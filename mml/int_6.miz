@@ -1,0 +1,2208 @@
+:: Modular Integer Arithmetic
+::  by Christoph Schwarzweller
+:: 
+:: Received May 13, 2008
+:: Copyright (c) 2008 Association of Mizar Users
+
+environ
+
+ vocabularies NAT_1, INT_1, INT_2, INT_3, FUNCT_1, FINSEQ_1, FINSEQ_4, RELAT_1,
+      CARD_3, ARYTM_3, RLVECT_1, COMPLEX1, COMPLSP1, INT_6, BOOLE, ARYTM,
+      REAL_3, SETWISEO, BINOP_1, SUBSET_1, ARYTM_1, RFINSEQ, PARTFUN3,
+      ABSVALUE, SEQ_1, SQUARE_1, GR_CY_1, ASYMPT_0, ORDINAL2, FINSOP_1,
+      ZF_REFLE, VALUED_0;
+ notations TARSKI, XBOOLE_0, SUBSET_1, NAT_D, INT_1, INT_2, ORDINAL1, NUMBERS,
+      PARTFUN1, PARTFUN3, REAL_3, XXREAL_0, XREAL_0, FUNCT_1, VALUED_0,
+      VALUED_1, BINOP_2, SETWISEO, RFINSEQ, BINOP_1, FINSEQ_1, SETWOP_2,
+      RVSUM_1, XCMPLX_0, NAT_1, FINSOP_1;
+ constructors FINSOP_1, RFINSEQ, NAT_1, INT_2, REAL_3, FINSEQ_4, BINOP_2,
+      REAL_1, SETWISEO, SETWOP_2, PARTFUN3, PARTFUN1, XXREAL_0;
+ registrations NUMBERS, XREAL_0, NAT_1, INT_1, RELAT_1, FINSEQ_1, RVSUM_1,
+      XBOOLE_0, MEMBERED, BINOP_2, ORDINAL1, XXREAL_0, SETWISEO, VALUED_0,
+      VALUED_1;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+ definitions TARSKI, NAT_1, INT_1, INT_2, XREAL_0, XCMPLX_0, FINSEQ_1,
+      FINSEQ_4, XXREAL_0, NAT_D, REAL_3, SEQ_1, FUNCT_1, VALUED_0;
+ theorems INT_1, FUNCT_1, FINSEQ_1, RVSUM_1, NAT_1, SETWOP_2, FINSEQ_3,
+      BINOP_2, SETWISEO, TARSKI, INT_3, INT_2, XCMPLX_0, XCMPLX_1, REAL_1,
+      XREAL_1, RFINSEQ, FINSEQ_5, FINSEQ_2, ABSVALUE, PARTFUN3, XBOOLE_0,
+      RELAT_1, GROEB_2, XXREAL_0, ORDINAL1, XBOOLE_1, PARTFUN1, XREAL_0,
+      WSIERP_1, VALUED_0, VALUED_1, COMPLEX1;
+ schemes FINSEQ_1, NAT_1, POLYNOM2;
+
+begin  :: Preliminaries
+
+intint:
+for f being integer-yielding FinSequence
+holds f is FinSequence of INT
+proof let f be integer-yielding FinSequence;
+rng f c= INT by VALUED_0:def 5;
+hence thesis by FINSEQ_1:def 4;
+end;
+
+registration
+let f be FinSequence;
+cluster f|0 -> empty;
+coherence
+proof
+0 <= len f; then len(f|0) = 0 by FINSEQ_1:80;
+hence thesis by FINSEQ_1:28;
+end;
+end;
+
+registration
+let f be complex-valued FinSequence,
+    n be natural number;
+cluster f|n -> complex-valued;
+coherence;
+end;
+
+registration
+let f be integer-valued FinSequence,
+    n be natural number;
+cluster f|n -> integer-valued;
+coherence;
+end;
+
+registration
+let f be integer-valued FinSequence,
+    n be natural number;
+cluster f/^n -> integer-valued;
+coherence
+proof
+per cases;
+suppose n > len f;
+  hence thesis by RFINSEQ:def 2;
+  end;
+suppose Q1: n <= len f;
+  then Q: len(f/^n) = len f - n & for m being Nat st
+          m in dom(f/^n) holds (f/^n).m = f.(m+n) by RFINSEQ:def 2;
+  now let u be set;
+    assume AS: u in rng(f/^n);
+    reconsider n' = n as Element of NAT by ORDINAL1:def 13;
+    consider x being set such that
+    H: x in dom(f/^n) & (f/^n).x = u by AS,FUNCT_1:def 5;
+    reconsider k = len f - n as Element of NAT by Q1,INT_1:18;
+    reconsider k as natural number;
+    dom(f/^n) = Seg k by Q,FINSEQ_1:def 3;
+    then consider x' being Element of NAT such that
+    X: x' = x & 1 <= x' & x' <= k by H;
+    reconsider x as Element of NAT by X;
+    reconsider f' = f as FinSequence of INT by intint;
+    I: x+n' in dom f' by H,FINSEQ_5:29;
+    K: (f/^n).x = f.(x+n) by H,Q1,RFINSEQ:def 2;
+    L: f.(x+n) in rng f by I,FUNCT_1:def 5;
+    rng f c= INT by VALUED_0:def 5;
+    hence u in INT by H,K,L;
+    end;
+  then rng(f/^n) c= INT by TARSKI:def 3;
+  hence thesis by VALUED_0:def 5;
+  end;
+end;
+end;
+
+registration
+let i be Integer;
+cluster <*i*> -> integer-valued;
+coherence
+proof
+A: rng(<*i*>) = {i} by FINSEQ_1:56;
+now let u be set; assume u in {i}; then u = i by TARSKI:def 1;
+  hence u in INT by INT_1:def 2; end;
+then {i} c= INT by TARSKI:def 3;
+hence thesis by A,VALUED_0:def 5;
+end;
+end;
+
+registration
+let f,g be integer-valued FinSequence;
+cluster f ^ g -> integer-valued;
+coherence
+proof
+now let u be set;
+  assume AS: u in rng(f^g);
+  A: rng(f^g) = rng f \/ rng g by FINSEQ_1:44;
+  now per cases by AS,A,XBOOLE_0:def 2;
+  case B: u in rng f;
+    rng f c= INT by VALUED_0:def 5;
+    hence u in INT by B;
+    end;
+  case B: u in rng g;
+    rng g c= INT by VALUED_0:def 5;
+    hence u in INT by B;
+    end;
+  end;
+  hence u in INT;
+  end;
+then rng(f^g) c= INT by TARSKI:def 3;
+hence thesis by VALUED_0:def 5;
+end;
+end;
+
+theorem length1a:
+for f1,f2 being complex-valued FinSequence
+holds len(f1 + f2) = min(len f1, len f2)
+proof
+let f1,f2 be complex-valued FinSequence;
+ set g = f1 + f2;
+ consider n1 being Nat such that
+ H1: dom f1 = Seg n1 by FINSEQ_1:def 2;
+ n1 in NAT by ORDINAL1:def 13; then
+ H1a: len f1 = n1 by H1,FINSEQ_1:def 3;
+ consider n2 being Nat such that
+ H2: dom f2 = Seg n2 by FINSEQ_1:def 2;
+ n2 in NAT by ORDINAL1:def 13; then
+ H2a: len f2 = n2 by H2,FINSEQ_1:def 3;
+ H3: dom g = dom f1 /\ dom f2 by VALUED_1:def 1;
+ now per cases;
+ case A: n1 <= n2;
+   then dom f1 c= dom f2 by H1,H2,FINSEQ_1:7;
+   then B: dom g = Seg n1 by H1,H3,XBOOLE_1:28;
+   min(n1,n2) = n1 by A,XXREAL_0:def 8;
+   hence len(f1 + f2) = min(len f1, len f2) by B,H1a,H2a,FINSEQ_1:def 3;
+   end;
+ case A: n2 <= n1;
+   then dom f2 c= dom f1 by H1,H2,FINSEQ_1:7;
+   then B: dom g = Seg n2 by H2,H3,XBOOLE_1:28;
+   min(n1,n2) = n2 by A,XXREAL_0:def 8;
+   hence len(f1 + f2) = min(len f1, len f2) by B,H1a,H2a,FINSEQ_1:def 3;
+   end;
+ end;
+hence thesis;
+end;
+
+theorem length2a:
+for f1, f2 being complex-valued FinSequence
+holds len(f1 - f2) = min(len f1, len f2)
+proof
+let f1,f2 be complex-valued FinSequence;
+ set g = f1 - f2;
+ consider n1 being Nat such that
+ H1: dom f1 = Seg n1 by FINSEQ_1:def 2;
+ n1 in NAT by ORDINAL1:def 13; then
+ H1a: len f1 = n1 by H1,FINSEQ_1:def 3;
+ consider n2 being Nat such that
+ H2: dom f2 = Seg n2 by FINSEQ_1:def 2;
+ n2 in NAT by ORDINAL1:def 13; then
+ H2a: len f2 = n2 by H2,FINSEQ_1:def 3;
+ H3: dom g = dom f1 /\ dom f2 by VALUED_1:12;
+ now per cases;
+ case A: n1 <= n2;
+   then dom f1 c= dom f2 by H1,H2,FINSEQ_1:7;
+   then B: dom g = Seg n1 by H1,H3,XBOOLE_1:28;
+   min(n1,n2) = n1 by A,XXREAL_0:def 8;
+   hence len(f1 - f2) = min(len f1, len f2) by B,H1a,H2a,FINSEQ_1:def 3;
+   end;
+ case A: n2 <= n1;
+   then dom f2 c= dom f1 by H1,H2,FINSEQ_1:7;
+   then B: dom g = Seg n2 by H2,H3,XBOOLE_1:28;
+   min(n1,n2) = n2 by A,XXREAL_0:def 8;
+   hence len(f1 - f2) = min(len f1, len f2) by B,H1a,H2a,FINSEQ_1:def 3;
+   end;
+ end;
+hence thesis;
+end;
+
+theorem length3a:
+for f1,f2 being complex-valued FinSequence
+holds len(f1 (#) f2) = min(len f1, len f2)
+proof
+let f1,f2 be complex-valued FinSequence;
+ set g = f1 (#) f2;
+ consider n1 being Nat such that
+ H1: dom f1 = Seg n1 by FINSEQ_1:def 2;
+ n1 in NAT by ORDINAL1:def 13; then
+ H1a: len f1 = n1 by H1,FINSEQ_1:def 3;
+ consider n2 being Nat such that
+ H2: dom f2 = Seg n2 by FINSEQ_1:def 2;
+ n2 in NAT by ORDINAL1:def 13; then
+ H2a: len f2 = n2 by H2,FINSEQ_1:def 3;
+ H3: dom g = dom f1 /\ dom f2 by VALUED_1:def 4;
+ now per cases;
+ case A: n1 <= n2;
+   then dom f1 c= dom f2 by H1,H2,FINSEQ_1:7;
+   then B: dom g = Seg n1 by H1,H3,XBOOLE_1:28;
+   min(n1,n2) = n1 by A,XXREAL_0:def 8;
+   hence len(f1 (#) f2) = min(len f1, len f2) by B,H1a,H2a,FINSEQ_1:def 3;
+ end;
+ case A: n2 <= n1;
+   then dom f2 c= dom f1 by H1,H2,FINSEQ_1:7;
+   then B: dom g = Seg n2 by H2,H3,XBOOLE_1:28;
+   min(n1,n2) = n2 by A,XXREAL_0:def 8;
+   hence len(f1 (#) f2) = min(len f1, len f2) by B,H1a,H2a,FINSEQ_1:def 3;
+   end;
+ end;
+hence thesis;
+end;
+
+length1:
+for m1,m2 be complex-valued FinSequence st len m1 = len m2
+holds len(m1 + m2) = len m1
+proof
+let m1,m2 be complex-valued FinSequence;
+assume AS: len m1 = len m2;
+thus len(m1 + m2) = min(len m1, len m2) by length1a
+                 .= len m1 by AS;
+end;
+
+length2:
+for m1,m2 be complex-valued FinSequence st len m1 = len m2
+holds len(m1 - m2) = len m1
+proof
+let m1,m2 be complex-valued FinSequence;
+assume AS: len m1 = len m2;
+thus len(m1 - m2) = min(len m1, len m2) by length2a
+                 .= len m1 by AS;
+end;
+
+length3:
+for m1,m2 be complex-valued FinSequence st len m1 = len m2
+holds len(m1 (#) m2) = len m1
+proof
+let m1,m2 be complex-valued FinSequence;
+assume AS: len m1 = len m2;
+thus len(m1 (#) m2) = min(len m1, len m2) by length3a
+                   .= len m1 by AS;
+end;
+
+theorem Z10:
+for m1,m2 being complex-valued FinSequence st len m1 = len m2
+for k being natural number st k <= len m1 holds (m1(#)m2)|k = (m1|k) (#) (m2|k)
+proof
+let m1,m2 be complex-valued FinSequence; assume AS1: len m1 = len m2;
+let k' be natural number; assume AS2: k' <= len m1;
+set p = (m1(#)m2)|k', q = (m1|k') (#) (m2|k');
+H: len(m1|k') = k' & len(m2|k') = k' by AS1,AS2,FINSEQ_1:80;
+k' <= len(m1(#)m2) by AS1,AS2,length3;
+then A: len p = k' & len q = k' by FINSEQ_1:80,H,length3;
+reconsider k = k' as Element of NAT by ORDINAL1:def 13;
+now let j be Nat;
+  assume B1: 1 <= j & j <= len p;
+  then B2: j in dom p by FINSEQ_3:27;
+AA:  j in NAT by ORDINAL1:def 13; then
+  D: j in Seg k by B1,A;
+  E: j <= len m1 by B1,A,AS2,XXREAL_0:2;
+  len(m1(#)m2) = len m1 by AS1,length3;
+  then j in Seg(len(m1(#)m2)) by AA,E,B1;
+  then B3: j in dom(m1(#)m2) by FINSEQ_1:def 3;
+  B6: j in dom(m1|k) by D,H,FINSEQ_1:def 3;
+  B7: j in dom(m2|k) by D,H,FINSEQ_1:def 3;
+  B8: j in dom q by D,A,FINSEQ_1:def 3;
+  thus p.j = (m1(#)m2).j by B2,FUNCT_1:70
+          .= m1.j * m2.j by B3,VALUED_1:def 4
+          .= (m1|k).j * m2.j by B6,FUNCT_1:70
+          .= (m1|k).j * (m2|k).j by B7,FUNCT_1:70
+          .= q.j by B8,VALUED_1:def 4;
+  end;
+hence thesis by A,FINSEQ_1:18;
+end;
+
+registration
+let F be integer-valued FinSequence;
+cluster Sum F -> integer;
+coherence
+  proof
+    consider f being FinSequence of COMPLEX such that
+A1: f = F & Sum F = addcomplex $$ f by RVSUM_1:def 11;
+A2: rng f c= INT by A1,VALUED_0:def 5; then
+    reconsider f' = f as FinSequence of INT by FINSEQ_1:def 4;
+    set mc = addcomplex, mr = addint;
+A3: mc $$ f = mc $$ (findom f,[#](f,the_unity_wrt mc)) by SETWOP_2:def 2;
+    consider n being Nat such that
+A4: dom f = Seg n by FINSEQ_1:def 2;
+AA: n in NAT by ORDINAL1:def 13;
+    defpred P[Element of NAT] means
+      mc $$ (finSeg $1,[#](f,the_unity_wrt mc)) is integer;
+    Seg 0 = {}.NAT by FINSEQ_1:4; then
+A5: P[0] by SETWISEO:40,BINOP_2:1;
+    set g = [#](f,the_unity_wrt mc);
+A6: for k being Element of NAT st P[k] holds P[k+1]
+    proof
+      let k be Element of NAT;
+      assume
+A7:   P[k];
+A8:   g.(k+1) is integer
+      proof
+        per cases;
+        suppose
+A9:       k+1 in dom f; then
+          g.(k+1) = f.(k+1) by SETWOP_2:22; then
+          g.(k+1) in rng f by A9,FUNCT_1:12;
+          hence thesis by A2,INT_1:def 2;
+        end;
+        suppose not k+1 in dom f;
+          hence thesis by BINOP_2:1,SETWOP_2:22;
+        end;
+      end;
+      reconsider a = g.(k+1), b = mc $$(finSeg k,g) as integer number
+        by A7,A8;
+      not (k + 1) in Seg k by FINSEQ_3:9; then
+      mc $$ (finSeg k \/ {.k+1.},g) = mc.(mc $$(finSeg k,g),g.(k+1))
+        by SETWOP_2:4
+        .= b + a by BINOP_2:def 3;
+      hence thesis by FINSEQ_1:11;
+    end;
+    for n being Element of NAT holds P[n] from NAT_1:sch 1(A5,A6);
+    hence thesis by A1,A4,A3,AA;
+  end;
+cluster Product F -> integer;
+coherence
+proof
+consider f being FinSequence of COMPLEX such that
+A1: f = F & Product F = multcomplex $$ f by RVSUM_1:def 14;
+A2: rng f c= INT by A1,VALUED_0:def 5; then
+reconsider f' = f as FinSequence of INT by FINSEQ_1:def 4;
+set mc = multcomplex, mr = multint;
+A3: mc $$ f = mc $$ (findom f,[#](f,the_unity_wrt mc)) by SETWOP_2:def 2;
+consider n being Nat such that
+A4: dom f = Seg n by FINSEQ_1:def 2;
+AA: n in NAT by ORDINAL1:def 13;
+defpred P[Element of NAT] means
+      mc $$ (finSeg $1,[#](f,the_unity_wrt mc)) is integer;
+Seg 0 = {}.NAT by FINSEQ_1:4; then
+A5: P[0] by SETWISEO:40,BINOP_2:6;
+set g = [#](f,the_unity_wrt mc);
+A6: for k being Element of NAT st P[k] holds P[k+1]
+    proof let k be Element of NAT;
+    assume A7: P[k];
+    A8: g.(k+1) is integer
+        proof
+        per cases;
+        suppose A9: k+1 in dom f; then
+          g.(k+1) = f.(k+1) by SETWOP_2:22; then
+          g.(k+1) in rng f by A9,FUNCT_1:12;
+          hence thesis by A2,INT_1:def 2;
+          end;
+        suppose not k+1 in dom f;
+          hence thesis by BINOP_2:6,SETWOP_2:22;
+        end;
+        end;
+    reconsider a = g.(k+1), b = mc $$(finSeg k,g) as integer number by A7,A8;
+    not (k + 1) in Seg k by FINSEQ_3:9; then
+    mc $$ (finSeg k \/ {.k+1.},g) = mc.(mc $$(finSeg k,g),g.(k+1))
+        by SETWOP_2:4 .= b * a by BINOP_2:def 5;
+    hence thesis by FINSEQ_1:11;
+    end;
+for n being Element of NAT holds P[n] from NAT_1:sch 1(A5,A6);
+hence thesis by A1,A4,A3,AA;
+end;
+end;
+
+ZZ1: for z being integer-yielding FinSequence holds z is FinSequence of REAL
+proof let f be integer-yielding FinSequence;
+rng f c= REAL; hence thesis by FINSEQ_1:def 4; end;
+
+theorem th67:
+for f being complex-valued FinSequence,
+    i being natural number st i+1 <= len f holds f|i ^ <*f.(i+1)*> = f|(i+1)
+proof
+let f be complex-valued FinSequence,
+    i be natural number;
+assume AS: i + 1 <= len f;
+AS1: i <= i + 1 by NAT_1:11;
+then AS2: i <= len f by AS,XXREAL_0:2;
+set f1 = f|i ^ <*f.(i+1)*>, f2 = f|(i+1);
+reconsider g = f|i as complex-valued FinSequence;
+reconsider f1 as complex-valued FinSequence;
+E: len f1 = len(f|i) + len(<*f.(i+1)*>) by FINSEQ_1:35
+         .= len(f|i) + 1 by FINSEQ_1:56
+         .= i + 1 by AS1,AS,XXREAL_0:2,FINSEQ_1:80
+         .= len f2 by AS,FINSEQ_1:80;
+then A: dom f1 = Seg(len f2) by FINSEQ_1:def 3
+              .= dom f2 by FINSEQ_1:def 3;
+now let x' be set;
+  assume C: x' in dom f1;
+  then reconsider x = x' as Element of NAT;
+  CCCC: dom f1 = Seg(len f1) by FINSEQ_1:def 3;
+  then CC: 1 <= x & x <= len f1 by C,FINSEQ_1:3;
+  then CCC: x <= i + 1 by E,AS,FINSEQ_1:80;
+  per cases by CCC,REAL_1:def 5;
+  suppose F: x = i + 1;
+    then x in Seg(i+1) by CC;
+    then C1: x in dom f2 by AS,FINSEQ_1:21;
+    C2: len(f|i) = i by AS1,AS,XXREAL_0:2,FINSEQ_1:80;
+    dom <*f.(i+1)*> = {1} by FINSEQ_1:4,FINSEQ_1:55;
+    then 1 in dom <*f.(i+1)*> by TARSKI:def 1;
+    hence f1.x' = <*f.(i+1)*>.1 by F,C2,FINSEQ_1:def 7
+               .= f.(i+1) by FINSEQ_1:57
+               .= f2.x' by F,C1,FUNCT_1:70;
+    end;
+  suppose x < i + 1;
+    then 1 <= x & x <= i by CCCC,C,FINSEQ_1:3,NAT_1:13;
+    then x in Seg i;
+    then C1: x in dom(f|i) by AS2,FINSEQ_1:21;
+    hence f1.x' = (f|i).x by FINSEQ_1:def 7
+               .= f.x by C1,FUNCT_1:70
+               .= f2.x' by C,A,FUNCT_1:70;
+    end;
+  end;
+hence thesis by A,FUNCT_1:9;
+end;
+
+theorem mtriv:
+for f being complex-valued FinSequence st
+ex i being natural number st i in dom f & f.i = 0 holds Product(f) = 0
+proof
+let m be complex-valued FinSequence;
+assume AS: ex i being natural number st i in dom m & m.i = 0;
+defpred P[Nat] means
+   for f being complex-valued FinSequence st len f = $1 holds
+   (ex i being natural number st i in dom f & f.i = 0) implies
+   Product(f) = 0;
+A: P[0] by FINSEQ_1:4,FINSEQ_1:def 3;
+B: for k being Element of NAT st P[k] holds P[k + 1]
+   proof
+   let k be Element of NAT;
+   assume AS: P[k];
+   now let f be complex-valued FinSequence;
+      assume B: len f = k + 1;
+      assume C: ex i being natural number st i in dom f & f.i = 0;
+      set f1 = f|k;
+      Y: len f1 = k by B,NAT_1:11,FINSEQ_1:80;
+      reconsider f1 as complex-valued FinSequence;
+      f = f1^<*f.(k+1)*> by B,FINSEQ_3:61;
+      then G: Product(f) = Product(f1) * f.(k+1) by RVSUM_1:126;
+      per cases;
+      suppose f.(k+1) = 0;
+        hence Product(f) = 0 by G; end;
+      suppose H1: f.(k+1) <> 0;
+        consider j being natural number such that
+        GG: j in dom f & f.j = 0 by C;
+        reconsider j as Element of NAT by ORDINAL1:def 13;
+        j in Seg(len f) by GG,FINSEQ_1:def 3;
+        then H4: 1 <= j & j <= k + 1 by B,FINSEQ_1:3;
+        then j < k+1 by GG,H1,REAL_1:def 5;
+        then j <= k by NAT_1:13;
+        then j in Seg k by H4;
+        then H2: j in dom f1 by Y,FINSEQ_1:def 3;
+        then f1.j = f.j by FUNCT_1:70;
+        then Product(f1) = 0 by AS,Y,GG,H2;
+        hence Product(f) = 0 by G; end;
+      end;
+   hence P[k+1];
+   end;
+I: for k being Element of NAT holds P[k] from NAT_1:sch 1(A,B);
+consider j being Nat such that H: len m = j;
+thus Product(m) = 0 by AS,I,H;
+end;
+
+theorem Th14:
+for n,a,b being Integer holds
+(a - b) mod n = ((a mod n) - (b mod n)) mod n
+proof
+let n,a,b be Integer;
+per cases;
+suppose
+A1: n = 0;
+hence (a - b) mod n = 0 by INT_1:def 8
+   .= ((a mod n) - (b mod n)) mod n by A1,INT_1:def 8;
+end;
+suppose A2: n <> 0;
+  then A3: a mod n + (a div n) * n = (a - (a div n) * n) + (a div n) * n
+  by INT_1:def 8;
+   b mod n + (b div n) * n = (b - (b div n) * n) + (b div n) * n
+  by A2,INT_1:def 8;
+   then (a - b) - ((a mod n) - (b mod n))
+ = ((a div n) - (b div n)) * n by A3;
+then n divides (a - b) - ((a mod n) - (b mod n)) by INT_1:def 9;
+then a-b,(a mod n)-(b mod n) are_congruent_mod n by INT_2:19;
+hence thesis by INT_3:12;
+end;
+end;
+
+theorem div0:
+for i,j,k being Integer st i divides j holds k*i divides k*j
+proof
+let i,j,k be Integer; assume i divides j;
+then consider z being Integer such that A: i * z = j by INT_1:def 9;
+(i*k)*z = j * k by A;
+hence thesis by INT_1:def 9;
+end;
+
+theorem prodint:
+for m being integer-valued FinSequence,
+    i being natural number st i in dom m & m.i <> 0
+holds Product(m) / m.i is Integer
+proof
+let m be integer-yielding FinSequence,
+    i' be natural number;
+assume AS: i' in dom m & m.i' <> 0;
+reconsider i = i' as Element of NAT by ORDINAL1:def 13;
+A3: dom m = Seg(len m) by FINSEQ_1:def 3;
+then 1 <= i & i <= len m by AS,FINSEQ_1:3;
+then 1 - 1 <= i - 1 by XREAL_1:11;
+then reconsider j = i - 1 as Element of NAT by INT_1:16;
+set f = (m|j) ^ (m/^i);
+j + 1 <= len m by A3,AS,FINSEQ_1:3;
+then A4: (m|j) ^ <*m.i*> = (m|i) by th67;
+reconsider m' = m as FinSequence of INT by intint;
+reconsider m1 = m|i as FinSequence of INT by intint;
+reconsider m2 = m/^i as FinSequence of INT by intint;
+reconsider f as FinSequence of INT by intint;
+m' = m1 ^ m2 by RFINSEQ:21;
+then Product(m) = Product(m|j ^ <*m.i*>) * Product(m/^i) by A4,RVSUM_1:127
+  .= Product(m|j) * Product(<*m.i*>) * Product(m/^i) by RVSUM_1:127
+  .= (Product(m|j) * Product(m/^i)) * Product(<*m.i*>)
+  .= Product(m|j) * Product(m/^i) * m.i by RVSUM_1:125
+  .= Product(f) * m.i by RVSUM_1:127;
+then m.i divides Product(m) by INT_1:def 9;
+hence thesis by AS,WSIERP_1:22;
+end;
+
+theorem x000:
+for m being integer-valued FinSequence,
+    i being natural number st i in dom m
+ex z being Integer st z * m.i = Product(m)
+proof
+let m be integer-yielding FinSequence,
+    i be natural number;
+assume AS: i in dom m;
+per cases;
+suppose C: m.i <> 0;
+  then reconsider z = Product(m) / m.i as Integer by AS,prodint;
+  take z;
+  thus z * m.i = Product(m) * ((m.i)" * m.i)
+             .= Product(m) * 1 by C,XCMPLX_0:def 7
+             .= Product(m);
+  end;
+suppose C: m.i = 0;
+  take 1;
+  thus thesis by C,AS,mtriv;
+  end;
+end;
+
+x0000:
+for m being integer-yielding FinSequence,
+    i,j being natural number st i in dom m & j in dom m & j <> i & m.j <> 0
+ex z being Integer st z * m.i = Product(m) / m.j
+proof
+let m be integer-yielding FinSequence,
+    i',j' be natural number;
+assume AS: i' in dom m & j' in dom m & j' <> i' & m.j' <> 0;
+reconsider i = i', j = j' as Element of NAT by ORDINAL1:def 13;
+reconsider mj = Product(m) / m.j' as Integer by AS,prodint;
+dom m = Seg(len m) by FINSEQ_1:def 3;
+then X1: 1 <= i & i <= len m by AS,FINSEQ_1:3;
+then 1 - 1 <= i - 1 by XREAL_1:11;
+then reconsider ki = i - 1 as Element of NAT by INT_1:16;
+A3: dom m = Seg len m by FINSEQ_1:def 3;
+then X2: 1 <= j & j <= len m by AS,FINSEQ_1:3;
+then 1 - 1 <= j - 1 by XREAL_1:11;
+then reconsider kj = j - 1 as Element of NAT by INT_1:16;
+set f = (m|kj) ^ (m/^j);
+reconsider m' = m as FinSequence of INT by intint;
+reconsider m1 = m|j as FinSequence of INT by intint;
+reconsider m2 = m/^j as FinSequence of INT by intint;
+reconsider f as FinSequence of INT by intint;
+kj + 1 <= len m by A3,AS,FINSEQ_1:3;
+then X: (m|kj) ^ <*m.j*> = (m|j) by th67;
+m' = m1 ^ m2 by RFINSEQ:21;
+then Product(m)
+   = Product((m|kj) ^ <*m.j*>) * Product(m/^j) by X,RVSUM_1:127
+  .= Product((m|kj)) * Product(<*m.j*>) * Product(m/^j) by RVSUM_1:127
+  .= (Product((m|kj))*Product(m/^j))*Product(<*m.j*>)
+  .= Product((m|kj)) * Product(m/^j) * m.j by RVSUM_1:125
+  .= Product(f) * m.j by RVSUM_1:127;
+then X: Product(m) / m.j = Product(f) * (m.j * (m.j)")
+                        .= Product(f) * 1 by XCMPLX_0:def 7,AS;
+kj + 1 = j; then kj <= j by NAT_1:11;
+then Y1: len(m|kj) = kj by X2,XXREAL_0:2,FINSEQ_1:80;
+ex l being Element of NAT st l in dom f & f.l = m.i
+  proof
+  per cases by AS,REAL_1:def 5;
+  suppose i < j;
+    then i < kj + 1;
+    then i <= j - 1 by NAT_1:13;
+    then i in Seg kj by X1;
+    then Z1: i in dom(m|kj) by Y1,FINSEQ_1:def 3;
+    Z2: dom(m|kj) c= dom f by FINSEQ_1:39;
+    (m|kj).i = m.i by Z1,FUNCT_1:70;
+    then f.i = m.i by Z1,FINSEQ_1:def 7;
+    hence ex l being Element of NAT st l in dom f & f.l = m.i by Z2,Z1;
+    end;
+  suppose ZZ: i > j;
+    then ki + 1 > 1 by X2,XXREAL_0:2; then Y4: ki >= 1 by NAT_1:13;
+    Z3: len(m/^j) = len m - j by X2,RFINSEQ:def 2;
+    then Z4: len f = kj + (len(m) - j) by Y1,FINSEQ_1:35
+                  .= len(m) - 1;
+    Y2: ki <= len f by X1,Z4,XREAL_1:11;
+    then ki in Seg(len f) by Y4;
+    then Y3: ki in dom f by FINSEQ_1:def 3;
+    i-1 > kj by ZZ,XREAL_1:11;
+    then reconsider a = i-1 - kj as Element of NAT by INT_1:18;
+    i - kj > (kj + 1) - kj by ZZ,XREAL_1:11;
+    then i - kj - 1 > 1 - 1 by XREAL_1:11;
+    then ex g being Nat st a = g + 1 by NAT_1:6;
+    then Z2: 1 <= i-1 - kj by NAT_1:11;
+    i - j <= len m - j by X1,XREAL_1:11;
+    then a in Seg len(m/^j) by Z2,Z3;
+    then Z1: i-1 - kj in dom(m'/^j) by FINSEQ_1:def 3;
+    len(m|kj) < i-1 by ZZ,Y1,XREAL_1:11;
+    then f.ki = (m/^j).(ki-kj) by Y1,Y2,FINSEQ_1:37
+             .= (m'/^j)/.(ki - kj) by Z1,PARTFUN1:def 8
+             .= m'/.(j+a) by Z1,FINSEQ_5:30
+             .= m.i by AS,PARTFUN1:def 8;
+    hence ex l being Element of NAT st l in dom f & f.l = m.i by Y3;
+    end;
+  end;
+then consider l being Element of NAT such that Y: l in dom f & f.l = m.i;
+l in Seg(len f) by Y,FINSEQ_1:def 3;
+then 1 <= l by FINSEQ_1:3;
+then reconsider kl = l - 1 as Element of NAT by INT_1:18;
+l in Seg(len f) by Y,FINSEQ_1:def 3;
+then kl + 1 <= len f by FINSEQ_1:3;
+then (f|kl) ^ <*f.l*> = (f|l) by th67;
+then f = (f|kl) ^ <*f.l*> ^ (f/^l) by RFINSEQ:21;
+then Product(f)
+   = Product((f|kl) ^ <*f.l*>) * Product(f/^l) by RVSUM_1:127
+  .= Product((f|kl)) * Product(<*f.l*>) * Product(f/^l) by RVSUM_1:127
+  .= (Product((f|kl)) * Product(f/^l)) * Product(<*m.i*>) by Y
+  .= Product((f|kl)) * Product(f/^l) * m.i by RVSUM_1:125
+  .= Product((f|kl) ^ (f/^l)) * m.i by RVSUM_1:127;
+hence thesis by X;
+end;
+
+theorem
+for m being integer-valued FinSequence,
+    i,j being natural number st i in dom m & j in dom m & j <> i & m.j <> 0
+holds Product(m) / (m.i * m.j) is Integer
+proof
+let m be integer-yielding FinSequence, i',j' be natural number;
+assume AS: i' in dom m & j' in dom m & j' <> i' & m.j' <> 0;
+reconsider i = i', j = j' as Element of NAT by ORDINAL1:def 13;
+consider z being Integer such that H: z * m.i = Product(m) / m.j by AS,x0000;
+per cases;
+suppose m.i = 0;
+  then 0 = Product(m) by AS,mtriv;
+  hence thesis;
+  end;
+suppose A: m.i <> 0;
+  reconsider u = Product(m) / m.j as Integer by AS,prodint;
+  B: m.i divides u by H,INT_1:def 9;
+  u / m.i = Product(m) * ((m.j)" * (m.i)")
+         .= Product(m) / (m.i * m.j) by XCMPLX_1:205;
+  hence thesis by A,B,WSIERP_1:22;
+  end;
+end;
+
+theorem
+for m being integer-valued FinSequence,
+    i,j being natural number st i in dom m & j in dom m & j <> i & m.j <> 0
+ex z being Integer st z *  m.i = Product(m) / m.j by x0000;
+
+
+begin  :: More on Greatest Common Divisors
+
+theorem thabs0:
+for i being Integer holds abs(i) divides i & i divides abs(i)
+proof
+let i be Integer;
+per cases by ABSVALUE:1;
+suppose abs(i) = i;
+ hence abs(i) divides i & i divides abs(i);
+ end;
+suppose abs(i) = -i;
+ then abs(i) * (-1) = i & i * (-1) = abs(i);
+ hence abs(i) divides i & i divides abs(i) by INT_1:def 9;
+ end;
+end;
+
+theorem thagcd:
+for i,j being Integer holds i gcd j = i gcd abs(j)
+proof
+let i,j be Integer;
+set k = i gcd abs(j);
+A: k divides i by INT_2:def 3;
+k divides abs(j) by INT_2:def 3;
+then consider x being Integer such that
+H: k*x = abs(j) by INT_1:def 9;
+abs(j) divides j by thabs0;
+then consider y being Integer such that
+K: abs(j) * y = j by INT_1:def 9;
+k * (x * y) = j by H,K; then
+B: k divides j by INT_1:def 9;
+for m being Integer st m divides i & m divides j holds m divides k
+ proof
+ let m be Integer;
+ assume AS: m divides i & m divides j;
+ then consider x being Integer such that
+ H: m * x = j by INT_1:def 9;
+ j divides abs(j) by thabs0;
+ then consider y being Integer such that
+ H1: j * y = abs(j) by INT_1:def 9;
+ m * (x * y) = abs(j) by H,H1;
+ then m divides abs(j) by INT_1:def 9;
+ hence thesis by AS,INT_2:def 3;
+ end;
+hence thesis by A,B,INT_2:def 3;
+end;
+
+theorem thabs1:
+for i,j being Integer st i,j are_relative_prime holds i lcm j = abs(i * j)
+proof
+let i,j be Integer; assume AS: i gcd j = 1;
+per cases;
+suppose A: i = 0 or j = 0;
+  hence i lcm j = 0 by INT_2:4 .= abs(i*j) by A,ABSVALUE:7;
+  end;
+suppose A: i <> 0 & j <> 0;
+  i divides abs(i) by thabs0;
+  then i divides abs(i) * abs(j) by INT_2:2;
+  then X: i divides abs(i * j) by COMPLEX1:151;
+  j divides abs(j) by thabs0;
+  then j divides abs(i) * abs(j) by INT_2:2;
+  then Y: j divides abs(i * j) by COMPLEX1:151;
+  for m being Integer st i divides m & j divides m holds abs(i*j) divides m
+    proof
+    let m be Integer;
+    assume B: i divides m & j divides m;
+    i divides i lcm j by INT_2:def 2; then
+    consider ki being Integer such that C: i * ki = i lcm j by INT_1:def 9;
+    j divides i lcm j by INT_2:def 2; then
+    consider kj being Integer such that D: j * kj = i lcm j by INT_1:def 9;
+    i divides i * j & j divides i * j by INT_2:2;
+    then i lcm j divides i * j by INT_2:def 2;
+    then consider kij being Integer such that
+    E: (i lcm j) * kij = i * j by INT_1:def 9;
+    i * j = i * (ki * kij) by C,E;
+    then F: j = ki * kij by A,XCMPLX_1:5;
+    i * j = j * (kj * kij) by D,E;
+    then G: i = kj * kij by A,XCMPLX_1:5;
+    kij divides i & kij divides j by F,G,INT_1:def 9;
+    then I: kij divides 1 by AS,INT_2:def 3;
+    K: i lcm j divides m by B,INT_2:def 2;
+    per cases by I,INT_2:17;
+    suppose kij = 1;
+      hence thesis by E,K,ABSVALUE:def 1;
+      end;
+    suppose J: kij = -1;
+      -(i * j) <> 0 by A,XCMPLX_1:6;
+      then -(i * j) > 0 by J,E;
+      then -(-(i * j)) < 0 by XREAL_1:60;
+      hence thesis by J,E,K,ABSVALUE:def 1;
+      end;
+    end;
+  hence thesis by X,Y,INT_2:def 2;
+  end;
+end;
+
+theorem thgcd0:
+for i,j,k being Integer holds (i*j) gcd (i*k) = abs(i) * (j gcd k)
+proof
+let i,j,k be Integer;
+per cases;
+suppose A: i = 0;
+  hence (i*j) gcd (i*k) = 0 * (j gcd k) by INT_2:35
+                        .= abs(i) * (j gcd k) by A,ABSVALUE:def 1;
+  end;
+suppose A: i <> 0;
+  set d = j gcd k, e = (i*j) gcd (i*k);
+  per cases;
+  suppose B: d = 0;
+  then j = 0 & k = 0 by INT_2:35;
+  hence thesis by B;
+  end;
+  suppose B: d <> 0;
+  then Y3: d > 0;
+  i * d divides i * j & i * d divides i * k by div0,INT_2:31;
+  then i * d divides e by INT_2:33;
+  then consider g being Integer such that
+  X2: e = (i * d) * g by INT_1:def 9;
+  Y2: e divides i*j & e divides i*k by INT_2:31;
+  d * g divides j & d * g divides k
+    proof
+    consider h1 being Integer such that
+    Y: ((i*d)*g)*h1 = i*j by Y2,X2,INT_1:def 9;
+    i*((d*g)*h1) = i*j by Y; then
+    (d*g)*h1 = j by A,XCMPLX_1:5;
+    hence d * g divides j by INT_1:def 9;
+    consider h2 being Integer such that
+    Y: ((i*d)*g)*h2 = i*k by Y2,X2,INT_1:def 9;
+    i*((d*g)*h2) = i*k by Y; then
+    (d*g)*h2 = k by A,XCMPLX_1:5;
+    hence d * g divides k by INT_1:def 9;
+    end;
+  then d * g divides d by INT_2:33;
+  then consider h3 being Integer such that Z: (d*g)*h3 = d by INT_1:def 9;
+  d*(g*h3) = d * 1 by Z; then g*h3 = 1 by B,XCMPLX_1:5;
+  then X3: g divides 1 by INT_1:def 9;
+  per cases by X3,INT_2:17;
+  suppose X4: g = 1;
+    i < 0 implies d*i < 0*i by Y3,XREAL_1:71;
+    hence (i*j) gcd (i*k) = abs(i)*(j gcd k) by X4,X2,ABSVALUE:def 1;
+    end;
+  suppose g = -1;
+    then X4: (i*j) gcd (i*k) = (-i)*d by X2;
+    now assume i > 0; then -- i > 0; then -i < 0 by XREAL_1:60;
+      hence d*(-i) < 0*(-i) by Y3,XREAL_1:71; end;
+    hence (i*j) gcd (i*k) = abs(i)*(j gcd k) by X4,A,ABSVALUE:def 1;
+    end;
+  end;
+  end;
+end;
+
+theorem thgcd4:
+for i,j being Integer holds (i * j) gcd i = abs(i)
+proof
+let i,j be Integer;
+set a = abs(i*j) hcf abs(i);
+E: abs(i) divides i by thabs0;
+then D: abs(i) divides i*j by INT_2:2;
+for m being Integer st m divides i*j & m divides i holds m divides abs(i)
+  proof
+  let m be Integer;
+  assume m divides i*j & m divides i;
+  then consider k being Integer such that H: m * k = i by INT_1:def 9;
+  i divides abs(i) by thabs0; then
+  consider l being Integer such that K: i * l = abs(i) by INT_1:def 9;
+  m * (k * l) = abs(i) by H,K;
+  hence thesis by INT_1:def 9;
+  end;
+hence thesis by D,E,INT_2:def 3;
+end;
+
+theorem thgcd3:
+for i,j,k being Integer holds i gcd (j gcd k) = (i gcd j) gcd k
+proof
+let i,j,k be Integer;
+per cases;
+suppose i = 0 & j = 0 & k = 0;
+hence thesis;
+end;
+suppose G: i <> 0 or j <> 0 or k <> 0;
+A: i gcd (j gcd k) divides i &
+   i gcd (j gcd k) divides j gcd k by INT_2:31;
+j gcd k divides j & j gcd k divides k by INT_2:31;
+then B: i gcd (j gcd k) divides j & i gcd (j gcd k) divides k by A,INT_2:13;
+then i gcd (j gcd k) divides i gcd j by A,INT_2:33;
+then C: i gcd (j gcd k) divides (i gcd j) gcd k by B,INT_2:33;
+A: (i gcd j) gcd k divides k &
+   (i gcd j) gcd k divides i gcd j by INT_2:31;
+i gcd j divides i & i gcd j divides j by INT_2:31;
+then B: (i gcd j) gcd k divides i & (i gcd j) gcd k divides j by A,INT_2:13;
+then (i gcd j) gcd k divides j gcd k by A,INT_2:33;
+then D: (i gcd j) gcd k divides i gcd (j gcd k) by B,INT_2:33;
+now assume i gcd (j gcd k) = -((i gcd j) gcd k);
+  then (-((i gcd j) gcd k)) * (-1) <= 0 * (-1) by XREAL_1:67;
+  then (i gcd j) gcd k = 0;
+  then k = 0 & i gcd j = 0 by INT_2:35;
+  hence contradiction by G,INT_2:35;
+  end;
+hence thesis by D,C,INT_2:15;
+end;
+end;
+
+theorem thgcd2:
+for i,j,k being Integer st i,j are_relative_prime holds i gcd (j* k) = i gcd k
+proof
+let i,j,k be Integer; assume AS: i gcd j = 1;
+(i*k) gcd (j*k) = abs(k) * (i gcd j) by thgcd0;
+then i gcd abs(k) = (i gcd (i*k)) gcd (j*k) by AS,thgcd3
+                 .= abs(i) gcd (j*k) by thgcd4
+                 .= (j*k) gcd i by thagcd;
+hence thesis by thagcd;
+end;
+
+theorem x1:
+for i,j being Integer st i,j are_relative_prime holds i * j divides i lcm j
+proof
+let i,j be Integer; assume i,j are_relative_prime;
+then abs(i * j) divides i lcm' j by thabs1;
+then consider z being Integer such that
+A: abs(i*j) * z = (i lcm' j) by INT_1:def 9;
+per cases;
+suppose 0 <= i*j;
+  then z*(i*j) = (i lcm' j) by A,ABSVALUE:def 1;
+  hence thesis by INT_1:def 9;
+  end;
+suppose B: 0 > i*j;
+  (-z)*(i*j) = z*(-(i*j)) .= (i lcm' j) by A,B,ABSVALUE:def 1;
+  hence thesis by INT_1:def 9;
+  end;
+end;
+
+theorem x1a:
+for x,y,i,j being Integer st i,j are_relative_prime
+holds (x,y are_congruent_mod i & x,y are_congruent_mod j)
+      implies x,y are_congruent_mod i*j
+proof
+let x,y,i,j be Integer;
+assume AS1: i,j are_relative_prime;
+assume x,y are_congruent_mod i & x,y are_congruent_mod j;
+then i divides (x - y) & j divides (x - y) by INT_2:19;
+then B: i lcm' j divides (x - y) by INT_2:27;
+i * j divides i lcm' j by AS1,x1;
+then i*j divides (x - y) by B,INT_2:13;
+hence thesis by INT_2:19;
+end;
+
+theorem thgcd:
+for i,j being Integer st i,j are_relative_prime
+holds ex s being Integer st s*i,1 are_congruent_mod j
+proof
+let i,j be Integer;
+assume i gcd j = 1;
+then consider s,t being Integer such that
+A: 1 = s * i + t * j by INT_3:16;
+B: s * i - 1 = (-t) * j by A;
+take s;
+j divides (s*i - 1) by B,INT_1:def 9;
+hence thesis by INT_2:19;
+end;
+
+
+begin  :: Chinese Remainder Sequences
+
+notation
+let f be integer-valued FinSequence;
+antonym f is multiplicative-trivial for f is non-empty;
+end;
+
+definition
+let f be integer-valued FinSequence;
+redefine attr f is multiplicative-trivial means :DefMTriv:
+  ex i being natural number st i in dom f & f.i = 0;
+compatibility
+  proof
+   thus f is non-empty implies
+     not ex i being natural number st i in dom f & f.i = 0 by FUNCT_1:def 15;
+  assume
+Z1: not ex i being natural number st i in dom f & f.i = 0;
+  let n be set;
+  assume
+Z2:   n in dom f;
+    then n is natural by ORDINAL1:def 13;
+   hence thesis by Z1,Z2;
+  end;
+end;
+
+registration
+cluster multiplicative-trivial (integer-valued FinSequence);
+existence
+proof
+set p = <*0*>;
+now let u be set;
+  assume u in {0};
+  then reconsider u' = u as Element of NAT by TARSKI:def 1;
+  u' is integer number;
+  hence u in INT by INT_1:def 1;
+  end;
+then {0} c= INT by TARSKI:def 3; then rng p c= INT by FINSEQ_1:56;
+then reconsider f = p as FinSequence of INT by FINSEQ_1:def 4;
+take f; take 1;
+len f = 1 by FINSEQ_1:57; then dom f = Seg 1 by FINSEQ_1:def 3;
+hence 1 in dom f;
+thus thesis by FINSEQ_1:57;
+end;
+cluster non multiplicative-trivial (integer-valued FinSequence);
+existence
+proof
+set p = <*1*>;
+now let u be set;
+  assume u in {1};
+  then reconsider u' = u as Element of NAT by TARSKI:def 1;
+  u' is integer number;
+  hence u in INT by INT_1:def 1;
+  end;
+then {1} c= INT by TARSKI:def 3; then rng p c= INT by FINSEQ_1:56;
+then reconsider f = p as FinSequence of INT by FINSEQ_1:def 4;
+take f;
+H: now let i be Element of NAT;
+   assume i in dom f;
+   then i in Seg 1 by FINSEQ_1:55;
+   hence i = 1 by TARSKI:def 1,FINSEQ_1:4;
+   end;
+now assume ex i being natural number st i in dom f & f.i = 0;
+   then consider i being natural number such that
+   A: i in dom f & f.i = 0;
+   reconsider i as Element of NAT by ORDINAL1:def 13;
+   i = 1 by A,H;
+   hence contradiction by A,FINSEQ_1:57;
+   end;
+hence thesis by DefMTriv;
+end;
+cluster non empty positive-yielding (integer-valued FinSequence);
+existence
+proof
+set p = <*1*>;
+now let u be set;
+  assume u in {1};
+  then reconsider u' = u as Element of NAT by TARSKI:def 1;
+  u' is integer number;
+  hence u in INT by INT_1:def 1;
+  end;
+then {1} c= INT by TARSKI:def 3; then rng p c= INT by FINSEQ_1:56;
+then reconsider f = p as FinSequence of INT by FINSEQ_1:def 4;
+take f;
+now let r be real number;
+   assume r in rng f;
+   then r in {1} by FINSEQ_1:56;
+   hence 0 < r by TARSKI:def 1;
+   end;
+hence thesis by PARTFUN3:def 1;
+end;
+end;
+
+theorem
+for m being multiplicative-trivial (integer-valued FinSequence)
+holds Product(m) = 0
+proof
+let m be multiplicative-trivial (integer-yielding FinSequence);
+consider i being natural number such that A: i in dom m & m.i = 0 by DefMTriv;
+thus thesis by A,mtriv;
+end;
+
+definition
+let f be integer-valued FinSequence;
+attr f is Chinese_Remainder means :DefCR:
+  for i,j being natural number
+  st i in dom f & j in dom f & i <> j holds f.i, f.j are_relative_prime;
+end;
+
+registration
+cluster non empty positive-yielding Chinese_Remainder
+        (integer-valued FinSequence);
+existence
+proof
+set p = <*1*>;
+now let u be set;
+  assume u in {1};
+  then reconsider u' = u as Element of NAT by TARSKI:def 1;
+  u' is integer number;
+  hence u in INT by INT_1:def 1;
+  end;
+then {1} c= INT by TARSKI:def 3; then rng p c= INT by FINSEQ_1:56;
+then reconsider f = p as FinSequence of INT by FINSEQ_1:def 4;
+take f;
+H: now let i be Element of NAT;
+   assume i in dom f;
+   then i in Seg 1 by FINSEQ_1:55;
+   hence i = 1 by TARSKI:def 1,FINSEQ_1:4;
+   end;
+C: now let r be real number;
+   assume r in rng f;
+   then r in {1} by FINSEQ_1:56;
+   hence 0 < r by TARSKI:def 1;
+   end;
+now let i',j' be natural number;
+   assume D1: i' in dom f & j' in dom f & i' <> j';
+   reconsider i = i',j = j' as Element of NAT by ORDINAL1:def 13;
+   i = 1 by D1,H .= j by D1,H;
+   hence f.i', f.j' are_relative_prime by D1;
+   end;
+hence thesis by C,DefCR,PARTFUN3:def 1;
+end;
+end;
+
+definition
+mode CR_Sequence is
+     non empty positive-yielding Chinese_Remainder
+     (integer-valued FinSequence);
+end;
+
+registration
+cluster -> non multiplicative-trivial CR_Sequence;
+coherence
+ proof
+ let f be CR_Sequence;
+ now let i be natural number;
+   assume i in dom f;
+   then f.i in rng f by FUNCT_1:12;
+   hence f.i <> 0 by PARTFUN3:def 1;
+   end;
+ hence thesis by DefMTriv;
+ end;
+end;
+
+registration
+cluster multiplicative-trivial -> non empty (integer-valued FinSequence);
+coherence
+proof
+let f be integer-yielding FinSequence;
+assume f is multiplicative-trivial; then
+consider i being natural number such that A: i in dom f & f.i = 0 by DefMTriv;
+thus thesis by A,RELAT_1:60;
+end;
+end;
+
+theorem CRsub:
+for f being CR_Sequence,
+    m being natural number st 0 < m & m <= len f
+holds f|m is CR_Sequence
+proof
+let f be CR_Sequence, m be natural number;
+assume AS: m > 0 & m <= len f;
+reconsider fm = f|m as FinSequence of INT by intint;
+C: len fm = m by AS,FINSEQ_1:80;
+H: now let i be Element of NAT;
+   assume i in dom fm;
+   then i in Seg m by C,FINSEQ_1:def 3;
+   then 1 <= i & i <= m by FINSEQ_1:3;
+   then 1 <= i & i <= len f by AS,XXREAL_0:2;
+   then i in Seg(len f);
+   hence i in dom f by FINSEQ_1:def 3;
+   end;
+B: now let r be real number;
+   assume r in rng fm; then
+   consider i being set such that B0: i in dom fm & fm.i = r by FUNCT_1:def 5;
+   reconsider i as Element of NAT by B0;
+   f.i in rng f by H,B0,FUNCT_1:12;
+   then f.i > 0 by PARTFUN3:def 1;
+   hence r > 0 by B0,FUNCT_1:70;
+   end;
+now let i',j' be natural number;
+  assume B1: i' in dom fm & j' in dom fm & i' <> j';
+  reconsider i = i',j = j' as Element of NAT by ORDINAL1:def 13;
+  B2: i in dom f & j in dom f by H,B1;
+  B4: f.i = fm.i by B1,FUNCT_1:70;
+  f.j = fm.j by B1,FUNCT_1:70;
+  hence fm.i', fm.j' are_relative_prime by B1,B2,B4,DefCR;
+  end;
+hence thesis by B,C,DefCR,PARTFUN3:def 1,AS,FINSEQ_1:4,
+   FINSEQ_1:def 3,RELAT_1:60;
+end;
+
+x0: for m being CR_Sequence holds Product(m) > 0
+proof
+let m be CR_Sequence;
+defpred P[Nat] means
+   for f being CR_Sequence st len f = $1
+   holds Product(f) > 0;
+A: P[0] by RVSUM_1:124,FINSEQ_1:32;
+B: for k being Element of NAT st P[k] holds P[k + 1]
+   proof
+   let k be Element of NAT;
+   assume AS: P[k];
+   now let f be CR_Sequence;
+      assume B: len f = k + 1;
+      set f1 = f|k;
+      per cases;
+      suppose k > 0;
+        then reconsider f1 as CR_Sequence by B,NAT_1:11,CRsub;
+        len f1 = k by B,NAT_1:11,FINSEQ_1:80;
+        then D: Product(f1) > 0 by AS;
+        F: f = f1^<*f.(k+1)*> by B,FINSEQ_3:61;
+        1 <= k + 1 & k + 1 <= k + 1 by NAT_1:11;
+        then k + 1 in Seg(k+1);
+        then H: k+1 in dom f by B,FINSEQ_1:def 3;
+        f.(k+1) in rng f by H,FUNCT_1:12;
+        then f.(k+1) > 0 by PARTFUN3:def 1;
+        then 0 * f.(k+1) < Product(f1) * f.(k+1) by D,XREAL_1:70;
+        hence Product(f) > 0 by F,RVSUM_1:126;
+        end;
+      suppose k = 0;
+        then C1: f = <*f.1*> by B,FINSEQ_1:57;
+        then dom f = Seg 1 by FINSEQ_1:55;
+        then 1 in dom f;
+        then f.1 in rng f by FUNCT_1:12;
+        then f.1 > 0 by PARTFUN3:def 1;
+        hence Product(f) > 0 by C1,RVSUM_1:125;
+        end;
+      end;
+   hence P[k+1];
+   end;
+I: for k being Element of NAT holds P[k] from NAT_1:sch 1(A,B);
+consider j being Nat such that H: len m = j;
+thus Product(m) > 0 by I,H;
+end;
+
+registration
+let m be CR_Sequence;
+cluster Product(m) -> positive natural;
+coherence proof
+Product(m) > 0 by x0; then Product(m) is Element of NAT by INT_1:16;
+hence thesis by x0; end;
+end;
+
+theorem prodgcd:
+for m being CR_Sequence,
+    i being natural number st i in dom m
+for mm being Integer st mm = Product(m) / m.i holds mm, m.i are_relative_prime
+proof
+let m be CR_Sequence, i be natural number;
+assume AS1: i in dom m;
+let mm be Integer;
+assume AS2: mm = Product(m) / m.i;
+set k = mm gcd m.i;
+defpred P[Nat] means
+for m being CR_Sequence st len m = $1
+for i being natural number st i in dom m
+for mm being Integer st mm = Product(m) / m.i holds mm, m.i are_relative_prime;
+now let m be (integer-yielding FinSequence); assume A: len m = 0;
+    let i be natural number; assume B: i in dom m;
+    let mm be Integer; assume mm = Product(m) / m.i;
+    m = <*>REAL by A,FINSEQ_1:32;
+    hence mm, m.i are_relative_prime by B,RELAT_1:60;
+    end;
+then A: P[0];
+B: now let k be Element of NAT;
+   assume B1: P[k];
+   now let m be CR_Sequence; assume A: len m = k+1;
+       let i' be natural number; assume B: i' in dom m;
+       reconsider i = i' as Element of NAT by ORDINAL1:def 13;
+       let mm be Integer;
+       assume M: mm = Product(m) / m.i';
+       set m1 = m|k;
+       C4: i in Seg(k+1) by A,B,FINSEQ_1:def 3;
+       then C5: 1 <= i & i <= k + 1 by FINSEQ_1:3;
+       Y: len m1 = k by A,NAT_1:11,FINSEQ_1:80;
+       m.i in rng m by B,FUNCT_1:12;
+       then C2: m.i > 0 by PARTFUN3:def 1;
+       1 <= k + 1 by NAT_1:11; then k+1 in Seg(k+1); then
+       G: k+1 in dom m by A,FINSEQ_1:def 3;
+       F: m1 ^ <*m.(k+1)*> = m|(k+1) by A,th67 .= m by A,FINSEQ_1:79;
+       per cases;
+       suppose k > 0;
+       then reconsider m1 as CR_Sequence by A,NAT_1:11,CRsub;
+       per cases;
+       suppose E: i in dom m1;
+         then E1: m1.i = m.i by FUNCT_1:70;
+         then reconsider mm1 = Product(m1) / m1.i as Integer by C2,E,prodint;
+         i in Seg(k) by E,Y,FINSEQ_1:def 3;
+         then 1 <= i & i <= k by FINSEQ_1:3;
+         then E2: i <> k + 1 by NAT_1:13;
+X:       m.i, m.(k+1) are_relative_prime by E2,B,G,DefCR;
+         mm1, m.i are_relative_prime by E1,E,Y,B1;
+         then E3: m.i gcd (mm1 * m.(k+1)) = m.i gcd m.(k+1) by thgcd2
+                                         .= 1 by X,INT_2:def 4;
+         mm1 * m.(k+1) = (Product(m1) * m.(k+1)) * (m.i)" by E1
+                      .= mm by F,M,RVSUM_1:126;
+         hence mm, m.i' are_relative_prime by E3,INT_2:def 4;
+         end;
+       suppose not(i in dom m1);
+         then not(i in Seg k) by Y,FINSEQ_1:def 3;
+         then not(1 <= i & i <= k);
+         then not(i < k + 1) by C4,NAT_1:13,FINSEQ_1:3;
+         then D0: i = k + 1 by C5,XXREAL_0:1;
+         m.(k+1) in rng m by G,FUNCT_1:12;
+         then D1: m.(k+1) > 0 by PARTFUN3:def 1;
+         defpred Q[Nat] means
+            $1 <= len m1 implies
+            for s being Element of NAT st s = $1
+            holds Product(m1|s), m.(k+1) are_relative_prime;
+         m1|0 is empty;
+         then Q1: Q[0] by WSIERP_1:14,RVSUM_1:124;
+         Q2: now let j be Element of NAT; assume Q3: 0 <= j & j < len m1;
+             assume Q4: Q[j];
+             now assume Q8: j+1 <= len m1;
+               then j+1 <= k by A,NAT_1:11,FINSEQ_1:80;
+               then Q5: j+1 <> k+1 by NAT_1:13;
+               Q7: 0 + 1 <= j + 1 by XREAL_1:8;
+               j + 1 <= len m by A,Y,Q3,XREAL_1:10;
+               then j+1 in Seg(len m) by Q7;
+               then Q6: j+1 in dom m by FINSEQ_1:def 3;
+               j+1 in Seg(len m1) by Q7,Q8;
+               then Q9: j+1 in dom m1 by FINSEQ_1:def 3;
+               now let s be Element of NAT;
+                 assume QX: s = j+1;
+                 reconsider s' = j as Element of NAT;
+X:              m.(j+1), m.(k+1) are_relative_prime by DefCR,Q5,G,Q6;
+                 j <= j + 1 by NAT_1:11; then
+                Product(m1|s'), m.(k+1) are_relative_prime by Q4,Q8,XXREAL_0:2;
+                 then
+                 QQ: Product(m1|s') * m.(j+1) gcd m.(k+1)
+                       = m.(j+1) gcd m.(k+1) by thgcd2
+                      .= 1 by X,INT_2:def 4;
+                 Q10: m1.(j+1) = m.(j+1) by Q9,FUNCT_1:70;
+                 m1|s' ^ <*m1.s*> = m1|s by QX,Q8,th67;
+                 then Product(m1|s) gcd m.(k+1) = 1 by QX,QQ,Q10,RVSUM_1:126;
+                hence Product(m1|s), m.(k+1) are_relative_prime by INT_2:def 4;
+                 end;
+               hence Q[j+1];
+               end;
+             hence Q[j+1];
+             end;
+         Q3: for j being Element of NAT st 0 <= j & j <= len m1 holds Q[j]
+             from POLYNOM2:sch 4(Q1,Q2);
+         D2: m1|(len m1) = m1 by FINSEQ_1:79;
+         mm = (Product(m1)*m.(k+1))*(m.(k+1))" by M,D0,F,RVSUM_1:126
+           .= Product(m1)* (m.(k+1)*(m.(k+1))")
+           .= Product(m1) * 1 by D1,XCMPLX_0:def 7;
+         hence mm, m.i' are_relative_prime by D2,Q3,D0;
+         end;
+       end;
+       suppose k = 0;
+       then D0: m = <*m.1*> by A,FINSEQ_1:57;
+       then dom m = Seg 1 by FINSEQ_1:55;
+       then 1 <= i & i <= 1 by B,FINSEQ_1:3;
+       then D2: i = 1 by XXREAL_0:1;
+       Product(m) = m.1 by D0,RVSUM_1:125;
+       then mm = 1 by D2,XCMPLX_0:def 7,M;
+       hence mm, m.i' are_relative_prime by WSIERP_1:14;
+       end;
+       end;
+   hence P[k+1];
+   end;
+I: for k be Element of NAT holds P[k] from NAT_1:sch 1(A,B);
+consider l be Element of NAT such that H: len m = l;
+thus thesis by I,H,AS1,AS2;
+end;
+
+Th3:
+for u being integer-yielding FinSequence,
+    m being CR_Sequence
+for z1,z2 being Integer
+    st 0 <= z1 & z1 < Product(m) & (for i being natural number st i in dom m
+                                    holds z1,u.i are_congruent_mod m.i) &
+       0 <= z2 & z2 < Product(m) & (for i being natural number st i in dom m
+                                    holds z2,u.i are_congruent_mod m.i)
+holds z1 = z2
+proof
+let u be integer-yielding FinSequence,
+    m be CR_Sequence;
+let z1,z2 being Integer;
+assume AS2: 0 <= z1 & z1 < Product(m) &
+     (for i being natural number st i in dom m
+      holds z1,u.i are_congruent_mod m.i) &
+     0 <= z2 & z2 < Product(m) &
+     (for i being natural number st i in dom m
+      holds z2,u.i are_congruent_mod m.i);
+H: now let i be Element of NAT;
+   assume i in dom m;
+   then z1,u.i are_congruent_mod m.i & z2,u.i are_congruent_mod m.i by AS2;
+   then z1,u.i are_congruent_mod m.i & u.i,z2 are_congruent_mod m.i
+     by INT_1:35;
+   hence z1,z2 are_congruent_mod m.i by INT_1:36;
+   end;
+defpred P[Nat] means
+  for m1 being CR_Sequence st m1 = m|($1)
+  holds z1, z2 are_congruent_mod Product(m1);
+A: P[0];
+B: now let k be Element of NAT;
+   assume B0: 0 <= k & k < len m;
+   assume B1: P[k];
+   now let m1 be CR_Sequence;
+     assume C0: m1 = m|(k+1);
+     set m2 = m|k;
+     C7: k+1 <= len m by B0,NAT_1:13;
+     then C6: len m1 = k + 1 by C0,FINSEQ_1:80;
+     C5: 1 <= k + 1 by NAT_1:11;
+     then C8: k+1 in Seg(len m1) & k+1 in Seg(len m) by C6,C7;
+     C1: k+1 in dom m1 & k+1 in dom m by C8,FINSEQ_1:def 3;
+     per cases;
+     suppose k > 0;
+       then reconsider m2 as CR_Sequence by B0,CRsub;
+       B2: z1, z2 are_congruent_mod Product(m2) by B1;
+       B5: m.(k+1) = m1.(k+1) by C1,C0,FUNCT_1:70;
+       m.(k+1) in rng m by C1,FUNCT_1:12;
+       then B4: m1.(k+1) > 0 by B5,PARTFUN3:def 1;
+       set mm = Product(m1) / m1.(k+1);
+       reconsider mm as Integer by prodint,C1,B4;
+       reconsider m' = m as FinSequence of INT by intint;
+       (m'|(k+1))|k = m'|k by GROEB_2:2,NAT_1:11;
+       then m1 = m2^<*m1.(k+1)*> by C0,C6,FINSEQ_3:61;
+       then Product(m1) = Product(m2) * m1.(k+1) by RVSUM_1:126;
+       then mm = Product(m2) * (m1.(k+1) * (m1.(k+1))");
+       then C3: mm = Product(m2) * 1 by B4,XCMPLX_0:def 7;
+       B3: z1, z2 are_congruent_mod m1.(k+1) by B5,C1,H;
+       mm * m1.(k+1)
+           = Product(m1) * ((m1.(k+1))" * m1.(k+1))
+          .= Product(m1) * 1 by B4,XCMPLX_0:def 7
+          .= Product(m1);
+       hence z1,z2 are_congruent_mod Product m1 by B3,C3,B2,x1a,C1,prodgcd;
+       end;
+     suppose k = 0;
+       then C1: m1 = <*m1.1*> by C6,FINSEQ_1:57;
+       then dom m1 = Seg 1 by FINSEQ_1:55;
+       then C4: 1 in dom m1;
+       1 <= len m by C5,C7,XXREAL_0:2;
+       then 1 in Seg(len m);
+       then C5: 1 in dom m by FINSEQ_1:def 3;
+       Product(m1) = m1.1 by C1,RVSUM_1:125
+                  .= m.1 by C4,C0,FUNCT_1:70;
+       hence z1,z2 are_congruent_mod Product(m1) by C5,H;
+     end;
+     end;
+   hence P[k+1];
+   end;
+I: for k being Element of NAT st 0 <= k & k <= len m holds P[k]
+   from POLYNOM2:sch 4(A,B);
+m|(len m) = m by FINSEQ_1:79;
+then A: z1, z2 are_congruent_mod Product(m) by I;
+thus z1 = z1 mod Product(m) by INT_3:10,AS2
+       .= z2 mod Product(m) by A,INT_3:12 .= z2 by AS2,INT_3:10;
+end;
+
+
+begin  :: Integer Arithmetic based on CRT
+
+definition
+let u be Integer,
+    m be integer-valued FinSequence;
+func mod(u,m) -> FinSequence means :Df1:
+  len it = len m &
+  for i being natural number st i in dom it holds it.i = u mod m.i;
+existence
+ proof
+ defpred P[set,set] means $2 = u mod m.($1);
+ A: for k being Nat st k in Seg(len m)
+    ex x being Element of INT st P[k,x]
+    proof
+    let k be Nat;
+    assume k in Seg(len m);
+    reconsider j = u mod (m.k) as Element of INT by INT_1:def 2;
+    take j;
+    thus thesis;
+    end;
+ consider p being FinSequence of INT such that
+ B: dom p = Seg len m &
+    for k being Nat st k in Seg len m holds P[k,p.k]
+    from FINSEQ_1:sch 5(A);
+ take p;
+ thus len p = len m by B,FINSEQ_1:def 3;
+ thus thesis by B;
+ end;
+uniqueness
+ proof
+ let z1,z2 be FinSequence;
+ assume A1: len z1 = len m &
+        for i being natural number st i in dom z1 holds z1.i = u mod (m.i);
+ assume A2: len z2 = len m &
+        for i being natural number st i in dom z2 holds z2.i = u mod (m.i);
+ B: dom z1 = Seg len z1 by FINSEQ_1:def 3 .= dom z2 by A1,A2,FINSEQ_1:def 3;
+ now let x be set;
+   assume C: x in dom z1;
+   then reconsider x' = x as Element of NAT;
+   thus z1.x = u mod (m.x') by C,A1 .= z2.x by B,C,A2;
+   end;
+ hence z1 = z2 by B,FUNCT_1:9;
+ end;
+end;
+
+registration
+let u be Integer,
+    m be integer-valued FinSequence;
+cluster mod(u,m) -> integer-valued;
+coherence
+ proof
+ now let y be set;
+   assume y in rng mod(u,m);
+   then consider x being set such that
+   H: x in dom mod(u,m) & mod(u,m).x = y by FUNCT_1:def 5;
+   reconsider x as Element of NAT by H;
+   reconsider x as natural number;
+   y = u mod m.x by H,Df1;
+   hence y in INT by INT_1:def 2;
+   end;
+ then rng mod(u,m) c= INT by TARSKI:def 3;
+ hence thesis by VALUED_0:def 5;
+ end;
+end;
+
+definition
+let m be CR_Sequence;
+mode CR_coefficients of m -> FinSequence means :defCi:
+  len it = len m &
+  for i being natural number st i in dom it holds
+    ex s being Integer, mm being Integer
+    st mm = Product(m) / m.i & s * mm, 1 are_congruent_mod m.i &
+       it.i = s * (Product(m) / m.i);
+existence
+proof
+defpred P[set,set] means
+  ex s being Integer, mm being Integer
+     st mm = Product(m) / m.$1 &
+        s * mm, 1 are_congruent_mod m.$1 &
+        $2 = s * (Product(m) / m.$1);
+A: for k being Nat st k in Seg len m
+   ex x being Element of INT st P[k,x]
+   proof
+   let k be Nat;
+   assume k in Seg(len m);
+   then A2: k in dom m by FINSEQ_1:def 3;
+   then m.k in rng m by FUNCT_1:12;
+   then m.k > 0 by PARTFUN3:def 1;
+   then reconsider mm = Product(m) / m.k as Integer by A2,prodint;
+   consider s being Integer such that
+   A1: s * mm, 1 are_congruent_mod m.k by thgcd,A2,prodgcd;
+   set x = s * mm;
+   reconsider x as Element of INT by INT_1:def 2;
+   take x;
+   take s; take mm;
+   thus thesis by A1;
+   end;
+consider p being FinSequence of INT such that
+B: dom p = Seg len m & for k being Nat st k in Seg len m
+   holds P[k,p.k] from FINSEQ_1:sch 5(A);
+take p;
+thus thesis by B,FINSEQ_1:def 3;
+end;
+end;
+
+registration
+let m be CR_Sequence;
+cluster -> integer-valued CR_coefficients of m;
+coherence
+proof
+let c be CR_coefficients of m;
+now let u be set;
+  assume u in rng c;
+  then consider x being set such that
+  H: x in dom c & c.x = u by FUNCT_1:def 5;
+  reconsider x as Element of NAT by H;
+  reconsider x as natural number;
+  consider s being Integer, mm being Integer such that
+  Q: mm = Product(m) / m.x & s * mm, 1 are_congruent_mod m.x &
+     c.x = s * (Product(m) / m.x) by defCi,H;
+  thus u in INT by H,Q,INT_1:def 2;
+  end;
+then rng c c= INT by TARSKI:def 3;
+hence thesis by VALUED_0:def 5;
+end;
+end;
+
+theorem l1:
+for m being CR_Sequence,
+    c being CR_coefficients of m,
+    i being natural number st i in dom c
+holds c.i,1 are_congruent_mod m.i
+proof
+let m be CR_Sequence,
+    c be CR_coefficients of m,
+    i be natural number;
+assume i in dom c;
+then consider s being Integer, mm being Integer such that
+A: mm = Product(m) / m.i &
+   s * mm, 1 are_congruent_mod m.i &
+   c.i = s * (Product(m) / m.i) by defCi;
+thus thesis by A;
+end;
+
+theorem l2:
+for m being CR_Sequence,
+    c being CR_coefficients of m,
+    i,j being natural number st i in dom c & j in dom c & i <> j
+holds c.i,0 are_congruent_mod m.j
+proof
+let m be CR_Sequence,
+    c be CR_coefficients of m,
+    i,j be natural number;
+assume AS: i in dom c & j in dom c & i <> j;
+then consider s being Integer, mm being Integer such that
+A: mm = Product(m) / m.i &
+   s * mm, 1 are_congruent_mod m.i &
+   c.i = s * (Product(m) / m.i) by defCi;
+len m = len c by defCi;
+then D: dom m = Seg(len c) by FINSEQ_1:def 3 .= dom c by FINSEQ_1:def 3;
+D1: m.j in rng m & m.i in rng m by AS,D,FUNCT_1:12;
+m.j > 0 & m.i > 0 by PARTFUN3:def 1,D1;
+then consider z being Integer such that
+C: z * m.j = mm by AS,A,x0000,D;
+B1: s,s are_congruent_mod m.j by INT_1:32;
+B2: z,z are_congruent_mod m.j by INT_1:32;
+m.j, 0 are_congruent_mod m.j by INT_1:33;
+then z * m.j, z*0 are_congruent_mod m.j by B2,INT_1:39;
+then s * mm, s * 0 are_congruent_mod m.j by C,B1,INT_1:39;
+hence thesis by A;
+end;
+
+theorem
+for m being CR_Sequence,
+    c1,c2 being CR_coefficients of m,
+    i being natural number  st i in dom c1
+holds c1.i,c2.i are_congruent_mod m.i
+proof
+let m be CR_Sequence,
+    c1,c2 be CR_coefficients of m,
+    i be natural number;
+assume AS: i in dom c1;
+then consider s1 being Integer, mm1 being Integer such that
+A1: mm1 = Product(m) / m.i &
+    s1 * mm1, 1 are_congruent_mod m.i &
+    c1.i = s1 * (Product(m) / m.i) by defCi;
+H1: len c1 = len m by defCi .= len c2 by defCi;
+dom c1 = Seg(len c1) by FINSEQ_1:def 3 .= dom c2 by H1,FINSEQ_1:def 3;
+then consider s2 being Integer, mm2 being Integer such that
+A2: mm2 = Product(m) / m.i &
+    s2 * mm2, 1 are_congruent_mod m.i &
+    c2.i = s2 * (Product(m) / m.i) by AS,defCi;
+1, s2 * mm2 are_congruent_mod m.i by A2,INT_1:35;
+hence thesis by A1,A2,INT_1:36;
+end;
+
+theorem congsum:
+for u being integer-valued FinSequence,
+    m being CR_Sequence st len m = len u
+for c being CR_coefficients of m,
+    i being natural number st i in dom m
+holds Sum(u(#)c),u.i are_congruent_mod m.i
+proof
+let u be integer-yielding FinSequence,
+    m be CR_Sequence;
+assume AS1: len m = len u;
+let c be CR_coefficients of m,
+    i be natural number;
+assume AS2: i in dom m;
+AS3: len m = len c by defCi; then
+K: dom m = Seg(len c) by FINSEQ_1:def 3 .= dom c by FINSEQ_1:def 3;
+J1: dom m = Seg(len u) by FINSEQ_1:def 3,AS1;
+then J: 1 <= i & i <= len u by AS2,FINSEQ_1:3;
+defpred P[Nat] means
+   for v,cc being integer-yielding FinSequence st v = u|($1) & cc = c|($1)
+   holds ($1 < i &  Sum(v(#)cc), 0 are_congruent_mod m.i) or
+         ($1 >= i & Sum(v(#)cc), u.i are_congruent_mod m.i);
+now let v,cc be integer-yielding FinSequence;
+  assume v = u|0 & cc = c|0;
+  then dom v /\ dom cc = {} by RELAT_1:60;
+  then dom(v(#)cc) = {} by VALUED_1:def 4;
+  then v(#)cc = {} by RELAT_1:64;
+  hence (0 < i & Sum(v(#)cc), 0 are_congruent_mod m.i) or
+     (0 >= i & Sum(v(#)cc), u.i are_congruent_mod m.i)
+     by INT_1:32,J1,AS2,FINSEQ_1:3,RVSUM_1:102;
+  end;
+then A: P[0];
+B: now let k be Element of NAT;
+   assume C0: 0 <= k & k < len u & P[k];
+   now let v,cc be integer-yielding FinSequence;
+     assume C: v = u|(k+1) & cc = c|(k+1);
+     set v' = u|k, cc' = c|k;
+     F1: 0 + 1 <= k + 1 by XREAL_1:8; then
+     F1a: 1 <= k + 1 & k + 1 <= len c by AS1,AS3,C0,NAT_1:13;
+     then k + 1 in Seg(len c);
+     then C1: k + 1 in dom c by FINSEQ_1:def 3;
+     len cc = k+1 by C,F1a,FINSEQ_1:80;
+     then k+1 in Seg(len cc) by F1; then
+     E1: k+1 in dom cc by FINSEQ_1:def 3;
+     k+1 <= len u by C0,NAT_1:13;
+     then len v = k+1 by FINSEQ_1:80,C;
+     then k+1 in Seg(len v) by F1; then
+     E2: k+1 in dom v by FINSEQ_1:def 3;
+     F3: k+1 <= len u by C0,NAT_1:13;
+     C5: cc.(k+1) = c.(k+1) by E1,C,FUNCT_1:70;
+     C2: v.(k+1) = u.(k+1) by E2,C,FUNCT_1:70;
+     E4: len u = len c by AS1,defCi;
+     C6: v' (#) cc' = (u(#)c)|k by E4,Z10,C0;
+     reconsider r = v.(k+1) * cc.(k+1) as Element of REAL by XREAL_0:def 1;
+     reconsider s = <*r*> as FinSequence of REAL;
+     reconsider a = v(#)cc, b = v'(#)cc' as FinSequence of REAL by ZZ1;
+     C4: k < k + 1 by NAT_1:13;
+     (u(#)c)|k ^ <*v.(k+1) * cc.(k+1)*> = (u(#)c)|(k+1)
+       proof
+       set p = ((u(#)c)|k) ^ <*v.(k+1) * cc.(k+1)*>, q = (u(#)c)|(k+1);
+       G1: k + 1 <= len(u(#)c) by AS1,AS3,F3,length3;
+       then G2: k <= len(u(#)c) by NAT_1:13;
+       Ga: len p = len((u(#)c)|k) + 1 by FINSEQ_2:19
+                .= k + 1 by G2,FINSEQ_1:80;
+       Gb: k + 1 = len q by G1,FINSEQ_1:80;
+       now let j be Nat;
+         assume X: 1 <= j & j <= len p;
+A:       j in NAT by ORDINAL1:def 13;
+         per cases;
+         suppose G3: j in dom((u(#)c)|k);
+           j in Seg(k+1) by X,Ga,A;
+           then G4: j in dom q by Gb,FINSEQ_1:def 3;
+           thus p.j = ((u(#)c)|k).j by G3,FINSEQ_1:def 7
+                   .= (u(#)c).j by G3,FUNCT_1:70
+                   .= q.j by G4,FUNCT_1:70;
+           end;
+         suppose G3: not j in dom((u(#)c)|k);
+           k <= len(u(#)c) by E4,C0,length3;
+           then G8: len((u(#)c)|k) = k by FINSEQ_1:80;
+           then dom((u(#)c)|k) = Seg k by FINSEQ_1:def 3;
+           then j > k by A,X,G3;
+           then G5a: j >= k + 1 & j <= k+1 by X,Ga,NAT_1:13;
+           then G5: j = k+1 by XXREAL_0:1;
+           j in Seg(k+1) by A,X,Ga;
+           then G4: j in dom q by Gb,FINSEQ_1:def 3;
+           k+1 <= len(u(#)c) by F1a,E4,length3;
+           then j in Seg(len(u(#)c)) by G5,F1;
+           then G6: j in dom(u(#)c) by FINSEQ_1:def 3;
+           G7: q.j = (u(#)c).j by G4,FUNCT_1:70
+                  .= v.(k+1) * cc.(k+1) by G5,C2,C5,G6,VALUED_1:def 4;
+           dom<*v.(k+1)*cc.(k+1)*> = {1} by FINSEQ_1:4,FINSEQ_1:55;
+           then 1 in dom<*v.(k+1)*cc.(k+1)*> by TARSKI:def 1;
+           then p.(k+1) = <*v.(k+1)*cc.(k+1)*>.1 by G8,FINSEQ_1:def 7
+                       .= v.(k+1)*cc.(k+1) by FINSEQ_1:57;
+           hence p.j = q.j by G7,G5a,XXREAL_0:1;
+           end;
+         end;
+       hence thesis by Ga,Gb,FINSEQ_1:18;
+       end;
+     then X: a = b^s by F3,C,E4,Z10,C6;
+     C3: Sum(v(#)cc) = Sum(b) + Sum s by X,RVSUM_1:105
+                    .= Sum(v'(#)cc') + v.(k+1) * cc.(k+1) by RVSUM_1:103;
+     now per cases by REAL_1:def 5;
+     case D0: k + 1 < i;
+       then k < i by NAT_1:13;
+       then D1: Sum(v'(#)cc'), 0 are_congruent_mod m.i by C0;
+       D2: cc.(k+1), 0 are_congruent_mod m.i by C5,K,C1,D0,AS2,l2;
+       v.(k+1),v.(k+1) are_congruent_mod m.i by INT_1:32; then
+       v.(k+1)*cc.(k+1),v.(k+1)*0 are_congruent_mod m.i by D2,INT_1:39;
+       then Sum(v(#)cc), (0+v.(k+1)*0) are_congruent_mod m.i by C3,D1,INT_1:37;
+       hence Sum(v(#)cc), 0 are_congruent_mod m.i;
+       end;
+     case D0: k + 1 = i;
+       then D1: Sum(v'(#)cc'), 0 are_congruent_mod m.i by C4,C0;
+       D2: cc.(k+1), 1 are_congruent_mod m.i by C5,C1,D0,l1;
+       v.(k+1),v.(k+1) are_congruent_mod m.i by INT_1:32; then
+       v.(k+1)*cc.(k+1),u.(k+1)*1 are_congruent_mod m.i by C2,D2,INT_1:39;
+       hence Sum(v(#)cc), 0 + u.i are_congruent_mod m.i by D1,C3,D0,INT_1:37;
+       end;
+     case D0: k + 1 > i;
+       then k >= i by NAT_1:13;
+       then D1: Sum(v'(#)cc'), u.i are_congruent_mod m.i by C0;
+       D2: cc.(k+1), 0 are_congruent_mod m.i by C5,K,C1,D0,AS2,l2;
+       v.(k+1),v.(k+1) are_congruent_mod m.i by INT_1:32; then
+       v.(k+1)*cc.(k+1),u.(k+1)*0 are_congruent_mod m.i by C2,D2,INT_1:39;
+       hence Sum(v(#)cc), u.i + 0 are_congruent_mod m.i by D1,C3,INT_1:37;
+       end;
+     end;
+     hence (k+1 < i &  Sum(v(#)cc), 0 are_congruent_mod m.i) or
+           (k+1 >= i & Sum(v(#)cc), u.i are_congruent_mod m.i);
+     end;
+   hence P[k+1];
+   end;
+I: for k be Element of NAT st 0 <= k & k <= len u holds P[k]
+   from POLYNOM2:sch 4(A,B);
+len u = len c by AS1,defCi; then
+u = u|(len u) & c|(len u) = c by FINSEQ_1:79;
+hence thesis by I,J;
+end;
+
+theorem exnon:
+for u being integer-valued FinSequence,
+    m being CR_Sequence st len m = len u
+for c1,c2 being CR_coefficients of m
+holds Sum(u(#)c1),Sum(u(#)c2) are_congruent_mod Product(m)
+proof
+let u be integer-yielding FinSequence,
+    m be CR_Sequence;
+assume H0: len u = len m;
+let c1, c2 be CR_coefficients of m;
+set s1 = Sum(u(#)c1) mod Product(m), s2 = Sum(u(#)c2) mod Product(m);
+A: for i being natural number
+   st i in dom m holds s1, u.i are_congruent_mod m.i
+   proof
+   let i be natural number;
+   assume A0: i in dom m;
+   then Sum(u(#)c1), u.i are_congruent_mod m.i by H0,congsum;
+   then C: Sum(u(#)c1) mod m.i = u.i mod m.i by INT_3:12;
+   m.i in rng m by A0,FUNCT_1:12;
+   then D1: m.i > 0 by PARTFUN3:def 1;
+   consider z being Integer such that
+   E: z * m.i = Product(m) by A0,x000;
+   s1 mod Product(m) = Sum(u(#)c1) mod Product(m) by INT_3:13;
+   then s1, Sum(u(#)c1) are_congruent_mod Product(m) by INT_3:12;
+   then s1, Sum(u(#)c1) are_congruent_mod m.i by E,INT_1:41;
+   then s1 mod m.i = Sum(u(#)c1) mod m.i by INT_3:12;
+   hence thesis by D1,C,INT_3:12;
+   end;
+B: for i being natural number
+   st i in dom m holds s2, u.i are_congruent_mod m.i
+   proof
+   let i be natural number;
+   assume A0: i in dom m;
+   then Sum(u(#)c2), u.i are_congruent_mod m.i by H0,congsum;
+   then C: Sum(u(#)c2) mod m.i = u.i mod m.i by INT_3:12;
+   m.i in rng m by A0,FUNCT_1:12;
+   then D1: m.i > 0 by PARTFUN3:def 1;
+   consider z being Integer such that
+   E: z * m.i = Product(m) by A0,x000;
+   s2 mod Product(m) = Sum(u(#)c2) mod Product(m) by INT_3:13;
+   then s2, Sum(u(#)c2) are_congruent_mod Product(m) by INT_3:12;
+   then s2, Sum(u(#)c2) are_congruent_mod m.i by E,INT_1:41;
+   then s2 mod m.i = Sum(u(#)c2) mod m.i by INT_3:12;
+   hence thesis by D1,C,INT_3:12;
+   end;
+C: 0 <= s1 & s1 < Product(m) by INT_3:9;
+0 <= s2 & s2 < Product(m) by INT_3:9;
+then s1 = s2 by A,B,C,Th3;
+hence thesis by INT_3:12;
+end;
+
+definition
+let u be integer-valued FinSequence,
+    m be CR_Sequence such that A:len m = len u;
+func to_int(u,m) -> Integer means :Df5:
+  for c being CR_coefficients of m holds it = Sum(u(#)c) mod Product(m);
+existence
+ proof
+ consider cz being CR_coefficients of m;
+ set z = Sum(u(#)cz) mod Product(m);
+ take z;
+ now let c be CR_coefficients of m;
+   Sum(u(#)c), Sum(u(#)cz) are_congruent_mod Product(m) by A,exnon;
+   hence z = Sum(u(#)c) mod Product(m) by INT_3:12;
+   end;
+ hence thesis;
+ end;
+uniqueness
+ proof
+ let z1, z2 be Integer;
+ assume A1: for c being CR_coefficients of m
+            holds z1 = Sum(u(#)c) mod Product(m);
+ assume A2: for c being CR_coefficients of m
+            holds z2 = Sum(u(#)c) mod Product(m);
+ consider c being CR_coefficients of m;
+ thus z1 = Sum(u(#)c) mod Product(m) by A1 .= z2 by A2;
+ end;
+end;
+
+theorem lemat2:
+for u being integer-valued FinSequence,
+    m being CR_Sequence st len m = len u
+holds 0 <= to_int(u,m) & to_int(u,m) < Product(m)
+proof
+let u be integer-yielding FinSequence,
+    m be CR_Sequence;
+assume AS: len u = len m;
+set z = to_int(u,m);
+consider c being CR_coefficients of m;
+z = Sum(u(#)c) mod Product(m) by AS,Df5;
+hence thesis by INT_3:9;
+end;
+
+theorem lemat4:
+for u being Integer,
+    m being CR_Sequence,
+    i being natural number st i in dom m
+holds u, mod(u,m).i are_congruent_mod m.i
+proof
+let u be Integer, m be CR_Sequence;
+let i be natural number;
+assume AS: i in dom m;
+then m.i in rng m by FUNCT_1:12;
+then D1: m.i > 0 by PARTFUN3:def 1;
+A: len mod(u,m) = len m & for i being Element of NAT st i in dom mod(u,m)
+                          holds mod(u,m).i = u mod m.i by Df1;
+dom mod(u,m) = Seg(len mod(u,m)) by FINSEQ_1:def 3
+            .= dom m by A,FINSEQ_1:def 3;
+then D: mod(u,m).i = u mod m.i by Df1,AS;
+u mod m.i = u - (u div m.i) * m.i by D1,INT_1:def 8;
+then u - (u mod m.i) = (u div m.i) * m.i;
+hence thesis by D,INT_1:def 3;
+end;
+
+theorem lemat3ap:
+for u,v being Integer,
+    m being CR_Sequence,
+    i being natural number st i in dom m holds
+(mod(u,m) + mod(v,m)).i, u + v are_congruent_mod m.i
+proof
+let u,v be Integer,
+    m be CR_Sequence,
+    i be natural number;
+assume AS: i in dom m;
+C: len mod(v,m) = len m by Df1; then
+CC: len mod(u,m) = len mod(v,m) & len mod(u,m) = len m by Df1;
+then len(mod(u,m)+mod(v,m)) = len m by length1;
+then A1: dom(mod(u,m)+mod(v,m)) = Seg(len m) by FINSEQ_1:def 3
+                               .= dom m by FINSEQ_1:def 3;
+m.i in rng m by AS,FUNCT_1:12;
+then D1: m.i > 0 by PARTFUN3:def 1;
+B1: (mod(u,m)+mod(v,m)).i
+   = (mod(u,m).i) + (mod(v,m).i) by A1,AS,VALUED_1:def 1;
+D: dom mod(u,m) = Seg(len m) by CC,FINSEQ_1:def 3
+            .= dom m by FINSEQ_1:def 3;
+dom mod(v,m) = Seg(len m) by C,FINSEQ_1:def 3
+            .= dom m by FINSEQ_1:def 3;
+then mod(u,m).i = u mod m.i & mod(v,m).i = v mod m.i by D,AS,Df1;
+then (mod(u,m).i + mod(v,m).i) mod m.i
+         = (u + v) mod m.i by INT_3:14;
+hence thesis by B1,D1,INT_3:12;
+end;
+
+lemat3mm:
+for u,v being Integer,
+    m being CR_Sequence,
+    i being natural number st i in dom m holds
+(mod(u,m) - mod(v,m)).i, u - v are_congruent_mod m.i
+proof
+let u,v be Integer,
+    m be CR_Sequence,
+    i be natural number;
+assume AS: i in dom m;
+C: len mod(v,m) = len m by Df1; then
+CC: len mod(u,m) = len mod(v,m) & len mod(u,m) = len m by Df1;
+then len(mod(u,m)-mod(v,m)) = len m by length2;
+then A1: dom(mod(u,m)-mod(v,m)) = Seg(len m) by FINSEQ_1:def 3
+                               .= dom m by FINSEQ_1:def 3;
+m.i in rng m by AS,FUNCT_1:12;
+then D1: m.i > 0 by PARTFUN3:def 1;
+B1: (mod(u,m)-mod(v,m)).i
+   = (mod(u,m).i) - (mod(v,m).i) by A1,AS,VALUED_1:13;
+D: dom mod(u,m) = Seg(len m) by CC,FINSEQ_1:def 3
+               .= dom m by FINSEQ_1:def 3;
+dom mod(v,m) = Seg(len m) by C,FINSEQ_1:def 3
+            .= dom m by FINSEQ_1:def 3;
+then mod(u,m).i = u mod m.i & mod(v,m).i = v mod m.i by D,AS,Df1;
+then (mod(u,m).i - mod(v,m).i) mod m.i
+         = (u - v) mod m.i by Th14;
+hence thesis by D1,B1,INT_3:12;
+end;
+
+theorem lemat3a:
+for u,v being Integer,
+    m being CR_Sequence,
+    i being natural number st i in dom m holds
+(mod(u,m) (#) mod(v,m)).i, u * v are_congruent_mod m.i
+proof
+let u,v be Integer,
+    m be CR_Sequence,
+    i be natural number;
+assume AS: i in dom m;
+C: len mod(v,m) = len m by Df1; then
+CC: len mod(u,m) = len mod(v,m) & len mod(u,m) = len m by Df1;
+then len(mod(u,m)(#)mod(v,m)) = len m by length3;
+then A1: dom(mod(u,m)(#)mod(v,m)) = Seg(len m) by FINSEQ_1:def 3
+                                 .= dom m by FINSEQ_1:def 3;
+m.i in rng m by AS,FUNCT_1:12;
+then D1: m.i > 0 by PARTFUN3:def 1;
+B1: (mod(u,m)(#)mod(v,m)).i
+   = ((mod(u,m).i) * (mod(v,m).i)) by A1,AS,VALUED_1:def 4;
+D: dom mod(u,m) = Seg(len m) by CC,FINSEQ_1:def 3
+            .= dom m by FINSEQ_1:def 3;
+dom mod(v,m) = Seg(len m) by C,FINSEQ_1:def 3
+            .= dom m by FINSEQ_1:def 3;
+then mod(u,m).i = u mod m.i & mod(v,m).i = v mod m.i by D,AS,Df1;
+then (mod(u,m).i * mod(v,m).i) mod m.i
+         = (u * v) mod m.i by INT_3:15;
+hence thesis by D1,B1,INT_3:12;
+end;
+
+theorem lemat3p:
+for u,v being Integer,
+    m being CR_Sequence,
+    i being natural number st i in dom m holds
+to_int(mod(u,m) + mod(v,m),m), u + v are_congruent_mod m.i
+proof
+let u,v be Integer,
+    m be CR_Sequence,
+    i be natural number;
+assume AS: i in dom m;
+set z = to_int(mod(u,m) + mod(v,m),m);
+consider c being CR_coefficients of m;
+len mod(v,m) = len m by Df1;
+then len mod(u,m) = len mod(v,m) & len mod(u,m) = len m by Df1;
+then E: len(mod(u,m)+mod(v,m)) = len m by length1;
+then z = Sum((mod(u,m)+mod(v,m)) (#) c) mod Product(m) by Df5;
+then z mod Product(m)
+   = Sum((mod(u,m)+mod(v,m)) (#) c) mod Product(m) by INT_3:13;
+then G: z, Sum((mod(u,m)+mod(v,m)) (#) c) are_congruent_mod Product(m)
+   by INT_3:12;
+consider y being Integer such that H: y * m.i = Product(m) by AS,x000;
+F: z, Sum((mod(u,m)+mod(v,m)) (#) c) are_congruent_mod m.i
+   by G,H,INT_1:41;
+Sum((mod(u,m)+mod(v,m)) (#) c),
+      (mod(u,m)+mod(v,m)).i are_congruent_mod m.i by AS,E,congsum;
+then D: z,(mod(u,m)+mod(v,m)).i are_congruent_mod m.i
+        by F,INT_1:36;
+(mod(u,m)+mod(v,m)).i, u + v are_congruent_mod m.i by lemat3ap,AS;
+hence thesis by D,INT_1:36;
+end;
+
+theorem lemat3m:
+for u,v being Integer,
+    m being CR_Sequence,
+    i being natural number st i in dom m holds
+to_int(mod(u,m) - mod(v,m),m), u - v are_congruent_mod m.i
+proof
+let u,v be Integer,
+    m be CR_Sequence,
+    i be natural number;
+assume AS: i in dom m;
+set z = to_int((mod(u,m) - mod(v,m)),m);
+consider c being CR_coefficients of m;
+len mod(v,m) = len m by Df1;
+then len mod(u,m) = len mod(v,m) & len mod(u,m) = len m by Df1;
+then E: len(mod(u,m) - mod(v,m)) = len m by length2;
+then z = Sum((mod(u,m) - mod(v,m)) (#) c) mod Product(m) by Df5;
+then z mod Product(m)
+   = Sum((mod(u,m)-mod(v,m)) (#) c) mod Product(m) by INT_3:13;
+then G: z, Sum((mod(u,m)-mod(v,m)) (#) c) are_congruent_mod Product(m)
+   by INT_3:12;
+consider y being Integer such that H: y * m.i = Product(m) by AS,x000;
+F: z, Sum((mod(u,m)-mod(v,m)) (#) c) are_congruent_mod m.i
+   by G,H,INT_1:41;
+Sum((mod(u,m)-mod(v,m)) (#) c),
+      (mod(u,m)-mod(v,m)).i are_congruent_mod m.i by AS,E,congsum;
+then D: z,(mod(u,m)-mod(v,m)).i are_congruent_mod m.i
+        by F,INT_1:36;
+(mod(u,m)-mod(v,m)).i, u - v are_congruent_mod m.i by lemat3mm,AS;
+hence thesis by D,INT_1:36;
+end;
+
+theorem lemat3:
+for u,v being Integer,
+    m being CR_Sequence,
+    i being natural number st i in dom m holds
+to_int(mod(u,m) (#) mod(v,m),m), u * v are_congruent_mod m.i
+proof
+let u,v be Integer,
+    m be CR_Sequence,
+    i be natural number;
+assume AS: i in dom m;
+set z = to_int((mod(u,m) (#) mod(v,m)),m);
+consider c being CR_coefficients of m;
+len mod(v,m) = len m by Df1;
+then len mod(u,m) = len mod(v,m) & len mod(u,m) = len m by Df1;
+then E: len(mod(u,m) (#) mod(v,m)) = len m by length3;
+then z = Sum((mod(u,m) (#) mod(v,m)) (#) c) mod Product(m) by Df5;
+then z mod Product(m)
+   = Sum((mod(u,m)(#)mod(v,m)) (#) c) mod Product(m) by INT_3:13;
+then G: z, Sum((mod(u,m)(#)mod(v,m)) (#) c) are_congruent_mod Product(m)
+   by INT_3:12;
+consider y being Integer such that H: y * m.i = Product(m) by AS,x000;
+F: z, Sum((mod(u,m)(#)mod(v,m)) (#) c) are_congruent_mod m.i
+   by G,H,INT_1:41;
+Sum((mod(u,m)(#)mod(v,m)) (#) c),
+      (mod(u,m)(#)mod(v,m)).i are_congruent_mod m.i by AS,E,congsum;
+then D: z,(mod(u,m)(#)mod(v,m)).i are_congruent_mod m.i
+        by F,INT_1:36;
+(mod(u,m)(#)mod(v,m)).i, u * v are_congruent_mod m.i by lemat3a,AS;
+hence thesis by D,INT_1:36;
+end;
+
+theorem
+for u,v being Integer,
+    m being CR_Sequence
+      st 0 <= u + v & u + v < Product(m)
+holds to_int(mod(u,m) + mod(v,m), m) = u + v
+proof
+let u, v be Integer,
+    m be CR_Sequence;
+assume A: 0 <= u + v & u + v < Product(m);
+A1: len mod(u+v,m) = len m by Df1;
+A2: for i being natural number st i in dom m
+    holds u + v, mod(u+v,m).i are_congruent_mod m.i by lemat4;
+set z = to_int(mod(u,m) + mod(v,m), m);
+len mod(v,m) = len m by Df1; then
+len mod(u,m) = len mod(v,m) & len mod(u,m) = len m by Df1;
+then len(mod(u,m)+mod(v,m)) = len m by length1;
+then A3: 0 <= z & z < Product(m) by lemat2;
+A4: for i being natural number st i in dom m
+    holds z, mod(u+v,m).i are_congruent_mod m.i
+    proof
+    let i be natural number;
+    assume B0: i in dom m;
+    dom(mod(u+v,m)) = Seg(len m) by FINSEQ_1:def 3,A1
+                   .= dom m by FINSEQ_1:def 3;
+    then B1: mod(u+v,m).i = (u + v) mod m.i by B0,Df1;
+    z,u + v are_congruent_mod m.i by B0,lemat3p;
+    then B3: z mod m.i = (u+v) mod m.i by INT_3:12;
+    m.i in rng m by B0,FUNCT_1:12;
+    then D1: m.i > 0 by PARTFUN3:def 1;
+    then m.i is Element of NAT by INT_1:16;
+    then (u+v) mod m.i = ((u+v) mod m.i) mod m.i by INT_3:13;
+    hence thesis by B1,D1,B3,INT_3:12;
+    end;
+thus thesis by A,A2,A3,A4,Th3;
+end;
+
+theorem
+for u,v being Integer,
+    m being CR_Sequence
+      st 0 <= u - v & u - v < Product(m)
+holds to_int(mod(u,m) - mod(v,m), m) = u - v
+proof
+let u, v be Integer,
+    m be CR_Sequence;
+assume A: 0 <= u - v & u - v < Product(m);
+A1: len mod(u-v,m) = len m by Df1;
+A2: for i being natural number st i in dom m
+    holds u - v, mod(u-v,m).i are_congruent_mod m.i by lemat4;
+set z = to_int(mod(u,m) - mod(v,m), m);
+len mod(v,m) = len m by Df1; then
+len mod(u,m) = len mod(v,m) & len mod(u,m) = len m by Df1;
+then len(mod(u,m) - mod(v,m)) = len m by length2;
+then A3: 0 <= z & z < Product(m) by lemat2;
+A4: for i being natural number st i in dom m
+    holds z,mod(u-v,m).i are_congruent_mod m.i
+    proof
+    let i be natural number;
+    assume B0: i in dom m;
+    dom(mod(u-v,m)) = Seg(len m) by FINSEQ_1:def 3,A1
+                   .= dom m by FINSEQ_1:def 3;
+    then B1: mod(u-v,m).i = (u - v) mod m.i by B0,Df1;
+    z,u - v are_congruent_mod m.i by B0,lemat3m;
+    then B3: z mod m.i = (u-v) mod m.i by INT_3:12;
+    m.i in rng m by B0,FUNCT_1:12;
+    then D1: m.i > 0 by PARTFUN3:def 1;
+    then m.i is Element of NAT by INT_1:16;
+    then (u-v) mod m.i = ((u-v) mod m.i) mod m.i by INT_3:13;
+    hence thesis by B1,D1,B3,INT_3:12;
+    end;
+thus thesis by A,A2,A3,A4,Th3;
+end;
+
+theorem
+for u,v being Integer,
+    m being CR_Sequence
+      st 0 <= u * v & u * v < Product(m)
+holds to_int(mod(u,m) (#) mod(v,m), m) = u * v
+proof
+let u, v be Integer,
+    m be CR_Sequence;
+assume A: 0 <= u * v & u * v < Product(m);
+A1: len mod(u*v,m) = len m by Df1;
+A2: for i being natural number st i in dom m
+    holds u * v,mod(u*v,m).i are_congruent_mod m.i by lemat4;
+set z = to_int(mod(u,m) (#) mod(v,m), m);
+len mod(v,m) = len m by Df1; then
+len mod(u,m) = len mod(v,m) & len mod(u,m) = len m by Df1;
+then len(mod(u,m) (#) mod(v,m)) = len m by length3;
+then A3: 0 <= z & z < Product(m) by lemat2;
+A4: for i being natural number st i in dom m
+    holds z,mod(u*v,m).i are_congruent_mod m.i
+    proof
+    let i be natural number;
+    assume B0: i in dom m;
+    dom(mod(u*v,m)) = Seg(len m) by FINSEQ_1:def 3,A1
+                   .= dom m by FINSEQ_1:def 3;
+    then B1: mod(u*v,m).i = (u * v) mod m.i by B0,Df1;
+    z,u * v are_congruent_mod m.i by B0,lemat3;
+    then B3: z mod m.i = (u*v) mod m.i by INT_3:12;
+    m.i in rng m by B0,FUNCT_1:12;
+    then D1: m.i > 0 by PARTFUN3:def 1;
+    then m.i is Element of NAT by INT_1:16;
+    then (u*v) mod m.i = ((u*v) mod m.i) mod m.i by INT_3:13;
+    hence thesis by B1,D1,B3,INT_3:12;
+    end;
+thus thesis by A,A2,A3,A4,Th3;
+end;
+
+begin  :: Chinese Remainder Theorem Revisited
+
+theorem
+for u being integer-valued FinSequence,
+    m being CR_Sequence st len u = len m
+ex z being Integer
+st 0 <= z & z < Product(m) &
+   for i being natural number st i in dom u holds z,u.i are_congruent_mod m.i
+proof
+let u be integer-yielding FinSequence,
+    m be CR_Sequence;
+assume AS: len u = len m;
+take z = to_int(u,m);
+now let i be natural number;
+  assume A1: i in dom u;
+  A1a: dom m = Seg(len u) by AS,FINSEQ_1:def 3 .= dom u by FINSEQ_1:def 3;
+  consider c being CR_coefficients of m;
+  set s = Sum(u(#)c) mod Product(m);
+  A2: dom m = Seg(len u) by AS,FINSEQ_1:def 3 .= dom u by FINSEQ_1:def 3;
+  then Sum(u(#)c), u.i are_congruent_mod m.i by A1,AS,congsum;
+  then C: Sum(u(#)c) mod m.i = u.i mod m.i by INT_3:12;
+  m.i in rng m by A1,A1a,FUNCT_1:12;
+  then D1: m.i > 0 by PARTFUN3:def 1;
+  consider y being Integer such that
+  E: y * m.i = Product(m) by A1,A2,x000;
+  s mod Product(m) = Sum(u(#)c) mod Product(m) by INT_3:13;
+  then s, Sum(u(#)c) are_congruent_mod Product(m) by INT_3:12;
+  then s, Sum(u(#)c) are_congruent_mod m.i by E,INT_1:41;
+  then s mod m.i = Sum(u(#)c) mod m.i by INT_3:12;
+  then s,u.i are_congruent_mod m.i by D1,C,INT_3:12;
+  hence z,u.i are_congruent_mod m.i by Df5,AS;
+  end;
+hence thesis by AS,lemat2;
+end;
+
+theorem
+for u being integer-valued FinSequence,
+    m being CR_Sequence
+for z1,z2 being Integer
+    st 0 <= z1 & z1 < Product(m) & (for i being natural number st i in dom m
+                                    holds z1,u.i are_congruent_mod m.i) &
+       0 <= z2 & z2 < Product(m) & (for i being natural number st i in dom m
+                                    holds z2,u.i are_congruent_mod m.i)
+holds z1 = z2 by Th3;
+

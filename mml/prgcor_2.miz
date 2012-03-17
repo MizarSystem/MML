@@ -99,10 +99,9 @@ A3:   i in NAT by ORDINAL1:def 13;
       assume y in rng p;
       then consider x being set such that
 A4:   x in dom p & y=p.x by FUNCT_1:def 5;
-A5:   x in len p by A4,AFINSQ_1:def 1;
       reconsider nx=x as Element of NAT by A4;
-A6:   p.nx= q.(nx +1) by A1,A5;
-      nx<len q by A1,A5,NAT_1:45;
+A6:   p.nx= q.(nx +1) by A1,A4;
+      nx<len q by A1,A4,NAT_1:45;
       then
 A7:   nx+1<=len q by NAT_1:13;
       0+1<=nx+1 by NAT_1:13;
@@ -164,18 +163,16 @@ A3: for i st 1<=i & i<=len q holds q.(i-'1)=p.i
       assume y in rng p;
       then consider x being set such that
 A4:   x in dom p & y=p.x by FUNCT_1:def 5;
-A5:   x in Seg len p by A4,FINSEQ_1:def 3;
       reconsider nx=x as Element of NAT by A4;
 A6:   nx in Seg len q by A1,A4,FINSEQ_1:def 3;
-A7:   p.nx= q.(nx -'1) by A1,A5,A2;
+A7:   p.nx= q.(nx -'1) by A1,A4;
 A8:   1<=nx & nx<=len q by A6,FINSEQ_1:3;
       then nx-1>=0 by XREAL_1:50;
       then
 A9:   nx-1=nx-'1 by BINARITH:def 3;
       nx-'1<nx-'1+1 by NAT_1:13;
       then nx-'1<len q by A8,A9,XXREAL_0:2;
-      then nx-'1 in len q by NAT_1:45;
-      then nx-'1 in dom q by AFINSQ_1:def 1;
+      then nx-'1 in dom q by NAT_1:45;
       then
 A10:   q.(nx-'1) in rng q by FUNCT_1:def 5;
       rng q c= D by ORDINAL1:def 8;
@@ -219,8 +216,7 @@ end;
 
 theorem Th4:
   for D being set, n being Nat, r being set st r in D
-  holds (n-->r) is XFinSequence of D & for q2 being XFinSequence
-  st q2=(n-->r) holds len q2=n
+  holds (n-->r) is XFinSequence of D
 proof
   let D be set, n be Nat, r be set;
   assume
@@ -239,20 +235,12 @@ A2:   rng p={r} by FUNCOP_1:14;
       hence (n-->r) is XFinSequence of D by ORDINAL1:def 8;
     end;
     case n=0;
-      then dom (n-->r)={} & rng (n-->r)={} by FUNCOP_1:16;
-      then len p=0 by AFINSQ_1:def 1;
+      then len p=0 by FUNCOP_1:16;
       then (n-->r)={} by AFINSQ_1:18;
       hence (n-->r) is XFinSequence of D by AFINSQ_1:19;
     end;
   end;
   hence (n-->r) is XFinSequence of D;
-  thus for q2 being XFinSequence st q2=(n-->r) holds len q2=n
-  proof
-    let q2 be XFinSequence;
-    assume q2=(n-->r);
-    then dom q2=n by FUNCOP_1:19;
-    hence len q2=n by AFINSQ_1:def 1;
-  end;
 end;
 
 definition
@@ -268,7 +256,7 @@ A1: n>len q & NAT c= D;
     0 in NAT;
     then reconsider r=0 as Element of D by A1;
     reconsider q5= ((n-'len q-'1)-->r) as XFinSequence of D by Th4;
-A2: len q5=(n-'len q-'1) by Th4;
+A2: len q5=(n-'len q-'1) by FUNCOP_1:19;
 A3: n-len q>0 by A1,XREAL_1:52;
     then
 A4: n-'len q=n-len q by BINARITH:def 3;
@@ -282,21 +270,18 @@ A5: n-'len q -1>=0 by XREAL_1:50;
     by AFINSQ_1:33;
 A6: len p0=len (<%x%> ^ (FS2XFS q)) + len q5 by AFINSQ_1:20
       .=len <%x%> + len (FS2XFS q) + len q5 by AFINSQ_1:20
-      .= 1 + len (FS2XFS q) + len q5 by AFINSQ_1:37
+      .= 1 + len (FS2XFS q) + len q5 by AFINSQ_1:36
       .=1 + len q + len q5 by Def1
-      .=1+len q+(n-'len q-'1) by Th4
+      .=1+len q+(n-'len q-'1) by FUNCOP_1:19
       .=(n-(len q+1))+(len q+1) by A4,A5,BINARITH:def 3
       .=n;
     0 in 1 by NAT_1:45;
     then
 A7: 0 in dom (<%x%>) by AFINSQ_1:def 5;
-    dom <%x%>=1 by AFINSQ_1:def 5;
-    then
-A8: len <%x%>=1 by AFINSQ_1:def 1;
+A8: len <%x%>=1 by AFINSQ_1:def 5;
     0<1+ len (FS2XFS q);
     then 0 in len <%x%> + len (FS2XFS q) by A8,NAT_1:45;
     then 0 in len (<%x%> ^ (FS2XFS q)) by AFINSQ_1:20;
-    then 0 in dom (<%x%> ^ (FS2XFS q)) by AFINSQ_1:def 1;
     then
 A9: p0.0=(<%x%> ^ (FS2XFS q)).0 by AFINSQ_1:def 4
       .=(<%x%>).0 by A7,AFINSQ_1:def 4
@@ -314,16 +299,14 @@ A12:  i-'1=i-1 by BINARITH:def 3;
       then
 A13:  i-'1 <len q by A11,A12,XXREAL_0:2;
       then i-'1 in len q by NAT_1:45;
-      then i-'1 in len (FS2XFS q) by Def1;
       then
-A14:  i-'1 in dom (FS2XFS q) by AFINSQ_1:def 1;
+B14:   i-'1 in len (FS2XFS q) by Def1;
       i<1+len q by A11,NAT_1:13;
       then i< (len (<%x%>)+len (FS2XFS q)) by A8,Def1;
       then i in (len (<%x%>)+len (FS2XFS q)) by NAT_1:45;
       then i in len (<%x%> ^ (FS2XFS q)) by AFINSQ_1:20;
-      then i in dom (<%x%> ^ (FS2XFS q)) by AFINSQ_1:def 1;
       then p0.i =(<%x%>^(FS2XFS q)).(1+(i-'1)) by A12,AFINSQ_1:def 4
-        .=(FS2XFS q).(i-'1) by A8,A14,AFINSQ_1:def 4
+        .=(FS2XFS q).(i-'1) by A8,B14,AFINSQ_1:def 4
         .=q.(i-'1+1) by A13,Def1
         .=q.i by A12;
       hence p0.i=q.i;
@@ -351,10 +334,8 @@ A20:  n-'len q-'1 =n-(len q+1) by A19,BINARITH:def 3;
       j-(len q+1)< n-(len q+1) by A15,XREAL_1:11;
       then
 A21:  j-'len (<%x%> ^ (FS2XFS q)) in (n-'len q-'1) by A16,A17,A20, NAT_1:45;
-      then
-A22:  j-'len (<%x%> ^ (FS2XFS q)) in dom q5 by A2,AFINSQ_1:def 1;
       j =len (<%x%> ^ (FS2XFS q))+(j-'len (<%x%> ^ (FS2XFS q))) by A16,A17;
-      then p0.j=q5.(j-'len (<%x%> ^ (FS2XFS q))) by A22,AFINSQ_1:def 4
+      then p0.j=q5.(j-'len (<%x%> ^ (FS2XFS q))) by A2,A21,AFINSQ_1:def 4
         .=0 by A21,FUNCOP_1:13;
       hence p0.j=0;
     end;
@@ -428,8 +409,7 @@ A8:   1<=k0 & k0<=m0 by A6,FINSEQ_1:3;
 A9:   rng p c= D by ORDINAL1:def 8;
       m0 < len p by A1,NAT_1:45;
       then k0 < len p by A8,XXREAL_0:2;
-      then k0 in len p by NAT_1:45;
-      then k0 in dom p by AFINSQ_1:def 1;
+      then k0 in dom p by NAT_1:45;
       then y in rng p by A7,FUNCT_1:def 5;
       hence y in D by A9;
     end;
@@ -542,10 +522,9 @@ A3: len p = n & for k be Element of NAT st k in n holds p.k=F(k);
     assume y in rng p;
     then consider x being set such that
 A4: x in dom p & y=p.x by FUNCT_1:def 5;
-A5: x in n by A3,A4,AFINSQ_1:def 1;
     reconsider nx=x as Ordinal by A4,ORDINAL1:23;
     reconsider kx=nx as Element of NAT by A4;
-A6: p.kx=F(kx) by A3,A5;
+A6: p.kx=F(kx) by A3,A4;
     now per cases;
       case x=0;
         then F(x)=d by FUNCOP_1:def 8;
@@ -649,9 +628,7 @@ A1: b.0 is Nat & 0<= b.0 & b.0 < len a;
     (len q=$1+1 &
     q.0=0 & (for k st k<$1 & k<nn2 holds q.(k+1)=q.k+(a.(k+1))*(b.(k+1))));
     reconsider q0=<%0 qua Element of REAL %> as XFinSequence of REAL;
-    dom q0=1 & q0.0=0 by AFINSQ_1:def 5;
-    then
-A2: len q0=1 & q0.0=0 by AFINSQ_1:def 1;
+A2: len q0=1 & q0.0=0 by AFINSQ_1:def 5;
     for k st k< 0 & k<nn2 holds q0.(k+1)=q0.k+(a.(k+1))*(b.(k+1));
     then
 A3: P[0] by A2;
@@ -667,9 +644,8 @@ A5:   (len q2= k+1 &
       reconsider q3=q2^<% q2.k0+(a.(k0+1))*(b.(k0+1)) %>
       as XFinSequence of REAL;
 A6:   len q3=len q2+len (<% q2.k0+(a.(k0+1))*(b.(k0+1)) %>) by AFINSQ_1:20
-        .=k+1+1 by A5,AFINSQ_1:37;
+        .=k+1+1 by A5,AFINSQ_1:36;
       0 in len q2 by A5,NAT_1:45;
-      then 0 in dom q2 by AFINSQ_1:def 1;
       then
 A7:   q3.0 =0 by A5,AFINSQ_1:def 4;
       for k2 being Nat st k2<k+1 & k2<nn2 holds q3.(k2+1)
@@ -685,12 +661,10 @@ A9:     k2<=k by NAT_1:13;
 A10:        k2<k;
             then k2+1<k+1 by XREAL_1:8;
             then k2+1 in len q2 by A5,NAT_1:45;
-            then k2+1 in dom q2 by AFINSQ_1:def 1;
             then
 A11:        q3.(k2+1)=q2.(k2+1) by AFINSQ_1:def 4;
             k2< len q2 by A5,A10,NAT_1:13;
-            then k2 in len q2 by NAT_1:45;
-            then k2 in dom q2 by AFINSQ_1:def 1;
+            then k2 in dom q2 by NAT_1:45;
             then q3.(k2)=q2.(k2) by AFINSQ_1:def 4;
             hence q3.(k2+1) =q3.k2+(a.(k2+1))*(b.(k2+1)) by A5,A8,A10,A11;
           end;
@@ -699,9 +673,8 @@ A12:        k2=k;
 A13:        (<% q2.k0+(a.(k0+1))*(b.(k0+1)) %>).0
             = q2.k0+(a.(k0+1))*(b.(k0+1)) by AFINSQ_1:38;
             k2<k2+1 by NAT_1:13;
-            then k2 in len q2 by A5,A12,NAT_1:45;
             then
-A14:        k2 in dom q2 by AFINSQ_1:def 1;
+A14:        k2 in dom q2 by A5,A12,NAT_1:45;
             0 in 1 by NAT_1:45;
             then 0 in dom (<% q2.k0+(a.(k0+1))*(b.(k0+1)) %>)
             by AFINSQ_1:def 5;
@@ -865,9 +838,8 @@ A1: len p = len a +1 &
     assume y in rng p;
     then consider x being set such that
 A2: x in dom p & y=p.x by FUNCT_1:def 5;
-A3: x in len p by A2,AFINSQ_1:def 1;
     reconsider nx=x as Element of NAT by A2;
-    p.nx =Sum(a|nx) by A1,A3;
+    p.nx =Sum(a|nx) by A1,A2;
     hence y in REAL by A2;
   end;
   then reconsider p as XFinSequence of REAL by ORDINAL1:def 8;

@@ -293,12 +293,11 @@ Lm2: now
   s be State of S, f be FinPartState of S such that
 A1: f = (IC S,l) --> (l,i);
   set t = s +* f;
-A2: IC S <> l by AMI_1:48;
 A3: dom f = {IC S,l} by A1,FUNCT_4:65;
   then IC S in dom f by TARSKI:def 2;
   then
 A4: IC t = f.IC S by FUNCT_4:14
-    .= l by A1,A2,FUNCT_4:66;
+    .= l by A1,AMI_1:48,FUNCT_4:66;
   l in dom f by A3,TARSKI:def 2;
   then t.l = f.l by FUNCT_4:14
     .= i by A1,FUNCT_4:66;
@@ -420,9 +419,8 @@ A5: dom f = {IC S,il} by FUNCT_4:65;
   then
 A6: IC S in dom f by TARSKI:def 2;
 A7: il in dom f by A5,TARSKI:def 2;
-A8: IC S <> il by AMI_1:48;
 A9: a.IC S = f.IC S by A6,FUNCT_4:14
-    .= il by A8,FUNCT_4:66;
+    .= il by AMI_1:48,FUNCT_4:66;
   then a.IC a = f.il by A7,FUNCT_4:14
     .= i by FUNCT_4:66;
   then IC Following a = a.IC S by A1
@@ -1598,7 +1596,7 @@ A1: f + z = g + z;
   hence f = g by Th27;
 end;
 
-theorem Th33:
+theorem
   for f being Instruction-Location of T
   holds locnum f + z = locnum (f + z) by Def13;
 
@@ -1743,9 +1741,8 @@ A3:   x = NextLoc il;
 A4:   dom ((IC S, il)-->(il1, I)) = {IC S, il} by FUNCT_4:65;
       then
 A5:   IC S in dom ((IC S, il)-->(il1, I)) by TARSKI:def 2;
-A6:   IC S <> il by AMI_1:48;
 A7:   IC u = ((IC S, il)-->(il1, I)).IC S by A5,FUNCT_4:14
-        .= il by A6,FUNCT_4:66;
+        .= il by AMI_1:48,FUNCT_4:66;
       il in dom ((IC S, il)-->(il1, I)) by A4,TARSKI:def 2;
       then
 A8:   u.il = ((IC S, il)-->(il1, I)).il by FUNCT_4:14
@@ -2178,10 +2175,8 @@ A2: LastLoc F = il.(T,k) by Th26;
 A3: k <= card F -' 1 by BINARITH:67;
   per cases by A3,REAL_1:def 5;
   suppose k < card F -' 1;
-    then
-A4: k+1 < card F -' 1 + 1 by XREAL_1:8;
-    card F >= 1 by NAT_1:14;
-    then k+1 < card F by A4,BINARITH:53;
+    then k+1 < card F -' 1 + 1 by XREAL_1:8;
+    then k+1 < card F by NAT_1:14,BINARITH:53;
     then il.(T,k+1) in dom F by Th50;
     then il.(T,k+1) <= LastLoc F by Th53;
     then
@@ -2433,7 +2428,7 @@ A9: f/.1 = l1 & f/.len f = l2 by A6,A7;
   then ex y being set st [1,y] in f by A8,RELAT_1:def 4;
   then reconsider f as non empty IL-FinSequence of S by AMI_1:def 34;
   take f;
-  thus f/.1 = l1 & f/.len f = l2 by A9;
+  thus f/.1 = l1 & f/.len f = l2 by A8,A6,A7;
   let n be Element of NAT;
   assume
 A10: 1 <= n;
@@ -2476,81 +2471,12 @@ end;
 theorem Th5:
   l + k -' k = l
 proof
-  thus l + k -' k = il.(S,locnum l + k -' k) by Th33
+  thus l + k -' k = il.(S,locnum l + k -' k) by Def13
     .= il.(S,locnum l) by BINARITH:39
     .= l by Def13;
 end;
 
-Lm3: now
-  let L,C,I be set;
-  set B = C \ (L \/ I);
-  thus I misses B
-  proof
-    assume I meets B;
-    then consider o being set such that
-A1: o in I and
-A2: o in B by XBOOLE_0:3;
-    not o in L \/ I by A2,XBOOLE_0:def 4;
-    hence thesis by A1,XBOOLE_0:def 2;
-  end;
-end;
-
-Lm2: for a,b,c being set holds not c in a \ ({c} \/ b)
-proof
-  let a,b,c be set;
-  assume c in a \ ({c} \/ b);
-  then not c in {c} \/ b by XBOOLE_0:def 4;
-  then not c in {c} by XBOOLE_0:def 2;
-  hence thesis by TARSKI:def 1;
-end;
-
-Lm4: for
-a,b,c being set st a c= c & b c= c \ a holds c = a \/ (c \ (a\/b)) \/ b
-proof
-  let a,b,c be set such that
-A1: a c= c and
-A2: b c= c \ a;
-  thus a \/ (c \ (a\/b)) \/ b = a \/ (c \ a \ b) \/ b by XBOOLE_1:41
-    .= a \/ ((c \ a \ b) \/ b) by XBOOLE_1:4
-    .= a \/ ((c \ a) \/ b) by XBOOLE_1:39
-    .= a \/ (c \ a) by A2,XBOOLE_1:12
-    .= a \/ c by XBOOLE_1:39
-    .= c by A1,XBOOLE_1:12;
-end;
-
-theorem
-  for S being IC-Ins-separated definite realistic
-  (non empty stored-program AMI-Struct over IL,N),
-  p being FinPartState of S holds p is data-only iff
-  dom p c= (the carrier of S) \ ({IC S} \/ IL)
-proof
-  let S be IC-Ins-separated definite realistic
-  (non empty stored-program AMI-Struct over IL,N), p be FinPartState of S;
-  set C = the carrier of S;
-  set I = IL;
-  set B = C \ ({IC S} \/ I);
-A1: B misses I by Lm3;
-  I c= C \ {IC S}
-  proof
-    let i be set;
-A2: IL c= the carrier of S by AMI_1:def 3;
-    assume
-A3: i in I;
-    then i is Instruction-Location of S by AMI_1:def 4;
-    then i <> IC S by AMI_1:48;
-    then not i in {IC S} by TARSKI:def 1;
-    hence thesis by A2,A3,XBOOLE_0:def 4;
-  end;
-  then
-A4: C = {IC S} \/ B \/ I by Lm4;
-  dom p c= C by AMI_1:80;
-  then
-A5: dom p c= {IC S} \/ I \/ B by A4,XBOOLE_1:4;
-  B misses {IC S} by Lm2,ZFMISC_1:56;
-  then B misses {IC S} \/ I by A1,XBOOLE_1:70;
-  then dom p misses {IC S} \/ I iff dom p c= B by A5,XBOOLE_1:63,73;
-  hence thesis by AMI_1:def 50;
-end;
+canceled;
 
 theorem
   for l1, l2 being Instruction-Location of S holds

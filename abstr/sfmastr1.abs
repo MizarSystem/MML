@@ -12,9 +12,9 @@ environ
       SCMFSA_1, SQUARE_1, PRE_FF, ARYTM_1, SFMASTR1, ARYTM, AMISTD_2, SCMNORM;
  notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, CARD_1, NUMBERS,
       XCMPLX_0, FINSET_1, NAT_1, RELAT_1, FUNCT_1, FUNCT_2, FUNCT_4, FUNCT_7,
-      PRE_FF, STRUCT_0, AMI_1, SCMNORM, SCMFSA_1, SCMFSA_2, SCMFSA_4, SCMFSA_5,
-      SCMFSA6A, SCMFSA6B, SF_MASTR, SCMFSA6C, SCMFSA7B, SCMFSA8A, SCMFSA8B,
-      SCMFSA8C, XXREAL_0, SEQ_4;
+      PRE_FF, CARD_3, STRUCT_0, AMI_1, SCMNORM, SCMFSA_1, SCMFSA_2, SCMFSA_4,
+      SCMFSA_5, SCMFSA6A, SCMFSA6B, SF_MASTR, SCMFSA6C, SCMFSA7B, SCMFSA8A,
+      SCMFSA8B, SCMFSA8C, XXREAL_0, SEQ_4;
  constructors DOMAIN_1, SETWISEO, XXREAL_0, NAT_1, SEQ_4, PRE_FF, SCM_1,
       SCMFSA_5, SCMFSA6A, SF_MASTR, SCMFSA6B, SCMFSA6C, SCMFSA8A, SCMFSA8B,
       SCMFSA8C, SCMNORM, SCMFSA_4;
@@ -131,7 +131,7 @@ reserve s, S for State of SCM+FSA,
 ::           Initialized I is halting
 
 theorem :: SFMASTR1:2
-  (I +* Start-At insloc 0) | (Int-Locations \/ FinSeq-Locations) = {};
+  DataPart(I +* Start-At insloc 0) = {};
 
 theorem :: SFMASTR1:3
   I is_halting_on Initialize S & I is_closed_on Initialize S &
@@ -178,14 +178,13 @@ theorem :: SFMASTR1:10
   Ig is_halting_on Initialize s & Ig is_closed_on Initialize s) &
   (J is parahalting or
   J is_halting_on IExec(Ig, s) & J is_closed_on IExec(Ig, s))
-  implies IExec(Ig ';' J, s) | (Int-Locations \/ FinSeq-Locations) =
-  IExec(J, IExec(Ig, s)) | (Int-Locations \/ FinSeq-Locations);
+  implies DataPart IExec(Ig ';' J, s) = DataPart IExec(J, IExec(Ig, s));
 
 theorem :: SFMASTR1:11
   Ig is parahalting
   or Ig is_closed_on Initialize s & Ig is_halting_on Initialize s
-  implies (Initialize IExec(Ig, s)) | (Int-Locations \/ FinSeq-Locations) =
-  IExec(Ig, s) | (Int-Locations \/ FinSeq-Locations);
+  implies
+  DataPart Initialize IExec(Ig, s) = DataPart IExec(Ig, s);
 
 theorem :: SFMASTR1:12
   Ig is parahalting or
@@ -200,8 +199,7 @@ theorem :: SFMASTR1:13
 theorem :: SFMASTR1:14
   Ig is parahalting or
   Ig is_halting_on Initialize s & Ig is_closed_on Initialize s
-  implies IExec(Ig ';' j, s) | (Int-Locations \/ FinSeq-Locations) =
-  Exec(j, IExec(Ig, s)) | (Int-Locations \/ FinSeq-Locations);
+  implies DataPart IExec(Ig ';' j, s) = DataPart Exec(j, IExec(Ig, s));
 
 theorem :: SFMASTR1:15
   J is parahalting or J is_halting_on Exec(i, Initialize s) &
@@ -216,8 +214,8 @@ theorem :: SFMASTR1:16
 theorem :: SFMASTR1:17
   J is parahalting or J is_halting_on Exec(i, Initialize s) &
   J is_closed_on Exec(i, Initialize s)
-  implies IExec(i ';' J, s) | (Int-Locations \/ FinSeq-Locations) =
-  IExec(J, Exec(i, Initialize s)) | (Int-Locations \/ FinSeq-Locations);
+  implies DataPart IExec(i ';' J, s) = DataPart IExec(J, Exec(i, Initialize s))
+;
 
 begin :: Memory allocation
 

@@ -44,8 +44,7 @@ theorem :: SCMFSA8A:5  ::TQ53
 
 theorem :: SCMFSA8A:6  ::T51(@BBB8)
   for s1,s2 being State of SCM+FSA holds s1,s2 equal_outside NAT
-  iff IC s1 = IC s2 & s1 | (Int-Locations \/ FinSeq-Locations) =
-  s2 | (Int-Locations \/ FinSeq-Locations);
+  iff IC s1 = IC s2 & DataPart s1 = DataPart s2;
 
 theorem :: SCMFSA8A:7  ::T27'
   for s being State of SCM+FSA, I being Program of SCM+FSA holds
@@ -61,14 +60,12 @@ theorem :: SCMFSA8A:9  ::TG13
 
 theorem :: SCMFSA8A:10  ::T52(@BBB8)
   for s being State of SCM+FSA, l being Instruction-Location of SCM+FSA holds
-  s | (Int-Locations \/ FinSeq-Locations) =
-  (s +* Start-At l) | (Int-Locations \/ FinSeq-Locations);
+  DataPart s = DataPart(s +* Start-At l);
 
 theorem :: SCMFSA8A:11  ::T52'
   for s being State of SCM+FSA, I being Program of SCM+FSA,
   l being Instruction-Location of SCM+FSA holds
-  s | (Int-Locations \/ FinSeq-Locations) =
-  (s +* (I +* Start-At l)) | (Int-Locations \/ FinSeq-Locations);
+  DataPart s = DataPart (s +* (I +* Start-At l));
 
 theorem :: SCMFSA8A:12  ::T53(@BBB8)
   for s being State of SCM+FSA, l being Instruction-Location of SCM+FSA holds
@@ -242,12 +239,10 @@ theorem :: SCMFSA8A:36  ::TQ4''(Lemma0)''
   st I is_closed_on s & I is_halting_on s holds
   IC  Computation( (s +* (Directed I +* Start-At insloc 0)),
   (LifeSpan (s +* (I +* Start-At insloc 0)) + 1)) = insloc card I &
-   Computation( (s +* (I +* Start-At insloc 0)),
-  (LifeSpan (s +* (I +* Start-At insloc 0)))) |
-  (Int-Locations \/ FinSeq-Locations) =
-   Computation( (s +* (Directed I +* Start-At insloc 0)),
-  (LifeSpan (s +* (I +* Start-At insloc 0)) + 1)) |
-  (Int-Locations \/ FinSeq-Locations);
+  DataPart Computation( (s +* (I +* Start-At insloc 0)),
+  (LifeSpan (s +* (I +* Start-At insloc 0)))) =
+  DataPart Computation( (s +* (Directed I +* Start-At insloc 0)),
+  (LifeSpan (s +* (I +* Start-At insloc 0)) + 1));
 
 theorem :: SCMFSA8A:37  ::TQ18
   for s being State of SCM+FSA, I being Program of SCM+FSA holds
@@ -272,12 +267,10 @@ theorem :: SCMFSA8A:42  ::TR1'
   IC  Computation( (s +* ((I ';' J) +* Start-At insloc 0)),k) &
   CurInstr  Computation( (s +* (Directed I +* Start-At insloc 0)),k) =
   CurInstr  Computation( (s +* ((I ';' J) +* Start-At insloc 0)),k)) &
-   Computation( (s +* (Directed I +* Start-At insloc 0)),
-  (LifeSpan (s +* (I +* Start-At insloc 0)) + 1)) |
-  (Int-Locations \/ FinSeq-Locations) =
-   Computation( (s +* ((I ';' J) +* Start-At insloc 0)),
-  (LifeSpan (s +* (I +* Start-At insloc 0)) + 1)) |
-  (Int-Locations \/ FinSeq-Locations) &
+  DataPart Computation( (s +* (Directed I +* Start-At insloc 0)),
+  (LifeSpan (s +* (I +* Start-At insloc 0)) + 1)) =
+  DataPart Computation( (s +* ((I ';' J) +* Start-At insloc 0)),
+  (LifeSpan (s +* (I +* Start-At insloc 0)) + 1)) &
   IC  Computation( (s +* (Directed I +* Start-At insloc 0)),
   (LifeSpan (s +* (I +* Start-At insloc 0)) + 1)) =
   IC  Computation( (s +* ((I ';' J) +* Start-At insloc 0)),
@@ -291,10 +284,10 @@ theorem :: SCMFSA8A:43  ::TR1
   IC  Computation( (s +* Initialized (I ';' J)),k) &
   CurInstr  Computation( (s +* Initialized Directed I),k) =
   CurInstr  Computation( (s +* Initialized (I ';' J)),k)) &
-   Computation( (s +* Initialized Directed I),
-  (LifeSpan (s +* Initialized I) + 1))| (Int-Locations \/ FinSeq-Locations) =
-   Computation( (s +* Initialized (I ';' J)),
-  (LifeSpan (s +* Initialized I) + 1))| (Int-Locations \/ FinSeq-Locations) &
+  DataPart Computation( (s +* Initialized Directed I),
+  (LifeSpan (s +* Initialized I) + 1)) =
+  DataPart Computation( (s +* Initialized (I ';' J)),
+  (LifeSpan (s +* Initialized I) + 1)) &
   IC  Computation( (s +* Initialized Directed I),
   (LifeSpan (s +* Initialized I) + 1)) =
   IC  Computation( (s +* Initialized (I ';' J)),
@@ -313,10 +306,9 @@ theorem :: SCMFSA8A:45  ::TQ4'(Lemma0)'
   st I is_closed_on Initialize s & I is_halting_on Initialize s holds
   IC  Computation( (s +* Initialized Directed I),
   (LifeSpan (s +* Initialized I) + 1)) = insloc card I &
-   Computation( (s +* Initialized I),LifeSpan (s +* Initialized I)) |
-  (Int-Locations \/ FinSeq-Locations) =
-   Computation( (s +* Initialized Directed I),
-  (LifeSpan (s +* Initialized I) + 1))| (Int-Locations \/ FinSeq-Locations);
+  DataPart Computation( (s +* Initialized I),LifeSpan (s +* Initialized I)) =
+  DataPart Computation( (s +* Initialized Directed I),
+  (LifeSpan (s +* Initialized I) + 1));
 
 theorem :: SCMFSA8A:46  ::TI9' <> _T22''
   for I being Program of SCM+FSA, s being State of SCM+FSA
@@ -339,11 +331,9 @@ theorem :: SCMFSA8A:53
 theorem :: SCMFSA8A:54
   for I being Program of SCM+FSA, s being State of SCM+FSA
   st I is_closed_on Initialize s & I is_halting_on Initialize s holds
-   Computation( (s +* Initialized I),LifeSpan (s +* Initialized I)) |
-  (Int-Locations \/ FinSeq-Locations) =
-   Computation( (s +* Initialized (I ';' Stop SCM+FSA)),
-  (LifeSpan (s +* Initialized I) + 1)) |
-  (Int-Locations \/ FinSeq-Locations);
+  DataPart Computation( (s +* Initialized I),LifeSpan (s +* Initialized I)) =
+  DataPart Computation( (s +* Initialized (I ';' Stop SCM+FSA)),
+  (LifeSpan (s +* Initialized I) + 1));
 
 theorem :: SCMFSA8A:55  ::TI9 <> _T22'
   for I being Program of SCM+FSA, s being State of SCM+FSA

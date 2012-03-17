@@ -21,12 +21,13 @@ environ
       NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1, CARD_3, SCMPDS_2, SCMPDS_3,
       SCMPDS_4, SCMPDS_5, XBOOLE_0, VALUED_0, MEMBERED, SCMNORM;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions FUNCOP_1, AMI_1, AMI_3, SCMPDS_2, SCMP_GCD, SCMPDS_4, SCMPDS_3;
+ definitions FUNCOP_1, AMI_1, AMI_3, SCMPDS_2, SCMP_GCD, SCMPDS_4, SCMPDS_3,
+      SCMNORM;
  theorems AMI_1, AMI_3, NAT_1, REAL_1, FUNCOP_1, TARSKI, FUNCT_4, FUNCT_1,
       INT_1, SCMPDS_2, FUNCT_7, SCMPDS_3, ABSVALUE, GRFUNC_1, SCMPDS_4,
       SCMPDS_5, SCMPDS_6, ENUMSET1, SCMP_GCD, LATTICE2, WSIERP_1, FINSEQ_1,
       RVSUM_1, RELAT_1, FINSEQ_3, XBOOLE_0, XBOOLE_1, XREAL_1, ORDINAL1,
-      XXREAL_0, AMI_2, ZFMISC_1, FINSEQ_2, VALUED_1, SCMNORM;
+      XXREAL_0, AMI_2, ZFMISC_1, FINSEQ_2, VALUED_1, SCMNORM, CARD_3;
  schemes NAT_1;
 
 begin :: Preliminaries
@@ -92,16 +93,17 @@ end;
 
 theorem Th7:
   for s1,s2 being State of SCMPDS st
-  IC s1= IC s2 & s1 | SCM-Data-Loc = s2 | SCM-Data-Loc & s1 | NAT = s2 | NAT
+  IC s1= IC s2 & DataPart s1 = DataPart s2 & s1 | NAT = s2 | NAT
   holds s1=s2
 proof
   let s1,s2 be State of SCMPDS;
   assume
-A1: IC s1= IC s2 & s1 | D = s2 | D & s1 | A = s2 | A;
+A1: IC s1= IC s2 & DataPart s1 = DataPart s2 & s1 | A = s2 | A;
 A2: dom s1 ={IC SCMPDS} \/ D \/ A by SCMPDS_4:19;
 A3: dom s2 ={IC SCMPDS} \/ D \/ A by SCMPDS_4:19;
   then s1|{IC SCMPDS} = s2|{IC SCMPDS} by A1,A2,GRFUNC_1:90;
-  then s1|({IC SCMPDS} \/ D) = s2| ({IC SCMPDS} \/ D) by A1,RELAT_1:185;
+  then s1|({IC SCMPDS} \/ D) = s2| ({IC SCMPDS} \/ D)
+   by A1,RELAT_1:185,SCMPDS_2:100;
   then s1|({IC SCMPDS} \/ D \/ A) = s2| ({IC SCMPDS} \/ D \/
   A) by A1,RELAT_1:185;
   hence s1=s2 | dom s2 by A2,A3,RELAT_1:97
@@ -215,7 +217,7 @@ end;
 
 theorem  ::S8C_Th32
   for s being State of SCMPDS, i being Instruction of SCMPDS st
-  InsCode i in {0,4,5,6} holds Exec(i,s) | SCM-Data-Loc = s | SCM-Data-Loc
+  InsCode i in {0,4,5,6} holds DataPart Exec(i,s) = DataPart s
 proof
   let s be State of SCMPDS,i be Instruction of SCMPDS;
   assume
@@ -244,23 +246,23 @@ A1: InsCode i in {0,4,5,6};
 end;
 
 theorem
-  for s,ss being State of SCMPDS holds (s +* ss | NAT) |
-  SCM-Data-Loc = s | SCM-Data-Loc
+  for s,ss being State of SCMPDS
+   holds (s +* ss | NAT) | SCM-Data-Loc = DataPart s
 proof
   let s,ss be State of SCMPDS;
   dom (ss | A) = A by SCMPDS_6:1;
-  hence thesis by AMI_2:29,FUNCT_4:76;
+  hence thesis by AMI_2:29,FUNCT_4:76,SCMPDS_2:100;
 end;
 
 theorem  ::S8C_Th41
   for i being Instruction of SCMPDS holds rng Load i = {i} by FUNCOP_1:14;
 
 theorem Th23:   ::SCMPDS_4:15
-  IC s1 = IC s2 & s1 | SCM-Data-Loc = s2 | SCM-Data-Loc implies
+  IC s1 = IC s2 & DataPart s1 = DataPart s2 implies
   IC Exec(i,s1)=IC Exec(i,s2) &
-  Exec(i,s1) | SCM-Data-Loc = Exec(i,s2) | SCM-Data-Loc
+  DataPart Exec(i,s1) = DataPart Exec(i,s2)
 proof
-  assume IC s1 = IC s2 & s1 | SCM-Data-Loc = s2 | SCM-Data-Loc;
+  assume IC s1 = IC s2 & DataPart s1 = DataPart s2;
   then s1,s2 equal_outside A by SCMPDS_6:4;
   then Exec(i,s1),Exec(i,s2) equal_outside A by SCMPDS_4:15;
   hence thesis by SCMPDS_6:4;
@@ -270,22 +272,22 @@ theorem Th24: ::S8C_43
   for s1,s2 being State of SCMPDS,I being Program of SCMPDS
   st I is_closed_on s1 &
   Initialized stop I c= s1 & Initialized stop I c= s2 &
-  s1 | SCM-Data-Loc = s2 | SCM-Data-Loc for i being Element of NAT holds
+  DataPart s1 = DataPart s2 for i being Element of NAT holds
   IC Computation(s1,i) = IC Computation(s2,i) &
   CurInstr Computation(s1,i) = CurInstr Computation(s2,i) &
-  Computation(s1,i) | SCM-Data-Loc = Computation(s2,i) | SCM-Data-Loc
+  DataPart Computation(s1,i) = DataPart Computation(s2,i)
 proof
   let s1,s2 be State of SCMPDS,I be Program of SCMPDS;
   set pI=stop I, IsI = Initialized pI;
   assume
-A1: I is_closed_on s1 & IsI c= s1 & IsI c= s2 & s1 | D = s2 | D;
+A1: I is_closed_on s1 & IsI c= s1 & IsI c= s2 & DataPart s1 = DataPart s2;
   then
 A2: s1=s1 +* IsI by FUNCT_4:79;
 :::  set C1 = Computation s1;::, C2 = Computation s2;
   defpred P[Element of NAT] means
   IC Computation(s1,$1) = IC Computation(s2,$1) &
   CurInstr (Computation(s1,$1)) = CurInstr (Computation(s2,$1)) &
-  Computation(s1,$1) | SCM-Data-Loc = Computation(s2,$1) | SCM-Data-Loc;
+  DataPart Computation(s1,$1) = DataPart Computation(s2,$1);
   pI c= IsI by SCMPDS_4:9;
   then
 A3: dom pI c= dom IsI by GRFUNC_1:8;
@@ -305,8 +307,8 @@ A8: s1.IC s1 = IsI.IC s1 by A1,A3,A4,GRFUNC_1:8
     thus CurInstr (Computation(s1,0)) = CurInstr s1 by AMI_1:13
       .= CurInstr s2 by A8
       .= CurInstr (Computation(s2,0)) by AMI_1:13;
-    thus Computation(s1,0) | D = s2 | D by A1,AMI_1:13
-      .= Computation(s2,0) | D by AMI_1:13;
+    thus DataPart Computation(s1,0) = DataPart s2 by A1,AMI_1:13
+      .= DataPart Computation(s2,0) by AMI_1:13;
   end;
 A9: for k being Element of NAT st P[k] holds P[k + 1]
   proof
@@ -326,7 +328,8 @@ A13: IC Computation(s1,k+1) in dom pI by A1,A2,SCMPDS_6:def 2;
       .= s2.l by A1,A3,A13,GRFUNC_1:8
       .= Computation(s2,k+1).l by AMI_1:54
       .=CurInstr Computation(s2,k+1) by A10,A11,A12,Th23;
-    thus Computation(s1,k+1) | D = Computation(s2,k+1) | D by A10,A11,A12,Th23;
+    thus DataPart Computation(s1,k+1) = DataPart Computation(s2,k+1)
+     by A10,A11,A12,Th23;
   end;
   thus for k being Element of NAT holds P[k] from NAT_1:sch 1(A5,A9);
 end;
@@ -334,7 +337,7 @@ end;
 theorem Th25: ::S8C:100
   for s1,s2 being State of SCMPDS,I being Program of SCMPDS
   st I is_closed_on s1 &
-  s1 | SCM-Data-Loc = s2 | SCM-Data-Loc holds for k being Element of NAT holds
+  DataPart s1 = DataPart s2 holds for k being Element of NAT holds
   Computation(s1+*Initialized stop I,k),
   Computation(s2+*Initialized stop I,k) equal_outside NAT &
   CurInstr Computation(s1+*Initialized stop I,k) =
@@ -344,7 +347,7 @@ proof
   assume
 A1: I is_closed_on s1;
   assume
-A2: s1 | D = s2 | D;
+A2: DataPart s1 = DataPart s2;
   set pI = stop I, IsI = Initialized stop I;
   set ss1 = s1 +* IsI;
   set ss2 = s2 +* IsI;
@@ -390,7 +393,7 @@ A3: iI c= s2 and
 A4: s1,s2 equal_outside A;
 A5: s1=s1 +* iI by A2,FUNCT_4:79;
 A6: s2=s2 +* iI by A3,FUNCT_4:79;
-  s1 | D = s2 | D by A4,SCMPDS_6:4;
+  DataPart s1 = DataPart s2 by A4,SCMPDS_6:4;
   hence thesis by A1,A5,A6,Th25;
 end;
 
@@ -398,13 +401,13 @@ theorem  ::S8C:41,SCMPDS_5:21  ???
   for s1,s2 being State of SCMPDS,I being Program of SCMPDS st
   I is_closed_on s1 & I is_halting_on s1 &
   Initialized stop I c= s1 & Initialized stop I c= s2 &
-  s1 | SCM-Data-Loc = s2 | SCM-Data-Loc holds LifeSpan s1 = LifeSpan s2
+  DataPart s1 = DataPart s2 holds LifeSpan s1 = LifeSpan s2
 proof
   let s1,s2 be State of SCMPDS,I be Program of SCMPDS;
   set IsI = Initialized stop I;
   assume
 A1: I is_closed_on s1 & I is_halting_on s1 &
-  IsI c= s1 & IsI c= s2 & s1 | D = s2 | D;
+  IsI c= s1 & IsI c= s2 & DataPart s1 = DataPart s2;
   then s1 = s1 +* IsI by FUNCT_4:79;
   then
 A2: s1 is halting by A1,SCMPDS_6:def 3;
@@ -452,7 +455,7 @@ A8: CurInstr Computation(s2,LifeSpan s1)
   = CurInstr Computation(s1,LifeSpan s1) by A1,A2,A3,A4,Th26
     .= halt SCMPDS by A5,AMI_1:def 46;
 A9: s2=s2 +* iI by A3,FUNCT_4:79;
-  s1 | D = s2 | D by A4,SCMPDS_6:4;
+  DataPart s1 = DataPart s2 by A4,SCMPDS_6:4;
   then I is_halting_on s2 by A1,SCMPDS_6:37;
   then
 A10: s2 is halting by A9,SCMPDS_6:def 3;
@@ -466,7 +469,7 @@ end;
 theorem Th29: ::S8C_: 101
   for s1,s2 being State of SCMPDS,I being Program of SCMPDS
   st I is_closed_on s1 & I is_halting_on s1 &
-  s1 | SCM-Data-Loc = s2 | SCM-Data-Loc holds
+  DataPart s1 = DataPart s2 holds
   LifeSpan (s1 +* Initialized stop I) = LifeSpan (s2 +* Initialized stop I) &
   Result (s1 +* Initialized stop I),Result (s2 +* Initialized stop I)
   equal_outside NAT
@@ -477,7 +480,7 @@ A1: I is_closed_on s1;
   assume
 A2: I is_halting_on s1;
   assume
-A3: s1 | D = s2 | D;
+A3: DataPart s1 = DataPart s2;
   set IsI = Initialized stop I;
   set ss1 = s1 +* IsI;
   set ss2 = s2 +* IsI;
@@ -528,7 +531,7 @@ A6: s2 = s2 +* IsI by A4,FUNCT_4:79;
   then IC SCMPDS in dom s3 & s3.IC SCMPDS = inspos 0 by AMI_1:94;
   then
 A7: IC SCMPDS .--> inspos 0 c= s3 by FUNCOP_1:88;
-A8: s3 | D = s2 | D by A5,SCMPDS_6:4;
+A8: DataPart s3 = DataPart s2 by A5,SCMPDS_6:4;
   pI c= IsI by SCMPDS_4:9;
   then pI c= s1 by A3,XBOOLE_1:1;
   then pI c= s3 by AMI_1:86;
@@ -647,11 +650,11 @@ theorem Th34:  :: SP4_88
   for I being shiftable Program of SCMPDS st
   Initialized stop I c= s1 & I is_closed_on s1 & I is_halting_on s1
   for n being Element of NAT st Shift(I,n) c= s2 & card I > 0 &
-  IC s2 = inspos n & s1 | SCM-Data-Loc = s2 | SCM-Data-Loc
+  IC s2 = inspos n & DataPart s1 = DataPart s2
   for i being Element of NAT holds i < LifeSpan s1 implies
   IC Computation(s1,i) + n = IC Computation(s2,i) &
   CurInstr (Computation(s1,i)) = CurInstr (Computation(s2,i)) &
-  Computation(s1,i) | SCM-Data-Loc = Computation(s2,i) | SCM-Data-Loc
+  DataPart Computation(s1,i) = DataPart Computation(s2,i)
 proof
   let I be shiftable Program of SCMPDS;
   set SI=stop I, II=Initialized SI;
@@ -662,14 +665,14 @@ A1: II c= s1 & I is_closed_on s1 & I is_halting_on s1;
 A2: Shift(I,n) c= s2 and
 A3: card I > 0 and
 A4: IC s2 = inspos n and
-A5: s1 | SCM-Data-Loc = s2 | SCM-Data-Loc;
+A5: DataPart s1 = DataPart s2;
 A6: s1=s1 +* II by A1,FUNCT_4:79;
 :::  set C1 = Computation s1;
 :::  set C2 = Computation s2;
   defpred P[Element of NAT] means $1 < LifeSpan s1 implies
   IC Computation(s1,$1) + n = IC Computation(s2,$1) &
   CurInstr (Computation(s1,$1)) = CurInstr (Computation(s2,$1)) &
-  Computation(s1,$1) | SCM-Data-Loc = Computation(s2,$1) | SCM-Data-Loc;
+  DataPart Computation(s1,$1) = DataPart Computation(s2,$1);
   dom SI misses dom Start-At inspos 0 by SCMPDS_4:54;
   then
 A7: SI c= II by FUNCT_4:33;
@@ -682,8 +685,8 @@ A11: P[0]
     assume 0 < LifeSpan s1;
 A12: IC SCMPDS in dom II by SCMPDS_4:7;
     inspos 0 + n in dom Shift(I,n) by A9,VALUED_1:25;
-    then
-A13: inspos (0 + n) in dom Shift(I,n);
+:::    then
+A13: inspos (0 + n) in dom Shift(I,n) by A9,VALUED_1:25;
     IC Computation(s1,0) = s1.IC SCMPDS by AMI_1:13
       .= II.IC SCMPDS by A1,A12,GRFUNC_1:8
       .= inspos 0 by SCMPDS_4:29;
@@ -699,8 +702,8 @@ A14: s1.IC s1 = s1.((II).IC SCMPDS) by A1,A12,GRFUNC_1:8
       .= Shift(I,n).inspos n by A3,Th19
       .= CurInstr s2 by A2,A4,A13,GRFUNC_1:8
       .= CurInstr (Computation(s2,0)) by AMI_1:13;
-    thus Computation(s1,0) | SCM-Data-Loc = s2 | SCM-Data-Loc by A5,AMI_1:13
-      .= Computation(s2,0) | SCM-Data-Loc by AMI_1:13;
+    thus DataPart Computation(s1,0) = DataPart s2 by A5,AMI_1:13
+      .= DataPart Computation(s2,0) by AMI_1:13;
   end;
 A15: for k being Element of NAT st P[k] holds P[k + 1]
   proof
@@ -741,8 +744,8 @@ A29:  l+n in dom Shift(I,n) by A26,VALUED_1:25;
         .= Shift(I,n).(IC Computation(s2,k+1)) by A25,A26,Th18
         .= s2.IC Computation(s2,k+1) by A2,A29,GRFUNC_1:8,A25
         .= CurInstr Computation(s2,k+1) by AMI_1:54;
-      thus Computation(s1,k+1) | SCM-Data-Loc
-      = Computation(s2,k+1) | SCM-Data-Loc
+      thus DataPart Computation(s1,k+1)
+      = DataPart Computation(s2,k+1)
       by A16,A17,A18,A19,A20,A23,A24,SCMPDS_4:83
       ,XXREAL_0:2;
     end;
@@ -783,10 +786,10 @@ theorem Th36:
   for I being No-StopCode shiftable Program of SCMPDS st
   Initialized stop I c= s1 & I is_closed_on s1 & I is_halting_on s1
   for n being Element of NAT st Shift(I,n) c= s2 & card I > 0 &
-  IC s2 = inspos n & s1 | SCM-Data-Loc = s2 | SCM-Data-Loc holds
+  IC s2 = inspos n & DataPart s1 = DataPart s2 holds
   IC Computation(s2,LifeSpan s1) = inspos (card I + n) &
-  Computation(s1,LifeSpan s1) | SCM-Data-Loc
-  = Computation(s2,LifeSpan s1) | SCM-Data-Loc
+  DataPart Computation(s1,LifeSpan s1)
+  = DataPart Computation(s2,LifeSpan s1)
 proof
   let I be No-StopCode shiftable Program of SCMPDS;
   set II=Initialized stop I;
@@ -799,7 +802,7 @@ A1: II c= s1 & I is_closed_on s1 & I is_halting_on s1;
 A2: Shift(I,n) c= s2 and
 A3: card I > 0 and
 A4: IC s2 = inspos n and
-A5: s1 | SCM-Data-Loc = s2 | SCM-Data-Loc;
+A5: DataPart s1 = DataPart s2;
   1+0 <= LifeSpan s1 by A1,A3,Th35,INT_1:20;
   then consider i be Nat such that
 A6: 1+i=LifeSpan s1 by NAT_1:10;
@@ -827,7 +830,7 @@ A14: InsCode i2 <> 1 & InsCode i2 <> 3 & i2 valid_at m
 A15: IC Computation(s1,i+1)=inspos card I by A1,A6,SCMPDS_6:43;
 A16: Computation(s1,i+1) = Following Computation(s1,i) by AMI_1:14
     .= Exec(i2,Computation(s1,i)) by A1,A2,A3,A4,A5,A7,Th34;
-A17: Computation(s1,i) | SCM-Data-Loc = Computation(s2,i) | SCM-Data-Loc
+A17: DataPart Computation(s1,i) = DataPart Computation(s2,i)
 by A1,A2,A3,A4,A5,A7,Th34;
 A18: Computation(s2,i+1) = Following Computation(s2,i) by AMI_1:14
     .=Exec(i2,Computation(s2,i));
@@ -835,8 +838,8 @@ A18: Computation(s2,i+1) = Following Computation(s2,i) by AMI_1:14
   by A6,A8,A13,A14,A15,A16,A17,
   SCMPDS_4:83
     .= inspos (card I + n); thus
-  Computation(s1,LifeSpan s1) | SCM-Data-Loc =
-   Computation(s2,LifeSpan s1) | SCM-Data-Loc by A6
+  DataPart Computation(s1,LifeSpan s1) =
+   DataPart Computation(s2,LifeSpan s1) by A6
   ,A8,A13,A14,A16,A17,A18,SCMPDS_4:83;
 end;
 
@@ -1058,8 +1061,8 @@ proof
 A1: I is_halting_on s & J is_closed_on sE & J is_halting_on sE;
 A2: dom (s | A) = A by SCMPDS_6:1;
 A3: s1 is halting by A1,SCMPDS_6:def 3;
-  sE | D = (Result s1) | D by A2,AMI_2:29,FUNCT_4:76
-    .= sm | D by A3,AMI_1:122;
+  DataPart sE = DataPart Result s1 by A2,AMI_2:29,FUNCT_4:76,SCMPDS_2:100
+    .= DataPart sm by A3,AMI_1:122;
   hence J is_closed_on sm & J is_halting_on sm by A1,SCMPDS_6:37;
 end;
 
@@ -1081,12 +1084,12 @@ A2: ss = s +* ((I ';' (J ';' Stop SCMPDS)) +* Start-At inspos 0)
 A3: sIJ c= ss by FUNCT_4:26,SCMPDS_4:57;
   set spJ = stop J, IsJ = Initialized spJ, s1 = s +* IsI, m1 = LifeSpan s1,
   sm =  Computation( s1,m1), s3 = sm +* IsJ, m3 = LifeSpan s3;
-A4: s3 | D = ( Computation( s1,m1) | D) +* IsJ | D by FUNCT_4:75;
+A4: DataPart s3 = DataPart Computation(s1,m1) +* DataPart IsJ by FUNCT_4:75;
 A5: now
     let x be set;
-    assume x in dom (IsJ | D);
+    assume x in dom (DataPart IsJ);
     then
-A6: x in dom IsJ /\ D by FUNCT_1:68;
+A6: x in dom IsJ /\ D by FUNCT_1:68,SCMPDS_2:100;
     then
 A7: x in dom IsJ & x in D by XBOOLE_0:def 3;
     per cases by A7,SCMPDS_4:28;
@@ -1095,10 +1098,11 @@ A8:   x in dom spJ;
       dom spJ c= A by AMI_1:def 40;
       then reconsider l=x as Instruction-Location of SCMPDS by A8,AMI_1:def 4;
       l=x;
-      hence (IsJ | D).x = ( Computation( s1,m1) | D).x by A7,SCMPDS_4:22;
+      hence (DataPart IsJ).x = (DataPart Computation(s1,m1)).x
+       by A7,SCMPDS_4:22;
     end;
     suppose x = IC SCMPDS;
-      hence (IsJ | D).x = ( Computation( s1,m1) | D).x by A6,SCMPDS_3:6
+      hence (DataPart IsJ).x = (DataPart Computation(s1,m1)).x by A6,SCMPDS_3:6
       ,XBOOLE_0:def 3;
     end;
   end;
@@ -1106,15 +1110,15 @@ A9: IsJ c= s3 by FUNCT_4:26;
   then dom IsJ c= dom s3 by GRFUNC_1:8;
   then
 A10: dom IsJ c= the carrier of SCMPDS by AMI_1:79;
-  dom (IsJ | D) = dom IsJ /\ D by RELAT_1:90;
-  then dom (IsJ | D) c= (the carrier of SCMPDS) /\ D by A10,XBOOLE_1:26;
-  then dom (IsJ | D) c= dom sm /\ D by AMI_1:79;
-  then dom (IsJ | D) c= dom (sm | D) by RELAT_1:90;
-  then IsJ | D c= sm | D by A5,GRFUNC_1:8;
+  dom (DataPart IsJ) = dom IsJ /\ D by RELAT_1:90,SCMPDS_2:100;
+  then dom (DataPart IsJ) c= (the carrier of SCMPDS) /\ D by A10,XBOOLE_1:26;
+  then dom (DataPart IsJ) c= dom sm /\ D by AMI_1:79;
+  then dom (DataPart IsJ) c= dom (DataPart sm) by RELAT_1:90,SCMPDS_2:100;
+  then DataPart IsJ c= DataPart sm by A5,GRFUNC_1:8;
   then
-A11: sm | D = s3 | D by A4,LATTICE2:8;
+A11: DataPart sm = DataPart s3 by A4,LATTICE2:8;
   set s4 =  Computation( ss,m1);
-A12: s4 | D = s3 | D by A1,A2,A11,Th38,SCMPDS_4:24;
+A12: DataPart s4 = DataPart s3 by A1,A2,A11,Th38,SCMPDS_4:24;
 A13: J is_closed_on sm & J is_halting_on sm by A1,Th42;
   then
 A14: J is_closed_on s3 by SCMPDS_6:38;
@@ -1238,8 +1242,8 @@ st I is_closed_on s & I is_halting_on s &
 J is_closed_on IExec(I,s) & J is_halting_on IExec(I,s) &
 s2=s +* Initialized stop (I ';' J) & s1=s +* Initialized stop I holds
 IC Computation(s2,LifeSpan s1) = inspos card I &
-Computation(s2,LifeSpan s1) | SCM-Data-Loc =
- (Computation(s1,LifeSpan s1) +* Initialized stop J) | SCM-Data-Loc &
+DataPart Computation(s2,LifeSpan s1)  =
+ DataPart(Computation(s1,LifeSpan s1) +* Initialized stop J) &
 Shift(stop J,card I) c= Computation(s2,LifeSpan s1) &
 LifeSpan s2 = LifeSpan s1 + LifeSpan (Result s1 +* Initialized stop J)
 proof
@@ -1260,12 +1264,12 @@ A3: IsIJ c= s2 by A1,FUNCT_4:26;
   sIJ c= IsIJ by SCMPDS_4:9;
   then
 A4: sIJ c= s2 by A3,XBOOLE_1:1;
-A5: s3 | D = ( Computation( s1,m1) | D) +* IsJ | D by FUNCT_4:75;
+A5: DataPart s3 = DataPart Computation(s1,m1) +* DataPart IsJ by FUNCT_4:75;
 A6: now
     let x be set;
-    assume x in dom (IsJ | D);
+    assume x in dom (DataPart IsJ);
     then
-A7: x in dom IsJ /\ D by FUNCT_1:68;
+A7: x in dom IsJ /\ D by FUNCT_1:68,SCMPDS_2:100;
     then
 A8: x in dom IsJ & x in D by XBOOLE_0:def 3;
     per cases by A8,SCMPDS_4:28;
@@ -1274,10 +1278,11 @@ A9:   x in dom spJ;
       dom spJ c= A by AMI_1:def 40;
       then reconsider l=x as Instruction-Location of SCMPDS by A9,AMI_1:def 4;
       l=x;
-      hence (IsJ | D).x = ( Computation( s1,m1) | D).x by A8,SCMPDS_4:22;
+      hence (DataPart IsJ).x = (DataPart Computation(s1,m1)).x
+       by A8,SCMPDS_4:22;
     end;
     suppose x = IC SCMPDS;
-      hence (IsJ | D).x = ( Computation( s1,m1) | D).x by A7,SCMPDS_3:6
+      hence (DataPart IsJ).x = (DataPart Computation(s1,m1)).x by A7,SCMPDS_3:6
       ,XBOOLE_0:def 3;
     end;
   end;
@@ -1285,20 +1290,21 @@ A10: IsJ c= s3 by FUNCT_4:26;
   then dom IsJ c= dom s3 by GRFUNC_1:8;
   then
 A11: dom IsJ c= the carrier of SCMPDS by AMI_1:79;
-  dom (IsJ | D) = dom IsJ /\ D by RELAT_1:90;
-  then dom (IsJ | D) c= (the carrier of SCMPDS) /\ D by A11,XBOOLE_1:26;
-  then dom (IsJ | D) c= dom ( Computation( s1,m1)) /\ D by AMI_1:79;
-  then dom (IsJ | D) c= dom ( Computation( s1,m1) | D) by RELAT_1:90;
-  then IsJ | D c=  Computation( s1,m1) | D by A6,GRFUNC_1:8;
+  dom (DataPart IsJ) = dom IsJ /\ D by RELAT_1:90,SCMPDS_2:100;
+  then dom (DataPart IsJ) c= (the carrier of SCMPDS) /\ D by A11,XBOOLE_1:26;
+  then dom (DataPart IsJ) c= dom ( Computation( s1,m1)) /\ D by AMI_1:79;
+  then dom (DataPart IsJ) c= dom DataPart Computation(s1,m1)
+   by RELAT_1:90,SCMPDS_2:100;
+  then DataPart IsJ c=  DataPart Computation(s1,m1) by A6,GRFUNC_1:8;
   then
-A12:  Computation( s1,m1) | D = s3 | D by A5,LATTICE2:8;
+A12:  DataPart Computation(s1,m1) = DataPart s3 by A5,LATTICE2:8;
   set s4 =  Computation( s2,m1);
 A13: J is_closed_on sm & J is_halting_on sm by A1,Th42;
   then
 A14: J is_closed_on s3 by SCMPDS_6:38;
 A15: s3 is halting by A13,SCMPDS_6:def 3; thus
 A16: IC s4 = inspos card I by A1,Th17,Th44; thus
-A17: s4 | D = s3 | D by A1,A2,A12,Th38,SCMPDS_4:24;
+A17: DataPart s4 = DataPart s3 by A1,A2,A12,Th38,SCMPDS_4:24;
   reconsider m = m1 + m3 as Element of NAT;
   sIJ = I ';' (J ';' Stop SCMPDS) by SCMPDS_4:46
     .= I +* Shift(spJ, card I);
@@ -1389,7 +1395,7 @@ A5: J is_closed_on Computation(s1,m1) & J is_halting_on Computation(s1,m1)
 by A1,Th42;
   then
 A6: s3 is halting by SCMPDS_6:def 3;
-  sE | D = (sE +* IsJ) | D by SCMPDS_6:9;
+  DataPart sE = DataPart(sE +* IsJ) by SCMPDS_6:9;
   then
 A7: J is_closed_on sE +* IsJ & J is_halting_on sE +* IsJ by A1,SCMPDS_6: 37;
 A8: dom ps = dom s /\ A by RELAT_1:90
@@ -1412,23 +1418,25 @@ A13: Result (IExec(I,s) +* IsJ) +* ps = Result s3 +* ps by A8,FUNCT_7: 108;
 A14: s3 = Result s1 +* IsJ by A2,AMI_1:122;
 A15: IExec(I ';' J,s) = Computation(s2,LifeSpan s2) +* ps by A3,AMI_1:122
     .= Computation(s2,m1+m3) +* ps by A1,A14,Lm1;
-A16: IExec(I,s) | A = ps by SCMPDS_4:25;
+A16: IExec(I,s) | A = ps by CARD_3:99;
   then
 A17: IExec(J,IExec(I,s)) = Computation(s3,m3) +* ps by A6,A13,AMI_1:122;
 A18: IC Computation(s2,m1) = inspos card I &
-Computation(s2,m1) | D = (Computation(s1,m1) +* IsJ) | D &
+  DataPart Computation(s2,m1) = DataPart(Computation(s1,m1) +* IsJ) &
   Shift(stop J,card I) c= Computation(s2,m1) by A1,Lm1;
   J is_closed_on s3 by A5,SCMPDS_6:38;
   then
-A19:  Computation( Computation(s2,m1),m3) | D = Computation(s3,m3) | D &
+A19: DataPart Computation( Computation(s2,m1),m3)
+ = DataPart Computation(s3,m3) &
   IC  Computation( Computation(s2,m1),m3) = IC Computation(s3,m3) + card I
   by A4,A18,SCMPDS_6:45;
-A20: IExec(I ';' J,s) | D = IExec(J,IExec(I,s)) | D
+A20: DataPart IExec(I ';' J,s) = DataPart IExec(J,IExec(I,s))
   proof
-    thus IExec(I ';' J,s) | D = Computation(s2,m1+m3) | D
-    by A8,A15,AMI_2:29,FUNCT_4:76
-      .= Computation(s3,m3) | D by A19,AMI_1:51
-      .= IExec(J,IExec(I,s)) | D by A8,A17,AMI_2:29,FUNCT_4:76;
+    thus DataPart IExec(I ';' J,s) = DataPart Computation(s2,m1+m3)
+    by A8,A15,AMI_2:29,FUNCT_4:76,SCMPDS_2:100
+      .= DataPart Computation(s3,m3) by A19,AMI_1:51
+      .= DataPart IExec(J,IExec(I,s))
+       by A8,A17,AMI_2:29,FUNCT_4:76,SCMPDS_2:100;
   end;
   set R1=IExec(I,s) +* IsJ, R2=Result s1 +* IsJ;
   Result s1 = Computation(s1,m1) by A2,AMI_1:122;
@@ -1437,10 +1445,10 @@ A21: Result s1 +* ps +* IsJ, Result s1 +* IsJ equal_outside A by A8
   ,A9,FUNCT_7:28;
 A22: IsJ c= R1 by FUNCT_4:26;
   IsJ c= R2 by FUNCT_4:26;
-  then Result R1, Result R2 equal_outside A by A7,A21,A22,Th28;
+:::  then Result R1, Result R2 equal_outside A by A7,A21,A22,Th28;
   then
 A23: IC Result (Result s1 +* IsJ)
-  = IC Result (IExec(I,s) +* IsJ) by AMI_1:121;
+  = IC Result (IExec(I,s) +* IsJ) by AMI_1:121,A7,A21,A22,Th28;
 A24: IC IExec(I ';' J,s) = IC Result (s +* IsIJ) by SCMPDS_5:22
     .= IC Computation(s2,LifeSpan s2) by A3,AMI_1:122
     .= IC Computation(s2,m1+m3) by A1,A14,Lm1
@@ -1481,8 +1489,8 @@ A31:    x in dom Start-At l by FUNCOP_1:19;
       end;
       suppose
 A32:    x is Instruction-Location of SCMPDS;
-        IExec(I ';' J,s) | A = ps by SCMPDS_4:25
-          .= IExec(J,IExec(I,s)) | A by A16,SCMPDS_4:25;
+        IExec(I ';' J,s) | A = ps by CARD_3:99
+          .= IExec(J,IExec(I,s)) | A by A16,CARD_3:99;
         then
 A33:    IExec(I ';' J,s).x = IExec(J,IExec(I,s)).x by A32,SCMPDS_4 :21;
         x <> IC SCMPDS by A32,AMI_1:48;
@@ -1524,16 +1532,17 @@ A1: I is_closed_on s & I is_halting_on s;
   set Mj = Load j;
   for a holds (Initialized IExec(I,s)).a=IExec(I, s).a by SCMPDS_5:40;
   then
-A2: (Initialized IExec(I,s)) | SCM-Data-Loc
-  = IExec(I, s) | SCM-Data-Loc by SCMPDS_4:23;
+A2: DataPart Initialized IExec(I,s)
+  = DataPart IExec(I, s) by SCMPDS_4:23;
 A3: a in SCM-Data-Loc by SCMPDS_2:def 2;
 A4: Mj is_closed_on IExec(I,s) by SCMPDS_6:34;
   Mj is_halting_on IExec(I,s) by SCMPDS_6:35;
   hence IExec(I ';' j, s).a = IExec(Mj,IExec(I,s)).a by A1,A4,Th49
     .= Exec(j, Initialized IExec(I,s)).a by SCMPDS_5:45
-    .= (Exec(j, Initialized IExec(I,s)) | SCM-Data-Loc).a by A3,FUNCT_1:72
-    .= (Exec(j, IExec(I, s)) |SCM-Data-Loc ).a by A2,SCMPDS_5:44
-    .= Exec(j, IExec(I, s)).a by A3,FUNCT_1:72;
+    .= (DataPart Exec(j, Initialized IExec(I,s))).a
+     by A3,FUNCT_1:72,SCMPDS_2:100
+    .= (DataPart Exec(j, IExec(I, s))).a by A2,SCMPDS_5:44
+    .= Exec(j, IExec(I, s)).a by A3,FUNCT_1:72,SCMPDS_2:100;
 end;
 
 begin :: The construction of for-up loop program
@@ -1895,14 +1904,14 @@ A26:    not b in dom iFOR & b in dom t by SCMPDS_2:49,SCMPDS_4:31;
         then
 A27:    IC t4 = Next IC t3 by A15,A24,SCMPDS_2:69
           .= inspos(0+1) by A22;
-A28:    t2 | D = t3 | D by SCMPDS_4:24,36;
+A28:    DataPart t2 = DataPart t3 by SCMPDS_4:24,36;
         now
           let a;
           thus t2.a = t3.a by A28,SCMPDS_4:23
             .= t4.a by A24,SCMPDS_2:69;
         end;
         then
-A29:    t2 | D = t4 | D by SCMPDS_4:23;
+A29:    DataPart t2 = DataPart t4 by SCMPDS_4:23;
         set m2=LifeSpan t2, t5= Computation( t4,m2), l1=inspos (card I + 1);
 A30:    dom (t | A) = A by SCMPDS_6:1;
 A31:    now
@@ -1931,7 +1940,8 @@ A35:    FOR c= t3 by A34,XBOOLE_1:1;
         then
 A36:    Shift(I,1) c= t4 by AMI_1:81;
         then
-A37:     Computation( t2,m2) | D = t5 | D by A4,A17,A19,A20,A27,A29,Th36;
+A37:     DataPart Computation( t2,m2) = DataPart t5
+ by A4,A17,A19,A20,A27,A29,Th36;
         then
 A38:    t5.a= Computation( t2,m2).a by SCMPDS_4:23
           .=(Result t2).a by A18,AMI_1:122
@@ -2186,14 +2196,14 @@ A26: not b in dom iFOR & b in dom s by SCMPDS_2:49,SCMPDS_4:31;
   then
 A27: IC s4 = Next IC s1 by A1,A24,SCMPDS_2:69
     .= inspos(0+1) by A22;
-A28: sI | D = s1 | D by SCMPDS_4:24,36;
+A28: DataPart sI = DataPart s1 by SCMPDS_4:24,36;
   now
     let a;
     thus sI.a = s1.a by A28,SCMPDS_4:23
       .= s4.a by A24,SCMPDS_2:69;
   end;
   then
-A29: sI | D = s4 | D by SCMPDS_4:23;
+A29: DataPart sI = DataPart s4 by SCMPDS_4:23;
   set mI=LifeSpan sI, s5= Computation( s4,mI), l1=inspos (card I + 1);
 A30: dom (s | A) = A by SCMPDS_6:1;
 A31: now
@@ -2220,7 +2230,7 @@ A35: FOR c= s1 by A34,XBOOLE_1:1;
   then
 A36: Shift(I,1) c= s4 by AMI_1:81;
   then
-A37:  Computation( sI,mI) | D = s5 | D by A4,A18,A20,A21,A27,A29,Th36;
+A37: DataPart Computation( sI,mI) = DataPart s5 by A4,A18,A20,A21,A27,A29,Th36;
   then
 A38: s5.a= Computation( sI,mI).a by SCMPDS_4:23
     .=(Result sI).a by A19,AMI_1:122
@@ -2292,7 +2302,7 @@ A57:  s7.x=s5.x by A38,A41,A43,A54,SCMPDS_2:60;
     end;
   end;
   then
-A58: s8 | D = s2 | D by SCMPDS_4:23;
+A58: DataPart s8 = DataPart s2 by SCMPDS_4:23;
 A59: IC s2 =IC Computation(s1,m1) by A48,SCMPDS_6:21;
 A60: s2 is halting by A12,SCMPDS_6:def 3;
 A61: dom ps = dom s /\ A by RELAT_1:90
@@ -2704,14 +2714,14 @@ A24:    not b in dom iFOR & b in dom t by SCMPDS_2:49,SCMPDS_4:31;
         then
 A25:    IC t4 = Next IC t3 by A13,A22,SCMPDS_2:68
           .= inspos(0+1) by A20;
-A26:    t2 | D = t3 | D by SCMPDS_4:24,36;
+A26:    DataPart t2 = DataPart t3 by SCMPDS_4:24,36;
         now
           let a;
           thus t2.a = t3.a by A26,SCMPDS_4:23
             .= t4.a by A22,SCMPDS_2:68;
         end;
         then
-A27:    t2 | D = t4 | D by SCMPDS_4:23;
+A27:    DataPart t2 = DataPart t4 by SCMPDS_4:23;
         set m2=LifeSpan t2, t5= Computation( t4,m2), l1=inspos (card I + 1);
 A28:    dom (t | A) = A by SCMPDS_6:1;
 A29:    now
@@ -2740,7 +2750,8 @@ A33:    FOR c= t3 by A32,XBOOLE_1:1;
         then
 A34:    Shift(I,1) c= t4 by AMI_1:81;
         then
-A35:     Computation( t2,m2) | D = t5 | D by A4,A15,A17,A18,A25,A27,Th36;
+A35:     DataPart Computation( t2,m2) = DataPart t5
+                by A4,A15,A17,A18,A25,A27,Th36;
         then
 A36:    t5.a= Computation( t2,m2).a by SCMPDS_4:23
           .=(Result t2).a by A16,AMI_1:122
@@ -2992,14 +3003,14 @@ A26: not b in dom iFOR & b in dom s by SCMPDS_2:49,SCMPDS_4:31;
   then
 A27: IC s4 = Next IC s1 by A1,A24,SCMPDS_2:68
     .= inspos(0+1) by A22;
-A28: sI | D = s1 | D by SCMPDS_4:24,36;
+A28: DataPart sI = DataPart s1 by SCMPDS_4:24,36;
   now
     let a;
     thus sI.a = s1.a by A28,SCMPDS_4:23
       .= s4.a by A24,SCMPDS_2:68;
   end;
   then
-A29: sI | D = s4 | D by SCMPDS_4:23;
+A29: DataPart sI = DataPart s4 by SCMPDS_4:23;
   set mI=LifeSpan sI, s5= Computation( s4,mI), l1=inspos (card I + 1);
 A30: dom (s | A) = A by SCMPDS_6:1;
 A31: now
@@ -3026,7 +3037,7 @@ A35: FOR c= s1 by A34,XBOOLE_1:1;
   then
 A36: Shift(I,1) c= s4 by AMI_1:81;
   then
-A37:  Computation( sI,mI) | D = s5 | D by A4,A18,A20,A21,A27,A29,Th36;
+A37:  DataPart Computation(sI,mI) = DataPart s5 by A4,A18,A20,A21,A27,A29,Th36;
   then
 A38: s5.a= Computation( sI,mI).a by SCMPDS_4:23
     .=(Result sI).a by A19,AMI_1:122
@@ -3098,7 +3109,7 @@ A57:  s7.x=s5.x by A38,A41,A43,A54,SCMPDS_2:60;
     end;
   end;
   then
-A58: s8 | D = s2 | D by SCMPDS_4:23;
+A58: DataPart s8 = DataPart s2 by SCMPDS_4:23;
 A59: IC s2 =IC Computation(s1,m1) by A48,SCMPDS_6:21;
 A60: s2 is halting by A12,SCMPDS_6:def 3;
 A61: dom ps = dom s /\ A by RELAT_1:90
@@ -3206,17 +3217,15 @@ A5:   (for x be Int_position st x in {GBP} holds t.x=s.x) & t.GBP=s.GBP;
       t0.GBP=0 by A1,A5,SCMPDS_5:40;
       then
 A6:   DataLoc(t0.GBP,3)=intpos(0+3) by SCMP_GCD:5;
-      then
-A7:   GBP <> DataLoc(t0.GBP,3) by AMI_3:52; thus
+thus
 A8:   IExec(I,t).GBP=Exec(AddTo(GBP,3,1),t0).GBP by SCMPDS_5:45
-        .=t0.GBP by A7,SCMPDS_2:60
+        .=t0.GBP by A6,SCMPDS_2:60,AMI_3:52
         .=t.GBP by SCMPDS_5:40;
       set cv=DataLoc(s.GBP,2);
-      cv=intpos(0+2) by A1,SCMP_GCD:5;
-      then
-A9:   cv <> DataLoc(t0.GBP,3) by A6,AMI_3:52; thus
+B9:   cv=intpos(0+2) by A1,SCMP_GCD:5;
+thus
       IExec(I,t).cv=Exec(AddTo(GBP,3,1),t0).cv by SCMPDS_5:45
-        .=t0.cv by A9,SCMPDS_2:60
+        .=t0.cv by B9,SCMPDS_2:60,A6,AMI_3:52
         .=t.cv by SCMPDS_5:40; thus
       I is_closed_on t & I is_halting_on t by SCMPDS_6:34,35;
       hereby
@@ -3272,10 +3281,9 @@ A11:    ( for x be Int_position st x in {GBP} holds t.x=s.x) & t.GBP=s.GBP;
         t0.GBP=0 by A6,A11,SCMPDS_5:40;
         then
 A12:    DataLoc(t0.GBP,3)=intpos(0+3) by SCMP_GCD:5;
-        then
-A13:    GBP <> DataLoc(t0.GBP,3) by AMI_3:52; thus
+thus
 A14:    IExec(I,t).GBP=Exec(AddTo(GBP,3,1),t0).GBP by SCMPDS_5:45
-          .=t0.GBP by A13,SCMPDS_2:60
+          .=t0.GBP by A12,SCMPDS_2:60,AMI_3:52
           .=t.GBP by SCMPDS_5:40;
         set cv=DataLoc(s.GBP,2);
 A15:    cv <> DataLoc(t0.GBP,3) by A6,A12,AMI_3:52,SCMP_GCD:5; thus
@@ -3295,29 +3303,23 @@ A15:    cv <> DataLoc(t0.GBP,3) by A6,A12,AMI_3:52,SCMP_GCD:5; thus
 A16:  s0.GBP=0 by A6,SCMPDS_5:40;
       then
 A17:  DataLoc(s0.GBP,3)=intpos(0+3) by SCMP_GCD:5;
-      then
-A18:  GBP <> DataLoc(s0.GBP,3) by AMI_3:52;
-A19:  l2 <> DataLoc(s0.GBP,3) by A17,AMI_3:52;
 A20:  s1.GBP=Exec(i, s0).GBP by SCMPDS_5:45
-        .=0 by A16,A18,SCMPDS_2:60;
+        .=0 by A16,A17,SCMPDS_2:60,AMI_3:52;
       then
 A21:  DataLoc(s1.GBP,2)=intpos(0+2) by SCMP_GCD:5;
-      then
-A22:  a <> DataLoc(s1.GBP,2) by AMI_3:52;
 A23:  s2.a=Exec(j, s1).a by SCMPDS_5:46
-        .=s1.a by A22,SCMPDS_2:60
+        .=s1.a by A21,SCMPDS_2:60,AMI_3:52
         .=Exec(i, s0).a by SCMPDS_5:45
         .=s0.a+1 by A17,SCMPDS_2:60
         .=s.a+1 by SCMPDS_5:40;
 A24:  s2.l2=Exec(j, s1).l2 by SCMPDS_5:46
         .=s1.l2+ -1 by A21,SCMPDS_2:60
         .=Exec(i, s0).l2+-1 by SCMPDS_5:45
-        .=s0.l2+ -1 by A19,SCMPDS_2:60
+        .=s0.l2+ -1 by A17,AMI_3:52,SCMPDS_2:60
         .=k+1+-1 by A6,SCMPDS_5:40
         .=k;
-A25:  GBP <> DataLoc(s1.GBP,2) by A21,AMI_3:52;
 A26:  s2.GBP=Exec(j, s1).GBP by SCMPDS_5:46
-        .=0 by A20,A25,SCMPDS_2:60;
+        .=0 by A20,A21,AMI_3:52,SCMPDS_2:60;
       thus IExec(FD,s).a =IExec(FD,s2).a by A6,A7,A8,A9,A10,Th68
         .=k+s2.a by A5,A24,A26
         .=k+1+s.a by A23;
@@ -3340,21 +3342,16 @@ proof
 A1: s2.GBP=0 by SCMPDS_2:57;
   then
 A2: DataLoc(s2.GBP,2)=intpos(0+2) by SCMP_GCD:5;
-  then
-A3: GBP <> DataLoc(s2.GBP,2) by AMI_3:52;
 A4: s1.GBP=Exec(i2, s2).GBP by SCMPDS_5:47
-    .=0 by A1,A3,SCMPDS_2:58;
+    .=0 by A1,A2,SCMPDS_2:58,AMI_3:52;
   then
 A5: DataLoc(s1.GBP,3)=intpos(0+3) by SCMP_GCD:5;
-  then
-A6: GBP <> DataLoc(s1.GBP,3) by AMI_3:52;
-A7: intpos 2 <> DataLoc(s1.GBP,3) by A5,AMI_3:52;
 A8: s3.a=Exec(i3,s1).a by SCMPDS_5:46
     .=0 by A5,SCMPDS_2:58;
 A9: s3.GBP=Exec(i3,s1).GBP by SCMPDS_5:46
-    .=0 by A4,A6,SCMPDS_2:58;
+    .=0 by A4,A5,SCMPDS_2:58,AMI_3:52;
 A10: s3.intpos 2=Exec(i3,s1).intpos 2 by SCMPDS_5:46
-    .=s1.intpos 2 by A7,SCMPDS_2:58
+    .=s1.intpos 2 by A5,AMI_3:52,SCMPDS_2:58
     .=Exec(i2, s2).intpos 2 by SCMPDS_5:47
     .=n by A2,SCMPDS_2:58;
 A11: I3 is_closed_on s & I3 is_halting_on s by SCMPDS_6:34,35;

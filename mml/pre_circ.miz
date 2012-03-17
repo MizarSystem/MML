@@ -21,7 +21,7 @@ environ
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCOP_1,
       FINSET_1, FRAENKEL, NUMBERS, XREAL_0, MEMBERED, FINSEQ_1, TREES_1,
       CARD_3, PBOOLE, TREES_2, TREES_3;
- requirements NUMERALS, REAL, BOOLE, SUBSET;
+ requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, FUNCOP_1, WELLORD2, FUNCT_1, RELAT_1, PBOOLE, XBOOLE_0,
       SEQ_4, FINSEQ_2, FINSET_1;
  theorems TARSKI, ZFMISC_1, FINSUB_1, FINSEQ_1, FINSEQ_3, GRFUNC_1, FUNCT_1,
@@ -68,12 +68,10 @@ proof
   let f, g, h be Function;
   assume
 A1: f c= g;
-  then
-A2: dom f c= dom g by RELAT_1:25;
   now
     dom (f +* h) = dom f \/ dom h & dom (g +* h) = dom g \/ dom h
     by FUNCT_4:def 1;
-    hence dom (f +* h) c= dom (g +* h) by A2,XBOOLE_1:9;
+    hence dom (f +* h) c= dom (g +* h) by A1,XBOOLE_1:9,RELAT_1:25;
     let x be set;
     assume x in dom (f +* h);
     then
@@ -566,9 +564,10 @@ A9: [i1,i2] = [[i1,i2]`1,[i1,i2]`2] by MCART_1:23;
 A10: [i1,i2]`1 in dom InpFs by A2,A8,MCART_1:10;
     reconsider g = InpFs.[i1,i2]`1 as Function;
 A11: C.[i1,i2]`1 <> {} by A2,A10,PBOOLE:def 16;
-    g is Function of (A-->B).[i1,i2]`1, C.[i1,i2]`1 by A2,A10,PBOOLE:def 18;
+    g is Function of (A-->B).[i1,i2]`1, C.[i1,i2]`1
+              by PBOOLE:def 18,A8,MCART_1:10;
     then dom g = (A-->B).[i1,i2]`1 by A11,FUNCT_2:def 1;
-    then dom g = B by A2,A10,FUNCOP_1:13;
+    then dom g = B by FUNCOP_1:13,A8,MCART_1:10;
     then [i1,i2]`2 in dom g by A8,MCART_1:10;
     hence [i1,i2] in dom(uncurry InpFs) by A9,A10,FUNCT_5:45;
   end;
@@ -830,13 +829,13 @@ A2: k+1 <= len q by FINSEQ_3:27;
   k < k+1 by XREAL_1:31;
   then
 A3: k < len q by A2,XXREAL_0:2;
-A4: dom doms q = dom q & doms q is Tree-yielding by TREES_3:39;
+    dom doms q = dom q & doms q is Tree-yielding by TREES_3:39;
   then (doms q).(k+1) is Tree by A1,TREES_3:24;
   then
 A5: {} in (doms q).(k+1) by TREES_1:47;
   dom q = Seg len q & Seg len doms q = dom doms q by FINSEQ_1:def 3;
   then
-A6: k < len doms q by A3,A4,FINSEQ_1:8;
+A6: k < len doms q by A3,FINSEQ_1:8,TREES_3:39;
   <*k*> = <*k*>^{} by FINSEQ_1:47;
   hence <*k*> in tree doms q by A5,A6,TREES_3:def 15;
 end;
@@ -1059,9 +1058,7 @@ A28:      u in (doms q).(w+1) and
 A29:      f = <*w*>^u by A15;
           reconsider u as FinSequence of NAT by A29,FINSEQ_1:50;
           reconsider ww = <*w*> as FinSequence of NAT;
-          w <> k by A24,A29,TREES_1:8;
-          then
-A30:      w+1 <> k+1 by XCMPLX_1:2;
+A30:      w+1 <> k+1 by A24,A29,TREES_1:8;
 A31:      w < len q by A27,TREES_3:40;
           then 1 <= w+1 & w+1 <= len p by A3,NAT_1:11,13;
           then
@@ -1313,7 +1310,7 @@ A19: card T1 = card C by A10,CARD_1:81;
   card(T|p) = card B by Th13,CARD_1:81;
   hence card(T with-replacement (p,T1)) + card (T|p) =
   card A + card C + card B by A3,A4,CARD_2:53
-    .= card A + card B + card C by XCMPLX_1:1
+    .= card A + card B + card C
     .= card T + card T1 by A7,A8,A19,CARD_2:53;
 end;
 
@@ -1508,5 +1505,34 @@ proof
   let r be real number;
   r in {r} & for k being real number st k in {r} holds k <= r by TARSKI:def 1;
   hence max {r} = r by Def1;
+end;
+
+:: from SCMPDS_9. 2008.05.06, A.T.
+
+theorem
+  {k where k is Element of NAT: k > 1} is infinite
+proof
+  set X = {k where k is Element of NAT: k > 1};
+  assume
+A1: X is finite;
+A2: X c= NAT
+  proof
+    let x be set;
+    assume x in X;
+    then ex k being Element of NAT st x = k & k > 1;
+    hence thesis;
+  end;
+  2 in X;
+  then reconsider X as non empty finite Subset of NAT by A1,A2;
+  set m = max X;
+  m in X by Def1;
+  then consider k being Element of NAT such that
+A3: m = k and
+A4: k > 1;
+  k+1 > k+0 by XREAL_1:10;
+  then k+1 > 1 by A4,XXREAL_0:2;
+  then m+1 in X by A3;
+  then m+1 <= m+0 by Def1;
+  hence contradiction by XREAL_1:10;
 end;
 

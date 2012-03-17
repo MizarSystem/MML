@@ -169,10 +169,8 @@ A3: Seg len xi = dom xi & Seg len x = dom x & Seg len yi = dom yi &
 A4: i in dom x;
 X: dom Del(x,i) = Seg len dx by FINSEQ_1:def 3;
     now thus len dx = len dx;
-      x <> {} by A4,RELAT_1:60;
-      then len x <> 0 by CARD_2:59;
-      then consider m being Nat such that
-A5:   len x = m+1 by NAT_1:6;
+      consider m being Nat such that
+A5:   len x = m+1 by NAT_1:6,CARD_2:59,A4,RELAT_1:60;
       reconsider m as Element of NAT by ORDINAL1:def 13;
 A6:   len x = m+1 by A5;
 A7:   len dx = m by A4,A5,FINSEQ_3:118;
@@ -211,7 +209,6 @@ theorem Th8:
   0-tuples_on X = {{}}
 proof
   set S = {s where s is Element of X*: len s = 0};
-A1: len <*>(X*) = 0 by CARD_1:47;
   now
     let x be set;
     hereby
@@ -225,7 +222,7 @@ A2:   x = s & len s = 0;
     then
 A3: x = {} by TARSKI:def 1;
     <*>(X*) is Element of X* by FINSEQ_1:66;
-    hence x in S by A1,A3;
+    hence x in S by CARD_1:47,A3;
   end;
   hence thesis by TARSKI:2;
 end;
@@ -241,9 +238,7 @@ A3: x in n-tuples_on {} by A2,XBOOLE_0:def 1;
   consider s being Element of {}* such that
 A4: s = x & len s = n by A3;
   rng s c= {} by FINSEQ_1:def 4;
-  then rng s = {} by XBOOLE_1:3;
-  then s = {} by RELAT_1:64;
-  hence contradiction by A1,A4,CARD_1:47;
+  hence contradiction by A1,A4,CARD_1:47,RELAT_1:64,XBOOLE_1:3;
 end;
 
 theorem Th10:
@@ -741,17 +736,17 @@ registration
   cluster non empty homogeneous to-naturals len-total
     (from-natural-fseqs Function);
   existence
-  proof consider n, m being Element of NAT;
-    reconsider Z = n-tuples_on NAT as non empty Subset of NAT* by Th13;
-    set f = Z --> m;
-A1: dom f = Z & rng f c= {m} by FUNCOP_1:19;
+  proof
+    reconsider Z = 0-tuples_on NAT as non empty Subset of NAT* by Th13;
+    set f = Z --> 0;
+A1: dom f = Z & rng f c= {0} by FUNCOP_1:19;
     then reconsider f as from-natural-fseqs Function by Def2;
     take f;
 A2: f is homogeneous
     proof
       let x,y be FinSequence;
       assume x in dom f & y in dom f;
-      then len x = n & len y = n by A1,FINSEQ_2:109;
+      then len x = 0 & len y = 0 by A1,FINSEQ_2:109;
       hence thesis;
     end;
     f is len-total
@@ -760,7 +755,7 @@ A2: f is homogeneous
 A4:   len x = len y and
 A5:   x in dom f;
 A6:   y is Element of (len y)-tuples_on NAT by FINSEQ_2:110;
-      len x = n by A1,A5,FINSEQ_2:109;
+      len x = 0 by A1,A5,FINSEQ_2:109;
       hence y in dom f by A1,A4,A6;
     end;
     hence thesis by A2;
@@ -816,8 +811,7 @@ proof
   let f be homogeneous Relation;
   assume dom f = {{}};
   then {} in dom f by TARSKI:def 1;
-  hence arity f = len {} by UNIALG_1:def 10
-    .= 0 by CARD_1:47;
+  hence arity f = 0 by CARD_1:47,UNIALG_1:def 10;
 end;
 
 theorem Th23:
@@ -834,9 +828,8 @@ A2: X is empty;
     then x = <*>(X*) by A1,FUNCT_7:19,TARSKI:def 1;
     then
 A3: arity f = len <*>(X*) by A1,UNIALG_1:def 10;
-A4: len <*>(X*) = 0 by CARD_1:47;
     0-tuples_on X = {{}} by Th8;
-    hence x in (arity f)-tuples_on X by A1,A2,A3,A4,FUNCT_7:19;
+    hence x in (arity f)-tuples_on X by A1,A2,A3,FUNCT_7:19,CARD_1:47;
   end;
   suppose X is non empty;
     then reconsider X' = X as non empty set;
@@ -906,8 +899,7 @@ proof
   let f be homogeneous PartFunc of X*, X;
   per cases;
   suppose X is empty;
-    then rng f c= {} by RELSET_1:12;
-    then rng f = {} by XBOOLE_1:3;
+    then rng f = {} by XBOOLE_1:3,RELSET_1:12;
     then f = {} by RELAT_1:64;
     hence f is quasi_total non empty iff dom f = (arity f)-tuples_on X by Th8
     ,Th21,RELAT_1:60;
@@ -1168,8 +1160,7 @@ A1: dom f = {p} by FUNCOP_1:19;
 A2: len a = len b;
     assume a in dom f;
     then a = p by A1,TARSKI:def 1;
-    then len b = 0 by A2,CARD_1:47;
-    then b = {} by CARD_2:59;
+    then b = {} by CARD_2:59,A2,CARD_1:47;
     hence thesis by A1,TARSKI:def 1;
   end;
 end;
@@ -1729,8 +1720,7 @@ A5: z in dom doms F & (doms F).z = y by A4,FUNCT_1:def 5;
     then
 A6: F.z in rng F & rng F c= HFuncs X by FUNCT_1:12,RELSET_1:12;
     then reconsider Fz = F.z as Element of HFuncs X;
-A7: (doms F).z = proj1(F.z) by A3,A5,FUNCT_6:def 2
-      .= dom Fz;
+A7: (doms F).z = dom Fz by A3,A5,FUNCT_6:def 2;
 A8: x in y by A1,A2,A4,SETFAM_1:def 1;
     dom Fz c= (arity Fz)-tuples_on X by Th23;
     then x in (arity Fz)-tuples_on X by A5,A7,A8;
@@ -1876,8 +1866,7 @@ A13:    w in dom doms F & (doms F).w = y by FUNCT_1:def 5;
 A14:    w in dom F by A11,A13,FUNCT_6:28;
         then reconsider w as Element of NAT;
         reconsider Fw = F.w as Element of HFuncs X by A14,FINSEQ_2:13;
-A15:    (doms F).w = proj1(F.w) by A11,A13,FUNCT_6:def 2
-          .= dom (Fw);
+A15:    (doms F).w = dom (Fw) by A11,A13,FUNCT_6:def 2;
 A16:    Fw in rng F by A14,FUNCT_1:12;
         then Fw is non empty quasi_total by A2;
         then dom (Fw) = (arity Fw)-tuples_on X by Th25;
@@ -1924,8 +1913,7 @@ A26:    dom F = Seg len F by FINSEQ_1:def 3;
         reconsider d as Element of NAT by A24;
         reconsider Fd = F.d as Element of HFuncs X by A19,A21,A23,A24,A26,
         FINSEQ_2:13;
-A27:    (rngs F).d = proj2(F.d) by A19,A21,A24,FUNCT_6:def 3
-          .= rng Fd;
+A27:    (rngs F).d = rng Fd by A19,A21,A24,FUNCT_6:def 3;
         rng Fd c= X by RELSET_1:12;
         hence x in X by A24,A25,A27;
       end;
@@ -3950,13 +3938,13 @@ theorem Th75:
 proof
   set f = 0 const 0;
 A1: f in P by Th73;
-A2: len {} = 0 by CARD_1:47;
 A3: arity f = 0 by Th35;
 A4: rng {} c= P by XBOOLE_1:2;
   reconsider F = {} as with_the_same_arity Element of (HFuncs NAT)* by
   FINSEQ_1:66;
   P is composition_closed by Def17;
-  then f*<:F:> in P by A1,A2,A3,A4,Def15;
+  then
+  f*<:F:> in P by A1,CARD_1:47,A3,A4,Def15;
   then f*{} in P by FUNCT_6:60;
   hence {} in P;
 end;
@@ -4383,8 +4371,7 @@ A11:  dom fKF = Seg len F by FUNCT_2:def 1;
       ,RELSET_1:12;
       set K = max KF;
       set k = max(kf, K);
-      K is Element of NAT by ORDINAL1:def 13;
-      then reconsider k as Element of NAT by XXREAL_0:16;
+      reconsider k as Element of NAT by ORDINAL1:def 13;
 A12:  prd.kf c= prd.k by Th79,XXREAL_0:25;
 A13:  rng F c= prd.k
       proof
@@ -5228,9 +5215,7 @@ registration
   coherence
   proof
     reconsider g, h as Element of PrimRec by Def19;
-    rng <*g,h*> c= PrimRec by FINSEQ_1:def 4;
-    then
-A1: rng <*g,h*> c= HFuncs NAT by XBOOLE_1:1;
+B1: rng <*g,h*> c= PrimRec by FINSEQ_1:def 4;
 A2: rng <*g,h*> = {g,h} by FINSEQ_2:147;
     now
       let f1,f2 be homogeneous Function;
@@ -5239,7 +5224,7 @@ A2: rng <*g,h*> = {g,h} by FINSEQ_2:147;
       then arity f1 = 2 & arity f2 = 2 by Def26;
       hence arity f1 = arity f2;
     end;
-    hence thesis by A1,Th33;
+    hence thesis by B1,Th33,XBOOLE_1:1;
   end;
 end;
 
@@ -5279,9 +5264,8 @@ A2: dom f' = 2-tuples_on NAT & dom g' = 2-tuples_on NAT &
     dom h' = 2-tuples_on NAT by Lm1;
     consider x being Element of 2-tuples_on NAT;
 A3: dom <:F:> = dom g /\ dom h by FUNCT_6:62;
-    then x in dom <:F:> & g'.x in rng g' & h'.x in rng h' & rng g' c= NAT &
-    rng h' c= NAT by A2,FUNCT_1:def 5,RELSET_1:12;
-    then <:F:>.x = <*g'.x,h'.x*> & g'.x in NAT & h'.x in NAT by A3,FUNCT_6:62;
+    <:F:>.x = <*g'.x,h'.x*> & g'.x in NAT & h'.x in NAT
+          by A3,FUNCT_6:62,A2;
     then <:F:>.x is Element of 2-tuples_on NAT by FINSEQ_2:121;
     then
 A4: fgh is non empty & f' = f by A2,A3,FUNCT_1:21,RELAT_1:60;
@@ -5325,10 +5309,7 @@ A1: arity f = 1 & arity g = 2 by Def25,Def26;
 A2: dom f' = 1-tuples_on NAT & dom g' = 2-tuples_on NAT by Lm1;
     consider x being Element of 2-tuples_on NAT;
 A3: dom <:F:> = dom g by FUNCT_6:61;
-    then x in dom <:F:> & g'.x in rng g' & rng g' c= NAT
-    by A2,FUNCT_1:def 5,RELSET_1:12;
-    then <:F:>.x = <*g'.x*> & g'.x in NAT by A3,FUNCT_6:61;
-    then <:F:>.x is Element of 1-tuples_on NAT;
+    <:F:>.x = <*g'.x*> & g'.x in NAT by FUNCT_6:61,A2;
     then
 A4: fg is non empty & f' = f by A2,A3,FUNCT_1:21,RELAT_1:60;
     rng F = { g} by FINSEQ_1:56;

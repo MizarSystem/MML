@@ -19,7 +19,7 @@ environ
       DOMAIN_1, SCMNORM, AFINSQ_1;
  registrations XBOOLE_0, SUBSET_1, SETFAM_1, FUNCT_1, ORDINAL1, RELSET_1,
       FRAENKEL, NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1, CARD_3, AMI_1,
-      SCMPDS_2, SCMPDS_3, AMI_2, SCMNORM, FINSET_1;
+      SCMPDS_2, SCMPDS_3, AMI_2, SCMNORM, FINSET_1, FINSEQ_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, AMI_1, AMI_3, SCMPDS_3, FUNCT_7, XBOOLE_0, SCMPDS_2,
       FUNCOP_1, NAT_1, SCMNORM, AFINSQ_1;
@@ -991,7 +991,7 @@ end;
 theorem Th23:    :: Th38
   for s1,s2 being State of SCMPDS holds
   (for a being Int_position holds s1.a = s2.a)
-  iff s1 | SCM-Data-Loc = s2 | SCM-Data-Loc
+  iff DataPart s1 = DataPart s2
 proof
   let s1,s2 be State of SCMPDS;
   set T1={IC SCMPDS}, T2=SCM-Data-Loc, T3=NAT;
@@ -1021,12 +1021,12 @@ A6: for x be set st x in SCM-Data-Loc holds s1.x = s2.x;
       hence s1.a=s2.a by A6;
     end;
   end;
-  hence thesis by A2,A3,A4,FUNCT_1:165;
+  hence thesis by A2,A3,A4,FUNCT_1:165,SCMPDS_2:100;
 end;
 
 theorem     :: T19
   for s1,s2 being State of SCMPDS st s1,s2 equal_outside NAT holds
-  s1 | SCM-Data-Loc = s2 | SCM-Data-Loc
+  DataPart s1 = DataPart s2
 proof
   let s1,s2 be State of SCMPDS;
   assume s1,s2 equal_outside NAT;
@@ -1034,29 +1034,7 @@ proof
   hence thesis by Th23;
 end;
 
-theorem     :: T21
-  for s,ss being State of SCMPDS, A being set holds (ss +* s | A) | A = s | A
-proof
-  let s,ss be State of SCMPDS;
-  let A be set;
-A1: dom s = the carrier of SCMPDS by AMI_1:79;
-A2: dom (ss +* s | A) = dom ss \/ dom (s | A) by FUNCT_4:def 1
-    .= dom ss \/ (dom s /\ A) by RELAT_1:90
-    .= (the carrier of SCMPDS) \/ (the carrier of SCMPDS) /\ A by A1,AMI_1:79
-    .= the carrier of SCMPDS by XBOOLE_1:22;
-A3: dom s /\ A c= dom s by XBOOLE_1:17;
-A4: now
-    let x be set;
-    assume
-A5: x in dom s /\ A;
-    then x in dom (s | A) by RELAT_1:90;
-    hence (ss +* s | A).x = (s | A).x by FUNCT_4:14
-      .= s.x by A5,FUNCT_1:71;
-  end;
-  thus (ss +* s | A) | A = (ss +* s | A) | (dom s /\ A) by A1,A2,RELAT_1:192
-    .= s | (dom s /\ A) by A1,A2,A3,A4,FUNCT_1:165
-    .= s | A by RELAT_1:192;
-end;
+canceled;
 
 theorem    :: T18
   for I,J being Program of SCMPDS holds I,J equal_outside NAT
@@ -1341,8 +1319,7 @@ proof
 A1: l in dom J;
   reconsider n = l as Element of NAT by ORDINAL1:def 13;
   inspos(n+card I) in { m+card I: m in dom J } by A1;
-  then inspos(n+card I) in dom Shift(J,card I) by VALUED_1:def 12;
-  then l+card I in dom Shift(J,card I);
+  then l+card I in dom Shift(J,card I) by VALUED_1:def 12;
   hence (I ';' J).(l+card I) = Shift(J, card I).(n+card I) by FUNCT_4:14
     .=J.l by A1,VALUED_1:def 12;
 end;
@@ -1708,10 +1685,7 @@ definition
   end;
 end;
 
-canceled;
-
-theorem
-  IC s <> Next IC s;
+canceled 2;
 
 theorem Th66:    ::TN66
   s2 +*((IC s2,Next IC s2) --> (goto 1, goto -1)) is not halting
@@ -1834,9 +1808,7 @@ theorem Th69:
   s +*((l1,l2) --> (i1, i2)) = s +* (l1,i1) +* (l2,i2)
 proof
 A1: l1 in dom s by Th68;
-  l2 in dom s by Th68;
-  then
-A2: l2 in dom (s +* (l1,i1)) by FUNCT_7:32;
+A2: l2 in dom (s +* (l1,i1)) by Th68;
   thus s +*((l1,l2) --> (i1, i2))
   =s +* ((l1 .--> i1) +* (l2 .--> i2)) by FUNCT_4:def 4
     .=s +* (l1 .--> i1) +* (l2 .--> i2) by FUNCT_4:15
@@ -1915,7 +1887,8 @@ A20: Computation(s0,n),s2 equal_outside IL by A17,A18,A19,Th67;
 A21: s2,t3 equal_outside IL by A8,FUNCT_7:93;
     t3,t4 equal_outside IL by FUNCT_7:93;
     then s2,t4 equal_outside IL by A21,FUNCT_7:29;
-    then s2,s1 equal_outside IL by Th69;
+    then
+B22:  s2,s1 equal_outside IL by Th69;
     then
 A22: Computation(s0,n), s1 equal_outside IL by A20,FUNCT_7:29;
     s| IL = s2 | IL by AMI_1:123;
@@ -1925,7 +1898,7 @@ A22: Computation(s0,n), s1 equal_outside IL by A20,FUNCT_7:29;
     then s0 | IL = s1 | IL by Th69;
     then Computation(s0,n) | IL = s1 | IL by AMI_1:123;
     then
-A23: Computation(s0,n) = s1 by A22,FUNCT_7:92;
+A23: Computation(s0,n) = s1 by B22,FUNCT_7:92,A20,FUNCT_7:29;
     s1 is not halting by Th66;
     hence contradiction by A15,A23,AMI_1:93;
   end;
@@ -2496,16 +2469,17 @@ A5: n2 = IC s2 & ICplusConst(s2,k1) = abs(n2+k1) by SCMPDS_2:def 20;
 A6: n2 =(m+n) by A1,A3,A5;
   reconsider nk = ICplusConst(s1,k1) as Element of NAT by ORDINAL1:def 13;
 A8: nk=mk by A1,A4,ABSVALUE:def 1;
-  thus ICplusConst(s1,k1) +n =ICplusConst(s2,k1) by A5,A6,A8,ABSVALUE:def 1;
+  thus ICplusConst(s1,k1) +n =ICplusConst(s2,k1)
+   by A1,A3,A5,A8,ABSVALUE:def 1;
 end;
 
 theorem Th83:  ::S6A_41
   for s1,s2 being State of SCMPDS, n,m being Element of NAT,
   i being Instruction of SCMPDS holds
   IC s1=inspos m & i valid_at m & InsCode i <> 1 & InsCode i <> 3 &
-  IC s1 + n = IC s2 & s1 | SCM-Data-Loc = s2 | SCM-Data-Loc implies
+  IC s1 + n = IC s2 & DataPart s1 = DataPart s2 implies
   IC Exec(i,s1) + n = IC Exec(i,s2) &
-  Exec(i,s1) | SCM-Data-Loc = Exec(i,s2) | SCM-Data-Loc
+  DataPart Exec(i,s1) = DataPart Exec(i,s2)
 proof
   let s1,s2 be State of SCMPDS, n,m be Element of NAT;
   let i be Instruction of SCMPDS;
@@ -2515,8 +2489,7 @@ A2: i valid_at m and
 A3: InsCode i <> 1 and
 A4: InsCode i <> 3 and
 A5: IC s1 + n = IC s2 and
-A6: s1 | SCM-Data-Loc = s2 | SCM-Data-Loc;
-  set D = SCM-Data-Loc;
+A6: DataPart s1 = DataPart s2;
   reconsider k1 = IC s1 as Element of NAT by ORDINAL1:def 13;
 A8: Next IC s1 + n = Next IC s2 by A5;
   set Ci=InsCode i;
@@ -2545,7 +2518,7 @@ A13: now
     IC Exec(i,s1) = ICplusConst(s1,k1) by A12,SCMPDS_2:66;
     hence IC Exec(i,s1) + n = ICplusConst(s2,k1) by A1,A5,A12,Th82
       .= IC Exec(i,s2) by A12,SCMPDS_2:66;
-    thus Exec(i,s1) | D = Exec(i,s2) | D by A13,Th23;
+    thus DataPart Exec(i,s1) = DataPart Exec(i,s2) by A13,Th23;
   end;
   suppose
 A14: Ci = 2;
@@ -2567,7 +2540,7 @@ A18:    a<>b;
       end;
     end;
     thus IC Exec(i,s1) + n = IC Exec(i,s2) by A9,A14;
-    thus Exec(i,s1) | D = Exec(i,s2) | D by A16,Th23;
+    thus DataPart Exec(i,s1) = DataPart Exec(i,s2) by A16,Th23;
   end;
   suppose Ci = 4;
     then consider a,k1,k2 such that
@@ -2596,7 +2569,7 @@ A24:    s2.DataLoc(s2.a,k1) = 0 by A11;
         hence IC Exec(i,s1) + n = IC Exec(i,s2) by A8,A19,A24,SCMPDS_2:67;
       end;
     end;
-    thus Exec(i,s1) | D = Exec(i,s2) | D by A20,Th23;
+    thus DataPart Exec(i,s1) = DataPart Exec(i,s2) by A20,Th23;
   end;
   suppose Ci = 5;
     then consider a,k1,k2 such that
@@ -2625,7 +2598,7 @@ A30:    s2.DataLoc(s2.a,k1) > 0 by A11;
         hence IC Exec(i,s1) + n = IC Exec(i,s2) by A8,A25,A30,SCMPDS_2:68;
       end;
     end;
-    thus Exec(i,s1) | D = Exec(i,s2) | D by A26,Th23;
+    thus DataPart Exec(i,s1) = DataPart Exec(i,s2) by A26,Th23;
   end;
   suppose Ci = 6;
     then consider a,k1,k2 such that
@@ -2654,7 +2627,7 @@ A36:    s2.DataLoc(s2.a,k1) < 0 by A11;
         hence IC Exec(i,s1) + n = IC Exec(i,s2) by A8,A31,A36,SCMPDS_2:69;
       end;
     end;
-    thus Exec(i,s1) | D = Exec(i,s2) | D by A32,Th23;
+    thus DataPart Exec(i,s1) = DataPart Exec(i,s2) by A32,Th23;
   end;
   suppose
 A37: Ci = 7;
@@ -2680,7 +2653,7 @@ A43:    DataLoc(s2.a,k1)<>b by A6,Th23;
       end;
     end;
     thus IC Exec(i,s1) + n = IC Exec(i,s2) by A9,A37;
-    thus Exec(i,s1) | D = Exec(i,s2) | D by A39,Th23;
+    thus DataPart Exec(i,s1) = DataPart Exec(i,s2) by A39,Th23;
   end;
   suppose
 A44: Ci = 8;
@@ -2707,7 +2680,7 @@ A50:    DataLoc(s2.a,k1)<>b by A6,Th23;
       end;
     end;
     thus IC Exec(i,s1) + n = IC Exec(i,s2) by A9,A44;
-    thus Exec(i,s1) | D = Exec(i,s2) | D by A46,Th23;
+    thus DataPart Exec(i,s1) = DataPart Exec(i,s2) by A46,Th23;
   end;
   suppose
 A51: Ci = 9;
@@ -2736,7 +2709,7 @@ A57:    DataLoc(s2.a,k1)<>c by A6,Th23;
       end;
     end;
     thus IC Exec(i,s1) + n = IC Exec(i,s2) by A9,A51;
-    thus Exec(i,s1) | D = Exec(i,s2) | D by A53,Th23;
+    thus DataPart Exec(i,s1) = DataPart Exec(i,s2) by A53,Th23;
   end;
   suppose
 A58: Ci = 10;
@@ -2765,7 +2738,7 @@ A64:    DataLoc(s2.a,k1)<>c by A6,Th23;
       end;
     end;
     thus IC Exec(i,s1) + n = IC Exec(i,s2) by A9,A58;
-    thus Exec(i,s1) | D = Exec(i,s2) | D by A60,Th23;
+    thus DataPart Exec(i,s1) = DataPart Exec(i,s2) by A60,Th23;
   end;
   suppose
 A65: Ci = 11;
@@ -2794,7 +2767,7 @@ A71:    DataLoc(s2.a,k1)<>c by A6,Th23;
       end;
     end;
     thus IC Exec(i,s1) + n = IC Exec(i,s2) by A9,A65;
-    thus Exec(i,s1) | D = Exec(i,s2) | D by A67,Th23;
+    thus DataPart Exec(i,s1) = DataPart Exec(i,s2) by A67,Th23;
   end;
   suppose
 A72: Ci = 12;
@@ -2841,7 +2814,7 @@ A82:        DataLoc(s2.a,k1)=c by A6,Th23;
       end;
     end;
     thus IC Exec(i,s1) + n = IC Exec(i,s2) by A9,A72;
-    thus Exec(i,s1) | D = Exec(i,s2) | D by A74,Th23;
+    thus DataPart Exec(i,s1) = DataPart Exec(i,s2) by A74,Th23;
   end;
   suppose
 A83: Ci = 13;
@@ -2868,7 +2841,7 @@ A89:    DataLoc(s2.a,k1)<>c by A6,Th23;
       end;
     end;
     thus IC Exec(i,s1) + n = IC Exec(i,s2) by A9,A83;
-    thus Exec(i,s1) | D = Exec(i,s2) | D by A85,Th23;
+    thus DataPart Exec(i,s1) = DataPart Exec(i,s2) by A85,Th23;
   end;
 end;
 
@@ -2876,10 +2849,10 @@ theorem  ::Th27 T0
   for J being parahalting shiftable Program of SCMPDS
    st Initialized stop J c= s1
   for n being Element of NAT st Shift(stop J,n) c= s2 & IC s2 = inspos n &
-  s1 | SCM-Data-Loc = s2 | SCM-Data-Loc for i being Element of NAT holds
+  DataPart s1 = DataPart s2 for i being Element of NAT holds
   IC Computation(s1,i) + n = IC Computation(s2,i) &
   CurInstr (Computation(s1,i)) = CurInstr (Computation(s2,i)) &
-  Computation(s1,i) | SCM-Data-Loc = Computation(s2,i) | SCM-Data-Loc
+  DataPart Computation(s1,i) = DataPart Computation(s2,i)
 proof
   let I be parahalting shiftable Program of SCMPDS;
   set SI=stop I, II = Initialized SI;
@@ -2889,11 +2862,11 @@ A1: II c= s1;
   assume that
 A2: Shift(SI,n) c= s2 and
 A3: IC s2 = inspos n and
-A4: s1 | SCM-Data-Loc = s2 | SCM-Data-Loc;
+A4: DataPart s1 = DataPart s2;
   let i be Element of NAT;
   defpred P[Nat] means IC Computation(s1,$1) + n = IC Computation(s2,$1) &
   CurInstr (Computation(s1,$1)) = CurInstr (Computation(s2,$1)) &
-  Computation(s1,$1) | SCM-Data-Loc = Computation(s2,$1) | SCM-Data-Loc;
+  DataPart Computation(s1,$1) = DataPart Computation(s2,$1);
   dom SI misses dom Start-At inspos 0 by Th54;
   then
 A5: SI c= II by FUNCT_4:33;
@@ -2903,9 +2876,7 @@ A7: inspos 0 in dom SI by Th75;
 A8: P[0]
   proof
 A9: IC SCMPDS in dom II by Th7;
-    inspos 0 + n in dom Shift(SI,n) by A7,VALUED_1:25;
-    then
-A10: inspos (0 + n) in dom Shift(SI,n);
+A10: inspos (0 + n) in dom Shift(SI,n) by A7,VALUED_1:25;
     IC Computation(s1,0) = s1.IC SCMPDS by AMI_1:13
       .= II.IC SCMPDS by A1,A9,GRFUNC_1:8
       .= inspos 0 by Th29;
@@ -2919,8 +2890,8 @@ A11: s1.IC s1 = s1.((II).IC SCMPDS) by A1,A9,GRFUNC_1:8
       .= Shift(SI,n).(inspos 0 + n) by A7,A11,VALUED_1:def 12
       .= CurInstr s2 by A2,A3,A10,GRFUNC_1:8
       .= CurInstr (Computation(s2,0)) by AMI_1:13;
-    thus Computation(s1,0) | SCM-Data-Loc = s2 | SCM-Data-Loc by A4,AMI_1:13
-      .= Computation(s2,0) | SCM-Data-Loc by AMI_1:13;
+    thus DataPart Computation(s1,0) = DataPart s2 by A4,AMI_1:13
+      .= DataPart Computation(s2,0) by AMI_1:13;
   end;
 A12: for k being Element of NAT st P[k] holds P[k + 1]
   proof
@@ -2952,8 +2923,8 @@ A23: l+n in dom Shift(SI,n) by A21,VALUED_1:25;
     = Shift(SI,n).(IC Computation(s2,k+1)) by A20,A21,A22,VALUED_1:def 12
       .= s2.IC Computation(s2,k+1) by A2,A23,GRFUNC_1:8,A20
       .= CurInstr Computation(s2,k+1) by AMI_1:54;
-    thus Computation(s1,k+1) | SCM-Data-Loc
-    = Computation(s2,k+1) | SCM-Data-Loc by A13,A14,A15,A18,A19,Th83;
+    thus DataPart Computation(s1,k+1)
+    = DataPart Computation(s2,k+1) by A13,A14,A15,A18,A19,Th83;
   end;
   for k being Element of NAT holds P[k] from NAT_1:sch 1(A8,A12);
   hence thesis;

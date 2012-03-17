@@ -17,9 +17,9 @@ environ
       SF_MASTR, SCMFSA6B, SCMNORM;
  registrations XBOOLE_0, SETFAM_1, RELAT_1, FUNCT_1, FUNCOP_1, FINSET_1,
       FRAENKEL, NUMBERS, XREAL_0, INT_1, CARD_3, AMI_1, SCMFSA_2, SCMFSA6A,
-      SF_MASTR, SCMFSA6B, ORDINAL1;
+      SF_MASTR, SCMFSA6B, ORDINAL1, FINSEQ_1;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM;
- definitions FUNCOP_1, AMI_1, SCMFSA_2, SCMFSA6B, SCMFSA6A;
+ definitions FUNCOP_1, AMI_1, SCMFSA_2, SCMFSA6B, SCMFSA6A, SCMNORM;
  theorems RELAT_1, FUNCT_7, FUNCT_4, FUNCT_1, SCMFSA_3, ZFMISC_1, FUNCOP_1,
       TARSKI, NAT_1, AMI_1, SCMFSA_2, ENUMSET1, GRFUNC_1, SCMFSA6A,
       SF_MASTR, SCMFSA6B, XBOOLE_0, XBOOLE_1, CARD_3, SCMNORM;
@@ -945,14 +945,11 @@ A9: dom s1 \ Y = X by A1,A3,A4,SCMFSA_2:8,XBOOLE_1:72;
 end;
 
 theorem Th5:
-  s1 | (Int-Locations \/ FinSeq-Locations)
-  = s2 | (Int-Locations \/ FinSeq-Locations) implies
-  Exec (i, s1) | (Int-Locations \/ FinSeq-Locations)
-  = Exec (i, s2) | (Int-Locations \/ FinSeq-Locations)
+  DataPart s1 = DataPart s2 implies
+  DataPart Exec (i, s1) = DataPart Exec (i, s2)
 proof
   assume
-A1: s1 | (Int-Locations \/ FinSeq-Locations)
-  = s2 | (Int-Locations \/ FinSeq-Locations);
+A1: DataPart s1 = DataPart s2;
 A2: InsCode i <= 11+1 by SCMFSA_2:35;
 A3: InsCode i <= 10+1 implies InsCode i <= 10 or InsCode i = 11 by NAT_1:8;
 A4: InsCode i <= 9+1 implies InsCode i <= 8+1 or InsCode i = 10 by NAT_1:8;
@@ -968,8 +965,7 @@ A9: dom ((Exec (l,s2)) | (Int-Locations \/ FinSeq-Locations))
   suppose InsCode i = 0;
     then i = halt SCM+FSA by SCMFSA_2:122;
     then Exec (i,s1) = s1 & Exec (i,s2) = s2 by AMI_1:def 8;
-    hence Exec (i,s1) | (Int-Locations \/ FinSeq-Locations)
-    = Exec (i,s2) | (Int-Locations \/ FinSeq-Locations) by A1;
+    hence DataPart Exec (i,s1) = DataPart Exec (i,s2) by A1;
   end;
   suppose InsCode i = 1;
     then consider db,da being Int-Location such that
@@ -1001,8 +997,8 @@ A17:    a <> db by A16,TARSKI:def 1;
         thus (Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \ {db})).x
         = (Exec (l,s1)).a by A14,FUNCT_1:72
           .= s1.a by A10,A17,SCMFSA_2:89
-          .= (s1 | (Int-Locations \/ FinSeq-Locations)).a by A15,FUNCT_1:72
-          .= s2.a by A1,A15,FUNCT_1:72
+          .= (DataPart s1).a by A15,FUNCT_1:72,SCMFSA_2:127
+          .= s2.a by A1,A15,FUNCT_1:72,SCMFSA_2:127
           .= (Exec (l,s2)).a by A10,A17,SCMFSA_2:89
           .= (Exec (l,s2) | (Int-Locations \/ FinSeq-Locations \ {db})).x
         by A14,FUNCT_1:72;
@@ -1012,8 +1008,8 @@ A17:    a <> db by A16,TARSKI:def 1;
         thus (Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \ {db})).x
         = (Exec (l,s1)).a by A14,FUNCT_1:72
           .= s1.a by A10,SCMFSA_2:89
-          .= (s1 | (Int-Locations \/ FinSeq-Locations)).a by A15,FUNCT_1:72
-          .= s2.a by A1,A15,FUNCT_1:72
+          .= (DataPart s1).a by A15,FUNCT_1:72,SCMFSA_2:127
+          .= s2.a by A1,A15,FUNCT_1:72,SCMFSA_2:127
           .= (Exec (l,s2)).a by A10,SCMFSA_2:89
           .= (Exec (l,s2) | (Int-Locations \/ FinSeq-Locations \ {db})).x
         by A14,FUNCT_1:72;
@@ -1028,12 +1024,11 @@ A18: Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \ {db} )
 A19: da in Int-Locations \/ FinSeq-Locations by XBOOLE_0:def 2;
 A20: Exec(l, s1).db = s1.da by A10,SCMFSA_2:89;
 A21: Exec(l, s2).db = s2.da by A10,SCMFSA_2:89;
-    s1.da = (s1 | (Int-Locations \/ FinSeq-Locations)).da by A19,FUNCT_1:72
-      .= s2.da by A1,A19,FUNCT_1:72;
+    s1.da = (DataPart s1).da by A19,FUNCT_1:72,SCMFSA_2:127
+      .= s2.da by A1,A19,FUNCT_1:72,SCMFSA_2:127;
     then Exec (l,s1) | {db} = Exec(l,s2) | {db} by A7,A20,A21,GRFUNC_1:90;
-    hence Exec (l,s1) |(Int-Locations \/ FinSeq-Locations)
-    = Exec (l,s2) |(Int-Locations \/ FinSeq-Locations) by A11,A18,
-    RELAT_1:185;
+    hence DataPart Exec (l,s1) = DataPart Exec (l,s2) by A11,A18,
+    RELAT_1:185,SCMFSA_2:127;
   end;
   suppose InsCode i = 2;
     then consider db,da being Int-Location such that
@@ -1065,8 +1060,8 @@ A29:    a <> db by A28,TARSKI:def 1;
         thus (Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \ {db})).x
         = (Exec (l,s1)).a by A26,FUNCT_1:72
           .= s1.a by A22,A29,SCMFSA_2:90
-          .= (s1 | (Int-Locations \/ FinSeq-Locations)).a by A27,FUNCT_1:72
-          .= s2.a by A1,A27,FUNCT_1:72
+          .= (DataPart s1).a by A27,FUNCT_1:72,SCMFSA_2:127
+          .= s2.a by A1,A27,FUNCT_1:72,SCMFSA_2:127
           .= (Exec (l,s2)).a by A22,A29,SCMFSA_2:90
           .= (Exec (l,s2) | (Int-Locations \/ FinSeq-Locations \ {db})).x
         by A26,FUNCT_1:72;
@@ -1076,8 +1071,8 @@ A29:    a <> db by A28,TARSKI:def 1;
         thus (Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \ {db})).x
         = (Exec (l,s1)).a by A26,FUNCT_1:72
           .= s1.a by A22,SCMFSA_2:90
-          .= (s1 | (Int-Locations \/ FinSeq-Locations)).a by A27,FUNCT_1:72
-          .= s2.a by A1,A27,FUNCT_1:72
+          .= (DataPart s1).a by A27,FUNCT_1:72,SCMFSA_2:127
+          .= s2.a by A1,A27,FUNCT_1:72,SCMFSA_2:127
           .= (Exec (l,s2)).a by A22,SCMFSA_2:90
           .= (Exec (l,s2) | (Int-Locations \/ FinSeq-Locations \ {db})).x
         by A26,FUNCT_1:72;
@@ -1093,14 +1088,13 @@ A31: da in Int-Locations \/ FinSeq-Locations &
     db in Int-Locations \/ FinSeq-Locations by XBOOLE_0:def 2;
 A32: Exec(l, s1).db = s1.db + s1.da by A22,SCMFSA_2:90;
 A33: Exec(l, s2).db = s2.db + s2.da by A22,SCMFSA_2:90;
-A34: s1.da = (s1 | (Int-Locations \/ FinSeq-Locations)).da by A31,FUNCT_1:72
-      .= s2.da by A1,A31,FUNCT_1:72;
-    s1.db = (s1 | (Int-Locations \/ FinSeq-Locations)).db by A31,FUNCT_1: 72
-      .= s2.db by A1,A31,FUNCT_1:72;
+A34: s1.da = (DataPart s1).da by A31,FUNCT_1:72,SCMFSA_2:127
+      .= s2.da by A1,A31,FUNCT_1:72,SCMFSA_2:127;
+    s1.db = (DataPart s1).db by A31,FUNCT_1: 72,SCMFSA_2:127
+      .= s2.db by A1,A31,FUNCT_1:72,SCMFSA_2:127;
     then Exec (l,s1) | {db} = Exec(l,s2) | {db} by A7,A32,A33,A34,GRFUNC_1:90;
-    hence Exec (l,s1) |(Int-Locations \/ FinSeq-Locations)
-    = Exec (l,s2) |(Int-Locations \/ FinSeq-Locations) by A23,A30,
-    RELAT_1:185;
+    hence DataPart Exec (l,s1) = DataPart Exec (l,s2)
+     by A23,A30,RELAT_1:185,SCMFSA_2:127;
   end;
   suppose InsCode i = 3;
     then consider db,da being Int-Location such that
@@ -1132,8 +1126,8 @@ A42:    a <> db by A41,TARSKI:def 1;
         thus (Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \ {db})).x
         = (Exec (l,s1)).a by A39,FUNCT_1:72
           .= s1.a by A35,A42,SCMFSA_2:91
-          .= (s1 | (Int-Locations \/ FinSeq-Locations)).a by A40,FUNCT_1:72
-          .= s2.a by A1,A40,FUNCT_1:72
+          .= (DataPart s1).a by A40,FUNCT_1:72,SCMFSA_2:127
+          .= s2.a by A1,A40,FUNCT_1:72,SCMFSA_2:127
           .= (Exec (l,s2)).a by A35,A42,SCMFSA_2:91
           .= (Exec (l,s2) | (Int-Locations \/ FinSeq-Locations \ {db})).x
         by A39,FUNCT_1:72;
@@ -1143,8 +1137,8 @@ A42:    a <> db by A41,TARSKI:def 1;
         thus (Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \ {db})).x
         = (Exec (l,s1)).a by A39,FUNCT_1:72
           .= s1.a by A35,SCMFSA_2:91
-          .= (s1 | (Int-Locations \/ FinSeq-Locations)).a by A40,FUNCT_1:72
-          .= s2.a by A1,A40,FUNCT_1:72
+          .= (DataPart s1).a by A40,FUNCT_1:72,SCMFSA_2:127
+          .= s2.a by A1,A40,FUNCT_1:72,SCMFSA_2:127
           .= (Exec (l,s2)).a by A35,SCMFSA_2:91
           .= (Exec (l,s2) | (Int-Locations \/ FinSeq-Locations \ {db})).x
         by A39,FUNCT_1:72;
@@ -1160,14 +1154,13 @@ A44: da in Int-Locations \/ FinSeq-Locations &
     db in Int-Locations \/ FinSeq-Locationsby XBOOLE_0:def 2;
 A45: Exec(l, s1).db = s1.db - s1.da by A35,SCMFSA_2:91;
 A46: Exec(l, s2).db = s2.db - s2.da by A35,SCMFSA_2:91;
-A47: s1.da = (s1 | (Int-Locations \/ FinSeq-Locations)).da by A44,FUNCT_1:72
-      .= s2.da by A1,A44,FUNCT_1:72;
-    s1.db = (s1 | (Int-Locations \/ FinSeq-Locations)).db by A44,FUNCT_1: 72
-      .= s2.db by A1,A44,FUNCT_1:72;
+A47: s1.da = (DataPart s1).da by A44,FUNCT_1:72,SCMFSA_2:127
+      .= s2.da by A1,A44,FUNCT_1:72,SCMFSA_2:127;
+    s1.db = (DataPart s1).db by A44,FUNCT_1: 72,SCMFSA_2:127
+      .= s2.db by A1,A44,FUNCT_1:72,SCMFSA_2:127;
     then Exec (l,s1) | {db} = Exec(l,s2) | {db} by A7,A45,A46,A47,GRFUNC_1:90;
-    hence Exec (l,s1) |(Int-Locations \/ FinSeq-Locations)
-    = Exec (l,s2) |(Int-Locations \/ FinSeq-Locations) by A36,A43,
-    RELAT_1:185;
+    hence DataPart Exec (l,s1) = DataPart Exec (l,s2) by A36,A43,
+    RELAT_1:185,SCMFSA_2:127;
   end;
   suppose InsCode i = 4;
     then consider db,da being Int-Location such that
@@ -1199,8 +1192,8 @@ A55:    a <> db by A54,TARSKI:def 1;
         thus (Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \ {db})).x
         = (Exec (l,s1)).a by A52,FUNCT_1:72
           .= s1.a by A48,A55,SCMFSA_2:92
-          .= (s1 | (Int-Locations \/ FinSeq-Locations)).a by A53,FUNCT_1:72
-          .= s2.a by A1,A53,FUNCT_1:72
+          .= (DataPart s1).a by A53,FUNCT_1:72,SCMFSA_2:127
+          .= s2.a by A1,A53,FUNCT_1:72,SCMFSA_2:127
           .= (Exec (l,s2)).a by A48,A55,SCMFSA_2:92
           .= (Exec (l,s2) | (Int-Locations \/ FinSeq-Locations \ {db})).x
         by A52,FUNCT_1:72;
@@ -1210,8 +1203,8 @@ A55:    a <> db by A54,TARSKI:def 1;
         thus (Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \ {db})).x
         = (Exec (l,s1)).a by A52,FUNCT_1:72
           .= s1.a by A48,SCMFSA_2:92
-          .= (s1 | (Int-Locations \/ FinSeq-Locations)).a by A53,FUNCT_1:72
-          .= s2.a by A1,A53,FUNCT_1:72
+          .= (DataPart s1).a by A53,FUNCT_1:72,SCMFSA_2:127
+          .= s2.a by A1,A53,FUNCT_1:72,SCMFSA_2:127
           .= (Exec (l,s2)).a by A48,SCMFSA_2:92
           .= (Exec (l,s2) | (Int-Locations \/ FinSeq-Locations \ {db})).x
         by A52,FUNCT_1:72;
@@ -1227,14 +1220,13 @@ A57: da in Int-Locations \/ FinSeq-Locations &
     db in Int-Locations \/ FinSeq-Locationsby XBOOLE_0:def 2;
 A58: Exec(l, s1).db = s1.db * s1.da by A48,SCMFSA_2:92;
 A59: Exec(l, s2).db = s2.db * s2.da by A48,SCMFSA_2:92;
-A60: s1.da = (s1 | (Int-Locations \/ FinSeq-Locations)).da by A57,FUNCT_1:72
-      .= s2.da by A1,A57,FUNCT_1:72;
-    s1.db = (s1 | (Int-Locations \/ FinSeq-Locations)).db by A57,FUNCT_1: 72
-      .= s2.db by A1,A57,FUNCT_1:72;
+A60: s1.da = (DataPart s1).da by A57,FUNCT_1:72,SCMFSA_2:127
+      .= s2.da by A1,A57,FUNCT_1:72,SCMFSA_2:127;
+    s1.db = (DataPart s1).db by A57,FUNCT_1: 72,SCMFSA_2:127
+      .= s2.db by A1,A57,FUNCT_1:72,SCMFSA_2:127;
     then Exec (l,s1) | {db} = Exec(l,s2) | {db} by A7,A58,A59,A60,GRFUNC_1:90;
-    hence Exec (l,s1) |(Int-Locations \/ FinSeq-Locations)
-    = Exec (l,s2) |(Int-Locations \/ FinSeq-Locations) by A49,A56,
-    RELAT_1:185;
+    hence DataPart Exec (l,s1) = DataPart Exec (l,s2)
+     by A49,A56, RELAT_1:185,SCMFSA_2:127;
   end;
   suppose InsCode i = 5;
     then consider db,da being Int-Location such that
@@ -1274,9 +1266,8 @@ A69:        a <> da & a <> db by A68,TARSKI:def 2;
 thus (Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \ {db,da})).x
             = (Exec (l,s1)).a by A66,FUNCT_1:72
               .= s1.a by A61,A69,SCMFSA_2:93
-              .= (s1 | (Int-Locations \/ FinSeq-Locations)).a
-            by A67,FUNCT_1:72
-              .= s2.a by A1,A67,FUNCT_1:72
+              .= (DataPart s1).a by A67,FUNCT_1:72,SCMFSA_2:127
+              .= s2.a by A1,A67,FUNCT_1:72,SCMFSA_2:127
               .= (Exec (l,s2)).a by A61,A69,SCMFSA_2:93
 
 .= (Exec (l,s2) | (Int-Locations \/ FinSeq-Locations \ {db,da})).x
@@ -1288,9 +1279,8 @@ thus (Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \ {db,da})).x
 thus (Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \ {db,da})).x
             = (Exec (l,s1)).a by A66,FUNCT_1:72
               .= s1.a by A61,SCMFSA_2:93
-              .= (s1 | (Int-Locations \/ FinSeq-Locations)).a
-            by A67,FUNCT_1:72
-              .= s2.a by A1,A67,FUNCT_1:72
+              .= (DataPart s1).a by A67,FUNCT_1:72,SCMFSA_2:127
+              .= s2.a by A1,A67,FUNCT_1:72,SCMFSA_2:127
               .= (Exec (l,s2)).a by A61,SCMFSA_2:93
 
 .= (Exec (l,s2) | (Int-Locations \/ FinSeq-Locations \ {db,da})).x
@@ -1309,18 +1299,15 @@ A72:    Exec(l, s1).db = s1.db div s1.da by A61,A62,SCMFSA_2:93;
 A73:    Exec(l, s1).da = s1.db mod s1.da by A61,SCMFSA_2:93;
 A74:    Exec(l, s2).db = s2.db div s2.da by A61,A62,SCMFSA_2:93;
 A75:    Exec(l, s2).da = s2.db mod s2.da by A61,SCMFSA_2:93;
-A76:    s1.da = (s1 | (Int-Locations \/ FinSeq-Locations)).da
-        by A71,FUNCT_1:72
-          .= s2.da by A1,A71,FUNCT_1:72;
-        s1.db = (s1 | (Int-Locations \/ FinSeq-Locations)).db by A71,FUNCT_1:
-        72
-          .= s2.db by A1,A71,FUNCT_1:72;
+A76:    s1.da = (DataPart s1).da by A71,FUNCT_1:72,SCMFSA_2:127
+          .= s2.da by A1,A71,FUNCT_1:72,SCMFSA_2:127;
+        s1.db = (DataPart s1).db by A71,FUNCT_1:72,SCMFSA_2:127
+          .= s2.db by A1,A71,FUNCT_1:72,SCMFSA_2:127;
 
 then Exec (l,s1) | {db,da} = Exec(l,s2) | {db,da} by A7,A72,A73,A74,A75,A76,
         GRFUNC_1:91;
-        hence Exec (l,s1) |(Int-Locations \/ FinSeq-Locations)
-        = Exec (l,s2) |(Int-Locations \/ FinSeq-Locations) by A63,A70,
-        RELAT_1:185;
+        hence DataPart Exec (l,s1) = DataPart Exec (l,s2) by A63,A70,
+        RELAT_1:185,SCMFSA_2:127;
       end;
       suppose
 A77:    da = db;
@@ -1352,9 +1339,8 @@ A84:        a <> db by A83,TARSKI:def 1;
             thus (Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \ {db})).x
             = (Exec (l,s1)).a by A81,FUNCT_1:72
               .= s1.a by A61,A77,A84,SCMFSA_2:94
-              .= (s1 | (Int-Locations \/ FinSeq-Locations)).a
-            by A82,FUNCT_1:72
-              .= s2.a by A1,A82,FUNCT_1:72
+              .= (DataPart s1).a by A82,FUNCT_1:72,SCMFSA_2:127
+              .= s2.a by A1,A82,FUNCT_1:72,SCMFSA_2:127
               .= (Exec (l,s2)).a by A61,A77,A84,SCMFSA_2:94
               .= (Exec (l,s2) | (Int-Locations \/ FinSeq-Locations \ {db})).x
             by A81,FUNCT_1:72;
@@ -1366,7 +1352,7 @@ A84:        a <> db by A83,TARSKI:def 1;
               .= s1.a by A61,A77,SCMFSA_2:94
               .= (s1 | (Int-Locations \/ FinSeq-Locations)).a
             by A82,FUNCT_1:72
-              .= s2.a by A1,A82,FUNCT_1:72
+              .= s2.a by A1,A82,FUNCT_1:72,SCMFSA_2:127
               .= (Exec (l,s2)).a by A61,A77,SCMFSA_2:94
               .= (Exec (l,s2) | (Int-Locations \/ FinSeq-Locations \ {db})).x
             by A81,FUNCT_1:72;
@@ -1382,17 +1368,14 @@ A86:    da in Int-Locations \/ FinSeq-Locations &
         db in Int-Locations \/ FinSeq-Locationsby XBOOLE_0:def 2;
 A87:    Exec(l, s1).db = s1.db mod s1.da by A61,A77,SCMFSA_2:94;
 A88:    Exec(l, s2).db = s2.db mod s2.da by A61,A77,SCMFSA_2:94;
-A89:    s1.da = (s1 | (Int-Locations \/ FinSeq-Locations)).da
-        by A86,FUNCT_1:72
-          .= s2.da by A1,A86,FUNCT_1:72;
-        s1.db = (s1 | (Int-Locations \/ FinSeq-Locations)).db by A86,FUNCT_1:
-        72
-          .= s2.db by A1,A86,FUNCT_1:72;
+A89:    s1.da = (DataPart s1).da by A86,FUNCT_1:72,SCMFSA_2:127
+          .= s2.da by A1,A86,FUNCT_1:72,SCMFSA_2:127;
+        s1.db = (DataPart s1).db by A86,FUNCT_1:72,SCMFSA_2:127
+          .= s2.db by A1,A86,FUNCT_1:72,SCMFSA_2:127;
 
 then Exec (l,s1) | {db} = Exec(l,s2) | {db} by A7,A87,A88,A89,GRFUNC_1:90;
-        hence Exec (l,s1) |(Int-Locations \/ FinSeq-Locations)
-        = Exec (l,s2) |(Int-Locations \/ FinSeq-Locations) by A78,A85,
-        RELAT_1:185;
+        hence DataPart Exec (l,s1) = DataPart Exec (l,s2) by A78,A85,
+        RELAT_1:185,SCMFSA_2:127;
       end;
     end;
   end;
@@ -1400,8 +1383,7 @@ then Exec (l,s1) | {db} = Exec(l,s2) | {db} by A7,A87,A88,A89,GRFUNC_1:90;
     then consider l1 such that
 A90: i = goto l1 by SCMFSA_2:59;
     for x being set st x in ((Int-Locations \/ FinSeq-Locations))
-    holds (Exec (l,s1) | (Int-Locations \/ FinSeq-Locations)).x
-    = (Exec (l,s2) | (Int-Locations \/ FinSeq-Locations)).x
+    holds (DataPart Exec (l,s1)).x = (DataPart Exec (l,s2)).x
     proof
       let x be set;
       assume
@@ -1409,36 +1391,33 @@ A91:  x in ((Int-Locations \/ FinSeq-Locations));
       per cases by A91,XBOOLE_0:def 2;
       suppose x in Int-Locations;
         then reconsider a = x as Int-Location by SCMFSA_2:11;
-        thus (Exec (l,s1) | (Int-Locations \/ FinSeq-Locations)).x
-        = (Exec (l,s1)).a by A91,FUNCT_1:72
+        thus (DataPart Exec (l,s1)).x
+        = (Exec (l,s1)).a by A91,FUNCT_1:72,SCMFSA_2:127
           .= s1.a by A90,SCMFSA_2:95
-          .= (s1 | (Int-Locations \/ FinSeq-Locations)).a by A91,FUNCT_1:72
-          .= s2.a by A1,A91,FUNCT_1:72
+          .= (DataPart s1).a by A91,FUNCT_1:72,SCMFSA_2:127
+          .= s2.a by A1,A91,FUNCT_1:72,SCMFSA_2:127
           .= (Exec (l,s2)).a by A90,SCMFSA_2:95
-          .= (Exec (l,s2) | (Int-Locations \/ FinSeq-Locations)).x
-        by A91,FUNCT_1:72;
+          .= (DataPart Exec (l,s2)).x by A91,FUNCT_1:72,SCMFSA_2:127;
       end;
       suppose x in FinSeq-Locations;
         then reconsider a = x as FinSeq-Location by SCMFSA_2:12;
-        thus (Exec (l,s1) | (Int-Locations \/ FinSeq-Locations)).x
-        = (Exec (l,s1)).a by A91,FUNCT_1:72
+        thus (DataPart Exec (l,s1)).x
+        = (Exec (l,s1)).a by A91,FUNCT_1:72,SCMFSA_2:127
           .= s1.a by A90,SCMFSA_2:95
-          .= (s1 | (Int-Locations \/ FinSeq-Locations)).a by A91,FUNCT_1:72
-          .= s2.a by A1,A91,FUNCT_1:72
+          .= (DataPart s1).a by A91,FUNCT_1:72,SCMFSA_2:127
+          .= s2.a by A1,A91,FUNCT_1:72,SCMFSA_2:127
           .= (Exec (l,s2)).a by A90,SCMFSA_2:95
-          .= (Exec (l,s2) | (Int-Locations \/ FinSeq-Locations)).x
-        by A91,FUNCT_1:72;
+          .= (DataPart Exec (l,s2)).x by A91,FUNCT_1:72,SCMFSA_2:127;
       end;
     end;
-    hence Exec (l,s1) | (Int-Locations \/ FinSeq-Locations )
-    = Exec (l,s2) | (Int-Locations \/ FinSeq-Locations ) by A8,A9,FUNCT_1:9;
+    hence DataPart Exec (l,s1) = DataPart Exec (l,s2)
+     by A8,A9,FUNCT_1:9,SCMFSA_2:127;
   end;
   suppose InsCode i = 7;
     then consider l1, a such that
 A92: i = a=0_goto l1 by SCMFSA_2:60;
     for x being set st x in ((Int-Locations \/ FinSeq-Locations))
-    holds (Exec (l,s1) | (Int-Locations \/ FinSeq-Locations)).x
-    = (Exec (l,s2) | (Int-Locations \/ FinSeq-Locations)).x
+    holds (DataPart Exec (l,s1)).x = (DataPart Exec (l,s2)).x
     proof
       let x be set;
       assume
@@ -1446,36 +1425,33 @@ A93:  x in ((Int-Locations \/ FinSeq-Locations));
       per cases by A93,XBOOLE_0:def 2;
       suppose x in Int-Locations;
         then reconsider a = x as Int-Location by SCMFSA_2:11;
-        thus (Exec (l,s1) | (Int-Locations \/ FinSeq-Locations)).x
-        = (Exec (l,s1)).a by A93,FUNCT_1:72
+        thus (DataPart Exec (l,s1)).x
+        = (Exec (l,s1)).a by A93,FUNCT_1:72,SCMFSA_2:127
           .= s1.a by A92,SCMFSA_2:96
-          .= (s1 | (Int-Locations \/ FinSeq-Locations)).a by A93,FUNCT_1:72
-          .= s2.a by A1,A93,FUNCT_1:72
+          .= (DataPart s1).a by A93,FUNCT_1:72,SCMFSA_2:127
+          .= s2.a by A1,A93,FUNCT_1:72,SCMFSA_2:127
           .= (Exec (l,s2)).a by A92,SCMFSA_2:96
-          .= (Exec (l,s2) | (Int-Locations \/ FinSeq-Locations)).x
-        by A93,FUNCT_1:72;
+          .= (DataPart Exec (l,s2)).x by A93,FUNCT_1:72,SCMFSA_2:127;
       end;
       suppose x in FinSeq-Locations;
         then reconsider a = x as FinSeq-Location by SCMFSA_2:12;
-        thus (Exec (l,s1) | (Int-Locations \/ FinSeq-Locations)).x
-        = (Exec (l,s1)).a by A93,FUNCT_1:72
+        thus (DataPart Exec (l,s1)).x
+        = (Exec (l,s1)).a by A93,FUNCT_1:72,SCMFSA_2:127
           .= s1.a by A92,SCMFSA_2:96
-          .= (s1 | (Int-Locations \/ FinSeq-Locations)).a by A93,FUNCT_1:72
-          .= s2.a by A1,A93,FUNCT_1:72
+          .= (DataPart s1).a by A93,FUNCT_1:72,SCMFSA_2:127
+          .= s2.a by A1,A93,FUNCT_1:72,SCMFSA_2:127
           .= (Exec (l,s2)).a by A92,SCMFSA_2:96
-          .= (Exec (l,s2) | (Int-Locations \/ FinSeq-Locations)).x
-        by A93,FUNCT_1:72;
+          .= (DataPart Exec (l,s2)).x by A93,FUNCT_1:72,SCMFSA_2:127;
       end;
     end;
-    hence Exec (l,s1) | (Int-Locations \/ FinSeq-Locations )
-    = Exec (l,s2) | (Int-Locations \/ FinSeq-Locations ) by A8,A9,FUNCT_1:9;
+    hence DataPart Exec (l,s1) = DataPart Exec (l,s2)
+     by A8,A9,FUNCT_1:9,SCMFSA_2:127;
   end;
   suppose InsCode i = 8;
     then consider l1, a such that
 A94: i = a>0_goto l1 by SCMFSA_2:61;
     for x being set st x in ((Int-Locations \/ FinSeq-Locations))
-    holds (Exec (l,s1) | (Int-Locations \/ FinSeq-Locations)).x
-    = (Exec (l,s2) | (Int-Locations \/ FinSeq-Locations)).x
+    holds (DataPart Exec (l,s1)).x = (DataPart Exec (l,s2)).x
     proof
       let x be set;
       assume
@@ -1483,29 +1459,27 @@ A95:  x in ((Int-Locations \/ FinSeq-Locations));
       per cases by A95,XBOOLE_0:def 2;
       suppose x in Int-Locations;
         then reconsider a = x as Int-Location by SCMFSA_2:11;
-        thus (Exec (l,s1) | (Int-Locations \/ FinSeq-Locations)).x
-        = (Exec (l,s1)).a by A95,FUNCT_1:72
+        thus (DataPart Exec (l,s1)).x
+        = (Exec (l,s1)).a by A95,FUNCT_1:72,SCMFSA_2:127
           .= s1.a by A94,SCMFSA_2:97
-          .= (s1 | (Int-Locations \/ FinSeq-Locations)).a by A95,FUNCT_1:72
-          .= s2.a by A1,A95,FUNCT_1:72
+          .= (DataPart s1).a by A95,FUNCT_1:72,SCMFSA_2:127
+          .= s2.a by A1,A95,FUNCT_1:72,SCMFSA_2:127
           .= (Exec (l,s2)).a by A94,SCMFSA_2:97
-          .= (Exec (l,s2) | (Int-Locations \/ FinSeq-Locations)).x
-        by A95,FUNCT_1:72;
+          .= (DataPart Exec (l,s2)).x by A95,FUNCT_1:72,SCMFSA_2:127;
       end;
       suppose x in FinSeq-Locations;
         then reconsider a = x as FinSeq-Location by SCMFSA_2:12;
-        thus (Exec (l,s1) | (Int-Locations \/ FinSeq-Locations)).x
-        = (Exec (l,s1)).a by A95,FUNCT_1:72
+        thus (DataPart Exec (l,s1)).x
+        = (Exec (l,s1)).a by A95,FUNCT_1:72,SCMFSA_2:127
           .= s1.a by A94,SCMFSA_2:97
-          .= (s1 | (Int-Locations \/ FinSeq-Locations)).a by A95,FUNCT_1:72
-          .= s2.a by A1,A95,FUNCT_1:72
+          .= (DataPart s1).a by A95,FUNCT_1:72,SCMFSA_2:127
+          .= s2.a by A1,A95,FUNCT_1:72,SCMFSA_2:127
           .= (Exec (l,s2)).a by A94,SCMFSA_2:97
-          .= (Exec (l,s2) | (Int-Locations \/ FinSeq-Locations)).x
-        by A95,FUNCT_1:72;
+          .= (DataPart Exec (l,s2)).x by A95,FUNCT_1:72,SCMFSA_2:127;
       end;
     end;
-    hence Exec (l,s1) | (Int-Locations \/ FinSeq-Locations )
-    = Exec (l,s2) | (Int-Locations \/ FinSeq-Locations ) by A8,A9,FUNCT_1:9;
+    hence DataPart Exec (l,s1) = DataPart Exec (l,s2)
+     by A8,A9,FUNCT_1:9,SCMFSA_2:127;
   end;
   suppose InsCode i = 9;
     then consider da,db being Int-Location, fa being FinSeq-Location such that
@@ -1537,8 +1511,8 @@ A103:   a <> db by A102,TARSKI:def 1;
         thus (Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \ {db})).x
         = (Exec (l,s1)).a by A100,FUNCT_1:72
           .= s1.a by A96,A103,SCMFSA_2:98
-          .= (s1 | (Int-Locations \/ FinSeq-Locations)).a by A101,FUNCT_1:72
-          .= s2.a by A1,A101,FUNCT_1:72
+          .= (DataPart s1).a by A101,FUNCT_1:72,SCMFSA_2:127
+          .= s2.a by A1,A101,FUNCT_1:72,SCMFSA_2:127
           .= (Exec (l,s2)).a by A96,A103,SCMFSA_2:98
           .= (Exec (l,s2) | (Int-Locations \/ FinSeq-Locations \ {db})).x
         by A100,FUNCT_1:72;
@@ -1548,8 +1522,8 @@ A103:   a <> db by A102,TARSKI:def 1;
         thus (Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \ {db})).x
         = (Exec (l,s1)).a by A100,FUNCT_1:72
           .= s1.a by A96,SCMFSA_2:98
-          .= (s1 | (Int-Locations \/ FinSeq-Locations)).a by A101,FUNCT_1:72
-          .= s2.a by A1,A101,FUNCT_1:72
+          .= (DataPart s1).a by A101,FUNCT_1:72,SCMFSA_2:127
+          .= s2.a by A1,A101,FUNCT_1:72,SCMFSA_2:127
           .= (Exec (l,s2)).a by A96,SCMFSA_2:98
           .= (Exec (l,s2) | (Int-Locations \/ FinSeq-Locations \ {db})).x
         by A100,FUNCT_1:72;
@@ -1568,18 +1542,17 @@ A107: Exec(l, s1).db = (s1.fa)/.k1 by A96,SCMFSA_2:98;
     consider k2 being Element of NAT such that
 A108: k2 = abs(s2.da) and
 A109: Exec(l, s2).db = (s2.fa)/.k2 by A96,SCMFSA_2:98;
-A110: s1.da = (s1 | (Int-Locations \/ FinSeq-Locations)).da by A105,FUNCT_1:72
-      .= s2.da by A1,A105,FUNCT_1:72;
+A110: s1.da = (DataPart s1).da by A105,FUNCT_1:72,SCMFSA_2:127
+      .= s2.da by A1,A105,FUNCT_1:72,SCMFSA_2:127;
     fa in FinSeq-Locations by SCMFSA_2:10;
     then
 A111: fa in Int-Locations \/ FinSeq-Locations by XBOOLE_0:def 2;
-    then s1.fa = (s1 | (Int-Locations \/ FinSeq-Locations)).fa by FUNCT_1:72
-      .= s2.fa by A1,A111,FUNCT_1:72;
+    then s1.fa = (DataPart s1).fa by FUNCT_1:72,SCMFSA_2:127
+      .= s2.fa by A1,A111,FUNCT_1:72,SCMFSA_2:127;
     then Exec (l,s1) | {db} = Exec(l,s2) | {db} by A7,A106,A107,A108,A109,A110
     , GRFUNC_1:90;
-    hence Exec (l,s1) |(Int-Locations \/ FinSeq-Locations)
-    = Exec (l,s2) |(Int-Locations \/ FinSeq-Locations) by A97,A104,
-    RELAT_1:185;
+    hence DataPart Exec (l,s1) = DataPart Exec (l,s2) by A97,A104,
+    RELAT_1:185,SCMFSA_2:127;
   end;
   suppose InsCode i = 10;
     then consider da,db being Int-Location, fa being FinSeq-Location such that
@@ -1610,8 +1583,8 @@ A118: not x in {fa} by A116,XBOOLE_0:def 4;
         thus (Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \ {fa})).x
         = (Exec (l,s1)).a by A116,FUNCT_1:72
           .= s1.a by A112,SCMFSA_2:99
-          .= (s1 | (Int-Locations \/ FinSeq-Locations)).a by A117,FUNCT_1:72
-          .= s2.a by A1,A117,FUNCT_1:72
+          .= (DataPart s1).a by A117,FUNCT_1:72,SCMFSA_2:127
+          .= s2.a by A1,A117,FUNCT_1:72,SCMFSA_2:127
           .= (Exec (l,s2)).a by A112,SCMFSA_2:99
           .= (Exec (l,s2) | (Int-Locations \/ FinSeq-Locations \ {fa})).x
         by A116,FUNCT_1:72;
@@ -1622,8 +1595,8 @@ A119:   a <> fa by A118,TARSKI:def 1;
         thus (Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \ {fa})).x
         = (Exec (l,s1)).a by A116,FUNCT_1:72
           .= s1.a by A112,A119,SCMFSA_2:99
-          .= (s1 | (Int-Locations \/ FinSeq-Locations)).a by A117,FUNCT_1:72
-          .= s2.a by A1,A117,FUNCT_1:72
+          .= (DataPart s1).a by A117,FUNCT_1:72,SCMFSA_2:127
+          .= s2.a by A1,A117,FUNCT_1:72,SCMFSA_2:127
           .= (Exec (l,s2)).a by A112,A119,SCMFSA_2:99
           .= (Exec (l,s2) | (Int-Locations \/ FinSeq-Locations \ {fa})).x
         by A116,FUNCT_1:72;
@@ -1642,24 +1615,23 @@ A123: Exec(l, s1).fa = s1.fa+*(k1,s1.db) by A112,SCMFSA_2:99;
     consider k2 being Element of NAT such that
 A124: k2 = abs(s2.da) and
 A125: Exec(l, s2).fa = s2.fa+*(k2,s2.db) by A112,SCMFSA_2:99;
-A126: s1.da = (s1 | (Int-Locations \/ FinSeq-Locations)).da by A121,FUNCT_1:72
-      .= s2.da by A1,A121,FUNCT_1:72;
+A126: s1.da = (DataPart s1).da by A121,FUNCT_1:72,SCMFSA_2:127
+      .= s2.da by A1,A121,FUNCT_1:72,SCMFSA_2:127;
     db in Int-Locations by SCMFSA_2:9;
     then
 A127: db in Int-Locations \/ FinSeq-Locations by XBOOLE_0:def 2;
     then
-A128: s1.db = (s1 | (Int-Locations \/ FinSeq-Locations)).db by FUNCT_1 :72
-      .= s2.db by A1,A127,FUNCT_1:72;
+A128: s1.db = (DataPart s1).db by FUNCT_1 :72,SCMFSA_2:127
+      .= s2.db by A1,A127,FUNCT_1:72,SCMFSA_2:127;
     fa in FinSeq-Locations by SCMFSA_2:10;
     then
 A129: fa in Int-Locations \/ FinSeq-Locations by XBOOLE_0:def 2;
-    then s1.fa = (s1 | (Int-Locations \/ FinSeq-Locations)).fa by FUNCT_1:72
-      .= s2.fa by A1,A129,FUNCT_1:72;
+    then s1.fa = (DataPart s1).fa by FUNCT_1:72,SCMFSA_2:127
+      .= s2.fa by A1,A129,FUNCT_1:72,SCMFSA_2:127;
     then Exec (l,s1) | {fa} = Exec(l,s2) | {fa} by A7,A122,A123,A124,A125,A126
     , A128,GRFUNC_1:90;
-    hence Exec (l,s1) |(Int-Locations \/ FinSeq-Locations)
-    = Exec (l,s2) |(Int-Locations \/ FinSeq-Locations) by A113,A120,
-    RELAT_1:185;
+    hence DataPart Exec (l,s1) = DataPart Exec (l,s2) by A113,A120,
+    RELAT_1:185,SCMFSA_2:127;
   end;
   suppose InsCode i = 11;
     then consider da being Int-Location, fa being FinSeq-Location such that
@@ -1691,8 +1663,8 @@ A137:   a <> da by A136,TARSKI:def 1;
         thus (Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \ {da})).x
         = (Exec (l,s1)).a by A134,FUNCT_1:72
           .= s1.a by A130,A137,SCMFSA_2:100
-          .= (s1 | (Int-Locations \/ FinSeq-Locations)).a by A135,FUNCT_1:72
-          .= s2.a by A1,A135,FUNCT_1:72
+          .= (DataPart s1).a by A135,FUNCT_1:72,SCMFSA_2:127
+          .= s2.a by A1,A135,FUNCT_1:72,SCMFSA_2:127
           .= (Exec (l,s2)).a by A130,A137,SCMFSA_2:100
           .= (Exec (l,s2) | (Int-Locations \/ FinSeq-Locations \ {da})).x
         by A134,FUNCT_1:72;
@@ -1702,8 +1674,8 @@ A137:   a <> da by A136,TARSKI:def 1;
         thus (Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \ {da})).x
         = (Exec (l,s1)).a by A134,FUNCT_1:72
           .= s1.a by A130,SCMFSA_2:100
-          .= (s1 | (Int-Locations \/ FinSeq-Locations)).a by A135,FUNCT_1:72
-          .= s2.a by A1,A135,FUNCT_1:72
+          .= (DataPart s1).a by A135,FUNCT_1:72,SCMFSA_2:127
+          .= s2.a by A1,A135,FUNCT_1:72,SCMFSA_2:127
           .= (Exec (l,s2)).a by A130,SCMFSA_2:100
           .= (Exec (l,s2) | (Int-Locations \/ FinSeq-Locations \ {da})).x
         by A134,FUNCT_1:72;
@@ -1717,13 +1689,12 @@ A138: Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \ {da} )
     then
 A139: fa in Int-Locations \/ FinSeq-Locations by XBOOLE_0:def 2;
     then s1.fa = (s1 | (Int-Locations \/ FinSeq-Locations)).fa by FUNCT_1:72
-      .= s2.fa by A1,A139,FUNCT_1:72;
+      .= s2.fa by A1,A139,FUNCT_1:72,SCMFSA_2:127;
     then Exec (l,s1).da = len(s2.fa) by A130,SCMFSA_2:100
       .= Exec (l,s2).da by A130,SCMFSA_2:100;
     then Exec (l,s1) | {da} = Exec(l,s2) | {da} by A5,A6,GRFUNC_1:90;
-    hence Exec (l,s1) |(Int-Locations \/ FinSeq-Locations)
-    = Exec (l,s2) |(Int-Locations \/ FinSeq-Locations) by A131,A138,
-    RELAT_1:185;
+    hence DataPart Exec (l,s1) = DataPart Exec (l,s2) by A131,A138,
+    RELAT_1:185,SCMFSA_2:127;
   end;
   suppose InsCode i = 12;
     then consider da being Int-Location, fa being FinSeq-Location such that
@@ -1755,8 +1726,8 @@ A146: not x in {fa} by A144,XBOOLE_0:def 4;
         thus (Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \ {fa})).x
         = (Exec (l,s1)).a by A144,FUNCT_1:72
           .= s1.a by A140,SCMFSA_2:101
-          .= (s1 | (Int-Locations \/ FinSeq-Locations )).a by A145,FUNCT_1:72
-          .= s2.a by A1,A145,FUNCT_1:72
+          .= (DataPart s1).a by A145,FUNCT_1:72,SCMFSA_2:127
+          .= s2.a by A1,A145,FUNCT_1:72,SCMFSA_2:127
           .= (Exec (l,s2)).a by A140,SCMFSA_2:101
           .= (Exec (l,s2) | (Int-Locations \/ FinSeq-Locations \ {fa})).x
         by A144,FUNCT_1:72;
@@ -1767,8 +1738,8 @@ A147:   a <> fa by A146,TARSKI:def 1;
         thus (Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \ {fa})).x
         = (Exec (l,s1)).a by A144,FUNCT_1:72
           .= s1.a by A140,A147,SCMFSA_2:101
-          .= (s1 | (Int-Locations \/ FinSeq-Locations )).a by A145,FUNCT_1:72
-          .= s2.a by A1,A145,FUNCT_1:72
+          .= (DataPart s1).a by A145,FUNCT_1:72,SCMFSA_2:127
+          .= s2.a by A1,A145,FUNCT_1:72,SCMFSA_2:127
           .= (Exec (l,s2)).a by A140,A147,SCMFSA_2:101
           .= (Exec (l,s2) | (Int-Locations \/ FinSeq-Locations \ {fa})).x
         by A144,FUNCT_1:72;
@@ -1787,13 +1758,12 @@ A151: Exec(l, s1).fa = k1 |->0 by A140,SCMFSA_2:101;
     consider k2 being Element of NAT such that
 A152: k2 = abs(s2.da) and
 A153: Exec(l, s2).fa = k2 |->0 by A140,SCMFSA_2:101;
-    s1.da = (s1 | (Int-Locations \/ FinSeq-Locations )).da by A149,FUNCT_1:72
-      .= s2.da by A1,A149,FUNCT_1:72;
+    s1.da = (DataPart s1).da by A149,FUNCT_1:72,SCMFSA_2:127
+      .= s2.da by A1,A149,FUNCT_1:72,SCMFSA_2:127;
     then Exec (l,s1) | {fa} = Exec(l,s2) | {fa}
     by A7,A150,A151,A152,A153,GRFUNC_1:90;
-    hence Exec (l,s1) |(Int-Locations \/ FinSeq-Locations)
-    = Exec (l,s2) |(Int-Locations \/ FinSeq-Locations) by A141,A148,
-    RELAT_1:185;
+    hence DataPart Exec (l,s1) = DataPart Exec (l,s2) by A141,A148,
+    RELAT_1:185,SCMFSA_2:127;
   end;
 end;
 
@@ -1805,14 +1775,14 @@ Lm3: now
 A1: dom (Initialize IE) = the carrier of SCM+FSA &
     dom IE = the carrier of SCM+FSA by AMI_1:79;
     hence
-A2: dom ((Initialize IE)|IF) = dom IE /\ IF by RELAT_1:90;
+A2: dom DataPart Initialize IE = dom IE /\ IF by RELAT_1:90,SCMFSA_2:127;
     let x;
     assume
-A3: x in dom ((Initialize IE)|IF);
+A3: x in dom DataPart Initialize IE;
     dom (Initialize IE) = Int-Locations \/ FinSeq-Locations \/ ({IC SCM+FSA }
     \/ NAT) by A1,SCMFSA_2:8,XBOOLE_1:4;
     then
-A4: dom ((Initialize IE)|IF) = Int-Locations \/ FinSeq-Locations
+A4: dom DataPart Initialize IE = Int-Locations \/ FinSeq-Locations
     by A1,A2,XBOOLE_1:21;
     per cases by A3,A4,XBOOLE_0:def 2;
     suppose x in Int-Locations;
@@ -1821,13 +1791,15 @@ A4: dom ((Initialize IE)|IF) = Int-Locations \/ FinSeq-Locations
         per cases;
         suppose
 A5:       x' is read-write;
-          thus ((Initialize IE)|IF).x = (Initialize IE).x by A3,A4,FUNCT_1:72
+          thus (DataPart Initialize IE).x
+             = (Initialize IE).x by A3,A4,FUNCT_1:72,SCMFSA_2:127
             .= IE.x by A5,Th3;
         end;
         suppose x' is read-only;
           then
 A6:       x' = intloc 0 by SF_MASTR:def 5;
-          thus ((Initialize IE)|IF).x = (Initialize IE).x' by A3,A4,FUNCT_1:72
+          thus (DataPart Initialize IE).x
+             = (Initialize IE).x' by A3,A4,FUNCT_1:72,SCMFSA_2:127
             .= 1 by A6,Th3
             .= IE.x by A6,SCMFSA6B:35;
         end;
@@ -1835,11 +1807,12 @@ A6:       x' = intloc 0 by SF_MASTR:def 5;
     end;
     suppose x in FinSeq-Locations;
       then reconsider x' = x as FinSeq-Location by SCMFSA_2:12;
-      thus ((Initialize IE)|IF).x = (Initialize IE).x' by A3,A4,FUNCT_1:72
+      thus (DataPart Initialize IE).x
+       = (Initialize IE).x' by A3,A4,FUNCT_1:72,SCMFSA_2:127
         .= IE.x by Th3;
     end;
   end;
-  hence (Initialize IE) | IF = IE | IF by FUNCT_1:68;
+  hence DataPart Initialize IE = DataPart IE by FUNCT_1:68,SCMFSA_2:127;
 end;
 
 theorem Th6:
@@ -2031,8 +2004,7 @@ proof
   set Mj = Macro j;
   set SA = Start-At (IC IExec(Mj,IExec(I,s)) + card I);
 A1: not a in dom SA & a in dom IExec(Mj,IExec(I,s)) by SCMFSA6B:9,SCMFSA_2:66;
-A2: (Initialize IExec(I,s)) | (Int-Locations \/ FinSeq-Locations)
-  = IExec(I, s) | (Int-Locations \/ FinSeq-Locations) by Lm3;
+A2: DataPart Initialize IExec(I,s) = DataPart IExec(I, s) by Lm3;
   a in Int-Locations by SCMFSA_2:9;
   then
 A3: a in Int-Locations \/ FinSeq-Locations by XBOOLE_0:def 2;
@@ -2040,11 +2012,10 @@ A3: a in Int-Locations \/ FinSeq-Locations by XBOOLE_0:def 2;
      = (IExec(Mj,IExec(I,s))+*SA).a by SCMFSA6B:44
     .= IExec(Mj, IExec(I,s)).a by A1,FUNCT_4:12
     .= Exec(j, Initialize IExec(I,s)).a by Th6
-    .= (Exec(j, Initialize IExec(I,s)) | (Int-Locations \/ FinSeq-Locations)).a
-  by A3,FUNCT_1:72
-    .= (Exec(j, IExec(I, s)) | (Int-Locations \/ FinSeq-Locations)).a
-  by A2,Th5
-    .= Exec(j, IExec(I, s)).a by A3,FUNCT_1:72;
+    .= (DataPart Exec(j, Initialize IExec(I,s))).a
+  by A3,FUNCT_1:72,SCMFSA_2:127
+    .= (DataPart Exec(j, IExec(I, s))).a by A2,Th5
+    .= Exec(j, IExec(I, s)).a by A3,FUNCT_1:72,SCMFSA_2:127;
 end;
 
 theorem Th8:
@@ -2057,8 +2028,7 @@ proof
   set Mj = Macro j;
   set SA = Start-At (IC IExec(Mj,IExec(I,s)) + card I);
 A1: not f in dom SA & f in dom IExec(Mj,IExec(I,s)) by SCMFSA6B:10,SCMFSA_2:67;
-A2: (Initialize IExec(I,s)) | (Int-Locations \/ FinSeq-Locations)
-  = IExec(I, s) | (Int-Locations \/ FinSeq-Locations) by Lm3;
+A2: DataPart Initialize IExec(I,s) = DataPart IExec(I, s) by Lm3;
   f in FinSeq-Locations by SCMFSA_2:10;
   then
 A3: f in Int-Locations \/ FinSeq-Locations by XBOOLE_0:def 2;
@@ -2066,11 +2036,11 @@ A3: f in Int-Locations \/ FinSeq-Locations by XBOOLE_0:def 2;
      = (IExec(Mj,IExec(I,s))+*SA).f by SCMFSA6B:44
     .= IExec(Mj, IExec(I,s)).f by A1,FUNCT_4:12
     .= Exec(j, Initialize IExec(I,s)).f by Th6
-    .= (Exec(j, Initialize IExec(I,s)) | (Int-Locations \/ FinSeq-Locations)).f
-  by A3,FUNCT_1:72
-    .= (Exec(j, IExec(I, s)) | (Int-Locations \/ FinSeq-Locations)).f
+    .= (DataPart Exec(j, Initialize IExec(I,s))).f
+  by A3,FUNCT_1:72,SCMFSA_2:127
+    .= (DataPart Exec(j, IExec(I, s))).f
   by A2,Th5
-    .= Exec(j, IExec(I, s)).f by A3,FUNCT_1:72;
+    .= Exec(j, IExec(I, s)).f by A3,FUNCT_1:72,SCMFSA_2:127;
 end;
 
 theorem Th9:

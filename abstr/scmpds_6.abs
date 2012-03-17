@@ -46,7 +46,7 @@ theorem :: SCMPDS_6:3
 
 theorem :: SCMPDS_6:4  ::S8A_Th6
   for s1,s2 being State of SCMPDS holds s1,s2 equal_outside NAT
-  iff IC s1 = IC s2 & s1 | SCM-Data-Loc = s2 | SCM-Data-Loc;
+  iff IC s1 = IC s2 & DataPart s1 = DataPart s2;
 
 theorem :: SCMPDS_6:5
   for s being State of SCMPDS, I being Program of SCMPDS holds
@@ -58,16 +58,16 @@ theorem :: SCMPDS_6:6
 
 theorem :: SCMPDS_6:7
   for s being State of SCMPDS, l being Instruction-Location of SCMPDS holds
-  s | SCM-Data-Loc = (s +* Start-At l) | SCM-Data-Loc;
+  DataPart s = DataPart(s +* Start-At l);
 
 theorem :: SCMPDS_6:8   ::S8A_11
   for s being State of SCMPDS,I being Program of SCMPDS,
   l being Instruction-Location of SCMPDS holds
-  s | SCM-Data-Loc = (s +* (I +* Start-At l)) | SCM-Data-Loc;
+  DataPart s = DataPart(s +* (I +* Start-At l));
 
 theorem :: SCMPDS_6:9
   for s being State of SCMPDS,I being Program of SCMPDS
-  holds s | SCM-Data-Loc = (s +* Initialized I) | SCM-Data-Loc;
+  holds DataPart s = DataPart(s +* Initialized I);
 
 theorem :: SCMPDS_6:10  :: S8A_Th12
   for s being State of SCMPDS, l being Instruction-Location of SCMPDS holds
@@ -80,7 +80,7 @@ theorem :: SCMPDS_6:11  ::S8A_Th14
 
 theorem :: SCMPDS_6:12  ::S8B_7
   for s1,s2 be State of SCMPDS,I,J be Program of SCMPDS holds
-  s1 | SCM-Data-Loc = s2 | SCM-Data-Loc implies
+  DataPart s1 = DataPart s2 implies
   s1 +* Initialized I, s2 +* Initialized J equal_outside NAT;
 
 canceled;
@@ -200,12 +200,12 @@ theorem :: SCMPDS_6:35   ::S7B_25
 
 theorem :: SCMPDS_6:36
   for s1,s2 being State of SCMPDS, I being Program of SCMPDS st
-  s1 | SCM-Data-Loc = s2 | SCM-Data-Loc holds
+  DataPart s1 = DataPart s2 holds
   I is_closed_on s1 implies I is_closed_on s2;
 
 theorem :: SCMPDS_6:37  ::S8B_Th8
   for s1,s2 being State of SCMPDS,I being Program of SCMPDS st
-  s1 | SCM-Data-Loc = s2 | SCM-Data-Loc holds
+  DataPart s1 = DataPart s2 holds
   I is_closed_on s1 & I is_halting_on s1 implies
   I is_closed_on s2 & I is_halting_on s2;
 
@@ -219,10 +219,10 @@ theorem :: SCMPDS_6:39
   (for k being Element of NAT st k <= LifeSpan (s +* Initialized stop I) holds
   IC  Computation( (s +* Initialized stop I),k) =
   IC  Computation( (s +* Initialized stop (I ';' J)),k)) &
-   Computation( (s +* Initialized stop I),
-  (LifeSpan (s +* Initialized stop I))) | SCM-Data-Loc =
-   Computation( (s +* Initialized stop (I ';' J)),
-  (LifeSpan (s +* Initialized stop I))) | SCM-Data-Loc;
+   DataPart Computation( (s +* Initialized stop I),
+  (LifeSpan (s +* Initialized stop I))) =
+   DataPart Computation( (s +* Initialized stop (I ';' J)),
+  (LifeSpan (s +* Initialized stop I)));
 
 theorem :: SCMPDS_6:40
   for I being Program of SCMPDS,k be Element of NAT st I is_closed_on s &
@@ -259,11 +259,11 @@ theorem :: SCMPDS_6:45   :: SP4_88,Th27
   for I being shiftable Program of SCMPDS st
   Initialized stop I c= s1 & I is_closed_on s1
   for n being Element of NAT st Shift(stop I,n) c= s2 &
-  IC s2 = inspos n & s1 | SCM-Data-Loc = s2 | SCM-Data-Loc
+  IC s2 = inspos n & DataPart s1 = DataPart s2
   for i being Element of NAT holds
   IC  Computation( s1,i) + n = IC  Computation( s2,i) &
   CurInstr ( Computation( s1,i)) = CurInstr ( Computation( s2,i)) &
-   Computation( s1,i) | SCM-Data-Loc =  Computation( s2,i) | SCM-Data-Loc;
+  DataPart Computation( s1,i) = DataPart Computation( s2,i);
 
 theorem :: SCMPDS_6:46   ::SCMFSA8A:61
   for s being State of SCMPDS,I being No-StopCode Program of SCMPDS,

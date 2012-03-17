@@ -1,0 +1,372 @@
+:: Modular Integer Arithmetic
+::  by Christoph Schwarzweller
+:: 
+:: Received May 13, 2008
+:: Copyright (c) 2008 Association of Mizar Users
+
+environ
+
+ vocabularies NAT_1, INT_1, INT_2, INT_3, FUNCT_1, FINSEQ_1, FINSEQ_4, RELAT_1,
+      CARD_3, ARYTM_3, RLVECT_1, COMPLEX1, COMPLSP1, INT_6, BOOLE, ARYTM,
+      REAL_3, SETWISEO, BINOP_1, SUBSET_1, ARYTM_1, RFINSEQ, PARTFUN3,
+      ABSVALUE, SEQ_1, SQUARE_1, GR_CY_1, ASYMPT_0, ORDINAL2, FINSOP_1,
+      ZF_REFLE, VALUED_0;
+ notations TARSKI, XBOOLE_0, SUBSET_1, NAT_D, INT_1, INT_2, ORDINAL1, NUMBERS,
+      PARTFUN1, PARTFUN3, REAL_3, XXREAL_0, XREAL_0, FUNCT_1, VALUED_0,
+      VALUED_1, BINOP_2, SETWISEO, RFINSEQ, BINOP_1, FINSEQ_1, SETWOP_2,
+      RVSUM_1, XCMPLX_0, NAT_1, FINSOP_1;
+ constructors FINSOP_1, RFINSEQ, NAT_1, INT_2, REAL_3, FINSEQ_4, BINOP_2,
+      REAL_1, SETWISEO, SETWOP_2, PARTFUN3, PARTFUN1, XXREAL_0;
+ registrations NUMBERS, XREAL_0, NAT_1, INT_1, RELAT_1, FINSEQ_1, RVSUM_1,
+      XBOOLE_0, MEMBERED, BINOP_2, ORDINAL1, XXREAL_0, SETWISEO, VALUED_0,
+      VALUED_1;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+
+
+begin
+
+registration
+let f be FinSequence;
+cluster f|0 -> empty;
+end;
+
+registration
+let f be complex-valued FinSequence,
+    n be natural number;
+cluster f|n -> complex-valued;
+end;
+
+registration
+let f be integer-valued FinSequence,
+    n be natural number;
+cluster f|n -> integer-valued;
+end;
+
+registration
+let f be integer-valued FinSequence,
+    n be natural number;
+cluster f/^n -> integer-valued;
+end;
+
+registration
+let i be Integer;
+cluster <*i*> -> integer-valued;
+end;
+
+registration
+let f,g be integer-valued FinSequence;
+cluster f ^ g -> integer-valued;
+end;
+
+theorem :: INT_6:1
+for f1,f2 being complex-valued FinSequence
+holds len(f1 + f2) = min(len f1, len f2);
+
+theorem :: INT_6:2
+for f1, f2 being complex-valued FinSequence
+holds len(f1 - f2) = min(len f1, len f2);
+
+theorem :: INT_6:3
+for f1,f2 being complex-valued FinSequence
+holds len(f1 (#) f2) = min(len f1, len f2);
+
+theorem :: INT_6:4
+for m1,m2 being complex-valued FinSequence st len m1 = len m2
+for k being natural number st k <= len m1 holds (m1(#)m2)|k = (m1|k) (#) (m2|k)
+;
+
+registration
+let F be integer-valued FinSequence;
+cluster Sum F -> integer;
+cluster Product F -> integer;
+end;
+
+theorem :: INT_6:5
+for f being complex-valued FinSequence,
+    i being natural number st i+1 <= len f holds f|i ^ <*f.(i+1)*> = f|(i+1);
+
+theorem :: INT_6:6
+for f being complex-valued FinSequence st
+ex i being natural number st i in dom f & f.i = 0 holds Product(f) = 0;
+
+theorem :: INT_6:7
+for n,a,b being Integer holds
+(a - b) mod n = ((a mod n) - (b mod n)) mod n;
+
+theorem :: INT_6:8
+for i,j,k being Integer st i divides j holds k*i divides k*j;
+
+theorem :: INT_6:9
+for m being integer-valued FinSequence,
+    i being natural number st i in dom m & m.i <> 0
+holds Product(m) / m.i is Integer;
+
+theorem :: INT_6:10
+for m being integer-valued FinSequence,
+    i being natural number st i in dom m
+ex z being Integer st z * m.i = Product(m);
+
+theorem :: INT_6:11
+for m being integer-valued FinSequence,
+    i,j being natural number st i in dom m & j in dom m & j <> i & m.j <> 0
+holds Product(m) / (m.i * m.j) is Integer;
+
+theorem :: INT_6:12
+for m being integer-valued FinSequence,
+    i,j being natural number st i in dom m & j in dom m & j <> i & m.j <> 0
+ex z being Integer st z *  m.i = Product(m) / m.j;
+
+
+begin  :: More on Greatest Common Divisors
+
+theorem :: INT_6:13
+for i being Integer holds abs(i) divides i & i divides abs(i);
+
+theorem :: INT_6:14
+for i,j being Integer holds i gcd j = i gcd abs(j);
+
+theorem :: INT_6:15
+for i,j being Integer st i,j are_relative_prime holds i lcm j = abs(i * j);
+
+theorem :: INT_6:16
+for i,j,k being Integer holds (i*j) gcd (i*k) = abs(i) * (j gcd k);
+
+theorem :: INT_6:17
+for i,j being Integer holds (i * j) gcd i = abs(i);
+
+theorem :: INT_6:18
+for i,j,k being Integer holds i gcd (j gcd k) = (i gcd j) gcd k;
+
+theorem :: INT_6:19
+for i,j,k being Integer st i,j are_relative_prime holds i gcd (j* k) = i gcd k;
+
+theorem :: INT_6:20
+for i,j being Integer st i,j are_relative_prime holds i * j divides i lcm j;
+
+theorem :: INT_6:21
+for x,y,i,j being Integer st i,j are_relative_prime
+holds (x,y are_congruent_mod i & x,y are_congruent_mod j)
+      implies x,y are_congruent_mod i*j;
+
+theorem :: INT_6:22
+for i,j being Integer st i,j are_relative_prime
+holds ex s being Integer st s*i,1 are_congruent_mod j;
+
+
+begin  :: Chinese Remainder Sequences
+
+notation
+let f be integer-valued FinSequence;
+antonym f is multiplicative-trivial for f is non-empty;
+end;
+
+definition
+let f be integer-valued FinSequence;
+redefine attr f is multiplicative-trivial means
+:: INT_6:def 1
+  ex i being natural number st i in dom f & f.i = 0;
+end;
+
+registration
+cluster multiplicative-trivial (integer-valued FinSequence);
+cluster non multiplicative-trivial (integer-valued FinSequence);
+cluster non empty positive-yielding (integer-valued FinSequence);
+end;
+
+theorem :: INT_6:23
+for m being multiplicative-trivial (integer-valued FinSequence)
+holds Product(m) = 0;
+
+definition
+let f be integer-valued FinSequence;
+attr f is Chinese_Remainder means
+:: INT_6:def 2
+  for i,j being natural number
+  st i in dom f & j in dom f & i <> j holds f.i, f.j are_relative_prime;
+end;
+
+registration
+cluster non empty positive-yielding Chinese_Remainder
+        (integer-valued FinSequence);
+end;
+
+definition
+mode CR_Sequence is
+     non empty positive-yielding Chinese_Remainder
+     (integer-valued FinSequence);
+end;
+
+registration
+cluster -> non multiplicative-trivial CR_Sequence;
+end;
+
+registration
+cluster multiplicative-trivial -> non empty (integer-valued FinSequence);
+end;
+
+theorem :: INT_6:24
+for f being CR_Sequence,
+    m being natural number st 0 < m & m <= len f
+holds f|m is CR_Sequence;
+
+registration
+let m be CR_Sequence;
+cluster Product(m) -> positive natural;
+end;
+
+theorem :: INT_6:25
+for m being CR_Sequence,
+    i being natural number st i in dom m
+for mm being Integer st mm = Product(m) / m.i holds mm, m.i are_relative_prime;
+
+
+begin  :: Integer Arithmetic based on CRT
+
+definition
+let u be Integer,
+    m be integer-valued FinSequence;
+func mod(u,m) -> FinSequence means
+:: INT_6:def 3
+  len it = len m &
+  for i being natural number st i in dom it holds it.i = u mod m.i;
+end;
+
+registration
+let u be Integer,
+    m be integer-valued FinSequence;
+cluster mod(u,m) -> integer-valued;
+end;
+
+definition
+let m be CR_Sequence;
+mode CR_coefficients of m -> FinSequence means
+:: INT_6:def 4
+  len it = len m &
+  for i being natural number st i in dom it holds
+    ex s being Integer, mm being Integer
+    st mm = Product(m) / m.i & s * mm, 1 are_congruent_mod m.i &
+       it.i = s * (Product(m) / m.i);
+end;
+
+registration
+let m be CR_Sequence;
+cluster -> integer-valued CR_coefficients of m;
+end;
+
+theorem :: INT_6:26
+for m being CR_Sequence,
+    c being CR_coefficients of m,
+    i being natural number st i in dom c
+holds c.i,1 are_congruent_mod m.i;
+
+theorem :: INT_6:27
+for m being CR_Sequence,
+    c being CR_coefficients of m,
+    i,j being natural number st i in dom c & j in dom c & i <> j
+holds c.i,0 are_congruent_mod m.j;
+
+theorem :: INT_6:28
+for m being CR_Sequence,
+    c1,c2 being CR_coefficients of m,
+    i being natural number  st i in dom c1
+holds c1.i,c2.i are_congruent_mod m.i;
+
+theorem :: INT_6:29
+for u being integer-valued FinSequence,
+    m being CR_Sequence st len m = len u
+for c being CR_coefficients of m,
+    i being natural number st i in dom m
+holds Sum(u(#)c),u.i are_congruent_mod m.i;
+
+theorem :: INT_6:30
+for u being integer-valued FinSequence,
+    m being CR_Sequence st len m = len u
+for c1,c2 being CR_coefficients of m
+holds Sum(u(#)c1),Sum(u(#)c2) are_congruent_mod Product(m);
+
+definition
+let u be integer-valued FinSequence,
+    m be CR_Sequence such that len m = len u;
+func to_int(u,m) -> Integer means
+:: INT_6:def 5
+  for c being CR_coefficients of m holds it = Sum(u(#)c) mod Product(m);
+end;
+
+theorem :: INT_6:31
+for u being integer-valued FinSequence,
+    m being CR_Sequence st len m = len u
+holds 0 <= to_int(u,m) & to_int(u,m) < Product(m);
+
+theorem :: INT_6:32
+for u being Integer,
+    m being CR_Sequence,
+    i being natural number st i in dom m
+holds u, mod(u,m).i are_congruent_mod m.i;
+
+theorem :: INT_6:33
+for u,v being Integer,
+    m being CR_Sequence,
+    i being natural number st i in dom m holds
+(mod(u,m) + mod(v,m)).i, u + v are_congruent_mod m.i;
+
+theorem :: INT_6:34
+for u,v being Integer,
+    m being CR_Sequence,
+    i being natural number st i in dom m holds
+(mod(u,m) (#) mod(v,m)).i, u * v are_congruent_mod m.i;
+
+theorem :: INT_6:35
+for u,v being Integer,
+    m being CR_Sequence,
+    i being natural number st i in dom m holds
+to_int(mod(u,m) + mod(v,m),m), u + v are_congruent_mod m.i;
+
+theorem :: INT_6:36
+for u,v being Integer,
+    m being CR_Sequence,
+    i being natural number st i in dom m holds
+to_int(mod(u,m) - mod(v,m),m), u - v are_congruent_mod m.i;
+
+theorem :: INT_6:37
+for u,v being Integer,
+    m being CR_Sequence,
+    i being natural number st i in dom m holds
+to_int(mod(u,m) (#) mod(v,m),m), u * v are_congruent_mod m.i;
+
+theorem :: INT_6:38
+for u,v being Integer,
+    m being CR_Sequence
+      st 0 <= u + v & u + v < Product(m)
+holds to_int(mod(u,m) + mod(v,m), m) = u + v;
+
+theorem :: INT_6:39
+for u,v being Integer,
+    m being CR_Sequence
+      st 0 <= u - v & u - v < Product(m)
+holds to_int(mod(u,m) - mod(v,m), m) = u - v;
+
+theorem :: INT_6:40
+for u,v being Integer,
+    m being CR_Sequence
+      st 0 <= u * v & u * v < Product(m)
+holds to_int(mod(u,m) (#) mod(v,m), m) = u * v;
+
+begin  :: Chinese Remainder Theorem Revisited
+
+theorem :: INT_6:41
+for u being integer-valued FinSequence,
+    m being CR_Sequence st len u = len m
+ex z being Integer
+st 0 <= z & z < Product(m) &
+   for i being natural number st i in dom u holds z,u.i are_congruent_mod m.i;
+
+theorem :: INT_6:42
+for u being integer-valued FinSequence,
+    m being CR_Sequence
+for z1,z2 being Integer
+    st 0 <= z1 & z1 < Product(m) & (for i being natural number st i in dom m
+                                    holds z1,u.i are_congruent_mod m.i) &
+       0 <= z2 & z2 < Product(m) & (for i being natural number st i in dom m
+                                    holds z2,u.i are_congruent_mod m.i)
+holds z1 = z2;
+

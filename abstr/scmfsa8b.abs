@@ -18,7 +18,7 @@ environ
       SF_MASTR, SCMFSA6B, SCMFSA6C, SCMFSA8A, SCMNORM, SCMFSA_4;
  registrations SETFAM_1, RELAT_1, FUNCT_1, FRAENKEL, NUMBERS, XXREAL_0,
       XREAL_0, NAT_1, INT_1, CARD_3, AMI_1, SCMFSA_2, SF_MASTR, SCMFSA6B,
-      SCMFSA6C, ORDINAL1, XBOOLE_0, SCMNORM;
+      SCMFSA6C, ORDINAL1, XBOOLE_0, SCMNORM, FINSEQ_1, FINSET_1;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
 
 
@@ -35,32 +35,26 @@ theorem :: SCMFSA8B:3  ::BBBB'53
   for I being Program of SCM+FSA, s being State of SCM+FSA st I is_closed_on s
   holds insloc 0 in dom I;
 
-theorem :: SCMFSA8B:4  ::T15(@BBB8)
-  for s being State of SCM+FSA, l1,l2 being Instruction-Location of SCM+FSA
-  holds s +* Start-At l1 +* Start-At l2 = s +* Start-At l2;
+canceled;
 
 theorem :: SCMFSA8B:5  ::TI1 <> PRE8'82'
   for s being State of SCM+FSA, I being Program of SCM+FSA holds
-  (Initialize s) | (Int-Locations \/ FinSeq-Locations) =
-  (s +* Initialized I) | (Int-Locations \/ FinSeq-Locations);
+  DataPart Initialize s = DataPart(s +* Initialized I);
 
 theorem :: SCMFSA8B:6  ::T8'
   for s1,s2 being State of SCM+FSA, I being Program of SCM+FSA st
-  s1 | (Int-Locations \/ FinSeq-Locations) =
-  s2 | (Int-Locations \/ FinSeq-Locations) holds
+  DataPart s1 = DataPart s2 holds
   I is_closed_on s1 implies I is_closed_on s2;
 
 theorem :: SCMFSA8B:7  ::TQ40'
   for s1,s2 being State of SCM+FSA, I,J being Program of SCM+FSA holds
-  s1 | (Int-Locations \/ FinSeq-Locations) =
-  s2 | (Int-Locations \/ FinSeq-Locations) implies
+  DataPart s1 = DataPart s2 implies
   s1 +* (I +* Start-At insloc 0),s2 +* (J +* Start-At insloc 0)
   equal_outside NAT;
 
 theorem :: SCMFSA8B:8  ::TQ38' <> T8'
   for s1,s2 being State of SCM+FSA, I being Program of SCM+FSA
-  st s1 | (Int-Locations \/ FinSeq-Locations) =
-  s2 | (Int-Locations \/ FinSeq-Locations) holds
+  st DataPart s1 = DataPart s2 holds
   I is_closed_on s1 & I is_halting_on s1 implies
   I is_closed_on s2 & I is_halting_on s2;
 
@@ -77,12 +71,11 @@ theorem :: SCMFSA8B:11  ::PRE8'115'(@AAAA)
   for s1,s2 being State of SCM+FSA, I being Program of SCM+FSA
   st I +* Start-At insloc 0 c= s1 & I is_closed_on s1
   for n being Element of NAT st ProgramPart Relocated(I,n) c= s2 &
-  IC s2 = insloc n & s1 | (Int-Locations \/ FinSeq-Locations)
-  = s2 | (Int-Locations \/ FinSeq-Locations) for i being Element of NAT holds
+  IC s2 = insloc n & DataPart s1 = DataPart s2
+   for i being Element of NAT holds
   IC  Computation( s1,i) + n = IC  Computation( s2,i) &
   IncAddr(CurInstr ( Computation( s1,i)),n) = CurInstr ( Computation( s2,i)) &
-   Computation( s1,i) | (Int-Locations \/ FinSeq-Locations)
-  =  Computation( s2,i) | (Int-Locations \/ FinSeq-Locations);
+  DataPart Computation( s1,i) = DataPart Computation( s2,i);
 
 theorem :: SCMFSA8B:12  ::TG25
   for s being State of SCM+FSA,
@@ -299,8 +292,7 @@ end;
 
 theorem :: SCMFSA8B:35  ::PRE8'90'(@AAAA)
   for s being State of SCM+FSA, I being Program of SCM+FSA holds
-  (Result (s +* Initialized I)) | (Int-Locations \/ FinSeq-Locations) =
-  IExec(I,s) | (Int-Locations \/ FinSeq-Locations);
+  DataPart Result (s +* Initialized I) = DataPart IExec(I,s);
 
 theorem :: SCMFSA8B:36  ::PRE8'91(@AAAA)
   for s being State of SCM+FSA, I being Program of SCM+FSA,

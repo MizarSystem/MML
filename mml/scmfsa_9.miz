@@ -18,7 +18,7 @@ environ
       SCMFSA8A, SCMFSA8B, SCMNORM, SCMFSA_4;
  registrations SETFAM_1, FUNCT_1, RELSET_1, FRAENKEL, NUMBERS, XREAL_0, NAT_1,
       INT_1, CARD_3, SCMFSA_2, SF_MASTR, SCMFSA6B, SCMFSA7B,
-      SCMFSA8A, ORDINAL1, XBOOLE_0, SCMNORM, FINSET_1, AMI_1;
+      SCMFSA8A, ORDINAL1, XBOOLE_0, SCMNORM, FINSET_1, AMI_1, FINSEQ_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions SCMFSA_2, SCMNORM, SCMFSA6A, FUNCOP_1;
  theorems TARSKI, NAT_1, FUNCT_1, FUNCT_4, REAL_1, AMI_1, SCMFSA_2, SCMFSA_4,
@@ -690,16 +690,12 @@ theorem Th19:
   k < LifeSpan (s +* (I +* Start-At insloc 0)) &
   IC  Computation( (s +* (while=0(a,I) +* Start-At insloc 0)),1+k) =
   IC  Computation( (s +* ( I +* Start-At insloc 0)),k) + 4 &
-   Computation( (s +* (while=0(a,I) +* Start-At insloc 0)),1+k) |
-  (Int-Locations \/ FinSeq-Locations) =
-   Computation( (s +* ( I +* Start-At insloc 0)),k) |
-  (Int-Locations \/ FinSeq-Locations) holds
+  DataPart Computation( (s +* (while=0(a,I) +* Start-At insloc 0)),1+k) =
+  DataPart Computation( (s +* ( I +* Start-At insloc 0)),k) holds
   IC  Computation( (s +* (while=0(a,I) +* Start-At insloc 0)),1+k+1) =
   IC  Computation( (s +* (I +* Start-At insloc 0)),k+1) + 4 &
-   Computation( (s +* (while=0(a,I) +* Start-At insloc 0)),1+k+1) |
-  (Int-Locations \/ FinSeq-Locations) =
-   Computation( (s +* (I +* Start-At insloc 0)),k+1) |
-  (Int-Locations \/ FinSeq-Locations)
+  DataPart Computation( (s +* (while=0(a,I) +* Start-At insloc 0)),1+k+1) =
+  DataPart Computation( (s +* (I +* Start-At insloc 0)),k+1)
 proof
   set D = Int-Locations \/ FinSeq-Locations;
   let a be Int-Location;
@@ -720,7 +716,7 @@ A3: k < LifeSpan sI;
   assume
 A4: IC  Computation( s1,1+k)=l3 + 4;
   assume
-A5: sK1 | D = sK2 | D;
+A5: DataPart sK1 = DataPart sK2;
   set I1= I ';' Goto insloc 0;
   set J = Stop SCM+FSA;
   set f = insloc (card I +4) .--> goto insloc 0;
@@ -993,12 +989,12 @@ A11: IC s2 = s2.IC SCM+FSA by AMI_1:def 15
     .= insloc 4 by A3,A9,A10,SCMFSA_2:96;
   (for c holds s2.c = s1.c) & for f holds s2.f = s1.f by A9,SCMFSA_2:96;
   then
-A12: s2 | D = s1 | D by SCMFSA6A:38
-    .= s | D by SCMFSA8A:11
-    .= sI | D by SCMFSA8A:11;
+A12: DataPart s2 = DataPart s1 by SCMFSA6A:38
+    .= DataPart s by SCMFSA8A:11
+    .= DataPart sI by SCMFSA8A:11;
   defpred P[Element of NAT] means $1 <= LifeSpan sI implies
   IC  Computation( s1,1+$1) = IC  Computation( sI,$1)+ 4 &
-   Computation( s1,1+$1) | D =  Computation( sI,$1)| D;
+  DataPart Computation( s1,1+$1) = DataPart Computation( sI,$1);
 A13: P[0]
   proof
     assume 0 <= LifeSpan sI;
@@ -1008,7 +1004,7 @@ A14: IC SCM+FSA in dom (I +* Start-At insloc 0) by SF_MASTR:65;
       .= (I +* Start-At insloc 0).IC SCM+FSA by A14,FUNCT_4:14
       .= insloc 0 by SF_MASTR:66;
     hence IC  Computation( s1,1+0) = IC  Computation( sI,0) + 4 &
-     Computation( s1,1+0) | D =  Computation( sI,0) | D
+    DataPart Computation( s1,1+0) = DataPart Computation( sI,0)
     by A11,A12,AMI_1:13;
   end;
 A15: now
@@ -1021,7 +1017,7 @@ A17:  k + 1 <= LifeSpan sI;
       k + 0 < k + 1 by XREAL_1:8;
       then k < LifeSpan sI by A17,XXREAL_0:2;
       hence IC  Computation( s1,1+k+1) = IC  Computation( sI,k+1) + 4 &
-       Computation( s1,1+k+1) | D =  Computation( sI,k+1) | D
+      DataPart Computation( s1,1+k+1) = DataPart Computation( sI,k+1)
       by A1,A2,A16,Th19;
     end;
     hence P[k + 1];
@@ -1154,8 +1150,8 @@ canceled 3;
 
 theorem Th29:
   for s1,s2 being State of SCM+FSA
-  st IC s1 = IC s2 & s1 | (Int-Locations \/ FinSeq-Locations) =
-  s2 | (Int-Locations \/ FinSeq-Locations) & s1 | NAT = s2 | NAT holds s1 = s2
+  st IC s1 = IC s2 &
+  DataPart s1 = DataPart s2 & s1 | NAT = s2 | NAT holds s1 = s2
 proof
   set IL = NAT;
   let s1,s2 be State of SCM+FSA;
@@ -1163,7 +1159,7 @@ proof
   assume
 A1: IC s1 = IC s2;
   assume
-A2: s1 | D = s2 | D;
+A2: DataPart s1 = DataPart s2;
   assume s1 | IL = s2 | IL;
   then
 A3: for l being Instruction-Location of SCM+FSA holds s1.l = s2.l
@@ -1216,7 +1212,7 @@ A3: IC SCM+FSA in dom (while=0(a,I) +* sl0 ) by SF_MASTR:65;
 A4: IC s2 = s2.IC SCM+FSA by AMI_1:def 15
     .= (while=0(a,I) +* sl0).IC SCM+FSA by A3,FUNCT_4:14
     .= IC sk by A1,SF_MASTR:66;
-A5: s2 | D = sk | D by SCMFSA8A:11;
+A5: DataPart s2 = DataPart sk by SCMFSA8A:11;
   sk | IL =s1 | IL by A2,AMI_1:123;
   then s2 | IL = sk | IL by FUNCT_4:100;
   hence s2=sk by A4,A5,Th29;
@@ -1323,7 +1319,7 @@ A26:  IC sm1 = sm1.IC SCM+FSA by AMI_1:def 15
         .= (while=0(a,I) +* sl0).IC SCM+FSA by A8,FUNCT_4:14
         .= IC sm by A25,SF_MASTR:66;
       set D = Int-Locations \/ FinSeq-Locations;
-A27:  sm1 | D = sm | D by SCMFSA8A:11;
+A27:  DataPart sm1 = DataPart sm by SCMFSA8A:11;
       sm | IL =s1 | IL by A21,AMI_1:123;
       then sm1 | IL = sm | IL by FUNCT_4:100;
       then
@@ -1904,16 +1900,12 @@ theorem Th44:
   k < LifeSpan (s +* (I +* Start-At insloc 0)) &
   IC  Computation( (s +* (while>0(a,I) +* Start-At insloc 0)),1+k) =
   IC  Computation( (s +* ( I +* Start-At insloc 0)),k) + 4 &
-   Computation( (s +* (while>0(a,I) +* Start-At insloc 0)),1+k) |
-  (Int-Locations \/ FinSeq-Locations) =
-   Computation( (s +* ( I +* Start-At insloc 0)),k) |
-  (Int-Locations \/ FinSeq-Locations) holds
+  DataPart Computation( (s +* (while>0(a,I) +* Start-At insloc 0)),1+k) =
+  DataPart Computation( (s +* ( I +* Start-At insloc 0)),k) holds
   IC  Computation( (s +* (while>0(a,I) +* Start-At insloc 0)),1+k+1) =
   IC  Computation( (s +* (I +* Start-At insloc 0)),k+1) + 4 &
-   Computation( (s +* (while>0(a,I) +* Start-At insloc 0)),1+k+1) |
-  (Int-Locations \/ FinSeq-Locations) =
-   Computation( (s +* (I +* Start-At insloc 0)),k+1) |
-  (Int-Locations \/ FinSeq-Locations)
+  DataPart Computation( (s +* (while>0(a,I) +* Start-At insloc 0)),1+k+1) =
+  DataPart Computation( (s +* (I +* Start-At insloc 0)),k+1)
 proof
   set D = Int-Locations \/ FinSeq-Locations;
   let a be Int-Location;
@@ -1934,7 +1926,7 @@ A3: k < LifeSpan sI;
   assume
 A4: IC  Computation( s1,1+k)=l3 + 4;
   assume
-A5: sK1 | D = sK2 | D;
+A5: DataPart sK1 = DataPart sK2;
   set I1= I ';' Goto insloc 0;
   set J = Stop SCM+FSA;
   set f = insloc (card I +4) .--> goto insloc 0;
@@ -2204,12 +2196,12 @@ A11: IC s2 = s2.IC SCM+FSA by AMI_1:def 15
     .= insloc 4 by A3,A9,A10,SCMFSA_2:97;
   (for c holds s2.c = s1.c) & for f holds s2.f = s1.f by A9,SCMFSA_2:97;
   then
-A12: s2 | D = s1 | D by SCMFSA6A:38
-    .= s | D by SCMFSA8A:11
-    .= sI | D by SCMFSA8A:11;
+A12: DataPart s2 = DataPart s1 by SCMFSA6A:38
+    .= DataPart s by SCMFSA8A:11
+    .= DataPart sI by SCMFSA8A:11;
   defpred P[Element of NAT] means $1 <= LifeSpan sI implies
   IC  Computation( s1,1+$1) = IC  Computation( sI,$1)+ 4 &
-   Computation( s1,1+$1) | D =  Computation( sI,$1)| D;
+  DataPart Computation( s1,1+$1) = DataPart Computation( sI,$1);
 A13: P[0]
   proof
     assume 0 <= LifeSpan sI;
@@ -2219,7 +2211,7 @@ A14: IC SCM+FSA in dom (I +* Start-At insloc 0) by SF_MASTR:65;
       .= (I +* Start-At insloc 0).IC SCM+FSA by A14,FUNCT_4:14
       .= insloc 0 by SF_MASTR:66;
     hence IC  Computation( s1,1+0) = IC  Computation( sI,0) + 4 &
-     Computation( s1,1+0) | D =  Computation( sI,0) | D by A11,A12,
+     DataPart Computation( s1,1+0) = DataPart Computation( sI,0) by A11,A12,
     AMI_1:13;
   end;
 A15: now
@@ -2232,7 +2224,7 @@ A17:  k + 1 <= LifeSpan sI;
       k + 0 < k + 1 by XREAL_1:8;
       then k < LifeSpan sI by A17,XXREAL_0:2;
       hence IC  Computation( s1,1+k+1) = IC  Computation( sI,k+1) + 4 &
-       Computation( s1,1+k+1) | D =  Computation( sI,k+1) | D
+       DataPart Computation( s1,1+k+1) = DataPart Computation( sI,k+1)
       by A1,A2,A16,Th44;
     end;
     hence P[k + 1];
@@ -2404,7 +2396,7 @@ A3: IC SCM+FSA in dom (while>0(a,I) +* sl0 ) by SF_MASTR:65;
 A4: IC s2 = s2.IC SCM+FSA by AMI_1:def 15
     .= (while>0(a,I) +* sl0).IC SCM+FSA by A3,FUNCT_4:14
     .= IC sk by A1,SF_MASTR:66;
-A5: s2 | D = sk | D by SCMFSA8A:11;
+A5: DataPart s2 = DataPart sk by SCMFSA8A:11;
   sk | IL =s1 | IL by A2,AMI_1:123;
   then s2 | IL = sk | IL by FUNCT_4:100;
   hence s2=sk by A4,A5,Th29;
@@ -2509,7 +2501,7 @@ A25:  IC sm =insloc 0 by A23,A24,Th47;
 A26:  IC sm1 = sm1.IC SCM+FSA by AMI_1:def 15
         .= (while>0(a,I) +* sl0).IC SCM+FSA by A8,FUNCT_4:14
         .= IC sm by A25,SF_MASTR:66;
-A27:  sm1 | D = sm | D by SCMFSA8A:11;
+A27:  DataPart sm1 = DataPart sm by SCMFSA8A:11;
       sm | IL =s1 | IL by A21,AMI_1:123;
       then sm1 | IL = sm | IL by FUNCT_4:100;
       then

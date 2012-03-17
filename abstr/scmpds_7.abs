@@ -51,7 +51,7 @@ theorem :: SCMPDS_7:6
 
 theorem :: SCMPDS_7:7
   for s1,s2 being State of SCMPDS st
-  IC s1= IC s2 & s1 | SCM-Data-Loc = s2 | SCM-Data-Loc & s1 | NAT = s2 | NAT
+  IC s1= IC s2 & DataPart s1 = DataPart s2 & s1 | NAT = s2 | NAT
   holds s1=s2;
 
 theorem :: SCMPDS_7:8  ::S8C_Th20
@@ -91,33 +91,33 @@ theorem :: SCMPDS_7:19
 
 theorem :: SCMPDS_7:20  ::S8C_Th32
   for s being State of SCMPDS, i being Instruction of SCMPDS st
-  InsCode i in {0,4,5,6} holds Exec(i,s) | SCM-Data-Loc = s | SCM-Data-Loc;
+  InsCode i in {0,4,5,6} holds DataPart Exec(i,s) = DataPart s;
 
 theorem :: SCMPDS_7:21
-  for s,ss being State of SCMPDS holds (s +* ss | NAT) |
-  SCM-Data-Loc = s | SCM-Data-Loc;
+  for s,ss being State of SCMPDS
+   holds (s +* ss | NAT) | SCM-Data-Loc = DataPart s;
 
 theorem :: SCMPDS_7:22  ::S8C_Th41
   for i being Instruction of SCMPDS holds rng Load i = {i};
 
 theorem :: SCMPDS_7:23    ::SCMPDS_4:15
-  IC s1 = IC s2 & s1 | SCM-Data-Loc = s2 | SCM-Data-Loc implies
+  IC s1 = IC s2 & DataPart s1 = DataPart s2 implies
   IC Exec(i,s1)=IC Exec(i,s2) &
-  Exec(i,s1) | SCM-Data-Loc = Exec(i,s2) | SCM-Data-Loc;
+  DataPart Exec(i,s1) = DataPart Exec(i,s2);
 
 theorem :: SCMPDS_7:24  ::S8C_43
   for s1,s2 being State of SCMPDS,I being Program of SCMPDS
   st I is_closed_on s1 &
   Initialized stop I c= s1 & Initialized stop I c= s2 &
-  s1 | SCM-Data-Loc = s2 | SCM-Data-Loc for i being Element of NAT holds
+  DataPart s1 = DataPart s2 for i being Element of NAT holds
   IC Computation(s1,i) = IC Computation(s2,i) &
   CurInstr Computation(s1,i) = CurInstr Computation(s2,i) &
-  Computation(s1,i) | SCM-Data-Loc = Computation(s2,i) | SCM-Data-Loc;
+  DataPart Computation(s1,i) = DataPart Computation(s2,i);
 
 theorem :: SCMPDS_7:25  ::S8C:100
   for s1,s2 being State of SCMPDS,I being Program of SCMPDS
   st I is_closed_on s1 &
-  s1 | SCM-Data-Loc = s2 | SCM-Data-Loc holds for k being Element of NAT holds
+  DataPart s1 = DataPart s2 holds for k being Element of NAT holds
   Computation(s1+*Initialized stop I,k),
   Computation(s2+*Initialized stop I,k) equal_outside NAT &
   CurInstr Computation(s1+*Initialized stop I,k) =
@@ -134,7 +134,7 @@ theorem :: SCMPDS_7:27  ::S8C:41,SCMPDS_5:21  ???
   for s1,s2 being State of SCMPDS,I being Program of SCMPDS st
   I is_closed_on s1 & I is_halting_on s1 &
   Initialized stop I c= s1 & Initialized stop I c= s2 &
-  s1 | SCM-Data-Loc = s2 | SCM-Data-Loc holds LifeSpan s1 = LifeSpan s2;
+  DataPart s1 = DataPart s2 holds LifeSpan s1 = LifeSpan s2;
 
 theorem :: SCMPDS_7:28  ::SCMPDS_5:21
   for I being Program of SCMPDS st I is_closed_on s1 & I is_halting_on s1 &
@@ -145,7 +145,7 @@ theorem :: SCMPDS_7:28  ::SCMPDS_5:21
 theorem :: SCMPDS_7:29  ::S8C_: 101
   for s1,s2 being State of SCMPDS,I being Program of SCMPDS
   st I is_closed_on s1 & I is_halting_on s1 &
-  s1 | SCM-Data-Loc = s2 | SCM-Data-Loc holds
+  DataPart s1 = DataPart s2 holds
   LifeSpan (s1 +* Initialized stop I) = LifeSpan (s2 +* Initialized stop I) &
   Result (s1 +* Initialized stop I),Result (s2 +* Initialized stop I)
   equal_outside NAT;
@@ -184,11 +184,11 @@ theorem :: SCMPDS_7:34   :: SP4_88
   for I being shiftable Program of SCMPDS st
   Initialized stop I c= s1 & I is_closed_on s1 & I is_halting_on s1
   for n being Element of NAT st Shift(I,n) c= s2 & card I > 0 &
-  IC s2 = inspos n & s1 | SCM-Data-Loc = s2 | SCM-Data-Loc
+  IC s2 = inspos n & DataPart s1 = DataPart s2
   for i being Element of NAT holds i < LifeSpan s1 implies
   IC Computation(s1,i) + n = IC Computation(s2,i) &
   CurInstr (Computation(s1,i)) = CurInstr (Computation(s2,i)) &
-  Computation(s1,i) | SCM-Data-Loc = Computation(s2,i) | SCM-Data-Loc;
+  DataPart Computation(s1,i) = DataPart Computation(s2,i);
 
 theorem :: SCMPDS_7:35
   for I being No-StopCode Program of SCMPDS st
@@ -199,10 +199,10 @@ theorem :: SCMPDS_7:36
   for I being No-StopCode shiftable Program of SCMPDS st
   Initialized stop I c= s1 & I is_closed_on s1 & I is_halting_on s1
   for n being Element of NAT st Shift(I,n) c= s2 & card I > 0 &
-  IC s2 = inspos n & s1 | SCM-Data-Loc = s2 | SCM-Data-Loc holds
+  IC s2 = inspos n & DataPart s1 = DataPart s2 holds
   IC Computation(s2,LifeSpan s1) = inspos (card I + n) &
-  Computation(s1,LifeSpan s1) | SCM-Data-Loc
-  = Computation(s2,LifeSpan s1) | SCM-Data-Loc;
+  DataPart Computation(s1,LifeSpan s1)
+  = DataPart Computation(s2,LifeSpan s1);
 
 theorem :: SCMPDS_7:37
   for s being State of SCMPDS,I being Program of SCMPDS,n being Element of NAT

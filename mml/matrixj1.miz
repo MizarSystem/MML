@@ -1,0 +1,4636 @@
+:: Block Diagonal Matrices
+::  by Karol P\c{a}k
+:: 
+:: Received May 13, 2008
+:: Copyright (c) 2008 Association of Mizar Users
+
+environ
+
+ vocabularies BOOLE, ARYTM, ARYTM_1, FINSEQ_1, FINSEQ_2, FINSEQ_4, TREES_1,
+      RELAT_1, FUNCT_1, INCSP_1, CAT_3, RVSUM_1, GROUP_1, CARD_1, CARD_3,
+      GR_CY_1, SEQ_1, MATRIX_1, MATRIX_2, MATRIX_3, MATRIX11, LAPLACE,
+      RLVECT_1, VECTSP_1, ALGSTR_0, RFINSEQ, SQUARE_1, MATRIXJ1, MATHMORP;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, CARD_1, XCMPLX_0,
+      ORDINAL1, VALUED_1, REAL_1, ALGSTR_0, XXREAL_0, XREAL_0, NAT_1, RELAT_1,
+      FUNCT_1, PARTFUN1, FINSEQ_1, STRUCT_0, RLVECT_1, GROUP_1, VECTSP_1,
+      FINSEQ_2, MATRIX_1, MATRIX_2, FVSUM_1, RVSUM_1, BINARITH, GROUP_4,
+      MATRIX_3, MATRIX11, FINSEQOP, MATRIX13, LAPLACE, RFINSEQ, POLYNOM1,
+      WSIERP_1;
+ constructors XXREAL_0, GROUP_4, VECTSP_7, MATRIX11, MATRIX13, LAPLACE,
+      RFINSEQ, POLYNOM1, WSIERP_1, SEQ_1, VALUED_0, VALUED_1;
+ registrations XBOOLE_0, FINSET_1, STRUCT_0, VECTSP_1, ORDINAL1, XXREAL_0,
+      NAT_1, FINSEQ_1, RELAT_1, FINSEQ_2, SEQM_3, MATRIX13, XREAL_0, VALUED_0;
+ requirements ARITHM, NUMERALS, REAL, BOOLE, SUBSET;
+ definitions TARSKI, FINSEQ_1, MATRIX_1, LAPLACE, MATRIX13, FVSUM_1;
+ theorems BINARITH, CARD_2, FINSEQ_1, FINSEQ_2, FINSEQ_3, FINSEQ_5, FINSEQ_6,
+      FINSEQOP, FUNCT_1, FVSUM_1, GROUP_1, GROUP_4, GOBOARD1, LAPLACE,
+      MATRIX_1, MATRIX_2, MATRIX_3, MATRIX_9, MATRIX11, MATRIX13, MATRIX15,
+      MATRIXR2, NAT_1, ORDINAL1, PARTFUN1, POLYNOM3, PRGCOR_1, REAL_1, RELAT_1,
+      RFINSEQ, RLVECT_1, RVSUM_1, TARSKI, VECTSP_1, XBOOLE_0, XBOOLE_1,
+      XREAL_1, XXREAL_0, ZFMISC_1, MATRIX_4, FUNCT_2, FUNCOP_1, MATRIXR1;
+ schemes FINSEQ_1, FINSEQ_2, NAT_1, MATRIX_1;
+
+begin :: Preliminaries
+
+ reserve i,j,m,n,k for Nat,
+         x,y for set,
+         K for Field,
+         a,a1,a2 for Element of K,
+         D for non empty set,
+         d,d1,d2 for Element of D,
+         M,M1,M2 for (Matrix of D),
+         A,A1,A2,B1,B2 for (Matrix of K),
+         f,g for FinSequence of NAT;
+
+Lm1:for K be non empty addLoopStr
+  for p1,p2 be FinSequence of K holds
+dom (p1+p2)=(dom p1)/\(dom p2)
+proof
+let K be non empty addLoopStr;
+ let p1,p2 be FinSequence of K;
+  rng p1 c= the carrier of K & rng p2 c= the carrier of K by FINSEQ_1:def 4;
+  then [:rng p1,rng p2:]c=[:the carrier of K,the carrier of K:]by ZFMISC_1:119;
+  then [:rng p1, rng p2:] c= dom (the addF of K) by FUNCT_2:def 1;
+  hence thesis by FUNCOP_1:84;
+end;
+
+theorem Th1:
+  for K be non empty addLoopStr
+    for f1,f2,g1,g2 be FinSequence of K st len f1 = len f2 holds
+       (f1+f2)^(g1+g2)=(f1^g1)+(f2^g2)
+proof
+  let K be non empty addLoopStr;
+  let f1,f2,g1,g2 be FinSequence of K such that
+A1:   len f1 = len f2;
+A2:   dom (f1+f2)=dom f1/\dom f2 & dom f1=dom f2 & dom (g1+g2)=dom g1/\dom g2
+      & dom((f1^g1)+(f2^g2))=dom (f1^g1)/\dom (f2^g2) by A1,Lm1,FINSEQ_3:31;
+  then
+A3:   len (f1+f2)=len f1 by FINSEQ_3:31;
+A4:   dom g1=Seg len g1 & dom g2=Seg len g2 & dom (f1^g1)=Seg(len f1+len g1)
+      & dom (f2^g2)=Seg(len f2+len g2) by FINSEQ_1:def 3,def 7;
+A5: now per cases;
+       suppose len g1<=len g2;
+          then Seg len g1 c= Seg len g2 & len f1+len g1 <= len f2+len g2
+             by A1,FINSEQ_1:7,XREAL_1:9;
+          then dom (g1+g2)=dom g1 & dom (f1^g1) c= dom (f2^g2)
+             by A2,A4,XBOOLE_1:28,FINSEQ_1:7;
+          then len (g1+g2)=len g1 & dom ((f1^g1)+(f2^g2))=dom (f1^g1)
+             by A2,FINSEQ_3:31,XBOOLE_1:28;
+          hence dom ((f1+f2)^(g1+g2))=dom ((f1^g1)+(f2^g2))
+             by A4,A3,FINSEQ_1:def 7;end;
+       suppose len g1> len g2;
+          then Seg len g2 c= Seg len g1 & len f1+len g1 > len f2+len g2
+             by A1,FINSEQ_1:7,XREAL_1:10;
+          then dom (g1+g2)=dom g2 & dom (f2^g2) c= dom (f1^g1)
+             by A2,A4,XBOOLE_1:28,FINSEQ_1:7;
+          then len (g1+g2)=len g2 & dom ((f1^g1)+(f2^g2))=dom (f2^g2)
+             by A2,FINSEQ_3:31,XBOOLE_1:28;
+          hence dom ((f1+f2)^(g1+g2))=dom ((f1^g1)+(f2^g2))
+             by A1,A4,A3,FINSEQ_1:def 7;end;
+  end;
+  now let i such that
+     A6:   i in dom ((f1+f2)^(g1+g2));
+         now per cases by A6,FINSEQ_1:38;
+            suppose
+            A7:   i in dom (f1+f2);
+               then
+            A8:   f1/.i=f1.i & f2/.i=f2.i by A2,PARTFUN1:def 8;
+            A9:   f1.i=(f1^g1).i & f2.i=(f2^g2).i by A2,A7,FINSEQ_1:def 7;
+               thus ((f1+f2)^(g1+g2)).i = (f1+f2).i by A7,FINSEQ_1:def 7
+                                       .= f1/.i + f2/.i by A7,A8,FVSUM_1:21
+                                       .= ((f1^g1)+(f2^g2)).i
+                                            by A5,A6,A8,A9,FVSUM_1:21;end;
+            suppose ex n st n in dom (g1+g2) & i=len (f1+f2) + n;
+               then consider n such that
+            A10:   n in dom (g1+g2) & i=len (f1+f2)+n;
+               n in dom g1 & n in dom g2 by A2,A10,XBOOLE_0:def 3;
+               then
+            A11:  g1.n=g1/.n & g2.n=g2/.n &
+            (f1^g1).i=g1.n & (f2^g2).i=g2.n
+                  by A1,A3,A10,PARTFUN1:def 8,FINSEQ_1:def 7;
+               thus  ((f1+f2)^(g1+g2)).i = (g1+g2).n by A10,FINSEQ_1:def 7
+                                        .= g1/.n + g2/.n by A10,A11,FVSUM_1:21
+                                        .= ((f1^g1)+(f2^g2)).i
+                                               by A5,A6,A11,FVSUM_1:21;end;
+         end;
+         hence ((f1+f2)^(g1+g2)).i=((f1^g1)+(f2^g2)).i;
+     end;
+   hence thesis by A5,FINSEQ_1:17;
+end;
+
+theorem Th2:
+  for f,g be FinSequence of D st i in dom f holds
+     Del(f^g,i) = Del(f,i)^g
+proof
+  let f,g be FinSequence of D such that
+A1:  i in dom f;
+  set Df=Del(f,i);
+  set fg=f^g;
+  set Dfg=Del(fg,i);
+  set Dg=Df^g;
+  consider m such that
+A2: len f = m + 1 & len Df = m by A1,FINSEQ_3:113;
+A3: len fg=len f+len g & len Dg=len Df+len g by FINSEQ_1:35;
+  then len f <=len fg by NAT_1:12;
+  then
+A4: Seg len f c= Seg len fg & Seg len f=dom f & Seg len fg=dom fg
+    by FINSEQ_1:def 3,7;
+A5: len fg=len g+m+1 by A2,A3;
+  then
+A6: len Dfg=m+len g by A1,A4,FINSEQ_3:118;
+  now let j such that
+   A7:  1<=j & j<=m+len g;
+   A8:  i in NAT & j in NAT by ORDINAL1:def 13;
+     now per cases;
+        suppose
+      A9: j<i;
+          i<=len f by A1,FINSEQ_3:27;
+          then j<len f by A9,XXREAL_0:2;
+          then
+      A10:  j in dom f & j<=m by A2,A7,FINSEQ_3:27,NAT_1:13;
+          then
+      A11:  j in dom Df by A2,A7,FINSEQ_3:27;
+          thus Dfg.j = fg.j by A5,A8,A9,FINSEQ_3:119
+                    .= f.j by A10,FINSEQ_1:def 7
+                    .= Df.j by A2,A8,A9,FINSEQ_3:119
+                    .= Dg.j by A11,FINSEQ_1:def 7;end;
+        suppose
+      A12: j>=i;
+          now per cases;
+            suppose
+          A13: j<=m;
+               then 0+1<=j+1 & j+1<=len f by A2,XREAL_1:9;
+               then
+          A14:  j+1 in dom f & j in dom Df by A2,A7,A13,FINSEQ_3:27;
+               thus Dfg.j = fg.(j+1) by A1,A4,A5,A7,A12,A8,FINSEQ_3:120
+                         .= f.(j+1) by A14,FINSEQ_1:def 7
+                         .= Df.j by A8,A1,A2,A12,A13,FINSEQ_3:120
+                         .= Dg.j by A14,FINSEQ_1:def 7;end;
+            suppose
+          A15: j>m;
+               then j>=len f by A2,NAT_1:13;
+               then j+1>len f by NAT_1:13;
+               then reconsider jL=j+1-len f as Element of NAT by NAT_1:21;
+               j+1<=m+len g+1 by A7,XREAL_1:9;
+               then jL+len f<=len f+len g by A2;
+               then
+          A16:  jL<=len g by XREAL_1:10;
+               jL<>0 by A2,A15;
+               then jL>=1 by NAT_1:14;
+               then
+          A17:  jL in dom g by A16,FINSEQ_3:27;
+               thus Dfg.j = fg.(jL+len f) by A1,A4,A5,A7,A12,A8,FINSEQ_3:120
+                         .= g.jL by A17,FINSEQ_1:def 7
+                         .= Dg.(m+jL) by A2,A17,FINSEQ_1:def 7
+                         .= Dg.j by A2;end;end;
+          hence Dg.j=Dfg.j;end;
+    end;
+    hence Dg.j=Dfg.j;
+  end;
+  hence thesis by A2,A3,A6,FINSEQ_1:18;
+end;
+
+theorem Th3:
+  for f,g be FinSequence of D st i in dom g holds
+     Del(f^g,i+len f)=f^Del(g,i)
+proof
+  let f,g be FinSequence of D such that
+A1: i in dom g;
+  set Dg=Del(g,i);
+  set fg=f^g;
+  set iL=i+len f;
+  set Dfg=Del(fg,iL);
+  set fD=f^Dg;
+  consider m such that
+A2: len g = m + 1 & len Dg = m by A1,FINSEQ_3:113;
+A3: len fg=len f+len g & len fD=len f+len Dg by FINSEQ_1:35;
+  i in Seg len g by A1,FINSEQ_1:def 3;
+  then
+A4: iL in Seg len fg & dom fg=Seg len fg & i>0 by A3,FINSEQ_1:81,def 3,3;
+A5: len fg=m+len f+1 by A2,A3;
+  then
+A6: len Dfg=m+len f by A4,FINSEQ_3:118;
+  now let j such that
+   A7:  1<=j & j<=m+len f;
+      now per cases;
+        suppose
+      A8:  j<=len f;
+           0+len f<iL by A4,XREAL_1:10;
+           then
+      A9:  j<iL & j in dom f by A7,A8,XXREAL_0:2,FINSEQ_3:27;
+           hence Dfg.j = fg.j by A5,FINSEQ_3:119
+                      .= f.j by A9,FINSEQ_1:def 7
+                      .= fD.j by A9,FINSEQ_1:def 7;end;
+        suppose
+      A10: j>len f;
+           then reconsider jL=j-len f as Element of NAT by NAT_1:21;
+           jL<>0 by A10;
+           then
+      A11:  jL>=1 by NAT_1:14;
+           jL+len f<=m+len f by A7;
+           then
+      A12:  jL<=m by XREAL_1:8;
+           then
+      A13:  jL in dom Dg & jL<=len g & 1<=jL+1 & jL+1<=len g
+             by A2,A11,FINSEQ_3:27,NAT_1:13,XREAL_1:9;
+           then
+      A14:  jL in dom g & jL+1 in dom g by A11,FINSEQ_3:27;
+           now per cases;
+             suppose
+           A15: jL<i;
+                then jL+len f<iL by XREAL_1:10;
+                hence Dfg.j = fg.(jL+len f) by A5,FINSEQ_3:119
+                           .= g.jL by A14,FINSEQ_1:def 7
+                           .= Dg.jL by A1,A2,A15,FINSEQ_3:119
+                           .= fD.(jL+len f) by A13,FINSEQ_1:def 7
+                           .= fD.j;end;
+             suppose
+           A16: jL>=i;
+                then jL+len f>=iL by XREAL_1:9;
+                hence Dfg.j = fg.(jL+len f+1) by A4,A5,A7,FINSEQ_3:120
+                           .= fg.((jL+1)+len f)
+                           .= g.(jL+1) by A14,FINSEQ_1:def 7
+                           .= Dg.jL by A1,A2,A12,A16,FINSEQ_3:120
+                           .= fD.(jL+len f) by A13,FINSEQ_1:def 7
+                           .=fD.j;end;
+           end;
+           hence fD.j=Dfg.j;end;end;
+    hence fD.j=Dfg.j;
+  end;
+  hence thesis by A2,A3,A6,FINSEQ_1:18;
+end;
+
+theorem Th4:
+   i in Seg (n+1) implies Del((n+1)|->d,i)=n |-> d
+proof
+  assume
+A1: i in Seg (n+1);
+  set n1=n+1;
+  set n1d=n1|->d;
+  set nd=n|->d;
+  set Dn=Del(n1d,i);
+A2: len n1d=n1 & len nd=n & dom n1d=Seg len n1d by FINSEQ_2:69,FINSEQ_1:def 3;
+  then
+A3: len Dn=n by A1,FINSEQ_3:118;
+  now let j such that
+   A4:  1<=j & j<=n;
+   A5:  i in NAT & j in NAT
+   by ORDINAL1:def 13;
+       j<=n1 by A4,NAT_1:13;
+       then
+   A6:  j in Seg n1 & j in Seg n by A4,FINSEQ_1:3;
+       then
+   A7: j+1 in Seg (n+1) by FINSEQ_1:81;
+       now per cases;
+         suppose j<i;
+           hence Dn.j = n1d.j by A2,A5,FINSEQ_3:119
+                     .= d by A6,FINSEQ_2:71
+                     .= nd.j by A6,A4,FINSEQ_2:71;end;
+         suppose j>=i;
+           hence Dn.j = n1d.(j+1) by A1,A2,A4,A5,FINSEQ_3:120
+                     .= d by A7,FINSEQ_2:71
+                     .= nd.j by A6,A4,FINSEQ_2:71;end;
+       end;
+       hence nd.j=Dn.j;
+  end;
+  hence thesis by A2,A3,FINSEQ_1:18;
+end;
+
+theorem
+  Product (n|->a) = (power K).(a,n)
+proof
+  defpred P[Nat] means Product ($1|->a) = (power K).(a,$1);
+A1:P[0]
+  proof
+     0|->a=<*>(the carrier of K) by FINSEQ_2:113;
+     hence Product (0|->a) = 1_K by GROUP_4:11
+                          .= (power K).(a,0) by GROUP_1:def 8;
+  end;
+A2:for k st P[k] holds P[k+1]
+  proof
+    let k such that
+  A3:  P[k];
+  A4: k in NAT by ORDINAL1:def 13;
+    hence Product ((k+1)|->a) = (Product (k|->a)) * Product (1|->a)
+                                  by FVSUM_1:108
+                             .= Product (k|->a)*Product<*a*> by FINSEQ_2:73
+                             .= (power K).(a,k)*a by A3,GROUP_4:12
+                             .= (power K).(a,k+1) by A4,GROUP_1:def 8;
+  end;
+  for k holds P[k] from NAT_1:sch 2(A1,A2);
+  hence thesis;
+end;
+
+definition
+  let f;
+  let i be Nat such that
+A1:  i in Seg (Sum f);
+  func min(f,i) -> Element of NAT means :Def1:
+     i <= Sum(f|it) &
+     it in dom f &
+     for j st i<=Sum (f|j) holds it <= j;
+  existence
+  proof
+    defpred P[Nat] means i<= Sum(f|$1) & $1>=1;
+A2:   len f>=1 &
+    i <= Sum f & f|(len f)=f by A1,FINSEQ_1:3,4,28,79,RVSUM_1:102;
+    then
+A3:   ex k st P[k];
+    consider k such that
+A4:   P[k] and
+A5:   for n st P[n] holds k<=n from NAT_1:sch 5(A3);
+    reconsider k as Element of NAT by ORDINAL1:def 13;
+    take k;
+    thus i<= Sum(f|k) by A4;
+    k<=len f by A5,A2;
+    hence k in dom f by A4,FINSEQ_3:27;
+    let j such that
+A6:   i<=Sum(f|j);
+    per cases;
+      suppose j=0;
+       then f|j=<*>REAL by FINSEQ_1:93;
+       hence thesis by A1,FINSEQ_1:3,A6,RVSUM_1:102;end;
+      suppose j>0;
+       hence thesis by A5,A6,NAT_1:14;end;
+  end;
+  uniqueness
+  proof
+    let n1,n2 be Element of NAT such that
+A7:   i <= Sum(f|n1) & n1 in dom f &
+      for j st i<=Sum (f|j) holds n1 <= j and
+A8:   i <= Sum(f|n2) & n2 in dom f &
+      for j st i<=Sum (f|j) holds n2 <= j;
+    n1<=n2 & n2<=n1 by A7,A8;
+    hence thesis by XXREAL_0:1;
+  end;
+end;
+
+theorem
+  i in dom f & f.i <> 0 implies min(f,Sum(f|i)) = i
+proof
+  assume
+A1:  i in dom f & f.i<>0;
+  then
+A2:  1<=i & i<=len f by FINSEQ_3:27;
+  then len (f|i) =i by FINSEQ_1:80;
+  then i in dom (f|i) by A2,FINSEQ_3:27;
+  then
+A3:  Sum(f|i) <= Sum(f|(len f)) & f|(len f) = f & Sum (f|i) >= (f|i).i &
+     (f|i).i=f.i by A2,POLYNOM3:4,18,FINSEQ_1:79,FUNCT_1:70;
+  then Sum(f|i)<>0 by A1;
+  then Sum(f|i)>=1 by NAT_1:14;
+  then
+A4:  Sum(f|i) in Seg Sum f by A3;
+  then
+A5:  min(f,Sum(f|i))<=i by Def1;
+  thus min(f,Sum(f|i))=i
+    proof
+      assume
+A6:     min(f,Sum(f|i))<>i;
+      then min(f,Sum(f|i))<i by A5,REAL_1:def 5;
+      then reconsider i1=i-1 as Element of NAT by NAT_1:20;
+      min(f,Sum(f|i))<i1+1 by A6,A5,REAL_1:def 5;
+      then min(f,Sum(f|i)) <=i1 by NAT_1:13;
+      then Sum(f|i) <= Sum(f|min(f,Sum(f|i))) &
+        Sum(f|min(f,Sum(f|i)))<=Sum (f|i1) by A4,POLYNOM3:18, Def1;
+      then
+A7:     Sum(f|i) <=Sum (f|i1) by XXREAL_0:2;
+      f|(i1+1)=(f|i1)^<*f.i*> by A1,FINSEQ_5:11;
+      then
+A8:     Sum (f|i)=Sum (f|i1)+ f.i by RVSUM_1:104;
+      then Sum (f|i)>=Sum (f|i1) by NAT_1:11;
+      then Sum (f|i)=Sum (f|i1) by A7,XXREAL_0:1;
+      hence thesis by A1,A8;
+    end;
+end;
+
+theorem Th7:
+  i in Seg (Sum f) implies
+    min(f,i)-'1 = min(f,i) - 1 & Sum(f|(min(f,i)-'1))<i
+proof
+  assume
+A1: i in Seg (Sum f);
+  set F=min(f,i);
+  F in dom f by A1,Def1;
+  then 1<=F by FINSEQ_3:27;
+  hence
+A2: F-'1=F-1 by BINARITH:50;
+  assume Sum(f|(F-'1))>=i;
+  then F-'1>=F-0 by A1,Def1;
+  hence thesis by A2,XREAL_1:12;
+end;
+
+theorem Th8:
+  i in Seg (Sum f) implies min(f^g,i)=min(f,i)
+proof
+  assume
+A1:  i in Seg Sum f;
+  reconsider fg=f^g as FinSequence of NAT;
+  Sum fg=Sum f+Sum g by RVSUM_1:105;
+  then Sum fg>=Sum f+0 by XREAL_1:8;
+  then
+A2:  Seg Sum f c= Seg Sum fg by FINSEQ_1:7;
+  min(f,i) in dom f by A1,Def1;
+  then
+A3:  min(f,i)<=len f by FINSEQ_3:27;
+  then
+A4:  fg|min(f,i)=f|min(f,i) by FINSEQ_5:25;
+  i<=Sum(f|min(f,i)) by A1,Def1;
+  then
+A5:  min(fg,i)<=min(f,i) by A1,A2,A4,Def1;
+  then fg|min(fg,i)=f|min(fg,i) by FINSEQ_5:25,A3,XXREAL_0:2;
+  then i<=Sum(f|min(fg,i)) by A1,A2,Def1;
+  then min(f,i)<=min(fg,i) by A1,Def1;
+  hence thesis by A5,XXREAL_0:1;
+end;
+
+theorem Th9:
+  i in Seg (Sum f +Sum g)\Seg Sum f implies
+      min(f^g,i)=min(g,i-'Sum f)+len f & i-'Sum f = i - Sum f
+proof
+  assume
+A1:  i in Seg (Sum f +Sum g)\Seg Sum f;
+  reconsider fg=f^g as FinSequence of NAT;
+A2:  Sum fg=Sum f+Sum g by RVSUM_1:105;
+  then
+A3:  i in Seg Sum fg by A1,XBOOLE_0:def 4;
+  then
+A4:  i <= Sum(fg|min(fg,i)) by Def1;
+  not i in Seg Sum f by A1,XBOOLE_0:def 4;
+  then
+A5:  1<=i & (1>i or i>Sum f) by A3,FINSEQ_1:3;
+  then reconsider j=i-Sum f as Element of NAT by NAT_1:21;
+  j<>0 by A5;
+  then j>0 & i=j+Sum f;
+  then
+A6:  j in Seg Sum g by A2,A3,FINSEQ_1:82;
+  min(fg,i)>len f
+    proof
+      assume min(fg,i)<=len f;
+      then fg|min(fg,i)=f|min(fg,i) & Sum(f|min(fg,i))<=Sum (f|len f)
+        & f|len f=f by FINSEQ_5:25,POLYNOM3:18,FINSEQ_1:79;
+      hence thesis by A5,A4,XXREAL_0:2;
+    end;
+  then reconsider m=min(fg,i)-len f as Element of NAT by NAT_1:21;
+  fg|(len f+m)=f^(g|m) by FINSEQ_6:16;
+  then i<=Sum f+Sum(g|m) by A4,RVSUM_1:105;
+  then j<=(Sum f+Sum (g|m))-Sum f by XREAL_1:11;
+  then m >= min(g,j) by Def1,A6;
+  then
+A7:  m+len f>=min(g,j)+len f by XREAL_1:9;
+A8:  j<=Sum(g|min(g,j)) by Def1,A6;
+  fg|(len f+min(g,j))=f^(g|min(g,j)) by FINSEQ_6:16;
+  then Sum (fg|(len f+min(g,j)))=Sum f + Sum(g|min(g,j)) by RVSUM_1:105;
+  then Sum (fg|(len f+min(g,j)))>=Sum f+j by A8,XREAL_1:9;
+  then len f+min(g,j)>=min(fg,i) by A3,Def1;
+  then len f+min(g,j)=min(fg,i) &j=i-'Sum f by A5,A7,XXREAL_0:1,BINARITH:50;
+  hence thesis;
+end;
+
+Lm2:i in dom f implies Sum (f|i) = Sum (f|(i-'1))+(f.i)
+proof
+  assume
+A1: i in dom f;
+  i>=1 by A1,FINSEQ_3:27;
+  then i-'1=i-1 by BINARITH:50;
+  then
+A2: i=i-'1+1;
+A3: f/.i = f.i by A1,PARTFUN1:def 8;
+  set g = <*f/.i*>;
+  set h = f|(i-'1);
+  thus Sum(f|(i-'1))+f.i = Sum (h^g) by RVSUM_1:104,A3
+                        .= Sum(f|i) by A1,A2,FINSEQ_5:11,A3;
+end;
+
+theorem Th10:
+  i in dom f & j in Seg (f/.i) implies
+    j +Sum (f|(i-'1)) in Seg Sum (f|i) & min(f,j+Sum (f|(i-'1)))=i
+proof
+  assume
+A1: i in dom f & j in Seg (f/.i);
+  set jj=j+Sum(f|(i-'1));
+  set fi=f/.i;
+A2:  fi=f.i by A1,PARTFUN1:def 8;
+A3:  i>=1 & i<=len f by A1,FINSEQ_3:27;
+  then i-'1=i-1 by BINARITH:50;
+  then
+A4:  i=(i-'1)+1;
+A5:  fi+Sum(f|(i-'1))= Sum(f|i) by A1,A2,Lm2;
+  1<=j & j<=fi by A1,FINSEQ_1:3;
+  then
+A6:  1+0<= jj & jj<=fi+Sum(f|(i-'1)) by XREAL_1:9;
+  hence
+A7:  jj in Seg Sum (f|i) by A5;
+  i in NAT by ORDINAL1:def 13;
+  then Sum(f|i)<=Sum(f|(len f)) & f|(len f)=f by A3,POLYNOM3:18,FINSEQ_1:79;
+  then
+A8:  Seg Sum (f|i) c= Seg Sum f by FINSEQ_1:7;
+  then
+A9:  min(f,jj)<=i by A5,A6,A7,Def1;
+  i<=min(f,jj)
+    proof
+      assume
+    A10:  i> min(f,jj);
+      min(f,jj)<=i-'1 & 0<j by A1,FINSEQ_1:3,A10,A4,NAT_1:13;
+      then Sum(f|min(f,jj))<=Sum(f|(i-'1)) & Sum (f|(i-'1))+0 < jj
+        by POLYNOM3:18,XREAL_1:10;
+      then Sum(f|min(f,jj))<jj by XXREAL_0:2;
+      hence thesis by A7,A8,Def1;
+    end;
+  hence thesis by A9,XXREAL_0:1;
+end;
+
+theorem
+  for i,j st i <= len f & j <= len f & Sum (f|i) = Sum (f|j) &
+             ( i in dom f implies f.i <> 0) &
+             ( j in dom f implies f.j <> 0)
+    holds i = j
+proof
+A1: now let i,j such that
+A2:      i <= len f & j <= len f & Sum (f|i) = Sum (f|j) and
+A3:    (i in dom f implies f.i <> 0) & ( j in dom f implies f.j <> 0);
+       assume
+A4:      i>j;
+       then reconsider i1=i-1 as Element of NAT by NAT_1:20;
+       i=i1+1;
+       then i>i1& j <= i1 & j in NAT by A4,NAT_1:13,ORDINAL1:def 13;
+       then
+A5:      i>=1 & Sum (f|j)<=Sum(f|i1) by POLYNOM3:18,NAT_1:14;
+       then i in dom f by A2,FINSEQ_3:27;
+       then f|(i1+1)=(f|i1)^<*f.i*> by FINSEQ_5:11;
+       then
+A6:      Sum (f|j)=Sum (f|i1)+ f.i by A2,RVSUM_1:104;
+       then Sum (f|i1)<=Sum (f|j) by NAT_1:11;
+       then Sum (f|i1)=Sum (f|j) by A5,XXREAL_0:1;
+       hence contradiction by A3,A5,A6,A2,FINSEQ_3:27;
+    end;
+  let i,j such that
+A7:  i <= len f & j <= len f & Sum (f|i) = Sum (f|j) and
+A8:  ( i in dom f implies f.i <> 0) & (j in dom f implies f.j <> 0);
+  i<=j & j<=i by A1,A7,A8;
+  hence thesis by XXREAL_0:1;
+end;
+
+begin :: Finite Sequences of Matrices
+
+definition
+  let D;
+  let F be FinSequence of (D**);
+  attr F is Matrix-yielding means :Def2:
+    for i st i in dom F holds F.i is Matrix of D;
+end;
+
+registration
+  let D;
+  cluster Matrix-yielding FinSequence of D**;
+  existence
+  proof
+    reconsider F=<*>(D**) as FinSequence of D**;
+    take F;
+    for i st i in dom F holds F.i is Matrix of D by RELAT_1:60;
+    hence thesis by Def2;
+  end;
+end;
+
+definition
+  let D;
+  mode FinSequence_of_Matrix of D is
+     Matrix-yielding FinSequence of D**;
+end;
+
+definition
+  let K;
+  mode FinSequence_of_Matrix of K is
+     Matrix-yielding FinSequence of (the carrier of K)**;
+end;
+
+theorem Th12:
+  {} is FinSequence_of_Matrix of D
+proof
+  set F=<*>(D**);
+  for i st i in dom F holds F.i is Matrix of D;
+  hence thesis by Def2;
+end;
+
+reserve F,F1,F2 for FinSequence_of_Matrix of D,
+        G,G',G1,G2 for FinSequence_of_Matrix of K;
+
+definition
+  let D,F,x;
+  redefine func F.x -> Matrix of D;
+  coherence
+  proof
+    per cases;
+      suppose
+    A1:  x in dom F;
+        then reconsider i=x as Element of NAT;
+        F.i is Matrix of D by A1,Def2;
+        hence thesis;end;
+      suppose not x in dom F;
+        then F.x={} by FUNCT_1:def 4;
+        hence thesis by MATRIX_1:13;end;
+  end;
+end;
+
+definition
+  let D,F1,F2;
+  redefine func F1^F2 -> FinSequence_of_Matrix of D;
+  coherence
+  proof
+    F1^F2 is Matrix-yielding
+      proof
+        let i such that
+      A1: i in dom (F1^F2);
+        per cases by A1,FINSEQ_1:38;
+          suppose i in dom F1;
+            then (F1^F2).i=F1.i by FINSEQ_1:def 7;
+            hence thesis;end;
+          suppose ex n st n in dom F2 & i=len F1 + n;
+            then consider n such that
+          A2: n in dom F2 & i=len F1+n;
+            (F1^F2).i=F2.n by A2,FINSEQ_1:def 7;
+            hence thesis;end;
+      end;
+    hence thesis;
+  end;
+end;
+
+Lm3:<*M*> is Matrix-yielding
+proof
+  now let i such that
+  A1:  i in dom <*M*>;
+     dom <*M*> ={1} by FINSEQ_1:4,def 8;
+     then <*M*>.1=M & i=1 by A1,TARSKI:def 1,FINSEQ_1:def 8;
+     hence <*M*>.i is Matrix of D;
+  end;
+  hence thesis by Def2;
+end;
+
+definition
+  let D,M1;
+  redefine func <* M1 *> -> FinSequence_of_Matrix of D;
+  coherence by Lm3;
+  let M2;
+  redefine func <* M1,M2 *> -> FinSequence_of_Matrix of D;
+  coherence
+  proof
+    reconsider F1=<*M1*>,F2=<*M2*> as FinSequence_of_Matrix of D by Lm3;
+    <*M1,M2*>=F1^F2;
+    hence thesis;
+  end;
+end;
+
+definition
+  let D,F,n;
+  redefine func F|n -> FinSequence_of_Matrix of D;
+  coherence
+  proof
+    now let i such that
+     A1: i in dom (F|n);
+       (F|n).i=F.i by A1,FUNCT_1:70;
+       hence (F|n).i is Matrix of D;
+    end;
+    hence thesis by Def2;
+  end;
+  redefine func F/^n -> FinSequence_of_Matrix of D;
+  coherence
+  proof
+    now let i such that
+      A2: i in dom (F/^n);
+        i+n in dom F by A2,FINSEQ_5:29;
+        then (F/^n).i=(F/^n)/.i & F.(n+i)=F/.(n+i) by A2,PARTFUN1:def 8;
+        hence (F/^n).i is Matrix of D by A2,FINSEQ_5:30;
+    end;
+    hence thesis by Def2;
+  end;
+end;
+
+begin :: Sequences of Sizes of Matrices in a Finite Sequence
+
+definition
+  let D,F;
+  func Len F -> FinSequence of NAT means :Def3:
+    dom it = dom F &
+    for i st i in dom it holds it.i=len (F.i);
+  existence
+  proof
+    deffunc F(Nat)=len (F.$1);
+    consider p be FinSequence of NAT such that
+A1:   len p=len F and
+A2:   for i st i in dom p holds p.i=F(i) from FINSEQ_2:sch 1;
+    take p;
+    thus thesis by A2,A1,FINSEQ_3:31;
+  end;
+  uniqueness
+  proof
+    let F1,F2 be FinSequence of NAT such that
+A3:  dom F1=dom F &
+     for i st i in dom F1 holds F1.i=len (F.i) and
+A4:  dom F2=dom F &
+     for i st i in dom F2 holds F2.i=len (F.i);
+    now let x such that
+    A5:  x in dom F1;
+       reconsider i=x as Element of NAT by A5;
+       thus F1.x = len (F.i) by A3,A5
+                .= F2.x by A3,A4,A5;
+    end;
+    hence thesis by FUNCT_1:9,A3,A4;
+  end;
+  func Width F -> FinSequence of NAT means :Def4:
+    dom it = dom F &
+    for i st i in dom it holds it.i=width (F.i);
+  existence
+  proof
+    deffunc F(Nat)=width (F.$1);
+    consider p be FinSequence of NAT such that
+A6:   len p=len F and
+A7:   for i st i in dom p holds p.i=F(i) from FINSEQ_2:sch 1;
+    take p;
+    thus thesis by A7,A6,FINSEQ_3:31;
+  end;
+  uniqueness
+  proof
+  let F1,F2 be FinSequence of NAT such that
+A8:  dom F1=dom F &
+     for i st i in dom F1 holds F1.i=width (F.i) and
+A9:  dom F2=dom F &
+     for i st i in dom F2 holds F2.i=width (F.i);
+     now let x such that
+      A10:  x in dom F1;
+          reconsider i=x as Element of NAT by A10;
+          thus F1.x = width (F.i) by A8,A10
+                   .= F2.x by A9,A10,A8;
+     end;
+     hence thesis by FUNCT_1:9,A8,A9;
+  end;
+end;
+
+definition
+  let D,F;
+  redefine func Len F -> Element of (len F)-tuples_on NAT;
+  coherence
+  proof
+    dom Len F=dom F by Def3;
+    then len Len F=len F by FINSEQ_3:31;
+    hence thesis by FINSEQ_2:110;
+  end;
+  redefine func Width F -> Element of (len F)-tuples_on NAT;
+  coherence
+  proof
+    dom Width F=dom F by Def4;
+    then len Width F=len F by FINSEQ_3:31;
+    hence thesis by FINSEQ_2:110;
+  end;
+end;
+
+theorem Th13:
+  Sum Len F = 0 implies Sum Width F = 0
+proof
+  set LF=Len F;
+  set WF=Width F;
+  assume
+A1: Sum LF=0;
+  per cases by A1,RVSUM_1:115;
+    suppose ex i st i in dom LF & 0> LF.i;
+      then consider i such that
+  A2:   i in dom LF & 0>LF.i;
+      thus thesis by A2;
+    end;
+    suppose
+  A3:  for i st i in dom LF holds 0>=LF.i;
+      set F0=len F|->0;
+  A4: len WF=len F &
+  len F0=len F by FINSEQ_2:69,109;
+  A5: dom WF=dom F & dom LF=dom F by Def3,Def4;
+      now let j such that
+     A6:  1<=j & j<=len WF;
+         j in dom WF & len F<>0 & j in Seg len F
+           by A4,A6,FINSEQ_3:27,FINSEQ_1:3;
+         then WF.j=width (F.j) & LF.j=len (F.j) & 0>= LF.j & F0.j=0
+           by A3,A5,Def3,Def4,FINSEQ_2:71;
+         hence WF.j=F0.j by MATRIX_1:def 4;
+      end;
+      then WF=F0 by A4,FINSEQ_1:18;
+      hence thesis by RVSUM_1:111;
+    end;
+end;
+
+theorem Th14:
+  Len (F1 ^ F2) = Len F1 ^ Len F2
+proof
+  set F12=F1^F2;
+A1: len Len F12=len F12 & len F12=len F1+len F2 &
+    len F1=len Len F1 & len F2=len Len F2 by FINSEQ_1:35,FINSEQ_2:109;
+A2: len (Len F1^Len F2)=len F1+len F2 by FINSEQ_2:109;
+  then
+A3: dom (Len F1)=dom F1 & dom (Len F2)=dom F2 & dom (Len F1 ^ Len F2)=
+    dom Len F12 by A1,FINSEQ_3:31;
+  now let k such that
+   A4: 1<=k & k<=len F1+len F2;
+   A5: k in dom (Len F1 ^ Len F2) by A2,A4,FINSEQ_3:27;
+      now per cases by A5,FINSEQ_1:38;
+        suppose
+      A6:  k in dom (Len F1);
+           hence (Len F1 ^ Len F2).k = (Len F1).k by FINSEQ_1:def 7
+                                    .= len (F1.k) by A6,Def3
+                                    .= len(F12.k) by A3,A6,FINSEQ_1:def 7
+                                    .= (Len F12).k by A3,A5,Def3;end;
+        suppose ex n st n in dom (Len F2) & k=len (Len F1)+n;
+          then consider n such that
+      A7:   n in dom (Len F2) & k=len F1+n by A1;
+          thus (Len F1 ^ Len F2).k = (Len F2).n by A1,A7,FINSEQ_1:def 7
+                                  .= len (F2.n) by A7,Def3
+                                  .= len(F12.k) by A3,A7,FINSEQ_1:def 7
+                                  .= (Len F12).k by A3,A5,Def3;end;
+      end;
+      hence (Len F12).k=(Len F1 ^ Len F2).k;
+  end;
+  hence thesis by A1,A2,FINSEQ_1:18;
+end;
+
+theorem Th15:
+  Len <*M*> = <*len M*>
+proof
+  set F=<*M*>;
+A1: len F=1 & 1 in Seg 1 by FINSEQ_1:57;
+A2: dom (Len F)=Seg len F by FINSEQ_2:144;
+A3: len F=len (Len F) by FINSEQ_2:109;
+  (Len F).1 = len (F.1) & F.1=M by A1,A2,FINSEQ_1:57,Def3;
+  hence Len<*M*>= <*len M*> by A1,A3,FINSEQ_1:57;
+end;
+
+Lm4: Sum Len <*M*> = len M
+proof
+  Len <*M*>=<*len M*> by Th15;
+  hence thesis by RVSUM_1:103;
+end;
+
+theorem Th16:
+  Sum Len <*M1,M2*> = len M1 + len M2
+proof
+  thus Sum Len <*M1,M2*> = Sum ((Len <*M1*>)^(Len<*M2*>)) by Th14
+                        .= Sum Len <*M1*>+Sum Len<*M2*> by RVSUM_1:105
+                        .= len M1+Sum Len <*M2*> by Lm4
+                        .= len M1+len M2 by Lm4;
+end;
+
+theorem Th17:
+  Len (F1|n) = (Len F1)|n
+proof
+A1: len Len F1=len F1 by FINSEQ_2:109;
+   per cases;
+     suppose n>=len F1;
+       then F1|n=F1 & (Len F1)|n=Len F1 by A1,FINSEQ_1:79;
+       hence thesis;end;
+     suppose n<len F1;
+       then len (F1|n) =n by FINSEQ_1:80;
+       then
+   A2:   len Len (F1|n)=n by FINSEQ_2:109;
+       F1=(F1|n)^(F1/^n) by RFINSEQ:21;
+       then Len F1=(Len (F1|n))^Len (F1/^n) by Th14;
+       hence thesis by A2,FINSEQ_5:26;
+     end;
+end;
+
+theorem Th18:
+  Width (F1 ^ F2)= Width F1 ^ Width F2
+proof
+  set F12=F1^F2;
+A1:  len Width F12=len F12 & len F12=len F1+len F2 &
+  len F1=len Width F1 & len F2=len Width F2 by FINSEQ_2:109,FINSEQ_1:35;
+A2:  len (Width F1^Width F2)=len F1+len F2 by FINSEQ_2:109;
+  then
+A3:  dom (Width F1)=dom F1 & dom (Width F2)=dom F2 & dom (Width F1 ^ Width F2)
+    =dom Width F12 by A1,FINSEQ_3:31;
+  now let k such that
+   A4:  1<=k & k<=len F1+len F2;
+   A5: k in dom (Width F1 ^ Width F2) by A2,A4,FINSEQ_3:27;
+      now per cases by A5,FINSEQ_1:38;
+        suppose
+      A6:   k in dom (Width F1);
+          hence (Width F1 ^ Width F2).k = (Width F1).k by FINSEQ_1:def 7
+                                       .= width (F1.k) by A6,Def4
+                                       .= width(F12.k) by A3,A6,FINSEQ_1:def 7
+                                       .= (Width F12).k by A3,A5,Def4;end;
+        suppose ex n st n in dom (Width F2) & k=len (Width F1)+n;
+          then consider n such that
+      A7:   n in dom (Width F2) & k=len F1+n by A1;
+          thus (Width F1 ^ Width F2).k = (Width F2).n by A1,A7,FINSEQ_1:def 7
+                                      .= width (F2.n) by A7,Def4
+                                      .= width(F12.k) by A3,A7,FINSEQ_1:def 7
+                                      .= (Width F12).k by A3,A5,Def4;end;
+      end;
+      hence (Width F12).k=(Width F1 ^ Width F2).k;
+  end;
+  hence thesis by A1,A2,FINSEQ_1:18;
+end;
+
+theorem Th19:
+  Width <*M*> = <*width M*>
+proof
+  set F=<*M*>;
+A1: len F=1 & 1 in Seg 1 by FINSEQ_1:57;
+A2: dom (Width F)=Seg len F by FINSEQ_2:144;
+A3: len F=len (Width F) by FINSEQ_2:109;
+  (Width F).1=width (F.1) & F.1=M by A1,A2,FINSEQ_1:57,Def4;
+   hence Width F= <*width M*> by A1,A3,FINSEQ_1:57;
+end;
+
+Lm5:Sum Width <*M*>=width M
+proof
+  Width <*M*>=<*width M*> by Th19;
+  hence thesis by RVSUM_1:103;
+end;
+
+theorem Th20:
+  Sum Width <*M1,M2*>=width M1+width M2
+proof
+  thus Sum Width <*M1,M2*> = Sum ((Width <*M1*>)^(Width<*M2*>)) by Th18
+                          .= Sum Width <*M1*>+Sum Width<*M2*> by RVSUM_1:105
+                          .= width M1+Sum Width <*M2*> by Lm5
+                          .= width M1+width M2 by Lm5;
+end;
+
+theorem Th21:
+  Width (F1|n) =(Width F1)|n
+proof
+A1: len Width F1=len F1 by FINSEQ_2:109;
+  per cases;
+    suppose n>=len F1;
+      then F1|n=F1 & (Width F1)|n=Width F1 by A1,FINSEQ_1:79;
+      hence thesis;end;
+    suppose n<len F1;
+      then len (F1|n) =n by FINSEQ_1:80;
+      then
+    A2:  len Width (F1|n)=n by FINSEQ_2:109;
+       F1=(F1|n)^(F1/^n) by RFINSEQ:21;
+       then Width F1=(Width (F1|n))^Width (F1/^n) by Th18;
+       hence thesis by A2,FINSEQ_5:26;end;
+end;
+
+begin :: Block Diagonal Matrices
+
+definition
+  let D;
+  let d be Element of D;
+  let F be FinSequence_of_Matrix of D;
+  func block_diagonal(F,d) -> Matrix of D means :Def5:
+    len it = Sum Len F &
+    width it = Sum Width F &
+    for i,j st [i,j] in Indices it holds
+       (j<=Sum((Width F)|(min(Len F,i)-'1)) or j>Sum ((Width F)|min(Len F,i))
+          implies
+      it*(i,j) = d) &
+       (Sum((Width F)|(min(Len F,i)-'1)) < j & j <= Sum((Width F)|min(Len F,i))
+          implies
+      it*(i,j) = F.min(Len F,i)*(i-'Sum((Len F)|(min(Len F,i)-'1)),
+                                 j-'Sum ((Width F)|(min(Len F,i)-'1))));
+  existence
+  proof
+    set W=Width F;
+    set L=Len F;
+    defpred P[Nat,Nat,Element of D] means
+      ($2 <= Sum(W|(min(L,$1)-'1)) or$2>Sum (W|min(L,$1))
+          implies $3 = d) &
+      (Sum (W|(min(L,$1)-'1)) <$2 &$2<= Sum (W|min(L,$1))
+          implies
+      $3 = F.min(L,$1)*($1-'Sum(L|(min(L,$1)-'1)),
+                                $2-'Sum (W|(min(L,$1)-'1))));
+    set N=Sum Len F;
+    set M=Sum Width F;
+A1: for i,j st [i,j] in [:Seg N,Seg M:]
+       for x1,x2 being Element of D st P[i,j,x1] & P[i,j,x2] holds x1 = x2;
+A2: for i,j st [i,j] in [:Seg N, Seg M:]
+      ex x being Element of D st P[i,j,x]
+      proof
+        let i,j such that [i,j] in [:Seg N,Seg M:];
+        per cases;
+          suppose
+        A3:  j<= Sum(W|(min(L,i)-'1))or j>Sum (W|min(L,i));
+            take d;
+            thus thesis by A3;end;
+          suppose
+        A4:  Sum(W|(min(L,i)-'1))<j & j<=Sum (W|min(L,i));
+            take b=F.min(L,i)*(i-'Sum(L|(min(L,i)-'1)),
+                               j-'Sum (W|(min(L,i)-'1)));
+            thus thesis by A4;end;
+      end;
+    consider MM being Matrix of N,M,D such that
+ A5:  for i,j st [i,j] in Indices MM holds P[i,j,MM*(i,j)]
+      from MATRIX_1:sch 2(A1,A2);
+    take MM;
+    per cases;
+      suppose
+    A6:  N=0;
+        then M=0 & len MM=0 & width MM=0 by Th13,MATRIX_1:23;
+        hence thesis by A5,A6;end;
+      suppose N>0;
+        hence thesis by MATRIX_1:24,A5;end;
+  end;
+  uniqueness
+  proof
+    set L=Len F;
+    set W=Width F;
+    let M1,M2 be Matrix of D such that
+A7:   len M1=Sum L &
+      width M1=Sum W and
+A8:   for i,j st [i,j] in Indices M1 holds
+      (j<=Sum(W|(min(L,i)-'1))or j>Sum(W|min(L,i))
+          implies M1*(i,j)=d)&
+      (Sum(W|(min(L,i)-'1))<j & j<=Sum (W|min(L,i))
+          implies M1*(i,j)=F.min(L,i)*(i-'Sum(L|(min(L,i)-'1)),
+                              j-'Sum (W|(min(L,i)-'1)))) and
+A9:   len M2=Sum L &
+      width M2=Sum W and
+A10:  for i,j st [i,j] in Indices M2 holds
+      (j<=Sum(W|(min(L,i)-'1)) or j>Sum (W|min(L,i))
+          implies M2*(i,j) = d) &
+      (Sum(W|(min(L,i)-'1))<j&j<=Sum (W|min(L,i))
+          implies M2*(i,j)=F.min(L,i)*(i-'Sum(L|(min(L,i)-'1)),
+                                     j-'Sum (W|(min(L,i)-'1))));
+A11:Indices M1 = [:Seg len M1,Seg width M1:] by FINSEQ_1:def 3
+              .= Indices M2 by A7,A9,FINSEQ_1:def 3;
+    now let i,j such that
+     A12: [i,j] in Indices M1;
+         (j <= Sum(W|(min(L,i)-'1) ) or j > Sum (W|min(L,i))) or
+         Sum(W|(min(L,i)-'1)) < j & j <= Sum (W|min(L,i));
+         then M1*(i,j)= d & M2*(i,j)=d  or
+            M1*(i,j) = F.min(L,i)*(i-'Sum(L|(min(L,i)-'1)),
+                                    j-'Sum (W|(min(L,i)-'1)))
+           & M2*(i,j) = F.min(L,i)*(i-'Sum(L|(min(L,i)-'1)),
+                                    j-'Sum (W|(min(L,i)-'1)))
+           by A8,A10,A11,A12;
+         hence M1*(i,j)=M2*(i,j);
+    end;
+    hence thesis by A7,A9,MATRIX_1:21;
+  end;
+end;
+
+definition
+  let D;
+  let d be Element of D;
+  let F be FinSequence_of_Matrix of D;
+  redefine func block_diagonal(F,d) -> Matrix of Sum Len F,Sum Width F,D;
+  coherence
+  proof
+    len block_diagonal(F,d)=Sum Len F &
+    width block_diagonal(F,d)=Sum Width F by Def5;
+    hence thesis by MATRIX_2:7;
+  end;
+end;
+
+theorem
+  for F be FinSequence_of_Matrix of D st F={} holds
+    block_diagonal(F,d)={}
+proof
+  let F be FinSequence_of_Matrix of D such that
+A1:  F={};
+  len Len F=0 by FINSEQ_2:109,A1,CARD_2:19;
+  then Len F=<*>REAL by CARD_2:59;
+  then 0 =len block_diagonal(F,d) by Def5,RVSUM_1:102;
+  hence thesis by CARD_2:59;
+end;
+
+theorem Th23:
+  for M be Matrix of Sum Len (<*M1,M2*>),Sum Width (<*M1,M2*>),D holds
+    M = block_diagonal(<*M1,M2*>,d) iff
+        for i holds
+         (i in dom M1 implies Line(M,i)=Line(M1,i)^(width M2 |-> d)) &
+         (i in dom M2 implies Line(M,i+len M1)=(width M1|->d)^Line(M2,i))
+proof
+  let M be Matrix of Sum Len (<*M1,M2*>),Sum Width (<*M1,M2*>),D;
+  set F1=<*M1*>;
+  set F2=<*M2*>;
+  set F12=<*M1,M2*>;
+  set B=block_diagonal(F12,d);
+  set L1=len M1;
+  set L2=len M2;
+  set W1=width M1;
+  set W2=width M2;
+A1:  len B=Sum Len F12 & width B=Sum Width F12 by Def5;
+A2:  Len F12=(Len F1) ^(Len F2) & Width F12=(Width F1)^(Width F2) &
+     Len F1=<*L1*> & Len F2=<*L2*> & Width F1=<*W1*>
+       by Th14,Th15,Th18,Th19;
+A3:  len B=L1+L2 & width B=W1+W2 & Sum <*W1*>=W1 & Sum <*L1*>=L1
+       by A1,RVSUM_1:103,Th16,Th20;
+     Sum Len F12=0 implies Sum Width F12=0 by Th13;
+     then
+A4:    width M=W1+W2 by A1,A3,MATRIX13:1;
+A5:    len <*L1*>=1 & len <*W1*>=1 & len F1=1 by FINSEQ_1:57;
+     then
+A6:    len Len F12=1+1 by A2,FINSEQ_2:19;
+     then
+A7:    dom Len F12={1,2} by FINSEQ_1:def 3,4;
+A8:    len Width F12=len F12 & len F12=len Len F12 by FINSEQ_2:109;
+A9:    1 in dom Len F12 & 2 in dom Len F12 & 1-'1=0 & 2-'1=2-1
+       by A7,TARSKI:def 2,BINARITH:50,51;
+     then
+A10:  (Len F12).2=L2 & (Len F12)/.2=(Len F12).2 & (Len F12).1=L1 &
+      (Len F12)/.1=(Len F12).1 & (Len F12)|0=<*>REAL & (Width F12)|0=<*>REAL&
+      (Len F12)|1=<*L1*> & (Width F12)|1=<*W1*> &(Width F12)|2=Width F12
+      by FINSEQ_1:58,59,79,A2,A5,A6,A8,PARTFUN1:def 8,FINSEQ_5:26;
+     then
+A11:   Sum ((Width F12)|2)=W1+W2 by Th20;
+     hereby assume
+       A12: M = B;
+        let i;
+        thus i in dom M1 implies Line(M,i)=Line(M1,i)^(W2|-> d)
+          proof
+            assume i in dom M1;
+            then
+         A13: 1<=i & i<=L1 & L1<=L1+L2 & i in Seg L1
+              by FINSEQ_1:def 3,FINSEQ_3:27,NAT_1:11;
+            then i<=L1+L2 by XXREAL_0:2;
+            then
+         A14: i in dom B by A3,A13,FINSEQ_3:27;
+            set LM=Line(M,i);
+            set LM1=Line(M1,i);
+            set W2d=W2|->d;
+         A15: len LM=W1+W2 & len LM1=W1 & len W2d=W2 & len (LM1^W2d)=
+              len LM1+len W2d by A4,MATRIX_1:def 8,FINSEQ_2:69,FINSEQ_1:35;
+            now let j such that
+         A16:   1<=j & j<=len LM;
+         A17:   j in Seg width B & j in dom (LM1^W2d)
+                  by A15,A16,A3,FINSEQ_1:3,FINSEQ_3:27;
+              then
+         A18:   [i,j] in Indices B by A14,ZFMISC_1:106;
+         A19:   min(Len F12,i+0)=1 by A10,A9,A13,Th10,RVSUM_1:102;
+              now per cases;
+                suppose
+             A20:  j<=W1;
+                then
+             A21:  j in Seg width M1 & j in dom LM1
+                   by A15,A16,FINSEQ_1:3,FINSEQ_3:27;
+                thus LM.j = M*(i,j) by A3,A4,A17,MATRIX_1:def 8
+                         .= F12.1*(i-'Sum((Len F12)|0),j-'Sum ((Width F12)|0))
+                             by A12,A16,A18,A9,A19,A10,Def5,A20,A3,RVSUM_1:102
+                         .= F12.1*(i,j-'0) by BINARITH:58,RVSUM_1:102
+                         .= F12.1*(i,j) by BINARITH:58
+                         .= M1*(i,j) by FINSEQ_1:58
+                         .= LM1.j by A21,MATRIX_1:def 8
+                         .= (LM1^W2d).j by A21,FINSEQ_1:def 7;end;
+                suppose
+             A22:  j>W1;
+                then not j in dom LM1 by A15,FINSEQ_3:27;
+                then consider k such that
+             A23:  k in dom W2d & j=len LM1+k by A17,FINSEQ_1:38;
+             A24:  dom W2d=Seg W2 by A15,FINSEQ_1:def 3;
+                thus LM.j = M*(i,j) by A3,A4,A17,MATRIX_1:def 8
+                         .= d by A12,A18,A19,A10,Def5,A22,A3
+                         .= W2d.k by A23,A24,FINSEQ_2:71,FINSEQ_1:4
+                         .= (LM1^W2d).j by A23,FINSEQ_1:def 7;end;
+              end;
+              hence LM.j=(LM1^W2d).j;
+            end;
+            hence thesis by A15,FINSEQ_1:18;
+          end;
+        thus i in dom M2 implies Line(M,i+L1)=(W1|->d)^Line(M2,i)
+          proof
+            set LM=Line(M,i+L1);
+            set W1d=W1|->d;
+            set LM2=Line(M2,i);
+            assume i in dom M2;
+            then
+         A25: i in Seg L2 by FINSEQ_1:def 3;
+            then L1+i in Seg (L1+L2) by FINSEQ_1:81;
+            then
+         A26:  L1+i in dom B by A3,FINSEQ_1:def 3;
+         A27:  len LM=W1+W2 & len LM2=W2 & len W1d=W1 & len (W1d^LM2)=
+               len W1d + len LM2 by A4,MATRIX_1:def 8,FINSEQ_2:69,FINSEQ_1:35;
+            now let j such that
+             A28:  1<=j & j<=len LM;
+             A29:  j in Seg width B & j in dom (W1d^LM2)
+                    by A3,A27,A28,FINSEQ_1:3,FINSEQ_3:27;
+                 then
+             A30:  [i+L1,j] in Indices B by A26,ZFMISC_1:106;
+             A31:  min(Len F12,i+L1)=2 by A25,A9,Th10,A3,A10;
+                 now per cases;
+                   suppose
+                 A32:  j<=W1;
+                      then
+                 A33:   j in Seg W1 & dom W1d=Seg W1
+                        by A28,A27,FINSEQ_1:3,def 3;
+                      thus LM.j = B*(i+L1,j) by A12,A29,MATRIX_1:def 8
+                               .= d by A30,A9,A10,A31,Def5,A3,A32
+                               .= W1d.j by A32,FINSEQ_2:71,A28,A33
+                               .= (W1d^LM2).j by A33,FINSEQ_1:def 7;end;
+                   suppose
+                 A34:  j>W1;
+                      then not j in dom W1d by A27,FINSEQ_3:27;
+                      then consider k such that
+                 A35:   k in dom LM2 & j=W1+k by A27,A29,FINSEQ_1:38;
+                 A36: dom LM2=Seg W2 by A27,FINSEQ_1:def 3;
+                      thus LM.j = B*(i+L1,j) by A12,A29,MATRIX_1:def 8
+                               .= F12.2*(i+L1-'L1,j-'W1)
+                                    by A27,A28,A3,A30,A9,A10,A31,A1,A34,Def5
+                               .= F12.2*(i,j-'W1) by BINARITH:39
+                               .= F12.(len F1+1)*(i,k) by A5,A35,BINARITH:39
+                               .= M2*(i,k) by FINSEQ_1:59
+                               .= LM2.k by A35,A36,MATRIX_1:def 8
+                               .= (W1d^LM2).j by A27,A35,FINSEQ_1:def 7;end;
+                 end;
+                 hence LM.j=(W1d^LM2).j;
+            end;
+            hence thesis by A27,FINSEQ_1:18;
+          end;
+     end;
+     assume
+A37: for i holds (i in dom M1 implies Line(M,i)=Line(M1,i)^(W2 |-> d))&
+                 (i in dom M2 implies Line(M,i+L1)=(W1|->d)^Line(M2,i));
+     now let i,j such that
+      A38:  [i,j] in Indices M;
+      A39:  Indices M=Indices B by MATRIX_1:27;
+        then
+      A40:  i in dom B & j in Seg width B by A38,ZFMISC_1:106;
+        then
+      A41:  1<=i & 1<=j & i in Seg (L1+L2) & j<=width B
+            by A3,FINSEQ_3:27,FINSEQ_1:3,def 3;
+        set LM1=Line(M1,i);
+        set W2d=W2|->d;
+        set W1d=W1|->d;
+      A42: len LM1=W1 & len W2d=W2 & len W1d=W1 &
+            len (LM1^W2d)=len LM1 + len W2d
+            by MATRIX_1:def 8,FINSEQ_2:69,FINSEQ_1:35;
+        now per cases;
+          suppose
+        A43:   i<=L1;
+             then i in dom M1 by A41,FINSEQ_3:27;
+             then
+        A44:   Line(M,i)=LM1^W2d by A37;
+             i in Seg L1 by A43,A41;
+             then
+        A45:   min(Len F12,i+0)=1 by A10,A9,Th10,RVSUM_1:102;
+             now per cases;
+               suppose
+             A46:  j<=W1;
+                then
+             A47:  j in Seg width M1 & j in dom LM1
+                   by A41,A42,FINSEQ_1:3,FINSEQ_3:27;
+                thus B*(i,j) = F12.1*(i-'0, j-'0)
+                              by A9,A10,A38,A39,A41,A45,A46,Def5,A3,RVSUM_1:102
+                            .= F12.1*(i,j-'0) by BINARITH:58
+                            .= F12.1*(i,j) by BINARITH:58
+                            .= M1*(i,j) by FINSEQ_1:58
+                            .= LM1.j by A47,MATRIX_1:def 8
+                            .= (LM1^W2d).j by A47,FINSEQ_1:def 7;end;
+               suppose
+            A48:  j>W1;
+                 then not j in dom LM1 & dom (LM1^W2d)=Seg width B
+                   by A3,A42,FINSEQ_3:27,FINSEQ_1:def 3;
+                 then consider k such that
+            A49:   k in dom W2d & j=len LM1+k by A40,FINSEQ_1:38;
+            A50: dom W2d=Seg W2 by A42,FINSEQ_1:def 3;
+                 thus B*(i,j) = d by A3,A10,A38,A39,A45,A48,Def5
+                             .= W2d.k by A49,A50,FINSEQ_2:71,FINSEQ_1:4
+                             .= (LM1^W2d).j by A49,FINSEQ_1:def 7;end;
+             end;
+             hence M*(i,j)=B*(i,j) by A44,A3,A4,A40,MATRIX_1:def 8;end;
+          suppose
+        A51:   i>L1;
+              then reconsider iL=i-L1 as Element of NAT by NAT_1:21;
+              set LM2=Line(M2,iL);
+              iL<>0 by A51;
+              then iL>0 & i=iL+L1;
+              then
+        A52:   iL in Seg L2 & Seg L2=dom M2 by A41,FINSEQ_1:82,def 3;
+              then
+        A53:   Line(M,iL+L1)=(W1|->d)^Line(M2,iL) by A37;
+        A54:   min(Len F12,iL+L1)=2 by A9,Th10,A3,A10,A52;
+              now per cases;
+                suppose
+             A55:  j<=W1;
+                  then
+             A56:   j in dom W1d & j in Seg W1 & W1<>0
+                    by A41,A42,FINSEQ_1:3,FINSEQ_3:27;
+                  thus B*(i,j) = d by A9,A10,A38,A39,A55,A54,Def5,A3
+                              .= W1d.j by A56,FINSEQ_2:71
+                              .= (W1d^LM2).j by A56,FINSEQ_1:def 7;end;
+                suppose
+             A57:  j>W1;
+                  then
+             A58:   not j in dom LM1 & dom (LM1^W2d)=Seg width B & len LM2=W2
+                    by A3,A42,FINSEQ_3:27,FINSEQ_1:def 3,MATRIX_1:def 8;
+                  then consider k such that
+             A59:   k in dom W2d & j=W1+k by A40,A42,FINSEQ_1:38;
+             A60:  dom W2d=Seg W2 & dom W2d=dom LM2
+                    by A42,FINSEQ_1:def 3,A58,FINSEQ_3:31;
+                  thus B*(i,j) = F12.2*(iL+L1-'L1,j-'W1)
+                                   by A3,A9,A10,A11,A38,A39,A41,A57,A54,Def5
+                              .= F12.2*(iL,j-'W1) by BINARITH:39
+                              .= F12.(len F1+1)*(iL,k) by A5,A59,BINARITH:39
+                              .= M2*(iL,k) by FINSEQ_1:59
+                              .= LM2.k by A60,A59,MATRIX_1:def 8
+                              .= (W1d^LM2).j by A42,A59,A60,FINSEQ_1:def 7;end;
+              end;
+              hence M*(i,j)=B*(i,j) by A53,A3,A4,A40,MATRIX_1:def 8;end;
+        end;
+        hence M*(i,j)=B*(i,j);
+     end;
+  hence thesis by MATRIX_1:28;
+end;
+
+theorem Th24:
+   for M be Matrix of Sum Len (<*M1,M2*>),Sum Width (<*M1,M2*>),D holds
+     M = block_diagonal(<*M1,M2*>,d) iff
+         for i holds
+          (i in Seg width M1 implies Col(M,i) = Col(M1,i)^(len M2 |-> d)) &
+          (i in Seg width M2 implies Col(M,i+width M1)=(len M1|->d)^Col(M2,i))
+proof
+  let M be Matrix of Sum Len (<*M1,M2*>),Sum Width (<*M1,M2*>),D;
+  set m1=<*M1*>;  set m2=<*M2*>;  set m12=<*M1,M2*>;
+  set B=block_diagonal(m12,d);
+  Sum Len m12=0 implies Sum Width m12=0 by Th13;
+  then
+A1:  len M=Sum Len m12 & width M=Sum Width m12 by MATRIX13:1;
+A2:  Sum Len m12=len M1+len M2 & Sum Width m12=width M1+width M2
+     by Th16,Th20;
+  then width M1<=width M & len M1 <=len M by A1,NAT_1:12;
+  then
+A3: Seg width M1 c= Seg width M & Seg len M1 c= Seg len M &
+    Seg len M=dom M & Seg len M1=dom M1 &dom M2=Seg len M2 by FINSEQ_1:def 3,7;
+  thus M = B implies
+    for i holds
+         (i in Seg width M1 implies Col(M,i)=Col(M1,i)^(len M2 |-> d)) &
+         (i in Seg width M2 implies Col(M,i+width M1)=(len M1|->d)^Col(M2,i))
+  proof
+    assume
+  A4:  M=B;
+    let i;
+    set CM=Col(M,i);
+    set CMi=Col(M,i+width M1);
+    set CM1=Col(M1,i);
+    set CM2=Col(M2,i);
+    set L1=len M1|->d;
+    set L2=len M2|->d;
+  A5: len CM=len M & len CMi=len M & len CM1=len M1 & len CM2=len M2 &
+      len L1=len M1 & len L2=len M2 by FINSEQ_2:109;
+    then
+  A6: dom CM1=dom M1 & dom CM2=dom M2 & dom L1=dom M1 & dom L2=dom M2 &
+      dom (width M1 |-> d) =Seg width M1 & dom (width M2 |-> d) =Seg width M2
+      & dom L2=Seg len M2 & dom L1=Seg len M1 by FINSEQ_2:144,FINSEQ_3:31;
+    thus i in Seg width M1 implies CM=CM1^L2
+      proof
+        assume
+     A7:  i in Seg width M1;
+     A8:  len (CM1^L2)=len CM1+len L2 by FINSEQ_1:35;
+        now let j such that
+        A9:  1<=j & j<=len CM;
+        A10: dom Line(M1,j)=Seg width M1 by FINSEQ_2:144;
+        A11: j in dom (CM1^L2) & j in dom M by A8,A9,A2,A1,A5,FINSEQ_3:27;
+            then
+        A12: CM.j=Line(M,j).i by A7,A3,GOBOARD1:17;
+            now per cases by A11,FINSEQ_1:38;
+              suppose
+            A13:  j in dom CM1;
+                 hence CM.j = (Line(M1,j)^(width M2 |-> d)).i by A6,A4,A12,Th23
+                           .= Line(M1,j).i by A7,A10,FINSEQ_1:def 7
+                           .= CM1.j by A7,A6,A13,GOBOARD1:17
+                           .= (CM1^L2).j by A13,FINSEQ_1:def 7;end;
+              suppose ex k st k in dom L2 & j=len CM1+k;
+                then consider k such that
+            A14:  k in dom L2 & j = len CM1+k;
+                thus CM.j = ((width M1 |-> d)^Line(M2,k)).i
+                               by A5,A6,A4,A12,A14,Th23
+                         .= (width M1|->d).i by A7,A6,FINSEQ_1:def 7
+                         .= d by A7,FINSEQ_2:71,FINSEQ_1:4
+                         .= L2.k by A14,A6,FINSEQ_2:71,FINSEQ_1:4
+                         .= (CM1^L2).j by A14,FINSEQ_1:def 7;end;
+            end;
+            hence (CM1^L2).j=CM.j;
+        end;
+        hence thesis by A8,A2,A1,A5,FINSEQ_1:18;
+      end;
+    assume
+A15:  i in Seg width M2;
+A16:  len (L1^CM2)=len L1+len CM2 by FINSEQ_1:35;
+    now let j such that
+     A17:  1<=j & j<=len CMi;
+     A18:  i+width M1 in Seg width M by A1,A2,A15,FINSEQ_1:81;
+     A19:  len Line(M1,j)=width M1 & len (width M1|->d)=width M1
+             by MATRIX_1:def 8,FINSEQ_2:69;
+     A20:  j in dom (L1^CM2) & j in dom M by A16,A17,A2,A1,A5,FINSEQ_3:27;
+          then
+     A21:  CMi.j=Line(M,j).(i+width M1) by A18,GOBOARD1:17;
+          now per cases by A20,FINSEQ_1:38;
+            suppose
+          A22:  j in dom L1;
+               hence CMi.j = (Line(M1,j)^(width M2 |-> d)).(i+width M1)
+                                by A6,A4,A21,Th23
+                          .= (width M2 |-> d).i by A19,A15,A6,FINSEQ_1:def 7
+                          .= d by A15,FINSEQ_2:71,FINSEQ_1:4
+                          .= L1.j by A22,A6,FINSEQ_2:71,FINSEQ_1:4
+                          .= (L1^CM2).j by A22,FINSEQ_1:def 7;end;
+            suppose ex k st k in dom CM2 & j=len L1+k;
+               then consider k such that
+          A23:   k in dom CM2 & j = len L1+k;
+          A24: dom Line(M2,k)=Seg width M2 by FINSEQ_2:144;
+               thus CMi.j = ((width M1 |-> d)^Line(M2,k)).(i+width M1)
+                             by A5,A6,A4,A21,A23,Th23
+                         .= Line(M2,k).i by A24,FINSEQ_1:def 7,A19,A15
+                         .= CM2.k by A15,A6,A23,GOBOARD1:17
+                         .= (L1^CM2).j by A23,FINSEQ_1:def 7;end;
+          end;
+          hence (L1^CM2).j=CMi.j;
+    end;
+    hence thesis by A16,A2,A1,A5,FINSEQ_1:18;
+  end;
+  assume
+A25: for i holds
+         (i in Seg width M1 implies Col(M,i)=Col(M1,i)^(len M2 |-> d)) &
+         (i in Seg width M2 implies Col(M,i+width M1)=(len M1|->d)^Col(M2,i));
+  now let  i;
+     set LM=Line(M,i);
+     set LMi=Line(M,i+len M1);
+     set LM1=Line(M1,i);
+     set LM2=Line(M2,i);
+     set W1=width M1|->d;
+     set W2=width M2|->d;
+  A26: len LM=width M & len LMi=width M & len LM1=width M1 & len LM2=width M2&
+       len W1=width M1 & len W2=width M2 by FINSEQ_2:109;
+     then
+  A27:  dom LM=Seg width M & dom LM1=Seg width M1 & dom LM2=Seg width M2 &
+        dom W2=Seg width M2 & dom W1=Seg width M1 by FINSEQ_1:def 3;
+     thus i in dom M1 implies LM=LM1^W2
+       proof
+         assume
+     A28:  i in dom M1;
+     A29:  len (LM1^W2)=len LM1+len W2 by FINSEQ_1:35;
+         now let j such that
+          A30:  1<=j & j<=len LM;
+          A31: j in Seg width M & j in dom (LM1^W2)
+                 by A1,A2,A26,A27,A29,A30,FINSEQ_3:27;
+               then
+          A32: LM.j=Col(M,j).i by A3,A28, GOBOARD1:17;
+          A33: dom Col(M1,j)=Seg len M1 & dom (len M1|->d) =Seg len M1
+                 by FINSEQ_2:144;
+               now per cases by A31,FINSEQ_1:38;
+                 suppose
+               A34: j in dom LM1;
+                    hence LM.j = (Col(M1,j)^(len M2 |-> d)).i by A25,A27,A32
+                              .= Col(M1,j).i by A28,A3,A33,FINSEQ_1:def 7
+                              .= LM1.j by A28,A27,A34,GOBOARD1:17
+                              .= (LM1^W2).j by A34,FINSEQ_1:def 7;end;
+                 suppose ex n st n in dom W2 & j=len LM1+n;
+                   then consider n such that
+               A35:  n in dom W2 & j=len LM1+n;
+                   thus LM.j =((len M1|->d)^Col(M2,n)).i by A25,A27,A32,A26,A35
+                            .= (len M1|->d).i by A28,A3,A33,FINSEQ_1:def 7
+                            .= d by FINSEQ_2:71,FINSEQ_1:4,A28,A3
+                            .= W2.n by FINSEQ_2:71,FINSEQ_1:4,A27,A35
+                            .= (LM1^W2).j by FINSEQ_1:def 7,A35;end;
+               end;
+               hence LM.j=(LM1^W2).j;
+         end;
+         hence thesis by A29,A2,A1,A26,FINSEQ_1:18;
+       end;
+     thus i in dom M2 implies LMi=W1^LM2
+       proof
+         assume
+     A36:  i in dom M2;
+     A37:  len (W1^LM2)=len W1 + len LM2 by FINSEQ_1:35;
+         now let j such that
+          A38:  1<=j & j<=len LMi;
+               dom M2=Seg len M2 by FINSEQ_1:def 3;
+               then
+          A39:  i+len M1 in Seg len M by A36,A1,A2,FINSEQ_1:81;
+          A40:  j in Seg width M & j in dom (W1^LM2)
+                 by A1,A2,A26,A27,A37,A38,FINSEQ_3:27;
+               then
+          A41:  LMi.j=Col(M,j).(i+len M1) by A3,A39, GOBOARD1:17;
+          A42:  len Col(M1,j)=len M1 & dom (len M2|->d)=Seg len M2 &
+                len (len M1|->d)=len M1 by FINSEQ_2:109,144;
+               now per cases by A40,FINSEQ_1:38;
+                 suppose
+               A43: j in dom W1;
+                    hence LMi.j = (Col(M1,j)^(len M2 |-> d)).(i+len M1)
+                                    by A25,A27,A41
+                               .= (len M2 |-> d).i by A36,A42,A3,FINSEQ_1:def 7
+                               .= d by FINSEQ_2:71,FINSEQ_1:4,A36,A3
+                               .= W1.j by FINSEQ_2:71,FINSEQ_1:4,A43,A27
+                               .= (W1^LM2).j by A43,FINSEQ_1:def 7;end;
+                 suppose ex n st n in dom LM2 & j=len W1+n;
+                   then consider n such that
+               A44:  n in dom LM2 & j=len W1+n;
+               A45: dom Col(M2,n)=Seg len M2 by FINSEQ_2:144;
+                   thus LMi.j = ((len M1|->d)^Col(M2,n)).(i+len M1)
+                                   by A25,A26,A27,A41,A44
+                             .= Col(M2,n).i by A45,A42,A36,A3,FINSEQ_1:def 7
+                             .= LM2.n by A36,A27,A44, GOBOARD1:17
+                             .= (W1^LM2).j by FINSEQ_1:def 7,A44;end;
+               end;
+               hence LMi.j=(W1^LM2).j;
+         end;
+         hence thesis by A37,A2,A1,A26,FINSEQ_1:18;
+       end;
+  end;
+  hence thesis by Th23;
+end;
+
+theorem Th25:
+  Indices block_diagonal(F1,d1) is Subset of Indices block_diagonal(F1^F2,d2)
+proof
+  set B1=block_diagonal(F1,d1);
+  set B2=block_diagonal(F1^F2,d2);
+  Indices B1 c= Indices B2
+    proof
+      let x such that
+  A1:   x in Indices B1;
+      consider i,j be set such that
+  A2:   i in dom B1 & j in Seg width B1 & x=[i,j] by A1,ZFMISC_1:def 2;
+  A3: dom B1=Seg len B1 & dom B2=Seg len B2 by FINSEQ_1:def 3;
+  A4: len B2=Sum Len (F1^F2) & len B1=Sum Len F1 & width B2=Sum Width (F1^F2)
+        & width B1=Sum Width F1 by Def5;
+      (Len F1)^(Len F2)=Len (F1^F2) & (Width F1)^(Width F2)=Width (F1^F2)
+         by Th14,Th18;
+      then Sum Len F1+Sum Len F2=Sum Len (F1^F2) & Sum Width F1+Sum Width F2=
+        Sum Width (F1^F2) by RVSUM_1:105;
+      then 0+Sum Len F1 <= Sum Len (F1^F2) & 0+Sum Width F1<= Sum Width(F1^F2)
+        by XREAL_1:8;
+      then Seg Sum Len F1 c= Seg Sum Len (F1^F2) & Seg Sum Width F1 c=
+        Seg Sum Width (F1^F2) by FINSEQ_1:7;
+      hence thesis by A2,A3,A4,ZFMISC_1:106;
+    end;
+  hence thesis;
+end;
+
+theorem Th26:
+  [i,j] in Indices block_diagonal(F1,d) implies
+       block_diagonal(F1,d)*(i,j) = block_diagonal(F1^F2,d)*(i,j)
+proof
+  assume
+A1:  [i,j] in Indices block_diagonal(F1,d);
+  set B1=block_diagonal(F1,d);
+  set L1=Len F1;
+  set W1=Width F1;
+  set L2=Len F2;
+  set W2=Width F2;
+  set F12=F1^F2;
+  set L=Len F12;
+  set W=Width F12;
+  set B12=block_diagonal(F12,d);
+A2:  Indices B1 is Subset of Indices B12 by Th25;
+  i in dom B1 by A1,ZFMISC_1:106;
+  then i in Seg len B1 & len B1= Sum L1 & L1^L2=L by FINSEQ_1:def 3,Def5,Th14;
+  then
+A3:  min(L1,i)=min(L,i) & min(L1,i) in dom L1
+    by Th8,Def1;
+  then
+A4:  min(L1,i)<=len L1 & min(L1,i)-'1<=min(L1,i) by FINSEQ_3:27,BINARITH:52;
+  then min(L1,i)-'1<=len L1 & len L1=len F1 & len F1=len W1
+    by XXREAL_0:2,FINSEQ_2:109;
+  then
+A5:  (W1^W2)|min(L,i)=W1|min(L1,i) & (W1^W2)|(min(L,i)-'1)=W1|(min(L1,i)-'1) &
+     (L1^L2)|(min(L,i)-'1)=L1|(min(L1,i)-'1) by A3,A4,FINSEQ_5:25;
+A6:  W1^W2=W & L1^L2=L by Th14,Th18;
+A7:  dom L1=dom F1 by Def3;
+  per cases;
+    suppose j <= Sum(W1|(min(L1,i)-'1)) or j > Sum (W1|min(L1,i));
+      then B1*(i,j)=d & d=B12*(i,j) by A1,A2,A5,Def5,A6;
+      hence thesis;end;
+    suppose j > Sum(W1|(min(L1,i)-'1)) & j<= Sum (W1|min(L1,i));
+       then B1*(i,j)= F1.min(L1,i)*(i-'Sum(L1|(min(L1,i)-'1)),
+                                    j-'Sum (W1|(min(L1,i)-'1)))&
+            B12*(i,j)= F12.min(L1,i)*(i-'Sum(L1|(min(L1,i)-'1)),
+                                      j-'Sum (W1|(min(L1,i)-'1)))
+             by A1,A2,A3,A5,Def5,A6;
+       hence thesis by A7,A3,FINSEQ_1:def 7;end;
+end;
+
+theorem Th27:
+  [i,j] in Indices block_diagonal(F2,d1) iff
+     i>0 & j>0 & [i+Sum Len F1,j+Sum Width F1] in
+     Indices block_diagonal(F1^F2,d2)
+proof
+  set B2=block_diagonal(F2,d1);
+  set B12=block_diagonal(F1^F2,d2);
+A1:  dom B2=Seg len B2 & dom B12=Seg len B12  by FINSEQ_1:def 3;
+A2:  len B12=Sum Len (F1^F2) & len B2=Sum Len F2 & width B12=Sum Width (F1^F2)
+       & width B2=Sum Width F2 by Def5;
+  (Len F1)^Len F2=Len (F1^F2) & (Width F1)^Width F2=Width (F1^F2) by Th14,Th18;
+  then
+A3:  Sum Len F1+Sum Len F2=Sum Len (F1^F2) & Sum Width F1+Sum Width F2=
+     Sum Width (F1^F2) by RVSUM_1:105;
+  hereby assume [i,j] in Indices B2;
+      then i in Seg len B2 & j in Seg width B2 by A1,ZFMISC_1:106;
+      then i>0 & j>0 & i +Sum Len F1 in Seg len B12 & j+Sum Width F1 in
+        Seg width B12 by A2,A3,FINSEQ_1:3,81;
+      hence i>0 & j>0 & [i+Sum Len F1,j+Sum Width F1] in Indices B12
+        by A1,ZFMISC_1:106;
+  end;
+  assume that
+A4:  i>0 & j>0 and
+A5:  [i+Sum Len F1,j+Sum Width F1] in Indices B12;
+  i +Sum Len F1 in Seg len B12 & j +Sum Width F1 in Seg width B12
+    by A1,A5,ZFMISC_1:106;
+  then i in Seg len B2 & j in Seg width B2 & dom B2=Seg len B2
+    by A2,A3,A4,FINSEQ_1:82,def 3;
+  hence thesis by ZFMISC_1:106;
+end;
+
+theorem Th28:
+  [i,j] in Indices block_diagonal(F2,d) implies
+       block_diagonal(F2,d)*(i,j) =
+       block_diagonal(F1^F2,d)*(i+Sum Len F1,j+Sum Width F1)
+proof
+  set L1=Len F1;
+  set W1=Width F1;
+  set L2=Len F2;
+  set W2=Width F2;
+  set F12=F1^F2;
+  set L=Len F12;
+  set W=Width F12;
+  set B2=block_diagonal(F2,d);
+  set B12=block_diagonal(F12,d);
+A1:  W1^W2=W & L1^L2=L by Th14,Th18;
+  then
+A2: Sum L=Sum L1+Sum L2 by RVSUM_1:105;
+A3:  dom B12=Seg len B12 & len B12=Sum L & len W1=len F1 & len F1=len L1&
+     len B2=Sum L2 & len L2=len F2 by Def5,FINSEQ_2:109,FINSEQ_1:def 3;
+  assume
+A4: [i,j] in Indices B2;
+  then
+A5: i>0 & [i+Sum L1,j+Sum W1] in Indices B12 & i in dom B2
+    by Th27,ZFMISC_1:106;
+  then
+A6:  i+Sum L1 in dom B12 & i in Seg len B2 & i+Sum L1>0+Sum L1
+    by ZFMISC_1:106,XREAL_1:8,FINSEQ_1:def 3;
+  then not i+Sum L1 in Seg Sum L1 & min(L2,i) in dom L2
+    by A3,Def1,FINSEQ_1:3;
+  then
+A7:  i+Sum L1 in Seg(Sum L1+Sum L2)\Seg Sum L1 & min(L2,i)>=1 &
+     min(L2,i)<=len L2 by A2,A3,A6,XBOOLE_0:def 4,FINSEQ_3:27;
+  then
+A8:  min(L,i+Sum L1)=min(L2,(i+Sum L1)-'Sum L1)+len L1 &
+     (i+Sum L1)-'Sum L1=i+Sum L1-Sum L1 & min(L2,i)+len L1-'1=
+     (min(L2,i)-'1)+len L1 by A1,Th9,BINARITH:56;
+  then W1^(W2|(min(L2,i)))=W|min(L,i+Sum L1) &
+       W1^(W2|(min(L2,i)-'1))=W|(min(L,i+Sum L1)-'1)&
+       L1^(L2|(min(L2,i)-'1))=L|(min(L,i+Sum L1)-'1) by A3,FINSEQ_6:16,A1;
+  then
+A9:  Sum W1+Sum (W2|(min(L2,i))) = Sum (W|min(L,i+Sum L1)) &
+     Sum W1+Sum (W2|(min(L2,i)-'1))=Sum (W|(min(L,i+Sum L1)-'1)) &
+     Sum L1+Sum (L2|(min(L2,i)-'1))=Sum (L|(min(L,i+Sum L1)-'1))by RVSUM_1:105;
+  i in NAT & j in NAT by ORDINAL1:def 13;
+  then
+A10: (i+Sum L1)-'(Sum L1+Sum (L2|(min(L2,i)-'1)))=i-'Sum (L2|(min(L2,i)-'1)) &
+     (j+Sum W1)-'(Sum W1+Sum (W2|(min(L2,i)-'1)))=j-'Sum (W2|(min(L2,i)-'1))
+     by PRGCOR_1:1;
+  per cases;
+    suppose
+  A11:  j <= Sum(W2|(min(L2,i)-'1)) or j > Sum (W2|min(L2,i));
+       then j+Sum W1<= Sum (W|(min(L,i+Sum L1)-'1)) or
+            j+Sum W1 > Sum (W|min(L,i+Sum L1)) by A9,XREAL_1:9,10;
+       then B12*(i+Sum L1,j+Sum W1)=d & B2*(i,j)=d by A4,A5,A11,Def5;
+       hence thesis;end;
+    suppose
+  A12:  j > Sum(W2|(min(L2,i)-'1)) & j <= Sum (W2|min(L2,i));
+       then j+Sum W1> Sum (W|(min(L,i+Sum L1)-'1)) &
+            j+Sum W1 <= Sum (W|min(L,i+Sum L1)) by A9,XREAL_1:9,10;
+       then B12*(i+Sum L1,j+Sum W1)=F12.min(L,i+Sum L1)*
+                                        (i-'Sum (L2|(min(L2,i)-'1)),
+                                         j-'Sum (W2|(min(L2,i)-'1)))&
+            B2*(i,j)=F2.min(L2,i)*(i-'Sum(L2|(min(L2,i)-'1)),
+                                   j-'Sum (W2|(min(L2,i)-'1)))
+         by A4,A5,A9,A12,A10,Def5;
+       hence thesis by A8,A3,A7,FINSEQ_1:86;end;
+end;
+
+theorem Th29:
+  [i,j] in Indices block_diagonal(F1^F2,d) &
+   (i <= Sum Len F1 & j > Sum Width F1 or i > Sum Len F1 & j <= Sum Width F1)
+  implies block_diagonal(F1^F2,d)*(i,j) = d
+proof
+  set L1=Len F1;
+  set W1=Width F1;
+  set L2=Len F2;
+  set W2=Width F2;
+  set F12=F1^F2;
+  set L=Len F12;
+  set W=Width F12;
+  set B2=block_diagonal(F2,d);
+  set B12=block_diagonal(F12,d);
+A1:  W1^W2=W & L1^L2=L by Th14,Th18;
+  then
+A2:  Sum L=Sum L1+Sum L2 by RVSUM_1:105;
+A3:  dom B12=Seg len B12 & len B12=Sum L & len W1=len F1 & len F1=len L1
+    by Def5,FINSEQ_1:def 3,FINSEQ_2:109;
+  assume that
+A4: [i,j] in Indices block_diagonal(F1^F2,d) and
+A5: i <= Sum Len F1 & j > Sum Width F1 or i > Sum Len F1 & j <= Sum Width F1;
+  i in dom  B12 by A4,ZFMISC_1:106;
+  then
+A6:  1<=i by FINSEQ_3:27;
+  per cases by A5;
+    suppose
+  A7:  i <= Sum Len F1 & j > Sum Width F1;
+      then i in Seg Sum L1 by A6,FINSEQ_1:3;
+      then
+  A8:   min(L,i)=min(L1,i) & min(L1,i) in dom L1 by A1,Th8,Def1;
+      then min(L1,i)<=len L1 by FINSEQ_3:27;
+      then
+W|(len L1)=W1 & Sum (W|min(L1,i))<=
+        Sum(W|(len L1)) by A1,A3,FINSEQ_5:26,POLYNOM3:18;
+      then Sum(W|min(L,i))<j by A8,A7,XXREAL_0:2;
+      hence thesis by A4,Def5;end;
+    suppose
+  A9:  i > Sum L1 & j <= Sum W1;
+      then
+  A10: not i in Seg Sum L1 & i in Seg Sum L by A4,ZFMISC_1:106,A3,FINSEQ_1:3;
+      then i in Seg (Sum L1+Sum L2)\Seg Sum L1 by A2,XBOOLE_0:def 4;
+      then
+  A11: min(L,i)=(min(L2,i-'Sum L1))+len L1 & i-'Sum L1=i-Sum L1 by A1,Th9;
+      then
+  A12: i=(i-'Sum L1)+Sum L1 & i-'Sum L1<>0 by A9;
+      then i-'Sum L1 >0;
+      then i-'Sum L1 in Seg Sum L2 by A2,A10,A12,FINSEQ_1:82;
+      then min(L2,i-'Sum L1) in dom L2 by Def1;
+      then min(L2,i-'Sum L1) >=1 by FINSEQ_3:27;
+      then min(L,i)-'1=(min(L2,i-'Sum L1)-'1)+len L1 by A11,BINARITH:56;
+      then min(L,i)-'1>=len L1+0 by XREAL_1:9;
+      then Sum(W|(min(L,i)-'1))>=Sum ((W1^W2)|len W1) & (W1^W2)|len W1=W1
+        by A1,A3,POLYNOM3:18,FINSEQ_5:26;
+      then Sum(W|(min(L,i)-'1))>=j by A9,XXREAL_0:2;
+      hence thesis by A4,Def5;end;
+end;
+
+theorem Th30:
+  for i,j,k st i in dom F & [j,k] in Indices F.i holds
+      [j+Sum ((Len F)|(i-'1)),
+       k+Sum((Width F)|(i-'1))] in Indices block_diagonal(F,d) &
+   (F.i)*(j,k) = block_diagonal(F,d)*(j+Sum ((Len F)|(i-'1)),
+                                      k+Sum((Width F)|(i-'1)))
+proof
+  let i,j,k such that
+A1:  i in dom F and
+A2:  [j,k] in Indices F.i;
+A3:  i<=len F by A1,FINSEQ_3:27;
+  set Fi=F.i;
+  set L=Len F;
+  set W=Width F;
+  set B=block_diagonal(F,d);
+A4:  len B=Sum L & width B=Sum W by Def5;
+A5:  len F=len L & len F=len W by FINSEQ_2:109;
+A6:  dom F=dom L & dom F=dom W by Def3,Def4;
+  set jS=j+Sum(L|(i-'1));
+  set kS=k+Sum(W|(i-'1));
+A7:  j in dom Fi & k in Seg width Fi by A2,ZFMISC_1:106;
+  then j in Seg len Fi & L.i=L/.i & L.i=len Fi & W.i=W/.i & W.i=width Fi
+    by A1,A6,FINSEQ_1:def 3,PARTFUN1:def 8,Def3,Def4;
+  then
+A8:  jS in Seg Sum (L|i) & min(L,jS)=i & kS in Seg Sum (W|i)
+      by A6,A1,A7,Th10;
+  i in NAT by ORDINAL1:def 13;
+  then Sum (L|i)<=Sum(L|(len F)) & Sum(W|i)<=Sum (W|(len F)) & L|(len F)=L &
+    W|(len F)=W by A5,A3,POLYNOM3:18,FINSEQ_1:79;
+  then Seg Sum (L|i) c= Seg Sum L & Seg Sum (W|i) c= Seg Sum W by FINSEQ_1:7;
+  then [jS,kS] in [:Seg len B,Seg width B:] by A8,A4,ZFMISC_1:106;
+  hence
+A9:  [jS,kS] in Indices B by FINSEQ_1:def 3;
+  0<k by A7,FINSEQ_1:3;
+  then
+A10:  Sum(W|(i-'1))+0<kS & Sum(L|(i-'1))+0<=jS & kS <= Sum(W|i)
+      by A8,XREAL_1:8,FINSEQ_1:3;
+  then jS-'Sum(L|(i-'1))=jS-Sum(L|(i-'1)) & kS-'Sum(W|(i-'1))=kS- Sum(W|(i-'1))
+    by BINARITH:50;
+  hence B*(jS,kS)=Fi*(j,k) by A8,A9,A10,Def5;
+end;
+
+theorem Th31:
+  i in dom F implies
+   F.i = Segm(block_diagonal(F,d),(Seg Sum((Len F)|i))\Seg Sum((Len F)|(i-'1)),
+                (Seg Sum((Width F)|i))\Seg Sum((Width F)|(i-'1)))
+proof
+  assume
+A1:  i in dom F;
+  set Fi=F.i;
+  set L=Len F;
+  set W=Width F;
+  set SL1=Sum(L|(i-'1));
+  set SW1=Sum(W|(i-'1));
+  set SL=Sum(L|i);
+  set SW=Sum(W|i);
+  set B=block_diagonal(F,d);
+A2:  dom F=dom L & dom F=dom W by Def3,Def4;
+A3:  SL1+L.i=SL & SW1+W.i=SW by A1,A2,Lm2;
+A4:  width Fi=W.i & len Fi=L.i by A1,A2,Def3,Def4;
+  i-'1 <=i & i in NAT by BINARITH:52,ORDINAL1:def 13;
+  then SL1 <= SL & SW1 <=SW by POLYNOM3:18;
+  then
+A5:  Seg SL1 c= Seg SL & Seg SW1 c= Seg SW by FINSEQ_1:7;
+  then
+A6:  card (Seg SL\Seg SL1) = card Seg SL-card Seg SL1 by CARD_2:63
+                          .= SL-card Seg SL1 by FINSEQ_1:78
+                          .= SL1+(L.i)-SL1 by A3,FINSEQ_1:78
+                          .= len Fi by A1,A2,Def3;
+A7:  card (Seg SW\Seg SW1) = card Seg SW-card Seg SW1 by A5,CARD_2:63
+                          .= SW-card Seg SW1 by FINSEQ_1:78
+                          .= SW1+(W.i)-SW1 by A3,FINSEQ_1:78
+                          .= width Fi by A1,A2,Def4;
+  reconsider FI=Fi as Matrix of len Fi,width Fi,D by MATRIX_2:7;
+  now let j,k such that
+   A8: [j,k] in Indices FI;
+   A9: Indices FI = Indices Segm(B,Seg SL\Seg SL1,Seg SW\Seg SW1)
+         by A6,A7,MATRIX_1:27;
+      j in dom FI & k in Seg (W.i) & dom FI=Seg (L.i)
+        by A4,A8,ZFMISC_1:106,FINSEQ_1:def 3;
+      then Sgm(Seg SL\Seg SL1).j=j+SL1 & Sgm(Seg SW\Seg SW1).k=k+SW1
+        by A3,MATRIX15:8;
+      hence Segm(B,Seg SL\Seg SL1,Seg SW\Seg SW1)*(j,k)
+                        = B*(j+SL1,k+SW1) by A8,A9,MATRIX13:def 1
+                       .= Fi*(j,k) by A1,A8,Th30;
+  end;
+  hence thesis by A6,A7,MATRIX_1:28;
+end;
+
+theorem Th32:
+  M = Segm(block_diagonal(<*M*>^F,d),Seg len M,Seg width M)
+proof
+  set MF=<*M*>^F;
+  set L=Len MF;
+  set W=Width MF;
+A1:  1-'1=0 by BINARITH:51;
+A2:  Seg Sum (L|0)={} & Seg Sum (W|0)={} by FINSEQ_1:4,RVSUM_1:102;
+  L=Len<*M*>^Len F & Len<*M*>=<*len M*> & len <*len M*>=1 &
+    W=Width <*M*>^Width F & Width <*M*>=<*width M*> & len <*width M*>=1
+    by Th14,Th18,Th15,Th19,FINSEQ_1:56;
+  then L|1=<*len M*> & W|1=<*width M*> by FINSEQ_5:26;
+  then
+A3:  Sum (L|1)=len M & Sum(W|1)=width M by RVSUM_1:103;
+  1 in Seg 1;
+  then 1 in dom <*M*> & dom <*M*> c= dom MF by FINSEQ_1:55,FINSEQ_1:39;
+  then 1 in dom MF & MF.1=M by FINSEQ_1:58;
+  hence M = Segm(block_diagonal(MF,d),(Seg Sum (L|1))\{},
+                                      (Seg Sum (W|1))\{}) by A1,Th31,A2
+         .= Segm(block_diagonal(MF,d),Seg len M,Seg width M) by A3;
+end;
+
+theorem Th33:
+  M = Segm(block_diagonal(F^<*M*>,d),Seg (len M+Sum Len F)\Seg Sum Len F,
+                                    Seg (width M+Sum Width F)\Seg Sum Width F)
+proof
+  set FM=F^<*M*>;
+  set L=Len FM;
+  set W=Width FM;
+  set 1F=1+len F;
+A1:  1F-'1=1F-1 by BINARITH:55;
+  L = Len F ^ Len <*M*> & W=Width F^Width<*M*> & len Len F=len F &
+    len Width F=len F & Len <*M*>=<*len M*> & Width <*M*>=<*width M*>
+      by Th14,Th15,Th18,Th19,FINSEQ_2:109;
+  then
+A2:  L|(len F)=Len F & W|(len F)=Width F & Sum L=Sum Len F+len M &
+     Sum W=Sum Width F+width M by FINSEQ_5:26,RVSUM_1:104;
+  1F in Seg (len F+1) & len FM=1F & len W=len FM & len L=len FM
+    by FINSEQ_1:6,FINSEQ_2:19,FINSEQ_2:109;
+  then 1F in dom FM &FM.1F=M & W|1F=W & L|1F=L by FINSEQ_1:def 3,59,79;
+  hence thesis by A1,A2,Th31;
+end;
+
+theorem Th34:
+  block_diagonal(<*M*>,d) = M
+proof
+  reconsider E=<*>(D**) as Matrix-yielding FinSequence of (D**) by Th12;
+  set ME=<*M*>^E;
+  set B=block_diagonal(<*M*>,d);
+A1:  len B = Sum Len <*M*> by Def5
+          .= len M by Lm4;
+A2:  width B = Sum Width <*M*> by Def5
+            .= width M by Lm5;
+  ME = <*M*> by FINSEQ_1:47;
+  hence M = Segm(B,Seg len M,Seg width M) by Th32
+         .= B by A1,A2,MATRIX13:46;
+end;
+
+theorem Th35:
+  block_diagonal(F1^F2,d) = block_diagonal(<*block_diagonal(F1,d)*>^F2,d)
+proof
+  set F12=F1^F2;
+  set D1=block_diagonal(F1,d);
+  set D2=block_diagonal(F2,d);
+  set D12=block_diagonal(F12,d);
+  set DF=<*D1*>^F2;
+  set DF2=block_diagonal(DF,d);
+  set LF1=Len F1;
+  set WF1=Width F1;
+  set LF2=Len F2;
+  set WF2=Width F2;
+  set LF=Len F12;
+  set WF=Width F12;
+A1:  len D12= Sum LF & width D12 = Sum WF by Def5;
+  LF = LF1^LF2 & WF=WF1^WF2 by Th14,Th18;
+  then
+A2:  len D12=Sum LF1+Sum LF2 & width D12=Sum WF1+Sum WF2 by A1,RVSUM_1:105;
+A3:  len DF2=Sum Len DF & len D1=Sum LF1 & width DF2=Sum Width DF &
+     width D1=Sum WF1 by Def5;
+  Len DF=(Len <*D1*>)^LF2 & Width DF=( Width<*D1*>)^WF2 & Len <*D1*>=<*len D1*>
+    & Width <*D1*>=<*width D1*> by Th14,Th15,Th18,Th19;
+  then
+A4:  len DF2=len D1+Sum LF2 & width DF2=width D1+Sum WF2 & Sum Len<*D1*>=len D1
+     & Sum Width <*D1*> =width D1 by A3,RVSUM_1:106,103;
+A5:  Sum LF1=len D1 & Sum WF1=width D1 by Def5;
+A6:  Indices D12 = [:Seg len D12,Seg width D12:] by FINSEQ_1:def 3
+                .= Indices DF2 by A2,A3,A4,FINSEQ_1:def 3;
+A7:  block_diagonal(<*D1*>,d)=D1 by Th34;
+  now let i,j such that
+    A8:  [i,j] in Indices D12;
+    A9:  i in dom D12 & j in Seg width D12 & dom D12=Seg len D12
+          by A8,ZFMISC_1:106,FINSEQ_1:def 3;
+        then
+    A10: 1<=i & 1<=j by FINSEQ_1:3;
+        now per cases;
+          suppose i <= Sum LF1 & j<=Sum WF1;
+             then i in dom D1 & j in Seg width D1 by A5,A9,A10,FINSEQ_3:27;
+             then
+        A11:   [i,j] in Indices D1  by ZFMISC_1:106;
+             hence D12*(i,j) = D1*(i,j) by Th26
+                            .= DF2*(i,j) by Th26,A11,A7;end;
+          suppose
+        A12:  i> Sum LF1 & j <=Sum WF1 or i<= Sum LF1 & j >Sum WF1;
+             hence D12*(i,j) = d  by Th29,A8
+                            .= DF2*(i,j) by A12,A3,A4,Th29,A6,A8;end;
+          suppose
+        A13:  i > Sum LF1 & j>Sum WF1;
+             then reconsider ii=i-Sum LF1,jj=j-Sum WF1 as Element of NAT
+               by NAT_1:21;
+        A14:  i=ii+Sum LF1 & j=jj+Sum WF1;
+             ii<>0 & jj<>0 by A13;
+             then ii >0 & jj>0;
+             then
+        A15:   [ii,jj] in Indices D2 by A8,Th27,A14;
+             hence D12*(i,j) = D2*(ii,jj) by A14,Th28
+                            .= DF2*(i,j) by A3,A4,A14,A15,Th28;end;
+        end;
+        hence D12*(i,j)=DF2*(i,j);
+  end;
+  hence thesis by A2,A3,A4,MATRIX_1:21;
+end;
+
+theorem Th36:
+  block_diagonal(F1^F2,d) = block_diagonal(F1^<*block_diagonal(F2,d)*>,d)
+proof
+  set F12=F1^F2;
+  set D1=block_diagonal(F1,d);
+  set D2=block_diagonal(F2,d);
+  set D12=block_diagonal(F12,d);
+  set FD=F1^<*D2*>;
+  set FD2=block_diagonal(FD,d);
+  set LF1=Len F1;
+  set WF1=Width F1;
+  set LF2=Len F2;
+  set WF2=Width F2;
+  set LF=Len F12;
+  set WF=Width F12;
+A1:  len D12= Sum LF & width D12 = Sum WF by Def5;
+  LF = LF1^LF2 & WF = WF1^WF2 by Th14,Th18;
+  then
+A2:  len D12=Sum LF1+Sum LF2 & width D12=Sum WF1+Sum WF2
+    by A1,RVSUM_1:105;
+A3: len FD2=Sum Len FD & len D2=Sum LF2 & width FD2=Sum Width FD &
+      width D2=Sum WF2 by Def5;
+  Len FD=LF1^Len <*D2*> & Width FD=WF1^Width<*D2*> by Th14,Th18;
+  then
+A4: len FD2=Sum Len <*D2*>+Sum LF1 & width FD2=Sum Width <*D2*> +Sum WF1 &
+      Sum Len <*D2*> =len D2 & Sum Width <*D2*>=width D2
+    by A3,RVSUM_1:105,Lm4,Lm5;
+A5:  Sum LF1=len D1 & Sum WF1=width D1 by Def5;
+A6:  Indices D12 = [:Seg len D12,Seg width D12:] by FINSEQ_1:def 3
+                .= Indices FD2 by A2,A3,A4,FINSEQ_1:def 3;
+A7:  block_diagonal(<*D2*>,d)=D2 by Th34;
+  now let i,j such that
+   A8:  [i,j] in Indices D12;
+   A9:  i in dom D12 & j in Seg width D12 & dom D12=Seg len D12
+          by A8,ZFMISC_1:106,FINSEQ_1:def 3;
+        then
+   A10:   1<=i & 1<=j by FINSEQ_1:3;
+        now per cases;
+          suppose i <= Sum LF1 & j<=Sum WF1;
+            then i in dom D1 & j in Seg width D1
+                by A5,A9,A10,FINSEQ_3:27;
+            then
+         A11:  [i,j] in Indices D1  by ZFMISC_1:106;
+            hence D12*(i,j) = D1*(i,j) by Th26
+                           .= FD2*(i,j) by Th26,A11;end;
+          suppose
+         A12:  i> Sum LF1 & j <=Sum WF1 or i<= Sum LF1 & j >Sum WF1;
+            hence D12*(i,j) = d  by Th29,A8
+                           .= FD2*(i,j) by A12,Th29,A6,A8;end;
+          suppose
+         A13:  i > Sum LF1 & j>Sum WF1;
+            then reconsider ii=i-Sum LF1,jj=j-Sum WF1 as Element of NAT
+              by NAT_1:21;
+         A14:  i=ii+Sum LF1 & j=jj+Sum WF1;
+            ii<>0 & jj<>0 by A13;
+            then ii >0 & jj>0;
+            then
+         A15:  [ii,jj] in Indices D2 by A8,Th27,A14;
+            hence D12*(i,j) = D2*(ii,jj) by A14,Th28
+                           .= FD2*(i,j) by A14,A15,A7,Th28;end;
+        end;
+        hence D12*(i,j)=FD2*(i,j);
+  end;
+  hence thesis by A2,A3,A4,MATRIX_1:21;
+end;
+
+theorem
+  i in Seg Sum Len F & m = min(Len F,i) implies
+     Line(block_diagonal(F,d),i) =
+           (Sum (Width F|(m-'1))|->d)^
+           Line(F.m,i-'Sum (Len F|(m-'1)))^
+           ((Sum Width F-'Sum (Width F|m))|->d)
+proof
+  assume
+A1:  i in Seg Sum Len F & m = min(Len F,i);
+  set L=Len F;
+A2:  1<=i & i <= Sum(L|m) & Sum(L|(m-'1))<i by A1,Def1,FINSEQ_1:3,Th7;
+  then
+A3:  i-Sum(L|(m-'1))=i-'Sum(L|(m-'1)) & i-Sum(L|(m-'1))<>0 by BINARITH:50;
+  then
+A4:  i-'Sum(L|(m-'1))>=1 by NAT_1:14;
+A5:  m in dom L & dom L=dom F by A1,Def1,Def3;
+  then 1 <= m & m <= len F & m <= len L by FINSEQ_3:27;
+  then
+A6:  m-'1=m-1 & len (F|m)=m & len (L|m)=m by BINARITH:50,FINSEQ_1:80;
+  then
+A7:  m=m-'1+1;
+  then
+A8: F|m=((F|m)|(m-'1))^<*(F|m).m*> & (F|m).m =F.m & F=(F|m)^(F/^m) &
+      L|m=((L|m)|(m-'1))^<*(L|m).m*> & (L|m).m =L.m
+      by A6,FINSEQ_3:61,121,RFINSEQ:21;
+  m-'1<=m by A7,NAT_1:11;
+  then Seg (m-'1) c= Seg m by FINSEQ_1:7;
+  then
+A9:  (F|m)|(m-'1)=F|(m-'1) & (L|m)|(m-'1)=L|(m-'1) by RELAT_1:103;
+  set BFm=block_diagonal(F|m,d);
+  set BFm1=block_diagonal(F|(m-'1),d);
+  Sum (L|m) = Sum (L|(m-'1))+L.m by A8,A9,RVSUM_1:104
+           .= Sum (L|(m-'1))+len (F.m) by A5,Def3;
+  then len (F.m)+Sum (L|(m-'1))>=i-'Sum(L|(m-'1))+Sum (L|(m-'1))
+    by A3,A1,Def1;
+  then len (F.m)>=i-'Sum(L|(m-'1)) by XREAL_1:8;
+  then
+A10:  i-'Sum(L|(m-'1)) in dom (F.m) by A4,FINSEQ_3:27;
+A11:  len BFm1 = Sum Len (F|(m-'1)) by Def5
+              .= Sum (L|(m-'1)) by Th17;
+A12:  width BFm1 = Sum Width (F|(m-'1)) by Def5
+                .= Sum ((Width F)|(m-'1)) by Th21;
+   BFm=block_diagonal(<*BFm1,F.m*>,d) by A9,A8,Th35;
+   then (Sum ((Width F)|(m-'1))|->d)^Line(F.m,i-'Sum(L|(m-'1)))
+      = Line(BFm,Sum (L|(m-'1))+(i-'Sum(L|(m-'1)))) by A10,A11,A12,Th23
+     .= Line(BFm,i) by A3;
+   then
+A13:  Line(BFm,i)=(Sum (Width F|(m-'1))|->d)^
+           Line(F.m,i-'Sum (L|(m-'1))) by Th21;
+  set BF'm=block_diagonal(F/^m,d);
+A14: block_diagonal(F,d) = block_diagonal((F|m)^<*BF'm*>,d) by A8,Th36
+                        .= block_diagonal(<*BFm,BF'm*>,d) by Th35;
+  Sum Width F = width block_diagonal(<*BFm,BF'm*>,d) by A14,Def5
+             .= Sum Width <*BFm,BF'm*> by Def5
+             .= width BFm + width BF'm by Th20
+             .= Sum (Width F|m)+width BF'm by Def5;
+  then
+A15:  Sum Width F-'Sum (Width F|m)
+        = (Sum (Width F|m)+width BF'm)-Sum (Width F|m) by BINARITH:50,NAT_1:11
+       .= width BF'm;
+  len BFm = Sum Len (F|m) by Def5
+         .= Sum (L|m) by Th17;
+  then i in dom BFm by A2,FINSEQ_3:27;
+  then Line(block_diagonal(F,d),i) = Line(BFm,i)^(width BF'm|->d) by A14,Th23;
+  hence thesis by A15,A13,Th17;
+end;
+
+theorem
+  i in Seg Sum Width F & m = min(Width F,i) implies
+    Col(block_diagonal(F,d),i) =
+           (Sum (Len F|(m-'1))|->d)^
+           Col(F.m,i-'Sum (Width F|(m-'1)))^
+           ((Sum Len F-'Sum (Len F|m))|->d)
+proof
+  assume
+A1:  i in Seg Sum Width F & m = min(Width F,i);
+  set L=Len F;
+  set W=Width F;
+A2:  1<=i & i <= Sum(W|m) & Sum(W|(m-'1))<i by A1,Def1,FINSEQ_1:3,Th7;
+  then
+A3:  i-Sum(W|(m-'1))=i-'Sum(W|(m-'1)) & i-Sum(W|(m-'1))<>0 by BINARITH:50;
+  then
+A4:  i-'Sum(W|(m-'1))>=1 by NAT_1:14;
+A5:  m in dom W & dom W=dom F by A1,Def1,Def4;
+  then 1 <= m & m <= len W & m <= len F by FINSEQ_3:27;
+  then
+A6:  m-'1=m-1 & len (W|m)=m & len (F|m)=m by BINARITH:50,FINSEQ_1:80;
+  then
+A7:  m=m-'1+1;
+  then
+A8:  F|m=((F|m)|(m-'1))^<*(F|m).m*> & (F|m).m =F.m & F=(F|m)^(F/^m) &
+     W|m=((W|m)|(m-'1))^<*(W|m).m*> & (W|m).m =W.m
+     by A6,FINSEQ_3:61,121,RFINSEQ:21;
+  m -' 1<=m by A7,NAT_1:11;
+  then Seg (m-'1) c= Seg m by FINSEQ_1:7;
+  then
+A9:  (F|m)|(m-'1)=F|(m-'1) & (W|m)|(m-'1)=W|(m-'1) by RELAT_1:103;
+  set BFm=block_diagonal(F|m,d);
+  set BFm1=block_diagonal(F|(m-'1),d);
+  Sum (W|m) = Sum (W|(m-'1))+W.m by A8,A9,RVSUM_1:104
+           .= Sum (W|(m-'1))+width (F.m) by A5,Def4;
+  then width (F.m)+Sum (W|(m-'1))>=i-'Sum(W|(m-'1))+Sum (W|(m-'1))
+    by A3,A1,Def1;
+  then width (F.m)>=i-'Sum(W|(m-'1)) by XREAL_1:8;
+  then
+A10:  i-'Sum(W|(m-'1)) in Seg width (F.m) by A4;
+A11:  len BFm1 = Sum Len (F|(m-'1)) by Def5
+              .= Sum (L|(m-'1)) by Th17;
+A12:width BFm1 = Sum Width (F|(m-'1)) by Def5
+              .= Sum (W|(m-'1)) by Th21;
+  BFm=block_diagonal(<*BFm1,F.m*>,d) by A9,A8,Th35;
+  then (Sum (L|(m-'1))|->d)^Col(F.m,i-'Sum(W|(m-'1)))
+       = Col(BFm,Sum (W|(m-'1))+(i-'Sum(W|(m-'1)))) by A10,A11,A12,Th24
+      .= Col(BFm,i) by A3;
+  then
+A13:  Col(BFm,i) = (Sum (Len F|(m-'1))|->d)^Col(F.m,i-'Sum (W|(m-'1)))by Th17;
+  set BF'm=block_diagonal(F/^m,d);
+A14:  block_diagonal(F,d) = block_diagonal((F|m)^<*BF'm*>,d) by A8,Th36
+                         .= block_diagonal(<*BFm,BF'm*>,d) by Th35;
+  Sum L = len block_diagonal(<*BFm,BF'm*>,d) by A14,Def5
+       .= Sum Len <*BFm,BF'm*> by Def5
+       .= len BFm + len BF'm by Th16
+       .= Sum (Len F|m)+len BF'm by Def5;
+  then
+A15:  Sum Len F-'Sum (Len F|m) = (Sum (Len F|m)+len BF'm)-Sum (Len F|m)
+                                    by BINARITH:50,NAT_1:11
+                              .= len BF'm;
+  width BFm = Sum Width (F|m) by Def5
+           .= Sum (W|m) by Th21;
+  then i in Seg width BFm by A2,FINSEQ_1:3;
+  then Col(block_diagonal(F,d),i) = Col(BFm,i)^(len BF'm|->d) by A14,Th24;
+  hence thesis by A15,A13,Th21;
+end;
+
+theorem
+  for M1,M2,N1,N2 be Matrix of D st
+      len M1=len N1 & width M1=width N1 &
+      len M2=len N2 & width M2=width N2 &
+      block_diagonal(<*M1,M2*>,d1) = block_diagonal(<*N1,N2*>,d2)
+   holds
+ M1 = N1 & M2= N2
+proof
+  let M1,M2,N1,N2 be Matrix of D such that
+A1:   len M1=len N1 & width M1=width N1 and
+A2:   len M2=len N2 & width M2=width N2 and
+A3:   block_diagonal(<*M1,M2*>,d1) = block_diagonal(<*N1,N2*>,d2);
+  set F1=<*M1*>;
+  set F2=<*M2*>;
+  set G1=<*N1*>;
+  set G2=<*N2*>;
+  thus M1 = Segm(block_diagonal(F1^F2,d1),Seg len M1,Seg width M1) by Th32
+         .= Segm(block_diagonal(G1^G2,d2),Seg len N1,Seg width N1) by A1,A3
+         .= N1 by Th32;
+A4: Sum Len F1 = Sum <*len M1*> by Th15
+              .= Sum Len G1 by A1,Th15;
+A5: Sum Width F1 = Sum <*width M1*> by Th19
+                .= Sum Width G1 by A1,Th19;
+  thus M2 = Segm(block_diagonal(F1^F2,d1),
+              Seg (len M2+Sum Len F1)\Seg Sum Len F1,
+              Seg (width M2+Sum Width F1)\Seg Sum Width F1) by Th33
+         .= N2 by Th33,A2,A3,A4,A5;
+end;
+
+theorem Th40:
+  M={} implies
+      block_diagonal(F^<*M*>,d) = block_diagonal(F,d) &
+      block_diagonal(<*M*>^F,d) = block_diagonal(F,d)
+proof
+  assume
+A1:  M={};
+  set MM=<*M*>;
+  set bf=block_diagonal(F,d);
+  set BF=<*bf*>;
+  set bFM=block_diagonal(BF^MM,d);
+  set bMF=block_diagonal(MM^BF,d);
+  set BFM=block_diagonal(F^MM,d);
+  set BMF=block_diagonal(MM^F,d);
+A2:  len M=0 by A1,CARD_2:19;
+A3:  width M=0 by MATRIX_1:def 4,A1,CARD_2:19;
+A4:  len bFM=Sum Len(BF^MM) & len bMF=Sum Len(MM^BF) &
+     width bFM=Sum Width(BF^MM) & width bMF=Sum Width(MM^BF) by Def5;
+  Len(BF^MM)=Len BF^Len MM&Len(MM^BF) = Len MM^Len BF
+    & Sum Len MM=len M & Width(BF^MM)=Width BF^Width MM & Width (MM^BF)=
+    Width MM^Width BF & Sum Width MM=width M & Sum Len BF=len bf &
+    Sum Width BF=width bf by Th14,Th18,Lm4,Lm5;
+  then
+A5:  len bFM=len bf + len M & len bMF=len M+len bf & width bFM=width bf+width M
+   & width bMF=width M+width bf by A4,RVSUM_1:105;
+A6:  Sum Len MM=0 & Sum Width MM=0 by A2,A3,Lm4,Lm5;
+  thus BFM = bFM by Th35
+          .= Segm(bFM,Seg len bFM,Seg width bFM) by MATRIX13:46
+          .= bf by Th32,A5,A2,A3;
+  thus BMF = bMF by Th36
+          .= Segm(bMF,Seg len bMF,Seg width bMF) by MATRIX13:46
+          .= Segm(bMF,Seg(len bf+Sum Len MM)\Seg Sum Len MM,
+                      Seg (width bf+Sum Width MM)\Seg Sum Width MM)
+              by A2,A5,A6,FINSEQ_1:4,MATRIX_1:def 4
+          .= bf by Th33;
+end;
+
+theorem Th41:
+  i in dom A & width A = width DelLine(A,i) implies
+   DelLine(block_diagonal(<*A*>^G,a),i) = block_diagonal(<*DelLine(A,i)*>^G,a)
+proof
+ assume that
+A1:  i in dom A and
+A2:  width A= width DelLine(A,i);
+  set AA=<*A*>;
+  set da=DelLine(A,i);
+  set DA=<*da*>;
+  set bG=block_diagonal(G,a);
+  set BG=<*bG*>;
+  set bAG=block_diagonal(<*A,bG*>,a);
+  set bdAG=block_diagonal(<*da,bG*>,a);
+  consider m such that
+A3:  len A = m + 1 & len da = m by A1,FINSEQ_3:113;
+A4:  len bAG=Sum Len (AA^BG) & len bdAG=Sum Len (DA^BG) by Def5;
+  then
+A5:  len bAG=len A +len bG & len bdAG=len da +len bG by Th16;
+  then
+A6:  len bAG=(m+len bG) +1 by A3;
+  len bAG>=len A by A5,NAT_1:11;
+  then
+A7:  Seg len A c= Seg len bAG & i in Seg len A & Seg len bAG=dom bAG
+    by A1,FINSEQ_1:def 3,7;
+  then
+A8:  len Del(bAG,i)=m+len bG & len bdAG=m+len bG by A3,A4,Th16,A6,FINSEQ_3:118;
+A9:  block_diagonal(AA^G,a)=bAG & block_diagonal(DA^G,a)=bdAG  by Th36;
+  now let j such that
+   A10:  1<=j & j<=m+len bG;
+   A11:  j in NAT & i in NAT by ORDINAL1:def 13;
+   A12:  m+len bG <=len bAG & j+1<=len bAG & 1<=1+j
+           by A10,A6,NAT_1:11,XREAL_1:9;
+        then
+   A13:  j in Seg (m+len bG) & Seg (m+len bG) c= Seg len bAG &
+         j+1 in Seg len bAG by A10,FINSEQ_1:3,7;
+        reconsider A'=A as Matrix of len A,width A,K by MATRIX_2:7;
+        reconsider da'=da as Matrix of len da,width da,K by MATRIX_2:7;
+        now per cases;
+          suppose
+       A14:  j<i;
+            i<=len A by A7,FINSEQ_1:3;
+            then j<len A by A14,XXREAL_0:2;
+            then
+       A15:   j in dom A & j in Seg len A & j<=m
+              by A10,A3,FINSEQ_3:27,FINSEQ_1:3,NAT_1:13;
+            then
+       A16:   j in Seg m & j in dom da by A10,A3,FINSEQ_3:27;
+       A17:   Line(A',j) = A.j by A15,MATRIX_2:10
+                        .= da'.j by A3,A14,A11,FINSEQ_3:119
+                        .= Line(da,j) by A3,A16,MATRIX_2:10;
+            thus Del(bAG,i).j = bAG.j by A14,A11,A6,FINSEQ_3:119
+                             .= Line(bAG,j) by A13,A4,MATRIX_2:10
+                             .= Line(da,j)^(width bG |-> a) by A15,A17,Th23
+                             .= Line(bdAG,j) by A16,Th23
+                             .= bdAG.j by A4,A13,MATRIX_2:10,A3,A5;end;
+          suppose
+       A18:  j>=i;
+            then
+       A19:  Del(bAG,i).j = bAG.(j+1) by A13,A10,A6,A7,FINSEQ_3:120
+                         .= Line(bAG,j+1) by A13,A4,MATRIX_2:10;
+            now per cases;
+              suppose j+1<=len A;
+                then
+            A20:  j+1 in dom A & j+1 in Seg len A & j<=m
+                  by A3,FINSEQ_3:27,A12,XREAL_1:10;
+                then
+            A21:  j in Seg m & j in dom da by A3,A10,FINSEQ_1:3,FINSEQ_3:27;
+            A22:  Line(A',j+1) = A.(j+1) by A20,MATRIX_2:10
+                              .= da'.j by A1,A3,A18,A20,A11,FINSEQ_3:120
+                              .= Line(da,j) by A3,A21,MATRIX_2:10;
+                thus Del(bAG,i).j = Line(da,j)^(width bG |-> a)
+                                        by A19,A20,A22,Th23
+                                 .= Line(bdAG,j) by A21,Th23;end;
+              suppose
+            A23:  j+1>len A;
+                then reconsider jL=j+1-len A as Element of NAT by NAT_1:21;
+                jL<>0 by A23;
+                then
+            A24:  jL>=1 by NAT_1:14;
+                jL+len A<=len bG+len A by A5,A10,A6,XREAL_1:9;
+                then jL<=len bG by XREAL_1:10;
+                then
+            A25:  jL in dom bG by A24,FINSEQ_3:27;
+                thus Del(bAG,i).j = Line(bAG,jL+len A) by A19
+                                 .= (width da|->a)^Line(bG,jL) by A2,A25,Th23
+                                 .= Line(bdAG,jL+len da) by A25,Th23
+                                 .= Line(bdAG,j) by A3;end;
+            end;
+            hence Del(bAG,i).j=bdAG.j by A4,A13,MATRIX_2:10,A3,A5;end;
+        end;
+        hence Del(bAG,i).j=bdAG.j;
+  end;
+  hence thesis by A9,A8,FINSEQ_1:18;
+end;
+
+theorem Th42:
+  i in dom A & width A = width DelLine(A,i) implies
+   DelLine(block_diagonal(G^<*A*>,a),Sum Len G+i) =
+                                   block_diagonal(G^<*DelLine(A,i)*>,a)
+proof
+  assume that
+A1:   i in dom A and
+A2:   width A= width DelLine(A,i);
+  set AA=<*A*>;
+  set da=DelLine(A,i);
+  set DA=<*da*>;
+  set bG=block_diagonal(G,a);
+  set BG=<*bG*>;
+  set bGA=block_diagonal(<*bG,A*>,a);
+  set bGdA=block_diagonal(<*bG,da*>,a);
+  set Si=Sum Len G+i;
+  consider m such that
+A3:  len A = m + 1 & len da = m by A1,FINSEQ_3:113;
+A4:  len bGA=Sum Len (BG^AA) & len bGdA=Sum Len (BG^DA) & len bG=Sum Len G
+    by Def5;
+A5:  len bGA=len A +len bG & len bGdA=len da +len bG by A4,Th16;
+  then
+A6:  len bGA=(m+len bG) +1 by A3;
+A7:  i in Seg len A by A1,FINSEQ_1:def 3;
+  then
+A8:  Si in Seg len bGA & Seg len bGA=dom bGA by A4,A5,FINSEQ_1:81,def 3;
+  then
+A9:  len Del(bGA,Si)=m+len bG & len bGdA=m+len bG
+     by A3,A4,Th16,A6,FINSEQ_3:118;
+A10: block_diagonal(G^AA,a)=bGA & block_diagonal(G^DA,a)=bGdA  by Th35;
+  now let j such that
+    A11:  1<=j & j<=m+len bG;
+    A12:  j in NAT & i in NAT by ORDINAL1:def 13;
+        m+len bG <=len bGA & j+1<=len bGA & 1<=1+j
+          by A11,A6,NAT_1:11,XREAL_1:9;
+        then
+    A13:  j in Seg (m+len bG) & Seg (m+len bG) c= Seg len bGA &
+          j+1 in Seg len bGA by A11,FINSEQ_1:3,7;
+        reconsider A'=A as Matrix of len A,width A,K by MATRIX_2:7;
+        reconsider da'=da as Matrix of len da,width da,K by MATRIX_2:7;
+        now per cases;
+           suppose
+        A14:  j<=len bG;
+             0<i by A7,FINSEQ_1:3;
+             then j+0<len bG+i by A14,XREAL_1:10;
+             then
+        A15:  j<Si by Def5;
+        A16:  j in dom bG by A11,A14,FINSEQ_3:27;
+             thus Del(bGA,Si).j = bGA.j by A15,A12,A6,FINSEQ_3:119
+                               .= Line(bGA,j) by A13,A4,MATRIX_2:10
+                               .= Line(bG,j)^(width da|-> a) by A2,A16,Th23
+                               .= Line(bGdA,j) by A16,Th23
+                               .= bGdA.j by A13,A4,A3,A5,MATRIX_2:10;end;
+           suppose
+        A17:  j>len bG;
+             then reconsider jL=j-len bG as Element of NAT by NAT_1:21;
+        A18:  jL<>0 by A17;
+             jL+len bG <=m +len bG by A11;
+             then
+        A19:  1<=jL & jL<=m by A18,XREAL_1:10,NAT_1:14;
+             then
+        A20:   jL in dom da & jL in Seg len da & jL<=len A & 0+1<=jL+1 &
+               jL+1<=len A by A3,FINSEQ_3:27,NAT_1:13,XREAL_1:9;
+             then
+        A21:   jL in dom A & jL in Seg len A & jL+1 in dom A &jL+1 in Seg len A
+               by A19,FINSEQ_3:27;
+             now per cases;
+               suppose
+             A22:  j<Si;
+                  then jL+len bG<i+len bG by Def5;
+                  then
+             A23:  jL<i by XREAL_1:9;
+             A24:  Line(A,jL) = A'.(jL) by A21,MATRIX_2:10
+                             .= da'.(jL) by A3,A23,A12,FINSEQ_3:119
+                             .= Line(da,jL) by A20,MATRIX_2:10;
+                  thus Del(bGA,Si).j = bGA.j by A22,A12,A6,FINSEQ_3:119
+                                    .= Line(bGA,jL+len bG)by A13,A4,MATRIX_2:10
+                                    .=(width bG|->a)^Line(da,jL)
+                                          by A21,A24,Th23
+                                    .= Line(bGdA,jL+len bG) by A20,Th23;end;
+               suppose
+             A25:  j>=Si;
+                  then jL+len bG>=i+len bG by Def5;
+                  then
+             A26:  jL>=i by XREAL_1:10;
+             A27: Line(A,1+jL) = A'.(1+jL) by A21,MATRIX_2:10
+                              .= da'.jL by A1,A3,A26,A19,FINSEQ_3:120
+                              .= Line(da,jL) by A20,MATRIX_2:10;
+                  thus Del(bGA,Si).j = bGA.(j+1)
+                                         by A11,A25,A12,A6,A8,FINSEQ_3:120
+                              .= Line(bGA,jL+1+len bG) by A13,A4,MATRIX_2:10
+                              .= (width bG|->a)^Line(da,jL) by A21,A27,Th23
+                              .= Line(bGdA,jL+len bG) by A20,Th23;end;
+             end;
+             hence Del(bGA,Si).j=bGdA.j by A3,A13,A4,A5,MATRIX_2:10;end;
+       end;
+       hence Del(bGA,i+Sum Len G).j=bGdA.j;
+  end;
+  hence thesis by A10,A9,FINSEQ_1:18;
+end;
+
+theorem Th43:
+  i in Seg width A implies
+   DelCol(block_diagonal(<*A*>^G,a),i) = block_diagonal(<*DelCol(A,i)*>^G,a)
+proof
+  assume
+A1:  i in Seg width A;
+  set AA=<*A*>;
+  set Da=DelCol(A,i);
+  set DA=<*Da*>;
+  set bG=block_diagonal(G,a);
+  set BG=<*bG*>;
+  set BAG=block_diagonal(<*A,bG*>,a);
+  set BDG=block_diagonal(<*Da,bG*>,a);
+A2:  len Da=len A & len DelCol(BAG,i)=len BAG by MATRIX_2:def 6;
+A3:  len BAG=Sum Len (AA^BG) & len BDG=Sum Len (DA^BG) by Def5;
+then
+A4:  len BDG=len Da+len bG & len BAG=len A+len bG by Th16;
+A5: now let j such that
+     A6: 1<=j & j<= len BDG;
+     A7: j in dom BAG & j in Seg len BDG by A2,A4,A6,FINSEQ_1:3,FINSEQ_3:27;
+        reconsider Da'=Da as Matrix of len Da,width Da,K by MATRIX_2:7;
+        now per cases;
+          suppose j<=len A;
+            then
+        A8:   j in dom A & j in Seg len A & j in dom Da
+              by A2,A6,FINSEQ_3:27,FINSEQ_1:3;
+            then
+        A9:   Line(BAG,j)=Line(A,j)^(width bG|->a) by Th23;
+        A10:  Del(Line(A,j),i) = Da'.j by A8,MATRIX_2:def 6
+                              .= Line(Da,j) by A2,A8,MATRIX_2:10;
+            dom Line(A,j)=Seg width A by FINSEQ_2:144;
+            hence Del(Line(BAG,j),i) = Line(Da,j)^(width bG|->a)
+                                           by A1,A9,Th2,A10
+                                    .= Line(BDG,j) by A8,Th23
+                                    .= BDG.j by A7,A3,MATRIX_2:10;end;
+          suppose
+        A11:  j>len A;
+            then reconsider jL=j-len A as Element of NAT by NAT_1:21;
+            reconsider w1=width A-1 as Element of NAT
+              by A1,FINSEQ_1:4,NAT_1:21,14;
+        A12:  width Da = w1+1-'1 by A1,LAPLACE:3
+                      .= w1 by BINARITH:39;
+        A13:  dom (width A |-> a) = Seg width A by FINSEQ_2:144;
+            jL<>0 by A11;
+            then
+        A14:  jL>=1 by NAT_1:14;
+            jL+len A <=len bG+len A by A6,MATRIX_2:def 6,A4;
+            then jL<=len bG by XREAL_1:10;
+            then
+        A15:  jL in dom bG by A14,FINSEQ_3:27;
+            then Line(BAG,jL+len A)=(width A |-> a)^Line(bG,jL) by Th23;
+            hence Del(Line(BAG,j),i) = Del((w1+1)|->a,i)^Line(bG,jL)
+                                             by A1,A13,Th2
+                                    .= (width Da|->a)^Line(bG,jL) by A1,Th4,A12
+                                    .= Line(BDG,len A+jL) by A2,A15,Th23
+                                    .= BDG.j by A7,A3,MATRIX_2:10;end;
+         end;
+     hence DelCol(BAG,i).j=BDG.j by A7,MATRIX_2:def 6;
+  end;
+  block_diagonal(AA^G,a)=BAG & block_diagonal(DA^G,a)=BDG by Th36;
+  hence thesis by A5,A2,A4,FINSEQ_1:18;
+end;
+
+theorem Th44:
+  i in Seg width A implies
+   DelCol(block_diagonal(G^<*A*>,a),i+Sum Width G) =
+     block_diagonal(G^<*DelCol(A,i)*>,a)
+proof
+  assume
+A1:  i in Seg width A;
+  set AA=<*A*>;
+  set Da=DelCol(A,i);
+  set DA=<*Da*>;
+  set bG=block_diagonal(G,a);
+  set BG=<*bG*>;
+  set BGA=block_diagonal(<*bG,A*>,a);
+  set BGD=block_diagonal(<*bG,Da*>,a);
+  set iS=i+Sum Width G;
+A2:  len Da=len A & len DelCol(BGA,iS)=len BGA by MATRIX_2:def 6;
+A3:  len BGA=Sum Len (BG^AA) & len BGD=Sum Len (BG^DA) & width bG=Sum Width G
+     by Def5;
+  then
+A4:  len BGD=len bG+len Da & len BGA=len bG+len A by Th16;
+A5:  now let j such that
+       A6:  1<=j & j<= len BGD;
+       A7:  j in dom BGA & j in Seg len BGD by A4,A2,A6,FINSEQ_1:3,FINSEQ_3:27;
+           reconsider Da'=Da as Matrix of len Da,width Da,K by MATRIX_2:7;
+       A8:  dom (width A|->a)=Seg width A &
+             len (width bG|->a)=width bG by FINSEQ_2:144,69;
+       A9:  len Line(bG,j)=width bG by MATRIX_1:def 8;
+           width A-'1=width A-1 by BINARITH:50,A1,FINSEQ_1:4,NAT_1:14;
+           then
+       A10: width A=(width A-'1)+1;
+           now per cases;
+             suppose j<=len bG;
+               then
+           A11:  j in dom bG
+by A6,FINSEQ_3:27;
+               then Line(BGA,j)=Line(bG,j)^(width A|->a) by Th23;
+               hence Del(Line(BGA,j),iS) = Line(bG,j)^Del(width A|->a,i)
+                                             by Th3,A3,A1,A8,A9
+                                        .= Line(bG,j)^((width A-'1)|->a)
+                                             by A1,A10,Th4
+                                        .= Line(bG,j)^(width Da|->a)
+                                             by A1,LAPLACE:3
+                                        .= Line(BGD,j) by A11,Th23
+                                        .= BGD.j by A3,A7,MATRIX_2:10;end;
+             suppose
+           A12:  j>len bG;
+                then reconsider jL=j-len bG as Element of NAT by NAT_1:21;
+           A13:  dom Line(A,jL)=Seg width A by FINSEQ_2:144;
+                jL<>0 by A12;
+                then
+           A14:  jL>=1 by NAT_1:14;
+                jL+len bG <=len bG+len A by A6,MATRIX_2:def 6,A4;
+                then jL<=len A by XREAL_1:10;
+                then
+           A15:   jL in dom A & jL in Seg len A & jL in dom Da
+                  by A2,A14,FINSEQ_3:27;
+                then
+           A16:   Del(Line(A,jL),i) = Da'.jL by MATRIX_2:def 6
+                                   .= Line(Da,jL) by A2,A15,MATRIX_2:10;
+                Line(BGA,jL+len bG)=(width bG |-> a)^Line(A,jL) by Th23,A15;
+                hence Del(Line(BGA,j),iS) = (width bG|->a)^Del(Line(A,jL),i)
+                                              by A13,Th3,A3,A1,A8
+                                         .= Line(BGD,len bG+jL) by A15,A16,Th23
+                                         .= BGD.j by A3,A7,MATRIX_2:10;end;
+     end;
+     hence DelCol(BGA,iS).j=BGD.j by A7,MATRIX_2:def 6;
+  end;
+  block_diagonal(G^AA,a)=BGA & block_diagonal(G^DA,a)=BGD by Th35;
+  hence thesis by A5,A2,A4,FINSEQ_1:18;
+end;
+
+definition
+  let D;
+  let F be FinSequence of (D**);
+  attr F is Square-Matrix-yielding means :Def6:
+  for i st i in dom F ex n st F.i is Matrix of n,D;
+end;
+
+registration
+  let D;
+  cluster Square-Matrix-yielding FinSequence of D**;
+  existence
+    proof
+      reconsider F=<*>(D**) as FinSequence of D**;
+      take F;
+      for i st i in dom F ex n st F.i is Matrix of n,D by RELAT_1:60;
+      hence thesis by Def6;
+    end;
+end;
+
+registration
+  let D;
+  cluster Square-Matrix-yielding -> Matrix-yielding FinSequence of D**;
+  coherence
+    proof
+      let F be FinSequence of D** such that
+        A1: F is Square-Matrix-yielding;
+      let i such that
+        A2: i in dom F;
+      ex n st F.i is Matrix of n,D by A1,A2,Def6;
+      hence thesis;
+    end;
+end;
+
+definition
+  let D;
+  mode FinSequence_of_Square-Matrix of D is
+    Square-Matrix-yielding FinSequence of D**;
+end;
+
+definition
+  let K;
+  mode FinSequence_of_Square-Matrix of K is
+     Square-Matrix-yielding FinSequence of (the carrier of K)**;
+end;
+
+reserve S,S1,S2 for FinSequence_of_Square-Matrix of D,
+        R,R1,R2 for FinSequence_of_Square-Matrix of K;
+
+theorem
+  {} is FinSequence_of_Square-Matrix of D
+proof
+  set F=<*>(D**);
+  for i st i in dom F ex n st F.i is Matrix of n,D;
+  hence thesis by Def6;
+end;
+
+definition
+  let D,S,x;
+  redefine func S.x -> Matrix of len (S.x),D;
+  coherence
+  proof
+    reconsider E={} as Matrix of 0,D by MATRIX_1:13;
+    per cases;
+      suppose
+    A1:  x in dom S;
+        then reconsider i=x as Element of NAT;
+        consider n such that
+    A2:   S.i is Matrix of n,D by A1,Def6;
+        len (S.i)=n by A2,MATRIX_1:25;
+        hence thesis by A2;end;
+      suppose not x in dom S;
+        then S.x=E & len E=0 by FUNCT_1:def 4,CARD_2:19;
+        hence thesis;end;
+  end;
+end;
+
+definition
+  let D,S1,S2;
+  redefine func S1^S2 -> FinSequence_of_Square-Matrix of D;
+  coherence
+  proof
+    S1^S2 is Square-Matrix-yielding
+       proof
+         let i such that
+      A1:  i in dom (S1^S2);
+         take L=len ((S1^S2).i);
+         per cases by A1,FINSEQ_1:38;
+           suppose i in dom S1;
+             then (S1^S2).i=S1.i by FINSEQ_1:def 7;
+             hence thesis;end;
+           suppose ex n st n in dom S2 & i=len S1 + n;
+             then consider n such that
+          A2:  n in dom S2 & i=len S1+n;
+             (S1^S2).i=S2.n by A2,FINSEQ_1:def 7;
+             hence thesis;end;
+       end;
+       hence thesis;
+  end;
+end;
+
+Lm6:for M be Matrix of n,D holds <*M*> is FinSequence_of_Square-Matrix of D
+proof
+  let M be Matrix of n,D;
+  now let i such that
+    A1: i in dom <*M*>;
+       take n;
+       dom <*M*> ={1} by FINSEQ_1:4,def 8;
+       then <*M*>.1=M & i=1 by A1,TARSKI:def 1,FINSEQ_1:def 8;
+       hence <*M*>.i is Matrix of n,D;
+  end;
+  hence thesis by Def6;
+end;
+
+definition
+  let D,n;
+  let M1 be Matrix of n,D;
+  redefine func <* M1 *> -> FinSequence_of_Square-Matrix of D;
+  coherence by Lm6;
+end;
+
+definition
+  let D,n,m;
+  let M1 be Matrix of n,D;
+  let M2 be Matrix of m,D;
+  redefine func <* M1,M2 *> -> FinSequence_of_Square-Matrix of D;
+  coherence
+  proof
+    reconsider F1=<*M1*>,F2=<*M2*> as FinSequence_of_Square-Matrix of D;
+    <*M1,M2*>=F1^F2;
+    hence thesis;
+  end;
+end;
+
+definition
+  let D,S,n;
+  redefine func S|n -> FinSequence_of_Square-Matrix of D;
+  coherence
+  proof
+    S|n is Square-Matrix-yielding
+    proof
+      let i such that
+    A1:  i in dom (S|n);
+       take L=len (S.i);
+       thus (S|n).i is Matrix of L,D by A1,FUNCT_1:70;
+    end;
+    hence thesis;
+  end;
+  redefine func S/^n -> FinSequence_of_Square-Matrix of D;
+  coherence
+  proof
+    S/^n is Square-Matrix-yielding
+      proof
+        let i such that
+     A2:  i in dom (S/^n);
+        take L=len (S.(n+i));
+        i+n in dom S by A2,FINSEQ_5:29;
+        then (S/^n).i=(S/^n)/.i & S.(n+i)=S/.(n+i) by A2,PARTFUN1:def 8;
+        hence (S/^n).i is Matrix of L,D by A2,FINSEQ_5:30;
+      end;
+    hence thesis;
+  end;
+end;
+
+theorem Th46:
+  Len S = Width S
+proof
+  set L=Len S;
+  set W=Width S;
+A1: dom L=dom S & dom W=dom S by Def3,Def4;
+  now let k such that
+    A2:  k in dom L;
+        thus L.k = len (S.k) by A2,Def3
+                .= width (S.k) by MATRIX_1:25
+                .= W.k by A1,A2,Def4;
+  end;
+  hence thesis by A1,FINSEQ_1:17;
+end;
+
+definition
+  let D;
+  let d be Element of D;
+  let S be FinSequence_of_Square-Matrix of D;
+  redefine func block_diagonal(S,d) -> Matrix of Sum Len S,D;
+  coherence
+  proof
+    block_diagonal(S,d) is Matrix of Sum Len S,Sum Width S,D;
+    hence thesis by Th46;
+  end;
+end;
+
+theorem Th47:
+  for A be (Matrix of n,K) st i in dom A & j in Seg n holds
+    Deleting(block_diagonal(<*A*>^R,a),i,j)=
+          block_diagonal(<*Deleting(A,i,j)*>^R,a)
+proof
+  let A be (Matrix of n,K) such that
+A1:  i in dom A & j in Seg n;
+  set b=block_diagonal(R,a);
+  set B=<*b*>;
+  set AA=<*A*>;
+  set LAR=Sum Len(AA^R);
+  set LAB=Sum Len(AA^B);
+A2:  len A=n & width A=n by MATRIX_1:25;
+  then
+A3:  n>=1 & dom A=Seg n by A1,NAT_1:14,FINSEQ_1:def 3,4;
+A4:
+     len b=Sum Len R by Def5;
+  Len(AA^R)=(Len AA)^Len R & Len(AA^B)=(Len AA)^Len B & Len AA=<*len A*>
+    & Len B=<*len b*> & Width(AA^B)=(Width AA)^Width B & Width AA=<*width A*> &
+    Width B=<*width b*> & Len(AA^B)=Width(AA^B)
+    by Th14,Th15,Th18,Th19,Th46;
+  then
+A5: LAR=len A +Sum Len R & LAB=len A+Sum Len B & LAB=Sum Width AA+width b &
+    Sum Len B=len b & Sum Len AA=len A & Sum Width AA=width A
+    by RVSUM_1:103,104,106;
+  per cases by A3,REAL_1:def 5;
+     suppose
+   A6:   n=1;
+        then
+   A7:   i=1 & j=1 by A1,A3,FINSEQ_1:4,TARSKI:def 1;
+        len Deleting(A,i,j) = 1-'1 by A1,A6,LAPLACE:2
+                           .= 0 by BINARITH:51;
+        then
+   A8:   Deleting(A,i,j)={} by CARD_2:59;
+        thus Deleting(block_diagonal(AA^R,a),i,j)
+               = Deleting(block_diagonal(AA^B,a),i,j) by A4,A5,Th36
+              .= Segm(block_diagonal(AA^B,a),Seg LAB\{i},Seg LAB\{j})
+                   by MATRIX13:58
+              .= b by Th33,A6,A2,A5,A7,FINSEQ_1:4
+              .= block_diagonal(B,a) by Th34
+              .= block_diagonal(<*Deleting(A,i,j)*>^B,a) by A8,Th40
+              .= block_diagonal(<*Deleting(A,i,j)*>^R,a) by Th36;end;
+     suppose n>1;
+        then
+   A9:   width A=width DelLine(A,i) by A2,LAPLACE:4;
+        thus Deleting(block_diagonal(AA^R,a),i,j)
+              = DelCol(DelLine(block_diagonal(AA^R,a),i),j) by MATRIX_2:def 8
+             .= DelCol(block_diagonal(<*DelLine(A,i)*>^R,a),j) by A1,A9,Th41
+             .= block_diagonal(<*DelCol(DelLine(A,i),j)*>^R,a) by A1,A2,A9,Th43
+             .= block_diagonal(<*Deleting(A,i,j)*>^R,a) by MATRIX_2:def 8;end;
+end;
+
+theorem
+  for A be Matrix of n,K st i in dom A & j in Seg n holds
+    Deleting(block_diagonal(R^<*A*>,a),i+Sum Len R,j+Sum Len R)=
+          block_diagonal(R^<*Deleting(A,i,j)*>,a)
+proof
+  let A be Matrix of n,K such that
+A1:  i in dom A & j in Seg n;
+  set b=block_diagonal(R,a);
+  set B=<*b*>;
+  set AA=<*A*>;
+  set LRA=Sum Len(R^AA);
+  set LBA=Sum Len(B^AA);
+  set iS=i+Sum Len R;
+  set jS=j+Sum Len R;
+A2:  len A=n & width A=n by MATRIX_1:25;
+  then
+A3:  n>=1 & dom A=Seg n by A1,NAT_1:14,FINSEQ_1:def 3,4;
+A4:  Len R=Width R by Th46;
+A5:  len b=Sum Len R by Def5;
+A6:  Len(R^AA)=(Len R)^Len AA & Len(B^AA)=(Len B)^Len AA & Len AA=<*len A*>
+      & Len B=<*len b*> & Width(B^AA)=(Width B)^Width AA &Width AA=<*width A*>&
+      Width B=<*width b*> & Len(B^AA)=Width(B^AA) by Th14,Th15,Th18,Th19,Th46;
+  then
+A7:  LRA=len A +Sum Len R & LBA=len A+Sum Len B & LBA=Sum Width AA+width b &
+      Sum Len B=len b & Sum Len AA=len A & Sum Width B=width b
+      by RVSUM_1:103,104,106;
+   per cases by A3,REAL_1:def 5;
+      suppose
+    A8:  n=1;
+        then
+    A9:  i=1 & j=1 by A1,A3,FINSEQ_1:4,TARSKI:def 1;
+        len Deleting(A,i,j) = 1-'1 by A1,A8,LAPLACE:2
+                           .= 0 by BINARITH:51;
+        then
+    A10:  Deleting(A,i,j)={} by CARD_2:59;
+        thus Deleting(block_diagonal(R^AA,a),iS,jS)
+               = Deleting(block_diagonal(B^AA,a),iS,jS) by A5,A7,Th35
+              .= Segm(block_diagonal(B^AA,a),Seg LBA\{iS},Seg LBA\{jS})
+                   by MATRIX13:58
+              .= Segm(block_diagonal(B^AA,a),Seg Sum Len B,Seg LBA\{jS})
+                   by A2,A5,A7,A8,A9,FINSEQ_1:12
+              .= Segm(block_diagonal(B^AA,a),Seg Sum Len B,Seg Sum Width B)
+                   by A2,A5,A6,A7,A8,A9,FINSEQ_1:12
+              .= b by Th32,A7
+              .= block_diagonal(B,a) by Th34
+              .= block_diagonal(B^<*Deleting(A,i,j)*>,a) by A10,Th40
+              .= block_diagonal(R^<*Deleting(A,i,j)*>,a) by Th35;end;
+      suppose n>1;
+         then
+     A11:  width A=width DelLine(A,i) by A2,LAPLACE:4;
+         thus Deleting(block_diagonal(R^AA,a),iS,jS)
+           = DelCol(DelLine(block_diagonal(R^AA,a),iS),jS) by MATRIX_2:def 8
+          .= DelCol(block_diagonal(R^<*DelLine(A,i)*>,a),jS) by A1,A11,Th42
+          .= block_diagonal(R^<*DelCol(DelLine(A,i),j)*>,a)by A4,A1,A2,A11,Th44
+          .= block_diagonal(R^<*Deleting(A,i,j)*>,a) by MATRIX_2:def 8;end;
+end;
+
+definition
+  let K,R;
+  func Det R -> FinSequence of K means :Def7:
+    dom it = dom R &
+    for i st i in dom it holds it.i = Det R.i;
+  existence
+  proof
+    deffunc D(Nat)=Det (R.$1);
+    consider p be FinSequence of K such that
+  A1:  len p=len R and
+  A2:  for i st i in dom p holds p.i=D(i) from FINSEQ_2:sch 1;
+    take p;
+    thus thesis by A2,A1,FINSEQ_3:31;
+  end;
+  uniqueness
+  proof
+  let F1,F2 be FinSequence of K such that
+ A3:  dom F1=dom R &
+      for i st i in dom F1 holds F1.i=Det (R.i) and
+ A4:  dom F2=dom R &
+      for i st i in dom F2 holds F2.i=Det (R.i);
+    now let x such that
+     A5:  x in dom F1;
+         reconsider i=x as Element of NAT by A5;
+         thus F1.x = Det (R.i) by A3,A5
+                  .= F2.x by A3,A4,A5;
+    end;
+    hence thesis by FUNCT_1:9,A3,A4;
+  end;
+end;
+
+definition
+  let K,R;
+  redefine func Det R-> Element of (len R)-tuples_on the carrier of K;
+  coherence
+  proof
+    dom (Det R)=dom R by Def7;
+    then len (Det R)=len R by FINSEQ_3:31;
+    hence thesis by FINSEQ_2:110;
+  end;
+end;
+
+reserve N for (Matrix of n,K),
+        N1 for (Matrix of m,K);
+
+theorem Th49:
+  Det <*N*> = <*Det N*>
+proof
+  set F=<*N*>;
+A1: len F=1 & 1 in Seg 1 by FINSEQ_1:57;
+A2: dom (Det F)=Seg len F & len F=len (Det F) by FINSEQ_2:109,144;
+ (Det F).1=Det (F.1) & F.1=N & n=len N
+   by A1,A2,FINSEQ_1:57,Def7,MATRIX_1:def 3;
+ hence Det F= <*Det N*> by A1,A2,FINSEQ_1:57;
+end;
+
+theorem Th50:
+  Det (R1^R2) = Det R1^Det R2
+proof
+  set R12=R1^R2;
+A1:  len Det R12=len R12 & len R12=len R1+len R2 &
+  len R1=len Det R1 & len R2=len Det R2 by FINSEQ_1:35,FINSEQ_2:109;
+  then
+A2:  len (Det R1^Det R2)=len R1+len R2 by FINSEQ_1:35;
+  then
+A3:  dom (Det R1)=dom R1 & dom (Det R2)=dom R2 & dom (Det R1 ^ Det R2)=
+     dom Det R12 by A1,FINSEQ_3:31;
+  now let k such that
+   A4:  1<=k & k<=len R1+len R2;
+   A5:  k in dom (Det R1 ^ Det R2) by A2,A4,FINSEQ_3:27;
+       now per cases by A5,FINSEQ_1:38;
+         suppose
+       A6:  k in dom (Det R1);
+       A7:  len (R1.k)=len (R12.k) by A3,A6,FINSEQ_1:def 7;
+           thus (Det R1 ^ Det R2).k = (Det R1).k by A6,FINSEQ_1:def 7
+                                   .= Det (R1.k) by A6,Def7
+                                   .= Det(R12.k) by A3,A6,A7,FINSEQ_1:def 7
+                                   .= (Det R12).k by A3,A5,Def7;end;
+         suppose ex n st n in dom (Det R2) & k=len (Det R1)+n;
+           then consider n such that
+       A8:   n in dom (Det R2) & k=len R1+n by A1;
+       A9:  len (R2.n)=len (R12.k) by A3,A8,FINSEQ_1:def 7;
+           thus (Det R1 ^ Det R2).k = (Det R2).n by A1,A8,FINSEQ_1:def 7
+                                   .= Det (R2.n) by A8,Def7
+                                   .= Det(R12.k) by A9,A3,A8,FINSEQ_1:def 7
+                                   .= (Det R12).k by A3,A5,Def7;end;
+       end;
+       hence (Det R12).k=(Det R1 ^ Det R2).k;
+  end;
+  hence thesis by A1,A2,FINSEQ_1:18;
+end;
+
+theorem
+  Det (R|n) = (Det R)|n
+proof
+A1:  len Det R=len R by FINSEQ_2:109;
+   per cases;
+     suppose n>=len R;
+       then R|n=R & (Det R)|n=Det R by A1,FINSEQ_1:79;
+       hence thesis;end;
+     suppose n<len R;
+       then len (R|n) =n by FINSEQ_1:80;
+       then
+    A2:  len Det (R|n)=n by FINSEQ_2:109;
+       R=(R|n)^(R/^n) by RFINSEQ:21;
+       then Det R=(Det (R|n))^Det(R/^n) by Th50;
+       hence thesis by A2,FINSEQ_5:26;end;
+end;
+
+theorem Th52:
+  Det block_diagonal(<*N,N1*>,0.K) = Det N * Det N1
+proof
+  defpred P[Nat] means
+     for n,m,N,N1 st n=$1 holds
+  Det block_diagonal(<*N,N1*>,0.K) = (Det N) * (Det N1);
+A1:  P[0]
+  proof
+    let n,m,N,N1 such that
+  A2:   n=0;
+    len N1=m & len N=n by MATRIX_1:def 3;
+    then
+  A3:   N={} & Sum Len <*N,N1*>=0+m by A2,CARD_2:59,Th16;
+    then block_diagonal(<*N,N1*>,0.K) = block_diagonal(<*N1*>,0.K) by Th40
+                                     .= N1 by Th34;
+    hence Det block_diagonal(<*N,N1*>,0.K) = (Det N1)*1_K by A3,VECTSP_1:def 16
+                                          .= Det N*Det N1 by A2,MATRIXR2:41;
+  end;
+A4:  for i st P[i] holds P[i+1]
+  proof
+    let i such that
+  A5:  P[i];set i1=i+1;
+    let n,m,N,N1 such that
+  A6:  n=i1;
+    reconsider M=N as Matrix of K;
+    set NN=<*N,N1*>;
+    set bN=block_diagonal(NN,0.K);
+    set L=LaplaceExpL(bN,1);
+    set L1=LaplaceExpL(N,1);
+    set D=Det N1;
+  A7:
+  width bN=Sum Len NN by MATRIX_1:25;
+  A8:  Sum Len NN=len N+len N1 & len N=n & len N1=m & width N=n & width N1=m
+       by MATRIX_1:25,Th16;
+    then
+  A9:  len L=n+m & len L1=n by LAPLACE:def 7;
+    1<=i1 & 1<=i+m+1 by NAT_1:11;
+    then
+  A10: 1 in Seg n & 1 in Seg (n+m) & dom N=Seg n by A8,A6,FINSEQ_1:def 3;
+    reconsider nn=n as Element of NAT by ORDINAL1:def 13;
+    reconsider L1 as Element of nn-tuples_on the carrier of K
+      by A9,FINSEQ_2:110;
+    set Ln=L|n;
+  A11: n<=n+m by NAT_1:11;
+    then
+  A12: len Ln=n & len (D*L1)=nn by A9,FINSEQ_1:80,MATRIXR1:16;
+    now let j such that
+      A13:  1<=j & j<=n;
+      A14: j in dom Ln & j in dom L1 & dom Ln= Seg n & dom Line(N,1)=Seg n
+            by A8,A9,A12,A13,FINSEQ_3:27,FINSEQ_2:144,FINSEQ_1:def 3;
+          then j in dom L/\Seg n by FUNCT_1:68;
+          then
+      A15:  j in dom L & dom L=Seg (n+m) by A9,XBOOLE_0:def 3,FINSEQ_1:def 3;
+          then
+      A16:  Delete(bN,1,j) = Deleting(bN,1,j) by A10,A8,LAPLACE:def 1
+                          .= block_diagonal(<*Deleting(N,1,j)*>^<*N1*>,0.K)
+                               by A10,A14,Th47
+                          .= block_diagonal(<*Delete(N,1,j),N1*>,0.K)
+                               by A10,A14,LAPLACE:def 1;
+      A17:  i=n-'1  & i+m+1-'1=i+m & len Delete(N,1,j)=n-'1
+            by A6,BINARITH:39,MATRIX_1:def 3;
+          Minor(N,1,j) *D = Det block_diagonal(<*Delete(N,1,j),N1*>,0.K)
+                               by A17,A5
+                         .= Minor(bN,1,j) by A16,A17,A8,A6,Th16;
+          then
+      A18:  Cofactor(bN,1,j)= D*Cofactor(N,1,j) by GROUP_1:def 4;
+      A19:  bN*(1,j) = Line(block_diagonal(<*M,N1*>,0.K),1).j
+                          by A8,A7,A15,MATRIX_1:def 8
+                    .= (Line(N,1)^(width N1|->0.K)).j by A10,Th23
+                    .= Line(N,1).j by A14,FINSEQ_1:def 7
+                    .= N*(1,j) by A8,A14,MATRIX_1:def 8;
+      A20:  N*(1,j)*Cofactor(N,1,j)=L1.j by A14,LAPLACE:def 7;
+          thus Ln.j = L.j by A14,FUNCT_1:70
+                   .= N*(1,j)*(D*Cofactor(N,1,j)) by A15,A18,A19,LAPLACE:def 7
+                   .= D*(N*(1,j)*Cofactor(N,1,j)) by GROUP_1:def 4
+                   .= (D*L1).j by A14,A20,FVSUM_1:63;
+    end;
+    then
+  A21:  L|n=D*L1 by A12,FINSEQ_1:18;
+    set L'n=L/^n;
+    set L0=len N1|->0.K;
+  A22:  len L'n=(n+m)-n & len L0=m by A11,A8,A9,RFINSEQ:def 2,FINSEQ_2:109;
+    now let i such that
+      A23:  1<=i & i<=m;
+      A25:  i in dom L'n & i in dom L0 & i in Seg m
+            by A23,A22,FINSEQ_3:27,FINSEQ_1:3; then
+      A26:  n+i in dom L & dom L=Seg width bN
+            by A8,A9,A7,FINSEQ_5:29,FINSEQ_1:def 3;
+      A27:  len Line(N,1)=n by A8,FINSEQ_2:109;
+      A28:  bN*(1,i+n) = Line(block_diagonal(<*M,N1*>,0.K),1).(i+n)
+                           by A26,MATRIX_1:def 8
+                      .= (Line(N,1)^L0).(i+n) by A8,A10,Th23
+                      .= L0.i by A25,A27,FINSEQ_1:def 7
+                      .= 0.K by A8,A23,A25,FINSEQ_2:71;
+          thus L'n.i = L'n/.i by A25,PARTFUN1:def 8
+                    .= L/.(i+n) by A25,FINSEQ_5:30
+                    .= L.(i+n) by A26,PARTFUN1:def 8
+                    .= bN*(1,i+n)*Cofactor(bN,1,i+n) by A26,LAPLACE:def 7
+                    .= 0.K by A28,VECTSP_1:36
+                    .= L0.i by A8,A23,A25,FINSEQ_2:71;
+    end;
+    then
+  A29:  L/^n=(len N1)|->0.K by A22,FINSEQ_1:18;
+    L=(L|n)^(L/^n) by RFINSEQ:21;
+    then Sum L = Sum (D*L1)+Sum(len N1|->0.K) by A21,A29,RLVECT_1:58
+              .= Sum (D*L1)+Sum (len N1|->(0.K*0.K)) by VECTSP_1:36
+              .= Sum (D*L1)+Sum (0.K*(len N1|->0.K)) by FVSUM_1:66
+              .= D*Sum L1+Sum (0.K*(len N1|->0.K)) by FVSUM_1:92
+              .= D*Sum L1+0.K*Sum (len N1|->0.K) by FVSUM_1:92
+              .= D*Sum L1+0.K by VECTSP_1:36
+              .= D*Sum L1 by RLVECT_1:def 7
+              .= D*Det N by A10,LAPLACE:25;
+    hence thesis by A8,A10,LAPLACE:25;
+  end;
+  for i holds P[i] from NAT_1:sch 2(A1,A4);
+  hence thesis;
+end;
+
+theorem
+  Det block_diagonal(R,0.K) = Product (Det R)
+proof
+  defpred P[Nat] means
+    for R st len R=$1 holds Det block_diagonal(R,0.K) = Product (Det R);
+A1: P[0]
+  proof
+    let R such that
+   A2:  len R=0;
+    len Len R=0 by A2,FINSEQ_2:109;
+    then Sum Len R=0 by RVSUM_1:102,CARD_2:59;
+    hence Det block_diagonal(R,0.K) = 1_K by MATRIXR2:41
+                                   .= Product Det R by A2,FVSUM_1:105;
+  end;
+A3:  for n st P[n] holds P[n+1]
+  proof
+    let n such that
+  A4:  P[n];set n1=n+1;
+    let R such that
+  A5:  len R=n1;
+    set Rn=R|n;
+    set bR=block_diagonal(Rn,0.K);
+    set R1=R.n1;
+  A6:  R=Rn^<*R1*> by A5, FINSEQ_3:61;
+  A7:  Sum Len <*bR,R1*> = len bR +len R1 by Th16
+                        .= Sum Len Rn+len R1 by Def5
+                        .= Sum (Len Rn^<*len R1*>) by RVSUM_1:104
+                        .= Sum (Len Rn^Len <*R1*>) by Th15
+                        .= Sum Len R by A6,Th14;
+  A8:  len Rn=n by NAT_1:11,A5,FINSEQ_1:80;
+    block_diagonal(R,0.K)=block_diagonal(<*bR,R1*>,0.K) by A6,Th35;
+    hence Det block_diagonal(R,0.K) = Det bR * Det R1 by A7,Th52
+                                   .= (Product Det Rn)*Det R1 by A4,A8
+                                   .= Product ((Det Rn)^<*Det R1*>)by GROUP_4:9
+                                   .= Product((Det Rn)^(Det <*R1*>)) by Th49
+                                   .= Product Det R by A6,Th50;
+  end;
+  for n holds P[n] from NAT_1:sch 2(A1,A3);
+  hence thesis;
+end;
+
+theorem Th54:
+  len A1 <> width A1 & N = block_diagonal(<*A1,A2*>,0.K) implies
+     Det N = 0.K
+proof
+  defpred P[Nat] means
+   for A1 st len A1<>width A1 & width A1=$1
+    for n,N st N=block_diagonal(<*A1,A2*>,0.K) holds
+     Det N=0.K;
+A1: P[0]
+   proof
+     let A1 such that
+   A2:   len A1<>width A1 & width A1=0;
+     let n,N such that
+   A3:   N=block_diagonal(<*A1,A2*>,0.K);
+   A4:  len N=Sum Len <*A1,A2*> & n=len N & width N=Sum Width <*A1,A2*> &
+          Sum Len <*A1,A2*>=len A1+len A2 & Sum Width <*A1,A2*>=
+          width A1+width A2 by Th16,Th20,A3,Def5,MATRIX_1:def 3;
+     len A1<=len A1+len A2 by NAT_1:11;
+     then
+   A5:   len A1 in Seg len A1 & dom A1=Seg len A1 & Seg len A1 c= Seg len N
+         by A2,A4,FINSEQ_1:def 3,5,7;
+     then Line(N,len A1) = Line(A1,len A1)^(width A2|->0.K) by A3,Th23
+                        .= (<*>(the carrier of K))^(width A2|->0.K)
+                             by A2,FINSEQ_2:113
+                        .= width A2|->0.K by FINSEQ_1:47
+                        .= 0.K * Line(N,len A1) by A2,A4,FVSUM_1:71;
+     hence Det N = Det RLine(N,len A1,0.K*Line(N,len A1)) by MATRIX11:30
+                .= 0.K*Det N by A4,A5,MATRIX11:35
+                .= 0.K by VECTSP_1:36;
+   end;
+A6: for k st P[k] holds P[k+1]
+   proof
+     let k such that
+   A7:  P[k];set k1=k+1;
+     let A1 such that
+   A8:  len A1<>width A1 & width A1=k1;
+     let n,N such that
+   A9:  N=block_diagonal(<*A1,A2*>,0.K);
+     set C=LaplaceExpC(N,1);
+   A10: len N=Sum Len <*A1,A2*> & n=len N & n=width N & width N=
+        Sum Width <*A1,A2*> & Sum Len <*A1,A2*>=len A1+len A2 &
+        Sum Width <*A1,A2*>=width A1+width A2 & len(A1^A2)=len A1+len A2
+        by FINSEQ_1:35,Th16,Th20,A9,Def5,MATRIX_1:25;
+     then
+   A11: len C=len N  by LAPLACE:def 8;
+     len A1<>0 by A8,MATRIX_1:def 4;
+     then
+   A12: len A1>=1 & 1<=k1 by NAT_1:14;
+     then
+   A13: 1 in Seg width A1 & 1+0<=len N by A8,A10,XREAL_1:9;
+     then
+   A14: 1 in Seg n by A10;
+     set L0=len N|->0.K;
+   A15: len L0=len N by FINSEQ_2:109;
+     now let i such that
+       A16:  1<=i & i<=len N;
+       A17: i in dom C & i in Seg n & i in dom (A1^A2)
+              by A10,A16,A11,FINSEQ_3:27,FINSEQ_1:3;
+           then
+       A18:  C.i=N*(i,1)*Cofactor(N,i,1) & N*(i,1)=Line(N,i).1
+             by A10,A14,LAPLACE:def 8,MATRIX_1:def 8;
+           now per cases by A17,FINSEQ_1:38;
+             suppose
+           A19: i in dom A1;
+               now per cases by A12,REAL_1:def 5;
+                  suppose
+               A20:  len A1=1;
+                    then 1<=i & i<=1 by A19,FINSEQ_3:27;
+                    then
+               A21:  i=1 by XXREAL_0:1;
+                    set Q=Seg n\{1};
+                    Seg 1 c= Seg n & Seg 1={1} by A13,A10,FINSEQ_1:4,7;
+                    then
+               A22:   card Q = card Seg n-card Seg 1 by CARD_2:63
+                            .= card Seg n-1 by FINSEQ_1:78
+                            .= n-1 by FINSEQ_1:78
+                            .= k+width A2 by A8,A10;
+                    then
+               A23:   card Q = k+width A2+1-'1 by BINARITH:39
+                            .= n-'1 by A8,A10;
+                    k<>0 by A8,A20;
+                    then k in Seg k by FINSEQ_1:5;
+                    then 1<=k by FINSEQ_1:3;
+                    then 1+0<=card Q & 1+1<=k1 by A22,XREAL_1:9;
+                    then
+               A24:   1 in Seg card Q & 2 in Seg k1 & Q c= Seg len N
+                      by A10,XBOOLE_1:36;
+                    Delete(N,i,1) = Deleting(N,i,1) by A14,A17,LAPLACE:def 1
+                                 .= Segm(N,Q,Q) by A21,MATRIX13:58;
+                    then
+               A25:   Col(Delete(N,i,1),1) = Col(N,Sgm Q.1)*Sgm Q
+                      by A24,MATRIX13:49;
+                    now let j be Element of NAT such that
+                      A26:   j in Seg (n-'1);
+                      A27:  dom Sgm Q=Seg card Q by XBOOLE_1:36,FINSEQ_3:45;
+                      A28:  n=1+card Q by A22,A8,A10;
+                      A29:  len Col(A1,2)=1 & dom (len A2|->0.K)=Seg len A2 &
+                            len A2=card Q by A10,A20,FINSEQ_2:109,144,A22,A8;
+                       thus Col(Delete(N,i,1),1).j
+                           = Col(N,Sgm Q.1).((Sgm Q).j)
+                                    by A25,A26,A27,A23,FUNCT_1:23
+                          .= Col(N,1+1).(Sgm Q.j)
+                                    by A28,FINSEQ_1:4,A24,MATRIX15:8
+                          .= Col(N,1+1).(j+1)
+                                    by A26,A28,FINSEQ_1:4,A23,MATRIX15:8
+                          .= (Col(A1,2)^(len A2|->0.K)).(j+1)by A24,A8,A9,Th24
+                          .= (len A2|->0.K).j by A23,A26,A29,FINSEQ_1:def 7
+                          .= 0.K by FINSEQ_2:71,A23,A26,A10,A20,A22,A8,
+                                    FINSEQ_1:4;
+                    end;
+                    hence Det Delete(N,i,1)=0.K by A24,A23,MATRIX_9:53;end;
+                  suppose
+               A30:  len A1>1;
+                    then reconsider L1=len A1-1 as Element of NAT by NAT_1:21;
+                    set DL=DelLine(A1,i);
+                    set DC=DelCol(DL,1);
+               A31:  len A1=L1+1;
+               A32:  width A1=width DL by A30,LAPLACE:4;
+                    then width DC=width A1-'1 & len DC=len DL & k1-'1=k
+                      by A13,LAPLACE:3,MATRIX_2:def 6,BINARITH:39;
+                    then
+               A33:  len DC<>width DC & width DC=k by A8,A31,A19,FINSEQ_3:118;
+                    Delete(N,i,1) = Deleting(N,i,1) by A14,A17,LAPLACE:def 1
+                                 .= DelCol(DelLine(N,i),1) by MATRIX_2:def 8
+                                 .= DelCol(block_diagonal(<*DL*>^<*A2*>,0.K),1)
+                                       by A9,A32,A19,Th41
+                                 .= block_diagonal(<*DC,A2*>,0.K)
+                                       by A13,A32,Th43;
+                    hence 0.K=Det Delete(N,i,1) by A33,A7;end;
+               end;
+               then 0.K = Cofactor(N,i,1) by VECTSP_1:36;
+               hence 0.K=C.i by A18,VECTSP_1:36;end;
+             suppose ex j st j in dom A2 & i=len A1+j;
+               then consider j such that
+           A34:  j in dom A2 & i=len A1+j;
+           A35:  dom (width A1|->0.K)=Seg width A1 by FINSEQ_2:144;
+               N*(i,1) = ((width A1|->0.K)^Line(A2,j)).1 by A9,A18,A34,Th23
+                      .= (width A1|->0.K).1 by A13,A35,FINSEQ_1:def 7
+                      .= 0.K by A13,FINSEQ_1:4,FINSEQ_2:71;
+               hence 0.K=C.i by A18,VECTSP_1:36;end;
+           end;
+           hence C.i=L0.i by A17,A10,A13,FINSEQ_2:71;
+     end;
+     then C=L0 by A11,A15,FINSEQ_1:18;
+     then C=len N|->(0.K*0.K) by VECTSP_1:39;
+     then Sum C = Sum (0.K*(len N|->0.K)) by FVSUM_1:66
+               .= 0.K*Sum(len N|->0.K) by FVSUM_1:92
+               .= 0.K by VECTSP_1:36;
+     hence thesis by LAPLACE:27,A14;
+  end;
+  for n holds P[n] from NAT_1:sch 2(A1,A6);
+  hence thesis;
+end;
+
+theorem
+  Len G <> Width G implies
+    for M be Matrix of n,K st M = block_diagonal(G,0.K) holds
+      Det M = 0.K
+proof
+  assume
+A1:  Len G<>Width G;
+  set B= block_diagonal(G,0.K);
+  let M be Matrix of n,K such that
+A2:  M =B;
+  consider i such that
+A3:  i in Seg len G & (Len G).i<>(Width G).i by A1,FINSEQ_2:139;
+  defpred P[Nat] means
+    $1 in Seg len G & (Len G).$1<>(Width G).$1;
+A4: ex k st P[k] by A3;
+  consider k such that
+A5:  P[k] and
+A6:  for n st P[n] holds k<=n from NAT_1:sch 5(A4);
+  1<=k by A5,FINSEQ_1:3;
+  then reconsider k1=k-1 as Element of NAT by NAT_1:21;
+  set bGk1=block_diagonal(G/^k,0.K);
+  set Gk=G|k1;
+  set bGk=block_diagonal(Gk,0.K);
+  set bGG=block_diagonal(<*G.k,bGk1*>,0.K);
+  k1+1<=len G by A5,FINSEQ_1:3;
+  then
+A7:  k1<len G & len G=len (Len G) & len G=len (Width G)
+     by NAT_1:13,FINSEQ_2:109;
+  then
+A8:  len Gk=k1 & len((Len G)|k1)=k1 &len((Width G)|k1)=k1 & Seg k1 c=Seg len G&
+     Seg len G=dom G by FINSEQ_1:def 3,7,80;
+  then
+A9:  dom ((Len G)|k1)=Seg k1 & dom ((Width G)|k1)=Seg k1 by FINSEQ_1:def 3;
+  now let j such that
+    A10:  j in Seg k1;
+         j<=k1 by A10,FINSEQ_1:3;
+         then j in Seg len G & j < k1+1 by A8,A10,NAT_1:13;
+         then
+    A11:  (Len G).j=(Width G).j by A6;
+         thus (Len Gk).j = ((Len G)|k1).j by Th17
+                        .= (Len G).j by A10,A9,FUNCT_1:70
+                        .= ((Width G)|k1).j by A11,A10,A9,FUNCT_1:70
+                        .= (Width Gk).j by Th21;
+  end;
+  then reconsider bGk as Matrix of Sum Len Gk,K by A8,FINSEQ_2:139;
+A12: M = block_diagonal(G|(k1+1)^(G/^k),0.K) by A2,RFINSEQ:21
+      .= block_diagonal(Gk^<*G.k*>^(G/^k),0.K) by A5,A8,FINSEQ_5:11
+      .= block_diagonal(Gk^(<*G.k*>^(G/^k)),0.K) by FINSEQ_1:45
+      .= block_diagonal(<*bGk*>^(<*G.k*>^(G/^k)),0.K) by Th35
+      .= block_diagonal(<*bGk*>^<*block_diagonal(<*G.k*>^(G/^k),0.K)*>,0.K)
+           by Th36
+      .= block_diagonal(<*bGk,bGG*>,0.K) by Th36;
+  then
+A13: len M=Sum Len <*bGk,bGG*> & width M=Sum Width <*bGk,bGG*> & len M=n &
+     width M=n & Sum Len <*bGk,bGG*>=len bGk+len bGG & len bGk=Sum Len Gk &
+     width bGk=Sum Len Gk & Sum Width <*bGk,bGG*>=width bGk+width bGG
+     by MATRIX_1:25,Def5,Th20,Th16;
+  then reconsider bGG'=bGG as Matrix of len bGG,K by MATRIX_2:7;
+  k in dom (Len G) & k in dom (Width G) by A5,A7,FINSEQ_1:def 3;
+  then len (G.k)=(Len G).k & width (G.k)=(Width G).k by Def3,Def4;
+  then Det bGG'=0.K by A5,Th54;
+  hence Det M = Det bGk * 0.K by A12,A13,Th52
+             .= 0.K by VECTSP_1:36;
+end;
+
+begin :: An Example of a Finite Sequence of Matrices
+
+definition
+  let K;
+  let f be FinSequence of NAT;
+  func 1.(K,f) -> FinSequence_of_Square-Matrix of K means :Def8:
+    dom it = dom f &
+    for i st i in dom it holds it.i = 1.(K,f.i);
+  existence
+  proof
+    deffunc G(Nat)=1.(K,f.$1);
+    consider IT be FinSequence such that
+A1:   len IT=len f and
+A2:   for k st k in dom IT holds IT.k=G(k) from FINSEQ_1:sch 2;
+A3:   dom IT=Seg len IT & dom IT=dom f by A1,FINSEQ_1:def 3,FINSEQ_3:31;
+    rng IT c= (the carrier of K)**
+      proof
+        let y such that
+     A4:  y in rng IT;
+        consider x such that
+     A5:  x in dom IT & IT.x=y by A4,FUNCT_1:def 5;
+        reconsider x as Nat by A5,ORDINAL1:def 13;
+        IT.x =1.(K,f.x) by A2,A5;
+        hence thesis by A5,FINSEQ_1:def 11;
+      end;
+    then reconsider IT as FinSequence of (the carrier of K)**
+      by FINSEQ_1:def 4;
+    now let i such that
+     A6:  i in dom IT;
+         IT.i=1.(K,f.i) by A2,A6;
+         hence IT.i is Matrix of K;
+    end;
+    then reconsider IT as FinSequence_of_Matrix of K by Def2;
+    now let i such that A7:i in dom IT;
+       IT.i=1.(K,f.i) by A2,A7;
+      hence ex n st IT.i is Matrix of n,K;
+    end;
+    then reconsider IT as FinSequence_of_Square-Matrix of K by Def6;
+    take IT;
+    thus thesis by A2,A3;
+  end;
+  uniqueness
+  proof
+    let T1,T2 be FinSequence_of_Square-Matrix of K such that
+A8:   dom T1=dom f & for i st i in dom T1 holds T1.i= 1.(K,f.i) and
+A9:   dom T2=dom f & for i st i in dom T2 holds T2.i= 1.(K,f.i);
+    now let i such that
+      A10:  i in dom f;
+          thus T1.i = 1.(K,f.i) by A8,A10
+                   .= T2.i by A9,A10;
+    end;
+    hence thesis by A8,A9,FINSEQ_1:17;
+  end;
+end;
+
+theorem
+  Len 1.(K,f) = f & Width 1.(K,f) = f
+proof
+  set ONE=1.(K,f);
+A1:  dom Len ONE=dom ONE & dom Width ONE=dom ONE & dom ONE=dom f
+by Def3,Def4,Def8;
+  now let i such that
+   A2:  i in dom Len ONE;
+       thus (Len ONE).i = len (ONE.i) by A2,Def3
+                       .= len (1.(K,f.i)) by A1,A2,Def8
+                       .= f.i by MATRIX_1:25;
+  end;
+  hence Len ONE=f by A1,FINSEQ_1:17;
+  now let i such that
+    A3:  i in dom Width ONE;
+        thus (Width ONE).i = width (ONE.i) by A3,Def4
+                          .= width (1.(K,f.i)) by A1,A3,Def8
+                          .= f.i by MATRIX_1:25;
+  end;
+  hence thesis by A1,FINSEQ_1:17;
+end;
+
+theorem Th57:
+  for i be Element of NAT holds
+    1.(K,<*i*>) = <*1.(K,i)*>
+proof
+  let i be Element of NAT;
+  A1:dom (1.(K,<*i*>)) = dom <*i*> by Def8
+                      .= Seg 1 by FINSEQ_1:55;
+  then A2:len (1.(K,<*i*>))=1 by FINSEQ_1:def 3;
+  1 in dom (1.(K,<*i*>)) by A1;
+  then (1.(K,<*i*>)).1 = 1.(K,<*i*>.1) by Def8
+                      .= 1.(K,i) by FINSEQ_1:57;
+  hence thesis by A2,FINSEQ_1:57;
+end;
+
+theorem Th58:
+  1.(K,f^g) = 1.(K,f)^1.(K,g)
+proof
+  set F=1.(K,f);
+  set G=1.(K,g);
+  set FG=F^G;
+  set ONE=1.(K,f^g);
+A1:  dom F=dom f & dom G=dom g & dom ONE=dom (f^g) by Def8;
+  then
+A2:len F=len f & len G=len g & len ONE=len (f^g) & len FG=len F+len G &
+     len (f^g)=len f+len g by FINSEQ_1:35,FINSEQ_3:31;
+  now let i such that
+A3:   1<=i & i<= len FG;
+A4:   i in dom FG & i in dom ONE by A2,A3,FINSEQ_3:27;
+    then
+A5:   ONE.i=1.(K,(f^g).i) by Def8;
+    now per cases by A4,FINSEQ_1:38;
+       suppose
+A6:        i in dom F;
+         hence ONE.i = 1.(K,f.i) by A1,A5,FINSEQ_1:def 7
+                    .= F.i by A6,Def8
+                    .= FG.i by A6,FINSEQ_1:def 7;
+       end;
+       suppose ex n st n in dom G & i=len F+n;
+         then consider n such that
+A7:        n in dom G & i=len F+n;
+         thus ONE.i = 1.(K,g.n) by A1,A2,A5,A7,FINSEQ_1:def 7
+                   .= G.n by A7,Def8
+                   .= FG.i by A7,FINSEQ_1:def 7;
+       end;
+    end;
+    hence ONE.i=FG.i;
+  end;
+  hence thesis by A2,FINSEQ_1:18;
+end;
+
+theorem
+  1.(K,f|n) = 1.(K,f)|n
+proof
+  dom 1.(K,f|n) = dom (f|n) & dom 1.(K,f) = dom f by Def8;
+  then
+A1:  len 1.(K,f|n)=len (f|n) & len 1.(K,f)=len f by FINSEQ_3:31;
+  per cases;
+     suppose n>len f;
+       then f|n=f & 1.(K,f)|n=1.(K,f) by A1,FINSEQ_1:79;
+       hence thesis;
+     end;
+     suppose n<=len f;
+       then
+A2:      len (1.(K,f|n))=n by A1,FINSEQ_1:80;
+       f=(f|n)^(f/^n) by RFINSEQ:21;
+       then 1.(K,f)=(1.(K,f|n))^1.(K,f/^n) by Th58;
+       hence thesis by A2,FINSEQ_5:26;
+     end;
+end;
+
+theorem Th60:
+  block_diagonal(<*1.(K,i),1.(K,j)*>,0.K)=1.(K,i+j)
+proof
+  set I=1.(K,i);
+  set J=1.(K,j);
+  set B=block_diagonal(<*I,J*>,0.K);
+A1:  Sum Len <*I*>=len I & Sum Width <*I*>=width I &
+     Sum Len <*J*>=len J by Lm4,Lm5;
+A2:  Sum Len <*I,J*>=len I+len J & len I=i & len J=j & width I=i
+     by Th16,MATRIX_1:25;
+  reconsider B as Matrix of i+j,K by A2;
+A3:  Indices B=[:Seg (i+j),Seg (i+j):] & Indices J=[:Seg j,Seg j:] &
+      Indices block_diagonal(<*I*>,0.K) =[:Seg i,Seg i:] &
+      Indices block_diagonal(<*J*>,0.K)=[:Seg j,Seg j:] &
+      Indices I=[:Seg i,Seg i:] by A1,A2,MATRIX_1:25;
+A4:  now let n such that
+A5:       [n,n] in Indices B;
+A6:     n in Seg (i+j) by A3,A5,ZFMISC_1:106;
+        then
+A7:       n >= 1 by FINSEQ_1:3;
+        now per cases;
+          suppose n<=i;
+            then n in Seg i by A6,A7;
+            then
+A8:           [n,n] in [:Seg i,Seg i:] by ZFMISC_1:106;
+            hence B*(n,n) = block_diagonal(<*I*>,0.K)*(n,n) by A3,Th26
+                         .= I*(n,n) by Th34
+                         .= 1_K by A3,A8,MATRIX_1:def 12;
+          end;
+          suppose n>i;
+            then n-'i=n-i & n-i<>0 by BINARITH:50;
+            then
+A9:           n-'i>0 & n=n-'i+i;
+A10:          [n-'i,n-'i] in [:Seg j,Seg j:] by A1,A2,A3,A5,A9,Th27;
+             hence B*(n,n) = block_diagonal(<*J*>,0.K)*(n-'i,n-'i)
+                             by A3,Th28,A1,A2,A9
+                          .= J*(n-'i,n-'i) by Th34
+                          .= 1_K by A3,A10,MATRIX_1:def 12;
+          end;
+        end;
+        hence B*(n,n) = 1_K;
+  end;
+  now let n,m such that
+A11:   [n,m] in Indices B & n <> m;
+A12:    n in Seg (i+j) & m in Seg (i+j) by A3,A11,ZFMISC_1:106;
+      then
+A13:     n>=1 & m>=1 by FINSEQ_1:3;
+      now per cases;
+          suppose n<=i & m<=i;
+             then n in Seg i & m in Seg i by A12,A13;
+             then
+A14:           [n,m] in [:Seg i,Seg i:] by ZFMISC_1:106;
+             hence B*(n,m) = block_diagonal(<*I*>,0.K)*(n,m) by A3,Th26
+                          .= I*(n,m) by Th34
+                          .= 0.K by A3,A11,A14,MATRIX_1:def 12;
+          end;
+          suppose n>i & m>i;
+             then n-'i=n-i & n-i<>0 & m-'i=m-i & m-i<>0 by BINARITH:50;
+             then
+A15:            n-'i>0 & n=n-'i+i & m-'i>0 & m=m-'i+i;
+             then
+A16:            [n-'i,m-'i] in [:Seg j,Seg j:] by A1,A2,A3,A11,Th27;
+             hence B*(n,m) = block_diagonal(<*J*>,0.K)*(n-'i,m-'i)
+                              by A3,Th28,A1,A2,A15
+                          .= J*(n-'i,m-'i) by Th34
+                          .= 0.K by A3,A11,A15,A16,MATRIX_1:def 12;
+          end;
+          suppose (n<=i & m>i) or (n>i & m<=i);
+            hence B*(n,m)=0.K by A1,A2,A11,Th29;
+          end;
+      end;
+      hence B*(n,m) = 0.K;
+  end;
+  hence thesis by A4,MATRIX_1:def 12;
+end;
+
+theorem
+  block_diagonal(1.(K,f),0.K) = 1.(K,Sum f)
+proof
+  defpred P[Nat] means
+      for f st len f=$1 holds block_diagonal(1.(K,f),0.K) = 1.(K,Sum f);
+A1:  P[0]
+    proof
+      let f such that
+A2:     len f=0;
+      dom 1.(K,f)=dom f by Def8;
+      then len Len 1.(K,f)=len 1.(K,f) & len 1.(K,f)=0
+        by A2,FINSEQ_2:109,FINSEQ_3:31;
+      then Sum Len 1.(K,f)=0 & Sum f=0 by A2,RVSUM_1:102,CARD_2:59;
+      hence thesis by MATRIX_1:36;
+    end;
+A3: for n st P[n] holds P[n+1]
+    proof
+      let n such that
+A4:      P[n]; set n1=n+1;
+      let f such that
+A5:     len f=n1;
+A6:   len (f|n)=n by A5,NAT_1:11,FINSEQ_1:80;
+      1 <= n1 by NAT_1:11; then
+      n1 in dom f by A5,FINSEQ_3:27; then
+AA:   f/.n1 = f.n1 by PARTFUN1:def 8;
+A7:   f=(f|n)^<*f.n1*> by A5,FINSEQ_3:61;
+      hence block_diagonal(1.(K,f),0.K)
+         = block_diagonal(1.(K,f|n)^(1.(K,<*f/.n1*>)),0.K) by Th58,AA
+        .= block_diagonal(1.(K,f|n)^<*1.(K,f.n1)*>,0.K) by Th57,AA
+        .= block_diagonal(<*block_diagonal(1.(K,f|n),0.K)*>^<*1.(K,f.n1)*>,0.K)
+             by Th35
+        .= block_diagonal(<*1.(K,Sum (f|n)),1.(K,f.n1)*>,0.K) by A4,A6
+        .= 1.(K,Sum (f|n)+f.n1) by Th60
+        .= 1.(K,Sum f) by A7,RVSUM_1:104;
+    end;
+  for n holds P[n] from NAT_1:sch 2(A1,A3);
+  then P[len f];
+  hence thesis;
+end;
+
+reserve p,p1,p2 for FinSequence of K;
+
+begin :: Operations On a Finite Sequence of Matrices
+
+definition
+  let K,G,p;
+  func mlt(p,G) -> FinSequence_of_Matrix of K means :Def9:
+    dom it = dom G &
+    for i st i in dom it holds it.i = p/.i * G.i;
+  existence
+  proof
+    deffunc G(Nat)=p/.$1*G.$1;
+    consider IT be FinSequence such that
+A1:   len IT=len G and
+A2:   for k st k in dom IT holds IT.k=G(k) from FINSEQ_1:sch 2;
+A3:   dom IT=Seg len IT & dom IT=dom G by A1,FINSEQ_1:def 3,FINSEQ_3:31;
+    rng IT c= (the carrier of K)**
+      proof
+        let y such that
+     A4:  y in rng IT;
+        consider x such that
+     A5:  x in dom IT & IT.x=y by A4,FUNCT_1:def 5;
+        reconsider x as Nat by A5,ORDINAL1:def 13;
+        IT.x =p/.x*G.x by A2,A5;
+        hence thesis by A5,FINSEQ_1:def 11;
+      end;
+    then reconsider IT as FinSequence of (the carrier of K)**
+      by FINSEQ_1:def 4;
+    now let i such that
+     A6:  i in dom IT;
+         IT.i=p/.i*G.i by A2,A6;
+         hence IT.i is Matrix of K;
+    end;
+    then reconsider IT as FinSequence_of_Matrix of K by Def2;
+    take IT;
+    thus thesis by A2,A3;
+  end;
+  uniqueness
+  proof
+    let T1,T2 be FinSequence_of_Matrix of K such that
+A7:   dom T1=dom G & for i st i in dom T1 holds T1.i= p/.i*G.i and
+A8:   dom T2=dom G & for i st i in dom T2 holds T2.i= p/.i*(G.i);
+    now let i such that
+      A9:  i in dom G;
+      thus T1.i = p/.i*G.i by A7,A9
+               .= T2.i by A8,A9;
+    end;
+    hence thesis by A7,A8,FINSEQ_1:17;
+  end;
+end;
+
+definition
+  let K;
+  let R,p;
+  redefine func mlt(p,R) -> FinSequence_of_Square-Matrix of K;
+  coherence
+  proof
+    set M=mlt(p,R);
+    now let i such that A1:i in dom M;
+      consider n such that
+        A2:R.i is Matrix of n,K;
+      take n;
+      len (R.i)=n & M.i=p/.i* R.i by A1,A2,Def9,MATRIX_1:25;
+      hence M.i is Matrix of n,K;
+    end;
+    hence thesis by Def6;
+  end;
+end;
+
+theorem
+    Len mlt(p,G) = Len G & Width mlt(p,G) = Width G
+proof
+  set M=mlt(p,G);
+A1:  dom Len M=dom M & dom Len G=dom G & dom Width G=dom G &
+     dom Width M=dom M & dom M=dom G by Def3,Def4,Def9;
+  now let i such that
+   A2:  i in dom Len M;
+       thus (Len M).i = len (M.i) by A2,Def3
+                       .= len (p/.i*G.i) by A1,A2,Def9
+                       .= len (G.i) by MATRIX_3:def 5
+                       .= (Len G).i by A1,A2,Def3;
+  end;
+  hence Len M=Len G by A1,FINSEQ_1:17;
+  now let i such that
+    A3:  i in dom Width M;
+    thus (Width M).i = width (M.i) by A3,Def4
+                     .= width (p/.i*G.i) by A1,A3,Def9
+                     .= width (G.i) by MATRIX_3:def 5
+                     .= (Width G).i by A1,A3,Def4;
+  end;
+  hence thesis by A1,FINSEQ_1:17;
+end;
+
+theorem Th63:
+  mlt(p,<*A*>)=<*p/.1*A*>
+proof
+  A1:dom mlt(p,<*A*>) = dom <*A*> by Def9
+                     .= Seg 1 by FINSEQ_1:55;
+  then A2:len mlt(p,<*A*>)=1 by FINSEQ_1:def 3;
+  1 in dom mlt(p,<*A*>) by A1;
+  then mlt(p,<*A*>).1 = p/.1*(<*A*>.1) by Def9
+                      .= p/.1*A by FINSEQ_1:57;
+  hence thesis by A2,FINSEQ_1:57;
+end;
+
+theorem Th64:
+  len G = len p & len G1 <=len p1 implies
+    mlt(p^p1,G^G1) = mlt(p,G)^mlt(p1,G1)
+proof
+  assume
+A1: len G=len p & len G1<=len p1;
+  set pp1=p^p1;
+  set GG1=G^G1;
+  set MM=mlt(pp1,GG1);
+  set M=mlt(p,G);
+  set M1=mlt(p1,G1);
+A2:  dom MM=dom GG1 & dom M=dom G & dom M1=dom G1 & dom G=dom p &
+     dom GG1=Seg len GG1 & dom G1=Seg len G1
+     by A1,Def9,FINSEQ_1:def 3,FINSEQ_3:31;
+  then
+A3: len MM=len GG1 & len M=len G & len M1=len G1 & len GG1=len G+len G1
+    & len (M^M1)=len M+len M1 by FINSEQ_1:35,FINSEQ_3:31;
+  then len GG1<=len p+len p1 by A1,XREAL_1:9;
+  then dom GG1 c= Seg (len p+len p1) & dom G1 c= Seg len p1
+    by A1,A2,FINSEQ_1:7;
+  then
+A4:  dom GG1 c= dom pp1 & dom G1 c= dom p1 by FINSEQ_1:def 3,def 7;
+  now let i such that
+A5:     1<=i & i<=len GG1;
+A6:    i in dom GG1 by A5,FINSEQ_3:27;
+     then
+A7:    MM.i=pp1/.i*GG1.i & pp1/.i =pp1.i by A2,A4,Def9,PARTFUN1:def 8;
+     now per cases by A6,FINSEQ_1:38;
+        suppose
+A8:         i in dom G;
+           then GG1.i=G.i & pp1.i=p.i & p.i=p/.i
+             by A2,FINSEQ_1:def 7,PARTFUN1:def 8;
+           hence MM.i = M.i by A2,A7,A8,Def9
+                     .= (M^M1).i by A2,A8,FINSEQ_1:def 7;
+        end;
+        suppose ex n st n in dom G1 & i=len G+n;
+          then consider n such that
+A9:          n in dom G1 & i=len G+n;
+          GG1.i=G1.n & pp1.i=p1.n & p1/.n=p1.n
+            by A1,A4,A9,FINSEQ_1:def 7,PARTFUN1:def 8;
+          hence MM.i = M1.n by A2,A7,A9,Def9
+                    .= (M^M1).i by A2,A3,A9,FINSEQ_1:def 7;
+        end;
+    end;
+    hence MM.i=(M^M1).i;
+  end;
+  hence thesis by A3,FINSEQ_1:18;
+end;
+
+Lm7:a*block_diagonal(<*A1,A2*>,a1)=block_diagonal(<*a*A1,a*A2*>,a*a1)
+proof
+  set AA1=a*A1;
+  set AA2=a*A2;
+  set aa1=a*a1;
+  set B=block_diagonal(<*A1,A2*>,a1);
+A1:  len AA1=len A1 & width AA1=width A1 & len AA2=len A2 & width AA2=width A2
+     by MATRIX_3:def 5;
+  then
+A2:  Sum Len <*AA1,AA2*>=len A1+len A2 & Sum Len <*A1,A2*>=len A1+len A2&
+    Sum Width <*AA1,AA2*> = width A1+width A2 & Sum Width <*A1,A2*> =
+    width A1+width A2& len B = Sum Len <*A1,A2*> by Th16,Th20,Def5;
+A3:  dom AA1 = dom A1 & dom AA2 = dom A2 by A1,FINSEQ_3:31;
+  now let i;
+     thus i in dom AA1 implies Line(a*B,i)=Line(AA1,i)^(width AA2 |->aa1)
+       proof
+         assume
+A4:         i in dom AA1;
+         then
+A5:         1<=i & i<=len A1 & len A1<= len B by A2,A1,FINSEQ_3:27,NAT_1:11;
+         then i<=len B by XXREAL_0:2;
+         hence Line(a*B,i) = a*Line(B,i) by A5,MATRIXR1:20
+                          .= a*(Line(A1,i)^(width A2 |->a1)) by A3,A4,Th23
+                          .= (a*Line(A1,i))^(a*(width A2 |->a1)) by MATRIX15:4
+                          .= Line(AA1,i)^(a*(width A2 |->a1))by A5,MATRIXR1:20
+                          .= Line(AA1,i)^(width AA2 |->aa1) by A1,FVSUM_1:66;
+       end;
+     thus i in dom AA2 implies
+         Line(a*B,i+len AA1)=(width AA1|->aa1)^Line(AA2,i)
+       proof
+         assume
+A6:        i in dom AA2;
+         then
+A7:        1<=i & i<=len A2 by FINSEQ_3:27,A1;
+         then 0+1<=i+len A1 & i+len A1<=len B by A2,XREAL_1:9;
+         hence Line(a*B,i+len AA1) = a*Line(B,i+len A1) by A1,MATRIXR1:20
+                                  .= a*((width A1|->a1)^Line(A2,i))
+                                        by A3,A6,Th23
+                                  .= (a*(width A1|->a1))^(a*Line(A2,i))
+                                        by MATRIX15:4
+                                  .= (width A1|->aa1)^(a*Line(A2,i))
+                                        by FVSUM_1:66
+                                  .= (width AA1|->aa1)^Line(AA2,i)
+                                        by A1,A7,MATRIXR1:20;
+       end;
+  end;
+  hence thesis by A2,Th23;
+end;
+
+theorem
+  a*block_diagonal(G,a1) = block_diagonal(mlt(len G|->a,G),a*a1)
+proof
+  defpred P[Nat] means
+    for a,a1,G st len G=$1 holds
+      a*block_diagonal(G,a1) = block_diagonal(mlt(len G|->a,G),a*a1);
+A1: P[0]
+    proof
+       let a,a1,G such that A2:len G=0;
+       dom mlt(len G|->a,G)=dom G by Def9;
+       then len Len G=len G & len Len mlt(len G|->a,G)=len mlt(len G|->a,G) &
+           len mlt(len G|->a,G)=len G by FINSEQ_2:109,FINSEQ_3:31;
+       then Len G={} & Len mlt(len G|->a,G)={} by A2,CARD_2:59;
+       then len block_diagonal(G,a1)=0 &
+         len block_diagonal(mlt(len G|->a,G),a*a1)=0 by RVSUM_1:102,Def5;
+       then len (a*block_diagonal(G,a1))=0 &
+        block_diagonal(mlt(len G|->a,G),a*a1)={} by MATRIX_3:def 5,CARD_2:59;
+       hence thesis by CARD_2:59;
+     end;
+A3: for n st P[n] holds P[n+1]
+     proof
+       let n such that
+A4:       P[n];set n1=n+1;
+       let a,a1,G such that
+A5:       len G=n1;
+       set M=mlt(len G|->a,G);
+       1 in Seg 1;
+       then 1 in dom <*a*> by FINSEQ_1:def 8;
+       then
+A6:      <*a*>.1=<*a*>/.1 & <*a*>.1=a by PARTFUN1:def 8,FINSEQ_1:def 8;
+       n<=n1 by NAT_1:13;
+       then
+A7:      G=(G|n)^<*G.n1*> & n1|->a=(n|->a)^<*a*>&len (G|n)=n&len (n|->a)=n&
+         len <*G.n1*>=1 & len <*a*>=1
+         by A5,FINSEQ_3:61,FINSEQ_2:69,74,FINSEQ_1:80,FINSEQ_1:56;
+       hence block_diagonal(mlt(len G|->a,G),a*a1)
+          = block_diagonal(mlt(n|->a,G|n)^mlt(<*a*>,<*G.n1*>),a*a1) by A5,Th64
+         .= block_diagonal(mlt(n|->a,G|n)^<*a*(G.n1)*>,a*a1) by Th63,A6
+         .= block_diagonal(<*block_diagonal(mlt(n|->a,G|n),a*a1)*>^<*a*G.n1*>,
+             a*a1) by Th35
+         .= block_diagonal(<*a*block_diagonal(G|n,a1),a*G.n1*>,a*a1) by A4,A7
+         .= a*block_diagonal(<*block_diagonal(G|n,a1),G.n1*>,a1) by Lm7
+         .= a*block_diagonal(G,a1) by A7,Th35;
+     end;
+   for n holds P[n] from NAT_1:sch 2(A1,A3);
+   hence thesis;
+end;
+
+definition
+  let K;
+  let G1,G2 be FinSequence_of_Matrix of K;
+  func G1(+)G2 -> FinSequence_of_Matrix of K  means :Def10:
+    dom it = dom G1 &
+    for i st i in dom it holds it.i= G1.i + G2.i;
+  existence
+  proof
+    deffunc G(Nat)=G1.$1+G2.$1;
+    consider IT be FinSequence such that
+A1:   len IT=len G1 and
+A2:   for k st k in dom IT holds IT.k=G(k) from FINSEQ_1:sch 2;
+A3:   dom IT=Seg len IT & dom IT=dom G1 by A1,FINSEQ_1:def 3,FINSEQ_3:31;
+    rng IT c= (the carrier of K)**
+      proof
+        let y such that
+     A4:  y in rng IT;
+        consider x such that
+     A5:  x in dom IT & IT.x=y by A4,FUNCT_1:def 5;
+        reconsider x as Nat by A5,ORDINAL1:def 13;
+        IT.x =G1.x + G2.x by A2,A5;
+        hence thesis by A5,FINSEQ_1:def 11;
+      end;
+    then reconsider IT as FinSequence of (the carrier of K)**
+      by FINSEQ_1:def 4;
+    now let i such that
+     A6:  i in dom IT;
+         IT.i=G1.i+G2.i by A2,A6;
+         hence IT.i is Matrix of K;
+    end;
+    then reconsider IT as FinSequence_of_Matrix of K by Def2;
+    take IT;
+    thus thesis by A2,A3;
+  end;
+  uniqueness
+  proof
+    let T1,T2 be FinSequence_of_Matrix of K such that
+A7:   dom T1=dom G1 & for i st i in dom T1 holds T1.i= G1.i + G2.i and
+A8:   dom T2=dom G1 & for i st i in dom T2 holds T2.i= G1.i + G2.i;
+    now let i such that
+      A9:  i in dom G1;
+          thus T1.i = G1.i+G2.i by A7,A9
+                   .= T2.i by A8,A9;
+    end;
+    hence thesis by A7,A8,FINSEQ_1:17;
+  end;
+end;
+
+definition
+  let K;
+  let R,G;
+  redefine func R(+)G -> FinSequence_of_Square-Matrix of K;
+  coherence
+  proof
+    set RG=R(+)G;
+    now let i such that A1:i in dom RG;
+      consider n such that
+        A2:R.i is Matrix of n,K;
+      take n;
+      len (R.i)=n & width (R.i)=n & RG.i=R.i+G.i &
+        len (R.i+G.i)=len (R.i) & width (R.i+G.i)=width (R.i)
+        by A1,A2,Def10,MATRIX_1:25,MATRIX_3:def 3;
+      hence RG.i is Matrix of n,K by MATRIX_2:7;
+    end;
+    hence thesis by Def6;
+  end;
+end;
+
+theorem Th66:
+    Len (G1(+)G2) = Len G1 & Width (G1(+)G2) = Width G1
+proof
+  set G12=G1(+)G2;
+A1:  dom Len G1=dom G1 & dom Len G12=dom G12 & dom Width G1=dom G1 &
+     dom Width G12=dom G12 & dom G12=dom G1 by Def10,Def3,Def4;
+  now let i such that
+   A2:  i in dom Len G12;
+       thus (Len G12).i = len (G12.i) by A2,Def3
+                       .= len (G1.i+G2.i) by A1,A2,Def10
+                       .= len (G1.i) by MATRIX_3:def 3
+                       .= (Len G1).i by A1,A2,Def3;
+  end;
+  hence Len G12=Len G1 by A1,FINSEQ_1:17;
+  now let i such that
+    A3:  i in dom Width G12;
+
+        thus (Width G12).i = width (G12.i) by A3,Def4
+                          .= width (G1.i+G2.i) by A1,A3,Def10
+                          .= width (G1.i) by MATRIX_3:def 3
+                          .= (Width G1).i by A1,A3,Def4;
+  end;
+  hence thesis by A1,FINSEQ_1:17;
+end;
+
+theorem Th67:
+  len G = len G' implies
+    (G^G1)(+)(G'^G2) = (G(+)G')^(G1(+)G2)
+proof
+  assume
+A1:  len G=len G';
+  set GG'=G(+)G';
+  set G12=G1(+)G2;
+  set GG1=G^G1;
+  set GG2=G'^G2;
+A2: dom GG'=dom G & dom G12=dom G1 & dom (GG1(+)GG2)= dom GG1 & dom G=dom G'
+     by A1,Def10,FINSEQ_3:31;
+  then
+A3:  len GG'=len G & len G12=len G1 & len (GG1(+)GG2)=len GG1  by FINSEQ_3:31;
+A4:  len GG1=len G+len G1 & len GG2=len G+len G2 by A1,FINSEQ_1:35;
+  then
+A5:  len (GG1(+)GG2)=len (GG'^G12) & len (GG'^G12)=len GG'+len G12
+     by A3,FINSEQ_1:35;
+  now let i such that
+    A6:  1<=i & i<= len G+len G1;
+    A7:  i in dom (GG1(+)GG2) by A2,A4,A6,FINSEQ_3:27;
+        then
+    A8:  (GG1(+)GG2).i=GG1.i + GG2.i by Def10;
+        now per cases by A2,A7,FINSEQ_1:38;
+          suppose
+         A9:  i in dom G;
+             hence (GG1(+)GG2).i = G.i+ GG2.i by A8,FINSEQ_1:def 7
+                                .= G.i +G'.i by A2,A9,FINSEQ_1:def 7
+                                .= GG'.i by A2,A9,Def10
+                                .= (GG'^G12).i by A2,A9,FINSEQ_1:def 7;end;
+          suppose ex n st n in dom G1 & i=len G + n;
+             then consider n such that
+         A10:  n in dom G1 & i=len G+n;
+             now per cases;
+               suppose n in dom G2;
+                  hence GG2.i=G2.n by A1,A10,FINSEQ_1:def 7;end;
+               suppose
+            A11:   not n in dom G2;
+                  then (n<1 or n>len G2) & 1<=n by A10,FINSEQ_3:27;
+                  then i>len G+len G2 by A10,XREAL_1:10;
+                  then not i in dom GG2 by A4,FINSEQ_3:27;
+                  hence GG2.i = {} by FUNCT_1:def 4
+                             .= G2.n by A11,FUNCT_1:def 4;end;
+             end;
+             hence (GG1(+)GG2).i = G1.n+G2.n by A8,A10,FINSEQ_1:def 7
+                                .= G12.n by A2,A10,Def10
+                                .= (GG'^G12).i by A2,A3,A10,FINSEQ_1:def 7;
+      end;
+    end;
+    hence (GG1(+)GG2).i=(GG'^G12).i;
+  end;
+  hence thesis by A3,A5,FINSEQ_1:18;
+end;
+
+theorem Th68:
+  <*A*>(+)G =  <*A + G.1*>
+proof
+  dom (<*A*>(+) G)=dom <*A*> by Def10;
+  then
+A1: len (<*A*>(+) G) = len <*A*> by FINSEQ_3:31
+                    .= 1 by FINSEQ_1:56;
+  then dom (<*A*>(+) G)={1} by FINSEQ_1:def 3,4;
+  then 1 in dom (<*A*>(+) G) by TARSKI:def 1;
+  then (<*A*>(+) G).1 = (<*A*>.1)+G.1 by Def10
+                     .= A+G.1 by FINSEQ_1:57;
+  hence thesis by A1,FINSEQ_1:57;
+end;
+
+theorem Th69:
+  <*A1*>(+)<*A2*> = <* A1+A2 *>
+proof
+  thus <*A1*>(+)<*A2*> = <* A1 + (<*A2*>.1)*> by Th68
+                      .= <*A1+A2*> by FINSEQ_1:57;
+end;
+
+theorem Th70:
+  <*A1,B1*>(+)<*A2,B2*> = <*A1+A2,B1+B2*>
+proof
+  len <*A1*>=1 & len <*A2*>=1 by FINSEQ_1:56;
+  hence (<*A1,B1*>)(+)(<*A2,B2*>) = (<*A1*>(+)<*A2*>)^(<*B1*>(+)<*B2*>) by Th67
+                                 .= (<*A1*>(+)<*A2*>)^(<*B1+B2*>) by Th69
+                                 .= <*A1+A2,B1+B2*> by Th69;
+end;
+
+Lm8:len A1=len A2 & width A1=width A2 & i in dom A1 implies
+   Line(A1+A2,i)=Line(A1,i)+Line(A2,i)
+proof
+  assume that
+A1:  len A1=len A2 & width A1=width A2 and
+A2:  i in dom A1;
+  reconsider L1=Line(A1,i),L2=Line(A2,i) as Element of width A1-tuples_on
+    the carrier of K by A1;
+  per cases;
+      suppose
+    A3:   width A1=0;
+         then width (A1+A2)=0 by MATRIX_3:def 3;
+         then Line(A1+A2,i) = <*>(the carrier of K) by FINSEQ_2:113
+                           .= L1+L2 by A3,FINSEQ_2:113;
+         hence thesis;end;
+     suppose width A1>0;
+         then width A1 in Seg width A1 by FINSEQ_1:5;
+         then [i,width A1] in Indices A1 by A2,ZFMISC_1:106;
+         hence thesis by A1,MATRIX_4:59;end;
+end;
+
+theorem Th71:
+  len A1 = len B1 & len A2 = len B2 &
+  width A1 = width B1 & width A2 = width B2 implies
+    block_diagonal(<*A1,A2*>,a1) + block_diagonal(<*B1,B2*>,a2) =
+      block_diagonal(<*A1,A2*>(+)<*B1,B2*>,a1+a2)
+proof
+  assume that
+A1:  len A1 = len B1 & len A2 = len B2  and
+A2:  width A1 = width B1 & width A2 = width B2;
+  set AB1=A1+B1;
+  set AB2=A2+B2;
+  set d1=<*A1*>;
+  set d2=<*A2*>;
+  set b1=<*B1*>;
+  set b2=<*B2*>;
+  set a12=<*A1,A2*>;
+  set b12=<*B1,B2*>;
+  set ab=a12(+)b12;
+  set bA=block_diagonal(a12,a1);
+  set bB=block_diagonal(b12,a2);
+  set bAB=block_diagonal(ab,a1+a2);
+A3:  ab = <*AB1,AB2*> by Th70;
+A4:  Sum Width a12=width A1+width A2 & Sum Len a12=len A1+len A2 &
+     Sum Width b12=width B1+width B2 & Sum Len b12=len B1+len B2
+       by Th16,Th20;
+A5: Len ab=Len a12 & len bA=Sum Len a12 & width bA=Sum Width a12 &
+       len bB=Sum Len b12 & width bB=Sum Width b12 by Th66,Def5;
+A6: len bAB=Sum Len ab & len (bA+bB)=len bA & width (bA+bB)=width bA
+       by Def5,MATRIX_3:def 3;
+A7: len AB1=len A1 & len AB2=len A2 & width AB1=width A1 & width AB2=width A2
+       by MATRIX_3:def 3;
+     reconsider bAbB=bA+bB as Matrix of len bA,width bA,K by A6,MATRIX_2:7;
+     now let i such that
+       A8:  1<= i & i<=len bAB;
+       A9:  i in Seg len bAB & dom (A1^A2)=Seg len bAB & dom bA =Seg len bA
+             by A8,A4,A5,A6,FINSEQ_1:3,def 7,def 3;
+           then
+       A10:   bAB.i=Line(block_diagonal(<*AB1,AB2*>,a1+a2),i) &
+             bAbB.i=Line(bA+bB,i) by A3,A5,A6,MATRIX_2:10;
+           now per cases by A9,FINSEQ_1:38;
+              suppose
+            A11:  i in dom A1;
+            A12:  len Line(A1,i)=width A1 & len Line(B1,i)=width B1
+                   by FINSEQ_2:109;
+            A13:  dom A1=dom AB1 & dom A1=dom B1 by A1,A7,FINSEQ_3:31;
+                hence bAB.i = Line(AB1,i)^(width AB2|->(a1+a2)) by A10,A11,Th23
+                           .= (Line(A1,i)+Line(B1,i))^(width AB2|->(a1+a2))
+                                 by A11,A1,A2,Lm8
+                           .= (Line(A1,i)+Line(B1,i))^
+                              ((width AB2|->a1)+(width AB2|->a2)) by FVSUM_1:25
+                           .= (Line(A1,i)^(width A2|->a1))+
+                              (Line(B1,i)^(width B2|->a2)) by A2,A7,A12,Th1
+                           .= Line(bA,i)+(Line(B1,i)^(width B2|->a2))
+                                 by A11,Th23
+                           .= Line(bA,i)+Line(bB,i) by A11,A13,Th23
+                           .= bAbB.i by A9,A10,A1,A2,A4,A5,A6,Lm8;end;
+              suppose ex n st n in dom A2 & i=len A1+n;
+                then consider n such that
+            A14:   n in dom A2 & i=len A1+n;
+            A15:  len (width AB1|->a1)=width AB1&len (width AB1|->a2)=width AB1
+                    by FINSEQ_2:109;
+            A16:  dom A2=dom AB2 & dom A2=dom B2 by A1,A7,FINSEQ_3:31;
+                hence bAB.i = (width AB1|->(a1+a2))^Line(AB2,n)
+                                by A10,A14,Th23,A7
+                           .= (width AB1|->(a1+a2))^(Line(A2,n)+Line(B2,n))
+                                by A14,A1,A2,Lm8
+                           .= ((width AB1|->a1)+(width AB1|->a2))^
+                              (Line(A2,n)+Line(B2,n)) by FVSUM_1:25
+                           .= ((width AB1|->a1)^Line(A2,n))+
+                              ((width AB1|->a2)^Line(B2,n)) by A15,Th1
+                           .=Line(bA,i)+((width B1|->a2)^Line(B2,n))
+                              by A2,A7,A14,Th23
+                           .=Line(bA,i)+Line(bB,i) by A1,A14,A16,Th23
+                           .=bAbB.i by A9,A10,A1,A2,A4,A5,A6,Lm8;end;
+           end;
+           hence bAB.i=(bA+bB).i;
+     end;
+     hence thesis by A5,A6,FINSEQ_1:18;
+end;
+
+theorem
+  Len R1 = Len R2 & Width R1 = Width R2 implies
+   block_diagonal(R1,a1) + block_diagonal(R2,a2) =
+      block_diagonal(R1(+)R2,a1+a2)
+proof
+  defpred P[Nat] means
+     for R1,R2,a1,a2 st Len R1=Len R2 & Width R1=Width R2 & len R1=$1 holds
+       block_diagonal(R1,a1)+block_diagonal(R2,a2)=
+       block_diagonal(R1(+)R2,a1+a2);
+A1:P[0]
+    proof
+      let R1,R2,a1,a2 such that
+   A2:  Len R1=Len R2 & Width R1=Width R2 & len R1=0;
+      set b1=block_diagonal(R1,a1);
+      set b2=block_diagonal(R2,a2);
+      set b12=block_diagonal(R1(+)R2,a1+a2);
+      len R1=len Len R1 by FINSEQ_2:109;
+      then Len R1={} & Len R1=Len(R1(+)R2) by A2,CARD_2:59,Th66;
+      then len b1=0 & len b12=0 by Def5,RVSUM_1:102;
+      then len (b1+b2)=0 & b12={} by MATRIX_3:def 3,CARD_2:59;
+      hence thesis by CARD_2:59;
+    end;
+A3:for n st P[n] holds P[n+1]
+    proof
+      let n such that
+   A4:  P[n];set n1=n+1;
+      let R1,R2,a1,a2 such that
+   A5:  Len R1=Len R2 & Width R1=Width R2 & len R1=n1;
+   A6: len R1 = len Len R2 by A5,FINSEQ_2:109
+             .= len R2 by FINSEQ_2:109;
+      set R1n=R1|n;
+      set R2n=R2|n;
+      set b1n=block_diagonal(R1n,a1);
+      set b2n=block_diagonal(R2n,a2);
+   A7: len R1n=n & len R2n=n by A5,A6,FINSEQ_1:80,NAT_1:11;
+   A8:  Len R1n = (Len R1)|n by Th17
+               .= Len R2n by A5,Th17;
+      then
+   A9:  len b1n = Sum Len R2n by Def5
+               .= len b2n by Def5;
+   A10: Width R1n = (Width R1)|n by Th21
+                 .= Width R2n by A5,Th21;
+      then
+   A11:  width b1n = Sum Width R2n by Def5
+                  .= width b2n by Def5;
+   A12:  n1 in Seg n1 & dom Len R1=Seg n1 & dom Width R1=Seg n1
+        by A5,FINSEQ_1:6,FINSEQ_2:144;
+   A13: R1=(R1|n)^<*R1.n1*> & R2=(R2|n)^<*R2.n1*> by A5,A6,FINSEQ_3:61;
+   A14: len (R1.n1) = (Len R1).n1 by A12,Def3
+                   .= len (R2.n1) by A5,A12,Def3;
+   A15: width (R1.n1) = (Width R1).n1 by A12,Def4
+                     .= width (R2.n1) by A5,A12,Def4;
+      thus block_diagonal(R1,a1)+block_diagonal(R2,a2)
+          = block_diagonal(<*b1n,R1.n1*>,a1)+block_diagonal(R2n^<*R2.n1*>,a2)
+              by A13,Th35
+         .= block_diagonal(<*b1n,R1.n1*>,a1)+block_diagonal(<*b2n,R2.n1*>,a2)
+              by Th35
+         .= block_diagonal(<*b1n,R1.n1*>(+)<*b2n,R2.n1*>,a1+a2)
+              by Th71,A9,A11,A14,A15
+         .= block_diagonal(<*b1n+b2n,R1.n1+R2.n1*>,a1+a2) by Th70
+         .= block_diagonal(<*block_diagonal(R1n(+)R2n,a1+a2),R1.n1+R2.n1*>,
+              a1+a2) by A4,A7,A8,A10
+         .= block_diagonal((R1n(+)R2n)^<*R1.n1+R2.n1*>,a1+a2) by Th35
+         .= block_diagonal((R1n(+)R2n)^(<*R1.n1*>(+)<*R2.n1*>),a1+a2) by Th69
+         .= block_diagonal(R1(+)R2,a1+a2) by A13,A7,Th67;
+    end;
+A16:for n holds P[n] from NAT_1:sch 2(A1,A3);
+  assume Len R1=Len R2 & Width R1=Width R2;
+  hence thesis by A16;
+end;
+
+definition
+  let K;
+  let G1,G2 be FinSequence_of_Matrix of K;
+  func G1(#)G2 -> FinSequence_of_Matrix of K  means :Def11:
+    dom it = dom G1 &
+    for i st i in dom it holds it.i= G1.i * G2.i;
+  existence
+  proof
+    deffunc G(Nat)=G1.$1*G2.$1;
+    consider IT be FinSequence such that
+A1:   len IT=len G1 and
+A2:   for k st k in dom IT holds IT.k=G(k) from FINSEQ_1:sch 2;
+A3:   dom IT=Seg len IT & dom IT=dom G1 by A1,FINSEQ_1:def 3,FINSEQ_3:31;
+    rng IT c= (the carrier of K)**
+      proof
+        let y such that
+     A4:  y in rng IT;
+        consider x such that
+     A5:  x in dom IT & IT.x=y by A4,FUNCT_1:def 5;
+        reconsider x as Nat by A5,ORDINAL1:def 13;
+        IT.x =G1.x * G2.x by A2,A5;
+        hence thesis by A5,FINSEQ_1:def 11;
+      end;
+    then reconsider IT as FinSequence of (the carrier of K)**
+      by FINSEQ_1:def 4;
+    now let i such that
+     A6:  i in dom IT;
+         IT.i=G1.i*G2.i by A2,A6;
+         hence IT.i is Matrix of K;
+    end;
+    then reconsider IT as FinSequence_of_Matrix of K by Def2;
+    take IT;
+    thus thesis by A2,A3;
+  end;
+  uniqueness
+  proof
+    let T1,T2 be FinSequence_of_Matrix of K such that
+A7:   dom T1=dom G1 & for i st i in dom T1 holds T1.i= G1.i * G2.i and
+A8:   dom T2=dom G1 & for i st i in dom T2 holds T2.i= G1.i * G2.i;
+    now let i such that
+      A9:  i in dom G1;
+          thus T1.i = G1.i*G2.i by A7,A9
+                   .= T2.i by A8,A9;
+    end;
+    hence thesis by A7,A8,FINSEQ_1:17;
+  end;
+end;
+
+theorem Th73:
+  Width G1 = Len G2 implies
+    Len (G1(#)G2) = Len G1 & Width (G1(#)G2) = Width G2
+proof
+  assume
+A1:  Width G1=Len G2;
+  set G12=G1(#)G2;
+A2:  dom Len G1=dom G1 & dom Len G12=dom G12 & dom Width G1=dom G1 &
+     dom Len G2=dom G2 & dom Width G12=dom G12 & dom Width G2=dom G2 &
+     dom G12=dom G1 by Def11,Def3,Def4;
+  now let i such that
+   A3:  i in dom Len G12;
+   A4:  width (G1.i) = (Width G1).i by A2,A3,Def4
+                    .= len (G2.i) by A1,A2,A3,Def3;
+       thus (Len G12).i = len (G12.i) by A3,Def3
+                       .= len (G1.i*G2.i) by A2,A3,Def11
+                       .= len (G1.i) by A4,MATRIX_3:def 4
+                       .= (Len G1).i by A2,A3,Def3;
+  end;
+  hence Len G12=Len G1 by A2,FINSEQ_1:17;
+  now let i such that
+    A5:  i in dom Width G12;
+    A6:  width (G1.i) = (Width G1).i by A2,A5,Def4
+                     .= len (G2.i) by A1,A2,A5,Def3;
+        thus (Width G12).i = width (G12.i) by A5,Def4
+                          .= width (G1.i*G2.i) by A2,A5,Def11
+                          .= width (G2.i) by A6,MATRIX_3:def 4
+                          .= (Width G2).i by A1,A2,A5,Def4;
+  end;
+  hence thesis by A1,A2,FINSEQ_1:17;
+end;
+
+theorem Th74:
+  len G = len G' implies
+    (G^G1)(#)(G'^G2) = (G(#)G')^(G1(#)G2)
+proof
+  assume
+A1:  len G=len G';
+  set GG'=G(#)G';
+  set G12=G1(#)G2;
+  set GG1=G^G1;
+  set GG2=G'^G2;
+A2: dom GG'=dom G & dom G12=dom G1 & dom (GG1(#)GG2)= dom GG1 & dom G=dom G'
+     by A1,Def11,FINSEQ_3:31;
+  then
+A3:  len GG'=len G & len G12=len G1 & len (GG1(#)GG2)=len GG1  by FINSEQ_3:31;
+A4:  len GG1=len G+len G1 & len GG2=len G+len G2 by A1,FINSEQ_1:35;
+  then
+A5:  len (GG1(#)GG2)=len (GG'^G12) & len (GG'^G12)=len GG'+len G12
+     by A3,FINSEQ_1:35;
+  now let i such that
+    A6:  1<=i & i<= len G+len G1;
+    A7:  i in dom (GG1(#)GG2) by A2,A4,A6,FINSEQ_3:27;
+        then
+    A8:  (GG1(#)GG2).i=GG1.i * GG2.i by Def11;
+        now per cases by A2,A7,FINSEQ_1:38;
+          suppose
+         A9:  i in dom G;
+             hence (GG1(#)GG2).i = G.i* GG2.i by A8,FINSEQ_1:def 7
+                                .= G.i *G'.i by A2,A9,FINSEQ_1:def 7
+                                .= GG'.i by A2,A9,Def11
+                                .= (GG'^G12).i by A2,A9,FINSEQ_1:def 7;end;
+          suppose ex n st n in dom G1 & i=len G + n;
+             then consider n such that
+         A10:  n in dom G1 & i=len G+n;
+             now per cases;
+               suppose n in dom G2;
+                  hence GG2.i=G2.n by A1,A10,FINSEQ_1:def 7;end;
+               suppose
+            A11:   not n in dom G2;
+                  then (n<1 or n>len G2) & 1<=n by A10,FINSEQ_3:27;
+                  then i>len G+len G2 by A10,XREAL_1:10;
+                  then not i in dom GG2 by A4,FINSEQ_3:27;
+                  hence GG2.i = {} by FUNCT_1:def 4
+                             .= G2.n by A11,FUNCT_1:def 4;end;
+             end;
+             hence (GG1(#)GG2).i = G1.n*G2.n by A8,A10,FINSEQ_1:def 7
+                                .= G12.n by A2,A10,Def11
+                                .= (GG'^G12).i by A2,A3,A10,FINSEQ_1:def 7;
+      end;
+    end;
+    hence (GG1(#)GG2).i=(GG'^G12).i;
+  end;
+  hence thesis by A3,A5,FINSEQ_1:18;
+end;
+
+theorem Th75:
+  <*A*>(#)G =  <*A * G.1*>
+proof
+  dom (<*A*>(#) G)=dom <*A*> by Def11;
+  then
+A1: len (<*A*>(#) G) = len <*A*> by FINSEQ_3:31
+                    .= 1 by FINSEQ_1:56;
+  then dom (<*A*>(#) G)={1} by FINSEQ_1:def 3,4;
+  then 1 in dom (<*A*>(#) G) by TARSKI:def 1;
+  then (<*A*>(#) G).1 = (<*A*>.1)*G.1 by Def11
+                     .= A*G.1 by FINSEQ_1:57;
+  hence thesis by A1,FINSEQ_1:57;
+end;
+
+theorem Th76:
+  <*A1*>(#)<*A2*> = <* A1*A2 *>
+proof
+  thus <*A1*>(#)<*A2*> = <* A1 * (<*A2*>.1)*> by Th75
+                      .= <*A1*A2*> by FINSEQ_1:57;
+end;
+
+theorem Th77:
+  <*A1,B1*>(#)<*A2,B2*> = <*A1*A2,B1*B2*>
+proof
+  len <*A1*>=1 & len <*A2*>=1 by FINSEQ_1:56;
+  hence (<*A1,B1*>)(#)(<*A2,B2*>) = (<*A1*>(#)<*A2*>)^(<*B1*>(#)<*B2*>) by Th74
+                                 .= (<*A1*>(#)<*A2*>)^(<*B1*B2*>) by Th76
+                                 .= <*A1*A2,B1*B2*> by Th76;
+end;
+
+Lm9:for R1,S1 be Element of i-tuples_on the carrier of K,
+      R2,S2 be Element of j-tuples_on the carrier of K holds
+    Sum (mlt(R1^R2,S1^S2)) = Sum(mlt(R1,S1))+Sum(mlt(R2,S2))
+proof
+  let R1,S1 be Element of i-tuples_on the carrier of K,
+      R2,S2 be Element of j-tuples_on the carrier of K;
+  mlt(R1^R2,S1^S2)=mlt(R1,S1)^mlt(R2,S2) by FINSEQOP:12;
+  hence thesis by RLVECT_1:58;
+end;
+
+theorem Th78:
+  width A1 = len B1 & width A2 = len B2 implies
+    block_diagonal(<*A1,A2*>,0.K)*block_diagonal(<*B1,B2*>,0.K) =
+      block_diagonal(<*A1,A2*>(#)(<*B1,B2*>),0.K)
+proof
+  assume that
+A1:  width A1=len B1 and
+A2:  width A2=len B2;
+  set a1=<*A1*>;
+  set a2=<*A2*>;
+  set b1=<*B1*>;
+  set b2=<*B2*>;
+  set a12=<*A1,A2*>;
+  set b12=<*B1,B2*>;
+  set ab=a12(#)b12;
+  set bA=block_diagonal(a12,0.K);
+  set bB=block_diagonal(b12,0.K);
+  set bAB=block_diagonal(ab,0.K);
+A3:  Width a12=(Width a1)^Width a2 & Len b12=(Len b1)^Len b2& Width a1=
+      <*width A1*> & Width a2=<*width A2*> & Len b1=<*len B1*> & Len b2=
+      <*len B2*> & Sum Len a12=len bA & Sum Width a12=width bA &
+      Sum Len b12=len bB & Sum Width b12=width bB & Sum Len ab=len bAB &
+      Sum Width ab=width bAB by Th14,Th15,Th18,Th19,Def5;
+  then
+A4: len (bA*bB)=Sum Len a12 & width (bA*bB)=Sum Width b12 & Len ab=Len a12 &
+     Width ab=Width b12 & Sum Len a12=len A1+len A2 & Sum Width b12=
+     width B1+width B2 by A1,A2,Th73,MATRIX_3:def 4,Th16,Th20;
+  set bAbB=bA*bB;
+A5:  ab = <*A1*B1,A2*B2*> by Th77;
+A6:  width (A1*B1)=width B1 & len (A1*B1)=len A1 & width (A2*B2)=width B2 &
+      len (A2*B2)=len A2 by A1,A2,MATRIX_3:def 4;
+A7:  Indices (A1*B1) = [:Seg len (A1*B1),Seg width (A1*B1):] by FINSEQ_1:def 3
+                    .= [:dom A1,Seg width B1:] by A6,FINSEQ_1:def 3;
+  now let i,j such that
+   A8:  [i,j] in Indices bAB;
+       Indices bAB = [:Seg len bAB,Seg width bAB:] by FINSEQ_1:def 3
+                  .= Indices bAbB by A3,A4,FINSEQ_1:def 3;
+       then
+   A9:  bAbB*(i,j) = Line(bA,i) "*" Col(bB,j) by A1,A2,A3,A8,MATRIX_3:def 4
+                  .= Sum(mlt(Line(bA,i),Col(bB,j)));
+   A10: i in dom bAB & j in Seg width bAB & dom bAB=Seg len bAB
+         by A8,ZFMISC_1:106,FINSEQ_1:def 3;
+       then
+   A11: 1<=i & 1<=j by FINSEQ_1:3;
+       now per cases;
+         suppose i<=len A1;
+           then
+       A12:  i in dom A1 & i in dom (A1*B1) by A6,A11,FINSEQ_3:27;
+           then
+       A13:  Line(bA,i)=Line(A1,i)^(width A2 |-> 0.K) by Th23;
+           now per cases;
+             suppose j<=width B1;
+               then
+           A14:  j in Seg width B1 & dom Line(A1*B1,i)=Seg width B1
+                 by A6,A11,FINSEQ_1:3,FINSEQ_2:144;
+               then
+           A15:  Col(bB,j)=Col(B1,j)^(len B2|->0.K) & [i,j] in Indices (A1*B1)
+                  by A7,A12,Th24,ZFMISC_1:106;
+               hence bAbB*(i,j) = Sum(mlt(Line(A1,i),Col(B1,j)))+
+                                   Sum(mlt(width A2|->0.K,len B2|->0.K))
+                                    by A1,A2,A9,A13,Lm9
+                               .= Sum(mlt(Line(A1,i),Col(B1,j)))+
+                                   Sum(0.K*(width A2|->0.K)) by A2,FVSUM_1:80
+                               .= Sum(mlt(Line(A1,i),Col(B1,j)))+
+                                   0.K*Sum(width A2|->0.K) by FVSUM_1:92
+                               .= Sum(mlt(Line(A1,i),Col(B1,j)))+0.K
+                                   by VECTSP_1:36
+                               .= Line(A1,i)"*"Col(B1,j) by RLVECT_1:def 7
+                               .= (A1*B1)*(i,j) by A1,A15,MATRIX_3:def 4
+                               .= Line(A1*B1,i).j by A6,A14,MATRIX_1:def 8
+                               .= (Line(A1*B1,i)^(width (A2*B2) |-> 0.K)).j
+                                   by A14,FINSEQ_1:def 7
+                               .= Line(bAB,i).j by A5,A12,Th23
+                               .= bAB*(i,j) by A10,MATRIX_1:def 8;end;
+             suppose
+           A16:  j>width B1;
+                then reconsider J=j-width B1 as Element of NAT by NAT_1:21;
+           A17:  j=J+width B1;
+                J<>0 by A16;
+                then J>0;
+                then
+           A18:  J in Seg width B2 by A17,A10,A3,A4,FINSEQ_1:82;
+                then
+           A19:   Col(bB,J+width B1)=(len B1 |-> 0.K)^Col(B2,J) &
+                   len Line(A1*B1,i)=width B1 & dom (width (A2*B2) |-> 0.K)=
+                   Seg width B2 by A6,Th24,FINSEQ_2:109,144;
+                hence bAbB*(i,j) = Sum(mlt(Line(A1,i),len B1 |-> 0.K))+
+                                    Sum(mlt(width A2|->0.K,Col(B2,J)))
+                                    by A1,A2,A9,A13,Lm9
+                                .= Sum(mlt(Line(A1,i),len B1 |-> 0.K))+
+                                    Sum(0.K*Col(B2,J)) by A2,FVSUM_1:80
+                                .= Sum(0.K*Line(A1,i))+Sum(0.K*Col(B2,J))
+                                    by A1,FVSUM_1:80
+                                .= Sum(0.K*Line(A1,i))+0.K*Sum Col(B2,J)
+                                    by FVSUM_1:92
+                                .= 0.K*Sum Line(A1,i)+0.K*Sum Col(B2,J)
+                                    by FVSUM_1:92
+                                .= 0.K*Sum Line(A1,i)+0.K by VECTSP_1:36
+                                .= 0.K+0.K by VECTSP_1:36
+                                .= 0.K by RLVECT_1:def 7
+                                .= (width (A2*B2) |-> 0.K).J
+                                    by A6,A18,FINSEQ_1:4,FINSEQ_2:71
+                                .= (Line(A1*B1,i)^(width (A2*B2)|->0.K)).
+                                                (J+width (A1*B1))
+                                    by A6,A18,A19,FINSEQ_1:def 7
+                                .= Line(bAB,i).j by A5,A12,Th23,A6
+                                .= bAB*(i,j) by A10,MATRIX_1:def 8;end;
+           end;
+           hence bAbB*(i,j)=bAB*(i,j);end;
+         suppose
+       A20:  i>len A1;
+           then reconsider I=i-len A1 as Element of NAT by NAT_1:21;
+       A21:  i=I+len A1;
+           I<>0 by A20;
+           then I>0;
+           then I in Seg len A2 by A21,A10,A3,A4,FINSEQ_1:82;
+           then
+       A22:  I in dom A2 & dom A2=dom (A2*B2)
+             by A6,FINSEQ_1:def 3,FINSEQ_3:31;
+           then
+       A23:  Line(bA,I+len A1)=(width A1 |-> 0.K)^Line(A2,I) by Th23;
+           now per cases;
+             suppose j<=width B1;
+               then
+          A24:   j in Seg width B1 & dom (width (A1*B1)|->0.K)=Seg width B1
+                 by A6,A11,FINSEQ_1:3,FINSEQ_2:144;
+               then Col(bB,j)=Col(B1,j)^(len B2 |-> 0.K) by Th24;
+               hence bAbB*(i,j) = Sum(mlt(width A1 |-> 0.K,Col(B1,j))) +
+                                  Sum(mlt(Line(A2,I),len B2|->0.K))
+                                       by A1,A2,A9,A23,Lm9
+                               .= Sum(mlt(width A1 |-> 0.K,Col(B1,j))) +
+                                   Sum(0.K*Line(A2,I)) by A2,FVSUM_1:80
+                               .= Sum(0.K*Col(B1,j))+Sum(0.K*Line(A2,I))
+                                       by A1,FVSUM_1:80
+                               .= Sum(0.K*Col(B1,j))+0.K*Sum Line(A2,I)
+                                       by FVSUM_1:92
+                               .= 0.K*Sum Col(B1,j)+0.K*Sum Line(A2,I)
+                                       by FVSUM_1:92
+                               .= 0.K*Sum Col(B1,j)+0.K by VECTSP_1:36
+                               .= 0.K+0.K by VECTSP_1:36
+                               .= 0.K by RLVECT_1:def 7
+                               .= (width (A1*B1) |-> 0.K).j
+                                       by A6,A24,FINSEQ_1:4,FINSEQ_2:71
+                               .= ((width (A1*B1) |-> 0.K)^Line(A2*B2,I)).j
+                                       by A24,FINSEQ_1:def 7
+                               .= Line(bAB,I+len A1).j by A6,A5,A22,Th23
+                               .= bAB*(i,j) by A10,MATRIX_1:def 8;end;
+             suppose
+           A25:  j>width B1;
+                then reconsider J=j-width B1 as Element of NAT by NAT_1:21;
+           A26:  j=J+width B1;
+                J<>0 by A25;
+                then J>0;
+                then
+           A27:   J in Seg width B2 & dom Line(A2*B2,I)=Seg width B2 &
+                  len (width (A1*B1)|->0.K)=width B1
+                  by A6,A26,A10,A3,A4,FINSEQ_1:82,FINSEQ_2:144,109;
+                then
+           A28:   Col(bB,J+width B1)=(len B1 |-> 0.K)^Col(B2,J) &
+                  [I,J] in Indices (A2*B2) by A22,A6,Th24,ZFMISC_1:106;
+                hence bAbB*(i,j) = Sum(mlt(width A1 |-> 0.K,len B1|->0.K)) +
+                                    Sum(mlt(Line(A2,I),Col(B2,J)))
+                                      by A1,A2,A9,A23,Lm9
+                                .= Sum(0.K*(width A1 |-> 0.K)) +
+                                    Sum(mlt(Line(A2,I),Col(B2,J)))
+                                      by A1,FVSUM_1:80
+                                .= 0.K*Sum(width A1|->0.K) +
+                                    Sum(mlt(Line(A2,I),Col(B2,J)))by FVSUM_1:92
+                                .= 0.K+Sum(mlt(Line(A2,I),Col(B2,J)))
+                                      by VECTSP_1:36
+                                .= Line(A2,I)"*"Col(B2,J) by RLVECT_1:def 7
+                                .= (A2*B2)*(I,J) by A28,A2,MATRIX_3:def 4
+                                .= Line(A2*B2,I).J by A27,A6,MATRIX_1:def 8
+                                .= ((width (A1*B1)|->0.K)^Line(A2*B2,I)).
+                                            (J+width B1) by A27,FINSEQ_1:def 7
+                                .= Line(bAB,I+len A1).j by A6,A5,A22,Th23
+                                .= bAB*(i,j) by A10,MATRIX_1:def 8;end;
+           end;
+           hence bAbB*(i,j)=bAB*(i,j);end;
+       end;
+       hence bAB*(i,j)=bAbB*(i,j);
+  end;
+  hence thesis by A3,A4,MATRIX_1:21;
+end;
+
+theorem
+  Width R1 = Len R2 implies
+    block_diagonal(R1,0.K)*block_diagonal(R2,0.K)=
+      block_diagonal(R1(#)R2,0.K)
+proof
+  defpred P[Nat] means
+     for R1,R2 st Width R1=Len R2 & len R1=$1 holds
+      block_diagonal(R1,0.K)*block_diagonal(R2,0.K)=
+      block_diagonal(R1(#)R2,0.K);
+A1:P[0]
+    proof
+      let R1,R2 such that
+   A2:  Width R1=Len R2 & len R1=0;
+      set b1=block_diagonal(R1,0.K);
+      set b2=block_diagonal(R2,0.K);
+      set b12=block_diagonal(R1(#)R2,0.K);
+      len R1=len Width R1 & len R1=len Len R1 by FINSEQ_2:109;
+      then Len R1={} & Len R2 ={} & Len R1=Len(R1(#)R2) by A2,CARD_2:59,Th73;
+      then len b1=0 & len b2=0 & len b12=0 & Sum Width R1=width b1 &
+        Sum Width R1=0 by Def5,Th13,RVSUM_1:102;
+      then len (b1*b2)=0 & b12={} by MATRIX_3:def 4,CARD_2:59;
+      hence thesis by CARD_2:59;
+    end;
+A3:for n st P[n] holds P[n+1]
+    proof
+      let n such that
+   A4:  P[n];set n1=n+1;
+      let R1,R2 such that
+   A5:  Width R1=Len R2 & len R1=n1;
+   A6: len R1 = len Len R2 by A5,FINSEQ_2:109
+             .= len R2 by FINSEQ_2:109;
+      set R1n=R1|n;
+      set R2n=R2|n;
+      set b1n=block_diagonal(R1n,0.K);
+      set b2n=block_diagonal(R2n,0.K);
+   A7: len R1n=n & len R2n=n by A5,A6,FINSEQ_1:80,NAT_1:11;
+   A8: Width R1n = (Width R1)|n by Th21
+                .= Len R2n by A5,Th17;
+   A9: width b1n = Sum Width R1n by Def5
+                .= len b2n by A8, Def5;
+   A10:n1 in Seg n1 & dom Width R1=Seg n1 & dom Width R1=dom Len R2
+        by A5,FINSEQ_1:6,FINSEQ_2:144;
+      then
+   A11: width (R1.n1) = (Len R2).n1 by A5,Def4
+                     .= len (R2.n1) by A10,Def3;
+   A12: R1=(R1|n)^<*R1.n1*> & R2=(R2|n)^<*R2.n1*> by A5,A6,FINSEQ_3:61;
+      thus block_diagonal(R1,0.K)*block_diagonal(R2,0.K)
+          = block_diagonal(<*b1n,R1.n1*>,0.K)*block_diagonal(R2n^<*R2.n1*>,0.K)
+              by A12,Th35
+         .= block_diagonal(<*b1n,R1.n1*>,0.K)*block_diagonal(<*b2n,R2.n1*>,0.K)
+              by Th35
+         .= block_diagonal((<*b1n,R1.n1*>)(#)(<*b2n,R2.n1*>),0.K)
+              by A9,A11,Th78
+         .= block_diagonal(<*b1n*b2n,R1.n1*R2.n1*>,0.K) by Th77
+         .= block_diagonal(<*block_diagonal(R1n(#)R2n,0.K),R1.n1*R2.n1*>,0.K)
+              by A4,A7,A8
+         .= block_diagonal((R1n(#)R2n)^<*R1.n1*R2.n1*>,0.K) by Th35
+         .= block_diagonal((R1n(#)R2n)^(<*R1.n1*>(#)<*R2.n1*>),0.K) by Th76
+         .= block_diagonal(R1(#)R2,0.K) by A12,A7,Th74;
+    end;
+A13:for n holds P[n] from NAT_1:sch 2(A1,A3);
+  assume Width R1=Len R2;
+  hence thesis by A13;
+end;
+

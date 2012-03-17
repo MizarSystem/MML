@@ -234,7 +234,7 @@ A14:    y in q' by XBOOLE_0:def 1;
 A15:      y in q;
           consider f being Function such that
 A16:      f = g+*(n.-->y);
-A17:      dom g = n & dom (n.-->y) = {n} by FUNCOP_1:19,FUNCT_2:def 1;
+A17:      dom g = n & dom (n.-->y) = {n} by FUNCT_2:def 1;
           then dom f = n \/ {n} by A16,FUNCT_4:def 1;
           then
 A18:      dom f = n+1 by AFINSQ_1:4;
@@ -265,7 +265,7 @@ A23:    b in rng G & [fx,b] in G & b in {g} by RELAT_1:166;
         then R[fx,G.fx] by A11;
         then
 A24:    fx|n = b by A23,FUNCT_1:8;
-A25:    dom g = n & dom (n .--> y) = {n} by FUNCOP_1:19,FUNCT_2:def 1;
+A25:    dom g = n & dom (n .--> y) = {n} by FUNCT_2:def 1;
         not n in n;
         then n misses {n} by ZFMISC_1:56;
         hence x in rng G by A23,A24,A25,FUNCT_4:34;
@@ -284,7 +284,7 @@ A27:  for y being set st y in q holds HH(y) in (G"{x})
 A28:    y in q;
         consider f being Function such that
 A29:    f = x+*(n.-->y);
-A30:    dom x = n & dom (n.-->y) = {n} by FUNCOP_1:19,FUNCT_2:def 1;
+A30:    dom x = n & dom (n.-->y) = {n} by FUNCT_2:def 1;
         then dom f = n \/ {n} by A29,FUNCT_4:def 1;
         then
 A31:    dom f = n+1 by AFINSQ_1:4;
@@ -1173,19 +1173,17 @@ end;
 definition
   let G be Group;
   func conjugate_Classes G -> a_partition of the carrier of G equals
-  {S where S is Subset of G : ex a being Element of G st S = con_class a };
+  {con_class a where a is Element of G: not contradiction};
   correctness
   proof
     set cG = the carrier of G;
-    set C = {S where S is Subset of cG:
-    ex a being Element of G st S=con_class a };
+    set C = {con_class a where a is Element of G: not contradiction};
 A1: C c= bool cG
     proof
       let x be set;
       assume x in C;
-      then consider S being Subset of cG such that
-A2:   S=x and ex a being Element of cG st S = con_class a;
-      thus thesis by A2;
+      then ex a being Element of cG st x = con_class a;
+     hence thesis;
     end;
     now
       let x be set;
@@ -1194,9 +1192,8 @@ A2:   S=x and ex a being Element of cG st S = con_class a;
         then consider S being set such that
 A3:     x in S and
 A4:     S in C by TARSKI:def 4;
-        consider S' being Subset of cG such that
-A5:     S' = S and ex a being Element of G st S'=con_class a by A4;
-        thus x in cG by A3,A5;
+        ex a being Element of G st S=con_class a by A4;
+       hence x in cG by A3;
       end;
       assume x in cG;
       then reconsider x'=x as Element of cG;
@@ -1210,27 +1207,25 @@ A7: union C = cG by TARSKI:2;
     now
       let A be Subset of cG;
       assume A in C;
-      then consider A' being Subset of cG such that
-A8:   A' = A and
-A9:   ex a being Element of cG st A' = con_class a;
+      then
+A9:   ex a being Element of cG st A = con_class a;
       consider a being Element of cG such that
-A10:  A' = con_class a by A9;
-      thus A<>{} by A8,A9;
+A10:  A = con_class a by A9;
+      thus A<>{} by A9;
       let B be Subset of cG;
       assume B in C;
-      then consider B' being Subset of cG such that
-A11:  B' = B and
-A12:  ex a being Element of cG st B' = con_class a;
+      then
+A12:  ex a being Element of cG st B = con_class a;
       consider b being Element of cG such that
-A13:  B' = con_class b by A12;
+A13:  B = con_class b by A12;
       assume
 A14:  A <> B;
       assume A meets B;
       then consider x being set such that
 A15:  x in A & x in B by XBOOLE_0:3;
       reconsider x as Element of cG by A15;
-A16:  x,a are_conjugated by A8,A10,A15,GROUP_3:96;
-      x,b are_conjugated by A11,A13,A15,GROUP_3:96;
+A16:  x,a are_conjugated by A10,A15,GROUP_3:96;
+      x,b are_conjugated by A13,A15,GROUP_3:96;
       then
 A17:  a,b are_conjugated by A16,GROUP_3:91;
       now
@@ -1239,16 +1234,16 @@ A17:  a,b are_conjugated by A16,GROUP_3:91;
           assume
 A18:      c in A;
           then reconsider c'=c as Element of cG;
-          c',a are_conjugated by A8,A10,A18,GROUP_3:96;
+          c',a are_conjugated by A10,A18,GROUP_3:96;
           then c',b are_conjugated by A17,GROUP_3:91;
-          hence c in B by A11,A13,GROUP_3:96;
+          hence c in B by A13,GROUP_3:96;
         end;
         assume
 A19:    c in B;
         then reconsider c'=c as Element of cG;
-        c',b are_conjugated by A11,A13,A19,GROUP_3:96;
+        c',b are_conjugated by A13,A19,GROUP_3:96;
         then c',a are_conjugated by A17,GROUP_3:91;
-        hence c in A by A8,A10,GROUP_3:96;
+        hence c in A by A10,GROUP_3:96;
       end;
       hence contradiction by A14,TARSKI:2;
     end;
@@ -1256,21 +1251,7 @@ A19:    c in B;
   end;
 end;
 
-theorem Th14:
-  for G being Group, x being set
-  holds x in conjugate_Classes G iff ex a being Element of G st con_class a = x
-proof
-  let G be Group, x be set;
-  hereby
-    assume x in conjugate_Classes G;
-    then ex S being Subset of G st
-    x=S & ex a being Element of G st S = con_class a;
-    hence ex a being Element of G st con_class a = x;
-  end;
-  given a being Element of G such that
-A1: con_class a = x;
-  thus x in conjugate_Classes G by A1;
-end;
+canceled;
 
 theorem :: ClassFormula Class formula for finite groups
   for G being finite Group, f being FinSequence of conjugate_Classes G
@@ -2973,7 +2954,7 @@ A19: x = X and
 A20: X in conjugate_Classes Rs and
 A21: card X = 1;
     consider a being Element of cRs such that
-A22: con_class a = X by A20,Th14;
+A22: con_class a = X by A20;
 A23: a in con_class a by GROUP_3:98;
     consider xx being set such that
 A24: X = {xx} by A21,CARD_2:60;
@@ -3083,7 +3064,7 @@ A55: x = Card(f2.i) by A51,A54;
     then f2.i in conjugate_Classes Rs \ A by A31,FUNCT_1:12;
     then f2.i in conjugate_Classes Rs by XBOOLE_0:def 4;
     then consider a being Element of cRs such that
-A56: con_class a = f2.i by Th14;
+A56: con_class a = f2.i;
     card con_class a is Element of NAT;
     hence thesis by A55,A56;
   end;
@@ -3152,7 +3133,7 @@ A68: i in dom f2 by A51,A66,FINSEQ_3:31;
     then f2.i in conjugate_Classes Rs \ A by A31,FUNCT_1:12;
     then f2.i in conjugate_Classes Rs & not f2.i in A by XBOOLE_0:def 4;
     then consider a being Element of cRs such that
-A69: con_class a = f2.i by Th14;
+A69: con_class a = f2.i;
     reconsider a as Element of Rs;
     reconsider s=a as Element of R by UNIROOTS:22;
     set ns = dim VectSp_over_center s;

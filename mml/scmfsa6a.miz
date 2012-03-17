@@ -1293,8 +1293,7 @@ theorem Th38:
   for s1,s2 being State of SCM+FSA holds
   ((for a being Int-Location holds s1.a = s2.a) &
   for f being FinSeq-Location holds s1.f = s2.f)
-  iff s1 | (Int-Locations \/ FinSeq-Locations) =
-  s2 | (Int-Locations \/ FinSeq-Locations)
+  iff DataPart s1 = DataPart s2
 proof
   let s1,s2 be State of SCM+FSA;
 A1: Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA} \/ NAT
@@ -1345,13 +1344,12 @@ A7: for x being set st x in Int-Locations \/ FinSeq-Locations
       hence s1.f = s2.f by A7;
     end;
   end;
-  hence thesis by A2,A3,A4,FUNCT_1:165;
+  hence thesis by A2,A3,A4,FUNCT_1:165,SCMFSA_2:127;
 end;
 
 theorem
   for s1,s2 being State of SCM+FSA st s1,s2 equal_outside NAT holds
-  s1 | (Int-Locations \/ FinSeq-Locations) =
-  s2 | (Int-Locations \/ FinSeq-Locations)
+  DataPart s1 = DataPart s2
 proof
   let s1,s2 be State of SCM+FSA;
   assume
@@ -1359,50 +1357,24 @@ A1: s1,s2 equal_outside NAT;
   then
 A2: for a being Int-Location holds s1.a = s2.a by Th30;
   for f being FinSeq-Location holds s1.f = s2.f by A1,Th31;
-  hence s1 | (Int-Locations \/ FinSeq-Locations) =
-  s2 | (Int-Locations \/ FinSeq-Locations) by A2,Th38;
+  hence DataPart s1 = DataPart s2 by A2,Th38;
 end;
 
-theorem
-  for s,ss being State of SCM+FSA, A being set holds (ss +* s | A) | A = s | A
-proof
-  let s,ss be State of SCM+FSA;
-  let A be set;
-A1: dom s = the carrier of SCM+FSA by AMI_1:79;
-A2: dom (ss +* s | A) = dom ss \/ dom (s | A) by FUNCT_4:def 1
-    .= dom ss \/ (dom s /\ A) by RELAT_1:90
-    .= (the carrier of SCM+FSA) \/ (the carrier of SCM+FSA) /\ A by A1,AMI_1:79
-    .= the carrier of SCM+FSA by XBOOLE_1:22;
-A3: dom s /\ A c= dom s by XBOOLE_1:17;
-A4: now
-    let x be set;
-    assume
-A5: x in dom s /\ A;
-    then x in dom (s | A) by RELAT_1:90;
-    hence (ss +* s | A).x = (s | A).x by FUNCT_4:14
-      .= s.x by A5,FUNCT_1:71;
-  end;
-  thus (ss +* s | A) | A = (ss +* s | A) | (dom s /\ A) by A1,A2,RELAT_1:192
-    .= s | (dom s /\ A) by A1,A2,A3,A4,FUNCT_1:165
-    .= s | A by RELAT_1:192;
-end;
+canceled;
 
 theorem
   for s1,s2 being State of SCM+FSA, n being Element of NAT,
   i being Instruction of SCM+FSA holds IC s1 + n = IC s2 &
-  s1 | (Int-Locations \/ FinSeq-Locations) =
-  s2 | (Int-Locations \/ FinSeq-Locations) implies
+  DataPart s1 = DataPart s2 implies
   IC Exec(i,s1) + n = IC Exec(IncAddr(i,n),s2) &
-  Exec(i,s1) | (Int-Locations \/ FinSeq-Locations) =
-  Exec(IncAddr(i,n),s2) | (Int-Locations \/ FinSeq-Locations)
+  DataPart Exec(i,s1) = DataPart Exec(IncAddr(i,n),s2)
 proof
   let s1,s2 be State of SCM+FSA;
   let n be Element of NAT;
   let i be Instruction of SCM+FSA;
   assume that
 A1: IC s1 + n = IC s2 and
-A2: s1 | (Int-Locations \/ FinSeq-Locations) =
-  s2 | (Int-Locations \/ FinSeq-Locations);
+A2: DataPart s1 = DataPart s2;
   set D = Int-Locations \/ FinSeq-Locations;
   reconsider k1 = IC s1 as Element of NAT by ORDINAL1:def 13;
 A4: Next IC s1 + n = Next IC s2
@@ -1492,7 +1464,7 @@ A21:    c <> da;
         .= s2.f by A2,Th38
         .= Exec(IncAddr(i,n),s2).f by A17,A18,SCMFSA_2:89;
     end;
-    hence Exec(i,s1) | D = Exec(IncAddr(i,n),s2) | D by A19,Th38;
+    hence DataPart Exec(i,s1) = DataPart Exec(IncAddr(i,n),s2) by A19,Th38;
   end;
   suppose
 A22: InsCode i = 2;
@@ -1522,7 +1494,7 @@ A27:    c <> da;
         .= s2.f by A2,Th38
         .= Exec(IncAddr(i,n),s2).f by A23,A24,SCMFSA_2:90;
     end;
-    hence Exec(i,s1) | D = Exec(IncAddr(i,n),s2) | D by A25,Th38;
+    hence DataPart Exec(i,s1) = DataPart Exec(IncAddr(i,n),s2) by A25,Th38;
   end;
   suppose
 A28: InsCode i = 3;
@@ -1552,7 +1524,7 @@ A33:    c <> da;
         .= s2.f by A2,Th38
         .= Exec(IncAddr(i,n),s2).f by A29,A30,SCMFSA_2:91;
     end;
-    hence Exec(i,s1) | D = Exec(IncAddr(i,n),s2) | D by A31,Th38;
+    hence DataPart Exec(i,s1) = DataPart Exec(IncAddr(i,n),s2) by A31,Th38;
   end;
   suppose
 A34: InsCode i = 4;
@@ -1582,7 +1554,7 @@ A39:    c <> da;
         .= s2.f by A2,Th38
         .= Exec(IncAddr(i,n),s2).f by A35,A36,SCMFSA_2:92;
     end;
-    hence Exec(i,s1) | D = Exec(IncAddr(i,n),s2) | D by A37,Th38;
+    hence DataPart Exec(i,s1) = DataPart Exec(IncAddr(i,n),s2) by A37,Th38;
   end;
   suppose
 A40: InsCode i = 5;
@@ -1618,7 +1590,7 @@ A46:    c <> da & c <> db;
         .= s2.f by A2,Th38
         .= Exec(IncAddr(i,n),s2).f by A41,A42,SCMFSA_2:93;
     end;
-    hence Exec(i,s1) | D = Exec(IncAddr(i,n),s2) | D by A43,Th38;
+    hence DataPart Exec(i,s1) = DataPart Exec(IncAddr(i,n),s2) by A43,Th38;
   end;
   suppose InsCode i = 6;
     then consider loc being Instruction-Location of SCM+FSA such that
@@ -1638,7 +1610,7 @@ A49: now
         .= s2.f by A2,Th38
         .= Exec(IncAddr(i,n),s2).f by A48,SCMFSA_2:95;
     end;
-    hence Exec(i,s1) | D = Exec(IncAddr(i,n),s2) | D by A49,Th38;
+    hence DataPart Exec(i,s1) = DataPart Exec(IncAddr(i,n),s2) by A49,Th38;
   end;
   suppose InsCode i = 7;
     then consider loc being Instruction-Location of SCM+FSA,
@@ -1675,7 +1647,7 @@ A57:    s2.da <> 0 by A2,Th38;
 hence IC Exec(i,s1) + n = IC Exec(IncAddr(i,n),s2) by A4,A51,A57,SCMFSA_2: 96;
       end;
     end;
-    thus Exec(i,s1) | D = Exec(IncAddr(i,n),s2) | D by A52,A53,Th38;
+    thus DataPart Exec(i,s1) = DataPart Exec(IncAddr(i,n),s2) by A52,A53,Th38;
   end;
   suppose InsCode i = 8;
     then consider loc being Instruction-Location of SCM+FSA,
@@ -1712,7 +1684,7 @@ A65:    s2.da <= 0 by A2,Th38;
 hence IC Exec(i,s1) + n = IC Exec(IncAddr(i,n),s2) by A4,A59,A65,SCMFSA_2: 97;
       end;
     end;
-    thus Exec(i,s1) | D = Exec(IncAddr(i,n),s2) | D by A60,A61,Th38;
+    thus DataPart Exec(i,s1) = DataPart Exec(IncAddr(i,n),s2) by A60,A61,Th38;
   end;
   suppose
 A66: InsCode i = 9;
@@ -1748,7 +1720,7 @@ A75:    c <> da;
         .= s2.f by A2,Th38
         .= Exec(IncAddr(i,n),s2).f by A67,A68,SCMFSA_2:98;
     end;
-    hence Exec(i,s1) | D = Exec(IncAddr(i,n),s2) | D by A69,Th38;
+    hence DataPart Exec(i,s1) = DataPart Exec(IncAddr(i,n),s2) by A69,Th38;
   end;
   suppose
 A76: InsCode i = 10;
@@ -1784,7 +1756,7 @@ A85:    g <> f;
           .= Exec(IncAddr(i,n),s2).g by A77,A78,A85,SCMFSA_2:99;
       end;
     end;
-    hence Exec(i,s1) | D = Exec(IncAddr(i,n),s2) | D by A79,Th38;
+    hence DataPart Exec(i,s1) = DataPart Exec(IncAddr(i,n),s2) by A79,Th38;
   end;
   suppose
 A86: InsCode i = 11;
@@ -1814,7 +1786,7 @@ A91:    c <> da;
         .= s2.f by A2,Th38
         .= Exec(IncAddr(i,n),s2).f by A87,A88,SCMFSA_2:100;
     end;
-    hence Exec(i,s1) | D = Exec(IncAddr(i,n),s2) | D by A89,Th38;
+    hence DataPart Exec(i,s1) = DataPart Exec(IncAddr(i,n),s2) by A89,Th38;
   end;
   suppose
 A92: InsCode i = 12;
@@ -1849,7 +1821,7 @@ A101:   g <> f;
           .= Exec(IncAddr(i,n),s2).g by A93,A94,A101,SCMFSA_2:101;
       end;
     end;
-    hence Exec(i,s1) | D = Exec(IncAddr(i,n),s2) | D by A95,Th38;
+    hence DataPart Exec(i,s1) = DataPart Exec(IncAddr(i,n),s2) by A95,Th38;
   end;
 end;
 
@@ -2447,7 +2419,6 @@ proof
   let k be Element of NAT;
 A1: dom ProgramPart I = dom I by AMI_1:105;
 A2: dom ProgramPart Directed I = dom Directed I by AMI_1:105
-    .= dom Directed(I,insloc card I)
     .= dom I by FUNCT_4:105;
   then
 A3: dom ProgramPart Relocated(Directed I,k) =
@@ -2464,8 +2435,7 @@ A6: x in {m + k: m in dom I};
     then consider n being Element of NAT such that
 A7: x = n + k and
 A8: n in dom I;
-    dom Directed I = dom Directed(I,insloc card I)
-      .= dom I by FUNCT_4:105;
+    dom Directed I = dom I by FUNCT_4:105;
     then reconsider i = (Directed I).insloc n as Instruction of SCM+FSA by A8
     ,AMI_1:126;
     reconsider i0 = I.insloc n as Instruction of SCM+FSA by A8,AMI_1:126;
@@ -2487,14 +2457,11 @@ A13:    (ProgramPart Relocated(I,k)).x = Relocated(I,k).x by A4,A6,Th49
 A14:    x in dom ((halt SCM+FSA .--> goto insloc (card I + k))*
         ProgramPart Relocated(I,k)) by A4,A6,FUNCT_1:21;
         thus (Directed([ProgramPart Relocated(I,k)],insloc (card I + k))).x
-        = (ProgramPart Relocated(I,k) +* ((halt SCM+FSA .--> goto insloc
-        (card I + k))*ProgramPart Relocated(I,k))).x
-          .= ((halt SCM+FSA .--> goto insloc (card I + k))*
+          = ((halt SCM+FSA .--> goto insloc (card I + k))*
         ProgramPart Relocated(I,k)).x by A14,FUNCT_4:14
           .= (halt SCM+FSA .--> goto insloc (card I + k)).
         ((ProgramPart Relocated(I,k)).x) by A4,A6,FUNCT_1:23
           .= goto insloc (card I + k) by A13,FUNCOP_1:87
-          .= goto ((insloc card I) + k)
           .= IncAddr(i,k) by A12,SCMFSA_4:14;
       end;
       suppose
@@ -2512,9 +2479,7 @@ A17:    (ProgramPart Relocated(I,k)).x = Relocated(I,k).x by A4,A6,Th49
 A18:    not x in dom ((halt SCM+FSA .--> goto insloc (card I + k)) *
         ProgramPart Relocated(I,k)) by FUNCT_1:21;
         thus (Directed([ProgramPart Relocated(I,k)],insloc (card I + k))).x
-        = ([ProgramPart Relocated(I,k)] +* ((halt SCM+FSA .--> goto insloc
-        (card I + k))*[ProgramPart Relocated(I,k)])).x
-          .= ([ProgramPart Relocated(I,k)]).x by A18,FUNCT_4:12
+          = ([ProgramPart Relocated(I,k)]).x by A18,FUNCT_4:12
           .= IncAddr(i,k) by A15,A17,FUNCT_4:111;
       end;
     end;
@@ -2538,18 +2503,14 @@ proof
   by Th61
     .= Directed(Directed I,insloc card (I ';' J)) +*
   Directed([ProgramPart Relocated(J,card I)],insloc card (I ';' J)) by Th39
-    .= Directed(Directed I +* [ProgramPart Relocated(J,card I)],
-  insloc card (I ';' J)) by FUNCT_7:119
-    .= Directed (I ';' J);
+    .= Directed (I ';' J) by FUNCT_7:119;
 end;
 
 theorem Th62:
   I ';' J ';' K = I ';' (J ';' K)
 proof
 XX:   ProgramPart Relocated(J ';' K, card I)
-    = ProgramPart Relocated(
-        Directed J +* [ProgramPart Relocated(K, card J)], card I)
-   .= ProgramPart Relocated(Directed J, card I)
+   = ProgramPart Relocated(Directed J, card I)
          +* ProgramPart Relocated([ProgramPart Relocated(K, card J)], card I)
             by Th21
    .= ProgramPart Relocated(Directed J, card I)
@@ -2557,14 +2518,9 @@ XX:   ProgramPart Relocated(J ';' K, card I)
  thus I ';' J ';' K
        = (I ';' Directed J) +* ProgramPart Relocated(K, card (I ';' J))
                          by Th52
-      .= Directed I +* ProgramPart Relocated(Directed J, card I)
-          +* ProgramPart Relocated(K, card (I ';' J))
       .= Directed I +* (ProgramPart Relocated(Directed J, card I)
           +* ProgramPart Relocated(K, card (I ';' J))) by FUNCT_4:15
-      .= Directed I +* (ProgramPart Relocated(Directed J, card I)
-         +* ProgramPart Relocated(K,card J + card I)) by Th61
-      .= Directed I +* ProgramPart Relocated(J ';' K, card I) by XX
-      .= I ';' (J ';' K);
+      .= I ';' (J ';' K) by XX,Th61;
 end;
 
 theorem

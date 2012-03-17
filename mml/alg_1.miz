@@ -109,7 +109,7 @@ A7: dom a = Seg len a & dom (h2*(h1*a)) = Seg len a & dom (h1*a) = Seg len a &
     assume
 A8: n in dom(h2*(h1*a));
     hence (h2*(h1*a)).n = h2.((h1*a).n) by Th1
-      .= h2.(h1.(a.n)) by A8,Th1,A7
+      .= h2.(h1.(a.n)) by A8,Th1,A2
       .= (h2*h1).(a.n) by A8,FINSEQ_2:13,FUNCT_2:21,A7
       .= ((h2 * h1)*a).n by A8,Th1,A7;
   end;
@@ -479,12 +479,12 @@ A15:  s1 in dom o1 by UNIALG_2:2;
 A16:  f.(o1.s1) = o2.(f*s1) by A1,A3,A6,A7,Def1;
 A17:  len (f*s1) = len s1 by Th1;
 A18:  dom (f*s1) = Seg len (f*s1) by FINSEQ_1:def 3;
-X: dom s = Seg len s1 by A14,FINSEQ_1:def 3;
+X: dom s = Seg len s1 by A13,FINSEQ_1:def 3;
       now
         let m be Nat;
         assume
 A19:    m in dom s;
-        then m in dom s1 by FINSEQ_1:def 3,X;
+:::        then m in dom s1 by FINSEQ_1:def 3,X;
         then f.(s1.m) = s.m by A13;
         hence (f*s1).m = s.m by A17,A18,A19,Th1,X;
       end;
@@ -920,8 +920,8 @@ A5:   dom F = dom the charact of(U1) & Seg len F = dom the charact of(U1)
       & dom F = Seg len the charact of(U1)
       & dom G = Seg len the charact of(U1)
       by A3,A4,FINSEQ_1:def 3,FINSEQ_3:31;
-      then
-X: dom F = Seg len the charact of(U1);
+:::      then
+X: dom F = Seg len the charact of(U1) by A3,FINSEQ_1:def 3;
       let n be Nat;
       assume
 A6:   n in dom F;
@@ -993,11 +993,10 @@ reconsider o = (the charact of U1).n as operation of U1 by A6,FUNCT_1:def 5;
 A7: the charact of UU is non-empty by FUNCT_1:def 15;
   the charact of UU <> {}
   proof
-    assume the charact of UU = {};
-    then
-A8: len the charact of UU = 0 by CARD_1:47;
+    assume
+Z:   the charact of UU = {};
     len the charact of UU = len the charact of U1 by Def13;
-    hence contradiction by A8,CARD_2:59;
+    hence contradiction by Z,CARD_2:59,CARD_1:47;
   end;
   hence thesis by A2,A4,A7,UNIALG_1:def 7,def 8,def 9;
 end;
@@ -1059,14 +1058,15 @@ A1: the charact of(QuotUnivAlg(U1,E)) = QuotOpSeq(U1,E) &
 X: dom (signature U1) = Seg len(signature U1) by FINSEQ_1:def 3;
   now
     let n be Nat;
-    assume n in dom (signature U1);
+    assume
+Z:   n in dom (signature U1);
     then
 A2: n in dom (signature U1) & n in dom the charact of(U1) &
     n in dom QuotOpSeq(U1,E) &
     n in dom (signature QuotUnivAlg(U1,E)) by A1,FINSEQ_1:def 3,X;
     then reconsider o1 = (the charact of U1).n as operation of U1 by
     FUNCT_1:def 5;
-A3: (signature U1).n = arity o1 by A2,UNIALG_1:def 11;
+A3: (signature U1).n = arity o1 by Z,UNIALG_1:def 11;
 A4: QuotOpSeq(U1,E).n = QuotOp(o1,E) by A2,Def13;
 A5: dom QuotOp(o1,E) = (arity o1)-tuples_on Class(E) by Def12;
     reconsider cl = QuotOp(o1,E) as homogeneous quasi_total non empty
@@ -1215,7 +1215,8 @@ then
 X: dom (f*y) = Seg len x by FINSEQ_1:def 3,A9;
       now
         let m be Nat;
-        assume m in dom (f*y);
+        assume
+Z:        m in dom (f*y);
         then
 A13:    m in dom x & m in dom y & m in dom (f*x) &
         m in dom (f*y) by A9,A12,FINSEQ_1:def 3,X;
@@ -1225,7 +1226,7 @@ A14:    [x.m,y.m] in R by A8,Def9;
         by A13,FUNCT_1:def 5;
         then reconsider xm = x.m, ym = y.m as Element of u1;
         f.xm = f.ym by A2,A14
-          .= (f*y).m by A13,Th1;
+          .= (f*y).m by Z,Th1;
         hence (f*y).m = (f*x).m by A13,Th1;
       end;
       then f.(ox) = f.(oy) by A9,A11,A12,FINSEQ_2:10;

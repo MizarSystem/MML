@@ -15,10 +15,10 @@ environ
       CARD_1, CARD_3, AFINSQ_1, NUMBERS, VALUED_1,
       XXREAL_0, XCMPLX_0, NAT_1, BINARITH, STRUCT_0, AMI_1;
  constructors NAT_1, BINARITH, AMI_1, VALUED_1, XXREAL_0, AFINSQ_1, FUNCT_4,
-      DOMAIN_1;
+      DOMAIN_1, PARTFUN1;
  registrations ORDINAL1, XREAL_0, CARD_3, FRAENKEL, AMI_1, RELSET_1, XBOOLE_0,
       SETFAM_1, RFUNCT_3, VALUED_1, FUNCT_4, RELAT_1, FINSET_1, STRUCT_0,
-      AFINSQ_1, FUNCT_1, FUNCOP_1;
+      AFINSQ_1, FUNCT_1, FUNCOP_1, FINSEQ_1;
  requirements BOOLE, SUBSET, NUMERALS, ARITHM;
  definitions NAT_1, TARSKI, XBOOLE_0, AMI_1, FUNCOP_1;
  theorems AMI_1, XBOOLE_1, FUNCT_2, GRFUNC_1, CARD_3, VALUED_1,
@@ -188,10 +188,10 @@ registration
   cluster initial preProgram of S;
   existence
    proof set e = {};
-A:   e is empty FinPartState of S by CARD_3:66;
+    e is empty FinPartState of S by CARD_3:66;
     then reconsider e as preProgram of S;
     take e;
-    thus thesis by A;
+    thus thesis;
    end;
 end;
 
@@ -651,7 +651,8 @@ end;
 :: from RELOC, SCMFSA_4, SCMPDS_3, 2008.04.12, A.T. (generalized)
 
   reserve N for with_non-empty_elements set,
-          S for IC-Ins-separated (non empty AMI-Struct over NAT,N);
+          S for IC-Ins-separated (non empty AMI-Struct over NAT,N),
+          s for State of S;
 
 theorem Th2:
   for l1,l2 being Instruction-Location of S , k being Element of NAT holds
@@ -693,15 +694,10 @@ definition let N,S;
   correctness;
 end;
 
+
 theorem Th11:
   for l being Instruction-Location of S
-   holds DataPart Start-At l = {}
-  proof let l be Instruction-Location of S;
-    IC S in {IC S} by TARSKI:def 1;
-    then IC S in {IC S} \/ NAT by XBOOLE_0:def 2;
-    then not IC S in (the carrier of S) \ ({IC S} \/ NAT) by XBOOLE_0:def 4;
-   hence DataPart Start-At l = {} by FUNCOP_1:91;
-  end;
+   holds DataPart Start-At l = {} by AMI_1:138;
 
 theorem Th12:
   for p being FinPartState of S, k being Element of NAT
@@ -714,3 +710,162 @@ proof
        .= DataPart p by FUNCT_4:22;
 end;
 
+definition
+  let N,S;
+  let s be State of S;
+  func DataPart s -> PartState of S equals
+  s | Data-Locations S;
+  coherence;
+end;
+
+theorem Th13:
+ Data-Locations S c= dom s
+  proof
+   dom s = the carrier of S by AMI_1:79;
+   hence thesis;
+  end;
+
+theorem
+ dom DataPart s = Data-Locations S
+  proof
+    Data-Locations S c= dom s by Th13;
+   hence dom DataPart s = Data-Locations S by RELAT_1:91;
+  end;
+
+  reserve N for non empty with_non-empty_elements set,
+   S for halting definite IC-Ins-separated realistic
+         (non empty stored-program AMI-Struct over NAT,N),
+   p for FinPartState of S,
+   l for Instruction-Location of S,
+   k for Element of NAT;
+
+theorem Th15:
+  NAT misses Data-Locations S
+proof
+  Data-Locations S misses {IC S} \/ NAT by XBOOLE_1:79;
+ hence NAT misses Data-Locations S by XBOOLE_1:70;
+end;
+
+theorem
+  for f being finite PartFunc of NAT, the Instructions of S
+  holds DataPart [f] = {}
+proof let f be finite PartFunc of NAT, the Instructions of S;
+  NAT misses Data-Locations S by Th15;
+ hence DataPart [f] = {} by RELSET_1:55;
+end;
+
+theorem Th17:
+ IC S in dom Start-At l
+  proof
+    dom Start-At l = {IC S} by FUNCOP_1:19;
+   hence thesis by TARSKI:def 1;
+  end;
+
+theorem
+ IC S in dom IncrIC(p,k)
+ proof
+X: dom IncrIC(p,k) = dom p \/ dom Start-At(IC p+k) by FUNCT_4:def 1;
+   IC S in dom Start-At(IC p+k) by Th17;
+  hence thesis by X,XBOOLE_0:def 2;
+ end;
+
+theorem Th19:
+ IC Start-At l = l
+proof
+  IC S in dom Start-At l by Th17;
+ hence IC Start-At l = (Start-At l).IC S by AMI_1:def 43
+   .= l by FUNCOP_1:87;
+end;
+
+theorem
+ IncrIC(p,k).IC S = IC p + k
+ proof
+X:  IC S in dom Start-At(IC p+k) by Th17;
+  hence IncrIC(p,k).IC S = (Start-At(IC p+k)).IC S by FUNCT_4:14
+       .= IC Start-At(IC p + k) by AMI_1:def 43,X
+       .= IC p + k by Th19;
+ end;
+
+theorem Th21:
+ not IC S in Data-Locations S
+  proof
+  assume IC S in Data-Locations S;
+  then not IC S in {IC S} \/ NAT by XBOOLE_0:def 4;
+  then not IC S in {IC S} by XBOOLE_0:def 2;
+  hence contradiction by TARSKI:def 1;
+  end;
+
+theorem Th22:
+  for d being data-only FinPartState of S
+   holds not IC S in dom d
+proof let d be data-only FinPartState of S;
+X: dom d c= Data-Locations S by AMI_1:139;
+  not IC S in Data-Locations S by Th21;
+ hence not IC S in dom d by X;
+end;
+
+theorem Th23:
+  for d being data-only FinPartState of S st IC S in dom p
+   holds IC (p+*d) = IC p
+proof let d be data-only FinPartState of S such that
+Z: IC S in dom p;
+X: not IC S in dom d by Th22;
+  dom(p+*d) = dom p \/ dom d by FUNCT_4:def 1;
+  then IC S in dom(p+*d) by Z,XBOOLE_0:def 2;
+ hence IC(p+*d) = (p+*d).IC S by AMI_1:def 43
+      .= p.IC S by X,FUNCT_4:12
+      .= IC p by Z,AMI_1:def 43;
+end;
+
+theorem Th24:
+  for d being data-only FinPartState of S
+   holds d tolerates Start-At l
+proof
+ let d be data-only FinPartState of S;
+  dom Start-At l = {IC S} by FUNCOP_1:19;
+  then dom d misses dom Start-At l by Th22,ZFMISC_1:56;
+ hence d tolerates Start-At l by PARTFUN1:138;
+end;
+
+theorem
+  for d being data-only FinPartState of S st IC S in dom p
+   holds IncrIC(p+*d,k) = IncrIC(p,k) +* d
+proof
+ let d be data-only FinPartState of S;
+X: d tolerates Start-At(IC p+k) by Th24;
+ assume
+Z: IC S in dom p;
+ hence IncrIC(p+*d,k) = p +* d +* Start-At(IC p+k) by Th23
+      .= p +* (d +* Start-At(IC p+k)) by FUNCT_4:15
+      .= p +* (Start-At(IC p+k) +* d) by X,FUNCT_4:35
+      .= IncrIC(p,k) +* d by FUNCT_4:15;
+end;
+
+theorem
+  for d being data-only FinPartState of S,
+      f being finite PartFunc of NAT, the Instructions of S
+   holds d tolerates f
+proof
+  let d be data-only FinPartState of S,
+      f be finite PartFunc of NAT, the Instructions of S;
+A: dom f c= NAT by RELSET_1:12;
+B: dom d c= Data-Locations S by AMI_1:139;
+  NAT misses Data-Locations S by Th15;
+  then dom d misses dom f by A,B,XBOOLE_1:64;
+ hence d tolerates f by PARTFUN1:138;
+end;
+
+theorem
+  for d being data-only FinPartState of S
+ holds IncrIC(d,k)|NAT = {}
+proof
+ let d be data-only FinPartState of S;
+A: dom IncrIC(d,k) = dom d \/ dom Start-At(IC d+k) by FUNCT_4:def 1;
+C: dom d c= Data-Locations S by AMI_1:139;
+  NAT misses Data-Locations S by Th15;
+  then
+B: dom d misses NAT by C,XBOOLE_1:63;
+  dom Start-At(IC d+k) misses NAT by AMI_1:134;
+  then dom IncrIC(d,k) misses NAT by A,B,XBOOLE_1:70;
+ hence thesis by RELAT_1:95;
+end;

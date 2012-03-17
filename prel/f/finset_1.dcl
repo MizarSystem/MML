@@ -13,6 +13,7 @@
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FUNCOP_1"/>
+<ArticleID name="FUNCT_4"/>
 <ArticleID name="FINSET_1"/>
 </Signature>
 <RCluster aid="FINSET_1" nr="1">
@@ -589,6 +590,54 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
+<Adjective nr="12"/>
+</Cluster>
+</FCluster>
+<FCluster aid="FINSET_1" nr="23">
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="2"/>
+<Adjective nr="5"/>
+<Adjective nr="12"/>
+</Cluster>
+</Typ>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="41">
+<LocusVar nr="1"/>
+<LocusVar nr="2"/>
+</Func>
+<Cluster>
+<Adjective nr="12"/>
+</Cluster>
+</FCluster>
+<FCluster aid="FINSET_1" nr="24">
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="2"/>
+<Adjective nr="5"/>
+<Adjective nr="12"/>
+</Cluster>
+</Typ>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="2"/>
+<Adjective nr="5"/>
+<Adjective nr="12"/>
+</Cluster>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="98">
+<LocusVar nr="1"/>
+<LocusVar nr="2"/>
+</Func>
+<Cluster>
+<Adjective nr="2"/>
+<Adjective nr="5"/>
 <Adjective nr="12"/>
 </Cluster>
 </FCluster>

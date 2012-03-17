@@ -448,19 +448,19 @@
 <Adjective nr="16">
 <Func kind="K" nr="173">
 <Num nr="2"/>
-<Func kind="K" nr="379"/>
+<Func kind="K" nr="380"/>
 </Func>
-<Func kind="K" nr="379"/>
+<Func kind="K" nr="380"/>
 </Adjective>
 </Cluster>
 <Func kind="K" nr="173">
 <Num nr="2"/>
-<Func kind="K" nr="379"/>
+<Func kind="K" nr="380"/>
 </Func>
-<Func kind="K" nr="379"/>
+<Func kind="K" nr="380"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="392">
+<Func kind="K" nr="393">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>

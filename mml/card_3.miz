@@ -52,10 +52,9 @@ registration
     consider M;
     consider X;
     take f = X --> M;
-A1: dom f = X & for x st x in X holds f.x = M by FUNCOP_1:13,19;
     let x;
     assume x in dom f;
-    hence thesis by A1;
+    hence thesis by FUNCOP_1:13;
   end;
 end;
 
@@ -91,7 +90,6 @@ registration
   proof
       let x;
       assume x in dom(X --> K);
-      then x in X;
       hence thesis by FUNCOP_1:13;
   end;
 end;
@@ -246,7 +244,7 @@ A2: dom Card (X --> Y) = X & dom (X --> Card Y) = X by FUNCOP_1:19;
     let x;
     assume x in X;
     then Card (X --> Y).x = Card ((X --> Y).x) & (X --> Card Y).x = Card Y &
-    (X --> Y).x = Y & Y = Y by A1,A2,Def2,FUNCOP_1:13;
+    (X --> Y).x = Y by A1,A2,Def2,FUNCOP_1:13;
     hence Card (X --> Y).x = (X --> Card Y).x;
   end;
   hence thesis by A2,FUNCT_1:9;
@@ -365,7 +363,7 @@ A2: x = g & dom g = X & rng g c= Y by FUNCT_2:def 2;
     now
       let y;
       assume y in dom f;
-      then f.y = Y & Y = Y & g.y in rng g by A1,A2,FUNCT_1:def 5;
+      then f.y = Y & g.y in rng g by FUNCOP_1:13,A2,FUNCT_1:def 5;
       hence g.y in f.y by A2;
     end;
     hence thesis by A1,A2,Def5;
@@ -380,7 +378,7 @@ A3: x = g & dom g = dom f & for x st x in dom f holds g.x in f.x by Def5;
     assume y in rng g;
     then consider z such that
 A4: z in dom g & y = g.z by FUNCT_1:def 5;
-    y in f.z & f.z = Y & Y = Y by A1,A3,A4;
+    y in f.z & f.z = Y by FUNCOP_1:13,A3,A4;
     hence thesis;
   end;
   hence thesis by A1,A3,FUNCT_2:def 2;
@@ -1678,9 +1676,9 @@ A32:  Z1 in Z & for Z2 st Z2 in Z holds Z1 c= Z2 by A4,A30;
 A33:  Z1 in XX by A29,A32;
       then Z1 /\ Y c= Z1 & Z1 c= union X & Z1 /\ Y <> {}
       by A3,A29,A32,XBOOLE_1:17,ZFMISC_1:92;
-      then Z1 /\ Y c= union X & Z1 /\ Y <> {} by XBOOLE_1:1;
       then consider x such that
-A34:  x in Z1 /\ Y & for y st y in Z1 /\ Y holds [x,y] in R by A6,WELLORD1:9;
+A34:  x in Z1 /\ Y & for y st y in Z1 /\ Y holds [x,y] in R
+            by A6,WELLORD1:9,XBOOLE_1:1;
       take x; thus x in Y by A34,XBOOLE_0:def 3;
       assume
 A35:  Q-Seg x /\ Y <> {};
@@ -2030,9 +2028,8 @@ A1: g in product f;
 A2: dom g = dom f & for x st x in dom f holds g.x in f.x by Th18;
   assume
 A3: h in sproduct f;
-  then dom h c= dom f & for x st x in dom h holds h.x in f.x by Th65;
   then
-A4: dom g \/ dom h = dom f by A2,XBOOLE_1:12;
+A4: dom g \/ dom h = dom f by A2,XBOOLE_1:12,Th65;
   then
 A5: dom(g +* h) = dom f by FUNCT_4:def 1;
   now
@@ -2327,11 +2324,12 @@ A4: now
 end;
 
 theorem Th80:
-  g c= h & h in sproduct f implies g in sproduct f
+  x c= h & h in sproduct f implies x in sproduct f
 proof
   assume that
-A1: g c= h and
+A1: x c= h and
 A2: h in sproduct f;
+   reconsider g = x as Function by A1,GRFUNC_1:6;
 A3: dom g c= dom h by A1,GRFUNC_1:8;
   dom h c= dom f by A2,Th65;
   then
@@ -2343,7 +2341,7 @@ A5: x in dom g;
     then h.x in f.x by A2,A3,Th65;
     hence g.x in f.x by A1,A5,GRFUNC_1:8;
   end;
-  hence g in sproduct f by A4,Def9;
+  hence x in sproduct f by A4,Def9;
 end;
 
 theorem Th81:
@@ -2355,9 +2353,8 @@ proof
 A1: dom(g|A) = dom g /\ A & dom(f|A) = dom f /\ A by RELAT_1:90;
   assume
 A2: g in sproduct f;
-  then dom g c= dom f by Th65;
   then
-A3: dom(g|A) c= dom(f|A) by A1,XBOOLE_1:26;
+A3: dom(g|A) c= dom(f|A) by A1,XBOOLE_1:26,Th65;
   now
     let x;
     assume
@@ -2891,8 +2888,7 @@ A:    product f = {} by Th37;
 B: s = {} by SUBSET_1:def 2;
    t = {} by A,SUBSET_1:def 2;
    then t|A = {} by RELAT_1:111;
-   then s +* t|A = {} by B;
-  hence s +* t|A is Element of product f by A,SUBSET_1:def 2;
+  hence s +* t|A is Element of product f by B;
   end;
 end;
 
@@ -2907,5 +2903,33 @@ proof
   reconsider s = h +* p as Element of product f by Th69;
   take s;
   thus p c= s by FUNCT_4:26;
+end;
+
+theorem Th98:
+  g in product f implies g|A in sproduct f
+proof
+A: product f c= sproduct f by Th67;
+ assume g in product f;
+ hence g|A in sproduct f by A,Th80,RELAT_1:88;
+end;
+
+:: needed, 2008.04.20, A.T.
+
+definition let f be non-empty Function;
+ let g be Element of product f; let X;
+ redefine func g|X -> Element of sproduct f;
+ coherence by Th98;
+end;
+
+theorem
+  for f being non-empty Function
+  for s,ss being Element of product f, A being set
+   holds (ss +* s | A) | A = s | A
+proof let f be non-empty Function;
+  let s,ss be Element of product f;
+  let A be set;
+   dom s = dom f by Th18 .= dom ss by Th18;
+   then A /\ dom ss c= A /\ dom s;
+  hence thesis by  FUNCT_4:93;
 end;
 

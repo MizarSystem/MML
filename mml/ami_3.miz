@@ -8,7 +8,7 @@ environ
 
  vocabularies AMI_1, INT_1, AMI_2, GR_CY_1, RELAT_1, FUNCT_1, CAT_1, FINSEQ_1,
       CARD_3, ARYTM_1, NAT_1, CQC_LANG, BOOLE, MCART_1, FUNCT_4, FUNCOP_1,
-      ORDINAL2, AMI_3, ARYTM, TARSKI, FUNCT_7, ORDINAL1;
+      ORDINAL2, AMI_3, ARYTM, TARSKI, FUNCT_7, ORDINAL1, SCMNORM;
  notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, ORDINAL1, XCMPLX_0, FUNCT_1,
       XXREAL_0, INT_1, ZFMISC_1, MCART_1, FUNCOP_1, CARD_1, CARD_3, RELAT_1,
       FUNCT_4, FUNCT_7, FINSEQ_1, STRUCT_0, AMI_1, SCMNORM, AMI_2;
@@ -452,27 +452,12 @@ A1: I = [0,{}];
   let s be State of SCM;
   reconsider L = I as Element of SCM-Instr;
 A2: I`2 = {} by A1,MCART_1:7;
-A3: now
-    let i;
-    let mk, ml be Element of SCM-Data-Loc;
-    assume I = [ i, <*mk, ml*>];
-    then I`2 = <*mk, ml*> by MCART_1:7;
-    hence contradiction by A2,FINSEQ_3:38;
-  end;
-A4: now
-    let i;
-    let mk be Element of NAT;
-    assume I = [ i, <*mk*>];
-    then I`2 = <*mk*> by MCART_1:7;
-    hence contradiction by A2,TREES_1:4;
-  end;
-  now
-    let i;
-    let mk be Element of NAT, ml be Element of SCM-Data-Loc;
-    assume I = [ i, <*mk, ml*>];
-    then I`2 = <*mk, ml*> by MCART_1:7;
-    hence contradiction by A2,FINSEQ_3:38;
-  end;
+A3: for i for mk, ml being Element of SCM-Data-Loc
+     holds not I = [ i, <*mk, ml*>] by A2,FINSEQ_3:38,MCART_1:7;
+A4: for i for mk being Element of NAT
+     holds not I = [ i, <*mk*>] by A2,TREES_1:4,MCART_1:7;
+ for i for mk being Element of NAT,ml being Element of SCM-Data-Loc
+     holds not I = [ i, <*mk,ml*>] by A2,FINSEQ_3:38,MCART_1:7;
   then
 A5: not (ex mk, ml being Element of SCM-Data-Loc st I = [ 1, <*mk, ml*>] ) &
   not (ex mk, ml being Element of SCM-Data-Loc st I = [ 2, <*mk, ml*>]) &
@@ -841,28 +826,12 @@ A1: c in { [SCM-Halt,{}] } \/ { [Y,<*a2*>] : Y = 6 } or
       then c = [SCM-Halt,{}] by TARSKI:def 1;
       then
 A2:   c`2 = {} by MCART_1:7;
-A3:   now
-        let l be Element of NAT;
-        let mk, ml be Element of SCM-Data-Loc;
-        assume c = [ l, <*mk, ml*>];
-        then c`2 = <*mk, ml*> by MCART_1:7;
-        hence contradiction by A2,FINSEQ_3:38;
-      end;
-A4:   now
-        let l be Element of NAT;
-        let mk be Element of NAT;
-        assume c = [ l, <*mk*>];
-        then c`2 = <*mk*> by MCART_1:7;
-        hence contradiction by A2,TREES_1:4;
-      end;
-      now
-        let l be Element of NAT;
-        let mk be Element of NAT, ml be Element of SCM-Data-Loc;
-        assume c = [ l, <*mk, ml*>];
-        then c`2 = <*mk, ml*> by MCART_1:7;
-        hence contradiction by A2,FINSEQ_3:38;
-      end;
-
+A3:  for l being Element of NAT, mk, ml being Element of SCM-Data-Loc
+      holds not c = [ l, <*mk, ml*>] by A2,FINSEQ_3:38,MCART_1:7;
+A4:  for l,mk being Element of NAT
+      holds not c = [ l, <*mk*>] by A2,TREES_1:4,MCART_1:7;
+  for l,mk being Element of NAT, ml being Element of SCM-Data-Loc
+      holds not c = [ l, <*mk, ml*>] by A2,FINSEQ_3:38,MCART_1:7;
 then not (ex mk, ml being Element of SCM-Data-Loc st c = [ 1, <*mk, ml*>]) &
       not (ex mk, ml being Element of SCM-Data-Loc st c = [ 2, <*mk, ml*>]) &
       not (ex mk, ml being Element of SCM-Data-Loc st c = [ 3, <*mk, ml*>]) &
@@ -1101,3 +1070,15 @@ theorem
 theorem
   halt SCM = [0,{}] by Lm12;
 
+theorem
+ Data-Locations SCM = SCM-Data-Loc
+ proof
+   SCM-Data-Loc misses {NAT} by ZFMISC_1:56,AMI_2:27;
+   then
+C: SCM-Data-Loc misses {NAT} \/ NAT by AMI_2:29,XBOOLE_1:70;
+  thus  Data-Locations SCM
+     = {NAT} \/ SCM-Data-Loc \/ NAT \ ({NAT} \/ NAT) by AMI_2:30,FUNCT_7:def 1
+    .= SCM-Data-Loc \/ ({NAT} \/ NAT) \ ({NAT} \/ NAT) by XBOOLE_1:4
+    .= SCM-Data-Loc \ ({NAT} \/ NAT) by XBOOLE_1:40
+    .= SCM-Data-Loc by C,XBOOLE_1:83;
+ end;

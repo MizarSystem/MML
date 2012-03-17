@@ -41,14 +41,14 @@
 <Cluster/>
 <Func kind="K" nr="172">
 <Func kind="U" nr="10">
-<Func kind="K" nr="268"/>
+<Func kind="K" nr="270"/>
 <Func kind="K" nr="15">
 <Func kind="K" nr="76"/>
-<Func kind="K" nr="262">
+<Func kind="K" nr="264">
 <Func kind="K" nr="76"/>
 </Func>
 </Func>
-<Func kind="K" nr="284"/>
+<Func kind="K" nr="286"/>
 </Func>
 </Func>
 </Typ>
@@ -57,24 +57,24 @@
 <Adjective nr="4"/>
 <Adjective nr="20"/>
 <Adjective nr="70">
-<Func kind="K" nr="268"/>
+<Func kind="K" nr="270"/>
 <Func kind="K" nr="15">
 <Func kind="K" nr="76"/>
-<Func kind="K" nr="262">
+<Func kind="K" nr="264">
 <Func kind="K" nr="76"/>
 </Func>
 </Func>
-<Func kind="K" nr="284"/>
+<Func kind="K" nr="286"/>
 </Adjective>
 <Adjective nr="75" value="false">
-<Func kind="K" nr="268"/>
+<Func kind="K" nr="270"/>
 <Func kind="K" nr="15">
 <Func kind="K" nr="76"/>
-<Func kind="K" nr="262">
+<Func kind="K" nr="264">
 <Func kind="K" nr="76"/>
 </Func>
 </Func>
-<Func kind="K" nr="284"/>
+<Func kind="K" nr="286"/>
 </Adjective>
 </Cluster>
 </RCluster>

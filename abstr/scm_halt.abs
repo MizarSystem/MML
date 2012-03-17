@@ -11,10 +11,10 @@ environ
       AMI_5, RELOC, SCM_1, CARD_1, SCMFSA6C, SCMFSA7B, SCMFSA_4, UNIALG_2,
       SCMFSA8B, ARYTM_1, SCMFSA8C, SCMFSA8A, SCM_HALT, CARD_3, ARYTM, AMISTD_2;
  notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0,
-      NAT_1, RELAT_1, FINSEQ_1, FUNCT_1, FUNCT_4, FUNCT_7, STRUCT_0, AMI_1,
-      SCMNORM, SCMFSA_2, FUNCOP_1, SCMFSA_4, SCMFSA6B, SCMFSA_5, SCMFSA6A,
-      SF_MASTR, SCMFSA8A, SCMFSA8B, SCMFSA8C, SCMFSA7B, BINARITH, SCMFSA_3,
-      SCMFSA6C, XXREAL_0;
+      NAT_1, RELAT_1, FINSEQ_1, FUNCT_1, FUNCT_4, FUNCT_7, CARD_3, STRUCT_0,
+      AMI_1, SCMNORM, SCMFSA_2, FUNCOP_1, SCMFSA_4, SCMFSA6B, SCMFSA_5,
+      SCMFSA6A, SF_MASTR, SCMFSA8A, SCMFSA8B, SCMFSA8C, SCMFSA7B, BINARITH,
+      SCMFSA_3, SCMFSA6C, XXREAL_0;
  constructors DOMAIN_1, XXREAL_0, REAL_1, NAT_1, PARTFUN1, SCM_1, SCMFSA_3,
       SCMFSA_5, SCMFSA6A, SF_MASTR, SCMFSA6B, SCMFSA6C, SCMFSA8A, SCMFSA8B,
       SCMFSA8C, SCMNORM, SCMFSA_4;
@@ -60,8 +60,7 @@ theorem :: SCM_HALT:2   ::TM002
   for I being Program of SCM+FSA,i,m,n being Element of NAT holds
   dom I misses dom (((intloc i) .--> m) +* Start-At insloc n);
 
-theorem :: SCM_HALT:3    ::I_iS
-  Initialized I = I +* (((intloc 0) .--> 1) +* Start-At insloc 0);
+canceled;
 
 theorem :: SCM_HALT:4
   Macro halt SCM+FSA is InitHalting;
@@ -121,12 +120,11 @@ theorem :: SCM_HALT:11   ::TM014=SCMFSA6B:26
 theorem :: SCM_HALT:12   ::TM016=SCMFSA6B:27 ::T0
   for J being InitHalting Program of SCM+FSA st Initialized J c= s1
   for n being Element of NAT st ProgramPart Relocated(J,n) c= s2 &
-  IC s2 = insloc n & s1 | (Int-Locations \/ FinSeq-Locations)
-  = s2 | (Int-Locations \/ FinSeq-Locations) for i being Element of NAT holds
+  IC s2 = insloc n & DataPart s1 = DataPart s2
+   for i being Element of NAT holds
   IC Computation(s1,i) + n = IC Computation(s2,i) &
   IncAddr(CurInstr (Computation(s1,i)),n) = CurInstr (Computation(s2,i)) &
-  Computation(s1,i) | (Int-Locations \/ FinSeq-Locations)
-  = Computation(s2,i) | (Int-Locations \/ FinSeq-Locations);
+  DataPart Computation(s1,i) = DataPart Computation(s2,i);
 
 theorem :: SCM_HALT:13   ::TM018=MacroAt0:
   Initialized I c= s implies I c= s;
@@ -184,8 +182,8 @@ theorem :: SCM_HALT:22  ::TM034=Lemma02
   for I being InitClosed Program of SCM+FSA
   st s +*I is halting & Directed I c= s &
   ((intloc 0) .--> 1) +* Start-At insloc 0 c= s holds
-   Computation( s,LifeSpan (s +*I)) | (Int-Locations \/ FinSeq-Locations) =
-   Computation( s,LifeSpan (s +*I) + 1) | (Int-Locations \/ FinSeq-Locations);
+   DataPart Computation( s,LifeSpan (s +*I)) =
+   DataPart Computation( s,LifeSpan (s +*I) + 1);
 
 theorem :: SCM_HALT:23  ::TM036=Lemma0
   for I being InitHalting Program of SCM+FSA st Initialized I c= s holds
@@ -204,10 +202,9 @@ theorem :: SCM_HALT:25  ::TM040=Th1:
   J being InitHalting Program of SCM+FSA,
   s being State of SCM+FSA st Initialized (I ';' J) c= s holds
   IC  Computation( s,LifeSpan (s +* I) + 1) = insloc card I &
-   Computation( s,LifeSpan (s +* I) + 1)
-  | (Int-Locations \/ FinSeq-Locations)
-  = ( Computation( (s +* I),LifeSpan (s +* I)) +* Initialized J)
-  | (Int-Locations \/ FinSeq-Locations) & ProgramPart Relocated(J,card I) c=
+   DataPart Computation( s,LifeSpan (s +* I) + 1)
+  = DataPart(Computation( (s +* I),LifeSpan (s +* I)) +* Initialized J)
+  & ProgramPart Relocated(J,card I) c=
    Computation( s,LifeSpan (s +* I) + 1) &
    Computation( s,LifeSpan (s +* I) + 1).intloc 0 = 1 & s is halting &
   LifeSpan s
@@ -304,8 +301,7 @@ theorem :: SCM_HALT:31   ::TM050
 theorem :: SCM_HALT:32
   for I be keepInt0_1 InitHalting Program of SCM+FSA,
   s be State of SCM+FSA holds
-  (Initialize IExec(I,s)) | (Int-Locations \/ FinSeq-Locations)
-  = IExec(I,s) | (Int-Locations \/ FinSeq-Locations);
+  DataPart(Initialize IExec(I,s)) = DataPart IExec(I,s);
 
 theorem :: SCM_HALT:33   ::TM051=miI:
   for I being keepInt0_1 InitHalting Program of SCM+FSA,
@@ -629,16 +625,14 @@ theorem :: SCM_HALT:77  ::TMP22'
 theorem :: SCM_HALT:78  ::T1
   for s being State of SCM+FSA, I being good InitHalting Program of SCM+FSA,
   a being read-write Int-Location st s.intloc 0 = 1 & s.a <= 0 holds
-  IExec(Times(a,I),s) | (Int-Locations \/ FinSeq-Locations) =
-  s | (Int-Locations \/ FinSeq-Locations);
+  DataPart IExec(Times(a,I),s) = DataPart s;
 
 theorem :: SCM_HALT:79  ::T2
   for s being State of SCM+FSA, I being good InitHalting Program of SCM+FSA,
   a being read-write Int-Location st I does_not_destroy a & s.a > 0 holds
   IExec(I ';' SubFrom(a,intloc 0),s).a = s.a - 1 &
-  IExec(Times(a,I),s) | (Int-Locations \/ FinSeq-Locations) =
-  IExec(Times(a,I),IExec(I ';' SubFrom(a,intloc 0),s)) |
-  (Int-Locations \/ FinSeq-Locations);
+  DataPart IExec(Times(a,I),s) =
+  DataPart IExec(Times(a,I),IExec(I ';' SubFrom(a,intloc 0),s));
 
 theorem :: SCM_HALT:80    ::T03
   for s be State of SCM+FSA, I be good InitHalting Program of SCM+FSA,

@@ -16,7 +16,7 @@ environ
       REAL_1, SCMNORM;
  registrations XBOOLE_0, SUBSET_1, SETFAM_1, RELAT_1, FUNCT_1, ORDINAL1,
       FRAENKEL, NUMBERS, XREAL_0, INT_1, CARD_3, AMI_1, AMI_3, SCMPDS_2,
-      SCMNORM, FINSET_1;
+      SCMNORM, FINSET_1, FINSEQ_1;
  requirements NUMERALS, SUBSET, BOOLE, ARITHM, REAL;
  definitions AMI_1, AMI_2, AMI_3, FUNCOP_1, SCMPDS_2, NAT_1, SCMNORM;
  theorems AMI_1, AMI_3, GRFUNC_1, NAT_1, FUNCOP_1, TARSKI, FUNCT_4, FUNCT_1,
@@ -47,31 +47,31 @@ end;
 
 theorem Th3:
   for k1 be Integer,a be Int_position,s1,s2 being State of SCMPDS st
-  s1 | SCM-Data-Loc = s2 | SCM-Data-Loc
+  DataPart s1 = DataPart s2
   holds s1.DataLoc(s1.a,k1)=s2.DataLoc(s2.a,k1)
 proof
   let k1 be Integer,a be Int_position,s1,s2 be State of SCMPDS;
   assume
-A1: s1 | SCM-Data-Loc = s2 | SCM-Data-Loc;
+A1: DataPart s1 = DataPart s2;
 A2: a in SCM-Data-Loc by SCMPDS_2:def 2;
 A3: DataLoc(s1.a,k1) in SCM-Data-Loc by SCMPDS_2:def 2;
-A4: s1.a= (s1 | SCM-Data-Loc).a by A2,FUNCT_1:72
-    .= s2.a by A1,A2,FUNCT_1:72;
-  thus s1.DataLoc(s1.a,k1)= (s1 | SCM-Data-Loc).DataLoc(s1.a,k1)
-  by A3,FUNCT_1:72
-    .= s2.DataLoc(s2.a,k1) by A1,A3,A4,FUNCT_1:72;
+A4: s1.a= (DataPart s1).a by A2,FUNCT_1:72,SCMPDS_2:100
+    .= s2.a by A1,A2,FUNCT_1:72,SCMPDS_2:100;
+  thus s1.DataLoc(s1.a,k1)= (DataPart s1).DataLoc(s1.a,k1)
+  by A3,FUNCT_1:72,SCMPDS_2:100
+    .= s2.DataLoc(s2.a,k1) by A1,A3,A4,FUNCT_1:72,SCMPDS_2:100;
 end;
 
 theorem Th4:
   for a be Int_position,s1,s2 being State of SCMPDS st
-  s1 | SCM-Data-Loc = s2 | SCM-Data-Loc holds s1.a=s2.a
+  DataPart s1 = DataPart s2 holds s1.a=s2.a
 proof
   let a be Int_position,s1,s2 be State of SCMPDS;
   assume
-A1: s1 | SCM-Data-Loc = s2 | SCM-Data-Loc;
+A1: DataPart s1 = DataPart s2;
 A2: a in SCM-Data-Loc by SCMPDS_2:def 2;
-  hence s1.a= (s1 | SCM-Data-Loc).a by FUNCT_1:72
-    .= s2.a by A1,A2,FUNCT_1:72;
+  hence s1.a= (DataPart s1).a by FUNCT_1:72,SCMPDS_2:100
+    .= s2.a by A1,A2,FUNCT_1:72,SCMPDS_2:100;
 end;
 
 theorem
@@ -95,7 +95,7 @@ theorem Th7:
 proof
   let s1,s2 be State of SCMPDS such that
 A1: s1 | (SCM-Data-Loc \/ {IC SCMPDS})=s2 | (SCM-Data-Loc \/ {IC SCMPDS});
-A2: s1 | SCM-Data-Loc =s2 | SCM-Data-Loc by A1,RELAT_1:188,XBOOLE_1:7;
+A2: DataPart s1 =DataPart s2 by A1,RELAT_1:188,XBOOLE_1:7,SCMPDS_2:100;
   IC SCMPDS in {IC SCMPDS} by TARSKI:def 1;
   then
 A3: IC SCMPDS in (SCM-Data-Loc \/ {IC SCMPDS}) by XBOOLE_0:def 2;
@@ -113,29 +113,30 @@ A7: IC s1 = (s2 | (SCM-Data-Loc \/ {IC SCMPDS})).IC SCMPDS by A1,A5,FUNCT_1:70
 A8: dom Exec(l,s1) = the carrier of SCMPDS by AMI_1:79;
 A9: dom Exec(l,s2) = the carrier of SCMPDS by AMI_1:79;
 A10: dom Exec(l,s1) = dom Exec(l,s2) by A8,AMI_1:79;
-A11: dom ((Exec (l,s1)) | SCM-Data-Loc)= SCM-Data-Loc by A8,RELAT_1:91;
-A12: dom ((Exec (l,s2)) | SCM-Data-Loc)= SCM-Data-Loc by A9,RELAT_1:91;
+A11: dom DataPart Exec (l,s1)= SCM-Data-Loc by A8,RELAT_1:91,SCMPDS_2:100;
+A12: dom DataPart Exec (l,s2)= SCM-Data-Loc by A9,RELAT_1:91,SCMPDS_2:100;
   per cases by NAT_1:38,SCMPDS_2:15;
   suppose InsCode (l) = 0;
     then consider k1 such that
 A13: l = goto k1 by SCMPDS_2:35;
     for x being set st x in SCM-Data-Loc holds
-    (Exec (l,s1) | SCM-Data-Loc ).x = (Exec (l,s2) | SCM-Data-Loc ).x
+    (DataPart Exec (l,s1)).x = (DataPart Exec (l,s2)).x
     proof
       let x be set;
       assume
 A14:  x in SCM-Data-Loc;
       then reconsider a = x as Int_position by SCMPDS_2:9;
-      thus (Exec (l,s1) | SCM-Data-Loc ).x = (Exec (l,s1)).a by A14,FUNCT_1:72
+      thus (DataPart Exec (l,s1)).x = (Exec (l,s1)).a
+       by A14,FUNCT_1:72,SCMPDS_2:100
         .= s1.a by A13,SCMPDS_2:66
-        .= (s1 | SCM-Data-Loc).a by A14,FUNCT_1:72
-        .= s2.a by A2,A14,FUNCT_1:72
+        .= (DataPart s1).a by A14,FUNCT_1:72,SCMPDS_2:100
+        .= s2.a by A2,A14,FUNCT_1:72,SCMPDS_2:100
         .= (Exec (l,s2)).a by A13,SCMPDS_2:66
-        .= (Exec (l,s2) | SCM-Data-Loc ).x by A14,FUNCT_1:72;
+        .= (DataPart Exec (l,s2)).x by A14,FUNCT_1:72,SCMPDS_2:100;
     end;
     then
 A15: Exec (l,s1) | (SCM-Data-Loc ) = Exec (l,s2) | (SCM-Data-Loc )
-    by A11,A12,FUNCT_1:9;
+    by A11,A12,FUNCT_1:9,SCMPDS_2:100;
     Exec (l,s1).IC SCMPDS = ICplusConst(s1,k1) by A13,SCMPDS_2:66
       .= ICplusConst(s2,k1) by A7,Th2
       .= Exec (l,s2).IC SCMPDS by A13,SCMPDS_2:66;
@@ -147,7 +148,7 @@ A15: Exec (l,s1) | (SCM-Data-Loc ) = Exec (l,s2) | (SCM-Data-Loc )
     then consider a such that
 A16: l = return a by SCMPDS_2:36;
     for x being set st x in SCM-Data-Loc holds
-    (Exec (l,s1) | SCM-Data-Loc ).x = (Exec (l,s2) | SCM-Data-Loc ).x
+    (DataPart Exec (l,s1)).x = (DataPart Exec (l,s2)).x
     proof
       let x be set;
       assume
@@ -156,27 +157,27 @@ A17:  x in SCM-Data-Loc;
       per cases;
       suppose
 A18:    b<>a;
-        thus (Exec (l,s1) | SCM-Data-Loc ).x
-        = (Exec (l,s1)).b by A17,FUNCT_1:72
+        thus (DataPart Exec (l,s1)).x
+        = (Exec (l,s1)).b by A17,FUNCT_1:72,SCMPDS_2:100
           .= s1.b by A16,A18,SCMPDS_2:70
-          .= (s1 | SCM-Data-Loc).b by A17,FUNCT_1:72
-          .= s2.b by A2,A17,FUNCT_1:72
+          .= (DataPart s1).b by A17,FUNCT_1:72,SCMPDS_2:100
+          .= s2.b by A2,A17,FUNCT_1:72,SCMPDS_2:100
           .= (Exec (l,s2)).b by A16,A18,SCMPDS_2:70
-          .= (Exec (l,s2) | SCM-Data-Loc ).x by A17,FUNCT_1:72;
+          .= (DataPart Exec (l,s2)).x by A17,FUNCT_1:72,SCMPDS_2:100;
       end;
       suppose
 A19:    b=a;
-        thus (Exec (l,s1) | SCM-Data-Loc ).x
-        = (Exec (l,s1)).b by A17,FUNCT_1:72
+        thus (DataPart Exec (l,s1)).x
+        = (Exec (l,s1)).b by A17,FUNCT_1:72,SCMPDS_2:100
           .= s1.DataLoc(s1.a,RetSP) by A16,A19,SCMPDS_2:70
           .= s2.DataLoc(s2.a,RetSP) by A2,Th3
           .= (Exec (l,s2)).b by A16,A19,SCMPDS_2:70
-          .= (Exec (l,s2) | SCM-Data-Loc ).x by A17,FUNCT_1:72;
+          .= (DataPart Exec (l,s2)).x by A17,FUNCT_1:72,SCMPDS_2:100;
       end;
     end;
     then
 A20: Exec (l,s1) | (SCM-Data-Loc ) = Exec (l,s2) | (SCM-Data-Loc )
-    by A11,A12,FUNCT_1:9;
+    by A11,A12,FUNCT_1:9,SCMPDS_2:100;
     Exec (l,s1).IC SCMPDS = (abs(s1.DataLoc(s1.a,RetIC)))+2 by A16,SCMPDS_2:70
       .= (abs(s2.DataLoc(s2.a,RetIC)))+2 by A2,Th3
       .= Exec (l,s2).IC SCMPDS by A16,SCMPDS_2:70;
@@ -188,7 +189,7 @@ A20: Exec (l,s1) | (SCM-Data-Loc ) = Exec (l,s2) | (SCM-Data-Loc )
     then consider a,k1 such that
 A21: l= a:=k1 by SCMPDS_2:37;
     for x being set st x in SCM-Data-Loc holds
-    (Exec (l,s1) | SCM-Data-Loc ).x = (Exec (l,s2) | SCM-Data-Loc ).x
+    (DataPart Exec (l,s1)).x = (DataPart Exec (l,s2)).x
     proof
       let x be set;
       assume
@@ -197,26 +198,26 @@ A22:  x in SCM-Data-Loc;
       per cases;
       suppose
 A23:    b<>a;
-        thus (Exec (l,s1) | SCM-Data-Loc ).x
-        = (Exec (l,s1)).b by A22,FUNCT_1:72
+        thus (DataPart Exec (l,s1)).x
+        = (Exec (l,s1)).b by A22,FUNCT_1:72,SCMPDS_2:100
           .= s1.b by A21,A23,SCMPDS_2:57
-          .= (s1 | SCM-Data-Loc).b by A22,FUNCT_1:72
-          .= s2.b by A2,A22,FUNCT_1:72
+          .= (DataPart s1).b by A22,FUNCT_1:72,SCMPDS_2:100
+          .= s2.b by A2,A22,FUNCT_1:72,SCMPDS_2:100
           .= (Exec (l,s2)).b by A21,A23,SCMPDS_2:57
-          .= (Exec (l,s2) | SCM-Data-Loc ).x by A22,FUNCT_1:72;
+          .= (DataPart Exec (l,s2)).x by A22,FUNCT_1:72,SCMPDS_2:100;
       end;
       suppose
 A24:    b=a;
-        thus (Exec (l,s1) | SCM-Data-Loc ).x
-        = (Exec (l,s1)).b by A22,FUNCT_1:72
+        thus (DataPart Exec (l,s1)).x
+        = (Exec (l,s1)).b by A22,FUNCT_1:72,SCMPDS_2:100
           .= k1 by A21,A24,SCMPDS_2:57
           .= (Exec (l,s2)).b by A21,A24,SCMPDS_2:57
-          .= (Exec (l,s2) | SCM-Data-Loc ).x by A22,FUNCT_1:72;
+          .= (DataPart Exec (l,s2)).x by A22,FUNCT_1:72,SCMPDS_2:100;
       end;
     end;
     then
 A25: Exec (l,s1) | (SCM-Data-Loc ) = Exec (l,s2) | (SCM-Data-Loc )
-    by A11,A12,FUNCT_1:9;
+    by A11,A12,FUNCT_1:9,SCMPDS_2:100;
     Exec (l,s1).IC SCMPDS = Next IC s2 by A7,A21,SCMPDS_2:57
       .= Exec (l,s2).IC SCMPDS by A21,SCMPDS_2:57;
     then Exec (l,s1) | {IC SCMPDS} = Exec (l,s2) | {IC SCMPDS} by A10,
@@ -227,7 +228,7 @@ A25: Exec (l,s1) | (SCM-Data-Loc ) = Exec (l,s2) | (SCM-Data-Loc )
     then consider a,k1 such that
 A26: l= saveIC(a,k1) by SCMPDS_2:38;
     for x being set st x in SCM-Data-Loc holds
-    (Exec (l,s1) | SCM-Data-Loc ).x = (Exec (l,s2) | SCM-Data-Loc ).x
+    (DataPart Exec (l,s1)).x = (DataPart Exec (l,s2)).x
     proof
       let x be set;
       assume
@@ -238,28 +239,28 @@ A27:  x in SCM-Data-Loc;
 A28:    b<>DataLoc(s1.a,k1);
         then
 A29:    b<>DataLoc(s2.a,k1) by A2,Th4;
-        thus (Exec (l,s1) | SCM-Data-Loc ).x
-        = (Exec (l,s1)).b by A27,FUNCT_1:72
+        thus (DataPart Exec (l,s1)).x
+        = (Exec (l,s1)).b by A27,FUNCT_1:72,SCMPDS_2:100
           .= s1.b by A26,A28,SCMPDS_2:71
-          .= (s1 | SCM-Data-Loc).b by A27,FUNCT_1:72
-          .= s2.b by A2,A27,FUNCT_1:72
+          .= (DataPart s1).b by A27,FUNCT_1:72,SCMPDS_2:100
+          .= s2.b by A2,A27,FUNCT_1:72,SCMPDS_2:100
           .= (Exec (l,s2)).b by A26,A29,SCMPDS_2:71
-          .= (Exec (l,s2) | SCM-Data-Loc ).x by A27,FUNCT_1:72;
+          .= (DataPart Exec (l,s2)).x by A27,FUNCT_1:72,SCMPDS_2:100;
       end;
       suppose
 A30:    b=DataLoc(s1.a,k1);
         then
 A31:    b=DataLoc(s2.a,k1) by A2,Th4;
-        thus (Exec (l,s1) | SCM-Data-Loc ).x
-        = (Exec (l,s1)).b by A27,FUNCT_1:72
+        thus (DataPart Exec (l,s1)).x
+        = (Exec (l,s1)).b by A27,FUNCT_1:72,SCMPDS_2:100
           .= IC s2 by A7,A26,A30,SCMPDS_2:71
           .= (Exec (l,s2)).b by A26,A31,SCMPDS_2:71
-          .= (Exec (l,s2) | SCM-Data-Loc ).x by A27,FUNCT_1:72;
+          .= (DataPart Exec (l,s2)).x by A27,FUNCT_1:72,SCMPDS_2:100;
       end;
     end;
     then
 A32: Exec (l,s1) | (SCM-Data-Loc ) = Exec (l,s2) | (SCM-Data-Loc )
-    by A11,A12,FUNCT_1:9;
+    by A11,A12,FUNCT_1:9,SCMPDS_2:100;
     Exec (l,s1).IC SCMPDS = Next IC s2 by A7,A26,SCMPDS_2:71
       .= Exec (l,s2).IC SCMPDS by A26,SCMPDS_2:71;
     then Exec (l,s1) | {IC SCMPDS} = Exec (l,s2) | {IC SCMPDS} by A10,
@@ -270,22 +271,23 @@ A32: Exec (l,s1) | (SCM-Data-Loc ) = Exec (l,s2) | (SCM-Data-Loc )
     then consider a,k1,k2 such that
 A33: l = (a,k1)<>0_goto k2 by SCMPDS_2:39;
     for x being set st x in SCM-Data-Loc holds
-    (Exec (l,s1) | SCM-Data-Loc ).x = (Exec (l,s2) | SCM-Data-Loc ).x
+    (DataPart Exec (l,s1)).x = (DataPart Exec (l,s2)).x
     proof
       let x be set;
       assume
 A34:  x in SCM-Data-Loc;
       then reconsider b = x as Int_position by SCMPDS_2:9;
-      thus (Exec (l,s1) | SCM-Data-Loc ).x = (Exec (l,s1)).b by A34,FUNCT_1:72
+      thus (DataPart Exec (l,s1)).x = (Exec (l,s1)).b
+       by A34,FUNCT_1:72,SCMPDS_2:100
         .= s1.b by A33,SCMPDS_2:67
-        .= (s1 | SCM-Data-Loc).b by A34,FUNCT_1:72
-        .= s2.b by A2,A34,FUNCT_1:72
+        .= (DataPart s1).b by A34,FUNCT_1:72,SCMPDS_2:100
+        .= s2.b by A2,A34,FUNCT_1:72,SCMPDS_2:100
         .= (Exec (l,s2)).b by A33,SCMPDS_2:67
-        .= (Exec (l,s2) | SCM-Data-Loc ).x by A34,FUNCT_1:72;
+        .= (DataPart Exec (l,s2)).x by A34,FUNCT_1:72,SCMPDS_2:100;
     end;
     then
 A35: Exec (l,s1) | (SCM-Data-Loc ) = Exec (l,s2) | (SCM-Data-Loc )
-    by A11,A12,FUNCT_1:9;
+    by A11,A12,FUNCT_1:9,SCMPDS_2:100;
     now
       per cases;
       suppose
@@ -312,22 +314,23 @@ A39:    s2.DataLoc(s2.a,k1) = 0 by A2,Th3;
     then consider a,k1,k2 such that
 A40: l = (a,k1)<=0_goto k2 by SCMPDS_2:40;
     for x being set st x in SCM-Data-Loc holds
-    (Exec (l,s1) | SCM-Data-Loc ).x = (Exec (l,s2) | SCM-Data-Loc ).x
+    (DataPart Exec (l,s1)).x = (DataPart Exec (l,s2)).x
     proof
       let x be set;
       assume
 A41:  x in SCM-Data-Loc;
       then reconsider b = x as Int_position by SCMPDS_2:9;
-      thus (Exec (l,s1) | SCM-Data-Loc ).x = (Exec (l,s1)).b by A41,FUNCT_1:72
+      thus (DataPart Exec (l,s1)).x = (Exec (l,s1)).b
+       by A41,FUNCT_1:72,SCMPDS_2:100
         .= s1.b by A40,SCMPDS_2:68
-        .= (s1 | SCM-Data-Loc).b by A41,FUNCT_1:72
-        .= s2.b by A2,A41,FUNCT_1:72
+        .= (DataPart s1).b by A41,FUNCT_1:72,SCMPDS_2:100
+        .= s2.b by A2,A41,FUNCT_1:72,SCMPDS_2:100
         .= (Exec (l,s2)).b by A40,SCMPDS_2:68
-        .= (Exec (l,s2) | SCM-Data-Loc ).x by A41,FUNCT_1:72;
+        .= (DataPart Exec (l,s2)).x by A41,FUNCT_1:72,SCMPDS_2:100;
     end;
     then
 A42: Exec (l,s1) | (SCM-Data-Loc ) = Exec (l,s2) | (SCM-Data-Loc )
-    by A11,A12,FUNCT_1:9;
+    by A11,A12,FUNCT_1:9,SCMPDS_2:100;
     now
       per cases;
       suppose
@@ -354,22 +357,23 @@ A46:    s2.DataLoc(s2.a,k1) > 0 by A2,Th3;
     then consider a,k1,k2 such that
 A47: l = (a,k1)>=0_goto k2 by SCMPDS_2:41;
     for x being set st x in SCM-Data-Loc holds
-    (Exec (l,s1) | SCM-Data-Loc ).x = (Exec (l,s2) | SCM-Data-Loc ).x
+    (DataPart Exec (l,s1)).x = (DataPart Exec (l,s2)).x
     proof
       let x be set;
       assume
 A48:  x in SCM-Data-Loc;
       then reconsider b = x as Int_position by SCMPDS_2:9;
-      thus (Exec (l,s1) | SCM-Data-Loc ).x = (Exec (l,s1)).b by A48,FUNCT_1:72
+      thus (DataPart Exec (l,s1)).x = (Exec (l,s1)).b
+       by A48,FUNCT_1:72,SCMPDS_2:100
         .= s1.b by A47,SCMPDS_2:69
-        .= (s1 | SCM-Data-Loc).b by A48,FUNCT_1:72
-        .= s2.b by A2,A48,FUNCT_1:72
+        .= (DataPart s1).b by A48,FUNCT_1:72,SCMPDS_2:100
+        .= s2.b by A2,A48,FUNCT_1:72,SCMPDS_2:100
         .= (Exec (l,s2)).b by A47,SCMPDS_2:69
-        .= (Exec (l,s2) | SCM-Data-Loc ).x by A48,FUNCT_1:72;
+        .= (DataPart Exec (l,s2)).x by A48,FUNCT_1:72,SCMPDS_2:100;
     end;
     then
 A49: Exec (l,s1) | (SCM-Data-Loc ) = Exec (l,s2) | (SCM-Data-Loc )
-    by A11,A12,FUNCT_1:9;
+    by A11,A12,FUNCT_1:9,SCMPDS_2:100;
     now
       per cases;
       suppose
@@ -396,7 +400,7 @@ A53:    s2.DataLoc(s2.a,k1) < 0 by A2,Th3;
     then consider a,k1,k2 such that
 A54: l = (a,k1):=k2 by SCMPDS_2:42;
     for x being set st x in SCM-Data-Loc holds
-    (Exec (l,s1) | SCM-Data-Loc ).x = (Exec (l,s2) | SCM-Data-Loc ).x
+    (DataPart Exec (l,s1)).x = (DataPart Exec (l,s2)).x
     proof
       let x be set;
       assume
@@ -407,28 +411,28 @@ A55:  x in SCM-Data-Loc;
 A56:    b<>DataLoc(s1.a,k1);
         then
 A57:    b<>DataLoc(s2.a,k1) by A2,Th4;
-        thus (Exec (l,s1) | SCM-Data-Loc ).x
-        = (Exec (l,s1)).b by A55,FUNCT_1:72
+        thus (DataPart Exec (l,s1)).x
+        = (Exec (l,s1)).b by A55,FUNCT_1:72,SCMPDS_2:100
           .= s1.b by A54,A56,SCMPDS_2:58
-          .= (s1 | SCM-Data-Loc).b by A55,FUNCT_1:72
-          .= s2.b by A2,A55,FUNCT_1:72
+          .= (DataPart s1).b by A55,FUNCT_1:72,SCMPDS_2:100
+          .= s2.b by A2,A55,FUNCT_1:72,SCMPDS_2:100
           .= (Exec (l,s2)).b by A54,A57,SCMPDS_2:58
-          .= (Exec (l,s2) | SCM-Data-Loc ).x by A55,FUNCT_1:72;
+          .= (DataPart Exec (l,s2)).x by A55,FUNCT_1:72,SCMPDS_2:100;
       end;
       suppose
 A58:    b=DataLoc(s1.a,k1);
         then
 A59:    b=DataLoc(s2.a,k1) by A2,Th4;
-        thus (Exec (l,s1) | SCM-Data-Loc ).x
-        = (Exec (l,s1)).b by A55,FUNCT_1:72
+        thus (DataPart Exec (l,s1)).x
+        = (Exec (l,s1)).b by A55,FUNCT_1:72,SCMPDS_2:100
           .= k2 by A54,A58,SCMPDS_2:58
           .= (Exec (l,s2)).b by A54,A59,SCMPDS_2:58
-          .= (Exec (l,s2) | SCM-Data-Loc ).x by A55,FUNCT_1:72;
+          .= (DataPart Exec (l,s2)).x by A55,FUNCT_1:72,SCMPDS_2:100;
       end;
     end;
     then
 A60: Exec (l,s1) | (SCM-Data-Loc ) = Exec (l,s2) | (SCM-Data-Loc )
-    by A11,A12,FUNCT_1:9;
+    by A11,A12,FUNCT_1:9,SCMPDS_2:100;
     Exec (l,s1).IC SCMPDS = Next IC s2 by A7,A54,SCMPDS_2:58
       .= Exec (l,s2).IC SCMPDS by A54,SCMPDS_2:58;
     then Exec (l,s1) | {IC SCMPDS} = Exec (l,s2) | {IC SCMPDS} by A10,
@@ -439,7 +443,7 @@ A60: Exec (l,s1) | (SCM-Data-Loc ) = Exec (l,s2) | (SCM-Data-Loc )
     then consider a,k1,k2 such that
 A61: l = AddTo(a,k1,k2) by SCMPDS_2:43;
     for x being set st x in SCM-Data-Loc holds
-    (Exec (l,s1) | SCM-Data-Loc ).x = (Exec (l,s2) | SCM-Data-Loc ).x
+    (DataPart Exec (l,s1)).x = (DataPart Exec (l,s2)).x
     proof
       let x be set;
       assume
@@ -450,29 +454,29 @@ A62:  x in SCM-Data-Loc;
 A63:    b<>DataLoc(s1.a,k1);
         then
 A64:    b<>DataLoc(s2.a,k1) by A2,Th4;
-        thus (Exec (l,s1) | SCM-Data-Loc ).x
-        = (Exec (l,s1)).b by A62,FUNCT_1:72
+        thus (DataPart Exec (l,s1)).x
+        = (Exec (l,s1)).b by A62,FUNCT_1:72,SCMPDS_2:100
           .= s1.b by A61,A63,SCMPDS_2:60
-          .= (s1 | SCM-Data-Loc).b by A62,FUNCT_1:72
-          .= s2.b by A2,A62,FUNCT_1:72
+          .= (DataPart s1).b by A62,FUNCT_1:72,SCMPDS_2:100
+          .= s2.b by A2,A62,FUNCT_1:72,SCMPDS_2:100
           .= (Exec (l,s2)).b by A61,A64,SCMPDS_2:60
-          .= (Exec (l,s2) | SCM-Data-Loc ).x by A62,FUNCT_1:72;
+          .= (DataPart Exec (l,s2)).x by A62,FUNCT_1:72,SCMPDS_2:100;
       end;
       suppose
 A65:    b=DataLoc(s1.a,k1);
         then
 A66:    b=DataLoc(s2.a,k1) by A2,Th4;
-        thus (Exec (l,s1) | SCM-Data-Loc ).x
-        = (Exec (l,s1)).b by A62,FUNCT_1:72
+        thus (DataPart Exec (l,s1)).x
+        = (Exec (l,s1)).b by A62,FUNCT_1:72,SCMPDS_2:100
           .= s1.DataLoc(s1.a,k1)+k2 by A61,A65,SCMPDS_2:60
           .= s2.DataLoc(s2.a,k1)+k2 by A2,Th3
           .= (Exec (l,s2)).b by A61,A66,SCMPDS_2:60
-          .= (Exec (l,s2) | SCM-Data-Loc ).x by A62,FUNCT_1:72;
+          .= (DataPart Exec (l,s2)).x by A62,FUNCT_1:72,SCMPDS_2:100;
       end;
     end;
     then
 A67: Exec (l,s1) | (SCM-Data-Loc ) = Exec (l,s2) | (SCM-Data-Loc )
-    by A11,A12,FUNCT_1:9;
+    by A11,A12,FUNCT_1:9,SCMPDS_2:100;
     Exec (l,s1).IC SCMPDS = Next IC s2 by A7,A61,SCMPDS_2:60
       .= Exec (l,s2).IC SCMPDS by A61,SCMPDS_2:60;
     then Exec (l,s1) | {IC SCMPDS} = Exec (l,s2) | {IC SCMPDS} by A10,
@@ -483,7 +487,7 @@ A67: Exec (l,s1) | (SCM-Data-Loc ) = Exec (l,s2) | (SCM-Data-Loc )
     then consider a,b,k1,k2 such that
 A68: l = AddTo(a,k1,b,k2) by SCMPDS_2:44;
     for x being set st x in SCM-Data-Loc holds
-    (Exec (l,s1) | SCM-Data-Loc ).x = (Exec (l,s2) | SCM-Data-Loc ).x
+    (DataPart Exec (l,s1)).x = (DataPart Exec (l,s2)).x
     proof
       let x be set;
       assume
@@ -494,30 +498,30 @@ A69:  x in SCM-Data-Loc;
 A70:    c <>DataLoc(s1.a,k1);
         then
 A71:    c <>DataLoc(s2.a,k1) by A2,Th4;
-        thus (Exec (l,s1) | SCM-Data-Loc ).x
-        = (Exec (l,s1)).c by A69,FUNCT_1:72
+        thus (DataPart Exec (l,s1)).x
+        = (Exec (l,s1)).c by A69,FUNCT_1:72,SCMPDS_2:100
           .= s1.c by A68,A70,SCMPDS_2:61
-          .= (s1 | SCM-Data-Loc).c by A69,FUNCT_1:72
-          .= s2.c by A2,A69,FUNCT_1:72
+          .= (DataPart s1).c by A69,FUNCT_1:72,SCMPDS_2:100
+          .= s2.c by A2,A69,FUNCT_1:72,SCMPDS_2:100
           .= (Exec (l,s2)).c by A68,A71,SCMPDS_2:61
-          .= (Exec (l,s2) | SCM-Data-Loc ).x by A69,FUNCT_1:72;
+          .= (DataPart Exec (l,s2)).x by A69,FUNCT_1:72,SCMPDS_2:100;
       end;
       suppose
 A72:    c = DataLoc(s1.a,k1);
         then
 A73:    c = DataLoc(s2.a,k1) by A2,Th4;
-        thus (Exec (l,s1) | SCM-Data-Loc ).x
-        = (Exec (l,s1)).c by A69,FUNCT_1:72
+        thus (DataPart Exec (l,s1)).x
+        = (Exec (l,s1)).c by A69,FUNCT_1:72,SCMPDS_2:100
           .= s1.DataLoc(s1.a,k1)+s1.DataLoc(s1.b,k2) by A68,A72,SCMPDS_2:61
           .= s2.DataLoc(s2.a,k1)+s1.DataLoc(s1.b,k2) by A2,Th3
           .= s2.DataLoc(s2.a,k1)+s2.DataLoc(s2.b,k2) by A2,Th3
           .= (Exec (l,s2)).c by A68,A73,SCMPDS_2:61
-          .= (Exec (l,s2) | SCM-Data-Loc ).x by A69,FUNCT_1:72;
+          .= (DataPart Exec (l,s2)).x by A69,FUNCT_1:72,SCMPDS_2:100;
       end;
     end;
     then
 A74: Exec (l,s1) | (SCM-Data-Loc ) = Exec (l,s2) | (SCM-Data-Loc )
-    by A11,A12,FUNCT_1:9;
+    by A11,A12,FUNCT_1:9,SCMPDS_2:100;
     Exec (l,s1).IC SCMPDS = Next IC s2 by A7,A68,SCMPDS_2:61
       .= Exec (l,s2).IC SCMPDS by A68,SCMPDS_2:61;
     then Exec (l,s1) | {IC SCMPDS} = Exec (l,s2) | {IC SCMPDS} by A10,
@@ -528,7 +532,7 @@ A74: Exec (l,s1) | (SCM-Data-Loc ) = Exec (l,s2) | (SCM-Data-Loc )
     then consider a,b,k1,k2 such that
 A75: l = SubFrom(a,k1,b,k2) by SCMPDS_2:45;
     for x being set st x in SCM-Data-Loc holds
-    (Exec (l,s1) | SCM-Data-Loc ).x = (Exec (l,s2) | SCM-Data-Loc ).x
+    (DataPart Exec (l,s1)).x = (DataPart Exec (l,s2)).x
     proof
       let x be set;
       assume
@@ -539,41 +543,41 @@ A76:  x in SCM-Data-Loc;
 A77:    c <>DataLoc(s1.a,k1);
         then
 A78:    c <>DataLoc(s2.a,k1) by A2,Th4;
-        thus (Exec (l,s1) | SCM-Data-Loc ).x
-        = (Exec (l,s1)).c by A76,FUNCT_1:72
+        thus (DataPart Exec (l,s1)).x
+        = (Exec (l,s1)).c by A76,FUNCT_1:72,SCMPDS_2:100
           .= s1.c by A75,A77,SCMPDS_2:62
-          .= (s1 | SCM-Data-Loc).c by A76,FUNCT_1:72
-          .= s2.c by A2,A76,FUNCT_1:72
+          .= (DataPart s1).c by A76,FUNCT_1:72,SCMPDS_2:100
+          .= s2.c by A2,A76,FUNCT_1:72,SCMPDS_2:100
           .= (Exec (l,s2)).c by A75,A78,SCMPDS_2:62
-          .= (Exec (l,s2) | SCM-Data-Loc ).x by A76,FUNCT_1:72;
+          .= (DataPart Exec (l,s2)).x by A76,FUNCT_1:72,SCMPDS_2:100;
       end;
       suppose
 A79:    c = DataLoc(s1.a,k1);
         then
 A80:    c = DataLoc(s2.a,k1) by A2,Th4;
-        thus (Exec (l,s1) | SCM-Data-Loc ).x
-        = (Exec (l,s1)).c by A76,FUNCT_1:72
+        thus (DataPart Exec (l,s1)).x
+        = (Exec (l,s1)).c by A76,FUNCT_1:72,SCMPDS_2:100
           .= s1.DataLoc(s1.a,k1)-s1.DataLoc(s1.b,k2) by A75,A79,SCMPDS_2:62
           .= s2.DataLoc(s2.a,k1)-s1.DataLoc(s1.b,k2) by A2,Th3
           .= s2.DataLoc(s2.a,k1)-s2.DataLoc(s2.b,k2) by A2,Th3
           .= (Exec (l,s2)).c by A75,A80,SCMPDS_2:62
-          .= (Exec (l,s2) | SCM-Data-Loc ).x by A76,FUNCT_1:72;
+          .= (DataPart Exec (l,s2)).x by A76,FUNCT_1:72,SCMPDS_2:100;
       end;
     end;
     then
-A81: Exec (l,s1) | (SCM-Data-Loc ) = Exec (l,s2) | (SCM-Data-Loc )
+A81: DataPart Exec (l,s1) = DataPart Exec (l,s2)
     by A11,A12,FUNCT_1:9;
     Exec (l,s1).IC SCMPDS = Next IC s2 by A7,A75,SCMPDS_2:62
       .= Exec (l,s2).IC SCMPDS by A75,SCMPDS_2:62;
     then Exec (l,s1) | {IC SCMPDS} = Exec (l,s2) | {IC SCMPDS} by A10,
     GRFUNC_1:90;
-    hence thesis by A81,RELAT_1:185;
+    hence thesis by A81,RELAT_1:185,SCMPDS_2:100;
   end;
   suppose InsCode (l) = 11;
     then consider a,b,k1,k2 such that
 A82: l = MultBy(a,k1,b,k2) by SCMPDS_2:46;
     for x being set st x in SCM-Data-Loc holds
-    (Exec (l,s1) | SCM-Data-Loc ).x = (Exec (l,s2) | SCM-Data-Loc ).x
+    (DataPart Exec (l,s1)).x = (DataPart Exec (l,s2)).x
     proof
       let x be set;
       assume
@@ -584,41 +588,41 @@ A83:  x in SCM-Data-Loc;
 A84:    c <>DataLoc(s1.a,k1);
         then
 A85:    c <>DataLoc(s2.a,k1) by A2,Th4;
-        thus (Exec (l,s1) | SCM-Data-Loc ).x
-        = (Exec (l,s1)).c by A83,FUNCT_1:72
+        thus (DataPart Exec (l,s1)).x
+        = (Exec (l,s1)).c by A83,FUNCT_1:72,SCMPDS_2:100
           .= s1.c by A82,A84,SCMPDS_2:63
-          .= (s1 | SCM-Data-Loc).c by A83,FUNCT_1:72
-          .= s2.c by A2,A83,FUNCT_1:72
+          .= (DataPart s1).c by A83,FUNCT_1:72,SCMPDS_2:100
+          .= s2.c by A2,A83,FUNCT_1:72,SCMPDS_2:100
           .= (Exec (l,s2)).c by A82,A85,SCMPDS_2:63
-          .= (Exec (l,s2) | SCM-Data-Loc ).x by A83,FUNCT_1:72;
+          .= (DataPart Exec (l,s2)).x by A83,FUNCT_1:72,SCMPDS_2:100;
       end;
       suppose
 A86:    c = DataLoc(s1.a,k1);
         then
 A87:    c = DataLoc(s2.a,k1) by A2,Th4;
-        thus (Exec (l,s1) | SCM-Data-Loc ).x
-        = (Exec (l,s1)).c by A83,FUNCT_1:72
+        thus (DataPart Exec (l,s1)).x
+        = (Exec (l,s1)).c by A83,FUNCT_1:72,SCMPDS_2:100
           .= s1.DataLoc(s1.a,k1) * s1.DataLoc(s1.b,k2) by A82,A86,SCMPDS_2:63
           .= s2.DataLoc(s2.a,k1) * s1.DataLoc(s1.b,k2) by A2,Th3
           .= s2.DataLoc(s2.a,k1) * s2.DataLoc(s2.b,k2) by A2,Th3
           .= (Exec (l,s2)).c by A82,A87,SCMPDS_2:63
-          .= (Exec (l,s2) | SCM-Data-Loc ).x by A83,FUNCT_1:72;
+          .= (DataPart Exec (l,s2)).x by A83,FUNCT_1:72,SCMPDS_2:100;
       end;
     end;
     then
-A88: Exec (l,s1) | (SCM-Data-Loc ) = Exec (l,s2) | (SCM-Data-Loc )
+A88: DataPart Exec (l,s1) = DataPart Exec (l,s2)
     by A11,A12,FUNCT_1:9;
     Exec (l,s1).IC SCMPDS = Next IC s2 by A7,A82,SCMPDS_2:63
       .= Exec (l,s2).IC SCMPDS by A82,SCMPDS_2:63;
     then Exec (l,s1) | {IC SCMPDS} = Exec (l,s2) | {IC SCMPDS} by A10,
     GRFUNC_1:90;
-    hence thesis by A88,RELAT_1:185;
+    hence thesis by A88,RELAT_1:185,SCMPDS_2:100;
   end;
   suppose InsCode (l) = 12;
     then consider a,b,k1,k2 such that
 A89: l = Divide(a,k1,b,k2) by SCMPDS_2:47;
     for x being set st x in SCM-Data-Loc holds
-    (Exec (l,s1) | SCM-Data-Loc ).x = (Exec (l,s2) | SCM-Data-Loc ).x
+    (DataPart Exec (l,s1)).x = (DataPart Exec (l,s2)).x
     proof
       let x be set;
       assume
@@ -629,13 +633,13 @@ A90:  x in SCM-Data-Loc;
 A91:    c = DataLoc(s1.b,k2);
         then
 A92:    c = DataLoc(s2.b,k2) by A2,Th4;
-        thus (Exec (l,s1) | SCM-Data-Loc ).x
-        = (Exec (l,s1)).c by A90,FUNCT_1:72
+        thus (DataPart Exec (l,s1)).x
+        = (Exec (l,s1)).c by A90,FUNCT_1:72,SCMPDS_2:100
           .= s1.DataLoc(s1.a,k1) mod s1.DataLoc(s1.b,k2) by A89,A91,SCMPDS_2:64
           .= s2.DataLoc(s2.a,k1) mod s1.DataLoc(s1.b,k2) by A2,Th3
           .= s2.DataLoc(s2.a,k1) mod s2.DataLoc(s2.b,k2) by A2,Th3
           .= (Exec (l,s2)).c by A89,A92,SCMPDS_2:64
-          .= (Exec (l,s2) | SCM-Data-Loc ).x by A90,FUNCT_1:72;
+          .= (DataPart Exec (l,s2)).x by A90,FUNCT_1:72,SCMPDS_2:100;
       end;
       suppose
 A93:    c <>DataLoc(s1.b,k2);
@@ -647,43 +651,43 @@ A94:    c <>DataLoc(s2.b,k2) by A2,Th4;
 A95:        c <> DataLoc(s1.a,k1);
             then
 A96:        c <> DataLoc(s2.a,k1) by A2,Th4;
-            thus (Exec (l,s1) | SCM-Data-Loc ).x
-            = (Exec (l,s1)).c by A90,FUNCT_1:72
+            thus (DataPart Exec (l,s1)).x
+            = (Exec (l,s1)).c by A90,FUNCT_1:72,SCMPDS_2:100
               .= s1.c by A89,A93,A95,SCMPDS_2:64
               .= s2.c by A2,Th4
               .= (Exec (l,s2)).c by A89,A94,A96,SCMPDS_2:64
-              .= (Exec (l,s2) | SCM-Data-Loc ).x by A90,FUNCT_1:72;
+              .= (DataPart Exec (l,s2)).x by A90,FUNCT_1:72,SCMPDS_2:100;
           end;
           suppose
 A97:        c = DataLoc(s1.a,k1);
             then
 A98:        c = DataLoc(s2.a,k1) by A2,Th4;
-            thus (Exec (l,s1) | SCM-Data-Loc ).x
-            = (Exec (l,s1)).c by A90,FUNCT_1:72
+            thus (DataPart Exec (l,s1)).x
+            = (Exec (l,s1)).c by A90,FUNCT_1:72,SCMPDS_2:100
               .= s1.DataLoc(s1.a,k1) div s1.DataLoc(s1.b,k2)
             by A89,A93,A97,SCMPDS_2:64
               .= s2.DataLoc(s2.a,k1) div s1.DataLoc(s1.b,k2) by A2,Th3
               .= s2.DataLoc(s2.a,k1) div s2.DataLoc(s2.b,k2) by A2,Th3
               .= (Exec (l,s2)).c by A89,A94,A98,SCMPDS_2:64
-              .= (Exec (l,s2) | SCM-Data-Loc ).x by A90,FUNCT_1:72;
+              .= (DataPart Exec (l,s2)).x by A90,FUNCT_1:72,SCMPDS_2:100;
           end;
         end;
       end;
     end;
     then
-A99: Exec (l,s1) | (SCM-Data-Loc ) = Exec (l,s2) | (SCM-Data-Loc )
+A99: DataPart Exec (l,s1) = DataPart Exec (l,s2)
     by A11,A12,FUNCT_1:9;
     Exec (l,s1).IC SCMPDS = Next IC s2 by A7,A89,SCMPDS_2:64
       .= Exec (l,s2).IC SCMPDS by A89,SCMPDS_2:64;
     then Exec (l,s1) | {IC SCMPDS} = Exec (l,s2) | {IC SCMPDS} by A10,
     GRFUNC_1:90;
-    hence thesis by A99,RELAT_1:185;
+    hence thesis by A99,RELAT_1:185,SCMPDS_2:100;
   end;
   suppose InsCode (l) = 13;
     then consider a,b,k1,k2 such that
 A100: l = (a,k1):=(b,k2) by SCMPDS_2:48;
     for x being set st x in SCM-Data-Loc holds
-    (Exec (l,s1) | SCM-Data-Loc ).x = (Exec (l,s2) | SCM-Data-Loc ).x
+    (DataPart Exec (l,s1)).x = (DataPart Exec (l,s2)).x
     proof
       let x be set;
       assume
@@ -694,34 +698,34 @@ A101: x in SCM-Data-Loc;
 A102:   c <>DataLoc(s1.a,k1);
         then
 A103:   c <>DataLoc(s2.a,k1) by A2,Th4;
-        thus (Exec (l,s1) | SCM-Data-Loc ).x
-        = (Exec (l,s1)).c by A101,FUNCT_1:72
+        thus (DataPart Exec (l,s1)).x
+        = (Exec (l,s1)).c by A101,FUNCT_1:72,SCMPDS_2:100
           .= s1.c by A100,A102,SCMPDS_2:59
-          .= (s1 | SCM-Data-Loc).c by A101,FUNCT_1:72
-          .= s2.c by A2,A101,FUNCT_1:72
+          .= (DataPart s1).c by A101,FUNCT_1:72,SCMPDS_2:100
+          .= s2.c by A2,A101,FUNCT_1:72,SCMPDS_2:100
           .= (Exec (l,s2)).c by A100,A103,SCMPDS_2:59
-          .= (Exec (l,s2) | SCM-Data-Loc ).x by A101,FUNCT_1:72;
+          .= (DataPart Exec (l,s2)).x by A101,FUNCT_1:72,SCMPDS_2:100;
       end;
       suppose
 A104:   c = DataLoc(s1.a,k1);
         then
 A105:   c = DataLoc(s2.a,k1) by A2,Th4;
-        thus (Exec (l,s1) | SCM-Data-Loc ).x
-        = (Exec (l,s1)).c by A101,FUNCT_1:72
+        thus (DataPart Exec (l,s1)).x
+        = (Exec (l,s1)).c by A101,FUNCT_1:72,SCMPDS_2:100
           .= s1.DataLoc(s1.b,k2) by A100,A104,SCMPDS_2:59
           .= s2.DataLoc(s2.b,k2) by A2,Th3
           .= (Exec (l,s2)).c by A100,A105,SCMPDS_2:59
-          .= (Exec (l,s2) | SCM-Data-Loc ).x by A101,FUNCT_1:72;
+          .= (DataPart Exec (l,s2)).x by A101,FUNCT_1:72,SCMPDS_2:100;
       end;
     end;
     then
-A106: Exec (l,s1) | (SCM-Data-Loc ) = Exec (l,s2) | (SCM-Data-Loc )
+A106: DataPart Exec (l,s1) = DataPart Exec (l,s2)
     by A11,A12,FUNCT_1:9;
     Exec (l,s1).IC SCMPDS = Next IC s2 by A7,A100,SCMPDS_2:59
       .= Exec (l,s2).IC SCMPDS by A100,SCMPDS_2:59;
     then Exec (l,s1) | {IC SCMPDS} = Exec (l,s2) | {IC SCMPDS} by A10,
     GRFUNC_1:90;
-    hence thesis by A106,RELAT_1:185;
+    hence thesis by A106,RELAT_1:185,SCMPDS_2:100;
   end;
 end;
 
@@ -752,49 +756,7 @@ end;
 
 begin :: Finite partial states of SCMPDS
 
-theorem Th9:
-  for p being FinPartState of SCMPDS holds DataPart p = p | SCM-Data-Loc
-proof
-  let p be FinPartState of SCMPDS;
-  SCM-Data-Loc misses {IC SCMPDS } by Th6,ZFMISC_1:56;
-  then
-A1: SCM-Data-Loc misses ({IC SCMPDS } \/ NAT ) by AMI_2:29,XBOOLE_1:70;
-  the carrier of SCMPDS = SCM-Data-Loc \/ ({IC SCMPDS } \/
-  NAT ) by AMI_3:4,XBOOLE_1:4;
-  then (the carrier of SCMPDS ) \ ({IC SCMPDS } \/ NAT ) = (SCM-Data-Loc )
-  \ ({IC SCMPDS } \/ NAT ) by XBOOLE_1:40
-    .= SCM-Data-Loc by A1,XBOOLE_1:83;
-  hence thesis;
-end;
-
-theorem
-  for p being FinPartState of SCMPDS holds
-  p is data-only iff dom p c= SCM-Data-Loc
-proof
-  let p be FinPartState of SCMPDS;
-A1: the carrier of SCMPDS = SCM-Data-Loc \/ ({IC SCMPDS } \/
-  NAT ) by AMI_3:4,XBOOLE_1:4;
-  hereby
-    assume p is data-only;
-    then dom p misses {IC SCMPDS } \/ NAT by AMI_1:def 50;
-    hence dom p c= SCM-Data-Loc by A1,AMI_1:80,XBOOLE_1:73;
-  end;
-  assume
-A2: dom p c= SCM-Data-Loc;
-  SCM-Data-Loc misses {IC SCMPDS } by Th6,ZFMISC_1:56;
-  then SCM-Data-Loc misses {IC SCMPDS } \/ NAT by AMI_2:29,XBOOLE_1:70;
-  hence dom p misses {IC SCMPDS } \/ NAT by A2,XBOOLE_1:63;
-end;
-
-theorem
-  for p being FinPartState of SCMPDS holds dom DataPart p c= SCM-Data-Loc
-proof
-  let p be FinPartState of SCMPDS;
-  DataPart p = p| SCM-Data-Loc by Th9;
-  hence dom DataPart p c= SCM-Data-Loc by RELAT_1:87;
-end;
-
-canceled;
+canceled 4;
 
 theorem
   for i being Instruction of SCMPDS, s being State of SCMPDS ,
@@ -894,8 +856,7 @@ A2: not IC SCMPDS in dom p;
 A3: d1 in dom DataPart p by A1;
     dom DataPart p c= the carrier of SCMPDS by AMI_1:80;
     then reconsider d1 as Element of SCMPDS by A3;
-    DataPart p = p | SCM-Data-Loc by Th9;
-    then dom DataPart p c= SCM-Data-Loc by RELAT_1:87;
+    dom DataPart p c= SCM-Data-Loc by RELAT_1:87,SCMPDS_2:100;
     then reconsider d1 as Int_position by A3,SCMPDS_2:9;
     consider il being Element of (NAT) \ dom p;
     not NAT c= dom p by FINSET_1:13,SCMPDS_2:11;
@@ -1062,8 +1023,7 @@ A2: dom p /\ {IC SCMPDS } \/ dom p /\ (SCM-Data-Loc ) <> {} by XBOOLE_1: 23;
   end;
   suppose
 A3: dom p /\ (SCM-Data-Loc ) <> {};
-    DataPart p = p |(SCM-Data-Loc ) by Th9;
-    then DataPart p <> {} by A3,RELAT_1:60,90;
+    DataPart p <> {} by A3,RELAT_1:60,90,SCMPDS_2:100;
     hence IC SCMPDS in dom p by Th16;
   end;
 end;

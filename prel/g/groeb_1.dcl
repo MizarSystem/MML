@@ -56,10 +56,10 @@
 </Typ>
 </ArgTypes>
 <Func kind="G" nr="13">
-<Func kind="K" nr="372">
+<Func kind="K" nr="373">
 <LocusVar nr="1"/>
 </Func>
-<Func kind="K" nr="392">
+<Func kind="K" nr="393">
 <LocusVar nr="1"/>
 </Func>
 </Func>

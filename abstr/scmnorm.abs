@@ -13,10 +13,10 @@ environ
       FUNCT_1, FUNCT_2, PARTFUN1, FUNCT_4, FUNCOP_1, CARD_1, CARD_3, AFINSQ_1,
       NUMBERS, VALUED_1, XXREAL_0, XCMPLX_0, NAT_1, BINARITH, STRUCT_0, AMI_1;
  constructors NAT_1, BINARITH, AMI_1, VALUED_1, XXREAL_0, AFINSQ_1, FUNCT_4,
-      DOMAIN_1;
+      DOMAIN_1, PARTFUN1;
  registrations ORDINAL1, XREAL_0, CARD_3, FRAENKEL, AMI_1, RELSET_1, XBOOLE_0,
       SETFAM_1, RFUNCT_3, VALUED_1, FUNCT_4, RELAT_1, FINSET_1, STRUCT_0,
-      AFINSQ_1, FUNCT_1, FUNCOP_1;
+      AFINSQ_1, FUNCT_1, FUNCOP_1, FINSEQ_1;
  requirements BOOLE, SUBSET, NUMERALS, ARITHM;
 
 
@@ -315,7 +315,8 @@ theorem :: SCMNORM:8
 :: from RELOC, SCMFSA_4, SCMPDS_3, 2008.04.12, A.T. (generalized)
 
   reserve N for with_non-empty_elements set,
-          S for IC-Ins-separated (non empty AMI-Struct over NAT,N);
+          S for IC-Ins-separated (non empty AMI-Struct over NAT,N),
+          s for State of S;
 
 theorem :: SCMNORM:9
   for l1,l2 being Instruction-Location of S , k being Element of NAT holds
@@ -332,6 +333,7 @@ definition let N,S;
    p +* Start-At(IC p+k);
 end;
 
+
 theorem :: SCMNORM:11
   for l being Instruction-Location of S
    holds DataPart Start-At l = {};
@@ -340,3 +342,70 @@ theorem :: SCMNORM:12
   for p being FinPartState of S, k being Element of NAT
    holds DataPart IncrIC(p,k) = DataPart p;
 
+definition
+  let N,S;
+  let s be State of S;
+  func DataPart s -> PartState of S equals
+:: SCMNORM:def 14
+  s | Data-Locations S;
+end;
+
+theorem :: SCMNORM:13
+ Data-Locations S c= dom s;
+
+theorem :: SCMNORM:14
+ dom DataPart s = Data-Locations S;
+
+  reserve N for non empty with_non-empty_elements set,
+   S for halting definite IC-Ins-separated realistic
+         (non empty stored-program AMI-Struct over NAT,N),
+   p for FinPartState of S,
+   l for Instruction-Location of S,
+   k for Element of NAT;
+
+theorem :: SCMNORM:15
+  NAT misses Data-Locations S;
+
+theorem :: SCMNORM:16
+  for f being finite PartFunc of NAT, the Instructions of S
+  holds DataPart [f] = {};
+
+theorem :: SCMNORM:17
+ IC S in dom Start-At l;
+
+theorem :: SCMNORM:18
+ IC S in dom IncrIC(p,k);
+
+theorem :: SCMNORM:19
+ IC Start-At l = l;
+
+theorem :: SCMNORM:20
+ IncrIC(p,k).IC S = IC p + k;
+
+theorem :: SCMNORM:21
+ not IC S in Data-Locations S;
+
+theorem :: SCMNORM:22
+  for d being data-only FinPartState of S
+   holds not IC S in dom d;
+
+theorem :: SCMNORM:23
+  for d being data-only FinPartState of S st IC S in dom p
+   holds IC (p+*d) = IC p;
+
+theorem :: SCMNORM:24
+  for d being data-only FinPartState of S
+   holds d tolerates Start-At l;
+
+theorem :: SCMNORM:25
+  for d being data-only FinPartState of S st IC S in dom p
+   holds IncrIC(p+*d,k) = IncrIC(p,k) +* d;
+
+theorem :: SCMNORM:26
+  for d being data-only FinPartState of S,
+      f being finite PartFunc of NAT, the Instructions of S
+   holds d tolerates f;
+
+theorem :: SCMNORM:27
+  for d being data-only FinPartState of S
+ holds IncrIC(d,k)|NAT = {};

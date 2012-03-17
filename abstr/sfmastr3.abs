@@ -44,8 +44,7 @@ theorem :: SFMASTR3:7
 
 theorem :: SFMASTR3:8
   s.intloc 0 = 1 implies
-  IExec(Stop SCM+FSA, s) | (Int-Locations \/ FinSeq-Locations) =
-  s | (Int-Locations \/ FinSeq-Locations);
+  DataPart IExec(Stop SCM+FSA, s) = DataPart s;
 
 theorem :: SFMASTR3:9
   Stop SCM+FSA does_not_refer aa;
@@ -110,9 +109,10 @@ theorem :: SFMASTR3:21
 theorem :: SFMASTR3:22
   s.intloc 0 = 1 implies for aux being read-write Int-Location
   st aux = 1-stRWNotIn ({a, bb, cc} \/ UsedIntLoc I)
-  holds IExec( aux := cc ';' SubFrom(aux, bb) ';' AddTo(aux, intloc 0) ';'
-  (a := bb), s) | (Int-Locations \/ FinSeq-Locations)
-  = (s+*(aux, s.cc-s.bb+1)+*(a, s.bb)) | (Int-Locations \/ FinSeq-Locations);
+  holds DataPart
+   IExec( aux := cc ';' SubFrom(aux, bb) ';' AddTo(aux, intloc 0) ';'
+  (a := bb), s)
+  = DataPart(s+*(aux, s.cc-s.bb+1)+*(a, s.bb));
 
 definition
   let a, b, c be Int-Location, I be Program of SCM+FSA, s be State of SCM+FSA;
@@ -189,8 +189,8 @@ theorem :: SFMASTR3:30
 theorem :: SFMASTR3:31
   s.intloc 0 = 1 &
   k = s.cc-s.bb+1 & (ProperForUpBody a, bb, cc, Ig, s or Ig is parahalting)
-  implies IExec(for-up(a, bb, cc, Ig), s) | (Int-Locations \/ FinSeq-Locations)
-  = StepForUp(a, bb, cc, Ig, s).k | (Int-Locations \/ FinSeq-Locations);
+  implies DataPart IExec(for-up(a, bb, cc, Ig), s)
+  = DataPart StepForUp(a, bb, cc, Ig, s).k;
 
 theorem :: SFMASTR3:32
   s.intloc 0 = 1 & (ProperForUpBody a, bb, cc, Ig, s or Ig is parahalting)

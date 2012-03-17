@@ -111,6 +111,25 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
+<Adjective nr="10"/>
+</Cluster>
+</Typ>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="79">
+<LocusVar nr="1"/>
+<LocusVar nr="2"/>
+</Func>
+<Cluster>
+<Adjective nr="12"/>
+</Cluster>
+</FCluster>
+<FCluster aid="ORDINAL2" nr="5">
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster>
 <Adjective nr="14"/>
 </Cluster>
 </Typ>
@@ -129,7 +148,7 @@
 <Adjective nr="14"/>
 </Cluster>
 </FCluster>
-<FCluster aid="ORDINAL2" nr="5">
+<FCluster aid="ORDINAL2" nr="6">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>

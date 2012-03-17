@@ -10,13 +10,14 @@ environ
       FUNCT_1, AMI_2, ARYTM_1, NAT_1, ABSVALUE, FINSEQ_1, FINSEQ_2, CARD_3,
       FINSET_1, PARTFUN1, FINSEQ_4, ARYTM, SCMNORM;
  notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, NUMBERS, XCMPLX_0, INT_2,
-      INT_1, NAT_1, CARD_3, PARTFUN1, RELAT_1, FUNCT_1, FINSEQ_1, FINSEQ_2,
-      FINSET_1, FUNCT_2, FUNCT_4, FUNCT_7, STRUCT_0, AMI_1, SCMNORM, SCMFSA_2,
+      INT_1, NAT_1, PARTFUN1, RELAT_1, FUNCT_1, FINSEQ_1, FINSEQ_2, FINSET_1,
+      FUNCT_2, FUNCT_4, FUNCT_7, CARD_3, STRUCT_0, AMI_1, SCMNORM, SCMFSA_2,
       SCMFSA_4, XXREAL_0;
  constructors DOMAIN_1, XXREAL_0, NAT_1, INT_2, RELOC, PARTFUN1, SCMFSA_4,
       SCMNORM;
  registrations XBOOLE_0, SETFAM_1, FUNCT_1, RELSET_1, FRAENKEL, NUMBERS,
-      XREAL_0, INT_1, CARD_3, AMI_1, SCMFSA_2, ORDINAL1, SCMNORM;
+      XREAL_0, INT_1, CARD_3, AMI_1, SCMFSA_2, ORDINAL1, SCMNORM, FINSEQ_1,
+      FUNCT_4, FINSET_1;
  requirements NUMERALS, SUBSET, BOOLE, ARITHM;
 
 
@@ -75,7 +76,7 @@ theorem :: SCMFSA_5:9
 theorem :: SCMFSA_5:10
   for k being Element of NAT, p being autonomic FinPartState of SCM+FSA ,
   s1, s2 being State of SCM+FSA st p c= s1 & Relocated(p,k) c= s2
-  holds p c= s1 +* s2|(Int-Locations \/ FinSeq-Locations);
+  holds p c= s1 +* DataPart s2;
 
 begin :: Main theorems of relocatability
 
@@ -89,16 +90,16 @@ theorem :: SCMFSA_5:11
 
 theorem :: SCMFSA_5:12
   for k being Element of NAT, p being autonomic FinPartState of SCM+FSA ,
-  s1, s2, s3 being State of SCM+FSA
-  st IC SCM+FSA in dom p & p c= s1 & Relocated(p,k) c= s2 &
-  s3 = s1 +* s2|(Int-Locations \/ FinSeq-Locations)
-  holds for i being Element of NAT holds
+  s1, s2 being State of SCM+FSA
+  st IC SCM+FSA in dom p & p c= s1 & Relocated(p,k) c= s2
+:::   &
+:::  s3 = s1 +* DataPart s2
+  for i being Element of NAT holds
   IC  Computation(s1,i) + k = IC  Computation(s2,i) &
   IncAddr(CurInstr( Computation(s1,i)), k) = CurInstr( Computation(s2,i)) &
    Computation(s1,i)|dom (DataPart p)
   =  Computation(s2,i)|dom (DataPart (Relocated(p,k))) &
-   Computation(s3,i)|(Int-Locations \/ FinSeq-Locations) =
-   Computation(s2,i)|(Int-Locations \/ FinSeq-Locations);
+   DataPart Computation(s1 +* DataPart s2,i) = DataPart Computation(s2,i);
 
 theorem :: SCMFSA_5:13
   for p being autonomic FinPartState of SCM+FSA , k being Element of NAT

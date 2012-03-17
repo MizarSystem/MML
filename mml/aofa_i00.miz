@@ -20,13 +20,13 @@ environ
       NUMBERS, XCMPLX_0, XXREAL_0, XREAL_0, POWER, TREES_1, TREES_2, TREES_3,
       ABSVALUE, INT_1, INT_2, NAT_1, NAT_D, NEWTON, ABIAN, BINARITH, WSIERP_1,
       VALUED_1, SUPINF_1, FUNCOP_1, FUNCT_4, FUNCT_7, CAT_2, MESFUNC1,
-      BORSUK_1, POLYNOM1, AMI_2, STRUCT_0, UNIALG_1, UNIALG_2, ALG_1, FREEALG,
+      BORSUK_1, POLYNOM1, STRUCT_0, UNIALG_1, UNIALG_2, ALG_1, FREEALG,
       COMPUT_1, TREES_4, DTCONSTR, MSUALG_1, MSAFREE, MSATERM, MSUALG_3,
       PRALG_3, FINSEQ_4, AOFA_000;
  constructors ORDINAL2, FINSEQ_1, UNIALG_1, PUA2MSS1, COMPUT_1, FUNCT_7,
       BINOP_1, BINARITH, REAL_1, BORSUK_1, SUPINF_1, SUPINF_2, POLYNOM1,
       CATALG_1, MSATERM, MSAFREE3, PROB_2, MSAFREE1, MSUALG_3, CQC_LANG,
-      FACIRC_1, CARD_4, AMI_2, FUNCT_3, MESFUNC1, PREPOWER, POWER, NAT_D,
+      FACIRC_1, CARD_4, FUNCT_3, MESFUNC1, PREPOWER, POWER, NAT_D,
       NEWTON, ABIAN, VALUED_0, VALUED_1, NAT_1, SQUARE_1, ALG_1, FREEALG,
       FINSEQ_4, FINSOP_1, ORDERS_1, PZFMISC1, PRE_FF, INT_2, SEQ_4, ABSVALUE,
       REAL_3, FUNCT_5, FINSEQOP, WSIERP_1, ENUMSET1, PRE_CIRC, WELLORD2,
@@ -799,8 +799,7 @@ A1: dom (f+*(x,f.y)) = dom f & A = dom (f+*(x,f.y)) &
     dom f = X & rng f = Card X by ThNum1,FUNCT_7:32;
 A2: rng (f+*(x,f.y)+*(y,f.x)) = rng f
     proof
-      f.y in rng f & f.x in rng f by A1; then
-      {f.y} c= rng f & {f.x} c= rng f by ZFMISC_1:37; then
+      {f.y} c= rng f & {f.x} c= rng f by A1,ZFMISC_1:37; then
 A4:   rng g c= rng (f+*(x,f.y)) \/ {f.x} & rng f \/ {f.y} = rng f &
       rng f \/ {f.x} = rng f & rng (f+*(x,f.y)) c= rng f \/ {f.y}
       by XBOOLE_1:12,POLYNOM1:6; then
@@ -894,9 +893,6 @@ definition
   end;
 end;
 
-LemP0:
-  for x being real number, n being Nat holds x to_power n = x |^ n;
-
 theorem
   for n,m being Nat holds 0 to_power (n+m) = (0 to_power n)*(0 to_power m)
   proof let n,m be Nat;
@@ -915,12 +911,10 @@ A1:   n > 0 or m > 0; then n+m <> 0 by NAT_1:7; then
     end;
   end;
 
-theorem LemP2:
+theorem
   for x being real number
   for n,m being Nat holds (x to_power n) to_power m = x to_power (n*m)
                              by NEWTON:14;
-
-LemP3: for x being real number holds x to_power 2 = x*x by NEWTON:100;
 
 begin :: If-while algebra over integers
 
@@ -1411,7 +1405,8 @@ A3: [s,I]`2 = root-tree [(c*v')**(c',NAT),e'**(c',NAT)] &
 A6: rng v c= X & rng v' c= X & dom c' = X & dom v' = Q & dom v = Q &
     dom e = Q & dom e' = Q & dom cv = Q & dom (c'*v') = Q
     by FUNCT_2:def 1;
-    [v0,e0] = [(c*v')**(c',NAT),e'**(c',NAT)] by A3,A4,TREES_4:4; then
+    [v0,e0] = [(c*v')**(c',NAT),e'**(c',NAT)] by A3,MCART_1:7,TREES_4:4;
+    then
     v0 = (c*v')**(c',NAT) & e0 = e'**(c',NAT) by ZFMISC_1:33; then
 A5: cv = c*v' & e = e' by A6,ThDS1;
     v = v' by A5,A6,FUNCT_1:49;
@@ -3156,12 +3151,13 @@ theorem
 D1: s <> i & s <> n & i <> n & b <> i & n <> b by 00;
     set t = .(2,A,g);
     let q be Element of S;
-01: s*=i is_terminating_wrt g by AOFA_000:104;
 02: [q,s:=1] in TerminatingPrograms(A,S,T,g) by AOFA_000:def 36;
 03: for q be Element of S holds g.(q,s*=i).n = q.n & g.(q,s*=i).i = q.i
     by D1,Th213;
     ex d' being Function st d'.b = 0 & d'.n = 1 & d'.i = 2 by D1,Lem3; then
-    for-do(i:=t, i leq n, i+=1, s*=i) is_terminating_wrt g by 01,03,ThT4; then
+    for-do(i:=t, i leq n, i+=1, s*=i) is_terminating_wrt g
+     by AOFA_000:104,03,ThT4;
+    then
     [g.(q, s:=1) qua Element of S, for-do(i:=t, i leq n, i+=1, s*=i)]
     in TerminatingPrograms(A,S,T,g) by AOFA_000:def 37;
     hence thesis by 02,AOFA_000:def 35;
@@ -3195,7 +3191,7 @@ A2: s <> n & s <> i & s <> b by A0;
 D:  n <> i & n <> b & i <> b by A0;
 Q1: q1.n = q.n & q1.s = 1 & q.n+1-1 = q.n by A2,Th011;
 Q2: q2.n = q1.n & q2.s = q1.s & q2.i = 2 & 2-1 = 1 by A2,D,Th011;
-A:  P[f.(q1,i:=a)] by Q1,Q2,NEWTON:19;
+A:  P[f.(q1,i:=a)] by Th011,Q2,NEWTON:19;
 C:  for q being Element of Funcs(X,INT) st P[q]
     holds f.(q,I).i = q.i & f.(q,I).n = q.n by A2,Th113;
 B:  for q being Element of Funcs(X,INT) st P[q]
@@ -3238,12 +3234,13 @@ theorem
 D1: s <> i & s <> n & i <> n & b <> i & n <> b by 00;
     set t = .(1,A,g);
     let q be Element of S;
-01: s*=x is_terminating_wrt g by AOFA_000:104;
 02: [q,s:=1] in TerminatingPrograms(A,S,T,g) by AOFA_000:def 36;
 03: for q be Element of S holds g.(q,s*=x).n = q.n & g.(q,s*=x).i = q.i
     by D1,Th213;
     ex d' being Function st d'.b = 0 & d'.n = 1 & d'.i = 2 by D1,Lem3; then
-    for-do(i:=t, i leq n, i+=1, s*=x) is_terminating_wrt g by 01,03,ThT4; then
+    for-do(i:=t, i leq n, i+=1, s*=x) is_terminating_wrt g
+    by AOFA_000:104,03,ThT4;
+    then
     [g.(q, s:=1) qua Element of S, for-do(i:=t, i leq n, i+=1, s*=x)]
     in TerminatingPrograms(A,S,T,g) by AOFA_000:def 37;
     hence thesis by 02,AOFA_000:def 35;
@@ -3328,7 +3325,6 @@ D2: i <> x & i <> y & i <> z & n <> x & n <> y & n <> z by 00;
     set s2 = g.(s, x:=0\;y:=1);
     set I1 = z:=x, I2 = x:=y, I3 = y+=z;
     set I = z:=x\;x:=y\;y+=z;
-01: I is_terminating_wrt g by AOFA_000:104;
 02: [s, x:=0\;y:=1] in TerminatingPrograms(A,S,T,g) by AOFA_000:def 36;
 03: for q be Element of S holds g.(q,I).n = q.n & g.(q,I).i = q.i
     proof
@@ -3348,7 +3344,7 @@ D2: i <> x & i <> y & i <> z & n <> x & n <> y & n <> z by 00;
     end;
     ex d' being Function st d'.b = 0 & d'.n = 1 & d'.i = 2 by D1,Lem3; then
     for-do(i:=1, i leq n, i+=1, z:=x\;x:=y\;y+=z) is_terminating_wrt g
-    by 01,03,ThT4; then
+    by AOFA_000:104,03,ThT4; then
     [s2, for-do(i:=1, i leq n, i+=1, z:=x\;x:=y\;y+=z)] in
     TerminatingPrograms(A,S,T,g) by AOFA_000:def 37;
     hence [s,x:=0\;y:=1\;for-do(i:=1, i leq n, i+=1, z:=x\;x:=y\;y+=z)]
@@ -3738,9 +3734,9 @@ S:     nx > ny; then
 06:     nx-ny > 0 & nx > 0 by XREAL_1:52;
 06':   IFEQ(nx,ny,1,max(2*nx,2*ny+1)) = max(2*nx,2*ny+1) by FUNCOP_1:def 8,S;
 07':     nn = nx-ny by 02,04,06,ABSVALUE:def 1;
-07:     F(s) = max(2*nx,2*ny+1) by 03',06,06',FUNCOP_1:def 8;
+07:     F(s) = max(2*nx,2*ny+1) by 03',06',FUNCOP_1:def 8,S;
         F(s'') = IFEQ(ny,0,2, IFEQ(ny,nn,1,max(2*ny,2*nn+1)))
-        by 03,06,FUNCOP_1:def 8,07'
+        by 03,06,FUNCOP_1:def 8,02,04,ABSVALUE:def 1
         .= IFEQ(ny,nn,1,max(2*ny,2*nn+1)) by 00,FUNCOP_1:def 8; then
 08:     (ny = nn implies F(s'') = 1) &
         (ny <> nn implies F(s'') = max(2*ny,2*nn+1)) by FUNCOP_1:def 8;
@@ -3963,7 +3959,6 @@ B1:   ex s' st s = s' & s'.m >= 0;
     set C = m gt 0;
     set I = if-then(m is_odd, y*=x);
     set J = I\; m/=2\; x*=x;
-A3: C is_terminating_wrt g by AOFA_000:104;
 A4: J is_terminating_wrt g,P by AOFA_000:107;
 A5: P is_invariant_wrt C,g
     proof let s;
@@ -4017,7 +4012,7 @@ B1:   for s being Element of S st R[s]
     end; then
     while(m gt 0,
       if-then(m is_odd, y*=x)\; m/=2\; x*=x
-    ) is_terminating_wrt g, P by A3,A4,A5,A6,AOFA_000:118;
+    ) is_terminating_wrt g, P by AOFA_000:104,A4,A5,A6,AOFA_000:118;
     hence y:=1\;
       while(m gt 0,
         if-then(m is_odd, y*=x)\; m/=2\; x*=x
@@ -4136,9 +4131,9 @@ I3:       q0.b = 1; then
       by 00,FIB_NUM2:7
       .= (s.y)*((s.x)to_power(sm mod 2))*((s.x)to_power((sm div 2)*2))
       .= (s.y)*((s.x)to_power(sm mod 2))*
-         (((s.x)to_power 2) to_power (sm div 2)) by LemP2
+         (((s.x)to_power 2) to_power (sm div 2)) by NEWTON:14
       .= (s.y)*((s.x)to_power(sm mod 2))*
-         (((s.x)*(s.x)) to_power (sm div 2)) by LemP3;
+         (((s.x)*(s.x)) to_power (sm div 2)) by NEWTON:100;
       hence P[g.(s,J)] by 02,06,09;
     end;
 D:  for s being Element of S st P[s] holds

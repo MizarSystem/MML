@@ -11,9 +11,9 @@ environ
       FUNCT_7, RELOC, ARYTM_1, SCMFSA6C, SCMFSA6B, SF_MASTR, SCMFSA_4,
       FUNCOP_1, SCMFSA8B, AMI_2, SCMFSA8C, CARD_3, ARYTM, AMISTD_2, SCMNORM;
  notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0,
-      NAT_1, FUNCOP_1, RELAT_1, FUNCT_1, FUNCT_4, FUNCT_7, STRUCT_0, AMI_1,
-      SCMNORM, SCMFSA_2, SCMFSA_4, SCMFSA_5, SF_MASTR, SCMFSA6A, SCMFSA6B,
-      SCMFSA6C, SCMFSA7B, SCMFSA8A, SCMFSA8B, BINARITH, XXREAL_0;
+      NAT_1, FUNCOP_1, RELAT_1, FUNCT_1, FUNCT_4, FUNCT_7, CARD_3, STRUCT_0,
+      AMI_1, SCMNORM, SCMFSA_2, SCMFSA_4, SCMFSA_5, SF_MASTR, SCMFSA6A,
+      SCMFSA6B, SCMFSA6C, SCMFSA7B, SCMFSA8A, SCMFSA8B, BINARITH, XXREAL_0;
  constructors PARTFUN1, DOMAIN_1, XXREAL_0, REAL_1, NAT_1, SCMFSA_5, SCMFSA6A,
       SF_MASTR, SCMFSA6B, SCMFSA6C, SCMFSA8A, SCMFSA8B, SCMNORM, SCMFSA_4,
       AFINSQ_1;
@@ -114,8 +114,7 @@ theorem :: SCMFSA8C:26
 
 theorem :: SCMFSA8C:27
   for s being State of SCM+FSA st s.intloc 0 = 1 holds
-  (Initialize s) | (Int-Locations \/ FinSeq-Locations) =
-  s | (Int-Locations \/ FinSeq-Locations);
+  DataPart Initialize s = DataPart s;
 
 theorem :: SCMFSA8C:28
   for s being State of SCM+FSA, I being Program of SCM+FSA,
@@ -140,33 +139,28 @@ theorem :: SCMFSA8C:31
 theorem :: SCMFSA8C:32
   for s being State of SCM+FSA, i being Instruction of SCM+FSA st
   InsCode i in {0,6,7,8} holds
-  Exec(i,s) | (Int-Locations \/ FinSeq-Locations) =
-  s | (Int-Locations \/ FinSeq-Locations);
+  DataPart Exec(i,s) = DataPart s;
 
 theorem :: SCMFSA8C:33
   for s1,s2 being State of SCM+FSA st s1.intloc 0 = s2.intloc 0 &
   ((for a being read-write Int-Location holds s1.a = s2.a) &
   for f being FinSeq-Location holds s1.f = s2.f) holds
-  s1 | (Int-Locations \/ FinSeq-Locations) =
-  s2 | (Int-Locations \/ FinSeq-Locations);
+  DataPart s1 = DataPart s2;
 
 theorem :: SCMFSA8C:34
   for s being State of SCM+FSA,P being preProgram of SCM+FSA
-  holds (s +* P) | (Int-Locations \/ FinSeq-Locations) =
-  s | (Int-Locations \/ FinSeq-Locations);
+  holds DataPart(s +* P) = DataPart s;
 
 theorem :: SCMFSA8C:35
-  for s,ss being State of SCM+FSA holds (s +* ss | NAT) |
-  (Int-Locations \/ FinSeq-Locations) =
-  s | (Int-Locations \/ FinSeq-Locations);
+  for s,ss being State of SCM+FSA holds
+   DataPart(s +* ss | NAT) = DataPart s;
 
 theorem :: SCMFSA8C:36
   for s being State of SCM+FSA holds (Initialize s) | NAT = s | NAT;
 
 theorem :: SCMFSA8C:37
   for s,ss being State of SCM+FSA, I being Program of SCM+FSA holds
-  (ss +* (s | (NAT))) | (Int-Locations \/ FinSeq-Locations) =
-  ss | (Int-Locations \/ FinSeq-Locations);
+  DataPart(ss +* (s | (NAT))) = DataPart ss;
 
 theorem :: SCMFSA8C:38
   for s being State of SCM+FSA holds
@@ -180,53 +174,47 @@ theorem :: SCMFSA8C:40
   for s being State of SCM+FSA,I being paraclosed Program of SCM+FSA holds
   insloc 0 in dom I;
 
-theorem :: SCMFSA8C:41  ::Tm1(@BBB8)
+theorem :: SCMFSA8C:41
   for i being Instruction of SCM+FSA holds rng Macro i = {i,halt SCM+FSA};
 
 theorem :: SCMFSA8C:42
   for s1,s2 being State of SCM+FSA,I being Program of SCM+FSA st
   I is_closed_on s1 & I +* Start-At insloc 0 c= s1
   for n being Element of NAT st ProgramPart Relocated(I,n) c= s2 &
-  IC s2 = insloc n & s1 | (Int-Locations \/ FinSeq-Locations) =
-  s2 | (Int-Locations \/ FinSeq-Locations) for i being Element of NAT holds
+  IC s2 = insloc n & DataPart s1 = DataPart s2
+   for i being Element of NAT holds
   IC  Computation( s1,i) + n = IC  Computation( s2,i) &
   IncAddr(CurInstr ( Computation( s1,i)),n) = CurInstr ( Computation( s2,i)) &
-   Computation( s1,i) | (Int-Locations \/ FinSeq-Locations)
-  =  Computation( s2,i) | (Int-Locations \/ FinSeq-Locations);
+   DataPart Computation( s1,i) = DataPart Computation( s2,i);
 
 theorem :: SCMFSA8C:43
   for s1,s2 being State of SCM+FSA,I being Program of SCM+FSA st
   I is_closed_on s1 &
   I +* Start-At insloc 0 c= s1 & I +* Start-At insloc 0 c= s2 &
-  s1 | (Int-Locations \/ FinSeq-Locations) =
-  s2 | (Int-Locations \/ FinSeq-Locations) for i being Element of NAT holds
+  DataPart s1 = DataPart s2
+   for i being Element of NAT holds
   IC  Computation( s1,i) = IC  Computation( s2,i) &
   CurInstr  Computation( s1,i) = CurInstr  Computation( s2,i) &
-   Computation( s1,i) | (Int-Locations \/ FinSeq-Locations) =
-   Computation( s2,i) | (Int-Locations \/ FinSeq-Locations);
+   DataPart Computation( s1,i) = DataPart Computation( s2,i);
 
 theorem :: SCMFSA8C:44
   for s1,s2 being State of SCM+FSA,I being Program of SCM+FSA st
   I is_closed_on s1 & I is_halting_on s1 &
   I +* Start-At insloc 0 c= s1 & I +* Start-At insloc 0 c= s2 &
-  s1 | (Int-Locations \/ FinSeq-Locations) =
-  s2 | (Int-Locations \/ FinSeq-Locations) holds LifeSpan s1 = LifeSpan s2;
+  DataPart s1 = DataPart s2 holds LifeSpan s1 = LifeSpan s2;
 
 theorem :: SCMFSA8C:45
   for s1,s2 being State of SCM+FSA,I being Program of SCM+FSA st
   s1.intloc 0 = 1 & I is_closed_on s1 & I is_halting_on s1 &
   ((for a being read-write Int-Location holds s1.a = s2.a) &
   for f being FinSeq-Location holds s1.f = s2.f) holds
-  IExec(I,s1) | (Int-Locations \/ FinSeq-Locations) =
-  IExec(I,s2) | (Int-Locations \/ FinSeq-Locations);
+  DataPart IExec(I,s1) = DataPart IExec(I,s2);
 
 theorem :: SCMFSA8C:46
   for s1,s2 being State of SCM+FSA,I being Program of SCM+FSA st
   s1.intloc 0 = 1 & I is_closed_on s1 & I is_halting_on s1 &
-  s1 | (Int-Locations \/ FinSeq-Locations) =
-  s2 | (Int-Locations \/ FinSeq-Locations) holds
-  IExec(I,s1) | (Int-Locations \/ FinSeq-Locations) =
-  IExec(I,s2) | (Int-Locations \/ FinSeq-Locations);
+  DataPart s1 = DataPart s2 holds
+  DataPart IExec(I,s1) = DataPart IExec(I,s2);
 
 registration
   let I be Program of SCM+FSA;
@@ -257,19 +245,16 @@ theorem :: SCMFSA8C:51
   for s1,s2 being State of SCM+FSA, I being Program of SCM+FSA
   st I +* Start-At insloc 0 c= s1 & I is_pseudo-closed_on s1
   for n being Element of NAT st ProgramPart Relocated(I,n) c= s2 &
-  IC s2 = insloc n & s1 | (Int-Locations \/ FinSeq-Locations)
-  = s2 | (Int-Locations \/ FinSeq-Locations) holds
+  IC s2 = insloc n & DataPart s1 = DataPart s2  holds
   ((for i being Element of NAT st i < pseudo-LifeSpan(s1,I) holds
   IncAddr(CurInstr  Computation( s1,i),n) = CurInstr  Computation( s2,i)) &
   for i being Element of NAT st i <= pseudo-LifeSpan(s1,I) holds
   IC  Computation( s1,i) + n = IC  Computation( s2,i) &
-   Computation( s1,i) | (Int-Locations \/ FinSeq-Locations)
-  =  Computation( s2,i) | (Int-Locations \/ FinSeq-Locations));
+   DataPart Computation( s1,i) = DataPart Computation( s2,i));
 
 theorem :: SCMFSA8C:52
   for s1,s2 being State of SCM+FSA, I being Program of SCM+FSA st
-  s1 | (Int-Locations \/ FinSeq-Locations) =
-  s2 | (Int-Locations \/ FinSeq-Locations) holds
+  DataPart s1 = DataPart s2 holds
   I is_pseudo-closed_on s1 implies I is_pseudo-closed_on s2;
 
 theorem :: SCMFSA8C:53
@@ -311,25 +296,22 @@ theorem :: SCMFSA8C:58
   IC  Computation( (s +* (I +* Start-At insloc 0)),n) =
   IC  Computation( (s +* (I ';' Stop SCM+FSA +* Start-At insloc 0)),n)) &
   for n being Element of NAT st n <= pseudo-LifeSpan(s,Directed I) holds
-   Computation( (s +* (I +* Start-At insloc 0)),n) |
-  (Int-Locations \/ FinSeq-Locations) =
-   Computation( (s +* (I ';' Stop SCM+FSA +* Start-At insloc 0)),n) |
-  (Int-Locations \/ FinSeq-Locations);
+  DataPart Computation( (s +* (I +* Start-At insloc 0)),n) =
+  DataPart Computation( (s +* (I ';' Stop SCM+FSA +* Start-At insloc 0)),n);
 
 theorem :: SCMFSA8C:59
   for s being State of SCM+FSA, I being Program of SCM+FSA st
   Directed I is_pseudo-closed_on s holds
-  (Result (s +* (I ';' Stop SCM+FSA +* Start-At insloc 0))) |
-  (Int-Locations \/ FinSeq-Locations) =
-   Computation( (s +* (I +* Start-At insloc 0)),
-  pseudo-LifeSpan(s,Directed I)) | (Int-Locations \/ FinSeq-Locations);
+  DataPart Result (s +* (I ';' Stop SCM+FSA +* Start-At insloc 0)) =
+  DataPart Computation( (s +* (I +* Start-At insloc 0)),
+  pseudo-LifeSpan(s,Directed I));
 
 theorem :: SCMFSA8C:60
   for s being State of SCM+FSA, I being Program of SCM+FSA st
   s.intloc 0 = 1 & Directed I is_pseudo-closed_on s holds
-  IExec(I ';' Stop SCM+FSA,s) | (Int-Locations \/ FinSeq-Locations) =
-   Computation( (s +* (I +* Start-At insloc 0)),
-  pseudo-LifeSpan(s,Directed I)) | (Int-Locations \/ FinSeq-Locations);
+  DataPart IExec(I ';' Stop SCM+FSA,s) =
+  DataPart Computation( (s +* (I +* Start-At insloc 0)),
+  pseudo-LifeSpan(s,Directed I));
 
 theorem :: SCMFSA8C:61  ::TMP20 ** n.t
   for I,J being Program of SCM+FSA,a being Int-Location holds
@@ -363,8 +345,7 @@ theorem :: SCMFSA8C:67
   for s being State of SCM+FSA, I,J being Program of SCM+FSA,
   a being read-write Int-Location
   st s.intloc 0 = 1 & s.a = 0 & Directed I is_pseudo-closed_on s holds
-  IExec(if=0(a,I,J),s) | (Int-Locations \/ FinSeq-Locations) =
-  IExec(I ';' Stop SCM+FSA,s) | (Int-Locations \/ FinSeq-Locations);
+  DataPart IExec(if=0(a,I,J),s) = DataPart IExec(I ';' Stop SCM+FSA,s);
 
 theorem :: SCMFSA8C:68
   for s being State of SCM+FSA, I,J being Program of SCM+FSA,
@@ -378,8 +359,7 @@ theorem :: SCMFSA8C:69
   for s being State of SCM+FSA, I,J being Program of SCM+FSA,
   a being read-write Int-Location
   st s.intloc 0 = 1 & s.a > 0 & Directed I is_pseudo-closed_on s holds
-  IExec(if>0(a,I,J),s) | (Int-Locations \/ FinSeq-Locations) =
-  IExec(I ';' Stop SCM+FSA,s) | (Int-Locations \/ FinSeq-Locations);
+  DataPart IExec(if>0(a,I,J),s) = DataPart IExec(I ';' Stop SCM+FSA,s);
 
 theorem :: SCMFSA8C:70
   for s being State of SCM+FSA, I,J being Program of SCM+FSA,
@@ -393,8 +373,7 @@ theorem :: SCMFSA8C:71
   for s being State of SCM+FSA, I,J being Program of SCM+FSA,
   a being read-write Int-Location
   st s.intloc 0 = 1 & s.a <> 0 & Directed J is_pseudo-closed_on s holds
-  IExec(if=0(a,I,J),s) | (Int-Locations \/ FinSeq-Locations) =
-  IExec(J ';' Stop SCM+FSA,s) | (Int-Locations \/ FinSeq-Locations);
+  DataPart IExec(if=0(a,I,J),s) = DataPart IExec(J ';' Stop SCM+FSA,s);
 
 theorem :: SCMFSA8C:72
   for s being State of SCM+FSA, I,J being Program of SCM+FSA,
@@ -408,8 +387,7 @@ theorem :: SCMFSA8C:73
   for s being State of SCM+FSA, I,J being Program of SCM+FSA,
   a being read-write Int-Location
   st s.intloc 0 = 1 & s.a <= 0 & Directed J is_pseudo-closed_on s holds
-  IExec(if>0(a,I,J),s) | (Int-Locations \/ FinSeq-Locations) =
-  IExec(J ';' Stop SCM+FSA,s) | (Int-Locations \/ FinSeq-Locations);
+  DataPart IExec(if>0(a,I,J),s) = DataPart IExec(J ';' Stop SCM+FSA,s);
 
 theorem :: SCMFSA8C:74
   for s being State of SCM+FSA, I,J being Program of SCM+FSA,
@@ -558,8 +536,7 @@ theorem :: SCMFSA8C:99
 theorem :: SCMFSA8C:100  ::T13'   6B
   for s1,s2 being State of SCM+FSA,I being Program of SCM+FSA
   st I is_closed_on s1 & I is_halting_on s1 &
-  s1 | (Int-Locations \/ FinSeq-Locations) =
-  s2 | (Int-Locations \/ FinSeq-Locations) holds
+  DataPart s1 = DataPart s2 holds
   for k being Element of NAT holds
    Computation( (s1 +* (I +* Start-At insloc 0)),k),
    Computation( (s2 +* (I +* Start-At insloc 0)),k) equal_outside NAT &
@@ -569,8 +546,7 @@ theorem :: SCMFSA8C:100  ::T13'   6B
 theorem :: SCMFSA8C:101  ::T14'   6B
   for s1,s2 being State of SCM+FSA,I being Program of SCM+FSA
   st I is_closed_on s1 & I is_halting_on s1 &
-  s1 | (Int-Locations \/ FinSeq-Locations) =
-  s2 | (Int-Locations \/ FinSeq-Locations) holds
+  DataPart s1 = DataPart s2 holds
   LifeSpan (s1 +* (I +* Start-At insloc 0)) =
   LifeSpan (s2 +* (I +* Start-At insloc 0)) &
   Result (s1 +* (I +* Start-At insloc 0)),
@@ -725,16 +701,14 @@ theorem :: SCMFSA8C:122
 theorem :: SCMFSA8C:123
   for s being State of SCM+FSA, I being good parahalting Program of SCM+FSA,
   a being read-write Int-Location st s.intloc 0 = 1 & s.a <= 0 holds
-  IExec(Times(a,I),s) | (Int-Locations \/ FinSeq-Locations) =
-  s | (Int-Locations \/ FinSeq-Locations);
+  DataPart IExec(Times(a,I),s) = DataPart s;
 
 theorem :: SCMFSA8C:124
   for s being State of SCM+FSA, I being good parahalting Program of SCM+FSA,
   a being read-write Int-Location st I does_not_destroy a & s.a > 0 holds
   IExec(I ';' SubFrom(a,intloc 0),s).a = s.a - 1 &
-  IExec(Times(a,I),s) | (Int-Locations \/ FinSeq-Locations) =
-  IExec(Times(a,I),IExec(I ';' SubFrom(a,intloc 0),s)) |
-  (Int-Locations \/ FinSeq-Locations);
+  DataPart IExec(Times(a,I),s)
+   = DataPart IExec(Times(a,I),IExec(I ';' SubFrom(a,intloc 0),s));
 
 begin :: Example
 

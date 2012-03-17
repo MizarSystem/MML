@@ -25,7 +25,7 @@ environ
  registrations XBOOLE_0, SETFAM_1, FUNCT_1, RELSET_1, FUNCOP_1, FINSUB_1,
       FRAENKEL, NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1, MEMBERED, CARD_3,
       STRUCT_0, SCMFSA_2, SF_MASTR, SCMFSA6C, SCMFSA8A, SCMFSA_9, SCM_HALT,
-      VALUED_0, SCMNORM, ORDINAL1, AMI_1;
+      VALUED_0, SCMNORM, ORDINAL1, AMI_1, FINSEQ_1, FINSET_1;
  requirements BOOLE, REAL, NUMERALS, SUBSET, ARITHM;
 
 
@@ -119,15 +119,12 @@ theorem :: SCMISORT:17
   k < LifeSpan (s +* Initialized I) &
   IC  Computation( (s +* Initialized while>0(a,I)),1 + k) =
   IC  Computation( (s +* Initialized I),k) + 4 &
-   Computation( (s +* Initialized while>0(a,I)),1 + k) |
-  (Int-Locations \/ FinSeq-Locations) =
-   Computation( (s +* Initialized I),k) | (Int-Locations \/ FinSeq-Locations)
+  DataPart Computation( (s +* Initialized while>0(a,I)),1 + k) =
+  DataPart Computation( (s +* Initialized I),k)
   holds IC  Computation( (s +* Initialized while>0(a,I)),1 + k+1) =
   IC  Computation( (s +* Initialized I),k+1) + 4 &
-   Computation( (s +* Initialized while>0(a,I)),1 + k+1) |
-  (Int-Locations \/ FinSeq-Locations) =
-   Computation( (s +* Initialized I),k+1) |
-  (Int-Locations \/ FinSeq-Locations);
+  DataPart Computation( (s +* Initialized while>0(a,I)),1 + k+1) =
+  DataPart Computation( (s +* Initialized I),k+1);
 
 theorem :: SCMISORT:18
   for a being Int-Location, I being Program of SCM+FSA,
@@ -160,10 +157,9 @@ theorem :: SCMISORT:21     ::SCM_9_37
   Int-Location st I is_closed_onInit s & I is_halting_onInit s & s.a >0 holds
   IC  Computation( (s +* Initialized while>0(a,I)),
   (LifeSpan (s +* Initialized I) + 3)) = insloc 0 &
-   Computation( (s +* Initialized while>0(a,I)),
-  (LifeSpan (s +* Initialized I) + 3))| (Int-Locations \/ FinSeq-Locations) =
-   Computation( (s +* Initialized I),LifeSpan (s +* Initialized I)) |
-  (Int-Locations \/ FinSeq-Locations);
+  DataPart Computation( (s +* Initialized while>0(a,I)),
+  (LifeSpan (s +* Initialized I) + 3)) =
+  DataPart Computation( (s +* Initialized I),LifeSpan (s +* Initialized I));
 
 theorem :: SCMISORT:22
   for s be State of SCM+FSA, I be InitHalting Program of SCM+FSA,
@@ -232,21 +228,19 @@ theorem :: SCMISORT:31
   for I be good InitHalting Program of SCM+FSA,a be read-write Int-Location
   st ex f being Function of (product the Object-Kind of SCM+FSA),INT st
   (for s,t be State of SCM+FSA holds (f.s > 0 implies f.IExec(I, s) < f.s ) &
-  (s|(Int-Locations \/ FinSeq-Locations) =
-  t|(Int-Locations \/ FinSeq-Locations) implies f.s=f.t) &
+  (DataPart s = DataPart t implies f.s=f.t) &
   ( f.s <= 0 iff s.a <= 0 ) ) holds while>0(a,I) is InitHalting;
 
 theorem :: SCMISORT:32
   for s be State of SCM+FSA, I be Program of SCM+FSA,
   a be read-write Int-Location st s.a <= 0 holds
-  IExec(while>0(a,I),s) | (Int-Locations \/ FinSeq-Locations) =
-  (Initialize s) | (Int-Locations \/ FinSeq-Locations);
+  DataPart IExec(while>0(a,I),s) = DataPart Initialize s;
 
 theorem :: SCMISORT:33
   for s be State of SCM+FSA, I be good InitHalting Program of SCM+FSA,
   a be read-write Int-Location st s.a > 0 & while>0(a,I) is InitHalting holds
-  IExec(while>0(a,I),s) | (Int-Locations \/ FinSeq-Locations) =
-  IExec(while>0(a,I),IExec(I,s)) | (Int-Locations \/ FinSeq-Locations);
+  DataPart IExec(while>0(a,I),s) =
+  DataPart IExec(while>0(a,I),IExec(I,s));
 
 theorem :: SCMISORT:34
   for s be State of SCM+FSA, I be Program of SCM+FSA,
