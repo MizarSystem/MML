@@ -33,11 +33,7 @@
 <ArgTypes/>
 <Func kind="K" nr="14"/>
 <Cluster>
-<Adjective nr="1"/>
-<Adjective nr="3"/>
-<Adjective nr="4"/>
 <Adjective nr="5"/>
-<Adjective nr="7"/>
 </Cluster>
 </FCluster>
 </Registrations>

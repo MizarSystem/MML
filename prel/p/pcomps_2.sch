@@ -16,9 +16,9 @@
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="NAT_1"/>
 <ArticleID name="RELSET_1"/>
+<ArticleID name="XREAL_0"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
-<ArticleID name="XREAL_0"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="BINOP_1"/>
@@ -129,7 +129,7 @@
 <Typ kind="M" nr="6">
 <Cluster>
 <Adjective nr="7"/>
-<Adjective nr="23">
+<Adjective nr="24">
 <Func kind="K" nr="61"/>
 <Func kind="K" nr="131">
 <Func kind="K" nr="131">
@@ -161,9 +161,8 @@
 <Func kind="F" nr="2"/>
 </Pred>
 <For>
-<Typ kind="M" nr="3">
+<Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="57"/>
 <Func kind="K" nr="61"/>
 </Typ>
 <Pred kind="R" nr="1">
@@ -207,9 +206,8 @@
 </Func>
 </Typ>
 <For>
-<Typ kind="M" nr="3">
+<Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="57"/>
 <Func kind="K" nr="61"/>
 </Typ>
 <Not>
@@ -283,7 +281,7 @@
 <Typ kind="M" nr="6">
 <Cluster>
 <Adjective nr="7"/>
-<Adjective nr="23">
+<Adjective nr="24">
 <Func kind="K" nr="61"/>
 <Func kind="K" nr="131">
 <Func kind="K" nr="131">
@@ -315,9 +313,8 @@
 <Func kind="F" nr="2"/>
 </Pred>
 <For>
-<Typ kind="M" nr="3">
+<Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="57"/>
 <Func kind="K" nr="61"/>
 </Typ>
 <Pred kind="R" nr="1">
@@ -362,9 +359,8 @@
 <Var nr="4"/>
 <Func kind="K" nr="3">
 <Fraenkel>
-<Typ kind="M" nr="3">
+<Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="57"/>
 <Func kind="K" nr="61"/>
 </Typ>
 <Func kind="K" nr="28">

@@ -16,7 +16,6 @@
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="MEMBERED"/>
-<ArticleID name="SEQ_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
@@ -24,9 +23,10 @@
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="COMPTS_1"/>
 <ArticleID name="FINSEQ_2"/>
-<ArticleID name="RVSUM_1"/>
 <ArticleID name="BINOP_1"/>
 <ArticleID name="METRIC_1"/>
+<ArticleID name="SEQ_1"/>
+<ArticleID name="RVSUM_1"/>
 <ArticleID name="EUCLID"/>
 <ArticleID name="ENUMSET1"/>
 <ArticleID name="DOMAIN_1"/>
@@ -55,11 +55,10 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="34" value="false"/>
+<Adjective nr="33" value="false"/>
 <Adjective nr="40"/>
 <Adjective nr="41"/>
 <Adjective nr="46"/>
-<Adjective nr="47"/>
 </Cluster>
 </RCluster>
 <FCluster>
@@ -73,11 +72,9 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="34" value="false"/>
 <Adjective nr="40"/>
 <Adjective nr="41"/>
-<Adjective nr="47"/>
-<Adjective nr="85"/>
+<Adjective nr="86"/>
 </Cluster>
 </FCluster>
 </Registrations>

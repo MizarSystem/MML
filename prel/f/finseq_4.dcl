@@ -94,9 +94,6 @@
 <LocusVar nr="4"/>
 </Func>
 <Cluster>
-<Adjective nr="1"/>
-<Adjective nr="4"/>
-<Adjective nr="15"/>
 <Adjective nr="19"/>
 </Cluster>
 </FCluster>
@@ -126,9 +123,6 @@
 <LocusVar nr="5"/>
 </Func>
 <Cluster>
-<Adjective nr="1"/>
-<Adjective nr="4"/>
-<Adjective nr="15"/>
 <Adjective nr="19"/>
 </Cluster>
 </FCluster>

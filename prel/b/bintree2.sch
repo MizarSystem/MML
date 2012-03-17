@@ -54,7 +54,7 @@
 <Cluster>
 <Adjective nr="4"/>
 <Adjective nr="34"/>
-<Adjective nr="53"/>
+<Adjective nr="54"/>
 </Cluster>
 <Func kind="F" nr="1"/>
 </Typ>
@@ -166,7 +166,7 @@
 <Cluster>
 <Adjective nr="4"/>
 <Adjective nr="34"/>
-<Adjective nr="53"/>
+<Adjective nr="54"/>
 </Cluster>
 <Func kind="F" nr="1"/>
 </Typ>

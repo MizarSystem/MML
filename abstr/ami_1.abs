@@ -7,16 +7,16 @@
 environ
 
  vocabularies BOOLE, FUNCT_2, FUNCT_1, RELAT_1, FUNCOP_1, CAT_1, FUNCT_4,
-      CARD_3, TARSKI, FRAENKEL, PARTFUN1, FINSET_1, AMI_1, NAT_1;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, NUMBERS, CARD_3,
-      XCMPLX_0, RELAT_1, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, FINSET_1, NAT_1,
-      NAT_D, CQC_LANG, FRAENKEL, FUNCOP_1, FUNCT_4, FINSEQ_1, DOMAIN_1,
-      STRUCT_0, XXREAL_0;
- constructors SETFAM_1, PARTFUN1, DOMAIN_1, FUNCOP_1, FUNCT_4, FRAENKEL,
-      XXREAL_0, NAT_1, INT_1, CARD_3, CQC_LANG, STRUCT_0, NAT_D;
- registrations SUBSET_1, FUNCT_1, INT_1, FRAENKEL, RELAT_1, FINSET_1, RELSET_1,
-      FINSEQ_1, FUNCOP_1, FUNCT_4, CQC_LANG, STRUCT_0, XBOOLE_0, FUNCT_2,
-      ORDINAL1, SETFAM_1, CARD_3;
+      CARD_3, TARSKI, FRAENKEL, PARTFUN1, FINSET_1, AMI_1, NAT_1, NEWTON,
+      AMI_5, MCART_1, AMISTD_2, FUNCT_3;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, MCART_1, SUBSET_1, SETFAM_1, NUMBERS,
+      CARD_3, XCMPLX_0, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FINSET_1, NAT_1,
+      FUNCOP_1, FUNCT_4, FINSEQ_1, DOMAIN_1, STRUCT_0, XXREAL_0;
+ constructors SETFAM_1, PARTFUN1, DOMAIN_1, FUNCT_4, FRAENKEL, XXREAL_0, NAT_1,
+      INT_1, CARD_3, CQC_LANG, STRUCT_0;
+ registrations XBOOLE_0, SUBSET_1, SETFAM_1, RELAT_1, FUNCT_1, ORDINAL1,
+      FUNCT_2, FUNCOP_1, FUNCT_4, ARYTM_3, FINSET_1, FRAENKEL, XREAL_0,
+      FINSEQ_1, CARD_3, STRUCT_0;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM;
 
 
@@ -39,9 +39,9 @@ definition let N be set;
   (# carrier -> set,
     Instruction-Counter -> Element of the carrier,
     Instruction-Locations -> Subset of the carrier,
-    Instruction-Codes -> non empty set,
-    Instructions -> non empty Subset of
-     [: the Instruction-Codes, ((union N) \/ the carrier)* :],
+    Instructions -> non empty set,
+:::     Subset of
+:::     [: NAT, ((union N) \/ the carrier)* :],
     Object-Kind ->
      Function of the carrier,
                  N \/ { the Instructions, the Instruction-Locations },
@@ -60,7 +60,6 @@ definition let N be set;
   the carrier of it = {0,1} &
   the Instruction-Counter of it = 0 &
   the Instruction-Locations of it = {1} &
-  the Instruction-Codes of it = {0} &
   the Instructions of it = {[0,{}]} &
   the Object-Kind of it = (0,1) --> ({1},{[0,{}]}) &
   the Execution of it = [0,{}] .--> id product (0,1) --> ({1},{[0,{}]});
@@ -137,8 +136,7 @@ end;
 definition let N; let S be non void AMI-Struct over N;
  attr S is halting means
 :: AMI_1:def 9
-  ex I being Instruction of S st I is halting &
-   for J being Instruction of S st J is halting holds I = J;
+  ex I being Instruction of S st I is halting;
 end;
 
 reserve E for set;
@@ -161,9 +159,9 @@ registration let N; let S be halting (non void AMI-Struct over N);
 end;
 
 definition let N; let S be halting (non void AMI-Struct over N);
- func halt S -> Instruction of S means
+ func halt S -> Instruction of S equals
 :: AMI_1:def 10
- it is halting Instruction of S;
+  choose { I where I is Instruction of S: I is halting };
 end;
 
 registration let N; let S be halting (non void AMI-Struct over N);
@@ -176,15 +174,9 @@ definition let N be set; let IT be non empty AMI-Struct over N;
   ObjectKind IC IT = the Instruction-Locations of IT;
 end;
 
-definition let N be set; let IT be AMI-Struct over N;
- attr IT is data-oriented means
-:: AMI_1:def 12
-     (the Object-Kind of IT)"{ the Instructions of IT }
-     c= the Instruction-Locations of IT;
-end;
-
 definition let N be with_non-empty_elements set;
  let IT be non empty non void AMI-Struct over N;
+canceled;
  attr IT is steady-programmed means
 :: AMI_1:def 13
   for s being State of IT, i being Instruction of IT,
@@ -202,8 +194,7 @@ end;
 theorem :: AMI_1:7
  Trivial-AMI E is IC-Ins-separated;
 
-theorem :: AMI_1:8
- Trivial-AMI E is data-oriented;
+canceled;
 
 theorem :: AMI_1:9
  for s1, s2 being State of Trivial-AMI E holds s1=s2;
@@ -215,10 +206,6 @@ theorem :: AMI_1:11
  Trivial-AMI E is definite;
 
 registration let E be set;
-  cluster Trivial-AMI E -> data-oriented;
-end;
-
-registration let E be set;
   cluster Trivial-AMI E -> IC-Ins-separated definite;
 end;
 
@@ -227,16 +214,16 @@ registration let N be with_non-empty_elements set;
 end;
 
 registration let E be set;
- cluster data-oriented strict AMI-Struct over E;
+ cluster strict AMI-Struct over E;
 end;
 
 registration let M be set;
- cluster IC-Ins-separated data-oriented definite strict
+ cluster IC-Ins-separated definite strict
               (non empty non void AMI-Struct over M);
 end;
 
 registration let N;
- cluster IC-Ins-separated data-oriented halting steady-programmed definite
+ cluster IC-Ins-separated halting steady-programmed definite
          strict (non empty non void AMI-Struct over N);
 end;
 
@@ -264,17 +251,8 @@ theorem :: AMI_1:15
  (for f,g being Function st f in A & g in A holds f tolerates g)
   implies union A is Function;
 
-begin :: Superproducts
-
-definition let f be Function;
- func sproduct f -> set means
-:: AMI_1:def 16
- x in it iff ex g st x = g & dom g c= dom f &
-     for x st x in dom g holds g.x in f.x;
-end;
-
-registration let f be Function;
- cluster sproduct f -> functional non empty;
+definition
+ canceled;
 end;
 
 canceled 9;
@@ -410,7 +388,8 @@ end;
 definition let N be set; let IT be AMI-Struct over N;
  attr IT is realistic means
 :: AMI_1:def 21
- the Instructions of IT <> the Instruction-Locations of IT;
+
+  not the Instruction-Counter of IT in the Instruction-Locations of IT;
 end;
 
 theorem :: AMI_1:48
@@ -495,17 +474,16 @@ definition let N be set; let S be AMI-Struct over N;
      { p where p is Element of sproduct the Object-Kind of S: p is finite };
 end;
 
-definition let N be set; let S be AMI-Struct over N;
- mode FinPartState of S -> Element of sproduct the Object-Kind of S means
-:: AMI_1:def 24
- it is finite;
+registration let N be set; let S be AMI-Struct over N;
+ cluster finite Element of sproduct the Object-Kind of S;
 end;
 
-registration let N be set; let S be AMI-Struct over N;
- cluster -> finite FinPartState of S;
+definition let N be set; let S be AMI-Struct over N;
+ mode FinPartState of S is finite Element of sproduct the Object-Kind of S;
 end;
 
 definition let N;
+ canceled;
  let S be IC-Ins-separated definite (non empty non void AMI-Struct over N);
  let IT be FinPartState of S;
  attr IT is autonomic means
@@ -572,16 +550,16 @@ registration let N;
 end;
 
 registration let E;
- cluster data-oriented realistic strict AMI-Struct over E;
+ cluster realistic strict AMI-Struct over E;
 end;
 
 registration let M be set;
- cluster data-oriented realistic strict IC-Ins-separated
+ cluster realistic strict IC-Ins-separated
  definite (non empty non void AMI-Struct over M);
 end;
 
 registration let N;
- cluster data-oriented halting steady-programmed realistic programmable
+ cluster halting steady-programmed realistic programmable
          strict (IC-Ins-separated definite
          (non empty non void AMI-Struct over N));
 end;
@@ -741,11 +719,6 @@ definition let N;
 it computes F;
 end;
 
-definition
- let N be set, S be AMI-Struct over N;
- mode InsType of S is Element of the Instruction-Codes of S;
-end;
-
 theorem :: AMI_1:74
     for S being realistic halting IC-Ins-separated definite
   (non empty non void AMI-Struct over N)
@@ -765,3 +738,48 @@ theorem :: AMI_1:76
  for p being pre-program of S
  for F being PartFunc of FinPartSt S, FinPartSt S st F = {} .--> Result p
   holds p is Program of F;
+
+begin :: InsType & InsCode
+
+notation let x;
+ synonym InsCode x for x`1;
+ synonym AddressPart x for x`2;
+end;
+
+definition
+ let N be set, S be AMI-Struct over N;
+ attr S is standard-ins means
+:: AMI_1:def 32
+ the Instructions of S c= [: NAT, ((union N) \/ the carrier of S)* :];
+end;
+
+registration let N be set;
+ cluster Trivial-AMI N -> standard-ins;
+end;
+
+registration let N be set;
+ cluster standard-ins non empty non void AMI-Struct over N;
+end;
+
+registration
+ let N be set, S be standard-ins AMI-Struct over N;
+ cluster the Instructions of S -> Relation-like;
+end;
+
+definition
+ let N be set, S be standard-ins AMI-Struct over N;
+ func InsCodes S equals
+:: AMI_1:def 33
+  dom the Instructions of S;
+end;
+
+definition
+ let N be set, S be standard-ins AMI-Struct over N;
+ mode InsType of S is Element of InsCodes S;
+end;
+
+definition
+ let N be set, S be standard-ins AMI-Struct over N;
+ let I be Element of the Instructions of S;
+ redefine func InsCode I -> InsType of S;
+end;

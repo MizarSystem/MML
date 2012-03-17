@@ -224,8 +224,6 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="1"/>
-<Adjective nr="4"/>
 <Adjective nr="29"/>
 </Cluster>
 </FCluster>

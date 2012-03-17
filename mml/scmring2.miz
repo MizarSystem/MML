@@ -8,17 +8,17 @@ environ
 
  vocabularies GR_CY_1, SCMFSA7B, FUNCSDOM, AMI_3, AMI_1, AMI_2, FUNCT_1, CAT_1,
       BOOLE, FINSEQ_1, FUNCT_2, CARD_3, ARYTM_1, RLVECT_1, CQC_LANG, SCMRING1,
-      MCART_1, FUNCT_4, RELAT_1, NAT_1;
- notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, RELAT_1, FUNCT_1, RELSET_1,
-      CARD_1, FUNCT_2, STRUCT_0, RLVECT_1, GROUP_1, FUNCSDOM, MCART_1,
-      NUMBERS, CARD_3, NAT_1, NAT_D, FINSEQ_1, FUNCOP_1, FUNCT_4, AMI_1, AMI_2,
-      AMI_3, SCMRING1, XXREAL_0;
- constructors PARTFUN1, DOMAIN_1, XXREAL_0, NAT_1, MEMBERED, FINSEQ_4,
-      REALSET2, CAT_2, AMI_3, SCMRING1, NAT_D;
- registrations AMI_1, FUNCOP_1, SCMRING1, STRUCT_0, RELSET_1, AMI_5, AMI_3,
-      FINSEQ_5, XBOOLE_0, FRAENKEL, NAT_1, ORDINAL1, SETFAM_1, CARD_3, GR_CY_1;
+      MCART_1, FUNCT_4, RELAT_1, NAT_1, TARSKI;
+ notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1,
+      CARD_1, FUNCT_2, STRUCT_0, RLVECT_1, GROUP_1, FUNCSDOM, MCART_1, NUMBERS,
+      CARD_3, NAT_1, FINSEQ_1, FUNCOP_1, FUNCT_4, AMI_1, AMI_2, AMI_3,
+      SCMRING1, XXREAL_0;
+ constructors XXREAL_0, NAT_1, FINSEQ_4, REALSET1, CAT_2, AMI_3, SCMRING1;
+ registrations XBOOLE_0, SUBSET_1, SETFAM_1, ORDINAL1, RELSET_1, FUNCOP_1,
+      ARYTM_3, FRAENKEL, XREAL_0, FINSEQ_1, CARD_3, REALSET1, FINSEQ_5,
+      STRUCT_0, AMI_1, AMI_3, AMI_5, SCMRING1;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
- definitions TARSKI, STRUCT_0, AMI_1, AMI_3, FUNCOP_1;
+ definitions STRUCT_0, AMI_3, FUNCOP_1, SCMRING1, AMI_2, AMI_1, CARD_1;
  theorems AMI_1, AMI_2, AMI_3, AMI_5, CARD_3, FUNCOP_1, ENUMSET1, FUNCT_2,
       FUNCT_4, GR_CY_1, MCART_1, NAT_1, SCMRING1, TARSKI, ZFMISC_1, XBOOLE_0,
       XBOOLE_1, XREAL_1, XXREAL_0;
@@ -30,32 +30,37 @@ reserve
         I for Element of Segm 8,
         S for non empty 1-sorted,
         t for Element of S,
-        x for set;
+        x for set,
+        k for Element of NAT;
 
 definition let R be good Ring;
  func SCM R -> strict AMI-Struct over { the carrier of R } means :Def1:
   the carrier of it = NAT &
   the Instruction-Counter of it = 0 &
   the Instruction-Locations of it = SCM-Instr-Loc &
-  the Instruction-Codes of it = Segm 8 &
   the Instructions of it = SCM-Instr R &
   the Object-Kind of it = SCM-OK R &
   the Execution of it = SCM-Exec R;
 existence
  proof
-  take AMI-Struct (#NAT,0,SCM-Instr-Loc,Segm 8,SCM-Instr R,SCM-OK R,SCM-Exec R
-#);
+  take AMI-Struct (#NAT,0,SCM-Instr-Loc,SCM-Instr R,SCM-OK R,SCM-Exec R#);
   thus thesis;
  end;
 uniqueness;
 end;
 
 registration let R be good Ring;
- cluster SCM R -> non empty non void;
+ cluster SCM R -> non empty non void standard-ins;
 coherence
   proof
    thus the carrier of SCM R is non empty by Def1;
    thus the Instruction-Locations of SCM R is non empty by Def1;
+A1:  the Instructions of SCM R = SCM-Instr R by Def1;
+    SCM-Instr R c= [: NAT, (union {the carrier of R} \/ NAT)* :];
+   hence the Instructions of SCM R
+       c= [: NAT, ((union {the carrier of R}) \/ the carrier of SCM R)* :]
+                       by A1, Def1;
+
   end;
 end;
 
@@ -105,7 +110,7 @@ A5:    P[m];
     not a in {0} by TARSKI:def 1;
     then not a in { 2*k where k is Element of NAT: k > 0 } \/ {0}
       by A1,XBOOLE_0:def 2;
-    hence thesis by AMI_2:def 3,XBOOLE_0:def 4;
+    hence thesis by XBOOLE_0:def 4;
   end;
 end;
 
@@ -156,14 +161,6 @@ end;
 theorem Th2:
  [0,{}] in SCM-Instr S
   proof
-A1: SCM-Instr S = { [0,{}] } \/
-  { [I,<*a,b*>] where a,b is Element of SCM-Data-Loc: I in { 1,2,3,4 } } \/
-  { [6,<*i*>] where i is Element of SCM-Instr-Loc: not contradiction } \/
-  { [7,<*i,a*>] where i is Element of SCM-Instr-Loc,
-                      a is Element of SCM-Data-Loc: not contradiction } \/
-  { [5,<*i,r*>] where i is Element of SCM-Data-Loc,
-                      r is Element of S: not contradiction }
-   by SCMRING1:def 1;
        [0,{}] in {[0,{}]} by TARSKI:def 1;
    then [0,{}] in { [0,{}] } \/
     { [I,<*a,b*>] where a,b is Element of SCM-Data-Loc: I in { 1,2,3,4 } }
@@ -178,7 +175,7 @@ A1: SCM-Instr S = { [0,{}] } \/
       { [7,<*i,a*>] where i is Element of SCM-Instr-Loc,
                       a is Element of SCM-Data-Loc: not contradiction }
     by XBOOLE_0:def 2;
-   hence thesis by A1,XBOOLE_0:def 2;
+   hence thesis by XBOOLE_0:def 2;
   end;
 
 theorem Th3:
@@ -196,14 +193,6 @@ theorem Th4:
 A1:  x in {1,2,3,4};
    then x=1 or x=2 or x=3 or x=4 by ENUMSET1:def 2;
    then reconsider x as Element of Segm 8 by GR_CY_1:10;
-A2: SCM-Instr S = { [0,{}] } \/
-  { [I,<*a,b*>] where a,b is Element of SCM-Data-Loc: I in { 1,2,3,4 } } \/
-  { [6,<*i*>] where i is Element of SCM-Instr-Loc: not contradiction } \/
-  { [7,<*i,a*>] where i is Element of SCM-Instr-Loc,
-                      a is Element of SCM-Data-Loc: not contradiction } \/
-  { [5,<*i,r*>] where i is Element of SCM-Data-Loc,
-                      r is Element of S: not contradiction }
-    by SCMRING1:def 1;
    reconsider D1 = d1, D2 = d2 as Element of SCM-Data-Loc by Th1;
        [x,<*D1,D2*>] in { [I,<*a,b*>] where a,b is Element of SCM-Data-Loc:
     I in { 1,2,3,4 } } by A1;
@@ -220,37 +209,21 @@ A2: SCM-Instr S = { [0,{}] } \/
       { [7,<*i,a*>] where i is Element of SCM-Instr-Loc,
                       a is Element of SCM-Data-Loc: not contradiction }
     by XBOOLE_0:def 2;
-   hence thesis by A2,XBOOLE_0:def 2;
+   hence thesis by XBOOLE_0:def 2;
   end;
 
 theorem Th5:
  [5,<*d1,t*>] in SCM-Instr S
   proof
-A1: SCM-Instr S = { [0,{}] } \/
-  { [I,<*a,b*>] where a,b is Element of SCM-Data-Loc: I in { 1,2,3,4 } } \/
-  { [6,<*i*>] where i is Element of SCM-Instr-Loc: not contradiction } \/
-  { [7,<*i,a*>] where i is Element of SCM-Instr-Loc,
-                      a is Element of SCM-Data-Loc: not contradiction } \/
-  { [5,<*a,r*>] where a is Element of SCM-Data-Loc,
-                      r is Element of S: not contradiction }
-   by SCMRING1:def 1;
    reconsider D1 = d1 as Element of SCM-Data-Loc by Th1;
        [5,<*D1,t*>] in { [5,<*i,a*>] where i is Element of SCM-Data-Loc,
       a is Element of S : not contradiction };
-   hence thesis by A1,XBOOLE_0:def 2;
+   hence thesis by XBOOLE_0:def 2;
   end;
 
 theorem Th6:
  [6,<*i1*>] in SCM-Instr S
   proof
-A1: SCM-Instr S = { [0,{}] } \/
-  { [I,<*a,b*>] where a,b is Element of SCM-Data-Loc: I in { 1,2,3,4 } } \/
-  { [6,<*i*>] where i is Element of SCM-Instr-Loc: not contradiction } \/
-  { [7,<*i,a*>] where i is Element of SCM-Instr-Loc,
-                      a is Element of SCM-Data-Loc: not contradiction } \/
-  { [5,<*i,r*>] where i is Element of SCM-Data-Loc,
-                      r is Element of S: not contradiction }
-   by SCMRING1:def 1;
    reconsider I1 = i1 as Element of SCM-Instr-Loc by Def1;
        [6,<*I1*>] in {[6,<*i*>] where i is Element of SCM-Instr-Loc:
      not contradiction};
@@ -264,20 +237,12 @@ A1: SCM-Instr S = { [0,{}] } \/
    { [7,<*i,a*>] where i is Element of SCM-Instr-Loc,
                       a is Element of SCM-Data-Loc: not contradiction }
     by XBOOLE_0:def 2;
-   hence thesis by A1,XBOOLE_0:def 2;
+   hence thesis by XBOOLE_0:def 2;
   end;
 
 theorem Th7:
  [7,<*i1,d1*>] in SCM-Instr S
   proof
-A1: SCM-Instr S = { [0,{}] } \/
-  { [I,<*a,b*>] where a,b is Element of SCM-Data-Loc: I in { 1,2,3,4 } } \/
-  { [6,<*i*>] where i is Element of SCM-Instr-Loc: not contradiction } \/
-  { [7,<*i,a*>] where i is Element of SCM-Instr-Loc,
-                      a is Element of SCM-Data-Loc: not contradiction } \/
-  { [5,<*i,r*>] where i is Element of SCM-Data-Loc,
-                      r is Element of S: not contradiction }
-   by SCMRING1:def 1;
    reconsider I1 = i1 as Element of SCM-Instr-Loc by Def1;
    reconsider D1 = d1 as Element of SCM-Data-Loc by Th1;
        [7,<*I1,D1*>] in { [7,<*i,a*>] where i is Element of SCM-Instr-Loc,
@@ -288,7 +253,7 @@ A1: SCM-Instr S = { [0,{}] } \/
     { [7,<*i,a*>] where i is Element of SCM-Instr-Loc,
                       a is Element of SCM-Data-Loc: not contradiction }
     by XBOOLE_0:def 2;
-   hence thesis by A1,XBOOLE_0:def 2;
+   hence thesis by XBOOLE_0:def 2;
   end;
 
 definition let R be good Ring, a, b be Data-Location of R;
@@ -371,16 +336,6 @@ theorem Th8:
   proof
     let J be set;
 A1: the Instructions of SCM R = SCM-Instr R by Def1;
-A2: SCM-Instr R =
-  { [0,{}] } \/
-  { [I,<*a,b*>] where I is Element of Segm 8,
-                      a, b is Element of SCM-Data-Loc: I in { 1,2,3,4 } } \/
-  { [6,<*i*>] where i is Element of SCM-Instr-Loc: not contradiction } \/
-  { [7,<*i,a*>] where i is Element of SCM-Instr-Loc,
-                      a is Element of SCM-Data-Loc: not contradiction } \/
-  { [5,<*a,r*>] where a is Element of SCM-Data-Loc,
-                      r is Element of R: not contradiction }
-   by SCMRING1:def 1;
     thus J is Instruction of SCM R implies
      J = [0,{}] or
      (ex a,b st J = a:=b) or
@@ -400,7 +355,7 @@ A2: SCM-Instr R =
                       a is Element of SCM-Data-Loc: not contradiction } or
   J in { [5,<*a,r*>] where a is Element of SCM-Data-Loc,
                       r is Element of R: not contradiction }
-   by A1,A2,XBOOLE_0:def 2;
+   by A1,XBOOLE_0:def 2;
       then J in { [0,{}] } \/
   { [I,<*a,b*>] where I is Element of Segm 8,
                       a, b is Element of SCM-Data-Loc: I in { 1,2,3,4 } } \/
@@ -410,7 +365,7 @@ A2: SCM-Instr R =
   J in { [5,<*a,r*>] where a is Element of SCM-Data-Loc,
                       r is Element of R: not contradiction }
    by XBOOLE_0:def 2;
-then A3:   J in { [0,{}] } \/
+then A2:   J in { [0,{}] } \/
   { [I,<*a,b*>] where I is Element of Segm 8,
                       a, b is Element of SCM-Data-Loc: I in { 1,2,3,4 } } or
   J in { [6,<*i*>] where i is Element of SCM-Instr-Loc: not contradiction } or
@@ -419,46 +374,46 @@ then A3:   J in { [0,{}] } \/
   J in { [5,<*a,r*>] where a is Element of SCM-Data-Loc,
                       r is Element of R: not contradiction }
    by XBOOLE_0:def 2;
-      per cases by A3,XBOOLE_0:def 2;
+      per cases by A2,XBOOLE_0:def 2;
       suppose J in { [0,{}] };
       hence thesis by TARSKI:def 1;
       end;
       suppose J in { [6,<*i*>] where i is Element of SCM-Instr-Loc:
         not contradiction };
       then consider i being Element of SCM-Instr-Loc such that
-A4:     J = [6,<*i*>] and not contradiction;
+A3:     J = [6,<*i*>] and not contradiction;
       reconsider i as Instruction-Location of SCM R by Def1;
-          J = goto i by A4;
+          J = goto i by A3;
       hence thesis;
       end;
       suppose J in { [7,<*i,a*>] where i is Element of SCM-Instr-Loc,
                     a is Element of SCM-Data-Loc: not contradiction };
       then consider i being Element of SCM-Instr-Loc,
                a being Element of SCM-Data-Loc such that
-A5:     J = [7,<*i,a*>] and not contradiction;
+A4:     J = [7,<*i,a*>] and not contradiction;
       reconsider I = i as Instruction-Location of SCM R by Def1;
       reconsider A = a as Data-Location of R by Th1;
-          J = A=0_goto I by A5;
+          J = A=0_goto I by A4;
       hence thesis;
       end;
       suppose J in { [5,<*a,r*>] where a is Element of SCM-Data-Loc,
                  r is Element of R: not contradiction };
       then consider a being Element of SCM-Data-Loc,
                r being Element of R such that
-A6:     J = [5,<*a,r*>] and not contradiction;
+A5:     J = [5,<*a,r*>] and not contradiction;
       reconsider A = a as Data-Location of R by Th1;
-          J = A:=r by A6;
+          J = A:=r by A5;
       hence thesis;
       end;
       suppose J in { [I,<*a,b*>] where I is Element of Segm 8,
                     a, b is Element of SCM-Data-Loc: I in { 1,2,3,4 } };
       then consider I being Element of Segm 8,
                a, b being Element of SCM-Data-Loc such that
-A7:     J = [I,<*a,b*>] & I in { 1,2,3,4 };
+A6:     J = [I,<*a,b*>] & I in { 1,2,3,4 };
       reconsider A = a, B = b as Data-Location of R by Th1;
-          I = 1 or I = 2 or I = 3 or I = 4 by A7,ENUMSET1:def 2;
+          I = 1 or I = 2 or I = 3 or I = 4 by A6,ENUMSET1:def 2;
       then J = A:=B or J = AddTo(A,B) or J = SubFrom(A,B) or
-       J = MultBy(A,B) by A7;
+       J = MultBy(A,B) by A6;
       hence thesis;
     end;
     end;
@@ -487,8 +442,7 @@ theorem Th10:
  proof
   let S be SCM-State of R such that
 A1: S = s;
-  thus IC s = S.0 by A1,Th9
-    .= IC S by SCMRING1:def 4;
+  thus IC s = IC S by A1,Th9;
  end;
 
 definition let R be good Ring, i1 be Instruction-Location of SCM R;
@@ -751,15 +705,13 @@ A1:   Exec(I, s).IC SCM R = Next IC s;
 A2:   I is halting;
     reconsider t = s as SCM-State of R by Def1;
 A3: IC t = IC s by Th10;
-A4: IC t = t.0 by SCMRING1:def 4;
-A5: Exec(I,s).IC SCM R = IC s by A2,AMI_1:def 8
-       .= t.0 by A3,SCMRING1:def 4;
+A4: IC t = t.0;
+A5: Exec(I,s).IC SCM R = t.0 by  A2,AMI_1:def 8,A3;
     reconsider w = t.0 as Instruction-Location of SCM R by A4,Def1;
     consider mj being Element of SCM-Instr-Loc such that
 A6:   mj = w & Next w = Next mj by Def10;
-A7: Exec(I,s).IC SCM R = Next w by A1,A3,SCMRING1:def 4;
-        Next w = mj + 2 by A6,AMI_2:def 15;
-    hence contradiction by A5,A6,A7;
+ Exec(I,s).IC SCM R = Next w by A1,A3;
+   hence contradiction by A5,A6;
   end;
 
 theorem Th21:
@@ -828,17 +780,17 @@ A1:   goto i1 is halting;
     set t = s +* (0 .--> Next i1);
     set f = the Object-Kind of SCM R;
 A2: f = SCM-OK R by Def1;
-A3: dom(0 .--> Next i1) = {0} by FUNCOP_1:14,19;
+A3: dom(0 .--> Next i1) = {0} by FUNCOP_1:19;
     then 0 in dom (0 .--> Next i1) by TARSKI:def 1;
 then A4: t.0 = (0 .--> Next i1).0 by FUNCT_4:14
        .= Next i1 by FUNCOP_1:87
        .= Next i5 by Th11;
-then A5: t.0 = i5 + 2 by AMI_2:def 15;
+then A5: t.0 = i5 + 2;
 A6: {0} c= NAT by ZFMISC_1:37;
 A7: dom s = dom (SCM-OK R) by CARD_3:18;
 A8: dom t = dom s \/ dom (0 .--> Next i1) by FUNCT_4:def 1
          .= NAT \/ dom (0 .--> Next i1) by A7,FUNCT_2:def 1
-         .= NAT \/ {0} by FUNCOP_1:14,19
+         .= NAT \/ {0} by FUNCOP_1:19
          .= NAT by A6,XBOOLE_1:12;
 A9: dom f = NAT by A2,FUNCT_2:def 1;
         for x being set st x in dom f holds t.x in f.x
@@ -859,14 +811,14 @@ A11:     x = 0;
     end;
     then reconsider t as State of SCM R by A8,A9,CARD_3:18;
     reconsider w = t as SCM-State of R by Def1;
-        dom(0 .--> i1) = {0} by FUNCOP_1:14,19;
+        dom(0 .--> i1) = {0} by FUNCOP_1:19;
     then 0 in dom (0 .--> i1) by TARSKI:def 1;
 then A12: (w +* (0 .--> i1)).0 = (0 .--> i1).0 by FUNCT_4:14
        .= i1 by FUNCOP_1:87;
 A13: 6 is Element of Segm 8 by GR_CY_1:10;
 A14: the Instruction-Locations of SCM R = SCM-Instr-Loc by Def1;
         w +* (0 .--> i1)
-      = SCM-Chg(w,i5) by SCMRING1:def 5
+      = SCM-Chg(w,i5)
      .= SCM-Chg(w,V jump_address) by A13,SCMRING1:18
      .= SCM-Exec-Res(V,w) by A14,SCMRING1:def 14
      .= Exec(goto i1,t) by Th12
@@ -883,17 +835,17 @@ Lm6:
     set t = s +* (0 .--> Next i1);
     set f = the Object-Kind of SCM R;
 A1: f = SCM-OK R by Def1;
-A2: dom(0 .--> Next i1) = {0} by FUNCOP_1:14,19;
+A2: dom(0 .--> Next i1) = {0} by FUNCOP_1:19;
     then 0 in dom (0 .--> Next i1) by TARSKI:def 1;
 then A3: t.0 = (0 .--> Next i1).0 by FUNCT_4:14
        .= Next i1 by FUNCOP_1:87
        .= Next i5 by Th11;
-then A4: t.0 = i5 + 2 by AMI_2:def 15;
+then A4: t.0 = i5 + 2;
 A5: {0} c= NAT by ZFMISC_1:37;
 A6: dom s = dom (SCM-OK R) by CARD_3:18;
 A7: dom t = dom s \/ dom (0 .--> Next i1) by FUNCT_4:def 1
          .= NAT \/ dom (0 .--> Next i1) by A6,FUNCT_2:def 1
-         .= NAT \/ {0} by FUNCOP_1:14,19
+         .= NAT \/ {0} by FUNCOP_1:19
          .= NAT by A5,XBOOLE_1:12;
 A8: dom f = NAT by A1,FUNCT_2:def 1;
         for x being set st x in dom f holds t.x in f.x
@@ -914,7 +866,7 @@ A10:     x = 0;
     end;
     then reconsider t as State of SCM R by A7,A8,CARD_3:18;
     reconsider w = t as SCM-State of R by Def1;
-        dom(0 .--> i1) = {0} by FUNCOP_1:14,19;
+        dom(0 .--> i1) = {0} by FUNCOP_1:19;
     then 0 in dom (0 .--> i1) by TARSKI:def 1;
 then A11: (w +* (0 .--> i1)).0 = (0 .--> i1).0 by FUNCT_4:14
        .= i1 by FUNCOP_1:87;
@@ -927,26 +879,24 @@ A15:   a =0_goto i1 is halting;
     suppose
 A16:   w.(V cond_address) <> 0.R;
 A17: IC t = IC w by Th10;
-A18: IC w = w.0 by SCMRING1:def 4;
-A19: Exec(a =0_goto i1,t).IC SCM R = IC t by A15,AMI_1:def 8
-       .= w.0 by A17,SCMRING1:def 4;
+A18: IC w = w.0;
+A19: Exec(a =0_goto i1,t).IC SCM R = w.0 by  A15,AMI_1:def 8,A17;
     reconsider e = w.0 as Instruction-Location of SCM R by A18,Def1;
         a is Element of SCM-Data-Loc by Th1;
     then t.a <> 0.R by A12,A14,A16,SCMRING1:19;
     then Exec(a =0_goto i1, t).IC SCM R = Next IC t by Th18;
-then A20: Exec(a =0_goto i1,t).IC SCM R = Next e by A17,SCMRING1:def 4;
-    consider mj being Element of SCM-Instr-Loc such that
-A21:   mj = e & Next e = Next mj by Def10;
-        Next e = mj + 2 by A21,AMI_2:def 15;
-    hence contradiction by A19,A20,A21;
+then A20: Exec(a =0_goto i1,t).IC SCM R = Next e by A17;
+      ex mj being Element of SCM-Instr-Loc st mj = e & Next e = Next mj
+              by Def10;
+     hence contradiction by A19,A20;
     end;
     suppose
-A22:   w.(V cond_address) = 0.R;
+A21:   w.(V cond_address) = 0.R;
         w +* (0 .--> i1)
-      = SCM-Chg(w,i5) by SCMRING1:def 5
+      = SCM-Chg(w,i5)
      .= SCM-Chg(w,V cjump_address) by A12,A13,SCMRING1:19
      .= SCM-Chg(w,IFEQ(w.(V cond_address),0.R,V cjump_address,Next IC w))
-        by A22,FUNCOP_1:def 8
+        by A21,FUNCOP_1:def 8
      .= SCM-Exec-Res(V,w) by A13,A14,SCMRING1:def 14
      .= Exec(a =0_goto i1,t) by Th12
      .= t by A15,AMI_1:def 8;
@@ -988,20 +938,13 @@ registration let R, a, r;
 coherence by Lm7;
 end;
 
-registration let R;
- cluster SCM R -> halting definite data-oriented steady-programmed
-                  realistic;
-coherence
-  proof
-    thus SCM R is halting
-    proof
-      reconsider I = [0,{}] as Instruction of SCM R by Th3;
-      take I;
-      thus I is halting by Th21;
-      let W be Instruction of SCM R such that
-A1:     W is halting;
-      assume
-A2:     I <> W;
+Lm8:
+ for W being Instruction of SCM R st W is halting holds W = [0,{}]
+  proof let W be Instruction of SCM R such that
+A1: W is halting;
+    set I = [0,{}];
+    assume
+A2:   I <> W;
       per cases by Th8;
       suppose W = [0,{}];
       hence thesis by A2;
@@ -1027,6 +970,18 @@ A2:     I <> W;
       suppose ex a,r st W = a := r;
       hence thesis by A1;
     end;
+  end;
+
+registration let R;
+ cluster SCM R -> halting definite steady-programmed
+                  realistic;
+coherence
+  proof
+    thus SCM R is halting
+    proof
+      reconsider I = [0,{}] as Instruction of SCM R by Th3;
+      take I;
+      thus I is halting by Th21;
     end;
     thus SCM R is definite
     proof
@@ -1037,37 +992,13 @@ A2:     I <> W;
        .= SCM-Instr R by SCMRING1:6
        .= the Instructions of SCM R by Def1;
     end;
-    thus SCM R is data-oriented
-    proof
-     let x be set; assume
-A3:   x in (the Object-Kind of SCM R)"{ the Instructions of SCM R };
-     then x in (the Object-Kind of SCM R)"{ SCM-Instr R } by Def1;
-then A4:  x in (SCM-OK R)"{ SCM-Instr R} by Def1;
-    reconsider x as Element of NAT by A3,Def1;
-        (SCM-OK R).x in { SCM-Instr R } by A4,FUNCT_2:46;
-    then (SCM-OK R).x = SCM-Instr R by TARSKI:def 1;
-    then consider i being Element of NAT such that
-A5:  x = 2*i+2*1 by SCMRING1:4;
-     x = 2*(i + 1) & i + 1 > 0 by A5,NAT_1:3;
-    then x in SCM-Instr-Loc by AMI_2:def 3;
-    hence thesis by Def1;
-   end;
    thus SCM R is steady-programmed
    proof
     let s be State of SCM R,
         j be Instruction of SCM R,
         l be Instruction-Location of SCM R;
      reconsider c = j as Element of SCM-Instr R by Def1;
-          SCM-Instr R =
-      { [0,{}] } \/
-    { [I,<*a,b*>] where a,b is Element of SCM-Data-Loc: I in { 1,2,3,4 } } \/
-    { [6,<*i*>] where i is Element of SCM-Instr-Loc: not contradiction } \/
-    { [7,<*i,a*>] where i is Element of SCM-Instr-Loc,
-                        a is Element of SCM-Data-Loc: not contradiction } \/
-    { [5,<*a,r*>] where a is Element of SCM-Data-Loc,
-                        r is Element of R: not contradiction }
-     by SCMRING1:def 1;
-     then c in { [0,{}] } \/
+    c in { [0,{}] } \/
     { [I,<*a,b*>] where a,b is Element of SCM-Data-Loc: I in { 1,2,3,4 } } \/
     { [6,<*i*>] where i is Element of SCM-Instr-Loc: not contradiction } \/
     { [7,<*i,a*>] where i is Element of SCM-Instr-Loc,
@@ -1083,7 +1014,7 @@ A5:  x = 2*i+2*1 by SCMRING1:4;
     c in { [5,<*a,r*>] where a is Element of SCM-Data-Loc,
                         r is Element of R: not contradiction }
       by XBOOLE_0:def 2;
-then A6:  c in { [0,{}] } \/
+then A1:  c in { [0,{}] } \/
     { [I,<*a,b*>] where a,b is Element of SCM-Data-Loc: I in { 1,2,3,4 } } or
     c in
  { [6,<*i*>] where i is Element of SCM-Instr-Loc: not contradiction } or
@@ -1094,9 +1025,9 @@ then A6:  c in { [0,{}] } \/
       by XBOOLE_0:def 2;
      reconsider S = s as SCM-State of R by Def1;
      reconsider l' = l as Element of SCM-Instr-Loc by Def1;
-A7:   Exec(j,s) = (SCM-Exec R).c.S by Def1
+A2:   Exec(j,s) = (SCM-Exec R).c.S by Def1
       .= SCM-Exec-Res(c,S) by SCMRING1:def 15;
-         now per cases by A6,XBOOLE_0:def 2;
+         now per cases by A1,XBOOLE_0:def 2;
      case c in { [0,{}] };
      then c = [0,{}] by TARSKI:def 1;
 then c`2 = {} by MCART_1:7;
@@ -1117,19 +1048,19 @@ then c`2 = {} by MCART_1:7;
            c in { [6,<*i*>] where i is Element of SCM-Instr-Loc:
          not contradiction };
        then consider i being Element of SCM-Instr-Loc such that
-A8:     c = [6,<*i*>] and not contradiction;
+A3:     c = [6,<*i*>] and not contradiction;
        thus SCM-Exec-Res(c,S).l' = SCM-Chg(S,c jump_address).l'
-         by A8,SCMRING1:def 14
+         by A3,SCMRING1:def 14
           .= S.l' by SCMRING1:12;
       end;
       case c in { [7,<*i,a*>] where i is Element of SCM-Instr-Loc,
                         a is Element of SCM-Data-Loc: not contradiction };
        then consider i being Element of SCM-Instr-Loc,
                      a being Element of SCM-Data-Loc such that
-A9:      c = [7,<*i,a*>] and not contradiction;
+A4:      c = [7,<*i,a*>] and not contradiction;
         thus SCM-Exec-Res(c,S).l'
          = SCM-Chg(S,IFEQ(S.(c cond_address),0.R,c cjump_address,Next IC S)).l'
-                by A9,SCMRING1:def 14
+                by A4,SCMRING1:def 14
         .= S.l' by SCMRING1:12;
       end;
       case c in
@@ -1137,12 +1068,12 @@ A9:      c = [7,<*i,a*>] and not contradiction;
                      a,b is Element of SCM-Data-Loc: I in { 1,2,3,4 } };
         then consider I being Element of Segm 8,
            a, b being Element of SCM-Data-Loc such that
-  A10:     c = [I,<*a,b*>] & I in {1,2,3,4};
-            now per cases by A10,ENUMSET1:def 2;
+  A5:     c = [I,<*a,b*>] & I in {1,2,3,4};
+            now per cases by A5,ENUMSET1:def 2;
          case I = 1;
           hence SCM-Exec-Res(c,S).l'
             = SCM-Chg(SCM-Chg(S, c address_1,S.(c address_2)), Next IC S).l'
-                by A10,SCMRING1:def 14
+                by A5,SCMRING1:def 14
            .= SCM-Chg(S, c address_1,S.(c address_2)).l' by SCMRING1:12
            .= S.l' by SCMRING1:16;
          end;
@@ -1150,7 +1081,7 @@ A9:      c = [7,<*i,a*>] and not contradiction;
           hence SCM-Exec-Res(c,S).l'
              = SCM-Chg(SCM-Chg(S,c address_1,
               S.(c address_1)+S.(c address_2)),Next IC S).l'
-                by A10,SCMRING1:def 14
+                by A5,SCMRING1:def 14
             .= SCM-Chg(S,c address_1,S.(c address_1)+S.(c address_2)).l'
                 by SCMRING1:12
             .= S.l' by SCMRING1:16;
@@ -1159,7 +1090,7 @@ A9:      c = [7,<*i,a*>] and not contradiction;
           hence SCM-Exec-Res(c,S).l'
              = SCM-Chg(SCM-Chg(S,c address_1,
               S.(c address_1)-S.(c address_2)),Next IC S).l'
-                by A10,SCMRING1:def 14
+                by A5,SCMRING1:def 14
             .= SCM-Chg(S,c address_1,S.(c address_1)-S.(c address_2)).l'
                 by SCMRING1:12
             .= S.l' by SCMRING1:16;
@@ -1168,7 +1099,7 @@ A9:      c = [7,<*i,a*>] and not contradiction;
           hence SCM-Exec-Res(c,S).l'
              = SCM-Chg(SCM-Chg(S,c address_1,
               S.(c address_1)*S.(c address_2)),Next IC S).l'
-                by A10,SCMRING1:def 14
+                by A5,SCMRING1:def 14
             .= SCM-Chg(S,c address_1,S.(c address_1)*S.(c address_2)).l'
                 by SCMRING1:12
             .= S.l' by SCMRING1:16;
@@ -1180,20 +1111,22 @@ A9:      c = [7,<*i,a*>] and not contradiction;
                         r is Element of R: not contradiction };
        then consider a being Element of SCM-Data-Loc,
                      r being Element of R such that
-A11:    c = [5,<*a,r*>] and not contradiction;
+A6:    c = [5,<*a,r*>] and not contradiction;
         thus SCM-Exec-Res(c,S).l'
         = SCM-Chg(SCM-Chg(S, c const_address, c const_value), Next IC S).l'
-                by A11,SCMRING1:def 14
+                by A6,SCMRING1:def 14
        .= SCM-Chg(S, c const_address, c const_value).l' by SCMRING1:12
        .= S.l' by SCMRING1:16;
      end;
      end;
-    hence s.l = Exec(j,s).l by A7;
+    hence s.l = Exec(j,s).l by A2;
    end;
-       the Instruction-Locations of SCM R = SCM-Instr-Loc &
-     the Instructions of SCM R = SCM-Instr R by Def1;
-   hence the Instructions of SCM R <> the Instruction-Locations of SCM R
-      by SCMRING1:1;
+A7:  the Instruction-Counter of SCM R = 0 by Def1;
+A8:  the Instruction-Locations of SCM R = { 2*k : k > 0 } by Def1;
+     assume the Instruction-Counter of SCM R in
+            the Instruction-Locations of SCM R;
+     then ex k st 0 = 2*k & k > 0 by A7,A8;
+    hence contradiction;
   end;
 end;
 
@@ -1201,15 +1134,10 @@ canceled 7;
 
 theorem Th29:
  for I being Instruction of SCM R st I is halting holds I = halt SCM R
-  proof
-    let I be Instruction of SCM R such that
-A1:   I is halting;
-    consider K being Instruction of SCM R such that
-          K is halting and
-A2:   for J being Instruction of SCM R st J is halting holds K = J
-       by AMI_1:def 9;
-    thus I = K by A1,A2
-          .= halt SCM R by A2;
+  proof let I be Instruction of SCM R;
+   assume I is halting;
+    then I = [0,{}] by Lm8;
+   hence thesis by Lm8;
   end;
 
 theorem

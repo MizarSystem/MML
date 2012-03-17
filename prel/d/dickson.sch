@@ -15,14 +15,12 @@
 </Signature>
 <Scheme>
 <ArgTypes>
-<Typ kind="M" nr="3">
+<Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="42"/>
 <Func kind="K" nr="46"/>
 </Typ>
-<Typ kind="M" nr="3">
+<Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="42"/>
 <Func kind="K" nr="46"/>
 </Typ>
 <Typ kind="M" nr="1">
@@ -31,9 +29,8 @@
 </ArgTypes>
 <Pred kind="V" nr="15">
 <Fraenkel>
-<Typ kind="M" nr="3">
+<Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="42"/>
 <Func kind="K" nr="46"/>
 </Typ>
 <Func kind="F" nr="3">

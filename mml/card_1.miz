@@ -9,14 +9,14 @@ environ
  vocabularies ORDINAL1, RELAT_1, FUNCT_1, BOOLE, WELLORD1, TARSKI, WELLORD2,
       ORDINAL2, FINSET_1, CARD_1, FUNCOP_1, NAT_1, COMPLEX1, GR_CY_1, ARYTM;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0, NAT_1,
-      NAT_D, RELAT_1, ENUMSET1, FUNCT_1, FUNCOP_1, WELLORD1, ORDINAL1,
-      ORDINAL2, WELLORD2, FINSET_1, XXREAL_0;
- constructors WELLORD1, WELLORD2, FUNCOP_1, FINSET_1, XXREAL_0, XREAL_0, NAT_1,
-      ORDINAL2, ENUMSET1, NAT_D;
- registrations FUNCT_1, ORDINAL1, FINSET_1, NAT_1, SUBSET_1, ORDINAL2,
-      FUNCOP_1;
+      RELAT_1, ENUMSET1, FUNCT_1, FUNCOP_1, WELLORD1, ORDINAL1, ORDINAL2,
+      WELLORD2, FINSET_1, XXREAL_0;
+ constructors ENUMSET1, WELLORD1, WELLORD2, FUNCOP_1, ORDINAL2, FINSET_1,
+      XXREAL_0, XREAL_0, NAT_1;
+ registrations XBOOLE_0, SUBSET_1, FUNCT_1, ORDINAL1, FUNCOP_1, ARYTM_3,
+      FINSET_1, XREAL_0, NAT_1;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
- definitions TARSKI, FUNCT_1, FINSET_1, WELLORD2, XBOOLE_0, RELAT_1;
+ definitions ORDINAL1, TARSKI, FUNCT_1, FINSET_1, WELLORD2, XBOOLE_0, RELAT_1;
  theorems TARSKI, FUNCT_1, ZFMISC_1, ORDINAL1, ORDINAL2, WELLORD1, WELLORD2,
       NAT_1, AXIOMS, REAL_1, RELAT_1, FINSET_1, XBOOLE_0, XBOOLE_1, FUNCOP_1,
       XREAL_1, ENUMSET1, XXREAL_0;
@@ -741,8 +741,7 @@ theorem
   proof
    1 = succ 0;
    then
-A1:  1 = {} \/ { {} } by ORDINAL1:def 1
-       .= { {} };
+A1:  1 = { {} };
        1 is cardinal
      proof
       take IT = 1; thus 1 = IT;
@@ -934,7 +933,7 @@ A7:     now assume a = y; then not y in
       hence thesis by A7;
      end;
    let z; assume
-Z:  z in X \ { y };
+A8:  z in X \ { y };
     then z in X & not z in { y } by XBOOLE_0:def 4;
 then A9:  z <> y by TARSKI:def 1;
 A10:  now assume
@@ -947,7 +946,7 @@ then A12:   y in dom f by A1,A4,XBOOLE_0:def 4;
     end;
        now assume z <> x;
       then not z in { x } by TARSKI:def 1;
-then A13:   z in X \ { x } by Z,XBOOLE_0:def 4;
+then A13:   z in X \ { x } by A8,XBOOLE_0:def 4;
       then z = f.z by A4,A9;
      hence z in rng f by A4,A13,FUNCT_1:def 5;
     end;
@@ -1001,7 +1000,7 @@ A5:  f is one-to-one & dom f = n & rng f = m by A4,WELLORD2:def 4;
 A6:  m = m1+1 by NAT_1:6;
      reconsider m1 as Element of NAT by ORDINAL1:def 13;
 A7: not m1 in m1;
-A8: m1 \/ {m1} = succ m1 by ORDINAL1:def 1 .= m by A6,Th52;
+A8: m1 \/ {m1} = succ m1 .= m by A6,Th52;
     then A9:  m \ {m1} = m1 \ {m1} by XBOOLE_1:40
             .= m1 by A7,ZFMISC_1:65;
        n <> 0 by A4,A5,RELAT_1:65;
@@ -1009,7 +1008,7 @@ A8: m1 \/ {m1} = succ m1 by ORDINAL1:def 1 .= m by A6,Th52;
 A10:  n = n1+1 by NAT_1:6;
       reconsider n1 as Element of NAT by ORDINAL1:def 13;
 A11: not n1 in n1;
-A12: n1 \/ {n1} = succ n1 by ORDINAL1:def 1 .= n by A10,Th52;
+A12: n1 \/ {n1} = succ n1 .= n by A10,Th52;
 then A13:  n \ {n1} = n1 \ {n1} by XBOOLE_1:40
             .= n1 by A11,ZFMISC_1:65;
        n1 in {n1} & m1 in {m1} by TARSKI:def 1;
@@ -1116,7 +1115,7 @@ then A6:      { Z } c= Y by ZFMISC_1:37;
         proof assume
 A7:        not Z in Y;
          take m = n+1;
-A8:        m = succ n by Th52 .= n \/ { n } by ORDINAL1:def 1;
+A8:        m = succ n by Th52 .= n \/ { n };
 A9:       { Z },{ n } are_equipotent by Th48;
 A10:       now
            assume n meets { n };
@@ -1167,7 +1166,7 @@ func card X -> Element of NAT means
   coherence
    proof consider n such that
 A1:   X,n are_equipotent by Th74;
-        n = Card n by Def5 .= Card X by A1,Th21;
+        n = Card X by  Def5,A1;
     hence thesis;
    end;
   compatibility by Def5;
@@ -1348,7 +1347,6 @@ theorem Th87:
  1 = { 0 }
  proof
   thus 1 = succ 0
-        .= 0 \/ {0} by ORDINAL1:def 1
         .= { 0 };
  end;
 
@@ -1356,7 +1354,6 @@ theorem Th88:
  2 = { 0,1 }
  proof
   thus 2 = succ 1
-        .= 1 \/ {1} by ORDINAL1:def 1
         .= { 0,1 } by Th87,ENUMSET1:41;
  end;
 
@@ -1364,7 +1361,6 @@ theorem Th89:
  3 = { 0,1,2 }
  proof
   thus 3 = succ 2
-        .= 2 \/ {2} by ORDINAL1:def 1
         .= { 0,1,2 } by Th88,ENUMSET1:43;
  end;
 
@@ -1372,7 +1368,6 @@ theorem Th90:
  4 = { 0,1,2,3 }
  proof
   thus 4 = succ 3
-        .= 3 \/ {3} by ORDINAL1:def 1
         .= { 0,1,2,3 } by Th89,ENUMSET1:46;
  end;
 
@@ -1380,7 +1375,6 @@ theorem Th91:
  5 = { 0,1,2,3,4 }
  proof
   thus 5 = succ 4
-        .= 4 \/ {4} by ORDINAL1:def 1
         .= { 0,1,2,3,4 } by Th90,ENUMSET1:50;
  end;
 
@@ -1388,7 +1382,6 @@ theorem Th92:
  6 = { 0,1,2,3,4,5 }
  proof
   thus 6 = succ 5
-        .= 5 \/ {5} by ORDINAL1:def 1
         .= { 0,1,2,3,4,5 } by Th91,ENUMSET1:55;
  end;
 
@@ -1396,7 +1389,6 @@ theorem Th93:
  7 = { 0,1,2,3,4,5,6 }
  proof
   thus 7 = succ 6
-        .= 6 \/ {6} by ORDINAL1:def 1
         .= { 0,1,2,3,4,5,6 } by Th92,ENUMSET1:61;
  end;
 
@@ -1404,7 +1396,6 @@ theorem Th94:
  8 = { 0,1,2,3,4,5,6,7 }
  proof
   thus 8 = succ 7
-        .= 7 \/ {7} by ORDINAL1:def 1
         .= { 0,1,2,3,4,5,6,7 } by Th93,ENUMSET1:68;
  end;
 
@@ -1412,7 +1403,6 @@ theorem Th95:
  9 = { 0,1,2,3,4,5,6,7,8 }
  proof
   thus 9 = succ 8
-        .= 8 \/ {8} by ORDINAL1:def 1
         .= { 0,1,2,3,4,5,6,7,8 } by Th94,ENUMSET1:134;
  end;
 
@@ -1420,7 +1410,6 @@ theorem
  10 = { 0,1,2,3,4,5,6,7,8,9 }
  proof
   thus 10 = succ 9
-        .= 9 \/ {9} by ORDINAL1:def 1
         .= { 0,1,2,3,4,5,6,7,8,9 } by Th95,ENUMSET1:135;
  end;
 
@@ -1464,23 +1453,23 @@ definition let n;
   end;
 end;
 
-theorem Th10:
-  k in Segm n iff k < n
+theorem Th98:
+  k in n iff k < n
   proof
-   hereby assume k in Segm n;
+   hereby assume k in n;
      then k in { l : l < n } by AXIOMS:30;
      then ex l st k = l & l < n;
     hence k < n;
    end;
    assume
-Z:  k < n;
+A1:  k < n;
     reconsider k as Element of NAT by ORDINAL1:def 13;
-    k in { l : l < n } by Z;
+    k in { l : l < n } by A1;
    hence thesis by AXIOMS:30;
   end;
 
 theorem
- Th12: n in Segm(n+1)
+ Th99: n in n+1
   proof
     reconsider n as Element of NAT by ORDINAL1:def 13;
     n<n+1 by XREAL_1:31;
@@ -1489,55 +1478,57 @@ theorem
   end;
 
 theorem
- Th13: n <= m iff Segm n c= Segm m
+ Th100: n <= m iff n c= m
   proof
-   thus n <= m implies Segm n c= Segm m
+   thus n <= m implies n c= m
      proof assume
 A1:  n <= m;
      let x; assume
-A2:  x in Segm n;
+A2:  x in n;
+     then x in Segm n;
      then reconsider k = x as Element of NAT;
-     k < n by A2,Th10;
+     k < n by A2,Th98;
      then k < m by A1,XXREAL_0:2;
      then x in { l : l < m };
-     hence x in Segm m by AXIOMS:30;
+     hence x in m by AXIOMS:30;
    end;
    now assume
-Z:  not n <= m;
+A3:  not n <= m;
     reconsider m as Element of NAT by ORDINAL1:def 13;
-     m in { l : l < n } by Z;
+     m in { l : l < n } by A3;
      then m in Segm n by AXIOMS:30;
-     hence thesis by Th10;
+     hence thesis by Th98;
     end;
    hence thesis;
   end;
 
-theorem Th15:
-  k <= n implies Segm k = Segm k /\ Segm n
+theorem
+  k <= n implies k = k /\ n
 proof
    assume k <= n;
-    then Segm k c= Segm n by Th13;
+    then Segm k c= Segm n by Th100;
    hence thesis by XBOOLE_1:28;
 end;
 
 theorem
-  Segm n \/ { n } = Segm (n+1)
+   succ n = n+1
 proof
-  thus Segm n \/ { n } c= Segm (n+1)
+  thus succ n c= n+1
   proof
     n+0<=n+1 by XREAL_1:9;
-then A1:     Segm n c= Segm(n+1) by Th13;
+then A1:     Segm n c= Segm(n+1) by Th100;
        let x;
-       assume x in Segm n \/ { n };
+       assume x in succ n;
        then x in Segm n or x in { n } by XBOOLE_0:def 2;
        then x in Segm (n+1) or x = n by A1,TARSKI:def 1;
-       hence thesis by Th12;
+       hence thesis by Th99;
     end;
     let x;
-    assume A2:x in Segm (n+1);
+    assume A2:x in n+1;
+     then x in Segm(n+1);
     then reconsider x as Element of NAT;
-pc: x<n+1 by A2,Th10;
-    per cases by pc,NAT_1:22;
+A3: x<n+1 by A2,Th98;
+    per cases by A3,NAT_1:22;
     suppose x < n;
     then x in { l : l < n };
     then x in Segm n by AXIOMS:30;

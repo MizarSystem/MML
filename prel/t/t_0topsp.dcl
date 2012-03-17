@@ -25,8 +25,8 @@
 </Typ>
 <Cluster>
 <Adjective nr="12" value="false"/>
-<Adjective nr="19"/>
-<Adjective nr="34"/>
+<Adjective nr="20"/>
+<Adjective nr="35"/>
 </Cluster>
 </RCluster>
 <FCluster>
@@ -34,7 +34,7 @@
 <Typ kind="G" nr="5">
 <Cluster>
 <Adjective nr="12" value="false"/>
-<Adjective nr="19"/>
+<Adjective nr="20"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -43,7 +43,7 @@
 </Func>
 <Cluster>
 <Adjective nr="12" value="false"/>
-<Adjective nr="19"/>
+<Adjective nr="20"/>
 </Cluster>
 </FCluster>
 </Registrations>

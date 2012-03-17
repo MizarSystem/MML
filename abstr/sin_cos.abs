@@ -10,18 +10,18 @@ environ
       FUNCT_1, RELAT_1, QC_LANG1, PREPOWER, SERIES_1, ABSVALUE, RLVECT_1,
       SEQM_3, SEQ_2, SUPINF_2, ORDINAL2, PROB_1, SQUARE_1, PARTFUN1, INCSP_1,
       RCOMP_1, PRE_TOPC, BOOLE, FCONT_1, SIN_COS, FINSEQ_4, GROUP_1, XCMPLX_0,
-      FUNCOP_1, FRECHET2, SIN_COS4, NAT_1;
+      FUNCOP_1, FRECHET2, SIN_COS4, NAT_1, RELOC;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, ARYTM_0, XCMPLX_0,
       XXREAL_0, XREAL_0, COMPLEX1, REAL_1, RELAT_1, FUNCT_1, RELSET_1, FCONT_1,
-      FUNCT_2, SEQ_1, SEQ_2, FDIFF_1, FUNCOP_1, SERIES_1, NAT_1, NAT_D,
-      FINSEQ_4, NEWTON, SQUARE_1, PARTFUN1, SEQM_3, RCOMP_1, BINARITH,
-      RFUNCT_1, RFUNCT_2, COMSEQ_1, COMSEQ_2, COMSEQ_3, PREPOWER;
- constructors PARTFUN1, FUNCT_4, ARYTM_3, ARYTM_0, REAL_1, SQUARE_1, NAT_1,
-      SEQ_2, RCOMP_1, FINSEQ_4, RFUNCT_1, RFUNCT_2, FCONT_1, FDIFF_1, COMSEQ_1,
-      PREPOWER, COMSEQ_2, SERIES_1, COMSEQ_3, BINARITH, NAT_D;
- registrations COMSEQ_2, COMSEQ_3, XREAL_0, RELSET_1, FDIFF_1, RCOMP_1, SEQ_1,
-      COMSEQ_1, SEQM_3, NEWTON, COMPLEX1, MEMBERED, ORDINAL2, SQUARE_1,
-      XCMPLX_0, NAT_1, XXREAL_0, ORDINAL1;
+      FUNCT_2, SEQ_1, SEQ_2, FDIFF_1, FUNCOP_1, SERIES_1, NAT_1, FINSEQ_4,
+      NEWTON, SQUARE_1, PARTFUN1, SEQM_3, RCOMP_1, BINARITH, RFUNCT_1,
+      RFUNCT_2, COMSEQ_1, COMSEQ_2, COMSEQ_3, PREPOWER;
+ constructors PARTFUN1, FUNCT_4, ARYTM_0, REAL_1, SQUARE_1, NAT_1, SEQ_2,
+      RCOMP_1, FINSEQ_4, COMSEQ_1, RFUNCT_1, COMSEQ_2, RFUNCT_2, FCONT_1,
+      FDIFF_1, PREPOWER, SERIES_1, COMSEQ_3, BINARITH;
+ registrations XBOOLE_0, ORDINAL1, RELSET_1, FUNCT_2, NUMBERS, XCMPLX_0,
+      XXREAL_0, XREAL_0, SQUARE_1, NAT_1, MEMBERED, COMPLEX1, SEQ_1, SEQM_3,
+      RCOMP_1, COMSEQ_1, COMSEQ_2, FDIFF_1, NEWTON, COMSEQ_3;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
 
 
@@ -129,7 +129,7 @@ definition let n be Element of NAT;
 end;
 
 definition let seq;
-func Sift seq -> Complex_Sequence means
+func Shift seq -> Complex_Sequence means
 :: SIN_COS:def 12
   it.0=0 & for k be Element of NAT holds it.(k+1) = seq.k;
 end;
@@ -194,10 +194,10 @@ theorem :: SIN_COS:4
  |.(z ExpSeq).n .| = (|.z.| ExpSeq ).n;
 
 theorem :: SIN_COS:5
-0 < k implies (Sift(seq)).k=seq.(k-'1);
+0 < k implies (Shift(seq)).k=seq.(k-'1);
 
 theorem :: SIN_COS:6
-Partial_Sums(seq).k=Partial_Sums(Sift(seq)).k+seq.k;
+Partial_Sums(seq).k=Partial_Sums(Shift(seq)).k+seq.k;
 
 theorem :: SIN_COS:7
 (z+w) |^ n = Partial_Sums(Expan(n,z,w)).n;
@@ -290,7 +290,7 @@ theorem :: SIN_COS:24
 begin :: Definition of Sinus, Cosine, and Exponential Function on REAL
 
 definition
-  func sin -> PartFunc of REAL, REAL means
+  func sin -> Function of REAL, REAL means
 :: SIN_COS:def 20
     dom it = REAL & for d being Element of REAL holds
       it.d = Im(Sum([*0,d*] ExpSeq));
@@ -316,7 +316,7 @@ theorem :: SIN_COS:25
  reserve d for Real;
 
 definition
-  func cos -> PartFunc of REAL, REAL means
+  func cos -> Function of REAL, REAL means
 :: SIN_COS:def 22
     dom it = REAL & for d holds it.d = Re(Sum([*0,d*] ExpSeq));
  end;
@@ -342,7 +342,7 @@ theorem :: SIN_COS:27
 dom(sin)=REAL & dom(cos)=REAL;
 
 theorem :: SIN_COS:28
-    exp([*0,th*])=cos(th)+(sin th)*<i>;
+  exp([*0,th*])=cos(th)+(sin th)*<i>;
 
 theorem :: SIN_COS:29
   (exp([*0,th*]))*'=exp(-[*0,th*]);
@@ -439,7 +439,7 @@ theorem :: SIN_COS:50
   Sum((p+q) ExpSeq) = (Sum(p ExpSeq))*(Sum(q ExpSeq));
 
 definition
-  func exp_R -> PartFunc of REAL, REAL means
+  func exp_R -> Function of REAL, REAL means
 :: SIN_COS:def 26
     dom it = REAL & for d being real number holds it.d=Sum(d ExpSeq);
  end;
@@ -548,12 +548,12 @@ theorem :: SIN_COS:74
 th in [.0,1 .] implies 0<cos.(th) & cos.(th)>=1/2;
 
 definition
- func tan -> PartFunc of REAL, REAL equals
+  func tan -> PartFunc of REAL, REAL equals
 :: SIN_COS:def 30
-  sin/cos;
- func cot -> PartFunc of REAL, REAL equals
+    sin/cos;
+  func cot -> PartFunc of REAL, REAL equals
 :: SIN_COS:def 31
-  cos/sin;
+    cos/sin;
 end;
 
 theorem :: SIN_COS:75
@@ -643,5 +643,3 @@ theorem :: SIN_COS:88
 
 theorem :: SIN_COS:89
  cos(a-b) = cos(a)*cos(b)+sin(a)*sin(b);
-
-

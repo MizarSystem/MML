@@ -9,11 +9,11 @@
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="MCART_1"/>
+<ArticleID name="ENUMSET1"/>
+<ArticleID name="DOMAIN_1"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="CARD_4"/>
-<ArticleID name="ENUMSET1"/>
-<ArticleID name="DOMAIN_1"/>
 </Signature>
 <Scheme>
 <ArgTypes/>
@@ -21,10 +21,10 @@
 <Fraenkel>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="64"/>
+<Func kind="K" nr="89"/>
 </Typ>
-<Func kind="K" nr="81">
-<Func kind="K" nr="64"/>
+<Func kind="K" nr="70">
+<Func kind="K" nr="89"/>
 <Var nr="1"/>
 </Func>
 <Pred kind="P" nr="1">

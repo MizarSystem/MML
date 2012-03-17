@@ -12,19 +12,18 @@ environ
       FINSEQ_4, FUNCT_1, BOOLE, RELAT_1, VECTSP_1, ZF_LANG, GROUP_1;
  notations INT_1, XBOOLEAN, MARGREL1, FINSEQ_1, FUNCOP_1, POWER, BINARITH,
       BINARI_2, BINARI_3, SERIES_1, NUMBERS, XCMPLX_0, XXREAL_0, XBOOLE_0,
-      BINOP_2, EUCLID, REAL_1, NAT_1, NAT_D, TARSKI, FINSEQ_4, FUNCT_1,
-      RELAT_1, ZFMISC_1, INT_2, FINSEQOP, NEWTON, PREPOWER, SUBSET_1;
- constructors XXREAL_0, REAL_1, NAT_1, FINSEQOP, SEQ_1, FINSEQ_4, SETWOP_2,
-      PREPOWER, SERIES_1, BINARITH, BINARI_2, WSIERP_1, EUCLID, BINARI_3,
-      NAT_D, NEWTON;
- registrations INT_1, MARGREL1, RELSET_1, NAT_1, XREAL_0, MEMBERED, XXREAL_0,
-      XBOOLEAN, SEQ_1;
+      BINOP_2, EUCLID, NAT_1, TARSKI, FINSEQ_4, FUNCT_1, RELAT_1, ZFMISC_1,
+      INT_2, FINSEQOP, NEWTON, SUBSET_1;
+ constructors XXREAL_0, REAL_1, NAT_1, NAT_D, FINSEQOP, FINSEQ_4, NEWTON,
+      SERIES_1, BINARITH, BINARI_2, EUCLID, BINARI_3;
+ registrations XBOOLE_0, RELSET_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1,
+      MEMBERED, SEQ_1, XBOOLEAN, MARGREL1;
  requirements REAL, BOOLE, SUBSET, NUMERALS, ARITHM;
- definitions FINSEQ_2, MARGREL1, XBOOLEAN, EUCLID;
+ definitions FINSEQ_2, XBOOLEAN, EUCLID;
  theorems POWER, NAT_1, PRE_FF, ABSVALUE, REAL_1, BINARI_3, INT_1, BINARITH,
       NAT_2, BINARI_2, FINSEQ_1, FINSEQ_2, FINSEQ_4, FUNCOP_1, RVSUM_1,
-      FUNCT_2, ZFMISC_1, INT_3, EULER_2, PEPIN, PREPOWER, XREAL_1,
-      NEWTON, XXREAL_0, ORDINAL1, XBOOLEAN, SEQ_1, NAT_D;
+      FUNCT_2, ZFMISC_1, INT_3, EULER_2, PEPIN, PREPOWER, XREAL_1, NEWTON,
+      XXREAL_0, ORDINAL1, XBOOLEAN, SEQ_1, NAT_D;
  schemes NAT_1, BINARITH;
 
 begin :: Preliminaries
@@ -457,10 +456,9 @@ end;
 theorem Th20:
   (i*n) mod n = 0
 proof
-   (i*n) mod n = ((i mod n) * ((n qua Integer) mod n)) mod n by INT_3:15
-   .= ((i mod n) * (n mod n)) mod n by NEWTON:101
+   (i*n) mod n = ((i mod n) * (n mod n)) mod n by INT_3:15
    .= ((i mod n) * 0) mod n by NAT_D:25
-   .= 0 mod n by NEWTON:101;
+   .= 0 mod n;
   hence thesis by NAT_D:26;
 end;
 
@@ -661,7 +659,7 @@ A2: l = (l div n)*n + (l mod n) by NAT_D:2;
 A3: k = (k div n)*n + (l mod n) by A1,NAT_D:2;
     consider m be Nat such that
 A4:  k = l + m by A1,NAT_1:10;
-    m mod n = (((k div n) - (l div n))*n) mod n by A2,A3,NEWTON:101,A4
+    m mod n = (((k div n) - (l div n))*n) mod n by A2,A3,A4
      .= 0 by Th20;
 then (l+m) div n = (l div n) + (m div n) by NAT_D:19;
 then A5: k = ((l div n) + (m div n))*n + (l mod n) by A1,A4,NAT_D:2
@@ -721,28 +719,21 @@ A3: n = m + j by A1,NAT_1:10;
   set M = 2 to_power m, J = 2 to_power j;
   reconsider L = l as Integer;
 A4:M > 0 by POWER:39;
-A5:L div M = l div M by NEWTON:101;
      m + -m < n + -m by A1,XREAL_1:10;
   then 0 + 1 < j + 1 by A3,XREAL_1:10;
   then 1 <= j by NAT_1:13;
   then 2 to_power 1 divides 2 to_power j by NAT_2:13;
   then 2 divides 2 to_power j by POWER:30;
-then A6:J mod 2 = 0 by PEPIN:6;
-A7:(s*J) mod 2 = ((s mod 2) * ((J qua Integer) mod 2)) mod 2 by INT_3:15
-   .= ((s mod 2) * 0) mod 2 by A6,NEWTON:101
-   .= 0 mod 2 by NEWTON:101
+then A5:J mod 2 = 0 by PEPIN:6;
+A6:(s*J) mod 2 = ((s mod 2) * 0) mod 2 by  INT_3:15,A5
    .= 0 by NAT_D:26;
      k div M
-   = (l + s*(2 to_power (j+m))) div M by A2,A3,NEWTON:101
-   .= (l + s*(J*M)) div M by POWER:32
+   = (l + s*(J*M)) div M by  A2,A3,POWER:32
    .= (l + s*J*M) div M
-   .= (L div M) + s*J by A4,INT_3:8
-   .= (l div M) + s*J by NEWTON:101;
-  then (k div M) mod 2 = ((l div M) + s*J) mod 2 by NEWTON:101
-   .= ((L div M) + s*J) mod 2 by NEWTON:101
-   .= ((L div M) mod 2 + 0) mod 2 by A7,INT_3:14
+   .= (l div M) + s*J by A4,INT_3:8;
+  then (k div M) mod 2 = ((L div M) mod 2 + 0) mod 2 by A6,INT_3:14
    .= (L div M) mod 2 by INT_3:13;
-  hence thesis by A5,NEWTON:101;
+  hence thesis;
 end;
 
 Lm4:
@@ -758,9 +749,8 @@ A1: h mod 2 to_power n = i mod 2 to_power n;
 A2: MajP(n,abs h) = n + x by NAT_1:10;
     reconsider x as Element of NAT by ORDINAL1:def 13;
      M = (2 to_power n)*(2 to_power x) by A2,POWER:32;
-then A3:M mod 2 to_power n =
-   ((2 to_power n)*(2 to_power x)) mod 2 to_power n by NEWTON:101
-   .= (((2 to_power n) mod (2 to_power n)) * (2 to_power x)) mod 2 to_power n
+then A3:M mod 2 to_power n = (((2 to_power n) mod (2 to_power n)) * (2 to_power
+x)) mod 2 to_power n
     by EULER_2:10
    .= (0 * (2 to_power x)) mod 2 to_power n by NAT_D:25
    .= 0 by NAT_D:26;
@@ -770,9 +760,8 @@ then A3:M mod 2 to_power n =
 A4: MajP(n,abs i) = n + y by NAT_1:10;
      reconsider y as Element of NAT by ORDINAL1:def 13;
      L = (2 to_power n)*(2 to_power y) by A4,POWER:32;
-then A5:L mod 2 to_power n =
-   ((2 to_power n)*(2 to_power y)) mod 2 to_power n by NEWTON:101
-   .= (((2 to_power n) mod (2 to_power n)) * (2 to_power y)) mod 2 to_power n
+then A5:L mod 2 to_power n = (((2 to_power n) mod (2 to_power n)) * (2 to_power
+y)) mod 2 to_power n
     by EULER_2:10
    .= (0 * (2 to_power y)) mod 2 to_power n by NAT_D:25
    .= 0 by NAT_D:26;
@@ -809,7 +798,7 @@ then A6:  j-'1 < n by A5,XXREAL_0:2;
 then A7:  abs(h) mod 2 to_power n = h mod 2 to_power n &
       abs(i) mod 2 to_power n = i mod 2 to_power n &
       h mod 2 to_power n >= 0 & i mod 2 to_power n >= 0
-      by INT_3:9,NEWTON:101;
+      by INT_3:9;
 A8:  len(n-BinarySequence(abs(h))) = n &
       len(n-BinarySequence(abs(i))) = n by FINSEQ_2:109;
 then A9:  (n-BinarySequence(abs(h))).j =
@@ -848,9 +837,7 @@ A3:2sComplement(n,i) =
   then  2 to_power MajP(n,abs i) + i >= -i+i by XREAL_1:8;
   then reconsider I = 2 to_power MajP(n,abs i) + i as Element of NAT
    by INT_1:16;
-     H mod (2 to_power n) = (H qua Integer) mod (2 to_power n) &
-  I mod (2 to_power n) = (I qua Integer) mod (2 to_power n) by NEWTON:101;
-then A4:(H qua Element of NAT) mod (2 to_power n)
+A4:(H qua Element of NAT) mod (2 to_power n)
  = (I qua Element of NAT) mod (2 to_power n) by A1,
 Lm4;
      for j be Element of NAT st j in Seg n holds
@@ -903,8 +890,7 @@ proof
   let l,m be Element of NAT such that
 A1:l mod 2 to_power n = m mod 2 to_power n;
 A2:(l qua Integer) mod 2 to_power n
-    = l mod 2 to_power n by NEWTON:101
-   .= (m qua Integer) mod 2 to_power n by A1,NEWTON:101;
+    = (m qua Integer) mod 2 to_power n by A1;
   abs l = l & abs m = m by ABSVALUE:def 1;
   then 2sComplement(n,l) = n-BinarySequence(l) &
    2sComplement(n,m) = n-BinarySequence(m) by Def2;
@@ -920,8 +906,7 @@ A1:l,m are_congruent_mod 2 to_power n;
  (l qua Integer) mod 2 to_power n
    = (m qua Integer) mod 2 to_power n by A1,INT_3:12;
   then l mod 2 to_power n
-   = (m qua Integer) mod 2 to_power n by NEWTON:101
-   .= m mod 2 to_power n by NEWTON:101;
+   = m mod 2 to_power n;
   hence thesis by Th30;
 end;
 
@@ -955,20 +940,16 @@ A6:  MajP(n+1,abs(i)) = MajP(n,abs(i)) + m by NAT_1:10;
 then A7: M = 2 to_power (P+m) + i by A6,ABSVALUE:def 1
      .= (Q * 2 to_power m)+i by POWER:32;
 A8: (Q * 2 to_power m qua Integer) mod Q
-      = (Q * 2 to_power m) mod Q by NEWTON:101
-     .= 0 by NAT_D:13;
-A9: M mod Q = ((Q * 2 to_power m)+i) mod Q by A7,NEWTON:101
-     .= (((Q * 2 to_power m qua Integer) mod Q) +
-      (i mod Q)) mod Q by INT_3:14
+      = 0 by NAT_D:13;
+A9: M mod Q = (((Q * 2 to_power m qua Integer) mod Q) +
+      (i mod Q)) mod Q by  A7,INT_3:14
      .= (i mod Q) mod Q by A8;
-A10: (Q qua Integer) mod Q = Q mod Q by NEWTON:101
-     .= 0 by NAT_D:25;
+A10: (Q qua Integer) mod Q = 0 by NAT_D:25;
        Q >= abs i by Def1;
     then Q >= -i by A5,ABSVALUE:def 1;
     then Q + i >= -i + i by XREAL_1:8;
 then N = Q + i by ABSVALUE:def 1;
-then A11: N mod Q =(Q + i) mod Q by NEWTON:101
-     .= (((Q qua Integer) mod Q) + (i mod Q)) mod Q by INT_3:14
+then A11: N mod Q = (((Q qua Integer) mod Q) + (i mod Q)) mod Q by INT_3:14
      .= (i mod Q) mod Q by A10;
 A12:P >= n by Def1;
       A13: j + -1 >= 1 + -1 by A1,XREAL_1:8;
@@ -1100,7 +1081,6 @@ A9: abs(2 to_power MajP(2,abs h) + h)
 then A10:(3 div 2 to_power (1-'1)) mod 2 = (2+1) mod 2
      .= ((2 mod 2) + 1) mod 2 by NAT_D:22
      .= (0 + 1) mod 2 by NAT_D:25
-     .= (1 qua Integer) mod 2 by NEWTON:101
      .= 1 by PEPIN:5;
 A11:1 in Seg 2 by FINSEQ_1:3;
 A12:(2sComplement(2,h))/.1 = (2-BinarySequence(3))/.1 by A2,A9,Def2

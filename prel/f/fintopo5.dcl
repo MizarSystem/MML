@@ -16,8 +16,8 @@
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="STRUCT_0"/>
 <ArticleID name="ORDERS_1"/>
+<ArticleID name="STRUCT_0"/>
 <ArticleID name="ORDERS_2"/>
 <ArticleID name="FINTOPO5"/>
 </Signature>
@@ -41,8 +41,8 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="25" value="false"/>
-<Adjective nr="34"/>
+<Adjective nr="28" value="false"/>
+<Adjective nr="35"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -65,8 +65,8 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="25" value="false"/>
-<Adjective nr="34"/>
+<Adjective nr="28" value="false"/>
+<Adjective nr="35"/>
 </Cluster>
 </FCluster>
 </Registrations>

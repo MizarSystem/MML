@@ -9,9 +9,9 @@ stylesheet 1.0;
 output method=html;
 
 
-// $Revision: 1.10 $
+// $Revision: 1.89 $
 //
-// File: mhtml_main.xsltxt - html-ization of Mizar XML, main file
+// File: miz.xsltxt - html-ization of Mizar XML, main file
 //
 // Author: Josef Urban
 //
@@ -135,8 +135,15 @@ $lbydlicgipref= { `concat($lbydlicgi,"?url=",$lbydliurl)`; }
 // tells if proofs are fetched through AJAX; default is off
 #ajax_proofs = { "0"; }
 
+// tells to display thesis after skeleton items
+#display_thesis = { "0"; }
+
 // tells if only selected items are generated to subdirs; default is off
 #generate_items = { "0"; }
+
+// relevant only if $generate_items>0
+// tells if proofs of selected items are generated to subdirs; default is off
+#generate_items_proofs = { "0"; }
 
 
 $lcletters= { "abcdefghijklmnopqrstuvwxyz"; }
@@ -1101,12 +1108,14 @@ tpl check_for_not(#el) {
     else { if [name($el)="For"] { check_for_not(#el=`$el/*[2]`); }
     else { "0"; }}}}
 
-tpl [Not](#i,#pr,#st) { 
+tpl [Not](#i,#pr,#st) 
+{ 
     $fnb = { if [For] { check_for_not(#el=`*[1]/*[2]`); } else { "0"; } }
     if [$fnb="1"]  { apply[*[1]](#i=$i,#ex="1"); }
     else { if [Pred|Is|PrivPred|Verum|ErrorFrm] {  if [$st="1"] { " holds "; }
 	   apply[*[1]](#i=$i,#not="1"); }
-    else { 
+    else 
+    { 
          $i3= is_impl1(#el=`.`);
 	 if [$i3 > 0] { // " IMPL1 "; $i3; 
             if [$st="1"] { " st "; } else { "( "; }
@@ -1145,6 +1154,9 @@ tpl [Not](#i,#pr,#st) {
 		   else { " not "; apply[.](#i=$i); } } }  " )";
 	      }
 
+              else { "not "; if[@pid] { comment { "HUMANRECFAILED"; } } // else {"NOPID  ";} 
+                     apply[*[1]](#i=$i); } } } } 
+} 
 // this was too AI, mizar is much simpler
 // 	     $cnt=`count(*[1]/*)`; 
 // 	     $pcnt1 = { if [$i3="1"] { count_positive(#els=`*[1]/*`,#nr=$cnt); } else {"10000";} }
@@ -1160,10 +1172,6 @@ tpl [Not](#i,#pr,#st) {
 //	     ilist(#separ=" & ", #elems=`*[1]/*[not(name()="Not")]`, #i=$i,#pr="1");
 //	    " )"; " implies "; 
 //	    "( "; ilist(#separ=" or ", #elems=`*[1]/Not/*[1]`, #i=$i,#pr="1"); " ) )"; }
-              else { "not "; if[@pid] { comment { "HUMANRECFAILED"; } } // else {"NOPID  ";} 
-                     apply[*[1]](#i=$i); } } } } } 
-// tpl [And/Not] { if [For] { <div { "not "; apply[*[1]]; } }
-//                else { "not "; apply[*[1]]; } }
 
 
 
@@ -2005,12 +2013,19 @@ tpl [Proposition]
     // ###TODO: include the possible link when generating items
     if [($generate_items>0) and not(string-length(@plevel)>0)] 
     { 
-       pcomment(#str = `concat($aname, ":lemma ", @propnr)`);
-       apply; " ";
-
-       if [following-sibling::*[1][(name()="By") or (name()="From") or (name()="Proof")]] 
-       { 	 
-	  apply[`following-sibling::*[1]`]; 
+       if [name(..) = "SchemeBlock"] { apply; " "; }
+       else
+       {
+         if [not(name(..) = "SchemePremises")]
+	 {
+	   pcomment(#str = `concat($aname, ":lemma ", @propnr)`);
+         }
+	 apply; " "; 
+	 if [($generate_items_proofs>0) and
+	      (following-sibling::*[1][(name()="By") or (name()="From") or (name()="Proof")])] 
+	 { 	 
+	   apply[`following-sibling::*[1]`]; 
+	 }
        }
     }
     else { apply; " ";} 
@@ -2282,15 +2297,25 @@ tpl [Let](#fst,#beg) {
    }
  }}
 
-tpl [Assume] { <b { "assume "; }  if [count(*)>1] { <b { "that ";} <br; }
-	       andlist(#elems=`*`);
-               ";"; try_th_exps(); <br; } 
+tpl [Assume] 
+{ 
+  <b { "assume "; }  
+  if [count(*)>1] { <b { "that ";} <br; }
+  andlist(#elems=`*`); ";"; 
+  try_th_exps(); <br; 
+} 
 
-tpl [Given] { $j=`@nr - 1`; <b {"given ";} 
-              jtlist(#j=$j, #sep2=" being ", #elems=`Typ`); 
-	      <b {" such that ";}
-              andlist(#elems=`Proposition`); 
-              ";"; try_th_exps(); <br; }
+// should handle both the new version with the existential statement
+// at the first position, and also the old version without it
+tpl [Given] 
+{ 
+  $j=`@nr - 1`; 
+  <b {"given ";} 
+  jtlist(#j=$j, #sep2=" being ", #elems=`Typ`); 
+  <b {" such that ";}
+  andlist(#elems=`*[(name()="Proposition") and (position() > 1)]`); ";"; 
+  try_th_exps(); <br; 
+}
 
 tpl [Take] { <b { "take ";} apply; ";"; try_th_exps(); <br; }
 tpl [TakeAsVar] 
@@ -2420,9 +2445,52 @@ tpl [DefPred] { <b { "defpred ";} pppred(#nr=`@nr`); "[";
 // forbid as default
 tpl [Thesis] { }
 
-tpl try_th_exps
+tpl do_thesis(#nd)
+{
+  apply[ThesisExpansions];
+  
+  if [($display_thesis = 1) and (not($nd = 1))] 
+  {
+        " ";
+        <a 
+	{   
+	  add_hs_attrs();
+	  pcomment0(#str=" thesis: ");      
+	}
+
+	<span { @class="hide"; " "; apply[*[1]]; }
+  }
+}
+
+tpl try_th_exps_old
+  { 
+     apply[./following-sibling::*[1][name()="Thesis"]/ThesisExpansions]; 
+  }
+
+// #nd overrides the $display_thesis parameter in do_thesis,
+// used to supress the incorrect PerCases thesis now
+tpl try_th_exps(#nd)
 { 
-    apply[./following-sibling::*[1][name()="Thesis"]/ThesisExpansions]; 
+  if [./following-sibling::*[1][name()="Thesis"]]
+  {  
+    for-each [./following-sibling::*[1][name()="Thesis"]]
+    {
+      do_thesis(#nd=$nd); 
+    }
+  }
+  else { if [((name(..) = "Now") or (name(..) = "CaseBlock") or (name(..) = "SupposeBlock"))
+              and (../BlockThesis/Thesis)]
+  {
+    $prev_thesis_changes 
+      = `count(./preceding-sibling::*[(name()="Let") or (name()="Take") 
+	                               or (name()="TakeAsVar") or (name()="Assume")
+	                               or (name()="Case") or (name()="Suppose")
+				       or (name()="Given") or (name()="Conclusion")])`;
+    for-each [ ../BlockThesis/Thesis[$prev_thesis_changes + 1]]
+    {
+      do_thesis(#nd=$nd);
+    }
+  }}
 }
 
 tpl [ThesisExpansions] { if [Pair] {
@@ -2458,7 +2526,13 @@ tpl [Case|Suppose]
     <b { "that "; }
   }
    
-  andlist(#elems = `*`); ";"; <br;
+  andlist(#elems = `*`); ";"; 
+  // this will break the thesis display in diffuse statements 
+  // for earlier kernel (analyzer v. < 1.94) - mea culpa, 
+  // the only reasonable backward-compatibility fix would be to 
+  // keep the kernel version as a parameter and check it here
+  try_th_exps();
+  <br;
 }
 
 // element PerCases { Proposition, Inference } 
@@ -2477,6 +2551,11 @@ tpl [PerCases]
   }
 
   apply [*[position()>1]];
+
+  // thesis after per cases is broken yet and would have 
+  // to be reconstructed from subblocks' theses;
+  // don't display it, only display the expansions
+  try_th_exps(#nd="1");
 }
 
 
@@ -2491,26 +2570,30 @@ tpl [PerCases]
 tpl [RCluster] { 
     $nr1 = `1 + count(preceding::RCluster)`;
     if [$generate_items>0]	{ 
-// <xsl:document href="items/{$anamelc}/rc_{$nr1}" format="html">
+// <xsl:document href="proofhtml/exreg/{$anamelc}.{$nr1}" format="html">
        rc();
 // </xsl:document>
    $bogus=`1`;
  } 
     else { rc(); } }
 
-tpl rc {
-                 if [($mml="1") or ($generate_items>0)] { apply[ArgTypes]; }
-		 $nr1 = `1 + count(preceding::RCluster)`;
-		 <a { @NAME=`concat("RC",$nr1)`;
-		      <b { "cluster "; } }
-                 if [ErrorCluster] { "errorcluster"; }
-	         else { apply[*[3]]; " "; apply[*[2]]; }
-                 ";"; <br; if [$mml="1"] { <br; }}
+tpl rc 
+{
+  if [($mml="1") or ($generate_items>0)] { apply[ArgTypes]; }
+  $nr1 = `1 + count(preceding::RCluster)`;
+  <a 
+  { 
+    @NAME=`concat("RC",$nr1)`;
+    <b { "cluster "; } 
+  }
+  if [ErrorCluster] { "errorcluster"; } else { apply[*[3]]; " "; apply[*[2]]; }
+  ";"; <br; if [$mml="1"] { <br; }
+}
 
 tpl [CCluster] { 
     $nr1 = `1 + count(preceding::CCluster)`;
     if [$generate_items>0]	{ 
-// <xsl:document href="items/{$anamelc}/cc_{$nr1}" format="html">
+// <xsl:document href="proofhtml/condreg/{$anamelc}.{$nr1}" format="html">
        cc();
 // </xsl:document>
    $bogus=`1`;
@@ -2530,26 +2613,29 @@ tpl cc         { if [($mml="1") or ($generate_items>0)] { apply[ArgTypes]; }
 tpl [FCluster] { 
     $nr1 = `1 + count(preceding::FCluster)`;
     if [$generate_items>0]	{ 
-// <xsl:document href="items/{$anamelc}/fc_{$nr1}" format="html">
+// <xsl:document href="proofhtml/funcreg/{$anamelc}.{$nr1}" format="html">
        fc();
 // </xsl:document>
    $bogus=`1`;
  } 
     else { fc(); } }
 
-tpl fc         { if [($mml="1") or ($generate_items>0)] { apply[ArgTypes]; }
-		 $nr1 = `1 + count(preceding::FCluster)`;
-		 <a { @NAME=`concat("FC",$nr1)`;
-		      <b { "cluster "; } }
-                 if [ErrorCluster] { "errorcluster"; }
-	         else { apply[*[2]]; <b {" -> ";} apply[*[3]]; apply[Typ];}
-                 ";"; <br; if [$mml="1"] { <br; }}
+tpl fc
+{ 
+   if [($mml="1") or ($generate_items>0)] { apply[ArgTypes]; }
+   $nr1 = `1 + count(preceding::FCluster)`;
+   <a { @NAME=`concat("FC",$nr1)`;
+   <b { "cluster "; } }
+   if [ErrorCluster] { "errorcluster"; }
+   else { apply[*[2]]; <b {" -> ";} apply[*[3]]; apply[Typ];}
+   ";"; <br; if [$mml="1"] { <br; }
+}
 
 
 tpl [IdentifyWithExp] { 
     $nr1 = `1 + count(preceding::IdentifyWithExp)`;
     if [$generate_items>0]	{ 
-// <xsl:document href="items/{$anamelc}/iy_{$nr1}" format="html">
+// <xsl:document href="proofhtml/idreg/{$anamelc}.{$nr1}" format="html">
        iy();
 // </xsl:document>
    $bogus=`1`;
@@ -2560,7 +2646,7 @@ tpl iy
 { 
    if [($mml="1") or ($generate_items>0)] 
    { 
-      apply[ArgTypes]; 
+      argtypes(#el=`Typ`);
    }
 
    $nr1 = `1 + count(preceding::IdentifyWithExp)`;
@@ -2572,13 +2658,74 @@ tpl iy
    }
 
    if [ErrorIdentify] { "erroridentify"; }
-   else 
+   else { if [($mml="1") or ($generate_items>0)] 
    { 
        apply[*[position() = last() - 1]]; 
        <b {" with ";} 
        apply[*[position() = last()]]; 
-       <b {" when ";} 
+     
    }
+   else // try nice display from the compatibility formula
+   {
+     for-each [following-sibling::*[1]/Proposition/*[1]]
+     {
+       if [name() = "Pred"] // equality - terms
+       { 
+         apply[*[1]]; 
+	 <b {" with ";} 
+	 apply[*[2]];
+       }
+       else { if [name() = "And"] // equivalence - predicates
+       {
+         $e1= is_equiv(#el=`.`);
+	 if [$e1="1"] 
+	 { 
+	   apply[*[1]/*[1]/*[1]]; 
+	   <b {" with ";}
+	   apply[*[1]/*[1]/*[2]/*[1]];
+	 }
+	 else 
+	 {
+	   "IDENTIFY DISPLAY FAILED -  PLEASE COMPLAIN!"; <br;
+	   apply[.];		 
+	 }
+       }
+       else 
+       {
+         $i3= is_impl1(#el=`.`);
+	 if [not($i3=2)] { "IDENTIFY DISPLAY FAILED -  PLEASE COMPLAIN!";  }
+	 else
+	 {
+           for-each [*[1]/*[@pid=$pid_Impl_RightNot]/*[1]]
+	   {
+	     if [name() = "Pred"] 
+	     {
+	       apply[*[1]]; 
+	       <b {" with ";} 
+	       apply[*[2]];
+	     }
+	     else 
+	     {
+	       $e1= is_equiv(#el=`.`);
+	       if [$e1="1"] 
+	       { 
+	         apply[*[1]/*[1]/*[1]]; 
+		 <b {" with ";}
+		 apply[*[1]/*[1]/*[2]/*[1]];
+               }
+	       else 
+	       {
+	         "IDENTIFY DISPLAY FAILED -  PLEASE COMPLAIN!"; <br;
+		 apply[.];		 
+	       }
+	     }
+	   }
+	   <b {" when ";}
+	   ilist(#separ = ", ", #elems=`*[1]/*[not(@pid=$pid_Impl_RightNot)]`); 
+	 }
+       }}
+     }
+   }}
 
    ";"; <br; if [$mml="1"] { <br; }
 }
@@ -2598,7 +2745,7 @@ tpl [JustifiedTheorem]
     $nr1 = `1+count(preceding-sibling::JustifiedTheorem)`;
     if [$generate_items>0]	
     { 
-// <xsl:document href="items/{$anamelc}/th_{$nr1}" format="html">
+// <xsl:document href="proofhtml/th/{$anamelc}.{$nr1}" format="html">
        jt();
 // </xsl:document>
        $bogus=`1`;
@@ -2650,7 +2797,10 @@ tpl jt
     if [Proof] 
     { 
        <div { @class="add"; apply[*[1]/*[1]]; } 
-       apply[*[2]]; 
+       if [not($generate_items>0) or ($generate_items_proofs>0)]
+       {
+         apply[*[2]]; 
+       }
     }
     else 
     { 
@@ -2676,7 +2826,7 @@ tpl [DefTheorem]
     $nr1 = `1+count(preceding-sibling::DefTheorem)`;
     if [$generate_items>0]	
     { 
-// <xsl:document href="items/{$anamelc}/def_{$nr1}" format="html">
+// <xsl:document href="proofhtml/def/{$anamelc}.{$nr1}" format="html">
        dt();
 // </xsl:document>
        $bogus=`1`;
@@ -2788,18 +2938,24 @@ tpl [SchemePredDecl] {
 //   element elSchemePremises { elProposition* },
 //   elProposition, Justification, elEndPosition
 tpl [SchemeBlock] {
-    if [$generate_items>0]	{ 
-// <xsl:document href="items/{$anamelc}/sch_{@schemenr}" format="html">
+    if [$generate_items>0]	
+    { 
+// <xsl:document href="proofhtml/sch/{$anamelc}.{@schemenr}" format="html">
        sd();
 // </xsl:document>
    $bogus=`1`;
    } 
    else { sd(); } }
 
-tpl sd {
-
-    <div { <a { @NAME=`concat("S",@schemenr)`; <b { "scheme  "; }
-    pcomment(#str=`concat($aname,":sch ",@schemenr)`); }
+tpl sd 
+{
+  <div 
+  { 
+    <a 
+    { 
+      @NAME=`concat("S",@schemenr)`; <b { "scheme  "; }
+      pcomment(#str=`concat($aname,":sch ",@schemenr)`); 
+    }
 //     "s"; `@schemenr`; 
 
     if [($proof_links > 0) and ($print_lab_identifiers = 0)]
@@ -2815,10 +2971,21 @@ tpl sd {
     list(#separ=", ", #elems=`SchemeFuncDecl|SchemePredDecl`); 
     " } :"; <br;
     <div { @class="add"; apply[Proposition]; } 
-    if [SchemePremises/Proposition] { <b { "provided"; }
-       <div { @class="add"; 
-       andlist(#elems=`SchemePremises/Proposition`); } }
-    apply[*[position() = last() - 1]];  }}
+    if [SchemePremises/Proposition] 
+    { 
+       <b { "provided"; }
+       <div 
+       { 
+          @class="add"; 
+	  andlist(#elems=`SchemePremises/Proposition`); 
+       } 
+    }
+    if [not($generate_items>0)]
+    {
+       apply[*[position() = last() - 1]];
+    }
+  }
+}
 
 
 //   ( ( CorrectnessCondition*, elCorrectness?,
@@ -2876,7 +3043,7 @@ tpl [Definition]
        { 
           $cnt1 = `1 + count(preceding-sibling::Definition[@nr])`;
 	  $defnr = `../following-sibling::Definiens[position() = $cnt1]/@defnr`;
-// <xsl:document href="items/{$anamelc}/dfs_{$defnr}" format="html">
+// <xsl:document href="proofhtml/dfs/{$anamelc}.{$defnr}" format="html">
           dfs();
 // </xsl:document>
           $bogus = `1`;
@@ -2923,14 +3090,7 @@ tpl dfs()
 	  // since Constructor may be missing for redefinitions.
           for-each [../following-sibling::Definiens[position() = $cnt1]] 
 	  {
-	     if [Typ] 
-	     {
-	        <b { "let "; } 
-		ploci(#nr = "1"); 
-		" be "; 
-		alist(#j = "1", #sep1 = ", ", #sep2 = " be ", #elems = `Typ`); 
-		";"; <br; 
-	     } 
+	     argtypes(#el=`Typ`);
           }
        }
 
@@ -3199,14 +3359,16 @@ tpl [Theorem]
 }
 
 // now used only when #mml=1 - in article the block has them
-tpl [ArgTypes] 
+tpl [ArgTypes] { argtypes(#el = `*`); }
+
+tpl argtypes(#el)
 { 
-   if [*] 
+   if [$el] 
    { 
       <b { "let "; } 
       ploci(#nr="1");
       " be "; 
-      alist(#j="1", #sep1=", ", #sep2=" be ", #elems=`*`); 
+      alist(#j="1", #sep1=", ", #sep2=" be ", #elems=`$el`); 
       ";"; <br; 
    }
 }
@@ -3354,13 +3516,16 @@ tpl [Pattern] {}
 // Default
 tpl [/] { if [$generate_items = "1"] { 
     apply[/*/JustifiedTheorem|/*/DefTheorem|/*/SchemeBlock];
-    apply[//RCluster|//CCluster|//FCluster|//Definition];
-   for-each [/*/Proposition] {
-// <xsl:document href="items/{$anamelc}/lemma_{@propnr}" format="html">
+    apply[//RCluster|//CCluster|//FCluster|//Definition|//IdentifyWithExp];
+// top-level lemmas
+   for-each [/*/Proposition] 
+   {
+// <xsl:document href="proofhtml/lemma/{$anamelc}.{@propnr}" format="html">
 apply[`.`];
 // </xsl:document>
    $bogus=`1`;
-} }
+   } 
+}
 
 else { <html { 
 

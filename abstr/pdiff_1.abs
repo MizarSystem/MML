@@ -1,0 +1,433 @@
+:: Partial Differentiation on Normed Linear Spaces $ {\cal R}^n$
+::  by Noboru Endou , Yasunari Shidama and Keiichi Miyajima
+:: 
+:: Received June 6, 2007
+:: Copyright (c) 2007 Association of Mizar Users
+
+environ
+
+ vocabularies PRE_TOPC, RLVECT_1, FUNCT_1, ARYTM, ARYTM_1, FINSEQ_1, FINSEQ_2,
+      FINSEQ_7, RVSUM_1, RELAT_1, COMPLEX1, ABSVALUE, LATTICES, SQUARE_1,
+      ORDINAL2, SEQ_1, SEQ_2, RCOMP_1, BOOLE, FINSEQ_4, PARTFUN1, NORMSP_1,
+      LOPBAN_1, FDIFF_1, PDIFF_1, REAL_NS1, SGRAPH1, SUPINF_1, BORSUK_1;
+ notations TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, RELSET_1, PARTFUN1,
+      FUNCT_2, RFUNCT_2, PRE_TOPC, STRUCT_0, PARTFUN2, XCMPLX_0, XREAL_0,
+      COMPLEX1, ORDINAL1, NUMBERS, REAL_1, FINSEQ_4, RLVECT_1, SEQ_1, SEQ_2,
+      RVSUM_1, FINSEQ_1, FINSEQ_2, FINSEQ_7, SQUARE_1, RCOMP_1, VFUNCT_1,
+      NORMSP_1, EUCLID, LOPBAN_1, NFCONT_1, FDIFF_1, NDIFF_1, REAL_NS1,
+      XXREAL_0, EXTREAL1, SUPINF_1;
+ constructors REAL_1, SQUARE_1, RSSPACE3, SEQ_2, PARTFUN1, PARTFUN2, RFUNCT_2,
+      FINSEQ_7, VFUNCT_1, COMPLEX1, REVROT_1, NFCONT_1, RCOMP_1, FDIFF_1,
+      NDIFF_1, REAL_NS1, EXTREAL1, RELAT_1, FUNCT_1, FINSEQ_1, XBOOLE_0;
+ registrations RELSET_1, STRUCT_0, ORDINAL1, XREAL_0, MEMBERED, LOPBAN_1,
+      FDIFF_1, NDIFF_1, FUNCT_1, FUNCT_2, NAT_1, REAL_NS1, RVSUM_1, SEQ_1,
+      NUMBERS, XBOOLE_0, XXREAL_0, FINSEQ_1;
+ requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
+
+
+begin :: Preliminaries
+
+definition let i,n be Element of NAT;
+  func proj(i,n) -> Function of REAL n,REAL means
+:: PDIFF_1:def 1
+    for x be Element of REAL n holds it.x=x.i;
+end;
+
+theorem :: PDIFF_1:1
+dom proj(1,1) = REAL 1 & rng proj(1,1) = REAL &
+for x be Element of REAL holds proj(1,1).<*x*> = x & proj(1,1)".x = <*x*>;
+
+theorem :: PDIFF_1:2
+proj(1,1)" is Function of REAL,REAL 1 & proj(1,1)" is one-to-one &
+dom(proj(1,1)") = REAL & rng(proj(1,1)") = REAL 1 &
+ex g be Function of REAL,REAL 1 st g is bijective & proj(1,1)" = g;
+
+registration
+  cluster proj(1,1) -> bijective;
+end;
+
+definition
+  let g be PartFunc of REAL,REAL;
+  func <>*g -> PartFunc of REAL 1,REAL 1 equals
+:: PDIFF_1:def 2
+    proj(1,1)"*g*proj(1,1);
+end;
+
+definition
+  let n be Element of NAT;
+  let g be PartFunc of REAL n,REAL;
+  func <>*g -> PartFunc of REAL n,REAL 1 equals
+:: PDIFF_1:def 3
+    proj(1,1)"*g;
+end;
+
+definition let i,n be Element of NAT;
+  func Proj(i,n) -> Function of REAL-NS n,REAL-NS 1 means
+:: PDIFF_1:def 4
+   for x be Point of REAL-NS n holds it.x=<* proj(i,n).x *>;
+end;
+
+definition
+ let i be Element of NAT;
+ let x be FinSequence of REAL;
+ func reproj(i,x) -> Function means
+:: PDIFF_1:def 5
+   dom it = REAL & for r be Element of REAL holds it.r = Replace(x,i,r);
+end;
+
+definition
+  let n,i be Element of NAT;
+  let x be Element of REAL n;
+redefine func reproj(i,x) -> Function of REAL,REAL n;
+end;
+
+definition
+  let n,i be Element of NAT;
+  let x be Point of REAL-NS n;
+  func reproj(i,x) -> Function of REAL-NS 1,REAL-NS n means
+:: PDIFF_1:def 6
+   for r be Element of REAL-NS 1
+    ex q be Element of REAL, y be Element of REAL n st
+      r=<*q*> & y=x & it.r = reproj(i,y).q;
+end;
+
+definition
+  let m,n be non empty Element of NAT;
+  let f be PartFunc of REAL m,REAL n;
+  let x be Element of REAL m;
+  pred f is_differentiable_in x means
+:: PDIFF_1:def 7
+   ex g be PartFunc of REAL-NS m,REAL-NS n, y be Point of REAL-NS m st
+    f=g & x=y & g is_differentiable_in y;
+end;
+
+definition
+  let m,n be non empty Element of NAT;
+  let f be PartFunc of REAL m,REAL n;
+  let x be Element of REAL m;
+  assume  f is_differentiable_in x;
+  func diff(f,x) -> Function of REAL m, REAL n means
+:: PDIFF_1:def 8
+   ex g be PartFunc of REAL-NS m,REAL-NS n, y be Point of REAL-NS m st
+    f=g & x=y & it = diff(g,y);
+end;
+
+theorem :: PDIFF_1:3
+for I be Function of REAL,REAL 1 st I=proj(1,1)" holds
+ (for x be VECTOR of REAL-NS 1, y be Element of REAL st x=I.y holds
+   ||.x.|| = abs y) &
+ (for x,y be VECTOR of REAL-NS 1, a,b be Element of REAL st x=I.a & y=I.b holds
+   x+y = I.(a+b)) &
+ (for x be VECTOR of REAL-NS 1, y be Element of REAL, a be Real st x=I.y holds
+   a*x = I.(a*y)) &
+ (for x be VECTOR of REAL-NS 1, a be Element of REAL st x=I.a holds
+   -x = I.(-a)) &
+ (for x,y be VECTOR of REAL-NS 1, a,b be Element of REAL st x=I.a & y=I.b holds
+   x-y =I.(a-b));
+
+theorem :: PDIFF_1:4
+for J be Function of REAL 1,REAL st J=proj(1,1) holds
+ (for x be VECTOR of REAL-NS 1, y be Element of REAL st J.x=y
+      holds ||.x.|| = abs y) &
+ (for x,y be VECTOR of REAL-NS 1, a,b be Element of REAL st J.x=a & J.y=b
+      holds J.(x+y) = a+b) &
+ (for x be VECTOR of REAL-NS 1, y be Element of REAL, a be Real st J.x=y
+      holds J.(a*x) = a*y) &
+ (for x be VECTOR of REAL-NS 1, a be Element of REAL st J.x=a
+      holds J.(-x) = -a) &
+ (for x,y be VECTOR of REAL-NS 1, a,b be Element of REAL st J.x=a & J.y=b
+      holds J.(x-y) = a-b);
+
+theorem :: PDIFF_1:5
+for I be Function of REAL,REAL 1, J be Function of REAL 1,REAL st
+ I=proj(1,1)" & J=proj(1,1) holds
+  (for R being REST of REAL-NS 1,REAL-NS 1 holds J*R*I is REST) &
+  (for L being LinearOperator of REAL-NS 1,REAL-NS 1 holds J*L*I is LINEAR);
+
+theorem :: PDIFF_1:6
+for I be Function of REAL,REAL 1, J be Function of REAL 1,REAL st
+ I=proj(1,1)" & J=proj(1,1) holds
+  (for R being REST holds I*R*J is REST of REAL-NS 1,REAL-NS 1) &
+  (for L being LINEAR holds
+    I*L*J is bounded LinearOperator of REAL-NS 1,REAL-NS 1);
+
+ reserve f for PartFunc of REAL-NS 1,REAL-NS 1;
+ reserve g for PartFunc of REAL,REAL;
+ reserve x for Point of REAL-NS 1;
+ reserve y for Element of REAL;
+
+theorem :: PDIFF_1:7
+f=<>*g& x=<*y*> & f is_differentiable_in x implies
+ g is_differentiable_in y & diff(g,y)=(proj(1,1)*diff(f,x)*proj(1,1)").1;
+
+theorem :: PDIFF_1:8
+f=<>*g & x=<*y*> & g is_differentiable_in y implies
+ f is_differentiable_in x & diff(f,x).<*1*> =<*diff(g,y)*>;
+
+theorem :: PDIFF_1:9
+f=<>*g & x=<*y*> implies
+(f is_differentiable_in x iff g is_differentiable_in y);
+
+theorem :: PDIFF_1:10
+f=<>*g & x=<*y*> & f is_differentiable_in x implies
+ diff(f,x).<*1*>=<*diff(g,y)*>;
+
+begin :: Partial Differentiation
+
+ reserve m,n for non empty Element of NAT;
+ reserve i,j for Element of NAT;
+ reserve f for PartFunc of REAL-NS n,REAL-NS 1;
+ reserve g for PartFunc of REAL n,REAL;
+ reserve x for Point of REAL-NS n;
+ reserve y for Element of REAL n;
+
+definition
+  let n,m be non empty Element of NAT;
+  let i be Element of NAT;
+  let f be PartFunc of REAL-NS m,REAL-NS n;
+  let x be Point of REAL-NS m;
+  pred f is_partial_differentiable_in x,i means
+:: PDIFF_1:def 9
+    f*reproj(i,x) is_differentiable_in Proj(i,m).x;
+end;
+
+definition
+  let m,n be non empty Element of NAT;
+  let i be Element of NAT;
+  let f be PartFunc of REAL-NS m, REAL-NS n;
+  let x be Point of REAL-NS m;
+  func partdiff(f,x,i) ->
+  Point of R_NormSpace_of_BoundedLinearOperators(REAL-NS 1,REAL-NS n) equals
+:: PDIFF_1:def 10
+    diff(f*reproj(i,x),Proj(i,m).x);
+end;
+
+definition
+  let n be non empty Element of NAT;
+  let i be Element of NAT;
+  let f be PartFunc of REAL n,REAL;
+  let x be Element of REAL n;
+  pred f is_partial_differentiable_in x,i means
+:: PDIFF_1:def 11
+    f*reproj(i,x) is_differentiable_in proj(i,n).x;
+end;
+
+definition
+  let n be non empty Element of NAT;
+  let i be Element of NAT;
+  let f be PartFunc of REAL n,REAL;
+  let x be Element of REAL n;
+  func partdiff(f,x,i) -> real number equals
+:: PDIFF_1:def 12
+    diff(f*reproj(i,x),proj(i,n).x);
+end;
+
+theorem :: PDIFF_1:11
+Proj(i,n)=proj(1,1)"*proj(i,n);
+
+theorem :: PDIFF_1:12
+x = y implies reproj(i,y)*proj(1,1)=reproj(i,x);
+
+theorem :: PDIFF_1:13
+f=<>*g & x=y implies <>*(g*reproj(i,y)) = f*reproj(i,x);
+
+theorem :: PDIFF_1:14
+f=<>*g & x=y implies
+ (f is_partial_differentiable_in x,i iff g is_partial_differentiable_in y,i);
+
+theorem :: PDIFF_1:15
+  f = <>*g & x = y & f is_partial_differentiable_in x,i implies
+    partdiff(f,x,i).<*1*> = <*partdiff(g,y,i)*>;
+
+definition
+  let m,n be non empty Element of NAT;
+  let i be Element of NAT;
+  let f be PartFunc of REAL m,REAL n;
+  let x be Element of REAL m;
+  pred f is_partial_differentiable_in x,i means
+:: PDIFF_1:def 13
+   ex g be PartFunc of REAL-NS m,REAL-NS n, y be Point of REAL-NS m st
+    f=g & x=y & g is_partial_differentiable_in y,i;
+end;
+
+definition
+  let m,n be non empty Element of NAT;
+  let i be Element of NAT;
+  let f be PartFunc of REAL m,REAL n;
+  let x be Element of REAL m;
+  assume  f is_partial_differentiable_in x,i;
+  func partdiff(f,x,i) -> Element of REAL n means
+:: PDIFF_1:def 14
+   ex g be PartFunc of REAL-NS m,REAL-NS n, y be Point of REAL-NS m st
+    f=g & x=y & it = partdiff(g,y,i).<*1*>;
+end;
+
+theorem :: PDIFF_1:16
+for m,n be non empty Element of NAT,
+    F be PartFunc of REAL-NS m,REAL-NS n, G be PartFunc of REAL m,REAL n,
+    x be Point of REAL-NS m, y be Element of REAL m st
+F = G & x = y holds
+ F is_partial_differentiable_in x,i iff G is_partial_differentiable_in y,i;
+
+theorem :: PDIFF_1:17
+for m,n be non empty Element of NAT,
+    F be PartFunc of REAL-NS m,REAL-NS n, G be PartFunc of REAL m,REAL n,
+    x be Point of REAL-NS m, y be Element of REAL m st
+F=G & x=y & F is_partial_differentiable_in x,i holds
+ partdiff(F,x,i).<*1*> = partdiff(G,y,i);
+
+theorem :: PDIFF_1:18
+for g1 be PartFunc of REAL n,REAL 1 holds
+g1 = <>*g implies
+ (g1 is_partial_differentiable_in y,i iff g is_partial_differentiable_in y,i);
+
+theorem :: PDIFF_1:19
+for g1 be PartFunc of REAL n,REAL 1 st
+g1 = <>*g & g1 is_partial_differentiable_in y,i holds
+  partdiff(g1,y,i) = <*partdiff(g,y,i)*>;
+
+begin :: Linearity of Partial Differential Operator
+
+ reserve X for set;
+ reserve r for Real;
+ reserve f,f1,f2 for PartFunc of REAL-NS m,REAL-NS n;
+ reserve g,g1,g2 for PartFunc of REAL n,REAL;
+ reserve h for PartFunc of REAL m,REAL n;
+ reserve x for Point of REAL-NS m;
+ reserve y for Element of REAL n;
+ reserve z for Element of REAL m;
+
+definition
+  let m,n be non empty Element of NAT;
+  let i,j be Element of NAT;
+  let f be PartFunc of REAL-NS m,REAL-NS n;
+  let x be Point of REAL-NS m;
+  pred f is_partial_differentiable_in x,i,j means
+:: PDIFF_1:def 15
+    Proj(j,n)*f*reproj(i,x) is_differentiable_in Proj(i,m).x;
+end;
+
+definition
+  let m,n be non empty Element of NAT;
+  let i,j be Element of NAT;
+  let f be PartFunc of REAL-NS m,REAL-NS n;
+  let x be Point of REAL-NS m;
+  func partdiff(f,x,i,j) ->
+    Point of R_NormSpace_of_BoundedLinearOperators(REAL-NS 1,REAL-NS 1) equals
+:: PDIFF_1:def 16
+    diff(Proj(j,n)*f*reproj(i,x),Proj(i,m).x);
+end;
+
+definition
+  let m,n be non empty Element of NAT;
+  let i,j be Element of NAT;
+  let h be PartFunc of REAL m,REAL n;
+  let z be Element of REAL m;
+  pred h is_partial_differentiable_in z,i,j means
+:: PDIFF_1:def 17
+    proj(j,n)*h*reproj(i,z) is_differentiable_in proj(i,m).z;
+end;
+
+definition
+  let m,n be non empty Element of NAT;
+  let i,j be Element of NAT;
+  let h be PartFunc of REAL m,REAL n;
+  let z be Element of REAL m;
+  func partdiff(h,z,i,j) -> real number equals
+:: PDIFF_1:def 18
+    diff(proj(j,n)*h*reproj(i,z),proj(i,m).z);
+end;
+
+theorem :: PDIFF_1:20
+for m,n be non empty Element of NAT,
+    F be PartFunc of REAL-NS m,REAL-NS n, G be PartFunc of REAL m,REAL n,
+    x be Point of REAL-NS m, y be Element of REAL m st
+F=G & x=y holds F is_differentiable_in x iff G is_differentiable_in y;
+
+theorem :: PDIFF_1:21
+for m,n be non empty Element of NAT,
+    F be PartFunc of REAL-NS m,REAL-NS n, G be PartFunc of REAL m,REAL n,
+    x be Point of REAL-NS m, y be Element of REAL m st
+F=G & x=y & F is_differentiable_in x holds diff(F,x)=diff(G,y);
+
+theorem :: PDIFF_1:22
+f=h & x=z implies Proj(j,n)*f*reproj(i,x) = <>*(proj(j,n)*h*reproj(i,z));
+
+theorem :: PDIFF_1:23
+f = h & x = z implies
+ (f is_partial_differentiable_in x,i,j
+   iff h is_partial_differentiable_in z,i,j);
+
+theorem :: PDIFF_1:24
+f=h & x=z & f is_partial_differentiable_in x,i,j implies
+ partdiff(f,x,i,j).<*1*> = <*partdiff(h,z,i,j)*>;
+
+definition
+  let m,n be non empty Element of NAT;
+  let i be Element of NAT;
+  let f be PartFunc of REAL-NS m,REAL-NS n;
+  let X be set;
+  pred f is_partial_differentiable_on X,i means
+:: PDIFF_1:def 19
+    X c=dom f &
+    for x be Point of REAL-NS m st x in X holds
+    f|X is_partial_differentiable_in x,i;
+end;
+
+theorem :: PDIFF_1:25
+  f is_partial_differentiable_on X,i implies X is Subset of REAL-NS m;
+
+definition
+let m,n be non empty Element of NAT;
+let i be Element of NAT;
+let f be PartFunc of REAL-NS m,REAL-NS n;
+let X;
+assume f is_partial_differentiable_on X,i;
+ func f `partial|(X,i) -> PartFunc of
+  REAL-NS m,R_NormSpace_of_BoundedLinearOperators(REAL-NS 1,REAL-NS n) means
+:: PDIFF_1:def 20
+  dom it = X &
+  for x be Point of REAL-NS m st x in X holds it/.x = partdiff(f,x,i);
+end;
+
+theorem :: PDIFF_1:26
+(f1+f2)*reproj(i,x) = f1*reproj(i,x)+f2*reproj(i,x) &
+(f1-f2)*reproj(i,x) = f1*reproj(i,x)-f2*reproj(i,x);
+
+theorem :: PDIFF_1:27
+r(#)(f*reproj(i,x)) = (r(#)f)*reproj(i,x);
+
+theorem :: PDIFF_1:28
+f1 is_partial_differentiable_in x,i & f2 is_partial_differentiable_in x,i
+ implies
+  f1+f2 is_partial_differentiable_in x,i &
+        partdiff(f1+f2,x,i)=partdiff(f1,x,i)+partdiff(f2,x,i);
+
+theorem :: PDIFF_1:29
+g1 is_partial_differentiable_in y,i & g2 is_partial_differentiable_in y,i
+implies
+ g1+g2 is_partial_differentiable_in y,i &
+ partdiff(g1+g2,y,i) = partdiff(g1,y,i) + partdiff(g2,y,i);
+
+theorem :: PDIFF_1:30
+f1 is_partial_differentiable_in x,i & f2 is_partial_differentiable_in x,i
+implies
+ f1-f2 is_partial_differentiable_in x,i &
+ partdiff(f1-f2,x,i)=partdiff(f1,x,i)-partdiff(f2,x,i);
+
+theorem :: PDIFF_1:31
+g1 is_partial_differentiable_in y,i & g2 is_partial_differentiable_in y,i
+implies
+  g1-g2 is_partial_differentiable_in y,i &
+  partdiff(g1-g2,y,i)=partdiff(g1,y,i)-partdiff(g2,y,i);
+
+theorem :: PDIFF_1:32
+f is_partial_differentiable_in x,i implies
+ r(#)f is_partial_differentiable_in x,i &
+ partdiff((r(#)f),x,i) = r*partdiff(f,x,i);
+
+theorem :: PDIFF_1:33
+g is_partial_differentiable_in y,i implies
+  r(#)g is_partial_differentiable_in y,i &
+  partdiff(r(#)g,y,i) = r*partdiff(g,y,i);
+

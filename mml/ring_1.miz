@@ -12,15 +12,15 @@ environ
       WAYBEL20, PARTFUN1, ORDERS_2, WELLORD2, WELLORD1, TARSKI, NAT_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, SETWISEO, RELAT_1, RELSET_1, FUNCT_1,
       PARTFUN1, ALG_1, RELAT_2, EQREL_1, WELLORD1, WELLORD2, ORDERS_1, BINOP_1,
-      DOMAIN_1, STRUCT_0, PRE_TOPC, GROUP_1, RLVECT_1, VECTSP_1, VECTSP_2,
-      FUNCSDOM, IDEAL_1;
- constructors WELLORD1, WELLORD2, DOMAIN_1, BINOP_1, SETWISEO, ORDERS_1,
-      EQREL_1, PRE_TOPC, GCD_1, IDEAL_1, NAT_D;
- registrations RELSET_1, ALGSTR_1, GCD_1, STRUCT_0, IDEAL_1, PRE_TOPC,
-      PARTFUN1, EQREL_1, GROUP_1, FINSET_1, FINSUB_1, ORDINAL1, QUOFIELD;
+      DOMAIN_1, STRUCT_0, GROUP_1, RLVECT_1, VECTSP_1, VECTSP_2, FUNCSDOM,
+      IDEAL_1;
+ constructors WELLORD1, WELLORD2, BINOP_1, SETWISEO, ORDERS_1, EQREL_1, GCD_1,
+      IDEAL_1;
+ registrations XBOOLE_0, SUBSET_1, RELSET_1, FINSUB_1, EQREL_1, STRUCT_0,
+      VECTSP_1, ALGSTR_1, QUOFIELD, IDEAL_1;
  requirements BOOLE, SUBSET;
- definitions TARSKI, XBOOLE_0, RELAT_1, RLVECT_1, GROUP_1, VECTSP_1,
-      VECTSP_2, IDEAL_1, ORDERS_1, RELAT_2, WELLORD1, STRUCT_0;
+ definitions TARSKI, XBOOLE_0, RELAT_1, RLVECT_1, GROUP_1, VECTSP_1, VECTSP_2,
+      IDEAL_1, ORDERS_1, RELAT_2, WELLORD1, STRUCT_0;
  theorems VECTSP_1, TARSKI, FUNCT_1, RLVECT_1, VECTSP_2, XBOOLE_0, FUNCT_2,
       BINOP_1, ZFMISC_1, GROUP_1, IDEAL_1, RELAT_1, EQREL_1, SETWISEO,
       ORDERS_1, WELLORD2, RELAT_2, STRUCT_0;
@@ -454,7 +454,6 @@ begin :: Quotient Ring
 
 definition
   let R be Ring, I be Ideal of R;
-X: 1.R = 1_R by VECTSP_1:96;
   func QuotientRing(R,I) -> strict doubleLoopStr means
   :Def6:
   the carrier of it = Class EqRel(R,I) &
@@ -512,7 +511,7 @@ A12: for a,b being Element of A holds R[a,b,h.(a,b)] from BINOP_1:sch 3(A7);
     reconsider u = Class(EqRel(R,I),1_R) as Element of A by EQREL_1:def 5;
     reconsider z = Class(EqRel(R,I),0.R) as Element of A by EQREL_1:def 5;
     take G = doubleLoopStr(#A,g,h,u,z#);
-    thus thesis by A6,A12,X;
+    thus thesis by A6,A12;
   end;
   uniqueness
   proof
@@ -677,17 +676,6 @@ A8: (a-1_R)*b = a*b-1_R*b by VECTSP_1:45
     .= h by A3,A8,A7,Th6;
   end;
 
-Lm3:
-  now
-    let R be Ring, I be Ideal of R;
-X: 1.R = 1_R by VECTSP_1:96;
-    thus R/I is well-unital
-    proof let x be Element of R/I;
-      1.(R/I) = Class(EqRel(R,I),1.R) by Def6;
-      hence thesis by Lm2,X;
-    end;
-  end;
-
 theorem Th15:
   Class(EqRel(R,I),1.R) = 1.(R/I) by Def6;
 
@@ -697,106 +685,106 @@ registration
   associative well-unital distributive;
   coherence
   proof
-X: 1.R = 1_R by VECTSP_1:96;
+A1: 1.R = 1_R;
     set E = EqRel(R,I);
     set g = the add of R/I;
     hereby
       let x, y be Element of R/I;
       consider a being Element of R such that
-A1:   x = Class(E,a) by Th11;
+A2:   x = Class(E,a) by Th11;
       consider b being Element of R such that
-A2:   y = Class(E,b) by Th11;
-      thus x + y = Class(E,a+b) by A1,A2,Th13
-      .= y + x by A1,A2,Th13;
+A3:   y = Class(E,b) by Th11;
+      thus x + y = Class(E,a+b) by A2,A3,Th13
+      .= y + x by A2,A3,Th13;
     end;
     hereby
       let x, y, z be Element of R/I;
       consider a being Element of R such that
-A3:   x = Class(E,a) by Th11;
+A4:   x = Class(E,a) by Th11;
       consider b being Element of R such that
-A4:   y = Class(E,b) by Th11;
+A5:   y = Class(E,b) by Th11;
       consider c being Element of R such that
-A5:   z = Class(E,c) by Th11;
+A6:   z = Class(E,c) by Th11;
       consider ab being Element of R such that
-A6:   x+y = Class(E,ab) by Th11;
+A7:   x+y = Class(E,ab) by Th11;
       consider bc being Element of R such that
-A7:   y+z = Class(E,bc) by Th11;
-      x+y = Class(E,a+b) by A3,A4,Th13;
+A8:   y+z = Class(E,bc) by Th11;
+      x+y = Class(E,a+b) by A4,A5,Th13;
       then
-A8:   ab-(a+b) in I by A6,Th6;
-      y+z = Class(E,b+c) by A4,A5,Th13;
-      then bc-(b+c) in I by A7,Th6;
+A9:   ab-(a+b) in I by A7,Th6;
+      y+z = Class(E,b+c) by A5,A6,Th13;
+      then bc-(b+c) in I by A8,Th6;
       then
-A9:   ab-(a+b)-(bc-(b+c)) in I by A8,IDEAL_1:15;
-A10:   ab-(a+b)-(bc-(b+c)) = ab-(a+b)-bc+(b+c) by RLVECT_1:43
+A10:   ab-(a+b)-(bc-(b+c)) in I by A9,IDEAL_1:15;
+A11:   ab-(a+b)-(bc-(b+c)) = ab-(a+b)-bc+(b+c) by RLVECT_1:43
       .= ab-(a+b)+(b+c)-bc by RLVECT_1:42
       .= ab-a-b+(b+c)-bc by RLVECT_1:41
       .= ab-a-b+b+c-bc by RLVECT_1:def 6
       .= ab-a+c-bc by Th1
       .= ab+c-a-bc by RLVECT_1:42
       .= ab+c-(a+bc) by RLVECT_1:41;
-      thus (x+y)+z = Class(E,ab+c) by A5,A6,Th13
-      .= Class(E,a+bc) by A10,A9,Th6
-      .= x+(y+z) by A3,A7,Th13;
+      thus (x+y)+z = Class(E,ab+c) by A6,A7,Th13
+      .= Class(E,a+bc) by A11,A10,Th6
+      .= x+(y+z) by A4,A8,Th13;
     end;
     hereby
       let v be Element of R/I;
       consider a, b being Element of R such that
-A11:   v = Class(E,a) & 0.(R/I) = Class(E,b) and
-A12:   g.(v,0.(R/I)) = Class(E,a+b) by Def6;
+A12:   v = Class(E,a) & 0.(R/I) = Class(E,b) and
+A13:   g.(v,0.(R/I)) = Class(E,a+b) by Def6;
       0.(R/I) = Class(E,0.R) by Def6;
       then
-A13:   b-0.R in I by A11,Th6;
-A14:   b-0.R = b by RLVECT_1:26;
-A15:   a+b-a = a-a+b by RLVECT_1:42
+A14:   b-0.R in I by A12,Th6;
+A15:   b-0.R = b by RLVECT_1:26;
+A16:   a+b-a = a-a+b by RLVECT_1:42
       .= 0.R+b by RLVECT_1:28
       .= b by RLVECT_1:def 7;
-      thus v + 0.(R/I) = v by A11,A12,A15,A14,A13,Th6;
+      thus v + 0.(R/I) = v by A12,A13,A16,A15,A14,Th6;
     end;
     hereby
       let v be Element of R/I;
       consider a, b being Element of R such that
-A16:   v = Class(E,a) & 0.(R/I) = Class(E,b) and
+A17:   v = Class(E,a) & 0.(R/I) = Class(E,b) and
       g.(v,0.(R/I)) = Class(E,a+b) by Def6;
       reconsider w = Class(E,-a) as Element of R/I by Th12;
       take w;
-A17:   0.(R/I) = Class(E,0.R) by Def6;
-      thus v + w = Class(E,a+-a) by A16,Th13
-      .= 0.(R/I) by A17,RLVECT_1:def 10;
+A18:   0.(R/I) = Class(E,0.R) by Def6;
+      thus v + w = Class(E,a+-a) by A17,Th13
+      .= 0.(R/I) by A18,RLVECT_1:def 10;
     end;
     hereby
       let x, y, z be Element of R/I;
       consider a being Element of R such that
-A18:   x = Class(E,a) by Th11;
+A19:   x = Class(E,a) by Th11;
       consider b being Element of R such that
-A19:   y = Class(E,b) by Th11;
+A20:   y = Class(E,b) by Th11;
       consider c being Element of R such that
-A20:   z = Class(E,c) by Th11;
+A21:   z = Class(E,c) by Th11;
       consider ab being Element of R such that
-A21:   x*y = Class(E,ab) by Th11;
+A22:   x*y = Class(E,ab) by Th11;
       consider bc being Element of R such that
-A22:   y*z = Class(E,bc) by Th11;
-      x*y = Class(E,a*b) by A18,A19,Th14;
-      then ab - a*b in I by A21,Th6;
+A23:   y*z = Class(E,bc) by Th11;
+      x*y = Class(E,a*b) by A19,A20,Th14;
+      then ab - a*b in I by A22,Th6;
       then
-A23:   (ab - a*b)*c in I by IDEAL_1:def 3;
-      y*z = Class(E,b*c) by A19,A20,Th14;
-      then bc - b*c in I by A22,Th6;
+A24:   (ab - a*b)*c in I by IDEAL_1:def 3;
+      y*z = Class(E,b*c) by A20,A21,Th14;
+      then bc - b*c in I by A23,Th6;
       then
-A24:   a*(bc - b*c) in I by IDEAL_1:def 2;
-A25:   (ab - a*b)*c = ab*c - a*b*c by VECTSP_1:45;
-A26:  a*(bc - b*c) = a*bc - a*(b*c) by VECTSP_1:43;
-A27:  a*(b*c) = a*b*c by GROUP_1:def 4;
+A25:   a*(bc - b*c) in I by IDEAL_1:def 2;
+A26:   (ab - a*b)*c = ab*c - a*b*c by VECTSP_1:45;
+A27:  a*(bc - b*c) = a*bc - a*(b*c) by VECTSP_1:43;
+A28:  a*(b*c) = a*b*c by GROUP_1:def 4;
       ab*c - a*b*c - (a*bc - a*b*c) = ab*c - a*bc by Th3;
       then
-A28:   ab*c - a*bc in I by A23,A24,A25,A26,A27,IDEAL_1:15;
-      thus (x*y)*z = Class(E,ab*c) by A20,A21,Th14
-      .= Class(E,a*bc) by A28,Th6
-      .= x*(y*z) by A18,A22,Th14;
+A29:   ab*c - a*bc in I by A24,A25,A26,A27,A28,IDEAL_1:15;
+      thus (x*y)*z = Class(E,ab*c) by A21,A22,Th14
+      .= Class(E,a*bc) by A29,Th6
+      .= x*(y*z) by A19,A23,Th14;
     end;
-A29: Class(E,1.R) = 1.(R/I) by Th15;
+ Class(E,1.R) = 1.(R/I) by Th15;
     hence for x being Element of R/I holds x*1.(R/I) = x
-      & 1.(R/I)*x = x by Lm2,X,A29;
+      & 1.(R/I)*x = x by Lm2,A1;
 ::    thus for x being Element of R/I holds x * 1.(R/I) = x by A29,Lm2,X;
     let x, y, z be Element of R/I;
     consider a being Element of R such that
@@ -891,24 +879,24 @@ theorem Th16:
   I is proper iff R/I is non degenerated
   proof
     set E = EqRel(R,I);
-X: 1.R = 1_R by VECTSP_1:96;
-A1: 0.(R/I) = Class(E,0.R) by Def6;
-A2: 1.(R/I) = Class(E,1.R) by Th15;
-A3: 1.R-0.R = 1.R by RLVECT_1:26;
+A1: 1.R = 1_R;
+A2: 0.(R/I) = Class(E,0.R) by Def6;
+A3: 1.(R/I) = Class(E,1.R) by Th15;
+A4: 1.R-0.R = 1.R by RLVECT_1:26;
     thus I is proper implies R/I is non degenerated
     proof
       assume that
-A4:   I is proper and
-A5:   0.(R/I) = 1.(R/I);
-      1.R-0.R in I by A5,A1,A2,Th6;
-      hence thesis by A4,A3,IDEAL_1:19,X;
+A5:   I is proper and
+A6:   0.(R/I) = 1.(R/I);
+      1.R-0.R in I by A6,A2,A3,Th6;
+      hence thesis by A5,A4,IDEAL_1:19,A1;
     end;
     assume
-A6: R/I is non degenerated;
+A7: R/I is non degenerated;
     assume not I is proper;
-    then 1.R in I by IDEAL_1:19,X;
-    then Class(E,1.R) = Class(E,0.R) by A3,Th6;
-    hence thesis by A1,A2,A6,STRUCT_0:def 8;
+    then 1.R in I by IDEAL_1:19,A1;
+    then Class(E,1.R) = Class(E,0.R) by A4,Th6;
+    hence thesis by A2,A3,A7,STRUCT_0:def 8;
   end;
 
 theorem Th17:
@@ -955,12 +943,11 @@ theorem
   proof
     let R be commutative Ring,
     I be Ideal of R;
-X: 1.R = 1_R by VECTSP_1:96;
     thus I is prime implies R/I is domRing
     proof
       assume I is prime;
       then I is quasi-prime proper by Def2;
-      hence thesis by Th17,Th16,X;
+      hence thesis by Th17,Th16;
     end;
     assume R/I is domRing;
     hence I is proper quasi-prime by Th16,Th17;
@@ -969,15 +956,15 @@ X: 1.R = 1_R by VECTSP_1:96;
 theorem Th19:
   R is commutative & I is quasi-maximal implies R/I is Field-like
   proof
-X: 1.R = 1_R by VECTSP_1:96;
+A1: 1.R = 1_R;
     set E = EqRel(R,I);
     assume that
-A1: R is commutative and
-A2: I is quasi-maximal;
+A2: R is commutative and
+A3: I is quasi-maximal;
     let x be Element of R/I such that
-A3: x <> 0.(R/I);
+A4: x <> 0.(R/I);
     consider a being Element of R such that
-A4: x = Class(E,a) by Th11;
+A5: x = Class(E,a) by Th11;
     set M = {a*r+s where r, s is Element of R: s in I};
     M c= the carrier of R
     proof
@@ -987,63 +974,63 @@ A4: x = Class(E,a) by Th11;
       hence thesis;
     end;
     then reconsider M as Subset of R;
-A5: a*1.R+0.R = a+0.R by VECTSP_1:def 13,X
+A6: a*1.R+0.R = a+0.R by VECTSP_1:def 13,A1
     .= a by RLVECT_1:def 7;
     0.R in I by IDEAL_1:2;
     then
-A6: a in M by A5;
-A7: M is add-closed
+A7: a in M by A6;
+A8: M is add-closed
     proof
       let c, d be Element of R;
       assume c in M;
       then consider rc, sc being Element of R such that
-A8:   c = a*rc+sc and
-A9:   sc in I;
+A9:   c = a*rc+sc and
+A10:   sc in I;
       assume d in M;
       then consider rd, sd being Element of R such that
-A10:   d = a*rd+sd and
-A11:   sd in I;
-A12:   sc+sd in I by A9,A11,IDEAL_1:def 1;
+A11:   d = a*rd+sd and
+A12:   sd in I;
+A13:   sc+sd in I by A10,A12,IDEAL_1:def 1;
       a*(rc+rd)+(sc+sd) = a*rc+a*rd+(sc+sd) by VECTSP_1:def 11
       .= a*rc+a*rd+sc+sd by RLVECT_1:def 6
       .= a*rc+sc+a*rd+sd by RLVECT_1:def 6
-      .= c+d by A8,A10,RLVECT_1:def 6;
-      hence c+d in M by A12;
+      .= c+d by A9,A11,RLVECT_1:def 6;
+      hence c+d in M by A13;
     end;
-A13: M is left-ideal
+A14: M is left-ideal
     proof
       let p, x be Element of R;
       assume x in M;
       then consider r, s being Element of R such that
-A14:   x = a*r+s and
-A15:   s in I;
-A16:   p*s in I by A15,IDEAL_1:def 2;
+A15:   x = a*r+s and
+A16:   s in I;
+A17:   p*s in I by A16,IDEAL_1:def 2;
       a*(r*p)+p*s = a*r*p+p*s by GROUP_1:def 4
-      .= a*r*p+s*p by A1,GROUP_1:def 16
-      .= x*p by A14,VECTSP_1:def 12
-      .= p*x by A1,GROUP_1:def 16;
-      hence p*x in M by A16;
+      .= a*r*p+s*p by A2,GROUP_1:def 16
+      .= x*p by A15,VECTSP_1:def 12
+      .= p*x by A2,GROUP_1:def 16;
+      hence p*x in M by A17;
     end;
-A17: M is right-ideal
+A18: M is right-ideal
     proof
       let p, x be Element of R;
       assume x in M;
       then consider r, s being Element of R such that
-A18:   x = a*r+s and
-A19:   s in I;
-A20:   p*s in I by A19,IDEAL_1:def 2;
+A19:   x = a*r+s and
+A20:   s in I;
+A21:   p*s in I by A20,IDEAL_1:def 2;
       a*(r*p)+p*s = a*r*p+p*s by GROUP_1:def 4
-      .= a*r*p+s*p by A1,GROUP_1:def 16
-      .= x*p by A18,VECTSP_1:def 12;
-      hence x*p in M by A20;
+      .= a*r*p+s*p by A2,GROUP_1:def 16
+      .= x*p by A19,VECTSP_1:def 12;
+      hence x*p in M by A21;
     end;
-A21: now
+A22: now
       assume
-A22:   a in I;
+A23:   a in I;
       a-0.R = a by RLVECT_1:26;
-      then Class(E,a) = Class(E,0.R) by A22,Th6
+      then Class(E,a) = Class(E,0.R) by A23,Th6
       .= 0.(R/I) by Def6;
-      hence contradiction by A3,A4;
+      hence contradiction by A4,A5;
     end;
     I c= M
     proof
@@ -1054,55 +1041,55 @@ A22:   a in I;
       .= i by RLVECT_1:def 7;
       hence thesis;
     end;
-    then M is non proper by A6,A21,A2,A17,A7,A13,Def3;
+    then M is non proper by A7,A22,A3,A18,A8,A14,Def3;
     then M = the carrier of R by IDEAL_1:def 5;
     then 1.R in M;
     then consider b, m being Element of R such that
-A23: 1.R = a*b+m and
-A24: m in I;
+A24: 1.R = a*b+m and
+A25: m in I;
     reconsider y = Class(E,b) as Element of R/I by Th12;
     take y;
-A25: m = 1.R-a*b by A23,VECTSP_2:22;
-A26: Class(E,1.R) = 1.(R/I) by Th15;
-    thus x*y = Class(E,a*b) by A4,Th14
-    .= 1.(R/I) by A24,A25,A26,Th6;
+A26: m = 1.R-a*b by A24,VECTSP_2:22;
+A27: Class(E,1.R) = 1.(R/I) by Th15;
+    thus x*y = Class(E,a*b) by A5,Th14
+    .= 1.(R/I) by A25,A26,A27,Th6;
   end;
 
 theorem Th20:
   R/I is Field-like implies I is quasi-maximal
   proof
-X: 1.R = 1_R by VECTSP_1:96;
+A1: 1.R = 1_R;
     set E = EqRel(R,I);
-A1: Class(E,0.R) = 0.(R/I) by Def6;
-A2: Class(E,1.R) = 1.(R/I) by Th15;
+A2: Class(E,0.R) = 0.(R/I) by Def6;
+A3: Class(E,1.R) = 1.(R/I) by Th15;
     assume
-A3: R/I is Field-like;
+A4: R/I is Field-like;
     given J being Ideal of R such that
-A4: I c= J and
-A5: J <> I and
-A6: J is proper;
-    not J c= I by A4,A5,XBOOLE_0:def 10;
+A5: I c= J and
+A6: J <> I and
+A7: J is proper;
+    not J c= I by A5,A6,XBOOLE_0:def 10;
     then consider a being set such that
-A7: a in J and
-A8: not a in I by TARSKI:def 3;
-    reconsider a as Element of R by A7;
+A8: a in J and
+A9: not a in I by TARSKI:def 3;
+    reconsider a as Element of R by A8;
     reconsider x = Class(E,a) as Element of R/I by Th12;
     now
       assume x = 0.(R/I);
-      then a-0.R in I by A1,Th6;
-      hence contradiction by A8,RLVECT_1:26;
+      then a-0.R in I by A2,Th6;
+      hence contradiction by A9,RLVECT_1:26;
     end;
     then consider y being Element of R/I such that
-A9: x*y = 1.(R/I) by A3,VECTSP_1:def 20;
+A10: x*y = 1.(R/I) by A4,VECTSP_1:def 20;
     consider b being Element of R such that
-A10: y = Class(E,b) by Th11;
-    x*y = Class(E,a*b) by A10,Th14;
+A11: y = Class(E,b) by Th11;
+    x*y = Class(E,a*b) by A11,Th14;
     then
-A11: a*b-1.R in I by A2,A9,Th6;
-A12: a*b in J by A7,IDEAL_1:def 3;
+A12: a*b-1.R in I by A3,A10,Th6;
+A13: a*b in J by A8,IDEAL_1:def 3;
     1.R = a*b-(a*b-1.R) by Th2;
-    then 1.R in J by A11,A4,A12,IDEAL_1:15;
-    hence thesis by A6,IDEAL_1:19,X;
+    then 1.R in J by A12,A5,A13,IDEAL_1:15;
+    hence thesis by A7,IDEAL_1:19,A1;
   end;
 
 theorem
@@ -1111,12 +1098,11 @@ theorem
   proof
     let R be commutative Ring,
     I be Ideal of R;
-X: 1.R = 1_R by VECTSP_1:96;
     thus I is maximal implies R/I is Skew-Field
     proof
       assume I is maximal;
       then I is quasi-maximal proper by Def4;
-      hence thesis by Th19,Th16,X;
+      hence thesis by Th19,Th16;
     end;
     assume R/I is Skew-Field;
     hence I is proper quasi-maximal by Th16,Th20;
@@ -1128,7 +1114,6 @@ registration
   coherence
   proof
     let I be Ideal of R;
-X: 1.R = 1_R by VECTSP_1:96;
     assume
 A1: I is proper quasi-maximal;
     then
@@ -1136,7 +1121,7 @@ A2: R/I is Field-like non degenerated by Th16,Th19;
     for A being add-associative right_zeroed right_complementable
     commutative associative well-unital
     distributive Field-like (non empty doubleLoopStr)
-    holds A is domRing-like by X;
+    holds A is domRing-like;
     then R/I is domRing-like by A2;
     hence I is proper quasi-prime by A1,Th17;
   end;
@@ -1149,158 +1134,158 @@ registration
   proof
     set S = {A where A is Ideal of R: A is proper};
     set P = RelIncl S;
-X: 1.R = 1_R by VECTSP_1:96;
-A1: P partially_orders S
+A1: 1.R = 1_R;
+A2: P partially_orders S
     proof
       thus P is_reflexive_in S by WELLORD2:29;
       thus P is_transitive_in S by WELLORD2:30;
       thus P is_antisymmetric_in S by WELLORD2:31;
     end;
-A2: field P = S by WELLORD2:def 1;
+A3: field P = S by WELLORD2:def 1;
     S has_upper_Zorn_property_wrt P
     proof
       let Y be set such that
-A3:   Y c= S and
-A4:   P |_2 Y is_linear-order;
+A4:   Y c= S and
+A5:   P |_2 Y is_linear-order;
       per cases;
       suppose
-A5:     Y is empty;
+A6:     Y is empty;
         take x = {0.R}-Ideal;
         now
           assume x is non proper;
           then
-A6:       x = the carrier of R by IDEAL_1:def 5;
+A7:       x = the carrier of R by IDEAL_1:def 5;
           x = {0.R} by IDEAL_1:47;
-          then 1.R = 0.R by A6,TARSKI:def 1;
+          then 1.R = 0.R by A7,TARSKI:def 1;
           hence contradiction by STRUCT_0:def 8;
         end;
         hence x in S;
-        thus thesis by A5;
+        thus thesis by A6;
       end;
       suppose Y is non empty;
         then consider e being set such that
-A7:     e in Y by XBOOLE_0:def 1;
-        e in S by A3,A7;
+A8:     e in Y by XBOOLE_0:def 1;
+        e in S by A4,A8;
         then consider A being Ideal of R such that
-A8:     e = A and A is proper;
+A9:     e = A and A is proper;
         consider q being set such that
-A9:     q in A by XBOOLE_0:def 1;
+A10:     q in A by XBOOLE_0:def 1;
         take x = union Y;
         x c= the carrier of R
         proof
           let a be set;
           assume a in x;
           then consider Z being set such that
-A10:       a in Z and
-A11:       Z in Y by TARSKI:def 4;
-          Z in S by A3,A11;
+A11:       a in Z and
+A12:       Z in Y by TARSKI:def 4;
+          Z in S by A4,A12;
           then ex A being Ideal of R st Z = A & A is proper;
-          hence thesis by A10;
+          hence thesis by A11;
         end;
         then reconsider B = x as Subset of R;
-A12:     B is non empty by A9,A8,A7,TARSKI:def 4;
-A13:     B is add-closed
+A13:     B is non empty by A10,A9,A8,TARSKI:def 4;
+A14:     B is add-closed
         proof
           let a, b be Element of R;
           assume a in B;
           then consider Aa being set such that
-A14:       a in Aa and
-A15:       Aa in Y by TARSKI:def 4;
+A15:       a in Aa and
+A16:       Aa in Y by TARSKI:def 4;
           assume b in B;
           then consider Ab being set such that
-A16:       b in Ab and
-A17:       Ab in Y by TARSKI:def 4;
-A18:       now
+A17:       b in Ab and
+A18:       Ab in Y by TARSKI:def 4;
+A19:       now
             let A be Ideal of R;
             assume a in A & b in A;
             then
-A19:         a+b in A by IDEAL_1:def 1;
+A20:         a+b in A by IDEAL_1:def 1;
             assume A in Y;
-            hence a+b in B by A19,TARSKI:def 4;
+            hence a+b in B by A20,TARSKI:def 4;
           end;
-          Aa in S by A3,A15;
+          Aa in S by A4,A16;
           then consider Ia being Ideal of R such that
-A20:       Aa = Ia and Ia is proper;
-          Ab in S by A3,A17;
+A21:       Aa = Ia and Ia is proper;
+          Ab in S by A4,A18;
           then consider Ib being Ideal of R such that
-A21:       Ab = Ib and Ib is proper;
-          P |_2 Y is connected by A4,ORDERS_1:def 5;
+A22:       Ab = Ib and Ib is proper;
+          P |_2 Y is connected by A5,ORDERS_1:def 5;
           then
-A22:       P |_2 Y is_connected_in field (P |_2 Y) by RELAT_2:def 14;
+A23:       P |_2 Y is_connected_in field (P |_2 Y) by RELAT_2:def 14;
           P is reflexive
           proof
-            thus P is_reflexive_in field P by A2,WELLORD2:29;
+            thus P is_reflexive_in field P by A3,WELLORD2:29;
           end;
-          then field (P |_2 Y) = Y by A2,A3,ORDERS_1:181;
+          then field (P |_2 Y) = Y by A3,A4,ORDERS_1:181;
           then [Aa,Ab] in P |_2 Y or [Ab,Aa] in P |_2 Y or Aa = Ab
-          by A22,A15,A17,RELAT_2:def 6;
+          by A23,A16,A18,RELAT_2:def 6;
           then [Aa,Ab] in P or [Ab,Aa] in P or Aa = Ab by XBOOLE_0:def 3;
-          then Aa c= Ab or Ab c= Aa by A3,A17,A15,WELLORD2:def 1;
-          hence a+b in B by A18,A20,A21,A14,A15,A16,A17;
+          then Aa c= Ab or Ab c= Aa by A4,A18,A16,WELLORD2:def 1;
+          hence a+b in B by A19,A21,A22,A15,A16,A17,A18;
         end;
-A23:     B is left-ideal
+A24:     B is left-ideal
         proof
           let p, a be Element of R;
           assume a in B;
           then consider Aa being set such that
-A24:       a in Aa and
-A25:       Aa in Y by TARSKI:def 4;
-          Aa in S by A3,A25;
+A25:       a in Aa and
+A26:       Aa in Y by TARSKI:def 4;
+          Aa in S by A4,A26;
           then consider Ia being Ideal of R such that
-A26:       Aa = Ia and Ia is proper;
-A27:       p*a in Ia by A24,A26,IDEAL_1:def 2;
-          Ia c= B by A26,A25,ZFMISC_1:92;
-          hence p*a in B by A27;
+A27:       Aa = Ia and Ia is proper;
+A28:       p*a in Ia by A25,A27,IDEAL_1:def 2;
+          Ia c= B by A27,A26,ZFMISC_1:92;
+          hence p*a in B by A28;
         end;
-A28:     B is right-ideal
+A29:     B is right-ideal
         proof
           let p, a be Element of R;
           assume a in B;
           then consider Aa being set such that
-A29:       a in Aa and
-A30:       Aa in Y by TARSKI:def 4;
-          Aa in S by A3,A30;
+A30:       a in Aa and
+A31:       Aa in Y by TARSKI:def 4;
+          Aa in S by A4,A31;
           then consider Ia being Ideal of R such that
-A31:       Aa = Ia and Ia is proper;
-A32:       a*p in Ia by A29,A31,IDEAL_1:def 3;
-          Ia c= B by A31,A30,ZFMISC_1:92;
-          hence a*p in B by A32;
+A32:       Aa = Ia and Ia is proper;
+A33:       a*p in Ia by A30,A32,IDEAL_1:def 3;
+          Ia c= B by A32,A31,ZFMISC_1:92;
+          hence a*p in B by A33;
         end;
         now
           assume B is non proper;
-          then 1.R in B by A12,A23,IDEAL_1:19,X;
+          then 1.R in B by A13,A24,IDEAL_1:19,A1;
           then consider Aa being set such that
-A33:       1.R in Aa and
-A34:       Aa in Y by TARSKI:def 4;
-          Aa in S by A3,A34;
+A34:       1.R in Aa and
+A35:       Aa in Y by TARSKI:def 4;
+          Aa in S by A4,A35;
           then ex Ia being Ideal of R st Aa = Ia & Ia is proper;
-          hence contradiction by A33,IDEAL_1:19,X;
+          hence contradiction by A34,IDEAL_1:19,A1;
         end;
         hence
-A35:     x in S by A28,A12,A13,A23;
+A36:     x in S by A29,A13,A14,A24;
         let y be set;
         assume
-A36:     y in Y;
+A37:     y in Y;
         then y c= x by ZFMISC_1:92;
-        hence [y,x] in P by A3,A36,A35,WELLORD2:def 1;
+        hence [y,x] in P by A4,A37,A36,WELLORD2:def 1;
       end;
     end;
     then consider x being set such that
-A37: x is_maximal_in P by A1,A2,ORDERS_1:173;
-A38: x in field P by A37,ORDERS_1:def 11;
+A38: x is_maximal_in P by A2,A3,ORDERS_1:173;
+A39: x in field P by A38,ORDERS_1:def 11;
     then consider I being Ideal of R such that
-A39: x = I and
-A40: I is proper by A2;
+A40: x = I and
+A41: I is proper by A3;
     take I;
-    thus I is proper by A40;
+    thus I is proper by A41;
     let J be Ideal of R such that
-A41: I c= J;
+A42: I c= J;
     now
       assume J is proper;
       then
-A42:   J in S;
-      then [I,J] in P by A2,A38,A39,A41,WELLORD2:def 1;
-      hence I = J by A2,A42,A39,A37,ORDERS_1:def 11;
+A43:   J in S;
+      then [I,J] in P by A3,A39,A40,A42,WELLORD2:def 1;
+      hence I = J by A3,A43,A40,A38,ORDERS_1:def 11;
     end;
     hence thesis;
   end;

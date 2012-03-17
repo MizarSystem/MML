@@ -9,11 +9,11 @@ environ
  vocabularies MCART_1, FINSEQ_1, RELAT_1, BOOLE, ZF_LANG, FUNCT_1, PRE_TOPC,
       QC_LANG1, FUNCOP_1, NAT_1;
  notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0,
-      XXREAL_0, MCART_1, NAT_1, NAT_D, RELAT_1, FUNCT_1, RELSET_1, FUNCT_2,
-      FUNCOP_1, FINSEQ_1;
- constructors ENUMSET1, FUNCOP_1, XXREAL_0, XREAL_0, NAT_1, FINSEQ_1, NAT_D;
- registrations RELSET_1, FINSEQ_1, SUBSET_1, ARYTM_3, ORDINAL2, XREAL_0, NAT_1,
-      ORDINAL1;
+      XXREAL_0, MCART_1, NAT_1, RELAT_1, FUNCT_1, RELSET_1, FUNCT_2, FUNCOP_1,
+      FINSEQ_1;
+ constructors ENUMSET1, FUNCOP_1, XXREAL_0, XREAL_0, NAT_1, FINSEQ_1;
+ registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, ARYTM_3,
+      XREAL_0, FINSEQ_1;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, XBOOLE_0;
  theorems ZFMISC_1, SUBSET_1, TARSKI, ENUMSET1, FINSEQ_1, MCART_1, NAT_1,
@@ -1226,7 +1226,7 @@ defpred Pfgp[(Element of D()),
            $1 = C($2.the_left_argument_of $3,
                      $2.the_right_argument_of $3)) &
       ($3 is universal implies $1 = Q($3, $2.the_scope_of $3));
-defpred Pfn[(Function of QC-WFF, D()), Element of NAT] means
+defpred Pfn[Function of QC-WFF, D(), Element of NAT] means
       $1.VERUM = V() &
       for p being Element of QC-WFF st len @p <= $2 holds
       (p is atomic implies $1.p = A(p)) &
@@ -1373,8 +1373,8 @@ A28: for n being Element of NAT holds S[n] from NAT_1:sch 1 (A1, A3);
 
 defpred Qfn[set, set] means
         ex p being Element of QC-WFF st p = $1 &
-          for g being Function of QC-WFF, D() st Pfn[g, len @p] holds
-                $2 = g.p;
+          for g being Function of QC-WFF, D() st
+          Pfn[g, len @p qua Element of NAT] holds $2 = g.p;
 
 A29: for x, y1, y2 being set st x in QC-WFF & Qfn[x, y1] & Qfn[x, y2]
         holds y1 = y2
@@ -1385,10 +1385,11 @@ A29: for x, y1, y2 being set st x in QC-WFF & Qfn[x, y1] & Qfn[x, y2]
    A31: Qfn[x, y2];
        consider p being Element of QC-WFF such that
    A32: p = x and
-   A33: for g being Function of QC-WFF, D() st Pfn[g, len @p] holds y1 = g.p
+   A33: for g being Function of QC-WFF, D() st
+    Pfn[g, len @p qua Element of NAT] holds y1 = g.p
                                                 by A30;
        consider F being Function of QC-WFF, D() such that
-   A34: Pfn[F, len @p] by A28;
+   A34: Pfn[F, len @p qua Element of NAT] by A28;
      thus y1 = F.p by A33,A34
             .= y2 by A31,A32,A34;
    end;
@@ -1398,11 +1399,11 @@ A35: for x being set st x in QC-WFF ex y being set st Qfn[x, y]
        x in QC-WFF;
        then reconsider x' = x as Element of QC-WFF;
        consider F being Function of QC-WFF, D() such that
-   A36: Pfn[F, len @x'] by A28;
+   A36: Pfn[F, len @x' qua Element of NAT] by A28;
        take F.x, x';
        thus x = x';
        let G be Function of QC-WFF, D() such that
-   A37: Pfn[G, len @x'];
+   A37: Pfn[G, len @x' qua Element of NAT];
 
      defpred  Prop[Element of QC-WFF] means
         len @$1 <= len@x' implies F.$1 = G.$1;
@@ -1466,10 +1467,11 @@ A53: for x being set st x in QC-WFF holds Qfn[x, F.x]
   A55: y = F.x by A52,FUNCT_1:def 5;
       consider p being Element of QC-WFF such that
       p = x and
-  A56: for g being Function of QC-WFF, D() st Pfn[g, len @p] holds y = g.p
+  A56: for g being Function of QC-WFF, D() st
+          Pfn[g, len @p qua Element of NAT] holds y = g.p
                                           by A53,A54,A55;
     consider G being Function of QC-WFF, D() such that
-  A57: Pfn[G, len @p] by A28;
+  A57: Pfn[G, len @p qua Element of NAT] by A28;
          y = G.p by A56,A57;
     hence y in D();
   end;
@@ -1477,16 +1479,17 @@ A53: for x being set st x in QC-WFF holds Qfn[x, F.x]
 ,RELSET_1:11;
  take F;
   consider G being Function of QC-WFF, D() such that
-A58: Pfn[G, len @VERUM] by A28;
+A58: Pfn[G, len @VERUM qua Element of NAT] by A28;
    Qfn[VERUM, F.VERUM] by A53;
  hence F.VERUM = V() by A58;
  let p be Element of QC-WFF;
  consider p1 being Element of QC-WFF such that
 A59: p1 = p and
-A60: for g being Function of QC-WFF, D() st Pfn[g, len @p1] holds F.p = g.p1
+A60: for g being Function of QC-WFF, D()
+ st Pfn[g, len @p1 qua Element of NAT] holds F.p = g.p1
 by A53;
  consider G being Function of QC-WFF, D() such that
-A61: Pfn[G, len @p1] by A28;
+A61: Pfn[G, len @p1 qua Element of NAT] by A28;
 A62: F.p = G.p by A59,A60,A61;
   hence p is atomic implies F.p = A(p) by A59,A61;
   A63: for k being Element of NAT st k < len @p holds Pfn[G, k]
@@ -1505,9 +1508,10 @@ A64:            k < len @p;
              set p' = the_argument_of p;
              set k = len @p';
                 k < len @p by A65,Th45;
-        then A66: Pfn[G, k] by A63;
+        then A66: Pfn[G, k qua Element of NAT] by A63;
                  ex p1 being Element of QC-WFF st p1 = p' &
- for g being Function of QC-WFF, D() st Pfn[g, len @p1] holds
+ for g being Function of QC-WFF, D() st Pfn[g, len @p1 qua Element of NAT]
+       holds
                 F.p' = g.p1 by A53;
              then F.p' = G.p' by A66;
          hence thesis by A59,A61,A62,A65;
@@ -1521,14 +1525,16 @@ A64:            k < len @p;
              set p'' = the_right_argument_of p;
              set k'' = len @p'';
                 k' < len @p by A67,Th46;
-        then A68: Pfn[G, k'] by A63;
+        then A68: Pfn[G, k' qua Element of NAT] by A63;
                 k'' < len @p by A67,Th46;
-       then A69: Pfn[G, k''] by A63;
+       then A69: Pfn[G, k'' qua Element of NAT] by A63;
  A70:             ex p1 being Element of QC-WFF st p1 = p' &
- for g being Function of QC-WFF, D() st Pfn[g, len @p1] holds
+ for g being Function of QC-WFF, D() st Pfn[g, len @p1 qua Element of NAT]
+             holds
                 F.p' = g.p1 by A53;
  A71:             ex p2 being Element of QC-WFF st p2 = p'' &
- for g being Function of QC-WFF, D() st Pfn[g, len @p2] holds
+ for g being Function of QC-WFF, D() st Pfn[g, len @p2 qua Element of NAT]
+             holds
                 F.p'' = g.p2 by A53;
         A72: F.p' = G.p' by A68,A70;
                 F.p'' = G.p'' by A69,A71;
@@ -1539,9 +1545,10 @@ A64:            k < len @p;
         set p' = the_scope_of p;
         set k = len @p';
            k < len @p by A73,Th47;
-   then A74: Pfn[G, k] by A63;
+   then A74: Pfn[G, k qua Element of NAT] by A63;
             ex p1 being Element of QC-WFF st p1 = p' &
- for g being Function of QC-WFF, D() st Pfn[g, len @p1] holds
+ for g being Function of QC-WFF, D() st Pfn[g, len @p1 qua Element of NAT]
+             holds
                          F.p' = g.p1 by A53;
         then F.p' = G.p' by A74;
   hence thesis by A59,A61,A62,A73;

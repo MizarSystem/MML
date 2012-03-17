@@ -28,32 +28,32 @@
 </Typ>
 <Cluster>
 <Adjective nr="20" value="false"/>
-<Adjective nr="27"/>
-<Adjective nr="50"/>
-</Cluster>
-</RCluster>
-<RCluster>
-<ArgTypes/>
-<Typ kind="G" nr="5">
-<Cluster/>
-</Typ>
-<Cluster>
-<Adjective nr="20" value="false"/>
-<Adjective nr="26"/>
-<Adjective nr="27"/>
-<Adjective nr="33"/>
-</Cluster>
-</RCluster>
-<RCluster>
-<ArgTypes/>
-<Typ kind="G" nr="5">
-<Cluster/>
-</Typ>
-<Cluster>
-<Adjective nr="20" value="false"/>
-<Adjective nr="26"/>
-<Adjective nr="27"/>
+<Adjective nr="28"/>
 <Adjective nr="51"/>
+</Cluster>
+</RCluster>
+<RCluster>
+<ArgTypes/>
+<Typ kind="G" nr="5">
+<Cluster/>
+</Typ>
+<Cluster>
+<Adjective nr="20" value="false"/>
+<Adjective nr="27"/>
+<Adjective nr="28"/>
+<Adjective nr="34"/>
+</Cluster>
+</RCluster>
+<RCluster>
+<ArgTypes/>
+<Typ kind="G" nr="5">
+<Cluster/>
+</Typ>
+<Cluster>
+<Adjective nr="20" value="false"/>
+<Adjective nr="27"/>
+<Adjective nr="28"/>
+<Adjective nr="52"/>
 </Cluster>
 </RCluster>
 <FCluster>
@@ -66,8 +66,8 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="26"/>
 <Adjective nr="27"/>
+<Adjective nr="28"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -83,8 +83,6 @@
 </Func>
 <Cluster>
 <Adjective nr="20" value="false"/>
-<Adjective nr="26"/>
-<Adjective nr="27"/>
 </Cluster>
 </FCluster>
 </Registrations>

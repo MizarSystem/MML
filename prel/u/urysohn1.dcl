@@ -11,7 +11,6 @@
 <ArticleID name="MCART_1"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
-<ArticleID name="MEMBERED"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSET_1"/>
@@ -33,9 +32,6 @@
 </Func>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="15"/>
-<Adjective nr="16"/>
-<Adjective nr="17"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -43,9 +39,6 @@
 <Func kind="K" nr="117"/>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="15"/>
-<Adjective nr="16"/>
-<Adjective nr="17"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -53,9 +46,6 @@
 <Func kind="K" nr="118"/>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="15"/>
-<Adjective nr="16"/>
-<Adjective nr="17"/>
 </Cluster>
 </FCluster>
 </Registrations>

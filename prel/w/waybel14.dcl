@@ -15,13 +15,13 @@
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PRE_TOPC"/>
-<ArticleID name="FINSET_1"/>
-<ArticleID name="CARD_1"/>
-<ArticleID name="FINSEQ_1"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="RELAT_2"/>
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="EQREL_1"/>
+<ArticleID name="FINSET_1"/>
+<ArticleID name="CARD_1"/>
+<ArticleID name="FINSEQ_1"/>
 <ArticleID name="ORDERS_1"/>
 <ArticleID name="ORDERS_2"/>
 <ArticleID name="FINSEQ_2"/>
@@ -50,10 +50,10 @@
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="51"/>
-<Adjective nr="52"/>
 <Adjective nr="53"/>
-<Adjective nr="122"/>
+<Adjective nr="54"/>
+<Adjective nr="55"/>
+<Adjective nr="124"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
@@ -68,7 +68,7 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="65">
+<Adjective nr="67">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -78,7 +78,7 @@
 <Typ kind="G" nr="5">
 <Cluster>
 <Adjective nr="19" value="false"/>
-<Adjective nr="26"/>
+<Adjective nr="27"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -88,33 +88,20 @@
 </Func>
 </Func>
 <Cluster>
-<Adjective nr="19" value="false"/>
-<Adjective nr="24" value="false"/>
-<Adjective nr="50"/>
 <Adjective nr="51"/>
-<Adjective nr="52"/>
-<Adjective nr="53"/>
-<Adjective nr="57"/>
-<Adjective nr="58"/>
-<Adjective nr="59"/>
-<Adjective nr="88"/>
-<Adjective nr="89"/>
-<Adjective nr="92"/>
-<Adjective nr="122"/>
-<Adjective nr="123"/>
-<Adjective nr="124"/>
+<Adjective nr="94"/>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="51"/>
-<Adjective nr="52"/>
 <Adjective nr="53"/>
-<Adjective nr="122"/>
-<Adjective nr="123"/>
+<Adjective nr="54"/>
+<Adjective nr="55"/>
 <Adjective nr="124"/>
+<Adjective nr="125"/>
+<Adjective nr="126"/>
 </Cluster>
 </Typ>
 </ArgTypes>

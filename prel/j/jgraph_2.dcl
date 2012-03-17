@@ -15,21 +15,20 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
-<ArticleID name="MEMBERED"/>
-<ArticleID name="SEQ_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="STRUCT_0"/>
 <ArticleID name="FINSEQ_2"/>
+<ArticleID name="STRUCT_0"/>
+<ArticleID name="MEMBERED"/>
+<ArticleID name="SEQ_1"/>
 <ArticleID name="RVSUM_1"/>
+<ArticleID name="ENUMSET1"/>
+<ArticleID name="DOMAIN_1"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="BINOP_1"/>
 <ArticleID name="METRIC_1"/>
 <ArticleID name="EUCLID"/>
-<ArticleID name="ENUMSET1"/>
-<ArticleID name="DOMAIN_1"/>
-<ArticleID name="PARTFUN1"/>
 <ArticleID name="JGRAPH_2"/>
 </Signature>
 <FCluster>
@@ -55,46 +54,32 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="240">
+<Func kind="K" nr="234">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
 <LocusVar nr="4"/>
 </Func>
 <Cluster>
-<Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="7" value="false"/>
 <Adjective nr="8">
 <Func kind="U" nr="1">
-<Func kind="K" nr="199">
+<Func kind="K" nr="224">
 <Num nr="2"/>
 </Func>
 </Func>
 <Func kind="U" nr="1">
-<Func kind="K" nr="199">
+<Func kind="K" nr="224">
 <Num nr="2"/>
 </Func>
 </Func>
 </Adjective>
-<Adjective nr="45">
-<Func kind="K" nr="199">
+<Adjective nr="46">
+<Func kind="K" nr="224">
 <Num nr="2"/>
 </Func>
-<Func kind="K" nr="199">
+<Func kind="K" nr="224">
 <Num nr="2"/>
-</Func>
-</Adjective>
-<Adjective nr="58">
-<Func kind="U" nr="1">
-<Func kind="K" nr="199">
-<Num nr="2"/>
-</Func>
-</Func>
-<Func kind="U" nr="1">
-<Func kind="K" nr="199">
-<Num nr="2"/>
-</Func>
 </Func>
 </Adjective>
 </Cluster>

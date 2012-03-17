@@ -19,13 +19,13 @@
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="FINSEQ_2"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PRE_TOPC"/>
-<ArticleID name="FINSEQ_2"/>
-<ArticleID name="SEQ_1"/>
-<ArticleID name="RVSUM_1"/>
 <ArticleID name="BINOP_1"/>
 <ArticleID name="METRIC_1"/>
+<ArticleID name="SEQ_1"/>
+<ArticleID name="RVSUM_1"/>
 <ArticleID name="EUCLID"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="GROUP_1"/>
@@ -52,11 +52,7 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="1"/>
-<Adjective nr="4"/>
 <Adjective nr="7" value="false"/>
-<Adjective nr="23"/>
-<Adjective nr="27"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -76,11 +72,7 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="1"/>
-<Adjective nr="4"/>
 <Adjective nr="7" value="false"/>
-<Adjective nr="23"/>
-<Adjective nr="27"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -103,11 +95,7 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="1"/>
 <Adjective nr="3" value="false"/>
-<Adjective nr="4"/>
-<Adjective nr="23"/>
-<Adjective nr="27"/>
 <Adjective nr="90"/>
 <Adjective nr="94"/>
 <Adjective nr="95"/>
@@ -135,14 +123,7 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="1"/>
-<Adjective nr="3" value="false"/>
-<Adjective nr="4"/>
-<Adjective nr="23"/>
-<Adjective nr="27"/>
 <Adjective nr="90"/>
-<Adjective nr="94"/>
-<Adjective nr="95"/>
 <Adjective nr="96"/>
 <Adjective nr="97"/>
 </Cluster>
@@ -160,11 +141,7 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="1"/>
-<Adjective nr="4"/>
 <Adjective nr="7" value="false"/>
-<Adjective nr="23"/>
-<Adjective nr="27"/>
 <Adjective nr="92"/>
 </Cluster>
 </FCluster>
@@ -185,11 +162,7 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="1"/>
 <Adjective nr="3" value="false"/>
-<Adjective nr="4"/>
-<Adjective nr="23"/>
-<Adjective nr="27"/>
 <Adjective nr="90"/>
 <Adjective nr="94"/>
 <Adjective nr="95"/>

@@ -14,13 +14,13 @@ environ
       DOMAIN_1, RELAT_1, FUNCT_1, FINSEQ_1, FINSEQ_2, CARD_1, GRAPH_2,
       FINSEQ_5, ORDINAL1, RELSET_1, MCART_1, FINSET_1, NAT_1, NAT_D, FUNCOP_1,
       FUNCT_4, GLIB_000, ABIAN;
- constructors DOMAIN_1, FUNCT_4, XXREAL_0, NAT_1, INT_1, BINOP_2, RECDEF_1,
-      FUNCOP_1, REALSET1, FINSEQ_5, ABIAN, GRAPH_2, GLIB_000, WELLORD2, NAT_D;
- registrations SUBSET_1, RELSET_1, FINSET_1, XREAL_0, PNPROC_1, INT_1, ABIAN,
-      FINSEQ_1, GRAPH_3, NAT_1, FUNCT_1, XBOOLE_0, RELAT_1, NUMBERS, ORDINAL1,
-      GLIB_000, XXREAL_0, FUNCOP_1, HEYTING3, NAT_3;
- definitions FUNCOP_1;
+ constructors DOMAIN_1, FUNCT_4, XXREAL_0, NAT_1, NAT_D, BINOP_2, RECDEF_1,
+      FINSEQ_5, GLIB_000, ABIAN, GRAPH_2;
+ registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCOP_1,
+      ARYTM_3, FINSET_1, XXREAL_0, XREAL_0, NAT_1, INT_1, FINSEQ_1, GLIB_000,
+      ABIAN, GRAPH_2, GRAPH_3, HEYTING3;
  requirements ARITHM, BOOLE, NUMERALS, REAL, SUBSET;
+ definitions FUNCOP_1;
  theorems CARD_1, CARD_2, FUNCOP_1, ENUMSET1, FINSEQ_1, FINSEQ_2, FINSEQ_3,
       FINSEQ_4, FINSEQ_5, FINSEQ_6, FINSET_1, FUNCT_1, FUNCT_4, GLIB_000,
       GRAPH_2, GRAPH_5, INT_1, JORDAN12, MCART_1, NAT_1, NAT_2, PEPIN, REAL_1,
@@ -118,46 +118,44 @@ end;
 
 theorem Th3: ::tFINSUBSEQ01
   for X being set, fs being FinSequence of X,
-      fss being FinSubsequence of fs holds len (Seq fss) <= len fs proof
-    let X be set, fs be FinSequence of X, fss be FinSubsequence of fs;
-A1: fss c= fs by GRAPH_2:def 5;
+      fss being Subset of fs holds len (Seq fss) <= len fs proof
+    let X be set, fs be FinSequence of X, fss be Subset of fs;
     dom fss c= dom fs by GRAPH_2:27; then
-A2: dom fss c= Seg len fs by FINSEQ_1:def 3;
-A3: Seq fss = fss * Sgm(dom fss) by FINSEQ_1:def 14;
-    rng (Sgm(dom fss)) = dom fss by A2, FINSEQ_1:def 13; then
-    len (Seq fss) = len Sgm (dom fss) by A3, FINSEQ_2:33
-                 .= card (dom fss) by A2, FINSEQ_3:44
+A1: dom fss c= Seg len fs by FINSEQ_1:def 3;
+A2: Seq fss = fss * Sgm(dom fss) by FINSEQ_1:def 14;
+    rng (Sgm(dom fss)) = dom fss by A1, FINSEQ_1:def 13; then
+    len (Seq fss) = len Sgm (dom fss) by A2, FINSEQ_2:33
+                 .= card (dom fss) by A1, FINSEQ_3:44
                  .= card fss by Lm2;
-    hence len (Seq fss) <= len fs by A1, CARD_1:80;
+    hence len (Seq fss) <= len fs by  CARD_1:80;
 end;
 
 theorem Th4: ::tFINSUBSEQ02
-  for X being set, fs being FinSequence of X, fss being FinSubsequence of fs,
+  for X being set, fs being FinSequence of X, fss being Subset of fs,
       m being Element of NAT st m in dom Seq fss holds
     ex n being Element of NAT st n in dom fs & m <= n & (Seq fss).m = fs.n
     proof
-    let X be set, fs be FinSequence of X, fss be FinSubsequence of fs,
-        m be Element of NAT;
-A1: fss c= fs by GRAPH_2:def 5; set f = Sgm(dom fss), n = f.m;
-A2: Seq fss = fss * f by FINSEQ_1:def 14; assume
-A3: m in dom Seq fss; then
+    let X be set, fs be FinSequence of X, fss be Subset of fs,
+        m be Element of NAT; set f = Sgm(dom fss), n = f.m;
+A1: Seq fss = fss * f by FINSEQ_1:def 14; assume
+A2: m in dom Seq fss; then
     m in dom (fss * f) by FINSEQ_1:def 14; then
-A4: m in dom f & n in dom fss by FUNCT_1:21;
-    (Seq fss).m = fss.n by A2,A3,FUNCT_1:22; then
-    [n, Seq(fss).m] in fss by A4, FUNCT_1:def 4; then
-A5: n in dom fs & (Seq fss).m = fs.n by A1, FUNCT_1:8; then
+A3: m in dom f & n in dom fss by FUNCT_1:21;
+    (Seq fss).m = fss.n by A1,A2,FUNCT_1:22; then
+    [n, Seq(fss).m] in fss by A3, FUNCT_1:def 4; then
+A4: n in dom fs & (Seq fss).m = fs.n by  FUNCT_1:8; then
     reconsider n as Element of NAT;
     set X = dom fss;
     consider k being Element of NAT such that
-A6: dom fss c= Seg k by FINSEQ_1:def 12;
-    m <= n by A4, A6, Th2;
-    hence thesis by A5;
+A5: dom fss c= Seg k by FINSEQ_1:def 12;
+    m <= n by A3, A5, Th2;
+    hence thesis by A4;
 end;
 
 theorem Th5: ::tFINSUBSEQ03
-  for X being set, fs being FinSequence of X, fss being FinSubsequence of fs
+  for X being set, fs being FinSequence of X, fss being Subset of fs
     holds len Seq fss = card fss proof
-    let X be set, fs be FinSequence of X, fss be FinSubsequence of fs;
+    let X be set, fs be FinSequence of X, fss be Subset of fs;
 A1: Seq fss = fss * Sgm(dom fss) by FINSEQ_1:def 14;
     consider k being Element of NAT such that
 A2: dom fss c= Seg k by FINSEQ_1:def 12;
@@ -169,9 +167,9 @@ A2: dom fss c= Seg k by FINSEQ_1:def 12;
 end;
 
 theorem Th6: ::tFINSUBSEQ04
-  for X being set, fs being FinSequence of X, fss being FinSubsequence of fs
+  for X being set, fs being FinSequence of X, fss being Subset of fs
     holds dom Seq fss = dom Sgm (dom fss) proof
-    let X be set, fs be FinSequence of X, fss be FinSubsequence of fs;
+    let X be set, fs be FinSequence of X, fss be Subset of fs;
     consider k being Element of NAT such that
 A1: dom fss c= Seg k by FINSEQ_1:def 12;
 A2: Seq fss = fss * Sgm (dom fss) by FINSEQ_1:def 14;
@@ -3265,14 +3263,12 @@ end;
 definition let G be _Graph, W be Walk of G;
   mode Subwalk of W -> Walk of G means :Def32: ::dSUBWALK
     it is_Walk_from W.first(), W.last() &
-    ex es being FinSubsequence of W.edgeSeq() st
+    ex es being Subset of W.edgeSeq() st
       it.edgeSeq() = Seq es;
   existence proof
    take W;
    thus W is_Walk_from W.first(), W.last() by Def23;
-::   reconsider fs = W.edgeSeq() as FinSubsequence;
-   reconsider es = W.edgeSeq() as FinSubsequence of W.edgeSeq()
-     by GRAPH_2:def 5;
+   reconsider es = W.edgeSeq() as Subset of W.edgeSeq() by GRAPH_2:28;
    take es;
    thus W.edgeSeq() = Seq es by FINSEQ_3:125;
   end;
@@ -3282,9 +3278,7 @@ Lm75:
   for G being _Graph, W being Walk of G holds W is Subwalk of W proof
     let G be _Graph, W be Walk of G;
 A1: W is_Walk_from W.first(),W.last() by Def23;
-::    reconsider fs = W.edgeSeq() as FinSubsequence;
-    reconsider es = W.edgeSeq() as FinSubsequence of W.edgeSeq()
-      by GRAPH_2:def 5;
+    reconsider es = W.edgeSeq() as Subset of W.edgeSeq() by GRAPH_2:28;
     W.edgeSeq() = Seq es by FINSEQ_3:125;
     hence thesis by A1, Def32;
 end;
@@ -3295,16 +3289,16 @@ Lm76:
     let G be _Graph, W1 be Walk of G, W2 be Subwalk of W1, W3 be Subwalk of W2;
     set fs  = W1.edgeSeq(),fs1 = W2.edgeSeq(),fs2 = W3.edgeSeq();
 A1: W3 is_Walk_from W2.first(), W2.last() &
-      ex fss1 being FinSubsequence of fs1 st fs2 = Seq fss1 by Def32;
+      ex fss1 being Subset of fs1 st fs2 = Seq fss1 by Def32;
     W2 is_Walk_from W1.first(), W1.last() &
-      ex fss being FinSubsequence of fs st fs1 = Seq fss by Def32; then
+      ex fss being Subset of fs st fs1 = Seq fss by Def32; then
 A2: W2.first() = W1.first() & W2.last() = W1.last() by Def23;
-    consider fss1 being FinSubsequence of fs1 such that
+    consider fss1 being Subset of fs1 such that
 A3: fs2 = Seq fss1 by Def32;
-    consider fss being FinSubsequence of fs such that
+    consider fss being Subset of fs such that
 A4: fs1 = Seq fss by Def32;
     set fss2 = fss | rng((Sgm dom fss)|dom fss1);
-    reconsider fss2 as FinSubsequence of fs by GRAPH_2:29;
+    reconsider fss2 as Subset of fs by GRAPH_2:29;
     fs2 = Seq fss2 by A3, A4, GRAPH_2:30;
 
     hence W3 is Subwalk of W1 by A1,A2,Def32;
@@ -3315,7 +3309,7 @@ Lm77:
     W1 is Subwalk of W2 implies
       len W1 <= len W2 proof
     let G be _Graph, W1,W2 be Walk of G; assume W1 is Subwalk of W2; then
-    consider es being FinSubsequence of W2.edgeSeq() such that
+    consider es being Subset of W2.edgeSeq() such that
 A1: W1.edgeSeq() = Seq es by Def32;
     len W1.edgeSeq() <= len W2.edgeSeq() by A1, Th3; then
     2*len W1.edgeSeq() <= 2*len W2.edgeSeq() by XREAL_1:66; then
@@ -3395,8 +3389,8 @@ definition let G be _Graph, W be Walk of G, m,n being Element of NAT;
             a' <= b' by Lm1;
             hence a < b by A17,A18,A20,A19,REAL_1:def 5;
         end;
-        W.edgeSeq() is FinSubsequence of W.edgeSeq() by GRAPH_2:28; then
-        reconsider es as FinSubsequence of W.edgeSeq() by GRAPH_2:29;
+        W.edgeSeq() is Subset of W.edgeSeq() by GRAPH_2:28; then
+        reconsider es as Subset of W.edgeSeq() by GRAPH_2:29;
     A21: len W2 = 2*len W2.edgeSeq()+1 by Def15;
     A22: Seg len es1 = dom es1 by FINSEQ_1:def 3;
         set es2 = Seq es;
@@ -3850,306 +3844,302 @@ A4: P[0];
           end;
           suppose
         A18: WB is open;
-            consider esb being FinSubsequence of WA.edgeSeq() such that
+            consider esb being Subset of WA.edgeSeq() such that
         A19: WB.edgeSeq() = Seq esb by Def32;
-        A20: esb c= WA.edgeSeq() by GRAPH_2:def 5;
-        A21: now let x be set; assume
+        A20: now let x be set; assume
                 x in dom esb; then
                 [x,esb.x] in esb by FUNCT_1:8; then
-                x in dom WA.edgeSeq() by FUNCT_1:8,A20; then
+                x in dom WA.edgeSeq() by FUNCT_1:8; then
                 x in Seg len WA.edgeSeq() by FINSEQ_1:def 3;
                 hence x in Seg k by A9;
             end; then
-        A22: dom esb c= Seg k by TARSKI:def 3;
-        A23: Seq esb = esb * (Sgm (dom esb)) by FINSEQ_1:def 14;
-        A24: Seq esb is one-to-one by A19, Def27;
-            rng Sgm(dom esb) = dom esb by A22, FINSEQ_1:def 13; then
-        A25: esb is one-to-one & Sgm(dom esb) is one-to-one by A23,A24,FUNCT_1:
+        A21: dom esb c= Seg k by TARSKI:def 3;
+        A22: Seq esb = esb * (Sgm (dom esb)) by FINSEQ_1:def 14;
+        A23: Seq esb is one-to-one by A19, Def27;
+            rng Sgm(dom esb) = dom esb by A21, FINSEQ_1:def 13; then
+        A24: esb is one-to-one & Sgm(dom esb) is one-to-one by A22,A23,FUNCT_1:
 48;
             now per cases;
               suppose v in WB.vertices(); then
                 consider n being odd Element of NAT such that
-            A26: n <= len WB & WB.n = v by Lm49;
+            A25: n <= len WB & WB.n = v by Lm49;
                 reconsider WB' = WB as directed Path of G by A10;
                 set W2 = WB'.cut(1,n);
                 2*0+1 <= n by HEYTING3:1; then
-                W2 is_Walk_from WB.1, v by A26,Lm20; then
+                W2 is_Walk_from WB.1, v by A25,Lm20; then
                 W2 is_Walk_from W1.1, v by  A14; then
                 W2 is_Walk_from W1.1, W1.last() by A7; then
-            A27: W2 is_Walk_from W1.first(), W1.last();
-                len W2 = n by A26, Lm26; then
+            A26: W2 is_Walk_from W1.first(), W1.last();
+                len W2 = n by A25, Lm26; then
                 consider naa1 being even Element of NAT such that
-            A28: naa1 = n - 1 & len W2.edgeSeq() = naa1 div 2 by Lm46;
+            A27: naa1 = n - 1 & len W2.edgeSeq() = naa1 div 2 by Lm46;
                 set es = esb | (rng (Sgm (dom esb) | Seg (naa1 div 2)));
-                reconsider es as FinSubsequence of WA.edgeSeq() by GRAPH_2:29;
-            A29: es c= WA.edgeSeq() by GRAPH_2:def 5;
+                reconsider es as Subset of WA.edgeSeq() by GRAPH_2:29;
                 for x being set st x in es holds x in W1.edgeSeq()
-                  by A16, A29, TARSKI:def 3; then
+                  by A16, TARSKI:def 3; then
                 es c= W1.edgeSeq() by TARSKI:def 3; then
-                reconsider es as FinSubsequence of W1.edgeSeq()
-                  by GRAPH_2:def 5;
-            A30: W2.edgeSeq() c= WB.edgeSeq() by Lm47;
-            A31: Seq es = es * Sgm (dom es) by FINSEQ_1:def 14;
-            A32: es c= esb by RELAT_1:88;
+                reconsider es as Subset of W1.edgeSeq();
+            A28: W2.edgeSeq() c= WB.edgeSeq() by Lm47;
+            A29: Seq es = es * Sgm (dom es) by FINSEQ_1:def 14;
+            A30: es c= esb by RELAT_1:88;
                 now let z be set;
                     hereby assume
-                    A33: z in esb;
+                    A31: z in esb;
                         now per cases;
                         suppose z in es;
                             hence z in es \/ (esb \ es) by XBOOLE_0:def 2; end;
                         suppose not z in es; then
-                            z in esb \ es by A33, XBOOLE_0:def 4;
+                            z in esb \ es by A31, XBOOLE_0:def 4;
                             hence z in es \/ (esb \ es) by XBOOLE_0:def 2; end;
                         end;
                         hence z in es \/ (esb \ es);
                     end;
                     assume
-                A34: z in es \/ (esb \ es);
-                    now per cases by A34, XBOOLE_0:def 2;
+                A32: z in es \/ (esb \ es);
+                    now per cases by A32, XBOOLE_0:def 2;
                     suppose z in es;
-                       hence z in esb by A32; end;
+                       hence z in esb by A30; end;
                     suppose z in esb \ es;
-                       hence z in esb; end;
+                       hence z in esb by XBOOLE_0:def 4; end;
                     end;
                     hence z in esb;
                 end; then
                 esb = es \/ (esb \ es) by TARSKI:2; then
-            A35: dom esb = dom es \/ dom (esb \ es) by RELAT_1:13;
-                dom (esb \ es) c= dom esb by RELAT_1:25; then
-            A36: dom (esb \ es) c= Seg k by A22, XBOOLE_1:1;
-                dom es c= dom esb by A32, RELAT_1:25; then
-            A37: dom es c= Seg k by A22, XBOOLE_1:1;
+            A33: dom esb = dom es \/ dom (esb \ es) by RELAT_1:13;
+                esb \ es c= esb by XBOOLE_1:36;
+                then dom (esb \ es) c= dom esb by RELAT_1:25; then
+            A34: dom (esb \ es) c= Seg k by A21, XBOOLE_1:1;
+                dom es c= dom esb by A30, RELAT_1:25; then
+            A35: dom es c= Seg k by A21, XBOOLE_1:1;
                 now let z be set; assume
-                A38: z in rng (Sgm (dom esb) | Seg (naa1 div 2));
+                A36: z in rng (Sgm (dom esb) | Seg (naa1 div 2));
                     rng (Sgm (dom esb) | Seg (naa1 div 2)) c= rng Sgm (dom esb)
                       by RELAT_1:99; then
-                    z in rng Sgm (dom esb) by A38;
-                    hence z in dom esb by A22, FINSEQ_1:def 13;
+                    z in rng Sgm (dom esb) by A36;
+                    hence z in dom esb by A21, FINSEQ_1:def 13;
                 end; then
                 rng (Sgm (dom esb) | Seg (naa1 div 2)) c= dom esb
                   by TARSKI:def 3; then
-            A39: dom es = rng (Sgm (dom esb) | Seg (naa1 div 2)) by RELAT_1:91;
+            A37: dom es = rng (Sgm (dom esb) | Seg (naa1 div 2)) by RELAT_1:91;
                 2 divides naa1 by PEPIN:22; then
-            A40: 2*(naa1 div 2) = naa1 by NAT_D:3;
-            A41: dom Sgm(dom esb) = dom WB.edgeSeq() by A19, Th6
+            A38: 2*(naa1 div 2) = naa1 by NAT_D:3;
+            A39: dom Sgm(dom esb) = dom WB.edgeSeq() by A19, Th6
                                 .= Seg len WB.edgeSeq() by FINSEQ_1:def 3;
                 now assume naa1 div 2 > len WB.edgeSeq(); then
-                    naa1 > 2 * len WB.edgeSeq() by A40,XREAL_1:70; then
+                    naa1 > 2 * len WB.edgeSeq() by A38,XREAL_1:70; then
                     naa1+1 > 2*len WB.edgeSeq() + 1 by XREAL_1:10;
-                    hence contradiction by A26,A28,Def15;
+                    hence contradiction by A25,A27,Def15;
                 end; then
-                Seg (naa1 div 2) c= dom Sgm (dom esb) by A41, FINSEQ_1:7; then
-            A42: dom (Sgm(dom esb)| Seg(naa1 div 2)) = Seg (naa1 div 2)
+                Seg (naa1 div 2) c= dom Sgm (dom esb) by A39, FINSEQ_1:7; then
+            A40: dom (Sgm(dom esb)| Seg(naa1 div 2)) = Seg (naa1 div 2)
                   by RELAT_1:91; then
                 reconsider ses = Sgm(dom esb)|Seg(naa1 div 2) as FinSequence
                   by FINSEQ_1:def 2;
-            A43: len ses = naa1 div 2 by A42, FINSEQ_1:def 3;
-                ses is one-to-one by A25,FUNCT_1:84; then
-                card dom es = naa1 div 2 by A39,A43,FINSEQ_4:77; then
+            A41: len ses = naa1 div 2 by A40, FINSEQ_1:def 3;
+                ses is one-to-one by A24,FUNCT_1:84; then
+                card dom es = naa1 div 2 by A37,A41,FINSEQ_4:77; then
                 card es = naa1 div 2 by Lm2; then
-            A44: len Seq es = len W2.edgeSeq() by A28,Th5;
-                for x,y1,y2 being set st [x,y1] in esb\es & [x,y2] in esb\es
-                  holds y1 = y2 by FUNCT_1:def 1; then
-                reconsider esbes1 = esb \ es as Function by FUNCT_1:def 1;
+            A42: len Seq es = len W2.edgeSeq() by A27,Th5;
+                reconsider esbes1 = esb \ es as Function;
                 now let a,b be Element of NAT; assume
-                A45: a in dom es & b in dom (esbes1); then
+                A43: a in dom es & b in dom (esbes1); then
                     consider xa being set such that
-                A46: xa in dom ses & ses.xa = a by A39, FUNCT_1:def 5;
-                    reconsider xa as Element of NAT by A46;
-                A47: a = Sgm(dom esb).xa by A46, FUNCT_1:70;
-                A48: xa in Seg(naa1 div 2) & xa in dom Sgm(dom esb)
-                      by A46, RELAT_1:86;
-                A49: [b, esbes1.b] in esb \ es by A45, FUNCT_1:8; then
-                    b in dom esb by FUNCT_1:8; then
-                    b in rng (Sgm (dom esb)) by A22, FINSEQ_1:def 13; then
+                A44: xa in dom ses & ses.xa = a by A37, FUNCT_1:def 5;
+                    reconsider xa as Element of NAT by A44;
+                A45: a = Sgm(dom esb).xa by A44, FUNCT_1:70;
+                A46: xa in Seg(naa1 div 2) & xa in dom Sgm(dom esb)
+                      by A44, RELAT_1:86;
+                A47: [b, esbes1.b] in esb \ es by A43, FUNCT_1:8; then
+A48:                 [b, esbes1.b] in esb by XBOOLE_0:def 4;
+                    then b in dom esb by FUNCT_1:8; then
+                    b in rng (Sgm (dom esb)) by A21, FINSEQ_1:def 13; then
                     consider xb being set such that
-                A50: xb in dom (Sgm (dom esb)) & Sgm(dom esb).xb = b
+                A49: xb in dom (Sgm (dom esb)) & Sgm(dom esb).xb = b
                       by FUNCT_1:def 5;
-                    reconsider xb as Element of NAT by A50;
-                A51: 1 <= xa & xa <= naa1 div 2 by A48, FINSEQ_1:3;
-                A52: 1 <= xb & xb <= len WB.edgeSeq() by A41,A50,FINSEQ_1:3;
+                    reconsider xb as Element of NAT by A49;
+                A50: 1 <= xa & xa <= naa1 div 2 by A46, FINSEQ_1:3;
+                A51: 1 <= xb & xb <= len WB.edgeSeq() by A39,A49,FINSEQ_1:3;
 then
                     xb in dom Seq esb by A19,FINSEQ_3:27; then
                     xb in dom Sgm (dom esb) by Th6; then
-                A53: xb <= len Sgm(dom esb) by FINSEQ_3:27;
+                A52: xb <= len Sgm(dom esb) by FINSEQ_3:27;
                     now assume xb <= xa; then
-                        xb <= naa1 div 2 by A51, XXREAL_0:2; then
-                    A54: xb in Seg(naa1 div 2) by A52, FINSEQ_1:3;
-                        [xb, b] in Sgm(dom esb) by A50, FUNCT_1:8; then
-                        [xb, b] in ses by A54, RELAT_1:def 11; then
+                        xb <= naa1 div 2 by A50, XXREAL_0:2; then
+                    A53: xb in Seg(naa1 div 2) by A51, FINSEQ_1:3;
+                        [xb, b] in Sgm(dom esb) by A49, FUNCT_1:8; then
+                        [xb, b] in ses by A53, RELAT_1:def 11; then
                         b in rng ses by RELAT_1:def 5; then
                         [b, esbes1.b] in es
-                          by A49,RELAT_1:def 11;
-                        hence contradiction by A49,XBOOLE_0:def 4;
+                          by A48,RELAT_1:def 11;
+                        hence contradiction by A47,XBOOLE_0:def 4;
                     end;
-                    hence a < b by A22, A47, A50, A51, A53, FINSEQ_1:def 13;
+                    hence a < b by A21, A45, A49, A50, A52, FINSEQ_1:def 13;
                 end; then
-            A55: Sgm(dom esb) = Sgm(dom es) ^ Sgm(dom (esb \ es))
-                  by A35, A36, A37, FINSEQ_3:48;
-            A56: dom W2.edgeSeq() c= dom Seq esb by A19,A30,RELAT_1:25;
+            A54: Sgm(dom esb) = Sgm(dom es) ^ Sgm(dom (esb \ es))
+                  by A33, A34, A35, FINSEQ_3:48;
+            A55: dom W2.edgeSeq() c= dom Seq esb by A19,A28,RELAT_1:25;
                 now let x be Element of NAT; assume
-                A57: 1 <= x & x <= len W2.edgeSeq(); then
-                A58: x in dom W2.edgeSeq() by FINSEQ_3:27; then
+                A56: 1 <= x & x <= len W2.edgeSeq(); then
+                A57: x in dom W2.edgeSeq() by FINSEQ_3:27; then
                     [x,W2.edgeSeq().x] in W2.edgeSeq() by FUNCT_1:8; then
-                A59: W2.edgeSeq().x = (Seq esb).x by A19, FUNCT_1:8,A30
+                A58: W2.edgeSeq().x = (Seq esb).x by A19, FUNCT_1:8,A28
                                   .= esb.(Sgm(dom esb).x)
-                                       by A23,A58,A56,FUNCT_1:22;
-                A60: x in dom Seq es by A44, A57, FINSEQ_3:27; then
+                                       by A22,A57,A55,FUNCT_1:22;
+                A59: x in dom Seq es by A42, A56, FINSEQ_3:27; then
                     x in dom Sgm(dom es) by Th6; then
-                A61: Sgm(dom esb).x = Sgm(dom es).x by A55, FINSEQ_1:def 7;
-                A62: x in dom Sgm(dom esb) &
-                     Sgm(dom esb).x in dom esb by A23,A58,A56,FUNCT_1:21; then
-                A63: [Sgm(dom esb).x, esb.(Sgm(dom esb).x)] in esb by FUNCT_1:8
+                A60: Sgm(dom esb).x = Sgm(dom es).x by A54, FINSEQ_1:def 7;
+                A61: x in dom Sgm(dom esb) &
+                     Sgm(dom esb).x in dom esb by A22,A57,A55,FUNCT_1:21; then
+                A62: [Sgm(dom esb).x, esb.(Sgm(dom esb).x)] in esb by FUNCT_1:8
 ;
-                A64: x in Seg (naa1 div 2) by A57, FINSEQ_1:3,A28;
-                    [x, Sgm(dom esb).x] in Sgm(dom esb) by A62, FUNCT_1:8; then
-                    [x, Sgm(dom esb).x] in ses by A64, RELAT_1:def 11; then
+                A63: x in Seg (naa1 div 2) by A56, FINSEQ_1:3,A27;
+                    [x, Sgm(dom esb).x] in Sgm(dom esb) by A61, FUNCT_1:8; then
+                    [x, Sgm(dom esb).x] in ses by A63, RELAT_1:def 11; then
                     Sgm(dom esb).x in rng ses by RELAT_1:def 5; then
                     [Sgm(dom esb).x, esb.(Sgm(dom esb).x)] in es
-                      by A63, RELAT_1:def 11; then
-                    es.(Sgm(dom es).x) = esb.(Sgm(dom esb).x) by A61, FUNCT_1:8
+                      by A62, RELAT_1:def 11; then
+                    es.(Sgm(dom es).x) = esb.(Sgm(dom esb).x) by A60, FUNCT_1:8
 ;
-                    hence W2.edgeSeq().x = (Seq es).x by A59,A60,A31,FUNCT_1:22
+                    hence W2.edgeSeq().x = (Seq es).x by A58,A59,A29,FUNCT_1:22
 ;
                 end; then
-                W2.edgeSeq() = Seq es by A44, FINSEQ_1:18; then
-                reconsider W2 as Path of W1 by A27, Def32;
+                W2.edgeSeq() = Seq es by A42, FINSEQ_1:18; then
+                reconsider W2 as Path of W1 by A26, Def32;
                 take W2;
                 thus W2 is directed;
               end;
               suppose
-            A65: not v in WB.vertices(); set W2 = WB.addEdge(e);
+            A64: not v in WB.vertices(); set W2 = WB.addEdge(e);
                 W2 is directed & W2 is_Walk_from W1.1,v
                   by A10,A11,A12,A13,Lm57; then
                 W2 is_Walk_from W1.first(), v; then
-            A66: W2 is_Walk_from W1.first(), W1.last() by A7;
+            A65: W2 is_Walk_from W1.first(), W1.last() by A7;
                 set es = esb +* ((k+1) .--> e);
-            A67: dom ((k+1) .--> e) = {k+1} by FUNCOP_1:19; then
-            A68: dom es = dom esb \/ {k+1} by FUNCT_4:def 1;
+            A66: dom ((k+1) .--> e) = {k+1} by FUNCOP_1:19; then
+            A67: dom es = dom esb \/ {k+1} by FUNCT_4:def 1;
                 now let x be set; assume
-                A69: x in dom es;
-                    now per cases by A68, A69, XBOOLE_0:def 2;
+                A68: x in dom es;
+                    now per cases by A67, A68, XBOOLE_0:def 2;
                     suppose x in dom esb; then
-                    A70: x in Seg k by A21; then
+                    A69: x in Seg k by A20; then
                         reconsider x'=x as Element of NAT;
-                    A71: 1 <= x' & x' <= k by A70,FINSEQ_1:3; then
+                    A70: 1 <= x' & x' <= k by A69,FINSEQ_1:3; then
                         x' <= k+1 by NAT_1:12;
-                        hence x in Seg (k+1) by A71, FINSEQ_1:3; end;
+                        hence x in Seg (k+1) by A70, FINSEQ_1:3; end;
                     suppose x in {k+1}; then
-                    A72: x = k+1 by TARSKI:def 1;
+                    A71: x = k+1 by TARSKI:def 1;
                         1 <= k+1 by NAT_1:12;
-                        hence x in Seg (k+1) by A72,FINSEQ_1:3; end;
+                        hence x in Seg (k+1) by A71,FINSEQ_1:3; end;
                     end;
                     hence x in Seg (k+1);
                 end; then
-            A73: dom es c= Seg (k+1) by TARSKI:def 3; then
+            A72: dom es c= Seg (k+1) by TARSKI:def 3; then
                 reconsider es as FinSubsequence by FINSEQ_1:def 12;
                 now let z be set; assume
-                A74: z in es; then consider x,y being set such that
-                A75: z = [x,y] by RELAT_1:def 1;
-                A76: x in dom es & es.x = y by A74, A75, FUNCT_1:8;
+                A73: z in es; then consider x,y being set such that
+                A74: z = [x,y] by RELAT_1:def 1;
+                A75: x in dom es & es.x = y by A73, A74, FUNCT_1:8;
                     now per cases;
                     suppose
-                    A77: x in dom ((k+1) .--> e); then
-                    A78: y = ((k+1).-->e).x by A67,A68,A76,FUNCT_4:def 1;
-                    A79: x = k+1 by A67, A77, TARSKI:def 1; then
-                    A80: y = e by A78, FUNCOP_1:87;
-                        reconsider x' = x as Element of NAT by A67,A77;
-                    A81: 1 <= x' & x' <= len W1.edgeSeq()
-                          by A79, NAT_1:12,A6; then
-                    A82: x in dom W1.edgeSeq() by FINSEQ_3:27;
-                        W1.edgeSeq().x = W1.(2*(k+1)) by A79, A81,Def15
+                    A76: x in dom ((k+1) .--> e); then
+                    A77: y = ((k+1).-->e).x by A66,A67,A75,FUNCT_4:def 1;
+                    A78: x = k+1 by A66, A76, TARSKI:def 1; then
+                    A79: y = e by A77, FUNCOP_1:87;
+                        reconsider x' = x as Element of NAT by A66,A76;
+                    A80: 1 <= x' & x' <= len W1.edgeSeq()
+                          by A78, NAT_1:12,A6; then
+                    A81: x in dom W1.edgeSeq() by FINSEQ_3:27;
+                        W1.edgeSeq().x = W1.(2*(k+1)) by A78, A80,Def15
                                       .= W1.(2*k+1+1);
-                        hence z in W1.edgeSeq() by A75,A80,A82,FUNCT_1:8;
+                        hence z in W1.edgeSeq() by A74,A79,A81,FUNCT_1:8;
                       end;
                       suppose
-                    A83: not x in dom ((k+1) .--> e); then
-                    A84: y = esb.x by A67, A68, A76, FUNCT_4:def 1;
-                        x in dom esb by A67, A68, A76, A83, XBOOLE_0:def 2;
+                    A82: not x in dom ((k+1) .--> e); then
+                    A83: y = esb.x by A66, A67, A75, FUNCT_4:def 1;
+                        x in dom esb by A66, A67, A75, A82, XBOOLE_0:def 2;
 then
-                        [x,y] in esb by A84, FUNCT_1:8; then
-                        [x,y] in WA.edgeSeq() by A20;
-                        hence z in W1.edgeSeq() by A16,A75;
+                        [x,y] in esb by A83, FUNCT_1:8; then
+                        [x,y] in WA.edgeSeq();
+                        hence z in W1.edgeSeq() by A16,A74;
                      end;
                     end;
                     hence z in W1.edgeSeq();
                 end; then
                 es c= W1.edgeSeq() by TARSKI:def 3; then
-                reconsider es as FinSubsequence of W1.edgeSeq()
-                  by GRAPH_2:def 5;
+                reconsider es as Subset of W1.edgeSeq();
                 now assume dom esb /\ dom ((k+1).-->e) <> {}; then
                     consider x being set such that
-                A85: x in dom esb /\ dom ((k+1).-->e) by XBOOLE_0:def 1;
-                A86: x in dom esb & x in {k+1} by A67, A85, XBOOLE_0:def 3;
+                A84: x in dom esb /\ dom ((k+1).-->e) by XBOOLE_0:def 1;
+                A85: x in dom esb & x in {k+1} by A66, A84, XBOOLE_0:def 3;
 then
                     x = k+1 by TARSKI:def 1; then
-                    k+1 <= k+0 by A22,A86,FINSEQ_1:3;
+                    k+1 <= k+0 by A21,A85,FINSEQ_1:3;
                     hence contradiction by XREAL_1:8;
                 end; then
-            A87: dom esb misses dom ((k+1).-->e) by XBOOLE_0:def 7;
-            A88: W2.edgeSeq() = Seq esb ^ <*e*> by A15, A19, Lm48; then
-            A89: len W2.edgeSeq() = len Seq esb + len <*e*> by FINSEQ_1:35
+            A86: dom esb misses dom ((k+1).-->e) by XBOOLE_0:def 7;
+            A87: W2.edgeSeq() = Seq esb ^ <*e*> by A15, A19, Lm48; then
+            A88: len W2.edgeSeq() = len Seq esb + len <*e*> by FINSEQ_1:35
                                 .= len Seq esb + 1 by FINSEQ_1:56
                                 .= card esb + 1 by Th5;
-            A90: len Seq es = card es by Th5
-                          .= card esb + card ((k+1).-->e) by A87, PRE_CIRC:27
+            A89: len Seq es = card es by Th5
+                          .= card esb + card ((k+1).-->e) by A86, PRE_CIRC:27
                           .= card esb + card {[k+1,e]} by FUNCT_4:87
-                          .= len W2.edgeSeq() by A89, CARD_1:79;
-            A91: {k+1} c= Seg (k+1) by A68,A73,XBOOLE_1:11;
+                          .= len W2.edgeSeq() by A88, CARD_1:79;
+            A90: {k+1} c= Seg (k+1) by A67,A72,XBOOLE_1:11;
                 now let m, n be Element of NAT; assume
-                A92: m in dom esb & n in {k+1}; then
-                A93: n = k+1 by TARSKI:def 1;
-                    m <= k by FINSEQ_1:3,A22,A92;
-                    hence m < n by A93, NAT_1:13;
+                A91: m in dom esb & n in {k+1}; then
+                A92: n = k+1 by TARSKI:def 1;
+                    m <= k by FINSEQ_1:3,A21,A91;
+                    hence m < n by A92, NAT_1:13;
                 end; then
-            A94: Sgm(dom es)=Sgm(dom esb) ^ Sgm({k+1}) by A22,A68,A91,FINSEQ_3:
+            A93: Sgm(dom es)=Sgm(dom esb) ^ Sgm({k+1}) by A21,A67,A90,FINSEQ_3:
 48
                           .=Sgm(dom esb) ^ <* k+1 *> by FINSEQ_3:50;
                 now let n be Element of NAT; assume
-                A95: 1 <= n & n <= len W2.edgeSeq(); then
-                A96: n in dom W2.edgeSeq() by FINSEQ_3:27;
-                A97: n in dom Seq es by A95, A90, FINSEQ_3:27;
+                A94: 1 <= n & n <= len W2.edgeSeq(); then
+                A95: n in dom W2.edgeSeq() by FINSEQ_3:27;
+                A96: n in dom Seq es by A94, A89, FINSEQ_3:27;
                     Seq es = es * Sgm(dom es) by FINSEQ_1:def 14; then
-                A98: (Seq es).n = es.(Sgm(dom es).n) by A97,FUNCT_1:22;
-                A99: Seq esb = esb * Sgm(dom esb) by FINSEQ_1:def 14;
-                    now per cases by A88, A96, FINSEQ_1:38;
+                A97: (Seq es).n = es.(Sgm(dom es).n) by A96,FUNCT_1:22;
+                A98: Seq esb = esb * Sgm(dom esb) by FINSEQ_1:def 14;
+                    now per cases by A87, A95, FINSEQ_1:38;
                       suppose
-                    A100: n in dom Seq esb; then
-                    A101: W2.edgeSeq().n = (Seq esb).n by A88, FINSEQ_1:def 7
-                                   .= esb.(Sgm(dom esb).n) by A99,A100,FUNCT_1:
+                    A99: n in dom Seq esb; then
+                    A100: W2.edgeSeq().n = (Seq esb).n by A87, FINSEQ_1:def 7
+                                   .= esb.(Sgm(dom esb).n) by A98,A99,FUNCT_1:
 22;
-                    A102: n in dom Sgm(dom esb) &
-                          Sgm(dom esb).n in dom esb by A99,A100,FUNCT_1:21;
+                    A101: n in dom Sgm(dom esb) &
+                          Sgm(dom esb).n in dom esb by A98,A99,FUNCT_1:21;
 then
-                        Sgm(dom es).n=Sgm(dom esb).n by A94,FINSEQ_1:def 7;
+                        Sgm(dom es).n=Sgm(dom esb).n by A93,FINSEQ_1:def 7;
                         hence W2.edgeSeq().n = (Seq es).n
-                          by A101,A87,A98,A102,FUNCT_4:17;
+                          by A100,A86,A97,A101,FUNCT_4:17;
                       end;
                       suppose ex m being Element of NAT st m in dom <*e*> &
                       n = len Seq esb + m; then consider m being Element of NAT
                       such that
-                    A103: m in dom <*e*> & n = len Seq esb + m;
-                        m in {1} by A103,FINSEQ_1:4,def 8; then
-                    A104: m = 1 by TARSKI:def 1; then
-                    A105: W2.edgeSeq().n = <*e*>.1 by A88, A103, FINSEQ_1:def 7
+                    A102: m in dom <*e*> & n = len Seq esb + m;
+                        m in {1} by A102,FINSEQ_1:4,def 8; then
+                    A103: m = 1 by TARSKI:def 1; then
+                    A104: W2.edgeSeq().n = <*e*>.1 by A87, A102, FINSEQ_1:def 7
                                       .= e by FINSEQ_1:def 8;
-                        len Sgm(dom esb) = card dom esb by A22, FINSEQ_3:44
+                        len Sgm(dom esb) = card dom esb by A21, FINSEQ_3:44
                                        .= card esb by Lm2
                                        .= len Seq esb by Th5; then
-                    A106: (Seq es).n = es.(k+1) by A98,A94,A103,A104,FINSEQ_1:
+                    A105: (Seq es).n = es.(k+1) by A97,A93,A102,A103,FINSEQ_1:
 59;
-                    A107: k+1 in dom ((k+1).-->e) by A67, TARSKI:def 1; then
+                    A106: k+1 in dom ((k+1).-->e) by A66, TARSKI:def 1; then
                         k+1 in dom esb \/ dom ((k+1).-->e)
                           by XBOOLE_0:def 2; then
-                        (Seq es).n = ((k+1).-->e).(k+1) by A106,A107,FUNCT_4:
+                        (Seq es).n = ((k+1).-->e).(k+1) by A105,A106,FUNCT_4:
 def 1
                                   .= e by FUNCOP_1:87;
-                        hence W2.edgeSeq().n = (Seq es).n by A105; end;
+                        hence W2.edgeSeq().n = (Seq es).n by A104; end;
                     end;
                     hence W2.edgeSeq().n = (Seq es).n;
                 end; then
-                W2.edgeSeq() = Seq es by A90, FINSEQ_1:18; then
-                reconsider W2 as Path of W1 by A65,A15,A18,Lm73,A66,Def32;
+                W2.edgeSeq() = Seq es by A89, FINSEQ_1:18; then
+                reconsider W2 as Path of W1 by A64,A15,A18,Lm73,A65,Def32;
                 take W2;
                 thus W2 is directed by A10,A11,A12,A13,Lm57; end;
             end;
@@ -4157,10 +4147,10 @@ def 1
         end;
         hence ex W2 being Path of W1 st W2 is directed;
     end; then
-A108: for k being Element of NAT st P[k] holds P[k+1];
-A109: for k being Element of NAT holds P[k] from NAT_1:sch 1(A4,A108);
+A107: for k being Element of NAT st P[k] holds P[k+1];
+A108: for k being Element of NAT holds P[k] from NAT_1:sch 1(A4,A107);
     W.length() = W.length();
-    hence thesis by A109;
+    hence thesis by A108;
   end;
 end;
 
@@ -6624,7 +6614,7 @@ theorem Th164: ::tSUBWALK06
       W1.edges() c= W2.edges() & W1.vertices() c= W2.vertices() proof
     assume
 A1: W1 is Subwalk of W2; then
-    consider es being FinSubsequence of W2.edgeSeq() such that
+    consider es being Subset of W2.edgeSeq() such that
 A2: W1.edgeSeq() = Seq es by Def32;
     now let e be set; assume e in W1.edges(); then
         consider n being even Element of NAT such that
@@ -6664,7 +6654,7 @@ theorem Th165: ::tSUBWALK07
        proof
     assume
 A1: W1 is Subwalk of W2; then
-    consider es being FinSubsequence of W2.edgeSeq() such that
+    consider es being Subset of W2.edgeSeq() such that
 A2: W1.edgeSeq() = Seq es by Def32;
     let m be odd Element of NAT such that
 A3: m <= len W1;
@@ -6716,7 +6706,7 @@ theorem ::tSUBWALK08
        ex n being even Element of NAT st m <= n & n <= len W2 & W1.m = W2.n
        proof
     assume W1 is Subwalk of W2; then
-    consider es being FinSubsequence of W2.edgeSeq() such that
+    consider es being Subset of W2.edgeSeq() such that
 A1: W1.edgeSeq() = Seq es by Def32;
     let m be even Element of NAT such that
 A2: 1 <= m & m <= len W1;
@@ -6835,151 +6825,150 @@ A2: 1 < len W1 by A1, REAL_1:def 5;
         W5 is_Walk_from W1.first(), W1.k2 by A35, Def23; then
         W2 is_Walk_from W1.first(), W1.k by A7, Lm43; then
     A38: W2 is_Walk_from W1.first(), W1.last() by A6;
-        consider es5 being FinSubsequence of W4.edgeSeq() such that
+        consider es5 being Subset of W4.edgeSeq() such that
     A39: W5.edgeSeq() = Seq es5 by Def32;
     A40: W4.edgeSeq() c= W3.edgeSeq() by Lm47;
         W3.edgeSeq() c= W1.edgeSeq() by A13, Lm47; then
     A41: W4.edgeSeq() c= W1.edgeSeq() by A40, XBOOLE_1:1;
-        es5 c= W4.edgeSeq() by GRAPH_2:def 5; then
-    A42: es5 c= W1.edgeSeq() by A41, XBOOLE_1:1; then
-        reconsider es5 as FinSubsequence of W1.edgeSeq() by GRAPH_2:def 5;
+     es5 c= W1.edgeSeq() by A41, XBOOLE_1:1; then
+        reconsider es5 as Subset of W1.edgeSeq();
         set g = ((k2+1) div 2) .--> e, es = es5 +* g;
-    A43: dom es = dom es5 \/ dom g & for x st x in dom es5 \/ dom g
+    A42: dom es = dom es5 \/ dom g & for x st x in dom es5 \/ dom g
           holds (x in dom g implies es.x = g.x) &
           (not x in dom g implies es.x = es5.x) by FUNCT_4:def 1;
-    A44: dom g = {(k2+1) div 2} & rng g = {e} by FUNCOP_1:14,19;
-    A45: g.((k2+1) div 2) = e by FUNCOP_1:87;
+    A43: dom g = {(k2+1) div 2} & rng g = {e} by FUNCOP_1:14,19;
+    A44: g.((k2+1) div 2) = e by FUNCOP_1:87;
         now let z be set; assume
-        A46: z in es; then consider x,y being set such that
-        A47: z = [x,y] by RELAT_1:def 1;
-        A48: x in dom es & y = es.x by A46,A47, FUNCT_1:8;
+        A45: z in es; then consider x,y being set such that
+        A46: z = [x,y] by RELAT_1:def 1;
+        A47: x in dom es & y = es.x by A45,A46, FUNCT_1:8;
             now per cases;
             suppose
-            A49: x in dom g; then
-            A50: x = (k2+1) div 2 by A44, TARSKI:def 1;
+            A48: x in dom g; then
+            A49: x = (k2+1) div 2 by A43, TARSKI:def 1;
                 1 <= k2+1 by NAT_1:12; then
-            A51: x in dom W1.edgeSeq() & W1.(k2+1) = W1.edgeSeq().x
-                  by A16,A50,Lm44;
-                W1.edgeSeq().x = y by A43,A45,A48,A49,A50,A51;
-                hence z in W1.edgeSeq() by A47, A51, FUNCT_1:8; end;
+            A50: x in dom W1.edgeSeq() & W1.(k2+1) = W1.edgeSeq().x
+                  by A16,A49,Lm44;
+                W1.edgeSeq().x = y by A42,A44,A47,A48,A49,A50;
+                hence z in W1.edgeSeq() by A46, A50, FUNCT_1:8; end;
             suppose
-            A52: not x in dom g; then
-            A53: x in dom es5 by A43, A48, XBOOLE_0:def 2;
-                y = es5.x by A43, A48, A52; then
-                z in es5 by A47,A53,FUNCT_1:8;
-                hence z in W1.edgeSeq() by A42; end;
+            A51: not x in dom g; then
+            A52: x in dom es5 by A42, A47, XBOOLE_0:def 2;
+                y = es5.x by A42, A47, A51; then
+                z in es5 by A46,A52,FUNCT_1:8;
+                hence z in W1.edgeSeq(); end;
             end;
             hence z in W1.edgeSeq();
         end; then
-    A54: es c= W1.edgeSeq() by TARSKI:def 3; then
+    A53: es c= W1.edgeSeq() by TARSKI:def 3; then
         dom es c= dom W1.edgeSeq() by RELAT_1:25; then
-    A55: dom es c= Seg len W1.edgeSeq() by FINSEQ_1:def 3; then
+    A54: dom es c= Seg len W1.edgeSeq() by FINSEQ_1:def 3; then
         reconsider es as FinSubsequence by FINSEQ_1:def 12;
-        reconsider es as FinSubsequence of W1.edgeSeq() by A54, GRAPH_2:def 5;
-    A56: dom es5 c= dom W4.edgeSeq() by GRAPH_2:27;
+        reconsider es as Subset of W1.edgeSeq() by A53;
+    A55: dom es5 c= dom W4.edgeSeq() by GRAPH_2:27;
         now thus dom es5 c= Seg len W1.edgeSeq() &
-              dom g c= Seg len W1.edgeSeq() by A43,XBOOLE_1:11,A55;
+              dom g c= Seg len W1.edgeSeq() by A42,XBOOLE_1:11,A54;
             let x,y be Element of NAT such that
-        A57: x in dom es5 & y in dom g;
-        A58: y = (k2+1) div 2 by A44, A57, TARSKI:def 1;
+        A56: x in dom es5 & y in dom g;
+        A57: y = (k2+1) div 2 by A43, A56, TARSKI:def 1;
             2 divides k2+1 by PEPIN:22; then
-        A59: 2*y = k2+1 by A58, NAT_D:3;
-            x <= len W4.edgeSeq() by A56,A57,FINSEQ_3:27; then
+        A58: 2*y = k2+1 by A57, NAT_D:3;
+            x <= len W4.edgeSeq() by A55,A56,FINSEQ_3:27; then
             2*x <= 2*len W4.edgeSeq() by XREAL_1:66; then
             2*x+1 <= 2*len W4.edgeSeq()+1 by XREAL_1:9; then
             2*x+1 <= k2 by A17, Def15; then
-            2*x+1 < 2*y by A59, NAT_1:13; then
-        A60: 2*x+1-1 < 2*y - 0 by REAL_1:92; then
+            2*x+1 < 2*y by A58, NAT_1:13; then
+        A59: 2*x+1-1 < 2*y - 0 by REAL_1:92; then
             x <= y by Lm1;
-            hence x < y by A60, REAL_1:def 5;
+            hence x < y by A59, REAL_1:def 5;
         end; then
-    A61: Sgm(dom es) = Sgm(dom es5) ^ Sgm(dom g) by A43, FINSEQ_3:48;
+    A60: Sgm(dom es) = Sgm(dom es5) ^ Sgm(dom g) by A42, FINSEQ_3:48;
         now
-        A62: e Joins W5.last(), W1.k, G by A7,A36,A6,A12,A13,Lm27;
+        A61: e Joins W5.last(), W1.k, G by A7,A36,A6,A12,A13,Lm27;
             len W2 = len W5 + 2 by A7,A37,Lm41; then
-        A63: len W5 + 2 = 2 * len W2.edgeSeq() + 1 by Def15;
-        A64: len Seq es = card es by Th5
+        A62: len W5 + 2 = 2 * len W2.edgeSeq() + 1 by Def15;
+        A63: len Seq es = card es by Th5
                       .= card dom es by Lm2;
             now assume dom es5 /\ dom g <> {}; then
                 consider x being set such that
-            A65: x in dom es5 /\ dom g by XBOOLE_0:def 1;
-            A66: x in dom es5 & x in dom g by A65, XBOOLE_0:def 3; then
-            A67: x = (k2+1) div 2 by A44, TARSKI:def 1;
-                (k2+1) div 2 <= len W4.edgeSeq() by A56,A66,A67,FINSEQ_3:27;
+            A64: x in dom es5 /\ dom g by XBOOLE_0:def 1;
+            A65: x in dom es5 & x in dom g by A64, XBOOLE_0:def 3; then
+            A66: x = (k2+1) div 2 by A43, TARSKI:def 1;
+                (k2+1) div 2 <= len W4.edgeSeq() by A55,A65,A66,FINSEQ_3:27;
 then
-            A68: 2 * ((k2+1) div 2) <= 2*len W4.edgeSeq() by XREAL_1:66;
+            A67: 2 * ((k2+1) div 2) <= 2*len W4.edgeSeq() by XREAL_1:66;
                 2 divides (k2+1) by PEPIN:22; then
-                k2+1 <= 2*len W4.edgeSeq() by A68, NAT_D:3; then
+                k2+1 <= 2*len W4.edgeSeq() by A67, NAT_D:3; then
                 k2+1+1 <= 2*len W4.edgeSeq()+1 by XREAL_1:9; then
                 (1+1)+k2 <= 0 + k2 by A17,Def15;
                 hence contradiction by XREAL_1:8;
             end; then
-        A69: dom es5 misses dom g by XBOOLE_0:def 7; then
-            len Seq es = card dom es5 + card dom g by A43,A64,CARD_2:53
-                      .= card dom es5 + 1 by A44, CARD_1:79
+        A68: dom es5 misses dom g by XBOOLE_0:def 7; then
+            len Seq es = card dom es5 + card dom g by A42,A63,CARD_2:53
+                      .= card dom es5 + 1 by A43, CARD_1:79
                       .= card es5 + 1 by Lm2
                       .= len W5.edgeSeq() + 1 by A39, Th5; then
             2 * len Seq es + 1 = 2*len W5.edgeSeq() + 1 + 2
-                              .= 2 * len W2.edgeSeq() + 1 by A63, Def15; then
+                              .= 2 * len W2.edgeSeq() + 1 by A62, Def15; then
             2 * len Seq es = 2 * len W2.edgeSeq();
             hence
-        A70: len W2.edgeSeq() = len Seq es;
+        A69: len W2.edgeSeq() = len Seq es;
             let x be Element of NAT; assume
-        A71: 1 <= x & x <= len W2.edgeSeq();
+        A70: 1 <= x & x <= len W2.edgeSeq();
             set h = Sgm dom es;
-        A72: Seq es = es * h by FINSEQ_1:def 14;
-        A73: x in dom (Seq es) by A70, A71, FINSEQ_3:27; then
-        A74: x in dom h & h.x in dom es by A72,FUNCT_1:21;
-        A75: (Seq es).x = es.(h.x) by A72, A73, FUNCT_1:22;
-        A76: dom h = Seg (len Sgm(dom es5) + len (Sgm dom g)) &
+        A71: Seq es = es * h by FINSEQ_1:def 14;
+        A72: x in dom (Seq es) by A69, A70, FINSEQ_3:27; then
+        A73: x in dom h & h.x in dom es by A71,FUNCT_1:21;
+        A74: (Seq es).x = es.(h.x) by A71, A72, FUNCT_1:22;
+        A75: dom h = Seg (len Sgm(dom es5) + len (Sgm dom g)) &
               (for x being Element of NAT st x in dom Sgm dom es5 holds
                h.x = Sgm(dom es5).x) &
               (for x being Element of NAT st x in dom Sgm dom g holds
                 h.(len Sgm(dom es5) + x) = (Sgm dom g).x)
-                by A61, FINSEQ_1:def 7;
-        A77: Sgm dom g = Sgm {(k2+1) div 2} by FUNCOP_1:19;
+                by A60, FINSEQ_1:def 7;
+        A76: Sgm dom g = Sgm {(k2+1) div 2} by FUNCOP_1:19;
             now assume k2+1 div 2 = 0; then
-            A78: 2 * ((k2+1) div 2) = 2*0;
+            A77: 2 * ((k2+1) div 2) = 2*0;
                 2 divides k2+1 by PEPIN:22;
-                hence contradiction by A78,NAT_D:3;
+                hence contradiction by A77,NAT_D:3;
             end; then
-            Sgm dom g = <* (k2+1) div 2 *> by A77, FINSEQ_3:50; then
-        A79: len Sgm dom g = 1 & (Sgm dom g).1 = (k2+1) div 2 by FINSEQ_1:57;
-        A80: dom es5 c=Seg len W1.edgeSeq() by A43,A55,XBOOLE_1:11;then
-        A81: len Sgm(dom es5) = card dom es5 by FINSEQ_3:44
+            Sgm dom g = <* (k2+1) div 2 *> by A76, FINSEQ_3:50; then
+        A78: len Sgm dom g = 1 & (Sgm dom g).1 = (k2+1) div 2 by FINSEQ_1:57;
+        A79: dom es5 c=Seg len W1.edgeSeq() by A42,A54,XBOOLE_1:11;then
+        A80: len Sgm(dom es5) = card dom es5 by FINSEQ_3:44
                             .= card es5 by Lm2
                             .= len W5.edgeSeq() by A39, Th5;
             now per cases;
             suppose
-            A82: x <= len Sgm (dom es5); then
-            A83: x in dom Sgm dom es5 by A71, FINSEQ_3:27; then
-            A84: h.x = Sgm(dom es5).x by A61, FINSEQ_1:def 7;
-                rng Sgm(dom es5) = dom es5 by A80, FINSEQ_1:def 13; then
-                h.x in dom es5 by A83, A84, FUNCT_1:def 5; then
-                not h.x in dom g by A69, XBOOLE_0:3; then
-            A85: (Seq es).x = es5.(Sgm(dom es5).x) by A74,A75,A43,A84;
-            A86: W5.edgeSeq().x = W5.(2*x) by A81,A82,A71, Def15;
-            A87: x in dom W5.edgeSeq() by A71,A81,A82,FINSEQ_3:27; then
+            A81: x <= len Sgm (dom es5); then
+            A82: x in dom Sgm dom es5 by A70, FINSEQ_3:27; then
+            A83: h.x = Sgm(dom es5).x by A60, FINSEQ_1:def 7;
+                rng Sgm(dom es5) = dom es5 by A79, FINSEQ_1:def 13; then
+                h.x in dom es5 by A82, A83, FUNCT_1:def 5; then
+                not h.x in dom g by A68, XBOOLE_0:3; then
+            A84: (Seq es).x = es5.(Sgm(dom es5).x) by A73,A74,A42,A83;
+            A85: W5.edgeSeq().x = W5.(2*x) by A80,A81,A70, Def15;
+            A86: x in dom W5.edgeSeq() by A70,A80,A81,FINSEQ_3:27; then
                 2*x in dom W5 by Lm45; then
-            A88: W2.(2*x) = W5.edgeSeq().x by A62, A86, Lm42
+            A87: W2.(2*x) = W5.edgeSeq().x by A61, A85, Lm42
                         .= (es5 * Sgm(dom es5)).x by A39, FINSEQ_1:def 14;
-                x in dom (es5 * Sgm(dom es5)) by A39,A87,FINSEQ_1:def 14;
-                hence (Seq es).x = W2.(2*x) by A85,A88,FUNCT_1:22; end;
+                x in dom (es5 * Sgm(dom es5)) by A39,A86,FINSEQ_1:def 14;
+                hence (Seq es).x = W2.(2*x) by A84,A87,FUNCT_1:22; end;
             suppose len Sgm (dom es5) < x; then
-            A89: len Sgm(dom es5) + 1 <= x by NAT_1:13;
-                x <= len Sgm(dom es5) + 1 by A74,A76,A79,FINSEQ_1:3; then
-            A90: x = len Sgm(dom es5) + 1 by A89, XXREAL_0:1;
-                1 in dom Sgm(dom g) by A79, FINSEQ_3:27; then
-            A91: h.x = (k2+1) div 2 by A61,FINSEQ_1:def 7,A79,A90;
-                 h.x in dom g by A91, A44, TARSKI:def 1; then
-                 A92: (Seq es).x = g.((k2+1) div 2) by A43,A74,A91,A75
+            A88: len Sgm(dom es5) + 1 <= x by NAT_1:13;
+                x <= len Sgm(dom es5) + 1 by A73,A75,A78,FINSEQ_1:3; then
+            A89: x = len Sgm(dom es5) + 1 by A88, XXREAL_0:1;
+                1 in dom Sgm(dom g) by A78, FINSEQ_3:27; then
+            A90: h.x = (k2+1) div 2 by A60,FINSEQ_1:def 7,A78,A89;
+                 h.x in dom g by A90, A43, TARSKI:def 1; then
+                 A91: (Seq es).x = g.((k2+1) div 2) by A42,A73,A90,A74
                           .= e by FUNCOP_1:87
-                          .= W2.(len W5 + 1) by A62, Lm42;
-                2*x = 2*len W5.edgeSeq()+1+1 by A81,A90
+                          .= W2.(len W5 + 1) by A61, Lm42;
+                2*x = 2*len W5.edgeSeq()+1+1 by A80,A89
                    .= len W5 + 1 by Def15;
-                hence (Seq es).x = W2.(2*x) by A92; end;
+                hence (Seq es).x = W2.(2*x) by A91; end;
             end;
-            hence W2.edgeSeq().x = (Seq es).x by A71,Def15;
+            hence W2.edgeSeq().x = (Seq es).x by A70,Def15;
         end; then
         W2.edgeSeq() = Seq es by FINSEQ_1:18; then
         reconsider W2 as Path of W1 by A38, Def32;

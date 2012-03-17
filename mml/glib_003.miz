@@ -11,29 +11,28 @@ environ
       GLIB_001, GLIB_002, GLIB_003, MSAFREE2, PARTFUN1, PBOOLE, REALSET1,
       RELAT_1, RELAT_2, RLVECT_1, SEQ_1, TREES_1, NAT_1;
  notations TARSKI, XBOOLE_0, NUMBERS, SUBSET_1, XCMPLX_0, XXREAL_0, XREAL_0,
-      DOMAIN_1, REAL_1, RELAT_1, PARTFUN1, FUNCT_1, SEQ_1, CARD_1, GRAPH_2,
-      PBOOLE, FUNCT_2, GRAPH_5, RVSUM_1, FINSEQ_5, ORDINAL1, POLYNOM1,
-      RELSET_1, FINSEQ_1, FINSET_1, NAT_1, NAT_D, FUNCOP_1, FUNCT_4, GLIB_000,
-      GLIB_001, GLIB_002;
- constructors DOMAIN_1, FUNCT_4, XXREAL_0, REAL_1, BINOP_2, FUNCOP_1, SETWOP_2,
-      RVSUM_1, FINSEQ_5, GRAPH_2, POLYNOM1, GRAPH_5, GLIB_001, GLIB_002, NAT_1,
-      FINSOP_1, NAT_D;
- registrations RELSET_1, FINSET_1, PNPROC_1, INT_1, FINSEQ_1, SEQ_1, FUNCT_1,
-      MEMBERED, ORDINAL1, GLIB_000, GLIB_002, POLYNOM1, CIRCCMB3, XREAL_0,
-      NAT_1, FUNCOP_1;
+      DOMAIN_1, REAL_1, RELAT_1, PARTFUN1, FUNCT_1, SEQ_1, CARD_1, PBOOLE,
+      FUNCT_2, GRAPH_5, RVSUM_1, FINSEQ_5, ORDINAL1, POLYNOM1, RELSET_1,
+      FINSEQ_1, FINSET_1, NAT_1, FUNCOP_1, FUNCT_4, GLIB_000, GLIB_001,
+      GLIB_002;
+ constructors DOMAIN_1, XXREAL_0, NAT_1, BINOP_2, FINSOP_1, RVSUM_1, FINSEQ_5,
+      POLYNOM1, GRAPH_5, GLIB_001, GLIB_002;
+ registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCOP_1,
+      FINSET_1, NUMBERS, XREAL_0, NAT_1, MEMBERED, FINSEQ_1, SEQ_1, GLIB_000,
+      GRAPH_2, POLYNOM1, CIRCCMB3, GLIB_002;
  requirements ARITHM, BOOLE, NUMERALS, REAL, SUBSET;
  definitions GLIB_000, FUNCOP_1, RVSUM_1;
  theorems CARD_1, CARD_2, FUNCOP_1, FINSEQ_1, FINSEQ_2, FINSEQ_3, FINSEQ_5,
-      FINSET_1, FUNCT_1, FUNCT_2, FUNCT_4, GLIB_000, GLIB_001,
-      GLIB_002, GRAPH_2, GRAPH_5, INT_1, NAT_1, PARTFUN1, PBOOLE, POLYNOM3,
-      REAL_1, RELAT_1, RELSET_1, RVSUM_1, SEQ_1, TARSKI, XBOOLE_0, XBOOLE_1,
-      XREAL_0, ZFMISC_1, PRE_CIRC, XREAL_1, XXREAL_0, ENUMSET1, ORDERS_1,
-      ORDINAL1, FINSOP_1;
+      FINSET_1, FUNCT_1, FUNCT_2, FUNCT_4, GLIB_000, GLIB_001, GLIB_002,
+      GRAPH_2, GRAPH_5, INT_1, NAT_1, PARTFUN1, PBOOLE, POLYNOM3, REAL_1,
+      RELAT_1, RELSET_1, RVSUM_1, SEQ_1, TARSKI, XBOOLE_0, XBOOLE_1, XREAL_0,
+      ZFMISC_1, PRE_CIRC, XREAL_1, XXREAL_0, ENUMSET1, ORDERS_1, ORDINAL1,
+      FINSOP_1;
  schemes NAT_1, FINSEQ_1, FUNCT_1;
 
 begin :: Preliminaries
 
-definition let D be set, fs be FinSequence of D, fss be FinSubsequence of fs;
+definition let D be set, fs be FinSequence of D, fss be Subset of fs;
   redefine func Seq fss -> FinSequence of D;
   correctness proof
     now let y be set; assume y in rng Seq fss; then
@@ -78,15 +77,15 @@ A2: len pa = 9 & pa.1 = x1 & pa.2 = x2 & pa.3 = x3 & pa.4 = x4 & pa.5 = x5 &
 end;
 
 theorem Th2:
-   for fs being FinSequence of REAL, fss being FinSubsequence of fs holds
+   for fs being FinSequence of REAL, fss being Subset of fs holds
    (for i being Element of NAT st i in dom fs holds 0 <= fs.i ) implies
    Sum (Seq fss) <= Sum fs proof
    defpred P[Element of NAT] means
-     for fs being FinSequence of REAL, fss being FinSubsequence of fs
+     for fs being FinSequence of REAL, fss being Subset of fs
       st (for i being Element of NAT st i in dom fs holds 0 <= fs.i) &
       len Seq fss = $1
         holds Sum (Seq fss) <= Sum fs;
-    now let fs be FinSequence of REAL, fss be FinSubsequence of fs; assume
+    now let fs be FinSequence of REAL, fss be Subset of fs; assume
     A1: (for i being Element of NAT st i in dom fs holds 0 <= fs.i) &
     len Seq fss=0;then
         Seq fss = <*> REAL by FINSEQ_1:25;
@@ -95,137 +94,138 @@ theorem Th2:
 A2: P[0];
     now let k be Element of NAT; assume
     A3: P[k];
-        let fs be FinSequence of REAL, fss be FinSubsequence of fs; assume
+        let fs be FinSequence of REAL, fss be Subset of fs; assume
     A4: (for i being Element of NAT st i in dom fs holds 0 <= fs.i) &
     len Seq fss = k+1;
         defpred P2[Element of NAT] means $1 in dom fss;
         consider L being Element of NAT such that
     A5: dom fss c= Seg L by FINSEQ_1:def 12;
     A6: for n being Element of NAT st P2[n] holds n <= L by A5,FINSEQ_1:3;
-    A7: fss c= fs by GRAPH_2:def 5;
         card fss = k + 1 by A4, GLIB_001:5; then
         dom fss <> {} by CARD_1:47,RELAT_1:64; then
         consider d being set such that
-    A8: d in dom fss by XBOOLE_0:def 1;
-    A9: dom fss c= dom fs by GRAPH_2:27; then
-        d in dom fs by A8; then reconsider d as Element of NAT;
-        d in dom fss by A8; then
-    A10: ex d being Element of NAT st P2[d];
+    A7: d in dom fss by XBOOLE_0:def 1;
+    A8: dom fss c= dom fs by GRAPH_2:27; then
+        d in dom fs by A7; then reconsider d as Element of NAT;
+        d in dom fss by A7; then
+    A9: ex d being Element of NAT st P2[d];
         consider x being Element of NAT such that
-    A11: P2[x] & for n being Element of NAT st P2[n] holds n <= x
-    from NAT_1:sch 6(A6,A10);
+    A10: P2[x] & for n being Element of NAT st P2[n] holds n <= x
+    from NAT_1:sch 6(A6,A9);
         set y = fs.x;
-    A12: 1 <= x & x <= len fs by A9,A11,FINSEQ_3:27; then
+    A11: 1 <= x & x <= len fs by A8,A10,FINSEQ_3:27; then
         reconsider xx1 = x-1 as Element of NAT by INT_1:18;
         set fssq = fss | Seg xx1;
-        reconsider fssq as FinSubsequence of fs by GRAPH_2:29;
+        reconsider fssq as Subset of fs by GRAPH_2:29;
         consider j being Nat such that
-    A13: x + j = len fs by A12, NAT_1:10;
+    A12: x + j = len fs by A11, NAT_1:10;
     j in NAT by ORDINAL1:def 13;
     then consider fsD, fsC being FinSequence of REAL such that
-    A14: len fsD = x & len fsC = j & fs = fsD ^ fsC by A13, FINSEQ_2:26;
-    A15: xx1 + 1 = x; then
+    A13: len fsD = x & len fsC = j & fs = fsD ^ fsC by A12, FINSEQ_2:26;
+    A14: xx1 + 1 = x; then
         consider fsA, fsB being FinSequence of REAL such that
-    A16: len fsA = xx1 & len fsB = 1 & fsD = fsA ^ fsB by A14,FINSEQ_2:26;
-        x in dom fsD by A12, A14, FINSEQ_3:27; then
-    A17: y = fsD.x by A14, FINSEQ_1:def 7;
-        1 in dom fsB by A16, FINSEQ_3:27; then
-        y = fsB.1 by A15, A16, A17, FINSEQ_1:def 7; then
-    A18: fsB = <* y *> by A16, FINSEQ_1:57;
-    A19: Sum fs = Sum fsD + Sum fsC by A14, RVSUM_1:105
-              .= Sum fsA + Sum <*y*> + Sum fsC by A18, A16, RVSUM_1:105
+    A15: len fsA = xx1 & len fsB = 1 & fsD = fsA ^ fsB by A13,FINSEQ_2:26;
+        x in dom fsD by A11, A13, FINSEQ_3:27; then
+    A16: y = fsD.x by A13, FINSEQ_1:def 7;
+        1 in dom fsB by A15, FINSEQ_3:27; then
+        y = fsB.1 by A14, A15, A16, FINSEQ_1:def 7; then
+    A17: fsB = <* y *> by A15, FINSEQ_1:57;
+    A18: Sum fs = Sum fsD + Sum fsC by A13, RVSUM_1:105
+              .= Sum fsA + Sum <*y*> + Sum fsC by A17, A15, RVSUM_1:105
               .= Sum fsA + y + Sum fsC by FINSOP_1:12;
         now let i be Element of NAT; assume
-        A20: i in dom fsC; then
-        A21: fs.(x+i) = fsC.i by A14, FINSEQ_1:def 7;
-            x+i in dom fs by A14, A20, FINSEQ_1:41;
-            hence 0 <= fsC.i by A21, A4;
+        A19: i in dom fsC; then
+        A20: fs.(x+i) = fsC.i by A13, FINSEQ_1:def 7;
+            x+i in dom fs by A13, A19, FINSEQ_1:41;
+            hence 0 <= fsC.i by A20, A4;
         end; then
         0 <= Sum fsC by RVSUM_1:114; then
-    A22: Sum fsA + y + 0 <= Sum fs by A19, XREAL_1:9;
+    A21: Sum fsA + y + 0 <= Sum fs by A18, XREAL_1:9;
         consider q being (FinSequence of REAL), z being Real such that
-    A23: Seq fss = q^<*z*> by A4, FINSEQ_2:22;
-    A24: len Seq fss = len q + len <*z*> by A23, FINSEQ_1:35; then
-    A25: k + 1 = len q + 1 by A4, FINSEQ_1:56; then
-    A26: len q = k;
-    A27: now let i be Element of NAT; assume
-        A28: i in dom fsA; then
-        A29: fsA.i = fsD.i by A16, FINSEQ_1:def 7;
-        A30: dom fsA c= dom fsD by A16, FINSEQ_1:39; then
-        A31: i in dom fsD by A28;
-        A32: fsA.i = fs.i by A14, A29, FINSEQ_1:def 7,A30,A28;
-            dom fsD c= dom fs by A14, FINSEQ_1:39;
-            hence 0 <= fsA.i by A4, A32,A31;
+    A22: Seq fss = q^<*z*> by A4, FINSEQ_2:22;
+    A23: len Seq fss = len q + len <*z*> by A22, FINSEQ_1:35; then
+    A24: k + 1 = len q + 1 by A4, FINSEQ_1:56; then
+    A25: len q = k;
+    A26: now let i be Element of NAT; assume
+        A27: i in dom fsA; then
+        A28: fsA.i = fsD.i by A15, FINSEQ_1:def 7;
+        A29: dom fsA c= dom fsD by A15, FINSEQ_1:39; then
+        A30: i in dom fsD by A27;
+        A31: fsA.i = fs.i by A13, A28, FINSEQ_1:def 7,A29,A27;
+            dom fsD c= dom fs by A13, FINSEQ_1:39;
+            hence 0 <= fsA.i by A4, A31,A30;
         end;
         now let z be set; assume
-        A33: z in fssq; then consider a,b being set such that
-        A34: z = [a,b] by RELAT_1:def 1;
-        A35: a in Seg xx1 & [a,b] in fss by A33,A34,RELAT_1:def 11; then
+        A32: z in fssq; then consider a,b being set such that
+        A33: z = [a,b] by RELAT_1:def 1;
+        A34: a in Seg xx1 & [a,b] in fss by A32,A33,RELAT_1:def 11; then
             reconsider a as Element of NAT;
-        A36: 1 <= a & a <= xx1 by A35, FINSEQ_1:3; then
-        A37: a in dom fsA by A16, FINSEQ_3:27;
-        A38: a in dom fs & b = fs.a by A7,A35,FUNCT_1:8;
-            a+0 <= x by A15, A36, XREAL_1:9; then
-            a in dom fsD by A14,A36, FINSEQ_3:27; then
-            b = fsD.a by A14, A38, FINSEQ_1:def 7; then
-            b = fsA.a by A16, A37, FINSEQ_1:def 7;
-            hence z in fsA by A34,A37,FUNCT_1:8;
+        A35: 1 <= a & a <= xx1 by A34, FINSEQ_1:3; then
+        A36: a in dom fsA by A15, FINSEQ_3:27;
+        A37: a in dom fs & b = fs.a by A34,FUNCT_1:8;
+            a+0 <= x by A14, A35, XREAL_1:9; then
+            a in dom fsD by A13,A35, FINSEQ_3:27; then
+            b = fsD.a by A13, A37, FINSEQ_1:def 7; then
+            b = fsA.a by A15, A36, FINSEQ_1:def 7;
+            hence z in fsA by A33,A36,FUNCT_1:8;
         end; then
         fssq c= fsA by TARSKI:def 3; then
-        reconsider fssq as FinSubsequence of fsA by GRAPH_2:def 5;
+        reconsider fssq as Subset of fsA;
         now
-        A39: len Seq fssq = card fssq by GLIB_001:5;
-        A40: card fss = k+1  by A4, GLIB_001:5;
-        A41: now let z be set; assume z in {[x,y]}; then
-            A42: z = [x,y] by TARSKI:def 1;
-            A43: [x,fss.x] in fss by A11, FUNCT_1:8;
-                thus z in fss by A42, FUNCT_1:8,A43,A7;
+        A38: len Seq fssq = card fssq by GLIB_001:5;
+        A39: card fss = k+1  by A4, GLIB_001:5;
+        A40: now let z be set; assume z in {[x,y]}; then
+            A41: z = [x,y] by TARSKI:def 1;
+            A42: [x,fss.x] in fss by A10, FUNCT_1:8;
+                thus z in fss by A41, FUNCT_1:8,A42;
             end; then
-        A44: {[x,y]} c= fss by TARSKI:def 3;
+        A43: {[x,y]} c= fss by TARSKI:def 3;
             now let z be set;
                 hereby assume
-                A45: z in fssq; then consider a,b being set such that
-                A46: z = [a,b] by RELAT_1:def 1;
-                A47: z in fss & a in Seg xx1 by A45, A46, RELAT_1:def 11; then
+                A44: z in fssq; then consider a,b being set such that
+                A45: z = [a,b] by RELAT_1:def 1;
+                A46: z in fss & a in Seg xx1 by A44, A45, RELAT_1:def 11; then
                     reconsider a as Element of NAT;
-                    a <= xx1 by A47, FINSEQ_1:3; then
-                    a < x by A15, NAT_1:13; then
+                    a <= xx1 by A46, FINSEQ_1:3; then
+                    a < x by A14, NAT_1:13; then
                     [a,b] <> [x,y] by ZFMISC_1:33; then
-                    not z in {[x,y]} by A46, TARSKI:def 1;
-                    hence z in fss \ {[x,y]} by A47, XBOOLE_0:def 4;
+                    not z in {[x,y]} by A45, TARSKI:def 1;
+                    hence z in fss \ {[x,y]} by A46, XBOOLE_0:def 4;
                 end;
                 assume
-            A48: z in fss \ {[x,y]}; then
-            A49: z in fss & not z in {[x,y]} by XBOOLE_0:def 4;
+            A47: z in fss \ {[x,y]}; then
+            A48: z in fss & not z in {[x,y]} by XBOOLE_0:def 4;
                 consider a,b being set such that
-            A50: z = [a,b] by A48,RELAT_1:def 1;
-            A51: a in dom fss by A48,A50,FUNCT_1:8;
-            A52: a in dom fs by A50,A7,A49,FUNCT_1:8; then
+            A49: z = [a,b] by A47,RELAT_1:def 1;
+A50:             z in fss by A47,XBOOLE_0:def 4;
+                 then
+            A51: a in dom fss by A49,FUNCT_1:8;
+            A52: a in dom fs by A49,A48,FUNCT_1:8; then
                 reconsider a as Element of NAT;
             A53: 1 <= a by A52, FINSEQ_3:27;
-            A54: a <= x by A11, A51;
-            A55: a <> x or b <> y by A50, A49, TARSKI:def 1;
+            A54: a <= x by A10, A51;
+            A55: a <> x or b <> y by A49, A48, TARSKI:def 1;
                 [x,y] in {[x,y]} by TARSKI:def 1; then
-                [x,y] in fss by A41; then
-                a <> x by A48,A50,FUNCT_1:def 1,A55; then
+                [x,y] in fss by A40; then
+                a <> x by A47,A49,FUNCT_1:def 1,A55; then
                 a < x by A54,REAL_1:def 5; then
                 a+1 <= x by NAT_1:13; then
                 a+1-1 <= x-1 by REAL_1:92; then
                 a in Seg xx1 by A53, FINSEQ_1:3;
-                hence z in fssq by A48, A50, RELAT_1:def 11;
+                hence z in fssq by A50, A49, RELAT_1:def 11;
             end; then
             fssq = fss \ {[x,y]} by TARSKI:2; then
-        A56: card fssq = card fss - card {[x,y]} by A44, CARD_2:63
-                     .= k+1-1 by A40, CARD_1:79
+        A56: card fssq = card fss - card {[x,y]} by A43, CARD_2:63
+                     .= k+1-1 by A39, CARD_1:79
                      .= k;
             hence
-        A57: len q = len Seq(fssq) by A25,A39;
+        A57: len q = len Seq(fssq) by A24,A38;
             let n be Element of NAT;
             set x1 = Sgm(dom fss).n, x2 = Sgm(dom fssq).n; assume
         A58: 1 <= n & n <= len q; then
             n in dom q by FINSEQ_3:27; then
-        A59: q.n = (Seq fss).n by A23, FINSEQ_1:def 7;
-            n <= k+1 by A58,A24,A4,NAT_1:12; then
+        A59: q.n = (Seq fss).n by A22, FINSEQ_1:def 7;
+            n <= k+1 by A58,A23,A4,NAT_1:12; then
         A60: n in dom Seq(fss) by A4, A58, FINSEQ_3:27;
             Seq fss = fss * Sgm (dom fss) by FINSEQ_1:def 14; then
         A61: q.n = fss.x1 by A59, A60, FUNCT_1:22;
@@ -236,7 +236,7 @@ A2: P[0];
         A64: dom fssq c= Seg lk by FINSEQ_1:def 12;
             len Sgm (dom fssq) = card dom fssq by A64, FINSEQ_3:44
                               .= k by A56,PRE_CIRC:21; then
-        A65: n in dom Sgm(dom fssq) by A26,A58,FINSEQ_3:27; then
+        A65: n in dom Sgm(dom fssq) by A25,A58,FINSEQ_3:27; then
             x2 in rng Sgm(dom fssq) by FUNCT_1:def 5; then
             x2 in dom fssq by A64,FINSEQ_1:def 13; then
             [x2,fssq.x2] in fssq by FUNCT_1:8; then
@@ -246,9 +246,9 @@ A2: P[0];
                 hereby assume
                 A67: z in dom fss; then
                 A68: [z, fss.z] in fss by FUNCT_1:8; then
-                A69: z in dom fs by A7,FUNCT_1:8; then
+                A69: z in dom fs by FUNCT_1:8; then
                     reconsider z' = z as Element of NAT;
-                A70: z' <= x by A11, A67;
+                A70: z' <= x by A10, A67;
                 A71: 1 <= z' by A69, FINSEQ_3:27;
                     now assume not z in {x}; then
                         z <> x by TARSKI:def 1; then
@@ -269,7 +269,7 @@ A2: P[0];
                     hence z in dom fss by FUNCT_1:8;
                   end;
                   suppose z in {x};
-                    hence z in dom fss by A11,TARSKI:def 1;
+                    hence z in dom fss by A10,TARSKI:def 1;
                   end;
                 end;
                 hence z in dom fss;
@@ -277,7 +277,7 @@ A2: P[0];
         A73: dom fss = (dom fssq) \/ {x} by TARSKI:2;
             now let z be set; assume z in {x}; then
                 z = x by TARSKI:def 1;
-                hence z in Seg len fs by A12, FINSEQ_1:3;
+                hence z in Seg len fs by A11, FINSEQ_1:3;
             end; then
         A74: {x} c= Seg len fs by TARSKI:def 3;
             now let m,n be Element of NAT; assume
@@ -286,15 +286,15 @@ A2: P[0];
                 [m,fssq.m] in fssq by A75, FUNCT_1:8; then
                 m in Seg xx1 by RELAT_1:def 11; then
                 m <= xx1 by FINSEQ_1:3;
-                hence m < n by A15, A76, NAT_1:13;
+                hence m < n by A14, A76, NAT_1:13;
             end; then
             Sgm(dom fss) = Sgm(dom fssq) ^ Sgm({x}) by A64,A73,A74,FINSEQ_3:48;
             hence q.n = (Seq fssq).n by A61, A63, A66,A65,FINSEQ_1:def 7;
         end; then
         q = Seq fssq by FINSEQ_1:18; then
-    A77: Sum q <= Sum fsA by A26,A27,A3;
+    A77: Sum q <= Sum fsA by A25,A26,A3;
         now
-        A78: (Seq fss).(len Seq fss) = z by A4, A23, A25,FINSEQ_1:59;
+        A78: (Seq fss).(len Seq fss) = z by A4, A22, A24,FINSEQ_1:59;
         A79: Seq fss = (fss * Sgm(dom fss)) by FINSEQ_1:def 14;
             1 <= k+1 by NAT_1:12; then
             len Seq fss in dom Seq fss by A4, FINSEQ_3:27; then
@@ -308,7 +308,7 @@ A2: P[0];
             A82: g.(len Seq fss) <> x;
             A83: rng g = dom fss by A5, FINSEQ_1:def 13; then
                 consider v being set such that
-            A84: v in dom g & g.v = x by A11,FUNCT_1:def 5;
+            A84: v in dom g & g.v = x by A10,FUNCT_1:def 5;
                 reconsider v as Element of NAT by A84;
             A85: 1 <= v & v <= len g by A84, FINSEQ_3:27; then
             A86: v < len g by REAL_1:def 5,A81,A82,A84;
@@ -318,20 +318,20 @@ A2: P[0];
             A87: k2 in rng g by FUNCT_1:def 5;
                 reconsider k2 as Element of NAT;
                 x < k2 by A5, A84, A85, A86, FINSEQ_1:def 13;
-                hence contradiction by A11,A87,A83;
+                hence contradiction by A10,A87,A83;
             end; then
-            [x,z] in fss by A80,A11,FUNCT_1:8;
-            hence y = z by FUNCT_1:8,A7;
+            [x,z] in fss by A80,A10,FUNCT_1:8;
+            hence y = z by FUNCT_1:8;
         end; then
-        Sum (Seq fss) = y + Sum q by A23, RVSUM_1:104; then
+        Sum (Seq fss) = y + Sum q by A22, RVSUM_1:104; then
         Sum (Seq fss) + Sum q <= y + Sum q + Sum fsA by A77, XREAL_1:9; then
         Sum (Seq fss) + Sum q <= y + Sum fsA + Sum q; then
         Sum (Seq fss) <= Sum fsA + y by XREAL_1:8;
-        hence Sum (Seq fss) <= Sum fs by A22, XXREAL_0:2;
+        hence Sum (Seq fss) <= Sum fs by A21, XXREAL_0:2;
     end; then
 A88: for k being Element of NAT st P[k] holds P[k+1];
 A89: for k being Element of NAT holds P[k] from NAT_1:sch 1(A2,A88);
-    let fs be FinSequence of REAL, fss be FinSubsequence of fs; assume
+    let fs be FinSequence of REAL, fss be Subset of fs; assume
 A90: for i being Element of NAT st i in dom fs holds 0 <= fs.i;
     len Seq fss = len Seq fss;
     hence Sum (Seq fss) <= Sum fs by A89, A90;
@@ -1754,7 +1754,7 @@ A2: rng F c= rng f \/ rng (x.-->y) by FUNCT_4:18;
             hence z in Y;
           end;
           suppose z in rng (x.-->y); then
-            z in {y} by FUNCOP_1:14,19;
+            z in {y} by FUNCOP_1:14;
             hence z in Y by A1,TARSKI:def 1;
           end;
         end;
@@ -1769,7 +1769,7 @@ A2: rng F c= rng f \/ rng (x.-->y) by FUNCT_4:18;
             hence z in X;
           end;
           suppose z in dom (x.-->y); then
-            z in {x} by FUNCOP_1:14,19;
+            z in {x} by FUNCOP_1:19;
             hence z in X by A1,TARSKI:def 1;
           end;
         end;
@@ -1798,7 +1798,7 @@ A1: the_Edges_of G = the_Edges_of G2 by GLIB_000:def 36;
     A3: ELabelSelector in dom G by Def5;
     A4: dom G c= dom G2 by FUNCT_4:11;
     A5: dom EL = dom the_ELabel_of G \/ dom (e.-->x) by FUNCT_4:def 1
-              .= dom the_ELabel_of G \/ {e} by FUNCOP_1:14,19;
+              .= dom the_ELabel_of G \/ {e} by FUNCOP_1:19;
         now let z be set; assume
         A6: z in dom EL;
             now per cases by A5,A6,XBOOLE_0:def 2;
@@ -2033,7 +2033,7 @@ definition let G be VGraph, v,x be set;
                 dom the_VLabel_of G c= the_Vertices_of G by Lm2;
                 hence y in the_Vertices_of G by A4; end;
             suppose y in dom (v.-->x); then
-                    y in {v} by FUNCOP_1:14,19;
+                    y in {v} by FUNCOP_1:19;
                     hence y in the_Vertices_of G by A1,TARSKI:def 1; end;
             end;
             hence y in the_Vertices_of G;
@@ -2673,10 +2673,10 @@ end;
 
 theorem Th25: ::tWWSEQ07
   for G being real-weighted WGraph, W1 being Walk of G, W2 being Subwalk of W1
-    holds ex ws being FinSubsequence of W1.weightSeq()
+    holds ex ws being Subset of W1.weightSeq()
        st W2.weightSeq() = Seq ws proof
     let G be real-weighted WGraph, W1 be Walk of G, W2 be Subwalk of W1;
-    consider es being FinSubsequence of W1.edgeSeq() such that
+    consider es being Subset of W1.edgeSeq() such that
 A1: W2.edgeSeq() = Seq es by GLIB_001:def 32;
     deffunc F(set) = (the_Weight_of G).(es.$1);
     consider ws being Function such that
@@ -2684,46 +2684,45 @@ A2: dom ws = dom es &
       for x being set st x in dom es holds ws.x = F(x) from FUNCT_1:sch 3;
     consider k being Element of NAT such that
 A3: dom ws c= Seg k by A2, FINSEQ_1:def 12;
-A4: es c= W1.edgeSeq() by GRAPH_2:def 5;
     reconsider ws as FinSubsequence by A3, FINSEQ_1:def 12;
     now let z be set; assume
-    A5: z in ws; then consider x,y being set such that
-    A6: z = [x,y] by RELAT_1:def 1;
-    A7: x in dom es & ws.x = y by A2,A5,A6,FUNCT_1:8; then
-    A8: [x,es.x] in es by FUNCT_1:8; then
-    A9: x in dom W1.edgeSeq() by A4,FUNCT_1:8;
+    A4: z in ws; then consider x,y being set such that
+    A5: z = [x,y] by RELAT_1:def 1;
+    A6: x in dom es & ws.x = y by A2,A4,A5,FUNCT_1:8; then
+    A7: [x,es.x] in es by FUNCT_1:8; then
+    A8: x in dom W1.edgeSeq() by FUNCT_1:8;
     then reconsider x as Element of NAT;
-    A10: 1 <= x & x <= len W1.edgeSeq() by A9, FINSEQ_3:27; then
-    A11: x <= len W1.weightSeq() by Def18; then
-        x in dom W1.weightSeq() by A10, FINSEQ_3:27; then
-    A12: [x, W1.weightSeq().x] in W1.weightSeq() by FUNCT_1:8;
-    A13: y = (the_Weight_of G).(es.x) by A2, A7;
-        W1.weightSeq().x = (the_Weight_of G).(W1.edgeSeq().x) by A10,A11,Def18;
-        hence z in W1.weightSeq() by A6,A12,A13,A8,A4,FUNCT_1:8;
+    A9: 1 <= x & x <= len W1.edgeSeq() by A8, FINSEQ_3:27; then
+    A10: x <= len W1.weightSeq() by Def18; then
+        x in dom W1.weightSeq() by A9, FINSEQ_3:27; then
+    A11: [x, W1.weightSeq().x] in W1.weightSeq() by FUNCT_1:8;
+    A12: y = (the_Weight_of G).(es.x) by A2, A6;
+        W1.weightSeq().x = (the_Weight_of G).(W1.edgeSeq().x) by A9,A10,Def18;
+        hence z in W1.weightSeq() by A5,A11,A12,A7,FUNCT_1:8;
     end; then
     ws c= W1.weightSeq() by TARSKI:def 3; then
-    reconsider ws as FinSubsequence of W1.weightSeq() by GRAPH_2:def 5;
+    reconsider ws as Subset of W1.weightSeq();
     take ws;
-A14: len Seq es = card es by GLIB_001:5
+A13: len Seq es = card es by GLIB_001:5
               .= card dom ws by A2, PRE_CIRC:21
               .= card ws by PRE_CIRC:21
               .= len Seq ws by GLIB_001:5; then
-A15: len W2.weightSeq() = len Seq ws by A1,Def18;
+A14: len W2.weightSeq() = len Seq ws by A1,Def18;
     now let n be Element of NAT; assume
-    A16: 1 <= n & n <= len W2.weightSeq();
-    A17: Seq ws = ws * Sgm(dom es) by A2, FINSEQ_1:def 14;
-    A18: Seq es = es * Sgm(dom es) by FINSEQ_1:def 14;
-    A19: rng Sgm(dom es) = dom es by A2, A3, FINSEQ_1:def 13;
-    A20: n in dom Seq ws by A15, A16, FINSEQ_3:27; then
-        n in dom Sgm(dom es) by A17, FUNCT_1:21; then
-    A21: Sgm(dom es).n in dom es by A19, FUNCT_1:def 5;
-    A22: n in dom Seq es by A16, A14,A15,FINSEQ_3:27;
-        (Seq ws).n = ws.((Sgm (dom es).n)) by A17,A20,FUNCT_1:22
-                  .= (the_Weight_of G).((es.(Sgm (dom es).n))) by A2,A21
-                  .= (the_Weight_of G).((Seq es).n) by A22,A18,FUNCT_1:22;
-        hence W2.weightSeq().n = (Seq ws).n by A1,A16,Def18;
+    A15: 1 <= n & n <= len W2.weightSeq();
+    A16: Seq ws = ws * Sgm(dom es) by A2, FINSEQ_1:def 14;
+    A17: Seq es = es * Sgm(dom es) by FINSEQ_1:def 14;
+    A18: rng Sgm(dom es) = dom es by A2, A3, FINSEQ_1:def 13;
+    A19: n in dom Seq ws by A14, A15, FINSEQ_3:27; then
+        n in dom Sgm(dom es) by A16, FUNCT_1:21; then
+    A20: Sgm(dom es).n in dom es by A18, FUNCT_1:def 5;
+    A21: n in dom Seq es by A15, A13,A14,FINSEQ_3:27;
+        (Seq ws).n = ws.((Sgm (dom es).n)) by A16,A19,FUNCT_1:22
+                  .= (the_Weight_of G).((es.(Sgm (dom es).n))) by A2,A20
+                  .= (the_Weight_of G).((Seq es).n) by A21,A17,FUNCT_1:22;
+        hence W2.weightSeq().n = (Seq ws).n by A1,A15,Def18;
     end;
-    hence W2.weightSeq() = Seq ws by A15, FINSEQ_1:18;
+    hence W2.weightSeq() = Seq ws by A14, FINSEQ_1:18;
 end;
 
 theorem Th26: ::tWWSEQ08
@@ -2870,9 +2869,9 @@ theorem
       W2 being Subwalk of W1 holds W2.cost() <= W1.cost() proof
     let G be nonnegative-weighted WGraph, W1 be Walk of G,
         W2 be Subwalk of W1;
-    consider ws being FinSubsequence of W1.weightSeq() such that
+    consider ws being Subset of W1.weightSeq() such that
 A1: W2.weightSeq() = Seq ws by Th25;
-    reconsider ws'=ws as FinSubsequence of W1.weightSeq();
+    reconsider ws'=ws as Subset of W1.weightSeq();
     for i being Element of NAT st i in dom W1.weightSeq()
     holds 0 <= (W1.weightSeq()).i
       by Th35; then
@@ -2917,7 +2916,7 @@ theorem  ::tGELABEL02
 A1: the_ELabel_of G.labelEdge(e,x) = the_ELabel_of G +* (e.-->x)
       by Th39;
     e in {e} by TARSKI:def 1; then
-    e in dom (e.-->x) by FUNCOP_1:14,19; then
+    e in dom (e.-->x) by FUNCOP_1:19; then
     (the_ELabel_of G.labelEdge(e,x)).e = (e.-->x).e by A1, FUNCT_4:14
                                       .= x by FUNCOP_1:87;
     hence thesis;
@@ -2982,7 +2981,7 @@ A1: e1 <> e2; set G2 = G.labelEdge(e1,x);
       suppose e1 in the_Edges_of G; then
     A2: the_ELabel_of G2 = the_ELabel_of G +* (e1.-->x) by Th39;
         not e2 in {e1} by A1,TARSKI:def 1; then
-        not e2 in dom (e1.-->x) by FUNCOP_1:14,19;
+        not e2 in dom (e1.-->x) by FUNCOP_1:19;
         hence thesis by A2,FUNCT_4:12;
       end;
       suppose not e1 in the_Edges_of G;
@@ -3013,7 +3012,7 @@ theorem  ::tGVLABEL02
 A1: the_VLabel_of G.labelVertex(e,x) = the_VLabel_of G +* (e.-->x)
       by Th45;
     e in {e} by TARSKI:def 1; then
-    e in dom (e.-->x) by FUNCOP_1:14,19; then
+    e in dom (e.-->x) by FUNCOP_1:19; then
     (the_VLabel_of G.labelVertex(e,x)).e = (e.-->x).e by A1, FUNCT_4:14
                                       .= x by FUNCOP_1:87;
     hence thesis;
@@ -3078,7 +3077,7 @@ A1: v1 <> v2; set G2 = G.labelVertex(v1,x);
       suppose v1 in the_Vertices_of G; then
     A2: the_VLabel_of G2 = the_VLabel_of G +* (v1.-->x) by Th45;
         not v2 in {v1} by A1,TARSKI:def 1; then
-        not v2 in dom (v1.-->x) by FUNCOP_1:14,19;
+        not v2 in dom (v1.-->x) by FUNCOP_1:19;
         hence thesis by A2,FUNCT_4:12;
       end;
       suppose not v1 in the_Vertices_of G;
@@ -3102,7 +3101,7 @@ theorem Th52: ::tGLABELE02
     assume e in the_Edges_of G; then
     EG2 = EG +* (e.--> val) by Th39; then
     dom EG2 = dom EG \/ dom (e.-->val) by FUNCT_4:def 1;
-    hence G2.labeledE() = G.labeledE() \/ {e} by FUNCOP_1:14,19;
+    hence G2.labeledE() = G.labeledE() \/ {e} by FUNCOP_1:19;
 end;
 
 theorem  ::tGLABELE03
@@ -3126,7 +3125,7 @@ A1: e in the_Edges_of G & not e in G.labeledE(); then
     e in the_Edges_of G & not e in dom (the_ELabel_of G); then
 A2: card (dom ECurr \/ {e}) = card (dom ECurr) + 1 by CARD_2:54;
 A3: ENext = ECurr +* (e .--> val) by A1,Th39;
-    dom (e.-->val) = {e} by FUNCOP_1:14,19; then
+    dom (e.-->val) = {e} by FUNCOP_1:19; then
     card dom ENext = card (dom ECurr) + 1 by A2, A3, FUNCT_4:def 1;
     hence card G2.labeledE() = card G.labeledE() + 1;
 end;
@@ -3145,7 +3144,7 @@ A3: not e2 in dom (the_ELabel_of G) & e2 in dom (the_ELabel_of Gn)
       by A2, Th39; then
     e2 in dom (the_ELabel_of G) or e2 in dom (e1 .--> val)
       by A3, FUNCT_4:13; then
-    e2 in {e1} by FUNCOP_1:14,19,A1;
+    e2 in {e1} by FUNCOP_1:19,A1;
     hence e1 = e2 by TARSKI:def 1;
     thus thesis by A1,Def21;
 end;
@@ -3178,7 +3177,7 @@ theorem Th59: ::tGLABELV02
     assume e in the_Vertices_of G; then
     EG2 = EG +* (e.--> val) by Th45; then
     dom EG2 = dom EG \/ dom (e.-->val) by FUNCT_4:def 1;
-    hence G2.labeledV() = G.labeledV() \/ {e} by FUNCOP_1:14,19;
+    hence G2.labeledV() = G.labeledV() \/ {e} by FUNCOP_1:19;
 end;
 
 theorem  ::tGLABELV03
@@ -3201,7 +3200,7 @@ A1: e in the_Vertices_of G & not e in G.labeledV(); then
     e in the_Vertices_of G & not e in dom (the_VLabel_of G); then
 A2: card (dom ECurr \/ {e}) = card (dom ECurr) + 1 by CARD_2:54;
 A3: ENext = ECurr +* (e .--> val) by A1,Th45;
-    dom (e.-->val) = {e} by FUNCOP_1:14,19; then
+    dom (e.-->val) = {e} by FUNCOP_1:19; then
     card dom ENext = card (dom ECurr) + 1 by A2, A3, FUNCT_4:def 1;
     hence card G2.labeledV() = card G.labeledV() + 1;
 end;
@@ -3220,7 +3219,7 @@ A3: not e2 in dom (the_VLabel_of G) & e2 in dom (the_VLabel_of Gn)
       by A2,Th45; then
     e2 in dom (the_VLabel_of G) or e2 in dom (e1 .--> val)
       by A3, FUNCT_4:13; then
-    e2 in {e1} by FUNCOP_1:14,19,A1;
+    e2 in {e1} by FUNCOP_1:19,A1;
     hence e1 = e2 by TARSKI:def 1;
     thus thesis by A1,Def22;
 end;

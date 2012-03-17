@@ -8,12 +8,12 @@ environ
 
  vocabularies FUNCT_1, RELAT_1, BOOLE, FUNCOP_1, PARTFUN1, TARSKI, WELLORD1,
       CAT_1, NAT_1;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, CQC_LANG, RELAT_1, FUNCT_1,
-      PARTFUN1, FUNCT_2, BINOP_1, FUNCOP_1, PBOOLE;
- constructors PARTFUN1, WELLORD2, CQC_LANG, PBOOLE, NAT_D, BINOP_1;
- registrations FUNCT_1, RELSET_1, SUBSET_1, FUNCT_2, XBOOLE_0;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, PARTFUN1,
+      FUNCT_2, BINOP_1, FUNCOP_1, PBOOLE;
+ constructors PARTFUN1, WELLORD2, BINOP_1, PBOOLE;
+ registrations XBOOLE_0, SUBSET_1, FUNCT_1, RELSET_1, FUNCT_2;
  requirements SUBSET, BOOLE;
- definitions TARSKI, CQC_LANG, FUNCOP_1, BINOP_1;
+ definitions TARSKI, FUNCOP_1, BINOP_1;
  theorems TARSKI, ZFMISC_1, FUNCT_1, FUNCT_2, PARTFUN1, FUNCOP_1, SUBSET_1,
       WELLORD2, RELAT_1, RELSET_1, XBOOLE_1;
  schemes FUNCT_2;
@@ -50,7 +50,7 @@ end;
 
 canceled 2;
 
-theorem Th7:
+theorem
   dom (a,b).-->c = [:{a},{b}:]
  proof
    dom (a,b).-->c = {[a,b]} by FUNCOP_1:19;
@@ -103,7 +103,7 @@ end;
 definition let C,f,g;
   assume A1: [g,f] in dom(the Comp of C);
    func g*f -> Morphism of C equals
-:Def4:  ( the Comp of C ).[g,f];
+:Def4:  ( the Comp of C ).(g,f);
  coherence by A1,PARTFUN1:27;
 end;
 
@@ -402,7 +402,7 @@ A7:  CD.g=CC.f;
     then dom(g*f)=dom f & cod(g*f)=cod g & [g,f] in dom CP &
       CD.(g*f) = dom(g*f) & CC.(g*f) = cod(g*f)
        by A2,A5,A7;
-    then CD.(CP.[g,f]) = dom f & CC.(CP.[g,f]) = cod g by Def4;
+    then CD.(CP.(g,f)) = dom f & CC.(CP.(g,f)) = cod g by Def4;
     hence thesis;
    end;
   thus for f,g,h being Element of the Morphisms of C
@@ -412,10 +412,10 @@ A7:  CD.g=CC.f;
 A8:  CD.h = CC.g & CD.g = CC.f;
 A9:    CD.h = dom h & CC.g = cod g & CD.g = dom g & CC.f = cod f;
        [g,f] in dom CP & [h,g] in dom CP by A5,A8;
-then A10:    g*f = CP.[g,f] & h*g = CP.[h,g] by Def4;
+then A10:    g*f = CP.(g,f) & h*g = CP.(h,g) by Def4;
        CD.(CP.(h,g)) = CD.g & CC.(CP.(g,f)) = CC.g by A6,A8;
     then [h,g*f] in dom CP & [h*g,f] in dom CP by A5,A8,A10;
-    then CP.[h,g*f] = h*(g*f) & CP.[h*g,f] = (h*g)*f by Def4;
+    then CP.(h,g*f) = h*(g*f) & CP.(h*g,f) = (h*g)*f by Def4;
     hence thesis by A3,A8,A9,A10;
    end;
   let b be Element of the Objects of C;
@@ -516,9 +516,9 @@ theorem Th40:
    dom(g) = cod(f) iff [g,f] in dom(the Comp of C) by Def8;
 
 theorem Th41:
-   dom(g) = cod(f) implies g*f = ( the Comp of C ).[g,f]
+   dom(g) = cod(f) implies g*f = ( the Comp of C ).(g,f)
  proof assume dom(g) = cod(f); then [g,f] in dom(the Comp of C) by Th40;
-  hence g*f = ( the Comp of C ).[g,f] by Def4;
+  hence g*f = ( the Comp of C ).(g,f) by Def4;
  end;
 
 theorem Th42:
@@ -1274,7 +1274,7 @@ definition let C,D;
             (the Id of D).((the Cod of D).(it.f)) )
     & ( for f,g being Element of the Morphisms of C
            st [g,f] in dom(the Comp of C)
-         holds it.((the Comp of C).[g,f]) = (the Comp of D).[it.g,it.f] );
+         holds it.((the Comp of C).(g,f)) = (the Comp of D).(it.g,it.f) );
  existence
   proof consider d being Element of the Objects of D;
    reconsider F = (the Morphisms of C) --> (the Id of D).d
@@ -1310,13 +1310,13 @@ A3:   [g,f] in dom(the Comp of C);
 then A4:   [F.g,F.f] in dom(the Comp of D) by Def8;
 A5:   Hom(d,d) <> {} by Th55;
       (the Comp of C).[g,f] is Element of the Morphisms of C by A3,PARTFUN1:27;
-   hence F.((the Comp of C).[g,f])
+   hence F.((the Comp of C).(g,f))
         = (the Id of D).d by A1
        .= (id d)*(id d) by Th59
        .= (id d)*((id d) qua Morphism of D) by A5,Def13
        .= (id d)*f' by A1
        .= F.g*f' by A1
-       .= (the Comp of D).[F.g,F.f] by A4,Def4;
+       .= (the Comp of D).(F.g,F.f) by A4,Def4;
   end;
 end;
 
@@ -1362,8 +1362,8 @@ A4:     T.(id c) = id d by A1;
 then A5:  dom g = cod f by Th40;
    then id dom (T.g) = T.(id cod f) by A2 .= id cod (T.f) by A2;
    then dom (T.g) = cod (T.f) by Th45;
-   then (the Comp of C).[g,f] = g*f &
-        (the Comp of D).[T.g,T.f] = (T.g)*(T.f) by A5,Th41;
+   then (the Comp of C).(g,f) = g*f &
+        (the Comp of D).(T.g,T.f) = (T.g)*(T.f) by A5,Th41;
    hence thesis by A3,A5;
  end;
 
@@ -1389,7 +1389,7 @@ theorem Th99:
 A1:  dom g = cod f;
    then id dom (T.g) = T.(id cod f) by Th98 .= id cod (T.f) by Th98;
    hence dom (T.g) = cod (T.f) by Th45;
-   then (the Comp of C).[g,f] = g*f & (the Comp of D).[T.g,T.f] = (T.g)*(T.f)
+   then (the Comp of C).(g,f) = g*f & (the Comp of D).(T.g,T.f) = (T.g)*(T.f)
 &
          [g,f] in dom(the Comp of C) by A1,Th40,Th41;
    hence thesis by Def18;
@@ -1703,7 +1703,7 @@ theorem
  proof
      rng id the Morphisms of C
  = the Morphisms of C & rng id the Objects of C = the Objects of C &
-   id the Morphisms of C is one-to-one by FUNCT_1:52,RELAT_1:71;
+   id the Morphisms of C is one-to-one by RELAT_1:71;
   hence id C is one-to-one
     & rng id C = the Morphisms of C & rng Obj id C = the Objects of C
      by Th117;

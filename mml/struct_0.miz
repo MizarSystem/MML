@@ -7,14 +7,15 @@
 environ
 
  vocabularies SETFAM_1, FUNCT_1, FINSEQ_1, PBOOLE, SUBSET_1, BOOLE, NAT_1,
-      RLVECT_1, GROUP_1, VECTSP_1, NORMSP_1, PARTFUN1, REALSET1, STRUCT_0;
- notations TARSKI, XBOOLE_0, SUBSET_1, SETFAM_1, RELAT_1, RELSET_1, PARTFUN1,
-      FUNCT_2, NUMBERS, FINSEQ_1, REALSET1, PBOOLE;
- constructors PBOOLE, NAT_D, PARTFUN1, REALSET1, CQC_LANG;
- registrations SUBSET_1, XBOOLE_0, FUNCT_1, RELSET_1, FUNCT_2, REALSET1;
+      RLVECT_1, GROUP_1, VECTSP_1, NORMSP_1, PARTFUN1, REALSET1, STRUCT_0,
+      FINSET_1;
+ notations TARSKI, XBOOLE_0, SUBSET_1, SETFAM_1, FINSET_1, PARTFUN1, FUNCT_2,
+      NUMBERS, FINSEQ_1, REALSET1, PBOOLE;
+ constructors PARTFUN1, PBOOLE, REALSET1;
+ registrations XBOOLE_0, SUBSET_1, FUNCT_1, FUNCT_2, REALSET1, CARD_5;
  requirements BOOLE, SUBSET;
  definitions SUBSET_1, TARSKI, XBOOLE_0, REALSET1;
- theorems TARSKI,REALSET1,XBOOLE_0, SUBSET_1, CARD_1;
+ theorems TARSKI, REALSET1, XBOOLE_0, SUBSET_1, CARD_1;
 
 begin
 
@@ -42,6 +43,11 @@ registration
    take 1-sorted(#A#);
    thus the carrier of 1-sorted(#A#) is non empty;
   end;
+end;
+
+registration let S be empty 1-sorted;
+ cluster the carrier of S -> empty;
+ coherence by Def1;
 end;
 
 registration let S be non empty 1-sorted;
@@ -102,7 +108,7 @@ end;
 
 registration let T be empty 1-sorted;
   cluster [#]T -> empty;
-  coherence by Def1;
+  coherence;
 end;
 
 registration let T be non empty 1-sorted;
@@ -199,6 +205,21 @@ definition let IT be 1-sorted;
 :Def9: the carrier of IT is trivial;
 end;
 
+registration
+ cluster empty -> trivial 1-sorted;
+ coherence
+  proof let S be 1-sorted;
+   assume the carrier of S is empty;
+   hence the carrier of S is trivial;
+  end;
+ cluster non trivial -> non empty 1-sorted;
+ coherence
+  proof let S be 1-sorted;
+   assume the carrier of S is non trivial;
+   hence the carrier of S is non empty;
+  end;
+end;
+
 definition
  let S be 1-sorted;
  redefine attr S is trivial means
@@ -246,7 +267,7 @@ A7: I is trivial implies S is trivial by Def9;
     thus x = {} by A6,SUBSET_1:def 2
           .= y by A6,SUBSET_1:def 2;
    end;
-  hence thesis by A6,A7,REALSET1:def 4;
+  hence thesis by A6,A7;
  end;
  end;
 end;
@@ -256,31 +277,22 @@ registration
  coherence
   proof let L be ZeroOneStr;
    assume
-Z:  L is non degenerated;
+A1:  L is non degenerated;
    assume L is trivial;
     then 0.L = 1.L by Def10;
-   hence contradiction by Z,Def8;
+   hence contradiction by A1,Def8;
 
   end;
-end;
-
-registration let A be non empty set;
- cluster 1-sorted(#A#) -> non empty;
- coherence by Def1;
 end;
 
 registration
- cluster trivial strict non empty 1-sorted;
+ cluster trivial non empty 1-sorted;
  existence
   proof
    take Y = 1-sorted (#1#);
-   thus Y is trivial
-    proof the carrier of Y = 1;
-     hence thesis by Def9, CARD_1:87;
-    end;
-   thus thesis;
+   thus thesis by Def1, Def9, CARD_1:87;
   end;
- cluster non trivial strict non empty 1-sorted;
+ cluster non trivial non empty 1-sorted;
  existence
   proof
    take Y = 1-sorted (#2#);
@@ -290,7 +302,7 @@ registration
      take x,y;
      thus thesis;
     end;
-   thus thesis;
+   thus thesis by Def1;
   end;
 end;
 
@@ -298,4 +310,89 @@ registration let S be non trivial 1-sorted;
  cluster the carrier of S -> non trivial;
  coherence by Def9;
 end;
+
+registration let S be trivial 1-sorted;
+ cluster the carrier of S -> trivial;
+ coherence by Def9;
+end;
+
+begin :: Finite 1-sorted Structures
+
+definition let S be 1-sorted;
+  attr S is finite means
+:Def11: the carrier of S is finite;
+ end;
+
+registration :: WAYBEL11
+  cluster finite non empty 1-sorted;
+  existence
+  proof
+   take 1-sorted(#{{}}#);
+   thus thesis by Def11,Def1;
+  end;
+end;
+
+registration let S be finite 1-sorted; :: YELLOW13
+ cluster the carrier of S -> finite;
+ coherence by Def11;
+end;
+
+registration
+ cluster -> finite (empty 1-sorted);
+ coherence
+  proof let S be empty 1-sorted;
+   thus the carrier of S is finite;
+  end;
+end;
+
+notation let S be 1-sorted;
+  antonym S is infinite for S is finite;
+end;
+
+registration
+ cluster infinite 1-sorted;
+existence
+  proof consider o being infinite set;
+    take A = 1-sorted(#o#);
+    thus the carrier of A is infinite;
+  end;
+end;
+
+registration
+  let S be infinite 1-sorted;
+  cluster the carrier of S -> infinite;
+coherence by Def11;
+end;
+
+registration
+ cluster -> non empty (infinite 1-sorted);
+ coherence
+  proof let S be infinite 1-sorted;
+   thus the carrier of S is non empty;
+  end;
+end;
+
+:: from YELLOW_13, 2007.04.12, A.T.
+
+registration
+ cluster trivial -> finite 1-sorted;
+coherence
+  proof
+   let S be 1-sorted;
+   assume S is trivial;
+    then reconsider C = the carrier of S as trivial set by Def9;
+    C is finite;
+   hence the carrier of S is finite;
+  end;
+end;
+
+registration
+ cluster infinite -> non trivial 1-sorted;
+ coherence
+  proof
+    for S being trivial 1-sorted holds S is finite;
+   hence thesis;
+  end;
+end;
+
 

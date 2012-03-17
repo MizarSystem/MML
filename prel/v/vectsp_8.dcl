@@ -33,11 +33,11 @@
 <Cluster>
 <Adjective nr="12" value="false"/>
 <Adjective nr="16" value="false"/>
-<Adjective nr="33"/>
 <Adjective nr="34"/>
 <Adjective nr="35"/>
 <Adjective nr="36"/>
-<Adjective nr="46"/>
+<Adjective nr="37"/>
+<Adjective nr="47"/>
 <Adjective nr="49"/>
 <Adjective nr="57"/>
 <Adjective nr="58"/>
@@ -47,10 +47,10 @@
 <Typ kind="G" nr="11">
 <Cluster>
 <Adjective nr="12" value="false"/>
-<Adjective nr="33"/>
 <Adjective nr="34"/>
 <Adjective nr="35"/>
 <Adjective nr="36"/>
+<Adjective nr="37"/>
 <Adjective nr="61">
 <LocusVar nr="1"/>
 </Adjective>

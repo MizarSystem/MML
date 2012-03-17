@@ -11,7 +11,6 @@
 <ArticleID name="TARSKI"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
-<ArticleID name="MEMBERED"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="XREAL_0"/>
@@ -19,9 +18,10 @@
 <ArticleID name="CARD_1"/>
 <ArticleID name="CARD_3"/>
 <ArticleID name="PROB_1"/>
-<ArticleID name="XXREAL_0"/>
-<ArticleID name="SUPINF_1"/>
 <ArticleID name="FINSUB_1"/>
+<ArticleID name="XXREAL_0"/>
+<ArticleID name="MEMBERED"/>
+<ArticleID name="SUPINF_1"/>
 <ArticleID name="CARD_4"/>
 <ArticleID name="SUPINF_2"/>
 <ArticleID name="MEASURE1"/>
@@ -37,10 +37,10 @@
 <Typ kind="M" nr="2">
 <Cluster>
 <Adjective nr="7" value="false"/>
-<Adjective nr="30">
+<Adjective nr="24">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="33">
+<Adjective nr="27">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -56,21 +56,16 @@
 <LocusVar nr="2"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="167">
+<Func kind="K" nr="168">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
 </Func>
 <Cluster>
 <Adjective nr="7" value="false"/>
-<Adjective nr="30">
+<Adjective nr="24">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="33">
-<LocusVar nr="1"/>
-</Adjective>
-<Adjective nr="42"/>
-<Adjective nr="43"/>
 <Adjective nr="55">
 <LocusVar nr="1"/>
 </Adjective>

@@ -11,8 +11,8 @@
 <ArticleID name="MCART_1"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
-<ArticleID name="STRUCT_0"/>
 <ArticleID name="ORDERS_1"/>
+<ArticleID name="STRUCT_0"/>
 <ArticleID name="ORDERS_2"/>
 <ArticleID name="YELLOW_0"/>
 <ArticleID name="WAYBEL_0"/>
@@ -21,13 +21,13 @@
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
-<Adjective nr="12" value="false"/>
+<Adjective nr="15" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="12" value="false"/>
-<Adjective nr="40"/>
+<Adjective nr="15" value="false"/>
+<Adjective nr="42"/>
 </Cluster>
 <Func kind="F" nr="1"/>
 </Typ>
@@ -42,8 +42,8 @@
 <For>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="12" value="false"/>
-<Adjective nr="40"/>
+<Adjective nr="15" value="false"/>
+<Adjective nr="42"/>
 </Cluster>
 <Func kind="F" nr="1"/>
 </Typ>

@@ -19,11 +19,11 @@
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="QC_LANG1"/>
 <ArticleID name="FUNCOP_1"/>
-<ArticleID name="QC_LANG2"/>
-<ArticleID name="CQC_LANG"/>
 <ArticleID name="FRAENKEL"/>
 <ArticleID name="XBOOLEAN"/>
 <ArticleID name="MARGREL1"/>
+<ArticleID name="QC_LANG2"/>
+<ArticleID name="CQC_LANG"/>
 <ArticleID name="VALUAT_1"/>
 <ArticleID name="SUBSTUT1"/>
 <ArticleID name="SUBLEMMA"/>

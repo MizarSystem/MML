@@ -12,19 +12,18 @@ environ
       ARYTM, FUNCT_3, MEMBERED, FINSEQ_1, FINSEQ_2, JGRAPH_2, SGRAPH1,
       XCMPLX_0;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0,
-      XXREAL_0, XREAL_0, REAL_1, MEMBERED, MCART_1, FINSEQ_1, FINSEQ_2,
-      RELAT_1, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_3, FUNCT_2, STRUCT_0,
-      PRE_TOPC, EUCLID, TOPS_2, RCOMP_1, COMPTS_1, JGRAPH_2, TREAL_1, FUNCT_4,
-      BORSUK_1, TOPMETR, BINOP_1, GRCAT_1, BORSUK_2;
- constructors XXREAL_0, REAL_1, MEMBERED, RCOMP_1, FINSEQ_4, CONNSP_1, TOPS_2,
-      COMPTS_1, GRCAT_1, T_0TOPSP, TREAL_1, MONOID_0, BORSUK_2, JGRAPH_2,
-      NAT_D;
- registrations STRUCT_0, FUNCT_1, PRE_TOPC, BORSUK_1, RELSET_1, MEMBERED,
-      BORSUK_2, BORSUK_3, BORSUK_4, XREAL_0, XCMPLX_0, ARYTM_3, EUCLID,
-      JGRAPH_2, MONOID_0, XXREAL_0, FUNCT_2, TOPMETR;
+      XXREAL_0, XREAL_0, REAL_1, MEMBERED, MCART_1, FINSEQ_1, RELAT_1, FUNCT_1,
+      RELSET_1, PARTFUN1, FUNCT_3, FUNCT_2, STRUCT_0, PRE_TOPC, EUCLID, TOPS_2,
+      RCOMP_1, COMPTS_1, JGRAPH_2, TREAL_1, FUNCT_4, BORSUK_1, TOPMETR,
+      BINOP_1, BORSUK_2, BORSUK_4;
+ constructors REAL_1, RCOMP_1, FINSEQ_4, CONNSP_1, TOPS_2, COMPTS_1, GRCAT_1,
+      T_0TOPSP, MONOID_0, TREAL_1, BORSUK_2, JGRAPH_2, BORSUK_4;
+ registrations XBOOLE_0, RELSET_1, FUNCT_2, NUMBERS, XXREAL_0, XREAL_0,
+      MEMBERED, STRUCT_0, PRE_TOPC, BORSUK_1, MONOID_0, EUCLID, TOPMETR,
+      BORSUK_2, BORSUK_3, JGRAPH_2, BORSUK_4;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions TARSKI, XBOOLE_0, BORSUK_2, MEMBERED, BINOP_1, EUCLID, FINSEQ_2,
-      STRUCT_0, PCOMPS_1;
+ definitions XBOOLE_0, BORSUK_2, MEMBERED, BINOP_1, EUCLID, STRUCT_0, PCOMPS_1,
+      TARSKI;
  theorems BORSUK_1, FUNCOP_1, TOPS_2, TREAL_1, FUNCT_2, FUNCT_1, PRE_TOPC,
       RCOMP_1, TARSKI, RELAT_1, REAL_1, TOPS_1, REAL_2, TOPMETR, FUNCT_4,
       TOPMETR2, MCART_1, ZFMISC_1, FUNCT_3, COMPTS_1, XBOOLE_0, XBOOLE_1,
@@ -65,10 +64,6 @@ A6:for c being set st c in C() holds (P[c] implies f.c = F(c)) &
 theorem Th1:
   the carrier of [:I[01],I[01]:] = [:[.0,1.], [.0,1.]:]
     by BORSUK_1:83,def 5;
-
- Lm1:
-  for x, b, c, d being complex number holds
-    ((d - c)/b) * x + c = (1 - x/b)*c + (x/b) * d by XCMPLX_1:236;
 
 canceled 3;
 
@@ -405,11 +400,6 @@ A10:    b`2 = C * (y`2) + D by A8,EUCLID:56;
 
 begin :: Real-membered Structures
 
-definition let T be 1-sorted;
-  attr T is real-membered means :Def1:
-    the carrier of T is real-membered;
-end;
-
 theorem Th18:
   for T being non empty 1-sorted holds
     T is real-membered iff
@@ -417,24 +407,15 @@ theorem Th18:
   proof
     let T be non empty 1-sorted;
     hereby assume T is real-membered; then
-A1:   the carrier of T is real-membered by Def1;
+A1:   the carrier of T is real-membered by BORSUK_4:def 2;
       let x be Element of T;
       thus x is real by A1,MEMBERED:def 3;
     end;
     assume for x being Element of T holds x is real; then
     for x being set st x in the carrier of T holds x is real; then
     the carrier of T is real-membered by MEMBERED:def 3;
-    hence thesis by Def1;
+    hence thesis by BORSUK_4:def 2;
   end;
-
-registration
-  cluster I[01] -> real-membered;
-  coherence
-  proof
-    for x being Element of I[01] holds x is real;
-    hence thesis by Th18;
-  end;
-end;
 
 registration
   cluster non empty real-membered 1-sorted;
@@ -453,19 +434,7 @@ end;
 
 registration let T be real-membered 1-sorted;
   cluster -> real Element of T;
-  coherence
-  proof
-    let x be Element of T;
-    per cases;
-    suppose T is non empty;
-      hence thesis by Th18;
-    end;
-    suppose T is empty; then
-      the carrier of T is empty by STRUCT_0:def 1; then
-      x = 0 by SUBSET_1:def 2;
-      hence thesis;
-    end;
-  end;
+  coherence;
 end;
 
 registration let T be real-membered TopStruct;
@@ -482,7 +451,7 @@ A1:   x in the carrier of R;
       x is Element of T by A1;
       hence thesis;
     end;
-    hence thesis by Def1;
+    hence thesis by BORSUK_4:def 2;
   end;
 end;
 
@@ -493,18 +462,16 @@ registration let S, T be real-membered non empty TopSpace,
   proof
     p in the carrier of [:S, T:]; then
     p in [:the carrier of S, the carrier of T:] by BORSUK_1:def 5; then
-A1: p`1 in the carrier of S by MCART_1:10;
-    the carrier of S is real-membered by Def1;
-    hence thesis by A1,MEMBERED:def 3;
+    p`1 in the carrier of S by MCART_1:10;
+    hence thesis by MEMBERED:def 3;
   end;
   cluster p`2 -> real;
   coherence
   proof
     p in the carrier of [:S, T:]; then
     p in [:the carrier of S, the carrier of T:] by BORSUK_1:def 5; then
-A2: p`2 in the carrier of T by MCART_1:10;
-    the carrier of T is real-membered by Def1;
-    hence thesis by A2,MEMBERED:def 3;
+    p`2 in the carrier of T by MCART_1:10;
+   hence thesis by MEMBERED:def 3;
   end;
 end;
 
@@ -653,8 +620,7 @@ A1: for x, y being Element of REAL
     proof
       let x, y be Element of REAL;
       take <*x,y*>;
-      <*x,y*> in 2-tuples_on REAL by CATALG_1:10;
-      then <*x,y*> is Element of REAL 2;
+      <*x,y*> is Element of REAL 2 by CATALG_1:10;
       hence thesis;
     end;
     consider f being Function of [:REAL,REAL:],REAL 2 such that
@@ -706,13 +672,10 @@ A4:      z = y & P[z] by A3;
 A5:      x1 in the carrier of R^1 & y1 in the carrier of R^1 & z = [x1, y1]
            by ZFMISC_1:def 2;
          reconsider x1, y1 as Real by A5,TOPMETR:24;
-A6:      x = <*x1, y1*> by A1,A3,A4,A5; then
-         x = |[ x1, y1 ]|; then
+A6:      x = |[ x1, y1 ]| by A1,A3,A4,A5; then
          reconsider x' = x as Point of SS;
-A7:      x'`1 = x'.1 by EUCLID:def 14
-             .= x1 by A6,FINSEQ_1:61;
-A8:      x'`2 = x'.2 by EUCLID:def 15
-             .= y1 by A6,FINSEQ_1:61;
+A7:      x'`1 = x1 by A6,FINSEQ_1:61;
+A8:      x'`2 = y1 by A6,FINSEQ_1:61;
          z`1 = x1 & z`2 = y1 by A5,MCART_1:7;
          hence thesis by A4,A7,A8;
        end;
@@ -724,18 +687,17 @@ A8:      x'`2 = x'.2 by EUCLID:def 15
 A9:      z = x & R[z];
          consider x1, y1 being Real such that
 A10:      z = <*x1, y1*> by FINSEQ_2:120;
-A11:      z = |[ x1, y1 ]| by A10; then
-         z`1 = x1 by EUCLID:56; then
-A12:      y1 <= 1 - 2 * x1 by A9,A11,EUCLID:56;
+         z`1 = x1 by A10,EUCLID:56; then
+A11:      y1 <= 1 - 2 * x1 by A9,A10,EUCLID:56;
          set Y = [x1, y1];
-A13:      Y in [:REAL, REAL:] by ZFMISC_1:106; then
-A14:      Y in the carrier of GG by BORSUK_1:def 5,TOPMETR:24;
-         reconsider Y as Point of GG by A13,BORSUK_1:def 5,TOPMETR:24;
+A12:      Y in [:REAL, REAL:] by ZFMISC_1:106; then
+A13:      Y in the carrier of GG by BORSUK_1:def 5,TOPMETR:24;
+         reconsider Y as Point of GG by A12,BORSUK_1:def 5,TOPMETR:24;
          Y`1 = x1 & Y`2 = y1 by MCART_1:7; then
-A15:      Y in K by A12;
-A16:      Y in dom f by A14,FUNCT_2:def 1;
+A14:      Y in K by A11;
+A15:      Y in dom f by A13,FUNCT_2:def 1;
          x = f.Y by A1,A9,A10;
-         hence thesis by A15,A16,FUNCT_1:def 12;
+         hence thesis by A14,A15,FUNCT_1:def 12;
        end;
      end;
      hence thesis by A2,Th21,TOPS_2:72;
@@ -772,13 +734,10 @@ A4:      z = y & P[z] by A3;
 A5:      x1 in the carrier of R^1 & y1 in the carrier of R^1 & z = [x1, y1]
            by ZFMISC_1:def 2;
          reconsider x1, y1 as Real by A5,TOPMETR:24;
-A6:      x = <*x1, y1*> by A1,A3,A4,A5; then
-         x = |[ x1, y1 ]|; then
+A6:      x = |[ x1, y1 ]| by A1,A3,A4,A5; then
          reconsider x' = x as Point of SS;
-A7:      x'`1 = x'.1 by EUCLID:def 14
-             .= x1 by A6,FINSEQ_1:61;
-A8:      x'`2 = x'.2 by EUCLID:def 15
-             .= y1 by A6,FINSEQ_1:61;
+A7:      x'`1 = x1 by A6,FINSEQ_1:61;
+A8:      x'`2 = y1 by A6,FINSEQ_1:61;
          z`1 = x1 & z`2 = y1 by A5,MCART_1:7;
          hence thesis by A4,A7,A8;
        end;
@@ -790,19 +749,18 @@ A8:      x'`2 = x'.2 by EUCLID:def 15
 A9:      z = x & R[z];
          consider x1, y1 being Real such that
 A10:      z = <*x1, y1*> by FINSEQ_2:120;
-A11:      z = |[ x1, y1 ]| by A10; then
-A12:      z`1 = x1 by EUCLID:56;
-A13:      y1 <= 2 * x1 - 1 by A9,A11,A12,EUCLID:56;
+A11:      z`1 = x1 by EUCLID:56,A10;
+A12:      y1 <= 2 * x1 - 1 by A9,A10,A11,EUCLID:56;
          set Y = [x1, y1];
-A14:      Y in [:the carrier of R^1, the carrier of R^1:]
+A13:      Y in [:the carrier of R^1, the carrier of R^1:]
            by TOPMETR:24,ZFMISC_1:106; then
-A15:      Y in the carrier of GG by BORSUK_1:def 5;
-         reconsider Y as Point of GG by A14,BORSUK_1:def 5;
+A14:      Y in the carrier of GG by BORSUK_1:def 5;
+         reconsider Y as Point of GG by A13,BORSUK_1:def 5;
          Y`1 = x1 & Y`2 = y1 by MCART_1:7; then
-A16:      Y in K by A13;
-A17:      Y in dom f by A15,FUNCT_2:def 1;
+A15:      Y in K by A12;
+A16:      Y in dom f by A14,FUNCT_2:def 1;
          x = f.Y by A1,A9,A10;
-         hence thesis by A16,A17,FUNCT_1:def 12;
+         hence thesis by A15,A16,FUNCT_1:def 12;
        end;
      end;
      hence thesis by A2,Th19,TOPS_2:72;
@@ -842,13 +800,10 @@ A4:      z = y & P[z] by A3;
 A5:      x1 in the carrier of R^1 & y1 in the carrier of R^1 & z = [x1, y1]
            by ZFMISC_1:def 2;
          reconsider x1, y1 as Real by A5,TOPMETR:24;
-A6:      x = <*x1, y1*> by A1,A3,A4,A5; then
-         x = |[ x1, y1 ]|; then
+A6:      x = |[ x1, y1 ]| by A1,A3,A4,A5; then
          reconsider x' = x as Point of SS;
-A7:      x'`1 = x'.1 by EUCLID:def 14
-             .= x1 by A6,FINSEQ_1:61;
-A8:      x'`2 = x'.2 by EUCLID:def 15
-             .= y1 by A6,FINSEQ_1:61;
+A7:      x'`1 = x1 by A6,FINSEQ_1:61;
+A8:      x'`2 = y1 by A6,FINSEQ_1:61;
          z`1 = x1 & z`2 = y1 by A5,MCART_1:7;
          hence thesis by A4,A7,A8;
        end;
@@ -860,19 +815,18 @@ A8:      x'`2 = x'.2 by EUCLID:def 15
 A9:      z = x & R[z];
          consider x1, y1 being Real such that
 A10:      z = <*x1, y1*> by FINSEQ_2:120;
-A11:      z = |[ x1, y1 ]| by A10; then
-A12:      z`1 = x1 by EUCLID:56;
-A13:      y1 >= 1 - 2 * x1 & y1 >= 2 * x1 - 1 by A9,A11,A12,EUCLID:56;
+A11:      z`1 = x1 by EUCLID:56,A10;
+A12:      y1 >= 1 - 2 * x1 & y1 >= 2 * x1 - 1 by A9,A10,A11,EUCLID:56;
          set Y = [x1, y1];
-A14:      Y in [:the carrier of R^1, the carrier of R^1:]
+A13:      Y in [:the carrier of R^1, the carrier of R^1:]
            by TOPMETR:24,ZFMISC_1:106; then
-A15:      Y in the carrier of GG by BORSUK_1:def 5;
-         reconsider Y as Point of GG by A14,BORSUK_1:def 5;
+A14:      Y in the carrier of GG by BORSUK_1:def 5;
+         reconsider Y as Point of GG by A13,BORSUK_1:def 5;
          Y`1 = x1 & Y`2 = y1 by MCART_1:7; then
-A16:      Y in K by A13;
-A17:      Y in dom f by A15,FUNCT_2:def 1;
+A15:      Y in K by A12;
+A16:      Y in dom f by A14,FUNCT_2:def 1;
          x = f.Y by A1,A9,A10;
-         hence thesis by A16,A17,FUNCT_1:def 12;
+         hence thesis by A15,A16,FUNCT_1:def 12;
        end;
      end;
      hence thesis by A2,Th23,TOPS_2:72;
@@ -894,33 +848,29 @@ A2:  x in P0 by A1;
      reconsider PA = { p where p is Point of SS : p`2 <= 1 - 2 * (p`1) }
        as closed Subset of SS by Th25;
 A3:  GG is SubSpace of SS by BORSUK_3:25;
-A4:  P0 = PA /\ [#] GG
+     P0 = PA /\ [#] GG
      proof
        thus P0 c= PA /\ [#] GG
        proof
          let x be set;
          assume x in P0; then
          consider p being Point of GG such that
-A5:      x = p & p`2 <= 1 - 2 * (p`1);
-A6:      x in the carrier of GG by A5;
+A4:      x = p & p`2 <= 1 - 2 * (p`1);
+A5:      x in the carrier of GG by A4;
          the carrier of GG c= the carrier of SS by A3,BORSUK_1:35; then
-         reconsider a = x as Point of SS by A6;
-         a`2 <= 1 - 2 * (a`1) by A5; then
-A7:      x in PA;
-         x in [#] GG by A6;
-         hence thesis by A7,XBOOLE_0:def 3;
+         reconsider a = x as Point of SS by A5;
+         a`2 <= 1 - 2 * (a`1) by A4;
+         then x in PA;
+         hence thesis by A4,XBOOLE_0:def 3;
        end;
        let x be set;
-       assume x in PA /\ [#] GG; then
-A8:    x in PA & x in [#] GG by XBOOLE_0:def 3; then
-       consider p being Point of SS such that
-A9:    x = p & p`2 <= 1 - 2 * (p`1);
-       thus thesis by A8,A9;
-     end; then
-     P0 c= [#] GG; then
-     reconsider P0 as Subset of GG;
-     P0 is closed by A3,A4,PRE_TOPC:43;
-     hence thesis by A2;
+       assume
+A6:      x in PA /\ [#] GG; then
+       x in PA & x in [#] GG by XBOOLE_0:def 3; then
+       ex p being Point of SS st x = p & p`2 <= 1 - 2 * (p`1);
+      hence thesis by A6;
+     end;
+     hence thesis by A2,A3,PRE_TOPC:43;
   end;
 
 theorem Th29:
@@ -942,33 +892,30 @@ A2:  x in P0 by A1;
        p`2 >= 1 - 2 * (p`1) & p`2 >= 2 * (p`1) - 1 }
          as closed Subset of SS by Th27;
 A3:  GG is SubSpace of SS by BORSUK_3:25;
-A4:  P0 = PA /\ [#] GG
+     P0 = PA /\ [#] GG
      proof
        thus P0 c= PA /\ [#] GG
        proof
          let x be set;
          assume x in P0; then
          consider p being Point of GG such that
-A5:      x = p & p`2 >= 1 - 2 * (p`1) & p`2 >= 2 * (p`1) - 1;
-A6:      x in the carrier of GG by A5;
+A4:      x = p & p`2 >= 1 - 2 * (p`1) & p`2 >= 2 * (p`1) - 1;
+A5:      x in the carrier of GG by A4;
          the carrier of GG c= the carrier of SS by A3,BORSUK_1:35; then
-         reconsider a = x as Point of SS by A6;
-         a`2 >= 1 - 2 * (a`1) & a`2 >= 2 * (a`1) - 1 by A5; then
-A7:      x in PA;
-         x in [#] GG by A6;
-         hence thesis by A7,XBOOLE_0:def 3;
+         reconsider a = x as Point of SS by A5;
+         a`2 >= 1 - 2 * (a`1) & a`2 >= 2 * (a`1) - 1 by A4; then
+         x in PA;
+         hence thesis by A4,XBOOLE_0:def 3;
        end;
        let x be set;
-       assume x in PA /\ [#] GG; then
-A8:    x in PA & x in [#] GG by XBOOLE_0:def 3; then
-       consider p being Point of SS such that
-A9:    x = p & p`2 >= 1 - 2 * (p`1) & p`2 >= 2 * (p`1) - 1;
-       thus thesis by A8,A9;
-     end; then
-     P0 c= [#] GG; then
-     reconsider P0 as Subset of GG;
-     P0 is closed by A3,A4,PRE_TOPC:43;
-     hence thesis by A2;
+       assume
+A6:      x in PA /\ [#] GG; then
+       x in PA & x in [#] GG by XBOOLE_0:def 3; then
+       ex p being Point of SS st
+       x = p & p`2 >= 1 - 2 * (p`1) & p`2 >= 2 * (p`1) - 1;
+      hence thesis by A6;
+     end;
+   hence thesis by A2,A3,PRE_TOPC:43;
   end;
 
 theorem Th30:
@@ -987,33 +934,29 @@ A2:  x in P0 by A1;
      reconsider PA = { p where p is Point of SS : p`2 <= 2 * (p`1) - 1 }
        as closed Subset of SS by Th26;
 A3:  GG is SubSpace of SS by BORSUK_3:25;
-A4:  P0 = PA /\ [#] GG
+     P0 = PA /\ [#] GG
      proof
        thus P0 c= PA /\ [#] GG
        proof
          let x be set;
          assume x in P0; then
          consider p being Point of GG such that
-A5:      x = p & p`2 <= 2 * (p`1) - 1;
-A6:      x in the carrier of GG by A5;
+A4:      x = p & p`2 <= 2 * (p`1) - 1;
+A5:      x in the carrier of GG by A4;
          the carrier of GG c= the carrier of SS by A3,BORSUK_1:35; then
-         reconsider a = x as Point of SS by A6;
-         a`2 <= 2 * (a`1) - 1 by A5; then
-A7:      x in PA;
-         x in [#] GG by A6;
-         hence thesis by A7,XBOOLE_0:def 3;
+         reconsider a = x as Point of SS by A5;
+         a`2 <= 2 * (a`1) - 1 by A4; then
+         x in PA;
+         hence thesis by A4,XBOOLE_0:def 3;
        end;
        let x be set;
-       assume x in PA /\ [#] GG; then
-A8:    x in PA & x in [#] GG by XBOOLE_0:def 3; then
-       consider p being Point of SS such that
-A9:    x = p & p`2 <= 2 * (p`1) - 1;
-       thus thesis by A8,A9;
-     end; then
-     P0 c= [#] GG; then
-     reconsider P0 as Subset of GG;
-     P0 is closed by A3,A4,PRE_TOPC:43;
-     hence thesis by A2;
+       assume
+A6:      x in PA /\ [#] GG; then
+       x in PA & x in [#] GG by XBOOLE_0:def 3; then
+       ex p being Point of SS st x = p & p`2 <= 2 * (p`1) - 1;
+      hence thesis by A6;
+     end;
+   hence thesis by A2,A3,PRE_TOPC:43;
   end;
 
 theorem Th31:
@@ -1134,6 +1077,7 @@ theorem
 begin :: Continuous Maps
 
 definition let a, b, c, d be real number;
+ canceled;
   func L[01](a,b,c,d) -> Function of
     Closed-Interval-TSpace(a,b),Closed-Interval-TSpace(c,d) equals
   L[01]((#)(c,d),(c,d)(#)) * P[01](a,b,(#)(0,1),(0,1)(#));
@@ -1185,10 +1129,8 @@ A2: L[01]((#)(c,d),(c,d)(#)) is continuous Function of
         by A1,TREAL_1:11;
     P[01](a,b,(#)(0,1),(0,1)(#)) is continuous Function of
       Closed-Interval-TSpace(a,b),Closed-Interval-TSpace(0,1)
-        by A1,TREAL_1:15; then
-A3: L[01]((#)(c,d),(c,d)(#)) * P[01](a,b,(#)(0,1),(0,1)(#)) is continuous
-      by A2,TOPS_2:58;
-    thus thesis by A3;
+        by A1,TREAL_1:15;
+    hence thesis by A2,TOPS_2:58;
   end;
 
 theorem Th39:
@@ -1216,7 +1158,7 @@ A9:   X in the carrier of Closed-Interval-TSpace (0,1)
       f.x = F.(G.x) by A7,FUNCT_1:23
          .= F.(((b-x)*0 + (x-a)*1)/(b-a)) by A1,A6,A8,TREAL_1:def 4
          .= (1 - X)*c + X * d by A2,A5,A9,TREAL_1:def 3
-         .= ((d - c)/(b - a)) * (x - a) + c by Lm1;
+         .= ((d - c)/(b - a)) * (x - a) + c by XCMPLX_1:236;
       hence L[01](a,b,c,d).x = ((d - c)/(b - a)) * (x - a) + c;
     end;
 
@@ -1351,18 +1293,17 @@ reserve
   T for non empty TopSpace,
   a, b, c, d for Point of T;
 
-Lm2: Closed-Interval-TSpace(0,1) = I[01] by TOPMETR:27;
-
 theorem Th43:
   for P being Path of a,b st P is continuous holds
   P * L[01]((0,1)(#),(#)(0,1)) is continuous Function of I[01], T
 proof
   let P be Path of a,b such that
 A1: P is continuous;
-   reconsider g = L[01]((0,1)(#),(#)(0,1)) as Function of I[01],  I[01] by Lm2;
+   reconsider g = L[01]((0,1)(#),(#)(0,1)) as Function of I[01],  I[01]
+               by TOPMETR:27;
   reconsider f = P * g
    as Function of I[01], T;
-  g is continuous by TREAL_1:11,Lm2;
+  g is continuous by TREAL_1:11,TOPMETR:27;
   then f is continuous by A1,TOPS_2:58;
   hence P * L[01]((0,1)(#),(#)(0,1)) is continuous Function of I[01], T;
 end;
@@ -1849,20 +1790,18 @@ A10:       f.x = ((1 - 0)/(1/2 - 0)) * (x - 0) + 0 by A8,Th39
         end;
         suppose
 A11:       x = 1/2; then
-A12:       x in dom g by A7,RCOMP_1:48; then
-A13:       x in the carrier of T2;
+A12:       x in dom g by A7,RCOMP_1:48;
           thus 1RP.x = 2 * (1/2) by A11,Def7
-                     .= g.x by A2,A13,FUNCOP_1:13
+                     .= g.x by A2,A12,FUNCOP_1:13
                      .= (f +* g).x by A12,FUNCT_4:14;
         end;
         suppose
-A14:       x > 1/2;
+A13:       x > 1/2;
           x <= 1 by BORSUK_1:86; then
-A15:       x in dom g by A7,A14,RCOMP_1:48; then
-A16:       x in the carrier of T2;
-          thus 1RP.x = 1 by A14,Def7
-                     .= g.x by A2,A16,FUNCOP_1:13
-                     .= (f +* g).x by A15,FUNCT_4:14;
+A14:       x in dom g by A7,A13,RCOMP_1:48;
+          thus 1RP.x = 1 by A13,Def7
+                     .= g.x by A2,A14,FUNCOP_1:13
+                     .= (f +* g).x by A14,FUNCT_4:14;
         end;
       end;
       hence thesis by A6,FUNCT_2:113;
@@ -3058,7 +2997,7 @@ A8: [1/2,0] in IAA by Th78;
     hence { [1/2,0] } c= IAA /\ ICC by ZFMISC_1:37;
   end;
 
-Lm3:
+Lm1:
   for x, y being Point of I[01] holds
     [x,y] in the carrier of [:I[01], I[01]:];
 
@@ -3522,262 +3461,260 @@ A7: e2 is continuous Function of
         by BORSUK_2:12;
     set f1 = f * e1,
         g1 = g * e2;
-A8: rng P[01](1/2, 1, (#)(0,1), (0,1)(#)) c= the carrier of I[01]
-       by TOPMETR:27;
     rng e2 = [:rng id I[01], rng P[01](1/2, 1, (#)(0,1), (0,1)(#)):]
       by FUNCT_3:88; then
-A9: rng e2 c= [:the carrier of I[01], the carrier of I[01]:]
-      by A8,ZFMISC_1:119;
+A8: rng e2 c= [:the carrier of I[01], the carrier of I[01]:]
+      by TOPMETR:27,ZFMISC_1:119;
     dom g = the carrier of [:I[01], I[01]:] by FUNCT_2:def 1
           .= [:the carrier of I[01], the carrier of I[01]:]
             by BORSUK_1:def 5; then
-A10: dom g1 = dom e2 by A9,RELAT_1:46
+A9: dom g1 = dom e2 by A8,RELAT_1:46
          .= [:the carrier of I[01], the carrier of
               Closed-Interval-TSpace(1/2,1):] by A4,A5,FUNCT_3:def 9;
-A11: the carrier of Closed-Interval-TSpace(0,1/2) = [.0,1/2.] &
+A10: the carrier of Closed-Interval-TSpace(0,1/2) = [.0,1/2.] &
          the carrier of Closed-Interval-TSpace(1/2,1) = [.1/2,1.]
            by TOPMETR:25;
-A12: [.0,1.] c= the carrier of I[01] by BORSUK_1:83;
+A11: [.0,1.] c= the carrier of I[01] by BORSUK_1:83;
     [.0,1/2.] c= the carrier of I[01] by BORSUK_1:83,RCOMP_1:49; then
-A13: [:[.0,1.], [.0,1/2.]:] c=
+A12: [:[.0,1.], [.0,1/2.]:] c=
       [:the carrier of I[01], the carrier of I[01]:]
         by BORSUK_1:83,ZFMISC_1:119;
-A14: 1 in [.0,1.] by RCOMP_1:48;
+A13: 1 in [.0,1.] by RCOMP_1:48;
     0 in [.0,1/2.] by RCOMP_1:48; then
     reconsider Ewa = [:[.0,1.], [.0,1/2.]:] as
       non empty Subset of [:I[01], I[01]:]
-        by A13,A14,BORSUK_1:def 5,ZFMISC_1:106;
+        by A12,A13,BORSUK_1:def 5,ZFMISC_1:106;
     [.1/2,1.] c= the carrier of I[01] by BORSUK_1:83,RCOMP_1:49; then
-A15: [:[.0,1.], [.1/2,1.]:] c=
+A14: [:[.0,1.], [.1/2,1.]:] c=
       [:the carrier of I[01], the carrier of I[01]:]
         by BORSUK_1:83,ZFMISC_1:119;
     1 in [.1/2,1.] by RCOMP_1:48; then
     reconsider Ewa1 = [:[.0,1.], [.1/2,1.]:] as
       non empty Subset of [:I[01], I[01]:]
-        by A14,A15,BORSUK_1:def 5,ZFMISC_1:106;
+        by A13,A14,BORSUK_1:def 5,ZFMISC_1:106;
     set T1 = [:I[01], I[01]:] | Ewa;
     set T2 = [:I[01], I[01]:] | Ewa1;
-    reconsider A01 = [.0,1.] as non empty Subset of I[01] by A12,RCOMP_1:48;
+    reconsider A01 = [.0,1.] as non empty Subset of I[01] by A11,RCOMP_1:48;
     reconsider B01 = [.0,1/2.] as non empty Subset of I[01]
       by BORSUK_1:83,RCOMP_1:48,49;
     1/2 in [.0,1/2.] by RCOMP_1:48; then
-A16: 1/2 in the carrier of Closed-Interval-TSpace(0,1/2)
+A15: 1/2 in the carrier of Closed-Interval-TSpace(0,1/2)
       by TOPMETR:25;
     reconsider B02 = [.1/2,1.] as non empty Subset of I[01]
       by BORSUK_1:83,RCOMP_1:48,49;
     A01 = [#] I[01] by BORSUK_1:83; then
-A17: I[01] = I[01] | A01 by TSEP_1:100;
+A16: I[01] = I[01] | A01 by TSEP_1:100;
     Closed-Interval-TSpace (0,1/2) = I[01] | B01 by TOPMETR:31; then
-A18: T1 = [:I[01],Closed-Interval-TSpace(0,1/2):] by A17,BORSUK_3:26;
+A17: T1 = [:I[01],Closed-Interval-TSpace(0,1/2):] by A16,BORSUK_3:26;
     Closed-Interval-TSpace (1/2,1) = I[01] | B02 by TOPMETR:31; then
-A19: T2 = [:I[01],Closed-Interval-TSpace(1/2,1):] by A17,BORSUK_3:26;
-A20: [#] T1 = Ewa & [#] T2 = Ewa1 by PRE_TOPC:def 10; then
-A21: [#] T1 \/ [#] T2
+A18: T2 = [:I[01],Closed-Interval-TSpace(1/2,1):] by A16,BORSUK_3:26;
+A19: [#] T1 = Ewa & [#] T2 = Ewa1 by PRE_TOPC:def 10; then
+A20: [#] T1 \/ [#] T2
                 = [:[.0,1.], [.0,1/2.] \/ [.1/2,1.]:] by ZFMISC_1:120
       .= [:the carrier of I[01], the carrier of I[01]:]
           by BORSUK_1:83,RCOMP_1:50
       .= [#] [:I[01],I[01]:] by BORSUK_1:def 5;
-    reconsider f1 as continuous Function of T1, T by A2,A6,A18,TOPS_2:58;
-    reconsider g1 as continuous Function of T2,T by A3,A7,A19,TOPS_2:58;
-A22: 0 is Point of I[01] & 1 is Point of I[01] & 1/2 is Point of I[01]
+    reconsider f1 as continuous Function of T1, T by A2,A6,A17,TOPS_2:58;
+    reconsider g1 as continuous Function of T2,T by A3,A7,A18,TOPS_2:58;
+A21: 0 is Point of I[01] & 1 is Point of I[01] & 1/2 is Point of I[01]
       by BORSUK_1:86; then
-A23: [.0,1.] is compact Subset of I[01] &
+A22: [.0,1.] is compact Subset of I[01] &
       [.0,1/2.] is compact Subset of I[01] by BORSUK_4:49; then
     Ewa is compact Subset of [:I[01], I[01]:] by BORSUK_3:27; then
-A24: T1 is compact by COMPTS_1:12;
-    [.1/2,1.] is compact Subset of I[01] by A22,BORSUK_4:49; then
-    Ewa1 is compact Subset of [:I[01], I[01]:] by A23,BORSUK_3:27; then
-A25: T2 is compact by COMPTS_1:12;
-A26:[#] T1 /\ [#] T2
-               = [:[.0,1.], [.0,1/2.] /\ [.1/2,1.]:] by A20,ZFMISC_1:122
+A23: T1 is compact by COMPTS_1:12;
+    [.1/2,1.] is compact Subset of I[01] by A21,BORSUK_4:49; then
+    Ewa1 is compact Subset of [:I[01], I[01]:] by A22,BORSUK_3:27; then
+A24: T2 is compact by COMPTS_1:12;
+A25:[#] T1 /\ [#] T2
+               = [:[.0,1.], [.0,1/2.] /\ [.1/2,1.]:] by A19,ZFMISC_1:122
               .= [:[.0,1.], {1/2} :] by TOPMETR2:1;
-A27: dom e1 = the carrier of [:I[01], Closed-Interval-TSpace(0,1/2):]
+A26: dom e1 = the carrier of [:I[01], Closed-Interval-TSpace(0,1/2):]
       by FUNCT_2:def 1
           .= [:the carrier of I[01],
           the carrier of Closed-Interval-TSpace(0,1/2):] by BORSUK_1:def 5;
-A28:dom e2 = the carrier of [:I[01], Closed-Interval-TSpace(1/2,1):]
+A27:dom e2 = the carrier of [:I[01], Closed-Interval-TSpace(1/2,1):]
       by FUNCT_2:def 1
      .= [:the carrier of I[01],
           the carrier of Closed-Interval-TSpace(1/2,1):] by BORSUK_1:def 5;
-A29: dom e1 = [:dom id I[01], dom P1:] by FUNCT_3:def 9;
-A30: dom e2 = [:dom id I[01], dom P2:] by FUNCT_3:def 9;
-A31: 1/2 in [.1/2,1.] by RCOMP_1:48; then
-A32: 1/2 in the carrier of Closed-Interval-TSpace(1/2,1) by TOPMETR:25;
+A28: dom e1 = [:dom id I[01], dom P1:] by FUNCT_3:def 9;
+A29: dom e2 = [:dom id I[01], dom P2:] by FUNCT_3:def 9;
+A30: 1/2 in [.1/2,1.] by RCOMP_1:48; then
+A31: 1/2 in the carrier of Closed-Interval-TSpace(1/2,1) by TOPMETR:25;
     for p be set st p in [#] T1 /\ [#] T2 holds f1.p = g1.p
     proof
       let p be set;
       assume p in [#] T1 /\ [#] T2; then
       consider x, y be set such that
-A33:   x in [.0,1.] & y in {1/2} & p = [x,y] by A26,ZFMISC_1:def 2;
-A34:   y = 1/2 by A33,TARSKI:def 1;
-      x in { r where r is Real : 0 <= r & r <= 1 } by A33,RCOMP_1:def 1; then
+A32:   x in [.0,1.] & y in {1/2} & p = [x,y] by A25,ZFMISC_1:def 2;
+A33:   y = 1/2 by A32,TARSKI:def 1;
+      x in { r where r is Real : 0 <= r & r <= 1 } by A32,RCOMP_1:def 1; then
       consider r1 be Real such that
-A35:   r1 = x & 0 <= r1 & r1 <= 1;
-      reconsider x' = x as Point of I[01] by A35,BORSUK_1:86;
+A34:   r1 = x & 0 <= r1 & r1 <= 1;
+      reconsider x' = x as Point of I[01] by A34,BORSUK_1:86;
       f1.p = g1.p
       proof
-A36:     x in the carrier of I[01] by A35,BORSUK_1:86;
+A35:     x in the carrier of I[01] by A34,BORSUK_1:86;
         1/2 in [.0,1/2.] by RCOMP_1:48; then
         reconsider y' = 1/2 as Point of Closed-Interval-TSpace(0,1/2)
           by TOPMETR:25;
       reconsider r1 = (#)(0,1), r2 = (0,1)(#) as Real
         by BORSUK_1:def 17,def 18,TREAL_1:8;
       set t' = 1/2;
-A37:   P1.y' = ((r2 - r1)/(1/2 - 0))*t' + ((1/2)*r1 - 0 *r2)/(1/2 - 0)
+A36:   P1.y' = ((r2 - r1)/(1/2 - 0))*t' + ((1/2)*r1 - 0 *r2)/(1/2 - 0)
         by TREAL_1:14
         .= 1 by BORSUK_1:def 18,TREAL_1:8;
       reconsider y' = 1/2 as Point of Closed-Interval-TSpace(1/2,1)
-        by A31,TOPMETR:25;
-A38:  P2.y' = ((r2 - r1)/(1 - 1/2))*t' + (1*r1 - (1/2)*r2)/(1 - 1/2)
+        by A30,TOPMETR:25;
+A37:  P2.y' = ((r2 - r1)/(1 - 1/2))*t' + (1*r1 - (1/2)*r2)/(1 - 1/2)
         by TREAL_1:14
         .= 0 by BORSUK_1:def 17,TREAL_1:8;
-A39:   [x,y] in dom e1 by A16,A27,A34,A36,ZFMISC_1:106;
-A40:  [x,y] in dom e2 by A28,A32,A34,A36,ZFMISC_1:106;
-      f1.p = f.(e1.(x,y)) by A33,A39,FUNCT_1:23
-          .= f.(id I[01].x, P1.y) by A29,A39,FUNCT_3:86
-          .= f.(x',1) by A34,A37,TMAP_1:91
+A38:   [x,y] in dom e1 by A15,A26,A33,A35,ZFMISC_1:106;
+A39:  [x,y] in dom e2 by A27,A31,A33,A35,ZFMISC_1:106;
+      f1.p = f.(e1.(x,y)) by A32,A38,FUNCT_1:23
+          .= f.(id I[01].x, P1.y) by A28,A38,FUNCT_3:86
+          .= f.(x',1) by A33,A36,TMAP_1:91
           .= Q.x' by A2
           .= g.(x',0) by A3
-          .= g.(id I[01]. x', P2.y) by A34,A38,TMAP_1:91
-          .= g.(e2.(x, y)) by A30,A40,FUNCT_3:86
-          .= g1. p by A33,A40,FUNCT_1:23;
+          .= g.(id I[01]. x', P2.y) by A33,A37,TMAP_1:91
+          .= g.(e2.(x, y)) by A29,A39,FUNCT_3:86
+          .= g1. p by A32,A39,FUNCT_1:23;
      hence thesis;
     end;
     hence thesis;
    end; then
    consider h being Function of [:I[01],I[01]:], T such that
-A41:  h = f1 +* g1 & h is continuous by A21,A24,A25,BORSUK_2:1;
-A42: the carrier of Closed-Interval-TSpace(1/2,1) = [. 1/2,1 .]
+A40:  h = f1 +* g1 & h is continuous by A20,A23,A24,BORSUK_2:1;
+A41: the carrier of Closed-Interval-TSpace(1/2,1) = [. 1/2,1 .]
       by TOPMETR:25;
-A43: the carrier of Closed-Interval-TSpace(0,1/2) = [. 0,1/2 .]
+A42: the carrier of Closed-Interval-TSpace(0,1/2) = [. 0,1/2 .]
       by TOPMETR:25;
-A44: for s being Point of I[01] holds h.(s,0) = P.s & h.(s,1) = R.s
+A43: for s being Point of I[01] holds h.(s,0) = P.s & h.(s,1) = R.s
    proof
     let s be Point of I[01];
-A45: the carrier of Closed-Interval-TSpace(1/2,1) = [. 1/2,1 .]
+A44: the carrier of Closed-Interval-TSpace(1/2,1) = [. 1/2,1 .]
       by TOPMETR:25; then
     not 0 in the carrier of Closed-Interval-TSpace(1/2,1)
       by RCOMP_1:48; then
-A46: not [s,0] in dom g1 by A10,ZFMISC_1:106;
-A47: 0 in the carrier of Closed-Interval-TSpace(0,1/2)
-      by A43,RCOMP_1:48; then
-A48: [s,0] in dom e1 by A27,ZFMISC_1:106;
+A45: not [s,0] in dom g1 by A9,ZFMISC_1:106;
+A46: 0 in the carrier of Closed-Interval-TSpace(0,1/2)
+      by A42,RCOMP_1:48; then
+A47: [s,0] in dom e1 by A26,ZFMISC_1:106;
     reconsider r1 = (#)(0,1), r2 = (0,1)(#) as Real
       by BORSUK_1:def 17,def 18,TREAL_1:8;
     set t' = 0;
-A49: P1.0 = ((r2 - r1)/(1/2 - 0))*t' + ((1/2)*r1 - 0 *r2)/(1/2 - 0)
-      by A47,TREAL_1:14
+A48: P1.0 = ((r2 - r1)/(1/2 - 0))*t' + ((1/2)*r1 - 0 *r2)/(1/2 - 0)
+      by A46,TREAL_1:14
         .= 0 by TREAL_1:def 1;
-A50: h.(s,0) = f1.(s,0) by A41,A46,FUNCT_4:12
-           .= f.(e1.(s,0)) by A48,FUNCT_1:23
-           .= f.(id I[01].s, P1.0) by A29,A48,FUNCT_3:86
-           .= f.(s,0) by  TMAP_1:91,A49
+A49: h.(s,0) = f1.(s,0) by A40,A45,FUNCT_4:12
+           .= f.(e1.(s,0)) by A47,FUNCT_1:23
+           .= f.(id I[01].s, P1.0) by A28,A47,FUNCT_3:86
+           .= f.(s,0) by  TMAP_1:91,A48
            .= P.s by A2;
-A51: 1 in the carrier of Closed-Interval-TSpace(1/2,1)
-      by A45,RCOMP_1:48; then
-A52: [s,1] in dom g1 by A10,ZFMISC_1:106;
-A53: [s,1] in dom e2 by A28,A51,ZFMISC_1:106;
+A50: 1 in the carrier of Closed-Interval-TSpace(1/2,1)
+      by A44,RCOMP_1:48; then
+A51: [s,1] in dom g1 by A9,ZFMISC_1:106;
+A52: [s,1] in dom e2 by A27,A50,ZFMISC_1:106;
     1/2 < 1 & 1 = (0,1)(#) & 1 = (1/2,1)(#) by TREAL_1:def 2; then
-A54: P2.1 = 1 by TREAL_1:16;
-    h.(s,1) = g1.(s,1) by A41,A52,FUNCT_4:14
-           .= g.(e2.(s,1)) by A53,FUNCT_1:23
-           .= g.(id I[01]. s, P2.1) by A30,A53,FUNCT_3:86
-           .= g.(s,1) by  TMAP_1:91,A54
+A53: P2.1 = 1 by TREAL_1:16;
+    h.(s,1) = g1.(s,1) by A40,A51,FUNCT_4:14
+           .= g.(e2.(s,1)) by A52,FUNCT_1:23
+           .= g.(id I[01]. s, P2.1) by A29,A52,FUNCT_3:86
+           .= g.(s,1) by  TMAP_1:91,A53
            .= R.s by A3;
-    hence thesis by A50;
+    hence thesis by A49;
    end;
-A55:  1 in the carrier of I[01] by BORSUK_1:86;
+A54:  1 in the carrier of I[01] by BORSUK_1:86;
    for t being Point of I[01] holds h.(0,t) = a & h.(1,t) = b
    proof
      let t be Point of I[01];
      per cases;
      suppose
-A56:  t < 1/2;
-A57:  0 <= t by BORSUK_1:86;
-A58:  0 in the carrier of I[01] by BORSUK_1:86;
+A55:  t < 1/2;
+A56:  0 <= t by BORSUK_1:86;
+A57:  0 in the carrier of I[01] by BORSUK_1:86;
      not t in the carrier of Closed-Interval-TSpace(1/2,1)
-       by A42,A56,RCOMP_1:48; then
-A59:  not [0,t] in dom g1 by A10,ZFMISC_1:106;
-A60:  t in the carrier of Closed-Interval-TSpace(0,1/2)
-       by A43,A56,A57,RCOMP_1:48; then
-A61:  [0,t] in dom e1 by A27,A58,ZFMISC_1:106;
+       by A41,A55,RCOMP_1:48; then
+A58:  not [0,t] in dom g1 by A9,ZFMISC_1:106;
+A59:  t in the carrier of Closed-Interval-TSpace(0,1/2)
+       by A42,A55,A56,RCOMP_1:48; then
+A60:  [0,t] in dom e1 by A26,A57,ZFMISC_1:106;
       reconsider r1 = (#)(0,1), r2 = (0,1)(#) as Real
         by BORSUK_1:def 17,def 18,TREAL_1:8;
-A62:   t is Real by XREAL_0:def 1;
+A61:   t is Real by XREAL_0:def 1;
       P1.t = ((r2 - r1)/(1/2 - 0))*t + ((1/2)*r1 - 0 *r2)/(1/2 - 0)
-        by A60,A62,TREAL_1:14
+        by A59,A61,TREAL_1:14
         .= ((1 - r1)/(1/2))*t + ((1/2)*r1)/(1/2) by TREAL_1:def 2
         .= ((1 - 0)/(1/2))*t + ((1/2)*r1)/(1/2) by TREAL_1:def 1
         .= (1/(1/2))*t + ((1/2)*0)/(1/2) by TREAL_1:def 1
         .= 2*t; then
-A63:  P1.t is Point of I[01] by A56,Th6;
-     thus h.(0,t) = f1.(0,t) by A41,A59,FUNCT_4:12
-           .= f.(e1.(0,t)) by A61,FUNCT_1:23
-           .= f.(id I[01].0, P1.t) by A29,A61,FUNCT_3:86
-           .= f.(0,P1.t) by A22,TMAP_1:91
-           .= a by A2,A63;
+A62:  P1.t is Point of I[01] by A55,Th6;
+     thus h.(0,t) = f1.(0,t) by A40,A58,FUNCT_4:12
+           .= f.(e1.(0,t)) by A60,FUNCT_1:23
+           .= f.(id I[01].0, P1.t) by A28,A60,FUNCT_3:86
+           .= f.(0,P1.t) by A21,TMAP_1:91
+           .= a by A2,A62;
      not t in the carrier of Closed-Interval-TSpace(1/2,1)
-       by A11,A56,RCOMP_1:48; then
-A64:  not [1,t] in dom g1 by A10,ZFMISC_1:106;
+       by A10,A55,RCOMP_1:48; then
+A63:  not [1,t] in dom g1 by A9,ZFMISC_1:106;
      t in the carrier of Closed-Interval-TSpace(0,1/2)
-       by A11,A56,A57,RCOMP_1:48; then
-A65:  [1,t] in dom e1 by A27,A55,ZFMISC_1:106;
+       by A10,A55,A56,RCOMP_1:48; then
+A64:  [1,t] in dom e1 by A26,A54,ZFMISC_1:106;
      P1.t = ((r2 - r1)/(1/2 - 0))*t + ((1/2)*r1 - 0 *r2)/(1/2 - 0)
-        by A60,A62,TREAL_1:14
+        by A59,A61,TREAL_1:14
         .= ((1 - r1)/(1/2))*t + ((1/2)*r1)/(1/2) by TREAL_1:def 2
         .= ((1 - 0)/(1/2))*t + ((1/2)*r1)/(1/2) by TREAL_1:def 1
         .= (1/(1/2))*t + ((1/2)*0)/(1/2) by TREAL_1:def 1
         .= 2*t; then
-A66:  P1.t is Point of I[01] by A56,Th6;
-     thus h.(1,t) = f1.(1,t) by A41,A64,FUNCT_4:12
-           .= f.(e1.(1,t)) by A65,FUNCT_1:23
-           .= f.(id I[01]. 1, P1.t) by A29,A65,FUNCT_3:86
-           .= f.(1,P1.t) by A22,TMAP_1:91
-           .= b by A2,A66;
+A65:  P1.t is Point of I[01] by A55,Th6;
+     thus h.(1,t) = f1.(1,t) by A40,A63,FUNCT_4:12
+           .= f.(e1.(1,t)) by A64,FUNCT_1:23
+           .= f.(id I[01]. 1, P1.t) by A28,A64,FUNCT_3:86
+           .= f.(1,P1.t) by A21,TMAP_1:91
+           .= b by A2,A65;
      end;
      suppose
-A67:  t >= 1/2;
-A68:  0 in the carrier of I[01] by BORSUK_1:86;
+A66:  t >= 1/2;
+A67:  0 in the carrier of I[01] by BORSUK_1:86;
      t <= 1 by BORSUK_1:86; then
-A69:  t in the carrier of Closed-Interval-TSpace(1/2,1)
-       by A42,A67,RCOMP_1:48; then
-A70:  [0,t] in dom g1 by A10,A68,ZFMISC_1:106;
-A71:  [0,t] in dom e2 by A28,A68,A69,ZFMISC_1:106;
+A68:  t in the carrier of Closed-Interval-TSpace(1/2,1)
+       by A41,A66,RCOMP_1:48; then
+A69:  [0,t] in dom g1 by A9,A67,ZFMISC_1:106;
+A70:  [0,t] in dom e2 by A27,A67,A68,ZFMISC_1:106;
       reconsider r1 = (#)(0,1), r2 = (0,1)(#) as Real
         by BORSUK_1:def 17,def 18,TREAL_1:8;
-A72:   t is Real by XREAL_0:def 1;
+A71:   t is Real by XREAL_0:def 1;
       P2.t = ((r2 - r1)/(1 - 1/2))*t + (1*r1 - (1/2) *r2)/(1 - 1/2)
-        by A69,A72,TREAL_1:14
+        by A68,A71,TREAL_1:14
         .= ((1 - r1)/(1/2))*t + (1*r1 - (1/2) *r2)/(1/2) by TREAL_1:def 2
         .= ((1 - 0)/(1/2))*t + (1*r1 - (1/2) *r2)/(1/2) by TREAL_1:def 1
         .= (1/(1/2))*t + (1*0 - (1/2) *r2)/(1/2) by TREAL_1:def 1
         .= (1/(1/2))*t + (1*0 - (1/2) *1)/(1/2) by TREAL_1:def 2
         .= 2*t - 1; then
-A73:  P2.t is Point of I[01] by A67,Th7;
-       thus h.(0,t) = g1.(0,t) by A41,A70,FUNCT_4:14
-           .= g.(e2.(0,t)) by A71,FUNCT_1:23
-           .= g.(id I[01]. 0, P2.t) by A30,A71,FUNCT_3:86
-           .= g.(0,P2.t) by A22,TMAP_1:91
-           .= a by A3,A73;
-A74:  [1,t] in dom g1 by A10,A55,A69,ZFMISC_1:106;
-A75:  [1,t] in dom e2 by A28,A55,A69,ZFMISC_1:106;
+A72:  P2.t is Point of I[01] by A66,Th7;
+       thus h.(0,t) = g1.(0,t) by A40,A69,FUNCT_4:14
+           .= g.(e2.(0,t)) by A70,FUNCT_1:23
+           .= g.(id I[01]. 0, P2.t) by A29,A70,FUNCT_3:86
+           .= g.(0,P2.t) by A21,TMAP_1:91
+           .= a by A3,A72;
+A73:  [1,t] in dom g1 by A9,A54,A68,ZFMISC_1:106;
+A74:  [1,t] in dom e2 by A27,A54,A68,ZFMISC_1:106;
      P2.t = ((r2 - r1)/(1 - 1/2))*t + (1*r1 - (1/2) *r2)/(1 - 1/2)
-        by A69,A72,TREAL_1:14
+        by A68,A71,TREAL_1:14
         .= ((1 - r1)/(1/2))*t + (1*r1 - (1/2) *r2)/(1/2) by TREAL_1:def 2
         .= ((1 - 0)/(1/2))*t + (1*r1 - (1/2) *r2)/(1/2) by TREAL_1:def 1
         .= 2*t + (1*0 - (1/2) *r2)/(1/2) by TREAL_1:def 1
         .= 2*t + (-(1/2) *r2)/(1/2)
         .= 2*t + (-(1/2) *1)/(1/2) by TREAL_1:def 2
         .= 2*t - 1; then
-A76:  P2.t is Point of I[01] by A67,Th7;
-       thus h.(1,t) = g1.(1,t) by A41,A74,FUNCT_4:14
-           .= g.(e2.(1,t)) by A75,FUNCT_1:23
-           .= g.(id I[01]. 1, P2.t) by A30,A75,FUNCT_3:86
-           .= g.(1,P2.t) by A22,TMAP_1:91
-           .= b by A3,A76;
+A75:  P2.t is Point of I[01] by A66,Th7;
+       thus h.(1,t) = g1.(1,t) by A40,A73,FUNCT_4:14
+           .= g.(e2.(1,t)) by A74,FUNCT_1:23
+           .= g.(id I[01]. 1, P2.t) by A29,A74,FUNCT_3:86
+           .= g.(1,P2.t) by A21,TMAP_1:91
+           .= b by A3,A75;
      end;
    end;
-   hence thesis by A41,A44,BORSUK_2:def 7;
+   hence thesis by A40,A43,BORSUK_2:def 7;
 end;
 
 theorem Th88:
@@ -3913,145 +3850,142 @@ A29:   x`1 >= 1/2 by A22,Th68;
       hence thesis;
     end;
     set S12 = S | (IAA \/ IBB);
-    IAA \/ IBB <> {} by XBOOLE_1:15; then
-    the carrier of S12 <> {} by PRE_TOPC:29; then
-    reconsider S12 as non empty SubSpace of S by STRUCT_0:def 1;
-A30: the carrier of S12 = IAA \/ IBB by PRE_TOPC:29; then
-A31: [#]S12 = IAA \/ IBB;
-A32: [#]S1 = IAA by PRE_TOPC:def 10;
-A33: [#]S2 = IBB by PRE_TOPC:def 10; then
-    reconsider s1 = [#]S1, s2 = [#]S2 as Subset of S12 by A30,A32,XBOOLE_1:7;
-A34: ([#] S1) \/ ([#] S2) = [#] S12 by A31,A33,PRE_TOPC:def 10;
-A35: for p be set st p in ([#] S1) /\ ([#] S2) holds f.p = g.p
+    reconsider S12 as non empty SubSpace of S;
+A30: the carrier of S12 = IAA \/ IBB by PRE_TOPC:29;
+A31: [#]S1 = IAA by PRE_TOPC:def 10;
+A32: [#]S2 = IBB by PRE_TOPC:def 10; then
+    reconsider s1 = [#]S1, s2 = [#]S2 as Subset of S12 by A30,A31,XBOOLE_1:7;
+A33: ([#] S1) \/ ([#] S2) = [#] S12 by A30,A32,PRE_TOPC:def 10;
+A34: for p be set st p in ([#] S1) /\ ([#] S2) holds f.p = g.p
     proof
       let p be set;
       assume p in ([#] S1) /\ ([#] S2); then
       p in ([#] S1) /\ IBB by PRE_TOPC:def 10; then
-A36:   p in IAA /\ IBB by PRE_TOPC:def 10; then
+A35:   p in IAA /\ IBB by PRE_TOPC:def 10; then
       consider r being Point of S such that
-A37:   r = p & r`2 = 1 - 2 * (r`1) by Th65;
-A38:   p in IAA & p in IBB by A36,XBOOLE_0:def 3; then
+A36:   r = p & r`2 = 1 - 2 * (r`1) by Th65;
+A37:   p in IAA & p in IBB by A35,XBOOLE_0:def 3; then
       reconsider pp = p as Point of S1 by PRE_TOPC:29;
-A39:   2 * r`1 = 1 - r`2 by A37;
-A40:   pp is Point of S2 by A38,PRE_TOPC:29;
+A38:   2 * r`1 = 1 - r`2 by A36;
+A39:   pp is Point of S2 by A37,PRE_TOPC:29;
       f.p = P.(2 * pp`1) by A4
-         .= g.p by A13,A37,A39,A40;
+         .= g.p by A13,A36,A38,A39;
       hence thesis;
     end;
     IAA c= IAA \/ IBB by XBOOLE_1:7; then
-A41: S1 is SubSpace of S12 by TOPMETR:29;
+A40: S1 is SubSpace of S12 by TOPMETR:29;
     IBB c= IAA \/ IBB by XBOOLE_1:7; then
-A42: S2 is SubSpace of S12 by TOPMETR:29;
-A43: s1 is closed by A32,TOPS_2:34;
-    s2 is closed by A33,TOPS_2:34; then
+A41: S2 is SubSpace of S12 by TOPMETR:29;
+A42: s1 is closed by A31,TOPS_2:34;
+    s2 is closed by A32,TOPS_2:34; then
     consider fg being Function of S12, T such that
-A44: fg = f +* g & fg is continuous by A34,A35,A41,A42,A43,JGRAPH_2:9;
-A45: [#]S3 = ICC by PRE_TOPC:def 10;
+A43: fg = f +* g & fg is continuous by A33,A34,A40,A41,A42,JGRAPH_2:9;
+A44: [#]S3 = ICC by PRE_TOPC:def 10;
     reconsider s12 = [#]S12, s3 = [#]S3 as Subset of S by PRE_TOPC:def 10;
-A46: ([#] S12) \/ ([#] S3) = (IAA \/ IBB) \/ ICC by A31,PRE_TOPC:def 10
+A45: ([#] S12) \/ ([#] S3) = (IAA \/ IBB) \/ ICC by A30,PRE_TOPC:def 10
        .= [#] S by Th64,BORSUK_1:83,def 5;
-A47: for p be set st p in ([#] S12) /\ ([#] S3) holds fg.p = h.p
+A46: for p be set st p in ([#] S12) /\ ([#] S3) holds fg.p = h.p
     proof
       let p be set;
       assume p in ([#] S12) /\ ([#] S3); then
-A48:   p in { [1/2,0] } \/ (IBB /\ ICC) by A31,A45,Th80,XBOOLE_1:23;
+A47:   p in { [1/2,0] } \/ (IBB /\ ICC) by A30,A44,Th80,XBOOLE_1:23;
       [1/2,0] in IBB /\ ICC by Th74,Th75,XBOOLE_0:def 3; then
       { [1/2,0] } c= IBB /\ ICC by ZFMISC_1:37; then
-A49:   p in IBB /\ ICC by A48,XBOOLE_1:12; then
+A48:   p in IBB /\ ICC by A47,XBOOLE_1:12; then
       consider q being Point of S such that
-A50:   q = p & q`2 = 2 * (q`1) - 1 by Th66;
-A51:   p in IBB & p in ICC by A49,XBOOLE_0:def 3; then
+A49:   q = p & q`2 = 2 * (q`1) - 1 by Th66;
+A50:   p in IBB & p in ICC by A48,XBOOLE_0:def 3; then
       reconsider pp = p as Point of S3 by PRE_TOPC:29;
-A52:   pp is Point of S2 by A51,PRE_TOPC:29;
-A53:   2 * pp`1 - 1 is Point of I[01] by A50,Th31;
-      p in the carrier of S2 by A51,PRE_TOPC:29; then
+A51:   pp is Point of S2 by A50,PRE_TOPC:29;
+A52:   2 * pp`1 - 1 is Point of I[01] by A49,Th31;
+      p in the carrier of S2 by A50,PRE_TOPC:29; then
       p in dom g by FUNCT_2:def 1; then
-      fg.p = g.p by A44,FUNCT_4:14
-          .= P.(1 - pp`2) by A13,A52
-          .= (-P).(2 * pp`1 - 1) by A1,A50,A53,BORSUK_2:def 6
+      fg.p = g.p by A43,FUNCT_4:14
+          .= P.(1 - pp`2) by A13,A51
+          .= (-P).(2 * pp`1 - 1) by A1,A49,A52,BORSUK_2:def 6
           .= h.p by A21;
       hence thesis;
     end;
-A54: s12 is closed by A31,TOPS_1:36;
+A53: s12 is closed by A30,TOPS_1:36;
     s3 = ICC by PRE_TOPC:def 10; then
     consider H being Function of S, T such that
-A55: H = fg +* h & H is continuous by A44,A46,A47,A54,JGRAPH_2:9;
-A56: for s being Point of I[01] holds H.(s,0) = (P+ -P).s &
+A54: H = fg +* h & H is continuous by A43,A45,A46,A53,JGRAPH_2:9;
+A55: for s being Point of I[01] holds H.(s,0) = (P+ -P).s &
       H.(s,1) = Q.s
     proof
       let s be Point of I[01];
       thus H.(s,0) = (P+ -P).s
       proof
-A57:     [s,0]`1 = s by MCART_1:7;
+A56:     [s,0]`1 = s by MCART_1:7;
         per cases by REAL_1:def 5;
         suppose
-A58:       s < 1/2; then
-A59:       [s,0] in IAA by Th78;
-          not [s,0] in ICC by A58,Th79; then
+A57:       s < 1/2; then
+A58:       [s,0] in IAA by Th78;
+          not [s,0] in ICC by A57,Th79; then
           not [s,0] in the carrier of S3 by PRE_TOPC:29; then
-A60:       not [s,0] in dom h;
-A61:       [s,0] in the carrier of S1 by A59,PRE_TOPC:29;
-          not [s,0] in IBB by A58,Th79; then
+A59:       not [s,0] in dom h;
+A60:       [s,0] in the carrier of S1 by A58,PRE_TOPC:29;
+          not [s,0] in IBB by A57,Th79; then
           not [s,0] in the carrier of S2 by PRE_TOPC:29; then
-A62:       not [s,0] in dom g;
-          H. [s,0] = fg. [s,0] by A55,A60,FUNCT_4:12
-                  .= f. [s,0] by A44,A62,FUNCT_4:12
-                  .= P.(2 * s) by A4,A57,A61
-                  .= (P+ -P).s by A1,A58,BORSUK_2:def 5;
+A61:       not [s,0] in dom g;
+          H. [s,0] = fg. [s,0] by A54,A59,FUNCT_4:12
+                  .= f. [s,0] by A43,A61,FUNCT_4:12
+                  .= P.(2 * s) by A4,A56,A60
+                  .= (P+ -P).s by A1,A57,BORSUK_2:def 5;
           hence thesis;
         end;
         suppose
-A63:       s = 1/2; then
-A64:       [s,0] in the carrier of S3 by Th74,PRE_TOPC:29; then
+A62:       s = 1/2; then
+A63:       [s,0] in the carrier of S3 by Th74,PRE_TOPC:29; then
           [s,0] in dom h by FUNCT_2:def 1; then
-          H. [s,0] = h. [s,0] by A55,FUNCT_4:14
-                  .= (-P).(2 * s - 1) by A21,A57,A64
-                  .= b by A1,A63,BORSUK_2:def 2
+          H. [s,0] = h. [s,0] by A54,FUNCT_4:14
+                  .= (-P).(2 * s - 1) by A21,A56,A63
+                  .= b by A1,A62,BORSUK_2:def 2
                   .= P.(2 * (1/2)) by A1,BORSUK_2:def 2
-                  .= (P+ -P).s by A1,A63,BORSUK_2:def 5;
+                  .= (P+ -P).s by A1,A62,BORSUK_2:def 5;
           hence thesis;
         end;
         suppose
-A65:       s > 1/2; then
+A64:       s > 1/2; then
           [s,0] in ICC by Th77; then
-A66:       [s,0] in the carrier of S3 by PRE_TOPC:29; then
+A65:       [s,0] in the carrier of S3 by PRE_TOPC:29; then
           [s,0] in dom h by FUNCT_2:def 1; then
-          H. [s,0] = h. [s,0] by A55,FUNCT_4:14
-                  .= (-P).(2 * s - 1) by A21,A57,A66
-                  .= (P+ -P).s by A1,A65,BORSUK_2:def 5;
+          H. [s,0] = h. [s,0] by A54,FUNCT_4:14
+                  .= (-P).(2 * s - 1) by A21,A56,A65
+                  .= (P+ -P).s by A1,A64,BORSUK_2:def 5;
           hence thesis;
         end;
       end;
       thus H.(s,1) = Q.s
       proof
-A67:     [s,1]`1 = s & [s,1]`2 = 1 by MCART_1:7;
+A66:     [s,1]`1 = s & [s,1]`2 = 1 by MCART_1:7;
         dom Q = the carrier of I[01] by FUNCT_2:def 1; then
-A68:     0 in dom Q & s in dom Q by BORSUK_1:86;
+A67:     0 in dom Q & s in dom Q by BORSUK_1:86;
         per cases;
         suppose s <> 1; then
           not [s,1] in ICC by Th71; then
           not [s,1] in the carrier of S3 by PRE_TOPC:29; then
-A69:       not [s,1] in dom h;
+A68:       not [s,1] in dom h;
           [s,1] in IBB by Th73; then
-A70:       [s,1] in the carrier of S2 by PRE_TOPC:29; then
-A71:       [s,1] in dom g by FUNCT_2:def 1;
-          H. [s,1] = fg. [s,1] by A55,A69,FUNCT_4:12
-                  .= g. [s,1] by A44,A71,FUNCT_4:14
-                  .= P.(1 - 1) by A13,A67,A70
+A69:       [s,1] in the carrier of S2 by PRE_TOPC:29; then
+A70:       [s,1] in dom g by FUNCT_2:def 1;
+          H. [s,1] = fg. [s,1] by A54,A68,FUNCT_4:12
+                  .= g. [s,1] by A43,A70,FUNCT_4:14
+                  .= P.(1 - 1) by A13,A66,A69
                   .= a by A1,BORSUK_2:def 2
                   .= Q.0 by A3,BORSUK_2:def 2
-                  .= Q.s by A68,FUNCT_1:def 16;
+                  .= Q.s by A67,FUNCT_1:def 16;
           hence thesis;
         end;
         suppose
-A72:       s = 1; then
-A73:       [s,1] in the carrier of S3 by Th74,PRE_TOPC:29; then
+A71:       s = 1; then
+A72:       [s,1] in the carrier of S3 by Th74,PRE_TOPC:29; then
           [s,1] in dom h by FUNCT_2:def 1; then
-          H. [s,1] = h. [s,1] by A55,FUNCT_4:14
-                  .= (-P).(2 * s - 1) by A21,A67,A73
-                  .= a by A1,A72,BORSUK_2:def 2
+          H. [s,1] = h. [s,1] by A54,FUNCT_4:14
+                  .= (-P).(2 * s - 1) by A21,A66,A72
+                  .= a by A1,A71,BORSUK_2:def 2
                   .= Q.0 by A3,BORSUK_2:def 2
-                  .= Q.s by A68,FUNCT_1:def 16;
+                  .= Q.s by A67,FUNCT_1:def 16;
           hence thesis;
         end;
       end;
@@ -4062,49 +3996,47 @@ A73:       [s,1] in the carrier of S3 by Th74,PRE_TOPC:29; then
       thus H.(0,t) = a
       proof
         0 in the carrier of I[01] by BORSUK_1:86; then
-        reconsider x = [0,t] as Point of S by Lm3;
+        reconsider x = [0,t] as Point of S by Lm1;
         x in IAA by Th69; then
-A74:     x is Point of S1 by PRE_TOPC:29;
-A75:     x`1 = 0 & x`2 = t by MCART_1:7; then
+A73:     x is Point of S1 by PRE_TOPC:29;
+A74:     x`1 = 0 & x`2 = t by MCART_1:7; then
         not x in ICC by Th68; then
         not x in the carrier of S3 by PRE_TOPC:29; then
-A76:     not [0,t] in dom h;
-A77:     H.(0,t) = fg. [0,t] by A55,A76,FUNCT_4:12;
+A75:     not [0,t] in dom h;
         per cases;
         suppose t <> 1; then
           not x in IBB by Th70; then
           not x in the carrier of S2 by PRE_TOPC:29; then
           not x in dom g; then
-          fg. [0,t] = f. [0,t] by A44,FUNCT_4:12
-                   .= P.(2 * x`1) by A4,A74
-                   .= a by A1,A75,BORSUK_2:def 2;
-          hence thesis by A77;
+          fg. [0,t] = f. [0,t] by A43,FUNCT_4:12
+                   .= P.(2 * x`1) by A4,A73
+                   .= a by A1,A74,BORSUK_2:def 2;
+          hence thesis by A54,A75,FUNCT_4:12;
         end;
         suppose
-A78:       t = 1; then
-A79:       x in the carrier of S2 by Th72,PRE_TOPC:29; then
+A76:       t = 1; then
+A77:       x in the carrier of S2 by Th72,PRE_TOPC:29; then
           x in dom g by FUNCT_2:def 1; then
-          fg. [0,t] = g. [0,1] by A44,A78,FUNCT_4:14
-                   .= P.(1 - x`2) by A13,A78,A79
-                   .= a by A1,A75,A78,BORSUK_2:def 2;
-          hence thesis by A77;
+          fg. [0,t] = g. [0,1] by A43,A76,FUNCT_4:14
+                   .= P.(1 - x`2) by A13,A76,A77
+                   .= a by A1,A74,A76,BORSUK_2:def 2;
+          hence thesis by A54,A75,FUNCT_4:12;
         end;
       end;
       thus H.(1,t) = a
       proof
         1 in the carrier of I[01] by BORSUK_1:86; then
-        reconsider x = [1,t] as Point of S by Lm3;
-A80:     x in ICC by Th76;
-A81:     x`1 = 1 & x`2 = t by MCART_1:7;
-A82:     x in the carrier of S3 by A80,PRE_TOPC:29; then
-A83:     [1,t] in dom h by FUNCT_2:def 1;
-A84:     H.(1,t) = h. [1,t] by A55,A83,FUNCT_4:14;
-        h. [1,t] = (-P).(2 * x`1 - 1) by A21,A82
-                .= a by A1,A81,BORSUK_2:def 2;
-        hence thesis by A84;
+        reconsider x = [1,t] as Point of S by Lm1;
+A78:     x in ICC by Th76;
+A79:     x`1 = 1 & x`2 = t by MCART_1:7;
+A80:     x in the carrier of S3 by A78,PRE_TOPC:29; then
+A81:     [1,t] in dom h by FUNCT_2:def 1;
+        h. [1,t] = (-P).(2 * x`1 - 1) by A21,A80
+                .= a by A1,A79,BORSUK_2:def 2;
+        hence thesis by A54,A81,FUNCT_4:14;
       end;
     end;
-    hence thesis by A55,A56,BORSUK_2:def 7;
+    hence thesis by A54,A55,BORSUK_2:def 7;
   end;
 
 theorem
@@ -4208,146 +4140,143 @@ A30:   x`1 >= 1/2 by A23,Th68;
       hence thesis;
     end;
     set S12 = S | (IAA \/ IBB);
-    IAA \/ IBB <> {} by XBOOLE_1:15; then
-    the carrier of S12 <> {} by PRE_TOPC:29; then
-    reconsider S12 as non empty SubSpace of S by STRUCT_0:def 1;
-A31: the carrier of S12 = IAA \/ IBB by PRE_TOPC:29; then
-A32: [#]S12 = IAA \/ IBB;
-A33: [#]S1 = IAA by PRE_TOPC:def 10;
-A34: [#]S2 = IBB by PRE_TOPC:def 10; then
-    reconsider s1 = [#]S1, s2 = [#]S2 as Subset of S12 by A31,A33,XBOOLE_1:7;
-A35: ([#] S1) \/ ([#] S2) = [#] S12 by A32,A34,PRE_TOPC:def 10;
-A36: for p be set st p in ([#] S1) /\ ([#] S2) holds f.p = g.p
+    reconsider S12 as non empty SubSpace of S;
+A31: the carrier of S12 = IAA \/ IBB by PRE_TOPC:29;
+A32: [#]S1 = IAA by PRE_TOPC:def 10;
+A33: [#]S2 = IBB by PRE_TOPC:def 10; then
+    reconsider s1 = [#]S1, s2 = [#]S2 as Subset of S12 by A31,A32,XBOOLE_1:7;
+A34: ([#] S1) \/ ([#] S2) = [#] S12 by A31,A33,PRE_TOPC:def 10;
+A35: for p be set st p in ([#] S1) /\ ([#] S2) holds f.p = g.p
     proof
       let p be set;
       assume p in ([#] S1) /\ ([#] S2); then
       p in ([#] S1) /\ IBB by PRE_TOPC:def 10; then
-A37:   p in IAA /\ IBB by PRE_TOPC:def 10; then
+A36:   p in IAA /\ IBB by PRE_TOPC:def 10; then
       consider r being Point of S such that
-A38:   r = p & r`2 = 1 - 2 * (r`1) by Th65;
-A39:   p in IAA & p in IBB by A37,XBOOLE_0:def 3; then
+A37:   r = p & r`2 = 1 - 2 * (r`1) by Th65;
+A38:   p in IAA & p in IBB by A36,XBOOLE_0:def 3; then
       reconsider pp = p as Point of S1 by PRE_TOPC:29;
-A40:   2 * r`1 = 1 - r`2 by A38;
-A41:   pp is Point of S2 by A39,PRE_TOPC:29;
+A39:   2 * r`1 = 1 - r`2 by A37;
+A40:   pp is Point of S2 by A38,PRE_TOPC:29;
       f.p = (-P).(2 * pp`1) by A4
-         .= g.p by A13,A38,A40,A41;
+         .= g.p by A13,A37,A39,A40;
       hence thesis;
     end;
     IAA c= IAA \/ IBB by XBOOLE_1:7; then
-A42: S1 is SubSpace of S12 by TOPMETR:29;
+A41: S1 is SubSpace of S12 by TOPMETR:29;
     IBB c= IAA \/ IBB by XBOOLE_1:7; then
-A43: S2 is SubSpace of S12 by TOPMETR:29;
-A44: s1 is closed by A33,TOPS_2:34;
-    s2 is closed by A34,TOPS_2:34; then
+A42: S2 is SubSpace of S12 by TOPMETR:29;
+A43: s1 is closed by A32,TOPS_2:34;
+    s2 is closed by A33,TOPS_2:34; then
     consider fg being Function of S12, T such that
-A45: fg = f +* g & fg is continuous by A35,A36,A42,A43,A44,JGRAPH_2:9;
-A46: [#]S3 = ICC by PRE_TOPC:def 10;
+A44: fg = f +* g & fg is continuous by A34,A35,A41,A42,A43,JGRAPH_2:9;
+A45: [#]S3 = ICC by PRE_TOPC:def 10;
     reconsider s12 = [#]S12, s3 = [#]S3 as Subset of S by PRE_TOPC:def 10;
-A47: ([#] S12) \/ ([#] S3)
-        = [#] S by A32,A46,Th64,BORSUK_1:83,def 5;
-A48: for p be set st p in ([#] S12) /\ ([#] S3) holds fg.p = h.p
+A46: ([#] S12) \/ ([#] S3)
+        = [#] S by A31,A45,Th64,BORSUK_1:83,def 5;
+A47: for p be set st p in ([#] S12) /\ ([#] S3) holds fg.p = h.p
     proof
       let p be set;
       assume p in ([#] S12) /\ ([#] S3); then
-A49:   p in { [1/2,0] } \/ (IBB /\ ICC) by A32,A46,Th80,XBOOLE_1:23;
+A48:   p in { [1/2,0] } \/ (IBB /\ ICC) by A31,A45,Th80,XBOOLE_1:23;
       [1/2,0] in IBB /\ ICC by Th74,Th75,XBOOLE_0:def 3; then
       { [1/2,0] } c= IBB /\ ICC by ZFMISC_1:37; then
-A50:   p in IBB /\ ICC by A49,XBOOLE_1:12; then
+A49:   p in IBB /\ ICC by A48,XBOOLE_1:12; then
       consider q being Point of S such that
-A51:   q = p & q`2 = 2 * (q`1) - 1 by Th66;
-A52:   p in IBB & p in ICC by A50,XBOOLE_0:def 3; then
+A50:   q = p & q`2 = 2 * (q`1) - 1 by Th66;
+A51:   p in IBB & p in ICC by A49,XBOOLE_0:def 3; then
       reconsider pp = p as Point of S3 by PRE_TOPC:29;
-A53:   pp is Point of S2 by A52,PRE_TOPC:29;
-      pp`1 is Point of I[01] & pp`2 is Point of I[01] by A51,Th31; then
-A54:   1 - pp`2 in the carrier of I[01] by JORDAN5B:4;
-      p in the carrier of S2 by A52,PRE_TOPC:29; then
+A52:   pp is Point of S2 by A51,PRE_TOPC:29;
+      pp`1 is Point of I[01] & pp`2 is Point of I[01] by A50,Th31; then
+A53:   1 - pp`2 in the carrier of I[01] by JORDAN5B:4;
+      p in the carrier of S2 by A51,PRE_TOPC:29; then
       p in dom g by FUNCT_2:def 1; then
-      fg.p = g.p by A45,FUNCT_4:14
-          .= (-P).(1 - pp`2) by A13,A53
-          .= P.(1 - (1 - pp`2)) by A1,A54,BORSUK_2:def 6
-          .= h.p by A22,A51;
+      fg.p = g.p by A44,FUNCT_4:14
+          .= (-P).(1 - pp`2) by A13,A52
+          .= P.(1 - (1 - pp`2)) by A1,A53,BORSUK_2:def 6
+          .= h.p by A22,A50;
       hence thesis;
     end;
-A55: s12 is closed by A32,TOPS_1:36;
+A54: s12 is closed by A31,TOPS_1:36;
     s3 = ICC by PRE_TOPC:def 10; then
     consider H being Function of S, T such that
-A56: H = fg +* h & H is continuous by A45,A47,A48,A55,JGRAPH_2:9;
-A57: for s being Point of I[01] holds H.(s,0) = (-P + P).s &
+A55: H = fg +* h & H is continuous by A44,A46,A47,A54,JGRAPH_2:9;
+A56: for s being Point of I[01] holds H.(s,0) = (-P + P).s &
       H.(s,1) = Q.s
     proof
       let s be Point of I[01];
       thus H.(s,0) = (-P + P).s
       proof
-A58:     [s,0]`1 = s by MCART_1:7;
+A57:     [s,0]`1 = s by MCART_1:7;
         per cases by REAL_1:def 5;
         suppose
-A59:       s < 1/2; then
-A60:       [s,0] in IAA by Th78;
-          not [s,0] in ICC by A59,Th79; then
+A58:       s < 1/2; then
+A59:       [s,0] in IAA by Th78;
+          not [s,0] in ICC by A58,Th79; then
           not [s,0] in the carrier of S3 by PRE_TOPC:29; then
-A61:       not [s,0] in dom h;
-A62:       [s,0] in the carrier of S1 by A60,PRE_TOPC:29;
-          not [s,0] in IBB by A59,Th79; then
+A60:       not [s,0] in dom h;
+A61:       [s,0] in the carrier of S1 by A59,PRE_TOPC:29;
+          not [s,0] in IBB by A58,Th79; then
           not [s,0] in the carrier of S2 by PRE_TOPC:29; then
-A63:       not [s,0] in dom g;
-          H. [s,0] = fg. [s,0] by A56,A61,FUNCT_4:12
-                  .= f. [s,0] by A45,A63,FUNCT_4:12
-                  .= (-P).(2 * s) by A4,A58,A62
-                  .= (-P + P).s by A1,A59,BORSUK_2:def 5;
+A62:       not [s,0] in dom g;
+          H. [s,0] = fg. [s,0] by A55,A60,FUNCT_4:12
+                  .= f. [s,0] by A44,A62,FUNCT_4:12
+                  .= (-P).(2 * s) by A4,A57,A61
+                  .= (-P + P).s by A1,A58,BORSUK_2:def 5;
           hence thesis;
         end;
         suppose
-A64:       s = 1/2; then
-A65:       [s,0] in the carrier of S3 by Th74,PRE_TOPC:29; then
+A63:       s = 1/2; then
+A64:       [s,0] in the carrier of S3 by Th74,PRE_TOPC:29; then
           [s,0] in dom h by FUNCT_2:def 1; then
-          H. [s,0] = h. [s,0] by A56,FUNCT_4:14
-                  .= P.(2 * s - 1) by A22,A58,A65
-                  .= b by A1,A64,BORSUK_2:def 2
+          H. [s,0] = h. [s,0] by A55,FUNCT_4:14
+                  .= P.(2 * s - 1) by A22,A57,A64
+                  .= b by A1,A63,BORSUK_2:def 2
                   .= (-P).(2 * (1/2)) by A1,BORSUK_2:def 2
-                  .= (-P + P).s by A1,A64,BORSUK_2:def 5;
+                  .= (-P + P).s by A1,A63,BORSUK_2:def 5;
           hence thesis;
         end;
         suppose
-A66:       s > 1/2; then
+A65:       s > 1/2; then
           [s,0] in ICC by Th77; then
-A67:       [s,0] in the carrier of S3 by PRE_TOPC:29; then
+A66:       [s,0] in the carrier of S3 by PRE_TOPC:29; then
           [s,0] in dom h by FUNCT_2:def 1; then
-          H. [s,0] = h. [s,0] by A56,FUNCT_4:14
-                  .= P.(2 * s - 1) by A22,A58,A67
-                  .= (-P + P).s by A1,A66,BORSUK_2:def 5;
+          H. [s,0] = h. [s,0] by A55,FUNCT_4:14
+                  .= P.(2 * s - 1) by A22,A57,A66
+                  .= (-P + P).s by A1,A65,BORSUK_2:def 5;
           hence thesis;
         end;
       end;
       thus H.(s,1) = Q.s
       proof
-A68:     [s,1]`1 = s & [s,1]`2 = 1 by MCART_1:7;
+A67:     [s,1]`1 = s & [s,1]`2 = 1 by MCART_1:7;
         dom Q = the carrier of I[01] by FUNCT_2:def 1; then
-A69:     0 in dom Q & s in dom Q by BORSUK_1:86;
+A68:     0 in dom Q & s in dom Q by BORSUK_1:86;
         per cases;
         suppose s <> 1; then
           not [s,1] in ICC by Th71; then
           not [s,1] in the carrier of S3 by PRE_TOPC:29; then
-A70:       not [s,1] in dom h;
+A69:       not [s,1] in dom h;
           [s,1] in IBB by Th73; then
-A71:       [s,1] in the carrier of S2 by PRE_TOPC:29; then
-A72:       [s,1] in dom g by FUNCT_2:def 1;
-          H. [s,1] = fg. [s,1] by A56,A70,FUNCT_4:12
-                  .= g. [s,1] by A45,A72,FUNCT_4:14
-                  .= (-P).(1 - 1) by A13,A68,A71
+A70:       [s,1] in the carrier of S2 by PRE_TOPC:29; then
+A71:       [s,1] in dom g by FUNCT_2:def 1;
+          H. [s,1] = fg. [s,1] by A55,A69,FUNCT_4:12
+                  .= g. [s,1] by A44,A71,FUNCT_4:14
+                  .= (-P).(1 - 1) by A13,A67,A70
                   .= a by A1,BORSUK_2:def 2
                   .= Q.0 by A3,BORSUK_2:def 2
-                  .= Q.s by A69,FUNCT_1:def 16;
+                  .= Q.s by A68,FUNCT_1:def 16;
           hence thesis;
         end;
         suppose
-A73:       s = 1; then
-A74:       [s,1] in the carrier of S3 by Th74,PRE_TOPC:29; then
+A72:       s = 1; then
+A73:       [s,1] in the carrier of S3 by Th74,PRE_TOPC:29; then
           [s,1] in dom h by FUNCT_2:def 1; then
-          H. [s,1] = h. [s,1] by A56,FUNCT_4:14
-                  .= P.(2 * s - 1) by A22,A68,A74
-                  .= a by A1,A73,BORSUK_2:def 2
+          H. [s,1] = h. [s,1] by A55,FUNCT_4:14
+                  .= P.(2 * s - 1) by A22,A67,A73
+                  .= a by A1,A72,BORSUK_2:def 2
                   .= Q.0 by A3,BORSUK_2:def 2
-                  .= Q.s by A69,FUNCT_1:def 16;
+                  .= Q.s by A68,FUNCT_1:def 16;
           hence thesis;
         end;
       end;
@@ -4358,49 +4287,47 @@ A74:       [s,1] in the carrier of S3 by Th74,PRE_TOPC:29; then
       thus H.(0,t) = a
       proof
         0 in the carrier of I[01] by BORSUK_1:86; then
-        reconsider x = [0,t] as Point of S by Lm3;
+        reconsider x = [0,t] as Point of S by Lm1;
         x in IAA by Th69; then
-A75:     x is Point of S1 by PRE_TOPC:29;
-A76:     x`1 = 0 & x`2 = t by MCART_1:7; then
+A74:     x is Point of S1 by PRE_TOPC:29;
+A75:     x`1 = 0 & x`2 = t by MCART_1:7; then
         not x in ICC by Th68; then
         not x in the carrier of S3 by PRE_TOPC:29; then
-A77:     not [0,t] in dom h;
-A78:     H.(0,t) = fg. [0,t] by A56,A77,FUNCT_4:12;
+A76:     not [0,t] in dom h;
         per cases;
         suppose t <> 1; then
           not x in IBB by Th70; then
           not x in the carrier of S2 by PRE_TOPC:29; then
           not x in dom g; then
-          fg. [0,t] = f. [0,t] by A45,FUNCT_4:12
-                   .= (-P).(2 * x`1) by A4,A75
-                   .= a by A1,A76,BORSUK_2:def 2;
-          hence thesis by A78;
+          fg. [0,t] = f. [0,t] by A44,FUNCT_4:12
+                   .= (-P).(2 * x`1) by A4,A74
+                   .= a by A1,A75,BORSUK_2:def 2;
+          hence thesis by A55,A76,FUNCT_4:12;
         end;
         suppose
-A79:       t = 1; then
-A80:       x in the carrier of S2 by Th72,PRE_TOPC:29; then
+A77:       t = 1; then
+A78:       x in the carrier of S2 by Th72,PRE_TOPC:29; then
           x in dom g by FUNCT_2:def 1; then
-          fg. [0,t] = g. [0,1] by A45,A79,FUNCT_4:14
-                   .= (-P).(1 - x`2) by A13,A79,A80
-                   .= a by A1,A76,A79,BORSUK_2:def 2;
-          hence thesis by A78;
+          fg. [0,t] = g. [0,1] by A44,A77,FUNCT_4:14
+                   .= (-P).(1 - x`2) by A13,A77,A78
+                   .= a by A1,A75,A77,BORSUK_2:def 2;
+          hence thesis by A55,A76,FUNCT_4:12;
         end;
       end;
       thus H.(1,t) = a
       proof
         1 in the carrier of I[01] by BORSUK_1:86; then
-        reconsider x = [1,t] as Point of S by Lm3;
-A81:     x in ICC by Th76;
-A82:     x`1 = 1 & x`2 = t by MCART_1:7;
-A83:     x in the carrier of S3 by A81,PRE_TOPC:29; then
-A84:     [1,t] in dom h by FUNCT_2:def 1;
-A85:     H.(1,t) = h. [1,t] by A56,A84,FUNCT_4:14;
-        h. [1,t] = P.(2 * x`1 - 1) by A22,A83
-                .= a by A1,A82,BORSUK_2:def 2;
-        hence thesis by A85;
+        reconsider x = [1,t] as Point of S by Lm1;
+A79:     x in ICC by Th76;
+A80:     x`1 = 1 & x`2 = t by MCART_1:7;
+A81:     x in the carrier of S3 by A79,PRE_TOPC:29; then
+A82:     [1,t] in dom h by FUNCT_2:def 1;
+        h. [1,t] = P.(2 * x`1 - 1) by A22,A81
+                .= a by A1,A80,BORSUK_2:def 2;
+        hence thesis by A55,A82,FUNCT_4:14;
       end;
     end;
-    hence thesis by A56,A57,BORSUK_2:def 7;
+    hence thesis by A55,A56,BORSUK_2:def 7;
   end;
 
 theorem

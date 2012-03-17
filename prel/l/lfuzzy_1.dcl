@@ -17,9 +17,9 @@
 <ArticleID name="FUNCT_3"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="SEQ_1"/>
-<ArticleID name="FUNCT_4"/>
 <ArticleID name="BINOP_1"/>
 <ArticleID name="FUZZY_1"/>
+<ArticleID name="FUNCT_4"/>
 <ArticleID name="FUZZY_4"/>
 <ArticleID name="LFUZZY_1"/>
 </Signature>
@@ -69,9 +69,6 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="2"/>
-<Adjective nr="5"/>
-<Adjective nr="25"/>
 <Adjective nr="29">
 <LocusVar nr="1"/>
 </Adjective>
@@ -116,7 +113,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="131">
+<Func kind="K" nr="126">
 <Func kind="K" nr="11">
 <LocusVar nr="1"/>
 <LocusVar nr="1"/>
@@ -125,9 +122,6 @@
 <LocusVar nr="3"/>
 </Func>
 <Cluster>
-<Adjective nr="2"/>
-<Adjective nr="5"/>
-<Adjective nr="25"/>
 <Adjective nr="30">
 <LocusVar nr="1"/>
 </Adjective>
@@ -163,7 +157,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="132">
+<Func kind="K" nr="127">
 <Func kind="K" nr="11">
 <LocusVar nr="1"/>
 <LocusVar nr="1"/>
@@ -172,9 +166,6 @@
 <LocusVar nr="3"/>
 </Func>
 <Cluster>
-<Adjective nr="2"/>
-<Adjective nr="5"/>
-<Adjective nr="25"/>
 <Adjective nr="30">
 <LocusVar nr="1"/>
 </Adjective>
@@ -210,7 +201,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="131">
+<Func kind="K" nr="126">
 <Func kind="K" nr="11">
 <LocusVar nr="1"/>
 <LocusVar nr="1"/>
@@ -219,9 +210,6 @@
 <LocusVar nr="3"/>
 </Func>
 <Cluster>
-<Adjective nr="2"/>
-<Adjective nr="5"/>
-<Adjective nr="25"/>
 <Adjective nr="31">
 <LocusVar nr="1"/>
 </Adjective>
@@ -247,9 +235,6 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="2"/>
-<Adjective nr="5"/>
-<Adjective nr="25"/>
 <Adjective nr="31">
 <LocusVar nr="1"/>
 </Adjective>
@@ -269,7 +254,6 @@
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="2"/>
 <Adjective nr="25"/>
 </Cluster>
 </CCluster>

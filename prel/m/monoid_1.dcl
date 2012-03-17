@@ -19,7 +19,6 @@
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PARTFUN1"/>
-<ArticleID name="MEMBERED"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
@@ -29,6 +28,7 @@
 <ArticleID name="INT_1"/>
 <ArticleID name="GROUP_1"/>
 <ArticleID name="VECTSP_1"/>
+<ArticleID name="MEMBERED"/>
 <ArticleID name="SEQ_1"/>
 <ArticleID name="RVSUM_1"/>
 <ArticleID name="GR_CY_1"/>
@@ -70,7 +70,6 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="22" value="false"/>
 <Adjective nr="77"/>
 </Cluster>
 </FCluster>
@@ -111,7 +110,7 @@
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="1"/>
-<Adjective nr="35"/>
+<Adjective nr="30"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -121,7 +120,7 @@
 </Func>
 <Cluster>
 <Adjective nr="1"/>
-<Adjective nr="35"/>
+<Adjective nr="30"/>
 </Cluster>
 </FCluster>
 <FCluster>

@@ -13,21 +13,21 @@
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="NUMBERS"/>
-<ArticleID name="FUNCOP_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="STRUCT_0"/>
+<ArticleID name="FUNCOP_1"/>
 <ArticleID name="RELAT_2"/>
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="EQREL_1"/>
+<ArticleID name="STRUCT_0"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="FINSEQ_2"/>
+<ArticleID name="ORDERS_1"/>
+<ArticleID name="ORDERS_2"/>
 <ArticleID name="FUNCT_4"/>
 <ArticleID name="FUNCT_5"/>
 <ArticleID name="PBOOLE"/>
-<ArticleID name="ORDERS_1"/>
-<ArticleID name="ORDERS_2"/>
 <ArticleID name="YELLOW_0"/>
 <ArticleID name="WAYBEL_0"/>
 <ArticleID name="LATTICES"/>
@@ -44,12 +44,12 @@
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="26" value="false"/>
+<Adjective nr="36" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="26" value="false"/>
+<Adjective nr="36" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
@@ -117,8 +117,8 @@
 <Adjective nr="53"/>
 <Adjective nr="54"/>
 <Adjective nr="55"/>
-<Adjective nr="110"/>
-<Adjective nr="111"/>
+<Adjective nr="112"/>
+<Adjective nr="113"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -194,7 +194,7 @@
 <ArgTypes>
 <Typ kind="G" nr="11">
 <Cluster>
-<Adjective nr="26" value="false"/>
+<Adjective nr="36" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -264,7 +264,7 @@
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="26" value="false"/>
+<Adjective nr="36" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -334,12 +334,12 @@
 <ArgTypes>
 <Typ kind="G" nr="11">
 <Cluster>
-<Adjective nr="26" value="false"/>
+<Adjective nr="36" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="11">
 <Cluster>
-<Adjective nr="26" value="false"/>
+<Adjective nr="36" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">

@@ -10,8 +10,8 @@
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
-<ArticleID name="MEMBERED"/>
 <ArticleID name="XXREAL_0"/>
+<ArticleID name="MEMBERED"/>
 <ArticleID name="SUPINF_1"/>
 </Signature>
 <Scheme>

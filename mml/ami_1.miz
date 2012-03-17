@@ -7,21 +7,21 @@
 environ
 
  vocabularies BOOLE, FUNCT_2, FUNCT_1, RELAT_1, FUNCOP_1, CAT_1, FUNCT_4,
-      CARD_3, TARSKI, FRAENKEL, PARTFUN1, FINSET_1, AMI_1, NAT_1;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, NUMBERS, CARD_3,
-      XCMPLX_0, RELAT_1, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, FINSET_1, NAT_1,
-      NAT_D, CQC_LANG, FRAENKEL, FUNCOP_1, FUNCT_4, FINSEQ_1, DOMAIN_1,
-      STRUCT_0, XXREAL_0;
- constructors SETFAM_1, PARTFUN1, DOMAIN_1, FUNCOP_1, FUNCT_4, FRAENKEL,
-      XXREAL_0, NAT_1, INT_1, CARD_3, CQC_LANG, STRUCT_0, NAT_D;
- registrations SUBSET_1, FUNCT_1, INT_1, FRAENKEL, RELAT_1, FINSET_1, RELSET_1,
-      FINSEQ_1, FUNCOP_1, FUNCT_4, CQC_LANG, STRUCT_0, XBOOLE_0, FUNCT_2,
-      ORDINAL1, SETFAM_1, CARD_3;
+      CARD_3, TARSKI, FRAENKEL, PARTFUN1, FINSET_1, AMI_1, NAT_1, NEWTON,
+      AMI_5, MCART_1, AMISTD_2, FUNCT_3;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, MCART_1, SUBSET_1, SETFAM_1, NUMBERS,
+      CARD_3, XCMPLX_0, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FINSET_1, NAT_1,
+      FUNCOP_1, FUNCT_4, FINSEQ_1, DOMAIN_1, STRUCT_0, XXREAL_0;
+ constructors SETFAM_1, PARTFUN1, DOMAIN_1, FUNCT_4, FRAENKEL, XXREAL_0, NAT_1,
+      INT_1, CARD_3, CQC_LANG, STRUCT_0;
+ registrations XBOOLE_0, SUBSET_1, SETFAM_1, RELAT_1, FUNCT_1, ORDINAL1,
+      FUNCT_2, FUNCOP_1, FUNCT_4, ARYTM_3, FINSET_1, FRAENKEL, XREAL_0,
+      FINSEQ_1, CARD_3, STRUCT_0;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM;
- definitions TARSKI, FRAENKEL, STRUCT_0, XBOOLE_0, CQC_LANG, FUNCOP_1;
+ definitions TARSKI, STRUCT_0, FUNCOP_1;
  theorems ZFMISC_1, FUNCT_2, TARSKI, NAT_1, CQC_LANG, CARD_3, CARD_5, FINSEQ_1,
       FUNCT_4, FUNCOP_1, FRAENKEL, FINSET_1, PARTFUN1, FUNCT_1, GRFUNC_1,
-      RELAT_1, RELSET_1, XBOOLE_0, XBOOLE_1, ORDINAL1;
+      RELAT_1, RELSET_1, XBOOLE_0, XBOOLE_1, ORDINAL1, MCART_1;
  schemes NAT_1, RECDEF_1, FRAENKEL, XBOOLE_0;
 
 begin :: Preliminaries
@@ -43,9 +43,9 @@ definition let N be set;
   (# carrier -> set,
     Instruction-Counter -> Element of the carrier,
     Instruction-Locations -> Subset of the carrier,
-    Instruction-Codes -> non empty set,
-    Instructions -> non empty Subset of
-     [: the Instruction-Codes, ((union N) \/ the carrier)* :],
+    Instructions -> non empty set,
+:::     Subset of
+:::     [: NAT, ((union N) \/ the carrier)* :],
     Object-Kind ->
      Function of the carrier,
                  N \/ { the Instructions, the Instruction-Locations },
@@ -63,17 +63,16 @@ definition let N be set;
   the carrier of it = {0,1} &
   the Instruction-Counter of it = 0 &
   the Instruction-Locations of it = {1} &
-  the Instruction-Codes of it = {0} &
   the Instructions of it = {[0,{}]} &
   the Object-Kind of it = (0,1) --> ({1},{[0,{}]}) &
   the Execution of it = [0,{}] .--> id product (0,1) --> ({1},{[0,{}]});
  existence
   proof
     reconsider y = 0 as Element of {0,1}by TARSKI:def 2;
-       0 in {0} & {} in (union N \/ {0,1})* by FINSEQ_1:66,TARSKI:def 1;
-    then [0,{}] in [: {0}, (union N \/ {0,1})* :] by ZFMISC_1:106;
+       0 in NAT & {} in (union N \/ {0,1})* by FINSEQ_1:66;
+    then [0,{}] in [: NAT, (union N \/ {0,1})* :] by ZFMISC_1:106;
     then reconsider I = {[0,{}]} as non empty Subset of
-        [: {0}, (union(N) \/ {0,1})* :] by ZFMISC_1:37;
+        [: NAT, (union(N) \/ {0,1})* :] by ZFMISC_1:37;
     reconsider S = {1} as non empty Subset of {0,1} by ZFMISC_1:12;
     set f = (0,1) --> (S,I);
        rng f c= { I,S} & { I,S } c= N \/ {I, S} by FUNCT_4:65,XBOOLE_1:7;
@@ -83,7 +82,7 @@ definition let N be set;
        id product f in Funcs(product f, product f) by FUNCT_2:12;
     then reconsider E = I --> id product f as
      Function of I,Funcs(product f, product f) by FUNCOP_1:57;
-   take AMI-Struct(#{0,1},y,S,{0},I,f,E #);
+   take AMI-Struct(#{0,1},y,S,I,f,E #);
  thus thesis;
 end;
  uniqueness;
@@ -176,8 +175,7 @@ end;
 
 definition let N; let S be non void AMI-Struct over N;
  attr S is halting means
-:Def9:  ex I being Instruction of S st I is halting &
-   for J being Instruction of S st J is halting holds I = J;
+:Def9:  ex I being Instruction of S st I is halting;
 end;
 
 reserve E for set;
@@ -188,20 +186,18 @@ theorem Th6:
  Trivial-AMI N is halting
   proof
    set T = Trivial-AMI N;
-A1:{[0,{}]} = the Instructions of T by Def2;
+{[0,{}]} = the Instructions of T by Def2;
    then reconsider I = [0,{}] as Instruction of T by TARSKI:def 1;
    take I;
    thus I is halting
    proof
     let s be State of T;
-A2: product the Object-Kind of T
+A1: product the Object-Kind of T
       = product (0,1) --> ({1},{[0,{}]}) by Def2
      .= { (0,1) --> (1,[0,{}]) } by CARD_3:63;
     hence Exec(I,s) = (0,1) --> (1,[0,{}]) by TARSKI:def 1
-     .= s by A2,TARSKI:def 1;
+     .= s by A1,TARSKI:def 1;
    end;
-   let J be Instruction of T such that J is halting;
-   thus I = J by A1,TARSKI:def 1;
   end;
 
 registration let N;
@@ -220,41 +216,34 @@ end;
 
 registration let N; let S be halting (non void AMI-Struct over N);
  cluster halting Instruction of S;
- existence
-  proof
-    ex I being Instruction of S st I is halting &
-     for J being Instruction of S st J is halting holds I = J by Def9;
-   hence thesis;
-  end;
+ existence by Def9;
 end;
 
 definition let N; let S be halting (non void AMI-Struct over N);
- func halt S -> Instruction of S means
-:Def10: it is halting Instruction of S;
-existence
-  proof
-     consider I being Instruction of S such that
-A1:   I is halting and
-         for J being Instruction of S st J is halting holds I = J by Def9;
-    take I;
-    thus thesis by A1;
-  end;
-uniqueness
-  proof
-    let I1, I2 be Instruction of S such that
-A2:  I1 is halting Instruction of S and
-A3:  I2 is halting Instruction of S;
+ func halt S -> Instruction of S equals
+  choose { I where I is Instruction of S: I is halting };
+ coherence
+  proof set X = { I where I is Instruction of S: I is halting };
     consider I being Instruction of S such that
-A4:   I is halting &
-      for J being Instruction of S st J is halting holds I = J by Def9;
-       I = I1 by A2,A4;
-    hence thesis by A3,A4;
-   end;
+A1:   I is halting by Def9;
+    I in X by A1;
+    then choose X in X;
+    then ex I being Instruction of S st choose X = I & I is halting;
+   hence choose X is Instruction of S;
+  end;
 end;
 
 registration let N; let S be halting (non void AMI-Struct over N);
  cluster halt S -> halting;
-coherence by Def10;
+ coherence
+  proof set X = { I where I is Instruction of S: I is halting };
+    consider I being Instruction of S such that
+A1:   I is halting by Def9;
+    I in X by A1;
+    then choose X in X;
+    then ex I being Instruction of S st choose X = I & I is halting;
+   hence thesis;
+  end;
 end;
 
 definition let N be set; let IT be non empty AMI-Struct over N;
@@ -262,14 +251,9 @@ definition let N be set; let IT be non empty AMI-Struct over N;
 :Def11:  ObjectKind IC IT = the Instruction-Locations of IT;
 end;
 
-definition let N be set; let IT be AMI-Struct over N;
- attr IT is data-oriented means
-     (the Object-Kind of IT)"{ the Instructions of IT }
-     c= the Instruction-Locations of IT;
-end;
-
 definition let N be with_non-empty_elements set;
  let IT be non empty non void AMI-Struct over N;
+canceled;
  attr IT is steady-programmed means
 :Def13:  for s being State of IT, i being Instruction of IT,
       l being Instruction-Location of IT
@@ -292,27 +276,7 @@ A1:  IC Trivial-AMI E = 0 by Def2;
           .= the Instruction-Locations of Trivial-AMI E by Def2;
   end;
 
-theorem Th8:
- Trivial-AMI E is data-oriented
- proof let x be set;
-A1:   1 <> [0,{}] by ZFMISC_1:8, CARD_5:1;
-  assume
-A2:  x in (the Object-Kind of Trivial-AMI E)"
-             { the Instructions of Trivial-AMI E };
-        then x in the carrier of Trivial-AMI E &
-   (the Object-Kind of Trivial-AMI E).x in
-       { the Instructions of Trivial-AMI E } by FUNCT_2:46;
-then A3:     (the Object-Kind of Trivial-AMI E).x =
-      the Instructions of Trivial-AMI E by TARSKI:def 1
-       .= {[0,{}]} by Def2;
-A4:  (the Object-Kind of Trivial-AMI E).0 =
-             (0,1) --> ({1},{[0,{}]}).0 by Def2
-          .= {1} by FUNCT_4:66;
-      the carrier of Trivial-AMI E = {0,1} by Def2;
-   then x = 0 or x = 1 by A2,TARSKI:def 2;
-   then x in {1} by A1,A3,A4,TARSKI:def 1,ZFMISC_1:6;
-  hence x in the Instruction-Locations of Trivial-AMI E by Def2;
- end;
+canceled;
 
 theorem Th9:
  for s1, s2 being State of Trivial-AMI E holds s1=s2
@@ -345,11 +309,6 @@ then A1:    l = 1 by TARSKI:def 1;
   end;
 
 registration let E be set;
-  cluster Trivial-AMI E -> data-oriented;
-  coherence by Th8;
-end;
-
-registration let E be set;
   cluster Trivial-AMI E -> IC-Ins-separated definite;
   coherence by Th7,Th11;
 end;
@@ -360,7 +319,7 @@ registration let N be with_non-empty_elements set;
 end;
 
 registration let E be set;
- cluster data-oriented strict AMI-Struct over E;
+ cluster strict AMI-Struct over E;
  existence
   proof
     take Trivial-AMI E;
@@ -369,7 +328,7 @@ registration let E be set;
 end;
 
 registration let M be set;
- cluster IC-Ins-separated data-oriented definite strict
+ cluster IC-Ins-separated definite strict
               (non empty non void AMI-Struct over M);
  existence
   proof
@@ -379,7 +338,7 @@ registration let M be set;
 end;
 
 registration let N;
- cluster IC-Ins-separated data-oriented halting steady-programmed definite
+ cluster IC-Ins-separated halting steady-programmed definite
          strict (non empty non void AMI-Struct over N);
  existence
   proof
@@ -410,606 +369,105 @@ reserve x,y,z,A,B for set,
 
 canceled 2;
 
-theorem Th14:
- f tolerates g & [x,y] in f & [x,z] in g implies y = z
- proof assume f tolerates g;
-   then consider h such that
-A1:  h = f \/ g by PARTFUN1:130;
-  assume [x,y] in f & [x,z] in g;
-   then [x,y] in h & [x,z] in h by A1,XBOOLE_0:def 2;
-  hence y = z by FUNCT_1:def 1;
- end;
+theorem
+ f tolerates g & [x,y] in f & [x,z] in g implies y = z by CARD_3:65;
 
-theorem Th15:
+theorem
  (for x st x in A holds x is Function) &
  (for f,g being Function st f in A & g in A holds f tolerates g)
-  implies union A is Function
- proof assume that
-A1: for x st x in A holds x is Function and
-A2: for f,g being Function st f in A & g in A holds f tolerates g;
-A3: now let z;
-    assume z in union A;
-     then consider p being set such that
-A4:   z in p & p in A by TARSKI:def 4;
-     reconsider p as Function by A1,A4;
-        p = p;
-    hence ex x,y st [x,y] = z by A4,RELAT_1:def 1;
-   end;
-      now let x,y,z; assume
-A5:  [x,y] in union A & [x,z] in union A;
-     then consider p being set such that
-A6:   [x,y] in p & p in A by TARSKI:def 4;
-     consider q being set such that
-A7:   [x,z] in q & q in A by A5,TARSKI:def 4;
-     reconsider p,q as Function by A1,A6,A7;
-        p tolerates q by A2,A6,A7;
-    hence y = z by A6,A7,Th14;
-   end;
-  hence union A is Function by A3,FUNCT_1:def 1,RELAT_1:def 1;
- end;
+  implies union A is Function by CARD_3:66;
 
- Lm1:
- for x1,x2,y1,y2 being set holds
-   (x1,x2)-->(y1,y2) = (x1 .--> y1) +* (x2 .--> y2) by FUNCT_4:def 4;
-
- Lm2:
- for x,y holds x .--> y = {[x,y]} by CQC_LANG:45;
-
-begin :: Superproducts
-
-definition let f be Function;
- func sproduct f -> set means
-:Def16: x in it iff ex g st x = g & dom g c= dom f &
-     for x st x in dom g holds g.x in f.x;
- existence
- proof
-   defpred P[set] means ex g st $1 = g & dom g c= dom f &
-     for x st x in dom g holds g.x in f.x;
-   consider A being set such that
-A1:x in A iff x in
- PFuncs(dom f, union rng f) & P[x] from XBOOLE_0:sch 1;
-      now let x;
-    thus x in A implies ex g st x = g & dom g c= dom f &
-         for x st x in dom g holds g.x in f.x by A1;
-    given g such that
-A2:     x = g & dom g c= dom f &
-     for x st x in dom g holds g.x in f.x;
-        rng g c= union rng f
-      proof let y be set;
-       assume y in rng g;
-        then consider z being set such that
-A3:       z in dom g & y = g.z by FUNCT_1:def 5;
-A4:      g.z in f.z by A2,A3;
-           f.z in rng f by A2,A3,FUNCT_1:def 5;
-       hence y in union rng f by A3,A4,TARSKI:def 4;
-      end;
-     then x in PFuncs(dom f, union rng f) by A2,PARTFUN1:def 5;
-    hence x in A by A1,A2;
-   end;
-  hence thesis;
- end;
- uniqueness
-  proof defpred P[set] means ex g st $1 = g & dom g c= dom f &
-                               for x st x in dom g holds g.x in f.x;
-   let A,B be set such that
-A5: x in A iff P[x] and A6: x in B iff P[x];
-   thus thesis from XBOOLE_0:sch 2(A5,A6);
-  end;
-end;
-
-registration let f be Function;
- cluster sproduct f -> functional non empty;
- coherence
- proof
-   defpred P[set] means ex g st $1 = g & dom g c= dom f &
-     for x st x in dom g holds g.x in f.x;
-   consider A being set such that
-A1:x in A iff x in  PFuncs(dom f, union rng f) & P[x] from XBOOLE_0:sch 1;
-      {} is PartFunc of dom f, union rng f by PARTFUN1:56;
-then A2:{} in PFuncs(dom f, union rng f) by PARTFUN1:119;
-      dom {} c= dom f & for x st x in dom {} holds {} .x in f.x by XBOOLE_1:2;
-   then reconsider A as non empty set by A1,A2;
-      now let x be set;
-    assume x in A;
-     then ex g st x = g & dom g c= dom f &
-         for x st x in dom g holds g.x in f.x by A1;
-    hence x is Function;
-   end;
-   then reconsider A as functional non empty set by FRAENKEL:def 1;
-      now let x;
-    thus x in A implies ex g st x = g & dom g c= dom f &
-         for x st x in dom g holds g.x in f.x by A1;
-    given g such that
-A3:     x = g & dom g c= dom f &
-     for x st x in dom g holds g.x in f.x;
-        rng g c= union rng f
-      proof let y be set;
-       assume y in rng g;
-        then consider z being set such that
-A4:       z in dom g & y = g.z by FUNCT_1:def 5;
-A5:      g.z in f.z by A3,A4;
-           f.z in rng f by A3,A4,FUNCT_1:def 5;
-       hence y in union rng f by A4,A5,TARSKI:def 4;
-      end;
-     then x in PFuncs(dom f, union rng f) by A3,PARTFUN1:def 5;
-    hence x in A by A1,A3;
-   end;
-  hence thesis by Def16;
- end;
+definition
+ canceled;
 end;
 
 canceled 9;
 
-theorem Th25:
+theorem
  g in sproduct f implies dom g c= dom f &
-   for x st x in dom g holds g.x in f.x
- proof assume g in sproduct f;
-   then ex h st g = h & dom h c= dom f &
-     for x st x in dom h holds h.x in f.x by Def16;
-  hence thesis;
- end;
-
-theorem Th26:
- {} in sproduct f
- proof
-      dom {} c= dom f & for x st x in dom {} holds {} .x in f.x by XBOOLE_1:2;
-  hence {} in sproduct f by Def16;
- end;
-
-theorem Th27:
- product f c= sproduct f
-proof let x;
- assume x in product f;
-  then ex g st x = g & dom g = dom f &
-       for x st x in dom f holds g.x in f.x by CARD_3:def 5;
- hence x in sproduct f by Def16;
-end;
-
-theorem Th28:
- x in sproduct f implies x is PartFunc of dom f, union rng f
- proof assume x in sproduct f;
-   then consider g such that
-A1:  x = g & dom g c= dom f &
-     for x st x in dom g holds g.x in f.x by Def16;
-      rng g c= union rng f
-    proof let y be set;
-     assume y in rng g;
-      then consider z being set such that
-A2:       z in dom g & y = g.z by FUNCT_1:def 5;
-A3:      g.z in f.z by A1,A2;
-         f.z in rng f by A1,A2,FUNCT_1:def 5;
-     hence y in union rng f by A2,A3,TARSKI:def 4;
-    end;
-  hence x is PartFunc of dom f, union rng f by A1,RELSET_1:11;
- end;
-
-theorem Th29:
- g in product f & h in sproduct f implies g +* h in product f
- proof assume A1: g in product f;
-then A2: dom g = dom f & for x st x in dom f holds g.x in f.x by CARD_3:18;
-  assume A3: h in sproduct f;
- then dom h c= dom f & for x st x in dom h holds h.x in f.x by Th25;
-then A4: dom g \/ dom h = dom f by A2,XBOOLE_1:12;
-then A5:  dom(g +* h) = dom f by FUNCT_4:def 1;
-      now let x;
-    assume
-A6:    x in dom f;
-A7:   (dom g \ dom h) \/ dom h = dom f by A4,XBOOLE_1:39;
-        now per cases by A6,A7,XBOOLE_0:def 2;
-      case
-A8:      x in dom g \ dom h;
-      then not x in dom h by XBOOLE_0:def 4;
-       hence x in dom f & (g +* h).x = g.x by A7,A8,FUNCT_4:12,XBOOLE_0:def 2;
-      end;
-      case x in dom h;
-       hence (g +* h).x = h.x by FUNCT_4:14;
-     end;
-     end;
-    hence (g +* h).x in f.x by A1,A3,Th25,CARD_3:18;
-   end;
-  hence g +* h in product f by A5,CARD_3:18;
- end;
-
-theorem Th30:
- product f <> {} implies
- (g in sproduct f iff ex h st h in product f & g <= h)
- proof assume
-A1: product f <> {};
-  thus g in sproduct f implies ex h st h in product f & g <= h
-   proof assume
-A2:  g in sproduct f;
-     consider k being Element of product f;
-     reconsider k as Function;
-    take k +* g;
-    thus k +* g in product f by A1,A2,Th29;
-    thus g <= k +* g by FUNCT_4:26;
-   end;
-  given h such that
-A3: h in product f & g <= h;
-A4: dom h = dom f & for x st x in dom f holds h.x in f.x by A3,CARD_3:18;
-A5: dom g c= dom h by A3,RELAT_1:25;
-      now let x;
-    assume
-A6:   x in dom g;
-     then g.x = h.x by A3,GRFUNC_1:8;
-    hence g.x in f.x by A4,A5,A6;
-   end;
-  hence g in sproduct f by A4,A5,Def16;
- end;
-
-theorem Th31:
- sproduct f c= PFuncs(dom f,union rng f)
- proof let x;
-  assume x in sproduct f;
-   then x is PartFunc of dom f, union rng f by Th28;
-  hence x in PFuncs(dom f,union rng f) by PARTFUN1:119;
- end;
-
-theorem Th32:
- f c= g implies sproduct f c= sproduct g
- proof
-  assume A1: f c= g;
-then A2: dom f c= dom g by GRFUNC_1:8;
-  let y;
-  assume y in sproduct f;
-   then consider h such that
-A3: y = h & dom h c= dom f and
-A4: for x st x in dom h holds h.x in f.x by Def16;
-A5: dom h c= dom g by A2,A3,XBOOLE_1:1;
-      now let x;
-    assume
-A6:   x in dom h;
-     then f.x = g.x by A1,A3,GRFUNC_1:8;
-    hence h.x in g.x by A4,A6;
-   end;
-  hence y in sproduct g by A3,A5,Def16;
- end;
-
-theorem Th33:
-  sproduct {} = {{}}
-proof
-     sproduct {} c= PFuncs({},{}) by Th31,RELAT_1:60,ZFMISC_1:2;
- hence sproduct {} c= {{}} by PARTFUN1:122;
- let x be set;
- assume x in {{}};
-  then x = {} by TARSKI:def 1;
- hence x in sproduct {} by Th26;
-end;
+   for x st x in dom g holds g.x in f.x by  CARD_3:67;
 
 theorem
-     PFuncs(A,B) = sproduct (A --> B)
-  proof
-       now per cases;
-     case
-A1:    A = {};
-       then A --> B = {} --> B;
-      hence sproduct (A --> B) = PFuncs(A,B) by  Th33,A1,PARTFUN1:122;
-     end;
-     case
-        A <> {};
-       then rng (A --> B) = { B } by FUNCOP_1:14;
-       then A2:    dom(A --> B) = A & B = union rng (A --> B)
-        by FUNCOP_1:19,ZFMISC_1:31;
-      thus PFuncs(A,B) c= sproduct (A --> B)
-       proof let x;
-        assume x in PFuncs(A,B);
-         then consider f being Function such that
-A3:         x = f & dom f c= A & rng f c= B by PARTFUN1:def 5;
-A4:       dom f c= dom (A --> B) by A3,FUNCOP_1:19;
-            now let x;
-          assume
-A5:          x in dom f;
-           then f.x in rng f by FUNCT_1:def 5;
-           then f.x in B by A3;
-          hence f.x in (A --> B).x by A3,A5,FUNCOP_1:13;
-         end;
-        hence x in sproduct (A --> B) by A3,A4,Def16;
-       end;
-      thus sproduct (A --> B) c= PFuncs(A,B) by A2,Th31;
-    end;
-    end;
-   hence thesis by XBOOLE_0:def 10;
-  end;
+ {} in sproduct f by CARD_3:68;
+
+theorem
+ product f c= sproduct f by CARD_3:69;
+
+theorem
+ x in sproduct f implies x is PartFunc of dom f, union rng f by CARD_3:70;
+
+theorem
+ g in product f & h in sproduct f implies g +* h in product f by CARD_3:71;
+
+theorem
+ product f <> {} implies
+ (g in sproduct f iff ex h st h in product f & g <= h) by CARD_3:72;
+
+theorem
+ sproduct f c= PFuncs(dom f,union rng f) by CARD_3:73;
+
+theorem
+ f c= g implies sproduct f c= sproduct g by CARD_3:74;
+
+theorem
+  sproduct {} = {{}} by CARD_3:75;
+
+theorem
+     PFuncs(A,B) = sproduct (A --> B) by CARD_3:76;
 
 theorem
     for A, B being non empty set
  for f being Function of A,B
   holds sproduct f = sproduct(f|{x where x is Element of A: f.x <> {} })
- proof let A, B be non empty set;
-  let f be Function of A,B;
-  set X = {x where x is Element of A: f.x <> {} };
-  thus sproduct f c= sproduct(f|X)
-   proof let x;
-    assume x in sproduct f;
-     then consider g such that
-A1:    x = g & dom g c= dom f &
-     for x st x in dom g holds g.x in f.x by Def16;
-A2:  now let x;
-      assume
-A3:       x in dom g;
-       then reconsider a = x as Element of A by A1,FUNCT_2:def 1;
-          f.a <> {} by A1,A3;
-      hence x in X;
-     end;
-A4:    now let x;
-       assume A5: x in dom g;
-        then x in X by A2;
-       hence x in (dom f)/\ X by A1,A5,XBOOLE_0:def 3;
-      end;
-A6:   dom g c= dom(f|X)
-      proof let x;
-       assume x in dom g;
-        then x in (dom f)/\ X by A4;
-       hence x in dom(f|X) by RELAT_1:90;
-      end;
-        now let x;
-      assume x in dom g;
-       then x in (dom f)/\ X & g.x in f.x by A1,A4;
-      hence g.x in (f|X).x by FUNCT_1:71;
-     end;
-    hence x in sproduct(f|X) by A1,A6,Def16;
-   end;
-      f|X c= f by RELAT_1:88;
-  hence thesis by Th32;
- end;
-
-theorem Th36:
- x in dom f & y in f.x implies x .--> y in sproduct f
-  proof assume that
-A1: x in dom f and
-A2:    y in f.x;
-A3:   dom(x .--> y) = {x} by CQC_LANG:5;
-then A4:  dom(x .--> y) c= dom f by A1,ZFMISC_1:37;
-      now let z;
-    assume z in dom(x .--> y);
-     then z = x by A3,TARSKI:def 1;
-    hence (x .--> y).z in f.z by A2,CQC_LANG:6;
-   end;
-  hence x .--> y in sproduct f by A4,Def16;
-  end;
+                               by CARD_3:77;
 
 theorem
-    sproduct f = {{}} iff for x st x in dom f holds f.x = {}
- proof
-  thus sproduct f = {{}} implies for x st x in dom f holds f.x = {}
-   proof assume
-A1:  sproduct f = {{}};
-    let x; assume
-A2:   x in dom f;
-    assume
-A3:   f.x <> {};
-     consider y being Element of f.x;
-        x .--> y in sproduct f by A2,A3,Th36;
-     then x .--> y = {} by A1,TARSKI:def 1;
-     then {[x,y]} = {} by Lm2;
-    hence contradiction;
-   end;
-  assume
-A4: for x st x in dom f holds f.x = {};
-      now let x;
-    thus x in sproduct f implies x = {}
-     proof assume x in sproduct f;
-      then consider g such that
-A5:    x = g and
-A6:    dom g c= dom f and
-A7:    for y st y in dom g holds g.y in f.y by Def16;
-      assume x <> {};
-       then A8:      dom g <> {} by A5,RELAT_1:64;
-       consider y being Element of dom g;
-          f.y <> {} & y in dom f by A6,A7,A8,TARSKI:def 3;
-      hence contradiction by A4;
-     end;
-    thus x = {} implies x in sproduct f by Th26;
-   end;
-  hence sproduct f = {{}} by TARSKI:def 1;
- end;
+ x in dom f & y in f.x implies x .--> y in sproduct f by CARD_3:78;
 
-theorem Th38:
+theorem
+    sproduct f = {{}} iff for x st x in dom f holds f.x = {} by CARD_3:79;
+
+theorem
  A c= sproduct f &
  (for h1,h2 being Function st h1 in A & h2 in A holds h1 tolerates h2)
- implies union A in sproduct f
- proof assume that
-A1: A c= sproduct f and
-A2: for h1,h2 being Function st h1 in A & h2 in A holds h1 tolerates h2;
-      for x be set st x in A holds x is Function by A1,FRAENKEL:def 1;
-   then reconsider g = union A as Function by A2,Th15;
-A3: dom g c= dom f
-    proof let x;
-     assume x in dom g;
-      then consider y such that
-A4:     [x,y] in g by RELAT_1:def 4;
-      consider h being set such that
-A5:    [x,y] in h and
-A6:    h in A by A4,TARSKI:def 4;
-      reconsider h as Function by A1,A6,FRAENKEL:def 1;
-A7:    x in dom h by A5,RELAT_1:def 4;
-         dom h c= dom f by A1,A6,Th25;
-     hence x in dom f by A7;
-    end;
-      now let x;
-    assume x in dom g;
-     then consider y such that
-A8:     [x,y] in g by RELAT_1:def 4;
-     consider h being set such that
-A9:    [x,y] in h and
-A10:    h in A by A8,TARSKI:def 4;
-     reconsider h as Function by A1,A10,FRAENKEL:def 1;
-A11:    x in dom h by A9,RELAT_1:def 4;
-        h.x = y by A9,FUNCT_1:8 .= g.x by A8,FUNCT_1:8;
-    hence g.x in f.x by A1,A10,A11,Th25;
-   end;
-  hence union A in sproduct f by A3,Def16;
- end;
+ implies union A in sproduct f by CARD_3:80;
 
 theorem
     g tolerates h & g in sproduct f & h in sproduct f
-  implies g \/ h in sproduct f
- proof assume that
-A1: g tolerates h and
-A2: g in sproduct f & h in sproduct f;
-A3: {g,h} c= sproduct f by A2,ZFMISC_1:38;
-A4: now let h1,h2 be Function;
-    assume h1 in {g,h} & h2 in {g,h};
-     then (h1 = g or h1 = h) & (h2 = g or h2 = h) by TARSKI:def 2;
-    hence h1 tolerates h2 by A1;
-   end;
-      union {g,h} = g \/ h by ZFMISC_1:93;
-  hence g \/ h in sproduct f by A3,A4,Th38;
- end;
+  implies g \/ h in sproduct f by CARD_3:81;
 
-theorem Th40:
- g c= h & h in sproduct f implies g in sproduct f
-  proof assume that
-A1: g c= h and
-A2: h in sproduct f;
-A3:  dom g c= dom h by A1,GRFUNC_1:8;
-       dom h c= dom f by A2,Th25;
-then A4:  dom g c= dom f by A3,XBOOLE_1:1;
-       now let x;
-     assume
-A5:     x in dom g;
-      then h.x in f.x by A2,A3,Th25;
-     hence g.x in f.x by A1,A5,GRFUNC_1:8;
-    end;
-   hence g in sproduct f by A4,Def16;
-  end;
+theorem
+ g c= h & h in sproduct f implies g in sproduct f by CARD_3:82;
 
-theorem Th41:
- g in sproduct f implies g|A in sproduct f
- proof
-      g|A c= g by RELAT_1:88;
-  hence thesis by Th40;
- end;
+theorem
+ g in sproduct f implies g|A in sproduct f by CARD_3:83;
 
-theorem Th42:
- g in sproduct f implies g|A in sproduct f|A
- proof
-A1: dom(g|A) = dom g /\ A & dom(f|A) = dom f /\ A by RELAT_1:90;
-  assume
-A2: g in sproduct f;
-   then dom g c= dom f by Th25;
-   then A3:  dom(g|A) c= dom(f|A) by A1,XBOOLE_1:26;
-      now let x;
-    assume
-A4:  x in dom(g|A);
-     then A5:  (g|A).x = g.x & (f|A).x = f.x by A3,FUNCT_1:70;
-        x in dom g by A1,A4,XBOOLE_0:def 3;
-    hence (g|A).x in (f|A).x by A2,A5,Th25;
-   end;
-  hence g|A in sproduct f|A by A3,Def16;
- end;
+theorem
+ g in sproduct f implies g|A in sproduct f|A by CARD_3:84;
 
 theorem
     h in sproduct(f+*g) implies
   ex f',g' being Function st f' in sproduct f & g' in sproduct g & h = f'+*g'
-proof
- assume
-A1: h in sproduct(f+*g);
- take h|(dom f \ dom g), h|dom g;
-A2:  h|(dom f \ dom g) in sproduct (f +* g)|(dom f \ dom g) by A1,Th42;
-     (f +* g)|(dom f \ dom g) c= f by FUNCT_4:25;
-  then sproduct (f +* g)|(dom f \ dom g) c= sproduct f by Th32;
- hence h|(dom f \ dom g) in sproduct f by A2;
-     (f +* g)|dom g = g by FUNCT_4:24;
- hence h|dom g in sproduct g by A1,Th42;
-     dom h c= dom(f+*g) by A1,Th25;
-  then dom h c= dom f \/ dom g by FUNCT_4:def 1;
-  then dom h c= (dom f \ dom g) \/ dom g by XBOOLE_1:39;
- hence h = h|(dom f \ dom g) +* h|dom g by FUNCT_4:74;
-end;
+                        by CARD_3:85;
 
-theorem Th44:
+theorem
  for f',g' being Function st dom g misses dom f' \ dom g' &
   f' in sproduct f & g' in sproduct g
- holds f'+*g' in sproduct(f+*g)
-proof
- let f',g' be Function such that
-A1: dom g misses dom f' \ dom g' and
-A2: f' in sproduct f & g' in sproduct g;
- set h = f'+*g';
-A3: dom f' c= dom f & dom g' c= dom g by A2,Th25;
-   then A4:dom f' \/ dom g' c= dom f \/ dom g by XBOOLE_1:13;
-A5: dom h = dom f' \/ dom g' by FUNCT_4:def 1;
-then A6: dom h c= dom(f+*g) by A4,FUNCT_4:def 1;
-     x in dom h implies h.x in (f+*g).x
-   proof assume
-A7:  x in dom h;
-    then x in dom(f+*g) by A6;
-then A8:  x in dom f \/ dom g by FUNCT_4:def 1;
-        x in dom f' \ dom g' \/ dom g' by A5,A7,XBOOLE_1:39;
-     then A9:   x in dom f' \ dom g' or x in dom g' by XBOOLE_0:def 2;
-        now per cases;
-      case
-A10:       x in dom g;
-        then h.x = g'.x by A1,A5,A7,A9,FUNCT_4:def 1,XBOOLE_0:3;
-       hence h.x in g.x by A1,A2,A9,A10,Th25,XBOOLE_0:3;
-      end;
-      case not x in dom g;
-then A11:       not x in dom g' by A3;
-        then A12:       h.x = f'.x by A5,A7,FUNCT_4:def 1;
-           x in dom f' by A5,A7,A11,XBOOLE_0:def 2;
-       hence h.x in f.x by A2,A12,Th25;
-     end;
-     end;
-    hence h.x in (f+*g).x by A8,FUNCT_4:def 1;
-   end;
- hence h in sproduct(f+*g) by A6,Def16;
-end;
+ holds f'+*g' in sproduct(f+*g) by CARD_3:86;
 
 theorem
     for f',g' being Function st dom f' misses dom g \ dom g' &
   f' in sproduct f & g' in sproduct g
- holds f'+*g' in sproduct(f+*g)
-proof let f',g' be Function;
- assume dom f' misses dom g \ dom g';
-  then dom g misses dom f' \ dom g' by XBOOLE_1:81;
- hence thesis by Th44;
-end;
+ holds f'+*g' in sproduct(f+*g) by CARD_3:87;
 
-theorem Th46:
+theorem
  g in sproduct f & h in sproduct f
-  implies g +* h in sproduct f
-proof
- assume
-A1: g in sproduct f & h in sproduct f;
-  then dom g c= dom f & dom h c= dom f by Th25;
-  then dom g \/ dom h c= dom f by XBOOLE_1:8;
-then A2: dom(g+*h) c= dom f by FUNCT_4:def 1;
-    now let x;
-  assume x in dom(g+*h);
-   then x in dom g \/ dom h by FUNCT_4:def 1;
-   then A3:  x in (dom g \ dom h \/ dom h) by XBOOLE_1:39;
-      now per cases by A3,XBOOLE_0:def 2;
-    suppose
-A4:   x in dom h;
-      then h.x in f.x by A1,Th25;
-     hence (g+*h).x in f.x by A4,FUNCT_4:14;
-    end;
-    suppose
-A5:   x in dom g \ dom h;
-      then x in dom g;
-then A6:      g.x in f.x by A1,Th25;
-        not x in dom h by A5,XBOOLE_0:def 4;
-     hence (g+*h).x in f.x by A6,FUNCT_4:12;
-   end;
-   end;
-  hence (g+*h).x in f.x;
- end;
- hence thesis by A2,Def16;
-end;
+  implies g +* h in sproduct f by CARD_3:88;
 
 theorem
     for x1,x2,y1,y2 being set holds
   x1 in dom f & y1 in f.x1 & x2 in dom f & y2 in f.x2
-   implies (x1,x2)-->(y1,y2) in sproduct f
- proof let x1,x2,y1,y2 be set;
-  assume x1 in dom f & y1 in f.x1;
-   then A1:  x1 .--> y1 in sproduct f by Th36;
-  assume x2 in dom f & y2 in f.x2;
-   then A2:  x2 .--> y2 in sproduct f by Th36;
-      (x1,x2)-->(y1,y2) = (x1 .--> y1) +* (x2 .--> y2) by Lm1;
-  hence (x1,x2)-->(y1,y2) in sproduct f by A1,A2,Th46;
- end;
+   implies (x1,x2)-->(y1,y2) in sproduct f by CARD_3:89;
 
 begin :: General theory
 
@@ -1083,23 +541,14 @@ end;
 
 definition let N be set; let IT be AMI-Struct over N;
  attr IT is realistic means
-:Def21: the Instructions of IT <> the Instruction-Locations of IT;
+:Def21:
+  not the Instruction-Counter of IT in the Instruction-Locations of IT;
 end;
 
-theorem Th48:
+theorem
  for S being IC-Ins-separated definite (non empty non void AMI-Struct over E)
   st S is realistic holds
-  not ex l being Instruction-Location of S st IC S = l
- proof
-  let S be IC-Ins-separated definite (non empty non void AMI-Struct over E)
-    such that
-A1: S is realistic;
-  given l being Instruction-Location of S such that
-A2: IC S = l;
-      ObjectKind IC S = the Instruction-Locations of S &
-   ObjectKind l = the Instructions of S by Def11,Def14;
-  hence contradiction by A1,A2,Def21;
- end;
+  not ex l being Instruction-Location of S st IC S = l by Def21;
 
  reserve
    S for IC-Ins-separated definite (non empty non void AMI-Struct over N),
@@ -1301,22 +750,21 @@ definition let N be set; let S be AMI-Struct over N;
   end;
 end;
 
-definition let N be set; let S be AMI-Struct over N;
- mode FinPartState of S -> Element of sproduct the Object-Kind of S means
-:Def24: it is finite;
+registration let N be set; let S be AMI-Struct over N;
+ cluster finite Element of sproduct the Object-Kind of S;
  existence
   proof
-       {} in sproduct the Object-Kind of S & {} is finite by Th26;
+    {} in sproduct the Object-Kind of S & {} is finite by CARD_3:68;
    hence thesis;
   end;
 end;
 
-registration let N be set; let S be AMI-Struct over N;
- cluster -> finite FinPartState of S;
- coherence by Def24;
+definition let N be set; let S be AMI-Struct over N;
+ mode FinPartState of S is finite Element of sproduct the Object-Kind of S;
 end;
 
 definition let N;
+ canceled;
  let S be IC-Ins-separated definite (non empty non void AMI-Struct over N);
  let IT be FinPartState of S;
  attr IT is autonomic means
@@ -1358,32 +806,26 @@ A4:   x in dom p;
      suppose
 A5:    la <> lb & x = la;
        then p.x = a by FUNCT_4:66;
-       then p.x in ObjectKind la by A1;
-      hence p.x in (the Object-Kind of S).x by A5;
+      hence p.x in (the Object-Kind of S).x by A5,A1;
      end;
      suppose
 A6:    la <> lb & x = lb;
        then p.x = b by FUNCT_4:66;
-       then p.x in ObjectKind lb by A1;
-      hence p.x in (the Object-Kind of S).x by A6;
+      hence p.x in (the Object-Kind of S).x by A6,A1;
      end;
      suppose
 A7:    la = lb & x = la;
        then p = la .--> b by CQC_LANG:44;
        then p.x = b by A7,CQC_LANG:6;
-       then p.x in ObjectKind lb by A1;
-      hence p.x in (the Object-Kind of S).x by A7;
+      hence p.x in (the Object-Kind of S).x by A7,A1;
     end;
     end;
    hence p.x in (the Object-Kind of S).x;
   end;
- then reconsider p as Element of sproduct the Object-Kind of S by A2,A3,Def16;
-     p is FinPartState of S
-   proof
-        dom p = {la,lb} by FUNCT_4:65;
-    hence p is finite by FINSET_1:29;
-   end;
- hence thesis;
+ then reconsider p as Element of sproduct the Object-Kind of S
+                       by A2,A3,CARD_3:def 9;
+   dom p = {la,lb} by FUNCT_4:65;
+ hence thesis by FINSET_1:29;
 end;
 
 theorem Th59:
@@ -1402,15 +844,11 @@ A3:dom the Object-Kind of S = the carrier of S by FUNCT_2:def 1;
    assume x in dom p;
     then A4:   x = la by A2,TARSKI:def 1;
     then p.x = a by CQC_LANG:6;
-    then p.x in ObjectKind la by A1;
-   hence p.x in (the Object-Kind of S).x by A4;
+   hence p.x in (the Object-Kind of S).x by A4,A1;
   end;
- then reconsider p as Element of sproduct the Object-Kind of S by A2,A3,Def16;
-     p is FinPartState of S
-   proof
-        dom p = {la} by CQC_LANG:5;
-    hence p is finite by FINSET_1:29;
-   end;
+ then reconsider p as Element of sproduct the Object-Kind of S
+       by A2,A3,CARD_3:def 9;
+     p is FinPartState of S;
  hence thesis;
 end;
 
@@ -1434,12 +872,11 @@ end;
 theorem Th60:
  Trivial-AMI E is realistic
  proof
-A1: the Instructions of Trivial-AMI E = {[0,{}]} &
-   the Instruction-Locations of Trivial-AMI E = {1} by Def2;
-  assume the Instructions of Trivial-AMI E
-      = the Instruction-Locations of Trivial-AMI E;
-   then [0,{}] = 1 by A1,ZFMISC_1:6;
-  hence contradiction by ZFMISC_1:8, CARD_5:1;
+A1: the Instruction-Counter of Trivial-AMI E = 0 &
+    the Instruction-Locations of Trivial-AMI E = {1} by Def2;
+  assume the Instruction-Counter of Trivial-AMI E
+      in the Instruction-Locations of Trivial-AMI E;
+  hence thesis by TARSKI:def 1,A1;
  end;
 
 theorem Th61:
@@ -1450,8 +887,7 @@ proof
     .= {1} by FUNCT_4:66;
   then reconsider a = 1 as Element of ObjectKind la by TARSKI:def 1;
  take la .--> a;
-     0 .--> 1 = [:{0},{1}:] by FUNCOP_1:def 2;
- hence la .--> a is non empty;
+ thus la .--> a is non empty;
  let s1,s2 be State of Trivial-AMI N such that
      la .--> a c= s1 & la .--> a c= s2;
  let i;
@@ -1470,7 +906,7 @@ registration let N;
 end;
 
 registration let E;
- cluster data-oriented realistic strict AMI-Struct over E;
+ cluster realistic strict AMI-Struct over E;
  existence
   proof
    take Trivial-AMI E;
@@ -1479,7 +915,7 @@ registration let E;
 end;
 
 registration let M be set;
- cluster data-oriented realistic strict IC-Ins-separated
+ cluster realistic strict IC-Ins-separated
  definite (non empty non void AMI-Struct over M);
  existence
   proof
@@ -1489,7 +925,7 @@ registration let M be set;
 end;
 
 registration let N;
- cluster data-oriented halting steady-programmed realistic programmable
+ cluster halting steady-programmed realistic programmable
          strict (IC-Ins-separated definite
          (non empty non void AMI-Struct over N));
  existence
@@ -1505,24 +941,15 @@ theorem Th62:
   holds s|dom p is FinPartState of S
 proof let S be non void AMI-Struct over N,
     s be State of S, p be FinPartState of S;
-     product the Object-Kind of S c= sproduct the Object-Kind of S
-  & s in product the Object-Kind of S by Th27;
-  then A1:s|dom p in sproduct the Object-Kind of S by Th41;
-A2: dom(s|dom p) = dom s /\ dom p by RELAT_1:90;
-     p is finite by Def24;
-  then dom p is finite by FINSET_1:29;
-  then dom(s|dom p) is finite by A2,FINSET_1:15;
-  then s|dom p is finite by FINSET_1:29;
- hence s|dom p is FinPartState of S by A1,Def24;
+A1:  product the Object-Kind of S c= sproduct the Object-Kind of S
+  & s in product the Object-Kind of S by CARD_3:69;
+  dom(s|dom p) = dom s /\ dom p by RELAT_1:90;
+ hence s|dom p is FinPartState of S by A1,FINSET_1:29,CARD_3:83;
 end;
 
-theorem Th63:
+theorem
 for N being set for S being AMI-Struct over N holds {} is FinPartState of S
- proof let N be set, S be AMI-Struct over N;
-      {} is Element of sproduct the Object-Kind of S
-   & {} is finite by Th26;
-  hence {} is FinPartState of S by Def24;
- end;
+              by CARD_3:68;
 
 registration let N;
  let S be programmable
@@ -1535,16 +962,7 @@ definition let N be set;
  let S be AMI-Struct over N;
  let f,g be FinPartState of S;
  redefine func f +* g -> FinPartState of S;
- coherence
-  proof
-A1:  f +* g is Element of sproduct the Object-Kind of S by Th46;
-       f is finite & g is finite by Def24;
-    then A2:   dom f is finite & dom g is finite by FINSET_1:29;
-       dom(f +* g) = dom f \/ dom g by FUNCT_4:def 1;
-    then dom(f +* g) is finite by A2,FINSET_1:14;
-    then f +* g is finite by FINSET_1:29;
-   hence thesis by A1,Def24;
-  end;
+ coherence by CARD_3:88;
 end;
 
 begin :: Preprograms
@@ -1567,7 +985,7 @@ A1: l = loc;
 A2: h = halt S;
    let s be State of S such that
 A3: (IC S,loc) --> (l, h) c= s;
-A4:  IC S <> loc by Th48;
+A4:  IC S <> loc by Def21;
        dom((IC S,loc) --> (l, h)) = {IC S,loc} by FUNCT_4:65;
 then A5: IC S in dom((IC S,loc) --> (l, h)) & loc in dom((IC S,loc) --> (l, h))
      by TARSKI:def 2;
@@ -1693,10 +1111,9 @@ A1: s is pre-program of S;
     for s' being State of S st s c= s' holds it = (Result s')|dom s;
  existence
   proof
-       sproduct the Object-Kind of S <> {};
-    then consider h being Function such that
+    consider h being Function such that
 A2:  h in product the Object-Kind of S and
-A3:  s <= h by Th30;
+A3:  s <= h by CARD_3:72;
     reconsider h as State of S by A2;
     reconsider R = (Result h)|dom s as FinPartState of S by Th62;
    take R;
@@ -1724,10 +1141,9 @@ A6:  Result s' = (Computation s').k2 & CurInstr(Result s') = halt S by Def22;
   proof let p1,p2 be FinPartState of S such that
 A7: for s' being State of S st s c= s' holds p1 = (Result s')|dom s and
 A8: for s' being State of S st s c= s' holds p2 = (Result s')|dom s;
-       sproduct the Object-Kind of S <> {};
-    then consider h being Function such that
+    consider h being Function such that
 A9:  h in product the Object-Kind of S and
-A10:  s <= h by Th30;
+A10:  s <= h by CARD_3:72;
     reconsider h as State of S by A9;
    thus p1 = (Result h)|dom s by A7,A10 .= p2 by A8,A10;
   end;
@@ -1785,7 +1201,7 @@ A1:   p is pre-program of S;
 A2:    x in dom({} .--> Result(p));
          dom({} .--> Result(p)) = {{}} by CQC_LANG:5;
 then A3:    x = {} by A2,TARSKI:def 1;
-      then reconsider s = x as FinPartState of S by Th63;
+      then reconsider s = x as FinPartState of S by CARD_3:68;
      take s;
      thus x = s;
      thus p +* s is pre-program of S by A1,A3,FUNCT_4:22;
@@ -1818,7 +1234,7 @@ A1:   p is pre-program of S;
 A2:    x in dom({} .--> {});
          dom({} .--> {}) = {{}} by CQC_LANG:5;
 then A3:    x = {} by A2,TARSKI:def 1;
-      then reconsider s = x as FinPartState of S by Th63;
+      then reconsider s = x as FinPartState of S by CARD_3:68;
      take s;
      thus x = s;
      thus p +* s is pre-program of S by A1,A3,FUNCT_4:22;
@@ -1901,11 +1317,6 @@ A1: F is computable;
   existence by A1,Def30;
 end;
 
-definition
- let N be set, S be AMI-Struct over N;
- mode InsType of S is Element of the Instruction-Codes of S;
-end;
-
 theorem
     for S being realistic halting IC-Ins-separated definite
   (non empty non void AMI-Struct over N)
@@ -1951,4 +1362,72 @@ proof
 A1: F = {} .--> Result p;
  hence F is computable by Th73;
  thus p computes F by A1,Th69;
+end;
+
+begin :: InsType & InsCode
+
+notation let x;
+ synonym InsCode x for x`1;
+ synonym AddressPart x for x`2;
+end;
+
+definition
+ let N be set, S be AMI-Struct over N;
+ attr S is standard-ins means
+:Def32: the Instructions of S c= [: NAT, ((union N) \/ the carrier of S)* :];
+end;
+
+registration let N be set;
+ cluster Trivial-AMI N -> standard-ins;
+ coherence
+  proof
+    {} in ((union N) \/ the carrier of Trivial-AMI N)* by FINSEQ_1:66;
+    then
+A1:  {{}} c= ((union N) \/ the carrier of Trivial-AMI N)* by ZFMISC_1:37;
+    the Instructions of Trivial-AMI N = {[0,{}]} by Def2
+           .= [:{0},{{}}:] by ZFMISC_1:35;
+   hence the Instructions of Trivial-AMI N
+     c= [: NAT, ((union N) \/ the carrier of Trivial-AMI N)* :]
+                  by A1,ZFMISC_1:119;
+  end;
+end;
+
+registration let N be set;
+ cluster standard-ins non empty non void AMI-Struct over N;
+ existence proof take Trivial-AMI N; thus thesis; end;
+end;
+
+registration
+ let N be set, S be standard-ins AMI-Struct over N;
+ cluster the Instructions of S -> Relation-like;
+ coherence
+  proof
+    the Instructions of S c= [: NAT, ((union N) \/ the carrier of S)* :]
+                     by Def32;
+    hence thesis by RELAT_1:3;
+  end;
+end;
+
+definition
+ let N be set, S be standard-ins AMI-Struct over N;
+ func InsCodes S equals
+  dom the Instructions of S;
+ correctness;
+end;
+
+definition
+ let N be set, S be standard-ins AMI-Struct over N;
+ mode InsType of S is Element of InsCodes S;
+end;
+
+definition
+ let N be set, S be standard-ins AMI-Struct over N;
+ let I be Element of the Instructions of S;
+ redefine func InsCode I -> InsType of S;
+ coherence
+  proof
+    InsCode I in dom the Instructions of S by MCART_1:91;
+    then InsCode I in InsCodes S;
+   hence thesis;
+  end;
 end;

@@ -36,9 +36,6 @@
 <ArticleID name="YELLOW_1"/>
 <ArticleID name="YELLOW_2"/>
 <ArticleID name="WAYBEL_1"/>
-<ArticleID name="PRE_TOPC"/>
-<ArticleID name="CARD_3"/>
-<ArticleID name="WAYBEL_3"/>
 <ArticleID name="FUNCT_7"/>
 <ArticleID name="WAYBEL_6"/>
 <ArticleID name="WAYBEL_8"/>
@@ -54,45 +51,25 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="34" value="false"/>
-<Adjective nr="43"/>
 <Adjective nr="44"/>
-<Adjective nr="45"/>
-<Adjective nr="46"/>
-<Adjective nr="69"/>
-<Adjective nr="70"/>
-<Adjective nr="71"/>
-<Adjective nr="78"/>
-<Adjective nr="79"/>
-<Adjective nr="80"/>
-<Adjective nr="109"/>
-<Adjective nr="110"/>
-<Adjective nr="113"/>
-<Adjective nr="120"/>
-<Adjective nr="121"/>
-<Adjective nr="122"/>
-<Adjective nr="130"/>
-<Adjective nr="131"/>
-<Adjective nr="142"/>
-<Adjective nr="143"/>
-<Adjective nr="144"/>
+<Adjective nr="134"/>
 </Cluster>
 </FCluster>
 <CCluster>
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
-<Adjective nr="44"/>
-<Adjective nr="45"/>
 <Adjective nr="46"/>
-<Adjective nr="69"/>
-<Adjective nr="70"/>
-<Adjective nr="122"/>
+<Adjective nr="47"/>
+<Adjective nr="48"/>
+<Adjective nr="71"/>
+<Adjective nr="72"/>
+<Adjective nr="124"/>
 </Cluster>
 </Typ>
 </ArgTypes>
 <Cluster>
-<Adjective nr="145">
+<Adjective nr="135">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -103,7 +80,7 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="141">
+<Adjective nr="131">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

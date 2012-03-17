@@ -15,20 +15,20 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
+<ArticleID name="FINSET_1"/>
+<ArticleID name="CARD_1"/>
+<ArticleID name="FINSEQ_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="BINOP_1"/>
 <ArticleID name="METRIC_1"/>
+<ArticleID name="FINSEQ_2"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="SEQ_1"/>
-<ArticleID name="FINSET_1"/>
-<ArticleID name="CARD_1"/>
-<ArticleID name="FINSEQ_1"/>
-<ArticleID name="FINSEQ_2"/>
 <ArticleID name="RVSUM_1"/>
-<ArticleID name="EUCLID"/>
 <ArticleID name="ENUMSET1"/>
 <ArticleID name="DOMAIN_1"/>
+<ArticleID name="EUCLID"/>
 </Signature>
 <Scheme>
 <ArgTypes>
@@ -38,7 +38,7 @@
 </Cluster>
 <Func kind="K" nr="19">
 <Func kind="U" nr="1">
-<Func kind="K" nr="199">
+<Func kind="K" nr="224">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -50,7 +50,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="199">
+<Func kind="K" nr="224">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -63,7 +63,7 @@
 <Not>
 <Pred kind="R" nr="1">
 <Var nr="1"/>
-<Func kind="K" nr="200">
+<Func kind="K" nr="225">
 <Num nr="2"/>
 </Func>
 </Pred>
@@ -71,8 +71,8 @@
 </And>
 </Fraenkel>
 <Func kind="U" nr="1">
-<Func kind="K" nr="97">
-<Func kind="K" nr="199">
+<Func kind="K" nr="121">
+<Func kind="K" nr="224">
 <Num nr="2"/>
 </Func>
 <Func kind="F" nr="1"/>
@@ -83,17 +83,17 @@
 <Func kind="F" nr="1"/>
 <Func kind="K" nr="28">
 <Func kind="U" nr="1">
-<Func kind="K" nr="199">
+<Func kind="K" nr="224">
 <Num nr="2"/>
 </Func>
 </Func>
-<Func kind="K" nr="221">
+<Func kind="K" nr="198">
 <Func kind="U" nr="1">
-<Func kind="K" nr="199">
+<Func kind="K" nr="224">
 <Num nr="2"/>
 </Func>
 </Func>
-<Func kind="K" nr="200">
+<Func kind="K" nr="225">
 <Num nr="2"/>
 </Func>
 </Func>

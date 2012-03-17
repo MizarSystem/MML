@@ -14,11 +14,10 @@
 <ArticleID name="FINSUB_1"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
+<ArticleID name="XREAL_0"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="CARD_3"/>
-<ArticleID name="XREAL_0"/>
-<ArticleID name="MEMBERED"/>
 <ArticleID name="PROB_1"/>
 </Signature>
 <RCluster>
@@ -38,7 +37,7 @@
 <Cluster>
 <Adjective nr="1" value="false"/>
 <Adjective nr="12"/>
-<Adjective nr="34">
+<Adjective nr="28">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -59,10 +58,10 @@
 </Typ>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="34">
+<Adjective nr="28">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="37">
+<Adjective nr="31">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -75,10 +74,10 @@
 <Typ kind="M" nr="2">
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="34">
+<Adjective nr="28">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="37">
+<Adjective nr="31">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -96,16 +95,6 @@
 </Typ>
 <Cluster>
 <Adjective nr="1"/>
-<Adjective nr="5"/>
-<Adjective nr="15"/>
-<Adjective nr="16"/>
-<Adjective nr="17"/>
-<Adjective nr="28"/>
-<Adjective nr="29"/>
-<Adjective nr="30"/>
-<Adjective nr="31"/>
-<Adjective nr="32"/>
-<Adjective nr="33"/>
 </Cluster>
 </RCluster>
 <CCluster>
@@ -116,10 +105,10 @@
 </ArgTypes>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="34">
+<Adjective nr="28">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="37">
+<Adjective nr="31">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -134,10 +123,10 @@
 <Cluster>
 <Adjective nr="1" value="false"/>
 <Adjective nr="12"/>
-<Adjective nr="34">
+<Adjective nr="28">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="37">
+<Adjective nr="31">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

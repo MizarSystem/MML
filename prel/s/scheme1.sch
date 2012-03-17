@@ -15,9 +15,9 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="NAT_1"/>
+<ArticleID name="XREAL_0"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
-<ArticleID name="XREAL_0"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="SEQ_1"/>
 <ArticleID name="SEQM_3"/>
@@ -27,7 +27,7 @@
 <Typ kind="M" nr="5">
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="20">
+<Adjective nr="21">
 <Func kind="K" nr="67"/>
 <Func kind="K" nr="63"/>
 </Adjective>
@@ -41,7 +41,7 @@
 <Typ kind="M" nr="5">
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="20">
+<Adjective nr="21">
 <Func kind="K" nr="67"/>
 <Func kind="K" nr="63"/>
 </Adjective>
@@ -184,7 +184,7 @@
 <Typ kind="M" nr="5">
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="20">
+<Adjective nr="21">
 <Func kind="K" nr="67"/>
 <Func kind="K" nr="63"/>
 </Adjective>
@@ -257,7 +257,7 @@
 <Typ kind="M" nr="5">
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="20">
+<Adjective nr="21">
 <Func kind="K" nr="67"/>
 <Func kind="K" nr="63"/>
 </Adjective>
@@ -351,7 +351,7 @@
 <Typ kind="M" nr="5">
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="20">
+<Adjective nr="21">
 <Func kind="K" nr="67"/>
 <Func kind="K" nr="63"/>
 </Adjective>
@@ -466,7 +466,7 @@
 <Typ kind="M" nr="5">
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="20">
+<Adjective nr="21">
 <Func kind="K" nr="67"/>
 <Func kind="K" nr="63"/>
 </Adjective>
@@ -4008,7 +4008,7 @@
 <Typ kind="M" nr="5">
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="20">
+<Adjective nr="21">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 </Adjective>
@@ -4186,7 +4186,7 @@
 <Typ kind="M" nr="5">
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="20">
+<Adjective nr="21">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 </Adjective>
@@ -4416,7 +4416,7 @@
 <Typ kind="M" nr="5">
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="20">
+<Adjective nr="21">
 <Func kind="K" nr="20">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
@@ -4552,7 +4552,7 @@
 <Typ kind="M" nr="5">
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="20">
+<Adjective nr="21">
 <Func kind="K" nr="20">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>

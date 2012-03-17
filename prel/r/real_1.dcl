@@ -21,11 +21,9 @@
 <Func kind="K" nr="42"/>
 </Typ>
 <Cluster>
-<Adjective nr="7" value="false"/>
 <Adjective nr="15"/>
 <Adjective nr="16"/>
 <Adjective nr="17"/>
-<Adjective nr="18" value="false"/>
 <Adjective nr="19"/>
 </Cluster>
 </RCluster>
@@ -37,8 +35,6 @@
 <Func kind="K" nr="42"/>
 </Typ>
 <Cluster>
-<Adjective nr="15"/>
-<Adjective nr="16"/>
 <Adjective nr="19"/>
 </Cluster>
 </CCluster>

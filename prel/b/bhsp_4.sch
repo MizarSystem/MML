@@ -70,9 +70,8 @@
 <Func kind="F" nr="2"/>
 </Pred>
 <For>
-<Typ kind="M" nr="3">
+<Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="79"/>
 <Func kind="K" nr="83"/>
 </Typ>
 <For>

@@ -10,20 +10,20 @@ environ
       FRECHET, AMISTD_1, REALSET1, FUNCOP_1, AMISTD_2, CARD_5, NET_1, AMI_5,
       AMI_2, INT_1, FINSEQ_1, ARYTM_1, SQUARE_1, ARYTM_3, NAT_1, AMI_7;
  notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, SETFAM_1, RELAT_1, FUNCT_1,
-      REALSET1, NUMBERS, XCMPLX_0, SQUARE_1, FINSEQ_1, FUNCOP_1,
-      INT_1, NAT_1, NAT_D, FUNCT_4, STRUCT_0, AMI_1, AMI_2, AMI_3, AMI_5,
-      FUNCT_7, AMISTD_1, AMISTD_2, XXREAL_0;
- constructors PARTFUN1, DOMAIN_1, SQUARE_1, NAT_1, REALSET1, PRE_CIRC, FUNCT_7,
-      AMI_5, AMISTD_2, NAT_D;
- registrations AMI_1, XREAL_0, INT_1, AMISTD_1, SCMRING1, AMI_6, AMISTD_2,
-      RELSET_1, FUNCOP_1, SQUARE_1, XBOOLE_0, FRAENKEL, SETFAM_1, STRUCT_0,
-      CARD_4, CARD_3;
+      REALSET1, NUMBERS, XCMPLX_0, SQUARE_1, FINSEQ_1, FUNCOP_1, INT_1, NAT_1,
+      FUNCT_4, STRUCT_0, AMI_1, AMI_2, AMI_3, AMI_5, FUNCT_7, AMISTD_1,
+      AMISTD_2, XXREAL_0;
+ constructors PARTFUN1, SQUARE_1, NAT_1, NAT_D, REALSET1, PRE_CIRC, FUNCT_7,
+      AMI_5, AMISTD_2;
+ registrations XBOOLE_0, SUBSET_1, SETFAM_1, RELAT_1, ORDINAL1, FUNCOP_1,
+      ARYTM_3, FRAENKEL, NUMBERS, XREAL_0, SQUARE_1, INT_1, CARD_3, CARD_4,
+      STRUCT_0, AMI_1, AMI_2, AMI_3, SCMRING1, AMISTD_1, AMISTD_2, AMI_6;
  requirements NUMERALS, SUBSET, BOOLE, REAL, ARITHM;
  definitions TARSKI, AMI_1, AMISTD_1, AMISTD_2, XBOOLE_0, SQUARE_1, FUNCOP_1;
  theorems AMI_1, AMI_2, AMI_3, AMI_5, BVFUNC14, ENUMSET1, FUNCT_7, TARSKI,
-      AMISTD_1, FUNCT_2, SUBSET_1, AMI_6, INT_1, FUNCOP_1, FUNCT_4,
-      ZFMISC_1, PRE_FF, YELLOW_8, CARD_3, FUNCT_1, YELLOW15, XBOOLE_0,
-      XBOOLE_1, XCMPLX_1, NEWTON, NAT_D;
+      AMISTD_1, FUNCT_2, SUBSET_1, AMI_6, INT_1, FUNCOP_1, FUNCT_4, ZFMISC_1,
+      PRE_FF, YELLOW_8, CARD_3, FUNCT_1, YELLOW15, XBOOLE_0, XBOOLE_1,
+      XCMPLX_1, NEWTON, NAT_D;
  schemes SUBSET_1;
 
 begin :: Preliminaries
@@ -248,7 +248,7 @@ registration
          with_explicit_jumps without_implicit_jumps
          IC-good Exec-preserving
          with_non_trivial_ObjectKinds with_non_trivial_Instructions
-         (regular standard (IC-Ins-separated definite
+         (regular standard (standard-ins IC-Ins-separated definite
          (non empty non void AMI-Struct over N)));
 existence
   proof
@@ -855,7 +855,7 @@ A2:   Exec(I,s+*(f,w)) <> Exec(I,s) +* (f,w) by Def5;
 A3: dom s = the carrier of A by AMI_3:36;
 A4: dom Exec(I,s) = the carrier of A by AMI_3:36;
     set p = f .--> w;
-       dom p = {f} by FUNCOP_1:14,19;
+       dom p = {f} by FUNCOP_1:19;
     then dom p c= the Instruction-Locations of A by ZFMISC_1:37;
     then reconsider p as programmed FinPartState of A by AMI_3:def 13;
 A5: s+*(f,w) = s +* p by A3,FUNCT_7:def 3;
@@ -864,12 +864,14 @@ A5: s+*(f,w) = s +* p by A3,FUNCT_7:def 3;
   end;
 
 theorem
-  for A being IC-Ins-separated definite (non empty non void AMI-Struct over N),
+  for A being IC-Ins-separated definite
+   (standard-ins non empty non void AMI-Struct over N),
      I being Instruction of A,
      o being Object of A st I is jump-only
   holds o in Output I implies o = IC A
   proof
-    let A be IC-Ins-separated definite (non empty non void AMI-Struct over N),
+    let A be IC-Ins-separated definite
+                 (standard-ins non empty non void AMI-Struct over N),
         I be Instruction of A,
         o be Object of A;
      assume
@@ -1419,11 +1421,9 @@ A8: dom t = the carrier of SCM by AMI_3:36;
 A9:     o = a;
 then A10:   s.a = w by A8,FUNCT_7:33;
      s.b = t.b by A1,A9,FUNCT_7:34;
-then A11:   Exec(I,s).o = (7 + 1) div t.b by A1,A3,A9,A10,AMI_3:12
-       .= 8 div 4 by A4,NEWTON:101
+then A11:   Exec(I,s).o = 8 div 4 by  A1,A3,A9,A10,AMI_3:12,A4
        .= 2 by A5,NAT_D:def 1;
-         Exec(I,t).o = 7 div t.b by A1,A3,A9,AMI_3:12
-       .= 7 div 4 by A4,NEWTON:101
+         Exec(I,t).o = 7 div 4 by  A1,A3,A9,AMI_3:12,A4
        .= 1 by A6,NAT_D:def 1;
       then Exec(I,s).o <> Exec(I,t).o by A11;
       hence thesis by A2,Def4;
@@ -1433,11 +1433,9 @@ A12:     o <> a and
 A13:     o = b;
 A14:   s.a = t.a by A12,FUNCT_7:34;
      s.b = w by A8,A13,FUNCT_7:33;
-then A15:   Exec(I,s).o = 7 mod (t.b + 1) by A3,A13,A14,AMI_3:12
-       .= 7 mod 5 by A4,NEWTON:101
+then A15:   Exec(I,s).o = 7 mod 5 by  A3,A13,A14,AMI_3:12,A4
        .= 2 by A7,NAT_D:def 2;
-         Exec(I,t).o = 7 mod t.b by A3,A13,AMI_3:12
-       .= 7 mod 4 by A4,NEWTON:101
+         Exec(I,t).o = 7 mod 4 by  A3,A13,AMI_3:12,A4
        .= 3 by A6,NAT_D:def 2;
       then Exec(I,s).o <> Exec(I,t).o by A15;
       hence thesis by A2,Def4;
@@ -1797,14 +1795,14 @@ A7: now
 then A8:   t.a = t.a div t.b by A4,AMI_3:12;
          7 = 2 * 3 + 1 & 2 = 2 * 1 + 0;
       then 7 div 2 = 3 & 2 div 2 = 1 by NAT_D:def 1;
-      hence contradiction by A5,A6,A8,NEWTON:101;
+      hence contradiction by A5,A6,A8;
     end;
        now
       assume t.b = Exec(I,t).b;
 then A9:   t.b = t.a mod t.b by AMI_3:12;
          7 = 2 * 3 + 1 & 2 = 2 * 1 + 0;
       then 7 mod 2 = 1 & 2 mod 2 = 0 by NAT_D:def 2;
-      hence contradiction by A5,A6,A9,NEWTON:101;
+      hence contradiction by A5,A6,A9;
     end;
     hence thesis by A3,A7,Def3,Th25;
     end;

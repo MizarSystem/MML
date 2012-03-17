@@ -1,0 +1,198 @@
+:: Riemann Indefinite Integral of Functions of Real Variable
+::  by Yasunari Shidama , Noboru Endou , Katsumi Wasaki and Katuhiko Kanazashi
+:: 
+:: Received June 6, 2007
+:: Copyright (c) 2007 Association of Mizar Users
+
+environ
+
+ vocabularies INTEGRA1, INTEGRA2, ARYTM_1, RELAT_1, FUNCT_1, SEQFUNC, PARTFUN1,
+      REALSET1, SEQ_1, SEQ_2, FUNCT_3, RLVECT_1, BOOLE, RFUNCT_1, FCONT_1,
+      ABSVALUE, ORDINAL2, ARYTM_3, SQUARE_1, FDIFF_1, RCOMP_1, PARTFUN2,
+      PRE_TOPC, INTEGRA5, FINSEQ_1, FINSEQ_2, FINSEQ_4, ARYTM, SIN_COS,
+      INTEGRA7, MEASURE5, PREPOWER;
+ notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
+      XXREAL_0, COMPLEX1, REAL_1, NAT_1, RELSET_1, FUNCT_2, RCOMP_1, PARTFUN1,
+      PARTFUN2, PSCOMP_1, FINSEQ_1, SEQ_1, RFUNCT_1, SEQ_2, SEQ_4, SQUARE_1,
+      PREPOWER, FCONT_1, FDIFF_1, FINSEQ_2, FINSEQ_4, RVSUM_1, INTEGRA1,
+      INTEGRA2, SEQFUNC, INTEGRA5, SIN_COS, TAYLOR_1;
+ constructors ARYTM_0, REAL_1, FDIFF_1, FINSEQ_4, PARTFUN1, PARTFUN2, RFUNCT_1,
+      INTEGRA2, SETWOP_2, LIMFUNC1, FCONT_1, PSCOMP_1, NAT_1, BINOP_2,
+      INTEGRA5, COMSEQ_3, SIN_COS, PREPOWER, TAYLOR_1, SQUARE_1, RELAT_1,
+      RELSET_1;
+ registrations XREAL_0, RELSET_1, FINSEQ_2, INTEGRA1, SEQ_1, RCOMP_1, INT_1,
+      ORDINAL1, MEMBERED, PREPOWER, XBOOLE_0, XXREAL_0, NUMBERS;
+ requirements NUMERALS, BOOLE, SUBSET, REAL, ARITHM;
+
+
+begin :: Preliminaries
+
+ reserve a,b,r for real number;
+ reserve A for non empty set;
+ reserve X,x for set;
+ reserve f,g,F,G for PartFunc of REAL,REAL;
+ reserve n for Element of NAT;
+
+theorem :: INTEGRA7:1
+for f,g being Function of A,REAL st
+ rng f is bounded_above & rng g is bounded_above &
+ (for x be set st x in A holds abs(f.x-g.x)<=a) holds
+  sup rng f - sup rng g <= a & sup rng g - sup rng f <= a;
+
+theorem :: INTEGRA7:2
+for f,g being Function of A,REAL st
+ rng f is bounded_below & rng g is bounded_below &
+ (for x be set st x in A holds abs(f.x-g.x)<=a) holds
+  inf rng f - inf rng g <= a & inf rng g - inf rng f <= a;
+
+theorem :: INTEGRA7:3
+ f|X is_bounded_on X implies f is_bounded_on X;
+
+theorem :: INTEGRA7:4
+for x be Real st
+ x in X & f|X is_differentiable_in x holds f is_differentiable_in x;
+
+theorem :: INTEGRA7:5
+f|X is_differentiable_on X implies f is_differentiable_on X;
+
+theorem :: INTEGRA7:6
+f is_differentiable_on X & g is_differentiable_on X implies
+  f+g is_differentiable_on X & f-g is_differentiable_on X &
+  f(#)g is_differentiable_on X;
+
+theorem :: INTEGRA7:7
+f is_differentiable_on X implies r(#)f is_differentiable_on X;
+
+theorem :: INTEGRA7:8
+(for x be set st x in X holds g.x <> 0) &
+f is_differentiable_on X & g is_differentiable_on X
+ implies f/g is_differentiable_on X;
+
+theorem :: INTEGRA7:9
+(for x be set st x in X holds f.x <> 0) & f is_differentiable_on X
+ implies f^ is_differentiable_on X;
+
+theorem :: INTEGRA7:10
+  a <= b & [' a,b '] c= X & F is_differentiable_on X &
+    F`|X is_integrable_on [' a,b '] & F`|X is_bounded_on [' a,b ']
+implies
+  F.b = integral(F`|X,a,b) + F.a;
+
+begin :: The Definition of Indefinite Integral
+
+definition let X be set, f be PartFunc of REAL,REAL;
+  func IntegralFuncs(f,X) -> set means
+:: INTEGRA7:def 1
+   x in it iff
+   ex F be PartFunc of REAL,REAL st
+    x = F & F is_differentiable_on X & F`|X = f|X;
+end;
+
+definition let X be set, F,f be PartFunc of REAL,REAL;
+  pred F is_integral_of f,X means
+:: INTEGRA7:def 2
+    F in IntegralFuncs(f,X);
+end;
+
+theorem :: INTEGRA7:11
+  F is_integral_of f,X implies X c= dom F;
+
+theorem :: INTEGRA7:12
+  F is_integral_of f,X & G is_integral_of g,X
+    implies F+G is_integral_of f+g,X & F-G is_integral_of f-g,X;
+
+theorem :: INTEGRA7:13
+  F is_integral_of f,X implies r(#)F is_integral_of r(#)f,X;
+
+theorem :: INTEGRA7:14
+  F is_integral_of f,X & G is_integral_of g,X
+    implies F(#)G is_integral_of f(#)G+F(#)g,X;
+
+theorem :: INTEGRA7:15
+  (for x be set st x in X holds G.x <> 0) &
+    F is_integral_of f,X & G is_integral_of g,X implies
+    F/G is_integral_of (f(#)G-F(#)g)/(G(#)G),X;
+
+theorem :: INTEGRA7:16
+  a <= b & [' a,b '] c= dom f & f is_continuous_on [' a,b '] &
+  ]. a,b .[ c= dom F &
+  (for x be real number st x in ].a,b.[ holds F.x = integral(f,a,x) + F.a)
+  implies
+    F is_integral_of f,]. a,b .[;
+
+theorem :: INTEGRA7:17
+  for x,x0 be real number st
+  f is_continuous_on [.a,b.] & x in ].a,b.[ & x0 in ].a,b.[ &
+  F is_integral_of f,].a,b.[
+    holds F.x = integral(f,x0,x) + F.x0;
+
+theorem :: INTEGRA7:18
+  a <= b & [' a,b '] c= X & F is_integral_of f,X &
+    f is_integrable_on [' a,b '] & f is_bounded_on [' a,b ']
+   implies F.b = integral(f,a,b) + F.a;
+
+theorem :: INTEGRA7:19
+  a <= b & [. a,b .] c= X & f is_continuous_on X implies
+    f is_continuous_on [' a,b '] & f is_integrable_on [' a,b '] &
+    f is_bounded_on [' a,b '];
+
+theorem :: INTEGRA7:20
+  a <= b & [. a,b .] c= X & f is_continuous_on X & F is_integral_of f,X
+    implies F.b = integral(f,a,b) + F.a;
+
+theorem :: INTEGRA7:21
+  b <= a & [' b,a '] c= X &
+  f is_integrable_on [' b,a '] & g is_integrable_on [' b,a '] &
+  f is_bounded_on [' b,a '] & g is_bounded_on [' b,a '] &
+  X c= dom f & X c= dom g & F is_integral_of f,X & G is_integral_of g,X
+  implies
+    (F.a)*(G.a) - (F.b)*(G.b) = integral(f(#)G,b,a) + integral(F(#)g,b,a);
+
+theorem :: INTEGRA7:22
+  b <= a & [. b,a .] c= X & X c= dom f & X c= dom g &
+  f is_continuous_on X & g is_continuous_on X &
+  F is_integral_of f,X & G is_integral_of g,X
+  implies
+    (F.a)*(G.a) - (F.b)*(G.b) = integral(f(#)G,b,a)+ integral(F(#)g,b,a);
+
+begin :: Examples of Indefinite Integral
+
+theorem :: INTEGRA7:23
+  sin is_integral_of cos,REAL;
+
+theorem :: INTEGRA7:24
+  sin.b-sin.a = integral(cos,a,b);
+
+theorem :: INTEGRA7:25
+  (-1)(#)cos is_integral_of sin,REAL;
+
+theorem :: INTEGRA7:26
+  cos.a - cos.b = integral(sin,a,b);
+
+theorem :: INTEGRA7:27
+  exp_R is_integral_of exp_R,REAL;
+
+theorem :: INTEGRA7:28
+  exp_R.b-exp_R.a = integral(exp_R,a,b);
+
+theorem :: INTEGRA7:29
+  #Z (n+1) is_integral_of (n+1)(#)( #Z n),REAL;
+
+theorem :: INTEGRA7:30
+  ( #Z (n+1)).b - ( #Z (n+1)).a = integral((n+1)(#)( #Z n),a,b);
+
+begin :: Uniform Convergent Functional Sequence
+
+theorem :: INTEGRA7:31
+  for H be Functional_Sequence of REAL,REAL,
+      rseq be Real_Sequence st
+  a < b &
+  (for n be Element of NAT holds
+   H.n is_integrable_on [' a,b '] & H.n is_bounded_on [' a,b '] &
+   rseq.n = integral(H.n,a,b) ) &
+  H is_unif_conv_on [' a,b ']
+    holds
+  lim(H,[' a,b ']) is_bounded_on [' a,b '] &
+  lim(H,[' a,b ']) is_integrable_on [' a,b '] &
+  rseq is convergent &
+  lim rseq = integral(lim(H,[' a,b ']),a,b);

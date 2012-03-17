@@ -26,8 +26,6 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="8"/>
-<Adjective nr="9"/>
 <Adjective nr="10"/>
 </Cluster>
 </FCluster>
@@ -49,8 +47,6 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="8"/>
-<Adjective nr="9"/>
 <Adjective nr="10"/>
 </Cluster>
 </FCluster>

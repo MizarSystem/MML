@@ -22,9 +22,9 @@
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="COMPTS_1"/>
+<ArticleID name="FINSEQ_2"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="SEQ_1"/>
-<ArticleID name="FINSEQ_2"/>
 <ArticleID name="RVSUM_1"/>
 <ArticleID name="BINOP_1"/>
 <ArticleID name="METRIC_1"/>
@@ -55,7 +55,7 @@
 <LocusVar nr="3"/>
 </Func>
 <Cluster>
-<Adjective nr="46">
+<Adjective nr="47">
 <Func kind="K" nr="204">
 <Num nr="2"/>
 </Func>
@@ -88,11 +88,6 @@
 </Func>
 <Cluster>
 <Adjective nr="7" value="false"/>
-<Adjective nr="46">
-<Func kind="K" nr="204">
-<Num nr="2"/>
-</Func>
-</Adjective>
 </Cluster>
 </FCluster>
 </Registrations>

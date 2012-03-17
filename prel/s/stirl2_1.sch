@@ -28,14 +28,12 @@
 </Signature>
 <Scheme>
 <ArgTypes>
-<Typ kind="M" nr="3">
+<Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="85"/>
 <Func kind="K" nr="89"/>
 </Typ>
-<Typ kind="M" nr="3">
+<Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="85"/>
 <Func kind="K" nr="89"/>
 </Typ>
 </ArgTypes>
@@ -776,9 +774,8 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </Typ>
-<Typ kind="M" nr="3">
+<Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="85"/>
 <Func kind="K" nr="89"/>
 </Typ>
 </ArgTypes>
@@ -799,9 +796,8 @@
 <Func kind="F" nr="2"/>
 </Pred>
 <For>
-<Typ kind="M" nr="3">
+<Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="85"/>
 <Func kind="K" nr="89"/>
 </Typ>
 <Not>
@@ -827,9 +823,8 @@
 </For>
 </Not>
 <For>
-<Typ kind="M" nr="3">
+<Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="85"/>
 <Func kind="K" nr="89"/>
 </Typ>
 <Not>
@@ -887,9 +882,8 @@
 </Func>
 </Pred>
 <For>
-<Typ kind="M" nr="3">
+<Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="85"/>
 <Func kind="K" nr="89"/>
 </Typ>
 <Not>
@@ -934,9 +928,8 @@
 </For>
 </Not>
 <For>
-<Typ kind="M" nr="3">
+<Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="85"/>
 <Func kind="K" nr="89"/>
 </Typ>
 <Not>
@@ -959,15 +952,13 @@
 </Not>
 </For>
 <For>
-<Typ kind="M" nr="3">
+<Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="85"/>
 <Func kind="K" nr="89"/>
 </Typ>
 <For>
-<Typ kind="M" nr="3">
+<Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="85"/>
 <Func kind="K" nr="89"/>
 </Typ>
 <Not>
@@ -1081,9 +1072,8 @@
 </Func>
 </Pred>
 <For>
-<Typ kind="M" nr="3">
+<Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="85"/>
 <Func kind="K" nr="89"/>
 </Typ>
 <Not>

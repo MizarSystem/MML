@@ -11,8 +11,8 @@
 <ArticleID name="MCART_1"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
-<ArticleID name="STRUCT_0"/>
 <ArticleID name="ORDERS_1"/>
+<ArticleID name="STRUCT_0"/>
 <ArticleID name="ORDERS_2"/>
 <ArticleID name="LATTICES"/>
 <ArticleID name="FUNCT_4"/>
@@ -28,12 +28,12 @@
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
-<Adjective nr="22"/>
-<Adjective nr="23"/>
 <Adjective nr="24"/>
-<Adjective nr="56"/>
-<Adjective nr="57"/>
+<Adjective nr="25"/>
+<Adjective nr="26"/>
 <Adjective nr="58"/>
+<Adjective nr="59"/>
+<Adjective nr="60"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -113,12 +113,12 @@
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
-<Adjective nr="22"/>
-<Adjective nr="23"/>
 <Adjective nr="24"/>
-<Adjective nr="56"/>
-<Adjective nr="57"/>
+<Adjective nr="25"/>
+<Adjective nr="26"/>
 <Adjective nr="58"/>
+<Adjective nr="59"/>
+<Adjective nr="60"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -420,12 +420,12 @@
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
-<Adjective nr="22"/>
-<Adjective nr="23"/>
 <Adjective nr="24"/>
-<Adjective nr="56"/>
-<Adjective nr="57"/>
+<Adjective nr="25"/>
+<Adjective nr="26"/>
 <Adjective nr="58"/>
+<Adjective nr="59"/>
+<Adjective nr="60"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">

@@ -9,18 +9,18 @@ environ
  vocabularies RELAT_1, CARD_1, FUNCT_1, BOOLE, TARSKI, FUNCT_2, FINSET_1,
       FINSEQ_1, ARYTM_1, SQUARE_1, RLVECT_1, PROB_1, ARYTM_3, RFINSEQ, NAT_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, RELAT_1, FUNCT_1, RELSET_1,
-      PARTFUN1, FUNCT_2, FINSEQ_1, CARD_1, XCMPLX_0, NAT_1, NAT_D, REAL_1,
-      SEQ_1, SEQM_3, FINSEQ_4, FINSET_1, RVSUM_1, XXREAL_0;
- constructors PARTFUN1, WELLORD2, REAL_1, SQUARE_1, NAT_1, BINOP_2, FINSEQOP,
-      SEQ_1, FINSEQ_4, RVSUM_1, ARYTM_3, INT_1, FINSOP_1, SEQM_3, NAT_D;
- registrations FINSET_1, FUNCT_1, RELSET_1, FINSEQ_1, FUNCT_2, NAT_1, MEMBERED,
-      ARYTM_3, XREAL_0, SEQ_1, RVSUM_1;
+      FUNCT_2, FINSEQ_1, CARD_1, XCMPLX_0, NAT_1, REAL_1, SEQ_1, SEQM_3,
+      FINSEQ_4, FINSET_1, RVSUM_1, XXREAL_0;
+ constructors PARTFUN1, WELLORD2, REAL_1, SQUARE_1, NAT_1, BINOP_2, SEQM_3,
+      FINSEQ_4, FINSOP_1, RVSUM_1;
+ registrations XBOOLE_0, RELAT_1, FUNCT_1, FUNCT_2, FINSET_1, NUMBERS, XREAL_0,
+      NAT_1, MEMBERED, FINSEQ_1, SEQ_1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, XBOOLE_0, SEQM_3, RVSUM_1;
  theorems TARSKI, FINSEQ_1, FINSEQ_2, FINSEQ_3, REAL_1, NAT_1, FUNCT_1,
       FUNCT_2, FINSET_1, CARD_1, CARD_2, RVSUM_1, WELLORD2, ZFMISC_1, RELAT_1,
-      XBOOLE_0, XBOOLE_1, XCMPLX_1, XREAL_1, FINSEQ_4, XXREAL_0,
-      FINSOP_1, RELSET_1, SEQM_3;
+      XBOOLE_0, XBOOLE_1, XCMPLX_1, XREAL_1, FINSEQ_4, XXREAL_0, FINSOP_1,
+      RELSET_1, SEQM_3;
  schemes NAT_1, FINSEQ_1, CLASSES1, WELLORD2;
 
 begin
@@ -459,10 +459,9 @@ Lm2: P[0]
       card(dom(F|X)) = 0;
   then A1: dom(F|X) = {} by CARD_2:59;
   take A = {};
-  A2: dom A = {} by FINSEQ_1:26;
   let x;
      (F|X)"{x} c= dom(F|X) & A"{x} c= dom A by RELAT_1:167;
-  then (F|X)"{x} = {} & A"{x} = {} by A1,A2,XBOOLE_1:3;
+  then (F|X)"{x} = {} & A"{x} = {} by A1,XBOOLE_1:3;
   hence Card((F|X)"{x}) = Card(A"{x});
  end;
 
@@ -609,16 +608,16 @@ func f /^ n -> FinSequence means :Def2:
    implies p1 = p2
      proof assume that
          n<=len f and
-      A4: len p1 = len f - n & for m be Nat st m in dom p1 holds
+      A2: len p1 = len f - n & for m be Nat st m in dom p1 holds
       p1.m = f.(m+n) and
-      A5: len p2 = len f - n & for m be Nat st m in dom p2 holds
+      A3: len p2 = len f - n & for m be Nat st m in dom p2 holds
       p2.m = f.(m+n);
-      A6: dom p1 = Seg len p1 & Seg len p2 = dom p2 by FINSEQ_1:def 3;
+      A4: dom p1 = Seg len p1 & Seg len p2 = dom p2 by FINSEQ_1:def 3;
           now let m; assume m in Seg len p1;
-        then p1.m = f.(m+n) & p2.m = f.(m+n) by A4,A5,A6;
+        then p1.m = f.(m+n) & p2.m = f.(m+n) by A2,A3,A4;
         hence p1.m = p2.m;
        end;
-      hence p1 = p2 by A4,A5,FINSEQ_2:10;
+      hence p1 = p2 by A2,A3,FINSEQ_2:10;
      end;
    thus not n<=len f & p1 = {} & p2 = {} implies p1 = p2;
   end;
@@ -634,18 +633,18 @@ redefine func f /^ n -> FinSequence of D;
     deffunc F(Element of NAT)=f.($1+n);
    per cases;
    suppose
-S:  n<=len f;
+A1:  n<=len f;
      then reconsider k = len f - n as Element of NAT by NAT_1:21;
-A1: len p = k & for m st m in dom p holds p.m = F(m) by Def2,S;
+A2: len p = k & for m st m in dom p holds p.m = F(m) by Def2,A1;
          rng p c= rng f
        proof let x; assume x in rng p;
         then consider m such that
-        A2: m in dom p & p.m = x by FINSEQ_2:11;
-        A3: p.m = f.(m+n) by Def2,S,A2;
-           1<=m & m<=len p & m<=m+n by A2,FINSEQ_3:27,NAT_1:11;
-        then 1<=m+n & m+n<=len f by A1,XXREAL_0:2,XREAL_1:21;
+        A3: m in dom p & p.m = x by FINSEQ_2:11;
+        A4: p.m = f.(m+n) by Def2,A1,A3;
+           1<=m & m<=len p & m<=m+n by A3,FINSEQ_3:27,NAT_1:11;
+        then 1<=m+n & m+n<=len f by A2,XXREAL_0:2,XREAL_1:21;
         then m+n in dom f by FINSEQ_3:27;
-        hence x in rng f by A2,A3,FUNCT_1:def 5;
+        hence x in rng f by A3,A4,FUNCT_1:def 5;
        end;
       then rng p c= D by XBOOLE_1:1;
    hence p is FinSequence of D by FINSEQ_1:def 4;
@@ -1225,7 +1224,7 @@ cluster non-increasing FinSequence of REAL;
   proof
    take f = <*>REAL;
    let n; assume n in dom f & n+1 in dom f;
-   hence f.n>=f.(n+1) by FINSEQ_1:26;
+   hence f.n>=f.(n+1);
   end;
 end;
 

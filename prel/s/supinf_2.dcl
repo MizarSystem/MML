@@ -73,7 +73,6 @@
 </Func>
 <Cluster>
 <Adjective nr="7" value="false"/>
-<Adjective nr="22"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -92,7 +91,6 @@
 </Func>
 <Cluster>
 <Adjective nr="7" value="false"/>
-<Adjective nr="22"/>
 </Cluster>
 </FCluster>
 <CCluster>

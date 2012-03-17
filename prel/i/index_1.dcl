@@ -22,8 +22,8 @@
 <ArticleID name="FUNCT_4"/>
 <ArticleID name="CAT_1"/>
 <ArticleID name="OPPCAT_1"/>
-<ArticleID name="FUNCT_3"/>
 <ArticleID name="BINOP_1"/>
+<ArticleID name="FUNCT_3"/>
 <ArticleID name="FRAENKEL"/>
 <ArticleID name="FUNCT_5"/>
 <ArticleID name="CAT_2"/>
@@ -174,8 +174,6 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="1"/>
-<Adjective nr="4"/>
 <Adjective nr="45"/>
 </Cluster>
 </FCluster>
@@ -218,7 +216,6 @@
 </Func>
 <Cluster>
 <Adjective nr="1"/>
-<Adjective nr="4"/>
 <Adjective nr="45"/>
 </Cluster>
 </FCluster>
@@ -264,7 +261,6 @@
 <LocusVar nr="3"/>
 </Func>
 <Cluster>
-<Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="15">
 <Func kind="U" nr="1">

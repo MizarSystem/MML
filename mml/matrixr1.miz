@@ -9,16 +9,16 @@ environ
  vocabularies MATRIXR1, FINSEQ_1, FUNCT_1, ARYTM_1, VECTSP_1, RLVECT_1,
       MATRIX_1, TREES_1, ARYTM, GROUP_1, RELAT_1, FINSEQ_2, INCSP_1, CAT_3,
       RVSUM_1, QC_LANG1, EUCLID, NAT_1;
- notations TARSKI, SUBSET_1, XXREAL_0, XREAL_0, REAL_1, NAT_1, NAT_D, FUNCT_1,
-      BINOP_1, MATRIX_1, RLVECT_1, NUMBERS, ORDINAL1, BINOP_2, VECTSP_1,
-      RELSET_1, FINSEQ_1, STRUCT_0, GROUP_1, MATRIX_4, MATRIX_3, RVSUM_1,
-      GOBOARD1, FINSEQ_2, FINSEQOP, FVSUM_1, EUCLID;
- constructors DOMAIN_1, XXREAL_0, BINOP_2, SEQ_1, SETWOP_2, FVSUM_1, GOBOARD1,
-      MATRIX_3, MATRIX_4, REAL_1, NAT_D, FINSOP_1;
- registrations STRUCT_0, INT_1, RELSET_1, VECTSP_1, NUMBERS, REAL_1, XREAL_0,
-      FINSEQ_1, FINSEQ_2, XXREAL_0, SEQ_1, MEMBERED;
+ notations TARSKI, SUBSET_1, XXREAL_0, XREAL_0, REAL_1, NAT_1, FUNCT_1,
+      MATRIX_1, RLVECT_1, NUMBERS, ORDINAL1, VECTSP_1, RELSET_1, FINSEQ_1,
+      STRUCT_0, GROUP_1, MATRIX_4, MATRIX_3, RVSUM_1, GOBOARD1, FINSEQ_2,
+      FINSEQOP, FVSUM_1, EUCLID;
+ constructors XXREAL_0, REAL_1, BINOP_2, FINSOP_1, FVSUM_1, GOBOARD1, MATRIX_3,
+      MATRIX_4;
+ registrations RELSET_1, NUMBERS, XXREAL_0, NAT_1, MEMBERED, FINSEQ_1, SEQ_1,
+      FINSEQ_2, STRUCT_0, VECTSP_1;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM, REAL;
- definitions BINOP_1, RLVECT_1, VECTSP_1, MATRIX_1, STRUCT_0;
+ definitions VECTSP_1, MATRIX_1, STRUCT_0;
  theorems MATRIX_3, VECTSP_1, MATRIX_1, MATRIX_4, MATRIX_5, XREAL_0, FUNCT_1,
       FINSEQ_1, MATRIX_2, FINSEQ_2, TARSKI, FVSUM_1, ZFMISC_1, EUCLID_2,
       RVSUM_1, EUCLID, FINSEQ_3, XXREAL_0, ORDINAL1, SEQ_1;
@@ -582,7 +582,7 @@ end;
 theorem
   for A being Matrix of REAL holds 1*A=A
 proof let A be Matrix of REAL;
-  1*A = MXF2MXR ((1_F_Real)*(MXR2MXF A)) by VECTSP_1:20,Def7;
+  1*A = MXF2MXR ((1_F_Real)*(MXR2MXF A)) by Def7;
   hence 1*A=A by MATRIX_5:10;
 end;
 
@@ -591,7 +591,6 @@ theorem
 proof let A be Matrix of REAL;
   set e2=(1_F_Real) + (1_F_Real);
 A1: (1_F_Real)*(MXR2MXF A)= MXR2MXF A by MATRIX_5:10;
-  (1_F_Real) + (1_F_Real) = 2 by VECTSP_1:20; then
   2*A = MXF2MXR (e2*(MXR2MXF A)) by Def7
      .= MXF2MXR ((MXR2MXF A)+(MXR2MXF A)) by A1,MATRIX_5:13;
   hence A+A=2*A;
@@ -603,10 +602,7 @@ proof let A be Matrix of REAL;
     reconsider e3=(1_F_Real) + (1_F_Real) + (1_F_Real)
       as Element of F_Real;
 A1: len A =len MXR2MXF A & width A=width MXR2MXF A;
-A2: (1_F_Real) + (1_F_Real) =1+1 by  VECTSP_1:20;
     reconsider rr=1+1 as Element of REAL;
-    (1_F_Real) + (1_F_Real) + (1_F_Real)
-      = 3 by A2; then
     3*A= MXF2MXR (e3*(MXR2MXF A)) by Def7
       .=MXF2MXR ((1_F_Real)*(MXR2MXF A)
        + ((1_F_Real)+ (1_F_Real))*(MXR2MXF A)) by MATRIX_5:13
@@ -1400,14 +1396,13 @@ end;
 
 theorem Th62:
   for x being FinSequence of REAL, A being Matrix of REAL st
-    len A=len x & len x>0 & width A>0 holds
-      len (x*A) = width A
+    len A=len x holds len (x*A) = width A
 proof let x be FinSequence of REAL, A be Matrix of REAL;
-    assume A1: len A=len x & len x>0 & width A>0;
+    assume A1: len A=len x;
 A2: width LineVec2Mx x=len x by Def10;
-    len Line((LineVec2Mx x)*A,1)=width ((LineVec2Mx x)*A)
-                           by MATRIX_1:def 8
-                                 .=width A by MATRIX_3:def 4,A2,A1;
+    len Line((LineVec2Mx x)*A,1)=width (MXF2MXR ((MXR2MXF (LineVec2Mx x))*(
+MXR2MXF A))) by MATRIX_1:def 8
+     .=width A by A1,A2,MATRIX_3:def 4;
     hence len (x*A) = width A;
 end;
 

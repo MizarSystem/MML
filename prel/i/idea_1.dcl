@@ -11,20 +11,20 @@
 <ArticleID name="TARSKI"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
-<ArticleID name="MCART_1"/>
-<ArticleID name="FUNCT_2"/>
-<ArticleID name="FUNCOP_1"/>
+<ArticleID name="XREAL_0"/>
+<ArticleID name="INT_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="XREAL_0"/>
+<ArticleID name="MCART_1"/>
+<ArticleID name="FUNCT_2"/>
+<ArticleID name="FUNCOP_1"/>
 <ArticleID name="FRAENKEL"/>
 <ArticleID name="XBOOLEAN"/>
 <ArticleID name="MARGREL1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="RLVECT_1"/>
-<ArticleID name="INT_1"/>
 <ArticleID name="GROUP_1"/>
 <ArticleID name="VECTSP_1"/>
 <ArticleID name="MATRIX_1"/>
@@ -41,8 +41,7 @@
 <ArgTypes/>
 <Func kind="K" nr="218"/>
 <Cluster>
-<Adjective nr="7" value="false"/>
-<Adjective nr="26"/>
+<Adjective nr="27"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -77,9 +76,8 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="18"/>
-<Adjective nr="19"/>
-<Adjective nr="23"/>
+<Adjective nr="21"/>
+<Adjective nr="26"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -114,9 +112,8 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="18"/>
-<Adjective nr="19"/>
-<Adjective nr="23"/>
+<Adjective nr="21"/>
+<Adjective nr="26"/>
 </Cluster>
 </FCluster>
 <CCluster>
@@ -127,10 +124,7 @@
 <Func kind="K" nr="218"/>
 </Typ>
 <Cluster>
-<Adjective nr="1"/>
-<Adjective nr="4"/>
-<Adjective nr="19"/>
-<Adjective nr="23"/>
+<Adjective nr="21"/>
 </Cluster>
 </CCluster>
 </Registrations>

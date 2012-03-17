@@ -29,8 +29,8 @@
 <Cluster>
 <Adjective nr="25" value="false"/>
 <Adjective nr="30" value="false"/>
-<Adjective nr="41"/>
-<Adjective nr="44"/>
+<Adjective nr="42"/>
+<Adjective nr="45"/>
 </Cluster>
 </RCluster>
 <FCluster>
@@ -58,7 +58,7 @@
 </Func>
 <Cluster>
 <Adjective nr="25" value="false"/>
-<Adjective nr="41"/>
+<Adjective nr="42"/>
 </Cluster>
 </FCluster>
 </Registrations>

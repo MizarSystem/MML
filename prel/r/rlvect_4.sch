@@ -176,11 +176,11 @@
 <Typ kind="G" nr="6">
 <Cluster>
 <Adjective nr="26" value="false"/>
-<Adjective nr="34"/>
 <Adjective nr="35"/>
 <Adjective nr="36"/>
 <Adjective nr="37"/>
 <Adjective nr="38"/>
+<Adjective nr="39"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
@@ -227,11 +227,11 @@
 <Typ kind="G" nr="6">
 <Cluster>
 <Adjective nr="26" value="false"/>
-<Adjective nr="34"/>
 <Adjective nr="35"/>
 <Adjective nr="36"/>
 <Adjective nr="37"/>
 <Adjective nr="38"/>
+<Adjective nr="39"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
@@ -308,11 +308,11 @@
 <Typ kind="G" nr="6">
 <Cluster>
 <Adjective nr="26" value="false"/>
-<Adjective nr="34"/>
 <Adjective nr="35"/>
 <Adjective nr="36"/>
 <Adjective nr="37"/>
 <Adjective nr="38"/>
+<Adjective nr="39"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">

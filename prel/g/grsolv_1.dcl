@@ -13,11 +13,11 @@
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
+<ArticleID name="XREAL_0"/>
+<ArticleID name="INT_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="STRUCT_0"/>
-<ArticleID name="XREAL_0"/>
-<ArticleID name="INT_1"/>
 <ArticleID name="GROUP_1"/>
 <ArticleID name="GROUP_2"/>
 <ArticleID name="GROUP_3"/>
@@ -30,11 +30,10 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="23" value="false"/>
-<Adjective nr="31"/>
+<Adjective nr="25" value="false"/>
 <Adjective nr="32"/>
-<Adjective nr="33"/>
 <Adjective nr="34"/>
+<Adjective nr="35"/>
 <Adjective nr="44"/>
 </Cluster>
 </RCluster>

@@ -7,14 +7,10 @@
 environ
 
  vocabularies ARYTM_1, ARYTM_3, NAT_1, INT_1;
- notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, REAL_1,
-      XXREAL_0, NAT_1, INT_1;
- constructors NUMBERS, XCMPLX_0, XXREAL_0, XREAL_0, ORDINAL2, REAL_1, NAT_1,
-      INT_1;
- registrations REAL_1, NUMBERS, ORDINAL2, XREAL_0, ARYTM_3, ZFMISC_1, XBOOLE_0,
-      XXREAL_0, ORDINAL1, NAT_1, INT_1;
+ notations SUBSET_1, NUMBERS, XCMPLX_0, XXREAL_0, NAT_1, INT_1;
+ constructors XXREAL_0, NAT_1, INT_1;
+ registrations ARYTM_3, XXREAL_0, XREAL_0, NAT_1, INT_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions REAL_1, INT_1;
  theorems REAL_1, ORDINAL1, XCMPLX_1, XREAL_1, XXREAL_0, NAT_1, INT_1;
  schemes NAT_1;
 
@@ -24,13 +20,13 @@ reserve p,k,l,m,n,s,h,i,j,t for Nat;
 
 :: Exact division and rest of division
 
-Lm3: now let k,l;
+Lm1: now let k,l;
   0 <= k div l by INT_1:82;
   then k div l in NAT by INT_1:16;
   hence k div l is Nat by ORDINAL1:def 13;
 end;
 
-Lm4: now let k,l;
+Lm2: now let k,l;
     0 <= k mod l by INT_1:84;
     then k mod l in NAT by INT_1:16;
     hence k mod l is Nat by ORDINAL1:def 13;
@@ -51,17 +47,17 @@ proof
   suppose
 A1: l > 0;
 A2: k = l * (k div l) + (k mod l) by A1,INT_1:86;
-A3: k mod l is Nat by Lm4;
-A7: k mod l < l by A1,INT_1:85; 
+A3: k mod l is Nat by Lm2;
+A4: k mod l < l by A1,INT_1:85;
     hence r = k div l implies
     ( ex t being Nat st k = l * r + t & t < l ) or r = 0 & l = 0 by A2,A3;
     assume
-A4: ( ex t being Nat st k = l * r + t & t < l ) or r = 0 & l = 0;
-    k div l is Nat by Lm3;
-    hence r = k div l by A2,A3,A7,A4,NAT_1:18;
+A5: ( ex t being Nat st k = l * r + t & t < l ) or r = 0 & l = 0;
+    k div l is Nat by Lm1;
+    hence r = k div l by A2,A3,A4,A5,NAT_1:18;
   end;
 end;
-coherence by Lm3;
+coherence by Lm1;
 end;
 
 definition let k,l be Nat;
@@ -79,16 +75,16 @@ proof
   suppose
 A1: l > 0;
 A2: k = l * (k div l) + (k mod l) by A1,INT_1:86;
-A7: k mod l < l by A1,INT_1:85; 
+A3: k mod l < l by A1,INT_1:85;
     hence r = k mod l implies
     ( ex t being Nat st k = l * t + r & r < l ) or r = 0 & l = 0 by A2;
     assume
 A4: ( ex t being Nat st k = l * t + r & r < l ) or r = 0 & l = 0;
-    k mod l is Nat by Lm4;
-    hence r = k mod l by A2,A7,A4,NAT_1:18;
+    k mod l is Nat by Lm2;
+    hence r = k mod l by A2,A3,A4,NAT_1:18;
   end;
 end;
-coherence by Lm4;
+coherence by Lm2;
 end;
 
 definition let k,l be Nat;
@@ -106,14 +102,14 @@ definition let k,l be Nat;
   end;
 end;
 
-theorem Th46:
+theorem Th1:
   0 < i implies j mod i < i
    proof assume 0 < i;
      then ex t being Nat st j = i * t + (j mod i) & j mod i < i by Def2;
     hence j mod i < i;
    end;
 
-theorem Th47:
+theorem Th2:
   0 < i implies j = i * (j div i) + (j mod i) by INT_1:86;
 
 :: The divisibility relation
@@ -125,22 +121,22 @@ definition let k,l be Nat;
   proof
     hereby
       assume
-A0:   k divides l;
+A1:   k divides l;
       thus ex t being Nat st l = k * t
       proof
       consider t being Integer such that
-A1:   l = k * t by A0,INT_1:def 9;
+A2:   l = k * t by A1,INT_1:def 9;
       per cases;
       suppose 0 < l;
-      then 0 <= t by A1,XREAL_1:133;
+      then 0 <= t by A2,XREAL_1:133;
       then reconsider t as Element of NAT by INT_1:16;
       take t;
-      thus l = k * t by A1;
+      thus l = k * t by A2;
       end;
       suppose
-A2:     l = 0;
+A3:     l = 0;
         take 0;
-        thus l = k*0 by A2;
+        thus l = k*0 by A3;
       end;
       end;
     end;
@@ -154,7 +150,7 @@ A2:     l = 0;
    end;
 end;
 
-theorem Th49:
+theorem Th3:
   j divides i iff i = j * (i div j)
    proof
      thus j divides i implies i = j * (i div j)
@@ -165,8 +161,8 @@ A2:    i = j * k + 0 by A1;
        now assume
 A3:      j <> 0;
 A4:      0 <= j;
-then A5: i = j * (i div j) + (i mod j) by A3,Th47;
-         i mod j < j by A3,A4,Th46;
+then A5: i = j * (i div j) + (i mod j) by A3,Th2;
+         i mod j < j by A3,A4,Th1;
          hence i = j * (i div j) by A2,A5,NAT_1:18;
        end;
        hence i = j * (i div j) by A1;
@@ -178,16 +174,16 @@ then A5: i = j * (i div j) + (i mod j) by A3,Th47;
 theorem
   i divides j & j divides h implies i divides h
   proof assume i divides j & j divides h;
-    then j = i * (j div i) & h = j * (h div j) by Th49;
+    then j = i * (j div i) & h = j * (h div j) by Th3;
     then h = i * ((j div i)*(h div j));
     hence i divides h by Def3;
    end;
 
-theorem Th52:
+theorem Th5:
   i divides j & j divides i implies i = j
    proof
     assume i divides j & j divides i;
-then A1:   j = i * (j div i) & i = j * (i div j) by Th49;
+then A1:   j = i * (j div i) & i = j * (i div j) by Th3;
 then A2:     i * 1 = i * ((j div i) * (i div j));
 A3:   i = 0 implies i = j by A1;
         (j div i) * (i div j) = 1 implies i = j
@@ -198,7 +194,7 @@ A3:   i = 0 implies i = j by A1;
     hence i = j by A2,A3,XCMPLX_1:5;
    end;
 
-theorem Th53:
+theorem Th6:
   i divides 0 & 1 divides i
   proof
    0 = i * 0;
@@ -207,11 +203,11 @@ theorem Th53:
    hence thesis by Def3;
   end;
 
-theorem Th54:
+theorem Th7:
   0 < j & i divides j implies i <= j
    proof assume
 A1:   0 < j & i divides j;
-then A2:   j = i * (j div i) by Th49;
+then A2:   j = i * (j div i) by Th3;
      then j div i <> 0 by A1;
     then consider m such that
 A3:   j div i = m + 1 by NAT_1:6;
@@ -219,16 +215,16 @@ A3:   j div i = m + 1 by NAT_1:6;
     hence i <= j by A2,A3,NAT_1:11;
    end;
 
-theorem Th55:
+theorem Th8:
   i divides j & i divides h implies i divides j+h
    proof
     assume i divides j & i divides h;
-   then j = i * (j div i) & h = i * (h div i) by Th49;
+   then j = i * (j div i) & h = i * (h div i) by Th3;
      then j + h = i * ((j div i) + (h div i));
     hence i divides j + h by Def3;
    end;
 
-theorem Th56:
+theorem Th9:
   i divides j implies i divides j * h
   proof assume i divides j;
    then consider l being Nat such that
@@ -237,7 +233,7 @@ A1:  j = i * l by Def3;
      hence thesis by A1,Def3;
   end;
 
-theorem Th57:
+theorem Th10:
   i divides j & i divides j + h implies i divides h
   proof assume
 A1:  i divides j & i divides j + h;
@@ -247,29 +243,29 @@ A2:  j + h = i * t by Def3;
 A3:  j = i * u by A1,Def3;
        now assume i <> 0;
       then A4: i <> 0 & 0 <= i;
-then A5:    h = i * (h div i) + (h mod i) by Th47;
+then A5:    h = i * (h div i) + (h mod i) by Th2;
 A6:    j + (i * (h div i) + (h mod i)) = i * (u + (h div i)) + (h mod i) by A3;
-A7:    h mod i < i by A4,Th46;
+A7:    h mod i < i by A4,Th1;
          j + h = i * t + 0 by A2;
       then h mod i = 0 by A5,A6,A7,NAT_1:18;
-      hence thesis by A5,Th49;
+      hence thesis by A5,Th3;
     end;
    hence thesis by A2,NAT_1:7;
   end;
 
-theorem Th58:
+theorem Th11:
   i divides j & i divides h implies i divides j mod h
   proof assume
 A1:  i divides j & i divides h;
 A2:  now assume h = 0; then j mod h = 0 by Def2;
-     hence thesis by Th53;
+     hence thesis by Th6;
     end;
        now assume
 A3:    h <> 0;
          0 <= h;
-then A4:    j = h * (j div h) + (j mod h) by A3,Th47;
-         i divides h * (j div h) by A1,Th56;
-     hence thesis by A1,A4,Th57;
+then A4:    j = h * (j div h) + (j mod h) by A3,Th2;
+         i divides h * (j div h) by A1,Th9;
+     hence thesis by A1,A4,Th10;
     end;
    hence thesis by A2;
   end;
@@ -285,7 +281,7 @@ definition let k,n be Nat;
 A1:    now assume
 A2:      k = 0 or n = 0;
        take w = 0;
-       thus k divides w & n divides w by Th53;
+       thus k divides w & n divides w by Th6;
        let m be Nat; assume k divides m & n divides m;
        hence w divides m by A2;
       end;
@@ -305,19 +301,19 @@ A6:      P[l] & for m being Element of NAT st P[m] holds l <= m
        let m be Nat such that
 A7:      k divides m & n divides m;
            now A8: 0 <= k;
-then A9:        m = l * (m div l) + (m mod l) by A3,A6,Th47;
-             l = k * (l div k) & l = n * (l div n) by A6,Th49;
+then A9:        m = l * (m div l) + (m mod l) by A3,A6,Th2;
+             l = k * (l div k) & l = n * (l div n) by A6,Th3;
           then l * (m div l) = k * ((l div k) * (m div l)) &
            l * (m div l) = n * ((l div n) * (m div l)) by XCMPLX_1:4;
           then k divides l * (m div l) & n divides l * (m div l) by Def3;
-then A10:        k divides m mod l & n divides m mod l by A7,A9,Th57;
+then A10:        k divides m mod l & n divides m mod l by A7,A9,Th10;
              now assume
 A11:          m mod l <> 0;
                0 <= m mod l;
-            then k <= m mod l by A10,A11,Th54;
+            then k <= m mod l by A10,A11,Th7;
            then l <= m mod l by A6,A10;
-           hence contradiction by A3,A6,A8,Th46;
-          end; hence l divides m by A9,Th49;
+           hence contradiction by A3,A6,A8,Th1;
+          end; hence l divides m by A9,Th3;
         end;
        hence l divides m;
       end;
@@ -330,7 +326,7 @@ A12:  k divides m1 & n divides m1 & for m being Nat st k divides m & n divides
 A13: k divides m2 & n divides m2 & for m being Nat st k divides m & n divides
  m holds m2 divides m;
   m1 divides m2 & m2 divides m1 by A12,A13;
-     hence m1 = m2 by Th52;
+     hence m1 = m2 by Th5;
     end;
     idempotence;
     commutativity;
@@ -348,19 +344,19 @@ definition let k,n be Nat;
    existence
     proof
        defpred P[Nat] means $1 divides k & $1 divides n;
-         1 divides k & 1 divides n by Th53;
+         1 divides k & 1 divides n by Th6;
 then A1:    ex m being Element of NAT st P[m];
 A2:    now assume
 A3:     k = 0;
        take m = n;
-       thus m divides k & m divides n by A3,Th53;
+       thus m divides k & m divides n by A3,Th6;
        let l be Nat; assume l divides k & l divides n;
        hence l divides m;
       end;
       now assume
 A4:     k <> 0;
         0 <= k;
-        then A5: for m being Element of NAT st P[m] holds m <= k by A4,Th54;
+        then A5: for m being Element of NAT st P[m] holds m <= k by A4,Th7;
        consider m being Element of NAT such that
 A6:    P[m] & for l being Element of NAT st P[l] holds l <= m
        from NAT_1:sch 6(A5,A1);
@@ -374,11 +370,11 @@ then A8:      l lcm m <= m by A6;
          proof
 A9:        m divides l lcm m by Def4;
 A10:        now assume l lcm m = 0;
-             then k = 0 * (k div 0) by A7,Th49;
+             then k = 0 * (k div 0) by A7,Th3;
             hence contradiction by A4;
            end;
               0 <= l lcm m;
-          hence thesis by A9,A10,Th54;
+          hence thesis by A9,A10,Th7;
          end;
        then l lcm m = m by A8,XXREAL_0:1;
        hence l divides m by Def4;
@@ -392,7 +388,7 @@ A11:  m1 divides k & m1 divides n & for m being Nat st m divides k & m divides
 A12: m2 divides k & m2 divides n & for m being Nat st m divides k & m divides
  n holds m divides m2;
   m1 divides m2 & m2 divides m1 by A11,A12;
-     hence m1 = m2 by Th52;
+     hence m1 = m2 by Th5;
     end;
     idempotence;
     commutativity;
@@ -428,7 +424,7 @@ A9:     n = m + 1;
 A10:    0 <= Q(n);
         reconsider m1=m as Element of NAT by ORDINAL1:def 13;
         Q(m1 + 2) = Q(m1) mod Q(m1 + 1) by A3;
-        hence Q(n + 1) < k by A6,A7,A9,A10,Th46;
+        hence Q(n + 1) < k by A6,A7,A9,A10,Th1;
         take m = n + 1;
         thus Q(n + 1) =Q(m);
       end;
@@ -446,7 +442,7 @@ A14:  k = n + 1 by A1,A2,A13,NAT_1:6;
    take n;
    defpred PP[Nat] means
     Q(n) divides Q($1) & Q(n) divides Q($1 + 1);
-       PP[n] by A13,A14,Th53;
+       PP[n] by A13,A14,Th6;
 then A15:  ex k being Element of NAT st PP[k];
 A16:  for k being Element of NAT st k <> 0 & PP[k]
       ex m being Element of NAT st m < k & PP[m]
@@ -468,33 +464,33 @@ A22:      m + 1 <> k;
 A23:      k <= m by NAT_1:13;
           defpred Q[Nat] means k <= $1 implies Q($1) = 0;
 A24: Q[0] by A13,XXREAL_0:1;
-A26: for m st Q[m] holds Q[m+1]
+A25: for m st Q[m] holds Q[m+1]
      proof let m such that
-A27:   k <= m implies Q(m) = 0 and
-A28:   k <= m + 1;
-       now assume k <> m + 1; then A29: k < m + 1 by A28,REAL_1:def 5;
+A26:   k <= m implies Q(m) = 0 and
+A27:   k <= m + 1;
+       now assume k <> m + 1; then A28: k < m + 1 by A27,REAL_1:def 5;
          then consider l such that
-A30:     m = l + 1 by A1,A2,A27,NAT_1:6,13;
+A29:     m = l + 1 by A1,A2,A26,NAT_1:6,13;
          reconsider l as Element of NAT by ORDINAL1:def 13;
          Q(l + 2) = Q(l) mod Q(l + 1) by A3;
-         hence Q(m + 1) = 0 by A27,A29,A30,Def2,NAT_1:13;
+         hence Q(m + 1) = 0 by A26,A28,A29,Def2,NAT_1:13;
        end;
        hence Q(m + 1) = 0 by A13;
      end;
-     for m holds Q[m] from NAT_1:sch 2(A24,A26);
+     for m holds Q[m] from NAT_1:sch 2(A24,A25);
      then Q(m) = 0 by A23;
-     hence Q(n) divides Q(m) by Th53;
+     hence Q(n) divides Q(m) by Th6;
    end;
    hence Q(n) divides Q(m) by A14;
  end;
  now assume
-A31:   Q(m + 1) <> 0;
-A32:   0 <= Q(m + 1);
+A30:   Q(m + 1) <> 0;
+A31:   0 <= Q(m + 1);
        Q(m + 2) = Q(m) mod Q(m + 1) by A3;then
-A33:   Q(m) = Q(m + 1) * (Q(m) div Q(m + 1)) + Q(m + 2) by A31,A32,Th47;
+A32:   Q(m) = Q(m + 1) * (Q(m) div Q(m + 1)) + Q(m + 2) by A30,A31,Th2;
        Q(n) divides Q(m + 1) * (Q(m) div Q(m + 1)) &
-       Q(n) divides Q(m + 2) by A17,A18,Th56;
-       hence Q(n) divides Q(m) by A33,Th55;
+       Q(n) divides Q(m + 2) by A17,A18,Th9;
+       hence Q(n) divides Q(m) by A32,Th8;
      end;
      hence Q(n) divides Q(m) by A20;
      thus Q(n) divides Q(m + 1) by A17,A18;
@@ -505,15 +501,15 @@ A33:   Q(m) = Q(m + 1) * (Q(m) div Q(m + 1)) + Q(m + 2) by A31,A32,Th47;
      let m;
      defpred P1[Nat] means m divides Q($1) & m divides Q($1 + 1);
      assume m divides a() & m divides b();
-then A34: P1[0] by A2;
-A35: for k be Element of NAT st P1[k] holds P1[k+1]
+then A33: P1[0] by A2;
+A34: for k be Element of NAT st P1[k] holds P1[k+1]
        proof let k be Element of NAT; assume
-A36:   m divides Q(k) & m divides Q(k + 1);
+A35:   m divides Q(k) & m divides Q(k + 1);
        hence m divides Q(k + 1);
        Q(k + 2) = Q(k) mod Q(k + 1) by A3;
-       hence m divides Q(k + 1 + 1) by A36,Th58;
+       hence m divides Q(k + 1 + 1) by A35,Th11;
      end;
-     for k be Element of NAT holds P1[k] from NAT_1:sch 1(A34,A35);
+     for k be Element of NAT holds P1[k] from NAT_1:sch 1(A33,A34);
      hence m divides Q(n);
     end;
    hence Q(n) = a() hcf b() by Def5;
@@ -524,7 +520,7 @@ theorem
   n mod 2 = 0 or n mod 2 = 1
  proof
   assume A1: n mod 2 <> 0;
-  2 = 1 + 1 & n mod 2 < 2 by Th46;
+  2 = 1 + 1 & n mod 2 < 2 by Th1;
   then n mod 2 <= 1 & n mod 2 >= 1 by A1,NAT_1:13,14;
   hence n mod 2 = 1 by XXREAL_0:1;
  end;
@@ -614,10 +610,10 @@ theorem
    per cases;
    suppose A2: n <> 0;
     A3: 0 <= n;
-   then A4: k = n * (k div n) + 0 by A1,A2,Th47;
+   then A4: k = n * (k div n) + 0 by A1,A2,Th2;
 A5: ex t being Nat st l = n * t + (l mod n) & l mod n < n
       by A2,Def2;
-   l = n * (l div n) + (l mod n) by A2,A3,Th47;
+   l = n * (l div n) + (l mod n) by A2,A3,Th2;
    then k + l = n * ((k div n) + (l div n)) + (l mod n) by A4;
   hence thesis by A5,Def1;
   end;
@@ -641,7 +637,7 @@ theorem
 
 :: from GR_CY_1, 2005.11.16, A.T.
 
-theorem Th73:
+theorem Th21:
   m mod n = (n*k + m) mod n
  proof
   per cases;
@@ -665,14 +661,14 @@ theorem Th73:
 end;
 end;
 
-theorem Th74:
+theorem Th22:
   (p+s) mod n = ((p mod n)+s) mod n
  proof
   per cases;
   suppose n > 0;
-  then (p + s) mod n = (n*(p div n) + (p mod n) + s) mod n by Th47
+  then (p + s) mod n = (n*(p div n) + (p mod n) + s) mod n by Th2
                 .=(n*(p div n) + ((p mod n) + s)) mod n
-                .=((p mod n) + s) mod n by Th73;
+                .=((p mod n) + s) mod n by Th21;
    hence thesis;
    end;
    suppose
@@ -683,9 +679,9 @@ A1:  n = 0;
  end;
 
 theorem
-  (p+s) mod n = (p + ( s mod n)) mod n by Th74;
+  (p+s) mod n = (p + ( s mod n)) mod n by Th22;
 
-theorem Th76:
+theorem Th24:
   k < n implies k mod n = k
  proof
    assume A1:k<n;
@@ -718,7 +714,7 @@ theorem
   0 = 0 mod n
   proof
     n = 0 or n > 0;
-    hence thesis by Th76,Def2;
+    hence thesis by Th24,Def2;
   end;
 
 :: from JORDAN4
@@ -755,11 +751,11 @@ proof
 A1: n = m * t + r & r < m by Def2;
     reconsider t as Element of NAT by ORDINAL1:def 13;
 A2: x divides n & x divides m by Def5;
-    then x divides r by Th58;
+    then x divides r by Th11;
 then A3: x divides y by A2,Def5;
 A4: y divides m & y divides r by Def5;
-then y divides m*t by Th56;
-    then y divides n by A1,A4,Th55;
+then y divides m*t by Th9;
+    then y divides n by A1,A4,Th8;
     then y divides x by A4,Def5;
-   hence thesis by A3,Th52;
+   hence thesis by A3,Th5;
 end;

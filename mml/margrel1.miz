@@ -8,14 +8,11 @@ environ
 
  vocabularies FUNCOP_1, FUNCT_2, RELAT_1, FINSEQ_1, BOOLE, QC_LANG1, ZF_LANG,
       MARGREL1, NAT_1, FUNCT_1, VALUAT_1;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS,
-      FUNCT_1, FINSEQ_1, RELAT_1,
-      FUNCOP_1, FRAENKEL, XBOOLEAN;
- constructors FUNCOP_1, FRAENKEL, FINSEQ_1, XBOOLEAN, XCMPLX_0, XXREAL_0,
-      NAT_D;
- registrations RELSET_1, FUNCOP_1, SUBSET_1, XBOOLE_0, XBOOLEAN, FUNCT_1,
-      RELAT_1;
- requirements SUBSET, BOOLE, NUMERALS, ARITHM, REAL;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, FUNCT_1, FINSEQ_1,
+      RELAT_1, FUNCOP_1, FRAENKEL, XBOOLEAN;
+ constructors FUNCOP_1, FRAENKEL, XCMPLX_0, FINSEQ_1, XBOOLEAN;
+ registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, FUNCOP_1, XBOOLEAN;
+ requirements SUBSET, BOOLE, ARITHM;
  definitions TARSKI, XBOOLEAN;
  theorems TARSKI, ZFMISC_1, FINSEQ_1, FUNCT_2, FUNCOP_1, XBOOLE_0, XBOOLE_1,
       XBOOLEAN, RELAT_1, FUNCT_1;
@@ -684,14 +681,14 @@ begin :: Addenda
 
 definition let f be Function;
  attr f is boolean-valued means
-:Def2: rng f c= BOOLEAN;
+:Def17: rng f c= BOOLEAN;
 end;
 
 registration
  cluster boolean-valued Function;
  existence
   proof take {};
-   thus rng {} c= BOOLEAN by RELAT_1:60,XBOOLE_1:2;
+   thus rng {} c= BOOLEAN by XBOOLE_1:2;
   end;
 end;
 
@@ -706,7 +703,7 @@ registration let f be boolean-valued Function, x be set;
    end;
    suppose x in dom f;
     then A1:   f.x in rng f by FUNCT_1:def 5;
-       rng f c= BOOLEAN by Def2;
+       rng f c= BOOLEAN by Def17;
    hence f.x in BOOLEAN by A1;
   end;
   end;
@@ -715,7 +712,7 @@ end;
 definition
  let p be boolean-valued Function;
   func 'not' p -> boolean-valued Function means
-:Def3: dom it = dom p &
+:Def18: dom it = dom p &
    for x being set st x in dom p holds it.x = 'not'(p.x);
  existence
   proof
@@ -763,7 +760,7 @@ A11:  x in dom q;
    end;
  let q be boolean-valued Function;
   func p '&' q -> boolean-valued Function means
-:Def4: dom it = dom p /\ dom q &
+:Def19: dom it = dom p /\ dom q &
   for x being set st x in dom it holds it.x = (p.x) '&' (q.x);
  existence
    proof
@@ -826,13 +823,13 @@ definition let A be non empty set;
  redefine
  let p be Element of Funcs(A,BOOLEAN);
   func 'not' p -> Element of Funcs(A,BOOLEAN) means
-:Def5: for x being Element of A holds it.x = 'not'(p.x);
+ for x being Element of A holds it.x = 'not'(p.x);
  coherence
      proof
         ex f being Function st p = f & dom f = A & rng f c= BOOLEAN
             by FUNCT_2:def 2;
-     then A1:     dom 'not' p = A by Def3;
-          rng 'not' p c= BOOLEAN by Def2;
+     then A1:     dom 'not' p = A by Def18;
+          rng 'not' p c= BOOLEAN by Def17;
       hence thesis by A1,FUNCT_2:def 2;
      end;
  compatibility
@@ -842,26 +839,26 @@ A2:   IT = 'not' p;
     let x be Element of A;
         x in A;
      then x in dom p by FUNCT_2:def 1;
-    hence IT.x = 'not'(p.x) by A2,Def3;
+    hence IT.x = 'not'(p.x) by A2,Def18;
    end;
    assume
 A3:  for x being Element of A holds IT.x = 'not'(p.x);
 A4:  dom IT = A by FUNCT_2:def 1;
 A5:  dom p = A by FUNCT_2:def 1;
     then for x being set st x in dom p holds IT.x = 'not'(p.x) by A3;
-   hence IT = 'not' p by A4,A5,Def3;
+   hence IT = 'not' p by A4,A5,Def18;
   end;
  let q be Element of Funcs(A,BOOLEAN);
   func p '&' q -> Element of Funcs(A,BOOLEAN) means
-:Def6: for x being Element of A holds it.x = (p.x) '&' (q.x);
+ for x being Element of A holds it.x = (p.x) '&' (q.x);
  coherence
    proof
 A6:  ex f being Function st p = f & dom f = A & rng f c= BOOLEAN
             by FUNCT_2:def 2;
         ex f being Function st q = f & dom f = A & rng f c= BOOLEAN
             by FUNCT_2:def 2;
-     then A7:   dom(p '&' q) = A /\ A by A6,Def4 .= A;
-        rng(p '&' q) c= BOOLEAN by Def2;
+     then A7:   dom(p '&' q) = A /\ A by A6,Def19 .= A;
+        rng(p '&' q) c= BOOLEAN by Def17;
     hence thesis by A7,FUNCT_2:def 2;
    end;
  compatibility
@@ -871,8 +868,8 @@ A8:   IT = p '&' q;
     let x be Element of A;
 A9:  dom p = A by FUNCT_2:def 1;
        dom q = A by FUNCT_2:def 1;
-    then dom(p '&' q) = A /\ A by A9,Def4 .= A;
-    hence IT.x = (p.x) '&' (q.x) by A8,Def4;
+    then dom(p '&' q) = A /\ A by A9,Def19 .= A;
+    hence IT.x = (p.x) '&' (q.x) by A8,Def19;
    end;
    assume
 A10:  for x being Element of A holds IT.x = (p.x) '&' (q.x);
@@ -880,7 +877,7 @@ A11:  dom IT = A by FUNCT_2:def 1;
 A12:  dom q = A by FUNCT_2:def 1;
 A13:  dom IT = A /\ A by FUNCT_2:def 1 .= dom p /\ dom q by A12,FUNCT_2:def 1;
        for x being set st x in dom IT holds IT.x = (p.x) '&' (q.x) by A10,A11;
-   hence IT = p '&' q by A13,Def4;
+   hence IT = p '&' q by A13,Def19;
   end;
 end;
 

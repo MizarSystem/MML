@@ -10,7 +10,6 @@
 <ArticleID name="TARSKI"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
-<ArticleID name="XCMPLX_0"/>
 <ArticleID name="XXREAL_0"/>
 </Signature>
 <CCluster>
@@ -22,7 +21,6 @@
 </Typ>
 <Cluster>
 <Adjective nr="15"/>
-<Adjective nr="16"/>
 </Cluster>
 </CCluster>
 </Registrations>

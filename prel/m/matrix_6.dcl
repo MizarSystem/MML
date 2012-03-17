@@ -44,11 +44,11 @@
 <Cluster>
 <Adjective nr="26" value="false"/>
 <Adjective nr="30" value="false"/>
-<Adjective nr="34"/>
 <Adjective nr="35"/>
 <Adjective nr="36"/>
 <Adjective nr="37"/>
-<Adjective nr="46"/>
+<Adjective nr="38"/>
+<Adjective nr="47"/>
 <Adjective nr="49"/>
 <Adjective nr="57"/>
 <Adjective nr="58"/>
@@ -61,10 +61,6 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="1"/>
-<Adjective nr="4"/>
-<Adjective nr="23"/>
-<Adjective nr="70"/>
 <Adjective nr="76">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>

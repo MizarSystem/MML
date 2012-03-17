@@ -26,7 +26,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="31"/>
+<Adjective nr="32"/>
 </Cluster>
 </RCluster>
 <FCluster>
@@ -79,11 +79,7 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="7"/>
-<Adjective nr="8"/>
-<Adjective nr="9"/>
 <Adjective nr="14"/>
-<Adjective nr="18"/>
 </Cluster>
 </CCluster>
 </Registrations>

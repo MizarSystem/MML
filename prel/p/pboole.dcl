@@ -21,17 +21,6 @@
 <ArticleID name="PBOOLE"/>
 </Signature>
 <RCluster>
-<ArgTypes/>
-<Typ kind="M" nr="1">
-<Cluster/>
-</Typ>
-<Cluster>
-<Adjective nr="2"/>
-<Adjective nr="4"/>
-<Adjective nr="5"/>
-</Cluster>
-</RCluster>
-<RCluster>
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -119,10 +108,7 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="2"/>
 <Adjective nr="3"/>
-<Adjective nr="4" value="false"/>
-<Adjective nr="5"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -161,9 +147,7 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="2"/>
 <Adjective nr="4"/>
-<Adjective nr="5"/>
 </Cluster>
 </FCluster>
 <CCluster>

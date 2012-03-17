@@ -11,11 +11,11 @@
 <ArticleID name="TARSKI"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
-<ArticleID name="FUNCOP_1"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
+<ArticleID name="FUNCOP_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="PBOOLE"/>
@@ -36,10 +36,8 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="1"/>
 <Adjective nr="2"/>
-<Adjective nr="4"/>
-<Adjective nr="20"/>
+<Adjective nr="19"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -62,10 +60,8 @@
 <LocusVar nr="3"/>
 </Func>
 <Cluster>
-<Adjective nr="1"/>
 <Adjective nr="2"/>
-<Adjective nr="4"/>
-<Adjective nr="20"/>
+<Adjective nr="19"/>
 </Cluster>
 </FCluster>
 </Registrations>

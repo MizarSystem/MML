@@ -18,7 +18,6 @@
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="FINSEQ_3"/>
 <ArticleID name="FINSEQ_4"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="RLVECT_1"/>
@@ -26,6 +25,7 @@
 <ArticleID name="GROUP_1"/>
 <ArticleID name="VECTSP_1"/>
 <ArticleID name="FINSEQ_2"/>
+<ArticleID name="FINSEQ_3"/>
 <ArticleID name="MATRIX_1"/>
 <ArticleID name="MATRLIN"/>
 </Signature>
@@ -46,11 +46,11 @@
 <Cluster>
 <Adjective nr="27" value="false"/>
 <Adjective nr="31" value="false"/>
-<Adjective nr="35"/>
 <Adjective nr="36"/>
 <Adjective nr="37"/>
 <Adjective nr="38"/>
-<Adjective nr="47"/>
+<Adjective nr="39"/>
+<Adjective nr="48"/>
 <Adjective nr="50"/>
 <Adjective nr="58"/>
 <Adjective nr="59"/>
@@ -64,10 +64,10 @@
 </Typ>
 <Cluster>
 <Adjective nr="27" value="false"/>
-<Adjective nr="35"/>
 <Adjective nr="36"/>
 <Adjective nr="37"/>
 <Adjective nr="38"/>
+<Adjective nr="39"/>
 <Adjective nr="62">
 <LocusVar nr="1"/>
 </Adjective>
@@ -92,7 +92,7 @@
 </Cluster>
 <Typ kind="M" nr="7">
 <Cluster/>
-<Func kind="K" nr="166">
+<Func kind="K" nr="164">
 <LocusVar nr="1"/>
 </Func>
 </Typ>

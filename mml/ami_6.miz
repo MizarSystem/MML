@@ -11,21 +11,21 @@ environ
       AMISTD_1, SETFAM_1, REALSET1, TARSKI, SGRAPH1, GOBOARD5, FRECHET,
       ARYTM_1, NAT_1, INT_1, UNIALG_1, CARD_5, CARD_3, RELOC;
  notations TARSKI, XBOOLE_0, SUBSET_1, SETFAM_1, RELAT_1, FUNCT_1, FUNCT_2,
-      REALSET1, ORDINAL1, NUMBERS, XCMPLX_0, INT_1, NAT_1, NAT_D, FUNCOP_1,
-      CARD_1, FINSEQ_1, FUNCT_4, STRUCT_0, CARD_3, FUNCT_7, AMI_1, AMI_2,
-      AMI_3, AMI_5, AMISTD_1, AMISTD_2, XXREAL_0;
- constructors DOMAIN_1, XXREAL_0, NAT_1, MEMBERED, FUNCT_7, PRALG_2, AMI_5,
-      AMISTD_2, REALSET1, NAT_D;
- registrations AMI_1, RELSET_1, SCMRING1, TEX_2, AMISTD_2, RELAT_1, FUNCT_1,
-      NAT_1, FUNCOP_1, FINSEQ_1, XBOOLE_0, INT_1, AMI_3, FRAENKEL, AMI_5,
-      MEMBERED, ORDINAL1, SETFAM_1, STRUCT_0, CARD_3, GR_CY_1;
+      REALSET1, ORDINAL1, NUMBERS, XCMPLX_0, INT_1, NAT_1, FUNCOP_1, FINSEQ_1,
+      FUNCT_4, STRUCT_0, CARD_3, FUNCT_7, AMI_1, AMI_2, AMI_3, AMI_5, AMISTD_1,
+      AMISTD_2, XXREAL_0;
+ constructors XXREAL_0, NAT_1, NAT_D, REALSET1, FUNCT_7, PRALG_2, AMI_5,
+      AMISTD_2;
+ registrations XBOOLE_0, SUBSET_1, SETFAM_1, RELAT_1, FUNCT_1, ORDINAL1,
+      FUNCOP_1, ARYTM_3, FRAENKEL, NUMBERS, XREAL_0, NAT_1, INT_1, FINSEQ_1,
+      CARD_3, TEX_2, AMI_1, AMI_2, AMI_3, AMI_5, SCMRING1, AMISTD_2;
  requirements NUMERALS, BOOLE, SUBSET, REAL, ARITHM;
  definitions TARSKI, FUNCT_1, FUNCT_2, FUNCT_7, AMISTD_1, AMISTD_2, XBOOLE_0,
-      AMI_3, AMI_5, FUNCOP_1;
+      AMI_3, FUNCOP_1, AMI_2, AMI_1;
  theorems TARSKI, NAT_1, AMI_1, AMI_3, FUNCT_4, AMI_5, FUNCT_1, FUNCT_2,
       RELSET_1, FUNCOP_1, SETFAM_1, AMI_2, AMISTD_1, MCART_1, FINSEQ_1,
       FINSEQ_3, GR_CY_1, AMISTD_2, FUNCT_7, CARD_3, SCMFSA6A, ORDINAL1,
-      XBOOLE_0, XBOOLE_1, YELLOW_8, NEWTON, NAT_D;
+      XBOOLE_0, XBOOLE_1, YELLOW_8, NEWTON, NAT_D, RELAT_1;
  schemes FUNCT_2;
 
 begin
@@ -76,8 +76,7 @@ A1:   i1 <> i2 & Next i1 = Next i2;
 A2:   m1 = i1 & Next i1 = Next m1 by AMI_3:def 11;
     consider m2 being Element of SCM-Instr-Loc such that
 A3:   m2 = i2 & Next i2 = Next m2 by AMI_3:def 11;
-     Next m1 = m1+2 & Next m2 = m2+2 by AMI_2:def 15;
-    hence contradiction by A1,A2,A3;
+    thus contradiction by A1,A2,A3;
   end;
 
 theorem Th5:
@@ -129,13 +128,10 @@ A2:  u = t+*((IC S, il)-->(e, I));
          u.il = ((IC S, il)-->(e, I)).il by A2,FUNCT_4:14
              .= I by A5,FUNCT_4:66;
          thus
-         IC u = u.IC S by AMI_1:def 15
-             .= ((IC S, il)-->(e, I)).IC S by A2,A4,FUNCT_4:14
+         IC u = ((IC S, il)-->(e, I)).IC S by A2,A4,FUNCT_4:14
              .= il by A1,A5,FUNCT_4:66;
          thus
-            IC Following u = IC Exec(CurInstr u,u) by AMI_1:def 18
-           .= IC Exec(u.IC u, u) by AMI_1:def 17
-           .= Exec(u.IC u, u).IC S by AMI_1:def 15;
+            IC Following u = Exec(u.IC u, u).IC S;
   end;
 
 Lm1:
@@ -159,11 +155,12 @@ Lm2:
 Lm3:
  T = 0 or T = 1 or T = 2 or T = 3 or T = 4 or T = 5 or T = 6 or T = 7 or T = 8
   proof
-       T in Segm 9;
-    then reconsider t = T as Element of NAT;
-       t = 0 or t < 8+1 by GR_CY_1:10;
-    then t = 0 or t <= 8 by NAT_1:13;
-    hence thesis by NAT_1:33;
+    consider y being set such that
+A1:  [T,y] in the Instructions of SCM by RELAT_1:def 4;
+    reconsider I = [T,y] as Instruction of SCM by A1;
+A2:  T = InsCode I by MCART_1:7;
+    InsCode I <= 8 by AMI_5:36;
+   hence thesis by NAT_1:33,A2;
   end;
 
 theorem Th7:
@@ -1067,10 +1064,7 @@ A1:   for s being State of SCM st IC s = l & s.l = i
       assume x in NIC(i,l);
       then consider s being State of SCM such that
 A2:     x = IC Following s & IC s = l & s.l = i;
-       x = (Following s).IC SCM by A2,AMI_1:def 15
-       .= Exec(CurInstr s,s).IC SCM by AMI_1:def 18
-       .= Exec(s.IC s,s).IC SCM by AMI_1:def 17
-       .= Next l by A1,A2;
+       x = Next l by  A2,A1;
       hence x in {Next l} by TARSKI:def 1;
     end;
     let x be set;
@@ -1082,8 +1076,7 @@ A2:     x = IC Following s & IC s = l & s.l = i;
     set u = t+*((IC SCM, l)-->(il1, I));
 A4: IC u = l by Th6;
 A5: u.l = i by Th6;
-     IC Following u = Exec(u.IC u, u).IC SCM by Th6
-    .= Next l by A1,A4,A5;
+     IC Following u = Next l by A1,A4,A5;
     hence thesis by A3,A4,A5;
   end;
 
@@ -1126,8 +1119,7 @@ proof
      A4: IC SCM <> il by AMI_1:48;
      A5: u.il = halt SCM by Th6;
      A6: IC u = il by Th6;
-            IC Following u = Exec(u.IC u, u).IC SCM by Th6
-           .= u.IC SCM by A5,A6,AMI_1:def 8
+            IC Following u = u.IC SCM by A5,A6,AMI_1:def 8
            .= ((IC SCM, il)-->(il1, I)).IC SCM by A3,FUNCT_4:14
            .= il by A4,FUNCT_4:66;
       hence x in {IC Following s : IC s = il & s.il=halt SCM} by A2,A5,A6;
@@ -1136,11 +1128,7 @@ proof
             x in {IC Following s : IC s = il & s.il=halt SCM};
          then consider s being State of SCM such that
      A7: x = IC Following s & IC s = il & s.il = halt SCM;
-      thus x = IC Exec(CurInstr s,s) by A7,AMI_1:def 18
-           .= IC Exec(s.IC s, s) by AMI_1:def 17
-           .= Exec(halt SCM, s).IC SCM by A7,AMI_1:def 15
-           .= s.IC SCM by AMI_1:def 8
-           .= il by A7,AMI_1:def 15;
+      thus x = il by  A7,AMI_1:def 8;
      end;
     hence x in {il} iff x in {IC Following s : IC s = il & s.il=halt SCM}
        by A1,TARSKI:def 1;
@@ -1273,18 +1261,14 @@ proof
          set u = t+*((IC SCM, il)-->(il1, I));
      A3: IC u = il by Th6;
      A4: u.il = goto i1 by Th6;
-            IC Following u = Exec(u.IC u, u).IC SCM by Th6
-           .= i1 by A3,A4,AMI_3:13;
+            IC Following u = i1 by A3,A4,AMI_3:13;
       hence x in {IC Following s : IC s = il & s.il=goto i1} by A2,A3,A4;
      end;
         now assume
             x in {IC Following s : IC s = il & s.il=goto i1};
          then consider s being State of SCM such that
      A5: x = IC Following s & IC s = il & s.il = goto i1;
-      thus x = IC Exec(CurInstr s,s) by A5,AMI_1:def 18
-           .= IC Exec(s.IC s, s) by AMI_1:def 17
-           .= Exec(s.IC s, s).IC SCM by AMI_1:def 15
-           .= i1 by A5,AMI_3:13;
+      thus x = i1 by  A5,AMI_3:13;
      end;
     hence x in {i1} iff x in {IC Following s : IC s = il & s.il=goto i1}
        by A1,TARSKI:def 1;
@@ -1339,16 +1323,14 @@ theorem Th48:
       then x in F;
       then consider s being State of SCM such that
 A1:     x = IC Following s & IC s = il & s.il = a=0_goto i1;
-A2:   x = IC Exec(CurInstr s,s) by A1,AMI_1:def 18
-       .= IC Exec(s.IC s, s) by AMI_1:def 17
-       .= Exec(a=0_goto i1, s).IC SCM by A1,AMI_1:def 15;
+A2:   x = Exec(a=0_goto i1, s).IC SCM by  A1;
       per cases;
       suppose s.a = 0;
       then x = i1 by A2,AMI_3:14;
       hence x in {i1, Next il} by TARSKI:def 2;
       end;
       suppose s.a <> 0;
-      then x = Next il by A1,A2,AMI_3:14;
+      then x = Next il by A1,AMI_3:14;
       hence x in {i1, Next il} by TARSKI:def 2;
     end;
     end;
@@ -1365,11 +1347,9 @@ A5: IC SCM <> a by AMI_5:20;
     suppose
 A6:   x = i1;
     set v = u+*(a .--> 0);
-A7: dom (a .--> 0) = {a} by FUNCOP_1:14,19;
+A7: dom (a .--> 0) = {a} by FUNCOP_1:19;
     then A8: not IC SCM in dom (a .--> 0) by A5,TARSKI:def 1;
-A9: IC v = v.IC SCM by AMI_1:def 15
-        .= u.IC SCM by A8,FUNCT_4:12
-        .= IC u by AMI_1:def 15
+A9: IC v = IC u by A8,FUNCT_4:12
         .= il1 by Th6;
      not il in dom (a .--> 0) by A4,A7,TARSKI:def 1;
     then A10: v.il = u.il by FUNCT_4:12
@@ -1377,21 +1357,16 @@ A9: IC v = v.IC SCM by AMI_1:def 15
      a in dom (a .--> 0) by A7,TARSKI:def 1;
     then A11: v.a = (a .--> 0).a by FUNCT_4:14
        .= 0 by FUNCOP_1:87;
-     IC Following v = IC Exec(CurInstr v, v) by AMI_1:def 18
-      .= IC Exec(v.IC v, v) by AMI_1:def 17
-      .= Exec(v.IC v, v).IC SCM by AMI_1:def 15
-      .= i1 by A9,A10,A11,AMI_3:14;
+     IC Following v = i1 by A9,A10,A11,AMI_3:14;
     then i1 in F by A9,A10;
     hence thesis by A6;
     end;
     suppose
 A12:   x = Next il;
     set v = u+*(a .--> 1);
-A13: dom (a .--> 1) = {a} by FUNCOP_1:14,19;
+A13: dom (a .--> 1) = {a} by FUNCOP_1:19;
     then A14: not IC SCM in dom (a .--> 1) by A5,TARSKI:def 1;
-A15: IC v = v.IC SCM by AMI_1:def 15
-        .= u.IC SCM by A14,FUNCT_4:12
-        .= IC u by AMI_1:def 15
+A15: IC v = IC u by A14,FUNCT_4:12
         .= il1 by Th6;
      not il in dom (a .--> 1) by A4,A13,TARSKI:def 1;
     then A16: v.il = u.il by FUNCT_4:12
@@ -1399,10 +1374,7 @@ A15: IC v = v.IC SCM by AMI_1:def 15
      a in dom (a .--> 1) by A13,TARSKI:def 1;
     then A17: v.a = (a .--> 1).a by FUNCT_4:14
        .= 1 by FUNCOP_1:87;
-     IC Following v = IC Exec(CurInstr v, v) by AMI_1:def 18
-      .= IC Exec(v.IC v, v) by AMI_1:def 17
-      .= Exec(v.IC v, v).IC SCM by AMI_1:def 15
-      .= Next il by A15,A16,A17,AMI_3:14;
+     IC Following v = Next il by A15,A16,A17,AMI_3:14;
     then Next il in F by A15,A16;
     hence thesis by A12;
 end;
@@ -1459,16 +1431,14 @@ theorem Th50:
       then x in F;
       then consider s being State of SCM such that
 A1:     x = IC Following s & IC s = il & s.il = a>0_goto i1;
-A2:   x = IC Exec(CurInstr s,s) by A1,AMI_1:def 18
-       .= IC Exec(s.IC s, s) by AMI_1:def 17
-       .= Exec(a>0_goto i1, s).IC SCM by A1,AMI_1:def 15;
+A2:   x = Exec(a>0_goto i1, s).IC SCM by  A1;
       per cases;
       suppose s.a > 0;
       then x = i1 by A2,AMI_3:15;
       hence x in {i1, Next il} by TARSKI:def 2;
       end;
       suppose s.a <= 0;
-      then x = Next il by A1,A2,AMI_3:15;
+      then x = Next il by A1,AMI_3:15;
       hence x in {i1, Next il} by TARSKI:def 2;
     end;
     end;
@@ -1485,11 +1455,9 @@ A5: IC SCM <> a by AMI_5:20;
     suppose
 A6:   x = i1;
     set v = u+*(a .--> 1);
-A7: dom (a .--> 1) = {a} by FUNCOP_1:14,19;
+A7: dom (a .--> 1) = {a} by FUNCOP_1:19;
     then A8: not IC SCM in dom (a .--> 1) by A5,TARSKI:def 1;
-A9: IC v = v.IC SCM by AMI_1:def 15
-        .= u.IC SCM by A8,FUNCT_4:12
-        .= IC u by AMI_1:def 15
+A9: IC v = IC u by A8,FUNCT_4:12
         .= il1 by Th6;
      not il in dom (a .--> 1) by A4,A7,TARSKI:def 1;
     then A10: v.il = u.il by FUNCT_4:12
@@ -1497,21 +1465,16 @@ A9: IC v = v.IC SCM by AMI_1:def 15
      a in dom (a .--> 1) by A7,TARSKI:def 1;
     then A11: v.a = (a .--> 1).a by FUNCT_4:14
        .= 1 by FUNCOP_1:87;
-     IC Following v = IC Exec(CurInstr v, v) by AMI_1:def 18
-      .= IC Exec(v.IC v, v) by AMI_1:def 17
-      .= Exec(v.IC v, v).IC SCM by AMI_1:def 15
-      .= i1 by A9,A10,A11,AMI_3:15;
+     IC Following v = i1 by A9,A10,A11,AMI_3:15;
     then i1 in F by A9,A10;
     hence thesis by A6;
     end;
     suppose
 A12:   x = Next il;
     set v = u+*(a .--> 0);
-A13: dom (a .--> 0) = {a} by FUNCOP_1:14,19;
+A13: dom (a .--> 0) = {a} by FUNCOP_1:19;
     then A14: not IC SCM in dom (a .--> 0) by A5,TARSKI:def 1;
-A15: IC v = v.IC SCM by AMI_1:def 15
-        .= u.IC SCM by A14,FUNCT_4:12
-        .= IC u by AMI_1:def 15
+A15: IC v = IC u by A14,FUNCT_4:12
         .= il1 by Th6;
      not il in dom (a .--> 0) by A4,A13,TARSKI:def 1;
     then A16: v.il = u.il by FUNCT_4:12
@@ -1519,10 +1482,7 @@ A15: IC v = v.IC SCM by AMI_1:def 15
      a in dom (a .--> 0) by A13,TARSKI:def 1;
     then A17: v.a = (a .--> 0).a by FUNCT_4:14
        .= 0 by FUNCOP_1:87;
-     IC Following v = IC Exec(CurInstr v, v) by AMI_1:def 18
-      .= IC Exec(v.IC v, v) by AMI_1:def 17
-      .= Exec(v.IC v, v).IC SCM by AMI_1:def 15
-      .= Next il by A15,A16,A17,AMI_3:15;
+     IC Following v = Next il by A15,A16,A17,AMI_3:15;
     then Next il in F by A15,A16;
     hence thesis by A12;
   end;
@@ -1771,14 +1731,16 @@ theorem Th56:
   end;
 
 registration
- cluster InsCode halt SCM -> jump-only;
+ cluster InsCode halt SCM -> jump-only InsType of SCM;
 coherence
   proof
-    let s be State of SCM, o be Object of SCM, I be Instruction of SCM;
+    now let s be State of SCM, o be Object of SCM, I be Instruction of SCM;
     assume that
 A1:   InsCode I = InsCode halt SCM and o <> IC SCM;
        I = halt SCM by A1,AMI_5:37,46;
     hence Exec(I, s).o = s.o by AMI_1:def 8;
+    end;
+   hence thesis by AMISTD_1:def 3;
   end;
 end;
 
@@ -1791,11 +1753,11 @@ coherence
 end;
 
 registration let i1;
- cluster InsCode goto i1 -> jump-only;
+ cluster InsCode goto i1 -> jump-only InsType of SCM;
 coherence
   proof
     set S = SCM;
-    let s be State of S, o be Object of S, I be Instruction of S;
+    now let s be State of S, o be Object of S, I be Instruction of S;
     assume that
 A1:    InsCode I = InsCode goto i1 and
 A2:    o <> IC S;
@@ -1809,6 +1771,8 @@ A3:    I = goto i2 by A1,AMI_5:52;
     suppose o is Data-Location;
     hence Exec(I, s).o = s.o by A3,AMI_3:13;
   end;
+    end;
+   hence thesis by AMISTD_1:def 3;
   end;
 end;
 
@@ -1831,11 +1795,11 @@ coherence
 end;
 
 registration let a, i1;
- cluster InsCode (a =0_goto i1) -> jump-only;
+ cluster InsCode (a =0_goto i1) -> jump-only InsType of SCM;
 coherence
   proof
     set S = SCM;
-    let s be State of S, o be Object of S, I be Instruction of S;
+    now let s be State of S, o be Object of S, I be Instruction of S;
     assume that
 A1:    InsCode I = InsCode (a =0_goto i1) and
 A2:    o <> IC S;
@@ -1849,13 +1813,15 @@ A3:    I = (b =0_goto i2) by A1,AMI_5:53;
     suppose o is Data-Location;
     hence Exec(I, s).o = s.o by A3,AMI_3:14;
   end;
+    end;
+   hence thesis by AMISTD_1:def 3;
   end;
 
- cluster InsCode (a >0_goto i1) -> jump-only;
+ cluster InsCode (a >0_goto i1) -> jump-only InsType of SCM;
 coherence
   proof
     set S = SCM;
-    let s be State of S, o be Object of S, I be Instruction of S;
+    now let s be State of S, o be Object of S, I be Instruction of S;
     assume that
 A4:    InsCode I = InsCode (a >0_goto i1) and
 A5:    o <> IC S;
@@ -1869,6 +1835,8 @@ A6:    I = (b >0_goto i2) by A4,AMI_5:54;
     suppose o is Data-Location;
     hence Exec(I, s).o = s.o by A6,AMI_3:15;
   end;
+    end;
+   hence thesis by AMISTD_1:def 3;
   end;
 end;
 
@@ -1907,14 +1875,14 @@ coherence
 end;
 
 registration let a, b;
-cluster InsCode (a:=b) -> non jump-only;
+cluster InsCode (a:=b) -> non jump-only InsType of SCM;
 coherence
 proof
    consider w being State of SCM;
    set t = w+*((dl.0, dl.1)-->(0,1));
 A1: InsCode (a:=b) = 1 by MCART_1:7
     .= InsCode (dl.0:=dl.1) by MCART_1:7;
-A2: dl.0 <> IC SCM by AMI_3:57;
+A2: dl.0 <> IC SCM;
       dom ((dl.0, dl.1)-->(0,1)) = {dl.0, dl.1} by FUNCT_4:65;
 then A3: dl.0 in dom ((dl.0, dl.1)-->(0,1)) &
    dl.1 in dom ((dl.0, dl.1)-->(0,1)) by TARSKI:def 2;
@@ -1927,14 +1895,14 @@ A4: t.dl.0 = (dl.0, dl.1)-->(0,1).dl.0 by A3,FUNCT_4:14
   hence thesis by A1,A2,A4,AMISTD_1:def 3;
 end;
 
- cluster InsCode AddTo(a,b) -> non jump-only;
+ cluster InsCode AddTo(a,b) -> non jump-only InsType of SCM;
 coherence
 proof
    consider w being State of SCM;
    set t = w+*((dl.0, dl.1)-->(0,1));
 A5: InsCode AddTo(a,b) = 2 by MCART_1:7
     .= InsCode AddTo(dl.0, dl.1) by MCART_1:7;
-A6: dl.0 <> IC SCM by AMI_3:57;
+A6: dl.0 <> IC SCM;
       dom ((dl.0, dl.1)-->(0,1)) = {dl.0, dl.1} by FUNCT_4:65;
 then A7: dl.0 in dom ((dl.0, dl.1)-->(0,1)) &
    dl.1 in dom ((dl.0, dl.1)-->(0,1)) by TARSKI:def 2;
@@ -1947,14 +1915,14 @@ A9: t.dl.1 = (dl.0, dl.1)-->(0,1).dl.1 by A7,FUNCT_4:14
   hence thesis by A5,A6,A8,AMISTD_1:def 3;
 end;
 
- cluster InsCode SubFrom(a,b) -> non jump-only;
+ cluster InsCode SubFrom(a,b) -> non jump-only InsType of SCM;
 coherence
 proof
    consider w being State of SCM;
    set t = w+*((dl.0, dl.1)-->(0,1));
 A10: InsCode SubFrom(a,b) = 3 by MCART_1:7
     .= InsCode SubFrom(dl.0, dl.1) by MCART_1:7;
-A11: dl.0 <> IC SCM by AMI_3:57;
+A11: dl.0 <> IC SCM;
       dom ((dl.0, dl.1)-->(0,1)) = {dl.0, dl.1} by FUNCT_4:65;
 then A12: dl.0 in dom ((dl.0, dl.1)-->(0,1)) &
    dl.1 in dom ((dl.0, dl.1)-->(0,1)) by TARSKI:def 2;
@@ -1968,14 +1936,14 @@ A14: t.dl.1 = (dl.0, dl.1)-->(0,1).dl.1 by A12,FUNCT_4:14
   hence thesis by A10,A11,A13,AMISTD_1:def 3;
 end;
 
- cluster InsCode MultBy(a,b) -> non jump-only;
+ cluster InsCode MultBy(a,b) -> non jump-only InsType of SCM;
 coherence
 proof
    consider w being State of SCM;
    set t = w+*((dl.0, dl.1)-->(1,0));
 A15: InsCode MultBy(a,b) = 4 by MCART_1:7
     .= InsCode MultBy(dl.0, dl.1) by MCART_1:7;
-A16:  dl.0 <> IC SCM by AMI_3:57;
+A16:  dl.0 <> IC SCM;
        dom ((dl.0, dl.1)-->(1,0)) = {dl.0, dl.1} by FUNCT_4:65;
      then A17: dl.0 in dom ((dl.0, dl.1)-->(1,0)) &
    dl.1 in dom ((dl.0, dl.1)-->(1,0)) by TARSKI:def 2;
@@ -1989,14 +1957,14 @@ A19: t.dl.1 = (dl.0, dl.1)-->(1,0).dl.1 by A17,FUNCT_4:14
   hence thesis by A15,A16,A18,AMISTD_1:def 3;
 end;
 
- cluster InsCode Divide(a,b) -> non jump-only;
+ cluster InsCode Divide(a,b) -> non jump-only InsType of SCM;
 coherence
 proof
    consider w being State of SCM;
    set t = w+*((dl.0, dl.1)-->(7,3));
 A20: InsCode Divide(a,b) = 5 by MCART_1:7
     .= InsCode Divide(dl.0, dl.1) by MCART_1:7;
-A21:  dl.0 <> IC SCM by AMI_3:57;
+A21:  dl.0 <> IC SCM;
        dom ((dl.0, dl.1)-->(7,3)) = {dl.0, dl.1} by FUNCT_4:65;
 then A22: dl.0 in dom ((dl.0, dl.1)-->(7,3)) &
    dl.1 in dom ((dl.0, dl.1)-->(7,3)) by TARSKI:def 2;
@@ -2006,8 +1974,7 @@ A24: t.dl.1 = (dl.0, dl.1)-->(7,3).dl.1 by A22,FUNCT_4:14
           .= 3 by FUNCT_4:66;
 A25: 7 = 2 * 3 + 1;
       Exec(Divide(dl.0, dl.1), t).dl.0
-    = 7 div (3 qua Integer) by A23,A24,AMI_3:12
-   .= 7 div (3 qua Element of NAT) by NEWTON:101
+    = 7 div (3 qua Element of NAT) by A23,A24,AMI_3:12
    .= 2 by A25,NAT_D:def 1;
   hence thesis by A20,A21,A23,AMISTD_1:def 3;
 end;
@@ -3151,11 +3118,9 @@ A6:     I = goto i1;
       let k be natural number,
           s1, s2 be State of SCM such that
            s2 = s1 +* (IC SCM .--> (IC s1 + k));
-A7:   IC Exec(I,s1) = Exec(I,s1).IC SCM by AMI_1:def 15
-        .= i1 by A6,AMI_3:13;
+A7:   IC Exec(I,s1) = i1 by A6,AMI_3:13;
       thus IC Exec(I,s1) + k
-         = Exec(goto il.(SCM, locnum i1 + k),s2).IC SCM by A7,AMI_3:13
-        .= IC Exec(goto il.(SCM, locnum i1 + k),s2) by AMI_1:def 15
+         = IC Exec(goto il.(SCM, locnum i1 + k),s2) by A7,AMI_3:13
         .= IC Exec(IncAddr(I,k), s2) by A6,Th57;
       end;
       suppose ex a,i1 st I = a=0_goto i1;
@@ -3165,42 +3130,34 @@ A8:     I = a=0_goto i1;
           s1, s2 be State of SCM such that
 A9:     s2 = s1 +* (IC SCM .--> (IC s1 + k));
 A10:   a <> IC SCM by AMI_5:20;
-         dom (IC SCM .--> (IC s1 + k)) = {IC SCM} by FUNCOP_1:14,19;
+         dom (IC SCM .--> (IC s1 + k)) = {IC SCM} by FUNCOP_1:19;
       then not a in dom (IC SCM .--> (IC s1 + k)) by A10,TARSKI:def 1;
 then A11:   s1.a = s2.a by A9,FUNCT_4:12;
          now per cases;
         suppose
 A12:       s1.a = 0;
-A13:     IC Exec(I,s1) = Exec(I,s1).IC SCM by AMI_1:def 15
-          .= i1 by A8,A12,AMI_3:14;
+A13:     IC Exec(I,s1) = i1 by A8,A12,AMI_3:14;
         thus IC Exec(I,s1) + k
-           = Exec(a=0_goto il.(SCM, locnum i1 + k),s2).IC SCM
-             by A11,A12,A13,AMI_3:14
-          .= IC Exec(a=0_goto il.(SCM, locnum i1 + k),s2) by AMI_1:def 15
+           = IC Exec(a=0_goto il.(SCM, locnum i1 + k),s2) by A11,A12,A13,AMI_3:
+14
           .= IC Exec(IncAddr(I,k), s2) by A8,Th58;
         end;
         suppose
 A14:       s1.a <> 0;
-           dom (IC SCM .--> (IC s1 + k)) = {IC SCM} by FUNCOP_1:14,19;
+           dom (IC SCM .--> (IC s1 + k)) = {IC SCM} by FUNCOP_1:19;
 then A15:     IC SCM in dom (IC SCM .--> (IC s1 + k)) by TARSKI:def 1;
-A16:     IC s2 = s2.IC SCM by AMI_1:def 15
-             .= (IC SCM .--> (IC s1 + k)).IC SCM by A9,A15,FUNCT_4:14
+A16:     IC s2 = (IC SCM .--> (IC s1 + k)).IC SCM by A9,A15,FUNCT_4:14
              .= il.(SCM,locnum IC s1 + k) by FUNCOP_1:87;
-A17:     IC Exec(I, s2) = Exec(I, s2).IC SCM by AMI_1:def 15
-          .= Next IC s2 by A8,A11,A14,AMI_3:14
+A17:     IC Exec(I, s2) = Next IC s2 by A8,A11,A14,AMI_3:14
           .= NextLoc IC s2 by Th56
           .= il.(SCM,locnum IC s1 + k + 1) by  A16,AMISTD_1:def 13
           .= il.(SCM,locnum IC s1 + 1 + k);
-A18:     IC Exec(I,s1) = Exec(I,s1).IC SCM by AMI_1:def 15
-          .= Next IC s1 by A8,A14,AMI_3:14
+A18:     IC Exec(I,s1) = Next IC s1 by A8,A14,AMI_3:14
           .= NextLoc IC s1 by Th56
           .= il.(SCM,locnum IC s1 + 1);
-        thus IC Exec(I,s1) + k = IC Exec(I,s2) by A17,A18,AMISTD_1:def 13
-          .= Exec(I,s2).IC SCM by AMI_1:def 15
+        thus IC Exec(I,s1) + k = Exec(I,s2).IC SCM by A17,A18,AMISTD_1:def 13
           .= Next IC s2 by A8,A11,A14,AMI_3:14
-          .= Exec(a=0_goto il.(SCM, locnum i1 + k),s2).IC SCM
-             by A11,A14,AMI_3:14
-          .= IC Exec(a=0_goto il.(SCM, locnum i1 + k),s2) by AMI_1:def 15
+          .= IC Exec(a=0_goto il.(SCM, locnum i1 + k),s2) by A11,A14,AMI_3:14
           .= IC Exec(IncAddr(I,k), s2) by A8,Th58;
         end;
         end;
@@ -3213,42 +3170,34 @@ A19:     I = a>0_goto i1;
           s1, s2 be State of SCM such that
 A20:     s2 = s1 +* (IC SCM .--> (IC s1 + k));
 A21:   a <> IC SCM by AMI_5:20;
-         dom (IC SCM .--> (IC s1 + k)) = {IC SCM} by FUNCOP_1:14,19;
+         dom (IC SCM .--> (IC s1 + k)) = {IC SCM} by FUNCOP_1:19;
       then not a in dom (IC SCM .--> (IC s1 + k)) by A21,TARSKI:def 1;
 then A22:   s1.a = s2.a by A20,FUNCT_4:12;
          now per cases;
         suppose
 A23:       s1.a > 0;
-A24:     IC Exec(I,s1) = Exec(I,s1).IC SCM by AMI_1:def 15
-          .= i1 by A19,A23,AMI_3:15;
+A24:     IC Exec(I,s1) = i1 by A19,A23,AMI_3:15;
         thus IC Exec(I,s1) + k
-           = Exec(a>0_goto il.(SCM, locnum i1 + k),s2).IC SCM
-             by A22,A23,A24,AMI_3:15
-          .= IC Exec(a>0_goto il.(SCM, locnum i1 + k),s2) by AMI_1:def 15
+           = IC Exec(a>0_goto il.(SCM, locnum i1 + k),s2) by A22,A23,A24,AMI_3:
+15
           .= IC Exec(IncAddr(I,k), s2) by A19,Th59;
         end;
         suppose
 A25:       s1.a <= 0;
-           dom (IC SCM .--> (IC s1 + k)) = {IC SCM} by FUNCOP_1:14,19;
+           dom (IC SCM .--> (IC s1 + k)) = {IC SCM} by FUNCOP_1:19;
 then A26:     IC SCM in dom (IC SCM .--> (IC s1 + k)) by TARSKI:def 1;
-A27:     IC s2 = s2.IC SCM by AMI_1:def 15
-             .= (IC SCM .--> (IC s1 + k)).IC SCM by A20,A26,FUNCT_4:14
+A27:     IC s2 = (IC SCM .--> (IC s1 + k)).IC SCM by A20,A26,FUNCT_4:14
              .= il.(SCM,locnum IC s1 + k) by FUNCOP_1:87;
-A28:     IC Exec(I, s2) = Exec(I, s2).IC SCM by AMI_1:def 15
-          .= Next IC s2 by A19,A22,A25,AMI_3:15
+A28:     IC Exec(I, s2) = Next IC s2 by A19,A22,A25,AMI_3:15
           .= NextLoc IC s2 by Th56
           .= il.(SCM,locnum IC s1 + k + 1) by  A27,AMISTD_1:def 13
           .= il.(SCM,locnum IC s1 + 1 + k);
-A29:     IC Exec(I,s1) = Exec(I,s1).IC SCM by AMI_1:def 15
-          .= Next IC s1 by A19,A25,AMI_3:15
+A29:     IC Exec(I,s1) = Next IC s1 by A19,A25,AMI_3:15
           .= NextLoc IC s1 by Th56
           .= il.(SCM,locnum IC s1 + 1);
-        thus IC Exec(I,s1) + k = IC Exec(I,s2) by A28,A29,AMISTD_1:def 13
-          .= Exec(I,s2).IC SCM by AMI_1:def 15
+        thus IC Exec(I,s1) + k = Exec(I,s2).IC SCM by A28,A29,AMISTD_1:def 13
           .= Next IC s2 by A19,A22,A25,AMI_3:15
-          .= Exec(a>0_goto il.(SCM, locnum i1 + k),s2).IC SCM
-             by A22,A25,AMI_3:15
-          .= IC Exec(a>0_goto il.(SCM, locnum i1 + k),s2) by AMI_1:def 15
+          .= IC Exec(a>0_goto il.(SCM, locnum i1 + k),s2) by A22,A25,AMI_3:15
           .= IC Exec(IncAddr(I,k), s2) by A19,Th59;
         end;
         end;

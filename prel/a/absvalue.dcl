@@ -10,8 +10,6 @@
 <ArticleID name="TARSKI"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
-<ArticleID name="XCMPLX_0"/>
-<ArticleID name="XXREAL_0"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="ABSVALUE"/>
 </Signature>
@@ -19,17 +17,15 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="19"/>
+<Adjective nr="15"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="59">
+<Func kind="K" nr="48">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="15"/>
-<Adjective nr="16"/>
-<Adjective nr="19"/>
 </Cluster>
 </FCluster>
 </Registrations>

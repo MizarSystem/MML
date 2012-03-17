@@ -17,8 +17,8 @@
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="QC_LANG1"/>
 <ArticleID name="FUNCT_2"/>
-<ArticleID name="FUNCOP_1"/>
 <ArticleID name="FRAENKEL"/>
+<ArticleID name="FUNCOP_1"/>
 <ArticleID name="QC_LANG2"/>
 <ArticleID name="CQC_LANG"/>
 <ArticleID name="SUBSTUT1"/>
@@ -56,8 +56,7 @@
 <ArgTypes/>
 <Func kind="K" nr="176"/>
 <Cluster>
-<Adjective nr="7" value="false"/>
-<Adjective nr="31"/>
+<Adjective nr="30"/>
 </Cluster>
 </FCluster>
 <FCluster>

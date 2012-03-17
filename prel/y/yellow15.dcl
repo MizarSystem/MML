@@ -8,13 +8,13 @@
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
-<ArticleID name="MCART_1"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
+<ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FRAENKEL"/>
@@ -22,9 +22,6 @@
 <ArticleID name="MARGREL1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PRE_TOPC"/>
-<ArticleID name="XREAL_0"/>
-<ArticleID name="INT_1"/>
-<ArticleID name="GROUP_1"/>
 <ArticleID name="RELAT_2"/>
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="EQREL_1"/>
@@ -50,7 +47,6 @@
 <ArgTypes/>
 <Func kind="K" nr="140"/>
 <Cluster>
-<Adjective nr="1" value="false"/>
 <Adjective nr="15"/>
 </Cluster>
 </FCluster>
@@ -70,7 +66,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="309">
+<Func kind="K" nr="292">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -80,7 +76,7 @@
 </FCluster>
 <FCluster>
 <ArgTypes>
-<Typ kind="G" nr="7">
+<Typ kind="G" nr="6">
 <Cluster>
 <Adjective nr="30" value="false"/>
 </Cluster>
@@ -90,29 +86,16 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="1" value="false"/>
-<Adjective nr="116">
+<Adjective nr="132">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="117">
+<Adjective nr="133">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="138">
+<Adjective nr="135">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="139">
-<LocusVar nr="1"/>
-</Adjective>
-<Adjective nr="140">
-<LocusVar nr="1"/>
-</Adjective>
-<Adjective nr="141">
-<LocusVar nr="1"/>
-</Adjective>
-<Adjective nr="143">
-<LocusVar nr="1"/>
-</Adjective>
-<Adjective nr="144">
+<Adjective nr="136">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -142,7 +125,7 @@
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster>
-<Adjective nr="48"/>
+<Adjective nr="36"/>
 </Cluster>
 </Typ>
 </ArgTypes>

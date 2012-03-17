@@ -12,21 +12,21 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
-<ArticleID name="MEMBERED"/>
 <ArticleID name="RELSET_1"/>
+<ArticleID name="MCART_1"/>
+<ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="MCART_1"/>
-<ArticleID name="FUNCT_2"/>
+<ArticleID name="FINSEQ_2"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="COMPTS_1"/>
-<ArticleID name="FINSEQ_2"/>
-<ArticleID name="SEQ_1"/>
-<ArticleID name="RVSUM_1"/>
 <ArticleID name="BINOP_1"/>
 <ArticleID name="METRIC_1"/>
+<ArticleID name="MEMBERED"/>
+<ArticleID name="SEQ_1"/>
+<ArticleID name="RVSUM_1"/>
 <ArticleID name="EUCLID"/>
 <ArticleID name="TOPREAL1"/>
 </Signature>
@@ -73,10 +73,9 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="33" value="false"/>
-<Adjective nr="39"/>
-<Adjective nr="40"/>
-<Adjective nr="46"/>
+<Adjective nr="34"/>
+<Adjective nr="35"/>
+<Adjective nr="41"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -161,7 +160,7 @@
 <CCluster>
 <ArgTypes/>
 <Cluster>
-<Adjective nr="68"/>
+<Adjective nr="69"/>
 </Cluster>
 <Typ kind="M" nr="2">
 <Cluster/>

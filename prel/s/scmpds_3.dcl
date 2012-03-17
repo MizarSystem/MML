@@ -18,9 +18,8 @@
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
-<ArticleID name="FINSEQ_1"/>
-<ArticleID name="FUNCT_4"/>
 <ArticleID name="CARD_3"/>
+<ArticleID name="FUNCT_4"/>
 <ArticleID name="SETFAM_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="AMI_1"/>
@@ -30,69 +29,75 @@
 </Signature>
 <RCluster>
 <ArgTypes/>
-<Typ kind="M" nr="9">
+<Typ kind="M" nr="2">
 <Cluster/>
+<Func kind="K" nr="118">
+<Func kind="U" nr="7">
 <Func kind="K" nr="1">
 <Func kind="K" nr="65"/>
 </Func>
-<Func kind="K" nr="190"/>
+<Func kind="K" nr="174"/>
+</Func>
+</Func>
 </Typ>
 <Cluster>
 <Adjective nr="2"/>
 <Adjective nr="5"/>
 <Adjective nr="21"/>
-<Adjective nr="47">
+<Adjective nr="45">
 <Func kind="K" nr="1">
 <Func kind="K" nr="65"/>
 </Func>
-<Func kind="K" nr="190"/>
+<Func kind="K" nr="174"/>
 </Adjective>
-<Adjective nr="51" value="false">
+<Adjective nr="50" value="false">
 <Func kind="K" nr="1">
 <Func kind="K" nr="65"/>
 </Func>
-<Func kind="K" nr="190"/>
+<Func kind="K" nr="174"/>
 </Adjective>
 </Cluster>
 </RCluster>
 <RCluster>
 <ArgTypes/>
-<Typ kind="M" nr="9">
+<Typ kind="M" nr="2">
 <Cluster/>
+<Func kind="K" nr="118">
+<Func kind="U" nr="7">
 <Func kind="K" nr="1">
 <Func kind="K" nr="65"/>
 </Func>
-<Func kind="K" nr="190"/>
+<Func kind="K" nr="174"/>
+</Func>
+</Func>
 </Typ>
 <Cluster>
 <Adjective nr="1" value="false"/>
 <Adjective nr="2"/>
 <Adjective nr="5"/>
 <Adjective nr="21"/>
-<Adjective nr="51">
+<Adjective nr="50">
 <Func kind="K" nr="1">
 <Func kind="K" nr="65"/>
 </Func>
-<Func kind="K" nr="190"/>
+<Func kind="K" nr="174"/>
 </Adjective>
-<Adjective nr="52"/>
+<Adjective nr="51"/>
 </Cluster>
 </RCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="213"/>
+<Func kind="K" nr="197"/>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="2"/>
-<Adjective nr="5"/>
 <Adjective nr="21"/>
-<Adjective nr="51">
+<Adjective nr="50">
 <Func kind="K" nr="1">
 <Func kind="K" nr="65"/>
 </Func>
-<Func kind="K" nr="190"/>
+<Func kind="K" nr="174"/>
 </Adjective>
-<Adjective nr="52"/>
+<Adjective nr="51"/>
 </Cluster>
 </FCluster>
 </Registrations>

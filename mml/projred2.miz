@@ -8,12 +8,12 @@ environ
 
  vocabularies INCPROJ, INCSP_1, AFF_2, ANALOAF, PARTFUN1, PROJRED1, FUNCT_1,
       RELAT_1, PROJRED2, NAT_1;
- notations TARSKI, ZFMISC_1, SUBSET_1, RELAT_1, RELSET_1, INCSP_1, INCPROJ,
-      PARTFUN1, FUNCT_1, PROJRED1;
- constructors TARSKI, PROJRED1, NAT_D;
- registrations INCPROJ, FUNCT_1, RELSET_1;
+ notations TARSKI, ZFMISC_1, SUBSET_1, DOMAIN_1, RELAT_1, RELSET_1, INCSP_1,
+      INCPROJ, PARTFUN1, FUNCT_1, PROJRED1;
+ constructors DOMAIN_1, PROJRED1;
+ registrations FUNCT_1, RELSET_1, INCPROJ;
  requirements SUBSET, BOOLE;
- theorems TARSKI, INCPROJ, FUNCT_1, PROJRED1, RELSET_1, ZFMISC_1;
+ theorems TARSKI, INCPROJ, FUNCT_1, PROJRED1, RELSET_1, ZFMISC_1, INCSP_1;
 
 begin
 
@@ -21,8 +21,8 @@ reserve IPS for IncProjSp,
         z for POINT of IPS;
 
 definition let IPS; let A,B,C be LINE of IPS;
-  pred A,B,C are_concurrent means
-:Def1: ex o being Element of the Points of IPS st o on A & o on B & o on C;
+  pred A,B,C are_concurrent means :Def1:
+    ex o being Element of the Points of IPS st o on A & o on B & o on C;
 end;
 
 definition let IPS; let Z be LINE of IPS;
@@ -269,14 +269,15 @@ A14: f1.p=pp' & g1.pp'=d by A1,PROJRED1:def 1;
 A15: x in dom f & d in dom g & pp' in dom g1 & x in dom f1 by A1,A4,A6;
 then (g*f).x = g1.(f1.x) by A12,A13,A14,FUNCT_1:23
  .= (g1*f1).x by A15,FUNCT_1:23; hence thesis; end;  now assume A16: p<>x;
-   p,x,c on A & p,d,a on O1 & p,pp',q on O2 & pp',d,b on O3 & pp',y,c on Q &
-d,x',c on C & b,a,q on O & x,y,q on Q3 & x,x',a on Q1 &
+   {p,x,c} on A & {p,d,a} on O1 & {p,pp',q} on O2 & {pp',d,b} on O3 &
+   {pp',y,c} on Q &
+{d,x',c} on C & {b,a,q} on O & {x,y,q} on Q3 & {x,x',a} on Q1 &
 A,O1,O2 are_mutually_different
-by A1,A3,A6,A7,A8,A9,A10,ZFMISC_1:def 5,INCPROJ:def 8;
-then consider R such that A17: y,x',b on R by A1,A2,A16,PROJRED1:14;
+by A1,A3,A6,A7,A8,A9,A10,ZFMISC_1:def 5,INCSP_1:12;
+then consider R such that A17: {y,x',b} on R by A1,A2,A16,PROJRED1:14;
 consider x'' being POINT of IPP such that
 A18: x'' on R & x'' on B by INCPROJ:def 14;
-A19: y on R & x' on R & b on R by A17,INCPROJ:def 8;
+A19: y on R & x' on R & b on R by A17,INCSP_1:12;
 then A20: f.x = x' & g.x' = x'' by A1,A6,A7,A8,A18,PROJRED1:def 1;
 A21: f1.x = y & g1.y = x'' by A1,A6,A9,A10,A18,A19,PROJRED1:def 1;
 A22: x in dom f & x' in dom g & y in dom g1 & x in dom f1 by A4,A6,A8,A10;
@@ -287,43 +288,42 @@ set X = CHAIN(A); A23: dom (g*f) = X & dom (g1*f1) = X by A1,A4,PROJRED1:25;
 then ex x st y=x & x on A; hence (g*f).y = (g1*f1).y
 by A5; end; hence thesis by A23,FUNCT_1:9; end;
 
-theorem
-Th16: not a on A & not a on C & not b on B & not b on C & not b on Q &
-not A,B,C are_concurrent & a<>b & b<>q & A<>Q & c,o on A & o,o'',d on B &
-c,d,o' on C &
-a,b,d on O & c,oo' on Q & a,o,o' on O1 & b,o',oo' on O2 & o,oo',q on O3 &
-q on O
-   implies IncProj(C,b,B)*IncProj(A,a,C) = IncProj(Q,b,B)*IncProj(A,q,Q)
+theorem Th16:
+  not a on A & not a on C & not b on B & not b on C & not b on Q &
+  not A,B,C are_concurrent & a<>b & b<>q & A<>Q & {c,o} on A &
+  {o,o'',d} on B & {c,d,o'} on C & {a,b,d} on O & {c,oo'} on Q &
+  {a,o,o'} on O1 & {b,o',oo'} on O2 & {o,oo',q} on O3 &
+  q on O
+  implies IncProj(C,b,B)*IncProj(A,a,C) = IncProj(Q,b,B)*IncProj(A,q,Q)
 proof assume A1:not a on A & not a on C & not b on B & not b on C &
 not b on Q &
 not A,B,C are_concurrent & a<>b & b<>q & A<>Q &
-c,o on A & o,o'',d on B & c,d,o' on C & a,b,d on O & c,oo' on Q &
-a,o,o' on O1 & b,o',oo' on O2 &
-o,oo',q on O3 & q on O;
+{c,o} on A & {o,o'',d} on B & {c,d,o'} on C & {a,b,d} on O & {c,oo'} on Q &
+{a,o,o'} on O1 & {b,o',oo'} on O2 &
+{o,oo',q} on O3 & q on O;
 then A2: not a on A & not a on C & not b on B & not b on C & not b on Q &
 not A,B,C are_concurrent
 & a<>b & b<>q & A<>Q & c on A & o on A & o on B & o'' on B & d on B &
 c on C & d on C & o' on C & a on O &
 b on O & d on O & c on Q & oo' on Q & a on O1 & o on O1 & o' on O1 &
 b on O2 & o' on O2 & oo' on O2 & o on O3 &
-oo' on O3 & q on O3 & q on O by INCPROJ:def 7,def 8;
-A3: c on A & c on C & c on Q by A1,INCPROJ:def 7,def 8
-; A4: d on B & d on C & d on O by A1,INCPROJ:def 8; A5: o on A & o on B by A1,
-INCPROJ:def 7,def 8;
-A6: oo' on Q & oo' on O2 by A1,INCPROJ:def 7,def 8; A7: o on O3 &
-oo' on O3 by A1,INCPROJ:def 8; A8: q on O3 & q on O by A1,INCPROJ:def 8;
+oo' on O3 & q on O3 & q on O by INCSP_1:12,11;
+A3: c on A & c on C & c on Q by A1,INCSP_1:12,11
+; A4: d on B & d on C & d on O by A1,INCSP_1:12; A5: o on A & o on B by A1,
+INCSP_1:12,11;
+A6: oo' on Q & oo' on O2 by A1,INCSP_1:11,12; A7: o on O3 &
+oo' on O3 by A1,INCSP_1:12; A8: q on O3 & q on O by A1,INCSP_1:12;
 A9: o<>c by A2,Def1;
 then A10: o'<>c by A2,INCPROJ:def 9;
 A11: o<>d by A2,Def1;
 A12: O1<>O2 proof assume not thesis;
 then o on O by A2,INCPROJ:def 9; then O=B by A4,A5,A11,INCPROJ:def 9;
-hence contradiction by A1,INCPROJ:def 8; end;
+hence contradiction by A1,INCSP_1:12; end;
 A13: q<>o by A2,A11,INCPROJ:def 9;
 A14: c <>oo' by A2,A10,INCPROJ:def 9;
 A15: not q on A proof assume not thesis;
 then oo' on A by A5,A7,A8,A13,INCPROJ:def 9
-; hence contradiction
-by A1,A3,A6,A14,INCPROJ:def 9; end;
+; hence contradiction by A1,A3,A6,A14,INCPROJ:def 9; end;
     o'<>d proof assume not thesis; then O1=O by A2,INCPROJ:def 9;
 hence contradiction by A2,A11,INCPROJ:def 9; end;
 then O<>O2 by A2,INCPROJ:def 9;
@@ -348,12 +348,12 @@ A23: x' on Q2 & b on Q2 by INCPROJ:def 10;
   consider x'' being POINT of IPP such that
 A24: x'' on Q2 & x'' on B by INCPROJ:def 14;
 consider y such that A25: y on Q & y on Q2 by INCPROJ:def 14;
-   o',b,oo' on O2 & o',o,a on O1 & o',c,x' on C & c,o,x on A & c,y,oo' on Q &
-o,q,oo' on O3 & x,a,x' on Q1 & b,y,x' on Q2 & b,q,a on O &
-O2,O1,C are_mutually_different
-by A2,A12,A20,A21,A22,A23,A25,ZFMISC_1:def 5,INCPROJ:def 8;
-then consider R such that A26: y,q,x on R by A2,A10,PROJRED1:14;
-A27: y on R & q on R & x on R by A26,INCPROJ:def 8;
+   {o',b,oo'} on O2 & {o',o,a} on O1 & {o',c,x'} on C & {c,o,x} on A &
+   {c,y,oo'} on Q & {o,q,oo'} on O3 & {x,a,x'} on Q1 & {b,y,x'} on Q2 &
+   {b,q,a} on O & O2,O1,C are_mutually_different
+by A2,A12,A20,A21,A22,A23,A25,ZFMISC_1:def 5,INCSP_1:12;
+then consider R such that A26: {y,q,x} on R by A2,A10,PROJRED1:14;
+A27: y on R & q on R & x on R by A26,INCSP_1:12;
 A28: f.x = x' & g.x' = x'' by A1,A20,A21,A22,A23,A24,PROJRED1:def 1;
 A29: f1.x = y & g1.y = x'' by A1,A15,A17,A20,A23,A24,A25,A27,PROJRED1:def 1;
 A30: x in dom f & x' in dom g & y in dom g1 & x in
@@ -369,25 +369,24 @@ by A19; end; hence thesis by A31,FUNCT_1:9; end;
 theorem
 Th17: not a on A & not a on C & not b on B & not b on C & not b on Q &
 not A,B,C are_concurrent & not B,C,O are_concurrent & A<>Q & Q<>C & a<>b &
-c,p on A & d on B & c,d on C & a,b,q on O & c,pp' on Q & a,d,p on O1 &
-q,p,pp' on O2 & b,d,pp' on O3
+{c,p} on A & d on B & {c,d} on C & {a,b,q} on O & {c,pp'} on Q &
+{a,d,p} on O1 & {q,p,pp'} on O2 & {b,d,pp'} on O3
    implies q<>a & q<>b & not q on A & not q on Q
 proof assume A1:not a on A & not a on C & not b on B & not b on C &
 not b on Q &
 not A,B,C are_concurrent & not B,C,O are_concurrent & A<>Q & Q<>C & a<>b &
-c,p on A & d on B & c,d on C & a,b,q on O & c,pp' on Q & a,d,p on O1 &
-q,p,pp' on O2 & b,d,pp' on O3;
+{c,p} on A & d on B & {c,d} on C & {a,b,q} on O & {c,pp'} on Q &
+{a,d,p} on O1 & {q,p,pp'} on O2 & {b,d,pp'} on O3;
 then A2: not a on A & not b on B & not a on C & not b on C &
 not A,B,C are_concurrent & c on A & c on C & c on Q & not b on Q & A<>Q &
 a<>b &
 a on O & b on O & not B,C,O are_concurrent & d on C & d on B & a on O1 &
 d on O1 & p on A & p on O1 &
 q on O & q on O2 & p on O2 & pp' on O2 & d on O3 & b on O3 & pp' on O3 &
-pp' on Q & Q<>C
-by INCPROJ:def 7,def 8;
- A3: pp' on O3 & pp' on Q by A1,INCPROJ:def 7,def 8;
-A4: p on O2 & pp' on O2 by A1,INCPROJ:def 8; A5: q on O & q on O2 by A1,
-INCPROJ:def 8;
+pp' on Q & Q<>C by INCSP_1:12,11;
+ A3: pp' on O3 & pp' on Q by A1,INCSP_1:11,12;
+A4: p on O2 & pp' on O2 by A1,INCSP_1:12;
+A5: q on O & q on O2 by A1,INCSP_1:12;
 A6: c <>d by A2,Def1;
 then A7: p<>c by A2,INCPROJ:def 9;
 A8: p<>d by A2,Def1;
@@ -395,9 +394,7 @@ A9: pp'<>d by A2,A6,INCPROJ:def 9;
     pp'<>c by A2,A6,INCPROJ:def 9;
 then A10: A<>O2 by A2,INCPROJ:def 9;
 A11: O1<>O2 proof assume not thesis; then a on O3 & a on O & b on O & b on O3
-&
-a<>b
-   by A2,A9,INCPROJ:def 9
+& a<>b by A2,A9,INCPROJ:def 9
 ; then d on O by A2,INCPROJ:def 9;hence contradiction by A2,Def1; end;
  A12: q<>p proof assume not thesis; then O=O1 by A2,INCPROJ:def 9;
 hence contradiction by A2,Def1; end;
@@ -412,28 +409,27 @@ hence thesis by A2,A10,A11,A12,A14,INCPROJ:def 9; end;
 
 theorem
 Th18: not a on A & not a on C & not b on B & not b on C & not b on Q &
-not A,B,C are_concurrent & a<>b & A<>Q & c,o on A & o,o'',d on B &
-c,d,o' on C & a,b,d on O
-& c,oo' on Q & a,o,o' on O1 & b,o',oo' on O2 & o,oo',q on O3 & q on O implies
-  not q on A & not q on Q & b<>q
+not A,B,C are_concurrent & a<>b & A<>Q & {c,o} on A & {o,o'',d} on B &
+{c,d,o'} on C & {a,b,d} on O
+& {c,oo'} on Q & {a,o,o'} on O1 & {b,o',oo'} on O2 & {o,oo',q} on O3 &
+q on O implies not q on A & not q on Q & b<>q
 proof assume A1:not a on A & not a on C & not b on B & not b on C &
 not b on Q &
-not A,B,C are_concurrent & a<>b & A<>Q & c,o on A & o,o'',d on B &
-c,d,o' on C &
-a,b,d on O & c,oo' on Q & a,o,o' on O1 & b,o',oo' on O2 & o,oo',q on O3 &
-q on O;
+not A,B,C are_concurrent & a<>b & A<>Q & {c,o} on A & {o,o'',d} on B &
+{c,d,o'} on C &
+{a,b,d} on O & {c,oo'} on Q & {a,o,o'} on O1 & {b,o',oo'} on O2 &
+{o,oo',q} on O3 & q on O;
 then A2: not a on A & not a on C & not b on B & not b on C & not b on Q &
 not A,B,C are_concurrent
 & a<>b & A<>Q & c on A & o on A & o on B & o'' on B & d on B & c on C &
 d on C & o' on C & a on O & b on O &
 d on O & c on Q & oo' on Q & a on O1 & o on O1 & o' on O1 & b on O2 &
 o' on O2 & oo' on O2 & o on O3 & oo' on O3
-& q on O3 & q on O by INCPROJ:def 7,def 8;
-A3: c on A & c on C & c on Q by A1,INCPROJ:def 7,
-def 8; A4: o on A & o on B
-by A1,INCPROJ:def 7,def 8; A5: b on O2 & o' on O2 by A1,INCPROJ:def 8;
-A6: oo' on Q & oo' on O2 by A1,INCPROJ:def 7,def 8; A7: o on O3 &
-oo' on O3 by A1,INCPROJ:def 8; A8: q on O3 & q on O by A1,INCPROJ:def 8;
+& q on O3 & q on O by INCSP_1:11,12;
+A3: c on A & c on C & c on Q by A1,INCSP_1:11,12; A4: o on A & o on B
+by A1,INCSP_1:11,12; A5: b on O2 & o' on O2 by A1,INCSP_1:12;
+A6: oo' on Q & oo' on O2 by A1,INCSP_1:11,12; A7: o on O3 &
+oo' on O3 by A1,INCSP_1:12; A8: q on O3 & q on O by A1,INCSP_1:12;
 A9: o<>c by A2,Def1;
 then A10: o'<>c by A2,INCPROJ:def 9;
 A11: o<>d by A2,Def1;
@@ -454,29 +450,31 @@ A17: not q on Q proof assume not thesis;
  by A2,A9,INCPROJ:def 9; end;
 A18: o<>o' by A2,Def1;
     b<>q proof assume not thesis;
-then o on O1 & o' on O1 &
- o on O2 & o' on O2 by A1,A5,A6,A7,A8,INCPROJ:def 8,def 9; hence
-    contradiction by A12,A18,INCPROJ:def 9; end; hence thesis by A15,A17; end;
+then o on O1 & o' on O1 & o on O2 & o' on O2
+by A1,A5,A6,A7,A8,INCSP_1:12,INCPROJ:def 9;
+hence contradiction by A12,A18,INCPROJ:def 9; end;
+hence thesis by A15,A17; end;
 
-theorem
-Th19: not a on A & not a on C & not b on B & not b on C & not q on A &
+theorem Th19:
+ not a on A & not a on C & not b on B & not b on C & not q on A &
  not A,B,C are_concurrent & not B,C,O are_concurrent & a<>b & b<>q & q<>a &
- c,p on A & d on B & c,d on C & a,b,q on O & c,pp' on Q & a,d,p on O1 &
- q,p,pp' on O2 & b,d,pp' on O3
+ {c,p} on A & d on B & {c,d} on C & {a,b,q} on O &
+ {c,pp'} on Q & {a,d,p} on O1 & {q,p,pp'} on O2 & {b,d,pp'} on O3
     implies Q<>A & Q<>C & not q on Q & not b on Q
 proof assume A1:not a on A & not a on C & not b on B & not b on C &
 not q on A &
  not A,B,C are_concurrent & not B,C,O are_concurrent & a<>b & b<>q & q<>a &
- c,p on A & d on B & c,d on C & a,b,q on O & c,pp' on Q & a,d,p on O1 &
- q,p,pp' on O2 & b,d,pp' on O3;
+ {c,p} on A & d on B & {c,d} on C &
+ {a,b,q} on O & {c,pp'} on Q & {a,d,p} on O1 &
+ {q,p,pp'} on O2 & {b,d,pp'} on O3;
 then A2: not a on A & not b on B & not a on C & not b on C & not q on A &
 not A,B,C are_concurrent & c on A & c on C & c on Q & a<>b & q<>a & q<>b &
 a on O & b on O &
 not B,C,O are_concurrent & d on C & d on B & a on O1 & d on O1 & p on A &
 p on O1 & q on O & q on O2 &
 p on O2 & pp' on O2 & d on O3 & b on O3 & pp' on O3 & pp' on Q
-by INCPROJ:def 7,def 8;
- A3: p on O2 & pp' on O2 by A1,INCPROJ:def 8;
+by INCSP_1:11,12;
+ A3: p on O2 & pp' on O2 by A1,INCSP_1:12;
 A4: c <>d by A2,Def1;
 then A5: p<>c by A2,INCPROJ:def 9;
 A6: p<>d by A2,Def1;
@@ -499,34 +497,33 @@ end; hence thesis by A2,A8,A9,A12,INCPROJ:def 9; end;
 
 theorem
 Th20: not a on A & not a on C & not b on B & not b on C & not q on A &
-not A,B,C are_concurrent & a<>b & b<>q & c,o on A & o,o'',d on B &
-c,d,o' on C &
-a,b,d on O & c,oo' on Q & a,o,o' on O1 & b,o',oo' on O2 & o,oo',q on O3 &
-q on O implies
+not A,B,C are_concurrent & a<>b & b<>q & {c,o} on A & {o,o'',d} on B &
+{c,d,o'} on C & {a,b,d} on O & {c,oo'} on Q & {a,o,o'} on O1 &
+{b,o',oo'} on O2 & {o,oo',q} on O3 & q on O implies
     not b on Q & not q on Q & A<>Q
 proof assume A1:not a on A & not a on C & not b on B & not b on C &
 not q on A &
-not A,B,C are_concurrent & a<>b & b<>q & c,o on A & o,o'',d on B &
-c,d,o' on C &
-a,b,d on O & c,oo' on Q & a,o,o' on O1 & b,o',oo' on O2 & o,oo',q on O3 &
-q on O;
+not A,B,C are_concurrent & a<>b & b<>q & {c,o} on A & {o,o'',d} on B &
+{c,d,o'} on C &
+{a,b,d} on O & {c,oo'} on Q & {a,o,o'} on O1 & {b,o',oo'} on O2 &
+{o,oo',q} on O3 & q on O;
 then A2: not a on A & not a on C & not b on B & not b on C & not q on A &
 not A,B,C are_concurrent
 & a<>b & b<>q & c on A & o on A & o on B & o'' on B & d on B & c on C &
 d on C & o' on C & a on O & b on O &
 d on O & c on Q & oo' on Q & a on O1 & o on O1 & o' on O1 & b on O2 &
 o' on O2 & oo' on O2 & o on O3 &
-oo' on O3 & q on O3 & q on O by INCPROJ:def 7,def 8;
-A3: c on A & c on C & c on Q by A1,INCPROJ:def 7,def 8
-; A4: d on B & d on C & d on O by A1,INCPROJ:def 8; A5: o on A & o on B by A1,
-INCPROJ:def 7,def 8; A6: b on O2 & o' on O2 by A1,INCPROJ:def 8;
-A7: oo' on Q & oo' on O2 by A1,INCPROJ:def 7,def 8; A8: o on O3 &
-oo' on O3 by A1,INCPROJ:def 8; A9: q on O3 & q on O by A1,INCPROJ:def 8;
+oo' on O3 & q on O3 & q on O by INCSP_1:11,12;
+A3: c on A & c on C & c on Q by A1,INCSP_1:11,12;
+A4: d on B & d on C & d on O by A1,INCSP_1:12; A5: o on A & o on B by A1,
+INCSP_1:11,12; A6: b on O2 & o' on O2 by A1,INCSP_1:12;
+A7: oo' on Q & oo' on O2 by A1,INCSP_1:11,12; A8: o on O3 &
+oo' on O3 by A1,INCSP_1:12; A9: q on O3 & q on O by A1,INCSP_1:12;
 A10: o<>c by A2,Def1;
 then A11: o'<>c by A2,INCPROJ:def 9;
-A12: o<>d by A2,Def1; A13: C<>O1 & C<>O2 by A1,INCPROJ:def 8;
+A12: o<>d by A2,Def1; A13: C<>O1 & C<>O2 by A1,INCSP_1:12;
 A14: O1<>O2 proof assume not thesis; then o on O by A2,INCPROJ:def 9;
- then O=B by A4,A5,A12,INCPROJ:def 9; hence contradiction by A1,INCPROJ:def 8
+ then O=B by A4,A5,A12,INCPROJ:def 9; hence contradiction by A1,INCSP_1:12
 ; end;
     o'<>d proof assume not thesis; then O1=O by A2,INCPROJ:def 9;
  hence contradiction by A2,A12,INCPROJ:def 9; end;
@@ -537,19 +534,19 @@ then A16: o<>oo' by A2,A14,INCPROJ:def 9;
 A17: b<>oo'
 proof
   assume not thesis;
-  then b on O3 & q on O3 & b on O & q on O & b<>q by A1,INCPROJ:def 8;
+  then b on O3 & q on O3 & b on O & q on O & b<>q by A1,INCSP_1:12;
   then o on O by A8,INCPROJ:def 9;
   then O=B by A4,A5,A12,INCPROJ:def 9;
-  hence contradiction by A1,INCPROJ:def 8;
+  hence contradiction by A1,INCSP_1:12;
 end;
 
 A18: not b on Q proof assume not thesis;
 then o' on C & c on C & o' on O2
- & c on O2 by A1,A3,A6,A7,A17,INCPROJ:def 8,def 9;
+ & c on O2 by A1,A3,A6,A7,A17,INCSP_1:12,INCPROJ:def 9;
  hence contradiction by A11,A13,INCPROJ:def 9; end;
 A19: q<>oo' by A2,A15,INCPROJ:def 9;
-    not q on Q proof assume not thesis; then Q=O3 by A7,A8,A9,A19,INCPROJ:def 9
-;
+ not q on Q proof assume not thesis; then
+ Q=O3 by A7,A8,A9,A19,INCPROJ:def 9;
  hence contradiction by A2,A10,INCPROJ:def 9; end;
 hence thesis by A2,A16,A18,INCPROJ:def 9; end;
 
@@ -574,9 +571,9 @@ proof assume A1: not a on A & not b on B & not a on C & not b on C &
   then not a on A & not a on C & not b on B & not b on C & not b on Q &
   not A,B,C are_concurrent & not B,C,O are_concurrent &
   A<>Q & Q<>C & a<>b &
-  c,p on A & d on B & c,d on C & a,b,q on O & c,pp' on Q & a,d,p on O1 &
-  q,p,pp' on O2
-   & b,d,pp' on O3 by A1,A2,A3,A4,A5,A6,A7,A8,A9,INCPROJ:def 7,def 8;
+  {c,p} on A & d on B & {c,d} on C & {a,b,q} on O & {c,pp'} on Q &
+  {a,d,p} on O1 & {q,p,pp'} on O2
+   & {b,d,pp'} on O3 by A1,A2,A3,A4,A5,A6,A7,A8,A9,INCSP_1:11,12;
  then A11: q<>a & q<>b & not q on A & not q on Q by Th17; take q;
    IncProj(C,b,B)*IncProj(A,a,C) = IncProj(Q,b,B)*IncProj(A,q,Q)
  by A1,A2,A3,A4,A5,A6,A7,A8,A9,A10,A11,Th15; hence thesis by A9,A11; end;
@@ -606,17 +603,16 @@ consider o'' being POINT of IPP such that
  A11: o'' on B & o'' on O2 by INCPROJ:def 14;
 A12:not a on A & not a on C & not b on B & not b on C & not b on Q &
   not A,B,C are_concurrent & a<>b & A<>Q &
-  c,o on A & o,o'',d on B & c,d,o' on C & a,b,d on O & c,oo' on Q &
-  a,o,o' on O1 &
-  b,o',oo' on O2 & o,oo',q on O3 & q on O
-  by A1,A2,A3,A4,A5,A6,A7,A8,A9,A10,A11,INCPROJ:def 7,def 8;
+  {c,o} on A & {o,o'',d} on B & {c,d,o'} on C & {a,b,d} on O & {c,oo'} on Q &
+  {a,o,o'} on O1 &
+  {b,o',oo'} on O2 & {o,oo',q} on O3 & q on O
+  by A1,A2,A3,A4,A5,A6,A7,A8,A9,A10,A11,INCSP_1:11,12;
 then A13: not q on A & not q on Q & b<>q by Th18;
    not a on A & not a on C & not b on B & not b on C & not b on Q &
 not A,B,C are_concurrent &
  a<>b & b<>q & A<>Q &
-  c,o on A & o,o'',d on B & c,d,o' on C & a,b,d on O & c,oo' on Q &
-  a,o,o' on O1 & b,o',oo' on O2 &
-  o,oo',q on O3 & q on O by A12,Th18;
+  {c,o} on A & {o,o'',d} on B & {c,d,o'} on C & {a,b,d} on O & {c,oo'} on Q &
+  {a,o,o'} on O1 & {b,o',oo'} on O2 & {o,oo',q} on O3 & q on O by A12,Th18;
   then IncProj(C,b,B)*IncProj(A,a,C) = IncProj(Q,b,B)*IncProj(A,q,Q) by Th16;
   hence thesis by A10,A13; end;
 
@@ -654,15 +650,14 @@ thus IncProj(C,b,B)*IncProj(A,a,C) = IncProj(B,b,C)"*IncProj(A,a,C) by A1,Th9
 .= IncProj(B,b,C)"*IncProj(C,a,A)" by A1,Th9 .= (IncProj(Q,a,A)*IncProj
 (B,q,Q))" by A3,A5,FUNCT_1:66 .= (IncProj(B,q,Q))"*(IncProj(Q,a,A))"
 by A4,FUNCT_1:66 .= IncProj(Q,q,B)*(IncProj(Q,a,A))" by A2,Th9 .= IncProj
-(Q,q,B)*IncProj(A,a,Q)
-by A1,Th9; end;
+(Q,q,B)*IncProj(A,a,Q) by A1,Th9; end;
 
 theorem
-    not a on A & not b on B & not a on C & not b on C & not a on B & not b on A
+  not a on A & not b on B & not a on C & not b on C & not a on B & not b on A
 &
-   c on A & c on C & d on B & d on C & a on S &
-   d on S & c on R & b on R & s on A & s on S & r on B & r on R & s on Q &
-   r on Q &
+  c on A & c on C & d on B & d on C & a on S &
+  d on S & c on R & b on R & s on A & s on S & r on B & r on R & s on Q &
+  r on Q &
    not A,B,C are_concurrent
    implies IncProj(C,b,B)*IncProj(A,a,C) = IncProj(Q,a,B)*IncProj(A,b,Q)
 proof assume A1: not a on A & not b on B & not a on C & not b on C &
@@ -701,12 +696,13 @@ IncProj(A,b,Q)).x
 A16: now assume A17: s=x; then x'=d by A1,PROJRED1:def 1; then A18: x''=d
  by A1,PROJRED1:27;  y=s by A1,A6,A17,PROJRED1:27;hence g.(f.x) = g1.(f1.x)
 by A1,A6,A18,PROJRED1:def 1; end;
-A19: now assume A20: s<>x; A21: c,d,x' on C & c,x,s on A & c,b,r on R by A1,A10
-,A11,INCPROJ:def 8;
-     b,x,y on O3 & b,x'',x' on O2 & x,a,x' on O1 & y,s,r on Q & d,x'',r on B &
-  d,a,s on S by A1,A11,A12,A13,A14,A15,INCPROJ:def 8;
-then consider O4 such that A22: x'',a,y on O4 by A3,A5,A20,A21,PROJRED1:14;
-   x'' on O4 & a on O4 & y on O4 by A22,INCPROJ:def 8;
+A19: now assume A20: s<>x;
+A21: {c,d,x'} on C & {c,x,s} on A & {c,b,r} on R by A1,A10,A11,INCSP_1:12;
+     {b,x,y} on O3 & {b,x'',x'} on O2 & {x,a,x'} on O1 & {y,s,r} on Q &
+     {d,x'',r} on B &
+  {d,a,s} on S by A1,A11,A12,A13,A14,A15,INCSP_1:12;
+then consider O4 such that A22: {x'',a,y} on O4 by A3,A5,A20,A21,PROJRED1:14;
+   x'' on O4 & a on O4 & y on O4 by A22,INCSP_1:12;
 hence g.(f.x) = g1.(f1.x) by A1,A6,A11,A12,PROJRED1:def 1; end;
  A23: x in dom f & x' in dom g & y in dom g1 & x in dom f1 by A8,A10,A11;
   then (g*f).x = g1.(f1.x) by A16,A19,FUNCT_1:23
@@ -739,9 +735,9 @@ by INCPROJ:def 14;
  then not a on A & not a on C & not b on B & not b on C & not q on A &
   not A,B,C are_concurrent & not B,C,O are_concurrent &
   a<>b & b<>q & q<>a &
-  c,p on A & d on B & c,d on C & a,b,q on O & c,pp' on Q & a,d,p on O1 &
-  q,p,pp' on O2
-   & b,d,pp' on O3 by A1,A2,A3,A4,A5,A6,A7,A8,INCPROJ:def 7,def 8;
+  {c,p} on A & d on B & {c,d} on C & {a,b,q} on O & {c,pp'} on Q &
+  {a,d,p} on O1 & {q,p,pp'} on O2
+   & {b,d,pp'} on O3 by A1,A2,A3,A4,A5,A6,A7,A8,INCSP_1:11,12;
   then A10: Q<>A & Q<>C & not q on Q & not b on Q by Th19;
 then IncProj(C,b,B)*IncProj(A,a,C) = IncProj(Q,b,B)*IncProj
 (A,q,Q) by A1,A2,A3,A4,A5,A6,A7,A8,A9,Th15;
@@ -773,17 +769,17 @@ consider o'' being POINT of IPP such that
  A10: o'' on B & o'' on O2 by INCPROJ:def 14;
 A11:not a on A & not a on C & not b on B & not b on C & not q on A &
   not A,B,C are_concurrent & a<>b & b<>q &
-  c,o on A & o,o'',d on B & c,d,o' on C & a,b,d on O & c,oo' on Q &
-  a,o,o' on O1 &
-  b,o',oo' on O2 & o,oo',q on O3 & q on O
-  by A1,A2,A3,A4,A5,A6,A7,A8,A9,A10,INCPROJ:def 7,def 8;
+  {c,o} on A & {o,o'',d} on B & {c,d,o'} on C & {a,b,d} on O &
+  {c,oo'} on Q & {a,o,o'} on O1 &
+  {b,o',oo'} on O2 & {o,oo',q} on O3 & q on O
+  by A1,A2,A3,A4,A5,A6,A7,A8,A9,A10,INCSP_1:11,12;
 then A12: not b on Q & not q on Q & A<>Q by Th20;
    not a on A & not a on C & not b on B & not b on C & not b on Q &
 not A,B,C are_concurrent &
  a<>b & b<>q & A<>Q &
-  c,o on A & o,o'',d on B & c,d,o' on C & a,b,d on O & c,oo' on Q &
-  a,o,o' on O1 & b,o',oo' on O2 &
-  o,oo',q on O3 & q on O by A11,Th20;
+  {c,o} on A & {o,o'',d} on B & {c,d,o'} on C & {a,b,d} on O & {c,oo'} on Q &
+  {a,o,o'} on O1 & {b,o',oo'} on O2 &
+  {o,oo',q} on O3 & q on O by A11,Th20;
   then IncProj(C,b,B)*IncProj(A,a,C) = IncProj(Q,b,B)*IncProj(A,q,Q) by Th16;
   hence thesis by A9,A12; end;
 
@@ -802,8 +798,7 @@ A3: now assume not B,C,O are_concurrent; then consider Q such that
  IncProj(Q,b,B)*IncProj(A,q,Q) by A1,A2,Lm3; take Q; thus A,C,Q are_concurrent
 by A2,A4,Def1; thus
     not b on Q & not q on Q & IncProj(C,b,B)*IncProj(A,a,C) = IncProj(Q,b,B)*
-IncProj(A,q,Q) by A4;
- end;
+IncProj(A,q,Q) by A4; end;
      now assume B,C,O are_concurrent; then consider Q such that
   A5: c on Q & not b on Q & not q on Q & IncProj(C,b,B)*IncProj(A,a,C) =
   IncProj(Q,b,B)*IncProj(A,q,Q)

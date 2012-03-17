@@ -2,17 +2,17 @@
 <Registrations>
 <Signature>
 <ArticleID name="HIDDEN"/>
-<ArticleID name="TARSKI"/>
+<ArticleID name="RELAT_1"/>
+<ArticleID name="FUNCT_1"/>
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
-<ArticleID name="RELAT_1"/>
-<ArticleID name="FUNCT_1"/>
-<ArticleID name="MCART_1"/>
-<ArticleID name="FINSET_1"/>
 <ArticleID name="RELSET_1"/>
-<ArticleID name="FUNCT_2"/>
 <ArticleID name="PARTFUN1"/>
+<ArticleID name="TARSKI"/>
+<ArticleID name="MCART_1"/>
+<ArticleID name="FUNCT_2"/>
+<ArticleID name="FINSET_1"/>
 <ArticleID name="FRAENKEL"/>
 </Signature>
 <RCluster>
@@ -21,7 +21,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="1" value="false"/>
+<Adjective nr="7" value="false"/>
 <Adjective nr="14"/>
 </Cluster>
 </RCluster>
@@ -34,7 +34,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="68">
+<Func kind="K" nr="74">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -46,22 +46,21 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="8"/>
+<Adjective nr="12"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="8"/>
+<Adjective nr="12"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="68">
+<Func kind="K" nr="74">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="8"/>
-<Adjective nr="14"/>
+<Adjective nr="12"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -73,7 +72,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="77">
+<Func kind="K" nr="47">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -95,8 +94,8 @@
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="2"/>
-<Adjective nr="5"/>
+<Adjective nr="1"/>
+<Adjective nr="4"/>
 </Cluster>
 </CCluster>
 </Registrations>

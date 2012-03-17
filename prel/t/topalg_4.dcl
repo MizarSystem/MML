@@ -15,7 +15,6 @@
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
-<ArticleID name="MEMBERED"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
@@ -24,6 +23,7 @@
 <ArticleID name="XREAL_0"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="GROUP_1"/>
+<ArticleID name="MEMBERED"/>
 <ArticleID name="SEQ_1"/>
 <ArticleID name="RVSUM_1"/>
 <ArticleID name="FUNCOP_1"/>
@@ -35,8 +35,8 @@
 <ArticleID name="RELAT_2"/>
 <ArticleID name="EQREL_1"/>
 <ArticleID name="DOMAIN_1"/>
-<ArticleID name="FUNCT_3"/>
 <ArticleID name="BINOP_1"/>
+<ArticleID name="FUNCT_3"/>
 <ArticleID name="GROUP_3"/>
 <ArticleID name="GROUP_6"/>
 <ArticleID name="METRIC_1"/>
@@ -54,14 +54,14 @@
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="33" value="false"/>
+<Adjective nr="27" value="false"/>
 <Adjective nr="59"/>
 <Adjective nr="99"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="33" value="false"/>
+<Adjective nr="27" value="false"/>
 <Adjective nr="59"/>
 <Adjective nr="99"/>
 </Cluster>
@@ -72,7 +72,6 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="33" value="false"/>
 <Adjective nr="58"/>
 <Adjective nr="59"/>
 <Adjective nr="99"/>
@@ -82,13 +81,13 @@
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="33" value="false"/>
+<Adjective nr="27" value="false"/>
 <Adjective nr="59"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="33" value="false"/>
+<Adjective nr="27" value="false"/>
 <Adjective nr="59"/>
 </Cluster>
 </Typ>
@@ -112,7 +111,6 @@
 <LocusVar nr="4"/>
 </Func>
 <Cluster>
-<Adjective nr="2"/>
 <Adjective nr="5"/>
 <Adjective nr="6"/>
 <Adjective nr="17">

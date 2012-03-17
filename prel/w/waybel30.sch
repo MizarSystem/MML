@@ -20,9 +20,9 @@
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="ORDERS_1"/>
 <ArticleID name="ORDERS_2"/>
-<ArticleID name="FUNCOP_1"/>
 <ArticleID name="FUNCT_4"/>
 <ArticleID name="FUNCT_5"/>
+<ArticleID name="FUNCOP_1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="PBOOLE"/>
 <ArticleID name="RELAT_2"/>
@@ -45,13 +45,13 @@
 <ArgTypes>
 <Typ kind="G" nr="11">
 <Cluster>
-<Adjective nr="19"/>
-<Adjective nr="40"/>
-<Adjective nr="41"/>
+<Adjective nr="20"/>
 <Adjective nr="42"/>
-<Adjective nr="110"/>
-<Adjective nr="111"/>
-<Adjective nr="137"/>
+<Adjective nr="43"/>
+<Adjective nr="44"/>
+<Adjective nr="112"/>
+<Adjective nr="113"/>
+<Adjective nr="139"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">

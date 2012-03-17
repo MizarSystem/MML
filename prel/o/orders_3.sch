@@ -12,9 +12,10 @@
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="STRUCT_0"/>
-<ArticleID name="FUNCOP_1"/>
 <ArticleID name="BINOP_1"/>
 <ArticleID name="FRAENKEL"/>
+<ArticleID name="FUNCOP_1"/>
+<ArticleID name="MULTOP_1"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="FINSET_1"/>
@@ -22,7 +23,6 @@
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="PBOOLE"/>
-<ArticleID name="MULTOP_1"/>
 <ArticleID name="ALTCAT_1"/>
 </Signature>
 <Scheme>
@@ -42,7 +42,7 @@
 <For>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="43"/>
+<Adjective nr="44"/>
 </Cluster>
 </Typ>
 <Not>
@@ -65,7 +65,7 @@
 </Typ>
 <And>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="93">
+<Func kind="K" nr="79">
 <Func kind="U" nr="4">
 <Var nr="1"/>
 </Func>
@@ -93,7 +93,7 @@
 <Func kind="F" nr="1"/>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="149">
+<Func kind="K" nr="97">
 <Func kind="U" nr="5">
 <Var nr="1"/>
 </Func>
@@ -203,13 +203,13 @@
 <For>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="43"/>
+<Adjective nr="44"/>
 </Cluster>
 </Typ>
 <For>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="43"/>
+<Adjective nr="44"/>
 </Cluster>
 </Typ>
 <Not>
@@ -232,7 +232,7 @@
 </Typ>
 <And>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="93">
+<Func kind="K" nr="79">
 <Func kind="U" nr="4">
 <Var nr="1"/>
 </Func>
@@ -260,7 +260,7 @@
 <Func kind="F" nr="1"/>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="149">
+<Func kind="K" nr="97">
 <Func kind="U" nr="5">
 <Var nr="1"/>
 </Func>
@@ -303,7 +303,7 @@
 </Typ>
 <And>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="93">
+<Func kind="K" nr="79">
 <Func kind="U" nr="4">
 <Var nr="2"/>
 </Func>
@@ -331,7 +331,7 @@
 <Func kind="F" nr="1"/>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="149">
+<Func kind="K" nr="97">
 <Func kind="U" nr="5">
 <Var nr="2"/>
 </Func>

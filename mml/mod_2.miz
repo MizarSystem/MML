@@ -13,10 +13,9 @@ environ
  notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, BINOP_1, PARTFUN1,
       FUNCT_2, STRUCT_0, ORDINAL1, RLVECT_1, GROUP_1, VECTSP_1, FUNCSDOM,
       VECTSP_2, CLASSES2, ALGSTR_1, MIDSP_1, GRCAT_1, FUNCT_3;
- constructors ENUMSET1, PARTFUN1, FUNCOP_1, MIDSP_1, VECTSP_2, ALGSTR_1,
-      GRCAT_1, NAT_D;
- registrations VECTSP_1, STRUCT_0, RELSET_1, SUBSET_1, ALGSTR_1, XBOOLE_0,
-      FUNCT_2;
+ constructors ENUMSET1, PARTFUN1, MIDSP_1, VECTSP_2, ALGSTR_1, GRCAT_1;
+ registrations XBOOLE_0, SUBSET_1, RELSET_1, FUNCT_2, STRUCT_0, VECTSP_1,
+      ALGSTR_1;
  requirements SUBSET, BOOLE, NUMERALS;
  definitions RLVECT_1, STRUCT_0, GROUP_1, GRCAT_1, VECTSP_1;
  theorems BINOP_1, CARD_2, CLASSES2, ENUMSET1, GRCAT_1, FUNCT_2, ORDINAL1,
@@ -45,7 +44,7 @@ Lm2: VectSpStr (#{{}},op2,op0,pr2(the carrier of R,{{}})#)
      A1: for a,b being Element of G
       for x,y being Element of L_Trivial st x = a & b = y
       holds a + b = x + y by ALGSTR_1:def 4;
-A4:  G is Abelian add-associative right_zeroed right_complementable
+A2:  G is Abelian add-associative right_zeroed right_complementable
       proof
        thus G is Abelian
         proof let a,b be Element of G;
@@ -71,12 +70,12 @@ A4:  G is Abelian add-associative right_zeroed right_complementable
         reconsider x = a as Element of L_Trivial
  by ALGSTR_1:def 4;
        consider b being Element of L_Trivial such that
-A6:     x + b = 0.L_Trivial by RLVECT_1:def 8;
+A3:     x + b = 0.L_Trivial by RLVECT_1:def 8;
        reconsider b' = b as Element of G by ALGSTR_1:def 4;
        take b';
-       thus a + b' = 0.G by ALGSTR_1:def 4,Lm1,A6;
+       thus a + b' = 0.G by ALGSTR_1:def 4,Lm1,A3;
       end;
-X: 1_R = 1.R by VECTSP_2:85;
+A4: 1_R = 1.R;
       now
      let x,y be Scalar of R, v,w be Vector of G;
         x*(v+w) = a & x*v+x*w = a &
@@ -85,7 +84,7 @@ X: 1_R = 1.R by VECTSP_2:85;
      (1.R)*v = a & v = a by ALGSTR_1:def 4,GRCAT_1:8;
      hence x*(v+w) = x*v+x*w & (x+y)*v = x*v+y*v
            & (x*y)*v = x*(y*v) & (1.R)*v = v;end;
-  hence thesis by A4,VECTSP_1:def 26,X;
+  hence thesis by A2,VECTSP_1:def 26,A4;
 end;
 
 definition let R;
@@ -796,7 +795,7 @@ Th32: 0.Z3 = 0
   & the add of Z3 = add3
   & the mult of Z3 = mult3;
 
-Lm9: for x,y,z being Scalar of Z3, X,Y,Z being Element of {0,1,2}
+Lm7: for x,y,z being Scalar of Z3, X,Y,Z being Element of {0,1,2}
      st X=x & Y=y & Z=z holds
         (x+y)+z = (X+Y)+Z
       & x+(y+z) = X+(Y+Z)
@@ -809,7 +808,7 @@ Lm9: for x,y,z being Scalar of Z3, X,Y,Z being Element of {0,1,2}
    hence thesis by A1,Def18,Def19;
  end;
 
-Lm10: for x,y,z,a being Element of {0,1,2} st a = 0 holds
+Lm8: for x,y,z,a being Element of {0,1,2} st a = 0 holds
             x+(-x) = a &
             x+a = x &
             (x+y)+z = x+(y+z)
@@ -889,16 +888,16 @@ registration
     proof
       let x,y,z be Element of Z3;
       reconsider X=x,Y=y,Z=z as Element of {0,1,2};
-      thus (x+y)+z = (X+Y)+Z by Lm9
-                  .= X+(Y+Z) by Lm10
-                  .= x+(y+z) by Lm9;
+      thus (x+y)+z = (X+Y)+Z by Lm7
+                  .= X+(Y+Z) by Lm8
+                  .= x+(y+z) by Lm7;
     end;
     thus Z3 is right_zeroed
     proof
       let x be Element of Z3;
       reconsider X=x,a=0 as Element of {0,1,2} by Def23;
       thus x+0.Z3 = X+a by Def18
-        .= x by Lm10;
+        .= x by Lm8;
     end;
     let x be Element of Z3;
     reconsider x' = x as Element of {0,1,2};
@@ -942,7 +941,7 @@ Th33: for x,y being Scalar of Z3, X,Y being Element of {0,1,2}
    reconsider a = -X as Element of Z3;
       x + a = X + -X by  A1,Def18
 
-        .= 0.Z3 by Lm10;
+        .= 0.Z3 by Lm8;
    hence -x = -X by RLVECT_1:def 10;
  end;
 
@@ -997,9 +996,9 @@ Th35: for x,y,z,a,b being Element of {0,1,2} st a = 0 & b = 1 holds
                           end;
       hence thesis;
     end;
-   thus (x+y)+z = x+(y+z) by A1,Lm10;
+   thus (x+y)+z = x+(y+z) by A1,Lm8;
    thus x+a = x by A1,Def16;
-   thus x+(-x) = a by A1,Lm10;
+   thus x+(-x) = a by A1,Lm8;
    thus x*y = y*x
     proof
          now per cases by ENUMSET1:def 1;
@@ -1159,26 +1158,20 @@ A2:now
                  .= y*x + x*z by A1
                  .= y*x + z*x by A1;
      end;
-X:     F is well-unital
-         by A2,GROUP_1:def 4,def 16,RLVECT_1:def 5,
-def 6,def 7
-,VECTSP_1:def 18,def 19,def 20,def 21,def 16, STRUCT_0:def 8;
-Z:  F is right_complementable
+A3:  F is right_complementable
      proof
        let v be Element of F;
        take -v;
        thus v + -v = 0.F by A2;
      end;
     F is Field-like
-         by A2,GROUP_1:def 4,def 16,RLVECT_1:def 5,
-def 6,def 7
-,VECTSP_1:def 18,def 19,def 20,def 21,def 16, STRUCT_0:def 8,X,Z;
+         by A2,VECTSP_1:def 20;
    hence F is add-associative right_zeroed right_complementable
     Abelian commutative associative well-unital distributive
       Field-like non degenerated (non empty doubleLoopStr)
          by A2,GROUP_1:def 4,def 16,RLVECT_1:def 5,
 def 6,def 7
-,VECTSP_1:def 18,def 19,def 20,def 21,def 16, STRUCT_0:def 8,X,Z;
+,VECTSP_1:def 18,def 16, STRUCT_0:def 8,A3;
 
  end;
 
@@ -1186,7 +1179,7 @@ theorem
 Th37: Z3 is Fanoian Field
  proof
    set F = Z3;
-X: 1_F = 1.F by VECTSP_2:85;
+A1: 1_F = 1.F;
    reconsider a = 0.F, b = 1.F as Element of {0,1,2};
       now
      let x,y,z be Scalar of Z3;
@@ -1224,21 +1217,21 @@ X: 1_F = 1.F by VECTSP_2:85;
           proof
             assume x <> 0.Z3;
             then consider Y being Element of {0,1,2} such that
-            A1: X*Y = b by Th35;
+            A2: X*Y = b by Th35;
             reconsider y=Y as Scalar of Z3;
             take y;
-            thus thesis by A1,Th33;
+            thus thesis by A2,Th33;
           end;
          thus 0.Z3 <> 1.Z3;
-         A2: y+z = Y+Z & x*y = X*Y & x*z = X*Z by Th33;
+         A3: y+z = Y+Z & x*y = X*Y & x*z = X*Z by Th33;
          hence x*(y+z) = X*(Y+Z) by Th33
                      .= X*Y + X*Z by Th35
-                     .= x*y+x*z by A2,Th33;
+                     .= x*y+x*z by A3,Th33;
        end;end;
    then reconsider F as Field by Th36;
       1.F + 1.F = b + b by Def18
             .= 2 by Def16;
-   hence thesis by Th32,VECTSP_1:def 29,X;
+   hence thesis by Th32,VECTSP_1:def 29,A1;
  end;
 
 registration
@@ -1247,7 +1240,7 @@ registration
  coherence by Th37;
 end;
 
-Lm11: the carrier of Z3 in UN
+Lm9: the carrier of Z3 in UN
  proof
    reconsider a = 0, b = 1, c = 2 as Element of UN by Th30;
       {a,b,c} is Element of UN by Th28;
@@ -1264,7 +1257,7 @@ for f being Function of D,D' st D in UN & D' in UN holds f in UN
    hence thesis by A1,GRCAT_1:4;
  end;
 
-Lm12:
+Lm10:
   (for f being BinOp of D st D in UN holds f in UN)
 & for f being UnOp of D st D in UN holds f in UN
  proof
@@ -1285,6 +1278,6 @@ theorem
   comp Z3 in UN & 0.Z3 in UN &
   the mult of Z3 in UN & 1.Z3 in UN
  proof
-   thus the carrier of Z3 in UN by Lm11;
-   hence thesis by Lm12,GRCAT_1:4;
+   thus the carrier of Z3 in UN by Lm9;
+   hence thesis by Lm10,GRCAT_1:4;
  end;

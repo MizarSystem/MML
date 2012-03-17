@@ -10,9 +10,8 @@ environ
       REALSET2, FINSET_1, CARD_1, CAT_1, NAT_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, FUNCT_2,
       BINOP_1, DOMAIN_1, FUNCOP_1, FUNCT_3, FINSET_1, CARD_1, XXREAL_0;
- constructors FUNCT_3, XCMPLX_0, XXREAL_0, XREAL_0, MEMBERED, FUNCOP_1,
-      BINOP_1, NAT_D, DOMAIN_1, CARD_1;
- registrations FUNCT_1, RELSET_1, MEMBERED, FINSET_1, NAT_1, SUBSET_1;
+ constructors BINOP_1, DOMAIN_1, FUNCT_3, FUNCOP_1, XXREAL_0, CARD_1, MEMBERED;
+ registrations XBOOLE_0, SUBSET_1, FUNCT_1, RELSET_1, FINSET_1, MEMBERED;
  requirements SUBSET, BOOLE, NUMERALS, REAL;
  definitions BINOP_1;
  theorems TARSKI, FUNCT_1, FUNCT_2, FUNCT_3, ZFMISC_1, RELSET_1, XBOOLE_0,
@@ -348,14 +347,14 @@ definition
    mode OnePoint of F is trivial non empty Subset of F;
 end;
 
-Def10:
+Lm1:
  for F being non trivial set, A being OnePoint of F
   ex x being Element of F st A = {x}
  proof let F be non trivial set, A be OnePoint of F;
    consider x being set such that
-W:  A = {x} by Def4;
-   x in A by W,TARSKI:def 1;
-  hence thesis by W;
+A1:  A = {x} by Def4;
+   x in A by A1,TARSKI:def 1;
+  hence thesis by A1;
  end;
 
 theorem Th12:
@@ -365,7 +364,7 @@ theorem Th12:
 proof
    let F be non trivial set;
    let A be OnePoint of F;
-      ex x being Element of F st A = {x} by Def10;
+      ex x being Element of F st A = {x} by Lm1;
    hence thesis by Th4;
 end;
 
@@ -450,7 +449,7 @@ end;
 
 theorem
  for F being non trivial set, A being OnePoint of F
-  ex x being Element of F st A = {x} by Def10;
+  ex x being Element of F st A = {x} by Lm1;
 
 begin :: Addenda
 
@@ -462,6 +461,42 @@ registration let x, y be set;
   proof
       x .--> y = {[x,y]} by FUNCT_4:87;
     hence thesis;
+  end;
+end;
+
+:: from FINSEQ_5, 2007.04.12, A.T.
+
+registration
+  cluster empty -> trivial set;
+  coherence by Def4;
+end;
+
+:: from REALSET1, 2007.04.12, A.T.
+
+registration
+ cluster trivial -> finite set;
+coherence
+  proof
+   let S be set such that
+A1: S is trivial;
+    per cases by A1,Def4;
+    suppose S is empty;
+    then reconsider T = S as empty set;
+        T is finite;
+    hence thesis;
+    end;
+    suppose ex x being set st S = {x};
+    hence thesis;
+  end;
+  end;
+end;
+
+registration
+ cluster infinite -> non trivial set;
+ coherence
+  proof
+    for S being trivial set holds S is finite;
+   hence thesis;
   end;
 end;
 

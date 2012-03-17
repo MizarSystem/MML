@@ -11,12 +11,12 @@ environ
  notations SUBSET_1, ORDINAL1, NUMBERS, XREAL_0, REAL_1, FUNCT_1, BINOP_1,
       BINOP_2, FINSEQ_1, FINSEQ_2, FINSEQ_4, SEQ_1, FINSEQOP, PRE_TOPC,
       RVSUM_1, EUCLID, STRUCT_0, EUCLID_2;
- constructors XXREAL_0, REAL_1, BINOP_2, FINSEQOP, SEQ_1, FINSEQ_4, SETWOP_2,
-      EUCLID_2, NAT_D;
- registrations XREAL_0, RELSET_1, ARYTM_3, MEMBERED, SEQ_1, EUCLID;
+ constructors XXREAL_0, REAL_1, BINOP_2, FINSEQOP, FINSEQ_4, MONOID_0,
+      EUCLID_2;
+ registrations RELSET_1, NUMBERS, XREAL_0, MEMBERED, SEQ_1, MONOID_0, EUCLID;
  requirements REAL, SUBSET, NUMERALS, ARITHM;
  theorems EUCLID, RVSUM_1, FINSEQ_2, FINSEQ_1, EUCLID_2, BINOP_2, SEQ_1,
-     XREAL_0;
+      XREAL_0;
 
 begin
 
@@ -37,13 +37,13 @@ theorem Th1: ex x, y, z st p= <* x, y, z *>
 
 definition let p;
   func p`1 -> Real equals
-    :Def1: p.1;
+     p.1;
    coherence;
   func p`2 -> Real equals
-    :Def2: p.2;
+     p.2;
    coherence;
   func p`3 -> Real equals
-    :Def3: p.3;
+     p.3;
    coherence;
 end;
 
@@ -70,26 +70,19 @@ theorem Th3: p = |[ p`1, p`2, p`3 ]|
     consider x,y,z such that
 A1:   p = <*x,y,z*> by Th1;
     reconsider f = p as FinSequence;
-A2: p`1 = f.1 by Def1
-       .= x by A1,FINSEQ_1:62;
-A3: p`2 = f.2 by Def2
-       .= y by A1,FINSEQ_1:62;
-     p`3 = f.3 by Def3
-       .= z by A1,FINSEQ_1:62;
+A2: p`1 = x by A1,FINSEQ_1:62;
+A3: p`2 = y by A1,FINSEQ_1:62;
+     p`3 = z by A1,FINSEQ_1:62;
     hence thesis by A1,A2,A3;
   end;
 
 theorem Th4: 0.REAL 3 = |[ 0,0,0 ]|
   proof
-A1: 0.REAL 3 = 0*3
-            .= 3 |-> 0 by EUCLID:def 4
+A1: 0.REAL 3 = 3 |-> 0 by EUCLID:def 4
             .= <* 0, 0, 0 *> by FINSEQ_2:76;
-    then A2: (0.REAL 3)`1 = <* 0, 0, 0 *>.1 by Def1
-                .= 0 by FINSEQ_1:62;
-A3: (0.REAL 3)`2 = <* 0, 0, 0 *>.2 by A1,Def2
-                .= 0 by FINSEQ_1:62;
-     (0.REAL 3)`3 = <* 0, 0, 0 *>.3 by A1,Def3
-                .= 0 by FINSEQ_1:62;
+    then A2: (0.REAL 3)`1 = 0 by FINSEQ_1:62;
+A3: (0.REAL 3)`2 = 0 by  A1,FINSEQ_1:62;
+     (0.REAL 3)`3 = 0 by  A1,FINSEQ_1:62;
     hence |[0,0,0]| = 0.REAL 3 by A2,A3,Th3;
   end;
 
@@ -99,25 +92,17 @@ reserve p1,p2,p3,p4 for Point of TOP-REAL 3,
 theorem Th5: p1 + p2 = |[ p1`1 + p2`1, p1`2 + p2`2, p1`3 + p2`3]|
   proof
     reconsider p1'=p1, p2'=p2 as Element of REAL 3 by EUCLID:25;
-A1: p1 + p2 = p1' + p2';
+ p1 + p2 = p1' + p2';
     then len(p1'+p2') = 3 by EUCLID:28;
-    then A2:   dom(p1'+p2') = Seg 3 by FINSEQ_1:def 3;
-then A3:   1 in dom(p1'+p2') by FINSEQ_1:3;
-A4: 2 in dom(p1'+p2') by A2,FINSEQ_1:3;
-A5:   3 in dom(p1'+p2') by A2,FINSEQ_1:3;
-A6: p1`1 = p1'.1 & p2`1 = p2'.1 by Def1;
-A7: (p1+p2)`1 = (p1' + p2').1 by A1,Def1
-             .= p1`1 + p2`1 by A3,A6,SEQ_1:def 3;
-A8: p1`2 = p1'.2 &
-    p2`2 = p2'.2 by Def2;
-A9: (p1+p2)`2 = (p1' + p2').2 by A1,Def2
-             .= p1`2 + p2`2 by A4,A8,SEQ_1:def 3;
-A10: p1`3 = p1'.3 &
-    p2`3 = p2'.3 by Def3;
-     (p1+p2)`3 = (p1' + p2').3 by A1,Def3
-             .= p1`3 + p2`3 by A5,A10,SEQ_1:def 3;
+    then A1:   dom(p1'+p2') = Seg 3 by FINSEQ_1:def 3;
+then A2:   1 in dom(p1'+p2') by FINSEQ_1:3;
+A3: 2 in dom(p1'+p2') by A1,FINSEQ_1:3;
+A4:   3 in dom(p1'+p2') by A1,FINSEQ_1:3;
+A5: (p1+p2)`1 = p1`1 + p2`1 by A2,SEQ_1:def 3;
+A6: (p1+p2)`2 = p1`2 + p2`2 by A3,SEQ_1:def 3;
+     (p1+p2)`3 = p1`3 + p2`3 by A4,SEQ_1:def 3;
     hence p1 + p2 =
-          |[ p1`1 + p2`1, p1`2 + p2`2, p1`3 + p2`3]| by A7,A9,Th3;
+          |[ p1`1 + p2`1, p1`2 + p2`2, p1`3 + p2`3]| by A5,A6,Th3;
  end;
 
 theorem Th6: |[x1,y1,z1]| + |[x2,y2,z2]| = |[x1+x2, y1+y2, z1+z2]|
@@ -131,15 +116,10 @@ theorem Th6: |[x1,y1,z1]| + |[x2,y2,z2]| = |[x1+x2, y1+y2, z1+z2]|
 theorem Th7: x*p = |[ x*p`1, x*p`2, x*p`3]|
   proof
     reconsider p1=p as Element of REAL 3 by EUCLID:25;
-A1: x*p = x*p1;
-A2: p`1 = p1.1 & p`2 = p1.2 & p`3 = p1.3 by Def1,Def2,Def3;
-A3: (x*p)`1 = (x*p1).1 by A1,Def1
-           .= x*(p`1) by A2,RVSUM_1:66;
-A4: (x*p)`2 = (x*p1).2 by A1,Def2
-           .= x*(p`2) by A2,RVSUM_1:66;
-     (x*p)`3 = (x*p1).3 by A1,Def3
-           .= x*(p`3) by A2,RVSUM_1:66;
-    hence x*p = |[ x*p`1, x*p`2, x*p`3]| by A3,A4,Th3;
+A1: (x*p)`1 = x*(p`1) by RVSUM_1:66;
+A2: (x*p)`2 = x*(p`2) by RVSUM_1:66;
+     (x*p)`3 = x*(p`3) by RVSUM_1:66;
+    hence x*p = |[ x*p`1, x*p`2, x*p`3]| by A1,A2,Th3;
  end;
 
 theorem Th8: x * |[x1,y1,z1]| = |[ x*x1, x*y1, x*z1]|
@@ -380,13 +360,10 @@ theorem Th27:
 proof
   consider x, y, z being Element of REAL such that
   A1: p = <* x, y, z *> by Th1;
-  reconsider f = p as FinSequence by EUCLID:27;
+  reconsider f = p as FinSequence;
    <* x, y, z *> = <* f.1, y, z *> by A1,FINSEQ_1:62
   .= <* f.1, f.2, z *> by A1,FINSEQ_1:62
-  .= <* f.1, f.2, f.3 *> by A1,FINSEQ_1:62
-  .= <* p`1, f.2, f.3 *> by Def1
-  .= <* p`1, p`2, f.3 *> by Def2
-  .= <* p`1, p`2, p`3 *> by Def3;
+  .= <* p`1, p`2, p`3 *> by A1,FINSEQ_1:62;
   hence thesis by A1;
 end;
 
@@ -414,20 +391,14 @@ theorem Th29:
   |(p1,p2)| = p1`1*p2`1 + p1`2*p2`2 + p1`3*p2`3
 proof
   reconsider f1=p1, f2=p2 as FinSequence of REAL by EUCLID:27;
-A1: |(p1,p2)| = |(f1,f2)|;
-  A2: len f1 = len <* p1`1, p1`2, p1`3 *> by A1,Th27
+  A1: len f1 = len <* p1`1, p1`2, p1`3 *> by Th27
   .= 3 by FINSEQ_1:62;
-  A3: len f2 = len <* p2`1, p2`2, p2`3 *> by A1,Th27
+  A2: len f2 = len <* p2`1, p2`2, p2`3 *> by Th27
   .= 3 by FINSEQ_1:62;
-   |(p1,p2)| = Sum mlt(f1, f2) by A1,EUCLID_2:def 1
-  .= Sum <* f1.1*f2.1, f1.2*f2.2, f1.3*f2.3 *> by A2,A3,Th28
-  .= f1.1*f2.1 + f1.2*f2.2 + f1.3*f2.3 by RVSUM_1:108
-  .= p1`1*f2.1 + f1.2*f2.2 + f1.3*f2.3 by A1,Def1
-  .= p1`1*p2`1 + f1.2*f2.2 + f1.3*f2.3 by A1,Def1
-  .= p1`1*p2`1 + p1`2*f2.2 + f1.3*f2.3 by A1,Def2
-  .= p1`1*p2`1 + p1`2*p2`2 + f1.3*f2.3 by A1,Def2
-  .= p1`1*p2`1 + p1`2*p2`2 + p1`3*f2.3 by A1,Def3;
-  hence thesis by A1,Def3;
+   |(p1,p2)| = Sum mlt(f1, f2) by EUCLID_2:def 1
+  .= Sum <* f1.1*f2.1, f1.2*f2.2, f1.3*f2.3 *> by A1,A2,Th28
+  .= p1`1*p2`1 + p1`2*p2`2 + p1`3*f2.3 by RVSUM_1:108;
+  hence thesis;
 end;
 
 theorem Th30:

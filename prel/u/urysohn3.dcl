@@ -10,10 +10,9 @@
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
-<ArticleID name="XCMPLX_0"/>
-<ArticleID name="MEMBERED"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="XXREAL_0"/>
+<ArticleID name="MEMBERED"/>
 <ArticleID name="SUPINF_1"/>
 </Signature>
 <CCluster>
@@ -23,7 +22,7 @@
 <Adjective nr="1" value="false"/>
 </Cluster>
 <Func kind="K" nr="10">
-<Func kind="K" nr="61"/>
+<Func kind="K" nr="54"/>
 </Func>
 </Typ>
 </ArgTypes>
@@ -34,8 +33,6 @@
 </Typ>
 <Cluster>
 <Adjective nr="15"/>
-<Adjective nr="22"/>
-<Adjective nr="23"/>
 </Cluster>
 </CCluster>
 </Registrations>

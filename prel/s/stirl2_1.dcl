@@ -13,11 +13,6 @@
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="NUMBERS"/>
-<ArticleID name="XCMPLX_0"/>
-<ArticleID name="XXREAL_0"/>
-<ArticleID name="XREAL_0"/>
-<ArticleID name="FINSET_1"/>
-<ArticleID name="INT_1"/>
 </Signature>
 <FCluster>
 <ArgTypes>
@@ -50,16 +45,7 @@
 <LocusVar nr="4"/>
 </Func>
 <Cluster>
-<Adjective nr="8"/>
-<Adjective nr="9"/>
-<Adjective nr="10"/>
 <Adjective nr="14"/>
-<Adjective nr="18"/>
-<Adjective nr="19"/>
-<Adjective nr="21" value="false"/>
-<Adjective nr="22"/>
-<Adjective nr="23"/>
-<Adjective nr="25"/>
 </Cluster>
 </FCluster>
 <CCluster>
@@ -75,16 +61,7 @@
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="8"/>
-<Adjective nr="9"/>
-<Adjective nr="10"/>
 <Adjective nr="14"/>
-<Adjective nr="18"/>
-<Adjective nr="19"/>
-<Adjective nr="21" value="false"/>
-<Adjective nr="22"/>
-<Adjective nr="23"/>
-<Adjective nr="25"/>
 </Cluster>
 </CCluster>
 </Registrations>

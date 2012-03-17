@@ -28,9 +28,7 @@
 </Func>
 <Cluster>
 <Adjective nr="15"/>
-<Adjective nr="16"/>
 <Adjective nr="18" value="false"/>
-<Adjective nr="19"/>
 </Cluster>
 </FCluster>
 </Registrations>

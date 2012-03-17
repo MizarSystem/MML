@@ -32,9 +32,7 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="2"/>
 <Adjective nr="3"/>
-<Adjective nr="5"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -42,7 +40,7 @@
 <Typ kind="G" nr="5">
 <Cluster>
 <Adjective nr="13" value="false"/>
-<Adjective nr="20"/>
+<Adjective nr="21"/>
 </Cluster>
 </Typ>
 </ArgTypes>

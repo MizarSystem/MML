@@ -10,16 +10,16 @@ environ
       REALSET1, BOOLE, ZF_REFLE, PROB_1, TARSKI, AMI_1, MSUALG_1, FREEALG,
       PRELAMB, ALG_1, FINSEQ_1, QC_LANG1, LANG1, DTCONSTR, TREES_4, TREES_2,
       TREES_3, FUNCT_6, UNIALG_2, GROUP_6, MSUALG_3, MSAFREE, FINSEQ_4,
-      MCART_1, NAT_1;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, NAT_1, NAT_D,
-      RELAT_1, RELSET_1, STRUCT_0, FUNCT_1, MCART_1, FUNCT_2, FINSEQ_1,
-      TREES_2, CARD_3, FINSEQ_4, LANG1, TREES_3, FUNCT_6, TREES_4, DTCONSTR,
-      PBOOLE, MSUALG_1, MSUALG_2, MSUALG_3, XXREAL_0;
- constructors FRAENKEL, XXREAL_0, NAT_1, CARD_3, FINSEQOP, FINSEQ_4, DTCONSTR,
-      MSUALG_3, NAT_D;
- registrations SUBSET_1, FUNCT_1, FINSEQ_1, PBOOLE, TREES_3, TREES_4, DTCONSTR,
-      MSUALG_1, MSUALG_3, RELSET_1, STRUCT_0, XBOOLE_0, ARYTM_3, ORDINAL1,
-      FUNCOP_1, FRAENKEL, XREAL_0, RELAT_1;
+      MCART_1, NAT_1, TREES_1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, NAT_1, RELAT_1,
+      RELSET_1, STRUCT_0, FUNCT_1, MCART_1, FUNCT_2, FINSEQ_1, XXREAL_0,
+      PBOOLE, TREES_2, CARD_3, FINSEQ_4, LANG1, FUNCT_6, TREES_3, TREES_4,
+      DTCONSTR, MSUALG_1, MSUALG_2, MSUALG_3;
+ constructors FRAENKEL, XXREAL_0, NAT_1, NAT_D, CARD_3, FINSEQOP, FINSEQ_4,
+      DTCONSTR, MSUALG_3;
+ registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCOP_1,
+      ARYTM_3, FRAENKEL, XREAL_0, FINSEQ_1, PBOOLE, TREES_2, TREES_3, TREES_4,
+      STRUCT_0, DTCONSTR, MSUALG_1, MSUALG_3;
  requirements NUMERALS, BOOLE, SUBSET;
 
 
@@ -55,8 +55,8 @@ for x be set holds x in it iff ex a be set st a in X.i & x = [a,i];
 end;
 
 notation let I be set,
-               X be ManySortedSet of I;
- synonym coprod X for disjoin X;
+             X be ManySortedSet of I;
+  synonym coprod X for disjoin X;
 end;
 
 definition let I be set,
@@ -87,8 +87,8 @@ begin
 :: Free Many Sorted Universal Algebra - General Notions
 ::
 
-reserve S for non void non empty ManySortedSign,
-        U0 for MSAlgebra over S;
+ reserve S for non void non empty ManySortedSign,
+         U0 for MSAlgebra over S;
 
 definition
  let S be non void non empty ManySortedSign,
@@ -168,8 +168,7 @@ reserve S for non void non empty ManySortedSign,
          X for ManySortedSet of the carrier of S,
          o for OperSymbol of S,
          b for Element of
-            ([:the OperSymbols of S,{the carrier of S}:] \/ Union (coprod X))*
-;
+       ([:the OperSymbols of S,{the carrier of S}:] \/ Union (coprod X))*;
 
 theorem :: MSAFREE:5
                [[o,the carrier of S],b] in REL(X)
@@ -198,9 +197,12 @@ end;
 
 theorem :: MSAFREE:6
 for S be non void non empty ManySortedSign,
-    X be non-empty ManySortedSet of the carrier of S holds
+    X be ManySortedSet of the carrier of S holds
+NonTerminals(DTConMSA(X))c= [:the OperSymbols of S,{the carrier of S}:] &
+Union (coprod X) c= Terminals (DTConMSA(X)) &
+(X is non-empty implies
 NonTerminals(DTConMSA(X)) = [:the OperSymbols of S,{the carrier of S}:] &
-Terminals (DTConMSA(X)) = Union (coprod X);
+Terminals (DTConMSA(X)) = Union (coprod X));
 
 reserve x for set;
 
@@ -213,11 +215,13 @@ end;
 
 theorem :: MSAFREE:7
 for S be non void non empty ManySortedSign,
-    X be non-empty ManySortedSet of the carrier of S,
+    X be ManySortedSet of the carrier of S,
     t be set holds
-               t in Terminals DTConMSA(X)
-                          iff
- ex s be SortSymbol of S, x be set st x in X.s & t = [x,s];
+      (t in Terminals DTConMSA(X) & X is non-empty
+                  implies
+       ex s be SortSymbol of S, x be set st x in X.s & t = [x,s]) &
+     for s be SortSymbol of S, x be set st x in X.s holds
+         [x,s] in Terminals DTConMSA(X);
 
 definition
  let S be non void non empty ManySortedSign,

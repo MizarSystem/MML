@@ -29,7 +29,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="43"/>
+<Adjective nr="45"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -39,7 +39,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="24" value="false"/>
-<Adjective nr="43"/>
+<Adjective nr="45"/>
 </Cluster>
 </RCluster>
 </Registrations>

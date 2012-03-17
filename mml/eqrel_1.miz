@@ -10,12 +10,10 @@ environ
       FUNCT_1, TARSKI, EQREL_1, PARTFUN1, TOLER_1, AMI_1, T_1TOPSP, PUA2MSS1,
       PROB_1, NAT_1, COMPLEX1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, XCMPLX_0, XXREAL_0, RELAT_1,
-      RELAT_2, RELSET_1, SETFAM_1, FINSEQ_1, FUNCT_1, NUMBERS, NAT_1, NAT_D,
-      PARTFUN1;
- constructors SETFAM_1, RELAT_2, PARTFUN1, XXREAL_0, XREAL_0, NAT_1, FINSEQ_1,
-      NAT_D;
- registrations RELSET_1, FINSEQ_1, SUBSET_1, XREAL_0, ARYTM_3, PARTFUN1,
-      XXREAL_0, NAT_1;
+      RELAT_2, RELSET_1, SETFAM_1, FINSEQ_1, FUNCT_1, NUMBERS, NAT_1, PARTFUN1;
+ constructors SETFAM_1, RELAT_2, PARTFUN1, XXREAL_0, XREAL_0, NAT_1, FINSEQ_1;
+ registrations XBOOLE_0, SUBSET_1, RELSET_1, PARTFUN1, ARYTM_3, XXREAL_0,
+      XREAL_0, FINSEQ_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, RELAT_1, RELAT_2, XBOOLE_0, PARTFUN1, SETFAM_1;
  theorems RELAT_1, RELAT_2, RELSET_1, SETFAM_1, ZFMISC_1, TARSKI, FINSEQ_1,
@@ -124,7 +122,7 @@ end;
 
  reserve EqR,EqR1,EqR2,EqR3 for Equivalence_Relation of X;
 
-Lm2: [x,y] in R implies x in X & y in X
+Lm1: [x,y] in R implies x in X & y in X
   proof
    assume [x,y] in R;
     then x in dom R & y in rng R by RELAT_1:20;
@@ -150,7 +148,7 @@ theorem Th12:
     let R be total symmetric Relation of X;
 A1: field R = X by ORDERS_1:97;
    assume [x,y] in R;
-   then A2: x in X & y in X & [x,y] in R by Lm2;
+   then A2: x in X & y in X & [x,y] in R by Lm1;
     R is_symmetric_in X by A1,RELAT_2:def 11;
    hence thesis by A2,RELAT_2:def 3;
   end;
@@ -162,7 +160,7 @@ theorem Th13:
     let R be total transitive Relation of X;
 A1: field R = X by ORDERS_1:97;
    assume [x,y] in R & [y,z] in R;
-   then A2: x in X & y in X & z in X & [x,y] in R & [y,z] in R by Lm2;
+   then A2: x in X & y in X & z in X & [x,y] in R & [y,z] in R by Lm1;
     R is_transitive_in X by A1,RELAT_2:def 16;
    hence thesis by A2,RELAT_2:def 8;
   end;
@@ -494,7 +492,7 @@ theorem
     hence thesis by Th13;
   end;
 
-Lm3:
+Lm2:
   for x st x in X holds [x,y] in EqR iff Class(EqR,x) = Class(EqR,y)
 proof let x such that A1: x in X;
  thus [x,y] in EqR implies Class(EqR,x) = Class(EqR,y)
@@ -530,10 +528,10 @@ proof let x such that A1: x in X;
   assume y in Class(EqR,x);
    then [y,x] in EqR by Th27;
   then [x,y] in EqR by Th12;
-  hence thesis by A1,Lm3;
+  hence thesis by A1,Lm2;
  end;
  assume Class(EqR,x) = Class(EqR,y);
- then [x,y] in EqR by A1,Lm3;
+ then [x,y] in EqR by A1,Lm2;
  then [y,x] in EqR by Th12;
  hence thesis by Th27;
 end;
@@ -745,7 +743,7 @@ A23:    Y is_transitive_in X
      for x,y holds [x,y] in EqR1 \/ EqR2 implies [x,y] in R1
   proof let x,y;
    assume A41: [x,y] in EqR1 \/ EqR2;
-   then A42: x in X & y in X by Lm2;
+   then A42: x in X & y in X by Lm1;
    set g = <*x,y*>;
    A43: len g = 2 by FINSEQ_1:61;
    A44:len g = 1 + 1 by FINSEQ_1:61;
@@ -782,9 +780,9 @@ given f being FinSequence such that A48: 1 <= len f &
       proof
       assume A52: 1 <= i + 1 & i + 1 <= len f;
       then A53: i < len f by NAT_1:13;
-B54:     1 <= i or 1 = i + 1 by A52,NAT_1:8;
+A54:     1 <= i or 1 = i + 1 by A52,NAT_1:8;
       A55: EqR1 \/ EqR2 c= EqR1 "\/" EqR2 by Def3;
-          now per cases by B54;
+          now per cases by A54;
         suppose A56: 1 <= i;
          then [f.i,f.(i+1)] in EqR1 \/ EqR2 by A48,A53;
 hence [f.1,f.(i+1)] in EqR1 "\/" EqR2 by A51,A52,A55,A56,Th13,NAT_1:13;
@@ -1090,7 +1088,7 @@ proof let P be a_partition of X;
 end;
 
 theorem
-  for x st x in X holds [x,y] in EqR iff Class(EqR,x) = Class(EqR,y) by Lm3;
+  for x st x in X holds [x,y] in EqR iff Class(EqR,x) = Class(EqR,y) by Lm2;
 
 theorem
   x in Class EqR implies ex y being Element of X st x = Class(EqR,y)
@@ -1193,7 +1191,7 @@ reserve X for non empty set, x for Element of X, y,v,w for set;
 
 definition
  let X be non empty set,x be Element of X,S1 be a_partition of X;
- func EqClass(x,S1) -> Subset of X means :Def1:
+ func EqClass(x,S1) -> Subset of X means :Def8:
  x in it & it in S1;
  existence
   proof
@@ -1212,7 +1210,7 @@ A2: x in A & A in S1 & x in B & B in S1;
   end;
 end;
 
-theorem Th6:
+theorem Th47:
  for S1,S2 being a_partition of X st
  (for x being Element of X holds EqClass(x,S1) = EqClass(x,S2)) holds S1=S2
   proof
@@ -1228,9 +1226,9 @@ A2:    P in S1;
       consider x being Element of P;
           x in P by A3;
       then reconsider x as Element of X;
-          P = EqClass(x,S1) by A2,A3,Def1;
+          P = EqClass(x,S1) by A2,A3,Def8;
       then P = EqClass(x,S2) by A1;
-      hence P in S2 by Def1;
+      hence P in S2 by Def8;
      end;
     thus P in S2 implies P in S1
      proof
@@ -1240,15 +1238,15 @@ then A5:   P <> {} by Def6;
       consider x being Element of P;
           x in P by A5;
       then reconsider x as Element of X;
-          P = EqClass(x,S2) by A4,A5,Def1;
+          P = EqClass(x,S2) by A4,A5,Def8;
       then P = EqClass(x,S1) by A1;
-      hence P in S1 by Def1;
+      hence P in S1 by Def8;
      end;
    end;
    hence thesis by SETFAM_1:44;
   end;
 
-theorem Th7:
+theorem Th48:
  for X being non empty set holds {X} is a_partition of X
   proof
    let X be non empty set;
@@ -1270,21 +1268,21 @@ A2:  A in A1;
   end;
 
 definition let X be set;
-  mode Family-Class of X means :Def2:
+  mode Family-Class of X means :Def9:
    it c= bool bool X;
   existence;
 end;
 
-Lm1: for X being set holds {} is Family-Class of X
+Lm3: for X being set holds {} is Family-Class of X
   proof
     let X be set;
     {} c= bool bool X by XBOOLE_1:2;
-    hence thesis by Def2;
+    hence thesis by Def9;
   end;
 
 definition let X be set;
  let F be Family-Class of X;
- attr F is partition-membered means :Def3:
+ attr F is partition-membered means :Def10:
    for S being set st S in F holds S is a_partition of X;
 end;
 
@@ -1292,7 +1290,7 @@ registration let X be set;
  cluster partition-membered Family-Class of X;
  existence
   proof
-   reconsider E = {} as Family-Class of X by Lm1;
+   reconsider E = {} as Family-Class of X by Lm3;
    take E;
    let S be set; assume S in E;
    hence thesis;
@@ -1311,11 +1309,11 @@ registration
  existence
   proof
    take {X};
-   thus thesis by Th7;
+   thus thesis by Th48;
  end;
 end;
 
-theorem Th8:
+theorem Th49:
  for X being set, p being a_partition of X holds
   {p} is Part-Family of X
    proof
@@ -1330,7 +1328,7 @@ A2:   x in {p};
       hence x in bool bool X by A2,TARSKI:def 1;
     end;
    for x be set st x in {p} holds x is a_partition of X by TARSKI:def 1;
-    hence thesis by A1,Def3;
+    hence thesis by A1,Def10;
 end;
 
 registration let X be set;
@@ -1338,13 +1336,13 @@ registration let X be set;
  existence
   proof
    consider p being a_partition of X;
-    reconsider P = {p} as Part-Family of X by Th8;
+    reconsider P = {p} as Part-Family of X by Th49;
    take P;
    thus thesis;
   end;
 end;
 
-theorem Th9:
+theorem Th50:
  for S1 being a_partition of X,
      x,y being Element of X holds
     EqClass(x,S1) meets EqClass(y,S1) implies EqClass(x,S1) = EqClass(y,S1)
@@ -1359,18 +1357,18 @@ A3:    Class(EQR,x) = EqClass(x,S1)
        proof
 A4:     x in Class(EQR,x) by Th28;
            Class(EQR,x) in S1 by A2,Def5;
-       hence thesis by A4,Def1;
+       hence thesis by A4,Def8;
       end;
       Class(EQR,y) = EqClass(y,S1)
        proof
 A5:     y in Class(EQR,y) by Th28;
            Class(EQR,y) in S1 by A2,Def5;
-       hence thesis by A5,Def1;
+       hence thesis by A5,Def8;
       end;
       hence thesis by A1,A3,Th32;
      end;
 
-Lm2:
+Lm4:
  for A being set holds
   A in {EqClass(x,S) where S is a_partition of X : S in F} implies
   ex T being a_partition of X st T in F & A = EqClass(x,T)
@@ -1383,7 +1381,7 @@ A1:  A = EqClass(x,S) & S in F;
     thus thesis by A1;
    end;
 
-theorem 
+theorem
  for A being set,X being non empty set,S being a_partition of X holds
  A in S implies ex x being Element of X st A = EqClass(x,S)
   proof
@@ -1394,7 +1392,7 @@ A1: A in S;
    then consider x being set such that
 A2: x in A by XBOOLE_0:def 1;
    take x;
-   thus thesis by A1,A2,Def1;
+   thus thesis by A1,A2,Def8;
   end;
 
 definition
@@ -1417,7 +1415,7 @@ A3: not S1 = S2;
       meet{EqClass(x,S) where S is a_partition of X : S in F} by A1;
     hence EqClass(x,S1) = EqClass(x,S2) by A2;
    end;
-   hence contradiction by A3,Th6;
+   hence contradiction by A3,Th47;
   end;
  existence
   proof
@@ -1440,7 +1438,7 @@ A4:    y = meet{EqClass(x,S) where S is a_partition of X : S in F};
 A5:      e in y;
          consider T being set such that
 A6:      T in F by XBOOLE_0:def 1;
-         reconsider T as a_partition of X by A6,Def3;
+         reconsider T as a_partition of X by A6,Def10;
          EqClass(x,T) in {EqClass(x,S) where S is a_partition of X :
            S in F } by A6;
          then consider f being set such that
@@ -1467,7 +1465,7 @@ A8:      f = EqClass(x,S) & S in F by A7;
            then reconsider a1=a as Element of X;
            consider T being set such that
 A9:        T in F by XBOOLE_0:def 1;
-           reconsider T as a_partition of X by A9,Def3;
+           reconsider T as a_partition of X by A9,Def10;
 A10:        EqClass(a1,T) in
            {EqClass(a1,S) where S is a_partition of X : S in F} by A9;
            for T being set
@@ -1480,7 +1478,7 @@ A10:        EqClass(a1,T) in
              then consider A being a_partition of X such that
 A11:          T = EqClass(a1,A)
              and A in F;
-             thus thesis by A11,Def1;
+             thus thesis by A11,Def8;
             end;
            then A12:        a in meet{EqClass(a1,S) where S is a_partition of X
 : S in F}
@@ -1496,7 +1494,7 @@ A13:   A in G;
 A14:    A = meet{EqClass(x,S) where S is a_partition of X : S in F};
        consider T being set such that
 A15:    T in F by XBOOLE_0:def 1;
-       reconsider T as a_partition of X by A15,Def3;
+       reconsider T as a_partition of X by A15,Def10;
 A16:    EqClass(x,T) in {EqClass(x,S) where S is a_partition of X : S in F}
                      by A15;
            for Y being set
@@ -1506,7 +1504,7 @@ A16:    EqClass(x,T) in {EqClass(x,S) where S is a_partition of X : S in F}
          let Y be set;
          assume Y in {EqClass(x,S) where S is a_partition of X : S in F};
          then ex T being a_partition of X st Y = EqClass(x,T) & T in F;
-         hence x in Y by Def1;
+         hence x in Y by Def8;
         end;
        hence A<>{} by A14,A16,SETFAM_1:def 1;
        consider x being Element of X such that
@@ -1521,7 +1519,7 @@ A19:      {EqClass(x,S) where S is a_partition of X : S in F} is non empty
            proof
             consider T being set such that
 A20:         T in F by XBOOLE_0:def 1;
-            reconsider T as a_partition of X by A20,Def3;
+            reconsider T as a_partition of X by A20,Def10;
             EqClass(x,T) in
             {EqClass(x,S) where S is a_partition of X : S in F} by A20;
             hence thesis;
@@ -1530,7 +1528,7 @@ A21:      {EqClass(y,S) where S is a_partition of X : S in F} is non empty
            proof
             consider T being set such that
 A22:         T in F by XBOOLE_0:def 1;
-            reconsider T as a_partition of X by A22,Def3;
+            reconsider T as a_partition of X by A22,Def10;
                 EqClass(y,T) in
             {EqClass(y,S) where S is a_partition of X : S in F} by A22;
             hence thesis;
@@ -1592,7 +1590,7 @@ A31:       for T being a_partition of X st T in F holds
            let T be a_partition of X;
            assume T in F;
            then EqClass(x,T) meets EqClass(y,T) by A29;
-           hence thesis by Th9;
+           hence thesis by Th50;
           end;
           {EqClass(x,S) where S is a_partition of X : S in F} =
           {EqClass(y,S) where S is a_partition of X : S in F}
@@ -1605,7 +1603,7 @@ A31:       for T being a_partition of X st T in F holds
               A in {EqClass(x,S) where S is a_partition of X : S in F};
               then consider T being a_partition of X such that
 A32:           T in F &
-              A = EqClass(x,T) by Lm2;
+              A = EqClass(x,T) by Lm4;
               A = EqClass(y,T) by A31,A32;
               hence thesis by A32;
              end;
@@ -1615,7 +1613,7 @@ A32:           T in F &
               let A be set;
               assume A in {EqClass(y,S) where S is a_partition of X : S in F};
               then consider T being a_partition of X such that
-A33:           T in F & A = EqClass(y,T) by Lm2;
+A33:           T in F & A = EqClass(y,T) by Lm4;
                   A = EqClass(x,T) by A31,A33;
               hence thesis by A33;
              end;
@@ -1642,7 +1640,7 @@ A35:       {EqClass(x,S) where S is a_partition of X : S in F} is non empty
            proof
             consider T being set such that
 A36:          T in F by XBOOLE_0:def 1;
-            reconsider T as a_partition of X by A36,Def3;
+            reconsider T as a_partition of X by A36,Def10;
                 EqClass(x,T) in
             {EqClass(x,S) where S is a_partition of X : S in F} by A36;
             hence thesis;
@@ -1652,18 +1650,18 @@ A36:          T in F by XBOOLE_0:def 1;
           assume Y in {EqClass(x,S) where S is a_partition of X : S in F};
           then ex T being a_partition of X st
           Y = EqClass(x,T) & T in F;
-          hence x in Y by Def1;
+          hence x in Y by Def8;
          end;
          hence thesis by A35,SETFAM_1:def 1;
         end;
-       hence thesis by A34,Def1;
+       hence thesis by A34,Def8;
       end;
      hence thesis;
   end;
  end;
 end;
 
-theorem Th3:
+theorem Th52:
  for X being non empty set,
      S being a_partition of X,
      A being Subset of S holds (union S) \ (union A) = union (S \ A)
@@ -1724,7 +1722,7 @@ A1:     A in S;
         hence thesis by A1,TARSKI:def 1;
        end;
        then reconsider AA = {A} as Subset of S;
-       thus union (S \ {A}) = (union S) \ (union AA) by Th3
+       thus union (S \ {A}) = (union S) \ (union AA) by Th52
                            .= X \ (union {A}) by Def6
                            .= X \ A by ZFMISC_1:31;
       end;

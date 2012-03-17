@@ -120,7 +120,6 @@
 <LocusVar nr="3"/>
 </Typ>
 <Cluster>
-<Adjective nr="1"/>
 <Adjective nr="7" value="false"/>
 </Cluster>
 </CCluster>
@@ -148,7 +147,6 @@
 <LocusVar nr="2"/>
 </Typ>
 <Cluster>
-<Adjective nr="1"/>
 <Adjective nr="7" value="false"/>
 </Cluster>
 </CCluster>

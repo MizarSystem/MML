@@ -1,0 +1,1614 @@
+<?xml version="1.0"?>
+<!DOCTYPE grammar SYSTEM "grammar.dtd">
+
+<?xml-stylesheet type="text/xml" href="grammar2thtml.xsl"?>
+
+<grammar initial="Article" language="Mizar" date="April 16, 2007" version="7.8.05">
+
+  <system-terms>
+    <system-term term="Identifier"/>
+    <system-term term="File-Name"/>
+    <system-term term="Symbol"/>
+    <system-term term="Numeral"/>
+  </system-terms>
+
+  <!-- Article -->
+
+  <part name="Article">
+    <rule name="Article" status="done">
+      <non-terminal name="Environment-Declaration"/>
+      <non-terminal name="Text-Proper"/>
+    </rule>
+  </part>
+
+  <!-- Environment -->
+
+  <part name="Environment">
+    <page>
+      <rule name="Environment-Declaration">
+	<terminal symbol="environ"/>
+	<subrule kind="zero-or-more">
+	  <non-terminal name="Directive"/>
+	</subrule>
+      </rule>
+
+      <rule name="Directive">
+	<subrule kind="alternative">
+	  <non-terminal name="Vocabulary-Directive"/>
+	  <non-terminal name="Library-Directive"/>
+	  <non-terminal name="Requirement-Directive"/>
+	</subrule>
+      </rule>
+    </page>
+
+    <rule name="Vocabulary-Directive">
+      <terminal symbol="vocabularies"/>
+      <subrule kind="one-or-more">
+	<non-terminal name="Vocabulary-Name"/>
+	<separator>
+	  <terminal symbol=","/>
+	</separator>
+      </subrule>
+      <terminal symbol=";"/>
+    </rule>
+
+    <rule name="Vocabulary-Name">
+      <non-terminal name="File-Name"/>
+    </rule>
+
+    <rule name="Library-Directive">
+      <subrule kind="alternative">
+	<terminal symbol="notations"/>
+	<terminal symbol="constructors"/>
+	<terminal symbol="registrations"/>
+	<terminal symbol="definitions"/>
+	<terminal symbol="theorems"/>
+	<terminal symbol="schemes"/>
+      </subrule>
+      <subrule kind="one-or-more">
+	<non-terminal name="Article-Name"/>
+	<separator>
+	  <terminal symbol=","/>
+	</separator>
+      </subrule>
+      <terminal symbol=";"/>
+    </rule>
+
+    <rule name="Article-Name">
+      <non-terminal name="File-Name"/>
+    </rule>
+
+    <rule name="Requirement-Directive">
+      <terminal symbol="requirements"/>
+      <subrule kind="one-or-more">
+	<non-terminal name="Requirement"/>
+	<separator>
+	  <terminal symbol=","/>
+	</separator>
+      </subrule>
+      <terminal symbol=";"/>
+    </rule>
+
+    <rule name="Requirement">
+      <non-terminal name="File-Name"/>
+    </rule>
+  </part>
+
+  <!-- Text Proper -->
+
+  <part name="Text Proper">
+    <rule name="Text-Proper" status="done">
+      <subrule kind="one-or-more">
+	<non-terminal name="Section"/>
+      </subrule>
+    </rule>
+
+    <rule name="Section">
+      <terminal symbol="begin"/>
+      <subrule kind="zero-or-more">
+	<non-terminal name="Text-Item"/>
+      </subrule>
+    </rule>
+
+    <rule name="Text-Item">
+      <subrule kind="alternative">
+	<non-terminal name="Reservation"/>
+	<non-terminal name="Definitional-Item"/>
+	<non-terminal name="Registration-Item"/>
+	<non-terminal name="Notation-Item"/>
+	<non-terminal name="Theorem"/>
+	<non-terminal name="Scheme-Item"/>
+	<non-terminal name="Auxiliary-Item"/>
+	<non-terminal name="Canceled-Theorem"/>
+      </subrule>
+    </rule>
+
+    <rule name="Reservation">
+      <terminal symbol="reserve"/>
+      <subrule kind="one-or-more">
+	<non-terminal name="Reservation-Segment"/>
+	<separator>
+	  <terminal symbol=","/>
+	</separator>
+      </subrule>
+      <terminal symbol=";"/>
+    </rule>
+
+    <rule name="Reservation-Segment">
+      <non-terminal name="Reserved-Identifiers"/>
+      <terminal symbol="for"/>
+      <non-terminal name="Type-Expression"/>
+    </rule>
+
+    <rule name="Reserved-Identifiers">
+      <subrule kind="one-or-more">
+	<non-terminal name="Identifier"/>
+	<separator>
+	  <terminal symbol=","/>
+	</separator>
+      </subrule>
+    </rule>
+
+    <rule name="Definitional-Item">
+      <non-terminal name="Definitional-Block"/>
+      <terminal symbol=";"/>
+    </rule>
+
+    <rule name="Registration-Item">
+      <non-terminal name="Registration-Block"/>
+      <terminal symbol=";"/>
+    </rule>
+
+    <rule name="Notation-Item">
+      <non-terminal name="Notation-Block"/>
+      <terminal symbol=";"/>
+    </rule>
+
+    <rule name="Definitional-Block">
+      <terminal symbol="definition"/>
+      <subrule kind="zero-or-more">
+	<subrule kind="alternative">
+	  <non-terminal name="Definition-Item"/>
+	  <non-terminal name="Definition"/>
+	</subrule>
+      </subrule>
+      <subrule kind="zero-or-more">
+	<non-terminal name="Redefinition-Block"/>
+      </subrule>
+      <terminal symbol="end"/>
+    </rule>
+
+    <rule name="Redefinition-Block">
+      <terminal symbol="redefine"/>
+      <subrule kind="zero-or-more">
+	<subrule kind="alternative">
+	  <non-terminal name="Definition-Item"/>
+	  <non-terminal name="Definition"/>
+	</subrule>
+      </subrule>
+    </rule>
+
+    <rule name="Registration-Block">
+      <terminal symbol="registration"/>
+      <subrule kind="zero-or-more">
+	<subrule kind="alternative">
+	  <non-terminal name="Loci-Declaration"/>
+	  <non-terminal name="Cluster-Registration"/>
+	  <non-terminal name="Identify-Registration"/>
+	</subrule>
+      </subrule>
+      <terminal symbol="end"/>
+    </rule>
+
+    <rule name="Notation-Block">
+      <terminal symbol="notation"/>
+      <subrule kind="zero-or-more">
+	<subrule kind="alternative">
+	  <non-terminal name="Loci-Declaration"/>
+	  <non-terminal name="Notation-Declaration"/>
+	</subrule>
+      </subrule>
+      <terminal symbol="end"/>
+    </rule>
+
+    <rule name="Definition-Item">
+      <subrule kind="alternative">
+	<non-terminal name="Loci-Declaration"/>
+	<non-terminal name="Permissive-Assumption"/>
+	<non-terminal name="Auxiliary-Item"/>
+      </subrule>
+    </rule>
+
+    <rule name="Notation-Declaration">
+      <subrule kind="alternative">
+	<non-terminal name="Attribute-Synonym"/>
+	<non-terminal name="Attribute-Antonym"/>
+	<non-terminal name="Functor-Synonym"/>
+	<non-terminal name="Mode-Synonym"/>
+	<non-terminal name="Predicate-Synonym"/>
+	<non-terminal name="Predicate-Antonym"/>
+      </subrule>
+    </rule>
+
+    <rule name="Loci-Declaration">
+      <terminal symbol="let"/>
+      <non-terminal name="Qualified-Variables"/>
+      <subrule kind="zero-or-one">
+	<terminal symbol="such"/>
+	<non-terminal name="Conditions"/>
+      </subrule>
+      <terminal symbol=";"/>
+    </rule>
+
+    <rule name="Permissive-Assumption">
+      <non-terminal name="Assumption"/>
+    </rule>
+
+    <rule name="Definition">
+      <subrule kind="alternative">
+	<non-terminal name="Structure-Definition"/>
+	<non-terminal name="Mode-Definition"/>
+	<non-terminal name="Functor-Definition"/>
+	<non-terminal name="Predicate-Definition"/>
+	<non-terminal name="Attribute-Definition"/>
+	<non-terminal name="Canceled-Definition"/>
+      </subrule>
+    </rule>
+
+    <rule name="Structure-Definition"> 
+      <terminal symbol="struct"/>
+      <subrule kind="zero-or-one">
+	<terminal symbol="("/>
+	<non-terminal name="Ancestors"/>
+	<terminal symbol=")"/>
+      </subrule>
+      <non-terminal name="Structure-Symbol"/>
+      <subrule kind="zero-or-one">
+	<terminal symbol="over"/>
+	<non-terminal name="Loci"/>
+      </subrule> 
+      <terminal symbol="(#"/>
+      <non-terminal name="Fields"/>
+      <terminal symbol="#)"/>
+      <terminal symbol=";"/>
+    </rule>
+
+    <rule name="Ancestors">
+      <subrule kind="one-or-more">
+	<non-terminal name="Structure-Type-Expression"/>
+	<separator>
+	  <terminal symbol=","/>
+	</separator>
+      </subrule>
+    </rule>
+
+    <rule name="Structure-Symbol">
+      <non-terminal name="Symbol"/>
+    </rule>
+
+    <rule name="Loci">
+      <subrule kind="one-or-more">
+	<non-terminal name="Locus"/>
+	<separator>
+	  <terminal symbol=","/>
+	</separator>
+      </subrule>
+    </rule>
+
+    <rule name="Fields">
+      <subrule kind="one-or-more">
+	<non-terminal name="Field-Segment"/>
+	<separator>
+	  <terminal symbol=","/>
+	</separator>
+      </subrule>
+    </rule>
+
+    <rule name="Locus">
+      <non-terminal name="Variable-Identifier"/>
+    </rule>
+
+    <rule name="Variable-Identifier">
+      <non-terminal name="Identifier"/>
+    </rule>
+
+    <rule name="Field-Segment">
+      <subrule kind="one-or-more">
+	<non-terminal name="Selector-Symbol"/>
+	<separator>
+	  <terminal symbol=","/>
+	</separator>
+      </subrule>
+      <non-terminal name="Specification"/>
+    </rule>
+
+    <rule name="Selector-Symbol">
+      <non-terminal name="Symbol"/>
+    </rule>
+
+    <rule name="Specification">
+      <terminal symbol="->"/>
+      <non-terminal name="Type-Expression"/>
+    </rule>
+
+    <rule name="Mode-Definition">
+      <terminal symbol="mode"/>
+      <non-terminal name="Mode-Pattern"/>
+      <subrule kind="alternative">
+	<subrule>
+	  <subrule kind="zero-or-one">
+	    <non-terminal name="Specification"/>
+	  </subrule> 
+	  <subrule kind="zero-or-one">
+	    <terminal symbol="means"/>
+	    <non-terminal name="Definiens"/>
+	  </subrule>
+	  <terminal symbol=";"/>
+	  <non-terminal name="Correctness-Conditions"/>
+	</subrule>
+	<subrule>
+	  <terminal symbol="is"/>
+	  <non-terminal name="Type-Expression"/>
+	  <terminal symbol=";"/>
+	</subrule>
+      </subrule>
+    </rule>
+
+    <rule name="Mode-Pattern">
+      <non-terminal name="Mode-Symbol"/>
+      <subrule kind="zero-or-one">
+	<terminal symbol="of"/>
+	<non-terminal name="Loci"/>
+      </subrule>
+    </rule>
+
+    <rule name="Mode-Symbol">
+      <subrule kind="alternative">
+        <non-terminal name="Symbol"/>
+        <terminal symbol="set"/>
+      </subrule>
+    </rule>
+
+    <rule name="Mode-Synonym">
+      <terminal symbol="synonym"/>
+      <non-terminal name="Mode-Pattern"/>
+      <terminal symbol="for"/>
+      <non-terminal name="Mode-Pattern"/>
+      <terminal symbol=";"/>
+    </rule>
+
+    <rule name="Definiens">
+      <subrule kind="alternative">
+	<non-terminal name="Simple-Definiens"/>
+	<non-terminal name="Conditional-Definiens"/>
+      </subrule>
+    </rule>
+
+    <rule name="Simple-Definiens"> 
+      <subrule kind="zero-or-one">
+	<terminal symbol=":"/>
+	<non-terminal name="Label-Identifier"/>
+	<terminal symbol=":"/>
+      </subrule>
+      <subrule kind="alternative">
+	<non-terminal name="Sentence"/>
+	<non-terminal name="Term-Expression"/>
+      </subrule>
+    </rule>
+
+    <rule name="Label-Identifier">
+      <non-terminal name="Identifier"/>
+    </rule>
+
+    <rule name="Conditional-Definiens">
+      <subrule kind="zero-or-one">
+	<terminal symbol=":"/>
+	<non-terminal name="Label-Identifier"/>
+	<terminal symbol=":"/>
+      </subrule>
+      <non-terminal name="Partial-Definiens-List"/> 
+      <subrule kind="zero-or-one">
+	<terminal symbol="otherwise"/>
+	<subrule kind="alternative">
+	  <non-terminal name="Sentence"/>
+	  <non-terminal name="Term-Expression"/>
+	</subrule>
+      </subrule>
+    </rule>
+
+    <rule name="Partial-Definiens-List">
+      <subrule kind="one-or-more">
+	<non-terminal name="Partial-Definiens"/>
+	<separator>
+	  <terminal symbol=","/>
+	</separator>
+      </subrule>
+    </rule>
+
+    <rule name="Partial-Definiens">
+      <subrule kind="alternative">
+	<non-terminal name="Sentence"/>
+	<non-terminal name="Term-Expression"/>
+      </subrule>
+      <terminal symbol="if"/>
+      <non-terminal name="Sentence"/>
+    </rule>
+
+    <rule name="Functor-Definition">
+      <terminal symbol="func"/>
+      <non-terminal name="Functor-Pattern"/>
+      <subrule kind="zero-or-one">
+	<non-terminal name="Specification"/>
+      </subrule>
+      <subrule kind="zero-or-one">
+	<subrule kind="alternative">
+	  <terminal symbol="means"/>
+	  <terminal symbol="equals"/>
+	</subrule>
+	<non-terminal name="Definiens"/>
+      </subrule>
+      <terminal symbol=";"/> 
+      <non-terminal name="Correctness-Conditions"/> 
+      <subrule kind="zero-or-more">
+	<non-terminal name="Functor-Property"/>
+      </subrule>
+    </rule>
+
+    <rule name="Functor-Pattern">
+      <subrule kind="alternative">
+	<subrule>
+	  <subrule kind="zero-or-one">
+	    <non-terminal name="Functor-Loci"/>
+	  </subrule>
+	  <non-terminal name="Functor-Symbol"/>
+	  <subrule kind="zero-or-one">
+	    <non-terminal name="Functor-Loci"/>
+	  </subrule>
+	</subrule>
+	<subrule> 
+	  <non-terminal name="Left-Functor-Bracket"/>
+	  <non-terminal name="Loci"/>
+	  <non-terminal name="Right-Functor-Bracket"/>
+	</subrule>
+      </subrule>
+    </rule>
+
+    <rule name="Functor-Property">
+      <subrule kind="alternative">
+	<terminal symbol="commutativity"/>
+	<terminal symbol="idempotence"/>
+	<terminal symbol="involutiveness"/>
+	<terminal symbol="projectivity"/>
+      </subrule>
+      <non-terminal name="Justification"/>
+      <terminal symbol=";"/>
+    </rule>
+
+    <rule name="Functor-Synonym">
+      <terminal symbol="synonym"/>
+      <non-terminal name="Functor-Pattern"/>
+      <terminal symbol="for"/>
+      <non-terminal name="Functor-Pattern"/>
+      <terminal symbol=";"/>
+    </rule>
+
+    <rule name="Functor-Loci">
+      <subrule kind="alternative">
+	<non-terminal name="Locus"/>
+	<subrule>
+	  <terminal symbol="("/>
+	  <non-terminal name="Loci"/>
+	  <terminal symbol=")"/>
+	</subrule>
+      </subrule>
+    </rule>
+
+    <rule name="Functor-Symbol">
+      <non-terminal name="Symbol"/>
+    </rule>
+
+    <rule name="Left-Functor-Bracket">
+      <subrule kind="alternative">
+        <non-terminal name="Symbol"/>
+        <terminal symbol="{"/>
+        <terminal symbol="["/>
+      </subrule>
+    </rule>
+
+    <rule name="Right-Functor-Bracket">
+      <subrule kind="alternative">
+        <non-terminal name="Symbol"/>
+        <terminal symbol="}"/>
+        <terminal symbol="]"/>
+      </subrule>
+    </rule>
+
+    <rule name="Predicate-Definition">
+      <terminal symbol="pred"/>
+      <non-terminal name="Predicate-Pattern"/>
+      <subrule kind="zero-or-one">
+	<terminal symbol="means"/>
+	<non-terminal name="Definiens"/>
+      </subrule>
+      <terminal symbol=";"/>
+      <subrule kind="zero-or-one">
+	<terminal symbol="correctness"/>
+	<non-terminal name="Justification"/>
+	<terminal symbol=";"/>
+      </subrule>
+      <subrule kind="zero-or-more">
+	<non-terminal name="Predicate-Property"/>
+      </subrule>
+    </rule>
+
+    <rule name="Predicate-Pattern">
+      <subrule kind="zero-or-one">
+	<non-terminal name="Loci"/>
+      </subrule>
+      <non-terminal name="Predicate-Symbol"/>
+      <subrule kind="zero-or-one">
+	<non-terminal name="Loci"/>
+      </subrule>
+    </rule>
+
+    <rule name="Predicate-Property">
+      <subrule kind="alternative">
+	<terminal symbol="symmetry"/>
+	<terminal symbol="asymmetry"/>
+	<terminal symbol="connectedness"/>
+	<terminal symbol="reflexivity"/>
+	<terminal symbol="irreflexivity"/>
+      </subrule>
+      <non-terminal name="Justification"/>
+      <terminal symbol=";"/>
+    </rule>
+
+    <rule name="Predicate-Synonym">
+      <terminal symbol="synonym"/>
+      <non-terminal name="Predicate-Pattern"/>
+      <terminal symbol="for"/>
+      <non-terminal name="Predicate-Pattern"/>
+      <terminal symbol=";"/>
+    </rule>
+
+    <rule name="Predicate-Antonym">
+      <terminal symbol="antonym"/>
+      <non-terminal name="Predicate-Pattern"/>
+      <terminal symbol="for"/>
+      <non-terminal name="Predicate-Pattern"/>
+      <terminal symbol=";"/>
+    </rule>
+
+    <rule name="Predicate-Symbol">
+      <subrule kind="alternative">
+        <non-terminal name="Symbol"/>
+	<terminal symbol="="/>
+      </subrule>
+    </rule>
+
+    <rule name="Attribute-Definition">
+      <terminal symbol="attr"/>
+      <non-terminal name="Attribute-Pattern"/>
+      <terminal symbol="means"/>
+      <non-terminal name="Definiens"/>
+      <terminal symbol=";"/>
+      <non-terminal name="Correctness-Conditions"/>
+    </rule>
+
+    <rule name="Attribute-Pattern">
+      <non-terminal name="Locus"/>
+      <terminal symbol="is"/>
+      <non-terminal name="Attribute-Symbol"/>
+    </rule>
+
+    <rule name="Attribute-Synonym">
+      <terminal symbol="synonym"/>
+      <subrule kind="alternative">
+	<non-terminal name="Attribute-Pattern"/>
+	<non-terminal name="Predicate-Pattern"/>
+      </subrule>
+      <terminal symbol="for"/>
+      <non-terminal name="Attribute-Pattern"/>
+      <terminal symbol=";"/>
+    </rule>
+
+    <rule name="Attribute-Antonym">
+      <terminal symbol="antonym"/>
+      <subrule kind="alternative">
+	<non-terminal name="Attribute-Pattern"/>
+	<non-terminal name="Predicate-Pattern"/>
+      </subrule>
+      <terminal symbol="for"/>
+      <non-terminal name="Attribute-Pattern"/>
+      <terminal symbol=";"/>
+    </rule>
+
+    <rule name="Attribute-Symbol">
+      <non-terminal name="Symbol"/>
+    </rule>
+
+    <rule name="Canceled-Definition">
+      <terminal symbol="canceled"/>
+      <subrule kind="zero-or-one">
+	<non-terminal name="Numeral"/>
+      </subrule>
+      <terminal symbol=";"/>
+    </rule>
+    
+    <rule name="Canceled-Registration">
+      <terminal symbol="canceled"/>
+      <subrule kind="zero-or-one">
+	<non-terminal name="Numeral"/>
+      </subrule>
+      <terminal symbol=";"/>
+    </rule>
+
+    <rule name="Cluster-Registration">
+      <subrule kind="alternative">
+	<non-terminal name="Existential-Registration"/>
+	<non-terminal name="Conditional-Registration"/>
+	<non-terminal name="Functorial-Registration"/>
+	<non-terminal name="Canceled-Registration"/>
+      </subrule>
+    </rule>
+
+    <rule name="Existential-Registration">
+      <terminal symbol="cluster"/>
+      <non-terminal name="Adjective-Cluster"/>
+      <non-terminal name="Type-Expression"/> 
+      <terminal symbol=";"/> 
+      <non-terminal name="Correctness-Conditions"/>
+    </rule>
+
+    <rule name="Adjective-Cluster">
+      <subrule kind="zero-or-more">
+	<non-terminal name="Adjective"/>
+      </subrule>
+    </rule>
+
+    <rule name="Adjective">
+      <subrule kind="zero-or-one">
+	<terminal symbol="non"/>
+      </subrule>
+      <non-terminal name="Attribute-Symbol"/>
+    </rule>
+
+    <rule name="Conditional-Registration">
+      <terminal symbol="cluster"/>
+      <non-terminal name="Adjective-Cluster"/>
+      <terminal symbol="->"/>
+      <non-terminal name="Adjective-Cluster"/>
+      <non-terminal name="Type-Expression"/>
+      <terminal symbol=";"/> 
+      <non-terminal name="Correctness-Conditions"/>
+    </rule>
+
+    <rule name="Functorial-Registration">
+      <terminal symbol="cluster"/>
+      <non-terminal name="Term-Expression"/>
+      <terminal symbol="->"/>
+      <non-terminal name="Adjective-Cluster"/>
+      <subrule kind="zero-or-one">
+	<non-terminal name="Type-Expression"/>
+      </subrule>
+      <terminal symbol=";"/>
+      <non-terminal name="Correctness-Conditions"/>
+    </rule>
+
+    <rule name="Identify-Registration">
+      <terminal symbol="identify"/>
+      <non-terminal name="Functor-Pattern"/>
+      <terminal symbol="with"/>
+      <non-terminal name="Functor-Pattern"/>
+      <subrule kind="zero-or-one">
+        <terminal symbol="when"/>
+        <subrule kind="one-or-more">
+  	  <non-terminal name="Variable-Identifier"/>
+          <terminal symbol="="/>
+          <non-terminal name="Variable-Identifier"/>
+	  <separator>
+  	    <terminal symbol=","/>
+          </separator>
+        </subrule>
+      </subrule>
+      <terminal symbol=";"/>
+      <non-terminal name="Correctness-Conditions"/>
+    </rule>
+
+    <rule name="Correctness-Conditions">
+      <subrule kind="zero-or-more">
+	<non-terminal name="Correctness-Condition"/>
+      </subrule>
+      <subrule kind="zero-or-one">
+	<terminal symbol="correctness"/>
+	<non-terminal name="Justification"/>
+	<terminal symbol=";"/>
+      </subrule>
+    </rule>
+
+    <rule name="Correctness-Condition">
+      <subrule kind="alternative">
+	<terminal symbol="existence"/>
+	<terminal symbol="uniqueness"/>
+	<terminal symbol="coherence"/>
+	<terminal symbol="compatibility"/>
+	<terminal symbol="consistency"/>
+      </subrule>
+      <non-terminal name="Justification"/>
+      <terminal symbol=";"/>
+    </rule>
+
+    <rule name="Theorem">
+      <terminal symbol="theorem"/>
+      <non-terminal name="Compact-Statement"/>
+    </rule>
+
+    <rule name="Scheme-Item">
+      <non-terminal name="Scheme-Block"/>
+      <terminal symbol=";"/>
+    </rule>
+
+    <rule name="Scheme-Block">
+      <terminal symbol="scheme"/>
+      <non-terminal name="Scheme-Identifier"/>
+      <terminal symbol="{"/>
+      <non-terminal name="Scheme-Parameters"/>
+      <terminal symbol="}"/>
+      <terminal symbol=":"/>
+      <non-terminal name="Scheme-Conclusion"/> 
+      <subrule kind="zero-or-one">
+	<terminal symbol="provided"/> 
+	<subrule kind="one-or-more">
+	  <non-terminal name="Scheme-Premise"/> 
+	<separator>
+	    <terminal symbol="and"/>
+	</separator>
+	</subrule>
+      </subrule>
+      <non-terminal name="Proof"/>
+    </rule>
+
+    <rule name="Scheme-Identifier">
+      <non-terminal name="Identifier"/>
+    </rule>
+
+    <rule name="Scheme-Parameters">
+      <subrule kind="one-or-more">
+	<non-terminal name="Scheme-Segment"/>
+	<separator>
+	  <terminal symbol=","/>
+	</separator>
+      </subrule>
+    </rule>
+
+    <rule name="Scheme-Conclusion">
+      <non-terminal name="Sentence"/>
+    </rule>
+
+    <rule name="Scheme-Premise">
+      <non-terminal name="Proposition"/>
+    </rule>
+
+    <rule name="Scheme-Segment">
+      <subrule kind="alternative">
+	<non-terminal name="Predicate-Segment"/>
+	<non-terminal name="Functor-Segment"/>
+      </subrule>
+    </rule>
+
+    <rule name="Predicate-Segment">
+      <subrule kind="one-or-more">
+	<non-terminal name="Predicate-Identifier"/>
+	<separator>
+	  <terminal symbol=","/>
+	</separator>
+      </subrule>
+      <terminal symbol="["/>
+      <subrule kind="zero-or-one">
+	<non-terminal name="Type-Expression-List"/>
+      </subrule> 
+      <terminal symbol="]"/>
+    </rule>
+
+    <rule name="Predicate-Identifier">
+      <non-terminal name="Identifier"/>
+    </rule>
+
+    <rule name="Functor-Segment">
+      <subrule kind="one-or-more">
+	<non-terminal name="Functor-Identifier"/>
+	<separator>
+	  <terminal symbol=","/>
+	</separator>
+      </subrule>
+      <terminal symbol="("/>
+      <subrule kind="zero-or-one">
+	<non-terminal name="Type-Expression-List"/>
+      </subrule>
+      <terminal symbol=")"/>
+      <non-terminal name="Specification"/>
+    </rule>
+
+    <rule name="Functor-Identifier">
+      <non-terminal name="Identifier"/>
+    </rule>
+
+    <rule name="Auxiliary-Item">
+      <subrule kind="alternative">
+	<non-terminal name="Statement"/>
+	<non-terminal name="Private-Definition"/>
+      </subrule>
+    </rule>
+
+    <rule name="Canceled-Theorem">
+      <terminal symbol="canceled"/>
+      <subrule kind="zero-or-one">
+	<non-terminal name="Numeral"/>
+      </subrule>
+      <terminal symbol=";"/>
+    </rule>
+
+    <rule name="Private-Definition">
+      <subrule kind="alternative">
+	<non-terminal name="Constant-Definition"/>
+	<non-terminal name="Private-Functor-Definition"/>
+	<non-terminal name="Private-Predicate-Definition"/>
+      </subrule>
+    </rule>
+
+    <rule name="Constant-Definition">
+      <terminal symbol="set"/>
+      <non-terminal name="Equating-List"/>
+      <terminal symbol=";"/>
+    </rule>
+
+    <rule name="Equating-List">
+      <subrule kind="one-or-more">
+	<non-terminal name="Equating"/>
+	<separator>
+	  <terminal symbol=","/>
+	</separator>
+      </subrule>
+    </rule>
+
+    <rule name="Equating">
+      <non-terminal name="Variable-Identifier"/>
+      <terminal symbol="="/>
+      <non-terminal name="Term-Expression"/>
+    </rule>
+
+    <rule name="Private-Functor-Definition">
+      <terminal symbol="deffunc"/>
+      <non-terminal name="Private-Functor-Pattern"/>
+      <terminal symbol="="/>
+      <non-terminal name="Term-Expression"/>
+    </rule>
+
+    <rule name="Private-Predicate-Definition">
+      <terminal symbol="defpred"/>
+      <non-terminal name="Private-Predicate-Pattern"/>
+      <terminal symbol="means"/>
+      <non-terminal name="Sentence"/>
+    </rule>
+
+    <rule name="Private-Functor-Pattern">
+      <non-terminal name="Functor-Identifier"/>
+      <terminal symbol="("/>
+      <subrule kind="zero-or-one">
+	<non-terminal name="Type-Expression-List"/>
+      </subrule>
+      <terminal symbol=")"/>
+    </rule>
+
+    <rule name="Private-Predicate-Pattern">
+      <non-terminal name="Predicate-Identifier"/>
+      <terminal symbol="["/>
+      <subrule kind="zero-or-one">
+	<non-terminal name="Type-Expression-List"/>
+      </subrule>
+      <terminal symbol="]"/>
+    </rule>
+
+    <rule name="Reasoning">
+      <subrule kind="zero-or-more">
+	<non-terminal name="Reasoning-Item"/>
+      </subrule>
+      <subrule kind="zero-or-one">
+	<terminal symbol="per"/>
+	<terminal symbol="cases"/>
+	<non-terminal name="Simple-Justification"/>
+	<terminal symbol=";"/> 
+	<subrule kind="alternative">
+	  <non-terminal name="Case-List"/>
+	  <non-terminal name="Suppose-List"/>
+	</subrule>
+      </subrule>
+    </rule>
+
+    <rule name="Case-List">
+      <subrule kind="one-or-more">
+	<non-terminal name="Case"/>
+      </subrule>
+    </rule>
+
+    <rule name="Case">
+      <terminal symbol="case"/>
+      <subrule kind="alternative">
+	<non-terminal name="Proposition"/>
+	<non-terminal name="Conditions"/>
+      </subrule>
+      <terminal symbol=";"/>
+      <non-terminal name="Reasoning"/>
+      <terminal symbol="end"/>
+      <terminal symbol=";"/>
+    </rule>
+
+    <rule name="Suppose-List">
+      <subrule kind="one-or-more">
+	<non-terminal name="Suppose"/>
+      </subrule>
+    </rule>
+
+    <rule name="Suppose">
+      <terminal symbol="suppose"/>
+      <subrule kind="alternative">
+	<non-terminal name="Proposition"/>
+	<non-terminal name="Conditions"/>
+      </subrule>
+      <terminal symbol=";"/> 
+      <non-terminal name="Reasoning"/>
+      <terminal symbol="end"/>
+      <terminal symbol=";"/>
+    </rule>
+
+    <rule name="Reasoning-Item">
+      <subrule kind="alternative">
+	<non-terminal name="Auxiliary-Item"/>
+	<non-terminal name="Skeleton-Item"/>
+      </subrule>
+    </rule>
+
+    <rule name="Skeleton-Item">
+      <subrule kind="alternative">
+	<non-terminal name="Generalization"/>
+	<non-terminal name="Assumption"/>
+	<non-terminal name="Conclusion"/>
+	<non-terminal name="Exemplification"/>
+      </subrule>
+    </rule>
+
+    <rule name="Generalization">
+      <terminal symbol="let"/>
+      <non-terminal name="Qualified-Variables"/>
+      <subrule kind="zero-or-one">
+	<terminal symbol="such"/>
+	<non-terminal name="Conditions"/>
+      </subrule>
+      <terminal symbol=";"/>
+    </rule>
+
+    <rule name="Assumption">
+      <subrule kind="alternative">
+	<non-terminal name="Single-Assumption"/>
+	<non-terminal name="Collective-Assumption"/>
+	<non-terminal name="Existential-Assumption"/>
+      </subrule>
+    </rule>
+
+    <rule name="Single-Assumption">
+      <terminal symbol="assume"/>
+      <non-terminal name="Proposition"/>
+      <terminal symbol=";"/>
+    </rule>
+
+    <rule name="Collective-Assumption">
+      <terminal symbol="assume"/>
+      <non-terminal name="Conditions"/>
+      <terminal symbol=";"/>
+    </rule>
+
+    <rule name="Existential-Assumption">
+      <terminal symbol="given"/>
+      <non-terminal name="Qualified-Variables"/>
+      <subrule kind="zero-or-one">
+	<terminal symbol="such"/>
+	<non-terminal name="Conditions"/>
+      </subrule>
+      <terminal symbol=";"/>
+    </rule>
+
+    <rule name="Conclusion">
+      <subrule kind="alternative">
+	<subrule>
+	  <subrule kind="alternative">
+	    <terminal symbol="thus"/>
+	    <terminal symbol="hence"/>
+	</subrule>
+	  <non-terminal name="Compact-Statement"/>
+	</subrule>
+	<non-terminal name="Diffuse-Conclusion"/>
+      </subrule>
+    </rule>
+
+    <rule name="Diffuse-Conclusion">
+      <subrule kind="alternative">
+	<subrule>
+	  <terminal symbol="thus"/>
+	  <non-terminal name="Diffuse-Statement"/>
+	</subrule>
+	<subrule>
+	  <terminal symbol="hereby"/>
+	  <non-terminal name="Reasoning"/>
+	  <terminal symbol="end"/>
+	  <terminal symbol=";"/>
+	</subrule>
+      </subrule>
+    </rule>
+
+    <rule name="Exemplification">
+      <terminal symbol="take"/>
+      <subrule kind="one-or-more">
+	<non-terminal name="Example"/>
+	<separator>
+	  <terminal symbol=","/>
+	</separator>
+      </subrule>
+      <terminal symbol=";"/>
+    </rule>
+
+    <rule name="Example">
+      <subrule kind="alternative">
+	<non-terminal name="Term-Expression"/>
+	<subrule>
+	  <non-terminal name="Variable-Identifier"/>
+	  <terminal symbol="="/>
+	  <non-terminal name="Term-Expression"/>
+	</subrule>
+      </subrule>
+    </rule>
+
+    <rule name="Statement">
+      <subrule kind="alternative">
+	<subrule>
+	  <subrule kind="zero-or-one">
+	    <terminal symbol="then"/>
+	</subrule>
+	  <non-terminal name="Linkable-Statement"/>
+	</subrule>
+	<non-terminal name="Diffuse-Statement"/>
+      </subrule>
+    </rule>
+
+    <rule name="Linkable-Statement">
+      <subrule kind="alternative">
+	<non-terminal name="Compact-Statement"/>
+	<non-terminal name="Choice-Statement"/>
+	<non-terminal name="Type-Changing-Statement"/>
+	<non-terminal name="Iterative-Equality"/>
+      </subrule>
+    </rule>
+
+    <rule name="Compact-Statement">
+      <non-terminal name="Proposition"/>
+      <non-terminal name="Justification"/>
+      <terminal symbol=";"/>
+    </rule>
+
+    <rule name="Choice-Statement">
+      <terminal symbol="consider"/>
+      <non-terminal name="Qualified-Variables"/>
+      <subrule kind="zero-or-one">
+	<terminal symbol="such"/>
+	<non-terminal name="Conditions"/>
+      </subrule>
+      <non-terminal name="Simple-Justification"/>
+      <terminal symbol=";"/>
+    </rule>
+
+    <rule name="Type-Changing-Statement">
+      <terminal symbol="reconsider"/>
+      <non-terminal name="Type-Change-List"/>
+      <terminal symbol="as"/>
+      <non-terminal name="Type-Expression"/>
+      <non-terminal name="Simple-Justification"/>
+      <terminal symbol=";"/>
+    </rule>
+
+    <rule name="Type-Change-List">
+      <subrule kind="one-or-more">
+	<subrule kind="alternative">
+	  <non-terminal name="Equating"/>
+	  <non-terminal name="Variable-Identifier"/>
+	</subrule>
+	<separator>
+	  <terminal symbol=","/>
+	</separator>
+      </subrule>
+    </rule>
+
+    <rule name="Iterative-Equality">
+      <subrule kind="zero-or-one">
+	<non-terminal name="Label-Identifier"/>
+	<terminal symbol=":"/>
+      </subrule>
+      <non-terminal name="Term-Expression"/>
+      <terminal symbol="="/>
+      <non-terminal name="Term-Expression"/>
+      <non-terminal name="Simple-Justification"/> 
+      <subrule kind="one-or-more">
+	<terminal symbol=".="/>
+	<non-terminal name="Term-Expression"/>
+	<non-terminal name="Simple-Justification"/>
+      </subrule>
+      <terminal symbol=";"/>
+    </rule>
+
+    <rule name="Diffuse-Statement">
+      <subrule kind="zero-or-one">
+	<non-terminal name="Label-Identifier"/>
+	<terminal symbol=":"/>
+      </subrule> 
+      <terminal symbol="now"/> 
+      <non-terminal name="Reasoning"/> 
+      <terminal symbol="end"/>
+      <terminal symbol=";"/>
+    </rule>
+
+    <rule name="Justification">
+      <subrule kind="alternative">
+	<non-terminal name="Simple-Justification"/>
+	<non-terminal name="Proof"/>
+      </subrule>
+    </rule>
+
+    <rule name="Simple-Justification">
+      <subrule kind="alternative">
+	<non-terminal name="Straightforward-Justification"/>
+	<non-terminal name="Scheme-Justification"/>
+      </subrule>
+    </rule>
+
+    <rule name="Proof">
+      <subrule kind="alternative">
+	<terminal symbol="proof"/>
+	<terminal symbol="@proof"/>
+      </subrule>
+      <non-terminal name="Reasoning"/> 
+      <terminal symbol="end"/>
+    </rule>
+
+    <rule name="Straightforward-Justification">
+      <subrule kind="zero-or-one">
+	<terminal symbol="by"/>
+	<non-terminal name="References"/>
+      </subrule>
+    </rule>
+
+    <rule name="Scheme-Justification">
+      <terminal symbol="from"/>
+      <non-terminal name="Scheme-Reference"/>
+      <subrule kind="zero-or-one">
+	<terminal symbol="("/>
+	<non-terminal name="References"/>
+	<terminal symbol=")"/>
+      </subrule>
+    </rule>
+
+    <rule name="References">
+      <subrule kind="one-or-more">
+	<non-terminal name="Reference"/>
+	<separator>
+	  <terminal symbol=","/>
+	</separator>
+      </subrule>
+    </rule>
+
+    <rule name="Reference">
+      <subrule kind="alternative">
+	<non-terminal name="Local-Reference"/>
+	<non-terminal name="Library-Reference"/>
+      </subrule>
+    </rule>
+
+    <rule name="Scheme-Reference">
+      <subrule kind="alternative">
+	<non-terminal name="Local-Scheme-Reference"/>
+	<non-terminal name="Library-Scheme-Reference"/>
+      </subrule>
+    </rule>
+
+    <rule name="Local-Reference">
+      <non-terminal name="Label-Identifier"/>
+    </rule>
+
+    <rule name="Local-Scheme-Reference">
+      <non-terminal name="Scheme-Identifier"/>
+    </rule>
+
+    <rule name="Library-Reference">
+      <non-terminal name="Article-Name"/>
+      <terminal symbol=":"/>
+      <subrule kind="one-or-more">
+	<subrule kind="alternative">
+	  <non-terminal name="Theorem-Number"/>
+	<subrule>
+	    <terminal symbol="def"/>
+	    <non-terminal name="Definition-Number"/>
+	</subrule>
+	</subrule>
+	<separator>
+	  <terminal symbol=","/>
+	</separator>
+      </subrule>
+    </rule>
+
+    <rule name="Library-Scheme-Reference">
+      <non-terminal name="Article-Name"/>
+      <terminal symbol=":"/>
+      <terminal symbol="sch"/>
+      <non-terminal name="Scheme-Number"/>
+    </rule>
+
+    <rule name="Theorem-Number">
+      <non-terminal name="Numeral"/>
+    </rule>
+
+    <rule name="Definition-Number">
+      <non-terminal name="Numeral"/>
+    </rule>
+
+    <rule name="Scheme-Number">
+      <non-terminal name="Numeral"/>
+    </rule>
+
+    <rule name="Conditions">
+      <terminal symbol="that"/>
+      <subrule kind="one-or-more">
+	<non-terminal name="Proposition"/>
+	<separator>
+	  <terminal symbol="and"/>
+	</separator>
+      </subrule>
+    </rule>
+
+    <rule name="Proposition">
+      <subrule kind="zero-or-one">
+	<non-terminal name="Label-Identifier"/>
+	<terminal symbol=":"/>
+      </subrule>
+      <non-terminal name="Sentence"/>
+    </rule>
+
+    <rule name="Sentence">
+      <non-terminal name="Formula-Expression"/>
+    </rule>
+  </part>
+
+    <!-- Expressions -->
+
+  <part name="Expressions">
+    <rule name="Formula-Expression">
+      <subrule kind="alternative">
+	<subrule>
+	  <terminal symbol="("/>
+	  <non-terminal name="Formula-Expression"/>
+	  <terminal symbol=")"/>
+	</subrule>
+	<non-terminal name="Atomic-Formula-Expression"/>
+	<non-terminal name="Quantified-Formula-Expression"/>
+	<subrule>
+	  <non-terminal name="Formula-Expression"/>
+	  <terminal symbol="&amp;"/>
+	  <non-terminal name="Formula-Expression"/>
+	</subrule>
+	<subrule>
+	  <non-terminal name="Formula-Expression"/>
+	  <terminal symbol="or"/>
+	  <non-terminal name="Formula-Expression"/>
+	</subrule>
+	<subrule>
+	  <non-terminal name="Formula-Expression"/>
+	  <terminal symbol="implies"/>
+	  <non-terminal name="Formula-Expression"/>
+	</subrule>
+	<subrule>
+	  <non-terminal name="Formula-Expression"/>
+	  <terminal symbol="iff"/>
+	  <non-terminal name="Formula-Expression"/>
+	</subrule>
+	<subrule>
+	  <terminal symbol="not"/> <non-terminal name="Formula-Expression"/>
+	</subrule>
+	<terminal symbol="contradiction"/> 
+	<terminal symbol="thesis"/>
+      </subrule>
+    </rule>
+
+    <rule name="Atomic-Formula-Expression">
+      <subrule kind="alternative">
+	<subrule>
+	  <subrule kind="zero-or-one">
+	    <non-terminal name="Term-Expression-List"/>
+	</subrule>
+	  <non-terminal name="Predicate-Symbol"/>
+	  <subrule kind="zero-or-one">
+	    <non-terminal name="Term-Expression-List"/>
+	</subrule>
+	</subrule>
+	<subrule>
+	  <non-terminal name="Predicate-Identifier"/>
+	  <terminal symbol="["/>
+	  <subrule kind="zero-or-one">
+	    <non-terminal name="Term-Expression-List"/>
+	</subrule>
+	  <terminal symbol="]"/>
+	</subrule>
+	<subrule>
+	  <non-terminal name="Term-Expression"/>
+	  <terminal symbol="is"/>
+	  <subrule kind="one-or-more">
+	    <non-terminal name="Adjective"/>
+	</subrule>
+	</subrule>
+	<subrule>
+	  <non-terminal name="Term-Expression"/>
+	  <terminal symbol="is"/>
+	  <non-terminal name="Type-Expression"/>
+	</subrule>
+      </subrule>
+    </rule>
+
+    <rule name="Quantified-Formula-Expression">
+      <subrule kind="alternative">
+	<subrule>
+	  <terminal symbol="for"/>
+	  <non-terminal name="Qualified-Variables"/>
+	  <subrule kind="zero-or-one">
+	    <terminal symbol="st"/>
+	    <non-terminal name="Formula-Expression"/>
+	</subrule> 
+	  <subrule kind="alternative">
+	    <subrule>
+	      <terminal symbol="holds"/>
+	      <non-terminal name="Formula-Expression"/>
+	    </subrule>
+	    <non-terminal name="Quantified-Formula-Expression"/>
+	</subrule>
+	</subrule>
+	<subrule>
+	  <terminal symbol="ex"/> <non-terminal name="Qualified-Variables"/>
+	  <terminal symbol="st"/> <non-terminal name="Formula-Expression"/>
+	</subrule>
+      </subrule>
+    </rule>
+
+    <rule name="Qualified-Variables">
+      <subrule kind="alternative">
+	<non-terminal name="Implicitly-Qualified-Variables"/>
+	<non-terminal name="Explicitly-Qualified-Variables"/>
+	<subrule>
+	  <non-terminal name="Explicitly-Qualified-Variables"/> <terminal symbol=","/>
+	  <non-terminal name="Implicitly-Qualified-Variables"/>
+	</subrule>
+      </subrule>
+    </rule>
+
+    <rule name="Implicitly-Qualified-Variables">
+      <non-terminal name="Variables"/>
+    </rule>
+
+    <rule name="Explicitly-Qualified-Variables">
+      <subrule kind="one-or-more">
+	<non-terminal name="Qualified-Segment"/>
+	<separator>
+	  <terminal symbol=","/>
+	</separator>
+      </subrule>
+    </rule>
+
+    <rule name="Qualified-Segment">
+      <non-terminal name="Variables"/>
+      <non-terminal name="Qualification"/>
+    </rule>
+
+    <rule name="Variables">
+      <subrule kind="one-or-more">
+	<non-terminal name="Variable-Identifier"/>
+	<separator>
+	  <terminal symbol=","/>
+	</separator>
+      </subrule>
+    </rule>
+
+    <rule name="Qualification">
+      <subrule kind="alternative">
+	<terminal symbol="being"/>
+	<terminal symbol="be"/>
+      </subrule>
+      <non-terminal name="Type-Expression"/>
+    </rule>
+
+    <rule name="Type-Expression">
+      <subrule kind="alternative">
+	<subrule>
+	  <terminal symbol="("/> <non-terminal name="Type-Expression"/> <terminal symbol=")"/>
+	</subrule>
+	<subrule>
+	  <non-terminal name="Adjective-Cluster"/> <non-terminal name="Type-Expression"/>
+	</subrule>
+	<non-terminal name="Radix-Type"/>
+      </subrule>
+    </rule>
+
+    <rule name="Structure-Type-Expression">
+      <subrule kind="alternative">
+	<subrule>
+	  <terminal symbol="("/> <non-terminal name="Structure-Type-Expression"/> <terminal symbol=")"/>
+	</subrule>
+	<subrule>
+	  <non-terminal name="Adjective-Cluster"/> 
+	  <non-terminal name="Structure-Symbol"/>
+	  <subrule kind="zero-or-one">
+	    <terminal symbol="over"/>
+	    <non-terminal name="Term-Expression-List"/>
+	  </subrule>
+	</subrule>
+      </subrule>      
+    </rule>
+    
+    <rule name="Radix-Type">
+      <subrule kind="alternative">
+	<subrule>
+	  <non-terminal name="Mode-Symbol"/>
+	  <subrule kind="zero-or-one">
+	    <terminal symbol="of"/>
+	    <non-terminal name="Term-Expression-List"/>
+	</subrule> 
+	</subrule>
+	<subrule>
+	  <non-terminal name="Structure-Symbol"/>
+	  <subrule kind="zero-or-one">
+	    <terminal symbol="over"/>
+	    <non-terminal name="Term-Expression-List"/>
+	</subrule>
+	</subrule>
+      </subrule>
+    </rule>
+
+    <rule name="Type-Expression-List">
+      <subrule kind="one-or-more">
+	<non-terminal name="Type-Expression"/>
+	<separator>
+	  <terminal symbol=","/>
+	</separator>
+      </subrule>
+    </rule>
+
+    <rule name="Term-Expression">
+      <subrule kind="alternative">
+	<subrule>
+	  <terminal symbol="("/>
+	  <non-terminal name="Term-Expression"/>
+	  <terminal symbol=")"/>
+	</subrule>
+	<subrule>
+	  <subrule kind="zero-or-one">
+	    <non-terminal name="Arguments"/>
+	</subrule>
+	  <non-terminal name="Functor-Symbol"/>
+	  <subrule kind="zero-or-one">
+	    <non-terminal name="Arguments"/>
+	</subrule>
+	</subrule>
+	<subrule>
+	  <non-terminal name="Left-Functor-Bracket"/>
+	  <non-terminal name="Term-Expression-List"/>
+	  <non-terminal name="Right-Functor-Bracket"/>
+	</subrule>
+	<subrule>
+	  <non-terminal name="Functor-Identifier"/>
+	  <terminal symbol="("/>
+	  <subrule kind="zero-or-one">
+	    <non-terminal name="Term-Expression-List"/>
+	</subrule>
+	  <terminal symbol=")"/>
+	</subrule>
+	<subrule>
+	  <non-terminal name="Structure-Symbol"/>
+	  <terminal symbol="(#"/>
+	  <non-terminal name="Term-Expression-List"/>
+	  <terminal symbol="#)"/>
+	</subrule>
+	<non-terminal name="Variable-Identifier"/>
+	<subrule>
+	  <terminal symbol="{"/>
+	  <non-terminal name="Term-Expression"/>
+	  <subrule kind="zero-or-one">
+	    <non-terminal name="Postqualification"/>
+	</subrule>
+	  <terminal symbol=":"/>
+	  <non-terminal name="Sentence"/> <terminal symbol="}"/>
+	</subrule>
+	<non-terminal name="Numeral"/>
+	<subrule>
+	  <non-terminal name="Term-Expression"/>
+	  <terminal symbol="qua"/>
+	  <non-terminal name="Type-Expression"/>
+	</subrule>
+	<subrule>
+	  <terminal symbol="the"/>
+	  <non-terminal name="Selector-Symbol"/>
+	  <terminal symbol="of"/>
+	  <non-terminal name="Term-Expression"/>
+	</subrule>
+	<subrule>
+	  <terminal symbol="the"/>
+	  <non-terminal name="Selector-Symbol"/>
+	</subrule>
+	<non-terminal name="Private-Definition-Parameter"/>
+	<terminal symbol="it"/>
+      </subrule>
+    </rule>
+
+    <rule name="Arguments">
+      <subrule kind="alternative">
+	<non-terminal name="Term-Expression"/>
+	<subrule>
+	  <terminal symbol="("/>
+	  <non-terminal name="Term-Expression-List"/>
+	  <terminal symbol=")"/>
+	</subrule>
+      </subrule>
+    </rule>
+
+    <rule name="Term-Expression-List">
+      <subrule kind="one-or-more">
+	<non-terminal name="Term-Expression"/>
+	<separator>
+	  <terminal symbol=","/>
+	</separator>
+      </subrule>
+    </rule>
+
+    <rule name="Postqualification">
+      <terminal symbol="where"/>
+      <subrule kind="one-or-more">
+	<non-terminal name="Postqualifying-Segment"/>
+	<separator>
+	  <terminal symbol=","/>
+	</separator>
+      </subrule>
+    </rule>
+
+    <rule name="Postqualifying-Segment">
+      <subrule kind="one-or-more">
+	<non-terminal name="Postqualified-Variable"/>
+	<separator>
+	  <terminal symbol=","/>
+	</separator>
+      </subrule>
+      <terminal symbol="is"/>
+      <non-terminal name="Type-Expression"/>
+    </rule>
+
+    <rule name="Postqualified-Variable">
+      <non-terminal name="Identifier"/>
+    </rule>
+
+    <rule name="Private-Definition-Parameter">
+      <subrule kind="alternative">
+	<terminal symbol="$1"/>
+	<terminal symbol="$2"/>
+	<terminal symbol="$3"/>
+	<terminal symbol="$4"/>
+	<terminal symbol="$5"/>
+	<terminal symbol="$6"/>
+	<terminal symbol="$7"/>
+	<terminal symbol="$8"/>
+	<terminal symbol="$9"/>
+	<terminal symbol="$10"/>
+      </subrule>
+    </rule>
+  </part>
+
+</grammar>

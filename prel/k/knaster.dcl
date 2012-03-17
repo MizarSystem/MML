@@ -9,16 +9,16 @@
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="ORDINAL1"/>
-<ArticleID name="MCART_1"/>
 <ArticleID name="RELSET_1"/>
+<ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="RELAT_2"/>
 <ArticleID name="PARTFUN1"/>
-<ArticleID name="FUNCOP_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
+<ArticleID name="FUNCOP_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="LATTICES"/>
 <ArticleID name="RLVECT_1"/>
@@ -64,7 +64,7 @@
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>
-<Adjective nr="152"/>
+<Adjective nr="153"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -72,7 +72,7 @@
 <Typ kind="G" nr="7">
 <Cluster>
 <Adjective nr="35" value="false"/>
-<Adjective nr="50"/>
+<Adjective nr="51"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -86,10 +86,10 @@
 </Typ>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="158">
+<Adjective nr="159">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="159">
+<Adjective nr="160">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -98,24 +98,16 @@
 <ArgTypes/>
 <Cluster>
 <Adjective nr="35" value="false"/>
-<Adjective nr="50"/>
-<Adjective nr="106"/>
+<Adjective nr="51"/>
+<Adjective nr="107"/>
 </Cluster>
 <Typ kind="G" nr="7">
 <Cluster/>
 </Typ>
 <Cluster>
 <Adjective nr="35" value="false"/>
-<Adjective nr="44"/>
-<Adjective nr="45"/>
-<Adjective nr="46"/>
-<Adjective nr="47"/>
-<Adjective nr="48"/>
-<Adjective nr="49"/>
-<Adjective nr="50"/>
-<Adjective nr="53"/>
-<Adjective nr="54"/>
-<Adjective nr="55"/>
+<Adjective nr="51"/>
+<Adjective nr="56"/>
 </Cluster>
 </CCluster>
 </Registrations>

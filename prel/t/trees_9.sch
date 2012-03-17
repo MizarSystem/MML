@@ -3,13 +3,13 @@
 <Signature>
 <ArticleID name="HIDDEN"/>
 <ArticleID name="RELAT_1"/>
+<ArticleID name="TARSKI"/>
 <ArticleID name="FUNCT_1"/>
+<ArticleID name="ORDINAL1"/>
+<ArticleID name="XXREAL_0"/>
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
-<ArticleID name="TARSKI"/>
-<ArticleID name="ORDINAL1"/>
-<ArticleID name="XXREAL_0"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
@@ -26,7 +26,7 @@
 </Typ>
 </ArgTypes>
 <For>
-<Typ kind="M" nr="2">
+<Typ kind="M" nr="3">
 <Cluster/>
 <Func kind="K" nr="50"/>
 </Typ>
@@ -39,7 +39,7 @@
 </Func>
 <Func kind="F" nr="2"/>
 </Pred>
-<Pred kind="R" nr="16">
+<Pred kind="R" nr="6">
 <Func kind="K" nr="55">
 <Func kind="F" nr="2"/>
 </Func>
@@ -50,7 +50,7 @@
 <Not>
 <And>
 <Not>
-<Pred kind="R" nr="16">
+<Pred kind="R" nr="6">
 <Func kind="K" nr="55">
 <Func kind="F" nr="2"/>
 </Func>
@@ -80,7 +80,7 @@
 <Func kind="F" nr="2"/>
 </Pred>
 <For>
-<Typ kind="M" nr="2">
+<Typ kind="M" nr="3">
 <Cluster/>
 <Func kind="K" nr="50"/>
 </Typ>
@@ -97,19 +97,19 @@
 </Not>
 </For>
 <For>
-<Typ kind="M" nr="2">
+<Typ kind="M" nr="3">
 <Cluster/>
 <Func kind="K" nr="50"/>
 </Typ>
 <For>
-<Typ kind="M" nr="2">
+<Typ kind="M" nr="3">
 <Cluster/>
 <Func kind="K" nr="50"/>
 </Typ>
 <Not>
 <And>
 <Not>
-<Pred kind="R" nr="16">
+<Pred kind="R" nr="6">
 <Var nr="2"/>
 <Var nr="1"/>
 </Pred>
@@ -133,12 +133,12 @@
 </For>
 </For>
 <For>
-<Typ kind="M" nr="2">
+<Typ kind="M" nr="3">
 <Cluster/>
 <Func kind="K" nr="50"/>
 </Typ>
 <For>
-<Typ kind="M" nr="2">
+<Typ kind="M" nr="3">
 <Cluster/>
 <Func kind="K" nr="50"/>
 </Typ>

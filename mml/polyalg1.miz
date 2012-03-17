@@ -12,17 +12,15 @@ environ
       UNIALG_2, RLSUB_1, SETFAM_1, POLYNOM1, ALGSEQ_1, POLYALG1, REALSET1,
       NAT_1, VECTSP_2, STRUCT_0;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, NUMBERS, XCMPLX_0,
-      REALSET1, STRUCT_0, NAT_1, NAT_D, RELAT_1, FUNCT_1, FUNCT_2, FINSEQ_1,
-      FINSEQ_4, FINSOP_1, RFINSEQ, BINOP_1, BINARITH, GROUP_1, RLVECT_1,
-      VECTSP_1, NORMSP_1, BHSP_1, POLYNOM1, ALGSTR_1, ALGSEQ_1, POLYNOM3,
-      POLYNOM5,
+      REALSET1, STRUCT_0, NAT_1, RELAT_1, FUNCT_1, FUNCT_2, FINSEQ_1, FINSEQ_4,
+      FINSOP_1, RFINSEQ, BINOP_1, BINARITH, GROUP_1, RLVECT_1, VECTSP_1,
+      NORMSP_1, BHSP_1, POLYNOM1, ALGSTR_1, ALGSEQ_1, POLYNOM3, POLYNOM5,
       VECTSP_4, XXREAL_0;
- constructors SETFAM_1, DOMAIN_1, BINOP_1, XXREAL_0, REAL_1, FINSOP_1, RFINSEQ,
-      BINARITH, ALGSTR_1, VECTSP_4, NORMSP_1, POLYNOM1, POLYNOM3, POLYNOM5,
-      NAT_D, BHSP_1, REALSET1;
- registrations SUBSET_1, FUNCT_1, STRUCT_0, RELSET_1, VECTSP_1, ALGSTR_2,
-      FINSEQ_5, ARYTM_3, BINOM, POLYNOM3, POLYNOM5, MEMBERED, REALSET1,
-      XXREAL_0, NAT_1;
+ constructors SETFAM_1, BINOP_1, XXREAL_0, FINSOP_1, REALSET1, RFINSEQ,
+      BINARITH, ALGSTR_1, VECTSP_4, BHSP_1, POLYNOM1, POLYNOM3, POLYNOM5;
+ registrations XBOOLE_0, SUBSET_1, FUNCT_1, RELSET_1, ARYTM_3, NUMBERS,
+      XREAL_0, NAT_1, FINSEQ_1, REALSET1, STRUCT_0, VECTSP_1, FVSUM_1,
+      POLYNOM3, POLYNOM5, BINOM;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, RLVECT_1, GROUP_1, VECTSP_1, VECTSP_4, BINOP_1, REALSET1,
       STRUCT_0;
@@ -478,7 +476,6 @@ A6:    1 in dom f & 1<=k & k<=i by A4,A5,FINSEQ_5:6;
     let L be add-associative right_zeroed well-unital right_complementable
      left-distributive (non empty doubleLoopStr);
     let p be sequence of L;
-X: 1.L = 1_L by VECTSP_1:96;
         now let i be Element of NAT;
      consider r be FinSequence of the carrier of L such that
       A1: len r = i+1 and
@@ -511,7 +508,7 @@ X: 1.L = 1_L by VECTSP_1:96;
         .= (1_.(L)).(1-'1)*p.(i+1-'1) by A3,A5
         .= (1_.(L)).(1-'1)*p.i by BINARITH:39
         .= (1_.(L)).(0)*p.i by BINARITH:51
-        .= 1_(L)*p.i by POLYNOM3:31,X
+        .= 1_(L)*p.i by POLYNOM3:31
         .= p.i by VECTSP_1:def 19;
      hence ((1_.(L))*'p).i = p.i by A2,A6,A12,RLVECT_1:10;
     end;
@@ -521,16 +518,15 @@ X: 1.L = 1_L by VECTSP_1:96;
 Lm1: now
    let L be add-associative right_zeroed right_complementable
          distributive well-unital (non empty doubleLoopStr);
-X: 1.L = 1_L by VECTSP_1:96;
    set F = Formal-Series L;
    let x, e be Element of F;
    assume
 A1: e = 1_.L;
    reconsider a=x, b=e as sequence of L by Def2;
    thus x * e = a*'b by Def2
-   .= x by A1,POLYNOM3:36,X;
+   .= x by A1,POLYNOM3:36;
    thus e * x = b*'a by Def2
-   .= x by A1,Th5,X;
+   .= x by A1,Th5;
 end;
 
 registration
@@ -688,6 +684,10 @@ thus (1_L)*v = 1_L*p by Def2
    end;
 end;
 
+consider D00 being ::left_zeroed
+add-associative associative right_zeroed
+   right_complementable distributive (non empty doubleLoopStr);
+
 theorem Th10:
   for L be Abelian left_zeroed add-associative associative right_zeroed
    right_complementable distributive (non empty doubleLoopStr)
@@ -844,9 +844,7 @@ A11: the mult of A = (the mult of B)||the carrier of A by A1,Def3
 A12: the lmult of A = (the lmult of B)|[:the carrier of L,the carrier of A:]
       by A1,Def3
      .= the lmult of B by A8,A9,RELAT_1:97;
-A13: 0.A = 0.A
-     .= 0.B by A1,Def3
-     .= 0.B;
+A13: 0.A = 0.B by A1,Def3;
     1.A = 1.B by A1,Def3;
   hence the AlgebraStr of A = the AlgebraStr of B
          by A3,A4,A10,A11,A12,A13,XBOOLE_0:def 10;
@@ -922,7 +920,7 @@ definition
   let B be non empty AlgebraStr over L;
   let A be Subset of B;
   attr A is opers_closed means :Def4:
-    A is lineary-closed &
+    A is linearly-closed &
     (for x,y being Element of B st x in A & y in A holds x*y in A) &
     1.B in A &
     0.B in A;
@@ -1001,7 +999,7 @@ proof
  let A be non empty Subalgebra of B;
  take C = the carrier of A;
 reconsider C as Subset of B by Def3;
-A1: C is lineary-closed
+A1: C is linearly-closed
   proof
    thus for v,u being Element of B st v in C & u in C
        holds v + u in C
@@ -1058,7 +1056,7 @@ A3:  x in [:A,A:];
     consider y,z be set such that
 A4:  y in A & z in A & x = [y,z] by A3,ZFMISC_1:def 2;
     reconsider y,z as Element of B by A4;
-A5:  A is lineary-closed by A1,Def4;
+A5:  A is linearly-closed by A1,Def4;
          f1.x = y + z by A3,A4,FUNCT_1:72;
      hence f1.x in A by A4,A5,VECTSP_4:def 1;
     end;
@@ -1090,7 +1088,7 @@ A10:  x in [:the carrier of L,A:];
 A11:  y in the carrier of L & z in A & x = [y,z] by A10,ZFMISC_1:def 2;
     reconsider y as Element of L by A11;
     reconsider z as Element of B by A11;
-A12:  A is lineary-closed by A1,Def4;
+A12:  A is linearly-closed by A1,Def4;
          f4.x = y * z by A10,A11,FUNCT_1:72;
     hence f4.x in A by A11,A12,VECTSP_4:def 1;
    end;
@@ -1125,7 +1123,7 @@ A1:  for Y be set holds Y in X iff Y c= the carrier of B &
    ex C being Subalgebra of B st Y = the carrier of C & A c= Y;
         B is Subalgebra of B by Th11;
 then A2: X <> {} by A1;
-   thus meet X is lineary-closed
+   thus meet X is linearly-closed
     proof
     thus for x,y being Element of B st x in meet X & y in meet
 X
@@ -1290,10 +1288,8 @@ A16:  the carrier of P2 c= the carrier of B by Def3;
         .= (the mult of P2).(x,y);
     end;
 then A17: the mult of P1 = the mult of P2 by A13,BINOP_1:2;
-A18: 0.P1 = 0.P1
-        .= 0.B by Def3
-        .= 0.P2 by Def3
-        .= 0.P2;
+A18: 0.P1 = 0.B by Def3
+        .= 0.P2 by Def3;
 A19: 1.P1 = 1.B by Def3
         .= 1.P2 by Def3;
         now let x be Element of L,
@@ -1393,7 +1389,7 @@ for A being non empty Subset of Formal-Series L st
   let A be non empty Subset of Formal-Series L such that
 A1: A = the carrier of Polynom-Ring L;
    set B = Formal-Series L;
-   thus A is lineary-closed
+   thus A is linearly-closed
     proof
      thus for v,u being Element of B st v in A & u in A
        holds v + u in A
@@ -1488,11 +1484,9 @@ A5: for x being Element of Polynom-Algebra L
     end;
 then A6: the mult of Polynom-Algebra L = the mult of Polynom-Ring L
   by A3,BINOP_1:2;
-A7: 0.Polynom-Algebra L = 0.(Polynom-Algebra L)
-       .= 0.(Formal-Series L) by A1,Def3
+A7: 0.Polynom-Algebra L = 0.(Formal-Series L) by A1,Def3
        .= 0_.(L) by Def2
-       .= 0.(Polynom-Ring L) by POLYNOM3:def 12
-       .= 0.Polynom-Ring L;
+       .= 0.Polynom-Ring L by POLYNOM3:def 12;
      1.Polynom-Algebra L = 1.Formal-Series L by A1,Def3
        .= 1_.(L) by Def2
        .= 1.Polynom-Ring L by POLYNOM3:def 12;

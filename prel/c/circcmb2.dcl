@@ -23,17 +23,6 @@
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="UNIALG_1"/>
 <ArticleID name="MSUALG_1"/>
-<ArticleID name="CARD_3"/>
-<ArticleID name="FUNCT_6"/>
-<ArticleID name="FUNCT_3"/>
-<ArticleID name="TREES_1"/>
-<ArticleID name="TREES_2"/>
-<ArticleID name="TREES_3"/>
-<ArticleID name="TREES_4"/>
-<ArticleID name="LANG1"/>
-<ArticleID name="DTCONSTR"/>
-<ArticleID name="MSAFREE"/>
-<ArticleID name="MSAFREE2"/>
 <ArticleID name="FUNCT_4"/>
 <ArticleID name="FRAENKEL"/>
 <ArticleID name="XBOOLEAN"/>
@@ -52,61 +41,43 @@
 <Adjective nr="8">
 <Func kind="K" nr="126">
 <LocusVar nr="1"/>
-<Func kind="K" nr="356"/>
+<Func kind="K" nr="210"/>
 </Func>
-<Func kind="K" nr="356"/>
+<Func kind="K" nr="210"/>
 </Adjective>
 </Cluster>
 <Func kind="K" nr="126">
 <LocusVar nr="1"/>
-<Func kind="K" nr="356"/>
+<Func kind="K" nr="210"/>
 </Func>
-<Func kind="K" nr="356"/>
+<Func kind="K" nr="210"/>
 </Typ>
-<Typ kind="M" nr="41">
+<Typ kind="M" nr="20">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="355">
+<Func kind="K" nr="209">
 <LocusVar nr="1"/>
-<Func kind="K" nr="356"/>
+<Func kind="K" nr="210"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
 </Func>
 <Cluster>
-<Adjective nr="46">
-<Func kind="K" nr="353">
-<LocusVar nr="2"/>
-<LocusVar nr="3"/>
-</Func>
-</Adjective>
 <Adjective nr="47">
-<Func kind="K" nr="353">
+<Func kind="K" nr="207">
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
 </Func>
 </Adjective>
-<Adjective nr="72">
-<Func kind="K" nr="353">
+<Adjective nr="48">
+<Func kind="K" nr="207">
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
 </Func>
 </Adjective>
-<Adjective nr="73">
-<Func kind="K" nr="353">
-<LocusVar nr="2"/>
-<LocusVar nr="3"/>
-</Func>
-</Adjective>
-<Adjective nr="82">
-<Func kind="K" nr="353">
-<LocusVar nr="2"/>
-<LocusVar nr="3"/>
-</Func>
-</Adjective>
-<Adjective nr="84">
-<Func kind="K" nr="353">
+<Adjective nr="59">
+<Func kind="K" nr="207">
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
 </Func>

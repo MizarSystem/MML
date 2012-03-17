@@ -3,7 +3,6 @@
 <Signature>
 <ArticleID name="HIDDEN"/>
 <ArticleID name="XCMPLX_0"/>
-<ArticleID name="XXREAL_0"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="POLYEQ_4"/>
 </Signature>
@@ -45,7 +44,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="12">
+<Func kind="K" nr="8">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -62,41 +61,41 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="5"/>
+<Adjective nr="2"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="5"/>
+<Adjective nr="2"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="5"/>
+<Adjective nr="2"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="5"/>
+<Adjective nr="2"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="5"/>
+<Adjective nr="2"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="5"/>
+<Adjective nr="2"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="5"/>
+<Adjective nr="2"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="12">
+<Func kind="K" nr="8">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -106,9 +105,7 @@
 <LocusVar nr="7"/>
 </Func>
 <Cluster>
-<Adjective nr="1"/>
 <Adjective nr="2"/>
-<Adjective nr="5"/>
 </Cluster>
 </FCluster>
 </Registrations>

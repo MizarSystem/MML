@@ -12,12 +12,11 @@ environ
  notations XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, FUNCT_1, FUNCT_2, BINOP_1,
       ORDINAL1, XCMPLX_0, XXREAL_0, XREAL_0, BINARITH, BINOP_2, STRUCT_0,
       RLVECT_1, GROUP_1;
- constructors BINOP_1, BINOP_2, MEMBERED, RLVECT_1, GROUP_1, XXREAL_0,
-      BINARITH, NAT_1, REAL_1, DOMAIN_1, NAT_D;
- registrations STRUCT_0, RLVECT_1, RELSET_1, MEMBERED, GROUP_1, NAT_1,
-      ORDINAL1, XREAL_0;
+ constructors BINOP_1, XXREAL_0, NAT_1, MEMBERED, BINARITH, RLVECT_1, GROUP_1;
+ registrations ORDINAL1, RELSET_1, NUMBERS, XREAL_0, MEMBERED, STRUCT_0,
+      RLVECT_1, GROUP_1;
  requirements NUMERALS, SUBSET, ARITHM, BOOLE;
- definitions RLVECT_1, STRUCT_0, GROUP_1, BINOP_1;
+ definitions RLVECT_1, STRUCT_0, GROUP_1;
  theorems FUNCT_2, RLVECT_1, XCMPLX_0, BINOP_2, GROUP_1, NAT_1, BINARITH,
       XREAL_1, XREAL_0, STRUCT_0;
  schemes FUNCT_2;
@@ -210,7 +209,7 @@ definition
  :Def16: for x being Element of IT holds x * 1.IT = x & 1.IT * x = x;
 end;
 
-Lx1:
+Lm1:
 for L being non empty multLoopStr st L is well-unital
   holds L is unital
 proof
@@ -220,14 +219,14 @@ A1: L is well-unital;
   thus for h being Element of L holds h * 1.L = h & 1.L * h = h by A1,Def16;
 end;
 
-Lx2:
+Lm2:
 for L being non empty multLoopStr st L is well-unital holds 1.L = 1_L
  proof let L be non empty multLoopStr;
    assume
 A1: L is well-unital;
    then
 A2: for h being Element of L holds h * 1.L = h & 1.L * h = h by Def16;
-   L is unital by A1,Lx1;
+   L is unital by A1,Lm1;
    hence 1.L = 1_L by A2,GROUP_1:def 5;
  end;
 
@@ -278,7 +277,7 @@ definition
 :Def21:  0.IT = 1_IT;
  compatibility
   proof
-    1_IT = 1.IT by Lx2;
+    1_IT = 1.IT by Lm2;
    hence thesis by STRUCT_0:def 8;
   end;
 end;
@@ -295,7 +294,7 @@ registration
  end;
 end;
 
-Lm1:
+Lm3:
  1_F_Real = 1
 proof
   reconsider e = 1 as Element of FR;
@@ -321,8 +320,8 @@ registration
    thus for x,y being Element of F_Real holds  x+y = y+x;
    thus for x,y being Element of F_Real holds  x*y = y*x;
    thus for x,y,z being Element of F_Real holds (x*y)*z = x*(y*z);
-   thus for x being Element of F_Real holds (1_F_Real)*x = x by Lm1;
-   thus for x being Element of F_Real holds x*(1_F_Real) = x by Lm1;
+   thus for x being Element of F_Real holds (1_F_Real)*x = x by Lm3;
+   thus for x being Element of F_Real holds x*(1_F_Real) = x by Lm3;
    thus for x,y,z being Element of F_Real holds
        x*(y+z) = x*y+x*z & (y+z)*x = y*x+z*x;
    hereby let x be Element of F_Real;
@@ -333,7 +332,7 @@ registration
     take y;
     thus x*y = 1.F_Real by A1;
    end;
-   thus 0.F_Real <> 1_F_Real by Lm1;
+   thus 0.F_Real <> 1_F_Real by Lm3;
   end;
 end;
 
@@ -348,7 +347,7 @@ registration let a be Element of F_Real, x be real number;
   end;
 end;
 
-Lm2: for L being non empty doubleLoopStr st
+Lm4: for L being non empty doubleLoopStr st
    L is distributive holds L is right-distributive left-distributive
 proof
    let L be non empty doubleLoopStr;
@@ -363,7 +362,7 @@ end;
 registration
   cluster distributive -> left-distributive right-distributive
     (non empty doubleLoopStr);
-  coherence by Lm2;
+  coherence by Lm4;
   cluster left-distributive right-distributive -> distributive
     (non empty doubleLoopStr);
   coherence
@@ -429,7 +428,7 @@ end;
 canceled 13;
 
 theorem
-  1_F_Real = 1 by Lm1;
+  1_F_Real = 1 by Lm3;
 
 theorem
   for x,y,z being Element of F_Real holds
@@ -461,7 +460,7 @@ canceled 10;
 
 registration
  cluster well-unital -> unital (non empty multLoopStr);
- coherence by Lx1;
+ coherence by Lm1;
 end;
 
 theorem Th33:
@@ -474,7 +473,7 @@ theorem Th33:
      x,y,z be Element of F;
   assume A1: x<>0.F;
   assume A2: x*y = x*z;
-   1_F = 1.F by Lx2;
+   1_F = 1.F by Lm2;
    then consider x1 being Element of F such that
    A3:  x*x1 = 1_F by A1,Def20;
        x1*x*y = x1*(x*y) & x1*(x*z) = x1*x*z by GROUP_1:def 4;
@@ -609,7 +608,7 @@ proof
   assume A2: x<>0.F;
   x"*(0.F) = x"*x*y by A1,GROUP_1:def 4
      .= (1.F)*y by A2,Def22
-     .= (1_F)*y by Lx2
+     .= (1_F)*y by Lm2
      .= y by Def19;
   hence thesis by Th39;
  end;
@@ -708,7 +707,7 @@ A2:  for x being Element of F holds g.x = -x;
   end;
 end;
 
-Lm3:
+Lm5:
  now let F be add-associative right_zeroed right_complementable Abelian
    associative left_unital distributive (non empty doubleLoopStr);
   let MLT be
@@ -740,7 +739,7 @@ A1:     x' + t = 0.F by RLVECT_1:def 8;
 def 8;
  end;
 
-Lm4:
+Lm6:
  now let F be add-associative right_zeroed right_complementable
    associative well-unital distributive (non empty doubleLoopStr);
   let MLT be
@@ -789,8 +788,8 @@ registration let F be add-associative right_zeroed right_complementable Abelian
      x*(v+w) = x*v+x*w &
      (x+y)*v = x*v+y*v &
      (x*y)*v = x*(y*v) &
-     (1_F)*v = v by Lm4;
-   thus thesis by Lm3;
+     (1_F)*v = v by Lm6;
+   thus thesis by Lm5;
   end;
 end;
 
@@ -852,7 +851,7 @@ proof
       x"*x*v = x"*(0.V) by A1,Def26
               .= 0.V by Th59;
    then 0.V = (1.F)*v by A2,Def22
-        .= (1_F)*v by Lx2;
+        .= (1_F)*v by Lm2;
   hence thesis by Def26;
  end;
 hence thesis by Th59;
@@ -884,7 +883,7 @@ A1:   v+w=0.V;
   hence thesis by RLVECT_1:16;
  end;
 
-Lm5:
+Lm7:
 for V being add-associative right_zeroed
                      right_complementable (non empty LoopStr),
     v,w being Element of V
@@ -896,7 +895,7 @@ holds -(w+-v)=v-w
     hence thesis by RLVECT_1:30;
  end;
 
-Lm6:
+Lm8:
 for V being add-associative right_zeroed
                      right_complementable (non empty LoopStr),
   v,w being Element of V holds -(-v-w)=w+v
@@ -912,7 +911,7 @@ theorem
                     right_complementable (non empty LoopStr),
     u,v,w being Element of V holds
   -(v+w)=-w-v & -(w+-v)=v-w & -(v-w)=w+-v & -(-v-w)=w+v &
-      u-(w+v)=u-v-w by Lm5,Lm6,RLVECT_1:41,44,47;
+      u-(w+v)=u-v-w by Lm7,Lm8,RLVECT_1:41,44,47;
 
 theorem
     for V being add-associative right_zeroed
@@ -949,7 +948,7 @@ theorem
   assume A1: x<>0.F;
      x"*(x*v)=(x"*x)*v by Def26
          .=1.F*v by A1,Def22
-         .=1_F*v by Lx2
+         .=1_F*v by Lm2
          .=v by Def26;
   hence thesis;
  end;
@@ -1040,7 +1039,7 @@ canceled 2;
 
 registration
  cluster well-unital -> unital (non empty multLoopStr);
-coherence by Lx1;
+coherence by Lm1;
 end;
 
 theorem
@@ -1080,9 +1079,9 @@ theorem
      x be Element of F;
    assume A1: x <> 0.F; assume A2: not thesis;
    A3: now assume
-Z:    x" = 0.F;
-    1_F = 1.F by Lx2
-       .= x*0.F by A1,Def22,Z;
+A4:    x" = 0.F;
+    1_F = 1.F by Lm2
+       .= x*0.F by A1,Def22,A4;
     then 1_F = 0.F by Th39;
     hence contradiction by Def21;
    end;
@@ -1100,7 +1099,7 @@ Z:    x" = 0.F;
 canceled 3;
 
 theorem
-Th78: 1_F_Real + 1_F_Real <> 0.F_Real by Lm1;
+Th78: 1_F_Real + 1_F_Real <> 0.F_Real by Lm3;
 
 definition
  let IT be non empty LoopStr;
@@ -1152,7 +1151,7 @@ registration
    end;
 end;
 
- Lm7:
+ Lm9:
  for F being add-associative right_zeroed
                  right_complementable (non empty LoopStr),
      a, b being Element of F holds
@@ -1187,7 +1186,7 @@ theorem
  proof let F be add-associative right_zeroed
                       right_complementable (non empty LoopStr),
     a,b be Element of F;
-     a - b = -(b - a) by Lm7; hence thesis by Th86;
+     a - b = -(b - a) by Lm9; hence thesis by Th86;
  end;
 
 theorem
@@ -1342,8 +1341,8 @@ end;
 
 registration let S be well-unital (non empty multLoopStr);
  identify 1_S with 1.S;
- compatibility by Lx2;
+ compatibility by Lm2;
 end;
 
 theorem
-for L being non empty multLoopStr st L is well-unital holds 1.L = 1_L by Lx2;
+for L being non empty multLoopStr st L is well-unital holds 1.L = 1_L by Lm2;

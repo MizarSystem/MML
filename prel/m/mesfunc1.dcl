@@ -13,7 +13,6 @@
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="NAT_1"/>
 <ArticleID name="XREAL_0"/>
-<ArticleID name="MEMBERED"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
@@ -22,17 +21,15 @@
 <ArticleID name="CARD_3"/>
 <ArticleID name="PROB_1"/>
 <ArticleID name="XXREAL_0"/>
+<ArticleID name="MEMBERED"/>
 <ArticleID name="SUPINF_1"/>
 <ArticleID name="MESFUNC1"/>
 </Signature>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="135"/>
+<Func kind="K" nr="136"/>
 <Cluster>
 <Adjective nr="14" value="false"/>
-<Adjective nr="17"/>
-<Adjective nr="18"/>
-<Adjective nr="19"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -42,7 +39,7 @@
 <Func kind="K" nr="46"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="137">
+<Func kind="K" nr="138">
 <Func kind="K" nr="55">
 <LocusVar nr="1"/>
 <Num nr="1"/>
@@ -50,10 +47,6 @@
 </Func>
 <Cluster>
 <Adjective nr="14" value="false"/>
-<Adjective nr="17"/>
-<Adjective nr="18"/>
-<Adjective nr="19"/>
-<Adjective nr="20"/>
 </Cluster>
 </FCluster>
 </Registrations>

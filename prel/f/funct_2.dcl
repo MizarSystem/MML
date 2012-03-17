@@ -51,12 +51,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="12"/>
-<Adjective nr="13"/>
 <Adjective nr="17">
-<LocusVar nr="1"/>
-<LocusVar nr="1"/>
-</Adjective>
-<Adjective nr="18">
 <LocusVar nr="1"/>
 <LocusVar nr="1"/>
 </Adjective>
@@ -132,7 +127,6 @@
 <LocusVar nr="3"/>
 </Func>
 <Cluster>
-<Adjective nr="1"/>
 <Adjective nr="12"/>
 <Adjective nr="17">
 <LocusVar nr="1"/>
@@ -180,7 +174,6 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="1"/>
 <Adjective nr="12"/>
 <Adjective nr="18">
 <LocusVar nr="1"/>
@@ -193,39 +186,6 @@
 </Cluster>
 <LocusVar nr="1"/>
 <LocusVar nr="1"/>
-</Typ>
-</FCluster>
-<FCluster>
-<ArgTypes>
-<Typ kind="M" nr="1">
-<Cluster>
-<Adjective nr="1"/>
-<Adjective nr="12"/>
-<Adjective nr="13"/>
-</Cluster>
-</Typ>
-<Typ kind="M" nr="1">
-<Cluster>
-<Adjective nr="1"/>
-<Adjective nr="12"/>
-<Adjective nr="13"/>
-</Cluster>
-</Typ>
-</ArgTypes>
-<Func kind="K" nr="9">
-<LocusVar nr="1"/>
-<LocusVar nr="2"/>
-</Func>
-<Cluster>
-<Adjective nr="1"/>
-<Adjective nr="12"/>
-<Adjective nr="13"/>
-</Cluster>
-<Typ kind="M" nr="1">
-<Cluster>
-<Adjective nr="1"/>
-<Adjective nr="12"/>
-</Cluster>
 </Typ>
 </FCluster>
 <FCluster>
@@ -269,14 +229,8 @@
 <LocusVar nr="3"/>
 </Func>
 <Cluster>
-<Adjective nr="1"/>
 <Adjective nr="12"/>
-<Adjective nr="13"/>
 <Adjective nr="17">
-<LocusVar nr="1"/>
-<LocusVar nr="1"/>
-</Adjective>
-<Adjective nr="18">
 <LocusVar nr="1"/>
 <LocusVar nr="1"/>
 </Adjective>
@@ -338,7 +292,6 @@
 <LocusVar nr="5"/>
 </Func>
 <Cluster>
-<Adjective nr="1"/>
 <Adjective nr="12"/>
 <Adjective nr="17">
 <LocusVar nr="1"/>
@@ -483,12 +436,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="12"/>
-<Adjective nr="13"/>
 <Adjective nr="17">
-<LocusVar nr="1"/>
-<LocusVar nr="1"/>
-</Adjective>
-<Adjective nr="18">
 <LocusVar nr="1"/>
 <LocusVar nr="1"/>
 </Adjective>
@@ -527,10 +475,6 @@
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>
-<Adjective nr="17">
-<LocusVar nr="1"/>
-<LocusVar nr="2"/>
-</Adjective>
 </Cluster>
 </CCluster>
 <CCluster>
@@ -561,10 +505,6 @@
 <Cluster>
 <Adjective nr="12"/>
 <Adjective nr="15" value="false"/>
-<Adjective nr="16">
-<LocusVar nr="1"/>
-<LocusVar nr="2"/>
-</Adjective>
 <Adjective nr="17">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>

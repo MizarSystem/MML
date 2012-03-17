@@ -13,20 +13,20 @@ environ
       GROUP_1, BINOP_1, DTCONSTR, RFINSEQ, POLYNOM3, FINSEQ_4, NAT_1, VECTSP_2,
       GR_CY_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0, ORDERS_1,
-      STRUCT_0, NAT_1, NAT_D, RELAT_1, RELAT_2, RELSET_1, CARD_1, FINSET_1,
-      FUNCT_1, PARTFUN1, FUNCT_2, TRIANG_1, FINSEQ_1, FINSEQ_2, FINSEQ_4,
-      FINSEQ_5, FINSOP_1, FINSEQOP, RFINSEQ, BINOP_1, RVSUM_1, FVSUM_1,
-      TREES_4, WSIERP_1, MATRLIN, BINARITH, GROUP_1, DTCONSTR, RLVECT_1,
-      VECTSP_1, NORMSP_1, POLYNOM1, ALGSEQ_1, XXREAL_0, BHSP_1;
- constructors DOMAIN_1, BINOP_1, SQUARE_1, FINSEQOP, FINSOP_1, SETWOP_2,
-      RFINSEQ, BINARITH, FINSEQ_5, WSIERP_1, NORMSP_1, ALGSEQ_1, DTCONSTR,
-      TRIANG_1, POLYNOM1, NAT_1, NAT_D, BHSP_1, REALSET1;
- registrations XREAL_0, SUBSET_1, FINSEQ_1, STRUCT_0, RELSET_1, VECTSP_1,
-      FINSEQ_2, FINSEQ_5, INT_1, FINSET_1, POLYNOM1, GOBRD13, FUNCT_2,
-      MEMBERED, ORDINAL1, NAT_1, XXREAL_0, SEQ_1;
+      STRUCT_0, NAT_1, RELAT_1, RELAT_2, RELSET_1, CARD_1, FINSET_1, FUNCT_1,
+      FUNCT_2, TRIANG_1, FINSEQ_1, FINSEQ_2, FINSEQ_4, FINSEQ_5, FINSOP_1,
+      FINSEQOP, RFINSEQ, BINOP_1, RVSUM_1, FVSUM_1, TREES_4, WSIERP_1, MATRLIN,
+      BINARITH, GROUP_1, DTCONSTR, RLVECT_1, VECTSP_1, NORMSP_1, POLYNOM1,
+      ALGSEQ_1, XXREAL_0, BHSP_1;
+ constructors BINOP_1, SQUARE_1, NAT_1, FINSEQOP, FINSOP_1, REALSET1, RFINSEQ,
+      BINARITH, FINSEQ_5, WSIERP_1, ALGSEQ_1, BHSP_1, DTCONSTR, TRIANG_1,
+      POLYNOM1;
+ registrations XBOOLE_0, RELAT_1, FUNCT_1, ORDINAL1, FUNCT_2, FUNCOP_1,
+      NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1, MEMBERED, FINSEQ_1, SEQ_1,
+      FINSEQ_2, REALSET1, FINSEQ_5, STRUCT_0, VECTSP_1, GOBRD13, POLYNOM1;
  requirements NUMERALS, BOOLE, SUBSET, REAL, ARITHM;
  definitions TARSKI, XBOOLE_0, RELAT_1, RELAT_2, MATRLIN, RLVECT_1, GROUP_1,
-      VECTSP_1, ALGSEQ_1, BINOP_1, RVSUM_1, FINSEQ_2, FUNCT_2, STRUCT_0;
+      VECTSP_1, ALGSEQ_1, FINSEQ_2, FUNCT_2, STRUCT_0, CARD_1;
  theorems AXIOMS, TARSKI, ENUMSET1, RELSET_1, REAL_1, REAL_2, INT_1, NAT_1,
       CARD_1, FINSET_1, RLVECT_1, VECTSP_1, BINARITH, ALGSEQ_1, RELAT_2,
       ORDERS_1, FUNCT_1, FUNCT_2, FUNCT_7, FUNCOP_1, FINSEQ_1, FINSEQ_2,
@@ -105,7 +105,7 @@ A3:       k in NAT by ORDINAL1:def 13;
    proof
     defpred P[FinSequence of NAT] means
      for i be Element of NAT st i in dom $1 holds Sum $1 >= $1.i;
-    A1: P[<*> NAT] by FINSEQ_1:26;
+    A1: P[<*> NAT];
     A2: for p be FinSequence of NAT
         for x being Element of NAT st P[p] holds P[p^<*x*>]
     proof
@@ -1584,7 +1584,7 @@ proof
    end;
   end;
 
-Th27: 
+Lm1:
    for L be non empty LoopStr
    for p,q be sequence of L holds p-q = p+-q
    proof
@@ -1601,7 +1601,7 @@ Th27:
    let p,q be sequence of L;
    redefine func p-q equals
     p+-q;
-   compatibility by Th27;
+   compatibility by Lm1;
   end;
 
   registration
@@ -1637,7 +1637,7 @@ Th27:
    end;
   end;
 
- Lm1:
+ Lm2:
    for L be non empty ZeroStr
    for n be Element of NAT holds
     (0_.(L)).n = 0.L by FUNCOP_1:13;
@@ -1653,7 +1653,7 @@ canceled;
     let p be sequence of L;
         now let n be Element of NAT;
      thus (p+0_.(L)).n = p.n + (0_.(L)).n by NORMSP_1:def 5
-        .= p.n + 0.L by Lm1
+        .= p.n + 0.L by Lm2
         .= p.n by RLVECT_1:def 7;
     end;
     hence thesis by FUNCT_2:113;
@@ -1671,7 +1671,7 @@ canceled;
         now let n be Element of NAT;
      thus (p-p).n = p.n - p.n by Th27
         .= 0.L by RLVECT_1:28
-        .= (0_.(L)).n by Lm1;
+        .= (0_.(L)).n by Lm2;
     end;
     hence thesis by FUNCT_2:113;
    end;
@@ -1693,7 +1693,7 @@ canceled;
      assume i >= 1;
      then A1: i <> 0;
      thus (1_.(L)).i = (0_.(L)).i by A1,FUNCT_7:34
-        .= 0.L by Lm1;
+        .= 0.L by Lm2;
    end;
   end;
 
@@ -1709,7 +1709,7 @@ canceled;
     let n be Element of NAT;
     assume A2: n <> 0;
     thus (1_.(L)).n = (0_.(L)).n by A2,FUNCT_7:34
-       .= 0.L by Lm1;
+       .= 0.L by Lm2;
    end;
 
   definition
@@ -2405,8 +2405,9 @@ then A131: FlattenSeq g1=prodTuples(p,q,r,FlattenSeq g2) by A112,FINSEQ_2:10;
          .= (Rev Card g2).j by A188,A190,FINSEQ_5:def 3;
      end;
      then A213: Card f2 = Rev Card g2 by A189,FINSEQ_2:10;
+     reconsider w = Card g2 as FinSequence of NAT;
      A214: len FlattenSeq f2 = Sum Card f2 by POLYNOM1:30
-        .= Sum Card g2 by A213,Th3
+        .= Sum w by A213,Th3
         .= len FlattenSeq g2 by POLYNOM1:30;
          now let x,y be set;
       assume that
@@ -2549,11 +2550,11 @@ A2: for k be Element of NAT st k in dom r
          now let k be Element of NAT;
       assume k in dom r;
       hence r.k = p.(k-'1) * (0_.(L)).(i+1-'k) by A2
-         .= p.(k-'1) * 0.L by Lm1
+         .= p.(k-'1) * 0.L by Lm2
          .= 0.L by VECTSP_1:36;
      end;
      hence (p*'0_.(L)).i = 0.L by A1,Th1
-        .= (0_.(L)).i by Lm1;
+        .= (0_.(L)).i by Lm2;
     end;
     hence thesis by FUNCT_2:113;
    end;
@@ -2601,8 +2602,7 @@ A2: for k be Element of NAT st k in dom r
         .= p.(i+1-'1) * (1_.(L)).(i+1-'(i+1)) by A3,A4
         .= p.i * (1_.(L)).(i+1-'(i+1)) by BINARITH:39
         .= p.i * (1_.(L)).0 by BINARITH:51
-        .= (p.i) * 1.L by Th31
-        .= (p.i) * 1_L by VECTSP_2:85
+        .= (p.i) * 1_L by Th31
         .= p.i by VECTSP_1:def 13;
      hence (p*'1_.(L)).i = p.i by A2,A5,A11,RLVECT_1:10;
     end;
@@ -2842,7 +2842,7 @@ A18:  ex p1,q1 be Polynomial of L st p1 = x & q1 = y & Mu.(x,y) = p1*'q1 by A9;
    end;
   end;
 
-Lm2: now
+Lm3: now
  let L be add-associative right_zeroed right_complementable well-unital
      Abelian commutative distributive (non empty doubleLoopStr);
    set Pm = Polynom-Ring L;
@@ -2864,7 +2864,7 @@ end;
    cluster Polynom-Ring L -> well-unital;
    coherence
    proof let x be Element of Polynom-Ring L;
-    thus thesis by Lm2;
+    thus thesis by Lm3;
    end;
   end;
 
@@ -2899,6 +2899,6 @@ proof
   set Pm = Polynom-Ring L;
 A1: 1.Pm = 1_.L by Def12;
   then reconsider e = 1_.L as Element of Pm;
-  for x be Element of Pm holds x*e = x & e*x = x by A1,Lm2;
+  for x be Element of Pm holds x*e = x & e*x = x by A1,Lm3;
   hence 1_Pm = 1_.L by GROUP_1:def 5;
 end;

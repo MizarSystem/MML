@@ -15,13 +15,13 @@
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XREAL_0"/>
+<ArticleID name="INT_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="INT_1"/>
 <ArticleID name="CARD_3"/>
-<ArticleID name="FUNCOP_1"/>
 <ArticleID name="FUNCT_4"/>
+<ArticleID name="FUNCOP_1"/>
 <ArticleID name="SETFAM_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="AMI_1"/>
@@ -30,7 +30,6 @@
 <ArticleID name="SCMFSA_2"/>
 <ArticleID name="SCMFSA_4"/>
 <ArticleID name="SCMFSA6A"/>
-<ArticleID name="SCMFSA6C"/>
 <ArticleID name="SCMFSA7B"/>
 <ArticleID name="SF_MASTR"/>
 <ArticleID name="SCM_HALT"/>
@@ -39,58 +38,54 @@
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="65"/>
+<Adjective nr="64"/>
 </Cluster>
-<Func kind="U" nr="7">
+<Func kind="U" nr="6">
 <Func kind="K" nr="2">
 <Func kind="K" nr="87"/>
-<Func kind="K" nr="197">
+<Func kind="K" nr="199">
 <Func kind="K" nr="87"/>
 </Func>
 </Func>
-<Func kind="K" nr="199"/>
+<Func kind="K" nr="201"/>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="229">
+<Func kind="K" nr="231">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="2"/>
-<Adjective nr="5"/>
-<Adjective nr="23"/>
-<Adjective nr="55">
+<Adjective nr="24"/>
+<Adjective nr="56">
 <Func kind="K" nr="2">
 <Func kind="K" nr="87"/>
-<Func kind="K" nr="197">
+<Func kind="K" nr="199">
 <Func kind="K" nr="87"/>
 </Func>
 </Func>
-<Func kind="K" nr="199"/>
+<Func kind="K" nr="201"/>
 </Adjective>
-<Adjective nr="56"/>
-<Adjective nr="59"/>
+<Adjective nr="57"/>
+<Adjective nr="58"/>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes>
-<Typ kind="M" nr="14">
+<Typ kind="M" nr="13">
 <Cluster>
-<Adjective nr="61" value="false"/>
+<Adjective nr="60" value="false"/>
 </Cluster>
 </Typ>
-<Typ kind="M" nr="14">
+<Typ kind="M" nr="13">
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="207">
+<Func kind="K" nr="209">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="57"/>
-<Adjective nr="58"/>
-<Adjective nr="65"/>
+<Adjective nr="64"/>
 </Cluster>
 </FCluster>
 </Registrations>

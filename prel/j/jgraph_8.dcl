@@ -24,6 +24,7 @@
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="BINOP_1"/>
 <ArticleID name="METRIC_1"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="SEQ_1"/>
 <ArticleID name="RVSUM_1"/>
@@ -33,17 +34,16 @@
 <ArticleID name="ENUMSET1"/>
 <ArticleID name="DOMAIN_1"/>
 <ArticleID name="RELAT_2"/>
-<ArticleID name="PARTFUN1"/>
 <ArticleID name="EQREL_1"/>
 <ArticleID name="CONNSP_2"/>
 <ArticleID name="BORSUK_1"/>
 <ArticleID name="TOPMETR"/>
 <ArticleID name="JGRAPH_6"/>
-<ArticleID name="TOPREALA"/>
 <ArticleID name="FUNCT_3"/>
 <ArticleID name="BORSUK_2"/>
 <ArticleID name="BORSUK_6"/>
 <ArticleID name="TOPALG_2"/>
+<ArticleID name="TOPREALA"/>
 </Signature>
 <FCluster>
 <ArgTypes>
@@ -75,7 +75,7 @@
 <LocusVar nr="4"/>
 </Func>
 <Cluster>
-<Adjective nr="59">
+<Adjective nr="61">
 <Num nr="2"/>
 </Adjective>
 </Cluster>
@@ -103,14 +103,13 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="307">
+<Func kind="K" nr="339">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
 <LocusVar nr="4"/>
 </Func>
 <Cluster>
-<Adjective nr="35"/>
 <Adjective nr="83">
 <Num nr="2"/>
 </Adjective>

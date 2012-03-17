@@ -13,9 +13,6 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
-<ArticleID name="XREAL_0"/>
-<ArticleID name="MEMBERED"/>
-<ArticleID name="SEQ_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
@@ -25,17 +22,20 @@
 <ArticleID name="FRAENKEL"/>
 <ArticleID name="RLVECT_2"/>
 <ArticleID name="CONVEX1"/>
+<ArticleID name="XREAL_0"/>
+<ArticleID name="MEMBERED"/>
+<ArticleID name="SEQ_1"/>
 </Signature>
 <RCluster>
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="33" value="false"/>
-<Adjective nr="41"/>
-<Adjective nr="42"/>
-<Adjective nr="43"/>
-<Adjective nr="44"/>
-<Adjective nr="45"/>
+<Adjective nr="25" value="false"/>
+<Adjective nr="34"/>
+<Adjective nr="35"/>
+<Adjective nr="36"/>
+<Adjective nr="37"/>
+<Adjective nr="38"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -52,22 +52,22 @@
 </Func>
 <Func kind="K" nr="62"/>
 </Adjective>
-<Adjective nr="25"/>
-<Adjective nr="52">
+<Adjective nr="45">
 <LocusVar nr="1"/>
 </Adjective>
+<Adjective nr="53"/>
 </Cluster>
 </RCluster>
 <RCluster>
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="33" value="false"/>
-<Adjective nr="41"/>
-<Adjective nr="42"/>
-<Adjective nr="43"/>
-<Adjective nr="44"/>
-<Adjective nr="45"/>
+<Adjective nr="25" value="false"/>
+<Adjective nr="34"/>
+<Adjective nr="35"/>
+<Adjective nr="36"/>
+<Adjective nr="37"/>
+<Adjective nr="38"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
@@ -95,10 +95,10 @@
 </Func>
 <Func kind="K" nr="62"/>
 </Adjective>
-<Adjective nr="25"/>
-<Adjective nr="52">
+<Adjective nr="45">
 <LocusVar nr="1"/>
 </Adjective>
+<Adjective nr="53"/>
 </Cluster>
 </RCluster>
 </Registrations>

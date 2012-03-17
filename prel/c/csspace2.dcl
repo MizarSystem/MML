@@ -29,12 +29,7 @@
 <Func kind="K" nr="159"/>
 <Cluster>
 <Adjective nr="31" value="false"/>
-<Adjective nr="39"/>
-<Adjective nr="40"/>
-<Adjective nr="41"/>
-<Adjective nr="42"/>
-<Adjective nr="52"/>
-<Adjective nr="58"/>
+<Adjective nr="59"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -42,13 +37,7 @@
 <Func kind="K" nr="159"/>
 <Cluster>
 <Adjective nr="31" value="false"/>
-<Adjective nr="39"/>
-<Adjective nr="40"/>
-<Adjective nr="41"/>
-<Adjective nr="42"/>
-<Adjective nr="52"/>
-<Adjective nr="58"/>
-<Adjective nr="63"/>
+<Adjective nr="64"/>
 </Cluster>
 </FCluster>
 </Registrations>

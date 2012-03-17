@@ -2,6 +2,7 @@
 <Schemes>
 <Signature>
 <ArticleID name="HIDDEN"/>
+<ArticleID name="XXREAL_0"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="XBOOLE_0"/>
@@ -11,9 +12,8 @@
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
-<ArticleID name="XXREAL_0"/>
-<ArticleID name="XREAL_0"/>
 <ArticleID name="NAT_1"/>
+<ArticleID name="XREAL_0"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="NAT_D"/>
 </Signature>
@@ -21,26 +21,25 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="14"/>
+<Adjective nr="17"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="14"/>
+<Adjective nr="17"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="14"/>
+<Adjective nr="17"/>
 </Cluster>
 </Typ>
 </ArgTypes>
 <Not>
 <For>
-<Typ kind="M" nr="3">
+<Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="42"/>
-<Func kind="K" nr="46"/>
+<Func kind="K" nr="50"/>
 </Typ>
 <Not>
 <And>
@@ -68,13 +67,13 @@
 </Not>
 <And>
 <Not>
-<Pred kind="R" nr="16">
+<Pred kind="R" nr="3">
 <Func kind="F" nr="3"/>
 <Num nr="0"/>
 </Pred>
 </Not>
 <Not>
-<Pred kind="R" nr="16">
+<Pred kind="R" nr="3">
 <Func kind="F" nr="2"/>
 <Func kind="F" nr="3"/>
 </Pred>
@@ -95,10 +94,9 @@
 </Pred>
 </And>
 <For>
-<Typ kind="M" nr="3">
+<Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="42"/>
-<Func kind="K" nr="46"/>
+<Func kind="K" nr="50"/>
 </Typ>
 <Pred kind="R" nr="1">
 <Func kind="F" nr="1">

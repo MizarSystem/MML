@@ -11,9 +11,9 @@
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XXREAL_0"/>
+<ArticleID name="XXREAL_1"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="MEMBERED"/>
-<ArticleID name="XXREAL_1"/>
 <ArticleID name="RCOMP_1"/>
 </Signature>
 <RCluster>
@@ -49,9 +49,6 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="19"/>
-<Adjective nr="20"/>
-<Adjective nr="21"/>
 <Adjective nr="27"/>
 </Cluster>
 <Typ kind="M" nr="2">
@@ -79,9 +76,6 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="19"/>
-<Adjective nr="20"/>
-<Adjective nr="21"/>
 <Adjective nr="26"/>
 </Cluster>
 <Typ kind="M" nr="2">
@@ -103,9 +97,6 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="19"/>
-<Adjective nr="20"/>
-<Adjective nr="21"/>
 <Adjective nr="26"/>
 </Cluster>
 </CCluster>
@@ -123,9 +114,6 @@
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="19"/>
-<Adjective nr="20"/>
-<Adjective nr="21"/>
 <Adjective nr="27"/>
 </Cluster>
 </CCluster>

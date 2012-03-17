@@ -18,12 +18,12 @@
 <ArticleID name="SERIES_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PRE_TOPC"/>
-<ArticleID name="RELAT_2"/>
-<ArticleID name="PARTFUN1"/>
-<ArticleID name="EQREL_1"/>
 <ArticleID name="ENUMSET1"/>
 <ArticleID name="DOMAIN_1"/>
 <ArticleID name="FUNCOP_1"/>
+<ArticleID name="RELAT_2"/>
+<ArticleID name="PARTFUN1"/>
+<ArticleID name="EQREL_1"/>
 <ArticleID name="CONNSP_2"/>
 <ArticleID name="BINOP_1"/>
 <ArticleID name="METRIC_1"/>
@@ -50,12 +50,12 @@
 <Func kind="K" nr="42"/>
 </Adjective>
 <Adjective nr="19"/>
-<Adjective nr="41">
+<Adjective nr="43">
 <Func kind="K" nr="46"/>
 <Func kind="K" nr="42"/>
 </Adjective>
-<Adjective nr="70"/>
-<Adjective nr="74"/>
+<Adjective nr="71"/>
+<Adjective nr="75"/>
 </Cluster>
 </RCluster>
 <FCluster>
@@ -102,30 +102,19 @@
 </Func>
 <Cluster>
 <Adjective nr="1"/>
-<Adjective nr="4"/>
-<Adjective nr="5"/>
 <Adjective nr="7"/>
-<Adjective nr="8"/>
-<Adjective nr="9"/>
-<Adjective nr="10"/>
-<Adjective nr="64"/>
-<Adjective nr="65"/>
-<Adjective nr="66"/>
-<Adjective nr="67"/>
-<Adjective nr="68"/>
-<Adjective nr="69"/>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
-<Adjective nr="29"/>
+<Adjective nr="30"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="31">
+<Adjective nr="32">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -141,9 +130,8 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="28"/>
 <Adjective nr="29"/>
-<Adjective nr="61">
+<Adjective nr="62">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

@@ -9,16 +9,15 @@ environ
  vocabularies PRE_TOPC, NORMSP_1, RLVECT_1, FUNCT_1, ARYTM, ARYTM_1, ARYTM_3,
       RELAT_1, ABSVALUE, ORDINAL2, QC_LANG1, LATTICES, SEQ_1, PROB_1, SEQ_2,
       SEQM_3, SIN_COS, CAT_1, PREPOWER, SERIES_1, SQUARE_1, GROUP_1, RSSPACE3,
-      LOPBAN_2, LOPBAN_3, SUPINF_2, LOPBAN_4, NAT_1, VECTSP_1;
+      LOPBAN_2, LOPBAN_3, SUPINF_2, LOPBAN_4, NAT_1, VECTSP_1, RELOC;
  notations SUBSET_1, RELAT_1, FUNCT_1, FUNCT_2, PRE_TOPC, STRUCT_0, XCMPLX_0,
-      XXREAL_0, XREAL_0, ORDINAL1, NUMBERS, REAL_1, NAT_1, NAT_D, RLVECT_1,
-      GROUP_1, COMPLEX1, SQUARE_1, NORMSP_1, RSSPACE3, SEQ_1, SEQ_2, SEQM_3,
-      NEWTON, SERIES_1, PREPOWER, BINARITH, SIN_COS, BHSP_4, LOPBAN_2,
-      LOPBAN_3;
- constructors ARYTM_0, REAL_1, SQUARE_1, NAT_1, SEQ_2, PREPOWER, SERIES_1,
-      COMSEQ_3, BINARITH, SIN_COS, RSSPACE3, LOPBAN_3, NAT_D, BHSP_4;
- registrations RELSET_1, STRUCT_0, ORDINAL1, XREAL_0, MEMBERED, SEQ_1,
-      LOPBAN_2, LOPBAN_3, SIN_COS, XXREAL_0, NAT_1, GROUP_1;
+      XXREAL_0, XREAL_0, ORDINAL1, NUMBERS, REAL_1, NAT_1, RLVECT_1, GROUP_1,
+      COMPLEX1, SQUARE_1, NORMSP_1, RSSPACE3, SEQ_1, SEQ_2, SEQM_3, NEWTON,
+      SERIES_1, BINARITH, SIN_COS, BHSP_4, LOPBAN_2, LOPBAN_3;
+ constructors ARYTM_0, REAL_1, SQUARE_1, NAT_1, SEQ_2, SERIES_1, COMSEQ_3,
+      BINARITH, SIN_COS, BHSP_4, RSSPACE3, LOPBAN_3;
+ registrations ORDINAL1, RELSET_1, XXREAL_0, XREAL_0, NAT_1, MEMBERED, SEQ_1,
+      SIN_COS, STRUCT_0, GROUP_1, LOPBAN_2, LOPBAN_3;
  requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
  definitions NORMSP_1, LOPBAN_3;
  theorems ABSVALUE, REAL_1, REAL_2, RLVECT_1, XCMPLX_0, XCMPLX_1, XREAL_0,
@@ -783,7 +782,7 @@ end;
 end;
 
 definition let X be non empty ZeroStr, seq be sequence of X;
-func Sift seq -> sequence of X means :Def5:
+func Shift seq -> sequence of X means :Def5:
   it.0 = 0.X & for k be Element of NAT holds it.(k+1) = seq.k;
 existence
 proof deffunc U(Element of NAT,set) = seq.$1;
@@ -1067,7 +1066,7 @@ then A10:||. (1/(n+1) *z) .|| * ||. (z ExpSeq.n ) .||
 theorem Th15:
 for X being non empty ZeroStr,
 seq being sequence of X holds
-0 < k implies (Sift(seq)).k=seq.(k -' 1)
+0 < k implies (Shift(seq)).k=seq.(k -' 1)
 proof
 let X be non empty ZeroStr,
 seq be sequence of X;
@@ -1078,27 +1077,27 @@ assume
   A3:   m+1=k by A1,NAT_1:6;
   A4: m=k-1 by A3;
   m in NAT by ORDINAL1:def 13;
-  hence (Sift(seq)).k=seq.m by A3,Def5
+  hence (Shift(seq)).k=seq.m by A3,Def5
              .=seq.(k -' 1) by A2,A4,BINARITH:50;
 end;
 
 theorem Th16:
-Partial_Sums(seq).k=Partial_Sums(Sift(seq)).k+seq.k
+Partial_Sums(seq).k=Partial_Sums(Shift(seq)).k+seq.k
 proof
   defpred X[Element of NAT] means
-   Partial_Sums(seq).$1=Partial_Sums(Sift(seq)).$1+seq.$1;
+   Partial_Sums(seq).$1=Partial_Sums(Shift(seq)).$1+seq.$1;
   Partial_Sums(seq).0=seq.0 by BHSP_4:def 1
                            .= 0.X + seq.0 by RLVECT_1:10
-                   .=(Sift(seq)).0 + seq.0 by Def5
-                   .=Partial_Sums(Sift(seq)).0+seq.0 by BHSP_4:def 1;
+                   .=(Shift(seq)).0 + seq.0 by Def5
+                   .=Partial_Sums(Shift(seq)).0+seq.0 by BHSP_4:def 1;
    then A1: X[0];
 A2: for k st X[k] holds X[k+1]
   proof let k such that
- A3:   Partial_Sums(seq).k=Partial_Sums(Sift(seq)).k+seq.k;
- thus Partial_Sums(seq).(k+1) = (Partial_Sums(Sift(seq)).k+seq.k) + seq.(k+1)
+ A3:   Partial_Sums(seq).k=Partial_Sums(Shift(seq)).k+seq.k;
+ thus Partial_Sums(seq).(k+1) = (Partial_Sums(Shift(seq)).k+seq.k) + seq.(k+1)
  by A3,BHSP_4:def 1
-      .=(Partial_Sums(Sift(seq)).k+(Sift(seq)).(k+1)) + seq.(k+1) by Def5
-      .=Partial_Sums(Sift(seq)).(k+1)+seq.(k+1) by BHSP_4:def 1;
+      .=(Partial_Sums(Shift(seq)).k+(Shift(seq)).(k+1)) + seq.(k+1) by Def5
+      .=Partial_Sums(Shift(seq)).(k+1)+seq.(k+1) by BHSP_4:def 1;
  end;
     for k holds X[k] from NAT_1:sch 1(A1,A2);
   hence thesis;
@@ -1180,22 +1179,22 @@ let z,w such that
          end;
 
      A13:Partial_Sums(( Expan(n,z,w)*z)).(n+1)
-         =Partial_Sums(Sift(( Expan(n,z,w)*z))).(n+1)
+         =Partial_Sums(Shift(( Expan(n,z,w)*z))).(n+1)
         proof
         A14:Partial_Sums(( Expan(n,z,w)*z)).(n+1)
-          =Partial_Sums(Sift(( Expan(n,z,w)*z))).(n+1)
+          =Partial_Sums(Shift(( Expan(n,z,w)*z))).(n+1)
           +( Expan(n,z,w)*z).(n+1) by Th16;
               0 +n < n+1 by XREAL_1:31;
 then A15:        Expan(n,z,w).(n+1)=0.X by Def6;
            thus Partial_Sums(( Expan(n,z,w)*z)).(n+1)
-             =Partial_Sums(Sift(( Expan(n,z,w)*z))).(n+1)
+             =Partial_Sums(Shift(( Expan(n,z,w)*z))).(n+1)
               + Expan(n,z,w).(n+1)*z by A14,LOPBAN_3:def 10
-            .=Partial_Sums(Sift(( Expan(n,z,w)*z))).(n+1)
+            .=Partial_Sums(Shift(( Expan(n,z,w)*z))).(n+1)
              +0.X by A15,LOPBAN_3:43
-        .= Partial_Sums(Sift((Expan(n,z,w)*z))).(n+1)
+        .= Partial_Sums(Shift((Expan(n,z,w)*z))).(n+1)
           by LOPBAN_3:43;
          end;
-    A16:( Expan(n,z,w)*w)+Sift(( Expan(n,z,w)*z))
+    A16:( Expan(n,z,w)*w)+Shift(( Expan(n,z,w)*z))
          =Expan(n+1,z,w)
      proof
         now let k be Element of NAT;
@@ -1209,9 +1208,9 @@ then A22:          n+0 < k-1+1 by XREAL_1:10;
                  1 <= k by A18,A20,XXREAL_0:2;
             hence thesis by A18,A20,A21,A22,XXREAL_0:2,BINARITH:50;
        end;
-           (( Expan(n,z,w)*w)+Sift(( Expan(n,z,w)*z))).k
-     =(Expan(n,z,w)*w).k + (Sift((Expan(n,z,w)*z))).k by NORMSP_1:def 5
-     .=(Expan(n,z,w).k*w) + (Sift(( Expan(n,z,w)*z))).k by LOPBAN_3:def 10
+           (( Expan(n,z,w)*w)+Shift(( Expan(n,z,w)*z))).k
+     =(Expan(n,z,w)*w).k + (Shift((Expan(n,z,w)*z))).k by NORMSP_1:def 5
+     .=(Expan(n,z,w).k*w) + (Shift(( Expan(n,z,w)*z))).k by LOPBAN_3:def 10
        .=(Expan(n,z,w).k*w) +  ((Expan(n,z,w)*z)).(k -' 1) by A19,Th15
        .=(Expan(n,z,w).k*w) + ((Expan(n,z,w).(k -' 1)*z))
                by LOPBAN_3:def 10
@@ -1220,7 +1219,7 @@ then A22:          n+0 < k-1+1 by XREAL_1:10;
        .=0.X + ( 0.X*z) by A19,Def6
        .=0.X + 0.X by LOPBAN_3:43
        .=0.X by LOPBAN_3:43;
-        hence (( Expan(n,z,w)*w)+Sift((Expan(n,z,w)*z))).k
+        hence (( Expan(n,z,w)*w)+Shift((Expan(n,z,w)*z))).k
          =Expan(n+1,z,w).k by A18,Def6;
       end;
          now assume
@@ -1228,7 +1227,7 @@ then A22:          n+0 < k-1+1 by XREAL_1:10;
        A24: now assume
             A25: k=n+1;
       thus (( Expan(n,z,w)*w)
-      +Sift((Expan(n,z,w)*z))).k=Expan(n+1,z,w).k
+      +Shift((Expan(n,z,w)*z))).k=Expan(n+1,z,w).k
               proof
               A26: n < n+1 by XREAL_1:31;
                A27: n-'n= n-n by BINARITH:50
@@ -1242,14 +1241,14 @@ then A22:          n+0 < k-1+1 by XREAL_1:10;
               A31: (Coef(n+1)).(n+1) = (n+1)!  /(((n+1)!  ) * (0!  ))
               by A28,Def3
                               .= 1 by A29,NEWTON:18,XCMPLX_1:60;
-              thus (( Expan(n,z,w)*w)+Sift((Expan(n,z,w)*z))).k =
-       (Expan(n,z,w)*w).(n+1)+(Sift((Expan(n,z,w)*z ))).(n+1)
+              thus (( Expan(n,z,w)*w)+Shift((Expan(n,z,w)*z))).k =
+       (Expan(n,z,w)*w).(n+1)+(Shift((Expan(n,z,w)*z ))).(n+1)
  by A25,NORMSP_1:def 5
-             .=( Expan(n,z,w).(n+1) *w) + (Sift((Expan(n,z,w)*z))).(n+1)
+             .=( Expan(n,z,w).(n+1) *w) + (Shift((Expan(n,z,w)*z))).(n+1)
  by LOPBAN_3:def 10
-             .=( 0.X*w  ) + (Sift(( Expan(n,z,w)*z))).(n+1) by A26,Def6
-             .=(  0.X ) + (Sift(( Expan(n,z,w)*z))).(n+1) by LOPBAN_3:43
-             .= (Sift((Expan(n,z,w)*z ))).(n+1) by LOPBAN_3:43
+             .=( 0.X*w  ) + (Shift(( Expan(n,z,w)*z))).(n+1) by A26,Def6
+             .=(  0.X ) + (Shift(( Expan(n,z,w)*z))).(n+1) by LOPBAN_3:43
+             .= (Shift((Expan(n,z,w)*z ))).(n+1) by LOPBAN_3:43
              .= (( Expan(n,z,w)*z)).(n) by Def5
              .=  (Expan(n,z,w)).n *z by LOPBAN_3:def 10
              .=((Coef(n)).n * (z #N n) * (w #N (n-' n))) *z by Def6
@@ -1266,7 +1265,7 @@ then A22:          n+0 < k-1+1 by XREAL_1:10;
            A32: k < n+1;
             A33: now assume
              A34: k=0;
-            thus (( Expan(n,z,w)*w)+Sift(( Expan(n,z,w)*z))).k
+            thus (( Expan(n,z,w)*w)+Shift(( Expan(n,z,w)*z))).k
               =Expan(n+1,z,w).k
               proof
    A35:         n-'0 =n-0 by BINARITH:50;
@@ -1278,10 +1277,10 @@ then A22:          n+0 < k-1+1 by XREAL_1:10;
               by A36,Def3
                          .= 1 by A37,NEWTON:18,XCMPLX_1:60;
               thus
-                (( Expan(n,z,w)*w)+Sift(( Expan(n,z,w)*z))).k =
-              ( Expan(n,z,w)*w).0+(Sift((Expan(n,z,w)*z))).0
+                (( Expan(n,z,w)*w)+Shift(( Expan(n,z,w)*z))).k =
+              ( Expan(n,z,w)*w).0+(Shift((Expan(n,z,w)*z))).0
  by A34,NORMSP_1:def 5
-             .=(Expan(n,z,w).0 *w) + (Sift(( Expan(n,z,w)*z))).0
+             .=(Expan(n,z,w).0 *w) + (Shift(( Expan(n,z,w)*z))).0
  by LOPBAN_3:def 10
              .=( Expan(n,z,w).0 *w ) + 0.X by Def5
              .=( Expan(n,z,w).0 *w) by LOPBAN_3:43
@@ -1302,14 +1301,14 @@ then A22:          n+0 < k-1+1 by XREAL_1:10;
               then k-1 <= k+1-1 by XREAL_1:11;
               then k-1 <= n by A43,XXREAL_0:2;
               then A44: k-'1 <= n by A42,BINARITH:50;
-              thus (( Expan(n,z,w)*w)+Sift((Expan(n,z,w)*z))).k
+              thus (( Expan(n,z,w)*w)+Shift((Expan(n,z,w)*z))).k
               =Expan(n+1,z,w).k
               proof
               A45:
-              (( Expan(n,z,w)*w )+Sift(( Expan(n,z,w)*z))).k
-              =( Expan(n,z,w)*w).k+(Sift((Expan(n,z,w)*z))).k
+              (( Expan(n,z,w)*w )+Shift(( Expan(n,z,w)*z))).k
+              =( Expan(n,z,w)*w).k+(Shift((Expan(n,z,w)*z))).k
  by NORMSP_1:def 5
-            .=(Expan(n,z,w).k)*w + (Sift(( Expan(n,z,w)*z))).k
+            .=(Expan(n,z,w).k)*w + (Shift(( Expan(n,z,w)*z))).k
  by LOPBAN_3:def 10
              .=(Expan(n,z,w).k)*w + (Expan(n,z,w)*z).( k-'1) by A41,Th15
              .=(Expan(n,z,w).k)*w  + ( Expan(n,z,w).(k-'1))*z
@@ -1369,7 +1368,7 @@ then A22:          n+0 < k-1+1 by XREAL_1:10;
               hence z #N ((k -' 1)+1)= z #N k;
               end;
                then A48:
-              ((Expan(n,z,w)*w)+Sift((Expan(n,z,w)*z))).k
+              ((Expan(n,z,w)*w)+Shift((Expan(n,z,w)*z))).k
              =(Coef(n)).k * ((z #N k) * (w #N (n+1-'k)))
               +  (Coef(n)).((k -' 1)) *(z #N k) *(w #N (n+1-'k))
                by A45,A46,A47,LOPBAN_3:43
@@ -1412,25 +1411,25 @@ then A22:          n+0 < k-1+1 by XREAL_1:10;
                   .=( n! * (n+1-k+k)) / ((k! ) * ((n+1-'k)! ))
                   .=((n+1)! ) / ((k! ) * ((n+1-'k)! )) by NEWTON:21
                   .=(Coef(n+1)).k by A32,Def3;
-               hence ((Expan(n,z,w)*w)+Sift((Expan(n,z,w)*z))).k
+               hence ((Expan(n,z,w)*w)+Shift((Expan(n,z,w)*z))).k
                   =(Coef(n+1)).k * (z #N k) * (w #N (n+1-'k) )
  by A48,LOPBAN_3:43
               .=Expan(n+1,z,w).k by A32,Def6;
               end;
             end;
-            hence ((Expan(n,z,w)*w)+Sift((Expan(n,z,w)*z))).k
+            hence ((Expan(n,z,w)*w)+Shift((Expan(n,z,w)*z))).k
               =Expan(n+1,z,w).k by A33;
           end;
-            hence ((Expan(n,z,w)*w)+Sift((Expan(n,z,w)*z))).k
+            hence ((Expan(n,z,w)*w)+Shift((Expan(n,z,w)*z))).k
           =Expan(n+1,z,w).k by A23,A24,REAL_1:def 5;
         end;
-     hence ((Expan(n,z,w)*w)+Sift((Expan(n,z,w)*z))).k
+     hence ((Expan(n,z,w)*w)+Shift((Expan(n,z,w)*z))).k
           =Expan(n+1,z,w).k by A17;
     end;
     hence thesis by FUNCT_2:113;
    end;
  thus (z+w) #N (n+1) =(Partial_Sums(( Expan(n,z,w)*w)) +
-                      Partial_Sums(Sift(( Expan(n,z,w)*z)))).(n+1)
+                      Partial_Sums(Shift(( Expan(n,z,w)*z)))).(n+1)
        by A8,A9,A11,A13,NORMSP_1:def 5
    .=Partial_Sums(Expan(n+1,z,w)).(n+1) by A16,LOPBAN_3:20;
      end;

@@ -12,9 +12,9 @@ environ
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, DOMAIN_1, RELAT_1, FUNCT_1,
       FUNCT_2, BINOP_1, PARTFUN1, FUNCT_3, FUNCT_4, FUNCT_5, FRAENKEL,
       REALSET1, PBOOLE, CAT_1;
- constructors PARTFUN1, FUNCT_3, DOMAIN_1, BINOP_1, FUNCT_4, FRAENKEL, FUNCT_5,
-      PBOOLE, REALSET1, CAT_1, NAT_D;
- registrations RELSET_1, SUBSET_1, XBOOLE_0, REALSET1;
+ constructors PARTFUN1, BINOP_1, FUNCT_3, FUNCT_4, FRAENKEL, FUNCT_5, PBOOLE,
+      REALSET1, CAT_1;
+ registrations XBOOLE_0, SUBSET_1, RELSET_1, REALSET1;
  requirements SUBSET, BOOLE;
  definitions TARSKI, CAT_1, REALSET1, FUNCOP_1, BINOP_1;
  theorems TARSKI, ZFMISC_1, MCART_1, DOMAIN_1, FUNCT_1, FUNCT_2, FUNCT_3,
@@ -325,8 +325,8 @@ theorem Th17:
 A1:  f = f' & g = g' and
 A2:  dom g = cod f;
       dom g = dom g' & cod f = cod f' by A1,Th15;
-   then g*f = (the Comp of E).[g,f] & [g,f] in dom(the Comp of E) &
-    g'*f' = (the Comp of C).[g',f'] & the Comp of E <= the Comp of C
+   then g*f = (the Comp of E).(g,f) & [g,f] in dom(the Comp of E) &
+    g'*f' = (the Comp of C).(g',f') & the Comp of E <= the Comp of C
       by A2,Def4,CAT_1:40,41;
    hence thesis by A1,GRFUNC_1:8;
  end;
@@ -565,7 +565,7 @@ A17:    x in dom the Comp of C by A13,A15,XBOOLE_0:def 3;
       then consider g,f being Morphism of C such that
 A18:     x = [g,f] by A12,DOMAIN_1:9;
          now
-       thus p.x = (the Comp of C).[g,f] by A15,A18,FUNCT_1:70
+       thus p.x = (the Comp of C).(g,f) by A15,A18,FUNCT_1:70
                .= g*f by A17,A18,CAT_1:def 4;
            now [g,f] in [:M,M:] by A13,A15,A18,XBOOLE_0:def 3;
           then f in M & g in M by ZFMISC_1:106;
@@ -872,10 +872,11 @@ A16:  x = [g,f] by A9,DOMAIN_1:9;
    reconsider f' = f ,g' = g as Morphism of C by A1,Th14;
 A17:  cod f = cod f' & dom g = dom g' & dom g = cod f
         by A1,A15,A16,Th15,CAT_1:40;
-   hence p.x = g*f by A1,A16,CAT_1:41
+    p.x = p.(g,f) by A16;
+   hence p.x = g*f by A1,CAT_1:41,A17
             .= g'*f' by A1,A17,Th17
-            .= (the Comp of C).[g',f'] by A17,CAT_1:41
-            .= p'.x by A14,A15,A16,FUNCT_1:70;
+            .= (the Comp of C).(g',f') by A17,CAT_1:41
+            .= p'.x by  A14,A15,A16,FUNCT_1:70;
   end;
   hence p = (the Comp of C)||M by FUNCT_1:9;
   reconsider i' = (the Id of C)|O as Function of O,M by A8,Th29;
@@ -1170,7 +1171,7 @@ A1:  dom f' = cod f & dom g' = cod g;
                 by A1,CAT_1:41
     .= [(the Comp of C).(f',f),(the Comp of D).(g',g)] by A2,FUNCT_4:def 3
 
-    .= [f'*f,(the Comp of D).[g',g]] by A1,CAT_1:41
+    .= [f'*f,(the Comp of D).(g',g)] by A1,CAT_1:41
     .= [f'*f,g'*g] by A1,CAT_1:41;
  end;
 
@@ -1368,11 +1369,9 @@ theorem
 theorem
       for S being Functor of [:C,C':],D,
       c being Object of C, c' being Object of C'
-    holds (Obj S?-c).c' = (Obj S).[c,c']
+    holds (Obj S?-c).c' = (Obj S).(c,c')
  proof let S be Functor of [:C,C':],D, c be Object of C, c' be Object of C';
-  reconsider S' = S as
-    Function of [:the Morphisms of C,the Morphisms of C':],the Morphisms of D;
-      (S?-c).(id c') = S.(id c,id c') by Th3
+   (S?-c).(id c') = S.(id c,id c') by Th3
                 .= S.(id [c,c']) by Th41
                 .= id ((Obj S).[c,c']) by CAT_1:104;
   hence thesis by CAT_1:103;
@@ -1393,10 +1392,8 @@ theorem
 theorem
       for S being Functor of [:C,C':],D,
       c being Object of C, c' being Object of C'
-    holds (Obj S-?c').c = (Obj S).[c,c']
+    holds (Obj S-?c').c = (Obj S).(c,c')
  proof let S be Functor of [:C,C':],D, c be Object of C, c' be Object of C';
-  reconsider S' = S as
-    Function of [:the Morphisms of C,the Morphisms of C':],the Morphisms of D;
       (S-?c').(id c) = S.(id c,id c') by Th4
                 .= S.(id [c,c']) by Th41
                 .= id ((Obj S).[c,c']) by CAT_1:104;
@@ -1695,7 +1692,7 @@ canceled 3;
 
 theorem
       for c being Object of C, d being Object of D
-    holds (Obj pr1(C,D)).[c,d] = c
+    holds (Obj pr1(C,D)).(c,d) = c
  proof let c be Object of C, d be Object of D;
 A1: id [c,d] = [id c,id d] by Th41;
   (pr1(C,D)).(id c,id d) = id c by FUNCT_3:def 5;
@@ -1707,7 +1704,7 @@ canceled;
 
 theorem
       for c being Object of C, d being Object of D
-    holds (Obj pr2(C,D)).[c,d] = d
+    holds (Obj pr2(C,D)).(c,d) = d
  proof let c be Object of C, d be Object of D;
 A1:   id [c,d] = [id c,id d] by Th41;
   (pr2(C,D)).(id c,id d) = id d by FUNCT_3:def 6;
@@ -1808,7 +1805,7 @@ end;
 theorem
       for T being Functor of C,D, T' being Functor of C',D',
        c being Object of C, c' being Object of C'
-    holds (Obj [:T,T':]).[c,c'] = [(Obj T).c,(Obj T').c']
+    holds (Obj [:T,T':]).(c,c') = [(Obj T).c,(Obj T').c']
  proof let T be Functor of C,D, T' be Functor of C',D';
   let c be Object of C, c' be Object of C';
       T.(id c) = id((Obj T).c) & T'.(id c') = id((Obj T').c') &

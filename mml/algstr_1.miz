@@ -10,8 +10,8 @@ environ
       BINOP_1, RELAT_1, ARYTM_3, ALGSTR_1, GROUP_1, VECTSP_2;
  notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, REAL_1, BINOP_2, STRUCT_0,
       GROUP_1, VECTSP_1, RLVECT_1, MIDSP_1;
- constructors BINOP_1, BINOP_2, MEMBERED, VECTSP_1, MIDSP_1, NAT_D;
- registrations SUBSET_1, VECTSP_1, MEMBERED;
+ constructors BINOP_1, BINOP_2, VECTSP_1, MIDSP_1;
+ registrations SUBSET_1, NUMBERS, VECTSP_1;
  requirements NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions RLVECT_1, STRUCT_0, GROUP_1, VECTSP_1;
  theorems RLVECT_1, VECTSP_1, TARSKI, XCMPLX_1, BINOP_2, GROUP_1;
@@ -514,7 +514,7 @@ theorem Th22:
            (for a holds a * 1.L = a)
          & (for a ex x st a*x = 1.L)
          & (for a,b,c holds (a*b)*c = a*(b*c))
- by Def12,GROUP_1:def 4,VECTSP_1:def 13,def 16;
+ by Def12,GROUP_1:def 4,VECTSP_1:def 16;
         assume A1: (for a holds a * 1.L = a)
                   & (for a ex x st a*x = 1.L)
                   & (for a,b,c holds (a*b)*c = a*(b*c));
@@ -562,7 +562,7 @@ theorem Th22:
                hence x = y * 1.L by A1,A6 .= y by A1;
              end;
          end;
-       hence thesis by A1,Def12,Def13,GROUP_1:def 4,def 2,VECTSP_1:def 16;
+       hence thesis by A1,Def12,Def13,GROUP_1:def 4,VECTSP_1:def 16;
   end;
 
 registration
@@ -668,8 +668,7 @@ Lm22: 0 = 0.multEX_0;
 Lm23: 1 = 1_multEX_0
 proof
   reconsider e = 1 as Element of multEX_0;
-  for x being Element of multEX_0 holds x*e=x & e*x=x by Lm21;
-  hence thesis by GROUP_1:def 5;
+  thus thesis;
 end;
 
 canceled 5;
@@ -880,76 +879,6 @@ end;
  reserve L for non empty multLoopStr_0;
  reserve a,b,c,x,y,z for Element of L;
 
-Lm31: 0.L <> 1_L
-     & (for a holds a * 1_L = a)
-     & (for a st a<>0.L ex x st a*x = 1_L)
-     & (for a,b,c holds (a*b)*c = a*(b*c))
-     & (for a holds a*0.L = 0.L)
-   implies (a*b = 1_L implies b*a = 1_L)
-  proof
-     assume that
-     A1: 0.L <> 1_L and
-     A2: for a holds a * 1_L = a and
-     A3: for a st a<>0.L ex x st a*x = 1_L and
-     A4: for a,b,c holds (a*b)*c = a*(b*c) and
-     A5: for a holds a*0.L = 0.L;
-        assume A6: a*b = 1_L;
-        then b<>0.L by A1,A5;
-        then consider x such that A7: b * x = 1_L by A3;
-        thus b*a = (b*a) * (b*x) by A2,A7
-                .= ((b*a) * b) * x by A4
-                .= (b * 1_L) * x by A4,A6
-                .= 1_L by A2,A7;
-  end;
-
-Lm32: 0.L <> 1_L
-     & (for a holds a * 1_L = a)
-     & (for a st a<>0.L ex x st a*x = 1_L)
-     & (for a,b,c holds (a*b)*c = a*(b*c))
-     & (for a holds a*0.L = 0.L)
-   implies 1_L*a = a*1_L
-  proof
-    assume that A1: 0.L <> 1_L and
-      A2: for a holds a * 1_L = a and
-      A3: for a st a<>0.L ex x st a*x = 1_L and
-      A4: for a,b,c holds (a*b)*c = a*(b*c) and
-      A5: for a holds a*0.L = 0.L;
-    A6: a<>0.L implies 1_L*a = a*1_L
-      proof
-        assume a<>0.L;
-        then consider x such that A7: a * x = 1_L by A3;
-        thus 1_L*a = a * (x*a) by A4,A7
-                  .= a*1_L by A1,A2,A3,A4,A5,A7,Lm31;
-      end;
-
-       a=0.L implies 1_L*a = a*1_L
-      proof
-        assume A8: a=0.L;
-        hence 1_L*a = 0.L by A5
-                  .= a*1_L by A2,A8;
-      end;
-    hence thesis by A6;
-  end;
-
-Lm33: 0.L <> 1_L
-     & (for a holds a * 1_L = a)
-     & (for a st a<>0.L ex x st a*x = 1_L)
-     & (for a,b,c holds (a*b)*c = a*(b*c))
-     & (for a holds a*0.L = 0.L)
-   implies for a st a<>0.L ex x st x*a = 1_L
-  proof
-    assume that A1: 0.L <> 1_L and
-     A2: for a holds a * 1_L = a and
-     A3: for a st a<>0.L ex x st a*x = 1_L and
-     A4: for a,b,c holds (a*b)*c = a*(b*c) and
-     A5: for a holds a*0.L = 0.L;
-    let a;
-    assume a<>0.L;
-    then consider x such that A6: a * x = 1_L by A3;
-       x*a=1_L by A1,A2,A3,A4,A5,A6,Lm31;
-    hence thesis;
-  end;
-
 canceled 2;
 
 registration
@@ -957,7 +886,7 @@ registration
   coherence by Lm30,GROUP_1:def 4;
 end;
 
-Lm34: for a,b be Element of multEX_0 holds a*b = b*a
+Lm31: for a,b be Element of multEX_0 holds a*b = b*a
       proof
         let a,b be Element of multEX_0;
         reconsider p=a, q=b as Real;
@@ -969,7 +898,7 @@ registration
  cluster strict commutative multGroup_0;
   existence
    proof multEX_0 is commutative non degenerated
-     by Lm22,Lm23,Lm34,GROUP_1:def 16,VECTSP_1:def 21;
+     by Lm22,Lm23,Lm31,GROUP_1:def 16,VECTSP_1:def 21;
     hence thesis;
    end;
 end;

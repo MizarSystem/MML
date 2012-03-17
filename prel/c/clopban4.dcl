@@ -37,11 +37,11 @@
 <Typ kind="G" nr="15">
 <Cluster>
 <Adjective nr="30" value="false"/>
-<Adjective nr="38"/>
 <Adjective nr="39"/>
 <Adjective nr="40"/>
 <Adjective nr="41"/>
-<Adjective nr="49"/>
+<Adjective nr="42"/>
+<Adjective nr="50"/>
 <Adjective nr="68"/>
 <Adjective nr="71"/>
 <Adjective nr="78"/>
@@ -60,19 +60,12 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="17">
 <Func kind="K" nr="46"/>
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
-</Adjective>
-<Adjective nr="72">
-<LocusVar nr="1"/>
-</Adjective>
-<Adjective nr="84">
-<LocusVar nr="1"/>
 </Adjective>
 <Adjective nr="85">
 <LocusVar nr="1"/>

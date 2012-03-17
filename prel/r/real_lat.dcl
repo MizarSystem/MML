@@ -10,8 +10,6 @@
 <ArticleID name="TARSKI"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
-<ArticleID name="XCMPLX_0"/>
-<ArticleID name="XXREAL_0"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="MCART_1"/>
@@ -23,42 +21,26 @@
 </Signature>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="111"/>
+<Func kind="K" nr="100"/>
 <Cluster>
-<Adjective nr="24" value="false"/>
-<Adjective nr="32"/>
+<Adjective nr="20" value="false"/>
+<Adjective nr="29"/>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="111"/>
+<Func kind="K" nr="100"/>
 <Cluster>
-<Adjective nr="24" value="false"/>
-<Adjective nr="32"/>
-<Adjective nr="33"/>
-<Adjective nr="34"/>
-<Adjective nr="35"/>
+<Adjective nr="29"/>
 <Adjective nr="36"/>
-<Adjective nr="37"/>
-<Adjective nr="38"/>
-<Adjective nr="39"/>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="111"/>
+<Func kind="K" nr="100"/>
 <Cluster>
-<Adjective nr="24" value="false"/>
-<Adjective nr="32"/>
-<Adjective nr="33"/>
-<Adjective nr="34"/>
-<Adjective nr="35"/>
-<Adjective nr="36"/>
+<Adjective nr="29"/>
 <Adjective nr="37"/>
-<Adjective nr="38"/>
-<Adjective nr="39"/>
-<Adjective nr="40"/>
-<Adjective nr="41"/>
 </Cluster>
 </FCluster>
 <CCluster>
@@ -67,13 +49,11 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="111"/>
+<Func kind="K" nr="100"/>
 </Func>
 </Typ>
 <Cluster>
 <Adjective nr="15"/>
-<Adjective nr="16"/>
-<Adjective nr="19"/>
 </Cluster>
 </CCluster>
 </Registrations>

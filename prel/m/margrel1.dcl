@@ -16,7 +16,6 @@
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XBOOLEAN"/>
-<ArticleID name="XCMPLX_0"/>
 <ArticleID name="MARGREL1"/>
 </Signature>
 <RCluster>
@@ -25,7 +24,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="22"/>
+<Adjective nr="21"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -36,19 +35,14 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="23"/>
+<Adjective nr="22"/>
 </Cluster>
 </RCluster>
 <FCluster>
 <ArgTypes/>
 <Func kind="K" nr="14"/>
 <Cluster>
-<Adjective nr="1"/>
-<Adjective nr="3"/>
-<Adjective nr="4"/>
-<Adjective nr="5"/>
-<Adjective nr="7"/>
-<Adjective nr="22"/>
+<Adjective nr="21"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -59,7 +53,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="120">
+<Func kind="K" nr="113">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -68,7 +62,7 @@
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="123"/>
+<Func kind="K" nr="116"/>
 <Cluster>
 <Adjective nr="7" value="false"/>
 </Cluster>
@@ -79,13 +73,11 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="128">
+<Func kind="K" nr="121">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="19"/>
 <Adjective nr="20"/>
-<Adjective nr="21"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -94,7 +86,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="23"/>
+<Adjective nr="22"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -106,9 +98,7 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="19"/>
 <Adjective nr="20"/>
-<Adjective nr="21"/>
 </Cluster>
 </FCluster>
 <CCluster>
@@ -116,12 +106,10 @@
 <Cluster/>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="123"/>
+<Func kind="K" nr="116"/>
 </Typ>
 <Cluster>
-<Adjective nr="19"/>
 <Adjective nr="20"/>
-<Adjective nr="21"/>
 </Cluster>
 </CCluster>
 <CCluster>
@@ -135,11 +123,11 @@
 <Cluster/>
 <Func kind="K" nr="88">
 <LocusVar nr="1"/>
-<Func kind="K" nr="123"/>
+<Func kind="K" nr="116"/>
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="23"/>
+<Adjective nr="22"/>
 </Cluster>
 </CCluster>
 </Registrations>

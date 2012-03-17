@@ -12,10 +12,9 @@ environ
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, MCART_1, FUNCT_1,
       PZFMISC1, REALSET1, DOMAIN_1, STRUCT_0, FUNCT_2, BINOP_1, MULTOP_1,
       FUNCT_3, FUNCT_4, CAT_1, PBOOLE, FUNCOP_1, PRALG_1, ALTCAT_1;
- constructors FUNCT_3, DOMAIN_1, REALSET1, PZFMISC1, CAT_1, PRALG_1, ALTCAT_1,
-      NAT_D;
- registrations STRUCT_0, ALTCAT_1, FUNCT_1, RELAT_1, RELSET_1, FUNCOP_1,
-      PBOOLE, REALSET1;
+ constructors FUNCT_3, REALSET1, PZFMISC1, CAT_1, PRALG_1, ALTCAT_1;
+ registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, FUNCOP_1, PBOOLE,
+      REALSET1, STRUCT_0, ALTCAT_1;
  requirements SUBSET, BOOLE;
  definitions STRUCT_0, ALTCAT_1, FUNCOP_1, FUNCT_1, RELAT_1, TARSKI, PBOOLE,
       BINOP_1, REALSET1;
@@ -246,7 +245,7 @@ theorem
 proof
  let I1,I2 be non empty set, M be ManySortedSet of [:I1,I2:],
   o1 be Element of I1, o2 be Element of I2;
-       [o1,o2] in [:I1,I2:] by ZFMISC_1:106;
+       [o1,o2] in [:I1,I2:];
 then A1: [o1,o2] in dom M by PBOOLE:def 3;
  thus (~M).(o2,o1) = M.(o1,o2) by A1,FUNCT_4:def 2;
 end;
@@ -441,9 +440,11 @@ A3: e = (the Comp of C).x by FUNCT_1:def 12;
 A4: x`1 in Hom(j,k) & x`2 in Hom(i,j) by A2,MCART_1:10;
    reconsider y = x`1, z = x`2 as Morphism of C by A2,MCART_1:10;
 A5: x = [y,z] by A2,MCART_1:23;
+   then
+A6: e = (the Comp of C).(y,z) by A3;
        y is Morphism of j,k & z is Morphism of i,j by A4,CAT_1:def 7;
    then y*z in Hom(i,k) by A4,CAT_1:51;
-  hence e in Hom(i,k) by A1,A3,A5,CAT_1:def 4;
+  hence e in Hom(i,k) by A1,A6,A5,CAT_1:def 4;
  end;
 
  definition let C be CatStr;
@@ -480,13 +481,14 @@ theorem Th13:
  definition let C be Category;
   func the_comps_of C -> BinComp of the_hom_sets_of C means
 :Def4:  for i,j,k being Object of C holds it.(i,j,k)
-   = (the Comp of C)|[:(the_hom_sets_of C).(j,k),(the_hom_sets_of C).(i,j):];
+   = (the Comp of C)|
+   ([:(the_hom_sets_of C).(j,k),(the_hom_sets_of C).(i,j):] qua set);
   existence
    proof
      set Ob3 = [:the Objects of C,the Objects of C,the Objects of C:],
          G = the_hom_sets_of C;
-     deffunc F(set) = (the Comp of C)| [:(the_hom_sets_of C).($1`1`2,$1`2),
-                                         (the_hom_sets_of C).($1`1`1,$1`1`2):];
+     deffunc F(set) = (the Comp of C)|([:(the_hom_sets_of C).($1`1`2,$1`2),
+                               (the_hom_sets_of C).($1`1`1,$1`1`2):] qua set);
      consider o being Function such that
 A1:   dom o = Ob3 and
 A2:   for e st e in Ob3 holds o.e = F(e) from FUNCT_1:sch 3;
@@ -494,7 +496,8 @@ A2:   for e st e in Ob3 holds o.e = F(e) from FUNCT_1:sch 3;
        now let e;
       assume e in dom o;
        then o.e = (the Comp of C)|
-        [:(the_hom_sets_of C).(e`1`2,e`2),(the_hom_sets_of C).(e`1`1,e`1`2):]
+        ([:(the_hom_sets_of C).(e`1`2,e`2),(the_hom_sets_of C).(e`1`1,e`1`2):]
+                             qua set)
           by A1,A2;
       hence o.e is Function;
      end;
@@ -510,7 +513,7 @@ A5:  [i,j,k] qua set `1`1 = e'`1 by A4,MCART_1:50 .= i by A4,MCART_1:47;
 A6:  [i,j,k] qua set `1`2 = e'`2 by A4,MCART_1:50 .= j by A4,MCART_1:47;
 A7:  [i,j,k] qua set `2 = e'`3 by A4,MCART_1:50 .= k by A4,MCART_1:47;
 A8:   G.(i,j) = Hom(i,j) & G.(j,k) = Hom(j,k) by Def3;
-A9:     f = (the Comp of C)|[:G.(j,k),G.(i,j):] by A2,A3,A4,A5,A6,A7;
+A9:     f = (the Comp of C)|([:G.(j,k),G.(i,j):] qua set) by A2,A4,A5,A6,A7;
 A10:     {|G|}.e = {|G|}.(i,j,k) by A4,MULTOP_1:def 1
               .= G.(i,k) by ALTCAT_1:def 5
               .= Hom(i,k) by Def3;
@@ -530,32 +533,34 @@ A12:     now assume {|G|}.e = {};
      then reconsider o as BinComp of G by PBOOLE:def 18;
     take o;
     let i,j,k be Object of C;
-A14:  [i,j,k] in Ob3 by DOMAIN_1:15;
      reconsider e = [i,j,k] as Element of Ob3;
-A15:  [i,j,k] qua set `1`1 = e`1 by MCART_1:50 .= i by MCART_1:47;
-A16:  [i,j,k] qua set `1`2 = e`2 by MCART_1:50 .= j by MCART_1:47;
-A17:  [i,j,k] qua set `2 = e`3 by MCART_1:50 .= k by MCART_1:47;
+A14:  [i,j,k] qua set `1`1 = e`1 by MCART_1:50 .= i by MCART_1:47;
+A15:  [i,j,k] qua set `1`2 = e`2 by MCART_1:50 .= j by MCART_1:47;
+A16:  [i,j,k] qua set `2 = e`3 by MCART_1:50 .= k by MCART_1:47;
     thus o.(i,j,k) = o.[i,j,k] by MULTOP_1:def 1
       .= (the Comp of C)|
-           [:(the_hom_sets_of C).(j,k),(the_hom_sets_of C).(i,j):]
-            by A2,A14,A15,A16,A17;
+           ([:(the_hom_sets_of C).(j,k),(the_hom_sets_of C).(i,j):] qua set)
+            by A2,A14,A15,A16;
    end;
   uniqueness
    proof let o1,o2 be BinComp of the_hom_sets_of C such that
-A18: for i,j,k being Object of C holds o1.(i,j,k) =
-     (the Comp of C)|[:(the_hom_sets_of C).(j,k),(the_hom_sets_of C).(i,j):]
+A17: for i,j,k being Object of C holds o1.(i,j,k) =
+     (the Comp of C)|
+      ([:(the_hom_sets_of C).(j,k),(the_hom_sets_of C).(i,j):] qua set)
     and
-A19: for i,j,k being Object of C holds o2.(i,j,k) =
-     (the Comp of C)|[:(the_hom_sets_of C).(j,k),(the_hom_sets_of C).(i,j):];
+A18: for i,j,k being Object of C holds o2.(i,j,k) =
+     (the Comp of C)|
+      ([:(the_hom_sets_of C).(j,k),(the_hom_sets_of C).(i,j):] qua set);
         now let a be set;
      assume a in [:the Objects of C,the Objects of C,the Objects of C:];
       then consider i,j,k being Object of C such that
-A20:     a = [i,j,k] by DOMAIN_1:15;
-     thus o1.a = o1.(i,j,k) by A20,MULTOP_1:def 1
+A19:     a = [i,j,k] by DOMAIN_1:15;
+     thus o1.a = o1.(i,j,k) by A19,MULTOP_1:def 1
          .= (the Comp of C)|
-                [:(the_hom_sets_of C).(j,k),(the_hom_sets_of C).(i,j):] by A18
-         .= o2.(i,j,k) by A19
-         .= o2.a by A20,MULTOP_1:def 1;
+            ([:(the_hom_sets_of C).(j,k),(the_hom_sets_of C).(i,j):] qua set)
+               by A17
+         .= o2.(i,j,k) by A18
+         .= o2.a by A19,MULTOP_1:def 1;
     end;
     hence o1 = o2 by PBOOLE:3;
    end;
@@ -578,9 +583,10 @@ A6: f in (the_hom_sets_of C).(i,j) by A3,Def3;
 then A7: [g,f] in [:(the_hom_sets_of C).(j,k),(the_hom_sets_of C).(i,j):]
      by A6,ZFMISC_1:106;
   thus (the_comps_of C).(i,j,k).(g,f)
-   = ((the Comp of C)|[:(the_hom_sets_of C).(j,k),(the_hom_sets_of C).(i,j):])
+   = ((the Comp of C)|
+        ([:(the_hom_sets_of C).(j,k),(the_hom_sets_of C).(i,j):] qua set))
           .[g,f] by Def4
-  .= (the Comp of C).[g,f] by A7,FUNCT_1:72
+  .= (the Comp of C).(g,f) by A7,FUNCT_1:72
   .= g*(f qua Morphism of C) by A5,CAT_1:41
   .= g*f by A1,A2,CAT_1:def 13;
  end;
@@ -907,8 +913,7 @@ theorem
      for E being empty strict AltCatStr holds
   E = the_empty_category
  proof let E be empty strict AltCatStr;
-       the carrier of E is empty & the carrier of the_empty_category is empty
-                  by STRUCT_0:def 1;
+       the carrier of E is empty & the carrier of the_empty_category is empty;
   hence E = the_empty_category by Lm1;
  end;
 
@@ -1110,7 +1115,7 @@ ZFMISC_1:113;
    reconsider c2 = (the Comp of D2).(j1,j2,j3)
       as Function of [:<^j2,j3^>,<^j1,j2^>:],<^j1,j3^>;
        [i1,i2] in [:the carrier of D1,the carrier of D1:] &
-   [i2,i3] in [:the carrier of D1,the carrier of D1:] by ZFMISC_1:106;
+   [i2,i3] in [:the carrier of D1,the carrier of D1:];
    then A9: <^i1,i2^> c= <^j1,j2^> & <^i2,i3^> c= <^j2,j3^> by A2,Def2;
        dom c2 = [:<^j2,j3^>,<^j1,j2^>:] by A8,FUNCT_2:def 1;
    then A10: dom c1 c= dom c2 by A7,A9,ZFMISC_1:119;
@@ -1280,7 +1285,7 @@ proof
  let C be non empty AltCatStr, D be full non empty SubCatStr of C,
      o1,o2 be object of C, p1,p2 be object of D such that
 A1: o1 = p1 & o2 = p2;
-A2: [p1,p2] in [:the carrier of D, the carrier of D:] by ZFMISC_1:106;
+A2: [p1,p2] in [:the carrier of D, the carrier of D:];
  thus <^o1,o2^>
        = ((the Arrows of C)||the carrier of D).(p1,p2) by A1,A2,FUNCT_1:72
       .= <^p1,p2^> by Def13;
@@ -1332,7 +1337,7 @@ proof
  let C be non empty AltCatStr, D be non empty SubCatStr of C,
      o1,o2 be object of C, p1,p2 be object of D such that
 A1: o1 = p1 & o2 = p2;
-A2: [p1,p2] in [:the carrier of D, the carrier of D:] by ZFMISC_1:106;
+A2: [p1,p2] in [:the carrier of D, the carrier of D:];
       the Arrows of D cc= the Arrows of C by Def11;
  hence thesis by A1,A2,Def2;
 end;
@@ -1359,18 +1364,16 @@ A3: f = ff & g = gg;
    then dom((the Comp of D).(p1,p2,p3)) = [:<^p2,p3^>,<^p1,p2^>:]
                              by FUNCT_2:def 1;
    then A4: [gg,ff] in dom((the Comp of D).(p1,p2,p3)) by A1,ZFMISC_1:106;
-A5: [p1,p2,p3] in [:the carrier of D,the carrier of D,the carrier of D:]
-             by MCART_1:73;
-A6: (the Comp of D).(p1,p2,p3) = (the Comp of D).[p1,p2,p3] &
+A5: (the Comp of D).(p1,p2,p3) = (the Comp of D).[p1,p2,p3] &
    (the Comp of C).(o1,o2,o3) = (the Comp of C).[o1,o2,o3] by MULTOP_1:def 1;
        the Comp of D cc= the Comp of C by Def11;
-   then A7: (the Comp of D).(p1,p2,p3) c= (the Comp of C).(o1,o2,o3) by A2,A5
-,A6,Def2;
+   then A6: (the Comp of D).(p1,p2,p3) c= (the Comp of C).(o1,o2,o3) by A2,A5,
+Def2;
 
        <^p1,p2^> c= <^o1,o2^> & <^p2,p3^> c= <^o2,o3^> by A2,Th32;
 then <^o1,o2^> <> {} & <^o2,o3^> <> {} by A1,XBOOLE_1:3;
  hence g*f = (the Comp of C).(o1,o2,o3).(g,f) by ALTCAT_1:def 10
-    .= (the Comp of D).(p1,p2,p3).(gg,ff) by A3,A4,A7,GRFUNC_1:8
+    .= (the Comp of D).(p1,p2,p3).(gg,ff) by A3,A4,A6,GRFUNC_1:8
     .= gg*ff by A1,ALTCAT_1:def 10;
 end;
 

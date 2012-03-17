@@ -11,12 +11,12 @@ environ
       ARYTM, TARSKI, SGRAPH1, CARD_1, FINSEQ_5, ARYTM_1, FINSEQ_2, SUBLEMMA,
       NAT_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, XCMPLX_0, NUMBERS, XXREAL_0,
-      CARD_1, NAT_1, NAT_D, RELAT_1, FUNCT_1, FINSEQ_1, CQC_LANG, FINSET_1,
-      FINSEQ_5, FINSEQ_2, RELSET_1, FUNCT_2, WELLORD2, CALCUL_1;
- constructors WELLORD2, XXREAL_0, NAT_1, INT_1, FINSEQ_2, FINSEQ_5, CALCUL_1,
-      NAT_D, PARTFUN1;
- registrations NAT_1, FINSEQ_1, RELSET_1, CQC_LANG, ORDINAL1, FUNCT_1, XREAL_0,
-      INT_1, CALCUL_1, XXREAL_0;
+      CARD_1, NAT_1, RELAT_1, FUNCT_1, FINSEQ_1, CQC_LANG, FINSET_1, FINSEQ_5,
+      FINSEQ_2, RELSET_1, FUNCT_2, WELLORD2, CALCUL_1;
+ constructors PARTFUN1, WELLORD2, XXREAL_0, NAT_1, INT_1, FINSEQ_2, FINSEQ_5,
+      CALCUL_1;
+ registrations FUNCT_1, ORDINAL1, RELSET_1, ARYTM_3, XXREAL_0, XREAL_0, NAT_1,
+      INT_1, FINSEQ_1, CQC_LANG, CALCUL_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, XBOOLE_0, FINSEQ_2;
  theorems TARSKI, FINSEQ_1, FINSEQ_3, FUNCT_1, XBOOLE_0, FINSEQ_2, RELAT_1,
@@ -197,43 +197,43 @@ A1:   a in Seg n & a in seq(n,m) by XBOOLE_0:3;
 
 theorem
   for f,g be FinSequence holds
-     Seg len(f^g) = Seg len f \/ seq(len f,len g)
+   dom(f^g) = dom f \/ seq(len f,len g)
   proof
     let f,g be FinSequence;
-    now let a be set such that A1: a in Seg len(f^g);
+    now let a be set such that A1: a in dom(f^g);
       reconsider i = a as Element of NAT by A1;
-A2:   1 <= i & i <= len(f^g) by A1,FINSEQ_1:3;
-A3:   now assume i <= len f; then
-A4:     i in Seg len f by A2,FINSEQ_1:3;
-        Seg len f c= Seg len f \/ seq(len f,len g) by XBOOLE_1:7;
-        hence a in Seg len f \/ seq(len f,len g) by A4;
+A2:   1 <= i & i <= len(f^g) by A1,FINSEQ_3:27;
+     per cases;
+      suppose i <= len f; then
+A3:     i in dom f by A2,FINSEQ_3:27;
+        dom f c= dom f \/ seq(len f,len g) by XBOOLE_1:7;
+        hence a in dom f \/ seq(len f,len g) by A3;
       end;
-      now assume len f < i; then
+      suppose len f < i; then
         len f+1 <= i & i <= len f+len g by A2,FINSEQ_1:35,NAT_1:13; then
-A5:     a in seq(len f,len g);
-        seq(len f,len g) c= Seg len f \/ seq(len f,len g) by XBOOLE_1:7;
-        hence a in Seg len f \/ seq(len f,len g) by A5;
+A4:     a in seq(len f,len g);
+        seq(len f,len g) c= dom f \/ seq(len f,len g) by XBOOLE_1:7;
+        hence a in dom f \/ seq(len f,len g) by A4;
       end;
-      hence a in Seg len f \/ seq(len f,len g) by A3;
     end;
-    hence Seg len(f^g) c= Seg len f \/ seq(len f,len g) by TARSKI:def 3;
-    let a be set such that A6: a in Seg len f \/ seq(len f,len g);
-A7: now assume A8: a in Seg len f; then
+    hence dom(f^g) c= dom f \/ seq(len f,len g) by TARSKI:def 3;
+    let a be set such that A5: a in dom f \/ seq(len f,len g);
+    per cases by A5, XBOOLE_0:def 2;
+    suppose A6: a in dom f; then
       reconsider i = a as Element of NAT;
-A9:  1 <= i & i <= len f by A8,FINSEQ_1:3;
+A7:  1 <= i & i <= len f by A6,FINSEQ_3:27;
       len f <= len (f^g) by CALCUL_1:6; then
-      i <= len (f^g) by A9,XXREAL_0:2;
-      hence a in Seg len(f^g) by A9,FINSEQ_1:3;
+      i <= len (f^g) by A7,XXREAL_0:2;
+      hence a in dom(f^g) by A7,FINSEQ_3:27;
     end;
-    now assume A10: a in seq(len f,len g); then
+    suppose A8: a in seq(len f,len g); then
       reconsider i = a as Element of NAT;
-A11:  1+len f <= i & i <= len g+len f by A10,Th1; then
-A12:  i <= len (f^g) by FINSEQ_1:35;
+A9:  1+len f <= i & i <= len g+len f by A8,Th1; then
+A10:  i <= len (f^g) by FINSEQ_1:35;
       1 <= 1+len f by NAT_1:11; then
-      1 <= i by A11,XXREAL_0:2;
-      hence a in Seg len (f^g) by A12,FINSEQ_1:3;
+      1 <= i by A9,XXREAL_0:2;
+      hence a in dom(f^g) by A10,FINSEQ_3:27;
     end;
-    hence thesis by A6,A7,XBOOLE_0:def 2;
   end;
 
 theorem Th10:

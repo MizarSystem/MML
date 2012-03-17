@@ -47,9 +47,6 @@
 <ArgTypes/>
 <Func kind="K" nr="17"/>
 <Cluster>
-<Adjective nr="1"/>
-<Adjective nr="3"/>
-<Adjective nr="9"/>
 <Adjective nr="10"/>
 <Adjective nr="11"/>
 <Adjective nr="12"/>

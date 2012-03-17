@@ -128,7 +128,6 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="15"/>
 <Adjective nr="20"/>
 </Cluster>
 </CCluster>

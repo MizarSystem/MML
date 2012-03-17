@@ -20,9 +20,9 @@
 <ArticleID name="REALSET1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
+<ArticleID name="MEMBERED"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
-<ArticleID name="MEMBERED"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="PARTFUN1"/>
@@ -69,12 +69,12 @@
 <Func kind="K" nr="42"/>
 <Func kind="K" nr="42"/>
 </Adjective>
-<Adjective nr="45">
+<Adjective nr="46">
 <Func kind="K" nr="42"/>
 <Func kind="K" nr="42"/>
 </Adjective>
-<Adjective nr="58"/>
-<Adjective nr="60"/>
+<Adjective nr="59"/>
+<Adjective nr="61"/>
 </Cluster>
 </RCluster>
 <FCluster>
@@ -95,19 +95,12 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="7" value="false"/>
 <Adjective nr="17">
 <Func kind="K" nr="42"/>
 <Func kind="K" nr="42"/>
 </Adjective>
-<Adjective nr="45">
-<Func kind="K" nr="42"/>
-<Func kind="K" nr="42"/>
-</Adjective>
-<Adjective nr="58"/>
-<Adjective nr="60"/>
+<Adjective nr="61"/>
 </Cluster>
 </FCluster>
 </Registrations>

@@ -8,15 +8,11 @@ environ
 
  vocabularies ARYTM_1, FINSEQ_1, FUNCT_1, RELAT_1, FINSEQ_4, REALSET1, RFINSEQ,
       BOOLE, RLSUB_2, FINSEQ_5, NAT_1;
- notations TARSKI, XBOOLE_0, SUBSET_1, XCMPLX_0, NUMBERS, NAT_1, NAT_D,
-      RELAT_1, FUNCT_1, FINSEQ_1, FINSEQ_4, REALSET1, RFINSEQ,
-      BINARITH, XXREAL_0;
- constructors XXREAL_0, REAL_1, NAT_1, INT_1, FINSEQ_4, REALSET1, RFINSEQ,
-      BINARITH, NAT_D;
- registrations FUNCT_1, FINSEQ_1, RELSET_1, INT_1, ORDINAL1, XREAL_0, ARYTM_3,
-      NAT_1;
- registrations MARGREL1, MEMBERED, ORDINAL2, FINSEQ_2,
-      BINOP_2, XXREAL_0, XBOOLEAN, SUBSET_1;
+ notations TARSKI, XBOOLE_0, SUBSET_1, XCMPLX_0, NUMBERS, NAT_1, RELAT_1,
+      FUNCT_1, FINSEQ_1, FINSEQ_4, REALSET1, RFINSEQ, BINARITH, XXREAL_0;
+ constructors XXREAL_0, NAT_1, INT_1, FINSEQ_4, REALSET1, RFINSEQ, BINARITH;
+ registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, ARYTM_3,
+      XXREAL_0, XREAL_0, NAT_1, INT_1, FINSEQ_1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, FUNCT_1, XBOOLE_0, FINSEQ_1;
  theorems TARSKI, ZFMISC_1, REAL_1, NAT_1, PARTFUN2, FUNCT_1, FINSEQ_1,
@@ -43,10 +39,8 @@ theorem Th2:
 then 1 <= i & i <= n by FINSEQ_1:3;
    then reconsider ni = n - i as Element of NAT by INT_1:18;
    reconsider j = ni + 1 as Element of NAT;
-      0 <= ni by NAT_1:2;
-then A2:  0+1 <= j by XREAL_1:8;
-      0 <= i by NAT_1:2;
-   then ni <= n by XREAL_1:45;
+A2:  0+1 <= j by XREAL_1:8;
+   ni <= n by XREAL_1:45;
 then A3:  j <= n + 1 by XREAL_1:8;
       now assume j = n + 1;
     then ni = n;
@@ -111,11 +105,6 @@ A6:  f"{y2} = {x2} by A1,A3,FUNCT_1:144;
      f.x1 = y1 & f.x2 = y2 by A5,A6,Th3;
    hence thesis by A4,A5,A6,ZFMISC_1:6;
  end;
-
-registration
-  cluster empty -> trivial set;
-  coherence by REALSET1:def 4;
-end;
 
 registration let x be set;
   cluster <*x*> -> trivial;
@@ -440,7 +429,7 @@ theorem
   suppose len f < i;
    then f/^i = <*>D by RFINSEQ:def 2;
    then len(f/^i) = 0 by FINSEQ_1:32;
-   hence thesis by NAT_1:2;
+   hence thesis;
  end;
  end;
 
@@ -488,8 +477,8 @@ A3:  n+i in dom f by A1,Th29;
 theorem Th31:
   f/^0 = f
  proof
-A1: 0 <= len f by NAT_1:2;
-then A2: len(f/^0) = len f - 0 by RFINSEQ:def 2
+A1: 0 <= len f;
+A2: len(f/^0) = len f - 0 by RFINSEQ:def 2
              .= len f;
   now
    let i;
@@ -1151,7 +1140,7 @@ then A9:  1 in dom g by A6;
 A10:  i > 1;
     then reconsider j = i-1 as Element of NAT by NAT_1:20;
     reconsider k = n - i + 1 as Element of NAT by A5,Th1;
-     0 < i by A10,XXREAL_0:2;
+     0 < i by A10;
     then consider l being Nat such that
 A11:   i = l + 1 by NAT_1:6;
        l <> 0 by A10,A11;
@@ -1411,7 +1400,7 @@ end;
 
 theorem  (<*>D)|i=<*>D
 proof len (<*>D)=0 by FINSEQ_1:32;
-  then len (<*>D)<=i by NAT_1:2;
+  then len (<*>D)<=i;
  hence thesis by FINSEQ_1:79;
 end;
 
@@ -1436,61 +1425,61 @@ theorem
          (f/^l1)|(l2-'l1)=(f|l2)/^l1
 proof let f be FinSequence of D,l1,l2 be Nat;
  per cases;
- suppose A2:l1<=l2;
+ suppose A1:l1<=l2;
   per cases;
-  suppose A3:l2<=len f;
-    then A4:l1<=len f by A2,XXREAL_0:2;
-    then A5:len (f/^l1)=len f-l1 by RFINSEQ:def 2;
-    A6:l1<=len (f|l2) by A2,A3,FINSEQ_1:80;
-        l2-l1<=len f-l1 by A3,XREAL_1:11;
-    then A7:l2-'l1<=len (f/^l1) by A2,A5,BINARITH:50;
-    then A8:len ((f/^l1)|(l2-'l1)) = l2-'l1 by FINSEQ_1:80;
-    A9:len ((f|l2)/^l1)=len (f|l2)-l1 by A6,RFINSEQ:def 2
-                  .=l2-l1 by A3,FINSEQ_1:80
-                  .=l2-'l1 by A2,BINARITH:50;
+  suppose A2:l2<=len f;
+    then A3:l1<=len f by A1,XXREAL_0:2;
+    then A4:len (f/^l1)=len f-l1 by RFINSEQ:def 2;
+    A5:l1<=len (f|l2) by A1,A2,FINSEQ_1:80;
+        l2-l1<=len f-l1 by A2,XREAL_1:11;
+    then A6:l2-'l1<=len (f/^l1) by A1,A4,BINARITH:50;
+    then A7:len ((f/^l1)|(l2-'l1)) = l2-'l1 by FINSEQ_1:80;
+    A8:len ((f|l2)/^l1)=len (f|l2)-l1 by A5,RFINSEQ:def 2
+                  .=l2-l1 by A2,FINSEQ_1:80
+                  .=l2-'l1 by A1,BINARITH:50;
     for k being Element of NAT st 1<=k & k<=len ((f|l2)/^l1) holds
     ((f/^l1)|(l2-'l1)).k=((f|l2)/^l1).k
     proof let k be Element of NAT such that
-A10: 1<=k and
-A11: k<=len ((f|l2)/^l1);
-     A12:k<=len (f/^l1) by A7,A9,A11,XXREAL_0:2;
-     A13:k in Seg (l2-'l1) by A9,A10,A11;
-     A14:k in dom (f/^l1) by A10,A12,FINSEQ_3:27;
-         k<=l2-l1 by A2,A9,A11,BINARITH:50; then
-A15: k+l1<=l2-l1+l1 by XREAL_1:8;
-     A16:k in dom ((f|l2)/^l1) by A10,A11,FINSEQ_3:27;
-     ((f/^l1)|(l2-'l1)).k =(f/^l1).k by A13,FUNCT_1:72
-     .=f.(k+l1) by A4,A14,RFINSEQ:def 2
-     .=(f|l2).(k+l1) by A15,FINSEQ_3:121
-     .=((f|l2)/^l1).k by A6,A16,RFINSEQ:def 2;
+A9: 1<=k and
+A10: k<=len ((f|l2)/^l1);
+     A11:k<=len (f/^l1) by A6,A8,A10,XXREAL_0:2;
+     A12:k in Seg (l2-'l1) by A8,A9,A10;
+     A13:k in dom (f/^l1) by A9,A11,FINSEQ_3:27;
+         k<=l2-l1 by A1,A8,A10,BINARITH:50; then
+A14: k+l1<=l2-l1+l1 by XREAL_1:8;
+     A15:k in dom ((f|l2)/^l1) by A9,A10,FINSEQ_3:27;
+     ((f/^l1)|(l2-'l1)).k =(f/^l1).k by A12,FUNCT_1:72
+     .=f.(k+l1) by A3,A13,RFINSEQ:def 2
+     .=(f|l2).(k+l1) by A14,FINSEQ_3:121
+     .=((f|l2)/^l1).k by A5,A15,RFINSEQ:def 2;
      hence ((f/^l1)|(l2-'l1)).k=((f|l2)/^l1).k;
     end;
-   hence (f/^l1)|(l2-'l1)=(f|l2)/^l1 by A8,A9,FINSEQ_1:18;
+   hence (f/^l1)|(l2-'l1)=(f|l2)/^l1 by A7,A8,FINSEQ_1:18;
   end;
-  suppose A17:l2>len f;
-    then A18:f|l2=f by FINSEQ_1:79;
+  suppose A16:l2>len f;
+    then A17:f|l2=f by FINSEQ_1:79;
         len (f/^l1)=len f-'l1 by BINARITH:76;
-    then len (f/^l1)<=l2-'l1 by A17,BINARITH:60;
-   hence (f/^l1)|(l2-'l1)=(f|l2)/^l1 by A18,FINSEQ_1:79;
+    then len (f/^l1)<=l2-'l1 by A16,BINARITH:60;
+   hence (f/^l1)|(l2-'l1)=(f|l2)/^l1 by A17,FINSEQ_1:79;
   end;
  end;
- suppose A19:l1>l2;
+ suppose A18:l1>l2;
    then l1-l1>l2-l1 by XREAL_1:11;
    then l2-'l1=0 by BINARITH:def 3;
    then dom ((f/^l1)|(l2-'l1)) =dom (f/^l1) /\ {} NAT
            by FUNCT_1:68,FINSEQ_1:4
    .={} NAT;
-   then A20:(f/^l1)|(l2-'l1)=<*>(D) by FINSEQ_1:26;
+   then A19:(f/^l1)|(l2-'l1)=<*>(D) by FINSEQ_1:26;
    reconsider l1'=l1,l2'=l2 as Element of NAT by ORDINAL1:def 13;
    per cases;
-   suppose l1<=len f; then l2<len f by A19,XXREAL_0:2;
-    then l1'>len (f|l2') by A19,FINSEQ_1:80;
-    hence (f/^l1)|(l2-'l1)=(f|l2)/^l1 by A20,Th35;
+   suppose l1<=len f; then l2<len f by A18,XXREAL_0:2;
+    then l1'>len (f|l2') by A18,FINSEQ_1:80;
+    hence (f/^l1)|(l2-'l1)=(f|l2)/^l1 by A19,Th35;
    end;
-   suppose A21:l1>len f;
+   suppose A20:l1>len f;
      len (f|l2')<=len f by Th18;
-    then l1'>len (f|l2') by A21,XXREAL_0:2;
-    hence (f/^l1)|(l2-'l1)=(f|l2)/^l1 by A20,Th35;
+    then l1'>len (f|l2') by A20,XXREAL_0:2;
+    hence (f/^l1)|(l2-'l1)=(f|l2)/^l1 by A19,Th35;
    end;
  end;
 end;
@@ -1530,10 +1519,8 @@ proof assume
 A1:  k+1 <= len f;
     1 <= k+1 by NAT_1:12;
 then A2: k+1 in dom f by A1,FINSEQ_3:27;
-    f|k = f|Seg k by FINSEQ_1:def 15;
- then f|Seg(k+1) = (f|k)^<*f.(k+1)*> by A2,Th11;
- hence f|(k+1) = (f|k)^<*f.(k+1)*> by FINSEQ_1:def 15
-              .= (f|k)^<*f/.(k+1)*> by A2,FINSEQ_4:def 4;
+ f|Seg(k+1) = (f|k)^<*f.(k+1)*> by A2,Th11;
+ hence f|(k+1) = (f|k)^<*f/.(k+1)*> by A2,FINSEQ_4:def 4;
 end;
 
 :: from JORDAN3, 2007.03.18, A.T.

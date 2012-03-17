@@ -12,12 +12,11 @@ environ
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, MCART_1, DOMAIN_1, RELAT_1,
       REALSET1, STRUCT_0, FUNCT_1, FUNCT_2, BINOP_1, MULTOP_1, FUNCOP_1,
       FRAENKEL, PBOOLE;
- constructors PARTFUN1, DOMAIN_1, BINOP_1, FRAENKEL, FUNCOP_1, PBOOLE,
-      MULTOP_1, REALSET2, NAT_D;
- registrations FUNCT_1, FRAENKEL, TEX_2, STRUCT_0, SUBSET_1, RELAT_1, FUNCOP_1,
-      RELSET_1, FUNCT_2;
+ constructors PARTFUN1, BINOP_1, FRAENKEL, MULTOP_1, PBOOLE, REALSET2;
+ registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, FUNCT_2, FUNCOP_1,
+      FRAENKEL, STRUCT_0, TEX_2;
  requirements BOOLE, SUBSET;
- definitions TARSKI, FRAENKEL, REALSET2, STRUCT_0, XBOOLE_0, FUNCOP_1, BINOP_1;
+ definitions TARSKI, FRAENKEL, STRUCT_0, XBOOLE_0, FUNCOP_1, BINOP_1;
  theorems FUNCT_1, ZFMISC_1, PBOOLE, DOMAIN_1, MULTOP_1, MCART_1, FUNCT_2,
       FRAENKEL, TARSKI, FUNCOP_1, CARD_5, RELAT_1, REALSET1, MSUHOM_1,
       STRUCT_0, RELSET_1, XBOOLE_0, XBOOLE_1, PARTFUN1;
@@ -593,7 +592,7 @@ definition let C be non empty AltCatStr;
  attr C is pseudo-functional means
 :Def15: for o1,o2,o3 being object of C holds
      (the Comp of C).(o1,o2,o3) =
-       FuncComp(Funcs(o1,o2),Funcs(o2,o3))|[:<^o2,o3^>,<^o1,o2^>:];
+       FuncComp(Funcs(o1,o2),Funcs(o2,o3))|([:<^o2,o3^>,<^o1,o2^>:] qua set);
 end;
 
 registration let X be non empty set, A be ManySortedSet of [:X,X:],
@@ -607,12 +606,12 @@ registration
  existence
   proof
 A1:    0 in 1 by CARD_5:1,TARSKI:def 1;
-         dom([0,0] .--> Funcs(0,0)) = {[0,0]} by FUNCOP_1:14,19
+         dom([0,0] .--> Funcs(0,0)) = {[0,0]} by FUNCOP_1:19
        .= [: 1,1 :] by CARD_5:1,ZFMISC_1:35;
     then reconsider m = [0,0] .--> Funcs(0,0) as ManySortedSet of [: 1,1 :]
        by PBOOLE:def 3;
 A2:  dom([0,0,0] .--> FuncComp(Funcs(0,0),Funcs(0,0))) = {[0,0,0]}
-        by FUNCOP_1:14,19;
+        by FUNCOP_1:19;
 A3:  {[0,0,0]} = [: 1,1,1 :] by CARD_5:1,MCART_1:39;
     then reconsider c = [0,0,0] .--> FuncComp(Funcs(0,0),Funcs(0,0))
       as ManySortedSet of [: 1,1,1 :] by A2,PBOOLE:def 3;
@@ -648,7 +647,7 @@ A8:    {|m|}.i = {|m|}.(0,0,0) by A5,MULTOP_1:def 1
       by A9,PBOOLE:def 3;
    thus (the Comp of C).(o1,o2,o3) = c.[o1,o2,o3] by MULTOP_1:def 1
     .= FuncComp(Funcs(0,0),Funcs(0,0)) by A9,FUNCOP_1:87
-    .= FuncComp(Funcs(o1,o2),Funcs(o2,o3))|[:<^o2,o3^>,<^o1,o2^>:]
+    .= FuncComp(Funcs(o1,o2),Funcs(o2,o3))|([:<^o2,o3^>,<^o1,o2^>:] qua set)
        by A9,A10,RELAT_1:97;
  end;
 end;
@@ -669,8 +668,9 @@ proof let C be pseudo-functional (non empty AltCatStr);
  let a1,a2,a3 be object of C such that
 A1:  <^a1,a2^> <> {} & <^a2,a3^> <> {} & <^a1,a3^> <> {};
 A2: (the Comp of C).(a1,a2,a3)
-       = FuncComp(Funcs(a1,a2),Funcs(a2,a3))|[:<^a2,a3^>,<^a1,a2^>:] by Def15;
-A3:  dom(FuncComp(Funcs(a1,a2),Funcs(a2,a3))|[:<^a2,a3^>,<^a1,a2^>:])
+       = FuncComp(Funcs(a1,a2),Funcs(a2,a3))|([:<^a2,a3^>,<^a1,a2^>:] qua set)
+            by Def15;
+A3:  dom(FuncComp(Funcs(a1,a2),Funcs(a2,a3))|([:<^a2,a3^>,<^a1,a2^>:] qua set))
       c= dom(FuncComp(Funcs(a1,a2),Funcs(a2,a3))) by RELAT_1:89;
  let f be Morphism of a1,a2, g be Morphism of a2,a3,
        f',g' be Function such that
@@ -754,9 +754,9 @@ A18:  <^o1,o2^> = Funcs(o1,o2) by A1;
     then A19:  dom FuncComp(Funcs(o1,o2),Funcs(o2,o3)) = [:<^o2,o3^>,<^o1,o2^>
 :]
             by A18,PBOOLE:def 3;
-     thus (the Comp of C).(o1,o2,o3)
-          = FuncComp(Funcs(o1,o2),Funcs(o2,o3)) by A2
-         .= FuncComp(Funcs(o1,o2),Funcs(o2,o3))|[:<^o2,o3^>,<^o1,o2^>:]
+   thus (the Comp of C).(o1,o2,o3)
+      = FuncComp(Funcs(o1,o2),Funcs(o2,o3)) by A2
+     .= FuncComp(Funcs(o1,o2),Funcs(o2,o3))|([:<^o2,o3^>,<^o1,o2^>:] qua set)
                    by A19,RELAT_1:97;
     end;
    then reconsider C as strict pseudo-functional (non empty AltCatStr);
@@ -791,7 +791,7 @@ A26:     i in A & j in A & k in A;
 A27:   <^a2,a3^> = <^b2,b3^> by A25;
        <^a1,a2^> = <^b1,b2^> by A25;
      hence (the Comp of C1).(i,j,k)
-        = FuncComp(Funcs(b1,b2),Funcs(b2,b3))|[:<^b2,b3^>,<^b1,b2^>:]
+        = FuncComp(Funcs(b1,b2),Funcs(b2,b3))|([:<^b2,b3^>,<^b1,b2^>:] qua set)
                    by A27,Def15
        .= (the Comp of C2).(i,j,k) by Def15;
     end;
@@ -941,7 +941,8 @@ registration
 A1:  C is quasi-functional semi-functional transitive;
    let o1,o2,o3 be object of C;
     set c = (the Comp of C).(o1,o2,o3),
-        f = FuncComp(Funcs(o1,o2),Funcs(o2,o3))|[:<^o2,o3^>,<^o1,o2^>:];
+        f =
+        FuncComp(Funcs(o1,o2),Funcs(o2,o3))|([:<^o2,o3^>,<^o1,o2^>:] qua set);
          <^o1,o3^> = {} implies <^o2,o3^> = {} or <^o1,o2^> = {} by A1,Def4;
     then A2: <^o1,o3^> = {} implies [:<^o2,o3^>,<^o1,o2^>:] = {} by
 ZFMISC_1:113;
@@ -980,7 +981,7 @@ A14:  i = [i1,i2] by A10,ZFMISC_1:103;
       .= f.i by A11,A12,A14,FUNCT_1:70;
    end;
    hence (the Comp of C).(o1,o2,o3) =
-       FuncComp(Funcs(o1,o2),Funcs(o2,o3))|[:<^o2,o3^>,<^o1,o2^>:]
+       FuncComp(Funcs(o1,o2),Funcs(o2,o3))|([:<^o2,o3^>,<^o1,o2^>:] qua set)
       by A11,FUNCT_1:9;
   end;
   end;
@@ -1003,7 +1004,7 @@ A16:     <^a1,a2^> <> {};
              f = FuncComp(Funcs(a1,a1),Funcs(a1,a2));
         A18:       dom c = [:<^a1,a2^>,<^a1,a1^>:] by A16,FUNCT_2:def 1;
 A19:       dom f = [:Funcs(a1,a2),Funcs(a1,a1):] by PBOOLE:def 3;
-              c = f|[:<^a1,a2^>,<^a1,a1^>:] by A15,Def15;
+              c = f|([:<^a1,a2^>,<^a1,a1^>:] qua set) by A15,Def15;
         then [:<^a1,a2^>,<^a1,a1^>:] c= [:Funcs(a1,a2),Funcs(a1,a1):]
              by A18,A19,RELAT_1:89;
        hence <^a1,a2^> c= Funcs(a1,a2) by A17,ZFMISC_1:138;
@@ -1257,10 +1258,10 @@ A9:     M.(i1,i1) = IFEQ(i1,i1,{ id i1 },{}) by A1
            .= {id i1} by FUNCOP_1:def 8;
 A10:     {|M,M|}.i = {|M,M|}.(i1,i1,i1) by A5,A6,A7,MULTOP_1:def 1
           .= [:{id i1},{id i1}:] by A9,Def6 .= {[id i1,id i1]} by ZFMISC_1:35
-         .= dom([id i1,id i1].-->id i1) by FUNCOP_1:14,19;
+         .= dom([id i1,id i1].-->id i1) by FUNCOP_1:19;
 A11:     {|M|}.i = {|M|}.(i1,i1,i1) by A5,A6,A7,MULTOP_1:def 1
            .= {id i1} by A9,Def5;
-          rng([id i1,id i1].-->id i1) = {id i1} by FUNCOP_1:14,19;
+          rng([id i1,id i1].-->id i1) = {id i1} by FUNCOP_1:14;
       hence c.i is Function of {|M,M|}.i, {|M|}.i
          by A8,A10,A11,FUNCT_2:def 1,RELSET_1:11;
       end;
@@ -1436,7 +1437,7 @@ A2:    o1 = o2 & o2 = o3;
 ,A2,ZFMISC_1:37;
      thus (the Comp of C).(o1,o2,o3) = (id o1,id o1) :-> id o1 by A2,Th29
       .= FuncComp({id o1},{id o1}) by Th15
-      .= FuncComp(Funcs(o1,o2),Funcs(o2,o3))|[:<^o2,o3^>,<^o1,o2^>:]
+      .= FuncComp(Funcs(o1,o2),Funcs(o2,o3))|([:<^o2,o3^>,<^o1,o2^>:] qua set)
                   by A3,A4,Th16;
      end;
      suppose
@@ -1444,7 +1445,7 @@ A5:    o1 <> o2 or o2 <> o3;
       then <^o2,o3^> = {} or <^o1,o2^> = {} by Def20;
       then A6:    [:<^o2,o3^>,<^o1,o2^>:] = {} by ZFMISC_1:113;
      thus (the Comp of C).(o1,o2,o3) = {} by A5,Th28
-      .= FuncComp(Funcs(o1,o2),Funcs(o2,o3))|[:<^o2,o3^>,<^o1,o2^>:]
+      .= FuncComp(Funcs(o1,o2),Funcs(o2,o3))|([:<^o2,o3^>,<^o1,o2^>:] qua set)
          by A6,RELAT_1:110;
     end;
     end;

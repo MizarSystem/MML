@@ -10,20 +10,20 @@ environ
       FUNCT_1, RELAT_1, QC_LANG1, PREPOWER, SERIES_1, ABSVALUE, RLVECT_1,
       SEQM_3, SEQ_2, SUPINF_2, ORDINAL2, PROB_1, SQUARE_1, PARTFUN1, INCSP_1,
       RCOMP_1, PRE_TOPC, BOOLE, FCONT_1, SIN_COS, FINSEQ_4, GROUP_1, XCMPLX_0,
-      FUNCOP_1, FRECHET2, SIN_COS4, NAT_1;
+      FUNCOP_1, FRECHET2, SIN_COS4, NAT_1, RELOC;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, ARYTM_0, XCMPLX_0,
       XXREAL_0, XREAL_0, COMPLEX1, REAL_1, RELAT_1, FUNCT_1, RELSET_1, FCONT_1,
-      FUNCT_2, SEQ_1, SEQ_2, FDIFF_1, FUNCOP_1, SERIES_1, NAT_1, NAT_D,
-      FINSEQ_4, NEWTON, SQUARE_1, PARTFUN1, SEQM_3, RCOMP_1, BINARITH,
-      RFUNCT_1, RFUNCT_2, COMSEQ_1, COMSEQ_2, COMSEQ_3, PREPOWER;
- constructors PARTFUN1, FUNCT_4, ARYTM_3, ARYTM_0, REAL_1, SQUARE_1, NAT_1,
-      SEQ_2, RCOMP_1, FINSEQ_4, RFUNCT_1, RFUNCT_2, FCONT_1, FDIFF_1, COMSEQ_1,
-      PREPOWER, COMSEQ_2, SERIES_1, COMSEQ_3, BINARITH, NAT_D;
- registrations COMSEQ_2, COMSEQ_3, XREAL_0, RELSET_1, FDIFF_1, RCOMP_1, SEQ_1,
-      COMSEQ_1, SEQM_3, NEWTON, COMPLEX1, MEMBERED, ORDINAL2, SQUARE_1,
-      XCMPLX_0, NAT_1, XXREAL_0, ORDINAL1;
+      FUNCT_2, SEQ_1, SEQ_2, FDIFF_1, FUNCOP_1, SERIES_1, NAT_1, FINSEQ_4,
+      NEWTON, SQUARE_1, PARTFUN1, SEQM_3, RCOMP_1, BINARITH, RFUNCT_1,
+      RFUNCT_2, COMSEQ_1, COMSEQ_2, COMSEQ_3, PREPOWER;
+ constructors PARTFUN1, FUNCT_4, ARYTM_0, REAL_1, SQUARE_1, NAT_1, SEQ_2,
+      RCOMP_1, FINSEQ_4, COMSEQ_1, RFUNCT_1, COMSEQ_2, RFUNCT_2, FCONT_1,
+      FDIFF_1, PREPOWER, SERIES_1, COMSEQ_3, BINARITH;
+ registrations XBOOLE_0, ORDINAL1, RELSET_1, FUNCT_2, NUMBERS, XCMPLX_0,
+      XXREAL_0, XREAL_0, SQUARE_1, NAT_1, MEMBERED, COMPLEX1, SEQ_1, SEQM_3,
+      RCOMP_1, COMSEQ_1, COMSEQ_2, FDIFF_1, NEWTON, COMSEQ_3;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions COMSEQ_3, SQUARE_1, TARSKI, SUBSET_1;
+ definitions COMSEQ_3, SQUARE_1, SUBSET_1;
  theorems NAT_1, REAL_1, ABSVALUE, REAL_2, INT_1, SEQ_1, SEQ_2, SERIES_1,
       SEQM_3, SEQ_4, PREPOWER, COMPLEX1, COMSEQ_1, COMSEQ_2, SQUARE_1,
       COMSEQ_3, FCONT_2, FINSEQ_4, RCOMP_1, FUNCT_1, FDIFF_1, FDIFF_2, FCONT_1,
@@ -404,7 +404,7 @@ end;
 end;
 
 definition let seq;
-func Sift seq -> Complex_Sequence means :Def12:
+func Shift seq -> Complex_Sequence means :Def12:
   it.0=0 & for k be Element of NAT holds it.(k+1) = seq.k;
 existence
 proof deffunc U(Element of NAT,Element of COMPLEX) = seq.$1;
@@ -724,7 +724,7 @@ A6:|.(n+1+0*<i>).|=n+1 by ABSVALUE:def 1;
  end;
 
 theorem Th5:
-0 < k implies (Sift(seq)).k=seq.(k-'1)
+0 < k implies (Shift(seq)).k=seq.(k-'1)
 proof
  assume
   A1:  0 < k;
@@ -733,26 +733,26 @@ proof
   A3:   m+1=k by A1,NAT_1:6;
   A4: m=k-1 by A3;
   m in NAT by ORDINAL1:def 13;
-  hence (Sift seq).k=seq.m by A3,Def12
+  hence (Shift seq).k=seq.m by A3,Def12
              .=seq.(k-'1) by A2,A4,BINARITH:50;
 end;
 
 theorem Th6:
-Partial_Sums(seq).k=Partial_Sums(Sift(seq)).k+seq.k
+Partial_Sums(seq).k=Partial_Sums(Shift(seq)).k+seq.k
 proof
   defpred X[Element of NAT] means
-   Partial_Sums(seq).$1=Partial_Sums(Sift(seq)).$1+seq.$1;
+   Partial_Sums(seq).$1=Partial_Sums(Shift(seq)).$1+seq.$1;
    Partial_Sums(seq).0=0c + seq.0 by COMSEQ_3:def 7
-                   .=(Sift(seq)).0 + seq.0 by Def12
-                   .=Partial_Sums(Sift(seq)).0+seq.0 by COMSEQ_3:def 7;
+                   .=(Shift(seq)).0 + seq.0 by Def12
+                   .=Partial_Sums(Shift(seq)).0+seq.0 by COMSEQ_3:def 7;
    then A1: X[0];
 A2: for k st X[k] holds X[k+1]
   proof let k such that
- A3:   Partial_Sums(seq).k=Partial_Sums(Sift(seq)).k+seq.k;
- thus Partial_Sums(seq).(k+1) = (Partial_Sums(Sift(seq)).k+seq.k) + seq.(k+1)
+ A3:   Partial_Sums(seq).k=Partial_Sums(Shift(seq)).k+seq.k;
+ thus Partial_Sums(seq).(k+1) = (Partial_Sums(Shift(seq)).k+seq.k) + seq.(k+1)
    by A3,COMSEQ_3:def 7
-      .=(Partial_Sums(Sift(seq)).k+(Sift(seq)).(k+1)) + seq.(k+1) by Def12
-      .=Partial_Sums(Sift(seq)).(k+1)+seq.(k+1) by COMSEQ_3:def 7;
+      .=(Partial_Sums(Shift(seq)).k+(Shift(seq)).(k+1)) + seq.(k+1) by Def12
+      .=Partial_Sums(Shift(seq)).(k+1)+seq.(k+1) by COMSEQ_3:def 7;
  end;
      for k holds X[k] from NAT_1:sch 1(A1,A2);
   hence thesis;
@@ -822,20 +822,20 @@ COMSEQ_1:def 7
             =Partial_Sums((w (#) Expan(n,z,w))).n by A11;
          end;
      A12:Partial_Sums((z (#) Expan(n,z,w))).(n+1)
-         =Partial_Sums(Sift((z (#) Expan(n,z,w)))).(n+1)
+         =Partial_Sums(Shift((z (#) Expan(n,z,w)))).(n+1)
         proof
         A13:Partial_Sums((z (#) Expan(n,z,w))).(n+1)
-          =Partial_Sums(Sift((z (#) Expan(n,z,w)))).(n+1)
+          =Partial_Sums(Shift((z (#) Expan(n,z,w)))).(n+1)
           +(z (#) Expan(n,z,w)).(n+1) by Th6;
                0 +n < n+1 by XREAL_1:31;
             then Expan(n,z,w).(n+1)=0c by Def13;
             then z * Expan(n,z,w).(n+1)=0c;
            hence Partial_Sums((z (#) Expan(n,z,w))).(n+1)
-             =Partial_Sums(Sift((z (#) Expan(n,z,w)))).(n+1)
+             =Partial_Sums(Shift((z (#) Expan(n,z,w)))).(n+1)
              +0c by A13,COMSEQ_1:def 7
-        .= Partial_Sums(Sift((z (#) Expan(n,z,w)))).(n+1);
+        .= Partial_Sums(Shift((z (#) Expan(n,z,w)))).(n+1);
          end;
-    A14:(w (#) Expan(n,z,w))+Sift((z (#) Expan(n,z,w)))
+    A14:(w (#) Expan(n,z,w))+Shift((z (#) Expan(n,z,w)))
          =Expan(n+1,z,w)
      proof
          now let k be Element of NAT;
@@ -849,23 +849,25 @@ then A20:          n+0 < k-1+1 by XREAL_1:10;
                   1 <= k by A16,A18,XXREAL_0:2;
             hence thesis by A16,A18,A19,A20,XXREAL_0:2,BINARITH:50;
        end;
-            ((w (#) Expan(n,z,w))+Sift((z (#) Expan(n,z,w)))).k
-     =(w (#) Expan(n,z,w)).k + (Sift((z (#) Expan(n,z,w)))).k by COMSEQ_1:def 4
-     .=(w * Expan(n,z,w).k) + (Sift((z (#) Expan(n,z,w)))).k by COMSEQ_1:def 7
+       ((w (#) Expan(n,z,w))+Shift((z (#) Expan(n,z,w)))).k
+     =(w (#) Expan(n,z,w)).k + (Shift((z (#) Expan(n,z,w)))).k
+       by COMSEQ_1:def 4
+     .=(w * Expan(n,z,w).k) + (Shift((z (#) Expan(n,z,w)))).k
+       by COMSEQ_1:def 7
        .=(w * Expan(n,z,w).k) + ((z (#) Expan(n,z,w))).(k-'1) by A17,Th5
        .=(w * Expan(n,z,w).k) + (z * (Expan(n,z,w).(k-'1)))
  by COMSEQ_1:def 7
        .=(w * 0c )+ (z * ((Expan(n,z,w).(k-'1)))) by A17,Def13
        .=0c + (z * 0c) by A17,Def13
        .=0c;
-        hence ((w (#) Expan(n,z,w))+Sift((z (#) Expan(n,z,w)))).k
+        hence ((w (#) Expan(n,z,w))+Shift((z (#) Expan(n,z,w)))).k
          =Expan(n+1,z,w).k by A16,Def13;
          end;
           now assume
        A21: k <= (n+1);
        A22: now assume
             A23: k=n+1;
-      thus ((w (#) Expan(n,z,w))+Sift((z (#) Expan(n,z,w)))).k=Expan(n+1,z,w).
+      thus ((w (#) Expan(n,z,w))+Shift((z (#) Expan(n,z,w)))).k=Expan(n+1,z,w).
 k
               proof
               A24: n < n+1 by XREAL_1:31;
@@ -879,12 +881,12 @@ k
               A29: (Coef(n+1)).(n+1) = (n+1)!c /(((n+1)!c ) * (0!c ))
                 by A26,Def10
                               .= 1 by A27,XCMPLX_1:60,Th1;
-              thus ((w (#) Expan(n,z,w))+Sift((z (#) Expan(n,z,w)))).k =
-       (w (#) Expan(n,z,w)).(n+1)+(Sift((z (#) Expan(n,z,w)))).(n+1)
+              thus ((w (#) Expan(n,z,w))+Shift((z (#) Expan(n,z,w)))).k =
+       (w (#) Expan(n,z,w)).(n+1)+(Shift((z (#) Expan(n,z,w)))).(n+1)
  by A23,COMSEQ_1:def 4
-             .=(w * Expan(n,z,w).(n+1)) + (Sift((z (#) Expan(n,z,w)))).(n+1)
+             .=(w * Expan(n,z,w).(n+1)) + (Shift((z (#) Expan(n,z,w)))).(n+1)
  by COMSEQ_1:def 7
-             .=( w * 0c) + (Sift((z (#) Expan(n,z,w)))).(n+1) by A24,Def13
+             .=( w * 0c) + (Shift((z (#) Expan(n,z,w)))).(n+1) by A24,Def13
              .=((z (#) Expan(n,z,w))).n by Def12
              .=z * (Expan(n,z,w)).n by COMSEQ_1:def 7
              .=z * ((Coef(n)).n * (z |^ n) * (w |^ (n-'n))) by Def13
@@ -900,7 +902,7 @@ k
              A32: k=0;
    A33:         n-'0 =n-0 by BINARITH:50;
 A34:            n+1-'0 =n+1-0 by BINARITH:50;
-            thus ((w (#) Expan(n,z,w))+Sift((z (#) Expan(n,z,w)))).k
+            thus ((w (#) Expan(n,z,w))+Shift((z (#) Expan(n,z,w)))).k
               =Expan(n+1,z,w).k
               proof
               A35: n!c <>0c & (n+1)!c <>0c by Th1;
@@ -909,10 +911,10 @@ A34:            n+1-'0 =n+1-0 by BINARITH:50;
                A37: (Coef(n+1)).0 = (n+1)!c /((0!c ) * ((n+1)!c ))
                 by A34,Def10
                          .= 1 by A35,XCMPLX_1:60,Th1;
-              thus ((w (#) Expan(n,z,w))+Sift((z (#) Expan(n,z,w)))).k =
-              (w (#) Expan(n,z,w)).0+(Sift((z (#) Expan(n,z,w)))).0
+              thus ((w (#) Expan(n,z,w))+Shift((z (#) Expan(n,z,w)))).k =
+              (w (#) Expan(n,z,w)).0+(Shift((z (#) Expan(n,z,w)))).0
  by A32,COMSEQ_1:def 4
-             .=(w * Expan(n,z,w).0) + (Sift((z (#) Expan(n,z,w)))).0
+             .=(w * Expan(n,z,w).0) + (Shift((z (#) Expan(n,z,w)))).0
  by COMSEQ_1:def 7
              .=(w * Expan(n,z,w).0) + 0c by Def12
              .=w * ((Coef n).0 * (z |^ 0) * (w |^ (n-'0))) by Def13
@@ -930,13 +932,13 @@ A34:            n+1-'0 =n+1-0 by BINARITH:50;
               then k-1 <= k+1-1 by XREAL_1:11;
               then k-1 <= n by A40,XXREAL_0:2;
               then A41: k-'1 <= n by A39,BINARITH:50;
-              thus ((w (#) Expan(n,z,w))+Sift((z (#) Expan(n,z,w)))).k
+              thus ((w (#) Expan(n,z,w))+Shift((z (#) Expan(n,z,w)))).k
               =Expan(n+1,z,w).k
               proof
-         A42: ((w (#) Expan(n,z,w))+Sift((z (#) Expan(n,z,w)))).k
-              =(w (#) Expan(n,z,w)).k+(Sift((z (#) Expan(n,z,w)))).k
+         A42: ((w (#) Expan(n,z,w))+Shift((z (#) Expan(n,z,w)))).k
+              =(w (#) Expan(n,z,w)).k+(Shift((z (#) Expan(n,z,w)))).k
  by COMSEQ_1:def 4
-             .=(w * Expan(n,z,w).k) + (Sift((z (#) Expan(n,z,w)))).k
+             .=(w * Expan(n,z,w).k) + (Shift((z (#) Expan(n,z,w)))).k
  by COMSEQ_1:def 7
              .=(w * Expan(n,z,w).k) + (z (#) Expan(n,z,w)).(k-'1)
  by A38,Th5
@@ -963,7 +965,7 @@ A46:          (w |^ (n-'k)) * w
                   = w |^ (n-'k+1) by COMSEQ_3:def 1;
 A47:          (z |^ (k-'1)) * z
                   = z |^ k by A45,COMSEQ_3:def 1;
-              A48: ((w (#) Expan(n,z,w))+Sift((z (#) Expan(n,z,w)))).k
+              A48: ((w (#) Expan(n,z,w))+Shift((z (#) Expan(n,z,w)))).k
              = ((Coef n).k +(Coef n).(k-'1))
                  * ((z |^ k) * (w |^ (n+1-'k))) by A42,A43,A44,A46,A47;
          A49: (Coef n).k +(Coef n).(k-'1)
@@ -995,24 +997,24 @@ A47:          (z |^ (k-'1)) * z
                    / ((k!c) * ((n+1-'k)!c))
                  .=((n+1)!c ) / ((k!c) * ((n+1-'k)!c)) by Th1
                  .=(Coef(n+1)).k by A30,Def10;
-              hence ((w (#) Expan(n,z,w))+Sift((z (#) Expan(n,z,w)))).k
+              hence ((w (#) Expan(n,z,w))+Shift((z (#) Expan(n,z,w)))).k
                  =(Coef(n+1)).k * (z |^ k) * (w |^ (n+1-'k)) by A48
                 .=Expan(n+1,z,w).k by A30,Def13;
               end;
             end;
-            hence ((w (#) Expan(n,z,w))+Sift((z (#) Expan(n,z,w)))).k
+            hence ((w (#) Expan(n,z,w))+Shift((z (#) Expan(n,z,w)))).k
               =Expan(n+1,z,w).k by A31;
           end;
-          hence ((w (#) Expan(n,z,w))+Sift((z (#) Expan(n,z,w)))).k
+          hence ((w (#) Expan(n,z,w))+Shift((z (#) Expan(n,z,w)))).k
           =Expan(n+1,z,w).k by A21,A22,REAL_1:def 5;
         end;
-     hence ((w (#) Expan(n,z,w))+Sift((z (#) Expan(n,z,w)))).k
+     hence ((w (#) Expan(n,z,w))+Shift((z (#) Expan(n,z,w)))).k
        =Expan(n+1,z,w).k by A15;
     end;
     hence thesis by COMSEQ_1:6;
    end;
  thus (z+w) |^ (n+1) =(Partial_Sums((w (#) Expan(n,z,w))) +
-                      Partial_Sums(Sift((z (#) Expan(n,z,w))))).(n+1)
+                      Partial_Sums(Shift((z (#) Expan(n,z,w))))).(n+1)
  by A7,A8,A10,A12,COMSEQ_1:def 4
                     .=Partial_Sums(Expan(n+1,z,w)).(n+1) by A14,COMSEQ_3:27;
      end;
@@ -1118,7 +1120,7 @@ registration let z;
   cluster z ExpSeq -> absolutely_summable;
    coherence
     proof
-        now assume
+     now assume
       A1:z<>0c;
       defpred X[set] means (z ExpSeq).$1 <> 0c;
          A2: X[0] by Th4;
@@ -1649,7 +1651,7 @@ proof
    then consider rseq be Real_Sequence such that
    A3: for k holds rseq.k=Partial_Sums(|.Conj(k,z,w).|).k;
    A4: now let k;
-           |.seq.k.| <= Partial_Sums(|.Conj(k,z,w).|).k by A2;
+       |.seq.k.| <= Partial_Sums(|.Conj(k,z,w).|).k by A2;
        hence |.seq.k.| <= rseq.k by A3;
        end;
        rseq is convergent & lim(rseq) =0
@@ -1793,7 +1795,7 @@ end;
 begin :: Definition of Sinus, Cosine, and Exponential Function on REAL
 
 definition
-  func sin -> PartFunc of REAL, REAL means :Def20:
+  func sin -> Function of REAL, REAL means :Def20:
     dom it = REAL & for d being Element of REAL holds
       it.d = Im(Sum([*0,d*] ExpSeq));
   existence
@@ -1804,11 +1806,10 @@ definition
 A1:for d be Element of REAL holds d in dom f iff X[d] and
 A2:for d be Element of REAL st d in dom f holds f/.d = U(d)
      from PARTFUN2:sch 2;
-   take f;
-   dom f = REAL &
+A3:dom f = REAL &
    for d be Element of REAL holds f.d = Im(Sum([*0,d*]ExpSeq))
    proof
-A3: dom(f)=REAL
+A4: dom(f)=REAL
     proof
       for x be set st x in REAL holds x in dom f by A1;
       then REAL c=dom(f) by TARSKI:def 3;
@@ -1817,31 +1818,32 @@ A3: dom(f)=REAL
     for d be Element of REAL holds f.d = Im(Sum([*0,d*] ExpSeq))
     proof
       let d be Element of REAL;
-      A4: d in dom f by A1;
+      A5: d in dom f by A1;
       then f/.d = Im(Sum([*0,d*] ExpSeq)) by A2;
-       hence thesis by A4,FINSEQ_4:def 4;
+       hence thesis by A5,FINSEQ_4:def 4;
     end;
-    hence thesis by A3;
-   end;
-   hence thesis;
+    hence thesis by A4;
+   end; then
+   f is Function of REAL, REAL by FUNCT_2:130;
+   hence thesis by A3;
   end;
   uniqueness
   proof
-    let f1,f2 be PartFunc of REAL, REAL;
+    let f1,f2 be Function of REAL, REAL;
     assume
-A5: dom f1= REAL & for d being Element of REAL
+A6: dom f1= REAL & for d being Element of REAL
      holds f1.d=Im(Sum([*0,d*] ExpSeq));
     assume
-A6: dom f2= REAL & for d being Element of REAL
+A7: dom f2= REAL & for d being Element of REAL
      holds f2.d=Im(Sum([*0,d*] ExpSeq));
     for d being Element of REAL st d in REAL holds f1.d = f2.d
     proof
      let d be Element of REAL such that
      d in REAL;
-     thus f1.d=Im(Sum([*0,d*] ExpSeq)) by A5
-        .=f2.d by A6;
+     thus f1.d=Im(Sum([*0,d*] ExpSeq)) by A6
+        .=f2.d by A7;
     end;
-   hence f1=f2 by A5,A6,PARTFUN1:34;
+   hence f1=f2 by A6,A7,PARTFUN1:34;
   end;
   end;
 
@@ -1862,16 +1864,12 @@ definition let th be Real;
 end;
 
 theorem
-  sin is Function of REAL,REAL
-proof
-  sin is PartFunc of REAL,REAL & dom sin=REAL by Def20;
-  hence thesis by FUNCT_2:130;
-end;
+  sin is Function of REAL,REAL;
 
  reserve d for Real;
 
 definition
-  func cos -> PartFunc of REAL, REAL means :Def22:
+  func cos -> Function of REAL, REAL means :Def22:
     dom it = REAL & for d holds it.d = Re(Sum([*0,d*] ExpSeq));
  existence
  proof
@@ -1880,10 +1878,9 @@ definition
   consider f being PartFunc of REAL, REAL such that
 A1:   for d holds d in dom f iff X[d] and
 A2:   for d st d in dom f holds f/.d = U(d) from PARTFUN2:sch 2;
-  take f;
-  dom f = REAL & for d holds f.d = Re(Sum([*0,d*] ExpSeq))
+A3: dom f = REAL & for d holds f.d = Re(Sum([*0,d*] ExpSeq))
   proof
-A3: dom(f)=REAL
+A4: dom(f)=REAL
    proof
      for x be set st x in REAL holds x in dom f by A1;
      then REAL c=dom(f) by TARSKI:def 3;
@@ -1892,28 +1889,29 @@ A3: dom(f)=REAL
    for d holds f.d = Re(Sum([*0,d*] ExpSeq))
    proof
      let d;
-     A4: d in dom f by A1;
+     A5: d in dom f by A1;
      then f/.d = Re(Sum([*0,d*] ExpSeq)) by A2;
-      hence thesis by A4,FINSEQ_4:def 4;
+      hence thesis by A5,FINSEQ_4:def 4;
    end;
-   hence thesis by A3;
-  end;
-  hence thesis;
+   hence thesis by A4;
+  end; then
+  f is Function of REAL, REAL by FUNCT_2:130;
+  hence thesis by A3;
  end;
  uniqueness
  proof
-   let f1,f2 be PartFunc of REAL, REAL;
+   let f1,f2 be Function of REAL, REAL;
    assume
-A5: dom f1= REAL & for d holds f1.d=Re(Sum([*0,d*] ExpSeq));
+A6: dom f1= REAL & for d holds f1.d=Re(Sum([*0,d*] ExpSeq));
    assume
-A6: dom f2= REAL & for d holds f2.d=Re(Sum([*0,d*] ExpSeq));
+A7: dom f2= REAL & for d holds f2.d=Re(Sum([*0,d*] ExpSeq));
    for d st d in REAL holds f1.d = f2.d
    proof
     let d such that d in REAL;
-    thus f1.d=Re(Sum([*0,d*] ExpSeq)) by A5
-       .=f2.d by A6;
+    thus f1.d=Re(Sum([*0,d*] ExpSeq)) by A6
+       .=f2.d by A7;
    end;
-  hence f1=f2 by A5,A6,PARTFUN1:34;
+  hence f1=f2 by A6,A7,PARTFUN1:34;
  end;
  end;
 
@@ -1934,15 +1932,11 @@ definition let th be Real;
 end;
 
 theorem
-  cos is Function of REAL,REAL
-proof
-  cos is PartFunc of REAL,REAL & dom cos=REAL by Def22;
-  hence thesis by FUNCT_2:130;
-end;
+  cos is Function of REAL,REAL;
 
 theorem Th27: dom(sin)=REAL & dom(cos)=REAL by Def20,Def22;
 
-Lm4:Sum([*0,th*] ExpSeq )=cos.(th)+(sin.th)*<i>
+Lm4:Sum([*0,th*] ExpSeq)=cos.(th)+(sin.th)*<i>
 proof
 A1:Im(Sum([*0,th*] ExpSeq))=sin.(th) by Def20;
    Re(Sum([*0,th*] ExpSeq))=cos.(th) by Def22;
@@ -1950,9 +1944,9 @@ A1:Im(Sum([*0,th*] ExpSeq))=sin.(th) by Def20;
 end;
 
 theorem
-    exp([*0,th*])=cos(th)+(sin th)*<i>
+  exp([*0,th*])=cos(th)+(sin th)*<i>
 proof
-      exp([*0,th*])=Sum([*0,th*] ExpSeq ) by Lm3
+   exp([*0,th*])=Sum([*0,th*] ExpSeq ) by Lm3
           .=cos(th)+(sin th)*<i> by Lm4;
    hence thesis;
 end;
@@ -3162,7 +3156,7 @@ proof
 end;
 
 definition
-  func exp_R -> PartFunc of REAL, REAL means :Def26:
+  func exp_R -> Function of REAL, REAL means :Def26:
     dom it = REAL & for d being real number holds it.d=Sum(d ExpSeq);
   existence
   proof
@@ -3172,42 +3166,42 @@ definition
   A1:   for d be Element of REAL holds d in dom f iff X[d] and
   A2:   for d be Element of REAL st d in dom f holds f/.d = U(d)
        from PARTFUN2:sch 2;
-  take f;
-  dom(f)=REAL & for d be real number holds f.d = Sum(d ExpSeq)
+A3: dom(f)=REAL & for d be real number holds f.d = Sum(d ExpSeq)
   proof
-A3:dom(f)=REAL
+A4:dom(f)=REAL
    proof
-           for x be set st x in REAL holds x in dom f by A1;
-       then REAL c=dom(f) by TARSKI:def 3;
+     for x be set st x in REAL holds x in dom f by A1;
+     then REAL c=dom(f) by TARSKI:def 3;
      hence dom(f)=REAL by XBOOLE_0:def 10;
    end;
    for d be real number holds f.d = Sum(d ExpSeq)
    proof
      let d be real number;
-  d is Real by XREAL_0:def 1;
-     then A4: d in dom f by A1;
+     d is Real by XREAL_0:def 1;
+     then A5: d in dom f by A1;
      then f/.d = Sum(d ExpSeq) by A2;
-      hence f.d = Sum(d ExpSeq) by A4,FINSEQ_4:def 4;
+      hence f.d = Sum(d ExpSeq) by A5,FINSEQ_4:def 4;
    end;
-   hence thesis by A3;
-  end;
-  hence thesis;
+   hence thesis by A4;
+  end; then
+  f is Function of REAL, REAL by FUNCT_2:130;
+  hence thesis by A3;
  end;
  uniqueness
  proof
-   let f1,f2 be PartFunc of REAL, REAL;
+   let f1,f2 be Function of REAL, REAL;
    assume
-A5:dom f1= REAL & for d being real number holds f1.d=Sum(d ExpSeq);
+A6:dom f1= REAL & for d being real number holds f1.d=Sum(d ExpSeq);
    assume
-A6:dom f2= REAL & for d being real number holds f2.d=Sum(d ExpSeq);
+A7:dom f2= REAL & for d being real number holds f2.d=Sum(d ExpSeq);
    for d being Element of REAL st d in REAL holds f1.d = f2.d
    proof
     let d be Element of REAL such that
     d in REAL;
-    thus f1.d=Sum(d ExpSeq) by A5
-       .=f2.d by A6;
+    thus f1.d=Sum(d ExpSeq) by A6
+       .=f2.d by A7;
    end;
-  hence f1=f2 by A5,A6,PARTFUN1:34;
+  hence f1=f2 by A6,A7,PARTFUN1:34;
  end;
  end;
 
@@ -3887,23 +3881,21 @@ A20:     abs(hy1.m-0)<r by A16,A18;
    then CL/.d = -d*sin.p by A26;
    hence CL.d = -d*sin.p by A28,FINSEQ_4:def 4;
    end;
-
-       dom CL=REAL
+    dom CL=REAL
      proof
-           for x be set st x in REAL holds x in dom CL by A25;
+      for x be set st x in REAL holds x in dom CL by A25;
        then REAL c=dom(CL) by TARSKI:def 3;
       hence dom(CL)=REAL by XBOOLE_0:def 10;
      end;
   then A29: CL is total by PARTFUN1:def 4;
-
       CL is linear PartFunc of REAL,REAL
     proof
-          ex r be Real st for q be Real holds CL.q=r*q
+      ex r be Real st for q be Real holds CL.q=r*q
       proof
        A30: for q be Real holds CL.q=(-sin.p)*q
         proof
         let q be Real;
-             CL.q= -q*sin.p by A27
+         CL.q= -q*sin.p by A27
           .=(-sin.p)*q;
           hence thesis;
         end;
@@ -4088,10 +4080,9 @@ A10
       hence dom(CL)=REAL by XBOOLE_0:def 10;
      end;
   then A26: CL is total by PARTFUN1:def 4;
-
-      CL is linear PartFunc of REAL,REAL
+    CL is linear PartFunc of REAL,REAL
     proof
-          ex r be Real st for q be Real holds CL.q=r*q
+      ex r be Real st for q be Real holds CL.q=r*q
       proof
        take (cos.p);
        thus thesis by A24;
@@ -4107,7 +4098,7 @@ A10
 A28: for r st r in ].p-1,p+1 .[ holds sin.r - sin.p = PL.(r-p) + PR.(r-p)
      proof
      let r;
-          r=p+(r-p);
+      r=p+(r-p);
      then sin.r - sin.p
      =(r-p)*cos.p +(r-p)*Re((Sum([*0,(r-p)*] P_dt))* [*cos.p,sin.p*]) by Th66
        .=(r-p)*cos.p +Cr.(r-p) by A5
@@ -4440,12 +4431,12 @@ XREAL_1:50;
  end;
 
 definition
- func tan -> PartFunc of REAL, REAL equals
-  sin/cos;
- correctness;
- func cot -> PartFunc of REAL, REAL equals
-  cos/sin;
- correctness;
+  func tan -> PartFunc of REAL, REAL equals
+    sin/cos;
+  correctness;
+  func cot -> PartFunc of REAL, REAL equals
+    cos/sin;
+  correctness;
 end;
 
 theorem Th75: [.0,1 .] c= dom tan & ].0,1 .[c=dom tan
@@ -4958,5 +4949,3 @@ proof
     .=(cos.(a)) *(cos.(b))-(sin.(a)) * -(sin.(b)) by Th33
     .=(cos(a)) *(cos(b))+(sin(a)) * (sin(b));
   end;
-
-

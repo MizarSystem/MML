@@ -9,11 +9,11 @@ environ
  vocabularies DIRAF, AFF_4, INCSP_1, AFF_1, ANALOAF, PARSP_1, BOOLE, SETFAM_1,
       EQREL_1, RELAT_1, RELAT_2, ANPROJ_1, INCPROJ, MCART_1, ANPROJ_2, AFF_2,
       VECTSP_1, AFPROJ, NAT_1;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, EQREL_1, RELSET_1, RELAT_1,
-      RELAT_2, MCART_1, STRUCT_0, ANALOAF, DIRAF, AFF_1, AFF_4, AFF_2,
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, DOMAIN_1, EQREL_1, RELSET_1,
+      RELAT_1, RELAT_2, MCART_1, STRUCT_0, ANALOAF, DIRAF, AFF_1, AFF_4, AFF_2,
       PAPDESAF, INCSP_1, INCPROJ;
- constructors DOMAIN_1, EQREL_1, AFF_1, AFF_2, TRANSLAC, INCPROJ, AFF_4, NAT_D;
- registrations INCPROJ, RELSET_1, STRUCT_0, SUBSET_1, XBOOLE_0, PARTFUN1;
+ constructors DOMAIN_1, EQREL_1, AFF_1, AFF_2, TRANSLAC, INCPROJ, AFF_4;
+ registrations XBOOLE_0, SUBSET_1, RELSET_1, STRUCT_0, INCPROJ;
  requirements SUBSET, BOOLE;
  definitions TARSKI;
  theorems RELSET_1, RELAT_1, RELAT_2, TARSKI, ZFMISC_1, MCART_1, EQREL_1,
@@ -104,18 +104,21 @@ proof assume that A1: X is_plane and A2: A '||' X
 :: respectively); they are intended to be considered as new objects which
 :: extend the given affine space to a projective space.
 
-definition let AS; func AfLines(AS) -> Subset-Family of AS equals
-  {A: A is_line};
+definition let AS;
+  func AfLines(AS) -> Subset-Family of AS equals
+    {A: A is_line};
 coherence proof set X={A: A is_line};
-    X c= bool the carrier of AS
+   X c= bool the carrier of AS
 proof let x; assume x in X;
  then ex A st x=A & A is_line;
  hence x in bool the carrier of AS; end;
  hence X is Subset-Family of AS;
-end; end;
+end;
+end;
 
-definition let AS; func AfPlanes(AS) -> Subset-Family of AS equals
-  {A: A is_plane};
+definition let AS;
+  func AfPlanes(AS) -> Subset-Family of AS equals
+    {A: A is_plane};
 coherence proof set X={A: A is_plane};
     X c= bool the carrier of AS
 proof let x; assume x in X;
@@ -1585,20 +1588,19 @@ a2 on A3 by A5,A14,A16,Lm2;
 end;
 then consider c3 being Element of the Points of XX such that
 A23: c3 on C1 & c3 on C2 by A14,A16,A22,INCPROJ:def 13;
-A24: a2,b3,c1 on A1 & a3,b1,c2 on B1 & a1,b2,c3 on C1 &
- a1,b3,c2 on A2 & a3,b2,c1 on B2 & a2,b1,c3 on C2 & b1,b2,b3 on A3 &
- a1,a2,a3 on B3 by A14,A15,A16,A23,INCPROJ:def 8;
-     c1,c2 on C3' by A17,INCPROJ:def 7;
+A24: {a2,b3,c1} on A1 & {a3,b1,c2} on B1 & {a1,b2,c3} on C1 &
+ {a1,b3,c2} on A2 & {a3,b2,c1} on B2 & {a2,b1,c3} on C2 & {b1,b2,b3} on A3 &
+ {a1,a2,a3} on B3 by A14,A15,A16,A23,INCSP_1:12;
+     {c1,c2} on C3' by A17,INCSP_1:11;
 then c3 on C3' by A1,A20,A21,A22,A24,INCPROJ:def 20;
 then not c3 is Element of AS by A9,Th27; then consider Y
-such that A25: c3=LDir(Y) & Y is_line by Th20
-;   Y '||' Line(a,c') & Y '||' Line(c,a')
+such that A25: c3=LDir(Y) & Y is_line by Th20;
+Y '||' Line(a,c') & Y '||' Line(c,a')
 by A12,A23,A25,Th28; then Y // Line(a,c') & Y // Line(c,a')
 by A12,A25,AFF_4:40;
 then Line(a,c') // Line(c,a') by AFF_1:58;hence a,c' // c,a'
 by A10,AFF_1:53;end;
-hence a,c' // c,a' by A2,A3,A4,A5,A6,A7,Th48
-; end;
+hence a,c' // c,a' by A2,A3,A4,A5,A6,A7,Th48; end;
 hence AS is Pappian by AFF_2:def 2; end;
 
 theorem Th50:
@@ -1622,11 +1624,11 @@ A8: now assume A9: o=a'; then A10: o=b' by A1,A2,A3,A4,A5,A6,AFF_4:8;   o=c'
  hence b,c // b',c' by A12,AFF_1:11; end;
 hence thesis by A7,A8; end;
 
-theorem   IncProjSp_of(AS) is Desarguesian implies AS is
- Desarguesian proof assume A1: IncProjSp_of(AS) is Desarguesian;
+theorem
+  IncProjSp_of(AS) is Desarguesian implies AS is Desarguesian
+  proof assume A1: IncProjSp_of(AS) is Desarguesian;
 set XX= IncProjSp_of(AS);
-    for A,P,C being Subset of AS, o,a,b,c,a',b',c' being Element
-of
+    for A,P,C being Subset of AS, o,a,b,c,a',b',c' being Element of
 the carrier of AS st o in A & o in P & o in C &
    o<>a & o<>b & o<>c & a in A & a' in A & b in P & b' in P &
    c in C & c' in C & A is_line & P is_line & C is_line &
@@ -1672,23 +1674,24 @@ A18: now assume C2=C3'; then P=[C,1]`1 by MCART_1:7
 then consider t being Element of the Points of XX such that
 A19: t on A1 & t on B1 by A16,A17,A18,INCPROJ:def 13;
      p on C1 & b1 on C1 & a1 on C1 by A2,A4,A5,Th26;
-then A20: p,b1,a1 on C1 & p,a2,b2 on C2 & p,a3,b3 on C3' by A16,INCPROJ:def 8;
+then A20: {p,b1,a1} on C1 & {p,a2,b2} on C2 & {p,a3,b3} on C3'
+by A16,INCSP_1:12;
 A21: a2 on A1 & a3 on A1 & a3 on A2 & r on A2 & a1 on A2 & a2 on A3 &
-s on A3 & a1 on A3
- by A12,A13,Th26,Th30;
+s on A3 & a1 on A3 by A12,A13,Th26,Th30;
      b2 on B1 & b3 on B1 & b1 on B2 & r on B2 & b3 on B2 & b1 on B3 & s on B3 &
  b2 on B3
  by A12,A13,A15,Th26,Th28;
-then A22: a3,a2,t on A1 & a3,r,a1 on A2 & a2,s,a1 on A3 & t,b2,b3 on B1 &
- b1,r,b3 on B2 & b1,s,b2 on B3 by A19,A21,INCPROJ:def 8;
+then A22: {a3,a2,t} on A1 & {a3,r,a1} on A2 & {a2,s,a1} on A3 &
+{t,b2,b3} on B1 &
+ {b1,r,b3} on B2 & {b1,s,b2} on B3 by A19,A21,INCSP_1:12;
 A23: now assume C1=C2; then A=[P,1]`1 by MCART_1:7
  .=P by MCART_1:7; hence contradiction by A6; end;
      now assume C1=C3'; then A=[C,1]`1 by MCART_1:7
  .=C by MCART_1:7; hence contradiction by A6; end;
 then C1,C2,C3' are_mutually_different by A18,A23,ZFMISC_1:def 5;
 then consider O being Element of the Lines of XX such that
-A24: r,s,t on O by A1,A3,A9,A10,A20,A22,INCPROJ:def 19;
-A25: r on O & s on O & t on O by A24,INCPROJ:def 8;
+A24: {r,s,t} on O by A1,A3,A9,A10,A20,A22,INCPROJ:def 19;
+A25: r on O & s on O & t on O by A24,INCSP_1:12;
 A26: now assume r=s; then A27: Line(a,b) // Line(a,c) by A12,Th11;
  then Line(a,b) // Line(a',c') by A14,AFF_1:58; then Line(a',b') // Line(a',
 c')
@@ -1712,8 +1715,7 @@ c')
 ;end;
 hence b,c // b',c' by A26; end; hence b,c // b',c' by A2,A3,A4,A5,A6,A7,Th50
 ; end;
-hence b,c // b',c' by A4,A5,AFF_1:65
-; end;
+hence b,c // b',c' by A4,A5,AFF_1:65; end;
 hence AS is Desarguesian by AFF_2:def 4; end;
 
 theorem   IncProjSp_of(AS) is Fanoian implies AS is Fanoian
@@ -1741,9 +1743,8 @@ A9: c <>d & b<>d & a<>d
  then LIN c,a,b by AFF_1:def 1
 ; then LIN a,b,c by AFF_1:15; hence contradiction by A4,AFF_1:def 1
 ; end;   now assume b=d; then b,a // b,c by A2,AFF_1:13; then LIN b,a,c by
-AFF_1:def 1; then LIN a,b,c by AFF_1:15; hence
-     contradiction by A4,AFF_1:def 1
-; end;
+AFF_1:def 1; then LIN a,b,c by AFF_1:15;
+hence contradiction by A4,AFF_1:def 1; end;
  hence thesis by A2,A4,A10,AFF_1:13; end;
 then A11: Line(a,b) is_line & Line(c,d) is_line & Line(b,d) is_line &
  Line(a,c) is_line & Line(a,d) is_line & Line(b,c) is_line
@@ -1788,7 +1789,8 @@ not r on R1 & not q on S1
  Line(b,d) by Th26;
    hence contradiction by A6,A7,A12,AFF_1:59
 ; end; hence thesis by A21,A22,A23; end;
-A24: a',p,s on L1 & a',q,r on Q1 & b',q,s on R1 & b',p,r on S1 & c',p,q on A1 &
-  c',r,s on B1 by A17,A18,INCPROJ:def 8;   a',b' on C1 by A19,INCPROJ:def 7;
+A24: {a',p,s} on L1 & {a',q,r} on Q1 & {b',q,s} on R1 & {b',p,r} on S1 &
+{c',p,q} on A1 & {c',r,s} on B1 by A17,A18,INCSP_1:12;
+{a',b'} on C1 by A19,INCSP_1:11;
 hence contradiction by A1,A19,A20,A24,INCPROJ:def 18; end;
 hence AS is Fanoian by PAPDESAF:def 5; end;

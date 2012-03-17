@@ -12,16 +12,15 @@ environ
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, REAL_1, MCART_1,
       DOMAIN_1, BINOP_2, REALSET1, STRUCT_0, RELAT_1, FINSEQOP, FUNCT_1,
       FINSEQ_1, PARTFUN1, FUNCT_2, BINOP_1, FINSEQ_2, INT_1, FRAENKEL, GROUP_1,
-      VECTSP_1, VECTSP_2, SETWISEO, FUNCOP_1, FUNCT_4, GR_CY_1;
- constructors RELAT_2, PARTFUN1, DOMAIN_1, BINOP_1, SETWISEO, FRAENKEL,
-      XXREAL_0, BINOP_2, MEMBERED, FINSEQOP, REALSET1, VECTSP_2, GR_CY_1,
-      NAT_D;
- registrations SUBSET_1, FUNCT_1, FINSEQ_1, INT_1, VECTSP_1, GROUP_1, RELSET_1,
-      STRUCT_0, PARTFUN1, FUNCOP_1, MEMBERED, FUNCT_2, ORDINAL2, BINOP_2,
-      REALSET1, ORDINAL1;
+      VECTSP_1, SETWISEO, FUNCOP_1, FUNCT_4, GR_CY_1;
+ constructors RELAT_2, PARTFUN1, BINOP_1, SETWISEO, FRAENKEL, BINOP_2,
+      FINSEQOP, REALSET1, VECTSP_2, GR_CY_1;
+ registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, PARTFUN1,
+      FUNCT_2, FUNCOP_1, NUMBERS, BINOP_2, MEMBERED, FINSEQ_1, REALSET1,
+      STRUCT_0, GROUP_1, VECTSP_1;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM;
- definitions TARSKI, BINOP_1, SETWISEO, FINSEQOP, GROUP_1, STRUCT_0, VECTSP_2,
-      XBOOLE_0, REALSET1, VECTSP_1;
+ definitions TARSKI, BINOP_1, SETWISEO, FINSEQOP, GROUP_1, STRUCT_0, XBOOLE_0,
+      REALSET1, VECTSP_1;
  theorems TARSKI, NAT_1, INT_1, FINSEQ_1, BINOP_1, GROUP_1, FINSEQOP, SETWISEO,
       VECTSP_1, MCART_1, ZFMISC_1, FUNCT_1, FUNCT_2, FUNCT_4, FUNCOP_1,
       PARTFUN1, GR_CY_1, GRFUNC_1, RELAT_1, STRUCT_0, RELSET_1, XBOOLE_1,
@@ -706,11 +705,9 @@ A1:     IT is well-unital;
 A2:  1.IT is_a_unity_wrt the mult of IT;
    let x be Element of IT;
 A3:  1.IT is_a_right_unity_wrt the mult of IT by A2,BINOP_1:def 7;
-   thus x*(1.IT) = (the mult of IT).(x,1.IT)
-           .= x by A3,BINOP_1:def 6;
+   thus x*(1.IT) = x by A3,BINOP_1:def 6;
 A4:  1.IT is_a_left_unity_wrt the mult of IT by A2,BINOP_1:def 7;
-   thus (1.IT)*x = (the mult of IT).(1.IT,x)
-           .= x by A4,BINOP_1:def 5;
+   thus (1.IT)*x = x by A4,BINOP_1:def 5;
   end;
 end;
 
@@ -997,11 +994,11 @@ registration let G be HGrStr;
  cluster strict MonoidalSubStr of G;
   existence
    proof consider N being MonoidalSubStr of G;
-X:      op(the multLoopStr of N) <= op(G) by Def24;
+A1:      op(the multLoopStr of N) <= op(G) by Def24;
      un(the multLoopStr of N) = un(N);
      then for M being multLoopStr st G = M
       holds un(the multLoopStr of N) = un(M) by Def24;
-     then the multLoopStr of N is MonoidalSubStr of G by Def24,X;
+     then the multLoopStr of N is MonoidalSubStr of G by Def24,A1;
     hence thesis;
    end;
 end;
@@ -1060,12 +1057,12 @@ registration let G be well-unital (non empty multLoopStr);
     reconsider e = a as Element of {a} by TARSKI:def 1;
     consider f being BinOp of {a};
     set H = multLoopStr(#{a},f,e#);
-X:   1.H = 1.G;
+A1:   1.H = 1.G;
      f = {[a,a]} --> a & a = a*a & a*a = op(G).(a,a) &
      dom op(G) = [:carr(G),carr(G):]
       by Th3,Th18,FUNCT_2:def 1;
     then op(H) <= op(G) by FUNCT_4:8;
-    then reconsider H as non empty MonoidalSubStr of G by Def25,X;
+    then reconsider H as non empty MonoidalSubStr of G by Def25,A1;
     take H;
         now let b be Element of H;  b = a by TARSKI:def 1;
       hence op(H).(un(H),b) = b & op(H).(b,un(H)) = b by TARSKI:def 1;
@@ -1457,13 +1454,12 @@ A4:     y in dom (op||D()) &
        by A2,A4,RELAT_1:91;
       reconsider y1 = y`1, y2 = y`2 as Element of D();
           y = [y1,y2] by MCART_1:23;
-:::       then op.(y1,y2) = x by A4,FUNCT_1:70;
        then x = y1*y2 by A4,FUNCT_1:70;
       hence thesis by A1;
      end;
    then reconsider f = op||D() as BinOp of D() by A3,FUNCT_2:def 1
 ,RELSET_1:11;
-       f <= op by RELAT_1:88;
+    f <= op by RELAT_1:88;
    then reconsider H = HGrStr(#D(),f#) as strict non empty SubStr of G() by
 Def23;
    take H; thus thesis;
@@ -1536,9 +1532,9 @@ A5:  for x being Element of G holds x in the carrier of H
       iff P[x] from SubStrEx2(A3,A4);
    reconsider e = 1.G() as Element of H by A2,A5;
    set M = multLoopStr(#carr(H), op(H), e#);
-X: 1.G() = 1.M;
+A6: 1.G() = 1.M;
        the mult of H <= the mult of G() by Def23;
-   then reconsider M as strict non empty MonoidalSubStr of G() by Def25,X;
+   then reconsider M as strict non empty MonoidalSubStr of G() by Def25,A6;
    take M; thus thesis by A5;
   end;
 
@@ -1547,7 +1543,9 @@ notation let G,a,b;
 end;
 
 definition let G,a,b;
- redefine func a [*] b -> Element of G; coherence; end;
+  redefine func a [*] b -> Element of G;
+  coherence;
+end;
 
 begin :: Monoids on natural numbers
 
@@ -1564,7 +1562,7 @@ end;
 canceled;
 
 theorem
-    x is Element of <REAL,+> iff x is Real;
+  x is Element of <REAL,+> iff x is Real;
 
 canceled;
 
@@ -1589,13 +1587,13 @@ theorem Th44:
 A1:  for b being Element of N holds a*b = b & b*a = b by Th6;
        carr(N) c= REAL by Th25;
    then reconsider x = a as Real by TARSKI:def 3;
-B2:    x+0 = a*a by A1 .= x+x by Th43;
+A2:    x+0 = a*a by A1 .= x+x by Th43;
        now let b be Element of N;
          a*b = op(N).(a,b) & b*a = op(N).(b,a);
      hence op(N).(a,b) = b & op(N).(b,a) = b by A1;
     end;
     then a is_a_unity_wrt op(N) by BINOP_1:11;
-   hence thesis by B2,BINOP_1:def 8;
+   hence thesis by A2,BINOP_1:def 8;
   end;
 
 registration let G be unital (non empty HGrStr);
@@ -1645,8 +1643,7 @@ theorem
   G = INT.Group iff the carrier of G = INT by Th28,GR_CY_1:def 4;
 
 theorem
-  x is Element of INT.Group iff x is Integer
- by GR_CY_1:def 4,INT_1:def 2;
+  x is Element of INT.Group iff x is Integer by GR_CY_1:def 4,INT_1:def 2;
 
 definition
  func <NAT,+> ->
@@ -1793,7 +1790,7 @@ end;
 canceled;
 
 theorem
-    x is Element of <REAL,*> iff x is Real;
+  x is Element of <REAL,*> iff x is Real;
 
 canceled;
 
@@ -1813,7 +1810,7 @@ theorem Th58:
 canceled;
 
 theorem
-    for N being unital (non empty SubStr of <REAL,*>) holds
+   for N being unital (non empty SubStr of <REAL,*>) holds
   the_unity_wrt the mult of N = 0 or
    the_unity_wrt the mult of N = 1
   proof let N be unital (non empty SubStr of <REAL,*>);
@@ -1933,7 +1930,7 @@ theorem
 theorem
   <NAT,*,1> = multLoopStr(#NAT,multnat,1#)
   proof set N = <NAT,*,1>;
-       the HGrStr of N = <NAT,*> & the_unity_wrt op(N) = un(N) by Def22,Th19;
+   the HGrStr of N = <NAT,*> & the_unity_wrt op(N) = un(N) by Def22,Th19;
    hence thesis by Def31,Th63;
   end;
 
@@ -1974,7 +1971,7 @@ A1:   for a,b being Element of D* holds
       proof set N = G, f = op(N);
         <*>D = {};
        then reconsider a = {} as Element of N by FINSEQ_1:def 11;
-A3:      now let b be Element of N;
+A2:      now let b be Element of N;
          thus a[*]b = a^b by A1 .= b by FINSEQ_1:47;
          thus b[*]a = b^a by A1 .= b by FINSEQ_1:47;
         end;
@@ -1990,18 +1987,18 @@ A3:      now let b be Element of N;
          hence a*b = a*c or b*a = c*a implies b = c by FINSEQ_1:46;
         end;
        hence N is cancelable by Th15;
-           N is unital by A3,Th6;
+           N is unital by A2,Th6;
        hence op(N) has_a_unity by Def10;
            now let b be Element of N;
              a[*]b = f.(a,b) & b[*]a = f.(b,a);
-         hence f.(a,b) = b & f.(b,a) = b by A3;
+         hence f.(a,b) = b & f.(b,a) = b by A2;
         end;
-then A4:        a is_a_unity_wrt op(N) by BINOP_1:11;
+then A3:        a is_a_unity_wrt op(N) by BINOP_1:11;
        let a',b be Element of N;
         assume f.(a',b) = the_unity_wrt op(N);
-        then {} = a'[*]b by A4,BINOP_1:def 8 .= a'^b by A1;
+        then {} = a'[*]b by A3,BINOP_1:def 8 .= a'^b by A1;
         then a = a' & a = b by FINSEQ_1:48;
-       hence thesis by A4,BINOP_1:def 8;
+       hence thesis by A3,BINOP_1:def 8;
       end;
     then reconsider G as unital associative cancelable uniquely-decomposable
                     constituted-FinSeqs strict (non empty HGrStr);
@@ -2010,20 +2007,20 @@ then A4:        a is_a_unity_wrt op(N) by BINOP_1:11;
   uniqueness
    proof let G1,G2 be unital associative cancelable uniquely-decomposable
       constituted-FinSeqs strict (non empty HGrStr) such that
-A6:  carr(G1) = D* &
+A4:  carr(G1) = D* &
      for p,q being Element of G1 holds p [*] q = p^q and
-A7:  carr(G2) = D* &
+A5:  carr(G2) = D* &
      for p,q being Element of G2 holds p [*] q = p^q;
     set f1 = op(G1), f2 = op(G2);
     now let a,b be Element of D*;
       reconsider p = a, q = b as Element of D*;
-      reconsider a1 = a, b1 = b as Element of G1 by A6;
-      reconsider a2 = a, b2 = b as Element of G2 by A7;
+      reconsider a1 = a, b1 = b as Element of G1 by A4;
+      reconsider a2 = a, b2 = b as Element of G2 by A5;
           f2.(a,b) = a2[*]b2 & a2[*]b2 = p^q &
-       f1.(a,b) = a1[*]b1 & a1[*]b1 = p^q by A6,A7;
+       f1.(a,b) = a1[*]b1 & a1[*]b1 = p^q by A4,A5;
       hence f1.(a,b) = f2.(a,b);
      end;
-    hence thesis by A6,A7,BINOP_1:2;
+    hence thesis by A4,A5,BINOP_1:2;
    end;
 end;
 
@@ -2298,7 +2295,7 @@ then A5:   x`1 in PFuncs(Y,Y) & x`2 in PFuncs(Y,Y) by MCART_1:10;
    hence op(GPFuncs Y) <= op(GPFuncs X) by A2,A3,GRFUNC_1:8;
   end;
 
-Lm9: x in Funcs(X,X) implies x is Function of X,X
+Lm6: x in Funcs(X,X) implies x is Function of X,X
  proof assume x in Funcs(X,X);
    then ex f being Function st x = f & dom f = X & rng f c= X by FUNCT_2:def 2
 ;
@@ -2316,7 +2313,7 @@ definition let X be set;
 GPFuncs X;
 A1:   for x,y being Element of F holds x [*] y in F
       proof let x,y be Element of F;
-       reconsider f = x, g = y as Function of X,X by Lm9;
+       reconsider f = x, g = y as Function of X,X by Lm6;
            x[*]y = f*g by Def37;
        hence thesis by FUNCT_2:12;
       end;
@@ -2345,7 +2342,7 @@ end;
 theorem
     x is Element of GFuncs X iff x is Function of X,X
   proof carr(GFuncs X) = Funcs(X,X) by Def40;
-   hence thesis by Lm9,FUNCT_2:12;
+   hence thesis by Lm6,FUNCT_2:12;
   end;
 
 theorem Th83:
@@ -2413,9 +2410,8 @@ A4:   carr(GFuncs X) = Funcs(X,X) by Def40;
       reconsider f' as Element of G by A3;
       reconsider r = f'[*]b, l = b[*]f' as Element of G;
       take r,l;
-          i = f(*)(f") & i = f"(*)f & g(*)i = g & i(*)g = g & a[*]f' = f(*)(f")
-&
-       f'[*]a = f"(*)f & i[*]b = (id X)(*)g & b[*]i = g(*)
+      i = f(*)(f") & i = f"(*)f & g(*)i = g & i(*)g = g & a[*]f' = f(*)(f")
+      & f'[*]a = f"(*)f & i[*]b = (id X)(*)g & b[*]i = g(*)
        id X by Th79,FUNCT_2:23,88;
       hence a[*]r = b & l[*]a = b by Lm2;
      end;
@@ -2471,8 +2467,7 @@ theorem Th87:
    now let a be Element of GPerms X;
      reconsider f = a as Permutation of X by Th86;
       a[*]i = a(*)i & i[*]a = i(*)a by Th79;
-      then op(GPerms X).(a,i) = f(*)i & op(GPerms X).(i,a) = i(*)
-f;
+      then op(GPerms X).(a,i) = f(*)i & op(GPerms X).(i,a) = i(*)f;
      hence op(GPerms X).(i,a) = a & op(GPerms X).(a,i) = a by FUNCT_2:23;
     end;
     then i is_a_unity_wrt op(GPerms X) by BINOP_1:11;

@@ -11,11 +11,10 @@ environ
       SUBSET_1, NAT_1;
  notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, NUMBERS, ORDINAL1, XCMPLX_0,
       RELAT_1, FUNCT_1, FINSEQ_1, FUNCT_2, FINSEQ_2, FINSET_1, CARD_1, NAT_1,
-      NAT_D, INT_1, FINSEQOP, XXREAL_0;
- constructors ENUMSET1, PARTFUN1, WELLORD2, XXREAL_0, REAL_1, NAT_1, INT_1,
-      FINSEQOP, NAT_D;
- registrations FINSEQ_1, FUNCT_1, INT_1, FINSET_1, RELSET_1, XREAL_0, ORDINAL2,
-      NAT_1, XXREAL_0, ORDINAL1;
+      INT_1, FINSEQOP, XXREAL_0;
+ constructors ENUMSET1, PARTFUN1, WELLORD2, XXREAL_0, NAT_1, INT_1, FINSEQOP;
+ registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, ARYTM_3,
+      FINSET_1, XXREAL_0, XREAL_0, NAT_1, INT_1, FINSEQ_1;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
  definitions FUNCT_1, TARSKI, WELLORD2, XBOOLE_0, FINSEQ_2;
  theorems CARD_1, CARD_2, ENUMSET1, FINSEQ_1, FINSEQ_2, FINSET_1, FUNCT_1,
@@ -1374,13 +1373,7 @@ theorem
 theorem
      p - rng p = {} by Th75;
 
-Lm6: {} - A = {}
- proof rng{} = {} by FINSEQ_1:27;
-   then A misses rng{} by XBOOLE_1:65;
-  hence thesis by Th76;
- end;
-
-Lm7: <* x *> - A = <* x *> iff not x in A
+Lm6: <* x *> - A = <* x *> iff not x in A
  proof
   thus <* x *> - A = <* x *> implies not x in A
    proof assume <* x *> - A = <* x *>;
@@ -1398,7 +1391,7 @@ Lm7: <* x *> - A = <* x *> iff not x in A
   hence thesis by Th76;
  end;
 
-Lm8: <* x *> - A = {} iff x in A
+Lm7: <* x *> - A = {} iff x in A
  proof
   thus <* x *> - A = {} implies x in A
    proof assume <* x *> - A = {};
@@ -1412,14 +1405,13 @@ Lm8: <* x *> - A = {} iff x in A
   hence thesis by Th75;
  end;
 
-Lm9: (p ^ {}) - A = (p - A) ^ ({} - A)
+Lm8: (p ^ {}) - A = (p - A) ^ ({} - A)
  proof
   thus (p ^ {}) - A = p - A by FINSEQ_1:47
-                    .= (p - A) ^ {} by FINSEQ_1:47
-                    .= (p - A) ^ ({} - A) by Lm6;
+                    .= (p - A) ^ ({} - A) by FINSEQ_1:47;
  end;
 
-Lm10: (p ^ <* x *>) - A = (p - A) ^ (<* x *> - A)
+Lm9: (p ^ <* x *>) - A = (p - A) ^ (<* x *> - A)
  proof set r = (p ^ <* x *>) - A; set q = <* x *> - A;
        set t = p ^ <* x *>;
    A1: len t = len p + len<* x *> by FINSEQ_1:35
@@ -1618,10 +1610,10 @@ XBOOLE_1:53
        now let k be Element of NAT;
      assume A50: k in dom q;
        A51: now assume x in A;
-         then q = {} by Lm8;
+         then q = {} by Lm7;
         hence contradiction by A50,FINSEQ_1:26;
        end;
-       then A52: q = <* x *> by Lm7;
+       then A52: q = <* x *> by Lm6;
        then A53: dom q = {1} by FINSEQ_1:4,def 8;
        then A54: k = 1 by A50,TARSKI:def 1;
        A55: p " A = (p ^ <* x *>) " A
@@ -1699,36 +1691,36 @@ FINSEQ_1:def 3,TARSKI:def 1;
   hence thesis by A2,A3,Th43;
  end;
 
-Lm11: now let q,x;
+Lm10: now let q,x;
   assume A1: for p,A holds (p ^ q) - A = (p - A) ^ (q - A);
  let p,A;
   thus (p ^ (q ^ <* x *>)) - A = (p ^ q ^ <* x *>) - A by FINSEQ_1:45
-                  .= ((p ^ q) - A) ^ (<* x *> - A) by Lm10
+                  .= ((p ^ q) - A) ^ (<* x *> - A) by Lm9
                   .= (p - A) ^ (q - A) ^ (<* x *> - A) by A1
                   .= (p - A) ^ ((q - A) ^ (<* x *> - A)) by FINSEQ_1:45
-                  .= (p - A) ^ ((q ^ <* x *>) - A) by Lm10;
+                  .= (p - A) ^ ((q ^ <* x *>) - A) by Lm9;
 end;
 
-Lm12: for q,p,A holds (p ^ q) - A = (p - A) ^ (q - A)
+Lm11: for q,p,A holds (p ^ q) - A = (p - A) ^ (q - A)
 proof
   defpred P[FinSequence] means (p ^ $1) - A = (p - A) ^ ($1 - A);
-A1: P[{}] by Lm9;
-A2: for q,x st P[q] holds P[q^<*x*>] by Lm11;
+A1: P[{}] by Lm8;
+A2: for q,x st P[q] holds P[q^<*x*>] by Lm10;
     for q holds P[q] from FINSEQ_1:sch 3(A1,A2);
   hence thesis;
 end;
 
 theorem
-    (p ^ q) - A = (p - A) ^ (q - A) by Lm12;
+    (p ^ q) - A = (p - A) ^ (q - A) by Lm11;
 
 theorem
-     {} - A = {} by Lm6;
+     {} - A = {};
 
 theorem
-     <* x *> - A = <* x *> iff not x in A by Lm7;
+     <* x *> - A = <* x *> iff not x in A by Lm6;
 
 theorem
-     <* x *> - A = {} iff x in A by Lm8;
+     <* x *> - A = {} iff x in A by Lm7;
 
 theorem Th84:
  <* x,y *> - A = {} iff x in A & y in A
@@ -1741,8 +1733,8 @@ theorem Th84:
     end;
     assume x in A & y in A;
      then <* x *> - A = {} & <* y *> - A = {} & <* x,y *> = <* x *> ^ <* y *>
-     by Lm8,FINSEQ_1:def 9;
-   hence <* x,y *> - A = {} ^ {} by Lm12
+     by Lm7,FINSEQ_1:def 9;
+   hence <* x,y *> - A = {} ^ {} by Lm11
                       .= {} by FINSEQ_1:47;
   end;
 
@@ -1751,8 +1743,8 @@ theorem Th85:
   proof
     assume x in A & not y in A;
      then <* x *> - A = {} & <* y *> - A = <* y *> &
-          <* x,y *> = <* x *> ^ <* y *> by Lm7,Lm8,FINSEQ_1:def 9;
-   hence <* x,y *> - A = {} ^ <* y *> by Lm12
+          <* x,y *> = <* x *> ^ <* y *> by Lm6,Lm7,FINSEQ_1:def 9;
+   hence <* x,y *> - A = {} ^ <* y *> by Lm11
                       .= <* y *> by FINSEQ_1:47;
   end;
 
@@ -1760,11 +1752,11 @@ theorem
      <* x,y *> - A = <* y *> & x <> y implies x in A & not y in A
   proof assume that A1: <* x,y *> - A = <* y *> and A2: x <> y;
      A3: <* y *> = (<* x *> ^ <* y *>) - A by A1,FINSEQ_1:def 9
-               .= (<* x *> - A) ^ (<* y *> - A) by Lm12;
+               .= (<* x *> - A) ^ (<* y *> - A) by Lm11;
      A4: (x in A implies <* x *> - A = {}) &
         (not x in A implies <* x *> - A = <* x *>) &
         (y in A implies <* y *> - A = {}) &
-        (not y in A implies <* y *> - A = <* y *>) by Lm7,Lm8;
+        (not y in A implies <* y *> - A = <* y *>) by Lm6,Lm7;
     assume not thesis;
      then <* y *> = {} or <* x *> = <* y *> or <* y *> = <* x,y *>
                                               by A3,A4,FINSEQ_1:47,
@@ -1779,8 +1771,8 @@ theorem Th87:
   proof
     assume not x in A & y in A;
      then <* x *> - A = <* x *> & <* y *> - A = {} &
-          <* x,y *> = <* x *> ^ <* y *> by Lm7,Lm8,FINSEQ_1:def 9;
-   hence <* x,y *> - A = <* x *> ^ {} by Lm12
+          <* x,y *> = <* x *> ^ <* y *> by Lm6,Lm7,FINSEQ_1:def 9;
+   hence <* x,y *> - A = <* x *> ^ {} by Lm11
                       .= <* x *> by FINSEQ_1:47;
   end;
 
@@ -1788,11 +1780,11 @@ theorem
      <* x,y *> - A = <* x *> & x <> y implies not x in A & y in A
   proof assume that A1: <* x,y *> - A = <* x *> and A2: x <> y;
      A3: <* x *> = (<* x *> ^ <* y *>) - A by A1,FINSEQ_1:def 9
-               .= (<* x *> - A) ^ (<* y *> - A) by Lm12;
+               .= (<* x *> - A) ^ (<* y *> - A) by Lm11;
      A4: (x in A implies <* x *> - A = {}) &
         (not x in A implies <* x *> - A = <* x *>) &
         (y in A implies <* y *> - A = {}) &
-        (not y in A implies <* y *> - A = <* y *>) by Lm7,Lm8;
+        (not y in A implies <* y *> - A = <* y *>) by Lm6,Lm7;
     assume not thesis;
      then <* x *> = {} or <* x *> = <* y *> or <* x *> = <* x,y *>
                                               by A3,A4,FINSEQ_1:47,
@@ -1815,8 +1807,8 @@ theorem
     end;
     assume not x in A & not y in A;
      then <* x *> - A = <* x *> & <* y *> - A = <* y *> &
-          <* x,y *> = <* x *> ^ <* y *> by Lm7,FINSEQ_1:def 9;
-   hence <* x,y *> - A = <* x,y *> by Lm12;
+          <* x,y *> = <* x *> ^ <* y *> by Lm6,FINSEQ_1:def 9;
+   hence <* x,y *> - A = <* x,y *> by Lm11;
   end;
 
 theorem Th90:
@@ -1826,14 +1818,14 @@ theorem Th90:
     thus p.(k + 1) in A implies p - A = q - A
      proof assume A3: p.(k + 1) in A;
       thus p - A = (q ^ <* p.(k + 1) *>) - A by A1,A2,Th61
-                .= (q - A) ^ (<* p.(k + 1) *> - A) by Lm12
-                .= (q - A) ^ {} by A3,Lm8
+                .= (q - A) ^ (<* p.(k + 1) *> - A) by Lm11
+                .= (q - A) ^ {} by A3,Lm7
                 .= q - A by FINSEQ_1:47;
      end;
      assume that A4: p - A = q - A and A5: not p.(k + 1) in A;
           q - A = (q ^ <* p.(k + 1) *>) - A by A1,A2,A4,Th61
-           .= (q - A) ^ (<* p.(k + 1) *> - A) by Lm12
-           .= (q - A) ^ <* p.(k + 1) *> by A5,Lm7;
+           .= (q - A) ^ (<* p.(k + 1) *> - A) by Lm11
+           .= (q - A) ^ <* p.(k + 1) *> by A5,Lm6;
       then {} = <* p.(k + 1) *> by TREES_1:5;
     hence thesis;
    end;
@@ -1845,8 +1837,8 @@ theorem Th91:
     thus not p.(k + 1) in A implies p - A = (q - A) ^ <* p.(k + 1) *>
      proof assume A2: not p.(k + 1) in A;
       thus p - A = (q ^ <* p.(k + 1) *>) - A by A1,Th61
-                .= (q - A) ^ (<* p.(k + 1) *> - A) by Lm12
-                .= (q - A) ^ <* p.(k + 1) *> by A2,Lm7;
+                .= (q - A) ^ (<* p.(k + 1) *> - A) by Lm11
+                .= (q - A) ^ <* p.(k + 1) *> by A2,Lm6;
      end;
      assume A3: p - A = (q - A) ^ <* p.(k + 1) *>;
      assume p.(k + 1) in A;
@@ -1855,7 +1847,7 @@ theorem Th91:
     hence contradiction;
    end;
 
-Lm13: for p,A st len p = 0
+Lm12: for p,A st len p = 0
      for n st n in dom p
      for B being finite set st
      B = {k where k is Element of NAT : k in dom p & k <= n & p.k in A}
@@ -1868,7 +1860,7 @@ Lm13: for p,A st len p = 0
   hence thesis by A2,FINSEQ_1:26;
  end;
 
-Lm14: for l st
+Lm13: for l st
      (for p,A st len p = l
        for n st n in dom p
         for B being finite set st
@@ -2068,7 +2060,7 @@ FINSEQ_1:35
   hence thesis;
  end;
 
-Lm15: for l for p,A st len p = l
+Lm14: for l for p,A st len p = l
     for n st n in dom p holds
     for B being finite set st
     B = {k where k is Element of NAT: k in dom p & k <= n & p.k in A}
@@ -2079,8 +2071,8 @@ Lm15: for l for p,A st len p = l
     for B being finite set st
     B = {k where k is Element of NAT : k in dom p & k <= n & p.k in A}
      holds p.n in A or (p - A).(n - card B) = p.n;
-A1: P[0] by Lm13;
-A2: for k being Element of NAT st P[k] holds P[k+1] by Lm14;
+A1: P[0] by Lm12;
+A2: for k being Element of NAT st P[k] holds P[k+1] by Lm13;
       for n being Element of NAT holds P[n] from NAT_1:sch 1(A1,A2);
     hence thesis;
   end;
@@ -2091,7 +2083,7 @@ theorem
   B = {k where k is Element of NAT : k in dom p & k <= n & p.k in A}
   holds p.n in A or (p - A).(n - card B) = p.n
    proof len p = len p;
-    hence thesis by Lm15;
+    hence thesis by Lm14;
    end;
 
 theorem

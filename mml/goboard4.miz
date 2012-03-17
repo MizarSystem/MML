@@ -10,13 +10,13 @@ environ
       MATRIX_1, TREES_1, BOOLE, FUNCT_1, ARYTM_1, ABSVALUE, MATRIX_2, TOPREAL1,
       GOBOARD2, MCART_1, TOPREAL4, GOBOARD4, NAT_1, RCOMP_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0, REAL_1,
-      COMPLEX1, NAT_1, NAT_D, RELAT_1, FUNCT_1, FINSEQ_1, STRUCT_0, PRE_TOPC,
+      COMPLEX1, NAT_1, RELAT_1, FUNCT_1, FINSEQ_1, STRUCT_0, PRE_TOPC,
       FINSEQ_4, MATRIX_1, EUCLID, TOPREAL1, TOPREAL4, GOBOARD1, GOBOARD2,
       XXREAL_0, XXREAL_1;
- constructors XXREAL_0, REAL_1, NAT_1, MEMBERED, COMPLEX1, FINSEQ_3, FINSEQ_4,
-      TOPREAL1, TOPREAL4, GOBOARD2, NAT_D, XXREAL_1;
- registrations GOBOARD1, RELSET_1, GOBOARD2, STRUCT_0, EUCLID, INT_1, MEMBERED,
-      ORDINAL1, FINSEQ_1;
+ constructors NAT_1, XXREAL_1, COMPLEX1, FINSEQ_3, FINSEQ_4, TOPREAL1,
+      TOPREAL4, GOBOARD2;
+ registrations XBOOLE_0, ORDINAL1, RELSET_1, NUMBERS, XREAL_0, MEMBERED,
+      FINSEQ_1, STRUCT_0, EUCLID, GOBOARD2;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, GOBOARD1;
  theorems TARSKI, REAL_1, NAT_1, ZFMISC_1, FINSEQ_1, ABSVALUE, FINSEQ_2,
@@ -1850,30 +1850,30 @@ theorem
     L~f1 meets L~f2 by Th2;
 
 definition let f be Relation, r,s be Real;
-  pred f lies_between r,s means :Def0:
+  pred f lies_between r,s means :Def1:
     rng f c= [. r,s .];
 end;
 
 definition let f be FinSequence of REAL, r,s be Real;
-  redefine pred f lies_between r,s means :Def1:
+  redefine pred f lies_between r,s means :Def2:
     for n st n in dom f holds r <= f.n & f.n <= s;
   compatibility
   proof
     hereby assume f lies_between r,s; then
-A1:   rng f c= [. r,s .] by Def0;
+A1:   rng f c= [. r,s .] by Def1;
       let n; assume n in dom f; then
       f.n in rng f by FUNCT_1:12;
       hence r <= f.n & f.n <= s by A1,XXREAL_1:1;
     end;
     assume
-B0: for n st n in dom f holds r <= f.n & f.n <= s;
+A2: for n st n in dom f holds r <= f.n & f.n <= s;
     let y be set;
     assume y in rng f; then
     consider x being set such that
-B1: x in dom f & y = f.x by FUNCT_1:def 5;
-    reconsider n=x as Element of NAT by B1;
-    r <= f.n & f.n <= s by B0,B1;
-    hence thesis by B1,XXREAL_1:1;
+A3: x in dom f & y = f.x by FUNCT_1:def 5;
+    reconsider n=x as Element of NAT by A3;
+    r <= f.n & f.n <= s by A2,A3;
+    hence thesis by A3,XXREAL_1:1;
   end;
 end;
 
@@ -1961,7 +1961,7 @@ A21:   len f = len f1 + len f2 by FINSEQ_1:35;
           f/.m=u by A24,FINSEQ_4:83;
        then A25: x.m=u`1 by A17,A22,GOBOARD1:def 3;
           x1.m=u`1 by A17,A24,GOBOARD1:def 3;
-       hence p1`1<=s by A6,A17,A20,A24,A25,Def1;
+       hence p1`1<=s by A6,A17,A20,A24,A25,Def2;
       end;
       suppose A26: len f1<m;
        then reconsider w5 = m-len f1 as Element of NAT by INT_1:18;
@@ -1974,7 +1974,7 @@ A27:    m = w5 + len f1;
        reconsider u=f2/.m1 as Point of TOP-REAL 2;
        A31: x.m=u`1 by A17,A22,A29,GOBOARD1:def 3;
           x2.m1=u`1 by A17,A30,GOBOARD1:def 3;
-       hence p1`1<=s by A7,A17,A20,A30,A31,Def1;
+       hence p1`1<=s by A7,A17,A20,A30,A31,Def2;
       end;
       end;
      hence p1`1<=s;
@@ -1991,7 +1991,7 @@ A27:    m = w5 + len f1;
           f/.m=u by A35,FINSEQ_4:83;
        then A36: x.m=u`1 by A17,A33,GOBOARD1:def 3;
           x1.m=u`1 by A17,A35,GOBOARD1:def 3;
-       hence s<=p2`1 by A6,A17,A20,A35,A36,Def1;
+       hence s<=p2`1 by A6,A17,A20,A35,A36,Def2;
       end;
       suppose A37: len f1<m;
        then reconsider w5 = m-len f1 as Element of NAT by INT_1:18;
@@ -2004,7 +2004,7 @@ A38:    m = w5 + len f1;
        reconsider u=f2/.m1 as Point of TOP-REAL 2;
        A42: x.m=u`1 by A17,A33,A40,GOBOARD1:def 3;
           x2.m1=u`1 by A17,A41,GOBOARD1:def 3;
-       hence s<=p2`1 by A7,A17,A20,A41,A42,Def1;
+       hence s<=p2`1 by A7,A17,A20,A41,A42,Def2;
       end;
       end;
      hence s<=p2`1;
@@ -2021,7 +2021,7 @@ A38:    m = w5 + len f1;
           f/.m=u by A46,FINSEQ_4:83;
        then A47: y.m=u`2 by A17,A44,GOBOARD1:def 4;
           y1.m=u`2 by A17,A46,GOBOARD1:def 4;
-       hence q1`2<=s by A8,A17,A20,A46,A47,Def1;
+       hence q1`2<=s by A8,A17,A20,A46,A47,Def2;
       end;
       suppose A48: len f1<m;
        then reconsider w5 = m-len f1 as Element of NAT by INT_1:18;
@@ -2034,7 +2034,7 @@ A49:    m = w5 + len f1;
        reconsider u=f2/.m1 as Point of TOP-REAL 2;
        A53: y.m=u`2 by A17,A44,A51,GOBOARD1:def 4;
           y2.m1=u`2 by A17,A52,GOBOARD1:def 4;
-       hence q1`2<=s by A9,A17,A20,A52,A53,Def1;
+       hence q1`2<=s by A9,A17,A20,A52,A53,Def2;
       end;
       end;
      hence q1`2<=s;
@@ -2051,7 +2051,7 @@ A49:    m = w5 + len f1;
           f/.m=u by A57,FINSEQ_4:83;
        then A58: y.m=u`2 by A17,A55,GOBOARD1:def 4;
           y1.m=u`2 by A17,A57,GOBOARD1:def 4;
-       hence s<=q2`2 by A8,A17,A20,A57,A58,Def1;
+       hence s<=q2`2 by A8,A17,A20,A57,A58,Def2;
       end;
       suppose A59: len f1<m;
        then reconsider w5 = m-len f1 as Element of NAT by INT_1:18;
@@ -2064,7 +2064,7 @@ A60:    m = w5 + len f1;
        reconsider u=f2/.m1 as Point of TOP-REAL 2;
        A64: y.m=u`2 by A17,A55,A62,GOBOARD1:def 4;
           y2.m1=u`2 by A17,A63,GOBOARD1:def 4;
-       hence s<=q2`2 by A9,A17,A20,A63,A64,Def1;
+       hence s<=q2`2 by A9,A17,A20,A63,A64,Def2;
       end;
       end;
      hence s<=q2`2;

@@ -10,17 +10,17 @@ environ
       RELAT_1, ABSVALUE, ORDINAL2, QC_LANG1, LATTICES, SEQ_1, PROB_1, SEQ_2,
       SEQM_3, SIN_COS, CAT_1, PREPOWER, SERIES_1, SQUARE_1, GROUP_1, RSSPACE3,
       LOPBAN_3, SUPINF_2, LOPBAN_4, CLOPBAN2, COMPLEX1, CFUNCT_1, XCMPLX_0,
-      NAT_1, VECTSP_1;
+      NAT_1, VECTSP_1, RELOC;
  notations RELAT_1, FUNCT_1, SUBSET_1, FUNCT_2, PRE_TOPC, STRUCT_0, XCMPLX_0,
-      XXREAL_0, XREAL_0, ORDINAL1, ARYTM_0, NUMBERS, REAL_1, NAT_1, NAT_D,
-      NEWTON, RLVECT_1, GROUP_1, SQUARE_1, NORMSP_1, SEQ_1, SEQ_2, SEQM_3,
-      SERIES_1, LOPBAN_4, PREPOWER, BINARITH, SIN_COS, COMPLEX1, BHSP_4,
-      CFUNCT_1, CLVECT_1, CSSPACE3, CLOPBAN2, LOPBAN_3, CLOPBAN3;
- constructors ARYTM_0, REAL_1, SQUARE_1, NAT_1, SEQ_2, COMSEQ_1, PREPOWER,
-      SERIES_1, COMSEQ_3, BINARITH, SIN_COS, LOPBAN_3, CSSPACE3, CLOPBAN3,
-      NAT_D, LOPBAN_4, BHSP_4;
- registrations RELSET_1, STRUCT_0, ORDINAL1, XREAL_0, MEMBERED, SEQ_1,
-      CLOPBAN2, CLOPBAN3, COMPLEX1, XCMPLX_0, XXREAL_0;
+      XXREAL_0, XREAL_0, ORDINAL1, ARYTM_0, NUMBERS, REAL_1, NAT_1, NEWTON,
+      RLVECT_1, GROUP_1, SQUARE_1, NORMSP_1, SEQ_1, SEQ_2, SEQM_3, SERIES_1,
+      LOPBAN_4, BINARITH, SIN_COS, COMPLEX1, BHSP_4, CFUNCT_1, CLVECT_1,
+      CSSPACE3, CLOPBAN2, LOPBAN_3, CLOPBAN3;
+ constructors ARYTM_0, REAL_1, SQUARE_1, NAT_1, SEQ_2, COMSEQ_1, SERIES_1,
+      COMSEQ_3, BINARITH, SIN_COS, BHSP_4, LOPBAN_3, LOPBAN_4, CSSPACE3,
+      CLOPBAN3;
+ registrations ORDINAL1, RELSET_1, NUMBERS, XCMPLX_0, XXREAL_0, XREAL_0,
+      MEMBERED, COMPLEX1, SEQ_1, STRUCT_0, CLOPBAN2, CLOPBAN3;
  requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
  definitions CLVECT_1;
  theorems ABSVALUE, REAL_1, REAL_2, RLVECT_1, XCMPLX_0, XCMPLX_1, XREAL_0,
@@ -888,27 +888,27 @@ A13: ||.(1r/[*(n+1),0*] *z).|| * ||.(z ExpSeq.n).||
 end;
 
 theorem Th14:
-0 < k implies (Sift(seq)).k=seq.(k -' 1) by LOPBAN_4:15;
+0 < k implies (Shift seq).k=seq.(k -' 1) by LOPBAN_4:15;
 
 theorem Th15:
-Partial_Sums(seq).k=Partial_Sums(Sift(seq)).k+seq.k
+Partial_Sums(seq).k=Partial_Sums(Shift seq).k+seq.k
 proof
    defpred X[Element of NAT] means
-    Partial_Sums(seq).$1=Partial_Sums(Sift(seq)).$1+seq.$1;
+    Partial_Sums(seq).$1=Partial_Sums(Shift seq).$1+seq.$1;
    Partial_Sums(seq).0 = seq.0 by BHSP_4:def 1
        .= 0.X + seq.0 by RLVECT_1:10
-       .= (Sift(seq)).0 + seq.0 by LOPBAN_4:def 5
-       .= Partial_Sums(Sift(seq)).0+seq.0 by BHSP_4:def 1; then
+       .= (Shift(seq)).0 + seq.0 by LOPBAN_4:def 5
+       .= Partial_Sums(Shift(seq)).0+seq.0 by BHSP_4:def 1; then
 A1:X[0];
 A2:for k st X[k] holds X[k+1]
    proof
      let k such that
-A3:  Partial_Sums(seq).k=Partial_Sums(Sift(seq)).k+seq.k;
+A3:  Partial_Sums(seq).k=Partial_Sums(Shift(seq)).k+seq.k;
      thus Partial_Sums(seq).(k+1)
-        = (Partial_Sums(Sift(seq)).k+seq.k) + seq.(k+1) by A3,BHSP_4:def 1
-       .=(Partial_Sums(Sift(seq)).k+(Sift(seq)).(k+1)) + seq.(k+1)
+        = (Partial_Sums(Shift(seq)).k+seq.k) + seq.(k+1) by A3,BHSP_4:def 1
+       .=(Partial_Sums(Shift(seq)).k+(Shift(seq)).(k+1)) + seq.(k+1)
        by LOPBAN_4:def 5
-       .=Partial_Sums(Sift(seq)).(k+1)+seq.(k+1) by BHSP_4:def 1;
+       .=Partial_Sums(Shift(seq)).(k+1)+seq.(k+1) by BHSP_4:def 1;
    end;
    for k holds X[k] from NAT_1:sch 1(A1,A2);
    hence thesis;
@@ -992,21 +992,21 @@ A12:   Partial_Sums((Expan(n,z,w)*w)).(n+1)
      end;
 
 A13: Partial_Sums(( Expan(n,z,w)*z)).(n+1)
-      =Partial_Sums(Sift(( Expan(n,z,w)*z))).(n+1)
+      =Partial_Sums(Shift(( Expan(n,z,w)*z))).(n+1)
      proof
 A14:   Partial_Sums(( Expan(n,z,w)*z)).(n+1)
-        =Partial_Sums(Sift(( Expan(n,z,w)*z))).(n+1) +( Expan(n,z,w)*z).(n+1)
+        =Partial_Sums(Shift(( Expan(n,z,w)*z))).(n+1) +( Expan(n,z,w)*z).(n+1)
            by Th15;
        0 +n < n+1 by XREAL_1:31; then
 A15:    Expan(n,z,w).(n+1)=0.X by Def4;
        thus Partial_Sums(( Expan(n,z,w)*z)).(n+1)
-           =Partial_Sums(Sift(( Expan(n,z,w)*z))).(n+1)
+           =Partial_Sums(Shift(( Expan(n,z,w)*z))).(n+1)
             + Expan(n,z,w).(n+1)*z by A14,CLOPBAN3:def 9
-          .=Partial_Sums(Sift(( Expan(n,z,w)*z))).(n+1)
+          .=Partial_Sums(Shift(( Expan(n,z,w)*z))).(n+1)
             +0.X by A15,CLOPBAN3:42
-          .= Partial_Sums(Sift((Expan(n,z,w)*z))).(n+1) by CLOPBAN3:42;
+          .= Partial_Sums(Shift((Expan(n,z,w)*z))).(n+1) by CLOPBAN3:42;
      end;
-A16: ( Expan(n,z,w)*w)+Sift(( Expan(n,z,w)*z)) =Expan(n+1,z,w)
+A16: ( Expan(n,z,w)*w)+Shift(( Expan(n,z,w)*z)) =Expan(n+1,z,w)
      proof
        now let k be Element of NAT;
 A17:     now assume
@@ -1020,9 +1020,10 @@ A22:         n+0 < k-1+1 by XREAL_1:10;
              1 <= k by A18,A20,XXREAL_0:2;
              hence thesis by A18,A20,A21,A22,XXREAL_0:2,BINARITH:50;
            end;
-           (( Expan(n,z,w)*w)+Sift(( Expan(n,z,w)*z))).k
-            =(Expan(n,z,w)*w).k + (Sift((Expan(n,z,w)*z))).k by NORMSP_1:def 5
-           .=(Expan(n,z,w).k*w) + (Sift(( Expan(n,z,w)*z))).k by CLOPBAN3:def 9
+           (( Expan(n,z,w)*w)+Shift(( Expan(n,z,w)*z))).k
+            =(Expan(n,z,w)*w).k + (Shift((Expan(n,z,w)*z))).k by NORMSP_1:def 5
+           .=(Expan(n,z,w).k*w) + (Shift(( Expan(n,z,w)*z))).k
+               by CLOPBAN3:def 9
            .=(Expan(n,z,w).k*w) +  ((Expan(n,z,w)*z)).(k -' 1) by A19,Th14
            .=(Expan(n,z,w).k*w) + ((Expan(n,z,w).(k -' 1)*z)) by CLOPBAN3:def 9
            .=( 0.X*w )+ ((Expan(n,z,w).(k -' 1))*z) by A19,Def4
@@ -1030,14 +1031,15 @@ A22:         n+0 < k-1+1 by XREAL_1:10;
            .=0.X + ( 0.X*z) by A19,Def4
            .=0.X + 0.X by CLOPBAN3:42
            .=0.X by CLOPBAN3:42;
-           hence (( Expan(n,z,w)*w)+Sift((Expan(n,z,w)*z))).k
+           hence (( Expan(n,z,w)*w)+Shift((Expan(n,z,w)*z))).k
                 =Expan(n+1,z,w).k by A18,Def4;
          end;
          now assume
 A23:       k <= (n+1);
 A24:       now assume
 A25:         k=n+1;
-             thus ((Expan(n,z,w)*w) +Sift((Expan(n,z,w)*z))).k=Expan(n+1,z,w).k
+             thus ((Expan(n,z,w)*w) +Shift((Expan(n,z,w)*z))).k=
+                Expan(n+1,z,w).k
              proof
 A26:           n < n+1 by XREAL_1:31;
 A27:           n-'n= n-n by BINARITH:50 .= 0;
@@ -1050,14 +1052,14 @@ A31:           (Coef(n+1)).(n+1)
                  = (n+1)!c /(((n+1)!c) * 1) by  A28,SIN_COS:def 10,1
                 .= 1 by  A29,XCMPLX_1:60;
                thus
-               (( Expan(n,z,w)*w)+Sift((Expan(n,z,w)*z))).k
-                = (Expan(n,z,w)*w).(n+1)+(Sift((Expan(n,z,w)*z ))).(n+1)
+               (( Expan(n,z,w)*w)+Shift((Expan(n,z,w)*z))).k
+                = (Expan(n,z,w)*w).(n+1)+(Shift((Expan(n,z,w)*z ))).(n+1)
                     by A25,NORMSP_1:def 5
-               .= (Expan(n,z,w).(n+1) *w) + (Sift((Expan(n,z,w)*z))).(n+1)
+               .= (Expan(n,z,w).(n+1) *w) + (Shift((Expan(n,z,w)*z))).(n+1)
                     by CLOPBAN3:def 9
-               .= (0.X*w) + (Sift(( Expan(n,z,w)*z))).(n+1) by A26,Def4
-               .= (0.X) + (Sift(( Expan(n,z,w)*z))).(n+1) by CLOPBAN3:42
-               .= (Sift((Expan(n,z,w)*z ))).(n+1) by CLOPBAN3:42
+               .= (0.X*w) + (Shift(( Expan(n,z,w)*z))).(n+1) by A26,Def4
+               .= (0.X) + (Shift(( Expan(n,z,w)*z))).(n+1) by CLOPBAN3:42
+               .= (Shift((Expan(n,z,w)*z ))).(n+1) by CLOPBAN3:42
                .= (( Expan(n,z,w)*z)).(n) by LOPBAN_4:def 5
                .=  (Expan(n,z,w)).n *z by CLOPBAN3:def 9
                .=((Coef(n)).n * (z #N n) * (w #N (n-' n))) *z by Def4
@@ -1075,7 +1077,7 @@ A32:         k < n+1;
 A33:         now assume
 A34:           k=0;
                thus
-               ((Expan(n,z,w)*w)+Sift(( Expan(n,z,w)*z))).k = Expan(n+1,z,w).k
+               ((Expan(n,z,w)*w)+Shift(( Expan(n,z,w)*z))).k = Expan(n+1,z,w).k
                proof
 A35:             0 <= n by NAT_1:2;
 A36:             0 <= n+1 by NAT_1:2;
@@ -1089,10 +1091,10 @@ A41:             (Coef(n+1)).0 = (n+1)!c /(1 * ((n+1)!c)) by  A36,A38,
 SIN_COS:def 10,1
                             .= 1 by  A39,XCMPLX_1:60;
                  thus
-                 (( Expan(n,z,w)*w)+Sift(( Expan(n,z,w)*z))).k
-                  = ( Expan(n,z,w)*w).0+(Sift((Expan(n,z,w)*z))).0
+                 (( Expan(n,z,w)*w)+Shift(( Expan(n,z,w)*z))).k
+                  = ( Expan(n,z,w)*w).0+(Shift((Expan(n,z,w)*z))).0
                       by A34,NORMSP_1:def 5
-                 .=(Expan(n,z,w).0 *w) + (Sift(( Expan(n,z,w)*z))).0
+                 .=(Expan(n,z,w).0 *w) + (Shift(( Expan(n,z,w)*z))).0
                       by CLOPBAN3:def 9
                  .=( Expan(n,z,w).0 *w ) + 0.X by LOPBAN_4:def 5
                  .=( Expan(n,z,w).0 *w) by CLOPBAN3:42
@@ -1113,12 +1115,12 @@ A45:           k+1-1 <= n+1-1 by A32,INT_1:20;
                k-1 <= n by A45,XXREAL_0:2; then
 A46:           k-'1 <= n by A44,BINARITH:50;
                thus
-               (( Expan(n,z,w)*w)+Sift((Expan(n,z,w)*z))).k = Expan(n+1,z,w).k
+               (( Expan(n,z,w)*w)+Shift((Expan(n,z,w)*z))).k = Expan(n+1,z,w).k
                proof
-A47:             (( Expan(n,z,w)*w )+Sift(( Expan(n,z,w)*z))).k
-                  =( Expan(n,z,w)*w).k+(Sift((Expan(n,z,w)*z))).k
+A47:             (( Expan(n,z,w)*w )+Shift(( Expan(n,z,w)*z))).k
+                  =( Expan(n,z,w)*w).k+(Shift((Expan(n,z,w)*z))).k
                      by NORMSP_1:def 5
-                 .=(Expan(n,z,w).k)*w + (Sift(( Expan(n,z,w)*z))).k
+                 .=(Expan(n,z,w).k)*w + (Shift(( Expan(n,z,w)*z))).k
                      by CLOPBAN3:def 9
                  .=(Expan(n,z,w).k)*w + (Expan(n,z,w)*z).( k-'1) by A43,Th14
                  .=(Expan(n,z,w).k)*w  + ( Expan(n,z,w).(k-'1))*z
@@ -1170,7 +1172,7 @@ A49:             w #N (n-' (k-'1)) =w #N  (n+1-'k)
                            .=k;
                    hence z #N ((k -' 1)+1)= z #N k;
                  end; then
-A50:             ((Expan(n,z,w)*w)+Sift((Expan(n,z,w)*z))).k
+A50:             ((Expan(n,z,w)*w)+Shift((Expan(n,z,w)*z))).k
                   =(Coef(n)).k * ((z #N k) * (w #N (n+1-'k)))
                    +  (Coef(n)).((k -' 1)) *(z #N k) *(w #N (n+1-'k))
                      by A47,A48,A49,CLOPBAN3:42
@@ -1227,25 +1229,25 @@ A57:             n!c /( (k!c) * ((n-'k)!c) )
                        by COMPLEX1:27
                   .=((n+1)!c ) / ((k!c ) * ((n+1-'k)!c )) by SIN_COS:1
                   .=(Coef(n+1)).k by A32,SIN_COS:def 10;
-                 hence ((Expan(n,z,w)*w)+Sift((Expan(n,z,w)*z))).k
+                 hence ((Expan(n,z,w)*w)+Shift((Expan(n,z,w)*z))).k
                    =(Coef(n+1)).k * (z #N k) * (w #N (n+1-'k) )
                       by A50,CLOPBAN3:42
                   .=Expan(n+1,z,w).k by A32,Def4;
                end;
              end;
-             hence ((Expan(n,z,w)*w)+Sift((Expan(n,z,w)*z))).k
+             hence ((Expan(n,z,w)*w)+Shift((Expan(n,z,w)*z))).k
               =Expan(n+1,z,w).k by A33;
            end;
-           hence ((Expan(n,z,w)*w)+Sift((Expan(n,z,w)*z))).k =Expan(n+1,z,w).k
+           hence ((Expan(n,z,w)*w)+Shift((Expan(n,z,w)*z))).k =Expan(n+1,z,w).k
                   by A23,A24,REAL_1:def 5;
          end;
-         hence ((Expan(n,z,w)*w)+Sift((Expan(n,z,w)*z))).k =Expan(n+1,z,w).k
+         hence ((Expan(n,z,w)*w)+Shift((Expan(n,z,w)*z))).k =Expan(n+1,z,w).k
                 by A17;
        end;
        hence thesis by FUNCT_2:113;
      end;
      thus (z+w) #N (n+1) =(Partial_Sums(( Expan(n,z,w)*w)) +
-                      Partial_Sums(Sift(( Expan(n,z,w)*z)))).(n+1)
+                      Partial_Sums(Shift(( Expan(n,z,w)*z)))).(n+1)
        by A8,A9,A11,A13,NORMSP_1:def 5
       .=Partial_Sums(Expan(n+1,z,w)).(n+1) by A16,CLOPBAN3:19;
    end;

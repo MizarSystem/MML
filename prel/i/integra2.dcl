@@ -8,7 +8,6 @@
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="RELSET_1"/>
-<ArticleID name="XXREAL_0"/>
 <ArticleID name="TARSKI"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
@@ -28,6 +27,7 @@
 <ArticleID name="METRIC_1"/>
 <ArticleID name="RVSUM_1"/>
 <ArticleID name="EUCLID"/>
+<ArticleID name="XXREAL_0"/>
 <ArticleID name="XXREAL_1"/>
 <ArticleID name="RCOMP_1"/>
 <ArticleID name="INT_1"/>
@@ -43,14 +43,14 @@
 <ArgTypes/>
 <Typ kind="M" nr="7">
 <Cluster/>
-<Func kind="K" nr="57"/>
+<Func kind="K" nr="53"/>
 </Typ>
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="22"/>
-<Adjective nr="26"/>
-<Adjective nr="35"/>
+<Adjective nr="19"/>
+<Adjective nr="23"/>
+<Adjective nr="32"/>
 <Adjective nr="105"/>
 </Cluster>
 </RCluster>

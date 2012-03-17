@@ -15,40 +15,37 @@
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="XREAL_0"/>
-<ArticleID name="MEMBERED"/>
-<ArticleID name="SEQ_1"/>
 <ArticleID name="XXREAL_0"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="LIMFUNC1"/>
 <ArticleID name="INT_1"/>
-<ArticleID name="FINSEQ_2"/>
 <ArticleID name="COMPLEX1"/>
 <ArticleID name="INT_2"/>
+<ArticleID name="FINSEQ_2"/>
 <ArticleID name="NEWTON"/>
 <ArticleID name="SIN_COS"/>
 </Signature>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="221"/>
+<Func kind="K" nr="199"/>
 <Cluster>
-<Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="5"/>
-<Adjective nr="26"/>
+<Adjective nr="16">
+<Func kind="K" nr="53"/>
+<Func kind="K" nr="53"/>
+</Adjective>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="145">
+<Func kind="K" nr="123">
 <Num nr="0"/>
 </Func>
 <Cluster>
 <Adjective nr="7" value="false"/>
-<Adjective nr="20"/>
-<Adjective nr="21"/>
-<Adjective nr="22"/>
 </Cluster>
 </FCluster>
 </Registrations>

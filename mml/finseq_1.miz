@@ -10,12 +10,12 @@ environ
       ORDINAL1, CARD_1, PARTFUN1, ARYTM_1, FINSEQ_1, MCART_1, MONOID_0,
       FUNCOP_1, FRAENKEL, FUNCT_4, NAT_1, ZF_REFLE;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, XCMPLX_0, RELAT_1, FUNCT_1,
-      FRAENKEL, FUNCOP_1, WELLORD2, ORDINAL1, REAL_1, NAT_1, NAT_D, NUMBERS,
-      PARTFUN1, FUNCT_4, MCART_1, FINSET_1, CARD_1, XXREAL_0;
+      FRAENKEL, FUNCOP_1, WELLORD2, ORDINAL1, REAL_1, NAT_1, NUMBERS, PARTFUN1,
+      FUNCT_4, MCART_1, FINSET_1, CARD_1, XXREAL_0;
  constructors WELLORD2, FUNCOP_1, FUNCT_4, FRAENKEL, XXREAL_0, XREAL_0, NAT_1,
-      CARD_1, NAT_D;
- registrations FUNCT_1, RELAT_1, RELSET_1, CARD_1, SUBSET_1, NAT_1, XREAL_0,
-      ORDINAL2, FINSET_1, FUNCOP_1, XXREAL_0, XBOOLE_0, ORDINAL1;
+      CARD_1;
+ registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCOP_1,
+      ARYTM_3, FINSET_1, XXREAL_0, XREAL_0, NAT_1, CARD_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, FINSET_1, FUNCT_1, WELLORD2, XBOOLE_0, RELAT_1, FRAENKEL;
  theorems TARSKI, AXIOMS, FUNCT_1, REAL_1, NAT_1, ZFMISC_1, RELAT_1, RELSET_1,
@@ -3089,7 +3089,7 @@ end;
 
 reserve a, b, c, d, e, f for set;
 
-theorem Th1:
+theorem
   <*a*> = <*b*> implies a = b
   proof
     assume
@@ -3137,7 +3137,7 @@ registration
  end;
 
 theorem
- Th2: for p,q being FinSequence st q = p|Seg n holds len q <= len p
+ Th100: for p,q being FinSequence st q = p|Seg n holds len q <= len p
   proof let p,q be FinSequence; assume
        q = p|Seg n;
     then dom q = dom p /\ Seg n & Seg len q = dom q & Seg len p = dom p
@@ -3151,7 +3151,7 @@ theorem
       ex q being FinSequence st p = r^q
   proof let p,r be FinSequence; assume
 A1:  r = p|Seg n;
-    then len r <= len p by Th2;
+    then len r <= len p by Th100;
    then consider m be Nat such that
 A2:  len p = len r + m by NAT_1:10;
    reconsider m as Element of NAT by ORDINAL1:def 13;
@@ -3164,7 +3164,7 @@ A4:  len p = len(r^q) by A2,A3,Th35;
 A5:    1 <= k & k <= len p;
 A6:    now assume k <= len r;
         then k in
- Seg len r & dom r = Seg len r by A5,Th3,Def3;
+ Seg len r & dom r = Seg len r by A5,Def3;
         then (r^q).k = r.k & r.k = p.k by A1,Def7,FUNCT_1:70;
        hence p.k = (r^q).k;
       end;
@@ -3184,3 +3184,13 @@ then A9:      (r^q).k = q.j by A4,A5,A7,Th37;
    hence thesis by A4,Th18;
   end;
 
+:: from GOBOARD1, PRALG_1, 2007.04.06, A.T
+
+registration let D be non empty set;
+cluster non empty FinSequence of D;
+ existence
+  proof consider x being Element of D;
+   take v = <*x*>;
+  thus v is non empty;
+  end;
+end;

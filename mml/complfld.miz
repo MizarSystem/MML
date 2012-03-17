@@ -10,16 +10,15 @@ environ
       FUNCT_1, ARYTM_1, RELAT_1, ARYTM_3, ABSVALUE, COMPLFLD, XCMPLX_0,
       GROUP_1, ARYTM, COMPTRIG, NAT_1, VECTSP_2;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, ARYTM_0, XCMPLX_0,
-      XREAL_0, COMPLEX1, NAT_1, NAT_D, FUNCT_1, XXREAL_0, COMPTRIG, BINOP_1,
-      BINOP_2, STRUCT_0, RLVECT_1, GROUP_1, NEWTON, VECTSP_1;
- constructors DOMAIN_1, BINOP_1, FUNCT_4, ARYTM_3, ARYTM_0, XXREAL_0, REAL_1,
-      BINOP_2, MEMBERED, COMPLEX1, VECTSP_1, NAT_1, INT_2, COMPTRIG, NEWTON,
-      FUNCOP_1, PBOOLE, PARTFUN1, SIN_COS, POWER, NAT_D;
- registrations VECTSP_1, RELSET_1, XREAL_0, COMPLEX1, MEMBERED, XCMPLX_0,
-      NAT_1, NEWTON, STRUCT_0, ORDINAL1;
- requirements NUMERALS, SUBSET, BOOLE, ARITHM, REAL;
+      COMPLEX1, NAT_1, FUNCT_1, XXREAL_0, COMPTRIG, BINOP_1, BINOP_2, STRUCT_0,
+      RLVECT_1, GROUP_1, NEWTON, VECTSP_1;
+ constructors BINOP_1, FUNCT_4, ARYTM_0, XXREAL_0, REAL_1, NAT_1, BINOP_2,
+      MEMBERED, NEWTON, COMPTRIG, VECTSP_1;
+ registrations ORDINAL1, RELSET_1, NUMBERS, XCMPLX_0, NAT_1, MEMBERED,
+      COMPLEX1, STRUCT_0, VECTSP_1;
+ requirements NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions RLVECT_1, GROUP_1, VECTSP_1, BINOP_1, COMPTRIG, STRUCT_0,
-     COMPLEX1;
+      COMPLEX1;
  theorems STRUCT_0, COMPLEX1, RLVECT_1, VECTSP_1, XREAL_0, XCMPLX_0, XCMPLX_1,
       ARYTM_0, BINOP_2, GROUP_1, COMPTRIG, NEWTON, ORDINAL1, NAT_1, XREAL_1;
  schemes NAT_1;
@@ -68,35 +67,21 @@ registration let a,b be complex number;
  identify x+y with a+b when x=a, y=b;
  compatibility
   proof assume
-Z: x=a & y=b;
+A1: x=a & y=b;
     reconsider a'=a, b'=b as Element of COMPLEX by XCMPLX_0:def 2;
     addcomplex = the add of F_Complex by Def1;
-   hence x+y = addcomplex.(a',b') by Z,Def1
+   hence x+y = addcomplex.(a',b') by A1
        .= a+b by BINOP_2:def 3;
   end;
  identify x*y with a*b when x=a, y=b;
  compatibility
   proof assume
-Z: x=a & y=b;
+A2: x=a & y=b;
     reconsider a'=a, b'=b as Element of COMPLEX by XCMPLX_0:def 2;
     multcomplex = the mult of F_Complex by Def1;
-   hence x*y = multcomplex.(a',b') by Z,Def1
+   hence x*y = multcomplex.(a',b') by A2
        .= a*b by BINOP_2:def 5;
   end;
-end;
-
-Lm1:
-now
-  let x, e be Element of F_Complex;
-  assume
-A1: e = 1r;
-  reconsider a = x as Element of COMPLEX by Def1;
-  thus x * e = multcomplex.(x,e) by Def1
-  .= a*1r by A1,BINOP_2:def 5
-  .= x by COMPLEX1:def 7;
-  thus e * x = multcomplex.(e,x) by Def1
-  .= a*1r by A1,BINOP_2:def 5
-  .= x by COMPLEX1:def 7;
 end;
 
   registration
@@ -108,15 +93,15 @@ end;
    end;
  end;
 
-Lm2:
+Lm1:
   1_F_Complex = 1r
   proof
    reconsider e = 1r as Element of F_Complex by Def1;
-   for h being Element of F_Complex holds h * e = h & e * h = h by Lm1;
+   for h being Element of F_Complex holds h * e = h & e * h = h;
    hence thesis by GROUP_1:def 5;
   end;
 
-Lm2':
+Lm2:
   1.F_Complex = 1r by Def1;
 
   registration
@@ -154,27 +139,19 @@ Lm2':
       reconsider x1=x as Element of COMPLEX by Def1;
       reconsider y=-x1 as Element of F_Complex by Def1;
       take y;
-      thus x + y = addcomplex.(x1,y) by Def1
-         .= x1+ -x1 by BINOP_2:def 3
-         .= 0.F_Complex by Def1;
+      thus x + y = 0.F_Complex by Def1;
      end;
     thus F_Complex is Abelian
      proof
       let x,y be Element of F_Complex;
       reconsider x1=x ,y1=y as Element of COMPLEX by Def1;
-      thus x + y = addcomplex.(x1,y1) by Def1
-         .= y1 + x1 by BINOP_2:def 3
-         .= addcomplex.(y1,x1) by BINOP_2:def 3
-         .= y + x by Def1;
+      thus x + y = y + x;
      end;
     thus F_Complex is commutative
      proof
       let x,y be Element of F_Complex;
       reconsider x1=x ,y1=y as Element of COMPLEX by Def1;
-      thus x * y = multcomplex.(x1,y1) by Def1
-         .= y1 * x1 by BINOP_2:def 5
-         .= multcomplex.(y1,x1) by BINOP_2:def 5
-         .= y * x by Def1;
+      thus x * y = y * x;
      end;
     thus F_Complex is associative
      proof
@@ -235,20 +212,17 @@ Lm2':
       take y;
           x1<>0.F_Complex by A1;
       then A2: x1<>0c by Def1;
-      thus x * y =multcomplex.(x1,x1") by Def1
-         .=x1 * x1" by BINOP_2:def 5
-         .=1.F_Complex by  A2,COMPLEX1:def 7,XCMPLX_0:def 7,Lm2';
+      thus x * y =1.F_Complex by  A2,XCMPLX_0:def 7,Lm2;
      end;
     thus F_Complex is non degenerated
      proof
-A:    1.F_Complex = 1r by Def1;
       0.F_Complex = 0c by Def1;
-      hence 0.F_Complex <> 1.F_Complex by Lm2,COMPLEX1:12,15,A;
+      hence 0.F_Complex <> 1.F_Complex by Lm1;
      end;
    end;
   end;
 
-  theorem Th3:
+  theorem
    for x1,y1 be Element of F_Complex
    for x2,y2 be complex number st x1 = x2 & y1 = y2 holds
     x1 + y1 = x2 + y2
@@ -257,8 +231,7 @@ A:    1.F_Complex = 1r by Def1;
     let x2,y2 be complex number;
      reconsider x3=x2, y3=y2 as Element of COMPLEX by XCMPLX_0:def 2;
     assume x1 = x2 & y1 = y2;
-    hence x1 + y1 = addcomplex.(x3,y3) by Def1
-         .= x2 + y2 by BINOP_2:def 3;
+    hence x1 + y1 = x2 + y2;
    end;
 
   theorem Th4:
@@ -272,8 +245,7 @@ A:    1.F_Complex = 1r by Def1;
     reconsider x3 = x1 as Element of COMPLEX by Def1;
     reconsider x2 as Element of COMPLEX by XCMPLX_0:def 2;
     reconsider x'=-x2 as Element of F_Complex by Def1;
-        x1 + x' = x3 + -x2 by Th3
-       .= 0.F_Complex by A1,Def1;
+        x1 + x' = 0.F_Complex by A1,Def1;
     hence thesis by RLVECT_1:def 10;
     end;
 
@@ -286,11 +258,10 @@ A:    1.F_Complex = 1r by Def1;
     let x2,y2 be complex number;
     assume A1: x1 = x2 & y1 = y2;
     then A2: - y1 = -y2 by Th4;
-    thus x1 - y1 = x2 + (-y2) by A1,A2,Th3
-         .= x2 - y2;
+    thus x1 - y1 = x2 - y2 by A1,A2;
    end;
 
-  theorem Th6:
+  theorem
    for x1,y1 be Element of F_Complex
    for x2,y2 be complex number st x1 = x2 & y1 = y2 holds
     x1 * y1 = x2 * y2
@@ -299,8 +270,7 @@ A:    1.F_Complex = 1r by Def1;
     let x2,y2 be complex number;
      reconsider x3=x2, y3=y2 as Element of COMPLEX by XCMPLX_0:def 2;
     assume x1 = x2 & y1 = y2;
-    hence x1 * y1 = multcomplex.(x3,y3) by Def1
-         .= x2 * y2 by BINOP_2:def 5;
+    hence x1 * y1 = x2 * y2;
    end;
 
   theorem Th7:
@@ -315,8 +285,7 @@ A:    1.F_Complex = 1r by Def1;
     reconsider x3 = x1 as Element of COMPLEX by Def1;
     reconsider x4 = x2 as Element of COMPLEX by XCMPLX_0:def 2;
     reconsider x'= x4" as Element of F_Complex by Def1;
-        x1 * x' = x3 * x2" by Th6
-       .= 1.F_Complex by  A1,A2,COMPLEX1:def 7,XCMPLX_0:def 7,Lm2';
+        x1 * x' = 1.F_Complex by  A1,A2,XCMPLX_0:def 7,Lm2;
     hence x1" = x2" by A1,VECTSP_1:def 22;
    end;
 
@@ -331,23 +300,21 @@ A:    1.F_Complex = 1r by Def1;
     assume A1: x1 = x2 & y1 = y2;
     assume y1 <> 0.F_Complex;
     then A2: y1" = y2" by A1,Th7;
-    thus x1/y1 = x3 * y3" by A1,A2,Th6
-              .= x2/y2 by XCMPLX_0:def 9;
+    thus x1/y1 = x2/y2 by  A1,A2,XCMPLX_0:def 9;
    end;
 
   theorem Th9:
    0.F_Complex = 0c by Def1;
 
   theorem Th10:
-   1_F_Complex = 1r by Lm2;
+   1_F_Complex = 1r by Lm1;
 
   theorem
        1_F_Complex + 1_F_Complex <> 0.F_Complex
     proof
 A1:   1 = [*1,0*] by ARYTM_0:def 7;
-     then 1_F_Complex = [*1,0*] by Lm2,COMPLEX1:def 7;
-     then A2: 1_F_Complex + 1_F_Complex = addcomplex.([*1,0*],[*1,0*]) by Def1
-         .= 1+1 + 0*<i> by  BINOP_2:def 3,A1
+     then 1_F_Complex = [*1,0*] by Lm1;
+     then A2: 1_F_Complex + 1_F_Complex = 1+1 + 0*<i> by  A1
          .= [*1+1,0+0*] by COMPLEX1:27;
 A3: 0c = [*0,0*] by ARYTM_0:def 7;
     0.F_Complex = [*0,0*] by A3,Def1;
@@ -376,8 +343,7 @@ canceled 17;
      reconsider z'=z as Element of COMPLEX by Def1;
      A1: -1r = -1_F_Complex by Th4,Th10;
      thus -z = -z' by Th4
-            .= (-1r) * z' by COMPLEX1:def 7
-            .= (-1_F_Complex) * z by A1,Th6;
+            .= (-1_F_Complex) * z by A1;
     end;
 
 canceled 5;
@@ -388,8 +354,7 @@ canceled 5;
      reconsider z1'=z1,z2'=z2 as Element of COMPLEX by Def1;
          -z2 = -z2' by Th4;
      hence z1 - -z2 = z1'- -z2' by Th5
-             .= z1' + z2'
-             .= z1 + z2 by Th3;
+             .= z1 + z2;
     end;
 
 canceled 5;
@@ -398,8 +363,7 @@ canceled 5;
        z1 = z1 + z - z
     proof
      reconsider z1'=z1,z'=z as Element of COMPLEX by Def1;
-         z1 + z = z1' + z' by Th3;
-     hence z1 + z - z = z1' + z' - z' by Th5
+     thus z1 + z - z = z1' + z' - z' by Th5
                     .= z1;
     end;
 
@@ -408,8 +372,7 @@ canceled 5;
     proof
      reconsider z1'=z1,z'=z as Element of COMPLEX by Def1;
          z1 - z = z1' - z' by Th5;
-     hence z1 - z + z = z1' - z' + z' by Th3
-                    .= z1;
+     hence z1 - z + z = z1;
     end;
 
 canceled 4;
@@ -438,16 +401,16 @@ canceled 4;
                 z2 * z1 = 1.F_Complex;
      per cases by A2;
       suppose z1 * z2 = 1.F_Complex;
-      then z1' * z2' = 1.F_Complex by Th6;
+      then z1' * z2' = 1.F_Complex;
       then A3: z1' * z2' = 1r by Def1;
           z2" = z2'" by A1,Th7;
-      hence z1 = z2" by A1,A3,Th9,COMPLEX1:def 7,XCMPLX_0:def 7;
+      hence z1 = z2" by A1,A3,Th9,XCMPLX_0:def 7;
       end;
       suppose z2 * z1 = 1.F_Complex;
-      then z2' * z1' = 1.F_Complex by Th6;
+      then z2' * z1' = 1.F_Complex;
       then A4: z2' * z1' = 1r by Def1;
           z2" = z2'" by A1,Th7;
-      hence z1 = z2" by A1,A4,Th9,COMPLEX1:def 7,XCMPLX_0:def 7;
+      hence z1 = z2" by A1,A4,Th9,XCMPLX_0:def 7;
     end;                                    end;
 
   theorem
@@ -460,25 +423,25 @@ canceled 4;
      A3: z2" = z2'" by A1,Th7;
      per cases by A2;
       suppose z1 * z2 = z3;
-      then z1' * z2' = z3' by Th6;
+      then z1' * z2' = z3';
       then z1' = z3' * z2'" by A1,Th9,XCMPLX_1:204;
-      hence z1 = z3 * z2" & z1 = z2" * z3 by A3,Th6;
+      hence z1 = z3 * z2" & z1 = z2" * z3 by A3;
       end;
       suppose z2 * z1 = z3;
-      then z2' * z1' = z3' by Th6;
+      then z2' * z1' = z3';
       then z1' = z3' * z2'" by A1,Th9,XCMPLX_1:204;
-      hence z1 = z3 * z2" & z1 = z2" * z3 by A3,Th6;
+      hence z1 = z3 * z2" & z1 = z2" * z3 by A3;
     end;
     end;
 
   theorem
        (1.F_Complex)" = 1.F_Complex
     proof
-         1.F_Complex <> 0c by Def1,COMPLEX1:12,15;
+         1.F_Complex <> 0c by Def1;
      then 1.F_Complex <> 0.F_Complex by Def1;
      then A1: 1.F_Complex <> 0.F_Complex;
-         1.F_Complex = 1r" by Def1,COMPLEX1:def 7;
-     hence thesis by A1,Th7,COMPLEX1:def 7;
+         1.F_Complex = 1r" by Def1;
+     hence thesis by A1,Th7;
     end;
 
   theorem
@@ -491,10 +454,8 @@ canceled 4;
      A3: z1" = z1'" by A1,Th7;
      A4: z2" = z2'" by A2,Th7;
      A5: z1 * z2 <> 0.F_Complex by A1,A2,VECTSP_1:44;
-         z1 * z2 = z1' * z2' by Th6;
-     hence (z1 * z2)" = (z1' * z2')" by A5,Th7
-                     .= z1'" * z2'" by XCMPLX_1:205
-                     .= z1" * z2" by A3,A4,Th6;
+     thus (z1 * z2)" = (z1' * z2')" by A5,Th7
+                     .= z1" * z2" by  XCMPLX_1:205,A3,A4;
     end;
 
 canceled;
@@ -523,13 +484,10 @@ canceled;
      then A2: z1" = z1'" by Th7;
      assume A3: z2 <> 0.F_Complex;
      then A4: z2" = z2'" by Th7;
-     A5: z1 + z2 = z1' + z2' by Th3;
-A6: z1 * z2 <> 0.F_Complex by A1,A3,VECTSP_1:44;
-         z1 * z2 = z1' * z2' by Th6;
-     then A7: (z1 * z2)" = (z1' * z2')" by A6,Th7;
-     thus z1" + z2" = z1'" + z2'" by A2,A4,Th3
-                    .= (z1' + z2') * (z1' * z2')" by A1,A3,Th9,XCMPLX_1:213
-                    .= (z1 + z2) * (z1 * z2)" by A5,A7,Th6;
+A5: z1 * z2 <> 0.F_Complex by A1,A3,VECTSP_1:44;
+     A6: (z1 * z2)" = (z1' * z2')" by A5,Th7;
+     thus z1" + z2" = (z1 + z2) * (z1 * z2)" by  A1,A2,A3,A4,Th9,XCMPLX_1:213,
+A6;
     end;
 
   theorem
@@ -543,11 +501,9 @@ A6: z1 * z2 <> 0.F_Complex by A1,A3,VECTSP_1:44;
      then A4: z2" = z2'" by Th7;
      A5: z2 - z1 = z2' - z1' by Th5;
      A6: z1 * z2 <> 0.F_Complex by A1,A3,VECTSP_1:44;
-         z1 * z2 = z1' * z2' by Th6;
-     then A7: (z1 * z2)" = (z1' * z2')" by A6,Th7;
+     A7: (z1 * z2)" = (z1' * z2')" by A6,Th7;
      thus z1" - z2" = z1'" - z2'" by A2,A4,Th5
-                    .= (z2' - z1') * (z1' * z2')" by A1,A3,Th9,XCMPLX_1:214
-                    .= (z2 - z1) * (z1 * z2)" by A5,A7,Th6;
+                    .= (z2 - z1) * (z1 * z2)" by  A1,A3,Th9,XCMPLX_1:214,A5,A7;
     end;
 
 canceled;
@@ -559,7 +515,7 @@ canceled;
      assume A1: z <> 0.F_Complex;
      A2: 1.F_Complex = 1r by Def1;
      thus z" = z1" by A1,Th7
-            .= 1r / z1 by COMPLEX1:def 7,XCMPLX_1:217
+            .= 1r / z1 by XCMPLX_1:217
             .= (1.F_Complex) / z by A1,A2,Th8;
     end;
 
@@ -568,9 +524,8 @@ canceled;
     proof
      reconsider z1=z as Element of COMPLEX by Def1;
          1.F_Complex = 1r by Def1;
-     hence z / (1.F_Complex) = z1 / 1r by Th8,Th9,COMPLEX1:12,
-15
-                                      .= z by COMPLEX1:def 7;
+     hence z / (1.F_Complex) = z1 / 1r by Th8,Th9
+                                      .= z;
     end;
 
   theorem
@@ -579,7 +534,7 @@ canceled;
      reconsider z1=z as Element of COMPLEX by Def1;
      assume A1: z <> 0.F_Complex;
      hence z / z = z1 / z1 by Th8
-               .= 1r by A1,Th9,COMPLEX1:def 7,XCMPLX_1:60
+               .= 1r by A1,Th9,XCMPLX_1:60
                .= 1.F_Complex by Def1;
     end;
 
@@ -588,8 +543,7 @@ canceled;
     proof
      reconsider z1=z as Element of COMPLEX by Def1;
      assume z <> 0.F_Complex;
-     hence (0.F_Complex) / z = 0c / z1 by Th8,Th9
-                            .= 0.F_Complex by Th9;
+     thus (0.F_Complex) / z = 0.F_Complex by  Th9;
     end;
 
   theorem Th62:
@@ -610,26 +564,19 @@ canceled;
      reconsider z1'=z1,z2'=z2,z3'=z3,z4'=z4 as Element of COMPLEX by Def1;
      assume A1: z2 <> 0.F_Complex;
      assume A2: z4 <> 0.F_Complex;
-     A3: z1' * z3' = z1 * z3 by Th6;
-     A4: z2' * z4' = z2 * z4 by Th6;
-     A5: z2 * z4 <> 0.F_Complex by A1,A2,VECTSP_1:44;
-     A6: z1' / z2' = z1 / z2 by A1,Th8;
+     A3: z2 * z4 <> 0.F_Complex by A1,A2,VECTSP_1:44;
+     A4: z1' / z2' = z1 / z2 by A1,Th8;
          z3' / z4' = z3 / z4 by A2,Th8;
-     hence (z1 / z2) * (z3 / z4) = (z1' / z2') * (z3' / z4') by A6,Th6
-                       .= (z1' * z3') / (z2' * z4') by XCMPLX_1:77
-                       .= (z1 * z3) / (z2 * z4) by A3,A4,A5,Th8;
+     hence (z1 / z2) * (z3 / z4) = (z1' * z3') / (z2' * z4') by  A4,XCMPLX_1:77
+                       .= (z1 * z3) / (z2 * z4) by A3,Th8;
     end;
 
   theorem
        z2 <> 0.F_Complex implies z * (z1 / z2) = (z * z1) / z2
     proof
      reconsider z1'=z1,z2'=z2,z'=z as Element of COMPLEX by Def1;
-     assume A1: z2 <> 0.F_Complex;
-     A2: z' * z1' = z * z1 by Th6;
-         z1' / z2' = z1 / z2 by A1,Th8;
-     hence z * (z1 / z2) = z' * (z1' / z2') by Th6
-                       .= (z' * z1') / z2' by XCMPLX_1:75
-                       .= (z * z1) / z2 by A1,A2,Th8;
+     assume  z2 <> 0.F_Complex;
+     thus z * (z1 / z2) = (z * z1) / z2;
     end;
 
   theorem
@@ -640,7 +587,7 @@ canceled;
      assume A1: z2 <> 0.F_Complex;
      assume z1 / z2 = 1.F_Complex;
      then z1' / z2' = 1.F_Complex by A1,Th8;
-     then z1' / z2' = 1 by  Def1,COMPLEX1:def 7;
+     then z1' / z2' = 1 by  Def1;
      hence z1 = z2 by XCMPLX_1:58;
     end;
 
@@ -649,9 +596,8 @@ canceled;
     proof
      reconsider z1'=z1,z'=z as Element of COMPLEX by Def1;
      assume A1: z <> 0.F_Complex;
-     A2: z1' * z' = z1 * z by Th6;
      thus z1 = (z1' * z') / z' by A1,Th9,XCMPLX_1:90
-            .= (z1 * z) / z by A1,A2,Th8;
+            .= (z1 * z) / z by A1,Th8;
     end;
 
   theorem
@@ -691,8 +637,7 @@ canceled;
      then A2: z2" <> 0.F_Complex by VECTSP_1:74;
          z2" = z2'" by A1,Th7;
      hence z1 / z2" = z1' / z2'" by A2,Th8
-                  .= z1' * z2' by XCMPLX_1:221
-                  .= z1 * z2 by Th6;
+                  .= z1 * z2 by XCMPLX_1:221;
     end;
 
   theorem
@@ -703,11 +648,10 @@ canceled;
      assume A1: z1 <> 0.F_Complex;
      assume A2: z2 <> 0.F_Complex;
      then A3: z1 * z2 <> 0.F_Complex by A1,VECTSP_1:44;
-     A4: z1 * z2 = z1' * z2' by Th6;
          z1" = z1'" by A1,Th7;
      hence z1" / z2 = z1'" / z2' by A2,Th8
                    .= (z1' * z2')" by XCMPLX_1:223
-                   .= (z1 * z2)" by A3,A4,Th7;
+                   .= (z1 * z2)" by A3,Th7;
      end;
 
   theorem
@@ -719,11 +663,9 @@ canceled;
      assume A2: z2 <> 0.F_Complex;
      then A3: z1 * z2 <> 0.F_Complex by A1,VECTSP_1:44;
      A4: z1" = z1'" by A1,Th7;
-     A5: z1 * z2 = z1' * z2' by Th6;
          z' / z2' = z / z2 by A2,Th8;
-     hence z1"* (z / z2) = z1'"* (z' / z2') by A4,Th6
-                       .= z' / (z1' * z2') by XCMPLX_1:222
-                       .= z / (z1 * z2) by A3,A5,Th8;
+     hence z1"* (z / z2) = z' / (z1' * z2') by  A4,XCMPLX_1:222
+                       .= z / (z1 * z2) by A3,Th8;
     end;
 
   theorem
@@ -733,12 +675,10 @@ canceled;
      reconsider z1'=z1,z2'=z2,z'=z as Element of COMPLEX by Def1;
      assume A1: z <> 0.F_Complex;
      assume A2: z2 <> 0.F_Complex;
-     A3: z1 * z = z1' * z' by Th6;
-     A4: z2 * z = z2' * z' by Th6;
-     A5: z2 * z <> 0.F_Complex by A1,A2,VECTSP_1:44;
+     A3: z2 * z <> 0.F_Complex by A1,A2,VECTSP_1:44;
      thus (z1 / z2) = (z1' / z2') by A2,Th8
                    .= (z1' * z') / (z2' * z') by A1,Th9,XCMPLX_1:92
-                   .= (z1 * z) / (z2 * z) by A3,A4,A5,Th8;
+                   .= (z1 * z) / (z2 * z) by A3,Th8;
      hence thesis;
     end;
 
@@ -749,12 +689,11 @@ canceled;
      reconsider z1'=z1,z2'=z2,z3'=z3 as Element of COMPLEX by Def1;
      assume A1: z2 <> 0.F_Complex;
      assume A2: z3 <> 0.F_Complex;
-     A3: z2 * z3 = z2' * z3' by Th6;
-     A4: z2 * z3 <> 0.F_Complex by A1,A2,VECTSP_1:44;
-     A5: z1 / z2 = z1' / z2' by A1,Th8;
-     thus z1 / (z2 * z3) = z1' / (z2' * z3') by A3,A4,Th8
+     A3: z2 * z3 <> 0.F_Complex by A1,A2,VECTSP_1:44;
+     A4: z1 / z2 = z1' / z2' by A1,Th8;
+     thus z1 / (z2 * z3) = z1' / (z2' * z3') by A3,Th8
                         .= z1' / z2' / z3' by XCMPLX_1:79
-                        .= z1 / z2 / z3 by A2,A5,Th8;
+                        .= z1 / z2 / z3 by A2,A4,Th8;
     end;
 
   theorem
@@ -766,8 +705,7 @@ canceled;
      assume A2: z3 <> 0.F_Complex;
      then A3: z2 / z3 = z2' / z3' by Th8;
      A4: z2 / z3 <> 0.F_Complex by A1,A2,Th62;
-         z1 * z3 = z1' * z3' by Th6;
-     hence (z1 * z3) / z2 = (z1' * z3') / z2' by A1,Th8
+     thus (z1 * z3) / z2 = (z1' * z3') / z2' by A1,Th8
                         .= z1' / (z2' / z3') by XCMPLX_1:78
                         .= z1 / (z2 / z3) by A3,A4,Th8;
     end;
@@ -781,15 +719,13 @@ canceled;
      assume A1: z2 <> 0.F_Complex;
      assume A2: z3 <> 0.F_Complex;
      assume A3: z4 <> 0.F_Complex;
-     A4: z1 * z4 = z1' * z4' by Th6;
-     A5: z2 * z3 = z2' * z3' by Th6;
-     A6: z2 * z3 <> 0.F_Complex by A1,A2,VECTSP_1:44;
-     A7: z1 / z2 = z1' / z2' by A1,Th8;
-     A8: z3 / z4 = z3' / z4' by A3,Th8;
+     A4: z2 * z3 <> 0.F_Complex by A1,A2,VECTSP_1:44;
+     A5: z1 / z2 = z1' / z2' by A1,Th8;
+     A6: z3 / z4 = z3' / z4' by A3,Th8;
          z3 / z4 <> 0.F_Complex by A2,A3,Th62;
-     hence (z1 / z2) / (z3 / z4) = (z1' / z2') / (z3' / z4') by A7,A8,Th8
+     hence (z1 / z2) / (z3 / z4) = (z1' / z2') / (z3' / z4') by A5,A6,Th8
                    .= (z1' * z4') / (z2' * z3') by XCMPLX_1:85
-                   .= (z1 * z4) / (z2 * z3) by A4,A5,A6,Th8;
+                   .= (z1 * z4) / (z2 * z3) by A4,Th8;
     end;
 
   theorem
@@ -799,30 +735,21 @@ canceled;
      reconsider z1'=z1,z2'=z2,z3'=z3,z4'=z4 as Element of COMPLEX by Def1;
      assume A1: z2 <> 0.F_Complex;
      assume A2: z4 <> 0.F_Complex;
-     A3: z2 * z4 = z2' * z4' by Th6;
-     A4: z1 * z4 = z1' * z4' by Th6;
-         z3 * z2 = z3' * z2' by Th6;
-     then A5: z1 * z4 + z3 * z2 = z1' * z4' + z3' * z2' by A4,Th3;
-     A6: z2 * z4 <> 0.F_Complex by A1,A2,VECTSP_1:44;
-     A7: z1 / z2 = z1' / z2' by A1,Th8;
+     A3: z2 * z4 <> 0.F_Complex by A1,A2,VECTSP_1:44;
+     A4: z1 / z2 = z1' / z2' by A1,Th8;
          z3 / z4 = z3' / z4' by A2,Th8;
-     hence z1 / z2 + z3 / z4 = z1' / z2' + z3' / z4' by A7,Th3
-               .= (z1' * z4' + z3' * z2') / (z2' * z4') by A1,A2,Th9,
+     hence z1 / z2 + z3 / z4 = (z1' * z4' + z3' * z2') / (z2' * z4') by  A4,A1,
+A2,Th9,
 XCMPLX_1:117
-               .= (z1 * z4 + z3 * z2) / (z2 * z4) by A3,A5,A6,Th8;
+               .= (z1 * z4 + z3 * z2) / (z2 * z4) by A3,Th8;
     end;
 
   theorem
        z <> 0.F_Complex implies z1 / z + z2 / z = (z1 + z2) / z
     proof
      reconsider z1'=z1,z2'=z2,z'=z as Element of COMPLEX by Def1;
-     assume A1: z <> 0.F_Complex;
-     A2: z1 + z2 = z1' + z2' by Th3;
-     A3: z1 / z = z1' / z' by A1,Th8;
-         z2 / z = z2' / z' by A1,Th8;
-     hence z1 / z + z2 / z = z1' / z' + z2' / z' by A3,Th3
-                         .= (z1' + z2') / z' by XCMPLX_1:63
-                         .= (z1 + z2) / z by A1,A2,Th8;
+     assume  z <> 0.F_Complex;
+     thus z1 / z + z2 / z = (z1 + z2) / z;
     end;
 
   theorem
@@ -864,13 +791,11 @@ XCMPLX_1:117
      assume A1: z2 <> 0.F_Complex;
      assume A2: z4 <> 0.F_Complex;
      then A3: z1' / z2' = z1 / z2 & z3' / z4' = z3 / z4 by A1,Th8;
-     A4: z2' * z4' = z2 * z4 by Th6;
-     A5: z2 * z4 <> 0.F_Complex by A1,A2,VECTSP_1:44;
-         z1' * z4' = z1 * z4 & z3' * z2' = z3 * z2 by Th6;
-     then A6: z1 * z4 - z3 * z2 = z1' * z4' - z3' * z2' by Th5;
+     A4: z2 * z4 <> 0.F_Complex by A1,A2,VECTSP_1:44;
+     A5: z1 * z4 - z3 * z2 = z1' * z4' - z3' * z2' by Th5;
      thus z1 / z2 - z3 / z4 = z1' / z2' - z3' / z4' by A3,Th5
             .= (z1' * z4' - z3' * z2') / (z2' * z4') by A1,A2,Th9,XCMPLX_1:131
-            .= (z1 * z4 - z3 * z2) / (z2 * z4) by A4,A5,A6,Th8;
+            .= (z1 * z4 - z3 * z2) / (z2 * z4) by A4,A5,Th8;
     end;
 
   theorem
@@ -894,12 +819,12 @@ XCMPLX_1:117
      assume A2: z1 * z2 = z3 or z2 * z1 = z3;
      per cases by A2;
       suppose z1 * z2 = z3;
-      then z1' * z2' = z3' by Th6;
+      then z1' * z2' = z3';
       hence z1 = z3' / z2' by A1,Th9,XCMPLX_1:90
               .= z3 / z2 by A1,Th8;
       end;
       suppose z2 * z1 = z3;
-      then z2' * z1' = z3' by Th6;
+      then z2' * z1' = z3';
       hence z1 = z3' / z2' by A1,Th9,XCMPLX_1:90
               .= z3 / z2 by A1,Th8;
     end;
@@ -935,9 +860,7 @@ XCMPLX_1:117
        (z1 + z2)*' = z1*' + z2*'
     proof
      reconsider z1'=z1,z2'=z2 as Element of COMPLEX by Def1;
-         z1' + z2' = z1 + z2 by Th3;
-     hence (z1 + z2)*' = z1'*' + z2'*' by COMPLEX1:118
-                    .= z1*' + z2*' by Th3;
+     thus (z1 + z2)*' = z1*' + z2*' by COMPLEX1:118;
     end;
 
   theorem
@@ -962,9 +885,8 @@ XCMPLX_1:117
        (z1 * z2)*' = z1*' * z2*'
     proof
      reconsider z1'=z1,z2'=z2 as Element of COMPLEX by Def1;
-     z1' * z2' = z1 * z2 by Th6;
-     hence (z1 * z2)*' = z1'*' * z2'*' by COMPLEX1:121
-                    .= z1*' * z2*' by Th6;
+     thus (z1 * z2)*' = z1'*' * z2'*' by COMPLEX1:121
+                    .= z1*' * z2*';
     end;
 
   theorem
@@ -1021,9 +943,7 @@ canceled;
        |.z1 + z2.| <= |.z1.| + |.z2.|
     proof
      reconsider z1'=z1,z2'=z2 as Element of COMPLEX by Def1;
-         z1' + z2' = z1 + z2 by Th3;
-     then |.z1' + z2'.| = |.z1 + z2.|;
-     hence thesis by COMPLEX1:142;
+     thus thesis by COMPLEX1:142;
     end;
 
   theorem
@@ -1039,9 +959,7 @@ canceled;
        |.z1.| - |.z2.| <= |.z1 + z2.|
     proof
      reconsider z1'=z1,z2'=z2 as Element of COMPLEX by Def1;
-         z1' + z2' = z1 + z2 by Th3;
-     then |.z1' + z2'.| = |.z1 + z2.|;
-     hence thesis by COMPLEX1:144;
+     thus thesis by COMPLEX1:144;
     end;
 
   theorem
@@ -1122,8 +1040,7 @@ canceled;
        |.z1*z2.| = |.z1.|*|.z2.|
     proof
      reconsider z1'=z1,z2'=z2 as Element of COMPLEX by Def1;
-     z1' * z2' = z1 * z2 by Th6;
-     hence |.z1 * z2.| = |.z1.| * |.z2.| by COMPLEX1:151;
+     thus |.z1 * z2.| = |.z1.| * |.z2.| by COMPLEX1:151;
     end;
 
   theorem
@@ -1201,8 +1118,7 @@ A2: now let n be non empty Nat;
     assume
 A3:   P[n];
     (power F_Complex).(e,n+1) = p*e by GROUP_1:def 8
-        .= (e|^n)*e by A3,Th6
-        .= e|^(n+1) by NEWTON:11;
+        .= e|^(n+1) by  A3,NEWTON:11;
     hence P[n+1];
    end;
  thus for n being non empty Nat holds P[n] from NAT_1:sch 10(A1,A2);

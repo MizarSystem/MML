@@ -9,12 +9,11 @@ environ
  vocabularies FUNCT_1, BOOLE, TARSKI, RELAT_1, RELAT_2, WELLORD1, SUBSET_1,
       ORDERS_1, PARTFUN1, ORDERS_2, NAT_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, RELAT_2, FUNCT_1,
-      RELSET_1, PARTFUN1, WELLORD1, DOMAIN_1, STRUCT_0, PRE_TOPC, ORDERS_1;
- constructors RELAT_2, WELLORD1, PARTFUN1, DOMAIN_1, MEMBERED, ORDERS_1,
-      PRE_TOPC, NAT_D;
- registrations RELSET_1, STRUCT_0, PRE_TOPC, SUBSET_1, XBOOLE_0, ORDERS_1;
+      RELSET_1, PARTFUN1, WELLORD1, DOMAIN_1, STRUCT_0, ORDERS_1;
+ constructors RELAT_2, WELLORD1, PARTFUN1, DOMAIN_1, ORDERS_1, PRE_TOPC;
+ registrations XBOOLE_0, SUBSET_1, RELSET_1, ORDERS_1, STRUCT_0, PARTFUN1;
  requirements BOOLE, SUBSET;
- definitions RELAT_2, TARSKI, WELLORD1, STRUCT_0, XBOOLE_0, ORDERS_1;
+ definitions RELAT_1, RELAT_2, TARSKI, WELLORD1, STRUCT_0, XBOOLE_0, ORDERS_1;
  theorems RELAT_1, RELAT_2, TARSKI, WELLORD1, ZFMISC_1, STRUCT_0, XBOOLE_0,
       XBOOLE_1, PARTFUN1, ORDERS_1;
  schemes XBOOLE_0;
@@ -38,8 +37,10 @@ registration
 end;
 
 definition let A be RelStr;
- canceled 3;
+ canceled 2;
 
+ attr A is total means :Def3:
+  the InternalRel of A is total;
  attr A is reflexive means :Def4:
   the InternalRel of A is_reflexive_in the carrier of A;
  attr A is transitive means :Def5:
@@ -49,7 +50,7 @@ definition let A be RelStr;
 end;
 
 registration
- cluster non empty reflexive transitive antisymmetric strict RelStr;
+ cluster non empty reflexive transitive antisymmetric strict total RelStr;
  existence
   proof consider A being non empty set;
     consider R being Order of A;
@@ -62,7 +63,20 @@ A1:  field R = the carrier of L by ORDERS_1:97;
                                 by A1,RELAT_2:def 16;
    thus the InternalRel of L is_antisymmetric_in the carrier of L
                                                 by A1,RELAT_2:def 12;
-   thus thesis;
+   thus L is strict;
+   thus the InternalRel of L is total;
+  end;
+end;
+
+registration
+  cluster reflexive -> total RelStr;
+  coherence
+  proof
+    let L be RelStr;
+    assume L is reflexive;
+    then the InternalRel of L is_reflexive_in the carrier of L by Def4;
+    then dom the InternalRel of L = the carrier of L by ORDERS_1:98;
+    hence the InternalRel of L is total by PARTFUN1:def 4;
   end;
 end;
 
@@ -70,34 +84,75 @@ definition
   mode Poset is reflexive transitive antisymmetric RelStr;
 end;
 
-registration let A be Poset;
- cluster the InternalRel of A -> total reflexive antisymmetric transitive;
+registration let A be total RelStr;
+ cluster the InternalRel of A -> total;
+ coherence by Def3;
+end;
+
+registration let A be reflexive RelStr;
+ cluster the InternalRel of A -> reflexive;
  coherence
   proof set R = the InternalRel of A;
-A1:  R is_reflexive_in the carrier of A by Def4;
+  R is_reflexive_in the carrier of A by Def4;
 then A2:  field R = the carrier of A by ORDERS_1:98;
-      dom R = the carrier of A by A1,ORDERS_1:98;
-   hence the InternalRel of A is total by PARTFUN1:def 4;
       the InternalRel of A is_reflexive_in the carrier of A by Def4;
    hence the InternalRel of A is reflexive by A2,RELAT_2:def 9;
+  end;
+end;
+
+registration let A be total antisymmetric RelStr;
+ cluster the InternalRel of A -> antisymmetric;
+ coherence
+  proof set R = the InternalRel of A;
+ A1:  field R = the carrier of A by ORDERS_1:97;
       the InternalRel of A is_antisymmetric_in the carrier of A by Def6;
-   hence the InternalRel of A is antisymmetric by A2,RELAT_2:def 12;
+   hence the InternalRel of A is antisymmetric by A1,RELAT_2:def 12;
+  end;
+end;
+
+registration let A be total transitive RelStr;
+ cluster the InternalRel of A -> transitive;
+ coherence
+  proof set R = the InternalRel of A;
+ A1:  field R = the carrier of A by ORDERS_1:97;
       the InternalRel of A is_transitive_in the carrier of A by Def5;
-   hence the InternalRel of A is transitive by A2,RELAT_2:def 16;
+   hence the InternalRel of A is transitive by A1,RELAT_2:def 16;
   end;
 end;
 
 registration
  let X be set;
- let O be Order of X;
- cluster RelStr(#X,O#) -> reflexive transitive antisymmetric;
+ let O be total reflexive Relation of X;
+ cluster RelStr(#X,O#) -> reflexive;
  coherence
   proof set A = RelStr(#X,O#);
       field O = X by ORDERS_1:97;
-   hence the InternalRel of A is_reflexive_in the carrier of A &
-    the InternalRel of A is_transitive_in the carrier of A &
-    the InternalRel of A is_antisymmetric_in the carrier of A
-          by RELAT_2:def 9,def 12,def 16;
+   hence the InternalRel of A is_reflexive_in the carrier of A
+          by RELAT_2:def 9;
+  end;
+end;
+
+registration
+ let X be set;
+ let O be total transitive Relation of X;
+ cluster RelStr(#X,O#) -> transitive;
+ coherence
+  proof set A = RelStr(#X,O#);
+      field O = X by ORDERS_1:97;
+   hence the InternalRel of A is_transitive_in the carrier of A
+          by RELAT_2:def 16;
+  end;
+end;
+
+registration
+ let X be set;
+ let O be total antisymmetric Relation of X;
+ cluster RelStr(#X,O#) -> antisymmetric;
+ coherence
+  proof set A = RelStr(#X,O#);
+      field O = X by ORDERS_1:97;
+   hence the InternalRel of A is_antisymmetric_in the carrier of A
+          by RELAT_2:def 12;
   end;
 end;
 
@@ -1476,7 +1531,7 @@ theorem Th107:
        then [x,x] in P by XBOOLE_0:def 3;
        then x in dom P & x in rng P by RELAT_1:def 4,def 5;
        then x in dom P \/ rng P by XBOOLE_0:def 2;
-     hence thesis by RELAT_1:def 6;
+     hence thesis;
     end;
   end;
 

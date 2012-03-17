@@ -11,9 +11,7 @@
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
-<ArticleID name="XXREAL_0"/>
 <ArticleID name="XREAL_0"/>
-<ArticleID name="MEMBERED"/>
 <ArticleID name="COMPLEX1"/>
 </Signature>
 <FCluster>
@@ -24,13 +22,11 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="59">
+<Func kind="K" nr="55">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="15"/>
 <Adjective nr="16"/>
-<Adjective nr="19"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -41,27 +37,18 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="60">
+<Func kind="K" nr="56">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="15"/>
 <Adjective nr="16"/>
-<Adjective nr="19"/>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="63"/>
+<Func kind="K" nr="59"/>
 <Cluster>
 <Adjective nr="7"/>
-<Adjective nr="15"/>
-<Adjective nr="20"/>
-<Adjective nr="21"/>
-<Adjective nr="22"/>
-<Adjective nr="23"/>
-<Adjective nr="24"/>
-<Adjective nr="25"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -72,13 +59,12 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="74">
+<Func kind="K" nr="70">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="15"/>
 <Adjective nr="16"/>
-<Adjective nr="19"/>
 </Cluster>
 </FCluster>
 </Registrations>

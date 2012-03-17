@@ -9,11 +9,11 @@ environ
 
  vocabularies BOOLE, NORMSP_1, FUNCT_1, RLVECT_1, RELAT_1, FINSEQ_1, ALGSEQ_1,
       FUNCOP_1, NAT_1, GR_CY_1;
- notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, NAT_1, NAT_D, RELAT_1, FUNCT_1,
-      CARD_1, FUNCOP_1, RLVECT_1, STRUCT_0, FUNCT_2, XXREAL_0;
- constructors FUNCOP_1, XXREAL_0, XREAL_0, NAT_1, RLVECT_1, NAT_D;
- registrations STRUCT_0, XREAL_0, RELSET_1, ARYTM_3, XBOOLE_0, NUMBERS,
-      ORDINAL1, FUNCOP_1, XXREAL_0;
+ notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, NAT_1, RELAT_1, FUNCT_1,
+      CARD_1, FUNCOP_1, STRUCT_0, FUNCT_2, XXREAL_0;
+ constructors FUNCOP_1, XXREAL_0, XREAL_0, NAT_1, RLVECT_1;
+ registrations XBOOLE_0, ORDINAL1, RELSET_1, FUNCOP_1, ARYTM_3, XREAL_0,
+      STRUCT_0;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, XBOOLE_0, CARD_1;
  theorems TARSKI, ZFMISC_1, FUNCT_1, FUNCT_2, REAL_1, NAT_1, FUNCOP_1, XREAL_1,
@@ -25,27 +25,25 @@ begin
  reserve i,k,l,m,n for Element of NAT,
          x for set;
 
-Lm1: x in Segm n implies x is Element of NAT;
-
 canceled 9;
 
-theorem Th10:
+theorem
   k in Segm n iff k < n by CARD_1:98;
 
 theorem
- Th11: Segm 0 = {} & Segm 1 = { 0 } & Segm 2 = { 0,1 }
+  Segm 0 = {} & Segm 1 = { 0 } & Segm 2 = { 0,1 }
                  by CARD_1:87,88;
 
 theorem
- Th12: n in Segm(n+1) by CARD_1:99;
+  n in Segm(n+1) by CARD_1:99;
 
 theorem
- Th13: n <= m iff Segm n c= Segm m by CARD_1:100;
+  n <= m iff Segm n c= Segm m by CARD_1:100;
 
 theorem
- Th14: Segm n = Segm m implies n = m;
+  Segm n = Segm m implies n = m;
 
-theorem Th15:
+theorem
   k <= n implies
     Segm k = Segm k /\ Segm n & Segm k = Segm n /\ Segm k by CARD_1:101;
 
@@ -53,8 +51,7 @@ theorem
   (Segm k = Segm k /\ Segm n or Segm k = Segm n /\ Segm k)
     implies k <= n by CARD_1:101;
 
-theorem
-  Segm n \/ { n } = Segm (n+1) by CARD_1:102;
+canceled;
 
 ::
 ::    Algebraic Sequences
@@ -92,7 +89,7 @@ definition let R,p,k;
   for i st i>=k holds p.i=0.R;
 end;
 
-Lm2:
+Lm1:
   ex m st m is_at_least_length_of p
     proof
       consider n such that A1:for i st i >= n holds p.i = 0.R by Def2;
@@ -100,12 +97,12 @@ Lm2:
       thus thesis by A1,Def3;
     end;
 
-Lm3:
+Lm2:
   ex k st k is_at_least_length_of p
      & (for n st n is_at_least_length_of p holds k<=n)
     proof
       defpred P[Element of NAT] means $1 is_at_least_length_of p;
-      A1:ex m st P[m] by Lm2;
+      A1:ex m st P[m] by Lm1;
       ex k st P[k]
         & (for n st P[n] holds k<=n) from NAT_1:sch 5(A1);
       then consider k such that A2:k is_at_least_length_of p
@@ -114,7 +111,7 @@ Lm3:
       thus thesis by A2;
     end;
 
-Lm4:
+Lm3:
   (k is_at_least_length_of p)
   & (for m st m is_at_least_length_of p holds k<=m)
   & (l is_at_least_length_of p)
@@ -133,8 +130,8 @@ definition let R,p;
   func len p -> Element of NAT means :Def4:
    it is_at_least_length_of p
     & for m st m is_at_least_length_of p holds it<=m;
-  existence by Lm3;
-  uniqueness by Lm4;
+  existence by Lm2;
+  uniqueness by Lm3;
 end;
 
 canceled 4;
@@ -311,7 +308,7 @@ A6:      now assume x<>0.R;
    end;
 end;
 
-Lm5:
+Lm4:
   p=<%0.R%> implies len p = 0
     proof
       A1:0+1=1;
@@ -327,11 +324,11 @@ canceled;
 theorem Th31:
   p=<%0.R%> iff len p = 0
     proof
-      thus p=<%0.R%> implies len p = 0 by Lm5;
+      thus p=<%0.R%> implies len p = 0 by Lm4;
       thus len p=0 implies p=<%0.R%>
       proof
         assume A1:len p=0;
-        then A2:len p=len <%0.R%> by Lm5;
+        then A2:len p=len <%0.R%> by Lm4;
         for k st k < len p holds p.k = <%0.R%>.k by A1,NAT_1:2;
         hence thesis by A2,Th28;
       end;

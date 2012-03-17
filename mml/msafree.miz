@@ -10,16 +10,16 @@ environ
       REALSET1, BOOLE, ZF_REFLE, PROB_1, TARSKI, AMI_1, MSUALG_1, FREEALG,
       PRELAMB, ALG_1, FINSEQ_1, QC_LANG1, LANG1, DTCONSTR, TREES_4, TREES_2,
       TREES_3, FUNCT_6, UNIALG_2, GROUP_6, MSUALG_3, MSAFREE, FINSEQ_4,
-      MCART_1, NAT_1;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, NAT_1, NAT_D,
-      RELAT_1, RELSET_1, STRUCT_0, FUNCT_1, MCART_1, FUNCT_2, FINSEQ_1,
-      TREES_2, CARD_3, FINSEQ_4, LANG1, TREES_3, FUNCT_6, TREES_4, DTCONSTR,
-      PBOOLE, MSUALG_1, MSUALG_2, MSUALG_3, XXREAL_0;
- constructors FRAENKEL, XXREAL_0, NAT_1, CARD_3, FINSEQOP, FINSEQ_4, DTCONSTR,
-      MSUALG_3, NAT_D;
- registrations SUBSET_1, FUNCT_1, FINSEQ_1, PBOOLE, TREES_3, TREES_4, DTCONSTR,
-      MSUALG_1, MSUALG_3, RELSET_1, STRUCT_0, XBOOLE_0, ARYTM_3, ORDINAL1,
-      FUNCOP_1, FRAENKEL, XREAL_0, RELAT_1;
+      MCART_1, NAT_1, TREES_1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, NAT_1, RELAT_1,
+      RELSET_1, STRUCT_0, FUNCT_1, MCART_1, FUNCT_2, FINSEQ_1, XXREAL_0,
+      PBOOLE, TREES_2, CARD_3, FINSEQ_4, LANG1, FUNCT_6, TREES_3, TREES_4,
+      DTCONSTR, MSUALG_1, MSUALG_2, MSUALG_3;
+ constructors FRAENKEL, XXREAL_0, NAT_1, NAT_D, CARD_3, FINSEQOP, FINSEQ_4,
+      DTCONSTR, MSUALG_3;
+ registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCOP_1,
+      ARYTM_3, FRAENKEL, XREAL_0, FINSEQ_1, PBOOLE, TREES_2, TREES_3, TREES_4,
+      STRUCT_0, DTCONSTR, MSUALG_1, MSUALG_3;
  requirements NUMERALS, BOOLE, SUBSET;
  definitions TARSKI, XBOOLE_0, PBOOLE, MSUALG_3;
  theorems TARSKI, FUNCT_1, FUNCT_2, MCART_1, ZFMISC_1, PBOOLE, CARD_3,
@@ -174,8 +174,8 @@ for x be set holds x in it iff ex a be set st a in X.i & x = [a,i];
 end;
 
 notation let I be set,
-               X be ManySortedSet of I;
- synonym coprod X for disjoin X;
+             X be ManySortedSet of I;
+  synonym coprod X for disjoin X;
 end;
 
 definition let I be set,
@@ -184,7 +184,7 @@ definition let I be set,
    for i be set st i in I holds it.i = coprod(i,X);
  coherence
   proof
-       dom X = I by PBOOLE:def 3;
+   dom X = I by PBOOLE:def 3;
    hence dom disjoin X = I by CARD_3:def 3;
   end;
  compatibility
@@ -208,7 +208,7 @@ A5:     x = [a,b] by A3,ZFMISC_1:def 2;
       given a being set such that
 A6:    a in X.i and
 A7:    x = [a,i];
-          i in {i} by TARSKI:def 1;
+      i in {i} by TARSKI:def 1;
       hence x in IT.i by A3,A6,A7,ZFMISC_1:def 2;
      end;
     hence IT.i = coprod(i,X) by A2,Def2;
@@ -226,7 +226,7 @@ A13:   now let a be set;
         then consider b being set such that
 A14:     b in X.x and
 A15:     a = [b,x] by A12,Def2;
-           x in {x} by TARSKI:def 1;
+        x in {x} by TARSKI:def 1;
        hence a in [:X.x,{x}:] by A14,A15,ZFMISC_1:def 2;
       end;
       assume a in [:X.x,{x}:];
@@ -306,8 +306,8 @@ begin
 :: Free Many Sorted Universal Algebra - General Notions
 ::
 
-reserve S for non void non empty ManySortedSign,
-        U0 for MSAlgebra over S;
+ reserve S for non void non empty ManySortedSign,
+         U0 for MSAlgebra over S;
 
 definition
  let S be non void non empty ManySortedSign,
@@ -531,8 +531,7 @@ reserve S for non void non empty ManySortedSign,
          X for ManySortedSet of the carrier of S,
          o for OperSymbol of S,
          b for Element of
-            ([:the OperSymbols of S,{the carrier of S}:] \/ Union (coprod X))*
-;
+       ([:the OperSymbols of S,{the carrier of S}:] \/ Union (coprod X))*;
 
 theorem Th5:
                [[o,the carrier of S],b] in REL(X)
@@ -594,12 +593,15 @@ end;
 
 theorem Th6:
 for S be non void non empty ManySortedSign,
-    X be non-empty ManySortedSet of the carrier of S holds
+    X be ManySortedSet of the carrier of S holds
+NonTerminals(DTConMSA(X))c= [:the OperSymbols of S,{the carrier of S}:] &
+Union (coprod X) c= Terminals (DTConMSA(X)) &
+(X is non-empty implies
 NonTerminals(DTConMSA(X)) = [:the OperSymbols of S,{the carrier of S}:] &
-Terminals (DTConMSA(X)) = Union (coprod X)
+Terminals (DTConMSA(X)) = Union (coprod X))
   proof
    let S be non void non empty ManySortedSign,
-       X be non-empty ManySortedSet of the carrier of S;
+       X be ManySortedSet of the carrier of S;
    A1: Union(coprod X) misses [:the OperSymbols of S,{the carrier of S}:]
          by Th4;
    set D = DTConMSA(X),
@@ -625,88 +627,96 @@ A3: NonTerminals D c= [:the OperSymbols of S,{the carrier of S}:]
     hence thesis by A4,Def9;
    end;
    thus
-A7:  [:the OperSymbols of S,{the carrier of S}:] c= NonTerminals D
+A7:  Union (coprod X) c= Terminals (DTConMSA(X))
+   proof
+     let x be set; assume A8: x in Union (coprod X);
+     then x in A by XBOOLE_0:def 2;
+     then x in Terminals D or x in NonTerminals D by A2,XBOOLE_0:def 2;
+     hence thesis by A1,A3,A8,XBOOLE_0:3;
+   end;
+   assume
+A9:  X is non-empty;
+   thus NonTerminals D c= [:the OperSymbols of S,{the carrier of S}:] by A3;
+   thus
+A10:  [:the OperSymbols of S,{the carrier of S}:] c= NonTerminals D
     proof
      let x be set; assume
-A8:   x in [:the OperSymbols of S,{the carrier of S}:];
+A11:   x in [:the OperSymbols of S,{the carrier of S}:];
      then consider o being OperSymbol of S, x2 being Element of {the carrier of
 S}
      such that
-A9:   x = [o,x2] by DOMAIN_1:9;
-A10:   the carrier of S = x2 by TARSKI:def 1;
+A12:   x = [o,x2] by DOMAIN_1:9;
+A13:   the carrier of S = x2 by TARSKI:def 1;
      then reconsider xa = [o,the carrier of S]
-       as Element of (the carrier of D) by A8,A9,XBOOLE_0:def 2;
+       as Element of (the carrier of D) by A11,A12,XBOOLE_0:def 2;
      set O = the_arity_of o;
      defpred P[set,set] means $2 in coprod (O.$1,X);
-     A11: for a be set st a in Seg len O ex b be set st P[a,b]
+     A14: for a be set st a in Seg len O ex b be set st P[a,b]
       proof
        let a be set; assume
           a in Seg len O;
        then a in dom O by FINSEQ_1:def 3;
-       then A12: O.a in rng O & rng O c= the carrier of S
+       then A15: O.a in rng O & rng O c= the carrier of S
                     by FINSEQ_1:def 4,FUNCT_1:def 5;
-       then X.(O.a) is non empty by PBOOLE:def 16;
+       then X.(O.a) is non empty by A9,PBOOLE:def 16;
        then consider x be set such that
-       A13: x in X.(O.a) by XBOOLE_0:def 1;
+       A16: x in X.(O.a) by XBOOLE_0:def 1;
        take y = [x,O.a];
-       thus y in coprod(O.a,X) by A12,A13,Def2;
+       thus y in coprod(O.a,X) by A15,A16,Def2;
       end;
      consider b be Function such that
-     A14: dom b = Seg len O &
-     for a be set st a in Seg len O holds P[a,b.a] from CLASSES1:sch 1(A11);
-     reconsider b as FinSequence by A14,FINSEQ_1:def 2;
+     A17: dom b = Seg len O &
+     for a be set st a in Seg len O holds P[a,b.a] from CLASSES1:sch 1(A14);
+     reconsider b as FinSequence by A17,FINSEQ_1:def 2;
         rng b c= A
       proof let a be set; assume a in rng b;
        then consider c be set such that
-       A15: c in dom b & b.c = a by FUNCT_1:def 5;
-       A16: a in coprod(O.c,X) by A14,A15;
+       A18: c in dom b & b.c = a by FUNCT_1:def 5;
+       A19: a in coprod(O.c,X) by A17,A18;
           dom O = Seg len O by FINSEQ_1:def 3;
-       then A17: O.c in rng O & rng O c= the carrier of S
-           by A14,A15,FINSEQ_1:def 4,FUNCT_1:def 5;
+       then A20: O.c in rng O & rng O c= the carrier of S
+           by A17,A18,FINSEQ_1:def 4,FUNCT_1:def 5;
           dom coprod(X) = the carrier of S by PBOOLE:def 3;
-       then (coprod(X)).(O.c) in rng coprod(X) by A17,FUNCT_1:def 5;
-       then coprod(O.c,X) in rng coprod(X) by A17,Def3;
-       then a in union rng coprod(X) by A16,TARSKI:def 4;
+       then (coprod(X)).(O.c) in rng coprod(X) by A20,FUNCT_1:def 5;
+       then coprod(O.c,X) in rng coprod(X) by A20,Def3;
+       then a in union rng coprod(X) by A19,TARSKI:def 4;
        then a in Union coprod(X) by CARD_3:def 4;
        hence thesis by XBOOLE_0:def 2;
       end;
      then reconsider b as FinSequence of A by FINSEQ_1:def 4;
      reconsider b as Element of A* by FINSEQ_1:def 11;
-     A18: len b = len O by A14,FINSEQ_1:def 3;
+     A21: len b = len O by A17,FINSEQ_1:def 3;
          now let c be set;
-       assume A19: c in dom b;
-       then A20: P[c,b.c] by A14;
+       assume A22: c in dom b;
+       then A23: P[c,b.c] by A17;
           dom O = Seg len O by FINSEQ_1:def 3;
-       then A21: O.c in rng O & rng O c= the carrier of S
-           by A14,A19,FINSEQ_1:def 4,FUNCT_1:def 5;
+       then A24: O.c in rng O & rng O c= the carrier of S
+           by A17,A22,FINSEQ_1:def 4,FUNCT_1:def 5;
           dom coprod(X) = the carrier of S by PBOOLE:def 3;
-       then (coprod(X)).(O.c) in rng coprod(X) by A21,FUNCT_1:def 5;
-       then coprod(O.c,X) in rng coprod(X) by A21,Def3;
-       then b.c in union rng coprod(X) by A20,TARSKI:def 4;
+       then (coprod(X)).(O.c) in rng coprod(X) by A24,FUNCT_1:def 5;
+       then coprod(O.c,X) in rng coprod(X) by A24,Def3;
+       then b.c in union rng coprod(X) by A23,TARSKI:def 4;
        then b.c in Union coprod(X) by CARD_3:def 4;
        hence b.c in [:the OperSymbols of S,{the carrier of S}:] implies
         for o1 be OperSymbol of S st [o1,the carrier of S] = b.c holds
        the_result_sort_of o1 = O.c by A1,XBOOLE_0:3;
        assume b.c in Union (coprod X);
-       thus b.c in coprod(O.c,X) by A14,A19;
+       thus b.c in coprod(O.c,X) by A17,A22;
       end;
-     then [xa,b] in REL(X) by A18,Th5;
+     then [xa,b] in REL(X) by A21,Th5;
      then xa ==> b by LANG1:def 1;
      then xa in { t where t is Symbol of D: ex n be FinSequence st t ==> n};
-     hence thesis by A9,A10,LANG1:def 3;
+     hence thesis by A12,A13,LANG1:def 3;
     end;
    thus Terminals D c= Union (coprod X)
       proof
-       let x be set; assume A22: x in Terminals D;
-       then A23: x in A by A2,XBOOLE_0:def 2;
+       let x be set; assume A25: x in Terminals D;
+       then A26: x in A by A2,XBOOLE_0:def 2;
            not x in [:the OperSymbols of S,{the carrier of S}:]
-          by A2,A7,A22,XBOOLE_0:3;
-       hence thesis by A23,XBOOLE_0:def 2;
+          by A2,A10,A25,XBOOLE_0:3;
+       hence thesis by A26,XBOOLE_0:def 2;
       end;
-   let x be set; assume A24: x in Union (coprod X);
-    then x in A by XBOOLE_0:def 2;
-     then x in Terminals D or x in NonTerminals D by A2,XBOOLE_0:def 2;
-   hence thesis by A1,A3,A24,XBOOLE_0:3;
+   thus thesis by A7;
   end;
 
 reserve x for set;
@@ -837,41 +847,46 @@ end;
 
 theorem Th7:
 for S be non void non empty ManySortedSign,
-    X be non-empty ManySortedSet of the carrier of S,
+    X be ManySortedSet of the carrier of S,
     t be set holds
-               t in Terminals DTConMSA(X)
-                          iff
- ex s be SortSymbol of S, x be set st x in X.s & t = [x,s]
+      (t in Terminals DTConMSA(X) & X is non-empty
+                  implies
+       ex s be SortSymbol of S, x be set st x in X.s & t = [x,s]) &
+     for s be SortSymbol of S, x be set st x in X.s holds
+         [x,s] in Terminals DTConMSA(X)
  proof
   let S be non void non empty ManySortedSign,
-      X be non-empty ManySortedSet of the carrier of S,
+      X be ManySortedSet of the carrier of S,
       t be set;
   set D = DTConMSA(X);
-  A1: Terminals D = Union (coprod X) by Th6
-                 .= union rng (coprod X) by CARD_3:def 4;
-  thus t in Terminals D implies
+A1: Union (coprod X) = union rng (coprod X) by CARD_3:def 4;
+  thus t in Terminals D & X is non-empty implies
        ex s be SortSymbol of S, x be set st x in X.s & t = [x,s]
    proof
-    assume t in Terminals D;
+    assume
+A2:   t in Terminals D & X is non-empty; then
+   Terminals D = Union (coprod X) by Th6;
     then consider A be set such that
-    A2: t in A & A in rng(coprod X) by A1,TARSKI:def 4;
+    A3: t in A & A in rng(coprod X) by A2,A1,TARSKI:def 4;
     consider s be set such that
-    A3: s in dom (coprod X) & (coprod X).s = A by A2,FUNCT_1:def 5;
-    reconsider s as SortSymbol of S by A3,PBOOLE:def 3;
+    A4: s in dom (coprod X) & (coprod X).s = A by A3,FUNCT_1:def 5;
+    reconsider s as SortSymbol of S by A4,PBOOLE:def 3;
     take s;
        (coprod X).s = coprod(s,X) by Def3;
     then consider x be set such that
-    A4: x in X.s & t = [x,s] by A2,A3,Def2;
+    A5: x in X.s & t = [x,s] by A3,A4,Def2;
     take x;
-    thus thesis by A4;
+    thus thesis by A5;
    end;
-  given s be SortSymbol of S, x be set such that
-  A5: x in X.s & t = [x,s];
-     t in coprod(s,X) by A5,Def2;
-  then A6: t in (coprod X).s by Def3;
+  let s be SortSymbol of S, x be set such that
+  A6: x in X.s; set t = [x,s];
+     t in coprod(s,X) by A6,Def2;
+  then A7: t in (coprod X).s by Def3;
      dom(coprod X) = the carrier of S by PBOOLE:def 3;
   then (coprod X).s in rng (coprod X) by FUNCT_1:def 5;
-  hence thesis by A1,A6,TARSKI:def 4;
+  then t in Union (coprod X) &
+     Union (coprod X) c= Terminals (DTConMSA(X)) by Th6,A7,A1,TARSKI:def 4;
+  hence thesis;
  end;
 
 definition
@@ -2409,7 +2424,6 @@ proof
    end;
  A51: for t being DecoratedTree of the carrier of D
        st t in TS(D) holds P[t] from DTCONSTR:sch 7(A4,A16);
-
     for s be set st s in the carrier of S holds
          h.s is Function of (the Sorts of FA).s, (the Sorts of U1).s
   proof

@@ -8,17 +8,17 @@
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
-<ArticleID name="MCART_1"/>
 <ArticleID name="RELSET_1"/>
+<ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="STRUCT_0"/>
+<ArticleID name="LATTICES"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="STRUCT_0"/>
-<ArticleID name="LATTICES"/>
-<ArticleID name="PARTFUN1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="UNIALG_1"/>
 <ArticleID name="UNIALG_2"/>
@@ -28,10 +28,10 @@
 <ArgTypes>
 <Typ kind="G" nr="8">
 <Cluster>
-<Adjective nr="25" value="false"/>
-<Adjective nr="54"/>
+<Adjective nr="12" value="false"/>
 <Adjective nr="55"/>
 <Adjective nr="56"/>
+<Adjective nr="57"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -47,12 +47,12 @@
 <ArgTypes>
 <Typ kind="G" nr="8">
 <Cluster>
-<Adjective nr="25" value="false"/>
-<Adjective nr="51"/>
-<Adjective nr="54"/>
+<Adjective nr="12" value="false"/>
+<Adjective nr="52"/>
 <Adjective nr="55"/>
 <Adjective nr="56"/>
-<Adjective nr="58"/>
+<Adjective nr="57"/>
+<Adjective nr="59"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -60,29 +60,21 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="25" value="false"/>
+<Adjective nr="12" value="false"/>
+<Adjective nr="21"/>
+<Adjective nr="28"/>
 <Adjective nr="33"/>
-<Adjective nr="34"/>
-<Adjective nr="35"/>
-<Adjective nr="36"/>
-<Adjective nr="37"/>
-<Adjective nr="38"/>
-<Adjective nr="39"/>
-<Adjective nr="40"/>
-<Adjective nr="43"/>
-<Adjective nr="44"/>
-<Adjective nr="45"/>
 </Cluster>
 </FCluster>
 <CCluster>
 <ArgTypes>
 <Typ kind="G" nr="8">
 <Cluster>
-<Adjective nr="25" value="false"/>
-<Adjective nr="54"/>
+<Adjective nr="12" value="false"/>
 <Adjective nr="55"/>
 <Adjective nr="56"/>
-<Adjective nr="58"/>
+<Adjective nr="57"/>
+<Adjective nr="59"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -92,7 +84,7 @@
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="58"/>
+<Adjective nr="59"/>
 </Cluster>
 </CCluster>
 </Registrations>

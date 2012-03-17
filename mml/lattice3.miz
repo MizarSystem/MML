@@ -12,9 +12,9 @@ environ
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, DOMAIN_1, STRUCT_0,
       FUNCT_1, FUNCT_2, BINOP_1, LATTICES, FILTER_0, LATTICE2, FILTER_1,
       RELAT_1, RELAT_2, RELSET_1, ORDERS_1, ORDERS_2;
- constructors DOMAIN_1, BINOP_1, ORDERS_2, LATTICE2, FILTER_1, NAT_D;
- registrations LATTICE2, ORDERS_2, RELSET_1, STRUCT_0, SUBSET_1, LATTICES,
-      XBOOLE_0;
+ constructors BINOP_1, DOMAIN_1, ORDERS_2, LATTICE2, FILTER_1;
+ registrations XBOOLE_0, SUBSET_1, RELSET_1, STRUCT_0, LATTICES, ORDERS_2,
+      LATTICE2;
  requirements SUBSET, BOOLE;
  definitions XBOOLE_0, TARSKI, LATTICES, RELAT_1, RELAT_2, ORDERS_2, STRUCT_0;
  theorems TARSKI, ENUMSET1, ZFMISC_1, FUNCT_1, FUNCT_2, BINOP_1, LATTICES,
@@ -82,17 +82,17 @@ end;
 registration let X; let x,y; let x',y' be set;
  identify x "\/" y with x' \/ y' when x = x', y = y';
  compatibility
-  proof 
+  proof
   reconsider x'' = x, y'' = y as Subset of X by Def1;
   assume A1: x = x' & y = y';
    thus x "\/" y = join(BooleLatt X).(x'',y'') .= x' \/ y' by A1,Def1;
   end;
  identify x "/\" y with x' /\ y' when x = x', y = y';
  compatibility
-  proof 
+  proof
    reconsider x'' = x, y'' = y as Subset of X by Def1;
-   assume A1:x = x' & y = y';
-   thus x "/\" y = met(BooleLatt X).(x'',y'') .= x' /\ y' by A1,Def1;
+   assume A2:x = x' & y = y';
+   thus x "/\" y = met(BooleLatt X).(x'',y'') .= x' /\ y' by A2,Def1;
   end;
 end;
 
@@ -880,11 +880,12 @@ definition
 
 notation
  let L be non empty LattStr, p be Element of L, X be set;
- synonym X is_great_than p for p is_less_than X; synonym p is_great_than X for
- X is_less_than p; end;
+ synonym X is_greater_than p for p is_less_than X; 
+ synonym p is_greater_than X for X is_less_than p; 
+end;
 
 theorem
-      for L being Lattice, p,q,r being Element of L holds
+  for L being Lattice, p,q,r being Element of L holds
    p is_less_than {q,r} iff p [= q"/\"r
   proof let L be Lattice, p,q,r be Element of L;
 A1:  q in {q,r} & r in {q,r} by TARSKI:def 2;
@@ -903,11 +904,11 @@ A2:  p [= q"/\"r;
 
 theorem
       for L being Lattice, p,q,r being Element of L holds
-  p is_great_than {q,r} iff q"\/"r [= p
+  p is_greater_than {q,r} iff q"\/"r [= p
   proof let L be Lattice, p,q,r be Element of L;
 A1:  q in {q,r} & r in {q,r} by TARSKI:def 2;
-   thus p is_great_than {q,r} implies q"\/"r [= p
-     proof assume p is_great_than {q,r};
+   thus p is_greater_than {q,r} implies q"\/"r [= p
+     proof assume p is_greater_than {q,r};
        then q [= p & r [= p by A1,Def17;
       hence thesis by FILTER_0:6;
      end;
@@ -935,12 +936,12 @@ definition let IT be non empty LattStr;
    holds b"/\"a [= c;
 
  attr IT is /\-distributive means
-       for X for a,b,c being Element of IT st X is_great_than a &
-   (for d being Element of IT st X is_great_than d holds d [= a)
+       for X for a,b,c being Element of IT st X is_greater_than a &
+   (for d being Element of IT st X is_greater_than d holds d [= a)
    & {b"\/"a' where a' is Element of IT: a' in
- X} is_great_than c &
+ X} is_greater_than c &
    for d being Element of IT st
-    {b"\/"a' where a' is Element of IT: a' in X} is_great_than d
+    {b"\/"a' where a' is Element of IT: a' in X} is_greater_than d
     holds d [= c
    holds c [= b"\/"a;
 end;
@@ -948,10 +949,10 @@ end;
 theorem
       for B being B_Lattice, a being Element of B holds
    X is_less_than a iff {b` where b is Element of B: b in X}
-    is_great_than a`
+    is_greater_than a`
   proof let B be B_Lattice, a be Element of B;
    set Y = {b` where b is Element of B: b in X};
-   thus X is_less_than a implies Y is_great_than a`
+   thus X is_less_than a implies Y is_greater_than a`
      proof assume
 A1:     for b being Element of B st b in X holds b [= a;
       let b be Element of B; assume
@@ -972,11 +973,11 @@ A3:  for b being Element of B st b in Y holds a` [= b;
 
 theorem Th24:
  for B being B_Lattice, a being Element of B holds
-   X is_great_than a iff {b` where b is Element of B: b in X}
+   X is_greater_than a iff {b` where b is Element of B: b in X}
     is_less_than a`
   proof let B be B_Lattice, a be Element of B;
    set Y = {b` where b is Element of B: b in X};
-   thus X is_great_than a implies Y is_less_than a`
+   thus X is_greater_than a implies Y is_less_than a`
      proof assume
 A1:     for b being Element of B st b in X holds a [= b;
       let b be Element of B; assume
@@ -1102,13 +1103,13 @@ theorem Th27:
  BooleLatt X is /\-distributive
   proof let x be set; set B = BooleLatt X;
    let a,b,c be Element of B such that
-A1: x is_great_than a and
-A2: for d being Element of B st x is_great_than d holds d [= a
+A1: x is_greater_than a and
+A2: for d being Element of B st x is_greater_than d holds d [= a
     and
 A3: {b"\/"a' where a' is Element of B: a' in
- x} is_great_than c and
+ x} is_greater_than c and
 A4: for d being Element of B st
-     {b"\/"a' where a' is Element of B: a' in x} is_great_than d
+     {b"\/"a' where a' is Element of B: a' in x} is_greater_than d
      holds d [= c;
    set x' = {e` where e is Element of B: e in x},
        y = {b"\/"e where e is Element of B: e in x},
@@ -1139,7 +1140,7 @@ A12: for d being Element of B st x' is_less_than d holds a` [= d
      proof let d be Element of B;
 A13:    d`` = d by LATTICES:49;
       assume x' is_less_than d;
-       then x is_great_than d` by A13,Th24;
+       then x is_greater_than d` by A13,Th24;
        then d` [= a by A2;
       hence thesis by A13,LATTICES:53;
      end;
@@ -1148,7 +1149,7 @@ A15: for d being Element of B st z is_less_than d holds c` [= d
      proof let d be Element of B;
 A16:    d`` = d by LATTICES:49;
       assume z is_less_than d;
-       then y is_great_than d` by A5,A16,Th24;
+       then y is_greater_than d` by A5,A16,Th24;
        then d` [= c by A4;
       hence thesis by A16,LATTICES:53;
      end;
@@ -1378,11 +1379,11 @@ A6:  Y is_less_than a
 theorem Th35:
  a"\/""/\"(X,C) [= "/\"({a"\/"b: b in X}, C)
   proof set Y = {a"\/"b: b in X};
-         Y is_great_than a"\/""/\"(X,C)
+         Y is_greater_than a"\/""/\"(X,C)
      proof let c; assume c in Y;
       then consider b such that
 A1:     c = a"\/"b & b in X;
-            X is_great_than "/\"(X,C) by Th34;
+            X is_greater_than "/\"(X,C) by Th34;
        then "/\"(X,C) [= b by A1,Def16;
       hence thesis by A1,FILTER_0:1;
      end;
@@ -1396,35 +1397,34 @@ theorem Th36:
    thus C is /\-distributive implies for X, a holds
        "/\"({a"\/"b: b in X}, C) [= a"\/""/\"(X,C)
      proof assume
-A1:     for X for a,b,c st X is_great_than a &
-       (for d st X is_great_than d holds d [= a) &
-       {b"\/"a': a' in X} is_great_than c &
-       for d st {b"\/"b': b' in X} is_great_than d holds d [= c
+A1:     for X for a,b,c st X is_greater_than a &
+       (for d st X is_greater_than d holds d [= a) &
+       {b"\/"a': a' in X} is_greater_than c &
+       for d st {b"\/"b': b' in X} is_greater_than d holds d [= c
         holds c [= b"\/"a;
       let X, a; set Y = {a"\/"b: b in X};
-            X is_great_than "/\"(X,C) &
-       (for d st X is_great_than d holds d [= "/\"(X,C)) &
-       Y is_great_than "/\"(Y,C) &
-       (for d st Y is_great_than d holds d [= "/\"(Y,C)) by Th34;
+            X is_greater_than "/\"(X,C) &
+       (for d st X is_greater_than d holds d [= "/\"(X,C)) &
+       Y is_greater_than "/\"(Y,C) &
+       (for d st Y is_greater_than d holds d [= "/\"(Y,C)) by Th34;
       hence thesis by A1;
      end;
    assume
 A2:  for X, a holds "/\"({a"\/"b: b in X}, C) [= a"\/""/\"(X,C);
-   let X; let a,b,c; assume
-         X is_great_than a &
-    (for d st X is_great_than d holds d [= a) &
-    {b"\/"a': a' in X} is_great_than c &
-    for d st {b"\/"b': b' in X} is_great_than d holds d [= c;
+   let X; let a,b,c; assume X is_greater_than a &
+    (for d st X is_greater_than d holds d [= a) &
+    {b"\/"a': a' in X} is_greater_than c &
+    for d st {b"\/"b': b' in X} is_greater_than d holds d [= c;
     then a = "/\"(X,C) & c = "/\"({b"\/"a': a' in X}, C) by Th34;
    hence c [= b"\/"a by A2;
   end;
 
 theorem
-      "\/"(X,C) = "/\"({a: a is_great_than X}, C)
-  proof set Y = {a: a is_great_than X};
+      "\/"(X,C) = "/\"({a: a is_greater_than X}, C)
+  proof set Y = {a: a is_greater_than X};
 A1:  "\/"(X,C) is_less_than Y
      proof let a; assume a in Y;
-       then ex b st a = b & b is_great_than X;
+       then ex b st a = b & b is_greater_than X;
       hence thesis by Def21;
      end;
          X is_less_than "\/"(X,C) by Def21;
@@ -1575,13 +1575,13 @@ A2:     a [= c & c in X;
      end;
     then "\/"(Y,C) [= "\/"(X,C) by Def21;
    hence "\/"(X,C) = "\/"(Y,C) by A1,LATTICES:26;
-         X is_great_than "/\"(Z,C)
+         X is_greater_than "/\"(Z,C)
      proof let a;
       assume a in X; then a in Z;
       hence thesis by Th38;
      end;
 then A3:  "/\"(Z,C) [= "/\"(X,C) by Th34;
-         Z is_great_than "/\"(X,C)
+         Z is_greater_than "/\"(X,C)
      proof let a; assume a in Z;
        then ex b st a = b & ex c st c [= b & c in X;
       then consider c such that

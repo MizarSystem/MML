@@ -19,7 +19,6 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="5"/>
 <Adjective nr="15"/>
 </Cluster>
 </RCluster>
@@ -93,9 +92,6 @@
 </Func>
 <Cluster>
 <Adjective nr="1"/>
-<Adjective nr="4"/>
-<Adjective nr="5"/>
-<Adjective nr="7"/>
 <Adjective nr="9"/>
 <Adjective nr="10"/>
 <Adjective nr="14"/>

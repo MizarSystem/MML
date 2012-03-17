@@ -8,10 +8,10 @@ environ
 
  vocabularies COLLSP, PRE_TOPC, INCSP_1, RELAT_1, ANPROJ_2, ANALOAF, VECTSP_1,
       AFF_2, INCPROJ, NAT_1;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELSET_1, STRUCT_0, PRE_TOPC,
-      INCSP_1, COLLSP, ANPROJ_2;
- constructors DOMAIN_1, INCSP_1, ANPROJ_2, NAT_D;
- registrations ANPROJ_2, RELSET_1, STRUCT_0, SUBSET_1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, DOMAIN_1, RELSET_1, STRUCT_0,
+      PRE_TOPC, INCSP_1, COLLSP, ANPROJ_2;
+ constructors DOMAIN_1, INCSP_1, ANPROJ_2;
+ registrations RELSET_1, STRUCT_0, ANPROJ_2;
  requirements SUBSET, BOOLE;
 
 
@@ -29,11 +29,11 @@ end;
 definition let CPS;
   func ProjectiveLines(CPS) -> set equals
 :: INCPROJ:def 1
-   {B : B is LINE of CPS};
+    {B : B is LINE of CPS};
 end;
 
 registration let CPS;
- cluster ProjectiveLines(CPS) -> non empty;
+  cluster ProjectiveLines(CPS) -> non empty;
 end;
 
 canceled;
@@ -43,7 +43,7 @@ theorem :: INCPROJ:2
 
 definition let CPS;
   func Proj_Inc(CPS) -> Relation of the carrier of CPS, ProjectiveLines(CPS)
-  means
+    means
 :: INCPROJ:def 2
   for x,y holds [x,y] in it iff x in the carrier of CPS &
    y in ProjectiveLines(CPS) & ex Y st y=Y & x in Y;
@@ -67,7 +67,7 @@ theorem :: INCPROJ:4
   the Inc of IncProjSp_of(CPS) = Proj_Inc(CPS);
 
 theorem :: INCPROJ:5
-    x is Point of CPS iff x is POINT of IncProjSp_of(CPS);
+  x is Point of CPS iff x is POINT of IncProjSp_of(CPS);
 
 theorem :: INCPROJ:6
   x is LINE of CPS iff x is LINE of IncProjSp_of(CPS);
@@ -102,9 +102,8 @@ theorem :: INCPROJ:14
 theorem :: INCPROJ:15
   ex p, P st not p on P;
 
-reserve CPS for CollProjectiveSpace;
-
-reserve a,b,c,d,p,q for POINT of IncProjSp_of(CPS),
+reserve CPS for CollProjectiveSpace,
+        a,b,c,d,p,q for POINT of IncProjSp_of(CPS),
         P,Q,S,M,N for LINE of IncProjSp_of(CPS),
         a',b',c',d',p',q' for Point of CPS;
 
@@ -137,19 +136,7 @@ theorem :: INCPROJ:20
     (for a, M, N ex b, c, S st a on S & b on S & c on S & b on M & c on N);
 
 definition
-  canceled 3;
-  let CS be IncProjStr, a,b be POINT of CS,
-   M be LINE of CS;
-  pred a,b on M means
-:: INCPROJ:def 7
-
-  a on M & b on M;
-
-  let c be POINT of CS;
-  pred a,b,c on M means
-:: INCPROJ:def 8
-
-  a on M & b on M & c on M;
+  canceled 5;
 end;
 
 theorem :: INCPROJ:21
@@ -165,9 +152,9 @@ theorem :: INCPROJ:21
      for L, Q, R, S, A, B, C being LINE of IncProjSp_of(CPS) st
       not q on L & not r on L & not p on Q & not s on Q & not p on R &
       not r on R &
-      not q on S & not s on S & a,p,s on L & a,q,r on Q & b,q,s on R &
-      b,p,r on S &
-      c,p,q on A & c,r,s on B & a,b on C holds not c on C);
+      not q on S & not s on S & {a,p,s} on L & {a,q,r} on Q & {b,q,s} on R &
+      {b,p,r} on S &
+      {c,p,q} on A & {c,r,s} on B & {a,b} on C holds not c on C);
 
 theorem :: INCPROJ:22
   (for o,p1,p2,p3,q1,q2,q3,r1,r2,r3 being Point of CPS st
@@ -183,13 +170,13 @@ theorem :: INCPROJ:22
  implies
   (for o,b1,a1,b2,a2,b3,a3,r,s,t being POINT of IncProjSp_of(CPS)
    for C1,C2,C3,A1,A2,A3,B1,B2,B3 being LINE of IncProjSp_of(CPS) st
-    o,b1,a1 on C1 & o,a2,b2 on C2 & o,a3,b3 on C3 &
-    a3,a2,t on A1 & a3,r,a1 on A2 & a2,s,a1 on A3 &
-    t,b2,b3 on B1 & b1,r,b3 on B2 & b1,s,b2 on B3 &
+    {o,b1,a1} on C1 & {o,a2,b2} on C2 & {o,a3,b3} on C3 &
+    {a3,a2,t} on A1 & {a3,r,a1} on A2 & {a2,s,a1} on A3 &
+    {t,b2,b3} on B1 & {b1,r,b3} on B2 & {b1,s,b2} on B3 &
     C1,C2,C3 are_mutually_different &
     o<>a1 & o<>a2 & o<>a3 & o<>b1 & o<>b2 & o<>b3 & a1<>b1 & a2<>b2 & a3<>b3
       holds
-     ex O being LINE of IncProjSp_of(CPS) st r,s,t on O);
+     ex O being LINE of IncProjSp_of(CPS) st {r,s,t} on O);
 
 theorem :: INCPROJ:23
   (for o,p1,p2,p3,q1,q2,q3,r1,r2,r3 being Point of CPS st
@@ -204,50 +191,47 @@ theorem :: INCPROJ:23
   (for o,a1,a2,a3,b1,b2,b3,c1,c2,c3 being POINT of IncProjSp_of(CPS)
    for A1,A2,A3,B1,B2,B3,C1,C2,C3 being LINE of IncProjSp_of(CPS) st
     o,a1,a2,a3 are_mutually_different & o,b1,b2,b3 are_mutually_different &
-    A3<>B3 & o on A3 & o on B3 & a2,b3,c1 on A1 & a3,b1,c2 on B1 &
-    a1,b2,c3 on C1 &
-    a1,b3,c2 on A2 & a3,b2,c1 on B2 & a2,b1,c3 on C2 &
-    b1,b2,b3 on A3 & a1,a2,a3 on B3 & c1,c2 on C3 holds c3 on C3);
+    A3<>B3 & o on A3 & o on B3 & {a2,b3,c1} on A1 & {a3,b1,c2} on B1 &
+    {a1,b2,c3} on C1 &
+    {a1,b3,c2} on A2 & {a3,b2,c1} on B2 & {a2,b1,c3} on C2 &
+    {b1,b2,b3} on A3 & {a1,a2,a3} on B3 & {c1,c2} on C3 holds c3 on C3);
 
-definition let IT be IncProjStr;
-  attr IT is partial means
+definition let S be IncProjStr;
+  attr S is partial means
 :: INCPROJ:def 9
+   for p, q being POINT of S, P, Q being LINE of S st
+     p on P & q on P & p on Q & q on Q holds
+     p = q or P = Q;
 
-  for p, q being POINT of IT, P, Q being LINE of IT st
-   p on P & q on P & p on Q & q on Q holds
-   p = q or P = Q;
-
-  attr IT is linear means
+  redefine attr S is linear means
 :: INCPROJ:def 10
+    for p,q being POINT of S ex P being LINE of S st p on P & q on P;
+end;
 
-  for p,q being POINT of IT ex P being LINE of IT st p on P & q on P;
-
-  attr IT is up-2-dimensional means
+definition let S be IncProjStr;
+  attr S is up-2-dimensional means
 :: INCPROJ:def 11
+    ex p being POINT of S, P being LINE of S st not p on P;
 
-  ex p being POINT of IT, P being LINE of IT st not p on P;
-
-  attr IT is up-3-rank means
+  attr S is up-3-rank means
 :: INCPROJ:def 12
+   for P being LINE of S ex a, b, c being POINT of S st
+    a <> b & b <> c & c <> a & a on P & b on P & c on P;
 
-  for P being LINE of IT ex a, b, c being POINT of IT st
-   a <> b & b <> c & c <> a & a on P & b on P & c on P;
-
-  attr IT is Vebleian means
+  attr S is Vebleian means
 :: INCPROJ:def 13
-
-  for a, b, c, d, p, q being POINT of IT
-  for M, N, P, Q being LINE of IT st a on M & b on M & c on N & d on N &
-   p on M & p on N & a on P & c on P & b on Q & d on Q & not p on P &
-   not p on Q & M<>N
+   for a, b, c, d, p, q being POINT of S
+   for M, N, P, Q being LINE of S st a on M & b on M & c on N & d on N &
+    p on M & p on N & a on P & c on P & b on Q & d on Q & not p on P &
+    not p on Q & M<>N
      holds
-    ex q being POINT of IT st q on P & q on Q;
+     ex q being POINT of S st q on P & q on Q;
 end;
 
 registration
   let CPS be CollProjectiveSpace;
   cluster IncProjSp_of(CPS) -> partial linear up-2-dimensional
-   up-3-rank Vebleian;
+    up-3-rank Vebleian;
 end;
 
 registration
@@ -256,12 +240,11 @@ registration
 end;
 
 definition
- mode IncProjSp is partial linear up-2-dimensional up-3-rank Vebleian
+  mode IncProjSp is partial linear up-2-dimensional up-3-rank Vebleian
    IncProjStr;
 end;
 
-registration
-  let CPS be CollProjectiveSpace;
+registration let CPS be CollProjectiveSpace;
   cluster IncProjSp_of(CPS) -> partial linear up-2-dimensional up-3-rank
     Vebleian;
 end;
@@ -269,21 +252,18 @@ end;
 definition let IT be IncProjSp;
   attr IT is 2-dimensional means
 :: INCPROJ:def 14
-
-  for M,N being LINE of IT ex q being POINT of IT st q on M & q on N;
-  end;
+    for M,N being LINE of IT ex q being POINT of IT st q on M & q on N;
+end;
 
 notation let IT be IncProjSp;
   antonym IT is up-3-dimensional for IT is 2-dimensional;
 end;
 
-definition
-  let IT be IncProjSp;
+definition let IT be IncProjStr;
  canceled;
 
   attr IT is at_most-3-dimensional means
 :: INCPROJ:def 16
-
   for a being POINT of IT, M, N being LINE of IT
    ex b,c being POINT of IT, S being LINE of IT st
     a on S & b on S & c on S & b on M & c on N;
@@ -292,49 +272,46 @@ end;
 definition let IT be IncProjSp;
   attr IT is 3-dimensional means
 :: INCPROJ:def 17
-     IT is at_most-3-dimensional up-3-dimensional;
+    IT is at_most-3-dimensional up-3-dimensional;
 end;
 
-definition let IT be IncProjSp;
+definition let IT be IncProjStr;
   attr IT is Fanoian means
 :: INCPROJ:def 18
-
   for p,q,r,s,a,b,c being POINT of IT
   for L,Q,R,S,A,B,C being LINE of IT st not q on L & not r on L &
    not p on Q & not s on Q & not p on R & not r on R & not q on S &
    not s on S &
-   a,p,s on L & a,q,r on Q & b,q,s on R & b,p,r on S & c,p,q on A &
-   c,r,s on B & a,b on C
+   {a,p,s} on L & {a,q,r} on Q & {b,q,s} on R & {b,p,r} on S &
+   {c,p,q} on A & {c,r,s} on B & {a,b} on C
      holds
     not c on C;
 end;
 
-definition let IT be IncProjSp;
+definition let IT be IncProjStr;
   attr IT is Desarguesian means
 :: INCPROJ:def 19
-
   for o,b1,a1,b2,a2,b3,a3,r,s,t being POINT of IT
   for C1,C2,C3,A1,A2,A3,B1,B2,B3 being LINE of IT st
-   o,b1,a1 on C1 & o,a2,b2 on C2 & o,a3,b3 on C3 &
-   a3,a2,t on A1 & a3,r,a1 on A2 & a2,s,a1 on A3 &
-   t,b2,b3 on B1 & b1,r,b3 on B2 & b1,s,b2 on B3 &
+   {o,b1,a1} on C1 & {o,a2,b2} on C2 & {o,a3,b3} on C3 &
+   {a3,a2,t} on A1 & {a3,r,a1} on A2 & {a2,s,a1} on A3 &
+   {t,b2,b3} on B1 & {b1,r,b3} on B2 & {b1,s,b2} on B3 &
    C1,C2,C3 are_mutually_different &
    o<>a1 & o<>a2 & o<>a3 & o<>b1 & o<>b2 & o<>b3 & a1<>b1 & a2<>b2 & a3<>b3
      holds
-   ex O being LINE of IT st r,s,t on O;
+   ex O being LINE of IT st {r,s,t} on O;
 end;
 
-definition let IT be IncProjSp;
+definition let IT be IncProjStr;
   attr IT is Pappian means
 :: INCPROJ:def 20
-
   for o,a1,a2,a3,b1,b2,b3,c1,c2,c3 being POINT of IT
   for A1,A2,A3,B1,B2,B3,C1,C2,C3 being LINE of IT st
    o,a1,a2,a3 are_mutually_different & o,b1,b2,b3 are_mutually_different &
-   A3<>B3 & o on A3 & o on B3 & a2,b3,c1 on A1 & a3,b1,c2 on B1 &
-   a1,b2,c3 on C1 &
-   a1,b3,c2 on A2 & a3,b2,c1 on B2 & a2,b1,c3 on C2 &
-   b1,b2,b3 on A3 & a1,a2,a3 on B3 & c1,c2 on C3
+   A3<>B3 & o on A3 & o on B3 & {a2,b3,c1} on A1 & {a3,b1,c2} on B1 &
+   {a1,b2,c3} on C1 &
+   {a1,b3,c2} on A2 & {a3,b2,c1} on B2 & {a2,b1,c3} on C2 &
+   {b1,b2,b3} on A3 & {a1,a2,a3} on B3 & {c1,c2} on C3
      holds
    c3 on C3;
 end;

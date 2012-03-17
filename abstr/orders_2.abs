@@ -9,10 +9,9 @@ environ
  vocabularies FUNCT_1, BOOLE, TARSKI, RELAT_1, RELAT_2, WELLORD1, SUBSET_1,
       ORDERS_1, PARTFUN1, ORDERS_2, NAT_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, RELAT_2, FUNCT_1,
-      RELSET_1, PARTFUN1, WELLORD1, DOMAIN_1, STRUCT_0, PRE_TOPC, ORDERS_1;
- constructors RELAT_2, WELLORD1, PARTFUN1, DOMAIN_1, MEMBERED, ORDERS_1,
-      PRE_TOPC, NAT_D;
- registrations RELSET_1, STRUCT_0, PRE_TOPC, SUBSET_1, XBOOLE_0, ORDERS_1;
+      RELSET_1, PARTFUN1, WELLORD1, DOMAIN_1, STRUCT_0, ORDERS_1;
+ constructors RELAT_2, WELLORD1, PARTFUN1, DOMAIN_1, ORDERS_1, PRE_TOPC;
+ registrations XBOOLE_0, SUBSET_1, RELSET_1, ORDERS_1, STRUCT_0, PARTFUN1;
  requirements BOOLE, SUBSET;
 
 
@@ -34,8 +33,11 @@ registration
 end;
 
 definition let A be RelStr;
- canceled 3;
+ canceled 2;
 
+ attr A is total means
+:: ORDERS_2:def 3
+  the InternalRel of A is total;
  attr A is reflexive means
 :: ORDERS_2:def 4
   the InternalRel of A is_reflexive_in the carrier of A;
@@ -48,21 +50,49 @@ definition let A be RelStr;
 end;
 
 registration
- cluster non empty reflexive transitive antisymmetric strict RelStr;
+ cluster non empty reflexive transitive antisymmetric strict total RelStr;
+end;
+
+registration
+  cluster reflexive -> total RelStr;
 end;
 
 definition
   mode Poset is reflexive transitive antisymmetric RelStr;
 end;
 
-registration let A be Poset;
- cluster the InternalRel of A -> total reflexive antisymmetric transitive;
+registration let A be total RelStr;
+ cluster the InternalRel of A -> total;
+end;
+
+registration let A be reflexive RelStr;
+ cluster the InternalRel of A -> reflexive;
+end;
+
+registration let A be total antisymmetric RelStr;
+ cluster the InternalRel of A -> antisymmetric;
+end;
+
+registration let A be total transitive RelStr;
+ cluster the InternalRel of A -> transitive;
 end;
 
 registration
  let X be set;
- let O be Order of X;
- cluster RelStr(#X,O#) -> reflexive transitive antisymmetric;
+ let O be total reflexive Relation of X;
+ cluster RelStr(#X,O#) -> reflexive;
+end;
+
+registration
+ let X be set;
+ let O be total transitive Relation of X;
+ cluster RelStr(#X,O#) -> transitive;
+end;
+
+registration
+ let X be set;
+ let O be total antisymmetric Relation of X;
+ cluster RelStr(#X,O#) -> antisymmetric;
 end;
 
  reserve A for non empty Poset;

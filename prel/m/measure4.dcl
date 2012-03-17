@@ -18,10 +18,10 @@
 <ArticleID name="CARD_1"/>
 <ArticleID name="CARD_3"/>
 <ArticleID name="PROB_1"/>
+<ArticleID name="FINSUB_1"/>
 <ArticleID name="XXREAL_0"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="SUPINF_1"/>
-<ArticleID name="FINSUB_1"/>
 <ArticleID name="CARD_4"/>
 <ArticleID name="SUPINF_2"/>
 <ArticleID name="MEASURE1"/>
@@ -39,7 +39,7 @@
 <LocusVar nr="1"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="166">
+<Func kind="K" nr="167">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -48,11 +48,6 @@
 <Adjective nr="24">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="27">
-<LocusVar nr="1"/>
-</Adjective>
-<Adjective nr="42"/>
-<Adjective nr="43"/>
 <Adjective nr="55">
 <LocusVar nr="1"/>
 </Adjective>

@@ -9,9 +9,6 @@
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="TARSKI"/>
-<ArticleID name="ENUMSET1"/>
-<ArticleID name="MCART_1"/>
-<ArticleID name="DOMAIN_1"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
@@ -19,21 +16,24 @@
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="FUNCT_2"/>
+<ArticleID name="INT_1"/>
 <ArticleID name="FINSEQ_2"/>
+<ArticleID name="MCART_1"/>
+<ArticleID name="FUNCT_2"/>
+<ArticleID name="ENUMSET1"/>
+<ArticleID name="DOMAIN_1"/>
+<ArticleID name="REALSET1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PRE_TOPC"/>
-<ArticleID name="REALSET1"/>
-<ArticleID name="RLVECT_1"/>
-<ArticleID name="INT_1"/>
 <ArticleID name="GROUP_1"/>
+<ArticleID name="RLVECT_1"/>
 <ArticleID name="VECTSP_1"/>
 <ArticleID name="MATRIX_1"/>
 <ArticleID name="MEMBERED"/>
-<ArticleID name="SEQ_1"/>
-<ArticleID name="RVSUM_1"/>
 <ArticleID name="BINOP_1"/>
 <ArticleID name="METRIC_1"/>
+<ArticleID name="SEQ_1"/>
+<ArticleID name="RVSUM_1"/>
 <ArticleID name="EUCLID"/>
 <ArticleID name="GRAPH_1"/>
 <ArticleID name="GRAPH_2"/>
@@ -59,7 +59,7 @@
 <Adjective nr="7" value="false"/>
 <Adjective nr="17"/>
 <Adjective nr="21"/>
-<Adjective nr="38" value="false"/>
+<Adjective nr="27" value="false"/>
 <Adjective nr="107"/>
 <Adjective nr="108"/>
 <Adjective nr="109"/>
@@ -94,7 +94,6 @@
 <Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="7" value="false"/>
-<Adjective nr="17"/>
 <Adjective nr="21"/>
 </Cluster>
 </FCluster>

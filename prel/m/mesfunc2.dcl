@@ -16,10 +16,10 @@
 <ArticleID name="XREAL_0"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
+<ArticleID name="FINSEQ_1"/>
 <ArticleID name="CARD_3"/>
 <ArticleID name="PROB_1"/>
 <ArticleID name="PROB_2"/>
-<ArticleID name="FINSEQ_1"/>
 </Signature>
 <RCluster>
 <ArgTypes>
@@ -29,10 +29,10 @@
 <Typ kind="M" nr="2">
 <Cluster>
 <Adjective nr="7" value="false"/>
-<Adjective nr="24">
+<Adjective nr="26">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="27">
+<Adjective nr="29">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -43,7 +43,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Typ kind="M" nr="10">
+<Typ kind="M" nr="7">
 <Cluster/>
 <LocusVar nr="2"/>
 </Typ>
@@ -51,7 +51,7 @@
 <Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="19"/>
-<Adjective nr="28"/>
+<Adjective nr="23"/>
 <Adjective nr="30"/>
 </Cluster>
 </RCluster>

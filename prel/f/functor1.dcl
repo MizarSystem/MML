@@ -2,20 +2,20 @@
 <Registrations>
 <Signature>
 <ArticleID name="HIDDEN"/>
+<ArticleID name="TARSKI"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="RELSET_1"/>
-<ArticleID name="TARSKI"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
-<ArticleID name="FUNCOP_1"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
+<ArticleID name="FUNCOP_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="PBOOLE"/>
@@ -37,9 +37,9 @@
 </Typ>
 <Cluster>
 <Adjective nr="28" value="false"/>
-<Adjective nr="49"/>
-<Adjective nr="59"/>
-<Adjective nr="62"/>
+<Adjective nr="50"/>
+<Adjective nr="60"/>
+<Adjective nr="63"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -47,7 +47,7 @@
 <Typ kind="G" nr="7">
 <Cluster>
 <Adjective nr="28" value="false"/>
-<Adjective nr="62"/>
+<Adjective nr="63"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -57,7 +57,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="28" value="false"/>
-<Adjective nr="62"/>
+<Adjective nr="63"/>
 </Cluster>
 </RCluster>
 <FCluster>
@@ -65,18 +65,18 @@
 <Typ kind="G" nr="7">
 <Cluster>
 <Adjective nr="28" value="false"/>
-<Adjective nr="62"/>
+<Adjective nr="63"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="7">
 <Cluster>
 <Adjective nr="28" value="false"/>
-<Adjective nr="62"/>
+<Adjective nr="63"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="9">
 <Cluster>
-<Adjective nr="72">
+<Adjective nr="73">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>
@@ -87,7 +87,7 @@
 <Typ kind="M" nr="19">
 <Cluster>
 <Adjective nr="28" value="false"/>
-<Adjective nr="62"/>
+<Adjective nr="63"/>
 </Cluster>
 <LocusVar nr="1"/>
 </Typ>
@@ -99,7 +99,7 @@
 <LocusVar nr="3"/>
 </Func>
 <Cluster>
-<Adjective nr="72">
+<Adjective nr="73">
 <LocusVar nr="4"/>
 <LocusVar nr="2"/>
 </Adjective>

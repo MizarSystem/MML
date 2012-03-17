@@ -2,7 +2,6 @@
 <Registrations>
 <Signature>
 <ArticleID name="HIDDEN"/>
-<ArticleID name="ENUMSET1"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="XBOOLE_0"/>
@@ -17,6 +16,7 @@
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="ENUMSET1"/>
 <ArticleID name="DOMAIN_1"/>
 <ArticleID name="REALSET1"/>
 <ArticleID name="FINSEQ_5"/>
@@ -82,17 +82,12 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="83">
+<Func kind="K" nr="75">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
 </Func>
 <Cluster>
-<Adjective nr="1"/>
-<Adjective nr="4"/>
-<Adjective nr="7" value="false"/>
-<Adjective nr="15"/>
-<Adjective nr="19"/>
 <Adjective nr="24" value="false"/>
 </Cluster>
 </FCluster>
@@ -114,7 +109,6 @@
 <Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="7" value="false"/>
-<Adjective nr="15"/>
 <Adjective nr="19"/>
 </Cluster>
 </FCluster>
@@ -133,16 +127,14 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="15">
+<Func kind="K" nr="7">
 <LocusVar nr="1"/>
-<Func kind="K" nr="74">
+<Func kind="K" nr="66">
 <LocusVar nr="2"/>
 </Func>
 </Func>
 <Cluster>
 <Adjective nr="1"/>
-<Adjective nr="4"/>
-<Adjective nr="15"/>
 <Adjective nr="19"/>
 </Cluster>
 </FCluster>
@@ -170,11 +162,7 @@
 <LocusVar nr="3"/>
 </Func>
 <Cluster>
-<Adjective nr="1"/>
-<Adjective nr="4"/>
 <Adjective nr="7" value="false"/>
-<Adjective nr="15"/>
-<Adjective nr="19"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -204,11 +192,6 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="1"/>
-<Adjective nr="4"/>
-<Adjective nr="7" value="false"/>
-<Adjective nr="15"/>
-<Adjective nr="19"/>
 <Adjective nr="25">
 <LocusVar nr="1"/>
 </Adjective>

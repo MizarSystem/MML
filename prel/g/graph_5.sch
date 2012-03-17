@@ -8,10 +8,8 @@
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
-<ArticleID name="TARSKI"/>
-<ArticleID name="ORDINAL1"/>
-<ArticleID name="NUMBERS"/>
 <ArticleID name="FINSET_1"/>
+<ArticleID name="XREAL_0"/>
 </Signature>
 <Scheme>
 <ArgTypes>
@@ -76,12 +74,13 @@
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="10" value="false"/>
-<Adjective nr="18"/>
+<Adjective nr="11"/>
 </Cluster>
 </Typ>
-<Typ kind="M" nr="2">
-<Cluster/>
-<Func kind="K" nr="46"/>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="13"/>
+</Cluster>
 </Typ>
 </ArgTypes>
 <Not>

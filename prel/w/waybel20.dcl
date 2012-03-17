@@ -13,39 +13,17 @@
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="NUMBERS"/>
-<ArticleID name="FUNCOP_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
+<ArticleID name="FUNCOP_1"/>
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="STRUCT_0"/>
-<ArticleID name="RLVECT_1"/>
-<ArticleID name="XREAL_0"/>
-<ArticleID name="INT_1"/>
-<ArticleID name="GROUP_1"/>
-<ArticleID name="VECTSP_1"/>
-<ArticleID name="FUNCT_4"/>
-<ArticleID name="FUNCT_5"/>
-<ArticleID name="PBOOLE"/>
 <ArticleID name="ORDERS_1"/>
 <ArticleID name="ORDERS_2"/>
-<ArticleID name="LATTICES"/>
 <ArticleID name="RELAT_2"/>
-<ArticleID name="EQREL_1"/>
-<ArticleID name="FILTER_0"/>
-<ArticleID name="FILTER_1"/>
-<ArticleID name="LATTICE3"/>
-<ArticleID name="QUANTAL1"/>
-<ArticleID name="FUNCT_3"/>
-<ArticleID name="BINOP_1"/>
-<ArticleID name="FRAENKEL"/>
-<ArticleID name="CAT_1"/>
-<ArticleID name="CAT_2"/>
-<ArticleID name="CAT_5"/>
-<ArticleID name="MULTOP_1"/>
-<ArticleID name="ALTCAT_1"/>
-<ArticleID name="ORDERS_3"/>
+<ArticleID name="PBOOLE"/>
 <ArticleID name="YELLOW_0"/>
 <ArticleID name="WAYBEL_0"/>
 <ArticleID name="WELLORD2"/>
@@ -55,10 +33,10 @@
 </Signature>
 <RCluster>
 <ArgTypes>
-<Typ kind="G" nr="12">
+<Typ kind="G" nr="5">
 <Cluster>
 <Adjective nr="27" value="false"/>
-<Adjective nr="72"/>
+<Adjective nr="39"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -91,19 +69,11 @@
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="121"/>
-<Adjective nr="168">
+<Adjective nr="82">
 <LocusVar nr="1"/>
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="198">
-<LocusVar nr="1"/>
-<LocusVar nr="1"/>
-</Adjective>
-<Adjective nr="208">
-<LocusVar nr="1"/>
-</Adjective>
-<Adjective nr="210">
+<Adjective nr="94">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

@@ -15,10 +15,10 @@
 <ArticleID name="RELSET_1"/>
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="FUNCT_2"/>
-<ArticleID name="FUNCOP_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
+<ArticleID name="FUNCOP_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="FUNCT_4"/>
@@ -114,20 +114,20 @@
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="50"/>
-<Adjective nr="51"/>
 <Adjective nr="52"/>
-<Adjective nr="75"/>
-<Adjective nr="76"/>
+<Adjective nr="53"/>
+<Adjective nr="54"/>
+<Adjective nr="77"/>
+<Adjective nr="78"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="50"/>
-<Adjective nr="51"/>
 <Adjective nr="52"/>
-<Adjective nr="75"/>
-<Adjective nr="76"/>
+<Adjective nr="53"/>
+<Adjective nr="54"/>
+<Adjective nr="77"/>
+<Adjective nr="78"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">

@@ -55,9 +55,6 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="15"/>
-<Adjective nr="18"/>
-<Adjective nr="19"/>
 <Adjective nr="20"/>
 </Cluster>
 </FCluster>
@@ -79,9 +76,6 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="15"/>
-<Adjective nr="18"/>
-<Adjective nr="19"/>
 <Adjective nr="20"/>
 </Cluster>
 </FCluster>
@@ -97,8 +91,6 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="15"/>
-<Adjective nr="18"/>
 <Adjective nr="19"/>
 <Adjective nr="20"/>
 </Cluster>
@@ -121,9 +113,6 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="15"/>
-<Adjective nr="18"/>
-<Adjective nr="19"/>
 <Adjective nr="20"/>
 </Cluster>
 </FCluster>
@@ -138,9 +127,6 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="15"/>
-<Adjective nr="16" value="false"/>
-<Adjective nr="18"/>
 <Adjective nr="19"/>
 <Adjective nr="20"/>
 </Cluster>
@@ -162,9 +148,6 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="15"/>
-<Adjective nr="18"/>
-<Adjective nr="19"/>
 <Adjective nr="20"/>
 </Cluster>
 </FCluster>
@@ -185,9 +168,6 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="15"/>
-<Adjective nr="18"/>
-<Adjective nr="19"/>
 <Adjective nr="20"/>
 </Cluster>
 </FCluster>
@@ -208,9 +188,6 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="15"/>
-<Adjective nr="18"/>
-<Adjective nr="19"/>
 <Adjective nr="20"/>
 </Cluster>
 </FCluster>
@@ -230,9 +207,6 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="15"/>
-<Adjective nr="18"/>
-<Adjective nr="19"/>
 <Adjective nr="20"/>
 </Cluster>
 </FCluster>
@@ -248,9 +222,7 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="15"/>
 <Adjective nr="18"/>
-<Adjective nr="19"/>
 </Cluster>
 </FCluster>
 <CCluster>
@@ -272,14 +244,6 @@
 <Func kind="K" nr="46"/>
 </Typ>
 <Cluster>
-<Adjective nr="8"/>
-<Adjective nr="9"/>
-<Adjective nr="10"/>
-<Adjective nr="14"/>
-<Adjective nr="15"/>
-<Adjective nr="17" value="false"/>
-<Adjective nr="18"/>
-<Adjective nr="19"/>
 <Adjective nr="20"/>
 </Cluster>
 </CCluster>
@@ -304,9 +268,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="15"/>
 <Adjective nr="18"/>
-<Adjective nr="19"/>
 </Cluster>
 </CCluster>
 </Registrations>

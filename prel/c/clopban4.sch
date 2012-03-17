@@ -37,11 +37,11 @@
 <Typ kind="G" nr="16">
 <Cluster>
 <Adjective nr="33" value="false"/>
-<Adjective nr="41"/>
 <Adjective nr="42"/>
 <Adjective nr="43"/>
 <Adjective nr="44"/>
-<Adjective nr="56"/>
+<Adjective nr="45"/>
+<Adjective nr="57"/>
 <Adjective nr="75"/>
 <Adjective nr="78"/>
 <Adjective nr="85"/>

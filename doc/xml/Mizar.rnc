@@ -754,8 +754,11 @@ Assume =
  element Assume { Proposition+ }
 
 ## This is existential assumption, it may be used when the normal
-## assumption starts with existential quantifier. In that case,
-## the existential variables are introduced as local constants.
+## assumption starts with existential quantifier, and emulates
+## the use of assume followed by consider.
+## First comes the reconstructed assumed existential statement, then
+## the newly introduced local constant(s), and finally the proposition(s)
+## containing the new local constant(s).
 ## For easier presentation, nr optionally contains the number   
 ## of the first local constant created here.   
 ## Each type may optionally have presentational info about
@@ -763,7 +766,7 @@ Assume =
 Given = 
  element Given {
    attribute nr { xsd:integer }?,
-   Typ+, Proposition+ }
+   Proposition, Typ+, Proposition+ }
 
 ## Take without equality. This does not introduce a new local constant,
 ## just changes the thesis.
@@ -868,8 +871,11 @@ Suppose =
 
 ## The block thesis is printed for proofs in the beginning and
 ## for diffuse reasoning in the end.
+## For diffuse reasoning, the series of temporary subthesis corresponding to
+## all skeleton items is printed before the main theses (in the same order
+## as the skeleton items in the block).   
 BlockThesis =
- element BlockThesis { Formula }
+ element BlockThesis { Thesis*, Formula }
 
 ## Block starting with one case, the direct and diffuse version
 ## (this depends on the kind of its parent block).

@@ -12,10 +12,10 @@ environ
  notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, NUMBERS, RELAT_1,
       FUNCT_1, MCART_1, FINSEQ_1, SETFAM_1, FUNCT_2, BINOP_1, PARTFUN1,
       FUNCT_3, WELLORD2, FUNCOP_1, FINSEQ_2, FUNCT_4, FUNCT_5, CARD_3;
- constructors ENUMSET1, SETFAM_1, PARTFUN1, WELLORD2, FUNCT_3, BINOP_1,
-      FUNCOP_1, FUNCT_4, FUNCT_5, FINSEQ_2, CARD_3, NAT_D;
- registrations SUBSET_1, RELAT_1, FUNCT_1, FUNCOP_1, FINSEQ_1, RELSET_1,
-      ARYTM_3, FUNCT_2;
+ constructors ENUMSET1, SETFAM_1, PARTFUN1, WELLORD2, BINOP_1, FUNCT_3,
+      FUNCOP_1, FUNCT_4, FUNCT_5, FINSEQ_2, CARD_3;
+ registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, FUNCT_2, FUNCOP_1,
+      ARYTM_3, FINSEQ_1;
  requirements NUMERALS, BOOLE, SUBSET;
  definitions TARSKI, FUNCT_1, WELLORD2, XBOOLE_0, BINOP_1;
  theorems TARSKI, ENUMSET1, ZFMISC_1, FINSEQ_2, MCART_1, FUNCT_1, FINSEQ_1,
@@ -953,17 +953,17 @@ begin
 
  definition let f be Function;
   func <:f:> -> Function equals
-    curry ((uncurry' f)|[:meet doms f, dom f:]);
+    curry ((uncurry' f)|([:meet doms f, dom f:] qua set));
     correctness;
  end;
 
 theorem
  Th49: dom <:f:> = meet doms f & rng <:f:> c= product rngs f
   proof
-A1:  <:f:> = curry ((uncurry' f)|[:meet doms f, dom f:]) &
+A1:  <:f:> = curry ((uncurry' f)|([:meet doms f, dom f:] qua set)) &
     dom doms f = f"SubFuncs rng f & dom rngs f = f"SubFuncs rng f
      by Def2,Def3;
-       dom ((uncurry' f)|[:meet doms f, dom f:]) c=
+       dom ((uncurry' f)|([:meet doms f, dom f:] qua set)) c=
     [:meet doms f, dom f:] by RELAT_1:87;
    hence
 A2:  dom <:f:> c= meet doms f by FUNCT_5:32;
@@ -983,12 +983,13 @@ A7:     z in dom f & f.z in SubFuncs rng f by A1,A6,FUNCT_1:def 13;
        then [x,z] in dom (uncurry' f) /\ [:meet doms f, dom f:] by
 XBOOLE_0:def 3
 ;
-       then [x,z] in dom ((uncurry' f)|[:meet doms f, dom f:])
+       then [x,z] in dom ((uncurry' f)|([:meet doms f, dom f:] qua set))
        by RELAT_1:90;
-       then x in proj1 dom ((uncurry' f)|[:meet doms f, dom f:]) by FUNCT_5:4;
+       then x in proj1 dom ((uncurry' f)|([:meet doms f, dom f:] qua set))
+                    by FUNCT_5:4;
       hence thesis by FUNCT_5:def 3;
      end;
-   set f' = (uncurry' f)|[:meet doms f, dom f:];
+   set f' = (uncurry' f)|([:meet doms f, dom f:] qua set);
    thus rng <:f:> c= product rngs f
      proof let y; assume y in rng <:f:>;
       then consider x such that
@@ -1070,8 +1071,9 @@ A1:  x in dom <:f:> & g = <:f:>.x;
      dom g = f"SubFuncs rng f by CARD_3:18;
    let y such that
 A2:  y in dom g;
-    g.y = ((uncurry' f)|[:meet doms f, dom f:]).(x,y) &
-    [x,y] in dom ((uncurry' f)|[:meet doms f, dom f:]) by A1,A2,FUNCT_5:38;
+    g.y = ((uncurry' f)|([:meet doms f, dom f:] qua set)).(x,y) &
+    [x,y] in dom ((uncurry' f)|([:meet doms f, dom f:] qua set))
+                  by A1,A2,FUNCT_5:38;
     then A3:  g.y = (uncurry' f).(x,y) &
     [x,y] in dom (uncurry' f) /\ [:meet doms f, dom f:] by FUNCT_1:68;
     then [x,y] in dom uncurry' f & ~(uncurry f) = uncurry' f
@@ -2309,8 +2311,8 @@ then A40: rng h c= Funcs(dom f, Union f) & dom f <> {}
 &
     meet doms g = dom <:g:> & dom <:g:> = X
      by A4,A38,Th49,FUNCT_5:33;
-    then (uncurry' h)|[:meet doms h, dom h:] = uncurry' h &
-    (uncurry h)|[:meet doms g, dom g:] = uncurry h &
+    then (uncurry' h)|([:meet doms h, dom h:] qua set) = uncurry' h &
+    (uncurry h)|([:meet doms g, dom g:] qua set) = uncurry h &
     uncurry' h = ~uncurry h & curry ~uncurry h = curry' uncurry h &
     uncurry' curry' uncurry h = uncurry h
      by A28,A32,A33,FUNCT_5:56,def 5,def 6,RELAT_1:97;

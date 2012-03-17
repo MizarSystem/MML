@@ -74,7 +74,6 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="4"/>
 <Adjective nr="7"/>
 <Adjective nr="18">
 <LocusVar nr="1"/>
@@ -92,8 +91,6 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="4"/>
-<Adjective nr="7"/>
 <Adjective nr="9"/>
 <Adjective nr="14"/>
 <Adjective nr="18">
@@ -155,7 +152,6 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="1" value="false"/>
 <Adjective nr="2"/>
 </Cluster>
 </FCluster>

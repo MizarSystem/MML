@@ -23,10 +23,9 @@
 <ArticleID name="INT_1"/>
 <ArticleID name="GROUP_1"/>
 <ArticleID name="VECTSP_1"/>
-<ArticleID name="ALGSTR_1"/>
-<ArticleID name="ALGSEQ_1"/>
-<ArticleID name="MATRIX_1"/>
 <ArticleID name="VECTSP_2"/>
+<ArticleID name="MATRIX_1"/>
+<ArticleID name="ALGSEQ_1"/>
 <ArticleID name="POLYNOM8"/>
 </Signature>
 <FCluster>
@@ -34,9 +33,9 @@
 <Typ kind="G" nr="10">
 <Cluster>
 <Adjective nr="26" value="false"/>
-<Adjective nr="35"/>
 <Adjective nr="36"/>
 <Adjective nr="37"/>
+<Adjective nr="38"/>
 <Adjective nr="55"/>
 </Cluster>
 </Typ>
@@ -49,7 +48,7 @@
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="75">
+<Adjective nr="71">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -67,7 +66,7 @@
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="75">
+<Adjective nr="71">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -77,13 +76,12 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="184">
+<Func kind="K" nr="176">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
 </Func>
 <Cluster>
-<Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="16">
 <Func kind="K" nr="46"/>
@@ -91,7 +89,7 @@
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="75">
+<Adjective nr="71">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -100,10 +98,10 @@
 <ArgTypes/>
 <Cluster>
 <Adjective nr="26" value="false"/>
-<Adjective nr="35"/>
 <Adjective nr="36"/>
 <Adjective nr="37"/>
-<Adjective nr="46"/>
+<Adjective nr="38"/>
+<Adjective nr="47"/>
 <Adjective nr="55"/>
 <Adjective nr="57"/>
 <Adjective nr="60"/>
@@ -113,22 +111,13 @@
 </Typ>
 <Cluster>
 <Adjective nr="26" value="false"/>
-<Adjective nr="35"/>
 <Adjective nr="36"/>
 <Adjective nr="37"/>
-<Adjective nr="44"/>
-<Adjective nr="46"/>
+<Adjective nr="38"/>
+<Adjective nr="47"/>
 <Adjective nr="55"/>
-<Adjective nr="56"/>
 <Adjective nr="57"/>
-<Adjective nr="59"/>
 <Adjective nr="64"/>
-<Adjective nr="65"/>
-<Adjective nr="66"/>
-<Adjective nr="67"/>
-<Adjective nr="68"/>
-<Adjective nr="69"/>
-<Adjective nr="78"/>
 </Cluster>
 </CCluster>
 </Registrations>

@@ -7,9 +7,9 @@
 <!-- provided the included .xsl files are available in the same directory -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
   <xsl:output method="html"/>
-  <!-- $Revision: 1.10 $ -->
+  <!-- $Revision: 1.11 $ -->
   <!--  -->
-  <!-- File: mhtml_main.xsltxt - html-ization of Mizar XML, main file -->
+  <!-- File: miz.xsltxt - html-ization of Mizar XML, main file -->
   <!--  -->
   <!-- Author: Josef Urban -->
   <!--  -->
@@ -138,8 +138,17 @@
   <xsl:param name="ajax_proofs">
     <xsl:text>0</xsl:text>
   </xsl:param>
+  <!-- tells to display thesis after skeleton items -->
+  <xsl:param name="display_thesis">
+    <xsl:text>0</xsl:text>
+  </xsl:param>
   <!-- tells if only selected items are generated to subdirs; default is off -->
   <xsl:param name="generate_items">
+    <xsl:text>0</xsl:text>
+  </xsl:param>
+  <!-- relevant only if $generate_items>0 -->
+  <!-- tells if proofs of selected items are generated to subdirs; default is off -->
+  <xsl:param name="generate_items_proofs">
     <xsl:text>0</xsl:text>
   </xsl:param>
   <xsl:variable name="lcletters">
@@ -2593,21 +2602,6 @@
                     </xsl:for-each>
                     <xsl:text> )</xsl:text>
                   </xsl:when>
-                  <!-- this was too AI, mizar is much simpler -->
-                  <!-- $cnt=`count(*[1]/*)`; -->
-                  <!-- $pcnt1 = { if [$i3="1"] { count_positive(#els=`*[1]/*`,#nr=$cnt); } else {"10000";} } -->
-                  <!-- $pcnt = $pcnt1; -->
-                  <!-- // $pcnt1; ":"; $cnt; ":"; $i3; -->
-                  <!-- if [($pcnt>0) and ($pcnt<$cnt)] { -->
-                  <!-- // "hhhhhhhhhhhh"; -->
-                  <!-- "( "; put_positive(#separ=" & ",#els=`*[1]/*`,#nr=$pcnt,#i=$i); " implies "; -->
-                  <!-- put_positive(#separ=" or ",#els=`*[1]/*`,#nr=`$cnt - $pcnt`,#neg="1",#i=$i); ")"; -->
-                  <!-- } -->
-                  <!-- else { if [($i3="1") and ($pcnt=0)] { "( "; put_positive(#separ=" or ",#els=`*[1]/*`,#nr=$cnt,#neg="1",#i=$i); ")"; } -->
-                  <!-- if [$i3="1"  and (*[1]/*[not(name()="Not")]) and (*[1]/Not)] { "( ( "; -->
-                  <!-- ilist(#separ=" & ", #elems=`*[1]/*[not(name()="Not")]`, #i=$i,#pr="1"); -->
-                  <!-- " )"; " implies "; -->
-                  <!-- "( "; ilist(#separ=" or ", #elems=`*[1]/Not/*[1]`, #i=$i,#pr="1"); " ) )"; } -->
                   <xsl:otherwise>
                     <xsl:text>not </xsl:text>
                     <xsl:if test="@pid">
@@ -2629,8 +2623,21 @@
     </xsl:choose>
   </xsl:template>
 
-  <!-- tpl [And/Not] { if [For] { <div { "not "; apply[*[1]]; } } -->
-  <!-- else { "not "; apply[*[1]]; } } -->
+  <!-- this was too AI, mizar is much simpler -->
+  <!-- $cnt=`count(*[1]/*)`; -->
+  <!-- $pcnt1 = { if [$i3="1"] { count_positive(#els=`*[1]/*`,#nr=$cnt); } else {"10000";} } -->
+  <!-- $pcnt = $pcnt1; -->
+  <!-- // $pcnt1; ":"; $cnt; ":"; $i3; -->
+  <!-- if [($pcnt>0) and ($pcnt<$cnt)] { -->
+  <!-- // "hhhhhhhhhhhh"; -->
+  <!-- "( "; put_positive(#separ=" & ",#els=`*[1]/*`,#nr=$pcnt,#i=$i); " implies "; -->
+  <!-- put_positive(#separ=" or ",#els=`*[1]/*`,#nr=`$cnt - $pcnt`,#neg="1",#i=$i); ")"; -->
+  <!-- } -->
+  <!-- else { if [($i3="1") and ($pcnt=0)] { "( "; put_positive(#separ=" or ",#els=`*[1]/*`,#nr=$cnt,#neg="1",#i=$i); ")"; } -->
+  <!-- if [$i3="1"  and (*[1]/*[not(name()="Not")]) and (*[1]/Not)] { "( ( "; -->
+  <!-- ilist(#separ=" & ", #elems=`*[1]/*[not(name()="Not")]`, #i=$i,#pr="1"); -->
+  <!-- " )"; " implies "; -->
+  <!-- "( "; ilist(#separ=" or ", #elems=`*[1]/Not/*[1]`, #i=$i,#pr="1"); " ) )"; } -->
   <xsl:template match="And">
     <xsl:param name="i"/>
     <xsl:param name="pr"/>
@@ -4633,14 +4640,25 @@
     <!-- ###TODO: include the possible link when generating items -->
     <xsl:choose>
       <xsl:when test="($generate_items&gt;0) and not(string-length(@plevel)&gt;0)">
-        <xsl:call-template name="pcomment">
-          <xsl:with-param name="str" select="concat($aname, &quot;:lemma &quot;, @propnr)"/>
-        </xsl:call-template>
-        <xsl:apply-templates/>
-        <xsl:text> </xsl:text>
-        <xsl:if test="following-sibling::*[1][(name()=&quot;By&quot;) or (name()=&quot;From&quot;) or (name()=&quot;Proof&quot;)]">
-          <xsl:apply-templates select="following-sibling::*[1]"/>
-        </xsl:if>
+        <xsl:choose>
+          <xsl:when test="name(..) = &quot;SchemeBlock&quot;">
+            <xsl:apply-templates/>
+            <xsl:text> </xsl:text>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:if test="not(name(..) = &quot;SchemePremises&quot;)">
+              <xsl:call-template name="pcomment">
+                <xsl:with-param name="str" select="concat($aname, &quot;:lemma &quot;, @propnr)"/>
+              </xsl:call-template>
+            </xsl:if>
+            <xsl:apply-templates/>
+            <xsl:text> </xsl:text>
+            <xsl:if test="($generate_items_proofs&gt;0) and
+	      (following-sibling::*[1][(name()=&quot;By&quot;) or (name()=&quot;From&quot;) or (name()=&quot;Proof&quot;)])">
+              <xsl:apply-templates select="following-sibling::*[1]"/>
+            </xsl:if>
+          </xsl:otherwise>
+        </xsl:choose>
       </xsl:when>
       <xsl:otherwise>
         <xsl:apply-templates/>
@@ -5220,6 +5238,8 @@
     <xsl:element name="br"/>
   </xsl:template>
 
+  <!-- should handle both the new version with the existential statement -->
+  <!-- at the first position, and also the old version without it -->
   <xsl:template match="Given">
     <xsl:variable name="j" select="@nr - 1"/>
     <xsl:element name="b">
@@ -5236,7 +5256,7 @@
       <xsl:text> such that </xsl:text>
     </xsl:element>
     <xsl:call-template name="andlist">
-      <xsl:with-param name="elems" select="Proposition"/>
+      <xsl:with-param name="elems" select="*[(name()=&quot;Proposition&quot;) and (position() &gt; 1)]"/>
     </xsl:call-template>
     <xsl:text>;</xsl:text>
     <xsl:call-template name="try_th_exps"/>
@@ -5477,8 +5497,51 @@
   <!-- forbid as default -->
   <xsl:template match="Thesis"/>
 
-  <xsl:template name="try_th_exps">
+  <xsl:template name="do_thesis">
+    <xsl:apply-templates select="ThesisExpansions"/>
+    <xsl:if test="$display_thesis = 1">
+      <xsl:text> </xsl:text>
+      <xsl:element name="a">
+        <xsl:call-template name="add_hs_attrs"/>
+        <xsl:call-template name="pcomment0">
+          <xsl:with-param name="str">
+            <xsl:text> thesis: </xsl:text>
+          </xsl:with-param>
+        </xsl:call-template>
+      </xsl:element>
+      <xsl:element name="span">
+        <xsl:attribute name="class">
+          <xsl:text>hide</xsl:text>
+        </xsl:attribute>
+        <xsl:text> </xsl:text>
+        <xsl:apply-templates select="*[1]"/>
+      </xsl:element>
+    </xsl:if>
+  </xsl:template>
+
+  <xsl:template name="try_th_exps_old">
     <xsl:apply-templates select="./following-sibling::*[1][name()=&quot;Thesis&quot;]/ThesisExpansions"/>
+  </xsl:template>
+
+  <xsl:template name="try_th_exps">
+    <xsl:choose>
+      <xsl:when test="./following-sibling::*[1][name()=&quot;Thesis&quot;]">
+        <xsl:for-each select="./following-sibling::*[1][name()=&quot;Thesis&quot;]">
+          <xsl:call-template name="do_thesis"/>
+        </xsl:for-each>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:if test="((name(..) = &quot;Now&quot;) or (name(..) = &quot;Case&quot;) or (name(..) = &quot;Suppose&quot;))
+              and (../BlockThesis/Thesis)">
+          <xsl:variable name="prev_thesis_changes" select="count(./preceding-sibling::*[(name()=&quot;Let&quot;) or (name()=&quot;Take&quot;) 
+	                               or (name()=&quot;TakeAsVar&quot;) or (name()=&quot;Assume&quot;) 
+				       or (name()=&quot;Given&quot;) or (name()=&quot;Conclusion&quot;)])"/>
+          <xsl:for-each select=" ../BlockThesis/Thesis[$prev_thesis_changes + 1]">
+            <xsl:call-template name="do_thesis"/>
+          </xsl:for-each>
+        </xsl:if>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
   <xsl:template match="ThesisExpansions">
@@ -5578,7 +5641,7 @@
     <xsl:variable name="nr1" select="1 + count(preceding::RCluster)"/>
     <xsl:choose>
       <xsl:when test="$generate_items&gt;0">
-        <xsl:document href="items/{$anamelc}/rc_{$nr1}" format="html"> 
+        <xsl:document href="proofhtml/exreg/{$anamelc}.{$nr1}" format="html"> 
         <xsl:call-template name="rc"/>
         </xsl:document> 
         <xsl:variable name="bogus" select="1"/>
@@ -5623,7 +5686,7 @@
     <xsl:variable name="nr1" select="1 + count(preceding::CCluster)"/>
     <xsl:choose>
       <xsl:when test="$generate_items&gt;0">
-        <xsl:document href="items/{$anamelc}/cc_{$nr1}" format="html"> 
+        <xsl:document href="proofhtml/condreg/{$anamelc}.{$nr1}" format="html"> 
         <xsl:call-template name="cc"/>
         </xsl:document> 
         <xsl:variable name="bogus" select="1"/>
@@ -5672,7 +5735,7 @@
     <xsl:variable name="nr1" select="1 + count(preceding::FCluster)"/>
     <xsl:choose>
       <xsl:when test="$generate_items&gt;0">
-        <xsl:document href="items/{$anamelc}/fc_{$nr1}" format="html"> 
+        <xsl:document href="proofhtml/funcreg/{$anamelc}.{$nr1}" format="html"> 
         <xsl:call-template name="fc"/>
         </xsl:document> 
         <xsl:variable name="bogus" select="1"/>
@@ -5720,7 +5783,7 @@
     <xsl:variable name="nr1" select="1 + count(preceding::IdentifyWithExp)"/>
     <xsl:choose>
       <xsl:when test="$generate_items&gt;0">
-        <xsl:document href="items/{$anamelc}/iy_{$nr1}" format="html"> 
+        <xsl:document href="proofhtml/idreg/{$anamelc}.{$nr1}" format="html"> 
         <xsl:call-template name="iy"/>
         </xsl:document> 
         <xsl:variable name="bogus" select="1"/>
@@ -5733,7 +5796,9 @@
 
   <xsl:template name="iy">
     <xsl:if test="($mml=&quot;1&quot;) or ($generate_items&gt;0)">
-      <xsl:apply-templates select="ArgTypes"/>
+      <xsl:call-template name="argtypes">
+        <xsl:with-param name="el" select="Typ"/>
+      </xsl:call-template>
     </xsl:if>
     <xsl:variable name="nr1" select="1 + count(preceding::IdentifyWithExp)"/>
     <xsl:element name="a">
@@ -5749,14 +5814,108 @@
         <xsl:text>erroridentify</xsl:text>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:apply-templates select="*[position() = last() - 1]"/>
-        <xsl:element name="b">
-          <xsl:text> with </xsl:text>
-        </xsl:element>
-        <xsl:apply-templates select="*[position() = last()]"/>
-        <xsl:element name="b">
-          <xsl:text> when </xsl:text>
-        </xsl:element>
+        <xsl:choose>
+          <xsl:when test="($mml=&quot;1&quot;) or ($generate_items&gt;0)">
+            <xsl:apply-templates select="*[position() = last() - 1]"/>
+            <xsl:element name="b">
+              <xsl:text> with </xsl:text>
+            </xsl:element>
+            <xsl:apply-templates select="*[position() = last()]"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:for-each select="following-sibling::*[1]/Proposition/*[1]">
+              <xsl:choose>
+                <xsl:when test="name() = &quot;Pred&quot;">
+                  <xsl:apply-templates select="*[1]"/>
+                  <xsl:element name="b">
+                    <xsl:text> with </xsl:text>
+                  </xsl:element>
+                  <xsl:apply-templates select="*[2]"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:choose>
+                    <xsl:when test="name() = &quot;And&quot;">
+                      <xsl:variable name="e1">
+                        <xsl:call-template name="is_equiv">
+                          <xsl:with-param name="el" select="."/>
+                        </xsl:call-template>
+                      </xsl:variable>
+                      <xsl:choose>
+                        <xsl:when test="$e1=&quot;1&quot;">
+                          <xsl:apply-templates select="*[1]/*[1]/*[1]"/>
+                          <xsl:element name="b">
+                            <xsl:text> with </xsl:text>
+                          </xsl:element>
+                          <xsl:apply-templates select="*[1]/*[1]/*[2]/*[1]"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                          <xsl:text>IDENTIFY DISPLAY FAILED -  PLEASE COMPLAIN!</xsl:text>
+                          <xsl:element name="br"/>
+                          <xsl:apply-templates select="."/>
+                        </xsl:otherwise>
+                      </xsl:choose>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <xsl:variable name="i3">
+                        <xsl:call-template name="is_impl1">
+                          <xsl:with-param name="el" select="."/>
+                        </xsl:call-template>
+                      </xsl:variable>
+                      <xsl:choose>
+                        <xsl:when test="not($i3=2)">
+                          <xsl:text>IDENTIFY DISPLAY FAILED -  PLEASE COMPLAIN!</xsl:text>
+                        </xsl:when>
+                        <xsl:otherwise>
+                          <xsl:for-each select="*[1]/*[@pid=$pid_Impl_RightNot]/*[1]">
+                            <xsl:choose>
+                              <xsl:when test="name() = &quot;Pred&quot;">
+                                <xsl:apply-templates select="*[1]"/>
+                                <xsl:element name="b">
+                                  <xsl:text> with </xsl:text>
+                                </xsl:element>
+                                <xsl:apply-templates select="*[2]"/>
+                              </xsl:when>
+                              <xsl:otherwise>
+                                <xsl:variable name="e1">
+                                  <xsl:call-template name="is_equiv">
+                                    <xsl:with-param name="el" select="."/>
+                                  </xsl:call-template>
+                                </xsl:variable>
+                                <xsl:choose>
+                                  <xsl:when test="$e1=&quot;1&quot;">
+                                    <xsl:apply-templates select="*[1]/*[1]/*[1]"/>
+                                    <xsl:element name="b">
+                                      <xsl:text> with </xsl:text>
+                                    </xsl:element>
+                                    <xsl:apply-templates select="*[1]/*[1]/*[2]/*[1]"/>
+                                  </xsl:when>
+                                  <xsl:otherwise>
+                                    <xsl:text>IDENTIFY DISPLAY FAILED -  PLEASE COMPLAIN!</xsl:text>
+                                    <xsl:element name="br"/>
+                                    <xsl:apply-templates select="."/>
+                                  </xsl:otherwise>
+                                </xsl:choose>
+                              </xsl:otherwise>
+                            </xsl:choose>
+                          </xsl:for-each>
+                          <xsl:element name="b">
+                            <xsl:text> when </xsl:text>
+                          </xsl:element>
+                          <xsl:call-template name="ilist">
+                            <xsl:with-param name="separ">
+                              <xsl:text>, </xsl:text>
+                            </xsl:with-param>
+                            <xsl:with-param name="elems" select="*[1]/*[not(@pid=$pid_Impl_RightNot)]"/>
+                          </xsl:call-template>
+                        </xsl:otherwise>
+                      </xsl:choose>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                </xsl:otherwise>
+              </xsl:choose>
+            </xsl:for-each>
+          </xsl:otherwise>
+        </xsl:choose>
       </xsl:otherwise>
     </xsl:choose>
     <xsl:text>;</xsl:text>
@@ -5783,7 +5942,7 @@
     <xsl:variable name="nr1" select="1+count(preceding-sibling::JustifiedTheorem)"/>
     <xsl:choose>
       <xsl:when test="$generate_items&gt;0">
-        <xsl:document href="items/{$anamelc}/th_{$nr1}" format="html"> 
+        <xsl:document href="proofhtml/th/{$anamelc}.{$nr1}" format="html"> 
         <xsl:call-template name="jt"/>
         </xsl:document> 
         <xsl:variable name="bogus" select="1"/>
@@ -5856,7 +6015,9 @@
           </xsl:attribute>
           <xsl:apply-templates select="*[1]/*[1]"/>
         </xsl:element>
-        <xsl:apply-templates select="*[2]"/>
+        <xsl:if test="not($generate_items&gt;0) or ($generate_items_proofs&gt;0)">
+          <xsl:apply-templates select="*[2]"/>
+        </xsl:if>
       </xsl:when>
       <xsl:otherwise>
         <xsl:element name="div">
@@ -5884,7 +6045,7 @@
     <xsl:variable name="nr1" select="1+count(preceding-sibling::DefTheorem)"/>
     <xsl:choose>
       <xsl:when test="$generate_items&gt;0">
-        <xsl:document href="items/{$anamelc}/def_{$nr1}" format="html"> 
+        <xsl:document href="proofhtml/def/{$anamelc}.{$nr1}" format="html"> 
         <xsl:call-template name="dt"/>
         </xsl:document> 
         <xsl:variable name="bogus" select="1"/>
@@ -6094,7 +6255,7 @@
   <xsl:template match="SchemeBlock">
     <xsl:choose>
       <xsl:when test="$generate_items&gt;0">
-        <xsl:document href="items/{$anamelc}/sch_{@schemenr}" format="html"> 
+        <xsl:document href="proofhtml/sch/{$anamelc}.{@schemenr}" format="html"> 
         <xsl:call-template name="sd"/>
         </xsl:document> 
         <xsl:variable name="bogus" select="1"/>
@@ -6166,7 +6327,9 @@
           </xsl:call-template>
         </xsl:element>
       </xsl:if>
-      <xsl:apply-templates select="*[position() = last() - 1]"/>
+      <xsl:if test="not($generate_items&gt;0)">
+        <xsl:apply-templates select="*[position() = last() - 1]"/>
+      </xsl:if>
     </xsl:element>
   </xsl:template>
 
@@ -6243,7 +6406,7 @@
           <xsl:when test="@nr and ($generate_items&gt;0)">
             <xsl:variable name="cnt1" select="1 + count(preceding-sibling::Definition[@nr])"/>
             <xsl:variable name="defnr" select="../following-sibling::Definiens[position() = $cnt1]/@defnr"/>
-            <xsl:document href="items/{$anamelc}/dfs_{$defnr}" format="html"> 
+            <xsl:document href="proofhtml/dfs/{$anamelc}.{$defnr}" format="html"> 
             <xsl:call-template name="dfs"/>
             </xsl:document> 
             <xsl:variable name="bogus" select="1"/>
@@ -6303,31 +6466,9 @@
         <!-- Definiens is better than Constructor for loci display, -->
         <!-- since Constructor may be missing for redefinitions. -->
         <xsl:for-each select="../following-sibling::Definiens[position() = $cnt1]">
-          <xsl:if test="Typ">
-            <xsl:element name="b">
-              <xsl:text>let </xsl:text>
-            </xsl:element>
-            <xsl:call-template name="ploci">
-              <xsl:with-param name="nr">
-                <xsl:text>1</xsl:text>
-              </xsl:with-param>
-            </xsl:call-template>
-            <xsl:text> be </xsl:text>
-            <xsl:call-template name="alist">
-              <xsl:with-param name="j">
-                <xsl:text>1</xsl:text>
-              </xsl:with-param>
-              <xsl:with-param name="sep1">
-                <xsl:text>, </xsl:text>
-              </xsl:with-param>
-              <xsl:with-param name="sep2">
-                <xsl:text> be </xsl:text>
-              </xsl:with-param>
-              <xsl:with-param name="elems" select="Typ"/>
-            </xsl:call-template>
-            <xsl:text>;</xsl:text>
-            <xsl:element name="br"/>
-          </xsl:if>
+          <xsl:call-template name="argtypes">
+            <xsl:with-param name="el" select="Typ"/>
+          </xsl:call-template>
         </xsl:for-each>
       </xsl:if>
       <xsl:apply-templates select="Constructor">
@@ -6763,7 +6904,14 @@
 
   <!-- now used only when #mml=1 - in article the block has them -->
   <xsl:template match="ArgTypes">
-    <xsl:if test="*">
+    <xsl:call-template name="argtypes">
+      <xsl:with-param name="el" select="*"/>
+    </xsl:call-template>
+  </xsl:template>
+
+  <xsl:template name="argtypes">
+    <xsl:param name="el"/>
+    <xsl:if test="$el">
       <xsl:element name="b">
         <xsl:text>let </xsl:text>
       </xsl:element>
@@ -6783,7 +6931,7 @@
         <xsl:with-param name="sep2">
           <xsl:text> be </xsl:text>
         </xsl:with-param>
-        <xsl:with-param name="elems" select="*"/>
+        <xsl:with-param name="elems" select="$el"/>
       </xsl:call-template>
       <xsl:text>;</xsl:text>
       <xsl:element name="br"/>
@@ -7095,9 +7243,10 @@
     <xsl:choose>
       <xsl:when test="$generate_items = &quot;1&quot;">
         <xsl:apply-templates select="/*/JustifiedTheorem|/*/DefTheorem|/*/SchemeBlock"/>
-        <xsl:apply-templates select="//RCluster|//CCluster|//FCluster|//Definition"/>
+        <xsl:apply-templates select="//RCluster|//CCluster|//FCluster|//Definition|//IdentifyWithExp"/>
+        <!-- top-level lemmas -->
         <xsl:for-each select="/*/Proposition">
-          <xsl:document href="items/{$anamelc}/lemma_{@propnr}" format="html"> 
+          <xsl:document href="proofhtml/lemma/{$anamelc}.{@propnr}" format="html"> 
           <xsl:apply-templates select="."/>
           </xsl:document> 
           <xsl:variable name="bogus" select="1"/>

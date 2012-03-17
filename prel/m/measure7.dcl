@@ -13,15 +13,15 @@
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
-<ArticleID name="MEMBERED"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="CARD_3"/>
 <ArticleID name="PROB_1"/>
-<ArticleID name="XXREAL_0"/>
-<ArticleID name="SUPINF_1"/>
 <ArticleID name="FINSUB_1"/>
+<ArticleID name="XXREAL_0"/>
+<ArticleID name="MEMBERED"/>
+<ArticleID name="SUPINF_1"/>
 <ArticleID name="CARD_4"/>
 <ArticleID name="SUPINF_2"/>
 <ArticleID name="MEASURE1"/>
@@ -37,16 +37,15 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="K" nr="19">
-<Func kind="K" nr="118"/>
+<Func kind="K" nr="124"/>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="189">
+<Func kind="K" nr="190">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="7" value="false"/>
-<Adjective nr="19"/>
 </Cluster>
 </FCluster>
 </Registrations>

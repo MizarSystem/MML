@@ -10,12 +10,11 @@ environ
       LATTICES, ABSVALUE, FUNCT_1, PROB_1, SEQ_4, MEMBERED, FUNCOP_1, FRECHET2,
       NAT_1, SQUARE_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
-      REAL_1, RELAT_1, COMPLEX1, SEQ_1, SEQ_2, NAT_1, NAT_D, FUNCT_2, FUNCOP_1,
+      REAL_1, RELAT_1, COMPLEX1, SEQ_1, SEQ_2, NAT_1, FUNCT_2, FUNCOP_1,
       SEQM_3, MEMBERED, XXREAL_0;
- constructors FUNCOP_1, XXREAL_0, REAL_1, NAT_1, COMPLEX1, SEQ_2, SEQM_3,
-      NAT_D;
- registrations XREAL_0, RELSET_1, SEQ_1, SEQM_3, ARYTM_3, SUBSET_1, MEMBERED,
-      ORDINAL1, XXREAL_0;
+ constructors FUNCOP_1, XXREAL_0, REAL_1, NAT_1, COMPLEX1, SEQ_2, SEQM_3;
+ registrations XBOOLE_0, SUBSET_1, ORDINAL1, RELSET_1, NUMBERS, XXREAL_0,
+      XREAL_0, MEMBERED, SEQ_1, SEQM_3;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, SEQ_2;
  theorems REAL_1, NAT_1, SEQ_1, SEQ_2, SEQM_3, AXIOMS, FUNCT_1, FUNCT_2,
@@ -1493,7 +1492,7 @@ A2: for t st for s st s in X holds s <= t holds r <= t;
  hence r = upper_bound X by A1,A3,Def4;
 end;
 
-theorem Th64:
+theorem
  for X being non empty real-membered set, Y being real-membered set
   st X c= Y & Y is bounded_below holds lower_bound Y <= lower_bound X
 proof let X be non empty real-membered set, Y be real-membered set; assume that
@@ -1532,61 +1531,59 @@ notation let A be non empty natural-membered set;
   synonym min A for lower_bound A;
 end;
 
-Lm11:
+Lm5:
 for A being non empty natural-membered set, k be natural number st k in A &
  for n being Element of NAT st n in A holds k <= n
  holds k = min A
 proof
   let A be non empty natural-membered set, k be natural number such that
-A2: k in A and
-A3: for n being Element of NAT st n in A holds k <= n;
+A1: k in A and
+A2: for n being Element of NAT st n in A holds k <= n;
   defpred P[Element of NAT] means $1 in A;
   consider a being Element of A;
-A4: now
+A3: now
       let r be real number;
       assume
-B1:   r in A;
+A4:   r in A;
       then r is natural by MEMBERED:def 6;
       then r in NAT by ORDINAL1:def 13;
-      hence k <= r by A3,B1;
+      hence k <= r by A2,A4;
     end;
     now
       let t be real number;
       assume for s being real number st s in A holds t <= s;
       then
-B2:   t <= min A by Th60;
-      min A <= k by A2,Def5;
-      hence t <= k by B2,XXREAL_0:2;
+A5:   t <= min A by Th60;
+      min A <= k by A1,Def5;
+      hence t <= k by A5,XXREAL_0:2;
     end;
-    then k = min A by A4,Th61;
+    then k = min A by A3,Th61;
     hence thesis;
 end;
 
-Lm10:
+Lm6:
 for A being non empty natural-membered set holds min A in A
 proof
   let A be non empty natural-membered set;
   defpred P[Element of NAT] means $1 in A;
   consider a being Element of A;
-  a in A;
-  then a is natural by MEMBERED:def 6;
-  then a in NAT by ORDINAL1:def 13;
+  a in NAT by ORDINAL1:def 13;
   then
 A1: ex k being Element of NAT st P[k];
     consider k being Element of NAT such that
 A2: P[k] and
 A3: for n being Element of NAT st P[n] holds k <= n from NAT_1:sch 5(A1);
-    k = min A by A2,A3,Lm11;
+    k = min A by A2,A3,Lm5;
     hence thesis by A2;
 end;
 
 definition
   let A be non empty natural-membered set;
-  redefine func min A -> Element of NAT means :Def8:
+  redefine func min A -> Element of NAT means
   it in A & for k being natural number st k in A holds it <= k;
   coherence
   proof
-    min A in A by Lm10;
+    min A in A by Lm6;
     then min A is natural by MEMBERED:def 6;
     hence thesis by ORDINAL1:def 13;
   end;
@@ -1596,7 +1593,7 @@ definition
     hereby
       assume
 A1:   m = min A;
-      hence m in A by Lm10;
+      hence m in A by Lm6;
       thus for k being natural number holds
       k in A implies m <= k by A1,Def5;
     end;
@@ -1604,7 +1601,7 @@ A1:   m = min A;
 A2: m in A;
     assume for k being natural number st k in A holds m <= k;
     then for k being Element of NAT st k in A holds m <= k;
-    hence thesis by A2,Lm11;
+    hence thesis by A2,Lm5;
   end;
 end;
 

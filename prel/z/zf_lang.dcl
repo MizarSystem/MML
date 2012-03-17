@@ -53,10 +53,6 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="1"/>
-<Adjective nr="4"/>
-<Adjective nr="15"/>
-<Adjective nr="19"/>
 <Adjective nr="21"/>
 </Cluster>
 </FCluster>
@@ -76,10 +72,6 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="1"/>
-<Adjective nr="4"/>
-<Adjective nr="15"/>
-<Adjective nr="19"/>
 <Adjective nr="21"/>
 </Cluster>
 </FCluster>
@@ -96,10 +88,6 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="1"/>
-<Adjective nr="4"/>
-<Adjective nr="15"/>
-<Adjective nr="19"/>
 <Adjective nr="21"/>
 </Cluster>
 </FCluster>
@@ -123,10 +111,6 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="1"/>
-<Adjective nr="4"/>
-<Adjective nr="15"/>
-<Adjective nr="19"/>
 <Adjective nr="21"/>
 </Cluster>
 </FCluster>
@@ -148,10 +132,6 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="1"/>
-<Adjective nr="4"/>
-<Adjective nr="15"/>
-<Adjective nr="19"/>
 <Adjective nr="21"/>
 </Cluster>
 </FCluster>

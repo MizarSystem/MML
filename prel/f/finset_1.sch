@@ -3,9 +3,9 @@
 <Signature>
 <ArticleID name="HIDDEN"/>
 <ArticleID name="TARSKI"/>
+<ArticleID name="XBOOLE_0"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
-<ArticleID name="XBOOLE_0"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="FINSET_1"/>
 </Signature>
@@ -25,14 +25,14 @@
 <For>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="1"/>
-<Adjective nr="4"/>
+<Adjective nr="2"/>
+<Adjective nr="5"/>
 </Cluster>
 </Typ>
 <Not>
 <And>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="5">
+<Func kind="K" nr="10">
 <Var nr="1"/>
 </Func>
 <Func kind="F" nr="1"/>
@@ -58,7 +58,7 @@
 </Pred>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="16">
+<Func kind="K" nr="21">
 <Var nr="1"/>
 <Var nr="2"/>
 </Func>
@@ -78,7 +78,7 @@
 </Not>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="16">
+<Func kind="K" nr="21">
 <Var nr="1"/>
 <Var nr="2"/>
 </Func>
@@ -112,7 +112,7 @@
 <Func kind="F" nr="1"/>
 </Pred>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="18"/>
+<Func kind="K" nr="5"/>
 </Pred>
 <For>
 <Typ kind="M" nr="1">
@@ -137,7 +137,7 @@
 </Pred>
 <Not>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="19">
+<Func kind="K" nr="6">
 <Var nr="2"/>
 <Func kind="K" nr="1">
 <Var nr="1"/>

@@ -10,20 +10,18 @@ environ
       ZF_LANG, FINSEQ_1, FUNCT_2, FINSUB_1, SQUARE_1, FINSET_1, QC_LANG3,
       GROUP_2, PRE_TOPC, PARTFUN1, SETWISEO, SETFAM_1, SUBSET_1, CQC_SIM1,
       NAT_1, SEQ_4, ORDINAL2, ARYTM, MEMBERED, COMPLEX1;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, DOMAIN_1,
-      MCART_1, SETFAM_1, RELAT_1, RELSET_1, FUNCT_1, FUNCT_2, BINOP_1,
-      PARTFUN1, XREAL_0, XXREAL_0, FUNCOP_1, FINSEQ_1, FINSET_1, FINSUB_1,
-      FRAENKEL, NAT_1, NAT_D, MEMBERED, SETWISEO, QC_LANG1, QC_LANG2, QC_LANG3,
-      CQC_LANG, FUNCT_4, RECDEF_1, SEQ_4;
- constructors SETFAM_1, RELAT_2, PARTFUN1, DOMAIN_1, BINOP_1, FUNCOP_1,
-      FUNCT_4, SETWISEO, FRAENKEL, XXREAL_0, NAT_1, MEMBERED, RECDEF_1,
-      QC_LANG3, CQC_LANG, NAT_D, SEQ_4, ARYTM_3, ORDINAL3, RAT_1, SEQM_3,
-      SEQ_2, REAL_1, COMPLEX1;
- registrations SUBSET_1, RELSET_1, CQC_LANG, QC_LANG1, FINSUB_1, FUNCOP_1,
-      FINSEQ_1, ARYTM_3, MEMBERED, FUNCT_2, PARTFUN1, ORDINAL2, XREAL_0,
-      XXREAL_0, ORDINAL1, NAT_1, FRAENKEL, SEQ_4;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, DOMAIN_1, MCART_1,
+      SETFAM_1, RELAT_1, RELSET_1, FUNCT_1, FUNCT_2, BINOP_1, PARTFUN1,
+      XXREAL_0, FUNCOP_1, FINSEQ_1, FINSET_1, FINSUB_1, FRAENKEL, NAT_1,
+      SETWISEO, QC_LANG1, QC_LANG2, QC_LANG3, CQC_LANG, FUNCT_4, RECDEF_1,
+      SEQ_4;
+ constructors SETFAM_1, PARTFUN1, BINOP_1, DOMAIN_1, FUNCT_4, SETWISEO,
+      FRAENKEL, XXREAL_0, NAT_1, RECDEF_1, SEQ_4, QC_LANG3, CQC_LANG;
+ registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCT_2,
+      FUNCOP_1, FINSUB_1, FRAENKEL, XXREAL_0, NAT_1, MEMBERED, FINSEQ_1, SEQ_4,
+      QC_LANG1, CQC_LANG;
  requirements NUMERALS, REAL, BOOLE, SUBSET;
- definitions TARSKI, XBOOLE_0, BINOP_1, FUNCOP_1, QC_LANG3, SUBSET_1, RELAT_1;
+ definitions TARSKI, XBOOLE_0, BINOP_1, QC_LANG3, SUBSET_1, RELAT_1;
  theorems ZFMISC_1, DOMAIN_1, FINSEQ_1, CQC_LANG, QC_LANG1, PARTFUN1, QC_LANG3,
       MCART_1, FUNCT_1, FUNCT_2, NAT_1, TARSKI, FUNCOP_1, FUNCT_4, FINSEQ_2,
       FINSET_1, SETFAM_1, QC_LANG2, RELAT_1, RELSET_1, FINSEQ_3, XBOOLE_0,
@@ -256,39 +254,39 @@ A1: S[0]
      take F;
      thus thesis by QC_LANG1:34;
     end;
-A3: for n be Element of NAT st S[n] holds S[n+1]
+A2: for n be Element of NAT st S[n] holds S[n+1]
    proof let n be Element of NAT;
        given F being Function of QC-WFF, D() such that
-  A4: Pfn[F, n];
+  A3: Pfn[F, n];
      defpred P[Element of QC-WFF,Element of D()] means
       (len @$1 <> n+1 implies $2 = F.$1) &
       (len @$1 = n+1 implies Pfgp[$2, F, $1]);
-  A5:  for x being Element of QC-WFF ex y being Element of D() st P[x,y]
+  A4:  for x being Element of QC-WFF ex y being Element of D() st P[x,y]
       proof let p be Element of QC-WFF;
          now per cases by QC_LANG1:33;
         case len @p <> n+1;
          take y = F.p;
          thus y =F.p;
         end;
-        case A6:len @p = n+1 & p = VERUM;
+        case A5:len @p = n+1 & p = VERUM;
          take y = V();
+         thus Pfgp[y, F, p] by A5,QC_LANG1:51;
+        end;
+        case A6: len @p = n+1 & p is atomic;
+         take y = A(p);
          thus Pfgp[y, F, p] by A6,QC_LANG1:51;
         end;
-        case A7: len @p = n+1 & p is atomic;
-         take y = A(p);
+        case A7: len @p = n+1 & p is negative;
+         take y = N(F.the_argument_of p, p);
          thus Pfgp[y, F, p] by A7,QC_LANG1:51;
         end;
-        case A8: len @p = n+1 & p is negative;
-         take y = N(F.the_argument_of p, p);
+        case A8: len @p = n+1 & p is conjunctive;
+         take y = C(F.the_left_argument_of p, F.the_right_argument_of p, p);
          thus Pfgp[y, F, p] by A8,QC_LANG1:51;
         end;
-        case A9: len @p = n+1 & p is conjunctive;
-         take y = C(F.the_left_argument_of p, F.the_right_argument_of p, p);
-         thus Pfgp[y, F, p] by A9,QC_LANG1:51;
-        end;
-        case A10: len @p = n+1 & p is universal;
+        case A9: len @p = n+1 & p is universal;
          take y = Q(F.the_scope_of p, p);
-         thus Pfgp[y, F, p] by A10,QC_LANG1:51;
+         thus Pfgp[y, F, p] by A9,QC_LANG1:51;
       end;
       end;
       hence ex y being Element of D() st
@@ -296,22 +294,22 @@ A3: for n be Element of NAT st S[n] holds S[n+1]
                 (len @p = n+1 implies Pfgp[y, F, p]);
      end;
      consider G being Function of QC-WFF, D() such that
-   A11:      for p being Element of QC-WFF holds P[p,G.p] from FUNCT_2:sch 3
- (A5);
+   A10:      for p being Element of QC-WFF holds P[p,G.p] from FUNCT_2:sch 3
+ (A4);
        take H = G;
      thus Pfn[H, n+1]
     proof
       let p be Element of QC-WFF such that
-   A12: len @p <= n+1;
+   A11: len @p <= n+1;
       thus p = VERUM implies H.p = V()
         proof
             now per cases;
-          suppose A13: len @p <> n+1; then A14: len @p <= n by A12,NAT_1:8;
-                   H.p = F.p by A11,A13;
-           hence thesis by A4,A14;
+          suppose A12: len @p <> n+1; then A13: len @p <= n by A11,NAT_1:8;
+                   H.p = F.p by A10,A12;
+           hence thesis by A3,A13;
           end;
           suppose len @p = n+1;
-           hence thesis by A11;
+           hence thesis by A10;
          end;
          end;
         hence thesis;
@@ -319,60 +317,60 @@ A3: for n be Element of NAT st S[n] holds S[n+1]
      thus p is atomic implies H.p = A(p)
         proof
             now per cases;
-          suppose A15: len @p <> n+1; then A16: len @p <= n by A12,NAT_1:8;
-                   H.p = F.p by A11,A15;
-           hence thesis by A4,A16;
+          suppose A14: len @p <> n+1; then A15: len @p <= n by A11,NAT_1:8;
+                   H.p = F.p by A10,A14;
+           hence thesis by A3,A15;
           end;
           suppose len @p = n+1;
-           hence thesis by A11;
+           hence thesis by A10;
          end;
          end;
         hence thesis;
         end;
      thus p is negative implies H.p = N(H.the_argument_of p,p)
-        proof assume A17: p is negative;
-          then len @the_argument_of p <> n+1 by A12,QC_LANG1:45;
-        then A18:  H.the_argument_of p = F.the_argument_of p by A11;
+        proof assume A16: p is negative;
+          then len @the_argument_of p <> n+1 by A11,QC_LANG1:45;
+        then A17:  H.the_argument_of p = F.the_argument_of p by A10;
             now per cases;
-          suppose A19: len @p <> n+1; then A20: len @p <= n by A12,NAT_1:8;
-               H.p = F.p by A11,A19;
-           hence thesis by A4,A17,A18,A20;
+          suppose A18: len @p <> n+1; then A19: len @p <= n by A11,NAT_1:8;
+               H.p = F.p by A10,A18;
+           hence thesis by A3,A16,A17,A19;
           end;
           suppose len @p = n+1;
-           hence thesis by A11,A17,A18;
+           hence thesis by A10,A16,A17;
          end;
          end;
         hence thesis;
         end;
       thus p is conjunctive implies
            H.p = C(H.the_left_argument_of p, H.the_right_argument_of p, p)
-        proof assume A21: p is conjunctive;
-          then len @the_left_argument_of p <> n+1 by A12,QC_LANG1:46;
-        then A22:  H.the_left_argument_of p = F.the_left_argument_of p by A11;
-             len @the_right_argument_of p <> n+1 by A12,A21,QC_LANG1:46;
-        then A23: H.the_right_argument_of p = F.the_right_argument_of p by A11;
+        proof assume A20: p is conjunctive;
+          then len @the_left_argument_of p <> n+1 by A11,QC_LANG1:46;
+        then A21:  H.the_left_argument_of p = F.the_left_argument_of p by A10;
+             len @the_right_argument_of p <> n+1 by A11,A20,QC_LANG1:46;
+        then A22: H.the_right_argument_of p = F.the_right_argument_of p by A10;
             now per cases;
-          suppose A24: len @p <> n+1; then A25: len @p <= n by A12,NAT_1:8;
-                   H.p = F.p by A11,A24;
-           hence thesis by A4,A21,A22,A23,A25;
+          suppose A23: len @p <> n+1; then A24: len @p <= n by A11,NAT_1:8;
+                   H.p = F.p by A10,A23;
+           hence thesis by A3,A20,A21,A22,A24;
           end;
           suppose len @p = n+1;
-           hence thesis by A11,A21,A22,A23;
+           hence thesis by A10,A20,A21,A22;
          end;
          end;
         hence thesis;
         end;
       thus p is universal implies H.p = Q(H.the_scope_of p, p)
-        proof assume A26: p is universal;
-          then len @the_scope_of p <> n+1 by A12,QC_LANG1:47;
-        then A27:  H.the_scope_of p = F.the_scope_of p by A11;
+        proof assume A25: p is universal;
+          then len @the_scope_of p <> n+1 by A11,QC_LANG1:47;
+        then A26:  H.the_scope_of p = F.the_scope_of p by A10;
             now per cases;
-          suppose A28: len @p <> n+1; then A29: len @p <= n by A12,NAT_1:8;
-                   H.p = F.p by A11,A28;
-           hence H.p = Q(H.the_scope_of p, p) by A4,A26,A27,A29;
+          suppose A27: len @p <> n+1; then A28: len @p <= n by A11,NAT_1:8;
+                   H.p = F.p by A10,A27;
+           hence H.p = Q(H.the_scope_of p, p) by A3,A25,A26,A28;
           end;
           suppose len @p = n+1;
-           hence H.p = Q(H.the_scope_of p, p) by A11,A26,A27;
+           hence H.p = Q(H.the_scope_of p, p) by A10,A25,A26;
          end;
          end;
         hence thesis;
@@ -380,79 +378,79 @@ A3: for n be Element of NAT st S[n] holds S[n+1]
      end;
    end;
 
-A30: for n being Element of NAT holds S[n] from NAT_1:sch 1 (A1, A3);
+A29: for n being Element of NAT holds S[n] from NAT_1:sch 1 (A1, A2);
 
 defpred Qfn[set, set] means
         ex p being Element of QC-WFF st p = $1 &
           for g being Function of QC-WFF, D() st Pfn[g, len @p] holds $2 = g.p;
 
-A31: for x being set st x in QC-WFF ex y being set st Qfn[x, y]
+A30: for x being set st x in QC-WFF ex y being set st Qfn[x, y]
    proof let x be set; assume x in QC-WFF;
        then reconsider x' = x as Element of QC-WFF;
        consider F being Function of QC-WFF, D() such that
-   A32: Pfn[F, len @x'] by A30;
+   A31: Pfn[F, len @x'] by A29;
        take F.x, x';
        thus x = x';
        let G be Function of QC-WFF, D() such that
-   A33: Pfn[G, len @x'];
+   A32: Pfn[G, len @x'];
 
    defpred Prop[Element of QC-WFF] means
              len @$1 <= len@x' implies F.$1 = G.$1;
-   A34: now
+   A33: now
         let p be Element of QC-WFF;
         thus p is atomic implies Prop[p]
          proof assume that
-         A35: p is atomic and
-         A36: len @p <= len@x';
-           thus F.p = A(p) by A32,A35,A36
-                   .= G.p by A33,A35,A36;
+         A34: p is atomic and
+         A35: len @p <= len@x';
+           thus F.p = A(p) by A31,A34,A35
+                   .= G.p by A32,A34,A35;
          end;
         thus Prop[VERUM]
          proof assume
-          A37: len @VERUM <= len @x';
-          hence F.VERUM = V() by A32
-                      .= G.VERUM by A33,A37;
+          A36: len @VERUM <= len @x';
+          hence F.VERUM = V() by A31
+                      .= G.VERUM by A32,A36;
          end;
         thus p is negative & Prop[the_argument_of p] implies Prop[p]
          proof assume that
-          A38: p is negative and
-          A39: Prop[the_argument_of p] and
-          A40: len @p <= len @x';
-             len @the_argument_of p < len @p by A38,QC_LANG1:45;
-          hence F.p = N(G.the_argument_of p, p) by A32,A38,A39,A40,XXREAL_0:2
-                  .= G.p by A33,A38,A40;
+          A37: p is negative and
+          A38: Prop[the_argument_of p] and
+          A39: len @p <= len @x';
+             len @the_argument_of p < len @p by A37,QC_LANG1:45;
+          hence F.p = N(G.the_argument_of p, p) by A31,A37,A38,A39,XXREAL_0:2
+                  .= G.p by A32,A37,A39;
          end;
         thus (p is conjunctive & Prop[the_left_argument_of p] &
                 Prop[the_right_argument_of p] implies Prop[p])
          proof assume that
-          A41: p is conjunctive and
-          A42: Prop[the_left_argument_of p] and
-         A43: Prop[the_right_argument_of p] and
-          A44: len @p <= len @x';
-A45:          len @the_left_argument_of p < len @p by A41,QC_LANG1:46;
-             len @the_right_argument_of p < len @p by A41,QC_LANG1:46;
+          A40: p is conjunctive and
+          A41: Prop[the_left_argument_of p] and
+         A42: Prop[the_right_argument_of p] and
+          A43: len @p <= len @x';
+A44:          len @the_left_argument_of p < len @p by A40,QC_LANG1:46;
+             len @the_right_argument_of p < len @p by A40,QC_LANG1:46;
          hence F.p = C(G.the_left_argument_of p, G.the_right_argument_of p, p)
-                       by A32,A41,A42,A43,A44,A45,XXREAL_0:2
-                  .= G.p by A33,A41,A44;
+                       by A31,A40,A41,A42,A43,A44,XXREAL_0:2
+                  .= G.p by A32,A40,A43;
          end;
         thus (p is universal & Prop[the_scope_of p] implies Prop[p])
          proof assume that
-          A46: p is universal and
-          A47: Prop[the_scope_of p] and
-          A48: len @p <= len @x';
-             len @the_scope_of p < len @p by A46,QC_LANG1:47;
-          hence F.p = Q(G.the_scope_of p, p) by A32,A46,A47,A48,XXREAL_0:2
-                  .= G.p by A33,A46,A48;
+          A45: p is universal and
+          A46: Prop[the_scope_of p] and
+          A47: len @p <= len @x';
+             len @the_scope_of p < len @p by A45,QC_LANG1:47;
+          hence F.p = Q(G.the_scope_of p, p) by A31,A45,A46,A47,XXREAL_0:2
+                  .= G.p by A32,A45,A47;
          end;
        end;
-       for p being Element of QC-WFF holds Prop[p] from QC_LANG1:sch 2 (A34);
+       for p being Element of QC-WFF holds Prop[p] from QC_LANG1:sch 2 (A33);
        hence F.x = G.x';
    end;
 
  consider F being Function such that
-A49: dom F = QC-WFF and
-A50: for x being set st x in
- QC-WFF holds Qfn[x, F.x] from CLASSES1:sch 1 (A31);
+A48: dom F = QC-WFF and
+A49: for x being set st x in
+ QC-WFF holds Qfn[x, F.x] from CLASSES1:sch 1 (A30);
    F is Function of QC-WFF, D()
  proof
      rng F c= D()
@@ -460,92 +458,92 @@ A50: for x being set st x in
     let y be set; assume
       y in rng F;
     then consider x being set such that
-  A51: x in QC-WFF and
-  A52: y = F.x by A49,FUNCT_1:def 5;
+  A50: x in QC-WFF and
+  A51: y = F.x by A48,FUNCT_1:def 5;
       consider p being Element of QC-WFF such that
          p = x and
-  A53: for g being Function of QC-WFF, D() st Pfn[g, len @p] holds
-       y = g.p by A50,A51,A52;
+  A52: for g being Function of QC-WFF, D() st Pfn[g, len @p] holds
+       y = g.p by A49,A50,A51;
     consider G being Function of QC-WFF, D() such that
-  A54: Pfn[G, len @p] by A30;
-         y = G.p by A53,A54;
+  A53: Pfn[G, len @p] by A29;
+         y = G.p by A52,A53;
     hence y in D();
   end;
-  hence thesis by A49,FUNCT_2:def 1,RELSET_1:11;
+  hence thesis by A48,FUNCT_2:def 1,RELSET_1:11;
  end;
 then reconsider F as Function of QC-WFF, D();
 take F;
  consider p1 being Element of QC-WFF such that
-A55: p1 = VERUM and
-A56: for g being Function of QC-WFF, D() st Pfn[g, len @p1]
-       holds F.VERUM = g.p1 by A50;
+A54: p1 = VERUM and
+A55: for g being Function of QC-WFF, D() st Pfn[g, len @p1]
+       holds F.VERUM = g.p1 by A49;
  consider G being Function of QC-WFF, D() such that
-A57: Pfn[G, len @p1] by A30;
-    F.VERUM = G.VERUM by A55,A56,A57;
-  hence F.VERUM = V() by A55,A57;
+A56: Pfn[G, len @p1] by A29;
+    F.VERUM = G.VERUM by A54,A55,A56;
+  hence F.VERUM = V() by A54,A56;
  let p be Element of QC-WFF;
  consider p1 being Element of QC-WFF such that
-A58: p1 = p and
-A59: for g being Function of QC-WFF, D() st Pfn[g, len @p1] holds F.p = g.p1
-by A50;
+A57: p1 = p and
+A58: for g being Function of QC-WFF, D() st Pfn[g, len @p1] holds F.p = g.p1
+by A49;
  consider G being Function of QC-WFF, D() such that
-A60: Pfn[G, len @p1] by A30;
-A61: F.p = G.p by A58,A59,A60;
-  hence p is atomic implies F.p = A(p) by A58,A60;
-  A62: for k being Element of NAT st k < len @p holds Pfn[G, k]
+A59: Pfn[G, len @p1] by A29;
+A60: F.p = G.p by A57,A58,A59;
+  hence p is atomic implies F.p = A(p) by A57,A59;
+  A61: for k being Element of NAT st k < len @p holds Pfn[G, k]
         proof let k be Element of NAT; assume
-A63:            k < len @p;
+A62:            k < len @p;
           let p' be Element of QC-WFF; assume
               len @p' <= k;
-           then len @p' <= len@p by A63,XXREAL_0:2;
-         hence thesis by A58,A60;
+           then len @p' <= len@p by A62,XXREAL_0:2;
+         hence thesis by A57,A59;
         end;
   thus p is negative implies F.p = N(F.the_argument_of p, p)
         proof assume
-        A64: p is negative;
+        A63: p is negative;
              set p' = the_argument_of p;
              set k = len @p';
-                k < len @p by A64,QC_LANG1:45;
-        then A65: Pfn[G, k] by A62;
+                k < len @p by A63,QC_LANG1:45;
+        then A64: Pfn[G, k] by A61;
                 ex p1 being Element of QC-WFF st p1 = p' &
  for g being Function of QC-WFF, D() st Pfn[g, len @p1] holds
-                F.p' = g.p1 by A50;
-             then F.p' = G.p' by A65;
-         hence thesis by A58,A60,A61,A64;
+                F.p' = g.p1 by A49;
+             then F.p' = G.p' by A64;
+         hence thesis by A57,A59,A60,A63;
         end;
   thus p is conjunctive implies
           F.p = C(F.the_left_argument_of p, F.the_right_argument_of p, p)
         proof assume
-        A66: p is conjunctive;
+        A65: p is conjunctive;
              set p' = the_left_argument_of p;
              set k' = len @p';
              set p'' = the_right_argument_of p;
              set k'' = len @p'';
-                k' < len @p by A66,QC_LANG1:46;
-        then A67: Pfn[G, k'] by A62;
-                k'' < len @p by A66,QC_LANG1:46;
-       then A68: Pfn[G, k''] by A62;
-A69:             ex p1 being Element of QC-WFF st p1 = p' &
+                k' < len @p by A65,QC_LANG1:46;
+        then A66: Pfn[G, k'] by A61;
+                k'' < len @p by A65,QC_LANG1:46;
+       then A67: Pfn[G, k''] by A61;
+A68:             ex p1 being Element of QC-WFF st p1 = p' &
  for g being Function of QC-WFF, D() st Pfn[g, len @p1] holds
-                F.p' = g.p1 by A50;
-A70:             ex p2 being Element of QC-WFF st p2 = p'' &
+                F.p' = g.p1 by A49;
+A69:             ex p2 being Element of QC-WFF st p2 = p'' &
  for g being Function of QC-WFF, D() st Pfn[g, len @p2] holds
-                F.p'' = g.p2 by A50;
-        A71: F.p' = G.p' by A67,A69;
-                F.p'' = G.p'' by A68,A70;
-         hence thesis by A58,A60,A61,A66,A71;
+                F.p'' = g.p2 by A49;
+        A70: F.p' = G.p' by A66,A68;
+                F.p'' = G.p'' by A67,A69;
+         hence thesis by A57,A59,A60,A65,A70;
         end;
   assume
-   A72: p is universal;
+   A71: p is universal;
         set p' = the_scope_of p;
         set k = len @p';
-           k < len @p by A72,QC_LANG1:47;
-   then A73: Pfn[G, k] by A62;
+           k < len @p by A71,QC_LANG1:47;
+   then A72: Pfn[G, k] by A61;
            ex p1 being Element of QC-WFF st p1 = p' &
  for g being Function of QC-WFF, D() st Pfn[g, len @p1] holds
-                         F.p' = g.p1 by A50;
-        then F.p' = G.p' by A73;
-  hence thesis by A58,A60,A61,A72;
+                         F.p' = g.p1 by A49;
+        then F.p' = G.p' by A72;
+  hence thesis by A57,A59,A60,A71;
 end;
 
 scheme CQCF2FuncEx { D, E() -> non empty set,

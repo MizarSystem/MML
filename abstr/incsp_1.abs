@@ -6,10 +6,10 @@
 
 environ
 
- vocabularies RELAT_1, BOOLE, INCSP_1, NAT_1;
+ vocabularies RELAT_1, BOOLE, INCSP_1, NAT_1, ANPROJ_2;
  notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, DOMAIN_1, RELSET_1;
- constructors RELSET_1, DOMAIN_1, NAT_D;
- registrations SUBSET_1, XBOOLE_0;
+ constructors RELSET_1, DOMAIN_1;
+ registrations XBOOLE_0, SUBSET_1;
  requirements SUBSET, BOOLE;
 
 
@@ -42,7 +42,7 @@ end;
  reserve P for PLANE of S;
  reserve F,G for Subset of the Points of S;
 
-::    Definitions of predicates: on, is_collinear, is_coplanar
+:: Definitions of predicates: on, is_collinear, is_coplanar
 
 definition let S be IncProjStr; let A be POINT of S, L be LINE of S;
   pred A on L means
@@ -63,7 +63,7 @@ definition let S; let L be LINE of S, P be PLANE of S;
 end;
 
 definition let S be IncProjStr;
-  let F be Subset of the Points of S, L be LINE of S;
+           let F be Subset of the Points of S, L be LINE of S;
   pred F on L means
 :: INCSP_1:def 4
     for A being POINT of S st A in F holds A on L;
@@ -100,10 +100,12 @@ end;
 canceled 10;
 
 theorem :: INCSP_1:11
-  {A,B} on L iff A on L & B on L;
+  for S being IncProjStr, L being LINE of S, A, B being POINT of S holds
+    {A,B} on L iff A on L & B on L;
 
 theorem :: INCSP_1:12
-  {A,B,C} on L iff A on L & B on L & C on L;
+  for S being IncProjStr, L being LINE of S, A, B, C being POINT of S holds
+    {A,B,C} on L iff A on L & B on L & C on L;
 
 theorem :: INCSP_1:13
   {A,B} on P iff A on P & B on P;
@@ -138,31 +140,68 @@ theorem :: INCSP_1:22
 theorem :: INCSP_1:23
   G c= F & F is_coplanar implies G is_coplanar;
 
-::    Introduction of mode IncSpace
+:: Introduction of mode IncSpace
+
+definition let S be IncProjStr;
+  attr S is with_non-trivial_lines means
+:: INCSP_1:def 8
+    for L being LINE of S ex A,B being POINT of S st A <> B & {A,B} on L;
+  attr S is linear means
+:: INCSP_1:def 9
+    for A,B being POINT of S ex L being LINE of S st {A,B} on L;
+  attr S is up-2-rank means
+:: INCSP_1:def 10
+    (for A,B being POINT of S, K,L being LINE of S
+      st A <> B & {A,B} on K & {A,B} on L holds K = L);
+end;
+
+definition let S be IncStruct;
+  attr S is with_non-empty_planes means
+:: INCSP_1:def 11
+    for P being PLANE of S ex A being POINT of S st A on P;
+  attr S is planar means
+:: INCSP_1:def 12
+    for A,B,C being POINT of S ex P being PLANE of S st {A,B,C} on P;
+  attr S is with_<=1_plane_per_3_pts means
+:: INCSP_1:def 13
+    for A,B,C being POINT of S, P,Q being PLANE of S
+      st not {A,B,C} is_collinear & {A,B,C} on P & {A,B,C} on Q
+        holds P = Q;
+  attr S is with_lines_inside_planes means
+:: INCSP_1:def 14
+    for L being LINE of S, P being PLANE of S
+      st ex A,B being POINT of S st A <> B & {A,B} on L & {A,B} on P
+        holds L on P;
+  attr S is with_planes_intersecting_in_2_pts means
+:: INCSP_1:def 15
+    for A being POINT of S, P,Q being PLANE of S
+      st A on P & A on Q ex B being POINT of S st A <> B & B on P & B on Q;
+  attr S is up-3-dimensional means
+:: INCSP_1:def 16
+    ex A,B,C,D being POINT of S st not {A,B,C,D} is_coplanar;
+  attr S is inc-compatible means
+:: INCSP_1:def 17
+    for A being POINT of S, L being LINE of S, P being PLANE of S
+      st A on L & L on P holds A on P;
+end;
 
 definition let IT be IncStruct;
   attr IT is IncSpace-like means
-:: INCSP_1:def 8
-    (for L being LINE of IT ex A,B being POINT of IT st A <> B & {A,B} on L) &
-    (for A,B being POINT of IT ex L being LINE of IT st {A,B} on L) &
-    (for A,B being POINT of IT, K,L being LINE of IT
-      st A <> B & {A,B} on K & {A,B} on L holds K = L) &
-    (for P being PLANE of IT ex A being POINT of IT st A on P) &
-    (for A,B,C being POINT of IT ex P being PLANE of IT st {A,B,C} on P) &
-    (for A,B,C being POINT of IT, P,Q being PLANE of IT
-      st not {A,B,C} is_collinear & {A,B,C} on P & {A,B,C} on Q
-       holds P = Q) &
-    (for L being LINE of IT, P being PLANE of IT
-      st ex A,B being POINT of IT st A <> B & {A,B} on L & {A,B} on P
-       holds L on P) &
-    (for A being POINT of IT, P,Q being PLANE of IT
-      st A on P & A on Q ex B being POINT of IT st A <> B & B on P & B on Q) &
-    (ex A,B,C,D being POINT of IT st not {A,B,C,D} is_coplanar) &
-    (for A being POINT of IT, L being LINE of IT, P being PLANE of IT
-      st A on L & L on P holds A on P);
+:: INCSP_1:def 18
+    IT is with_non-trivial_lines linear up-2-rank
+          with_non-empty_planes planar with_<=1_plane_per_3_pts
+          with_lines_inside_planes with_planes_intersecting_in_2_pts
+          up-3-dimensional inc-compatible;
 end;
 
  reserve a,b,c for Element of {0,1,2,3};
+
+registration
+  cluster IncSpace-like -> with_non-trivial_lines linear up-2-rank
+    with_non-empty_planes planar with_<=1_plane_per_3_pts
+      with_lines_inside_planes with_planes_intersecting_in_2_pts
+        up-3-dimensional inc-compatible IncStruct;
+end;
 
 registration
   cluster strict IncSpace-like IncStruct;
@@ -185,7 +224,7 @@ canceled 11;
 theorem :: INCSP_1:35
   F on L & L on P implies F on P;
 
-::     Collinearity of points & coplanarity of points & lines
+:: Collinearity of points & coplanarity of points & lines
 
 theorem :: INCSP_1:36
   {A,A,B} is_collinear;
@@ -240,32 +279,32 @@ theorem :: INCSP_1:49
 definition let S; let A,B;
  assume  A <> B;
  func Line(A,B) -> LINE of S means
-:: INCSP_1:def 9
+:: INCSP_1:def 19
    {A,B} on it;
 end;
 
 definition let S; let A,B,C;
  assume  not {A,B,C} is_collinear;
  func Plane(A,B,C) -> PLANE of S means
-:: INCSP_1:def 10
+:: INCSP_1:def 20
    {A,B,C} on it;
 end;
 
 definition let S; let A,L;
  assume  not A on L;
  func Plane(A,L) -> PLANE of S means
-:: INCSP_1:def 11
+:: INCSP_1:def 21
    A on it & L on it;
 end;
 
 definition let S; let K,L;
  assume that  K <> L and  (ex A st A on K & A on L);
  func Plane(K,L) -> PLANE of S means
-:: INCSP_1:def 12
+:: INCSP_1:def 22
    K on it & L on it;
 end;
 
-::    Definitional theorems of functions: Line, Plane
+:: Definitional theorems of functions: Line, Plane
 
 canceled 7;
 

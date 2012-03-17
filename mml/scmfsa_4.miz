@@ -9,20 +9,20 @@ environ
  vocabularies AMI_1, FINSET_1, AMI_3, BOOLE, RELAT_1, FUNCT_1, FUNCT_4,
       SCMFSA_2, ARYTM_1, CAT_1, RELOC, AMI_5, AMI_2, NAT_1, ABSVALUE, FINSEQ_1,
       FINSEQ_2, SCMFSA_4, CARD_3, FINSEQ_4;
- notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, SETFAM_1, NUMBERS, XCMPLX_0,
-      NAT_1, NAT_D, BINARITH, INT_1, INT_2, RELAT_1, FUNCT_1, FUNCT_2, FUNCT_4,
-      FUNCOP_1, FUNCT_7, FINSEQ_1, FINSET_1, FINSEQ_2, FINSEQ_4, STRUCT_0,
-      AMI_1, AMI_3, AMI_5, RELOC, SCMFSA_2, XXREAL_0;
- constructors DOMAIN_1, XXREAL_0, NAT_1, FINSEQ_4, INT_2, BINARITH, FUNCT_7,
-      AMI_5, RELOC, SCMFSA_2, NAT_D;
- registrations AMI_1, SCMFSA_2, FUNCT_7, XBOOLE_0, FUNCT_1, TREES_2, RELSET_1,
-      INT_1, AMI_3, FRAENKEL, NUMBERS, ORDINAL1, SETFAM_1, CARD_3, FUNCOP_1,
-      SUBSET_1;
+ notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, SETFAM_1, NUMBERS, CARD_3,
+      XCMPLX_0, NAT_1, BINARITH, INT_1, INT_2, RELAT_1, FUNCT_1, FUNCT_2,
+      FUNCT_4, FUNCOP_1, FUNCT_7, FINSEQ_1, FINSET_1, FINSEQ_2, FINSEQ_4,
+      STRUCT_0, AMI_1, AMI_3, AMI_5, RELOC, SCMFSA_2, XXREAL_0;
+ constructors DOMAIN_1, XXREAL_0, NAT_1, INT_2, FINSEQ_4, BINARITH, FUNCT_7,
+      AMI_5, RELOC, SCMFSA_2;
+ registrations XBOOLE_0, SUBSET_1, SETFAM_1, FUNCT_1, ORDINAL1, RELSET_1,
+      FUNCOP_1, ARYTM_3, FRAENKEL, NUMBERS, XREAL_0, INT_1, CARD_3, TREES_2,
+      FUNCT_7, AMI_1, AMI_3, SCMFSA_2;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, AMI_3, XBOOLE_0, SCMFSA_2, FUNCOP_1;
  theorems SCMFSA_2, BINARITH, AMI_3, ZFMISC_1, RELOC, AMI_5, ENUMSET1, NAT_1,
       FUNCOP_1, RELAT_1, FUNCT_1, TARSKI, FUNCT_4, FUNCT_2, AMI_1, FINSET_1,
-      GRFUNC_1, SCMFSA_3, RELSET_1, XBOOLE_0, XBOOLE_1;
+      GRFUNC_1, SCMFSA_3, RELSET_1, XBOOLE_0, XBOOLE_1, CARD_3;
  schemes CLASSES1, FUNCT_7;
 
 begin ::Preliminaries
@@ -55,10 +55,9 @@ A1: dom p c= the Instruction-Locations of S by AMI_3:def 13;
 A2: y in dom p and
 A3: x = p.y by FUNCT_1:def 5;
   reconsider y as Instruction-Location of S by A1,A2;
-A4: p in sproduct the Object-Kind of S;
      (the Object-Kind of S).y = ObjectKind y by AMI_1:def 6
          .= the Instructions of S by AMI_1:def 14;
- hence x in the Instructions of S by A2,A3,A4,AMI_1:25;
+ hence x in the Instructions of S by A2,A3,AMI_1:25;
 end;
 
 definition let N be set;
@@ -399,7 +398,7 @@ theorem Th21:
 proof
  let i be Instruction of SCM+FSA, I; assume
 A1: i = I;
-then A2: InsCode i = InsCode I by SCMFSA_2:37;
+then A2: InsCode i = InsCode I;
  per cases;
  suppose InsCode i in {6,7,8};
    then ex I being Instruction of SCM st I = i & IncAddr(i,k) = IncAddr(I,k)
@@ -426,9 +425,7 @@ A3: InsCode I <= 9+1 implies InsCode I <= 8+1 or InsCode I = 10 by NAT_1:8;
   suppose InsCode I <= 8;
    then reconsider i = I as Instruction of SCM by SCMFSA_2:34;
        IncAddr (I, k) = IncAddr (i, k) by Th21;
-   hence InsCode (IncAddr (I, k)) = InsCode (IncAddr (i, k)) by SCMFSA_2:37
-              .= InsCode i by RELOC:13
-              .= InsCode I by SCMFSA_2:37;
+   hence InsCode (IncAddr (I, k)) = InsCode I by RELOC:13;
   end;
   suppose InsCode I=9 or InsCode I=10 or InsCode I=11 or InsCode I=12;
    then not InsCode I in {6,7,8} by ENUMSET1:def 1;
@@ -452,7 +449,7 @@ registration
  coherence
   proof
    thus SCM+FSA-Stop is non empty;
-A1:  dom SCM+FSA-Stop = {insloc 0} by FUNCOP_1:14,19;
+A1:  dom SCM+FSA-Stop = {insloc 0} by FUNCOP_1:19;
    thus SCM+FSA-Stop is initial
     proof let m,n such that
 A2:   insloc n in dom SCM+FSA-Stop and
@@ -504,8 +501,8 @@ then A7:   rng(f*s) c= the Instructions of S by A6,XBOOLE_1:1;
           .= the Instructions of S by AMI_1:def 14;
      hence (f*s).x in (the Object-Kind of S).x by A5,A7;
     end;
-    then f*s in sproduct the Object-Kind of S by A3,AMI_1:def 16;
-    then reconsider fs = f*s as FinPartState of S by AMI_1:def 24;
+    then f*s in sproduct the Object-Kind of S by A3,CARD_3:def 9;
+    then reconsider fs = f*s as FinPartState of S;
         fs is programmed by A2,AMI_3:def 13;
    hence thesis;
   end;
@@ -597,9 +594,9 @@ A9:       f.x = IncAddr(pi(p,insloc m),k) by A4,A5;
        hence f.x in (the Object-Kind of SCM+FSA).x by A9;
       end;
    then reconsider f as Element of sproduct the Object-Kind of SCM+FSA
-                                         by A7,AMI_1:def 16;
+                                         by A7,CARD_3:def 9;
        f is finite by A4,FINSET_1:29;
-    then reconsider f as FinPartState of SCM+FSA by AMI_1:def 24;
+    then reconsider f as FinPartState of SCM+FSA;
        f is programmed
      proof
       let x be set;
@@ -700,10 +697,10 @@ proof
                       the Instructions of SCM+FSA such that
 A1: f = (id the Instructions of SCM+FSA) +* (halt SCM+FSA .--> i);
 A2: dom(halt SCM+FSA .--> IncAddr(i,n)) = {halt SCM+FSA}
-                 by FUNCOP_1:14,19;
-A3: dom(halt SCM+FSA .--> i) = {halt SCM+FSA} by FUNCOP_1:14,19;
+                 by FUNCOP_1:19;
+A3: dom(halt SCM+FSA .--> i) = {halt SCM+FSA} by FUNCOP_1:19;
 A4: rng(halt SCM+FSA .--> IncAddr(i,n)) = {IncAddr(i,n)}
-                 by FUNCOP_1:14,19;
+                 by FUNCOP_1:14;
 A5: dom(id the Instructions of SCM+FSA) = the Instructions of SCM+FSA
                     by RELAT_1:71;
 A6: dom((id the Instructions of SCM+FSA) +*
@@ -2333,12 +2330,12 @@ then A14:   insloc m in dom p by A13;
               by A9,A10,A11,A14,GRFUNC_1:8;
       end;
     then reconsider f as Element of sproduct the Object-Kind of SCM+FSA
-              by A6,AMI_1:def 16;
+              by A6,CARD_3:def 9;
 A15: dom p is finite;
 A16: for m1,m2 being Element of NAT st U(m1) = U(m2) holds m1 = m2;
        A is finite from FUNCT_7:sch 2(A15,A16);
     then f is finite by A3,FINSET_1:29;
-    then reconsider f as FinPartState of SCM+FSA by AMI_1:def 24;
+    then reconsider f as FinPartState of SCM+FSA;
        f is programmed
      proof
       let x be set;
