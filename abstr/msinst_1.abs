@@ -24,108 +24,115 @@ environ
 
 begin  :: Category of Many Sorted Signatures
 
- reserve A for non empty set,
-         S for non void non empty ManySortedSign;
- reserve x for set;
+reserve A for non empty set,
+  S for non void non empty ManySortedSign;
 
-definition let A;
+reserve x for set;
+
+definition
+  let A;
   func MSSCat A -> strict non empty AltCatStr means
 :: MSINST_1:def 1
-   the carrier of it = MSS_set A &
-   ( for i, j be Element of MSS_set A holds
-   (the Arrows of it).(i,j) = MSS_morph (i,j) ) &
-    for i,j,k be object of it st
-     i in MSS_set A & j in MSS_set A & k in MSS_set A
-     for f1,f2,g1,g2 be Function st
-      [f1,f2] in (the Arrows of it).(i,j) &
-      [g1,g2] in (the Arrows of it).(j,k) holds
-       (the Comp of it).(i,j,k).([g1,g2],[f1,f2]) = [g1*f1,g2*f2];
+
+  the carrier of it = MSS_set A & ( for i, j be Element of MSS_set A holds
+  (the Arrows of it).(i,j) = MSS_morph (i,j) ) & for i,j,k be object of it st
+  i in MSS_set A & j in MSS_set A & k in MSS_set A
+  for f1,f2,g1,g2 be Function st [f1,f2] in (the Arrows of it).(i,j) &
+  [g1,g2] in (the Arrows of it).(j,k) holds
+  (the Comp of it).(i,j,k).([g1,g2],[f1,f2]) = [g1*f1,g2*f2];
 end;
 
-registration let A;
+registration
+  let A;
   cluster MSSCat A -> transitive associative with_units;
 end;
 
 theorem :: MSINST_1:1
-     for C be category st C = MSSCat A
+  for C be category st C = MSSCat A
   for o be object of C holds o is non empty non void ManySortedSign;
 
-registration let S;
+registration
+  let S;
   cluster strict feasible MSAlgebra over S;
 end;
 
-definition let S, A;
+definition
+  let S, A;
   func MSAlg_set (S,A) means
 :: MSINST_1:def 2
-   x in it iff ex M be strict feasible MSAlgebra over S st x = M &
-     for C be Component of the Sorts of M holds C c= A;
+
+  x in it iff ex M be strict feasible MSAlgebra over S st x = M &
+  for C be Component of the Sorts of M holds C c= A;
 end;
 
-registration let S, A;
+registration
+  let S, A;
   cluster MSAlg_set (S,A) -> non empty;
 end;
 
 begin :: Category of Many Sorted Algebras
 
- reserve o for OperSymbol of S;
+reserve o for OperSymbol of S;
 
 theorem :: MSINST_1:2
- for x be MSAlgebra over S st x in MSAlg_set (S,A) holds
+  for x be MSAlgebra over S st x in MSAlg_set (S,A) holds
   the Sorts of x in Funcs (the carrier of S, bool A) &
   the Charact of x in Funcs (the OperSymbols of S,PFuncs(PFuncs (NAT ,A),A));
 
 theorem :: MSINST_1:3
- for U1,U2 be MSAlgebra over S
-   st the Sorts of U1 is_transformable_to the Sorts of U2 &
-      Args (o,U1) <> {} holds Args (o,U2) <> {};
+  for U1,U2 be MSAlgebra over S
+  st the Sorts of U1 is_transformable_to the Sorts of U2 &
+  Args (o,U1) <> {} holds Args (o,U2) <> {};
 
 theorem :: MSINST_1:4
-for U1,U2,U3 be feasible MSAlgebra over S,
-    F be ManySortedFunction of U1,U2,
-    G be ManySortedFunction of U2,U3,
+  for U1,U2,U3 be feasible MSAlgebra over S, F be ManySortedFunction of U1,U2,
+  G be ManySortedFunction of U2,U3,
   x be Element of Args(o,U1) st Args (o,U1) <> {} &
-    the Sorts of U1 is_transformable_to the Sorts of U2
+  the Sorts of U1 is_transformable_to the Sorts of U2
   & the Sorts of U2 is_transformable_to the Sorts of U3
-  ex GF be ManySortedFunction of U1,U3 st
-   GF = G ** F & GF#x = G#(F#x);
+  ex GF be ManySortedFunction of U1,U3 st GF = G ** F & GF#x = G#(F#x);
 
 theorem :: MSINST_1:5
-for U1,U2,U3 be feasible MSAlgebra over S,
- F be ManySortedFunction of U1,U2,
- G be ManySortedFunction of U2,U3 st
+  for U1,U2,U3 be feasible MSAlgebra over S, F be ManySortedFunction of U1,U2,
+  G be ManySortedFunction of U2,U3 st
   the Sorts of U1 is_transformable_to the Sorts of U2
   & the Sorts of U2 is_transformable_to the Sorts of U3
   & F is_homomorphism U1,U2 & G is_homomorphism U2,U3
   ex GF be ManySortedFunction of U1,U3 st
-   GF = G ** F & GF is_homomorphism U1,U3;
+  GF = G ** F & GF is_homomorphism U1,U3;
 
-definition let S, A; let i,j be set;
-  assume  i in MSAlg_set (S,A) & j in MSAlg_set (S,A);
+definition
+  let S, A;
+  let i,j be set;
+  assume
+ i in MSAlg_set (S,A) & j in MSAlg_set (S,A);
   func MSAlg_morph (S,A,i,j) means
 :: MSINST_1:def 3
-    x in it iff (ex M,N be strict feasible MSAlgebra over S,
-     f be ManySortedFunction of M,N
-     st M = i & N = j & f = x &
-    the Sorts of M is_transformable_to the Sorts of N & f is_homomorphism M,N);
+
+  x in it iff (ex M,N be strict feasible MSAlgebra over S,
+  f be ManySortedFunction of M,N st M = i & N = j & f = x &
+  the Sorts of M is_transformable_to the Sorts of N & f is_homomorphism M,N);
 end;
 
-definition let S, A;
+definition
+  let S, A;
   func MSAlgCat (S,A) -> strict non empty AltCatStr means
 :: MSINST_1:def 4
-   the carrier of it = MSAlg_set (S,A) &
- ( for i, j be Element of MSAlg_set (S,A) holds
- (the Arrows of it).(i,j) = MSAlg_morph (S,A,i,j) ) &
-   ( for i,j,k be object of it, f,g be Function-yielding Function st
-     f in (the Arrows of it).(i,j) &
-     g in (the Arrows of it).(j,k) holds
-   (the Comp of it).(i,j,k).(g,f) = ( g ** f ) );
+
+  the carrier of it = MSAlg_set (S,A) &
+  ( for i, j be Element of MSAlg_set (S,A) holds
+  (the Arrows of it).(i,j) = MSAlg_morph (S,A,i,j) ) &
+  ( for i,j,k be object of it, f,g be Function-yielding Function st
+  f in (the Arrows of it).(i,j) & g in (the Arrows of it).(j,k) holds
+  (the Comp of it).(i,j,k).(g,f) = ( g ** f ) );
 end;
 
-registration let S, A;
+registration
+  let S, A;
   cluster MSAlgCat (S,A) -> transitive associative with_units;
 end;
 
 theorem :: MSINST_1:6
-      for C be category st C = MSAlgCat (S,A)
-   for o be object of C holds
-   o is strict feasible MSAlgebra over S;
+  for C be category st C = MSAlgCat (S,A) for o be object of C holds
+  o is strict feasible MSAlgebra over S;
+

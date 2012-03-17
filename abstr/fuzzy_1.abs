@@ -22,23 +22,25 @@ environ
 
 begin
 
- reserve x,y,y1,y2 for set;
- reserve C for non empty set;
- reserve c for Element of C;
+reserve x,y,y1,y2 for set;
+reserve C for non empty set;
+reserve c for Element of C;
 
 ::::::Definition of Membership Function and Fuzzy Set
 
 theorem :: FUZZY_1:1
-rng chi(x,y) c= [.0,1.];
+  rng chi(x,y) c= [.0,1.];
 
-definition let C;
-mode Membership_Func of C -> PartFunc of C,REAL means
+definition
+  let C;
+  mode Membership_Func of C -> PartFunc of C,REAL means
 :: FUZZY_1:def 1
-dom it = C & rng it c= [.0,1.];
+
+    dom it = C & rng it c= [.0,1.];
 end;
 
 theorem :: FUZZY_1:2
-chi(C,C) is Membership_Func of C;
+  chi(C,C) is Membership_Func of C;
 
 reserve f,h,g,h1 for Membership_Func of C;
 
@@ -51,205 +53,210 @@ definition
   let f,g be real-yielding Function;
   pred f is_less_than g means
 :: FUZZY_1:def 2
-   dom f c= dom g &
-   for x being set st x in dom f holds f.x <= g.x;
+
+  dom f c= dom g &
+  for x being set st x in dom f holds f.x <= g.x;
   reflexivity;
 end;
 
 notation
- let X be non empty set;
- let f,g be Membership_Func of X;
- synonym f c= g for f is_less_than g;
+  let X be non empty set;
+  let f,g be Membership_Func of X;
+  synonym f c= g for f is_less_than g;
 end;
 
 definition
- let X be non empty set;
- let f,g be Membership_Func of X;
- redefine pred f is_less_than g means
+  let X be non empty set;
+  let f,g be Membership_Func of X;
+  redefine pred f is_less_than g means
 :: FUZZY_1:def 3
+
   for x being Element of X holds f.x <= g.x;
-  end;
+end;
 
 theorem :: FUZZY_1:3
-    f = g iff f c= g & g c= f;
+  f = g iff f c= g & g c= f;
 
 theorem :: FUZZY_1:4
-    f c= f;
+  f c= f;
 
 theorem :: FUZZY_1:5
- f c= g & g c= h implies g c= h;
+  f c= g & g c= h implies g c= h;
 
 begin
+
 ::::::Intersection,Union and Complement
 
 definition
-let C be non empty set;
-let h,g be Membership_Func of C;
-func min(h,g) -> Membership_Func of C means
+  let C be non empty set;
+  let h,g be Membership_Func of C;
+  func min(h,g) -> Membership_Func of C means
 :: FUZZY_1:def 4
-for c being Element of C holds it.c = min(h.c,g.c);
- idempotence;
- commutativity;
+
+  for c being Element of C holds it.c = min(h.c,g.c);
+  idempotence;
+  commutativity;
 end;
 
 definition
-let C be non empty set;
-let h,g be Membership_Func of C;
-func max(h,g) -> Membership_Func of C means
+  let C be non empty set;
+  let h,g be Membership_Func of C;
+  func max(h,g) -> Membership_Func of C means
 :: FUZZY_1:def 5
-for c being Element of C holds it.c = max(h.c,g.c);
- idempotence;
- commutativity;
+
+  for c being Element of C holds it.c = max(h.c,g.c);
+  idempotence;
+  commutativity;
 end;
 
 definition
-let C be non empty set;
-let h be Membership_Func of C;
-func 1_minus h -> Membership_Func of C means
+  let C be non empty set;
+  let h be Membership_Func of C;
+  func 1_minus h -> Membership_Func of C means
 :: FUZZY_1:def 6
-for c being Element of C holds it.c = 1-h.c;
- involutiveness;
+
+  for c being Element of C holds it.c = 1-h.c;
+  involutiveness;
 end;
 
 theorem :: FUZZY_1:6
-    min(h.c,g.c) = min(h,g).c & max(h.c,g.c) = max(h,g).c;
+  min(h.c,g.c) = min(h,g).c & max(h.c,g.c) = max(h,g).c;
 
 theorem :: FUZZY_1:7
- max(h,h) = h & min(h,h) = h & max(h,h) = min(h,h) &
-min(f,g) = min(g,f) & max(f,g) = max(g,f);
+  max(h,h) = h & min(h,h) = h & max(h,h) = min(h,h) &
+  min(f,g) = min(g,f) & max(f,g) = max(g,f);
 
 theorem :: FUZZY_1:8
-max(max(f,g),h) = max(f,max(g,h)) &
-min(min(f,g),h) = min(f,min(g,h));
+  max(max(f,g),h) = max(f,max(g,h)) & min(min(f,g),h) = min(f,min(g,h));
 
 theorem :: FUZZY_1:9
-max(f,min(f,g)) = f & min(f,max(f,g)) = f;
+  max(f,min(f,g)) = f & min(f,max(f,g)) = f;
 
 theorem :: FUZZY_1:10
-min(f,max(g,h)) = max(min(f,g),min(f,h)) &
-max(f,min(g,h)) = min(max(f,g),max(f,h));
+  min(f,max(g,h)) = max(min(f,g),min(f,h)) &
+  max(f,min(g,h)) = min(max(f,g),max(f,h));
 
 theorem :: FUZZY_1:11
- 1_minus(1_minus(h)) = h;
+  1_minus(1_minus(h)) = h;
 
 theorem :: FUZZY_1:12
-1_minus(max(f,g)) = min(1_minus(f),1_minus(g)) &
-1_minus(min(f,g)) = max(1_minus(f),1_minus(g));
+  1_minus(max(f,g)) = min(1_minus(f),1_minus(g)) &
+  1_minus(min(f,g)) = max(1_minus(f),1_minus(g));
 
 begin
+
 ::::::Empty Fuzzy Set and Universal Fuzzy Set
 
 theorem :: FUZZY_1:13
-chi({},C) is Membership_Func of C;
+  chi({},C) is Membership_Func of C;
 
 definition
-let C be non empty set;
-func EMF(C) -> Membership_Func of C equals
+  let C be non empty set;
+  func EMF(C) -> Membership_Func of C equals
 :: FUZZY_1:def 7
- chi({},C);
+
+  chi({},C);
 end;
 
 definition
-let C be non empty set;
-func UMF(C) -> Membership_Func of C equals
+  let C be non empty set;
+  func UMF(C) -> Membership_Func of C equals
 :: FUZZY_1:def 8
- chi(C,C);
+
+  chi(C,C);
 end;
 
 theorem :: FUZZY_1:14
-for a,b be Element of REAL,
-f be PartFunc of C,REAL st rng f c= [.a,b.] & a <= b holds
-(for x being Element of C st x in dom f holds a <= f.x & f.x <= b);
+  for a,b be Element of REAL,
+  f be PartFunc of C,REAL st rng f c= [.a,b.] & a <= b holds
+  (for x being Element of C st x in dom f holds a <= f.x & f.x <= b);
 
 theorem :: FUZZY_1:15
-   EMF(C) c= f;
+  EMF(C) c= f;
 
 theorem :: FUZZY_1:16
-   f c= UMF(C);
+  f c= UMF(C);
 
 theorem :: FUZZY_1:17
-for x be Element of C,h be Membership_Func of C holds
-(EMF(C)).x <= h.x & h.x <= (UMF(C)).x;
+  for x be Element of C,h be Membership_Func of C holds
+  (EMF(C)).x <= h.x & h.x <= (UMF(C)).x;
 
 theorem :: FUZZY_1:18
- min(f,g) c= f & f c= max(f,g);
+  min(f,g) c= f & f c= max(f,g);
 
 theorem :: FUZZY_1:19
-max(f,UMF(C)) = UMF(C) & min(f,UMF(C)) = f &
-max(f,EMF(C)) = f & min(f,EMF(C)) = EMF(C);
+  max(f,UMF(C)) = UMF(C) & min(f,UMF(C)) = f &
+  max(f,EMF(C)) = f & min(f,EMF(C)) = EMF(C);
 
 theorem :: FUZZY_1:20
-f c= h & g c= h implies max(f,g) c= h;
+  f c= h & g c= h implies max(f,g) c= h;
 
 theorem :: FUZZY_1:21
-    f c= g implies max(f,h) c= max(g,h);
+  f c= g implies max(f,h) c= max(g,h);
 
 theorem :: FUZZY_1:22
-    f c= g & h c= h1 implies max(f,h) c= max(g,h1);
+  f c= g & h c= h1 implies max(f,h) c= max(g,h1);
 
 theorem :: FUZZY_1:23
-    f c= g implies max(f,g) = g;
+  f c= g implies max(f,g) = g;
 
 theorem :: FUZZY_1:24
-   min(f,g) c= max(f,g);
+  min(f,g) c= max(f,g);
 
 theorem :: FUZZY_1:25
-h c= f & h c= g implies h c= min(f,g);
+  h c= f & h c= g implies h c= min(f,g);
 
 canceled 2;
 
 theorem :: FUZZY_1:28
-    f c= g implies min(f,h) c= min(g,h);
+  f c= g implies min(f,h) c= min(g,h);
 
 theorem :: FUZZY_1:29
-    f c= g & h c= h1 implies min(f,h) c= min(g,h1);
+  f c= g & h c= h1 implies min(f,h) c= min(g,h1);
 
 theorem :: FUZZY_1:30
-f c= g implies min(f,g) = f;
+  f c= g implies min(f,g) = f;
 
 theorem :: FUZZY_1:31
-    f c= g & f c= h & min(g,h) = EMF(C) implies f = EMF(C);
+  f c= g & f c= h & min(g,h) = EMF(C) implies f = EMF(C);
 
 theorem :: FUZZY_1:32
-   max(min(f,g),min(f,h)) = f implies f c= max(g,h);
+  max(min(f,g),min(f,h)) = f implies f c= max(g,h);
 
 theorem :: FUZZY_1:33
-    f c= g & min(g,h) = EMF(C) implies min(f,h) = EMF(C);
+  f c= g & min(g,h) = EMF(C) implies min(f,h) = EMF(C);
 
 theorem :: FUZZY_1:34
-    f c= EMF(C) implies f = EMF(C);
+  f c= EMF(C) implies f = EMF(C);
 
 theorem :: FUZZY_1:35
-    max(f,g) = EMF(C) iff f = EMF(C) & g = EMF(C);
+  max(f,g) = EMF(C) iff f = EMF(C) & g = EMF(C);
 
 theorem :: FUZZY_1:36
-   f = max(g,h) iff g c= f & h c= f & for h1 st g c= h1 & h c= h1 holds f c= h1
-;
+  f = max(g,h) iff g c= f & h c= f & for h1 st g c= h1 & h c= h1 holds f c= h1;
 
 theorem :: FUZZY_1:37
-   f = min(g,h) iff f c= g & f c= h & for h1 st h1 c= g & h1 c= h holds h1 c= f
-;
+  f = min(g,h) iff f c= g & f c= h & for h1 st h1 c= g & h1 c= h holds h1 c= f;
 
 theorem :: FUZZY_1:38
-   f c= max(g,h) & min(f,h) = EMF(C) implies f c= g;
+  f c= max(g,h) & min(f,h) = EMF(C) implies f c= g;
 
 theorem :: FUZZY_1:39
   f c= g iff 1_minus g c= 1_minus f;
 
 theorem :: FUZZY_1:40
-   f c= 1_minus g implies g c= 1_minus f;
+  f c= 1_minus g implies g c= 1_minus f;
 
 theorem :: FUZZY_1:41
-   1_minus max(f,g) c= 1_minus f;
+  1_minus max(f,g) c= 1_minus f;
 
 theorem :: FUZZY_1:42
-   1_minus f c= 1_minus min(f,g);
+  1_minus f c= 1_minus min(f,g);
 
 canceled;
 
 theorem :: FUZZY_1:44
   1_minus(EMF(C)) = UMF(C) & 1_minus(UMF(C)) = EMF(C);
-
 
 ::::::Exclusive Sum, Absolute Difference
 
@@ -258,33 +265,33 @@ definition
   let h,g be Membership_Func of C;
   func h \+\ g -> Membership_Func of C equals
 :: FUZZY_1:def 9
-   max(min(h,1_minus(g)),min(1_minus(h),g));
+  max(min(h,1_minus(g)),min(1_minus(h),g));
   commutativity;
 end;
 
 theorem :: FUZZY_1:45
-   f \+\ EMF(C) = f;
+  f \+\ EMF(C) = f;
 
 theorem :: FUZZY_1:46
-   f \+\ UMF(C) = 1_minus f;
+  f \+\ UMF(C) = 1_minus f;
 
 theorem :: FUZZY_1:47
-   min(min(max(f,g),max(g,h)),max(h,f)) = max(max(min(f,g),min(g,h)),min(h,f));
+  min(min(max(f,g),max(g,h)),max(h,f)) = max(max(min(f,g),min(g,h)),min(h,f));
 
 theorem :: FUZZY_1:48
-   max(min(f,g),min(1_minus f, 1_minus g)) c= 1_minus (f \+\ g);
+  max(min(f,g),min(1_minus f, 1_minus g)) c= 1_minus (f \+\ g);
 
 theorem :: FUZZY_1:49
-   max(f \+\ g, min(f,g)) c= max(f,g);
+  max(f \+\ g, min(f,g)) c= max(f,g);
 
 theorem :: FUZZY_1:50
-   f \+\ f = min(f, 1_minus f);
+  f \+\ f = min(f, 1_minus f);
 
 definition
-let C be non empty set;
-let h,g be Membership_Func of C;
-func ab_difMF(h,g) -> Membership_Func of C means
+  let C be non empty set;
+  let h,g be Membership_Func of C;
+  func ab_difMF(h,g) -> Membership_Func of C means
 :: FUZZY_1:def 10
-    for c being Element of C holds it.c = abs(h.c - g.c);
+  for c being Element of C holds it.c = abs(h.c - g.c);
 end;
 

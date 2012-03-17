@@ -27,109 +27,105 @@ begin
 reserve i,i1,i2,i',i1',j,j1,j2,j',j1',k,l,m,n for Element of NAT;
 reserve r,s,r',s' for Real;
 reserve D for set,
-        f for FinSequence of D,
-        G for Matrix of D;
+  f for FinSequence of D,
+  G for Matrix of D;
 
 theorem :: JORDAN8:1
-      len f >= 2 implies f|2 = <*f/.1,f/.2*>;
+  len f >= 2 implies f|2 = <*f/.1,f/.2*>;
 
 theorem :: JORDAN8:2
-      k+1 <= len f implies f|(k+1) = f|k^<*f/.(k+1)*>;
+  k+1 <= len f implies f|(k+1) = f|k^<*f/.(k+1)*>;
 
 theorem :: JORDAN8:3
-      <*>D is_sequence_on G;
+  <*>D is_sequence_on G;
 
 canceled;
 
 theorem :: JORDAN8:5
-     for D being non empty set, f being FinSequence of D, G being Matrix of D
-   st f is_sequence_on G
-  holds f/^m is_sequence_on G;
+  for D being non empty set, f being FinSequence of D, G being Matrix of D
+  st f is_sequence_on G holds f/^m is_sequence_on G;
 
 theorem :: JORDAN8:6
   1 <= k & k+1 <= len f & f is_sequence_on G
-   implies ex i1,j1,i2,j2 being Element of NAT st
-     [i1,j1] in Indices G & f/.k = G*(i1,j1) &
-     [i2,j2] in Indices G & f/.(k+1) = G*(i2,j2) &
-     (i1 = i2 & j1+1 = j2 or i1+1 = i2 & j1 = j2 or
-      i1 = i2+1 & j1 = j2 or i1 = i2 & j1 = j2+1);
+  implies ex i1,j1,i2,j2 being Element of NAT st
+  [i1,j1] in Indices G & f/.k = G*(i1,j1) &
+  [i2,j2] in Indices G & f/.(k+1) = G*(i2,j2) &
+  (i1 = i2 & j1+1 = j2 or i1+1 = i2 & j1 = j2 or
+  i1 = i2+1 & j1 = j2 or i1 = i2 & j1 = j2+1);
 
 reserve G for Go-board,
-        p for Point of TOP-REAL 2;
+  p for Point of TOP-REAL 2;
 
 theorem :: JORDAN8:7
-     for f being non empty FinSequence of TOP-REAL 2 st f is_sequence_on G
-   holds f is standard special;
+  for f being non empty FinSequence of TOP-REAL 2 st f is_sequence_on G
+  holds f is standard special;
 
 theorem :: JORDAN8:8
-     for f being non empty FinSequence of TOP-REAL 2 st
-    len f >= 2 & f is_sequence_on G
-   holds f is non constant;
+  for f being non empty FinSequence of TOP-REAL 2 st
+  len f >= 2 & f is_sequence_on G holds f is non constant;
 
 theorem :: JORDAN8:9
-  for f being non empty FinSequence of TOP-REAL 2
-   st f is_sequence_on G &
-     (ex i,j being Element of NAT st [i,j] in Indices G & p = G*(i,j)) &
-     (for i1,j1,i2,j2
-      st [i1,j1] in Indices G & [i2,j2] in Indices G &
-         f/.len f = G*(i1,j1) & p = G*(i2,j2)
-      holds abs(i2-i1)+abs(j2-j1) = 1)
+  for f being non empty FinSequence of TOP-REAL 2 st f is_sequence_on G &
+  (ex i,j being Element of NAT st [i,j] in Indices G & p = G*(i,j)) &
+  (for i1,j1,i2,j2 st [i1,j1] in Indices G & [i2,j2] in Indices G &
+  f/.len f = G*(i1,j1) & p = G*(i2,j2) holds abs(i2-i1)+abs(j2-j1) = 1)
   holds f^<*p*> is_sequence_on G;
 
 theorem :: JORDAN8:10
-      i+k < len G & 1 <= j & j < width G & cell(G,i,j) meets cell(G,i+k,j)
-    implies k <= 1;
+  i+k < len G & 1 <= j & j < width G & cell(G,i,j) meets cell(G,i+k,j)
+  implies k <= 1;
 
 theorem :: JORDAN8:11
- for C being non empty compact Subset of TOP-REAL 2
-   holds C is vertical iff E-bound C <= W-bound C;
+  for C being non empty compact Subset of TOP-REAL 2
+  holds C is vertical iff E-bound C <= W-bound C;
 
 theorem :: JORDAN8:12
- for C being non empty compact Subset of TOP-REAL 2
-   holds C is horizontal iff N-bound C <= S-bound C;
+  for C being non empty compact Subset of TOP-REAL 2
+  holds C is horizontal iff N-bound C <= S-bound C;
 
-definition let C be Subset of TOP-REAL 2, n be Nat;
-
- func Gauge (C,n) -> Matrix of TOP-REAL 2 means
+definition
+  let C be Subset of TOP-REAL 2, n be Nat;
+  func Gauge (C,n) -> Matrix of TOP-REAL 2 means
 :: JORDAN8:def 1
- len it = 2|^n + 3 & len it = width it &
-   for i,j being Nat st [i,j] in Indices it holds
-      it*(i,j) = |[(W-bound C)+(((E-bound C)-(W-bound C))/(2|^n))*(i-2),
-                   (S-bound C)+(((N-bound C)-(S-bound C))/(2|^n))*(j-2)]|;
+
+  len it = 2|^n + 3 & len it = width it &
+  for i,j being Nat st [i,j] in Indices it holds
+  it*(i,j) = |[(W-bound C)+(((E-bound C)-(W-bound C))/(2|^n))*(i-2),
+  (S-bound C)+(((N-bound C)-(S-bound C))/(2|^n))*(j-2)]|;
 end;
 
 registration
- let C be non empty Subset of TOP-REAL 2, n be Nat;
- cluster Gauge (C,n) -> non empty-yielding X_equal-in-line Y_equal-in-column;
+  let C be non empty Subset of TOP-REAL 2, n be Nat;
+  cluster Gauge (C,n) -> non empty-yielding X_equal-in-line Y_equal-in-column;
 end;
 
 registration
   let C be compact non vertical non horizontal non empty Subset of TOP-REAL 2,
-      n be Nat;
- cluster Gauge (C,n) -> Y_increasing-in-line X_increasing-in-column;
+  n be Nat;
+  cluster Gauge (C,n) -> Y_increasing-in-line X_increasing-in-column;
 end;
 
 reserve T for non empty Subset of TOP-REAL 2;
 
 theorem :: JORDAN8:13
- for n being Nat holds len Gauge(T,n) >= 4;
+  for n being Nat holds len Gauge(T,n) >= 4;
 
 theorem :: JORDAN8:14
   1 <= j & j <= len Gauge(T,n) implies Gauge(T,n)*(2,j)`1 = W-bound T;
 
 theorem :: JORDAN8:15
-      1 <= j & j <= len Gauge(T,n) implies
-    Gauge(T,n)*(len Gauge(T,n)-'1,j)`1 = E-bound T;
+  1 <= j & j <= len Gauge(T,n) implies
+  Gauge(T,n)*(len Gauge(T,n)-'1,j)`1 = E-bound T;
 
 theorem :: JORDAN8:16
-      1 <= i & i <= len Gauge(T,n) implies Gauge(T,n)*(i,2)`2 = S-bound T;
+  1 <= i & i <= len Gauge(T,n) implies Gauge(T,n)*(i,2)`2 = S-bound T;
 
 theorem :: JORDAN8:17
-      1 <= i & i <= len Gauge(T,n) implies
-    Gauge(T,n)*(i,len Gauge(T,n)-'1)`2 = N-bound T;
+  1 <= i & i <= len Gauge(T,n) implies
+  Gauge(T,n)*(i,len Gauge(T,n)-'1)`2 = N-bound T;
 
 reserve C for
-   compact non vertical non horizontal non empty Subset of TOP-REAL 2;
+  compact non vertical non horizontal non empty Subset of TOP-REAL 2;
 
 reserve i, j, n for Nat;
 
@@ -144,3 +140,4 @@ theorem :: JORDAN8:20
 
 theorem :: JORDAN8:21
   j <= len Gauge(C,n) implies cell(Gauge(C,n),0,j) misses C;
+

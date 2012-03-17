@@ -22,22 +22,25 @@ environ
 
 begin :: Basic Properties of The Element P16-P19
 
- reserve X,Y for BCI-algebra;
- reserve A,I,I1 for Ideal of X;
- reserve a,x,y,z,u,v,h for Element of X;
- reserve f,f',g for Function of NAT, the carrier of X;
- reserve j,i,k,n,m for Element of NAT;
+reserve X,Y for BCI-algebra;
+reserve A,I,I1 for Ideal of X;
+reserve a,x,y,z,u,v,h for Element of X;
+reserve f,f',g for Function of NAT, the carrier of X;
+reserve j,i,k,n,m for Element of NAT;
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 :: x*y to_power n  =  x*y|^n                    ::
 :: n=0: it=x;   n=1:it =x*y; n=2:it=(x*y)*y...  ::
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
-definition let X,x,y; let n be Element of NAT;
+definition
+  let X,x,y;
+  let n be Element of NAT;
   func (x,y) to_power n -> Element of X means
 :: BCIALG_2:def 1
-   ex f st it = f.n & f.0 = x &
-   for j being Element of NAT st j<n holds f.(j+1) = f.j\y;
+
+  ex f st it = f.n & f.0 = x &
+  for j being Element of NAT st j<n holds f.(j+1) = f.j\y;
 end;
 
 theorem :: BCIALG_2:1
@@ -95,6 +98,7 @@ theorem :: BCIALG_2:18
   (0.X,x\y) to_power n=((0.X,x) to_power n)\((0.X,y) to_power n);
 
 ::P20-P22
+
 theorem :: BCIALG_2:19
   x<=y implies (x,z) to_power n <= (y,z) to_power n;
 
@@ -107,31 +111,40 @@ theorem :: BCIALG_2:21
 theorem :: BCIALG_2:22
   (((x,x\y) to_power n),y\x) to_power n <= x;
 
-notation let X,a;
+notation
+  let X,a;
   synonym a is minimal for a is atom;
 end;
 
 ::P17   proposition 1.1.10
-definition let X,a;
+
+definition
+  let X,a;
   attr a is positive means
 :: BCIALG_2:def 2
-    0.X <= a;
+
+  0.X <= a;
   attr a is least means
 :: BCIALG_2:def 3
-    for x holds a<=x;
+
+  for x holds a<=x;
   attr a is maximal means
 :: BCIALG_2:def 4
-    for x holds a<=x implies x=a;
+
+  for x holds a<=x implies x=a;
   attr a is greatest means
 :: BCIALG_2:def 5
-    for x holds x<=a;
+
+  for x holds x<=a;
 end;
 
-registration let X;
+registration
+  let X;
   cluster positive Element of X;
 end;
 
-registration let X;
+registration
+  let X;
   cluster 0.X -> positive minimal;
 end;
 
@@ -142,8 +155,7 @@ theorem :: BCIALG_2:24
   x` is minimal iff (for y holds y<=x implies x` = y`);
 
 theorem :: BCIALG_2:25
-  x` is minimal iff
-    for y,z holds((((x\z)\(y\z))`)` = y`\x`);
+  x` is minimal iff for y,z holds((((x\z)\(y\z))`)` = y`\x`);
 
 theorem :: BCIALG_2:26
   0.X is maximal implies for a holds a is minimal;
@@ -161,28 +173,36 @@ theorem :: BCIALG_2:30
   a is minimal iff ex x st a=x`;
 
 :: p38
-definition let X,x;
+
+definition
+  let X,x;
   attr x is nilpotent means
 :: BCIALG_2:def 6
-    ex k being non empty Element of NAT st (0.X,x) to_power k = 0.X;
+
+  ex k being non empty Element of NAT st (0.X,x) to_power k = 0.X;
 end;
 
-definition let X;
+definition
+  let X;
   attr X is nilpotent means
 :: BCIALG_2:def 7
-    for x being Element of X holds x is nilpotent;
+
+  for x being Element of X holds x is nilpotent;
 end;
 
-definition let X,x;
-  assume x is nilpotent;
+definition
+  let X,x;
+  assume
+ x is nilpotent;
   func ord x -> non empty Element of NAT means
 :: BCIALG_2:def 8
-    (0.X,x) to_power it = 0.X &
-    for m being Element of NAT st (0.X,x) to_power m=0.X & m <> 0 holds
-      it <= m;
+
+  (0.X,x) to_power it = 0.X &
+  for m being Element of NAT st (0.X,x) to_power m=0.X & m <> 0 holds it <= m;
 end;
 
-registration let X;
+registration
+  let X;
   cluster 0.X -> nilpotent;
 end;
 
@@ -200,67 +220,85 @@ theorem :: BCIALG_2:34
 
 begin :: Congruence and Quotient Algebras P58-65
 
-definition let X be BCI-algebra;
+definition
+  let X be BCI-algebra;
   mode Congruence of X -> Equivalence_Relation of X means
 :: BCIALG_2:def 9
+
     for x,y,u,v being Element of X st [x,y] in it & [u,v] in it holds
-       [x\u,y\v] in it;
+    [x\u,y\v] in it;
 end;
 
 :: Left Congruence
-definition let X be BCI-algebra;
+
+definition
+  let X be BCI-algebra;
   mode L-congruence of X -> Equivalence_Relation of X means
 :: BCIALG_2:def 10
+
     for x,y being Element of X st [x,y] in it holds
-       for u being Element of X holds [u\x,u\y] in it;
+    for u being Element of X holds [u\x,u\y] in it;
 end;
 
 :: Right Congruence
-definition let X be BCI-algebra;
+
+definition
+  let X be BCI-algebra;
   mode R-congruence of X -> Equivalence_Relation of X means
 :: BCIALG_2:def 11
+
     for x,y being Element of X st [x,y] in it holds
-       for u being Element of X holds [x\u,y\u] in it;
+    for u being Element of X holds [x\u,y\u] in it;
 end;
 
 ::Ideal Congruence
-definition let X be BCI-algebra,A be Ideal of X;
+
+definition
+  let X be BCI-algebra,A be Ideal of X;
   mode I-congruence of X,A -> Relation of X means
 :: BCIALG_2:def 12
-    for x,y being Element of X holds [x,y] in it iff
-       x\y in A & y\x in A;
+
+    for x,y being Element of X holds [x,y] in it iff x\y in A & y\x in A;
 end;
 
-registration let X be BCI-algebra, A be Ideal of X;
+registration
+  let X be BCI-algebra, A be Ideal of X;
   cluster -> total symmetric transitive I-congruence of X,A;
 end;
 
-definition let X be BCI-algebra;
+definition
+  let X be BCI-algebra;
   func IConSet(X) means
 :: BCIALG_2:def 13
-    for A1 being set holds
-    A1 in it iff ex I being Ideal of X st A1 is I-congruence of X,I;
+
+  for A1 being set holds
+  A1 in it iff ex I being Ideal of X st A1 is I-congruence of X,I;
 end;
 
-definition let X be BCI-algebra;
+definition
+  let X be BCI-algebra;
   func ConSet(X) equals
 :: BCIALG_2:def 14
-    {R where R is Congruence of X:not contradiction};
+
+  {R where R is Congruence of X:not contradiction};
   func LConSet(X) equals
 :: BCIALG_2:def 15
-    {R where R is L-congruence of X:not contradiction};
+
+  {R where R is L-congruence of X:not contradiction};
   func RConSet(X) equals
 :: BCIALG_2:def 16
-    {R where R is R-congruence of X:not contradiction};
+
+  {R where R is R-congruence of X:not contradiction};
 end;
 
- reserve R1,R2,R for Equivalence_Relation of X;
- reserve RI for I-congruence of X,I;
- reserve E for Congruence of X;
- reserve RC for R-congruence of X;
- reserve LC for L-congruence of X;
+reserve R1,R2,R for Equivalence_Relation of X;
+reserve RI for I-congruence of X,I;
+reserve E for Congruence of X;
+reserve RC for R-congruence of X;
+reserve LC for L-congruence of X;
 
 :: huang-P58:P1.5.1
+
 theorem :: BCIALG_2:35
   for X,E holds Class(E,0.X) is closed Ideal of X;
 
@@ -270,7 +308,8 @@ theorem :: BCIALG_2:36
 theorem :: BCIALG_2:37
   RI is Congruence of X;
 
-definition let X be BCI-algebra, I be Ideal of X;
+definition
+  let X be BCI-algebra, I be Ideal of X;
   redefine mode I-congruence of X,I -> Congruence of X;
 end;
 
@@ -285,8 +324,7 @@ theorem :: BCIALG_2:40
 
 theorem :: BCIALG_2:41
   for A,I being Ideal of X,IA being I-congruence of X,A,
-      II being I-congruence of X,I st Class(IA,0.X)=Class(II,0.X)
-   holds IA = II;
+  II being I-congruence of X,I st Class(IA,0.X)=Class(II,0.X) holds IA = II;
 
 theorem :: BCIALG_2:42
   [x,y] in E & u in Class(E,0.X) implies [x,(y,u)to_power k] in E;
@@ -294,7 +332,7 @@ theorem :: BCIALG_2:42
 theorem :: BCIALG_2:43
   (for X,x,y holds ex i,j,m,n st
   ((x,x\y) to_power i,y\x) to_power j = ((y,y\x)to_power m,x\y) to_power n)
-    implies for E,I st I=Class(E,0.X) holds E is I-congruence of X,I;
+  implies for E,I st I=Class(E,0.X) holds E is I-congruence of X,I;
 
 theorem :: BCIALG_2:44
   IConSet(X) c= ConSet(X);
@@ -318,52 +356,67 @@ theorem :: BCIALG_2:50
   Class(LC,0.X) is closed Ideal of X;
 
 ::::::::::::::::::::::::::::  Quotient Algebras  :::::::::::
- reserve E for Congruence of X;
- reserve RI for I-congruence of X,I;
 
-registration let X,E;
+reserve E for Congruence of X;
+reserve RI for I-congruence of X,I;
+
+registration
+  let X,E;
   cluster Class E -> non empty;
 end;
 
-definition let X,E;
+definition
+  let X,E;
   func EqClaOp E -> BinOp of Class E means
 :: BCIALG_2:def 17
-    for W1,W2 being Element of Class(E)
-     for x,y st W1=Class(E,x) & W2=Class(E,y) holds it.(W1,W2)=Class(E,x\y);
- end;
 
-definition let X,E;
+  for W1,W2 being Element of Class(E)
+  for x,y st W1=Class(E,x) & W2=Class(E,y) holds it.(W1,W2)=Class(E,x\y);
+end;
+
+definition
+  let X,E;
   func zeroEqC(E) -> Element of Class E equals
 :: BCIALG_2:def 18
-    Class(E,0.X);
+
+  Class(E,0.X);
 end;
 
 ::Quotient Algebras
-definition let X,E;
+
+definition
+  let X,E;
   func X./.E -> BCIStr_0 equals
 :: BCIALG_2:def 19
-    BCIStr_0(#Class E,EqClaOp E,zeroEqC(E)#);
+
+  BCIStr_0(#Class E,EqClaOp E,zeroEqC(E)#);
 end;
 
-registration let X;let E be Congruence of X;
+registration
+  let X;
+  let E be Congruence of X;
   cluster X./.E -> non empty;
 end;
 
- reserve W1,W2,W3 for Element of Class E;
+reserve W1,W2,W3 for Element of Class E;
 
-definition let X,E,W1,W2;
+definition
+  let X,E,W1,W2;
   func W1\W2 -> Element of Class E equals
 :: BCIALG_2:def 20
-    (EqClaOp E).(W1,W2);
+
+  (EqClaOp E).(W1,W2);
 end;
 
 theorem :: BCIALG_2:51
   X./.RI is BCI-algebra;
 
-registration let X,I,RI;
+registration
+  let X,I,RI;
   cluster X./.RI -> strict being_B being_C being_I being_BCI-4;
 end;
 
 theorem :: BCIALG_2:52
   for X,I st I = BCK-part(X) holds for RI being I-congruence of X,I
-    holds X./.RI is p-Semisimple BCI-algebra;
+  holds X./.RI is p-Semisimple BCI-algebra;
+

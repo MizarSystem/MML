@@ -29,69 +29,71 @@ environ
 begin :: The Product Space of Real Linear Spaces
 
 theorem :: PRVECT_2:1
- for s,t be Real_Sequence, g be real number st
- for n be Element of NAT holds t.n = abs(s.n-g) holds
+  for s,t be Real_Sequence, g be real number st
+  for n be Element of NAT holds t.n = abs(s.n-g) holds
   (s is convergent & lim s = g) iff (t is convergent & lim t = 0);
 
 theorem :: PRVECT_2:2
-for x,y be FinSequence of REAL st
- len x = len y &
- for i be Element of NAT st i in Seg len x holds 0 <= x.i & x.i <= y.i
-holds |.x.| <= |.y.|;
+  for x,y be FinSequence of REAL st len x = len y &
+  for i be Element of NAT st i in Seg len x holds 0 <= x.i & x.i <= y.i
+  holds |.x.| <= |.y.|;
 
 theorem :: PRVECT_2:3
-for F be FinSequence of REAL st
- for i be Element of NAT st i in dom F holds F.i = 0
-holds Sum F = 0;
+  for F be FinSequence of REAL st
+  for i be Element of NAT st i in dom F holds F.i = 0 holds Sum F = 0;
 
-definition let f be Function;
-           let X be set;
+definition
+  let f be Function;
+  let X be set;
   mode MultOps of X,f -> Function means
 :: PRVECT_2:def 1
-   dom it = dom f &
-   for i being set st i in dom f holds it.i is Function of [:X,f.i:],f.i;
+
+    dom it = dom f &
+    for i being set st i in dom f holds it.i is Function of [:X,f.i:],f.i;
 end;
 
-registration let F be Domain-Sequence;
-             let X be set;
+registration
+  let F be Domain-Sequence;
+  let X be set;
   cluster -> FinSequence-like MultOps of X,F;
 end;
 
 theorem :: PRVECT_2:4
-for X be set, F be Domain-Sequence, p be FinSequence holds
- (p is MultOps of X,F iff
-   len p = len F &
-   for i be set st i in dom F holds p.i is Function of [:X,F.i:],F.i);
+  for X be set, F be Domain-Sequence, p be FinSequence holds
+  (p is MultOps of X,F iff len p = len F &
+  for i be set st i in dom F holds p.i is Function of [:X,F.i:],F.i);
 
-definition let F be Domain-Sequence;
-           let X be set;
-           let p be MultOps of X,F;
-           let i be Element of dom F;
+definition
+  let F be Domain-Sequence;
+  let X be set;
+  let p be MultOps of X,F;
+  let i be Element of dom F;
   redefine func p.i -> Function of [:X,F.i:],F.i;
 end;
 
 theorem :: PRVECT_2:5
-for X be non empty set, F be Domain-Sequence,
-    f,g being Function of [:X,product F:],product F st
- for x be Element of X, d being Element of product F,
-     i being Element of dom F holds (f.(x,d)).i = (g.(x,d)).i
-holds f = g;
+  for X be non empty set, F be Domain-Sequence,
+  f,g being Function of [:X,product F:],product F st
+  for x be Element of X, d being Element of product F,
+  i being Element of dom F holds (f.(x,d)).i = (g.(x,d)).i holds f = g;
 
-definition let F be Domain-Sequence;
-           let X be non empty set;
-           let p be MultOps of X,F;
+definition
+  let F be Domain-Sequence;
+  let X be non empty set;
+  let p be MultOps of X,F;
   func [:p:] -> Function of [:X,product F:],product F means
 :: PRVECT_2:def 2
- for x be Element of X,
-     d being Element of product F,
-     i being Element of dom F holds
-        (it.(x,d)).i = (p.i).(x,d.i);
+
+  for x be Element of X, d being Element of product F,
+  i being Element of dom F holds (it.(x,d)).i = (p.i).(x,d.i);
 end;
 
-definition let R be Relation;
+definition
+  let R be Relation;
   attr R is RealLinearSpace-yielding means
 :: PRVECT_2:def 3
-    for S be set st S in rng R holds S is RealLinearSpace;
+
+  for S be set st S in rng R holds S is RealLinearSpace;
 end;
 
 registration
@@ -106,57 +108,66 @@ end;
 definition
   let G be RealLinearSpace-Sequence;
   let j be Element of dom G;
-redefine func G.j -> RealLinearSpace;
+  redefine func G.j -> RealLinearSpace;
 end;
 
-definition let G be RealLinearSpace-Sequence;
- func carr G -> Domain-Sequence means
+definition
+  let G be RealLinearSpace-Sequence;
+  func carr G -> Domain-Sequence means
 :: PRVECT_2:def 4
+
   len it = len G &
   for j be Element of dom G holds it.j = the carrier of G.j;
 end;
 
-definition let G be RealLinearSpace-Sequence, j be Element of dom carr G;
+definition
+  let G be RealLinearSpace-Sequence, j be Element of dom carr G;
   redefine func G.j -> RealLinearSpace;
 end;
 
-definition let G be RealLinearSpace-Sequence;
+definition
+  let G be RealLinearSpace-Sequence;
   func addop G -> BinOps of carr G means
 :: PRVECT_2:def 5
-    len it = len carr G &
-    for j be Element of dom carr G holds it.j = the addF of G.j;
 
- func complop G -> UnOps of carr G means
+  len it = len carr G &
+  for j be Element of dom carr G holds it.j = the addF of G.j;
+  func complop G -> UnOps of carr G means
 :: PRVECT_2:def 6
+
   len it = len carr G & for j be Element of dom carr G holds it.j = comp G.j;
-
- func zeros G -> Element of product carr G means
+  func zeros G -> Element of product carr G means
 :: PRVECT_2:def 7
-  for j be Element of dom carr G holds it.j = the ZeroF of G.j;
 
- func multop G -> MultOps of REAL,carr G means
+  for j be Element of dom carr G holds it.j = the ZeroF of G.j;
+  func multop G -> MultOps of REAL,carr G means
 :: PRVECT_2:def 8
+
   len it = len carr G &
   for j be Element of dom carr G holds it.j = the Mult of G.j;
 end;
 
-definition let G be RealLinearSpace-Sequence;
+definition
+  let G be RealLinearSpace-Sequence;
   func product G -> strict non empty RLSStruct equals
 :: PRVECT_2:def 9
-     RLSStruct(# product carr G,zeros G,[:addop G :],[:multop G:] #);
+  RLSStruct(# product carr G,zeros G,[:addop G :],[:multop G:] #);
 end;
 
-registration let G be RealLinearSpace-Sequence;
+registration
+  let G be RealLinearSpace-Sequence;
   cluster product G -> Abelian add-associative right_zeroed
     right_complementable RealLinearSpace-like;
 end;
 
 begin :: The Product Space of Real Normed Spaces
 
-definition let R be Relation;
+definition
+  let R be Relation;
   attr R is RealNormSpace-yielding means
 :: PRVECT_2:def 10
-    for x be set st x in rng R holds x is RealNormSpace;
+
+  for x be set st x in rng R holds x is RealNormSpace;
 end;
 
 registration
@@ -177,26 +188,32 @@ registration
   cluster RealNormSpace-yielding -> RealLinearSpace-yielding FinSequence;
 end;
 
-definition let G be RealNormSpace-Sequence;
-           let x be Element of product carr G;
+definition
+  let G be RealNormSpace-Sequence;
+  let x be Element of product carr G;
   func normsequence(G,x) -> Element of REAL len G means
 :: PRVECT_2:def 11
-    len it = len G &
-    for j be Element of dom G holds it.j=(the norm of G.j).(x.j);
+
+  len it = len G &
+  for j be Element of dom G holds it.j=(the norm of G.j).(x.j);
 end;
 
-definition let G be RealNormSpace-Sequence;
+definition
+  let G be RealNormSpace-Sequence;
   func productnorm G ->
   Function of product carr (G qua RealLinearSpace-Sequence),REAL means
 :: PRVECT_2:def 12
- for x being Element of product carr G holds it.x = |.normsequence(G,x).|;
+
+  for x being Element of product carr G holds it.x = |.normsequence(G,x).|;
 end;
 
-definition let G be RealNormSpace-Sequence;
+definition
+  let G be RealNormSpace-Sequence;
   func product G -> strict non empty NORMSTR means
 :: PRVECT_2:def 13
-    the RLSStruct of it = product (G qua RealLinearSpace-Sequence) &
-    the norm of it = productnorm G;
+
+  the RLSStruct of it = product (G qua RealLinearSpace-Sequence) &
+  the norm of it = productnorm G;
 end;
 
 reserve G for RealNormSpace-Sequence;
@@ -206,62 +223,53 @@ theorem :: PRVECT_2:6
     productnorm G #);
 
 theorem :: PRVECT_2:7
-for x be VECTOR of product G, y be Element of product carr G st
- x = y holds ||.x.|| = |.normsequence(G,y).|;
+  for x be VECTOR of product G, y be Element of product carr G st
+  x = y holds ||.x.|| = |.normsequence(G,y).|;
 
 theorem :: PRVECT_2:8
-for x,y,z be Element of product carr G, i be Element of NAT st
- i in dom x & z = [:addop G :].(x,y) holds
-   normsequence(G,z).i <= (normsequence(G,x) + normsequence(G,y)).i;
+  for x,y,z be Element of product carr G, i be Element of NAT st
+  i in dom x & z = [:addop G :].(x,y) holds
+  normsequence(G,z).i <= (normsequence(G,x) + normsequence(G,y)).i;
 
 theorem :: PRVECT_2:9
-for x be Element of product carr G, i be Element of NAT st
- i in dom x holds 0 <= normsequence(G,x).i;
+  for x be Element of product carr G, i be Element of NAT st
+  i in dom x holds 0 <= normsequence(G,x).i;
 
-registration let G be RealNormSpace-Sequence;
+registration
+  let G be RealNormSpace-Sequence;
   cluster product G -> RealNormSpace-like RealLinearSpace-like
     Abelian add-associative right_zeroed right_complementable;
 end;
 
 theorem :: PRVECT_2:10
-for G be RealNormSpace-Sequence,
-    i be Element of dom G, x be Point of product G,
-    y be Element of product carr G, xi be Point of G.i st
- y = x & xi = y.i holds ||.xi.|| <= ||.x.||;
+  for G be RealNormSpace-Sequence,
+  i be Element of dom G, x be Point of product G,
+  y be Element of product carr G, xi be Point of G.i st
+  y = x & xi = y.i holds ||.xi.|| <= ||.x.||;
 
 theorem :: PRVECT_2:11
-for G be RealNormSpace-Sequence,
-    i be Element of dom G,
-    x,y be Point of product G,
-    xi,yi be Point of G.i,
-    zx,zy be Element of product carr G st
- xi=zx.i & zx=x & yi=zy.i & zy=y holds ||.yi - xi.|| <= ||.y - x.||;
+  for G be RealNormSpace-Sequence, i be Element of dom G,
+  x,y be Point of product G, xi,yi be Point of G.i,
+  zx,zy be Element of product carr G st
+  xi=zx.i & zx=x & yi=zy.i & zy=y holds ||.yi - xi.|| <= ||.y - x.||;
 
 theorem :: PRVECT_2:12
- for G be RealNormSpace-Sequence,
-    seq be sequence of (product G),
-    x0 be Point of product G,
-    y0 be Element of product carr G st
- x0 = y0 & seq is convergent & lim seq=x0 holds
-  for i be Element of dom G
-   ex seqi be sequence of G.i st
-    seqi is convergent & y0.i = lim seqi &
-    for m be Element of NAT holds
-     ex seqm be Element of product carr G st seqm= seq.m & seqi.m=seqm.i;
+  for G be RealNormSpace-Sequence, seq be sequence of (product G),
+  x0 be Point of product G, y0 be Element of product carr G st
+  x0 = y0 & seq is convergent & lim seq=x0 holds for i be Element of dom G
+  ex seqi be sequence of G.i st seqi is convergent & y0.i = lim seqi &
+  for m be Element of NAT holds
+  ex seqm be Element of product carr G st seqm= seq.m & seqi.m=seqm.i;
 
 theorem :: PRVECT_2:13
-for G be RealNormSpace-Sequence, seq be sequence of (product G),
- x0 be Point of product G, y0 be Element of product carr G st
-  x0=y0 &
-  for i be Element of dom G
-   ex seqi be sequence of G.i st
-    seqi is convergent & y0.i = lim seqi &
-    for m be Element of NAT holds
-     ex seqm be Element of product carr G st seqm= seq.m & seqi.m=seqm.i
-holds
+  for G be RealNormSpace-Sequence, seq be sequence of (product G),
+  x0 be Point of product G, y0 be Element of product carr G st x0=y0 &
+  for i be Element of dom G ex seqi be sequence of G.i st
+  seqi is convergent & y0.i = lim seqi & for m be Element of NAT holds
+  ex seqm be Element of product carr G st seqm= seq.m & seqi.m=seqm.i holds
   seq is convergent & lim seq=x0;
 
 theorem :: PRVECT_2:14
-   for G be RealNormSpace-Sequence st
-  for i be Element of dom G holds G.i is complete holds
-    product G is complete;
+  for G be RealNormSpace-Sequence st
+  for i be Element of dom G holds G.i is complete holds product G is complete;
+

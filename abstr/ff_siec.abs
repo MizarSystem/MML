@@ -15,223 +15,206 @@ environ
 
 begin :: F - Nets
 
- reserve x,y,X,Y for set;
-
+reserve x,y,X,Y for set;
 reserve M for Pnet;
 
-definition let X,Y;
- assume  X misses Y;
- canceled 3;
-
- func PTempty_f_net(X,Y) -> strict Pnet equals
+definition
+  let X,Y;
+  assume
+ X misses Y;
+  canceled 3;
+  func PTempty_f_net(X,Y) -> strict Pnet equals
 :: FF_SIEC:def 4
+
   Net (# X, Y, {} #);
 end;
 
-definition let X;
- func Tempty_f_net(X) -> strict Pnet equals
+definition
+  let X;
+  func Tempty_f_net(X) -> strict Pnet equals
 :: FF_SIEC:def 5
-   PTempty_f_net(X,{});
 
- func Pempty_f_net(X) -> strict Pnet equals
+  PTempty_f_net(X,{});
+  func Pempty_f_net(X) -> strict Pnet equals
 :: FF_SIEC:def 6
-   PTempty_f_net({},X);
-end;
 
-definition let x;
- func Tsingle_f_net(x) -> strict Pnet equals
-:: FF_SIEC:def 7
-   PTempty_f_net({},{x});
-
- func Psingle_f_net(x) -> strict Pnet equals
-:: FF_SIEC:def 8
-   PTempty_f_net({x},{});
+  PTempty_f_net({},X);
 end;
 
 definition
- func empty_f_net -> strict Pnet equals
+  let x;
+  func Tsingle_f_net(x) -> strict Pnet equals
+:: FF_SIEC:def 7
+
+  PTempty_f_net({},{x});
+  func Psingle_f_net(x) -> strict Pnet equals
+:: FF_SIEC:def 8
+
+  PTempty_f_net({x},{});
+end;
+
+definition
+  func empty_f_net -> strict Pnet equals
 :: FF_SIEC:def 9
-   PTempty_f_net({},{});
+
+  PTempty_f_net({},{});
 end;
 
 canceled;
 
 theorem :: FF_SIEC:2
-     X misses Y implies the Places of PTempty_f_net(X,Y) = X &
-      the Transitions of PTempty_f_net(X,Y) = Y &
-       the Flow of PTempty_f_net(X,Y) = {};
+  X misses Y implies the Places of PTempty_f_net(X,Y) = X &
+  the Transitions of PTempty_f_net(X,Y) = Y &
+  the Flow of PTempty_f_net(X,Y) = {};
 
 theorem :: FF_SIEC:3
-     the Places of Tempty_f_net(X) = X &
-      the Transitions of Tempty_f_net(X) = {} &
-       the Flow of Tempty_f_net(X) = {};
+  the Places of Tempty_f_net(X) = X &
+  the Transitions of Tempty_f_net(X) = {} & the Flow of Tempty_f_net(X) = {};
 
 theorem :: FF_SIEC:4
-     for X holds the Places of Pempty_f_net(X) = {} &
-      the Transitions of Pempty_f_net(X) = X &
-       the Flow of Pempty_f_net(X) = {};
+  for X holds the Places of Pempty_f_net(X) = {} &
+  the Transitions of Pempty_f_net(X) = X & the Flow of Pempty_f_net(X) = {};
 
 theorem :: FF_SIEC:5
-     for x holds the Places of (Tsingle_f_net(x)) = {} &
-      the Transitions of (Tsingle_f_net(x)) = {x} &
-       the Flow of (Tsingle_f_net(x)) = {};
+  for x holds the Places of (Tsingle_f_net(x)) = {} &
+  the Transitions of (Tsingle_f_net(x)) = {x} &
+  the Flow of (Tsingle_f_net(x)) = {};
 
 theorem :: FF_SIEC:6
-     for x holds the Places of (Psingle_f_net(x)) = {x} &
-      the Transitions of (Psingle_f_net(x)) = {} &
-       the Flow of (Psingle_f_net(x)) = {};
+  for x holds the Places of (Psingle_f_net(x)) = {x} &
+  the Transitions of (Psingle_f_net(x)) = {} &
+  the Flow of (Psingle_f_net(x)) = {};
 
 theorem :: FF_SIEC:7
-     the Places of empty_f_net = {} &
-  the Transitions of empty_f_net = {} &
-    the Flow of empty_f_net = {};
+  the Places of empty_f_net = {} & the Transitions of empty_f_net = {} &
+  the Flow of empty_f_net = {};
 
 canceled 3;
 
 theorem :: FF_SIEC:11
- (([x,y] in the Flow of M & x in the Transitions of M) implies
-   not x in the Places of M & not y in the Transitions of M &
-                                           y in the Places of M) &
- (([x,y] in the Flow of M & y in the Transitions of M) implies
-   not y in the Places of M & not x in the Transitions of M &
-                                           x in the Places of M) &
- (([x,y] in the Flow of M & x in the Places of M) implies
-   not y in the Places of M & not x in the Transitions of M &
-                                      y in the Transitions of M) &
- (([x,y] in the Flow of M & y in the Places of M) implies
-   not x in the Places of M & not y in the Transitions of M &
-                                      x in the Transitions of M);
+  (([x,y] in the Flow of M & x in the Transitions of M) implies
+  not x in the Places of M & not y in the Transitions of M &
+  y in the Places of M) &
+  (([x,y] in the Flow of M & y in the Transitions of M) implies
+  not y in the Places of M & not x in the Transitions of M &
+  x in the Places of M) &
+  (([x,y] in the Flow of M & x in the Places of M) implies
+  not y in the Places of M & not x in the Transitions of M &
+  y in the Transitions of M) &
+  (([x,y] in the Flow of M & y in the Places of M) implies
+  not x in the Places of M & not y in the Transitions of M &
+  x in the Transitions of M);
 
 canceled;
 
 theorem :: FF_SIEC:13
- (the Flow of M) c= [:Elements(M), Elements(M):] &
-                      (the Flow of M)~ c= [:Elements(M), Elements(M):];
+  (the Flow of M) c= [:Elements(M), Elements(M):] &
+  (the Flow of M)~ c= [:Elements(M), Elements(M):];
 
 theorem :: FF_SIEC:14
- rng ((the Flow of M)|(the Transitions of M)) c= (the Places of M) &
-       rng ((the Flow of M)~|(the Transitions of M)) c= (the Places of M) &
-         rng ((the Flow of M)|(the Places of M)) c= (the Transitions of M) &
-        rng ((the Flow of M)~|(the Places of M)) c= (the Transitions of M) &
-         rng id(the Transitions of M) c= (the Transitions of M) &
-         dom id(the Transitions of M) c= (the Transitions of M) &
-         rng id(the Places of M) c= (the Places of M) &
-         dom id(the Places of M) c= (the Places of M);
+  rng ((the Flow of M)|(the Transitions of M)) c= (the Places of M) &
+  rng ((the Flow of M)~|(the Transitions of M)) c= (the Places of M) &
+  rng ((the Flow of M)|(the Places of M)) c= (the Transitions of M) &
+  rng ((the Flow of M)~|(the Places of M)) c= (the Transitions of M) &
+  rng id(the Transitions of M) c= (the Transitions of M) &
+  dom id(the Transitions of M) c= (the Transitions of M) &
+  rng id(the Places of M) c= (the Places of M) &
+  dom id(the Places of M) c= (the Places of M);
 
 theorem :: FF_SIEC:15
-        rng ((the Flow of M)|(the Transitions of M)) misses
-             dom((the Flow of M)|(the Transitions of M)) &
-        rng ((the Flow of M)|(the Transitions of M)) misses
-             dom((the Flow of M)~|(the Transitions of M)) &
-        rng ((the Flow of M)|(the Transitions of M)) misses
-             dom(id(the Transitions of M)) &
-
-        rng ((the Flow of M)~|(the Transitions of M)) misses
-             dom((the Flow of M)|(the Transitions of M)) &
-        rng ((the Flow of M)~|(the Transitions of M)) misses
-             dom((the Flow of M)~|(the Transitions of M)) &
-        rng ((the Flow of M)~|(the Transitions of M)) misses
-             dom(id(the Transitions of M)) &
-
-        dom ((the Flow of M)|(the Transitions of M)) misses
-             rng((the Flow of M)|(the Transitions of M)) &
-        dom ((the Flow of M)|(the Transitions of M)) misses
-             rng((the Flow of M)~|(the Transitions of M)) &
-        dom ((the Flow of M)|(the Transitions of M)) misses
-             rng(id(the Places of M)) &
-
-        dom ((the Flow of M)~|(the Transitions of M)) misses
-             rng((the Flow of M)|(the Transitions of M)) &
-        dom ((the Flow of M)~|(the Transitions of M)) misses
-             rng((the Flow of M)~|(the Transitions of M)) &
-        dom ((the Flow of M)~|(the Transitions of M)) misses
-             rng(id(the Places of M)) &
-
-        rng ((the Flow of M)|(the Places of M)) misses
-             dom((the Flow of M)|(the Places of M)) &
-        rng ((the Flow of M)|(the Places of M)) misses
-             dom((the Flow of M)~|(the Places of M)) &
-        rng ((the Flow of M)|(the Places of M)) misses
-             dom(id(the Places of M)) &
-
-        rng ((the Flow of M)~|(the Places of M)) misses
-             dom((the Flow of M)|(the Places of M)) &
-        rng ((the Flow of M)~|(the Places of M)) misses
-             dom((the Flow of M)~|(the Places of M)) &
-        rng ((the Flow of M)~|(the Places of M)) misses
-             dom(id(the Places of M)) &
-
-        dom ((the Flow of M)|(the Places of M)) misses
-             rng((the Flow of M)|(the Places of M)) &
-        dom ((the Flow of M)|(the Places of M)) misses
-             rng((the Flow of M)~|(the Places of M)) &
-        dom ((the Flow of M)|(the Places of M)) misses
-             rng(id(the Transitions of M)) &
-
-        dom ((the Flow of M)~|(the Places of M)) misses
-             rng((the Flow of M)|(the Places of M)) &
-        dom ((the Flow of M)~|(the Places of M)) misses
-             rng((the Flow of M)~|(the Places of M)) &
-        dom ((the Flow of M)~|(the Places of M)) misses
-             rng(id(the Transitions of M));
+  rng ((the Flow of M)|(the Transitions of M)) misses
+  dom((the Flow of M)|(the Transitions of M)) &
+  rng ((the Flow of M)|(the Transitions of M)) misses
+  dom((the Flow of M)~|(the Transitions of M)) &
+  rng ((the Flow of M)|(the Transitions of M)) misses
+  dom(id(the Transitions of M)) &
+  rng ((the Flow of M)~|(the Transitions of M)) misses
+  dom((the Flow of M)|(the Transitions of M)) &
+  rng ((the Flow of M)~|(the Transitions of M)) misses
+  dom((the Flow of M)~|(the Transitions of M)) &
+  rng ((the Flow of M)~|(the Transitions of M)) misses
+  dom(id(the Transitions of M)) &
+  dom ((the Flow of M)|(the Transitions of M)) misses
+  rng((the Flow of M)|(the Transitions of M)) &
+  dom ((the Flow of M)|(the Transitions of M)) misses
+  rng((the Flow of M)~|(the Transitions of M)) &
+  dom ((the Flow of M)|(the Transitions of M)) misses
+  rng(id(the Places of M)) &
+  dom ((the Flow of M)~|(the Transitions of M)) misses
+  rng((the Flow of M)|(the Transitions of M)) &
+  dom ((the Flow of M)~|(the Transitions of M)) misses
+  rng((the Flow of M)~|(the Transitions of M)) &
+  dom ((the Flow of M)~|(the Transitions of M)) misses
+  rng(id(the Places of M)) & rng ((the Flow of M)|(the Places of M)) misses
+  dom((the Flow of M)|(the Places of M)) &
+  rng ((the Flow of M)|(the Places of M)) misses
+  dom((the Flow of M)~|(the Places of M)) &
+  rng ((the Flow of M)|(the Places of M)) misses dom(id(the Places of M)) &
+  rng ((the Flow of M)~|(the Places of M)) misses
+  dom((the Flow of M)|(the Places of M)) &
+  rng ((the Flow of M)~|(the Places of M)) misses
+  dom((the Flow of M)~|(the Places of M)) &
+  rng ((the Flow of M)~|(the Places of M)) misses dom(id(the Places of M)) &
+  dom ((the Flow of M)|(the Places of M)) misses
+  rng((the Flow of M)|(the Places of M)) &
+  dom ((the Flow of M)|(the Places of M)) misses
+  rng((the Flow of M)~|(the Places of M)) &
+  dom ((the Flow of M)|(the Places of M)) misses
+  rng(id(the Transitions of M)) &
+  dom ((the Flow of M)~|(the Places of M)) misses
+  rng((the Flow of M)|(the Places of M)) &
+  dom ((the Flow of M)~|(the Places of M)) misses
+  rng((the Flow of M)~|(the Places of M)) &
+  dom ((the Flow of M)~|(the Places of M)) misses
+  rng(id(the Transitions of M));
 
 theorem :: FF_SIEC:16
-        (((the Flow of M)|(the Transitions of M)) *
-           ((the Flow of M)|(the Transitions of M)) = {}) &
-        (((the Flow of M)~|(the Transitions of M)) *
-           ((the Flow of M)~|(the Transitions of M)) = {}) &
-        (((the Flow of M)|(the Transitions of M)) *
-           ((the Flow of M)~|(the Transitions of M)) = {}) &
-        (((the Flow of M)~|(the Transitions of M)) *
-           ((the Flow of M)|(the Transitions of M)) = {}) &
-
-       (((the Flow of M)|(the Places of M)) *
-           ((the Flow of M)|(the Places of M)) = {}) &
-        (((the Flow of M)~|(the Places of M)) *
-           ((the Flow of M)~|(the Places of M)) = {}) &
-        (((the Flow of M)|(the Places of M)) *
-           ((the Flow of M)~|(the Places of M)) = {}) &
-        (((the Flow of M)~|(the Places of M)) *
-           ((the Flow of M)|(the Places of M)) = {});
+  (((the Flow of M)|(the Transitions of M)) *
+  ((the Flow of M)|(the Transitions of M)) = {}) &
+  (((the Flow of M)~|(the Transitions of M)) *
+  ((the Flow of M)~|(the Transitions of M)) = {}) &
+  (((the Flow of M)|(the Transitions of M)) *
+  ((the Flow of M)~|(the Transitions of M)) = {}) &
+  (((the Flow of M)~|(the Transitions of M)) *
+  ((the Flow of M)|(the Transitions of M)) = {}) &
+  (((the Flow of M)|(the Places of M)) *
+  ((the Flow of M)|(the Places of M)) = {}) &
+  (((the Flow of M)~|(the Places of M)) *
+  ((the Flow of M)~|(the Places of M)) = {}) &
+  (((the Flow of M)|(the Places of M)) *
+  ((the Flow of M)~|(the Places of M)) = {}) &
+  (((the Flow of M)~|(the Places of M)) *
+  ((the Flow of M)|(the Places of M)) = {});
 
 theorem :: FF_SIEC:17
   (((the Flow of M)|(the Transitions of M)) *
-   id(the Places of M) = (the Flow of M)|(the Transitions of M)) &
-        (((the Flow of M)~|(the Transitions of M)) *
+  id(the Places of M) = (the Flow of M)|(the Transitions of M)) &
+  (((the Flow of M)~|(the Transitions of M)) *
   id(the Places of M) = (the Flow of M)~|(the Transitions of M)) &
-        ((id(the Transitions of M) *
-        ((the Flow of M)|(the Transitions of M))) =
-                    (the Flow of M)|(the Transitions of M)) &
-        ((id(the Transitions of M) *
-        ((the Flow of M)~|(the Transitions of M))) =
-                    (the Flow of M)~|(the Transitions of M)) &
-
-   (((the Flow of M)|(the Places of M)) *
-     id(the Transitions of M) = (the Flow of M)|(the Places of M)) &
-        (((the Flow of M)~|(the Places of M)) *
-   id(the Transitions of M) = (the Flow of M)~|(the Places of M)) &
-        (id(the Places of M)) *
-        ((the Flow of M)|(the Places of M)) =
-                    (the Flow of M)|(the Places of M) &
-   (id(the Places of M)) * ((the Flow of M)~|(the Places of M)) =
-                    (the Flow of M)~|(the Places of M) &
-   ((the Flow of M)|(the Places of M)) * id(the Transitions of M) =
-                (the Flow of M)|(the Places of M) &
-   ((the Flow of M)~|(the Places of M)) * id(the Transitions of M) =
-                (the Flow of M)~|(the Places of M) &
- (id(the Transitions of M) * ((the Flow of M)|(the Places of M))) = {} &
-   (id(the Transitions of M) *
-          ((the Flow of M)~|(the Places of M))) = {} &
-   ((the Flow of M)|(the Places of M)) * id(the Places of M) = {} &
-   ((the Flow of M)~|(the Places of M)) * id(the Places of M) = {} &
-   (id(the Places of M)) *
-     ((the Flow of M)|(the Transitions of M)) = {} &
-        (id(the Places of M)) *
-        ((the Flow of M)~|(the Transitions of M)) = {} &
-   ((the Flow of M)|(the Transitions of M)) *
-                 (id(the Transitions of M)) = {} &
-   ((the Flow of M)~|(the Transitions of M)) *
-                (id(the Transitions of M)) = {};
+  ((id(the Transitions of M) * ((the Flow of M)|(the Transitions of M))) =
+  (the Flow of M)|(the Transitions of M)) & ((id(the Transitions of M) *
+  ((the Flow of M)~|(the Transitions of M))) =
+  (the Flow of M)~|(the Transitions of M)) &
+  (((the Flow of M)|(the Places of M)) *
+  id(the Transitions of M) = (the Flow of M)|(the Places of M)) &
+  (((the Flow of M)~|(the Places of M)) *
+  id(the Transitions of M) = (the Flow of M)~|(the Places of M)) &
+  (id(the Places of M)) * ((the Flow of M)|(the Places of M)) =
+  (the Flow of M)|(the Places of M) &
+  (id(the Places of M)) * ((the Flow of M)~|(the Places of M)) =
+  (the Flow of M)~|(the Places of M) &
+  ((the Flow of M)|(the Places of M)) * id(the Transitions of M) =
+  (the Flow of M)|(the Places of M) &
+  ((the Flow of M)~|(the Places of M)) * id(the Transitions of M) =
+  (the Flow of M)~|(the Places of M) &
+  (id(the Transitions of M) * ((the Flow of M)|(the Places of M))) = {} &
+  (id(the Transitions of M) * ((the Flow of M)~|(the Places of M))) = {} &
+  ((the Flow of M)|(the Places of M)) * id(the Places of M) = {} &
+  ((the Flow of M)~|(the Places of M)) * id(the Places of M) = {} &
+  (id(the Places of M)) * ((the Flow of M)|(the Transitions of M)) = {} &
+  (id(the Places of M)) * ((the Flow of M)~|(the Transitions of M)) = {} &
+  ((the Flow of M)|(the Transitions of M)) * (id(the Transitions of M)) = {} &
+  ((the Flow of M)~|(the Transitions of M)) * (id(the Transitions of M)) = {};
 
 theorem :: FF_SIEC:18
   (((the Flow of M)~|(the Transitions of M)) misses (id(Elements(M)))) &
@@ -240,181 +223,176 @@ theorem :: FF_SIEC:18
   (((the Flow of M)|(the Places of M)) misses (id(Elements(M))));
 
 theorem :: FF_SIEC:19
-         ((the Flow of M)~|(the Transitions of M)) \/
-                (id(the Places of M)) \ id(Elements(M)) =
-                           (the Flow of M)~|(the Transitions of M) &
-         ((the Flow of M)|(the Transitions of M)) \/
-                (id(the Places of M)) \ id(Elements(M)) =
-                             (the Flow of M)|(the Transitions of M) &
-
-         (((the Flow of M)~|(the Places of M)) \/
-                (id(the Places of M))) \ id(Elements(M)) =
-                           (the Flow of M)~|(the Places of M) &
-         (((the Flow of M)|(the Places of M)) \/
-                (id(the Places of M))) \ id(Elements(M)) =
-                             (the Flow of M)|(the Places of M) &
-
-         ((the Flow of M)~|(the Places of M)) \/
-                (id(the Transitions of M)) \ id(Elements(M)) =
-                           (the Flow of M)~|(the Places of M) &
-         ((the Flow of M)|(the Places of M)) \/
-                (id(the Transitions of M)) \ id(Elements(M)) =
-                             (the Flow of M)|(the Places of M) &
-
-         (((the Flow of M)~|(the Transitions of M)) \/
-                (id(the Transitions of M))) \ id(Elements(M)) =
-                           (the Flow of M)~|(the Transitions of M) &
-         (((the Flow of M)|(the Transitions of M)) \/
-                (id(the Transitions of M))) \ id(Elements(M)) =
-                             (the Flow of M)|(the Transitions of M);
+  ((the Flow of M)~|(the Transitions of M)) \/
+  (id(the Places of M)) \ id(Elements(M)) =
+  (the Flow of M)~|(the Transitions of M) &
+  ((the Flow of M)|(the Transitions of M)) \/
+  (id(the Places of M)) \ id(Elements(M)) =
+  (the Flow of M)|(the Transitions of M) &
+  (((the Flow of M)~|(the Places of M)) \/
+  (id(the Places of M))) \ id(Elements(M)) =
+  (the Flow of M)~|(the Places of M) & (((the Flow of M)|(the Places of M)) \/
+  (id(the Places of M))) \ id(Elements(M)) =
+  (the Flow of M)|(the Places of M) & ((the Flow of M)~|(the Places of M)) \/
+  (id(the Transitions of M)) \ id(Elements(M)) =
+  (the Flow of M)~|(the Places of M) & ((the Flow of M)|(the Places of M)) \/
+  (id(the Transitions of M)) \ id(Elements(M)) =
+  (the Flow of M)|(the Places of M) &
+  (((the Flow of M)~|(the Transitions of M)) \/
+  (id(the Transitions of M))) \ id(Elements(M)) =
+  (the Flow of M)~|(the Transitions of M) &
+  (((the Flow of M)|(the Transitions of M)) \/
+  (id(the Transitions of M))) \ id(Elements(M)) =
+  (the Flow of M)|(the Transitions of M);
 
 theorem :: FF_SIEC:20
-          ((the Flow of M)|(the Places of M))~ =
-             ((the Flow of M)~)|(the Transitions of M) &
-          ((the Flow of M)|(the Transitions of M))~ =
-             ((the Flow of M)~)|(the Places of M);
+  ((the Flow of M)|(the Places of M))~ =
+  ((the Flow of M)~)|(the Transitions of M) &
+  ((the Flow of M)|(the Transitions of M))~ =
+  ((the Flow of M)~)|(the Places of M);
 
 theorem :: FF_SIEC:21
-          ((the Flow of M)|(the Places of M)) \/
-           ((the Flow of M)|(the Transitions of M)) = (the Flow of M) &
-          ((the Flow of M)|(the Transitions of M)) \/
-                ((the Flow of M)|(the Places of M)) = (the Flow of M) &
-         (((the Flow of M)|(the Places of M))~) \/
-           (((the Flow of M)|(the Transitions of M))~) = (the Flow of M)~ &
-          (((the Flow of M)|(the Transitions of M))~) \/
-                (((the Flow of M)|(the Places of M))~) = (the Flow of M)~;
+  ((the Flow of M)|(the Places of M)) \/
+  ((the Flow of M)|(the Transitions of M)) = (the Flow of M) &
+  ((the Flow of M)|(the Transitions of M)) \/
+  ((the Flow of M)|(the Places of M)) = (the Flow of M) &
+  (((the Flow of M)|(the Places of M))~) \/
+  (((the Flow of M)|(the Transitions of M))~) = (the Flow of M)~ &
+  (((the Flow of M)|(the Transitions of M))~) \/
+  (((the Flow of M)|(the Places of M))~) = (the Flow of M)~;
 
 :: T R A N S F O R M A T I O N S
 :: A [F -> E]
 
 definition
- let M;
- func f_enter(M) -> Relation equals
+  let M;
+  func f_enter(M) -> Relation equals
 :: FF_SIEC:def 10
-   ((the Flow of M)~|(the Transitions of M)) \/ id(the Places of M);
-
- func f_exit(M) -> Relation equals
+  ((the Flow of M)~|(the Transitions of M)) \/ id(the Places of M);
+  func f_exit(M) -> Relation equals
 :: FF_SIEC:def 11
-   ((the Flow of M)|(the Transitions of M)) \/ id(the Places of M);
+  ((the Flow of M)|(the Transitions of M)) \/ id(the Places of M);
 end;
 
 theorem :: FF_SIEC:22
-      f_exit(M) c= [:Elements(M),Elements(M):] &
-    f_enter(M) c= [:Elements(M),Elements(M):];
+  f_exit(M) c= [:Elements(M),Elements(M):] &
+  f_enter(M) c= [:Elements(M),Elements(M):];
 
 theorem :: FF_SIEC:23
-      dom(f_exit(M)) c= Elements(M) & rng(f_exit(M)) c= Elements(M) &
-     dom(f_enter(M)) c= Elements(M) & rng(f_enter(M)) c= Elements(M);
+  dom(f_exit(M)) c= Elements(M) & rng(f_exit(M)) c= Elements(M) &
+  dom(f_enter(M)) c= Elements(M) & rng(f_enter(M)) c= Elements(M);
 
 theorem :: FF_SIEC:24
-           (f_exit(M)) * (f_exit(M)) = f_exit(M) &
-         (f_exit(M)) * (f_enter(M)) = f_exit(M) &
-           (f_enter(M)) * (f_enter(M)) = f_enter(M) &
-             (f_enter(M)) * (f_exit(M)) = f_enter(M);
+  (f_exit(M)) * (f_exit(M)) = f_exit(M) &
+  (f_exit(M)) * (f_enter(M)) = f_exit(M) &
+  (f_enter(M)) * (f_enter(M)) = f_enter(M) &
+  (f_enter(M)) * (f_exit(M)) = f_enter(M);
 
 theorem :: FF_SIEC:25
-      (f_exit(M)) * (f_exit(M) \ id(Elements(M))) = {} &
-    (f_enter(M)) * (f_enter(M) \ id(Elements(M))) = {};
+  (f_exit(M)) * (f_exit(M) \ id(Elements(M))) = {} &
+  (f_enter(M)) * (f_enter(M) \ id(Elements(M))) = {};
 
 ::B [F ->R]
 
 definition
- let M;
- func f_prox(M) -> Relation equals
+  let M;
+  func f_prox(M) -> Relation equals
 :: FF_SIEC:def 12
-  ((the Flow of M)|(the Places of M) \/
-                        (the Flow of M)~|(the Places of M)) \/
-                                              id(the Places of M);
 
- func f_flow(M) -> Relation equals
+  ((the Flow of M)|(the Places of M) \/
+  (the Flow of M)~|(the Places of M)) \/ id(the Places of M);
+  func f_flow(M) -> Relation equals
 :: FF_SIEC:def 13
+
   (the Flow of M) \/ id(Elements(M));
 end;
 
 theorem :: FF_SIEC:26
-       f_prox(M) * f_prox(M) = f_prox(M) &
-    (f_prox(M) \ id(Elements(M))) * f_prox(M) = {} &
-      (f_prox(M) \/ ((f_prox(M))~)) \/ id(Elements(M)) =
-                                         f_flow(M) \/ (f_flow(M))~;
+  f_prox(M) * f_prox(M) = f_prox(M) &
+  (f_prox(M) \ id(Elements(M))) * f_prox(M) = {} &
+  (f_prox(M) \/ ((f_prox(M))~)) \/ id(Elements(M)) = f_flow(M) \/ (f_flow(M))~;
 
 ::C [F ->P]
- definition let M;
+
+definition
+  let M;
   func f_places(M) -> set equals
 :: FF_SIEC:def 14
-    the Places of M;
 
+  the Places of M;
   func f_transitions(M) -> set equals
 :: FF_SIEC:def 15
-    the Transitions of M;
 
+  the Transitions of M;
   func f_pre(M) -> Relation equals
 :: FF_SIEC:def 16
-    (the Flow of M)|(the Transitions of M);
 
+  (the Flow of M)|(the Transitions of M);
   func f_post(M) -> Relation equals
 :: FF_SIEC:def 17
-    (the Flow of M)~|(the Transitions of M);
- end;
+
+  (the Flow of M)~|(the Transitions of M);
+end;
 
 theorem :: FF_SIEC:27
-            f_pre(M) c= [:f_transitions(M),f_places(M):] &
-          f_post(M) c= [:f_transitions(M),f_places(M):];
+  f_pre(M) c= [:f_transitions(M),f_places(M):] &
+  f_post(M) c= [:f_transitions(M),f_places(M):];
 
 canceled;
 
 theorem :: FF_SIEC:29
-          f_prox(M) c= [:Elements(M), Elements(M):] &
-       f_flow(M) c= [:Elements(M), Elements(M):];
+  f_prox(M) c= [:Elements(M), Elements(M):] &
+  f_flow(M) c= [:Elements(M), Elements(M):];
 
 ::A [F -> E]
 
-definition let M;
- func f_entrance(M) -> Relation equals
+definition
+  let M;
+  func f_entrance(M) -> Relation equals
 :: FF_SIEC:def 18
-    ((the Flow of M)~|(the Places of M)) \/ id(the Transitions of M);
-
- func f_escape(M) -> Relation equals
+  ((the Flow of M)~|(the Places of M)) \/ id(the Transitions of M);
+  func f_escape(M) -> Relation equals
 :: FF_SIEC:def 19
-    ((the Flow of M)|(the Places of M)) \/ id(the Transitions of M);
+  ((the Flow of M)|(the Places of M)) \/ id(the Transitions of M);
 end;
 
 theorem :: FF_SIEC:30
-           f_escape(M) c= [:Elements(M),Elements(M):] &
-         f_entrance(M) c= [:Elements(M),Elements(M):];
+  f_escape(M) c= [:Elements(M),Elements(M):] &
+  f_entrance(M) c= [:Elements(M),Elements(M):];
 
 theorem :: FF_SIEC:31
-           dom(f_escape(M)) c= Elements(M) & rng(f_escape(M)) c= Elements(M) &
-         dom(f_entrance(M)) c= Elements(M) & rng(f_entrance(M)) c= Elements(M);
+  dom(f_escape(M)) c= Elements(M) & rng(f_escape(M)) c= Elements(M) &
+  dom(f_entrance(M)) c= Elements(M) & rng(f_entrance(M)) c= Elements(M);
 
 theorem :: FF_SIEC:32
-           (f_escape(M)) * (f_escape(M)) = f_escape(M) &
-         (f_escape(M)) * (f_entrance(M)) = f_escape(M) &
-           (f_entrance(M)) * (f_entrance(M)) =f_entrance(M) &
-             (f_entrance(M)) * (f_escape(M)) = f_entrance(M);
+  (f_escape(M)) * (f_escape(M)) = f_escape(M) &
+  (f_escape(M)) * (f_entrance(M)) = f_escape(M) &
+  (f_entrance(M)) * (f_entrance(M)) =f_entrance(M) &
+  (f_entrance(M)) * (f_escape(M)) = f_entrance(M);
 
 theorem :: FF_SIEC:33
-            (f_escape(M)) * (f_escape(M) \ id(Elements(M))) = {} &
-          (f_entrance(M)) * (f_entrance(M) \ id(Elements(M))) = {};
+  (f_escape(M)) * (f_escape(M) \ id(Elements(M))) = {} &
+  (f_entrance(M)) * (f_entrance(M) \ id(Elements(M))) = {};
 
 ::B [F ->R]
 
-notation let M;
- synonym f_circulation(M) for f_flow(M);
-  end;
+notation
+  let M;
+  synonym f_circulation(M) for f_flow(M);
+end;
 
-definition let M;
- func f_adjac(M) -> Relation equals
+definition
+  let M;
+  func f_adjac(M) -> Relation equals
 :: FF_SIEC:def 20
   ((the Flow of M)|(the Transitions of M) \/
-                        (the Flow of M)~|(the Transitions of M)) \/
-                                              id(the Transitions of M);
-
- redefine func f_circulation(M);
+  (the Flow of M)~|(the Transitions of M)) \/ id(the Transitions of M);
+  redefine func f_circulation(M);
 end;
 
 theorem :: FF_SIEC:34
-            f_adjac(M) * f_adjac(M) = f_adjac(M) &
-         (f_adjac(M) \ id(Elements(M))) * f_adjac(M) = {} &
-           (f_adjac(M) \/ ((f_adjac(M))~)) \/ id(Elements(M)) =
-                                         f_circulation(M) \/
- (f_circulation(M))~;
+  f_adjac(M) * f_adjac(M) = f_adjac(M) &
+  (f_adjac(M) \ id(Elements(M))) * f_adjac(M) = {} &
+  (f_adjac(M) \/ ((f_adjac(M))~)) \/ id(Elements(M)) = f_circulation(M) \/
+  (f_circulation(M))~;
+

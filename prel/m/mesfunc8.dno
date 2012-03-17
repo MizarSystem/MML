@@ -22,8 +22,8 @@
 <ArticleID name="RAT_1"/>
 <ArticleID name="XXREAL_0"/>
 <ArticleID name="MEMBERED"/>
-<ArticleID name="FUNCT_3"/>
 <ArticleID name="VALUED_0"/>
+<ArticleID name="FUNCT_3"/>
 <ArticleID name="RFUNCT_1"/>
 <ArticleID name="VALUED_1"/>
 <ArticleID name="FUNCOP_1"/>

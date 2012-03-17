@@ -22,6 +22,7 @@
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FRAENKEL"/>
+<ArticleID name="VALUED_0"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="CARD_3"/>
 <ArticleID name="PROB_1"/>
@@ -40,7 +41,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="210">
+<Func kind="K" nr="215">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -55,7 +56,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="211">
+<Func kind="K" nr="216">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

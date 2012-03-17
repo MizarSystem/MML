@@ -23,600 +23,613 @@ environ
 
 begin :: Preliminaries
 
- reserve i, j, k, l, m, n, t for Nat;
+reserve i, j, k, l, m, n, t for Nat;
 
-  scheme NonUniqPiFinRecExD{D() -> non empty set, A() -> Element of D(),
-                          N() -> Element of NAT, P[set,set,set]}:
-   ex p be FinSequence of D() st len p = N() & (p/.1 = A() or N() = 0) &
-    for n be Element of NAT st 1 <= n & n < N() holds P[n,p/.n,p/.(n+1)]
-   provided
-    A1: for n be Element of NAT st 1 <= n & n < N() for x be Element of D()
-         ex y be Element of D() st P[n,x,y]
+scheme NonUniqPiFinRecExD{D() -> non empty set, A() -> Element of D(),
+  N() -> Element of NAT, P[set,set,set]}:
+  ex p be FinSequence of D() st len p = N() & (p/.1 = A() or N() = 0) &
+  for n be Element of NAT st 1 <= n & n < N() holds P[n,p/.n,p/.(n+1)]
+provided
+A1: for n be Element of NAT st 1 <= n & n < N() for x be Element of D()
+ex y be Element of D() st P[n,x,y]
 proof
-  A2: for n be Element of NAT st 1 <= n & n < N() holds for x be Element of D()
-         ex y be Element of D() st P[n,x,y] by A1;
-    consider p be FinSequence of D() such that
-     A3: len p = N() and
-     A4: (p.1 = A() or N() = 0) and
-     A5: for n be Element of NAT st 1 <= n & n < N() holds P[n,p.n,p.(n+1)]
-                                                   from RECDEF_1:sch 6(A2);
-    take p;
-    thus len p = N() by A3;
-         now assume N() <> 0;
-     then N() > 0;
-     then N() >= 0 + 1 by NAT_1:13;
-     hence p/.1 = A() by A3,A4,FINSEQ_4:24;
-    end;
-    hence p/.1 = A() or N() = 0;
-    let n be Element of NAT;
-    assume that
-     A6: 1 <= n and
-     A7: n < N();
-    A8: 1 <= n + 1 by NAT_1:11;
-             n + 1 <= N() by A7,NAT_1:13;
-    then p.n = p/.n & p.(n+1) = p/.(n+1) by A3,A6,A7,A8,FINSEQ_4:24;
-    hence P[n,p/.n,p/.(n+1)] by A5,A6,A7;
-   end;
+A2: for n be Element of NAT st 1 <= n & n < N() holds for x be Element of D()
+  ex y be Element of D() st P[n,x,y] by A1;
+  consider p be FinSequence of D() such that
+A3: len p = N() and
+A4: (p.1 = A() or N() = 0) and
+A5: for n be Element of NAT st 1 <= n & n < N() holds P[n,p.n,p.(n+1)]
+  from RECDEF_1:sch 6(A2);
+  take p;
+  thus len p = N() by A3;
+  now
+    assume N() <> 0;
+    then N() > 0;
+    then N() >= 0 + 1 by NAT_1:13;
+    hence p/.1 = A() by A3,A4,FINSEQ_4:24;
+  end;
+  hence p/.1 = A() or N() = 0;
+  let n be Element of NAT;
+  assume that
+A6: 1 <= n and
+A7: n < N();
+  n + 1 <= N() by A7,NAT_1:13;
+  then p.n = p/.n & p.(n+1) = p/.(n+1) by A3,A6,A7,FINSEQ_4:24,NAT_1:11;
+  hence P[n,p/.n,p/.(n+1)] by A5,A6,A7;
+end;
 
 canceled;
 
-  theorem
-    for x,y be real number st x >= 0 & y > 0 holds
-    x / ( [\ x / y /] + 1 ) < y
-   proof
-    let x,y be real number such that
-     A1: x >= 0 and
-     A2: y > 0;
-         x / y >= 0 by A1,A2,REAL_2:125;
-    then [\ x / y /] >= 0 by INT_1:80;
-    then A3: [\ x / y /] + 1 > 0 + 0 by XREAL_1:10;
-         x / y < [\ (x / y) /] + 1 by INT_1:52;
-    then (x / y) * y < ( [\ x / y /] + 1 ) * y by A2,XREAL_1:70;
-    then x < ( [\ x / y /] + 1 ) * y by A2,XCMPLX_1:88;
-    hence x / ( [\ x / y /] + 1 ) < y by A3,REAL_2:178;
-   end;
+theorem
+  for x,y be real number st x >= 0 & y > 0 holds x / ( [\ x / y /] + 1 ) < y
+proof
+  let x,y be real number such that
+A1: x >= 0 and
+A2: y > 0;
+  x / y >= 0 by A1,A2,REAL_2:125;
+  then [\ x / y /] >= 0 by INT_1:80;
+  then
+A3: [\ x / y /] + 1 > 0 + 0 by XREAL_1:10;
+  (x / y) * y < ( [\ x / y /] + 1 ) * y by A2,INT_1:52,XREAL_1:70;
+  then x < ( [\ x / y /] + 1 ) * y by A2,XCMPLX_1:88;
+  hence x / ( [\ x / y /] + 1 ) < y by A3,REAL_2:178;
+end;
 
 begin :: Division and Rest of Division
 
 canceled;
 
-  theorem Th4:
-    0 div n = 0
-   proof
-         now per cases by NAT_D:def 1;
-     suppose ex t be Nat st 0 = n * (0 div n) + t & t < n;
+theorem Th4:
+  0 div n = 0
+proof
+  now per cases by NAT_D:def 1;
+    suppose ex t be Nat st 0 = n * (0 div n) + t & t < n;
       then consider t be Nat such that
-       A1: 0 = n * (0 div n) + t and
-       A2: t < n;
-       n * (0 div n) = 0 by A1,NAT_1:7;
+A1:   0 = n * (0 div n) + t and
+A2:   t < n;
+      n * (0 div n) = 0 by A1,NAT_1:7;
       hence 0 div n = 0 by A2,XCMPLX_1:6;
-     end;
-     suppose 0 div n = 0 & n = 0;
+    end;
+    suppose 0 div n = 0 & n = 0;
       hence 0 div n = 0;
     end;
-    end;
-    hence 0 div n = 0;
-   end;
+  end;
+  hence 0 div n = 0;
+end;
 
-  theorem
-    for n be non empty Nat holds n div n = 1
-   proof
-     let n be non empty Nat;
-     n*1 div n = 1 by NAT_D:18;
-    hence thesis;
-   end;
+theorem
+  for n be non empty Nat holds n div n = 1
+proof
+  let n be non empty Nat;
+  n*1 div n = 1 by NAT_D:18;
+  hence thesis;
+end;
 
-  theorem
-    n div 1 = n
-   proof
-     n = 1 * n + 0 & 0 < 1;
-    hence n div 1 = n by NAT_D:def 1;
-   end;
+theorem
+  n div 1 = n
+proof
+  n = 1 * n + 0 & 0 < 1;
+  hence n div 1 = n by NAT_D:def 1;
+end;
 
-  theorem
-    i <= j & k <= j & i = j -' k + l implies k = j -' i + l
-   proof
-    assume that
-     A1: i <= j and
-     A2: k <= j and
-     A3: i = j -' k + l;
-         i - l = j - k by A2,A3,BINARITH:50;
-    hence k = j - i + l
-       .= j -' i + l by A1,BINARITH:50;
-   end;
+theorem
+  i <= j & k <= j & i = j -' k + l implies k = j -' i + l
+proof
+  assume that
+A1: i <= j and
+A2: k <= j and
+A3: i = j -' k + l;
+  i - l = j - k by A2,A3,BINARITH:50;
+  hence k = j - i + l
+    .= j -' i + l by A1,BINARITH:50;
+end;
 
-  theorem
-    i in Seg n implies n -' i + 1 in Seg n
-   proof
-    assume i in Seg n;
-    then A1: 1 <= i & i <= n by FINSEQ_1:3;
-    then n - i <= n - 1 by REAL_1:92;
-    then n - i + 1 <= n by XREAL_1:21;
-    then A2: n -' i + 1 <= n by A1,BINARITH:50;
-         1 <= n -' i + 1 by NAT_1:11;
-    hence n -' i + 1 in Seg n by A2,FINSEQ_1:3;
-   end;
+theorem
+  i in Seg n implies n -' i + 1 in Seg n
+proof
+  assume i in Seg n;
+  then
+A1: 1 <= i & i <= n by FINSEQ_1:3;
+  then n - i <= n - 1 by REAL_1:92;
+  then n - i + 1 <= n by XREAL_1:21;
+  then
+A2: n -' i + 1 <= n by A1,BINARITH:50;
+  1 <= n -' i + 1 by NAT_1:11;
+  hence n -' i + 1 in Seg n by A2,FINSEQ_1:3;
+end;
 
-  theorem
-    j < i implies i -' (j + 1) + 1 = i -' j
-   proof
-    assume A1: j < i;
-    then j + 1 <= i by NAT_1:13;
-    hence i -' (j + 1) + 1 = i - (j + 1) + 1 by BINARITH:50
-       .= i - j
-       .= i -' j by A1,BINARITH:50;
-   end;
+theorem
+  j < i implies i -' (j + 1) + 1 = i -' j
+proof
+  assume
+A1: j < i;
+  then j + 1 <= i by NAT_1:13;
+  hence i -' (j + 1) + 1 = i - (j + 1) + 1 by BINARITH:50
+    .= i - j
+    .= i -' j by A1,BINARITH:50;
+end;
 
-  theorem Th10:
-   i >= j implies j -' i = 0
-   proof
-    assume A1: i >= j;
-    per cases by A1,REAL_1:def 5;
-     suppose i = j;
-      hence j -' i = 0 by BINARITH:51;
-     end;
-     suppose i > j;
-      then j - i < 0 by REAL_2:105;
-      hence j -' i = 0 by BINARITH:def 3;
-   end;
-   end;
+theorem Th10:
+  i >= j implies j -' i = 0
+proof
+  assume
+A1: i >= j;
+  per cases by A1,REAL_1:def 5;
+  suppose i = j;
+    hence j -' i = 0 by BINARITH:51;
+  end;
+  suppose i > j;
+    then j - i < 0 by REAL_2:105;
+    hence j -' i = 0 by BINARITH:def 3;
+  end;
+end;
 
-  theorem Th11:
-   for i,j be non empty Nat holds
-    i -' j < i
-   proof
-    let i,j be non empty Nat;
-    per cases;
-     suppose A1: j <= i;
-       i - j < i - 0 by REAL_1:92;
-      hence i -' j < i by A1,BINARITH:50;
-     end;
-     suppose j > i;
-      hence i -' j < i by Th10;
-   end;
-   end;
+theorem Th11:
+  for i,j be non empty Nat holds i -' j < i
+proof
+  let i,j be non empty Nat;
+  per cases;
+  suppose
+A1: j <= i;
+    i - j < i - 0 by REAL_1:92;
+    hence i -' j < i by A1,BINARITH:50;
+  end;
+  suppose j > i;
+    hence i -' j < i by Th10;
+  end;
+end;
 
-  theorem Th12:
-    k <= n implies
-    2 to_power n = (2 to_power k) * (2 to_power (n-'k))
-   proof
-    assume k <= n;
-    then n = k + (n -' k) by BINARITH:53;
-    hence 2 to_power n
-        = (2 to_power k) * (2 to_power (n-'k)) by POWER:32;
-   end;
+theorem Th12:
+  k <= n implies 2 to_power n = (2 to_power k) * (2 to_power (n-'k))
+proof
+  assume k <= n;
+  then n = k + (n -' k) by BINARITH:53;
+  hence 2 to_power n = (2 to_power k) * (2 to_power (n-'k)) by POWER:32;
+end;
 
-  theorem
-    k <= n implies
-    2 to_power k divides 2 to_power n
-   proof
-    assume k <= n;
-    then 2 to_power n = (2 to_power k) * (2 to_power (n-'k)) by Th12;
-    hence thesis by NAT_D:def 3;
-   end;
+theorem
+  k <= n implies 2 to_power k divides 2 to_power n
+proof
+  assume k <= n;
+  then 2 to_power n = (2 to_power k) * (2 to_power (n-'k)) by Th12;
+  hence thesis by NAT_D:def 3;
+end;
 
-  theorem Th14:
-    k > 0 & n div k = 0 implies n < k
-   proof
-    assume that
-     A1: k > 0 and
-     A2: n div k = 0;
-    consider t be Nat such that
-     A3: n = k * (n div k) + t and
-     A4: t < k by A1,NAT_D:def 1;
-    thus n < k by A2,A3,A4;
-   end;
+theorem Th14:
+  k > 0 & n div k = 0 implies n < k
+proof
+  assume that
+A1: k > 0 and
+A2: n div k = 0;
+  consider t be Nat such that
+A3: n = k * (n div k) + t and
+A4: t < k by A1,NAT_D:def 1;
+  thus n < k by A2,A3,A4;
+end;
 
-  theorem
-     k > 0 & k <= n implies n div k >= 1
-   proof
-    assume that
-     A1: k > 0 and
-     A2: k <= n;
-         n div k <> 0 by A1,A2,Th14;
-    then n div k > 0;
-    then n div k >= 0 + 1 by NAT_1:13;
-    hence n div k >= 1;
-   end;
+theorem
+  k > 0 & k <= n implies n div k >= 1
+proof
+  assume that
+A1: k > 0 and
+A2: k <= n;
+  n div k <> 0 by A1,A2,Th14;
+  then n div k > 0;
+  then n div k >= 0 + 1 by NAT_1:13;
+  hence n div k >= 1;
+end;
 
-  theorem
-     k <> 0 implies (n+k) div k = (n div k) + 1
-   proof
-    assume k <> 0;
-    then consider t be Nat such that
-     A1: n = k * (n div k) + t and
-     A2: t < k by NAT_D:def 1;
-         n + k = k * ((n div k) + 1) + t by A1;
-    hence (n+k) div k = (n div k) + 1 by A2,NAT_D:def 1;
-   end;
+theorem
+  k <> 0 implies (n+k) div k = (n div k) + 1
+proof
+  assume k <> 0;
+  then consider t be Nat such that
+A1: n = k * (n div k) + t and
+A2: t < k by NAT_D:def 1;
+  n + k = k * ((n div k) + 1) + t by A1;
+  hence (n+k) div k = (n div k) + 1 by A2,NAT_D:def 1;
+end;
 
-  theorem
-     k divides n & 1 <= n & 1 <= i & i <= k implies
-    (n -' i) div k = (n div k) - 1
-   proof
-    assume that
-     A1: k divides n and
-     A2: 1 <= n and
-     A3: 1 <= i and
-     A4: i <= k;
-    A5: n = k * (n div k) by A1,NAT_D:3;
-    A6: k <= n by A1,A2,NAT_D:7;
-         n div k > 0
-    proof
-     assume not n div k > 0;
-     then n div k = 0;
-     hence contradiction by A3,A4,A6,Th14;
-    end;
-    then n div k >= 0 + 1 by NAT_1:13;
-    then A7: (n div k)-'1 = (n div k) - 1 by BINARITH:50;
-         i >= 0 + 1 by A3;
-    then A8: k-'i < k by A4,Th11;
-         i + k <= k + n by A4,A6,XREAL_1:9;
-    then i <= n by XREAL_1:8;
-    then n -' i = k * (n div k) - k * 1 + k - i by A5,BINARITH:50
-       .= k * ((n div k)-'1) + (k - i) by A7
-       .= k * ((n div k)-'1) + (k-'i) by A4,BINARITH:50;
-    hence thesis by A7,A8,NAT_D:def 1;
-   end;
+theorem
+  k divides n & 1 <= n & 1 <= i & i <= k implies
+  (n -' i) div k = (n div k) - 1
+proof
+  assume that
+A1: k divides n and
+A2: 1 <= n and
+A3: 1 <= i and
+A4: i <= k;
+A5: n = k * (n div k) by A1,NAT_D:3;
+A6: k <= n by A1,A2,NAT_D:7;
+  n div k > 0
+  proof
+    assume not n div k > 0;
+    then n div k = 0;
+    hence contradiction by A3,A4,A6,Th14;
+  end;
+  then n div k >= 0 + 1 by NAT_1:13;
+  then
+A7: (n div k)-'1 = (n div k) - 1 by BINARITH:50;
+  i >= 0 + 1 by A3;
+  then
+A8: k-'i < k by A4,Th11;
+  i + k <= k + n by A4,A6,XREAL_1:9;
+  then i <= n by XREAL_1:8;
+  then n -' i = k * (n div k) - k * 1 + k - i by A5,BINARITH:50
+    .= k * ((n div k)-'1) + (k - i) by A7
+    .= k * ((n div k)-'1) + (k-'i) by A4,BINARITH:50;
+  hence thesis by A7,A8,NAT_D:def 1;
+end;
 
-  theorem
-    k <= n implies
-    (2 to_power n) div (2 to_power k) = 2 to_power (n -' k)
-   proof
+theorem
+  k <= n implies (2 to_power n) div (2 to_power k) = 2 to_power (n -' k)
+proof
 A1: 2 to_power k > 0 by POWER:39;
-    assume k <= n;
-    then 2 to_power n = (2 to_power k) * (2 to_power (n-'k)) by Th12;
-    hence (2 to_power n) div (2 to_power k) = 2 to_power (n -' k)
-                                                           by A1,NAT_D:18;
-   end;
+  assume k <= n;
+  then 2 to_power n = (2 to_power k) * (2 to_power (n-'k)) by Th12;
+  hence (2 to_power n) div (2 to_power k) = 2 to_power (n -' k)
+  by A1,NAT_D:18;
+end;
 
-  theorem
-    n > 0 implies 2 to_power n mod 2 = 0
-   proof
-    assume n > 0;
-    then A1: n >= 0 + 1 by NAT_1:13;
-         2 to_power n
-        = 2 to_power (n - 1 + 1)
-       .= 2 to_power (n-'1 + 1) by A1,BINARITH:50
-       .= 2 to_power (n-'1) * (2 to_power 1) by POWER:32
-       .= 2 to_power (n-'1) * 2 by POWER:30;
-    hence 2 to_power n mod 2 = 0 by NAT_D:13;
-   end;
+theorem
+  n > 0 implies 2 to_power n mod 2 = 0
+proof
+  assume n > 0;
+  then
+A1: n >= 0 + 1 by NAT_1:13;
+  2 to_power n = 2 to_power (n - 1 + 1)
+    .= 2 to_power (n-'1 + 1) by A1,BINARITH:50
+    .= 2 to_power (n-'1) * (2 to_power 1) by POWER:32
+    .= 2 to_power (n-'1) * 2 by POWER:30;
+  hence 2 to_power n mod 2 = 0 by NAT_D:13;
+end;
 
-  theorem
-    n > 0 implies
-    (n mod 2 = 0 iff (n -' 1) mod 2 = 1)
-   proof
-    assume A1: n > 0;
-    thus n mod 2 = 0 implies (n -' 1) mod 2 = 1
+theorem
+  n > 0 implies (n mod 2 = 0 iff (n -' 1) mod 2 = 1)
+proof
+  assume
+A1: n > 0;
+  thus n mod 2 = 0 implies (n -' 1) mod 2 = 1
+  proof
+    assume
+A2: n mod 2 = 0;
+    consider t be Nat such that
+A3: n = 2 * t + (n mod 2) and (n mod 2) < 2 by NAT_D:def 2;
+    t > 0
     proof
-     assume A2: n mod 2 = 0;
-     consider t be Nat such that
-      A3: n = 2 * t + (n mod 2) and
-           (n mod 2) < 2 by NAT_D:def 2;
-          t > 0
-     proof
       assume not t > 0;
       then t = 0;
       hence contradiction by A1,A2,A3;
-     end;
-     then A4: t >= 0 + 1 by NAT_1:13;
-          n >= 0 + 1 by A1,NAT_1:13;
-     then n -' 1 = 2 * (t - 1 + 1) - 1 by A2,A3,BINARITH:50
-        .= 2 * (t - 1) + (1 + 1 - 1)
-        .= 2 * (t-'1) + 1 by A4,BINARITH:50;
-     hence (n -' 1) mod 2 = 1 by NAT_D:def 2;
     end;
-    assume (n -' 1) mod 2 = 1;
-    then consider t be Nat such that
-     A5: n -' 1 = 2 * t + 1 and
-          1 < 2 by NAT_D:def 2;
-         n >= 0 + 1 by A1,NAT_1:13;
-    then n = 2 * t + 1 + 1 by A5,BINARITH:53
-          .= 2 * (t + 1) + 0;
-    hence n mod 2 = 0 by NAT_D:def 2;
-   end;
+    then
+A4: t >= 0 + 1 by NAT_1:13;
+    n >= 0 + 1 by A1,NAT_1:13;
+    then n -' 1 = 2 * (t - 1 + 1) - 1 by A2,A3,BINARITH:50
+      .= 2 * (t - 1) + (1 + 1 - 1)
+      .= 2 * (t-'1) + 1 by A4,BINARITH:50;
+    hence (n -' 1) mod 2 = 1 by NAT_D:def 2;
+  end;
+  assume (n -' 1) mod 2 = 1;
+  then consider t be Nat such that
+A5: n -' 1 = 2 * t + 1 and 1 < 2 by NAT_D:def 2;
+  n >= 0 + 1 by A1,NAT_1:13;
+  then n = 2 * t + 1 + 1 by A5,BINARITH:53
+    .= 2 * (t + 1) + 0;
+  hence n mod 2 = 0 by NAT_D:def 2;
+end;
 
-  theorem
-    for n be non empty Nat st n <> 1 holds
-    n > 1
-   proof
-    let n be non empty Nat;
-    assume A1: n <> 1;
-         n >= 1 by NAT_1:14;
-    hence n > 1 by A1,REAL_1:def 5;
-   end;
+theorem
+  for n be non empty Nat st n <> 1 holds n > 1
+proof
+  let n be non empty Nat;
+  assume
+A1: n <> 1;
+  n >= 1 by NAT_1:14;
+  hence n > 1 by A1,REAL_1:def 5;
+end;
 
-  theorem
-    n <= k & k < n + n implies k div n = 1
-   proof
-    assume that
-     A1: n <= k and
-     A2: k < n + n;
-       A3: k - n < n + n - n by A2,XREAL_1:11;
-         k = n + (k - n)
-     .= n * 1 + (k-'n) by A1,BINARITH:50;
-    hence k div n = 1 by A3,NAT_D:def 1;
-   end;
+theorem
+  n <= k & k < n + n implies k div n = 1
+proof
+  assume that
+A1: n <= k and
+A2: k < n + n;
+A3: k - n < n + n - n by A2,XREAL_1:11;
+  k = n + (k - n)
+    .= n * 1 + (k-'n) by A1,BINARITH:50;
+  hence k div n = 1 by A3,NAT_D:def 1;
+end;
 
-  theorem Th23:
-    n is even iff n mod 2 = 0
-   proof
+theorem Th23:
+  n is even iff n mod 2 = 0
+proof
 A1: n in NAT by ORDINAL1:def 13;
-    thus n is even implies n mod 2 = 0
-    proof
-     assume n is even;
-     then consider k be Element of NAT such that
-      A2: n = 2*k by A1,ABIAN:def 2;
-          n = 2*k + 0 by A2;
-     hence n mod 2 = 0 by NAT_D:def 2;
-    end;
-    assume n mod 2 = 0;
-    then ex k be Nat st
-      n = 2*k + 0 & 0 < 2 by NAT_D:def 2;
-    hence n is even;
-   end;
+  thus n is even implies n mod 2 = 0
+  proof
+    assume n is even;
+    then consider k be Element of NAT such that
+A2: n = 2*k by A1,ABIAN:def 2;
+    n = 2*k + 0 by A2;
+    hence n mod 2 = 0 by NAT_D:def 2;
+  end;
+  assume n mod 2 = 0;
+  then ex k be Nat st n = 2*k + 0 & 0 < 2 by NAT_D:def 2;
+  hence n is even;
+end;
 
-  theorem
-    n is odd iff n mod 2 = 1
-   proof
-     n is odd iff not n mod 2 = 0 by Th23;
-     hence n is odd iff n mod 2 = 1 by NAT_D:12;
-   end;
+theorem
+  n is odd iff n mod 2 = 1
+proof
+  n is odd iff not n mod 2 = 0 by Th23;
+  hence n is odd iff n mod 2 = 1 by NAT_D:12;
+end;
 
-  theorem
-    1 <= t & k <= n & 2*t divides k implies
-    (n div t is even iff (n-'k) div t is even)
-   proof
-    assume that
-     A1: 1 <= t and
-     A2: k <= n and
-     A3: 2*t divides k;
-    thus n div t is even implies (n-'k) div t is even
-    proof
-     assume n div t is even;
-     then consider p be Element of NAT such that
-      A4: n div t = 2 * p by ABIAN:def 2;
-     consider q be Nat such that
-      A5: n = t * (2 * p) + q and
-      A6: q < t by A1,A4,NAT_D:def 1;
-     consider r be Nat such that
-      A7: k = 2 * t * r by A3,NAT_D:def 3;
-     A8: 2 * t <> 0 by A1;
-     then A9: 2 * t > 0;
-       2 * t * r <= 2 * t * p + q / (2 * t) * (2 * t) by A2,A5,A7,A8,
-XCMPLX_1:88
-;
-     then 2 * t * r <= 2 * t * (p + q / (2 * t));
-     then A10: r <= p + q / (2 * t) by A9,XREAL_1:70;
-          1 * t < 2 * t by A1,XREAL_1:70;
-     then t + q < 2 * t + t by A6,XREAL_1:10;
-     then A11: q < 2 * t by XREAL_1:8;
-          now per cases;
+theorem
+  1 <= t & k <= n & 2*t divides k implies
+  (n div t is even iff (n-'k) div t is even)
+proof
+  assume that
+A1: 1 <= t and
+A2: k <= n and
+A3: 2*t divides k;
+  thus n div t is even implies (n-'k) div t is even
+  proof
+    assume n div t is even;
+    then consider p be Element of NAT such that
+A4: n div t = 2 * p by ABIAN:def 2;
+    consider q be Nat such that
+A5: n = t * (2 * p) + q and
+A6: q < t by A1,A4,NAT_D:def 1;
+    consider r be Nat such that
+A7: k = 2 * t * r by A3,NAT_D:def 3;
+A8: 2 * t <> 0 by A1;
+    then
+A9: 2 * t > 0;
+    2 * t * r <= 2 * t * p + q / (2 * t) * (2 * t) by A2,A5,A7,A8,
+    XCMPLX_1:88;
+    then 2 * t * r <= 2 * t * (p + q / (2 * t));
+    then
+A10: r <= p + q / (2 * t) by A9,XREAL_1:70;
+    1 * t < 2 * t by A1,XREAL_1:70;
+    then t + q < 2 * t + t by A6,XREAL_1:10;
+    then
+A11: q < 2 * t by XREAL_1:8;
+    now per cases;
       suppose q <> 0;
-       then q > 0;
-       hence q / (2 * t) < 1 by A11,REAL_2:142;
+        then q > 0;
+        hence q / (2 * t) < 1 by A11,REAL_2:142;
       end;
       suppose q = 0;
-       hence q / (2 * t) < 1;
-     end;
-     end;
-     then p + q / (2 * t) < p + 1 by XREAL_1:8;
-     then p + q / (2 * t) + r < p + 1 + (p + q / (2 * t)) by A10,XREAL_1:10;
-     then r < p + 1 by XREAL_1:8;
-     then A12: r <= p by NAT_1:13;
-          (n-'k) = t * (2 * p) + q - 2 * t * r by A2,A5,A7,BINARITH:50
-        .= t * (2 * (p - r)) + q
-        .= t * (2 * (p-'r)) + q by A12,BINARITH:50;
-     hence (n-'k) div t is even by A6,NAT_D:def 1;
-    end;
-    assume (n-'k) div t is even;
-    then consider p be Element of NAT such that
-     A13: (n-'k) div t = 2 * p by ABIAN:def 2;
-    consider q be Nat such that
-     A14: n-'k = t * (2 * p) + q and
-     A15: q < t by A1,A13,NAT_D:def 1;
-       A16: n - k = t * (2 * p) + q by A2,A14,BINARITH:50;
-    consider r be Nat such that
-     A17: k = 2 * t * r by A3,NAT_D:def 3;
-         n = t * (2 * (p + r)) + q by A16,A17;
-    hence n div t is even by A15,NAT_D:def 1;
-   end;
-
-  theorem Th26:
-    n <= m implies n div k <= m div k
-   proof
-    assume that
-     A1: n <= m and
-     A2: n div k > m div k;
-    set r = (n div k) -' (m div k);
-    A3: r = (n div k) - (m div k) by A2,BINARITH:50;
-    then r > (m div k) - (m div k) by A2,XREAL_1:11;
-    then r >= 0 + 1 by NAT_1:13;
-    then k * r >= k * 1 by XREAL_1:66;
-    then A4: k * r + k * (m div k) >= k + k * (m div k) by XREAL_1:8;
-    per cases;
-     suppose A5: k <> 0;
-      then consider t1 be Nat such that
-       A6: n = k * (n div k) + t1 and
-            t1 < k by NAT_D:def 1;
-      consider t2 be Nat such that
-       A7: m = k * (m div k) + t2 and
-       A8: t2 < k by A5,NAT_D:def 1;
-      A9: m < k + k * (m div k) by A7,A8,XREAL_1:8;
-      A10: k * (n div k) <= n by A6,NAT_1:11;
-        m - (k * (n div k)) < (k + k * (m div k)) - (k + k * (m div k))
-        by A3,A4,A9,REAL_1:92;
-      then m - (k * (n div k)) < 0;
-      then m - n < (k * (n div k)) - (k * (n div k)) by A10,REAL_1:92;
-      then m < 0 + n by XREAL_1:21;
-      hence contradiction by A1;
-     end;
-     suppose k = 0;
-      hence contradiction by A2,NAT_D:def 1;
-   end;
-   end;
-
-  theorem
-    k <= 2 * n implies
-    (k+1) div 2 <= n
-   proof
-    assume k <= 2 * n;
-    then k + 1 <= 2 * n + 1 by XREAL_1:8;
-    then (k + 1) div 2 <= (2 * n + 1) div 2 by Th26;
-    hence (k + 1) div 2 <= n by NAT_D:def 1;
-   end;
-
-  theorem
-    n is even implies
-    n div 2 = (n + 1) div 2
-   proof
-     assume
-A1:  n is even;
-         n = 2 * (n div 2) + (n mod 2) by NAT_D:2
-     .= 2 * (n div 2) + 0 by A1,Th23;
-    hence n div 2 = (n + 1) div 2 by NAT_D:def 1;
-   end;
-
-  theorem
-    (n div k) div i = n div (k*i)
-   proof
-         now per cases;
-     suppose A1: i = 0;
-      hence (n div k) div i = 0 by NAT_D:def 1
-         .= n div (k*i) by A1,NAT_D:def 1;
-     end;
-     suppose A2: i <> 0;
-           now per cases;
-       suppose A3: k = 0;
-        then n div k = 0 by NAT_D:def 1;
-        hence (n div k) div i = n div (k*i) by A3,Th4;
-       end;
-       suppose k <> 0;
-        then consider t1 be Nat such that
-         A4: n = k * (n div k) + t1 and
-         A5: t1 < k by NAT_D:def 1;
-        consider t2 be Nat such that
-         A6: n div k = i * ((n div k) div i) + t2 and
-         A7: t2 < i by A2,NAT_D:def 1;
-        A8: n = k * i * ((n div k) div i) + (k * t2 + t1) by A4,A6;
-             t2 + 1 <= i by A7,NAT_1:13;
-        then A9: k * (t2 + 1) <= k * i by XREAL_1:66;
-             k * t2 + t1 < k * t2 + k * 1 by A5,XREAL_1:8;
-        then (k * t2 + t1) - (k * i) < (k * (t2 + 1)) - (k * (t2 + 1))
-                                                             by A9,REAL_1:92;
-        then k * t2 + t1 < 0 + k * i by XREAL_1:21;
-        hence (n div k) div i = n div (k*i) by A8,NAT_D:def 1;
+        hence q / (2 * t) < 1;
       end;
+    end;
+    then p + q / (2 * t) < p + 1 by XREAL_1:8;
+    then p + q / (2 * t) + r < p + 1 + (p + q / (2 * t)) by A10,XREAL_1:10;
+    then r < p + 1 by XREAL_1:8;
+    then
+A12: r <= p by NAT_1:13;
+    (n-'k) = t * (2 * p) + q - 2 * t * r by A2,A5,A7,BINARITH:50
+      .= t * (2 * (p - r)) + q
+      .= t * (2 * (p-'r)) + q by A12,BINARITH:50;
+    hence (n-'k) div t is even by A6,NAT_D:def 1;
+  end;
+  assume (n-'k) div t is even;
+  then consider p be Element of NAT such that
+A13: (n-'k) div t = 2 * p by ABIAN:def 2;
+  consider q be Nat such that
+A14: n-'k = t * (2 * p) + q and
+A15: q < t by A1,A13,NAT_D:def 1;
+A16: n - k = t * (2 * p) + q by A2,A14,BINARITH:50;
+  consider r be Nat such that
+A17: k = 2 * t * r by A3,NAT_D:def 3;
+  n = t * (2 * (p + r)) + q by A16,A17;
+  hence n div t is even by A15,NAT_D:def 1;
+end;
+
+theorem Th26:
+  n <= m implies n div k <= m div k
+proof
+  assume that
+A1: n <= m and
+A2: n div k > m div k;
+  set r = (n div k) -' (m div k);
+A3: r = (n div k) - (m div k) by A2,BINARITH:50;
+  then r > (m div k) - (m div k) by A2,XREAL_1:11;
+  then r >= 0 + 1 by NAT_1:13;
+  then k * r >= k * 1 by XREAL_1:66;
+  then
+A4: k * r + k * (m div k) >= k + k * (m div k) by XREAL_1:8;
+  per cases;
+  suppose
+A5: k <> 0;
+    then consider t1 be Nat such that
+A6: n = k * (n div k) + t1 and t1 < k by NAT_D:def 1;
+    consider t2 be Nat such that
+A7: m = k * (m div k) + t2 and
+A8: t2 < k by A5,NAT_D:def 1;
+A9: m < k + k * (m div k) by A7,A8,XREAL_1:8;
+A10: k * (n div k) <= n by A6,NAT_1:11;
+    m - (k * (n div k)) < (k + k * (m div k)) - (k + k * (m div k))
+    by A3,A4,A9,REAL_1:92;
+    then m - (k * (n div k)) < 0;
+    then m - n < (k * (n div k)) - (k * (n div k)) by A10,REAL_1:92;
+    then m < 0 + n by XREAL_1:21;
+    hence contradiction by A1;
+  end;
+  suppose k = 0;
+    hence contradiction by A2,NAT_D:def 1;
+  end;
+end;
+
+theorem
+  k <= 2 * n implies (k+1) div 2 <= n
+proof
+  assume k <= 2 * n;
+  then k + 1 <= 2 * n + 1 by XREAL_1:8;
+  then (k + 1) div 2 <= (2 * n + 1) div 2 by Th26;
+  hence (k + 1) div 2 <= n by NAT_D:def 1;
+end;
+
+theorem
+  n is even implies n div 2 = (n + 1) div 2
+proof
+  assume
+A1: n is even;
+  n = 2 * (n div 2) + (n mod 2) by NAT_D:2
+    .= 2 * (n div 2) + 0 by A1,Th23;
+  hence n div 2 = (n + 1) div 2 by NAT_D:def 1;
+end;
+
+theorem
+  (n div k) div i = n div (k*i)
+proof
+  now per cases;
+    suppose
+A1:   i = 0;
+      hence (n div k) div i = 0 by NAT_D:def 1
+        .= n div (k*i) by A1,NAT_D:def 1;
+    end;
+    suppose
+A2:   i <> 0;
+      now per cases;
+        suppose
+A3:       k = 0;
+          then n div k = 0 by NAT_D:def 1;
+          hence (n div k) div i = n div (k*i) by A3,Th4;
+        end;
+        suppose k <> 0;
+          then consider t1 be Nat such that
+A4:       n = k * (n div k) + t1 and
+A5:       t1 < k by NAT_D:def 1;
+          consider t2 be Nat such that
+A6:       n div k = i * ((n div k) div i) + t2 and
+A7:       t2 < i by A2,NAT_D:def 1;
+A8:       n = k * i * ((n div k) div i) + (k * t2 + t1) by A4,A6;
+          t2 + 1 <= i by A7,NAT_1:13;
+          then
+A9:       k * (t2 + 1) <= k * i by XREAL_1:66;
+          k * t2 + t1 < k * t2 + k * 1 by A5,XREAL_1:8;
+          then (k * t2 + t1) - (k * i) < (k * (t2 + 1)) - (k * (t2 + 1))
+          by A9,REAL_1:92;
+          then k * t2 + t1 < 0 + k * i by XREAL_1:21;
+          hence (n div k) div i = n div (k*i) by A8,NAT_D:def 1;
+        end;
       end;
       hence (n div k) div i = n div (k*i);
     end;
-    end;
-    hence (n div k) div i = n div (k*i);
-   end;
+  end;
+  hence (n div k) div i = n div (k*i);
+end;
 
-  definition
-   let n be Nat;
-   redefine attr n is trivial means :Def1:
-    n = 0 or n = 1;
-   compatibility
+definition
+  let n be Nat;
+  redefine attr n is trivial means
+  :Def1:
+  n = 0 or n = 1;
+  compatibility
+  proof
+    thus n is trivial implies n = 0 or n = 1
     proof
-     thus n is trivial implies n = 0 or n = 1
-      proof assume
-A1:     n is trivial;
-       assume
-A2:     n <> 0 & n <> 1;
-        then A3:       n > 1+0 by NAT_1:26;
-        reconsider n as Element of NAT by ORDINAL1:def 13;
+      assume
+A1:   n is trivial;
+      assume
+A2:   n <> 0 & n <> 1;
+      then
+A3:   n > 1+0 by NAT_1:26;
+      reconsider n as Element of NAT by ORDINAL1:def 13;
       n = { k where k is Element of NAT : k < n } by AXIOMS:30;
-        then A4:       0 in n & 1 in n by A3;
-        consider x being set such that
-A5:        n = {x} by A1,A2,REALSET1:def 4;
-             0 = x & 1 = x by A4,A5,TARSKI:def 1;
-       hence contradiction;
-      end;
-     assume
-A6:    n = 0 or n = 1;
-     per cases by A6;
-     suppose n = 0;
-     hence n is empty or ex x being set st n = {x};
-     end;
-     suppose
-A7:    n = 1;
-A8:    for x being set holds x in { k where k is Element of NAT : k < 1 }
- iff x in { 0 }
-      proof let x be set;
-       hereby assume x in { k where k is Element of NAT : k < 1 };
-         then ex k being Element of NAT st x = k & k < 1;
-         then x = 0 by NAT_1:14;
-        hence x in {0 } by TARSKI:def 1;
-       end;
-       assume x in {0};
+      then
+A4:   0 in n & 1 in n by A3;
+      consider x being set such that
+A5:   n = {x} by A1,A2,REALSET1:def 4;
+      0 = x & 1 = x by A4,A5,TARSKI:def 1;
+      hence contradiction;
+    end;
+    assume
+A6: n = 0 or n = 1;
+    per cases by A6;
+    suppose n = 0;
+      hence n is empty or ex x being set st n = {x};
+    end;
+    suppose
+A7:   n = 1;
+A8:   for x being set holds x in { k where k is Element of NAT : k < 1 }
+      iff x in { 0 }
+      proof
+        let x be set;
+        hereby
+          assume x in { k where k is Element of NAT : k < 1 };
+          then ex k being Element of NAT st x = k & k < 1;
+          then x = 0 by NAT_1:14;
+          hence x in {0 } by TARSKI:def 1;
+        end;
+        assume x in {0};
         then x = 0 by TARSKI:def 1;
-       hence x in { k where k is Element of NAT : k < 1 };
+        hence x in { k where k is Element of NAT : k < 1 };
       end;
-           1 = { k where k is Element of NAT : k < 1 } by AXIOMS:30;
+      1 = { k where k is Element of NAT : k < 1 } by AXIOMS:30;
       then n = {0} by A7,A8,TARSKI:2;
-     hence n is empty or ex x being set st n = {x};
-    end;
+      hence n is empty or ex x being set st n = {x};
     end;
   end;
+end;
 
-  registration
-   cluster non trivial Element of NAT;
-   existence
-   proof
+registration
+  cluster non trivial Element of NAT;
+  existence
+  proof
     take 2;
     thus thesis by Def1;
-   end;
-   cluster non trivial Nat;
-   existence
-   proof
-    take 2;
-    thus thesis by Def1;
-   end;
   end;
+  cluster non trivial Nat;
+  existence
+  proof
+    take 2;
+    thus thesis by Def1;
+  end;
+end;
 
-  theorem
-    k is non trivial iff k is non empty & k <> 1 by Def1;
+theorem
+  k is non trivial iff k is non empty & k <> 1 by Def1;
 
-  theorem
-    for k be non trivial Nat holds
-    k >= 2
-   proof
-    let k be non trivial Nat;
-         k >= 1 by NAT_1:14;
-    then k > 1 or k = 1 by REAL_1:def 5;
-    then k >= 1 + 1 by Def1,NAT_1:13;
-    hence thesis;
-   end;
-
-  scheme Indfrom2 { P[set] } :
-   for k be non trivial Element of NAT holds P[k]
-   provided
-    A1: P[2] and
-    A2: for k be non trivial Element of NAT st P[k] holds P[k + 1]
+theorem
+  for k be non trivial Nat holds k >= 2
 proof
-    defpred P[non empty Element of NAT] means $1 is non trivial implies P[$1];
-    A3: P[1] by Def1;
-    A4: now let k be non empty Element of NAT;
-     assume A5: P[k];
-        now
-     assume k + 1 is non trivial;
-     per cases;
+  let k be non trivial Nat;
+  k >= 1 by NAT_1:14;
+  then k > 1 or k = 1 by REAL_1:def 5;
+  then k >= 1 + 1 by Def1,NAT_1:13;
+  hence thesis;
+end;
+
+scheme Indfrom2 { P[set] } : for k be non trivial Element of NAT holds P[k]
+provided
+A1: P[2]
+and
+A2: for k be non trivial Element of NAT st P[k] holds P[k + 1]
+proof
+  defpred P[non empty Element of NAT] means $1 is non trivial implies P[$1];
+A3: P[1] by Def1;
+A4: now
+    let k be non empty Element of NAT;
+    assume
+A5: P[k];
+    now
+      assume k + 1 is non trivial;
+      per cases;
       suppose k = 1;
-       hence P[k + 1] by A1;
+        hence P[k + 1] by A1;
       end;
       suppose k <> 1;
-       then k is non trivial by Def1;
-       hence P[k + 1] by A2,A5;
-     end;
-     end; hence P[k+1];
+        then k is non trivial by Def1;
+        hence P[k + 1] by A2,A5;
+      end;
     end;
-         for k be non empty Element of NAT holds P[k]
-         from BINARITH:sch 1(A3,A4);
-    hence thesis;
-   end;
+    hence P[k+1];
+  end;
+  for k be non empty Element of NAT holds P[k] from BINARITH:sch 1(A3,A4);
+  hence thesis;
+end;
 
 begin :: Addenda
 
@@ -625,24 +638,29 @@ begin :: Addenda
 theorem
   i-'j-'k = i-'(j+k)
 proof
- per cases;
- suppose A1: i <= j;
- then A2: i <= j+k by NAT_1:12;
-  thus i-'j-'k = 0-'k by A1,Th10 .= 0 by Th10
-     .= i-'(j+k) by A2,Th10;
- end;
- suppose A3: j <= i & i-j <= k;
- then A4: i <= j+k by XREAL_1:22;
-       i-'j = i-j by A3,BINARITH:50;
-  hence i-'j-'k = 0 by A3,Th10
-    .= i-'(j+k) by A4,Th10;
- end;
- suppose A5: j <= i & k <= i-j;
- then A6: k+j <= i by XREAL_1:21;
-       i-'j = i-j by A5,BINARITH:50;
-  hence i-'j-'k = i-j-k by A5,BINARITH:50
-    .= i-(j+k)
-    .= i-'(j+k) by A6,BINARITH:50;
-end;
+  per cases;
+  suppose
+A1: i <= j;
+    hence i-'j-'k = 0-'k by Th10
+      .= 0 by Th10
+      .= i-'(j+k) by A1,Th10,NAT_1:12;
+  end;
+  suppose
+A2: j <= i & i-j <= k;
+    then
+A3: i <= j+k by XREAL_1:22;
+    i-'j = i-j by A2,BINARITH:50;
+    hence i-'j-'k = 0 by A2,Th10
+      .= i-'(j+k) by A3,Th10;
+  end;
+  suppose
+A4: j <= i & k <= i-j;
+    then
+A5: k+j <= i by XREAL_1:21;
+    i-'j = i-j by A4,BINARITH:50;
+    hence i-'j-'k = i-j-k by A4,BINARITH:50
+      .= i-(j+k)
+      .= i-'(j+k) by A5,BINARITH:50;
+  end;
 end;
 

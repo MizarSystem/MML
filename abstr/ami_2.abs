@@ -23,59 +23,59 @@ environ
 
 begin :: A small concrete machine
 
- reserve x,y,z for set;
- reserve i,j,k for Element of NAT;
+reserve x,y,z for set;
+reserve i,j,k for Element of NAT;
 
 notation
- synonym SCM-Halt for {};
+  synonym SCM-Halt for {};
 end;
 
 definition
- redefine func SCM-Halt -> Element of Segm 9;
+  redefine func SCM-Halt -> Element of Segm 9;
 end;
 
 notation
- synonym SCM-Instr-Loc for NAT;
+  synonym SCM-Instr-Loc for NAT;
 end;
 
 definition
- func SCM-Data-Loc equals
+  func SCM-Data-Loc equals
 :: AMI_2:def 1
+
   [:{1},NAT:];
 end;
 
 definition
- canceled;
- func SCM-Memory equals
+  canceled;
+  func SCM-Memory equals
 :: AMI_2:def 3
+
   {NAT} \/ SCM-Data-Loc \/ SCM-Instr-Loc;
 end;
 
 registration
- cluster SCM-Memory -> non empty;
+  cluster SCM-Memory -> non empty;
 end;
 
 definition
   redefine func SCM-Data-Loc -> Subset of SCM-Memory;
-   redefine func SCM-Instr-Loc -> Subset of SCM-Memory;
+  redefine func SCM-Instr-Loc -> Subset of SCM-Memory;
 end;
 
 registration
- cluster SCM-Data-Loc -> non empty;
- cluster SCM-Instr-Loc -> non empty;
+  cluster SCM-Data-Loc -> non empty;
+  cluster SCM-Instr-Loc -> non empty;
 end;
 
 reserve I,J,K for Element of Segm 9,
-        a,a1,a2 for Element of SCM-Instr-Loc,
-        b,b1,b2,c,c1 for Element of SCM-Data-Loc;
+  a,a1,a2 for Element of SCM-Instr-Loc,
+  b,b1,b2,c,c1 for Element of SCM-Data-Loc;
 
 definition
- func SCM-Instr -> Subset of [: NAT, (union {INT} \/ SCM-Memory)* :] equals
+  func SCM-Instr -> Subset of [: NAT, (union {INT} \/ SCM-Memory)* :] equals
 :: AMI_2:def 4
-  { [SCM-Halt,{}] } \/
-       { [J,<*a*>] : J = 6 } \/
-       { [K,<*a1,b1*>] : K in { 7,8 } } \/
-       { [I,<*b,c*>] : I in { 1,2,3,4,5} };
+  { [SCM-Halt,{}] } \/ { [J,<*a*>] : J = 6 } \/
+  { [K,<*a1,b1*>] : K in { 7,8 } } \/ { [I,<*b,c*>] : I in { 1,2,3,4,5} };
 end;
 
 canceled;
@@ -84,224 +84,224 @@ theorem :: AMI_2:2
   [0,{}] in SCM-Instr;
 
 registration
- cluster SCM-Instr -> non empty;
+  cluster SCM-Instr -> non empty;
 end;
 
 theorem :: AMI_2:3
-     [6,<*a2*>] in SCM-Instr;
+  [6,<*a2*>] in SCM-Instr;
 
 theorem :: AMI_2:4
-     x in { 7, 8 } implies [x,<*a2,b2*>] in SCM-Instr;
+  x in { 7, 8 } implies [x,<*a2,b2*>] in SCM-Instr;
 
 theorem :: AMI_2:5
-     x in { 1,2,3,4,5} implies [x,<*b1,c1*>] in SCM-Instr;
+  x in { 1,2,3,4,5} implies [x,<*b1,c1*>] in SCM-Instr;
 
 definition
- func SCM-OK -> Function of SCM-Memory, {INT} \/ { SCM-Instr, SCM-Instr-Loc }
-     means
+  func SCM-OK -> Function of SCM-Memory, {INT} \/ { SCM-Instr, SCM-Instr-Loc }
+  means
 :: AMI_2:def 5
- for k being Element of SCM-Memory holds
-   (k = NAT implies it.k = SCM-Instr-Loc) &
-   (k in SCM-Data-Loc implies it.k = INT) &
-   (k in SCM-Instr-Loc implies it.k = SCM-Instr);
+
+  for k being Element of SCM-Memory holds
+  (k = NAT implies it.k = SCM-Instr-Loc) &
+  (k in SCM-Data-Loc implies it.k = INT) &
+  (k in SCM-Instr-Loc implies it.k = SCM-Instr);
 end;
 
 theorem :: AMI_2:6
-   SCM-Instr-Loc <> INT & SCM-Instr <> INT & SCM-Instr-Loc <> SCM-Instr;
+  SCM-Instr-Loc <> INT & SCM-Instr <> INT & SCM-Instr-Loc <> SCM-Instr;
 
 theorem :: AMI_2:7
- for i being Element of SCM-Memory
- holds SCM-OK.i = SCM-Instr-Loc iff i = NAT;
+  for i being Element of SCM-Memory holds SCM-OK.i = SCM-Instr-Loc iff i = NAT;
 
 theorem :: AMI_2:8
- for i being Element of SCM-Memory
- holds SCM-OK.i = INT iff i in SCM-Data-Loc;
+  for i being Element of SCM-Memory holds SCM-OK.i = INT iff i in SCM-Data-Loc;
 
 theorem :: AMI_2:9
- for i being Element of SCM-Memory
- holds SCM-OK.i = SCM-Instr iff i in SCM-Instr-Loc;
+  for i being Element of SCM-Memory
+  holds SCM-OK.i = SCM-Instr iff i in SCM-Instr-Loc;
 
 definition
- mode SCM-State is Element of product SCM-OK;
+  mode SCM-State is Element of product SCM-OK;
 end;
 
 theorem :: AMI_2:10
- for a being Element of SCM-Data-Loc holds
-  SCM-OK.a = INT;
+  for a being Element of SCM-Data-Loc holds SCM-OK.a = INT;
 
 theorem :: AMI_2:11
- for a being Element of SCM-Instr-Loc holds
-  SCM-OK.a = SCM-Instr;
+  for a being Element of SCM-Instr-Loc holds SCM-OK.a = SCM-Instr;
 
 theorem :: AMI_2:12
-     for a being Element of SCM-Instr-Loc,
-     t being Element of SCM-Data-Loc holds a <> t;
+  for a being Element of SCM-Instr-Loc,
+  t being Element of SCM-Data-Loc holds a <> t;
 
 theorem :: AMI_2:13
- pi(product SCM-OK,NAT) = SCM-Instr-Loc;
+  pi(product SCM-OK,NAT) = SCM-Instr-Loc;
 
 theorem :: AMI_2:14
- for a being Element of SCM-Data-Loc holds
-    pi(product SCM-OK,a) = INT;
+  for a being Element of SCM-Data-Loc holds pi(product SCM-OK,a) = INT;
 
 theorem :: AMI_2:15
-     for a being Element of SCM-Instr-Loc holds
-    pi(product SCM-OK,a) = SCM-Instr;
+  for a being Element of SCM-Instr-Loc holds pi(product SCM-OK,a) = SCM-Instr;
 
-definition let s be SCM-State;
- func IC(s) -> Element of SCM-Instr-Loc equals
+definition
+  let s be SCM-State;
+  func IC(s) -> Element of SCM-Instr-Loc equals
 :: AMI_2:def 6
+
   s.NAT;
 end;
 
-definition let s be SCM-State, u be Element of SCM-Instr-Loc;
- func SCM-Chg(s,u) -> SCM-State equals
+definition
+  let s be SCM-State, u be Element of SCM-Instr-Loc;
+  func SCM-Chg(s,u) -> SCM-State equals
 :: AMI_2:def 7
-   s +* (NAT .--> u);
+
+  s +* (NAT .--> u);
 end;
 
 theorem :: AMI_2:16
-     for s being SCM-State, u being Element of SCM-Instr-Loc
+  for s being SCM-State, u being Element of SCM-Instr-Loc
   holds SCM-Chg(s,u).NAT = u;
 
 theorem :: AMI_2:17
-     for s being SCM-State, u being Element of SCM-Instr-Loc,
-     mk being Element of SCM-Data-Loc
-  holds SCM-Chg(s,u).mk = s.mk;
+  for s being SCM-State, u being Element of SCM-Instr-Loc,
+  mk being Element of SCM-Data-Loc holds SCM-Chg(s,u).mk = s.mk;
 
 theorem :: AMI_2:18
-     for s being SCM-State, u,v being Element of SCM-Instr-Loc
+  for s being SCM-State, u,v being Element of SCM-Instr-Loc
   holds SCM-Chg(s,u).v = s.v;
 
-definition let s be SCM-State, t be Element of SCM-Data-Loc, u be Integer;
- func SCM-Chg(s,t,u) -> SCM-State equals
+definition
+  let s be SCM-State, t be Element of SCM-Data-Loc, u be Integer;
+  func SCM-Chg(s,t,u) -> SCM-State equals
 :: AMI_2:def 8
-   s +* (t .--> u);
+
+  s +* (t .--> u);
 end;
 
 theorem :: AMI_2:19
-     for s being SCM-State, t being Element of SCM-Data-Loc, u being Integer
+  for s being SCM-State, t being Element of SCM-Data-Loc, u being Integer
   holds SCM-Chg(s,t,u).NAT = s.NAT;
 
 theorem :: AMI_2:20
-     for s being SCM-State, t being Element of SCM-Data-Loc, u being Integer
+  for s being SCM-State, t being Element of SCM-Data-Loc, u being Integer
   holds SCM-Chg(s,t,u).t = u;
 
 theorem :: AMI_2:21
-     for s being SCM-State, t being Element of SCM-Data-Loc, u being Integer,
-     mk being Element of SCM-Data-Loc st mk <> t
-  holds SCM-Chg(s,t,u).mk = s.mk;
+  for s being SCM-State, t being Element of SCM-Data-Loc, u being Integer,
+  mk being Element of SCM-Data-Loc st mk <> t holds SCM-Chg(s,t,u).mk = s.mk;
 
 theorem :: AMI_2:22
-     for s being SCM-State, t being Element of SCM-Data-Loc, u being Integer,
-     v being Element of SCM-Instr-Loc
-  holds SCM-Chg(s,t,u).v = s.v;
+  for s being SCM-State, t being Element of SCM-Data-Loc, u being Integer,
+  v being Element of SCM-Instr-Loc holds SCM-Chg(s,t,u).v = s.v;
 
-definition let x be Element of SCM-Instr;
- given mk, ml being Element of SCM-Data-Loc, I such that
+definition
+  let x be Element of SCM-Instr;
+  given mk, ml being Element of SCM-Data-Loc, I such that
  x = [ I, <*mk, ml*>];
- func x address_1 -> Element of SCM-Data-Loc means
+  func x address_1 -> Element of SCM-Data-Loc means
 :: AMI_2:def 9
- ex f being FinSequence of SCM-Data-Loc st f = x`2 & it = f/.1;
- func x address_2 -> Element of SCM-Data-Loc means
+
+  ex f being FinSequence of SCM-Data-Loc st f = x`2 & it = f/.1;
+  func x address_2 -> Element of SCM-Data-Loc means
 :: AMI_2:def 10
- ex f being FinSequence of SCM-Data-Loc st f = x`2 & it = f/.2;
+
+  ex f being FinSequence of SCM-Data-Loc st f = x`2 & it = f/.2;
 end;
 
 theorem :: AMI_2:23
-     for x being Element of SCM-Instr, mk, ml being Element of SCM-Data-Loc, I
-  st x = [ I, <*mk, ml*>]
-  holds x address_1 = mk & x address_2 = ml;
+  for x being Element of SCM-Instr, mk, ml being Element of SCM-Data-Loc, I
+  st x = [ I, <*mk, ml*>] holds x address_1 = mk & x address_2 = ml;
 
-definition let x be Element of SCM-Instr;
- given mk being Element of SCM-Instr-Loc, I such that
+definition
+  let x be Element of SCM-Instr;
+  given mk being Element of SCM-Instr-Loc, I such that
  x = [ I, <*mk*>];
- func x jump_address -> Element of SCM-Instr-Loc means
+  func x jump_address -> Element of SCM-Instr-Loc means
 :: AMI_2:def 11
- ex f being FinSequence of SCM-Instr-Loc st f = x`2 & it = f/.1;
+
+  ex f being FinSequence of SCM-Instr-Loc st f = x`2 & it = f/.1;
 end;
 
 theorem :: AMI_2:24
-     for x being Element of SCM-Instr, mk being Element of SCM-Instr-Loc, I
-  st x = [ I, <*mk*>]
-  holds x jump_address = mk;
+  for x being Element of SCM-Instr, mk being Element of SCM-Instr-Loc, I
+  st x = [ I, <*mk*>] holds x jump_address = mk;
 
-definition let x be Element of SCM-Instr;
- given mk being Element of SCM-Instr-Loc,
-       ml being Element of SCM-Data-Loc, I such that
+definition
+  let x be Element of SCM-Instr;
+  given mk being Element of SCM-Instr-Loc,
+  ml being Element of SCM-Data-Loc, I such that
  x = [ I, <*mk,ml*>];
- func x cjump_address -> Element of SCM-Instr-Loc means
+  func x cjump_address -> Element of SCM-Instr-Loc means
 :: AMI_2:def 12
 
- ex mk being Element of SCM-Instr-Loc,
-    ml being Element of SCM-Data-Loc st <*mk,ml*> = x`2 & it = <*mk,ml*>/.1;
- func x cond_address -> Element of SCM-Data-Loc means
+  ex mk being Element of SCM-Instr-Loc,
+  ml being Element of SCM-Data-Loc st <*mk,ml*> = x`2 & it = <*mk,ml*>/.1;
+  func x cond_address -> Element of SCM-Data-Loc means
 :: AMI_2:def 13
 
- ex mk being Element of SCM-Instr-Loc,
-    ml being Element of SCM-Data-Loc st <*mk,ml*> = x`2 & it = <*mk,ml*>/.2;
+  ex mk being Element of SCM-Instr-Loc,
+  ml being Element of SCM-Data-Loc st <*mk,ml*> = x`2 & it = <*mk,ml*>/.2;
 end;
 
 theorem :: AMI_2:25
-     for x being Element of SCM-Instr,
-     mk being Element of SCM-Instr-Loc,
-     ml being Element of SCM-Data-Loc, I
-  st x = [ I, <*mk,ml*>]
+  for x being Element of SCM-Instr, mk being Element of SCM-Instr-Loc,
+  ml being Element of SCM-Data-Loc, I st x = [ I, <*mk,ml*>]
   holds x cjump_address = mk & x cond_address = ml;
 
-registration let s be SCM-State, a be Element of SCM-Data-Loc;
- cluster s.a -> integer;
-end;
-
-definition let D be non empty set; let x,y be real number,
-  a,b be Element of D;
- func IFGT(x,y,a,b) -> Element of D equals
-:: AMI_2:def 14
-      a if x > y
-   otherwise b;
-end;
-
-definition let d be Element of SCM-Instr-Loc;
- func Next d -> Element of SCM-Instr-Loc equals
-:: AMI_2:def 15
-      d + 1;
-end;
-
-definition let x be Element of SCM-Instr, s be SCM-State;
- func SCM-Exec-Res(x,s) -> SCM-State equals
-:: AMI_2:def 16
-      SCM-Chg(SCM-Chg(s, x address_1,s.(x address_2)), Next IC s)
-        if ex mk, ml being Element of SCM-Data-Loc st x = [ 1, <*mk, ml*>],
-  SCM-Chg(SCM-Chg(s,x address_1,
-            s.(x address_1)+s.(x address_2)),Next IC s)
-        if ex mk, ml being Element of SCM-Data-Loc st x = [ 2, <*mk, ml*>],
-  SCM-Chg(SCM-Chg(s,x address_1,
-            s.(x address_1)-s.(x address_2)),Next IC s)
-        if ex mk, ml being Element of SCM-Data-Loc st x = [ 3, <*mk, ml*>],
-  SCM-Chg(SCM-Chg(s,x address_1,
-            s.(x address_1)*s.(x address_2)),Next IC s)
-        if ex mk, ml being Element of SCM-Data-Loc st x = [ 4, <*mk, ml*>],
-  SCM-Chg(SCM-Chg(
-           SCM-Chg(s,x address_1,s.(x address_1) div s.(x address_2)),
-           x address_2,s.(x address_1) mod s.(x address_2)),Next IC s)
-        if ex mk, ml being Element of SCM-Data-Loc st x = [ 5, <*mk, ml*>],
-  SCM-Chg(s,x jump_address)
-        if ex mk being Element of SCM-Instr-Loc st x = [ 6, <*mk*>],
-  SCM-Chg(s,IFEQ(s.(x cond_address),0,x cjump_address,Next IC s))
-        if ex mk being Element of SCM-Instr-Loc,
-              ml being Element of SCM-Data-Loc st x = [ 7, <*mk,ml*>],
-  SCM-Chg(s,IFGT(s.(x cond_address),0,x cjump_address,Next IC s))
-        if ex mk being Element of SCM-Instr-Loc,
-              ml being Element of SCM-Data-Loc st x = [ 8, <*mk,ml*>]
-  otherwise s;
+registration
+  let s be SCM-State, a be Element of SCM-Data-Loc;
+  cluster s.a -> integer;
 end;
 
 definition
- func SCM-Exec ->
+  let D be non empty set;
+  let x,y be real number, a,b be Element of D;
+  func IFGT(x,y,a,b) -> Element of D equals
+:: AMI_2:def 14
+
+  a if x > y otherwise b;
+end;
+
+definition
+  let d be Element of SCM-Instr-Loc;
+  func Next d -> Element of SCM-Instr-Loc equals
+:: AMI_2:def 15
+
+  d + 1;
+end;
+
+definition
+  let x be Element of SCM-Instr, s be SCM-State;
+  func SCM-Exec-Res(x,s) -> SCM-State equals
+:: AMI_2:def 16
+  SCM-Chg(SCM-Chg(s, x address_1,s.(x address_2)), Next IC s)
+  if ex mk, ml being Element of SCM-Data-Loc st x = [ 1, <*mk, ml*>],
+  SCM-Chg(SCM-Chg(s,x address_1, s.(x address_1)+s.(x address_2)),Next IC s)
+  if ex mk, ml being Element of SCM-Data-Loc st x = [ 2, <*mk, ml*>],
+  SCM-Chg(SCM-Chg(s,x address_1, s.(x address_1)-s.(x address_2)),Next IC s)
+  if ex mk, ml being Element of SCM-Data-Loc st x = [ 3, <*mk, ml*>],
+  SCM-Chg(SCM-Chg(s,x address_1, s.(x address_1)*s.(x address_2)),Next IC s)
+  if ex mk, ml being Element of SCM-Data-Loc st x = [ 4, <*mk, ml*>],
+  SCM-Chg(SCM-Chg( SCM-Chg(s,x address_1,s.(x address_1) div s.(x address_2)),
+  x address_2,s.(x address_1) mod s.(x address_2)),Next IC s)
+  if ex mk, ml being Element of SCM-Data-Loc st x = [ 5, <*mk, ml*>],
+  SCM-Chg(s,x jump_address)
+  if ex mk being Element of SCM-Instr-Loc st x = [ 6, <*mk*>],
+  SCM-Chg(s,IFEQ(s.(x cond_address),0,x cjump_address,Next IC s))
+  if ex mk being Element of SCM-Instr-Loc,
+  ml being Element of SCM-Data-Loc st x = [ 7, <*mk,ml*>],
+  SCM-Chg(s,IFGT(s.(x cond_address),0,x cjump_address,Next IC s))
+  if ex mk being Element of SCM-Instr-Loc,
+  ml being Element of SCM-Data-Loc st x = [ 8, <*mk,ml*>] otherwise s;
+end;
+
+definition
+  func SCM-Exec ->
   Function of SCM-Instr, Funcs(product SCM-OK, product SCM-OK) means
 :: AMI_2:def 17
-     for x being Element of SCM-Instr, y being SCM-State holds
-    (it.x).y = SCM-Exec-Res(x,y);
+  for x being Element of SCM-Instr, y being SCM-State holds
+  (it.x).y = SCM-Exec-Res(x,y);
 end;
 
 begin :: Addenda
@@ -311,22 +311,23 @@ begin :: Addenda
 canceled;
 
 theorem :: AMI_2:27
- not NAT in SCM-Data-Loc;
+  not NAT in SCM-Data-Loc;
 
 theorem :: AMI_2:28
- not NAT in SCM-Instr-Loc;
+  not NAT in SCM-Instr-Loc;
 
 theorem :: AMI_2:29
- SCM-Data-Loc misses SCM-Instr-Loc;
+  SCM-Data-Loc misses SCM-Instr-Loc;
 
 theorem :: AMI_2:30
- NAT in SCM-Memory;
+  NAT in SCM-Memory;
 
 theorem :: AMI_2:31
- SCM-Instr-Loc <> INT;
+  SCM-Instr-Loc <> INT;
 
 theorem :: AMI_2:32
- x in SCM-Data-Loc implies ex k being Element of NAT st x = [1,k];
+  x in SCM-Data-Loc implies ex k being Element of NAT st x = [1,k];
 
 theorem :: AMI_2:33
- for k being natural number holds [1,k] in SCM-Data-Loc;
+  for k being natural number holds [1,k] in SCM-Data-Loc;
+

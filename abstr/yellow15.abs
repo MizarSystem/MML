@@ -26,254 +26,210 @@ environ
 
 begin  :: Preliminaries
 
-  scheme :: YELLOW15:sch 1
+scheme :: YELLOW15:sch 1
  SeqLambda1C{ i() -> Nat, D() -> non empty set, C[set], F(set)->set,
-                      G(set)->set } :
-   ex p be FinSequence of D() st
-    len p = i() &
-    for i be Nat st i in Seg i() holds
-     (C[i] implies p.i = F(i)) & (not C[i] implies p.i = G(i))
-   provided
-     for i be Nat st i in Seg i() holds
-     (C[i] implies F(i) in D()) & (not C[i] implies G(i) in D());
+  G(set)->set } : ex p be FinSequence of D() st len p = i() &
+  for i be Nat st i in Seg i() holds
+  (C[i] implies p.i = F(i)) & (not C[i] implies p.i = G(i))
+provided
+ for i be Nat st i in Seg i() holds
+(C[i] implies F(i) in D()) & (not C[i] implies G(i) in D());
 
-  registration
-   cluster BOOLEAN -> finite;
-  end;
+registration
+  cluster BOOLEAN -> finite;
+end;
 
 canceled;
 
-  theorem :: YELLOW15:2
-   for i be Nat
-   for D be finite set holds
-    i-tuples_on D is finite;
+theorem :: YELLOW15:2
+  for i be Nat for D be finite set holds i-tuples_on D is finite;
 
-  theorem :: YELLOW15:3
-   for T be finite set
-   for S be Subset-Family of T holds
-    S is finite;
+theorem :: YELLOW15:3
+  for T be finite set for S be Subset-Family of T holds S is finite;
 
-  registration
-   let T be finite set;
-   cluster -> finite Subset-Family of T;
-  end;
+registration
+  let T be finite set;
+  cluster -> finite Subset-Family of T;
+end;
 
-  registration
-   let T be finite 1-sorted;
-   cluster -> finite Subset-Family of T;
-  end;
+registration
+  let T be finite 1-sorted;
+  cluster -> finite Subset-Family of T;
+end;
 
-  theorem :: YELLOW15:4
-   for X be non trivial set
-   for x being Element of X
-   ex y be set st y in X & x <> y;
+theorem :: YELLOW15:4
+  for X be non trivial set for x being Element of X
+  ex y be set st y in X & x <> y;
 
 begin  :: Components
 
-  definition
-   let X be set;
-   let p be FinSequence of bool X;
-   let q be FinSequence of BOOLEAN;
-   func MergeSequence(p,q) -> FinSequence of bool X means
+definition
+  let X be set;
+  let p be FinSequence of bool X;
+  let q be FinSequence of BOOLEAN;
+  func MergeSequence(p,q) -> FinSequence of bool X means
 :: YELLOW15:def 1
-    len it = len p &
-    for i be Nat st i in dom p holds it.i = IFEQ(q.i,TRUE,p.i,X\p.i);
-  end;
 
-  theorem :: YELLOW15:5
-   for X be set
-   for p be FinSequence of bool X
-   for q be FinSequence of BOOLEAN holds
-    dom MergeSequence(p,q) = dom p;
-
-  theorem :: YELLOW15:6
-   for X be set
-   for p be FinSequence of bool X
-   for q be FinSequence of BOOLEAN
-   for i be Nat st q.i = TRUE holds
-    MergeSequence(p,q).i = p.i;
-
-  theorem :: YELLOW15:7
-   for X be set
-   for p be FinSequence of bool X
-   for q be FinSequence of BOOLEAN
-   for i be Nat st i in dom p & q.i = FALSE holds
-    MergeSequence(p,q).i = X\p.i;
-
-  theorem :: YELLOW15:8
-        for X be set
-   for q be FinSequence of BOOLEAN holds
-    len MergeSequence(<*>(bool X),q) = 0;
-
-  theorem :: YELLOW15:9
-   for X be set
-   for q be FinSequence of BOOLEAN holds
-    MergeSequence(<*>(bool X),q) = <*>(bool X);
-
-  theorem :: YELLOW15:10
-        for X be set
-   for x be Subset of X
-   for q be FinSequence of BOOLEAN holds
-    len MergeSequence(<*x*>,q) = 1;
-
-  theorem :: YELLOW15:11
-        for X be set
-   for x be Subset of X
-   for q be FinSequence of BOOLEAN holds
-    (q.1 = TRUE implies MergeSequence(<*x*>,q).1 = x) &
-    (q.1 = FALSE implies MergeSequence(<*x*>,q).1 = X\x);
-
-  theorem :: YELLOW15:12
-        for X be set
-   for x,y be Subset of X
-   for q be FinSequence of BOOLEAN holds
-    len MergeSequence(<*x,y*>,q) = 2;
-
-  theorem :: YELLOW15:13
-        for X be set
-   for x,y be Subset of X
-   for q be FinSequence of BOOLEAN holds
-    (q.1 = TRUE implies MergeSequence(<*x,y*>,q).1 = x) &
-    (q.1 = FALSE implies MergeSequence(<*x,y*>,q).1 = X\x) &
-    (q.2 = TRUE implies MergeSequence(<*x,y*>,q).2 = y) &
-    (q.2 = FALSE implies MergeSequence(<*x,y*>,q).2 = X\y);
-
-  theorem :: YELLOW15:14
-        for X be set
-   for x,y,z be Subset of X
-   for q be FinSequence of BOOLEAN holds
-    len MergeSequence(<*x,y,z*>,q) = 3;
-
-  theorem :: YELLOW15:15
-        for X be set
-   for x,y,z be Subset of X
-   for q be FinSequence of BOOLEAN holds
-    (q.1 = TRUE implies MergeSequence(<*x,y,z*>,q).1 = x) &
-    (q.1 = FALSE implies MergeSequence(<*x,y,z*>,q).1 = X\x) &
-    (q.2 = TRUE implies MergeSequence(<*x,y,z*>,q).2 = y) &
-    (q.2 = FALSE implies MergeSequence(<*x,y,z*>,q).2 = X\y) &
-    (q.3 = TRUE implies MergeSequence(<*x,y,z*>,q).3 = z) &
-    (q.3 = FALSE implies MergeSequence(<*x,y,z*>,q).3 = X\z);
-
-  theorem :: YELLOW15:16
-   for X be set
-   for p be FinSequence of bool X holds
-    { Intersect (rng MergeSequence(p,q)) where
-     q is FinSequence of BOOLEAN : len q = len p } is Subset-Family of X;
-
-registration
- cluster -> boolean-valued FinSequence of BOOLEAN;
+  len it = len p &
+  for i be Nat st i in dom p holds it.i = IFEQ(q.i,TRUE,p.i,X\p.i);
 end;
 
-  definition
-   let X be set;
-   let Y be finite Subset-Family of X;
-   func Components(Y) -> Subset-Family of X means
+theorem :: YELLOW15:5
+  for X be set for p be FinSequence of bool X
+  for q be FinSequence of BOOLEAN holds dom MergeSequence(p,q) = dom p;
+
+theorem :: YELLOW15:6
+  for X be set for p be FinSequence of bool X for q be FinSequence of BOOLEAN
+  for i be Nat st q.i = TRUE holds MergeSequence(p,q).i = p.i;
+
+theorem :: YELLOW15:7
+  for X be set for p be FinSequence of bool X for q be FinSequence of BOOLEAN
+  for i be Nat st i in dom p & q.i = FALSE holds MergeSequence(p,q).i = X\p.i;
+
+theorem :: YELLOW15:8
+  for X be set for q be FinSequence of BOOLEAN holds
+  len MergeSequence(<*>(bool X),q) = 0;
+
+theorem :: YELLOW15:9
+  for X be set for q be FinSequence of BOOLEAN holds
+  MergeSequence(<*>(bool X),q) = <*>(bool X);
+
+theorem :: YELLOW15:10
+  for X be set for x be Subset of X for q be FinSequence of BOOLEAN holds
+  len MergeSequence(<*x*>,q) = 1;
+
+theorem :: YELLOW15:11
+  for X be set for x be Subset of X for q be FinSequence of BOOLEAN holds
+  (q.1 = TRUE implies MergeSequence(<*x*>,q).1 = x) &
+  (q.1 = FALSE implies MergeSequence(<*x*>,q).1 = X\x);
+
+theorem :: YELLOW15:12
+  for X be set for x,y be Subset of X for q be FinSequence of BOOLEAN holds
+  len MergeSequence(<*x,y*>,q) = 2;
+
+theorem :: YELLOW15:13
+  for X be set for x,y be Subset of X for q be FinSequence of BOOLEAN holds
+  (q.1 = TRUE implies MergeSequence(<*x,y*>,q).1 = x) &
+  (q.1 = FALSE implies MergeSequence(<*x,y*>,q).1 = X\x) &
+  (q.2 = TRUE implies MergeSequence(<*x,y*>,q).2 = y) &
+  (q.2 = FALSE implies MergeSequence(<*x,y*>,q).2 = X\y);
+
+theorem :: YELLOW15:14
+  for X be set for x,y,z be Subset of X for q be FinSequence of BOOLEAN holds
+  len MergeSequence(<*x,y,z*>,q) = 3;
+
+theorem :: YELLOW15:15
+  for X be set for x,y,z be Subset of X for q be FinSequence of BOOLEAN holds
+  (q.1 = TRUE implies MergeSequence(<*x,y,z*>,q).1 = x) &
+  (q.1 = FALSE implies MergeSequence(<*x,y,z*>,q).1 = X\x) &
+  (q.2 = TRUE implies MergeSequence(<*x,y,z*>,q).2 = y) &
+  (q.2 = FALSE implies MergeSequence(<*x,y,z*>,q).2 = X\y) &
+  (q.3 = TRUE implies MergeSequence(<*x,y,z*>,q).3 = z) &
+  (q.3 = FALSE implies MergeSequence(<*x,y,z*>,q).3 = X\z);
+
+theorem :: YELLOW15:16
+  for X be set for p be FinSequence of bool X holds
+  { Intersect (rng MergeSequence(p,q)) where
+  q is FinSequence of BOOLEAN : len q = len p } is Subset-Family of X;
+
+registration
+  cluster -> boolean-valued FinSequence of BOOLEAN;
+end;
+
+definition
+  let X be set;
+  let Y be finite Subset-Family of X;
+  func Components(Y) -> Subset-Family of X means
 :: YELLOW15:def 2
-    ex p be FinSequence of bool X st
-     len p = card Y & rng p = Y &
-     it = { Intersect (rng MergeSequence(p,q)) where
-      q is FinSequence of BOOLEAN : len q = len p };
-  end;
 
-  registration
-   let X be set;
-   let Y be finite Subset-Family of X;
-   cluster Components(Y) -> finite;
-  end;
+  ex p be FinSequence of bool X st len p = card Y & rng p = Y &
+  it = { Intersect (rng MergeSequence(p,q)) where
+  q is FinSequence of BOOLEAN : len q = len p };
+end;
 
-  theorem :: YELLOW15:17
-   for X be set
-   for Y be empty Subset-Family of X holds
-    Components(Y) = {X};
+registration
+  let X be set;
+  let Y be finite Subset-Family of X;
+  cluster Components(Y) -> finite;
+end;
 
-  theorem :: YELLOW15:18
-        for X be set
-   for Y,Z be finite Subset-Family of X st Z c= Y holds
-    Components(Y) is_finer_than Components(Z);
+theorem :: YELLOW15:17
+  for X be set for Y be empty Subset-Family of X holds Components(Y) = {X};
 
-  theorem :: YELLOW15:19
-   for X be set
-   for Y be finite Subset-Family of X holds
-    union Components(Y) = X;
+theorem :: YELLOW15:18
+  for X be set for Y,Z be finite Subset-Family of X st Z c= Y holds
+  Components(Y) is_finer_than Components(Z);
 
-  theorem :: YELLOW15:20
-   for X be set
-   for Y be finite Subset-Family of X
-   for A,B be set st A in Components(Y) & B in Components(Y) & A <> B holds
-    A misses B;
+theorem :: YELLOW15:19
+  for X be set for Y be finite Subset-Family of X holds
+  union Components(Y) = X;
 
-  definition
-   let X be set;
-   let Y be finite Subset-Family of X;
-   attr Y is in_general_position means
+theorem :: YELLOW15:20
+  for X be set for Y be finite Subset-Family of X
+  for A,B be set st A in Components(Y) & B in Components(Y) & A <> B holds
+  A misses B;
+
+definition
+  let X be set;
+  let Y be finite Subset-Family of X;
+  attr Y is in_general_position means
 :: YELLOW15:def 3
-    not {} in Components(Y);
-  end;
 
-  theorem :: YELLOW15:21
-        for X be set
-   for Y,Z be finite Subset-Family of X st
-    Z is in_general_position & Y c= Z holds
-     Y is in_general_position;
+  not {} in Components(Y);
+end;
 
-  theorem :: YELLOW15:22
-        for X be non empty set
-   for Y be empty Subset-Family of X holds
-    Y is in_general_position;
+theorem :: YELLOW15:21
+  for X be set for Y,Z be finite Subset-Family of X st
+  Z is in_general_position & Y c= Z holds Y is in_general_position;
 
-  theorem :: YELLOW15:23
-        for X be non empty set
-   for Y be finite Subset-Family of X st Y is in_general_position holds
-    Components(Y) is a_partition of X;
+theorem :: YELLOW15:22
+  for X be non empty set for Y be empty Subset-Family of X holds
+  Y is in_general_position;
+
+theorem :: YELLOW15:23
+  for X be non empty set
+  for Y be finite Subset-Family of X st Y is in_general_position holds
+  Components(Y) is a_partition of X;
 
 begin  :: About basis of Topological Spaces
 
-  theorem :: YELLOW15:24
-   for L be non empty RelStr holds
-    [#]L is infs-closed sups-closed;
+theorem :: YELLOW15:24
+  for L be non empty RelStr holds [#]L is infs-closed sups-closed;
 
-  theorem :: YELLOW15:25
-   for L be non empty RelStr holds
-    [#]L is with_bottom with_top;
+theorem :: YELLOW15:25
+  for L be non empty RelStr holds [#]L is with_bottom with_top;
 
-  registration
-   let L be non empty RelStr;
-   cluster [#]L -> infs-closed sups-closed with_bottom with_top;
-  end;
+registration
+  let L be non empty RelStr;
+  cluster [#]L -> infs-closed sups-closed with_bottom with_top;
+end;
 
-  theorem :: YELLOW15:26
-        for L be continuous sup-Semilattice holds
-    [#]L is CLbasis of L;
+theorem :: YELLOW15:26
+  for L be continuous sup-Semilattice holds [#]L is CLbasis of L;
 
-  theorem :: YELLOW15:27
-        for L be up-complete (non empty Poset) st L is finite holds
-    the carrier of L = the carrier of CompactSublatt L;
+theorem :: YELLOW15:27
+  for L be up-complete (non empty Poset) st L is finite holds
+  the carrier of L = the carrier of CompactSublatt L;
 
-  theorem :: YELLOW15:28
-        for L be lower-bounded sup-Semilattice
-   for B be Subset of L st B is infinite holds
-    Card B = Card finsups B;
+theorem :: YELLOW15:28
+  for L be lower-bounded sup-Semilattice
+  for B be Subset of L st B is infinite holds Card B = Card finsups B;
 
-  theorem :: YELLOW15:29
-        for T be T_0 non empty TopSpace holds
-    Card the carrier of T c= Card the topology of T;
+theorem :: YELLOW15:29
+  for T be T_0 non empty TopSpace holds
+  Card the carrier of T c= Card the topology of T;
 
-  theorem :: YELLOW15:30
-   for T be TopStruct
-   for X be Subset of T st X is open
-   for B be finite Subset-Family of T st B is Basis of T
-   for Y be set st Y in Components(B) holds
-    X misses Y or Y c= X;
+theorem :: YELLOW15:30
+  for T be TopStruct for X be Subset of T st X is open
+  for B be finite Subset-Family of T st B is Basis of T
+  for Y be set st Y in Components(B) holds X misses Y or Y c= X;
 
-  theorem :: YELLOW15:31
-        for T be T_0 TopSpace st T is infinite
-   for B be Basis of T holds
-    B is infinite;
+theorem :: YELLOW15:31
+  for T be T_0 TopSpace st T is infinite for B be Basis of T holds
+  B is infinite;
 
-  theorem :: YELLOW15:32
-        for T be non empty TopSpace
-    st T is finite
-   for B be Basis of T
-   for x be Element of T holds
-    meet { A where A is Element of the topology of T : x in A } in B;
+theorem :: YELLOW15:32
+  for T be non empty TopSpace st T is finite for B be Basis of T
+  for x be Element of T holds
+  meet { A where A is Element of the topology of T : x in A } in B;
+

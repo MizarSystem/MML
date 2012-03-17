@@ -29,18 +29,19 @@ environ
 
 begin :: The Sign of a Permutation
 
-  reserve x, y, X for set,
-          i, j, k, l, n, m for Nat,
-          D for non empty set,
-          K for Field,
-          a,b for Element of K,
-          perm, p, q, pq for Element of Permutations(n),
-          Perm,P, Q for Permutation of Seg n,
-          F for Function of Seg n,Seg n,
-          perm2, p2, q2, pq2 for Element of Permutations(n+2),
-          Perm2 for Permutation of Seg (n+2);
+reserve x, y, X for set,
+  i, j, k, l, n, m for Nat,
+  D for non empty set,
+  K for Field,
+  a,b for Element of K,
+  perm, p, q, pq for Element of Permutations(n),
+  Perm,P, Q for Permutation of Seg n,
+  F for Function of Seg n,Seg n,
+  perm2, p2, q2, pq2 for Element of Permutations(n+2),
+  Perm2 for Permutation of Seg (n+2);
 
-notation let X be set;
+notation
+  let X be set;
   synonym 2Set(X) for TWOELEMENTSETS(X);
 end;
 
@@ -53,38 +54,42 @@ theorem :: MATRIX11:2
 theorem :: MATRIX11:3
   for n st n >= 2 holds {1,2} in 2Set Seg n;
 
-registration let n;
+registration
+  let n;
   cluster 2Set Seg(n+2) -> non empty finite;
 end;
 
-registration let n, x;
+registration
+  let n, x;
   let perm be Element of Permutations(n);
   cluster perm.x -> natural;
 end;
 
-registration let K;
+registration
+  let K;
   cluster the multF of K -> having_a_unity;
   cluster the multF of K -> associative;
 end;
 
-     ::------------------------------------------::
-     ::     The partial sign of a permutation    ::
-     ::------------------------------------------::
+::------------------------------------------::
+::     The partial sign of a permutation    ::
+::------------------------------------------::
 
-definition let n,K;
+definition
+  let n,K;
   let perm2 be Element of Permutations(n+2);
   func Part_sgn(perm2,K) -> Function of 2Set Seg (n+2),the carrier of K means
 :: MATRIX11:def 1
+
   for i,j be Element of NAT st i in Seg (n+2)& j in Seg (n+2) & i < j
-      holds
-        ( perm2.i < perm2.j implies it.{i,j}= 1_K ) &
-        ( perm2.i > perm2.j implies it.{i,j}=-1_K );
+  holds ( perm2.i < perm2.j implies it.{i,j}= 1_K ) &
+  ( perm2.i > perm2.j implies it.{i,j}=-1_K );
 end;
 
 theorem :: MATRIX11:4
   for X be Element of Fin 2Set Seg (n+2) st
-    for x st x in X holds Part_sgn(p2,K).x = 1_K holds
-      (the multF of K) $$ (X,Part_sgn(p2,K)) = 1_K;
+  for x st x in X holds Part_sgn(p2,K).x = 1_K holds
+  (the multF of K) $$ (X,Part_sgn(p2,K)) = 1_K;
 
 reserve s for Element of 2Set Seg (n+2);
 
@@ -93,48 +98,44 @@ theorem :: MATRIX11:5
 
 theorem :: MATRIX11:6
   for i,j st i in Seg (n+2) & j in Seg (n+2)
-       & i < j & p2.i = q2.i & p2.j = q2.j
-    holds Part_sgn(p2,K).{i,j} = Part_sgn(q2,K).{i,j};
+  & i < j & p2.i = q2.i & p2.j = q2.j
+  holds Part_sgn(p2,K).{i,j} = Part_sgn(q2,K).{i,j};
 
 theorem :: MATRIX11:7
-  for X be Element of Fin 2Set Seg (n+2),p2,q2
-    for F be finite set st
-      F={s:s in X & Part_sgn(p2,K).s <> Part_sgn(q2,K).s}
-    holds
-      (card F mod 2 = 0 implies (the multF of K) $$ (X,Part_sgn(p2,K)) =
-                                (the multF of K) $$ (X,Part_sgn(q2,K))  ) &
-      (card F mod 2 = 1 implies (the multF of K) $$ (X,Part_sgn(p2,K)) =
-                               -(the multF of K) $$ (X,Part_sgn(q2,K))  );
+  for X be Element of Fin 2Set Seg (n+2),p2,q2 for F be finite set st
+  F={s:s in X & Part_sgn(p2,K).s <> Part_sgn(q2,K).s} holds
+  (card F mod 2 = 0 implies (the multF of K) $$ (X,Part_sgn(p2,K)) =
+  (the multF of K) $$ (X,Part_sgn(q2,K)) ) &
+  (card F mod 2 = 1 implies (the multF of K) $$ (X,Part_sgn(p2,K)) =
+  -(the multF of K) $$ (X,Part_sgn(q2,K)) );
 
 theorem :: MATRIX11:8
   for P be Permutation of Seg n st P is_transposition
-    for i,j st i < j holds P.i = j iff
-        i in dom P & j in dom P &
-        P.i=j & P.j=i & for k st k <> i & k <> j & k in dom P holds P.k = k;
+  for i,j st i < j holds P.i = j iff i in dom P & j in dom P &
+  P.i=j & P.j=i & for k st k <> i & k <> j & k in dom P holds P.k = k;
 
 theorem :: MATRIX11:9
   for p2,q2,pq2,i,j st pq2 = p2*q2 & q2 is_transposition & q2.i = j & i < j
-    for s st Part_sgn(p2,K).s <> Part_sgn(pq2,K).s
-      holds i in s or j in s;
+  for s st Part_sgn(p2,K).s <> Part_sgn(pq2,K).s holds i in s or j in s;
 
 theorem :: MATRIX11:10
   for p2,q2,pq2,i,j,K st
-      pq2 = p2*q2 & q2 is_transposition & q2.i = j & i < j & 1_K <> -1_K
-    holds
-      Part_sgn(p2,K).{i,j} <> Part_sgn(pq2,K).{i,j} &
-      for k st k in Seg(n+2) & i <> k & j <> k holds
-           Part_sgn(p2,K).{i,k} <> Part_sgn(pq2,K).{i,k}
-                           iff Part_sgn(p2,K).{j,k} <> Part_sgn(pq2,K).{j,k};
+  pq2 = p2*q2 & q2 is_transposition & q2.i = j & i < j & 1_K <> -1_K holds
+  Part_sgn(p2,K).{i,j} <> Part_sgn(pq2,K).{i,j} &
+  for k st k in Seg(n+2) & i <> k & j <> k holds
+  Part_sgn(p2,K).{i,k} <> Part_sgn(pq2,K).{i,k}
+  iff Part_sgn(p2,K).{j,k} <> Part_sgn(pq2,K).{j,k};
 
-     ::------------------------------------------::
-     ::        The sign of a permutation         ::
-     ::------------------------------------------::
+::------------------------------------------::
+::        The sign of a permutation         ::
+::------------------------------------------::
 
-definition let n,K;
+definition
+  let n,K;
   let perm2 be Element of Permutations(n+2);
   func sgn(perm2,K) -> Element of K equals
 :: MATRIX11:def 2
-     (the multF of K) $$ (FinOmega(2Set Seg (n+2)),Part_sgn(perm2,K));
+  (the multF of K) $$ (FinOmega(2Set Seg (n+2)),Part_sgn(perm2,K));
 end;
 
 theorem :: MATRIX11:11
@@ -142,81 +143,77 @@ theorem :: MATRIX11:11
 
 theorem :: MATRIX11:12
   for Id be Element of Permutations(n+2) st Id = idseq (n+2) holds
-    sgn(Id,K) = 1_K;
+  sgn(Id,K) = 1_K;
 
 theorem :: MATRIX11:13
   for p2,q2,pq2 st pq2 = p2*q2 & q2 is_transposition holds
-    sgn(pq2,K) = -sgn(p2,K);
+  sgn(pq2,K) = -sgn(p2,K);
 
-     ::------------------------------------------::
-     ::       The sign of a transposition        ::
-     ::------------------------------------------::
+::------------------------------------------::
+::       The sign of a transposition        ::
+::------------------------------------------::
 
 theorem :: MATRIX11:14
   for tr be Element of Permutations(n+2) st
-    tr is_transposition holds sgn(tr,K) = -1_K;
+  tr is_transposition holds sgn(tr,K) = -1_K;
 
 theorem :: MATRIX11:15
   for P be FinSequence of Group_of_Perm(n+2),
-         p2 be Element of Permutations(n+2) st p2 = Product P &
-      (for i st i in dom P ex trans be Element of Permutations(n+2)
-         st P.i = trans & trans is_transposition)
-    holds
-      (len P mod 2=0 implies sgn(p2,K) =  1_K) &
-      (len P mod 2=1 implies sgn(p2,K) = -1_K);
+  p2 be Element of Permutations(n+2) st p2 = Product P &
+  (for i st i in dom P ex trans be Element of Permutations(n+2)
+  st P.i = trans & trans is_transposition) holds
+  (len P mod 2=0 implies sgn(p2,K) = 1_K) &
+  (len P mod 2=1 implies sgn(p2,K) = -1_K);
 
 theorem :: MATRIX11:16
   for i,j,n st i < j & i in Seg n & j in Seg n
-     ex tr be Element of Permutations(n) st
-       tr is_transposition & tr.i = j;
+  ex tr be Element of Permutations(n) st tr is_transposition & tr.i = j;
 
 theorem :: MATRIX11:17
   for p be Element of Permutations(k+1) st p.(k+1) <> k+1
-    ex tr be Element of Permutations(k+1) st
-      tr is_transposition & tr.(p.(k+1)) = k+1 & (tr*p).(k+1) = k+1;
+  ex tr be Element of Permutations(k+1) st
+  tr is_transposition & tr.(p.(k+1)) = k+1 & (tr*p).(k+1) = k+1;
 
 theorem :: MATRIX11:18
   for X,x st not x in X for p1 be Permutation of X\/{x} st p1.x = x
-    ex p be Permutation of X st p1|X = p;
+  ex p be Permutation of X st p1|X = p;
 
 theorem :: MATRIX11:19
   for p,q be (Permutation of X),p1,q1 be Permutation of X\/{x} st
-      p1|X = p & q1|X = q & p1.x = x & q1.x = x
-    holds (p1*q1)|X = p*q & (p1*q1).x = x;
+  p1|X = p & q1|X = q & p1.x = x & q1.x = x
+  holds (p1*q1)|X = p*q & (p1*q1).x = x;
 
 theorem :: MATRIX11:20
   for tr be Element of Permutations(k) st tr is_transposition
-    holds tr*tr = idseq k & tr = tr";
+  holds tr*tr = idseq k & tr = tr";
 
-     ::------------------------------------------::
-     ::          A general theorem about         ::
-     :: the representation of a permutation as   ::
-     ::       a  product of transpositions       ::
-     ::------------------------------------------::
+::------------------------------------------::
+::          A general theorem about         ::
+:: the representation of a permutation as   ::
+::       a  product of transpositions       ::
+::------------------------------------------::
 
 theorem :: MATRIX11:21
-  for perm ex P be FinSequence of Group_of_Perm(n) st
-      perm=Product P &
-      for i st i in dom P ex trans be Element of Permutations(n)
-         st P.i = trans & trans is_transposition;
+  for perm ex P be FinSequence of Group_of_Perm(n) st perm=Product P &
+  for i st i in dom P ex trans be Element of Permutations(n)
+  st P.i = trans & trans is_transposition;
 
 theorem :: MATRIX11:22
   K is Fanoian iff 1_K <> -1_K;
 
-     ::------------------------------------------::
-     ::   The relation between sign and parity   ::
-     ::            of permutations               ::
-     ::------------------------------------------::
+::------------------------------------------::
+::   The relation between sign and parity   ::
+::            of permutations               ::
+::------------------------------------------::
 
 theorem :: MATRIX11:23
-  for K be Fanoian Field holds
-     ( perm2 is even iff sgn(perm2,K) =  1_K )&
-     ( perm2 is odd  iff sgn(perm2,K) = -1_K );
+  for K be Fanoian Field holds ( perm2 is even iff sgn(perm2,K) = 1_K )&
+  ( perm2 is odd iff sgn(perm2,K) = -1_K );
 
-     ::------------------------------------------::
-     ::     The sign of a composition of         ::
-     ::               permutations               ::
-     ::------------------------------------------::
+::------------------------------------------::
+::     The sign of a composition of         ::
+::               permutations               ::
+::------------------------------------------::
 
 theorem :: MATRIX11:24
   for p2,q2,pq2 st pq2 = p2*q2 holds sgn(pq2,K) = sgn(p2,K)*sgn(q2,K);
@@ -229,31 +226,34 @@ theorem :: MATRIX11:26
 
 theorem :: MATRIX11:27
   for tr be Element of Permutations(n+2) st
-    tr is_transposition holds tr is odd;
+  tr is_transposition holds tr is odd;
 
-registration let n;
+registration
+  let n;
   cluster odd Permutation of Seg (n+2);
 end;
 
 begin :: The Determinant of a Linear Combination of Lines
 
-  reserve pD,qD for FinSequence of D,
-          M for Matrix of n,m,D,
-          pK,qK for FinSequence of K,
-          A,B for Matrix of n,K;
+reserve pD,qD for FinSequence of D,
+  M for Matrix of n,m,D,
+  pK,qK for FinSequence of K,
+  A,B for Matrix of n,K;
 
-definition let l, n, m, D;
-           let M be Matrix of n,m,D;
-           let pD be FinSequence of D;
+definition
+  let l, n, m, D;
+  let M be Matrix of n,m,D;
+  let pD be FinSequence of D;
   func ReplaceLine(M,l,pD) -> Matrix of n,m,D means
 :: MATRIX11:def 3
-      len it = len M & width it = width M &
-      for i,j st [i,j] in Indices M holds
-        (i <> l implies it*(i,j) = M*(i,j)) & (i = l implies it*(l,j) = pD.j)
-    if len pD = width M otherwise it = M;
+
+  len it = len M & width it = width M & for i,j st [i,j] in Indices M holds
+  (i <> l implies it*(i,j) = M*(i,j)) & (i = l implies it*(l,j) = pD.j)
+  if len pD = width M otherwise it = M;
 end;
 
-notation let l, n, m, D;
+notation
+  let l, n, m, D;
   let M be Matrix of n,m,D;
   let pD be FinSequence of D;
   synonym RLine(M,l,pD) for ReplaceLine(M,l,pD);
@@ -261,51 +261,51 @@ end;
 
 theorem :: MATRIX11:28
   for l,M,pD,i st i in Seg n holds
-     (i = l & len pD = width M implies Line(RLine(M,l,pD),i) = pD) &
-     (i <> l implies Line(RLine(M,l,pD),i) = Line(M,i));
+  (i = l & len pD = width M implies Line(RLine(M,l,pD),i) = pD) &
+  (i <> l implies Line(RLine(M,l,pD),i) = Line(M,i));
 
 theorem :: MATRIX11:29
-    for M,pD st len pD=width M
-     for p' be Element of D* st pD = p' holds RLine(M,l,pD) = Replace(M,l,p');
+  for M,pD st len pD=width M
+  for p' be Element of D* st pD = p' holds RLine(M,l,pD) = Replace(M,l,p');
 
 theorem :: MATRIX11:30
   M = RLine(M,l,Line(M,l));
 
 theorem :: MATRIX11:31
   for l,pK,qK,perm st l in Seg n & len pK = n & len qK = n
-    for M be Matrix of n,K holds
+  for M be Matrix of n,K holds
   (the multF of K) $$ Path_matrix(perm,RLine(M,l,a * pK + b * qK)) =
-             a * ((the multF of K) $$ Path_matrix(perm,RLine(M,l,pK))) +
-             b * ((the multF of K) $$ Path_matrix(perm,RLine(M,l,qK)));
+  a * ((the multF of K) $$ Path_matrix(perm,RLine(M,l,pK))) +
+  b * ((the multF of K) $$ Path_matrix(perm,RLine(M,l,qK)));
 
 theorem :: MATRIX11:32
   for l,pK,qK,perm st l in Seg n & len pK = n & len qK = n
-    for M be Matrix of n,K holds
-       (Path_product(RLine(M,l,a*pK+b*qK))).perm =
+  for M be Matrix of n,K holds (Path_product(RLine(M,l,a*pK+b*qK))).perm =
   a*(Path_product(RLine(M,l,pK))).perm + b*(Path_product(RLine(M,l,qK))).perm;
 
-     ::------------------------------------------::
-     ::       The determinant of a linear        ::
-     ::          combination of lines            ::
-     ::------------------------------------------::
+::------------------------------------------::
+::       The determinant of a linear        ::
+::          combination of lines            ::
+::------------------------------------------::
 
 theorem :: MATRIX11:33
   for l, pK, qK st l in Seg n & len pK = n & len qK = n
-    for M be Matrix of n,K holds
-      Det(RLine(M,l,a*pK+b*qK)) = a*Det(RLine(M,l,pK)) + b*Det(RLine(M,l,qK));
+  for M be Matrix of n,K holds
+  Det(RLine(M,l,a*pK+b*qK)) = a*Det(RLine(M,l,pK)) + b*Det(RLine(M,l,qK));
 
 theorem :: MATRIX11:34
   l in Seg n & len pK = n implies Det(RLine(A,l,a*pK)) = a*Det(RLine(A,l,pK));
 
 theorem :: MATRIX11:35
-   l in Seg n implies Det(RLine(A,l,a*Line(A,l))) = a*Det(A);
+  l in Seg n implies Det(RLine(A,l,a*Line(A,l))) = a*Det(A);
 
 theorem :: MATRIX11:36
   l in Seg n & len pK = n & len qK = n implies
-     Det(RLine(A,l,pK+qK)) = Det(RLine(A,l,pK)) + Det(RLine(A,l,qK));
+  Det(RLine(A,l,pK+qK)) = Det(RLine(A,l,pK)) + Det(RLine(A,l,qK));
 
 begin :: The Determinant of a Matrix with Permutated Lines
-      :: and with a Repeated Line
+
+:: and with a Repeated Line
 
 definition
   let n, m, D;
@@ -313,94 +313,92 @@ definition
   let M be Matrix of n,m,D;
   redefine func M*F -> Matrix of n,m,D means
 :: MATRIX11:def 4
-    len it = len M & width it = width M &
-    for i,j,k st [i,j] in Indices M & F.i = k holds it*(i,j)= M*(k,j);
+
+  len it = len M & width it = width M &
+  for i,j,k st [i,j] in Indices M & F.i = k holds it*(i,j)= M*(k,j);
 end;
 
 theorem :: MATRIX11:37
-  Indices M = Indices (M*F) &
-  for i,j st [i,j] in Indices M
-     ex k st F.i = k & [k,j] in Indices M & (M*F)*(i,j) = M*(k,j);
+  Indices M = Indices (M*F) & for i,j st [i,j] in Indices M
+  ex k st F.i = k & [k,j] in Indices M & (M*F)*(i,j) = M*(k,j);
 
 theorem :: MATRIX11:38
-  for M be Matrix of n,m,D,F
-    for k st k in Seg n holds Line(M*F,k) = M.(F.k);
+  for M be Matrix of n,m,D,F for k st k in Seg n holds Line(M*F,k) = M.(F.k);
 
 theorem :: MATRIX11:39
   M*(idseq n) = M;
 
 theorem :: MATRIX11:40
   for p,Perm,q st q = p*Perm"
-    holds Path_matrix(p,A*Perm) = (Path_matrix(q,A))*Perm;
+  holds Path_matrix(p,A*Perm) = (Path_matrix(q,A))*Perm;
 
 theorem :: MATRIX11:41
   for p,Perm,q st q=p*Perm" holds
-       (the multF of K) $$ (Path_matrix(p,A*Perm)) =
-       (the multF of K) $$ (Path_matrix(q,A));
+  (the multF of K) $$ (Path_matrix(p,A*Perm)) =
+  (the multF of K) $$ (Path_matrix(q,A));
 
 theorem :: MATRIX11:42
   for p2,q2 st q2 = p2" holds sgn(p2,K) = sgn(q2,K);
 
 theorem :: MATRIX11:43
- for M be (Matrix of n+2,K),perm2,Perm2 st perm2=Perm2
-   for p2,q2 st q2 = p2*Perm2" holds
-     (Path_product(M)).q2 = sgn(perm2,K)*(Path_product(M*Perm2)).p2;
+  for M be (Matrix of n+2,K),perm2,Perm2 st perm2=Perm2
+  for p2,q2 st q2 = p2*Perm2" holds
+  (Path_product(M)).q2 = sgn(perm2,K)*(Path_product(M*Perm2)).p2;
 
 theorem :: MATRIX11:44
   for perm ex P be Permutation of Permutations(n) st
-    for p be Element of Permutations(n) holds P.p = p*perm;
+  for p be Element of Permutations(n) holds P.p = p*perm;
 
 theorem :: MATRIX11:45
   for M be Matrix of n+2,n+2,K, perm2,Perm2 st perm2=Perm2
-    holds Det(M*Perm2) = sgn(perm2,K)*Det(M);
+  holds Det(M*Perm2) = sgn(perm2,K)*Det(M);
 
-     ::------------------------------------------::
-     ::    The determinant of a matrix with      ::
-     ::            permutated lines              ::
-     ::------------------------------------------::
+::------------------------------------------::
+::    The determinant of a matrix with      ::
+::            permutated lines              ::
+::------------------------------------------::
 
 theorem :: MATRIX11:46
   for M be (Matrix of n,K),perm,Perm st perm = Perm holds
-    Det(M*Perm) = -(Det(M),perm);
+  Det(M*Perm) = -(Det(M),perm);
 
 theorem :: MATRIX11:47
   for PERM be Permutation of Permutations(n), perm st
-     perm is odd & for p holds PERM.p = p*perm holds
+  perm is odd & for p holds PERM.p = p*perm holds
   PERM.:{p:p is even} = {q:q is odd};
 
 theorem :: MATRIX11:48
-   for n st n >= 2 ex ODD,EVEN be finite set st
-    EVEN ={p:p is even} & ODD = {q:q is odd} &
-    EVEN /\ ODD = {} & EVEN \/ ODD =Permutations(n) & card EVEN = card ODD;
+  for n st n >= 2 ex ODD,EVEN be finite set st
+  EVEN ={p:p is even} & ODD = {q:q is odd} &
+  EVEN /\ ODD = {} & EVEN \/ ODD =Permutations(n) & card EVEN = card ODD;
 
 theorem :: MATRIX11:49
   for i,j st i in Seg n & j in Seg n & i < j
-    for M be (Matrix of n,K) st Line(M,i) = Line(M,j)
-      for p,q,tr be Element of Permutations(n)
-          st q = p*tr & tr is_transposition & tr.i=j holds
-     (Path_product M).q = - (Path_product M).p;
+  for M be (Matrix of n,K) st Line(M,i) = Line(M,j)
+  for p,q,tr be Element of Permutations(n)
+  st q = p*tr & tr is_transposition & tr.i=j holds
+  (Path_product M).q = - (Path_product M).p;
 
-     ::------------------------------------------::
-     ::     The determinant of a matrix with     ::
-     ::            a repeated line               ::
-     ::------------------------------------------::
+::------------------------------------------::
+::     The determinant of a matrix with     ::
+::            a repeated line               ::
+::------------------------------------------::
 
 theorem :: MATRIX11:50
   for i,j st i in Seg n & j in Seg n & i < j
-    for M be (Matrix of n,K) st Line(M,i) = Line(M,j) holds
-      Det(M) = 0.K;
+  for M be (Matrix of n,K) st Line(M,i) = Line(M,j) holds Det(M) = 0.K;
 
 theorem :: MATRIX11:51
   for i, j st i in Seg n & j in Seg n & i <> j holds
-    Det RLine(A,i,Line(A,j)) = 0.K;
+  Det RLine(A,i,Line(A,j)) = 0.K;
 
 theorem :: MATRIX11:52
   for i, j st i in Seg n & j in Seg n & i <> j holds
-    Det RLine(A,i,a*Line(A,j)) = 0.K;
+  Det RLine(A,i,a*Line(A,j)) = 0.K;
 
 theorem :: MATRIX11:53
-   for i, j st i in Seg n & j in Seg n & i <> j holds
-    Det A = Det RLine(A,i,Line(A,i) + a*Line(A,j));
+  for i, j st i in Seg n & j in Seg n & i <> j holds
+  Det A = Det RLine(A,i,Line(A,i) + a*Line(A,j));
 
 theorem :: MATRIX11:54
   not F in Permutations(n) implies Det(A*F) = 0.K;
@@ -411,82 +409,75 @@ definition
   let K be non empty addLoopStr;
   func addFinS(K) -> BinOp of (the carrier of K)* means
 :: MATRIX11:def 5
-    for p1,p2 be Element of (the carrier of K)* holds
-      it.(p1,p2)=p1+p2;
+
+  for p1,p2 be Element of (the carrier of K)* holds it.(p1,p2)=p1+p2;
 end;
 
-registration let K be Abelian (non empty addLoopStr);
+registration
+  let K be Abelian (non empty addLoopStr);
   cluster addFinS(K) -> commutative;
 end;
 
-registration let K be add-associative (non empty addLoopStr);
+registration
+  let K be add-associative (non empty addLoopStr);
   cluster addFinS(K) -> associative;
 end;
 
 theorem :: MATRIX11:55
   for A,B be Matrix of K st width A = len B & len B > 0
-    for i st i in Seg len A
-  ex P be FinSequence of (the carrier of K)* st
-      len P = len B &
-      Line(A*B,i) = addFinS(K) "**" P &
-      for j st j in Seg len B holds P.j = A*(i,j) * Line(B,j);
+  for i st i in Seg len A ex P be FinSequence of (the carrier of K)* st
+  len P = len B & Line(A*B,i) = addFinS(K) "**" P &
+  for j st j in Seg len B holds P.j = A*(i,j) * Line(B,j);
 
 theorem :: MATRIX11:56
-  for A,B,C be (Matrix of n,K), i st i in Seg n
-    ex P be FinSequence of K st
-      len P = n &
-      Det RLine(C,i,Line(A*B,i)) = (the addF of K)"**" P &
-      for j st j in Seg n holds P.j = A*(i,j) * Det RLine(C,i,Line(B,j));
+  for A,B,C be (Matrix of n,K), i st i in Seg n ex P be FinSequence of K st
+  len P = n & Det RLine(C,i,Line(A*B,i)) = (the addF of K)"**" P &
+  for j st j in Seg n holds P.j = A*(i,j) * Det RLine(C,i,Line(B,j));
 
 theorem :: MATRIX11:57
   for X being set,Y being non empty set, x st not x in X
   ex BIJECT be Function of [:Funcs(X,Y),Y:],Funcs(X\/{x},Y) st
-    BIJECT is bijective &
-    for f be Function of X,Y,F be Function of X\/{x},Y st F|X=f
-      holds BIJECT.(f,F.x)=F;
+  BIJECT is bijective &
+  for f be Function of X,Y,F be Function of X\/{x},Y st F|X=f
+  holds BIJECT.(f,F.x)=F;
 
 theorem :: MATRIX11:58
   for X being finite set, Y being non empty finite set, x st not x in X
   for F being BinOp of D st
-      F has_a_unity & F is commutative & F is associative & F has_an_inverseOp
+  F has_a_unity & F is commutative & F is associative & F has_an_inverseOp
   for f being Function of Funcs(X,Y),D
   for g being Function of Funcs(X\/{x},Y),D st
-      for H be Function of X,Y, SF be Element of Fin Funcs(X\/{x},Y) st
-        SF={h where h is Function of X\/{x},Y: h|X = H} holds F $$ (SF,g)=f.H
-  holds
-    F $$ (FinOmega(Funcs(X,Y)),f) = F $$ (FinOmega(Funcs(X\/{x},Y)),g);
+  for H be Function of X,Y, SF be Element of Fin Funcs(X\/{x},Y) st
+  SF={h where h is Function of X\/{x},Y: h|X = H} holds F $$ (SF,g)=f.H holds
+  F $$ (FinOmega(Funcs(X,Y)),f) = F $$ (FinOmega(Funcs(X\/{x},Y)),g);
 
 theorem :: MATRIX11:59
   for A,B be Matrix of n,m,D, i st i <= n & 0 < n
-    for F be Function of Seg i, Seg n
-      ex M be Matrix of n,m,D st
-        M = A +* ((B*(idseq n+*F))|Seg i) &
-        for j holds
-               (j in Seg i implies M.j = B.(F.j)) &
-               (not j in Seg i implies M.j = A.j);
+  for F be Function of Seg i, Seg n ex M be Matrix of n,m,D st
+  M = A +* ((B*(idseq n+*F))|Seg i) & for j holds
+  (j in Seg i implies M.j = B.(F.j)) & (not j in Seg i implies M.j = A.j);
 
 theorem :: MATRIX11:60
   for A,B be Matrix of n,K st 0 < n
-    ex P be Function of Funcs(Seg n,Seg n),the carrier of K st
-       ( for F be Function of Seg n,Seg n
-         ex Path be FinSequence of K st
-            len Path = n &
-            (for Fj,j be Nat st j in Seg n & Fj = F.j holds Path.j = A*(j,Fj))&
-            P.F= (the multF of K) $$ Path * Det (B*F) ) &
+  ex P be Function of Funcs(Seg n,Seg n),the carrier of K st
+  ( for F be Function of Seg n,Seg n ex Path be FinSequence of K st
+  len Path = n &
+  (for Fj,j be Nat st j in Seg n & Fj = F.j holds Path.j = A*(j,Fj))&
+  P.F= (the multF of K) $$ Path * Det (B*F) ) &
   Det(A*B) = (the addF of K) $$ (FinOmega(Funcs(Seg n,Seg n)),P);
 
 theorem :: MATRIX11:61
   for A,B be Matrix of n,K st 0 < n
-    ex P be Function of Permutations n,the carrier of K st
-      Det(A*B) = (the addF of K) $$ (FinOmega(Permutations n),P) &
-      for perm be Element of Permutations n holds
-        P.perm= (the multF of K) $$ Path_matrix(perm,A) * -(Det B,perm);
+  ex P be Function of Permutations n,the carrier of K st
+  Det(A*B) = (the addF of K) $$ (FinOmega(Permutations n),P) &
+  for perm be Element of Permutations n holds
+  P.perm= (the multF of K) $$ Path_matrix(perm,A) * -(Det B,perm);
 
-     ::------------------------------------------::
-     ::     Determinant of a product of          ::
-     ::          two square matrices             ::
-     ::------------------------------------------::
+::------------------------------------------::
+::     Determinant of a product of          ::
+::          two square matrices             ::
+::------------------------------------------::
 
 theorem :: MATRIX11:62
-   for A,B be Matrix of n,K st 0 < n holds
-    Det (A * B) = Det A * Det B;
+  for A,B be Matrix of n,K st 0 < n holds Det (A * B) = Det A * Det B;
+

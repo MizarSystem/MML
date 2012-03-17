@@ -28,10 +28,9 @@ end;
 :: Place/Transition Net Structure
 
 definition
-  struct PT_net_Str
-    (# Places, Transitions -> non empty set,
-       S-T_Arcs -> non empty Relation of the Places, the Transitions,
-       T-S_Arcs -> non empty Relation of the Transitions, the Places #);
+  struct PT_net_Str (# Places, Transitions -> non empty set,
+    S-T_Arcs -> non empty Relation of the Places, the Transitions,
+    T-S_Arcs -> non empty Relation of the Transitions, the Places #);
 end;
 
 reserve PTN for PT_net_Str;
@@ -54,7 +53,6 @@ definition
   let PTN;
   let x be S-T_arc of PTN;
   redefine func x`1 -> place of PTN;
-
   func x`2 -> transition of PTN;
 end;
 
@@ -64,91 +62,81 @@ definition
   let PTN;
   let x be T-S_arc of PTN;
   redefine
-
   func x`1 -> transition of PTN;
-
   func x`2 -> place of PTN;
 end;
 
 :: *S, S* Definitions and Theorems
+
 reserve S0 for Subset of the Places of PTN;
 
 definition
   let PTN, S0;
   func *'S0 -> Subset of the Transitions of PTN equals
 :: PETRI:def 1
-
-      { t where t is transition of PTN : ex f being T-S_arc of PTN,
-      s being place of PTN st s in S0 & f = [t,s] };
-
+  { t where t is transition of PTN : ex f being T-S_arc of PTN,
+  s being place of PTN st s in S0 & f = [t,s] };
   func S0*' -> Subset of the Transitions of PTN equals
 :: PETRI:def 2
-
-      { t where t is transition of PTN : ex f being S-T_arc of PTN,
-      s being place of PTN st s in S0 & f = [s,t] };
+  { t where t is transition of PTN : ex f being S-T_arc of PTN,
+  s being place of PTN st s in S0 & f = [s,t] };
 end;
 
 theorem :: PETRI:1
-      *'S0 = {f`1 where f is T-S_arc of PTN : f`2 in S0};
+  *'S0 = {f`1 where f is T-S_arc of PTN : f`2 in S0};
 
 theorem :: PETRI:2
-  for x being set holds x in *'S0
-    iff
+  for x being set holds x in *'S0 iff
   ex f being T-S_arc of PTN, s being place of PTN st s in S0 & f = [x,s];
 
 theorem :: PETRI:3
-      S0*' = {f`2 where f is S-T_arc of PTN : f`1 in S0};
+  S0*' = {f`2 where f is S-T_arc of PTN : f`1 in S0};
 
 theorem :: PETRI:4
-  for x being set holds x in S0*'
-    iff
+  for x being set holds x in S0*' iff
   ex f being S-T_arc of PTN, s being place of PTN st s in S0 & f = [s,x];
 
 :: *T, T* Definitions and Theorems
+
 reserve T0 for Subset of the Transitions of PTN;
 
 definition
   let PTN, T0;
   func *'T0 -> Subset of the Places of PTN equals
 :: PETRI:def 3
-
-      { s where s is place of PTN : ex f being S-T_arc of PTN,
-      t being transition of PTN st t in T0 & f = [s,t] };
-
+  { s where s is place of PTN : ex f being S-T_arc of PTN,
+  t being transition of PTN st t in T0 & f = [s,t] };
   func T0*' -> Subset of the Places of PTN equals
 :: PETRI:def 4
-
-      { s where s is place of PTN : ex f being T-S_arc of PTN,
-      t being transition of PTN st t in T0 & f = [t,s] };
+  { s where s is place of PTN : ex f being T-S_arc of PTN,
+  t being transition of PTN st t in T0 & f = [t,s] };
 end;
 
 theorem :: PETRI:5
-      *'T0 = {f`1 where f is S-T_arc of PTN : f`2 in T0};
+  *'T0 = {f`1 where f is S-T_arc of PTN : f`2 in T0};
 
 theorem :: PETRI:6
-  for x being set holds x in *'T0
-    iff
+  for x being set holds x in *'T0 iff
   ex f being S-T_arc of PTN, t being transition of PTN st t in T0 & f = [x,t];
 
 theorem :: PETRI:7
-      T0*' = {f`2 where f is T-S_arc of PTN : f`1 in T0};
+  T0*' = {f`2 where f is T-S_arc of PTN : f`1 in T0};
 
 theorem :: PETRI:8
-  for x being set holds x in T0*'
-    iff
+  for x being set holds x in T0*' iff
   ex f being T-S_arc of PTN, t being transition of PTN st t in T0 & f = [t,x];
 
 theorem :: PETRI:9
-      *'{}the Places of PTN = {};
+  *'{}the Places of PTN = {};
 
 theorem :: PETRI:10
-      ({}the Places of PTN)*' = {};
+  ({}the Places of PTN)*' = {};
 
 theorem :: PETRI:11
-      *'{}the Transitions of PTN = {};
+  *'{}the Transitions of PTN = {};
 
 theorem :: PETRI:12
-      ({}the Transitions of PTN)*' = {};
+  ({}the Transitions of PTN)*' = {};
 
 begin
 
@@ -159,15 +147,17 @@ definition
   let IT be Subset of the Places of PTN;
   attr IT is Deadlock-like means
 :: PETRI:def 5
-        *'IT is Subset of IT*';
+
+  *'IT is Subset of IT*';
 end;
 
 :: With_Deadlocks Mode for Place\Transition Nets
 
-definition let IT be PT_net_Str;
+definition
+  let IT be PT_net_Str;
   attr IT is With_Deadlocks means
 :: PETRI:def 6
-        ex S being Subset of the Places of IT st S is Deadlock-like;
+  ex S being Subset of the Places of IT st S is Deadlock-like;
 end;
 
 registration
@@ -183,15 +173,17 @@ definition
   let IT be Subset of the Places of PTN;
   attr IT is Trap-like means
 :: PETRI:def 7
-        IT*' is Subset of *'IT;
+
+  IT*' is Subset of *'IT;
 end;
 
 :: With_Traps Mode for Place\Transition Nets
 
-definition let IT be PT_net_Str;
+definition
+  let IT be PT_net_Str;
   attr IT is With_Traps means
 :: PETRI:def 8
-        ex S being Subset of the Places of IT st S is Trap-like;
+  ex S being Subset of the Places of IT st S is Trap-like;
 end;
 
 registration
@@ -202,7 +194,7 @@ definition
   let A, B be non empty set;
   let r be non empty Relation of A, B;
   redefine
-    func r~ -> non empty Relation of B, A;
+  func r~ -> non empty Relation of B, A;
 end;
 
 begin
@@ -213,19 +205,18 @@ definition
   let PTN;
   func PTN.: -> strict PT_net_Str equals
 :: PETRI:def 9
-
-      PT_net_Str (# the Places of PTN, the Transitions of PTN,
-      (the T-S_Arcs of PTN)~, (the S-T_Arcs of PTN)~ #);
+  PT_net_Str (# the Places of PTN, the Transitions of PTN,
+    (the T-S_Arcs of PTN)~, (the S-T_Arcs of PTN)~ #);
 end;
 
 theorem :: PETRI:13
-   PTN.:.: = the PT_net_Str of PTN;
+  PTN.:.: = the PT_net_Str of PTN;
 
 theorem :: PETRI:14
-   the Places of PTN = the Places of PTN.:
-    & the Transitions of PTN = the Transitions of PTN.:
-    & (the S-T_Arcs of PTN)~ = the T-S_Arcs of PTN.:
-    & (the T-S_Arcs of PTN)~ = the S-T_Arcs of PTN.:;
+  the Places of PTN = the Places of PTN.:
+  & the Transitions of PTN = the Transitions of PTN.:
+  & (the S-T_Arcs of PTN)~ = the T-S_Arcs of PTN.:
+  & (the T-S_Arcs of PTN)~ = the S-T_Arcs of PTN.:;
 
 definition
   let PTN;
@@ -233,7 +224,7 @@ definition
   func S0.: -> Subset of the Places of PTN.: equals
 :: PETRI:def 10
 
-      S0;
+  S0;
 end;
 
 definition
@@ -242,7 +233,7 @@ definition
   func s.: -> place of PTN.: equals
 :: PETRI:def 11
 
-      s;
+  s;
 end;
 
 definition
@@ -250,7 +241,8 @@ definition
   let S0 be Subset of the Places of PTN.:;
   func .:S0 -> Subset of the Places of PTN equals
 :: PETRI:def 12
-         S0;
+
+  S0;
 end;
 
 definition
@@ -259,7 +251,7 @@ definition
   func .:s -> place of PTN equals
 :: PETRI:def 13
 
-      s;
+  s;
 end;
 
 definition
@@ -267,7 +259,8 @@ definition
   let T0 be Subset of the Transitions of PTN;
   func T0.: -> Subset of the Transitions of PTN.: equals
 :: PETRI:def 14
-         T0;
+
+  T0;
 end;
 
 definition
@@ -275,7 +268,8 @@ definition
   let t be transition of PTN;
   func t.: -> transition of PTN.: equals
 :: PETRI:def 15
-         t;
+
+  t;
 end;
 
 definition
@@ -283,7 +277,8 @@ definition
   let T0 be Subset of the Transitions of PTN.:;
   func .:T0 -> Subset of the Transitions of PTN equals
 :: PETRI:def 16
-         T0;
+
+  T0;
 end;
 
 definition
@@ -291,7 +286,8 @@ definition
   let t be transition of PTN.:;
   func .:t -> transition of PTN equals
 :: PETRI:def 17
-         t;
+
+  t;
 end;
 
 reserve S for Subset of the Places of PTN;
@@ -303,19 +299,16 @@ theorem :: PETRI:16
   *'(S.:) = S*';
 
 theorem :: PETRI:17
-      S is Deadlock-like iff S.: is Trap-like;
+  S is Deadlock-like iff S.: is Trap-like;
 
 theorem :: PETRI:18
-      S is Trap-like iff S.: is Deadlock-like;
+  S is Trap-like iff S.: is Deadlock-like;
 
 theorem :: PETRI:19
-      for PTN being PT_net_Str,
-      t being transition of PTN,
-      S0 being Subset of the Places of PTN
-  holds t in S0*' iff *'{t} meets S0;
+  for PTN being PT_net_Str, t being transition of PTN,
+  S0 being Subset of the Places of PTN holds t in S0*' iff *'{t} meets S0;
 
 theorem :: PETRI:20
-      for PTN being PT_net_Str,
-      t being transition of PTN,
-      S0 being Subset of the Places of PTN
-  holds t in *'S0 iff {t}*' meets S0;
+  for PTN being PT_net_Str, t being transition of PTN,
+  S0 being Subset of the Places of PTN holds t in *'S0 iff {t}*' meets S0;
+

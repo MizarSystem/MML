@@ -20,21 +20,23 @@ environ
 begin
 
 reserve x, y, z, v for set,
-        n, m, k for Element of NAT;
+  n, m, k for Element of NAT;
 
 definition
   struct MultiGraphStruct (# Vertices, Edges -> set,
     Source, Target -> Function of the Edges, the Vertices #);
 end;
 
-definition let IT be MultiGraphStruct;
-attr IT is Graph-like means
+definition
+  let IT be MultiGraphStruct;
+  attr IT is Graph-like means
 :: GRAPH_1:def 1
+
   the Vertices of IT is non empty set;
 end;
 
 registration
- cluster strict Graph-like MultiGraphStruct;
+  cluster strict Graph-like MultiGraphStruct;
 end;
 
 definition
@@ -43,288 +45,312 @@ end;
 
 reserve G, G1, G2, G3 for Graph;
 
-definition let G1, G2;
-  assume  (the Source of G1) tolerates (the Source of G2) &
-            (the Target of G1) tolerates (the Target of G2);
-
+definition
+  let G1, G2;
+  assume
+ (the Source of G1) tolerates (the Source of G2) &
+  (the Target of G1) tolerates (the Target of G2);
   func G1 \/ G2 -> strict Graph means
 :: GRAPH_1:def 2
-     the Vertices of it = (the Vertices of G1) \/ (the Vertices of G2) &
-     the Edges of it = (the Edges of G1) \/ (the Edges of G2) &
-     (for v st v in the Edges of G1 holds
-             (the Source of it).v = (the Source of G1).v &
-             (the Target of it).v = (the Target of G1).v) &
-     (for v st v in the Edges of G2 holds
-             (the Source of it).v = (the Source of G2).v &
-             (the Target of it).v = (the Target of G2).v);
+
+  the Vertices of it = (the Vertices of G1) \/ (the Vertices of G2) &
+  the Edges of it = (the Edges of G1) \/ (the Edges of G2) &
+  (for v st v in the Edges of G1 holds
+  (the Source of it).v = (the Source of G1).v &
+  (the Target of it).v = (the Target of G1).v) &
+  (for v st v in the Edges of G2 holds
+  (the Source of it).v = (the Source of G2).v &
+  (the Target of it).v = (the Target of G2).v);
 end;
 
-definition let G, G1, G2 be Graph;
+definition
+  let G, G1, G2 be Graph;
   pred G is_sum_of G1, G2 means
 :: GRAPH_1:def 3
-    (the Target of G1) tolerates (the Target of G2) &
-    (the Source of G1) tolerates (the Source of G2) &
-    the MultiGraphStruct of G = G1 \/ G2;
+
+  (the Target of G1) tolerates (the Target of G2) &
+  (the Source of G1) tolerates (the Source of G2) &
+  the MultiGraphStruct of G = G1 \/ G2;
 end;
 
-definition let IT be Graph;
+definition
+  let IT be Graph;
   attr IT is oriented means
 :: GRAPH_1:def 4
-  for x,y st x in the Edges of IT & y in the Edges of IT &
-    (the Source of IT).x = (the Source of IT).y &
-    (the Target of IT).x = (the Target of IT).y
-  holds x = y;
 
+  for x,y st x in the Edges of IT & y in the Edges of IT &
+  (the Source of IT).x = (the Source of IT).y &
+  (the Target of IT).x = (the Target of IT).y holds x = y;
   attr IT is non-multi means
 :: GRAPH_1:def 5
-  for x,y st x in the Edges of IT & y in the Edges of IT &
-    (((the Source of IT).x = (the Source of IT).y &
-    (the Target of IT).x = (the Target of IT).y) or
-    ((the Source of IT).x = (the Target of IT).y &
-    (the Source of IT).y = (the Target of IT).x))
-  holds x = y;
 
+  for x,y st x in the Edges of IT & y in the Edges of IT &
+  (((the Source of IT).x = (the Source of IT).y &
+  (the Target of IT).x = (the Target of IT).y) or
+  ((the Source of IT).x = (the Target of IT).y &
+  (the Source of IT).y = (the Target of IT).x)) holds x = y;
   attr IT is simple means
 :: GRAPH_1:def 6
-  not ex x st x in the Edges of IT &
-    (the Source of IT).x = (the Target of IT).x;
 
+  not ex x st x in the Edges of IT &
+  (the Source of IT).x = (the Target of IT).x;
   attr IT is connected means
 :: GRAPH_1:def 7
-    not ex G1, G2 being Graph st
-      the Vertices of G1 misses the Vertices of G2 &
-      IT is_sum_of G1, G2;
+
+  not ex G1, G2 being Graph st
+  the Vertices of G1 misses the Vertices of G2 & IT is_sum_of G1, G2;
 end;
 
-definition let IT be MultiGraphStruct;
+definition
+  let IT be MultiGraphStruct;
   attr IT is finite means
 :: GRAPH_1:def 8
-     the Vertices of IT is finite & the Edges of IT is finite;
+
+  the Vertices of IT is finite & the Edges of IT is finite;
 end;
 
 registration
   cluster finite MultiGraphStruct;
-
   cluster finite non-multi oriented simple connected Graph;
 end;
 
 reserve x, y for Element of (the Vertices of G);
 
-definition let G; let x, y; let v;
-   pred v joins x, y means
+definition
+  let G;
+  let x, y;
+  let v;
+  pred v joins x, y means
 :: GRAPH_1:def 9
-           ((the Source of G).v = x & (the Target of G).v = y) or
-       ((the Source of G).v = y & (the Target of G).v = x);
+  ((the Source of G).v = x & (the Target of G).v = y) or
+  ((the Source of G).v = y & (the Target of G).v = x);
 end;
 
-definition let G; let x,y be Element of (the Vertices of G);
-   pred x,y are_incydent means
+definition
+  let G;
+  let x,y be Element of (the Vertices of G);
+  pred x,y are_incydent means
 :: GRAPH_1:def 10
-         ex v being set st v in the Edges of G & v joins x, y;
+  ex v being set st v in the Edges of G & v joins x, y;
 end;
 
-definition let G be Graph;
-   mode Chain of G -> FinSequence means
+definition
+  let G be Graph;
+  mode Chain of G -> FinSequence means
 :: GRAPH_1:def 11
-     (for n st 1 <= n & n <= len it holds it.n in the Edges of G) &
-     ex p being FinSequence st
-       len p = len it + 1 &
-       (for n st 1 <= n & n <= len p holds p.n in the Vertices of G) &
-       for n st 1 <= n & n <= len it
-         ex x', y' being Element of the Vertices of G st
-           x' = p.n & y' = p.(n+1) & it.n joins x', y';
+
+    (for n st 1 <= n & n <= len it holds it.n in the Edges of G) &
+    ex p being FinSequence st len p = len it + 1 &
+    (for n st 1 <= n & n <= len p holds p.n in the Vertices of G) &
+    for n st 1 <= n & n <= len it
+    ex x', y' being Element of the Vertices of G st
+    x' = p.n & y' = p.(n+1) & it.n joins x', y';
 end;
 
-definition let G be Graph;
- redefine mode Chain of G -> FinSequence of the Edges of G;
+definition
+  let G be Graph;
+  redefine mode Chain of G -> FinSequence of the Edges of G;
 end;
 
-definition let G be Graph;
+definition
+  let G be Graph;
   let IT be Chain of G;
   attr IT is oriented means
 :: GRAPH_1:def 12
-     for n st 1 <= n & n < len IT holds
-       (the Source of G).(IT.(n+1)) = (the Target of G).(IT.n);
+
+  for n st 1 <= n & n < len IT holds
+  (the Source of G).(IT.(n+1)) = (the Target of G).(IT.n);
 end;
 
-registration let G be Graph;
+registration
+  let G be Graph;
   cluster oriented Chain of G;
 end;
 
-definition let G be Graph;
+definition
+  let G be Graph;
   let IT be Chain of G;
   redefine attr IT is one-to-one means
 :: GRAPH_1:def 13
-        for n, m st 1 <= n & n < m & m <= len IT holds IT.n <> IT.m;
+  for n, m st 1 <= n & n < m & m <= len IT holds IT.n <> IT.m;
 end;
 
-registration let G be Graph;
+registration
+  let G be Graph;
   cluster one-to-one Chain of G;
 end;
 
-definition let G be Graph;
+definition
+  let G be Graph;
   mode Path of G is one-to-one Chain of G;
 end;
 
-registration let G be Graph;
+registration
+  let G be Graph;
   cluster one-to-one oriented Chain of G;
 end;
 
-definition let G be Graph;
+definition
+  let G be Graph;
   mode OrientedPath of G is one-to-one oriented Chain of G;
 end;
 
-definition let G be Graph;
-   let IT be Path of G;
- canceled;
-
-   attr IT is cyclic means
+definition
+  let G be Graph;
+  let IT be Path of G;
+  canceled;
+  attr IT is cyclic means
 :: GRAPH_1:def 15
-     ex p being FinSequence st
-       len p = len IT + 1 &
-       (for n st 1 <= n & n <= len p holds p.n in the Vertices of G) &
-       (for n st 1 <= n & n <= len IT
-         ex x', y' being Element of the Vertices of G st
-           x' = p.n & y' = p.(n+1) & IT.n joins x', y') &
-       p.1 = p.(len p);
+
+  ex p being FinSequence st
+  len p = len IT + 1 &
+  (for n st 1 <= n & n <= len p holds p.n in the Vertices of G) &
+  (for n st 1 <= n & n <= len IT
+  ex x', y' being Element of the Vertices of G st
+  x' = p.n & y' = p.(n+1) & IT.n joins x', y') & p.1 = p.(len p);
 end;
 
-registration let G be Graph;
-   cluster cyclic Path of G;
+registration
+  let G be Graph;
+  cluster cyclic Path of G;
 end;
 
-definition let G be Graph;
-   mode Cycle of G is cyclic Path of G;
+definition
+  let G be Graph;
+  mode Cycle of G is cyclic Path of G;
 end;
 
-registration let G be Graph;
-   cluster cyclic OrientedPath of G;
+registration
+  let G be Graph;
+  cluster cyclic OrientedPath of G;
 end;
 
-definition let G be Graph;
-   mode OrientedCycle of G is cyclic OrientedPath of G;
+definition
+  let G be Graph;
+  mode OrientedCycle of G is cyclic OrientedPath of G;
 end;
 
-definition let G be Graph;
- canceled;
-
+definition
+  let G be Graph;
+  canceled;
   mode Subgraph of G -> Graph means
 :: GRAPH_1:def 17
-   the Vertices of it c= the Vertices of G &
-   the Edges of it c= the Edges of G &
-   for v st v in the Edges of it holds
+
+    the Vertices of it c= the Vertices of G &
+    the Edges of it c= the Edges of G & for v st v in the Edges of it holds
     (the Source of it).v = (the Source of G).v &
     (the Target of it).v = (the Target of G).v &
     (the Source of G).v in the Vertices of it &
     (the Target of G).v in the Vertices of it;
 end;
 
-registration let G be Graph;
- cluster strict Subgraph of G;
+registration
+  let G be Graph;
+  cluster strict Subgraph of G;
 end;
 
-definition let G be finite Graph;
-   func VerticesCount G -> Element of NAT means
+definition
+  let G be finite Graph;
+  func VerticesCount G -> Element of NAT means
 :: GRAPH_1:def 18
-       ex B being finite set st B = the Vertices of G & it = card B;
-
-   func EdgesCount G -> Element of NAT means
+  ex B being finite set st B = the Vertices of G & it = card B;
+  func EdgesCount G -> Element of NAT means
 :: GRAPH_1:def 19
-       ex B being finite set st B = the Edges of G & it = card B;
+  ex B being finite set st B = the Edges of G & it = card B;
 end;
 
-definition let G be finite Graph; let x be Element of the Vertices of G;
-   func EdgesIn x -> Element of NAT means
+definition
+  let G be finite Graph;
+  let x be Element of the Vertices of G;
+  func EdgesIn x -> Element of NAT means
 :: GRAPH_1:def 20
-        ex X being finite set st
-      (for z being set holds
-          z in X iff z in the Edges of G & (the Target of G).z = x)
-     & it = card(X);
 
+  ex X being finite set st
+  (for z being set holds
+  z in X iff z in the Edges of G & (the Target of G).z = x) & it = card(X);
   func EdgesOut x -> Element of NAT means
 :: GRAPH_1:def 21
-        ex X being finite set st
-      (for z being set holds
-        z in X iff z in the Edges of G & (the Source of G).z = x)
-     & it = card(X);
+
+  ex X being finite set st
+  (for z being set holds
+  z in X iff z in the Edges of G & (the Source of G).z = x) & it = card(X);
 end;
 
-definition let G be finite Graph; let x be Element of the Vertices of G;
+definition
+  let G be finite Graph;
+  let x be Element of the Vertices of G;
   func Degree x -> Element of NAT equals
 :: GRAPH_1:def 22
-         EdgesIn(x) + EdgesOut(x);
+
+  EdgesIn(x) + EdgesOut(x);
 end;
 
-definition let G1, G2 be Graph;
+definition
+  let G1, G2 be Graph;
   pred G1 c= G2 means
 :: GRAPH_1:def 23
-    G1 is Subgraph of G2;
- reflexivity;
+
+  G1 is Subgraph of G2;
+  reflexivity;
 end;
 
-definition let G be Graph;
+definition
+  let G be Graph;
   func bool G -> set means
 :: GRAPH_1:def 24
-   for x being set holds
-    x in it iff x is strict Subgraph of G;
+
+  for x being set holds
+  x in it iff x is strict Subgraph of G;
 end;
 
 scheme :: GRAPH_1:sch 1
- GraphSeparation{G() -> Graph, P[set]}:
-  ex X being set st
-    for x being set holds
-      x in X iff x is strict Subgraph of G() & P[x];
+ GraphSeparation{G() -> Graph, P[set]}: ex X being set st
+  for x being set holds x in X iff x is strict Subgraph of G() & P[x];
 
-               ::::::::::::::::::::::::::
-               :: Properties of graphs ::
-               ::::::::::::::::::::::::::
+::::::::::::::::::::::::::
+:: Properties of graphs ::
+::::::::::::::::::::::::::
 
 theorem :: GRAPH_1:1
-       for G being Graph holds
-     dom(the Source of G) = the Edges of G &
-     dom(the Target of G) = the Edges of G;
+  for G being Graph holds dom(the Source of G) = the Edges of G &
+  dom(the Target of G) = the Edges of G;
 
 theorem :: GRAPH_1:2
-       for x being Element of the Vertices of G holds
-     x in the Vertices of G;
+  for x being Element of the Vertices of G holds
+  x in the Vertices of G;
 
 theorem :: GRAPH_1:3
-      for v being set holds v in the Edges of G implies
-      (the Source of G).v in the Vertices of G &
-      (the Target of G).v in the Vertices of G;
+  for v being set holds v in the Edges of G implies
+  (the Source of G).v in the Vertices of G &
+  (the Target of G).v in the Vertices of G;
 
-                  :::::::::::
-                  :: Chain ::
-                  :::::::::::
+:::::::::::
+:: Chain ::
+:::::::::::
 
 theorem :: GRAPH_1:4
-       for p being Chain of G holds p|Seg(n) is Chain of G;
+  for p being Chain of G holds p|Seg(n) is Chain of G;
 
-             :::::::::::::::::::::::
-             :: Sum of two graphs ::
-             :::::::::::::::::::::::
+:::::::::::::::::::::::
+:: Sum of two graphs ::
+:::::::::::::::::::::::
 
 theorem :: GRAPH_1:5
-  G1 c= G implies
-    (the Source of G1) c= (the Source of G) &
-    (the Target of G1) c= (the Target of G);
+  G1 c= G implies (the Source of G1) c= (the Source of G) &
+  (the Target of G1) c= (the Target of G);
 
 theorem :: GRAPH_1:6
-      (the Source of G1) tolerates (the Source of G2) &
-  (the Target of G1) tolerates (the Target of G2)
-    implies
-  (the Source of (G1 \/ G2)) =
-    (the Source of G1) \/ (the Source of G2) &
-  (the Target of (G1 \/ G2)) =
-    (the Target of G1) \/ (the Target of G2);
+  (the Source of G1) tolerates (the Source of G2) &
+  (the Target of G1) tolerates (the Target of G2) implies
+  (the Source of (G1 \/ G2)) = (the Source of G1) \/ (the Source of G2) &
+  (the Target of (G1 \/ G2)) = (the Target of G1) \/ (the Target of G2);
 
 theorem :: GRAPH_1:7
- for G being strict Graph holds G = G \/ G;
+  for G being strict Graph holds G = G \/ G;
 
 theorem :: GRAPH_1:8
   (the Source of G1) tolerates (the Source of G2) &
-  (the Target of G1) tolerates (the Target of G2) implies
-  G1 \/ G2 = G2 \/ G1;
+  (the Target of G1) tolerates (the Target of G2) implies G1 \/ G2 = G2 \/ G1;
 
 theorem :: GRAPH_1:9
   (the Source of G1) tolerates (the Source of G2) &
@@ -332,36 +358,33 @@ theorem :: GRAPH_1:9
   (the Source of G1) tolerates (the Source of G3) &
   (the Target of G1) tolerates (the Target of G3) &
   (the Source of G2) tolerates (the Source of G3) &
-  (the Target of G2) tolerates (the Target of G3)
- implies
+  (the Target of G2) tolerates (the Target of G3) implies
   (G1 \/ G2) \/ G3 = G1 \/ (G2 \/ G3);
 
 theorem :: GRAPH_1:10
   G is_sum_of G1, G2 implies G is_sum_of G2, G1;
 
 theorem :: GRAPH_1:11
-      for G being strict Graph holds G is_sum_of G, G;
+  for G being strict Graph holds G is_sum_of G, G;
 
-         :::::::::::::::::::::::
-         :: Graphs' inclusion ::
-         :::::::::::::::::::::::
+:::::::::::::::::::::::
+:: Graphs' inclusion ::
+:::::::::::::::::::::::
 
 theorem :: GRAPH_1:12
- (ex G st G1 c= G & G2 c= G) implies G1 \/ G2 = G2 \/ G1;
+  (ex G st G1 c= G & G2 c= G) implies G1 \/ G2 = G2 \/ G1;
 
 theorem :: GRAPH_1:13
-     (ex G st G1 c= G & G2 c= G & G3 c= G) implies (G1 \/ G2) \/ G3 = G1 \/ (G2
-\/
- G3);
+  (ex G st G1 c= G & G2 c= G & G3 c= G) implies (G1 \/ G2) \/ G3 = G1 \/ ( G2
+  \/ G3);
 
 theorem :: GRAPH_1:14
-      {} is cyclic oriented Path of G;
+  {} is cyclic oriented Path of G;
 
 theorem :: GRAPH_1:15
-       for H1, H2 being strict Subgraph of G st
-     the Vertices of H1 = the Vertices of H2 &
-     the Edges of H1 = the Edges of H2
-   holds H1 = H2;
+  for H1, H2 being strict Subgraph of G st
+  the Vertices of H1 = the Vertices of H2 & the Edges of H1 = the Edges of H2
+  holds H1 = H2;
 
 theorem :: GRAPH_1:16
   for G1,G2 being strict Graph holds G1 c= G2 & G2 c= G1 implies G1 = G2;
@@ -374,12 +397,11 @@ theorem :: GRAPH_1:18
 
 theorem :: GRAPH_1:19
   (the Source of G1) tolerates (the Source of G2) &
-  (the Target of G1) tolerates (the Target of G2)
- implies
-   G1 c= G1 \/ G2 & G2 c= G1 \/ G2;
+  (the Target of G1) tolerates (the Target of G2) implies
+  G1 c= G1 \/ G2 & G2 c= G1 \/ G2;
 
 theorem :: GRAPH_1:20
- (ex G st G1 c= G & G2 c= G) implies G1 c= G1 \/ G2 & G2 c= G1 \/ G2;
+  (ex G st G1 c= G & G2 c= G) implies G1 c= G1 \/ G2 & G2 c= G1 \/ G2;
 
 theorem :: GRAPH_1:21
   G1 c= G3 & G2 c= G3 & G is_sum_of G1, G2 implies G c= G3;
@@ -388,57 +410,54 @@ theorem :: GRAPH_1:22
   G1 c= G & G2 c= G implies (G1 \/ G2) c= G;
 
 theorem :: GRAPH_1:23
-      for G1,G2 being strict Graph holds
+  for G1,G2 being strict Graph holds
   G1 c= G2 implies G1 \/ G2 = G2 & G2 \/ G1 = G2;
 
 theorem :: GRAPH_1:24
   (the Source of G1) tolerates (the Source of G2) &
   (the Target of G1) tolerates (the Target of G2) &
-  (G1 \/ G2 = G2 or G2 \/ G1 = G2)
- implies G1 c= G2;
+  (G1 \/ G2 = G2 or G2 \/ G1 = G2) implies G1 c= G2;
 
 canceled 2;
 
 theorem :: GRAPH_1:27
-      for G being oriented Graph st G1 c= G holds G1 is oriented;
+  for G being oriented Graph st G1 c= G holds G1 is oriented;
 
 theorem :: GRAPH_1:28
-      for G being non-multi Graph st G1 c= G holds G1 is non-multi;
+  for G being non-multi Graph st G1 c= G holds G1 is non-multi;
 
 theorem :: GRAPH_1:29
-      for G being simple Graph st G1 c= G holds G1 is simple;
+  for G being simple Graph st G1 c= G holds G1 is simple;
 
-                  ::::::::::::::::::::::::::
-                  :: Set of all subgraphs ::
-                  ::::::::::::::::::::::::::
+::::::::::::::::::::::::::
+:: Set of all subgraphs ::
+::::::::::::::::::::::::::
 
 theorem :: GRAPH_1:30
-      for G1 being strict Graph holds G1 in bool G iff G1 c= G;
+  for G1 being strict Graph holds G1 in bool G iff G1 c= G;
 
 theorem :: GRAPH_1:31
   for G being strict Graph holds G in bool G;
 
 theorem :: GRAPH_1:32
-     for G1 being strict Graph holds G1 c= G2 iff bool G1 c= bool G2;
+  for G1 being strict Graph holds G1 c= G2 iff bool G1 c= bool G2;
 
 canceled;
 
 theorem :: GRAPH_1:34
-     for G being strict Graph holds { G } c= bool G;
+  for G being strict Graph holds { G } c= bool G;
 
 theorem :: GRAPH_1:35
-     for G1,G2 being strict Graph holds
-   (the Source of G1) tolerates (the Source of G2) &
-   (the Target of G1) tolerates (the Target of G2) &
-   bool (G1 \/ G2) c= (bool G1) \/ (bool G2)
-  implies
-    G1 c= G2 or G2 c= G1;
+  for G1,G2 being strict Graph holds
+  (the Source of G1) tolerates (the Source of G2) &
+  (the Target of G1) tolerates (the Target of G2) &
+  bool (G1 \/ G2) c= (bool G1) \/ (bool G2) implies G1 c= G2 or G2 c= G1;
 
 theorem :: GRAPH_1:36
-       (the Source of G1) tolerates (the Source of G2) &
-   (the Target of G1) tolerates (the Target of G2)
- implies
-   bool G1 \/ bool G2 c= bool (G1 \/ G2);
+  (the Source of G1) tolerates (the Source of G2) &
+  (the Target of G1) tolerates (the Target of G2) implies
+  bool G1 \/ bool G2 c= bool (G1 \/ G2);
 
 theorem :: GRAPH_1:37
-      G1 in bool G & G2 in bool G implies (G1 \/ G2) in bool G;
+  G1 in bool G & G2 in bool G implies (G1 \/ G2) in bool G;
+

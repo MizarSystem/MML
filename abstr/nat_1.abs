@@ -22,68 +22,71 @@ definition
   mode Nat is natural number;
 end;
 
- reserve x for Real,
-         p,k,l,m,n,s,h,i,j,k1,t,t1 for Nat,
-         X for Subset of REAL;
+reserve x for Real,
+  p,k,l,m,n,s,h,i,j,k1,t,t1 for Nat,
+  X for Subset of REAL;
 
 :: The results of axioms of natural numbers
 
-theorem :: NAT_1:1                       :: axiom of induction
-  for X st 0 in X & for x st x in X holds x + 1 in X
-  for n holds n in X;
+theorem :: NAT_1:1
+  for X st 0 in X & for x st x in X holds x + 1 in X for n holds n in X;
 
 :: Addition and multiplication
-
 :: The natural numbers are real numbers therefore some theorems of real
 :: numbers are translated for natural numbers.
 
-registration let n,k be Nat;
+registration
+  let n,k be Nat;
   cluster n + k -> natural;
 end;
 
-definition let n be Nat, k be Element of NAT;
+definition
+  let n be Nat, k be Element of NAT;
   redefine func n + k -> Element of NAT;
- end;
+end;
 
-definition let n be Element of NAT, k be Nat;
+definition
+  let n be Element of NAT, k be Nat;
   redefine func n + k -> Element of NAT;
- end;
+end;
 
 :: Now we can form and prove the scheme of induction.
 
 scheme :: NAT_1:sch 1
- Ind { P[Nat] } :
- for k being Element of NAT holds P[k]
-   provided
-   P[0] and
-   for k being Element of NAT st P[k] holds P[k + 1];
+ Ind { P[Nat] } : for k being Element of NAT holds P[k]
+provided
+ P[0]
+and
+ for k being Element of NAT st P[k] holds P[k + 1];
 
 scheme :: NAT_1:sch 2
- NatInd { P[Nat] } :
- for k being Nat holds P[k]
-   provided
-   P[0] and
-   for k be Nat st P[k] holds P[k + 1];
+ NatInd { P[Nat] } : for k being Nat holds P[k]
+provided
+ P[0]
+and
+ for k be Nat st P[k] holds P[k + 1];
 
 :: Like addition, the result of multiplication of two natural numbers is
 :: a natural number.
 
-registration let n,k be Nat;
+registration
+  let n,k be Nat;
   cluster n * k -> natural;
 end;
 
-definition let n be Nat, k be Element of NAT;
+definition
+  let n be Nat, k be Element of NAT;
   redefine func n * k -> Element of NAT;
 end;
 
-definition let n be Element of NAT, k be Nat;
+definition
+  let n be Element of NAT, k be Nat;
   redefine func n * k -> Element of NAT;
 end;
 
-                ::::::::::::::::::::
-                :: Order relation ::
-                ::::::::::::::::::::
-
+::::::::::::::::::::
+:: Order relation ::
+::::::::::::::::::::
 :: Some theorems of not great relation "<=" in real numbers are translated
 :: to natural number easy and it is necessary to have them here.
 
@@ -91,13 +94,13 @@ theorem :: NAT_1:2
   0 <= i;
 
 theorem :: NAT_1:3
-   0 <> i implies 0 < i;
+  0 <> i implies 0 < i;
 
 theorem :: NAT_1:4
-   i <= j implies i * h <= j * h;
+  i <= j implies i * h <= j * h;
 
 theorem :: NAT_1:5
-   0 < i + 1;
+  0 < i + 1;
 
 theorem :: NAT_1:6
   i = 0 or ex k st i = k + 1;
@@ -109,7 +112,8 @@ registration
   cluster non zero Nat;
 end;
 
-registration let m be Nat, n be non zero Nat;
+registration
+  let m be Nat, n be non zero Nat;
   cluster m + n -> non zero;
   cluster n + m -> non zero;
 end;
@@ -117,17 +121,16 @@ end;
 scheme :: NAT_1:sch 3
  DefbyInd { N()->Nat, F(Nat,Nat)->Nat, P[Nat,Nat] } :
   (for k being Nat ex n being Nat st P[k,n]) &
-    for k,n,m being Nat st P[k,n] & P[k,m] holds n = m
-     provided
-    for k,n being Nat holds P[k,n] iff
-       k = 0 & n = N() or
-       ex m,l being Nat st k = m + 1 & P[m,l] & n = F(k,l);
+  for k,n,m being Nat st P[k,n] & P[k,m] holds n = m
+provided
+ for k,n being Nat holds P[k,n] iff k = 0 & n = N() or
+ex m,l being Nat st k = m + 1 & P[m,l] & n = F(k,l);
 
 theorem :: NAT_1:8
   i <= j + 1 implies i <= j or i = j + 1;
 
 theorem :: NAT_1:9
-   i <= j & j <= i + 1 implies i = j or j = i + 1;
+  i <= j & j <= i + 1 implies i = j or j = i + 1;
 
 theorem :: NAT_1:10
   i <= j implies ex k st j = i + k;
@@ -136,30 +139,27 @@ theorem :: NAT_1:11
   i <= i + j;
 
 scheme :: NAT_1:sch 4
- CompInd { P[Nat] } :
-  for k being Nat holds P[k]
-   provided
-   for k being Nat st
-      for n being Nat st n < k holds P[n] holds P[k];
+ CompInd { P[Nat] } : for k being Nat holds P[k]
+provided
+ for k being Nat st for n being Nat st n < k holds P[n] holds P[k];
 
 :: Principle of minimum
 
 scheme :: NAT_1:sch 5
- Min { P[Nat] } :
- ex k being Nat st P[k] &
- for n being Nat st P[n] holds k <= n
-  provided
-  ex k being Nat st P[k];
+ Min { P[Nat] } : ex k being Nat st P[k] &
+  for n being Nat st P[n] holds k <= n
+provided
+ ex k being Nat st P[k];
 
 :: Principle of maximum
 
 scheme :: NAT_1:sch 6
- Max { P[Nat], N()->Nat } :
-  ex k being Nat st P[k] &
+ Max { P[Nat], N()->Nat } : ex k being Nat st P[k] &
   for n being Nat st P[n] holds n <= k
-   provided
-   for k being Nat st P[k] holds k <= N() and
-   ex k being Nat st P[k];
+provided
+ for k being Nat st P[k] holds k <= N()
+and
+ ex k being Nat st P[k];
 
 theorem :: NAT_1:12
   i <= j implies i <= j + h;
@@ -171,26 +171,25 @@ theorem :: NAT_1:14
   j < 1 implies j = 0;
 
 theorem :: NAT_1:15
-   i * j = 1 implies i = 1;
+  i * j = 1 implies i = 1;
 
 theorem :: NAT_1:16
   k <> 0 implies n < n + k;
 
 scheme :: NAT_1:sch 7
- Regr { P[Nat] } :
-  P[0]
-  provided
-  ex k being Nat st P[k] and
-  for k being Nat st k <> 0 & P[k]
-     ex n being Nat st n < k & P[n];
+ Regr { P[Nat] } : P[0]
+provided
+ ex k being Nat st P[k]
+and
+ for k being Nat st k <> 0 & P[k] ex n being Nat st n < k & P[n];
 
 :: Exact division and rest of division
 
 theorem :: NAT_1:17
-   0 < m implies for n ex k,t st n = (m*k)+t & t < m;
+  0 < m implies for n ex k,t st n = (m*k)+t & t < m;
 
 theorem :: NAT_1:18
-   n = m*k+t & t < m & n = m*k1+t1 & t1 < m implies k = k1 & t = t1;
+  n = m*k+t & t < m & n = m*k1+t1 & t1 < m implies k = k1 & t = t1;
 
 registration
   cluster -> ordinal Nat;
@@ -201,13 +200,13 @@ registration
 end;
 
 theorem :: NAT_1:19
-   k < k + n iff 1 <= n;
+  k < k + n iff 1 <= n;
 
 theorem :: NAT_1:20
-   k < n implies n - 1 is Element of NAT;
+  k < n implies n - 1 is Element of NAT;
 
 theorem :: NAT_1:21
-   k <= n implies n - k is Element of NAT;
+  k <= n implies n - k is Element of NAT;
 
 begin :: Addenda
 
@@ -217,7 +216,7 @@ theorem :: NAT_1:22
   m < n+1 implies m < n or m = n;
 
 theorem :: NAT_1:23
-   k < 2 implies k = 0 or k = 1;
+  k < 2 implies k = 0 or k = 1;
 
 registration
   cluster non zero Element of NAT;
@@ -243,20 +242,20 @@ canceled; :: Th25 - refer to Th11 and Th13
 :: from BINOM, 2006.05.28, A.T.
 
 scheme :: NAT_1:sch 8
- Ind1{M() -> Nat, P[Nat]} :
-  for i being Nat st M() <= i holds P[i]
+ Ind1{M() -> Nat, P[Nat]} : for i being Nat st M() <= i holds P[i]
 provided
-  P[M()] and
-  for j being Nat st M() <= j holds P[j] implies P[j+1];
+ P[M()]
+and
+ for j being Nat st M() <= j holds P[j] implies P[j+1];
 
 :: from INT_2, 2006.05.30, AG
 
 scheme :: NAT_1:sch 9
  CompInd1 { a() -> Nat, P[Nat] } :
   for k being Nat st k >= a() holds P[k]
-  provided
-   for k being Nat st k>=a() &
-  (for n being Nat st n>=a() & n<k holds P[n]) holds P[k];
+provided
+ for k being Nat st k>=a() &
+(for n being Nat st n>=a() & n<k holds P[n]) holds P[k];
 
 :: Moved from CQC_THE1 on 07.07.2006 by AK
 
@@ -287,45 +286,44 @@ theorem :: NAT_1:33
   or n = 4 or n = 5 or n = 6 or n = 7 or n = 8;
 
 theorem :: NAT_1:34
-   n <= 9 implies n = 0 or n = 1 or n = 2 or n = 3
+  n <= 9 implies n = 0 or n = 1 or n = 2 or n = 3
   or n = 4 or n = 5 or n = 6 or n = 7 or n = 8 or n = 9;
 
 theorem :: NAT_1:35
-   n <= 10 implies n = 0 or n = 1 or n = 2 or n = 3
+  n <= 10 implies n = 0 or n = 1 or n = 2 or n = 3
   or n = 4 or n = 5 or n = 6 or n = 7 or n = 8 or n = 9 or n = 10;
 
 theorem :: NAT_1:36
-   n <= 11 implies n = 0 or n = 1 or n = 2 or n = 3
-  or n = 4 or n = 5 or n = 6 or n = 7 or n = 8 or n = 9 or n = 10
-  or n = 11;
+  n <= 11 implies n = 0 or n = 1 or n = 2 or n = 3
+  or n = 4 or n = 5 or n = 6 or n = 7 or n = 8 or n = 9 or n = 10 or n = 11;
 
 theorem :: NAT_1:37
-   n <= 12 implies n = 0 or n = 1 or n = 2 or n = 3
+  n <= 12 implies n = 0 or n = 1 or n = 2 or n = 3
   or n = 4 or n = 5 or n = 6 or n = 7 or n = 8 or n = 9 or n = 10
   or n = 11 or n = 12;
 
 theorem :: NAT_1:38
-   n <= 13 implies n = 0 or n = 1 or n = 2 or n = 3
+  n <= 13 implies n = 0 or n = 1 or n = 2 or n = 3
   or n = 4 or n = 5 or n = 6 or n = 7 or n = 8 or n = 9 or n = 10
   or n = 11 or n = 12 or n = 13;
 
 :: compare BINARITH:sch 1, 2006.07.19, A.T.
 
 scheme :: NAT_1:sch 10
- Indfrom1 { P[Nat] } :
-  for k being non empty Nat holds P[k]
-  provided
- P[1] and
+ Indfrom1 { P[Nat] } : for k being non empty Nat holds P[k]
+provided
+ P[1]
+and
  for k being non empty Nat st P[k] holds P[k + 1];
 
 :: from HENMODEL, 2007.03.15, A.T.
 
-definition let A be set;
+definition
+  let A be set;
   func min* A -> Element of NAT means
 :: NAT_1:def 1
-    (it in A & for k st k in A holds it <= k) if
-                                   A is non empty Subset of NAT
-          otherwise it = 0;
+  (it in A & for k st k in A holds it <= k) if A is non empty Subset of NAT
+  otherwise it = 0;
 end;
 
 :: from CARD_1, 2007.10.28,A.T.
@@ -333,10 +331,10 @@ end;
 reserve x,X,Y,Z for set;
 
 theorem :: NAT_1:39
- for n being natural number holds succ n = n + 1;
+  for n being natural number holds succ n = n + 1;
 
 theorem :: NAT_1:40
- n <= m iff n c= m;
+  n <= m iff n c= m;
 
 theorem :: NAT_1:41
   Card n <=` Card m iff n <= m;
@@ -349,15 +347,16 @@ reserve M,N for Cardinal;
 theorem :: NAT_1:43
   nextcard Card n = Card(n+1);
 
-definition let n be natural number;
- redefine func succ n equals
+definition
+  let n be natural number;
+  redefine func succ n equals
 :: NAT_1:def 2
-n+1;
+
+  n+1;
 end;
 
 theorem :: NAT_1:44
-     for X,Y being finite set holds
-   X c= Y implies card X <= card Y;
+  for X,Y being finite set holds X c= Y implies card X <= card Y;
 
 reserve l for Element of NAT;
 
@@ -368,5 +367,5 @@ theorem :: NAT_1:46
   n in n+1;
 
 theorem :: NAT_1:47
-   k <= n implies k = k /\ n;
+  k <= n implies k = k /\ n;
 

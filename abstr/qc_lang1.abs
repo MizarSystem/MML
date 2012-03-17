@@ -23,19 +23,21 @@ begin
 :: Preliminaries
 
 theorem :: QC_LANG1:1
-    for D1 being non empty set, D2 being set, k being Element of D1 holds
+  for D1 being non empty set, D2 being set, k being Element of D1 holds
   [: {k}, D2 :] c= [: D1, D2 :];
 
 theorem :: QC_LANG1:2
+
 for D1 being non empty set, D2 being set, k1, k2, k3 being Element of D1 holds
   [: {k1, k2, k3}, D2 :] c= [: D1, D2 :];
 
 reserve k, l, m, n for Element of NAT;
 
 definition
- func QC-variables -> set equals
+  func QC-variables -> set equals
 :: QC_LANG1:def 1
-   [: { 4, 5, 6 }, NAT :];
+
+  [: { 4, 5, 6 }, NAT :];
 end;
 
 registration
@@ -45,379 +47,392 @@ end;
 canceled;
 
 theorem :: QC_LANG1:4
-QC-variables c= [: NAT, NAT :];
+  QC-variables c= [: NAT, NAT :];
 
 definition
- mode QC-variable is Element of QC-variables;
-
- func bound_QC-variables -> Subset of QC-variables equals
+  mode QC-variable is Element of QC-variables;
+  func bound_QC-variables -> Subset of QC-variables equals
 :: QC_LANG1:def 2
-   [: {4}, NAT :];
 
- func fixed_QC-variables -> Subset of QC-variables equals
+  [: {4}, NAT :];
+  func fixed_QC-variables -> Subset of QC-variables equals
 :: QC_LANG1:def 3
+
   [: {5}, NAT :];
-
- func free_QC-variables -> Subset of QC-variables equals
+  func free_QC-variables -> Subset of QC-variables equals
 :: QC_LANG1:def 4
-   [: {6}, NAT :];
 
+  [: {6}, NAT :];
   func QC-pred_symbols -> set equals
 :: QC_LANG1:def 5
-   { [k, l]: 7 <= k };
+
+  { [k, l]: 7 <= k };
 end;
 
 registration
- cluster bound_QC-variables -> non empty;
-
- cluster fixed_QC-variables -> non empty;
-
- cluster free_QC-variables -> non empty;
-
+  cluster bound_QC-variables -> non empty;
+  cluster fixed_QC-variables -> non empty;
+  cluster free_QC-variables -> non empty;
   cluster QC-pred_symbols -> non empty;
 end;
 
 canceled 5;
 
 theorem :: QC_LANG1:10
-QC-pred_symbols c= [: NAT, NAT :];
+  QC-pred_symbols c= [: NAT, NAT :];
 
 definition
   mode QC-pred_symbol is Element of QC-pred_symbols;
 end;
 
-definition let P be Element of QC-pred_symbols;
+definition
+  let P be Element of QC-pred_symbols;
   func the_arity_of P -> Element of NAT means
 :: QC_LANG1:def 6
- P`1 = 7+it;
+
+  P`1 = 7+it;
 end;
 
- reserve P for QC-pred_symbol;
+reserve P for QC-pred_symbol;
 
-definition let k;
- func k-ary_QC-pred_symbols -> Subset of QC-pred_symbols equals
+definition
+  let k;
+  func k-ary_QC-pred_symbols -> Subset of QC-pred_symbols equals
 :: QC_LANG1:def 7
-   { P : the_arity_of P = k };
+  { P : the_arity_of P = k };
 end;
 
-registration let k;
- cluster k-ary_QC-pred_symbols -> non empty;
+registration
+  let k;
+  cluster k-ary_QC-pred_symbols -> non empty;
 end;
 
 definition
- mode bound_QC-variable is Element of bound_QC-variables;
- mode fixed_QC-variable is Element of fixed_QC-variables;
- mode free_QC-variable is Element of free_QC-variables;
-
-let k;
- mode QC-pred_symbol of k is Element of k-ary_QC-pred_symbols;
+  mode bound_QC-variable is Element of bound_QC-variables;
+  mode fixed_QC-variable is Element of fixed_QC-variables;
+  mode free_QC-variable is Element of free_QC-variables;
+  let k;
+  mode QC-pred_symbol of k is Element of k-ary_QC-pred_symbols;
 end;
 
-definition let k be Element of NAT;
+definition
+  let k be Element of NAT;
   mode QC-variable_list of k -> FinSequence of QC-variables means
 :: QC_LANG1:def 8
- len it = k;
-end;
 
-definition let D be set;
-  attr D is QC-closed means
-:: QC_LANG1:def 9
-   D is Subset of [:NAT, NAT:]* &
-                :: Includes atomic formulae
-     (for k being Element of NAT, p being (QC-pred_symbol of k),
-          ll being QC-variable_list of k holds <*p*>^ll in D) &
-                :: Is closed under VERUM, 'not', '&', and quantification
-     <*[0, 0]*> in D &
-     (for p being FinSequence of [:NAT,NAT:]
-      st p in D holds <*[1, 0]*>^p in D) &
-     (for p, q being FinSequence of [:NAT, NAT:] st
-      p in D & q in D
-           holds <*[2, 0]*>^p^q in D) &
-     (for x being bound_QC-variable,
-          p being FinSequence of [:NAT, NAT:]
-           st p in D holds <*[3, 0]*>^<*x*>^p in D);
+    len it = k;
 end;
 
 definition
-   func QC-WFF -> non empty set means
+  let D be set;
+  attr D is QC-closed means
+:: QC_LANG1:def 9
+
+  D is Subset of [:NAT, NAT:]* &
+
+:: Includes atomic formulae
+  (for k being Element of NAT, p being (QC-pred_symbol of k),
+  ll being QC-variable_list of k holds <*p*>^ll in D) &
+
+:: Is closed under VERUM, 'not', '&', and quantification
+  <*[0, 0]*> in D & (for p being FinSequence of [:NAT,NAT:]
+  st p in D holds <*[1, 0]*>^p in D) &
+  (for p, q being FinSequence of [:NAT, NAT:] st p in D & q in D
+  holds <*[2, 0]*>^p^q in D) & (for x being bound_QC-variable,
+  p being FinSequence of [:NAT, NAT:]
+  st p in D holds <*[3, 0]*>^<*x*>^p in D);
+end;
+
+definition
+  func QC-WFF -> non empty set means
 :: QC_LANG1:def 10
- it is QC-closed &
-                :: Is the smallest that is_QC-closed
-   for D being non empty set st D is QC-closed holds it c= D;
+
+  it is QC-closed &
+
+:: Is the smallest that is_QC-closed
+  for D being non empty set st D is QC-closed holds it c= D;
 end;
 
 canceled 10;
 
 theorem :: QC_LANG1:21
-QC-WFF is QC-closed;
+  QC-WFF is QC-closed;
 
 definition
   mode QC-formula is Element of QC-WFF;
 end;
 
-definition let P be QC-pred_symbol,l be FinSequence of QC-variables;
- assume  the_arity_of P = len l;
+definition
+  let P be QC-pred_symbol,l be FinSequence of QC-variables;
+  assume
+ the_arity_of P = len l;
   func P!l -> Element of QC-WFF equals
 :: QC_LANG1:def 11
+
   <*P*>^l;
 end;
 
 canceled;
 
 theorem :: QC_LANG1:23
-   for k being Element of NAT, p being QC-pred_symbol of k,
-           ll be QC-variable_list of k
-         holds p!ll = <*p*>^ll;
+  for k being Element of NAT, p being QC-pred_symbol of k,
+  ll be QC-variable_list of k holds p!ll = <*p*>^ll;
 
 definition
   let p be Element of QC-WFF;
-
   func @p -> FinSequence of [:NAT, NAT:] equals
 :: QC_LANG1:def 12
-   p;
+
+  p;
 end;
 
 definition
   func VERUM -> QC-formula equals
 :: QC_LANG1:def 13
-   <*[0, 0]*>;
 
-let p be Element of QC-WFF;
-
+  <*[0, 0]*>;
+  let p be Element of QC-WFF;
   func 'not' p -> QC-formula equals
 :: QC_LANG1:def 14
-   <*[1, 0]*>^@p;
 
-let q be Element of QC-WFF;
-
-        func p '&' q -> QC-formula equals
+  <*[1, 0]*>^@p;
+  let q be Element of QC-WFF;
+  func p '&' q -> QC-formula equals
 :: QC_LANG1:def 15
-   <*[2, 0]*>^@p^@q;
+
+  <*[2, 0]*>^@p^@q;
 end;
 
-definition let x be bound_QC-variable, p be Element of QC-WFF;
+definition
+  let x be bound_QC-variable, p be Element of QC-WFF;
   func All(x, p) -> QC-formula equals
 :: QC_LANG1:def 16
+
   <*[3, 0]*>^<*x*>^@p;
 end;
 
- reserve F for Element of QC-WFF;
+reserve F for Element of QC-WFF;
 
 scheme :: QC_LANG1:sch 1
  QCInd { Prop[Element of QC-WFF] }:
-        for F being Element of QC-WFF holds Prop[F]
-  provided
-         for k being Element of NAT, P being (QC-pred_symbol of k),
-                ll being QC-variable_list of k
-              holds Prop[P!ll] and
-         Prop[VERUM] and
-         for p being Element of QC-WFF st Prop[p] holds Prop['not' p] and
-         for p, q being Element of QC-WFF st Prop[p] & Prop[q]
-              holds Prop[p '&' q] and
-         for x being bound_QC-variable, p being Element of QC-WFF st Prop[p]
-                        holds Prop[All(x, p)];
+  for F being Element of QC-WFF holds Prop[F]
+provided
+ for k being Element of NAT, P being (QC-pred_symbol of k),
+ll being QC-variable_list of k holds Prop[P!ll]
+and
+ Prop[VERUM]
+and
+ for p being Element of QC-WFF st Prop[p] holds Prop['not' p]
+and
+ for p, q being Element of QC-WFF st Prop[p] & Prop[q] holds Prop[p '&' q]
+and
+ for x being bound_QC-variable, p being Element of QC-WFF st Prop[p]
+holds Prop[All(x, p)];
 
 definition
-
-let F be Element of QC-WFF;
-        attr F is atomic means
+  let F be Element of QC-WFF;
+  attr F is atomic means
 :: QC_LANG1:def 17
- ex k being Element of NAT, p being (QC-pred_symbol of k),
-                ll being QC-variable_list of k
-                        st F = p!ll;
-        attr F is negative means
+
+  ex k being Element of NAT, p being (QC-pred_symbol of k),
+  ll being QC-variable_list of k st F = p!ll;
+  attr F is negative means
 :: QC_LANG1:def 18
- ex p being Element of QC-WFF st F = 'not' p;
-        attr F is conjunctive means
+
+  ex p being Element of QC-WFF st F = 'not' p;
+  attr F is conjunctive means
 :: QC_LANG1:def 19
- ex p, q being Element of QC-WFF st F = p '&' q;
-        attr F is universal means
+
+  ex p, q being Element of QC-WFF st F = p '&' q;
+  attr F is universal means
 :: QC_LANG1:def 20
- ex x being bound_QC-variable, p being Element of QC-WFF
-                        st F = All(x, p);
+
+  ex x being bound_QC-variable, p being Element of QC-WFF st F = All(x, p);
 end;
 
 canceled 9;
 
 theorem :: QC_LANG1:33
-for F being Element of QC-WFF holds
-                F = VERUM or F is atomic or F is negative or
-                F is conjunctive or F is universal;
+  for F being Element of QC-WFF holds
+  F = VERUM or F is atomic or F is negative or
+  F is conjunctive or F is universal;
 
 theorem :: QC_LANG1:34
-for F being Element of QC-WFF holds 1 <= len @F;
+  for F being Element of QC-WFF holds 1 <= len @F;
 
- reserve Q for QC-pred_symbol;
+reserve Q for QC-pred_symbol;
 
 theorem :: QC_LANG1:35
-for k being Element of NAT, P being QC-pred_symbol of k
-                  holds the_arity_of P = k;
+  for k being Element of NAT, P being QC-pred_symbol of k
+  holds the_arity_of P = k;
 
- reserve F, G for (Element of QC-WFF),
- k,n for Element of NAT, s for FinSequence;
+reserve F, G for (Element of QC-WFF),
+  k,n for Element of NAT,
+  s for FinSequence;
 
 theorem :: QC_LANG1:36
-    ((@F.1)`1 = 0 implies F = VERUM) &
-    ((@F.1)`1 = 1 implies F is negative) &
-    ((@F.1)`1 = 2 implies F is conjunctive) &
-    ((@F.1)`1 = 3 implies F is universal) &
-    ((ex k being Element of NAT st @F.1 is QC-pred_symbol of k)
-    implies F is atomic);
+  ((@F.1)`1 = 0 implies F = VERUM) & ((@F.1)`1 = 1 implies F is negative) &
+  ((@F.1)`1 = 2 implies F is conjunctive) &
+  ((@F.1)`1 = 3 implies F is universal) &
+  ((ex k being Element of NAT st @F.1 is QC-pred_symbol of k)
+  implies F is atomic);
 
 theorem :: QC_LANG1:37
-@F = @G^s implies @F = @G;
+  @F = @G^s implies @F = @G;
 
 definition
-        let F be Element of QC-WFF such that  F is atomic;
-        func the_pred_symbol_of F -> QC-pred_symbol means
+  let F be Element of QC-WFF such that
+ F is atomic;
+  func the_pred_symbol_of F -> QC-pred_symbol means
 :: QC_LANG1:def 21
- ex k being Element of NAT, ll being (QC-variable_list of k),
-                        P being QC-pred_symbol of k
-                st it = P & F = P!ll;
+
+  ex k being Element of NAT, ll being (QC-variable_list of k),
+  P being QC-pred_symbol of k st it = P & F = P!ll;
 end;
 
-definition let F be Element of QC-WFF such that  F is atomic;
+definition
+  let F be Element of QC-WFF such that
+ F is atomic;
   func the_arguments_of F -> FinSequence of QC-variables means
 :: QC_LANG1:def 22
- ex k being Element of NAT, P being (QC-pred_symbol of k),
-                        ll being QC-variable_list of k
-                st it = ll & F = P!ll;
+
+  ex k being Element of NAT, P being (QC-pred_symbol of k),
+  ll being QC-variable_list of k st it = ll & F = P!ll;
 end;
 
-definition let F be Element of QC-WFF such that  F is negative;
+definition
+  let F be Element of QC-WFF such that
+ F is negative;
   func the_argument_of F -> QC-formula means
 :: QC_LANG1:def 23
- F = 'not' it;
+
+  F = 'not' it;
 end;
 
 definition
-  let F be Element of QC-WFF such that  F is conjunctive;
+  let F be Element of QC-WFF such that
+ F is conjunctive;
   func the_left_argument_of F -> QC-formula means
 :: QC_LANG1:def 24
- ex q being Element of QC-WFF st F = it '&' q;
+
+  ex q being Element of QC-WFF st F = it '&' q;
 end;
 
 definition
-        let F be Element of QC-WFF such that  F is conjunctive;
-
-        func the_right_argument_of F -> QC-formula means
+  let F be Element of QC-WFF such that
+ F is conjunctive;
+  func the_right_argument_of F -> QC-formula means
 :: QC_LANG1:def 25
- ex p being Element of QC-WFF st F = p '&' it;
+
+  ex p being Element of QC-WFF st F = p '&' it;
 end;
 
-definition let F be Element of QC-WFF such that  F is universal;
+definition
+  let F be Element of QC-WFF such that
+ F is universal;
   func bound_in F -> bound_QC-variable means
 :: QC_LANG1:def 26
- ex p being Element of QC-WFF st F = All(it, p);
 
+  ex p being Element of QC-WFF st F = All(it, p);
   func the_scope_of F -> QC-formula means
 :: QC_LANG1:def 27
- ex x being bound_QC-variable st F = All(x, it);
+
+  ex x being bound_QC-variable st F = All(x, it);
 end;
 
-  reserve p for Element of QC-WFF;
+reserve p for Element of QC-WFF;
 
 canceled 7;
 
 theorem :: QC_LANG1:45
-p is negative implies len @the_argument_of p < len @p;
+  p is negative implies len @the_argument_of p < len @p;
 
 theorem :: QC_LANG1:46
-p is conjunctive implies len @the_left_argument_of p < len @p
-                        & len @the_right_argument_of p < len @p;
+  p is conjunctive implies len @the_left_argument_of p < len @p
+  & len @the_right_argument_of p < len @p;
+
 theorem :: QC_LANG1:47
-p is universal implies len @the_scope_of p < len @p;
+  p is universal implies len @the_scope_of p < len @p;
 
 scheme :: QC_LANG1:sch 2
  QCInd2 { P[Element of QC-WFF] }:
-        for p being Element of QC-WFF holds P[p]
-  provided
-       for p being Element of QC-WFF holds
-         (p is atomic implies P[p]) &
-         P[VERUM] &
-         (p is negative & P[the_argument_of p] implies P[p]) &
-         (p is conjunctive & P[the_left_argument_of p] &
-                P[the_right_argument_of p] implies P[p]) &
-         (p is universal & P[the_scope_of p] implies P[p]);
+  for p being Element of QC-WFF holds P[p]
+provided
+ for p being Element of QC-WFF holds (p is atomic implies P[p]) &
+P[VERUM] & (p is negative & P[the_argument_of p] implies P[p]) &
+(p is conjunctive & P[the_left_argument_of p] &
+P[the_right_argument_of p] implies P[p]) &
+(p is universal & P[the_scope_of p] implies P[p]);
 
 reserve F for Element of QC-WFF;
 
 theorem :: QC_LANG1:48
-for k being Element of NAT, P being QC-pred_symbol of k holds
-                P`1 <> 0 & P`1 <> 1 & P`1 <> 2 & P`1 <> 3;
+  for k being Element of NAT, P being QC-pred_symbol of k holds
+  P`1 <> 0 & P`1 <> 1 & P`1 <> 2 & P`1 <> 3;
 
 theorem :: QC_LANG1:49
-    (@VERUM.1)`1 = 0 &
-    (F is atomic implies
-    ex k being Element of NAT st @F.1 is QC-pred_symbol of k) &
-    (F is negative implies (@F.1)`1 = 1) &
-    (F is conjunctive implies (@F.1)`1 = 2) &
-    (F is universal implies (@F.1)`1 = 3);
+  (@VERUM.1)`1 = 0 & (F is atomic implies
+  ex k being Element of NAT st @F.1 is QC-pred_symbol of k) &
+  (F is negative implies (@F.1)`1 = 1) &
+  (F is conjunctive implies (@F.1)`1 = 2) &
+  (F is universal implies (@F.1)`1 = 3);
 
 theorem :: QC_LANG1:50
-F is atomic implies
-                (@F.1)`1 <> 0 & (@F.1)`1 <> 1 & (@F.1)`1 <> 2 & (@F.1)`1 <> 3;
+  F is atomic implies
+  (@F.1)`1 <> 0 & (@F.1)`1 <> 1 & (@F.1)`1 <> 2 & (@F.1)`1 <> 3;
 
- reserve p for Element of QC-WFF;
+reserve p for Element of QC-WFF;
 
 theorem :: QC_LANG1:51
-not (VERUM is atomic or VERUM is negative or VERUM is conjunctive
-                                  or VERUM is universal) &
-        not (ex p st p is atomic & p is negative or
-                        p is atomic & p is conjunctive or
-                        p is atomic & p is universal or
-                        p is negative & p is conjunctive or
-                        p is negative & p is universal or
-                        p is conjunctive & p is universal);
+  not (VERUM is atomic or VERUM is negative or VERUM is conjunctive
+  or VERUM is universal) & not (ex p st p is atomic & p is negative or
+  p is atomic & p is conjunctive or p is atomic & p is universal or
+  p is negative & p is conjunctive or p is negative & p is universal or
+  p is conjunctive & p is universal);
 
 scheme :: QC_LANG1:sch 3
- QCFuncEx { D() -> non empty set,
-                V() -> (Element of D()),
-                A(Element of QC-WFF) -> (Element of D()),
-                N(Element of D()) -> (Element of D()),
-                C((Element of D()), Element of D()) -> (Element of D()),
-                Q((Element of QC-WFF), Element of D()) -> Element of D()} :
-ex F being Function of QC-WFF, D() st
-        F.VERUM = V() &
-        for p being Element of QC-WFF holds
-        (p is atomic implies F.p = A(p)) &
-        (p is negative implies F.p = N(F.the_argument_of p)) &
-        (p is conjunctive implies
-           F.p = C(F.the_left_argument_of p, F.the_right_argument_of p)) &
-        (p is universal implies F.p = Q(p, F.the_scope_of p));
+ QCFuncEx { D() -> non empty set, V() -> (Element of D()),
+  A(Element of QC-WFF) -> (Element of D()),
+  N(Element of D()) -> (Element of D()),
+  C((Element of D()), Element of D()) -> (Element of D()),
+  Q((Element of QC-WFF), Element of D()) -> Element of D()} :
+  ex F being Function of QC-WFF, D() st F.VERUM = V() &
+  for p being Element of QC-WFF holds (p is atomic implies F.p = A(p)) &
+  (p is negative implies F.p = N(F.the_argument_of p)) &
+  (p is conjunctive implies
+  F.p = C(F.the_left_argument_of p, F.the_right_argument_of p)) &
+  (p is universal implies F.p = Q(p, F.the_scope_of p));
 
- reserve j,k for Element of NAT;
+reserve j,k for Element of NAT;
 
 definition
-        let ll be FinSequence of QC-variables;
-func still_not-bound_in ll -> Subset of bound_QC-variables
-         equals
+  let ll be FinSequence of QC-variables;
+  func still_not-bound_in ll -> Subset of bound_QC-variables equals
 :: QC_LANG1:def 28
   { ll.k : 1 <= k & k <= len ll & ll.k in bound_QC-variables };
 end;
 
- reserve k for Element of NAT;
+reserve k for Element of NAT;
 
-definition let p be QC-formula;
- func still_not-bound_in p -> Subset of bound_QC-variables means
+definition
+  let p be QC-formula;
+  func still_not-bound_in p -> Subset of bound_QC-variables means
 :: QC_LANG1:def 29
-      ex F being Function of QC-WFF, bool bound_QC-variables st
-         it = F.p &
-         for p being Element of QC-WFF holds
-         F.VERUM = {} &
-         (p is atomic implies
-           F.p = { (the_arguments_of p).k :
-                         1 <= k & k <= len the_arguments_of p &
-                         (the_arguments_of p).k in bound_QC-variables }) &
-         (p is negative implies F.p = F.the_argument_of p) &
-         (p is conjunctive implies F.p = (F.the_left_argument_of p) \/
-                                         (F.the_right_argument_of p)) &
-         (p is universal implies F.p = (F.the_scope_of p) \ {bound_in p});
+  ex F being Function of QC-WFF, bool bound_QC-variables st it = F.p &
+  for p being Element of QC-WFF holds F.VERUM = {} & (p is atomic implies
+  F.p = { (the_arguments_of p).k : 1 <= k & k <= len the_arguments_of p &
+  (the_arguments_of p).k in bound_QC-variables }) &
+  (p is negative implies F.p = F.the_argument_of p) &
+  (p is conjunctive implies F.p = (F.the_left_argument_of p) \/
+  (F.the_right_argument_of p)) &
+  (p is universal implies F.p = (F.the_scope_of p) \ {bound_in p});
 end;
 
-definition let p be QC-formula;
+definition
+  let p be QC-formula;
   attr p is closed means
 :: QC_LANG1:def 30
-     still_not-bound_in p = {};
+
+  still_not-bound_in p = {};
 end;
 

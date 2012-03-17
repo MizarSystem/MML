@@ -48,219 +48,208 @@ definition
   let IIG;
   let SCS be non-empty Circuit of IIG;
   func Set-Constants SCS -> ManySortedSet of SortsWithConstants IIG means
-:Def1:
-    for x being Vertex of IIG st x in dom it
-      holds it.x in Constants (SCS, x);
+  :Def1:
+  for x being Vertex of IIG st x in dom it
+  holds it.x in Constants (SCS, x);
   existence
-    proof
-      set SW = SortsWithConstants IIG;
-      defpred P[set, set] means
-        ex v being Vertex of IIG st v = $1 & $2 in Constants (SCS, v);
-A1:    now
-        let i be set;
-        assume
-A2:       i in SW;
-        then reconsider x = i as Vertex of IIG;
-             SW = {v where v is SortSymbol of IIG : v is with_const_op }
-          by MSAFREE2:def 1;
-        then consider v being Vertex of IIG such that
-A3:       v = x & v is with_const_op by A2;
-        consider o be OperSymbol of IIG such that
-A4:       (the Arity of IIG).o = {} & (the ResultSort of IIG).o = v by A3,
-MSUALG_2:def 2;
-       consider A being non empty set such that
-A5:     A =(the Sorts of SCS).v &
-       Constants (SCS, v) = { a where a is Element of A :
-       ex o be OperSymbol of IIG st (the Arity of IIG).o = {} &
-       (the ResultSort of IIG).o = v & a in rng Den(o,SCS)} by MSUALG_2:def 4;
-        consider y being Element of rng Den(o,SCS);
-             Den (o, SCS) is non empty by MSUALG_1:6;
-        then A6: rng Den (o, SCS) <> {} by RELAT_1:64;
-        then A7: y in rng Den(o, SCS);
-A8:     dom the ResultSort of IIG = the OperSymbols of IIG by FUNCT_2:def 1;
-             Result (o, SCS)=((the Sorts of SCS) * the ResultSort of IIG).o
-          by MSUALG_1:def 10
-          .= (the Sorts of SCS).((the ResultSort of IIG).o) by A8,FUNCT_1:23;
-        then reconsider y' = y as Element of (the Sorts of SCS).v by A4,A7;
-A9:     y' in Constants (SCS, x) by A3,A4,A5,A6;
-        reconsider y as set;
-        take y;
-        thus P[i, y] by A9;
-      end;
-      consider f being ManySortedSet of SW such that
-A10:      for i being set st i in SW
-          holds P[i,f.i] from PBOOLE:sch 3 (A1);
-      take f;
-      let x be Vertex of IIG;
-      assume x in dom f;
-      then x in SW by PBOOLE:def 3;
-      then P[x, f.x] by A10;
-      hence f.x in Constants (SCS, x);
+  proof
+    set SW = SortsWithConstants IIG;
+    defpred P[set, set] means
+    ex v being Vertex of IIG st v = $1 & $2 in Constants (SCS, v);
+A1: now
+      let i be set;
+      assume
+A2:   i in SW;
+      then reconsider x = i as Vertex of IIG;
+      SW = {v where v is SortSymbol of IIG : v is with_const_op }
+      by MSAFREE2:def 1;
+      then consider v being Vertex of IIG such that
+A3:   v = x & v is with_const_op by A2;
+      consider o be OperSymbol of IIG such that
+A4:   (the Arity of IIG).o = {} & (the ResultSort of IIG).o = v by A3,
+      MSUALG_2:def 2;
+      consider A being non empty set such that
+A5:   A =(the Sorts of SCS).v &
+      Constants (SCS, v) = { a where a is Element of A :
+      ex o be OperSymbol of IIG st (the Arity of IIG).o = {} &
+      (the ResultSort of IIG).o = v & a in rng Den(o,SCS)} by MSUALG_2:def 4;
+      consider y being Element of rng Den(o,SCS);
+A6:   dom the ResultSort of IIG = the OperSymbols of IIG by FUNCT_2:def 1;
+      Result (o, SCS)=((the Sorts of SCS) * the ResultSort of IIG).o
+      by MSUALG_1:def 10
+        .= (the Sorts of SCS).((the ResultSort of IIG).o) by A6,FUNCT_1:23;
+      then reconsider y' = y as Element of (the Sorts of SCS).v by A4;
+A7:   y' in Constants (SCS, x) by A3,A4,A5;
+      reconsider y as set;
+      take y;
+      thus P[i, y] by A7;
     end;
+    consider f being ManySortedSet of SW such that
+A8: for i being set st i in SW holds P[i,f.i] from PBOOLE:sch 3 (A1);
+    take f;
+    let x be Vertex of IIG;
+    assume x in dom f;
+    then x in SW by PBOOLE:def 3;
+    then P[x, f.x] by A8;
+    hence f.x in Constants (SCS, x);
+  end;
   correctness
-    proof
-      let it1, it2 be ManySortedSet of SortsWithConstants IIG;
+  proof
+    let it1, it2 be ManySortedSet of SortsWithConstants IIG;
+    assume
+A9: for x being Vertex of IIG st x in dom it1
+    holds it1.x in Constants (SCS, x);
+    assume
+A10: for x being Vertex of IIG st x in dom it2
+    holds it2.x in Constants (SCS, x);
+    now
+      let i be set;
       assume
-A11:     for x being Vertex of IIG st x in dom it1
-          holds it1.x in Constants (SCS, x);
-      assume
-A12:     for x being Vertex of IIG st x in dom it2
-          holds it2.x in Constants (SCS, x);
-           now
-        let i be set;
-        assume
-A13:        i in SortsWithConstants IIG;
-        then reconsider v = i as Vertex of IIG;
-             dom it1 = SortsWithConstants IIG
-          & dom it2 = SortsWithConstants IIG by PBOOLE:def 3;
-        then A14:       it1.v in Constants (SCS, v)
-          & it2.v in Constants (SCS, v) by A11,A12,A13;
-       consider A being non empty set such that
-A15:     A =(the Sorts of SCS).v &
-       Constants (SCS, v) = { a where a is Element of A :
-       ex o be OperSymbol of IIG st (the Arity of IIG).o = {} &
-       (the ResultSort of IIG).o = v & a in rng Den(o,SCS)} by MSUALG_2:def 4;
-        consider a1 being Element of (the Sorts of SCS).v such that
-A16:       it1.v = a1 and
-A17:       ex o being OperSymbol of IIG st (the Arity of IIG).o = {}
-            & (the ResultSort of IIG).o = v & a1 in rng Den(o,SCS) by A14,A15;
-        consider a2 being Element of (the Sorts of SCS).v such that
-A18:       it2.v = a2 and
-A19:       ex o being OperSymbol of IIG st (the Arity of IIG).o = {}
-            & (the ResultSort of IIG).o = v & a2 in rng Den(o,SCS) by A14,A15;
-        consider o1 be OperSymbol of IIG such that
-A20:       (the Arity of IIG).o1 = {} and
-A21:       (the ResultSort of IIG).o1 = v and
-A22:       a1 in rng Den(o1,SCS) by A17;
-        consider o2 being OperSymbol of IIG such that
-               (the Arity of IIG).o2 = {} and
-A23:       (the ResultSort of IIG).o2 = v and
-A24:       a2 in rng Den(o2,SCS) by A19;
-        A25: the_result_sort_of o1 = v & the_result_sort_of o2 = v
-          by A21,A23,MSUALG_1:def 7;
-        then A26:        o1 = o2 by MSAFREE2:def 6;
-
-      A27: dom the Arity of IIG = the OperSymbols of IIG by FUNCT_2:def 1;
-A28:      {} = <*>the carrier of IIG;
-A29:      dom Den (o1, SCS) = Args (o1, SCS) by FUNCT_2:def 1
-          .= ((the Sorts of SCS)# * the Arity of IIG).o1
-            by MSUALG_1:def 9
-          .= (the Sorts of SCS)#.((the Arity of IIG).o1) by A27,FUNCT_1:23
-          .= {{}} by A20,A28,PRE_CIRC:5;
-        consider x1 being set such that
-A30:       x1 in dom Den(o1, SCS) and
-A31:       a1 = Den(o1,SCS).x1 by A22,FUNCT_1:def 5;
-        consider x2 being set such that
-A32:      x2 in dom Den(o2, SCS) and
-A33:      a2 = Den(o2,SCS).x2 by A24,FUNCT_1:def 5;
-             x1 = {} & x2 = {} by A26,A29,A30,A32,TARSKI:def 1;
-        hence it1.i = it2.i by A16,A18,A25,A31,A33,MSAFREE2:def 6;
-      end;
-      hence it1 = it2 by PBOOLE:3;
+A11:  i in SortsWithConstants IIG;
+      then reconsider v = i as Vertex of IIG;
+      dom it1 = SortsWithConstants IIG
+      & dom it2 = SortsWithConstants IIG by PBOOLE:def 3;
+      then
+A12:  it1.v in Constants (SCS, v) & it2.v in Constants (SCS, v) by A9,A10,A11;
+      consider A being non empty set such that
+A13:  A =(the Sorts of SCS).v &
+      Constants (SCS, v) = { a where a is Element of A :
+      ex o be OperSymbol of IIG st (the Arity of IIG).o = {} &
+      (the ResultSort of IIG).o = v & a in rng Den(o,SCS)} by MSUALG_2:def 4;
+      consider a1 being Element of (the Sorts of SCS).v such that
+A14:  it1.v = a1 and
+A15:  ex o being OperSymbol of IIG st (the Arity of IIG).o = {}
+      & (the ResultSort of IIG).o = v & a1 in rng Den(o,SCS) by A12,A13;
+      consider a2 being Element of (the Sorts of SCS).v such that
+A16:  it2.v = a2 and
+A17:  ex o being OperSymbol of IIG st (the Arity of IIG).o = {}
+      & (the ResultSort of IIG).o = v & a2 in rng Den(o,SCS) by A12,A13;
+      consider o1 be OperSymbol of IIG such that
+A18:  (the Arity of IIG).o1 = {} and
+A19:  (the ResultSort of IIG).o1 = v and
+A20:  a1 in rng Den(o1,SCS) by A15;
+      consider o2 being OperSymbol of IIG such that
+      (the Arity of IIG).o2 = {} and
+A21:  (the ResultSort of IIG).o2 = v and
+A22:  a2 in rng Den(o2,SCS) by A17;
+A23:  the_result_sort_of o1 = v & the_result_sort_of o2 = v
+      by A19,A21,MSUALG_1:def 7;
+      then
+A24:  o1 = o2 by MSAFREE2:def 6;
+A25:  dom the Arity of IIG = the OperSymbols of IIG by FUNCT_2:def 1;
+A26:  {} = <*>the carrier of IIG;
+A27:  dom Den (o1, SCS) = Args (o1, SCS) by FUNCT_2:def 1
+        .= ((the Sorts of SCS)# * the Arity of IIG).o1 by MSUALG_1:def 9
+        .= (the Sorts of SCS)#.((the Arity of IIG).o1) by A25,FUNCT_1:23
+        .= {{}} by A18,A26,PRE_CIRC:5;
+      consider x1 being set such that
+A28:  x1 in dom Den(o1, SCS) and
+A29:  a1 = Den(o1,SCS).x1 by A20,FUNCT_1:def 5;
+      consider x2 being set such that
+A30:  x2 in dom Den(o2, SCS) and
+A31:  a2 = Den(o2,SCS).x2 by A22,FUNCT_1:def 5;
+      x1 = {} & x2 = {} by A24,A27,A28,A30,TARSKI:def 1;
+      hence it1.i = it2.i by A14,A16,A23,A29,A31,MSAFREE2:def 6;
     end;
+    hence it1 = it2 by PBOOLE:3;
+  end;
 end;
 
 theorem
-       for IIG
-  for SCS being non-empty Circuit of IIG,
-    v being Vertex of IIG,
-    e being Element of (the Sorts of SCS).v
-      st v in SortsWithConstants IIG & e in Constants (SCS, v)
-    holds (Set-Constants SCS).v = e
-    proof
-      let IIG;
-      let SCS be non-empty Circuit of IIG,
-        v be Vertex of IIG,
-        e be Element of (the Sorts of SCS).v; assume
-A1:        v in SortsWithConstants IIG & e in Constants (SCS, v);
-        then v in dom Set-Constants SCS by PBOOLE:def 3;
-      then A2:      (Set-Constants SCS).v in Constants (SCS, v) by Def1;
-       consider A being non empty set such that
-A3:     A =(the Sorts of SCS).v &
-       Constants (SCS, v) = { a where a is Element of A :
-       ex o be OperSymbol of IIG st (the Arity of IIG).o = {} &
-       (the ResultSort of IIG).o = v & a in rng Den(o,SCS)} by MSUALG_2:def 4;
-      consider a being Element of (the Sorts of SCS).v such that
-A4:      a = e & ex o being OperSymbol of IIG st (the Arity of IIG).o = {}
-          & (the ResultSort of IIG).o = v
-          & a in rng Den(o,SCS) by A1,A3;
-      consider o being OperSymbol of IIG such that
-A5:      (the Arity of IIG).o = {}
-        & (the ResultSort of IIG).o = v & e in rng Den(o,SCS) by A4;
-      consider a being Element of (the Sorts of SCS).v such that
-A6:      a = (Set-Constants SCS).v
-        & ex o being OperSymbol of IIG st (the Arity of IIG).o = {}
-        & (the ResultSort of IIG).o = v & a in rng Den(o,SCS) by A2,A3;
-      consider o1 being OperSymbol of IIG such that
-A7:      (the Arity of IIG).o1 = {}
-        & (the ResultSort of IIG).o1 = v
-        & (Set-Constants SCS).v in rng Den(o1,SCS) by A6;
-      A8: the_result_sort_of o = (the ResultSort of IIG).o
-        & the_result_sort_of o1 = (the ResultSort of IIG).o1
-          by MSUALG_1:def 7;
-      then A9:      o = o1 by A5,A7,MSAFREE2:def 6;
-    A10: dom the Arity of IIG = the OperSymbols of IIG by FUNCT_2:def 1;
-A11:    {} = <*>the carrier of IIG;
-A12:    dom Den (o, SCS) = Args (o, SCS) by FUNCT_2:def 1
-        .= ((the Sorts of SCS)# * the Arity of IIG).o
-          by MSUALG_1:def 9
-        .= (the Sorts of SCS)#.((the Arity of IIG).o) by A10,FUNCT_1:23
-        .= {{}} by A5,A11,PRE_CIRC:5;
-      consider d being set such that
-A13:      d in dom Den(o, SCS) & e = Den(o, SCS).d by A5,FUNCT_1:def 5;
-      consider d1 being set such that
-A14:      d1 in dom Den(o1, SCS) & (Set-Constants SCS).v = Den(o1, SCS).d1
-          by A7,FUNCT_1:def 5;
-           d = {} & d1 = {} by A9,A12,A13,A14,TARSKI:def 1;
-      hence (Set-Constants SCS).v = e by A5,A7,A8,A13,A14,MSAFREE2:def 6;
-    end;
+  for IIG for SCS being non-empty Circuit of IIG, v being Vertex of IIG,
+  e being Element of (the Sorts of SCS).v
+  st v in SortsWithConstants IIG & e in Constants (SCS, v)
+  holds (Set-Constants SCS).v = e
+proof
+  let IIG;
+  let SCS be non-empty Circuit of IIG, v be Vertex of IIG,
+  e be Element of (the Sorts of SCS).v;
+  assume
+A1: v in SortsWithConstants IIG & e in Constants (SCS, v);
+  then v in dom Set-Constants SCS by PBOOLE:def 3;
+  then
+A2: (Set-Constants SCS).v in Constants (SCS, v) by Def1;
+  consider A being non empty set such that
+A3: A =(the Sorts of SCS).v &
+  Constants (SCS, v) = { a where a is Element of A :
+  ex o be OperSymbol of IIG st (the Arity of IIG).o = {} &
+  (the ResultSort of IIG).o = v & a in rng Den(o,SCS)} by MSUALG_2:def 4;
+  consider a being Element of (the Sorts of SCS).v such that
+A4: a = e & ex o being OperSymbol of IIG st (the Arity of IIG).o = {}
+  & (the ResultSort of IIG).o = v & a in rng Den(o,SCS) by A1,A3;
+  consider o being OperSymbol of IIG such that
+A5: (the Arity of IIG).o = {}
+  & (the ResultSort of IIG).o = v & e in rng Den(o,SCS) by A4;
+  consider a being Element of (the Sorts of SCS).v such that
+A6: a = (Set-Constants SCS).v
+  & ex o being OperSymbol of IIG st (the Arity of IIG).o = {}
+  & (the ResultSort of IIG).o = v & a in rng Den(o,SCS) by A2,A3;
+  consider o1 being OperSymbol of IIG such that
+A7: (the Arity of IIG).o1 = {} & (the ResultSort of IIG).o1 = v
+  & (Set-Constants SCS).v in rng Den(o1,SCS) by A6;
+A8: the_result_sort_of o = (the ResultSort of IIG).o
+  & the_result_sort_of o1 = (the ResultSort of IIG).o1 by MSUALG_1:def 7;
+  then
+A9: o = o1 by A5,A7,MSAFREE2:def 6;
+A10: dom the Arity of IIG = the OperSymbols of IIG by FUNCT_2:def 1;
+A11: {} = <*>the carrier of IIG;
+A12: dom Den (o, SCS) = Args (o, SCS) by FUNCT_2:def 1
+    .= ((the Sorts of SCS)# * the Arity of IIG).o by MSUALG_1:def 9
+    .= (the Sorts of SCS)#.((the Arity of IIG).o) by A10,FUNCT_1:23
+    .= {{}} by A5,A11,PRE_CIRC:5;
+  consider d being set such that
+A13: d in dom Den(o, SCS) & e = Den(o, SCS).d by A5,FUNCT_1:def 5;
+  consider d1 being set such that
+A14: d1 in dom Den(o1, SCS) & (Set-Constants SCS).v = Den(o1, SCS).d1
+  by A7,FUNCT_1:def 5;
+  d = {} & d1 = {} by A9,A12,A13,A14,TARSKI:def 1;
+  hence (Set-Constants SCS).v = e by A5,A7,A8,A13,A14,MSAFREE2:def 6;
+end;
 
 definition
   let IIG;
   let CS be Circuit of IIG;
   mode InputFuncs of CS is ManySortedFunction of
-    ((InputVertices IIG) --> NAT),
-    ((the Sorts of CS) | InputVertices IIG);
+    ((InputVertices IIG) --> NAT), ((the Sorts of CS) | InputVertices IIG);
 end;
 
 theorem Th2:
   for IIG
   for SCS being non-empty Circuit of IIG, InpFs being InputFuncs of SCS,
-      n being Element of NAT
-    st IIG is with_input_V
-    holds (commute InpFs).n is InputValues of SCS
-    proof
-      let IIG;
-      let SCS be non-empty Circuit of IIG, InpFs be InputFuncs of SCS,
-          n be Element of NAT;
-      assume
-A1:      IIG is with_input_V;
-      reconsider A = InputVertices IIG as Subset of IIG;
-      reconsider A as non empty Subset of IIG by A1,MSAFREE2:def 4;
-      reconsider SS = the Sorts of SCS as non-empty ManySortedSet of
-        the carrier of IIG;
-      reconsider SI = SS | A as ManySortedSet of A;
-      reconsider SI as non-empty ManySortedSet of A;
-      consider ivm being ManySortedSet of A such that
-A2:      ivm = (commute InpFs).n & ivm in SI by PRE_CIRC:10;
-           now
-        let v be Vertex of IIG;
-        assume
-A3:        v in InputVertices IIG;
-        then SI.v = (the Sorts of SCS).v by FUNCT_1:72;
-        hence ivm.v in (the Sorts of SCS).v by A2,A3,PBOOLE:def 4;
-      end;
-      hence (commute InpFs).n is InputValues of SCS by A2,MSAFREE2:def 5;
-    end;
+  n being Element of NAT st IIG is with_input_V
+  holds (commute InpFs).n is InputValues of SCS
+proof
+  let IIG;
+  let SCS be non-empty Circuit of IIG, InpFs be InputFuncs of SCS,
+  n be Element of NAT;
+  assume
+A1: IIG is with_input_V;
+  reconsider A = InputVertices IIG as Subset of IIG;
+  reconsider A as non empty Subset of IIG by A1,MSAFREE2:def 4;
+  reconsider SS = the Sorts of SCS as non-empty ManySortedSet of
+  the carrier of IIG;
+  reconsider SI = SS | A as ManySortedSet of A;
+  reconsider SI as non-empty ManySortedSet of A;
+  consider ivm being ManySortedSet of A such that
+A2: ivm = (commute InpFs).n & ivm in SI by PRE_CIRC:10;
+  now
+    let v be Vertex of IIG;
+    assume
+A3: v in InputVertices IIG;
+    then SI.v = (the Sorts of SCS).v by FUNCT_1:72;
+    hence ivm.v in (the Sorts of SCS).v by A2,A3,PBOOLE:def 4;
+  end;
+  hence (commute InpFs).n is InputValues of SCS by A2,MSAFREE2:def 5;
+end;
 
 definition
   let IIG such that
-A1:  IIG is with_input_V;
-  let SCS be non-empty Circuit of IIG,
-    InpFs be InputFuncs of SCS,
-    n be Element of NAT;
+A1: IIG is with_input_V;
+  let SCS be non-empty Circuit of IIG, InpFs be InputFuncs of SCS,
+  n be Element of NAT;
   func n-th_InputValues InpFs -> InputValues of SCS equals
-         (commute InpFs).n;
+
+  (commute InpFs).n;
   coherence by A1,Th2;
   correctness;
 end;
@@ -274,515 +263,473 @@ end;
 canceled;
 
 theorem
-       for IIG
-  for SCS being non-empty Circuit of IIG, s being State of SCS
-    holds dom s = the carrier of IIG
-    proof
-      let IIG;
-      let SCS be non-empty Circuit of IIG, s be State of SCS;
-      consider g being Function such that
-A1:      s = g & dom g = dom the Sorts of SCS
-        & for x being set st x in dom the Sorts of SCS
-            holds g.x in (the Sorts of SCS).x by CARD_3:def 5;
-      thus dom s = the carrier of IIG by A1,PBOOLE:def 3;
-    end;
+  for IIG for SCS being non-empty Circuit of IIG, s being State of SCS
+  holds dom s = the carrier of IIG
+proof
+  let IIG;
+  let SCS be non-empty Circuit of IIG, s be State of SCS;
+  consider g being Function such that
+A1: s = g & dom g = dom the Sorts of SCS
+  & for x being set st x in dom the Sorts of SCS
+  holds g.x in (the Sorts of SCS).x by CARD_3:def 5;
+  thus dom s = the carrier of IIG by A1,PBOOLE:def 3;
+end;
 
 theorem
-       for IIG
-  for SCS being non-empty Circuit of IIG, s being State of SCS,
-    v being Vertex of IIG
-    holds s.v in (the Sorts of SCS).v
-    proof
-      let IIG;
-      let SCS be non-empty Circuit of IIG, s be State of SCS,
-        v be Vertex of IIG;
-A1:    dom the Sorts of SCS = the carrier of IIG by PBOOLE:def 3;
-      consider g being Function such that
-A2:      s = g & dom g = dom the Sorts of SCS
-        & for x being set st x in dom the Sorts of SCS
-            holds g.x in (the Sorts of SCS).x by CARD_3:def 5;
-      thus s.v in (the Sorts of SCS).v by A1,A2;
-    end;
+  for IIG for SCS being non-empty Circuit of IIG, s being State of SCS,
+  v being Vertex of IIG holds s.v in (the Sorts of SCS).v
+proof
+  let IIG;
+  let SCS be non-empty Circuit of IIG, s be State of SCS, v be Vertex of IIG;
+A1: dom the Sorts of SCS = the carrier of IIG by PBOOLE:def 3;
+  consider g being Function such that
+A2: s = g & dom g = dom the Sorts of SCS
+  & for x being set st x in dom the Sorts of SCS
+  holds g.x in (the Sorts of SCS).x by CARD_3:def 5;
+  thus s.v in (the Sorts of SCS).v by A1,A2;
+end;
 
 definition
   let IIG;
-  let SCS be non-empty Circuit of IIG,
-    s be State of SCS,
-    o be OperSymbol of IIG;
+  let SCS be non-empty Circuit of IIG, s be State of SCS,
+  o be OperSymbol of IIG;
   func o depends_on_in s -> Element of Args (o, SCS) equals
-                s * (the_arity_of o);
+  s * (the_arity_of o);
   coherence
-    proof
-           Args(o,SCS) = product ((the Sorts of SCS)*(the_arity_of o))
-        by PRALG_2:10;
-      hence s * (the_arity_of o) is Element of Args (o, SCS) by PRE_CIRC:11;
-    end;
+  proof
+    Args(o,SCS) = product ((the Sorts of SCS)*(the_arity_of o)) by PRALG_2:10;
+    hence s * (the_arity_of o) is Element of Args (o, SCS) by PRE_CIRC:11;
+  end;
   correctness;
 end;
 
-reserve IIG for monotonic Circuit-like
-  (non void non empty ManySortedSign);
+reserve IIG for monotonic Circuit-like (non void non empty ManySortedSign);
 
 theorem Th6:
-  for IIG
-  for SCS being locally-finite non-empty MSAlgebra over IIG,
-    v, w being Vertex of IIG,
-    e1 being Element of (the Sorts of FreeEnv SCS).v,
-    q1 being DTree-yielding FinSequence
-      st v in InnerVertices IIG &
-         e1 = [action_at v,the carrier of IIG]-tree q1
-    holds
-      for k being Element of NAT st k in dom q1
-        & q1.k in (the Sorts of FreeEnv SCS).w
-        holds w = (the_arity_of action_at v)/.k
-    proof
-      let IIG;
-      let SCS be locally-finite non-empty MSAlgebra over IIG,
-        v, w be Vertex of IIG,
-        e1 be Element of (the Sorts of FreeEnv SCS).v,
-        q1 be DTree-yielding FinSequence;
-      assume that
-A1:      v in InnerVertices IIG and
-A2:      e1 = [action_at v,the carrier of IIG]-tree q1;
-
-      thus for k being Element of NAT st k in dom q1
-        & q1.k in (the Sorts of FreeEnv SCS).w
-        holds w = (the_arity_of action_at v)/.k
-        proof
-          let k be Element of NAT;
-          assume that
-A3:          k in dom q1 and
-A4:          q1.k in (the Sorts of FreeEnv SCS).w;
-          reconsider av = action_at v as OperSymbol of IIG;
-               e1 in (the Sorts of FreeEnv SCS).v;
-          then A5:          e1 in (the Sorts of FreeEnv SCS)
-              .(the_result_sort_of av) by A1,MSAFREE2:def 7;
-          then len q1 = len (the_arity_of av) by A2,MSAFREE2:13;
-          then A6:          k in dom the_arity_of av by A3,FINSEQ_3:31;
-          then A7:          q1.k in (the Sorts of FreeEnv SCS)
-              .((the_arity_of av).k) by A2,A5,MSAFREE2:14;
-A8:        FreeEnv SCS = MSAlgebra (# FreeSort the Sorts of SCS,
-            FreeOper the Sorts of SCS #) by MSAFREE:def 16;
-then A9:     q1.k in (FreeSort the Sorts of SCS).((the_arity_of av)/.k) by A6
-,A7,PARTFUN1:def 8;
-               now
-            assume (the_arity_of av)/.k <> w;
-           then ((FreeSort the Sorts of SCS).((the_arity_of av)/.k))
-                misses ((FreeSort the Sorts of SCS).w) by MSAFREE:13;
-           then ((FreeSort the Sorts of SCS).((the_arity_of av)/.k)) /\
-                ((FreeSort the Sorts of SCS).w) = {} by XBOOLE_0:def 7;
-            hence contradiction by A4,A8,A9,XBOOLE_0:def 3;
-          end;
-          hence w = (the_arity_of action_at v)/.k;
-        end;
-    end;
-
-registration
+  for IIG for SCS being locally-finite non-empty MSAlgebra over IIG,
+  v, w being Vertex of IIG, e1 being Element of (the Sorts of FreeEnv SCS).v,
+  q1 being DTree-yielding FinSequence st v in InnerVertices IIG &
+  e1 = [action_at v,the carrier of IIG]-tree q1 holds
+  for k being Element of NAT st k in dom q1
+  & q1.k in (the Sorts of FreeEnv SCS).w
+  holds w = (the_arity_of action_at v)/.k
+proof
   let IIG;
   let SCS be locally-finite non-empty MSAlgebra over IIG,
-    v be Vertex of IIG;
-  cluster -> finite non empty
-   Function-like Relation-like Element of (the Sorts of FreeEnv SCS).v;
- coherence
+  v, w be Vertex of IIG, e1 be Element of (the Sorts of FreeEnv SCS).v,
+  q1 be DTree-yielding FinSequence;
+  assume that
+A1: v in InnerVertices IIG and
+A2: e1 = [action_at v,the carrier of IIG]-tree q1;
+  thus for k being Element of NAT st k in dom q1
+  & q1.k in (the Sorts of FreeEnv SCS).w
+  holds w = (the_arity_of action_at v)/.k
   proof
-   let a be Element of (the Sorts of FreeEnv SCS).v;
-    reconsider b = a
-     as Element of (the Sorts of FreeMSA the Sorts of SCS).v;
-         b is finite non empty Function-like Relation-like;
-   hence thesis;
+    let k be Element of NAT;
+    assume that
+A3: k in dom q1 and
+A4: q1.k in (the Sorts of FreeEnv SCS).w;
+    reconsider av = action_at v as OperSymbol of IIG;
+    e1 in (the Sorts of FreeEnv SCS).v;
+    then
+A5: e1 in (the Sorts of FreeEnv SCS)
+    .(the_result_sort_of av) by A1,MSAFREE2:def 7;
+    then len q1 = len (the_arity_of av) by A2,MSAFREE2:13;
+    then
+A6: k in dom the_arity_of av by A3,FINSEQ_3:31;
+    then
+A7: q1.k in (the Sorts of FreeEnv SCS)
+    .((the_arity_of av).k) by A2,A5,MSAFREE2:14;
+A8: FreeEnv SCS = MSAlgebra (# FreeSort the Sorts of SCS,
+      FreeOper the Sorts of SCS #) by MSAFREE:def 16;
+    then
+A9: q1.k in (FreeSort the Sorts of SCS).((the_arity_of av)/.k) by A6
+    ,A7,PARTFUN1:def 8;
+    now
+      assume (the_arity_of av)/.k <> w;
+      then ((FreeSort the Sorts of SCS).((the_arity_of av)/.k))
+      misses ((FreeSort the Sorts of SCS).w) by MSAFREE:13;
+      then ((FreeSort the Sorts of SCS).((the_arity_of av)/.k)) /\
+      ((FreeSort the Sorts of SCS).w) = {} by XBOOLE_0:def 7;
+      hence contradiction by A4,A8,A9,XBOOLE_0:def 3;
+    end;
+    hence w = (the_arity_of action_at v)/.k;
   end;
 end;
 
 registration
   let IIG;
-  let SCS be locally-finite non-empty MSAlgebra over IIG,
-    v be Vertex of IIG;
-  cluster -> DecoratedTree-like Element of (the Sorts of FreeEnv SCS).v;
- coherence
+  let SCS be locally-finite non-empty MSAlgebra over IIG, v be Vertex of IIG;
+  cluster -> finite non empty
+    Function-like Relation-like Element of (the Sorts of FreeEnv SCS).v;
+  coherence
   proof
-   let a be Element of (the Sorts of FreeEnv SCS).v;
-    reconsider b = a
-     as Element of (the Sorts of FreeMSA the Sorts of SCS).v;
-         b is DecoratedTree-like;
-   hence thesis;
+    let a be Element of (the Sorts of FreeEnv SCS).v;
+    reconsider b = a as Element of (the Sorts of FreeMSA the Sorts of SCS).v;
+    b is finite non empty Function-like Relation-like;
+    hence thesis;
+  end;
+end;
+
+registration
+  let IIG;
+  let SCS be locally-finite non-empty MSAlgebra over IIG, v be Vertex of IIG;
+  cluster -> DecoratedTree-like Element of (the Sorts of FreeEnv SCS).v;
+  coherence
+  proof
+    let a be Element of (the Sorts of FreeEnv SCS).v;
+    reconsider b = a as Element of (the Sorts of FreeMSA the Sorts of SCS).v;
+    b is DecoratedTree-like;
+    hence thesis;
   end;
 end;
 
 theorem Th7:
-  for IIG
-  for SCS being locally-finite non-empty MSAlgebra over IIG,
-    v, w being Vertex of IIG,
-    e1 being Element of (the Sorts of FreeEnv SCS).v,
-    e2 being Element of (the Sorts of FreeEnv SCS).w,
-    q1 being DTree-yielding FinSequence, k1 being Element of NAT
-      st v in InnerVertices IIG \ SortsWithConstants IIG
-        & e1 = [action_at v,the carrier of IIG]-tree q1
-        & k1+1 in dom q1
-        & q1.(k1+1) in (the Sorts of FreeEnv SCS).w
-      holds e1 with-replacement (<*k1*>,e2) in (the Sorts of FreeEnv SCS).v
-    proof
-      let IIG;
-      let SCS be locally-finite non-empty MSAlgebra over IIG,
-         v, w be Vertex of IIG,
-        e1 be Element of (the Sorts of FreeEnv SCS).v,
-        e2 be Element of (the Sorts of FreeEnv SCS).w,
-        q1 be DTree-yielding FinSequence, k1 be Element of NAT;
-      set k = k1 + 1, eke = e1 with-replacement (<*k1*>,e2);
-      assume that
-A1:      v in InnerVertices IIG \ SortsWithConstants IIG and
-A2:      e1 = [action_at v,the carrier of IIG]-tree q1 and
-A3:     k in dom q1 and
-A4:     q1.k in (the Sorts of FreeEnv SCS).w;
-A5:   FreeEnv SCS = MSAlgebra (# FreeSort the Sorts of SCS,
-        FreeOper the Sorts of SCS #) by MSAFREE:def 16;
-      then A6:     (the Sorts of FreeEnv SCS).v
-          = FreeSort(the Sorts of SCS, v) by MSAFREE:def 13;
-      then A7:   e1 in TS(DTConMSA(the Sorts of SCS)) by TARSKI:def 3;
-      reconsider av = action_at v as OperSymbol of IIG;
-A8:    NonTerminals(DTConMSA(the Sorts of SCS))
-      = [:the OperSymbols of IIG,{the carrier of IIG}:] by MSAFREE:6;
-           the carrier of IIG in {the carrier of IIG} by TARSKI:def 1;
-      then reconsider nt = [av,the carrier of IIG]
-         as NonTerminal of DTConMSA(the Sorts of SCS) by A8,ZFMISC_1:106;
-           e1.{} = nt by A2,TREES_4:def 4;
-      then consider p' being FinSequence of TS(DTConMSA(the Sorts of SCS))
-        such that
-A9:     e1 = nt-tree p' and
-          nt ==> roots p' by A7,DTCONSTR:10;
-      reconsider q1' = q1 as FinSequence of
-        TS(DTConMSA(the Sorts of SCS)) by A2,A9,TREES_4:15;
-      reconsider e1' = e1 as DecoratedTree;
-      consider p' being DTree-yielding FinSequence such that
-A10:     p' = q1 and
-A11:     dom e1' = tree(doms p') by A2,TREES_4:def 4;
-      reconsider m = <*k1*> as Element of dom e1 by A3,A10,A11,PRE_CIRC:17;
-      reconsider m' = m as FinSequence of NAT;
-      consider qq being DTree-yielding FinSequence such that
-A12:     e1 with-replacement (m',e2) = [av,the carrier of IIG]-tree qq and
-A13:     len qq = len q1 and
-A14:     qq.(k1+1) = e2 and
-A15:     for i being Element of NAT st i in dom q1
-          holds (i <> (k1+1) implies qq.i = q1.i) by A2,PRE_CIRC:19;
-A16:   dom qq = dom q1 by A13,FINSEQ_3:31;
-      reconsider O =
-       [:the OperSymbols of IIG,{the carrier of IIG}:]
-        \/ Union(coprod the Sorts of SCS) as non empty set;
-      reconsider R = REL(the Sorts of SCS) as Relation of O, O*;
-A17:   DTConMSA(the Sorts of SCS) = DTConstrStr (# O, R #) by MSAFREE:def 10;
-      then reconsider TSDT = TS(DTConMSA(the Sorts of SCS))
-        as Subset of FinTrees(O);
-           now
-        let x be set;
-        assume x in TSDT;
-        then x is Element of FinTrees(O);
-        hence x is DecoratedTree of O;
-      end;
-      then reconsider TSDT as DTree-set of O by TREES_3:def 6;
-
-           (the Sorts of FreeEnv SCS).w
-        = FreeSort(the Sorts of SCS, w) by A5,MSAFREE:def 13;
-      then A18:     e2 in FreeSort(the Sorts of SCS, w);
-      then e2 in {a' where a' is Element of TS(DTConMSA(the Sorts of SCS)):
-        (ex x being set st x in (the Sorts of SCS).w
-          & a' = root-tree[x,w]) or
-        ex o being OperSymbol of IIG st [o,the carrier of IIG] = a'.{}
-          & the_result_sort_of o = w} by MSAFREE:def 12;
-      then consider aa being Element of TS(DTConMSA(the Sorts of SCS))
-        such that
-A19:     aa = e2 and
-A20:     (ex x being set st x in (the Sorts of SCS).w
-          & aa = root-tree[x,w]) or
-        ex o being OperSymbol of IIG st [o,the carrier of IIG] = aa.{}
-          & the_result_sort_of o = w;
-           rng qq c= TS(DTConMSA(the Sorts of SCS))
-        proof
-          let y be set;
-          assume y in rng qq;
-          then consider x being set such that
-A21:         x in dom qq and
-A22:         y = qq.x by FUNCT_1:def 5;
-          reconsider x as Element of NAT by A21;
-
-          per cases;
-          suppose x = k1+1;
-          hence y in TS(DTConMSA(the Sorts of SCS)) by A14,A19,A22;
-
-          end;
-          suppose x <> k1+1;
-          then qq.x = q1'.x by A15,A16,A21;
-          hence y in TS(DTConMSA(the Sorts of SCS)) by A16,A21,A22,FINSEQ_2:13
-;
-        end;
-        end;
-      then reconsider q' = qq as FinSequence of TSDT by FINSEQ_1:def 4;
-      reconsider rq = roots q' as FinSequence of O;
-      reconsider rq as Element of O* by FINSEQ_1:def 11;
-
-A23:   dom rq = dom qq by TREES_3:def 18;
-      then A24:     len rq = len qq by FINSEQ_3:31;
-
-A25:   v in InnerVertices IIG by A1,XBOOLE_0:def 4;
-      then A26: (the Sorts of FreeEnv SCS).(the_result_sort_of av)
-        = (the Sorts of FreeEnv SCS).v by MSAFREE2:def 7;
-then A27:     len q1 = len (the_arity_of av) by A2,MSAFREE2:13;
-then A28:     dom rq = dom (the_arity_of av) by A13,A23,FINSEQ_3:31;
-           for x being set st x in dom rq
-        holds (rq.x in [:the OperSymbols of IIG,{the carrier of IIG}:] implies
-          for o1 being OperSymbol of IIG st [o1,the carrier of IIG] = rq.x
-            holds the_result_sort_of o1 = (the_arity_of av).x)
-          & (rq.x in Union(coprod the Sorts of SCS) implies
-            rq.x in coprod((the_arity_of av).x, the Sorts of SCS))
-        proof
-          let x be set;
-          assume
-A29:         x in dom rq;
-          then reconsider x' = x as Element of NAT;
-A30:       (the_arity_of av)/.x' = (the_arity_of av).x'
-            by A28,A29,PARTFUN1:def 8;
-          consider T being DecoratedTree such that
-A31:         T = qq.x' and
-A32:         rq.x' = T.{} by A23,A29,TREES_3:def 18;
-A33:       dom roots q1 = dom q1 by TREES_3:def 18;
-          consider T' being DecoratedTree such that
-A34:         T' = q1.x' and
-A35:         (roots q1).x' = T'.{} by A16,A23,A29,TREES_3:def 18;
-          reconsider q1' as FinSequence of TSDT;
-          reconsider b = roots q1' as
-           Element of
-           ([:the OperSymbols of IIG,{the carrier of IIG}:] \/
-           Union(coprod the Sorts of SCS))* by FINSEQ_1:def 11;
-A36:       dom q1 = dom the_arity_of av by A27,FINSEQ_3:31;
-               for n being Nat st n in dom q1
-            holds q1.n in FreeSort(the Sorts of SCS, (the_arity_of av)/.n)
-            proof
-              let n be Nat;
-              assume
-A37:             n in dom q1;
-then A38:             q1.n in (the Sorts of FreeEnv SCS)
-                  .((the_arity_of av).n) by A2,A26,A36,MSAFREE2:14;
-               (the_arity_of av).n = (the_arity_of av)/.n
-                by A36,A37,PARTFUN1:def 8;
-              hence q1.n in FreeSort(the Sorts of SCS, (the_arity_of av)/.n)
-                by A5,A38,MSAFREE:def 13;
-            end;
-          then A39: q1' in ((FreeSort the Sorts of SCS)# * (the Arity of IIG)).
-av
-              by A36,MSAFREE:9;
-          reconsider b as FinSequence;
-               the carrier of IIG in {the carrier of IIG} by TARSKI:def 1;
-          then [av,the carrier of IIG] in
-           [:the OperSymbols of IIG,{the carrier of IIG}:] by ZFMISC_1:106;
-          then reconsider av' = [av,the carrier of IIG]
-           as Symbol of DTConMSA(the Sorts of SCS) by A17,XBOOLE_0:def 2;
-               Sym(av, the Sorts of SCS) = [av,the carrier of IIG]
-                                               by MSAFREE:def 11;
-          then av' ==> b by A39,MSAFREE:10;
-          then A40:         [av',b] in R by A17,LANG1:def 1;
-
-A41:       (the_arity_of av)/.k = w by A2,A3,A4,A25,Th6;
-          thus rq.x in [:the OperSymbols of IIG,{the carrier of IIG}:] implies
-            for o1 being OperSymbol of IIG st [o1,the carrier of IIG] = rq.x
-              holds the_result_sort_of o1 = (the_arity_of av).x
-            proof
-              assume
-A42:             rq.x in [:the OperSymbols of IIG,{the carrier of IIG}:];
-              let o1 be OperSymbol of IIG;
-                  assume
-A43:                 [o1,the carrier of IIG] = rq.x;
-
-                  per cases;
-                  suppose
-A44:                 x' = k1+1;
-
-                       now
-                    per cases by A20;
-                    case (ex xx being set st xx in (the Sorts of SCS).w
-                      & aa = root-tree[xx,w]);
-                    then consider xx being set such that
-                           xx in (the Sorts of SCS).w and
-A45:                   aa = root-tree[xx,w];
-
-                         [o1,the carrier of IIG] = [xx,w] by A14,A19,A31,A32
-,A43,A44,A45,TREES_4:3;
-                    then A46: the carrier of IIG = w by ZFMISC_1:33;
-                         for X be set holds not X in X;
-                     hence contradiction by A46;
-
-                    end;
-                    case ex o being OperSymbol of IIG st
-                        [o,the carrier of IIG] = aa.{}
-                      & the_result_sort_of o = w;
-                    then consider o being OperSymbol of IIG such that
-A47:                   [o,the carrier of IIG] = aa.{} and
-A48:                   the_result_sort_of o = w;
-                    thus the_result_sort_of o1 = (the_arity_of av).x
-                      by A14,A19,A30,A31,A32,A41,A43,A44,A47,A48,ZFMISC_1:33;
-                  end;
-                  end;
-                  hence thesis;
-
-                  end;
-                  suppose
-                    x' <> k1+1;
-                  then (roots q1).x' = [o1,the carrier of IIG]
-                         by A15,A16,A23,A29,A31,A32,A34,A35,A43;
-                  hence the_result_sort_of o1 = (the_arity_of av).x
-                    by A16,A23,A29,A33,A40,A42,A43,MSAFREE1:3;
-            end;
-            end;
-          thus rq.x in Union(coprod the Sorts of SCS) implies
-            rq.x in coprod((the_arity_of av).x, the Sorts of SCS)
-            proof
-              assume
-A49:             rq.x in Union(coprod the Sorts of SCS);
-              then rq.x in Terminals DTConMSA(the Sorts of SCS)
-by MSAFREE:6;
-              then consider s1 being SortSymbol of IIG,
-                x'' being set such that
-A50:             x'' in (the Sorts of SCS).s1 and
-A51:             rq.x = [x'',s1] by MSAFREE:7;
-
-              per cases;
-              suppose
-A52:             x' = k1+1;
-A53:             e2 in (FreeSort the Sorts of SCS).w by A18,MSAFREE:def 13;
-              reconsider rqx = rq.x' as Terminal of DTConMSA the Sorts of
-                SCS by A49,MSAFREE:6;
-                   aa = root-tree rqx by A14,A19,A31,A32,A52,DTCONSTR:9;
-              then aa in {a'' where a'' is Element of TS(DTConMSA(the Sorts
-                of SCS)): (ex x''' being set st x''' in (the Sorts of SCS).s1
-                & a'' = root-tree[x''',s1]) or ex o being OperSymbol of IIG
-                st [o,the carrier of IIG] = a''.{} &
-                   the_result_sort_of o = s1}
-                  by A50,A51;
-              then A54:             aa in FreeSort(the Sorts of SCS, s1) by
-MSAFREE:def 12;
-               now
-A55:             e2 in (FreeSort the Sorts of SCS).s1 by A19,A54,MSAFREE:def 13
-;
-                assume w <> s1;
-                then (FreeSort the Sorts of SCS).w misses
-                  (FreeSort the Sorts of SCS).s1 by MSAFREE:13;
-                then (FreeSort the Sorts of SCS).w /\
-                  (FreeSort the Sorts of SCS).s1 = {} by XBOOLE_0:def 7;
-                hence contradiction by A53,A55,XBOOLE_0:def 3;
-              end;
-           hence rq.x in coprod((the_arity_of av).x, the Sorts of SCS)
-                by A30,A41,A50,A51,A52,MSAFREE:def 2;
-              end;
-              suppose x' <> k1+1;
-              then rq.x' = (roots q1).x' by A15,A16,A23,A29,A31,A32,A34,A35;
-              hence rq.x in coprod((the_arity_of av).x, the Sorts of SCS)
-                by A16,A23,A29,A33,A40,A49,MSAFREE1:3;
-            end;
-            end;
-        end;
-      then [nt,roots qq] in REL(the Sorts of SCS) by A13,A24,A27,MSAFREE:5;
-      then nt ==> roots qq by A17,LANG1:def 1;
-      then reconsider q' as SubtreeSeq of nt by DTCONSTR:def 9;
-           eke = nt-tree q' by A12;
-      then reconsider eke' = eke as Element of TS(DTConMSA(the Sorts of SCS));
-      reconsider q'' = {} as FinSequence of NAT by FINSEQ_1:29;
-           q'' in dom e1 with-replacement (m',dom e2) by TREES_1:47;
-      then      not m' is_a_prefix_of q'' & eke.q'' = e1.q'' or
-        ex r being FinSequence of NAT st r in dom e2
-          & q'' = m'^r & eke.q'' = e2.r by TREES_2:def 12;
-      then A56:      eke.{} = [av,the carrier of IIG] by A2,FINSEQ_1:48
-,TREES_4:def 4;
-           now
-        take av;
-             the_result_sort_of av = v by A25,MSAFREE2:def 7;
-        hence ex o being OperSymbol of IIG st [o,the carrier of IIG] = eke.{}
-          & the_result_sort_of o = v by A56;
-      end;
-      then eke' in {a'' where a'' is Element of TS(DTConMSA(the Sorts
-        of SCS)): (ex x being set st x in (the Sorts of SCS).v
-          & a'' = root-tree[x,v]) or
-        ex o being OperSymbol of IIG st [o,the carrier of IIG] = a''.{}
-          & the_result_sort_of o = v};
-      then reconsider eke' as Element of (the Sorts of FreeEnv SCS).v
-                      by A6,MSAFREE:def 12;
-           eke' in (the Sorts of FreeEnv SCS).v;
-      hence eke in (the Sorts of FreeEnv SCS).v;
+  for IIG for SCS being locally-finite non-empty MSAlgebra over IIG,
+  v, w being Vertex of IIG, e1 being Element of (the Sorts of FreeEnv SCS).v,
+  e2 being Element of (the Sorts of FreeEnv SCS).w,
+  q1 being DTree-yielding FinSequence, k1 being Element of NAT
+  st v in InnerVertices IIG \ SortsWithConstants IIG
+  & e1 = [action_at v,the carrier of IIG]-tree q1 & k1+1 in dom q1
+  & q1.(k1+1) in (the Sorts of FreeEnv SCS).w
+  holds e1 with-replacement (<*k1*>,e2) in (the Sorts of FreeEnv SCS).v
+proof
+  let IIG;
+  let SCS be locally-finite non-empty MSAlgebra over IIG,
+  v, w be Vertex of IIG, e1 be Element of (the Sorts of FreeEnv SCS).v,
+  e2 be Element of (the Sorts of FreeEnv SCS).w,
+  q1 be DTree-yielding FinSequence, k1 be Element of NAT;
+  set k = k1 + 1, eke = e1 with-replacement (<*k1*>,e2);
+  assume that
+A1: v in InnerVertices IIG \ SortsWithConstants IIG and
+A2: e1 = [action_at v,the carrier of IIG]-tree q1 and
+A3: k in dom q1 and
+A4: q1.k in (the Sorts of FreeEnv SCS).w;
+A5: FreeEnv SCS = MSAlgebra (# FreeSort the Sorts of SCS,
+    FreeOper the Sorts of SCS #) by MSAFREE:def 16;
+  then
+A6: (the Sorts of FreeEnv SCS).v
+  = FreeSort(the Sorts of SCS, v) by MSAFREE:def 13;
+  then
+A7: e1 in TS(DTConMSA(the Sorts of SCS)) by TARSKI:def 3;
+  reconsider av = action_at v as OperSymbol of IIG;
+A8: NonTerminals(DTConMSA(the Sorts of SCS))
+  = [:the OperSymbols of IIG,{the carrier of IIG}:] by MSAFREE:6;
+  the carrier of IIG in {the carrier of IIG} by TARSKI:def 1;
+  then reconsider nt = [av,the carrier of IIG]
+  as NonTerminal of DTConMSA(the Sorts of SCS) by A8,ZFMISC_1:106;
+  e1.{} = nt by A2,TREES_4:def 4;
+  then consider p' being FinSequence of TS(DTConMSA(the Sorts of SCS))
+  such that
+A9: e1 = nt-tree p' and nt ==> roots p' by A7,DTCONSTR:10;
+  reconsider q1' = q1 as FinSequence of
+  TS(DTConMSA(the Sorts of SCS)) by A2,A9,TREES_4:15;
+  reconsider e1' = e1 as DecoratedTree;
+  consider p' being DTree-yielding FinSequence such that
+A10: p' = q1 and
+A11: dom e1' = tree(doms p') by A2,TREES_4:def 4;
+  reconsider m = <*k1*> as Element of dom e1 by A3,A10,A11,PRE_CIRC:17;
+  reconsider m' = m as FinSequence of NAT;
+  consider qq being DTree-yielding FinSequence such that
+A12: e1 with-replacement (m',e2) = [av,the carrier of IIG]-tree qq and
+A13: len qq = len q1 and
+A14: qq.(k1+1) = e2 and
+A15: for i being Element of NAT st i in dom q1
+  holds (i <> (k1+1) implies qq.i = q1.i) by A2,PRE_CIRC:19;
+A16: dom qq = dom q1 by A13,FINSEQ_3:31;
+  reconsider O = [:the OperSymbols of IIG,{the carrier of IIG}:]
+  \/ Union(coprod the Sorts of SCS) as non empty set;
+  reconsider R = REL(the Sorts of SCS) as Relation of O, O*;
+A17: DTConMSA(the Sorts of SCS) = DTConstrStr (# O, R #) by MSAFREE:def 10;
+  then reconsider TSDT = TS(DTConMSA(the Sorts of SCS))
+  as Subset of FinTrees(O);
+  now
+    let x be set;
+    assume x in TSDT;
+    then x is Element of FinTrees(O);
+    hence x is DecoratedTree of O;
+  end;
+  then reconsider TSDT as DTree-set of O by TREES_3:def 6;
+  (the Sorts of FreeEnv SCS).w
+  = FreeSort(the Sorts of SCS, w) by A5,MSAFREE:def 13;
+  then
+A18: e2 in FreeSort(the Sorts of SCS, w);
+  then e2 in {a' where a' is Element of TS(DTConMSA(the Sorts of SCS)):
+  (ex x being set st x in (the Sorts of SCS).w & a' = root-tree[x,w]) or
+  ex o being OperSymbol of IIG st [o,the carrier of IIG] = a'.{}
+  & the_result_sort_of o = w} by MSAFREE:def 12;
+  then consider aa being Element of TS(DTConMSA(the Sorts of SCS)) such that
+A19: aa = e2 and
+A20: (ex x being set st x in (the Sorts of SCS).w & aa = root-tree[x,w]) or
+  ex o being OperSymbol of IIG st [o,the carrier of IIG] = aa.{}
+  & the_result_sort_of o = w;
+  rng qq c= TS(DTConMSA(the Sorts of SCS))
+  proof
+    let y be set;
+    assume y in rng qq;
+    then consider x being set such that
+A21: x in dom qq and
+A22: y = qq.x by FUNCT_1:def 5;
+    reconsider x as Element of NAT by A21;
+    per cases;
+    suppose x = k1+1;
+      hence y in TS(DTConMSA(the Sorts of SCS)) by A14,A19,A22;
     end;
+    suppose x <> k1+1;
+      then qq.x = q1'.x by A15,A16,A21;
+      hence y in TS(DTConMSA(the Sorts of SCS)) by A16,A21,A22,FINSEQ_2:13;
+    end;
+  end;
+  then reconsider q' = qq as FinSequence of TSDT by FINSEQ_1:def 4;
+  reconsider rq = roots q' as FinSequence of O;
+  reconsider rq as Element of O* by FINSEQ_1:def 11;
+A23: dom rq = dom qq by TREES_3:def 18;
+  then
+A24: len rq = len qq by FINSEQ_3:31;
+A25: v in InnerVertices IIG by A1,XBOOLE_0:def 4;
+  then
+A26: (the Sorts of FreeEnv SCS).(the_result_sort_of av)
+  = (the Sorts of FreeEnv SCS).v by MSAFREE2:def 7;
+  then
+A27: len q1 = len (the_arity_of av) by A2,MSAFREE2:13;
+  then
+A28: dom rq = dom (the_arity_of av) by A13,A23,FINSEQ_3:31;
+  for x being set st x in dom rq
+  holds (rq.x in [:the OperSymbols of IIG,{the carrier of IIG}:] implies
+  for o1 being OperSymbol of IIG st [o1,the carrier of IIG] = rq.x
+  holds the_result_sort_of o1 = (the_arity_of av).x)
+  & (rq.x in Union(coprod the Sorts of SCS) implies
+  rq.x in coprod((the_arity_of av).x, the Sorts of SCS))
+  proof
+    let x be set;
+    assume
+A29: x in dom rq;
+    then reconsider x' = x as Element of NAT;
+A30: (the_arity_of av)/.x' = (the_arity_of av).x' by A28,A29,PARTFUN1:def 8;
+    consider T being DecoratedTree such that
+A31: T = qq.x' and
+A32: rq.x' = T.{} by A23,A29,TREES_3:def 18;
+A33: dom roots q1 = dom q1 by TREES_3:def 18;
+    consider T' being DecoratedTree such that
+A34: T' = q1.x' and
+A35: (roots q1).x' = T'.{} by A16,A23,A29,TREES_3:def 18;
+    reconsider q1' as FinSequence of TSDT;
+    reconsider b = roots q1' as Element of
+    ([:the OperSymbols of IIG,{the carrier of IIG}:] \/
+    Union(coprod the Sorts of SCS))* by FINSEQ_1:def 11;
+A36: dom q1 = dom the_arity_of av by A27,FINSEQ_3:31;
+    for n being Nat st n in dom q1
+    holds q1.n in FreeSort(the Sorts of SCS, (the_arity_of av)/.n)
+    proof
+      let n be Nat;
+      assume
+A37:  n in dom q1;
+      then
+A38:  q1.n in (the Sorts of FreeEnv SCS)
+      .((the_arity_of av).n) by A2,A26,A36,MSAFREE2:14;
+      (the_arity_of av).n = (the_arity_of av)/.n by A36,A37,PARTFUN1:def 8;
+      hence q1.n in FreeSort(the Sorts of SCS, (the_arity_of av)/.n)
+      by A5,A38,MSAFREE:def 13;
+    end;
+    then
+A39: q1' in ((FreeSort the Sorts of SCS)# * (the Arity of IIG)). av
+    by A36,MSAFREE:9;
+    reconsider b as FinSequence;
+    the carrier of IIG in {the carrier of IIG} by TARSKI:def 1;
+    then [av,the carrier of IIG] in
+    [:the OperSymbols of IIG,{the carrier of IIG}:] by ZFMISC_1:106;
+    then reconsider av' = [av,the carrier of IIG]
+    as Symbol of DTConMSA(the Sorts of SCS) by A17,XBOOLE_0:def 2;
+    Sym(av, the Sorts of SCS) = [av,the carrier of IIG] by MSAFREE:def 11;
+    then av' ==> b by A39,MSAFREE:10;
+    then
+A40: [av',b] in R by A17,LANG1:def 1;
+A41: (the_arity_of av)/.k = w by A2,A3,A4,A25,Th6;
+    thus rq.x in [:the OperSymbols of IIG,{the carrier of IIG}:] implies
+    for o1 being OperSymbol of IIG st [o1,the carrier of IIG] = rq.x
+    holds the_result_sort_of o1 = (the_arity_of av).x
+    proof
+      assume
+A42:  rq.x in [:the OperSymbols of IIG,{the carrier of IIG}:];
+      let o1 be OperSymbol of IIG;
+      assume
+A43:  [o1,the carrier of IIG] = rq.x;
+      per cases;
+      suppose
+A44:    x' = k1+1;
+        now
+          per cases by A20;
+          case (ex xx being set st xx in (the Sorts of SCS).w
+            & aa = root-tree[xx,w]);
+            then consider xx being set such that
+            xx in (the Sorts of SCS).w and
+A45:        aa = root-tree[xx,w];
+            [o1,the carrier of IIG] = [xx,w] by A14,A19,A31,A32
+            ,A43,A44,A45,TREES_4:3;
+            then
+A46:        the carrier of IIG = w by ZFMISC_1:33;
+            for X be set holds not X in X;
+            hence contradiction by A46;
+          end;
+          case ex o being OperSymbol of IIG st [o,the carrier of IIG] = aa.{}
+            & the_result_sort_of o = w;
+            then consider o being OperSymbol of IIG such that
+A47:        [o,the carrier of IIG] = aa.{} and
+A48:        the_result_sort_of o = w;
+            thus the_result_sort_of o1 = (the_arity_of av).x
+            by A14,A19,A30,A31,A32,A41,A43,A44,A47,A48,ZFMISC_1:33;
+          end;
+        end;
+        hence thesis;
+      end;
+      suppose x' <> k1+1;
+        then (roots q1).x' = [o1,the carrier of IIG]
+        by A15,A16,A23,A29,A31,A32,A34,A35,A43;
+        hence the_result_sort_of o1 = (the_arity_of av).x
+        by A16,A23,A29,A33,A40,A42,A43,MSAFREE1:3;
+      end;
+    end;
+    thus rq.x in Union(coprod the Sorts of SCS) implies
+    rq.x in coprod((the_arity_of av).x, the Sorts of SCS)
+    proof
+      assume
+A49:  rq.x in Union(coprod the Sorts of SCS);
+      then rq.x in Terminals DTConMSA(the Sorts of SCS) by MSAFREE:6;
+      then consider s1 being SortSymbol of IIG, x'' being set such that
+A50:  x'' in (the Sorts of SCS).s1 and
+A51:  rq.x = [x'',s1] by MSAFREE:7;
+      per cases;
+      suppose
+A52:    x' = k1+1;
+A53:    e2 in (FreeSort the Sorts of SCS).w by A18,MSAFREE:def 13;
+        reconsider rqx = rq.x' as Terminal of DTConMSA the Sorts of
+        SCS by A49,MSAFREE:6;
+        aa = root-tree rqx by A14,A19,A31,A32,A52,DTCONSTR:9;
+        then aa in {a'' where a'' is Element of TS(DTConMSA(the Sorts
+        of SCS)): (ex x''' being set st x''' in (the Sorts of SCS).s1
+        & a'' = root-tree[x''',s1]) or ex o being OperSymbol of IIG
+        st [o,the carrier of IIG] = a''.{} & the_result_sort_of o = s1}
+        by A50,A51;
+        then
+A54:    aa in FreeSort(the Sorts of SCS, s1) by MSAFREE:def 12;
+        now
+A55:      e2 in (FreeSort the Sorts of SCS).s1 by A19,A54,MSAFREE:def 13;
+          assume w <> s1;
+          then (FreeSort the Sorts of SCS).w misses
+          (FreeSort the Sorts of SCS).s1 by MSAFREE:13;
+          then (FreeSort the Sorts of SCS).w /\
+          (FreeSort the Sorts of SCS).s1 = {} by XBOOLE_0:def 7;
+          hence contradiction by A53,A55,XBOOLE_0:def 3;
+        end;
+        hence rq.x in coprod((the_arity_of av).x, the Sorts of SCS)
+        by A30,A41,A50,A51,A52,MSAFREE:def 2;
+      end;
+      suppose x' <> k1+1;
+        then rq.x' = (roots q1).x' by A15,A16,A23,A29,A31,A32,A34,A35;
+        hence rq.x in coprod((the_arity_of av).x, the Sorts of SCS)
+        by A16,A23,A29,A33,A40,A49,MSAFREE1:3;
+      end;
+    end;
+  end;
+  then [nt,roots qq] in REL(the Sorts of SCS) by A13,A24,A27,MSAFREE:5;
+  then nt ==> roots qq by A17,LANG1:def 1;
+  then reconsider q' as SubtreeSeq of nt by DTCONSTR:def 9;
+  eke = nt-tree q' by A12;
+  then reconsider eke' = eke as Element of TS(DTConMSA(the Sorts of SCS));
+  reconsider q'' = {} as FinSequence of NAT by FINSEQ_1:29;
+  q'' in dom e1 with-replacement (m',dom e2) by TREES_1:47;
+  then not m' is_a_prefix_of q'' & eke.q'' = e1.q'' or
+  ex r being FinSequence of NAT st r in dom e2
+  & q'' = m'^r & eke.q'' = e2.r by TREES_2:def 12;
+  then
+A56: eke.{} = [av,the carrier of IIG] by A2,FINSEQ_1:48 ,TREES_4:def 4;
+  now
+    take av;
+    the_result_sort_of av = v by A25,MSAFREE2:def 7;
+    hence ex o being OperSymbol of IIG st [o,the carrier of IIG] = eke.{}
+    & the_result_sort_of o = v by A56;
+  end;
+  then eke' in {a'' where a'' is Element of TS(DTConMSA(the Sorts
+  of SCS)): (ex x being set st x in (the Sorts of SCS).v
+  & a'' = root-tree[x,v]) or
+  ex o being OperSymbol of IIG st [o,the carrier of IIG] = a''.{}
+  & the_result_sort_of o = v};
+  then reconsider eke' as Element of (the Sorts of FreeEnv SCS).v
+  by A6,MSAFREE:def 12;
+  eke' in (the Sorts of FreeEnv SCS).v;
+  hence eke in (the Sorts of FreeEnv SCS).v;
+end;
 
 theorem Th8:
-  for IIG
-  for A being locally-finite non-empty MSAlgebra over IIG,
-    v being Element of IIG,
-    e being Element of (the Sorts of FreeEnv A).v
-      st 1 < card e
-    ex o being OperSymbol of IIG st e.{} = [o,the carrier of IIG]
-    proof
-      let IIG;
-      let A be locally-finite non-empty MSAlgebra over IIG,
-        v be Element of IIG,
-        e be Element of (the Sorts of FreeEnv A).v;
-      set X = the Sorts of A;
-      assume
-A1:      1 < card e;
-A2:   e in (the Sorts of FreeMSA X).v;
-A3:   FreeMSA X = MSAlgebra (# FreeSort(X), FreeOper(X) #) by MSAFREE:def 16;
-A4:   (FreeSort X).v = FreeSort(X, v) by MSAFREE:def 13;
-           FreeSort (X, v) = {a where a is Element of TS(DTConMSA(X)):
-        (ex x being set st x in X.v & a = root-tree[x,v]) or
-          ex o being OperSymbol of IIG st [o,the carrier of IIG] = a.{}
-            & the_result_sort_of o = v} by MSAFREE:def 12;
-      then consider a being Element of TS(DTConMSA(X)) such that
-A5:      a = e and
-A6:      (ex x being set st x in X.v & a = root-tree[x,v]) or
-          ex o being OperSymbol of IIG st [o,the carrier of IIG] = a.{}
-            & the_result_sort_of o = v by A2,A3,A4;
-      thus ex o being OperSymbol of IIG st e.{} = [o,the carrier of IIG]
-         by A1,A5,A6,PRE_CIRC:24;
-    end;
+  for IIG for A being locally-finite non-empty MSAlgebra over IIG,
+  v being Element of IIG, e being Element of (the Sorts of FreeEnv A).v
+  st 1 < card e ex o being OperSymbol of IIG st e.{} = [o,the carrier of IIG]
+proof
+  let IIG;
+  let A be locally-finite non-empty MSAlgebra over IIG, v be Element of IIG,
+  e be Element of (the Sorts of FreeEnv A).v;
+  set X = the Sorts of A;
+  assume
+A1: 1 < card e;
+A2: e in (the Sorts of FreeMSA X).v;
+A3: FreeMSA X = MSAlgebra (# FreeSort(X), FreeOper(X) #) by MSAFREE:def 16;
+A4: (FreeSort X).v = FreeSort(X, v) by MSAFREE:def 13;
+  FreeSort (X, v) = {a where a is Element of TS(DTConMSA(X)):
+  (ex x being set st x in X.v & a = root-tree[x,v]) or
+  ex o being OperSymbol of IIG st [o,the carrier of IIG] = a.{}
+  & the_result_sort_of o = v} by MSAFREE:def 12;
+  then consider a being Element of TS(DTConMSA(X)) such that
+A5: a = e and
+A6: (ex x being set st x in X.v & a = root-tree[x,v]) or
+  ex o being OperSymbol of IIG st [o,the carrier of IIG] = a.{}
+  & the_result_sort_of o = v by A2,A3,A4;
+  thus ex o being OperSymbol of IIG st e.{} = [o,the carrier of IIG]
+  by A1,A5,A6,PRE_CIRC:24;
+end;
 
 theorem
-       for IIG being non void Circuit-like (non empty ManySortedSign)
+  for IIG being non void Circuit-like (non empty ManySortedSign)
   for SCS being non-empty Circuit of IIG, s being State of SCS,
-    o being OperSymbol of IIG
-    holds (Den(o,SCS)).(o depends_on_in s)
-      in (the Sorts of SCS).(the_result_sort_of o)
-    proof
-      let IIG be non void Circuit-like (non empty ManySortedSign);
-      let SCS be non-empty Circuit of IIG, s be State of SCS,
-        o be OperSymbol of IIG;
-    A1: dom the ResultSort of IIG = the OperSymbols of IIG by FUNCT_2:def 1;
-           Result(o,SCS)
-        = ((the Sorts of SCS) * the ResultSort of IIG).o by MSUALG_1:def 10
-        .= (the Sorts of SCS).((the ResultSort of IIG).o) by A1,FUNCT_1:23
-        .= (the Sorts of SCS).(the_result_sort_of o) by MSUALG_1:def 7;
-      hence (Den(o,SCS)).(o depends_on_in s) in (the Sorts of SCS)
-        .(the_result_sort_of o) by FUNCT_2:7;
-    end;
+  o being OperSymbol of IIG holds (Den(o,SCS)).(o depends_on_in s)
+  in (the Sorts of SCS).(the_result_sort_of o)
+proof
+  let IIG be non void Circuit-like (non empty ManySortedSign);
+  let SCS be non-empty Circuit of IIG, s be State of SCS,
+  o be OperSymbol of IIG;
+A1: dom the ResultSort of IIG = the OperSymbols of IIG by FUNCT_2:def 1;
+  Result(o,SCS)
+  = ((the Sorts of SCS) * the ResultSort of IIG).o by MSUALG_1:def 10
+    .= (the Sorts of SCS).((the ResultSort of IIG).o) by A1,FUNCT_1:23
+    .= (the Sorts of SCS).(the_result_sort_of o) by MSUALG_1:def 7;
+  hence (Den(o,SCS)).(o depends_on_in s) in (the Sorts of SCS)
+  .(the_result_sort_of o) by FUNCT_2:7;
+end;
 
 theorem Th10:
-  for IIG
-  for A being non-empty Circuit of IIG, v being Vertex of IIG,
-    e being Element of (the Sorts of FreeEnv A).v
-      st e.{} = [action_at v,the carrier of IIG]
-   ex p being DTree-yielding FinSequence st
-        e = [action_at v,the carrier of IIG]-tree p
-proof let IIG;
- let A be non-empty Circuit of IIG,
-     v be Vertex of IIG,
-     e be Element of (the Sorts of FreeEnv A).v
-     such that
+  for IIG for A being non-empty Circuit of IIG, v being Vertex of IIG,
+  e being Element of (the Sorts of FreeEnv A).v
+  st e.{} = [action_at v,the carrier of IIG]
+  ex p being DTree-yielding FinSequence st
+  e = [action_at v,the carrier of IIG]-tree p
+proof
+  let IIG;
+  let A be non-empty Circuit of IIG, v be Vertex of IIG,
+  e be Element of (the Sorts of FreeEnv A).v such that
 A1: e.{} = [action_at v,the carrier of IIG];
   set X = the Sorts of A;
-A2:FreeMSA(X) = MSAlgebra (# FreeSort(X), FreeOper(X) #) by MSAFREE:def 16;
-       e in (the Sorts of FreeEnv A).v;
+A2: FreeMSA(X) = MSAlgebra (# FreeSort(X), FreeOper(X) #) by MSAFREE:def 16;
+  e in (the Sorts of FreeEnv A).v;
   then e in FreeSort(X,v) by A2,MSAFREE:def 13;
   then reconsider tsg = e as Element of TS DTConMSA(X);
-A3:NonTerminals(DTConMSA(X)) = [:the OperSymbols of IIG,{the carrier of IIG}:]
-             by MSAFREE:6;
-           the carrier of IIG in {the carrier of IIG} by TARSKI:def 1;
-      then reconsider nt = [action_at v,the carrier of IIG]
-    as NonTerminal of DTConMSA(X) by A3,ZFMISC_1:106;
+A3: NonTerminals(DTConMSA(X)) = [:the OperSymbols of IIG,{the carrier of IIG}:]
+  by MSAFREE:6;
+  the carrier of IIG in {the carrier of IIG} by TARSKI:def 1;
+  then reconsider nt = [action_at v,the carrier of IIG]
+  as NonTerminal of DTConMSA(X) by A3,ZFMISC_1:106;
   consider ts being FinSequence of TS DTConMSA(X) such that
-A4:  tsg = nt-tree ts and nt ==> roots ts by A1,DTCONSTR:10;
- take ts;
- thus e = [action_at v,the carrier of IIG]-tree ts by A4;
+A4: tsg = nt-tree ts and nt ==> roots ts by A1,DTCONSTR:10;
+  take ts;
+  thus e = [action_at v,the carrier of IIG]-tree ts by A4;
 end;
 
 begin :: Size
@@ -791,17 +738,16 @@ registration
   let IIG be monotonic non void (non empty ManySortedSign);
   let A be locally-finite non-empty MSAlgebra over IIG;
   let v be SortSymbol of IIG;
- cluster (the Sorts of FreeEnv A).v -> finite;
- coherence
+  cluster (the Sorts of FreeEnv A).v -> finite;
+  coherence
   proof
-         the Sorts of A is locally-finite by MSAFREE2:def 11;
+    the Sorts of A is locally-finite by MSAFREE2:def 11;
     then FreeEnv A is finitely-generated by MSAFREE2:11;
     then FreeEnv A is locally-finite by MSAFREE2:def 13;
     then the Sorts of FreeEnv A is locally-finite by MSAFREE2:def 11;
-   hence (the Sorts of FreeEnv A).v is finite by PRE_CIRC:def 3;
+    hence (the Sorts of FreeEnv A).v is finite by PRE_CIRC:def 3;
   end;
 end;
-
 defpred P[set] means not contradiction;
 
 definition
@@ -809,1295 +755,1220 @@ definition
   let A be locally-finite non-empty MSAlgebra over IIG;
   let v be SortSymbol of IIG;
   func size(v,A) -> natural number means
-:Def4:
-    ex s being finite non empty Subset of NAT
-      st s = { card t where t is Element of (the Sorts of FreeEnv A).v :
-                 not contradiction }
-        & it = max s;
+  :Def4:
+  ex s being finite non empty Subset of NAT
+  st s = { card t where t is Element of (the Sorts of FreeEnv A).v :
+  not contradiction } & it = max s;
   existence
-    proof
-      deffunc F(Element of (the Sorts of FreeEnv A).v) = card $1;
-      set s = { F(t) where
-        t is Element of (the Sorts of FreeEnv A).v : P[t] };
-      consider t being Element of (the Sorts of FreeEnv A).v;
-A1:      card t in s;
-A2:    s is Subset of NAT from DOMAIN_1:sch 8;
-          s is finite from PRE_CIRC:sch 1;
-      then reconsider s as finite non empty Subset of NAT by A1,A2;
-      take max s, s;
-      thus thesis;
-    end;
+  proof
+    deffunc F(Element of (the Sorts of FreeEnv A).v) = card $1;
+    set s = { F(t) where t is Element of (the Sorts of FreeEnv A).v : P[t] };
+    consider t being Element of (the Sorts of FreeEnv A).v;
+A1: card t in s;
+A2: s is Subset of NAT from DOMAIN_1:sch 8;
+    s is finite from PRE_CIRC:sch 1;
+    then reconsider s as finite non empty Subset of NAT by A1,A2;
+    take max s, s;
+    thus thesis;
+  end;
   correctness;
 end;
 
 theorem Th11:
-  for IIG
-  for A being locally-finite non-empty MSAlgebra over IIG,
-    v being Element of IIG
-    holds size(v,A) = 1
-      iff v in InputVertices IIG \/ SortsWithConstants IIG
-    proof
-      let IIG;
-      let A be locally-finite non-empty MSAlgebra over IIG,
-        v be Element of IIG;
-      consider s being finite non empty Subset of NAT such that
-A1:      s = { card t where t is Element of (the Sorts of FreeEnv A).v
-                  : not contradiction } and
-A2:      size(v,A) = max s by Def4;
-      reconsider Y = s as finite non empty real-membered set;
-           max Y in { card t where t is Element of (the Sorts of FreeEnv A).v
-                 : not contradiction }
-          by A1,PRE_CIRC:def 1;
-      then consider e being Element of (the Sorts of FreeEnv A).v such that
-A3:      card e = max Y;
-A4:      e in (the Sorts of FreeEnv A).v;
-
-A5:    FreeEnv A = MSAlgebra (# FreeSort the Sorts of A,
-        FreeOper the Sorts of A #) by MSAFREE:def 16;
-
-      then (the Sorts of FreeEnv A).v
-        = FreeSort(the Sorts of A, v) by MSAFREE:def 13;
-      then e in {a where a is Element of TS(DTConMSA(the Sorts of A)):
-        (ex x being set st x in (the Sorts of A).v & a = root-tree[x,v]) or
-          ex o being OperSymbol of IIG st [o,the carrier of IIG] = a.{}
-            & the_result_sort_of o = v} by A4,MSAFREE:def 12;
-      then consider a being Element of TS(DTConMSA(the Sorts of A)) such that
-A6:      a = e and
-A7:      (ex x being set st x in (the Sorts of A).v & a = root-tree[x,v]) or
-          ex o being OperSymbol of IIG st [o,the carrier of IIG] = a.{}
-            & the_result_sort_of o = v;
-
-      thus size(v,A) = 1 implies
-        v in InputVertices IIG \/ SortsWithConstants IIG
-        proof
-          assume
-A8:       size(v,A) = 1;
-               now
-            assume not v in InputVertices IIG \/ SortsWithConstants IIG;
-            then A9:           not v in InputVertices IIG & not v in
-SortsWithConstants IIG
-              by XBOOLE_0:def 2;
-                 the carrier of IIG = InputVertices IIG \/ InnerVertices IIG
-              by XBOOLE_1:45;
-            then v in InnerVertices IIG by A9,XBOOLE_0:def 2;
-            then consider x being set such that
-A10:          x in dom the ResultSort of IIG and
-A11:          v = (the ResultSort of IIG).x by FUNCT_1:def 5;
-            reconsider o = x as OperSymbol of IIG by A10;
-
-                 not v in { v' where v' is SortSymbol of IIG : v' is
-              with_const_op } by A9,MSAFREE2:def 1;
-            then A12: not v is with_const_op;
-
-            per cases by A12,MSUALG_2:def 2;
-            suppose
-A13:          not ((the Arity of IIG).o = {});
-                   the carrier of IIG in {the carrier of IIG} by TARSKI:def 1;
-              then A14:            [o,the carrier of IIG] in
-               [:the OperSymbols of IIG,{the carrier of IIG}:]
-                      by ZFMISC_1:106;
-            reconsider O =
-             [:the OperSymbols of IIG,{the carrier of IIG}:]
-                  \/ Union(coprod(the Sorts of A)) as non empty set;
-            reconsider R = REL(the Sorts of A) as Relation of O, O*;
-                 DTConMSA(the Sorts of A) = DTConstrStr (# O, R #)
-              by MSAFREE:def 10;
-            then reconsider o' = [o,the carrier of IIG]
-             as Symbol of DTConMSA(the Sorts of A) by A14,XBOOLE_0:def 2;
-                 o' in NonTerminals DTConMSA(the Sorts of A) by A14,MSAFREE:6;
-            then consider p being FinSequence of TS(DTConMSA(the Sorts of A))
-              such that
-A15:          o' ==> roots p by DTCONSTR:def 8;
-            reconsider op = o'-tree p as Element of TS(DTConMSA(the Sorts
-              of A)) by A15,DTCONSTR:def 4;
-A16:       op.{} = o' by TREES_4:def 4;
-
-                 now
-              take o;
-                   the_result_sort_of o = v by A11,MSUALG_1:def 7;
-              hence ex o being OperSymbol of IIG st
-                  [o,the carrier of IIG] = op.{}
-                & the_result_sort_of o = v by A16;
-            end;
-            then op in {a' where a' is Element of TS(DTConMSA(the Sorts of A))
-:
-              (ex x' being set st x' in (the Sorts of A).v
-                & a' = root-tree[x',v]) or
-              ex o being OperSymbol of IIG st [o,the carrier of IIG] = a'.{}
-                & the_result_sort_of o = v};
-            then A17:          op in FreeSort(the Sorts of A, v) by
-MSAFREE:def 12;
-            A18: (the Sorts of FreeEnv A).(the_result_sort_of o)
-              = (FreeSort(the Sorts of A)).v by A5,A11,MSUALG_1:def 7
-             .= FreeSort(the Sorts of A, v) by MSAFREE:def 13;
-            then len p = len the_arity_of o by A17,MSAFREE2:13;
-            then A19:          dom p = dom the_arity_of o by FINSEQ_3:31;
-
-            reconsider e1 = op as finite DecoratedTree;
-            reconsider co = card e1 as real number;
-            reconsider e1 as Element of (the Sorts of FreeEnv A).v
-              by A11,A17,A18,MSUALG_1:def 7;
-                 e1 in (the Sorts of FreeEnv A).v;
-            then A20:          co in Y by A1;
-
-                 {} in dom op by TREES_1:47;
-            then A21:         [{},o'] in op by A16,FUNCT_1:8;
-
-                 the_arity_of o <> {} by A13,MSUALG_1:def 6;
-            then A22:          dom p <> {} by A19,FINSEQ_1:26;
-            consider q being DTree-yielding FinSequence such that
-A23:         p = q and
-A24:         dom op = tree(doms q) by TREES_4:def 4;
-                 p <> {} by A22,FINSEQ_1:26;
-            then rng p <> {} by FINSEQ_1:27;
-            then A25:          1 in dom p by FINSEQ_3:34;
-                 0 + 1 = 1;
-            then A26:         <*0*> in dom op by A23,A24,A25,PRE_CIRC:17;
-            then consider i being Element of NAT, T being DecoratedTree,
-              q being Node of T such that
-A27:         i < len p and
-A28:         T = p.(i+1) and
-A29:         <*0*> = <*i*>^q by TREES_4:11;
-                 op.<*0*> = T.q by A27,A28,A29,TREES_4:12;
-            then [<*0*>,T.q] in op by A26,FUNCT_1:8;
-            then A30:         { [{},o'], [<*0*>,T.q] } c= op by A21,ZFMISC_1:38
-;
-                   [{},o'] <> [<*0*>,T.q] by ZFMISC_1:33;
-            then card { [{},o'], [<*0*>,T.q] } = 2 by CARD_2:76;
-            then 2 <= co by A30,NAT_1:44;
-            then co > size(v,A) by A8,XXREAL_0:2;
-            hence contradiction by A2,A20,PRE_CIRC:def 1;
-
-            end;
-            suppose not ((the ResultSort of IIG).o = v);
-            hence contradiction by A11;
-          end;
-          end;
-          hence v in InputVertices IIG \/ SortsWithConstants IIG;
-        end;
-
-      assume
-A31:      v in InputVertices IIG \/ SortsWithConstants IIG;
-      per cases by A31,XBOOLE_0:def 2;
-      suppose v in InputVertices IIG;
+  for IIG for A being locally-finite non-empty MSAlgebra over IIG,
+  v being Element of IIG holds size(v,A) = 1
+  iff v in InputVertices IIG \/ SortsWithConstants IIG
+proof
+  let IIG;
+  let A be locally-finite non-empty MSAlgebra over IIG, v be Element of IIG;
+  consider s being finite non empty Subset of NAT such that
+A1: s = { card t where t is Element of (the Sorts of FreeEnv A).v
+  : not contradiction } and
+A2: size(v,A) = max s by Def4;
+  reconsider Y = s as finite non empty real-membered set;
+  max Y in { card t where t is Element of (the Sorts of FreeEnv A).v
+  : not contradiction } by A1,PRE_CIRC:def 1;
+  then consider e being Element of (the Sorts of FreeEnv A).v such that
+A3: card e = max Y;
+A4: e in (the Sorts of FreeEnv A).v;
+A5: FreeEnv A = MSAlgebra (# FreeSort the Sorts of A,
+    FreeOper the Sorts of A #) by MSAFREE:def 16;
+  then (the Sorts of FreeEnv A).v
+  = FreeSort(the Sorts of A, v) by MSAFREE:def 13;
+  then e in {a where a is Element of TS(DTConMSA(the Sorts of A)):
+  (ex x being set st x in (the Sorts of A).v & a = root-tree[x,v]) or
+  ex o being OperSymbol of IIG st [o,the carrier of IIG] = a.{}
+  & the_result_sort_of o = v} by A4,MSAFREE:def 12;
+  then consider a being Element of TS(DTConMSA(the Sorts of A)) such that
+A6: a = e and
+A7: (ex x being set st x in (the Sorts of A).v & a = root-tree[x,v]) or
+  ex o being OperSymbol of IIG st [o,the carrier of IIG] = a.{}
+  & the_result_sort_of o = v;
+  thus size(v,A) = 1 implies v in InputVertices IIG \/ SortsWithConstants IIG
+  proof
+    assume
+A8: size(v,A) = 1;
+    now
+      assume not v in InputVertices IIG \/ SortsWithConstants IIG;
+      then
+A9:   not v in InputVertices IIG & not v in SortsWithConstants IIG
+      by XBOOLE_0:def 2;
+      the carrier of IIG = InputVertices IIG \/ InnerVertices IIG
+      by XBOOLE_1:45;
+      then v in InnerVertices IIG by A9,XBOOLE_0:def 2;
       then consider x being set such that
-             x in (the Sorts of A).v and
-A32:      a = root-tree[x,v] by A7,MSAFREE2:2;
-             root-tree[x,v] = {{}} --> [x,v] by TREES_1:56,TREES_4:def 2
-        .= [: {{}}, {[x,v]} :] by FUNCOP_1:def 2
-        .= { [{},[x,v]] } by ZFMISC_1:35;
-      hence size(v,A) = 1 by A2,A3,A6,A32,CARD_1:79;
-
-      end;
-      suppose v in SortsWithConstants IIG;
-      then v in { v' where v' is SortSymbol of IIG : v' is with_const_op }
-        by MSAFREE2:def 1;
-      then consider v' being SortSymbol of IIG such that
-A33:      v' = v and
-A34:      v' is with_const_op;
-      consider o being OperSymbol of IIG such that
-A35:      (the Arity of IIG).o = {} and
-A36:      (the ResultSort of IIG).o = v' by A34,MSUALG_2:def 2;
-
-           now
-        per cases by A7;
-        suppose ex x being set st x in (the Sorts of A).v
-          & a = root-tree[x,v];
-        then consider x being set such that
-               x in (the Sorts of A).v and
-A37:       a = root-tree[x,v];
-
-             root-tree[x,v] = { [{},[x,v]] } by TREES_4:6;
-        hence size(v,A) = 1 by A2,A3,A6,A37,CARD_1:79;
-
+A10:  x in dom the ResultSort of IIG and
+A11:  v = (the ResultSort of IIG).x by FUNCT_1:def 5;
+      reconsider o = x as OperSymbol of IIG by A10;
+      not v in { v' where v' is SortSymbol of IIG : v' is
+      with_const_op } by A9,MSAFREE2:def 1;
+      then
+A12:  not v is with_const_op;
+      per cases by A12,MSUALG_2:def 2;
+      suppose
+A13:    not ((the Arity of IIG).o = {});
+        the carrier of IIG in {the carrier of IIG} by TARSKI:def 1;
+        then
+A14:    [o,the carrier of IIG] in
+        [:the OperSymbols of IIG,{the carrier of IIG}:] by ZFMISC_1:106;
+        reconsider O = [:the OperSymbols of IIG,{the carrier of IIG}:]
+        \/ Union(coprod(the Sorts of A)) as non empty set;
+        reconsider R = REL(the Sorts of A) as Relation of O, O*;
+        DTConMSA(the Sorts of A) = DTConstrStr (# O, R #) by MSAFREE:def 10;
+        then reconsider o' = [o,the carrier of IIG]
+        as Symbol of DTConMSA(the Sorts of A) by A14,XBOOLE_0:def 2;
+        o' in NonTerminals DTConMSA(the Sorts of A) by A14,MSAFREE:6;
+        then consider p being FinSequence of TS(DTConMSA(the Sorts of A))
+        such that
+A15:    o' ==> roots p by DTCONSTR:def 8;
+        reconsider op = o'-tree p as Element of TS(DTConMSA(the Sorts
+        of A)) by A15,DTCONSTR:def 4;
+A16:    op.{} = o' by TREES_4:def 4;
+        now
+          take o;
+          the_result_sort_of o = v by A11,MSUALG_1:def 7;
+          hence ex o being OperSymbol of IIG st [o,the carrier of IIG] = op.{}
+          & the_result_sort_of o = v by A16;
         end;
-        suppose ex o' being OperSymbol of IIG st
-         [o',the carrier of IIG] = a.{} & the_result_sort_of o' = v;
+        then op in {a' where a' is Element of TS(DTConMSA(the Sorts of A)) :
+        (ex x' being set st x' in (the Sorts of A).v
+        & a' = root-tree[x',v]) or
+        ex o being OperSymbol of IIG st [o,the carrier of IIG] = a'.{}
+        & the_result_sort_of o = v};
+        then
+A17:    op in FreeSort(the Sorts of A, v) by MSAFREE:def 12;
+A18:    (the Sorts of FreeEnv A).(the_result_sort_of o)
+        = (FreeSort(the Sorts of A)).v by A5,A11,MSUALG_1:def 7
+          .= FreeSort(the Sorts of A, v) by MSAFREE:def 13;
+        then len p = len the_arity_of o by A17,MSAFREE2:13;
+        then
+A19:    dom p = dom the_arity_of o by FINSEQ_3:31;
+        reconsider e1 = op as finite DecoratedTree;
+        reconsider co = card e1 as real number;
+        reconsider e1 as Element of (the Sorts of FreeEnv A).v
+        by A11,A17,A18,MSUALG_1:def 7;
+        e1 in (the Sorts of FreeEnv A).v;
+        then
+A20:    co in Y by A1;
+        {} in dom op by TREES_1:47;
+        then
+A21:    [{},o'] in op by A16,FUNCT_1:8;
+        the_arity_of o <> {} by A13,MSUALG_1:def 6;
+        then
+A22:    dom p <> {} by A19,FINSEQ_1:26;
+        consider q being DTree-yielding FinSequence such that
+A23:    p = q and
+A24:    dom op = tree(doms q) by TREES_4:def 4;
+        p <> {} by A22,FINSEQ_1:26;
+        then rng p <> {} by FINSEQ_1:27;
+        then
+A25:    1 in dom p by FINSEQ_3:34;
+        0 + 1 = 1;
+        then
+A26:    <*0*> in dom op by A23,A24,A25,PRE_CIRC:17;
+        then consider i being Element of NAT, T being DecoratedTree,
+        q being Node of T such that
+A27:    i < len p and
+A28:    T = p.(i+1) and
+A29:    <*0*> = <*i*>^q by TREES_4:11;
+        op.<*0*> = T.q by A27,A28,A29,TREES_4:12;
+        then [<*0*>,T.q] in op by A26,FUNCT_1:8;
+        then
+A30:    { [{},o'], [<*0*>,T.q] } c= op by A21,ZFMISC_1:38;
+        [{},o'] <> [<*0*>,T.q] by ZFMISC_1:33;
+        then card { [{},o'], [<*0*>,T.q] } = 2 by CARD_2:76;
+        then 2 <= co by A30,NAT_1:44;
+        then co > size(v,A) by A8,XXREAL_0:2;
+        hence contradiction by A2,A20,PRE_CIRC:def 1;
+      end;
+      suppose not ((the ResultSort of IIG).o = v);
+        hence contradiction by A11;
+      end;
+    end;
+    hence v in InputVertices IIG \/ SortsWithConstants IIG;
+  end;
+  assume
+A31: v in InputVertices IIG \/ SortsWithConstants IIG;
+  per cases by A31,XBOOLE_0:def 2;
+  suppose v in InputVertices IIG;
+    then consider x being set such that x in (the Sorts of A).v and
+A32: a = root-tree[x,v] by A7,MSAFREE2:2;
+    root-tree[x,v] = {{}} --> [x,v] by TREES_1:56,TREES_4:def 2
+      .= [: {{}}, {[x,v]} :] by FUNCOP_1:def 2
+      .= { [{},[x,v]] } by ZFMISC_1:35;
+    hence size(v,A) = 1 by A2,A3,A6,A32,CARD_1:79;
+  end;
+  suppose v in SortsWithConstants IIG;
+    then v in { v' where v' is SortSymbol of IIG : v' is with_const_op }
+    by MSAFREE2:def 1;
+    then consider v' being SortSymbol of IIG such that
+A33: v' = v and
+A34: v' is with_const_op;
+    consider o being OperSymbol of IIG such that
+A35: (the Arity of IIG).o = {} and
+A36: (the ResultSort of IIG).o = v' by A34,MSUALG_2:def 2;
+    now
+      per cases by A7;
+      suppose ex x being set st x in (the Sorts of A).v & a = root-tree[x,v];
+        then consider x being set such that x in (the Sorts of A).v and
+A37:    a = root-tree[x,v];
+        root-tree[x,v] = { [{},[x,v]] } by TREES_4:6;
+        hence size(v,A) = 1 by A2,A3,A6,A37,CARD_1:79;
+      end;
+      suppose ex o' being OperSymbol of IIG st
+        [o',the carrier of IIG] = a.{} & the_result_sort_of o' = v;
         then consider o' being OperSymbol of IIG such that
-A38:       [o',the carrier of IIG] = a.{} and
-A39:       the_result_sort_of o' = v;
-
-             the_result_sort_of o' = the_result_sort_of o
-          by A33,A36,A39,MSUALG_1:def 7;
-        then A40:    o' = o by MSAFREE2:def 6;
-A41:      NonTerminals(DTConMSA(the Sorts of A))
+A38:    [o',the carrier of IIG] = a.{} and
+A39:    the_result_sort_of o' = v;
+        the_result_sort_of o' = the_result_sort_of o
+        by A33,A36,A39,MSUALG_1:def 7;
+        then
+A40:    o' = o by MSAFREE2:def 6;
+A41:    NonTerminals(DTConMSA(the Sorts of A))
         = [:the OperSymbols of IIG,{the carrier of IIG}:] by MSAFREE:6;
-             the carrier of IIG in {the carrier of IIG} by TARSKI:def 1;
+        the carrier of IIG in {the carrier of IIG} by TARSKI:def 1;
         then reconsider nt = [o',the carrier of IIG]
-         as NonTerminal of DTConMSA(the Sorts of A) by A41,ZFMISC_1:106;
+        as NonTerminal of DTConMSA(the Sorts of A) by A41,ZFMISC_1:106;
         consider ts being FinSequence of TS(DTConMSA(the Sorts of A))
-          such that
-A42:       a = nt-tree ts and
-               nt ==> roots ts by A38,DTCONSTR:10;
-
+        such that
+A42:    a = nt-tree ts and nt ==> roots ts by A38,DTCONSTR:10;
         reconsider ts as DTree-yielding FinSequence;
-             len ts = len the_arity_of o' by A6,A39,A42,MSAFREE2:13
+        len ts = len the_arity_of o' by A6,A39,A42,MSAFREE2:13
           .= len {} by A35,A40,MSUALG_1:def 6
           .= 0 by FINSEQ_1:25;
         then ts = {} by FINSEQ_1:25;
         then a = root-tree nt by A42,TREES_4:20
-            .= { [{},nt] } by TREES_4:6;
+          .= { [{},nt] } by TREES_4:6;
         hence size(v,A) = 1 by A2,A3,A6,CARD_1:79;
       end;
-      end;
-      hence thesis;
     end;
-    end;
+    hence thesis;
+  end;
+end;
 
 theorem
-       for IIG
-  for SCS being locally-finite non-empty MSAlgebra over IIG,
-    v, w being Vertex of IIG,
-    e1 being Element of (the Sorts of FreeEnv SCS).v,
-    e2 being Element of (the Sorts of FreeEnv SCS).w,
-    q1 being DTree-yielding FinSequence
-      st v in InnerVertices IIG \ SortsWithConstants IIG
-        & card e1 = size(v,SCS)
-        & e1 = [action_at v,the carrier of IIG]-tree q1
-        & e2 in rng q1
-    holds card e2 = size(w,SCS)
-    proof
-      let IIG;
-      let SCS be locally-finite non-empty MSAlgebra over IIG,
-        v, w be Vertex of IIG,
-        e1 be Element of (the Sorts of FreeEnv SCS).v,
-        e2 be Element of (the Sorts of FreeEnv SCS).w,
-        q1 be DTree-yielding FinSequence;
-      assume that
-A1:     v in InnerVertices IIG \ SortsWithConstants IIG and
-A2:      card e1 = size(v,SCS) and
-A3:      e1 = [action_at v,the carrier of IIG]-tree q1 and
-A4:      e2 in rng q1;
-
-      assume
-A5:      card e2 <> size(w,SCS);
-      consider sw being finite non empty Subset of NAT such that
-A6:      sw = { card t where t is Element of (the Sorts of FreeEnv SCS).w
-                 : not contradiction } and
-A7:      size(w,SCS) = max sw by Def4;
-      reconsider Y = sw as finite non empty real-membered set;
-           card e2 in Y by A6;
-      then card e2 <= max Y by PRE_CIRC:def 1;
-      then A8:     card e2 < max Y by A5,A7,REAL_1:def 5;
-      reconsider m = max Y as real number;
-           m in { card t where t is Element of (the Sorts of FreeEnv SCS).w
-              : not contradiction }
-          by A6,PRE_CIRC:def 1;
-      then consider e3 being Element of (the Sorts of FreeEnv SCS).w
-           such that
-A9:      card e3 = m;
-
-      consider sv being finite non empty Subset of NAT such that
-A10:      sv = { card t where t is Element of (the Sorts of FreeEnv SCS).v
-                 : not contradiction } and
-A11:      size(v,SCS) = max sv by Def4;
-      reconsider Z = sv as finite non empty real-membered set;
-      reconsider q1' = q1 as Function;
-      consider k being set such that
-A12:      k in dom q1' and
-A13:      e2 = q1'.k by A4,FUNCT_1:def 5;
-
-       k in dom q1 by A12;
-      then reconsider kN = k as Element of NAT;
-      reconsider k1 = kN - 1 as Element of NAT by A12,FINSEQ_3:28;
-A14:   k1 + 1 = kN;
-
-A15:   kN <= len q1 by A12,FINSEQ_3:27;
-           k1 < kN by A14,XREAL_1:31;
-      then A16:     k1 < len q1 by A15,XXREAL_0:2;
-
-      reconsider e1' = e1 as DecoratedTree;
-      consider p being DTree-yielding FinSequence such that
-A17:    p = q1 and
-A18:    dom e1' = tree(doms p) by A3,TREES_4:def 4;
-
-      reconsider k' = <*k1*> as Element of dom e1
-       by A12,A14,A17,A18,PRE_CIRC:17;
-      reconsider e3' = e3 as DecoratedTree;
-      reconsider k'' = k' as FinSequence of NAT;
-      reconsider eke = e1' with-replacement (k'', e3') as DecoratedTree;
-   reconsider eke as Element of (the Sorts of FreeEnv SCS).v by A1,A3,A12,A13
-,A14,Th7;
-A19:    card eke in Z by A10;
-A20:    card(e1 with-replacement (k',e3)) + card (e1|k') = card e1 + card e3
-        by PRE_CIRC:23;
-           e1|k' = e2 by A3,A13,A14,A16,TREES_4:def 4;
-      then card e1 + card (e1|k') < card e1 + card e3 by A8,A9,XREAL_1:8;
-      then card e1 < card (e1 with-replacement (k',e3)) by A20,XREAL_1:8;
-      hence contradiction by A2,A11,A19,PRE_CIRC:def 1;
-    end;
+  for IIG for SCS being locally-finite non-empty MSAlgebra over IIG,
+  v, w being Vertex of IIG, e1 being Element of (the Sorts of FreeEnv SCS).v,
+  e2 being Element of (the Sorts of FreeEnv SCS).w,
+  q1 being DTree-yielding FinSequence
+  st v in InnerVertices IIG \ SortsWithConstants IIG & card e1 = size(v,SCS)
+  & e1 = [action_at v,the carrier of IIG]-tree q1 & e2 in rng q1
+  holds card e2 = size(w,SCS)
+proof
+  let IIG;
+  let SCS be locally-finite non-empty MSAlgebra over IIG,
+  v, w be Vertex of IIG, e1 be Element of (the Sorts of FreeEnv SCS).v,
+  e2 be Element of (the Sorts of FreeEnv SCS).w,
+  q1 be DTree-yielding FinSequence;
+  assume that
+A1: v in InnerVertices IIG \ SortsWithConstants IIG and
+A2: card e1 = size(v,SCS) and
+A3: e1 = [action_at v,the carrier of IIG]-tree q1 and
+A4: e2 in rng q1;
+  assume
+A5: card e2 <> size(w,SCS);
+  consider sw being finite non empty Subset of NAT such that
+A6: sw = { card t where t is Element of (the Sorts of FreeEnv SCS).w
+  : not contradiction } and
+A7: size(w,SCS) = max sw by Def4;
+  reconsider Y = sw as finite non empty real-membered set;
+  card e2 in Y by A6;
+  then card e2 <= max Y by PRE_CIRC:def 1;
+  then
+A8: card e2 < max Y by A5,A7,REAL_1:def 5;
+  reconsider m = max Y as real number;
+  m in { card t where t is Element of (the Sorts of FreeEnv SCS).w
+  : not contradiction } by A6,PRE_CIRC:def 1;
+  then consider e3 being Element of (the Sorts of FreeEnv SCS).w such that
+A9: card e3 = m;
+  consider sv being finite non empty Subset of NAT such that
+A10: sv = { card t where t is Element of (the Sorts of FreeEnv SCS).v
+  : not contradiction } and
+A11: size(v,SCS) = max sv by Def4;
+  reconsider Z = sv as finite non empty real-membered set;
+  reconsider q1' = q1 as Function;
+  consider k being set such that
+A12: k in dom q1' and
+A13: e2 = q1'.k by A4,FUNCT_1:def 5;
+  k in dom q1 by A12;
+  then reconsider kN = k as Element of NAT;
+  reconsider k1 = kN - 1 as Element of NAT by A12,FINSEQ_3:28;
+A14: k1 + 1 = kN;
+A15: kN <= len q1 by A12,FINSEQ_3:27;
+  k1 < kN by A14,XREAL_1:31;
+  then
+A16: k1 < len q1 by A15,XXREAL_0:2;
+  reconsider e1' = e1 as DecoratedTree;
+  consider p being DTree-yielding FinSequence such that
+A17: p = q1 and
+A18: dom e1' = tree(doms p) by A3,TREES_4:def 4;
+  reconsider k' = <*k1*> as Element of dom e1 by A12,A14,A17,A18,PRE_CIRC:17;
+  reconsider e3' = e3 as DecoratedTree;
+  reconsider k'' = k' as FinSequence of NAT;
+  reconsider eke = e1' with-replacement (k'', e3') as DecoratedTree;
+  reconsider eke as Element of (the Sorts of FreeEnv SCS).v by A1,A3,A12,A13
+  ,A14,Th7;
+A19: card eke in Z by A10;
+A20: card(e1 with-replacement (k',e3)) + card (e1|k') = card e1 + card e3
+  by PRE_CIRC:23;
+  e1|k' = e2 by A3,A13,A14,A16,TREES_4:def 4;
+  then card e1 + card (e1|k') < card e1 + card e3 by A8,A9,XREAL_1:8;
+  then card e1 < card (e1 with-replacement (k',e3)) by A20,XREAL_1:8;
+  hence contradiction by A2,A11,A19,PRE_CIRC:def 1;
+end;
 
 theorem Th13:
-  for IIG
-  for A being locally-finite non-empty MSAlgebra over IIG,
-    v being Vertex of IIG,
-    e being Element of (the Sorts of FreeEnv A).v
-      st v in (InnerVertices IIG \ SortsWithConstants IIG)
-        & card e = size(v,A)
-    ex q being DTree-yielding FinSequence st
-       e = [action_at v,the carrier of IIG]-tree q
-    proof
-      let IIG;
-      let A be locally-finite non-empty MSAlgebra over IIG,
-        v be Vertex of IIG,
-        e be Element of (the Sorts of FreeEnv A).v;
-      assume that
-A1:      v in (InnerVertices IIG \ SortsWithConstants IIG) and
-A2:      card e = size(v,A);
-
-           FreeEnv A = MSAlgebra (# FreeSort the Sorts of A,
-        FreeOper the Sorts of A #) by MSAFREE:def 16;
-      then (the Sorts of FreeEnv A).v
-          = FreeSort(the Sorts of A, v) by MSAFREE:def 13;
-      then e in FreeSort(the Sorts of A, v);
-      then e in {a where a is Element of TS(DTConMSA(the Sorts of A)):
-        (ex x being set st x in (the Sorts of A).v & a = root-tree[x,v]) or
-          ex o being OperSymbol of IIG st [o,the carrier of IIG] = a.{}
-            & the_result_sort_of o = v} by MSAFREE:def 12;
-      then consider a being Element of TS(DTConMSA(the Sorts of A))
-        such that
-A3:      a = e and
-A4:      (ex x being set st x in (the Sorts of A).v & a = root-tree[x,v]) or
-          ex o being OperSymbol of IIG st [o,the carrier of IIG] = a.{}
-            & the_result_sort_of o = v;
-
-A5:    v in InnerVertices IIG & not v in SortsWithConstants IIG
-        by A1,XBOOLE_0:def 4;
-           InputVertices IIG misses InnerVertices IIG by XBOOLE_1:79;
-      then InputVertices IIG /\ InnerVertices IIG = {} by XBOOLE_0:def 7;
-      then not v in InputVertices IIG by A5,XBOOLE_0:def 3;
-      then not v in InputVertices IIG \/ SortsWithConstants IIG
-        by A5,XBOOLE_0:def 2;
-      then A6:      card e <> 1 by A2,Th11;
-
-      reconsider e' = e as finite non empty set;
-           card e' <> 0 by CARD_2:59;
-      then 1 <= card e' by NAT_1:14;
-      then 1 < card e' by A6,REAL_1:def 5;
-      then consider o being OperSymbol of IIG such that
-A7:      e.{} = [o,the carrier of IIG] by Th8;
-A8:    NonTerminals(DTConMSA(the Sorts of A))
-      = [:the OperSymbols of IIG,{the carrier of IIG}:] by MSAFREE:6;
-           the carrier of IIG in {the carrier of IIG} by TARSKI:def 1;
-      then reconsider nt = [o,the carrier of IIG]
-       as NonTerminal of DTConMSA(the Sorts of A) by A8,ZFMISC_1:106;
-
-      consider ts being FinSequence of TS(DTConMSA(the Sorts of A))
-        such that
-A9:      a = nt-tree ts and
-             nt ==> roots ts by A3,A7,DTCONSTR:10;
-
-      reconsider q = ts as DTree-yielding FinSequence;
-      take q;
-
-      consider x being set such that
-A10:      x in (the Sorts of A).v & a = root-tree[x,v] or
-        ex o' being OperSymbol of IIG st [o',the carrier of IIG] = a.{}
-          & the_result_sort_of o' = v by A4;
-           now
-        assume a = root-tree[x,v];
-        then [o,the carrier of IIG] = [x,v] by A3,A7,TREES_4:3;
-        then A11: the carrier of IIG = v by ZFMISC_1:33;
-             for X be set holds not X in X;
-        hence contradiction by A11;
-      end;
-      then consider o' being OperSymbol of IIG such that
-A12:      [o',the carrier of IIG] = a.{} and
-A13:      the_result_sort_of o' = v by A10;
-A14:    v in InnerVertices IIG & not v in
- SortsWithConstants IIG by A1,XBOOLE_0:def 4;
-           o = o' by A3,A7,A12,ZFMISC_1:33
-        .= action_at v by A13,A14,MSAFREE2:def 7;
-      hence thesis by A3,A9;
-    end;
+  for IIG for A being locally-finite non-empty MSAlgebra over IIG,
+  v being Vertex of IIG, e being Element of (the Sorts of FreeEnv A).v
+  st v in (InnerVertices IIG \ SortsWithConstants IIG) & card e = size(v,A)
+  ex q being DTree-yielding FinSequence st
+  e = [action_at v,the carrier of IIG]-tree q
+proof
+  let IIG;
+  let A be locally-finite non-empty MSAlgebra over IIG, v be Vertex of IIG,
+  e be Element of (the Sorts of FreeEnv A).v;
+  assume that
+A1: v in (InnerVertices IIG \ SortsWithConstants IIG) and
+A2: card e = size(v,A);
+  FreeEnv A = MSAlgebra (# FreeSort the Sorts of A,
+    FreeOper the Sorts of A #) by MSAFREE:def 16;
+  then (the Sorts of FreeEnv A).v
+  = FreeSort(the Sorts of A, v) by MSAFREE:def 13;
+  then e in FreeSort(the Sorts of A, v);
+  then e in {a where a is Element of TS(DTConMSA(the Sorts of A)):
+  (ex x being set st x in (the Sorts of A).v & a = root-tree[x,v]) or
+  ex o being OperSymbol of IIG st [o,the carrier of IIG] = a.{}
+  & the_result_sort_of o = v} by MSAFREE:def 12;
+  then consider a being Element of TS(DTConMSA(the Sorts of A)) such that
+A3: a = e and
+A4: (ex x being set st x in (the Sorts of A).v & a = root-tree[x,v]) or
+  ex o being OperSymbol of IIG st [o,the carrier of IIG] = a.{}
+  & the_result_sort_of o = v;
+A5: v in InnerVertices IIG & not v in SortsWithConstants IIG
+  by A1,XBOOLE_0:def 4;
+  InputVertices IIG misses InnerVertices IIG by XBOOLE_1:79;
+  then InputVertices IIG /\ InnerVertices IIG = {} by XBOOLE_0:def 7;
+  then not v in InputVertices IIG by A5,XBOOLE_0:def 3;
+  then not v in InputVertices IIG \/ SortsWithConstants IIG
+  by A5,XBOOLE_0:def 2;
+  then
+A6: card e <> 1 by A2,Th11;
+  reconsider e' = e as finite non empty set;
+  1 <= card e' by CARD_2:59,NAT_1:14;
+  then 1 < card e' by A6,REAL_1:def 5;
+  then consider o being OperSymbol of IIG such that
+A7: e.{} = [o,the carrier of IIG] by Th8;
+A8: NonTerminals(DTConMSA(the Sorts of A))
+  = [:the OperSymbols of IIG,{the carrier of IIG}:] by MSAFREE:6;
+  the carrier of IIG in {the carrier of IIG} by TARSKI:def 1;
+  then reconsider nt = [o,the carrier of IIG]
+  as NonTerminal of DTConMSA(the Sorts of A) by A8,ZFMISC_1:106;
+  consider ts being FinSequence of TS(DTConMSA(the Sorts of A)) such that
+A9: a = nt-tree ts and nt ==> roots ts by A3,A7,DTCONSTR:10;
+  reconsider q = ts as DTree-yielding FinSequence;
+  take q;
+  consider x being set such that
+A10: x in (the Sorts of A).v & a = root-tree[x,v] or
+  ex o' being OperSymbol of IIG st [o',the carrier of IIG] = a.{}
+  & the_result_sort_of o' = v by A4;
+  now
+    assume a = root-tree[x,v];
+    then [o,the carrier of IIG] = [x,v] by A3,A7,TREES_4:3;
+    then
+A11: the carrier of IIG = v by ZFMISC_1:33;
+    for X be set holds not X in X;
+    hence contradiction by A11;
+  end;
+  then consider o' being OperSymbol of IIG such that
+A12: [o',the carrier of IIG] = a.{} and
+A13: the_result_sort_of o' = v by A10;
+A14: v in InnerVertices IIG & not v in
+  SortsWithConstants IIG by A1,XBOOLE_0:def 4;
+  o = o' by A3,A7,A12,ZFMISC_1:33
+    .= action_at v by A13,A14,MSAFREE2:def 7;
+  hence thesis by A3,A9;
+end;
 
 theorem
-       for IIG
-  for A being locally-finite non-empty MSAlgebra over IIG,
-    v being Vertex of IIG,
-    e being Element of (the Sorts of FreeEnv A).v
-      st v in (InnerVertices IIG \ SortsWithConstants IIG)
-        & card e = size(v,A)
-    ex o being OperSymbol of IIG st e.{} = [o,the carrier of IIG]
-    proof
-      let IIG;
-      let A be locally-finite non-empty MSAlgebra over IIG,
-        v be Vertex of IIG,
-        e be Element of (the Sorts of FreeEnv A).v such that
-A1:        v in (InnerVertices IIG \ SortsWithConstants IIG)
-          & card e = size(v,A);
-      consider q being DTree-yielding FinSequence such that
-A2:      e = [action_at v,the carrier of IIG]-tree q by A1,Th13;
-      take action_at v;
-      thus thesis by A2,TREES_4:def 4;
-    end;
+  for IIG for A being locally-finite non-empty MSAlgebra over IIG,
+  v being Vertex of IIG, e being Element of (the Sorts of FreeEnv A).v
+  st v in (InnerVertices IIG \ SortsWithConstants IIG) & card e = size(v,A)
+  ex o being OperSymbol of IIG st e.{} = [o,the carrier of IIG]
+proof
+  let IIG;
+  let A be locally-finite non-empty MSAlgebra over IIG, v be Vertex of IIG,
+  e be Element of (the Sorts of FreeEnv A).v such that
+A1: v in (InnerVertices IIG \ SortsWithConstants IIG) & card e = size(v,A);
+  consider q being DTree-yielding FinSequence such that
+A2: e = [action_at v,the carrier of IIG]-tree q by A1,Th13;
+  take action_at v;
+  thus thesis by A2,TREES_4:def 4;
+end;
 
 definition
   let S be non void (non empty ManySortedSign),
-      A be locally-finite non-empty MSAlgebra over S,
-    v be SortSymbol of S,
-    e be Element of (the Sorts of FreeEnv A).v;
+  A be locally-finite non-empty MSAlgebra over S, v be SortSymbol of S,
+  e be Element of (the Sorts of FreeEnv A).v;
   func depth e -> Element of NAT means
-:Def5: ex e' being Element of (the Sorts of FreeMSA the Sorts of A).v st
-      e = e' & it = depth e';
- existence
+  :Def5:
+  ex e' being Element of (the Sorts of FreeMSA the Sorts of A).v st
+  e = e' & it = depth e';
+  existence
   proof
-    reconsider e' = e as
-              Element of (the Sorts of FreeMSA the Sorts of A).v;
+    reconsider e' = e as Element of (the Sorts of FreeMSA the Sorts of A).v;
     reconsider d = depth e' as Element of NAT by ORDINAL1:def 13;
-   take d,e';
-   thus thesis;
+    take d,e';
+    thus thesis;
   end;
- correctness;
+  correctness;
 end;
 
 theorem Th15:
-  for IIG
-  for A being locally-finite non-empty MSAlgebra over IIG,
-    v, w being Element of IIG
-      st v in InnerVertices IIG & w in rng the_arity_of action_at v
-    holds size(w,A) < size(v,A)
-    proof
-      let IIG;
-      let A be locally-finite non-empty MSAlgebra over IIG,
-        v, w be Element of IIG;
-      assume that
-A1:     v in InnerVertices IIG and
-A2:     w in rng the_arity_of action_at v;
-
-      reconsider av = action_at v as OperSymbol of IIG;
-      consider x being set such that
-A3:      x in dom (the_arity_of av) and
-A4:      w = (the_arity_of av).x by A2,FUNCT_1:def 5;
-      reconsider k = x as Element of NAT by A3;
-      consider sv being finite non empty Subset of NAT such that
-A5:      sv = { card tv where tv is Element of (the Sorts of FreeEnv A).v
-                 : not contradiction } and
-A6:      size(v,A) = max sv by Def4;
-      reconsider Yv = sv as finite non empty real-membered set;
-           max Yv in Yv by PRE_CIRC:def 1;
-      then consider tv being Element of (the Sorts of FreeEnv A).v such that
-A7:      card tv = max Yv by A5;
-      reconsider e1 = tv as finite DecoratedTree;
-           now
-        assume v in SortsWithConstants IIG;
-        then v in { v' where v' is SortSymbol of IIG : v' is with_const_op }
-          by MSAFREE2:def 1;
-        then consider v' being SortSymbol of IIG such that
-A8:        v' = v and
-A9:       v' is with_const_op;
-        consider oo being OperSymbol of IIG such that
-A10:       (the Arity of IIG).oo = {} and
-A11:       (the ResultSort of IIG).oo = v' by A9,MSUALG_2:def 2;
-             the_result_sort_of oo = v by A8,A11,MSUALG_1:def 7
-          .= the_result_sort_of av by A1,MSAFREE2:def 7;
-        then A12:       av = oo by MSAFREE2:def 6;
-        reconsider aoo = (the Arity of IIG).oo as FinSequence by A10;
-             dom aoo = {} by A10,FINSEQ_1:26;
-        hence contradiction by A3,A12,MSUALG_1:def 6;
-      end;
-      then A13:     v in (InnerVertices IIG \ SortsWithConstants IIG)
-        by A1,XBOOLE_0:def 4;
-      then consider p being DTree-yielding FinSequence such that
-A14:      tv = [av,the carrier of IIG]-tree p by A6,A7,Th13;
-
-      consider sw being finite non empty Subset of NAT such that
-A15:      sw = { card tw where tw is Element of (the Sorts of FreeEnv A).w
-                : not contradiction } and
-A16:      size(w,A) = max sw by Def4;
-      reconsider Yw = sw as finite non empty real-membered set;
-           max Yw in Yw by PRE_CIRC:def 1;
-      then consider tw being Element of (the Sorts of FreeEnv A).w such that
-A17:      card tw = max Yw by A15;
-      reconsider e2 = tw as finite DecoratedTree;
-      consider p' being DTree-yielding FinSequence such that
-A18:     p' = p and
-A19:     dom e1 = tree(doms p') by A14,TREES_4:def 4;
-
-      A20: (the Sorts of FreeEnv A).v
-        = (the Sorts of FreeEnv A).(the_result_sort_of av)
-          by A1,MSAFREE2:def 7;
-      then len p = len the_arity_of av by A14,MSAFREE2:13;
-      then A21:     k in dom p by A3,FINSEQ_3:31;
-      reconsider k1 = k - 1 as Element of NAT by A3,FINSEQ_3:28;
-A22:   k1 + 1 = k;
-      reconsider o = <*k1*> as FinSequence of NAT;
-      reconsider o as Element of dom e1 by A18,A19,A21,A22,PRE_CIRC:17;
-      reconsider eoe = e1 with-replacement (o,e2) as finite Function;
-      reconsider de1 = dom e1 as finite Tree;
-      reconsider de2 = dom e2 as finite Tree;
-      reconsider o as Element of de1;
-A23:  dom eoe = de1 with-replacement (o,de2) by TREES_2:def 12;
-      then reconsider deoe = dom eoe as finite Tree;
-       p.k in (the Sorts of FreeEnv A).((the_arity_of av).k)
-        by A3,A14,A20,MSAFREE2:14;
-      then reconsider eoe as Element of (the Sorts of FreeEnv A).v by A4,A13
-,A14,A21,A22,Th7;
-           card eoe in Yv by A5;
-      then A24:     card eoe <= size(v,A) by A6,PRE_CIRC:def 1;
-
-A25:    card deoe + card (de1|o) = card de1 + card de2 by A23,PRE_CIRC:22;
-       card (de1|o) < card de1 by PRE_CIRC:20;
-      then card (de1|o) + card de2 < card deoe + card (de1|o) by A25,XREAL_1:8
-;
-      then card de2 < card deoe by XREAL_1:8;
-      then A26:     card e2 < card deoe by PRE_CIRC:21;
-           card deoe <= size(v,A) by A24,PRE_CIRC:21;
-      hence size(w,A) < size(v,A) by A16,A17,A26,XXREAL_0:2;
-    end;
+  for IIG for A being locally-finite non-empty MSAlgebra over IIG,
+  v, w being Element of IIG
+  st v in InnerVertices IIG & w in rng the_arity_of action_at v
+  holds size(w,A) < size(v,A)
+proof
+  let IIG;
+  let A be locally-finite non-empty MSAlgebra over IIG,
+  v, w be Element of IIG;
+  assume that
+A1: v in InnerVertices IIG and
+A2: w in rng the_arity_of action_at v;
+  reconsider av = action_at v as OperSymbol of IIG;
+  consider x being set such that
+A3: x in dom (the_arity_of av) and
+A4: w = (the_arity_of av).x by A2,FUNCT_1:def 5;
+  reconsider k = x as Element of NAT by A3;
+  consider sv being finite non empty Subset of NAT such that
+A5: sv = { card tv where tv is Element of (the Sorts of FreeEnv A).v
+  : not contradiction } and
+A6: size(v,A) = max sv by Def4;
+  reconsider Yv = sv as finite non empty real-membered set;
+  max Yv in Yv by PRE_CIRC:def 1;
+  then consider tv being Element of (the Sorts of FreeEnv A).v such that
+A7: card tv = max Yv by A5;
+  reconsider e1 = tv as finite DecoratedTree;
+  now
+    assume v in SortsWithConstants IIG;
+    then v in { v' where v' is SortSymbol of IIG : v' is with_const_op }
+    by MSAFREE2:def 1;
+    then consider v' being SortSymbol of IIG such that
+A8: v' = v and
+A9: v' is with_const_op;
+    consider oo being OperSymbol of IIG such that
+A10: (the Arity of IIG).oo = {} and
+A11: (the ResultSort of IIG).oo = v' by A9,MSUALG_2:def 2;
+    the_result_sort_of oo = v by A8,A11,MSUALG_1:def 7
+      .= the_result_sort_of av by A1,MSAFREE2:def 7;
+    then
+A12: av = oo by MSAFREE2:def 6;
+    reconsider aoo = (the Arity of IIG).oo as FinSequence by A10;
+    dom aoo = {} by A10,FINSEQ_1:26;
+    hence contradiction by A3,A12,MSUALG_1:def 6;
+  end;
+  then
+A13: v in (InnerVertices IIG \ SortsWithConstants IIG) by A1,XBOOLE_0: def 4;
+  then consider p being DTree-yielding FinSequence such that
+A14: tv = [av,the carrier of IIG]-tree p by A6,A7,Th13;
+  consider sw being finite non empty Subset of NAT such that
+A15: sw = { card tw where tw is Element of (the Sorts of FreeEnv A).w
+  : not contradiction } and
+A16: size(w,A) = max sw by Def4;
+  reconsider Yw = sw as finite non empty real-membered set;
+  max Yw in Yw by PRE_CIRC:def 1;
+  then consider tw being Element of (the Sorts of FreeEnv A).w such that
+A17: card tw = max Yw by A15;
+  reconsider e2 = tw as finite DecoratedTree;
+  consider p' being DTree-yielding FinSequence such that
+A18: p' = p and
+A19: dom e1 = tree(doms p') by A14,TREES_4:def 4;
+A20: (the Sorts of FreeEnv A).v
+  = (the Sorts of FreeEnv A).(the_result_sort_of av) by A1,MSAFREE2:def 7;
+  then len p = len the_arity_of av by A14,MSAFREE2:13;
+  then
+A21: k in dom p by A3,FINSEQ_3:31;
+  reconsider k1 = k - 1 as Element of NAT by A3,FINSEQ_3:28;
+A22: k1 + 1 = k;
+  reconsider o = <*k1*> as FinSequence of NAT;
+  reconsider o as Element of dom e1 by A18,A19,A21,A22,PRE_CIRC:17;
+  reconsider eoe = e1 with-replacement (o,e2) as finite Function;
+  reconsider de1 = dom e1 as finite Tree;
+  reconsider de2 = dom e2 as finite Tree;
+  reconsider o as Element of de1;
+A23: dom eoe = de1 with-replacement (o,de2) by TREES_2:def 12;
+  then reconsider deoe = dom eoe as finite Tree;
+  p.k in (the Sorts of FreeEnv A).((the_arity_of av).k)
+  by A3,A14,A20,MSAFREE2:14;
+  then reconsider eoe as Element of (the Sorts of FreeEnv A).v by A4,A13
+  ,A14,A21,A22,Th7;
+  card eoe in Yv by A5;
+  then
+A24: card eoe <= size(v,A) by A6,PRE_CIRC:def 1;
+A25: card deoe + card (de1|o) = card de1 + card de2 by A23,PRE_CIRC:22;
+  card (de1|o) < card de1 by PRE_CIRC:20;
+  then card (de1|o) + card de2 < card deoe + card (de1|o) by A25,XREAL_1:8;
+  then card de2 < card deoe by XREAL_1:8;
+  then
+A26: card e2 < card deoe by PRE_CIRC:21;
+  card deoe <= size(v,A) by A24,PRE_CIRC:21;
+  hence size(w,A) < size(v,A) by A16,A17,A26,XXREAL_0:2;
+end;
 
 theorem Th16:
-  for IIG
-  for A being locally-finite non-empty MSAlgebra over IIG,
-    v being SortSymbol of IIG
-    holds size(v,A) > 0
-    proof
-      let IIG;
-      let A be locally-finite non-empty MSAlgebra over IIG,
-        v be SortSymbol of IIG;
-      consider s being finite non empty Subset of NAT such that
-A1:      s = { card t where t is Element of (the Sorts of FreeEnv A).v
-               : not contradiction } and
-A2:      size(v,A) = max s by Def4;
-      reconsider Y = s as finite non empty real-membered set;
-           max Y in { card t where t is Element of (the Sorts of FreeEnv A).v
-              : not contradiction } by A1,PRE_CIRC:def 1;
-      then consider t being Element of (the Sorts of FreeEnv A).v such that
-A3:      card t = max Y;
-             size(v,A) <> 0 by A2,A3,CARD_2:59;
-      hence size(v,A) > 0;
-    end;
+  for IIG for A being locally-finite non-empty MSAlgebra over IIG,
+  v being SortSymbol of IIG holds size(v,A) > 0
+proof
+  let IIG;
+  let A be locally-finite non-empty MSAlgebra over IIG,
+  v be SortSymbol of IIG;
+  consider s being finite non empty Subset of NAT such that
+A1: s = { card t where t is Element of (the Sorts of FreeEnv A).v
+  : not contradiction } and
+A2: size(v,A) = max s by Def4;
+  reconsider Y = s as finite non empty real-membered set;
+  max Y in { card t where t is Element of (the Sorts of FreeEnv A).v
+  : not contradiction } by A1,PRE_CIRC:def 1;
+  then consider t being Element of (the Sorts of FreeEnv A).v such that
+A3: card t = max Y;
+  size(v,A) <> 0 by A2,A3,CARD_2:59;
+  hence size(v,A) > 0;
+end;
 
 theorem
-       for IIG
-  for A being non-empty Circuit of IIG, v being Vertex of IIG,
-    e being Element of (the Sorts of FreeEnv A).v,
-    p being DTree-yielding FinSequence
-      st v in InnerVertices IIG
-        & e = [action_at v,the carrier of IIG]-tree p
-        & for k being Element of NAT st k in dom p
-            ex ek being Element of (the Sorts of FreeEnv A)
-              .((the_arity_of action_at v)/.k) st ek = p.k
-              & card ek = size ((the_arity_of action_at v)/.k, A)
-    holds card e = size(v,A)
-  proof let IIG;
-     let A be non-empty Circuit of IIG, v be Vertex of IIG,
-         e be Element of (the Sorts of FreeEnv A).v,
-         p be DTree-yielding FinSequence
-      such that
-A1:   v in InnerVertices IIG and
-A2:   e = [action_at v,the carrier of IIG]-tree p and
-A3:   for k being Element of NAT st k in dom p
-        ex ek being Element of (the Sorts of FreeEnv A)
-             .((the_arity_of action_at v)/.k) st ek = p.k
-              & card ek = size ((the_arity_of action_at v)/.k, A);
-      consider s being finite non empty Subset of NAT such that
-A4:      s = { card t where t is Element of (the Sorts of FreeEnv A).v
-                 : not contradiction } and
-A5:      size(v,A) = max s by Def4;
-      reconsider S = s as finite non empty real-membered set;
-A6:    card e in S by A4;
-           now let r be real number;
-           FreeEnv A = MSAlgebra (# FreeSort the Sorts of A,
-        FreeOper the Sorts of A #) by MSAFREE:def 16;
-      then A7:      (the Sorts of FreeEnv A).v
-          = FreeSort(the Sorts of A,v) by MSAFREE:def 13;
-      reconsider e' = e as finite set;
-           card e' <> 0 by CARD_2:59;
-      then A8:      1 <= card e' by NAT_1:14;
-       assume r in S;
-        then consider t being Element of (the Sorts of FreeEnv A).v
-        such that
-A9:      r = card t by A4;
-             t in FreeSort(the Sorts of A, v) by A7;
-        then t in {a' where a' is Element of TS(DTConMSA(the Sorts of A)):
-          (ex x being set st x in (the Sorts of A).v
-            & a' = root-tree[x,v]) or
-          ex o being OperSymbol of IIG st [o,the carrier of IIG] = a'.{}
-            & the_result_sort_of o = v} by MSAFREE:def 12;
-        then consider a' being Element of TS(DTConMSA(the Sorts of A))
-          such that
-A10:        a' = t and
-A11:        (ex x being set st x in (the Sorts of A).v
-            & a' = root-tree[x,v]) or
-          ex o being OperSymbol of IIG st [o,the carrier of IIG] = a'.{}
-              & the_result_sort_of o = v;
-        per cases by A11;
-        suppose ex x being set st x in (the Sorts of A).v
-          & a' = root-tree[x,v];
-        then consider x being set such that
-A12:        x in (the Sorts of A).v & a' = root-tree[x,v];
-          root-tree[x,v] = { [{},[x,v]] } by TREES_4:6;
-        hence r <= card e by A8,A9,A10,A12,CARD_1:79;
+  for IIG for A being non-empty Circuit of IIG, v being Vertex of IIG,
+  e being Element of (the Sorts of FreeEnv A).v,
+  p being DTree-yielding FinSequence st v in InnerVertices IIG
+  & e = [action_at v,the carrier of IIG]-tree p
+  & for k being Element of NAT st k in dom p
+  ex ek being Element of (the Sorts of FreeEnv A)
+  .((the_arity_of action_at v)/.k) st ek = p.k
+  & card ek = size ((the_arity_of action_at v)/.k, A) holds card e = size(v,A)
+proof
+  let IIG;
+  let A be non-empty Circuit of IIG, v be Vertex of IIG,
+  e be Element of (the Sorts of FreeEnv A).v, p be DTree-yielding FinSequence
+  such that
+A1: v in InnerVertices IIG and
+A2: e = [action_at v,the carrier of IIG]-tree p and
+A3: for k being Element of NAT st k in dom p
+  ex ek being Element of (the Sorts of FreeEnv A)
+  .((the_arity_of action_at v)/.k) st ek = p.k
+  & card ek = size ((the_arity_of action_at v)/.k, A);
+  consider s being finite non empty Subset of NAT such that
+A4: s = { card t where t is Element of (the Sorts of FreeEnv A).v
+  : not contradiction } and
+A5: size(v,A) = max s by Def4;
+  reconsider S = s as finite non empty real-membered set;
+A6: card e in S by A4;
+  now
+    let r be real number;
+    FreeEnv A = MSAlgebra (# FreeSort the Sorts of A,
+      FreeOper the Sorts of A #) by MSAFREE:def 16;
+    then
+A7: (the Sorts of FreeEnv A).v = FreeSort(the Sorts of A,v) by MSAFREE
+    :def 13;
+    reconsider e' = e as finite set;
+A8: 1 <= card e' by CARD_2:59,NAT_1:14;
+    assume r in S;
+    then consider t being Element of (the Sorts of FreeEnv A).v such that
+A9: r = card t by A4;
+    t in FreeSort(the Sorts of A, v) by A7;
+    then t in {a' where a' is Element of TS(DTConMSA(the Sorts of A)):
+    (ex x being set st x in (the Sorts of A).v & a' = root-tree[x,v]) or
+    ex o being OperSymbol of IIG st [o,the carrier of IIG] = a'.{}
+    & the_result_sort_of o = v} by MSAFREE:def 12;
+    then consider a' being Element of TS(DTConMSA(the Sorts of A)) such that
+A10: a' = t and
+A11: (ex x being set st x in (the Sorts of A).v & a' = root-tree[x,v]) or
+    ex o being OperSymbol of IIG st [o,the carrier of IIG] = a'.{}
+    & the_result_sort_of o = v;
+    per cases by A11;
+    suppose ex x being set st x in (the Sorts of A).v & a' = root-tree[x,v];
+      then consider x being set such that
+A12:  x in (the Sorts of A).v & a' = root-tree[x,v];
+      root-tree[x,v] = { [{},[x,v]] } by TREES_4:6;
+      hence r <= card e by A8,A9,A10,A12,CARD_1:79;
+    end;
+    suppose ex o being OperSymbol of IIG st [o,the carrier of IIG] = a'.{}
+      & the_result_sort_of o = v;
+      then consider o being OperSymbol of IIG such that
+A13:  [o,the carrier of IIG] = a'.{} & the_result_sort_of o = v;
+      a'.{} = [action_at v,the carrier of IIG] by A1,A13,MSAFREE2:def 7;
+      then consider q being DTree-yielding FinSequence such that
+A14:  t = [action_at v,the carrier of IIG]-tree q by A10,Th10;
+      deffunc F(Nat) = p +* (q|Seg $1);
+      consider T being FinSequence such that len T = len p and
+A15:  for k being Nat st k in Seg len p holds T.k = F(k) from FINSEQ_1:sch 2;
+A16:  dom p = Seg len p by FINSEQ_1:def 3;
+A17:  the_result_sort_of action_at v = v by A1,MSAFREE2:def 7;
+      now per cases;
+        suppose len q = 0;
+          then q = {} by FINSEQ_1:25;
 
+then t = root-tree [action_at v,the carrier of IIG] by A14,TREES_4:20;
+          hence r <= card e by A8,A9,PRE_CIRC:24;
         end;
-        suppose ex o being OperSymbol of IIG st [o,the carrier of IIG] = a'.{}
-          & the_result_sort_of o = v;
-        then consider o being OperSymbol of IIG such that
-A13:        [o,the carrier of IIG] = a'.{} & the_result_sort_of o = v;
-             a'.{} = [action_at v,the carrier of IIG] by A1,A13,MSAFREE2:def 7;
-        then consider q being DTree-yielding FinSequence such that
-A14:        t = [action_at v,the carrier of IIG]-tree q
-                                          by A10,Th10;
-        deffunc F(Nat) = p +* (q|Seg $1);
-        consider T being FinSequence such that
-               len T = len p and
-A15:      for k being Nat st k in Seg len p holds T.k = F(k) from
-FINSEQ_1:sch 2;
-    A16: dom p = Seg len p by FINSEQ_1:def 3;
-A17:    the_result_sort_of action_at v = v by A1,MSAFREE2:def 7;
-            now per cases;
-       suppose len q = 0;
-        then q = {} by FINSEQ_1:25;
-        then t = root-tree [action_at v,the carrier of IIG] by A14,TREES_4:20;
-        hence r <= card e by A8,A9,PRE_CIRC:24;
-       end;
-       suppose
+        suppose
 A18:      len q <> 0;
-A19:     len p = len the_arity_of action_at v by A2,A17,MSAFREE2:13;
-then A20:      len p = len q by A14,A17,MSAFREE2:13;
-        then A21:      dom p = dom q by FINSEQ_3:31;
-A22:    dom p = dom the_arity_of action_at v by A19,FINSEQ_3:31;
+A19:      len p = len the_arity_of action_at v by A2,A17,MSAFREE2:13;
+          then
+A20:      len p = len q by A14,A17,MSAFREE2:13;
+          then
+A21:      dom p = dom q by FINSEQ_3:31;
+A22:      dom p = dom the_arity_of action_at v by A19,FINSEQ_3:31;
 A23:      1+0 <= len p by A18,A20,NAT_1:14;
-defpred P[Element of NAT] means $1 in dom p implies
-        for qk be DTree-yielding FinSequence st qk = T.$1
-        for tk be finite set st tk = [action_at v,the carrier of IIG]-tree qk
-         holds card tk <= card e;
-A24:  P[0] by FINSEQ_3:27;
-A25:   now let k be Element of NAT;
-         assume
-A26:       P[k];
-         thus P[k+1]
-         proof
-         assume
-A27:      k+1 in dom p;
-         let qk1 be DTree-yielding FinSequence such that
-A28:      qk1 = T.(k+1);
-         let tk1 be finite set; assume
-A29:      tk1 = [action_at v,the carrier of IIG]-tree qk1;
-         then reconsider treek1 = tk1 as finite DecoratedTree;
-         reconsider tree0 = [action_at v,the carrier of IIG]-tree p
-              as finite DecoratedTree by A2;
-         per cases;
-         suppose
-A30:        k = 0;
-          set v1 = (the_arity_of action_at v)/.1;
-A31:       1 in dom p by A23,FINSEQ_3:27;
-          then consider e1 being Element of (the Sorts of FreeEnv A).v1
-          such that
-A32:        e1 = p.1 and
-A33:        card e1 = size (v1, A) by A3;
-          consider s1 being finite non empty Subset of NAT such that
-A34:     s1 = { card t1 where t1 is
-               Element of (the Sorts of FreeEnv A).v1 :
-               not contradiction } and
-A35:     card e1 = max s1 by A33,Def4;
-          reconsider S1 = s1 as finite non empty real-membered set;
-A36:       1 in dom the_arity_of action_at v by A19,A23,FINSEQ_3:27;
-A37:       1 in dom p by A23,FINSEQ_3:27;
-A38:      1 in Seg 1 by FINSEQ_1:5;
-then A39:       1 in dom(q|Seg 1) by A21,A31,RELAT_1:86;
-A40:       qk1.1 = (p +* (q|Seg 1)).1 by A15,A16,A28,A30,A37
-             .= (q|Seg 1).1 by A39,FUNCT_4:14
-             .= q.1 by A38,FUNCT_1:72;
-
-               dom qk1 = dom(p +* (q|Seg 1)) by A15,A16,A28,A30,A37
-                 .= dom p \/ dom(q|Seg 1) by FUNCT_4:def 1
-                 .= dom p \/ dom q /\ Seg 1 by RELAT_1:90
-                 .= dom p by A21,XBOOLE_1:22;
-          then A41:       len qk1 = len p by FINSEQ_3:31;
-            q.1 in
-           (the Sorts of FreeEnv A).((the_arity_of action_at v).1)
-                      by A14,A17,A36,MSAFREE2:14;
-          then reconsider T1 = q.1 as
-            Element of (the Sorts of FreeEnv A).v1 by A36,PARTFUN1:def 8;
-               card T1 in S1 by A34;
-          then A42:       card T1 <= card e1 by A35,PRE_CIRC:def 1;
-          reconsider Tx = p.1 as finite DecoratedTree by A32;
-A43:       {} is Element of dom Tx by TREES_1:47;
-               <*0*> = <*0*>^{} by FINSEQ_1:47;
-          then reconsider w0 = <*0*> as Element of dom tree0 by A23,A43,
-TREES_4:11;
-A44:       tree0|w0 = e1 by A23,A32,TREES_4:def 4;
-          consider q0 being DTree-yielding FinSequence such that
-A45:      e with-replacement (w0,T1) =
-             [action_at v,the carrier of IIG]-tree q0 and
-A46:         len q0 = len p and
-A47:         q0.(0+1) = T1 and
-A48:         for i being Element of NAT st i in dom p & i <> 0+1
- holds q0.i = p.i
-                      by A2,PRE_CIRC:19;
-               now let k be Nat;
-           assume 1 <= k & k <= len q0;
-then A49:          k in dom p by A46,FINSEQ_3:27;
-           per cases;
-           suppose
-                k = 1;
-           hence q0.k = qk1.k by A40,A47;
-           end;
-           suppose
-A50:           k <> 1;
-            then A51:         not k in Seg 1 by FINSEQ_1:4,TARSKI:def 1;
-                 dom(q|Seg 1) = dom q /\ Seg 1 by RELAT_1:90;
-            then A52:           not k in dom(q|Seg 1) by A51,XBOOLE_0:def 3;
-           thus qk1.k = (p +* (q|Seg 1)).k by A15,A16,A28,A30,A37
-                 .= p.k by A52,FUNCT_4:12
-                 .=q0.k by A48,A49,A50;
-          end;
-          end;
-          then treek1 = tree0 with-replacement (w0,T1)
-            by A2,A29,A41,A45,A46,FINSEQ_1:18;
-          then card treek1 + card (tree0|w0) = card tree0 + card T1
-                  by PRE_CIRC:23;
-         hence card tk1 <= card e by A2,A42,A44,XREAL_1:10;
-         end;
-         suppose k <> 0;
-          then A53:        k >= 1 by NAT_1:14;
-A54:        k+1 <= len p by A27,FINSEQ_3:27;
-          then A55:      k < len p by NAT_1:13;
-          then A56:       k in dom p by A53,FINSEQ_3:27;
-          A57: k+1 >= 1 by NAT_1:11;
-               T.k = p +* (q|Seg k) by A15,A16,A56;
-          then reconsider qk = T.k as Function;
-A58:       dom qk1 = dom(p +* (q|Seg(k+1))) by A15,A16,A27,A28
-                 .= dom p \/ dom(q|Seg(k+1)) by FUNCT_4:def 1
-                 .= dom p \/ dom q /\ Seg(k+1) by RELAT_1:90
-                 .= dom p by A21,XBOOLE_1:22;
-A59:       dom qk = dom(p +* (q|Seg k)) by A15,A16,A56
-                 .= dom p \/ dom(q|Seg k) by FUNCT_4:def 1
-                 .= dom p \/ dom q /\ Seg k by RELAT_1:90
-                 .= dom p by A21,XBOOLE_1:22;
-          then dom qk = Seg len p by FINSEQ_1:def 3;
-          then reconsider qk as FinSequence by FINSEQ_1:def 2;
-A60:      for x being set st x in dom qk holds qk.x is finite DecoratedTree
-           proof
-            let x be set;
+          defpred P[Element of NAT] means $1 in dom p implies
+          for qk be DTree-yielding FinSequence st qk = T.$1
+          for tk be finite set st tk = [action_at v,the carrier of IIG]-tree qk
+          holds card tk <= card e;
+A24:      P[0] by FINSEQ_3:27;
+A25:      now
+            let k be Element of NAT;
             assume
-A61:         x in dom qk;
-            then reconsider n = x as Element of NAT;
-            set v1 = (the_arity_of action_at v)/.n;
-                 qk.n = q.n or qk.n = p.n
-            proof per cases;
-             suppose
-A62:           n <= k;
-                    n>=1 by A61,FINSEQ_3:27;
-               then A63:            n in Seg k by A62,FINSEQ_1:3;
-                    dom(q|Seg k) = dom q /\ Seg k by RELAT_1:90;
-               then A64:           n in dom(q|Seg k) by A21,A59,A61,A63,
-XBOOLE_0:def 3;
-                    qk.n = (p +* (q|Seg k)).n by A15,A16,A56
-                       .= (q|Seg k).n by A64,FUNCT_4:14
-                       .= q.n by A64,FUNCT_1:70;
-              hence thesis;
-             end;
-             suppose n > k;
-               then A65:           not n in Seg k by FINSEQ_1:3;
-                    dom(q|Seg k) = dom q /\ Seg k by RELAT_1:90;
-               then A66:             not n in dom(q|Seg k) by A65,
-XBOOLE_0:def 3;
-                    qk.n = (p +* (q|Seg k)).n by A15,A16,A56
-                  .= p.n by A66,FUNCT_4:12;
-              hence thesis;
-            end;
-            end;
-            then qk.n in
-             (the Sorts of FreeEnv A).
-              ((the_arity_of action_at v).n) by A2,A14,A17,A22,A59,A61,
-MSAFREE2:14;
-         then reconsider T1 = qk.n as
-             Element of (the Sorts of FreeEnv A).v1 by A22,A59,A61,
-PARTFUN1:def 8;
-                  T1 in (the Sorts of FreeEnv A).v1;
-            hence qk.x is finite DecoratedTree;
-           end;
-          then for x being set st x in dom qk holds qk.x is DecoratedTree;
-          then reconsider qk as DTree-yielding FinSequence by TREES_3:26;
-          set v1 = (the_arity_of action_at v)/.(k+1);
-               now let x be set;
-           assume x in dom doms qk;
-            then A67:         x in dom qk by TREES_3:39;
-            then reconsider T1 = qk.x as finite DecoratedTree by A60;
-                 dom T1 is finite Tree;
-           hence (doms qk).x is finite Tree by A67,FUNCT_6:31;
-          end;
-          then reconsider qkf = doms qk as FinTree-yielding FinSequence by
-TREES_3:25;
-A68:    tree(qkf) is finite;
-               ex q being DTree-yielding FinSequence
-          st qk = q & dom([action_at v,the carrier of IIG]-tree qk) =
-            tree(doms q) by TREES_4:def 4;
-          then reconsider tk = [action_at v,the carrier of IIG]-tree qk
-                as finite DecoratedTree by A68,FINSET_1:29;
-A69:     card tk <= card e by A26,A53,A55,FINSEQ_3:27;
-          consider e1 being Element of (the Sorts of FreeEnv A).v1
-          such that
-A70:        e1 = p.(k+1) and
-A71:        card e1 = size (v1, A) by A3,A27;
-A72:      not k+1 in Seg k by FINSEQ_3:9;
-               dom(q|Seg k) = dom q /\ Seg k by RELAT_1:90;
-          then A73:        not k+1 in dom(q|Seg k) by A72,XBOOLE_0:def 3;
-A74:       qk.(k+1) = (p +* (q|Seg k)).(k+1) by A15,A16,A56
-             .= p.(k+1) by A73,FUNCT_4:12;
-A75:       k+1 in dom the_arity_of action_at v by A19,A54,A57,FINSEQ_3:27;
-then A76:       p.(k+1) in
-           (the Sorts of FreeEnv A).
-             ((the_arity_of action_at v).(k+1)) by A2,A17,MSAFREE2:14;
-A77:       v1 = (the_arity_of action_at v).(k+1) by A75,PARTFUN1:def 8;
-          reconsider T1 = p.(k+1) as
-            Element of (the Sorts of FreeEnv A).v1 by A75,A76,PARTFUN1:def 8;
-               T1 in (the Sorts of FreeEnv A).v1;
-          then reconsider Tx = qk.(k+1) as finite DecoratedTree
-                              by A74;
-          consider s1 being finite non empty Subset of NAT such that
-A78:     s1 = { card t1 where t1 is
-               Element of (the Sorts of FreeEnv A).v1 :
-               not contradiction } and
-A79:     card e1 = max s1 by A71,Def4;
-          reconsider S1 = s1 as finite non empty real-membered set;
-A80:      k+1 in Seg(k+1) by FINSEQ_1:5;
-then A81:       k+1 in dom(q|Seg(k+1)) by A21,A27,RELAT_1:86;
-A82:       qk1.(k+1) = (p +* (q|Seg(k+1))).(k+1) by A15,A16,A27,A28
-             .= (q|Seg(k+1)).(k+1) by A81,FUNCT_4:14
-             .= q.(k+1) by A80,FUNCT_1:72;
-A83:       len qk1 = len p by A58,FINSEQ_3:31;
-       reconsider T1 = q.(k+1) as
-            Element of (the Sorts of FreeEnv A).v1 by A14,A17,A75,A77,
-MSAFREE2:14;
-               card T1 in S1 by A78;
-          then A84:       card T1 <= card e1 by A79,PRE_CIRC:def 1;
-A85:       {} is Element of dom Tx by TREES_1:47;
-A86:      len qk = len p by A59,FINSEQ_3:31;
-          A87:       k < len qk by A55,A59,FINSEQ_3:31;
-          A88: <*k*> = <*k*>^{} by FINSEQ_1:47;
-          then A89:        <*k*> in dom tk by A55,A85,A86,TREES_4:11;
-          reconsider w0 = <*k*> as Element of dom tk by A85,A87,A88,TREES_4:11;
-          A90:       tk|w0 = e1 by A55,A70,A74,A86,TREES_4:def 4;
-          consider q0 being DTree-yielding FinSequence such that
-A91:         tk with-replacement (<*k*>,T1) =
+A26:        P[k];
+            thus P[k+1]
+            proof
+              assume
+A27:          k+1 in dom p;
+              let qk1 be DTree-yielding FinSequence such that
+A28:          qk1 = T.(k+1);
+              let tk1 be finite set;
+              assume
+A29:          tk1 = [action_at v,the carrier of IIG]-tree qk1;
+              then reconsider treek1 = tk1 as finite DecoratedTree;
+              reconsider tree0 = [action_at v,the carrier of IIG]-tree p
+              as finite DecoratedTree by A2;
+              per cases;
+              suppose
+A30:            k = 0;
+                set v1 = (the_arity_of action_at v)/.1;
+A31:            1 in dom p by A23,FINSEQ_3:27;
+                then consider e1 being Element of (the Sorts of FreeEnv A).v1
+                such that
+A32:            e1 = p.1 and
+A33:            card e1 = size (v1, A) by A3;
+                consider s1 being finite non empty Subset of NAT such that
+A34:            s1 = { card t1 where t1 is
+                Element of (the Sorts of FreeEnv A).v1 :
+                not contradiction } and
+A35:            card e1 = max s1 by A33,Def4;
+                reconsider S1 = s1 as finite non empty real-membered set;
+A36:            1 in dom the_arity_of action_at v by A19,A23,FINSEQ_3:27;
+A37:            1 in dom p by A23,FINSEQ_3:27;
+                1 in Seg 1 by FINSEQ_1:5;
+                then
+A38:            1 in dom(q|Seg 1) by A21,A31,RELAT_1:86;
+A39:            qk1.1 = (p +* (q|Seg 1)).1 by A15,A16,A28,A30,A37
+                  .= (q|Seg 1).1 by A38,FUNCT_4:14
+                  .= q.1 by FINSEQ_1:5,FUNCT_1:72;
+                dom qk1 = dom(p +* (q|Seg 1)) by A15,A16,A28,A30,A37
+                  .= dom p \/ dom(q|Seg 1) by FUNCT_4:def 1
+                  .= dom p \/ dom q /\ Seg 1 by RELAT_1:90
+                  .= dom p by A21,XBOOLE_1:22;
+                then
+A40:            len qk1 = len p by FINSEQ_3:31;
+                q.1 in (the Sorts of FreeEnv A).((the_arity_of action_at v).1)
+                by A14,A17,A36,MSAFREE2:14;
+                then reconsider T1 = q.1 as
+                Element of (the Sorts of FreeEnv A).v1 by A36,PARTFUN1:def 8;
+                card T1 in S1 by A34;
+                then
+A41:            card T1 <= card e1 by A35,PRE_CIRC:def 1;
+                reconsider Tx = p.1 as finite DecoratedTree by A32;
+A42:            {} is Element of dom Tx by TREES_1:47;
+                <*0*> = <*0*>^{} by FINSEQ_1:47;
+                then reconsider w0 = <*0*> as Element of dom tree0 by A23,A42,
+                TREES_4:11;
+A43:            tree0|w0 = e1 by A23,A32,TREES_4:def 4;
+                consider q0 being DTree-yielding FinSequence such that
+A44:            e with-replacement (w0,T1) =
                 [action_at v,the carrier of IIG]-tree q0 and
-A92:         len q0 = len qk and
-A93:         q0.(k+1) = T1 and
-A94:         for i being Element of NAT st i in dom qk & i <> k+1
- holds q0.i = qk.i
-                      by A89,PRE_CIRC:19;
-               now let n be Nat;
-           assume
-A95:         1 <= n & n <= len q0;
-then A96:          n in dom qk by A92,FINSEQ_3:27;
-           per cases by REAL_1:def 5;
-           suppose
-                n = k+1;
-           hence q0.n = qk1.n by A82,A93;
-           end;
-           suppose
-A97:           n > k+1;
-            then A98:         not n in Seg(k+1) by FINSEQ_1:3;
-                 dom(q|Seg(k+1)) = dom q /\ Seg(k+1) by RELAT_1:90;
-            then A99:         not n in dom(q|Seg(k+1)) by A98,XBOOLE_0:def 3;
-                 k+1 >= k by NAT_1:11;
-            then n > k by A97,XXREAL_0:2;
-            then A100:         not n in Seg k by FINSEQ_1:3;
-                 dom(q|Seg k) = dom q /\ Seg k by RELAT_1:90;
-            then A101:          not n in dom(q|Seg k) by A100,XBOOLE_0:def 3;
-           thus qk1.n = (p +* (q|Seg(k+1))).n by A15,A16,A27,A28
-                 .= p.n by A99,FUNCT_4:12
-                 .= (p +* (q|Seg k)).n by A101,FUNCT_4:12
-                 .= qk.n by A15,A16,A56
-                 .= q0.n by A94,A96,A97;
-           end;
-           suppose
-A102:           n < k+1;
-            then A103:          n in Seg(k+1) by A95,FINSEQ_1:3;
-A104:         n in dom q by A20,A86,A92,A95,FINSEQ_3:27;
-                 dom(q|Seg(k+1)) = dom q /\ Seg(k+1) by RELAT_1:90;
-            then A105:          n in dom(q|Seg(k+1)) by A103,A104,
-XBOOLE_0:def 3;
-                    n <= k by A102,NAT_1:13;
-            then A106:          n in Seg k by A95,FINSEQ_1:3;
-                 dom(q|Seg k) = dom q /\ Seg k by RELAT_1:90;
-            then A107:          n in dom(q|Seg k) by A104,A106,XBOOLE_0:def 3;
-           thus qk1.n = (p +* (q|Seg(k+1))).n by A15,A16,A27,A28
-                 .= (q|Seg(k+1)).n by A105,FUNCT_4:14
-                 .= q.n by A105,FUNCT_1:70
-                 .= (q|Seg k).n by A107,FUNCT_1:70
-                 .= (p +* (q|Seg k)).n by A107,FUNCT_4:14
-                 .= qk.n by A15,A16,A56
-                 .= q0.n by A94,A96,A102;
+A45:            len q0 = len p and
+A46:            q0.(0+1) = T1 and
+A47:            for i being Element of NAT st i in dom p & i <> 0+1
+                holds q0.i = p.i by A2,PRE_CIRC:19;
+                now
+                  let k be Nat;
+                  assume 1 <= k & k <= len q0;
+                  then
+A48:              k in dom p by A45,FINSEQ_3:27;
+                  per cases;
+                  suppose k = 1;
+                    hence q0.k = qk1.k by A39,A46;
+                  end;
+                  suppose
+A49:                k <> 1;
+                    then
+A50:                not k in Seg 1 by FINSEQ_1:4, TARSKI:def 1;
+                    dom(q|Seg 1) = dom q /\ Seg 1 by RELAT_1:90;
+                    then
+A51:                not k in dom(q|Seg 1) by A50, XBOOLE_0:def 3;
+                    thus qk1.k = (p +* (q|Seg 1)).k by A15,A16,A28,A30,A37
+                      .= p.k by A51,FUNCT_4:12
+                      .=q0.k by A47,A48,A49;
+                  end;
+                end;
+                then treek1 = tree0 with-replacement (w0,T1)
+                by A2,A29,A40,A44,A45,FINSEQ_1:18;
+                then card treek1 + card (tree0|w0) = card tree0 + card T1
+                by PRE_CIRC:23;
+                hence card tk1 <= card e by A2,A41,A43,XREAL_1:10;
+              end;
+              suppose k <> 0;
+                then
+A52:            k >= 1 by NAT_1:14;
+A53:            k+1 <= len p by A27,FINSEQ_3:27;
+                then
+A54:            k < len p by NAT_1:13;
+                then
+A55:            k in dom p by A52,FINSEQ_3:27;
+A56:            k+1 >= 1 by NAT_1:11;
+                T.k = p +* (q|Seg k) by A15,A16,A55;
+                then reconsider qk = T.k as Function;
+A57:            dom qk1 = dom(p +* (q|Seg(k+1))) by A15,A16,A27,A28
+                  .= dom p \/ dom(q|Seg(k+1)) by FUNCT_4:def 1
+                  .= dom p \/ dom q /\ Seg(k+1) by RELAT_1:90
+                  .= dom p by A21,XBOOLE_1:22;
+A58:            dom qk = dom(p +* (q|Seg k)) by A15,A16,A55
+                  .= dom p \/ dom(q|Seg k) by FUNCT_4:def 1
+                  .= dom p \/ dom q /\ Seg k by RELAT_1:90
+                  .= dom p by A21,XBOOLE_1:22;
+                then dom qk = Seg len p by FINSEQ_1:def 3;
+                then reconsider qk as FinSequence by FINSEQ_1:def 2;
+A59:            for
+                x being set st x in dom qk holds qk.x is finite DecoratedTree
+                proof
+                  let x be set;
+                  assume
+A60:              x in dom qk;
+                  then reconsider n = x as Element of NAT;
+                  set v1 = (the_arity_of action_at v)/.n;
+                  qk.n = q.n or qk.n = p.n
+                  proof per cases;
+                    suppose
+A61:                  n <= k;
+                      n>=1 by A60,FINSEQ_3:27;
+                      then
+A62:                  n in Seg k by A61,FINSEQ_1:3;
+                      dom(q|Seg k) = dom q /\ Seg k by RELAT_1:90;
+                      then
+A63:                  n in dom(q|Seg k) by A21,A58, A60,A62, XBOOLE_0:def 3;
+                      qk.n = (p +* (q|Seg k)).n by A15,A16,A55
+                        .= (q|Seg k).n by A63,FUNCT_4:14
+                        .= q.n by A63,FUNCT_1:70;
+                      hence thesis;
+                    end;
+                    suppose n > k;
+                      then
+A64:                  not n in Seg k by FINSEQ_1:3;
+                      dom(q|Seg k) = dom q /\ Seg k by RELAT_1:90;
+                      then
+A65:                  not n in dom(q|Seg k) by A64, XBOOLE_0:def 3;
+                      qk.n = (p +* (q|Seg k)).n by A15,A16,A55
+                        .= p.n by A65,FUNCT_4:12;
+                      hence thesis;
+                    end;
+                  end;
+                  then qk.n in (the Sorts of FreeEnv A).
+                  ((the_arity_of action_at v).n) by A2,A14,A17,A22,A58,A60,
+                  MSAFREE2:14;
+                  then reconsider T1 = qk.n as
+                  Element of (the Sorts of FreeEnv A).v1 by A22,A58,A60,
+                  PARTFUN1:def 8;
+                  T1 in (the Sorts of FreeEnv A).v1;
+                  hence qk.x is finite DecoratedTree;
+                end;
+
+then for x being set st x in dom qk holds qk.x is DecoratedTree;
+                then reconsider qk as DTree-yielding FinSequence by TREES_3:26;
+                set v1 = (the_arity_of action_at v)/.(k+1);
+                now
+                  let x be set;
+                  assume x in dom doms qk;
+                  then
+A66:              x in dom qk by TREES_3:39;
+                  then reconsider T1 = qk.x as finite DecoratedTree by A59;
+                  dom T1 is finite Tree;
+                  hence (doms qk).x is finite Tree by A66,FUNCT_6:31;
+                end;
+
+then reconsider qkf = doms qk as FinTree-yielding FinSequence by TREES_3:25;
+A67:            tree(qkf) is finite;
+                ex q being DTree-yielding FinSequence
+                st qk = q & dom([action_at v,the carrier of IIG]-tree qk) =
+                tree(doms q) by TREES_4:def 4;
+                then reconsider tk = [action_at v,the carrier of IIG]-tree qk
+                as finite DecoratedTree by A67,FINSET_1:29;
+A68:            card tk <= card e by A26,A52,A54,FINSEQ_3:27;
+                consider e1 being Element of (the Sorts of FreeEnv A).v1
+                such that
+A69:            e1 = p.(k+1) and
+A70:            card e1 = size (v1, A) by A3,A27;
+A71:            not k+1 in Seg k by FINSEQ_3:9;
+                dom(q|Seg k) = dom q /\ Seg k by RELAT_1:90;
+                then
+A72:            not k+1 in dom(q|Seg k) by A71,XBOOLE_0: def 3;
+A73:            qk.(k+1) = (p +* (q|Seg k)).(k+1) by A15,A16,A55
+                  .= p.(k+1) by A72,FUNCT_4:12;
+A74:            k+1 in dom the_arity_of action_at v by A19,A53,A56,FINSEQ_3:27;
+                then
+A75:            p.(k+1) in (the Sorts of FreeEnv A).
+                ((the_arity_of action_at v).(k+1)) by A2,A17,MSAFREE2:14;
+A76:            v1 = (the_arity_of action_at v).(k+1) by A74,PARTFUN1:def 8;
+                reconsider T1 = p.(k+1) as
+
+Element of (the Sorts of FreeEnv A).v1 by A74,A75,PARTFUN1:def 8;
+                T1 in (the Sorts of FreeEnv A).v1;
+                then reconsider Tx = qk.(k+1) as finite DecoratedTree by A73;
+                consider s1 being finite non empty Subset of NAT such that
+A77:            s1 = { card t1 where t1 is
+                Element of (the Sorts of FreeEnv A).v1 :
+                not contradiction } and
+A78:            card e1 = max s1 by A70,Def4;
+                reconsider S1 = s1 as finite non empty real-membered set;
+                k+1 in Seg(k+1) by FINSEQ_1:5;
+                then
+A79:            k+1 in dom(q|Seg(k+1)) by A21,A27,RELAT_1: 86;
+A80:            qk1.(k+1) = (p +* (q|Seg(k+1))).(k+1) by A15,A16,A27,A28
+                  .= (q|Seg(k+1)).(k+1) by A79,FUNCT_4:14
+                  .= q.(k+1) by FINSEQ_1:5,FUNCT_1:72;
+A81:            len qk1 = len p by A57,FINSEQ_3:31;
+                reconsider T1 = q.(k+1) as
+                Element of (the Sorts of FreeEnv A).v1 by A14,A17,A74,A76,
+                MSAFREE2:14;
+                card T1 in S1 by A77;
+                then
+A82:            card T1 <= card e1 by A78,PRE_CIRC:def 1;
+A83:            {} is Element of dom Tx by TREES_1:47;
+A84:            len qk = len p by A58,FINSEQ_3:31;
+A85:            k < len qk by A54,A58,FINSEQ_3:31;
+A86:            <*k*> = <*k*>^{} by FINSEQ_1:47;
+                then
+A87:            <*k*> in dom tk by A54,A83,A84,TREES_4:11;
+
+reconsider w0 = <*k*> as Element of dom tk by A83,A85,A86,TREES_4:11;
+A88:            tk|w0 = e1 by A54,A69,A73,A84,TREES_4:def 4;
+                consider q0 being DTree-yielding FinSequence such that
+A89:            tk with-replacement (<*k*>,T1) =
+                [action_at v,the carrier of IIG]-tree q0 and
+A90:            len q0 = len qk and
+A91:            q0.(k+1) = T1 and
+A92:            for i being Element of NAT st i in dom qk & i <> k+1
+                holds q0.i = qk.i by A87,PRE_CIRC:19;
+                now
+                  let n be Nat;
+                  assume
+A93:              1 <= n & n <= len q0;
+                  then
+A94:              n in dom qk by A90,FINSEQ_3:27;
+                  per cases by REAL_1:def 5;
+                  suppose n = k+1;
+                    hence q0.n = qk1.n by A80,A91;
+                  end;
+                  suppose
+A95:                n > k+1;
+                    then
+A96:                not n in Seg(k+1) by FINSEQ_1:3;
+                    dom(q|Seg(k+1)) = dom q /\ Seg(k+1) by RELAT_1:90;
+                    then
+A97:                not n in dom(q|Seg(k+1)) by A96, XBOOLE_0:def 3;
+                    k+1 >= k by NAT_1:11;
+                    then n > k by A95,XXREAL_0:2;
+                    then
+A98:                not n in Seg k by FINSEQ_1:3;
+                    dom(q|Seg k) = dom q /\ Seg k by RELAT_1:90;
+                    then
+A99:                not n in dom(q|Seg k) by A98, XBOOLE_0:def 3;
+                    thus qk1.n = (p +* (q|Seg(k+1))).n by A15,A16,A27,A28
+                      .= p.n by A97,FUNCT_4:12
+                      .= (p +* (q|Seg k)).n by A99,FUNCT_4:12
+                      .= qk.n by A15,A16,A55
+                      .= q0.n by A92,A94,A95;
+                  end;
+                  suppose
+A100:               n < k+1;
+                    then
+A101:               n in Seg(k+1) by A93,FINSEQ_1:3;
+A102:               n in dom q by A20,A84,A90,A93,FINSEQ_3:27;
+                    dom(q|Seg(k+1)) = dom q /\ Seg(k+1) by RELAT_1:90;
+                    then
+A103:               n in dom(q|Seg(k+1)) by A101,A102, XBOOLE_0:def 3;
+                    n <= k by A100,NAT_1:13;
+                    then
+A104:               n in Seg k by A93,FINSEQ_1:3;
+                    dom(q|Seg k) = dom q /\ Seg k by RELAT_1:90;
+                    then
+A105:               n in dom(q|Seg k) by A102,A104, XBOOLE_0:def 3;
+                    thus qk1.n = (p +* (q|Seg(k+1))).n by A15,A16,A27,A28
+                      .= (q|Seg(k+1)).n by A103,FUNCT_4:14
+                      .= q.n by A103,FUNCT_1:70
+                      .= (q|Seg k).n by A105,FUNCT_1:70
+                      .= (p +* (q|Seg k)).n by A105,FUNCT_4:14
+                      .= qk.n by A15,A16,A55
+                      .= q0.n by A92,A94,A100;
+                  end;
+                end;
+                then treek1 = tk with-replacement (w0,T1)
+                by A29,A81,A84,A89,A90,FINSEQ_1:18;
+                then card treek1 + card (tk|w0) = card tk + card T1
+                by PRE_CIRC:23;
+                then card tk1 <= card tk by A82,A88,XREAL_1:10;
+                hence card tk1 <= card e by A68,XXREAL_0:2;
+              end;
+            end;
           end;
-          end;
-          then treek1 = tk with-replacement (w0,T1)
-            by A29,A83,A86,A91,A92,FINSEQ_1:18;
-          then card treek1 + card (tk|w0) = card tk + card T1
-                  by PRE_CIRC:23;
-          then card tk1 <= card tk by A84,A90,XREAL_1:10;
-         hence card tk1 <= card e by A69,XXREAL_0:2;
-         end;
-         end;
+A106:     for k be Element of NAT holds P[k] from NAT_1:sch 1(A24,A25);
+          dom p = Seg len p by FINSEQ_1:def 3;
+          then
+A107:     dom p = dom q by A20,FINSEQ_1:def 3;
+A108:     len p in dom p by A23,FINSEQ_3:27;
+          then T.len p = p +* (q|dom p) by A15,A16
+            .= p +* q by A107,RELAT_1:98
+            .= q by A21,FUNCT_4:20;
+          hence r <= card e by A9,A14,A106,A108;
         end;
-A108:     for k be Element of NAT holds P[k] from NAT_1:sch 1(A24,A25);
-         dom p = Seg len p by FINSEQ_1:def 3;
-then A109:     dom p = dom q by A20,FINSEQ_1:def 3;
-A110:      len p in dom p by A23,FINSEQ_3:27;
-        then T.len p = p +* (q|dom p) by A15,A16
-           .= p +* q by A109,RELAT_1:98
-           .= q by A21,FUNCT_4:20;
-        hence r <= card e by A9,A14,A108,A110;
-       end;
-       end;
-       hence r <= card e;
       end;
-      end;
-     hence thesis by A5,A6,PRE_CIRC:def 1;
+      hence r <= card e;
+    end;
   end;
+  hence thesis by A5,A6,PRE_CIRC:def 1;
+end;
 
 begin :: Depth
 
 definition
   let S be monotonic non void (non empty ManySortedSign),
-    A be locally-finite non-empty MSAlgebra over S,
-    v be SortSymbol of S;
+  A be locally-finite non-empty MSAlgebra over S, v be SortSymbol of S;
   func depth(v,A) -> natural number means
-:Def6:
-    ex s being finite non empty Subset of NAT st
-      s = { depth t where t is Element of (the Sorts of FreeEnv A).v :
-               not contradiction }
-      & it = max s;
+  :Def6:
+  ex s being finite non empty Subset of NAT st
+  s = { depth t where t is Element of (the Sorts of FreeEnv A).v :
+  not contradiction } & it = max s;
   existence
-    proof
-      deffunc F(Element of (the Sorts of FreeEnv A).v) = depth $1;
-      set s = { F(t) where t is Element of (the Sorts of FreeEnv A).v : P[t]};
-      consider t being Element of (the Sorts of FreeEnv A).v;
-A1:      depth t in s;
-A2:    s is Subset of NAT from DOMAIN_1:sch 8;
-          s is finite from PRE_CIRC:sch 1;
-      then reconsider s as finite non empty Subset of NAT by A1,A2;
-      take max s, s;
-      thus thesis;
-    end;
+  proof
+    deffunc F(Element of (the Sorts of FreeEnv A).v) = depth $1;
+    set s = { F(t) where t is Element of (the Sorts of FreeEnv A).v : P[t]};
+    consider t being Element of (the Sorts of FreeEnv A).v;
+A1: depth t in s;
+A2: s is Subset of NAT from DOMAIN_1:sch 8;
+    s is finite from PRE_CIRC:sch 1;
+    then reconsider s as finite non empty Subset of NAT by A1,A2;
+    take max s, s;
+    thus thesis;
+  end;
   correctness;
 end;
 
 definition
   let IIG be finite monotonic
-    Circuit-like non void (non empty ManySortedSign),
-    A be non-empty Circuit of IIG;
+  Circuit-like non void (non empty ManySortedSign),
+  A be non-empty Circuit of IIG;
   func depth A -> natural number means
-:Def7:
-    ex Ds being finite non empty Subset of NAT st
-      Ds = { depth(v,A) where v is Element of IIG :
-      v in the carrier of IIG }
-      & it = max Ds;
+  :Def7:
+  ex Ds being finite non empty Subset of NAT st
+  Ds = { depth(v,A) where v is Element of IIG : v in the carrier of IIG }
+  & it = max Ds;
   existence
+  proof
+    deffunc F(Element of IIG) = depth($1,A);
+    set Ds = { F(v) where v is Element of IIG : v in the carrier of IIG };
+A1: Ds is natural-membered
     proof
-      deffunc F(Element of IIG) = depth($1,A);
-      set Ds = { F(v) where v is Element of IIG :
-        v in the carrier of IIG };
-A1:  Ds is natural-membered
-      proof let e be number;
-       assume e in Ds;
-        then ex v being Element of IIG st
-           e = depth(v,A) & v in the carrier of IIG;
-       hence thesis;
-      end;
-      consider v being Element of IIG;
-A2:    depth(v,A) in Ds;
-A3:    the carrier of IIG is finite;
-           Ds is finite from FRAENKEL:sch 21 (A3);
-      then reconsider Ds as finite non empty Subset of NAT
-                  by A1,A2,MEMBERED:6;
-      take max Ds, Ds;
-      thus thesis;
+      let e be number;
+      assume e in Ds;
+      then ex v being Element of IIG st
+      e = depth(v,A) & v in the carrier of IIG;
+      hence thesis;
     end;
+    consider v being Element of IIG;
+A2: depth(v,A) in Ds;
+A3: the carrier of IIG is finite;
+    Ds is finite from FRAENKEL:sch 21 (A3);
+    then reconsider Ds as finite non empty Subset of NAT by A1,A2,MEMBERED:6;
+    take max Ds, Ds;
+    thus thesis;
+  end;
   uniqueness;
 end;
 
 theorem
-       for IIG being finite monotonic
-    Circuit-like (non void non empty ManySortedSign),
-    A being non-empty Circuit of IIG,
-    v being Vertex of IIG
-    holds depth(v,A) <= depth A
-    proof
-      let IIG be finite monotonic Circuit-like
-        (non void non empty ManySortedSign),
-        A be non-empty Circuit of IIG, v be Vertex of IIG;
-
-      consider Ds being finite non empty Subset of NAT such that
-A1:      Ds = { depth(v',A) where v' is Element of IIG :
-          v' in the carrier of IIG } and
-A2:      depth A = max Ds by Def7;
-
-      reconsider Y = Ds as finite non empty real-membered set;
-           depth(v,A) in Y by A1;
-      hence depth(v,A) <= depth A by A2,PRE_CIRC:def 1;
-    end;
+  for IIG being finite monotonic
+  Circuit-like (non void non empty ManySortedSign),
+  A being non-empty Circuit of IIG, v being Vertex of IIG
+  holds depth(v,A) <= depth A
+proof
+  let IIG be finite monotonic Circuit-like
+  (non void non empty ManySortedSign),
+  A be non-empty Circuit of IIG, v be Vertex of IIG;
+  consider Ds being finite non empty Subset of NAT such that
+A1: Ds = { depth(v',A) where v' is Element of IIG :
+  v' in the carrier of IIG } and
+A2: depth A = max Ds by Def7;
+  reconsider Y = Ds as finite non empty real-membered set;
+  depth(v,A) in Y by A1;
+  hence depth(v,A) <= depth A by A2,PRE_CIRC:def 1;
+end;
 
 theorem Th19:
-  for IIG
-  for A being non-empty Circuit of IIG, v being Vertex of IIG
-    holds depth(v,A) = 0
-      iff v in InputVertices IIG or v in SortsWithConstants IIG
+  for IIG for A being non-empty Circuit of IIG, v being Vertex of IIG
+  holds depth(v,A) = 0
+  iff v in InputVertices IIG or v in SortsWithConstants IIG
+proof
+  let IIG;
+  let A be non-empty Circuit of IIG, v be Vertex of IIG;
+  consider s being finite non empty Subset of NAT such that
+A1: s = { depth t where t is Element of (the Sorts of FreeEnv A).v
+  : not contradiction } and
+A2: depth(v,A) = max s by Def6;
+  reconsider Y = s as finite non empty real-membered set;
+  max Y in { depth t where t is Element of (the Sorts of FreeEnv A).v
+  : not contradiction } by A1,PRE_CIRC:def 1;
+  then consider t being Element of (the Sorts of FreeEnv A).v such that
+A3: depth t = max Y;
+  consider t2 being Element of (the Sorts of FreeMSA the Sorts of A).v
+  such that
+A4: t = t2 and
+A5: depth t = depth t2 by Def5;
+  consider dt being finite DecoratedTree, t' being finite Tree such that
+A6: dt = t2 and
+A7: t' = dom dt and
+A8: depth t2 = height t' by MSAFREE2:def 14;
+  consider p being FinSequence of NAT such that
+A9: p in t' and
+A10: len p = height t' by TREES_1:def 15;
+  consider ss being finite non empty Subset of NAT such that
+A11: ss = { card tt where tt is Element of (the Sorts of FreeEnv A).v
+  : not contradiction } and
+A12: size(v,A) = max ss by Def4;
+  reconsider YY = ss as finite non empty real-membered set;
+  reconsider t'' = t as Function;
+  thus depth(v,A) = 0 implies
+  v in InputVertices IIG or v in SortsWithConstants IIG
+  proof
+    assume
+A13: depth(v,A) = 0;
+    then rng t'' = { t.{} } by A2,A3,A4,A5,A6,A7,A8,FUNCT_1:14, TREES_1:56,80;
+    then t'' = { [{},t.{}] } by A2,A3,A4,A5,A6,A7,A8,A13,PRE_CIRC:2,
+    TREES_1:56,80;
+    then card t = 1 by CARD_1:79;
+    then
+A14: 1 in YY by A11;
+    for kk being real number st kk in YY holds kk <= 1
     proof
-      let IIG;
-      let A be non-empty Circuit of IIG, v be Vertex of IIG;
-
-      consider s being finite non empty Subset of NAT such that
-A1:      s = { depth t where t is Element of (the Sorts of FreeEnv A).v
-                 : not contradiction } and
-A2:      depth(v,A) = max s by Def6;
-      reconsider Y = s as finite non empty real-membered set;
-           max Y in { depth t where t is Element of (the Sorts of FreeEnv A).v
-               : not contradiction } by A1,PRE_CIRC:def 1;
-      then consider t being Element of (the Sorts of FreeEnv A).v such that
-A3:      depth t = max Y;
-      consider t2 being Element of (the Sorts of FreeMSA the Sorts of A).v
+      let kk be real number;
+      assume kk in YY;
+      then consider tt being Element of (the Sorts of FreeEnv A).v such that
+A15:  card tt = kk by A11;
+      depth tt in Y by A1;
+      then depth tt <= 0 by A2,A13,PRE_CIRC:def 1;
+      then
+A16:  depth tt = 0;
+      consider tiv being Element of (the Sorts of FreeMSA the Sorts of A).v
       such that
-A4:   t = t2 and
-A5:   depth t = depth t2 by Def5;
-      consider dt being finite DecoratedTree, t' being finite Tree such that
-A6:      dt = t2 and
-A7:      t' = dom dt and
-A8:      depth t2 = height t' by MSAFREE2:def 14;
-      consider p being FinSequence of NAT such that
-A9:      p in t' and
-A10:      len p = height t' by TREES_1:def 15;
-      consider ss being finite non empty Subset of NAT such that
-A11:      ss = { card tt where tt is Element of (the Sorts of FreeEnv A).v
-                 : not contradiction } and
-A12:      size(v,A) = max ss by Def4;
-      reconsider YY = ss as finite non empty real-membered set;
-
-      reconsider t'' = t as Function;
-
-          thus depth(v,A) = 0 implies
-            v in InputVertices IIG or v in SortsWithConstants IIG
-            proof
-              assume
-A13:             depth(v,A) = 0;
-              then A14: t' = { {} } by A2,A3,A5,A8,TREES_1:56,80;
-              then rng t'' = { t.{} } by A4,A6,A7,FUNCT_1:14;
-              then t'' = { [{},t.{}] } by A4,A6,A7,A14,PRE_CIRC:2;
-              then card t = 1 by CARD_1:79;
-              then A15:             1 in YY by A11;
-                   for kk being real number st kk in YY holds kk <= 1
-                proof
-                  let kk be real number;
-                  assume kk in YY;
-                  then consider tt being Element of (the Sorts of FreeEnv A).v
-                     such that
-A16:                 card tt = kk by A11;
-                       depth tt in Y by A1;
-                  then depth tt <= 0 by A2,A13,PRE_CIRC:def 1;
-                  then A17:                 depth tt = 0;
-          consider tiv being Element of (the Sorts of FreeMSA the Sorts of A).v
-          such that
-A18:      tt = tiv and
-A19:       depth tt = depth tiv by Def5;
-                  consider dt' being finite DecoratedTree,
-                    t''' being finite Tree such that
-A20:                 dt' = tiv and
-A21:                 t''' = dom dt' and
-A22:                 depth tiv = height t''' by MSAFREE2:def 14;
-                  A23: t''' = { {} } by A17,A19,A22,TREES_1:56,80;
-                  then rng tt = { tt.{} } by A18,A20,A21,FUNCT_1:14;
-                  then tt = { [{},tt.{}] } by A18,A20,A21,A23,PRE_CIRC:2;
-                  hence kk <= 1 by A16,CARD_1:79;
-                end;
-              then size(v,A) = 1 by A12,A15,PRE_CIRC:def 1;
-              then v in InputVertices IIG \/ SortsWithConstants IIG
-                by Th11;
-              hence v in InputVertices IIG or v in SortsWithConstants IIG
-                by XBOOLE_0:def 2;
-            end;
-
-          assume v in InputVertices IIG or v in SortsWithConstants IIG;
-          then v in InputVertices IIG \/ SortsWithConstants IIG by
-XBOOLE_0:def 2;
-          then A24:          size(v,A) = 1 by Th11;
-A25:        card t in ss by A11;
-           card t in NAT;
-          then reconsider ct = card t as Real;
-               ct <= 1 by A12,A24,A25,PRE_CIRC:def 1;
-          then A26:          card t <= 0 or card t = 0 + 1 by NAT_1:8;
-
-               now
-            assume card t <= 0;
-            then card t = 0;
-            hence contradiction by CARD_2:59;
-          end;
-          then consider x being set such that
-A27:          t = {x} by A26,CARD_2:60;
-
-               {} in dom t by TREES_1:47;
-          then consider y being set such that
-A28:          [{},y] in t'' by RELAT_1:def 4;
-A29:       x = [{},y] by A27,A28,TARSKI:def 1;
-
-          consider y'' being set such that
-A30:          [p,y''] in t'' by A4,A6,A7,A9,RELAT_1:def 4;
-               [p,y''] = [{},y] by A27,A29,A30,TARSKI:def 1;
-          then p = {} by ZFMISC_1:33;
-          hence depth(v,A) = 0 by A2,A3,A5,A8,A10,FINSEQ_1:25;
+A17:  tt = tiv and
+A18:  depth tt = depth tiv by Def5;
+      consider dt' being finite DecoratedTree,
+      t''' being finite Tree such that
+A19:  dt' = tiv and
+A20:  t''' = dom dt' and
+A21:  depth tiv = height t''' by MSAFREE2:def 14;
+      rng tt = { tt.{} } by A16,A17,A18,A19,A20,A21,FUNCT_1:14, TREES_1:56,80;
+      then tt = { [{},tt.{}] } by A16,A17,A18,A19,A20,A21,PRE_CIRC
+      :2,TREES_1:56,80;
+      hence kk <= 1 by A15,CARD_1:79;
     end;
+    then size(v,A) = 1 by A12,A14,PRE_CIRC:def 1;
+    then v in InputVertices IIG \/ SortsWithConstants IIG by Th11;
+    hence v in InputVertices IIG or v in SortsWithConstants IIG
+    by XBOOLE_0:def 2;
+  end;
+  assume v in InputVertices IIG or v in SortsWithConstants IIG;
+  then v in InputVertices IIG \/ SortsWithConstants IIG by XBOOLE_0:def 2;
+  then
+A22: size(v,A) = 1 by Th11;
+A23: card t in ss by A11;
+  card t in NAT;
+  then reconsider ct = card t as Real;
+  ct <= 1 by A12,A22,A23,PRE_CIRC:def 1;
+  then
+A24: card t <= 0 or card t = 0 + 1 by NAT_1:8;
+  now
+    assume card t <= 0;
+    then card t = 0;
+    hence contradiction by CARD_2:59;
+  end;
+  then consider x being set such that
+A25: t = {x} by A24,CARD_2:60;
+  {} in dom t by TREES_1:47;
+  then consider y being set such that
+A26: [{},y] in t'' by RELAT_1:def 4;
+A27: x = [{},y] by A25,A26,TARSKI:def 1;
+  consider y'' being set such that
+A28: [p,y''] in t'' by A4,A6,A7,A9,RELAT_1:def 4;
+  [p,y''] = [{},y] by A25,A27,A28,TARSKI:def 1;
+  then p = {} by ZFMISC_1:33;
+  hence depth(v,A) = 0 by A2,A3,A5,A8,A10,FINSEQ_1:25;
+end;
 
 theorem
-       for IIG
-  for A being locally-finite non-empty MSAlgebra over IIG,
-    v, v1 being SortSymbol of IIG
-      st v in InnerVertices IIG & v1 in rng the_arity_of action_at v
-    holds depth(v1,A) < depth(v,A)
-    proof
-      let IIG;
-      let A be locally-finite non-empty MSAlgebra over IIG,
-        v, v1 be SortSymbol of IIG;
-      assume that
-A1:      v in InnerVertices IIG and
-A2:      v1 in rng the_arity_of action_at v;
-
-      consider s being finite non empty Subset of NAT such that
-A3:      s = { depth t where t is Element of (the Sorts of FreeEnv A).v
-                 : not contradiction } and
-A4:      depth(v,A) = max s by Def6;
-      reconsider Y = s as finite non empty real-membered set;
-           max Y in { depth t where t is Element of (the Sorts of FreeEnv A).v
-                 : not contradiction } by A3,PRE_CIRC:def 1;
-      then consider t being Element of (the Sorts of FreeEnv A).v such that
-A5:      depth t = max Y;
-      consider s1 being finite non empty Subset of NAT such that
-A6:      s1 = { depth t1 where t1 is Element of (the Sorts of FreeEnv A).v1
-                : not contradiction } and
-A7:      depth(v1,A) = max s1 by Def6;
-      reconsider Y1 = s1 as finite non empty real-membered set;
-           max Y1 in { depth t1 where t1 is Element of (the Sorts of FreeEnv A)
-.
-v1
-                : not contradiction } by A6,PRE_CIRC:def 1;
-      then consider t1 being Element of (the Sorts of FreeEnv A).v1 such that
-A8:      depth t1 = max Y1;
-      consider e' being Element of (the Sorts of FreeMSA the Sorts of A).v1
-      such that
-A9:   t1 = e' and
-A10:   depth t1 = depth e' by Def5;
-      consider dt1' being finite DecoratedTree, t1' being finite Tree
-        such that
-A11:      dt1' = e' and
-A12:      t1' = dom dt1' and
-A13:      depth e' = height t1' by MSAFREE2:def 14;
-A14:   size(v1,A) < size(v,A) by A1,A2,Th15;
-           size(v1,A) > 0 by Th16;
-      then 0 + 1 <= size(v1,A) by NAT_1:13;
-      then not v in InputVertices IIG \/ SortsWithConstants IIG by A14,Th11;
-      then A15:     not v in InputVertices IIG & not v in SortsWithConstants
-IIG
-          by XBOOLE_0:def 2;
-      then A16:     v in (InnerVertices IIG \ SortsWithConstants IIG) by A1,
-XBOOLE_0:def 4
-;
-
-           FreeEnv A = MSAlgebra (# FreeSort the Sorts of A,
-        FreeOper the Sorts of A #) by MSAFREE:def 16;
-      then (the Sorts of FreeEnv A).v
-        = FreeSort(the Sorts of A,v) by MSAFREE:def 13;
-      then t in FreeSort(the Sorts of A,v);
-      then t in {a where a is Element of TS(DTConMSA(the Sorts of A)):
-        (ex x being set st x in (the Sorts of A).v & a = root-tree[x,v]) or
-        ex o being OperSymbol of IIG st
-         [o,the carrier of IIG] = a.{} & the_result_sort_of o = v}
-        by MSAFREE:def 12;
-      then consider a being Element of TS(DTConMSA(the Sorts of A))
-        such that
-A17:     a = t and
-A18:     (ex x being set st x in (the Sorts of A).v & a = root-tree[x,v]) or
-          ex o being OperSymbol of IIG st [o,the carrier of IIG] = a.{}
-            & the_result_sort_of o = v;
-           now
-         given x being set such that
-               x in (the Sorts of A).v and
-A19:       a = root-tree[x,v];
-
-        consider e' being Element of (the Sorts of FreeMSA the Sorts of A).v
-        such that
-A20:    t = e' and
-A21:    depth t = depth e' by Def5;
-        consider dta being finite DecoratedTree, ta being finite Tree
-          such that
-A22:       dta = e' and
-A23:       ta = dom dta and
-A24:       depth e' = height ta by MSAFREE2:def 14;
-
-              depth t = 0 by A17,A19,A20,A21,A22,A23,A24,TREES_1:79,TREES_4:3;
-
-        hence contradiction by A4,A5,A15,Th19;
-      end;
-      then consider o being OperSymbol of IIG such that
-A25:     [o,the carrier of IIG] = a.{} and
-A26:     the_result_sort_of o = v by A18;
-      A27:    NonTerminals(DTConMSA(the Sorts of A))
-      = [:the OperSymbols of IIG,{the carrier of IIG}:] by MSAFREE:6;
-           the carrier of IIG in {the carrier of IIG} by TARSKI:def 1;
-      then reconsider o' = [o,the carrier of IIG]
-        as NonTerminal of DTConMSA(the Sorts of A) by A27,ZFMISC_1:106;
-      consider q being FinSequence of TS(DTConMSA(the Sorts of A)) such that
-A28:     a = o'-tree q and
-             o' ==> roots q by A25,DTCONSTR:10;
-      consider q' being DTree-yielding FinSequence such that
-A29:     q = q' and
-A30:     dom a = tree(doms q') by A28,TREES_4:def 4;
-      reconsider av = action_at v as OperSymbol of IIG;
-      consider x being set such that
-A31:      x in dom the_arity_of av and
-A32:     v1 = (the_arity_of av).x by A2,FUNCT_1:def 5;
-      reconsider k = x as Element of NAT by A31;
-      A33:     o = av by A1,A26,MSAFREE2:def 7;
-      then A34: len q' = len the_arity_of av by A17,A26,A28,A29,MSAFREE2:13;
-      then A35:     dom q' = dom the_arity_of av by FINSEQ_3:31;
-      A36:     k in dom q' by A31,A34,FINSEQ_3:31;
-      reconsider k1 = k - 1 as Element of NAT by A31,FINSEQ_3:28;
-A37:   k1 + 1 = k;
-then A38:   <*k1*> in tree(doms q') by A31,A35,PRE_CIRC:17;
-      reconsider f = <*k1*> as FinSequence of NAT;
-      consider qq being DTree-yielding FinSequence such that
-A39:     t with-replacement (f,t1) = o'-tree qq and
-A40:     len qq = len q' and
-             qq.(k1+1) = t1 and
-             for i being Element of NAT st i in dom q' & i <> k1+1
-             holds qq.i = q'.i
-          by A17,A28,A29,A30,A38,PRE_CIRC:19;
-
-   A41:     q'.k in (the Sorts of FreeEnv A).v1
-         by A17,A26,A28,A29,A31,A32,A33,MSAFREE2:14;
-      reconsider tft = t with-replacement (f,t1) as DecoratedTree;
-       t = [av,the carrier of IIG]-tree q' by A1,A17,A26,A28,A29,MSAFREE2:def 7
-;
-      then reconsider tft as Element of (the Sorts of FreeEnv A).v by A16,A36
-,A37,A41,Th7;
-      reconsider dtft = depth tft as Real;
-           dtft in Y by A3;
-      then A42:   dtft <= depth t by A5,PRE_CIRC:def 1;
-
-     consider e' being Element of (the Sorts of FreeMSA the Sorts of A).v
-        such that
-A43:    tft = e' and
-A44:    depth tft = depth e' by Def5;
-      consider dttft being finite DecoratedTree, ttft being finite Tree
-        such that
-A45:     dttft = e' and
-A46:     ttft = dom dttft and
-A47:     depth e' = height ttft by MSAFREE2:def 14;
-
-      A48: k in dom qq by A31,A34,A40,FINSEQ_3:31;
-      consider qq' being DTree-yielding FinSequence such that
-A49:     qq = qq' and
-A50:     dom tft = tree(doms qq') by A39,TREES_4:def 4;
-      reconsider f' = f as Element of ttft by A37,A43,A45,A46,A48,A49,A50,
-PRE_CIRC:17;
-A51:   f' <> {};
-A52:   f' in dom t by A17,A30,A36,A37,PRE_CIRC:17;
-           dom tft = dom t with-replacement (f,dom t1) by A17,A30,A38,
-TREES_2:def 12;
-      then ttft|f = t1' by A9,A11,A12,A43,A45,A46,A52,TREES_1:66;
-      then depth t1 < depth tft by A10,A13,A44,A47,A51,TREES_1:85;
-      hence depth(v1,A) < depth(v,A) by A4,A5,A7,A8,A42,XXREAL_0:2
-;
-    end;
+  for IIG for A being locally-finite non-empty MSAlgebra over IIG,
+  v, v1 being SortSymbol of IIG
+  st v in InnerVertices IIG & v1 in rng the_arity_of action_at v
+  holds depth(v1,A) < depth(v,A)
+proof
+  let IIG;
+  let A be locally-finite non-empty MSAlgebra over IIG,
+  v, v1 be SortSymbol of IIG;
+  assume that
+A1: v in InnerVertices IIG and
+A2: v1 in rng the_arity_of action_at v;
+  consider s being finite non empty Subset of NAT such that
+A3: s = { depth t where t is Element of (the Sorts of FreeEnv A).v
+  : not contradiction } and
+A4: depth(v,A) = max s by Def6;
+  reconsider Y = s as finite non empty real-membered set;
+  max Y in { depth t where t is Element of (the Sorts of FreeEnv A).v
+  : not contradiction } by A3,PRE_CIRC:def 1;
+  then consider t being Element of (the Sorts of FreeEnv A).v such that
+A5: depth t = max Y;
+  consider s1 being finite non empty Subset of NAT such that
+A6: s1 = { depth t1 where t1 is Element of (the Sorts of FreeEnv A).v1
+  : not contradiction } and
+A7: depth(v1,A) = max s1 by Def6;
+  reconsider Y1 = s1 as finite non empty real-membered set;
+  max Y1 in { depth t1 where t1 is Element of (the Sorts of FreeEnv A ) .
+v1: not contradiction } by A6,PRE_CIRC:def 1;
+  then consider t1 being Element of (the Sorts of FreeEnv A).v1 such that
+A8: depth t1 = max Y1;
+  consider e' being Element of (the Sorts of FreeMSA the Sorts of A).v1
+  such that
+A9: t1 = e' and
+A10: depth t1 = depth e' by Def5;
+  consider dt1' being finite DecoratedTree, t1' being finite Tree such that
+A11: dt1' = e' and
+A12: t1' = dom dt1' and
+A13: depth e' = height t1' by MSAFREE2:def 14;
+A14: size(v1,A) < size(v,A) by A1,A2,Th15;
+  size(v1,A) > 0 by Th16;
+  then 0 + 1 <= size(v1,A) by NAT_1:13;
+  then not v in InputVertices IIG \/ SortsWithConstants IIG by A14,Th11;
+  then
+A15: not v in InputVertices IIG & not v in SortsWithConstants IIG
+  by XBOOLE_0:def 2;
+  then
+A16: v in (InnerVertices IIG \ SortsWithConstants IIG) by A1, XBOOLE_0: def 4;
+  FreeEnv A = MSAlgebra (# FreeSort the Sorts of A,
+    FreeOper the Sorts of A #) by MSAFREE:def 16;
+  then (the Sorts of FreeEnv A).v
+  = FreeSort(the Sorts of A,v) by MSAFREE:def 13;
+  then t in FreeSort(the Sorts of A,v);
+  then t in {a where a is Element of TS(DTConMSA(the Sorts of A)):
+  (ex x being set st x in (the Sorts of A).v & a = root-tree[x,v]) or
+  ex o being OperSymbol of IIG st
+  [o,the carrier of IIG] = a.{} & the_result_sort_of o = v} by MSAFREE:def 12;
+  then consider a being Element of TS(DTConMSA(the Sorts of A)) such that
+A17: a = t and
+A18: (ex x being set st x in (the Sorts of A).v & a = root-tree[x,v]) or
+  ex o being OperSymbol of IIG st [o,the carrier of IIG] = a.{}
+  & the_result_sort_of o = v;
+  now
+    given x being set such that x in (the Sorts of A).v and
+A19: a = root-tree[x,v];
+    consider e' being Element of (the Sorts of FreeMSA the Sorts of A).v
+    such that
+A20: t = e' and
+A21: depth t = depth e' by Def5;
+    consider dta being finite DecoratedTree, ta being finite Tree such that
+A22: dta = e' and
+A23: ta = dom dta and
+A24: depth e' = height ta by MSAFREE2:def 14;
+    depth t = 0 by A17,A19,A20,A21,A22,A23,A24,TREES_1:79,TREES_4:3;
+    hence contradiction by A4,A5,A15,Th19;
+  end;
+  then consider o being OperSymbol of IIG such that
+A25: [o,the carrier of IIG] = a.{} and
+A26: the_result_sort_of o = v by A18;
+A27: NonTerminals(DTConMSA(the Sorts of A))
+  = [:the OperSymbols of IIG,{the carrier of IIG}:] by MSAFREE:6;
+  the carrier of IIG in {the carrier of IIG} by TARSKI:def 1;
+  then reconsider o' = [o,the carrier of IIG]
+  as NonTerminal of DTConMSA(the Sorts of A) by A27,ZFMISC_1:106;
+  consider q being FinSequence of TS(DTConMSA(the Sorts of A)) such that
+A28: a = o'-tree q and o' ==> roots q by A25,DTCONSTR:10;
+  consider q' being DTree-yielding FinSequence such that
+A29: q = q' and
+A30: dom a = tree(doms q') by A28,TREES_4:def 4;
+  reconsider av = action_at v as OperSymbol of IIG;
+  consider x being set such that
+A31: x in dom the_arity_of av and
+A32: v1 = (the_arity_of av).x by A2,FUNCT_1:def 5;
+  reconsider k = x as Element of NAT by A31;
+A33: o = av by A1,A26,MSAFREE2:def 7;
+  then
+A34: len q' = len the_arity_of av by A17,A26,A28,A29,MSAFREE2:13;
+  then
+A35: dom q' = dom the_arity_of av by FINSEQ_3:31;
+A36: k in dom q' by A31,A34,FINSEQ_3:31;
+  reconsider k1 = k - 1 as Element of NAT by A31,FINSEQ_3:28;
+A37: k1 + 1 = k;
+  then
+A38: <*k1*> in tree(doms q') by A31,A35,PRE_CIRC:17;
+  reconsider f = <*k1*> as FinSequence of NAT;
+  consider qq being DTree-yielding FinSequence such that
+A39: t with-replacement (f,t1) = o'-tree qq and
+A40: len qq = len q' and qq.(k1+1) = t1 and
+  for i being Element of NAT st i in dom q' & i <> k1+1 holds qq.i = q'.i
+  by A17,A28,A29,A30,A38,PRE_CIRC:19;
+A41: q'.k in (the Sorts of FreeEnv A).v1
+  by A17,A26,A28,A29,A31,A32,A33,MSAFREE2:14;
+  reconsider tft = t with-replacement (f,t1) as DecoratedTree;
+  t = [av,the carrier of IIG]-tree q' by A1,A17,A26,A28,A29,MSAFREE2:def 7;
+  then reconsider tft as Element of (the Sorts of FreeEnv A).v by A16,A36
+  ,A37,A41,Th7;
+  reconsider dtft = depth tft as Real;
+  dtft in Y by A3;
+  then
+A42: dtft <= depth t by A5,PRE_CIRC:def 1;
+  consider e' being Element of (the Sorts of FreeMSA the Sorts of A).v
+  such that
+A43: tft = e' and
+A44: depth tft = depth e' by Def5;
+  consider dttft being finite DecoratedTree, ttft being finite Tree such that
+A45: dttft = e' and
+A46: ttft = dom dttft and
+A47: depth e' = height ttft by MSAFREE2:def 14;
+A48: k in dom qq by A31,A34,A40,FINSEQ_3:31;
+  consider qq' being DTree-yielding FinSequence such that
+A49: qq = qq' and
+A50: dom tft = tree(doms qq') by A39,TREES_4:def 4;
+  reconsider f' = f as Element of ttft by A37,A43,A45,A46,A48,A49,A50,
+  PRE_CIRC:17;
+A51: f' <> {};
+  dom tft = dom t with-replacement (f,dom t1) by A17,A30,A38, TREES_2:def 12;
+  then ttft|f = t1' by A9,A11,A12,A17,A30,A36,A37,A43,A45,A46,PRE_CIRC:17,
+  TREES_1:66;
+  hence depth(v1,A) < depth(v,A) by A4,A5,A7,A8,A10,A13,A42,A44,A47,A51,
+  TREES_1:85,XXREAL_0:2;
+end;
 

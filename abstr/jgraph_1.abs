@@ -43,11 +43,12 @@ reserve r,r1,r2 for Real;
 canceled 3;
 
 theorem :: JGRAPH_1:4
-for vs st IT is Simple & vs is_oriented_vertex_seq_of IT
+  for vs st IT is Simple & vs is_oriented_vertex_seq_of IT
   holds for n,m st 1<=n & n<m & m<=len vs & vs.n=vs.m holds n=1 & m=len vs;
 
-definition let X be set;
- func PGraph(X) -> MultiGraphStruct equals
+definition
+  let X be set;
+  func PGraph(X) -> MultiGraphStruct equals
 :: JGRAPH_1:def 1
   MultiGraphStruct(#X,[:X,X:],pr1(X,X),pr2(X,X)#);
 end;
@@ -57,169 +58,171 @@ canceled;
 theorem :: JGRAPH_1:6
   for X being set holds the Vertices of PGraph(X)=X;
 
-definition let f be FinSequence;
- func PairF(f) -> FinSequence means
+definition
+  let f be FinSequence;
+  func PairF(f) -> FinSequence means
 :: JGRAPH_1:def 2
+
   len it=len f-'1 &
-   for i being Element of NAT st 1<=i & i<len f holds it.i=[f.i,f.(i+1)];
+  for i being Element of NAT st 1<=i & i<len f holds it.i=[f.i,f.(i+1)];
 end;
 
 reserve X for non empty set;
 
-registration let X be non empty set;
- cluster PGraph(X) -> Graph-like;
+registration
+  let X be non empty set;
+  cluster PGraph(X) -> Graph-like;
 end;
 
 theorem :: JGRAPH_1:7
-for f being FinSequence of X
+  for f being FinSequence of X
   holds f is FinSequence of the Vertices of PGraph(X);
 
 theorem :: JGRAPH_1:8
-for f being FinSequence of X
+  for f being FinSequence of X
   holds PairF(f) is FinSequence of the Edges of PGraph(X);
 
-definition let X be non empty set,f be FinSequence of X;
- redefine func PairF(f) -> FinSequence of the Edges of PGraph(X);
+definition
+  let X be non empty set,f be FinSequence of X;
+  redefine func PairF(f) -> FinSequence of the Edges of PGraph(X);
 end;
 
 theorem :: JGRAPH_1:9
-for n being Element of NAT,f being FinSequence of X
-  st 1 <= n & n <= len PairF(f) holds
-  (PairF(f)).n in the Edges of PGraph(X);
+  for n being Element of NAT,f being FinSequence of X
+  st 1 <= n & n <= len PairF(f) holds (PairF(f)).n in the Edges of PGraph(X);
 
 theorem :: JGRAPH_1:10
-for f being FinSequence of X holds
- PairF(f) is oriented Chain of PGraph(X);
+  for f being FinSequence of X holds PairF(f) is oriented Chain of PGraph(X);
 
-definition let X be non empty set,f be FinSequence of X;
- redefine func PairF(f) -> oriented Chain of PGraph(X);
+definition
+  let X be non empty set,f be FinSequence of X;
+  redefine func PairF(f) -> oriented Chain of PGraph(X);
 end;
 
 theorem :: JGRAPH_1:11
-for f being FinSequence of X,
+  for f being FinSequence of X,
   f1 being FinSequence of the Vertices of PGraph(X) st len f>=1 & f=f1 holds
   f1 is_oriented_vertex_seq_of PairF(f);
 
 begin ::  SHORTCUTS OF FINITE SEQUENCES IN PLANE
 
-definition let X be non empty set,f,g be FinSequence of X;
-pred g is_Shortcut_of f means
+definition
+  let X be non empty set,f,g be FinSequence of X;
+  pred g is_Shortcut_of f means
 :: JGRAPH_1:def 3
- f.1=g.1 & f.len f=g.len g &
- ex fc being Subset of PairF(f),fvs being Subset of f,
- sc being oriented simple Chain of PGraph(X),
- g1 being FinSequence of the Vertices of PGraph(X)
- st Seq fc = sc & Seq fvs = g & g1=g
- & g1 is_oriented_vertex_seq_of sc;
+
+  f.1=g.1 & f.len f=g.len g &
+  ex fc being Subset of PairF(f),fvs being Subset of f,
+  sc being oriented simple Chain of PGraph(X),
+  g1 being FinSequence of the Vertices of PGraph(X)
+  st Seq fc = sc & Seq fvs = g & g1=g & g1 is_oriented_vertex_seq_of sc;
 end;
 
 theorem :: JGRAPH_1:12
-for f,g being FinSequence of X st g is_Shortcut_of f holds
- 1<=len g & len g <= len f;
+  for f,g being FinSequence of X st g is_Shortcut_of f holds
+  1<=len g & len g <= len f;
 
 theorem :: JGRAPH_1:13
-for f being FinSequence of X st len f>=1 holds
- ex g being FinSequence of X st g is_Shortcut_of f;
+  for f being FinSequence of X st len f>=1 holds
+  ex g being FinSequence of X st g is_Shortcut_of f;
 
 theorem :: JGRAPH_1:14
-for f,g being FinSequence of X st
- g is_Shortcut_of f holds rng PairF(g) c= rng PairF(f);
+  for f,g being FinSequence of X st
+  g is_Shortcut_of f holds rng PairF(g) c= rng PairF(f);
 
 theorem :: JGRAPH_1:15
-for f,g being FinSequence of X st f.1<>f.len f & g is_Shortcut_of f
- holds g is one-to-one;
+  for f,g being FinSequence of X st f.1<>f.len f & g is_Shortcut_of f
+  holds g is one-to-one;
 
-definition let n; let IT be FinSequence of TOP-REAL n;
-   attr IT is nodic means
+definition
+  let n;
+  let IT be FinSequence of TOP-REAL n;
+  attr IT is nodic means
 :: JGRAPH_1:def 4
-    for i,j st LSeg(IT,i) meets LSeg(IT,j)
-         holds LSeg(IT,i) /\ LSeg(IT,j)={IT.i}
-               &(IT.i=IT.j or IT.i=IT.(j+1)) or
-               LSeg(IT,i) /\ LSeg(IT,j)={IT.(i+1)}
-               &(IT.(i+1)=IT.j or IT.(i+1)=IT.(j+1)) or
-               LSeg(IT,i)=LSeg(IT,j);
+
+  for i,j st LSeg(IT,i) meets LSeg(IT,j)
+  holds LSeg(IT,i) /\ LSeg(IT,j)={IT.i} &(IT.i=IT.j or IT.i=IT.(j+1)) or
+  LSeg(IT,i) /\ LSeg(IT,j)={IT.(i+1)} &(IT.(i+1)=IT.j or IT.(i+1)=IT.(j+1)) or
+  LSeg(IT,i)=LSeg(IT,j);
 end;
 
 theorem :: JGRAPH_1:16
-for f being FinSequence of TOP-REAL 2 st f is s.n.c.
-  holds f is s.c.c.;
+  for f being FinSequence of TOP-REAL 2 st f is s.n.c. holds f is s.c.c.;
 
 theorem :: JGRAPH_1:17
-for f being FinSequence of TOP-REAL 2 st f is s.c.c. &
- LSeg(f,1) misses LSeg(f,len f -'1) holds f is s.n.c.;
+  for f being FinSequence of TOP-REAL 2 st f is s.c.c. &
+  LSeg(f,1) misses LSeg(f,len f -'1) holds f is s.n.c.;
 
 theorem :: JGRAPH_1:18
-for f being FinSequence of TOP-REAL 2 st
+  for f being FinSequence of TOP-REAL 2 st
   f is nodic & PairF(f) is Simple holds f is s.c.c.;
 
 theorem :: JGRAPH_1:19
-for f being FinSequence of TOP-REAL 2 st
+  for f being FinSequence of TOP-REAL 2 st
   f is nodic & PairF(f) is Simple & f.1<>f.len f holds f is s.n.c.;
 
 theorem :: JGRAPH_1:20
-for p1,p2,p3 being Point of TOP-REAL n st
- (ex x being set st x<>p2 & x in LSeg(p1,p2)/\ LSeg(p2,p3)) holds
- p1 in LSeg(p2,p3) or p3 in LSeg(p1,p2);
+  for p1,p2,p3 being Point of TOP-REAL n st
+  (ex x being set st x<>p2 & x in LSeg(p1,p2)/\ LSeg(p2,p3)) holds
+  p1 in LSeg(p2,p3) or p3 in LSeg(p1,p2);
 
 theorem :: JGRAPH_1:21
-for f being FinSequence of TOP-REAL 2 st f is s.n.c. &
-LSeg(f,1) /\ LSeg(f,1+1) c= {f/.(1+1)} &
-LSeg(f,len f-'2) /\ LSeg(f,len f-'1) c= {f/.(len f-'1)} holds
-f is unfolded;
+  for f being FinSequence of TOP-REAL 2 st f is s.n.c. &
+  LSeg(f,1) /\ LSeg(f,1+1) c= {f/.(1+1)} &
+  LSeg(f,len f-'2) /\ LSeg(f,len f-'1) c= {f/.(len f-'1)} holds f is unfolded;
 
 theorem :: JGRAPH_1:22
-for f being FinSequence of X holds
+  for f being FinSequence of X holds
   PairF(f) is Simple & f.1<>f.len f implies f is one-to-one & len f<>1;
 
 theorem :: JGRAPH_1:23
-for f being FinSequence of X holds
+  for f being FinSequence of X holds
   f is one-to-one & len f>1 implies PairF(f) is Simple & f.1<>f.len f;
 
 theorem :: JGRAPH_1:24
-for f being FinSequence of TOP-REAL 2 st
+  for f being FinSequence of TOP-REAL 2 st
   f is nodic & PairF(f) is Simple & f.1<>f.len f holds f is unfolded;
 
 theorem :: JGRAPH_1:25
-for f,g being FinSequence of TOP-REAL 2,i st
- g is_Shortcut_of f & 1 <= i & i+1 <= len g holds
- ex k1 being Element of NAT st 1<=k1 & k1+1<=len f & f/.k1=g/.i &
-   f/.(k1+1)=g/.(i+1)
-    & f.k1=g.i & f.(k1+1)=g.(i+1);
+  for f,g being FinSequence of TOP-REAL 2,i st
+  g is_Shortcut_of f & 1 <= i & i+1 <= len g holds
+  ex k1 being Element of NAT st 1<=k1 & k1+1<=len f & f/.k1=g/.i &
+  f/.(k1+1)=g/.(i+1) & f.k1=g.i & f.(k1+1)=g.(i+1);
 
 theorem :: JGRAPH_1:26
-for f,g being FinSequence of TOP-REAL 2 st
- g is_Shortcut_of f holds rng g c= rng f;
+  for f,g being FinSequence of TOP-REAL 2 st
+  g is_Shortcut_of f holds rng g c= rng f;
 
 theorem :: JGRAPH_1:27
-for f,g being FinSequence of TOP-REAL 2 st
- g is_Shortcut_of f holds L~g c= L~f;
+  for f,g being FinSequence of TOP-REAL 2 st
+  g is_Shortcut_of f holds L~g c= L~f;
 
 theorem :: JGRAPH_1:28
-for f,g being FinSequence of TOP-REAL 2 st f is special
- & g is_Shortcut_of f holds g is special;
+  for f,g being FinSequence of TOP-REAL 2 st f is special
+  & g is_Shortcut_of f holds g is special;
 
 theorem :: JGRAPH_1:29
-for f being FinSequence of TOP-REAL 2 st f is special & 2<=len f
- & f.1 <> f.len f holds ex g being FinSequence of TOP-REAL 2 st
- 2<=len g & g is special & g is one-to-one & L~g c= L~f & f.1=g.1
- & f.len f=g.len g & rng g c= rng f;
+  for f being FinSequence of TOP-REAL 2 st f is special & 2<=len f
+  & f.1 <> f.len f holds ex g being FinSequence of TOP-REAL 2 st
+  2<=len g & g is special & g is one-to-one & L~g c= L~f & f.1=g.1
+  & f.len f=g.len g & rng g c= rng f;
 
 ::  Goboard Theorem for general special sequences
+
 theorem :: JGRAPH_1:30
-for f1,f2 being FinSequence of TOP-REAL 2 st
- f1 is special & f2 is special & 2<=len f1 & 2<=len f2 & f1.1<>f1.len f1
- & f2.1<>f2.len f2 &
- X_axis(f1) lies_between (X_axis(f1)).1, (X_axis(f1)).(len f1) &
- X_axis(f2) lies_between (X_axis(f1)).1, (X_axis(f1)).(len f1) &
- Y_axis(f1) lies_between (Y_axis(f2)).1, (Y_axis(f2)).(len f2) &
- Y_axis(f2) lies_between (Y_axis(f2)).1, (Y_axis(f2)).(len f2) holds
+  for f1,f2 being FinSequence of TOP-REAL 2 st
+  f1 is special & f2 is special & 2<=len f1 & 2<=len f2 & f1.1<>f1.len f1
+  & f2.1<>f2.len f2 &
+  X_axis(f1) lies_between (X_axis(f1)).1, (X_axis(f1)).(len f1) &
+  X_axis(f2) lies_between (X_axis(f1)).1, (X_axis(f1)).(len f1) &
+  Y_axis(f1) lies_between (Y_axis(f2)).1, (Y_axis(f2)).(len f2) &
+  Y_axis(f2) lies_between (Y_axis(f2)).1, (Y_axis(f2)).(len f2) holds
   L~f1 meets L~f2;
 
 begin  :: NORM OF POINTS IN TOPREAL n
 
 theorem :: JGRAPH_1:31
-for a,b,r1,r2 being Real
-  st a<=r1 & r1<=b & a<=r2 & r2<=b holds
+  for a,b,r1,r2 being Real st a<=r1 & r1<=b & a<=r2 & r2<=b holds
   abs(r1-r2)<=b-a;
 
 reserve p,p1,p2 for Point of TOP-REAL n;
@@ -227,136 +230,120 @@ reserve p,p1,p2 for Point of TOP-REAL n;
 canceled 13;
 
 theorem :: JGRAPH_1:45
-for x1,x2 being Point of Euclid n st x1=p1 & x2=p2 holds
- |.p1 - p2.| = dist(x1,x2);
+  for x1,x2 being Point of Euclid n st x1=p1 & x2=p2 holds
+  |.p1 - p2.| = dist(x1,x2);
 
 theorem :: JGRAPH_1:46
-for p being Point of TOP-REAL 2 holds
-  |.p.|^2 = (p`1)^2+(p`2)^2;
+  for p being Point of TOP-REAL 2 holds |.p.|^2 = (p`1)^2+(p`2)^2;
 
 theorem :: JGRAPH_1:47
-for p being Point of TOP-REAL 2 holds
- |.p.| = sqrt((p`1)^2+(p`2)^2);
+  for p being Point of TOP-REAL 2 holds |.p.| = sqrt((p`1)^2+(p`2)^2);
 
 theorem :: JGRAPH_1:48
-for p being Point of TOP-REAL 2 holds |.p.|<=abs(p`1)+abs(p`2);
+  for p being Point of TOP-REAL 2 holds |.p.|<=abs(p`1)+abs(p`2);
 
 theorem :: JGRAPH_1:49
-for p1,p2 being Point of TOP-REAL 2 holds
-       |.p1-p2.|<=abs(p1`1-p2`1)+abs(p1`2-p2`2);
+  for p1,p2 being Point of TOP-REAL 2 holds
+  |.p1-p2.|<=abs(p1`1-p2`1)+abs(p1`2-p2`2);
 
 theorem :: JGRAPH_1:50
-for p being Point of TOP-REAL 2 holds
-      abs(p`1)<=|.p.| & abs(p`2)<=|.p.|;
+  for p being Point of TOP-REAL 2 holds abs(p`1)<=|.p.| & abs(p`2)<=|.p.|;
 
 theorem :: JGRAPH_1:51
-for p1,p2 being Point of TOP-REAL 2 holds
-      abs(p1`1-p2`1)<=|.p1-p2.| & abs(p1`2-p2`2)<=|.p1-p2.|;
+  for p1,p2 being Point of TOP-REAL 2 holds
+  abs(p1`1-p2`1)<=|.p1-p2.| & abs(p1`2-p2`2)<=|.p1-p2.|;
 
 theorem :: JGRAPH_1:52
-p in LSeg(p1,p2) implies ex r st
-  0<=r & r<=1 & p=(1-r)*p1+r*p2;
+  p in LSeg(p1,p2) implies ex r st 0<=r & r<=1 & p=(1-r)*p1+r*p2;
 
 theorem :: JGRAPH_1:53
-p in LSeg(p1,p2) implies
- |.p-p1.|<=|.p1-p2.| & |.p-p2.|<=|.p1-p2.|;
+  p in LSeg(p1,p2) implies |.p-p1.|<=|.p1-p2.| & |.p-p2.|<=|.p1-p2.|;
 
 begin ::  EXTENDED GOBOARD THEOREM AND FASHODA MEET THEOREM
 
 reserve M for non empty MetrSpace;
 
 theorem :: JGRAPH_1:54
-for P,Q being Subset of TopSpaceMetr(M) st
-   P <> {} & P is compact & Q <> {} & Q is compact holds
-   min_dist_min(P,Q)>=0;
+  for P,Q being Subset of TopSpaceMetr(M) st
+  P <> {} & P is compact & Q <> {} & Q is compact holds min_dist_min(P,Q)>=0;
 
 theorem :: JGRAPH_1:55
-for P,Q being Subset of TopSpaceMetr(M) st
-   P <> {} & P is compact & Q <> {} & Q is compact holds
-   P misses Q iff min_dist_min(P,Q)>0;
+  for P,Q being Subset of TopSpaceMetr(M) st
+  P <> {} & P is compact & Q <> {} & Q is compact holds
+  P misses Q iff min_dist_min(P,Q)>0;
 
 ::  Approximation of finite sequence by special finite sequence
+
 theorem :: JGRAPH_1:56
-for f being FinSequence of TOP-REAL 2,a,c,d being Real st
- 1<=len f & X_axis(f) lies_between (X_axis(f)).1, (X_axis(f)).(len f) &
- Y_axis(f) lies_between c, d & a>0 &
- (for i st 1<=i & i+1<=len f holds
- |. f/.i-f/.(i+1) .|<a)
- holds
- ex g being FinSequence of TOP-REAL 2 st g is special &
- g.1=f.1 & g.len g=f.len f & len g>=len f &
- X_axis(g) lies_between (X_axis(f)).1, (X_axis(f)).(len f) &
- Y_axis(g) lies_between c, d &
- (for j st j in dom g holds ex k st k in dom f & |. g/.j - f/.k .|<a)&
- (for j st 1<=j & j+1<=len g holds |. g/.j - g/.(j+1) .|<a);
+  for f being FinSequence of TOP-REAL 2,a,c,d being Real st
+  1<=len f & X_axis(f) lies_between (X_axis(f)).1, (X_axis(f)).(len f) &
+  Y_axis(f) lies_between c, d & a>0 & (for i st 1<=i & i+1<=len f holds
+  |. f/.i-f/.(i+1) .|<a) holds
+  ex g being FinSequence of TOP-REAL 2 st g is special &
+  g.1=f.1 & g.len g=f.len f & len g>=len f &
+  X_axis(g) lies_between (X_axis(f)).1, (X_axis(f)).(len f) &
+  Y_axis(g) lies_between c, d &
+  (for j st j in dom g holds ex k st k in dom f & |. g/.j - f/.k .|<a)&
+  (for j st 1<=j & j+1<=len g holds |. g/.j - g/.(j+1) .|<a);
 
 theorem :: JGRAPH_1:57
-for f being FinSequence of TOP-REAL 2,a,c,d being Real st
- 1<=len f &
- Y_axis(f) lies_between (Y_axis(f)).1, (Y_axis(f)).(len f) &
- X_axis(f) lies_between c, d & a>0 &
- (for i st 1<=i & i+1<=len f holds |. (f/.i)-(f/.(i+1)) .|<a)
- holds
- ex g being FinSequence of TOP-REAL 2 st g is special &
- g.1=f.1 & g.len g=f.len f & len g>=len f &
- Y_axis(g) lies_between (Y_axis(f)).1, (Y_axis(f)).(len f) &
- X_axis(g) lies_between c, d &
- (for j st j in dom g holds ex k st k in dom f & |. g/.j - f/.k .| < a)&
- (for j st 1<=j & j+1<=len g holds |. g/.j - g/.(j+1) .|<a);
+  for f being FinSequence of TOP-REAL 2,a,c,d being Real st 1<=len f &
+  Y_axis(f) lies_between (Y_axis(f)).1, (Y_axis(f)).(len f) &
+  X_axis(f) lies_between c, d & a>0 &
+  (for i st 1<=i & i+1<=len f holds |. (f/.i)-(f/.(i+1)) .|<a) holds
+  ex g being FinSequence of TOP-REAL 2 st g is special &
+  g.1=f.1 & g.len g=f.len f & len g>=len f &
+  Y_axis(g) lies_between (Y_axis(f)).1, (Y_axis(f)).(len f) &
+  X_axis(g) lies_between c, d &
+  (for j st j in dom g holds ex k st k in dom f & |. g/.j - f/.k .| < a)&
+  (for j st 1<=j & j+1<=len g holds |. g/.j - g/.(j+1) .|<a);
 
 canceled;
 
 theorem :: JGRAPH_1:59
   for f being FinSequence of TOP-REAL 2 st 1 <=len f
-    holds len X_axis(f)=len f &
+  holds len X_axis(f)=len f &
   X_axis(f).1=(f/.1)`1 & X_axis(f).len f=(f/.len f)`1;
 
 theorem :: JGRAPH_1:60
   for f being FinSequence of TOP-REAL 2 st 1 <=len f
-    holds len Y_axis(f)=len f &
+  holds len Y_axis(f)=len f &
   Y_axis(f).1=(f/.1)`2 & Y_axis(f).len f=(f/.len f)`2;
 
 theorem :: JGRAPH_1:61
   for f being FinSequence of TOP-REAL 2 st i in dom f
-    holds X_axis(f).i=(f/.i)`1 & Y_axis(f).i=(f/.i)`2;
+  holds X_axis(f).i=(f/.i)`1 & Y_axis(f).i=(f/.i)`2;
 
 :: Goboard Theorem in continuous case
+
 theorem :: JGRAPH_1:62
-for P,Q being non empty Subset of TOP-REAL 2,
-p1,p2,q1,q2 being Point of TOP-REAL 2 st
-P is_an_arc_of p1,p2 & Q is_an_arc_of q1,q2 &
- (for p being Point of TOP-REAL 2 st p in P holds p1`1<=p`1 & p`1<= p2`1) &
- (for p being Point of TOP-REAL 2 st p in Q holds p1`1<=p`1 & p`1<= p2`1) &
- (for p being Point of TOP-REAL 2 st p in P holds q1`2<=p`2 & p`2<= q2`2) &
- (for p being Point of TOP-REAL 2 st p in Q holds q1`2<=p`2 & p`2<= q2`2)
- holds P meets Q;
+  for P,Q being non empty Subset of TOP-REAL 2,
+  p1,p2,q1,q2 being Point of TOP-REAL 2 st
+  P is_an_arc_of p1,p2 & Q is_an_arc_of q1,q2 &
+  (for p being Point of TOP-REAL 2 st p in P holds p1`1<=p`1 & p`1<= p2`1) &
+  (for p being Point of TOP-REAL 2 st p in Q holds p1`1<=p`1 & p`1<= p2`1) &
+  (for p being Point of TOP-REAL 2 st p in P holds q1`2<=p`2 & p`2<= q2`2) &
+  (for p being Point of TOP-REAL 2 st p in Q holds q1`2<=p`2 & p`2<= q2`2)
+  holds P meets Q;
 
 reserve X,Y for non empty TopSpace;
 
 theorem :: JGRAPH_1:63
-for f being Function of X,Y,
- P being non empty Subset of Y,
- f1 being Function of X,Y|P st f=f1 & f is continuous holds
- f1 is continuous;
+  for f being Function of X,Y, P being non empty Subset of Y,
+  f1 being Function of X,Y|P st f=f1 & f is continuous holds f1 is continuous;
 
 theorem :: JGRAPH_1:64
-for f being Function of X,Y,
- P being non empty Subset of Y
- st X is compact & Y is_T2 &
- f is continuous one-to-one & P=rng f holds
- ex f1 being Function of X,(Y|P) st f=f1 & f1 is_homeomorphism;
+  for f being Function of X,Y, P being non empty Subset of Y
+  st X is compact & Y is_T2 & f is continuous one-to-one & P=rng f holds
+  ex f1 being Function of X,(Y|P) st f=f1 & f1 is_homeomorphism;
 
 ::  Fashoda Meet Theorem
+
 theorem :: JGRAPH_1:65
-for f,g being Function of I[01],TOP-REAL 2,a,b,c,d being real number
-,
-  O,I being Point of I[01] st O=0 & I=1 &
-  f is continuous one-to-one &
-  g is continuous one-to-one &
-  (f.O)`1=a & (f.I)`1=b &
-  (g.O)`2=c & (g.I)`2=d &
+  for f,g being Function of I[01],TOP-REAL 2,a,b,c,d being real number ,
+  O,I being Point of I[01] st O=0 & I=1 & f is continuous one-to-one &
+  g is continuous one-to-one & (f.O)`1=a & (f.I)`1=b & (g.O)`2=c & (g.I)`2=d &
   (for r being Point of I[01] holds
-    a <=(f.r)`1 & (f.r)`1<=b & a <=(g.r)`1 & (g.r)`1<=b &
-    c <=(f.r)`2 & (f.r)`2<=d & c <=(g.r)`2 & (g.r)`2<=d)
-   holds rng f meets rng g;
+  a <=(f.r)`1 & (f.r)`1<=b & a <=(g.r)`1 & (g.r)`1<=b &
+  c <=(f.r)`2 & (f.r)`2<=d & c <=(g.r)`2 & (g.r)`2<=d) holds rng f meets rng g;
 

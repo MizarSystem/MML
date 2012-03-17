@@ -20,42 +20,43 @@ environ
 begin
 
 theorem
-   for x, y, A, B being set st
-      x in A \/ B & y in A \/ B holds
-    (x in A \ B & y in A \ B) or
-    (x in B & y in B) or
-    (x in A \ B & y in B) or
-    (x in B & y in A \ B)
-  proof
-    let x, y, A, B be set;
+  for x, y, A, B being set st x in A \/ B & y in A \/ B holds
+  (x in A \ B & y in A \ B) or (x in B & y in B) or (x in A \ B & y in B) or
+  (x in B & y in A \ B)
+proof
+  let x, y, A, B be set;
 A1: A \/ B = (A \ B) \/ B by XBOOLE_1:39;
-    assume x in A \/ B & y in A \/ B;
-    hence thesis by A1,XBOOLE_0:def 2;
-  end;
+  assume x in A \/ B & y in A \/ B;
+  hence thesis by A1,XBOOLE_0:def 2;
+end;
 
-definition let R, S be RelStr;
-  pred R tolerates S means :Def1:
+definition
+  let R, S be RelStr;
+  pred R tolerates S means
+  :Def1:
   for x, y being set st x in (the carrier of R) /\ (the carrier of S) &
-    y in (the carrier of R) /\ (the carrier of S) holds
-     [x, y] in the InternalRel of R iff [x,y] in the InternalRel of S;
+  y in (the carrier of R) /\ (the carrier of S) holds
+  [x, y] in the InternalRel of R iff [x,y] in the InternalRel of S;
 end;
 
 begin
 
-definition let R, S be RelStr; :: Wronski Sum Operation
-  func R [*] S -> strict RelStr means :Def2:
-   the carrier of it = (the carrier of R) \/ (the carrier of S) &
-     the InternalRel of it = (the InternalRel of R) \/ (the InternalRel of S)
-       \/ ((the InternalRel of R) * the InternalRel of S);
+definition
+  let R, S be RelStr; :: Wronski Sum Operation
+  func R [*] S -> strict RelStr means
+  :Def2:
+  the carrier of it = (the carrier of R) \/ (the carrier of S) &
+  the InternalRel of it = (the InternalRel of R) \/ (the InternalRel of S)
+  \/ ((the InternalRel of R) * the InternalRel of S);
   existence
   proof
     set X = (the carrier of R) \/ (the carrier of S);
-     the carrier of R c= X & the carrier of S c= X by XBOOLE_1:7;
+    the carrier of R c= X & the carrier of S c= X by XBOOLE_1:7;
     then reconsider G = (the InternalRel of R) * the InternalRel of S
-      as Relation of X by RELSET_1:17;
-     the carrier of R c= X & the carrier of S c= X by XBOOLE_1:7;
+    as Relation of X by RELSET_1:17;
+    the carrier of R c= X & the carrier of S c= X by XBOOLE_1:7;
     then reconsider IR = the InternalRel of R, IS = the InternalRel of S
-      as Relation of X by RELSET_1:17;
+    as Relation of X by RELSET_1:17;
     set F = IR \/ IS \/ G;
     reconsider F as Relation of X;
     take RelStr (# X, F #);
@@ -64,21 +65,23 @@ definition let R, S be RelStr; :: Wronski Sum Operation
   uniqueness;
 end;
 
-registration let R be RelStr, S be non empty RelStr;
+registration
+  let R be RelStr, S be non empty RelStr;
   cluster R [*] S -> non empty;
   coherence
   proof
-     (the carrier of R) \/ (the carrier of S) <> {};
+    (the carrier of R) \/ (the carrier of S) <> {};
     then the carrier of R [*] S <> {} by Def2;
     hence thesis by STRUCT_0:def 1;
   end;
 end;
 
-registration let R be non empty RelStr, S be RelStr;
+registration
+  let R be non empty RelStr, S be RelStr;
   cluster R [*] S -> non empty;
   coherence
   proof
-     (the carrier of R) \/ (the carrier of S) <> {};
+    (the carrier of R) \/ (the carrier of S) <> {};
     then the carrier of R [*] S <> {} by Def2;
     hence thesis by STRUCT_0:def 1;
   end;
@@ -86,372 +89,356 @@ end;
 
 theorem Th2:
   for R, S being RelStr holds
-   the InternalRel of R c= the InternalRel of R [*] S &
-   the InternalRel of S c= the InternalRel of R [*] S
-  proof
-    let R, S be RelStr;
+  the InternalRel of R c= the InternalRel of R [*] S &
+  the InternalRel of S c= the InternalRel of R [*] S
+proof
+  let R, S be RelStr;
 A1: the InternalRel of R c= (the InternalRel of R) \/ (the InternalRel of S)
-    by XBOOLE_1:7;
-     (the InternalRel of R) \/ (the InternalRel of S) c=
-    (the InternalRel of R) \/ (the InternalRel of S) \/
-    ((the InternalRel of R) * the InternalRel of S) by XBOOLE_1:7;
-    then the InternalRel of R c=
-    (the InternalRel of R) \/ (the InternalRel of S) \/
-    ((the InternalRel of R) * the InternalRel of S) by A1,XBOOLE_1:1;
-    hence the InternalRel of R c= the InternalRel of R [*] S by Def2;
+  by XBOOLE_1:7;
+  (the InternalRel of R) \/ (the InternalRel of S) c=
+  (the InternalRel of R) \/ (the InternalRel of S) \/
+  ((the InternalRel of R) * the InternalRel of S) by XBOOLE_1:7;
+  then the InternalRel of R c=
+  (the InternalRel of R) \/ (the InternalRel of S) \/
+  ((the InternalRel of R) * the InternalRel of S) by A1,XBOOLE_1:1;
+  hence the InternalRel of R c= the InternalRel of R [*] S by Def2;
 A2: the InternalRel of S c= (the InternalRel of R) \/ (the InternalRel of S)
-      by XBOOLE_1:7;
-     (the InternalRel of R) \/ (the InternalRel of S) c=
-    (the InternalRel of R) \/ (the InternalRel of S) \/
-    ((the InternalRel of R) * the InternalRel of S) by XBOOLE_1:7;
-    then the InternalRel of S c=
-    (the InternalRel of R) \/ (the InternalRel of S) \/
-    ((the InternalRel of R) * the InternalRel of S) by A2,XBOOLE_1:1;
-    hence the InternalRel of S c= the InternalRel of R [*] S by Def2;
-  end;
+  by XBOOLE_1:7;
+  (the InternalRel of R) \/ (the InternalRel of S) c=
+  (the InternalRel of R) \/ (the InternalRel of S) \/
+  ((the InternalRel of R) * the InternalRel of S) by XBOOLE_1:7;
+  then the InternalRel of S c=
+  (the InternalRel of R) \/ (the InternalRel of S) \/
+  ((the InternalRel of R) * the InternalRel of S) by A2,XBOOLE_1:1;
+  hence the InternalRel of S c= the InternalRel of R [*] S by Def2;
+end;
 
 theorem Th3:
   for R, S being RelStr st
-      R is reflexive & S is reflexive holds R [*] S is reflexive
-  proof
-    let R, S be RelStr;
-    assume R is reflexive & S is reflexive;
-then A1: the InternalRel of R is_reflexive_in the carrier of R &
-    the InternalRel of S is_reflexive_in the carrier of S by ORDERS_2:def 4;
+  R is reflexive & S is reflexive holds R [*] S is reflexive
+proof
+  let R, S be RelStr;
+  assume R is reflexive & S is reflexive;
+  then
+A1: the InternalRel of R is_reflexive_in the carrier of R &
+  the InternalRel of S is_reflexive_in the carrier of S by ORDERS_2:def 4;
 A2: the InternalRel of R c= the InternalRel of R [*] S &
-    the InternalRel of S c= the InternalRel of R [*] S by Th2;
-     the InternalRel of R [*] S is_reflexive_in the carrier of R [*] S
-    proof
-      let x be set;
-      assume x in the carrier of R [*] S;
-      then x in (the carrier of R) \/ (the carrier of S) by Def2;
-      then x in the carrier of R or x in the carrier of S by XBOOLE_0:def 2;
-      then [x,x] in the InternalRel of R or [x,x] in the InternalRel of S
-      by A1,RELAT_2:def 1;
-      hence thesis by A2;
-    end;
-    hence thesis by ORDERS_2:def 4;
+  the InternalRel of S c= the InternalRel of R [*] S by Th2;
+  the InternalRel of R [*] S is_reflexive_in the carrier of R [*] S
+  proof
+    let x be set;
+    assume x in the carrier of R [*] S;
+    then x in (the carrier of R) \/ (the carrier of S) by Def2;
+    then x in the carrier of R or x in the carrier of S by XBOOLE_0:def 2;
+    then [x,x] in the InternalRel of R or [x,x] in the InternalRel of S
+    by A1,RELAT_2:def 1;
+    hence thesis by A2;
   end;
+  hence thesis by ORDERS_2:def 4;
+end;
 
 begin
 
 theorem Th4: :: theorem 3.1 (vii)
-  for R, S being RelStr,
-      a, b being set st
-   [a,b] in the InternalRel of R [*] S &
-    a in the carrier of R & b in the carrier of R &
-    R tolerates S & R is transitive holds
-      [a,b] in the InternalRel of R
-  proof
-    let R, S be RelStr,
-        a, b be set;
-    assume that
+  for R, S being RelStr, a, b being set st
+  [a,b] in the InternalRel of R [*] S &
+  a in the carrier of R & b in the carrier of R &
+  R tolerates S & R is transitive holds [a,b] in the InternalRel of R
+proof
+  let R, S be RelStr, a, b be set;
+  assume that
 A1: [a,b] in the InternalRel of R [*] S &
-    a in the carrier of R & b in the carrier of R &
-    R tolerates S and
+  a in the carrier of R & b in the carrier of R & R tolerates S and
 A2: R is transitive;
-    assume
+  assume
 A3: not [a,b] in the InternalRel of R;
-     [a,b] in (the InternalRel of R) \/ (the InternalRel of S) \/
-       ((the InternalRel of R) * the InternalRel of S) by A1,Def2;
-then A4: [a,b] in (the InternalRel of R) \/ (the InternalRel of S) or
-      [a,b] in ((the InternalRel of R) * the InternalRel of S)
-        by XBOOLE_0:def 2;
-    per cases by A3,A4,XBOOLE_0:def 2;
-    suppose
-A5:   [a,b] in the InternalRel of S;
-      then a in the carrier of S & b in the carrier of S by ZFMISC_1:106;
-      then a in (the carrier of R) /\ (the carrier of S) &
-      b in (the carrier of R) /\ (the carrier of S) by A1,XBOOLE_0:def 3;
-      hence thesis by A1,A3,A5,Def1;
-    end;
-    suppose
-A6:   [a,b] in ((the InternalRel of R) * the InternalRel of S);
-      then a in the carrier of R & b in the carrier of S by ZFMISC_1:106;
-then A7:   b in (the carrier of R) /\ (the carrier of S) by A1,XBOOLE_0:def 3;
-      consider z being set such that
-A8:   [a,z] in the InternalRel of R & [z,b] in the InternalRel of S
-       by A6,RELAT_1:def 8;
-A9:   z in the carrier of R & z in the carrier of S by A8,ZFMISC_1:106;
-      then z in (the carrier of R) /\ (the carrier of S) by XBOOLE_0:def 3;
-then A10:   [z,b] in the InternalRel of R by A1,A7,A8,Def1;
-       the InternalRel of R is_transitive_in the carrier of R
-        by A2,ORDERS_2:def 5;
-      hence thesis by A1,A3,A8,A9,A10,RELAT_2:def 8;
-    end;
+  [a,b] in (the InternalRel of R) \/ (the InternalRel of S) \/
+  ((the InternalRel of R) * the InternalRel of S) by A1,Def2;
+  then
+A4: [a,b] in (the InternalRel of R) \/ (the InternalRel of S) or
+  [a,b] in ((the InternalRel of R) * the InternalRel of S) by XBOOLE_0:def 2;
+  per cases by A3,A4,XBOOLE_0:def 2;
+  suppose
+A5: [a,b] in the InternalRel of S;
+    then a in the carrier of S & b in the carrier of S by ZFMISC_1:106;
+    then a in (the carrier of R) /\ (the carrier of S) &
+    b in (the carrier of R) /\ (the carrier of S) by A1,XBOOLE_0:def 3;
+    hence thesis by A1,A3,A5,Def1;
   end;
+  suppose
+A6: [a,b] in ((the InternalRel of R) * the InternalRel of S);
+    then a in the carrier of R & b in the carrier of S by ZFMISC_1:106;
+    then
+A7: b in (the carrier of R) /\ (the carrier of S) by A1,XBOOLE_0:def 3;
+    consider z being set such that
+A8: [a,z] in the InternalRel of R & [z,b] in the InternalRel of S
+    by A6,RELAT_1:def 8;
+A9: z in the carrier of R & z in the carrier of S by A8,ZFMISC_1:106;
+    then z in (the carrier of R) /\ (the carrier of S) by XBOOLE_0:def 3;
+    then
+A10: [z,b] in the InternalRel of R by A1,A7,A8,Def1;
+    the InternalRel of R is_transitive_in the carrier of R
+    by A2,ORDERS_2:def 5;
+    hence thesis by A1,A3,A8,A9,A10,RELAT_2:def 8;
+  end;
+end;
 
 theorem Th5: :: theorem 3.1 (viii)
-  for R, S being RelStr,
-      a, b being set st
-   [a,b] in the InternalRel of R [*] S &
-    a in the carrier of S & b in the carrier of S &
-    R tolerates S & S is transitive holds
-      [a,b] in the InternalRel of S
-  proof
-    let R, S be RelStr,
-        a, b be set;
-    assume that
+  for R, S being RelStr, a, b being set st
+  [a,b] in the InternalRel of R [*] S &
+  a in the carrier of S & b in the carrier of S &
+  R tolerates S & S is transitive holds [a,b] in the InternalRel of S
+proof
+  let R, S be RelStr, a, b be set;
+  assume that
 A1: [a,b] in the InternalRel of R [*] S &
-    a in the carrier of S & b in the carrier of S &
-    R tolerates S and
+  a in the carrier of S & b in the carrier of S & R tolerates S and
 A2: S is transitive;
-    assume
+  assume
 A3: not [a,b] in the InternalRel of S;
-     [a,b] in (the InternalRel of R) \/ (the InternalRel of S) \/
-       ((the InternalRel of R) * the InternalRel of S) by A1,Def2;
-then A4: [a,b] in (the InternalRel of R) \/ (the InternalRel of S) or
-      [a,b] in ((the InternalRel of R) * the InternalRel of S)
-        by XBOOLE_0:def 2;
-    per cases by A3,A4,XBOOLE_0:def 2;
-    suppose
-   A5: [a,b] in the InternalRel of R;
-       then a in the carrier of R & b in the carrier of R by ZFMISC_1:106;
-       then a in (the carrier of R) /\ (the carrier of S) &
-       b in (the carrier of R) /\ (the carrier of S) by A1,XBOOLE_0:def 3;
-      hence thesis by A1,A3,A5,Def1;
-    end;
-    suppose
-   A6: [a,b] in ((the InternalRel of R) * the InternalRel of S);
-       then a in the carrier of R & b in the carrier of S by ZFMISC_1:106;
-   then A7: a in (the carrier of R) /\ (the carrier of S) by A1,XBOOLE_0:def 3;
-       consider z being set such that
-   A8: [a,z] in the InternalRel of R & [z,b] in the InternalRel of S
-         by A6,RELAT_1:def 8;
-   A9: z in the carrier of R & z in the carrier of S by A8,ZFMISC_1:106;
-       then z in (the carrier of R) /\ (the carrier of S) by XBOOLE_0:def 3;
-   then A10: [a,z] in the InternalRel of S by A1,A7,A8,Def1;
-        the InternalRel of S is_transitive_in the carrier of S
-         by A2,ORDERS_2:def 5;
-    hence thesis by A1,A3,A8,A9,A10,RELAT_2:def 8;
-    end;
+  [a,b] in (the InternalRel of R) \/ (the InternalRel of S) \/
+  ((the InternalRel of R) * the InternalRel of S) by A1,Def2;
+  then
+A4: [a,b] in (the InternalRel of R) \/ (the InternalRel of S) or
+  [a,b] in ((the InternalRel of R) * the InternalRel of S) by XBOOLE_0:def 2;
+  per cases by A3,A4,XBOOLE_0:def 2;
+  suppose
+A5: [a,b] in the InternalRel of R;
+    then a in the carrier of R & b in the carrier of R by ZFMISC_1:106;
+    then a in (the carrier of R) /\ (the carrier of S) &
+    b in (the carrier of R) /\ (the carrier of S) by A1,XBOOLE_0:def 3;
+    hence thesis by A1,A3,A5,Def1;
   end;
+  suppose
+A6: [a,b] in ((the InternalRel of R) * the InternalRel of S);
+    then a in the carrier of R & b in the carrier of S by ZFMISC_1:106;
+    then
+A7: a in (the carrier of R) /\ (the carrier of S) by A1,XBOOLE_0:def 3;
+    consider z being set such that
+A8: [a,z] in the InternalRel of R & [z,b] in the InternalRel of S
+    by A6,RELAT_1:def 8;
+A9: z in the carrier of R & z in the carrier of S by A8,ZFMISC_1:106;
+    then z in (the carrier of R) /\ (the carrier of S) by XBOOLE_0:def 3;
+    then
+A10: [a,z] in the InternalRel of S by A1,A7,A8,Def1;
+    the InternalRel of S is_transitive_in the carrier of S
+    by A2,ORDERS_2:def 5;
+    hence thesis by A1,A3,A8,A9,A10,RELAT_2:def 8;
+  end;
+end;
 
 theorem Th6:  :: a version of 3.1 (vii, viii - left to right)
-  for R, S being RelStr,
-      a, b being set holds
-   ([a,b] in the InternalRel of R implies
-   [a,b] in the InternalRel of R [*] S) &
-   ([a,b] in the InternalRel of S implies
-   [a,b] in the InternalRel of R [*] S)
+  for R, S being RelStr, a, b being set holds
+  ([a,b] in the InternalRel of R implies
+  [a,b] in the InternalRel of R [*] S) &
+  ([a,b] in the InternalRel of S implies [a,b] in the InternalRel of R [*] S)
+proof
+  let R, S be RelStr, a, b be set;
+  thus ([a,b] in the InternalRel of R implies
+  [a,b] in the InternalRel of R [*] S)
   proof
-    let R, S be RelStr,
-        a, b be set;
-    thus ([a,b] in the InternalRel of R implies
-    [a,b] in the InternalRel of R [*] S)
-    proof
-      assume [a,b] in the InternalRel of R;
-      then [a,b] in (the InternalRel of R) \/ (the InternalRel of S)
-        by XBOOLE_0:def 2;
-      then [a,b] in (the InternalRel of R) \/ (the InternalRel of S) \/
-      ((the InternalRel of R) * the InternalRel of S) by XBOOLE_0:def 2;
-      hence thesis by Def2;
-    end;
-    assume [a,b] in the InternalRel of S;
+    assume [a,b] in the InternalRel of R;
     then [a,b] in (the InternalRel of R) \/ (the InternalRel of S)
-      by XBOOLE_0:def 2;
+    by XBOOLE_0:def 2;
     then [a,b] in (the InternalRel of R) \/ (the InternalRel of S) \/
     ((the InternalRel of R) * the InternalRel of S) by XBOOLE_0:def 2;
-    hence [a,b] in the InternalRel of R [*] S by Def2;
+    hence thesis by Def2;
   end;
+  assume [a,b] in the InternalRel of S;
+  then [a,b] in (the InternalRel of R) \/ (the InternalRel of S)
+  by XBOOLE_0:def 2;
+  then [a,b] in (the InternalRel of R) \/ (the InternalRel of S) \/
+  ((the InternalRel of R) * the InternalRel of S) by XBOOLE_0:def 2;
+  hence [a,b] in the InternalRel of R [*] S by Def2;
+end;
 
 theorem
-   for R, S being non empty RelStr,
-      x being Element of R [*] S holds
-    x in the carrier of R or x in (the carrier of S) \ (the carrier of R)
-  proof
-    let R, S be non empty RelStr,
-        x be Element of R [*] S;
-     x in the carrier of R [*] S;
-    then x in (the carrier of S) \/ (the carrier of R) by Def2;
-    then x in (the carrier of R) \/ ((the carrier of S) \ (the carrier of R))
-      by XBOOLE_1:39;
-    hence thesis by XBOOLE_0:def 2;
-  end;
+  for R, S being non empty RelStr, x being Element of R [*] S holds
+  x in the carrier of R or x in (the carrier of S) \ (the carrier of R)
+proof
+  let R, S be non empty RelStr, x be Element of R [*] S;
+  x in the carrier of R [*] S;
+  then x in (the carrier of S) \/ (the carrier of R) by Def2;
+  then x in (the carrier of R) \/ ((the carrier of S) \ (the carrier of R))
+  by XBOOLE_1:39;
+  hence thesis by XBOOLE_0:def 2;
+end;
 
 theorem Th8: :: theorem 3.1 (vii)
-  for R, S being non empty RelStr
-  for x, y being Element of R,
+  for R, S being non empty RelStr for x, y being Element of R,
   a, b being Element of R [*] S st
-    x = a & y = b & R tolerates S & R is transitive holds
-    x <= y iff a <= b
-  proof
-    let R, S be non empty RelStr,
-        x, y be Element of R,
-        a, b be Element of R [*] S;
-    assume
+  x = a & y = b & R tolerates S & R is transitive holds x <= y iff a <= b
+proof
+  let R, S be non empty RelStr, x, y be Element of R,
+  a, b be Element of R [*] S;
+  assume
 A1: x = a & y = b;
-    assume
+  assume
 A2: R tolerates S & R is transitive;
-    hereby assume x <= y;
-      then [x,y] in the InternalRel of R by ORDERS_2:def 9;
-      then [a,b] in the InternalRel of R [*] S by A1,Th6;
-      hence a <= b by ORDERS_2:def 9;
-    end;
-    assume a <= b;
-then [a,b] in the InternalRel of R [*] S by ORDERS_2:def 9;
-    then [x,y] in the InternalRel of R by A1,A2,Th4;
-    hence thesis by ORDERS_2:def 9;
+  hereby
+    assume x <= y;
+    then [x,y] in the InternalRel of R by ORDERS_2:def 9;
+    then [a,b] in the InternalRel of R [*] S by A1,Th6;
+    hence a <= b by ORDERS_2:def 9;
   end;
+  assume a <= b;
+  then [a,b] in the InternalRel of R [*] S by ORDERS_2:def 9;
+  then [x,y] in the InternalRel of R by A1,A2,Th4;
+  hence thesis by ORDERS_2:def 9;
+end;
 
 theorem Th9: :: theorem 3.1 (viii)
-  for R, S being non empty RelStr,
-      a, b being Element of R [*] S,
-      c, d being Element of S st
-   a = c & b = d &
-    R tolerates S & S is transitive holds
-      a <= b iff c <= d
-  proof
-    let R, S be non empty RelStr,
-        a, b be Element of R [*] S,
-        c, d be Element of S;
-    assume that
+  for R, S being non empty RelStr, a, b being Element of R [*] S,
+  c, d being Element of S st a = c & b = d &
+  R tolerates S & S is transitive holds a <= b iff c <= d
+proof
+  let R, S be non empty RelStr, a, b be Element of R [*] S,
+  c, d be Element of S;
+  assume that
 A1: a = c & b = d and
 A2: R tolerates S & S is transitive;
-    hereby assume a <= b;
-then   [a,b] in the InternalRel of R [*] S by ORDERS_2:def 9;
-      then [c,d] in the InternalRel of S by A1,A2,Th5;
-      hence c <= d by ORDERS_2:def 9;
-    end;
-    assume c <= d;
-then [c,d] in the InternalRel of S by ORDERS_2:def 9;
-    then [a,b] in the InternalRel of R [*] S by A1,Th6;
-    hence thesis by ORDERS_2:def 9;
+  hereby
+    assume a <= b;
+    then [a,b] in the InternalRel of R [*] S by ORDERS_2:def 9;
+    then [c,d] in the InternalRel of S by A1,A2,Th5;
+    hence c <= d by ORDERS_2:def 9;
   end;
+  assume c <= d;
+  then [c,d] in the InternalRel of S by ORDERS_2:def 9;
+  then [a,b] in the InternalRel of R [*] S by A1,Th6;
+  hence thesis by ORDERS_2:def 9;
+end;
 
 theorem Th10:
   for R, S being antisymmetric reflexive transitive with_suprema
-    (non empty RelStr)
-  for x being set st x in the carrier of R holds
-    x is Element of R [*] S
-  proof
-    let R, S be antisymmetric reflexive transitive with_suprema
-      (non empty RelStr);
-    let x be set;
-    assume x in the carrier of R;
-    then x in (the carrier of R) \/ (the carrier of S) by XBOOLE_0:def 2;
-    hence thesis by Def2;
-  end;
+  (non empty RelStr) for x being set st x in the carrier of R holds
+  x is Element of R [*] S
+proof
+  let R, S be antisymmetric reflexive transitive with_suprema
+  (non empty RelStr);
+  let x be set;
+  assume x in the carrier of R;
+  then x in (the carrier of R) \/ (the carrier of S) by XBOOLE_0:def 2;
+  hence thesis by Def2;
+end;
 
 theorem
-   for R, S being antisymmetric reflexive transitive with_suprema
-    (non empty RelStr)
-  for x being set st x in the carrier of S holds
-    x is Element of R [*] S
-  proof
-    let R, S be antisymmetric reflexive transitive with_suprema
-      (non empty RelStr);
-    let x be set;
-    assume x in the carrier of S;
-    then x in (the carrier of R) \/ (the carrier of S) by XBOOLE_0:def 2;
-    hence thesis by Def2;
-  end;
+  for R, S being antisymmetric reflexive transitive with_suprema
+  (non empty RelStr) for x being set st x in the carrier of S holds
+  x is Element of R [*] S
+proof
+  let R, S be antisymmetric reflexive transitive with_suprema
+  (non empty RelStr);
+  let x be set;
+  assume x in the carrier of S;
+  then x in (the carrier of R) \/ (the carrier of S) by XBOOLE_0:def 2;
+  hence thesis by Def2;
+end;
 
 theorem Th12:
   for R, S being non empty RelStr
   for x being set st x in (the carrier of R) /\ (the carrier of S) holds
-    x is Element of R
-  proof
-    let R, S be non empty RelStr;
-    let x be set;
+  x is Element of R
+proof
+  let R, S be non empty RelStr;
+  let x be set;
 A1: (the carrier of R) /\ (the carrier of S) c= the carrier of R
-      by XBOOLE_1:17;
-    assume x in (the carrier of R) /\ (the carrier of S);
-    hence thesis by A1;
-  end;
+  by XBOOLE_1:17;
+  assume x in (the carrier of R) /\ (the carrier of S);
+  hence thesis by A1;
+end;
 
 theorem Th13:
   for R, S being non empty RelStr
   for x being set st x in (the carrier of R) /\ (the carrier of S) holds
-    x is Element of S
-  proof
-    let R, S be non empty RelStr;
-    let x be set;
+  x is Element of S
+proof
+  let R, S be non empty RelStr;
+  let x be set;
 A1: (the carrier of R) /\ (the carrier of S) c= the carrier of S
-      by XBOOLE_1:17;
-    assume x in (the carrier of R) /\ (the carrier of S);
-    hence thesis by A1;
-  end;
+  by XBOOLE_1:17;
+  assume x in (the carrier of R) /\ (the carrier of S);
+  hence thesis by A1;
+end;
 
 theorem
-   for R, S being antisymmetric reflexive transitive with_suprema
-    (non empty RelStr)
+  for R, S being antisymmetric reflexive transitive with_suprema
+  (non empty RelStr)
   for x, y being Element of R [*] S st x in the carrier of R &
-  y in the carrier of S & R tolerates S holds
-  x <= y iff
+  y in the carrier of S & R tolerates S holds x <= y iff
   (ex a being Element of R [*] S st
-  a in (the carrier of R) /\ (the carrier of S) &
-  x <= a & a <= y)
-  proof
-    let R, S be antisymmetric reflexive transitive with_suprema
-      (non empty RelStr),
-        x, y be Element of R [*] S;
-    assume
+  a in (the carrier of R) /\ (the carrier of S) & x <= a & a <= y)
+proof
+  let R, S be antisymmetric reflexive transitive with_suprema
+  (non empty RelStr), x, y be Element of R [*] S;
+  assume
 A1: x in the carrier of R & y in the carrier of S & R tolerates S;
-    per cases;
-    suppose
-A2:   [x,y] in the InternalRel of R;
-      hereby assume
-A3:     x <= y;
-A4:     y in the carrier of R by A2,ZFMISC_1:106;
-        take a = y;
-        thus a in (the carrier of R) /\ (the carrier of S)
-          by A1,A4,XBOOLE_0:def 3;
-         R [*] S is reflexive by Th3;
-        hence x <= a & a <= y by A3,ORDERS_2:24;
-      end;
-       [x,y] in the InternalRel of R [*] S by A2,Th6;
-      hence thesis by ORDERS_2:def 9;
+  per cases;
+  suppose
+A2: [x,y] in the InternalRel of R;
+    hereby
+      assume
+A3:   x <= y;
+A4:   y in the carrier of R by A2,ZFMISC_1:106;
+      take a = y;
+      thus a in (the carrier of R) /\ (the carrier of S)
+      by A1,A4,XBOOLE_0:def 3;
+      R [*] S is reflexive by Th3;
+      hence x <= a & a <= y by A3,ORDERS_2:24;
     end;
-    suppose
-A5:   [x,y] in the InternalRel of S;
-      hereby assume
-A6:     x <= y;
-A7:     x in the carrier of S by A5,ZFMISC_1:106;
-        take a = x;
-        thus a in (the carrier of R) /\ (the carrier of S)
-          by A1,A7,XBOOLE_0:def 3;
-         R [*] S is reflexive by Th3;
-        hence x <= a & a <= y by A6,ORDERS_2:24;
-      end;
-       [x,y] in the InternalRel of R [*] S by A5,Th6;
-      hence thesis by ORDERS_2:def 9;
+    [x,y] in the InternalRel of R [*] S by A2,Th6;
+    hence thesis by ORDERS_2:def 9;
+  end;
+  suppose
+A5: [x,y] in the InternalRel of S;
+    hereby
+      assume
+A6:   x <= y;
+A7:   x in the carrier of S by A5,ZFMISC_1:106;
+      take a = x;
+      thus a in (the carrier of R) /\ (the carrier of S)
+      by A1,A7,XBOOLE_0:def 3;
+      R [*] S is reflexive by Th3;
+      hence x <= a & a <= y by A6,ORDERS_2:24;
     end;
-    suppose that
+    [x,y] in the InternalRel of R [*] S by A5,Th6;
+    hence thesis by ORDERS_2:def 9;
+  end;
+  suppose that
 A8: not [x,y] in the InternalRel of R and
 A9: not [x,y] in the InternalRel of S;
-    hereby assume x <= y;
+    hereby
+      assume x <= y;
       then [x,y] in the InternalRel of R [*] S by ORDERS_2:def 9;
       then [x,y] in (the InternalRel of R) \/
       (the InternalRel of S) \/ (the InternalRel of R) *
       the InternalRel of S by Def2;
-then   [x,y] in (the InternalRel of R) \/
+      then [x,y] in (the InternalRel of R) \/
       (the InternalRel of S) or [x,y] in (the InternalRel of R) *
       the InternalRel of S by XBOOLE_0:def 2;
       then consider z being set such that
-A10:   [x,z] in the InternalRel of R &
-      [z,y] in the InternalRel of S
-        by A8,A9,RELAT_1:def 8,XBOOLE_0:def 2;
-A11:   z in the carrier of R by A10,ZFMISC_1:106;
-A12:   z in the carrier of S by A10,ZFMISC_1:106;
+A10:  [x,z] in the InternalRel of R & [z,y] in the InternalRel of S
+      by A8,A9,RELAT_1:def 8,XBOOLE_0:def 2;
+A11:  z in the carrier of R by A10,ZFMISC_1:106;
+A12:  z in the carrier of S by A10,ZFMISC_1:106;
       then z in (the carrier of R) \/ (the carrier of S) by XBOOLE_0:def 2;
       then reconsider z as Element of R [*] S by Def2;
       take z;
       thus z in (the carrier of R) /\ (the carrier of S)
-        by A11,A12,XBOOLE_0:def 3;
-       [x,z] in the InternalRel of R [*] S by A10,Th6;
+      by A11,A12,XBOOLE_0:def 3;
+      [x,z] in the InternalRel of R [*] S by A10,Th6;
       hence x <= z by ORDERS_2:def 9;
-       [z,y] in the InternalRel of R [*] S by A10,Th6;
+      [z,y] in the InternalRel of R [*] S by A10,Th6;
       hence z <= y by ORDERS_2:def 9;
     end;
     given a being Element of R [*] S such that
-A13: a in (the carrier of R) /\ (the carrier of S) &
-    x <= a & a <= y;
+A13: a in (the carrier of R) /\ (the carrier of S) & x <= a & a <= y;
     reconsider x' = x, a' = a as Element of R by A1,A13,Th12;
     reconsider y' = y, a1 = a as Element of S by A1,A13,Th13;
-     x' <= a' by A1,A13,Th8;
-then A14: [x,a] in the InternalRel of R by ORDERS_2:def 9;
-     a1 <= y' by A1,A13,Th9;
+    x' <= a' by A1,A13,Th8;
+    then
+A14: [x,a] in the InternalRel of R by ORDERS_2:def 9;
+    a1 <= y' by A1,A13,Th9;
     then [a,y] in the InternalRel of S by ORDERS_2:def 9;
     then [x,y] in (the InternalRel of R) *
     the InternalRel of S by A14,RELAT_1:def 8;
@@ -459,495 +446,463 @@ then A14: [x,a] in the InternalRel of R by ORDERS_2:def 9;
     (the InternalRel of R) * the InternalRel of S by XBOOLE_0:def 2;
     then [x,y] in the InternalRel of R [*] S by Def2;
     hence thesis by ORDERS_2:def 9;
-    end;
   end;
+end;
 
 theorem Th15:
-  for R, S being non empty RelStr,
-      a, b being Element of R,
-      c, d being Element of S st
-   a = c & b = d &
-     R tolerates S & R is transitive & S is transitive holds
-     a <= b iff c <= d
-  proof
-    let R, S be non empty RelStr,
-        a, b be Element of R,
-        c, d be Element of S;
-    assume
+  for R, S being non empty RelStr, a, b being Element of R,
+  c, d being Element of S st a = c & b = d &
+  R tolerates S & R is transitive & S is transitive holds a <= b iff c <= d
+proof
+  let R, S be non empty RelStr, a, b be Element of R, c, d be Element of S;
+  assume
 A1: a = c & b = d & R tolerates S & R is transitive & S is transitive;
-     a in (the carrier of R) \/ the carrier of S &
-    b in (the carrier of R) \/ the carrier of S by XBOOLE_0:def 2;
-    then reconsider a' = a, b' = b as Element of R [*] S by Def2;
-    hereby assume a <= b;
-      then a' <= b' by A1,Th8;
-      hence c <= d by A1,Th9;
-    end;
-    assume c <= d;
-    then a' <= b' by A1,Th9;
-    hence thesis by A1,Th8;
+  a in (the carrier of R) \/ the carrier of S &
+  b in (the carrier of R) \/ the carrier of S by XBOOLE_0:def 2;
+  then reconsider a' = a, b' = b as Element of R [*] S by Def2;
+  hereby
+    assume a <= b;
+    then a' <= b' by A1,Th8;
+    hence c <= d by A1,Th9;
   end;
+  assume c <= d;
+  then a' <= b' by A1,Th9;
+  hence thesis by A1,Th8;
+end;
 
 theorem Th16:
   for R being antisymmetric reflexive transitive with_suprema
-    (non empty RelStr),
-      D being lower directed Subset of R
-     for x, y being Element of R st
-     x in D & y in D holds x "\/" y in D
-  proof
-    let R be antisymmetric reflexive transitive with_suprema
-      (non empty RelStr),
-        D be lower directed Subset of R;
-    let x, y be Element of R;
-    assume x in D & y in D;
-    then consider z being Element of R such that
+  (non empty RelStr), D being lower directed Subset of R
+  for x, y being Element of R st x in D & y in D holds x "\/" y in D
+proof
+  let R be antisymmetric reflexive transitive with_suprema (non empty RelStr),
+  D be lower directed Subset of R;
+  let x, y be Element of R;
+  assume x in D & y in D;
+  then consider z being Element of R such that
 A1: z in D & x <= z & y <= z by WAYBEL_0:def 1;
-     x "\/" y <= z by A1,YELLOW_0:22;
-    hence thesis by A1,WAYBEL_0:def 19;
-  end;
+  x "\/" y <= z by A1,YELLOW_0:22;
+  hence thesis by A1,WAYBEL_0:def 19;
+end;
 
 theorem Th17:
-  for R, S being RelStr,
-      a, b being set st
-   (the carrier of R) /\ (the carrier of S) is upper Subset of R &
-   [a,b] in the InternalRel of R [*] S & a in the carrier of S holds
-     b in the carrier of S
-  proof
-    let R, S be RelStr,
-        a, b be set;
-    set X = (the carrier of R) /\ (the carrier of S);
-    reconsider X as Subset of R by XBOOLE_1:17;
-    assume that
+  for R, S being RelStr, a, b being set st
+  (the carrier of R) /\ (the carrier of S) is upper Subset of R &
+  [a,b] in the InternalRel of R [*] S & a in the carrier of S holds
+  b in the carrier of S
+proof
+  let R, S be RelStr, a, b be set;
+  set X = (the carrier of R) /\ (the carrier of S);
+  reconsider X as Subset of R by XBOOLE_1:17;
+  assume that
 A1: (the carrier of R) /\ (the carrier of S) is upper Subset of R and
 A2: [a,b] in the InternalRel of R [*] S & a in the carrier of S;
-    assume
+  assume
 A3: not b in the carrier of S;
-     [a,b] in (the InternalRel of R) \/ (the InternalRel of S)
-       \/ ((the InternalRel of R) * the InternalRel of S) by A2,Def2;
-then A4: [a,b] in (the InternalRel of R) \/ (the InternalRel of S) or
-       [a,b] in ((the InternalRel of R) * the InternalRel of S)
-         by XBOOLE_0:def 2;
-    per cases by A4,XBOOLE_0:def 2;
-    suppose
-A5:   [a,b] in the InternalRel of R;
-      then a in the carrier of R by ZFMISC_1:106;
-then A6:   a in (the carrier of R) /\ the carrier of S by A2,XBOOLE_0:def 3;
-      reconsider a' = a, b' = b as Element of R by A5,ZFMISC_1:106;
-A7:   X c= the carrier of S by XBOOLE_1:17;
-       a' <= b' by A5,ORDERS_2:def 9;
-      then b in X by A1,A6,WAYBEL_0:def 20;
-      hence thesis by A3,A7;
-    end;
-    suppose [a,b] in the InternalRel of S;
-      hence thesis by A3,ZFMISC_1:106;
-    end;
-    suppose [a,b] in (the InternalRel of R) * the InternalRel of S;
-      then consider z being set such that
-A8:   [a,z] in the InternalRel of R & [z,b] in the InternalRel of S
-        by RELAT_1:def 8;
-      thus thesis by A3,A8,ZFMISC_1:106;
-    end;
+  [a,b] in (the InternalRel of R) \/ (the InternalRel of S)
+  \/ ((the InternalRel of R) * the InternalRel of S) by A2,Def2;
+  then
+A4: [a,b] in (the InternalRel of R) \/ (the InternalRel of S) or
+  [a,b] in ((the InternalRel of R) * the InternalRel of S) by XBOOLE_0:def 2;
+  per cases by A4,XBOOLE_0:def 2;
+  suppose
+A5: [a,b] in the InternalRel of R;
+    then a in the carrier of R by ZFMISC_1:106;
+    then
+A6: a in (the carrier of R) /\ the carrier of S by A2,XBOOLE_0:def 3;
+    reconsider a' = a, b' = b as Element of R by A5,ZFMISC_1:106;
+A7: X c= the carrier of S by XBOOLE_1:17;
+    a' <= b' by A5,ORDERS_2:def 9;
+    then b in X by A1,A6,WAYBEL_0:def 20;
+    hence thesis by A3,A7;
   end;
+  suppose [a,b] in the InternalRel of S;
+    hence thesis by A3,ZFMISC_1:106;
+  end;
+  suppose [a,b] in (the InternalRel of R) * the InternalRel of S;
+    then consider z being set such that
+A8: [a,z] in the InternalRel of R & [z,b] in the InternalRel of S
+    by RELAT_1:def 8;
+    thus thesis by A3,A8,ZFMISC_1:106;
+  end;
+end;
 
 theorem Th18: :: theorem 3.1 (xi)
-  for R, S being RelStr,
-      a, b being Element of R [*] S st
-   (the carrier of R) /\ (the carrier of S) is upper Subset of R &
-   a <= b & a in the carrier of S holds
-   b in the carrier of S
-   proof
-     let R, S be RelStr,
-         a, b be Element of R [*] S;
-     assume
-A1:  (the carrier of R) /\ (the carrier of S) is upper Subset of R &
-     a <= b & a in the carrier of S;
-     then [a,b] in the InternalRel of R [*] S by ORDERS_2:def 9;
-     hence thesis by A1,Th17;
-   end;
+  for R, S being RelStr, a, b being Element of R [*] S st
+  (the carrier of R) /\ (the carrier of S) is upper Subset of R &
+  a <= b & a in the carrier of S holds b in the carrier of S
+proof
+  let R, S be RelStr, a, b be Element of R [*] S;
+  assume
+A1: (the carrier of R) /\ (the carrier of S) is upper Subset of R &
+  a <= b & a in the carrier of S;
+  then [a,b] in the InternalRel of R [*] S by ORDERS_2:def 9;
+  hence thesis by A1,Th17;
+end;
 
 theorem :: theorem 3.1 (vi)
-   for R, S being antisymmetric reflexive transitive with_suprema
-    (non empty RelStr)
-  for x, y being Element of R,
-      a, b being Element of S st
+  for R, S being antisymmetric reflexive transitive with_suprema
+  (non empty RelStr) for x, y being Element of R, a, b being Element of S st
   (the carrier of R) /\ (the carrier of S) is lower directed Subset of S &
   (the carrier of R) /\ (the carrier of S) is upper Subset of R &
-  R tolerates S &
-  x = a & y = b holds x "\/" y = a "\/" b
-  proof
-    let R, S be antisymmetric reflexive transitive with_suprema
-      (non empty RelStr);
-    let x, y be Element of R;
-    let a, b be Element of S;
-    assume
+  R tolerates S & x = a & y = b holds x "\/" y = a "\/" b
+proof
+  let R, S be antisymmetric reflexive transitive with_suprema
+  (non empty RelStr);
+  let x, y be Element of R;
+  let a, b be Element of S;
+  assume
 A1: (the carrier of R) /\ (the carrier of S) is lower directed Subset of S &
-    (the carrier of R) /\ (the carrier of S) is upper Subset of R &
-    R tolerates S & x = a & y = b;
-    then a in (the carrier of R) /\ (the carrier of S) &
-    b in (the carrier of R) /\ (the carrier of S) by XBOOLE_0:def 3;
-    then a "\/" b in (the carrier of R) /\ (the carrier of S)
-      by A1,Th16;
-    then reconsider xy = a "\/" b as Element of R by Th13;
-     a "\/" b >= a by YELLOW_0:22;
-then A2: xy >= x by A1,Th15;
-     a "\/" b >= b by YELLOW_0:22;
-then A3: xy >= y by A1,Th15;
-     for d being Element of R st d >= x & d >= y holds xy <= d
-    proof
-      let d be Element of R;
-      assume
-A4:   d >= x & d >= y;
-      reconsider X = x, D = d as Element of R [*] S by Th10;
-       X <= D by A1,A4,Th8;
-      then reconsider dd = d as Element of S by A1,Th18;
-A5:   dd >= a by A1,A4,Th15;
-       b <= dd by A1,A4,Th15;
-      then a "\/" b <= dd by A5,YELLOW_5:9;
-      hence thesis by A1,Th15;
-    end;
-    hence thesis by A2,A3,YELLOW_0:22;
+  (the carrier of R) /\ (the carrier of S) is upper Subset of R &
+  R tolerates S & x = a & y = b;
+  then a in (the carrier of R) /\ (the carrier of S) &
+  b in (the carrier of R) /\ (the carrier of S) by XBOOLE_0:def 3;
+  then reconsider xy = a "\/" b as Element of R by A1,Th13,Th16;
+  a "\/" b >= a by YELLOW_0:22;
+  then
+A2: xy >= x by A1,Th15;
+  a "\/" b >= b by YELLOW_0:22;
+  then
+A3: xy >= y by A1,Th15;
+  for d being Element of R st d >= x & d >= y holds xy <= d
+  proof
+    let d be Element of R;
+    assume
+A4: d >= x & d >= y;
+    reconsider X = x, D = d as Element of R [*] S by Th10;
+    X <= D by A1,A4,Th8;
+    then reconsider dd = d as Element of S by A1,Th18;
+A5: dd >= a by A1,A4,Th15;
+    b <= dd by A1,A4,Th15;
+    then a "\/" b <= dd by A5,YELLOW_5:9;
+    hence thesis by A1,Th15;
   end;
+  hence thesis by A2,A3,YELLOW_0:22;
+end;
 
 theorem
-   for R, S being lower-bounded antisymmetric reflexive
-    transitive with_suprema (non empty RelStr) st
-    (the carrier of R) /\ (the carrier of S) is non empty
-      lower directed Subset of S holds
-    Bottom S in the carrier of R
-  proof
-    let R, S be lower-bounded antisymmetric reflexive transitive
-      with_suprema (non empty RelStr);
-    assume
+  for R, S being lower-bounded antisymmetric reflexive
+  transitive with_suprema (non empty RelStr) st
+  (the carrier of R) /\ (the carrier of S) is non empty
+  lower directed Subset of S holds Bottom S in the carrier of R
+proof
+  let R, S be lower-bounded antisymmetric reflexive transitive
+  with_suprema (non empty RelStr);
+  assume
 A1: (the carrier of R) /\ (the carrier of S)
-      is non empty lower directed Subset of S;
-    then consider x being set such that
+  is non empty lower directed Subset of S;
+  then consider x being set such that
 A2: x in (the carrier of R) /\ (the carrier of S) by XBOOLE_0:def 1;
-    reconsider x as Element of S by A2,Th13;
-     Bottom S <= x by YELLOW_0:44;
-    then Bottom S in (the carrier of R) /\ (the carrier of S)
-      by A1,A2,WAYBEL_0:def 19;
-    hence thesis by XBOOLE_0:def 3;
-  end;
+  reconsider x as Element of S by A2,Th13;
+  Bottom S <= x by YELLOW_0:44;
+  then Bottom S in (the carrier of R) /\ (the carrier of S)
+  by A1,A2,WAYBEL_0:def 19;
+  hence thesis by XBOOLE_0:def 3;
+end;
 
 theorem Th21:
-  for R, S being RelStr,
-      a, b being set st
-   (the carrier of R) /\ (the carrier of S) is lower Subset of S &
-   [a,b] in the InternalRel of R [*] S & b in the carrier of R holds
-     a in the carrier of R
-  proof
-    let R, S be RelStr,
-        a, b be set;
-    set X = (the carrier of R) /\ (the carrier of S);
-    reconsider X as Subset of R by XBOOLE_1:17;
-    assume that
+  for R, S being RelStr, a, b being set st
+  (the carrier of R) /\ (the carrier of S) is lower Subset of S &
+  [a,b] in the InternalRel of R [*] S & b in the carrier of R holds
+  a in the carrier of R
+proof
+  let R, S be RelStr, a, b be set;
+  set X = (the carrier of R) /\ (the carrier of S);
+  reconsider X as Subset of R by XBOOLE_1:17;
+  assume that
 A1: (the carrier of R) /\ (the carrier of S) is lower Subset of S and
 A2: [a,b] in the InternalRel of R [*] S & b in the carrier of R;
-    assume
+  assume
 A3: not a in the carrier of R;
-     [a,b] in (the InternalRel of R) \/ (the InternalRel of S)
-       \/ ((the InternalRel of R) * the InternalRel of S) by A2,Def2;
-then A4: [a,b] in (the InternalRel of R) \/ (the InternalRel of S) or
-       [a,b] in ((the InternalRel of R) * the InternalRel of S)
-         by XBOOLE_0:def 2;
-    per cases by A4,XBOOLE_0:def 2;
-    suppose
-A5:   [a,b] in the InternalRel of S;
-      then b in the carrier of S by ZFMISC_1:106;
-then A6:   b in (the carrier of R) /\ the carrier of S by A2,XBOOLE_0:def 3;
-      reconsider a' = a, b' = b as Element of S by A5,ZFMISC_1:106;
-       a' <= b' by A5,ORDERS_2:def 9;
-      then a in X by A1,A6,WAYBEL_0:def 19;
-      hence thesis by A3;
-    end;
-    suppose [a,b] in the InternalRel of R;
-      hence thesis by A3,ZFMISC_1:106;
-    end;
-    suppose [a,b] in (the InternalRel of R) * the InternalRel of S;
-      then consider z being set such that
-A7:   [a,z] in the InternalRel of R & [z,b] in the InternalRel of S
-        by RELAT_1:def 8;
-      thus thesis by A3,A7,ZFMISC_1:106;
-    end;
+  [a,b] in (the InternalRel of R) \/ (the InternalRel of S)
+  \/ ((the InternalRel of R) * the InternalRel of S) by A2,Def2;
+  then
+A4: [a,b] in (the InternalRel of R) \/ (the InternalRel of S) or
+  [a,b] in ((the InternalRel of R) * the InternalRel of S) by XBOOLE_0:def 2;
+  per cases by A4,XBOOLE_0:def 2;
+  suppose
+A5: [a,b] in the InternalRel of S;
+    then b in the carrier of S by ZFMISC_1:106;
+    then
+A6: b in (the carrier of R) /\ the carrier of S by A2,XBOOLE_0:def 3;
+    reconsider a' = a, b' = b as Element of S by A5,ZFMISC_1:106;
+    a' <= b' by A5,ORDERS_2:def 9;
+    then a in X by A1,A6,WAYBEL_0:def 19;
+    hence thesis by A3;
   end;
+  suppose [a,b] in the InternalRel of R;
+    hence thesis by A3,ZFMISC_1:106;
+  end;
+  suppose [a,b] in (the InternalRel of R) * the InternalRel of S;
+    then consider z being set such that
+A7: [a,z] in the InternalRel of R & [z,b] in the InternalRel of S
+    by RELAT_1:def 8;
+    thus thesis by A3,A7,ZFMISC_1:106;
+  end;
+end;
 
 theorem :: theorem 1 (ix)
-   for x, y being set,
-      R, S being RelStr st
-    [x,y] in the InternalRel of R [*] S &
-   (the carrier of R) /\ (the carrier of S) is upper Subset of R holds
-      (x in the carrier of R & y in the carrier of R) or
-      (x in the carrier of S & y in the carrier of S) or
-      (x in (the carrier of R) \ (the carrier of S) &
-       y in (the carrier of S) \ (the carrier of R))
-  proof
-    let x, y be set,
-        R, S be RelStr;
-    assume
+  for x, y being set, R, S being RelStr st
+  [x,y] in the InternalRel of R [*] S &
+  (the carrier of R) /\ (the carrier of S) is upper Subset of R holds
+  (x in the carrier of R & y in the carrier of R) or
+  (x in the carrier of S & y in the carrier of S) or
+  (x in (the carrier of R) \ (the carrier of S) &
+  y in (the carrier of S) \ (the carrier of R))
+proof
+  let x, y be set, R, S be RelStr;
+  assume
 A1: [x,y] in the InternalRel of R [*] S &
-    (the carrier of R) /\ (the carrier of S) is upper Subset of R;
-    then x in the carrier of R [*] S &
-    y in the carrier of R [*] S by ZFMISC_1:106;
-then A2: x in (the carrier of R) \/ (the carrier of S) &
-    y in (the carrier of R) \/ (the carrier of S) by Def2;
-    per cases by A2,XBOOLE_0:def 2;
-    suppose x in the carrier of R & y in the carrier of R;
+  (the carrier of R) /\ (the carrier of S) is upper Subset of R;
+  then x in the carrier of R [*] S &
+  y in the carrier of R [*] S by ZFMISC_1:106;
+  then
+A2: x in (the carrier of R) \/ (the carrier of S) &
+  y in (the carrier of R) \/ (the carrier of S) by Def2;
+  per cases by A2,XBOOLE_0:def 2;
+  suppose x in the carrier of R & y in the carrier of R;
     hence thesis;
-    end;
-    suppose x in the carrier of S & y in the carrier of S;
-      hence thesis;
-    end;
-    suppose
-       x in the carrier of R & y in the carrier of S;
-      hence thesis by XBOOLE_0:def 4;
-    end;
-    suppose
-       x in the carrier of S & y in the carrier of R;
-      hence thesis by A1,Th17;
-    end;
   end;
+  suppose x in the carrier of S & y in the carrier of S;
+    hence thesis;
+  end;
+  suppose x in the carrier of R & y in the carrier of S;
+    hence thesis by XBOOLE_0:def 4;
+  end;
+  suppose x in the carrier of S & y in the carrier of R;
+    hence thesis by A1,Th17;
+  end;
+end;
 
 theorem :: theorem 3.1 (x)
-   for R, S being RelStr,
-      a, b being Element of R [*] S st
-   (the carrier of R) /\ (the carrier of S) is lower Subset of S &
-   a <= b & b in the carrier of R holds
-   a in the carrier of R
-  proof
-    let R, S be RelStr,
-        a, b be Element of R [*] S;
-    assume
+  for R, S being RelStr, a, b being Element of R [*] S st
+  (the carrier of R) /\ (the carrier of S) is lower Subset of S &
+  a <= b & b in the carrier of R holds a in the carrier of R
+proof
+  let R, S be RelStr, a, b be Element of R [*] S;
+  assume
 A1: (the carrier of R) /\ (the carrier of S) is lower Subset of S &
-    a <= b & b in the carrier of R;
-    then [a,b] in the InternalRel of R [*] S by ORDERS_2:def 9;
-    hence thesis by A1,Th21;
-  end;
+  a <= b & b in the carrier of R;
+  then [a,b] in the InternalRel of R [*] S by ORDERS_2:def 9;
+  hence thesis by A1,Th21;
+end;
 
 theorem :: theorem 3.1 (xii)
-   for R, S being RelStr st R tolerates S &
-   (the carrier of R) /\ (the carrier of S) is upper Subset of R &
-      (the carrier of R) /\ (the carrier of S) is lower Subset of S &
-    R is transitive antisymmetric &
-    S is transitive antisymmetric holds R [*] S is antisymmetric
-  proof
-    let R, S be RelStr;
-    set X = the carrier of R [*] S,
-        F = the InternalRel of R [*] S;
-    assume
+  for R, S being RelStr st R tolerates S &
+  (the carrier of R) /\ (the carrier of S) is upper Subset of R &
+  (the carrier of R) /\ (the carrier of S) is lower Subset of S &
+  R is transitive antisymmetric &
+  S is transitive antisymmetric holds R [*] S is antisymmetric
+proof
+  let R, S be RelStr;
+  set X = the carrier of R [*] S, F = the InternalRel of R [*] S;
+  assume
 A1: R tolerates S &
-    (the carrier of R) /\ (the carrier of S) is upper Subset of R &
-      (the carrier of R) /\ (the carrier of S) is lower Subset of S &
-    R is transitive antisymmetric &
-    S is transitive antisymmetric;
-then A2: the InternalRel of R is_antisymmetric_in the carrier of R &
-    the InternalRel of S is_antisymmetric_in the carrier of S
-      by ORDERS_2:def 6;
-     F is_antisymmetric_in X
-    proof
-      let x, y be set;
-      assume
-A3:   x in X & y in X & [x,y] in F & [y,x] in F;
-then A4:   x in (the carrier of R) \/ (the carrier of S) by Def2;
-A5:   y in (the carrier of R) \/ (the carrier of S) by A3,Def2;
-      per cases by A4,A5,XBOOLE_0:def 2;
-      suppose
-A6:     x in the carrier of R & y in the carrier of R;
-        then [x,y] in the InternalRel of R & [y,x] in the InternalRel of R
-          by A1,A3,Th4;
-        hence x = y by A2,A6,RELAT_2:def 4;
-      end;
-      suppose
-A7:     x in the carrier of R & y in the carrier of S;
-then A8:     y in the carrier of R by A1,A3,Th21;
-        then [x,y] in the InternalRel of R & [y,x] in the InternalRel of R
-          by A1,A3,A7,Th4;
-        hence x = y by A2,A7,A8,RELAT_2:def 4;
-      end;
-      suppose
-A9:     x in the carrier of S & y in the carrier of R;
-then A10:     y in the carrier of S by A1,A3,Th17;
-        then [x,y] in the InternalRel of S & [y,x] in the InternalRel of S
-          by A1,A3,A9,Th5;
-        hence x = y by A2,A9,A10,RELAT_2:def 4;
-      end;
-      suppose
-A11:     x in the carrier of S & y in the carrier of S;
-        then [x,y] in the InternalRel of S & [y,x] in the InternalRel of S
-          by A1,A3,Th5;
-        hence x = y by A2,A11,RELAT_2:def 4;
-      end;
+  (the carrier of R) /\ (the carrier of S) is upper Subset of R &
+  (the carrier of R) /\ (the carrier of S) is lower Subset of S &
+  R is transitive antisymmetric & S is transitive antisymmetric;
+  then
+A2: the InternalRel of R is_antisymmetric_in the carrier of R &
+  the InternalRel of S is_antisymmetric_in the carrier of S by ORDERS_2:def 6;
+  F is_antisymmetric_in X
+  proof
+    let x, y be set;
+    assume
+A3: x in X & y in X & [x,y] in F & [y,x] in F;
+    then
+A4: x in (the carrier of R) \/ (the carrier of S) by Def2;
+A5: y in (the carrier of R) \/ (the carrier of S) by A3,Def2;
+    per cases by A4,A5,XBOOLE_0:def 2;
+    suppose
+A6:   x in the carrier of R & y in the carrier of R;
+      then [x,y] in the InternalRel of R & [y,x] in the InternalRel of R
+      by A1,A3,Th4;
+      hence x = y by A2,A6,RELAT_2:def 4;
     end;
-    hence thesis by ORDERS_2:def 6;
+    suppose
+A7:   x in the carrier of R & y in the carrier of S;
+      then
+A8:   y in the carrier of R by A1,A3,Th21;
+      then [x,y] in the InternalRel of R & [y,x] in the InternalRel of R
+      by A1,A3,A7,Th4;
+      hence x = y by A2,A7,A8,RELAT_2:def 4;
+    end;
+    suppose
+A9:   x in the carrier of S & y in the carrier of R;
+      then
+A10:  y in the carrier of S by A1,A3,Th17;
+      then [x,y] in the InternalRel of S & [y,x] in the InternalRel of S
+      by A1,A3,A9,Th5;
+      hence x = y by A2,A9,A10,RELAT_2:def 4;
+    end;
+    suppose
+A11:  x in the carrier of S & y in the carrier of S;
+      then [x,y] in the InternalRel of S & [y,x] in the InternalRel of S
+      by A1,A3,Th5;
+      hence x = y by A2,A11,RELAT_2:def 4;
+    end;
   end;
+  hence thesis by ORDERS_2:def 6;
+end;
 
 theorem :: theorem 3.1 (xiii)
-   for R, S being RelStr st
+  for R, S being RelStr st
   (the carrier of R) /\ (the carrier of S) is upper Subset of R &
   (the carrier of R) /\ (the carrier of S) is lower Subset of S &
   R tolerates S &
-    R is transitive & S is transitive holds R [*] S is transitive
-  proof
-    let R, S be RelStr;
-    set X = the carrier of R [*] S,
-        F = the InternalRel of R [*] S;
-    assume that
+  R is transitive & S is transitive holds R [*] S is transitive
+proof
+  let R, S be RelStr;
+  set X = the carrier of R [*] S, F = the InternalRel of R [*] S;
+  assume that
 A1: (the carrier of R) /\ (the carrier of S) is upper Subset of R and
 A2: (the carrier of R) /\ (the carrier of S) is lower Subset of S and
 A3: R tolerates S & R is transitive & S is transitive;
 A4: the InternalRel of R is_transitive_in the carrier of R &
-    the InternalRel of S is_transitive_in the carrier of S
-      by A3,ORDERS_2:def 5;
-     F is_transitive_in X
-    proof
-      let x, y, z be set;
-      assume
-A5:   x in X & y in X & z in X & [x,y] in F & [y,z] in F;
-then A6:   x in (the carrier of R) \/ (the carrier of S) by Def2;
-A7:   y in (the carrier of R) \/ (the carrier of S) by A5,Def2;
-A8:   z in (the carrier of R) \/ (the carrier of S) by A5,Def2;
-      per cases by A6,A7,A8,XBOOLE_0:def 2;
-      suppose
-A9:     x in the carrier of R & y in the carrier of R &
-        z in the carrier of R;
-        then [x,y] in the InternalRel of R & [y,z] in the InternalRel of R
-          by A3,A5,Th4;
-        then [x,z] in the InternalRel of R by A4,A9,RELAT_2:def 8;
-        hence thesis by Th6;
-      end;
-      suppose
-A10:     x in the carrier of R & y in the carrier of R &
-        z in the carrier of S;
-then A11:     [x,y] in the InternalRel of R by A3,A5,Th4;
-         [y,z] in (the InternalRel of R) \/ (the InternalRel of S)
-        \/ ((the InternalRel of R) * the InternalRel of S)
-          by A5,Def2;
-then A12:     [y,z] in (the InternalRel of R) \/ (the InternalRel of S) or
-        [y,z] in ((the InternalRel of R) * the InternalRel of S)
-          by XBOOLE_0:def 2;
-         now per cases by A12,XBOOLE_0:def 2;
-          suppose A13: [y,z] in the InternalRel of R;
-then         z in the carrier of R by ZFMISC_1:106;
-            then [x,z] in the InternalRel of R
-              by A4,A10,A11,A13,RELAT_2:def 8;
-            hence thesis by Th6;
-          end;
-          suppose [y,z] in the InternalRel of S;
-            then [x,z] in ((the InternalRel of R) * the InternalRel of S)
-              by A11,RELAT_1:def 8;
-            then [x,z] in (the InternalRel of R) \/ (the InternalRel of S)
-            \/ ((the InternalRel of R) * the InternalRel of S)
-              by XBOOLE_0:def 2;
-            hence thesis by Def2;
-          end;
-          suppose [y,z] in ((the InternalRel of R) * the InternalRel of S);
-            then consider a being set such that
-A14:         [y,a] in the InternalRel of R & [a,z] in the InternalRel of S
-              by RELAT_1:def 8;
-             a in the carrier of R by A14,ZFMISC_1:106;
-            then [x,a] in the InternalRel of R
-              by A4,A10,A11,A14,RELAT_2:def 8;
-            then [x,z] in ((the InternalRel of R) * the InternalRel of S)
-              by A14,RELAT_1:def 8;
-            then [x,z] in ((the InternalRel of R) \/ (the InternalRel of S))
-\/
-            ((the InternalRel of R) * the InternalRel of S)
-              by XBOOLE_0:def 2;
-            hence thesis by Def2;
-          end;
-        end;
-        hence thesis;
-      end;
-      suppose
-A15:     x in the carrier of R & y in the carrier of S &
-        z in the carrier of R;
-then A16:     y in the carrier of R by A2,A5,Th21;
-then A17:     [x,y] in the InternalRel of R by A3,A5,A15,Th4;
-         [y,z] in the InternalRel of R by A3,A5,A15,A16,Th4;
-        then [x,z] in the InternalRel of R by A4,A15,A16,A17,RELAT_2:def 8;
-        hence thesis by Th6;
-      end;
-      suppose
-A18:     x in the carrier of S & y in the carrier of R &
-        z in the carrier of R;
-then A19:     x in the carrier of R by A2,A5,Th21;
-then A20:     [x,y] in the InternalRel of R by A3,A5,A18,Th4;
-         [y,z] in the InternalRel of R by A3,A5,A18,Th4;
-        then [x,z] in the InternalRel of R by A4,A18,A19,A20,RELAT_2:def 8;
-        hence thesis by Th6;
-      end;
-      suppose
-A21:     x in the carrier of S & y in the carrier of S &
-        z in the carrier of R;
-then A22:     [x,y] in the InternalRel of S by A3,A5,Th5;
-A23:     z in the carrier of S by A1,A5,A21,Th17;
-        then [y,z] in the InternalRel of S by A3,A5,A21,Th5;
-        then [x,z] in the InternalRel of S by A4,A21,A22,A23,RELAT_2:def 8;
-        hence thesis by Th6;
-      end;
-      suppose
-A24:     x in the carrier of S & y in the carrier of S &
-        z in the carrier of S;
-        then [x,y] in the InternalRel of S & [y,z] in the InternalRel of S
-          by A3,A5,Th5;
-        then [x,z] in the InternalRel of S by A4,A24,RELAT_2:def 8;
-        hence thesis by Th6;
-      end;
-      suppose
-A25:     x in the carrier of R & y in the carrier of S &
-        z in the carrier of S;
-then A26:     [y,z] in the InternalRel of S by A3,A5,Th5;
-         [x,y] in (the InternalRel of R) \/ (the InternalRel of S)
-        \/ ((the InternalRel of R) * the InternalRel of S)
-          by A5,Def2;
-then A27:     [x,y] in (the InternalRel of R) \/ (the InternalRel of S) or
-        [x,y] in ((the InternalRel of R) * the InternalRel of S)
-          by XBOOLE_0:def 2;
-         now per cases by A27,XBOOLE_0:def 2;
-          suppose
-         [x,y] in the InternalRel of R;
-            then [x,z] in ((the InternalRel of R) * the InternalRel of S)
-              by A26,RELAT_1:def 8;
-            then [x,z] in ((the InternalRel of R) \/ (the InternalRel of S))
-\/
-            ((the InternalRel of R) * the InternalRel of S)
-              by XBOOLE_0:def 2;
-            hence thesis by Def2;
-          end;
-          suppose
-A28:         [x,y] in the InternalRel of S;
-            then x in the carrier of S by ZFMISC_1:106;
-            then [x,z] in the InternalRel of S
-              by A4,A25,A26,A28,RELAT_2:def 8;
-            hence thesis by Th6;
-          end;
-          suppose
-             [x,y] in ((the InternalRel of R) * the InternalRel of S);
-            then consider a being set such that
-A29:         [x,a] in the InternalRel of R & [a,y] in the InternalRel of S
-              by RELAT_1:def 8;
-         a in the carrier of S by A29,ZFMISC_1:106;
-            then [a,z] in the InternalRel of S
-              by A4,A25,A26,A29,RELAT_2:def 8;
-            then [x,z] in ((the InternalRel of R) * the InternalRel of S)
-              by A29,RELAT_1:def 8;
-            then [x,z] in ((the InternalRel of R) \/ (the InternalRel of S))
-\/
-            ((the InternalRel of R) * the InternalRel of S)
-              by XBOOLE_0:def 2;
-            hence thesis by Def2;
-          end;
-        end;
-        hence thesis;
-      end;
-      suppose
-A30:     x in the carrier of S & y in the carrier of R &
-        z in the carrier of S;
-then A31:     y in the carrier of S by A1,A5,Th17;
-then A32:     [x,y] in the InternalRel of S by A3,A5,A30,Th5;
-         [y,z] in the InternalRel of S by A3,A5,A30,A31,Th5;
-        then [x,z] in the InternalRel of S by A4,A30,A31,A32,RELAT_2:def 8;
-        hence thesis by Th6;
-      end;
+  the InternalRel of S is_transitive_in the carrier of S by A3,ORDERS_2:def 5;
+  F is_transitive_in X
+  proof
+    let x, y, z be set;
+    assume
+A5: x in X & y in X & z in X & [x,y] in F & [y,z] in F;
+    then
+A6: x in (the carrier of R) \/ (the carrier of S) by Def2;
+A7: y in (the carrier of R) \/ (the carrier of S) by A5,Def2;
+A8: z in (the carrier of R) \/ (the carrier of S) by A5,Def2;
+    per cases by A6,A7,A8,XBOOLE_0:def 2;
+    suppose
+A9:   x in the carrier of R & y in the carrier of R & z in the carrier of R;
+      then [x,y] in the InternalRel of R & [y,z] in the InternalRel of R
+      by A3,A5,Th4;
+      then [x,z] in the InternalRel of R by A4,A9,RELAT_2:def 8;
+      hence thesis by Th6;
     end;
-    hence thesis by ORDERS_2:def 5;
+    suppose
+A10:  x in the carrier of R & y in the carrier of R & z in the carrier of S;
+      then
+A11:  [x,y] in the InternalRel of R by A3,A5,Th4;
+      [y,z] in (the InternalRel of R) \/ (the InternalRel of S)
+      \/ ((the InternalRel of R) * the InternalRel of S) by A5,Def2;
+      then
+A12:  [y,z] in (the InternalRel of R) \/ (the InternalRel of S) or
+      [y,z] in ((the InternalRel of R) * the InternalRel of S)
+      by XBOOLE_0:def 2;
+      now per cases by A12,XBOOLE_0:def 2;
+        suppose
+A13:      [y,z] in the InternalRel of R;
+          then z in the carrier of R by ZFMISC_1:106;
+          then [x,z] in the InternalRel of R by A4,A10,A11,A13,RELAT_2:def 8;
+          hence thesis by Th6;
+        end;
+        suppose [y,z] in the InternalRel of S;
+          then [x,z] in ((the InternalRel of R) * the InternalRel of S)
+          by A11,RELAT_1:def 8;
+          then [x,z] in (the InternalRel of R) \/ (the InternalRel of S)
+          \/ ((the InternalRel of R) * the InternalRel of S)
+          by XBOOLE_0:def 2;
+          hence thesis by Def2;
+        end;
+        suppose [y,z] in ((the InternalRel of R) * the InternalRel of S);
+          then consider a being set such that
+A14:      [y,a] in the InternalRel of R & [a,z] in the InternalRel of S
+          by RELAT_1:def 8;
+          a in the carrier of R by A14,ZFMISC_1:106;
+          then [x,a] in the InternalRel of R by A4,A10,A11,A14,RELAT_2:def 8;
+          then [x,z] in ((the InternalRel of R) * the InternalRel of S)
+          by A14,RELAT_1:def 8;
+          then [x,z] in ((the InternalRel of R) \/ (the InternalRel of S)) \/
+          ((the InternalRel of R) * the InternalRel of S) by XBOOLE_0:def 2;
+          hence thesis by Def2;
+        end;
+      end;
+      hence thesis;
+    end;
+    suppose
+A15:  x in the carrier of R & y in the carrier of S & z in the carrier of R;
+      then
+A16:  y in the carrier of R by A2,A5,Th21;
+      then
+A17:  [x,y] in the InternalRel of R by A3,A5,A15,Th4;
+      [y,z] in the InternalRel of R by A3,A5,A15,A16,Th4;
+      then [x,z] in the InternalRel of R by A4,A15,A16,A17,RELAT_2:def 8;
+      hence thesis by Th6;
+    end;
+    suppose
+A18:  x in the carrier of S & y in the carrier of R & z in the carrier of R;
+      then
+A19:  x in the carrier of R by A2,A5,Th21;
+      then
+A20:  [x,y] in the InternalRel of R by A3,A5,A18,Th4;
+      [y,z] in the InternalRel of R by A3,A5,A18,Th4;
+      then [x,z] in the InternalRel of R by A4,A18,A19,A20,RELAT_2:def 8;
+      hence thesis by Th6;
+    end;
+    suppose
+A21:  x in the carrier of S & y in the carrier of S & z in the carrier of R;
+      then
+A22:  [x,y] in the InternalRel of S by A3,A5,Th5;
+A23:  z in the carrier of S by A1,A5,A21,Th17;
+      then [y,z] in the InternalRel of S by A3,A5,A21,Th5;
+      then [x,z] in the InternalRel of S by A4,A21,A22,A23,RELAT_2:def 8;
+      hence thesis by Th6;
+    end;
+    suppose
+A24:  x in the carrier of S & y in the carrier of S & z in the carrier of S;
+      then [x,y] in the InternalRel of S & [y,z] in the InternalRel of S
+      by A3,A5,Th5;
+      then [x,z] in the InternalRel of S by A4,A24,RELAT_2:def 8;
+      hence thesis by Th6;
+    end;
+    suppose
+A25:  x in the carrier of R & y in the carrier of S & z in the carrier of S;
+      then
+A26:  [y,z] in the InternalRel of S by A3,A5,Th5;
+      [x,y] in (the InternalRel of R) \/ (the InternalRel of S)
+      \/ ((the InternalRel of R) * the InternalRel of S) by A5,Def2;
+      then
+A27:  [x,y] in (the InternalRel of R) \/ (the InternalRel of S) or
+      [x,y] in ((the InternalRel of R) * the InternalRel of S)
+      by XBOOLE_0:def 2;
+      now per cases by A27,XBOOLE_0:def 2;
+        suppose [x,y] in the InternalRel of R;
+          then [x,z] in ((the InternalRel of R) * the InternalRel of S)
+          by A26,RELAT_1:def 8;
+          then [x,z] in ((the InternalRel of R) \/ (the InternalRel of S)) \/
+          ((the InternalRel of R) * the InternalRel of S) by XBOOLE_0:def 2;
+          hence thesis by Def2;
+        end;
+        suppose
+A28:      [x,y] in the InternalRel of S;
+          then x in the carrier of S by ZFMISC_1:106;
+          then [x,z] in the InternalRel of S by A4,A25,A26,A28,RELAT_2:def 8;
+          hence thesis by Th6;
+        end;
+        suppose [x,y] in ((the InternalRel of R) * the InternalRel of S);
+          then consider a being set such that
+A29:      [x,a] in the InternalRel of R & [a,y] in the InternalRel of S
+          by RELAT_1:def 8;
+          a in the carrier of S by A29,ZFMISC_1:106;
+          then [a,z] in the InternalRel of S by A4,A25,A26,A29,RELAT_2:def 8;
+          then [x,z] in ((the InternalRel of R) * the InternalRel of S)
+          by A29,RELAT_1:def 8;
+          then [x,z] in ((the InternalRel of R) \/ (the InternalRel of S)) \/
+          ((the InternalRel of R) * the InternalRel of S) by XBOOLE_0:def 2;
+          hence thesis by Def2;
+        end;
+      end;
+      hence thesis;
+    end;
+    suppose
+A30:  x in the carrier of S & y in the carrier of R & z in the carrier of S;
+      then
+A31:  y in the carrier of S by A1,A5,Th17;
+      then
+A32:  [x,y] in the InternalRel of S by A3,A5,A30,Th5;
+      [y,z] in the InternalRel of S by A3,A5,A30,A31,Th5;
+      then [x,z] in the InternalRel of S by A4,A30,A31,A32,RELAT_2:def 8;
+      hence thesis by Th6;
+    end;
   end;
+  hence thesis by ORDERS_2:def 5;
+end;
 

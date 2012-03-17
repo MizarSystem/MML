@@ -23,13 +23,14 @@ environ
 
 begin
 
- reserve m, n for Element of NAT,
-         x for set,
-         i for Instruction of SCM+FSA,
-         I for Macro-Instruction,
-         a for Int-Location, f for FinSeq-Location,
-         l, l1 for Instruction-Location of SCM+FSA,
-         s,s1,s2 for State of SCM+FSA;
+reserve m, n for Element of NAT,
+  x for set,
+  i for Instruction of SCM+FSA,
+  I for Macro-Instruction,
+  a for Int-Location,
+  f for FinSeq-Location,
+  l, l1 for Instruction-Location of SCM+FSA,
+  s,s1,s2 for State of SCM+FSA;
 
 canceled 3;
 
@@ -43,10 +44,10 @@ theorem :: SCMFSA6B:6
   (I +* Start-At insloc n)|NAT = I;
 
 theorem :: SCMFSA6B:7
- x in dom I implies I.x = (I +* Start-At insloc n).x;
+  x in dom I implies I.x = (I +* Start-At insloc n).x;
 
 theorem :: SCMFSA6B:8
- Initialized I c= s implies I +* Start-At insloc 0 c= s;
+  Initialized I c= s implies I +* Start-At insloc 0 c= s;
 
 theorem :: SCMFSA6B:9
   not a in dom Start-At l;
@@ -55,7 +56,7 @@ theorem :: SCMFSA6B:10
   not f in dom Start-At l;
 
 theorem :: SCMFSA6B:11
-   not l1 in dom Start-At l;
+  not l1 in dom Start-At l;
 
 theorem :: SCMFSA6B:12
   not a in dom (I+*Start-At l);
@@ -64,244 +65,218 @@ theorem :: SCMFSA6B:13
   not f in dom (I+*Start-At l);
 
 theorem :: SCMFSA6B:14
- s+*I+*Start-At insloc 0 = s+*Start-At insloc 0+*I;
+  s+*I+*Start-At insloc 0 = s+*Start-At insloc 0+*I;
 
 begin ::  General theory
 
- reserve N for non empty with_non-empty_elements set;
+reserve N for non empty with_non-empty_elements set;
 
 theorem :: SCMFSA6B:15
-      s = Following s implies for n holds (Computation s).n = s;
+  s = Following s implies for n holds (Computation s).n = s;
 
 definition
- let s be State of SCM+FSA, li be Int-Location, k be Integer;
- redefine func s+*(li,k) -> State of SCM+FSA;
+  let s be State of SCM+FSA, li be Int-Location, k be Integer;
+  redefine func s+*(li,k) -> State of SCM+FSA;
 end;
 
 begin
 
-definition let I be Macro-Instruction, s be State of SCM+FSA;
- func IExec(I,s) -> State of SCM+FSA equals
+definition
+  let I be Macro-Instruction, s be State of SCM+FSA;
+  func IExec(I,s) -> State of SCM+FSA equals
 :: SCMFSA6B:def 1
-   Result(s+*Initialized I) +* s|NAT;
+  Result(s+*Initialized I) +* s|NAT;
 end;
 
-definition let I be Macro-Instruction;
- attr I is paraclosed means
+definition
+  let I be Macro-Instruction;
+  attr I is paraclosed means
 :: SCMFSA6B:def 2
- for s being State of SCM+FSA, n being Element of NAT
-    st I +* Start-At insloc 0 c= s
-   holds IC (Computation s).n in dom I;
 
- attr I is parahalting means
+  for s being State of SCM+FSA, n being Element of NAT
+  st I +* Start-At insloc 0 c= s holds IC (Computation s).n in dom I;
+  attr I is parahalting means
 :: SCMFSA6B:def 3
- I +* Start-At insloc 0 is halting;
 
- attr I is keeping_0 means
+  I +* Start-At insloc 0 is halting;
+  attr I is keeping_0 means
 :: SCMFSA6B:def 4
- for s being State of SCM+FSA st I +* Start-At insloc 0 c= s
+
+  for s being State of SCM+FSA st I +* Start-At insloc 0 c= s
   for k being Element of NAT holds ((Computation s).k).intloc 0 = s.intloc 0;
 end;
 
 registration
- cluster parahalting Macro-Instruction;
+  cluster parahalting Macro-Instruction;
 end;
 
 canceled 2;
 
 theorem :: SCMFSA6B:18
- for I being parahalting Macro-Instruction
-   st I +* Start-At insloc 0 c= s holds s is halting;
+  for I being parahalting Macro-Instruction
+  st I +* Start-At insloc 0 c= s holds s is halting;
 
 theorem :: SCMFSA6B:19
- for I being parahalting Macro-Instruction
-   st Initialized I c= s holds s is halting;
+  for I being parahalting Macro-Instruction
+  st Initialized I c= s holds s is halting;
 
-registration let I be parahalting Macro-Instruction;
- cluster Initialized I -> halting;
+registration
+  let I be parahalting Macro-Instruction;
+  cluster Initialized I -> halting;
 end;
 
 theorem :: SCMFSA6B:20
- s2 +*(IC s2, goto IC s2) is not halting;
+  s2 +*(IC s2, goto IC s2) is not halting;
 
 theorem :: SCMFSA6B:21
- s1,s2 equal_outside NAT &
-  I c= s1 & I c= s2 &
-  (for m st m < n holds IC((Computation s2).m) in dom I)
- implies
- for m st m <= n holds
-  (Computation s1).m, (Computation s2 ).m equal_outside
-     NAT;
+  s1,s2 equal_outside NAT & I c= s1 & I c= s2 &
+  (for m st m < n holds IC((Computation s2).m) in dom I) implies
+  for m st m <= n holds (Computation s1).m, (Computation s2 ).m equal_outside
+  NAT;
 
 registration
- cluster parahalting -> paraclosed Macro-Instruction;
-
- cluster keeping_0 -> paraclosed Macro-Instruction;
+  cluster parahalting -> paraclosed Macro-Instruction;
+  cluster keeping_0 -> paraclosed Macro-Instruction;
 end;
 
 theorem :: SCMFSA6B:22
-      for I being parahalting Macro-Instruction,
-     a being read-write Int-Location
- holds not a in UsedIntLoc I implies (IExec(I, s)).a = s.a;
+  for I being parahalting Macro-Instruction, a being read-write Int-Location
+  holds not a in UsedIntLoc I implies (IExec(I, s)).a = s.a;
 
 theorem :: SCMFSA6B:23
-   for I being parahalting Macro-Instruction
+  for I being parahalting Macro-Instruction
   holds not f in UsedInt*Loc I implies (IExec(I, s)).f = s.f;
 
 theorem :: SCMFSA6B:24
- IC s = l & s.l = goto l implies s is not halting;
+  IC s = l & s.l = goto l implies s is not halting;
 
 registration
- cluster parahalting -> non empty Macro-Instruction;
+  cluster parahalting -> non empty Macro-Instruction;
 end;
 
 theorem :: SCMFSA6B:25
   for I being parahalting Macro-Instruction holds dom I <> {};
 
 theorem :: SCMFSA6B:26
- for I being parahalting Macro-Instruction holds insloc 0 in dom I;
+  for I being parahalting Macro-Instruction holds insloc 0 in dom I;
 
 theorem :: SCMFSA6B:27
- for J being parahalting Macro-Instruction st J +* Start-At insloc 0 c= s1
- for n being Element of NAT st ProgramPart Relocated(J,n) c= s2 &
-     IC s2 = insloc n &
-     s1 | (Int-Locations \/ FinSeq-Locations)
-     = s2 | (Int-Locations \/ FinSeq-Locations)
- for i being Element of NAT holds
-     IC (Computation s1).i + n = IC (Computation s2).i &
-     IncAddr(CurInstr ((Computation s1).i),n) = CurInstr ((Computation s2).i) &
-     (Computation s1).i | (Int-Locations \/ FinSeq-Locations)
-         = (Computation s2).i | (Int-Locations \/ FinSeq-Locations);
+  for J being parahalting Macro-Instruction st J +* Start-At insloc 0 c= s1
+  for n being Element of NAT st ProgramPart Relocated(J,n) c= s2 &
+  IC s2 = insloc n & s1 | (Int-Locations \/ FinSeq-Locations)
+  = s2 | (Int-Locations \/ FinSeq-Locations) for i being Element of NAT holds
+  IC (Computation s1).i + n = IC (Computation s2).i &
+  IncAddr(CurInstr ((Computation s1).i),n) = CurInstr ((Computation s2).i) &
+  (Computation s1).i | (Int-Locations \/ FinSeq-Locations)
+  = (Computation s2).i | (Int-Locations \/ FinSeq-Locations);
 
 theorem :: SCMFSA6B:28
- for I being parahalting Macro-Instruction st
-     I +* Start-At insloc 0 c= s1 & I +* Start-At insloc 0 c= s2 &
-     s1,s2 equal_outside NAT holds
- for k being Element of NAT holds
-     (Computation s1).k, (Computation s2).k
-         equal_outside NAT &
-     CurInstr (Computation s1).k = CurInstr (Computation s2).k;
+  for I being parahalting Macro-Instruction st
+  I +* Start-At insloc 0 c= s1 & I +* Start-At insloc 0 c= s2 &
+  s1,s2 equal_outside NAT holds for k being Element of NAT holds
+  (Computation s1).k, (Computation s2).k equal_outside NAT &
+  CurInstr (Computation s1).k = CurInstr (Computation s2).k;
 
 theorem :: SCMFSA6B:29
- for I being parahalting Macro-Instruction st
-     I +* Start-At insloc 0 c= s1 & I +* Start-At insloc 0 c= s2 &
-     s1,s2 equal_outside NAT holds
- LifeSpan s1 = LifeSpan s2 &
-     Result s1, Result s2 equal_outside NAT;
+  for I being parahalting Macro-Instruction st
+  I +* Start-At insloc 0 c= s1 & I +* Start-At insloc 0 c= s2 &
+  s1,s2 equal_outside NAT holds LifeSpan s1 = LifeSpan s2 &
+  Result s1, Result s2 equal_outside NAT;
 
 theorem :: SCMFSA6B:30
- for I being parahalting Macro-Instruction
+  for I being parahalting Macro-Instruction
   holds IC IExec(I,s) = IC Result (s +* Initialized I);
 
 theorem :: SCMFSA6B:31
- for I being non empty Macro-Instruction
+  for I being non empty Macro-Instruction
   holds insloc 0 in dom I & insloc 0 in dom Initialized I &
-        insloc 0 in dom (I +* Start-At insloc 0);
+  insloc 0 in dom (I +* Start-At insloc 0);
 
 theorem :: SCMFSA6B:32
   x in dom Macro i iff x = insloc 0 or x = insloc 1;
 
 theorem :: SCMFSA6B:33
-        (Macro i).(insloc 0) = i &
-        (Macro i).(insloc 1) = halt SCM+FSA &
-        (Initialized Macro i).insloc 0 = i &
-        (Initialized Macro i).insloc 1 = halt SCM+FSA &
-        ((Macro i) +* Start-At insloc 0).insloc 0 = i;
+  (Macro i).(insloc 0) = i & (Macro i).(insloc 1) = halt SCM+FSA &
+  (Initialized Macro i).insloc 0 = i &
+  (Initialized Macro i).insloc 1 = halt SCM+FSA &
+  ((Macro i) +* Start-At insloc 0).insloc 0 = i;
 
 theorem :: SCMFSA6B:34
-   Initialized I c= s implies IC s = insloc 0;
+  Initialized I c= s implies IC s = insloc 0;
 
 registration
- cluster keeping_0 parahalting Macro-Instruction;
+  cluster keeping_0 parahalting Macro-Instruction;
 end;
 
 theorem :: SCMFSA6B:35
-   for I being keeping_0 parahalting Macro-Instruction
+  for I being keeping_0 parahalting Macro-Instruction
   holds IExec(I, s).intloc 0 = 1;
 
 begin :: The composition of macroinstructions
 
 theorem :: SCMFSA6B:36
- for I being paraclosed Macro-Instruction, J being Macro-Instruction
-   st I +* Start-At insloc 0 c= s & s is halting
- for m st m <= LifeSpan s
-  holds (Computation s).m,(Computation(s+*(I ';' J))).m
-    equal_outside NAT;
+  for I being paraclosed Macro-Instruction, J being Macro-Instruction
+  st I +* Start-At insloc 0 c= s & s is halting for m st m <= LifeSpan s
+  holds (Computation s).m,(Computation(s+*(I ';' J))).m equal_outside NAT;
 
 theorem :: SCMFSA6B:37
- for I being paraclosed Macro-Instruction
- st s +*I is halting & Directed I c= s & Start-At insloc 0 c= s holds
-     IC (Computation s).(LifeSpan (s +*I) + 1)
-         = insloc card I;
+  for I being paraclosed Macro-Instruction
+  st s +*I is halting & Directed I c= s & Start-At insloc 0 c= s holds
+  IC (Computation s).(LifeSpan (s +*I) + 1) = insloc card I;
 
 theorem :: SCMFSA6B:38
- for I being paraclosed Macro-Instruction
- st s +*I is halting & Directed I c= s & Start-At insloc 0 c= s
-   holds
-     (Computation s).(LifeSpan (s +*I)) |
-                                      (Int-Locations \/ FinSeq-Locations) =
-     (Computation s).(LifeSpan (s +*I) + 1) |
-                                      (Int-Locations \/ FinSeq-Locations);
+  for I being paraclosed Macro-Instruction
+  st s +*I is halting & Directed I c= s & Start-At insloc 0 c= s holds
+  (Computation s).(LifeSpan (s +*I)) | (Int-Locations \/ FinSeq-Locations) =
+  (Computation s).(LifeSpan (s +*I) + 1) | (Int-Locations \/ FinSeq-Locations);
 
 theorem :: SCMFSA6B:39
- for I being parahalting Macro-Instruction
- st Initialized I c= s holds
-     for k being Element of NAT st k <= LifeSpan s holds
-         CurInstr (Computation (s +* Directed I)).k <> halt SCM+FSA;
+  for I being parahalting Macro-Instruction st Initialized I c= s holds
+  for k being Element of NAT st k <= LifeSpan s holds
+  CurInstr (Computation (s +* Directed I)).k <> halt SCM+FSA;
 
 theorem :: SCMFSA6B:40
- for I being paraclosed Macro-Instruction
+  for I being paraclosed Macro-Instruction
   st s +* (I +* Start-At insloc 0) is halting
-   for J being Macro-Instruction, k being Element of NAT
-    st k <= LifeSpan (s +* (I +* Start-At insloc 0))
-     holds (Computation (s +* (I +* Start-At insloc 0))).k,
-           (Computation (s +* ((I ';' J) +* Start-At insloc 0))).k
-            equal_outside NAT;
+  for J being Macro-Instruction, k being Element of NAT
+  st k <= LifeSpan (s +* (I +* Start-At insloc 0))
+  holds (Computation (s +* (I +* Start-At insloc 0))).k,
+  (Computation (s +* ((I ';' J) +* Start-At insloc 0))).k equal_outside NAT;
 
 registration
- let I, J be parahalting Macro-Instruction;
- cluster I ';' J -> parahalting;
+  let I, J be parahalting Macro-Instruction;
+  cluster I ';' J -> parahalting;
 end;
 
 theorem :: SCMFSA6B:41
- for I being keeping_0 Macro-Instruction
+  for I being keeping_0 Macro-Instruction
   st not s +* (I +* Start-At insloc 0) is halting
-   for J being Macro-Instruction, k being Element of NAT
-    holds (Computation (s +* (I +* Start-At insloc 0))).k,
-          (Computation (s +* ((I ';' J) +* Start-At insloc 0))).k
-           equal_outside NAT;
+  for J being Macro-Instruction, k being Element of NAT
+  holds (Computation (s +* (I +* Start-At insloc 0))).k,
+  (Computation (s +* ((I ';' J) +* Start-At insloc 0))).k equal_outside NAT;
 
 theorem :: SCMFSA6B:42
- for I being keeping_0 Macro-Instruction
-  st s +* I is halting
-   for J being paraclosed Macro-Instruction
-    st (I ';' J) +* Start-At insloc 0 c= s
-     for k being Element of NAT
-     holds (Computation (Result(s +*I)
-                               +* (J +* Start-At insloc 0))).k
-    +* Start-At (IC (Computation ((Result(s +*I))
-                           +* (J +* Start-At insloc 0))).k + card I),
-           (Computation (s +* (I ';' J))).
-                          (LifeSpan (s +* I)+1+k)
-            equal_outside NAT;
+  for I being keeping_0 Macro-Instruction st s +* I is halting
+  for J being paraclosed Macro-Instruction
+  st (I ';' J) +* Start-At insloc 0 c= s for k being Element of NAT
+  holds (Computation (Result(s +*I) +* (J +* Start-At insloc 0))).k
+  +* Start-At (IC (Computation ((Result(s +*I))
+  +* (J +* Start-At insloc 0))).k + card I), (Computation (s +* (I ';' J))).
+  (LifeSpan (s +* I)+1+k) equal_outside NAT;
 
 registration
- let I, J be keeping_0 Macro-Instruction;
- cluster I ';' J -> keeping_0;
+  let I, J be keeping_0 Macro-Instruction;
+  cluster I ';' J -> keeping_0;
 end;
 
 theorem :: SCMFSA6B:43
- for I being keeping_0 parahalting Macro-Instruction,
-     J being parahalting Macro-Instruction
-   holds
-     LifeSpan (s +* Initialized (I ';' J))
-         = LifeSpan (s +* Initialized I) + 1
-         + LifeSpan (Result (s +* Initialized I) +* Initialized J);
+  for I being keeping_0 parahalting Macro-Instruction,
+  J being parahalting Macro-Instruction holds
+  LifeSpan (s +* Initialized (I ';' J)) = LifeSpan (s +* Initialized I) + 1
+  + LifeSpan (Result (s +* Initialized I) +* Initialized J);
 
 theorem :: SCMFSA6B:44
-   for I being keeping_0 parahalting Macro-Instruction,
-      J being parahalting Macro-Instruction
-  holds
-     IExec(I ';' J,s) =
-         IExec(J,IExec(I,s)) +* Start-At (IC IExec(J,IExec(I,s)) + card I);
+  for I being keeping_0 parahalting Macro-Instruction,
+  J being parahalting Macro-Instruction holds IExec(I ';' J,s) =
+  IExec(J,IExec(I,s)) +* Start-At (IC IExec(J,IExec(I,s)) + card I);
 

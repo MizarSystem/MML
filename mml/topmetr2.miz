@@ -30,736 +30,844 @@ begin
 reserve x,r,a,b for Real;
 
 theorem Th1:
- for x,y,z being real number holds
+  for x,y,z being real number holds
   x <= y & y <= z implies [. x,y .] /\ [. y,z .] = {y}
- proof
+proof
   let x,y,z be real number;
   assume x <= y & y <= z;
-   then y in [. x,y .] & y in [. y,z .] by RCOMP_1:15;
-   then y in [. x,y .] /\ [. y,z .] by XBOOLE_0:def 3;
-  then A1: {y} c= [. x,y .] /\ [. y,z .] by ZFMISC_1:37;
-       [. x,y .] /\ [. y,z .] c= {y}
-   proof
-    let a be set; assume a in [. x,y .] /\ [. y,z .];
+  then y in [. x,y .] & y in [. y,z .] by RCOMP_1:15;
+  then y in [. x,y .] /\ [. y,z .] by XBOOLE_0:def 3;
+  then
+A1: {y} c= [. x,y .] /\ [. y,z .] by ZFMISC_1:37;
+  [. x,y .] /\ [. y,z .] c= {y}
+  proof
+    let a be set;
+    assume a in [. x,y .] /\ [. y,z .];
     then a in [. x,y .] & a in [. y,z .] by XBOOLE_0:def 3;
-    then A2: a in {r: x<=r & r<=y} & a in {b: y<=b & b<=z} by RCOMP_1:def 1;
-    then A3: ex r st r=a & x <= r & r <= y;
-         ex b st b=a & y <= b & b <= z by A2;
+    then
+A2: a in {r: x<=r & r<=y} & a in {b: y<=b & b<=z} by RCOMP_1:def 1;
+    then
+A3: ex r st r=a & x <= r & r <= y;
+    ex b st b=a & y <= b & b <= z by A2;
     then a = y by A3,XXREAL_0:1;
     hence a in {y} by TARSKI:def 1;
-   end;
+  end;
   hence thesis by A1,XBOOLE_0:def 10;
- end;
+end;
 
-reserve f,g for Function, x1,x2 for set;
+reserve f,g for Function,
+  x1,x2 for set;
 
-theorem    f is one-to-one & g is one-to-one &
- (for x1,x2 st x1 in dom g & x2 in dom f \ dom g holds g.x1 <> f.x2) implies
+theorem
+  f is one-to-one & g is one-to-one &
+  (for x1,x2 st x1 in dom g & x2 in dom f \ dom g holds g.x1 <> f.x2) implies
   f+*g is one-to-one
 proof
- assume that A1: f is one-to-one and A2: g is one-to-one and
-  A3: for x1,x2 st x1 in dom g & x2 in dom f \ dom g holds g.x1 <> f.x2;
-       now let x11,x22 be set;
-   assume that A4: x11 in dom (f+*g) and
-     A5: x22 in dom (f+*g) and
-     A6: (f+*g).x11 = (f+*g).x22;
-     A7: x11 in dom f \/ dom g by A4,FUNCT_4:def 1;
-     then A8: x11 in (dom f \ dom g) \/ dom g by XBOOLE_1:39;
-
-     A9: x22 in dom f \/ dom g by A5,FUNCT_4:def 1;
-     then A10: x22 in (dom f \ dom g) \/ dom g by XBOOLE_1:39;
-
-          now per cases by A8,XBOOLE_0:def 2;
-      suppose A11: x11 in (dom f \ dom g);
-       then x11 in dom f & not x11 in dom g by XBOOLE_0:def 4;
-       then A12:  (f+*g).x11 = f.x11 by A7,FUNCT_4:def 1;
-            now per cases by A10,XBOOLE_0:def 2;
-        case A13: x22 in (dom f \ dom g);
-         then x22 in dom f & not x22 in dom g by XBOOLE_0:def 4;
-         then f.x11 = f.x22 by A6,A9,A12,FUNCT_4:def 1;
-        hence x11 = x22 by A1,A11,A13,FUNCT_1:def 8;
+  assume that
+A1: f is one-to-one and
+A2: g is one-to-one and
+A3: for x1,x2 st x1 in dom g & x2 in dom f \ dom g holds g.x1 <> f.x2;
+  now
+    let x11,x22 be set;
+    assume that
+A4: x11 in dom (f+*g) and
+A5: x22 in dom (f+*g) and
+A6: (f+*g).x11 = (f+*g).x22;
+A7: x11 in dom f \/ dom g by A4,FUNCT_4:def 1;
+    then
+A8: x11 in (dom f \ dom g) \/ dom g by XBOOLE_1:39;
+A9: x22 in dom f \/ dom g by A5,FUNCT_4:def 1;
+    then
+A10: x22 in (dom f \ dom g) \/ dom g by XBOOLE_1:39;
+    now per cases by A8,XBOOLE_0:def 2;
+      suppose
+A11:    x11 in (dom f \ dom g);
+        then x11 in dom f & not x11 in dom g by XBOOLE_0:def 4;
+        then
+A12:    (f+*g).x11 = f.x11 by A7,FUNCT_4:def 1;
+        now per cases by A10,XBOOLE_0:def 2;
+          case
+A13:        x22 in (dom f \ dom g);
+            then x22 in dom f & not x22 in dom g by XBOOLE_0:def 4;
+            then f.x11 = f.x22 by A6,A9,A12,FUNCT_4:def 1;
+            hence x11 = x22 by A1,A11,A13,FUNCT_1:def 8;
+          end;
+          case
+A14:        x22 in dom g;
+            then g.x22 <> f.x11 by A3,A11;
+            hence contradiction by A6,A9,A12,A14,FUNCT_4:def 1;
+          end;
         end;
-        case A14: x22 in dom g;
-         then g.x22 <> f.x11 by A3,A11;
-        hence contradiction by A6,A9,A12,A14,FUNCT_4:def 1;
-       end;
-       end;
-       hence x11 = x22;
+        hence x11 = x22;
       end;
-      suppose A15: x11 in dom g;
-            now per cases by A10,XBOOLE_0:def 2;
-        case A16: x22 in (dom f \ dom g);
-         then x22 in dom f & not x22 in dom g by XBOOLE_0:def 4;
-         then A17: (f+*g).x22 = f.x22 by A9,FUNCT_4:def 1;
-               g.x11 <> f.x22 by A3,A15,A16;
-         hence contradiction by A6,A7,A15,A17,FUNCT_4:def 1;
+      suppose
+A15:    x11 in dom g;
+        now per cases by A10,XBOOLE_0:def 2;
+          case
+A16:        x22 in (dom f \ dom g);
+            then x22 in dom f & not x22 in dom g by XBOOLE_0:def 4;
+            then
+A17:        (f+*g).x22 = f.x22 by A9,FUNCT_4:def 1;
+            g.x11 <> f.x22 by A3,A15,A16;
+            hence contradiction by A6,A7,A15,A17,FUNCT_4:def 1;
+          end;
+          case
+A18:        x22 in dom g;
+            then (f+*g).x22 = g.x22 by A9,FUNCT_4:def 1;
+            then g.x11 = g.x22 by A6,A7,A15,FUNCT_4:def 1;
+            hence x11 = x22 by A2,A15,A18,FUNCT_1:def 8;
+          end;
         end;
-        case A18: x22 in dom g;
-         then (f+*g).x22 = g.x22 by A9,FUNCT_4:def 1;
-         then g.x11 = g.x22 by A6,A7,A15,FUNCT_4:def 1;
-         hence x11 = x22 by A2,A15,A18,FUNCT_1:def 8;
-       end;
-       end;
-       hence x11 = x22;
-     end;
-     end;
-   hence x11 = x22;
+        hence x11 = x22;
+      end;
+    end;
+    hence x11 = x22;
   end;
- hence f+*g is one-to-one by FUNCT_1:def 8;
+  hence f+*g is one-to-one by FUNCT_1:def 8;
 end;
 
 Lm1: f.:(dom f /\ dom g) c= rng g implies rng f \ rng g c= rng(f+*g)
 proof
- assume A1: f.:(dom f /\ dom g) c= rng g;
-  let y1 be set; assume A2: y1 in rng f \ rng g;
-        then consider x1 being set such that
-        A3: x1 in dom f & y1 = f.x1 by FUNCT_1:def 5;
-        A4: x1 in dom f \/ dom g by A3,XBOOLE_0:def 2;
-         then A5: x1 in dom (f+*g) by FUNCT_4:def 1;
-               now assume x1 in dom g;
-           then x1 in dom f /\ dom g by A3,XBOOLE_0:def 3;
-           then f.x1 in f.:(dom f /\ dom g) by A3,FUNCT_1:def 12;
-           hence contradiction by A1,A2,A3,XBOOLE_0:def 4;
-          end;
-        then (f+*g).x1 = f.x1 by A4,FUNCT_4:def 1;
-      hence y1 in rng(f+*g) by A3,A5,FUNCT_1:def 5;
+  assume
+A1: f.:(dom f /\ dom g) c= rng g;
+  let y1 be set;
+  assume
+A2: y1 in rng f \ rng g;
+  then consider x1 being set such that
+A3: x1 in dom f & y1 = f.x1 by FUNCT_1:def 5;
+A4: x1 in dom f \/ dom g by A3,XBOOLE_0:def 2;
+  then
+A5: x1 in dom (f+*g) by FUNCT_4:def 1;
+  now
+    assume x1 in dom g;
+    then x1 in dom f /\ dom g by A3,XBOOLE_0:def 3;
+    then f.x1 in f.:(dom f /\ dom g) by A3,FUNCT_1:def 12;
+    hence contradiction by A1,A2,A3,XBOOLE_0:def 4;
+  end;
+  then (f+*g).x1 = f.x1 by A4,FUNCT_4:def 1;
+  hence y1 in rng(f+*g) by A3,A5,FUNCT_1:def 5;
 end;
-
-theorem    f.:(dom f /\ dom g) c= rng g implies rng f \/ rng g = rng(f+*g)
-proof
- assume f.:(dom f /\ dom g) c= rng g;
-  then A1: rng f \ rng g c= rng(f+*g) by Lm1;
-       rng g c= rng(f +* g) by FUNCT_4:19;
-  then (rng f \ rng g) \/ rng g c= rng(f +* g) by A1,XBOOLE_1:8;
-  then A2: rng f \/ rng g c= rng(f +* g) by XBOOLE_1:39;
-       rng(f+*g) c= rng f \/ rng g by FUNCT_4:18;
- hence rng f \/ rng g = rng(f+*g) by A2,XBOOLE_0:def 10;
-end;
-
- reserve T, S for non empty TopSpace, p for Point of T;
-
-theorem Th4:
- for T1,T2 being SubSpace of T,
-  f being Function of T1,S, g being Function of T2,S st
-   ([#] T1) \/ ([#] T2) = [#] T & ([#] T1) /\ ([#] T2) = {p} & T1 is compact &
-     T2 is compact & T is_T2 & f is continuous & g is continuous & f.p = g.p
-   holds f+*g is continuous Function of T,S
- proof
-  let T1,T2 be SubSpace of T, f be Function of T1,S, g be Function of T2,S;
-  assume that
-  A1: ([#] T1) \/ ([#] T2) = [#] T & ([#] T1) /\ ([#] T2) = {p} and
-  A2: T1 is compact and
-  A3: T2 is compact and
-  A4: T is_T2 and
-  A5: f is continuous and
-  A6: g is continuous and
-  A7: f.p = g.p;
-  A8: dom f = the carrier of T1 by FUNCT_2:def 1 .= [#] T1 by PRE_TOPC:12;
-  A9: dom g = the carrier of T2 by FUNCT_2:def 1 .= [#] T2 by PRE_TOPC:12;
-  set h = f+*g;
-  A10: dom h = [#] T by A1,A8,A9,FUNCT_4:def 1
-              .= the carrier of T by PRE_TOPC:12;
-   rng h c= rng f \/ rng g & rng f \/ rng g c= the carrier of S
-   by FUNCT_4:18;
-  then rng h c= the carrier of S by XBOOLE_1:1;
-  then reconsider h as Function of T,S  by A10,FUNCT_2:def 1,RELSET_1:11;
-       for P being Subset of S st P is closed holds h"P is closed
-   proof
-    let P be Subset of S;
-    assume A11: P is closed;
-    A12: h"P c= dom h & dom h = dom f \/ dom g by FUNCT_4:def 1,RELAT_1:167;
-    then A13: h"P = h"P /\ ([#] T1 \/ [#] T2) by A8,A9,XBOOLE_1:28
-        .= (h"P /\ [#](T1)) \/ (h"P /\ [#](T2)) by XBOOLE_1:23;
- A14: for x being set st x in [#] T1 holds h.x = f.x
-      proof
-       let x be set such that A15: x in [#] T1;
-            now per cases;
-        suppose A16: x in [#] T2;
-         then x in [#] T1 /\ [#] T2 by A15,XBOOLE_0:def 3;
-         then x = p by A1,TARSKI:def 1;
-        hence h.x = f.x by A7,A9,A16,FUNCT_4:14;
-        end;
-        suppose not x in [#] T2;
-         hence h.x = f.x by A9,FUNCT_4:12;
-       end;
-       end;
-       hence thesis;
-      end;
-          now let x be set;
-      thus x in h"P /\ [#] T1 implies x in f"P
-       proof
-        assume x in h"P /\ [#] T1;
-        then x in h"P & x in dom f & x in [#] T1 by A8,XBOOLE_0:def 3;
-        then h.x in P & x in dom f & f.x = h.x by A14,FUNCT_1:def 13;
-        hence x in f"P by FUNCT_1:def 13;
-       end;
-      assume x in f"P;
-      then x in dom f & f.x in P by FUNCT_1:def 13;
-      then x in dom h & x in [#] T1 & h.x in P by A8,A12,A14,XBOOLE_0:def 2;
-      then x in h"P & x in [#] T1 by FUNCT_1:def 13;
-      hence x in h"P /\ [#] T1 by XBOOLE_0:def 3;
-     end;
- then A17: h"P /\ [#] T1 = f"P by TARSKI:2;
-          now let x be set;
-      thus x in h"P /\ [#] T2 implies x in g"P
-       proof
-        assume x in h"P /\ [#] T2;
-        then x in h"P & x in dom g & x in [#] T2 by A9,XBOOLE_0:def 3;
-        then h.x in P & x in dom g & g.x = h.x by FUNCT_1:def 13,FUNCT_4:14;
-        hence x in g"P by FUNCT_1:def 13;
-       end;
-      assume x in g"P;
-      then x in dom g & g.x in P by FUNCT_1:def 13;
-      then x in dom h & x in [#]
- T2 & h.x in P by A9,A12,FUNCT_4:14,XBOOLE_0:def 2;
-      then x in h"P & x in [#] T2 by FUNCT_1:def 13;
-      hence x in h"P /\ [#] T2 by XBOOLE_0:def 3;
-     end;
-    then A18: h"P = f"P \/ g"P by A13,A17,TARSKI:2;
-         f"P c= the carrier of T1;
-    then f"P c= [#] T1 & [#] T1 c= [#] T by A1,PRE_TOPC:12,XBOOLE_1:7;
-    then f"P c= [#] T by XBOOLE_1:1;
-    then reconsider P1 = f"P as Subset of T by PRE_TOPC:12;
-         g"P c= the carrier of T2;
-    then g"P c= [#] T2 & [#] T2 c= [#] T by A1,PRE_TOPC:12,XBOOLE_1:7;
-    then g"P c= [#] T by XBOOLE_1:1;
-    then reconsider P2 = g"P as Subset of T by PRE_TOPC:12;
-         f"P is closed & g"P is closed by A5,A6,A11,PRE_TOPC:def 12;
-    then f"P is compact & g"P is compact by A2,A3,COMPTS_1:17;
-    then P1 is compact & P2 is compact by BORSUK_1:42;
-    then P1 \/ P2 is compact by COMPTS_1:19;
-    hence h"P is closed by A4,A18,COMPTS_1:16;
-   end;
-  hence f+*g is continuous Function of T,S by PRE_TOPC:def 12;
- end;
 
 theorem
-      for T being non empty TopSpace,
-     T1, T2 being SubSpace of T,
-     p1,p2 being Point of T
- for f being Function of T1,S, g being Function of T2,S st
-   ([#] T1) \/ ([#] T2) = [#] T & ([#] T1) /\ ([#]
- T2) = {p1,p2} & T1 is compact &
-    T2 is compact & T is_T2 & f is continuous & g is continuous &
-    f.p1 = g.p1 & f.p2 = g.p2
+  f.:(dom f /\ dom g) c= rng g implies rng f \/ rng g = rng(f+*g)
+proof
+  assume f.:(dom f /\ dom g) c= rng g;
+  then
+A1: rng f \ rng g c= rng(f+*g) by Lm1;
+  rng g c= rng(f +* g) by FUNCT_4:19;
+  then (rng f \ rng g) \/ rng g c= rng(f +* g) by A1,XBOOLE_1:8;
+  then
+A2: rng f \/ rng g c= rng(f +* g) by XBOOLE_1:39;
+  rng(f+*g) c= rng f \/ rng g by FUNCT_4:18;
+  hence rng f \/ rng g = rng(f+*g) by A2,XBOOLE_0:def 10;
+end;
+
+reserve T, S for non empty TopSpace,
+  p for Point of T;
+
+theorem Th4:
+  for T1,T2 being SubSpace of T,
+  f being Function of T1,S, g being Function of T2,S st
+  ([#] T1) \/ ([#] T2) = [#] T & ([#] T1) /\ ([#] T2) = {p} & T1 is compact &
+  T2 is compact & T is_T2 & f is continuous & g is continuous & f.p = g.p
   holds f+*g is continuous Function of T,S
- proof
-  let T be non empty TopSpace,
-      T1, T2 be SubSpace of T,
-      p1,p2 be Point of T;
-  let f be Function of T1,S, g be Function of T2,S;
+proof
+  let T1,T2 be SubSpace of T, f be Function of T1,S, g be Function of T2,S;
   assume that
-  A1: ([#] T1) \/ ([#] T2) = [#] T & ([#] T1) /\ ([#] T2) = {p1,p2} and
-  A2: T1 is compact and
-  A3: T2 is compact and
-  A4: T is_T2 and
-  A5: f is continuous and
-  A6: g is continuous and
-  A7: f.p1 = g.p1 & f.p2 = g.p2;
- set h = f+*g;
-A8: dom f = the carrier of T1 by FUNCT_2:def 1 .= [#] T1 by PRE_TOPC:12;
-A9: dom g = the carrier of T2 by FUNCT_2:def 1 .= [#] T2 by PRE_TOPC:12;
-then A10: dom h = [#] T by A1,A8,FUNCT_4:def 1
+A1: ([#] T1) \/ ([#] T2) = [#] T & ([#] T1) /\ ([#] T2) = {p} and
+A2: T1 is compact and
+A3: T2 is compact and
+A4: T is_T2 and
+A5: f is continuous and
+A6: g is continuous and
+A7: f.p = g.p;
+A8: dom f = the carrier of T1 by FUNCT_2:def 1
+    .= [#] T1 by PRE_TOPC:12;
+A9: dom g = the carrier of T2 by FUNCT_2:def 1
+    .= [#] T2 by PRE_TOPC:12;
+  set h = f+*g;
+A10: dom h = [#] T by A1,A8,A9,FUNCT_4:def 1
     .= the carrier of T by PRE_TOPC:12;
-   rng f \/ rng g c= the carrier of S & rng h c= rng f \/ rng g
-   by FUNCT_4:18; then rng h c= the carrier of S by XBOOLE_1:1;
- then reconsider h as Function of T,S  by A10,FUNCT_2:def 1,RELSET_1:11;
-       for P being Subset of S st P is closed holds h"P is closed
-   proof
+  rng h c= rng f \/ rng g & rng f \/ rng g c= the carrier of S by FUNCT_4:18;
+  then rng h c= the carrier of S by XBOOLE_1:1;
+  then reconsider h as Function of T,S by A10,FUNCT_2:def 1,RELSET_1:11;
+  for P being Subset of S st P is closed holds h"P is closed
+  proof
     let P be Subset of S;
-    assume A11: P is closed;
-    A12: h"P c= dom h & dom h = dom f \/ dom g by FUNCT_4:def 1,RELAT_1:167;
-    then A13: h"P = h"P /\ ([#] T1 \/ [#] T2) by A8,A9,XBOOLE_1:28
-        .= (h"P /\ [#](T1)) \/ (h"P /\ [#](T2)) by XBOOLE_1:23;
- A14: for x being set st x in [#] T1 holds h.x = f.x
-      proof
-       let x be set such that A15: x in [#] T1;
-            now per cases;
-        suppose A16: x in [#] T2;
-         then A17: x in [#] T1 /\ [#] T2 by A15,XBOOLE_0:def 3;
-               now per cases by A1,A17,TARSKI:def 2;
-           suppose x = p1;
-            hence h.x = f.x by A7,A9,A16,FUNCT_4:14;
-           end;
-           suppose x = p2;
-            hence h.x = f.x by A7,A9,A16,FUNCT_4:14;
-          end;
-          end;
-        hence h.x = f.x;
+    assume
+A11: P is closed;
+A12: h"P c= dom h & dom h = dom f \/ dom g by FUNCT_4:def 1,RELAT_1:167;
+    then
+A13: h"P = h"P /\ ([#] T1 \/ [#] T2) by A8,A9,XBOOLE_1:28
+      .= (h"P /\ [#](T1)) \/ (h"P /\ [#](T2)) by XBOOLE_1:23;
+A14: for x being set st x in [#] T1 holds h.x = f.x
+    proof
+      let x be set such that
+A15:  x in [#] T1;
+      now per cases;
+        suppose
+A16:      x in [#] T2;
+          then x in [#] T1 /\ [#] T2 by A15,XBOOLE_0:def 3;
+          then x = p by A1,TARSKI:def 1;
+          hence h.x = f.x by A7,A9,A16,FUNCT_4:14;
         end;
         suppose not x in [#] T2;
-         hence h.x = f.x by A9,FUNCT_4:12;
-       end;
-       end;
-       hence thesis;
+          hence h.x = f.x by A9,FUNCT_4:12;
+        end;
       end;
-          now let x be set;
+      hence thesis;
+    end;
+    now
+      let x be set;
       thus x in h"P /\ [#] T1 implies x in f"P
-       proof
+      proof
         assume x in h"P /\ [#] T1;
         then x in h"P & x in dom f & x in [#] T1 by A8,XBOOLE_0:def 3;
         then h.x in P & x in dom f & f.x = h.x by A14,FUNCT_1:def 13;
         hence x in f"P by FUNCT_1:def 13;
-       end;
+      end;
       assume x in f"P;
       then x in dom f & f.x in P by FUNCT_1:def 13;
       then x in dom h & x in [#] T1 & h.x in P by A8,A12,A14,XBOOLE_0:def 2;
       then x in h"P & x in [#] T1 by FUNCT_1:def 13;
       hence x in h"P /\ [#] T1 by XBOOLE_0:def 3;
-     end;
- then A18: h"P /\ [#] T1 = f"P by TARSKI:2;
-          now let x be set;
+    end;
+    then
+A17: h"P /\ [#] T1 = f"P by TARSKI:2;
+    now
+      let x be set;
       thus x in h"P /\ [#] T2 implies x in g"P
-       proof
+      proof
         assume x in h"P /\ [#] T2;
         then x in h"P & x in dom g & x in [#] T2 by A9,XBOOLE_0:def 3;
         then h.x in P & x in dom g & g.x = h.x by FUNCT_1:def 13,FUNCT_4:14;
         hence x in g"P by FUNCT_1:def 13;
-       end;
+      end;
       assume x in g"P;
       then x in dom g & g.x in P by FUNCT_1:def 13;
       then x in dom h & x in [#]
- T2 & h.x in P by A9,A12,FUNCT_4:14,XBOOLE_0:def 2;
+      T2 & h.x in P by A9,A12,FUNCT_4:14,XBOOLE_0:def 2;
       then x in h"P & x in [#] T2 by FUNCT_1:def 13;
       hence x in h"P /\ [#] T2 by XBOOLE_0:def 3;
-     end;
-    then A19: h"P = f"P \/ g"P by A13,A18,TARSKI:2;
-         f"P c= the carrier of T1;
+    end;
+    then
+A18: h"P = f"P \/ g"P by A13,A17,TARSKI:2;
+    f"P c= the carrier of T1;
     then f"P c= [#] T1 & [#] T1 c= [#] T by A1,PRE_TOPC:12,XBOOLE_1:7;
     then f"P c= [#] T by XBOOLE_1:1;
     then reconsider P1 = f"P as Subset of T by PRE_TOPC:12;
-         g"P c= the carrier of T2;
+    g"P c= the carrier of T2;
     then g"P c= [#] T2 & [#] T2 c= [#] T by A1,PRE_TOPC:12,XBOOLE_1:7;
     then g"P c= [#] T by XBOOLE_1:1;
     then reconsider P2 = g"P as Subset of T by PRE_TOPC:12;
-         f"P is closed & g"P is closed by A5,A6,A11,PRE_TOPC:def 12;
+    f"P is closed & g"P is closed by A5,A6,A11,PRE_TOPC:def 12;
     then f"P is compact & g"P is compact by A2,A3,COMPTS_1:17;
     then P1 is compact & P2 is compact by BORSUK_1:42;
-    then P1 \/ P2 is compact by COMPTS_1:19;
-    hence h"P is closed by A4,A19,COMPTS_1:16;
-   end;
+    hence h"P is closed by A4,A18,COMPTS_1:16,19;
+  end;
   hence f+*g is continuous Function of T,S by PRE_TOPC:def 12;
- end;
+end;
+
+theorem
+  for T being non empty TopSpace, T1, T2 being SubSpace of T,
+  p1,p2 being Point of T
+  for f being Function of T1,S, g being Function of T2,S st
+  ([#] T1) \/ ([#] T2) = [#] T & ([#] T1) /\ ([#]
+  T2) = {p1,p2} & T1 is compact &
+  T2 is compact & T is_T2 & f is continuous & g is continuous &
+  f.p1 = g.p1 & f.p2 = g.p2 holds f+*g is continuous Function of T,S
+proof
+  let T be non empty TopSpace, T1, T2 be SubSpace of T, p1,p2 be Point of T;
+  let f be Function of T1,S, g be Function of T2,S;
+  assume that
+A1: ([#] T1) \/ ([#] T2) = [#] T & ([#] T1) /\ ([#] T2) = {p1,p2} and
+A2: T1 is compact and
+A3: T2 is compact and
+A4: T is_T2 and
+A5: f is continuous and
+A6: g is continuous and
+A7: f.p1 = g.p1 & f.p2 = g.p2;
+  set h = f+*g;
+A8: dom f = the carrier of T1 by FUNCT_2:def 1
+    .= [#] T1 by PRE_TOPC:12;
+A9: dom g = the carrier of T2 by FUNCT_2:def 1
+    .= [#] T2 by PRE_TOPC:12;
+  then
+A10: dom h = [#] T by A1,A8,FUNCT_4:def 1
+    .= the carrier of T by PRE_TOPC:12;
+  rng f \/ rng g c= the carrier of S & rng h c= rng f \/ rng g by FUNCT_4:18;
+  then rng h c= the carrier of S by XBOOLE_1:1;
+  then reconsider h as Function of T,S by A10,FUNCT_2:def 1,RELSET_1:11;
+  for P being Subset of S st P is closed holds h"P is closed
+  proof
+    let P be Subset of S;
+    assume
+A11: P is closed;
+A12: h"P c= dom h & dom h = dom f \/ dom g by FUNCT_4:def 1,RELAT_1:167;
+    then
+A13: h"P = h"P /\ ([#] T1 \/ [#] T2) by A8,A9,XBOOLE_1:28
+      .= (h"P /\ [#](T1)) \/ (h"P /\ [#](T2)) by XBOOLE_1:23;
+A14: for x being set st x in [#] T1 holds h.x = f.x
+    proof
+      let x be set such that
+A15:  x in [#] T1;
+      now per cases;
+        suppose
+A16:      x in [#] T2;
+          then
+A17:      x in [#] T1 /\ [#] T2 by A15,XBOOLE_0:def 3;
+          now per cases by A1,A17,TARSKI:def 2;
+            suppose x = p1;
+              hence h.x = f.x by A7,A9,A16,FUNCT_4:14;
+            end;
+            suppose x = p2;
+              hence h.x = f.x by A7,A9,A16,FUNCT_4:14;
+            end;
+          end;
+          hence h.x = f.x;
+        end;
+        suppose not x in [#] T2;
+          hence h.x = f.x by A9,FUNCT_4:12;
+        end;
+      end;
+      hence thesis;
+    end;
+    now
+      let x be set;
+      thus x in h"P /\ [#] T1 implies x in f"P
+      proof
+        assume x in h"P /\ [#] T1;
+        then x in h"P & x in dom f & x in [#] T1 by A8,XBOOLE_0:def 3;
+        then h.x in P & x in dom f & f.x = h.x by A14,FUNCT_1:def 13;
+        hence x in f"P by FUNCT_1:def 13;
+      end;
+      assume x in f"P;
+      then x in dom f & f.x in P by FUNCT_1:def 13;
+      then x in dom h & x in [#] T1 & h.x in P by A8,A12,A14,XBOOLE_0:def 2;
+      then x in h"P & x in [#] T1 by FUNCT_1:def 13;
+      hence x in h"P /\ [#] T1 by XBOOLE_0:def 3;
+    end;
+    then
+A18: h"P /\ [#] T1 = f"P by TARSKI:2;
+    now
+      let x be set;
+      thus x in h"P /\ [#] T2 implies x in g"P
+      proof
+        assume x in h"P /\ [#] T2;
+        then x in h"P & x in dom g & x in [#] T2 by A9,XBOOLE_0:def 3;
+        then h.x in P & x in dom g & g.x = h.x by FUNCT_1:def 13,FUNCT_4:14;
+        hence x in g"P by FUNCT_1:def 13;
+      end;
+      assume x in g"P;
+      then x in dom g & g.x in P by FUNCT_1:def 13;
+      then x in dom h & x in [#]
+      T2 & h.x in P by A9,A12,FUNCT_4:14,XBOOLE_0:def 2;
+      then x in h"P & x in [#] T2 by FUNCT_1:def 13;
+      hence x in h"P /\ [#] T2 by XBOOLE_0:def 3;
+    end;
+    then
+A19: h"P = f"P \/ g"P by A13,A18,TARSKI:2;
+    f"P c= the carrier of T1;
+    then f"P c= [#] T1 & [#] T1 c= [#] T by A1,PRE_TOPC:12,XBOOLE_1:7;
+    then f"P c= [#] T by XBOOLE_1:1;
+    then reconsider P1 = f"P as Subset of T by PRE_TOPC:12;
+    g"P c= the carrier of T2;
+    then g"P c= [#] T2 & [#] T2 c= [#] T by A1,PRE_TOPC:12,XBOOLE_1:7;
+    then g"P c= [#] T by XBOOLE_1:1;
+    then reconsider P2 = g"P as Subset of T by PRE_TOPC:12;
+    f"P is closed & g"P is closed by A5,A6,A11,PRE_TOPC:def 12;
+    then f"P is compact & g"P is compact by A2,A3,COMPTS_1:17;
+    then P1 is compact & P2 is compact by BORSUK_1:42;
+    hence h"P is closed by A4,A19,COMPTS_1:16,19;
+  end;
+  hence f+*g is continuous Function of T,S by PRE_TOPC:def 12;
+end;
 
 reserve T for being_T2 TopSpace;
 
 theorem
-      for P, Q being Subset of T
- for p being Point of T,
-     f being Function of I[01], T|P,
-     g being Function of I[01], T|Q st
-      P /\
- Q = {p} & f is_homeomorphism & f.1 = p & g is_homeomorphism & g.0 = p
- ex h being Function of I[01], T|(P \/ Q) st
+  for P, Q being Subset of T for p being Point of T,
+  f being Function of I[01], T|P, g being Function of I[01], T|Q st P /\
+  Q = {p} & f is_homeomorphism & f.1 = p & g is_homeomorphism & g.0 = p
+  ex h being Function of I[01], T|(P \/ Q) st
   h is_homeomorphism & h.0 = f.0 & h.1 = g.1
+proof
+  let P, Q be Subset of T;
+  let p be Point of T;
+  let f be Function of I[01], T|P, g be Function of I[01], T|Q;
+  assume that
+A1: P /\ Q = {p} and
+A2: f is_homeomorphism and
+A3: f.1 = p and
+A4: g is_homeomorphism and
+A5: g.0 = p;
+  p in P /\ Q by A1,TARSKI:def 1;
+  then reconsider M = T as non empty TopSpace by STRUCT_0:def 1;
+  reconsider P'=P, Q'=Q as non empty Subset of M by A1;
+  f is Function of the carrier of I[01], the carrier of M|P';
+  then
+A6: dom f = [. 0,1 .] by BORSUK_1:83,FUNCT_2:def 1;
+  P = [#](T | P) by PRE_TOPC:def 10;
+  then
+A7: rng f = P by A2,TOPS_2:def 5;
+A8: g is Function of the carrier of I[01], the carrier of M|Q';
+  then
+A9: dom g = [. 0,1 .] by BORSUK_1:83,FUNCT_2:def 1;
+  Q = [#](T | Q) by PRE_TOPC:def 10;
+  then
+A10: rng g = Q by A4,TOPS_2:def 5;
+A11: f is one-to-one by A2,TOPS_2:def 5;
+A12: g is one-to-one by A4,TOPS_2:def 5;
+  defpred X[set,set] means for a st a=$1 holds $2 = f.(2*a);
+A13: for x being set st x in [. 0,1/2 .] ex u being set st X[x,u]
   proof
-   let P, Q be Subset of T;
-   let p be Point of T;
-   let f be Function of I[01], T|P, g be Function of I[01], T|Q;
-   assume that
- A1: P /\ Q = {p} and
- A2: f is_homeomorphism and
- A3: f.1 = p and
- A4: g is_homeomorphism and
- A5: g.0 = p;
-     p in P /\ Q by A1,TARSKI:def 1;
-    then reconsider M = T as non empty TopSpace by STRUCT_0:def 1;
-    reconsider P'=P, Q'=Q as non empty Subset of M by A1;
-         f is Function of the carrier of I[01], the carrier of M|P';
-     then A6: dom f = [. 0,1 .] by BORSUK_1:83,FUNCT_2:def 1;
-         P = [#](T | P) by PRE_TOPC:def 10;
- then A7: rng f = P by A2,TOPS_2:def 5;
-A8:  g is Function of the carrier of I[01], the carrier of M|Q';
-then A9: dom g = [. 0,1 .] by BORSUK_1:83,FUNCT_2:def 1;
-         Q = [#](T | Q) by PRE_TOPC:def 10;
-  then A10: rng g = Q by A4,TOPS_2:def 5;
-  A11: f is one-to-one by A2,TOPS_2:def 5;
-  A12: g is one-to-one by A4,TOPS_2:def 5;
-   defpred X[set,set] means for a st a=$1 holds $2 = f.(2*a);
- A13: for x being set st x in [. 0,1/2 .] ex u being set st X[x,u]
-       proof
-        let x be set; assume x in [. 0,1/2 .];
-         then x in { r: 0 <= r & r <= 1/2} by RCOMP_1:def 1;
-         then consider r such that A14: r=x and 0<=r & r<=1/2;
-         take f.(2*r); thus thesis by A14;
-       end;
-   consider f2 being Function such that A15: dom f2 = [. 0,1/2 .] and
-    A16: for x being set st x in [. 0,1/2 .] holds X[x,f2.x]
-          from CLASSES1:sch 1(A13);
-   defpred X[set,set] means for a st a=$1 holds $2 = g.(2*a-1);
- A17: for x being set st x in [. 1/2,1 .]
-       ex u being set st X[x,u]
-       proof
-        let x be set; assume x in [. 1/2,1 .];
-         then x in { r: 1/2 <= r & r <= 1} by RCOMP_1:def 1;
-         then consider r such that A18: r=x and 1/2<=r & r<=1;
-         take g.(2*r-1);
-         thus thesis by A18;
-       end;
-   consider g2 being Function such that A19: dom g2 = [. 1/2, 1 .] and
-    A20: for x being set st x in [. 1/2,1 .] holds X[x,g2.x]
-         from CLASSES1:sch 1(A17);
-    reconsider R = P' \/ Q' as non empty Subset of M;
- A21: R = [#] (M|R) by PRE_TOPC:def 10
-         .= the carrier of M|R by PRE_TOPC:12;
-          now let y be set; assume y in rng f2;
-      then consider x being set such that A22: x in dom f2 & y = f2.x by
-FUNCT_1:def 5;
-           x in { a: 0 <= a & a <= 1/2 } by A15,A22,RCOMP_1:def 1;
-      then consider a such that A23: x = a & 0 <= a & a <= 1/2;
-   A24: y = f.(2*a) by A15,A16,A22,A23;
-           0 <= 2*a & 2*a <= 2*(1/2) & 0<>2 by A23,XREAL_1:66,129;
-      then 2*a in { r: 0 <= r & r <= 1 };
-      then 2*a in dom f by A6,RCOMP_1:def 1;
-      hence y in P by A7,A24,FUNCT_1:def 5;
-     end;
- then A25: rng f2 c= P by TARSKI:def 3;
-          now let y be set; assume y in rng g2;
-      then consider x being set such that A26: x in dom g2 & y = g2.x by
-FUNCT_1:def 5;
-           x in { a: 1/2 <= a & a <= 1 } by A19,A26,RCOMP_1:def 1;
-      then consider a such that A27: x = a & 1/2 <= a & a <= 1;
-   A28: y = g.(2*a-1) by A19,A20,A26,A27;
-           2*(1/2) = 1 & 0 <= 2;
-      then 1 <= 2*a & 2*a <= 2*1 by A27,XREAL_1:66;
-      then 1-1 <= 2*a-1 & 2*a-1 <= 1+1-1 by XREAL_1:11;
-      then 2*a -1 in { r: 0 <= r & r <= 1 };
-      then 2*a -1 in dom g by A9,RCOMP_1:def 1;
-      hence y in Q by A10,A28,FUNCT_1:def 5;
-     end;
- then A29: rng g2 c= Q by TARSKI:def 3;
-         0 <= 1 & 1/2 in {r where r is Real: 0 <= r & r <= 1};
-    then 0 in [. 0,1 .] & 1 in [. 0,1 .] & 1/2 in
- [. 0,1 .] by RCOMP_1:15,def 1;
-    then [. 0,1/2 .] c= the carrier of I[01] &
-         [. 1/2,1 .] c= the carrier of I[01] by BORSUK_1:83,RCOMP_1:16;
-    then the carrier of (Closed-Interval-TSpace(0,1/2))
- c= the carrier of I[01] &
-         the carrier of (Closed-Interval-TSpace(1/2,1))
- c= the carrier of I[01] by TOPMETR:25;
-    then reconsider T1 = Closed-Interval-TSpace(0,1/2),T2
- = Closed-Interval-TSpace(1/2,1) as SubSpace of I[01] by TOPMETR:4;
-         P c= P \/ Q & Q c= P \/ Q by XBOOLE_1:7;
-    then A30: dom f2 = the carrier of T1 &
-     rng f2 c= the carrier of T|(P \/ Q
-     qua Subset of T) & dom g2 = the carrier of T2 &
-      rng g2 c= the carrier of M|R
-        by A15,A19,A21,A25,A29,TOPMETR:25,XBOOLE_1:1;
-    then reconsider f1 = f2 as Function
- of T1,M|R  by FUNCT_2:def 1,RELSET_1:11;
-    reconsider g1 = g2 as Function of T2,M|R  by A30,FUNCT_2:def 1,RELSET_1:11;
-         1/2 in { r where r is Real : 0 <= r & r <= 1};
-    then reconsider pp = 1/2 as Point of I[01] by BORSUK_1:83,RCOMP_1:def 1;
-         [#] T1 = the carrier of T1 & [#] T2 = the carrier of T2 by PRE_TOPC:12
-;
-    then A31: [#] T1 = [. 0,1/2 .] & [#] T2 = [. 1/2,1 .] by TOPMETR:25;
-    then [#] T1 \/ [#] T2 = the carrier of I[01] by BORSUK_1:83,HEINE:2;
- then A32: ([#] T1) \/ ([#] T2) = [#](I[01] qua TopSpace) by PRE_TOPC:12;
- A33: ([#] T1) /\ ([#] T2) = {pp} by A31,Th1;
- A34: T1 is compact & T2 is compact by HEINE:11;
-         TopSpaceMetr(RealSpace) is_T2 by PCOMPS_1:38;
- then A35: I[01] is_T2 by TOPMETR:3,def 7;
- deffunc U(Element of REAL) = 2*$1;
-    consider f3 being Function of REAL,REAL such that
- A36: for x holds f3.x = U(x) from FUNCT_2:sch 4;
-    reconsider f3 as Function of R^1,R^1 by TOPMETR:24;
-         f3.x = 2*x + 0 by A36;
- then A37: f3 is continuous by TOPMETR:28;
-     reconsider PP = [. 0,1/2 .] as Subset of R^1 by TOPMETR:24;
-     reconsider PP as non empty Subset of R^1 by RCOMP_1:15;
- A38: R^1|PP = T1 by TOPMETR:26;
- A39: dom (f3| [.0,1/2.]) = dom f3 /\ [. 0,1/2 .] by FUNCT_1:68
-                       .= REAL /\ [. 0,1/2 .] by FUNCT_2:def 1
-                       .= [. 0,1/2 .] by XBOOLE_1:28
-                       .= the carrier of T1 by TOPMETR:25;
-     rng (f3| [.0,1/2.]) c= the carrier of R^1;
-    then reconsider f3' = f3|PP as Function of T1,R^1  by A39,FUNCT_2:def 1
-,RELSET_1:11;
- A40: f3' is continuous by A37,A38,TOPMETR:10;
- A41: dom f3' = the carrier of T1 by FUNCT_2:def 1;
-      rng f3' c= the carrier of I[01]
-      proof
-       let y be set; assume y in rng f3';
-        then consider x being set such that
-      A42: x in dom f3' & y = f3'.x by FUNCT_1:def 5;
-            x in [. 0,1/2 .] by A41,A42,TOPMETR:25;
-       then x in {r where r is Real: 0 <= r & r <= 1/2} by RCOMP_1:def 1;
-       then consider r being Real such that
-      A43: x = r & 0 <= r & r <= 1/2;
-      A44: y = f3.x by A42,FUNCT_1:70 .= 2*r by A36,A43;
-            2*0 <= 2*r & 2*r <= 2*(1/2) & 0 <> 2 by A43,XREAL_1:66;
-       then y in {rr where rr is Real: 0 <= rr & rr <= 1} by A44;
-       hence y in the carrier of I[01] by BORSUK_1:83,RCOMP_1:def 1;
-      end;
-    then reconsider f4 = f3' as Function of T1,I[01]  by A41,FUNCT_2:def 1
-,RELSET_1:11;
- A45: f4 is continuous by A40,TOPMETR:8;
- A46: f is continuous by A2,TOPS_2:def 5;
-         f is Function of the carrier of I[01], the carrier of M|P';
-    then dom f = the carrier of I[01] & rng f c= the carrier of
-     M|R by A7,A21,FUNCT_2:def 1,XBOOLE_1:7;
-    then reconsider ff=f as Function
- of I[01],M|R  by FUNCT_2:def 1,RELSET_1:11;
-         M|P' is SubSpace of M|R by TOPMETR:5;
- then A47: ff is continuous by A46,TOPMETR:7;
-         for x being set st x in the carrier of T1 holds f1.x = (ff*f4).x
-     proof
-      let x be set such that A48: x in the carrier of T1;
-           the carrier of T1 = [. 0,1/2 .] & [. 0,1/2 .] c= REAL
-       by TOPMETR:25;
-      then reconsider x'=x as Real by A48;
-           the carrier of T1 = [. 0,1/2 .] by TOPMETR:25;
-      hence f1.x = f.(2*x') by A16,A48 .= f.(f3.x') by A36
-                .= f.(f4.x) by A39,A48,FUNCT_1:70 .= (ff*f4).x by A48,
-FUNCT_2:21;
-     end;
-    then f1 = ff*f4 by FUNCT_2:18;
- then A49: f1 is continuous by A45,A47,TOPS_2:58;
- deffunc U(Element of REAL) = 2*$1-1;
-    consider g3 being Function of REAL,REAL such that
- A50: for x holds g3.x = U(x) from FUNCT_2:sch 4;
-    reconsider g3 as Function of R^1,R^1 by TOPMETR:24;
-         g3.x = 2*x + (-1)
-     proof thus g3.x = 2*x -1 by A50 .= 2*x + (-1); end;
- then A51: g3 is continuous by TOPMETR:28;
-     reconsider PP = [. 1/2,1 .] as Subset of R^1 by TOPMETR:24;
-     reconsider PP as non empty Subset of R^1 by RCOMP_1:15;
- A52: R^1|PP = T2 by TOPMETR:26;
- A53: dom (g3| [. 1/2,1 .]) = dom g3 /\ [. 1/2,1 .] by FUNCT_1:68
-                       .= REAL /\ [. 1/2,1 .] by FUNCT_2:def 1
-                       .= [. 1/2,1 .] by XBOOLE_1:28
-                       .= the carrier of T2 by TOPMETR:25;
-     rng (g3| [. 1/2,1 .]) c= the carrier of R^1;
-    then reconsider g3' = g3|PP as Function of T2,R^1  by A53,FUNCT_2:def 1
-,RELSET_1:11;
- A54: g3' is continuous by A51,A52,TOPMETR:10;
- A55: dom g3' = the carrier of T2 by FUNCT_2:def 1;
-      rng g3' c= the carrier of I[01]
-      proof
-       let y be set; assume y in rng g3';
-        then consider x being set such that
-      A56: x in dom g3' & y = g3'.x by FUNCT_1:def 5;
-            x in [. 1/2,1 .] by A55,A56,TOPMETR:25;
-       then x in {r where r is Real: 1/2 <= r & r <= 1} by RCOMP_1:def 1;
-       then consider r being Real such that
-      A57: x = r & 1/2 <= r & r <= 1;
-      A58: y = g3.x by A56,FUNCT_1:70 .= 2*r - 1 by A50,A57;
-            2*(1/2) <= 2*r & 2*r <= 2*1 & 0 <> 2 by A57,XREAL_1:66;
-       then 1 - 1 <= 2*r - 1 & 2*r - 1 <= (1 + 1) - 1 by XREAL_1:11;
-       then y in {rr where rr is Real: 0 <= rr & rr <= 1} by A58;
-       hence y in the carrier of I[01] by BORSUK_1:83,RCOMP_1:def 1;
-      end;
-    then reconsider g4 = g3' as Function of T2,I[01]  by A55,FUNCT_2:def 1
-,RELSET_1:11;
- A59: g4 is continuous by A54,TOPMETR:8;
- A60: g is continuous by A4,TOPS_2:def 5;
-         dom g = the carrier of I[01] & rng g c= the carrier of (M|R)
-     by A8,A10,A21,FUNCT_2:def 1,XBOOLE_1:7;
-    then reconsider g' = g as Function
- of I[01],M|R  by FUNCT_2:def 1,RELSET_1:11;
-         M|Q' is SubSpace of M|R by TOPMETR:5;
- then A61: g' is continuous by A60,TOPMETR:7;
-         for x being set st x in the carrier of T2 holds g1.x = (g'*g4).x
-     proof
-      let x be set such that A62: x in the carrier of T2;
-           the carrier of T2 = [. 1/2,1 .] & [. 1/2,1 .] c= REAL
-       by TOPMETR:25;
-      then reconsider x'=x as Real by A62;
-           the carrier of T2 = [. 1/2,1 .] by TOPMETR:25;
-      hence g1.x = g.(2*x'-1) by A20,A62 .= g.(g3.x') by A50
-                .= g.(g4.x) by A53,A62,FUNCT_1:70 .= (g'*g4).x by A62,
-FUNCT_2:21;
-     end;
-    then g1 = g'*g4 by FUNCT_2:18;
- then A63: g1 is continuous by A59,A61,TOPS_2:58;
- A64: 1/2 in [. 1/2,1 .] & 1/2 in [. 0,1/2 .] by RCOMP_1:15;
+    let x be set;
+    assume x in [. 0,1/2 .];
+    then x in { r: 0 <= r & r <= 1/2} by RCOMP_1:def 1;
+    then consider r such that
+A14: r=x and 0<=r & r<=1/2;
+    take f.(2*r); thus thesis by A14;
+  end;
+  consider f2 being Function such that
+A15: dom f2 = [. 0,1/2 .] and
+A16: for x being set st x in [. 0,1/2 .] holds X[x,f2.x]
+  from CLASSES1:sch 1(A13);
+  defpred X[set,set] means for a st a=$1 holds $2 = g.(2*a-1);
+A17: for x being set st x in [. 1/2,1 .] ex u being set st X[x,u]
+  proof
+    let x be set;
+    assume x in [. 1/2,1 .];
+    then x in { r: 1/2 <= r & r <= 1} by RCOMP_1:def 1;
+    then consider r such that
+A18: r=x and 1/2<=r & r<=1;
+    take g.(2*r-1);
+    thus thesis by A18;
+  end;
+  consider g2 being Function such that
+A19: dom g2 = [. 1/2, 1 .] and
+A20: for x being set st x in [. 1/2,1 .] holds X[x,g2.x]
+  from CLASSES1:sch 1(A17);
+  reconsider R = P' \/ Q' as non empty Subset of M;
+A21: R = [#] (M|R) by PRE_TOPC:def 10
+    .= the carrier of M|R by PRE_TOPC:12;
+  now
+    let y be set;
+    assume y in rng f2;
+    then consider x being set such that
+A22: x in dom f2 & y = f2.x by FUNCT_1:def 5;
+    x in { a: 0 <= a & a <= 1/2 } by A15,A22,RCOMP_1:def 1;
+    then consider a such that
+A23: x = a & 0 <= a & a <= 1/2;
+A24: y = f.(2*a) by A15,A16,A22,A23;
+    0 <= 2*a & 2*a <= 2*(1/2) & 0<>2 by A23,XREAL_1:66,129;
+    then 2*a in { r: 0 <= r & r <= 1 };
+    then 2*a in dom f by A6,RCOMP_1:def 1;
+    hence y in P by A7,A24,FUNCT_1:def 5;
+  end;
+  then
+A25: rng f2 c= P by TARSKI:def 3;
+  now
+    let y be set;
+    assume y in rng g2;
+    then consider x being set such that
+A26: x in dom g2 & y = g2.x by FUNCT_1:def 5;
+    x in { a: 1/2 <= a & a <= 1 } by A19,A26,RCOMP_1:def 1;
+    then consider a such that
+A27: x = a & 1/2 <= a & a <= 1;
+A28: y = g.(2*a-1) by A19,A20,A26,A27;
+    2*(1/2) = 1 & 0 <= 2;
+    then 1 <= 2*a & 2*a <= 2*1 by A27,XREAL_1:66;
+    then 1-1 <= 2*a-1 & 2*a-1 <= 1+1-1 by XREAL_1:11;
+    then 2*a -1 in { r: 0 <= r & r <= 1 };
+    then 2*a -1 in dom g by A9,RCOMP_1:def 1;
+    hence y in Q by A10,A28,FUNCT_1:def 5;
+  end;
+  then
+A29: rng g2 c= Q by TARSKI:def 3;
+  0 <= 1 & 1/2 in {r where r is Real: 0 <= r & r <= 1};
+  then 0 in [. 0,1 .] & 1 in [. 0,1 .] & 1/2 in [. 0,1 .] by RCOMP_1:15,def 1;
+  then [. 0,1/2 .] c= the carrier of I[01] &
+  [. 1/2,1 .] c= the carrier of I[01] by BORSUK_1:83,RCOMP_1:16;
+  then the carrier of (Closed-Interval-TSpace(0,1/2))
+  c= the carrier of I[01] & the carrier of (Closed-Interval-TSpace(1/2,1))
+  c= the carrier of I[01] by TOPMETR:25;
+  then reconsider T1 = Closed-Interval-TSpace(0,1/2),T2
+  = Closed-Interval-TSpace(1/2,1) as SubSpace of I[01] by TOPMETR:4;
+  P c= P \/ Q & Q c= P \/ Q by XBOOLE_1:7;
+  then
+A30: dom f2 = the carrier of T1 & rng f2 c= the carrier of T|(P \/ Q
+  qua Subset of T) & dom g2 = the carrier of T2 & rng g2 c= the carrier of M|R
+  by A15,A19,A21,A25,A29,TOPMETR:25,XBOOLE_1:1;
+  then reconsider f1 = f2 as Function of T1,M|R by FUNCT_2:def 1,RELSET_1:11;
+  reconsider g1 = g2 as Function of T2,M|R by A30,FUNCT_2:def 1,RELSET_1:11;
+  1/2 in { r where r is Real : 0 <= r & r <= 1};
+  then reconsider pp = 1/2 as Point of I[01] by BORSUK_1:83,RCOMP_1:def 1;
+  [#] T1 = the carrier of T1 & [#] T2 = the carrier of T2 by PRE_TOPC: 12;
+  then
+A31: [#] T1 = [. 0,1/2 .] & [#] T2 = [. 1/2,1 .] by TOPMETR:25;
+  then [#] T1 \/ [#] T2 = the carrier of I[01] by BORSUK_1:83,HEINE:2;
+  then
+A32: ([#] T1) \/ ([#] T2) = [#](I[01] qua TopSpace) by PRE_TOPC:12;
+A33: ([#] T1) /\ ([#] T2) = {pp} by A31,Th1;
+A34: T1 is compact & T2 is compact by HEINE:11;
+  TopSpaceMetr(RealSpace) is_T2 by PCOMPS_1:38;
+  then
+A35: I[01] is_T2 by TOPMETR:3,def 7;
+  deffunc U(Element of REAL) = 2*$1;
+  consider f3 being Function of REAL,REAL such that
+A36: for x holds f3.x = U(x) from FUNCT_2:sch 4;
+  reconsider f3 as Function of R^1,R^1 by TOPMETR:24;
+  f3.x = 2*x + 0 by A36;
+  then
+A37: f3 is continuous by TOPMETR:28;
+  reconsider PP = [. 0,1/2 .] as Subset of R^1 by TOPMETR:24;
+  reconsider PP as non empty Subset of R^1 by RCOMP_1:15;
+A38: R^1|PP = T1 by TOPMETR:26;
+A39: dom (f3| [.0,1/2.]) = dom f3 /\ [. 0,1/2 .] by FUNCT_1:68
+    .= REAL /\ [. 0,1/2 .] by FUNCT_2:def 1
+    .= [. 0,1/2 .] by XBOOLE_1:28
+    .= the carrier of T1 by TOPMETR:25;
+  rng (f3| [.0,1/2.]) c= the carrier of R^1;
+  then reconsider f3' = f3|PP as Function of T1,R^1 by A39,FUNCT_2:def 1
+  ,RELSET_1:11;
+A40: f3' is continuous by A37,A38,TOPMETR:10;
+A41: dom f3' = the carrier of T1 by FUNCT_2:def 1;
+  rng f3' c= the carrier of I[01]
+  proof
+    let y be set;
+    assume y in rng f3';
+    then consider x being set such that
+A42: x in dom f3' & y = f3'.x by FUNCT_1:def 5;
+    x in [. 0,1/2 .] by A41,A42,TOPMETR:25;
+    then x in {r where r is Real: 0 <= r & r <= 1/2} by RCOMP_1:def 1;
+    then consider r being Real such that
+A43: x = r & 0 <= r & r <= 1/2;
+A44: y = f3.x by A42,FUNCT_1:70
+      .= 2*r by A36,A43;
+    2*0 <= 2*r & 2*r <= 2*(1/2) & 0 <> 2 by A43,XREAL_1:66;
+    then y in {rr where rr is Real: 0 <= rr & rr <= 1} by A44;
+    hence y in the carrier of I[01] by BORSUK_1:83,RCOMP_1:def 1;
+  end;
+  then reconsider f4 = f3' as Function of T1,I[01] by A41,FUNCT_2:def 1
+  ,RELSET_1:11;
+A45: f4 is continuous by A40,TOPMETR:8;
+A46: f is continuous by A2,TOPS_2:def 5;
+  f is Function of the carrier of I[01], the carrier of M|P';
+  then dom f = the carrier of I[01] & rng f c= the carrier of
+  M|R by A7,A21,FUNCT_2:def 1,XBOOLE_1:7;
+  then reconsider ff=f as Function of I[01],M|R by FUNCT_2:def 1,RELSET_1:11;
+  M|P' is SubSpace of M|R by TOPMETR:5;
+  then
+A47: ff is continuous by A46,TOPMETR:7;
+  for x being set st x in the carrier of T1 holds f1.x = (ff*f4).x
+  proof
+    let x be set such that
+A48: x in the carrier of T1;
+    the carrier of T1 = [. 0,1/2 .] & [. 0,1/2 .] c= REAL by TOPMETR:25;
+    then reconsider x'=x as Real by A48;
+    the carrier of T1 = [. 0,1/2 .] by TOPMETR:25;
+    hence f1.x = f.(2*x') by A16,A48
+      .= f.(f3.x') by A36
+      .= f.(f4.x) by A39,A48,FUNCT_1:70
+      .= (ff*f4).x by A48, FUNCT_2:21;
+  end;
+  then f1 = ff*f4 by FUNCT_2:18;
+  then
+A49: f1 is continuous by A45,A47,TOPS_2:58;
+  deffunc U(Element of REAL) = 2*$1-1;
+  consider g3 being Function of REAL,REAL such that
+A50: for x holds g3.x = U(x) from FUNCT_2:sch 4;
+  reconsider g3 as Function of R^1,R^1 by TOPMETR:24;
+  g3.x = 2*x + (-1)
+  proof thus g3.x = 2*x -1 by A50
+      .= 2*x + (-1);
+  end;
+  then
+A51: g3 is continuous by TOPMETR:28;
+  reconsider PP = [. 1/2,1 .] as Subset of R^1 by TOPMETR:24;
+  reconsider PP as non empty Subset of R^1 by RCOMP_1:15;
+A52: R^1|PP = T2 by TOPMETR:26;
+A53: dom (g3| [. 1/2,1 .]) = dom g3 /\ [. 1/2,1 .] by FUNCT_1:68
+    .= REAL /\ [. 1/2,1 .] by FUNCT_2:def 1
+    .= [. 1/2,1 .] by XBOOLE_1:28
+    .= the carrier of T2 by TOPMETR:25;
+  rng (g3| [. 1/2,1 .]) c= the carrier of R^1;
+  then reconsider g3' = g3|PP as Function of T2,R^1 by A53,FUNCT_2:def 1
+  ,RELSET_1:11;
+A54: g3' is continuous by A51,A52,TOPMETR:10;
+A55: dom g3' = the carrier of T2 by FUNCT_2:def 1;
+  rng g3' c= the carrier of I[01]
+  proof
+    let y be set;
+    assume y in rng g3';
+    then consider x being set such that
+A56: x in dom g3' & y = g3'.x by FUNCT_1:def 5;
+    x in [. 1/2,1 .] by A55,A56,TOPMETR:25;
+    then x in {r where r is Real: 1/2 <= r & r <= 1} by RCOMP_1:def 1;
+    then consider r being Real such that
+A57: x = r & 1/2 <= r & r <= 1;
+A58: y = g3.x by A56,FUNCT_1:70
+      .= 2*r - 1 by A50,A57;
+    2*(1/2) <= 2*r & 2*r <= 2*1 & 0 <> 2 by A57,XREAL_1:66;
+    then 1 - 1 <= 2*r - 1 & 2*r - 1 <= (1 + 1) - 1 by XREAL_1:11;
+    then y in {rr where rr is Real: 0 <= rr & rr <= 1} by A58;
+    hence y in the carrier of I[01] by BORSUK_1:83,RCOMP_1:def 1;
+  end;
+  then reconsider g4 = g3' as Function of T2,I[01] by A55,FUNCT_2:def 1
+  ,RELSET_1:11;
+A59: g4 is continuous by A54,TOPMETR:8;
+A60: g is continuous by A4,TOPS_2:def 5;
+  dom g = the carrier of I[01] & rng g c= the carrier of (M|R)
+  by A8,A10,A21,FUNCT_2:def 1,XBOOLE_1:7;
+  then reconsider g' = g as Function
+  of I[01],M|R by FUNCT_2:def 1,RELSET_1:11;
+  M|Q' is SubSpace of M|R by TOPMETR:5;
+  then
+A61: g' is continuous by A60,TOPMETR:7;
+  for x being set st x in the carrier of T2 holds g1.x = (g'*g4).x
+  proof
+    let x be set such that
+A62: x in the carrier of T2;
+    the carrier of T2 = [. 1/2,1 .] & [. 1/2,1 .] c= REAL by TOPMETR:25;
+    then reconsider x'=x as Real by A62;
+    the carrier of T2 = [. 1/2,1 .] by TOPMETR:25;
+    hence g1.x = g.(2*x'-1) by A20,A62
+      .= g.(g3.x') by A50
+      .= g.(g4.x) by A53,A62,FUNCT_1:70
+      .= (g'*g4).x by A62, FUNCT_2:21;
+  end;
+  then g1 = g'*g4 by FUNCT_2:18;
+  then
+A63: g1 is continuous by A59,A61,TOPS_2:58;
+A64: 1/2 in [. 1/2,1 .] & 1/2 in [. 0,1/2 .] by RCOMP_1:15;
   then f1.pp = g.(2*(1/2) -1) by A3,A5,A16
- .= g1.pp by A20,A64;
-    then reconsider h = f2 +* g2 as continuous Function of I[01],M|R
-      by A32,A33,A34,A35,A49,A63,Th4;
- A65: dom h = [. 0,1/2 .] \/ [. 1/2,1 .] by A15,A19,FUNCT_4:def 1
-          .= [. 0,1 .] by HEINE:2;
- A66: rng h c= rng f2 \/ rng g2 by FUNCT_4:18;
-          rng f2 \/ rng g2 c= P \/ Q by A25,A29,XBOOLE_1:13;
- then A67: rng h c= P \/ Q by A66,XBOOLE_1:1;
-    reconsider h' = h as
-     Function of I[01],T|(P \/ Q);
-   take h';
+    .= g1.pp by A20,A64;
+  then reconsider h = f2 +* g2 as continuous Function of I[01],M|R
+  by A32,A33,A34,A35,A49,A63,Th4;
+A65: dom h = [. 0,1/2 .] \/ [. 1/2,1 .] by A15,A19,FUNCT_4:def 1
+    .= [. 0,1 .] by HEINE:2;
+A66: rng h c= rng f2 \/ rng g2 by FUNCT_4:18;
+  rng f2 \/ rng g2 c= P \/ Q by A25,A29,XBOOLE_1:13;
+  then
+A67: rng h c= P \/ Q by A66,XBOOLE_1:1;
+  reconsider h' = h as Function of I[01],T|(P \/ Q);
+  take h';
 A68: I[01] is compact by HEINE:11,TOPMETR:27;
 A69: M|R is_T2 by TOPMETR:3;
- A70: rng g2 c= rng h by FUNCT_4:19;
-          Q c= rng g2
-      proof
-       let a be set; assume a in Q;
-       then consider x being set such that
-    A71: x in dom g & a = g.x by A10,FUNCT_1:def 5;
-            x in {r where r is Real: 0 <= r & r <= 1} by A9,A71,RCOMP_1:def 1;
-       then consider x' being Real such that
-    A72: x' = x & 0 <= x' & x' <= 1;
-             0+1 <= x'+1 & x'+1 <= 1+1 & 2 <> 0 & 2 > 0 by A72,XREAL_1:8;
-        then 1/2 <= (x'+1)/2 & (x'+1)/2 <= 2/2 & 2 <> 0 by REAL_1:73;
-        then (x'+1)/2 in {r where r is Real: 1/2 <= r & r <= 1};
-    then A73: (x'+1)/2 in dom g2 by A19,RCOMP_1:def 1;
-            a = g.(2*((x'+1)/2)-1) by A71,A72
-        .= g2.((x'+1)/2) by A19,A20,A73;
-       hence a in rng g2 by A73,FUNCT_1:def 5;
-      end;
- then A74: Q c= rng h by A70,XBOOLE_1:1;
- A75: P c= rng f2
-      proof
-       let a be set; assume a in P;
-       then consider x being set such that
-    A76: x in dom f & a = f.x by A7,FUNCT_1:def 5;
-            x in {r where r is Real: 0 <= r & r <= 1} by A6,A76,RCOMP_1:def 1;
-       then consider x' being Real such that
-    A77: x' = x & 0 <= x' & x' <= 1;
-             0/2 <= x'/2 & x'/2 <= 1/2 & 2 <> 0 by A77,REAL_1:73;
-        then x'/2 in {r where r is Real: 0 <= r & r <= 1/2};
-    then A78: x'/2 in dom f2 by A15,RCOMP_1:def 1;
-            a = f.(2*(x'/2)) by A76,A77 .= f2.(x'/2) by A15,A16,A78;
-       hence a in rng f2 by A78,FUNCT_1:def 5;
-      end;
-          P c= rng h
-      proof
-       let a be set; assume a in P;
-       then consider x being set such that
-    A79: x in dom f2 & a = f2.x by A75,FUNCT_1:def 5;
-            now per cases;
-        suppose A80: x in [. 1/2,1 .];
-         then x in [. 0,1/2 .] /\ [. 1/2,1 .] by A15,A79,XBOOLE_0:def 3;
-         then x in {1/2} by Th1;
-         then A81: x = 1/2 by TARSKI:def 1;
-      A82: 1/2 in [. 0,1/2 .] by RCOMP_1:15;
-      A83: h.x = g2.x by A19,A80,FUNCT_4:14 .= g.(2*(1/2) - 1) by A20,A80,A81
-            .= f2.(1/2) by A3,A5,A16,A82;
-             x in dom f2 \/ dom g2 by A79,XBOOLE_0:def 2;
+A70: rng g2 c= rng h by FUNCT_4:19;
+  Q c= rng g2
+  proof
+    let a be set;
+    assume a in Q;
+    then consider x being set such that
+A71: x in dom g & a = g.x by A10,FUNCT_1:def 5;
+    x in {r where r is Real: 0 <= r & r <= 1} by A9,A71,RCOMP_1:def 1;
+    then consider x' being Real such that
+A72: x' = x & 0 <= x' & x' <= 1;
+    0+1 <= x'+1 & x'+1 <= 1+1 & 2 <> 0 & 2 > 0 by A72,XREAL_1:8;
+    then 1/2 <= (x'+1)/2 & (x'+1)/2 <= 2/2 & 2 <> 0 by REAL_1:73;
+    then (x'+1)/2 in {r where r is Real: 1/2 <= r & r <= 1};
+    then
+A73: (x'+1)/2 in dom g2 by A19,RCOMP_1:def 1;
+    a = g.(2*((x'+1)/2)-1) by A71,A72
+      .= g2.((x'+1)/2) by A19,A20,A73;
+    hence a in rng g2 by A73,FUNCT_1:def 5;
+  end;
+  then
+A74: Q c= rng h by A70,XBOOLE_1:1;
+A75: P c= rng f2
+  proof
+    let a be set;
+    assume a in P;
+    then consider x being set such that
+A76: x in dom f & a = f.x by A7,FUNCT_1:def 5;
+    x in {r where r is Real: 0 <= r & r <= 1} by A6,A76,RCOMP_1:def 1;
+    then consider x' being Real such that
+A77: x' = x & 0 <= x' & x' <= 1;
+    0/2 <= x'/2 & x'/2 <= 1/2 & 2 <> 0 by A77,REAL_1:73;
+    then x'/2 in {r where r is Real: 0 <= r & r <= 1/2};
+    then
+A78: x'/2 in dom f2 by A15,RCOMP_1:def 1;
+    a = f.(2*(x'/2)) by A76,A77
+      .= f2.(x'/2) by A15,A16,A78;
+    hence a in rng f2 by A78,FUNCT_1:def 5;
+  end;
+  P c= rng h
+  proof
+    let a be set;
+    assume a in P;
+    then consider x being set such that
+A79: x in dom f2 & a = f2.x by A75,FUNCT_1:def 5;
+    now per cases;
+      suppose
+A80:    x in [. 1/2,1 .];
+        then x in [. 0,1/2 .] /\ [. 1/2,1 .] by A15,A79,XBOOLE_0:def 3;
+        then x in {1/2} by Th1;
+        then
+A81:    x = 1/2 by TARSKI:def 1;
+A82:    1/2 in [. 0,1/2 .] by RCOMP_1:15;
+A83:    h.x = g2.x by A19,A80,FUNCT_4:14
+          .= g.(2*(1/2) - 1) by A20,A80,A81
+          .= f2.(1/2) by A3,A5,A16,A82;
+        x in dom f2 \/ dom g2 by A79,XBOOLE_0:def 2;
         then x in dom h by FUNCT_4:def 1;
         hence a in rng h by A79,A81,A83,FUNCT_1:def 5;
-        end;
-        suppose A84: not x in [. 1/2,1 .];
-A85:         x in dom f2 \/ dom g2 by A79,XBOOLE_0:def 2;
-         then A86: x in dom h by FUNCT_4:def 1;
-              h.x = f2.x by A19,A84,A85,FUNCT_4:def 1;
+      end;
+      suppose
+A84:    not x in [. 1/2,1 .];
+A85:    x in dom f2 \/ dom g2 by A79,XBOOLE_0:def 2;
+        then
+A86:    x in dom h by FUNCT_4:def 1;
+        h.x = f2.x by A19,A84,A85,FUNCT_4:def 1;
         hence a in rng h by A79,A86,FUNCT_1:def 5;
-       end;
-       end;
-      hence a in rng h;
-     end;
-     then P \/ Q c= rng h by A74,XBOOLE_1:8;
- then rng h = P \/ Q by A67,XBOOLE_0:def 10;
-then A87: rng h = [#] (M|R) by PRE_TOPC:def 10;
-         dom h = the carrier of I[01] by FUNCT_2:def 1;
-then A88: dom h = [#]I[01] by PRE_TOPC:12;
-A89: now let x be Real; assume x in dom f2;
-     then x in {a: 0 <= a & a <= 1/2} by A15,RCOMP_1:def 1;
-     then consider a such that A90: a=x & 0 <= a & a <= 1/2;
-           0 <= 2*a & 2*a <= 2*(1/2) & 0<>2 by A90,XREAL_1:66,129;
-      then 2*a in { r: 0 <= r & r <= 1 };
-     hence 2*x in dom f by A6,A90,RCOMP_1:def 1;
+      end;
     end;
-A91: now let x be Real; assume x in dom g2;
-     then x in {a: 1/2 <= a & a <= 1} by A19,RCOMP_1:def 1;
-     then consider a such that A92: a=x & 1/2 <= a & a <= 1;
-           2*(1/2) = 1 & 0 <= 2;
-      then 1 <= 2*a & 2*a <= 2*1 by A92,XREAL_1:66;
-      then 1-1 <= 2*a-1 & 2*a-1 <= 1+1-1 by XREAL_1:11;
-      then 2*a - 1 in { r: 0 <= r & r <= 1 };
-     hence 2*x - 1 in dom g by A9,A92,RCOMP_1:def 1;
-    end;
-         now let x1,x2 be set; assume that
-     A93: x1 in dom h & x2 in dom h and
-     A94: h.x1 = h.x2;
-           now per cases;
-       suppose A95: not x1 in dom g2 & not x2 in dom g2;
-A96:        dom h = dom f2 \/ dom g2 by FUNCT_4:def 1;
-        then A97: x1 in dom f2 & x2 in dom f2 by A93,A95,XBOOLE_0:def 2;
-        A98: x1 in [. 0,1/2 .] & x2 in
- [. 0,1/2 .] by A15,A93,A95,A96,XBOOLE_0:def 2;
+    hence a in rng h;
+  end;
+  then P \/ Q c= rng h by A74,XBOOLE_1:8;
+  then rng h = P \/ Q by A67,XBOOLE_0:def 10;
+  then
+A87: rng h = [#] (M|R) by PRE_TOPC:def 10;
+  dom h = the carrier of I[01] by FUNCT_2:def 1;
+  then
+A88: dom h = [#]I[01] by PRE_TOPC:12;
+A89: now
+    let x be Real;
+    assume x in dom f2;
+    then x in {a: 0 <= a & a <= 1/2} by A15,RCOMP_1:def 1;
+    then consider a such that
+A90: a=x & 0 <= a & a <= 1/2;
+    0 <= 2*a & 2*a <= 2*(1/2) & 0<>2 by A90,XREAL_1:66,129;
+    then 2*a in { r: 0 <= r & r <= 1 };
+    hence 2*x in dom f by A6,A90,RCOMP_1:def 1;
+  end;
+A91: now
+    let x be Real;
+    assume x in dom g2;
+    then x in {a: 1/2 <= a & a <= 1} by A19,RCOMP_1:def 1;
+    then consider a such that
+A92: a=x & 1/2 <= a & a <= 1;
+    2*(1/2) = 1 & 0 <= 2;
+    then 1 <= 2*a & 2*a <= 2*1 by A92,XREAL_1:66;
+    then 1-1 <= 2*a-1 & 2*a-1 <= 1+1-1 by XREAL_1:11;
+    then 2*a - 1 in { r: 0 <= r & r <= 1 };
+    hence 2*x - 1 in dom g by A9,A92,RCOMP_1:def 1;
+  end;
+  now
+    let x1,x2 be set;
+    assume that
+A93: x1 in dom h & x2 in dom h and
+A94: h.x1 = h.x2;
+    now per cases;
+      suppose
+A95:    not x1 in dom g2 & not x2 in dom g2;
+A96:    dom h = dom f2 \/ dom g2 by FUNCT_4:def 1;
+        then
+A97:    x1 in dom f2 & x2 in dom f2 by A93,A95,XBOOLE_0:def 2;
+A98:    x1 in [. 0,1/2 .] & x2 in
+        [. 0,1/2 .] by A15,A93,A95,A96,XBOOLE_0:def 2;
         then x1 in { a: 0 <= a & a <= 1/2 } by RCOMP_1:def 1;
         then consider x1' being Real such that
-          A99: x1' = x1 and 0 <= x1' & x1' <= 1/2;
-             x2 in { a: 0 <= a & a <= 1/2 } by A98,RCOMP_1:def 1;
+A99:    x1' = x1 and 0 <= x1' & x1' <= 1/2;
+        x2 in { a: 0 <= a & a <= 1/2 } by A98,RCOMP_1:def 1;
         then consider x2' being Real such that
-          A100: x2' = x2 and 0 <= x2' & x2' <= 1/2;
-        A101: 2*x1' in dom f & 2*x2' in dom f by A89,A97,A99,A100;
-              f.(2*x1') = f2.x1 by A15,A16,A97,A99 .= h.x2 by A94,A95,
-FUNCT_4:12
-                 .= f2.x2 by A95,FUNCT_4:12 .= f.(2*x2') by A15,A16,A97,A100;
+A100:   x2' = x2 and 0 <= x2' & x2' <= 1/2;
+A101:   2*x1' in dom f & 2*x2' in dom f by A89,A97,A99,A100;
+        f.(2*x1') = f2.x1 by A15,A16,A97,A99
+          .= h.x2 by A94,A95, FUNCT_4:12
+          .= f2.x2 by A95,FUNCT_4:12
+          .= f.(2*x2') by A15,A16,A97,A100;
         then 2*x1' = 2*x2' & 2 <> 0 by A11,A101,FUNCT_1:def 8;
         hence x1 = x2 by A99,A100;
-       end;
-       suppose A102: not x1 in dom g2 & x2 in dom g2;
+      end;
+      suppose
+A102:   not x1 in dom g2 & x2 in dom g2;
         then x2 in { a: 1/2 <= a & a <= 1 } by A19,RCOMP_1:def 1;
         then consider x2' being Real such that
-          A103: x2' = x2 and 1/2 <= x2' & x2' <= 1;
-             dom h = dom f2 \/ dom g2 by FUNCT_4:def 1;
-        then A104: x1 in dom f2 by A93,A102,XBOOLE_0:def 2;
+A103:   x2' = x2 and 1/2 <= x2' & x2' <= 1;
+        dom h = dom f2 \/ dom g2 by FUNCT_4:def 1;
+        then
+A104:   x1 in dom f2 by A93,A102,XBOOLE_0:def 2;
         then x1 in { a: 0 <= a & a <= 1/2 } by A15,RCOMP_1:def 1;
         then consider x1' being Real such that
-          A105: x1' = x1 and 0 <= x1' & x1' <= 1/2;
-       A106: f.(2*x1') = f2.x1 by A15,A16,A104,A105 .= h.x2 by A94,A102,
-FUNCT_4:12
-          .= g2.x2 by A102,FUNCT_4:14 .= g.(2*x2' -1) by A19,A20,A102,A103;
-       A107: 2*x1' in dom f & 2*x2' -1 in dom g by A89,A91,A102,A103,A104,A105;
+A105:   x1' = x1 and 0 <= x1' & x1' <= 1/2;
+A106:   f.(2*x1') = f2.x1 by A15,A16,A104,A105
+          .= h.x2 by A94,A102, FUNCT_4:12
+          .= g2.x2 by A102,FUNCT_4:14
+          .= g.(2*x2' -1) by A19,A20,A102,A103;
+A107:   2*x1' in dom f & 2*x2' -1 in dom g by A89,A91,A102,A103,A104,A105;
         then f.(2*x1') in P & g.(2*x2' -1) in Q by A7,A10,FUNCT_1:def 5;
         then f.(2*x1') in P /\ Q & g.(2*x2' -1) in P /\ Q by A106,
-XBOOLE_0:def 3;
-        then A108: f.(2*x1') = p & g.(2*x2' -1) = p by A1,TARSKI:def 1;
-             0 in dom g & 1 in dom f by A6,A9,RCOMP_1:15;
+        XBOOLE_0:def 3;
+        then
+A108:   f.(2*x1') = p & g.(2*x2' -1) = p by A1,TARSKI:def 1;
+        0 in dom g & 1 in dom f by A6,A9,RCOMP_1:15;
         then 1/2*(2*x1') = 1/2*1 & 2*x2'-1+1 = 0+1 by A3,A5,A11,A12,A107,A108,
-FUNCT_1:def 8;
+        FUNCT_1:def 8;
         hence x1 = x2 by A103,A105;
-       end;
-       suppose A109: x1 in dom g2 & not x2 in dom g2;
+      end;
+      suppose
+A109:   x1 in dom g2 & not x2 in dom g2;
         then x1 in { a: 1/2 <= a & a <= 1 } by A19,RCOMP_1:def 1;
         then consider x1' being Real such that
-          A110: x1' = x1 and 1/2 <= x1' & x1' <= 1;
-             dom h = dom f2 \/ dom g2 by FUNCT_4:def 1;
-        then A111: x2 in dom f2 by A93,A109,XBOOLE_0:def 2;
+A110:   x1' = x1 and 1/2 <= x1' & x1' <= 1;
+        dom h = dom f2 \/ dom g2 by FUNCT_4:def 1;
+        then
+A111:   x2 in dom f2 by A93,A109,XBOOLE_0:def 2;
         then x2 in { a: 0 <= a & a <= 1/2 } by A15,RCOMP_1:def 1;
         then consider x2' being Real such that
-          A112: x2' = x2 and 0 <= x2' & x2' <= 1/2;
-       A113: f.(2*x2') = f2.x2 by A15,A16,A111,A112 .= h.x1 by A94,A109,
-FUNCT_4:12
-          .= g2.x1 by A109,FUNCT_4:14 .= g.(2*x1' -1) by A19,A20,A109,A110;
-       A114: 2*x2' in dom f & 2*x1' -1 in dom g by A89,A91,A109,A110,A111,A112;
+A112:   x2' = x2 and 0 <= x2' & x2' <= 1/2;
+A113:   f.(2*x2') = f2.x2 by A15,A16,A111,A112
+          .= h.x1 by A94,A109, FUNCT_4:12
+          .= g2.x1 by A109,FUNCT_4:14
+          .= g.(2*x1' -1) by A19,A20,A109,A110;
+A114:   2*x2' in dom f & 2*x1' -1 in dom g by A89,A91,A109,A110,A111,A112;
         then f.(2*x2') in P & g.(2*x1' -1) in Q by A7,A10,FUNCT_1:def 5;
         then f.(2*x2') in P /\ Q & g.(2*x1' -1) in P /\ Q by A113,
-XBOOLE_0:def 3;
-        then A115: f.(2*x2') = p & g.(2*x1' -1) = p by A1,TARSKI:def 1;
-             0 in dom g & 1 in dom f by A6,A9,RCOMP_1:15;
+        XBOOLE_0:def 3;
+        then
+A115:   f.(2*x2') = p & g.(2*x1' -1) = p by A1,TARSKI:def 1;
+        0 in dom g & 1 in dom f by A6,A9,RCOMP_1:15;
         then 1/2*(2*x2') = 1/2*1 & 2*x1'-1+1 = 0+1 by A3,A5,A11,A12,A114,A115,
-FUNCT_1:def 8;
+        FUNCT_1:def 8;
         hence x1 = x2 by A110,A112;
-       end;
-       suppose A116: x1 in dom g2 & x2 in dom g2;
+      end;
+      suppose
+A116:   x1 in dom g2 & x2 in dom g2;
         then x1 in { a: 1/2 <= a & a <= 1 } by A19,RCOMP_1:def 1;
         then consider x1' being Real such that
-          A117: x1' = x1 and 1/2 <= x1' & x1' <= 1;
-             x2 in { a: 1/2 <= a & a <= 1 } by A19,A116,RCOMP_1:def 1;
+A117:   x1' = x1 and 1/2 <= x1' & x1' <= 1;
+        x2 in { a: 1/2 <= a & a <= 1 } by A19,A116,RCOMP_1:def 1;
         then consider x2' being Real such that
-          A118: x2' = x2 and 1/2 <= x2' & x2' <= 1;
-        A119: 2*x1'-1 in dom g & 2*x2'-1 in dom g by A91,A116,A117,A118;
-              g.(2*x1'-1) = g2.x1 by A19,A20,A116,A117 .= h.x2 by A94,A116,
-FUNCT_4:14
-                 .= g2.x2 by A116,FUNCT_4:14 .= g.(2*x2'-1) by A19,A20,A116
-,A118;
+A118:   x2' = x2 and 1/2 <= x2' & x2' <= 1;
+A119:   2*x1'-1 in dom g & 2*x2'-1 in dom g by A91,A116,A117,A118;
+        g.(2*x1'-1) = g2.x1 by A19,A20,A116,A117
+          .= h.x2 by A94,A116,
+        FUNCT_4:14
+          .= g2.x2 by A116,FUNCT_4:14
+          .= g.(2*x2'-1) by A19,A20,A116
+        ,A118;
         then 2*x1' - 1 + 1 = 2*x2' - 1 + 1 by A12,A119,FUNCT_1:def 8;
         hence x1 = x2 by A117,A118;
       end;
-      end;
-      hence x1 = x2;
-     end;
- then h is one-to-one by FUNCT_1:def 8;
-   hence h' is_homeomorphism by A68,A69,A87,A88,COMPTS_1:26;
-   A120: 0 in [. 0,1/2 .] by RCOMP_1:15;
-         now assume 0 in {r where r is Real: 1/2 <= r & r <= 1};
-     then ex r being Real st r = 0 & 1/2 <= r & r <= 1;
-     hence contradiction;
     end;
-   then 0 in dom h & not 0 in dom g2 by A19,A65,RCOMP_1:15,def 1;
-   hence h'.0 = f2.0 by FUNCT_4:12 .= f.(2*0) by A16,A120 .= f.0;
-   A121: 1 in dom g2 by A19,RCOMP_1:15;
-   hence h'.1 = g2.1 by FUNCT_4:14 .= g.(2*1-1 qua Real) by A19,A20,A121
-            .= g.1;
+    hence x1 = x2;
   end;
+  then h is one-to-one by FUNCT_1:def 8;
+  hence h' is_homeomorphism by A68,A69,A87,A88,COMPTS_1:26;
+A120: 0 in [. 0,1/2 .] by RCOMP_1:15;
+  now
+    assume 0 in {r where r is Real: 1/2 <= r & r <= 1};
+    then ex r being Real st r = 0 & 1/2 <= r & r <= 1;
+    hence contradiction;
+  end;
+  then 0 in dom h & not 0 in dom g2 by A19,A65,RCOMP_1:15,def 1;
+  hence h'.0 = f2.0 by FUNCT_4:12
+    .= f.(2*0) by A16,A120
+    .= f.0;
+A121: 1 in dom g2 by A19,RCOMP_1:15;
+  hence h'.1 = g2.1 by FUNCT_4:14
+    .= g.(2*1-1 qua Real) by A19,A20,A121
+    .= g.1;
+end;
+

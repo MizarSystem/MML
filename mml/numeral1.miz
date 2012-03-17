@@ -27,286 +27,280 @@ environ
 
 begin :: Preliminaries
 
-  Lm1: for d being XFinSequence holds
-  (ex n being Nat st n in dom d) iff len d > 0
+Lm1: for d being XFinSequence holds
+(ex n being Nat st n in dom d) iff len d > 0
+proof
+  let d be XFinSequence;
+  thus (ex n being Nat st n in dom d) implies len d > 0
   proof
-    let d be XFinSequence;
-    thus (ex n being Nat st n in dom d) implies len d > 0
-    proof
-      given n being Nat such that A1: n in dom d;
-       n in len d by A1,AFINSQ_1:def 1;
-      hence len d > 0;
-    end;
-    assume len d > 0;
-    then dom d <> {} by AFINSQ_1:def 1;
-    then consider n being set such that A2: n in dom d by XBOOLE_0:def 1;
-    reconsider n as Element of NAT by A2;
-    take n;
-    thus thesis by A2;
+    given n being Nat such that
+A1: n in dom d;
+    n in len d by A1,AFINSQ_1:def 1;
+    hence len d > 0;
   end;
+  assume len d > 0;
+  then dom d <> {} by AFINSQ_1:def 1;
+  then consider n being set such that
+A2: n in dom d by XBOOLE_0:def 1;
+  reconsider n as Element of NAT by A2;
+  take n;
+  thus thesis by A2;
+end;
 
 theorem Th1:
   for d,e being XFinSequence of NAT holds Sum(d^e)=Sum(d)+Sum(e)
-  proof
-    let d,e be XFinSequence of NAT;
-    thus Sum(d^e)=addnat.(Sum(d),Sum(e)) by STIRL2_1:47
+proof
+  let d,e be XFinSequence of NAT;
+  thus Sum(d^e)=addnat.(Sum(d),Sum(e)) by STIRL2_1:47
     .= Sum(d)+Sum(e) by BINOP_2:def 23;
-  end;
+end;
 
 theorem Th2:
-  for S being Real_Sequence, d being XFinSequence of NAT,
-  n being Nat
+  for S being Real_Sequence, d being XFinSequence of NAT, n being Nat
   st d=S|(n+1) holds Sum(d)=Partial_Sums(S).n
-  proof
-    let S be Real_Sequence, d be XFinSequence of NAT, n be Nat;
-    assume A1: d=S|(n+1);
-    then A2: dom d = dom S /\ (n+1) & for x being set st x in dom d holds
-    d.x = S.x by FUNCT_1:68;
-     n+1 in NAT by ORDINAL1:def 13;
-    then n+1 c= NAT & REAL<>{} by ORDINAL1:def 2;
-    then n+1 c= dom S by FUNCT_2:def 1;
-    then A3: dom d = n+1 by A2,XBOOLE_1:28;
-    then A4: len d = n+1 by AFINSQ_1:def 1;
-    then consider f be Function of NAT,NAT such that
-    A5: f.0 = d.0 &
-    (for m being Element of NAT st m+1 < len d holds
-    f.(m + 1) = addnat.(f.m,d.(m + 1))) & addnat "**" d = f.(len d-1)
-    by STIRL2_1:def 3;
-
-    defpred P[Element of NAT] means
-    $1 in dom d implies f.$1=Partial_Sums(S).$1;
-
-     Partial_Sums(S).0=S.0 by SERIES_1:def 1;
-    then A6:P[0] by A1,A5,FUNCT_1:68;
-    A7:
-    now
-      let k be Element of NAT;
-      assume A8: P[k];
-
-      thus P[k+1]
-      proof
-        assume A9: k+1 in dom d;
-        then k+1 in len d by AFINSQ_1:def 1;
-        then A10: k<k+1 & k+1 < len d by NAT_1:13,PRGCOR_2:1;
-        then k<len d by XXREAL_0:2;
-        then A11: k in len d by PRGCOR_2:1;
-        thus f.(k+1)= addnat.(f.k,d.(k + 1)) by A5,A10
+proof
+  let S be Real_Sequence, d be XFinSequence of NAT, n be Nat;
+  assume
+A1: d=S|(n+1);
+  then
+A2: dom d = dom S /\ (n+1) & for x being set st x in dom d holds
+  d.x = S.x by FUNCT_1:68;
+  n+1 c= NAT & REAL<>{} by ORDINAL1:def 2;
+  then n+1 c= dom S by FUNCT_2:def 1;
+  then
+A3: dom d = n+1 by A2,XBOOLE_1:28;
+  then
+A4: len d = n+1 by AFINSQ_1:def 1;
+  then consider f be Function of NAT,NAT such that
+A5: f.0 = d.0 & (for m being Element of NAT st m+1 < len d holds
+  f.(m + 1) = addnat.(f.m,d.(m + 1))) & addnat "**" d = f.(len d-1)
+  by STIRL2_1:def 3;
+  defpred P[Element of NAT] means $1 in dom d implies f.$1=Partial_Sums(S).$1;
+  Partial_Sums(S).0=S.0 by SERIES_1:def 1;
+  then
+A6: P[0] by A1,A5,FUNCT_1:68;
+A7: now
+    let k be Element of NAT;
+    assume
+A8: P[k];
+    thus P[k+1]
+    proof
+      assume
+A9:   k+1 in dom d;
+      then k+1 in len d by AFINSQ_1:def 1;
+      then
+A10:  k<k+1 & k+1 < len d by NAT_1:13,PRGCOR_2:1;
+      then k<len d by XXREAL_0:2;
+      then
+A11:  k in len d by PRGCOR_2:1;
+      thus f.(k+1)= addnat.(f.k,d.(k + 1)) by A5,A10
         .= (f.k)+d.(k + 1) by BINOP_2:def 23
         .= (f.k)+S.(k+1) by A1,A9,FUNCT_1:68
         .= Partial_Sums(S).(k+1) by A8,A11,AFINSQ_1:def 1,SERIES_1:def 1;
-      end;
     end;
-    A12: for m being Element of NAT holds P[m] from NAT_1:sch 1(A6,A7);
-    reconsider N=n as Element of NAT by ORDINAL1:def 13;
-     N in dom d by A3,AFINSQ_1:1;
-    hence Sum(d) = Partial_Sums(S).n by A4,A5,A12;
   end;
+A12: for m being Element of NAT holds P[m] from NAT_1:sch 1(A6,A7);
+  reconsider N=n as Element of NAT by ORDINAL1:def 13;
+  N in dom d by A3,AFINSQ_1:1;
+  hence Sum(d) = Partial_Sums(S).n by A4,A5,A12;
+end;
 
 theorem Th3:
-  for k,l,m being Nat holds
-  (k(#)(l GeoSeq))|m is XFinSequence of NAT
+  for k,l,m being Nat holds (k(#)(l GeoSeq))|m is XFinSequence of NAT
+proof
+  let k,l,m be Nat;
+  set g=(k(#)(l GeoSeq))|m;
+A1: dom (k(#)(l GeoSeq)) = NAT by FUNCT_2:def 1;
+  then m in dom (k(#)(l GeoSeq)) by ORDINAL1:def 13;
+  then m c= dom (k(#)(l GeoSeq)) by A1,ORDINAL1:def 2;
+  then dom g = m by RELAT_1:91;
+  then reconsider g'=g as XFinSequence by ORDINAL1:def 7;
+  rng g' c= NAT
   proof
-    let k,l,m be Nat;
-    set g=(k(#)(l GeoSeq))|m;
-    A1: dom (k(#)(l GeoSeq)) = NAT by FUNCT_2:def 1;
-    then m in dom (k(#)(l GeoSeq)) by ORDINAL1:def 13;
-    then m c= dom (k(#)(l GeoSeq)) by A1,ORDINAL1:def 2;
-    then dom g = m by RELAT_1:91;
-    then reconsider g'=g as XFinSequence by ORDINAL1:def 7;
-     rng g' c= NAT
-    proof
-      let a be set;
-      assume a in rng g';
-      then consider o being set such that
-      A2: o in dom g & a=g.o by FUNCT_1:def 5;
-      reconsider o as Element of NAT by A2;
-       g.o = (k(#)(l GeoSeq)).o by A2,FUNCT_1:68
+    let a be set;
+    assume a in rng g';
+    then consider o being set such that
+A2: o in dom g & a=g.o by FUNCT_1:def 5;
+    reconsider o as Element of NAT by A2;
+    g.o = (k(#)(l GeoSeq)).o by A2,FUNCT_1:68
       .= k*((l GeoSeq).o) by SEQ_1:13
       .= k*(l|^o) by PREPOWER:def 1;
-      hence a in NAT by A2,ORDINAL1:def 13;
-    end;
-    hence g is XFinSequence of NAT by ORDINAL1:def 8;
+    hence a in NAT by A2,ORDINAL1:def 13;
   end;
+  hence g is XFinSequence of NAT by ORDINAL1:def 8;
+end;
 
 theorem Th4:
-  for d,e being XFinSequence of NAT st
-  len d >= 1 & len d = len e &
-  for i being Nat st i in dom d holds d.i<=e.i
-  holds Sum d <= Sum e
-  proof
-    let d,e be XFinSequence of NAT such that
-    A1: len d >=1 & len d = len e &
-    for i being Nat st i in dom d holds d.i<=e.i;
-    consider f being Function of NAT,NAT such that
-    A2: f.0 = d.0 &
-    (for n being Element of NAT st n+1 < len d holds
-    f.(n + 1) = addnat.(f.n,d.(n + 1))) & Sum d = f.(len d-1)
-    by A1,STIRL2_1:def 3;
-    consider g being Function of NAT,NAT such that
-    A3: g.0 = e.0 &
-    (for n being Element of NAT st n+1 < len e holds
-    g.(n + 1) = addnat.(g.n,e.(n + 1))) & Sum e = g.(len e-1)
-    by A1,STIRL2_1:def 3;
-
-    defpred P[Element of NAT] means $1 in dom d implies f.$1 <= g.$1;
-
-    A4: P[0] by A1,A2,A3;
-    A5:
-    now
-      let i be Element of NAT;
-      assume A6: P[i];
-      thus P[i+1]
-      proof
-        assume A7: i+1 in dom d;
-        then i+1 in len d by AFINSQ_1:def 1;
-        then A8: i+1 < len d by PRGCOR_2:1;
-        then i < len d by NAT_1:13;
-        then A9:i in len d by PRGCOR_2:1;
-        A10: f.(i+1) = addnat.(f.i,d.(i + 1)) by A2,A8
+  for d,e being XFinSequence of NAT st len d >= 1 & len d = len e &
+  for i being Nat st i in dom d holds d.i<=e.i holds Sum d <= Sum e
+proof
+  let d,e be XFinSequence of NAT such that
+A1: len d >=1 & len d = len e & for i being Nat st i in dom d holds d.i<=e.i;
+  consider f being Function of NAT,NAT such that
+A2: f.0 = d.0 & (for n being Element of NAT st n+1 < len d holds
+  f.(n + 1) = addnat.(f.n,d.(n + 1))) & Sum d = f.(len d-1)
+  by A1,STIRL2_1:def 3;
+  consider g being Function of NAT,NAT such that
+A3: g.0 = e.0 & (for n being Element of NAT st n+1 < len e holds
+  g.(n + 1) = addnat.(g.n,e.(n + 1))) & Sum e = g.(len e-1)
+  by A1,STIRL2_1:def 3;
+  defpred P[Element of NAT] means $1 in dom d implies f.$1 <= g.$1;
+A4: P[0] by A1,A2,A3;
+A5: now
+    let i be Element of NAT;
+    assume
+A6: P[i];
+    thus P[i+1]
+    proof
+      assume
+A7:   i+1 in dom d;
+      then i+1 in len d by AFINSQ_1:def 1;
+      then
+A8:   i+1 < len d by PRGCOR_2:1;
+      then i < len d by NAT_1:13;
+      then
+A9:   i in len d by PRGCOR_2:1;
+A10:  f.(i+1) = addnat.(f.i,d.(i + 1)) by A2,A8
         .= f.i + d.(i+1) by BINOP_2:def 23;
-        A11: g.(i+1) = addnat.(g.i,e.(i + 1)) by A1,A3,A8
+A11:  g.(i+1) = addnat.(g.i,e.(i + 1)) by A1,A3,A8
         .= g.i + e.(i+1) by BINOP_2:def 23;
-         d.(i+1) <= e.(i+1) by A1,A7;
-        hence f.(i+1) <= g.(i+1) by A6,A9,A10,A11,AFINSQ_1:def 1,XREAL_1:9;
-      end;
+      d.(i+1) <= e.(i+1) by A1,A7;
+      hence f.(i+1) <= g.(i+1) by A6,A9,A10,A11,AFINSQ_1:def 1,XREAL_1:9;
     end;
-    A12: for i being Element of NAT holds P[i] from NAT_1:sch 1(A4,A5);
-
-    reconsider ld=len d-1 as Element of NAT by A1,NAT_1:21;
-     len d-1 < len d - 0 by XREAL_1:12;
-    then ld in len d by PRGCOR_2:1;
-    then ld in dom d by AFINSQ_1:def 1;
-    hence Sum d <= Sum e by A1,A2,A3,A12;
   end;
+A12: for i being Element of NAT holds P[i] from NAT_1:sch 1(A4,A5);
+  reconsider ld=len d-1 as Element of NAT by A1,NAT_1:21;
+  len d-1 < len d - 0 by XREAL_1:12;
+  then ld in len d by PRGCOR_2:1;
+  then ld in dom d by AFINSQ_1:def 1;
+  hence Sum d <= Sum e by A1,A2,A3,A12;
+end;
 
 theorem Th5:
   for d being XFinSequence of NAT, n being Nat st
-  for i being Nat st i in dom d holds n divides d.i
-  holds n divides Sum d
-  proof
-    let d be XFinSequence of NAT, n be Nat such that
-    A1: for i being Nat st i in dom d holds n divides d.i;
-    per cases;
-    suppose len d=0;
-      then Sum d = 0 by STIRL2_1:53;
-      hence n divides Sum d by NAT_D:6;
-    end;
-    suppose A2: len d > 0;
-      then consider f being Function of NAT,NAT such that
-      A3: f.0 = d.0 &
-      (for n being Element of NAT st n+1 < len d holds
-      f.(n + 1) = addnat.(f.n,d.(n + 1))) & Sum d = f.(len d-1)
-      by STIRL2_1:def 3;
-
-      defpred P[Element of NAT] means $1 < len d implies n divides f.$1;
-
-       0 in len d by A2,PRGCOR_2:1;
-      then 0 in dom d by AFINSQ_1:def 1;
-      then A4: P[0] by A1,A3;
-      A5: now
-        let k be Element of NAT;
-        assume A6: P[k];
-        thus P[k+1]
-        proof
-          assume A7: k+1 < len d;
-          then k+1 in len d by PRGCOR_2:1;
-          then k+1 in dom d by AFINSQ_1:def 1;
-          then A8: n divides d.(k+1) by A1;
-           f.(k+1) = addnat.(f.k,d.(k+1)) by A3,A7 .= f.k + d.(k+1)
-          by BINOP_2:def 23;
-          hence n divides f.(k+1) by A6,A7,A8,NAT_1:13,NAT_D:8;
-        end;
-      end;
-      A9: for k being Element of NAT holds P[k] from NAT_1:sch 1(A4,A5);
-      reconsider ld=len d-1 as Element of NAT by A2,NAT_1:20;
-       ld < len d by XREAL_1:149;
-      hence n divides Sum d by A3,A9;
-    end;
+  for i being Nat st i in dom d holds n divides d.i holds n divides Sum d
+proof
+  let d be XFinSequence of NAT, n be Nat such that
+A1: for i being Nat st i in dom d holds n divides d.i;
+  per cases;
+  suppose len d=0;
+    then Sum d = 0 by STIRL2_1:53;
+    hence n divides Sum d by NAT_D:6;
   end;
+  suppose
+A2: len d > 0;
+    then consider f being Function of NAT,NAT such that
+A3: f.0 = d.0 & (for n being Element of NAT st n+1 < len d holds
+    f.(n + 1) = addnat.(f.n,d.(n + 1))) & Sum d = f.(len d-1)
+    by STIRL2_1:def 3;
+    defpred P[Element of NAT] means $1 < len d implies n divides f.$1;
+    0 in len d by A2,PRGCOR_2:1;
+    then 0 in dom d by AFINSQ_1:def 1;
+    then
+A4: P[0] by A1,A3;
+A5: now
+      let k be Element of NAT;
+      assume
+A6:   P[k];
+      thus P[k+1]
+      proof
+        assume
+A7:     k+1 < len d;
+        then k+1 in len d by PRGCOR_2:1;
+        then k+1 in dom d by AFINSQ_1:def 1;
+        then
+A8:     n divides d.(k+1) by A1;
+        f.(k+1) = addnat.(f.k,d.(k+1)) by A3,A7
+          .= f.k + d.(k+1)
+        by BINOP_2:def 23;
+        hence n divides f.(k+1) by A6,A7,A8,NAT_1:13,NAT_D:8;
+      end;
+    end;
+A9: for k being Element of NAT holds P[k] from NAT_1:sch 1(A4,A5);
+    reconsider ld=len d-1 as Element of NAT by A2,NAT_1:20;
+    ld < len d by XREAL_1:149;
+    hence n divides Sum d by A3,A9;
+  end;
+end;
 
 theorem Th6:
-  for d,e being XFinSequence of NAT, n being Nat st
-  dom d = dom e &
+  for d,e being XFinSequence of NAT, n being Nat st dom d = dom e &
   for i being Nat st i in dom d holds e.i = d.i mod n
   holds Sum d mod n = Sum e mod n
+proof
+  let d,e be XFinSequence of NAT, n be Nat such that
+A1: dom d = dom e & for i being Nat st i in dom d holds e.i = d.i mod n;
+  defpred P[XFinSequence of NAT] means
+  for e being XFinSequence of NAT st dom $1=dom e &
+  for i being Nat st i in dom $1 holds e.i = $1.i mod n
+  holds (Sum $1) mod n = (Sum e) mod n;
+A2: P[<%>NAT]
   proof
-    let d,e be XFinSequence of NAT, n be Nat such that
-    A1: dom d = dom e &
-    for i being Nat st i in dom d holds e.i = d.i mod n;
-
-    defpred P[XFinSequence of NAT] means
-    for e being XFinSequence of NAT st dom $1=dom e &
-    for i being Nat st i in dom $1 holds e.i = $1.i mod n
-    holds (Sum $1) mod n = (Sum e) mod n;
-
-    A2: P[<%>NAT]
+    let e be XFinSequence of NAT;
+    assume dom <%>NAT=dom e &
+    for i being Nat st i in dom <%>NAT holds e.i = <%>NAT.i mod n;
+    then len e = 0 by AFINSQ_1:def 1;
+    hence (Sum <%>NAT) mod n = (Sum e) mod n by AFINSQ_1:18;
+  end;
+A3: for p being XFinSequence of NAT,l being Element of NAT
+  st P[p] holds P[p^<%l%>]
+  proof
+    let p be XFinSequence of NAT,l be Element of NAT;
+    assume
+A4: P[p];
+    thus P[p^<%l%>]
     proof
       let e be XFinSequence of NAT;
-      assume dom <%>NAT=dom e &
-      for i being Nat st i in dom <%>NAT holds e.i = <%>NAT.i mod n;
-      then len e = 0 by AFINSQ_1:def 1;
-      hence (Sum <%>NAT) mod n = (Sum e) mod n by AFINSQ_1:18;
-    end;
-    A3: for p being XFinSequence of NAT,l being Element of NAT
-    st P[p] holds P[p^<%l%>]
-    proof
-      let p be XFinSequence of NAT,l be Element of NAT;
-      assume A4: P[p];
-      thus P[p^<%l%>]
-      proof
-        let e be XFinSequence of NAT;
-        assume A5: dom (p^<%l%>)=dom e &
-        for i being Nat st i in dom (p^<%l%>) holds
-        e.i = (p^<%l%>).i mod n;
-
-        defpred Q[set,set] means $2=p.$1 mod n;
-        reconsider dop=dom p as Element of NAT by ORDINAL1:def 13;
-
-        A6: for k being Element of NAT st k in dop
-        ex x being Element of NAT st Q[k,x];
-
-        consider p' being XFinSequence of NAT such that
-        A7: dom p' = dop &
-        for k being Element of NAT st k in dop holds Q[k,p'.k]
-        from STIRL2_1:sch 6(A6);
-        A8: for i being Nat st i in dom p holds
-        p'.i = p.i mod n by A7;
-
-        A9: dom e=len p + len <%l%> by A5,AFINSQ_1:def 4
+      assume
+A5:   dom (p^<%l%>)=dom e & for i being Nat st i in dom (p^<%l%>) holds
+      e.i = (p^<%l%>).i mod n;
+      defpred Q[set,set] means $2=p.$1 mod n;
+      reconsider dop=dom p as Element of NAT by ORDINAL1:def 13;
+A6:   for k being Element of NAT st k in dop
+      ex x being Element of NAT st Q[k,x];
+      consider p' being XFinSequence of NAT such that
+A7:   dom p' = dop & for k being Element of NAT st k in dop holds Q[k,p'.k]
+      from STIRL2_1:sch 6(A6);
+A8:   for i being Nat st i in dom p holds p'.i = p.i mod n by A7;
+A9:   dom e=len p + len <%l%> by A5,AFINSQ_1:def 4
         .= dom p + len <%l%> by AFINSQ_1:def 1
         .= dom p + 1 by AFINSQ_1:37
         .= dom p + len <%l mod n%> by AFINSQ_1:37
         .= len p' + len <%l mod n%> by A7,AFINSQ_1:def 1;
-        A10:
-        now
-          let k be Element of NAT;
-          assume A11: k in dom p';
-          then k < dom p' by PRGCOR_2:1;
-          then k < len p & len p < len p + 1 by A7,AFINSQ_1:def 1,NAT_1:13;
-          then k < len p + 1 by XXREAL_0:2;
-          then k < len p + len <%l%> by AFINSQ_1:37;
-          then k in len p + len <%l%> by PRGCOR_2:1;
-          then k in dom (p^<%l%>) by AFINSQ_1:def 4;
-          hence e.k = (p^<%l%>).k mod n by A5
+A10:  now
+        let k be Element of NAT;
+        assume
+A11:    k in dom p';
+        then k < dom p' by PRGCOR_2:1;
+        then k < len p & len p < len p + 1 by A7,AFINSQ_1:def 1,NAT_1:13;
+        then k < len p + 1 by XXREAL_0:2;
+        then k < len p + len <%l%> by AFINSQ_1:37;
+        then k in len p + len <%l%> by PRGCOR_2:1;
+        then k in dom (p^<%l%>) by AFINSQ_1:def 4;
+        hence e.k = (p^<%l%>).k mod n by A5
           .= p.k mod n by A7,A11,AFINSQ_1:def 4
           .= p'.k by A7,A11;
-        end;
-         now
-          let k be Element of NAT;
-          assume k in dom <%l mod n%>;
-          then A12: k in 1 by AFINSQ_1:36;
-          then k < 1 by PRGCOR_2:1;
-          then A13: k = 0 by NAT_1:14;
-           k in dom <%l%> by A12,AFINSQ_1:36;
-          then A14: len p + k in dom (p^<%l%>) by AFINSQ_1:26;
-          thus e.(len p' + k) = e.(dom p) by A7,A13,AFINSQ_1:def 1
+      end;
+      now
+        let k be Element of NAT;
+        assume k in dom <%l mod n%>;
+        then
+A12:    k in 1 by AFINSQ_1:36;
+        then k < 1 by PRGCOR_2:1;
+        then
+A13:    k = 0 by NAT_1:14;
+        k in dom <%l%> by A12,AFINSQ_1:36;
+        then
+A14:    len p + k in dom (p^<%l%>) by AFINSQ_1:26;
+        thus e.(len p' + k) = e.(dom p) by A7,A13,AFINSQ_1:def 1
           .= e.(len p) by AFINSQ_1:def 1
           .= (p^<%l%>).len p mod n by A5,A13,A14
           .= l mod n by AFINSQ_1:40
           .= <%l mod n%>.k by A13,AFINSQ_1:38;
-        end;
-        then A15: e=p'^<%l mod n%> by A9,A10,AFINSQ_1:def 4;
-        thus Sum (p^<%l%>) mod n = (Sum p + Sum <%l%>) mod n by Th1
+      end;
+      then
+A15:  e=p'^<%l mod n%> by A9,A10,AFINSQ_1:def 4;
+      thus Sum (p^<%l%>) mod n = (Sum p + Sum <%l%>) mod n by Th1
         .= (Sum p + l) mod n by STIRL2_1:44
         .= ((Sum p) mod n + l) mod n by NAT_D:22
         .= ((Sum p) mod n + (l mod n)) mod n by NAT_D:22
@@ -314,44 +308,43 @@ theorem Th6:
         .= (Sum p' + (l mod n)) mod n by NAT_D:22
         .= (Sum p' + Sum <%l mod n%>) mod n by STIRL2_1:44
         .= (Sum e) mod n by A15,Th1;
-      end;
     end;
-     for p being XFinSequence of NAT holds P[p] from STIRL2_1:sch 5(A2,A3);
-    hence (Sum d) mod n = (Sum e) mod n by A1;
   end;
+  for p being XFinSequence of NAT holds P[p] from STIRL2_1:sch 5(A2,A3);
+  hence (Sum d) mod n = (Sum e) mod n by A1;
+end;
 
 begin :: Representation of numbers in the base-$b$ numeral system
 
 definition
   let d be XFinSequence of NAT;
   let b be Nat;
-  func value(d,b) -> Nat means :Def1:
+  func value(d,b) -> Nat means
+  :Def1:
   ex d' being XFinSequence of NAT st (dom d' = dom d &
-  for i being Nat st i in dom d' holds d'.i = (d.i)*(b|^i)) &
-  it = Sum d';
+  for i being Nat st i in dom d' holds d'.i = (d.i)*(b|^i)) & it = Sum d';
   existence
   proof
-
     deffunc F(Nat)=(d.$1)*(b|^$1);
-
     consider d' being XFinSequence such that
-    A1: len d' = len d &
+A1: len d' = len d &
     for i being Element of NAT st i in len d holds d'.i = F(i)
     from AFINSQ_1:sch 2;
-     rng d' c= NAT
+    rng d' c= NAT
     proof
       let a be set;
       assume a in rng d';
       then consider i being set such that
-      A2: i in dom d' & d'.i=a by FUNCT_1:def 5;
+A2:   i in dom d' & d'.i=a by FUNCT_1:def 5;
       reconsider i as Element of NAT by A2;
-       i in len d' by A2,AFINSQ_1:def 1;
+      i in len d' by A2,AFINSQ_1:def 1;
       then a=F(i) by A1,A2;
-      hence a in NAT by ORDINAL1:def 13;
+      hence a in NAT;
     end;
     then reconsider d' as XFinSequence of NAT by ORDINAL1:def 8;
-    A3: dom d' = len d' by AFINSQ_1:def 1 .= dom d by A1,AFINSQ_1:def 1;
-    A4: for i being Nat st i in dom d' holds d'.i = (d.i)*(b|^i)
+A3: dom d' = len d' by AFINSQ_1:def 1
+      .= dom d by A1,AFINSQ_1:def 1;
+A4: for i being Nat st i in dom d' holds d'.i = (d.i)*(b|^i)
     proof
       let i be Nat;
       reconsider j=i as Element of NAT by ORDINAL1:def 13;
@@ -365,16 +358,18 @@ definition
   uniqueness
   proof
     let k,l be Nat;
-    given k' being XFinSequence of NAT such that A5: (dom k' = dom d &
-    for i being Nat st i in dom k' holds k'.i = (d.i)*(b|^i)) &
-    k = Sum k';
-    given l' being XFinSequence of NAT such that A6: (dom l' = dom d &
-    for i being Nat st i in dom l' holds l'.i = (d.i)*(b|^i)) &
-    l = Sum l';
-     now
+    given k' being XFinSequence of NAT such that
+A5: (dom k' = dom d &
+    for i being Nat st i in dom k' holds k'.i = (d.i)*(b|^i)) & k = Sum k';
+    given l' being XFinSequence of NAT such that
+A6: (dom l' = dom d &
+    for i being Nat st i in dom l' holds l'.i = (d.i)*(b|^i)) & l = Sum l';
+    now
       let i be Element of NAT;
-      assume A7: i in dom d;
-      hence k'.i=(d.i)*(b|^i) by A5 .= l'.i by A6,A7;
+      assume
+A7:   i in dom d;
+      hence k'.i=(d.i)*(b|^i) by A5
+        .= l'.i by A6,A7;
     end;
     hence k=l by A5,A6,AFINSQ_1:10;
   end;
@@ -382,12 +377,12 @@ end;
 
 definition
   let n,b be Nat;
-  assume A1: b>1;
-  func digits(n,b) -> XFinSequence of NAT means :Def2:
-  value(it,b)=n & it.(len(it)-1) <> 0 &
-  for i being Nat st i in dom it holds
-  0 <= it.i & it.i < b if n <> 0
-  otherwise it = <%0%>;
+  assume
+A1: b>1;
+  func digits(n,b) -> XFinSequence of NAT means
+  :Def2:
+  value(it,b)=n & it.(len(it)-1) <> 0 & for i being Nat st i in dom it holds
+  0 <= it.i & it.i < b if n <> 0 otherwise it = <%0%>;
   consistency;
   existence
   proof
@@ -396,97 +391,88 @@ definition
     value(d,b)=n & d.(len(d)-1) <> 0 &
     for i being Nat st i in dom d holds 0 <= d.i & d.i < b
     proof
-      assume A2: n<>0;
-
+      assume
+A2:   n<>0;
       deffunc G(Element of NAT,Element of NAT)=$2 div B;
-
       consider f being Function of NAT,NAT such that
-      A3: f.0=N &
+A3:   f.0=N &
       for i being Element of NAT holds f.(i+1)=G(i,(f.i) qua Element of NAT)
       from RECDEF_1:sch 4;
-
       defpred R[Nat] means f.$1 = 0;
-
       defpred Q[Nat] means ex i being Element of NAT st f.i = $1;
-
-      A4: ex k being Nat st Q[k] by A3;
-      A5: for k being Nat st k <> 0 & Q[k]
-      ex l being Nat st l < k & Q[l]
+A4:   ex k being Nat st Q[k] by A3;
+A5:   for k being Nat st k <> 0 & Q[k] ex l being Nat st l < k & Q[l]
       proof
         let k be Nat;
-        assume A6: k <> 0 & Q[k];
+        assume
+A6:     k <> 0 & Q[k];
         then consider i being Element of NAT such that
-        A7: f.i=k;
+A7:     f.i=k;
         take l=k div b;
-         k>0 & b > 1 by A1,A6;
+        k>0 & b > 1 by A1,A6;
         hence l<k by INT_1:83;
         take i+1;
         thus thesis by A3,A7;
       end;
-       Q[0] from NAT_1:sch 7(A4,A5);
-      then A8: ex l being Nat st R[l];
+      Q[0] from NAT_1:sch 7(A4,A5);
+      then
+A8:   ex l being Nat st R[l];
       consider l being Nat such that
-      A9: R[l] & for i being Nat st R[i] holds l<=i
-      from NAT_1:sch 5(A8);
+A9:   R[l] & for i being Nat st R[i] holds l<=i from NAT_1:sch 5(A8);
       consider m being Nat such that
-      A10: m+1=l by A2,A3,A9,NAT_1:6;
+A10:  m+1=l by A2,A3,A9,NAT_1:6;
       reconsider m as Element of NAT by ORDINAL1:def 13;
-       m < l by A10,NAT_1:13;
-      then A11: f.m<>0 by A9;
-      A12: R[l] by A9;
-      A13:
-      now
+      m < l by A10,NAT_1:13;
+      then
+A11:  f.m<>0 by A9;
+A12:  R[l] by A9;
+A13:  now
         let i be Nat such that l <= i;
-A14:   i in NAT by ORDINAL1:def 13;
+A14:    i in NAT by ORDINAL1:def 13;
         assume R[i];
         then f.(i+1)=0 div b by A3,A14;
         hence R[i+1] by NAT_2:4;
       end;
-      A15: for i being Nat st l <= i holds R[i]
-      from NAT_1:sch 8(A12,A13);
-      A16:
-      now
+A15:  for i being Nat st l <= i holds R[i] from NAT_1:sch 8(A12,A13);
+A16:  now
         let i be Element of NAT;
         assume m < i;
         then l<=i by A10,NAT_1:13;
         hence f.i=0 by A15;
       end;
-       dom f=NAT by FUNCT_2:def 1;
+      dom f=NAT by FUNCT_2:def 1;
       then m+1 c= dom f by ORDINAL1:def 2;
       then dom (f|(m+1)) = m+1 by RELAT_1:91;
-      then A17: f|(m+1) is XFinSequence by ORDINAL1:def 7;
-       rng (f|(m+1)) c= NAT;
+      then
+A17:  f|(m+1) is XFinSequence by ORDINAL1:def 7;
+      rng (f|(m+1)) c= NAT;
       then reconsider g=f|(m+1) as XFinSequence of NAT by A17,ORDINAL1:def 8;
-
       defpred P[Element of NAT,Element of NAT] means $2=g.$1 mod b;
-
-      A18: for i being Element of NAT st i in m+1
+A18:  for i being Element of NAT st i in m+1
       ex x being Element of NAT st P[i,x];
       consider d being XFinSequence of NAT such that
-      A19: dom d = m+1 & for i being Element of NAT st i in m+1 holds
-      P[i,(d.i)qua Element of NAT]
-      from STIRL2_1:sch 6(A18);
+A19:  dom d = m+1 & for i being Element of NAT st i in m+1 holds
+      P[i,(d.i)qua Element of NAT] from STIRL2_1:sch 6(A18);
       take d;
-
       deffunc F(Element of NAT)=(d.$1)*(b|^$1);
-
       consider d' being XFinSequence such that
-      A20: len d' = len d & for i being Element of NAT st i in len d holds
+A20:  len d' = len d & for i being Element of NAT st i in len d holds
       d'.i = F(i) from AFINSQ_1:sch 2;
-       rng d' c= NAT
+      rng d' c= NAT
       proof
         let a be set;
         assume a in rng d';
         then consider i being set such that
-        A21: i in dom d' & d'.i=a by FUNCT_1:def 5;
+A21:    i in dom d' & d'.i=a by FUNCT_1:def 5;
         reconsider i as Element of NAT by A21;
-         i in len d' by A21,AFINSQ_1:def 1;
+        i in len d' by A21,AFINSQ_1:def 1;
         then a=F(i) by A20,A21;
-        hence a in NAT by ORDINAL1:def 13;
+        hence a in NAT;
       end;
       then reconsider d' as XFinSequence of NAT by ORDINAL1:def 8;
-      A22: dom d' = len d' by AFINSQ_1:def 1 .= dom d by A20,AFINSQ_1:def 1;
-      A23: for i being Nat st i in dom d' holds d'.i = (d.i)*(b|^i)
+A22:  dom d' = len d' by AFINSQ_1:def 1
+        .= dom d by A20,AFINSQ_1:def 1;
+A23:  for i being Nat st i in dom d' holds d'.i = (d.i)*(b|^i)
       proof
         let i be Nat;
         reconsider j=i as Element of NAT by ORDINAL1:def 13;
@@ -494,1168 +480,1248 @@ A14:   i in NAT by ORDINAL1:def 13;
         then j in len d by A20,AFINSQ_1:def 1;
         hence d'.i = (d.i)*(b|^i) by A20;
       end;
-      A24: m<m+1 by NAT_1:13;
-      A25: m in m+1 by AFINSQ_1:1;
-      then g.m = f.m by FUNCT_1:72;
+A24:  m<m+1 by NAT_1:13;
+      g.m = f.m by AFINSQ_1:1,FUNCT_1:72;
       then f.(m+1)=g.m div b by A3;
-      then g.m div b = 0 by A16,A24;
-      then A26: g.m < b by A1,NAT_2:14;
-      A27: len(d) = m+1 by A19,AFINSQ_1:def 1;
+      then
+A25:  g.m div b = 0 by A16,A24;
+A26:  len(d) = m+1 by A19,AFINSQ_1:def 1;
       then consider s being Function of NAT,NAT such that
-      A28: s.0 = d'.0 &
-      (for i being Element of NAT st i+1 < len d' holds
+A27:  s.0 = d'.0 & (for i being Element of NAT st i+1 < len d' holds
       s.(i + 1) = addnat.(s.i,d'.(i + 1))) & addnat "**" d' = s.(len d'-1)
       by A20,STIRL2_1:def 3;
-
       defpred I[Element of NAT] means
       $1<len d' implies s.$1=n-f.($1+1)*b|^($1+1);
-
-      A29: 0 in m+1 by PRGCOR_2:1;
+A28:  0 in m+1 by PRGCOR_2:1;
       then d'.0=(d.0)*(b|^0) by A19,A22,A23
-      .= (g.0 mod b)*(b|^0) by A19,A29
-      .= (f.0 mod b)*(b|^0) by A29,FUNCT_1:72
-      .= (n mod b)*1 by A3,NEWTON:9
-      .= N-B*(N div B) by A1,NEWTON:77
-      .= n-(n div b)*b|^1 by NEWTON:10
-      .= n-f.(0+1)*b|^(0+1) by A3;
-      then A30: I[0] by A28;
-      A31:
-      now
+        .= (g.0 mod b)*(b|^0) by A19,A28
+        .= (f.0 mod b)*(b|^0) by A28,FUNCT_1:72
+        .= (n mod b)*1 by A3,NEWTON:9
+        .= N-B*(N div B) by A1,NEWTON:77
+        .= n-(n div b)*b|^1 by NEWTON:10
+        .= n-f.(0+1)*b|^(0+1) by A3;
+      then
+A29:  I[0] by A27;
+A30:  now
         let i be Element of NAT;
-        assume A32: I[i];
-         now
-          assume A33: i+1<len d';
+        assume
+A31:    I[i];
+        now
+          assume
+A32:      i+1<len d';
           then i+1 in len d' by PRGCOR_2:1;
-          then A34: i+1 in dom d' by AFINSQ_1:def 1;
-          thus s.(i+1)=addnat.(s.i,d'.(i + 1)) by A28,A33
-          .= n-f.(i+1)*b|^(i+1) +  d'.(i+1) by A32,A33,BINOP_2:def 23,NAT_1:13
-          .= n-f.(i+1)*b|^(i+1) + (d.(i+1)*(b|^(i+1))) by A23,A34
-          .= n-f.(i+1)*b|^(i+1) + ((g.(i+1) mod b)*(b|^(i+1))) by A19,A22,A34
-          .= n-f.(i+1)*b|^(i+1) + ((f.(i+1) mod b)*(b|^(i+1)))
-          by A19,A22,A34,FUNCT_1:72
-          .= n-f.(i+1)*b|^(i+1) + ((f.(i+1) - b*(f.(i+1) div B))*(b|^(i+1)))
+          then
+A33:      i+1 in dom d' by AFINSQ_1:def 1;
+          thus s.(i+1)=addnat.(s.i,d'.(i + 1)) by A27,A32
+            .= n-f.(i+1)*b|^(i+1) + d'.(i+1) by A31,A32,BINOP_2:def 23,NAT_1:13
+            .= n-f.(i+1)*b|^(i+1) + (d.(i+1)*(b|^(i+1))) by A23,A33
+            .= n-f.(i+1)*b|^(i+1) + ((g.(i+1) mod b)*(b|^(i+1))) by A19,A22,A33
+            .= n-f.(i+1)*b|^(i+1) + ((f.(i+1) mod b)*(b|^(i+1)))
+          by A19,A22,A33,FUNCT_1:72
+            .= n-f.(i+1)*b|^(i+1) + ((f.(i+1) - b*(f.(i+1) div B))*(b|^(i+1)))
           by A1,NEWTON:77
-          .= n-f.(i+1)*b|^(i+1) + ((f.(i+1) - b*(f.(i+1+1)))*(b|^(i+1))) by A3
-          .= n-f.(i+1)*b|^(i+1) + ((f.(i+1)*(b|^(i+1)) -
+
+.= n-f.(i+1)*b|^(i+1) + ((f.(i+1) - b*(f.(i+1+1)))*(b|^(i+1))) by A3
+            .= n-f.(i+1)*b|^(i+1) + ((f.(i+1)*(b|^(i+1)) -
           (f.(i+1+1))*(b*(b|^(i+1)))))
-          .= n-f.(i+1)*b|^(i+1) + ((f.(i+1)*(b|^(i+1)) -
+            .= n-f.(i+1)*b|^(i+1) + ((f.(i+1)*(b|^(i+1)) -
           (f.(i+1+1))*((b|^(i+1+1))))) by NEWTON:11
-          .= n-f.(i+1+1)*b|^(i+1+1);
+            .= n-f.(i+1+1)*b|^(i+1+1);
         end;
         hence I[i+1];
       end;
-      A35: for i being Element of NAT holds I[i] from NAT_1:sch 1(A30,A31);
-      reconsider ld=len d'-1 as Element of NAT by A20,A27;
-       ld<len d' by XREAL_1:46;
-      then s.(ld)= n-f.(m+1)*b|^(m+1) by A20,A27,A35
-      .=n by A9,A10;
-      then n=Sum d' by A28;
+A34:  for i being Element of NAT holds I[i] from NAT_1:sch 1(A29,A30);
+      reconsider ld=len d'-1 as Element of NAT by A20,A26;
+      ld<len d' by XREAL_1:46;
+      then s.(ld)= n-f.(m+1)*b|^(m+1) by A20,A26,A34
+        .=n by A9,A10;
+      then n=Sum d' by A27;
       hence value(d,b)=n by A22,A23,Def1;
-       d.(len(d)-1) = g.m mod b by A19,A25,A27 .= g.m by A26,NAT_D:24;
-      hence d.(len(d)-1) <> 0 by A11,A25,FUNCT_1:72;
+      d.(len(d)-1) = g.m mod b by A19,A26,AFINSQ_1:1
+        .= g.m by A1,A25,NAT_2:
+      14,NAT_D:24;
+      hence d.(len(d)-1) <> 0 by A11,AFINSQ_1:1,FUNCT_1:72;
       let i be Nat;
       assume i in dom d;
       then d.i=g.i mod b by A19;
       hence 0 <= d.i & d.i < b by A1,NAT_D:1;
     end;
     assume n=0;
-    reconsider d=<%0%> as XFinSequence of NAT; take d; thus thesis;
+    reconsider d=<%0%> as XFinSequence of NAT;
+    take d; thus thesis;
   end;
   uniqueness
   proof
     reconsider b1=b-1 as Element of NAT by A1,NAT_1:20;
     let d,e be XFinSequence of NAT;
-    thus n<>0 &
-    (value(d,b)=n & d.(len(d)-1) <> 0 &
+    thus n<>0 & (value(d,b)=n & d.(len(d)-1) <> 0 &
     for i being Nat st i in dom d holds 0 <= d.i & d.i < b) &
     (value(e,b)=n & e.(len(e)-1) <> 0 &
-    for i being Nat st i in dom e holds 0 <= e.i & e.i < b)
-    implies d=e
+    for i being Nat st i in dom e holds 0 <= e.i & e.i < b) implies d=e
     proof
-      assume n<>0; then A36: n>0;
-      assume A37: (value(d,b)=n & d.(len(d)-1) <> 0 &
+      assume n<>0;
+      then
+A35:  n>0;
+      assume
+A36:  (value(d,b)=n & d.(len(d)-1) <> 0 &
       for i being Nat st i in dom d holds 0 <= d.i & d.i < b);
-      assume A38: (value(e,b)=n & e.(len(e)-1) <> 0 &
+      assume
+A37:  (value(e,b)=n & e.(len(e)-1) <> 0 &
       for i being Nat st i in dom e holds 0 <= e.i & e.i < b);
       consider D being XFinSequence of NAT such that
-      A39: (dom D = dom d &
+A38:  (dom D = dom d &
       for i being Nat st i in dom D holds D.i = (d.i)*(b|^i)) &
-      n = Sum D by A37,Def1;
-
-      A40: len(d)-1 in dom d by A37,FUNCT_1:def 4;
+      n = Sum D by A36,Def1;
+A39:  len(d)-1 in dom d by A36,FUNCT_1:def 4;
       then reconsider k=len(d)-1 as Element of NAT;
-       d.k>=1 by A37,NAT_1:14;
-      then A41: 1*(b|^k)<=(d.k)*(b|^k) by NAT_1:4;
-       k in dom D by A37,A39,FUNCT_1:def 4;
-      then A42: len D > 0 by Lm1;
-
-      A43: b|^k>0 & b|^(k+1)>0 by A1,PREPOWER:13;
-       log(2,b)>log(2,1) by A1,POWER:65;
-      then A44: log(2,b)>0 by POWER:59;
-       D.k = (d.k)*(b|^k) by A39,A40;
-      then (d.k)*(b|^k) <= n by A39,A40,A42,STIRL2_1:52;
-      then b|^k <= n by A41,XXREAL_0:2;
-      then log(2,b|^k) <= log(2,n) by A43,PRE_FF:12;
+      d.k>=1 by A36,NAT_1:14;
+      then
+A40:  1*(b|^k)<=(d.k)*(b|^k) by NAT_1:4;
+      k in dom D by A36,A38,FUNCT_1:def 4;
+      then
+A41:  len D > 0 by Lm1;
+A42:  b|^k>0 & b|^(k+1)>0 by A1,PREPOWER:13;
+      log(2,b)>log(2,1) by A1,POWER:65;
+      then
+A43:  log(2,b)>0 by POWER:59;
+      D.k = (d.k)*(b|^k) by A38,A39;
+      then (d.k)*(b|^k) <= n by A38,A39,A41,STIRL2_1:52;
+      then b|^k <= n by A40,XXREAL_0:2;
+      then log(2,b|^k) <= log(2,n) by A42,PRE_FF:12;
       then log(2,b to_power k) <= log(2,n) by A1,POWER:46;
       then k*log(2,b) <= log(2,n) by A1,POWER:63;
-      then k*log(2,b)/log(2,b) <= log(2,n)/log(2,b) by A44,XREAL_1:74;
-      then A45: k <= log(2,n)/log(2,b) by A44,XCMPLX_1:90;
-
+      then k*log(2,b)/log(2,b) <= log(2,n)/log(2,b) by A43,XREAL_1:74;
+      then
+A44:  k <= log(2,n)/log(2,b) by A43,XCMPLX_1:90;
       consider E being XFinSequence of NAT such that
-      A46: (dom E = dom e &
+A45:  (dom E = dom e &
       for i being Nat st i in dom E holds E.i = (e.i)*(b|^i)) &
-      n = Sum E by A38,Def1;
-
+      n = Sum E by A37,Def1;
       reconsider g=((b1)(#)(b GeoSeq))|len d as XFinSequence of NAT by Th3;
-       dom ((b-1)(#)(b GeoSeq)) = NAT by FUNCT_2:def 1;
+      dom ((b-1)(#)(b GeoSeq)) = NAT by FUNCT_2:def 1;
       then len d c= dom ((b-1)(#)(b GeoSeq)) by ORDINAL1:def 2;
-      then A47: dom g = len d by RELAT_1:91;
-      A48: 1-b <> 0 by A1;
-       g=((b-1)(#)(b GeoSeq))|(k+1);
-      then A49: Sum g = Partial_Sums((b-1)(#)(b GeoSeq)).k by Th2
-      .= ((b-1)(#)Partial_Sums(b GeoSeq)).k by SERIES_1:12
-      .= (b-1)*(Partial_Sums(b GeoSeq).k) by SEQ_1:13
-      .= (b-1)*((1 - (b to_power (k+1)))/(1-b)) by A1,SERIES_1:26
-      .= (b-1)*((1 - (b |^ (k+1)))/(1-b)) by A1,POWER:46
-      .= -((1-b)*((1 - (b |^ (k+1)))/(1-b)))
-      .= -(1 - (b |^ (k+1))) by A48,XCMPLX_1:88
-      .= b|^(k+1)-1;
-      A50: len D >= 0+1 by A42,NAT_1:13;
-      A51: len D = dom D by AFINSQ_1:def 1
-      .= len d by A39,AFINSQ_1:def 1
-      .= len g by A47,AFINSQ_1:def 1;
-       for i being Nat st i in dom D holds D.i <= g.i
+      then
+A46:  dom g = len d by RELAT_1:91;
+A47:  1-b <> 0 by A1;
+      g=((b-1)(#)(b GeoSeq))|(k+1);
+      then
+A48:  Sum g = Partial_Sums((b-1)(#)(b GeoSeq)).k by Th2
+        .= ((b-1)(#)Partial_Sums(b GeoSeq)).k by SERIES_1:12
+        .= (b-1)*(Partial_Sums(b GeoSeq).k) by SEQ_1:13
+        .= (b-1)*((1 - (b to_power (k+1)))/(1-b)) by A1,SERIES_1:26
+        .= (b-1)*((1 - (b |^ (k+1)))/(1-b)) by A1,POWER:46
+        .= -((1-b)*((1 - (b |^ (k+1)))/(1-b)))
+        .= -(1 - (b |^ (k+1))) by A47,XCMPLX_1:88
+        .= b|^(k+1)-1;
+A49:  len D >= 0+1 by A41,NAT_1:13;
+A50:  len D = dom D by AFINSQ_1:def 1
+        .= len d by A38,AFINSQ_1:def 1
+        .= len g by A46,AFINSQ_1:def 1;
+      for i being Nat st i in dom D holds D.i <= g.i
       proof
         let i be Nat;
         reconsider I=i as Element of NAT by ORDINAL1:def 13;
-        assume A52: i in dom D;
-        then i in len d by A39,AFINSQ_1:def 1;
-        then A53: g.I = ((b-1)(#)(b GeoSeq)).I by A47,FUNCT_1:68
-        .= (b-1)*((b GeoSeq).I) by SEQ_1:13
-        .= b1*(b|^I) by PREPOWER:def 1;
-         d.i < b1+1 by A37,A39,A52;
-        then A54: d.i <= b1 by NAT_1:13;
-         D.i = (d.i)*(b|^i) by A39,A52;
-        hence D.i <= g.i by A53,A54,XREAL_1:66;
+        assume
+A51:    i in dom D;
+        then i in len d by A38,AFINSQ_1:def 1;
+        then
+A52:    g.I = ((b-1)(#)(b GeoSeq)).I by A46,FUNCT_1:68
+          .= (b-1)*((b GeoSeq).I) by SEQ_1:13
+          .= b1*(b|^I) by PREPOWER:def 1;
+        d.i < b1+1 by A36,A38,A51;
+        then
+A53:    d.i <= b1 by NAT_1:13;
+        D.i = (d.i)*(b|^i) by A38,A51;
+        hence D.i <= g.i by A52,A53,XREAL_1:66;
       end;
-      then n <= (b|^(k+1))-1 by A39,A49,A50,A51,Th4;
+      then n <= (b|^(k+1))-1 by A38,A48,A49,A50,Th4;
       then n < b|^(k+1)-1+1 by XREAL_1:41;
-      then log(2,n) < log(2,b|^(k+1)) by A36,POWER:65;
+      then log(2,n) < log(2,b|^(k+1)) by A35,POWER:65;
       then log(2,n) < log(2,b to_power (k+1)) by A1,POWER:46;
       then log(2,n) < (k+1)*log(2,b) by A1,POWER:63;
-      then log(2,n)/log(2,b) < (k+1)*log(2,b)/log(2,b) by A44,XREAL_1:76;
-      then A55: log(2,n)/log(2,b) < k+1 by A44,XCMPLX_1:90;
-
-      A56: len(e)-1 in dom e by A38,FUNCT_1:def 4;
+      then log(2,n)/log(2,b) < (k+1)*log(2,b)/log(2,b) by A43,XREAL_1:76;
+      then
+A54:  log(2,n)/log(2,b) < k+1 by A43,XCMPLX_1:90;
+A55:  len(e)-1 in dom e by A37,FUNCT_1:def 4;
       then reconsider l=len(e)-1 as Element of NAT;
-       e.l>=1 by A38,NAT_1:14;
-      then A57: 1*(b|^l)<=(e.l)*(b|^l) by NAT_1:4;
-       l in dom E by A38,A46,FUNCT_1:def 4;
-      then A58: len E > 0 by Lm1;
-
-      A59: b|^l>0 & b|^(l+1)>0 by A1,PREPOWER:13;
-       log(2,b)>log(2,1) by A1,POWER:65;
-      then A60: log(2,b)>0 by POWER:59;
-       E.l = (e.l)*(b|^l) by A46,A56;
-      then (e.l)*(b|^l) <= n by A46,A56,A58,STIRL2_1:52;
-      then b|^l <= n by A57,XXREAL_0:2;
-      then log(2,b|^l) <= log(2,n) by A59,PRE_FF:12;
+      e.l>=1 by A37,NAT_1:14;
+      then
+A56:  1*(b|^l)<=(e.l)*(b|^l) by NAT_1:4;
+      l in dom E by A37,A45,FUNCT_1:def 4;
+      then
+A57:  len E > 0 by Lm1;
+A58:  b|^l>0 & b|^(l+1)>0 by A1,PREPOWER:13;
+      log(2,b)>log(2,1) by A1,POWER:65;
+      then
+A59:  log(2,b)>0 by POWER:59;
+      E.l = (e.l)*(b|^l) by A45,A55;
+      then (e.l)*(b|^l) <= n by A45,A55,A57,STIRL2_1:52;
+      then b|^l <= n by A56,XXREAL_0:2;
+      then log(2,b|^l) <= log(2,n) by A58,PRE_FF:12;
       then log(2,b to_power l) <= log(2,n) by A1,POWER:46;
       then l*log(2,b) <= log(2,n) by A1,POWER:63;
-      then l*log(2,b)/log(2,b) <= log(2,n)/log(2,b) by A60,XREAL_1:74;
-      then A61: l <= log(2,n)/log(2,b) by A60,XCMPLX_1:90;
-
+      then l*log(2,b)/log(2,b) <= log(2,n)/log(2,b) by A59,XREAL_1:74;
+      then
+A60:  l <= log(2,n)/log(2,b) by A59,XCMPLX_1:90;
       reconsider g=((b1)(#)(b GeoSeq))|len e as XFinSequence of NAT by Th3;
-       dom ((b-1)(#)(b GeoSeq)) = NAT by FUNCT_2:def 1;
+      dom ((b-1)(#)(b GeoSeq)) = NAT by FUNCT_2:def 1;
       then len e c= dom ((b-1)(#)(b GeoSeq)) by ORDINAL1:def 2;
-      then A62: dom g = len e by RELAT_1:91;
-      A63: 1-b <> 0 by A1;
-       g=((b-1)(#)(b GeoSeq))|(l+1);
-      then A64: Sum g = Partial_Sums((b-1)(#)(b GeoSeq)).l by Th2
-      .= ((b-1)(#)Partial_Sums(b GeoSeq)).l by SERIES_1:12
-      .= (b-1)*(Partial_Sums(b GeoSeq).l) by SEQ_1:13
-      .= (b-1)*((1 - (b to_power (l+1)))/(1-b)) by A1,SERIES_1:26
-      .= (b-1)*((1 - (b |^ (l+1)))/(1-b)) by A1,POWER:46
-      .= -((1-b)*((1 - (b |^ (l+1)))/(1-b)))
-      .= -(1 - (b |^ (l+1))) by A63,XCMPLX_1:88
-      .= b|^(l+1)-1;
-      A65: len E >= 0+1 by A58,NAT_1:13;
-      A66: len E = dom E by AFINSQ_1:def 1
-      .= len e by A46,AFINSQ_1:def 1
-      .= len g by A62,AFINSQ_1:def 1;
-       for i being Nat st i in dom E holds E.i <= g.i
+      then
+A61:  dom g = len e by RELAT_1:91;
+A62:  1-b <> 0 by A1;
+      g=((b-1)(#)(b GeoSeq))|(l+1);
+      then
+A63:  Sum g = Partial_Sums((b-1)(#)(b GeoSeq)).l by Th2
+        .= ((b-1)(#)Partial_Sums(b GeoSeq)).l by SERIES_1:12
+        .= (b-1)*(Partial_Sums(b GeoSeq).l) by SEQ_1:13
+        .= (b-1)*((1 - (b to_power (l+1)))/(1-b)) by A1,SERIES_1:26
+        .= (b-1)*((1 - (b |^ (l+1)))/(1-b)) by A1,POWER:46
+        .= -((1-b)*((1 - (b |^ (l+1)))/(1-b)))
+        .= -(1 - (b |^ (l+1))) by A62,XCMPLX_1:88
+        .= b|^(l+1)-1;
+A64:  len E >= 0+1 by A57,NAT_1:13;
+A65:  len E = dom E by AFINSQ_1:def 1
+        .= len e by A45,AFINSQ_1:def 1
+        .= len g by A61,AFINSQ_1:def 1;
+      for i being Nat st i in dom E holds E.i <= g.i
       proof
         let i be Nat;
         reconsider I=i as Element of NAT by ORDINAL1:def 13;
-        assume A67: i in dom E;
-        then i in len e by A46,AFINSQ_1:def 1;
-        then A68: g.I = ((b-1)(#)(b GeoSeq)).I by A62,FUNCT_1:68
-        .= (b-1)*((b GeoSeq).I) by SEQ_1:13
-        .= b1*(b|^I) by PREPOWER:def 1;
-         e.i < b1+1 by A38,A46,A67;
-        then A69: e.i <= b1 by NAT_1:13;
-         E.i = (e.i)*(b|^i) by A46,A67;
-        hence E.i <= g.i by A68,A69,XREAL_1:66;
+        assume
+A66:    i in dom E;
+        then i in len e by A45,AFINSQ_1:def 1;
+        then
+A67:    g.I = ((b-1)(#)(b GeoSeq)).I by A61,FUNCT_1:68
+          .= (b-1)*((b GeoSeq).I) by SEQ_1:13
+          .= b1*(b|^I) by PREPOWER:def 1;
+        e.i < b1+1 by A37,A45,A66;
+        then
+A68:    e.i <= b1 by NAT_1:13;
+        E.i = (e.i)*(b|^i) by A45,A66;
+        hence E.i <= g.i by A67,A68,XREAL_1:66;
       end;
-      then n <= (b|^(l+1))-1 by A46,A64,A65,A66,Th4;
+      then n <= (b|^(l+1))-1 by A45,A63,A64,A65,Th4;
       then n < b|^(l+1)-1+1 by XREAL_1:41;
-      then log(2,n) < log(2,b|^(l+1)) by A36,POWER:65;
+      then log(2,n) < log(2,b|^(l+1)) by A35,POWER:65;
       then log(2,n) < log(2,b to_power (l+1)) by A1,POWER:46;
       then log(2,n) < (l+1)*log(2,b) by A1,POWER:63;
-      then log(2,n)/log(2,b) < (l+1)*log(2,b)/log(2,b) by A60,XREAL_1:76;
-      then log(2,n)/log(2,b) < l+1 by A60,XCMPLX_1:90;
-
-      then k<l+1 by A45,XXREAL_0:2;
-      then A70: k<=l by NAT_1:13;
-       l<k+1 by A55,A61,XXREAL_0:2;
+      then log(2,n)/log(2,b) < (l+1)*log(2,b)/log(2,b) by A59,XREAL_1:76;
+      then log(2,n)/log(2,b) < l+1 by A59,XCMPLX_1:90;
+      then k<l+1 by A44,XXREAL_0:2;
+      then
+A69:  k<=l by NAT_1:13;
+      l<k+1 by A54,A60,XXREAL_0:2;
       then l<=k by NAT_1:13;
-      then A71: k=l by A70,XXREAL_0:1;
-      A72: dom d = len d by AFINSQ_1:def 1 .= dom e by A71,AFINSQ_1:def 1;
-       now
+      then
+A70:  k=l by A69,XXREAL_0:1;
+A71:  dom d = len d by AFINSQ_1:def 1
+        .= dom e by A70,AFINSQ_1:def 1;
+      now
         let a be set;
-        assume A73: a in dom d;
+        assume
+A72:    a in dom d;
         then reconsider o=a as Element of NAT;
-         a in len e by A71,A73,AFINSQ_1:def 1;
-        then A74: a in dom e by AFINSQ_1:def 1;
-        A75: o in len d by A73,AFINSQ_1:def 1;
-        then A76: o < len d by PRGCOR_2:1;
+        a in len e by A70,A72,AFINSQ_1:def 1;
+        then
+A73:    a in dom e by AFINSQ_1:def 1;
+A74:    o in len d by A72,AFINSQ_1:def 1;
+        then
+A75:    o < len d by PRGCOR_2:1;
         then reconsider oo=len d - o as Element of NAT by NAT_1:21;
-         o<k+1 by A75,PRGCOR_2:1;
-        then A77: o<=k by NAT_1:13;
-        per cases by A77,XXREAL_0:1;
-        suppose A78: o = 0 & o = k;
+        o<k+1 by A74,PRGCOR_2:1;
+        then
+A76:    o<=k by NAT_1:13;
+        per cases by A76,XXREAL_0:1;
+        suppose
+A77:      o = 0 & o = k;
           then dom d = 1 by AFINSQ_1:def 1;
-          then len D = 1 by A39,AFINSQ_1:def 1;
-          then A79: D = <%D.0%> by AFINSQ_1:38
-          .= <%d.0*b|^0%> by A39,A73,A78
-          .= <%d.0*1%> by NEWTON:9;
-           dom e = 1 by A71,A78,AFINSQ_1:def 1;
-          then len E = 1 by A46,AFINSQ_1:def 1;
-          then A80: E = <%E.0%> by AFINSQ_1:38
-          .= <%e.0*b|^0%> by A46,A74,A78
-          .= <%e.0*1%> by NEWTON:9;
-          thus d.a = n by A39,A78,A79,STIRL2_1:44
-          .= e.a by A46,A78,A80,STIRL2_1:44;
+          then len D = 1 by A38,AFINSQ_1:def 1;
+          then
+A78:      D = <%D.0%> by AFINSQ_1:38
+            .= <%d.0*b|^0%> by A38,A72,A77
+            .= <%d.0*1%> by NEWTON:9;
+          dom e = 1 by A70,A77,AFINSQ_1:def 1;
+          then len E = 1 by A45,AFINSQ_1:def 1;
+          then
+A79:      E = <%E.0%> by AFINSQ_1:38
+            .= <%e.0*b|^0%> by A45,A73,A77
+            .= <%e.0*1%> by NEWTON:9;
+          thus d.a = n by A38,A77,A78,STIRL2_1:44
+            .= e.a by A45,A77,A79,STIRL2_1:44;
         end;
-        suppose A81: o = 0 & o < k;
-
+        suppose
+A80:      o = 0 & o < k;
           set d'=D;
-
-          A82: dom d'= oo by A39,A81,AFINSQ_1:def 1;
+A81:      dom d'= oo by A38,A80,AFINSQ_1:def 1;
           set do=<%>NAT;
-
-          A83: len d'=oo by A82,AFINSQ_1:def 1;
-          A84: len do=o by A81,AFINSQ_1:18;
-          then A85: dom D = len do + len d' by A39,A83,AFINSQ_1:def 1;
-          A86: for x being Element of NAT st x in dom do holds D.x=do.x;
-           for x being Element of NAT st x in dom d' holds D.(len do+x)=d'.x
-          by A81,A84;
-          then D=do^d' by A85,A86,AFINSQ_1:def 4;
-          then A87: n = Sum do + Sum d' by A39,Th1;
+A82:      len d'=oo by A81,AFINSQ_1:def 1;
+A83:      len do=o by A80,AFINSQ_1:18;
+          then
+A84:      dom D = len do + len d' by A38,A82,AFINSQ_1:def 1;
+A85:      for x being Element of NAT st x in dom do holds D.x=do.x;
+          for x being Element of NAT st x in dom d' holds D.(len do+x)=d'.x
+          by A80,A83;
+          then D=do^d' by A84,A85,AFINSQ_1:def 4;
+          then
+A86:      n = Sum do + Sum d' by A38,Th1;
           reconsider bo=b|^o as Element of NAT by ORDINAL1:def 13;
-          A88: bo <> 0 by A1,PREPOWER:12;
-
-           Sum do = 0 by A81,A84,STIRL2_1:53;
-          then A89: Sum do div (b|^o) = 0 by NAT_2:4;
-           now
+A87:      bo <> 0 by A1,PREPOWER:12;
+          Sum do = 0 by A80,A83,STIRL2_1:53;
+          then
+A88:      Sum do div (b|^o) = 0 by NAT_2:4;
+          now
             let k be Nat;
             reconsider K=k as Element of NAT by ORDINAL1:def 13;
             assume k in dom d';
             then k in len d' by AFINSQ_1:def 1;
             then k < len d' by PRGCOR_2:1;
-            then o+k < dom D by A81,AFINSQ_1:def 1;
+            then o+k < dom D by A80,AFINSQ_1:def 1;
             then o+k in dom D by PRGCOR_2:1;
-            then d'.K = d.(o+k)*b|^(o+k) by A39,A81
-            .= d.(o+k)*(b|^o*b|^k) by NEWTON:13
-            .= (d.(o+k)*(b|^k))*(b|^o);
+            then d'.K = d.(o+k)*b|^(o+k) by A38,A80
+              .= d.(o+k)*(b|^o*b|^k) by NEWTON:13
+              .= (d.(o+k)*(b|^k))*(b|^o);
             hence b|^o divides d'.k by NAT_D:def 3;
           end;
-          then A90: b|^o divides Sum d' by Th5;
-          then Sum d' mod (b|^o) = 0 by A88,PEPIN:6;
+          then
+A89:      b|^o divides Sum d' by Th5;
+          then Sum d' mod (b|^o) = 0 by A87,PEPIN:6;
           then n div (b|^o) = (Sum d' div (b|^o)) + (Sum do div (b|^o))
-          by A87,NAT_D:19;
-          then A91: (n div (b|^o)) * b|^o = Sum d' by A89,A90,NAT_D:3;
-
+          by A86,NAT_D:19;
+          then
+A90:      (n div (b|^o)) * b|^o = Sum d' by A88,A89,NAT_D:3;
           reconsider o1=o+1 as Element of NAT;
-           o1 <= k & k < len d by A81,NAT_1:13,XREAL_1:149;
-          then A92: o1 < len d by XXREAL_0:2;
-          then reconsider oo1=len d - o1 as Element of NAT by NAT_1:21;
-
+          o1 <= k & k < len d by A80,NAT_1:13,XREAL_1:149;
+          then
+A91:      o1 < len d by XXREAL_0:2;
+          reconsider oo1=len d - o1 as Element of NAT by A80;
           defpred P[Element of NAT,set] means $2=D.($1+o1);
-
-          A93: for u being Element of NAT st u in oo1
+A92:      for u being Element of NAT st u in oo1
           ex x be Element of NAT st P[u,x];
-
           consider d'1 being XFinSequence of NAT such that
-          A94: dom d'1=oo1 & for x being Element of NAT st x in oo1 holds
-          P[x,d'1.x] from STIRL2_1:sch 6(A93);
+A93:      dom d'1=oo1 & for x being Element of NAT st x in oo1 holds
+          P[x,d'1.x] from STIRL2_1:sch 6(A92);
           reconsider do1=D|o1 as XFinSequence of NAT by AFINSQ_1:16;
-
-          A95: len d'1=oo1 by A94,AFINSQ_1:def 1;
-          A96: len d=dom D by A39,AFINSQ_1:def 1 .= len D by AFINSQ_1:def 1;
-          then A97: len do1=o1 by A92,AFINSQ_1:14;
-          then A98: dom D = len do1 + len d'1 by A39,A95,AFINSQ_1:def 1;
-          A99: for x being Element of NAT st x in dom do1 holds
+A94:      len d'1=oo1 by A93,AFINSQ_1:def 1;
+A95:      len d=dom D by A38,AFINSQ_1:def 1
+            .= len D by AFINSQ_1:def 1;
+          then
+A96:      len do1=o1 by A91,AFINSQ_1:14;
+          then
+A97:      dom D = len do1 + len d'1 by A38,A94,AFINSQ_1:def 1;
+A98:      for x being Element of NAT st x in dom do1 holds
           D.x=do1.x by FUNCT_1:70;
-           for x being Element of NAT st x in dom d'1 holds
-          D.(len do1+x)=d'1.x
-          by A94,A97;
-          then D=do1^d'1 by A98,A99,AFINSQ_1:def 4;
-          then A100: n = Sum do1 + Sum d'1 by A39,Th1;
+          for x being Element of NAT st x in dom d'1 holds D.(len do1+x)=d'1.x
+          by A93,A96;
+          then D=do1^d'1 by A97,A98,AFINSQ_1:def 4;
+          then
+A99:      n = Sum do1 + Sum d'1 by A38,Th1;
           reconsider bo1=b|^o1 as Element of NAT by ORDINAL1:def 13;
-          A101: bo1 <> 0 by A1,PREPOWER:12;
-
+A100:     bo1 <> 0 by A1,PREPOWER:12;
           consider ok1 being Nat such that
-          A102: ok1+1=o1;
+A101:     ok1+1=o1;
           reconsider ok1 as Element of NAT by ORDINAL1:def 13;
           reconsider g1=((b1)(#)(b GeoSeq))|(ok1+1) as XFinSequence of NAT
           by Th3;
-           dom ((b-1)(#)(b GeoSeq)) = NAT by FUNCT_2:def 1;
+          dom ((b-1)(#)(b GeoSeq)) = NAT by FUNCT_2:def 1;
           then o1 c= dom ((b-1)(#)(b GeoSeq)) by ORDINAL1:def 2;
-          then A103: dom g1 = o1 by A102,RELAT_1:91;
-          A104: 1-b <> 0 by A1;
-          A105: Sum g1 = Partial_Sums((b-1)(#)(b GeoSeq)).ok1 by Th2
-          .= ((b-1)(#)Partial_Sums(b GeoSeq)).ok1 by SERIES_1:12
-          .= (b-1)*(Partial_Sums(b GeoSeq).ok1) by SEQ_1:13
-          .= (b-1)*((1 - (b to_power (ok1+1)))/(1-b)) by A1,SERIES_1:26
-          .= (b-1)*((1 - (b |^ (ok1+1)))/(1-b)) by A1,POWER:46
-          .= -((1-b)*((1 - (b |^ o1))/(1-b))) by A102
-          .= -(1 - (b |^ o1)) by A104,XCMPLX_1:88
-          .= b|^o1-1;
-          A106: len do1>=0+1 by A97,NAT_1:13;
-          A107: len do1 = len g1 by A97,A103,AFINSQ_1:def 1;
-           for i being Nat st i in dom do1 holds do1.i <= g1.i
+          then
+A102:     dom g1 = o1 by A101,RELAT_1:91;
+A103:     1-b <> 0 by A1;
+A104:     Sum g1 = Partial_Sums((b-1)(#)(b GeoSeq)).ok1 by Th2
+            .= ((b-1)(#)Partial_Sums(b GeoSeq)).ok1 by SERIES_1:12
+            .= (b-1)*(Partial_Sums(b GeoSeq).ok1) by SEQ_1:13
+            .= (b-1)*((1 - (b to_power (ok1+1)))/(1-b)) by A1,SERIES_1:26
+            .= (b-1)*((1 - (b |^ (ok1+1)))/(1-b)) by A1,POWER:46
+            .= -((1-b)*((1 - (b |^ o1))/(1-b))) by A101
+            .= -(1 - (b |^ o1)) by A103,XCMPLX_1:88
+            .= b|^o1-1;
+A105:     len do1>=0+1 by A96,NAT_1:13;
+A106:     len do1 = len g1 by A96,A102,AFINSQ_1:def 1;
+          for i being Nat st i in dom do1 holds do1.i <= g1.i
           proof
             let i be Nat;
             reconsider I=i as Element of NAT by ORDINAL1:def 13;
-            assume A108: i in dom do1;
-            then i in o1 by A92,A96,AFINSQ_1:14;
-            then A109: g1.I = ((b-1)(#)(b GeoSeq)).I by A103,FUNCT_1:68
-            .= (b-1)*((b GeoSeq).I) by SEQ_1:13
-            .= b1*(b|^I) by PREPOWER:def 1;
-            A110: dom do1 c= dom D by RELAT_1:89;
-            then d.i < b1+1 by A37,A39,A108;
-            then A111: d.i <= b1 by NAT_1:13;
-             do1.i = D.i by A108,FUNCT_1:70
-            .= (d.i)*(b|^i) by A39,A108,A110;
-            hence do1.i <= g1.i by A109,A111,XREAL_1:66;
+            assume
+A107:       i in dom do1;
+            then i in o1 by A91,A95,AFINSQ_1:14;
+            then
+A108:       g1.I = ((b-1)(#)(b GeoSeq)).I by A102,FUNCT_1:68
+              .= (b-1)*((b GeoSeq).I) by SEQ_1:13
+              .= b1*(b|^I) by PREPOWER:def 1;
+A109:       dom do1 c= dom D by RELAT_1:89;
+            then d.i < b1+1 by A36,A38,A107;
+            then
+A110:       d.i <= b1 by NAT_1:13;
+            do1.i = D.i by A107,FUNCT_1:70
+              .= (d.i)*(b|^i) by A38,A107,A109;
+            hence do1.i <= g1.i by A108,A110,XREAL_1:66;
           end;
-          then Sum do1 <= (b|^o1)-1 by A105,A106,A107,Th4;
+          then Sum do1 <= (b|^o1)-1 by A104,A105,A106,Th4;
           then Sum do1 < b|^o1 -1 + 1 by XREAL_1:147;
-          then A112: Sum do1 div (b|^o1) = 0 by NAT_D:27;
-           now
+          then
+A111:     Sum do1 div (b|^o1) = 0 by NAT_D:27;
+          now
             let k be Nat;
             reconsider K=k as Element of NAT by ORDINAL1:def 13;
-            assume A113: k in dom d'1;
+            assume
+A112:       k in dom d'1;
             then k in len d'1 by AFINSQ_1:def 1;
             then k < len d'1 by PRGCOR_2:1;
-            then o1+k < dom D by A97,A98,XREAL_1:10;
+            then o1+k < dom D by A96,A97,XREAL_1:10;
             then o1+k in dom D by PRGCOR_2:1;
-            then D.(o1+k) = d.(o1+k)*b|^(o1+k) by A39;
-            then d'1.K = d.(o1+k)*b|^(o1+k) by A94,A113
-            .= d.(o1+k)*(b|^o1*b|^k) by NEWTON:13
-            .= (d.(o1+k)*(b|^k))*(b|^o1);
+            then D.(o1+k) = d.(o1+k)*b|^(o1+k) by A38;
+            then d'1.K = d.(o1+k)*b|^(o1+k) by A93,A112
+              .= d.(o1+k)*(b|^o1*b|^k) by NEWTON:13
+              .= (d.(o1+k)*(b|^k))*(b|^o1);
             hence b|^o1 divides d'1.k by NAT_D:def 3;
           end;
-          then A114: b|^o1 divides Sum d'1 by Th5;
-          then Sum d'1 mod (b|^o1) = 0 by A101,PEPIN:6;
+          then
+A113:     b|^o1 divides Sum d'1 by Th5;
+          then Sum d'1 mod (b|^o1) = 0 by A100,PEPIN:6;
           then n div (b|^o1) = (Sum d'1 div (b|^o1)) + (Sum do1 div (b|^o1))
-          by A100,NAT_D:19;
-          then A115: (n div (b|^o1)) * b|^o1 = Sum d'1 by A112,A114,NAT_D:3;
-          A116: dom d'= 1 + dom d'1 by A39,A81,A94,AFINSQ_1:def 1
-          .= 1 + len d'1 by AFINSQ_1:def 1
-          .= len <%D.o%> + len d'1 by AFINSQ_1:38;
-          A117:
-          now
+          by A99,NAT_D:19;
+          then
+A114:     (n div (b|^o1)) * b|^o1 = Sum d'1 by A111,A113,NAT_D:3;
+A115:     dom d'= 1 + dom d'1 by A38,A80,A93,AFINSQ_1:def 1
+            .= 1 + len d'1 by AFINSQ_1:def 1
+            .= len <%D.o%> + len d'1 by AFINSQ_1:38;
+A116:     now
             let k be Element of NAT;
             assume k in dom <%D.o%>;
             then k in 1 by AFINSQ_1:36;
             then k < 1 by PRGCOR_2:1;
             then k=0 by NAT_1:14;
-            hence d'.k = <%D.o%>.k by A81,AFINSQ_1:def 5;
+            hence d'.k = <%D.o%>.k by A80,AFINSQ_1:def 5;
           end;
-           now
+          now
             let k be Element of NAT;
-            assume A118: k in dom d'1;
-            thus d'.(len <%D.o%> + k) = D.(len do1 + k)
-            by A81,A97,AFINSQ_1:37
-            .= d'1.k by A94,A97,A118;
+            assume
+A117:       k in dom d'1;
+            thus d'.(len <%D.o%> + k) = D.(len do1 + k) by A80,A96,AFINSQ_1:37
+              .= d'1.k by A93,A96,A117;
           end;
-          then d'=<%D.o%>^d'1 by A116,A117,AFINSQ_1:def 4;
+          then d'=<%D.o%>^d'1 by A115,A116,AFINSQ_1:def 4;
           then Sum d' = Sum <%D.o%> + Sum d'1 by Th1;
           then D.o = (n div (b|^o)) * b|^o - (n div (b|^o1)) * b|^o1
-          by A91,A115,STIRL2_1:44;
+          by A90,A114,STIRL2_1:44;
           then d.o*b|^o = (n div (b|^o)) * b|^o - (n div (b|^o1)) * b|^o1
-          by A39,A73;
+          by A38,A72;
           then d.o*b|^o = (n div (b|^o)) * b|^o - (n div (b|^o1)) * (b|^o*b|^1
-)
-          by NEWTON:13;
+          ) by NEWTON:13;
           then d.o*b|^o = b|^o*((n div (b|^o)) - (n div (b|^o1)) * b|^1);
           then (b|^o*d.o)/b|^o = (b|^o*((n div (b|^o)) - (n div (b|^o1)) * b))
-/b|^o
-          by NEWTON:10;
-          then A119: d.o = (b|^o*((n div (b|^o)) - (n div (b|^o1)) * b))/b|^o
-          by A88,XCMPLX_1:90;
-
+          /b|^o by NEWTON:10;
+          then
+A118:     d.o = (b|^o*((n div (b|^o)) - (n div (b|^o1)) * b))/b |^o
+          by A87,XCMPLX_1:90;
           set d'=E;
-
-          A120: dom d'= oo by A46,A71,A81,AFINSQ_1:def 1;
+A119:     dom d'= oo by A45,A70,A80,AFINSQ_1:def 1;
           set do=<%>NAT;
-
-          A121: len d'=oo by A120,AFINSQ_1:def 1;
-          A122: len do=o by A81,AFINSQ_1:18;
-          then A123: dom E = len do + len d' by A46,A71,A121,AFINSQ_1:def 1;
-          A124: for x being Element of NAT st x in dom do holds E.x=do.x;
-           for x being Element of NAT st x in dom d' holds E.(len do+x)=d'.x
-          by A81,A122;
-          then E=do^d' by A123,A124,AFINSQ_1:def 4;
-          then A125: n = Sum do + Sum d' by A46,Th1;
+A120:     len d'=oo by A119,AFINSQ_1:def 1;
+A121:     len do=o by A80,AFINSQ_1:18;
+          then
+A122:     dom E = len do + len d' by A45,A70,A120,AFINSQ_1:def 1;
+A123:     for x being Element of NAT st x in dom do holds E.x=do.x;
+          for x being Element of NAT st x in dom d' holds E.(len do+x)=d'.x
+          by A80,A121;
+          then E=do^d' by A122,A123,AFINSQ_1:def 4;
+          then
+A124:     n = Sum do + Sum d' by A45,Th1;
           reconsider bo=b|^o as Element of NAT by ORDINAL1:def 13;
-          A126: bo <> 0 by A1,PREPOWER:12;
-
-           Sum do = 0 by A81,A122,STIRL2_1:53;
-          then A127: Sum do div (b|^o) = 0 by NAT_2:4;
-           now
+A125:     bo <> 0 by A1,PREPOWER:12;
+          Sum do = 0 by A80,A121,STIRL2_1:53;
+          then
+A126:     Sum do div (b|^o) = 0 by NAT_2:4;
+          now
             let k be Nat;
             reconsider K=k as Element of NAT by ORDINAL1:def 13;
             assume k in dom d';
             then k in len d' by AFINSQ_1:def 1;
             then k < len d' by PRGCOR_2:1;
-            then o+k < dom E by A81,AFINSQ_1:def 1;
+            then o+k < dom E by A80,AFINSQ_1:def 1;
             then o+k in dom E by PRGCOR_2:1;
-            then d'.K = e.(o+k)*b|^(o+k) by A46,A81
-            .= e.(o+k)*(b|^o*b|^k) by NEWTON:13
-            .= (e.(o+k)*(b|^k))*(b|^o);
+            then d'.K = e.(o+k)*b|^(o+k) by A45,A80
+              .= e.(o+k)*(b|^o*b|^k) by NEWTON:13
+              .= (e.(o+k)*(b|^k))*(b|^o);
             hence b|^o divides d'.k by NAT_D:def 3;
           end;
-          then A128: b|^o divides Sum d' by Th5;
-          then Sum d' mod (b|^o) = 0 by A126,PEPIN:6;
+          then
+A127:     b|^o divides Sum d' by Th5;
+          then Sum d' mod (b|^o) = 0 by A125,PEPIN:6;
           then n div (b|^o) = (Sum d' div (b|^o)) + (Sum do div (b|^o))
-          by A125,NAT_D:19;
-          then A129: (n div (b|^o)) * b|^o = Sum d' by A127,A128,NAT_D:3;
-
+          by A124,NAT_D:19;
+          then
+A128:     (n div (b|^o)) * b|^o = Sum d' by A126,A127,NAT_D:3;
           reconsider o1=o+1 as Element of NAT;
-           o1 <= k & k < len d by A81,NAT_1:13,XREAL_1:149;
-          then A130: o1 < len d by XXREAL_0:2;
-          then reconsider oo1=len d - o1 as Element of NAT by NAT_1:21;
-
+          o1 <= k & k < len d by A80,NAT_1:13,XREAL_1:149;
+          then
+A129:     o1 < len d by XXREAL_0:2;
+          reconsider oo1=len d - o1 as Element of NAT by A80;
           defpred P[Element of NAT,set] means $2=E.($1+o1);
-
-          A131: for u being Element of NAT st u in oo1
+A130:     for u being Element of NAT st u in oo1
           ex x be Element of NAT st P[u,x];
-
           consider d'1 being XFinSequence of NAT such that
-          A132: dom d'1=oo1 & for x being Element of NAT st x in oo1 holds
-          P[x,d'1.x] from STIRL2_1:sch 6(A131);
+A131:     dom d'1=oo1 & for x being Element of NAT st x in oo1 holds
+          P[x,d'1.x] from STIRL2_1:sch 6(A130);
           reconsider do1=E|o1 as XFinSequence of NAT by AFINSQ_1:16;
-
-          A133: len d'1=oo1 by A132,AFINSQ_1:def 1;
-          A134: len e=dom E by A46,AFINSQ_1:def 1 .= len E by AFINSQ_1:def 1;
-          then A135: len do1=o1 by A71,A130,AFINSQ_1:14;
-          then A136: dom E = len do1 + len d'1 by A46,A71,A133,AFINSQ_1:def 1;
-          A137: for x being Element of NAT st x in dom do1 holds E.x=do1.x
+A132:     len d'1=oo1 by A131,AFINSQ_1:def 1;
+A133:     len e=dom E by A45,AFINSQ_1:def 1
+            .= len E by AFINSQ_1:def 1;
+          then
+A134:     len do1=o1 by A70,A129,AFINSQ_1:14;
+          then
+A135:     dom E = len do1 + len d'1 by A45,A70,A132,AFINSQ_1:def 1;
+A136:     for x being Element of NAT st x in dom do1 holds E.x=do1.x
           by FUNCT_1:70;
-           for x being Element of NAT st x in dom d'1 holds
-          E.(len do1+x)=d'1.x
-          by A132,A135;
-          then E=do1^d'1 by A136,A137,AFINSQ_1:def 4;
-          then A138: n = Sum do1 + Sum d'1 by A46,Th1;
+          for x being Element of NAT st x in dom d'1 holds E.(len do1+x)=d'1.x
+          by A131,A134;
+          then E=do1^d'1 by A135,A136,AFINSQ_1:def 4;
+          then
+A137:     n = Sum do1 + Sum d'1 by A45,Th1;
           reconsider bo1=b|^o1 as Element of NAT by ORDINAL1:def 13;
-          A139: bo1 <> 0 by A1,PREPOWER:12;
-
+A138:     bo1 <> 0 by A1,PREPOWER:12;
           consider ok1 being Nat such that
-          A140: ok1+1=o1;
+A139:     ok1+1=o1;
           reconsider ok1 as Element of NAT by ORDINAL1:def 13;
           reconsider g1=((b1)(#)(b GeoSeq))|(ok1+1) as XFinSequence of NAT
           by Th3;
-           dom ((b-1)(#)(b GeoSeq)) = NAT by FUNCT_2:def 1;
+          dom ((b-1)(#)(b GeoSeq)) = NAT by FUNCT_2:def 1;
           then o1 c= dom ((b-1)(#)(b GeoSeq)) by ORDINAL1:def 2;
-          then A141: dom g1 = o1 by A140,RELAT_1:91;
-          A142: 1-b <> 0 by A1;
-          A143: Sum g1 = Partial_Sums((b-1)(#)(b GeoSeq)).ok1 by Th2
-          .= ((b-1)(#)Partial_Sums(b GeoSeq)).ok1 by SERIES_1:12
-          .= (b-1)*(Partial_Sums(b GeoSeq).ok1) by SEQ_1:13
-          .= (b-1)*((1 - (b to_power (ok1+1)))/(1-b)) by A1,SERIES_1:26
-          .= (b-1)*((1 - (b |^ (ok1+1)))/(1-b)) by A1,POWER:46
-          .= -((1-b)*((1 - (b |^ o1))/(1-b))) by A140
-          .= -(1 - (b |^ o1)) by A142,XCMPLX_1:88
-          .= b|^o1-1;
-          A144: len do1>=0+1 by A135,NAT_1:13;
-          A145: len do1 = len g1 by A135,A141,AFINSQ_1:def 1;
-           for i being Nat st i in dom do1 holds do1.i <= g1.i
+          then
+A140:     dom g1 = o1 by A139,RELAT_1:91;
+A141:     1-b <> 0 by A1;
+A142:     Sum g1 = Partial_Sums((b-1)(#)(b GeoSeq)).ok1 by Th2
+            .= ((b-1)(#)Partial_Sums(b GeoSeq)).ok1 by SERIES_1:12
+            .= (b-1)*(Partial_Sums(b GeoSeq).ok1) by SEQ_1:13
+            .= (b-1)*((1 - (b to_power (ok1+1)))/(1-b)) by A1,SERIES_1:26
+            .= (b-1)*((1 - (b |^ (ok1+1)))/(1-b)) by A1,POWER:46
+            .= -((1-b)*((1 - (b |^ o1))/(1-b))) by A139
+            .= -(1 - (b |^ o1)) by A141,XCMPLX_1:88
+            .= b|^o1-1;
+A143:     len do1>=0+1 by A134,NAT_1:13;
+A144:     len do1 = len g1 by A134,A140,AFINSQ_1:def 1;
+          for i being Nat st i in dom do1 holds do1.i <= g1.i
           proof
             let i be Nat;
             reconsider I=i as Element of NAT by ORDINAL1:def 13;
-            assume A146: i in dom do1;
-            then i in o1 by A71,A130,A134,AFINSQ_1:14;
-            then A147: g1.I = ((b-1)(#)(b GeoSeq)).I by A141,FUNCT_1:68
-            .= (b-1)*((b GeoSeq).I) by SEQ_1:13
-            .= b1*(b|^I) by PREPOWER:def 1;
-            A148: dom do1 c= dom E by RELAT_1:89;
-            then e.i < b1+1 by A38,A46,A146;
-            then A149: e.i <= b1 by NAT_1:13;
-             do1.i = E.i by A146,FUNCT_1:70
-            .= (e.i)*(b|^i) by A46,A146,A148;
-            hence do1.i <= g1.i by A147,A149,XREAL_1:66;
+            assume
+A145:       i in dom do1;
+            then i in o1 by A70,A129,A133,AFINSQ_1:14;
+            then
+A146:       g1.I = ((b-1)(#)(b GeoSeq)).I by A140,FUNCT_1:68
+              .= (b-1)*((b GeoSeq).I) by SEQ_1:13
+              .= b1*(b|^I) by PREPOWER:def 1;
+A147:       dom do1 c= dom E by RELAT_1:89;
+            then e.i < b1+1 by A37,A45,A145;
+            then
+A148:       e.i <= b1 by NAT_1:13;
+            do1.i = E.i by A145,FUNCT_1:70
+              .= (e.i)*(b|^i) by A45,A145,A147;
+            hence do1.i <= g1.i by A146,A148,XREAL_1:66;
           end;
-          then Sum do1 <= (b|^o1)-1 by A143,A144,A145,Th4;
+          then Sum do1 <= (b|^o1)-1 by A142,A143,A144,Th4;
           then Sum do1 < b|^o1 -1 + 1 by XREAL_1:147;
-          then A150: Sum do1 div (b|^o1) = 0 by NAT_D:27;
-           now
+          then
+A149:     Sum do1 div (b|^o1) = 0 by NAT_D:27;
+          now
             let k be Nat;
             reconsider K=k as Element of NAT by ORDINAL1:def 13;
-            assume A151: k in dom d'1;
+            assume
+A150:       k in dom d'1;
             then k in len d'1 by AFINSQ_1:def 1;
             then k < len d'1 by PRGCOR_2:1;
-            then o1+k < dom E by A135,A136,XREAL_1:10;
+            then o1+k < dom E by A134,A135,XREAL_1:10;
             then o1+k in dom E by PRGCOR_2:1;
-            then E.(o1+k) = e.(o1+k)*b|^(o1+k) by A46;
-            then d'1.K = e.(o1+k)*b|^(o1+k) by A132,A151
-            .= e.(o1+k)*(b|^o1*b|^k) by NEWTON:13
-            .= (e.(o1+k)*(b|^k))*(b|^o1);
+            then E.(o1+k) = e.(o1+k)*b|^(o1+k) by A45;
+            then d'1.K = e.(o1+k)*b|^(o1+k) by A131,A150
+              .= e.(o1+k)*(b|^o1*b|^k) by NEWTON:13
+              .= (e.(o1+k)*(b|^k))*(b|^o1);
             hence b|^o1 divides d'1.k by NAT_D:def 3;
           end;
-          then A152: b|^o1 divides Sum d'1 by Th5;
-          then Sum d'1 mod (b|^o1) = 0 by A139,PEPIN:6;
+          then
+A151:     b|^o1 divides Sum d'1 by Th5;
+          then Sum d'1 mod (b|^o1) = 0 by A138,PEPIN:6;
           then n div (b|^o1) = (Sum d'1 div (b|^o1)) + (Sum do1 div (b|^o1))
-          by A138,NAT_D:19;
-          then A153: (n div (b|^o1)) * b|^o1 = Sum d'1 by A150,A152,NAT_D:3;
-
-           o in len e by A71,A73,AFINSQ_1:def 1;
-          then A154: o in dom E by A46,AFINSQ_1:def 1;
-
-          A155: dom d'= 1 + dom d'1 by A46,A71,A81,A132,AFINSQ_1:def 1
-          .= 1 + len d'1 by AFINSQ_1:def 1
-          .= len <%E.o%> + len d'1 by AFINSQ_1:38;
-          A156:
-          now
+          by A137,NAT_D:19;
+          then
+A152:     (n div (b|^o1)) * b|^o1 = Sum d'1 by A149,A151,NAT_D:3;
+          o in len e by A70,A72,AFINSQ_1:def 1;
+          then
+A153:     o in dom E by A45,AFINSQ_1:def 1;
+A154:     dom d'= 1 + dom d'1 by A45,A70,A80,A131,AFINSQ_1:def 1
+            .= 1 + len d'1 by AFINSQ_1:def 1
+            .= len <%E.o%> + len d'1 by AFINSQ_1:38;
+A155:     now
             let k be Element of NAT;
             assume k in dom <%E.o%>;
             then k in 1 by AFINSQ_1:36;
             then k < 1 by PRGCOR_2:1;
             then k=0 by NAT_1:14;
-            hence d'.k = <%E.o%>.k by A81,AFINSQ_1:def 5;
+            hence d'.k = <%E.o%>.k by A80,AFINSQ_1:def 5;
           end;
-           now
+          now
             let k be Element of NAT;
-            assume A157: k in dom d'1;
+            assume
+A156:       k in dom d'1;
             thus d'.(len <%E.o%> + k) = E.(len do1 + k)
-            by A81,A135,AFINSQ_1:37
-            .= d'1.k by A132,A135,A157;
+            by A80,A134,AFINSQ_1:37
+              .= d'1.k by A131,A134,A156;
           end;
-          then d'=<%E.o%>^d'1 by A155,A156,AFINSQ_1:def 4;
+          then d'=<%E.o%>^d'1 by A154,A155,AFINSQ_1:def 4;
           then Sum d' = Sum <%E.o%> + Sum d'1 by Th1;
           then E.o = (n div (b|^o)) * b|^o - (n div (b|^o1)) * b|^o1
-          by A129,A153,STIRL2_1:44;
+          by A128,A152,STIRL2_1:44;
           then e.o*b|^o = (n div (b|^o)) * b|^o - (n div (b|^o1)) * b|^o1 by
-A46,A154;
+          A45,A153;
           then e.o*b|^o = (n div (b|^o)) * b|^o - (n div (b|^o1)) * (b|^o*b|^1
-)
-          by NEWTON:13;
+          ) by NEWTON:13;
           then e.o*b|^o = b|^o*((n div (b|^o)) - (n div (b|^o1)) * b|^1);
           then (b|^o*e.o)/b|^o = (b|^o*((n div (b|^o)) - (n div (b|^o1)) * b))
-/b|^o
-          by NEWTON:10;
-          hence d.a=e.a by A119,A126,XCMPLX_1:90;
+          /b|^o by NEWTON:10;
+          hence d.a=e.a by A118,A125,XCMPLX_1:90;
         end;
-        suppose A158: o>0 & o = k;
-
+        suppose
+A157:     o>0 & o = k;
           set d'=<%D.o%>;
-
           reconsider do=D|o as XFinSequence of NAT by AFINSQ_1:16;
-
-          A159: len d'=oo by A158,AFINSQ_1:38;
-          A160: len d=dom D by A39,AFINSQ_1:def 1 .= len D by AFINSQ_1:def 1;
-          then A161: len do=o by A76,AFINSQ_1:14;
-          then A162: dom D = len do + len d' by A39,A159,AFINSQ_1:def 1;
-          A163: for x being Element of NAT st x in dom do holds D.x=do.x
+A158:     len d'=oo by A157,AFINSQ_1:38;
+A159:     len d=dom D by A38,AFINSQ_1:def 1
+            .= len D by AFINSQ_1:def 1;
+          then
+A160:     len do=o by A75,AFINSQ_1:14;
+          then
+A161:     dom D = len do + len d' by A38,A158,AFINSQ_1:def 1;
+A162:     for x being Element of NAT st x in dom do holds D.x=do.x
           by FUNCT_1:70;
-          A164: for x being Element of NAT st x in dom d' holds D.(len do+x)=d'
-.x
+A163:     for x being Element of NAT st x in dom d' holds D.(len do+x)=d' .x
           proof
             let x be Element of NAT;
             assume x in dom d';
-            then x in 1 by A158,A159,AFINSQ_1:def 1;
+            then x in 1 by A157,A158,AFINSQ_1:def 1;
             then x < 1 by PRGCOR_2:1;
             then x = 0 by NAT_1:14;
-            hence D.(len do+x)=d'.x by A161,AFINSQ_1:38;
+            hence D.(len do+x)=d'.x by A160,AFINSQ_1:38;
           end;
-          then D=do^d' by A162,A163,AFINSQ_1:def 4;
-          then A165: n = Sum do + Sum d' by A39,Th1;
+          then D=do^d' by A161,A162,AFINSQ_1:def 4;
+          then
+A164:     n = Sum do + Sum d' by A38,Th1;
           reconsider bo=b|^o as Element of NAT by ORDINAL1:def 13;
-          A166: bo <> 0 by A1,PREPOWER:12;
-
+A165:     bo <> 0 by A1,PREPOWER:12;
           consider ok being Nat such that
-          A167: ok+1=o by A158,NAT_1:6;
+A166:     ok+1=o by A157,NAT_1:6;
           reconsider ok as Element of NAT by ORDINAL1:def 13;
           reconsider g=((b1)(#)(b GeoSeq))|(ok+1) as XFinSequence of NAT
           by Th3;
-           dom ((b-1)(#)(b GeoSeq)) = NAT by FUNCT_2:def 1;
+          dom ((b-1)(#)(b GeoSeq)) = NAT by FUNCT_2:def 1;
           then o c= dom ((b-1)(#)(b GeoSeq)) by ORDINAL1:def 2;
-          then A168: dom g = o by A167,RELAT_1:91;
-          A169: 1-b <> 0 by A1;
-          A170: Sum g = Partial_Sums((b-1)(#)(b GeoSeq)).ok by Th2
-          .= ((b-1)(#)Partial_Sums(b GeoSeq)).ok by SERIES_1:12
-          .= (b-1)*(Partial_Sums(b GeoSeq).ok) by SEQ_1:13
-          .= (b-1)*((1 - (b to_power (ok+1)))/(1-b)) by A1,SERIES_1:26
-          .= (b-1)*((1 - (b |^ (ok+1)))/(1-b)) by A1,POWER:46
-          .= -((1-b)*((1 - (b |^ o))/(1-b))) by A167
-          .= -(1 - (b |^ o)) by A169,XCMPLX_1:88
-          .= b|^o-1;
-          A171: len do>=0+1 by A158,A161,NAT_1:13;
-          A172: len do = len g by A161,A168,AFINSQ_1:def 1;
-           for i being Nat st i in dom do holds do.i <= g.i
+          then
+A167:     dom g = o by A166,RELAT_1:91;
+A168:     1-b <> 0 by A1;
+A169:     Sum g = Partial_Sums((b-1)(#)(b GeoSeq)).ok by Th2
+            .= ((b-1)(#)Partial_Sums(b GeoSeq)).ok by SERIES_1:12
+            .= (b-1)*(Partial_Sums(b GeoSeq).ok) by SEQ_1:13
+            .= (b-1)*((1 - (b to_power (ok+1)))/(1-b)) by A1,SERIES_1:26
+            .= (b-1)*((1 - (b |^ (ok+1)))/(1-b)) by A1,POWER:46
+            .= -((1-b)*((1 - (b |^ o))/(1-b))) by A166
+            .= -(1 - (b |^ o)) by A168,XCMPLX_1:88
+            .= b|^o-1;
+A170:     len do>=0+1 by A157,A160,NAT_1:13;
+A171:     len do = len g by A160,A167,AFINSQ_1:def 1;
+          for i being Nat st i in dom do holds do.i <= g.i
           proof
             let i be Nat;
             reconsider I=i as Element of NAT by ORDINAL1:def 13;
-            assume A173: i in dom do;
-            then i in o by A76,A160,AFINSQ_1:14;
-            then A174: g.I = ((b-1)(#)(b GeoSeq)).I by A168,FUNCT_1:68
-            .= (b-1)*((b GeoSeq).I) by SEQ_1:13
-            .= b1*(b|^I) by PREPOWER:def 1;
-            A175: dom do c= dom D by RELAT_1:89;
-            then d.i < b1+1 by A37,A39,A173;
-            then A176: d.i <= b1 by NAT_1:13;
-             do.i = D.i by A173,FUNCT_1:70
-            .= (d.i)*(b|^i) by A39,A173,A175;
-            hence do.i <= g.i by A174,A176,XREAL_1:66;
+            assume
+A172:       i in dom do;
+            then i in o by A75,A159,AFINSQ_1:14;
+            then
+A173:       g.I = ((b-1)(#)(b GeoSeq)).I by A167,FUNCT_1:68
+              .= (b-1)*((b GeoSeq).I) by SEQ_1:13
+              .= b1*(b|^I) by PREPOWER:def 1;
+A174:       dom do c= dom D by RELAT_1:89;
+            then d.i < b1+1 by A36,A38,A172;
+            then
+A175:       d.i <= b1 by NAT_1:13;
+            do.i = D.i by A172,FUNCT_1:70
+              .= (d.i)*(b|^i) by A38,A172,A174;
+            hence do.i <= g.i by A173,A175,XREAL_1:66;
           end;
-          then Sum do <= (b|^o)-1 by A170,A171,A172,Th4;
+          then Sum do <= (b|^o)-1 by A169,A170,A171,Th4;
           then Sum do < b|^o -1 + 1 by XREAL_1:147;
-          then A177: Sum do div (b|^o) = 0 by NAT_D:27;
-           now
+          then
+A176:     Sum do div (b|^o) = 0 by NAT_D:27;
+          now
             let k be Nat;
             reconsider K=k as Element of NAT by ORDINAL1:def 13;
-            assume A178: k in dom d';
+            assume
+A177:       k in dom d';
             then k in len d' by AFINSQ_1:def 1;
             then k < len d' by PRGCOR_2:1;
-            then o+k < dom D by A161,A162,XREAL_1:10;
+            then o+k < dom D by A160,A161,XREAL_1:10;
             then o+k in dom D by PRGCOR_2:1;
-            then D.(o+k) = d.(o+k)*b|^(o+k) by A39;
-            then d'.K = d.(o+k)*b|^(o+k) by A161,A164,A178
-            .= d.(o+k)*(b|^o*b|^k) by NEWTON:13
-            .= (d.(o+k)*(b|^k))*(b|^o);
+            then D.(o+k) = d.(o+k)*b|^(o+k) by A38;
+            then d'.K = d.(o+k)*b|^(o+k) by A160,A163,A177
+              .= d.(o+k)*(b|^o*b|^k) by NEWTON:13
+              .= (d.(o+k)*(b|^k))*(b|^o);
             hence b|^o divides d'.k by NAT_D:def 3;
           end;
-          then A179: b|^o divides Sum d' by Th5;
-          then Sum d' mod (b|^o) = 0 by A166,PEPIN:6;
+          then
+A178:     b|^o divides Sum d' by Th5;
+          then Sum d' mod (b|^o) = 0 by A165,PEPIN:6;
           then n div (b|^o) = (Sum d' div (b|^o)) + (Sum do div (b|^o))
-          by A165,NAT_D:19;
-          then (n div (b|^o)) * b|^o = Sum d' by A177,A179,NAT_D:3;
+          by A164,NAT_D:19;
+          then (n div (b|^o)) * b|^o = Sum d' by A176,A178,NAT_D:3;
           then D.o = (n div (b|^o)) * b|^o by STIRL2_1:44;
-          then d.o*b|^o/b|^o = (n div (b|^o)) * b|^o/b|^o by A39,A73;
-          then A180: d.o = (n div (b|^o)) * b|^o/b|^o by A166,XCMPLX_1:90;
-
+          then d.o*b|^o/b|^o = (n div (b|^o)) * b|^o/b|^o by A38,A72;
+          then
+A179:     d.o = (n div (b|^o)) * b|^o/b|^o by A165,XCMPLX_1:90;
           set d'=<%E.o%>;
-
           reconsider do=E|o as XFinSequence of NAT by AFINSQ_1:16;
-
-          A181: len d'=oo by A158,AFINSQ_1:38;
-          A182: len e=dom E by A46,AFINSQ_1:def 1 .= len E by AFINSQ_1:def 1;
-          then A183: len do=o by A71,A76,AFINSQ_1:14;
-          then A184: dom E = len do + len d' by A46,A71,A181,AFINSQ_1:def 1;
-          A185: for x being Element of NAT st x in dom do holds E.x=do.x
+A180:     len d'=oo by A157,AFINSQ_1:38;
+A181:     len e=dom E by A45,AFINSQ_1:def 1
+            .= len E by AFINSQ_1:def 1;
+          then
+A182:     len do=o by A70,A75,AFINSQ_1:14;
+          then
+A183:     dom E = len do + len d' by A45,A70,A180,AFINSQ_1:def 1;
+A184:     for x being Element of NAT st x in dom do holds E.x=do.x
           by FUNCT_1:70;
-          A186: for x being Element of NAT st x in dom d' holds E.(len do+x)=d'
-.x
+A185:     for x being Element of NAT st x in dom d' holds E.(len do+x)=d' .x
           proof
             let x be Element of NAT;
             assume x in dom d';
-            then x in 1 by A158,A181,AFINSQ_1:def 1;
+            then x in 1 by A157,A180,AFINSQ_1:def 1;
             then x < 1 by PRGCOR_2:1;
             then x = 0 by NAT_1:14;
-            hence E.(len do+x)=d'.x by A183,AFINSQ_1:38;
+            hence E.(len do+x)=d'.x by A182,AFINSQ_1:38;
           end;
-          then E=do^d' by A184,A185,AFINSQ_1:def 4;
-          then A187: n = Sum do + Sum d' by A46,Th1;
+          then E=do^d' by A183,A184,AFINSQ_1:def 4;
+          then
+A186:     n = Sum do + Sum d' by A45,Th1;
           reconsider bo=b|^o as Element of NAT by ORDINAL1:def 13;
-          A188: bo <> 0 by A1,PREPOWER:12;
-
+A187:     bo <> 0 by A1,PREPOWER:12;
           consider ok being Nat such that
-          A189: ok+1=o by A158,NAT_1:6;
+A188:     ok+1=o by A157,NAT_1:6;
           reconsider ok as Element of NAT by ORDINAL1:def 13;
           reconsider g=((b1)(#)(b GeoSeq))|(ok+1) as XFinSequence of NAT
           by Th3;
-           dom ((b-1)(#)(b GeoSeq)) = NAT by FUNCT_2:def 1;
+          dom ((b-1)(#)(b GeoSeq)) = NAT by FUNCT_2:def 1;
           then o c= dom ((b-1)(#)(b GeoSeq)) by ORDINAL1:def 2;
-          then A190: dom g = o by A189,RELAT_1:91;
-          A191: 1-b <> 0 by A1;
-          A192: Sum g = Partial_Sums((b-1)(#)(b GeoSeq)).ok by Th2
-          .= ((b-1)(#)Partial_Sums(b GeoSeq)).ok by SERIES_1:12
-          .= (b-1)*(Partial_Sums(b GeoSeq).ok) by SEQ_1:13
-          .= (b-1)*((1 - (b to_power (ok+1)))/(1-b)) by A1,SERIES_1:26
-          .= (b-1)*((1 - (b |^ (ok+1)))/(1-b)) by A1,POWER:46
-          .= -((1-b)*((1 - (b |^ o))/(1-b))) by A189
-          .= -(1 - (b |^ o)) by A191,XCMPLX_1:88
-          .= b|^o-1;
-          A193: len do>=0+1 by A158,A183,NAT_1:13;
-          A194: len do = len g by A183,A190,AFINSQ_1:def 1;
-           for i being Nat st i in dom do holds do.i <= g.i
+          then
+A189:     dom g = o by A188,RELAT_1:91;
+A190:     1-b <> 0 by A1;
+A191:     Sum g = Partial_Sums((b-1)(#)(b GeoSeq)).ok by Th2
+            .= ((b-1)(#)Partial_Sums(b GeoSeq)).ok by SERIES_1:12
+            .= (b-1)*(Partial_Sums(b GeoSeq).ok) by SEQ_1:13
+            .= (b-1)*((1 - (b to_power (ok+1)))/(1-b)) by A1,SERIES_1:26
+            .= (b-1)*((1 - (b |^ (ok+1)))/(1-b)) by A1,POWER:46
+            .= -((1-b)*((1 - (b |^ o))/(1-b))) by A188
+            .= -(1 - (b |^ o)) by A190,XCMPLX_1:88
+            .= b|^o-1;
+A192:     len do>=0+1 by A157,A182,NAT_1:13;
+A193:     len do = len g by A182,A189,AFINSQ_1:def 1;
+          for i being Nat st i in dom do holds do.i <= g.i
           proof
             let i be Nat;
             reconsider I=i as Element of NAT by ORDINAL1:def 13;
-            assume A195: i in dom do;
-            then i in o by A71,A76,A182,AFINSQ_1:14;
-            then A196: g.I = ((b-1)(#)(b GeoSeq)).I by A190,FUNCT_1:68
-            .= (b-1)*((b GeoSeq).I) by SEQ_1:13
-            .= b1*(b|^I) by PREPOWER:def 1;
-            A197: dom do c= dom E by RELAT_1:89;
-            then e.i < b1+1 by A38,A46,A195;
-            then A198: e.i <= b1 by NAT_1:13;
-             do.i = E.i by A195,FUNCT_1:70
-            .= (e.i)*(b|^i) by A46,A195,A197;
-            hence do.i <= g.i by A196,A198,XREAL_1:66;
+            assume
+A194:       i in dom do;
+            then i in o by A70,A75,A181,AFINSQ_1:14;
+            then
+A195:       g.I = ((b-1)(#)(b GeoSeq)).I by A189,FUNCT_1:68
+              .= (b-1)*((b GeoSeq).I) by SEQ_1:13
+              .= b1*(b|^I) by PREPOWER:def 1;
+A196:       dom do c= dom E by RELAT_1:89;
+            then e.i < b1+1 by A37,A45,A194;
+            then
+A197:       e.i <= b1 by NAT_1:13;
+            do.i = E.i by A194,FUNCT_1:70
+              .= (e.i)*(b|^i) by A45,A194,A196;
+            hence do.i <= g.i by A195,A197,XREAL_1:66;
           end;
-          then Sum do <= (b|^o)-1 by A192,A193,A194,Th4;
+          then Sum do <= (b|^o)-1 by A191,A192,A193,Th4;
           then Sum do < b|^o -1 + 1 by XREAL_1:147;
-          then A199: Sum do div (b|^o) = 0 by NAT_D:27;
-           now
+          then
+A198:     Sum do div (b|^o) = 0 by NAT_D:27;
+          now
             let k be Nat;
             reconsider K=k as Element of NAT by ORDINAL1:def 13;
-            assume A200: k in dom d';
+            assume
+A199:       k in dom d';
             then k in len d' by AFINSQ_1:def 1;
             then k < len d' by PRGCOR_2:1;
-            then o+k < dom E by A183,A184,XREAL_1:10;
+            then o+k < dom E by A182,A183,XREAL_1:10;
             then o+k in dom E by PRGCOR_2:1;
-            then E.(o+k) = e.(o+k)*b|^(o+k) by A46;
-            then d'.K = e.(o+k)*b|^(o+k) by A183,A186,A200
-            .= e.(o+k)*(b|^o*b|^k) by NEWTON:13
-            .= (e.(o+k)*(b|^k))*(b|^o);
+            then E.(o+k) = e.(o+k)*b|^(o+k) by A45;
+            then d'.K = e.(o+k)*b|^(o+k) by A182,A185,A199
+              .= e.(o+k)*(b|^o*b|^k) by NEWTON:13
+              .= (e.(o+k)*(b|^k))*(b|^o);
             hence b|^o divides d'.k by NAT_D:def 3;
           end;
-          then A201: b|^o divides Sum d' by Th5;
-          then Sum d' mod (b|^o) = 0 by A188,PEPIN:6;
+          then
+A200:     b|^o divides Sum d' by Th5;
+          then Sum d' mod (b|^o) = 0 by A187,PEPIN:6;
           then n div (b|^o) = (Sum d' div (b|^o)) + (Sum do div (b|^o))
-          by A187,NAT_D:19;
-          then (n div (b|^o)) * b|^o = Sum d' by A199,A201,NAT_D:3;
+          by A186,NAT_D:19;
+          then (n div (b|^o)) * b|^o = Sum d' by A198,A200,NAT_D:3;
           then E.o = (n div (b|^o)) * b|^o by STIRL2_1:44;
-          then e.o*b|^o/b|^o = (n div (b|^o)) * b|^o/b|^o by A46,A74;
-          hence d.a=e.a by A180,A188,XCMPLX_1:90;
+          then e.o*b|^o/b|^o = (n div (b|^o)) * b|^o/b|^o by A45,A73;
+          hence d.a=e.a by A179,A187,XCMPLX_1:90;
         end;
-        suppose A202: o>0 & o < k;
+        suppose
+A201:     o>0 & o < k;
           defpred P[Element of NAT,set] means $2=D.($1+o);
-
-          A203: for u being Element of NAT st u in oo
+A202:     for u being Element of NAT st u in oo
           ex x be Element of NAT st P[u,x];
-
           consider d' being XFinSequence of NAT such that
-          A204: dom d'=oo & for x being Element of NAT st x in oo holds
-          P[x,d'.x] from STIRL2_1:sch 6(A203);
+A203:     dom d'=oo & for x being Element of NAT st x in oo holds
+          P[x,d'.x] from STIRL2_1:sch 6(A202);
           reconsider do=D|o as XFinSequence of NAT by AFINSQ_1:16;
-
-          A205: len d'=oo by A204,AFINSQ_1:def 1;
-          A206: len d=dom D by A39,AFINSQ_1:def 1 .= len D by AFINSQ_1:def 1;
-          then A207: len do=o by A76,AFINSQ_1:14;
-          then A208: dom D = len do + len d' by A39,A205,AFINSQ_1:def 1;
-          A209: for x being Element of NAT st x in dom do holds D.x=do.x
+A204:     len d'=oo by A203,AFINSQ_1:def 1;
+A205:     len d=dom D by A38,AFINSQ_1:def 1
+            .= len D by AFINSQ_1:def 1;
+          then
+A206:     len do=o by A75,AFINSQ_1:14;
+          then
+A207:     dom D = len do + len d' by A38,A204,AFINSQ_1:def 1;
+A208:     for x being Element of NAT st x in dom do holds D.x=do.x
           by FUNCT_1:70;
-           for x being Element of NAT st x in dom d' holds D.(len do+x)=d'
-.x
-          by A204,A207;
-          then D=do^d' by A208,A209,AFINSQ_1:def 4;
-          then A210: n = Sum do + Sum d' by A39,Th1;
+          for x being Element of NAT st x in dom d' holds D.(len do+x)=d' .x
+          by A203,A206;
+          then D=do^d' by A207,A208,AFINSQ_1:def 4;
+          then
+A209:     n = Sum do + Sum d' by A38,Th1;
           reconsider bo=b|^o as Element of NAT by ORDINAL1:def 13;
-          A211: bo <> 0 by A1,PREPOWER:12;
-
+A210:     bo <> 0 by A1,PREPOWER:12;
           consider ok being Nat such that
-          A212: ok+1=o by A202,NAT_1:6;
+A211:     ok+1=o by A201,NAT_1:6;
           reconsider ok as Element of NAT by ORDINAL1:def 13;
           reconsider g=((b1)(#)(b GeoSeq))|(ok+1) as XFinSequence of NAT
           by Th3;
-           dom ((b-1)(#)(b GeoSeq)) = NAT by FUNCT_2:def 1;
+          dom ((b-1)(#)(b GeoSeq)) = NAT by FUNCT_2:def 1;
           then o c= dom ((b-1)(#)(b GeoSeq)) by ORDINAL1:def 2;
-          then A213: dom g = o by A212,RELAT_1:91;
-          A214: 1-b <> 0 by A1;
-          A215: Sum g = Partial_Sums((b-1)(#)(b GeoSeq)).ok by Th2
-          .= ((b-1)(#)Partial_Sums(b GeoSeq)).ok by SERIES_1:12
-          .= (b-1)*(Partial_Sums(b GeoSeq).ok) by SEQ_1:13
-          .= (b-1)*((1 - (b to_power (ok+1)))/(1-b)) by A1,SERIES_1:26
-          .= (b-1)*((1 - (b |^ (ok+1)))/(1-b)) by A1,POWER:46
-          .= -((1-b)*((1 - (b |^ o))/(1-b))) by A212
-          .= -(1 - (b |^ o)) by A214,XCMPLX_1:88
-          .= b|^o-1;
-          A216: len do>=0+1 by A202,A207,NAT_1:13;
-          A217: len do = len g by A207,A213,AFINSQ_1:def 1;
-           for i being Nat st i in dom do holds do.i <= g.i
+          then
+A212:     dom g = o by A211,RELAT_1:91;
+A213:     1-b <> 0 by A1;
+A214:     Sum g = Partial_Sums((b-1)(#)(b GeoSeq)).ok by Th2
+            .= ((b-1)(#)Partial_Sums(b GeoSeq)).ok by SERIES_1:12
+            .= (b-1)*(Partial_Sums(b GeoSeq).ok) by SEQ_1:13
+            .= (b-1)*((1 - (b to_power (ok+1)))/(1-b)) by A1,SERIES_1:26
+            .= (b-1)*((1 - (b |^ (ok+1)))/(1-b)) by A1,POWER:46
+            .= -((1-b)*((1 - (b |^ o))/(1-b))) by A211
+            .= -(1 - (b |^ o)) by A213,XCMPLX_1:88
+            .= b|^o-1;
+A215:     len do>=0+1 by A201,A206,NAT_1:13;
+A216:     len do = len g by A206,A212,AFINSQ_1:def 1;
+          for i being Nat st i in dom do holds do.i <= g.i
           proof
             let i be Nat;
             reconsider I=i as Element of NAT by ORDINAL1:def 13;
-            assume A218: i in dom do;
-            then i in o by A76,A206,AFINSQ_1:14;
-            then A219: g.I = ((b-1)(#)(b GeoSeq)).I by A213,FUNCT_1:68
-            .= (b-1)*((b GeoSeq).I) by SEQ_1:13
-            .= b1*(b|^I) by PREPOWER:def 1;
-            A220: dom do c= dom D by RELAT_1:89;
-            then d.i < b1+1 by A37,A39,A218;
-            then A221: d.i <= b1 by NAT_1:13;
-             do.i = D.i by A218,FUNCT_1:70
-            .= (d.i)*(b|^i) by A39,A218,A220;
-            hence do.i <= g.i by A219,A221,XREAL_1:66;
+            assume
+A217:       i in dom do;
+            then i in o by A75,A205,AFINSQ_1:14;
+            then
+A218:       g.I = ((b-1)(#)(b GeoSeq)).I by A212,FUNCT_1:68
+              .= (b-1)*((b GeoSeq).I) by SEQ_1:13
+              .= b1*(b|^I) by PREPOWER:def 1;
+A219:       dom do c= dom D by RELAT_1:89;
+            then d.i < b1+1 by A36,A38,A217;
+            then
+A220:       d.i <= b1 by NAT_1:13;
+            do.i = D.i by A217,FUNCT_1:70
+              .= (d.i)*(b|^i) by A38,A217,A219;
+            hence do.i <= g.i by A218,A220,XREAL_1:66;
           end;
-          then Sum do <= (b|^o)-1 by A215,A216,A217,Th4;
+          then Sum do <= (b|^o)-1 by A214,A215,A216,Th4;
           then Sum do < b|^o -1 + 1 by XREAL_1:147;
-          then A222: Sum do div (b|^o) = 0 by NAT_D:27;
-           now
+          then
+A221:     Sum do div (b|^o) = 0 by NAT_D:27;
+          now
             let k be Nat;
             reconsider K=k as Element of NAT by ORDINAL1:def 13;
-            assume A223: k in dom d';
+            assume
+A222:       k in dom d';
             then k in len d' by AFINSQ_1:def 1;
             then k < len d' by PRGCOR_2:1;
-            then o+k < dom D by A207,A208,XREAL_1:10;
+            then o+k < dom D by A206,A207,XREAL_1:10;
             then o+k in dom D by PRGCOR_2:1;
-            then D.(o+k) = d.(o+k)*b|^(o+k) by A39;
-            then d'.K = d.(o+k)*b|^(o+k) by A204,A223
-            .= d.(o+k)*(b|^o*b|^k) by NEWTON:13
-            .= (d.(o+k)*(b|^k))*(b|^o);
+            then D.(o+k) = d.(o+k)*b|^(o+k) by A38;
+            then d'.K = d.(o+k)*b|^(o+k) by A203,A222
+              .= d.(o+k)*(b|^o*b|^k) by NEWTON:13
+              .= (d.(o+k)*(b|^k))*(b|^o);
             hence b|^o divides d'.k by NAT_D:def 3;
           end;
-          then A224: b|^o divides Sum d' by Th5;
-          then Sum d' mod (b|^o) = 0 by A211,PEPIN:6;
+          then
+A223:     b|^o divides Sum d' by Th5;
+          then Sum d' mod (b|^o) = 0 by A210,PEPIN:6;
           then n div (b|^o) = (Sum d' div (b|^o)) + (Sum do div (b|^o))
-          by A210,NAT_D:19;
-          then A225: (n div (b|^o)) * b|^o = Sum d' by A222,A224,NAT_D:3;
-
+          by A209,NAT_D:19;
+          then
+A224:     (n div (b|^o)) * b|^o = Sum d' by A221,A223,NAT_D:3;
           reconsider o1=o+1 as Element of NAT;
-           o1 <= k & k < len d by A202,NAT_1:13,XREAL_1:149;
-          then A226: o1 < len d by XXREAL_0:2;
-          then reconsider oo1=len d - o1 as Element of NAT by NAT_1:21;
-
+A225:     o1 <= k & k < len d by A201,NAT_1:13,XREAL_1:149;
+          then
+A226:     o1 < len d by XXREAL_0:2;
+          reconsider oo1=len d - o1 as Element of NAT by A225,NAT_1:21,XXREAL_0
+          :2;
           defpred P[Element of NAT,set] means $2=D.($1+o1);
-
-          A227: for u being Element of NAT st u in oo1
+A227:     for u being Element of NAT st u in oo1
           ex x be Element of NAT st P[u,x];
-
           consider d'1 being XFinSequence of NAT such that
-          A228: dom d'1=oo1 & for x being Element of NAT st x in oo1 holds
+A228:     dom d'1=oo1 & for x being Element of NAT st x in oo1 holds
           P[x,d'1.x] from STIRL2_1:sch 6(A227);
           reconsider do1=D|o1 as XFinSequence of NAT by AFINSQ_1:16;
-
-          A229: len d'1=oo1 by A228,AFINSQ_1:def 1;
-          A230: len d=dom D by A39,AFINSQ_1:def 1 .= len D by AFINSQ_1:def 1;
-          then A231: len do1=o1 by A226,AFINSQ_1:14;
-          then A232: dom D = len do1 + len d'1 by A39,A229,AFINSQ_1:def 1;
-          A233: for x being Element of NAT st x in dom do1 holds D.x=do1.x
+A229:     len d'1=oo1 by A228,AFINSQ_1:def 1;
+A230:     len d=dom D by A38,AFINSQ_1:def 1
+            .= len D by AFINSQ_1:def 1;
+          then
+A231:     len do1=o1 by A226,AFINSQ_1:14;
+          then
+A232:     dom D = len do1 + len d'1 by A38,A229,AFINSQ_1:def 1;
+A233:     for x being Element of NAT st x in dom do1 holds D.x=do1.x
           by FUNCT_1:70;
-           for x being Element of NAT st x in dom d'1 holds
+          for x being Element of NAT st x in dom d'1 holds
           D.(len do1+x)=d'1.x by A228,A231;
           then D=do1^d'1 by A232,A233,AFINSQ_1:def 4;
-          then A234: n = Sum do1 + Sum d'1 by A39,Th1;
+          then
+A234:     n = Sum do1 + Sum d'1 by A38,Th1;
           reconsider bo1=b|^o1 as Element of NAT by ORDINAL1:def 13;
-          A235: bo1 <> 0 by A1,PREPOWER:12;
-
+A235:     bo1 <> 0 by A1,PREPOWER:12;
           consider ok1 being Nat such that
-          A236: ok1+1=o1;
+A236:     ok1+1=o1;
           reconsider ok1 as Element of NAT by ORDINAL1:def 13;
           reconsider g1=((b1)(#)(b GeoSeq))|(ok1+1) as XFinSequence of NAT
           by Th3;
-           dom ((b-1)(#)(b GeoSeq)) = NAT by FUNCT_2:def 1;
+          dom ((b-1)(#)(b GeoSeq)) = NAT by FUNCT_2:def 1;
           then o1 c= dom ((b-1)(#)(b GeoSeq)) by ORDINAL1:def 2;
-          then A237: dom g1 = o1 by A236,RELAT_1:91;
-          A238: 1-b <> 0 by A1;
-          A239: Sum g1 = Partial_Sums((b-1)(#)(b GeoSeq)).ok1 by Th2
-          .= ((b-1)(#)Partial_Sums(b GeoSeq)).ok1 by SERIES_1:12
-          .= (b-1)*(Partial_Sums(b GeoSeq).ok1) by SEQ_1:13
-          .= (b-1)*((1 - (b to_power (ok1+1)))/(1-b)) by A1,SERIES_1:26
-          .= (b-1)*((1 - (b |^ (ok1+1)))/(1-b)) by A1,POWER:46
-          .= -((1-b)*((1 - (b |^ o1))/(1-b))) by A236
-          .= -(1 - (b |^ o1)) by A238,XCMPLX_1:88
-          .= b|^o1-1;
-          A240: len do1>=0+1 by A231,NAT_1:13;
-          A241: len do1 = len g1 by A231,A237,AFINSQ_1:def 1;
-           for i being Nat st i in dom do1 holds do1.i <= g1.i
+          then
+A237:     dom g1 = o1 by A236,RELAT_1:91;
+A238:     1-b <> 0 by A1;
+A239:     Sum g1 = Partial_Sums((b-1)(#)(b GeoSeq)).ok1 by Th2
+            .= ((b-1)(#)Partial_Sums(b GeoSeq)).ok1 by SERIES_1:12
+            .= (b-1)*(Partial_Sums(b GeoSeq).ok1) by SEQ_1:13
+            .= (b-1)*((1 - (b to_power (ok1+1)))/(1-b)) by A1,SERIES_1:26
+            .= (b-1)*((1 - (b |^ (ok1+1)))/(1-b)) by A1,POWER:46
+            .= -((1-b)*((1 - (b |^ o1))/(1-b))) by A236
+            .= -(1 - (b |^ o1)) by A238,XCMPLX_1:88
+            .= b|^o1-1;
+A240:     len do1>=0+1 by A231,NAT_1:13;
+A241:     len do1 = len g1 by A231,A237,AFINSQ_1:def 1;
+          for i being Nat st i in dom do1 holds do1.i <= g1.i
           proof
             let i be Nat;
             reconsider I=i as Element of NAT by ORDINAL1:def 13;
-            assume A242: i in dom do1;
+            assume
+A242:       i in dom do1;
             then i in o1 by A226,A230,AFINSQ_1:14;
-            then A243: g1.I = ((b-1)(#)(b GeoSeq)).I by A237,FUNCT_1:68
-            .= (b-1)*((b GeoSeq).I) by SEQ_1:13
-            .= b1*(b|^I) by PREPOWER:def 1;
-            A244: dom do1 c= dom D by RELAT_1:89;
-            then d.i < b1+1 by A37,A39,A242;
-            then A245: d.i <= b1 by NAT_1:13;
-             do1.i = D.i by A242,FUNCT_1:70
-            .= (d.i)*(b|^i) by A39,A242,A244;
+            then
+A243:       g1.I = ((b-1)(#)(b GeoSeq)).I by A237,FUNCT_1:68
+              .= (b-1)*((b GeoSeq).I) by SEQ_1:13
+              .= b1*(b|^I) by PREPOWER:def 1;
+A244:       dom do1 c= dom D by RELAT_1:89;
+            then d.i < b1+1 by A36,A38,A242;
+            then
+A245:       d.i <= b1 by NAT_1:13;
+            do1.i = D.i by A242,FUNCT_1:70
+              .= (d.i)*(b|^i) by A38,A242,A244;
             hence do1.i <= g1.i by A243,A245,XREAL_1:66;
           end;
           then Sum do1 <= (b|^o1)-1 by A239,A240,A241,Th4;
           then Sum do1 < b|^o1 -1 + 1 by XREAL_1:147;
-          then A246: Sum do1 div (b|^o1) = 0 by NAT_D:27;
-           now
+          then
+A246:     Sum do1 div (b|^o1) = 0 by NAT_D:27;
+          now
             let k be Nat;
             reconsider K=k as Element of NAT by ORDINAL1:def 13;
-            assume A247: k in dom d'1;
+            assume
+A247:       k in dom d'1;
             then k in len d'1 by AFINSQ_1:def 1;
             then k < len d'1 by PRGCOR_2:1;
             then o1+k < dom D by A231,A232,XREAL_1:10;
             then o1+k in dom D by PRGCOR_2:1;
-            then D.(o1+k) = d.(o1+k)*b|^(o1+k) by A39;
+            then D.(o1+k) = d.(o1+k)*b|^(o1+k) by A38;
             then d'1.K = d.(o1+k)*b|^(o1+k) by A228,A247
-            .= d.(o1+k)*(b|^o1*b|^k) by NEWTON:13
-            .= (d.(o1+k)*(b|^k))*(b|^o1);
+              .= d.(o1+k)*(b|^o1*b|^k) by NEWTON:13
+              .= (d.(o1+k)*(b|^k))*(b|^o1);
             hence b|^o1 divides d'1.k by NAT_D:def 3;
           end;
-          then A248: b|^o1 divides Sum d'1 by Th5;
+          then
+A248:     b|^o1 divides Sum d'1 by Th5;
           then Sum d'1 mod (b|^o1) = 0 by A235,PEPIN:6;
           then n div (b|^o1) = (Sum d'1 div (b|^o1)) + (Sum do1 div (b|^o1))
           by A234,NAT_D:19;
-          then A249: (n div (b|^o1)) * b|^o1 = Sum d'1 by A246,A248,NAT_D:3;
-          A250: dom d' = 1 + dom d'1 by A204,A228
-          .= 1 + len d'1 by AFINSQ_1:def 1
-          .= len <%D.o%> + len d'1 by AFINSQ_1:38;
-          A251:
-          now
+          then
+A249:     (n div (b|^o1)) * b|^o1 = Sum d'1 by A246,A248,NAT_D:3;
+A250:     dom d' = 1 + dom d'1 by A203,A228
+            .= 1 + len d'1 by AFINSQ_1:def 1
+            .= len <%D.o%> + len d'1 by AFINSQ_1:38;
+A251:     now
             let k be Element of NAT;
             assume k in dom <%D.o%>;
             then k in 1 by AFINSQ_1:36;
             then k < 1 by PRGCOR_2:1;
-            then A252: k=0 by NAT_1:14;
-             oo > 0 by A76,XREAL_1:52;
-            then k in dom d' by A204,A252,PRGCOR_2:1;
-            hence d'.k=D.(k+o) by A204
-            .= <%D.o%>.k by A252,AFINSQ_1:def 5;
+            then
+A252:       k=0 by NAT_1:14;
+            oo > 0 by A75,XREAL_1:52;
+            then k in dom d' by A203,A252,PRGCOR_2:1;
+            hence d'.k=D.(k+o) by A203
+              .= <%D.o%>.k by A252,AFINSQ_1:def 5;
           end;
-           now
+          now
             let k be Element of NAT;
-            assume A253: k in dom d'1;
+            assume
+A253:       k in dom d'1;
             then k < oo1 by A228,PRGCOR_2:1;
             then k+1 < oo1+1 by XREAL_1:10;
-            then A254: k+1 in dom d' by A204,PRGCOR_2:1;
+            then
+A254:       k+1 in dom d' by A203,PRGCOR_2:1;
             thus d'.(len <%D.o%> + k) = d'.(1 + k) by AFINSQ_1:37
-            .= D.(len do+(k+1)) by A204,A207,A254
-            .= D.(len do1 + k) by A207,A231
-            .= d'1.k by A228,A231,A253;
+              .= D.(len do+(k+1)) by A203,A206,A254
+              .= D.(len do1 + k) by A206,A231
+              .= d'1.k by A228,A231,A253;
           end;
           then d'=<%D.o%>^d'1 by A250,A251,AFINSQ_1:def 4;
           then Sum d' = Sum <%D.o%> + Sum d'1 by Th1;
           then D.o = (n div (b|^o)) * b|^o - (n div (b|^o1)) * b|^o1
-          by A225,A249,STIRL2_1:44;
+          by A224,A249,STIRL2_1:44;
           then d.o*b|^o = (n div (b|^o)) * b|^o - (n div (b|^o1)) * b|^o1
-          by A39,A73;
+          by A38,A72;
           then d.o*b|^o = (n div (b|^o)) * b|^o - (n div (b|^o1)) * (b|^o*b|^1
-)
-          by NEWTON:13;
+          ) by NEWTON:13;
           then d.o*b|^o = b|^o*((n div (b|^o)) - (n div (b|^o1)) * b|^1);
           then (b|^o*d.o)/b|^o = (b|^o*((n div (b|^o)) - (n div (b|^o1)) * b))
-/b|^o
-          by NEWTON:10;
-          then A255: d.o = (b|^o*((n div (b|^o)) - (n div (b|^o1)) * b))/b|^o
-          by A211,XCMPLX_1:90;
-
+          /b|^o by NEWTON:10;
+          then
+A255:     d.o = (b|^o*((n div (b|^o)) - (n div (b|^o1)) * b))/b |^o
+          by A210,XCMPLX_1:90;
           defpred P[Element of NAT,set] means $2=E.($1+o);
-
-          A256: for u being Element of NAT st u in oo
+A256:     for u being Element of NAT st u in oo
           ex x be Element of NAT st P[u,x];
-
           consider d' being XFinSequence of NAT such that
-          A257: dom d'=oo & for x being Element of NAT st x in oo holds
+A257:     dom d'=oo & for x being Element of NAT st x in oo holds
           P[x,d'.x] from STIRL2_1:sch 6(A256);
           reconsider do=E|o as XFinSequence of NAT by AFINSQ_1:16;
-
-          A258: len d'=oo by A257,AFINSQ_1:def 1;
-          A259: len e=dom E by A46,AFINSQ_1:def 1 .= len E by AFINSQ_1:def 1;
-          then A260: len do=o by A71,A76,AFINSQ_1:14;
-          then A261: dom E = len do + len d' by A46,A71,A258,AFINSQ_1:def 1;
-          A262: for x being Element of NAT st x in dom do holds E.x=do.x
+A258:     len d'=oo by A257,AFINSQ_1:def 1;
+A259:     len e=dom E by A45,AFINSQ_1:def 1
+            .= len E by AFINSQ_1:def 1;
+          then
+A260:     len do=o by A70,A75,AFINSQ_1:14;
+          then
+A261:     dom E = len do + len d' by A45,A70,A258,AFINSQ_1:def 1;
+A262:     for x being Element of NAT st x in dom do holds E.x=do.x
           by FUNCT_1:70;
-           for x being Element of NAT st x in dom d' holds E.(len do+x)=d'
-.x
+          for x being Element of NAT st x in dom d' holds E.(len do+x)=d' .x
           by A257,A260;
           then E=do^d' by A261,A262,AFINSQ_1:def 4;
-          then A263: n = Sum do + Sum d' by A46,Th1;
+          then
+A263:     n = Sum do + Sum d' by A45,Th1;
           reconsider bo=b|^o as Element of NAT by ORDINAL1:def 13;
-          A264: bo <> 0 by A1,PREPOWER:12;
-
+A264:     bo <> 0 by A1,PREPOWER:12;
           consider ok being Nat such that
-          A265: ok+1=o by A202,NAT_1:6;
+A265:     ok+1=o by A201,NAT_1:6;
           reconsider ok as Element of NAT by ORDINAL1:def 13;
           reconsider g=((b1)(#)(b GeoSeq))|(ok+1) as XFinSequence of NAT
           by Th3;
-           dom ((b-1)(#)(b GeoSeq)) = NAT by FUNCT_2:def 1;
+          dom ((b-1)(#)(b GeoSeq)) = NAT by FUNCT_2:def 1;
           then o c= dom ((b-1)(#)(b GeoSeq)) by ORDINAL1:def 2;
-          then A266: dom g = o by A265,RELAT_1:91;
-          A267: 1-b <> 0 by A1;
-          A268: Sum g = Partial_Sums((b-1)(#)(b GeoSeq)).ok by Th2
-          .= ((b-1)(#)Partial_Sums(b GeoSeq)).ok by SERIES_1:12
-          .= (b-1)*(Partial_Sums(b GeoSeq).ok) by SEQ_1:13
-          .= (b-1)*((1 - (b to_power (ok+1)))/(1-b)) by A1,SERIES_1:26
-          .= (b-1)*((1 - (b |^ (ok+1)))/(1-b)) by A1,POWER:46
-          .= -((1-b)*((1 - (b |^ o))/(1-b))) by A265
-          .= -(1 - (b |^ o)) by A267,XCMPLX_1:88
-          .= b|^o-1;
-          A269: len do>=0+1 by A202,A260,NAT_1:13;
-          A270: len do = len g by A260,A266,AFINSQ_1:def 1;
-           for i being Nat st i in dom do holds do.i <= g.i
+          then
+A266:     dom g = o by A265,RELAT_1:91;
+A267:     1-b <> 0 by A1;
+A268:     Sum g = Partial_Sums((b-1)(#)(b GeoSeq)).ok by Th2
+            .= ((b-1)(#)Partial_Sums(b GeoSeq)).ok by SERIES_1:12
+            .= (b-1)*(Partial_Sums(b GeoSeq).ok) by SEQ_1:13
+            .= (b-1)*((1 - (b to_power (ok+1)))/(1-b)) by A1,SERIES_1:26
+            .= (b-1)*((1 - (b |^ (ok+1)))/(1-b)) by A1,POWER:46
+            .= -((1-b)*((1 - (b |^ o))/(1-b))) by A265
+            .= -(1 - (b |^ o)) by A267,XCMPLX_1:88
+            .= b|^o-1;
+A269:     len do>=0+1 by A201,A260,NAT_1:13;
+A270:     len do = len g by A260,A266,AFINSQ_1:def 1;
+          for i being Nat st i in dom do holds do.i <= g.i
           proof
             let i be Nat;
             reconsider I=i as Element of NAT by ORDINAL1:def 13;
-            assume A271: i in dom do;
-            then i in o by A71,A76,A259,AFINSQ_1:14;
-            then A272: g.I = ((b-1)(#)(b GeoSeq)).I by A266,FUNCT_1:68
-            .= (b-1)*((b GeoSeq).I) by SEQ_1:13
-            .= b1*(b|^I) by PREPOWER:def 1;
-            A273: dom do c= dom E by RELAT_1:89;
-            then e.i < b1+1 by A38,A46,A271;
-            then A274: e.i <= b1 by NAT_1:13;
-             do.i = E.i by A271,FUNCT_1:70
-            .= (e.i)*(b|^i) by A46,A271,A273;
+            assume
+A271:       i in dom do;
+            then i in o by A70,A75,A259,AFINSQ_1:14;
+            then
+A272:       g.I = ((b-1)(#)(b GeoSeq)).I by A266,FUNCT_1:68
+              .= (b-1)*((b GeoSeq).I) by SEQ_1:13
+              .= b1*(b|^I) by PREPOWER:def 1;
+A273:       dom do c= dom E by RELAT_1:89;
+            then e.i < b1+1 by A37,A45,A271;
+            then
+A274:       e.i <= b1 by NAT_1:13;
+            do.i = E.i by A271,FUNCT_1:70
+              .= (e.i)*(b|^i) by A45,A271,A273;
             hence do.i <= g.i by A272,A274,XREAL_1:66;
           end;
           then Sum do <= (b|^o)-1 by A268,A269,A270,Th4;
           then Sum do < b|^o -1 + 1 by XREAL_1:147;
-          then A275: Sum do div (b|^o) = 0 by NAT_D:27;
-           now
+          then
+A275:     Sum do div (b|^o) = 0 by NAT_D:27;
+          now
             let k be Nat;
             reconsider K=k as Element of NAT by ORDINAL1:def 13;
-            assume A276: k in dom d';
+            assume
+A276:       k in dom d';
             then k in len d' by AFINSQ_1:def 1;
             then k < len d' by PRGCOR_2:1;
             then o+k < dom E by A260,A261,XREAL_1:10;
             then o+k in dom E by PRGCOR_2:1;
-            then E.(o+k) = e.(o+k)*b|^(o+k) by A46;
+            then E.(o+k) = e.(o+k)*b|^(o+k) by A45;
             then d'.K = e.(o+k)*b|^(o+k) by A257,A276
-            .= e.(o+k)*(b|^o*b|^k) by NEWTON:13
-            .= (e.(o+k)*(b|^k))*(b|^o);
+              .= e.(o+k)*(b|^o*b|^k) by NEWTON:13
+              .= (e.(o+k)*(b|^k))*(b|^o);
             hence b|^o divides d'.k by NAT_D:def 3;
           end;
-          then A277: b|^o divides Sum d' by Th5;
+          then
+A277:     b|^o divides Sum d' by Th5;
           then Sum d' mod (b|^o) = 0 by A264,PEPIN:6;
           then n div (b|^o) = (Sum d' div (b|^o)) + (Sum do div (b|^o))
           by A263,NAT_D:19;
-          then A278: (n div (b|^o)) * b|^o = Sum d' by A275,A277,NAT_D:3;
-
+          then
+A278:     (n div (b|^o)) * b|^o = Sum d' by A275,A277,NAT_D:3;
           reconsider o1=o+1 as Element of NAT;
-           o1 <= k & k < len d by A202,NAT_1:13,XREAL_1:149;
-          then A279: o1 < len d by XXREAL_0:2;
-          then reconsider oo1=len d - o1 as Element of NAT by NAT_1:21;
-
+A279:     o1 <= k & k < len d by A201,NAT_1:13,XREAL_1:149;
+          then
+A280:     o1 < len d by XXREAL_0:2;
+          reconsider oo1=len d - o1 as Element of NAT by A279,NAT_1:21,XXREAL_0
+          :2;
           defpred P[Element of NAT,set] means $2=E.($1+o1);
-
-          A280: for u being Element of NAT st u in oo1
+A281:     for u being Element of NAT st u in oo1
           ex x be Element of NAT st P[u,x];
-
           consider d'1 being XFinSequence of NAT such that
-          A281: dom d'1=oo1 & for x being Element of NAT st x in oo1 holds
-          P[x,d'1.x] from STIRL2_1:sch 6(A280);
+A282:     dom d'1=oo1 & for x being Element of NAT st x in oo1 holds
+          P[x,d'1.x] from STIRL2_1:sch 6(A281);
           reconsider do1=E|o1 as XFinSequence of NAT by AFINSQ_1:16;
-
-          A282: len d'1=oo1 by A281,AFINSQ_1:def 1;
-          A283: len e=dom E by A46,AFINSQ_1:def 1 .= len E by AFINSQ_1:def 1;
-          then A284: len do1=o1 by A71,A279,AFINSQ_1:14;
-          then A285: dom E = len do1 + len d'1 by A46,A71,A282,AFINSQ_1:def 1;
-          A286: for x being Element of NAT st x in dom do1 holds E.x=do1.x
+A283:     len d'1=oo1 by A282,AFINSQ_1:def 1;
+A284:     len e=dom E by A45,AFINSQ_1:def 1
+            .= len E by AFINSQ_1:def 1;
+          then
+A285:     len do1=o1 by A70,A280,AFINSQ_1:14;
+          then
+A286:     dom E = len do1 + len d'1 by A45,A70,A283,AFINSQ_1:def 1;
+A287:     for x being Element of NAT st x in dom do1 holds E.x=do1.x
           by FUNCT_1:70;
-           for x being Element of NAT st x in dom d'1 holds
-          E.(len do1+x)=d'1.x by A281,A284;
-          then E=do1^d'1 by A285,A286,AFINSQ_1:def 4;
-          then A287: n = Sum do1 + Sum d'1 by A46,Th1;
+          for x being Element of NAT st x in dom d'1 holds
+          E.(len do1+x)=d'1.x by A282,A285;
+          then E=do1^d'1 by A286,A287,AFINSQ_1:def 4;
+          then
+A288:     n = Sum do1 + Sum d'1 by A45,Th1;
           reconsider bo1=b|^o1 as Element of NAT by ORDINAL1:def 13;
-          A288: bo1 <> 0 by A1,PREPOWER:12;
-
+A289:     bo1 <> 0 by A1,PREPOWER:12;
           consider ok1 being Nat such that
-          A289: ok1+1=o1;
+A290:     ok1+1=o1;
           reconsider ok1 as Element of NAT by ORDINAL1:def 13;
           reconsider g1=((b1)(#)(b GeoSeq))|(ok1+1) as XFinSequence of NAT
           by Th3;
-           dom ((b-1)(#)(b GeoSeq)) = NAT by FUNCT_2:def 1;
+          dom ((b-1)(#)(b GeoSeq)) = NAT by FUNCT_2:def 1;
           then o1 c= dom ((b-1)(#)(b GeoSeq)) by ORDINAL1:def 2;
-          then A290: dom g1 = o1 by A289,RELAT_1:91;
-          A291: 1-b <> 0 by A1;
-          A292: Sum g1 = Partial_Sums((b-1)(#)(b GeoSeq)).ok1 by Th2
-          .= ((b-1)(#)Partial_Sums(b GeoSeq)).ok1 by SERIES_1:12
-          .= (b-1)*(Partial_Sums(b GeoSeq).ok1) by SEQ_1:13
-          .= (b-1)*((1 - (b to_power (ok1+1)))/(1-b)) by A1,SERIES_1:26
-          .= (b-1)*((1 - (b |^ (ok1+1)))/(1-b)) by A1,POWER:46
-          .= -((1-b)*((1 - (b |^ o1))/(1-b))) by A289
-          .= -(1 - (b |^ o1)) by A291,XCMPLX_1:88
-          .= b|^o1-1;
-          A293: len do1>=0+1 by A284,NAT_1:13;
-          A294: len do1 = len g1 by A284,A290,AFINSQ_1:def 1;
-           for i being Nat st i in dom do1 holds do1.i <= g1.i
+          then
+A291:     dom g1 = o1 by A290,RELAT_1:91;
+A292:     1-b <> 0 by A1;
+A293:     Sum g1 = Partial_Sums((b-1)(#)(b GeoSeq)).ok1 by Th2
+            .= ((b-1)(#)Partial_Sums(b GeoSeq)).ok1 by SERIES_1:12
+            .= (b-1)*(Partial_Sums(b GeoSeq).ok1) by SEQ_1:13
+            .= (b-1)*((1 - (b to_power (ok1+1)))/(1-b)) by A1,SERIES_1:26
+            .= (b-1)*((1 - (b |^ (ok1+1)))/(1-b)) by A1,POWER:46
+            .= -((1-b)*((1 - (b |^ o1))/(1-b))) by A290
+            .= -(1 - (b |^ o1)) by A292,XCMPLX_1:88
+            .= b|^o1-1;
+A294:     len do1>=0+1 by A285,NAT_1:13;
+A295:     len do1 = len g1 by A285,A291,AFINSQ_1:def 1;
+          for i being Nat st i in dom do1 holds do1.i <= g1.i
           proof
             let i be Nat;
             reconsider I=i as Element of NAT by ORDINAL1:def 13;
-            assume A295: i in dom do1;
-            then i in o1 by A71,A279,A283,AFINSQ_1:14;
-            then A296: g1.I = ((b-1)(#)(b GeoSeq)).I by A290,FUNCT_1:68
-            .= (b-1)*((b GeoSeq).I) by SEQ_1:13
-            .= b1*(b|^I) by PREPOWER:def 1;
-            A297: dom do1 c= dom E by RELAT_1:89;
-            then e.i < b1+1 by A38,A46,A295;
-            then A298: e.i <= b1 by NAT_1:13;
-             do1.i = E.i by A295,FUNCT_1:70
-            .= (e.i)*(b|^i) by A46,A295,A297;
-            hence do1.i <= g1.i by A296,A298,XREAL_1:66;
+            assume
+A296:       i in dom do1;
+            then i in o1 by A70,A280,A284,AFINSQ_1:14;
+            then
+A297:       g1.I = ((b-1)(#)(b GeoSeq)).I by A291,FUNCT_1:68
+              .= (b-1)*((b GeoSeq).I) by SEQ_1:13
+              .= b1*(b|^I) by PREPOWER:def 1;
+A298:       dom do1 c= dom E by RELAT_1:89;
+            then e.i < b1+1 by A37,A45,A296;
+            then
+A299:       e.i <= b1 by NAT_1:13;
+            do1.i = E.i by A296,FUNCT_1:70
+              .= (e.i)*(b|^i) by A45,A296,A298;
+            hence do1.i <= g1.i by A297,A299,XREAL_1:66;
           end;
-          then Sum do1 <= (b|^o1)-1 by A292,A293,A294,Th4;
+          then Sum do1 <= (b|^o1)-1 by A293,A294,A295,Th4;
           then Sum do1 < b|^o1 -1 + 1 by XREAL_1:147;
-          then A299: Sum do1 div (b|^o1) = 0 by NAT_D:27;
-           now
+          then
+A300:     Sum do1 div (b|^o1) = 0 by NAT_D:27;
+          now
             let k be Nat;
             reconsider K=k as Element of NAT by ORDINAL1:def 13;
-            assume A300: k in dom d'1;
+            assume
+A301:       k in dom d'1;
             then k in len d'1 by AFINSQ_1:def 1;
             then k < len d'1 by PRGCOR_2:1;
-            then o1+k < dom E by A284,A285,XREAL_1:10;
+            then o1+k < dom E by A285,A286,XREAL_1:10;
             then o1+k in dom E by PRGCOR_2:1;
-            then E.(o1+k) = e.(o1+k)*b|^(o1+k) by A46;
-            then d'1.K = e.(o1+k)*b|^(o1+k) by A281,A300
-            .= e.(o1+k)*(b|^o1*b|^k) by NEWTON:13
-            .= (e.(o1+k)*(b|^k))*(b|^o1);
+            then E.(o1+k) = e.(o1+k)*b|^(o1+k) by A45;
+            then d'1.K = e.(o1+k)*b|^(o1+k) by A282,A301
+              .= e.(o1+k)*(b|^o1*b|^k) by NEWTON:13
+              .= (e.(o1+k)*(b|^k))*(b|^o1);
             hence b|^o1 divides d'1.k by NAT_D:def 3;
           end;
-          then A301: b|^o1 divides Sum d'1 by Th5;
-          then Sum d'1 mod (b|^o1) = 0 by A288,PEPIN:6;
+          then
+A302:     b|^o1 divides Sum d'1 by Th5;
+          then Sum d'1 mod (b|^o1) = 0 by A289,PEPIN:6;
           then n div (b|^o1) = (Sum d'1 div (b|^o1)) + (Sum do1 div (b|^o1))
-          by A287,NAT_D:19;
-          then A302: (n div (b|^o1)) * b|^o1 = Sum d'1 by A299,A301,NAT_D:3;
-
-           o in len e by A71,A73,AFINSQ_1:def 1;
-          then A303: o in dom E by A46,AFINSQ_1:def 1;
-
-          A304: dom d' = 1 + dom d'1 by A257,A281
-          .= 1 + len d'1 by AFINSQ_1:def 1
-          .= len <%E.o%> + len d'1 by AFINSQ_1:38;
-          A305:
-          now
+          by A288,NAT_D:19;
+          then
+A303:     (n div (b|^o1)) * b|^o1 = Sum d'1 by A300,A302,NAT_D:3;
+          o in len e by A70,A72,AFINSQ_1:def 1;
+          then
+A304:     o in dom E by A45,AFINSQ_1:def 1;
+A305:     dom d' = 1 + dom d'1 by A257,A282
+            .= 1 + len d'1 by AFINSQ_1:def 1
+            .= len <%E.o%> + len d'1 by AFINSQ_1:38;
+A306:     now
             let k be Element of NAT;
             assume k in dom <%E.o%>;
             then k in 1 by AFINSQ_1:36;
             then k < 1 by PRGCOR_2:1;
-            then A306: k=0 by NAT_1:14;
-             oo > 0 by A76,XREAL_1:52;
-            then k in dom d' by A257,A306,PRGCOR_2:1;
+            then
+A307:       k=0 by NAT_1:14;
+            oo > 0 by A75,XREAL_1:52;
+            then k in dom d' by A257,A307,PRGCOR_2:1;
             hence d'.k=E.(k+o) by A257
-            .= <%E.o%>.k by A306,AFINSQ_1:def 5;
+              .= <%E.o%>.k by A307,AFINSQ_1:def 5;
           end;
-           now
+          now
             let k be Element of NAT;
-            assume A307: k in dom d'1;
-            then k < oo1 by A281,PRGCOR_2:1;
+            assume
+A308:       k in dom d'1;
+            then k < oo1 by A282,PRGCOR_2:1;
             then k+1 < oo1+1 by XREAL_1:10;
-            then A308: k+1 in oo by PRGCOR_2:1;
+            then
+A309:       k+1 in oo by PRGCOR_2:1;
             thus d'.(len <%E.o%> + k) = d'.(1 + k) by AFINSQ_1:37
-            .= E.(len do+(k+1)) by A257,A260,A308
-            .= E.(len do1 + k) by A260,A284
-            .= d'1.k by A281,A284,A307;
+              .= E.(len do+(k+1)) by A257,A260,A309
+              .= E.(len do1 + k) by A260,A285
+              .= d'1.k by A282,A285,A308;
           end;
-          then d'=<%E.o%>^d'1 by A304,A305,AFINSQ_1:def 4;
+          then d'=<%E.o%>^d'1 by A305,A306,AFINSQ_1:def 4;
           then Sum d' = Sum <%E.o%> + Sum d'1 by Th1;
           then E.o = (n div (b|^o)) * b|^o - (n div (b|^o1)) * b|^o1
-          by A278,A302,STIRL2_1:44;
+          by A278,A303,STIRL2_1:44;
           then e.o*b|^o = (n div (b|^o)) * b|^o - (n div (b|^o1)) * b|^o1
-          by A46,A303;
+          by A45,A304;
           then e.o*b|^o = (n div (b|^o)) * b|^o - (n div (b|^o1)) * (b|^o*b|^1
-)
-          by NEWTON:13;
+          ) by NEWTON:13;
           then e.o*b|^o = b|^o*((n div (b|^o)) - (n div (b|^o1)) * b|^1);
           then (b|^o*e.o)/b|^o = (b|^o*((n div (b|^o)) -
           (n div (b|^o1)) * b))/b|^o by NEWTON:10;
           hence d.a=e.a by A255,A264,XCMPLX_1:90;
         end;
       end;
-
-      hence d=e by A72,FUNCT_1:9;
+      hence d=e by A71,FUNCT_1:9;
     end;
     assume n=0 & d=<%0%> & e=<%0%>;
     hence thesis;
@@ -1663,498 +1729,506 @@ A46,A154;
 end;
 
 theorem Th7:
-  for n,b being Nat st b > 1 holds
-  len digits(n,b) >= 1
-  proof
-    let n,b be Nat;
-    assume A1: b > 1;
-    per cases;
-    suppose n=0;
-      then digits(n,b)=<%0%> by A1,Def2;
-      hence len digits(n,b) >= 1 by AFINSQ_1:37;
-    end;
-    suppose n<>0;
-      then digits(n,b).(len digits(n,b) -1) <> 0 by A1,Def2;
-      then len digits(n,b) -1 in dom digits(n,b) by FUNCT_1:def 4;
-      then len digits(n,b) <> 0 by AFINSQ_1:def 1;
-      hence len digits(n,b) >= 1 by NAT_1:14;
-    end;
+  for n,b being Nat st b > 1 holds len digits(n,b) >= 1
+proof
+  let n,b be Nat;
+  assume
+A1: b > 1;
+  per cases;
+  suppose n=0;
+    then digits(n,b)=<%0%> by A1,Def2;
+    hence len digits(n,b) >= 1 by AFINSQ_1:37;
   end;
+  suppose n<>0;
+    then digits(n,b).(len digits(n,b) -1) <> 0 by A1,Def2;
+    then len digits(n,b) -1 in dom digits(n,b) by FUNCT_1:def 4;
+    then len digits(n,b) <> 0 by AFINSQ_1:def 1;
+    hence len digits(n,b) >= 1 by NAT_1:14;
+  end;
+end;
 
 theorem Th8:
-  for n,b being Nat st b > 1 holds
-  value(digits(n,b),b)=n
-  proof
-    let n,b be Nat;
-    assume A1: b>1;
-    per cases;
-    suppose n<>0;
-      hence thesis by A1,Def2;
-    end;
-    suppose A2: n=0;
-      then A3: digits(n,b)= <%0%> by A1,Def2;
-       now
-        let i be Nat;
-        assume i in dom <%0%>;
-        then i in {0} by AFINSQ_1:def 5,CARD_5:1;
-        then A4: i=0 by TARSKI:def 1;
-        hence <%0%>.i = 0*(b|^i) by AFINSQ_1:def 5
-        .= (digits(n,b).i)*(b|^i) by A3,A4,AFINSQ_1:def 5;
-      end;
-      then A5: value(digits(n,b),b)=Sum <%0%> by A3,Def1;
-       now
-        let i be Element of NAT;
-        assume i in dom <%0%>;
-        then i in {0} by AFINSQ_1:def 5,CARD_5:1;
-        then i=0 by TARSKI:def 1;
-        hence <%0%>.i=0 by AFINSQ_1:def 5;
-      end;
-      hence thesis by A2,A5,STIRL2_1:53;
-    end;
+  for n,b being Nat st b > 1 holds value(digits(n,b),b)=n
+proof
+  let n,b be Nat;
+  assume
+A1: b>1;
+  per cases;
+  suppose n<>0;
+    hence thesis by A1,Def2;
   end;
+  suppose
+A2: n=0;
+    then
+A3: digits(n,b)= <%0%> by A1,Def2;
+    now
+      let i be Nat;
+      assume i in dom <%0%>;
+      then i in {0} by AFINSQ_1:def 5,CARD_5:1;
+      then
+A4:   i=0 by TARSKI:def 1;
+      hence <%0%>.i = 0*(b|^i) by AFINSQ_1:def 5
+        .= (digits(n,b).i)*(b|^i) by A3,A4,AFINSQ_1:def 5;
+    end;
+    then
+A5: value(digits(n,b),b)=Sum <%0%> by A3,Def1;
+    now
+      let i be Element of NAT;
+      assume i in dom <%0%>;
+      then i in {0} by AFINSQ_1:def 5,CARD_5:1;
+      then i=0 by TARSKI:def 1;
+      hence <%0%>.i=0 by AFINSQ_1:def 5;
+    end;
+    hence thesis by A2,A5,STIRL2_1:53;
+  end;
+end;
 
 begin :: Selected divisibility criteria
 
 theorem Th9:
   for n,k being Nat st k=10|^n - 1 holds 9 divides k
-  proof
-    let n,k be Nat;
-    assume A1: k=10|^n - 1;
-
-    defpred P[Nat] means
-    ex k being Nat st k=(10|^$1)-1 & 9 divides k;
-
-    A2: (10|^0) -1 = 1-1 by NEWTON:9 .= 0;
-     9 divides 0 by NAT_D:6;
-    then A3: P[0] by A2;
-    A4:
-    now
-      let k be Nat;
-      assume P[k];
-      then consider l being Nat such that
-      A5: l=(10|^k)-1 & 9 divides l;
-      consider m being Nat such that
-      A6: l = 9 * m by A5,NAT_D:def 3;
-      A7: 10|^(k+1)-1 = (9*m+1)*10 -1 by A5,A6,NEWTON:11
-      .= 9*(m*10+1);
-       9 divides 9*(m*10+1) by NAT_D:def 3;
-      hence P[k+1] by A7;
-    end;
-     for k being Nat holds P[k] from NAT_1:sch 2(A3,A4);
+proof
+  let n,k be Nat;
+  assume
+A1: k=10|^n - 1;
+  defpred P[Nat] means ex k being Nat st k=(10|^$1)-1 & 9 divides k;
+A2: (10|^0) -1 = 1-1 by NEWTON:9
+    .= 0;
+  9 divides 0 by NAT_D:6;
+  then
+A3: P[0] by A2;
+A4: now
+    let k be Nat;
+    assume P[k];
     then consider l being Nat such that
-    A8: l=10|^n -1 & 9 divides l;
-    thus 9 divides k by A1,A8;
+A5: l=(10|^k)-1 & 9 divides l;
+    consider m being Nat such that
+A6: l = 9 * m by A5,NAT_D:def 3;
+A7: 10|^(k+1)-1 = (9*m+1)*10 -1 by A5,A6,NEWTON:11
+      .= 9*(m*10+1);
+    9 divides 9*(m*10+1) by NAT_D:def 3;
+    hence P[k+1] by A7;
   end;
+  for k being Nat holds P[k] from NAT_1:sch 2(A3,A4);
+  then consider l being Nat such that
+A8: l=10|^n -1 & 9 divides l;
+  thus 9 divides k by A1,A8;
+end;
 
 theorem
-   for n,b being Nat st b>1 holds
-  b divides n iff digits(n,b).0 = 0
+  for n,b being Nat st b>1 holds b divides n iff digits(n,b).0 = 0
+proof
+  let n,b be Nat;
+  reconsider B=b as Element of NAT by ORDINAL1:def 13;
+  assume
+A1: b>1;
+  thus b divides n implies digits(n,b).0 = 0
   proof
-    let n,b be Nat;
-    reconsider B=b as Element of NAT by ORDINAL1:def 13;
-    assume A1: b>1;
-    thus b divides n implies digits(n,b).0 = 0
-    proof
-      assume A2: b divides n;
-      consider d being XFinSequence of NAT such that
-      A3: (dom d = dom digits(n,b) &
-      for i being Nat st i in dom d holds
-      d.i = (digits(n,b).i)*(b|^i)) & value(digits(n,b),b) = Sum d by Def1;
-      A4: len digits(n,b)>=1 by A1,Th7;
-      per cases by A4,XXREAL_0:1;
-      suppose A5: len digits(n,b)=1;
-        then dom digits(n,b)=1 by AFINSQ_1:def 1;
-        then A6: 0 in dom digits(n,b) by PRGCOR_2:1;
-         len d = dom digits(n,b) by A3,AFINSQ_1:def 1
+    assume
+A2: b divides n;
+    consider d being XFinSequence of NAT such that
+A3: (dom d = dom digits(n,b) & for i being Nat st i in dom d holds
+    d.i = (digits(n,b).i)*(b|^i)) & value(digits(n,b),b) = Sum d by Def1;
+A4: len digits(n,b)>=1 by A1,Th7;
+    per cases by A4,XXREAL_0:1;
+    suppose
+A5:   len digits(n,b)=1;
+      then dom digits(n,b)=1 by AFINSQ_1:def 1;
+      then
+A6:   0 in dom digits(n,b) by PRGCOR_2:1;
+      len d = dom digits(n,b) by A3,AFINSQ_1:def 1
         .= 1 by A5,AFINSQ_1:def 1;
-        then d=<%d.0%> by AFINSQ_1:38;
-        then A7: Sum d = d.0 by STIRL2_1:44
+      then d=<%d.0%> by AFINSQ_1:38;
+      then
+A7:   Sum d = d.0 by STIRL2_1:44
         .= digits(n,b).0*(b|^0) by A3,A6;
-         b divides Sum d by A1,A2,A3,Th8;
-        then A8: b divides digits(n,b).0*1 by A7,NEWTON:9;
-        per cases;
-        suppose n=0;
-          then digits(n,b) = <%0%> by A1,Def2;
-          hence digits(n,b).0 = 0 by AFINSQ_1:38;
-        end;
-        suppose n<>0;
-          then digits(n,b).0 < b by A1,A6,Def2;
-          then digits(n,b).0 <= 0 by A8,NAT_D:7;
-          hence digits(n,b).0 = 0;
-        end;
+      b divides Sum d by A1,A2,A3,Th8;
+      then
+A8:   b divides digits(n,b).0*1 by A7,NEWTON:9;
+      per cases;
+      suppose n=0;
+        then digits(n,b) = <%0%> by A1,Def2;
+        hence digits(n,b).0 = 0 by AFINSQ_1:38;
       end;
-      suppose A9: len digits(n,b)>1;
-        then reconsider k=len digits(n,b)-1 as Element of NAT by NAT_1:21;
-         dom digits(n,b)>1 by A9,AFINSQ_1:def 1;
-        then A10: 0 in dom digits(n,b) by PRGCOR_2:1;
-
-        defpred P[Element of NAT,set] means $2=d.($1+1);
-
-        A11: for u being Element of NAT st u in k
-        ex x be Element of NAT st P[u,x];
-
-        consider d' being XFinSequence of NAT such that
-        A12: dom d'=k & for x being Element of NAT st x in k holds P[x,d'.x]
-        from STIRL2_1:sch 6(A11);
-
-         now
-          let i be Nat;
-          assume A13: i in dom d';
-          then i < k by A12,PRGCOR_2:1;
-          then i+1 < k+1 by XREAL_1:10;
-          then i+1 < dom d by A3,AFINSQ_1:def 1;
-          then A14: i+1 in dom d by PRGCOR_2:1;
-           d'.i=d.(i+1) by A12,A13
+      suppose n<>0;
+        then digits(n,b).0 < b by A1,A6,Def2;
+        then digits(n,b).0 <= 0 by A8,NAT_D:7;
+        hence digits(n,b).0 = 0;
+      end;
+    end;
+    suppose
+A9:   len digits(n,b)>1;
+      then reconsider k=len digits(n,b)-1 as Element of NAT by NAT_1:21;
+      dom digits(n,b)>1 by A9,AFINSQ_1:def 1;
+      then
+A10:  0 in dom digits(n,b) by PRGCOR_2:1;
+      defpred P[Element of NAT,set] means $2=d.($1+1);
+A11:  for u being Element of NAT st u in k ex x be Element of NAT st P[u,x];
+      consider d' being XFinSequence of NAT such that
+A12:  dom d'=k & for x being Element of NAT st x in k holds P[x,d'.x]
+      from STIRL2_1:sch 6(A11);
+      now
+        let i be Nat;
+        assume
+A13:    i in dom d';
+        then i < k by A12,PRGCOR_2:1;
+        then i+1 < k+1 by XREAL_1:10;
+        then i+1 < dom d by A3,AFINSQ_1:def 1;
+        then
+A14:    i+1 in dom d by PRGCOR_2:1;
+        d'.i=d.(i+1) by A12,A13
           .= digits(n,b).(i+1)*b|^(i+1) by A3,A14
           .= digits(n,b).(i+1)*(b|^i*b) by NEWTON:11
           .= b*(digits(n,b).(i+1)*b|^i);
-          hence b divides d'.i by NAT_D:def 3;
-        end;
-        then b divides Sum d' by Th5;
-        then A15: Sum d' mod B = 0 by A1,PEPIN:6;
-        A16: dom d = k+1 by A3,AFINSQ_1:def 1
+        hence b divides d'.i by NAT_D:def 3;
+      end;
+      then b divides Sum d' by Th5;
+      then
+A15:  Sum d' mod B = 0 by A1,PEPIN:6;
+A16:  dom d = k+1 by A3,AFINSQ_1:def 1
         .= 1 + len d' by A12,AFINSQ_1:def 1
         .= len <%d.0%> + len d' by AFINSQ_1:37;
-        A17:
-        now
-          let l be Element of NAT;
-          assume l in dom <%d.0%>;
-          then l in 1 by AFINSQ_1:def 5;
-          then l < 1 by PRGCOR_2:1;
-          then l=0 by NAT_1:14;
-          hence d.l=<%d.0%>.l by AFINSQ_1:38;
-        end;
-         now
-          let l be Element of NAT;
-          assume A18: l in dom d';
-           len <%d.0%> + l = l+1 by AFINSQ_1:38;
-          hence d.(len <%d.0%> + l) = d'.l by A12,A18;
-        end;
-        then d=<%d.0%>^d' by A16,A17,AFINSQ_1:def 4;
-        then Sum d = Sum <%d.0%> + Sum d' by Th1;
-        then n = Sum <%d.0%> + Sum d' by A1,A3,Th8;
-        then n = d.0 + Sum d' by STIRL2_1:44;
-        then (d.0 + Sum d') mod B = 0 by A1,A2,PEPIN:6;
-        then d.0 mod b = 0 by A15,NAT_D:17;
-        then B divides d.0 by A1,PEPIN:6;
-        then b divides digits(n,b).0*(b|^0) by A3,A10;
-        then A19: b divides digits(n,b).0*1 by NEWTON:9;
-        per cases;
-        suppose n=0;
-          then digits(n,b) = <%0%> by A1,Def2;
-          hence digits(n,b).0 = 0 by AFINSQ_1:38;
-        end;
-        suppose n<>0;
-          then digits(n,b).0 < b by A1,A10,Def2;
-          then digits(n,b).0 <= 0 by A19,NAT_D:7;
-          hence digits(n,b).0 = 0;
-        end;
+A17:  now
+        let l be Element of NAT;
+        assume l in dom <%d.0%>;
+        then l in 1 by AFINSQ_1:def 5;
+        then l < 1 by PRGCOR_2:1;
+        then l=0 by NAT_1:14;
+        hence d.l=<%d.0%>.l by AFINSQ_1:38;
+      end;
+      now
+        let l be Element of NAT;
+        assume
+A18:    l in dom d';
+        len <%d.0%> + l = l+1 by AFINSQ_1:38;
+        hence d.(len <%d.0%> + l) = d'.l by A12,A18;
+      end;
+      then d=<%d.0%>^d' by A16,A17,AFINSQ_1:def 4;
+      then Sum d = Sum <%d.0%> + Sum d' by Th1;
+      then n = Sum <%d.0%> + Sum d' by A1,A3,Th8;
+      then n = d.0 + Sum d' by STIRL2_1:44;
+      then (d.0 + Sum d') mod B = 0 by A1,A2,PEPIN:6;
+      then d.0 mod b = 0 by A15,NAT_D:17;
+      then B divides d.0 by A1,PEPIN:6;
+      then b divides digits(n,b).0*(b|^0) by A3,A10;
+      then
+A19:  b divides digits(n,b).0*1 by NEWTON:9;
+      per cases;
+      suppose n=0;
+        then digits(n,b) = <%0%> by A1,Def2;
+        hence digits(n,b).0 = 0 by AFINSQ_1:38;
+      end;
+      suppose n<>0;
+        then digits(n,b).0 < b by A1,A10,Def2;
+        then digits(n,b).0 <= 0 by A19,NAT_D:7;
+        hence digits(n,b).0 = 0;
       end;
     end;
-    assume A20: digits(n,b).0=0;
-    consider d being XFinSequence of NAT such that
-    A21: (dom d = dom digits(n,b) &
-    for i being Nat st i in dom d holds
-    d.i = (digits(n,b).i)*(b|^i)) & value(digits(n,b),b) = Sum d by Def1;
-     now
-      let i be Nat;
-      assume A22: i in dom d;
-      per cases;
-      suppose i=0;
-        then d.i = (digits(n,b).0)*b|^0 by A21,A22
+  end;
+  assume
+A20: digits(n,b).0=0;
+  consider d being XFinSequence of NAT such that
+A21: (dom d = dom digits(n,b) & for i being Nat st i in dom d holds
+  d.i = (digits(n,b).i)*(b|^i)) & value(digits(n,b),b) = Sum d by Def1;
+  now
+    let i be Nat;
+    assume
+A22: i in dom d;
+    per cases;
+    suppose i=0;
+      then d.i = (digits(n,b).0)*b|^0 by A21,A22
         .= digits(n,b).0*1 by NEWTON:9;
-        hence b divides d.i by A20,NAT_D:6;
-      end;
-      suppose i>0;
-        then consider j being Nat such that
-        A23: j+1=i by NAT_1:6;
-         d.i = digits(n,b).i*(b|^(j+1)) by A21,A22,A23
+      hence b divides d.i by A20,NAT_D:6;
+    end;
+    suppose i>0;
+      then consider j being Nat such that
+A23:  j+1=i by NAT_1:6;
+      d.i = digits(n,b).i*(b|^(j+1)) by A21,A22,A23
         .= digits(n,b).i*((b|^j)*b) by NEWTON:11
         .= b*(digits(n,b).i*(b|^j));
-        hence b divides d.i by NAT_D:def 3;
-      end;
+      hence b divides d.i by NAT_D:def 3;
     end;
-    then b divides value(digits(n,b),b) by A21,Th5;
-    hence b divides n by A1,Th8;
   end;
+  then b divides value(digits(n,b),b) by A21,Th5;
+  hence b divides n by A1,Th8;
+end;
 
 theorem
-   for n being Nat holds
-  2 divides n iff 2 divides digits(n,10).0
+  for n being Nat holds 2 divides n iff 2 divides digits(n,10).0
+proof
+  let n be Nat;
+  thus 2 divides n implies 2 divides digits(n,10).0
   proof
-    let n be Nat;
-    thus 2 divides n implies 2 divides digits(n,10).0
-    proof
-      assume A1: 2 divides n;
-      consider d being XFinSequence of NAT such that
-      A2: (dom d = dom digits(n,10) &
-      for i being Nat st i in dom d holds
-      d.i = (digits(n,10).i)*(10|^i)) & value(digits(n,10),10) = Sum d by Def1;
-      A3: len digits(n,10)>=1 by Th7;
-      per cases by A3,XXREAL_0:1;
-      suppose A4: len digits(n,10)=1;
-        then dom digits(n,10)=1 by AFINSQ_1:def 1;
-        then A5: 0 in dom digits(n,10) by PRGCOR_2:1;
-         len d = dom digits(n,10) by A2,AFINSQ_1:def 1
+    assume
+A1: 2 divides n;
+    consider d being XFinSequence of NAT such that
+A2: (dom d = dom digits(n,10) & for i being Nat st i in dom d holds
+    d.i = (digits(n,10).i)*(10|^i)) & value(digits(n,10),10) = Sum d by Def1;
+A3: len digits(n,10)>=1 by Th7;
+    per cases by A3,XXREAL_0:1;
+    suppose
+A4:   len digits(n,10)=1;
+      then dom digits(n,10)=1 by AFINSQ_1:def 1;
+      then
+A5:   0 in dom digits(n,10) by PRGCOR_2:1;
+      len d = dom digits(n,10) by A2,AFINSQ_1:def 1
         .= 1 by A4,AFINSQ_1:def 1;
-        then d=<%d.0%> by AFINSQ_1:38;
-        then A6: Sum d = d.0 by STIRL2_1:44
+      then d=<%d.0%> by AFINSQ_1:38;
+      then
+A6:   Sum d = d.0 by STIRL2_1:44
         .= digits(n,10).0*(10|^0) by A2,A5;
-         2 divides Sum d by A1,A2,Th8;
-        then 2 divides digits(n,10).0*1 by A6,NEWTON:9;
-        hence 2 divides digits(n,10).0;
-      end;
-      suppose A7: len digits(n,10)>1;
-        then reconsider k=len digits(n,10)-1 as Element of NAT by NAT_1:21;
-         dom digits(n,10)>1 by A7,AFINSQ_1:def 1;
-        then A8: 0 in dom digits(n,10) by PRGCOR_2:1;
-
-        defpred P[Element of NAT,set] means $2=d.($1+1);
-
-        A9: for u being Element of NAT st u in k
-        ex x be Element of NAT st P[u,x];
-
-        consider d' being XFinSequence of NAT such that
-        A10: dom d'=k & for x being Element of NAT st x in k holds P[x,d'.x]
-        from STIRL2_1:sch 6(A9);
-
-         now
-          let i be Nat;
-          assume A11: i in dom d';
-          then i < k by A10,PRGCOR_2:1;
-          then i+1 < k+1 by XREAL_1:10;
-          then i+1 < dom d by A2,AFINSQ_1:def 1;
-          then A12: i+1 in dom d by PRGCOR_2:1;
-           d'.i=d.(i+1) by A10,A11
+      2 divides Sum d by A1,A2,Th8;
+      then 2 divides digits(n,10).0*1 by A6,NEWTON:9;
+      hence 2 divides digits(n,10).0;
+    end;
+    suppose
+A7:   len digits(n,10)>1;
+      then reconsider k=len digits(n,10)-1 as Element of NAT by NAT_1:21;
+      dom digits(n,10)>1 by A7,AFINSQ_1:def 1;
+      then
+A8:   0 in dom digits(n,10) by PRGCOR_2:1;
+      defpred P[Element of NAT,set] means $2=d.($1+1);
+A9:   for u being Element of NAT st u in k ex x be Element of NAT st P[u,x];
+      consider d' being XFinSequence of NAT such that
+A10:  dom d'=k & for x being Element of NAT st x in k holds P[x,d'.x]
+      from STIRL2_1:sch 6(A9);
+      now
+        let i be Nat;
+        assume
+A11:    i in dom d';
+        then i < k by A10,PRGCOR_2:1;
+        then i+1 < k+1 by XREAL_1:10;
+        then i+1 < dom d by A2,AFINSQ_1:def 1;
+        then
+A12:    i+1 in dom d by PRGCOR_2:1;
+        d'.i=d.(i+1) by A10,A11
           .= digits(n,10).(i+1)*10|^(i+1) by A2,A12
           .= digits(n,10).(i+1)*(10|^i*10) by NEWTON:11
           .= 2*(digits(n,10).(i+1)*10|^i*5);
-          hence 2 divides d'.i by NAT_D:def 3;
-        end;
-        then 2 divides Sum d' by Th5;
-        then A13: Sum d' mod 2 = 0 by PEPIN:6;
-        A14: dom d = k+1 by A2,AFINSQ_1:def 1
+        hence 2 divides d'.i by NAT_D:def 3;
+      end;
+      then 2 divides Sum d' by Th5;
+      then
+A13:  Sum d' mod 2 = 0 by PEPIN:6;
+A14:  dom d = k+1 by A2,AFINSQ_1:def 1
         .= 1 + len d' by A10,AFINSQ_1:def 1
         .= len <%d.0%> + len d' by AFINSQ_1:37;
-        A15:
-        now
-          let l be Element of NAT;
-          assume l in dom <%d.0%>;
-          then l in 1 by AFINSQ_1:def 5;
-          then l < 1 by PRGCOR_2:1;
-          then l=0 by NAT_1:14;
-          hence d.l=<%d.0%>.l by AFINSQ_1:38;
-        end;
-         now
-          let l be Element of NAT;
-          assume A16: l in dom d';
-           len <%d.0%> + l = l+1 by AFINSQ_1:38;
-          hence d.(len <%d.0%> + l) = d'.l by A10,A16;
-        end;
-        then d=<%d.0%>^d' by A14,A15,AFINSQ_1:def 4;
-        then Sum d = Sum <%d.0%> + Sum d' by Th1;
-        then n = Sum <%d.0%> + Sum d' by A2,Th8;
-        then n = d.0 + Sum d' by STIRL2_1:44;
-        then (d.0 + Sum d') mod 2 = 0 by A1,PEPIN:6;
-        then d.0 mod 2 = 0 by A13,NAT_D:17;
-        then 2 divides d.0 by PEPIN:6;
-        then 2 divides digits(n,10).0*(10|^0) by A2,A8;
-        then 2 divides digits(n,10).0*1 by NEWTON:9;
-        hence 2 divides digits(n,10).0;
+A15:  now
+        let l be Element of NAT;
+        assume l in dom <%d.0%>;
+        then l in 1 by AFINSQ_1:def 5;
+        then l < 1 by PRGCOR_2:1;
+        then l=0 by NAT_1:14;
+        hence d.l=<%d.0%>.l by AFINSQ_1:38;
       end;
+      now
+        let l be Element of NAT;
+        assume
+A16:    l in dom d';
+        len <%d.0%> + l = l+1 by AFINSQ_1:38;
+        hence d.(len <%d.0%> + l) = d'.l by A10,A16;
+      end;
+      then d=<%d.0%>^d' by A14,A15,AFINSQ_1:def 4;
+      then Sum d = Sum <%d.0%> + Sum d' by Th1;
+      then n = Sum <%d.0%> + Sum d' by A2,Th8;
+      then n = d.0 + Sum d' by STIRL2_1:44;
+      then (d.0 + Sum d') mod 2 = 0 by A1,PEPIN:6;
+      then d.0 mod 2 = 0 by A13,NAT_D:17;
+      then 2 divides d.0 by PEPIN:6;
+      then 2 divides digits(n,10).0*(10|^0) by A2,A8;
+      then 2 divides digits(n,10).0*1 by NEWTON:9;
+      hence 2 divides digits(n,10).0;
     end;
-    assume A17: 2 divides digits(n,10).0;
-    consider d being XFinSequence of NAT such that
-    A18: (dom d = dom digits(n,10) &
-    for i being Nat st i in dom d holds
-    d.i = (digits(n,10).i)*(10|^i)) & value(digits(n,10),10) = Sum d by Def1;
-     now
-      let i be Nat;
-      assume A19: i in dom d;
-      per cases;
-      suppose i=0;
-        then d.i = (digits(n,10).0)*10|^0 by A18,A19
+  end;
+  assume
+A17: 2 divides digits(n,10).0;
+  consider d being XFinSequence of NAT such that
+A18: (dom d = dom digits(n,10) & for i being Nat st i in dom d holds
+  d.i = (digits(n,10).i)*(10|^i)) & value(digits(n,10),10) = Sum d by Def1;
+  now
+    let i be Nat;
+    assume
+A19: i in dom d;
+    per cases;
+    suppose i=0;
+      then d.i = (digits(n,10).0)*10|^0 by A18,A19
         .= digits(n,10).0*1 by NEWTON:9;
-        hence 2 divides d.i by A17;
-      end;
-      suppose i>0;
-        then consider j being Nat such that
-        A20: j+1=i by NAT_1:6;
-         d.i = digits(n,10).i*(10|^(j+1)) by A18,A19,A20
+      hence 2 divides d.i by A17;
+    end;
+    suppose i>0;
+      then consider j being Nat such that
+A20:  j+1=i by NAT_1:6;
+      d.i = digits(n,10).i*(10|^(j+1)) by A18,A19,A20
         .= digits(n,10).i*((10|^j)*10) by NEWTON:11
         .= 2*(digits(n,10).i*(10|^j)*5);
-        hence 2 divides d.i by NAT_D:def 3;
-      end;
+      hence 2 divides d.i by NAT_D:def 3;
     end;
-    then 2 divides value(digits(n,10),10) by A18,Th5;
-    hence 2 divides n by Th8;
   end;
+  then 2 divides value(digits(n,10),10) by A18,Th5;
+  hence 2 divides n by Th8;
+end;
 
 theorem
-   for n being Nat holds
-  3 divides n iff 3 divides Sum digits(n,10)
+  for n being Nat holds 3 divides n iff 3 divides Sum digits(n,10)
+proof
+  let n be Nat;
+  consider p being XFinSequence of NAT such that
+A1: (dom p = dom digits(n,10) & for i being Nat st i in dom p holds
+  p.i = (digits(n,10).i)*(10|^i)) & value(digits(n,10),10) = Sum p by Def1;
+  defpred Q[set,set] means $2=p.$1 mod 3;
+  reconsider dop=dom p as Element of NAT by ORDINAL1:def 13;
+A2: for k being Element of NAT st k in dop
+  ex x being Element of NAT st Q[k,x];
+  consider p' being XFinSequence of NAT such that
+A3: dom p' = dop & for k being Element of NAT st k in dop holds Q[k,p'.k]
+  from STIRL2_1:sch 6(A2);
+A4: for i being Nat st i in dom p holds p'.i = p.i mod 3 by A3;
+A5: now
+    let i be Nat;
+    reconsider dz=10|^i - 1 as Nat by NAT_1:20,NEWTON:102;
+    reconsider dz as Element of NAT by ORDINAL1:def 13;
+    3 divides 3*3 & 9 divides dz by Th9,NAT_D:def 3;
+    then 3 divides dz by NAT_D:4;
+    then 3 divides (digits(n,10).i)*dz by NAT_D:9;
+    then
+A6: (digits(n,10).i)*dz mod 3 = 0 by PEPIN:6;
+    assume
+A7: i in dom p;
+    hence p'.i = p.i mod 3 by A3
+      .= (digits(n,10).i)*(dz+1) mod 3 by A1,A7
+      .= ((digits(n,10).i)*dz+ digits(n,10).i) mod 3
+      .= (0+digits(n,10).i) mod 3 by A6,NAT_D:22
+      .= digits(n,10).i mod 3;
+  end;
+  thus 3 divides n implies 3 divides Sum digits(n,10)
   proof
-    let n be Nat;
-      consider p being XFinSequence of NAT such that
-      A1: (dom p = dom digits(n,10) &
-      for i being Nat st i in dom p holds
-      p.i = (digits(n,10).i)*(10|^i)) & value(digits(n,10),10) = Sum p by Def1;
+    assume 3 divides n;
+    then 3 divides Sum p by A1,Th8;
+    then Sum p mod 3 = 0 by PEPIN:6;
+    then Sum p' mod 3 = 0 by A3,A4,Th6;
+    then Sum digits(n,10) mod 3 = 0 by A1,A3,A5,Th6;
+    hence 3 divides Sum digits(n,10) by PEPIN:6;
+  end;
+  assume 3 divides Sum digits(n,10);
+  then Sum digits(n,10) mod 3 = 0 by PEPIN:6;
+  then Sum p' mod 3 = 0 by A1,A3,A5,Th6;
+  then Sum p mod 3 = 0 by A3,A4,Th6;
+  then 3 divides Sum p by PEPIN:6;
+  hence 3 divides n by A1,Th8;
+end;
 
-      defpred Q[set,set] means $2=p.$1 mod 3;
-      reconsider dop=dom p as Element of NAT by ORDINAL1:def 13;
-
-      A2: for k being Element of NAT st k in dop
-      ex x being Element of NAT st Q[k,x];
-
-      consider p' being XFinSequence of NAT such that
-      A3: dom p' = dop &
-      for k being Element of NAT st k in dop holds Q[k,p'.k]
-      from STIRL2_1:sch 6(A2);
-      A4: for i being Nat st i in dom p holds
-      p'.i = p.i mod 3 by A3;
-      A5:
+theorem
+  for n being Nat holds 5 divides n iff 5 divides digits(n,10).0
+proof
+  let n be Nat;
+  thus 5 divides n implies 5 divides digits(n,10).0
+  proof
+    assume
+A1: 5 divides n;
+    consider d being XFinSequence of NAT such that
+A2: (dom d = dom digits(n,10) & for i being Nat st i in dom d holds
+    d.i = (digits(n,10).i)*(10|^i)) & value(digits(n,10),10) = Sum d by Def1;
+A3: len digits(n,10)>=1 by Th7;
+    per cases by A3,XXREAL_0:1;
+    suppose
+A4:   len digits(n,10)=1;
+      then dom digits(n,10)=1 by AFINSQ_1:def 1;
+      then
+A5:   0 in dom digits(n,10) by PRGCOR_2:1;
+      len d = dom digits(n,10) by A2,AFINSQ_1:def 1
+        .= 1 by A4,AFINSQ_1:def 1;
+      then d=<%d.0%> by AFINSQ_1:38;
+      then
+A6:   Sum d = d.0 by STIRL2_1:44
+        .= digits(n,10).0*(10|^0) by A2,A5;
+      5 divides Sum d by A1,A2,Th8;
+      then 5 divides digits(n,10).0*1 by A6,NEWTON:9;
+      hence 5 divides digits(n,10).0;
+    end;
+    suppose
+A7:   len digits(n,10)>1;
+      then reconsider k=len digits(n,10)-1 as Element of NAT by NAT_1:21;
+      dom digits(n,10)>1 by A7,AFINSQ_1:def 1;
+      then
+A8:   0 in dom digits(n,10) by PRGCOR_2:1;
+      defpred P[Element of NAT,set] means $2=d.($1+1);
+A9:   for u being Element of NAT st u in k ex x be Element of NAT st P[u,x];
+      consider d' being XFinSequence of NAT such that
+A10:  dom d'=k & for x being Element of NAT st x in k holds P[x,d'.x]
+      from STIRL2_1:sch 6(A9);
       now
         let i be Nat;
-         10|^i > 0 by NEWTON:102;
-        then reconsider dz=10|^i - 1 as Nat by NAT_1:20;
-        reconsider dz as Element of NAT by ORDINAL1:def 13;
-         3 divides 3*3 & 9 divides dz by Th9,NAT_D:def 3;
-        then 3 divides dz by NAT_D:4;
-        then 3 divides (digits(n,10).i)*dz by NAT_D:9;
-        then A6: (digits(n,10).i)*dz mod 3 = 0 by PEPIN:6;
-        assume A7: i in dom p;
-        hence p'.i = p.i mod 3 by A3
-        .= (digits(n,10).i)*(dz+1) mod 3 by A1,A7
-        .= ((digits(n,10).i)*dz+ digits(n,10).i) mod 3
-        .= (0+digits(n,10).i) mod 3 by A6,NAT_D:22
-        .= digits(n,10).i mod 3;
-      end;
-    thus 3 divides n implies 3 divides Sum digits(n,10)
-    proof
-      assume 3 divides n;
-      then 3 divides Sum p by A1,Th8;
-      then Sum p mod 3 = 0 by PEPIN:6;
-      then Sum p' mod 3 = 0 by A3,A4,Th6;
-      then Sum digits(n,10) mod 3 = 0 by A1,A3,A5,Th6;
-      hence 3 divides Sum digits(n,10) by PEPIN:6;
-    end;
-    assume 3 divides Sum digits(n,10);
-    then Sum digits(n,10) mod 3 = 0 by PEPIN:6;
-    then Sum p' mod 3 = 0 by A1,A3,A5,Th6;
-    then Sum p mod 3 = 0 by A3,A4,Th6;
-    then 3 divides Sum p by PEPIN:6;
-    hence 3 divides n by A1,Th8;
-  end;
-
-theorem
-   for n being Nat holds
-  5 divides n iff 5 divides digits(n,10).0
-  proof
-    let n be Nat;
-    thus 5 divides n implies 5 divides digits(n,10).0
-    proof
-      assume A1: 5 divides n;
-      consider d being XFinSequence of NAT such that
-      A2: (dom d = dom digits(n,10) &
-      for i being Nat st i in dom d holds
-      d.i = (digits(n,10).i)*(10|^i)) & value(digits(n,10),10) = Sum d by Def1;
-      A3: len digits(n,10)>=1 by Th7;
-      per cases by A3,XXREAL_0:1;
-      suppose A4: len digits(n,10)=1;
-        then dom digits(n,10)=1 by AFINSQ_1:def 1;
-        then A5: 0 in dom digits(n,10) by PRGCOR_2:1;
-         len d = dom digits(n,10) by A2,AFINSQ_1:def 1
-        .= 1 by A4,AFINSQ_1:def 1;
-        then d=<%d.0%> by AFINSQ_1:38;
-        then A6: Sum d = d.0 by STIRL2_1:44
-        .= digits(n,10).0*(10|^0) by A2,A5;
-         5 divides Sum d by A1,A2,Th8;
-        then 5 divides digits(n,10).0*1 by A6,NEWTON:9;
-        hence 5 divides digits(n,10).0;
-      end;
-      suppose A7: len digits(n,10)>1;
-        then reconsider k=len digits(n,10)-1 as Element of NAT by NAT_1:21;
-         dom digits(n,10)>1 by A7,AFINSQ_1:def 1;
-        then A8: 0 in dom digits(n,10) by PRGCOR_2:1;
-
-        defpred P[Element of NAT,set] means $2=d.($1+1);
-
-        A9: for u being Element of NAT st u in k
-        ex x be Element of NAT st P[u,x];
-
-        consider d' being XFinSequence of NAT such that
-        A10: dom d'=k & for x being Element of NAT st x in k holds P[x,d'.x]
-        from STIRL2_1:sch 6(A9);
-
-         now
-          let i be Nat;
-          assume A11: i in dom d';
-          then i < k by A10,PRGCOR_2:1;
-          then i+1 < k+1 by XREAL_1:10;
-          then i+1 < dom d by A2,AFINSQ_1:def 1;
-          then A12: i+1 in dom d by PRGCOR_2:1;
-           d'.i=d.(i+1) by A10,A11
+        assume
+A11:    i in dom d';
+        then i < k by A10,PRGCOR_2:1;
+        then i+1 < k+1 by XREAL_1:10;
+        then i+1 < dom d by A2,AFINSQ_1:def 1;
+        then
+A12:    i+1 in dom d by PRGCOR_2:1;
+        d'.i=d.(i+1) by A10,A11
           .= digits(n,10).(i+1)*10|^(i+1) by A2,A12
           .= digits(n,10).(i+1)*(10|^i*10) by NEWTON:11
           .= 5*(digits(n,10).(i+1)*10|^i*2);
-          hence 5 divides d'.i by NAT_D:def 3;
-        end;
-        then 5 divides Sum d' by Th5;
-        then A13: Sum d' mod 5 = 0 by PEPIN:6;
-        A14: dom d = k+1 by A2,AFINSQ_1:def 1
+        hence 5 divides d'.i by NAT_D:def 3;
+      end;
+      then 5 divides Sum d' by Th5;
+      then
+A13:  Sum d' mod 5 = 0 by PEPIN:6;
+A14:  dom d = k+1 by A2,AFINSQ_1:def 1
         .= 1 + len d' by A10,AFINSQ_1:def 1
         .= len <%d.0%> + len d' by AFINSQ_1:37;
-        A15:
-        now
-          let l be Element of NAT;
-          assume l in dom <%d.0%>;
-          then l in 1 by AFINSQ_1:def 5;
-          then l < 1 by PRGCOR_2:1;
-          then l=0 by NAT_1:14;
-          hence d.l=<%d.0%>.l by AFINSQ_1:38;
-        end;
-         now
-          let l be Element of NAT;
-          assume A16: l in dom d';
-           len <%d.0%> + l = l+1 by AFINSQ_1:38;
-          hence d.(len <%d.0%> + l) = d'.l by A10,A16;
-        end;
-        then d=<%d.0%>^d' by A14,A15,AFINSQ_1:def 4;
-        then Sum d = Sum <%d.0%> + Sum d' by Th1;
-        then n = Sum <%d.0%> + Sum d' by A2,Th8;
-        then n = d.0 + Sum d' by STIRL2_1:44;
-        then (d.0 + Sum d') mod 5 = 0 by A1,PEPIN:6;
-        then d.0 mod 5 = 0 by A13,NAT_D:17;
-        then 5 divides d.0 by PEPIN:6;
-        then 5 divides digits(n,10).0*(10|^0) by A2,A8;
-        then 5 divides digits(n,10).0*1 by NEWTON:9;
-        hence 5 divides digits(n,10).0;
+A15:  now
+        let l be Element of NAT;
+        assume l in dom <%d.0%>;
+        then l in 1 by AFINSQ_1:def 5;
+        then l < 1 by PRGCOR_2:1;
+        then l=0 by NAT_1:14;
+        hence d.l=<%d.0%>.l by AFINSQ_1:38;
       end;
+      now
+        let l be Element of NAT;
+        assume
+A16:    l in dom d';
+        len <%d.0%> + l = l+1 by AFINSQ_1:38;
+        hence d.(len <%d.0%> + l) = d'.l by A10,A16;
+      end;
+      then d=<%d.0%>^d' by A14,A15,AFINSQ_1:def 4;
+      then Sum d = Sum <%d.0%> + Sum d' by Th1;
+      then n = Sum <%d.0%> + Sum d' by A2,Th8;
+      then n = d.0 + Sum d' by STIRL2_1:44;
+      then (d.0 + Sum d') mod 5 = 0 by A1,PEPIN:6;
+      then d.0 mod 5 = 0 by A13,NAT_D:17;
+      then 5 divides d.0 by PEPIN:6;
+      then 5 divides digits(n,10).0*(10|^0) by A2,A8;
+      then 5 divides digits(n,10).0*1 by NEWTON:9;
+      hence 5 divides digits(n,10).0;
     end;
-    assume A17: 5 divides digits(n,10).0;
-    consider d being XFinSequence of NAT such that
-    A18: (dom d = dom digits(n,10) &
-    for i being Nat st i in dom d holds
-    d.i = (digits(n,10).i)*(10|^i)) & value(digits(n,10),10) = Sum d by Def1;
-     now
-      let i be Nat;
-      assume A19: i in dom d;
-      per cases;
-      suppose i=0;
-        then d.i = (digits(n,10).0)*10|^0 by A18,A19
+  end;
+  assume
+A17: 5 divides digits(n,10).0;
+  consider d being XFinSequence of NAT such that
+A18: (dom d = dom digits(n,10) & for i being Nat st i in dom d holds
+  d.i = (digits(n,10).i)*(10|^i)) & value(digits(n,10),10) = Sum d by Def1;
+  now
+    let i be Nat;
+    assume
+A19: i in dom d;
+    per cases;
+    suppose i=0;
+      then d.i = (digits(n,10).0)*10|^0 by A18,A19
         .= digits(n,10).0*1 by NEWTON:9;
-        hence 5 divides d.i by A17;
-      end;
-      suppose i>0;
-        then consider j being Nat such that
-        A20: j+1=i by NAT_1:6;
-         d.i = digits(n,10).i*(10|^(j+1)) by A18,A19,A20
+      hence 5 divides d.i by A17;
+    end;
+    suppose i>0;
+      then consider j being Nat such that
+A20:  j+1=i by NAT_1:6;
+      d.i = digits(n,10).i*(10|^(j+1)) by A18,A19,A20
         .= digits(n,10).i*((10|^j)*10) by NEWTON:11
         .= 5*(digits(n,10).i*(10|^j)*2);
-        hence 5 divides d.i by NAT_D:def 3;
-      end;
+      hence 5 divides d.i by NAT_D:def 3;
     end;
-    then 5 divides value(digits(n,10),10) by A18,Th5;
-    hence 5 divides n by Th8;
   end;
-  
+  then 5 divides value(digits(n,10),10) by A18,Th5;
+  hence 5 divides n by Th8;
+end;
+

@@ -26,6 +26,7 @@
 <ArticleID name="MEMBERED"/>
 <ArticleID name="SETFAM_1"/>
 <ArticleID name="SUPINF_1"/>
+<ArticleID name="VALUED_0"/>
 <ArticleID name="MESFUNC1"/>
 <ArticleID name="RADIX_1"/>
 </Signature>
@@ -37,7 +38,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="185">
+<Func kind="K" nr="190">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

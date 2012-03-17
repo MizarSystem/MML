@@ -27,17 +27,18 @@ environ
 
 begin :: Preliminaries
 
- reserve a,b,b1,b2,c,d for set,
-         i,j,k,n for Element of NAT,
-         x,y,x1,x2 for bound_QC-variable,
-         P for QC-pred_symbol of k,
-         ll for CQC-variable_list of k,
-         l1,l2 for FinSequence of QC-variables,
-         p for QC-formula;
+reserve a,b,b1,b2,c,d for set,
+  i,j,k,n for Element of NAT,
+  x,y,x1,x2 for bound_QC-variable,
+  P for QC-pred_symbol of k,
+  ll for CQC-variable_list of k,
+  l1,l2 for FinSequence of QC-variables,
+  p for QC-formula;
 
 definition
   func vSUB equals
-     PFuncs(bound_QC-variables,bound_QC-variables);
+
+  PFuncs(bound_QC-variables,bound_QC-variables);
   coherence;
 end;
 
@@ -55,158 +56,180 @@ registration
   coherence;
 end;
 
- reserve Sub for CQC_Substitution;
+reserve Sub for CQC_Substitution;
 
-definition let Sub;
+definition
+  let Sub;
   func @Sub -> PartFunc of bound_QC-variables,bound_QC-variables equals
-    Sub;
+
+  Sub;
   coherence by PARTFUN1:121;
 end;
 
 theorem Th1:
   a in dom Sub implies Sub.a in bound_QC-variables
-  proof
-    assume a in dom Sub;
-    then a in dom @Sub;
-    hence thesis by PARTFUN1:27;
-  end;
+proof
+  assume a in dom Sub;
+  then a in dom @Sub;
+  hence thesis by PARTFUN1:27;
+end;
 
-definition let l be FinSequence of QC-variables; let Sub;
+definition
+  let l be FinSequence of QC-variables;
+  let Sub;
   func CQC_Subst(l,Sub) -> FinSequence of QC-variables means
-  :Def3: len it = len l &
-  for k st 1 <= k & k <= len l holds
+  :Def3:
+  len it = len l & for k st 1 <= k & k <= len l holds
   (l.k in dom Sub implies it.k = Sub.(l.k)) &
   (not l.k in dom Sub implies it.k = l.k);
   existence
   proof
-  defpred P[set,set] means (l.$1 in dom Sub implies $2 = Sub.(l.$1)) &
-      (not l.$1 in dom Sub implies $2 = l.$1);
+    defpred P[set,set] means (l.$1 in dom Sub implies $2 = Sub.(l.$1)) &
+    (not l.$1 in dom Sub implies $2 = l.$1);
 A1: for k be Nat for y1,y2 being set st k in Seg len l & P[k,y1] & P[k,y2]
-                                                      holds y1  = y2;
+    holds y1 = y2;
 A2: for k be Nat st k in Seg len l ex y being set st P[k,y]
-     proof let k be Nat; assume k in Seg len l;
-        (l.k in dom Sub implies thesis) &
-       (not l.k in dom Sub implies thesis);
+    proof
+      let k be Nat;
+      assume k in Seg len l;
+      (l.k in dom Sub implies thesis) & (not l.k in dom Sub implies thesis);
       hence thesis;
-     end;
-  consider s being FinSequence such that
-A3:  dom s = Seg len l and
-A4:  for k be Nat st k in Seg len l holds P[k,s.k] from FINSEQ_1:sch 1(A1,A2);
-   rng s c= QC-variables
-   proof let y be set;
-    assume y in rng s;
-    then consider x being set such that
-A5:    x in dom s and
-A6:    s.x = y by FUNCT_1:def 5;
-    reconsider x as Element of NAT by A5;
-     now per cases;
-     case l.x in dom Sub;
-      then s.x = Sub.(l.x) & Sub.(l.x) in bound_QC-variables by A3,A4,A5,Th1;
-      hence s.x in bound_QC-variables;
-     end;
-     case not l.x in dom Sub;
-      then A7: s.x = l.x by A3,A4,A5;
-       x in dom l by A3,A5,FINSEQ_1:def 3;
-      then l.x in rng l by FUNCT_1:12;
-      hence s.x in QC-variables by A7;
-     end;
     end;
-    hence thesis by A6;
-   end;
-  then reconsider s as FinSequence of QC-variables by FINSEQ_1:def 4;
-  take s;
-  thus len s = len l by A3,FINSEQ_1:def 3;
-  thus for k st 1 <= k & k <= len l holds
-  (l.k in dom Sub implies s.k = Sub.(l.k)) &
-  (not l.k in dom Sub implies s.k = l.k)
-  proof
-    let k;
-    assume 1 <= k & k <= len l;
-    then k in dom l by FINSEQ_3:27;
-    then k in Seg len l by FINSEQ_1:def 3;
-    hence thesis by A4;
-  end;
- end;
- uniqueness
- proof let l1,l2 such that
-A8:  len l1 = len l and
-A9:  for k st 1 <= k & k <= len l holds
-      (l.k in dom Sub implies l1.k = Sub.(l.k)) &
-      (not l.k in dom Sub implies l1.k = l.k) and
-A10:  len l2 = len l and
-A11:  for k st 1 <= k & k <= len l holds
-      (l.k in dom Sub implies l2.k = Sub.(l.k)) &
-      (not l.k in dom Sub implies l2.k = l.k);
-   now let k be Nat;
-A12:  k in NAT by ORDINAL1:def 13;
-   assume 1 <= k & k <= len l;
-   then (l.k in dom Sub implies l1.k = Sub.(l.k)) &
-     (not l.k in dom Sub implies l1.k = l.k) &
-     (l.k in dom Sub implies l2.k = Sub.(l.k)) &
-     (not l.k in dom Sub implies l2.k = l.k) by A9,A11,A12;
-   hence l1.k = l2.k;
-  end;
-  hence thesis by A8,A10,FINSEQ_1:18;
-  end;
-end;
+    consider s being FinSequence such that
+A3: dom s = Seg len l and
+A4: for k be Nat st k in Seg len l holds P[k,s.k] from FINSEQ_1:sch 1(A1,A2);
+    rng s c= QC-variables
+    proof
+      let y be set;
+      assume y in rng s;
+      then consider x being set such that
+A5:   x in dom s and
+A6:   s.x = y by FUNCT_1:def 5;
+      reconsider x as Element of NAT by A5;
+      now per cases;
+        case l.x in dom Sub;
 
-definition let l be FinSequence of bound_QC-variables;
-  func @l -> FinSequence of QC-variables equals
-    l;
-   coherence
-   proof
-      rng l c= QC-variables by XBOOLE_1:1;
-     hence thesis by FINSEQ_1:def 4;
-   end;
-end;
-
-definition let l be FinSequence of bound_QC-variables; let Sub;
-  func CQC_Subst(l,Sub) -> FinSequence of bound_QC-variables equals
-    CQC_Subst(@l,Sub);
-   coherence
-   proof
-       len CQC_Subst(@l,Sub) = len @l by Def3;
-      then A1:   dom CQC_Subst(@l,Sub) = Seg len @l by FINSEQ_1:def 3;
-A2:   for k st k in Seg len @l holds
-      (@l.k in dom Sub implies CQC_Subst(@l,Sub).k = Sub.(@l.k)) &
-      (not @l.k in dom Sub implies  CQC_Subst(@l,Sub).k = @l.k)
-      proof
-        let k such that A3: k in Seg len @l;
-         1 <= k & k <= len @l by A3,FINSEQ_1:3;
-        hence thesis by Def3;
+then s.x = Sub.(l.x) & Sub.(l.x) in bound_QC-variables by A3,A4,A5,Th1;
+          hence s.x in bound_QC-variables;
+        end;
+        case not l.x in dom Sub;
+          then
+A7:       s.x = l.x by A3,A4,A5;
+          x in dom l by A3,A5,FINSEQ_1:def 3;
+          then l.x in rng l by FUNCT_1:12;
+          hence s.x in QC-variables by A7;
+        end;
       end;
-      rng CQC_Subst(@l,Sub) c= bound_QC-variables
-   proof let y be set;
-    assume y in rng CQC_Subst(@l,Sub);
-    then consider x being set such that
-A4: x in dom CQC_Subst(@l,Sub) and
-A5: CQC_Subst(@l,Sub).x = y by FUNCT_1:def 5;
-    reconsider x as Element of NAT by A4;
-     now per cases;
-     case @l.x in dom Sub;
-      then CQC_Subst(@l,Sub).x = Sub.(@l.x) & Sub.(@l.x) in bound_QC-variables
-                                   by A1,A2,A4,Th1;
-      hence CQC_Subst(@l,Sub).x in bound_QC-variables;
-     end;
-     case not @l.x in dom Sub;
-      then A6: CQC_Subst(@l,Sub).x = @l.x by A1,A2,A4;
-       x in dom @l by A1,A4,FINSEQ_1:def 3;
-      then A7: @l.x in rng @l by FUNCT_1:12;
-       rng l c= bound_QC-variables;
-      hence CQC_Subst(@l,Sub).x in bound_QC-variables by A6,A7;
-     end;
+      hence thesis by A6;
     end;
-    hence thesis by A5;
-   end;
-   hence thesis by FINSEQ_1:def 4;
- end;
+    then reconsider s as FinSequence of QC-variables by FINSEQ_1:def 4;
+    take s;
+    thus len s = len l by A3,FINSEQ_1:def 3;
+    thus for k st 1 <= k & k <= len l holds
+    (l.k in dom Sub implies s.k = Sub.(l.k)) &
+    (not l.k in dom Sub implies s.k = l.k)
+    proof
+      let k;
+      assume 1 <= k & k <= len l;
+      then k in dom l by FINSEQ_3:27;
+      then k in Seg len l by FINSEQ_1:def 3;
+      hence thesis by A4;
+    end;
+  end;
+  uniqueness
+  proof
+    let l1,l2 such that
+A8: len l1 = len l and
+A9: for k st 1 <= k & k <= len l holds
+    (l.k in dom Sub implies l1.k = Sub.(l.k)) &
+    (not l.k in dom Sub implies l1.k = l.k) and
+A10: len l2 = len l and
+A11: for k st 1 <= k & k <= len l holds
+    (l.k in dom Sub implies l2.k = Sub.(l.k)) &
+    (not l.k in dom Sub implies l2.k = l.k);
+    now
+      let k be Nat;
+A12:  k in NAT by ORDINAL1:def 13;
+      assume 1 <= k & k <= len l;
+      then (l.k in dom Sub implies l1.k = Sub.(l.k)) &
+      (not l.k in dom Sub implies l1.k = l.k) &
+      (l.k in dom Sub implies l2.k = Sub.(l.k)) &
+      (not l.k in dom Sub implies l2.k = l.k) by A9,A11,A12;
+      hence l1.k = l2.k;
+    end;
+    hence thesis by A8,A10,FINSEQ_1:18;
+  end;
 end;
 
-definition let Sub; let X be set;
+definition
+  let l be FinSequence of bound_QC-variables;
+  func @l -> FinSequence of QC-variables equals
+
+  l;
+  coherence
+  proof
+    rng l c= QC-variables by XBOOLE_1:1;
+    hence thesis by FINSEQ_1:def 4;
+  end;
+end;
+
+definition
+  let l be FinSequence of bound_QC-variables;
+  let Sub;
+  func CQC_Subst(l,Sub) -> FinSequence of bound_QC-variables equals
+  CQC_Subst(@l,Sub);
+  coherence
+  proof
+    len CQC_Subst(@l,Sub) = len @l by Def3;
+    then
+A1: dom CQC_Subst(@l,Sub) = Seg len @l by FINSEQ_1:def 3;
+A2: for k st k in Seg len @l holds
+    (@l.k in dom Sub implies CQC_Subst(@l,Sub).k = Sub.(@l.k)) &
+    (not @l.k in dom Sub implies CQC_Subst(@l,Sub).k = @l.k)
+    proof
+      let k such that
+A3:   k in Seg len @l;
+      1 <= k & k <= len @l by A3,FINSEQ_1:3;
+      hence thesis by Def3;
+    end;
+    rng CQC_Subst(@l,Sub) c= bound_QC-variables
+    proof
+      let y be set;
+      assume y in rng CQC_Subst(@l,Sub);
+      then consider x being set such that
+A4:   x in dom CQC_Subst(@l,Sub) and
+A5:   CQC_Subst(@l,Sub).x = y by FUNCT_1:def 5;
+      reconsider x as Element of NAT by A4;
+      now per cases;
+        case @l.x in dom Sub;
+
+then CQC_Subst(@l,Sub).x = Sub.(@l.x) & Sub.(@l.x) in bound_QC-variables
+          by A1,A2,A4,Th1;
+          hence CQC_Subst(@l,Sub).x in bound_QC-variables;
+        end;
+        case not @l.x in dom Sub;
+          then
+A6:       CQC_Subst(@l,Sub).x = @l.x by A1,A2,A4;
+          x in dom @l by A1,A4,FINSEQ_1:def 3;
+          then
+A7:       @l.x in rng @l by FUNCT_1:12;
+          rng l c= bound_QC-variables;
+          hence CQC_Subst(@l,Sub).x in bound_QC-variables by A6,A7;
+        end;
+      end;
+      hence thesis by A5;
+    end;
+    hence thesis by FINSEQ_1:def 4;
+  end;
+end;
+
+definition
+  let Sub;
+  let X be set;
   redefine func Sub|X -> CQC_Substitution;
   coherence
   proof
-     Sub|X = @Sub|X;
+    Sub|X = @Sub|X;
     hence thesis by PARTFUN1:119;
   end;
 end;
@@ -216,418 +239,431 @@ registration
   existence
   proof
     take L = {};
-     L is PartFunc of bound_QC-variables,bound_QC-variables by PARTFUN1:56;
+    L is PartFunc of bound_QC-variables,bound_QC-variables by PARTFUN1:56;
     hence L is CQC_Substitution by PARTFUN1:119;
     thus L is finite;
-   end;
+  end;
 end;
 
-definition let x, p, Sub;
+definition
+  let x, p, Sub;
   func RestrictSub(x,p,Sub) -> finite CQC_Substitution equals
-    Sub|{y : y in still_not-bound_in p & y is Element of dom Sub &
-                y <> x & y <> Sub.y};
+  Sub|{y : y in still_not-bound_in p & y is Element of dom Sub &
+  y <> x & y <> Sub.y};
   coherence
   proof
     reconsider Z = still_not-bound_in p as finite set by CQC_SIM1:20;
     set X = {y : y in still_not-bound_in p & y is Element of dom Sub &
-              y <> x & y <> Sub.y};
+    y <> x & y <> Sub.y};
     set Y = {y : y is Element of dom Sub & y <> x & y <> Sub.y};
-     X = Z /\ Y
-     proof
-        for a holds (a in X iff a in Z /\ Y)
-       proof
-         let a;
-         thus a in X implies a in Z /\ Y
-         proof
-           assume a in X;
-           then consider y such that A1: a = y &
-           y in still_not-bound_in p & y is Element of dom Sub &
-           y <> x & y <> Sub.y;
-            y in still_not-bound_in p & y in Y by A1;
-           hence thesis by A1,XBOOLE_0:def 3;
-         end;
-         thus a in Z /\ Y implies a in X
-         proof
-           assume a in Z /\ Y;
-           then A2: a in Z & a in Y by XBOOLE_0:def 3;
-           then consider y such that
-A3:        a = y & y is Element of dom Sub & y <> x & y <> Sub.y;
-           thus thesis by A2,A3;
-         end;
-       end;
-       hence thesis by TARSKI:2;
-     end;
-     then reconsider X as finite set;
-      Sub|X is finite;
-     hence thesis;
-   end;
-end;
-
-definition let l1;
-  func Bound_Vars(l1) -> Subset of bound_QC-variables equals
-    { l1.k : 1 <= k & k <= len l1 & l1.k in bound_QC-variables};
- coherence
- proof set A = { l1.k : 1 <= k & k <= len l1 & l1.k in bound_QC-variables};
-    A c= bound_QC-variables
+    X = Z /\ Y
     proof
-      let x be set; assume x in A;
-      then ex k st l1.k = x & 1 <= k & k <= len l1 & l1.k in
-bound_QC-variables;
-     hence thesis;
+      for a holds (a in X iff a in Z /\ Y)
+      proof
+        let a;
+        thus a in X implies a in Z /\ Y
+        proof
+          assume a in X;
+          then consider y such that
+A1:       a = y & y in still_not-bound_in p & y is Element of dom Sub &
+          y <> x & y <> Sub.y;
+          y in still_not-bound_in p & y in Y by A1;
+          hence thesis by A1,XBOOLE_0:def 3;
+        end;
+        thus a in Z /\ Y implies a in X
+        proof
+          assume a in Z /\ Y;
+          then
+A2:       a in Z & a in Y by XBOOLE_0:def 3;
+          then consider y such that
+A3:       a = y & y is Element of dom Sub & y <> x & y <> Sub.y;
+          thus thesis by A2,A3;
+        end;
+      end;
+      hence thesis by TARSKI:2;
     end;
-   hence thesis;
+    then reconsider X as finite set;
+    Sub|X is finite;
+    hence thesis;
   end;
 end;
 
-definition let p;
+definition
+  let l1;
+  func Bound_Vars(l1) -> Subset of bound_QC-variables equals
+  { l1.k : 1 <= k & k <= len l1 & l1.k in bound_QC-variables};
+  coherence
+  proof
+    set A = { l1.k : 1 <= k & k <= len l1 & l1.k in bound_QC-variables};
+    A c= bound_QC-variables
+    proof
+      let x be set;
+      assume x in A;
+      then ex k st l1.k = x & 1 <= k & k <= len l1 & l1.k in
+      bound_QC-variables;
+      hence thesis;
+    end;
+    hence thesis;
+  end;
+end;
+
+definition
+  let p;
   func Bound_Vars(p) -> Subset of bound_QC-variables means
-  :Def8: ex F being Function of QC-WFF, bool bound_QC-variables st
-    it = F.p &
-    for p being Element of QC-WFF
-     for d1,d2 being Subset of bound_QC-variables holds
-      (p = VERUM implies F.p = {}(bound_QC-variables))   &
-      (p is atomic implies F.p = Bound_Vars(the_arguments_of p)) &
-      (p is negative & d1 = F.the_argument_of p implies F.p = d1) &
-      (p is conjunctive & d1 = F.the_left_argument_of p &
-        d2 = F.the_right_argument_of p implies F.p = d1 \/ d2) &
-      (p is universal & d1 = F.the_scope_of p implies
-                   F.p = (d1 \/ {bound_in p}));
-   correctness
-   proof
+  :Def8:
+  ex F being Function of QC-WFF, bool bound_QC-variables st it = F.p &
+  for p being Element of QC-WFF
+  for d1,d2 being Subset of bound_QC-variables holds
+  (p = VERUM implies F.p = {}(bound_QC-variables)) &
+  (p is atomic implies F.p = Bound_Vars(the_arguments_of p)) &
+  (p is negative & d1 = F.the_argument_of p implies F.p = d1) &
+  (p is conjunctive & d1 = F.the_left_argument_of p &
+  d2 = F.the_right_argument_of p implies F.p = d1 \/ d2) &
+  (p is universal & d1 = F.the_scope_of p implies F.p = (d1 \/ {bound_in p}));
+  correctness
+  proof
     set V = bound_QC-variables;
     deffunc A(Element of QC-WFF) = Bound_Vars(the_arguments_of $1);
     deffunc N(Subset of V) = $1;
     deffunc C(Subset of V,Subset of V) = $1 \/ $2;
     deffunc Q(Element of QC-WFF,Subset of V) = $2 \/ {bound_in $1};
     thus (ex d being (Subset of V), F being Function of QC-WFF, bool V st
-        d = F.p &
-    for p being Element of QC-WFF
-        for d1,d2 being Subset of V holds
-        (p = VERUM implies F.p = {}V) &
-        (p is atomic implies F.p = A(p)) &
-        (p is negative & d1 = F.the_argument_of p
-            implies F.p = N(d1)) &
-        (p is conjunctive &
-         d1 = F.the_left_argument_of p & d2 = F.the_right_argument_of p
-            implies F.p = C(d1, d2)) &
-        (p is universal & d1 = F.the_scope_of p implies F.p = Q(p, d1)) ) &
- for x1,x2 being Subset of V st
-  (ex F being Function of QC-WFF, bool V st
-        x1 = F.p &
-        for p being Element of QC-WFF
-        for d1,d2 being Subset of V holds
-        (p = VERUM implies F.p = {}V) &
-        (p is atomic implies F.p = A(p)) &
-        (p is negative & d1 = F.the_argument_of p
-            implies F.p = N(d1)) &
-        (p is conjunctive &
-         d1 = F.the_left_argument_of p & d2 = F.the_right_argument_of p
-            implies F.p = C(d1, d2)) &
-        (p is universal & d1 = F.the_scope_of p implies F.p = Q(p, d1)) ) &
-  (ex F being Function of QC-WFF, bool V st
-        x2 = F.p &
-        for p being Element of QC-WFF
-        for d1,d2 being Subset of V holds
-        (p = VERUM implies F.p = {}V) &
-        (p is atomic implies F.p = A(p)) &
-        (p is negative & d1 = F.the_argument_of p
-            implies F.p = N(d1)) &
-        (p is conjunctive &
-         d1 = F.the_left_argument_of p & d2 = F.the_right_argument_of p
-            implies F.p = C(d1, d2)) &
-        (p is universal & d1 = F.the_scope_of p implies F.p = Q(p, d1)) )
-     holds x1 = x2 from QC_LANG3:sch 2;
-   end;
+    d = F.p & for p being Element of QC-WFF for d1,d2 being Subset of V holds
+    (p = VERUM implies F.p = {}V) & (p is atomic implies F.p = A(p)) &
+    (p is negative & d1 = F.the_argument_of p implies F.p = N(d1)) &
+    (p is conjunctive &
+    d1 = F.the_left_argument_of p & d2 = F.the_right_argument_of p
+    implies F.p = C(d1, d2)) &
+    (p is universal & d1 = F.the_scope_of p implies F.p = Q(p, d1)) ) &
+    for x1,x2 being Subset of V st (ex F being Function of QC-WFF, bool V st
+    x1 = F.p & for p being Element of QC-WFF for d1,d2 being Subset of V holds
+    (p = VERUM implies F.p = {}V) & (p is atomic implies F.p = A(p)) &
+    (p is negative & d1 = F.the_argument_of p implies F.p = N(d1)) &
+    (p is conjunctive &
+    d1 = F.the_left_argument_of p & d2 = F.the_right_argument_of p
+    implies F.p = C(d1, d2)) &
+    (p is universal & d1 = F.the_scope_of p implies F.p = Q(p, d1)) ) &
+    (ex F being Function of QC-WFF, bool V st x2 = F.p &
+    for p being Element of QC-WFF for d1,d2 being Subset of V holds
+    (p = VERUM implies F.p = {}V) & (p is atomic implies F.p = A(p)) &
+    (p is negative & d1 = F.the_argument_of p implies F.p = N(d1)) &
+    (p is conjunctive &
+    d1 = F.the_left_argument_of p & d2 = F.the_right_argument_of p
+    implies F.p = C(d1, d2)) &
+    (p is universal & d1 = F.the_scope_of p implies F.p = Q(p, d1)) )
+    holds x1 = x2 from QC_LANG3:sch 2;
+  end;
 end;
 
 Lm1: (Bound_Vars(VERUM) = {}(bound_QC-variables)) &
-     (p is atomic implies Bound_Vars(p) = Bound_Vars(the_arguments_of p)) &
-     (p is negative implies Bound_Vars(p) = Bound_Vars(the_argument_of p)) &
-     (p is conjunctive implies Bound_Vars(p) =
-     Bound_Vars(the_left_argument_of p) \/ Bound_Vars(the_right_argument_of p))
-     & (p is universal implies Bound_Vars(p) =
-                          Bound_Vars(the_scope_of p) \/ {bound_in p})
-
+(p is atomic implies Bound_Vars(p) = Bound_Vars(the_arguments_of p)) &
+(p is negative implies Bound_Vars(p) = Bound_Vars(the_argument_of p)) &
+(p is conjunctive implies Bound_Vars(p) =
+Bound_Vars(the_left_argument_of p) \/ Bound_Vars(the_right_argument_of p))
+& (p is universal implies Bound_Vars(p) =
+Bound_Vars(the_scope_of p) \/ {bound_in p})
 proof
-set V = bound_QC-variables;
-deffunc F1(Element of QC-WFF) = Bound_Vars($1);
-deffunc A(Element of QC-WFF) = Bound_Vars(the_arguments_of $1);
-deffunc N(Subset of V) = $1;
-deffunc C(Subset of V,Subset of V) = $1 \/ $2;
-deffunc Q(Element of QC-WFF,Subset of V) = $2 \/ {bound_in $1};
-A1: for p being QC-formula, X being Subset of V holds
-   X = F1(p) iff
-   ex F being Function of QC-WFF, bool V st
-    X = F.p &
-    for p being Element of QC-WFF
-     for d1,d2 being Subset of bound_QC-variables holds
-      (p = VERUM implies F.p = {}(V)) &
-      (p is atomic implies F.p = A(p)) &
-      (p is negative & d1 = F.the_argument_of p implies F.p = N(d1)) &
-      (p is conjunctive & d1 = F.the_left_argument_of p &
-        d2 = F.the_right_argument_of p implies F.p = C(d1,d2)) &
-      (p is universal & d1 = F.the_scope_of p implies F.p = Q(p,d1)) by Def8;
-  F1(VERUM) = {}(V) from QC_LANG3:sch 3(A1) .= {};
- hence Bound_Vars(VERUM) = {}(bound_QC-variables);
- thus p is atomic implies Bound_Vars(p) = Bound_Vars(the_arguments_of p)
-   proof assume
-A2:   p is atomic;
+  set V = bound_QC-variables;
+  deffunc F1(Element of QC-WFF) = Bound_Vars($1);
+  deffunc A(Element of QC-WFF) = Bound_Vars(the_arguments_of $1);
+  deffunc N(Subset of V) = $1;
+  deffunc C(Subset of V,Subset of V) = $1 \/ $2;
+  deffunc Q(Element of QC-WFF,Subset of V) = $2 \/ {bound_in $1};
+A1: for p being QC-formula, X being Subset of V holds X = F1(p) iff
+  ex F being Function of QC-WFF, bool V st X = F.p &
+  for p being Element of QC-WFF
+  for d1,d2 being Subset of bound_QC-variables holds
+  (p = VERUM implies F.p = {}(V)) & (p is atomic implies F.p = A(p)) &
+  (p is negative & d1 = F.the_argument_of p implies F.p = N(d1)) &
+  (p is conjunctive & d1 = F.the_left_argument_of p &
+  d2 = F.the_right_argument_of p implies F.p = C(d1,d2)) &
+  (p is universal & d1 = F.the_scope_of p implies F.p = Q(p,d1)) by Def8;
+  F1(VERUM) = {}(V) from QC_LANG3:sch 3(A1)
+    .= {};
+  hence Bound_Vars(VERUM) = {}(bound_QC-variables);
+  thus p is atomic implies Bound_Vars(p) = Bound_Vars(the_arguments_of p)
+  proof
+    assume
+A2: p is atomic;
     thus F1(p) = A(p) from QC_LANG3:sch 4(A1,A2);
-   end;
- thus p is negative implies Bound_Vars(p) = Bound_Vars(the_argument_of p)
-   proof assume
-A3:   p is negative;
+  end;
+  thus p is negative implies Bound_Vars(p) = Bound_Vars(the_argument_of p)
+  proof
+    assume
+A3: p is negative;
     thus F1(p) = N(F1(the_argument_of p)) from QC_LANG3:sch 5(A1,A3);
-   end;
- thus p is conjunctive implies Bound_Vars(p) =
-   Bound_Vars(the_left_argument_of p) \/ Bound_Vars(the_right_argument_of p)
-   proof assume
-A4:   p is conjunctive;
-        for d1,d2 being Subset of V st
-      d1 = F1(the_left_argument_of p) & d2 = F1(the_right_argument_of p) holds
-       F1(p) = C(d1,d2) from QC_LANG3: sch 6(A1,A4);
+  end;
+  thus p is conjunctive implies Bound_Vars(p) =
+  Bound_Vars(the_left_argument_of p) \/ Bound_Vars(the_right_argument_of p)
+  proof
+    assume
+A4: p is conjunctive;
+    for d1,d2 being Subset of V st
+    d1 = F1(the_left_argument_of p) & d2 = F1(the_right_argument_of p) holds
+    F1(p) = C(d1,d2) from QC_LANG3: sch 6(A1,A4);
     hence thesis;
-   end;
- thus p is universal implies Bound_Vars(p) =
-                                     Bound_Vars(the_scope_of p) \/ {bound_in p}
-   proof assume
-A5:   p is universal;
+  end;
+  thus p is universal implies Bound_Vars(p) =
+  Bound_Vars(the_scope_of p) \/ {bound_in p}
+  proof
+    assume
+A5: p is universal;
     thus F1(p) = Q(p,F1(the_scope_of p)) from QC_LANG3:sch 7(A1,A5);
-   end;
+  end;
 end;
 
 theorem
-   Bound_Vars(VERUM) = {} by Lm1;
+  Bound_Vars(VERUM) = {} by Lm1;
 
 theorem
-   for p being QC-formula st p is atomic holds
-                 Bound_Vars(p) = Bound_Vars(the_arguments_of p) by Lm1;
+  for p being QC-formula st p is atomic holds
+  Bound_Vars(p) = Bound_Vars(the_arguments_of p) by Lm1;
 
 theorem
-   for p being QC-formula st p is negative holds
-                 Bound_Vars(p) = Bound_Vars(the_argument_of p) by Lm1;
+  for p being QC-formula st p is negative holds
+  Bound_Vars(p) = Bound_Vars(the_argument_of p) by Lm1;
 
 theorem
-   for p being QC-formula st p is conjunctive holds
-                 Bound_Vars(p) = ( Bound_Vars(the_left_argument_of p)) \/
-                              ( Bound_Vars(the_right_argument_of p)) by Lm1;
+  for p being QC-formula st p is conjunctive holds
+  Bound_Vars(p) = ( Bound_Vars(the_left_argument_of p)) \/
+  ( Bound_Vars(the_right_argument_of p)) by Lm1;
 
 theorem
-   for p being QC-formula st p is universal holds
-     Bound_Vars(p) = Bound_Vars(the_scope_of p) \/ {bound_in p} by Lm1;
+  for p being QC-formula st p is universal holds
+  Bound_Vars(p) = Bound_Vars(the_scope_of p) \/ {bound_in p} by Lm1;
 
-registration let p;
+registration
+  let p;
   cluster Bound_Vars(p) -> finite;
   coherence
   proof
     defpred P[Element of QC-WFF] means Bound_Vars($1) is finite;
-      A1: for p being Element of QC-WFF holds
-        (p is atomic implies P[p]) &
-          P[VERUM] &
-        (p is negative & P[the_argument_of p] implies P[p]) &
-        (p is conjunctive & P[the_left_argument_of p] &
-          P[the_right_argument_of p] implies P[p]) &
-        (p is universal &  P[the_scope_of p] implies P[p])
-   proof
-    let p be Element of QC-WFF;
-    thus p is atomic implies Bound_Vars(p) is finite
+A1: for p being Element of QC-WFF holds (p is atomic implies P[p]) &
+    P[VERUM] & (p is negative & P[the_argument_of p] implies P[p]) &
+    (p is conjunctive & P[the_left_argument_of p] &
+    P[the_right_argument_of p] implies P[p]) &
+    (p is universal & P[the_scope_of p] implies P[p])
     proof
-      assume p is atomic;
-      then A2: Bound_Vars(p) = Bound_Vars(the_arguments_of p) by Lm1
-       .= { (the_arguments_of p).k : 1 <= k & k <= len (the_arguments_of p)
-       & (the_arguments_of p).k in bound_QC-variables };
-      defpred A[Element of NAT] means
-       1 <= $1 & $1 <= len (the_arguments_of p) &
+      let p be Element of QC-WFF;
+      thus p is atomic implies Bound_Vars(p) is finite
+      proof
+        assume p is atomic;
+        then
+A2:     Bound_Vars(p) = Bound_Vars(the_arguments_of p) by Lm1
+          .= { (the_arguments_of p).k : 1 <= k & k <= len (the_arguments_of p)
+        & (the_arguments_of p).k in bound_QC-variables };
+        defpred A[Element of NAT] means
+        1 <= $1 & $1 <= len (the_arguments_of p) &
         (the_arguments_of p).$1 in bound_QC-variables;
-      defpred B[Element of NAT] means 1 <= $1 & $1 <= len the_arguments_of p;
-      deffunc F(set) = (the_arguments_of p).$1;
-    A3: for k st A[k] holds B[k];
-         { F(k) : A[k] } c= { F(n) : B[n]} from FRAENKEL:sch 1(A3);
-      then Bound_Vars(p) c= rng (the_arguments_of p) &
-      rng (the_arguments_of p) is finite by A2,CQC_SIM1:9;
-      hence thesis by FINSET_1:13;
-     end;
-    thus Bound_Vars(VERUM) is finite by Lm1;
-    thus p is negative & Bound_Vars(the_argument_of p) is finite
-     implies Bound_Vars(p) is finite by Lm1;
-    thus p is conjunctive &
-           Bound_Vars(the_left_argument_of p) is finite &
-           Bound_Vars(the_right_argument_of p) is finite implies
-           Bound_Vars(p) is finite
-     proof
-      assume that
-A4:   p is conjunctive and
-A5:   Bound_Vars(the_left_argument_of p) is finite &
-             Bound_Vars(the_right_argument_of p) is finite;
-         Bound_Vars(p) = (Bound_Vars(the_left_argument_of p)) \/
+        defpred B[Element of NAT] means 1 <= $1 & $1 <= len the_arguments_of p;
+        deffunc F(set) = (the_arguments_of p).$1;
+A3:     for k st A[k] holds B[k];
+        { F(k) : A[k] } c= { F(n) : B[n]} from FRAENKEL:sch 1(A3);
+        then Bound_Vars(p) c= rng (the_arguments_of p) &
+        rng (the_arguments_of p) is finite by A2,CQC_SIM1:9;
+        hence thesis by FINSET_1:13;
+      end;
+      thus Bound_Vars(VERUM) is finite by Lm1;
+      thus p is negative & Bound_Vars(the_argument_of p) is finite
+      implies Bound_Vars(p) is finite by Lm1;
+      thus p is conjunctive & Bound_Vars(the_left_argument_of p) is finite &
+      Bound_Vars(the_right_argument_of p) is finite implies
+      Bound_Vars(p) is finite
+      proof
+        assume that
+A4:     p is conjunctive and
+A5:     Bound_Vars(the_left_argument_of p) is finite &
+        Bound_Vars(the_right_argument_of p) is finite;
+        Bound_Vars(p) = (Bound_Vars(the_left_argument_of p)) \/
         (Bound_Vars(the_right_argument_of p)) by A4,Lm1;
-       hence thesis by A5,FINSET_1:14;
-     end;
-    assume that
-     A6: p is universal and
-     A7: Bound_Vars(the_scope_of p) is finite;
-      Bound_Vars(p) =
-      (Bound_Vars(the_scope_of p)) \/ {bound_in p} by A6,Lm1;
-    hence Bound_Vars(p) is finite by A7,FINSET_1:14;
-   end;
+        hence thesis by A5,FINSET_1:14;
+      end;
+      assume that
+A6:   p is universal and
+A7:   Bound_Vars(the_scope_of p) is finite;
+      Bound_Vars(p) = (Bound_Vars(the_scope_of p)) \/ {bound_in p} by A6,Lm1;
+      hence Bound_Vars(p) is finite by A7,FINSET_1:14;
+    end;
     for p being Element of QC-WFF holds P[p] from QC_LANG1:sch 2(A1);
-   hence thesis;
+    hence thesis;
   end;
 end;
 
-definition let p;
+definition
+  let p;
   func Dom_Bound_Vars(p) -> finite Subset of NAT equals
-     {i : x.i in Bound_Vars(p)};
+  {i : x.i in Bound_Vars(p)};
   coherence
   proof
     set X = {i : x.i in Bound_Vars(p)};
     defpred P[set,set] means ex i st i = $1 & $2 = x.i;
-    A1: for a,b1,b2 st a in NAT & P[a,b1] & P[a,b2] holds b1 = b2;
-    A2: for a st a in NAT ex b st P[a,b]
-        proof
-          let a such that A3: a in NAT;
-          reconsider i = a as Element of NAT by A3;
-          take b = x.i;
-          take i;
-          thus thesis;
-        end;
-        consider f being Function such that A4: dom f = NAT &
-        for a st a in NAT holds P[a,f.a] from FUNCT_1:sch 2(A1,A2);
-         f is one-to-one
-        proof
-         let a1,a2 be set such that
-A5:      a1 in dom f & a2 in dom f & f.a1 = f.a2;
-         consider i1 being Element of NAT such that
-A6:      i1 = a1 & f.a1 = x.i1 by A4,A5;
-         consider i2 being Element of NAT such that
-A7:      i2 = a2 & f.a2 = x.i2 by A4,A5;
-         thus thesis by A5,A6,A7,ZFMISC_1:33;
-        end;
-        then A8: f|X is one-to-one by FUNCT_1:84;
-         rng(f|X) c= Bound_Vars(p)
-          proof
-            let b;
-            assume b in rng(f|X);
-            then consider a such that
-       A9: a in dom(f|X) & b = (f|X).a by FUNCT_1:def 5;
-      A10:  b = f.a by A9,FUNCT_1:70;
-      A11:  a in X & a in dom f by A9,RELAT_1:86;
-            then consider i such that A12: i = a & b = x.i by A4,A10;
-            consider i such that A13: a = i & x.i in Bound_Vars(p) by A11;
-            thus thesis by A12,A13;
-          end;
-        then rng(f|X) is finite by FINSET_1:13;
-        then A14: dom(f|X) is finite by A8,CARD_1:97;
-         X c= NAT
-        proof
-          let a;
-          assume a in X;
-          then consider i such that A15: a = i & x.i in Bound_Vars(p);
-          thus thesis by A15;
-        end;
-        then reconsider X as Subset of NAT;
-         a in dom(f|X) iff a in X & a in dom f by RELAT_1:86;
-        then dom(f|X) = X /\ NAT by A4,XBOOLE_0:def 3;
-        hence thesis by A14,XBOOLE_1:28;
-      end;
+A1: for a,b1,b2 st a in NAT & P[a,b1] & P[a,b2] holds b1 = b2;
+A2: for a st a in NAT ex b st P[a,b]
+    proof
+      let a such that
+A3:   a in NAT;
+      reconsider i = a as Element of NAT by A3;
+      take b = x.i;
+      take i;
+      thus thesis;
+    end;
+    consider f being Function such that
+A4: dom f = NAT & for a st a in NAT holds P[a,f.a] from FUNCT_1:sch 2(A1,A2);
+    f is one-to-one
+    proof
+      let a1,a2 be set such that
+A5:   a1 in dom f & a2 in dom f & f.a1 = f.a2;
+      consider i1 being Element of NAT such that
+A6:   i1 = a1 & f.a1 = x.i1 by A4,A5;
+      consider i2 being Element of NAT such that
+A7:   i2 = a2 & f.a2 = x.i2 by A4,A5;
+      thus thesis by A5,A6,A7,ZFMISC_1:33;
+    end;
+    then
+A8: f|X is one-to-one by FUNCT_1:84;
+    rng(f|X) c= Bound_Vars(p)
+    proof
+      let b;
+      assume b in rng(f|X);
+      then consider a such that
+A9:   a in dom(f|X) & b = (f|X).a by FUNCT_1:def 5;
+A10:  b = f.a by A9,FUNCT_1:70;
+A11:  a in X & a in dom f by A9,RELAT_1:86;
+      then consider i such that
+A12:  i = a & b = x.i by A4,A10;
+      consider i such that
+A13:  a = i & x.i in Bound_Vars(p) by A11;
+      thus thesis by A12,A13;
+    end;
+    then rng(f|X) is finite by FINSET_1:13;
+    then
+A14: dom(f|X) is finite by A8,CARD_1:97;
+    X c= NAT
+    proof
+      let a;
+      assume a in X;
+      then consider i such that
+A15:  a = i & x.i in Bound_Vars(p);
+      thus thesis by A15;
+    end;
+    then reconsider X as Subset of NAT;
+    a in dom(f|X) iff a in X & a in dom f by RELAT_1:86;
+    then dom(f|X) = X /\ NAT by A4,XBOOLE_0:def 3;
+    hence thesis by A14,XBOOLE_1:28;
+  end;
 end;
 
- reserve finSub for finite CQC_Substitution;
+reserve finSub for finite CQC_Substitution;
 
-definition let finSub;
+definition
+  let finSub;
   func Sub_Var(finSub) -> finite Subset of NAT equals
-     {i : x.i in rng finSub};
-    coherence
-    proof
+
+  {i : x.i in rng finSub};
+  coherence
+  proof
     set X = {i : x.i in rng finSub};
     defpred P[set,set] means ex i st i = $1 & $2 = x.i;
-    A1: for a,b1,b2 st a in NAT & P[a,b1] & P[a,b2] holds b1 = b2;
-    A2: for a st a in NAT ex b st P[a,b]
-        proof
-          let a such that A3: a in NAT;
-          reconsider i = a as Element of NAT by A3;
-          take b = x.i;
-          take i;
-          thus thesis;
-        end;
-        consider f being Function such that A4: dom f = NAT &
-        for a st a in NAT holds P[a,f.a] from FUNCT_1:sch 2(A1,A2);
-         f is one-to-one
-        proof
-         let a1,a2 be set such that
-A5:      a1 in dom f & a2 in dom f & f.a1 = f.a2;
-         consider i1 being Element of NAT such that
-A6:      i1 = a1 & f.a1 = x.i1 by A4,A5;
-         consider i2 being Element of NAT such that
-A7:      i2 = a2 & f.a2 = x.i2 by A4,A5;
-         thus thesis by A5,A6,A7,ZFMISC_1:33;
-        end;
-        then A8: f|X is one-to-one by FUNCT_1:84;
-         rng(f|X) c= rng finSub
-          proof
-            let b;
-            assume b in rng(f|X);
-            then consider a such that
-       A9: a in dom(f|X) & b = (f|X).a by FUNCT_1:def 5;
-      A10:  b = f.a by A9,FUNCT_1:70;
-      A11:  a in X & a in dom f by A9,RELAT_1:86;
-            then consider i such that A12: i = a & b = x.i by A4,A10;
-            consider i such that A13: a = i & x.i in rng finSub by A11;
-            thus thesis by A12,A13;
-          end;
-        then rng(f|X) is finite by FINSET_1:13;
-        then A14: dom(f|X) is finite by A8,CARD_1:97;
-         X c= NAT
-        proof
-          let a;
-          assume a in X;
-          then consider i such that A15: a = i & x.i in rng finSub;
-          thus thesis by A15;
-        end;
-        then reconsider X as Subset of NAT;
-         a in dom(f|X) iff a in X & a in dom f by RELAT_1:86;
-        then dom(f|X) = X /\ NAT by A4,XBOOLE_0:def 3;
-        hence thesis by A14,XBOOLE_1:28;
-      end;
+A1: for a,b1,b2 st a in NAT & P[a,b1] & P[a,b2] holds b1 = b2;
+A2: for a st a in NAT ex b st P[a,b]
+    proof
+      let a such that
+A3:   a in NAT;
+      reconsider i = a as Element of NAT by A3;
+      take b = x.i;
+      take i;
+      thus thesis;
+    end;
+    consider f being Function such that
+A4: dom f = NAT & for a st a in NAT holds P[a,f.a] from FUNCT_1:sch 2(A1,A2);
+    f is one-to-one
+    proof
+      let a1,a2 be set such that
+A5:   a1 in dom f & a2 in dom f & f.a1 = f.a2;
+      consider i1 being Element of NAT such that
+A6:   i1 = a1 & f.a1 = x.i1 by A4,A5;
+      consider i2 being Element of NAT such that
+A7:   i2 = a2 & f.a2 = x.i2 by A4,A5;
+      thus thesis by A5,A6,A7,ZFMISC_1:33;
+    end;
+    then
+A8: f|X is one-to-one by FUNCT_1:84;
+    rng(f|X) c= rng finSub
+    proof
+      let b;
+      assume b in rng(f|X);
+      then consider a such that
+A9:   a in dom(f|X) & b = (f|X).a by FUNCT_1:def 5;
+A10:  b = f.a by A9,FUNCT_1:70;
+A11:  a in X & a in dom f by A9,RELAT_1:86;
+      then consider i such that
+A12:  i = a & b = x.i by A4,A10;
+      consider i such that
+A13:  a = i & x.i in rng finSub by A11;
+      thus thesis by A12,A13;
+    end;
+    then rng(f|X) is finite by FINSET_1:13;
+    then
+A14: dom(f|X) is finite by A8,CARD_1:97;
+    X c= NAT
+    proof
+      let a;
+      assume a in X;
+      then consider i such that
+A15:  a = i & x.i in rng finSub;
+      thus thesis by A15;
+    end;
+    then reconsider X as Subset of NAT;
+    a in dom(f|X) iff a in X & a in dom f by RELAT_1:86;
+    then dom(f|X) = X /\ NAT by A4,XBOOLE_0:def 3;
+    hence thesis by A14,XBOOLE_1:28;
+  end;
 end;
 
-definition let p, finSub;
+definition
+  let p, finSub;
   func NSub(p,finSub) -> non empty Subset of NAT equals
-     NAT\(Dom_Bound_Vars(p) \/ Sub_Var(finSub));
+  NAT\(Dom_Bound_Vars(p) \/ Sub_Var(finSub));
   coherence
   proof
     set X = Dom_Bound_Vars(p) \/ Sub_Var(finSub);
-     Card X in Card NAT by CARD_3:58;
+    Card X in Card NAT by CARD_3:58;
     hence thesis by CARD_2:4,XBOOLE_1:36;
   end;
 end;
 
-definition let finSub, p;
+definition
+  let finSub, p;
   func upVar(finSub,p) -> Element of NAT equals
-     min NSub(p,finSub);
+
+  min NSub(p,finSub);
   coherence;
 end;
 
-definition let x, p, finSub;
-  assume A1: ex Sub st finSub = RestrictSub(x,All(x,p),Sub);
+definition
+  let x, p, finSub;
+  assume
+A1: ex Sub st finSub = RestrictSub(x,All(x,p),Sub);
   func ExpandSub(x,p,finSub) -> CQC_Substitution equals
-     finSub \/ {[x,x.upVar(finSub,p)]} if x in rng finSub
-       otherwise finSub \/ {[x,x]};
+  finSub \/ {[x,x.upVar(finSub,p)]} if x in rng finSub
+  otherwise finSub \/ {[x,x]};
   coherence
   proof
- A2: now assume x in rng finSub;
-        reconsider Z = {[x,x.upVar(finSub,p)]} as Relation-like set;
- A3:    dom finSub /\ dom Z = {}
+A2: now
+      assume x in rng finSub;
+      reconsider Z = {[x,x.upVar(finSub,p)]} as Relation-like set;
+A3:   dom finSub /\ dom Z = {}
       proof
-         now given a such that
-  A4:     a in dom finSub /\ dom Z;
-  A5:     a in dom finSub & a in dom Z by A4,XBOOLE_0:def 3;
-  A6:     dom Z = {x} by RELAT_1:23;
-          consider Sub such that A7: finSub = RestrictSub(x,All(x,p),Sub)
-                                                                  by A1;
+        now
+          given a such that
+A4:       a in dom finSub /\ dom Z;
+A5:       a in dom finSub & a in dom Z by A4,XBOOLE_0:def 3;
+A6:       dom Z = {x} by RELAT_1:23;
+          consider Sub such that
+A7:       finSub = RestrictSub(x,All(x,p),Sub) by A1;
           set X = {y : y in still_not-bound_in All(x,p) &
-                      y is Element of dom Sub & y <> x & y <> Sub.y};
-           dom finSub c= X by A7,RELAT_1:87;
+          y is Element of dom Sub & y <> x & y <> Sub.y};
+          dom finSub c= X by A7,RELAT_1:87;
           then a in X by A5;
           then consider y such that
 A8:       a = y & y in still_not-bound_in All(x,p) &
@@ -637,222 +673,228 @@ A8:       a = y & y in still_not-bound_in All(x,p) &
         hence thesis by XBOOLE_0:def 1;
       end;
       reconsider Z as Function;
-       for a st a in dom (@finSub) /\ dom Z holds (@finSub).a = Z.a
-        by A3;
-      then consider h being Function such that A9: (@finSub) \/ Z = h
-                                                                 by PARTFUN1:2;
+      for a st a in dom (@finSub) /\ dom Z holds (@finSub).a = Z.a by A3;
+      then consider h being Function such that
+A9:   (@finSub) \/ Z = h by PARTFUN1:2;
       reconsider Z as Relation of bound_QC-variables,bound_QC-variables
-                                                                 by RELSET_1:8;
-       @finSub \/ Z = h by A9;
+      by RELSET_1:8;
+      @finSub \/ Z = h by A9;
       hence finSub \/ {[x,x.upVar(finSub,p)]} is CQC_Substitution
-        by PARTFUN1:119;
-      end;
-       now assume not x in rng finSub;
-        reconsider Z = {[x,x]} as Relation-like set;
-A10:     dom finSub /\ dom Z = {}
+      by PARTFUN1:119;
+    end;
+    now
+      assume not x in rng finSub;
+      reconsider Z = {[x,x]} as Relation-like set;
+A10:  dom finSub /\ dom Z = {}
       proof
-         now given a such that
-  A11:     a in dom finSub /\ dom Z;
-  A12:     a in dom finSub & a in dom Z by A11,XBOOLE_0:def 3;
-  A13:     dom Z = {x} by RELAT_1:23;
+        now
+          given a such that
+A11:      a in dom finSub /\ dom Z;
+A12:      a in dom finSub & a in dom Z by A11,XBOOLE_0:def 3;
+A13:      dom Z = {x} by RELAT_1:23;
           consider Sub such that
-A14:       finSub = RestrictSub(x,All(x,p),Sub) by A1;
+A14:      finSub = RestrictSub(x,All(x,p),Sub) by A1;
           set X = {y : y in still_not-bound_in All(x,p) &
-                                y is Element of dom Sub & y <> x & y <> Sub.y};
-           dom finSub c= X by A14,RELAT_1:87;
+          y is Element of dom Sub & y <> x & y <> Sub.y};
+          dom finSub c= X by A14,RELAT_1:87;
           then a in X by A12;
           then consider y such that
-  A15:     a = y & y in still_not-bound_in All(x,p) &
+A15:      a = y & y in still_not-bound_in All(x,p) &
           y is Element of dom Sub & y <> x & y <> Sub.y;
           thus contradiction by A12,A13,A15,TARSKI:def 1;
         end;
         hence thesis by XBOOLE_0:def 1;
       end;
       reconsider Z as Function;
-       for a st a in dom (@finSub) /\ dom Z holds (@finSub).a = Z.a
-        by A10;
+      for a st a in dom (@finSub) /\ dom Z holds (@finSub).a = Z.a by A10;
       then consider h being Function such that
 A16:  (@finSub) \/ Z = h by PARTFUN1:2;
       reconsider Z as Relation of bound_QC-variables,bound_QC-variables
-        by RELSET_1:8;
-       @finSub \/ Z = h by A16;
+      by RELSET_1:8;
+      @finSub \/ Z = h by A16;
       hence finSub \/ {[x,x]} is CQC_Substitution by PARTFUN1:119;
-      end;
-      hence thesis by A2;
-   end;
-   consistency;
- end;
+    end;
+    hence thesis by A2;
+  end;
+  consistency;
+end;
 
-definition let p, Sub, b;
+definition
+  let p, Sub, b;
   pred p,Sub PQSub b means
-   :Def14: (p is universal implies b =
-    ExpandSub(bound_in p,the_scope_of p, RestrictSub(bound_in p,p,Sub))) &
-    (not p is universal implies b = {});
+  :Def14:
+  (p is universal implies b =
+  ExpandSub(bound_in p,the_scope_of p, RestrictSub(bound_in p,p,Sub))) &
+  (not p is universal implies b = {});
 end;
 
 definition
   func QSub -> Function means
-     a in it iff ex p,Sub,b st a = [[p,Sub],b] & p,Sub PQSub b;
+  a in it iff ex p,Sub,b st a = [[p,Sub],b] & p,Sub PQSub b;
   existence
   proof
     defpred P[set,set] means ex p,Sub st $1 = [p,Sub] & p,Sub PQSub $2;
- A1:for a,b1,b2 st P[a,b1] & P[a,b2] holds b1 = b2
-     proof
-       let a,b1,b2 such that
-   A2: (ex p,Sub st a = [p,Sub] &  p,Sub PQSub b1) &
-       (ex p,Sub st a = [p,Sub] &  p,Sub PQSub b2);
-       consider p1 being QC-formula, Sub1 being CQC_Substitution such that
-A3:    a = [p1,Sub1] &  p1,Sub1 PQSub b1 by A2;
-       consider p2 being QC-formula, Sub2 being CQC_Substitution such that
-A4:    a = [p2,Sub2] &  p2,Sub2 PQSub b2 by A2;
- A5: p1 = p2 & Sub1 = Sub2 by A3,A4,ZFMISC_1:33;
-       per cases;
-       suppose p1 is universal;
-         then b1 = ExpandSub(bound_in p1,the_scope_of p1,
-                                RestrictSub(bound_in p1,p1,Sub1)) &
-         b2 = ExpandSub(bound_in p2,the_scope_of p2,
-                           RestrictSub(bound_in p2,p2,Sub2)) by A3,A4,A5,Def14;
-         hence b1 = b2 by A5;
-       end;
-       suppose not p1 is universal;
-         then b1 = {} & b2 = {} by A3,A4,A5,Def14;
-         hence thesis;
-       end;
-     end;
-     consider f being Function such that
-A6:  for a,b holds [a,b] in f iff a in [:QC-WFF,vSUB:] & P[a,b]
-                                                   from FUNCT_1:sch 1(A1);
- A7: c in f iff ex p,Sub,b st c = [[p,Sub],b] & p,Sub PQSub b
-     proof
-       thus c in f implies ex p,Sub,b st c = [[p,Sub],b] & p,Sub PQSub b
-       proof
-         assume A8: c in f;
-         then consider a,b such that A9: c = [a,b] by RELAT_1:def 1;
-         consider p,Sub such that
-A10:     a = [p,Sub] & p,Sub PQSub b by A6,A8,A9;
-         thus thesis by A9,A10;
-       end;
-       thus (ex p,Sub,b st c = [[p,Sub],b] & p,Sub PQSub b) implies
-         c in f by A6;
-     end;
-     take f;
-     thus thesis by A7;
+A1: for a,b1,b2 st P[a,b1] & P[a,b2] holds b1 = b2
+    proof
+      let a,b1,b2 such that
+A2:   (ex p,Sub st a = [p,Sub] & p,Sub PQSub b1) &
+      (ex p,Sub st a = [p,Sub] & p,Sub PQSub b2);
+      consider p1 being QC-formula, Sub1 being CQC_Substitution such that
+A3:   a = [p1,Sub1] & p1,Sub1 PQSub b1 by A2;
+      consider p2 being QC-formula, Sub2 being CQC_Substitution such that
+A4:   a = [p2,Sub2] & p2,Sub2 PQSub b2 by A2;
+A5:   p1 = p2 & Sub1 = Sub2 by A3,A4,ZFMISC_1:33;
+      per cases;
+      suppose p1 is universal;
+        then b1 = ExpandSub(bound_in p1,the_scope_of p1,
+        RestrictSub(bound_in p1,p1,Sub1)) &
+        b2 = ExpandSub(bound_in p2,the_scope_of p2,
+        RestrictSub(bound_in p2,p2,Sub2)) by A3,A4,A5,Def14;
+        hence b1 = b2 by A5;
+      end;
+      suppose not p1 is universal;
+        then b1 = {} & b2 = {} by A3,A4,A5,Def14;
+        hence thesis;
+      end;
+    end;
+    consider f being Function such that
+A6: for a,b holds [a,b] in f iff a in [:QC-WFF,vSUB:] & P[a,b]
+    from FUNCT_1:sch 1(A1);
+A7: c in f iff ex p,Sub,b st c = [[p,Sub],b] & p,Sub PQSub b
+    proof
+      thus c in f implies ex p,Sub,b st c = [[p,Sub],b] & p,Sub PQSub b
+      proof
+        assume
+A8:     c in f;
+        then consider a,b such that
+A9:     c = [a,b] by RELAT_1:def 1;
+        consider p,Sub such that
+A10:    a = [p,Sub] & p,Sub PQSub b by A6,A8,A9;
+        thus thesis by A9,A10;
+      end;
+      thus (ex p,Sub,b st c = [[p,Sub],b] & p,Sub PQSub b) implies
+      c in f by A6;
+    end;
+    take f;
+    thus thesis by A7;
   end;
-   uniqueness
-   proof
-     let F1, F2 be Function;
-     assume
+  uniqueness
+  proof
+    let F1, F2 be Function;
+    assume
 A11: (for a holds a in F1 iff ex p,Sub,b st a = [[p,Sub],b] & p,Sub PQSub b) &
-     (for a holds a in F2 iff ex p,Sub,b st a = [[p,Sub],b] & p,Sub PQSub b);
-      now let a;
-        (a in F1 iff ex p,Sub,b st a = [[p,Sub],b] & p,Sub PQSub b) &
-       (a in F2 iff ex p,Sub,b st a = [[p,Sub],b] & p,Sub PQSub b) by A11;
-       hence a in F1 iff a in F2;
-     end;
-     hence F1  = F2 by TARSKI:2;
-   end;
+    (for a holds a in F2 iff ex p,Sub,b st a = [[p,Sub],b] & p,Sub PQSub b);
+    now
+      let a;
+      (a in F1 iff ex p,Sub,b st a = [[p,Sub],b] & p,Sub PQSub b) &
+      (a in F2 iff ex p,Sub,b st a = [[p,Sub],b] & p,Sub PQSub b) by A11;
+      hence a in F1 iff a in F2;
+    end;
+    hence F1 = F2 by TARSKI:2;
+  end;
 end;
 
 begin :: Definition and Properties of the
-      :: Formula - Substitution - Construction
 
- reserve e for Element of vSUB;
+:: Formula - Substitution - Construction
+
+reserve e for Element of vSUB;
 
 theorem Th7:
   [:QC-WFF,vSUB:] is Subset of [:[:NAT, NAT:]*,vSUB:] &
-     (for k being Element of NAT, p being (QC-pred_symbol of k),
-          ll being QC-variable_list of k, e being Element of vSUB
-          holds [<*p*>^ll,e] in [:QC-WFF,vSUB:]) &
-     (for e being Element of vSUB holds [<*[0, 0]*>,e] in [:QC-WFF,vSUB:]) &
-     (for p being FinSequence of [:NAT,NAT:], e being Element of vSUB
-      st [p,e] in [:QC-WFF,vSUB:] holds [<*[1, 0]*>^p,e] in [:QC-WFF,vSUB:]) &
-     (for p, q being FinSequence of [:NAT, NAT:], e being Element of vSUB st
-      [p,e] in [:QC-WFF,vSUB:] & [q,e] in [:QC-WFF,vSUB:]
-           holds [<*[2, 0]*>^p^q,e] in [:QC-WFF,vSUB:]) &
-     (for x being bound_QC-variable,
-          p being FinSequence of [:NAT, NAT:], e being Element of vSUB
-           st [p,QSub.[<*[3, 0]*>^<*x*>^p,e]] in [:QC-WFF,vSUB:] holds
-                             [<*[3, 0]*>^<*x*>^p,e] in [:QC-WFF,vSUB:])
-      proof
-         [:QC-WFF,vSUB:] c= [:[:NAT, NAT:]*,vSUB:]
-        proof
-           QC-WFF is Subset of [:NAT, NAT:]* by QC_LANG1:21,def 9;
-          hence thesis by ZFMISC_1:118;
-        end;
-        hence [:QC-WFF,vSUB:] is Subset of [:[:NAT, NAT:]*,vSUB:];
-        thus (for k being Element of NAT, p being (QC-pred_symbol of k),
-          ll being QC-variable_list of k, e being Element of vSUB
-          holds [<*p*>^ll,e] in [:QC-WFF,vSUB:])
-        proof
-          let k be Element of NAT, p be (QC-pred_symbol of k),
-          ll be QC-variable_list of k, e be Element of vSUB;
-           p!ll = <*p*>^ll by QC_LANG1:23;
-          hence thesis by ZFMISC_1:def 2;
-        end;
-        thus (for e being Element of vSUB holds
-          [<*[0, 0]*>,e] in [:QC-WFF,vSUB:]) by QC_LANG1:def 13,ZFMISC_1:def 2;
-        thus (for p being FinSequence of [:NAT,NAT:], e being Element of vSUB
-              st [p,e] in [:QC-WFF,vSUB:] holds
-                     [<*[1, 0]*>^p,e] in  [:QC-WFF,vSUB:])
-        proof
-          let p be FinSequence of [:NAT,NAT:], e be Element of vSUB;
-          assume [p,e] in [:QC-WFF,vSUB:];
-          then consider a,b such that
-   A1:    a in QC-WFF & b in vSUB & [p,e] = [a,b] by ZFMISC_1:def 2;
-          reconsider p' = p as Element of QC-WFF by A1,ZFMISC_1:33;
-       'not' p' = <*[1, 0]*>^@p';
-          hence thesis by ZFMISC_1:def 2;
-       end;
-       thus (for p, q being FinSequence of [:NAT, NAT:],e being Element of
-vSUB
-       st [p,e] in [:QC-WFF,vSUB:] & [q,e] in [:QC-WFF,vSUB:]
-           holds [<*[2, 0]*>^p^q,e] in [:QC-WFF,vSUB:])
-       proof
-         let p, q be FinSequence of [:NAT, NAT:], e be Element of vSUB;
-         assume A2: [p,e] in [:QC-WFF,vSUB:] & [q,e] in [:QC-WFF,vSUB:];
-         then consider a,b such that
-   A3:    a in QC-WFF & b in vSUB & [p,e] = [a,b] by ZFMISC_1:def 2;
-          reconsider p' = p as Element of QC-WFF by A3,ZFMISC_1:33;
-          consider c,d such that
-   A4:           c in QC-WFF & d in vSUB & [q,e] = [c,d] by A2,ZFMISC_1:def 2;
-          reconsider q' = q as Element of QC-WFF by A4,ZFMISC_1:33;
-       p' '&' q' = <*[2, 0]*>^@p'^@q';
-          hence thesis by ZFMISC_1:def 2;
-       end;
-       thus (for x being bound_QC-variable,
-          p being FinSequence of [:NAT, NAT:], e being Element of vSUB
-           st [p,QSub.[<*[3, 0]*>^<*x*>^p,e]] in [:QC-WFF,vSUB:] holds
-               [<*[3, 0]*>^<*x*>^p,e] in [:QC-WFF,vSUB:])
-       proof
-         let x be bound_QC-variable, p be FinSequence of [:NAT, NAT:],
-             e be Element of vSUB;
-         assume [p,QSub.[<*[3, 0]*>^<*x*>^p,e]] in [:QC-WFF,vSUB:];
-         then consider a,b such that
-   A5:    a in QC-WFF & b in vSUB &
-               [p,QSub.[<*[3, 0]*>^<*x*>^p,e]] = [a,b] by ZFMISC_1:def 2;
-          reconsider p' = p as Element of QC-WFF by A5,ZFMISC_1:33;
-      All(x,p') = <*[3, 0]*>^<*x*>^@p';
-          hence thesis by ZFMISC_1:def 2;
-        end;
-     end;
+  (for k being Element of NAT, p being (QC-pred_symbol of k),
+  ll being QC-variable_list of k, e being Element of vSUB
+  holds [<*p*>^ll,e] in [:QC-WFF,vSUB:]) &
+  (for e being Element of vSUB holds [<*[0, 0]*>,e] in [:QC-WFF,vSUB:]) &
+  (for p being FinSequence of [:NAT,NAT:], e being Element of vSUB
+  st [p,e] in [:QC-WFF,vSUB:] holds [<*[1, 0]*>^p,e] in [:QC-WFF,vSUB:]) &
+  (for p, q being FinSequence of [:NAT, NAT:], e being Element of vSUB st
+  [p,e] in [:QC-WFF,vSUB:] & [q,e] in [:QC-WFF,vSUB:]
+  holds [<*[2, 0]*>^p^q,e] in [:QC-WFF,vSUB:]) &
+  (for x being bound_QC-variable,
+  p being FinSequence of [:NAT, NAT:], e being Element of vSUB
+  st [p,QSub.[<*[3, 0]*>^<*x*>^p,e]] in [:QC-WFF,vSUB:] holds
+  [<*[3, 0]*>^<*x*>^p,e] in [:QC-WFF,vSUB:])
+proof
+  [:QC-WFF,vSUB:] c= [:[:NAT, NAT:]*,vSUB:]
+  proof
+    QC-WFF is Subset of [:NAT, NAT:]* by QC_LANG1:21,def 9;
+    hence thesis by ZFMISC_1:118;
+  end;
+  hence [:QC-WFF,vSUB:] is Subset of [:[:NAT, NAT:]*,vSUB:];
+  thus (for k being Element of NAT, p being (QC-pred_symbol of k),
+  ll being QC-variable_list of k, e being Element of vSUB
+  holds [<*p*>^ll,e] in [:QC-WFF,vSUB:])
+  proof
+    let k be Element of NAT, p be (QC-pred_symbol of k),
+    ll be QC-variable_list of k, e be Element of vSUB;
+    p!ll = <*p*>^ll by QC_LANG1:23;
+    hence thesis by ZFMISC_1:def 2;
+  end;
+  thus (for e being Element of vSUB holds
+  [<*[0, 0]*>,e] in [:QC-WFF,vSUB:]) by QC_LANG1:def 13,ZFMISC_1:def 2;
+  thus (for p being FinSequence of [:NAT,NAT:], e being Element of vSUB
+  st [p,e] in [:QC-WFF,vSUB:] holds [<*[1, 0]*>^p,e] in [:QC-WFF,vSUB:])
+  proof
+    let p be FinSequence of [:NAT,NAT:], e be Element of vSUB;
+    assume [p,e] in [:QC-WFF,vSUB:];
+    then consider a,b such that
+A1: a in QC-WFF & b in vSUB & [p,e] = [a,b] by ZFMISC_1:def 2;
+    reconsider p' = p as Element of QC-WFF by A1,ZFMISC_1:33;
+    'not' p' = <*[1, 0]*>^@p';
+    hence thesis by ZFMISC_1:def 2;
+  end;
+  thus (for p, q being FinSequence of [:NAT, NAT:],e being Element of vSUB
+  st [p,e] in [:QC-WFF,vSUB:] & [q,e] in [:QC-WFF,vSUB:]
+  holds [<*[2, 0]*>^p^q,e] in [:QC-WFF,vSUB:])
+  proof
+    let p, q be FinSequence of [:NAT, NAT:], e be Element of vSUB;
+    assume
+A2: [p,e] in [:QC-WFF,vSUB:] & [q,e] in [:QC-WFF,vSUB:];
+    then consider a,b such that
+A3: a in QC-WFF & b in vSUB & [p,e] = [a,b] by ZFMISC_1:def 2;
+    reconsider p' = p as Element of QC-WFF by A3,ZFMISC_1:33;
+    consider c,d such that
+A4: c in QC-WFF & d in vSUB & [q,e] = [c,d] by A2,ZFMISC_1:def 2;
+    reconsider q' = q as Element of QC-WFF by A4,ZFMISC_1:33;
+    p' '&' q' = <*[2, 0]*>^@p'^@q';
+    hence thesis by ZFMISC_1:def 2;
+  end;
+  thus (for x being bound_QC-variable,
+  p being FinSequence of [:NAT, NAT:], e being Element of vSUB
+  st [p,QSub.[<*[3, 0]*>^<*x*>^p,e]] in [:QC-WFF,vSUB:] holds
+  [<*[3, 0]*>^<*x*>^p,e] in [:QC-WFF,vSUB:])
+  proof
+    let x be bound_QC-variable, p be FinSequence of [:NAT, NAT:],
+    e be Element of vSUB;
+    assume [p,QSub.[<*[3, 0]*>^<*x*>^p,e]] in [:QC-WFF,vSUB:];
+    then consider a,b such that
+A5: a in QC-WFF & b in vSUB &
+    [p,QSub.[<*[3, 0]*>^<*x*>^p,e]] = [a,b] by ZFMISC_1:def 2;
+    reconsider p' = p as Element of QC-WFF by A5,ZFMISC_1:33;
+    All(x,p') = <*[3, 0]*>^<*x*>^@p';
+    hence thesis by ZFMISC_1:def 2;
+  end;
+end;
 
-definition let IT be set;
-  attr IT is QC-Sub-closed means :Def16:
-    IT is Subset of [:[:NAT, NAT:]*,vSUB:] &
-     (for k being Element of NAT, p being (QC-pred_symbol of k),
-          ll being QC-variable_list of k, e being Element of vSUB
-          holds [<*p*>^ll,e] in IT) &
-     (for e being Element of vSUB holds [<*[0, 0]*>,e] in IT) &
-     (for p being FinSequence of [:NAT,NAT:], e being Element of vSUB
-      st [p,e] in IT holds [<*[1, 0]*>^p,e] in IT) &
-     (for p, q being FinSequence of [:NAT, NAT:], e being Element of vSUB st
-      [p,e] in IT & [q,e] in IT
-           holds [<*[2, 0]*>^p^q,e] in IT) &
-     (for x being bound_QC-variable,
-          p being FinSequence of [:NAT, NAT:], e being Element of vSUB
-           st [p,QSub.[<*[3, 0]*>^<*x*>^p,e]] in IT holds
-                             [<*[3, 0]*>^<*x*>^p,e] in IT);
- end;
+definition
+  let IT be set;
+  attr IT is QC-Sub-closed means
+  :Def16:
+  IT is Subset of [:[:NAT, NAT:]*,vSUB:] &
+  (for k being Element of NAT, p being (QC-pred_symbol of k),
+  ll being QC-variable_list of k, e being Element of vSUB
+  holds [<*p*>^ll,e] in IT) &
+  (for e being Element of vSUB holds [<*[0, 0]*>,e] in IT) &
+  (for p being FinSequence of [:NAT,NAT:], e being Element of vSUB
+  st [p,e] in IT holds [<*[1, 0]*>^p,e] in IT) &
+  (for p, q being FinSequence of [:NAT, NAT:], e being Element of vSUB st
+  [p,e] in IT & [q,e] in IT holds [<*[2, 0]*>^p^q,e] in IT) &
+  (for x being bound_QC-variable,
+  p being FinSequence of [:NAT, NAT:], e being Element of vSUB
+  st [p,QSub.[<*[3, 0]*>^<*x*>^p,e]] in IT holds
+  [<*[3, 0]*>^<*x*>^p,e] in IT);
+end;
 
 registration
   cluster QC-Sub-closed non empty set;
@@ -863,679 +905,737 @@ registration
   end;
 end;
 
-Lm2:
-  for x being bound_QC-variable,
-      p being FinSequence of [:NAT, NAT:] holds
-      <*[3, 0]*>^<*x*>^p is FinSequence of [:NAT, NAT:]
-  proof
-    let x be bound_QC-variable, p be FinSequence of [:NAT, NAT:];
-    reconsider y = <*[3, 0]*> as FinSequence of [:NAT, NAT:];
-     bound_QC-variables c= [:NAT,NAT:] by QC_LANG1:4,XBOOLE_1:1;
-    then rng <*x*>  c= [:NAT,NAT:] by XBOOLE_1:1;
-    then reconsider z = <*x*> as FinSequence of [:NAT, NAT:]
-      by FINSEQ_1:def 4;
-     y^z^p is FinSequence of [:NAT, NAT:];
-    hence thesis;
-  end;
+Lm2: for x being bound_QC-variable, p being FinSequence of [:NAT, NAT:] holds
+<*[3, 0]*>^<*x*>^p is FinSequence of [:NAT, NAT:]
+proof
+  let x be bound_QC-variable, p be FinSequence of [:NAT, NAT:];
+  reconsider y = <*[3, 0]*> as FinSequence of [:NAT, NAT:];
+  bound_QC-variables c= [:NAT,NAT:] by QC_LANG1:4,XBOOLE_1:1;
+  then rng <*x*> c= [:NAT,NAT:] by XBOOLE_1:1;
+  then reconsider z = <*x*> as FinSequence of [:NAT, NAT:] by FINSEQ_1:def 4;
+  y^z^p is FinSequence of [:NAT, NAT:];
+  hence thesis;
+end;
 
-Lm3:
-  for k, l being Element of NAT, e being Element of vSUB holds
-          [<*[k, l]*>,e] in [:[:NAT, NAT:]*,vSUB:]
-  proof
-    let k, l be Element of NAT; let e;
-     <*[k, l]*> in [:NAT,NAT:]* by FINSEQ_1:def 11;
-    hence thesis by ZFMISC_1:def 2;
-  end;
+Lm3: for k, l being Element of NAT, e being Element of vSUB holds
+[<*[k, l]*>,e] in [:[:NAT, NAT:]*,vSUB:]
+proof
+  let k, l be Element of NAT;
+  let e;
+  <*[k, l]*> in [:NAT,NAT:]* by FINSEQ_1:def 11;
+  hence thesis by ZFMISC_1:def 2;
+end;
 
-Lm4:
-  for k being Element of NAT, p being (QC-pred_symbol of k),
-      ll being (QC-variable_list of k),
-      e being Element of vSUB
-        holds [<*p*>^ll,e] in [:[:NAT, NAT:]*,vSUB:]
-  proof
-    let k be Element of NAT, p be (QC-pred_symbol of k),
-    ll be QC-variable_list of k;
-     k-ary_QC-pred_symbols c= [:NAT,NAT:] & QC-variables c= [:NAT,NAT:]
-                               by QC_LANG1:4,10,XBOOLE_1:1;
-    then rng <*p*>  c= [:NAT,NAT:] & rng ll c= [:NAT,NAT:] by XBOOLE_1:1;
-    then rng <*p*> \/ rng ll c= [:NAT,NAT:] by XBOOLE_1:8;
-    then rng (<*p*>^ll) c= [:NAT,NAT:] by FINSEQ_1:44;
-    then <*p*>^ll is FinSequence of [:NAT,NAT:]
-       by FINSEQ_1:def 4;
-    then <*p*>^ll in [:NAT,NAT:]* by FINSEQ_1:def 11;
-    hence thesis by ZFMISC_1:def 2;
-  end;
+Lm4: for k being Element of NAT, p being (QC-pred_symbol of k),
+ll being (QC-variable_list of k), e being Element of vSUB
+holds [<*p*>^ll,e] in [:[:NAT, NAT:]*,vSUB:]
+proof
+  let k be Element of NAT, p be (QC-pred_symbol of k),
+  ll be QC-variable_list of k;
+  k-ary_QC-pred_symbols c= [:NAT,NAT:] & QC-variables c= [:NAT,NAT:]
+  by QC_LANG1:4,10,XBOOLE_1:1;
+  then rng <*p*> c= [:NAT,NAT:] & rng ll c= [:NAT,NAT:] by XBOOLE_1:1;
+  then rng <*p*> \/ rng ll c= [:NAT,NAT:] by XBOOLE_1:8;
+  then rng (<*p*>^ll) c= [:NAT,NAT:] by FINSEQ_1:44;
+  then <*p*>^ll is FinSequence of [:NAT,NAT:] by FINSEQ_1:def 4;
+  then <*p*>^ll in [:NAT,NAT:]* by FINSEQ_1:def 11;
+  hence thesis by ZFMISC_1:def 2;
+end;
 
 definition
   func QC-Sub-WFF -> non empty set means
-   :Def17: it is QC-Sub-closed &
-   for D being non empty set st D is QC-Sub-closed holds it c= D;
- existence
- proof
- defpred P[set] means
-        for D being non empty set st D is QC-Sub-closed holds $1 in D;
- consider D0 being set such that
-A1:   for x being set holds x in D0 iff x in [:[:NAT, NAT:]*,vSUB:] & P[x]
-                                                         from XBOOLE_0:sch 1;
-      consider e;
-  A2: [<*[0, 0]*>,e] in [:[:NAT, NAT:]*,vSUB:] by Lm3;
-      for D being non empty set st
- D is QC-Sub-closed holds [<*[0, 0]*>,e] in D by Def16;
-   then reconsider D0 as non empty set by A1,A2;
-   take D0;
-       D0 c= [:[:NAT, NAT:]*,vSUB:]
-        proof let x be set;
-          thus thesis by A1;
-        end;
-   hence D0 is Subset of [:[:NAT, NAT:]*,vSUB:];
-   thus for k being Element of NAT, p being (QC-pred_symbol of k),
-          ll being QC-variable_list of k, e being Element of vSUB
-          holds [<*p*>^ll,e] in D0
-         proof
-           let k be Element of NAT, p be (QC-pred_symbol of k),
-             ll be QC-variable_list of k, e being Element of vSUB;
-            [<*p*>^ll,e] in [:[:NAT, NAT:]*,vSUB:] &
-            for D being non empty set st D is QC-Sub-closed
-                                 holds [<*p*>^ll,e] in D by Def16,Lm4;
-           hence [<*p*>^ll,e] in D0 by A1;
-         end;
-   thus for e holds [<*[0, 0]*>,e] in D0
-   proof
+  :Def17:
+  it is QC-Sub-closed &
+  for D being non empty set st D is QC-Sub-closed holds it c= D;
+  existence
+  proof
+    defpred P[set] means
+    for D being non empty set st D is QC-Sub-closed holds $1 in D;
+    consider D0 being set such that
+A1: for x being set holds x in D0 iff x in [:[:NAT, NAT:]*,vSUB:] & P[x]
+    from XBOOLE_0:sch 1;
+    consider e;
+A2: [<*[0, 0]*>,e] in [:[:NAT, NAT:]*,vSUB:] by Lm3;
+    for D being non empty set st
+    D is QC-Sub-closed holds [<*[0, 0]*>,e] in D by Def16;
+    then reconsider D0 as non empty set by A1,A2;
+    take D0;
+    D0 c= [:[:NAT, NAT:]*,vSUB:]
+    proof
+      let x be set;
+      thus thesis by A1;
+    end;
+    hence D0 is Subset of [:[:NAT, NAT:]*,vSUB:];
+    thus for k being Element of NAT, p being (QC-pred_symbol of k),
+    ll being QC-variable_list of k, e being Element of vSUB
+    holds [<*p*>^ll,e] in D0
+    proof
+      let k be Element of NAT, p be (QC-pred_symbol of k),
+      ll be QC-variable_list of k, e being Element of vSUB;
+      [<*p*>^ll,e] in [:[:NAT, NAT:]*,vSUB:] &
+      for D being non empty set st D is QC-Sub-closed
+      holds [<*p*>^ll,e] in D by Def16,Lm4;
+      hence [<*p*>^ll,e] in D0 by A1;
+    end;
+    thus for e holds [<*[0, 0]*>,e] in D0
+    proof
       let e;
- A3: [<*[0, 0]*>,e] in [:[:NAT, NAT:]*,vSUB:] by Lm3;
-        for D being non empty set st
-       D is QC-Sub-closed holds [<*[0, 0]*>,e] in D by Def16;
-       hence thesis by A1,A3;
-   end;
-   thus for p being FinSequence of [:NAT, NAT:], e being Element of vSUB
-           st [p,e] in D0 holds [<*[1, 0]*>^p,e] in D0
-         proof
-           let p be FinSequence of [:NAT, NAT:];
-           let e be Element of vSUB;
-           assume
-     A4:   [p,e] in D0;
-           reconsider h = <*[1, 0]*> as FinSequence of [:NAT, NAT:];
-           <*[1, 0]*>^p in [:NAT, NAT:]* by FINSEQ_1:def 11;
-         then A5: [<*[1, 0]*>^p,e] in [:[:NAT, NAT:]*,vSUB:] by ZFMISC_1:def 2;
-            for D being non empty set st
-           D is QC-Sub-closed holds [<*[1, 0]*>^p,e] in D
-                proof let D be non empty set; assume
-                A6:    D is QC-Sub-closed;
-                    then [p,e] in D by A1,A4;
-                  hence thesis by A6,Def16;
-                end;
-           hence thesis by A1,A5;
-         end;
-   thus for p, q being FinSequence of [:NAT, NAT:], e being Element of vSUB
-    st [p,e] in D0 & [q,e] in D0
-           holds [<*[2, 0]*>^p^q,e] in D0
-        proof
-          let p, q be FinSequence of [:NAT, NAT:], e be Element of vSUB
-          such that
-        A7: [p,e] in D0 & [q,e] in D0;
-            reconsider h = <*[2, 0]*> as FinSequence of [:NAT, NAT:];
-            <*[2, 0]*>^p^q in [:NAT, NAT:]* by FINSEQ_1:def 11;
-           then A8: [<*[2, 0]*>^p^q,e] in [:[:NAT, NAT:]*,vSUB:]
-                                            by ZFMISC_1:def 2;
-             for D being non empty set
- st D is QC-Sub-closed holds [<*[2, 0]*>^p^q,e] in D
-                proof let D be non empty set; assume
-                A9:    D is QC-Sub-closed;
-                    then [p,e] in D & [q,e] in D by A1,A7;
-                  hence thesis by A9,Def16;
-                end;
-           hence [<*[2, 0]*>^p^q,e] in D0 by A1,A8;
-        end;
-   thus for x being bound_QC-variable, p being FinSequence of [:NAT, NAT:],
-            e being Element of vSUB
-           st [p,QSub.[<*[3, 0]*>^<*x*>^p,e]] in D0 holds
-               [<*[3, 0]*>^<*x*>^p,e] in D0
-        proof
-           let x be bound_QC-variable, p be FinSequence of [:NAT, NAT:],
-               e be Element of vSUB;
-           assume
-     A10:   [p,QSub.[<*[3, 0]*>^<*x*>^p,e]] in D0;
-            <*[3, 0]*>^<*x*>^p is FinSequence of [:NAT, NAT:]
-            by Lm2;
-          then <*[3, 0]*>^<*x*>^p in [:NAT, NAT:]* by FINSEQ_1:def 11;
-           then A11: [<*[3, 0]*>^<*x*>^p,e] in [:[:NAT, NAT:]*,vSUB:]
-                                              by ZFMISC_1:def 2;
-             for D being non empty set
- st D is QC-Sub-closed holds [<*[3, 0]*>^<*x*>^p,e] in D
-                proof let D be non empty set; assume
-          A12:    D is QC-Sub-closed;
-                  then [p,QSub.[<*[3, 0]*>^<*x*>^p,e]] in D by A1,A10;
-                  hence thesis by A12,Def16;
-                end;
-           hence thesis by A1,A11;
-        end;
-   let D be non empty set such that
-A13:   D is QC-Sub-closed;
-   let x be set; assume x in D0;
-   hence thesis by A1,A13;
+A3:   [<*[0, 0]*>,e] in [:[:NAT, NAT:]*,vSUB:] by Lm3;
+      for D being non empty set st
+      D is QC-Sub-closed holds [<*[0, 0]*>,e] in D by Def16;
+      hence thesis by A1,A3;
+    end;
+    thus for p being FinSequence of [:NAT, NAT:], e being Element of vSUB
+    st [p,e] in D0 holds [<*[1, 0]*>^p,e] in D0
+    proof
+      let p be FinSequence of [:NAT, NAT:];
+      let e be Element of vSUB;
+      assume
+A4:   [p,e] in D0;
+      reconsider h = <*[1, 0]*> as FinSequence of [:NAT, NAT:];
+      <*[1, 0]*>^p in [:NAT, NAT:]* by FINSEQ_1:def 11;
+      then
+A5:   [<*[1, 0]*>^p,e] in [:[:NAT, NAT:]*,vSUB:] by ZFMISC_1:def 2;
+      for D being non empty set st
+      D is QC-Sub-closed holds [<*[1, 0]*>^p,e] in D
+      proof
+        let D be non empty set;
+        assume
+A6:     D is QC-Sub-closed;
+        then [p,e] in D by A1,A4;
+        hence thesis by A6,Def16;
+      end;
+      hence thesis by A1,A5;
+    end;
+    thus for p, q being FinSequence of [:NAT, NAT:], e being Element of vSUB
+    st [p,e] in D0 & [q,e] in D0 holds [<*[2, 0]*>^p^q,e] in D0
+    proof
+      let p, q be FinSequence of [:NAT, NAT:], e be Element of vSUB such that
+A7:   [p,e] in D0 & [q,e] in D0;
+      reconsider h = <*[2, 0]*> as FinSequence of [:NAT, NAT:];
+      <*[2, 0]*>^p^q in [:NAT, NAT:]* by FINSEQ_1:def 11;
+      then
+A8:   [<*[2, 0]*>^p^q,e] in [:[:NAT, NAT:]*,vSUB:] by ZFMISC_1:def 2;
+      for D being non empty set
+      st D is QC-Sub-closed holds [<*[2, 0]*>^p^q,e] in D
+      proof
+        let D be non empty set;
+        assume
+A9:     D is QC-Sub-closed;
+        then [p,e] in D & [q,e] in D by A1,A7;
+        hence thesis by A9,Def16;
+      end;
+      hence [<*[2, 0]*>^p^q,e] in D0 by A1,A8;
+    end;
+    thus for x being bound_QC-variable, p being FinSequence of [:NAT, NAT:],
+    e being Element of vSUB st [p,QSub.[<*[3, 0]*>^<*x*>^p,e]] in D0 holds
+    [<*[3, 0]*>^<*x*>^p,e] in D0
+    proof
+      let x be bound_QC-variable, p be FinSequence of [:NAT, NAT:],
+      e be Element of vSUB;
+      assume
+A10:  [p,QSub.[<*[3, 0]*>^<*x*>^p,e]] in D0;
+      <*[3, 0]*>^<*x*>^p is FinSequence of [:NAT, NAT:] by Lm2;
+      then <*[3, 0]*>^<*x*>^p in [:NAT, NAT:]* by FINSEQ_1:def 11;
+      then
+A11:  [<*[3, 0]*>^<*x*>^p,e] in [:[:NAT, NAT:]*,vSUB:] by ZFMISC_1: def 2;
+      for D being non empty set
+      st D is QC-Sub-closed holds [<*[3, 0]*>^<*x*>^p,e] in D
+      proof
+        let D be non empty set;
+        assume
+A12:    D is QC-Sub-closed;
+        then [p,QSub.[<*[3, 0]*>^<*x*>^p,e]] in D by A1,A10;
+        hence thesis by A12,Def16;
+      end;
+      hence thesis by A1,A11;
+    end;
+    let D be non empty set such that
+A13: D is QC-Sub-closed;
+    let x be set;
+    assume x in D0;
+    hence thesis by A1,A13;
   end;
-uniqueness
+  uniqueness
   proof
     let D1, D2 be non empty set such that
-A14:D1 is QC-Sub-closed & for D being non empty set st
+A14: D1 is QC-Sub-closed & for D being non empty set st
     D is QC-Sub-closed holds D1 c= D and
-A15:D2 is QC-Sub-closed & for D being non empty set st
+A15: D2 is QC-Sub-closed & for D being non empty set st
     D is QC-Sub-closed holds D2 c= D;
-     D1 c= D2 & D2 c= D1 by A14,A15;
+    D1 c= D2 & D2 c= D1 by A14,A15;
     hence D1 = D2 by XBOOLE_0:def 10;
   end;
 end;
 
- reserve S,S',S1,S2,S1',S2',T1,T2 for Element of QC-Sub-WFF;
+reserve S,S',S1,S2,S1',S2',T1,T2 for Element of QC-Sub-WFF;
 
-theorem
-   Th8: ex p,e st S = [p,e]
-   proof
- [:QC-WFF,vSUB:] is QC-Sub-closed by Def16,Th7;
-      then QC-Sub-WFF c= [:QC-WFF,vSUB:] by Def17;
-      then S in [:QC-WFF,vSUB:] by TARSKI:def 3;
-      then consider a,b such that A1: a in QC-WFF & b in vSUB & S = [a,b]
-                                                 by ZFMISC_1:def 2;
-      reconsider p = a as Element of QC-WFF by A1;
-      reconsider e = b as Element of vSUB by A1;
-      take p,e;
-      thus thesis by A1;
-    end;
+theorem Th8:
+  ex p,e st S = [p,e]
+proof
+  [:QC-WFF,vSUB:] is QC-Sub-closed by Def16,Th7;
+  then QC-Sub-WFF c= [:QC-WFF,vSUB:] by Def17;
+  then S in [:QC-WFF,vSUB:] by TARSKI:def 3;
+  then consider a,b such that
+A1: a in QC-WFF & b in vSUB & S = [a,b] by ZFMISC_1:def 2;
+  reconsider p = a as Element of QC-WFF by A1;
+  reconsider e = b as Element of vSUB by A1;
+  take p,e;
+  thus thesis by A1;
+end;
 
 registration
   cluster QC-Sub-WFF -> QC-Sub-closed;
   coherence by Def17;
 end;
 
-definition let P be QC-pred_symbol, l be FinSequence of QC-variables; let e;
-  assume A1: the_arity_of P = len l;
+definition
+  let P be QC-pred_symbol, l be FinSequence of QC-variables;
+  let e;
+  assume
+A1: the_arity_of P = len l;
   func Sub_P(P,l,e) -> Element of QC-Sub-WFF equals
-  :Def18: [P!l,e];
-   coherence
-   proof
-     set k = len l;
-     set QCP = {QP where QP is QC-pred_symbol: the_arity_of QP = k };
-      QCP = k-ary_QC-pred_symbols & P in QCP by A1;
-     then reconsider P as QC-pred_symbol of k;
-     reconsider l as QC-variable_list of k by QC_LANG1:def 8;
-      P!l = <*P*>^l by QC_LANG1:23;
-     hence thesis by Def16;
-   end;
+  :Def18:
+  [P!l,e];
+  coherence
+  proof
+    set k = len l;
+    set QCP = {QP where QP is QC-pred_symbol: the_arity_of QP = k };
+    QCP = k-ary_QC-pred_symbols & P in QCP by A1;
+    then reconsider P as QC-pred_symbol of k;
+    reconsider l as QC-variable_list of k by QC_LANG1:def 8;
+    P!l = <*P*>^l by QC_LANG1:23;
+    hence thesis by Def16;
+  end;
 end;
 
 theorem Th9:
   for k being Element of NAT, P being QC-pred_symbol of k,
-      ll being QC-variable_list of k holds Sub_P(P,ll,e) = [P!ll,e]
- proof
-   let k be Element of NAT, P be  QC-pred_symbol of k,
-   ll be QC-variable_list of k;
-   set QCP = {QP where QP is QC-pred_symbol: the_arity_of QP = k };
-    P in QCP;
-   then ex Q being QC-pred_symbol st P = Q & the_arity_of Q = k;
-   then len ll = k & the_arity_of P = k by QC_LANG1:def 8;
-   hence thesis by Def18;
- end;
-
-definition let S;
-  attr S is Sub_VERUM means
-  :Def19: ex e st S = [VERUM,e];
+  ll being QC-variable_list of k holds Sub_P(P,ll,e) = [P!ll,e]
+proof
+  let k be Element of NAT, P be QC-pred_symbol of k,
+  ll be QC-variable_list of k;
+  set QCP = {QP where QP is QC-pred_symbol: the_arity_of QP = k };
+  P in QCP;
+  then ex Q being QC-pred_symbol st P = Q & the_arity_of Q = k;
+  then len ll = k & the_arity_of P = k by QC_LANG1:def 8;
+  hence thesis by Def18;
 end;
 
-definition let S;
+definition
+  let S;
+  attr S is Sub_VERUM means
+  :Def19:
+  ex e st S = [VERUM,e];
+end;
+
+definition
+  let S;
   redefine func S`1 -> Element of QC-WFF;
   coherence
   proof
-    consider p,e such that A1: S = [p,e] by Th8;
+    consider p,e such that
+A1: S = [p,e] by Th8;
     thus thesis by A1,MCART_1:7;
   end;
   redefine func S`2 -> Element of vSUB;
   coherence
   proof
-    consider p,e such that A2: S = [p,e] by Th8;
+    consider p,e such that
+A2: S = [p,e] by Th8;
     thus thesis by A2,MCART_1:7;
   end;
 end;
 
 theorem Th10:
   S = [S`1,S`2]
- proof
-   consider p,e such that A1: S = [p,e] by Th8;
-   thus thesis by A1,MCART_1:8;
- end;
+proof
+  consider p,e such that
+A1: S = [p,e] by Th8;
+  thus thesis by A1,MCART_1:8;
+end;
 
-definition let S;
+definition
+  let S;
   func Sub_not S -> Element of QC-Sub-WFF equals
-    ['not' S`1,S`2];
+
+  ['not' S`1,S`2];
   coherence
   proof
-   [S`1,S`2] is Element of  QC-Sub-WFF by Th10;
-      hence thesis by Def16;
+    [S`1,S`2] is Element of QC-Sub-WFF by Th10;
+    hence thesis by Def16;
   end;
 end;
 
-definition let S, S';
-  assume A1: S`2 = (S')`2;
+definition
+  let S, S';
+  assume
+A1: S`2 = (S')`2;
   func Sub_&(S,S') -> Element of QC-Sub-WFF equals
-  :Def21: [(S`1) '&' ((S')`1),S`2];
+  :Def21:
+  [(S`1) '&' ((S')`1),S`2];
   coherence
   proof
-  A2: [S`1,S`2] is Element of QC-Sub-WFF by Th10;
-   [(S')`1,(S')`2] is Element of QC-Sub-WFF by Th10;
-      hence thesis by A1,A2,Def16;
+A2: [S`1,S`2] is Element of QC-Sub-WFF by Th10;
+    [(S')`1,(S')`2] is Element of QC-Sub-WFF by Th10;
+    hence thesis by A1,A2,Def16;
   end;
 end;
 
- reserve B for Element of [:QC-Sub-WFF,bound_QC-variables:];
+reserve B for Element of [:QC-Sub-WFF,bound_QC-variables:];
 
-definition let B;
+definition
+  let B;
   redefine func B`1 -> Element of QC-Sub-WFF;
   coherence by MCART_1:10;
   redefine func B`2 -> Element of bound_QC-variables;
   coherence by MCART_1:10;
 end;
 
-definition let B;
+definition
+  let B;
   attr B is quantifiable means
-  :Def22: ex e st (B`1)`2 = QSub.[All((B)`2,(B`1)`1),e];
+  :Def22:
+  ex e st (B`1)`2 = QSub.[All((B)`2,(B`1)`1),e];
 end;
 
-definition let B;
-  assume A1: B is quantifiable;
+definition
+  let B;
+  assume
+A1: B is quantifiable;
   mode second_Q_comp of B -> Element of vSUB means
-  :Def23: (B`1)`2 = QSub.[All(B`2,(B`1)`1),it];
+    :Def23:
+    (B`1)`2 = QSub.[All(B`2,(B`1)`1),it];
   existence by A1,Def22;
 end;
 
- reserve SQ for second_Q_comp of B;
+reserve SQ for second_Q_comp of B;
 
-definition let B, SQ;
-  assume A1: B is quantifiable;
+definition
+  let B, SQ;
+  assume
+A1: B is quantifiable;
   func Sub_All(B,SQ) -> Element of QC-Sub-WFF equals
-   :Def24: [All(B`2,(B`1)`1),SQ];
+  :Def24:
+  [All(B`2,(B`1)`1),SQ];
   coherence
   proof
-  (B`1)`2 = QSub.[All(B`2,(B`1)`1),SQ] by A1,Def23;
- then B`1 = [(B`1)`1, QSub.[All(B`2,(B`1)`1),SQ]] by Th10;
-     hence thesis by Def16;
+    (B`1)`2 = QSub.[All(B`2,(B`1)`1),SQ] by A1,Def23;
+    then B`1 = [(B`1)`1, QSub.[All(B`2,(B`1)`1),SQ]] by Th10;
+    hence thesis by Def16;
   end;
 end;
 
-definition let S, x;
+definition
+  let S, x;
   redefine func [S,x] -> Element of [:QC-Sub-WFF,bound_QC-variables:];
   coherence
   proof
-     [S,x] in [:QC-Sub-WFF,bound_QC-variables:];
+    [S,x] in [:QC-Sub-WFF,bound_QC-variables:];
     hence thesis;
   end;
 end;
 
 scheme SubQCInd { Pro[Element of QC-Sub-WFF]}:
-        for S being Element of QC-Sub-WFF holds Pro[S]
-  provided
-        A1: for k being Element of NAT, P being (QC-pred_symbol of k),
-                ll being QC-variable_list of k, e being Element of vSUB
-              holds Pro[Sub_P(P,ll,e)] and
-        A2: for S being Element of QC-Sub-WFF st
-                       S is Sub_VERUM holds Pro[S] and
-        A3: for S being Element of QC-Sub-WFF st Pro[S]
-                                                      holds Pro[Sub_not S] and
-        A4: for S,S' being Element of QC-Sub-WFF
-                 st S`2 = (S')`2 & Pro[S] & Pro[S'] holds Pro[Sub_&(S,S')] and
-        A5: for x being bound_QC-variable, S being Element of QC-Sub-WFF,
-                        SQ being second_Q_comp of [S,x] st
-            [S,x] is quantifiable & Pro[S] holds Pro[Sub_All([S,x], SQ)]
+  for S being Element of QC-Sub-WFF holds Pro[S]
+provided
+A1: for k being Element of NAT, P being (QC-pred_symbol of k),
+ll being QC-variable_list of k, e being Element of vSUB
+holds Pro[Sub_P(P,ll,e)]
+and
+A2: for S being Element of QC-Sub-WFF st S is Sub_VERUM holds Pro[S]
+and
+A3: for S being Element of QC-Sub-WFF st Pro[S] holds Pro[Sub_not S]
+and
+A4: for S,S' being Element of QC-Sub-WFF
+st S`2 = (S')`2 & Pro[S] & Pro[S'] holds Pro[Sub_&(S,S')]
+and
+A5: for x being bound_QC-variable, S being Element of QC-Sub-WFF,
+SQ being second_Q_comp of [S,x] st
+[S,x] is quantifiable & Pro[S] holds Pro[Sub_All([S,x], SQ)]
+proof
+  set X = { S : Pro[S]};
+  X is non empty
   proof
-    set X = { S : Pro[S]};
-     X is non empty
-   proof
-     consider e;
-     reconsider V = [VERUM,e] as Element of QC-Sub-WFF
-       by Def16;
+    consider e;
+    reconsider V = [VERUM,e] as Element of QC-Sub-WFF by Def16;
+    V is Sub_VERUM by Def19;
+    then Pro[V] by A2;
+    then V in X;
+    hence thesis;
+  end;
+  then reconsider X as non empty set;
+  X is QC-Sub-closed
+  proof
+    X c= [:[:NAT, NAT:]*,vSUB:]
+    proof
+      let x be set;
+      assume x in X;
+      then consider S such that
+A6:   x = S & Pro[S];
+      consider p being Element of QC-WFF, e being Element of vSUB such that
+A7:   x = [p,e] by A6,Th8;
+      p = @p;
+      then p in [:NAT,NAT:]* by FINSEQ_1:def 11;
+      hence thesis by A7,ZFMISC_1:def 2;
+    end;
+    hence X is Subset of [:[:NAT, NAT:]*,vSUB:];
+    thus for k being Element of NAT, P being (QC-pred_symbol of k),
+    ll being QC-variable_list of k, e being Element of vSUB
+    holds [<*P*>^ll,e] in X
+    proof
+      let k be Element of NAT, P be (QC-pred_symbol of k),
+      ll be QC-variable_list of k, e being Element of vSUB;
+A8:   Pro[Sub_P(P,ll,e)] by A1;
+      [P!ll,e] = Sub_P(P,ll,e) by Th9;
+      then [P!ll,e] in X by A8;
+      hence thesis by QC_LANG1:23;
+    end;
+    for e being Element of vSUB holds [VERUM,e] in X
+    proof
+      let e be Element of vSUB;
+      set V = [VERUM,e];
+      reconsider V = [VERUM,e] as Element of QC-Sub-WFF by Def16;
       V is Sub_VERUM by Def19;
-then  Pro[V] by A2;
-      then V in X;
+      then Pro[V] by A2;
       hence thesis;
     end;
-    then reconsider X as non empty set;
-      X is QC-Sub-closed
-      proof
-         X c= [:[:NAT, NAT:]*,vSUB:]
-         proof
-           let x be set;
-           assume x in X;
-           then consider S such that A6: x = S & Pro[S];
-           consider p being Element of QC-WFF, e being Element of vSUB
-           such that A7: x = [p,e] by A6,Th8;
-            p = @p;
-           then p in [:NAT,NAT:]* by FINSEQ_1:def 11;
-           hence thesis by A7,ZFMISC_1:def 2;
-         end;
-       hence X is Subset of [:[:NAT, NAT:]*,vSUB:];
-       thus for k being Element of NAT, P being (QC-pred_symbol of k),
-                ll being QC-variable_list of k, e being Element of vSUB
-              holds [<*P*>^ll,e] in X
-         proof
-           let k be Element of NAT, P be (QC-pred_symbol of k),
-                ll be QC-variable_list of k, e being Element of vSUB;
-       A8:  Pro[Sub_P(P,ll,e)] by A1;
-        [P!ll,e] = Sub_P(P,ll,e) by Th9;
-       then [P!ll,e] in X by A8;
-           hence thesis by QC_LANG1:23;
-         end;
-          for e being Element of vSUB holds [VERUM,e] in X
-         proof
-           let e be Element of vSUB;
-           set V = [VERUM,e];
-           reconsider V = [VERUM,e] as Element of QC-Sub-WFF
-             by Def16;
-       V is Sub_VERUM by Def19;
-           then Pro[V] by A2;
-           hence thesis;
-         end;
-         hence for e being Element of vSUB holds [<*[0, 0]*>,e] in X;
-       thus for p being FinSequence of [:NAT, NAT:], e being Element of vSUB
-                 st [p,e] in X holds [<*[1, 0]*>^p,e] in X
-         proof
-          let p be FinSequence of [:NAT, NAT:],
-              e be Element of vSUB;
-          assume [p,e] in X;
-          then consider S such that A9: S = [p,e] & Pro[S];
-          consider p' being Element of QC-WFF, e' being Element of vSUB
-                                             such that A10: S = [p',e'] by Th8;
+    hence for e being Element of vSUB holds [<*[0, 0]*>,e] in X;
+    thus for p being FinSequence of [:NAT, NAT:], e being Element of vSUB
+    st [p,e] in X holds [<*[1, 0]*>^p,e] in X
+    proof
+      let p be FinSequence of [:NAT, NAT:], e be Element of vSUB;
+      assume [p,e] in X;
+      then consider S such that
+A9:   S = [p,e] & Pro[S];
+      consider p' being Element of QC-WFF, e' being Element of vSUB such that
+A10:  S = [p',e'] by Th8;
       Pro[Sub_not S] by A3,A9;
-          then A11: Sub_not S in X;
-          A12: S`1 = p' by A10,MCART_1:7;
-           p = p' & e = e' by A9,A10,ZFMISC_1:33;
-          hence thesis by A10,A11,A12,MCART_1:7;
-         end;
-       thus for p, q being FinSequence of [:NAT, NAT:], e being Element of
-vSUB
-             st [p,e] in X & [q,e] in X
-              holds [<*[2, 0]*>^p^q,e] in X
-         proof
-           let p, q be FinSequence of [:NAT, NAT:], e be Element of vSUB;
-           assume [p,e] in X;
-           then consider S1 such that A13: S1 = [p,e] & Pro[S1];
-           consider p' being Element of QC-WFF, e1 being Element of vSUB
-                                    such that A14: [p,e] = [p',e1] by A13,Th8;
-           assume [q,e] in X;
-           then consider S2 such that A15: S2 = [q,e] & Pro[S2];
-           consider q' being Element of QC-WFF, e2 being Element of vSUB
-                                     such that A16: [q,e] = [q',e2] by A15,Th8;
-         A17: p = p'& q = q' & e = e1 & e = e2
-                                            by A14,A16,ZFMISC_1:33;
-    A18: S1`2 = e1 by A13,A14,MCART_1:7;
-    then A19: S1`2 = S2`2 by A15,A17,MCART_1:7;
-         then Pro[Sub_&(S1,S2)] by A4,A13,A15;
-         then Sub_&(S1,S2) in X;
-         then A20: [S1`1 '&' S2`1,S1`2] in X by A19,Def21;
-     S1`1 = p' by A13,A14,MCART_1:7;
-           hence thesis by A15,A17,A18,A20,MCART_1:7;
-         end;
-        thus for x being bound_QC-variable,
-              p being FinSequence of [:NAT, NAT:], e being Element of vSUB
-                 st [p,QSub.[<*[3, 0]*>^<*x*>^p,e]] in X holds
-                                 [<*[3, 0]*>^<*x*>^p,e] in X
-         proof
-          let x be bound_QC-variable,
-              p be FinSequence of [:NAT, NAT:],
-              e being Element of vSUB;
-           assume [p,QSub.[<*[3, 0]*>^<*x*>^p,e]] in X;
-           then consider S such that
-A21:       S = [p,QSub.[<*[3,0]*>^<*x*>^p,e]] & Pro[S];
-           consider p' being Element of QC-WFF, e' being Element of vSUB;
-       S`1 = p by A21,MCART_1:7;
-then A22:       S`2 = QSub.[All(x,S`1),e] by A21,MCART_1:7;
-           consider B being set such that A23: B = [S,x];
-           reconsider B as Element of [:QC-Sub-WFF,bound_QC-variables:] by A23;
-      A24: B`1 = S & B`2 = x by A23,MCART_1:7;
-      then A25: B is quantifiable by A22,Def22;
-           then reconsider e as second_Q_comp of B by A22,A24,Def23;
-       Pro[Sub_All(B,e)] by A5,A21,A23,A25;
-           then Sub_All(B,e) in X;
-           then [All(B`2,(B`1)`1),e] in X by A25,Def24;
-          hence thesis by A21,A24,MCART_1:7;
-         end;
-      end;
-  then A26: QC-Sub-WFF c= X by Def17;
-    let F be Element of QC-Sub-WFF;
-     F in X by A26,TARSKI:def 3;
-     then consider S being Element of QC-Sub-WFF such that
-              A27: S = F & Pro[S];
-    thus Pro[F] by A27;
+      then
+A11:  Sub_not S in X;
+A12:  S`1 = p' by A10,MCART_1:7;
+      p = p' & e = e' by A9,A10,ZFMISC_1:33;
+      hence thesis by A10,A11,A12,MCART_1:7;
+    end;
+    thus for p, q being FinSequence of [:NAT, NAT:], e being Element of vSUB
+    st [p,e] in X & [q,e] in X holds [<*[2, 0]*>^p^q,e] in X
+    proof
+      let p, q be FinSequence of [:NAT, NAT:], e be Element of vSUB;
+      assume [p,e] in X;
+      then consider S1 such that
+A13:  S1 = [p,e] & Pro[S1];
+      consider p' being Element of QC-WFF, e1 being Element of vSUB such that
+A14:  [p,e] = [p',e1] by A13,Th8;
+      assume [q,e] in X;
+      then consider S2 such that
+A15:  S2 = [q,e] & Pro[S2];
+      consider q' being Element of QC-WFF, e2 being Element of vSUB such that
+A16:  [q,e] = [q',e2] by A15,Th8;
+A17:  p = p'& q = q' & e = e1 & e = e2 by A14,A16,ZFMISC_1:33;
+A18:  S1`2 = e1 by A13,A14,MCART_1:7;
+      then
+A19:  S1`2 = S2`2 by A15,A17,MCART_1:7;
+      then Pro[Sub_&(S1,S2)] by A4,A13,A15;
+      then Sub_&(S1,S2) in X;
+      then
+A20:  [S1`1 '&' S2`1,S1`2] in X by A19,Def21;
+      S1`1 = p' by A13,A14,MCART_1:7;
+      hence thesis by A15,A17,A18,A20,MCART_1:7;
+    end;
+    thus for x being bound_QC-variable,
+    p being FinSequence of [:NAT, NAT:], e being Element of vSUB
+    st [p,QSub.[<*[3, 0]*>^<*x*>^p,e]] in X holds [<*[3, 0]*>^<*x*>^p,e] in X
+    proof
+      let x be bound_QC-variable, p be FinSequence of [:NAT, NAT:],
+      e being Element of vSUB;
+      assume [p,QSub.[<*[3, 0]*>^<*x*>^p,e]] in X;
+      then consider S such that
+A21:  S = [p,QSub.[<*[3,0]*>^<*x*>^p,e]] & Pro[S];
+      consider p' being Element of QC-WFF, e' being Element of vSUB;
+      S`1 = p by A21,MCART_1:7;
+      then
+A22:  S`2 = QSub.[All(x,S`1),e] by A21,MCART_1:7;
+      consider B being set such that
+A23:  B = [S,x];
+      reconsider B as Element of [:QC-Sub-WFF,bound_QC-variables:] by A23;
+A24:  B`1 = S & B`2 = x by A23,MCART_1:7;
+      then
+A25:  B is quantifiable by A22,Def22;
+      then reconsider e as second_Q_comp of B by A22,A24,Def23;
+      Pro[Sub_All(B,e)] by A5,A21,A23,A25;
+      then Sub_All(B,e) in X;
+      then [All(B`2,(B`1)`1),e] in X by A25,Def24;
+      hence thesis by A21,A24,MCART_1:7;
+    end;
   end;
+  then
+A26: QC-Sub-WFF c= X by Def17;
+  let F be Element of QC-Sub-WFF;
+  F in X by A26,TARSKI:def 3;
+  then consider S being Element of QC-Sub-WFF such that
+A27: S = F & Pro[S];
+  thus Pro[F] by A27;
+end;
 
-definition let S;
+definition
+  let S;
   attr S is Sub_atomic means
-  :Def25: ex k being Element of NAT, P being QC-pred_symbol of k,
-        ll being QC-variable_list of k, e being Element of vSUB st
-                                                          S = Sub_P(P,ll,e);
+  :Def25:
+  ex k being Element of NAT, P being QC-pred_symbol of k,
+  ll being QC-variable_list of k, e being Element of vSUB st
+  S = Sub_P(P,ll,e);
 end;
 
 theorem Th11:
   S is Sub_atomic implies S`1 is atomic
-   proof
-     assume S is Sub_atomic;
-     then consider k being Element of NAT, P being (QC-pred_symbol of k),
-        ll being QC-variable_list of k, e being Element of vSUB such that
- A1:              S = Sub_P(P,ll,e) by Def25;
-         S = [P!ll,e] by A1,Th9;
-        then S`1 = P!ll by MCART_1:7;
-        hence thesis by QC_LANG1:def 17;
-   end;
+proof
+  assume S is Sub_atomic;
+  then consider k being Element of NAT, P being (QC-pred_symbol of k),
+  ll being QC-variable_list of k, e being Element of vSUB such that
+A1: S = Sub_P(P,ll,e) by Def25;
+  S = [P!ll,e] by A1,Th9;
+  then S`1 = P!ll by MCART_1:7;
+  hence thesis by QC_LANG1:def 17;
+end;
 
-registration let k be Element of NAT; let P be (QC-pred_symbol of k),
-                 ll be QC-variable_list of k;
-             let e be Element of vSUB;
+registration
+  let k be Element of NAT;
+  let P be (QC-pred_symbol of k), ll be QC-variable_list of k;
+  let e be Element of vSUB;
   cluster Sub_P(P,ll,e) -> Sub_atomic;
   coherence by Def25;
 end;
 
-definition let S;
+definition
+  let S;
   attr S is Sub_negative means
-  :Def26: ex S' st S = Sub_not S';
+  :Def26:
+  ex S' st S = Sub_not S';
   attr S is Sub_conjunctive means
-  :Def27: ex S1,S2 st S = Sub_&(S1,S2) & S1`2 = S2`2;
+  :Def27:
+  ex S1,S2 st S = Sub_&(S1,S2) & S1`2 = S2`2;
 end;
 
-definition let A be set;
+definition
+  let A be set;
   attr A is Sub_universal means
-  :Def28: ex B,SQ st A = Sub_All(B,SQ) & B is quantifiable;
+  :Def28:
+  ex B,SQ st A = Sub_All(B,SQ) & B is quantifiable;
 end;
 
 theorem Th12:
-  for S holds S is Sub_VERUM or
-      S is Sub_atomic or S is Sub_negative or
-      S is Sub_conjunctive or S is Sub_universal
- proof
-   defpred P[Element of QC-Sub-WFF] means
-           $1 is Sub_VERUM or $1 is Sub_atomic or
-           $1 is Sub_negative or $1 is Sub_conjunctive or
-           $1 is Sub_universal;
-A1:   for k being Element of NAT, p being (QC-pred_symbol of k),
-         ll being QC-variable_list of k, e being Element of vSUB
-       holds P[Sub_P(p,ll,e)];
-A2:   for S being Element of QC-Sub-WFF st S is Sub_VERUM holds P[S];
-A3:   for S being Element of QC-Sub-WFF st P[S] holds
-                                              P[Sub_not(S)] by Def26;
-A4:   for S1, S2 being Element of QC-Sub-WFF st
-   S1`2 = S2`2 & P[S1] & P[S2] holds P[Sub_&(S1,S2)] by Def27;
-A5: for x being bound_QC-variable,
-      S being Element of QC-Sub-WFF,
-                   SQ being second_Q_comp of [S,x] st
-       [S,x] is quantifiable & P[S] holds P[Sub_All([S,x], SQ)] by Def28;
-   thus for S being Element of QC-Sub-WFF holds P[S]
-                           from SubQCInd (A1, A2, A3, A4, A5);
- end;
+  for S holds S is Sub_VERUM or S is Sub_atomic or S is Sub_negative or
+  S is Sub_conjunctive or S is Sub_universal
+proof
+  defpred P[Element of QC-Sub-WFF] means
+  $1 is Sub_VERUM or $1 is Sub_atomic or
+  $1 is Sub_negative or $1 is Sub_conjunctive or $1 is Sub_universal;
+A1: for k being Element of NAT, p being (QC-pred_symbol of k),
+  ll being QC-variable_list of k, e being Element of vSUB
+  holds P[Sub_P(p,ll,e)];
+A2: for S being Element of QC-Sub-WFF st S is Sub_VERUM holds P[S];
+A3: for S being Element of QC-Sub-WFF st P[S] holds P[Sub_not(S)] by Def26;
+A4: for S1, S2 being Element of QC-Sub-WFF st
+  S1`2 = S2`2 & P[S1] & P[S2] holds P[Sub_&(S1,S2)] by Def27;
+A5: for x being bound_QC-variable, S being Element of QC-Sub-WFF,
+  SQ being second_Q_comp of [S,x] st
+  [S,x] is quantifiable & P[S] holds P[Sub_All([S,x], SQ)] by Def28;
+  thus for S being Element of QC-Sub-WFF holds P[S]
+  from SubQCInd (A1, A2, A3, A4, A5);
+end;
 
-definition let S such that A1: S is Sub_atomic;
+definition
+  let S such that
+A1: S is Sub_atomic;
   func Sub_the_arguments_of S -> FinSequence of QC-variables means
-  :Def29: ex k being Element of NAT, P being (QC-pred_symbol of k),
-               ll being QC-variable_list of k, e being Element of vSUB
-                  st it = ll & S = Sub_P(P,ll,e);
-   existence
-   proof
-     consider k being Element of NAT, P being (QC-pred_symbol of k),
-              ll being QC-variable_list of k, e being Element of vSUB such that
-A2:  S = Sub_P(P,ll,e) by A1,Def25;
-     reconsider ll as FinSequence of QC-variables;
-     take ll;
-     thus thesis by A2;
-   end;
-   uniqueness
-   proof
-     let ll1,ll2 be FinSequence of QC-variables;
-     given k1 being Element of NAT, P1 being (QC-pred_symbol of k1),
-               ll1' being QC-variable_list of k1, e1 being Element of vSUB
-                  such that
-         A3: ll1 = ll1' & S = Sub_P(P1,ll1',e1);
-     given k2 being Element of NAT, P2 being (QC-pred_symbol of k2),
-               ll2' being QC-variable_list of k2, e2 being Element of vSUB
-                  such that
-         A4: ll2 = ll2' & S = Sub_P(P2,ll2',e2);
-     A5: <*P1*>^ll1' = P1!ll1' &  <*P2*>^ll2' = P2!ll2' by QC_LANG1:23;
-          S = [P1!ll1',e1] & S = [P2!ll2',e2] by A3,A4,Th9;
-     then A6: S`1 = <*P1*>^ll1' & S`1 = P1!ll1' &
-         S`1 =  <*P2*>^ll2'& S`1 = P2!ll2' by A5,MCART_1:7;
-     A7: S`1 is atomic by A1,Th11;
-         then P1 = the_pred_symbol_of (S`1) by A6,QC_LANG1:def 21
-           .= P2 by A6,A7,QC_LANG1:def 21;
-     hence ll1 = ll2 by A3,A4,A6,FINSEQ_1:46;
-   end;
- end;
-
-definition let S such that A1: S is Sub_negative;
-  func Sub_the_argument_of S -> Element of  QC-Sub-WFF means
-  :Def30: S = Sub_not it;
-   existence by A1,Def26;
-   uniqueness
-   proof
-     let S1,S2;
-     assume A2: S = Sub_not(S1) & S = Sub_not(S2);
-     then 'not' S1`1 = 'not' S2`1 by ZFMISC_1:33;
- then A3: S1`1 = S2`1 by FINSEQ_1:46;
-      S1 = [S1`1,S1`2] & S2 = [S2`1,S2`2] by Th10;
-     hence thesis by A2,A3,ZFMISC_1:33;
-   end;
-end;
-
-definition let S such that A1: S is Sub_conjunctive;
-  func Sub_the_left_argument_of S -> Element of QC-Sub-WFF means
-  :Def31: ex S' st S = Sub_&(it,S') & it`2 = (S')`2;
-   existence by A1,Def27;
-   uniqueness
-   proof
-     let S1,S2;
-     given T1 being Element of QC-Sub-WFF such that
-               A2: S = Sub_&(S1,T1) & S1`2 = T1`2;
-     given T2 being Element of QC-Sub-WFF such that
-               A3: S = Sub_&(S2,T2) & S2`2 = T2`2;
-A4: S = [(S1`1) '&' (T1`1),S1`2] & S = [(S2`1) '&' (T2`1),S2`2] by A2,A3,Def21;
-     then (S1`1) '&' (T1`1) = (S2`1) '&' (T2`1) by ZFMISC_1:33;
-     then <*[2,0]*>^((@S1`1)^(@T1`1)) = (S2`1) '&' (T2`1) by FINSEQ_1:45
-                .= <*[2,0]*>^((@S2`1)^(@T2`1)) by FINSEQ_1:45;
- then A5: @S1`1^@T1`1 = @S2`1^@T2`1 by FINSEQ_1:46;
-      len @(S1`1) <= len @(S2`1) or len @(S2`1) <= len @(S1`1);
-     then consider a,b,c,d being FinSequence such that
-     A6: a = @S1`1 & b = @S2`1 or a = @S2`1 & b = @S1`1 and
-     A7: len a <= len b and
-     A8: a^c = b^d by A5;
-  ex t being FinSequence st a^t = b by A7,A8,FINSEQ_1:64;
-     then A9: S1`1 = S2`1 by A6,QC_LANG1:37;
-      S1 = [S1`1,S1`2] & S2 = [S2`1,S2`2] by Th10;
-     hence thesis by A4,A9,ZFMISC_1:33;
-   end;
-end;
-
-definition let S such that A1: S is Sub_conjunctive;
-  func Sub_the_right_argument_of S -> Element of QC-Sub-WFF means
-  :Def32: ex S' st S = Sub_&(S',it) & (S')`2 = it`2;
-  existence
-    proof
-     consider S1,S2 such that A2: S = Sub_&(S1,S2) & S1`2 = S2`2 by A1,Def27;
-     take S2;
-     thus thesis by A2;
-   end;
-   uniqueness
-   proof
-     let T1,T2;
-     given S1 being Element of QC-Sub-WFF such that
-               A3: S = Sub_&(S1,T1) & S1`2 = T1`2;
-     given S2 being Element of QC-Sub-WFF such that
-               A4: S = Sub_&(S2,T2) & S2`2 = T2`2;
-A5: S = [(S1`1) '&' (T1`1),T1`2] & S = [(S2`1) '&' (T2`1),T2`2] by A3,A4,Def21;
-     then (S1`1) '&' (T1`1) = (S2`1) '&' (T2`1) by ZFMISC_1:33;
-     then <*[2,0]*>^((@S1`1)^(@T1`1)) = (S2`1) '&' (T2`1) by FINSEQ_1:45
-                .= <*[2,0]*>^((@S2`1)^(@T2`1)) by FINSEQ_1:45;
- then A6: @S1`1^@T1`1 = @S2`1^@T2`1 by FINSEQ_1:46;
-      S1 = Sub_the_left_argument_of S by A1,A3,Def31
-                    .= S2 by A1,A4,Def31;
-     then A7: @T1`1 = @T2`1 by A6,FINSEQ_1:46;
-      T1 = [T1`1,T1`2] & T2 = [T2`1,T2`2] by Th10;
-     hence thesis by A5,A7,ZFMISC_1:33;
-   end;
-end;
-
-definition let A be set such that A1: A is Sub_universal;
-  func Sub_the_bound_of A -> bound_QC-variable means
-     ex B,SQ st A = Sub_All(B,SQ) & B`2 = it & B is quantifiable;
+  :Def29:
+  ex k being Element of NAT, P being (QC-pred_symbol of k),
+  ll being QC-variable_list of k, e being Element of vSUB
+  st it = ll & S = Sub_P(P,ll,e);
   existence
   proof
-    consider B,SQ such that A2: A = Sub_All(B,SQ) & B is quantifiable
-                                                                   by A1,Def28;
-     take B`2;
-     thus thesis by A2;
-   end;
-   uniqueness
-   proof
-     let x1,x2;
-     assume
- A3:   (ex B,SQ st A = Sub_All(B,SQ) & B`2 = x1 & B is quantifiable) &
-       (ex B,SQ st A = Sub_All(B,SQ) & B`2 = x2 & B is quantifiable);
-     then consider B1 being Element of [:QC-Sub-WFF,bound_QC-variables:],
-            SQ1 being second_Q_comp of B1 such that
-     A4: A = Sub_All(B1,SQ1) & B1`2 = x1 & B1 is quantifiable;
-          consider B2 being Element of [:QC-Sub-WFF,bound_QC-variables:],
-            SQ2 being second_Q_comp of B2 such that
-     A5: A = Sub_All(B2,SQ2) & B2`2 = x2 & B2 is quantifiable by A3;
- A6: [All(B1`2,(B1`1)`1),SQ1] = A by A4,Def24;
-      [All(B2`2,(B2`1)`1),SQ2] = A by A5,Def24;
-     then All(B1`2,(B1`1)`1) = All(B2`2,((B2`1))`1) by A6,ZFMISC_1:33;
-     hence x1 = x2 by A4,A5,QC_LANG2:6;
-   end;
+    consider k being Element of NAT, P being (QC-pred_symbol of k),
+    ll being QC-variable_list of k, e being Element of vSUB such that
+A2: S = Sub_P(P,ll,e) by A1,Def25;
+    reconsider ll as FinSequence of QC-variables;
+    take ll;
+    thus thesis by A2;
+  end;
+  uniqueness
+  proof
+    let ll1,ll2 be FinSequence of QC-variables;
+    given k1 being Element of NAT, P1 being (QC-pred_symbol of k1),
+    ll1' being QC-variable_list of k1, e1 being Element of vSUB such that
+A3: ll1 = ll1' & S = Sub_P(P1,ll1',e1);
+    given k2 being Element of NAT, P2 being (QC-pred_symbol of k2),
+    ll2' being QC-variable_list of k2, e2 being Element of vSUB such that
+A4: ll2 = ll2' & S = Sub_P(P2,ll2',e2);
+A5: <*P1*>^ll1' = P1!ll1' & <*P2*>^ll2' = P2!ll2' by QC_LANG1:23;
+    S = [P1!ll1',e1] & S = [P2!ll2',e2] by A3,A4,Th9;
+    then
+A6: S`1 = <*P1*>^ll1' & S`1 = P1!ll1' &
+    S`1 = <*P2*>^ll2'& S`1 = P2!ll2' by A5,MCART_1:7;
+A7: S`1 is atomic by A1,Th11;
+    then P1 = the_pred_symbol_of (S`1) by A6,QC_LANG1:def 21
+      .= P2 by A6,A7,QC_LANG1:def 21;
+    hence ll1 = ll2 by A3,A4,A6,FINSEQ_1:46;
+  end;
 end;
 
-definition let A be set such that A1: A is Sub_universal;
-  func Sub_the_scope_of A -> Element of QC-Sub-WFF means
-  :Def34: ex B,SQ st A = Sub_All(B,SQ) & B`1 = it & B is quantifiable;
+definition
+  let S such that
+A1: S is Sub_negative;
+  func Sub_the_argument_of S -> Element of QC-Sub-WFF means
+  :Def30:
+  S = Sub_not it;
+  existence by A1,Def26;
+  uniqueness
+  proof
+    let S1,S2;
+    assume
+A2: S = Sub_not(S1) & S = Sub_not(S2);
+    then 'not' S1`1 = 'not' S2`1 by ZFMISC_1:33;
+    then
+A3: S1`1 = S2`1 by FINSEQ_1:46;
+    S1 = [S1`1,S1`2] & S2 = [S2`1,S2`2] by Th10;
+    hence thesis by A2,A3,ZFMISC_1:33;
+  end;
+end;
+
+definition
+  let S such that
+A1: S is Sub_conjunctive;
+  func Sub_the_left_argument_of S -> Element of QC-Sub-WFF means
+  :Def31:
+  ex S' st S = Sub_&(it,S') & it`2 = (S')`2;
+  existence by A1,Def27;
+  uniqueness
+  proof
+    let S1,S2;
+    given T1 being Element of QC-Sub-WFF such that
+A2: S = Sub_&(S1,T1) & S1`2 = T1`2;
+    given T2 being Element of QC-Sub-WFF such that
+A3: S = Sub_&(S2,T2) & S2`2 = T2`2;
+A4: S = [(S1`1) '&' (T1`1),S1`2] & S = [(S2`1) '&' (T2`1),S2`2] by A2,A3,Def21;
+    then (S1`1) '&' (T1`1) = (S2`1) '&' (T2`1) by ZFMISC_1:33;
+    then <*[2,0]*>^((@S1`1)^(@T1`1)) = (S2`1) '&' (T2`1) by FINSEQ_1:45
+      .= <*[2,0]*>^((@S2`1)^(@T2`1)) by FINSEQ_1:45;
+    then
+A5: @S1`1^@T1`1 = @S2`1^@T2`1 by FINSEQ_1:46;
+    len @(S1`1) <= len @(S2`1) or len @(S2`1) <= len @(S1`1);
+    then consider a,b,c,d being FinSequence such that
+A6: a = @S1`1 & b = @S2`1 or a = @S2`1 & b = @S1`1 and
+A7: len a <= len b and
+A8: a^c = b^d by A5;
+    ex t being FinSequence st a^t = b by A7,A8,FINSEQ_1:64;
+    then
+A9: S1`1 = S2`1 by A6,QC_LANG1:37;
+    S1 = [S1`1,S1`2] & S2 = [S2`1,S2`2] by Th10;
+    hence thesis by A4,A9,ZFMISC_1:33;
+  end;
+end;
+
+definition
+  let S such that
+A1: S is Sub_conjunctive;
+  func Sub_the_right_argument_of S -> Element of QC-Sub-WFF means
+  :Def32:
+  ex S' st S = Sub_&(S',it) & (S')`2 = it`2;
+  existence
+  proof
+    consider S1,S2 such that
+A2: S = Sub_&(S1,S2) & S1`2 = S2`2 by A1,Def27;
+    take S2;
+    thus thesis by A2;
+  end;
+  uniqueness
+  proof
+    let T1,T2;
+    given S1 being Element of QC-Sub-WFF such that
+A3: S = Sub_&(S1,T1) & S1`2 = T1`2;
+    given S2 being Element of QC-Sub-WFF such that
+A4: S = Sub_&(S2,T2) & S2`2 = T2`2;
+A5: S = [(S1`1) '&' (T1`1),T1`2] & S = [(S2`1) '&' (T2`1),T2`2] by A3,A4,Def21;
+    then (S1`1) '&' (T1`1) = (S2`1) '&' (T2`1) by ZFMISC_1:33;
+    then <*[2,0]*>^((@S1`1)^(@T1`1)) = (S2`1) '&' (T2`1) by FINSEQ_1:45
+      .= <*[2,0]*>^((@S2`1)^(@T2`1)) by FINSEQ_1:45;
+    then
+A6: @S1`1^@T1`1 = @S2`1^@T2`1 by FINSEQ_1:46;
+    S1 = Sub_the_left_argument_of S by A1,A3,Def31
+      .= S2 by A1,A4,Def31;
+    then
+A7: @T1`1 = @T2`1 by A6,FINSEQ_1:46;
+    T1 = [T1`1,T1`2] & T2 = [T2`1,T2`2] by Th10;
+    hence thesis by A5,A7,ZFMISC_1:33;
+  end;
+end;
+
+definition
+  let A be set such that
+A1: A is Sub_universal;
+  func Sub_the_bound_of A -> bound_QC-variable means
+  ex B,SQ st A = Sub_All(B,SQ) & B`2 = it & B is quantifiable;
   existence
   proof
     consider B,SQ such that
 A2: A = Sub_All(B,SQ) & B is quantifiable by A1,Def28;
-     take B`1;
-     thus thesis by A2;
-   end;
-   uniqueness
-   proof
-     let S1,S2;
-     given B1 being Element of [:QC-Sub-WFF,bound_QC-variables:],
-           SQ1 being second_Q_comp of B1 such that
- A3:  A = Sub_All(B1,SQ1) & B1`1 = S1 & B1 is quantifiable;
-     given B2 being Element of [:QC-Sub-WFF,bound_QC-variables:],
-           SQ2 being second_Q_comp of B2 such that
- A4:  A = Sub_All(B2,SQ2) & B2`1 = S2 & B2 is quantifiable;
- A5:     A = [All(B1`2,(B1`1)`1),SQ1] &
-         A = [All(B2`2,(B2`1)`1),SQ2] by A3,A4,Def24;
-         then All(B1`2,(B1`1)`1)= All(B2`2,(B2`1)`1) &
-                                SQ1 = SQ2 by ZFMISC_1:33;
-     then A6: B1`2 = B2`2 & (B1`1)`1 = (B2`1)`1 by QC_LANG2:6;
- A7: (B1`1)`2 = QSub.[All(B1`2,(B1`1)`1),SQ1] by A3,Def23;
-      B1`1 = [(B1`1)`1,(B1`1)`2] & B2`1 = [(B2`1)`1,(B2`1)`2] by Th10;
-     hence thesis by A3,A4,A5,A6,A7,Def23;
-   end;
+    take B`2;
+    thus thesis by A2;
+  end;
+  uniqueness
+  proof
+    let x1,x2;
+    assume
+A3: (ex B,SQ st A = Sub_All(B,SQ) & B`2 = x1 & B is quantifiable) &
+    (ex B,SQ st A = Sub_All(B,SQ) & B`2 = x2 & B is quantifiable);
+    then consider B1 being Element of [:QC-Sub-WFF,bound_QC-variables:],
+    SQ1 being second_Q_comp of B1 such that
+A4: A = Sub_All(B1,SQ1) & B1`2 = x1 & B1 is quantifiable;
+    consider B2 being Element of [:QC-Sub-WFF,bound_QC-variables:],
+    SQ2 being second_Q_comp of B2 such that
+A5: A = Sub_All(B2,SQ2) & B2`2 = x2 & B2 is quantifiable by A3;
+A6: [All(B1`2,(B1`1)`1),SQ1] = A by A4,Def24;
+    [All(B2`2,(B2`1)`1),SQ2] = A by A5,Def24;
+    then All(B1`2,(B1`1)`1) = All(B2`2,((B2`1))`1) by A6,ZFMISC_1:33;
+    hence x1 = x2 by A4,A5,QC_LANG2:6;
+  end;
 end;
 
-registration let S;
+definition
+  let A be set such that
+A1: A is Sub_universal;
+  func Sub_the_scope_of A -> Element of QC-Sub-WFF means
+  :Def34:
+  ex B,SQ st A = Sub_All(B,SQ) & B`1 = it & B is quantifiable;
+  existence
+  proof
+    consider B,SQ such that
+A2: A = Sub_All(B,SQ) & B is quantifiable by A1,Def28;
+    take B`1;
+    thus thesis by A2;
+  end;
+  uniqueness
+  proof
+    let S1,S2;
+    given B1 being Element of [:QC-Sub-WFF,bound_QC-variables:],
+    SQ1 being second_Q_comp of B1 such that
+A3: A = Sub_All(B1,SQ1) & B1`1 = S1 & B1 is quantifiable;
+    given B2 being Element of [:QC-Sub-WFF,bound_QC-variables:],
+    SQ2 being second_Q_comp of B2 such that
+A4: A = Sub_All(B2,SQ2) & B2`1 = S2 & B2 is quantifiable;
+A5: A = [All(B1`2,(B1`1)`1),SQ1] &
+    A = [All(B2`2,(B2`1)`1),SQ2] by A3,A4,Def24;
+    then All(B1`2,(B1`1)`1)= All(B2`2,(B2`1)`1) & SQ1 = SQ2 by ZFMISC_1:33;
+    then
+A6: B1`2 = B2`2 & (B1`1)`1 = (B2`1)`1 by QC_LANG2:6;
+A7: (B1`1)`2 = QSub.[All(B1`2,(B1`1)`1),SQ1] by A3,Def23;
+    B1`1 = [(B1`1)`1,(B1`1)`2] & B2`1 = [(B2`1)`1,(B2`1)`2] by Th10;
+    hence thesis by A3,A4,A5,A6,A7,Def23;
+  end;
+end;
+
+registration
+  let S;
   cluster Sub_not S -> Sub_negative;
   coherence
   proof
@@ -1546,63 +1646,69 @@ end;
 
 theorem Th13:
   S1`2 = S2`2 implies Sub_&(S1,S2) is Sub_conjunctive
-   proof
-     assume A1: S1`2 = S2`2;
-     take S1,S2;
-     thus thesis by A1;
-   end;
+proof
+  assume
+A1: S1`2 = S2`2;
+  take S1,S2;
+  thus thesis by A1;
+end;
 
 theorem Th14:
   B is quantifiable implies Sub_All(B,SQ) is Sub_universal
-   proof
-     assume A1: B is quantifiable;
-     take B,SQ;
-     thus thesis by A1;
-   end;
+proof
+  assume
+A1: B is quantifiable;
+  take B,SQ;
+  thus thesis by A1;
+end;
 
 theorem
-   Sub_not(S) = Sub_not(S') implies S = S'
-   proof
-     assume Sub_not(S) = Sub_not(S');
-     then A1: 'not' S`1 = 'not' (S')`1 & S`2 = (S')`2 by ZFMISC_1:33;
-      S = [S`1,S`2] & S' = [(S')`1,(S')`2] by Th10;
-     hence thesis by A1,FINSEQ_1:46;
-   end;
+  Sub_not(S) = Sub_not(S') implies S = S'
+proof
+  assume Sub_not(S) = Sub_not(S');
+  then
+A1: 'not' S`1 = 'not' (S')`1 & S`2 = (S')`2 by ZFMISC_1:33;
+  S = [S`1,S`2] & S' = [(S')`1,(S')`2] by Th10;
+  hence thesis by A1,FINSEQ_1:46;
+end;
 
 theorem
-   Sub_the_argument_of(Sub_not(S)) = S by Def30;
+  Sub_the_argument_of(Sub_not(S)) = S by Def30;
 
 theorem Th17:
   (S1`2 = S2`2 & (S1')`2 = (S2')`2 &
-     Sub_&(S1,S2) = Sub_&(S1',S2')) implies S1 = S1' & S2 = S2'
-    proof
-      assume A1: S1`2 = S2`2 & (S1')`2 = (S2')`2 &
-                                            Sub_&(S1,S2) = Sub_&(S1',S2');
-      then Sub_&(S1,S2) = [(S1`1) '&' (S2`1),S1`2] by Def21;
-      then [(S1`1) '&' (S2`1),S1`2] = [((S1')`1) '&' ((S2')`1),(S1')`2] by A1,
-Def21;
-     then A2: (S1`1) '&' (S2`1) = ((S1')`1) '&' ((S2')`1) &
-                                                 S1`2 = (S1')`2 by ZFMISC_1:33;
- A3: S1 = [S1`1,S1`2] & S1' = [(S1')`1,(S1')`2] by Th10;
-      S2 =  [S2`1,S2`2] & S2' = [(S2')`1,(S2')`2] by Th10;
-     hence thesis by A1,A2,A3,QC_LANG2:3;
-    end;
+  Sub_&(S1,S2) = Sub_&(S1',S2')) implies S1 = S1' & S2 = S2'
+proof
+  assume
+A1: S1`2 = S2`2 & (S1')`2 = (S2')`2 & Sub_&(S1,S2) = Sub_&(S1',S2');
+  then Sub_&(S1,S2) = [(S1`1) '&' (S2`1),S1`2] by Def21;
+  then [(S1`1) '&' (S2`1),S1`2] = [((S1')`1) '&' ((S2')`1),(S1')`2] by A1,
+  Def21;
+  then
+A2: (S1`1) '&' (S2`1) = ((S1')`1) '&' ((S2')`1) &
+  S1`2 = (S1')`2 by ZFMISC_1:33;
+A3: S1 = [S1`1,S1`2] & S1' = [(S1')`1,(S1')`2] by Th10;
+  S2 = [S2`1,S2`2] & S2' = [(S2')`1,(S2')`2] by Th10;
+  hence thesis by A1,A2,A3,QC_LANG2:3;
+end;
 
 theorem Th18:
   S1`2 = S2`2 implies Sub_the_left_argument_of(Sub_&(S1,S2)) = S1
-    proof
-      assume A1: S1`2 = S2`2;
-      then Sub_&(S1,S2) is Sub_conjunctive by Th13;
-      then consider S2' such that A2: Sub_&(S1,S2) =
-         Sub_&(Sub_the_left_argument_of(Sub_&(S1,S2)),S2') &
-         (Sub_the_left_argument_of(Sub_&(S1,S2)))`2 = (S2')`2 by Def31;
-      thus thesis by A1,A2,Th17;
-    end;
+proof
+  assume
+A1: S1`2 = S2`2;
+  then Sub_&(S1,S2) is Sub_conjunctive by Th13;
+  then consider S2' such that
+A2: Sub_&(S1,S2) = Sub_&(Sub_the_left_argument_of(Sub_&(S1,S2)),S2') &
+  (Sub_the_left_argument_of(Sub_&(S1,S2)))`2 = (S2')`2 by Def31;
+  thus thesis by A1,A2,Th17;
+end;
 
 theorem Th19:
   S1`2 = S2`2 implies Sub_the_right_argument_of(Sub_&(S1,S2)) = S2
 proof
-  assume A1: S1`2 = S2`2;
+  assume
+A1: S1`2 = S2`2;
   then Sub_&(S1,S2) is Sub_conjunctive by Th13;
   then consider S1' such that
 A2: Sub_&(S1,S2) = Sub_&(S1',Sub_the_right_argument_of(Sub_&(S1,S2))) &
@@ -1612,692 +1718,690 @@ end;
 
 theorem Th20:
   for B1,B2 being Element of [:QC-Sub-WFF,bound_QC-variables:],
-        SQ1 being second_Q_comp of B1, SQ2 being second_Q_comp of B2 st
-      B1 is quantifiable & B2 is quantifiable &
-        Sub_All(B1,SQ1) = Sub_All(B2,SQ2) holds B1 = B2
-    proof
-      let B1,B2 be Element of [:QC-Sub-WFF,bound_QC-variables:],
-           SQ1 being second_Q_comp of B1, SQ2 being second_Q_comp of B2
-           such that A1: B1 is quantifiable & B2 is quantifiable &
-                         Sub_All(B1,SQ1) = Sub_All(B2,SQ2);
-A2:   Sub_All(B1,SQ1) = [All(B1`2,(B1`1)`1),SQ1] &
-      Sub_All(B2,SQ2) = [All(B2`2,(B2`1)`1),SQ2] by A1,Def24;
-      then All(B1`2,(B1`1)`1) = All(B2`2,(B2`1)`1) & SQ1 = SQ2
-                                                        by A1,ZFMISC_1:33;
-then A3:   B1`2 = B2`2 & (B1`1)`1 = (B2`1)`1 by QC_LANG2:6;
-A4:   (B1`1)`2 = QSub.[All(B1`2,(B1`1)`1),SQ1] by A1,Def23;
-A5:   B1`1 = [(B1`1)`1,(B1`1)`2] & B2`1 = [(B2`1)`1,(B2`1)`2] by Th10;
-      (ex a,b st a in QC-Sub-WFF & b in bound_QC-variables & B1 = [a,b]) &
-     (ex a,b st a in QC-Sub-WFF & b in bound_QC-variables & B2 = [a,b])
-                                                        by ZFMISC_1:def 2;
-     then B1 = [B1`1,B1`2] & B2 = [B2`1,B2`2] by MCART_1:8;
-     hence thesis by A1,A2,A3,A4,A5,Def23;
-   end;
+  SQ1 being second_Q_comp of B1, SQ2 being second_Q_comp of B2 st
+  B1 is quantifiable & B2 is quantifiable &
+  Sub_All(B1,SQ1) = Sub_All(B2,SQ2) holds B1 = B2
+proof
+  let B1,B2 be Element of [:QC-Sub-WFF,bound_QC-variables:],
+  SQ1 being second_Q_comp of B1, SQ2 being second_Q_comp of B2 such that
+A1: B1 is quantifiable & B2 is quantifiable &
+  Sub_All(B1,SQ1) = Sub_All(B2,SQ2);
+A2: Sub_All(B1,SQ1) = [All(B1`2,(B1`1)`1),SQ1] &
+  Sub_All(B2,SQ2) = [All(B2`2,(B2`1)`1),SQ2] by A1,Def24;
+  then All(B1`2,(B1`1)`1) = All(B2`2,(B2`1)`1) & SQ1 = SQ2 by A1,ZFMISC_1:33;
+  then
+A3: B1`2 = B2`2 & (B1`1)`1 = (B2`1)`1 by QC_LANG2:6;
+A4: (B1`1)`2 = QSub.[All(B1`2,(B1`1)`1),SQ1] by A1,Def23;
+A5: B1`1 = [(B1`1)`1,(B1`1)`2] & B2`1 = [(B2`1)`1,(B2`1)`2] by Th10;
+  (ex a,b st a in QC-Sub-WFF & b in bound_QC-variables & B1 = [a,b]) &
+  (ex a,b st a in QC-Sub-WFF & b in bound_QC-variables & B2 = [a,b])
+  by ZFMISC_1:def 2;
+  then B1 = [B1`1,B1`2] & B2 = [B2`1,B2`2] by MCART_1:8;
+  hence thesis by A1,A2,A3,A4,A5,Def23;
+end;
 
 theorem Th21:
   B is quantifiable implies Sub_the_scope_of(Sub_All(B,SQ)) = B`1
-   proof
-     assume A1: B is quantifiable;
-     then Sub_All(B,SQ) is Sub_universal by Th14;
-     then consider B1 being Element of [:QC-Sub-WFF,bound_QC-variables:],
-           SQ1 being second_Q_comp of B1
-        such that A2: Sub_All(B,SQ) = Sub_All(B1,SQ1) &
-          B1`1 = Sub_the_scope_of(Sub_All(B,SQ)) & B1 is quantifiable by Def34;
-     thus thesis by A1,A2,Th20;
-   end;
+proof
+  assume
+A1: B is quantifiable;
+  then Sub_All(B,SQ) is Sub_universal by Th14;
+  then consider B1 being Element of [:QC-Sub-WFF,bound_QC-variables:],
+  SQ1 being second_Q_comp of B1 such that
+A2: Sub_All(B,SQ) = Sub_All(B1,SQ1) &
+  B1`1 = Sub_the_scope_of(Sub_All(B,SQ)) & B1 is quantifiable by Def34;
+  thus thesis by A1,A2,Th20;
+end;
 
 scheme
   SubQCInd2 {Pro[Element of QC-Sub-WFF]}:
   for S being Element of QC-Sub-WFF holds Pro[S]
-  provided
-  A1:     for S being Element of QC-Sub-WFF holds
-         (S is Sub_atomic implies Pro[S]) &
-         (S is Sub_VERUM implies Pro[S]) &
-         (S is Sub_negative & Pro[Sub_the_argument_of S] implies
-                                                       Pro[S]) &
-         (S is Sub_conjunctive & Pro[Sub_the_left_argument_of S] &
-                Pro[Sub_the_right_argument_of S] implies Pro[S]) &
-         (S is Sub_universal & Pro[Sub_the_scope_of S] implies Pro[S])
+provided
+A1: for S being Element of QC-Sub-WFF holds (S is Sub_atomic implies Pro[S]) &
+(S is Sub_VERUM implies Pro[S]) &
+(S is Sub_negative & Pro[Sub_the_argument_of S] implies Pro[S]) &
+(S is Sub_conjunctive & Pro[Sub_the_left_argument_of S] &
+Pro[Sub_the_right_argument_of S] implies Pro[S]) &
+(S is Sub_universal & Pro[Sub_the_scope_of S] implies Pro[S])
 proof
 A2: for k be Element of NAT, P be (QC-pred_symbol of k),
-ll be QC-variable_list of k,
-                           e be Element of vSUB holds Pro[Sub_P(P,ll,e)] by A1;
+  ll be QC-variable_list of k,
+  e be Element of vSUB holds Pro[Sub_P(P,ll,e)] by A1;
 A3: for S be Element of QC-Sub-WFF st S is Sub_VERUM holds Pro[S] by A1;
-A4: now let S be Element of QC-Sub-WFF such that
-     A5: Pro[S];
-          S = Sub_the_argument_of(Sub_not(S)) by Def30;
-        hence Pro[Sub_not(S)] by A1,A5;
-    end;
-A6: now let S1, S2 be Element of QC-Sub-WFF such that
-     A7: S1`2 = S2`2 & Pro[S1] & Pro[S2];
-     A8: Sub_&(S1,S2) is Sub_conjunctive by A7,Th13;
-              S1 = Sub_the_left_argument_of (Sub_&(S1,S2)) &
-             S2 = Sub_the_right_argument_of (Sub_&(S1,S2)) by A7,Th18,Th19;
-        hence Pro[Sub_&(S1,S2)] by A1,A7,A8;
-    end;
-A9: now let x be bound_QC-variable, S be Element of QC-Sub-WFF,
-         SQ being second_Q_comp of [S,x] such that
-         A10: [S,x] is quantifiable & Pro[S];
-     A11: Sub_All([S,x],SQ) is Sub_universal by A10,Th14;
-      [S,x]`1 = Sub_the_scope_of(Sub_All([S,x], SQ)) by A10,Th21;
-     then S = Sub_the_scope_of(Sub_All([S,x], SQ)) by MCART_1:7;
-     hence Pro[Sub_All([S,x], SQ)] by A1,A10,A11;
-    end;
- thus thesis from SubQCInd (A2, A3, A4, A6, A9);
+A4: now
+    let S be Element of QC-Sub-WFF such that
+A5: Pro[S];
+    S = Sub_the_argument_of(Sub_not(S)) by Def30;
+    hence Pro[Sub_not(S)] by A1,A5;
+  end;
+A6: now
+    let S1, S2 be Element of QC-Sub-WFF such that
+A7: S1`2 = S2`2 & Pro[S1] & Pro[S2];
+A8: Sub_&(S1,S2) is Sub_conjunctive by A7,Th13;
+    S1 = Sub_the_left_argument_of (Sub_&(S1,S2)) &
+    S2 = Sub_the_right_argument_of (Sub_&(S1,S2)) by A7,Th18,Th19;
+    hence Pro[Sub_&(S1,S2)] by A1,A7,A8;
+  end;
+A9: now
+    let x be bound_QC-variable, S be Element of QC-Sub-WFF,
+    SQ being second_Q_comp of [S,x] such that
+A10: [S,x] is quantifiable & Pro[S];
+A11: Sub_All([S,x],SQ) is Sub_universal by A10,Th14;
+    [S,x]`1 = Sub_the_scope_of(Sub_All([S,x], SQ)) by A10,Th21;
+    then S = Sub_the_scope_of(Sub_All([S,x], SQ)) by MCART_1:7;
+    hence Pro[Sub_All([S,x], SQ)] by A1,A10,A11;
+  end;
+  thus thesis from SubQCInd (A2, A3, A4, A6, A9);
 end;
 
 theorem Th22:
   S is Sub_negative implies len @((Sub_the_argument_of(S))`1) < len @(S`1)
-   proof
-     assume S is Sub_negative;
-     then consider S' such that A1: S = Sub_not S' by Def26;
- A2: (Sub_the_argument_of(S))`1 = (S')`1 by A1,Def30;
- A3: S`1 = 'not' (S')`1 by A1,MCART_1:7;
-      'not' (S')`1 is negative by QC_LANG1:def 18;
-     then len @the_argument_of ('not' (S')`1) < len @(S`1) by A3,QC_LANG1:45;
-     hence thesis by A2,QC_LANG2:2;
-   end;
+proof
+  assume S is Sub_negative;
+  then consider S' such that
+A1: S = Sub_not S' by Def26;
+A2: (Sub_the_argument_of(S))`1 = (S')`1 by A1,Def30;
+A3: S`1 = 'not' (S')`1 by A1,MCART_1:7;
+  'not' (S')`1 is negative by QC_LANG1:def 18;
+  then len @the_argument_of ('not' (S')`1) < len @(S`1) by A3,QC_LANG1:45;
+  hence thesis by A2,QC_LANG2:2;
+end;
 
 theorem Th23:
   S is Sub_conjunctive implies
-      len @((Sub_the_left_argument_of(S))`1) < len @(S`1) &
-      len @((Sub_the_right_argument_of(S))`1) < len @(S`1)
-   proof
-     assume S is Sub_conjunctive;
-     then consider S1,S2 such that
- A1: S = Sub_&(S1,S2) & S1`2 = S2`2 by Def27;
- A2: S = [(S1`1) '&' (S2`1),S1`2] by A1,Def21;
- A3: (Sub_the_right_argument_of(S))`1 = S2`1 by A1,Th19;
- A4: (Sub_the_left_argument_of(S))`1 = S1`1 by A1,Th18;
- A5: S`1 = (S1`1) '&' (S2`1) by A2,MCART_1:7;
-      (S1`1) '&' (S2`1) is conjunctive by QC_LANG1:def 19;
-     then len @the_left_argument_of (S1`1) '&' (S2`1) < len  @(S`1) &
-              len @the_right_argument_of (S1`1) '&' (S2`1) < len  @(S`1)
-                                                             by A5,QC_LANG1:46;
-     hence thesis by A3,A4,QC_LANG2:5;
-   end;
+  len @((Sub_the_left_argument_of(S))`1) < len @(S`1) &
+  len @((Sub_the_right_argument_of(S))`1) < len @(S`1)
+proof
+  assume S is Sub_conjunctive;
+  then consider S1,S2 such that
+A1: S = Sub_&(S1,S2) & S1`2 = S2`2 by Def27;
+A2: S = [(S1`1) '&' (S2`1),S1`2] by A1,Def21;
+A3: (Sub_the_right_argument_of(S))`1 = S2`1 by A1,Th19;
+A4: (Sub_the_left_argument_of(S))`1 = S1`1 by A1,Th18;
+A5: S`1 = (S1`1) '&' (S2`1) by A2,MCART_1:7;
+  (S1`1) '&' (S2`1) is conjunctive by QC_LANG1:def 19;
+  then len @the_left_argument_of (S1`1) '&' (S2`1) < len @(S`1) &
+  len @the_right_argument_of (S1`1) '&' (S2`1) < len @(S`1) by A5,QC_LANG1:46;
+  hence thesis by A3,A4,QC_LANG2:5;
+end;
 
 theorem Th24:
   S is Sub_universal implies len@((Sub_the_scope_of(S))`1) < len @(S`1)
-   proof
-     assume S is Sub_universal;
-     then consider B,SQ such that
-                     A1: S = Sub_All(B,SQ) & B is quantifiable by Def28;
- A2: S = [All(B`2,(B`1)`1),SQ] by A1,Def24;
- A3: (Sub_the_scope_of(S))`1 = (B`1)`1 by A1,Th21;
- A4: S`1 = All(B`2,(B`1)`1) by A2,MCART_1:7;
-      All(B`2,(B`1)`1) is universal by QC_LANG1:def 20;
-     then len @the_scope_of All(B`2,(B`1)`1) < len @(S`1) by A4,QC_LANG1:47;
-     hence thesis by A3,QC_LANG2:8;
-   end;
+proof
+  assume S is Sub_universal;
+  then consider B,SQ such that
+A1: S = Sub_All(B,SQ) & B is quantifiable by Def28;
+A2: S = [All(B`2,(B`1)`1),SQ] by A1,Def24;
+A3: (Sub_the_scope_of(S))`1 = (B`1)`1 by A1,Th21;
+A4: S`1 = All(B`2,(B`1)`1) by A2,MCART_1:7;
+  All(B`2,(B`1)`1) is universal by QC_LANG1:def 20;
+  then len @the_scope_of All(B`2,(B`1)`1) < len @(S`1) by A4,QC_LANG1:47;
+  hence thesis by A3,QC_LANG2:8;
+end;
 
 theorem Th25:
   (S is Sub_VERUM implies ((@S`1).1)`1 = 0) &
-        (S is Sub_atomic implies ex k being Element of NAT st (@S`1).1 is
-                                         QC-pred_symbol of k) &
-        (S is Sub_negative implies ((@S`1).1)`1 = 1) &
-        (S is Sub_conjunctive implies ((@S`1).1)`1 = 2) &
-        (S is Sub_universal implies ((@S`1).1)`1 = 3)
-    proof
-      thus S is Sub_VERUM implies ((@S`1).1)`1 = 0
-      proof
-        assume S is Sub_VERUM;
-        then consider e such that A1: S = [VERUM,e] by Def19;
-     S`1 = VERUM by A1,MCART_1:7;
-        hence ((@S`1).1)`1 = [0,0]`1 by FINSEQ_1:def 8
-               .= 0 by MCART_1:7;
-      end;
-      thus S is Sub_atomic implies ex k being Element of NAT st (@S`1).1 is
-                                           QC-pred_symbol of k
-      proof
-        assume S is Sub_atomic;
-        then consider k being Element of NAT, P being QC-pred_symbol of k,
-        ll being QC-variable_list of k, e being Element of vSUB such that
-  A2:   S = Sub_P(P,ll,e) by Def25;
-         S = [P!ll,e] by A2,Th9;
-   then  S`1 = P!ll by MCART_1:7;
-        then @S`1 = <*P*>^ll by QC_LANG1:23;
-        then (@S`1).1 = P by FINSEQ_1:58;
-        hence ex k being Element of NAT st (@S`1).1 is QC-pred_symbol of k;
-      end;
-      thus S is Sub_negative implies ((@S`1).1)`1 = 1
-      proof
-        assume S is Sub_negative;
-        then consider S' such that A3: S = Sub_not S' by Def26;
-     S`1 = 'not' (S')`1 by A3,MCART_1:7;
-        then @(S`1).1 = [1,0] by FINSEQ_1:58;
-        hence ((@S`1).1)`1 = 1 by MCART_1:7;
-      end;
-      thus S is Sub_conjunctive implies ((@S`1).1)`1 = 2
-      proof
-        assume S is Sub_conjunctive;
-        then consider S1,S2 such that A4:
-        S = Sub_&(S1,S2) & S1`2 = S2`2 by Def27;
-         S = [(S1`1) '&' (S2`1),S1`2] by A4,Def21;
-   then  S`1 = (S1`1) '&' (S2`1) by MCART_1:7;
-        then @S`1 = <*[2,0]*>^(@S1`1^@S2`1)
-                                    by FINSEQ_1:45;
-        then @(S`1).1 = [2,0] by FINSEQ_1:58;
-        hence ((@S`1).1)`1 = 2 by MCART_1:7;
-      end;
-      thus S is Sub_universal implies ((@S`1).1)`1 = 3
-      proof
-        assume S is Sub_universal;
-        then consider B,SQ such that A5: S = Sub_All(B,SQ) & B is quantifiable
-                                                                by Def28;
-         S = [All(B`2,(B`1)`1),SQ] by A5,Def24;
-   then  S`1 = All(B`2,(B`1)`1) by MCART_1:7;
-        then @S`1 = <*[3,0]*>^(<*B`2*>^@(B`1)`1) by FINSEQ_1:45;
-        then (@S`1).1 = [3,0] by FINSEQ_1:58;
-        hence ((@S`1).1)`1 = 3 by MCART_1:7;
-      end;
-   end;
+  (S is Sub_atomic implies ex k being Element of NAT st (@S`1).1 is
+  QC-pred_symbol of k) & (S is Sub_negative implies ((@S`1).1)`1 = 1) &
+  (S is Sub_conjunctive implies ((@S`1).1)`1 = 2) &
+  (S is Sub_universal implies ((@S`1).1)`1 = 3)
+proof
+  thus S is Sub_VERUM implies ((@S`1).1)`1 = 0
+  proof
+    assume S is Sub_VERUM;
+    then consider e such that
+A1: S = [VERUM,e] by Def19;
+    S`1 = VERUM by A1,MCART_1:7;
+    hence ((@S`1).1)`1 = [0,0]`1 by FINSEQ_1:def 8
+      .= 0 by MCART_1:7;
+  end;
+  thus S is Sub_atomic implies ex k being Element of NAT st (@S`1).1 is
+  QC-pred_symbol of k
+  proof
+    assume S is Sub_atomic;
+    then consider k being Element of NAT, P being QC-pred_symbol of k,
+    ll being QC-variable_list of k, e being Element of vSUB such that
+A2: S = Sub_P(P,ll,e) by Def25;
+    S = [P!ll,e] by A2,Th9;
+    then S`1 = P!ll by MCART_1:7;
+    then @S`1 = <*P*>^ll by QC_LANG1:23;
+    then (@S`1).1 = P by FINSEQ_1:58;
+    hence ex k being Element of NAT st (@S`1).1 is QC-pred_symbol of k;
+  end;
+  thus S is Sub_negative implies ((@S`1).1)`1 = 1
+  proof
+    assume S is Sub_negative;
+    then consider S' such that
+A3: S = Sub_not S' by Def26;
+    S`1 = 'not' (S')`1 by A3,MCART_1:7;
+    then @(S`1).1 = [1,0] by FINSEQ_1:58;
+    hence ((@S`1).1)`1 = 1 by MCART_1:7;
+  end;
+  thus S is Sub_conjunctive implies ((@S`1).1)`1 = 2
+  proof
+    assume S is Sub_conjunctive;
+    then consider S1,S2 such that
+A4: S = Sub_&(S1,S2) & S1`2 = S2`2 by Def27;
+    S = [(S1`1) '&' (S2`1),S1`2] by A4,Def21;
+    then S`1 = (S1`1) '&' (S2`1) by MCART_1:7;
+    then @S`1 = <*[2,0]*>^(@S1`1^@S2`1) by FINSEQ_1:45;
+    then @(S`1).1 = [2,0] by FINSEQ_1:58;
+    hence ((@S`1).1)`1 = 2 by MCART_1:7;
+  end;
+  thus S is Sub_universal implies ((@S`1).1)`1 = 3
+  proof
+    assume S is Sub_universal;
+    then consider B,SQ such that
+A5: S = Sub_All(B,SQ) & B is quantifiable by Def28;
+    S = [All(B`2,(B`1)`1),SQ] by A5,Def24;
+    then S`1 = All(B`2,(B`1)`1) by MCART_1:7;
+    then @S`1 = <*[3,0]*>^(<*B`2*>^@(B`1)`1) by FINSEQ_1:45;
+    then (@S`1).1 = [3,0] by FINSEQ_1:58;
+    hence ((@S`1).1)`1 = 3 by MCART_1:7;
+  end;
+end;
 
 theorem Th26:
-  S is Sub_atomic implies
-            ((@S`1).1)`1 <> 0 & ((@S`1).1)`1 <> 1 &
-            ((@S`1).1)`1 <> 2 & ((@S`1).1)`1 <> 3
-   proof
-     assume S is Sub_atomic;
-     then ex k being Element of NAT st (@S`1).1 is QC-pred_symbol of k by Th25
-;
-     hence thesis by QC_LANG1:48;
-   end;
+  S is Sub_atomic implies ((@S`1).1)`1 <> 0 & ((@S`1).1)`1 <> 1 &
+  ((@S`1).1)`1 <> 2 & ((@S`1).1)`1 <> 3
+proof
+  assume S is Sub_atomic;
+  then ex k being Element of NAT st (@S`1).1 is QC-pred_symbol of k by Th25;
+  hence thesis by QC_LANG1:48;
+end;
 
 theorem Th27:
   not (ex S st S is Sub_atomic Sub_negative or
-          S is Sub_atomic Sub_conjunctive or
-          S is Sub_atomic Sub_universal or
-          S is Sub_negative Sub_conjunctive or
-          S is Sub_negative Sub_universal or
-          S is Sub_conjunctive Sub_universal or
-          S is Sub_VERUM Sub_atomic or
-          S is Sub_VERUM Sub_negative or
-          S is Sub_VERUM Sub_conjunctive or
-          S is Sub_VERUM Sub_universal )
- proof
-   let S;
-    (S is Sub_VERUM implies ((@S`1).1)`1 = 0) &
-   (S is Sub_atomic implies ex k being Element of NAT st (@S`1).1 is
-                                    QC-pred_symbol of k) &
-   (S is Sub_negative implies ((@S`1).1)`1 = 1) &
-   (S is Sub_conjunctive implies ((@S`1).1)`1 = 2) &
-   (S is Sub_universal implies ((@S`1).1)`1 = 3) by Th25;
-   hence thesis by Th26;
- end;
+  S is Sub_atomic Sub_conjunctive or S is Sub_atomic Sub_universal or
+  S is Sub_negative Sub_conjunctive or S is Sub_negative Sub_universal or
+  S is Sub_conjunctive Sub_universal or S is Sub_VERUM Sub_atomic or
+  S is Sub_VERUM Sub_negative or S is Sub_VERUM Sub_conjunctive or
+  S is Sub_VERUM Sub_universal )
+proof
+  let S;
+  (S is Sub_VERUM implies ((@S`1).1)`1 = 0) &
+  (S is Sub_atomic implies ex k being Element of NAT st (@S`1).1 is
+  QC-pred_symbol of k) & (S is Sub_negative implies ((@S`1).1)`1 = 1) &
+  (S is Sub_conjunctive implies ((@S`1).1)`1 = 2) &
+  (S is Sub_universal implies ((@S`1).1)`1 = 3) by Th25;
+  hence thesis by Th26;
+end;
 
 scheme
-  SubFuncEx { D()-> non empty set,
-                    V() -> (Element of D()),
-                    A(Element of QC-Sub-WFF)  -> (Element of D()),
-                    N(Element of D()) -> (Element of D()),
-                    C((Element of D()), (Element of D())) -> (Element of D()),
-                    R(Element of QC-Sub-WFF, Element of D()) ->
-                           Element of D()} :
- ex F being Function of QC-Sub-WFF, D() st
-        for S being Element of QC-Sub-WFF
-        for d1,d2 being Element of D() holds
-        (S is Sub_VERUM implies F.S = V()) &
-        (S is Sub_atomic implies F.S = A(S)) &
-        (S is Sub_negative & d1 = F.Sub_the_argument_of S implies F.S = N(d1))
-     &  (S is Sub_conjunctive & d1 = F.Sub_the_left_argument_of S &
-                d2 = F.Sub_the_right_argument_of S
-            implies F.S = C(d1, d2)) &
-        (S is Sub_universal & d1 = F.Sub_the_scope_of S
-                                               implies F.S = R(S,d1))
- proof
-   defpred Pfgp[(Element of D()),
-          (Function of QC-Sub-WFF,D()),
-           Element of QC-Sub-WFF] means
-      ($3 is Sub_VERUM implies $1 = V()) &
-      ($3 is Sub_atomic implies $1 = A($3)) &
-      ($3 is Sub_negative implies $1 = N($2.Sub_the_argument_of $3)) &
-      ($3 is Sub_conjunctive implies
-           $1 = C($2.Sub_the_left_argument_of $3,
-                     $2.Sub_the_right_argument_of $3)) &
-      ($3 is Sub_universal implies
-                   $1 = R($3,$2.Sub_the_scope_of $3));
-defpred Pfn[(Function of QC-Sub-WFF,D()), Element of NAT] means
-      for S being Element of QC-Sub-WFF st
-      len @(S`1) <= $2 holds
-      (S is Sub_VERUM implies $1.S = V()) &
-      (S is Sub_atomic implies $1.S = A(S)) &
-      (S is Sub_negative implies $1.S = N($1.Sub_the_argument_of S)) &
-      (S is Sub_conjunctive implies
-      $1.S = C($1.Sub_the_left_argument_of S,
-              $1.Sub_the_right_argument_of S)) &
-      (S is Sub_universal implies
-               $1.S = R(S,$1.Sub_the_scope_of S));
-defpred S[Element of NAT] means
- ex F being Function of QC-Sub-WFF, D() st Pfn[F, $1];
-A1: S[0]
-    proof
-     consider F being Function of QC-Sub-WFF, D();
-     take F;
-     let S be Element of QC-Sub-WFF such that
-     A2:  len @(S`1) <= 0;
-         1 <= len @(S`1) by QC_LANG1:34;
-        hence thesis by A2;
-    end;
-A3: for n be Element of NAT st S[n] holds S[n+1]
+  SubFuncEx { D()-> non empty set, V() -> (Element of D()),
+  A(Element of QC-Sub-WFF) -> (Element of D()),
+  N(Element of D()) -> (Element of D()),
+  C((Element of D()), (Element of D())) -> (Element of D()),
+  R(Element of QC-Sub-WFF, Element of D()) -> Element of D()} :
+  ex F being Function of QC-Sub-WFF, D() st for S being Element of QC-Sub-WFF
+  for d1,d2 being Element of D() holds (S is Sub_VERUM implies F.S = V()) &
+  (S is Sub_atomic implies F.S = A(S)) &
+  (S is Sub_negative & d1 = F.Sub_the_argument_of S implies F.S = N(d1))
+  & (S is Sub_conjunctive & d1 = F.Sub_the_left_argument_of S &
+  d2 = F.Sub_the_right_argument_of S implies F.S = C(d1, d2)) &
+  (S is Sub_universal & d1 = F.Sub_the_scope_of S implies F.S = R(S,d1))
 proof
-  let n be Element of NAT;
-  given F being Function of QC-Sub-WFF, D() such that
-  A4: Pfn[F, n];
-  defpred R[Element of QC-Sub-WFF,Element of D()] means
-   (len @($1`1) <> n+1 implies $2 = F.$1) &
-   (len @($1`1) = n+1 implies Pfgp[$2,F,$1]);
-  A5: for S be Element of QC-Sub-WFF ex y being Element of D() st R[S,y]
+  defpred Pfgp[(Element of D()), (Function of QC-Sub-WFF,D()),
+  Element of QC-Sub-WFF] means ($3 is Sub_VERUM implies $1 = V()) &
+  ($3 is Sub_atomic implies $1 = A($3)) &
+  ($3 is Sub_negative implies $1 = N($2.Sub_the_argument_of $3)) &
+  ($3 is Sub_conjunctive implies $1 = C($2.Sub_the_left_argument_of $3,
+  $2.Sub_the_right_argument_of $3)) & ($3 is Sub_universal implies
+  $1 = R($3,$2.Sub_the_scope_of $3));
+  defpred Pfn[(Function of QC-Sub-WFF,D()), Element of NAT] means
+  for S being Element of QC-Sub-WFF st len @(S`1) <= $2 holds
+  (S is Sub_VERUM implies $1.S = V()) &
+  (S is Sub_atomic implies $1.S = A(S)) &
+  (S is Sub_negative implies $1.S = N($1.Sub_the_argument_of S)) &
+  (S is Sub_conjunctive implies $1.S = C($1.Sub_the_left_argument_of S,
+  $1.Sub_the_right_argument_of S)) & (S is Sub_universal implies
+  $1.S = R(S,$1.Sub_the_scope_of S));
+  defpred S[Element of NAT] means
+  ex F being Function of QC-Sub-WFF, D() st Pfn[F, $1];
+A1: S[0]
   proof
+    consider F being Function of QC-Sub-WFF, D();
+    take F;
+    let S be Element of QC-Sub-WFF such that
+A2: len @(S`1) <= 0;
+    thus thesis by A2,QC_LANG1:34;
+  end;
+A3: for n be Element of NAT st S[n] holds S[n+1]
+  proof
+    let n be Element of NAT;
+    given F being Function of QC-Sub-WFF, D() such that
+A4: Pfn[F, n];
+    defpred R[Element of QC-Sub-WFF,Element of D()] means
+    (len @($1`1) <> n+1 implies $2 = F.$1) &
+    (len @($1`1) = n+1 implies Pfgp[$2,F,$1]);
+A5: for S be Element of QC-Sub-WFF ex y being Element of D() st R[S,y]
+    proof
       let S be Element of QC-Sub-WFF;
-       now per cases by Th12;
+      now per cases by Th12;
         case len @(S`1) <> n+1;
-         take y = F.S;
-         thus y = F.S;
+          take y = F.S;
+          thus y = F.S;
         end;
-        case A6: len @(S`1) = n+1 & S is Sub_VERUM;
-         take y = V();
-         thus Pfgp[y, F, S] by A6,Th27;
+        case
+A6:       len @(S`1) = n+1 & S is Sub_VERUM;
+          take y = V();
+          thus Pfgp[y, F, S] by A6,Th27;
         end;
-        case A7: len @(S`1) = n+1 & S is Sub_atomic;
-         take y = A(S);
-         thus Pfgp[y, F, S] by A7,Th27;
+        case
+A7:       len @(S`1) = n+1 & S is Sub_atomic;
+          take y = A(S);
+          thus Pfgp[y, F, S] by A7,Th27;
         end;
-        case A8: len @(S`1) = n+1 & S is Sub_negative;
-         take y = N(F.Sub_the_argument_of S);
-         thus Pfgp[y, F, S] by A8,Th27;
+        case
+A8:       len @(S`1) = n+1 & S is Sub_negative;
+          take y = N(F.Sub_the_argument_of S);
+          thus Pfgp[y, F, S] by A8,Th27;
         end;
-        case A9: len @(S`1) = n+1 & S is Sub_conjunctive;
-         take y = C(F.Sub_the_left_argument_of S,
-                         F.Sub_the_right_argument_of S);
-         thus Pfgp[y, F, S] by A9,Th27;
+        case
+A9:       len @(S`1) = n+1 & S is Sub_conjunctive;
+          take y = C(F.Sub_the_left_argument_of S,
+          F.Sub_the_right_argument_of S);
+          thus Pfgp[y, F, S] by A9,Th27;
         end;
-        case A10: len @(S`1) = n+1 & S is Sub_universal;
-         take y = R(S,F.Sub_the_scope_of S);
-         thus Pfgp[y, F, S] by A10,Th27;
+        case
+A10:      len @(S`1) = n+1 & S is Sub_universal;
+          take y = R(S,F.Sub_the_scope_of S);
+          thus Pfgp[y, F, S] by A10,Th27;
         end;
       end;
       hence ex y being Element of D() st
-                ((len @(S`1) <> n+1 implies y = F.S) &
-                (len @(S`1) = n+1 implies Pfgp[y, F, S]));
-     end;
-     consider G being Function of QC-Sub-WFF, D() such that
+      ((len @(S`1) <> n+1 implies y = F.S) &
+      (len @(S`1) = n+1 implies Pfgp[y, F, S]));
+    end;
+    consider G being Function of QC-Sub-WFF, D() such that
 A11: for S being Element of QC-Sub-WFF holds R[S,G.S] from FUNCT_2:sch 3(A5);
-       take H = G;
-     thus Pfn[H, n+1]
+    take H = G;
+    thus Pfn[H, n+1]
     proof
       let S be Element of QC-Sub-WFF such that
-   A12: len @(S`1) <= n+1;
+A12:  len @(S`1) <= n+1;
       thus S is Sub_VERUM implies H.S = V()
-        proof
-          now per cases;
-          suppose A13: len @(S`1)  <> n+1;
-            then A14: len @(S`1) <= n by A12,NAT_1:8;
-                 H.S = F.S by A11,A13;
-           hence thesis by A4,A14;
+      proof
+        now per cases;
+          suppose
+A13:        len @(S`1) <> n+1;
+            then
+A14:        len @(S`1) <= n by A12,NAT_1:8;
+            H.S = F.S by A11,A13;
+            hence thesis by A4,A14;
           end;
           suppose len @(S`1) = n+1;
-           hence thesis by A11;
+            hence thesis by A11;
           end;
-         end;
-        hence thesis;
         end;
-     thus S is Sub_atomic implies H.S = A(S)
-        proof
-          now per cases;
-          suppose A15: len @(S`1) <> n+1;
-          then A16: len @(S`1) <= n by A12,NAT_1:8;
-                 H.S = F.S by A11,A15;
-           hence thesis by A4,A16;
+        hence thesis;
+      end;
+      thus S is Sub_atomic implies H.S = A(S)
+      proof
+        now per cases;
+          suppose
+A15:        len @(S`1) <> n+1;
+            then
+A16:        len @(S`1) <= n by A12,NAT_1:8;
+            H.S = F.S by A11,A15;
+            hence thesis by A4,A16;
           end;
           suppose len @(S`1) = n+1;
-           hence thesis by A11;
+            hence thesis by A11;
           end;
-         end;
-        hence thesis;
         end;
-       thus S is Sub_negative implies
-       H.S = N(H.Sub_the_argument_of S)
-        proof assume A17: S is Sub_negative;
-          then len @((Sub_the_argument_of S)`1) <> n+1 by A12,Th22;
-        then A18:  H.Sub_the_argument_of S = F.Sub_the_argument_of S by A11;
-          now per cases;
-          suppose A19: len @(S`1) <> n+1;
-          then A20: len @(S`1) <= n by A12,NAT_1:8;
-             H.S = F.S by A11,A19;
-           hence thesis by A4,A17,A18,A20;
+        hence thesis;
+      end;
+      thus S is Sub_negative implies H.S = N(H.Sub_the_argument_of S)
+      proof
+        assume
+A17:    S is Sub_negative;
+        then len @((Sub_the_argument_of S)`1) <> n+1 by A12,Th22;
+        then
+A18:    H.Sub_the_argument_of S = F.Sub_the_argument_of S by A11;
+        now per cases;
+          suppose
+A19:        len @(S`1) <> n+1;
+            then
+A20:        len @(S`1) <= n by A12,NAT_1:8;
+            H.S = F.S by A11,A19;
+            hence thesis by A4,A17,A18,A20;
           end;
           suppose len @(S`1) = n+1;
-           hence thesis by A11,A17,A18;
+            hence thesis by A11,A17,A18;
           end;
-         end;
-        hence thesis;
         end;
+        hence thesis;
+      end;
       thus S is Sub_conjunctive implies
-       H.S = C(H.Sub_the_left_argument_of S,H.Sub_the_right_argument_of S)
-        proof assume A21: S is Sub_conjunctive;
-          then len @((Sub_the_left_argument_of S)`1) <> n+1 by A12,Th23;
-        then A22:  H.Sub_the_left_argument_of S =
-              F.Sub_the_left_argument_of S by A11;
-           len @((Sub_the_right_argument_of S)`1) <> n+1
-                                      by A12,A21,Th23;
-        then A23:  H.Sub_the_right_argument_of S =
-              F.Sub_the_right_argument_of S by A11;
-          now per cases;
-          suppose A24: len @(S`1) <> n+1;
-          then A25: len @(S`1) <= n by A12,NAT_1:8;
-                 H.S = F.S by A11,A24;
-           hence thesis by A4,A21,A22,A23,A25;
+      H.S = C(H.Sub_the_left_argument_of S,H.Sub_the_right_argument_of S)
+      proof
+        assume
+A21:    S is Sub_conjunctive;
+        then len @((Sub_the_left_argument_of S)`1) <> n+1 by A12,Th23;
+        then
+A22:    H.Sub_the_left_argument_of S = F.Sub_the_left_argument_of S by A11;
+        len @((Sub_the_right_argument_of S)`1) <> n+1 by A12,A21,Th23;
+        then
+A23:    H.Sub_the_right_argument_of S = F. Sub_the_right_argument_of S by A11;
+        now per cases;
+          suppose
+A24:        len @(S`1) <> n+1;
+            then
+A25:        len @(S`1) <= n by A12,NAT_1:8;
+            H.S = F.S by A11,A24;
+            hence thesis by A4,A21,A22,A23,A25;
           end;
           suppose len @(S`1) = n+1;
-           hence thesis by A11,A21,A22,A23;
+            hence thesis by A11,A21,A22,A23;
           end;
-         end;
-        hence thesis;
         end;
-      thus S is Sub_universal implies
-      H.S = R(S,H.Sub_the_scope_of S)
-        proof assume A26: S is Sub_universal;
-          then len @((Sub_the_scope_of S)`1) <> n+1 by A12,Th24;
-        then A27:  H.Sub_the_scope_of S =
-                   F.Sub_the_scope_of S by A11;
-          now per cases;
-          suppose A28: len @(S`1)  <> n+1;
-          then A29: len @(S`1)  <= n by A12,NAT_1:8;
-                 H.S = F.S by A11,A28;
-           hence thesis by A4,A26,A27,A29;
+        hence thesis;
+      end;
+      thus S is Sub_universal implies H.S = R(S,H.Sub_the_scope_of S)
+      proof
+        assume
+A26:    S is Sub_universal;
+        then len @((Sub_the_scope_of S)`1) <> n+1 by A12,Th24;
+        then
+A27:    H.Sub_the_scope_of S = F.Sub_the_scope_of S by A11;
+        now per cases;
+          suppose
+A28:        len @(S`1) <> n+1;
+            then
+A29:        len @(S`1) <= n by A12,NAT_1:8;
+            H.S = F.S by A11,A28;
+            hence thesis by A4,A26,A27,A29;
           end;
           suppose len @(S`1) = n+1;
-           hence thesis by A11,A26,A27;
+            hence thesis by A11,A26,A27;
           end;
-         end;
-        hence thesis;
         end;
-     end;
-   end;
-
+        hence thesis;
+      end;
+    end;
+  end;
 A30: for n being Element of NAT holds S[n] from NAT_1:sch 1(A1, A3);
-
-defpred Qfn[set,set] means
-        ex S being Element of QC-Sub-WFF st S = $1 &
-        for g being Function of QC-Sub-WFF,D() st
-        Pfn[g, (len @(S`1)) qua Element of NAT] holds $2 = g.S;
-
-A31: for x, y1, y2 being set st x in QC-Sub-WFF & Qfn[x, y1] &
-        Qfn[x, y2]
-        holds y1 = y2
-   proof
-     let x, y1, y2 be set such that x in QC-Sub-WFF and
-   A32: Qfn[x, y1] and
-   A33: Qfn[x, y2];
-       consider S being Element of QC-Sub-WFF such that
-   A34: S = x and
-   A35: for g being Function of QC-Sub-WFF,D() st
-   Pfn[g, len @(S`1) qua Element of NAT] holds y1 = g.S by A32;
-       consider F being Function of QC-Sub-WFF,D() such that
-   A36: Pfn[F, len @(S`1) qua Element of NAT] by A30;
+  defpred Qfn[set,set] means ex S being Element of QC-Sub-WFF st S = $1 &
+  for g being Function of QC-Sub-WFF,D() st
+  Pfn[g, (len @(S`1)) qua Element of NAT] holds $2 = g.S;
+A31: for x, y1, y2 being set st x in QC-Sub-WFF & Qfn[x, y1] & Qfn[x, y2]
+  holds y1 = y2
+  proof
+    let x, y1, y2 be set such that x in QC-Sub-WFF and
+A32: Qfn[x, y1] and
+A33: Qfn[x, y2];
+    consider S being Element of QC-Sub-WFF such that
+A34: S = x and
+A35: for g being Function of QC-Sub-WFF,D() st
+    Pfn[g, len @(S`1) qua Element of NAT] holds y1 = g.S by A32;
+    consider F being Function of QC-Sub-WFF,D() such that
+A36: Pfn[F, len @(S`1) qua Element of NAT] by A30;
     thus y1 = F.S by A35,A36
-           .= y2 by A33,A34,A36;
-   end;
-
+      .= y2 by A33,A34,A36;
+  end;
 A37: for x being set st x in QC-Sub-WFF ex y being set st Qfn[x, y]
-   proof let x be set; assume x in QC-Sub-WFF;
-       then reconsider x' = x as Element of QC-Sub-WFF;
-     consider F being Function of  QC-Sub-WFF, D() such that
-   A38: Pfn[F, len @((x')`1) qua Element of NAT] by A30;
-       take F.x, x';
-       thus x' = x;
-       let G be Function of QC-Sub-WFF, D() such that
-   A39: Pfn[G, len @((x')`1)qua Element of NAT];
-   defpred Pro[Element of QC-Sub-WFF] means
-       len @(($1)`1) <= len@((x')`1) implies F.$1 = G.$1;
-   A40: now
-        let S be Element of QC-Sub-WFF;
-        thus S is Sub_atomic implies Pro[S]
-         proof assume that
-         A41: S is Sub_atomic and
-         A42: len @(S`1) <= len@((x')`1);
-           thus F.S = A(S) by A38,A41,A42
-                   .= G.S by A39,A41,A42;
-         end;
-        thus S is Sub_VERUM implies Pro[S]
-         proof assume that
-          A43:  S is Sub_VERUM and
-          A44: len @(S`1) <= len @((x')`1);
-            thus F.S = V() by A38,A43,A44
-                    .= G.S by A39,A43,A44;
-         end;
-        thus S is Sub_negative & Pro[Sub_the_argument_of S]
-                             implies Pro[S]
-         proof assume that
-          A45: S is Sub_negative and
-          A46: Pro[Sub_the_argument_of S] and
-          A47: len @(S`1) <= len @((x')`1);
-           len @((Sub_the_argument_of S)`1) <
-                     len @(S`1) by A45,Th22;
-          hence F.S = N(G.Sub_the_argument_of S)
-                             by A38,A45,A46,A47,XXREAL_0:2
-                  .= G.S by A39,A45,A47;
-         end;
-        thus (S is Sub_conjunctive &
-             Pro[Sub_the_left_argument_of S] &
-                Pro[Sub_the_right_argument_of S] implies Pro[S])
-         proof assume that
-          A48: S is Sub_conjunctive and
-          A49: Pro[Sub_the_left_argument_of S] and
-         A50: Pro[Sub_the_right_argument_of S] and
-          A51: len @(S`1) <= len @((x')`1);
-A52:          len @((Sub_the_left_argument_of S)`1) <
-                   len @(S`1) by A48,Th23;
-           len @((Sub_the_right_argument_of S)`1) <
-                          len @(S`1) by A48,Th23;
-          hence F.S =
-          C(G.Sub_the_left_argument_of S, G.Sub_the_right_argument_of S)
-                         by A38,A48,A49,A50,A51,A52,XXREAL_0:2
-                  .= G.S by A39,A48,A51;
-         end;
-        thus (S is Sub_universal & Pro[Sub_the_scope_of S] implies Pro[S])
-         proof assume that
-          A53: S is Sub_universal and
-          A54: Pro[Sub_the_scope_of S] and
-          A55: len @(S`1) <= len @((x')`1);
-           len @((Sub_the_scope_of S)`1) < len @(S`1) by A53,Th24;
-          hence F.S = R(S,G.Sub_the_scope_of S)
-                                 by A38,A53,A54,A55,XXREAL_0:2
-                  .= G.S by A39,A53,A55;
-         end;
-       end;
-        for S being Element of QC-Sub-WFF holds Pro[S] from SubQCInd2 (A40);
-       hence F.x = G.x';
-   end;
- consider F being Function such that
+  proof
+    let x be set;
+    assume x in QC-Sub-WFF;
+    then reconsider x' = x as Element of QC-Sub-WFF;
+    consider F being Function of QC-Sub-WFF, D() such that
+A38: Pfn[F, len @((x')`1) qua Element of NAT] by A30;
+    take F.x, x';
+    thus x' = x;
+    let G be Function of QC-Sub-WFF, D() such that
+A39: Pfn[G, len @((x')`1)qua Element of NAT];
+    defpred Pro[Element of QC-Sub-WFF] means
+    len @(($1)`1) <= len@((x')`1) implies F.$1 = G.$1;
+A40: now
+      let S be Element of QC-Sub-WFF;
+      thus S is Sub_atomic implies Pro[S]
+      proof
+        assume that
+A41:    S is Sub_atomic and
+A42:    len @(S`1) <= len@((x')`1);
+        thus F.S = A(S) by A38,A41,A42
+          .= G.S by A39,A41,A42;
+      end;
+      thus S is Sub_VERUM implies Pro[S]
+      proof
+        assume that
+A43:    S is Sub_VERUM and
+A44:    len @(S`1) <= len @((x')`1);
+        thus F.S = V() by A38,A43,A44
+          .= G.S by A39,A43,A44;
+      end;
+      thus S is Sub_negative & Pro[Sub_the_argument_of S] implies Pro[S]
+      proof
+        assume that
+A45:    S is Sub_negative and
+A46:    Pro[Sub_the_argument_of S] and
+A47:    len @(S`1) <= len @((x')`1);
+        len @((Sub_the_argument_of S)`1) < len @(S`1) by A45,Th22;
+        hence F.S = N(G.Sub_the_argument_of S) by A38,A45,A46,A47,XXREAL_0:2
+          .= G.S by A39,A45,A47;
+      end;
+      thus (S is Sub_conjunctive & Pro[Sub_the_left_argument_of S] &
+      Pro[Sub_the_right_argument_of S] implies Pro[S])
+      proof
+        assume that
+A48:    S is Sub_conjunctive and
+A49:    Pro[Sub_the_left_argument_of S] and
+A50:    Pro[Sub_the_right_argument_of S] and
+A51:    len @(S`1) <= len @((x')`1);
+A52:    len @((Sub_the_left_argument_of S)`1) < len @(S`1) by A48,Th23;
+        len @((Sub_the_right_argument_of S)`1) < len @(S`1) by A48,Th23;
+        hence F.S =
+        C(G.Sub_the_left_argument_of S, G.Sub_the_right_argument_of S)
+        by A38,A48,A49,A50,A51,A52,XXREAL_0:2
+          .= G.S by A39,A48,A51;
+      end;
+      thus (S is Sub_universal & Pro[Sub_the_scope_of S] implies Pro[S])
+      proof
+        assume that
+A53:    S is Sub_universal and
+A54:    Pro[Sub_the_scope_of S] and
+A55:    len @(S`1) <= len @((x')`1);
+        len @((Sub_the_scope_of S)`1) < len @(S`1) by A53,Th24;
+        hence F.S = R(S,G.Sub_the_scope_of S) by A38,A53,A54,A55,XXREAL_0:2
+          .= G.S by A39,A53,A55;
+      end;
+    end;
+    for S being Element of QC-Sub-WFF holds Pro[S] from SubQCInd2 (A40);
+    hence F.x = G.x';
+  end;
+  consider F being Function such that
 A56: dom F = QC-Sub-WFF and
 A57: for x being set st x in QC-Sub-WFF holds Qfn[x, F.x]
-                                                  from FUNCT_1:sch 2(A31, A37);
-   rng F c= D()
+  from FUNCT_1:sch 2(A31, A37);
+  rng F c= D()
   proof
-    let y be set; assume y in rng F;
+    let y be set;
+    assume y in rng F;
     then consider x being set such that
-  A58: x in QC-Sub-WFF and
-  A59: y = F.x by A56,FUNCT_1:def 5;
-      consider S being Element of QC-Sub-WFF such that
-    S = x and A60: for g being Function of QC-Sub-WFF, D() st
-    Pfn[g, len @(S`1)qua Element of NAT] holds  y = g.S by A57,A58,A59;
+A58: x in QC-Sub-WFF and
+A59: y = F.x by A56,FUNCT_1:def 5;
+    consider S being Element of QC-Sub-WFF such that S = x and
+A60: for g being Function of QC-Sub-WFF, D() st
+    Pfn[g, len @(S`1)qua Element of NAT] holds y = g.S by A57,A58,A59;
     consider G being Function of QC-Sub-WFF, D() such that
-  A61: Pfn[G, len @(S`1)qua Element of NAT] by A30;
-       y = G.S by A60,A61;
+A61: Pfn[G, len @(S`1)qua Element of NAT] by A30;
+    y = G.S by A60,A61;
     hence y in D();
   end;
   then reconsider F as Function of QC-Sub-WFF, D()
-                                              by A56,FUNCT_2:def 1,RELSET_1:11;
- take F;
- let S be Element of QC-Sub-WFF;
- let d1,d2 be Element of D();
- consider S1 being Element of QC-Sub-WFF such that
+  by A56,FUNCT_2:def 1,RELSET_1:11;
+  take F;
+  let S be Element of QC-Sub-WFF;
+  let d1,d2 be Element of D();
+  consider S1 being Element of QC-Sub-WFF such that
 A62: S1 = S and
-A63: for g being Function of  QC-Sub-WFF,D() st
-         Pfn[g, len@(S1`1)qua Element of NAT] holds F.S = g.S1 by A57;
- consider G being Function of  QC-Sub-WFF, D() such that
+A63: for g being Function of QC-Sub-WFF,D() st
+  Pfn[g, len@(S1`1)qua Element of NAT] holds F.S = g.S1 by A57;
+  consider G being Function of QC-Sub-WFF, D() such that
 A64: Pfn[G, len @(S1`1)qua Element of NAT] by A30;
 A65: F.S = G.S by A62,A63,A64;
   hence S is Sub_VERUM implies F.S = V() by A62,A64;
   thus S is Sub_atomic implies F.S = A(S) by A62,A64,A65;
-  A66: for k being Element of NAT st k < len @(S`1) holds Pfn[G, k]
-        proof let k be Element of NAT; assume
-A67:      k < len @(S`1);
-          let S' be Element of QC-Sub-WFF;
-          assume len @((S')`1) <= k;
-          then len @((S')`1) <= len@(S`1) by A67,XXREAL_0:2;
-          hence thesis by A62,A64;
-        end;
-  thus S is Sub_negative & d1 = F.Sub_the_argument_of S implies
-          F.S = N(d1)
-        proof assume
-        A68: S is Sub_negative;
-             set S' = Sub_the_argument_of S;
-             set k = len @((S')`1);
-              k < len @(S`1) by A68,Th22;
-        then A69: Pfn[G, k qua Element of NAT] by A66;
-               ex S1 being Element of QC-Sub-WFF st S1 = S' &
+A66: for k being Element of NAT st k < len @(S`1) holds Pfn[G, k]
+  proof
+    let k be Element of NAT;
+    assume
+A67: k < len @(S`1);
+    let S' be Element of QC-Sub-WFF;
+    assume len @((S')`1) <= k;
+    then len @((S')`1) <= len@(S`1) by A67,XXREAL_0:2;
+    hence thesis by A62,A64;
+  end;
+  thus S is Sub_negative & d1 = F.Sub_the_argument_of S implies F.S = N(d1)
+  proof
+    assume
+A68: S is Sub_negative;
+    set S' = Sub_the_argument_of S;
+    set k = len @((S')`1);
+    k < len @(S`1) by A68,Th22;
+    then
+A69: Pfn[G, k qua Element of NAT] by A66;
+    ex S1 being Element of QC-Sub-WFF st S1 = S' &
     for g being Function of QC-Sub-WFF, D() st
-            Pfn[g, len @(S1`1)qua Element of NAT] holds
-                F.S' = g.S1 by A57;
-             then F.S' = G.S' by A69;
-         hence thesis by A62,A64,A65,A68;
-        end;
+    Pfn[g, len @(S1`1)qua Element of NAT] holds F.S' = g.S1 by A57;
+    then F.S' = G.S' by A69;
+    hence thesis by A62,A64,A65,A68;
+  end;
   thus S is Sub_conjunctive &
-       d1 = F.Sub_the_left_argument_of S & d2 = F.Sub_the_right_argument_of S
-          implies F.S = C(d1, d2)
-        proof assume
-        A70: S is Sub_conjunctive;
-             set S' = Sub_the_left_argument_of S;
-             set k' = len @((S')`1);
-             set S'' = Sub_the_right_argument_of S;
-             set k'' = len @((S'')`1);
-              k' < len @(S`1) by A70,Th23;
-        then A71: Pfn[G, k' qua Element of NAT] by A66;
-              k'' < len @(S`1) by A70,Th23;
-       then A72: Pfn[G, k'' qua Element of NAT] by A66;
- A73:  ex S1 being Element of QC-Sub-WFF st S1 = S' &
- for g being Function of QC-Sub-WFF,D() st
-        Pfn[g, len @(S1`1) qua Element of NAT] holds F.S' = g.S1 by A57;
- A74:  ex S2 being Element of QC-Sub-WFF st S2 = S'' &
- for g being Function of QC-Sub-WFF, D() st
-        Pfn[g, len @(S2`1) qua Element of NAT] holds F.S'' = g.S2 by A57;
-        A75: F.S' = G.S' by A71,A73;
-              F.S'' = G.S'' by A72,A74;
-         hence thesis by A62,A64,A65,A70,A75;
-        end;
+  d1 = F.Sub_the_left_argument_of S & d2 = F.Sub_the_right_argument_of S
+  implies F.S = C(d1, d2)
+  proof
+    assume
+A70: S is Sub_conjunctive;
+    set S' = Sub_the_left_argument_of S;
+    set k' = len @((S')`1);
+    set S'' = Sub_the_right_argument_of S;
+    set k'' = len @((S'')`1);
+    k' < len @(S`1) by A70,Th23;
+    then
+A71: Pfn[G, k' qua Element of NAT] by A66;
+    k'' < len @(S`1) by A70,Th23;
+    then
+A72: Pfn[G, k'' qua Element of NAT] by A66;
+A73: ex S1 being Element of QC-Sub-WFF st S1 = S' &
+    for g being Function of QC-Sub-WFF,D() st
+    Pfn[g, len @(S1`1) qua Element of NAT] holds F.S' = g.S1 by A57;
+A74: ex S2 being Element of QC-Sub-WFF st S2 = S'' &
+    for g being Function of QC-Sub-WFF, D() st
+    Pfn[g, len @(S2`1) qua Element of NAT] holds F.S'' = g.S2 by A57;
+A75: F.S' = G.S' by A71,A73;
+    F.S'' = G.S'' by A72,A74;
+    hence thesis by A62,A64,A65,A70,A75;
+  end;
   assume
-   A76: S is Sub_universal;
-        set S' = Sub_the_scope_of S;
-        set k = len @((S')`1);
-         k < len @(S`1) by A76,Th24;
-   then A77: Pfn[G, k qua Element of NAT] by A66;
-          ex S1 being Element of QC-Sub-WFF st S1 = S' &
- for g being Function of QC-Sub-WFF, D() st
-       Pfn[g, len @(S1`1) qua Element of NAT] holds F.S' = g.S1 by A57;
-        then F.S' = G.S' by A77;
+A76: S is Sub_universal;
+  set S' = Sub_the_scope_of S;
+  set k = len @((S')`1);
+  k < len @(S`1) by A76,Th24;
+  then
+A77: Pfn[G, k qua Element of NAT] by A66;
+  ex S1 being Element of QC-Sub-WFF st S1 = S' &
+  for g being Function of QC-Sub-WFF, D() st
+  Pfn[g, len @(S1`1) qua Element of NAT] holds F.S' = g.S1 by A57;
+  then F.S' = G.S' by A77;
   hence thesis by A62,A64,A65,A76;
 end;
 
 scheme
-  SubQCFuncUniq { D() -> non empty set,
-                F1() -> (Function of QC-Sub-WFF, D()),
-                F2() -> (Function of QC-Sub-WFF, D()),
-                V() -> (Element of D()),
-                A(set) -> (Element of D()),
-                N(set) -> (Element of D()),
-                C(set,set) -> (Element of D()),
-                R(set,set) -> Element of D()} :
- F1() = F2() provided
-A1: for S being Element of QC-Sub-WFF
-    for d1,d2 being Element of D() holds
-      (S is Sub_VERUM implies F1().S = V()) &
-      (S is Sub_atomic implies F1().S = A(S)) &
-      (S is Sub_negative &
-         d1 = F1().Sub_the_argument_of S implies F1().S = N(d1)) &
-      (S is Sub_conjunctive &
-         d1 = F1().Sub_the_left_argument_of S &
-         d2 = F1().Sub_the_right_argument_of S
-            implies F1().S = C(d1, d2)) &
-      (S is Sub_universal & d1 = F1().Sub_the_scope_of S implies
-                                                        F1().S = R(S, d1)) and
-A2:  for S being Element of QC-Sub-WFF
-     for d1,d2 being Element of D() holds
-      (S is Sub_VERUM implies F2().S = V()) &
-      (S is Sub_atomic implies F2().S = A(S)) &
-      (S is Sub_negative &
-         d1 = F2().Sub_the_argument_of S implies F2().S = N(d1)) &
-      (S is Sub_conjunctive &
-         d1 = F2().Sub_the_left_argument_of S &
-         d2 = F2().Sub_the_right_argument_of S
-            implies F2().S = C(d1, d2)) &
-      (S is Sub_universal &
-      d1 = F2().Sub_the_scope_of S implies F2().S = R(S, d1))
- proof
- defpred Pro[Element of QC-Sub-WFF] means F1().$1 = F2().$1;
-A3:  for k for P being (QC-pred_symbol of k),l being QC-variable_list of k,
-               e being Element of vSUB holds Pro[Sub_P(P,l,e)]
-   proof let k; let P be (QC-pred_symbol of k),l be QC-variable_list of k;
-         let e be Element of vSUB;
+  SubQCFuncUniq { D() -> non empty set, F1() -> (Function of QC-Sub-WFF, D()),
+  F2() -> (Function of QC-Sub-WFF, D()), V() -> (Element of D()),
+  A(set) -> (Element of D()), N(set) -> (Element of D()),
+  C(set,set) -> (Element of D()), R(set,set) -> Element of D()} : F1() = F2()
+provided
+A1: for S being Element of QC-Sub-WFF for d1,d2 being Element of D() holds
+(S is Sub_VERUM implies F1().S = V()) &
+(S is Sub_atomic implies F1().S = A(S)) & (S is Sub_negative &
+d1 = F1().Sub_the_argument_of S implies F1().S = N(d1)) &
+(S is Sub_conjunctive & d1 = F1().Sub_the_left_argument_of S &
+d2 = F1().Sub_the_right_argument_of S implies F1().S = C(d1, d2)) &
+(S is Sub_universal & d1 = F1().Sub_the_scope_of S implies F1().S = R(S, d1))
+and
+A2: for S being Element of QC-Sub-WFF for d1,d2 being Element of D() holds
+(S is Sub_VERUM implies F2().S = V()) &
+(S is Sub_atomic implies F2().S = A(S)) & (S is Sub_negative &
+d1 = F2().Sub_the_argument_of S implies F2().S = N(d1)) &
+(S is Sub_conjunctive & d1 = F2().Sub_the_left_argument_of S &
+d2 = F2().Sub_the_right_argument_of S implies F2().S = C(d1, d2)) &
+(S is Sub_universal & d1 = F2().Sub_the_scope_of S implies F2().S = R(S, d1))
+proof
+  defpred Pro[Element of QC-Sub-WFF] means F1().$1 = F2().$1;
+A3: for k for P being (QC-pred_symbol of k),l being QC-variable_list of k,
+  e being Element of vSUB holds Pro[Sub_P(P,l,e)]
+  proof
+    let k;
+    let P be (QC-pred_symbol of k),l be QC-variable_list of k;
+    let e be Element of vSUB;
     thus F1().Sub_P(P,l,e) = A(Sub_P(P,l,e)) by A1
-                                .= F2().Sub_P(P,l,e) by A2;
-   end;
+      .= F2().Sub_P(P,l,e) by A2;
+  end;
 A4: for S being Element of QC-Sub-WFF st S is Sub_VERUM holds Pro[S]
-      proof
-        let S be Element of QC-Sub-WFF;
-        assume S is Sub_VERUM;
-        then F1().S = V() & F2().S = V() by A1,A2; hence F1().S = F2().S;
-      end;
-A5:  for S being Element of QC-Sub-WFF st Pro[S] holds Pro[Sub_not(S)]
-    proof let S be Element of QC-Sub-WFF such that
-A6:    F1().S = F2().S;
-A7:    Sub_the_argument_of Sub_not(S) = S by Def30;
-     hence F1().Sub_not(S) = N(F2().S) by A1,A6
-                          .= F2().Sub_not(S) by A2,A7;
-    end;
-A8:  for S1,S2 being Element of QC-Sub-WFF st S1`2 = S2`2 &
-                                      Pro[S1] & Pro[S2] holds Pro[Sub_&(S1,S2)]
-    proof let S1,S2 be Element of QC-Sub-WFF such that
-A9:  S1`2 = S2`2 & F1().S1 = F2().S1 &
-      F1().S2 = F2().S2;
-A10:  Sub_&(S1,S2) is Sub_conjunctive by A9,Th13;
-A11:  Sub_the_left_argument_of (Sub_&(S1,S2)) = S1 &
-      Sub_the_right_argument_of (Sub_&(S1,S2)) = S2 by A9,Th18,Th19;
-      hence F1().Sub_&(S1,S2) = C(F2().S1,F2().S2) by A1,A9,A10
-                          .= F2().(Sub_&(S1,S2)) by A2,A10,A11;
-    end;
-A12:  for x being bound_QC-variable, S being Element of QC-Sub-WFF,
-       SQ being second_Q_comp of [S,x] st [S,x] is quantifiable
-            & Pro[S] holds Pro[Sub_All([S,x], SQ)]
-    proof let x be bound_QC-variable, S be Element of QC-Sub-WFF,
-          SQ being second_Q_comp of [S,x] such that
-A13:   [S,x] is quantifiable & F1().S = F2().S;
-A14:   Sub_All([S,x],SQ) is Sub_universal by A13,Th14;
-       Sub_the_scope_of Sub_All([S,x],SQ) = [S,x]`1 by A13,Th21;
-      then Sub_the_scope_of Sub_All([S,x],SQ) = S by MCART_1:7;
-      hence F1().Sub_All([S,x],SQ)
-  = R(Sub_All([S,x],SQ), F2().Sub_the_scope_of Sub_All([S,x],SQ)) by A1,A13,A14
- .= F2().Sub_All([S,x],SQ) by A2,A14;
-    end;
-     Pro[S] from SubQCInd(A3,A4,A5,A8,A12);
-  hence thesis by FUNCT_2:113;
- end;
+  proof
+    let S be Element of QC-Sub-WFF;
+    assume S is Sub_VERUM;
+    then F1().S = V() & F2().S = V() by A1,A2;
+    hence F1().S = F2().S;
+  end;
+A5: for S being Element of QC-Sub-WFF st Pro[S] holds Pro[Sub_not(S)]
+  proof
+    let S be Element of QC-Sub-WFF such that
+A6: F1().S = F2().S;
+A7: Sub_the_argument_of Sub_not(S) = S by Def30;
+    hence F1().Sub_not(S) = N(F2().S) by A1,A6
+      .= F2().Sub_not(S) by A2,A7;
+  end;
+A8: for S1,S2 being Element of QC-Sub-WFF st S1`2 = S2`2 &
+  Pro[S1] & Pro[S2] holds Pro[Sub_&(S1,S2)]
+  proof
+    let S1,S2 be Element of QC-Sub-WFF such that
+A9: S1`2 = S2`2 & F1().S1 = F2().S1 & F1().S2 = F2().S2;
+A10: Sub_&(S1,S2) is Sub_conjunctive by A9,Th13;
+A11: Sub_the_left_argument_of (Sub_&(S1,S2)) = S1 &
+    Sub_the_right_argument_of (Sub_&(S1,S2)) = S2 by A9,Th18,Th19;
+    hence F1().Sub_&(S1,S2) = C(F2().S1,F2().S2) by A1,A9,A10
+      .= F2().(Sub_&(S1,S2)) by A2,A10,A11;
+  end;
+A12: for x being bound_QC-variable, S being Element of QC-Sub-WFF,
+  SQ being second_Q_comp of [S,x] st [S,x] is quantifiable
+  & Pro[S] holds Pro[Sub_All([S,x], SQ)]
+  proof
+    let x be bound_QC-variable, S be Element of QC-Sub-WFF,
+    SQ being second_Q_comp of [S,x] such that
+A13: [S,x] is quantifiable & F1().S = F2().S;
+A14: Sub_All([S,x],SQ) is Sub_universal by A13,Th14;
+    Sub_the_scope_of Sub_All([S,x],SQ) = [S,x]`1 by A13,Th21;
+    then Sub_the_scope_of Sub_All([S,x],SQ) = S by MCART_1:7;
+    hence F1().Sub_All([S,x],SQ)
 
-definition let S;
+= R(Sub_All([S,x],SQ), F2().Sub_the_scope_of Sub_All([S,x],SQ)) by A1,A13,A14
+      .= F2().Sub_All([S,x],SQ) by A2,A14;
+  end;
+  Pro[S] from SubQCInd(A3,A4,A5,A8,A12);
+  hence thesis by FUNCT_2:113;
+end;
+
+definition
+  let S;
   func @S -> Element of [:QC-WFF,vSUB:] equals
-     S;
+
+  S;
   coherence
   proof
-    consider p,e such that A1: S = [p,e] by Th8;
+    consider p,e such that
+A1: S = [p,e] by Th8;
     thus thesis by A1;
   end;
 end;
 
- reserve Z for Element of [:QC-WFF,vSUB:];
+reserve Z for Element of [:QC-WFF,vSUB:];
 
-definition let Z;
+definition
+  let Z;
   redefine func Z`1 -> Element of QC-WFF;
   coherence
   proof
@@ -2314,286 +2418,244 @@ A2: a in QC-WFF & b in vSUB & [a,b] = Z by ZFMISC_1:def 2;
   end;
 end;
 
-definition let Z;
+definition
+  let Z;
   func S_Bound(Z) -> bound_QC-variable equals
-      x.upVar(RestrictSub(bound_in Z`1,Z`1,Z`2),(the_scope_of Z`1)) if
-   bound_in(Z`1) in rng(RestrictSub(bound_in Z`1,Z`1,Z`2))
-          otherwise bound_in(Z`1);
+  x.upVar(RestrictSub(bound_in Z`1,Z`1,Z`2),(the_scope_of Z`1)) if
+  bound_in(Z`1) in rng(RestrictSub(bound_in Z`1,Z`1,Z`2))
+  otherwise bound_in(Z`1);
   coherence;
   consistency;
 end;
 
-definition let S, p;
+definition
+  let S, p;
   func Quant(S,p) -> Element of QC-WFF equals
-     All(S_Bound(@S),p);
+
+  All(S_Bound(@S),p);
   coherence;
 end;
 
-Lm5:
-  for F1,F2 being Function of QC-Sub-WFF,QC-WFF st
-    ( for S being Element of QC-Sub-WFF holds
-    (S is Sub_VERUM implies F1.S = VERUM) &
-    (S is Sub_atomic implies
-       F1.S = (the_pred_symbol_of (S`1))!
-       CQC_Subst(Sub_the_arguments_of S,S`2)) &
-    (S is Sub_negative implies
-           F1.S = 'not' (F1.Sub_the_argument_of S) ) &
-    (S is Sub_conjunctive implies
-             F1.S = (F1.Sub_the_left_argument_of S) '&'
-                                     (F1.Sub_the_right_argument_of S)) &
-    (S is Sub_universal implies
-       F1.S = Quant(S,F1.Sub_the_scope_of S))) &
-    ( for S being Element of QC-Sub-WFF holds
-    (S is Sub_VERUM implies F2.S = VERUM) &
-    (S is Sub_atomic implies
-       F2.S = (the_pred_symbol_of (S`1))!
-       CQC_Subst(Sub_the_arguments_of S,S`2)) &
-    (S is Sub_negative implies
-           F2.S = 'not' (F2.Sub_the_argument_of S) ) &
-    (S is Sub_conjunctive implies
-             F2.S = (F2.Sub_the_left_argument_of S) '&'
-                                     (F2.Sub_the_right_argument_of S)) &
-    (S is Sub_universal implies
-       F2.S = Quant(S,F2.Sub_the_scope_of S)))
-   holds F1 = F2
- proof
-deffunc A(Element of QC-Sub-WFF) = (the_pred_symbol_of ($1`1))!
-                                  CQC_Subst(Sub_the_arguments_of $1,$1`2);
-deffunc N(Element of QC-WFF) = 'not' $1;
-deffunc C(Element of QC-WFF,Element of QC-WFF) = $1 '&' $2;
- let F1,F2 be Function of QC-Sub-WFF,QC-WFF;
+Lm5: for F1,F2 being Function of QC-Sub-WFF,QC-WFF st
+( for S being Element of QC-Sub-WFF holds
+(S is Sub_VERUM implies F1.S = VERUM) & (S is Sub_atomic implies
+F1.S = (the_pred_symbol_of (S`1))! CQC_Subst(Sub_the_arguments_of S,S`2)) &
+(S is Sub_negative implies F1.S = 'not' (F1.Sub_the_argument_of S) ) &
+(S is Sub_conjunctive implies F1.S = (F1.Sub_the_left_argument_of S) '&'
+(F1.Sub_the_right_argument_of S)) & (S is Sub_universal implies
+F1.S = Quant(S,F1.Sub_the_scope_of S))) &
+( for S being Element of QC-Sub-WFF holds
+(S is Sub_VERUM implies F2.S = VERUM) & (S is Sub_atomic implies
+F2.S = (the_pred_symbol_of (S`1))! CQC_Subst(Sub_the_arguments_of S,S`2)) &
+(S is Sub_negative implies F2.S = 'not' (F2.Sub_the_argument_of S) ) &
+(S is Sub_conjunctive implies F2.S = (F2.Sub_the_left_argument_of S) '&'
+(F2.Sub_the_right_argument_of S)) & (S is Sub_universal implies
+F2.S = Quant(S,F2.Sub_the_scope_of S))) holds F1 = F2
+proof
+  deffunc A(Element of QC-Sub-WFF) = (the_pred_symbol_of ($1`1))!
+  CQC_Subst(Sub_the_arguments_of $1,$1`2);
+  deffunc N(Element of QC-WFF) = 'not' $1;
+  deffunc C(Element of QC-WFF,Element of QC-WFF) = $1 '&' $2;
+  let F1,F2 be Function of QC-Sub-WFF,QC-WFF;
   assume ( for S being Element of QC-Sub-WFF holds
-    (S is Sub_VERUM implies F1.S = VERUM) &
-    (S is Sub_atomic implies F1.S = A(S)) &
-    (S is Sub_negative implies F1.S = N(F1.Sub_the_argument_of S))  &
-    (S is Sub_conjunctive implies F1.S =
-            C(F1.Sub_the_left_argument_of S,F1.Sub_the_right_argument_of S)) &
-    (S is Sub_universal implies  F1.S = Quant(S,F1.Sub_the_scope_of S)));
-  then A1:    for S being Element of QC-Sub-WFF
-        for d1,d2 being Element of QC-WFF holds
-        (S is Sub_VERUM implies F1.S = VERUM)  &
-        (S is Sub_atomic implies F1.S = A(S)) &
-        (S is Sub_negative & d1 = F1.Sub_the_argument_of S implies
-                                                       F1.S =  N(d1)) &
-        (S is Sub_conjunctive & d1 = F1.(Sub_the_left_argument_of S) &
-           d2 = F1.(Sub_the_right_argument_of S) implies F1.S = C(d1,d2)) &
-        (S is Sub_universal & d1 = F1.Sub_the_scope_of S implies
-                                                      F1.S = Quant(S,d1));
-   assume (for S being Element of QC-Sub-WFF holds
-    (S is Sub_VERUM implies F2.S = VERUM) &
-    (S is Sub_atomic implies F2.S = A(S))  &
-    (S is Sub_negative implies F2.S = N(F2.Sub_the_argument_of S))     &
-    (S is Sub_conjunctive implies F2.S = C(F2.Sub_the_left_argument_of S,
-                                            F2.Sub_the_right_argument_of S)) &
-    (S is Sub_universal implies F2.S = Quant(S,F2.Sub_the_scope_of S)));
-  then A2:  for S being Element of QC-Sub-WFF
-        for d1,d2 being Element of QC-WFF holds
-        (S is Sub_VERUM implies F2.S = VERUM)  &
-        (S is Sub_atomic implies F2.S = A(S)) &
-        (S is Sub_negative & d1 = F2.Sub_the_argument_of S implies
-                                                        F2.S = N(d1)) &
-        (S is Sub_conjunctive & d1 = F2.(Sub_the_left_argument_of S) &
-           d2 = F2.(Sub_the_right_argument_of S) implies F2.S = C(d1,d2)) &
-        (S is Sub_universal & d1 = F2.Sub_the_scope_of S implies
-                                                      F2.S = Quant(S,d1));
-   thus F1 = F2 from SubQCFuncUniq(A1,A2);
- end;
+  (S is Sub_VERUM implies F1.S = VERUM) &
+  (S is Sub_atomic implies F1.S = A(S)) &
+  (S is Sub_negative implies F1.S = N(F1.Sub_the_argument_of S)) &
+  (S is Sub_conjunctive implies F1.S =
+  C(F1.Sub_the_left_argument_of S,F1.Sub_the_right_argument_of S)) &
+  (S is Sub_universal implies F1.S = Quant(S,F1.Sub_the_scope_of S)));
+  then
+A1: for S being Element of QC-Sub-WFF for d1,d2 being Element of QC-WFF holds
+  (S is Sub_VERUM implies F1.S = VERUM) &
+  (S is Sub_atomic implies F1.S = A(S)) &
+  (S is Sub_negative & d1 = F1.Sub_the_argument_of S implies F1.S = N(d1)) &
+  (S is Sub_conjunctive & d1 = F1.(Sub_the_left_argument_of S) &
+  d2 = F1.(Sub_the_right_argument_of S) implies F1.S = C(d1,d2)) &
+  (S is Sub_universal & d1 = F1.Sub_the_scope_of S implies
+  F1.S = Quant(S,d1));
+  assume (for S being Element of QC-Sub-WFF holds
+  (S is Sub_VERUM implies F2.S = VERUM) &
+  (S is Sub_atomic implies F2.S = A(S)) &
+  (S is Sub_negative implies F2.S = N(F2.Sub_the_argument_of S)) &
+  (S is Sub_conjunctive implies F2.S = C(F2.Sub_the_left_argument_of S,
+  F2.Sub_the_right_argument_of S)) &
+  (S is Sub_universal implies F2.S = Quant(S,F2.Sub_the_scope_of S)));
+  then
+A2: for S being Element of QC-Sub-WFF for d1,d2 being Element of QC-WFF holds
+  (S is Sub_VERUM implies F2.S = VERUM) &
+  (S is Sub_atomic implies F2.S = A(S)) &
+  (S is Sub_negative & d1 = F2.Sub_the_argument_of S implies F2.S = N(d1)) &
+  (S is Sub_conjunctive & d1 = F2.(Sub_the_left_argument_of S) &
+  d2 = F2.(Sub_the_right_argument_of S) implies F2.S = C(d1,d2)) &
+  (S is Sub_universal & d1 = F2.Sub_the_scope_of S implies
+  F2.S = Quant(S,d1));
+  thus F1 = F2 from SubQCFuncUniq(A1,A2);
+end;
 
 begin :: Definition and Properties of Substitution
-      :: (Ebb et al, Chapter III, Definition 8.1/8.2)
 
-definition let S be Element of QC-Sub-WFF;
+:: (Ebb et al, Chapter III, Definition 8.1/8.2)
+
+definition
+  let S be Element of QC-Sub-WFF;
   func CQC_Sub(S) -> Element of QC-WFF means
-:Def38: ex F being Function of QC-Sub-WFF,QC-WFF
-     st it = F.S & for S' being Element of QC-Sub-WFF holds
-       (S' is Sub_VERUM implies F.S' = VERUM) &
-     ( S' is Sub_atomic implies
-       F.S' = (the_pred_symbol_of ((S')`1))!
-       CQC_Subst(Sub_the_arguments_of S',(S')`2)) &
-     (S' is Sub_negative implies
-         F.S' = 'not' (F.(Sub_the_argument_of S'))) &
-     (S' is Sub_conjunctive implies
-       F.S' = (F.Sub_the_left_argument_of S') '&'
-              (F.Sub_the_right_argument_of S')) &
-     (S' is Sub_universal implies
-     F.S' = Quant(S',F.Sub_the_scope_of S'));
-   existence
-   proof
-deffunc A(Element of QC-Sub-WFF) = (the_pred_symbol_of ($1`1))!
-                                  CQC_Subst(Sub_the_arguments_of $1,$1`2);
-deffunc N(Element of QC-WFF) = 'not' $1;
-deffunc C(Element of QC-WFF,Element of QC-WFF) = $1 '&' $2;
-     consider F being Function of QC-Sub-WFF,QC-WFF such that
-A1:     for S being Element of QC-Sub-WFF
-        for d1,d2 being Element of QC-WFF holds
-        (S is Sub_VERUM implies F.S = VERUM)  &
-        (S is Sub_atomic implies F.S = A(S)) &
-        (S is Sub_negative & d1 = F.Sub_the_argument_of S implies
-                                                                F.S = N(d1)) &
-        (S is Sub_conjunctive & d1 = F.(Sub_the_left_argument_of S) &
-          d2 = F.(Sub_the_right_argument_of S) implies F.S = C(d1,d2)) &
-        (S is Sub_universal & d1 = F.Sub_the_scope_of S implies
-                                       F.S = Quant(S,d1)) from SubFuncEx;
-        take F.S,F;
-        thus F.S = F.S;
-        thus thesis by A1;
-   end;
-   uniqueness by Lm5;
+  :Def38:
+  ex F being Function of QC-Sub-WFF,QC-WFF
+  st it = F.S & for S' being Element of QC-Sub-WFF holds
+  (S' is Sub_VERUM implies F.S' = VERUM) & ( S' is Sub_atomic implies
+  F.S' = (the_pred_symbol_of ((S')`1))!
+  CQC_Subst(Sub_the_arguments_of S',(S')`2)) & (S' is Sub_negative implies
+  F.S' = 'not' (F.(Sub_the_argument_of S'))) & (S' is Sub_conjunctive implies
+  F.S' = (F.Sub_the_left_argument_of S') '&'
+  (F.Sub_the_right_argument_of S')) & (S' is Sub_universal implies
+  F.S' = Quant(S',F.Sub_the_scope_of S'));
+  existence
+  proof
+    deffunc A(Element of QC-Sub-WFF) = (the_pred_symbol_of ($1`1))!
+    CQC_Subst(Sub_the_arguments_of $1,$1`2);
+    deffunc N(Element of QC-WFF) = 'not' $1;
+    deffunc C(Element of QC-WFF,Element of QC-WFF) = $1 '&' $2;
+    consider F being Function of QC-Sub-WFF,QC-WFF such that
+A1: for S being Element of QC-Sub-WFF for d1,d2 being Element of QC-WFF holds
+    (S is Sub_VERUM implies F.S = VERUM) &
+    (S is Sub_atomic implies F.S = A(S)) &
+    (S is Sub_negative & d1 = F.Sub_the_argument_of S implies F.S = N(d1)) &
+    (S is Sub_conjunctive & d1 = F.(Sub_the_left_argument_of S) &
+    d2 = F.(Sub_the_right_argument_of S) implies F.S = C(d1,d2)) &
+    (S is Sub_universal & d1 = F.Sub_the_scope_of S implies
+    F.S = Quant(S,d1)) from SubFuncEx;
+    take F.S,F;
+    thus F.S = F.S;
+    thus thesis by A1;
+  end;
+  uniqueness by Lm5;
 end;
 
 theorem Th28:
   S is Sub_negative implies CQC_Sub(S) = 'not' CQC_Sub(Sub_the_argument_of S)
- proof
-    consider F being Function of QC-Sub-WFF,QC-WFF such that
+proof
+  consider F being Function of QC-Sub-WFF,QC-WFF such that
 A1: CQC_Sub(S) = F.S and
 A2: for S' being Element of QC-Sub-WFF holds
-       (S' is Sub_VERUM implies F.S' = VERUM) &
-     ( S' is Sub_atomic implies
-       F.S' = (the_pred_symbol_of ((S')`1))!
-       CQC_Subst(Sub_the_arguments_of S',(S')`2)) &
-     (S' is Sub_negative implies
-         F.S' = 'not' (F.(Sub_the_argument_of S'))) &
-     (S' is Sub_conjunctive implies
-       F.S' = (F.Sub_the_left_argument_of S') '&'
-              (F.Sub_the_right_argument_of S')) &
-     (S' is Sub_universal implies
-     F.S' = Quant(S',F.Sub_the_scope_of S')) by Def38;
-     consider G being Function of QC-Sub-WFF,QC-WFF such that
-A3:    CQC_Sub(Sub_the_argument_of S) = G.(Sub_the_argument_of S) and
-A4:  for S' being Element of QC-Sub-WFF holds
-       (S' is Sub_VERUM implies G.S' = VERUM) &
-     ( S' is Sub_atomic implies
-       G.S' = (the_pred_symbol_of ((S')`1))!
-       CQC_Subst(Sub_the_arguments_of S',(S')`2)) &
-     (S' is Sub_negative implies
-         G.S' = 'not' (G.(Sub_the_argument_of S'))) &
-     (S' is Sub_conjunctive implies
-       G.S' = (G.Sub_the_left_argument_of S') '&'
-              (G.Sub_the_right_argument_of S')) &
-     (S' is Sub_universal implies
-     G.S' = Quant(S',G.Sub_the_scope_of S')) by Def38;
-      F = G by A2,A4,Lm5;
-     hence thesis by A1,A2,A3;
+  (S' is Sub_VERUM implies F.S' = VERUM) & ( S' is Sub_atomic implies
+  F.S' = (the_pred_symbol_of ((S')`1))!
+  CQC_Subst(Sub_the_arguments_of S',(S')`2)) & (S' is Sub_negative implies
+  F.S' = 'not' (F.(Sub_the_argument_of S'))) & (S' is Sub_conjunctive implies
+  F.S' = (F.Sub_the_left_argument_of S') '&'
+  (F.Sub_the_right_argument_of S')) & (S' is Sub_universal implies
+  F.S' = Quant(S',F.Sub_the_scope_of S')) by Def38;
+  consider G being Function of QC-Sub-WFF,QC-WFF such that
+A3: CQC_Sub(Sub_the_argument_of S) = G.(Sub_the_argument_of S) and
+A4: for S' being Element of QC-Sub-WFF holds
+  (S' is Sub_VERUM implies G.S' = VERUM) & ( S' is Sub_atomic implies
+  G.S' = (the_pred_symbol_of ((S')`1))!
+  CQC_Subst(Sub_the_arguments_of S',(S')`2)) & (S' is Sub_negative implies
+  G.S' = 'not' (G.(Sub_the_argument_of S'))) & (S' is Sub_conjunctive implies
+  G.S' = (G.Sub_the_left_argument_of S') '&'
+  (G.Sub_the_right_argument_of S')) & (S' is Sub_universal implies
+  G.S' = Quant(S',G.Sub_the_scope_of S')) by Def38;
+  F = G by A2,A4,Lm5;
+  hence thesis by A1,A2,A3;
 end;
 
 theorem Th29:
   CQC_Sub(Sub_not S) = 'not' CQC_Sub(S)
-proof set 'S = Sub_not S;
-   Sub_the_argument_of 'S = S by Def30;
+proof
+  set 'S = Sub_not S;
+  Sub_the_argument_of 'S = S by Def30;
   hence thesis by Th28;
 end;
 
 theorem Th30:
   S is Sub_conjunctive implies
-     CQC_Sub(S) = (CQC_Sub(Sub_the_left_argument_of S)) '&'
-                         (CQC_Sub(Sub_the_right_argument_of S))
- proof
-    consider F being Function of QC-Sub-WFF,QC-WFF such that
+  CQC_Sub(S) = (CQC_Sub(Sub_the_left_argument_of S)) '&'
+  (CQC_Sub(Sub_the_right_argument_of S))
+proof
+  consider F being Function of QC-Sub-WFF,QC-WFF such that
 A1: CQC_Sub(S) = F.S and
 A2: for S' being Element of QC-Sub-WFF holds
-       (S' is Sub_VERUM implies F.S' = VERUM) &
-     ( S' is Sub_atomic implies
-       F.S' = (the_pred_symbol_of ((S')`1))!
-       CQC_Subst(Sub_the_arguments_of S',(S')`2)) &
-     (S' is Sub_negative implies
-         F.S' = 'not' (F.(Sub_the_argument_of S'))) &
-     (S' is Sub_conjunctive implies
-       F.S' = (F.Sub_the_left_argument_of S') '&'
-              (F.Sub_the_right_argument_of S')) &
-     (S' is Sub_universal implies
-     F.S' = Quant(S',F.Sub_the_scope_of S')) by Def38;
-       consider F1 being Function of QC-Sub-WFF,QC-WFF such that
+  (S' is Sub_VERUM implies F.S' = VERUM) & ( S' is Sub_atomic implies
+  F.S' = (the_pred_symbol_of ((S')`1))!
+  CQC_Subst(Sub_the_arguments_of S',(S')`2)) & (S' is Sub_negative implies
+  F.S' = 'not' (F.(Sub_the_argument_of S'))) & (S' is Sub_conjunctive implies
+  F.S' = (F.Sub_the_left_argument_of S') '&'
+  (F.Sub_the_right_argument_of S')) & (S' is Sub_universal implies
+  F.S' = Quant(S',F.Sub_the_scope_of S')) by Def38;
+  consider F1 being Function of QC-Sub-WFF,QC-WFF such that
 A3: CQC_Sub(Sub_the_left_argument_of S) = F1.(Sub_the_left_argument_of S) and
-A4:   for S' being Element of QC-Sub-WFF holds
-       (S' is Sub_VERUM implies F1.S' = VERUM) &
-     ( S' is Sub_atomic implies
-       F1.S' = (the_pred_symbol_of ((S')`1))!
-       CQC_Subst(Sub_the_arguments_of S',(S')`2)) &
-     (S' is Sub_negative implies
-         F1.S' = 'not' (F1.(Sub_the_argument_of S'))) &
-     (S' is Sub_conjunctive implies
-       F1.S' = (F1.Sub_the_left_argument_of S') '&'
-              (F1.Sub_the_right_argument_of S')) &
-     (S' is Sub_universal implies
-     F1.S' = Quant(S',F1.Sub_the_scope_of S')) by Def38;
-      consider F2 being Function of QC-Sub-WFF,QC-WFF such that
-A5:    CQC_Sub(Sub_the_right_argument_of S) =
-                         F2.(Sub_the_right_argument_of S) and
+A4: for S' being Element of QC-Sub-WFF holds
+  (S' is Sub_VERUM implies F1.S' = VERUM) & ( S' is Sub_atomic implies
+  F1.S' = (the_pred_symbol_of ((S')`1))!
+  CQC_Subst(Sub_the_arguments_of S',(S')`2)) & (S' is Sub_negative implies
+  F1.S' = 'not' (F1.(Sub_the_argument_of S'))) &
+  (S' is Sub_conjunctive implies F1.S' = (F1.Sub_the_left_argument_of S') '&'
+  (F1.Sub_the_right_argument_of S')) & (S' is Sub_universal implies
+  F1.S' = Quant(S',F1.Sub_the_scope_of S')) by Def38;
+  consider F2 being Function of QC-Sub-WFF,QC-WFF such that
+A5: CQC_Sub(Sub_the_right_argument_of S) =
+  F2.(Sub_the_right_argument_of S) and
 A6: for S' being Element of QC-Sub-WFF holds
-       (S' is Sub_VERUM implies F2.S' = VERUM) &
-     ( S' is Sub_atomic implies
-       F2.S' = (the_pred_symbol_of ((S')`1))!
-       CQC_Subst(Sub_the_arguments_of S',(S')`2)) &
-     (S' is Sub_negative implies
-         F2.S' = 'not' (F2.(Sub_the_argument_of S'))) &
-     (S' is Sub_conjunctive implies
-       F2.S' = (F2.Sub_the_left_argument_of S') '&'
-              (F2.Sub_the_right_argument_of S')) &
-     (S' is Sub_universal implies
-     F2.S' = Quant(S',F2.Sub_the_scope_of S')) by Def38;
-      F1 = F & F2 = F by A2,A4,A6,Lm5;
-     hence thesis by A1,A2,A3,A5;
-  end;
+  (S' is Sub_VERUM implies F2.S' = VERUM) & ( S' is Sub_atomic implies
+  F2.S' = (the_pred_symbol_of ((S')`1))!
+  CQC_Subst(Sub_the_arguments_of S',(S')`2)) & (S' is Sub_negative implies
+  F2.S' = 'not' (F2.(Sub_the_argument_of S'))) &
+  (S' is Sub_conjunctive implies F2.S' = (F2.Sub_the_left_argument_of S') '&'
+  (F2.Sub_the_right_argument_of S')) & (S' is Sub_universal implies
+  F2.S' = Quant(S',F2.Sub_the_scope_of S')) by Def38;
+  F1 = F & F2 = F by A2,A4,A6,Lm5;
+  hence thesis by A1,A2,A3,A5;
+end;
 
 theorem Th31:
-  S1`2 = S2`2 implies
-         CQC_Sub(Sub_&(S1,S2)) = (CQC_Sub(S1)) '&' (CQC_Sub(S2))
-    proof
-      assume A1: S1`2 = S2`2;
-      set S = Sub_&(S1,S2);
-A2:   S is Sub_conjunctive by A1,Th13;
-     Sub_the_left_argument_of S = S1 & Sub_the_right_argument_of S = S2
-    by A1,Th18,Th19;
-   hence thesis by A2,Th30;
-  end;
+  S1`2 = S2`2 implies CQC_Sub(Sub_&(S1,S2)) = (CQC_Sub(S1)) '&' (CQC_Sub(S2))
+proof
+  assume
+A1: S1`2 = S2`2;
+  set S = Sub_&(S1,S2);
+  Sub_the_left_argument_of S = S1 & Sub_the_right_argument_of S = S2
+  by A1,Th18,Th19;
+  hence thesis by A1,Th13,Th30;
+end;
 
 theorem Th32:
-  S is Sub_universal implies
-    CQC_Sub(S) = Quant(S,CQC_Sub(Sub_the_scope_of S))
-     proof
-       consider F being Function of QC-Sub-WFF,QC-WFF such that
-A1:    CQC_Sub(S) = F.S and
-A2:    for S' being Element of QC-Sub-WFF holds
-       (S' is Sub_VERUM implies F.S' = VERUM) &
-     ( S' is Sub_atomic implies
-       F.S' = (the_pred_symbol_of ((S')`1))!
-       CQC_Subst(Sub_the_arguments_of S',(S')`2)) &
-     (S' is Sub_negative implies
-         F.S' = 'not' (F.(Sub_the_argument_of S'))) &
-     (S' is Sub_conjunctive implies
-       F.S' = (F.Sub_the_left_argument_of S') '&'
-              (F.Sub_the_right_argument_of S')) &
-     (S' is Sub_universal implies
-     F.S' = Quant(S',F.Sub_the_scope_of S')) by Def38;
-     consider G being Function of QC-Sub-WFF,QC-WFF such that
+  S is Sub_universal implies CQC_Sub(S) = Quant(S,CQC_Sub(Sub_the_scope_of S))
+proof
+  consider F being Function of QC-Sub-WFF,QC-WFF such that
+A1: CQC_Sub(S) = F.S and
+A2: for S' being Element of QC-Sub-WFF holds
+  (S' is Sub_VERUM implies F.S' = VERUM) & ( S' is Sub_atomic implies
+  F.S' = (the_pred_symbol_of ((S')`1))!
+  CQC_Subst(Sub_the_arguments_of S',(S')`2)) & (S' is Sub_negative implies
+  F.S' = 'not' (F.(Sub_the_argument_of S'))) & (S' is Sub_conjunctive implies
+  F.S' = (F.Sub_the_left_argument_of S') '&'
+  (F.Sub_the_right_argument_of S')) & (S' is Sub_universal implies
+  F.S' = Quant(S',F.Sub_the_scope_of S')) by Def38;
+  consider G being Function of QC-Sub-WFF,QC-WFF such that
 A3: CQC_Sub(Sub_the_scope_of S) = G.(Sub_the_scope_of S) and
 A4: for S' being Element of QC-Sub-WFF holds
-       (S' is Sub_VERUM implies G.S' = VERUM) &
-     ( S' is Sub_atomic implies
-       G.S' = (the_pred_symbol_of ((S')`1))!
-       CQC_Subst(Sub_the_arguments_of S',(S')`2)) &
-     (S' is Sub_negative implies
-         G.S' = 'not' (G.(Sub_the_argument_of S'))) &
-     (S' is Sub_conjunctive implies
-       G.S' = (G.Sub_the_left_argument_of S') '&'
-              (G.Sub_the_right_argument_of S')) &
-     (S' is Sub_universal implies
-     G.S' = Quant(S',G.Sub_the_scope_of S')) by Def38;
-        F = G by A2,A4,Lm5;
-       hence thesis by A1,A2,A3;
-     end;
+  (S' is Sub_VERUM implies G.S' = VERUM) & ( S' is Sub_atomic implies
+  G.S' = (the_pred_symbol_of ((S')`1))!
+  CQC_Subst(Sub_the_arguments_of S',(S')`2)) & (S' is Sub_negative implies
+  G.S' = 'not' (G.(Sub_the_argument_of S'))) & (S' is Sub_conjunctive implies
+  G.S' = (G.Sub_the_left_argument_of S') '&'
+  (G.Sub_the_right_argument_of S')) & (S' is Sub_universal implies
+  G.S' = Quant(S',G.Sub_the_scope_of S')) by Def38;
+  F = G by A2,A4,Lm5;
+  hence thesis by A1,A2,A3;
+end;
 
 definition
   func CQC-Sub-WFF -> Subset of QC-Sub-WFF equals
-    {S : S`1 is Element of CQC-WFF};
+  {S : S`1 is Element of CQC-WFF};
   coherence
   proof
     set X = {S : S`1 is Element of CQC-WFF};
-     X c= QC-Sub-WFF
+    X c= QC-Sub-WFF
     proof
       let a;
       assume a in X;
-      then consider S such that A1: a = S & S`1 is Element of CQC-WFF;
+      then consider S such that
+A1:   a = S & S`1 is Element of CQC-WFF;
       thus thesis by A1;
     end;
     hence thesis;
@@ -2605,9 +2667,8 @@ registration
   coherence
   proof
     consider e;
-    reconsider S = [VERUM,e] as Element of QC-Sub-WFF
-      by Def16;
-     S`1 = VERUM by MCART_1:7;
+    reconsider S = [VERUM,e] as Element of QC-Sub-WFF by Def16;
+    S`1 = VERUM by MCART_1:7;
     then [VERUM,e] in CQC-Sub-WFF;
     hence thesis;
   end;
@@ -2615,240 +2676,240 @@ end;
 
 theorem Th33:
   S is Sub_VERUM implies CQC_Sub(S) is Element of CQC-WFF
-  proof
-    assume A1: S is Sub_VERUM;
-    consider F being Function of QC-Sub-WFF,QC-WFF such that
+proof
+  assume
+A1: S is Sub_VERUM;
+  consider F being Function of QC-Sub-WFF,QC-WFF such that
 A2: CQC_Sub(S) = F.S & for S' being Element of QC-Sub-WFF holds
-       (S' is Sub_VERUM implies F.S' = VERUM) &
-     ( S' is Sub_atomic implies
-       F.S' = (the_pred_symbol_of ((S')`1))!
-       CQC_Subst(Sub_the_arguments_of S',(S')`2)) &
-     (S' is Sub_negative implies
-         F.S' = 'not' (F.(Sub_the_argument_of S'))) &
-     (S' is Sub_conjunctive implies
-       F.S' = (F.Sub_the_left_argument_of S') '&'
-              (F.Sub_the_right_argument_of S')) &
-     (S' is Sub_universal implies
-     F.S' = Quant(S',F.Sub_the_scope_of S')) by Def38;
-     thus thesis by A1,A2;
- end;
+  (S' is Sub_VERUM implies F.S' = VERUM) & ( S' is Sub_atomic implies
+  F.S' = (the_pred_symbol_of ((S')`1))!
+  CQC_Subst(Sub_the_arguments_of S',(S')`2)) & (S' is Sub_negative implies
+  F.S' = 'not' (F.(Sub_the_argument_of S'))) & (S' is Sub_conjunctive implies
+  F.S' = (F.Sub_the_left_argument_of S') '&'
+  (F.Sub_the_right_argument_of S')) & (S' is Sub_universal implies
+  F.S' = Quant(S',F.Sub_the_scope_of S')) by Def38;
+  thus thesis by A1,A2;
+end;
 
 Lm6: the_pred_symbol_of (P!ll) = P
- proof
-    P!ll is atomic by QC_LANG1:def 17;
-   then consider k being Element of NAT, ll' being QC-variable_list of k,
-                        P' being (QC-pred_symbol of k)
-                such that A1: the_pred_symbol_of (P!ll) = P' & P!ll = P'!ll'
-                by QC_LANG1:def 21;
-    P!ll = <*P*>^ll & P'!ll' = <*P'*>^ll' by QC_LANG1:23;
-   then (<*P*>^ll).1 = P & (<*P*>^ll).1 = P' by A1,FINSEQ_1:58;
-   hence thesis by A1;
- end;
+proof
+  P!ll is atomic by QC_LANG1:def 17;
+  then consider k being Element of NAT, ll' being QC-variable_list of k,
+  P' being (QC-pred_symbol of k) such that
+A1: the_pred_symbol_of (P!ll) = P' & P!ll = P'!ll' by QC_LANG1:def 21;
+  P!ll = <*P*>^ll & P'!ll' = <*P'*>^ll' by QC_LANG1:23;
+  then (<*P*>^ll).1 = P & (<*P*>^ll).1 = P' by A1,FINSEQ_1:58;
+  hence thesis by A1;
+end;
 
 theorem Th34:
-  for h being FinSequence holds
-     h is CQC-variable_list of k iff
-       (h is FinSequence of bound_QC-variables & len h = k)
- proof
-   let h be FinSequence;
-   thus h is CQC-variable_list of k implies
-       (h is FinSequence of bound_QC-variables & len h = k)
-   proof
-     assume A1: h is CQC-variable_list of k;
-     then rng h c= bound_QC-variables by CQC_LANG:def 5;
-     hence h is FinSequence of bound_QC-variables by FINSEQ_1:def 4;
-     thus thesis by A1,QC_LANG1:def 8;
-   end;
-   thus (h is FinSequence of bound_QC-variables & len h = k) implies
-          h is CQC-variable_list of k
-   proof
-     assume A2: h is FinSequence of bound_QC-variables & len h = k;
-     then A3: rng h c= bound_QC-variables by FINSEQ_1:def 4;
-     then rng h c= QC-variables by XBOOLE_1:1;
-     then h is FinSequence of QC-variables by FINSEQ_1:def 4;
-     hence thesis by A2,A3,CQC_LANG:def 5,QC_LANG1:def 8;
-   end;
- end;
+  for h being FinSequence holds h is CQC-variable_list of k iff
+  (h is FinSequence of bound_QC-variables & len h = k)
+proof
+  let h be FinSequence;
+  thus h is CQC-variable_list of k implies
+  (h is FinSequence of bound_QC-variables & len h = k)
+  proof
+    assume
+A1: h is CQC-variable_list of k;
+    then rng h c= bound_QC-variables by CQC_LANG:def 5;
+    hence h is FinSequence of bound_QC-variables by FINSEQ_1:def 4;
+    thus thesis by A1,QC_LANG1:def 8;
+  end;
+  thus (h is FinSequence of bound_QC-variables & len h = k) implies
+  h is CQC-variable_list of k
+  proof
+    assume
+A2: h is FinSequence of bound_QC-variables & len h = k;
+    then
+A3: rng h c= bound_QC-variables by FINSEQ_1:def 4;
+    then rng h c= QC-variables by XBOOLE_1:1;
+    then h is FinSequence of QC-variables by FINSEQ_1:def 4;
+    hence thesis by A2,A3,CQC_LANG:def 5,QC_LANG1:def 8;
+  end;
+end;
 
 theorem Th35:
   CQC_Sub(Sub_P(P,ll,e)) is Element of CQC-WFF
- proof
-   consider F being Function of QC-Sub-WFF,QC-WFF such that
-A1:  CQC_Sub(Sub_P(P,ll,e)) = F.Sub_P(P,ll,e) &
-     for S' being Element of QC-Sub-WFF holds
-       (S' is Sub_VERUM implies F.S' = VERUM) &
-     ( S' is Sub_atomic implies
-       F.S' = (the_pred_symbol_of ((S')`1))!
-       CQC_Subst(Sub_the_arguments_of S',(S')`2)) &
-     (S' is Sub_negative implies
-         F.S' = 'not' (F.(Sub_the_argument_of S'))) &
-     (S' is Sub_conjunctive implies
-       F.S' = (F.Sub_the_left_argument_of S') '&'
-              (F.Sub_the_right_argument_of S')) &
-     (S' is Sub_universal implies
-     F.S' = Quant(S',F.Sub_the_scope_of S')) by Def38;
-      set l = Sub_the_arguments_of Sub_P(P,ll,e);
-A2:   l is CQC-variable_list of k by Def29;
-      then reconsider l as FinSequence of bound_QC-variables by Th34;
-     reconsider s = CQC_Subst(l,Sub_P(P,ll,e)`2)
-                              as FinSequence of bound_QC-variables;
-      len l = k by A2,QC_LANG1:def 8;
-     then len s = k by Def3;
-     then reconsider s as CQC-variable_list of k by Th34;
-      Sub_P(P,ll,e) = [P!ll,e] by Th9;
-     then Sub_P(P,ll,e)`1 = P!ll by MCART_1:7;
-     then reconsider P' = the_pred_symbol_of Sub_P(P,ll,e)`1
-                                      as QC-pred_symbol of k by Lm6;
-      CQC_Sub(Sub_P(P,ll,e)) = P'!s by A1;
-     hence thesis;
- end;
+proof
+  consider F being Function of QC-Sub-WFF,QC-WFF such that
+A1: CQC_Sub(Sub_P(P,ll,e)) = F.Sub_P(P,ll,e) &
+  for S' being Element of QC-Sub-WFF holds
+  (S' is Sub_VERUM implies F.S' = VERUM) & ( S' is Sub_atomic implies
+  F.S' = (the_pred_symbol_of ((S')`1))!
+  CQC_Subst(Sub_the_arguments_of S',(S')`2)) & (S' is Sub_negative implies
+  F.S' = 'not' (F.(Sub_the_argument_of S'))) & (S' is Sub_conjunctive implies
+  F.S' = (F.Sub_the_left_argument_of S') '&'
+  (F.Sub_the_right_argument_of S')) & (S' is Sub_universal implies
+  F.S' = Quant(S',F.Sub_the_scope_of S')) by Def38;
+  set l = Sub_the_arguments_of Sub_P(P,ll,e);
+A2: l is CQC-variable_list of k by Def29;
+  then reconsider l as FinSequence of bound_QC-variables by Th34;
+  reconsider s = CQC_Subst(l,Sub_P(P,ll,e)`2)
+  as FinSequence of bound_QC-variables;
+  len l = k by A2,QC_LANG1:def 8;
+  then len s = k by Def3;
+  then reconsider s as CQC-variable_list of k by Th34;
+  Sub_P(P,ll,e) = [P!ll,e] by Th9;
+  then Sub_P(P,ll,e)`1 = P!ll by MCART_1:7;
+  then reconsider P' = the_pred_symbol_of Sub_P(P,ll,e)`1
+  as QC-pred_symbol of k by Lm6;
+  CQC_Sub(Sub_P(P,ll,e)) = P'!s by A1;
+  hence thesis;
+end;
 
 theorem Th36:
   CQC_Sub(S) is Element of CQC-WFF implies
-                     CQC_Sub(Sub_not S) is Element of CQC-WFF
- proof
-   set S' = Sub_not S;
-   assume A1: CQC_Sub(S) is Element of CQC-WFF;
-    CQC_Sub(S') = 'not' CQC_Sub(S) by Th29;
-   hence thesis by A1,CQC_LANG:18;
- end;
+  CQC_Sub(Sub_not S) is Element of CQC-WFF
+proof
+  set S' = Sub_not S;
+  assume
+A1: CQC_Sub(S) is Element of CQC-WFF;
+  CQC_Sub(S') = 'not' CQC_Sub(S) by Th29;
+  hence thesis by A1,CQC_LANG:18;
+end;
 
 theorem Th37:
   (S1`2 = S2`2 &
-   CQC_Sub(S1) is Element of CQC-WFF & CQC_Sub(S2) is Element of CQC-WFF)
-             implies CQC_Sub(Sub_&(S1,S2)) is Element of CQC-WFF
-  proof
-    assume A1: S1`2 = S2`2 & CQC_Sub(S1) is Element of CQC-WFF &
-                                             CQC_Sub(S2) is Element of CQC-WFF;
-     S1`2 = S2`2 implies
-               CQC_Sub(Sub_&(S1,S2)) = (CQC_Sub(S1)) '&' (CQC_Sub(S2)) by Th31;
-    hence thesis by A1,CQC_LANG:19;
-  end;
+  CQC_Sub(S1) is Element of CQC-WFF & CQC_Sub(S2) is Element of CQC-WFF)
+  implies CQC_Sub(Sub_&(S1,S2)) is Element of CQC-WFF
+proof
+  assume
+A1: S1`2 = S2`2 & CQC_Sub(S1) is Element of CQC-WFF &
+  CQC_Sub(S2) is Element of CQC-WFF;
+  S1`2 = S2`2 implies
+  CQC_Sub(Sub_&(S1,S2)) = (CQC_Sub(S1)) '&' (CQC_Sub(S2)) by Th31;
+  hence thesis by A1,CQC_LANG:19;
+end;
 
- reserve xSQ for second_Q_comp of [S,x];
+reserve xSQ for second_Q_comp of [S,x];
 
 theorem Th38:
   CQC_Sub(S) is Element of CQC-WFF & [S,x] is quantifiable implies
-               CQC_Sub(Sub_All([S,x],xSQ)) is Element of CQC-WFF
- proof
-   set S' = Sub_All([S,x],xSQ);
-   assume A1: CQC_Sub(S) is Element of CQC-WFF & [S,x] is quantifiable;
-then A2: S' is Sub_universal by Th14;
-    Sub_the_scope_of S' = [S,x]`1 by A1,Th21;
-   then Quant(S',CQC_Sub(Sub_the_scope_of S')) = All(S_Bound(@S'),CQC_Sub(S))
-                                                          by MCART_1:7;
-   then Quant(S',CQC_Sub(Sub_the_scope_of S')) is Element of CQC-WFF
-     by A1,CQC_LANG:23;
-   hence thesis by A2,Th32;
- end;
+  CQC_Sub(Sub_All([S,x],xSQ)) is Element of CQC-WFF
+proof
+  set S' = Sub_All([S,x],xSQ);
+  assume
+A1: CQC_Sub(S) is Element of CQC-WFF & [S,x] is quantifiable;
+  then Sub_the_scope_of S' = [S,x]`1 by Th21;
+  then Quant(S',CQC_Sub(Sub_the_scope_of S')) = All(S_Bound(@S'),CQC_Sub(S))
+  by MCART_1:7;
+  then Quant(S',CQC_Sub(Sub_the_scope_of S')) is Element of CQC-WFF
+  by A1,CQC_LANG:23;
+  hence thesis by A1,Th14,Th32;
+end;
 
- reserve S for Element of CQC-Sub-WFF;
+reserve S for Element of CQC-Sub-WFF;
 
-scheme SubCQCInd { Pro[set] } :
-  for S holds Pro[S]
-  provided
+scheme SubCQCInd { Pro[set] } : for S holds Pro[S]
+provided
 A1: for S,S' being Element of CQC-Sub-WFF,
-        x being bound_QC-variable,SQ be second_Q_comp of [S,x],
-          k being Element of NAT,ll being CQC-variable_list of k,
-      P being (QC-pred_symbol of k), e being Element of vSUB
-             holds Pro[Sub_P(P,ll,e)] &
-           (S is Sub_VERUM implies Pro[S]) &
-           (Pro[S] implies Pro[Sub_not S]) &
-           (S`2 = (S')`2 & Pro[S] & Pro[S']
-                                       implies Pro[Sub_&(S,S')]) &
-      ([S,x] is quantifiable & Pro[S] implies Pro[Sub_All([S,x], SQ)])
- proof
-   defpred Pro1[Element of QC-Sub-WFF] means $1 is Element of CQC-Sub-WFF
-                             implies Pro[$1];
+x being bound_QC-variable,SQ be second_Q_comp of [S,x],
+k being Element of NAT,ll being CQC-variable_list of k,
+P being (QC-pred_symbol of k), e being Element of vSUB
+holds Pro[Sub_P(P,ll,e)] & (S is Sub_VERUM implies Pro[S]) &
+(Pro[S] implies Pro[Sub_not S]) & (S`2 = (S')`2 & Pro[S] & Pro[S']
+implies Pro[Sub_&(S,S')]) &
+([S,x] is quantifiable & Pro[S] implies Pro[Sub_All([S,x], SQ)])
+proof
+  defpred Pro1[Element of QC-Sub-WFF] means $1 is Element of CQC-Sub-WFF
+  implies Pro[$1];
 A2: for k being Element of NAT, P being (QC-pred_symbol of k),
-                ll being QC-variable_list of k, e being Element of vSUB
-              holds Pro1[Sub_P(P,ll,e)]
-   proof
-     let k be Element of NAT, P be (QC-pred_symbol of k),
-                ll be QC-variable_list of k, e be Element of vSUB;
-     assume Sub_P(P,ll,e) is Element of CQC-Sub-WFF;
- then A3: Sub_P(P,ll,e) in CQC-Sub-WFF;
- A4: Sub_P(P,ll,e) = [P!ll,e] by Th9;
-     consider S1 being Element of QC-Sub-WFF such that
-       A5:  Sub_P(P,ll,e) = S1 & S1`1 is Element of CQC-WFF by A3;
-      P!ll is Element of CQC-WFF by A4,A5,MCART_1:7;
-     then { ll.i : 1 <= i & i <= len ll & ll.i in free_QC-variables } = {} &
-        { ll.j : 1 <= j & j <= len ll & ll.j in fixed_QC-variables } = {}
-                                                        by CQC_LANG:17;
-     then ll is CQC-variable_list of k by CQC_LANG:15;
-     hence thesis by A1;
-   end;
+  ll being QC-variable_list of k, e being Element of vSUB
+  holds Pro1[Sub_P(P,ll,e)]
+  proof
+    let k be Element of NAT, P be (QC-pred_symbol of k),
+    ll be QC-variable_list of k, e be Element of vSUB;
+    assume Sub_P(P,ll,e) is Element of CQC-Sub-WFF;
+    then
+A3: Sub_P(P,ll,e) in CQC-Sub-WFF;
+A4: Sub_P(P,ll,e) = [P!ll,e] by Th9;
+    consider S1 being Element of QC-Sub-WFF such that
+A5: Sub_P(P,ll,e) = S1 & S1`1 is Element of CQC-WFF by A3;
+    P!ll is Element of CQC-WFF by A4,A5,MCART_1:7;
+    then { ll.i : 1 <= i & i <= len ll & ll.i in free_QC-variables } = {} &
+    { ll.j : 1 <= j & j <= len ll & ll.j in fixed_QC-variables } = {}
+    by CQC_LANG:17;
+    then ll is CQC-variable_list of k by CQC_LANG:15;
+    hence thesis by A1;
+  end;
 A6: for S being Element of QC-Sub-WFF st S is Sub_VERUM holds Pro1[S] by A1;
 A7: for S being Element of QC-Sub-WFF st Pro1[S] holds Pro1[Sub_not S]
-    proof
-      let S be Element of QC-Sub-WFF;
-      assume A8: Pro1[S];
-      assume Sub_not S is Element of CQC-Sub-WFF;
-      then Sub_not S in CQC-Sub-WFF;
-      then consider S' being Element of QC-Sub-WFF such that
-A9:   Sub_not S = S' & (S')`1 is Element of CQC-WFF;
-       (S')`1 = 'not' S`1 by A9,MCART_1:7;
-      then S`1 is Element of CQC-WFF by A9,CQC_LANG:18;
-      then S in CQC-Sub-WFF;
-      hence thesis by A1,A8;
-    end;
+  proof
+    let S be Element of QC-Sub-WFF;
+    assume
+A8: Pro1[S];
+    assume Sub_not S is Element of CQC-Sub-WFF;
+    then Sub_not S in CQC-Sub-WFF;
+    then consider S' being Element of QC-Sub-WFF such that
+A9: Sub_not S = S' & (S')`1 is Element of CQC-WFF;
+    (S')`1 = 'not' S`1 by A9,MCART_1:7;
+    then S`1 is Element of CQC-WFF by A9,CQC_LANG:18;
+    then S in CQC-Sub-WFF;
+    hence thesis by A1,A8;
+  end;
 A10: for S1,S2 being Element of QC-Sub-WFF st S1`2 = S2`2
-                      & Pro1[S1] & Pro1[S2] holds Pro1[Sub_&(S1,S2)]
-    proof
+  & Pro1[S1] & Pro1[S2] holds Pro1[Sub_&(S1,S2)]
+  proof
     let S1,S2 be Element of QC-Sub-WFF;
-    assume A11: S1`2 = S2`2 & Pro1[S1] & Pro1[S2];
+    assume
+A11: S1`2 = S2`2 & Pro1[S1] & Pro1[S2];
     assume Sub_&(S1,S2) is Element of CQC-Sub-WFF;
     then Sub_&(S1,S2) in CQC-Sub-WFF;
     then consider S' being Element of QC-Sub-WFF such that
-A12:Sub_&(S1,S2) = S' & (S')`1 is Element of CQC-WFF;
-     Sub_&(S1,S2) = [S1`1 '&' S2`1,S1`2] by A11,Def21;
+A12: Sub_&(S1,S2) = S' & (S')`1 is Element of CQC-WFF;
+    Sub_&(S1,S2) = [S1`1 '&' S2`1,S1`2] by A11,Def21;
     then (S')`1 = S1`1 '&' S2`1 by A12,MCART_1:7;
-    then A13: S1`1 is Element of CQC-WFF & S2`1 is Element of CQC-WFF
-                                                       by A12,CQC_LANG:19;
-then A14: S1 in CQC-Sub-WFF;
-      S2 in CQC-Sub-WFF by A13;
-     hence thesis by A1,A11,A14;
-    end;
- A15: for x being bound_QC-variable, S being Element of QC-Sub-WFF,
-                        SQ being second_Q_comp of [S,x] st
-            [S,x] is quantifiable & Pro1[S] holds Pro1[Sub_All([S,x], SQ)]
-    proof
-      let x be bound_QC-variable, S be Element of QC-Sub-WFF,
-                        SQ being second_Q_comp of [S,x];
-      assume A16: [S,x] is quantifiable & Pro1[S];
-      assume Sub_All([S,x],SQ) is Element of CQC-Sub-WFF;
-      then Sub_All([S,x],SQ) in CQC-Sub-WFF;
-      then consider S' being Element of QC-Sub-WFF such that
-A17:  Sub_All([S,x],SQ) = S' &
-        (S')`1 is Element of CQC-WFF;
-       Sub_All([S,x],SQ) = [All([S,x]`2,([S,x]`1)`1),SQ] by A16,Def24;
-      then (S')`1 = All([S,x]`2,([S,x]`1)`1) by A17,MCART_1:7;
-      then A18: ([S,x]`1)`1 is Element of CQC-WFF by A17,CQC_LANG:23;
-       [S,x]`1 = S by MCART_1:7;
-      then S in CQC-Sub-WFF by A18;
-      hence thesis by A1,A16;
-    end;
-     for S being Element of QC-Sub-WFF holds Pro1[S]
-                                              from SubQCInd(A2,A6,A7,A10,A15
-);
-    hence thesis;
- end;
+    then
+A13: S1`1 is Element of CQC-WFF & S2`1 is Element of CQC-WFF
+    by A12,CQC_LANG:19;
+    then
+A14: S1 in CQC-Sub-WFF;
+    S2 in CQC-Sub-WFF by A13;
+    hence thesis by A1,A11,A14;
+  end;
+A15: for x being bound_QC-variable, S being Element of QC-Sub-WFF,
+  SQ being second_Q_comp of [S,x] st
+  [S,x] is quantifiable & Pro1[S] holds Pro1[Sub_All([S,x], SQ)]
+  proof
+    let x be bound_QC-variable, S be Element of QC-Sub-WFF,
+    SQ being second_Q_comp of [S,x];
+    assume
+A16: [S,x] is quantifiable & Pro1[S];
+    assume Sub_All([S,x],SQ) is Element of CQC-Sub-WFF;
+    then Sub_All([S,x],SQ) in CQC-Sub-WFF;
+    then consider S' being Element of QC-Sub-WFF such that
+A17: Sub_All([S,x],SQ) = S' & (S')`1 is Element of CQC-WFF;
+    Sub_All([S,x],SQ) = [All([S,x]`2,([S,x]`1)`1),SQ] by A16,Def24;
+    then (S')`1 = All([S,x]`2,([S,x]`1)`1) by A17,MCART_1:7;
+    then
+A18: ([S,x]`1)`1 is Element of CQC-WFF by A17,CQC_LANG:23;
+    [S,x]`1 = S by MCART_1:7;
+    then S in CQC-Sub-WFF by A18;
+    hence thesis by A1,A16;
+  end;
+  for S being Element of QC-Sub-WFF holds Pro1[S]
+  from SubQCInd(A2,A6,A7,A10,A15 );
+  hence thesis;
+end;
 
-definition let S;
+definition
+  let S;
   redefine func CQC_Sub(S) -> Element of CQC-WFF;
   coherence
   proof
-  defpred P[Element of QC-Sub-WFF] means CQC_Sub($1) is Element of CQC-WFF;
-A1:  for S,S' being Element of CQC-Sub-WFF,
-        x being bound_QC-variable,SQ be second_Q_comp of [S,x],
-          k being Element of NAT,ll being CQC-variable_list of k,
-           P being (QC-pred_symbol of k), e being Element of vSUB holds
-                                                            P[Sub_P(P,ll,e)] &
-           (S is Sub_VERUM implies P[S]) & (P[S] implies P[Sub_not S]) &
-           (S`2 = (S')`2 &  P[S] & P[S'] implies P[Sub_&(S,S')]) &
-      ([S,x] is quantifiable & P[S] implies P[Sub_All([S,x], SQ)])
-                                                 by Th33,Th35,Th36,Th37,Th38;
-     for S holds P[S] from SubCQCInd(A1);
+    defpred P[Element of QC-Sub-WFF] means CQC_Sub($1) is Element of CQC-WFF;
+A1: for S,S' being Element of CQC-Sub-WFF,
+    x being bound_QC-variable,SQ be second_Q_comp of [S,x],
+    k being Element of NAT,ll being CQC-variable_list of k,
+    P being (QC-pred_symbol of k), e being Element of vSUB holds
+    P[Sub_P(P,ll,e)] &
+    (S is Sub_VERUM implies P[S]) & (P[S] implies P[Sub_not S]) &
+    (S`2 = (S')`2 & P[S] & P[S'] implies P[Sub_&(S,S')]) &
+    ([S,x] is quantifiable & P[S] implies P[Sub_All([S,x], SQ)])
+    by Th33,Th35,Th36,Th37,Th38;
+    for S holds P[S] from SubCQCInd(A1);
     hence thesis;
   end;
 end;
+

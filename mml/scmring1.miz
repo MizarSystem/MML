@@ -31,232 +31,222 @@ environ
 begin  :: The construction of { \bf SCM } over ring
 
 reserve i, j, k for Element of NAT,
-        I for Element of Segm 8,
-        i1, i2 for Element of SCM-Instr-Loc,
-        d1, d2, d3, d4 for Element of SCM-Data-Loc,
-        S for non empty 1-sorted;
+  I for Element of Segm 8,
+  i1, i2 for Element of SCM-Instr-Loc,
+  d1, d2, d3, d4 for Element of SCM-Data-Loc,
+  S for non empty 1-sorted;
 
 registration
   cluster infinite -> non trivial set;
-coherence
-proof
-       for S being trivial set holds S is finite;
-  hence thesis;
-end;
+  coherence
+  proof
+    for S being trivial set holds S is finite;
+    hence thesis;
+  end;
   cluster infinite -> non trivial 1-sorted;
-coherence
-proof
-       for S being trivial 1-sorted holds S is finite;
-  hence thesis;
-end;
+  coherence
+  proof
+    for S being trivial 1-sorted holds S is finite;
+    hence thesis;
+  end;
 end;
 
 registration
- cluster trivial -> Abelian add-associative right_zeroed right_complementable
-                    (non empty addLoopStr);
-coherence
- proof
-  let S be non empty addLoopStr; assume
+  cluster trivial -> Abelian add-associative right_zeroed right_complementable
+    (non empty addLoopStr);
+  coherence
+  proof
+    let S be non empty addLoopStr;
+    assume
 A1: S is trivial;
-  hence (for v, w being Element of S holds v + w = w + v) &
-       (for u, v, w being Element of S holds
-            u + v + w = u + (v + w)) &
-       for v being Element of S holds v + 0.S = v
-         by STRUCT_0:def 10;
-  let v be Element of S;
-  take v;
-  thus v + v = 0.S by A1,STRUCT_0:def 10;
- end;
- cluster trivial -> well-unital right-distributive (non empty doubleLoopStr);
-coherence
- proof
-  let S be non empty doubleLoopStr such that
+    hence (for v, w being Element of S holds v + w = w + v) &
+    (for u, v, w being Element of S holds u + v + w = u + (v + w)) &
+    for v being Element of S holds v + 0.S = v by STRUCT_0:def 10;
+    let v be Element of S;
+    take v;
+    thus v + v = 0.S by A1,STRUCT_0:def 10;
+  end;
+  cluster trivial -> well-unital right-distributive (non empty doubleLoopStr);
+  coherence
+  proof
+    let S be non empty doubleLoopStr such that
 A2: S is trivial;
-  thus for x be Element of S holds
+    thus for x be Element of S holds
     x*(1.S) = x & (1.S)*x = x by A2,STRUCT_0:def 10;
-  let x, y, z be Element of S;
-  thus x*(y+z) = x*y + x*z by A2,STRUCT_0:def 10;
- end;
+    let x, y, z be Element of S;
+    thus x*(y+z) = x*y + x*z by A2,STRUCT_0:def 10;
+  end;
 end;
 
 registration
- cluster SCM-Instr -> non trivial;
-coherence
- proof
-  consider e, f being Element of SCM-Data-Loc;
-A1:1 in {1,2,3,4,5} & 2 in {1,2,3,4,5} by ENUMSET1:def 3;
-       1 is Element of Segm 9 & 2 is Element of Segm 9 by GR_CY_1:10;
-  then [1,<*e,f*>] in
-   { [K,<*b,c*>] where K is Element of Segm 9,
-                       b, c is Element of SCM-Data-Loc : K in {1,2,3,4,5} } &
-  [2,<*e,f*>] in
-   { [K,<*b,c*>] where K is Element of Segm 9,
-                       b, c is Element of SCM-Data-Loc : K in {1,2,3,4,5} }
-    by A1;
+  cluster SCM-Instr -> non trivial;
+  coherence
+  proof
+    consider e, f being Element of SCM-Data-Loc;
+A1: 1 in {1,2,3,4,5} & 2 in {1,2,3,4,5} by ENUMSET1:def 3;
+    1 is Element of Segm 9 & 2 is Element of Segm 9 by GR_CY_1:10;
+    then [1,<*e,f*>] in { [K,<*b,c*>] where K is Element of Segm 9,
+    b, c is Element of SCM-Data-Loc : K in {1,2,3,4,5} } & [2,<*e,f*>] in
+    { [K,<*b,c*>] where K is Element of Segm 9,
+    b, c is Element of SCM-Data-Loc : K in {1,2,3,4,5} } by A1;
     then
-A2:[1,<*e,f*>] in SCM-Instr & [2,<*e,f*>] in SCM-Instr by XBOOLE_0:def 2;
-       [1,<*e,f*>] <> [2,<*e,f*>] by ZFMISC_1:33;
-  hence thesis by A2,YELLOW_8:def 1;
- end;
- cluster SCM-Instr-Loc -> infinite;
-coherence by AMI_3:def 1;
+A2: [1,<*e,f*>] in SCM-Instr & [2,<*e,f*>] in SCM-Instr by XBOOLE_0: def 2;
+    [1,<*e,f*>] <> [2,<*e,f*>] by ZFMISC_1:33;
+    hence thesis by A2,YELLOW_8:def 1;
+  end;
+  cluster SCM-Instr-Loc -> infinite;
+  coherence;
 end;
 
-definition let S be non empty 1-sorted;
- func SCM-Instr S ->
-      Subset of [: NAT, (union {the carrier of S} \/ SCM-Memory)* :] equals
-
-   { [0,{}] } \/
-  { [I,<*a,b*>] where I is Element of Segm 8,
-                      a, b is Element of SCM-Data-Loc: I in { 1,2,3,4 } } \/
+definition
+  let S be non empty 1-sorted;
+  func SCM-Instr S ->
+  Subset of [: NAT, (union {the carrier of S} \/ SCM-Memory)* :] equals
+  { [0,{}] } \/ { [I,<*a,b*>] where I is Element of Segm 8,
+  a, b is Element of SCM-Data-Loc: I in { 1,2,3,4 } } \/
   { [6,<*i*>] where i is Element of SCM-Instr-Loc: not contradiction } \/
   { [7,<*i,a*>] where i is Element of SCM-Instr-Loc,
-                      a is Element of SCM-Data-Loc: not contradiction } \/
+  a is Element of SCM-Data-Loc: not contradiction } \/
   { [5,<*a,r*>] where a is Element of SCM-Data-Loc,
-                      r is Element of S: not contradiction };
-coherence
+  r is Element of S: not contradiction };
+  coherence
   proof
 A1: SCM-Memory c= union { the carrier of S } \/ SCM-Memory by XBOOLE_1:7;
 A2: { [I,<*d1,d2*>] : I in { 1,2,3,4} }
-     c= [: NAT, (union {the carrier of S} \/ SCM-Memory)* :]
+    c= [: NAT, (union {the carrier of S} \/ SCM-Memory)* :]
     proof
       let x be set;
       assume x in { [I,<*d1,d2*>] : I in { 1,2,3,4} };
       then consider I, d1, d2 such that
-A3:     x = [I,<*d1,d2*>] and I in { 1,2,3,4 };
+A3:   x = [I,<*d1,d2*>] and I in { 1,2,3,4 };
       reconsider d1, d2 as Element of union {the carrier of S} \/ SCM-Memory
-        by A1,TARSKI:def 3;
+      by A1,TARSKI:def 3;
       <*d1,d2*> in (union {the carrier of S} \/ SCM-Memory)*
-           by FINSEQ_1:def 11;
+      by FINSEQ_1:def 11;
       hence thesis by A3,ZFMISC_1:106;
     end;
 A4: { [6,<*i1*>] : not contradiction }
-      c= [: NAT, (union {the carrier of S} \/ SCM-Memory)* :]
+    c= [: NAT, (union {the carrier of S} \/ SCM-Memory)* :]
     proof
       let x be set;
       assume x in { [6,<*i1*>] : not contradiction };
       then consider i1 such that
-A5:     x = [6,<*i1*>] and not contradiction;
+A5:   x = [6,<*i1*>] and not contradiction;
       reconsider i1 as Element of union {the carrier of S} \/ SCM-Memory
-        by A1,TARSKI:def 3;
-       <*i1*> in (union {the carrier of S} \/ SCM-Memory)* by FINSEQ_1:def 11;
+      by A1,TARSKI:def 3;
+      <*i1*> in (union {the carrier of S} \/ SCM-Memory)* by FINSEQ_1:def 11;
       hence thesis by A5,ZFMISC_1:106;
     end;
 A6: { [7,<*i2,d3*>] : not contradiction }
-      c= [: NAT, (union {the carrier of S} \/ SCM-Memory)* :]
+    c= [: NAT, (union {the carrier of S} \/ SCM-Memory)* :]
     proof
       let x be set;
       assume x in { [7,<*i2,d3*>] : not contradiction };
       then consider i2, d3 such that
-A7:     x = [7,<*i2,d3*>] and not contradiction;
+A7:   x = [7,<*i2,d3*>] and not contradiction;
       reconsider i2, d3 as Element of union {the carrier of S} \/ SCM-Memory
-        by A1,TARSKI:def 3;
-       <*i2,d3*> in (union {the carrier of S} \/ SCM-Memory)*
-                  by FINSEQ_1:def 11;
+      by A1,TARSKI:def 3;
+      <*i2,d3*> in (union {the carrier of S} \/ SCM-Memory)*
+      by FINSEQ_1:def 11;
       hence thesis by A7,ZFMISC_1:106;
     end;
 A8: { [5,<*d4,r*>] where r is Element of S: not contradiction }
-      c= [: NAT, (union {the carrier of S} \/ SCM-Memory)* :]
+    c= [: NAT, (union {the carrier of S} \/ SCM-Memory)* :]
     proof
       let x be set;
-      assume x in { [5,<*d4,r*>] where r is Element of S:
-        not contradiction };
+      assume x in { [5,<*d4,r*>] where r is Element of S: not contradiction };
       then consider d4 such that
-A9:     ex r being Element of S st x = [5,<*d4,r*>] &
-         not contradiction;
+A9:   ex r being Element of S st x = [5,<*d4,r*>] & not contradiction;
       consider r being Element of S such that
-A10:    x = [5,<*d4,r*>] and not contradiction by A9;
-           union {the carrier of S} = the carrier of S by ZFMISC_1:31;
+A10:  x = [5,<*d4,r*>] and not contradiction by A9;
+      union {the carrier of S} = the carrier of S by ZFMISC_1:31;
       then the carrier of S c= union {the carrier of S} \/ SCM-Memory
-                      by XBOOLE_1:7;
-      then
-       reconsider d4, r as Element of union {the carrier of S} \/ SCM-Memory
-        by A1,TARSKI:def 3;
-           <*d4,r*> in (union {the carrier of S} \/ SCM-Memory)*
-              by FINSEQ_1:def 11;
+      by XBOOLE_1:7;
+      then reconsider d4, r as Element of union {the carrier of S} \/
+      SCM-Memory by A1,TARSKI:def 3;
+      <*d4,r*> in (union {the carrier of S} \/ SCM-Memory)*
+      by FINSEQ_1:def 11;
       hence thesis by A10,ZFMISC_1:106;
     end;
     0 in Segm 8 & {} in (union {the carrier of S} \/ SCM-Memory)*
-      by FINSEQ_1:66,GR_CY_1:10;
+    by FINSEQ_1:66,GR_CY_1:10;
     then [0,{}] in [: NAT, (union {the carrier of S} \/ SCM-Memory)* :]
-      by ZFMISC_1:106;
+    by ZFMISC_1:106;
     then { [0,{}] } c= [: NAT, (union {the carrier of S} \/ SCM-Memory)* :]
-      by ZFMISC_1:37;
+    by ZFMISC_1:37;
     then { [0,{}] } \/ { [I,<*d1,d2*>] : I in { 1,2,3,4} }
-      c= [: NAT, (union {the carrier of S} \/ SCM-Memory)* :] by A2,XBOOLE_1:8
-;
+    c= [: NAT, (union {the carrier of S} \/ SCM-Memory)* :] by A2,XBOOLE_1:8;
     then { [0,{}] } \/ { [I,<*d1,d2*>] : I in { 1,2,3,4} } \/
-     { [6,<*i1*>] : not contradiction }
-      c= [: NAT, (union {the carrier of S} \/ SCM-Memory)* :] by A4,XBOOLE_1:8;
+    { [6,<*i1*>] : not contradiction }
+    c= [: NAT, (union {the carrier of S} \/ SCM-Memory)* :] by A4,XBOOLE_1:8;
     then { [0,{}] } \/ { [I,<*d1,d2*>] : I in { 1,2,3,4} } \/
-      { [6,<*i1*>] : not contradiction }
-       \/ { [7,<*i2,d3*>] : not contradiction }
-     c= [: NAT, (union {the carrier of S} \/ SCM-Memory)* :] by A6,XBOOLE_1:8;
+    { [6,<*i1*>] : not contradiction }
+    \/ { [7,<*i2,d3*>] : not contradiction }
+    c= [: NAT, (union {the carrier of S} \/ SCM-Memory)* :] by A6,XBOOLE_1:8;
     hence thesis by A8,XBOOLE_1:8;
   end;
 end;
 
-registration let S be non empty 1-sorted;
- cluster SCM-Instr S -> non trivial;
-coherence
- proof
-A1:1 in Segm 8 & 2 in Segm 8 by GR_CY_1:10;
-   consider e1, e2 being Element of SCM-Data-Loc;
-A2:SCM-Instr S
-  = ({ [0,{}] } \/
-   { [I,<*d1,d2*>] : I in { 1,2,3,4 } } \/
-   { [6,<*i1*>] : not contradiction }) \/
-   ({ [7,<*i2,d3*>] : not contradiction } \/
-   { [5,<*d4,r*>] where r is Element of S: not contradiction })
-    by XBOOLE_1:4
- .= ({ [0,{}] } \/
-   { [I,<*d1,d2*>] : I in { 1,2,3,4 } }) \/
-   ({ [6,<*i1*>] : not contradiction } \/
-   ({ [7,<*i2,d3*>] : not contradiction } \/
-   { [5,<*d4,r*>] where r is Element of S: not contradiction}))
-    by XBOOLE_1:4
- .= { [I,<*d1,d2*>] : I in { 1,2,3,4 } } \/
-   ({ [0,{}] } \/
-   (({ [6,<*i1*>] : not contradiction } \/
-   ({ [7,<*i2,d3*>] : not contradiction } \/
- { [5,<*d4,r*>] where r is Element of S: not contradiction}))))
- by XBOOLE_1:4;
-       1 in {1,2,3,4} & 2 in {1,2,3,4} by ENUMSET1:def 2;
-  then [1,<*e1,e2*>] in { [I,<*d1,d2*>] where d1,d2 is Element of SCM-Data-Loc
-:
+registration
+  let S be non empty 1-sorted;
+  cluster SCM-Instr S -> non trivial;
+  coherence
+  proof
+A1: 1 in Segm 8 & 2 in Segm 8 by GR_CY_1:10;
+    consider e1, e2 being Element of SCM-Data-Loc;
+A2: SCM-Instr S = ({ [0,{}] } \/ { [I,<*d1,d2*>] : I in { 1,2,3,4 } } \/
+    { [6,<*i1*>] : not contradiction }) \/
+    ({ [7,<*i2,d3*>] : not contradiction } \/
+    { [5,<*d4,r*>] where r is Element of S: not contradiction }) by XBOOLE_1:4
+      .= ({ [0,{}] } \/ { [I,<*d1,d2*>] : I in { 1,2,3,4 } }) \/
+    ({ [6,<*i1*>] : not contradiction } \/
+    ({ [7,<*i2,d3*>] : not contradiction } \/
+    { [5,<*d4,r*>] where r is Element of S: not contradiction})) by XBOOLE_1:4
+      .= { [I,<*d1,d2*>] : I in { 1,2,3,4 } } \/ ({ [0,{}] } \/
+    (({ [6,<*i1*>] : not contradiction } \/
+    ({ [7,<*i2,d3*>] : not contradiction } \/
+    { [5,<*d4,r*>] where r is Element of S: not contradiction}))))
+    by XBOOLE_1:4;
+    1 in {1,2,3,4} & 2 in {1,2,3,4} by ENUMSET1:def 2;
+
+then [1,<*e1,e2*>] in { [I,<*d1,d2*>] where d1,d2 is Element of SCM-Data-Loc :
     I in { 1,2,3,4 } } &
-  [2,<*e1,e2*>] in { [I,<*d1,d2*>] where I is Element of Segm 8,
+    [2,<*e1,e2*>] in { [I,<*d1,d2*>] where I is Element of Segm 8,
     d1,d2 is Element of SCM-Data-Loc: I in { 1,2,3,4 } } by A1;
-then A3: [1,<*e1,e2*>] in SCM-Instr S & [2,<*e1,e2*>] in SCM-Instr S
-   by A2,XBOOLE_0:def 2;
-       [1,<*e1,e2*>] <> [2,<*e1,e2*>] by ZFMISC_1:33;
-  hence thesis by A3,YELLOW_8:def 1;
- end;
+    then
+A3: [1,<*e1,e2*>] in SCM-Instr S & [2,<*e1,e2*>] in SCM-Instr S
+    by A2,XBOOLE_0:def 2;
+    [1,<*e1,e2*>] <> [2,<*e1,e2*>] by ZFMISC_1:33;
+    hence thesis by A3,YELLOW_8:def 1;
+  end;
 end;
 
-definition let S be non empty 1-sorted;
- attr S is good means :Def2:
+definition
+  let S be non empty 1-sorted;
+  attr S is good means
+  :Def2:
   the carrier of S <> SCM-Instr-Loc & the carrier of S <> SCM-Instr S;
 end;
 
 registration
- cluster trivial -> good (non empty 1-sorted);
-coherence
+  cluster trivial -> good (non empty 1-sorted);
+  coherence
   proof
     let S be non empty 1-sorted;
     assume S is trivial;
     then reconsider T = S as trivial non empty 1-sorted;
     assume S is non good;
-then A1: the carrier of S = SCM-Instr-Loc or the carrier of S = SCM-Instr S
-     by Def2;
-         the carrier of T is trivial;
+    then
+A1: the carrier of S = SCM-Instr-Loc or the carrier of S = SCM-Instr S
+    by Def2;
+    the carrier of T is trivial;
     hence thesis by A1;
   end;
 end;
 
 registration
- cluster trivial non empty 1-sorted;
-existence
+  cluster trivial non empty 1-sorted;
+  existence
   proof
     consider A being trivial non empty 1-sorted;
     take A;
@@ -265,722 +255,722 @@ existence
 end;
 
 registration
- cluster strict trivial non empty doubleLoopStr;
-existence
- proof
-  consider a being BinOp of {0};
-  reconsider z = 0 as Element of {0} by TARSKI:def 1;
-  take doubleLoopStr(#{0},a,a,z,z#);
-  thus thesis by STRUCT_0:def 1,def 9;
- end;
+  cluster strict trivial non empty doubleLoopStr;
+  existence
+  proof
+    consider a being BinOp of {0};
+    reconsider z = 0 as Element of {0} by TARSKI:def 1;
+    take doubleLoopStr(#{0},a,a,z,z#);
+    thus thesis by STRUCT_0:def 1,def 9;
+  end;
 end;
 
 registration
- cluster strict trivial Ring;
-existence
+  cluster strict trivial Ring;
+  existence
   proof
-   consider R being strict trivial non empty doubleLoopStr;
-   take R;
-   thus thesis;
+    consider R being strict trivial non empty doubleLoopStr;
+    take R;
+    thus thesis;
   end;
 end;
 
 reserve G for good (non empty 1-sorted);
 
-Lm1:
-now let k be Element of SCM-Memory;
+Lm1: now
+  let k be Element of SCM-Memory;
   k in {NAT} \/ SCM-Data-Loc or k in SCM-Instr-Loc by XBOOLE_0:def 2;
   then k in {NAT} or k in SCM-Data-Loc or k in SCM-Instr-Loc by XBOOLE_0:def 2;
- hence k = NAT or k in SCM-Data-Loc or k in SCM-Instr-Loc by TARSKI:def 1;
+  hence k = NAT or k in SCM-Data-Loc or k in SCM-Instr-Loc by TARSKI:def 1;
 end;
 
-definition let S be non empty 1-sorted;
- func SCM-OK S ->
-    Function of SCM-Memory,
-           {the carrier of S} \/ { SCM-Instr S, SCM-Instr-Loc } means
-:Def3:
+definition
+  let S be non empty 1-sorted;
+  func SCM-OK S -> Function of SCM-Memory,
+  {the carrier of S} \/ { SCM-Instr S, SCM-Instr-Loc } means
+  :Def3:
   for k being Element of SCM-Memory holds
-   (k = NAT implies it.k = SCM-Instr-Loc) &
-   (k in SCM-Data-Loc implies it.k = the carrier of S) &
-   (k in SCM-Instr-Loc implies it.k = SCM-Instr S);
-existence
+  (k = NAT implies it.k = SCM-Instr-Loc) &
+  (k in SCM-Data-Loc implies it.k = the carrier of S) &
+  (k in SCM-Instr-Loc implies it.k = SCM-Instr S);
+  existence
   proof
-   defpred P[set,set] means
-    $1 = NAT & $2 = SCM-Instr-Loc or
+    defpred P[set,set] means $1 = NAT & $2 = SCM-Instr-Loc or
     $1 in SCM-Data-Loc & $2 = the carrier of S or
     $1 in SCM-Instr-Loc & $2 = SCM-Instr S;
-A1:  now let k be Element of SCM-Memory;
-          {the carrier of S} \/ { SCM-Instr S, SCM-Instr-Loc }
+A1: now
+      let k be Element of SCM-Memory;
+      {the carrier of S} \/ { SCM-Instr S, SCM-Instr-Loc }
       = { the carrier of S, SCM-Instr S, SCM-Instr-Loc } by ENUMSET1:42;
-then
-A2:  the carrier of S in {the carrier of S} \/ { SCM-Instr S,SCM-Instr-Loc } &
-     SCM-Instr S in {the carrier of S} \/ { SCM-Instr S, SCM-Instr-Loc } &
-     SCM-Instr-Loc in {the carrier of S} \/ { SCM-Instr S, SCM-Instr-Loc }
-       by ENUMSET1:def 1;
+      then
+A2:   the carrier of S in {the carrier of S} \/ { SCM-Instr S, SCM-Instr-Loc
+      } &
+      SCM-Instr S in {the carrier of S} \/ { SCM-Instr S, SCM-Instr-Loc } &
+      SCM-Instr-Loc in {the carrier of S} \/ { SCM-Instr S, SCM-Instr-Loc }
+      by ENUMSET1:def 1;
       P[k,SCM-Instr-Loc] or P[k,the carrier of S] or P[k,SCM-Instr S] by Lm1;
-     hence ex b being Element of {the carrier of S} \/
-       { SCM-Instr S, SCM-Instr-Loc } st P[k,b] by A2;
+      hence ex b being Element of {the carrier of S} \/
+      { SCM-Instr S, SCM-Instr-Loc } st P[k,b] by A2;
     end;
     consider h being Function of SCM-Memory, {the carrier of S} \/
-     { SCM-Instr S, SCM-Instr-Loc } such that
-A3:   for a being Element of SCM-Memory holds P[a,h.a] from FUNCT_2:sch 3(A1);
-   take h;
-   let k be Element of SCM-Memory;
-A4:  P[k,h.k] by A3;
-   thus k = NAT implies h.k = SCM-Instr-Loc by A4,AMI_2:27;
-   thus k in SCM-Data-Loc implies h.k = the carrier of S
-         by A4,AMI_2:27,29,XBOOLE_0:3;
-   thus k in SCM-Instr-Loc implies h.k = SCM-Instr S
-         by A4,AMI_2:29,XBOOLE_0:3;
+    { SCM-Instr S, SCM-Instr-Loc } such that
+A3: for a being Element of SCM-Memory holds P[a,h.a] from FUNCT_2:sch 3(A1);
+    take h;
+    let k be Element of SCM-Memory;
+A4: P[k,h.k] by A3;
+    hence k = NAT implies h.k = SCM-Instr-Loc by AMI_2:27;
+    thus k in SCM-Data-Loc implies h.k = the carrier of S
+    by A4,AMI_2:27,29,XBOOLE_0:3;
+    thus k in SCM-Instr-Loc implies h.k = SCM-Instr S
+    by A4,AMI_2:29,XBOOLE_0:3;
   end;
-uniqueness
+  uniqueness
   proof
-   let f, g be Function of SCM-Memory, {the carrier of S} \/
-     { SCM-Instr S, SCM-Instr-Loc } such that
+    let f, g be Function of SCM-Memory, {the carrier of S} \/
+    { SCM-Instr S, SCM-Instr-Loc } such that
 A5: for k being Element of SCM-Memory holds
-     (k = NAT implies f.k = SCM-Instr-Loc) &
-     (k in SCM-Data-Loc implies f.k = the carrier of S) &
-     (k in SCM-Instr-Loc implies f.k = SCM-Instr S) and
+    (k = NAT implies f.k = SCM-Instr-Loc) &
+    (k in SCM-Data-Loc implies f.k = the carrier of S) &
+    (k in SCM-Instr-Loc implies f.k = SCM-Instr S) and
 A6: for k being Element of SCM-Memory holds
-     (k = NAT implies g.k = SCM-Instr-Loc) &
-     (k in SCM-Data-Loc implies g.k = the carrier of S) &
-     (k in SCM-Instr-Loc implies g.k = SCM-Instr S);
-      now let k be Element of SCM-Memory;
-       now per cases by Lm1;
-       suppose
+    (k = NAT implies g.k = SCM-Instr-Loc) &
+    (k in SCM-Data-Loc implies g.k = the carrier of S) &
+    (k in SCM-Instr-Loc implies g.k = SCM-Instr S);
+    now
+      let k be Element of SCM-Memory;
+      now per cases by Lm1;
+        suppose
 A7:       k = NAT;
-        hence f.k = SCM-Instr-Loc by A5
-                 .= g.k by A6,A7;
-       end;
-       suppose A8: k in SCM-Data-Loc;
-        hence f.k = the carrier of S by A5
-                 .= g.k by A6,A8;
-       end;
-       suppose A9: k in SCM-Instr-Loc;
-        hence f.k = SCM-Instr S by A5
-                 .= g.k by A6,A9;
+          hence f.k = SCM-Instr-Loc by A5
+            .= g.k by A6,A7;
+        end;
+        suppose
+A8:       k in SCM-Data-Loc;
+          hence f.k = the carrier of S by A5
+            .= g.k by A6,A8;
+        end;
+        suppose
+A9:       k in SCM-Instr-Loc;
+          hence f.k = SCM-Instr S by A5
+            .= g.k by A6,A9;
+        end;
       end;
-      end;
-     hence f.k = g.k;
+      hence f.k = g.k;
     end;
-   hence thesis by FUNCT_2:113;
+    hence thesis by FUNCT_2:113;
   end;
 end;
 
-definition let S be non empty 1-sorted;
- mode SCM-State of S is Element of product SCM-OK S;
+definition
+  let S be non empty 1-sorted;
+  mode SCM-State of S is Element of product SCM-OK S;
 end;
 
 theorem Th1:
- SCM-Instr-Loc <> SCM-Instr S
-  proof
-        now
+  SCM-Instr-Loc <> SCM-Instr S
+proof
+  now
     assume 2 in SCM-Instr S;
     then 2 in { [0,{}] } \/
-  { [I,<*a,b*>] where a,b is Element of SCM-Data-Loc: I in { 1,2,3,4 } } \/
-  { [6,<*i*>] where i is Element of SCM-Instr-Loc: not contradiction } \/
-  { [7,<*i,a*>] where i is Element of SCM-Instr-Loc,
-                      a is Element of SCM-Data-Loc: not contradiction } or
-  2 in { [5,<*i,r*>] where i is Element of SCM-Data-Loc,
-                      r is Element of S: not contradiction }
-   by XBOOLE_0:def 2;
+    { [I,<*a,b*>] where a,b is Element of SCM-Data-Loc: I in { 1,2,3,4 } } \/
+    { [6,<*i*>] where i is Element of SCM-Instr-Loc: not contradiction } \/
+    { [7,<*i,a*>] where i is Element of SCM-Instr-Loc,
+    a is Element of SCM-Data-Loc: not contradiction } or
+    2 in { [5,<*i,r*>] where i is Element of SCM-Data-Loc,
+    r is Element of S: not contradiction } by XBOOLE_0:def 2;
     then 2 in { [0,{}] } \/
-  { [I,<*a,b*>] where a,b is Element of SCM-Data-Loc: I in { 1,2,3,4 } } \/
-  { [6,<*i*>] where i is Element of SCM-Instr-Loc: not contradiction } or
-  2 in { [7,<*i,a*>] where i is Element of SCM-Instr-Loc,
-                      a is Element of SCM-Data-Loc: not contradiction } or
-  2 in { [5,<*i,r*>] where i is Element of SCM-Data-Loc,
-                      r is Element of S: not contradiction }
-   by XBOOLE_0:def 2;
+    { [I,<*a,b*>] where a,b is Element of SCM-Data-Loc: I in { 1,2,3,4 } } \/
+    { [6,<*i*>] where i is Element of SCM-Instr-Loc: not contradiction } or
+    2 in { [7,<*i,a*>] where i is Element of SCM-Instr-Loc,
+    a is Element of SCM-Data-Loc: not contradiction } or
+    2 in { [5,<*i,r*>] where i is Element of SCM-Data-Loc,
+    r is Element of S: not contradiction } by XBOOLE_0:def 2;
     then 2 in { [0,{}] } \/
-  { [I,<*a,b*>] where a,b is Element of SCM-Data-Loc: I in { 1,2,3,4 } } or
-  2 in { [6,<*i*>] where i is Element of SCM-Instr-Loc: not contradiction } or
-  2 in { [7,<*i,a*>] where i is Element of SCM-Instr-Loc,
-                      a is Element of SCM-Data-Loc: not contradiction } or
-  2 in { [5,<*i,r*>] where i is Element of SCM-Data-Loc,
-                      r is Element of S: not contradiction }
-   by XBOOLE_0:def 2;
+    { [I,<*a,b*>] where a,b is Element of SCM-Data-Loc: I in { 1,2,3,4 } } or
+
+2 in { [6,<*i*>] where i is Element of SCM-Instr-Loc: not contradiction } or
+    2 in { [7,<*i,a*>] where i is Element of SCM-Instr-Loc,
+    a is Element of SCM-Data-Loc: not contradiction } or
+    2 in { [5,<*i,r*>] where i is Element of SCM-Data-Loc,
+    r is Element of S: not contradiction } by XBOOLE_0:def 2;
     then 2 in { [0,{}] } or
-  2 in { [I,<*a,b*>] where a,b is Element of SCM-Data-Loc: I in
- { 1,2,3,4 } } or
-  2 in { [6,<*i*>] where i is Element of SCM-Instr-Loc: not contradiction } or
-  2 in { [7,<*i,a*>] where i is Element of SCM-Instr-Loc,
-                      a is Element of SCM-Data-Loc: not contradiction } or
-  2 in { [5,<*i,r*>] where i is Element of SCM-Data-Loc,
-                      r is Element of S: not contradiction }
-   by XBOOLE_0:def 2;
-   then 2 = [0,{}] or
-   (ex I,d1,d2 st 2 = [I,<*d1,d2*>] & I in { 1,2,3,4 }) or
-   (ex i1 st 2 = [6,<*i1*>] & not contradiction) or
-   (ex i2,d3 st 2 = [7,<*i2,d3*>] & not contradiction) or
-   (ex d4 st ex r being Element of S st 2 = [5,<*d4,r*>]
+    2 in { [I,<*a,b*>] where a,b is Element of SCM-Data-Loc: I in
+    { 1,2,3,4 } } or
+
+2 in { [6,<*i*>] where i is Element of SCM-Instr-Loc: not contradiction } or
+    2 in { [7,<*i,a*>] where i is Element of SCM-Instr-Loc,
+    a is Element of SCM-Data-Loc: not contradiction } or
+    2 in { [5,<*i,r*>] where i is Element of SCM-Data-Loc,
+    r is Element of S: not contradiction } by XBOOLE_0:def 2;
+    then 2 = [0,{}] or (ex I,d1,d2 st 2 = [I,<*d1,d2*>] & I in { 1,2,3,4 }) or
+    (ex i1 st 2 = [6,<*i1*>] & not contradiction) or
+    (ex i2,d3 st 2 = [7,<*i2,d3*>] & not contradiction) or
+    (ex d4 st ex r being Element of S st 2 = [5,<*d4,r*>]
     & not contradiction) by TARSKI:def 1;
-   hence contradiction;
-   end;
+    hence contradiction;
+  end;
   hence thesis;
- end;
-
-theorem Th2:
- for i being Element of SCM-Memory holds
- (SCM-OK G).i = SCM-Instr-Loc iff i = NAT
- proof let i be Element of SCM-Memory;
-   thus (SCM-OK G).i = SCM-Instr-Loc implies i = NAT
-   proof assume
-A1: (SCM-OK G).i = SCM-Instr-Loc;
-    assume
-A2:   i <> NAT;
-    per cases by A2,Lm1;
-    suppose
-   i in SCM-Data-Loc;
-     then (SCM-OK G).i = the carrier of G by Def3;
-    hence contradiction by A1,Def2;
-    end;
-    suppose
-   i in SCM-Instr-Loc;
-     then (SCM-OK G).i = SCM-Instr G by Def3;
-    hence contradiction by A1,Th1;
-   end;
-   end;
-  thus thesis by Def3;
- end;
-
-theorem Th3:
- for i being Element of SCM-Memory holds
- (SCM-OK G).i = the carrier of G iff i in SCM-Data-Loc
- proof let i be Element of SCM-Memory;
-  thus (SCM-OK G).i = the carrier of G implies i in SCM-Data-Loc
-   proof assume
-A1:   (SCM-OK G).i = the carrier of G;
-    assume
-A2:   not i in SCM-Data-Loc;
-    per cases by A2,Lm1;
-    suppose i = NAT;
-    then (SCM-OK G).i = SCM-Instr-Loc by Def3;
-    hence contradiction by A1,Def2;
-    end;
-    suppose i in SCM-Instr-Loc;
-     then  (SCM-OK G).i = SCM-Instr G by Def3;
-      hence contradiction by A1,Def2;
-   end;
-   end;
-  thus thesis by Def3;
- end;
-
-theorem Th4:
- for i being Element of SCM-Memory holds
- (SCM-OK G).i = SCM-Instr G iff i in SCM-Instr-Loc
- proof let i be Element of SCM-Memory;
-  thus (SCM-OK G).i = SCM-Instr G implies i in SCM-Instr-Loc
-   proof assume
-A1: (SCM-OK G).i = SCM-Instr G;
-    assume
-A2: not  i in SCM-Instr-Loc;
-    per cases by A2,Lm1;
-    suppose i = NAT;
-    then (SCM-OK G).i = SCM-Instr-Loc by Def3;
-    hence contradiction by A1,Th1;
-    end;
-    suppose i in SCM-Data-Loc;
-     then (SCM-OK G).i = the carrier of G by Def3;
-    hence contradiction by A1,Def2;
-   end;
-   end;
-  thus thesis by Def3;
- end;
-
-theorem Th5:
- (SCM-OK G).d1 = the carrier of G by Th3;
-
-theorem Th6:
- (SCM-OK G).i1 = SCM-Instr G by Th4;
-
-theorem Th7:
- pi(product SCM-OK S,NAT) = SCM-Instr-Loc
- proof
-   dom (SCM-OK S) = SCM-Memory by FUNCT_2:def 1;
-  hence pi(product SCM-OK S,NAT) = (SCM-OK S).NAT by AMI_2:30,CARD_3:22
-   .= SCM-Instr-Loc by Def3,AMI_2:30;
- end;
-
-theorem Th8:
- pi(product SCM-OK G,d1) = the carrier of G
- proof
-       dom (SCM-OK G) = SCM-Memory by FUNCT_2:def 1;
-  hence pi(product SCM-OK G,d1) = (SCM-OK G).d1 by CARD_3:22
-   .= the carrier of G by Th5;
- end;
-
-theorem
-      pi(product SCM-OK G,i1) = SCM-Instr G
- proof
-       dom (SCM-OK G) = SCM-Memory by FUNCT_2:def 1;
-  hence pi(product SCM-OK G,i1) = (SCM-OK G).i1 by CARD_3:22
-   .= SCM-Instr G by Th6;
- end;
-
-definition let S be non empty 1-sorted, s be SCM-State of S;
- func IC s -> Element of SCM-Instr-Loc equals
-   s.NAT;
-coherence
- proof
-    s.NAT in pi(product SCM-OK S,NAT) by CARD_3:def 6;
-   hence thesis by Th7;
- end;
 end;
 
-definition let R be good (non empty 1-sorted),
-               s be SCM-State of R,
-               u be Element of SCM-Instr-Loc;
- func SCM-Chg(s,u) -> SCM-State of R equals
-   s +* (NAT .--> u);
-coherence
+theorem Th2:
+  for i being Element of SCM-Memory holds
+  (SCM-OK G).i = SCM-Instr-Loc iff i = NAT
+proof
+  let i be Element of SCM-Memory;
+  thus (SCM-OK G).i = SCM-Instr-Loc implies i = NAT
   proof
-A1:  dom(SCM-OK R) = SCM-Memory by FUNCT_2:def 1;
-  then dom s = SCM-Memory by CARD_3:18;
-  then
-A2:  dom(s +* (NAT .--> u)) = SCM-Memory \/ dom(NAT .--> u)
-     by FUNCT_4:def 1
+    assume
+A1: (SCM-OK G).i = SCM-Instr-Loc;
+    assume
+A2: i <> NAT;
+    per cases by A2,Lm1;
+    suppose i in SCM-Data-Loc;
+      then (SCM-OK G).i = the carrier of G by Def3;
+      hence contradiction by A1,Def2;
+    end;
+    suppose i in SCM-Instr-Loc;
+      then (SCM-OK G).i = SCM-Instr G by Def3;
+      hence contradiction by A1,Th1;
+    end;
+  end;
+  thus thesis by Def3;
+end;
+
+theorem Th3:
+  for i being Element of SCM-Memory holds
+  (SCM-OK G).i = the carrier of G iff i in SCM-Data-Loc
+proof
+  let i be Element of SCM-Memory;
+  thus (SCM-OK G).i = the carrier of G implies i in SCM-Data-Loc
+  proof
+    assume
+A1: (SCM-OK G).i = the carrier of G;
+    assume
+A2: not i in SCM-Data-Loc;
+    per cases by A2,Lm1;
+    suppose i = NAT;
+      then (SCM-OK G).i = SCM-Instr-Loc by Def3;
+      hence contradiction by A1,Def2;
+    end;
+    suppose i in SCM-Instr-Loc;
+      then (SCM-OK G).i = SCM-Instr G by Def3;
+      hence contradiction by A1,Def2;
+    end;
+  end;
+  thus thesis by Def3;
+end;
+
+theorem Th4:
+  for i being Element of SCM-Memory holds
+  (SCM-OK G).i = SCM-Instr G iff i in SCM-Instr-Loc
+proof
+  let i be Element of SCM-Memory;
+  thus (SCM-OK G).i = SCM-Instr G implies i in SCM-Instr-Loc
+  proof
+    assume
+A1: (SCM-OK G).i = SCM-Instr G;
+    assume
+A2: not i in SCM-Instr-Loc;
+    per cases by A2,Lm1;
+    suppose i = NAT;
+      then (SCM-OK G).i = SCM-Instr-Loc by Def3;
+      hence contradiction by A1,Th1;
+    end;
+    suppose i in SCM-Data-Loc;
+      then (SCM-OK G).i = the carrier of G by Def3;
+      hence contradiction by A1,Def2;
+    end;
+  end;
+  thus thesis by Def3;
+end;
+
+theorem
+  (SCM-OK G).d1 = the carrier of G by Th3;
+
+theorem
+  (SCM-OK G).i1 = SCM-Instr G by Th4;
+
+theorem Th7:
+  pi(product SCM-OK S,NAT) = SCM-Instr-Loc
+proof
+  dom (SCM-OK S) = SCM-Memory by FUNCT_2:def 1;
+  hence pi(product SCM-OK S,NAT) = (SCM-OK S).NAT by AMI_2:30,CARD_3:22
+    .= SCM-Instr-Loc by Def3,AMI_2:30;
+end;
+
+theorem Th8:
+  pi(product SCM-OK G,d1) = the carrier of G
+proof
+  dom (SCM-OK G) = SCM-Memory by FUNCT_2:def 1;
+  hence pi(product SCM-OK G,d1) = (SCM-OK G).d1 by CARD_3:22
+    .= the carrier of G by Th3;
+end;
+
+theorem
+  pi(product SCM-OK G,i1) = SCM-Instr G
+proof
+  dom (SCM-OK G) = SCM-Memory by FUNCT_2:def 1;
+  hence pi(product SCM-OK G,i1) = (SCM-OK G).i1 by CARD_3:22
+    .= SCM-Instr G by Th4;
+end;
+
+definition
+  let S be non empty 1-sorted, s be SCM-State of S;
+  func IC s -> Element of SCM-Instr-Loc equals
+
+  s.NAT;
+  coherence
+  proof
+    s.NAT in pi(product SCM-OK S,NAT) by CARD_3:def 6;
+    hence thesis by Th7;
+  end;
+end;
+
+definition
+  let R be good (non empty 1-sorted), s be SCM-State of R,
+  u be Element of SCM-Instr-Loc;
+  func SCM-Chg(s,u) -> SCM-State of R equals
+
+  s +* (NAT .--> u);
+  coherence
+  proof
+A1: dom(SCM-OK R) = SCM-Memory by FUNCT_2:def 1;
+    then dom s = SCM-Memory by CARD_3:18;
+    then
+A2: dom(s +* (NAT .--> u)) = SCM-Memory \/ dom(NAT .--> u) by FUNCT_4: def 1
       .= SCM-Memory \/ {NAT} by FUNCOP_1:19
       .= dom(SCM-OK R) by A1,AMI_2:30,ZFMISC_1:46;
-         now let x be set;
-     assume
-A3:    x in dom(SCM-OK R);
+    now
+      let x be set;
+      assume
+A3:   x in dom(SCM-OK R);
       then
-A4:     x in SCM-Memory by FUNCT_2:def 1;
-          now per cases;
-      suppose
-A5:     x = NAT;
-             {NAT} = dom(NAT .--> u) by FUNCOP_1:19;
-        then NAT in dom(NAT .--> u) by TARSKI:def 1;
-       then (s +* (NAT .--> u)).NAT = (NAT .--> u).NAT by FUNCT_4:14
-          .= u by FUNCOP_1:87;
-        then (s +* (NAT .--> u)).NAT in SCM-Instr-Loc;
-       hence (s +* (NAT .--> u)).x in (SCM-OK R).x by A4,A5,Th2;
+A4:   x in SCM-Memory by FUNCT_2:def 1;
+      now per cases;
+        suppose
+A5:       x = NAT;
+          {NAT} = dom(NAT .--> u) by FUNCOP_1:19;
+          then NAT in dom(NAT .--> u) by TARSKI:def 1;
+          then (s +* (NAT .--> u)).NAT = (NAT .--> u).NAT by FUNCT_4:14
+            .= u by FUNCOP_1:87;
+          then (s +* (NAT .--> u)).NAT in SCM-Instr-Loc;
+          hence (s +* (NAT .--> u)).x in (SCM-OK R).x by A4,A5,Th2;
+        end;
+        suppose
+A6:       x <> NAT;
+          {NAT} = dom(NAT .--> u) by FUNCOP_1:19;
+          then not x in dom(NAT .--> u) by A6,TARSKI:def 1;
+          then (s +* (NAT .--> u)).x = s.x by FUNCT_4:12;
+          hence (s +* (NAT .--> u)).x in (SCM-OK R).x by A3,CARD_3:18;
+        end;
       end;
-      suppose
-A6:     x <> NAT;
-             {NAT} = dom(NAT .--> u) by FUNCOP_1:19;
-        then not x in dom(NAT .--> u) by A6,TARSKI:def 1;
-        then (s +* (NAT .--> u)).x = s.x by FUNCT_4:12;
-       hence (s +* (NAT .--> u)).x in (SCM-OK R).x by A3,CARD_3:18;
-     end;
-     end;
-     hence (s +* (NAT .--> u)).x in (SCM-OK R).x;
+      hence (s +* (NAT .--> u)).x in (SCM-OK R).x;
     end;
-   hence thesis by A2,CARD_3:18;
+    hence thesis by A2,CARD_3:18;
   end;
 end;
 
 theorem
-      for s being SCM-State of G, u being Element of SCM-Instr-Loc
+  for s being SCM-State of G, u being Element of SCM-Instr-Loc
   holds SCM-Chg(s,u).NAT = u
- proof
-   let s be SCM-State of G, u be Element of SCM-Instr-Loc;
-       {NAT} = dom(NAT .--> u) by FUNCOP_1:19;
-then NAT in dom(NAT .--> u) by TARSKI:def 1;
+proof
+  let s be SCM-State of G, u be Element of SCM-Instr-Loc;
+  {NAT} = dom(NAT .--> u) by FUNCOP_1:19;
+  then NAT in dom(NAT .--> u) by TARSKI:def 1;
   hence SCM-Chg(s,u).NAT = (NAT .--> u).NAT by FUNCT_4:14
     .= u by FUNCOP_1:87;
- end;
+end;
 
 theorem
-      for s being SCM-State of G, u being Element of SCM-Instr-Loc,
-     mk being Element of SCM-Data-Loc
-  holds SCM-Chg(s,u).mk = s.mk
- proof
-  let s be SCM-State of G,
-      u be Element of SCM-Instr-Loc,
-      mk be Element of SCM-Data-Loc;
-A1:  (SCM-OK G).NAT = SCM-Instr-Loc & (SCM-OK G).mk = the carrier of G
-     by Th2,Th5,AMI_2:30;
+  for s being SCM-State of G, u being Element of SCM-Instr-Loc,
+  mk being Element of SCM-Data-Loc holds SCM-Chg(s,u).mk = s.mk
+proof
+  let s be SCM-State of G, u be Element of SCM-Instr-Loc,
+  mk be Element of SCM-Data-Loc;
+A1: (SCM-OK G).NAT = SCM-Instr-Loc & (SCM-OK G).mk = the carrier of G
+  by Th2,Th3,AMI_2:30;
 A2: the carrier of G <> SCM-Instr-Loc by Def2;
-       {NAT} = dom(NAT .--> u) by FUNCOP_1:19;
-then not mk in dom(NAT .--> u) by A1,A2,TARSKI:def 1;
+  {NAT} = dom(NAT .--> u) by FUNCOP_1:19;
+  then not mk in dom(NAT .--> u) by A1,A2,TARSKI:def 1;
   hence SCM-Chg(s,u).mk = s.mk by FUNCT_4:12;
 end;
 
 theorem
-      for s being SCM-State of G,
-     u, v being Element of SCM-Instr-Loc
+  for s being SCM-State of G, u, v being Element of SCM-Instr-Loc
   holds SCM-Chg(s,u).v = s.v
- proof
-   let s be SCM-State of G,
-       u, v be Element of SCM-Instr-Loc;
-       {NAT} = dom(NAT .--> u) by FUNCOP_1:19;
-then  not v in dom(NAT .--> u) by TARSKI:def 1;
+proof
+  let s be SCM-State of G, u, v be Element of SCM-Instr-Loc;
+  {NAT} = dom(NAT .--> u) by FUNCOP_1:19;
+  then not v in dom(NAT .--> u) by TARSKI:def 1;
   hence SCM-Chg(s,u).v = s.v by FUNCT_4:12;
 end;
 
-definition let R be good (non empty 1-sorted),
-               s be SCM-State of R,
-               t be Element of SCM-Data-Loc,
-               u be Element of R;
- func SCM-Chg(s,t,u) -> SCM-State of R equals
-   s +* (t .--> u);
-coherence
+definition
+  let R be good (non empty 1-sorted), s be SCM-State of R,
+  t be Element of SCM-Data-Loc, u be Element of R;
+  func SCM-Chg(s,t,u) -> SCM-State of R equals
+
+  s +* (t .--> u);
+  coherence
   proof
 A1: dom(SCM-OK R) = SCM-Memory by FUNCT_2:def 1;
- then dom s = SCM-Memory by CARD_3:18;
-then A2: dom(s +* (t .--> u)) = SCM-Memory \/ dom(t .--> u) by FUNCT_4:def 1
+    then dom s = SCM-Memory by CARD_3:18;
+    then
+A2: dom(s +* (t .--> u)) = SCM-Memory \/ dom(t .--> u) by FUNCT_4:def 1
       .= SCM-Memory \/ {t} by FUNCOP_1:19
       .= dom(SCM-OK R) by A1,ZFMISC_1:46;
-         now let x be set;
-     assume
-A3:    x in dom(SCM-OK R);
-          now per cases;
-      suppose
-A4:     x = t;
-             {t} = dom(t .--> u) by FUNCOP_1:19;
-        then t in dom(t .--> u) by TARSKI:def 1;
-       then (s +* (t .--> u)).t = (t .--> u).t by FUNCT_4:14
-          .= u by FUNCOP_1:87;
-       then (s +* (t .--> u)).t in the carrier of R;
-       hence (s +* (t .--> u)).x in (SCM-OK R).x by A4,Th5;
+    now
+      let x be set;
+      assume
+A3:   x in dom(SCM-OK R);
+      now per cases;
+        suppose
+A4:       x = t;
+          {t} = dom(t .--> u) by FUNCOP_1:19;
+          then t in dom(t .--> u) by TARSKI:def 1;
+          then (s +* (t .--> u)).t = (t .--> u).t by FUNCT_4:14
+            .= u by FUNCOP_1:87;
+          then (s +* (t .--> u)).t in the carrier of R;
+          hence (s +* (t .--> u)).x in (SCM-OK R).x by A4,Th3;
+        end;
+        suppose
+A5:       x <> t;
+          {t} = dom(t .--> u) by FUNCOP_1:19;
+          then not x in dom(t .--> u) by A5,TARSKI:def 1;
+          then (s +* (t .--> u)).x = s.x by FUNCT_4:12;
+          hence (s +* (t .--> u)).x in (SCM-OK R).x by A3,CARD_3:18;
+        end;
       end;
-      suppose
-A5:     x <> t;
-            {t} = dom(t .--> u) by FUNCOP_1:19;
-       then not x in dom(t .--> u) by A5,TARSKI:def 1;
-        then (s +* (t .--> u)).x = s.x by FUNCT_4:12;
-       hence (s +* (t .--> u)).x in (SCM-OK R).x by A3,CARD_3:18;
-     end;
-     end;
-     hence (s +* (t .--> u)).x in (SCM-OK R).x;
+      hence (s +* (t .--> u)).x in (SCM-OK R).x;
     end;
-   hence thesis by A2,CARD_3:18;
+    hence thesis by A2,CARD_3:18;
   end;
 end;
 
 theorem
-      for s being SCM-State of G, t being Element of SCM-Data-Loc,
-     u being Element of G
-  holds SCM-Chg(s,t,u).NAT = s.NAT
- proof
- let s be SCM-State of G, t be Element of SCM-Data-Loc,
-    u be Element of G;
-A1:  (SCM-OK G).NAT = SCM-Instr-Loc & (SCM-OK G).t = the carrier of G
-    by Th2,Th5,AMI_2:30;
+  for s being SCM-State of G, t being Element of SCM-Data-Loc,
+  u being Element of G holds SCM-Chg(s,t,u).NAT = s.NAT
+proof
+  let s be SCM-State of G, t be Element of SCM-Data-Loc, u be Element of G;
+A1: (SCM-OK G).NAT = SCM-Instr-Loc & (SCM-OK G).t = the carrier of G
+  by Th2,Th3,AMI_2:30;
 A2: SCM-Instr-Loc <> the carrier of G by Def2;
-       {t} = dom(t .--> u) by FUNCOP_1:19;
-then  not NAT in dom(t .--> u) by A1,A2,TARSKI:def 1;
- hence SCM-Chg(s,t,u).NAT = s.NAT by FUNCT_4:12;
+  {t} = dom(t .--> u) by FUNCOP_1:19;
+  then not NAT in dom(t .--> u) by A1,A2,TARSKI:def 1;
+  hence SCM-Chg(s,t,u).NAT = s.NAT by FUNCT_4:12;
 end;
 
 theorem
-      for s being SCM-State of G, t being Element of SCM-Data-Loc,
-     u being Element of G
-  holds SCM-Chg(s,t,u).t = u
- proof
- let s be SCM-State of G, t be Element of SCM-Data-Loc,
-     u be Element of G;
-      {t} = dom(t .--> u) by FUNCOP_1:19;
-then t in dom(t .--> u) by TARSKI:def 1;
- hence SCM-Chg(s,t,u).t = (t .--> u).t by FUNCT_4:14
-   .= u by FUNCOP_1:87;
+  for s being SCM-State of G, t being Element of SCM-Data-Loc,
+  u being Element of G holds SCM-Chg(s,t,u).t = u
+proof
+  let s be SCM-State of G, t be Element of SCM-Data-Loc, u be Element of G;
+  {t} = dom(t .--> u) by FUNCOP_1:19;
+  then t in dom(t .--> u) by TARSKI:def 1;
+  hence SCM-Chg(s,t,u).t = (t .--> u).t by FUNCT_4:14
+    .= u by FUNCOP_1:87;
 end;
 
 theorem
-      for s being SCM-State of G, t being Element of SCM-Data-Loc,
-     u being Element of G,
-     mk being Element of SCM-Data-Loc st mk <> t
+  for s being SCM-State of G, t being Element of SCM-Data-Loc,
+  u being Element of G, mk being Element of SCM-Data-Loc st mk <> t
   holds SCM-Chg(s,t,u).mk = s.mk
- proof
-  let s be SCM-State of G, t be Element of SCM-Data-Loc,
-      u be Element of G,
-     mk be Element of SCM-Data-Loc such that
-A1:   mk <> t;
-       {t} = dom(t .--> u) by FUNCOP_1:19;
-then not mk in dom(t .--> u) by A1,TARSKI:def 1;
- hence SCM-Chg(s,t,u).mk = s.mk by FUNCT_4:12;
+proof
+  let s be SCM-State of G, t be Element of SCM-Data-Loc, u be Element of G,
+  mk be Element of SCM-Data-Loc such that
+A1: mk <> t;
+  {t} = dom(t .--> u) by FUNCOP_1:19;
+  then not mk in dom(t .--> u) by A1,TARSKI:def 1;
+  hence SCM-Chg(s,t,u).mk = s.mk by FUNCT_4:12;
 end;
 
 theorem
-      for s being SCM-State of G, t being Element of SCM-Data-Loc,
-     u being Element of G,
-     v being Element of SCM-Instr-Loc
+  for s being SCM-State of G, t being Element of SCM-Data-Loc,
+  u being Element of G, v being Element of SCM-Instr-Loc
   holds SCM-Chg(s,t,u).v = s.v
- proof
-  let s be SCM-State of G, t be Element of SCM-Data-Loc,
-      u be Element of G,
-      v be Element of SCM-Instr-Loc;
-A1: (SCM-OK G).v = SCM-Instr G & (SCM-OK G).t = the carrier of G
-     by Th5,Th6;
+proof
+  let s be SCM-State of G, t be Element of SCM-Data-Loc, u be Element of G,
+  v be Element of SCM-Instr-Loc;
+A1: (SCM-OK G).v = SCM-Instr G & (SCM-OK G).t = the carrier of G by Th3,Th4;
 A2: SCM-Instr G <> the carrier of G by Def2;
-       {t} = dom(t .--> u) by FUNCOP_1:19;
-then  not v in dom(t .--> u) by A1,A2,TARSKI:def 1;
- hence SCM-Chg(s,t,u).v = s.v by FUNCT_4:12;
+  {t} = dom(t .--> u) by FUNCOP_1:19;
+  then not v in dom(t .--> u) by A1,A2,TARSKI:def 1;
+  hence SCM-Chg(s,t,u).v = s.v by FUNCT_4:12;
 end;
 
-definition let R be good (non empty 1-sorted),
-               s be SCM-State of R,
-               a be Element of SCM-Data-Loc;
- redefine func s.a -> Element of R;
-coherence
+definition
+  let R be good (non empty 1-sorted), s be SCM-State of R,
+  a be Element of SCM-Data-Loc;
+  redefine func s.a -> Element of R;
+  coherence
   proof
-         s.a in pi(product SCM-OK R,a) by CARD_3:def 6;
+    s.a in pi(product SCM-OK R,a) by CARD_3:def 6;
     hence thesis by Th8;
   end;
 end;
 
-definition let S be non empty 1-sorted, x be Element of SCM-Instr S;
- given mk, ml being Element of SCM-Data-Loc, I such that
+definition
+  let S be non empty 1-sorted, x be Element of SCM-Instr S;
+  given mk, ml being Element of SCM-Data-Loc, I such that
 A1: x = [ I, <*mk, ml*>];
- func x address_1 -> Element of SCM-Data-Loc means :Def7:
+  func x address_1 -> Element of SCM-Data-Loc means
+  :Def7:
   ex f being FinSequence of SCM-Data-Loc st f = x`2 & it = f/.1;
-existence
+  existence
   proof
     take mk,<*mk, ml*>;
     thus thesis by A1,FINSEQ_4:26,MCART_1:7;
   end;
-uniqueness;
-
- func x address_2 -> Element of SCM-Data-Loc means :Def8:
+  uniqueness;
+  func x address_2 -> Element of SCM-Data-Loc means
+  :Def8:
   ex f being FinSequence of SCM-Data-Loc st f = x`2 & it = f/.2;
-existence
+  existence
   proof
     take ml,<*mk, ml*>;
     thus thesis by A1,FINSEQ_4:26,MCART_1:7;
   end;
-uniqueness;
+  uniqueness;
 end;
 
 theorem
-      for x being Element of SCM-Instr S, mk, ml being Element of SCM-Data-Loc
-  st x = [ I, <*mk, ml*>] holds
- x address_1 = mk & x address_2 = ml
- proof
-   let x be Element of SCM-Instr S, mk,ml be Element of SCM-Data-Loc;
+  for x being Element of SCM-Instr S, mk, ml being Element of SCM-Data-Loc
+  st x = [ I, <*mk, ml*>] holds x address_1 = mk & x address_2 = ml
+proof
+  let x be Element of SCM-Instr S, mk,ml be Element of SCM-Data-Loc;
   assume
 A1: x = [ I, <*mk,ml*>];
-   then consider f being FinSequence of SCM-Data-Loc such that
-A2:  f = x`2 & x address_1 = f/.1 by Def7;
-        f = <*mk,ml*> by A1,A2,MCART_1:7;
+  then consider f being FinSequence of SCM-Data-Loc such that
+A2: f = x`2 & x address_1 = f/.1 by Def7;
+  f = <*mk,ml*> by A1,A2,MCART_1:7;
   hence x address_1 = mk by A2,FINSEQ_4:26;
-   consider f being FinSequence of SCM-Data-Loc such that
-A3:  f = x`2 & x address_2 = f/.2 by A1,Def8;
-        f = <*mk,ml*> by A1,A3,MCART_1:7;
+  consider f being FinSequence of SCM-Data-Loc such that
+A3: f = x`2 & x address_2 = f/.2 by A1,Def8;
+  f = <*mk,ml*> by A1,A3,MCART_1:7;
   hence x address_2 = ml by A3,FINSEQ_4:26;
- end;
+end;
 
-definition let R be non empty 1-sorted, x be Element of SCM-Instr R;
- given mk being Element of SCM-Instr-Loc, I such that
+definition
+  let R be non empty 1-sorted, x be Element of SCM-Instr R;
+  given mk being Element of SCM-Instr-Loc, I such that
 A1: x = [ I, <*mk*>];
- func x jump_address -> Element of SCM-Instr-Loc means :Def9:
+  func x jump_address -> Element of SCM-Instr-Loc means
+  :Def9:
   ex f being FinSequence of SCM-Instr-Loc st f = x`2 & it = f/.1;
-existence
+  existence
   proof
     take mk,<*mk*>;
     thus thesis by A1,FINSEQ_4:25,MCART_1:7;
   end;
-uniqueness;
+  uniqueness;
 end;
 
 theorem
-      for x being Element of SCM-Instr S, mk being Element of SCM-Instr-Loc
-  st x = [ I, <*mk*>] holds
- x jump_address = mk
- proof
+  for x being Element of SCM-Instr S, mk being Element of SCM-Instr-Loc
+  st x = [ I, <*mk*>] holds x jump_address = mk
+proof
   let x be Element of SCM-Instr S, mk be Element of SCM-Instr-Loc;
   assume
 A1: x = [ I, <*mk*>];
-   then consider f being FinSequence of SCM-Instr-Loc such that
-A2:  f = x`2 & x jump_address = f/.1 by Def9;
-        f = <*mk*> by A1,A2,MCART_1:7;
+  then consider f being FinSequence of SCM-Instr-Loc such that
+A2: f = x`2 & x jump_address = f/.1 by Def9;
+  f = <*mk*> by A1,A2,MCART_1:7;
   hence x jump_address = mk by A2,FINSEQ_4:25;
- end;
+end;
 
-definition let S be non empty 1-sorted, x be Element of SCM-Instr S;
- given mk being Element of SCM-Instr-Loc,
-       ml being Element of SCM-Data-Loc, I such that
+definition
+  let S be non empty 1-sorted, x be Element of SCM-Instr S;
+  given mk being Element of SCM-Instr-Loc,
+  ml being Element of SCM-Data-Loc, I such that
 A1: x = [ I, <*mk,ml*>];
- func x cjump_address -> Element of SCM-Instr-Loc means :Def10:
+  func x cjump_address -> Element of SCM-Instr-Loc means
+  :Def10:
   ex mk being Element of SCM-Instr-Loc,
-     ml being Element of SCM-Data-Loc st <*mk,ml*> = x`2 & it = <*mk,ml*>/.1;
-existence
+  ml being Element of SCM-Data-Loc st <*mk,ml*> = x`2 & it = <*mk,ml*>/.1;
+  existence
   proof
     take mk,mk,ml;
     thus thesis by A1,FINSEQ_4:26,MCART_1:7;
   end;
-uniqueness;
-
- func x cond_address -> Element of SCM-Data-Loc means :Def11:
+  uniqueness;
+  func x cond_address -> Element of SCM-Data-Loc means
+  :Def11:
   ex mk being Element of SCM-Instr-Loc,
-     ml being Element of SCM-Data-Loc st <*mk,ml*> = x`2 & it = <*mk,ml*>/.2;
-existence
+  ml being Element of SCM-Data-Loc st <*mk,ml*> = x`2 & it = <*mk,ml*>/.2;
+  existence
   proof
     take ml,mk,ml;
     thus thesis by A1,FINSEQ_4:26,MCART_1:7;
   end;
-uniqueness;
+  uniqueness;
 end;
 
 theorem
-      for x being Element of SCM-Instr S, mk being Element of SCM-Instr-Loc,
-     ml being Element of SCM-Data-Loc
-  st x = [ I, <*mk,ml*>]
+  for x being Element of SCM-Instr S, mk being Element of SCM-Instr-Loc,
+  ml being Element of SCM-Data-Loc st x = [ I, <*mk,ml*>]
   holds x cjump_address = mk & x cond_address = ml
- proof
-  let x be Element of SCM-Instr S,
-     mk be Element of SCM-Instr-Loc,
-     ml be Element of SCM-Data-Loc;
+proof
+  let x be Element of SCM-Instr S, mk be Element of SCM-Instr-Loc,
+  ml be Element of SCM-Data-Loc;
   assume
 A1: x = [ I, <*mk,ml*>];
-   then consider mk' being Element of SCM-Instr-Loc,
-                 ml' being Element of SCM-Data-Loc such that
-A2:  <*mk',ml'*> = x`2 & x cjump_address = <*mk',ml'*>/.1 by Def10;
-        <*mk',ml'*> = <*mk,ml*> by A1,A2,MCART_1:7;
+  then consider mk' being Element of SCM-Instr-Loc,
+  ml' being Element of SCM-Data-Loc such that
+A2: <*mk',ml'*> = x`2 & x cjump_address = <*mk',ml'*>/.1 by Def10;
+  <*mk',ml'*> = <*mk,ml*> by A1,A2,MCART_1:7;
   hence x cjump_address = mk by A2,FINSEQ_4:26;
-   consider mk' being Element of SCM-Instr-Loc,
-                 ml' being Element of SCM-Data-Loc such that
-A3:  <*mk',ml'*> = x`2 & x cond_address = <*mk',ml'*>/.2 by A1,Def11;
-        <*mk',ml'*> = <*mk,ml*> by A1,A3,MCART_1:7;
+  consider mk' being Element of SCM-Instr-Loc,
+  ml' being Element of SCM-Data-Loc such that
+A3: <*mk',ml'*> = x`2 & x cond_address = <*mk',ml'*>/.2 by A1,Def11;
+  <*mk',ml'*> = <*mk,ml*> by A1,A3,MCART_1:7;
   hence x cond_address = ml by A3,FINSEQ_4:26;
- end;
+end;
 
-definition let S be non empty 1-sorted, d be Element of SCM-Data-Loc,
-               s be Element of S;
- redefine func <*d,s*> -> FinSequence of SCM-Data-Loc \/ the carrier of S;
-coherence
+definition
+  let S be non empty 1-sorted, d be Element of SCM-Data-Loc,
+  s be Element of S;
+  redefine func <*d,s*> -> FinSequence of SCM-Data-Loc \/ the carrier of S;
+  coherence
   proof
     let y be set;
     assume y in rng <*d,s*>;
     then consider x being set such that
-A1:   x in dom <*d,s*> and
-A2:   <*d,s*>.x = y by FUNCT_1:def 5;
+A1: x in dom <*d,s*> and
+A2: <*d,s*>.x = y by FUNCT_1:def 5;
 A3: dom <*d,s*> = {1,2} by FINSEQ_1:4,FINSEQ_3:29;
     per cases by A1,A3,TARSKI:def 2;
     suppose x = 1;
-    then y = d by A2,FINSEQ_1:61;
-    hence thesis by XBOOLE_0:def 2;
+      then y = d by A2,FINSEQ_1:61;
+      hence thesis by XBOOLE_0:def 2;
     end;
     suppose x = 2;
-    then y = s by A2,FINSEQ_1:61;
-    hence thesis by XBOOLE_0:def 2;
-  end;
+      then y = s by A2,FINSEQ_1:61;
+      hence thesis by XBOOLE_0:def 2;
+    end;
   end;
 end;
 
-definition let S be non empty 1-sorted, x be Element of SCM-Instr S;
- given mk being Element of SCM-Data-Loc, r being Element of S,
-       I such that
+definition
+  let S be non empty 1-sorted, x be Element of SCM-Instr S;
+  given mk being Element of SCM-Data-Loc, r being Element of S, I such that
 A1: x = [ I, <*mk, r*>];
- func x const_address -> Element of SCM-Data-Loc means :Def12:
+  func x const_address -> Element of SCM-Data-Loc means
+  :Def12:
   ex f being FinSequence of SCM-Data-Loc \/ the carrier of S
-   st f = x`2 & it = f/.1;
-existence
+  st f = x`2 & it = f/.1;
+  existence
   proof
     take mk,<*mk, r*>;
-         mk is Element of SCM-Data-Loc \/ the carrier of S &
-     r is Element of SCM-Data-Loc \/ the carrier of S by XBOOLE_0:def 2;
+    mk is Element of SCM-Data-Loc \/ the carrier of S &
+    r is Element of SCM-Data-Loc \/ the carrier of S by XBOOLE_0:def 2;
     hence thesis by A1,FINSEQ_4:26,MCART_1:7;
   end;
-uniqueness;
-
- func x const_value -> Element of S means :Def13:
+  uniqueness;
+  func x const_value -> Element of S means
+  :Def13:
   ex f being FinSequence of SCM-Data-Loc \/ the carrier of S
-   st f = x`2 & it = f/.2;
-existence
+  st f = x`2 & it = f/.2;
+  existence
   proof
     take r,<*mk, r*>;
-         mk is Element of SCM-Data-Loc \/ the carrier of S &
-     r is Element of SCM-Data-Loc \/ the carrier of S by XBOOLE_0:def 2;
+    mk is Element of SCM-Data-Loc \/ the carrier of S &
+    r is Element of SCM-Data-Loc \/ the carrier of S by XBOOLE_0:def 2;
     hence thesis by A1,FINSEQ_4:26,MCART_1:7;
   end;
-uniqueness;
+  uniqueness;
 end;
 
 theorem
-      for x being Element of SCM-Instr S, mk being Element of SCM-Data-Loc,
-     r being Element of S st x = [ I, <*mk, r*>] holds
+  for x being Element of SCM-Instr S, mk being Element of SCM-Data-Loc,
+  r being Element of S st x = [ I, <*mk, r*>] holds
   x const_address = mk & x const_value = r
- proof
-   let x be Element of SCM-Instr S,
-       mk be Element of SCM-Data-Loc,
-       r be Element of S;
+proof
+  let x be Element of SCM-Instr S, mk be Element of SCM-Data-Loc,
+  r be Element of S;
   assume
 A1: x = [ I, <*mk,r*>];
   then consider f being FinSequence of SCM-Data-Loc \/ the carrier of S such
-that
-A2:  f = x`2 & x const_address = f/.1 by Def12;
+  that
+A2: f = x`2 & x const_address = f/.1 by Def12;
 A3: f = <*mk,r*> by A1,A2,MCART_1:7;
 A4: mk is Element of SCM-Data-Loc \/ the carrier of S &
-   r is Element of SCM-Data-Loc \/ the carrier of S by XBOOLE_0:def 2;
+  r is Element of SCM-Data-Loc \/ the carrier of S by XBOOLE_0:def 2;
   hence x const_address = mk by A2,A3,FINSEQ_4:26;
-   consider f being FinSequence of SCM-Data-Loc \/ the carrier of S such that
-A5:  f = x`2 & x const_value = f/.2 by A1,Def13;
-        f = <*mk,r*> by A1,A5,MCART_1:7;
+  consider f being FinSequence of SCM-Data-Loc \/ the carrier of S such that
+A5: f = x`2 & x const_value = f/.2 by A1,Def13;
+  f = <*mk,r*> by A1,A5,MCART_1:7;
   hence x const_value = r by A4,A5,FINSEQ_4:26;
- end;
+end;
 
-definition let R be good Ring,
-               x be Element of SCM-Instr R,
-               s be SCM-State of R;
- func SCM-Exec-Res (x,s) -> SCM-State of R equals
-       SCM-Chg(SCM-Chg(s, x address_1, s.(x address_2)), Next IC s)
-        if ex mk, ml being Element of SCM-Data-Loc st x = [ 1, <*mk, ml*>],
-  SCM-Chg(SCM-Chg(s, x address_1,
-            s.(x address_1)+s.(x address_2)), Next IC s)
-        if ex mk, ml being Element of SCM-Data-Loc st x = [ 2, <*mk, ml*>],
-  SCM-Chg(SCM-Chg(s, x address_1,
-            s.(x address_1)-s.(x address_2)), Next IC s)
-        if ex mk, ml being Element of SCM-Data-Loc st x = [ 3, <*mk, ml*>],
-  SCM-Chg(SCM-Chg(s, x address_1,
-            s.(x address_1)*s.(x address_2)), Next IC s)
-        if ex mk, ml being Element of SCM-Data-Loc st x = [ 4, <*mk, ml*>],
+definition
+  let R be good Ring, x be Element of SCM-Instr R, s be SCM-State of R;
+  func SCM-Exec-Res (x,s) -> SCM-State of R equals
+  SCM-Chg(SCM-Chg(s, x address_1, s.(x address_2)), Next IC s)
+  if ex mk, ml being Element of SCM-Data-Loc st x = [ 1, <*mk, ml*>],
+  SCM-Chg(SCM-Chg(s, x address_1, s.(x address_1)+s.(x address_2)), Next IC s)
+  if ex mk, ml being Element of SCM-Data-Loc st x = [ 2, <*mk, ml*>],
+  SCM-Chg(SCM-Chg(s, x address_1, s.(x address_1)-s.(x address_2)), Next IC s)
+  if ex mk, ml being Element of SCM-Data-Loc st x = [ 3, <*mk, ml*>],
+  SCM-Chg(SCM-Chg(s, x address_1, s.(x address_1)*s.(x address_2)), Next IC s)
+  if ex mk, ml being Element of SCM-Data-Loc st x = [ 4, <*mk, ml*>],
   SCM-Chg(s, x jump_address)
-        if ex mk being Element of SCM-Instr-Loc st x = [ 6, <*mk*>],
+  if ex mk being Element of SCM-Instr-Loc st x = [ 6, <*mk*>],
   SCM-Chg(s, IFEQ(s.(x cond_address), 0.R, x cjump_address, Next IC s))
-        if ex mk being Element of SCM-Instr-Loc,
-              ml being Element of SCM-Data-Loc st x = [ 7, <*mk, ml*>],
+  if ex mk being Element of SCM-Instr-Loc,
+  ml being Element of SCM-Data-Loc st x = [ 7, <*mk, ml*>],
   SCM-Chg(SCM-Chg(s, x const_address, x const_value), Next IC s)
-        if ex mk being Element of SCM-Data-Loc,
-               r being Element of R st x = [ 5, <*mk, r*>]
-  otherwise s;
-coherence;
-consistency by ZFMISC_1:33;
+  if ex mk being Element of SCM-Data-Loc,
+  r being Element of R st x = [ 5, <*mk, r*>] otherwise s;
+  coherence;
+  consistency by ZFMISC_1:33;
 end;
 
-registration let S be non empty 1-sorted,
-     f be Function of SCM-Instr S, Funcs(product SCM-OK S, product SCM-OK S),
-     x be Element of SCM-Instr S;
- cluster f.x -> Function-like Relation-like;
-coherence;
+registration
+  let S be non empty 1-sorted,
+  f be Function of SCM-Instr S, Funcs(product SCM-OK S, product SCM-OK S),
+  x be Element of SCM-Instr S;
+  cluster f.x -> Function-like Relation-like;
+  coherence;
 end;
 
-definition let R be good Ring;
- func SCM-Exec R ->
-      Function of SCM-Instr R, Funcs(product SCM-OK R, product SCM-OK R) means
-       for x being Element of SCM-Instr R, y being SCM-State of R holds
-   (it.x).y = SCM-Exec-Res (x,y);
-existence
+definition
+  let R be good Ring;
+  func SCM-Exec R ->
+  Function of SCM-Instr R, Funcs(product SCM-OK R, product SCM-OK R) means
+  for x being Element of SCM-Instr R, y being SCM-State of R holds
+  (it.x).y = SCM-Exec-Res (x,y);
+  existence
   proof
-   deffunc U(Element of SCM-Instr R, SCM-State of R) = SCM-Exec-Res($1,$2);
-   consider f being
+    deffunc U(Element of SCM-Instr R, SCM-State of R) = SCM-Exec-Res($1,$2);
+    consider f being
     Function of [:SCM-Instr R,product SCM-OK R:], product SCM-OK R such that
-A1:   for x being Element of SCM-Instr R, y being SCM-State of R holds
+A1: for x being Element of SCM-Instr R, y being SCM-State of R holds
     f.(x,y) = U(x,y) from BINOP_1:sch 4;
-   take curry f;
-   let x be Element of SCM-Instr R, y be SCM-State of R;
-   thus (curry f).x.y = f.(x,y) by CAT_2:3
-     .= SCM-Exec-Res(x,y) by A1;
+    take curry f;
+    let x be Element of SCM-Instr R, y be SCM-State of R;
+    thus (curry f).x.y = f.(x,y) by CAT_2:3
+      .= SCM-Exec-Res(x,y) by A1;
   end;
-uniqueness
+  uniqueness
   proof
-   let f, g be Function of SCM-Instr R,
-     Funcs(product SCM-OK R, product SCM-OK R) such that
-A2:   for x being Element of SCM-Instr R, y being SCM-State of R holds
-      (f.x).y = SCM-Exec-Res(x,y) and
-A3:   for x being Element of SCM-Instr R, y being SCM-State of R holds
-      (g.x).y = SCM-Exec-Res(x,y);
-         now let x be Element of SCM-Instr R;
-     reconsider gx = g.x, fx = f.x as
+    let f, g be Function of SCM-Instr R,
+    Funcs(product SCM-OK R, product SCM-OK R) such that
+A2: for x being Element of SCM-Instr R, y being SCM-State of R holds
+    (f.x).y = SCM-Exec-Res(x,y) and
+A3: for x being Element of SCM-Instr R, y being SCM-State of R holds
+    (g.x).y = SCM-Exec-Res(x,y);
+    now
+      let x be Element of SCM-Instr R;
+      reconsider gx = g.x, fx = f.x as
       Function of product SCM-OK R, product SCM-OK R;
-          now let y be SCM-State of R;
-      thus fx.y = SCM-Exec-Res(x,y) by A2
-               .= gx.y by A3;
-     end;
-     hence f.x = g.x by FUNCT_2:113;
+      now
+        let y be SCM-State of R;
+        thus fx.y = SCM-Exec-Res(x,y) by A2
+          .= gx.y by A3;
+      end;
+      hence f.x = g.x by FUNCT_2:113;
     end;
-   hence f = g by FUNCT_2:113;
+    hence f = g by FUNCT_2:113;
   end;
 end;
 

@@ -13,104 +13,72 @@ environ
  constructors XXREAL_0, REAL_1, NAT_1, MEMBERED, SEQ_1, NEWTON, POWER, PRE_FF,
       SCM_1, AMI_1, VALUED_1, PARTFUN1;
  registrations SUBSET_1, SETFAM_1, NUMBERS, XREAL_0, INT_1, MEMBERED, AMI_3,
-      AMI_2, VALUED_1, FUNCT_2;
+      AMI_2, VALUED_1, FUNCT_2, XBOOLE_0;
  requirements REAL, NUMERALS, SUBSET, ARITHM, BOOLE;
 
 
 begin
 
 definition
- func Fib_Program -> FinSequence of the Instructions of SCM equals
+  func Fib_Program -> FinSequence of the Instructions of SCM equals
 :: FIB_FUSC:def 1
-    <* dl.1 >0_goto il.2 *>^
-                        <* halt SCM *>^
-                        <* dl.3 := dl.0 *>^
-                        <* SubFrom(dl.1, dl.0) *>^
-                        <* dl.1 =0_goto il.1 *>^
-                        <* dl.4 := dl.2 *>^
-                        <* dl.2 := dl.3 *>^
-                        <* AddTo(dl.3, dl.4) *>^
-                        <* goto il.3 *>;
+  <* dl.1 >0_goto il.2 *>^ <* halt SCM *>^ <* dl.3 := dl.0 *>^
+  <* SubFrom(dl.1, dl.0) *>^ <* dl.1 =0_goto il.1 *>^ <* dl.4 := dl.2 *>^
+  <* dl.2 := dl.3 *>^ <* AddTo(dl.3, dl.4) *>^ <* goto il.3 *>;
 end;
 
 theorem :: FIB_FUSC:1
-    for N being Element of NAT,
-    s being State-consisting of 0, 0, 0,
-                                Fib_Program,
-                                <*1*>^<*N*>^<*0*>^<*0*>
-    holds s is halting &
-          (N = 0 implies LifeSpan s = 1) &
-          (N > 0 implies LifeSpan s = 6 * N - 2) &
-          (Result s).dl.3 = Fib N;
+  for N being Element of NAT, s being State-consisting of 0, 0, 0,
+  Fib_Program, <*1*>^<*N*>^<*0*>^<*0*> holds s is halting &
+  (N = 0 implies LifeSpan s = 1) & (N > 0 implies LifeSpan s = 6 * N - 2) &
+  (Result s).dl.3 = Fib N;
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :: Fusc
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 definition
- let i be Integer;
- func Fusc' i -> Element of NAT means
+  let i be Integer;
+  func Fusc' i -> Element of NAT means
 :: FIB_FUSC:def 2
 
-           (ex n being Element of NAT st i = n & it = Fusc n) or
-           i is not Element of NAT & it = 0;
+  (ex n being Element of NAT st i = n & it = Fusc n) or
+  i is not Element of NAT & it = 0;
 end;
 
 definition
- func Fusc_Program -> FinSequence of the Instructions of SCM equals
+  func Fusc_Program -> FinSequence of the Instructions of SCM equals
 :: FIB_FUSC:def 3
-           <* dl.1 =0_goto il.8 *>^
-                                <* dl.4 := dl.0 *>^
-                                <* Divide(dl.1, dl.4) *>^
-                                <* dl.4 =0_goto il.6 *>^
-                                <* AddTo(dl.3, dl.2) *>^
-                                <* goto il.0 *>^
-                                <* AddTo(dl.2, dl.3) *>^
-                                <* goto il.0 *>^
-                                <* halt SCM *>;
+  <* dl.1 =0_goto il.8 *>^ <* dl.4 := dl.0 *>^ <* Divide(dl.1, dl.4) *>^
+  <* dl.4 =0_goto il.6 *>^ <* AddTo(dl.3, dl.2) *>^ <* goto il.0 *>^
+  <* AddTo(dl.2, dl.3) *>^ <* goto il.0 *>^ <* halt SCM *>;
 end;
 
 theorem :: FIB_FUSC:2
-    for N being Element of NAT st N > 0
-for s being State-consisting of 0, 0, 0,
-                                Fusc_Program,
-                                <*2*>^<*N*>^<*1*>^<*0*>
-    holds s is halting &
-          (Result s).dl.3 = Fusc N &
-          LifeSpan s = 6 * ([\ log(2, N) /] + 1) + 1;
+  for N being Element of NAT st N > 0 for s being State-consisting of 0, 0, 0,
+  Fusc_Program, <*2*>^<*N*>^<*1*>^<*0*> holds s is halting &
+  (Result s).dl.3 = Fusc N & LifeSpan s = 6 * ([\ log(2, N) /] + 1) + 1;
 
 theorem :: FIB_FUSC:3
-    for N being Element of NAT, k, Fk, Fk1 being Element of NAT,
-    s being State-consisting of 3, 0, 0,
-                      Fib_Program,
-                      <* 1 *>^<* N *>^<* Fk *>^<* Fk1 *>
-    st N > 0 & Fk = Fib k & Fk1 = Fib (k+1)
-    holds s is halting &
-          LifeSpan s = 6 * N - 4 &
-          ex m being Element of NAT st m = k+N-1 &
-             (Result s).dl.2 = Fib m & (Result s).dl.3 = Fib (m+1);
+  for N being Element of NAT, k, Fk, Fk1 being Element of NAT,
+  s being State-consisting of 3, 0, 0, Fib_Program,
+  <* 1 *>^<* N *>^<* Fk *>^<* Fk1 *> st N > 0 & Fk = Fib k & Fk1 = Fib (k+1)
+  holds s is halting & LifeSpan s = 6 * N - 4 &
+  ex m being Element of NAT st m = k+N-1 &
+  (Result s).dl.2 = Fib m & (Result s).dl.3 = Fib (m+1);
 
 canceled;
 
 theorem :: FIB_FUSC:5
- for n being Element of NAT,
-     N, A, B being Element of NAT,
-     s being State-consisting of 0, 0, 0,
-                                 Fusc_Program,
-                                <*2*>^<*n*>^<*A*>^<*B*>
-   st N > 0 & Fusc N = A * Fusc n + B * Fusc (n+1)
-   holds s is halting &
-         (Result s).dl.3 = Fusc N &
-         (n = 0 implies LifeSpan s = 1) &
-         (n > 0 implies LifeSpan s = 6 * ([\ log(2, n) /] + 1) + 1);
+  for n being Element of NAT, N, A, B being Element of NAT,
+  s being State-consisting of 0, 0, 0, Fusc_Program, <*2*>^<*n*>^<*A*>^<*B*>
+  st N > 0 & Fusc N = A * Fusc n + B * Fusc (n+1) holds s is halting &
+  (Result s).dl.3 = Fusc N & (n = 0 implies LifeSpan s = 1) &
+  (n > 0 implies LifeSpan s = 6 * ([\ log(2, n) /] + 1) + 1);
 
 theorem :: FIB_FUSC:6
-    for N being Element of NAT st N > 0
-for s being State-consisting of 0, 0, 0,
-                                Fusc_Program,
-                                <*2*>^<*N*>^<*1*>^<*0*>
-    holds s is halting &
-          (Result s).dl.3 = Fusc N &
-          (N = 0 implies LifeSpan s = 1) &
-          (N > 0 implies LifeSpan s = 6 * ([\ log(2, N) /] + 1)+1);
+  for N being Element of NAT st N > 0 for s being State-consisting of 0, 0, 0,
+  Fusc_Program, <*2*>^<*N*>^<*1*>^<*0*> holds s is halting &
+  (Result s).dl.3 = Fusc N & (N = 0 implies LifeSpan s = 1) &
+  (N > 0 implies LifeSpan s = 6 * ([\ log(2, N) /] + 1)+1);
 

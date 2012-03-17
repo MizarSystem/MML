@@ -21,25 +21,28 @@ environ
 
 begin
 
- reserve x, y, X for set,
-         i, j, k, l, n, m, t,i,j1,l1,k1 for Nat,
-         K for Field,
-         a,b,a1,a2,g for Element of K,
-         M,M1,M2,M3 for Matrix of n,m,K,
-         N,N1,N2 for Matrix of m,n,K,
-         pK,qK for FinSequence of K,
-         A,B for Matrix of n,K;
+reserve x, y, X for set,
+  i, j, k, l, n, m, t,i,j1,l1,k1 for Nat,
+  K for Field,
+  a,b,a1,a2,g for Element of K,
+  M,M1,M2,M3 for Matrix of n,m,K,
+  N,N1,N2 for Matrix of m,n,K,
+  pK,qK for FinSequence of K,
+  A,B for Matrix of n,K;
 
-definition let n,m;let K;
-           let M be Matrix of n,m,K;
-           let l,k be Nat;
+definition
+  let n,m;
+  let K;
+  let M be Matrix of n,m,K;
+  let l,k be Nat;
   func InterchangeLine(M,l,k) -> Matrix of n,m,K means
 :: MATRIX12:def 1
-         len it = len M &
-         for i,j st i in dom M & j in Seg width M
-     holds (i = l implies it*(i,j) = M*(k,j)) &
-           (i = k implies it*(i,j) = M*(l,j)) &
-           (i <> l & i <> k implies it*(i,j) = M*(i,j));
+
+  len it = len M &
+  for i,j st i in dom M & j in Seg width M
+  holds (i = l implies it*(i,j) = M*(k,j)) &
+  (i = k implies it*(i,j) = M*(l,j)) &
+  (i <> l & i <> k implies it*(i,j) = M*(i,j));
 end;
 
 theorem :: MATRIX12:1
@@ -47,83 +50,93 @@ theorem :: MATRIX12:1
 
 theorem :: MATRIX12:2
   for M,M1,i st l in dom M & k in dom M & i in dom M &
-    M1 = InterchangeLine(M,l,k) holds
-      (i = l implies Line(M1,i) = Line(M,k)) &
-         (i = k implies Line(M1,i) = Line(M,l)) &
-         (i <> l & i <> k implies Line(M1,i) = Line(M,i));
+  M1 = InterchangeLine(M,l,k) holds (i = l implies Line(M1,i) = Line(M,k)) &
+  (i = k implies Line(M1,i) = Line(M,l)) &
+  (i <> l & i <> k implies Line(M1,i) = Line(M,i));
 
 theorem :: MATRIX12:3
   for a,i,j,M st i in dom M & j in Seg width M holds
-      (a*Line(M,i)).j = a*(M*(i,j));
+  (a*Line(M,i)).j = a*(M*(i,j));
 
-definition let n,m;let K;
-           let M be Matrix of n,m,K;
-           let l be Nat;
-           let a be Element of K;
+definition
+  let n,m;
+  let K;
+  let M be Matrix of n,m,K;
+  let l be Nat;
+  let a be Element of K;
   func ScalarXLine(M,l,a) -> Matrix of n,m,K means
 :: MATRIX12:def 2
-         len it = len M &
-         for i,j st i in dom M & j in Seg width M holds
-           (i = l implies it*(i,j) = a*(M*(l,j))) &
-           (i <> l implies it*(i,j) = M*(i,j));
+
+  len it = len M &
+  for i,j st i in dom M & j in Seg width M holds
+  (i = l implies it*(i,j) = a*(M*(l,j))) &
+  (i <> l implies it*(i,j) = M*(i,j));
 end;
 
 theorem :: MATRIX12:4
-  l in dom M & i in dom M & a<>0.K &
-    M1 = ScalarXLine(M,l,a) implies
-      (i = l implies Line(M1,i) = a*Line(M,l)) &
-      (i <> l implies Line(M1,i) = Line(M,i));
+  l in dom M & i in dom M & a<>0.K & M1 = ScalarXLine(M,l,a) implies
+  (i = l implies Line(M1,i) = a*Line(M,l)) &
+  (i <> l implies Line(M1,i) = Line(M,i));
 
-definition let n,m;let K;
-           let M be Matrix of n,m,K;
-           let l,k be Nat;
-           let a be Element of K;
-  assume  l in dom M & k in dom M;
+definition
+  let n,m;
+  let K;
+  let M be Matrix of n,m,K;
+  let l,k be Nat;
+  let a be Element of K;
+  assume
+ l in dom M & k in dom M;
   func RlineXScalar(M,l,k,a) -> Matrix of n,m,K means
 :: MATRIX12:def 3
-         len it = len M &
-         for i,j st i in dom M & j in Seg width M
-     holds (i = l implies it*(i,j) = a*(M*(k,j))+(M*(l,j))) &
-           (i <> l implies it*(i,j) = M*(i,j));
+
+  len it = len M &
+  for i,j st i in dom M & j in Seg width M
+  holds (i = l implies it*(i,j) = a*(M*(k,j))+(M*(l,j))) &
+  (i <> l implies it*(i,j) = M*(i,j));
 end;
 
 theorem :: MATRIX12:5
-  l in dom M & k in dom M & i in dom M &
-    M1 = RlineXScalar(M,l,k,a) implies
-     (i = l implies Line(M1,i) = a*Line(M,k) + Line(M,l)) &
-     (i <> l implies Line(M1,i) = Line(M,i));
+  l in dom M & k in dom M & i in dom M & M1 = RlineXScalar(M,l,k,a) implies
+  (i = l implies Line(M1,i) = a*Line(M,k) + Line(M,l)) &
+  (i <> l implies Line(M1,i) = Line(M,i));
 
-notation let n,m;let K;
-           let M be Matrix of n,m,K;
-           let l,k be Nat;
+notation
+  let n,m;
+  let K;
+  let M be Matrix of n,m,K;
+  let l,k be Nat;
   synonym ILine(M,l,k) for InterchangeLine(M,l,k);
 end;
 
-notation let n,m;let K;
-         let M be Matrix of n,m,K;
-         let l be Nat;
-         let a be Element of K;
+notation
+  let n,m;
+  let K;
+  let M be Matrix of n,m,K;
+  let l be Nat;
+  let a be Element of K;
   synonym SXLine(M,l,a) for ScalarXLine(M,l,a);
 end;
 
-notation let n,m;let K;
-           let M be Matrix of n,m,K;
-           let l,k be Nat;
-           let a be Element of K;
+notation
+  let n,m;
+  let K;
+  let M be Matrix of n,m,K;
+  let l,k be Nat;
+  let a be Element of K;
   synonym RLineXS(M,l,k,a) for RlineXScalar(M,l,k,a);
 end;
 
 theorem :: MATRIX12:6
   l in dom (1.(K,n)) & k in dom (1.(K,n))
-    implies ILine((1.(K,n)),l,k) * A = ILine(A,l,k);
+  implies ILine((1.(K,n)),l,k) * A = ILine(A,l,k);
 
 theorem :: MATRIX12:7
   for l,a,A st l in dom (1.(K,n)) & a <> 0.K
-     holds SXLine((1.(K,n)),l,a) * A = SXLine(A,l,a);
+  holds SXLine((1.(K,n)),l,a) * A = SXLine(A,l,a);
 
 theorem :: MATRIX12:8
   l in dom (1.(K,n)) & k in dom (1.(K,n))
-    implies RLineXS((1.(K,n)),l,k,a) * A = RLineXS(A,l,k,a);
+  implies RLineXS((1.(K,n)),l,k,a) * A = RLineXS(A,l,k,a);
 
 theorem :: MATRIX12:9
   ILine(M,k,k) = M;
@@ -136,110 +149,127 @@ theorem :: MATRIX12:11
 
 theorem :: MATRIX12:12
   l in dom (1.(K,n)) & k in dom (1.(K,n))
-    implies ILine((1.(K,n)),l,k) is invertible &
-       (ILine((1.(K,n)),l,k))~ = ILine((1.(K,n)),l,k);
+  implies ILine((1.(K,n)),l,k) is invertible &
+  (ILine((1.(K,n)),l,k))~ = ILine((1.(K,n)),l,k);
 
 theorem :: MATRIX12:13
   l in dom (1.(K,n)) & k in dom (1.(K,n)) & k<>l
-    implies RLineXS((1.(K,n)),l,k,a) is invertible &
-      (RLineXS((1.(K,n)),l,k,a))~ = RLineXS((1.(K,n)),l,k,-a);
+  implies RLineXS((1.(K,n)),l,k,a) is invertible &
+  (RLineXS((1.(K,n)),l,k,a))~ = RLineXS((1.(K,n)),l,k,-a);
 
 theorem :: MATRIX12:14
-  l in dom (1.(K,n)) & a <> 0.K
-    implies SXLine((1.(K,n)),l,a) is invertible &
-      (SXLine((1.(K,n)),l,a))~ = SXLine((1.(K,n)),l,a");
+  l in dom (1.(K,n)) & a <> 0.K implies SXLine((1.(K,n)),l,a) is invertible &
+  (SXLine((1.(K,n)),l,a))~ = SXLine((1.(K,n)),l,a");
 
-definition let n,m;let K;
-           let M be Matrix of n,m,K;
-           let l,k be Nat;
-  assume  l in Seg width M & k in Seg width M & n>0 & m>0;
+definition
+  let n,m;
+  let K;
+  let M be Matrix of n,m,K;
+  let l,k be Nat;
+  assume
+ l in Seg width M & k in Seg width M & n>0 & m>0;
   func InterchangeCol(M,l,k) -> Matrix of n,m,K means
 :: MATRIX12:def 4
-         len it = len M &
-         for i,j st i in dom M & j in Seg width M holds
-         (j = l implies it*(i,j) = M*(i,k)) &
-         (j = k implies it*(i,j) = M*(i,l)) &
-         (j <> l & j <> k implies it*(i,j) = M*(i,j));
+
+  len it = len M &
+  for i,j st i in dom M & j in Seg width M holds
+  (j = l implies it*(i,j) = M*(i,k)) & (j = k implies it*(i,j) = M*(i,l)) &
+  (j <> l & j <> k implies it*(i,j) = M*(i,j));
 end;
 
-definition let n,m;let K;
-           let M be Matrix of n,m,K;
-           let l be Nat;
-           let a be Element of K;
-  assume  l in Seg width M & n>0 & m>0;
+definition
+  let n,m;
+  let K;
+  let M be Matrix of n,m,K;
+  let l be Nat;
+  let a be Element of K;
+  assume
+ l in Seg width M & n>0 & m>0;
   func ScalarXCol(M,l,a) -> Matrix of n,m,K means
 :: MATRIX12:def 5
-         len it = len M &
-         for i,j st i in dom M & j in Seg width M holds
-         (j = l implies it*(i,j) = a*(M*(i,l))) &
-         (j <> l implies it*(i,j) = M*(i,j));
+
+  len it = len M &
+  for i,j st i in dom M & j in Seg width M holds
+  (j = l implies it*(i,j) = a*(M*(i,l))) &
+  (j <> l implies it*(i,j) = M*(i,j));
 end;
 
-definition let n,m;let K;
-           let M be Matrix of n,m,K;
-           let l,k be Nat;
-           let a be Element of K;
-  assume  l in Seg width M & k in Seg width M & n>0 & m>0;
+definition
+  let n,m;
+  let K;
+  let M be Matrix of n,m,K;
+  let l,k be Nat;
+  let a be Element of K;
+  assume
+ l in Seg width M & k in Seg width M & n>0 & m>0;
   func RcolXScalar(M,l,k,a) -> Matrix of n,m,K means
 :: MATRIX12:def 6
-         len it = len M &
-         for i,j st i in dom M & j in Seg width M holds
-         (j = l implies it*(i,j) = a*(M*(i,k))+(M*(i,l))) &
-         (j <> l implies it*(i,j) = M*(i,j));
+
+  len it = len M &
+  for i,j st i in dom M & j in Seg width M holds
+  (j = l implies it*(i,j) = a*(M*(i,k))+(M*(i,l))) &
+  (j <> l implies it*(i,j) = M*(i,j));
 end;
 
-notation let n,m;let K;
-         let M be Matrix of n,m,K;
-         let l,k be Nat;
+notation
+  let n,m;
+  let K;
+  let M be Matrix of n,m,K;
+  let l,k be Nat;
   synonym ICol(M,l,k) for InterchangeCol(M,l,k);
 end;
 
-notation let n,m;let K;
-         let M be Matrix of n,m,K;
-         let l be Nat;
-         let a be Element of K;
+notation
+  let n,m;
+  let K;
+  let M be Matrix of n,m,K;
+  let l be Nat;
+  let a be Element of K;
   synonym SXCol(M,l,a) for ScalarXCol(M,l,a);
 end;
 
-notation let n,m;let K;
-           let M be Matrix of n,m,K;
-           let l,k be Nat;
-           let a be Element of K;
+notation
+  let n,m;
+  let K;
+  let M be Matrix of n,m,K;
+  let l,k be Nat;
+  let a be Element of K;
   synonym RColXS(M,l,k,a) for RcolXScalar(M,l,k,a);
 end;
 
 theorem :: MATRIX12:15
   l in Seg width M & k in Seg width M & n>0 & m>0 & M1 = M@
-    implies (ILine(M1,l,k))@ = ICol(M,l,k);
+  implies (ILine(M1,l,k))@ = ICol(M,l,k);
 
 theorem :: MATRIX12:16
   l in Seg width M & a <> 0.K & n>0 & m>0 & M1 = M@ implies
-    (SXLine(M1,l,a))@ = SXCol(M,l,a);
+  (SXLine(M1,l,a))@ = SXCol(M,l,a);
 
 theorem :: MATRIX12:17
   l in Seg width M & k in Seg width M & n>0 & m>0 & M1 = M@
-    implies (RLineXS(M1,l,k,a))@ = RColXS(M,l,k,a);
+  implies (RLineXS(M1,l,k,a))@ = RColXS(M,l,k,a);
 
 theorem :: MATRIX12:18
   l in dom (1.(K,n)) & k in dom (1.(K,n)) & n>0
-    implies A * ICol((1.(K,n)),l,k) = ICol(A,l,k);
+  implies A * ICol((1.(K,n)),l,k) = ICol(A,l,k);
 
 theorem :: MATRIX12:19
   l in dom (1.(K,n)) & a <> 0.K & n>0
-    implies A * SXCol((1.(K,n)),l,a) = SXCol(A,l,a);
+  implies A * SXCol((1.(K,n)),l,a) = SXCol(A,l,a);
 
 theorem :: MATRIX12:20
   l in dom (1.(K,n)) & k in dom (1.(K,n)) & n>0
-    implies A * RColXS((1.(K,n)),l,k,a) = RColXS(A,l,k,a);
+  implies A * RColXS((1.(K,n)),l,k,a) = RColXS(A,l,k,a);
 
 theorem :: MATRIX12:21
   l in dom (1.(K,n)) & k in dom (1.(K,n)) & n>0
-     implies (ICol((1.(K,n)),l,k))~ = ICol((1.(K,n)),l,k);
+  implies (ICol((1.(K,n)),l,k))~ = ICol((1.(K,n)),l,k);
 
 theorem :: MATRIX12:22
   l in dom (1.(K,n)) & k in dom (1.(K,n)) & k<>l & n>0 implies
-     (RColXS((1.(K,n)),l,k,a))~ = RColXS((1.(K,n)),l,k,-a);
+  (RColXS((1.(K,n)),l,k,a))~ = RColXS((1.(K,n)),l,k,-a);
 
 theorem :: MATRIX12:23
   l in dom (1.(K,n)) & a <> 0.K & n>0 implies
-     (SXCol((1.(K,n)),l,a))~ = SXCol((1.(K,n)),l,a");
+  (SXCol((1.(K,n)),l,a))~ = SXCol((1.(K,n)),l,a");
+

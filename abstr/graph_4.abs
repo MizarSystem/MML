@@ -20,181 +20,198 @@ environ
 
 begin   ::Oriented vertex sequences and V-sets
 
-reserve
-        p, q for FinSequence,
-        y1,y2,e,X for set,
-        i, j, k, m, n for Element of NAT,
-        G for Graph;
+reserve p, q for FinSequence,
+  y1,y2,e,X for set,
+  i, j, k, m, n for Element of NAT,
+  G for Graph;
+
 reserve x,y,v,v1,v2,v3,v4 for Element of the Vertices of G;
 
-definition let G; let x, y; let e;
-   pred e orientedly_joins x, y means
+definition
+  let G;
+  let x, y;
+  let e;
+  pred e orientedly_joins x, y means
 :: GRAPH_4:def 1
+
   (the Source of G).e = x & (the Target of G).e = y;
 end;
 
 theorem :: GRAPH_4:1
-e orientedly_joins v1, v2 implies e joins v1, v2;
+  e orientedly_joins v1, v2 implies e joins v1, v2;
 
-definition let G; let x,y be Element of (the Vertices of G);
-   pred x,y are_orientedly_incident means
+definition
+  let G;
+  let x,y be Element of (the Vertices of G);
+  pred x,y are_orientedly_incident means
 :: GRAPH_4:def 2
-         ex v being set st v in the Edges of G & v orientedly_joins x, y;
+  ex v being set st v in the Edges of G & v orientedly_joins x, y;
 end;
 
 theorem :: GRAPH_4:2
-e orientedly_joins v1,v2 & e orientedly_joins v3,v4 implies v1=v3 & v2=v4;
+  e orientedly_joins v1,v2 & e orientedly_joins v3,v4 implies v1=v3 & v2=v4;
 
 reserve vs, vs1, vs2 for FinSequence of the Vertices of G,
-        c, c1, c2 for oriented Chain of G;
+  c, c1, c2 for oriented Chain of G;
 
-registration let G;
- cluster empty oriented Chain of G;
+registration
+  let G;
+  cluster empty oriented Chain of G;
 end;
 
-definition let G, X;
- func G-SVSet X -> set equals
+definition
+  let G, X;
+  func G-SVSet X -> set equals
 :: GRAPH_4:def 3
-   { v: ex e being Element of the Edges of G st e in X &
-                v = (the Source of G).e };
+  { v: ex e being Element of the Edges of G st e in X &
+  v = (the Source of G).e };
 end;
 
-definition let G, X;
- func G-TVSet X -> set equals
+definition
+  let G, X;
+  func G-TVSet X -> set equals
 :: GRAPH_4:def 4
-   { v: ex e being Element of the Edges of G st e in X &
-                v = (the Target of G).e };
+  { v: ex e being Element of the Edges of G st e in X &
+  v = (the Target of G).e };
 end;
 
 canceled;
 
 theorem :: GRAPH_4:4
-G-SVSet {} = {} & G-TVSet {} = {};
+  G-SVSet {} = {} & G-TVSet {} = {};
 
-definition let G, vs; let c be FinSequence;
- pred vs is_oriented_vertex_seq_of c means
+definition
+  let G, vs;
+  let c be FinSequence;
+  pred vs is_oriented_vertex_seq_of c means
 :: GRAPH_4:def 5
- len vs = len c + 1 &
-   for n st 1<=n & n<=len c holds c.n orientedly_joins vs/.n, vs/.(n+1);
+
+  len vs = len c + 1 &
+  for n st 1<=n & n<=len c holds c.n orientedly_joins vs/.n, vs/.(n+1);
 end;
 
 theorem :: GRAPH_4:5
-vs is_oriented_vertex_seq_of c implies vs is_vertex_seq_of c;
+  vs is_oriented_vertex_seq_of c implies vs is_vertex_seq_of c;
 
 theorem :: GRAPH_4:6
-vs is_oriented_vertex_seq_of c implies G-SVSet rng c c= rng vs;
+  vs is_oriented_vertex_seq_of c implies G-SVSet rng c c= rng vs;
 
 theorem :: GRAPH_4:7
-vs is_oriented_vertex_seq_of c implies G-TVSet rng c c= rng vs;
+  vs is_oriented_vertex_seq_of c implies G-TVSet rng c c= rng vs;
 
 theorem :: GRAPH_4:8
-c <>{} & vs is_oriented_vertex_seq_of c implies
-   rng vs c= G-SVSet rng c \/ G-TVSet rng c;
+  c <>{} & vs is_oriented_vertex_seq_of c implies
+  rng vs c= G-SVSet rng c \/ G-TVSet rng c;
 
 begin :: Cutting and glueing of oriented chains
 
 theorem :: GRAPH_4:9
-<*v*> is_oriented_vertex_seq_of {};
+  <*v*> is_oriented_vertex_seq_of {};
 
 theorem :: GRAPH_4:10
-ex vs st vs is_oriented_vertex_seq_of c;
+  ex vs st vs is_oriented_vertex_seq_of c;
 
 theorem :: GRAPH_4:11
-c <> {} & vs1 is_oriented_vertex_seq_of c & vs2 is_oriented_vertex_seq_of c
-implies vs1 = vs2;
+  c <> {} & vs1 is_oriented_vertex_seq_of c & vs2 is_oriented_vertex_seq_of c
+  implies vs1 = vs2;
 
-definition let G, c;
-assume  c <>{};
- func oriented-vertex-seq c -> FinSequence of the Vertices of G means
+definition
+  let G, c;
+  assume
+ c <>{};
+  func oriented-vertex-seq c -> FinSequence of the Vertices of G means
 :: GRAPH_4:def 6
-     it is_oriented_vertex_seq_of c;
+  it is_oriented_vertex_seq_of c;
 end;
 
 theorem :: GRAPH_4:12
-vs is_oriented_vertex_seq_of c & c1 = c|Seg n & vs1= vs|Seg (n+1)
-    implies vs1 is_oriented_vertex_seq_of c1;
+  vs is_oriented_vertex_seq_of c & c1 = c|Seg n & vs1= vs|Seg (n+1)
+  implies vs1 is_oriented_vertex_seq_of c1;
 
 theorem :: GRAPH_4:13
-1<=m & m<=n & n<=len c & q = (m,n)-cut c implies q is oriented Chain of G;
+  1<=m & m<=n & n<=len c & q = (m,n)-cut c implies q is oriented Chain of G;
 
 theorem :: GRAPH_4:14
   1<=m & m<=n & n<=len c & c1 = (m,n)-cut c &
-vs is_oriented_vertex_seq_of c & vs1 = (m,n+1)-cut vs
-    implies vs1 is_oriented_vertex_seq_of c1;
+  vs is_oriented_vertex_seq_of c & vs1 = (m,n+1)-cut vs
+  implies vs1 is_oriented_vertex_seq_of c1;
 
 theorem :: GRAPH_4:15
-vs1 is_oriented_vertex_seq_of c1
-& vs2 is_oriented_vertex_seq_of c2 & vs1.len vs1 = vs2.1
-    implies c1^c2 is oriented Chain of G;
+  vs1 is_oriented_vertex_seq_of c1
+  & vs2 is_oriented_vertex_seq_of c2 & vs1.len vs1 = vs2.1
+  implies c1^c2 is oriented Chain of G;
 
 theorem :: GRAPH_4:16
-vs1 is_oriented_vertex_seq_of c1 & vs2 is_oriented_vertex_seq_of c2
-& vs1.len vs1 = vs2.1 &
-c = c1^c2 & vs = vs1^'vs2
-   implies vs is_oriented_vertex_seq_of c;
+  vs1 is_oriented_vertex_seq_of c1 & vs2 is_oriented_vertex_seq_of c2
+  & vs1.len vs1 = vs2.1 & c = c1^c2 & vs = vs1^'vs2
+  implies vs is_oriented_vertex_seq_of c;
 
 begin
 
-definition let G;
+definition
+  let G;
   let IT be oriented Chain of G;
-   attr IT is Simple means
+  attr IT is Simple means
 :: GRAPH_4:def 7
- ex vs st vs is_oriented_vertex_seq_of IT &
-     (for n,m st 1<=n & n<m & m<=len vs & vs.n=vs.m holds n=1 & m=len vs);
+
+  ex vs st vs is_oriented_vertex_seq_of IT &
+  (for n,m st 1<=n & n<m & m<=len vs & vs.n=vs.m holds n=1 & m=len vs);
 end;
 
-registration let G;
-   cluster Simple (oriented Chain of G);
+registration
+  let G;
+  cluster Simple (oriented Chain of G);
 end;
 
-registration let G;
-   cluster oriented simple Chain of G;
+registration
+  let G;
+  cluster oriented simple Chain of G;
 end;
 
 canceled;
 
 theorem :: GRAPH_4:18
-for q being oriented Chain of G holds
-      q|(Seg n) is oriented Chain of G;
+  for q being oriented Chain of G holds q|(Seg n) is oriented Chain of G;
 
 reserve sc for oriented simple Chain of G;
 
 theorem :: GRAPH_4:19
-sc|(Seg n) is oriented simple Chain of G;
+  sc|(Seg n) is oriented simple Chain of G;
 
 theorem :: GRAPH_4:20
-for sc' being oriented Chain of G st sc'=sc holds sc' is Simple;
+  for sc' being oriented Chain of G st sc'=sc holds sc' is Simple;
 
 theorem :: GRAPH_4:21
-for sc' being Simple (oriented Chain of G)
+  for sc' being Simple (oriented Chain of G)
   holds sc' is oriented simple Chain of G;
 
 reserve x,y for set;
 
 theorem :: GRAPH_4:22
-not c is Simple & vs is_oriented_vertex_seq_of c
-implies
+  not c is Simple & vs is_oriented_vertex_seq_of c implies
   ex fc being Subset of c, fvs being Subset of vs, c1, vs1
-   st len c1 < len c & vs1 is_oriented_vertex_seq_of c1 & len vs1 < len vs &
-      vs.1 = vs1.1 & vs.len vs = vs1.len vs1 & Seq fc = c1 & Seq fvs = vs1;
+  st len c1 < len c & vs1 is_oriented_vertex_seq_of c1 & len vs1 < len vs &
+  vs.1 = vs1.1 & vs.len vs = vs1.len vs1 & Seq fc = c1 & Seq fvs = vs1;
 
 theorem :: GRAPH_4:23
-vs is_oriented_vertex_seq_of c implies
- ex fc being Subset of c, fvs being Subset of vs, sc, vs1
+  vs is_oriented_vertex_seq_of c implies
+  ex fc being Subset of c, fvs being Subset of vs, sc, vs1
   st Seq fc = sc & Seq fvs = vs1 & vs1 is_oriented_vertex_seq_of sc &
-     vs.1 = vs1.1 & vs.len vs = vs1.len vs1;
+  vs.1 = vs1.1 & vs.len vs = vs1.len vs1;
 
-registration let G;
- cluster empty -> one-to-one (oriented Chain of G);
+registration
+  let G;
+  cluster empty -> one-to-one (oriented Chain of G);
 end;
 
 theorem :: GRAPH_4:24
-p is OrientedPath of G implies p|Seg(n) is OrientedPath of G;
+  p is OrientedPath of G implies p|Seg(n) is OrientedPath of G;
 
 theorem :: GRAPH_4:25
-sc is OrientedPath of G;
+  sc is OrientedPath of G;
 
 theorem :: GRAPH_4:26
-for c1 being FinSequence holds
+  for c1 being FinSequence holds
   (c1 is Simple (oriented Chain of G) iff c1 is oriented simple Chain of G)
   &(c1 is oriented simple Chain of G implies c1 is OrientedPath of G);
+

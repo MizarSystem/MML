@@ -24,278 +24,272 @@ environ
 begin
 
 definition
- mode Macro-Instruction is initial programmed FinPartState of SCM+FSA;
+  mode Macro-Instruction is initial programmed FinPartState of SCM+FSA;
 end;
 
 reserve l, m, n for Element of NAT,
-        i,j,k for Instruction of SCM+FSA,
-        I,J,K for Macro-Instruction;
+  i,j,k for Instruction of SCM+FSA,
+  I,J,K for Macro-Instruction;
 
-definition let I be programmed FinPartState of SCM+FSA;
- func Directed I -> programmed FinPartState of SCM+FSA equals
+definition
+  let I be programmed FinPartState of SCM+FSA;
+  func Directed I -> programmed FinPartState of SCM+FSA equals
 :: SCMFSA6A:def 1
   ((id the Instructions of SCM+FSA) +*
-         (halt SCM+FSA .--> goto insloc card I))*I;
+  (halt SCM+FSA .--> goto insloc card I))*I;
 end;
 
 canceled 13;
 
 theorem :: SCMFSA6A:14
- dom Directed I = dom I;
+  dom Directed I = dom I;
 
-registration let I be Macro-Instruction;
- cluster Directed I -> initial;
+registration
+  let I be Macro-Instruction;
+  cluster Directed I -> initial;
 end;
 
-definition let i;
- func Macro i -> Macro-Instruction equals
+definition
+  let i;
+  func Macro i -> Macro-Instruction equals
 :: SCMFSA6A:def 2
-   (insloc 0,insloc 1) --> (i,halt SCM+FSA);
+  (insloc 0,insloc 1) --> (i,halt SCM+FSA);
 end;
 
-registration let i;
- cluster Macro i -> non empty;
+registration
+  let i;
+  cluster Macro i -> non empty;
 end;
 
 theorem :: SCMFSA6A:15
- for P being Macro-Instruction, n holds
-  n < card P iff insloc n in dom P;
+  for P being Macro-Instruction, n holds n < card P iff insloc n in dom P;
 
-registration let I be initial FinPartState of SCM+FSA;
- cluster ProgramPart I -> initial;
+registration
+  let I be initial FinPartState of SCM+FSA;
+  cluster ProgramPart I -> initial;
 end;
 
 theorem :: SCMFSA6A:16
- dom I misses dom ProgramPart Relocated(J, card I);
+  dom I misses dom ProgramPart Relocated(J, card I);
 
 theorem :: SCMFSA6A:17
-for I being programmed FinPartState of SCM+FSA
- holds card ProgramPart Relocated(I, m) = card I;
+  for I being programmed FinPartState of SCM+FSA
+  holds card ProgramPart Relocated(I, m) = card I;
 
 theorem :: SCMFSA6A:18
- not halt SCM+FSA in rng Directed I;
+  not halt SCM+FSA in rng Directed I;
 
 theorem :: SCMFSA6A:19
- ProgramPart Relocated(Directed I, m) =
-   ((id the Instructions of SCM+FSA) +*
-     (halt SCM+FSA .--> goto insloc(m + card I)))*
-          ProgramPart Relocated(I, m);
+  ProgramPart Relocated(Directed I, m) = ((id the Instructions of SCM+FSA) +*
+  (halt SCM+FSA .--> goto insloc(m + card I)))* ProgramPart Relocated(I, m);
 
 theorem :: SCMFSA6A:20
-for I,J being FinPartState of SCM+FSA holds
- ProgramPart(I +* J) = ProgramPart I +* ProgramPart J;
+  for I,J being FinPartState of SCM+FSA holds
+  ProgramPart(I +* J) = ProgramPart I +* ProgramPart J;
 
 theorem :: SCMFSA6A:21
-for I,J being FinPartState of SCM+FSA holds
- ProgramPart Relocated(I +* J, n) =
-    ProgramPart Relocated(I,n) +* ProgramPart Relocated(J,n);
+  for I,J being FinPartState of SCM+FSA holds
+  ProgramPart Relocated(I +* J, n) =
+  ProgramPart Relocated(I,n) +* ProgramPart Relocated(J,n);
 
 theorem :: SCMFSA6A:22
   ProgramPart Relocated(ProgramPart Relocated(I, m), n)
-          = ProgramPart Relocated(I, m + n);
+  = ProgramPart Relocated(I, m + n);
 
-reserve a,b for Int-Location, f for FinSeq-Location,
-        s,s1,s2 for State of SCM+FSA;
+reserve a,b for Int-Location,
+  f for FinSeq-Location,
+  s,s1,s2 for State of SCM+FSA;
 
-definition let I be FinPartState of SCM+FSA;
- func Initialized I -> FinPartState of SCM+FSA equals
+definition
+  let I be FinPartState of SCM+FSA;
+  func Initialized I -> FinPartState of SCM+FSA equals
 :: SCMFSA6A:def 3
   I +* ((intloc 0) .--> 1) +* Start-At(insloc 0);
 end;
 
 theorem :: SCMFSA6A:23
- InsCode i in {0,6,7,8} or Exec(i,s).IC SCM+FSA = Next IC s;
+  InsCode i in {0,6,7,8} or Exec(i,s).IC SCM+FSA = Next IC s;
 
 theorem :: SCMFSA6A:24
- IC SCM+FSA in dom Initialized I;
+  IC SCM+FSA in dom Initialized I;
 
 theorem :: SCMFSA6A:25
-     IC Initialized I = insloc 0;
+  IC Initialized I = insloc 0;
 
 theorem :: SCMFSA6A:26
- I c= Initialized I;
+  I c= Initialized I;
 
 canceled;
 
 theorem :: SCMFSA6A:28
- for s1,s2 being State of SCM+FSA
-       st IC s1 = IC s2 &
-      (for a being Int-Location holds s1.a = s2.a) &
-       for f being FinSeq-Location holds s1.f = s2.f
-  holds s1,s2 equal_outside NAT;
+  for s1,s2 being State of SCM+FSA st IC s1 = IC s2 &
+  (for a being Int-Location holds s1.a = s2.a) &
+  for f being FinSeq-Location holds s1.f = s2.f holds s1,s2 equal_outside NAT;
 
 canceled;
 
 theorem :: SCMFSA6A:30
- s1,s2 equal_outside NAT implies
-  for a being Int-Location holds s1.a = s2.a;
+  s1,s2 equal_outside NAT implies for a being Int-Location holds s1.a = s2.a;
 
 theorem :: SCMFSA6A:31
- s1,s2 equal_outside NAT implies
+  s1,s2 equal_outside NAT implies
   for f being FinSeq-Location holds s1.f = s2.f;
 
 theorem :: SCMFSA6A:32
-     s1,s2 equal_outside NAT implies
-  Exec(i,s1),Exec(i,s2) equal_outside NAT;
+  s1,s2 equal_outside NAT implies Exec(i,s1),Exec(i,s2) equal_outside NAT;
 
 theorem :: SCMFSA6A:33
-     (Initialized I)|NAT = I;
+  (Initialized I)|NAT = I;
 
 scheme :: SCMFSA6A:sch 1
  SCMFSAEx{ F(set) -> Element of the Instructions of SCM+FSA,
-                 G(set) -> Integer, H(set) -> FinSequence of INT,
-                 I() -> Instruction-Location of SCM+FSA }:
- ex S being State of SCM+FSA st IC S = I() &
-  for i being Element of NAT holds
-    S.insloc i = F(i) & S.intloc i = G(i) & S.fsloc i = H(i);
+  G(set) -> Integer, H(set) -> FinSequence of INT,
+  I() -> Instruction-Location of SCM+FSA }:
+  ex S being State of SCM+FSA st IC S = I() & for i being Element of NAT holds
+  S.insloc i = F(i) & S.intloc i = G(i) & S.fsloc i = H(i);
 
 theorem :: SCMFSA6A:34  ::T12
-    for s being State of SCM+FSA holds
-     dom s = Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA} \/
-         NAT;
+  for s being State of SCM+FSA holds
+  dom s = Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA} \/
+  NAT;
 
 theorem :: SCMFSA6A:35  ::T12'
-     for s being State of SCM+FSA, x being set st x in dom s holds
-     x is Int-Location or x is FinSeq-Location or
-     x = IC SCM+FSA or x is Instruction-Location of SCM+FSA;
+  for s being State of SCM+FSA, x being set st x in dom s holds
+  x is Int-Location or x is FinSeq-Location or
+  x = IC SCM+FSA or x is Instruction-Location of SCM+FSA;
 
 theorem :: SCMFSA6A:36  ::T29
-     for s1,s2 being State of SCM+FSA holds
-     (for l being Instruction-Location of SCM+FSA holds s1.l = s2.l)
- iff s1 | NAT =
-     s2 | NAT;
+  for s1,s2 being State of SCM+FSA holds
+  (for l being Instruction-Location of SCM+FSA holds s1.l = s2.l)
+  iff s1 | NAT = s2 | NAT;
 
 theorem :: SCMFSA6A:37  ::T32
-     for i being Instruction-Location of SCM+FSA holds
-     not i in Int-Locations \/ FinSeq-Locations &
-     not IC SCM+FSA in Int-Locations \/ FinSeq-Locations;
+  for i being Instruction-Location of SCM+FSA holds
+  not i in Int-Locations \/ FinSeq-Locations &
+  not IC SCM+FSA in Int-Locations \/ FinSeq-Locations;
 
 theorem :: SCMFSA6A:38  ::T28
- for s1,s2 being State of SCM+FSA holds
-     ((for a being Int-Location holds s1.a = s2.a) &
-     for f being FinSeq-Location holds s1.f = s2.f)
- iff s1 | (Int-Locations \/ FinSeq-Locations) =
-     s2 | (Int-Locations \/ FinSeq-Locations);
+  for s1,s2 being State of SCM+FSA holds
+  ((for a being Int-Location holds s1.a = s2.a) &
+  for f being FinSeq-Location holds s1.f = s2.f)
+  iff s1 | (Int-Locations \/ FinSeq-Locations) =
+  s2 | (Int-Locations \/ FinSeq-Locations);
 
 theorem :: SCMFSA6A:39  ::T19
-     for s1,s2 being State of SCM+FSA st
-     s1,s2 equal_outside NAT holds
-     s1 | (Int-Locations \/ FinSeq-Locations) =
-     s2 | (Int-Locations \/ FinSeq-Locations);
+  for s1,s2 being State of SCM+FSA st s1,s2 equal_outside NAT holds
+  s1 | (Int-Locations \/ FinSeq-Locations) =
+  s2 | (Int-Locations \/ FinSeq-Locations);
 
 theorem :: SCMFSA6A:40  ::T21
-     for s,ss being State of SCM+FSA, A being set holds
-     (ss +* s | A) | A = s | A;
+  for s,ss being State of SCM+FSA, A being set holds (ss +* s | A) | A = s | A;
 
 theorem :: SCMFSA6A:41  ::Lemma
-     for s1,s2 being State of SCM+FSA, n being Element of NAT,
-     i being Instruction of SCM+FSA holds
-     IC s1 + n = IC s2 &
-     s1 | (Int-Locations \/ FinSeq-Locations) =
-     s2 | (Int-Locations \/ FinSeq-Locations)
- implies
-     IC Exec(i,s1) + n = IC Exec(IncAddr(i,n),s2) &
-     Exec(i,s1) | (Int-Locations \/ FinSeq-Locations) =
-     Exec(IncAddr(i,n),s2) | (Int-Locations \/ FinSeq-Locations);
+  for s1,s2 being State of SCM+FSA, n being Element of NAT,
+  i being Instruction of SCM+FSA holds IC s1 + n = IC s2 &
+  s1 | (Int-Locations \/ FinSeq-Locations) =
+  s2 | (Int-Locations \/ FinSeq-Locations) implies
+  IC Exec(i,s1) + n = IC Exec(IncAddr(i,n),s2) &
+  Exec(i,s1) | (Int-Locations \/ FinSeq-Locations) =
+  Exec(IncAddr(i,n),s2) | (Int-Locations \/ FinSeq-Locations);
 
 theorem :: SCMFSA6A:42  ::T18
-     for I,J being Macro-Instruction holds
-     I,J equal_outside NAT;
+  for I,J being Macro-Instruction holds I,J equal_outside NAT;
 
 theorem :: SCMFSA6A:43  ::T3
- for I being Macro-Instruction holds
-     dom Initialized I = dom I \/ {intloc 0} \/ {IC SCM+FSA};
+  for I being Macro-Instruction holds
+  dom Initialized I = dom I \/ {intloc 0} \/ {IC SCM+FSA};
 
 theorem :: SCMFSA6A:44  ::T2
- for I being Macro-Instruction, x being set st x in dom Initialized I holds
-     x in dom I or x = intloc 0 or x = IC SCM+FSA;
+  for I being Macro-Instruction, x being set st x in dom Initialized I holds
+  x in dom I or x = intloc 0 or x = IC SCM+FSA;
 
 theorem :: SCMFSA6A:45  ::T3'
- for I being Macro-Instruction holds intloc 0 in dom Initialized I;
+  for I being Macro-Instruction holds intloc 0 in dom Initialized I;
 
 theorem :: SCMFSA6A:46  ::T5
- for I being Macro-Instruction holds
-     (Initialized I).intloc 0 = 1 & (Initialized I).IC SCM+FSA = insloc 0;
+  for I being Macro-Instruction holds
+  (Initialized I).intloc 0 = 1 & (Initialized I).IC SCM+FSA = insloc 0;
 
 theorem :: SCMFSA6A:47  ::T7
- for I being Macro-Instruction holds
-     not intloc 0 in dom I & not IC SCM+FSA in dom I;
+  for I being Macro-Instruction holds
+  not intloc 0 in dom I & not IC SCM+FSA in dom I;
 
 theorem :: SCMFSA6A:48  ::T36
- for I being Macro-Instruction, a being Int-Location st a <> intloc 0 holds
-     not a in dom Initialized I;
+  for I being Macro-Instruction, a being Int-Location st a <> intloc 0 holds
+  not a in dom Initialized I;
 
 theorem :: SCMFSA6A:49  ::T37
- for I being Macro-Instruction, f being FinSeq-Location holds
-     not f in dom Initialized I;
+  for I being Macro-Instruction, f being FinSeq-Location holds
+  not f in dom Initialized I;
 
 theorem :: SCMFSA6A:50  ::T8
- for I being Macro-Instruction, x being set st x in dom I holds
-     I.x = (Initialized I).x;
+  for I being Macro-Instruction, x being set st x in dom I holds
+  I.x = (Initialized I).x;
 
 theorem :: SCMFSA6A:51  ::T10'
- for I,J being Macro-Instruction
- for s being State of SCM+FSA st Initialized J c= s holds
-     s +* Initialized I = s +* I;
+  for I,J being Macro-Instruction
+  for s being State of SCM+FSA st Initialized J c= s holds
+  s +* Initialized I = s +* I;
 
 theorem :: SCMFSA6A:52  ::T10
-     for I,J being Macro-Instruction
- for s being State of SCM+FSA st Initialized J c= s holds
-     Initialized I c= s +* I;
+  for I,J being Macro-Instruction
+  for s being State of SCM+FSA st Initialized J c= s holds
+  Initialized I c= s +* I;
 
 theorem :: SCMFSA6A:53  ::T23
-     for I,J being Macro-Instruction
- for s being State of SCM+FSA holds
-     s +* Initialized I, s +* Initialized J
-         equal_outside NAT;
+  for I,J being Macro-Instruction for s being State of SCM+FSA holds
+  s +* Initialized I, s +* Initialized J equal_outside NAT;
 
 begin :: The composition of macroinstructions
 
-definition let I,J be Macro-Instruction;
- func I ';' J -> Macro-Instruction equals
+definition
+  let I,J be Macro-Instruction;
+  func I ';' J -> Macro-Instruction equals
 :: SCMFSA6A:def 4
-   Directed I +* ProgramPart Relocated(J, card I);
+  Directed I +* ProgramPart Relocated(J, card I);
 end;
 
 theorem :: SCMFSA6A:54
-     for I,J being Macro-Instruction, l being Instruction-Location of SCM+FSA
-  st l in dom I & I.l <> halt SCM+FSA
- holds (I ';' J).l = I.l;
+  for I,J being Macro-Instruction, l being Instruction-Location of SCM+FSA
+  st l in dom I & I.l <> halt SCM+FSA holds (I ';' J).l = I.l;
 
 theorem :: SCMFSA6A:55  ::T16
-     for I,J being Macro-Instruction holds
-     Directed I c= I ';' J;
+  for I,J being Macro-Instruction holds Directed I c= I ';' J;
 
 theorem :: SCMFSA6A:56  ::T4
- for I,J being Macro-Instruction holds
-     dom I c= dom (I ';' J);
+  for I,J being Macro-Instruction holds dom I c= dom (I ';' J);
 
 theorem :: SCMFSA6A:57  ::T6
-     for I,J being Macro-Instruction holds
-     I +* (I ';' J) = (I ';' J);
+  for I,J being Macro-Instruction holds I +* (I ';' J) = (I ';' J);
 
 theorem :: SCMFSA6A:58  ::T1
-     for I,J being Macro-Instruction holds
-     Initialized I +* (I ';' J) = Initialized (I ';' J);
+  for I,J being Macro-Instruction holds
+  Initialized I +* (I ';' J) = Initialized (I ';' J);
 
 begin :: The compostion of instruction and macroinstructions
 
-definition let i, J;
- func i ';' J -> Macro-Instruction equals
+definition
+  let i, J;
+  func i ';' J -> Macro-Instruction equals
 :: SCMFSA6A:def 5
-   Macro i ';' J;
+
+  Macro i ';' J;
 end;
 
-definition let I, j;
- func I ';' j -> Macro-Instruction equals
+definition
+  let I, j;
+  func I ';' j -> Macro-Instruction equals
 :: SCMFSA6A:def 6
-   I ';' Macro j;
+
+  I ';' Macro j;
 end;
 
-definition let i,j;
- func i ';' j -> Macro-Instruction equals
+definition
+  let i,j;
+  func i ';' j -> Macro-Instruction equals
 :: SCMFSA6A:def 7
-   Macro i ';' Macro j;
+
+  Macro i ';' Macro j;
 end;
 
 theorem :: SCMFSA6A:59
@@ -305,28 +299,28 @@ theorem :: SCMFSA6A:60
   i ';' j = i ';' Macro j;
 
 theorem :: SCMFSA6A:61
- card(I ';' J) = card I + card J;
+  card(I ';' J) = card I + card J;
 
 theorem :: SCMFSA6A:62
- I ';' J ';' K = I ';' (J ';' K);
+  I ';' J ';' K = I ';' (J ';' K);
 
 theorem :: SCMFSA6A:63
- I ';' J ';' k = I ';' (J ';' k);
+  I ';' J ';' k = I ';' (J ';' k);
 
 theorem :: SCMFSA6A:64
-     I ';' j ';' K = I ';' (j ';' K);
+  I ';' j ';' K = I ';' (j ';' K);
 
 theorem :: SCMFSA6A:65
-     I ';' j ';' k = I ';' (j ';' k);
+  I ';' j ';' k = I ';' (j ';' k);
 
 theorem :: SCMFSA6A:66
- i ';' J ';' K = i ';' (J ';' K);
+  i ';' J ';' K = i ';' (J ';' K);
 
 theorem :: SCMFSA6A:67
-     i ';' J ';' k = i ';' (J ';' k);
+  i ';' J ';' k = i ';' (J ';' k);
 
 theorem :: SCMFSA6A:68
- i ';' j ';' K = i ';' (j ';' K);
+  i ';' j ';' K = i ';' (j ';' K);
 
 theorem :: SCMFSA6A:69
-     i ';' j ';' k = i ';' (j ';' k);
+  i ';' j ';' k = i ';' (j ';' k);

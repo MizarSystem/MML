@@ -23,221 +23,226 @@ environ
 
 begin  :: { \bf SCM } over ring
 
-reserve
-        I for Element of Segm 8,
-        S for non empty 1-sorted,
-        t for Element of S,
-        x for set,
-        k for Element of NAT;
+reserve I for Element of Segm 8,
+  S for non empty 1-sorted,
+  t for Element of S,
+  x for set,
+  k for Element of NAT;
 
-definition let R be good Ring;
- func SCM R -> strict AMI-Struct over NAT, { the carrier of R } means
+definition
+  let R be good Ring;
+  func SCM R -> strict AMI-Struct over NAT, { the carrier of R } means
 :: SCMRING2:def 1
-  the carrier of it = SCM-Memory &
-  the Instruction-Counter of it = NAT &
-  the Instructions of it = SCM-Instr R &
-  the Object-Kind of it = SCM-OK R &
+
+  the carrier of it = SCM-Memory & the Instruction-Counter of it = NAT &
+  the Instructions of it = SCM-Instr R & the Object-Kind of it = SCM-OK R &
   the Execution of it = SCM-Exec R;
 end;
 
-registration let R be good Ring;
- cluster SCM R -> non empty standard-ins stored-program;
+registration
+  let R be good Ring;
+  cluster SCM R -> non empty standard-ins stored-program;
 end;
 
-definition let R be good Ring,
-               s be State of SCM R,
-               a be Element of SCM-Data-Loc;
- redefine func s.a -> Element of R;
+definition
+  let R be good Ring, s be State of SCM R, a be Element of SCM-Data-Loc;
+  redefine func s.a -> Element of R;
 end;
 
-definition let R be good Ring;
- mode Data-Location of R -> Object of SCM R means
+definition
+  let R be good Ring;
+  mode Data-Location of R -> Object of SCM R means
 :: SCMRING2:def 2
-  it in (the carrier of SCM R) \ (SCM-Instr-Loc \/ {NAT});
+
+    it in (the carrier of SCM R) \ (SCM-Instr-Loc \/ {NAT});
 end;
 
 reserve R for good Ring,
-        r for Element of R,
-        a, b, c, d1, d2 for Data-Location of R,
-        i1 for Instruction-Location of SCM R;
+  r for Element of R,
+  a, b, c, d1, d2 for Data-Location of R,
+  i1 for Instruction-Location of SCM R;
 
 theorem :: SCMRING2:1
- x is Data-Location of R iff x in SCM-Data-Loc;
+  x is Data-Location of R iff x in SCM-Data-Loc;
 
-definition let R be good Ring,
-               s be State of SCM R,
-               a be Data-Location of R;
- redefine func s.a -> Element of R;
+definition
+  let R be good Ring, s be State of SCM R, a be Data-Location of R;
+  redefine func s.a -> Element of R;
 end;
 
 theorem :: SCMRING2:2
- [0,{}] in SCM-Instr S;
+  [0,{}] in SCM-Instr S;
 
 theorem :: SCMRING2:3
- [0,{}] is Instruction of SCM R;
+  [0,{}] is Instruction of SCM R;
 
 theorem :: SCMRING2:4
- x in {1,2,3,4} implies [x,<*d1,d2*>] in SCM-Instr S;
+  x in {1,2,3,4} implies [x,<*d1,d2*>] in SCM-Instr S;
 
 theorem :: SCMRING2:5
- [5,<*d1,t*>] in SCM-Instr S;
+  [5,<*d1,t*>] in SCM-Instr S;
 
 theorem :: SCMRING2:6
- [6,<*i1*>] in SCM-Instr S;
+  [6,<*i1*>] in SCM-Instr S;
 
 theorem :: SCMRING2:7
- [7,<*i1,d1*>] in SCM-Instr S;
+  [7,<*i1,d1*>] in SCM-Instr S;
 
-definition let R be good Ring, a, b be Data-Location of R;
- func a := b -> Instruction of SCM R equals
+definition
+  let R be good Ring, a, b be Data-Location of R;
+  func a := b -> Instruction of SCM R equals
 :: SCMRING2:def 3
+
   [ 1, <*a, b*>];
- func AddTo(a,b) -> Instruction of SCM R equals
+  func AddTo(a,b) -> Instruction of SCM R equals
 :: SCMRING2:def 4
+
   [ 2, <*a, b*>];
- func SubFrom(a,b) -> Instruction of SCM R equals
+  func SubFrom(a,b) -> Instruction of SCM R equals
 :: SCMRING2:def 5
+
   [ 3, <*a, b*>];
- func MultBy(a,b) -> Instruction of SCM R equals
+  func MultBy(a,b) -> Instruction of SCM R equals
 :: SCMRING2:def 6
+
   [ 4, <*a, b*>];
 end;
 
-definition let R be good Ring, a be Data-Location of R,
-               r be Element of R;
- func a := r -> Instruction of SCM R equals
+definition
+  let R be good Ring, a be Data-Location of R, r be Element of R;
+  func a := r -> Instruction of SCM R equals
 :: SCMRING2:def 7
+
   [ 5, <*a,r*>];
 end;
 
-definition let R be good Ring, l be Instruction-Location of SCM R;
- func goto l -> Instruction of SCM R equals
+definition
+  let R be good Ring, l be Instruction-Location of SCM R;
+  func goto l -> Instruction of SCM R equals
 :: SCMRING2:def 8
+
   [ 6, <*l*>];
 end;
 
-definition let R be good Ring, l be Instruction-Location of SCM R,
-               a be Data-Location of R;
- func a=0_goto l -> Instruction of SCM R equals
+definition
+  let R be good Ring, l be Instruction-Location of SCM R,
+  a be Data-Location of R;
+  func a=0_goto l -> Instruction of SCM R equals
 :: SCMRING2:def 9
+
   [ 7, <*l,a*>];
 end;
 
 theorem :: SCMRING2:8
- for I being set holds I is Instruction of SCM R iff
-  I = [0,{}] or
-  (ex a,b st I = a:=b) or
-  (ex a,b st I = AddTo(a,b)) or
-  (ex a,b st I = SubFrom(a,b)) or
-  (ex a,b st I = MultBy(a,b)) or
-  (ex i1 st I = goto i1) or
-  (ex a,i1 st I = a=0_goto i1) or
-  ex a,r st I = a:=r;
+  for I being set holds I is Instruction of SCM R iff I = [0,{}] or
+  (ex a,b st I = a:=b) or (ex a,b st I = AddTo(a,b)) or
+  (ex a,b st I = SubFrom(a,b)) or (ex a,b st I = MultBy(a,b)) or
+  (ex i1 st I = goto i1) or (ex a,i1 st I = a=0_goto i1) or ex a,r st I = a:=r;
 
 reserve s for State of SCM R;
 
-registration let R;
- cluster SCM R -> IC-Ins-separated;
+registration
+  let R;
+  cluster SCM R -> IC-Ins-separated;
 end;
 
 theorem :: SCMRING2:9
- IC SCM R = NAT;
+  IC SCM R = NAT;
 
 theorem :: SCMRING2:10
- for S being SCM-State of R st S = s holds IC s = IC S;
+  for S being SCM-State of R st S = s holds IC s = IC S;
 
-definition let R be good Ring, i1 be Instruction-Location of SCM R;
- func Next i1 -> Instruction-Location of SCM R means
+definition
+  let R be good Ring, i1 be Instruction-Location of SCM R;
+  func Next i1 -> Instruction-Location of SCM R means
 :: SCMRING2:def 10
+
   ex mj being Element of SCM-Instr-Loc st mj = i1 & it = Next mj;
 end;
 
 theorem :: SCMRING2:11
- for i1 being Instruction-Location of SCM R,
-     mj being Element of SCM-Instr-Loc st mj = i1
- holds Next mj = Next i1;
+  for i1 being Instruction-Location of SCM R,
+  mj being Element of SCM-Instr-Loc st mj = i1 holds Next mj = Next i1;
 
 theorem :: SCMRING2:12
- for I being Instruction of SCM R
-  for i being Element of SCM-Instr R st i = I
-   for S being SCM-State of R st S = s holds
- Exec(I,s) = SCM-Exec-Res(i,S);
+  for I being Instruction of SCM R for i being Element of SCM-Instr R st i = I
+  for S being SCM-State of R st S = s holds Exec(I,s) = SCM-Exec-Res(i,S);
 
 begin :: Users guide
 
 theorem :: SCMRING2:13
- Exec(a := b, s).IC SCM R = Next IC s &
- Exec(a := b, s).a = s.b &
- for c st c <> a holds Exec(a := b, s).c = s.c;
+  Exec(a := b, s).IC SCM R = Next IC s & Exec(a := b, s).a = s.b &
+  for c st c <> a holds Exec(a := b, s).c = s.c;
 
 theorem :: SCMRING2:14
- Exec(AddTo(a,b), s).IC SCM R = Next IC s &
- Exec(AddTo(a,b), s).a = s.a + s.b &
- for c st c <> a holds Exec(AddTo(a,b), s).c = s.c;
+  Exec(AddTo(a,b), s).IC SCM R = Next IC s &
+  Exec(AddTo(a,b), s).a = s.a + s.b &
+  for c st c <> a holds Exec(AddTo(a,b), s).c = s.c;
 
 theorem :: SCMRING2:15
- Exec(SubFrom(a,b), s).IC SCM R = Next IC s &
- Exec(SubFrom(a,b), s).a = s.a - s.b &
- for c st c <> a holds Exec(SubFrom(a,b), s).c = s.c;
+  Exec(SubFrom(a,b), s).IC SCM R = Next IC s &
+  Exec(SubFrom(a,b), s).a = s.a - s.b &
+  for c st c <> a holds Exec(SubFrom(a,b), s).c = s.c;
 
 theorem :: SCMRING2:16
- Exec(MultBy(a,b), s).IC SCM R = Next IC s &
- Exec(MultBy(a,b), s).a = s.a * s.b &
- for c st c <> a holds Exec(MultBy(a,b), s).c = s.c;
+  Exec(MultBy(a,b), s).IC SCM R = Next IC s &
+  Exec(MultBy(a,b), s).a = s.a * s.b &
+  for c st c <> a holds Exec(MultBy(a,b), s).c = s.c;
 
 theorem :: SCMRING2:17
-      Exec(goto i1, s).IC SCM R = i1 &
- Exec(goto i1, s).c = s.c;
+  Exec(goto i1, s).IC SCM R = i1 & Exec(goto i1, s).c = s.c;
 
 theorem :: SCMRING2:18
- (s.a = 0.R implies Exec(a =0_goto i1, s).IC SCM R = i1) &
- (s.a <> 0.R implies Exec(a =0_goto i1, s).IC SCM R = Next IC s) &
- Exec(a =0_goto i1, s).c = s.c;
+  (s.a = 0.R implies Exec(a =0_goto i1, s).IC SCM R = i1) &
+  (s.a <> 0.R implies Exec(a =0_goto i1, s).IC SCM R = Next IC s) &
+  Exec(a =0_goto i1, s).c = s.c;
 
 theorem :: SCMRING2:19
- Exec(a := r, s).IC SCM R = Next IC s &
- Exec(a := r, s).a = r &
- for c st c <> a holds Exec(a := r, s).c = s.c;
+  Exec(a := r, s).IC SCM R = Next IC s & Exec(a := r, s).a = r &
+  for c st c <> a holds Exec(a := r, s).c = s.c;
 
 begin  :: Halt instruction
 
 theorem :: SCMRING2:20
- for I being Instruction of SCM R st
-  ex s st Exec(I,s).IC SCM R = Next IC s
- holds I is non halting;
+  for I being Instruction of SCM R st ex s st Exec(I,s).IC SCM R = Next IC s
+  holds I is non halting;
 
 theorem :: SCMRING2:21
- for I being Instruction of SCM R st I = [0,{}] holds I is halting;
+  for I being Instruction of SCM R st I = [0,{}] holds I is halting;
 
-registration let R, a, b;
- cluster a:=b -> non halting;
- cluster AddTo(a,b) -> non halting;
- cluster SubFrom(a,b) -> non halting;
- cluster MultBy(a,b) -> non halting;
+registration
+  let R, a, b;
+  cluster a:=b -> non halting;
+  cluster AddTo(a,b) -> non halting;
+  cluster SubFrom(a,b) -> non halting;
+  cluster MultBy(a,b) -> non halting;
 end;
 
-registration let R, i1;
- cluster goto i1 -> non halting;
+registration
+  let R, i1;
+  cluster goto i1 -> non halting;
 end;
 
-registration let R, a, i1;
- cluster a =0_goto i1 -> non halting;
+registration
+  let R, a, i1;
+  cluster a =0_goto i1 -> non halting;
 end;
 
-registration let R, a, r;
- cluster a:=r -> non halting;
+registration
+  let R, a, r;
+  cluster a:=r -> non halting;
 end;
 
-registration let R;
- cluster SCM R -> halting definite steady-programmed
-                  realistic;
+registration
+  let R;
+  cluster SCM R -> halting definite steady-programmed realistic;
 end;
 
 canceled 7;
 
 theorem :: SCMRING2:29
- for I being Instruction of SCM R st I is halting holds I = halt SCM R;
+  for I being Instruction of SCM R st I is halting holds I = halt SCM R;
 
 theorem :: SCMRING2:30
-      halt SCM R = [0,{}];
+  halt SCM R = [0,{}];
 

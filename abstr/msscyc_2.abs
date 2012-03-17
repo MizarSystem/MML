@@ -32,66 +32,67 @@ begin
 
 reserve k, n for Nat;
 
-definition let S be ManySortedSign;
- func InducedEdges S -> set means
+definition
+  let S be ManySortedSign;
+  func InducedEdges S -> set means
 :: MSSCYC_2:def 1
- for x being set holds x in it iff
+
+  for x being set holds x in it iff
   ex op, v being set
-   st x = [op, v] & op in the OperSymbols of S & v in the carrier of S &
-   ex n being Nat, args being Element of (the carrier of S)*
-     st (the Arity of S).op = args & n in dom args & args.n = v;
+  st x = [op, v] & op in the OperSymbols of S & v in the carrier of S &
+  ex n being Nat, args being Element of (the carrier of S)*
+  st (the Arity of S).op = args & n in dom args & args.n = v;
 end;
 
 theorem :: MSSCYC_2:1
-for S being ManySortedSign
+  for S being ManySortedSign
   holds InducedEdges S c= [: the OperSymbols of S, the carrier of S :];
 
-definition let S be ManySortedSign;
- func InducedSource S -> Function of InducedEdges S, the carrier of S means
+definition
+  let S be ManySortedSign;
+  func InducedSource S -> Function of InducedEdges S, the carrier of S means
 :: MSSCYC_2:def 2
 
- for e being set st e in InducedEdges S holds it.e = e`2;
- func InducedTarget S -> Function of InducedEdges S, the carrier of S means
+  for e being set st e in InducedEdges S holds it.e = e`2;
+  func InducedTarget S -> Function of InducedEdges S, the carrier of S means
 :: MSSCYC_2:def 3
 
- for e being set st e in InducedEdges S holds it.e = (the ResultSort of S).e`1;
+
+for e being set st e in InducedEdges S holds it.e = (the ResultSort of S).e`1;
 end;
 
-definition let S be non empty ManySortedSign;
- func InducedGraph S -> Graph equals
+definition
+  let S be non empty ManySortedSign;
+  func InducedGraph S -> Graph equals
 :: MSSCYC_2:def 4
-
-   MultiGraphStruct (# the carrier of S, InducedEdges S,
-                            InducedSource S, InducedTarget S
-                       #);
+  MultiGraphStruct (# the carrier of S, InducedEdges S,
+    InducedSource S, InducedTarget S #);
 end;
 
 theorem :: MSSCYC_2:2
-for S being non void (non empty ManySortedSign),
-        X being non-empty ManySortedSet of the carrier of S,
-        v being SortSymbol of S,
-        n st 1<=n holds
- (ex t being Element of (the Sorts of FreeMSA X).v st depth t = n)
-iff
- (ex c being directed Chain of InducedGraph S st
-    len c = n & (vertex-seq c).(len c +1) = v);
+  for S being non void (non empty ManySortedSign),
+  X being non-empty ManySortedSet of the carrier of S,
+  v being SortSymbol of S, n st 1<=n holds
+  (ex t being Element of (the Sorts of FreeMSA X).v st depth t = n) iff
+  (ex c being directed Chain of InducedGraph S st
+  len c = n & (vertex-seq c).(len c +1) = v);
 
 theorem :: MSSCYC_2:3
-    for S being void non empty ManySortedSign
- holds S is monotonic iff InducedGraph S is well-founded;
+  for S being void non empty ManySortedSign
+  holds S is monotonic iff InducedGraph S is well-founded;
 
 theorem :: MSSCYC_2:4
-    for S being non void (non empty ManySortedSign)
- st S is monotonic holds InducedGraph S is well-founded;
+  for S being non void (non empty ManySortedSign)
+  st S is monotonic holds InducedGraph S is well-founded;
 
 theorem :: MSSCYC_2:5
- for S being non void non empty ManySortedSign,
-     X being non-empty locally-finite ManySortedSet of the carrier of S
-  st S is finitely_operated
-  for n being Nat, v being SortSymbol of S holds
- {t where t is Element of (the Sorts of FreeMSA X).v: depth t <= n} is finite;
+  for S being non void non empty ManySortedSign,
+  X being non-empty locally-finite ManySortedSet of the carrier of S
+  st S is finitely_operated for n being Nat, v being SortSymbol of S holds
+  {t where t is Element of (the Sorts of FreeMSA X).v: depth t <= n} is finite;
 
 theorem :: MSSCYC_2:6
-    for S being non void non empty ManySortedSign
- st S is finitely_operated & InducedGraph S is well-founded
+  for S being non void non empty ManySortedSign
+  st S is finitely_operated & InducedGraph S is well-founded
   holds S is monotonic;
+

@@ -20,310 +20,335 @@ environ
 
 begin
 
- reserve P,Q,X,Y,Z,p,x,x',x1,x2,y,z for set;
+reserve P,Q,X,Y,Z,p,x,x',x1,x2,y,z for set;
 
 ::::::::::::::::::::::::::::::::::::
 :: function from a set into a set ::
 ::::::::::::::::::::::::::::::::::::
 
-definition let X,Y; let R be Relation of X,Y;
- attr R is quasi_total means
-:Def1: X = dom R if Y = {} implies X = {}
-   otherwise R = {};
+definition
+  let X,Y;
+  let R be Relation of X,Y;
+  attr R is quasi_total means
+  :Def1:
+  X = dom R if Y = {} implies X = {}
+  otherwise R = {};
   consistency;
 end;
 
-registration let X,Y;
- cluster quasi_total PartFunc of X,Y;
+registration
+  let X,Y;
+  cluster quasi_total PartFunc of X,Y;
   existence
-   proof
+  proof
     per cases;
     suppose
-A1:    Y = {} & X <> {};
-     reconsider R = {} as PartFunc of X,Y by RELSET_1:25;
-    take R;
-    thus thesis by A1,Def1;
+A1:   Y = {} & X <> {};
+      reconsider R = {} as PartFunc of X,Y by RELSET_1:25;
+      take R;
+      thus thesis by A1,Def1;
     end;
     suppose
-A2:    Y <> {} or X = {};
-     then consider f being Function such that
-A3:    X = dom f & rng f c= Y by FUNCT_1:18;
-     reconsider R = f as PartFunc of X,Y by A3,RELSET_1:10;
-    take R;
-    thus thesis by A2,A3,Def1;
-   end;
-   end;
-end;
-
-registration let X,Y;
- cluster total -> quasi_total PartFunc of X,Y;
- coherence
-  proof let f be PartFunc of X,Y;
-   assume
-A1:   dom f = X;
-   per cases;
-   case Y = {} implies X = {};
-   thus X = dom f by A1;
-   end;
-   case Y = {} & X <> {};
-   hence f = {} by PARTFUN1:64;
-  end;
+A2:   Y <> {} or X = {};
+      then consider f being Function such that
+A3:   X = dom f & rng f c= Y by FUNCT_1:18;
+      reconsider R = f as PartFunc of X,Y by A3,RELSET_1:10;
+      take R;
+      thus thesis by A2,A3,Def1;
+    end;
   end;
 end;
 
-definition let X,Y;
- mode Function of X,Y is quasi_total PartFunc of X,Y;
+registration
+  let X,Y;
+  cluster total -> quasi_total PartFunc of X,Y;
+  coherence
+  proof
+    let f be PartFunc of X,Y;
+    assume
+A1: dom f = X;
+    per cases;
+    case Y = {} implies X = {};
+      thus X = dom f by A1;
+    end;
+    case Y = {} & X <> {};
+      hence f = {} by PARTFUN1:64;
+    end;
+  end;
+end;
+
+definition
+  let X,Y;
+  mode Function of X,Y is quasi_total PartFunc of X,Y;
 end;
 
 canceled 2;
 
 theorem
-   for f being Function holds f is Function of dom f, rng f
- proof let f be Function;
+  for f being Function holds f is Function of dom f, rng f
+proof
+  let f be Function;
   reconsider R = f as Relation of dom f, rng f by RELSET_1:9;
-      R is quasi_total
-   proof per cases;
+  R is quasi_total
+  proof per cases;
     case rng f = {} implies dom f = {};
-    thus thesis;
+      thus thesis;
     end;
     case rng f = {} & dom f <> {};
-    hence thesis by RELAT_1:65;
-   end;
-   end;
+      hence thesis by RELAT_1:65;
+    end;
+  end;
   hence thesis;
- end;
+end;
 
 theorem Th4:
   for f being Function st rng f c= Y holds f is Function of dom f, Y
- proof let f be Function;
-   assume
-A1:  rng f c= Y;
+proof
+  let f be Function;
+  assume
+A1: rng f c= Y;
   then reconsider R = f as Relation of dom f,Y by RELSET_1:10;
-      R is quasi_total
+  R is quasi_total
   proof
-   per cases;
-   case Y = {} implies dom f = {};
-   thus thesis;
-   end;
-   case
-A2:  Y = {} & dom f <> {};
-   then rng f = {} by A1,XBOOLE_1:3;
-  hence thesis by A2,RELAT_1:65;
-  end;
+    per cases;
+    case Y = {} implies dom f = {};
+      thus thesis;
+    end;
+    case
+A2:   Y = {} & dom f <> {};
+      then rng f = {} by A1,XBOOLE_1:3;
+      hence thesis by A2,RELAT_1:65;
+    end;
   end;
   hence thesis;
- end;
+end;
 
 theorem
-   for f being Function
-    st dom f = X & for x st x in X holds f.x in Y holds f is Function of X,Y
- proof let f be Function such that
-A1:  dom f = X and
-A2:  for x st x in X holds f.x in Y;
-       rng f c= Y
-    proof
+  for f being Function
+  st dom f = X & for x st x in X holds f.x in Y holds f is Function of X,Y
+proof
+  let f be Function such that
+A1: dom f = X and
+A2: for x st x in X holds f.x in Y;
+  rng f c= Y
+  proof
     let y;
     assume y in rng f;
     then ex x st x in X & y = f.x by A1,FUNCT_1:def 5;
     hence thesis by A2;
-    end;
-   then reconsider R = f as Relation of dom f,Y by RELSET_1:10;
-       R is quasi_total
-   proof
-   per cases;
-   case Y = {} implies dom f = {};
-    thus dom f = dom R;
-    thus thesis;
-   end;
-   case that
-A3: Y = {} and
-A4: dom f <> {};
-    consider x being Element of dom f;
-     x in dom f by A4;
-    hence thesis by A1,A2,A3;
   end;
+  then reconsider R = f as Relation of dom f,Y by RELSET_1:10;
+  R is quasi_total
+  proof
+    per cases;
+    case Y = {} implies dom f = {};
+      thus dom f = dom R;
+      thus thesis;
+    end;
+    case that
+A3:   Y = {} and
+A4:   dom f <> {};
+      consider x being Element of dom f;
+      x in dom f by A4;
+      hence thesis by A1,A2,A3;
+    end;
   end;
   hence thesis by A1;
- end;
+end;
 
 theorem Th6:
-   for f being Function of X,Y st Y <> {} & x in X holds f.x in rng f
- proof let f be Function of X,Y;
-   assume Y <> {};
-   then dom f = X by Def1;
-   hence thesis by FUNCT_1:def 5;
- end;
+  for f being Function of X,Y st Y <> {} & x in X holds f.x in rng f
+proof
+  let f be Function of X,Y;
+  assume Y <> {};
+  then dom f = X by Def1;
+  hence thesis by FUNCT_1:def 5;
+end;
 
 theorem Th7:
   for f being Function of X,Y st Y <> {} & x in X holds f.x in Y
- proof let f be Function of X,Y;
-   assume Y <> {} & x in X;
-   then f.x in rng f & rng f c= Y by Th6;
-   hence f.x in Y;
- end;
+proof
+  let f be Function of X,Y;
+  assume Y <> {} & x in X;
+  then f.x in rng f & rng f c= Y by Th6;
+  hence f.x in Y;
+end;
 
 theorem
-   for f being Function of X,Y st (Y = {} implies X = {}) & rng f c= Z
-     holds f is Function of X,Z
- proof let f be Function of X,Y;
-   assume Y <> {} or X = {};
-then A1:   dom f = X by Def1;
-   assume
-A2:   rng f c= Z;
-        now assume Z = {};
-     then rng f = {} by A2,XBOOLE_1:3;
-     hence X = {} by A1,RELAT_1:65;
-    end;
-   hence f is Function of X,Z by A1,A2,Def1,RELSET_1:11;
- end;
-
-theorem
-   for f being Function of X,Y
-    st (Y = {} implies X = {}) & Y c= Z holds f is Function of X,Z
- proof let f be Function of X,Y;
-   assume that
-A1:  Y <> {} or X = {} and
-A2:  Y c= Z;
-   reconsider R = f as Relation of X,Z by A2,RELSET_1:16;
-       R is quasi_total
-   proof
-   per cases;
-   case Z = {} implies X = {};
-   thus X = dom R by A1,Def1;
-   end;
-   case Z = {} & X <> {};
-   hence thesis by A1,A2,XBOOLE_1:3;
+  for f being Function of X,Y st (Y = {} implies X = {}) & rng f c= Z
+  holds f is Function of X,Z
+proof
+  let f be Function of X,Y;
+  assume Y <> {} or X = {};
+  then
+A1: dom f = X by Def1;
+  assume
+A2: rng f c= Z;
+  now
+    assume Z = {};
+    then rng f = {} by A2,XBOOLE_1:3;
+    hence X = {} by A1,RELAT_1:65;
   end;
+  hence f is Function of X,Z by A1,A2,Def1,RELSET_1:11;
+end;
+
+theorem
+  for f being Function of X,Y
+  st (Y = {} implies X = {}) & Y c= Z holds f is Function of X,Z
+proof
+  let f be Function of X,Y;
+  assume that
+A1: Y <> {} or X = {} and
+A2: Y c= Z;
+  reconsider R = f as Relation of X,Z by A2,RELSET_1:16;
+  R is quasi_total
+  proof
+    per cases;
+    case Z = {} implies X = {};
+      thus X = dom R by A1,Def1;
+    end;
+    case Z = {} & X <> {};
+      hence thesis by A1,A2,XBOOLE_1:3;
+    end;
   end;
   hence thesis;
- end;
+end;
 
 scheme FuncEx1{X, Y() -> set, P[set,set]}:
- ex f being Function of X(),Y() st for x st x in X() holds P[x,f.x]
+  ex f being Function of X(),Y() st for x st x in X() holds P[x,f.x]
 provided
 A1: for x st x in X() ex y st y in Y() & P[x,y]
 proof
   per cases;
   suppose
 A2: Y() = {};
-A3: now let x;
+A3: now
+      let x;
       assume x in X();
       then ex y st y in Y() & P[x,y] by A1;
       hence contradiction by A2;
-     end;
-     consider f being Function of X(),Y();
-     take f;
-     thus for x st x in X() holds P[x,f.x] by A3;
+    end;
+    consider f being Function of X(),Y();
+    take f;
+    thus for x st x in X() holds P[x,f.x] by A3;
   end;
   suppose
 A4: X() = {};
-     consider f being Function of X(),Y();
-     take f;
-   thus for x st x in X() holds P[x,f.x] by A4;
+    consider f being Function of X(),Y();
+    take f;
+    thus for x st x in X() holds P[x,f.x] by A4;
   end;
   suppose X() <> {} & Y() <> {};
-   then reconsider X = X(), Y = Y() as non empty set;
-   set M = { { ff where ff is Element of Y : P[tt,ff] }
-                     where tt is Element of X : not contradiction };
-   consider x0 being Element of X;
-       { ff where ff is Element of Y : P[x0,ff] } in M;
-   then reconsider M as non empty set;
-       now let x;
-     assume x in M; then consider t being Element of X such that
+    then reconsider X = X(), Y = Y() as non empty set;
+    set M = { { ff where ff is Element of Y : P[tt,ff] }
+    where tt is Element of X : not contradiction };
+    consider x0 being Element of X;
+    { ff where ff is Element of Y : P[x0,ff] } in M;
+    then reconsider M as non empty set;
+    now
+      let x;
+      assume x in M;
+      then consider t being Element of X such that
 A5:   x = { ff where ff is Element of Y : P[t,ff] };
       consider ff being set such that
-A6:    ff in Y and
-A7:    P[t,ff] by A1;
-          ff in x by A5,A6,A7;
-     hence x <> {};
+A6:   ff in Y and
+A7:   P[t,ff] by A1;
+      ff in x by A5,A6,A7;
+      hence x <> {};
     end;
-   then consider C being Function such that dom C = M and
+    then consider C being Function such that dom C = M and
 A8: for x holds x in M implies C.x in x by WELLORD2:28;
-   deffunc F(set) = C.{ ff where ff is Element of Y : P[ $1,ff] };
-   consider f being Function such that
+    deffunc F(set) = C.{ ff where ff is Element of Y : P[ $1,ff] };
+    consider f being Function such that
 A9: dom f = X and
 A10: for x st x in X holds f.x = F(x) from FUNCT_1:sch 3;
-       rng f c= Y
-    proof let x be set;
-     assume x in rng f;
+    rng f c= Y
+    proof
+      let x be set;
+      assume x in rng f;
       then consider y being set such that
-A11:    y in X and
-A12:    x = f.y by A9,FUNCT_1:def 5;
+A11:  y in X and
+A12:  x = f.y by A9,FUNCT_1:def 5;
       set y0 = { ff where ff is Element of Y : P[y,ff] };
-A13:    x = C.y0 by A10,A11,A12;
-          y0 in M by A11;
+A13:  x = C.y0 by A10,A11,A12;
+      y0 in M by A11;
       then x in y0 by A8,A13;
       then ex ff being Element of Y st x = ff & P[y,ff];
-     hence x in Y;
+      hence x in Y;
     end;
-   then reconsider f as Function of X(),Y() by A9,Def1,RELSET_1:11;
-  take f;
-  let x;
-   set x0 = { ff where ff is Element of Y : P[x,ff] };
-  assume
+    then reconsider f as Function of X(),Y() by A9,Def1,RELSET_1:11;
+    take f;
+    let x;
+    set x0 = { ff where ff is Element of Y : P[x,ff] };
+    assume
 A14: x in X();
-   then A15: x0 in M;
-       f.x = C.x0 by A10,A14;
-   then f.x in x0 by A8,A15;
-   then ex ff being Element of Y st ff = f.x & P[x,ff];
-  hence P[x,f.x];
- end;
- end;
+    then
+A15: x0 in M;
+    f.x = C.x0 by A10,A14;
+    then f.x in x0 by A8,A15;
+    then ex ff being Element of Y st ff = f.x & P[x,ff];
+    hence P[x,f.x];
+  end;
+end;
 
 scheme Lambda1{X, Y() -> set, F(set)->set}:
- ex f being Function of X(),Y() st for x st x in X() holds f.x = F(x)
+  ex f being Function of X(),Y() st for x st x in X() holds f.x = F(x)
 provided
 A1: for x st x in X() holds F(x) in Y()
 proof
-   defpred P[set,set] means $2 = F($1);
+  defpred P[set,set] means $2 = F($1);
 A2: for x st x in X() ex y st y in Y() & P[x,y] by A1;
-   thus ex f being Function of X(),Y() st for x st x in X() holds P[x,f.x]
-     from FuncEx1(A2);
-  end;
+  thus ex f being Function of X(),Y() st for x st x in X() holds P[x,f.x]
+  from FuncEx1(A2);
+end;
 
 ::::::::::::::::::::::::::::::::::::::::::::
 :: set of functions from a set into a set ::
 ::::::::::::::::::::::::::::::::::::::::::::
 
-definition let X,Y;
- func Funcs(X,Y) -> set means
-:Def2: x in it iff ex f being Function st x = f & dom f = X & rng f c= Y;
- existence
+definition
+  let X,Y;
+  func Funcs(X,Y) -> set means
+  :Def2:
+  x in it iff ex f being Function st x = f & dom f = X & rng f c= Y;
+  existence
+  proof
+    defpred P[set] means
+    ex f being Function st $1 = f & dom f = X & rng f c= Y;
+    consider F being set such that
+A1: z in F iff z in bool [:X,Y:] & P[z] from XBOOLE_0:sch 1;
+    take F;
+    let z;
+    thus z in F implies
+    ex f being Function st z = f & dom f = X & rng f c= Y by A1;
+    given f being Function such that
+A2: z = f and
+A3: dom f = X and
+A4: rng f c= Y;
+    f c= [:X,Y:]
     proof
-     defpred P[set] means
-       ex f being Function st $1 = f & dom f = X & rng f c= Y;
-     consider F being set such that
-A1:    z in F iff z in bool [:X,Y:] & P[z] from XBOOLE_0:sch 1;
-     take F;
-     let z;
-     thus z in F implies
-           ex f being Function st z = f & dom f = X & rng f c= Y by A1;
-     given f being Function such that
-A2:    z = f and
-A3:    dom f = X and
-A4:    rng f c= Y;
-         f c= [:X,Y:]
-      proof let p;
-       assume
-A5:       p in f;
-       then consider x,y such that
-A6:       p = [x,y] by RELAT_1:def 1;
-A7:       x in dom f by A5,A6,RELAT_1:def 4;
-       then y = f.x by A5,A6,FUNCT_1:def 4;
-       then y in rng f by A7,FUNCT_1:def 5;
-       hence p in [:X,Y:] by A3,A4,A6,A7,ZFMISC_1:def 2;
-      end;
-     hence z in F by A1,A2,A3,A4;
+      let p;
+      assume
+A5:   p in f;
+      then consider x,y such that
+A6:   p = [x,y] by RELAT_1:def 1;
+A7:   x in dom f by A5,A6,RELAT_1:def 4;
+      then y = f.x by A5,A6,FUNCT_1:def 4;
+      then y in rng f by A7,FUNCT_1:def 5;
+      hence p in [:X,Y:] by A3,A4,A6,A7,ZFMISC_1:def 2;
+    end;
+    hence z in F by A1,A2,A3,A4;
   end;
- uniqueness
-  proof let F1,F2 be set such that
+  uniqueness
+  proof
+    let F1,F2 be set such that
 A8: x in F1 iff ex f being Function st x = f & dom f = X & rng f c= Y and
 A9: x in F2 iff ex f being Function st x = f & dom f = X & rng f c= Y;
-        x in F1 iff x in F2
-     proof
-       x in F1 iff ex f being Function st x = f & dom f = X & rng f c= Y by A8;
+    x in F1 iff x in F2
+    proof
+      x in F1 iff ex f being Function st x = f & dom f = X & rng f c= Y by A8;
       hence thesis by A9;
-     end;
+    end;
     hence thesis by TARSKI:2;
   end;
 end;
@@ -331,22 +356,25 @@ end;
 canceled;
 
 theorem Th11:
-   for f being Function of X,Y st Y = {} implies X = {} holds f in Funcs(X,Y)
- proof let f be Function of X,Y;
+  for f being Function of X,Y st Y = {} implies X = {} holds f in Funcs(X,Y)
+proof
+  let f be Function of X,Y;
   assume Y = {} implies X = {};
   then dom f = X & rng f c= Y by Def1;
   hence thesis by Def2;
- end;
+end;
 
 theorem
   for f being Function of X,X holds f in Funcs(X,X) by Th11;
 
-registration let X be set, Y be non empty set;
+registration
+  let X be set, Y be non empty set;
   cluster Funcs(X,Y) -> non empty;
   coherence by Th11;
 end;
 
-registration let X be set;
+registration
+  let X be set;
   cluster Funcs(X,X) -> non empty;
   coherence by Th11;
 end;
@@ -355,470 +383,512 @@ canceled;
 
 theorem Th14:
   X <> {} implies Funcs(X,{}) = {}
- proof assume
+proof
+  assume
 A1: X <> {};
-   consider x being Element of Funcs(X,{});
+  consider x being Element of Funcs(X,{});
   assume Funcs(X,{}) <> {};
-   then consider f being Function such that x = f and
-A2:  dom f = X and
-A3:  rng f c= {} by Def2;
-        rng f = {} by A3,XBOOLE_1:3;
-   hence contradiction by A1,A2,RELAT_1:65;
- end;
+  then consider f being Function such that x = f and
+A2: dom f = X and
+A3: rng f c= {} by Def2;
+  rng f = {} by A3,XBOOLE_1:3;
+  hence contradiction by A1,A2,RELAT_1:65;
+end;
 
 canceled;
 
 theorem
-   for f being Function of X,Y
-     st Y <> {} & for y st y in Y ex x st x in X & y = f.x holds rng f = Y
- proof let f be Function of X,Y such that
-A1:  Y <> {} and
-A2:  for y st y in Y ex x st x in X & y = f.x;
-      y in rng f iff y in Y
-   proof dom f = X by A1,Def1;
-     then (y in rng f iff ex x st x in X & y = f.x) & rng f c= Y
-      by FUNCT_1:def 5;
-     hence thesis by A2;
-   end;
+  for f being Function of X,Y
+  st Y <> {} & for y st y in Y ex x st x in X & y = f.x holds rng f = Y
+proof
+  let f be Function of X,Y such that
+A1: Y <> {} and
+A2: for y st y in Y ex x st x in X & y = f.x;
+  y in rng f iff y in Y
+  proof dom f = X by A1,Def1;
+    then (y in rng f iff ex x st x in X & y = f.x) & rng f c= Y
+    by FUNCT_1:def 5;
+    hence thesis by A2;
+  end;
   hence thesis by TARSKI:2;
- end;
+end;
 
 theorem
-   for f being Function of X,Y st y in rng f ex x st x in X & f.x = y
- proof let f be Function of X,Y;
-   assume
-A1:  y in rng f;
-   then dom f = X by Def1;
-   hence thesis by A1,FUNCT_1:def 5;
- end;
+  for f being Function of X,Y st y in rng f ex x st x in X & f.x = y
+proof
+  let f be Function of X,Y;
+  assume
+A1: y in rng f;
+  then dom f = X by Def1;
+  hence thesis by A1,FUNCT_1:def 5;
+end;
 
 theorem Th18:
-  for f1,f2 being Function of X,Y
-     st for x st x in X holds f1.x = f2.x
-    holds f1 = f2
- proof let f1,f2 be Function of X,Y;
+  for f1,f2 being Function of X,Y st for x st x in X holds f1.x = f2.x
+  holds f1 = f2
+proof
+  let f1,f2 be Function of X,Y;
   per cases;
   suppose Y = {};
     then f1 = {} & f2 = {} by RELSET_1:27;
-   hence thesis;
+    hence thesis;
   end;
   suppose Y <> {};
-   then dom f1 = X & dom f2 = X by Def1;
-   hence thesis by FUNCT_1:9;
- end;
- end;
+    then dom f1 = X & dom f2 = X by Def1;
+    hence thesis by FUNCT_1:9;
+  end;
+end;
 
 theorem Th19:
   for f being quasi_total Relation of X,Y
-  for g being quasi_total Relation of Y,Z
-     st Y = {} implies Z = {} or X = {}
-    holds f*g is quasi_total
- proof let f be quasi_total Relation of X,Y;
+  for g being quasi_total Relation of Y,Z st Y = {} implies Z = {} or X = {}
+  holds f*g is quasi_total
+proof
+  let f be quasi_total Relation of X,Y;
   let g be quasi_total Relation of Y,Z such that
 A1: Y = {} implies Z = {} or X = {};
   per cases;
   case
 A2: Z <> {} or X = {};
-   per cases;
-     suppose
-          Z <> {} or Y = {};
+    per cases;
+    suppose Z <> {} or Y = {};
       then dom g = Y & dom f = X & rng f c= Y by A1,A2,Def1;
-     hence X = dom(f*g) by RELAT_1:46;
-     end;
-     suppose that
+      hence X = dom(f*g) by RELAT_1:46;
+    end;
+    suppose that
 A3:   Y <> {} and
 A4:   Z = {};
-       g = {} by A3,A4,Def1;
-     hence X = dom(f*g) by A2,A4,RELAT_1:60,62;
+      g = {} by A3,A4,Def1;
+      hence X = dom(f*g) by A2,A4,RELAT_1:60,62;
     end;
   end;
   case
 A5: Z = {} & X <> {};
     Y = {} or Y <> {};
-   then f = {} or g = {} by A5,Def1;
-  hence thesis by RELAT_1:62;
+    then f = {} or g = {} by A5,Def1;
+    hence thesis by RELAT_1:62;
   end;
- end;
+end;
 
 theorem
-   for f being Function of X,Y for g being Function of Y,Z
-    st Y <> {} & Z <> {} & rng f = Y & rng g = Z holds rng(g*f) = Z
- proof let f be Function of X,Y; let g be Function of Y,Z;
-   assume Y <> {} & Z <> {};
-   then dom g = Y by Def1;
-   hence thesis by RELAT_1:47;
- end;
+  for f being Function of X,Y for g being Function of Y,Z
+  st Y <> {} & Z <> {} & rng f = Y & rng g = Z holds rng(g*f) = Z
+proof
+  let f be Function of X,Y;
+  let g be Function of Y,Z;
+  assume Y <> {} & Z <> {};
+  then dom g = Y by Def1;
+  hence thesis by RELAT_1:47;
+end;
 
 theorem
-   for f being Function of X,Y, g being Function
-    st Y <> {} & x in X holds (g*f).x = g.(f.x)
- proof let f be Function of X,Y, g be Function;
-   assume Y <> {};
-   then X = dom f by Def1;
-   hence thesis by FUNCT_1:23;
- end;
+  for f being Function of X,Y, g being Function
+  st Y <> {} & x in X holds (g*f).x = g.(f.x)
+proof
+  let f be Function of X,Y, g be Function;
+  assume Y <> {};
+  then X = dom f by Def1;
+  hence thesis by FUNCT_1:23;
+end;
 
 theorem
-   for f being Function of X,Y st Y <> {}
-     holds rng f = Y iff
-      for Z st Z <> {} for g,h being Function of Y,Z st g*f = h*f holds g = h
- proof let f be Function of X,Y;
+  for f being Function of X,Y st Y <> {} holds rng f = Y iff
+  for Z st Z <> {} for g,h being Function of Y,Z st g*f = h*f holds g = h
+proof
+  let f be Function of X,Y;
   assume
-A1:  Y <> {};
+A1: Y <> {};
   thus rng f = Y implies
-      for Z st Z <> {} for g,h being Function of Y,Z st g*f = h*f holds g = h
-   proof assume
-A2:   rng f = Y;
+  for Z st Z <> {} for g,h being Function of Y,Z st g*f = h*f holds g = h
+  proof
+    assume
+A2: rng f = Y;
     let Z such that
-A3:   Z <> {};
+A3: Z <> {};
     let g,h be Function of Y,Z;
-        dom g = Y & dom h = Y by A3,Def1;
+    dom g = Y & dom h = Y by A3,Def1;
     hence thesis by A2,FUNCT_1:156;
-   end;
+  end;
   assume
 A4: for Z st Z <> {} for g,h being Function of Y,Z st g*f = h*f holds g = h;
-      for g,h being Function st dom g = Y & dom h = Y & g*f = h*f holds g = h
-   proof let g,h be Function; assume
-A5:   dom g = Y & dom h = Y;
+  for g,h being Function st dom g = Y & dom h = Y & g*f = h*f holds g = h
+  proof
+    let g,h be Function;
+    assume
+A5: dom g = Y & dom h = Y;
     then rng g c= rng g \/ rng h & rng h c= rng g \/ rng h & rng g <> {}
-     by A1,RELAT_1:65,XBOOLE_1:7;
+    by A1,RELAT_1:65,XBOOLE_1:7;
     then g is Function of Y,rng g \/ rng h & h is Function of Y,rng g \/ rng h
-         & rng g \/ rng h <> {} by A5,Th4,XBOOLE_1:15;
+    & rng g \/ rng h <> {} by A5,Th4,XBOOLE_1:15;
     hence thesis by A4;
-   end;
-  hence thesis by FUNCT_1:33;
- end;
-
-theorem
-   for f being Relation of X,Y holds
-    (id X)*f = f & f*(id Y) = f
- proof let f be Relation of X,Y;
-    dom f c= X;
-   hence (id X)*f = f by RELAT_1:77;
-    rng f c= Y;
-   hence f*(id Y) = f by RELAT_1:79;
- end;
-
-theorem
-   for f being Function of X,Y for g being Function of Y,X
-    st f*g = id Y holds rng f = Y
- proof let f be (Function of X,Y),g be Function of Y,X;
-   assume f*g = id Y;
-   then rng(f*g) = Y by RELAT_1:71;
-   then Y c= rng f & rng f c= Y by RELAT_1:45;
-   hence thesis by XBOOLE_0:def 10;
- end;
-
-theorem
-   for f being Function of X,Y st Y = {} implies X = {}
-    holds f is one-to-one iff
-      for x1,x2 st x1 in X & x2 in X & f.x1 = f.x2 holds x1 = x2
-  proof let f be Function of X,Y;
-   assume Y = {} implies X = {};
-   then dom f = X by Def1;
-   hence thesis by FUNCT_1:def 8;
   end;
+  hence thesis by FUNCT_1:33;
+end;
 
 theorem
-   for f being Function of X,Y for g being Function of Y,Z
-     st (Z = {} implies Y = {}) & (Y = {} implies X = {}) & g*f is one-to-one
-    holds f is one-to-one
- proof let f be Function of X,Y; let g be Function of Y,Z;
+  for f being Relation of X,Y holds (id X)*f = f & f*(id Y) = f
+proof
+  let f be Relation of X,Y;
+  dom f c= X;
+  hence (id X)*f = f by RELAT_1:77;
+  rng f c= Y;
+  hence f*(id Y) = f by RELAT_1:79;
+end;
+
+theorem
+  for f being Function of X,Y for g being Function of Y,X
+  st f*g = id Y holds rng f = Y
+proof
+  let f be (Function of X,Y),g be Function of Y,X;
+  assume f*g = id Y;
+  then rng(f*g) = Y by RELAT_1:71;
+  then Y c= rng f & rng f c= Y by RELAT_1:45;
+  hence thesis by XBOOLE_0:def 10;
+end;
+
+theorem
+  for f being Function of X,Y st Y = {} implies X = {}
+  holds f is one-to-one iff
+  for x1,x2 st x1 in X & x2 in X & f.x1 = f.x2 holds x1 = x2
+proof
+  let f be Function of X,Y;
+  assume Y = {} implies X = {};
+  then dom f = X by Def1;
+  hence thesis by FUNCT_1:def 8;
+end;
+
+theorem
+  for f being Function of X,Y for g being Function of Y,Z
+  st (Z = {} implies Y = {}) & (Y = {} implies X = {}) & g*f is one-to-one
+  holds f is one-to-one
+proof
+  let f be Function of X,Y;
+  let g be Function of Y,Z;
   assume (Z <> {} or Y = {}) & (Y <> {} or X = {});
   then Y = dom g & rng f c= Y by Def1;
   hence thesis by FUNCT_1:47;
- end;
+end;
 
 theorem
-   for f being Function of X,Y st X <> {} & Y <> {}
-     holds f is one-to-one iff
-      for Z for g,h being Function of Z,X st f*g = f*h holds g = h
- proof let f be Function of X,Y; assume
-A1:  X <> {} & Y <> {};
-then A2:  dom f = X by Def1;
-   thus f is one-to-one implies
-      for Z for g,h being Function of Z,X st f*g = f*h holds g = h
-    proof assume A3: f is one-to-one;
-      let Z; let g,h be Function of Z,X;
-       rng g c= X & rng h c= X & dom g = Z & dom h = Z by A1,Def1;
-      hence thesis by A2,A3,FUNCT_1:49;
-    end;
-   assume
+  for f being Function of X,Y st X <> {} & Y <> {} holds f is one-to-one iff
+  for Z for g,h being Function of Z,X st f*g = f*h holds g = h
+proof
+  let f be Function of X,Y;
+  assume
+A1: X <> {} & Y <> {};
+  then
+A2: dom f = X by Def1;
+  thus f is one-to-one implies
+  for Z for g,h being Function of Z,X st f*g = f*h holds g = h
+  proof
+    assume
+A3: f is one-to-one;
+    let Z;
+    let g,h be Function of Z,X;
+    rng g c= X & rng h c= X & dom g = Z & dom h = Z by A1,Def1;
+    hence thesis by A2,A3,FUNCT_1:49;
+  end;
+  assume
 A4: for Z for g,h being Function of Z,X st f*g = f*h holds g = h;
-     now let g,h be Function;
-     assume rng g c= dom f & rng h c= dom f & dom g = dom h;
-     then g is Function of dom g ,X & h is Function of dom g,X by A2,Th4;
-     hence f*g = f*h implies g = h by A4;
-    end;
-   hence thesis by FUNCT_1:49;
- end;
+  now
+    let g,h be Function;
+    assume rng g c= dom f & rng h c= dom f & dom g = dom h;
+    then g is Function of dom g,X & h is Function of dom g,X by A2,Th4;
+    hence f*g = f*h implies g = h by A4;
+  end;
+  hence thesis by FUNCT_1:49;
+end;
 
 theorem
-   for f being Function of X,Y for g being Function of Y,Z
-     st Z <> {} & rng(g*f) = Z & g is one-to-one holds rng f = Y
- proof let f be Function of X,Y; let g be Function of Y,Z;
+  for f being Function of X,Y for g being Function of Y,Z
+  st Z <> {} & rng(g*f) = Z & g is one-to-one holds rng f = Y
+proof
+  let f be Function of X,Y;
+  let g be Function of Y,Z;
   assume that
 A1: Z <> {} and
 A2: rng(g*f) = Z and
 A3: g is one-to-one;
-      rng g c= rng(g*f) & rng(g*f) c= rng g by A2,RELAT_1:45;
+  rng g c= rng(g*f) & rng(g*f) c= rng g by A2,RELAT_1:45;
   then rng g = rng(g*f) & dom g = Y by A1,Def1,XBOOLE_0:def 10;
   then Y c= rng f & rng f c= Y by A3,FUNCT_1:51;
   hence thesis by XBOOLE_0:def 10;
- end;
+end;
 
 theorem
-   for f being Function of X,Y for g being Function of Y,X
-     st Y <> {} & g*f = id X holds f is one-to-one & rng g = X
- proof let f be Function of X,Y; let g be Function of Y,X;
-   assume that
+  for f being Function of X,Y for g being Function of Y,X
+  st Y <> {} & g*f = id X holds f is one-to-one & rng g = X
+proof
+  let f be Function of X,Y;
+  let g be Function of Y,X;
+  assume that
 A1: Y <> {} and
 A2: g*f = id X;
-       dom f = X by A1,Def1;
-   hence f is one-to-one by A2,FUNCT_1:53;
-       rng(g*f) = X by A2,RELAT_1:71;
-   then X c= rng g & rng g c= X by RELAT_1:45;
-   hence thesis by XBOOLE_0:def 10;
- end;
+  dom f = X by A1,Def1;
+  hence f is one-to-one by A2,FUNCT_1:53;
+  rng(g*f) = X by A2,RELAT_1:71;
+  then X c= rng g & rng g c= X by RELAT_1:45;
+  hence thesis by XBOOLE_0:def 10;
+end;
 
 theorem
-   for f being Function of X,Y for g being Function of Y,Z
-     st (Z = {} implies Y = {}) & g*f is one-to-one & rng f = Y
-    holds f is one-to-one & g is one-to-one
- proof let f be Function of X,Y; let g be Function of Y,Z;
-   assume Z <> {} or Y = {};
-   then Y = dom g by Def1;
-   hence thesis by FUNCT_1:48;
- end;
+  for f being Function of X,Y for g being Function of Y,Z
+  st (Z = {} implies Y = {}) & g*f is one-to-one & rng f = Y
+  holds f is one-to-one & g is one-to-one
+proof
+  let f be Function of X,Y;
+  let g be Function of Y,Z;
+  assume Z <> {} or Y = {};
+  then Y = dom g by Def1;
+  hence thesis by FUNCT_1:48;
+end;
 
 theorem Th31:
   for f being Function of X,Y st f is one-to-one & rng f = Y
-   holds f" is Function of Y,X
- proof let f be Function of X,Y;
+  holds f" is Function of Y,X
+proof
+  let f be Function of X,Y;
   assume that
-A1:  f is one-to-one and
-A2:  rng f = Y;
+A1: f is one-to-one and
+A2: rng f = Y;
 A3: rng(f") c= X
-   proof
+  proof
     let x;
     assume x in rng(f");
     then x in dom f by A1,FUNCT_1:55;
     hence x in X;
-   end;
-   dom(f") = Y by A1,A2,FUNCT_1:55;
+  end;
+  dom(f") = Y by A1,A2,FUNCT_1:55;
   then reconsider R = f" as Relation of Y,X by A3,RELSET_1:11;
-   R is quasi_total
+  R is quasi_total
   proof
-  per cases;
-  case X = {} implies Y = {};
-  thus Y = dom R by A1,A2,FUNCT_1:55;
-  end;
-  case X = {} & Y <> {};
-   then dom f = {} by Def1;
-   then rng f = {} by RELAT_1:65;
-   then dom(f") = {} by A1,FUNCT_1:54;
-  hence thesis by RELAT_1:64;
-  end;
+    per cases;
+    case X = {} implies Y = {};
+      thus Y = dom R by A1,A2,FUNCT_1:55;
+    end;
+    case X = {} & Y <> {};
+      then dom f = {} by Def1;
+      then rng f = {} by RELAT_1:65;
+      then dom(f") = {} by A1,FUNCT_1:54;
+      hence thesis by RELAT_1:64;
+    end;
   end;
   hence thesis;
- end;
+end;
 
 theorem
-   for f being Function of X,Y
-    st Y <> {} & f is one-to-one & x in X holds (f").(f.x) = x
- proof let f be Function of X,Y;
-   assume Y <> {};
-   then dom f = X by Def1;
-   hence thesis by FUNCT_1:56;
- end;
+  for f being Function of X,Y
+  st Y <> {} & f is one-to-one & x in X holds (f").(f.x) = x
+proof
+  let f be Function of X,Y;
+  assume Y <> {};
+  then dom f = X by Def1;
+  hence thesis by FUNCT_1:56;
+end;
 
 canceled;
 
 theorem
-   for f being Function of X,Y for g being Function of Y,X
-      st X <> {} & Y <> {} & rng f = Y & f is one-to-one &
-         for y,x holds y in Y & g.y = x iff x in X & f.x = y
-    holds g = f"
- proof let f be Function of X,Y; let g be Function of Y,X;
-    assume X <> {} & Y <> {};
-    then dom f = X & dom g = Y by Def1;
-    hence thesis by FUNCT_1:54;
- end;
+  for f being Function of X,Y for g being Function of Y,X
+  st X <> {} & Y <> {} & rng f = Y & f is one-to-one &
+  for y,x holds y in Y & g.y = x iff x in X & f.x = y holds g = f"
+proof
+  let f be Function of X,Y;
+  let g be Function of Y,X;
+  assume X <> {} & Y <> {};
+  then dom f = X & dom g = Y by Def1;
+  hence thesis by FUNCT_1:54;
+end;
 
 theorem
-   for f being Function of X,Y
-     st Y <> {} & rng f = Y & f is one-to-one holds f"*f = id X & f*f" = id Y
- proof let f be Function of X,Y;
-   assume Y <> {};
-   then dom f = X by Def1;
-   hence thesis by FUNCT_1:61;
- end;
+  for f being Function of X,Y
+  st Y <> {} & rng f = Y & f is one-to-one holds f"*f = id X & f*f" = id Y
+proof
+  let f be Function of X,Y;
+  assume Y <> {};
+  then dom f = X by Def1;
+  hence thesis by FUNCT_1:61;
+end;
 
 theorem
-   for f being Function of X,Y for g being Function of Y,X
-     st X <> {} & Y <> {} & rng f = Y & g*f = id X & f is one-to-one
-    holds g = f"
- proof let f be Function of X,Y;
-   let g be Function of Y,X;
-   assume X <> {} & Y <> {};
-   then dom f = X & dom g = Y by Def1;
-   hence thesis by FUNCT_1:63;
- end;
+  for f being Function of X,Y for g being Function of Y,X
+  st X <> {} & Y <> {} & rng f = Y & g*f = id X & f is one-to-one holds g = f"
+proof
+  let f be Function of X,Y;
+  let g be Function of Y,X;
+  assume X <> {} & Y <> {};
+  then dom f = X & dom g = Y by Def1;
+  hence thesis by FUNCT_1:63;
+end;
 
 theorem
-   for f being Function of X,Y
-     st Y <> {}
- & ex g being Function of Y,X st g*f = id X holds f is one-to-one
- proof let f be Function of X,Y;
-   assume
-A1:  Y <> {};
-   given g being Function of Y,X such that
-A2:  g*f = id X;
-       dom f = X by A1,Def1;
-   hence thesis by A2,FUNCT_1:53;
- end;
+  for f being Function of X,Y st Y <> {}
+  & ex g being Function of Y,X st g*f = id X holds f is one-to-one
+proof
+  let f be Function of X,Y;
+  assume
+A1: Y <> {};
+  given g being Function of Y,X such that
+A2: g*f = id X;
+  dom f = X by A1,Def1;
+  hence thesis by A2,FUNCT_1:53;
+end;
 
 theorem Th38:
   for f being Function of X,Y
-    st (Y = {} implies X = {}) & Z c= X holds f|Z is Function of Z,Y
- proof let f be Function of X,Y such that
-A1:  Y = {} implies X = {} and
-A2:  Z c= X;
-      dom f = X by A1,Def1;
-  then A3:  Z = dom(f|Z) by A2,RELAT_1:91;
-      rng(f|Z) c= Y;
+  st (Y = {} implies X = {}) & Z c= X holds f|Z is Function of Z,Y
+proof
+  let f be Function of X,Y such that
+A1: Y = {} implies X = {} and
+A2: Z c= X;
+  dom f = X by A1,Def1;
+  then
+A3: Z = dom(f|Z) by A2,RELAT_1:91;
+  rng(f|Z) c= Y;
   then reconsider R = f|Z as Relation of Z,Y by A3,RELSET_1:11;
-      R is quasi_total
+  R is quasi_total
   proof
-  per cases;
-  case Y = {} implies Z = {};
-   dom f = X by A1,Def1;
-  hence Z = dom R by A2,RELAT_1:91;
-  thus thesis;
-  end;
-  case Y = {} & Z <> {};
-  hence thesis by A1,A2,XBOOLE_1:3;
-  end;
+    per cases;
+    case Y = {} implies Z = {};
+      dom f = X by A1,Def1;
+      hence Z = dom R by A2,RELAT_1:91;
+      thus thesis;
+    end;
+    case Y = {} & Z <> {};
+      hence thesis by A1,A2,XBOOLE_1:3;
+    end;
   end;
   hence thesis;
- end;
+end;
 
 canceled;
 
 theorem
-   for f being Function of X,Y st X c= Z holds f|Z = f
- proof let f be Function of X,Y;
+  for f being Function of X,Y st X c= Z holds f|Z = f
+proof
+  let f be Function of X,Y;
   per cases;
   suppose Y = {} implies X = {};
-   then dom f = X by Def1;
-   hence thesis by RELAT_1:97;
+    then dom f = X by Def1;
+    hence thesis by RELAT_1:97;
   end;
   suppose Y = {} & X <> {};
-   then f = {} by Def1;
-  hence thesis by RELAT_1:111;
- end;
- end;
+    then f = {} by Def1;
+    hence thesis by RELAT_1:111;
+  end;
+end;
 
 theorem
-   for f being Function of X,Y st Y <> {} & x in X & f.x in Z holds
-    (Z|f).x = f.x
- proof let f be Function of X,Y;
+  for f being Function of X,Y st Y <> {} & x in X & f.x in Z holds
+  (Z|f).x = f.x
+proof
+  let f be Function of X,Y;
   assume Y <> {} & x in X & f.x in Z;
   then x in dom f & f.x in Z by Def1;
   then x in dom(Z|f) by FUNCT_1:86;
   hence thesis by FUNCT_1:87;
- end;
+end;
 
 canceled;
 
 theorem
-   for f being Function of X,Y st Y <> {}
-    for y holds
-     (ex x st x in X & x in P & y = f.x) implies y in f.:P
- proof let f be Function of X,Y;
-   assume Y <> {};
-   then A1:  dom f = X by Def1;
-   let y;
-   given x such that
+  for f being Function of X,Y st Y <> {} for y holds
+  (ex x st x in X & x in P & y = f.x) implies y in f.:P
+proof
+  let f be Function of X,Y;
+  assume Y <> {};
+  then
+A1: dom f = X by Def1;
+  let y;
+  given x such that
 A2: x in X and
 A3: x in P and
 A4: y = f.x;
-   thus y in f.:P by A1,A2,A3,A4,FUNCT_1:def 12;
- end;
+  thus y in f.:P by A1,A2,A3,A4,FUNCT_1:def 12;
+end;
 
 theorem
-   for f being Function of X,Y holds f.:P c= Y;
+  for f being Function of X,Y holds f.:P c= Y;
 
 theorem Th45:
   for f being Function of X,Y st Y = {} implies X = {} holds f.:X = rng f
- proof let f be Function of X,Y;
+proof
+  let f be Function of X,Y;
   assume Y <> {} or X = {};
   then dom f = X by Def1;
   hence f.:X = rng f by RELAT_1:146;
- end;
+end;
 
 theorem
-   for f being Function of X,Y
-    st Y <> {} for x holds x in f"Q iff x in X & f.x in Q
- proof let f be Function of X,Y;
+  for f being Function of X,Y
+  st Y <> {} for x holds x in f"Q iff x in X & f.x in Q
+proof
+  let f be Function of X,Y;
   assume Y <> {};
   then dom f = X by Def1;
   hence thesis by FUNCT_1:def 13;
- end;
+end;
 
 theorem
-   for f being PartFunc of X,Y holds f"Q c= X;
+  for f being PartFunc of X,Y holds f"Q c= X;
 
 theorem
-   for f being Function of X,Y st Y = {} implies X = {} holds f"Y = X
- proof let f be Function of X,Y;
+  for f being Function of X,Y st Y = {} implies X = {} holds f"Y = X
+proof
+  let f be Function of X,Y;
   assume Y <> {} or X = {};
   then dom f = X & rng f /\ Y = rng f by Def1,XBOOLE_1:28;
   then dom f = X & f"Y = f"(rng f) by RELAT_1:168;
   hence f"Y = X by RELAT_1:169;
- end;
+end;
 
 theorem
-       for f being Function of X,Y
-    holds (for y st y in Y holds f"{y} <> {}) iff rng f = Y
- proof let f be Function of X,Y;
+  for f being Function of X,Y
+  holds (for y st y in Y holds f"{y} <> {}) iff rng f = Y
+proof
+  let f be Function of X,Y;
   thus (for y st y in Y holds f"{y} <> {}) implies rng f = Y
-   proof assume for y st y in Y holds f"{y} <> {};
+  proof
+    assume for y st y in Y holds f"{y} <> {};
     then rng f c= Y & Y c= rng f by FUNCT_1:143;
     hence thesis by XBOOLE_0:def 10;
-   end;
+  end;
   thus thesis by FUNCT_1:142;
- end;
+end;
 
 theorem Th50:
   for f being Function of X,Y
-     st (Y = {} implies X = {}) & P c= X holds P c= f"(f.:P)
- proof let f be Function of X,Y;
+  st (Y = {} implies X = {}) & P c= X holds P c= f"(f.:P)
+proof
+  let f be Function of X,Y;
   assume Y <> {} or X = {};
   then dom f = X by Def1;
   hence thesis by FUNCT_1:146;
- end;
+end;
 
 theorem Th51:
-   for f being Function of X,Y st Y = {} implies X = {} holds f"(f.:X) = X
- proof let f be Function of X,Y;
+  for f being Function of X,Y st Y = {} implies X = {} holds f"(f.:X) = X
+proof
+  let f be Function of X,Y;
   assume Y <> {} or X = {};
   then dom f = X by Def1;
   then f"(rng f) = X & f.:X = rng f by RELAT_1:146,169;
   hence thesis;
- end;
+end;
 
 canceled;
 
 theorem
-   for f being Function of X,Y for g being Function of Y,Z
-     st (Z = {} implies Y = {}) & (Y = {} implies X = {})
-    holds f"Q c= (g*f)"(g.:Q)
- proof let f be Function of X,Y; let g be Function of Y,Z;
+  for f being Function of X,Y for g being Function of Y,Z
+  st (Z = {} implies Y = {}) & (Y = {} implies X = {})
+  holds f"Q c= (g*f)"(g.:Q)
+proof
+  let f be Function of X,Y;
+  let g be Function of Y,Z;
   assume (Z <> {} or Y = {}) & (Y <> {} or X = {});
   then dom g = Y & rng f c= Y by Def1;
   hence thesis by FUNCT_1:160;
- end;
+end;
 
 ::::::::::::::::::::
 :: Empty Function ::
@@ -828,206 +898,237 @@ canceled;
 
 theorem Th55:
   for f being Function st dom f = {} holds f is Function of {},Y
- proof let f be Function;
-   assume A1:dom f = {};
-   then rng f = {} by RELAT_1:65;
-   then rng f c= Y by XBOOLE_1:2;
-   then reconsider f as Relation of {},Y by A1,RELSET_1:11;
-       f is quasi_total
-   proof
-   per cases;
-   case Y = {} implies {} = {};
-   thus dom f = {} by A1;
-   end;
-   case Y = {} & {} <> {};
-   hence thesis;
-  end;
+proof
+  let f be Function;
+  assume
+A1: dom f = {};
+  then rng f = {} by RELAT_1:65;
+  then rng f c= Y by XBOOLE_1:2;
+  then reconsider f as Relation of {},Y by A1,RELSET_1:11;
+  f is quasi_total
+  proof
+    per cases;
+    case Y = {} implies {} = {};
+      thus dom f = {} by A1;
+    end;
+    case Y = {} & {} <> {};
+      hence thesis;
+    end;
   end;
   hence thesis;
- end;
+end;
 
 canceled 3;
 
 theorem
-   for f being Function of {},Y holds f.:P = {}
- proof let f be Function of {},Y;
-   consider y being Element of f.:P;
-   assume f.:P <> {};
-    then ex x st x in dom f & x in P & y = f.x by FUNCT_1:def 12;
-   hence contradiction;
- end;
+  for f being Function of {},Y holds f.:P = {}
+proof
+  let f be Function of {},Y;
+  consider y being Element of f.:P;
+  assume f.:P <> {};
+  then ex x st x in dom f & x in P & y = f.x by FUNCT_1:def 12;
+  hence contradiction;
+end;
 
 theorem
-   for f being Function of {},Y holds f"Q = {}
- proof let f be Function of {},Y;
-   consider x being Element of f"Q;
+  for f being Function of {},Y holds f"Q = {}
+proof
+  let f be Function of {},Y;
+  consider x being Element of f"Q;
   assume f"Q <> {};
-    then x in dom f by FUNCT_1:def 13;
-    hence contradiction;
- end;
+  then x in dom f by FUNCT_1:def 13;
+  hence contradiction;
+end;
 
 :::::::::::::::::::::::::::::::::::::::
 :: Function from a singelton into set::
 :::::::::::::::::::::::::::::::::::::::
 
 theorem
-   for f being Function of {x},Y st Y <> {} holds f.x in Y
- proof let f be Function of {x},Y;
+  for f being Function of {x},Y st Y <> {} holds f.x in Y
+proof
+  let f be Function of {x},Y;
   assume Y <> {};
   then dom f = {x} & rng f c= Y by Def1;
   then {f.x} c= Y by FUNCT_1:14;
   hence f.x in Y by ZFMISC_1:37;
- end;
+end;
 
 theorem Th62:
   for f being Function of {x},Y st Y <> {} holds rng f = {f.x}
- proof let f be Function of {x},Y;
+proof
+  let f be Function of {x},Y;
   assume Y <> {};
   then dom f = {x} by Def1;
   hence thesis by FUNCT_1:14;
- end;
+end;
 
 canceled;
 
 theorem
-   for f being Function of {x},Y st Y <> {} holds f.:P c= {f.x}
- proof let f be Function of {x},Y;
-   f.:P c= rng f by RELAT_1:144;
+  for f being Function of {x},Y st Y <> {} holds f.:P c= {f.x}
+proof
+  let f be Function of {x},Y;
+  f.:P c= rng f by RELAT_1:144;
   hence thesis by Th62;
- end;
+end;
 
 ::::::::::::::::::::::::::::::::::::::::::
 :: Function from a set into a singelton ::
 ::::::::::::::::::::::::::::::::::::::::::
 
 theorem Th65:
-   for f being Function of X,{y} st x in X holds f.x = y
- proof let f be Function of X,{y};
-    x in X implies f.x in {y} by Th7;
-   hence thesis by TARSKI:def 1;
- end;
+  for f being Function of X,{y} st x in X holds f.x = y
+proof
+  let f be Function of X,{y};
+  x in X implies f.x in {y} by Th7;
+  hence thesis by TARSKI:def 1;
+end;
 
 theorem Th66:
   for f1,f2 being Function of X,{y} holds f1 = f2
- proof let f1,f2 be Function of X,{y};
-    x in X implies f1.x = f2.x
-   proof assume x in X;
+proof
+  let f1,f2 be Function of X,{y};
+  x in X implies f1.x = f2.x
+  proof
+    assume x in X;
     then f1.x = y & f2.x = y by Th65;
     hence thesis;
-   end;
+  end;
   hence f1 = f2 by Th18;
- end;
+end;
 
 ::::::::::::::::::::::::::::
 :: Function from X into X ::
 ::::::::::::::::::::::::::::
 
-registration let X;
+registration
+  let X;
   let f,g be quasi_total PartFunc of X,X;
   cluster g*f -> quasi_total PartFunc of X,X;
-  coherence proof X <> {} or X = {}; hence thesis by Th19; end;
+  coherence
+  proof X <> {} or X = {};
+    hence thesis by Th19;
+  end;
 end;
 
 theorem Th67:
   for f being Function of X,X holds dom f = X
- proof X = {} implies X = {}; hence thesis by Def1; end;
+proof X = {} implies X = {};
+  hence thesis by Def1;
+end;
 
 canceled 2;
 
 theorem
-   for f being Function of X,X, g being Function
-    st x in X holds (g*f).x = g.(f.x)
- proof let f be Function of X,X, g be Function;
-    X = dom f by Th67;
-   hence thesis by FUNCT_1:23;
- end;
+  for f being Function of X,X, g being Function
+  st x in X holds (g*f).x = g.(f.x)
+proof
+  let f be Function of X,X, g be Function;
+  X = dom f by Th67;
+  hence thesis by FUNCT_1:23;
+end;
 
 canceled 2;
 
 theorem Th73:
   for f,g being Relation of X,X st rng f = X & rng g = X holds rng(g*f) = X
- proof let f,g be Relation of X,X;
+proof
+  let f,g be Relation of X,X;
   assume that
 A1: rng f = X and
 A2: rng g = X;
   thus rng(g*f) = f.:X by A2,RELAT_1:160
-     .= X by A1,RELSET_1:38;
- end;
+    .= X by A1,RELSET_1:38;
+end;
 
 canceled;
 
 theorem
-   for f,g being Function of X,X st g*f = f & rng f = X holds g = id X
- proof let f,g be Function of X,X;
-   dom f = X & dom g = X by Th67;
+  for f,g being Function of X,X st g*f = f & rng f = X holds g = id X
+proof
+  let f,g be Function of X,X;
+  dom f = X & dom g = X by Th67;
   hence thesis by FUNCT_1:44;
- end;
+end;
 
 theorem
-   for f,g being Function of X,X st f*g = f & f is one-to-one holds g = id X
- proof let f,g be Function of X,X;
-      dom f = X & dom g = X & rng g c= X by Th67;
+  for f,g being Function of X,X st f*g = f & f is one-to-one holds g = id X
+proof
+  let f,g be Function of X,X;
+  dom f = X & dom g = X & rng g c= X by Th67;
   hence thesis by FUNCT_1:50;
- end;
+end;
 
 theorem Th77:
-  for f being Function of X,X
-    holds f is one-to-one iff
-     for x1,x2 st x1 in X & x2 in X & f.x1 = f.x2 holds x1 = x2
- proof let f be Function of X,X;
-       dom f = X by Th67;
-   hence thesis by FUNCT_1:def 8;
- end;
+  for f being Function of X,X holds f is one-to-one iff
+  for x1,x2 st x1 in X & x2 in X & f.x1 = f.x2 holds x1 = x2
+proof
+  let f be Function of X,X;
+  dom f = X by Th67;
+  hence thesis by FUNCT_1:def 8;
+end;
 
 canceled;
 
 theorem
-   for f being Function of X,X holds f.:X = rng f by Th45;
+  for f being Function of X,X holds f.:X = rng f by Th45;
 
 canceled 2;
 
 theorem
-   for f being Function of X,X holds f"(f.:X) = X by Th51;
+  for f being Function of X,X holds f"(f.:X) = X by Th51;
 
 ::::::::::::::::::::::::::
 :: Permutation of a set ::
 ::::::::::::::::::::::::::
 
-definition let X, Y be set; let f be Relation of X, Y;
-  attr f is onto means :Def3:
+definition
+  let X, Y be set;
+  let f be Relation of X, Y;
+  attr f is onto means
+  :Def3:
   rng f = Y;
 end;
 
-definition let X, Y; let f be Function of X,Y;
+definition
+  let X, Y;
+  let f be Function of X,Y;
   attr f is bijective means
-:Def4:  f is one-to-one onto;
+  :Def4:
+  f is one-to-one onto;
 end;
 
-registration let X, Y be set;
+registration
+  let X, Y be set;
   cluster bijective -> one-to-one onto Function of X,Y;
   coherence by Def4;
   cluster one-to-one onto -> bijective Function of X,Y;
   coherence by Def4;
 end;
 
-registration let X;
- cluster bijective Function of X,X;
+registration
+  let X;
+  cluster bijective Function of X,X;
   existence
-   proof take id X;
+  proof
+    take id X;
     thus id X is one-to-one & rng id X = X by RELAT_1:71;
-   end;
+  end;
 end;
 
-definition let X;
+definition
+  let X;
   mode Permutation of X is bijective Function of X,X;
 end;
 
 theorem Th83:
   for f being Function of X, X st f is one-to-one & rng f = X
-   holds f is Permutation of X
+  holds f is Permutation of X
 proof
   let f be Function of X, X;
-  assume A1: f is one-to-one & rng f = X;
+  assume
+A1: f is one-to-one & rng f = X;
   then f is onto by Def3;
   hence thesis by A1,Def4;
 end;
@@ -1035,212 +1136,230 @@ end;
 canceled;
 
 theorem
-   for f being Function of X,X st f is one-to-one holds
-    for x1,x2 st x1 in X & x2 in X & f.x1 = f.x2 holds x1 = x2 by Th77;
+  for f being Function of X,X st f is one-to-one holds
+  for x1,x2 st x1 in X & x2 in X & f.x1 = f.x2 holds x1 = x2 by Th77;
 
-registration let X;
- let f,g be onto PartFunc of X,X;
- cluster f*g -> onto PartFunc of X,X;
- coherence
+registration
+  let X;
+  let f,g be onto PartFunc of X,X;
+  cluster f*g -> onto PartFunc of X,X;
+  coherence
   proof rng f = X & rng g = X by Def3;
     then rng(f*g) = X by Th73;
-   hence thesis by Def3;
+    hence thesis by Def3;
   end;
 end;
 
-registration let X;
- let f,g be bijective Function of X,X;
- cluster g*f -> bijective Function of X,X;
- coherence;
+registration
+  let X;
+  let f,g be bijective Function of X,X;
+  cluster g*f -> bijective Function of X,X;
+  coherence;
 end;
 
-registration let X;
- cluster reflexive total -> bijective Function of X,X;
- coherence
-  proof let f be Function of X,X;
-   assume
-A1:  f is reflexive total;
-    then A2:  f is_reflexive_in field f by RELAT_2:def 9;
-A3:  field f = dom f \/ rng f by RELAT_1:def 6;
-   thus f is one-to-one
-    proof let x1,x2 such that
+registration
+  let X;
+  cluster reflexive total -> bijective Function of X,X;
+  coherence
+  proof
+    let f be Function of X,X;
+    assume
+A1: f is reflexive total;
+    then
+A2: f is_reflexive_in field f by RELAT_2:def 9;
+A3: field f = dom f \/ rng f by RELAT_1:def 6;
+    thus f is one-to-one
+    proof
+      let x1,x2 such that
 A4:   x1 in dom f and
 A5:   x2 in dom f and
 A6:   f.x1 = f.x2;
-         x1 in field f & x2 in field f by A3,A4,A5,XBOOLE_0:def 2;
+      x1 in field f & x2 in field f by A3,A4,A5,XBOOLE_0:def 2;
       then [x1,x1] in f & [x2,x2] in f by A2,RELAT_2:def 1;
       then x1 = f.x1 & x2 = f.x2 by A4,A5,FUNCT_1:def 4;
-     hence x1 = x2 by A6;
+      hence x1 = x2 by A6;
     end;
-   thus rng f c= X;
-   let x;
-   assume x in X;
+    thus rng f c= X;
+    let x;
+    assume x in X;
     then x in dom f by A1,PARTFUN1:def 4;
     then x in field f by A3,XBOOLE_0:def 2;
     then [x,x] in f by A2,RELAT_2:def 1;
-   hence x in rng f by RELAT_1:def 5;
+    hence x in rng f by RELAT_1:def 5;
   end;
 end;
 
-definition let X; let f be Permutation of X;
+definition
+  let X;
+  let f be Permutation of X;
   redefine func f" -> Permutation of X;
   coherence
-   proof f is one-to-one & rng f = X & dom f = X & (X = {} iff X = {})
-     by Def3,Th67;
+  proof f is one-to-one & rng f = X & dom f = X & (X = {} iff X = {})
+    by Def3,Th67;
     then f" is Function of X,X & f" is one-to-one & rng(f") = X
-     by Th31,FUNCT_1:55;
+    by Th31,FUNCT_1:55;
     hence f" is Permutation of X by Th83;
-   end;
+  end;
 end;
 
 theorem
-   for f,g being Permutation of X st g*f = g holds f = id X
- proof let f,g be Permutation of X;
-   dom f = X & dom g = X & rng f c= X & g is one-to-one by Th67;
+  for f,g being Permutation of X st g*f = g holds f = id X
+proof
+  let f,g be Permutation of X;
+  dom f = X & dom g = X & rng f c= X & g is one-to-one by Th67;
   hence thesis by FUNCT_1:50;
- end;
+end;
 
 theorem
-   for f,g being Permutation of X st g*f = id X holds g = f"
- proof let f,g be Permutation of X;
-   f is one-to-one & rng f= X & dom g = X & dom f = X by Def3,Th67;
+  for f,g being Permutation of X st g*f = id X holds g = f"
+proof
+  let f,g be Permutation of X;
+  f is one-to-one & rng f= X & dom g = X & dom f = X by Def3,Th67;
   hence thesis by FUNCT_1:63;
- end;
+end;
 
 theorem
-   for f being Permutation of X holds (f")*f =id X & f*(f") = id X
- proof let f be Permutation of X;
-      f is one-to-one & dom f = X & rng f = X by Def3,Th67;
+  for f being Permutation of X holds (f")*f =id X & f*(f") = id X
+proof
+  let f be Permutation of X;
+  f is one-to-one & dom f = X & rng f = X by Def3,Th67;
   hence thesis by FUNCT_1:61;
- end;
+end;
 
 canceled 3;
 
 theorem Th92:
   for f being Permutation of X st P c= X holds f.:(f"P) = P & f"(f.:P) = P
- proof let f be Permutation of X such that
+proof
+  let f be Permutation of X such that
 A1: P c= X;
-   f is one-to-one & dom f = X by Th67;
-  then P c= f"(f.:P) & f"(f.:P) c= P & rng f = X
-    by A1,Def3,FUNCT_1:146,152;
+  f is one-to-one & dom f = X by Th67;
+  then P c= f"(f.:P) & f"(f.:P) c= P & rng f = X by A1,Def3,FUNCT_1:146,152;
   hence thesis by A1,FUNCT_1:147,XBOOLE_0:def 10;
- end;
+end;
 
 ::::::::::::::::::::::::::::::::::::::::::::
 :: Function from a set into a nonempty set
 ::::::::::::::::::::::::::::::::::::::::::::
 
- reserve D for non empty set;
+reserve D for non empty set;
 
-registration let X,D;
- cluster quasi_total -> total PartFunc of X,D;
- coherence
-  proof let f be PartFunc of X,D;
-   assume f is quasi_total;
+registration
+  let X,D;
+  cluster quasi_total -> total PartFunc of X,D;
+  coherence
+  proof
+    let f be PartFunc of X,D;
+    assume f is quasi_total;
     then dom f = X by Def1;
-   hence thesis by PARTFUN1:def 4;
+    hence thesis by PARTFUN1:def 4;
   end;
 end;
 
-registration let X,D,Z;
-  let f be Function of X,D; let g be Function of D,Z;
+registration
+  let X,D,Z;
+  let f be Function of X,D;
+  let g be Function of D,Z;
   cluster g*f -> quasi_total PartFunc of X,Z;
   coherence by Th19;
 end;
 
-definition let C be non empty set, D be set; let f be Function of C,D;
+definition
+  let C be non empty set, D be set;
+  let f be Function of C,D;
   let c be Element of C;
   redefine func f.c -> Element of D;
- coherence
- proof
-   per cases;
-   suppose D is non empty;
-   hence thesis by Th7;
-   end;
-   suppose
-A1:  D is empty;
-   then dom f = {} by PARTFUN1:64,RELAT_1:60;
-   then f.c = {} by FUNCT_1:def 4;
-   hence thesis by A1,SUBSET_1:def 2;
- end;
- end;
+  coherence
+  proof
+    per cases;
+    suppose D is non empty;
+      hence thesis by Th7;
+    end;
+    suppose
+A1:   D is empty;
+      then dom f = {} by PARTFUN1:64,RELAT_1:60;
+      then f.c = {} by FUNCT_1:def 4;
+      hence thesis by A1,SUBSET_1:def 2;
+    end;
+  end;
 end;
 
 scheme FuncExD{C, D() -> non empty set, P[set,set]}:
- ex f being Function of C(),D() st for x being Element of C() holds P[x,f.x]
+  ex f being Function of C(),D() st for x being Element of C() holds P[x,f.x]
 provided
 A1: for x being Element of C() ex y being Element of D() st P[x,y]
 proof
-   defpred R[set,set] means $1 in C() & $2 in D() & P[ $1,$2];
-A2: for x being set st x in C()
-     ex y being set st y in D() & R[x,y]
-   proof let x be set;
+  defpred R[set,set] means $1 in C() & $2 in D() & P[ $1,$2];
+A2: for x being set st x in C() ex y being set st y in D() & R[x,y]
+  proof
+    let x be set;
     assume
-A3:    x in C();
+A3: x in C();
     then ex y being Element of D() st P[x,y] by A1;
     hence thesis by A3;
-   end;
+  end;
   consider f being Function of C(),D() such that
-A4: for x being set st x in C()
-      holds R[x,f.x] from FuncEx1(A2);
+A4: for x being set st x in C() holds R[x,f.x] from FuncEx1(A2);
   take f;
   let x be Element of C();
   thus thesis by A4;
- end;
+end;
 
 scheme LambdaD{C, D() -> non empty set, F(Element of C()) -> Element of D()}:
- ex f being Function of C(),D() st
+  ex f being Function of C(),D() st
   for x being Element of C() holds f.x = F(x)
 proof
   defpred P[Element of C(),set] means $2 = F($1);
 A1: for x being Element of C() ex y being Element of D() st P[x,y];
   thus ex f being Function of C(),D() st
-         for x being Element of C() holds P[x,f.x] from FuncExD(A1);
- end;
+  for x being Element of C() holds P[x,f.x] from FuncExD(A1);
+end;
 
 canceled 20;
 
 theorem Th113:
   for f1,f2 being Function of X,Y st
-    for x being Element of X holds f1.x = f2.x holds f1 = f2
- proof let f1,f2 be Function of X,Y;
+  for x being Element of X holds f1.x = f2.x holds f1 = f2
+proof
+  let f1,f2 be Function of X,Y;
   assume for x being Element of X holds f1.x = f2.x;
-   then for x st x in X holds f1.x = f2.x;
+  then for x st x in X holds f1.x = f2.x;
   hence thesis by Th18;
- end;
+end;
 
 canceled;
 
 theorem Th115:
-   for P being set
-   for f being Function of X,Y
-    for y holds y in f.:P implies ex x st x in X & x in P & y = f.x
- proof let P be set;
+  for P being set for f being Function of X,Y
+  for y holds y in f.:P implies ex x st x in X & x in P & y = f.x
+proof
+  let P be set;
   let f be Function of X,Y;
-   let y;
-   assume y in f.:P;
-    then consider x such that
-A1:  x in dom f and
-A2:  x in P & y = f.x by FUNCT_1:def 12;
-   take x;
-   thus x in X by A1;
-   thus thesis by A2;
- end;
-
-theorem
-   for f being Function of X,Y for y st y in f.:P
-    ex c being Element of X st c in P & y = f.c
- proof let f be Function of X,Y;
   let y;
   assume y in f.:P;
-    then consider x such that
-A1:   x in X and
-A2:   x in P and
-A3:   y = f.x by Th115;
-    reconsider c = x as Element of X by A1;
-    take c;
-    thus thesis by A2,A3;
- end;
+  then consider x such that
+A1: x in dom f and
+A2: x in P & y = f.x by FUNCT_1:def 12;
+  take x;
+  thus x in X by A1;
+  thus thesis by A2;
+end;
+
+theorem
+  for f being Function of X,Y for y st y in f.:P
+  ex c being Element of X st c in P & y = f.c
+proof
+  let f be Function of X,Y;
+  let y;
+  assume y in f.:P;
+  then consider x such that
+A1: x in X and
+A2: x in P and
+A3: y = f.x by Th115;
+  reconsider c = x as Element of X by A1;
+  take c;
+  thus thesis by A2,A3;
+end;
 
 canceled 4;
 
@@ -1248,425 +1367,476 @@ begin :: PARTFUN1
 
 theorem Th121:
   for f being set st f in Funcs(X,Y) holds f is Function of X,Y
- proof let f be set;
+proof
+  let f be set;
   assume
-A1:  f in Funcs(X,Y);
-then A2: not(Y = {} & X <> {}) by Th14;
-      ex f' being Function st f' = f & dom f' = X & rng f' c= Y by A1,Def2;
+A1: f in Funcs(X,Y);
+  then
+A2: not(Y = {} & X <> {}) by Th14;
+  ex f' being Function st f' = f & dom f' = X & rng f' c= Y by A1,Def2;
   hence thesis by A2,Def1,RELSET_1:11;
- end;
+end;
 
 scheme Lambda1C{A, B() -> set, C[set], F(set)->set, G(set)->set}:
- ex f being Function of A(),B() st
-  for x st x in A() holds
-   (C[ x] implies f.x = F(x)) & (not C[ x] implies f.x = G(x))
- provided
+  ex f being Function of A(),B() st for x st x in A() holds
+  (C[ x] implies f.x = F(x)) & (not C[ x] implies f.x = G(x))
+provided
 A1: for x st x in A() holds
-     (C[ x] implies F(x) in B()) & (not C[ x] implies G(x) in B())
+(C[ x] implies F(x) in B()) & (not C[ x] implies G(x) in B())
 proof
   consider f being Function such that
-A2:  dom f = A() and
-A3:  for x st x in A() holds
-      (C[ x] implies f.x = F(x)) &
-      (not C[ x] implies f.x = G(x)) from PARTFUN1:sch 1;
-A4: now assume
-A5:   B() = {};
+A2: dom f = A() and
+A3: for x st x in A() holds (C[ x] implies f.x = F(x)) &
+  (not C[ x] implies f.x = G(x)) from PARTFUN1:sch 1;
+A4: now
     assume
-A6:  A() <> {};
+A5: B() = {};
+    assume
+A6: A() <> {};
     consider x being Element of A();
-        (C[ x] implies F(x) in B()) & (not C[ x] implies G(x) in B()) by A1,A6;
+    (C[ x] implies F(x) in B()) & (not C[ x] implies G(x) in B()) by A1,A6;
     hence contradiction by A5;
-   end;
-    rng f c= B()
-   proof let y;
+  end;
+  rng f c= B()
+  proof
+    let y;
     assume y in rng f;
     then consider x such that
-A7:  x in dom f and
-A8:  y = f.x by FUNCT_1:def 5;
-      (C[ x] implies f.x = F(x)) & (not C[ x] implies f.x = G(x)) by A2,A3,A7;
+A7: x in dom f and
+A8: y = f.x by FUNCT_1:def 5;
+    (C[ x] implies f.x = F(x)) & (not C[ x] implies f.x = G(x)) by A2,A3,A7;
     hence y in B() by A1,A2,A7,A8;
-   end;
-   then f is Function of A(),B() by A2,A4,Def1,RELSET_1:11;
+  end;
+  then f is Function of A(),B() by A2,A4,Def1,RELSET_1:11;
   hence thesis by A3;
- end;
+end;
 
 canceled 8;
 
 theorem
-   for f being PartFunc of X,Y st dom f = X holds f is Function of X,Y
- proof let f be PartFunc of X,Y;
-    rng f c= Y;
-   hence thesis by Th4;
- end;
+  for f being PartFunc of X,Y st dom f = X holds f is Function of X,Y
+proof
+  let f be PartFunc of X,Y;
+  rng f c= Y;
+  hence thesis by Th4;
+end;
 
 theorem Th131:
   for f being PartFunc of X,Y st f is total holds f is Function of X,Y
- proof let f be PartFunc of X,Y;
+proof
+  let f be PartFunc of X,Y;
   assume f is total;
   then dom f = X & rng f c= Y by PARTFUN1:def 4;
   hence thesis by Th4;
- end;
+end;
 
 theorem Th132:
   for f being PartFunc of X,Y st (Y = {} implies X = {}) &
-   f is Function of X,Y holds f is total
- proof let f be PartFunc of X,Y;
-   assume (Y = {} implies X = {}) & f is Function of X,Y;
-   hence dom f = X by Def1;
- end;
+  f is Function of X,Y holds f is total
+proof
+  let f be PartFunc of X,Y;
+  assume (Y = {} implies X = {}) & f is Function of X,Y;
+  hence dom f = X by Def1;
+end;
 
 theorem Th133:
   for f being Function of X,Y
-    st (Y = {} implies X = {}) holds <:f,X,Y:> is total
- proof let f be Function of X,Y;
+  st (Y = {} implies X = {}) holds <:f,X,Y:> is total
+proof
+  let f be Function of X,Y;
   assume
-A1:  Y = {} implies X = {};
-      f = <:f,X,Y:> by PARTFUN1:87; hence thesis by A1,Th132;
- end;
+A1: Y = {} implies X = {};
+  f = <:f,X,Y:> by PARTFUN1:87;
+  hence thesis by A1,Th132;
+end;
 
 theorem
-   for f being Function of X,X holds <:f,X,X:> is total by Th133;
+  for f being Function of X,X holds <:f,X,X:> is total by Th133;
 
 canceled;
 
 theorem Th136:
   for f being PartFunc of X,Y st Y = {} implies X = {}
-   ex g being Function of X,Y st for x st x in dom f holds g.x = f.x
- proof let f be PartFunc of X,Y such that
-A1:   Y = {} implies X = {};
-A2: now assume
-A3:     Y = {};
-      then rng f = {} by XBOOLE_1:3;
-      then dom f = {} by RELAT_1:65;
-      then reconsider g = f as Function of X,Y by A1,A3,Th55;
-      take g;
-      thus for x st x in dom f holds g.x = f.x;
-    end;
-     now assume
-A4:   Y <> {};
-     consider y being Element of Y;
-      defpred P[set] means $1 in dom f;
-      deffunc F(set) = f.$1;
-      deffunc G(set) = y;
-A5:  for x st x in X holds
-      (P[ x] implies F(x) in Y) & (not P[ x] implies G(x) in Y)
-       by A4,PARTFUN1:27;
-     consider g being Function of X,Y such that
-A6:   for x st x in X holds
-       (P[ x] implies g.x = F(x)) & (not P[ x] implies g.x = G(x))
-        from Lambda1C(A5);
-     take g;
-     let x;
-     assume x in dom f;
-     hence g.x = f.x by A6;
-    end;
-   hence thesis by A2;
- end;
+  ex g being Function of X,Y st for x st x in dom f holds g.x = f.x
+proof
+  let f be PartFunc of X,Y such that
+A1: Y = {} implies X = {};
+A2: now
+    assume
+A3: Y = {};
+    then rng f = {} by XBOOLE_1:3;
+    then dom f = {} by RELAT_1:65;
+    then reconsider g = f as Function of X,Y by A1,A3,Th55;
+    take g;
+    thus for x st x in dom f holds g.x = f.x;
+  end;
+  now
+    assume
+A4: Y <> {};
+    consider y being Element of Y;
+    defpred P[set] means $1 in dom f;
+    deffunc F(set) = f.$1;
+    deffunc G(set) = y;
+A5: for x st x in X holds
+    (P[ x] implies F(x) in Y) & (not P[ x] implies G(x) in Y)
+    by A4,PARTFUN1:27;
+    consider g being Function of X,Y such that
+A6: for x st x in X holds
+    (P[ x] implies g.x = F(x)) & (not P[ x] implies g.x = G(x))
+    from Lambda1C(A5);
+    take g;
+    let x;
+    assume x in dom f;
+    hence g.x = f.x by A6;
+  end;
+  hence thesis by A2;
+end;
 
 canceled 4;
 
 theorem
-   Funcs(X,Y) c= PFuncs(X,Y)
- proof let x;
+  Funcs(X,Y) c= PFuncs(X,Y)
+proof
+  let x;
   assume x in Funcs(X,Y);
-   then ex f being Function st x = f & dom f = X & rng f c= Y by Def2;
-   hence thesis by PARTFUN1:def 5;
- end;
+  then ex f being Function st x = f & dom f = X & rng f c= Y by Def2;
+  hence thesis by PARTFUN1:def 5;
+end;
 
 theorem Th142:
-   for f,g being Function of X,Y st (Y = {} implies X = {}) &
-   f tolerates g holds f = g
- proof let f,g be Function of X,Y;
-   assume Y = {} implies X = {};
-   then f is total & g is total by Th132;
-   hence thesis by PARTFUN1:148;
- end;
+  for f,g being Function of X,Y st (Y = {} implies X = {}) &
+  f tolerates g holds f = g
+proof
+  let f,g be Function of X,Y;
+  assume Y = {} implies X = {};
+  then f is total & g is total by Th132;
+  hence thesis by PARTFUN1:148;
+end;
 
 theorem
-   for f,g being Function of X,X st f tolerates g holds f = g by Th142;
+  for f,g being Function of X,X st f tolerates g holds f = g by Th142;
 
 canceled;
 
 theorem Th145:
-   for f being PartFunc of X,Y for g being Function of X,Y
-     st Y = {} implies X = {}
-    holds f tolerates g iff for x st x in dom f holds f.x = g.x
- proof let f be PartFunc of X,Y; let g be Function of X,Y;
+  for f being PartFunc of X,Y for g being Function of X,Y
+  st Y = {} implies X = {}
+  holds f tolerates g iff for x st x in dom f holds f.x = g.x
+proof
+  let f be PartFunc of X,Y;
+  let g be Function of X,Y;
   assume Y = {} implies X = {};
   then dom f c= X & dom g = X by Def1;
   hence thesis by PARTFUN1:132;
- end;
+end;
 
 theorem
-   for f being PartFunc of X,X for g being Function of X,X
-    holds f tolerates g iff for x st x in dom f holds f.x = g.x
- proof let f be PartFunc of X,X; let g be Function of X,X;
-      X = {} implies X = {}; hence thesis by Th145;
- end;
+  for f being PartFunc of X,X for g being Function of X,X
+  holds f tolerates g iff for x st x in dom f holds f.x = g.x
+proof
+  let f be PartFunc of X,X;
+  let g be Function of X,X;
+  X = {} implies X = {};
+  hence thesis by Th145;
+end;
 
 canceled;
 
 theorem Th148:
   for f being PartFunc of X,Y st Y = {} implies X = {}
-   ex g being Function of X,Y st f tolerates g
- proof let f be PartFunc of X,Y;
+  ex g being Function of X,Y st f tolerates g
+proof
+  let f be PartFunc of X,Y;
   assume
-A1:  Y = {} implies X = {};
+A1: Y = {} implies X = {};
   then consider g being Function of X,Y such that
-A2:  for x st x in dom f holds g.x = f.x by Th136;
+A2: for x st x in dom f holds g.x = f.x by Th136;
   take g; thus thesis by A1,A2,Th145;
- end;
+end;
 
 theorem
-   for f being PartFunc of X,X ex g being Function of X,X st f tolerates g
- proof let f be PartFunc of X,X;
-      X = {} implies X = {}; hence thesis by Th148;
- end;
+  for f being PartFunc of X,X ex g being Function of X,X st f tolerates g
+proof
+  let f be PartFunc of X,X;
+  X = {} implies X = {};
+  hence thesis by Th148;
+end;
 
 canceled;
 
 theorem Th151:
-   for f,g being PartFunc of X,Y for h being Function of X,Y
-    st (Y = {} implies X = {}) & f tolerates h & g tolerates h holds
-      f tolerates g
- proof let f,g be PartFunc of X,Y; let h be Function of X,Y;
+  for f,g being PartFunc of X,Y for h being Function of X,Y
+  st (Y = {} implies X = {}) & f tolerates h & g tolerates h holds
+  f tolerates g
+proof
+  let f,g be PartFunc of X,Y;
+  let h be Function of X,Y;
   assume Y = {} implies X = {};
-  then h is total by Th132; hence thesis by PARTFUN1:158;
- end;
+  then h is total by Th132;
+  hence thesis by PARTFUN1:158;
+end;
 
 theorem
-   for f,g being PartFunc of X,X for h being Function of X,X
-     st f tolerates h & g tolerates h holds f tolerates g
- proof let f,g be PartFunc of X,X; let h be Function of X,X;
-      X = {} implies X = {}; hence thesis by Th151;
- end;
+  for f,g being PartFunc of X,X for h being Function of X,X
+  st f tolerates h & g tolerates h holds f tolerates g
+proof
+  let f,g be PartFunc of X,X;
+  let h be Function of X,X;
+  X = {} implies X = {};
+  hence thesis by Th151;
+end;
 
 canceled;
 
 theorem
-   for f,g being PartFunc of X,Y st (Y = {} implies X = {}) & f tolerates g
-    ex h being Function of X,Y st f tolerates h & g tolerates h
- proof let f,g be PartFunc of X,Y;
+  for f,g being PartFunc of X,Y st (Y = {} implies X = {}) & f tolerates g
+  ex h being Function of X,Y st f tolerates h & g tolerates h
+proof
+  let f,g be PartFunc of X,Y;
   assume (Y = {} implies X = {}) & f tolerates g;
   then consider h being PartFunc of X,Y such that
-A1:   h is total and
-A2:   f tolerates h & g tolerates h by PARTFUN1:162;
-      h is Function of X,Y by A1,Th131;
+A1: h is total and
+A2: f tolerates h & g tolerates h by PARTFUN1:162;
+  h is Function of X,Y by A1,Th131;
   hence thesis by A2;
- end;
+end;
 
 theorem Th155:
-   for f being PartFunc of X,Y for g being Function of X,Y
-     st (Y = {} implies X = {}) & f tolerates g holds g in TotFuncs f
- proof let f be PartFunc of X,Y; let g be Function of X,Y;
+  for f being PartFunc of X,Y for g being Function of X,Y
+  st (Y = {} implies X = {}) & f tolerates g holds g in TotFuncs f
+proof
+  let f be PartFunc of X,Y;
+  let g be Function of X,Y;
   assume Y = {} implies X = {};
   then g is total by Th132;
   hence thesis by PARTFUN1:def 7;
- end;
+end;
 
 theorem
-   for f being PartFunc of X,X for g being Function of X,X
-     st f tolerates g holds g in TotFuncs f by Th155;
+  for f being PartFunc of X,X for g being Function of X,X
+  st f tolerates g holds g in TotFuncs f by Th155;
 
 canceled;
 
 theorem Th158:
   for f being PartFunc of X,Y for g being set
-   st g in TotFuncs(f) holds g is Function of X,Y
- proof let f be PartFunc of X,Y; let g be set;
+  st g in TotFuncs(f) holds g is Function of X,Y
+proof
+  let f be PartFunc of X,Y;
+  let g be set;
   assume g in TotFuncs(f);
   then ex g' being PartFunc of X,Y st g' = g & g' is total & f tolerates g'
-    by PARTFUN1:def 7;
+  by PARTFUN1:def 7;
   hence g is Function of X,Y by Th131;
- end;
+end;
 
 theorem
-   for f being PartFunc of X,Y holds TotFuncs f c= Funcs(X,Y)
- proof let f be PartFunc of X,Y;
-   per cases;
-   suppose Y = {} & X <> {}; then TotFuncs f = {} by PARTFUN1:172;
-     hence thesis by XBOOLE_1:2;
-   end;
-   suppose
-A1:   Y <> {} or X = {};
+  for f being PartFunc of X,Y holds TotFuncs f c= Funcs(X,Y)
+proof
+  let f be PartFunc of X,Y;
+  per cases;
+  suppose Y = {} & X <> {};
+    then TotFuncs f = {} by PARTFUN1:172;
+    hence thesis by XBOOLE_1:2;
+  end;
+  suppose
+A1: Y <> {} or X = {};
     thus TotFuncs f c= Funcs(X,Y)
-     proof let g be set;
+    proof
+      let g be set;
       assume g in TotFuncs f;
       then g is Function of X,Y by Th158;
       hence g in Funcs(X,Y) by A1,Th11;
-     end;
+    end;
   end;
- end;
+end;
 
 theorem
-   TotFuncs <:{},X,Y:> = Funcs(X,Y)
- proof
-   per cases;
-   suppose Y = {} & X <> {};
+  TotFuncs <:{},X,Y:> = Funcs(X,Y)
+proof
+  per cases;
+  suppose Y = {} & X <> {};
     then TotFuncs <:{},X,Y:> = {} & Funcs(X,Y) = {} by Th14,PARTFUN1:172;
     hence thesis;
-   end;
-   suppose
-A1:   Y = {} implies X = {};
-        for g being set holds g in TotFuncs <:{},X,Y:> iff g in Funcs(X,Y)
-     proof let g be set;
+  end;
+  suppose
+A1: Y = {} implies X = {};
+    for g being set holds g in TotFuncs <:{},X,Y:> iff g in Funcs(X,Y)
+    proof
+      let g be set;
       thus g in TotFuncs <:{},X,Y:> implies g in Funcs(X,Y)
-       proof assume g in TotFuncs <:{},X,Y:>;
+      proof
+        assume g in TotFuncs <:{},X,Y:>;
         then g is Function of X,Y by Th158;
         hence thesis by A1,Th11;
-       end;
-      assume A2: g in Funcs(X,Y);
-then A3:   g is Function of X,Y by Th121;
+      end;
+      assume
+A2:   g in Funcs(X,Y);
+      then
+A3:   g is Function of X,Y by Th121;
       reconsider g' = g as PartFunc of X,Y by A2,Th121;
-          <:{},X,Y:> tolerates g' & g' is total by A1,A3,Th132,PARTFUN1:142;
+      <:{},X,Y:> tolerates g' & g' is total by A1,A3,Th132,PARTFUN1:142;
       hence thesis by PARTFUN1:def 7;
-     end;
+    end;
     hence thesis by TARSKI:2;
-   end;
- end;
+  end;
+end;
 
 theorem Th161:
   for f being Function of X,Y st Y = {} implies X = {}
-    holds TotFuncs <:f,X,Y:> = {f}
- proof let f be Function of X,Y;
+  holds TotFuncs <:f,X,Y:> = {f}
+proof
+  let f be Function of X,Y;
   assume Y = {} implies X = {};
   then <:f,X,Y:> is total & <:f,X,Y:> = f by Th133,PARTFUN1:87;
   hence thesis by PARTFUN1:174;
- end;
+end;
 
 theorem
-   for f being Function of X,X holds TotFuncs <:f,X,X:> = {f} by Th161;
+  for f being Function of X,X holds TotFuncs <:f,X,X:> = {f} by Th161;
 
 canceled;
 
 theorem
-   for f being PartFunc of X,{y} for g being Function of X,{y}
-    holds TotFuncs f = {g}
- proof let f be PartFunc of X,{y}; let g be Function of X,{y};
-    for h being set holds h in TotFuncs f iff h = g
-   proof let h be set;
+  for f being PartFunc of X,{y} for g being Function of X,{y}
+  holds TotFuncs f = {g}
+proof
+  let f be PartFunc of X,{y};
+  let g be Function of X,{y};
+  for h being set holds h in TotFuncs f iff h = g
+  proof
+    let h be set;
     thus h in TotFuncs f implies h = g
-     proof assume h in TotFuncs f;
+    proof
+      assume h in TotFuncs f;
       then h is Function of X,{y} by Th158;
       hence thesis by Th66;
-     end;
-        f tolerates g by PARTFUN1:143;
+    end;
+    f tolerates g by PARTFUN1:143;
     hence thesis by Th155;
-   end;
+  end;
   hence thesis by TARSKI:def 1;
- end;
+end;
 
 theorem
-   for f,g being PartFunc of X,Y
-     st g c= f holds TotFuncs f c= TotFuncs g
- proof let f,g be PartFunc of X,Y such that
+  for f,g being PartFunc of X,Y st g c= f holds TotFuncs f c= TotFuncs g
+proof
+  let f,g be PartFunc of X,Y such that
 A1: g c= f;
   let h be set;
   assume
-A2:   h in TotFuncs f;
-   then reconsider h'=h as PartFunc of X,Y by PARTFUN1:168;
-A3:   h' is total by A2,PARTFUN1:169;
-   g tolerates h' by A1,A2,PARTFUN1:140,171;
+A2: h in TotFuncs f;
+  then reconsider h'=h as PartFunc of X,Y by PARTFUN1:168;
+A3: h' is total by A2,PARTFUN1:169;
+  g tolerates h' by A1,A2,PARTFUN1:140,171;
   hence h in TotFuncs g by A3,PARTFUN1:def 7;
- end;
+end;
 
 theorem Th166:
-   for f,g being PartFunc of X,Y
-     st dom g c= dom f & TotFuncs f c= TotFuncs g holds g c= f
- proof let f,g be PartFunc of X,Y such that
-A1:    dom g c= dom f;
-      now per cases;
-   suppose Y = {} & X <> {}; then g = {} by PARTFUN1:64;
-    hence thesis by XBOOLE_1:2;
-   end;
-   suppose
+  for f,g being PartFunc of X,Y
+  st dom g c= dom f & TotFuncs f c= TotFuncs g holds g c= f
+proof
+  let f,g be PartFunc of X,Y such that
+A1: dom g c= dom f;
+  now per cases;
+    suppose Y = {} & X <> {};
+      then g = {} by PARTFUN1:64;
+      hence thesis by XBOOLE_1:2;
+    end;
+    suppose
 A2:   Y = {} implies X = {};
-    thus TotFuncs f c= TotFuncs g implies g c= f
-    proof assume
-A3:    TotFuncs f c= TotFuncs g;
-         for x st x in dom g holds g.x = f.x
-      proof let x;
-       assume
-A4:      x in dom g;
-       consider h being Function of X,Y such that
-A5:      f tolerates h by A2,Th148;
-           h in TotFuncs f by A2,A5,Th155;
-       then g tolerates h & x in dom f by A1,A3,A4,PARTFUN1:171;
-       then f tolerates g & x in dom f /\ dom g by A2,A4,A5,Th151,
-XBOOLE_0:def 3;
-       hence thesis by PARTFUN1:def 6;
+      thus TotFuncs f c= TotFuncs g implies g c= f
+      proof
+        assume
+A3:     TotFuncs f c= TotFuncs g;
+        for x st x in dom g holds g.x = f.x
+        proof
+          let x;
+          assume
+A4:       x in dom g;
+          consider h being Function of X,Y such that
+A5:       f tolerates h by A2,Th148;
+          h in TotFuncs f by A2,A5,Th155;
+          then g tolerates h & x in dom f by A1,A3,A4,PARTFUN1:171;
+          then f tolerates g & x in dom f /\ dom g by A2,A4,A5,Th151,
+          XBOOLE_0:def 3;
+          hence thesis by PARTFUN1:def 6;
+        end;
+        hence thesis by A1,GRFUNC_1:8;
       end;
-     hence thesis by A1,GRFUNC_1:8;
     end;
   end;
-  end;
   hence thesis;
- end;
+end;
 
 theorem Th167:
-   for f,g being PartFunc of X,Y
-     st TotFuncs f c= TotFuncs g & (for y holds Y <> {y})
-    holds g c= f
- proof let f,g be PartFunc of X,Y such that
+  for f,g being PartFunc of X,Y
+  st TotFuncs f c= TotFuncs g & (for y holds Y <> {y}) holds g c= f
+proof
+  let f,g be PartFunc of X,Y such that
 A1: TotFuncs f c= TotFuncs g and
 A2: for y holds Y <> {y};
-    now per cases;
-   suppose Y = {}; then g = {} by PARTFUN1:64;
-    hence dom g c= dom f by RELAT_1:60,XBOOLE_1:2;
-   end;
-   suppose
+  now per cases;
+    suppose Y = {};
+      then g = {} by PARTFUN1:64;
+      hence dom g c= dom f by RELAT_1:60,XBOOLE_1:2;
+    end;
+    suppose
 A3:   Y <> {};
-    thus dom g c= dom f
-     proof let x such that
-A4:      x in dom g and
-A5:      not x in dom f;
-          g.x in Y & Y <> {g.x} by A2,A4,PARTFUN1:27;
-      then consider y such that
-A6:      y in Y and
-A7:      y <> g.x by ZFMISC_1:41;
-      defpred P[set] means $1 in dom f;
-      deffunc F(set) = f.$1;
-      deffunc G(set) = y;
-A8:   for x' st x' in X holds
-       (P[ x'] implies F(x') in Y) & (not P[ x'] implies G(x') in Y)
+      thus dom g c= dom f
+      proof
+        let x such that
+A4:     x in dom g and
+A5:     not x in dom f;
+        g.x in Y & Y <> {g.x} by A2,A4,PARTFUN1:27;
+        then consider y such that
+A6:     y in Y and
+A7:     y <> g.x by ZFMISC_1:41;
+        defpred P[set] means $1 in dom f;
+        deffunc F(set) = f.$1;
+        deffunc G(set) = y;
+A8:     for x' st x' in X holds
+        (P[ x'] implies F(x') in Y) & (not P[ x'] implies G(x') in Y)
         by A6,PARTFUN1:27;
-      consider h being Function of X,Y such that
-A9:   for x' st x' in X holds
-        (P[ x'] implies h.x' = F(x')) &
+        consider h being Function of X,Y such that
+A9:     for x' st x' in X holds (P[ x'] implies h.x' = F(x')) &
         (not P[ x'] implies h.x' = G(x')) from Lambda1C(A8);
 A10:    x in X by A4;
-          f tolerates h
-       proof let x';
-        assume x' in dom f /\ dom h;
-        then x' in dom f & x' in dom h by XBOOLE_0:def 3;
-        hence thesis by A9;
-       end;
-      then h in TotFuncs f by A3,Th155;
-      then h in TotFuncs g & x in dom h by A1,A3,A10,Def1;
-      then g tolerates h & x in dom g /\ dom h & h.x = y
-       by A4,A5,A9,PARTFUN1:171,XBOOLE_0:def 3;
-      hence contradiction by A7,PARTFUN1:def 6;
-     end;
-  end;
+        f tolerates h
+        proof
+          let x';
+          assume x' in dom f /\ dom h;
+          then x' in dom f & x' in dom h by XBOOLE_0:def 3;
+          hence thesis by A9;
+        end;
+        then h in TotFuncs f by A3,Th155;
+        then h in TotFuncs g & x in dom h by A1,A3,A10,Def1;
+        then g tolerates h & x in dom g /\ dom h & h.x = y
+        by A4,A5,A9,PARTFUN1:171,XBOOLE_0:def 3;
+        hence contradiction by A7,PARTFUN1:def 6;
+      end;
+    end;
   end;
   hence thesis by A1,Th166;
- end;
+end;
 
 theorem
-   for f,g being PartFunc of X,Y
-    st (for y holds Y <> {y}) & TotFuncs f = TotFuncs g holds f = g
- proof let f,g be PartFunc of X,Y;
+  for f,g being PartFunc of X,Y
+  st (for y holds Y <> {y}) & TotFuncs f = TotFuncs g holds f = g
+proof
+  let f,g be PartFunc of X,Y;
   assume
-A1:  for y holds Y <> {y};
+A1: for y holds Y <> {y};
   assume TotFuncs f = TotFuncs g;
   then g c= f & f c= g by A1,Th167;
   hence thesis by XBOOLE_0:def 10;
- end;
+end;
 
 :: from WAYBEL_1
 
-registration let A,B be non empty set;
- cluster -> non empty Function of A,B;
+registration
+  let A,B be non empty set;
+  cluster -> non empty Function of A,B;
   coherence by Def1,RELAT_1:60;
 end;
 
@@ -1675,316 +1845,335 @@ begin :: Addenda
 :: from RLVECT_2
 
 scheme LambdaSep1{D, R() -> non empty set, A() -> Element of D(),
-                  B() -> Element of R(), F(set) -> Element of R()}:
- ex f being Function of D(),R() st
+  B() -> Element of R(), F(set) -> Element of R()}:
+  ex f being Function of D(),R() st
   f.A() = B() & for x being Element of D() st x <> A() holds f.x = F(x)
 proof
-     defpred P[set,set] means
-     ($1 = A() implies $2 = B()) & ($1 <> A() implies $2 = F($1));
-     A1: for x being Element of D()
-          ex y being Element of R() st P[x,y]
-      proof let x be Element of D();
-             (x = A() implies thesis) & (x <> A() implies thesis);
-       hence thesis;
-      end;
-     consider f being Function of D(),R() such that A2:
-      for x being Element of D() holds P[x,f.x] from FuncExD(A1);
-    take f;
-    thus thesis by A2;
-   end;
+  defpred P[set,set] means
+  ($1 = A() implies $2 = B()) & ($1 <> A() implies $2 = F($1));
+A1: for x being Element of D() ex y being Element of R() st P[x,y]
+  proof
+    let x be Element of D();
+    (x = A() implies thesis) & (x <> A() implies thesis);
+    hence thesis;
+  end;
+  consider f being Function of D(),R() such that
+A2: for x being Element of D() holds P[x,f.x] from FuncExD(A1);
+  take f;
+  thus thesis by A2;
+end;
 
 scheme LambdaSep2{D, R() -> non empty set, A1, A2() -> Element of D(),
-                  B1, B2() -> Element of R(), F(set) -> Element of R()}:
- ex f being Function of D(),R() st
-  f.A1() = B1() & f.A2() = B2() &
-   for x being Element of D() st x <> A1() & x <> A2() holds f.x = F(x)
- provided
-  A1: A1() <> A2()
+  B1, B2() -> Element of R(), F(set) -> Element of R()}:
+  ex f being Function of D(),R() st f.A1() = B1() & f.A2() = B2() &
+  for x being Element of D() st x <> A1() & x <> A2() holds f.x = F(x)
+provided
+A1: A1() <> A2()
 proof
-      defpred P[set,set] means
-        ($1 = A1() implies $2 = B1()) & ($1 = A2() implies $2 = B2()) &
-        ($1 <> A1() & $1 <> A2() implies $2 = F($1));
-      A2: for x being Element of D()
-           ex y being Element of R() st P[x,y]
-       proof let x be Element of D();
-              (x = A1() implies thesis) & (x = A2() implies thesis) &
-         (x <> A1() & x <> A2() implies thesis) by A1;
-        hence thesis;
-       end;
-      consider f being Function of D(),R() such that A3:
-       for x being Element of D() holds P[x,f.x] from FuncExD(A2);
-     take f;
-     thus thesis by A3;
-    end;
+  defpred P[set,set] means
+  ($1 = A1() implies $2 = B1()) & ($1 = A2() implies $2 = B2()) &
+  ($1 <> A1() & $1 <> A2() implies $2 = F($1));
+A2: for x being Element of D() ex y being Element of R() st P[x,y]
+  proof
+    let x be Element of D();
+    (x = A1() implies thesis) & (x = A2() implies thesis) &
+    (x <> A1() & x <> A2() implies thesis) by A1;
+    hence thesis;
+  end;
+  consider f being Function of D(),R() such that
+A3: for x being Element of D() holds P[x,f.x] from FuncExD(A2);
+  take f;
+  thus thesis by A3;
+end;
 
 :: from ALTCAT_1, PRALG_3
 
 theorem
-   for A,B being set
- for f being Function st f in Funcs(A,B) holds dom f = A & rng f c= B
- proof let A,B be set;
+  for A,B being set
+  for f being Function st f in Funcs(A,B) holds dom f = A & rng f c= B
+proof
+  let A,B be set;
   let f be Function;
   assume f in Funcs(A,B);
-   then ex g being Function st f = g & dom g = A & rng g c= B by Def2;
+  then ex g being Function st f = g & dom g = A & rng g c= B by Def2;
   hence dom f = A & rng f c= B;
- end;
+end;
 
 :: from SUPINF_2
 
 scheme FunctRealEx{X()->non empty set,Y()->set,F(set)->set}:
   ex f being Function of X(),Y() st
-   for x being Element of X() holds f.x = F(x)
-   provided
-A1:for x being Element of X() holds F(x) in Y()
-proof defpred P[set,set] means $2 = F($1);
-A2:for x being set st x in X() ex y being set st y in Y() & P[x,y] by A1;
-    ex f being Function of X(),Y() st
-   for x being set st x in X() holds P[x,f.x] from FuncEx1(A2);
-   then consider f being Function of X(),Y() such that
-A3:for x being set st x in X() holds f.x = F(x);
-       for x being Element of X() holds f.x = F (x) by A3;
-   hence thesis;
+  for x being Element of X() holds f.x = F(x)
+provided
+A1: for x being Element of X() holds F(x) in Y()
+proof
+  defpred P[set,set] means $2 = F($1);
+A2: for x being set st x in X() ex y being set st y in Y() & P[x,y] by A1;
+  ex f being Function of X(),Y() st
+  for x being set st x in X() holds P[x,f.x] from FuncEx1(A2);
+  then consider f being Function of X(),Y() such that
+A3: for x being set st x in X() holds f.x = F(x);
+  for x being Element of X() holds f.x = F (x) by A3;
+  hence thesis;
 end;
 
 :: from YELLOW_2
 
 scheme KappaMD{X, Y() -> non empty set, F(set) -> set}:
   ex f being Function of X(), Y() st for x being Element of X() holds
-   f.x = F(x)
+  f.x = F(x)
 provided
-A1:  for x being Element of X() holds F(x) is Element of Y()
+A1: for x being Element of X() holds F(x) is Element of Y()
 proof
-A2: now let x be Element of X();
-      F(x) is Element of Y() by A1;
-     hence F(x) in Y();
-    end;
+A2: now
+    let x be Element of X();
+    F(x) is Element of Y() by A1;
+    hence F(x) in Y();
+  end;
   consider f being Function of X(), Y() such that
 A3: for x being Element of X() holds f.x = F(x) from FunctRealEx(A2);
   take f;
   thus thesis by A3;
- end;
+end;
 
 scheme NonUniqExMD{X, Y() -> non empty set, P[set,set]}:
   ex f being Function of X(), Y() st
-    for x being Element of X() holds P[x, f.x]
+  for x being Element of X() holds P[x, f.x]
 provided
-A1:  for x being Element of X() ex y being Element of Y() st P[x, y]
+A1: for x being Element of X() ex y being Element of Y() st P[x, y]
 proof
-A2: for x being set st x in X()
-     ex y being set st y in Y() & P[x,y]
-   proof let x be set;
+A2: for x being set st x in X() ex y being set st y in Y() & P[x,y]
+  proof
+    let x be set;
     assume x in X();
     then reconsider x as Element of X();
-     ex y being Element of Y() st P[x,y] by A1;
+    ex y being Element of Y() st P[x,y] by A1;
     hence thesis;
-   end;
+  end;
   consider f being Function of X(),Y() such that
-A3:  for x being set st x in X() holds P[x,f.x] from FuncEx1(A2);
+A3: for x being set st x in X() holds P[x,f.x] from FuncEx1(A2);
   reconsider f as Function of X(),Y();
   take f;
   thus thesis by A3;
- end;
+end;
 
-definition let A,B,C be non empty set;
+definition
+  let A,B,C be non empty set;
   canceled;
- let f be Function of A, [:B,C:];
- redefine func pr1 f -> Function of A,B means
-   for x being Element of A holds it.x = (f.x)`1;
- coherence
+  let f be Function of A, [:B,C:];
+  redefine func pr1 f -> Function of A,B means
+  for x being Element of A holds it.x = (f.x)`1;
+  coherence
   proof
-A1:  dom pr1 f = dom f by MCART_1:def 12;
-    then A2:  dom pr1 f = A by Def1;
-         rng pr1 f c= B
-     proof let x be set;
+A1: dom pr1 f = dom f by MCART_1:def 12;
+    then
+A2: dom pr1 f = A by Def1;
+    rng pr1 f c= B
+    proof
+      let x be set;
       assume x in rng pr1 f;
-       then consider y being set such that
-A3:     y in dom pr1 f and
-A4:     x = (pr1 f).y by FUNCT_1:def 5;
-A5:     x = (f.y)`1 by A1,A3,A4,MCART_1:def 12;
-            f.y in [:B,C:] by A1,A3,Th7;
+      then consider y being set such that
+A3:   y in dom pr1 f and
+A4:   x = (pr1 f).y by FUNCT_1:def 5;
+A5:   x = (f.y)`1 by A1,A3,A4,MCART_1:def 12;
+      f.y in [:B,C:] by A1,A3,Th7;
       hence x in B by A5,MCART_1:10;
-     end;
-   hence pr1 f is Function of A,B by A2,Th4;
+    end;
+    hence pr1 f is Function of A,B by A2,Th4;
   end;
- compatibility
-  proof let IT be Function of A,B;
-A6:  dom pr1 f = dom f by MCART_1:def 12;
-    then A7:  dom pr1 f = A by Def1;
-   hence IT = pr1 f implies for x being Element of A holds IT.x = (f.x)`1
-    by A6,MCART_1:def 12;
-   assume for x being Element of A holds IT.x = (f.x)`1;
-    then A8:   for x being set st x in dom f holds IT.x = (f.x)`1;
-         dom IT = dom f by A6,A7,Def1;
-   hence IT = pr1 f by A8,MCART_1:def 12;
-  end;
- func pr2 f -> Function of A,C means
-   for x being Element of A holds it.x = (f.x)`2;
- coherence
+  compatibility
   proof
-A9:  dom pr2 f = dom f by MCART_1:def 13;
-    then A10:  dom pr2 f = A by Def1;
-         rng pr2 f c= C
-     proof let x be set;
-      assume x in rng pr2 f;
-       then consider y being set such that
-A11:     y in dom pr2 f and
-A12:     x = (pr2 f).y by FUNCT_1:def 5;
-A13:     x = (f.y)`2 by A9,A11,A12,MCART_1:def 13;
-            f.y in [:B,C:] by A9,A11,Th7;
-      hence x in C by A13,MCART_1:10;
-     end;
-   hence pr2 f is Function of A,C by A10,Th4;
+    let IT be Function of A,B;
+A6: dom pr1 f = dom f by MCART_1:def 12;
+    then
+A7: dom pr1 f = A by Def1;
+    hence IT = pr1 f implies for x being Element of A holds IT.x = (f.x)`1
+    by A6,MCART_1:def 12;
+    assume for x being Element of A holds IT.x = (f.x)`1;
+    then
+A8: for x being set st x in dom f holds IT.x = (f.x)`1;
+    dom IT = dom f by A6,A7,Def1;
+    hence IT = pr1 f by A8,MCART_1:def 12;
   end;
- compatibility
-  proof let IT be Function of A,C;
-A14:  dom pr2 f = dom f by MCART_1:def 13;
-    then A15:  dom pr2 f = A by Def1;
-   hence IT = pr2 f implies for x being Element of A holds IT.x = (f.x)`2
-     by A14,MCART_1:def 13;
-   assume for x being Element of A holds IT.x = (f.x)`2;
-    then A16:   for x being set st x in dom f holds IT.x = (f.x)`2;
-         dom IT = dom f by A14,A15,Def1;
-   hence IT = pr2 f by A16,MCART_1:def 13;
+  func pr2 f -> Function of A,C means
+  for x being Element of A holds it.x = (f.x)`2;
+  coherence
+  proof
+A9: dom pr2 f = dom f by MCART_1:def 13;
+    then
+A10: dom pr2 f = A by Def1;
+    rng pr2 f c= C
+    proof
+      let x be set;
+      assume x in rng pr2 f;
+      then consider y being set such that
+A11:  y in dom pr2 f and
+A12:  x = (pr2 f).y by FUNCT_1:def 5;
+A13:  x = (f.y)`2 by A9,A11,A12,MCART_1:def 13;
+      f.y in [:B,C:] by A9,A11,Th7;
+      hence x in C by A13,MCART_1:10;
+    end;
+    hence pr2 f is Function of A,C by A10,Th4;
+  end;
+  compatibility
+  proof
+    let IT be Function of A,C;
+A14: dom pr2 f = dom f by MCART_1:def 13;
+    then
+A15: dom pr2 f = A by Def1;
+    hence IT = pr2 f implies for x being Element of A holds IT.x = (f.x)`2
+    by A14,MCART_1:def 13;
+    assume for x being Element of A holds IT.x = (f.x)`2;
+    then
+A16: for x being set st x in dom f holds IT.x = (f.x)`2;
+    dom IT = dom f by A14,A15,Def1;
+    hence IT = pr2 f by A16,MCART_1:def 13;
   end;
 end;
 
 definition
-  let A1 be set, B1 be non empty set,
-      A2 be set, B2 be non empty set,
-      f1 be Function of A1,B1,
-      f2 be Function of A2,B2;
- redefine pred f1 = f2 means
+  let A1 be set, B1 be non empty set, A2 be set, B2 be non empty set,
+  f1 be Function of A1,B1, f2 be Function of A2,B2;
+  redefine pred f1 = f2 means
   A1 = A2 & for a being Element of A1 holds f1.a = f2.a;
- compatibility
+  compatibility
   proof
-A1:  dom f1 = A1 & dom f2 = A2 by Def1;
-   hence f1 = f2 implies
+A1: dom f1 = A1 & dom f2 = A2 by Def1;
+    hence f1 = f2 implies
     A1 = A2 & for a being Element of A1 holds f1.a = f2.a;
-   assume that
+    assume that
 A2: A1 = A2 and
 A3: for a being Element of A1 holds f1.a = f2.a;
-         for a being set st a in A1 holds f1.a = f2.a by A3;
-   hence f1 = f2 by A1,A2,FUNCT_1:9;
+    for a being set st a in A1 holds f1.a = f2.a by A3;
+    hence f1 = f2 by A1,A2,FUNCT_1:9;
   end;
 end;
 
 definition
-  let A be set, B be non empty set,
-      f1,f2 be Function of A,B;
- redefine pred f1 = f2 means
+  let A be set, B be non empty set, f1,f2 be Function of A,B;
+  redefine pred f1 = f2 means
+
   for a being Element of A holds f1.a = f2.a;
- compatibility by Th113;
+  compatibility by Th113;
 end;
 
 :: missing, 2006.11.05, A.T.
 
 theorem
-  for N being set, f being Function of N, bool N
-  ex R being Relation of N st
-   for i being set st i in N holds Im(R,i) = f.i
- proof let N be set, f be Function of N, bool N;
-   deffunc F(set) = f.$1;
+  for N being set, f being Function of N, bool N ex R being Relation of N st
+  for i being set st i in N holds Im(R,i) = f.i
+proof
+  let N be set, f be Function of N, bool N;
+  deffunc F(set) = f.$1;
 A1: for i being Element of N st i in [#]N holds F(i) c= [#]N
-    proof let i be Element of N;
-     assume i in [#]N;
-      then f.i in bool N by Th7;
-     hence F(i) c= [#]N;
-    end;
-   consider R being Relation of [#]N such that
+  proof
+    let i be Element of N;
+    assume i in [#]N;
+    then f.i in bool N by Th7;
+    hence F(i) c= [#]N;
+  end;
+  consider R being Relation of [#]N such that
 A2: for i being Element of N st i in [#]N holds Im(R,i) = F(i)
-                from RELSET_1:sch 3(A1);
-   reconsider R as Relation of N;
+  from RELSET_1:sch 3(A1);
+  reconsider R as Relation of N;
   take R;
   thus thesis by A2;
- end;
+end;
 
 :: Moved from BORSUK_1 by AK on 27.12.2006
 
 theorem Th171:
   for A being Subset of X holds (id X)"A = A
- proof
-   let A be Subset of X;
-   thus A = (id X)"((id X).:A) by Th92
-   .= (id X)"A by FUNCT_1:162;
- end;
+proof
+  let A be Subset of X;
+  thus A = (id X)"((id X).:A) by Th92
+    .= (id X)"A by FUNCT_1:162;
+end;
 
 :: Moved from TMAP_1 by AK on 27.12.2006
 
 reserve A,B for non empty set;
 
 theorem
-  for f being Function of A,B, A0 being Subset of A,
-     B0 being Subset of B
+  for f being Function of A,B, A0 being Subset of A, B0 being Subset of B
   holds f.:A0 c= B0 iff A0 c= f"B0
- proof let f be Function of A,B, A0 be Subset of A,
-     B0 be Subset of B;
+proof
+  let f be Function of A,B, A0 be Subset of A, B0 be Subset of B;
   thus f.:A0 c= B0 implies A0 c= f"B0
-   proof assume f.:A0 c= B0;
+  proof
+    assume f.:A0 c= B0;
     then f"(f.:A0) c= f"B0 & A0 c= f"(f.:A0) by Th50,RELAT_1:178;
     hence A0 c= f"B0 by XBOOLE_1:1;
-   end;
+  end;
   thus A0 c= f"B0 implies f.:A0 c= B0
-   proof assume A0 c= f"B0;
+  proof
+    assume A0 c= f"B0;
     then f.:A0 c= f.:f"B0 & f.:f"B0 c= B0 by FUNCT_1:145,RELAT_1:156;
     hence f.:A0 c= B0 by XBOOLE_1:1;
-   end;
- end;
+  end;
+end;
 
 theorem
   for f being Function of A,B, A0 being non empty Subset of A,
   f0 being Function of A0,B st
-   for c being Element of A st c in A0 holds f.c = f0.c
-    holds f|A0 = f0
- proof let f be Function of A,B, A0 be non empty Subset of A,
-            f0 be Function of A0,B such that
-    A1: for c being Element of A st c in A0 holds f.c = f0.c;
+  for c being Element of A st c in A0 holds f.c = f0.c holds f|A0 = f0
+proof
+  let f be Function of A,B, A0 be non empty Subset of A,
+  f0 be Function of A0,B such that
+A1: for c being Element of A st c in A0 holds f.c = f0.c;
   reconsider g = f|A0 as Function of A0,B by Th38;
-        for c being Element of A0 holds g.c = f0.c
-    proof let c be Element of A0;
-     thus g.c = f.c by FUNCT_1:72
-             .= f0.c by A1;
-    end;
+  for c being Element of A0 holds g.c = f0.c
+  proof
+    let c be Element of A0;
+    thus g.c = f.c by FUNCT_1:72
+      .= f0.c by A1;
+  end;
   hence thesis by Th113;
- end;
+end;
 
 theorem
-  for f being Function, A0, C being set st
-   C c= A0 holds f.:C = (f|A0).:C
- proof let f be Function, A0, C be set;
-  assume A1: C c= A0;
+  for f being Function, A0, C being set st C c= A0 holds f.:C = (f|A0).:C
+proof
+  let f be Function, A0, C be set;
+  assume
+A1: C c= A0;
   thus (f|A0).:C = (f*(id A0)).:C by RELAT_1:94
-               .= f.:((id A0).:C) by RELAT_1:159
-               .= f.:C by A1,FUNCT_1:162;
- end;
+    .= f.:((id A0).:C) by RELAT_1:159
+    .= f.:C by A1,FUNCT_1:162;
+end;
 
 theorem
-  for f being Function, A0, D being set st
-   f"D c= A0 holds f"D = (f|A0)"D
- proof let f be Function, A0, D be set;
-  assume A1: f"D c= A0;
+  for f being Function, A0, D being set st f"D c= A0 holds f"D = (f|A0)"D
+proof
+  let f be Function, A0, D be set;
+  assume
+A1: f"D c= A0;
   thus (f|A0)"D = (f*(id A0))"D by RELAT_1:94
-               .= (id A0)"(f"D) by RELAT_1:181
-               .= f"D by A1,Th171;
- end;
+    .= (id A0)"(f"D) by RELAT_1:181
+    .= f"D by A1,Th171;
+end;
 
-scheme MChoice{A()-> non empty set, B()-> non empty set,
-                  F(set) -> set}:
-ex t being Function of A(),B() st
+scheme MChoice{A()-> non empty set, B()-> non empty set, F(set) -> set}:
+  ex t being Function of A(),B() st
   for a being Element of A() holds t.a in F(a)
 provided
 A1: for a being Element of A() holds B() meets F(a)
 proof
-   defpred P[set,set] means $2 in F($1);
+  defpred P[set,set] means $2 in F($1);
 A2: for e being set st e in A() ex u being set st u in B() & P[e,u]
- proof let e be set; assume e in A(); then B() meets F(e) by A1;
-  hence thesis by XBOOLE_0:3;
- end;
- consider t being Function such that
-A3:  dom t = A() & rng t c= B() and
-A4:  for e being set st e in A() holds P[e,t.e] from WELLORD2:sch 1(A2);
- reconsider t as Function of A(),B() by A3,Def1,RELSET_1:11;
- take t; let a be Element of A();
- thus t.a in F(a) by A4;
+  proof
+    let e be set;
+    assume e in A();
+    then B() meets F(e) by A1;
+    hence thesis by XBOOLE_0:3;
+  end;
+  consider t being Function such that
+A3: dom t = A() & rng t c= B() and
+A4: for e being set st e in A() holds P[e,t.e] from WELLORD2:sch 1(A2);
+  reconsider t as Function of A(),B() by A3,Def1,RELSET_1:11;
+  take t;
+  let a be Element of A();
+  thus t.a in F(a) by A4;
 end;
 
 :: Moved from FINSEQ_4 by AK on 2007.10.09
@@ -1992,14 +2181,16 @@ end;
 theorem Th176:
   for X, D be non empty set, p be Function of X,D, i be Element of X
   holds p/.i = p.i
-  proof let X, D be non empty set, p be Function of X,D, i be Element of X;
-    i in X;
-    then i in dom p by Def1;
-    hence p/.i = p.i by PARTFUN1:def 8;
-  end;
+proof
+  let X, D be non empty set, p be Function of X,D, i be Element of X;
+  i in X;
+  then i in dom p by Def1;
+  hence p/.i = p.i by PARTFUN1:def 8;
+end;
 
 registration
   let X, D be non empty set, p be Function of X,D, i be Element of X;
   identify p/.i with p.i;
   correctness by Th176;
 end;
+

@@ -65,4 +65,36 @@
 <Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
+<FCluster>
+<ArgTypes>
+<Typ kind="G" nr="7">
+<Cluster>
+<Adjective nr="25" value="false"/>
+<Adjective nr="70"/>
+<Adjective nr="71"/>
+</Cluster>
+</Typ>
+<Typ kind="M" nr="2">
+<Cluster/>
+<Func kind="U" nr="1">
+<LocusVar nr="1"/>
+</Func>
+</Typ>
+<Typ kind="M" nr="7">
+<Cluster>
+<Adjective nr="31"/>
+</Cluster>
+<LocusVar nr="1"/>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="146">
+<LocusVar nr="1"/>
+<LocusVar nr="3"/>
+<LocusVar nr="2"/>
+</Func>
+<Cluster>
+<Adjective nr="31"/>
+<Adjective nr="47"/>
+</Cluster>
+</FCluster>
 </Registrations>

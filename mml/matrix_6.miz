@@ -21,41 +21,53 @@ environ
 
 begin
 
- reserve i,j,n for Nat,
-         K for Field,
-         a for Element of K,
-         M,M1,M2,M3,M4 for Matrix of n,K;
- reserve A for Matrix of K;
+reserve i,j,n for Nat,
+  K for Field,
+  a for Element of K,
+  M,M1,M2,M3,M4 for Matrix of n,K;
 
-definition let n be Nat, K be Field, M1,M2 be Matrix of n,K;
-  pred M1 commutes_with M2 means :Def1:
-    M1 * M2 = M2 * M1;
+reserve A for Matrix of K;
+
+definition
+  let n be Nat, K be Field, M1,M2 be Matrix of n,K;
+  pred M1 commutes_with M2 means
+  :Def1:
+  M1 * M2 = M2 * M1;
   reflexivity;
   symmetry;
 end;
 
-definition let n be Nat,K be Field,M1,M2 be Matrix of n,K;
-  pred M1 is_reverse_of M2 means :Def2:
-    M1*M2 = M2*M1 & M1*M2 = 1.(K,n);
+definition
+  let n be Nat,K be Field,M1,M2 be Matrix of n,K;
+  pred M1 is_reverse_of M2 means
+  :Def2:
+  M1*M2 = M2*M1 & M1*M2 = 1.(K,n);
   symmetry;
 end;
 
-definition let n be Nat, K be Field; let M1 be Matrix of n,K;
-  attr M1 is invertible means :Def3:
-    ex M2 be Matrix of n,K st M1 is_reverse_of M2;
+definition
+  let n be Nat, K be Field;
+  let M1 be Matrix of n,K;
+  attr M1 is invertible means
+  :Def3:
+  ex M2 be Matrix of n,K st M1 is_reverse_of M2;
 end;
 
-definition let n, K; let M1 be Matrix of n,K;
+definition
+  let n, K;
+  let M1 be Matrix of n,K;
   redefine func -M1 -> Matrix of n,K;
   coherence
   proof
-     width M1=n &len M1=n by MATRIX_1:25;
+    width M1=n &len M1=n by MATRIX_1:25;
     then width (-M1)=n & len (-M1)=n by MATRIX_3:def 2;
     hence thesis by MATRIX_2:7;
   end;
 end;
 
-definition let n, K; let M1,M2 be Matrix of n,K;
+definition
+  let n, K;
+  let M1,M2 be Matrix of n,K;
   redefine func M1+M2 -> Matrix of n,K;
   coherence
   proof
@@ -65,11 +77,13 @@ A1: width M1=n & width M2=n &len M1=n & len M2=n by MATRIX_1:25;
   end;
 end;
 
-definition let n, K; let M1,M2 be Matrix of n,K;
+definition
+  let n, K;
+  let M1,M2 be Matrix of n,K;
   redefine func M1-M2 -> Matrix of n,K;
   coherence
   proof
-     len (M1+(-M2))=n & width (M1+(-M2))=n by MATRIX_1:25;
+    len (M1+(-M2))=n & width (M1+(-M2))=n by MATRIX_1:25;
     hence thesis;
   end;
   redefine func M1*M2 -> Matrix of n,K;
@@ -83,125 +97,140 @@ end;
 
 theorem Th1:
   for K being Field,A being Matrix of K holds
-    (0.(K,len A,len A))*A=0.(K,len A,width A)
+  (0.(K,len A,len A))*A=0.(K,len A,width A)
 proof
-   let K, A;
-   per cases by NAT_1:3;
-   suppose A1: len A>0;
-A2:len (0.(K,len A,len A))=len A & len (0.(K,len A,width A))=len A
-     by MATRIX_1:def 3;
-then A3:width (0.(K,len A,len A))=len A & width (0.(K,len A,width A))=width A
-     by A1,MATRIX_1:20;
-then A4:len ((0.(K,len A,len A))*A)=len A &
-     len ((0.(K,len A,len A))*A)=len (0.(K,len A,width A))
-     by A2,MATRIX_3:def 4;
-A5:width ((0.(K,len A,len A))*A)=width A by A3,MATRIX_3:def 4;
-A6:len -((0.(K,len A,len A))*A)=len ((0.(K,len A,len A))*A)
-     by MATRIX_3:def 2;
-A7:width -((0.(K,len A,len A))*A)=width ((0.(K,len A,len A))*A)
-     by MATRIX_3:def 2;
-A8:(0.(K,len A,len A))*A
-     =(0.(K,len A,len A)+0.(K,len A,len A))*A by MATRIX_3:6
-    .=(0.(K,len A,len A))*A+(0.(K,len A,len A))*A by A1,A2,A3,MATRIX_4:63;
-   set B = (0.(K,len A,len A))*A;
+  let K, A;
+  per cases by NAT_1:3;
+  suppose
+A1: len A>0;
+A2: len (0.(K,len A,len A))=len A & len (0.(K,len A,width A))=len A
+    by MATRIX_1:def 3;
+    then
+A3: width (0.(K,len A,len A))=len A & width (0.(K,len A,width A))= width A
+    by A1,MATRIX_1:20;
+    then
+A4: len ((0.(K,len A,len A))*A)=len A &
+    len ((0.(K,len A,len A))*A)=len (0.(K,len A,width A))
+    by A2,MATRIX_3:def 4;
+A5: width ((0.(K,len A,len A))*A)=width A by A3,MATRIX_3:def 4;
+A6: len -((0.(K,len A,len A))*A)=len ((0.(K,len A,len A))*A)
+    by MATRIX_3:def 2;
+A7: width -((0.(K,len A,len A))*A)=width ((0.(K,len A,len A))*A)
+    by MATRIX_3:def 2;
+A8: (0.(K,len A,len A))*A
+    =(0.(K,len A,len A)+0.(K,len A,len A))*A by MATRIX_3:6
+      .=(0.(K,len A,len A))*A+(0.(K,len A,len A))*A by A1,A2,A3,MATRIX_4:63;
+    set B = (0.(K,len A,len A))*A;
     0.(K,len A,width A)=B+B+(-B) by A4,A5,A8,MATRIX_4:2;
-   then 0.(K,len A,width A) =B+(B-B) by A6,A7,MATRIX_3:5
-     .=(0.(K,len A,len A))*A by A4,A7,MATRIX_4:20;
-   hence thesis;
-   end;
-   suppose A9: len A = 0;
-     then len (0.(K,len A,len A)) = 0 by MATRIX_1:def 3;
-     then width (0.(K,len A,len A)) = len A by A9,MATRIX_1:def 4;
-then A10:   len ((0.(K,len A,len A))*A) = len ((0.(K,len A,len A)))
-       by MATRIX_3:def 4;
-A11:   len ((0.(K,len A,len A))) = len A by MATRIX_1:def 3;
-      len (0.(K,len A,width A)) = len A by MATRIX_1:def 3;
-     hence thesis by A9,A10,A11,MATRIX_1:37;
-   end;
+    then 0.(K,len A,width A) =B+(B-B) by A6,A7,MATRIX_3:5
+      .=(0.(K,len A,len A))*A by A4,A7,MATRIX_4:20;
+    hence thesis;
+  end;
+  suppose
+A9: len A = 0;
+    then len (0.(K,len A,len A)) = 0 by MATRIX_1:def 3;
+    then width (0.(K,len A,len A)) = len A by A9,MATRIX_1:def 4;
+    then
+A10: len ((0.(K,len A,len A))*A) = len ((0.(K,len A,len A)))
+    by MATRIX_3:def 4;
+A11: len ((0.(K,len A,len A))) = len A by MATRIX_1:def 3;
+    len (0.(K,len A,width A)) = len A by MATRIX_1:def 3;
+    hence thesis by A9,A10,A11,MATRIX_1:37;
+  end;
 end;
 
 theorem Th2:
   for K being Field,A being Matrix of K st width A>0 holds
-    A*(0.(K,width A,width A))=0.(K,len A,width A)
+  A*(0.(K,width A,width A))=0.(K,len A,width A)
 proof
-   let K,A;
-   assume A1:width A > 0; then A2:len A>0 by MATRIX_1:def 4;
-A3:len (0.(K,width A,width A))=width A & len (0.(K,len A,width A))=len A
-     by MATRIX_1:def 3;
-then A4:width (0.(K,width A,width A))=width A &
-     width (0.(K,len A,width A))=width A by A1,A2,MATRIX_1:20;
-A5:len (A*(0.(K,width A,width A)))=len A &
-     len (A*(0.(K,width A,width A)))=len (0.(K,len A,width A))
-       by A3,MATRIX_3:def 4;
-A6:width (A*(0.(K,width A,width A)))=width (0.(K,width A,width A)) &
-     width (A*(0.(K,width A,width A)))=width A by A3,A4,MATRIX_3:def 4;
-A7:len -(A*(0.(K,width A,width A)))=len (A*(0.(K,width A,width A)))
-     by MATRIX_3:def 2;
-A8:width -(A*(0.(K,width A,width A)))=width (A*(0.(K,width A,width A)))
-     by MATRIX_3:def 2;
-A9:A*(0.(K,width A,width A))
-     =A*(0.(K,width A,width A)+0.(K,width A,width A)) by MATRIX_3:6
+  let K,A;
+  assume
+A1: width A > 0;
+  then
+A2: len A>0 by MATRIX_1:def 4;
+A3: len (0.(K,width A,width A))=width A & len (0.(K,len A,width A))=len A
+  by MATRIX_1:def 3;
+  then
+A4: width (0.(K,width A,width A))=width A &
+  width (0.(K,len A,width A))=width A by A1,A2,MATRIX_1:20;
+A5: len (A*(0.(K,width A,width A)))=len A &
+  len (A*(0.(K,width A,width A)))=len (0.(K,len A,width A))
+  by A3,MATRIX_3:def 4;
+A6: width (A*(0.(K,width A,width A)))=width (0.(K,width A,width A)) &
+  width (A*(0.(K,width A,width A)))=width A by A3,A4,MATRIX_3:def 4;
+A7: len -(A*(0.(K,width A,width A)))=len (A*(0.(K,width A,width A)))
+  by MATRIX_3:def 2;
+A8: width -(A*(0.(K,width A,width A)))=width (A*(0.(K,width A,width A)))
+  by MATRIX_3:def 2;
+A9: A*(0.(K,width A,width A))
+  =A*(0.(K,width A,width A)+0.(K,width A,width A)) by MATRIX_3:6
     .= A*(0.(K,width A,width A))+A*(0.(K,width A,width A))
-       by A1,A2,A3,A4,MATRIX_4:62;
-   set B= A*(0.(K,width A,width A));
-    0.(K,len A,width A)=B+B+(-B) by A5,A6,A9,MATRIX_4:2;
-   then 0.(K,len A,width A)=B+(B-B) by A7,A8,MATRIX_3:5
-     .=A*(0.(K,width A,width A)) by A5,A8,MATRIX_4:20;
-   hence thesis;
+  by A1,A2,A3,A4,MATRIX_4:62;
+  set B= A*(0.(K,width A,width A));
+  0.(K,len A,width A)=B+B+(-B) by A5,A6,A9,MATRIX_4:2;
+  then 0.(K,len A,width A)=B+(B-B) by A7,A8,MATRIX_3:5
+    .=A*(0.(K,width A,width A)) by A5,A8,MATRIX_4:20;
+  hence thesis;
 end;
 
 theorem Th3:
   M1 commutes_with 0.(K,n,n)
 proof
-   per cases by NAT_1:3;
-   suppose A1:n>0;
-A2:len M1 = n & width M1=n by MATRIX_1:25;
-   then A3:M1*(0.(K,n,n))=0.(K,n,n) by A1,Th2;
+  per cases by NAT_1:3;
+  suppose
+A1: n>0;
+A2: len M1 = n & width M1=n by MATRIX_1:25;
+    then
+A3: M1*(0.(K,n,n))=0.(K,n,n) by A1,Th2;
     (0.(K,n,n))*M1=0.(K,n,n) by A2,Th1;
-   hence thesis by A3,Def1;
-   end;
-   suppose A4:n = 0;
-then A5: len M1 = 0 by MATRIX_1:def 3;
-     len (0.(K,n,n)) = 0 by A4,FINSEQ_2:69;
+    hence thesis by A3,Def1;
+  end;
+  suppose
+A4: n = 0;
+    then
+A5: len M1 = 0 by MATRIX_1:def 3;
+    len (0.(K,n,n)) = 0 by A4,FINSEQ_2:69;
     hence thesis by A5,MATRIX_1:37;
-   end;
+  end;
 end;
 
 theorem
-   M1 commutes_with M2 & M2 commutes_with M3 &
-    M1 commutes_with M3 implies M1 commutes_with M2*M3
+  M1 commutes_with M2 & M2 commutes_with M3 &
+  M1 commutes_with M3 implies M1 commutes_with M2*M3
 proof
-A1:width M1=n & width M2=n & width M3=n & len M1=n & len M2=n & len M3=n
-     by MATRIX_1:25;
-   assume A2:M1 commutes_with M2 &M2 commutes_with M3 & M1 commutes_with M3;
-   then (M2*M3)*M1=(M3*M2)*M1 by Def1
-                 .=M3*(M2*M1) by A1,MATRIX_3:35
-                 .=M3*(M1*M2) by A2,Def1
-                 .=(M3*M1)*M2 by A1,MATRIX_3:35
-                 .=(M1*M3)*M2 by A2,Def1
-                 .=M1*(M3*M2) by A1,MATRIX_3:35
-                 .=M1*(M2*M3) by A2,Def1;
-   hence thesis by Def1;
+A1: width M1=n & width M2=n & width M3=n & len M1=n & len M2=n & len M3=n
+  by MATRIX_1:25;
+  assume
+A2: M1 commutes_with M2 &M2 commutes_with M3 & M1 commutes_with M3;
+  then (M2*M3)*M1=(M3*M2)*M1 by Def1
+    .=M3*(M2*M1) by A1,MATRIX_3:35
+    .=M3*(M1*M2) by A2,Def1
+    .=(M3*M1)*M2 by A1,MATRIX_3:35
+    .=(M1*M3)*M2 by A2,Def1
+    .=M1*(M3*M2) by A1,MATRIX_3:35
+    .=M1*(M2*M3) by A2,Def1;
+  hence thesis by Def1;
 end;
 
 theorem
-   M1 commutes_with M2 & M1 commutes_with M3 & n>0 implies
-    M1 commutes_with M2+M3
+  M1 commutes_with M2 & M1 commutes_with M3 & n>0 implies
+  M1 commutes_with M2+M3
 proof
-A1:width M1=n & width M2=n & width M3=n & len M1=n & len M2=n & len M3=n
-     by MATRIX_1:25;
-   assume A2:M1 commutes_with M2 & M1 commutes_with M3 & n>0;
-   then (M2+M3)*M1=M2*M1+M3*M1 by A1,MATRIX_4:63
-           .=M1*M2+M3*M1 by A2,Def1
-           .=M1*M2+M1*M3 by A2,Def1
-           .=M1*(M2+M3) by A1,A2,MATRIX_4:62;
-   hence thesis by Def1;
+A1: width M1=n & width M2=n & width M3=n & len M1=n & len M2=n & len M3=n
+  by MATRIX_1:25;
+  assume
+A2: M1 commutes_with M2 & M1 commutes_with M3 & n>0;
+  then (M2+M3)*M1=M2*M1+M3*M1 by A1,MATRIX_4:63
+    .=M1*M2+M3*M1 by A2,Def1
+    .=M1*M2+M1*M3 by A2,Def1
+    .=M1*(M2+M3) by A1,A2,MATRIX_4:62;
+  hence thesis by Def1;
 end;
 
 theorem Th6:
   M1 commutes_with 1.(K,n)
 proof
-   M1=M1*(1.(K,n)) & M1=1.(K,n)*M1 by MATRIX_3:20,21;
+  M1=M1*(1.(K,n)) & M1=1.(K,n)*M1 by MATRIX_3:20,21;
   hence thesis by Def1;
 end;
 
@@ -209,20 +238,24 @@ theorem Th7:
   M2 is_reverse_of M3 & M1 is_reverse_of M3 implies M1=M2
 proof
 A1: width M1=n & width M2=n & width M3=n & len M1=n & len M2=n & len M3=n
-     by MATRIX_1:25;
-   assume A2:M2 is_reverse_of M3 & M1 is_reverse_of M3;
-    M1=M1*(1.(K,n)) by MATRIX_3:21
-          .=M1*(M3*M2) by A2,Def2
-          .=(M1*M3)*M2 by A1,MATRIX_3:35
-          .=(1.(K,n))*M2 by A2,Def2
-          .=M2 by MATRIX_3:20;
-   hence thesis;
+  by MATRIX_1:25;
+  assume
+A2: M2 is_reverse_of M3 & M1 is_reverse_of M3;
+  M1=M1*(1.(K,n)) by MATRIX_3:21
+    .=M1*(M3*M2) by A2,Def2
+    .=(M1*M3)*M2 by A1,MATRIX_3:35
+    .=(1.(K,n))*M2 by A2,Def2
+    .=M2 by MATRIX_3:20;
+  hence thesis;
 end;
 
-definition let n be Nat, K be Field, M1 be Matrix of n,K;
-  assume A1: M1 is invertible;
-  func M1~ -> Matrix of n,K means :Def4:
-    it is_reverse_of M1;
+definition
+  let n be Nat, K be Field, M1 be Matrix of n,K;
+  assume
+A1: M1 is invertible;
+  func M1~ -> Matrix of n,K means
+  :Def4:
+  it is_reverse_of M1;
   existence by A1,Def3;
   uniqueness by Th7;
 end;
@@ -230,120 +263,127 @@ end;
 theorem Th8:
   (1.(K,n))~ = 1.(K,n) & 1.(K,n) is invertible
 proof
-    (1.(K,n))*(1.(K,n))=1.(K,n) & (1.(K,n))*(1.(K,n))=(1.(K,n))*(1.(K,n))
-     by MATRIX_3:20;
-then A1:1.(K,n) is_reverse_of 1.(K,n) by Def2;
-   then 1.(K,n) is invertible by Def3;
-   hence thesis by A1,Def4;
+  (1.(K,n))*(1.(K,n))=1.(K,n) & (1.(K,n))*(1.(K,n))=(1.(K,n))*(1.(K,n))
+  by MATRIX_3:20;
+  then
+A1: 1.(K,n) is_reverse_of 1.(K,n) by Def2;
+  then 1.(K,n) is invertible by Def3;
+  hence thesis by A1,Def4;
 end;
 
 theorem
-   ((1.(K,n))~)~ = 1.(K,n)
+  ((1.(K,n))~)~ = 1.(K,n)
 proof
-   (1.(K,n))~ = 1.(K,n) by Th8;
+  (1.(K,n))~ = 1.(K,n) by Th8;
   hence thesis;
 end;
 
 theorem Th10:
   (1.(K,n))@ = 1.(K,n)
 proof
-   per cases by NAT_1:3;
-   suppose A1: n>0;
-A2:1.(K,n) is Matrix of n,K & width (1.(K,n))=n & len (1.(K,n))=n
-     by MATRIX_1:25;
-then A3:len ((1.(K,n))@)=width (1.(K,n)) & width ((1.(K,n))@)=len (1.(K,n))
-     by A1,MATRIX_2:12;
-A4:Indices ((1.(K,n))@)=Indices (1.(K,n)) &
-     Indices (1.(K,n)) = [:Seg n, Seg n:] by MATRIX_1:25,27;
+  per cases by NAT_1:3;
+  suppose
+A1: n>0;
+A2: 1.(K,n) is Matrix of n,K & width (1.(K,n))=n & len (1.(K,n))=n
+    by MATRIX_1:25;
+    then
+A3: len ((1.(K,n))@)=width (1.(K,n)) & width ((1.(K,n))@)=len (1.(K,n) )
+    by A1,MATRIX_2:12;
+A4: Indices ((1.(K,n))@)=Indices (1.(K,n)) &
+    Indices (1.(K,n)) = [:Seg n, Seg n:] by MATRIX_1:25,27;
     for i,j st [i,j] in Indices (1.(K,n)) holds
-     (1.(K,n))*(i,j)=((1.(K,n))@)*(i,j)
-   proof
-     let i,j;
-     assume [i,j] in Indices (1.(K,n));
-     then i in Seg n & j in Seg n by A4,ZFMISC_1:106;
-     then A5:[i,j] in Indices (1.(K,n))&[j,i] in Indices (1.(K,n))
-       by A4,ZFMISC_1:106;
-     per cases;
-     suppose i=j;
-       hence thesis by A5,MATRIX_1:def 7;
-     end;
-     suppose i<>j;
-       then (1.(K,n))*(i,j)=0.K & (1.(K,n))*(j,i)=0.K by A5,MATRIX_1:def 12;
-       hence thesis by A5,MATRIX_1:def 7;
-     end;
-   end;
-   hence thesis by A2,A3,MATRIX_1:21;
-   end;
-   suppose n=0;
-     hence thesis by MATRIX_1:36;
-   end;
+    (1.(K,n))*(i,j)=((1.(K,n))@)*(i,j)
+    proof
+      let i,j;
+      assume [i,j] in Indices (1.(K,n));
+      then i in Seg n & j in Seg n by A4,ZFMISC_1:106;
+      then
+A5:   [i,j] in Indices (1.(K,n))&[j,i] in Indices (1.(K,n))
+      by A4,ZFMISC_1:106;
+      per cases;
+      suppose i=j;
+        hence thesis by A5,MATRIX_1:def 7;
+      end;
+      suppose i<>j;
+        then (1.(K,n))*(i,j)=0.K & (1.(K,n))*(j,i)=0.K by A5,MATRIX_1:def 12;
+        hence thesis by A5,MATRIX_1:def 7;
+      end;
+    end;
+    hence thesis by A2,A3,MATRIX_1:21;
+  end;
+  suppose n=0;
+    hence thesis by MATRIX_1:36;
+  end;
 end;
 
 theorem
-   for K being Field, n being Nat holds
-    ((1.(K,n))@)~ = 1.(K,n)
+  for K being Field, n being Nat holds ((1.(K,n))@)~ = 1.(K,n)
 proof
-   let K,n;
-    (1.(K,n))@=1.(K,n) by Th10;
-   hence thesis by Th8;
+  let K,n;
+  (1.(K,n))@=1.(K,n) by Th10;
+  hence thesis by Th8;
 end;
 
 theorem
-   M3 is_reverse_of M1 & n>0 implies
-    M1@ is_reverse_of M3@
+  M3 is_reverse_of M1 & n>0 implies M1@ is_reverse_of M3@
 proof
 A1: width M1=n & width (M1@)=n & width M3=n & len M1=n &
-      len (M1@)=n & len M3=n by MATRIX_1:25;
-   assume A2: M3 is_reverse_of M1 & n>0;
-   then M3*M1=M1*M3 & M1*M3=1.(K,n) by Def2;
-   then (M3*M1)@=(M3@)*(M1@) & (M1*M3)@=(M1@)*(M3@) & (M1*M3)@=1.(K,n)
-     by A1,A2,Th10,MATRIX_3:24;
-   then (M3@)*(M1@)=(M1@)*(M3@) & (M1@)*(M3@)=1.(K,n) by A2,Def2;
-   hence thesis by Def2;
+  len (M1@)=n & len M3=n by MATRIX_1:25;
+  assume
+A2: M3 is_reverse_of M1 & n>0;
+  then M3*M1=M1*M3 & M1*M3=1.(K,n) by Def2;
+  then (M3*M1)@=(M3@)*(M1@) & (M1*M3)@=(M1@)*(M3@) & (M1*M3)@=1.(K,n)
+  by A1,A2,Th10,MATRIX_3:24;
+  then (M3@)*(M1@)=(M1@)*(M3@) & (M1@)*(M3@)=1.(K,n) by A2,Def2;
+  hence thesis by Def2;
 end;
 
 theorem
-   M is invertible & n > 0 implies M@~= M~@
+  M is invertible & n > 0 implies M@~= M~@
 proof
-   assume A1:M is invertible & n >0; set M1=M@, M2=M~@;
-A2:width M=n & len M=n & width (M~)=n & len (M~)=n & len M >0
-     by A1,MATRIX_1:25;
+  assume
+A1: M is invertible & n >0;
+  set M1=M@, M2=M~@;
+A2: width M=n & len M=n & width (M~)=n & len (M~)=n & len M >0
+  by A1,MATRIX_1:25;
 A3: M~ is_reverse_of M by A1,Def4;
-   then (M~)*(M)=(M)*(M~) & (M~)*M=1.(K,n) by Def2;
-   then ((M~)*M)@=(M@)*(M~@) & (M*(M~))@=(M~@)*(M@) & ((M~)*M)@=1.(K,n)
-     by A2,Th10,MATRIX_3:24;
-   then M1*M2=M2*M1 & M1*M2=1.(K,n) by A3,Def2;
-then A4:M1 is_reverse_of M2 by Def2;
-   then M1 is invertible by Def3;
-   hence thesis by A4,Def4;
+  then (M~)*(M)=(M)*(M~) & (M~)*M=1.(K,n) by Def2;
+  then ((M~)*M)@=(M@)*(M~@) & (M*(M~))@=(M~@)*(M@) & ((M~)*M)@=1.(K,n)
+  by A2,Th10,MATRIX_3:24;
+  then M1*M2=M2*M1 & M1*M2=1.(K,n) by A3,Def2;
+  then
+A4: M1 is_reverse_of M2 by Def2;
+  then M1 is invertible by Def3;
+  hence thesis by A4,Def4;
 end;
 
 theorem
-   for K being Field, n being Nat, M1,M2,M3,M4 being Matrix of n,K st
-    M3 is_reverse_of M1 & M4 is_reverse_of M2 holds
-      M3*M4 is_reverse_of M2*M1
+  for K being Field, n being Nat, M1,M2,M3,M4 being Matrix of n,K st
+  M3 is_reverse_of M1 & M4 is_reverse_of M2 holds M3*M4 is_reverse_of M2*M1
 proof
-   let K,n,M1,M2,M3,M4;
+  let K,n,M1,M2,M3,M4;
 A1: width M1=n & width M2=n & width M3=n & len M1=n & len M2=n & len M3=n &
-     width M4=n & len M4=n by MATRIX_1:25;
-   assume A2:M3 is_reverse_of M1 & M4 is_reverse_of M2;
-A3:width (M3*M4)=n & width (M2*M1)=n by MATRIX_1:25;
-then A4:(M3*M4)*(M2*M1)=((M3*M4)*M2)*M1 by A1,MATRIX_3:35
+  width M4=n & len M4=n by MATRIX_1:25;
+  assume
+A2: M3 is_reverse_of M1 & M4 is_reverse_of M2;
+A3: width (M3*M4)=n & width (M2*M1)=n by MATRIX_1:25;
+  then
+A4: (M3*M4)*(M2*M1)=((M3*M4)*M2)*M1 by A1,MATRIX_3:35
     .=(M3*(M4*M2))*M1 by A1,MATRIX_3:35
     .=(M3*(1.(K,n)))*M1 by A2,Def2
     .=M3*M1 by MATRIX_3:21
     .=1.(K,n) by A2,Def2;
-    (M2*M1)*(M3*M4)=((M2*M1)*M3)*M4 by A1,A3,MATRIX_3:35
+  (M2*M1)*(M3*M4)=((M2*M1)*M3)*M4 by A1,A3,MATRIX_3:35
     .=(M2*(M1*M3))*M4 by A1,MATRIX_3:35
     .=(M2*(1.(K,n)))*M4 by A2,Def2
     .=M2*M4 by MATRIX_3:21
     .=1.(K,n) by A2,Def2;
-   hence thesis by A4,Def2;
+  hence thesis by A4,Def2;
 end;
 
 theorem
-   for K being Field, n being Nat, M1,M2 being Matrix of n,K st
-    M2 is_reverse_of M1 holds M1 commutes_with M2
+  for K being Field, n being Nat, M1,M2 being Matrix of n,K st
+  M2 is_reverse_of M1 holds M1 commutes_with M2
 proof
   let K,n,M1,M2;
   assume M2 is_reverse_of M1;
@@ -354,67 +394,77 @@ end;
 theorem Th16:
   M is invertible implies M~ is invertible & (M~)~= M
 proof
-   assume M is invertible;
-then A1:M~ is_reverse_of M by Def4;
-   then M~ is invertible by Def3;
-   hence thesis by A1,Def4;
+  assume M is invertible;
+  then
+A1: M~ is_reverse_of M by Def4;
+  then M~ is invertible by Def3;
+  hence thesis by A1,Def4;
 end;
 
 theorem
-   n > 0 & M1*M2=0.(K,n,n) & M1 is invertible implies
-    M1 commutes_with M2
+  n > 0 & M1*M2=0.(K,n,n) & M1 is invertible implies M1 commutes_with M2
 proof
-   assume A1: n > 0 & M1*M2=0.(K,n,n)& M1 is invertible;
-then A2:M1~ is_reverse_of M1 & M1~ is Matrix of n,K by Def4;
-A3:len M1=n & width M1=n & len M2 = n & width M2 = n & len (M1~) =n &
-     width (M1~) = n by MATRIX_1:25;
-    M2=(1.(K,n))*M2 by MATRIX_3:20
+  assume
+A1: n > 0 & M1*M2=0.(K,n,n)& M1 is invertible;
+  then
+A2: M1~ is_reverse_of M1 & M1~ is Matrix of n,K by Def4;
+A3: len M1=n & width M1=n & len M2 = n & width M2 = n & len (M1~) =n &
+  width (M1~) = n by MATRIX_1:25;
+  M2=(1.(K,n))*M2 by MATRIX_3:20
     .=(M1~*M1)*M2 by A2,Def2
     .=M1~*(0.(K,n,n)) by A1,A3,MATRIX_3:35
     .=0.(K,n,n) by A1,A3,Th2;
-   hence thesis by Th3;
+  hence thesis by Th3;
 end;
 
 theorem
-   M1=M1*M2 & M1 is invertible implies M1 commutes_with M2
+  M1=M1*M2 & M1 is invertible implies M1 commutes_with M2
 proof
-   assume A1: M1=M1*M2 & M1 is invertible;
-then A2:M1~ is_reverse_of M1 & M1~ is Matrix of n,K by Def4;
-A3:len M1=n & width M1=n & len M2=n & width M2=n & len (M1~) = n &
-     width (M1~) = n by MATRIX_1:25;
-    M2=(1.(K,n))*M2 by MATRIX_3:20
+  assume
+A1: M1=M1*M2 & M1 is invertible;
+  then
+A2: M1~ is_reverse_of M1 & M1~ is Matrix of n,K by Def4;
+A3: len M1=n & width M1=n & len M2=n & width M2=n & len (M1~) = n &
+  width (M1~) = n by MATRIX_1:25;
+  M2=(1.(K,n))*M2 by MATRIX_3:20
     .=(M1~*M1)*M2 by A2,Def2
     .=M1~*M1 by A1,A3,MATRIX_3:35
     .=1.(K,n) by A2,Def2;
-   hence thesis by Th6;
+  hence thesis by Th6;
 end;
 
 theorem
-   M1=M2*M1 & M1 is invertible implies M1 commutes_with M2
+  M1=M2*M1 & M1 is invertible implies M1 commutes_with M2
 proof
-   assume A1: M1=M2*M1 & M1 is invertible;
-then A2:M1~ is_reverse_of M1 & M1~ is Matrix of n,K by Def4;
-A3:len M1=n & width M1=n & len M2 =n & width M2=n & len (M1~)=n &
-     width (M1~)=n by MATRIX_1:25;
-    M2=M2*(1.(K,n)) by MATRIX_3:21
+  assume
+A1: M1=M2*M1 & M1 is invertible;
+  then
+A2: M1~ is_reverse_of M1 & M1~ is Matrix of n,K by Def4;
+A3: len M1=n & width M1=n & len M2 =n & width M2=n & len (M1~)=n &
+  width (M1~)=n by MATRIX_1:25;
+  M2=M2*(1.(K,n)) by MATRIX_3:21
     .=M2*(M1*M1~) by A2,Def2
     .=M1*M1~ by A1,A3,MATRIX_3:35
     .=1.(K,n) by A2,Def2;
-   hence thesis by Th6;
+  hence thesis by Th6;
 end;
 
-definition let n be Nat, K be Field; let M1 be Matrix of n,K;
-  attr M1 is symmetric means :Def5:
-    M1@=M1;
+definition
+  let n be Nat, K be Field;
+  let M1 be Matrix of n,K;
+  attr M1 is symmetric means
+  :Def5:
+  M1@=M1;
 end;
 
 canceled;
 
-registration let n be Nat, K be Field;
+registration
+  let n be Nat, K be Field;
   cluster 1.(K,n) -> symmetric;
   coherence
   proof
-     (1.(K,n))@=1.(K,n) by Th10;
+    (1.(K,n))@=1.(K,n) by Th10;
     hence thesis by Def5;
   end;
 end;
@@ -422,491 +472,537 @@ end;
 theorem Th21:
   ((n,n)-->a)@ = (n,n)-->a
 proof
-   per cases by NAT_1:3;
-   suppose A1:n>0;
-A2:width ((n,n)-->a)=n & len ((n,n)-->a)=n &
-     Indices ((n,n)-->a)=[:Seg n, Seg n:] by MATRIX_1:25;
-then A3:width (((n,n)-->a)@) = width ((n,n)-->a) &
-     len(((n,n)-->a)@)=len ((n,n)-->a) by A1,MATRIX_2:12;
+  per cases by NAT_1:3;
+  suppose
+A1: n>0;
+A2: width ((n,n)-->a)=n & len ((n,n)-->a)=n &
+    Indices ((n,n)-->a)=[:Seg n, Seg n:] by MATRIX_1:25;
+    then
+A3: width (((n,n)-->a)@) = width ((n,n)-->a) &
+    len(((n,n)-->a)@)=len ((n,n)-->a) by A1,MATRIX_2:12;
     for i,j st [i,j] in Indices (((n,n)-->a)@) holds
-     (((n,n)-->a)@)*(i,j)=((n,n)-->a)*(i,j)
-   proof
-     let i,j;
-     assume [i,j] in Indices (((n,n)-->a)@);
-then A4:  [i,j] in Indices (((n,n)-->a)) by MATRIX_1:27;
-     then i in Seg n & j in Seg n by A2,ZFMISC_1:106;
-then  [j,i] in Indices ((n,n)-->a) by A2,ZFMISC_1:106;
-     then (((n,n)-->a)@)*(i,j)=((n,n)-->a)*(j,i) & ((n,n)-->a)*(j,i)=a
-       by MATRIX_1:def 7,MATRIX_2:1;
-     hence thesis by A4,MATRIX_2:1;
-   end;
-   hence thesis by A3,MATRIX_1:21;
-   end;
-   suppose n = 0;
-     then len (((n,n)-->a)@) = 0 & len ((n,n)-->a) = 0 by MATRIX_1:def 3;
-     hence thesis by MATRIX_1:37;
-   end;
+    (((n,n)-->a)@)*(i,j)=((n,n)-->a)*(i,j)
+    proof
+      let i,j;
+      assume [i,j] in Indices (((n,n)-->a)@);
+      then
+A4:   [i,j] in Indices (((n,n)-->a)) by MATRIX_1:27;
+      then i in Seg n & j in Seg n by A2,ZFMISC_1:106;
+      then [j,i] in Indices ((n,n)-->a) by A2,ZFMISC_1:106;
+      then (((n,n)-->a)@)*(i,j)=((n,n)-->a)*(j,i) & ((n,n)-->a)*(j,i)=a
+      by MATRIX_1:def 7,MATRIX_2:1;
+      hence thesis by A4,MATRIX_2:1;
+    end;
+    hence thesis by A3,MATRIX_1:21;
+  end;
+  suppose n = 0;
+    then len (((n,n)-->a)@) = 0 & len ((n,n)-->a) = 0 by MATRIX_1:def 3;
+    hence thesis by MATRIX_1:37;
+  end;
 end;
 
 theorem
-   (n,n)-->a is symmetric
+  (n,n)-->a is symmetric
 proof
-   ((n,n)-->a)@ = (n,n)-->a by Th21;
+  ((n,n)-->a)@ = (n,n)-->a by Th21;
   hence thesis by Def5;
 end;
 
 theorem
-   n > 0 & M1 is symmetric & M2 is symmetric implies
-    (M1 commutes_with M2 iff M1*M2 is symmetric)
+  n > 0 & M1 is symmetric & M2 is symmetric implies
+  (M1 commutes_with M2 iff M1*M2 is symmetric)
 proof
-   assume A1: n > 0 & M1 is symmetric & M2 is symmetric;
-then A2:M1@=M1 & M2@=M2 by Def5;
-A3:M1 is Matrix of n,K & M2 is Matrix of n,K &
-     width M1=n & len M2=n & width M2=n & len M1=n by MATRIX_1:25;
-   thus M1 commutes_with M2 implies M1*M2 is symmetric
-   proof
-     assume A4:M1 commutes_with M2;
-      (M1*M2)@=M2*M1 by A1,A2,A3,MATRIX_3:24
-            .=M1*M2 by A4,Def1;
-     hence thesis by Def5;
-   end;
-   assume A5:M1*M2 is symmetric;
-    M2*M1=(M1*M2)@ by A1,A2,A3,MATRIX_3:24
-       .=M1*M2 by A5,Def5;
-   hence thesis by Def1;
+  assume
+A1: n > 0 & M1 is symmetric & M2 is symmetric;
+  then
+A2: M1@=M1 & M2@=M2 by Def5;
+A3: M1 is Matrix of n,K & M2 is Matrix of n,K &
+  width M1=n & len M2=n & width M2=n & len M1=n by MATRIX_1:25;
+  thus M1 commutes_with M2 implies M1*M2 is symmetric
+  proof
+    assume
+A4: M1 commutes_with M2;
+    (M1*M2)@=M2*M1 by A1,A2,A3,MATRIX_3:24
+      .=M1*M2 by A4,Def1;
+    hence thesis by Def5;
+  end;
+  assume
+A5: M1*M2 is symmetric;
+  M2*M1=(M1*M2)@ by A1,A2,A3,MATRIX_3:24
+    .=M1*M2 by A5,Def5;
+  hence thesis by Def1;
 end;
 
 theorem Th24:
   (M1+M2)@=M1@+M2@
 proof
-    for i,j st [i,j] in Indices ((M1+M2)@) holds
-     ((M1+M2)@)*(i,j)=(M1@+M2@)*(i,j)
-   proof
-     let i,j;
-     assume [i,j] in Indices ((M1+M2)@);
-then A1: [i,j] in [:Seg n, Seg n:] by MATRIX_1:25;
-     then i in Seg n & j in Seg n by ZFMISC_1:106;
-     then [j,i] in [:Seg n, Seg n:] by ZFMISC_1:106;
-then A2: [j,i] in Indices (M1+M2) & [j,i] in Indices M1 &
-       [j,i] in Indices M2 & [i,j] in Indices (M1@) & [i,j] in Indices (M2@)
-         by A1,MATRIX_1:25;
-     then ((M1+M2)@)*(i,j)=(M1+M2)*(j,i) by MATRIX_1:def 7
-                 .=M1*(j,i)+M2*(j,i) by A2,MATRIX_3:def 3
-                 .=(M1@)*(i,j)+M2*(j,i) by A2,MATRIX_1:def 7
-                 .=(M1@)*(i,j)+(M2@)*(i,j) by A2,MATRIX_1:def 7
-                 .=(M1@+M2@)*(i,j) by A2,MATRIX_3:def 3;
-     hence thesis;
-   end;
-   hence thesis by MATRIX_1:28;
+  for i,j st [i,j] in Indices ((M1+M2)@) holds
+  ((M1+M2)@)*(i,j)=(M1@+M2@)*(i,j)
+  proof
+    let i,j;
+    assume [i,j] in Indices ((M1+M2)@);
+    then
+A1: [i,j] in [:Seg n, Seg n:] by MATRIX_1:25;
+    then i in Seg n & j in Seg n by ZFMISC_1:106;
+    then [j,i] in [:Seg n, Seg n:] by ZFMISC_1:106;
+    then
+A2: [j,i] in Indices (M1+M2) & [j,i] in Indices M1 &
+    [j,i] in Indices M2 & [i,j] in Indices (M1@) & [i,j] in Indices (M2@)
+    by A1,MATRIX_1:25;
+    then ((M1+M2)@)*(i,j)=(M1+M2)*(j,i) by MATRIX_1:def 7
+      .=M1*(j,i)+M2*(j,i) by A2,MATRIX_3:def 3
+      .=(M1@)*(i,j)+M2*(j,i) by A2,MATRIX_1:def 7
+      .=(M1@)*(i,j)+(M2@)*(i,j) by A2,MATRIX_1:def 7
+      .=(M1@+M2@)*(i,j) by A2,MATRIX_3:def 3;
+    hence thesis;
+  end;
+  hence thesis by MATRIX_1:28;
 end;
 
 theorem
-   M1 is symmetric & M2 is symmetric implies
-    M1+M2 is symmetric
+  M1 is symmetric & M2 is symmetric implies M1+M2 is symmetric
 proof
-  assume A1: M1 is symmetric & M2 is symmetric;
-   (M1+M2)@=M1@+M2@ by Th24
-       .=M1+M2@ by A1,Def5
-       .=M1+M2 by A1,Def5;
+  assume
+A1: M1 is symmetric & M2 is symmetric;
+  (M1+M2)@=M1@+M2@ by Th24
+    .=M1+M2@ by A1,Def5
+    .=M1+M2 by A1,Def5;
   hence thesis by Def5;
 end;
 
 theorem
-   M1 is Upper_Triangular_Matrix of n,K &
-    M1 is Lower_Triangular_Matrix of n,K & n>0 implies
-      M1 is symmetric
+  M1 is Upper_Triangular_Matrix of n,K &
+  M1 is Lower_Triangular_Matrix of n,K & n>0 implies M1 is symmetric
 proof
-  assume A1:M1 is Upper_Triangular_Matrix of n,K &
-    M1 is Lower_Triangular_Matrix of n,K & n>0;
-A2:M1 is Matrix of n,K & width M1=n & len M1=n &
-     Indices M1=[:Seg n, Seg n:] by MATRIX_1:25;
-    for i,j st [i,j] in Indices M1 holds M1@*(i,j)=M1*(i,j)
-   proof
-     let i,j;
-     assume A3:[i,j] in Indices M1;
-     then [i,j] in [:Seg n, Seg n:] by MATRIX_1:25;
-     then i in Seg n & j in Seg n by ZFMISC_1:106;
-     then A4:[j,i] in Indices M1 by A2,ZFMISC_1:106;
-     per cases;
-     suppose i=j;
-       hence thesis by A4,MATRIX_1:def 7;
-     end;
-     suppose A5:i<>j;
-       per cases by A5,REAL_1:def 5;
-       suppose A6:i<j;
-         then A7:M1*(i,j) = 0.K by A1,A3,MATRIX_2:def 4;
-          M1*(j,i) = 0.K by A1,A4,A6,MATRIX_2:def 3;
-         hence thesis by A4,A7,MATRIX_1:def 7;
-       end;
-       suppose A8:i>j;
-         then A9:M1*(i,j)=0.K by A1,A3,MATRIX_2:def 3;
-          M1*(j,i)=0.K by A1,A4,A8,MATRIX_2:def 4;
-         hence thesis by A4,A9,MATRIX_1:def 7;
-       end;
-     end;
-   end;
-   then M1@=M1 by MATRIX_1:28;
-   hence thesis by Def5;
+  assume
+A1: M1 is Upper_Triangular_Matrix of n,K &
+  M1 is Lower_Triangular_Matrix of n,K & n>0;
+A2: M1 is Matrix of n,K & width M1=n & len M1=n &
+  Indices M1=[:Seg n, Seg n:] by MATRIX_1:25;
+  for i,j st [i,j] in Indices M1 holds M1@*(i,j)=M1*(i,j)
+  proof
+    let i,j;
+    assume
+A3: [i,j] in Indices M1;
+    then [i,j] in [:Seg n, Seg n:] by MATRIX_1:25;
+    then i in Seg n & j in Seg n by ZFMISC_1:106;
+    then
+A4: [j,i] in Indices M1 by A2,ZFMISC_1:106;
+    per cases;
+    suppose i=j;
+      hence thesis by A4,MATRIX_1:def 7;
+    end;
+    suppose
+A5:   i<>j;
+      per cases by A5,REAL_1:def 5;
+      suppose
+A6:     i<j;
+        then
+A7:     M1*(i,j) = 0.K by A1,A3,MATRIX_2:def 4;
+        M1*(j,i) = 0.K by A1,A4,A6,MATRIX_2:def 3;
+        hence thesis by A4,A7,MATRIX_1:def 7;
+      end;
+      suppose
+A8:     i>j;
+        then
+A9:     M1*(i,j)=0.K by A1,A3,MATRIX_2:def 3;
+        M1*(j,i)=0.K by A1,A4,A8,MATRIX_2:def 4;
+        hence thesis by A4,A9,MATRIX_1:def 7;
+      end;
+    end;
+  end;
+  then M1@=M1 by MATRIX_1:28;
+  hence thesis by Def5;
 end;
 
 theorem Th27:
-  for K being Field,n being Nat,M1 being Matrix of n,K holds
-    (-M1)@=-(M1@)
+  for K being Field,n being Nat,M1 being Matrix of n,K holds (-M1)@=-(M1@)
 proof
-   let K,n,M1;
-    for i,j st [i,j] in Indices ((-M1)@) holds ((-M1)@)*(i,j)=(-(M1@))*(i,j)
-   proof
-     let i,j;
-     assume A1: [i,j] in Indices ((-M1)@);
-     then [i,j] in [:Seg n, Seg n:] by MATRIX_1:25;
-     then i in Seg n & j in Seg n by ZFMISC_1:106;
-     then [j,i] in [:Seg n, Seg n:] by ZFMISC_1:106;
-then A2:  [j,i] in Indices M1 & [j,i] in Indices (-M1) by MATRIX_1:25;
-A3:  [i,j] in Indices M1@ by A1,MATRIX_1:27;
-      ((-M1)@)*(i,j)=(-M1)*(j,i) by A2,MATRIX_1:def 7
-                .=-(M1*(j,i)) by A2,MATRIX_3:def 2
-                .=-(M1@*(i,j)) by A2,MATRIX_1:def 7
-                .=(-(M1@))*(i,j) by A3,MATRIX_3:def 2;
-     hence thesis;
-   end;
-   hence thesis by MATRIX_1:28;
+  let K,n,M1;
+  for i,j st [i,j] in Indices ((-M1)@) holds ((-M1)@)*(i,j)=(-(M1@))*(i,j)
+  proof
+    let i,j;
+    assume
+A1: [i,j] in Indices ((-M1)@);
+    then [i,j] in [:Seg n, Seg n:] by MATRIX_1:25;
+    then i in Seg n & j in Seg n by ZFMISC_1:106;
+    then [j,i] in [:Seg n, Seg n:] by ZFMISC_1:106;
+    then
+A2: [j,i] in Indices M1 & [j,i] in Indices (-M1) by MATRIX_1:25;
+A3: [i,j] in Indices M1@ by A1,MATRIX_1:27;
+    ((-M1)@)*(i,j)=(-M1)*(j,i) by A2,MATRIX_1:def 7
+      .=-(M1*(j,i)) by A2,MATRIX_3:def 2
+      .=-(M1@*(i,j)) by A2,MATRIX_1:def 7
+      .=(-(M1@))*(i,j) by A3,MATRIX_3:def 2;
+    hence thesis;
+  end;
+  hence thesis by MATRIX_1:28;
 end;
 
 theorem
-   for K being Field, n being Nat, M1 being Matrix of n,K st
-    M1 is symmetric holds -M1 is symmetric
+  for K being Field, n being Nat, M1 being Matrix of n,K st
+  M1 is symmetric holds -M1 is symmetric
 proof
   let K,n,M1;
-  assume A1:M1 is symmetric;
-   (-M1)@ =-(M1@) by Th27
-       .=-M1 by A1,Def5;
+  assume
+A1: M1 is symmetric;
+  (-M1)@ =-(M1@) by Th27
+    .=-M1 by A1,Def5;
   hence thesis by Def5;
 end;
 
 theorem
-   for K being Field,n being Nat,M1,M2 being Matrix of n,K st
-    M1 is symmetric & M2 is symmetric holds
-      M1-M2 is symmetric
+  for K being Field,n being Nat,M1,M2 being Matrix of n,K st
+  M1 is symmetric & M2 is symmetric holds M1-M2 is symmetric
 proof
   let K,n,M1,M2;
-  assume A1: M1 is symmetric & M2 is symmetric;
-   (M1-M2)@=M1@+(-M2)@ by Th24
-       .=M1+(-M2)@ by A1,Def5
-       .=M1+-(M2@) by Th27
-       .=M1-M2 by A1,Def5;
+  assume
+A1: M1 is symmetric & M2 is symmetric;
+  (M1-M2)@=M1@+(-M2)@ by Th24
+    .=M1+(-M2)@ by A1,Def5
+    .=M1+-(M2@) by Th27
+    .=M1-M2 by A1,Def5;
   hence thesis by Def5;
 end;
 
-definition let n be Nat,K be Field;let M1 be Matrix of n,K;
-  attr M1 is antisymmetric means :Def6:
-    M1@=-M1;
+definition
+  let n be Nat,K be Field;
+  let M1 be Matrix of n,K;
+  attr M1 is antisymmetric means
+  :Def6:
+  M1@=-M1;
 end;
 
 theorem
-   for K being Fanoian Field,n being Nat,M1 being Matrix of n,K st
-    M1 is symmetric antisymmetric holds
-      M1=0.(K,n,n)
+  for K being Fanoian Field,n being Nat,M1 being Matrix of n,K st
+  M1 is symmetric antisymmetric holds M1=0.(K,n,n)
 proof
-   let K be Fanoian Field;
-   let n;
-   let M1 be Matrix of n,K;
-   assume M1 is symmetric antisymmetric;
-then A1:M1@=M1 & M1@=-M1 by Def5,Def6;
-    for i,j st [i,j] in Indices M1 holds M1*(i,j)=(0.(K,n,n))*(i,j)
-   proof
-     let i,j;
-A2:  1_K+1_K<>0.K by VECTSP_1:def 29;
-     assume A3:[i,j] in Indices M1;
-then A4:  [i,j] in Indices (0.(K,n,n)) by MATRIX_1:27;
-      M1*(i,j)=-M1*(i,j) by A1,A3,MATRIX_3:def 2;
-     then M1*(i,j)+M1*(i,j)=0.K by RLVECT_1:16;
-     then (1_K)*(M1*(i,j))+M1*(i,j)=0.K by VECTSP_1:def 19;
-     then (1_K)*(M1*(i,j))+(1_K)*(M1*(i,j))=0.K by VECTSP_1:def 19;
-     then (1_K+1_K)*(M1*(i,j))=0.K by VECTSP_1:def 18;
-     then M1*(i,j)=0.K by A2,VECTSP_1:44;
-     hence thesis by A4,MATRIX_3:3;
-   end;
-   hence thesis by MATRIX_1:28;
+  let K be Fanoian Field;
+  let n;
+  let M1 be Matrix of n,K;
+  assume M1 is symmetric antisymmetric;
+  then
+A1: M1@=M1 & M1@=-M1 by Def5,Def6;
+  for i,j st [i,j] in Indices M1 holds M1*(i,j)=(0.(K,n,n))*(i,j)
+  proof
+    let i,j;
+A2: 1_K+1_K<>0.K by VECTSP_1:def 29;
+    assume
+A3: [i,j] in Indices M1;
+    then
+A4: [i,j] in Indices (0.(K,n,n)) by MATRIX_1:27;
+    M1*(i,j)=-M1*(i,j) by A1,A3,MATRIX_3:def 2;
+    then M1*(i,j)+M1*(i,j)=0.K by RLVECT_1:16;
+    then (1_K)*(M1*(i,j))+M1*(i,j)=0.K by VECTSP_1:def 19;
+    then (1_K)*(M1*(i,j))+(1_K)*(M1*(i,j))=0.K by VECTSP_1:def 19;
+    then (1_K+1_K)*(M1*(i,j))=0.K by VECTSP_1:def 18;
+    then M1*(i,j)=0.K by A2,VECTSP_1:44;
+    hence thesis by A4,MATRIX_3:3;
+  end;
+  hence thesis by MATRIX_1:28;
 end;
 
 theorem
-   for K being Fanoian Field,n,i being Nat,M1 being Matrix of n,K st
-    M1 is antisymmetric & i in Seg n holds M1*(i,i) =0.K
+  for K being Fanoian Field,n,i being Nat,M1 being Matrix of n,K st
+  M1 is antisymmetric & i in Seg n holds M1*(i,i) =0.K
 proof
-   let K be Fanoian Field;
-   let n,i;
-   let M1 be Matrix of n,K;
-A1:1_K+1_K<>0.K by VECTSP_1:def 29;
-   assume A2:M1 is antisymmetric & i in Seg n;
-    Indices M1=[:Seg n, Seg n:] by MATRIX_1:25;
-then A3:[i,i] in Indices M1 by A2,ZFMISC_1:106;
-A4:M1@=-M1 by A2,Def6;
-    M1@*(i,i)=M1*(i,i) by A3,MATRIX_1:def 7;
-   then M1*(i,i)=-M1*(i,i) by A3,A4,MATRIX_3:def 2;
-   then M1*(i,i)+M1*(i,i)=0.K by RLVECT_1:16;
-   then (1_K)*(M1*(i,i))+M1*(i,i)=0.K by VECTSP_1:def 19;
-   then (1_K)*(M1*(i,i))+(1_K)*(M1*(i,i))=0.K by VECTSP_1:def 19;
-   then (1_K+1_K)*(M1*(i,i))=0.K by VECTSP_1:def 18;
-   hence thesis by A1,VECTSP_1:44;
+  let K be Fanoian Field;
+  let n,i;
+  let M1 be Matrix of n,K;
+A1: 1_K+1_K<>0.K by VECTSP_1:def 29;
+  assume
+A2: M1 is antisymmetric & i in Seg n;
+  Indices M1=[:Seg n, Seg n:] by MATRIX_1:25;
+  then
+A3: [i,i] in Indices M1 by A2,ZFMISC_1:106;
+A4: M1@=-M1 by A2,Def6;
+  M1@*(i,i)=M1*(i,i) by A3,MATRIX_1:def 7;
+  then M1*(i,i)=-M1*(i,i) by A3,A4,MATRIX_3:def 2;
+  then M1*(i,i)+M1*(i,i)=0.K by RLVECT_1:16;
+  then (1_K)*(M1*(i,i))+M1*(i,i)=0.K by VECTSP_1:def 19;
+  then (1_K)*(M1*(i,i))+(1_K)*(M1*(i,i))=0.K by VECTSP_1:def 19;
+  then (1_K+1_K)*(M1*(i,i))=0.K by VECTSP_1:def 18;
+  hence thesis by A1,VECTSP_1:44;
 end;
 
 theorem
-   for K being Field,n being Nat,M1,M2 being Matrix of n,K st
-    n>0 & M1 is antisymmetric & M2 is antisymmetric holds
-      M1+M2 is antisymmetric
+  for K being Field,n being Nat,M1,M2 being Matrix of n,K st
+  n>0 & M1 is antisymmetric & M2 is antisymmetric holds M1+M2 is antisymmetric
 proof
-   let K,n,M1,M2;
-   assume A1: n>0 & M1 is antisymmetric & M2 is antisymmetric;
-A2:len M1=n &width M1=n&len M2=n &width M2=n by MATRIX_1:25;
-    (M1+M2)@=M1@+M2@ by Th24
-       .=-M1+M2@ by A1,Def6
-       .=-M1+-M2 by A1,Def6
-       .=-(M1+M2) by A2,MATRIX_4:12;
-   hence thesis by Def6;
-end;
-
-theorem
-   for K being Field,n being Nat,M1 being Matrix of n,K st
-    M1 is antisymmetric holds -M1 is antisymmetric
-proof
-  let K,n,M1;
-  assume A1:M1 is antisymmetric;
-   (-M1)@=-(M1@) by Th27
-       .=-(-M1) by A1,Def6;
+  let K,n,M1,M2;
+  assume
+A1: n>0 & M1 is antisymmetric & M2 is antisymmetric;
+A2: len M1=n &width M1=n&len M2=n &width M2=n by MATRIX_1:25;
+  (M1+M2)@=M1@+M2@ by Th24
+    .=-M1+M2@ by A1,Def6
+    .=-M1+-M2 by A1,Def6
+    .=-(M1+M2) by A2,MATRIX_4:12;
   hence thesis by Def6;
 end;
 
 theorem
-   for K being Field,n being Nat,M1,M2 being Matrix of n,K st
-    n>0 & M1 is antisymmetric & M2 is antisymmetric holds
-      M1-M2 is antisymmetric
+  for K being Field,n being Nat,M1 being Matrix of n,K st
+  M1 is antisymmetric holds -M1 is antisymmetric
 proof
-   let K,n,M1,M2;
-   assume A1: n>0 & M1 is antisymmetric & M2 is antisymmetric;
-A2:len (-M2)=n &width (-M2)=n by MATRIX_1:25;
-A3:len M1=n &width M1=n by MATRIX_1:25;
-    (M1-M2)@=M1@+(-M2)@ by Th24
-       .=-M1+(-M2)@ by A1,Def6
-       .=-M1+-(M2@) by Th27
-       .=-M1+-(-M2) by A1,Def6
-       .=-(M1-M2) by A2,A3,MATRIX_4:12;
-   hence thesis by Def6;
+  let K,n,M1;
+  assume
+A1: M1 is antisymmetric;
+  (-M1)@=-(M1@) by Th27
+    .=-(-M1) by A1,Def6;
+  hence thesis by Def6;
 end;
 
 theorem
-   n>0 implies M1-M1@ is antisymmetric
+  for K being Field,n being Nat,M1,M2 being Matrix of n,K st
+  n>0 & M1 is antisymmetric & M2 is antisymmetric holds M1-M2 is antisymmetric
 proof
-   assume A1: n>0; set M2=M1-(M1@);
-A2:len M1 = n & width M1=n by MATRIX_1:25;
-A3:len (M1@)=n & width (M1@)=n by MATRIX_1:25;
-    M2@=M1@+(-(M1@))@ by Th24
-     .=M1@+-((M1@)@) by Th27
-     .=M1@-M1 by A1,A2,MATRIX_2:15
-     .=-(M1-M1@) by A2,A3,MATRIX_4:43;
-   hence thesis by Def6;
+  let K,n,M1,M2;
+  assume
+A1: n>0 & M1 is antisymmetric & M2 is antisymmetric;
+A2: len (-M2)=n &width (-M2)=n by MATRIX_1:25;
+A3: len M1=n &width M1=n by MATRIX_1:25;
+  (M1-M2)@=M1@+(-M2)@ by Th24
+    .=-M1+(-M2)@ by A1,Def6
+    .=-M1+-(M2@) by Th27
+    .=-M1+-(-M2) by A1,Def6
+    .=-(M1-M2) by A2,A3,MATRIX_4:12;
+  hence thesis by Def6;
 end;
 
 theorem
-   n>0 implies
-    (M1 commutes_with M2 iff (M1+M2)*(M1+M2)=M1*M1+M1*M2+M1*M2+M2*M2)
+  n>0 implies M1-M1@ is antisymmetric
 proof
-   assume A1: n>0;
-A2:len M1 =n & width M1=n & len M2=n & width M2=n by MATRIX_1:25;
-A3:len (M1+M2)=n & width (M1+M2)=n by MATRIX_1:25;
-A4:len (M1*M1)=n & width (M1*M1)=n & len (M1*M2)=n & width (M1*M2)=n
-     by MATRIX_1:25;
-A5:len (M2*M1)=n & width (M2*M1)=n & len (M2*M2)=n & width (M2*M2)=n
-     by MATRIX_1:25;
-A6:len (M1*M1+M2*M1)=n & width (M1*M1+M2*M1)=n &
-       len (M1*M2+M2*M2)=n & width (M1*M2+M2*M2)=n by MATRIX_1:25;
-A7:len (M1*M1+M1*M2)=n & width (M1*M1+M1*M2)=n by MATRIX_1:25;
-   thus M1 commutes_with M2 implies
-     (M1+M2)*(M1+M2)=M1*M1+M1*M2+M1*M2+M2*M2
-   proof
-     assume A8:M1 commutes_with M2;
-      (M1+M2)*(M1+M2)=(M1+M2)*M1+(M1+M2)*M2 by A1,A2,A3,MATRIX_4:62
-       .=M1*M1+M2*M1+(M1+M2)*M2 by A1,A2,MATRIX_4:63
-       .=M1*M1+M2*M1+(M1*M2+M2*M2) by A1,A2,MATRIX_4:63
-       .=M1*M1+M2*M1+M1*M2+M2*M2 by A4,A5,A6,MATRIX_3:5;
-     hence thesis by A8,Def1;
-   end;
-   assume A9:(M1+M2)*(M1+M2)=M1*M1+M1*M2+M1*M2+M2*M2;
+  assume
+A1: n>0;
+  set M2=M1-(M1@);
+A2: len M1 = n & width M1=n by MATRIX_1:25;
+A3: len (M1@)=n & width (M1@)=n by MATRIX_1:25;
+  M2@=M1@+(-(M1@))@ by Th24
+    .=M1@+-((M1@)@) by Th27
+    .=M1@-M1 by A1,A2,MATRIX_2:15
+    .=-(M1-M1@) by A2,A3,MATRIX_4:43;
+  hence thesis by Def6;
+end;
+
+theorem
+  n>0 implies
+  (M1 commutes_with M2 iff (M1+M2)*(M1+M2)=M1*M1+M1*M2+M1*M2+M2*M2)
+proof
+  assume
+A1: n>0;
+A2: len M1 =n & width M1=n & len M2=n & width M2=n by MATRIX_1:25;
+A3: len (M1+M2)=n & width (M1+M2)=n by MATRIX_1:25;
+A4: len (M1*M1)=n & width (M1*M1)=n & len (M1*M2)=n & width (M1*M2)=n
+  by MATRIX_1:25;
+A5: len (M2*M1)=n & width (M2*M1)=n & len (M2*M2)=n & width (M2*M2)=n
+  by MATRIX_1:25;
+A6: len (M1*M1+M2*M1)=n & width (M1*M1+M2*M1)=n &
+  len (M1*M2+M2*M2)=n & width (M1*M2+M2*M2)=n by MATRIX_1:25;
+A7: len (M1*M1+M1*M2)=n & width (M1*M1+M1*M2)=n by MATRIX_1:25;
+  thus M1 commutes_with M2 implies (M1+M2)*(M1+M2)=M1*M1+M1*M2+M1*M2+M2*M2
+  proof
+    assume
+A8: M1 commutes_with M2;
     (M1+M2)*(M1+M2)=(M1+M2)*M1+(M1+M2)*M2 by A1,A2,A3,MATRIX_4:62
-          .=M1*M1+M2*M1+(M1+M2)*M2 by A1,A2,MATRIX_4:63
-          .=M1*M1+M2*M1+(M1*M2+M2*M2) by A1,A2,MATRIX_4:63
-          .=M1*M1+M2*M1+M1*M2+M2*M2 by A4,A5,A6,MATRIX_3:5;
-   then M1*M1+M2*M1+(M1*M2+M2*M2)=M1*M1+M1*M2+M1*M2+M2*M2
-     by A4,A5,A6,A9,MATRIX_3:5;
-   then M1*M1+M2*M1+(M1*M2+M2*M2)=M1*M1+M1*M2+(M1*M2+M2*M2)
-     by A4,A5,A7,MATRIX_3:5;
-   then M1*M1+M2*M1=M1*M1+M1*M2 by A6,A7,MATRIX_4:4;
-   then M2*M1+M1*M1=M1*M1+M1*M2 by A4,A5,MATRIX_3:4;
-   then M2*M1+M1*M1=M1*M2+M1*M1 by A4,MATRIX_3:4;
-   then M2*M1=M1*M2 by A4,A5,MATRIX_4:4;
-   hence thesis by Def1;
+      .=M1*M1+M2*M1+(M1+M2)*M2 by A1,A2,MATRIX_4:63
+      .=M1*M1+M2*M1+(M1*M2+M2*M2) by A1,A2,MATRIX_4:63
+      .=M1*M1+M2*M1+M1*M2+M2*M2 by A4,A5,A6,MATRIX_3:5;
+    hence thesis by A8,Def1;
+  end;
+  assume
+A9: (M1+M2)*(M1+M2)=M1*M1+M1*M2+M1*M2+M2*M2;
+  (M1+M2)*(M1+M2)=(M1+M2)*M1+(M1+M2)*M2 by A1,A2,A3,MATRIX_4:62
+    .=M1*M1+M2*M1+(M1+M2)*M2 by A1,A2,MATRIX_4:63
+    .=M1*M1+M2*M1+(M1*M2+M2*M2) by A1,A2,MATRIX_4:63
+    .=M1*M1+M2*M1+M1*M2+M2*M2 by A4,A5,A6,MATRIX_3:5;
+  then M1*M1+M2*M1+(M1*M2+M2*M2)=M1*M1+M1*M2+M1*M2+M2*M2
+  by A4,A5,A6,A9,MATRIX_3:5;
+  then M1*M1+M2*M1+(M1*M2+M2*M2)=M1*M1+M1*M2+(M1*M2+M2*M2)
+  by A4,A5,A7,MATRIX_3:5;
+  then M1*M1+M2*M1=M1*M1+M1*M2 by A6,A7,MATRIX_4:4;
+  then M2*M1+M1*M1=M1*M1+M1*M2 by A4,A5,MATRIX_3:4;
+  then M2*M1+M1*M1=M1*M2+M1*M1 by A4,MATRIX_3:4;
+  then M2*M1=M1*M2 by A4,A5,MATRIX_4:4;
+  hence thesis by Def1;
 end;
 
 theorem Th37:
   M1 is invertible & M2 is invertible implies
-    M1*M2 is invertible & (M1*M2)~=(M2~)*(M1~)
+  M1*M2 is invertible & (M1*M2)~=(M2~)*(M1~)
 proof
-   assume A1: M1 is invertible & M2 is invertible;
-A2:width M1=n & len M2=n & width M2=n & len M1=n by MATRIX_1:25;
-A3:M1~ is Matrix of n,K & M2~ is Matrix of n,K & width (M1~)=n &
-     len (M2~)=n & width (M2~)=n & len (M1~)=n by MATRIX_1:25;
-A4:width (M2~*M1~)=n & len (M2~*M1~)=n & width (M1*M2)=n & len (M1*M2)=n
-     by MATRIX_1:25;
-A5:M2~ is_reverse_of M2 & M1~ is_reverse_of M1 by A1,Def4;
-A6:(M2~*M1~)*(M1*M2)=(M2~*M1~)*M1*M2 by A2,A4,MATRIX_3:35
-        .=(M2~*(M1~*M1))*M2 by A2,A3,MATRIX_3:35
-        .=(M2~*(1.(K,n)))*M2 by A5,Def2
-        .=M2~*M2 by MATRIX_3:21
-        .=1.(K,n) by A5,Def2;
-    (M1*M2)*(M2~*M1~)=((M1*M2)*M2~)*M1~ by A3,A4,MATRIX_3:35
-        .=(M1*(M2*M2~))*M1~ by A2,A3,MATRIX_3:35
-        .=(M1*(1.(K,n)))*M1~ by A5,Def2
-        .=M1*M1~ by MATRIX_3:21
-        .=1.(K,n) by A5,Def2;
-then A7:(M2~)*(M1~) is_reverse_of M1*M2 by A6,Def2;
-   then M1*M2 is invertible by Def3;
-   hence thesis by A7,Def4;
+  assume
+A1: M1 is invertible & M2 is invertible;
+A2: width M1=n & len M2=n & width M2=n & len M1=n by MATRIX_1:25;
+A3: M1~ is Matrix of n,K & M2~ is Matrix of n,K & width (M1~)=n &
+  len (M2~)=n & width (M2~)=n & len (M1~)=n by MATRIX_1:25;
+A4: width (M2~*M1~)=n & len (M2~*M1~)=n & width (M1*M2)=n & len (M1*M2)=n
+  by MATRIX_1:25;
+A5: M2~ is_reverse_of M2 & M1~ is_reverse_of M1 by A1,Def4;
+A6: (M2~*M1~)*(M1*M2)=(M2~*M1~)*M1*M2 by A2,A4,MATRIX_3:35
+    .=(M2~*(M1~*M1))*M2 by A2,A3,MATRIX_3:35
+    .=(M2~*(1.(K,n)))*M2 by A5,Def2
+    .=M2~*M2 by MATRIX_3:21
+    .=1.(K,n) by A5,Def2;
+  (M1*M2)*(M2~*M1~)=((M1*M2)*M2~)*M1~ by A3,A4,MATRIX_3:35
+    .=(M1*(M2*M2~))*M1~ by A2,A3,MATRIX_3:35
+    .=(M1*(1.(K,n)))*M1~ by A5,Def2
+    .=M1*M1~ by MATRIX_3:21
+    .=1.(K,n) by A5,Def2;
+  then
+A7: (M2~)*(M1~) is_reverse_of M1*M2 by A6,Def2;
+  then M1*M2 is invertible by Def3;
+  hence thesis by A7,Def4;
 end;
 
 theorem
-   M1 is invertible & M2 is invertible &
-    M1 commutes_with M2 implies
-      M1*M2 is invertible & (M1*M2)~ = (M1~)*(M2~)
+  M1 is invertible & M2 is invertible & M1 commutes_with M2 implies
+  M1*M2 is invertible & (M1*M2)~ = (M1~)*(M2~)
 proof
-   assume A1: M1 is invertible & M2 is invertible & M1 commutes_with M2;
-A2:M1 is Matrix of n,K & M2 is Matrix of n,K &
-     width M1=n & len M2=n & width M2=n & len M1=n by MATRIX_1:25;
-A3:M1~ is Matrix of n,K & M2~ is Matrix of n,K & width (M1~)=n &
-     len (M2~)=n & width (M2~)=n & len (M1~)=n by MATRIX_1:25;
-A4:width (M1~*M2~)=n & len (M1~*M2~)=n &
-     width (M1*M2)=n & len (M1*M2)=n by MATRIX_1:25;
-A5:M2~ is_reverse_of M2 & M1~ is_reverse_of M1 by A1,Def4;
-A6:(M1~)*(M2~)*(M1*M2)=(M1~)*(M2~)*(M2*M1) by A1,Def1
-        .=(M1~)*(M2~)*M2*M1 by A2,A4,MATRIX_3:35
-        .=((M1~)*((M2~)*M2))*M1 by A2,A3,MATRIX_3:35
-        .=((M1~)*(1.(K,n)))*M1 by A5,Def2
-        .=(M1~)*M1 by MATRIX_3:21
-        .=1.(K,n) by A5,Def2;
-    (M1*M2)*(M1~*M2~)=((M1*M2)*M1~)*M2~ by A3,A4,MATRIX_3:35
-        .=((M2*M1)*M1~)*M2~ by A1,Def1
-        .=(M2*(M1*M1~))*M2~ by A2,A3,MATRIX_3:35
-        .=(M2*(1.(K,n)))*M2~ by A5,Def2
-        .=M2*M2~ by MATRIX_3:21
-        .=1.(K,n) by A5,Def2;
-then A7:(M1~)*(M2~) is_reverse_of M1*M2 by A6,Def2;
-   then M1*M2 is invertible by Def3;
-   hence thesis by A7,Def4;
+  assume
+A1: M1 is invertible & M2 is invertible & M1 commutes_with M2;
+A2: M1 is Matrix of n,K & M2 is Matrix of n,K &
+  width M1=n & len M2=n & width M2=n & len M1=n by MATRIX_1:25;
+A3: M1~ is Matrix of n,K & M2~ is Matrix of n,K & width (M1~)=n &
+  len (M2~)=n & width (M2~)=n & len (M1~)=n by MATRIX_1:25;
+A4: width (M1~*M2~)=n & len (M1~*M2~)=n &
+  width (M1*M2)=n & len (M1*M2)=n by MATRIX_1:25;
+A5: M2~ is_reverse_of M2 & M1~ is_reverse_of M1 by A1,Def4;
+A6: (M1~)*(M2~)*(M1*M2)=(M1~)*(M2~)*(M2*M1) by A1,Def1
+    .=(M1~)*(M2~)*M2*M1 by A2,A4,MATRIX_3:35
+    .=((M1~)*((M2~)*M2))*M1 by A2,A3,MATRIX_3:35
+    .=((M1~)*(1.(K,n)))*M1 by A5,Def2
+    .=(M1~)*M1 by MATRIX_3:21
+    .=1.(K,n) by A5,Def2;
+  (M1*M2)*(M1~*M2~)=((M1*M2)*M1~)*M2~ by A3,A4,MATRIX_3:35
+    .=((M2*M1)*M1~)*M2~ by A1,Def1
+    .=(M2*(M1*M1~))*M2~ by A2,A3,MATRIX_3:35
+    .=(M2*(1.(K,n)))*M2~ by A5,Def2
+    .=M2*M2~ by MATRIX_3:21
+    .=1.(K,n) by A5,Def2;
+  then
+A7: (M1~)*(M2~) is_reverse_of M1*M2 by A6,Def2;
+  then M1*M2 is invertible by Def3;
+  hence thesis by A7,Def4;
 end;
 
 theorem
-   M1 is invertible & M2 is invertible & M1*M2=1.(K,n) implies
-    M1 is_reverse_of M2
+  M1 is invertible & M2 is invertible & M1*M2=1.(K,n) implies
+  M1 is_reverse_of M2
 proof
-A1:width M1=n & len M1=n & width M2=n & len M2=n & width (M1~)=n &
-     len (M1~)=n by MATRIX_1:25;
-   assume A2: M1 is invertible & M2 is invertible & M1*M2=1.(K,n);
-   then A3:M1~ is_reverse_of M1 by Def4;
-    M1~*(M1*M2)=M1~ by A2,MATRIX_3:21;
-   then (M1~*M1)*M2=M1~ by A1,MATRIX_3:35;
-   then (1.(K,n))*M2=M1~ by A3,Def2;
-   then M2=M1~ by MATRIX_3:20;
-   hence thesis by A2,Def4;
+A1: width M1=n & len M1=n & width M2=n & len M2=n & width (M1~)=n &
+  len (M1~)=n by MATRIX_1:25;
+  assume
+A2: M1 is invertible & M2 is invertible & M1*M2=1.(K,n);
+  then
+A3: M1~ is_reverse_of M1 by Def4;
+  M1~*(M1*M2)=M1~ by A2,MATRIX_3:21;
+  then (M1~*M1)*M2=M1~ by A1,MATRIX_3:35;
+  then (1.(K,n))*M2=M1~ by A3,Def2;
+  then M2=M1~ by MATRIX_3:20;
+  hence thesis by A2,Def4;
 end;
 
 theorem
-   M1 is invertible & M2 is invertible & M2*M1=1.(K,n) implies
-    M1 is_reverse_of M2
+  M1 is invertible & M2 is invertible & M2*M1=1.(K,n) implies
+  M1 is_reverse_of M2
 proof
-A1:width M1=n & len M1=n & width M2=n & len M2=n &
-     width (M2~)=n & len (M2~)=n by MATRIX_1:25;
-   assume A2: M1 is invertible & M2 is invertible & M2*M1=1.(K,n);
-   then A3:M2~ is_reverse_of M2 by Def4;
-    (M2~)*(M2*M1)=M2~ by A2,MATRIX_3:21;
-   then (M2~*M2)*M1=M2~ by A1,MATRIX_3:35;
-   then (1.(K,n))*M1=M2~ by A3,Def2;
-   then M1=M2~ by MATRIX_3:20;
-   hence thesis by A2,Def4;
+A1: width M1=n & len M1=n & width M2=n & len M2=n &
+  width (M2~)=n & len (M2~)=n by MATRIX_1:25;
+  assume
+A2: M1 is invertible & M2 is invertible & M2*M1=1.(K,n);
+  then
+A3: M2~ is_reverse_of M2 by Def4;
+  (M2~)*(M2*M1)=M2~ by A2,MATRIX_3:21;
+  then (M2~*M2)*M1=M2~ by A1,MATRIX_3:35;
+  then (1.(K,n))*M1=M2~ by A3,Def2;
+  then M1=M2~ by MATRIX_3:20;
+  hence thesis by A2,Def4;
 end;
 
 theorem Th41:
-  M1 is invertible & M1 commutes_with M2 implies
-    M1~ commutes_with M2
+  M1 is invertible & M1 commutes_with M2 implies M1~ commutes_with M2
 proof
-   assume A1: M1 is invertible & M1 commutes_with M2;
-A2:width M1=n & len M1=n & width M2=n & len M2=n & width (M1~)=n &
-     len (M1~)=n by MATRIX_1:25;
-A3:len (M2*M1)=n & width (M2*M1)=n by MATRIX_1:25;
-A4:M1~ is_reverse_of M1 by A1,Def4;
-    M2=(1.(K,n))*M2 by MATRIX_3:20
-       .=(M1~*M1)*M2 by A4,Def2
-       .=M1~*(M1*M2) by A2,MATRIX_3:35
-       .=M1~*(M2*M1) by A1,Def1;
-   then M2*M1~=M1~*((M2*M1)*M1~) by A2,A3,MATRIX_3:35
-       .=M1~*(M2*(M1*M1~)) by A2,MATRIX_3:35
-       .=M1~*(M2*(1.(K,n))) by A4,Def2
-       .=M1~*M2 by MATRIX_3:21;
-   hence thesis by Def1;
+  assume
+A1: M1 is invertible & M1 commutes_with M2;
+A2: width M1=n & len M1=n & width M2=n & len M2=n & width (M1~)=n &
+  len (M1~)=n by MATRIX_1:25;
+A3: len (M2*M1)=n & width (M2*M1)=n by MATRIX_1:25;
+A4: M1~ is_reverse_of M1 by A1,Def4;
+  M2=(1.(K,n))*M2 by MATRIX_3:20
+    .=(M1~*M1)*M2 by A4,Def2
+    .=M1~*(M1*M2) by A2,MATRIX_3:35
+    .=M1~*(M2*M1) by A1,Def1;
+  then M2*M1~=M1~*((M2*M1)*M1~) by A2,A3,MATRIX_3:35
+    .=M1~*(M2*(M1*M1~)) by A2,MATRIX_3:35
+    .=M1~*(M2*(1.(K,n))) by A4,Def2
+    .=M1~*M2 by MATRIX_3:21;
+  hence thesis by Def1;
 end;
 
-definition let n be Nat, K be Field; let M1 be Matrix of n,K;
-  attr M1 is Orthogonal means :Def7:
-    M1 is invertible & M1@ = M1~;
+definition
+  let n be Nat, K be Field;
+  let M1 be Matrix of n,K;
+  attr M1 is Orthogonal means
+  :Def7:
+  M1 is invertible & M1@ = M1~;
 end;
 
 theorem Th42:
   (M1*(M1@)=1.(K,n) & M1 is invertible) iff M1 is Orthogonal
 proof
-A1:width M1=n & len M1=n & width (M1~)=n & len (M1~)=n by MATRIX_1:25;
-A2:width (M1@)=n & len (M1@)=n by MATRIX_1:25;
-   thus (M1*(M1@)=1.(K,n) & M1 is invertible) implies M1 is Orthogonal
-   proof
-     assume A3:M1*(M1@)=1.(K,n) & M1 is invertible;
-then A4:  M1~ is_reverse_of M1 by Def4;
-     then M1~*(M1*M1~)=M1~*(M1*(M1@)) by A3,Def2;
-     then (M1~*M1)*M1~=M1~*(M1*(M1@)) by A1,MATRIX_3:35;
-     then (M1~*M1)*M1~=(M1~*M1)*(M1@) by A1,A2,MATRIX_3:35;
-     then (1.(K,n))*M1~=(M1~*M1)*(M1@) by A4,Def2;
-     then (1.(K,n))*M1~=(1.(K,n))*(M1@) by A4,Def2;
-     then M1~=(1.(K,n))*(M1@) by MATRIX_3:20;
-     then M1~=M1@ by MATRIX_3:20;
-     hence thesis by A3,Def7;
-   end;
-   assume A5:M1 is Orthogonal;
-   then M1 is invertible & M1@=M1~ by Def7;
-   then M1*(M1@)=M1*M1~ & M1~ is_reverse_of M1 by Def4;
-   hence thesis by A5,Def2,Def7;
+A1: width M1=n & len M1=n & width (M1~)=n & len (M1~)=n by MATRIX_1:25;
+A2: width (M1@)=n & len (M1@)=n by MATRIX_1:25;
+  thus (M1*(M1@)=1.(K,n) & M1 is invertible) implies M1 is Orthogonal
+  proof
+    assume
+A3: M1*(M1@)=1.(K,n) & M1 is invertible;
+    then
+A4: M1~ is_reverse_of M1 by Def4;
+    then M1~*(M1*M1~)=M1~*(M1*(M1@)) by A3,Def2;
+    then (M1~*M1)*M1~=M1~*(M1*(M1@)) by A1,MATRIX_3:35;
+    then (M1~*M1)*M1~=(M1~*M1)*(M1@) by A1,A2,MATRIX_3:35;
+    then (1.(K,n))*M1~=(M1~*M1)*(M1@) by A4,Def2;
+    then (1.(K,n))*M1~=(1.(K,n))*(M1@) by A4,Def2;
+    then M1~=(1.(K,n))*(M1@) by MATRIX_3:20;
+    then M1~=M1@ by MATRIX_3:20;
+    hence thesis by A3,Def7;
+  end;
+  assume
+A5: M1 is Orthogonal;
+  then M1 is invertible & M1@=M1~ by Def7;
+  then M1*(M1@)=M1*M1~ & M1~ is_reverse_of M1 by Def4;
+  hence thesis by A5,Def2,Def7;
 end;
 
 theorem Th43:
   (M1 is invertible & (M1@)*M1=1.(K,n)) iff M1 is Orthogonal
 proof
-A1:width M1=n & len M1=n & width (M1~)=n & len (M1~)=n by MATRIX_1:25;
-A2:width (M1@)=n & len (M1@)=n by MATRIX_1:25;
-   thus (M1 is invertible & (M1@)*M1=1.(K,n)) implies M1 is Orthogonal
-   proof
-     assume A3:M1 is invertible & (M1@)*M1=1.(K,n);
-     then A4:M1~ is_reverse_of M1 by Def4;
-     then (M1~*M1)*M1~=((M1@)*M1)*M1~ by A3,Def2;
-     then M1~*(M1*M1~)=((M1@)*M1)*M1~ by A1,MATRIX_3:35;
-     then M1~*(M1*M1~)=(M1@)*(M1*M1~) by A1,A2,MATRIX_3:35;
-     then M1~*(1.(K,n))=(M1@)*(M1*M1~) by A4,Def2;
-     then M1~*(1.(K,n))=(M1@)*(1.(K,n)) by A4,Def2;
-     then M1~=(M1@)*(1.(K,n)) by MATRIX_3:21;
-     then M1~=M1@ by MATRIX_3:21;
-     hence thesis by A3,Def7;
-   end;
-   assume A5:M1 is Orthogonal;
-   then M1 is invertible & M1@=M1~ by Def7;
-   then (M1@)*M1=M1~*M1 & M1~ is_reverse_of M1 by Def4;
-   hence thesis by A5,Def2,Def7;
+A1: width M1=n & len M1=n & width (M1~)=n & len (M1~)=n by MATRIX_1:25;
+A2: width (M1@)=n & len (M1@)=n by MATRIX_1:25;
+  thus (M1 is invertible & (M1@)*M1=1.(K,n)) implies M1 is Orthogonal
+  proof
+    assume
+A3: M1 is invertible & (M1@)*M1=1.(K,n);
+    then
+A4: M1~ is_reverse_of M1 by Def4;
+    then (M1~*M1)*M1~=((M1@)*M1)*M1~ by A3,Def2;
+    then M1~*(M1*M1~)=((M1@)*M1)*M1~ by A1,MATRIX_3:35;
+    then M1~*(M1*M1~)=(M1@)*(M1*M1~) by A1,A2,MATRIX_3:35;
+    then M1~*(1.(K,n))=(M1@)*(M1*M1~) by A4,Def2;
+    then M1~*(1.(K,n))=(M1@)*(1.(K,n)) by A4,Def2;
+    then M1~=(M1@)*(1.(K,n)) by MATRIX_3:21;
+    then M1~=M1@ by MATRIX_3:21;
+    hence thesis by A3,Def7;
+  end;
+  assume
+A5: M1 is Orthogonal;
+  then M1 is invertible & M1@=M1~ by Def7;
+  then (M1@)*M1=M1~*M1 & M1~ is_reverse_of M1 by Def4;
+  hence thesis by A5,Def2,Def7;
 end;
 
 theorem
-   M1 is Orthogonal implies (M1@)*M1=M1*(M1@)
+  M1 is Orthogonal implies (M1@)*M1=M1*(M1@)
 proof
   assume M1 is Orthogonal;
   then (M1@)*M1=1.(K,n) & M1*(M1@)=1.(K,n) by Th42,Th43;
@@ -914,66 +1010,69 @@ proof
 end;
 
 theorem
-   M1 is Orthogonal & M1 commutes_with M2 implies
-    M1@ commutes_with M2
+  M1 is Orthogonal & M1 commutes_with M2 implies M1@ commutes_with M2
 proof
-   assume A1: M1 is Orthogonal & M1 commutes_with M2;
-   then M1@=M1~ & M1 is invertible by Def7;
-   hence thesis by A1,Th41;
+  assume
+A1: M1 is Orthogonal & M1 commutes_with M2;
+  then M1@=M1~ & M1 is invertible by Def7;
+  hence thesis by A1,Th41;
 end;
 
 theorem Th46:
   M1 is invertible & M2 is invertible implies
-    M1*M2 is invertible & (M1*M2)~=M2~*M1~
+  M1*M2 is invertible & (M1*M2)~=M2~*M1~
 proof
-   assume A1: M1 is invertible & M2 is invertible;
-A2:width M1=n & len M2=n & width M2=n & len M1=n by MATRIX_1:25;
-A3:M1~ is Matrix of n,K & M2~ is Matrix of n,K &
-     width (M1~)=n & len (M2~)=n & width (M2~)=n & len (M1~)=n
-       by MATRIX_1:25;
-A4:width (M2~*M1~)=n & len (M2~*M1~)=n &
-     width (M1*M2)=n & len (M1*M2)=n by MATRIX_1:25;
-A5:M1~ is_reverse_of M1 & M2~ is_reverse_of M2 by A1,Def4;
-A6:(M1*M2)*(M2~*M1~)=((M1*M2)*M2~)*M1~ by A3,A4,MATRIX_3:35
-     .=(M1*(M2*M2~))*M1~ by A2,A3,MATRIX_3:35
-     .=(M1*(1.(K,n)))*M1~ by A5,Def2
-     .=M1*M1~ by MATRIX_3:21
-     .=1.(K,n) by A5,Def2;
-    (M2~*M1~)*(M1*M2)=(((M2~)*(M1~))*M1)*M2 by A2,A4,MATRIX_3:35
+  assume
+A1: M1 is invertible & M2 is invertible;
+A2: width M1=n & len M2=n & width M2=n & len M1=n by MATRIX_1:25;
+A3: M1~ is Matrix of n,K & M2~ is Matrix of n,K &
+  width (M1~)=n & len (M2~)=n & width (M2~)=n & len (M1~)=n by MATRIX_1:25;
+A4: width (M2~*M1~)=n & len (M2~*M1~)=n &
+  width (M1*M2)=n & len (M1*M2)=n by MATRIX_1:25;
+A5: M1~ is_reverse_of M1 & M2~ is_reverse_of M2 by A1,Def4;
+A6: (M1*M2)*(M2~*M1~)=((M1*M2)*M2~)*M1~ by A3,A4,MATRIX_3:35
+    .=(M1*(M2*M2~))*M1~ by A2,A3,MATRIX_3:35
+    .=(M1*(1.(K,n)))*M1~ by A5,Def2
+    .=M1*M1~ by MATRIX_3:21
+    .=1.(K,n) by A5,Def2;
+  (M2~*M1~)*(M1*M2)=(((M2~)*(M1~))*M1)*M2 by A2,A4,MATRIX_3:35
     .=((M2~)*((M1~)*M1))*M2 by A2,A3,MATRIX_3:35
     .=((M2~)*(1.(K,n)))*M2 by A5,Def2
     .=(M2~)*M2 by MATRIX_3:21
     .=1.(K,n) by A5,Def2;
-then A7:(M2~*M1~) is_reverse_of M1*M2 by A6,Def2;
-   then M1*M2 is invertible by Def3;
-   hence thesis by A7,Def4;
+  then
+A7: (M2~*M1~) is_reverse_of M1*M2 by A6,Def2;
+  then M1*M2 is invertible by Def3;
+  hence thesis by A7,Def4;
 end;
 
 theorem
-   n > 0 & M1 is Orthogonal & M2 is Orthogonal implies
-    M1*M2 is Orthogonal
+  n > 0 & M1 is Orthogonal & M2 is Orthogonal implies M1*M2 is Orthogonal
 proof
-   assume A1: n > 0 & M1 is Orthogonal & M2 is Orthogonal;
-A2:M1 is Matrix of n,K & M2 is Matrix of n,K &
-     width M1=n & len M2=n & width M2=n & len M1=n by MATRIX_1:25;
-A3:M1 is invertible & M2 is invertible & M1@=M1~ & M2@=M2~ by A1,Def7;
-then A4:M1*M2 is invertible & (M1*M2)~=M2~*M1~ by Th46;
-    (M1*M2)@ = M2~*M1~ by A1,A2,A3,MATRIX_3:24;
-   hence thesis by A4,Def7;
+  assume
+A1: n > 0 & M1 is Orthogonal & M2 is Orthogonal;
+A2: M1 is Matrix of n,K & M2 is Matrix of n,K &
+  width M1=n & len M2=n & width M2=n & len M1=n by MATRIX_1:25;
+A3: M1 is invertible & M2 is invertible & M1@=M1~ & M2@=M2~ by A1,Def7;
+  then
+A4: M1*M2 is invertible & (M1*M2)~=M2~*M1~ by Th46;
+  (M1*M2)@ = M2~*M1~ by A1,A2,A3,MATRIX_3:24;
+  hence thesis by A4,Def7;
 end;
 
 theorem
-   M1 is Orthogonal & M1 commutes_with M2 implies
-    M1@ commutes_with M2
+  M1 is Orthogonal & M1 commutes_with M2 implies M1@ commutes_with M2
 proof
-   set M3=M1@;
-   assume A1: M1 is Orthogonal & M1 commutes_with M2;
-   then M1 is invertible & M1@=M1~ by Def7;
-   then A2:M1~ is_reverse_of M1 by Def4;
-A3:width M1=n & len M2=n & width M2=n & len M1=n & width (M1~)=n &
-     len (M1~)=n by MATRIX_1:25;
-A4:width (M1~*M2)=n & len (M1~*M2)=n by MATRIX_1:25;
-    M2*M3=((1.(K,n))*M2)*(M1@) by MATRIX_3:20
+  set M3=M1@;
+  assume
+A1: M1 is Orthogonal & M1 commutes_with M2;
+  then M1 is invertible & M1@=M1~ by Def7;
+  then
+A2: M1~ is_reverse_of M1 by Def4;
+A3: width M1=n & len M2=n & width M2=n & len M1=n & width (M1~)=n &
+  len (M1~)=n by MATRIX_1:25;
+A4: width (M1~*M2)=n & len (M1~*M2)=n by MATRIX_1:25;
+  M2*M3=((1.(K,n))*M2)*(M1@) by MATRIX_3:20
     .=((M1~*M1)*M2)*(M1@) by A2,Def2
     .=(M1~*(M1*M2))*(M1@) by A3,MATRIX_3:35
     .=(M1~*(M2*M1))*(M1@) by A1,Def1
@@ -983,220 +1082,229 @@ A4:width (M1~*M2)=n & len (M1~*M2)=n by MATRIX_1:25;
     .=(M1~*M2)*(1.(K,n)) by A2,Def2
     .=M1~*M2 by MATRIX_3:21
     .=M3*M2 by A1,Def7;
-   hence thesis by Def1;
+  hence thesis by Def1;
 end;
 
 theorem
-   n > 0 & M1 commutes_with M2 implies M1+M1 commutes_with M2
+  n > 0 & M1 commutes_with M2 implies M1+M1 commutes_with M2
 proof
-   assume A1: n >0 & M1 commutes_with M2;
-A2:width M1=n & len M2=n & width M2=n & len M1=n by MATRIX_1:25;
-   then (M1+M1)*M2=M1*M2+M1*M2 by A1,MATRIX_4:63
-      .=M2*M1+M1*M2 by A1,Def1
-      .=M2*M1+M2*M1 by A1,Def1
-      .=M2*(M1+M1) by A1,A2,MATRIX_4:62;
-   hence thesis by Def1;
+  assume
+A1: n >0 & M1 commutes_with M2;
+A2: width M1=n & len M2=n & width M2=n & len M1=n by MATRIX_1:25;
+  then (M1+M1)*M2=M1*M2+M1*M2 by A1,MATRIX_4:63
+    .=M2*M1+M1*M2 by A1,Def1
+    .=M2*M1+M2*M1 by A1,Def1
+    .=M2*(M1+M1) by A1,A2,MATRIX_4:62;
+  hence thesis by Def1;
 end;
 
 theorem
-   n >0 & M1 commutes_with M2 implies M1+M2 commutes_with M2
+  n >0 & M1 commutes_with M2 implies M1+M2 commutes_with M2
 proof
-   assume A1:n >0 & M1 commutes_with M2;
-A2:width M1=n & len M2=n & width M2=n & len M1=n by MATRIX_1:25;
-   then (M1+M2)*M2=M1*M2+M2*M2 by A1,MATRIX_4:63
-     .=M2*M1+M2*M2 by A1,Def1
-     .=M2*(M1+M2) by A1,A2,MATRIX_4:62;
-   hence thesis by Def1;
+  assume
+A1: n >0 & M1 commutes_with M2;
+A2: width M1=n & len M2=n & width M2=n & len M1=n by MATRIX_1:25;
+  then (M1+M2)*M2=M1*M2+M2*M2 by A1,MATRIX_4:63
+    .=M2*M1+M2*M2 by A1,Def1
+    .=M2*(M1+M2) by A1,A2,MATRIX_4:62;
+  hence thesis by Def1;
 end;
 
 theorem
-   n >0 & M1 commutes_with M2 implies
-    M1+M1 commutes_with M2+M2
+  n >0 & M1 commutes_with M2 implies M1+M1 commutes_with M2+M2
 proof
-   assume A1: n >0 & M1 commutes_with M2;
-A2:width M1=n&len M2=n & width M2=n & len M1=n by MATRIX_1:25;
-A3:len (M1+M1)=n & width (M1+M1)=n by MATRIX_1:25;
-   then (M1+M1)*(M2+M2)=(M1+M1)*M2+(M1+M1)*M2 by A1,A2,MATRIX_4:62
-      .=M1*M2+M1*M2+(M1+M1)*M2 by A1,A2,MATRIX_4:63
-      .=M1*M2+M1*M2+(M1*M2+M1*M2) by A1,A2,MATRIX_4:63
-      .=M2*M1+M1*M2+(M1*M2+M1*M2) by A1,Def1
-      .=M2*M1+M2*M1+(M1*M2+M1*M2) by A1,Def1
-      .=M2*M1+M2*M1+(M2*M1+M1*M2) by A1,Def1
-      .=M2*M1+M2*M1+(M2*M1+M2*M1) by A1,Def1
-      .=M2*(M1+M1)+(M2*M1+M2*M1) by A1,A2,MATRIX_4:62
-      .=M2*(M1+M1)+M2*(M1+M1) by A1,A2,MATRIX_4:62
-      .=(M2+M2)*(M1+M1) by A1,A2,A3,MATRIX_4:63;
-   hence thesis by Def1;
+  assume
+A1: n >0 & M1 commutes_with M2;
+A2: width M1=n&len M2=n & width M2=n & len M1=n by MATRIX_1:25;
+A3: len (M1+M1)=n & width (M1+M1)=n by MATRIX_1:25;
+  then (M1+M1)*(M2+M2)=(M1+M1)*M2+(M1+M1)*M2 by A1,A2,MATRIX_4:62
+    .=M1*M2+M1*M2+(M1+M1)*M2 by A1,A2,MATRIX_4:63
+    .=M1*M2+M1*M2+(M1*M2+M1*M2) by A1,A2,MATRIX_4:63
+    .=M2*M1+M1*M2+(M1*M2+M1*M2) by A1,Def1
+    .=M2*M1+M2*M1+(M1*M2+M1*M2) by A1,Def1
+    .=M2*M1+M2*M1+(M2*M1+M1*M2) by A1,Def1
+    .=M2*M1+M2*M1+(M2*M1+M2*M1) by A1,Def1
+    .=M2*(M1+M1)+(M2*M1+M2*M1) by A1,A2,MATRIX_4:62
+    .=M2*(M1+M1)+M2*(M1+M1) by A1,A2,MATRIX_4:62
+    .=(M2+M2)*(M1+M1) by A1,A2,A3,MATRIX_4:63;
+  hence thesis by Def1;
 end;
 
 theorem
-   n >0 & M1 commutes_with M2 implies M1+M2 commutes_with M2+M2
+  n >0 & M1 commutes_with M2 implies M1+M2 commutes_with M2+M2
 proof
-   assume A1:n >0 & M1 commutes_with M2;
-A2:width M1=n&len M2=n & width M2=n & len M1=n by MATRIX_1:25;
-A3:len (M1+M2)=n & width (M1+M2)=n by MATRIX_1:25;
-   then (M1+M2)*(M2+M2)=(M1+M2)*M2+(M1+M2)*M2 by A1,A2,MATRIX_4:62
-     .=M1*M2+M2*M2+(M1+M2)*M2 by A1,A2,MATRIX_4:63
-     .=M1*M2+M2*M2+(M1*M2+M2*M2) by A1,A2,MATRIX_4:63
-     .=M2*M1+M2*M2+(M1*M2+M2*M2) by A1,Def1
-     .=M2*M1+M2*M2+(M2*M1+M2*M2) by A1,Def1
-     .=M2*(M1+M2)+(M2*M1+M2*M2) by A1,A2,MATRIX_4:62
-     .=M2*(M1+M2)+M2*(M1+M2) by A1,A2,MATRIX_4:62
-     .=(M2+M2)*(M1+M2) by A1,A2,A3,MATRIX_4:63;
-   hence thesis by Def1;
+  assume
+A1: n >0 & M1 commutes_with M2;
+A2: width M1=n&len M2=n & width M2=n & len M1=n by MATRIX_1:25;
+A3: len (M1+M2)=n & width (M1+M2)=n by MATRIX_1:25;
+  then (M1+M2)*(M2+M2)=(M1+M2)*M2+(M1+M2)*M2 by A1,A2,MATRIX_4:62
+    .=M1*M2+M2*M2+(M1+M2)*M2 by A1,A2,MATRIX_4:63
+    .=M1*M2+M2*M2+(M1*M2+M2*M2) by A1,A2,MATRIX_4:63
+    .=M2*M1+M2*M2+(M1*M2+M2*M2) by A1,Def1
+    .=M2*M1+M2*M2+(M2*M1+M2*M2) by A1,Def1
+    .=M2*(M1+M2)+(M2*M1+M2*M2) by A1,A2,MATRIX_4:62
+    .=M2*(M1+M2)+M2*(M1+M2) by A1,A2,MATRIX_4:62
+    .=(M2+M2)*(M1+M2) by A1,A2,A3,MATRIX_4:63;
+  hence thesis by Def1;
 end;
 
 canceled;
 
 theorem
-   M1 commutes_with M2 implies
-    M1*M2 commutes_with M2
+  M1 commutes_with M2 implies M1*M2 commutes_with M2
 proof
-A1:width M1=n & width M2=n & len M1=n & len M2=n by MATRIX_1:25;
-   assume M1 commutes_with M2;
-   then (M1*M2)*M2=(M2*M1)*M2 by Def1
-      .=M2*(M1*M2) by A1,MATRIX_3:35;
-   hence thesis by Def1;
+A1: width M1=n & width M2=n & len M1=n & len M2=n by MATRIX_1:25;
+  assume M1 commutes_with M2;
+  then (M1*M2)*M2=(M2*M1)*M2 by Def1
+    .=M2*(M1*M2) by A1,MATRIX_3:35;
+  hence thesis by Def1;
 end;
 
 theorem
-   M1 commutes_with M2 implies
-    M1*M1 commutes_with M2
+  M1 commutes_with M2 implies M1*M1 commutes_with M2
 proof
-A1:width M1=n & width M2=n & len M1=n & len M2=n by MATRIX_1:25;
-   assume A2:M1 commutes_with M2;
-    (M1*M1)*M2=M1*(M1*M2) by A1,MATRIX_3:35
-         .=M1*(M2*M1) by A2,Def1
-         .=(M1*M2)*M1 by A1,MATRIX_3:35
-         .=(M2*M1)*M1 by A2,Def1
-         .=M2*(M1*M1) by A1,MATRIX_3:35;
-   hence thesis by Def1;
+A1: width M1=n & width M2=n & len M1=n & len M2=n by MATRIX_1:25;
+  assume
+A2: M1 commutes_with M2;
+  (M1*M1)*M2=M1*(M1*M2) by A1,MATRIX_3:35
+    .=M1*(M2*M1) by A2,Def1
+    .=(M1*M2)*M1 by A1,MATRIX_3:35
+    .=(M2*M1)*M1 by A2,Def1
+    .=M2*(M1*M1) by A1,MATRIX_3:35;
+  hence thesis by Def1;
 end;
 
 theorem
-   M1 commutes_with M2 implies
-    M1*M1 commutes_with M2*M2
+  M1 commutes_with M2 implies M1*M1 commutes_with M2*M2
 proof
-A1:width M1=n & width M2=n & len M1=n & len M2=n by MATRIX_1:25;
-A2:width (M1*M1)=n & len (M1*M1)=n by MATRIX_1:25;
-   assume A3:M1 commutes_with M2;
-    (M1*M1)*(M2*M2)=((M1*M1)*M2)*M2 by A1,A2,MATRIX_3:35
-              .=(M1*(M1*M2))*M2 by A1,MATRIX_3:35
-              .=(M1*(M2*M1))*M2 by A3,Def1
-              .=((M1*M2)*M1)*M2 by A1,MATRIX_3:35
-              .=((M2*M1)*M1)*M2 by A3,Def1
-              .=(M2*(M1*M1))*M2 by A1,MATRIX_3:35
-              .=M2*((M1*M1)*M2) by A1,A2,MATRIX_3:35
-              .=M2*(M1*(M1*M2)) by A1,MATRIX_3:35
-              .=M2*(M1*(M2*M1)) by A3,Def1
-              .=M2*((M1*M2)*M1) by A1,MATRIX_3:35
-              .=M2*((M2*M1)*M1) by A3,Def1
-              .=M2*(M2*(M1*M1)) by A1,MATRIX_3:35
-              .=(M2*M2)*(M1*M1) by A1,A2,MATRIX_3:35;
-   hence thesis by Def1;
+A1: width M1=n & width M2=n & len M1=n & len M2=n by MATRIX_1:25;
+A2: width (M1*M1)=n & len (M1*M1)=n by MATRIX_1:25;
+  assume
+A3: M1 commutes_with M2;
+  (M1*M1)*(M2*M2)=((M1*M1)*M2)*M2 by A1,A2,MATRIX_3:35
+    .=(M1*(M1*M2))*M2 by A1,MATRIX_3:35
+    .=(M1*(M2*M1))*M2 by A3,Def1
+    .=((M1*M2)*M1)*M2 by A1,MATRIX_3:35
+    .=((M2*M1)*M1)*M2 by A3,Def1
+    .=(M2*(M1*M1))*M2 by A1,MATRIX_3:35
+    .=M2*((M1*M1)*M2) by A1,A2,MATRIX_3:35
+    .=M2*(M1*(M1*M2)) by A1,MATRIX_3:35
+    .=M2*(M1*(M2*M1)) by A3,Def1
+    .=M2*((M1*M2)*M1) by A1,MATRIX_3:35
+    .=M2*((M2*M1)*M1) by A3,Def1
+    .=M2*(M2*(M1*M1)) by A1,MATRIX_3:35
+    .=(M2*M2)*(M1*M1) by A1,A2,MATRIX_3:35;
+  hence thesis by Def1;
 end;
 
 theorem
-   n>0 & M1 commutes_with M2 implies
-    M1@ commutes_with M2@
+  n>0 & M1 commutes_with M2 implies M1@ commutes_with M2@
 proof
-A1:width M1=n & width M2=n & len M1=n & len M2=n by MATRIX_1:25;
-   assume A2: n>0 & M1 commutes_with M2; set M3=M1@, M4=M2@;
-    M3*M4=(M2*M1)@ by A1,A2,MATRIX_3:24
+A1: width M1=n & width M2=n & len M1=n & len M2=n by MATRIX_1:25;
+  assume
+A2: n>0 & M1 commutes_with M2;
+  set M3=M1@, M4=M2@;
+  M3*M4=(M2*M1)@ by A1,A2,MATRIX_3:24
     .=(M1*M2)@ by A2,Def1
     .=M4*M3 by A1,A2,MATRIX_3:24;
-   hence thesis by Def1;
+  hence thesis by Def1;
 end;
 
 theorem Th58:
   M1 is invertible & M2 is invertible & M3 is invertible implies
-    M1*M2*M3 is invertible & (M1*M2*M3)~=M3~*M2~*M1~
+  M1*M2*M3 is invertible & (M1*M2*M3)~=M3~*M2~*M1~
 proof
-   assume A1: M1 is invertible & M2 is invertible & M3 is invertible;
-   set M4=M1*M2*M3;
-   set M5 = M3~*M2~*M1~;
-A2:width M1=n & width M2=n & width M3=n & len M1=n & len M2=n & len M3=n
-     by MATRIX_1:25;
-A3:width (M1*M2)=n & len (M1*M2)=n by MATRIX_1:25;
-A4:width (M2*M3)=n & len (M2*M3)=n by MATRIX_1:25;
-A5:width ((M1*M2)*M3)=n & len ((M1*M2)*M3)=n
-     by MATRIX_1:25;
-A6:width (M1~)=n & width (M2~)=n & width (M3~)=n & len (M1~)=n &
-     len (M2~)=n & len (M3~)=n by MATRIX_1:25;
-A7:M2~*M1~ is Matrix of K & width (M2~*M1~)=n & len (M2~*M1~)=n
-     by MATRIX_1:25;
-A8:M3~*M2~ is Matrix of K & width (M3~*M2~)=n & len (M3~*M2~)=n
-     by MATRIX_1:25;
-A9:M3~*M2~*M1~ is Matrix of K & width (M3~*M2~*M1~)=n &
-     len (M3~*M2~*M1~)=n by MATRIX_1:25;
-A10:M1~ is_reverse_of M1 & M2~ is_reverse_of M2 & M3~ is_reverse_of M3
-     by A1,Def4;
-A11:M4*M5 =((M1*M2)*M3)*(M3~*(M2~*M1~)) by A6,MATRIX_3:35
-      .=(((M1*M2)*M3)*M3~)*(M2~*M1~) by A5,A6,A7,MATRIX_3:35
-      .=((M1*M2)*(M3*M3~))*(M2~*M1~) by A2,A3,A6,MATRIX_3:35
-      .=((M1*M2)*(1.(K,n)))*(M2~*M1~) by A10,Def2
-      .=(M1*M2)*(M2~*M1~) by MATRIX_3:21
-      .=((M1*M2)*M2~)*M1~ by A3,A6,MATRIX_3:35
-      .=(M1*(M2*M2~))*M1~ by A2,A6,MATRIX_3:35
-      .=(M1*(1.(K,n)))*M1~ by A10,Def2
-      .=M1*M1~ by MATRIX_3:21
-      .=1.(K,n) by A10,Def2;
-    M5*M4=(M3~*M2~*M1~)*(M1*(M2*M3)) by A2,MATRIX_3:35
-      .=((M3~*M2~*M1~)*M1)*(M2*M3) by A2,A4,A9,MATRIX_3:35
-      .=((M3~*M2~)*(M1~*M1))*(M2*M3) by A2,A6,A8,MATRIX_3:35
-      .=((M3~*M2~)*(1.(K,n)))*(M2*M3) by A10,Def2
-      .=(M3~*M2~)*(M2*M3) by MATRIX_3:21
-      .=((M3~*M2~)*M2)*M3 by A2,A8,MATRIX_3:35
-      .=(M3~*(M2~*M2))*M3 by A2,A6,MATRIX_3:35
-      .=(M3~*(1.(K,n)))*M3 by A10,Def2
-      .=M3~*M3 by MATRIX_3:21
-      .=1.(K,n) by A10,Def2;
-then A12: M5 is_reverse_of M4 by A11,Def2;
-    then M4 is invertible by Def3;
-    hence thesis by A12,Def4;
+  assume
+A1: M1 is invertible & M2 is invertible & M3 is invertible;
+  set M4=M1*M2*M3;
+  set M5 = M3~*M2~*M1~;
+A2: width M1=n & width M2=n & width M3=n & len M1=n & len M2=n & len M3=n
+  by MATRIX_1:25;
+A3: width (M1*M2)=n & len (M1*M2)=n by MATRIX_1:25;
+A4: width (M2*M3)=n & len (M2*M3)=n by MATRIX_1:25;
+A5: width ((M1*M2)*M3)=n & len ((M1*M2)*M3)=n by MATRIX_1:25;
+A6: width (M1~)=n & width (M2~)=n & width (M3~)=n & len (M1~)=n &
+  len (M2~)=n & len (M3~)=n by MATRIX_1:25;
+A7: M2~*M1~ is Matrix of K & width (M2~*M1~)=n & len (M2~*M1~)=n
+  by MATRIX_1:25;
+A8: M3~*M2~ is Matrix of K & width (M3~*M2~)=n & len (M3~*M2~)=n
+  by MATRIX_1:25;
+A9: M3~*M2~*M1~ is Matrix of K & width (M3~*M2~*M1~)=n &
+  len (M3~*M2~*M1~)=n by MATRIX_1:25;
+A10: M1~ is_reverse_of M1 & M2~ is_reverse_of M2 & M3~ is_reverse_of M3
+  by A1,Def4;
+A11: M4*M5 =((M1*M2)*M3)*(M3~*(M2~*M1~)) by A6,MATRIX_3:35
+    .=(((M1*M2)*M3)*M3~)*(M2~*M1~) by A5,A6,A7,MATRIX_3:35
+    .=((M1*M2)*(M3*M3~))*(M2~*M1~) by A2,A3,A6,MATRIX_3:35
+    .=((M1*M2)*(1.(K,n)))*(M2~*M1~) by A10,Def2
+    .=(M1*M2)*(M2~*M1~) by MATRIX_3:21
+    .=((M1*M2)*M2~)*M1~ by A3,A6,MATRIX_3:35
+    .=(M1*(M2*M2~))*M1~ by A2,A6,MATRIX_3:35
+    .=(M1*(1.(K,n)))*M1~ by A10,Def2
+    .=M1*M1~ by MATRIX_3:21
+    .=1.(K,n) by A10,Def2;
+  M5*M4=(M3~*M2~*M1~)*(M1*(M2*M3)) by A2,MATRIX_3:35
+    .=((M3~*M2~*M1~)*M1)*(M2*M3) by A2,A4,A9,MATRIX_3:35
+    .=((M3~*M2~)*(M1~*M1))*(M2*M3) by A2,A6,A8,MATRIX_3:35
+    .=((M3~*M2~)*(1.(K,n)))*(M2*M3) by A10,Def2
+    .=(M3~*M2~)*(M2*M3) by MATRIX_3:21
+    .=((M3~*M2~)*M2)*M3 by A2,A8,MATRIX_3:35
+    .=(M3~*(M2~*M2))*M3 by A2,A6,MATRIX_3:35
+    .=(M3~*(1.(K,n)))*M3 by A10,Def2
+    .=M3~*M3 by MATRIX_3:21
+    .=1.(K,n) by A10,Def2;
+  then
+A12: M5 is_reverse_of M4 by A11,Def2;
+  then M4 is invertible by Def3;
+  hence thesis by A12,Def4;
 end;
 
 theorem
-   n > 0 & M1 is Orthogonal & M2 is Orthogonal & M3 is Orthogonal implies
-    M1*M2*M3 is Orthogonal
+  n > 0 & M1 is Orthogonal & M2 is Orthogonal & M3 is Orthogonal implies
+  M1*M2*M3 is Orthogonal
 proof
-   assume A1: n > 0 & M1 is Orthogonal & M2 is Orthogonal & M3 is Orthogonal;
-   set M4=M1*M2*M3;
-   set M5=M3~*M2~*M1~;
-A2:width M1=n & len M1=n & len M2=n & width M2=n & len M3=n & width M3=n
-     by MATRIX_1:25;
-A3:M1 is invertible & M2 is invertible & M3 is invertible & M1@=M1~ &
-     M2@=M2~ & M3@=M3~ by A1,Def7;
-A4:width (M1*M2)=n & len (M1*M2)=n by MATRIX_1:25;
-A5:width (M1~)=n & width (M2~)=n & width (M3~)=n & len (M1~)=n &
-     len (M2~)=n & len (M3~)=n by MATRIX_1:25;
-A6:(M1*M2*M3)@ = M3@*((M1*M2)@) by A1,A2,A4,MATRIX_3:24
-     .=M3~*(M2~*M1~) by A1,A2,A3,MATRIX_3:24
-     .=M5 by A5,MATRIX_3:35;
-    M4~=M5 & M4 is invertible by A3,Th58;
-   hence thesis by A6,Def7;
+  assume
+A1: n > 0 & M1 is Orthogonal & M2 is Orthogonal & M3 is Orthogonal;
+  set M4=M1*M2*M3;
+  set M5=M3~*M2~*M1~;
+A2: width M1=n & len M1=n & len M2=n & width M2=n & len M3=n & width M3=n
+  by MATRIX_1:25;
+A3: M1 is invertible & M2 is invertible & M3 is invertible & M1@=M1~ &
+  M2@=M2~ & M3@=M3~ by A1,Def7;
+A4: width (M1*M2)=n & len (M1*M2)=n by MATRIX_1:25;
+A5: width (M1~)=n & width (M2~)=n & width (M3~)=n & len (M1~)=n &
+  len (M2~)=n & len (M3~)=n by MATRIX_1:25;
+A6: (M1*M2*M3)@ = M3@*((M1*M2)@) by A1,A2,A4,MATRIX_3:24
+    .=M3~*(M2~*M1~) by A1,A2,A3,MATRIX_3:24
+    .=M5 by A5,MATRIX_3:35;
+  M4~=M5 & M4 is invertible by A3,Th58;
+  hence thesis by A6,Def7;
 end;
 
 theorem
-   1.(K,n) is Orthogonal
+  1.(K,n) is Orthogonal
 proof
-A1:(1.(K,n))~=1.(K,n) & 1.(K,n) is invertible by Th8;
-    (1.(K,n))@=1.(K,n) by Th10;
-   hence thesis by A1,Def7;
+A1: (1.(K,n))~=1.(K,n) & 1.(K,n) is invertible by Th8;
+  (1.(K,n))@=1.(K,n) by Th10;
+  hence thesis by A1,Def7;
 end;
 
 theorem
-   n > 0 & M1 is Orthogonal & M2 is Orthogonal implies
-    M1~*M2 is Orthogonal
+  n > 0 & M1 is Orthogonal & M2 is Orthogonal implies M1~*M2 is Orthogonal
 proof
-   assume A1: n > 0 & M1 is Orthogonal & M2 is Orthogonal;
-then A2:M1 is invertible & M2 is invertible & M1@=M1~ & M2@=M2~ by Def7;
-A3:width M1=n & len M1=n & width (M1~)=n & width M2=n & len (M1~)=n &
-     len M2=n by MATRIX_1:25;
-    M1~ is invertible by A2,Th16;
-then A4:M1~*M2 is invertible & (M1~*M2)~=M2~*(M1~)~ by A2,Th37;
-then A5:(M1~*M2)~=M2~*M1 by A2,Th16;
-    (M1~*M2)@=(M2~)*((M1@)@) by A1,A2,A3,MATRIX_3:24
-           .=(M2~)*M1 by A1,A3,MATRIX_2:15;
-   hence thesis by A4,A5,Def7;
+  assume
+A1: n > 0 & M1 is Orthogonal & M2 is Orthogonal;
+  then
+A2: M1 is invertible & M2 is invertible & M1@=M1~ & M2@=M2~ by Def7;
+A3: width M1=n & len M1=n & width (M1~)=n & width M2=n & len (M1~)=n &
+  len M2=n by MATRIX_1:25;
+  M1~ is invertible by A2,Th16;
+  then
+A4: M1~*M2 is invertible & (M1~*M2)~=M2~*(M1~)~ by A2,Th37;
+  then
+A5: (M1~*M2)~=M2~*M1 by A2,Th16;
+  (M1~*M2)@=(M2~)*((M1@)@) by A1,A2,A3,MATRIX_3:24
+    .=(M2~)*M1 by A1,A3,MATRIX_2:15;
+  hence thesis by A4,A5,Def7;
 end;
+

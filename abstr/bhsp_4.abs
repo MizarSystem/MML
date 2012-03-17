@@ -24,100 +24,102 @@ environ
 
 begin
 
- reserve a, b, r, M2 for Real;
- reserve Rseq,Rseq1,Rseq2 for Real_Sequence;
- reserve k, n, m, m1, m2 for Element of NAT;
+reserve a, b, r, M2 for Real;
+reserve Rseq,Rseq1,Rseq2 for Real_Sequence;
+reserve k, n, m, m1, m2 for Element of NAT;
 
 scheme :: BHSP_4:sch 1
- RecFuncExRUS{ X() -> non empty addLoopStr,
-                     z() -> Point of X(),
-                     G(Element of NAT, Point of X()) -> Point of X()}:
-ex f being Function of NAT, the carrier of X() st
-f.0 = z() & for n being Element of NAT,
-x being Point of X() st x = f.n holds f.(n + 1) = G(n,x);
+ RecFuncExRUS{ X() -> non empty addLoopStr, z() -> Point of X(),
+  G(Element of NAT, Point of X()) -> Point of X()}:
+  ex f being Function of NAT, the carrier of X() st
+  f.0 = z() & for n being Element of NAT,
+  x being Point of X() st x = f.n holds f.(n + 1) = G(n,x);
 
-definition let X be non empty addLoopStr;
-           let seq be sequence of X;
+definition
+  let X be non empty addLoopStr;
+  let seq be sequence of X;
   func Partial_Sums(seq) -> sequence of X means
 :: BHSP_4:def 1
-    it.0 = seq.0 &
-    for n holds it.(n + 1) = it.n + seq.(n + 1);
+
+  it.0 = seq.0 &
+  for n holds it.(n + 1) = it.n + seq.(n + 1);
 end;
 
 theorem :: BHSP_4:1
-for X being Abelian add-associative (non empty addLoopStr),
- seq1, seq2 being sequence of X holds
+  for X being Abelian add-associative (non empty addLoopStr),
+  seq1, seq2 being sequence of X holds
   Partial_Sums(seq1) + Partial_Sums(seq2) = Partial_Sums(seq1 + seq2);
 
 theorem :: BHSP_4:2
-for X being Abelian add-associative right_zeroed right_complementable
-(non empty addLoopStr),
- seq1, seq2 being sequence of X holds
+  for X being Abelian add-associative right_zeroed right_complementable
+  (non empty addLoopStr), seq1, seq2 being sequence of X holds
   Partial_Sums(seq1) - Partial_Sums(seq2) = Partial_Sums(seq1 - seq2);
 
 theorem :: BHSP_4:3
-for X being RealLinearSpace-like (non empty RLSStruct),
- seq being sequence of X holds
-  Partial_Sums(a * seq) = a * Partial_Sums(seq);
+  for X being RealLinearSpace-like (non empty RLSStruct),
+  seq being sequence of X holds Partial_Sums(a * seq) = a * Partial_Sums(seq);
 
- reserve X for RealUnitarySpace;
- reserve g for Point of X;
- reserve seq, seq1, seq2 for sequence of X;
+reserve X for RealUnitarySpace;
+reserve g for Point of X;
+reserve seq, seq1, seq2 for sequence of X;
 
 theorem :: BHSP_4:4
-   Partial_Sums(- seq) = - Partial_Sums(seq);
+  Partial_Sums(- seq) = - Partial_Sums(seq);
 
 theorem :: BHSP_4:5
-   a * Partial_Sums(seq1) + b * Partial_Sums(seq2) =
-    Partial_Sums(a * seq1 + b * seq2);
+  a * Partial_Sums(seq1) + b * Partial_Sums(seq2) =
+  Partial_Sums(a * seq1 + b * seq2);
 
-definition let X, seq;
+definition
+  let X, seq;
   attr seq is summable means
 :: BHSP_4:def 2
-    Partial_Sums(seq) is convergent;
+
+  Partial_Sums(seq) is convergent;
   func Sum(seq) -> Point of X equals
 :: BHSP_4:def 3
-     lim Partial_Sums(seq);
+
+  lim Partial_Sums(seq);
 end;
 
 theorem :: BHSP_4:6
-   seq1 is summable & seq2 is summable implies seq1 + seq2 is summable
-    & Sum(seq1 + seq2) = Sum(seq1) + Sum(seq2);
+  seq1 is summable & seq2 is summable implies seq1 + seq2 is summable
+  & Sum(seq1 + seq2) = Sum(seq1) + Sum(seq2);
 
 theorem :: BHSP_4:7
-   seq1 is summable & seq2 is summable implies seq1 - seq2 is summable
-     & Sum(seq1 - seq2) = Sum(seq1) - Sum(seq2);
+  seq1 is summable & seq2 is summable implies seq1 - seq2 is summable
+  & Sum(seq1 - seq2) = Sum(seq1) - Sum(seq2);
 
 theorem :: BHSP_4:8
-   seq is summable implies
-    a * seq is summable & Sum(a * seq) = a * Sum(seq);
+  seq is summable implies a * seq is summable & Sum(a * seq) = a * Sum(seq);
 
 theorem :: BHSP_4:9
-  seq is summable implies
-    seq is convergent & lim seq = 0.X;
+  seq is summable implies seq is convergent & lim seq = 0.X;
 
 theorem :: BHSP_4:10
   X is_Hilbert_space implies
-   ( seq is summable iff ( for r st r > 0 ex k st for n, m st ( n >= k &
-     m >= k ) holds ||.(Partial_Sums(seq)).n - (Partial_Sums(seq)).m.|| < r ));
+  ( seq is summable iff ( for r st r > 0 ex k st for n, m st ( n >= k &
+  m >= k ) holds ||.(Partial_Sums(seq)).n - (Partial_Sums(seq)).m.|| < r ));
 
 theorem :: BHSP_4:11
-   seq is summable implies Partial_Sums(seq) is bounded;
+  seq is summable implies Partial_Sums(seq) is bounded;
 
 theorem :: BHSP_4:12
   for seq, seq1 st for n holds seq1.n = seq.0 holds
-   Partial_Sums(seq^\1) = (Partial_Sums(seq)^\1) - seq1;
+  Partial_Sums(seq^\1) = (Partial_Sums(seq)^\1) - seq1;
 
 theorem :: BHSP_4:13
   seq is summable implies for k holds seq^\k is summable;
 
 theorem :: BHSP_4:14
-   (ex k st seq^\k is summable) implies seq is summable;
+  (ex k st seq^\k is summable) implies seq is summable;
 
-definition let X, seq, n;
+definition
+  let X, seq, n;
   func Sum(seq,n) -> Point of X equals
 :: BHSP_4:def 4
-     Partial_Sums(seq).n;
+
+  Partial_Sums(seq).n;
 end;
 
 canceled;
@@ -138,172 +140,173 @@ theorem :: BHSP_4:20
   seq.(n + 1) = Sum(seq, n + 1) - Sum(seq, n);
 
 theorem :: BHSP_4:21
-   seq.1 = Sum(seq, 1) - Sum(seq, 0);
+  seq.1 = Sum(seq, 1) - Sum(seq, 0);
 
-definition let X, seq, n, m;
+definition
+  let X, seq, n, m;
   func Sum(seq, n, m) -> Point of X equals
 :: BHSP_4:def 5
-     Sum(seq, n) - Sum(seq, m);
+
+  Sum(seq, n) - Sum(seq, m);
 end;
 
 canceled;
 
 theorem :: BHSP_4:23
-   Sum(seq, 1, 0) = seq.1;
+  Sum(seq, 1, 0) = seq.1;
 
 theorem :: BHSP_4:24
-   Sum(seq, n+1, n) = seq.(n+1);
+  Sum(seq, n+1, n) = seq.(n+1);
 
 theorem :: BHSP_4:25
   X is_Hilbert_space implies
-    ( seq is summable iff ( for r st r > 0 ex k st for n, m st
-      n >= k & m >= k holds ||.Sum(seq, n) - Sum(seq, m).|| < r ));
+  ( seq is summable iff ( for r st r > 0 ex k st for n, m st
+  n >= k & m >= k holds ||.Sum(seq, n) - Sum(seq, m).|| < r ));
 
 theorem :: BHSP_4:26
-   X is_Hilbert_space implies
-   ( seq is summable iff ( for r st r > 0 ex k st for n, m st n >= k &
-     m >= k holds ||.Sum(seq, n, m).|| < r ));
+  X is_Hilbert_space implies
+  ( seq is summable iff ( for r st r > 0 ex k st for n, m st n >= k &
+  m >= k holds ||.Sum(seq, n, m).|| < r ));
 
-definition let X, seq;
- canceled 2;
+definition
+  let X, seq;
+  canceled 2;
   attr seq is absolutely_summable means
 :: BHSP_4:def 8
-    ||.seq.|| is summable;
+
+  ||.seq.|| is summable;
 end;
 
 theorem :: BHSP_4:27
-   seq1 is absolutely_summable & seq2 is absolutely_summable implies
-    seq1 + seq2 is absolutely_summable;
+  seq1 is absolutely_summable & seq2 is absolutely_summable implies
+  seq1 + seq2 is absolutely_summable;
 
 theorem :: BHSP_4:28
-   seq is absolutely_summable implies a * seq is absolutely_summable;
+  seq is absolutely_summable implies a * seq is absolutely_summable;
 
 theorem :: BHSP_4:29
-   ( for n holds ||.seq.||.n <= Rseq.n ) & Rseq is summable implies
-    seq is absolutely_summable;
+  ( for n holds ||.seq.||.n <= Rseq.n ) & Rseq is summable implies
+  seq is absolutely_summable;
 
 theorem :: BHSP_4:30
-   ( for n holds seq.n <> 0.X &
-    Rseq.n = ||.seq.(n+1).||/||.seq.n.|| ) &
-      Rseq is convergent & lim Rseq < 1 implies
-       seq is absolutely_summable;
+  ( for n holds seq.n <> 0.X & Rseq.n = ||.seq.(n+1).||/||.seq.n.|| ) &
+  Rseq is convergent & lim Rseq < 1 implies seq is absolutely_summable;
 
 theorem :: BHSP_4:31
   r > 0 & ( ex m st for n st n >= m holds ||.seq.n.|| >= r) implies
-    not seq is convergent or lim seq <> 0.X;
+  not seq is convergent or lim seq <> 0.X;
 
 theorem :: BHSP_4:32
   ( for n holds seq.n <> 0.X ) &
-    ( ex m st for n st n >= m holds ||.seq.(n+1).||/||.seq.n.|| >= 1 )
-      implies not seq is summable;
+  ( ex m st for n st n >= m holds ||.seq.(n+1).||/||.seq.n.|| >= 1 )
+  implies not seq is summable;
 
 theorem :: BHSP_4:33
-   (for n holds seq.n <> 0.X) &
-    (for n holds Rseq.n = ||.seq.(n+1).||/||.seq.n.||)
-      & Rseq is convergent & lim Rseq > 1
-     implies not seq is summable;
+  (for n holds seq.n <> 0.X) &
+  (for n holds Rseq.n = ||.seq.(n+1).||/||.seq.n.||)
+  & Rseq is convergent & lim Rseq > 1 implies not seq is summable;
 
 theorem :: BHSP_4:34
-   ( for n holds Rseq.n = n-root (||.seq.n.||) ) &
-     Rseq is convergent & lim Rseq < 1 implies
-     seq is absolutely_summable;
+  ( for n holds Rseq.n = n-root (||.seq.n.||) ) &
+  Rseq is convergent & lim Rseq < 1 implies seq is absolutely_summable;
 
 theorem :: BHSP_4:35
-   (for n holds Rseq.n = n-root (||.seq.||.n))
-    & (ex m st for n st n >= m holds Rseq.n >= 1)
-      implies not seq is summable;
+  (for n holds Rseq.n = n-root (||.seq.||.n))
+  & (ex m st for n st n >= m holds Rseq.n >= 1) implies not seq is summable;
 
 theorem :: BHSP_4:36
-   (for n holds Rseq.n = n-root (||.seq.||.n))
-     & Rseq is convergent & lim Rseq > 1
-     implies not seq is summable;
+  (for n holds Rseq.n = n-root (||.seq.||.n))
+  & Rseq is convergent & lim Rseq > 1 implies not seq is summable;
 
 theorem :: BHSP_4:37
   Partial_Sums(||.seq.||) is non-decreasing;
 
 theorem :: BHSP_4:38
-   for n holds Partial_Sums(||.seq.||).n >= 0;
+  for n holds Partial_Sums(||.seq.||).n >= 0;
 
 theorem :: BHSP_4:39
   for n holds ||.Partial_Sums(seq).n.|| <= Partial_Sums(||.seq.||).n;
 
 theorem :: BHSP_4:40
-   for n holds ||.Sum(seq, n).|| <= Sum(||.seq.||, n);
+  for n holds ||.Sum(seq, n).|| <= Sum(||.seq.||, n);
 
 theorem :: BHSP_4:41
   for n, m holds ||.Partial_Sums(seq).m - Partial_Sums(seq).n.|| <=
-    abs(Partial_Sums(||.seq.||).m - Partial_Sums(||.seq.||).n);
+  abs(Partial_Sums(||.seq.||).m - Partial_Sums(||.seq.||).n);
 
 theorem :: BHSP_4:42
   for n, m holds ||.Sum(seq, m) - Sum(seq, n).|| <=
-    abs(Sum(||.seq.||, m) - Sum(||.seq.||, n));
+  abs(Sum(||.seq.||, m) - Sum(||.seq.||, n));
 
 theorem :: BHSP_4:43
-   for n, m holds ||.Sum(seq, m, n).|| <= abs(Sum(||.seq.||, m, n));
+  for n, m holds ||.Sum(seq, m, n).|| <= abs(Sum(||.seq.||, m, n));
 
 theorem :: BHSP_4:44
-   X is_Hilbert_space implies
-    ( seq is absolutely_summable implies seq is summable );
+  X is_Hilbert_space implies
+  ( seq is absolutely_summable implies seq is summable );
 
-definition let X, seq, Rseq;
+definition
+  let X, seq, Rseq;
   func Rseq * seq -> sequence of X means
 :: BHSP_4:def 9
-    for n holds it.n = Rseq.n * seq.n;
+
+  for n holds it.n = Rseq.n * seq.n;
 end;
 
 theorem :: BHSP_4:45
-   Rseq * (seq1 + seq2) = Rseq * seq1 + Rseq * seq2;
+  Rseq * (seq1 + seq2) = Rseq * seq1 + Rseq * seq2;
 
 theorem :: BHSP_4:46
-   (Rseq1 + Rseq2) * seq = Rseq1 * seq + Rseq2 * seq;
+  (Rseq1 + Rseq2) * seq = Rseq1 * seq + Rseq2 * seq;
 
 theorem :: BHSP_4:47
-   (Rseq1 (#) Rseq2) * seq = Rseq1 * (Rseq2 * seq);
+  (Rseq1 (#) Rseq2) * seq = Rseq1 * (Rseq2 * seq);
 
 theorem :: BHSP_4:48
   (a (#) Rseq) * seq = a * (Rseq * seq);
 
 theorem :: BHSP_4:49
-   Rseq * (- seq) = (- Rseq) * seq;
+  Rseq * (- seq) = (- Rseq) * seq;
 
 theorem :: BHSP_4:50
-  Rseq is convergent & seq is convergent
-    implies Rseq * seq is convergent;
+  Rseq is convergent & seq is convergent implies Rseq * seq is convergent;
 
 theorem :: BHSP_4:51
-   Rseq is bounded & seq is bounded implies Rseq * seq is bounded;
+  Rseq is bounded & seq is bounded implies Rseq * seq is bounded;
 
 theorem :: BHSP_4:52
-   Rseq is convergent & seq is convergent implies
-    Rseq * seq is convergent & lim (Rseq * seq) = lim Rseq * lim seq;
+  Rseq is convergent & seq is convergent implies
+  Rseq * seq is convergent & lim (Rseq * seq) = lim Rseq * lim seq;
 
-definition let Rseq;
+definition
+  let Rseq;
   attr Rseq is Cauchy means
 :: BHSP_4:def 10
-    for r st r > 0 ex k st for n, m st n >= k & m >= k holds
-      abs((Rseq.n - Rseq.m)) < r;
+
+  for r st r > 0 ex k st for n, m st n >= k & m >= k holds
+  abs((Rseq.n - Rseq.m)) < r;
 end;
 
-notation let Rseq;
+notation
+  let Rseq;
   synonym Rseq is_Cauchy_sequence for Rseq is Cauchy;
 end;
 
 theorem :: BHSP_4:53
-   X is_Hilbert_space implies
-    ( seq is_Cauchy_sequence & Rseq is_Cauchy_sequence implies
-      Rseq * seq is_Cauchy_sequence );
+  X is_Hilbert_space implies
+  ( seq is_Cauchy_sequence & Rseq is_Cauchy_sequence implies
+  Rseq * seq is_Cauchy_sequence );
 
 theorem :: BHSP_4:54
   for n holds Partial_Sums((Rseq - Rseq^\1) * Partial_Sums(seq)).n
-     = Partial_Sums(Rseq * seq).(n+1) - (Rseq * Partial_Sums(seq)).(n+1);
+  = Partial_Sums(Rseq * seq).(n+1) - (Rseq * Partial_Sums(seq)).(n+1);
 
 theorem :: BHSP_4:55
   for n holds Partial_Sums(Rseq * seq).(n+1) =
-    (Rseq * Partial_Sums(seq)).(n+1) -
-     Partial_Sums((Rseq^\1 - Rseq) * Partial_Sums(seq)).n;
+  (Rseq * Partial_Sums(seq)).(n+1) -
+  Partial_Sums((Rseq^\1 - Rseq) * Partial_Sums(seq)).n;
 
 theorem :: BHSP_4:56
-   for n holds
-    Sum(Rseq * seq, n+1) =
-     (Rseq * Partial_Sums(seq)).(n+1) -
-     Sum((Rseq^\1 - Rseq) * Partial_Sums(seq), n);
+  for n holds Sum(Rseq * seq, n+1) = (Rseq * Partial_Sums(seq)).(n+1) -
+  Sum((Rseq^\1 - Rseq) * Partial_Sums(seq), n);
+

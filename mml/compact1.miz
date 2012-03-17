@@ -30,17 +30,22 @@ environ
 
 begin :: Preliminaires
 
-definition let X be TopSpace, P be Subset-Family of X;
-  attr P is compact means :Def1:
-    for U being Subset of X st U in P holds U is compact;
+definition
+  let X be TopSpace, P be Subset-Family of X;
+  attr P is compact means
+  :Def1:
+  for U being Subset of X st U in P holds U is compact;
 end;
 
-definition let X be TopSpace, U be Subset of X;
-  attr U is relatively-compact means :Def2:
-    Cl U is compact;
+definition
+  let X be TopSpace, U be Subset of X;
+  attr U is relatively-compact means
+  :Def2:
+  Cl U is compact;
 end;
 
-registration let X be TopSpace;
+registration
+  let X be TopSpace;
   cluster {}X -> relatively-compact;
   coherence
   proof
@@ -49,7 +54,8 @@ registration let X be TopSpace;
   end;
 end;
 
-registration let X be TopSpace;
+registration
+  let X be TopSpace;
   cluster relatively-compact Subset of X;
   existence
   proof
@@ -58,321 +64,346 @@ registration let X be TopSpace;
   end;
 end;
 
-registration let X be TopSpace, U be relatively-compact Subset of X;
+registration
+  let X be TopSpace, U be relatively-compact Subset of X;
   cluster Cl U -> compact;
   coherence by Def2;
 end;
 
-notation let X be TopSpace, U be Subset of X;
+notation
+  let X be TopSpace, U be Subset of X;
   synonym U is pre-compact for U is relatively-compact;
 end;
 
 :: see WAYBEL_3:def 9
-notation let X be non empty TopSpace;
+
+notation
+  let X be non empty TopSpace;
   synonym X is liminally-compact for X is locally-compact;
 end;
 
 :: see WAYBEL_3:def 9
-definition let X be non empty TopSpace;
+
+definition
+  let X be non empty TopSpace;
   redefine attr X is liminally-compact means
-:Def3: for x being Point of X ex B being basis of x st B is compact;
-   compatibility
- proof
-  hereby assume
-A1:  X is liminally-compact;
-   let x be Point of X;
-   set B = {Q where Q is a_neighborhood of x: Q is compact &
-            ex V being a_neighborhood of x st Q c= V};
-   B c= bool [#]X
-    proof let A be set;
-     assume A in B;
-     then ex Q being a_neighborhood of x st A = Q & Q is compact &
-            ex V being a_neighborhood of x st Q c= V;
-     hence A in bool [#]X;
+  :Def3:
+  for x being Point of X ex B being basis of x st B is compact;
+  compatibility
+  proof
+    hereby
+      assume
+A1:   X is liminally-compact;
+      let x be Point of X;
+      set B = {Q where Q is a_neighborhood of x: Q is compact &
+      ex V being a_neighborhood of x st Q c= V};
+      B c= bool [#]X
+      proof
+        let A be set;
+        assume A in B;
+        then ex Q being a_neighborhood of x st A = Q & Q is compact &
+        ex V being a_neighborhood of x st Q c= V;
+        hence A in bool [#]X;
+      end;
+      then reconsider B as Subset-Family of X;
+A2:   B is basis of x
+      proof
+        let V be a_neighborhood of x;
+        x in Int V by CONNSP_2:def 1;
+        then consider Q being Subset of X such that
+A3:     x in Int Q and
+A4:     Q c= Int V and
+A5:     Q is compact by A1,WAYBEL_3:def 9;
+        reconsider Q as a_neighborhood of x by A3,CONNSP_2:def 1;
+        take Q;
+        Int V c= V by TOPS_1:44;
+        hence thesis by A4,A5,XBOOLE_1:1;
+      end;
+      B is compact
+      proof
+        let U be Subset of X;
+        assume U in B;
+        then ex Q being a_neighborhood of x st U = Q & Q is compact &
+        ex V being a_neighborhood of x st Q c= V;
+        hence U is compact;
+      end;
+      hence ex B being basis of x st B is compact by A2;
     end;
-   then reconsider B as Subset-Family of X;
-A2:  B is basis of x
-   proof
-    let V be a_neighborhood of x;
-    x in Int V by CONNSP_2:def 1;
+    assume
+A6: for x being Point of X ex B being basis of x st B is compact;
+    let x be Point of X, P be Subset of X such that
+A7: x in P and
+A8: P is open;
+    consider B being basis of x such that
+A9: B is compact by A6;
+    x in Int P by A7,A8,TOPS_1:55;
     then consider Q being Subset of X such that
-A3:   x in Int Q and
-A4:   Q c= Int V and
-A5:   Q is compact by A1,WAYBEL_3:def 9;
-    reconsider Q as a_neighborhood of x by A3,CONNSP_2:def 1;
+A10: Q in B and
+A11: x in Int Q & Q c= P by YELLOW13:def 1;
     take Q;
-    Int V c= V by TOPS_1:44;
-    hence thesis by A4,A5,XBOOLE_1:1;
-   end;
-  B is compact
-   proof let U be Subset of X;
-    assume U in B;
-    then ex Q being a_neighborhood of x st U = Q & Q is compact &
-            ex V being a_neighborhood of x st Q c= V;
-    hence U is compact;
-   end;
-   hence ex B being basis of x st B is compact by A2;
+    thus x in Int Q & Q c= P by A11;
+    thus Q is compact by A9,A10,Def1;
   end;
-  assume
-A6:  for x being Point of X ex B being basis of x st B is compact;
-  let x be Point of X, P be Subset of X such that
-A7:  x in P and
-A8:  P is open;
-   consider B being basis of x such that
-A9:  B is compact by A6;
-   x in Int P by A7,A8,TOPS_1:55;
-   then consider Q being Subset of X such that
-A10:  Q in B and
-A11:  x in Int Q & Q c= P by YELLOW13:def 1;
-   take Q;
-   thus x in Int Q & Q c= P by A11;
-   thus Q is compact by A9,A10,Def1;
- end;
 end;
 
-definition let X be non empty TopSpace;
+definition
+  let X be non empty TopSpace;
   attr X is locally-relatively-compact means
-:Def4: for x being Point of X
-          ex U being a_neighborhood of x st U is relatively-compact;
+  :Def4:
+  for x being Point of X
+  ex U being a_neighborhood of x st U is relatively-compact;
 end;
 
-definition let X be non empty TopSpace;
+definition
+  let X be non empty TopSpace;
   attr X is locally-closed/compact means
-:Def5: for x being Point of X
-          ex U being a_neighborhood of x st U is closed compact;
+  :Def5:
+  for x being Point of X
+  ex U being a_neighborhood of x st U is closed compact;
 end;
 
-definition let X be non empty TopSpace;
+definition
+  let X be non empty TopSpace;
   attr X is locally-compact means
-:Def6: for x being Point of X
-          ex U being a_neighborhood of x st U is compact;
+  :Def6:
+  for x being Point of X
+  ex U being a_neighborhood of x st U is compact;
 end;
 
 registration
   cluster liminally-compact -> locally-compact (non empty TopSpace);
   coherence
- proof let X be non empty TopSpace such that
-A1:  X is liminally-compact;
-  let x be Point of X;
-  consider B being basis of x such that
-A2:   B is compact by A1,Def3;
-  consider V being a_neighborhood of x;
-  consider Y being a_neighborhood of x such that
-A3:   Y in B and Y c= V by YELLOW13:def 2;
-  Y is compact by A2,A3,Def1;
-  hence thesis;
- end;
+  proof
+    let X be non empty TopSpace such that
+A1: X is liminally-compact;
+    let x be Point of X;
+    consider B being basis of x such that
+A2: B is compact by A1,Def3;
+    consider V being a_neighborhood of x;
+    consider Y being a_neighborhood of x such that
+A3: Y in B and Y c= V by YELLOW13:def 2;
+    Y is compact by A2,A3,Def1;
+    hence thesis;
+  end;
 end;
 
 registration
   cluster locally-compact -> liminally-compact (non empty being_T3 TopSpace);
   coherence
- proof let X be non empty being_T3 TopSpace such that
-A1:  X is locally-compact;
-  let x be Point of X;
-  set B = {Q where Q is a_neighborhood of x: Q is compact &
-            ex V,W being a_neighborhood of x st Q c= V /\ W};
-  B c= bool [#]X
-   proof let A be set;
-    assume A in B;
-    then ex Q being a_neighborhood of x st A = Q & Q is compact &
-            ex V,W being a_neighborhood of x st Q c= V /\ W;
-    hence A in bool [#]X;
-   end;
-  then reconsider B as Subset-Family of X;
-A2:  B is basis of x
   proof
-   let V be a_neighborhood of x;
-   consider W being a_neighborhood of x such that
-A3: W is compact by A1,Def6;
-A4: x in Int W by CONNSP_2:def 1;
-    x in Int V by CONNSP_2:def 1;
-   then x in Int V /\ Int W by A4,XBOOLE_0:def 3;
-   then x in Int(V /\ W) by TOPS_1:46;
-   then consider Q being Subset of X such that
-A5: Q is closed and
-A6: Q c= V /\ W and
-A7: x in Int Q by YELLOW_8:36;
-    reconsider Q as a_neighborhood of x by A7,CONNSP_2:def 1;
-    take Q;
+    let X be non empty being_T3 TopSpace such that
+A1: X is locally-compact;
+    let x be Point of X;
+    set B = {Q where Q is a_neighborhood of x: Q is compact &
+    ex V,W being a_neighborhood of x st Q c= V /\ W};
+    B c= bool [#]X
+    proof
+      let A be set;
+      assume A in B;
+      then ex Q being a_neighborhood of x st A = Q & Q is compact &
+      ex V,W being a_neighborhood of x st Q c= V /\ W;
+      hence A in bool [#]X;
+    end;
+    then reconsider B as Subset-Family of X;
+A2: B is basis of x
+    proof
+      let V be a_neighborhood of x;
+      consider W being a_neighborhood of x such that
+A3:   W is compact by A1,Def6;
+A4:   x in Int W by CONNSP_2:def 1;
+      x in Int V by CONNSP_2:def 1;
+      then x in Int V /\ Int W by A4,XBOOLE_0:def 3;
+      then x in Int(V /\ W) by TOPS_1:46;
+      then consider Q being Subset of X such that
+A5:   Q is closed and
+A6:   Q c= V /\ W and
+A7:   x in Int Q by YELLOW_8:36;
+      reconsider Q as a_neighborhood of x by A7,CONNSP_2:def 1;
+      take Q;
       V /\ W c= W by XBOOLE_1:17;
-    then Q c= W by A6,XBOOLE_1:1;
-    then Q is compact by A3,A5,COMPTS_1:18;
-    hence Q in B by A6;
+      then Q is compact by A3,A5,A6,COMPTS_1:18,XBOOLE_1:1;
+      hence Q in B by A6;
       V /\ W c= V by XBOOLE_1:17;
-    hence Q c= V by A6,XBOOLE_1:1;
+      hence Q c= V by A6,XBOOLE_1:1;
+    end;
+    B is compact
+    proof
+      let U be Subset of X;
+      assume U in B;
+      then ex Q being a_neighborhood of x st U = Q & Q is compact &
+      ex V,W being a_neighborhood of x st Q c= V /\ W;
+      hence U is compact;
+    end;
+    hence thesis by A2;
   end;
-  B is compact
-   proof let U be Subset of X;
-    assume U in B;
-    then ex Q being a_neighborhood of x st U = Q & Q is compact &
-            ex V,W being a_neighborhood of x st Q c= V /\ W;
-    hence U is compact;
-   end;
-  hence thesis by A2;
- end;
 end;
 
 registration
   cluster locally-relatively-compact ->
-               locally-closed/compact (non empty TopSpace);
+    locally-closed/compact (non empty TopSpace);
   coherence
- proof let X be non empty TopSpace such that
-A1:  X is locally-relatively-compact;
-  let x be Point of X;
-  consider U being a_neighborhood of x such that
+  proof
+    let X be non empty TopSpace such that
+A1: X is locally-relatively-compact;
+    let x be Point of X;
+    consider U being a_neighborhood of x such that
 A2: U is relatively-compact by A1,Def4;
 A3: Cl U is compact by A2,Def2;
-   U c= Cl U by PRE_TOPC:48; then
-A4:  Int U c= Int Cl U by TOPS_1:48;
-   x in Int U by CONNSP_2:def 1;
-   then Cl U is a_neighborhood of x by A4,CONNSP_2:def 1;
-   hence thesis by A3;
- end;
+A4: Int U c= Int Cl U by PRE_TOPC:48,TOPS_1:48;
+    x in Int U by CONNSP_2:def 1;
+    then Cl U is a_neighborhood of x by A4,CONNSP_2:def 1;
+    hence thesis by A3;
+  end;
 end;
 
 registration
   cluster locally-closed/compact ->
-             locally-relatively-compact (non empty TopSpace);
+    locally-relatively-compact (non empty TopSpace);
   coherence
- proof let X be non empty TopSpace such that
-A1:  X is locally-closed/compact;
-  let x be Point of X;
-  consider U being a_neighborhood of x such that
-A2:  U is closed compact by A1,Def5;
-  Cl U = U by A2,PRE_TOPC:52;
-  then U is relatively-compact by A2,Def2;
-  hence thesis;
- end;
+  proof
+    let X be non empty TopSpace such that
+A1: X is locally-closed/compact;
+    let x be Point of X;
+    consider U being a_neighborhood of x such that
+A2: U is closed compact by A1,Def5;
+    Cl U = U by A2,PRE_TOPC:52;
+    then U is relatively-compact by A2,Def2;
+    hence thesis;
+  end;
 end;
 
 registration
   cluster locally-relatively-compact -> locally-compact (non empty TopSpace);
   coherence
- proof let X be non empty TopSpace such that
-A1:  X is locally-relatively-compact;
-   let x be Point of X;
-   consider Y being a_neighborhood of x such that
-A2:   Y is relatively-compact by A1,Def4;
-A3:   Cl Y is compact by A2,Def2;
-   Y c= Cl Y by PRE_TOPC:48;
-   then
-A4:  Int Y c= Int Cl Y by TOPS_1:48;
-   x in Int Y by CONNSP_2:def 1;
-   then Cl Y is a_neighborhood of x by A4,CONNSP_2:def 1;
-   hence thesis by A3;
- end;
+  proof
+    let X be non empty TopSpace such that
+A1: X is locally-relatively-compact;
+    let x be Point of X;
+    consider Y being a_neighborhood of x such that
+A2: Y is relatively-compact by A1,Def4;
+A3: Cl Y is compact by A2,Def2;
+A4: Int Y c= Int Cl Y by PRE_TOPC:48,TOPS_1:48;
+    x in Int Y by CONNSP_2:def 1;
+    then Cl Y is a_neighborhood of x by A4,CONNSP_2:def 1;
+    hence thesis by A3;
+  end;
 end;
 
 registration
   cluster locally-compact ->
-             locally-relatively-compact (non empty Hausdorff TopSpace);
+    locally-relatively-compact (non empty Hausdorff TopSpace);
   coherence
-  proof let X be non empty Hausdorff TopSpace such that
-A1:  X is locally-compact;
-   let x be Point of X;
-   consider U being a_neighborhood of x such that
-A2:   U is compact by A1,Def6;
-  U is closed by A2,COMPTS_1:16;
-  then Cl U = U by PRE_TOPC:52;
-  then U is relatively-compact by A2,Def2;
-  hence thesis;
- end;
+  proof
+    let X be non empty Hausdorff TopSpace such that
+A1: X is locally-compact;
+    let x be Point of X;
+    consider U being a_neighborhood of x such that
+A2: U is compact by A1,Def6;
+    U is closed by A2,COMPTS_1:16;
+    then Cl U = U by PRE_TOPC:52;
+    then U is relatively-compact by A2,Def2;
+    hence thesis;
+  end;
 end;
 
 registration
   cluster compact -> locally-compact (non empty TopSpace);
   coherence
-  proof let X be non empty TopSpace;
-   set Y = [#]X;
-   assume X is compact; then
-A1:   Y is compact by COMPTS_1:10;
-   let x be Point of X;
-   Int Y = Y  by TOPS_1:55;
-   then Y is a_neighborhood of x by CONNSP_2:def 1;
-   hence thesis by A1;
- end;
+  proof
+    let X be non empty TopSpace;
+    set Y = [#]X;
+    assume X is compact;
+    then
+A1: Y is compact by COMPTS_1:10;
+    let x be Point of X;
+    Int Y = Y by TOPS_1:55;
+    then Y is a_neighborhood of x by CONNSP_2:def 1;
+    hence thesis by A1;
+  end;
 end;
 
 registration
   cluster discrete -> locally-compact (non empty TopSpace);
   coherence
- proof let X be non empty TopSpace such that
-A1:  X is discrete;
-   let x be Point of X;
-   set Y = {x};
-   Y is open by A1,TDLAT_3:17;
-   then Int Y = Y by TOPS_1:55;
-   then x in Int Y by TARSKI:def 1;
-   then reconsider Y as a_neighborhood of x by CONNSP_2:def 1;
-   Y is compact by BORSUK_1:41;
-   hence thesis;
- end;
+  proof
+    let X be non empty TopSpace such that
+A1: X is discrete;
+    let x be Point of X;
+    set Y = {x};
+    Y is open by A1,TDLAT_3:17;
+    then Int Y = Y by TOPS_1:55;
+    then x in Int Y by TARSKI:def 1;
+    then reconsider Y as a_neighborhood of x by CONNSP_2:def 1;
+    Y is compact by BORSUK_1:41;
+    hence thesis;
+  end;
 end;
 
 registration
   cluster discrete non empty TopSpace;
   existence
   proof
-   consider X being discrete non empty TopSpace;
-   take X;
-   thus thesis;
- end;
-end;
-
-registration let X be locally-compact (non empty TopSpace),
-                 C be closed non empty Subset of X;
-  cluster X | C -> locally-compact;
-  coherence
-  proof let x be Point of X|C;
-A1:  [#](X|C) = C by PRE_TOPC:29;
-    reconsider xx = x as Point of X by TOPMETR:2;
-    consider K being a_neighborhood of xx such that
-A2:   K is compact by Def6;
-A3:    K /\ C c= C by XBOOLE_1:17;
-    reconsider KC = K /\ C as Subset of (X|C) by A1,XBOOLE_1:17;
-    reconsider KC as a_neighborhood of x by A1,TOPMETR:6;
-    take KC;
-A4:   [#](X|K) = K by PRE_TOPC:29;
-A5:    K /\ C c= K by XBOOLE_1:17;
-    reconsider KK = K /\ C as Subset of (X|K) by A4,XBOOLE_1:17;
-A6:    KK is closed by A4,PRE_TOPC:43;
-A7:    Int K c= K by TOPS_1:44;
-A8:    xx in Int K by CONNSP_2:def 1;
-    then X|K is compact by A2,A7,COMPTS_1:12;
-    then
-A9:    KK is compact by A6,COMPTS_1:17;
-A10:    x in KC by A1,A7,A8,XBOOLE_0:def 3;
-    then (X|K) | KK is compact by A9,COMPTS_1:12;
-    then X | (K /\ C) is compact by A5,PRE_TOPC:28;
-    then (X|C) | KC is compact by A3,PRE_TOPC:28;
-    hence KC is compact by A10,COMPTS_1:12;
+    consider X being discrete non empty TopSpace;
+    take X;
+    thus thesis;
   end;
 end;
 
-registration let X be locally-compact (non empty being_T3 TopSpace),
-                 P be open non empty Subset of X;
+registration
+  let X be locally-compact (non empty TopSpace),
+  C be closed non empty Subset of X;
+  cluster X | C -> locally-compact;
+  coherence
+  proof
+    let x be Point of X|C;
+A1: [#](X|C) = C by PRE_TOPC:29;
+    reconsider xx = x as Point of X by TOPMETR:2;
+    consider K being a_neighborhood of xx such that
+A2: K is compact by Def6;
+    reconsider KC = K /\ C as Subset of (X|C) by A1,XBOOLE_1:17;
+    reconsider KC as a_neighborhood of x by A1,TOPMETR:6;
+    take KC;
+A3: [#](X|K) = K by PRE_TOPC:29;
+    then reconsider KK = K /\ C as Subset of (X|K) by XBOOLE_1:17;
+A4: KK is closed by A3,PRE_TOPC:43;
+A5: Int K c= K by TOPS_1:44;
+A6: xx in Int K by CONNSP_2:def 1;
+    then X|K is compact by A2,A5,COMPTS_1:12;
+    then
+A7: KK is compact by A4,COMPTS_1:17;
+A8: x in KC by A1,A5,A6,XBOOLE_0:def 3;
+    then (X|K) | KK is compact by A7,COMPTS_1:12;
+    then X | (K /\ C) is compact by PRE_TOPC:28,XBOOLE_1:17;
+    then (X|C) | KC is compact by PRE_TOPC:28,XBOOLE_1:17;
+    hence KC is compact by A8,COMPTS_1:12;
+  end;
+end;
+
+registration
+  let X be locally-compact (non empty being_T3 TopSpace),
+  P be open non empty Subset of X;
   cluster X | P -> locally-compact;
-   coherence
-  proof let x be Point of X|P;
-   reconsider xx = x as Point of X by TOPMETR:2;
-   consider B being basis of xx such that
-A1:    B is compact by Def3;
-A2:    [#](X|P) = P by PRE_TOPC:29;
-   then xx in P;
-   then xx in Int P by TOPS_1:55;
-   then P is a_neighborhood of xx by CONNSP_2:def 1;
-   then consider K being a_neighborhood of xx such that
-A3:   K in B and
-A4:   K c= P by YELLOW13:def 2;
+  coherence
+  proof
+    let x be Point of X|P;
+    reconsider xx = x as Point of X by TOPMETR:2;
+    consider B being basis of xx such that
+A1: B is compact by Def3;
+A2: [#](X|P) = P by PRE_TOPC:29;
+    then xx in P;
+    then xx in Int P by TOPS_1:55;
+    then P is a_neighborhood of xx by CONNSP_2:def 1;
+    then consider K being a_neighborhood of xx such that
+A3: K in B and
+A4: K c= P by YELLOW13:def 2;
     reconsider KK = K as Subset of X|P by A4,PRE_TOPC:29;
-A5:   xx in Int K by CONNSP_2:def 1;
+A5: xx in Int K by CONNSP_2:def 1;
     Int K c= K by TOPS_1:44;
     then
-A6:   x in K by A5;
+A6: x in K by A5;
     KK = K /\ P by A4,XBOOLE_1:28;
     then
-A7:   KK is a_neighborhood of x by A4,A6,TOPMETR:6;
+A7: KK is a_neighborhood of x by A4,A6,TOPMETR:6;
     K is compact by A1,A3,Def1;
     then KK is compact by A2,COMPTS_1:11;
     hence thesis by A7;
@@ -381,152 +412,161 @@ end;
 
 theorem
   for X being Hausdorff non empty TopSpace, E being non empty Subset of X
-     st X|E is dense locally-compact
-    holds X|E is open
-proof let X be Hausdorff non empty TopSpace, E be non empty Subset of X
-  such that
-A1:  X|E is dense locally-compact;
-A2:  [#](X|E) = E by PRE_TOPC:29;
- Int E = E
+  st X|E is dense locally-compact holds X|E is open
+proof
+  let X be Hausdorff non empty TopSpace, E be non empty Subset of X such that
+A1: X|E is dense locally-compact;
+A2: [#](X|E) = E by PRE_TOPC:29;
+  Int E = E
   proof
-   thus Int E c= E by TOPS_1:44;
-   let a be set;
-   assume
-A3:   a in E;
-   then reconsider x = a as Point of X;
-   reconsider xx = x as Point of X|E by A3,PRE_TOPC:29;
-   consider K being a_neighborhood of xx such that
-A4:   K is compact by A1,Def6;
-A5:   xx in Int K by CONNSP_2:def 1;
-   set UE = {G where G is Subset of X : G is open & G c= E};
-   Int K in the topology of X|E by PRE_TOPC:def 5;
-   then consider G being Subset of X such that
-A6:   G in the topology of X and
-A7:   Int K  = G /\ E by A2,PRE_TOPC:def 9;
-A8:   G is open by A6,PRE_TOPC:def 5;
-A9:   Int K c= G by A7,XBOOLE_1:17;
-A10:   G /\ E c= K by A7,TOPS_1:44;
-   E is dense by A1,A2,TEX_3:def 1;
-   then
-A11:   Cl(G /\ E) = Cl G by A8,TOPS_1:81;
-A12:   K c= [#](X|E);
-   reconsider KK = K as Subset of X by A2,XBOOLE_1:1;
-   for P being Subset of X|E st P=KK holds P is compact by A4;
-   then KK is compact by A12,COMPTS_1:11;
-   then KK is closed by COMPTS_1:16;
-   then
-A13:   Cl(G /\ E)  c= KK by A10,TOPS_1:31;
-   G c= Cl G by PRE_TOPC:48;
-   then G c= K by A11,A13,XBOOLE_1:1;
-   then G c= E by A2,XBOOLE_1:1;
-   then G in UE by A8;
-   then a in union UE by A5,A9,TARSKI:def 4;
-   hence a in Int E by TEX_4:4;
+    thus Int E c= E by TOPS_1:44;
+    let a be set;
+    assume
+A3: a in E;
+    then reconsider x = a as Point of X;
+    reconsider xx = x as Point of X|E by A3,PRE_TOPC:29;
+    consider K being a_neighborhood of xx such that
+A4: K is compact by A1,Def6;
+A5: xx in Int K by CONNSP_2:def 1;
+    set UE = {G where G is Subset of X : G is open & G c= E};
+    Int K in the topology of X|E by PRE_TOPC:def 5;
+    then consider G being Subset of X such that
+A6: G in the topology of X and
+A7: Int K = G /\ E by A2,PRE_TOPC:def 9;
+A8: G is open by A6,PRE_TOPC:def 5;
+A9: Int K c= G by A7,XBOOLE_1:17;
+A10: G /\ E c= K by A7,TOPS_1:44;
+    E is dense by A1,A2,TEX_3:def 1;
+    then
+A11: Cl(G /\ E) = Cl G by A8,TOPS_1:81;
+A12: K c= [#](X|E);
+    reconsider KK = K as Subset of X by A2,XBOOLE_1:1;
+    for P being Subset of X|E st P=KK holds P is compact by A4;
+    then KK is compact by A12,COMPTS_1:11;
+    then
+A13: Cl(G /\ E) c= KK by A10,COMPTS_1:16,TOPS_1:31;
+    G c= Cl G by PRE_TOPC:48;
+    then G c= K by A11,A13,XBOOLE_1:1;
+    then G c= E by A2,XBOOLE_1:1;
+    then G in UE by A8;
+    then a in union UE by A5,A9,TARSKI:def 4;
+    hence a in Int E by TEX_4:4;
   end;
- hence X|E is open by A2,TSEP_1:16;
+  hence X|E is open by A2,TSEP_1:16;
 end;
 
 theorem Th2:
   for X,Y being TopSpace, A being Subset of X st [#]X c= [#]Y
-   holds incl(X,Y).:A = A
-proof let X,Y be TopSpace, A be Subset of X;
- assume [#]X c= [#]Y;
- hence incl(X,Y).:A = id([#]X).:A by YELLOW_9:def 1
-                   .= A by FUNCT_1:162;
+  holds incl(X,Y).:A = A
+proof
+  let X,Y be TopSpace, A be Subset of X;
+  assume [#]X c= [#]Y;
+  hence incl(X,Y).:A = id([#]X).:A by YELLOW_9:def 1
+    .= A by FUNCT_1:162;
 end;
 
-definition let X,Y be TopSpace, f be Function of X,Y;
+definition
+  let X,Y be TopSpace, f be Function of X,Y;
   attr f is embedding means
-    ex h being Function of X, Y | (rng f) st h = f & h is_homeomorphism;
+  ex h being Function of X, Y | (rng f) st h = f & h is_homeomorphism;
 end;
 
 theorem Th3:
   for X,Y being TopSpace st [#]X c= [#]Y &
-   ex Xy being Subset of Y st Xy = [#]X &
-         the topology of Y|Xy = the topology of X
-  holds incl(X,Y) is embedding
-proof let X,Y be TopSpace such that
-A1:   [#]X c= [#]Y;
+  ex Xy being Subset of Y st Xy = [#]X &
+  the topology of Y|Xy = the topology of X holds incl(X,Y) is embedding
+proof
+  let X,Y be TopSpace such that
+A1: [#]X c= [#]Y;
   given Xy being Subset of Y such that
-A2:   Xy = [#]X and
-A3:   the topology of Y|Xy = the topology of X;
-A4:  incl(X,Y) = id X by A1,YELLOW_9:def 1;
-A5:  [#]Y = {} implies [#]X = {} by A1,XBOOLE_1:3;
- set YY = Y| (rng incl(X,Y));
-A6:  [#]YY = rng incl(X,Y) by PRE_TOPC:def 10;
- then reconsider h = incl(X,Y) as Function of X,YY by A5,FUNCT_2:8;
- take h;
- thus h = incl(X,Y);
- thus dom h = [#]X & rng h = [#]YY by A5,FUNCT_2:def 1,PRE_TOPC:def 10;
- thus h is one-to-one by A4;
-A7:  [#]YY = {} implies [#]X = {} by A4,A6,RELAT_1:71;
- set f = id X;
-A8:  [#]X = {} implies [#]X = {};
+A2: Xy = [#]X and
+A3: the topology of Y|Xy = the topology of X;
+A4: incl(X,Y) = id X by A1,YELLOW_9:def 1;
+A5: [#]Y = {} implies [#]X = {} by A1,XBOOLE_1:3;
+  set YY = Y| (rng incl(X,Y));
+A6: [#]YY = rng incl(X,Y) by PRE_TOPC:def 10;
+  then reconsider h = incl(X,Y) as Function of X,YY by A5,FUNCT_2:8;
+  take h;
+  thus h = incl(X,Y);
+  thus dom h = [#]X & rng h = [#]YY by A5,FUNCT_2:def 1,PRE_TOPC:def 10;
+  thus h is one-to-one by A4;
+A7: [#]YY = {} implies [#]X = {} by A4,A6,RELAT_1:71;
+  set f = id X;
+A8: [#]X = {} implies [#]X = {};
   for P being Subset of YY st P is open holds h"P is open
-   proof let P be Subset of YY;
-     assume P is open;
-     then
-A9:    P in the topology of YY by PRE_TOPC:def 5;
-     reconsider Q = P as Subset of X by A4,A6,RELAT_1:71;
-     Q in the topology of X by A2,A3,A4,A9,RELAT_1:71;
-     then Q is open by PRE_TOPC:def 5;
-     then f"Q is open by A8,TOPS_2:55;
-     then f"Q in the topology of X by PRE_TOPC:def 5;
-     hence h"P in the topology of X by A1,YELLOW_9:def 1;
-   end;
+  proof
+    let P be Subset of YY;
+    assume P is open;
+    then
+A9: P in the topology of YY by PRE_TOPC:def 5;
+    reconsider Q = P as Subset of X by A4,A6,RELAT_1:71;
+    Q in the topology of X by A2,A3,A4,A9,RELAT_1:71;
+    then Q is open by PRE_TOPC:def 5;
+    then f"Q is open by A8,TOPS_2:55;
+    then f"Q in the topology of X by PRE_TOPC:def 5;
+    hence h"P in the topology of X by A1,YELLOW_9:def 1;
+  end;
   hence h is continuous by A7,TOPS_2:55;
-A10:  [#]X = {} implies [#]YY = {} by A4,A6,RELAT_1:71;
+A10: [#]X = {} implies [#]YY = {} by A4,A6,RELAT_1:71;
   for P being Subset of X st P is open holds (h")"P is open
-   proof let P be Subset of X;
-     assume P is open;
-     then
-A11:    P in the topology of X by PRE_TOPC:def 5;
-     reconsider Q = P as Subset of YY by A4,A6,RELAT_1:71;
-       (h")"P = h.:Q by A4,A6,TOPS_2:67
-             .= Q by A4,FUNCT_1:162;
-     hence (h")"P in the topology of YY by A2,A3,A4,A11,RELAT_1:71;
-   end;
+  proof
+    let P be Subset of X;
+    assume P is open;
+    then
+A11: P in the topology of X by PRE_TOPC:def 5;
+    reconsider Q = P as Subset of YY by A4,A6,RELAT_1:71;
+    (h")"P = h.:Q by A4,A6,TOPS_2:67
+      .= Q by A4,FUNCT_1:162;
+    hence (h")"P in the topology of YY by A2,A3,A4,A11,RELAT_1:71;
+  end;
   hence h" is continuous by A10,TOPS_2:55;
 end;
 
-definition let X be TopSpace, Y be TopSpace, h be Function of X,Y;
+definition
+  let X be TopSpace, Y be TopSpace, h be Function of X,Y;
   attr h is compactification means
-:Def8: h is embedding & Y is compact & h.:([#]X) is dense;
+  :Def8:
+  h is embedding & Y is compact & h.:([#]X) is dense;
 end;
 
-registration let X be TopSpace, Y be TopSpace;
+registration
+  let X be TopSpace, Y be TopSpace;
   cluster compactification -> embedding Function of X,Y;
   coherence by Def8;
 end;
 
-definition let X be TopStruct;
- func One-Point_Compactification(X) -> strict TopStruct means
-:Def9: the carrier of it = succ([#]X) &
-      the topology of it = (the topology of X) \/
-        {U \/ {[#]X} where U is Subset of X: U is open & U` is compact};
+definition
+  let X be TopStruct;
+  func One-Point_Compactification(X) -> strict TopStruct means
+  :Def9:
+  the carrier of it = succ([#]X) & the topology of it = (the topology of X) \/
+  {U \/ {[#]X} where U is Subset of X: U is open & U` is compact};
   existence
   proof
     set T = succ [#]X,
-        D = {U \/ {[#]X} where U is Subset of X: U is open & U` is compact},
-        O = (the topology of X) \/ D;
+    D = {U \/ {[#]X} where U is Subset of X: U is open & U` is compact},
+    O = (the topology of X) \/ D;
     O c= bool T
-     proof let a be set;
+    proof
+      let a be set;
       assume a in O;
       then
-A1:     a in the topology of X or a in D by XBOOLE_0:def 2;
-      now assume a in D; then
-       consider U being Subset of X such that
+A1:   a in the topology of X or a in D by XBOOLE_0:def 2;
+      now
+        assume a in D;
+        then consider U being Subset of X such that
 A2:     a = U \/ {[#]X} and U is open and U` is compact;
-       thus a c= T
-        proof let A be set;
-         assume A in a;
-         then A in U or A in {[#]X} by A2,XBOOLE_0:def 2;
-         hence thesis by XBOOLE_0:def 2;
+        thus a c= T
+        proof
+          let A be set;
+          assume A in a;
+          then A in U or A in {[#]X} by A2,XBOOLE_0:def 2;
+          hence thesis by XBOOLE_0:def 2;
         end;
       end;
       then a is Subset of T by A1,XBOOLE_1:10;
       hence thesis;
-     end;
+    end;
     then reconsider O as Subset-Family of T;
     set Y = TopStruct(#T,O#);
     Y is non empty by STRUCT_0:def 1;
@@ -535,7 +575,8 @@ A2:     a = U \/ {[#]X} and U is open and U` is compact;
   uniqueness;
 end;
 
-registration let X be TopStruct;
+registration
+  let X be TopStruct;
   cluster One-Point_Compactification(X) -> non empty;
   coherence
   proof
@@ -546,781 +587,803 @@ end;
 
 theorem Th4:
   for X being TopStruct holds [#]X c= [#]One-Point_Compactification(X)
-proof let X be TopStruct;
- [#]One-Point_Compactification(X) = succ([#]X) by Def9;
- hence [#]X c= [#]One-Point_Compactification(X) by XBOOLE_1:7;
+proof
+  let X be TopStruct;
+  [#]One-Point_Compactification(X) = succ([#]X) by Def9;
+  hence [#]X c= [#]One-Point_Compactification(X) by XBOOLE_1:7;
 end;
 
-registration let X be TopSpace;
+registration
+  let X be TopSpace;
   cluster One-Point_Compactification(X) -> TopSpace-like;
   coherence
   proof
-A1:  not [#]X in [#]X;
+A1: not [#]X in [#]X;
     set T = succ [#]X,
-        D = {U \/ {[#]X} where U is Subset of X: U is open & U` is compact};
-A2:    [#]One-Point_Compactification(X) = T by Def9;
-A3:    the topology of One-Point_Compactification(X) = (the topology of X) \/ D
-         by Def9;
+    D = {U \/ {[#]X} where U is Subset of X: U is open & U` is compact};
+A2: [#]One-Point_Compactification(X) = T by Def9;
+A3: the topology of One-Point_Compactification(X) = (the topology of X) \/ D
+    by Def9;
     set Y = One-Point_Compactification(X);
     Y is TopSpace-like
-     proof
+    proof
       ([#]X)` = ({}X)``
-             .= {}X;
+        .= {}X;
       then T in D;
       hence the carrier of Y in the topology of Y by A2,A3,XBOOLE_0:def 2;
-      hereby let a be Subset-Family of Y;
-       assume
-A4:       a c= the topology of Y;
-A5:       not [#]X in [#]X;
-         set ua = {U where U is Subset of X: U is open &
-                      (U in a or U \/ {[#]X} in a)};
-A6:      ua c= the topology of X
-          proof let x be set;
-           assume x in ua;
-           then ex U being Subset of X st x = U & U is open &
-                       (U in a or U \/ {[#]X} in a);
-           hence thesis by PRE_TOPC:def 5;
-          end;
-        reconsider ua as Subset-Family of X by A6,XBOOLE_1:1;
-        union ua in the topology of X by A6,PRE_TOPC:def 1; then
-A7:        union ua is open by PRE_TOPC:def 5; then
-A8:        (union ua)` is closed by TOPS_1:30;
-A9:        union ua = (union a) \ {[#]X}
-         proof
+      hereby
+        let a be Subset-Family of Y;
+        assume
+A4:     a c= the topology of Y;
+A5:     not [#]X in [#]X;
+        set ua = {U where U is Subset of X: U is open &
+        (U in a or U \/ {[#]X} in a)};
+A6:     ua c= the topology of X
+        proof
+          let x be set;
+          assume x in ua;
+          then ex U being Subset of X st x = U & U is open &
+          (U in a or U \/ {[#]X} in a);
+          hence thesis by PRE_TOPC:def 5;
+        end;
+        then reconsider ua as Subset-Family of X by XBOOLE_1:1;
+        union ua in the topology of X by A6,PRE_TOPC:def 1;
+        then
+A7:     union ua is open by PRE_TOPC:def 5;
+        then
+A8:     (union ua)` is closed by TOPS_1:30;
+A9:     union ua = (union a) \ {[#]X}
+        proof
           thus union ua c= (union a) \ {[#]X}
-           proof let x be set;
+          proof
+            let x be set;
             assume x in union ua;
             then consider A being set such that
-A10:          x in A and
-A11:          A in ua by TARSKI:def 4;
+A10:        x in A and
+A11:        A in ua by TARSKI:def 4;
             consider U being Subset of X such that
-A12:           A = U and U is open and
-A13:           (U in a or U \/ {[#]X} in a) by A11;
-A14:           now assume x in {[#]X}; then
-A15:              x = [#]X by TARSKI:def 1;
-               x in [#]X by A10,A12;
-               hence contradiction by A15;
-              end;
+A12:        A = U and U is open and
+A13:        (U in a or U \/ {[#]X} in a) by A11;
+A14:        now
+              assume x in {[#]X};
+              then
+A15:          x = [#]X by TARSKI:def 1;
+              x in [#]X by A10,A12;
+              hence contradiction by A15;
+            end;
             now per cases by A13;
-             suppose U in a;
-              hence x in union a by A10,A12,TARSKI:def 4;
-             end;
-             suppose
-A16:             U \/ {[#]X} in a;
-               x in U \/ {[#]X} by A10,A12,XBOOLE_0:def 2;
-               hence x in union a by A16,TARSKI:def 4;
-             end;
+              suppose U in a;
+                hence x in union a by A10,A12,TARSKI:def 4;
+              end;
+              suppose
+A16:            U \/ {[#]X} in a;
+                x in U \/ {[#]X} by A10,A12,XBOOLE_0:def 2;
+                hence x in union a by A16,TARSKI:def 4;
+              end;
             end;
             hence thesis by A14,XBOOLE_0:def 4;
-           end;
+          end;
           let x be set;
           assume
-A17:          x in (union a) \ {[#]X};
+A17:      x in (union a) \ {[#]X};
           then x in union a by XBOOLE_0:def 4;
           then consider A being set such that
-A18:         x in A and
-A19:         A in a by TARSKI:def 4;
-           per cases by A3,A4,A19,XBOOLE_0:def 2;
-            suppose
-A20:            A in the topology of X;
-             then reconsider U = A as Subset of X;
-             U is open by A20,PRE_TOPC:def 5;
-             then U in ua by A19;
-             hence x in union ua by A18,TARSKI:def 4;
-            end;
-            suppose A in D;
-             then consider U being Subset of X such that
-A21:            A = U \/ {[#]X} and
-A22:            U is open and U` is compact;
-             not x in {[#]X} by A17,XBOOLE_0:def 4;
-             then
-A23:            x in U by A18,A21,XBOOLE_0:def 2;
-             U in ua by A19,A21,A22;
-             hence x in union ua by A23,TARSKI:def 4;
-            end;
-         end;
-         per cases;
-         suppose
-A24:         [#]X in union a;
-           then consider A being set such that
-A25:         [#]X in A and
-A26:         A in a by TARSKI:def 4;
-            A in the topology of X or A in D by A3,A4,A26,XBOOLE_0:def 2;
-           then consider U being Subset of X such that
-A27:          A = U \/ {[#]X} and U is open and
-A28:          U` is compact by A5,A25;
-A29:        now assume [#]X in U;
+A18:      x in A and
+A19:      A in a by TARSKI:def 4;
+          per cases by A3,A4,A19,XBOOLE_0:def 2;
+          suppose
+A20:        A in the topology of X;
+            then reconsider U = A as Subset of X;
+            U is open by A20,PRE_TOPC:def 5;
+            then U in ua by A19;
+            hence x in union ua by A18,TARSKI:def 4;
+          end;
+          suppose A in D;
+            then consider U being Subset of X such that
+A21:        A = U \/ {[#]X} and
+A22:        U is open and U` is compact;
+            not x in {[#]X} by A17,XBOOLE_0:def 4;
+            then
+A23:        x in U by A18,A21,XBOOLE_0:def 2;
+            U in ua by A19,A21,A22;
+            hence x in union ua by A23,TARSKI:def 4;
+          end;
+        end;
+        per cases;
+        suppose
+A24:      [#]X in union a;
+          then consider A being set such that
+A25:      [#]X in A and
+A26:      A in a by TARSKI:def 4;
+          A in the topology of X or A in D by A3,A4,A26,XBOOLE_0:def 2;
+          then consider U being Subset of X such that
+A27:      A = U \/ {[#]X} and U is open and
+A28:      U` is compact by A5,A25;
+A29:      now
+            assume [#]X in U;
             then [#]X in [#]X;
             hence contradiction;
-           end;
-A30:          A \ {[#]X} = U \ {[#]X} by A27,XBOOLE_1:40
-                       .= U by A29,ZFMISC_1:65;
-           A c= union a by A26,ZFMISC_1:92;
-           then U c= union ua by A9,A30,XBOOLE_1:33;
-           then (union ua)` c= U` by XBOOLE_1:34; then
-A31:          (union ua)` is compact by A8,A28,COMPTS_1:18;
-           (union ua) \/  {[#]X} = (union a) \/ {[#]X} by A9,XBOOLE_1:39
-                                .= (union a) by A24,ZFMISC_1:46;
-           then union a in D by A7,A31;
+          end;
+          A \ {[#]X} = U \ {[#]X} by A27,XBOOLE_1:40
+            .= U by A29,ZFMISC_1:65;
+          then U c= union ua by A9,A26,XBOOLE_1:33,ZFMISC_1:92;
+          then
+A30:      (union ua)` is compact by A8,A28,COMPTS_1:18,XBOOLE_1: 34;
+          (union ua) \/ {[#]X} = (union a) \/ {[#]X} by A9,XBOOLE_1:39
+            .= (union a) by A24,ZFMISC_1:46;
+          then union a in D by A7,A30;
           hence union a in the topology of Y by A3,XBOOLE_0:def 2;
-         end;
-         suppose
-A32:         not [#]X in union a;
-A33:         a c= the topology of X
-           proof let A be set;
+        end;
+        suppose
+A31:      not [#]X in union a;
+A32:      a c= the topology of X
+          proof
+            let A be set;
             assume
-A34:           A in a;
+A33:        A in a;
             assume not A in the topology of X;
-            then A in D by A3,A4,A34,XBOOLE_0:def 2;
+            then A in D by A3,A4,A33,XBOOLE_0:def 2;
             then consider U being Subset of X such that
-A35:           A = U \/ {[#]X} and U is open and U` is compact;
+A34:        A = U \/ {[#]X} and U is open and U` is compact;
             [#]X in {[#]X} by TARSKI:def 1;
-            then [#]X in A by A35,XBOOLE_0:def 2;
-            hence contradiction by A32,A34,TARSKI:def 4;
-           end;
+            then [#]X in A by A34,XBOOLE_0:def 2;
+            hence contradiction by A31,A33,TARSKI:def 4;
+          end;
           then a is Subset-Family of [#]X by XBOOLE_1:1;
-          then union a in the topology of X by A33,PRE_TOPC:def 1;
+          then union a in the topology of X by A32,PRE_TOPC:def 1;
           hence union a in the topology of Y by A3,XBOOLE_0:def 2;
-         end;
+        end;
       end;
       let a,b be Subset of Y;
       assume
-A36:    a in the topology of Y;
+A35:  a in the topology of Y;
       assume
-A37:     b in the topology of Y;
-      per cases by A3,A36,A37,XBOOLE_0:def 2;
-       suppose a in the topology of X & b in the topology of X;
+A36:  b in the topology of Y;
+      per cases by A3,A35,A36,XBOOLE_0:def 2;
+      suppose a in the topology of X & b in the topology of X;
         then a /\ b in the topology of X by PRE_TOPC:def 1;
         hence a /\ b in the topology of Y by A3,XBOOLE_0:def 2;
-       end;
-       suppose that
-A38:       a in  the topology of X and
-A39:       b in D;
+      end;
+      suppose that
+A37:    a in the topology of X and
+A38:    b in D;
         consider U being Subset of X such that
-A40:       b = U \/ {[#]X} and
-A41:       U is open and U` is compact by A39;
-        reconsider a' = a as Subset of X by A38;
-        a' is open by A38,PRE_TOPC:def 5;
-        then reconsider aXU = a' /\ U as open Subset of X by A41,TOPS_1:38;
+A39:    b = U \/ {[#]X} and
+A40:    U is open and U` is compact by A38;
+        reconsider a' = a as Subset of X by A37;
+        a' is open by A37,PRE_TOPC:def 5;
+        then reconsider aXU = a' /\ U as open Subset of X by A40,TOPS_1:38;
         not [#]X in a' by A1;
         then {[#]X} misses a' by ZFMISC_1:56;
-        then a' /\ {[#]X} = {}X  by XBOOLE_0:def 7;
+        then a' /\ {[#]X} = {}X by XBOOLE_0:def 7;
         then reconsider aX = a' /\ {[#]X} as open Subset of X;
- A42:      aXU \/ aX is open by TOPS_1:37;
-        a /\ b = aXU \/ aX by A40,XBOOLE_1:23;
-        then a /\ b in the topology of X by A42,PRE_TOPC:def 5;
+A41:    aXU \/ aX is open by TOPS_1:37;
+        a /\ b = aXU \/ aX by A39,XBOOLE_1:23;
+        then a /\ b in the topology of X by A41,PRE_TOPC:def 5;
         hence a /\ b in the topology of Y by A3,XBOOLE_0:def 2;
-       end;
-       suppose that
-A43:       b in  the topology of X and
-A44:       a in D;
+      end;
+      suppose that
+A42:    b in the topology of X and
+A43:    a in D;
         consider U being Subset of X such that
-A45:       a = U \/ {[#]X} and
-A46:       U is open and U` is compact by A44;
-        reconsider b' = b as Subset of X by A43;
-        b' is open by A43,PRE_TOPC:def 5;
-        then reconsider bXUa = b' /\ U as open Subset of X by A46,TOPS_1:38;
+A44:    a = U \/ {[#]X} and
+A45:    U is open and U` is compact by A43;
+        reconsider b' = b as Subset of X by A42;
+        b' is open by A42,PRE_TOPC:def 5;
+        then reconsider bXUa = b' /\ U as open Subset of X by A45,TOPS_1:38;
         not [#]X in b' by A1;
         then {[#]X} misses b' by ZFMISC_1:56;
-        then b' /\ {[#]X} = {}X  by XBOOLE_0:def 7;
+        then b' /\ {[#]X} = {}X by XBOOLE_0:def 7;
         then reconsider bX = b' /\ {[#]X} as open Subset of X;
-A47:      bXUa \/ bX is open by TOPS_1:37;
-        a /\ b = bXUa \/ bX by A45,XBOOLE_1:23;
-        then a /\ b in the topology of X by A47,PRE_TOPC:def 5;
+A46:    bXUa \/ bX is open by TOPS_1:37;
+        a /\ b = bXUa \/ bX by A44,XBOOLE_1:23;
+        then a /\ b in the topology of X by A46,PRE_TOPC:def 5;
         hence a /\ b in the topology of Y by A3,XBOOLE_0:def 2;
-       end;
-       suppose that
-A48:       a in D and
-A49:       b in D;
+      end;
+      suppose that
+A47:    a in D and
+A48:    b in D;
         consider Ua being Subset of X such that
-A50:       a = Ua \/ {[#]X} and
-A51:       Ua is open and
-A52:       Ua` is compact by A48;
+A49:    a = Ua \/ {[#]X} and
+A50:    Ua is open and
+A51:    Ua` is compact by A47;
         consider Ub being Subset of X such that
-A53:       b = Ub \/ {[#]X} and
-A54:       Ub is open and
-A55:       Ub` is compact by A49;
-A56:       a /\ b = (Ua /\ Ub) \/ {[#]X} by A50,A53,XBOOLE_1:24;
-A57:      Ua /\ Ub is open by A51,A54,TOPS_1:38;
-        Ua` \/ Ub` is compact by A52,A55,COMPTS_1:19;
+A52:    b = Ub \/ {[#]X} and
+A53:    Ub is open and
+A54:    Ub` is compact by A48;
+A55:    a /\ b = (Ua /\ Ub) \/ {[#]X} by A49,A52,XBOOLE_1:24;
+A56:    Ua /\ Ub is open by A50,A53,TOPS_1:38;
+        Ua` \/ Ub` is compact by A51,A54,COMPTS_1:19;
         then (Ua /\ Ub)` is compact by XBOOLE_1:54;
-        then a /\ b in D by A56,A57;
+        then a /\ b in D by A55,A56;
         hence a /\ b in the topology of Y by A3,XBOOLE_0:def 2;
-       end;
-     end;
+      end;
+    end;
     hence thesis;
   end;
 end;
 
 theorem Th5:
   for X being TopStruct holds X is SubSpace of One-Point_Compactification(X)
-proof let X be TopStruct;
-  thus
-A1:  [#]X c= [#]One-Point_Compactification(X) by Th4;
+proof
+  let X be TopStruct; thus
+A1: [#]X c= [#]One-Point_Compactification(X) by Th4;
   let P being Subset of X;
   set D = {U \/ {[#]X} where U is Subset of X: U is open & U` is compact};
-A2:  the topology of One-Point_Compactification(X) = (the topology of X) \/ D
-       by Def9;
-  hereby assume
-A3:  P in the topology of X;
+A2: the topology of One-Point_Compactification(X) = (the topology of X) \/ D
+  by Def9;
+  hereby
+    assume
+A3: P in the topology of X;
     reconsider Q = P as Subset of One-Point_Compactification(X)
-       by A1,XBOOLE_1:1;
+    by A1,XBOOLE_1:1;
     take Q;
     thus Q in the topology of One-Point_Compactification(X)
-       by A2,A3,XBOOLE_0:def 2;
+    by A2,A3,XBOOLE_0:def 2;
     thus P = Q /\ [#]X by XBOOLE_1:28;
   end;
   given Q being Subset of One-Point_Compactification(X) such that
-A4:   Q in the topology of One-Point_Compactification(X) and
-A5:   P = Q /\ [#]X;
+A4: Q in the topology of One-Point_Compactification(X) and
+A5: P = Q /\ [#]X;
   per cases by A2,A4,XBOOLE_0:def 2;
-   suppose Q in the topology of X;
+  suppose Q in the topology of X;
     hence P in the topology of X by A5,XBOOLE_1:28;
-   end;
-   suppose Q in D;
+  end;
+  suppose Q in D;
     then consider U being Subset of X such that
-A6:   Q = U \/ {[#]X} and
-A7:   U is open and U` is compact;
-     not [#]X in [#]X;
+A6: Q = U \/ {[#]X} and
+A7: U is open and U` is compact;
+    not [#]X in [#]X;
     then {[#]X} misses [#]X by ZFMISC_1:56;
     then {[#]X} /\ [#]X = {} by XBOOLE_0:def 7;
     then P = (U /\ [#]X) \/ {} by A5,A6,XBOOLE_1:23
-          .= U by XBOOLE_1:28;
+      .= U by XBOOLE_1:28;
     hence P in the topology of X by A7,PRE_TOPC:def 5;
-   end;
+  end;
 end;
 
-registration let X be TopSpace;
+registration
+  let X be TopSpace;
   cluster One-Point_Compactification(X) -> compact;
-   coherence
+  coherence
   proof
-   let F be Subset-Family of One-Point_Compactification(X) such that
-A1:    F is_a_cover_of One-Point_Compactification(X) and
-A2:    F is open;
-A3:    not [#]X in [#]X;
-      set D = {U \/ {[#]X} where U is Subset of X: U is open & U` is compact};
-A4:    [#]One-Point_Compactification(X) = union F by A1,PRE_TOPC:def 8;
-      set Fx = {U where U is Subset of X: U is open &
-                     (U in F & not U \/ {[#]X} in F or U \/ {[#]X} in F)};
-      Fx c= the topology of X
-        proof let x be set;
-         assume x in Fx;
-         then ex U being Subset of X st x = U & U is open &
-            (U in F & not U \/ {[#]X} in F or U \/ {[#]X} in F);
-         hence thesis by PRE_TOPC:def 5;
-        end;
-      then reconsider Fx as Subset-Family of X by XBOOLE_1:1;
-      [#]X in {[#]X} by TARSKI:def 1;
-      then [#]X in succ([#]X) by XBOOLE_0:def 2;
-      then [#]X in [#]One-Point_Compactification(X) by Def9;
-      then consider A being set such that
-A5:     [#]X in A and
-A6:     A in F by A4,TARSKI:def 4;
-      reconsider A as Subset of One-Point_Compactification(X) by A6;
-      A is open by A2,A6,TOPS_2:def 1;
-      then A in the topology of One-Point_Compactification(X)
+    let F be Subset-Family of One-Point_Compactification(X) such that
+A1: F is_a_cover_of One-Point_Compactification(X) and
+A2: F is open;
+A3: not [#]X in [#]X;
+    set D = {U \/ {[#]X} where U is Subset of X: U is open & U` is compact};
+A4: [#]One-Point_Compactification(X) = union F by A1,PRE_TOPC:def 8;
+    set Fx = {U where U is Subset of X: U is open &
+    (U in F & not U \/ {[#]X} in F or U \/ {[#]X} in F)};
+    Fx c= the topology of X
+    proof
+      let x be set;
+      assume x in Fx;
+      then ex U being Subset of X st x = U & U is open &
+      (U in F & not U \/ {[#]X} in F or U \/ {[#]X} in F);
+      hence thesis by PRE_TOPC:def 5;
+    end;
+    then reconsider Fx as Subset-Family of X by XBOOLE_1:1;
+    [#]X in {[#]X} by TARSKI:def 1;
+    then [#]X in succ([#]X) by XBOOLE_0:def 2;
+    then [#]X in [#]One-Point_Compactification(X) by Def9;
+    then consider A being set such that
+A5: [#]X in A and
+A6: A in F by A4,TARSKI:def 4;
+    reconsider A as Subset of One-Point_Compactification(X) by A6;
+    A is open by A2,A6,TOPS_2:def 1;
+    then A in the topology of One-Point_Compactification(X) by PRE_TOPC:def 5;
+    then
+A7: A in (the topology of X) \/ D by Def9;
+    not A in the topology of X by A3,A5;
+    then A in D by A7,XBOOLE_0:def 2;
+    then consider U being Subset of X such that
+A8: A = U \/ {[#]X} and U is open and
+A9: U` is compact;
+A10: Fx is open
+    proof
+      let P be Subset of X;
+      assume P in Fx;
+      then ex U being Subset of X st P = U & U is open &
+      (U in F & not U \/ {[#]X} in F or U \/ {[#]X} in F);
+      hence P is open;
+    end;
+    Fx is_a_cover_of X
+    proof
+      thus [#]X c= union Fx
+      proof
+        let x be set;
+        assume
+A11:    x in [#]X;
+        then x in succ([#]X) by XBOOLE_0:def 2;
+        then x in union F by A4,Def9;
+        then consider B being set such that
+A12:    x in B and
+A13:    B in F by TARSKI:def 4;
+        reconsider B as Subset of One-Point_Compactification(X) by A13;
+        B is open by A2,A13,TOPS_2:def 1;
+        then B in the topology of One-Point_Compactification(X)
         by PRE_TOPC:def 5;
-      then
-A7:     A in (the topology of X) \/ D by Def9;
-      not A in the topology of X by A3,A5;
-      then A in D by A7,XBOOLE_0:def 2;
-      then consider U being Subset of X such that
-A8:     A = U \/ {[#]X} and U is open and
-A9:     U` is compact;
-A10:     Fx is open
-       proof let P be Subset of X;
-        assume P in Fx;
-        then ex U being Subset of X st P = U & U is open &
-          (U in F & not U \/ {[#]X} in F or U \/ {[#]X} in F);
-        hence P is open;
-       end;
-     Fx is_a_cover_of X
-       proof
-        thus [#]X c= union Fx
-         proof let x be set;
-          assume
-A11:         x in [#]X;
-          then x in succ([#]X) by XBOOLE_0:def 2;
-          then x in union F by A4,Def9;
-          then consider B being set such that
-A12:         x in B and
-A13:         B in F by TARSKI:def 4;
-          reconsider B as Subset of One-Point_Compactification(X) by A13;
-          B is open by A2,A13,TOPS_2:def 1;
-          then B in the topology of One-Point_Compactification(X)
-             by PRE_TOPC:def 5;
-          then
-A14:       B in (the topology of X) \/ D by Def9;
-          per cases by A14,XBOOLE_0:def 2;
-          suppose
-A15:          B in the topology of X;
-            then reconsider Bx = B as Subset of X;
-            Bx is open & (Bx in F & not Bx \/ {[#]X} in F or Bx \/ {[#]X} in F)
-             by A13,A15,PRE_TOPC:def 5;
-            then Bx in Fx;
-            hence x in union Fx by A12,TARSKI:def 4;
-          end;
-          suppose B in D;
-           then consider Bx being Subset of X such that
-A16:          B = Bx \/ {[#]X} and
-A17:          Bx is open and Bx` is compact;
-           now assume x in {[#]X};
-             then x = [#]X by TARSKI:def 1;
-             hence contradiction by A11;
-           end;
-           then
-A18:          x in Bx by A12,A16,XBOOLE_0:def 2;
-            Bx in Fx by A13,A16,A17;
-            hence x in union Fx by A18,TARSKI:def 4;
-          end;
-         end;
-        thus union Fx c= [#]X;
-       end;
-      then [#]X = union Fx by PRE_TOPC:def 8;
-      then Fx is_a_cover_of U` by COMPTS_1:def 1;
-      then consider Gx being Subset-Family of X such that
-A19:      Gx c= Fx and
-A20:      Gx is_a_cover_of U` and
-A21:      Gx is finite by A9,A10,COMPTS_1:def 7;
-      set GX = {W where W is Subset of One-Point_Compactification(X): W in F &
-                  ex V being Subset of X st V in Gx &
-                    (V in F & not V \/ {[#]X} in F & W = V or
-                     V \/ {[#]X} in F & W = V \/ {[#]X})};
-      defpred P[set,set] means $1 in Gx &
-                   ($1 \/ {[#]X} in F implies $2 = $1 \/ {[#]X}) &
-                   (not $1 \/ {[#]X} in F implies $2 = $1);
-A22:    for x being set st x in Gx ex y being set st y in GX & P[x,y]
-      proof let x be set;
-       assume
-A23:       x in Gx;
-        then x in Fx by A19;
-        then consider U being Subset of X such that
-A24:      x = U and U is open and
-A25:      U in F & not U \/ {[#]X} in F or U \/ {[#]X} in F;
-       per cases;
-       suppose
-A26:       not U \/ {[#]X} in F;
         then
-        reconsider y = U as Subset of One-Point_Compactification(X) by A25;
+A14:    B in (the topology of X) \/ D by Def9;
+        per cases by A14,XBOOLE_0:def 2;
+        suppose
+A15:      B in the topology of X;
+          then reconsider Bx = B as Subset of X;
+          Bx is open & (Bx in F & not Bx \/ {[#]X} in F or Bx \/ {[#]X} in F )
+          by A13,A15,PRE_TOPC:def 5;
+          then Bx in Fx;
+          hence x in union Fx by A12,TARSKI:def 4;
+        end;
+        suppose B in D;
+          then consider Bx being Subset of X such that
+A16:      B = Bx \/ {[#]X} and
+A17:      Bx is open and Bx` is compact;
+          now
+            assume x in {[#]X};
+            then x = [#]X by TARSKI:def 1;
+            hence contradiction by A11;
+          end;
+          then
+A18:      x in Bx by A12,A16,XBOOLE_0:def 2;
+          Bx in Fx by A13,A16,A17;
+          hence x in union Fx by A18,TARSKI:def 4;
+        end;
+      end;
+      thus union Fx c= [#]X;
+    end;
+    then [#]X = union Fx by PRE_TOPC:def 8;
+    then Fx is_a_cover_of U` by COMPTS_1:def 1;
+    then consider Gx being Subset-Family of X such that
+A19: Gx c= Fx and
+A20: Gx is_a_cover_of U` and
+A21: Gx is finite by A9,A10,COMPTS_1:def 7;
+    set GX = {W where W is Subset of One-Point_Compactification(X): W in F &
+    ex V being Subset of X st V in Gx &
+    (V in F & not V \/ {[#]X} in F & W = V or
+    V \/ {[#]X} in F & W = V \/ {[#]X})};
+    defpred P[set,set] means $1 in Gx &
+    ($1 \/ {[#]X} in F implies $2 = $1 \/ {[#]X}) &
+    (not $1 \/ {[#]X} in F implies $2 = $1);
+A22: for x being set st x in Gx ex y being set st y in GX & P[x,y]
+    proof
+      let x be set;
+      assume
+A23:  x in Gx;
+      then x in Fx by A19;
+      then consider U being Subset of X such that
+A24:  x = U and U is open and
+A25:  U in F & not U \/ {[#]X} in F or U \/ {[#]X} in F;
+      per cases;
+      suppose
+A26:    not U \/ {[#]X} in F;
+
+then reconsider y = U as Subset of One-Point_Compactification(X) by A25;
         take y;
         thus y in GX by A23,A24,A25,A26;
         thus thesis by A23,A24,A26;
-       end;
-       suppose
-A27:       U \/ {[#]X} in F;
+      end;
+      suppose
+A27:    U \/ {[#]X} in F;
         then reconsider y = U \/ {[#]X}
-              as Subset of One-Point_Compactification(X);
+        as Subset of One-Point_Compactification(X);
         take y;
         thus y in GX by A23,A24,A27;
         thus thesis by A23,A24,A27;
-       end;
       end;
-      consider f being Function such that
-A28:     dom f = Gx and rng f c= GX and
-A29:     for x being set st x in Gx holds P[x,f.x] from WELLORD2:sch 1(A22);
-A30:     GX c= rng f
-       proof let y be set;
-        assume y in GX;
-         then consider W being Subset of One-Point_Compactification(X)
-          such that
-A31:        y = W and W in F and
-A32:        ex V being Subset of X st V in Gx &
-             (V in F & not V \/ {[#]X} in F & W = V or
-              V \/ {[#]X} in F & W = V \/ {[#]X});
-         consider V being Subset of X such that
-A33:        V in Gx and
-A34:        V in F & not V \/ {[#]X} in F & W = V or
-           V \/ {[#]X} in F & W = V \/ {[#]X} by A32;
-          f.V in rng f by A28,A33,FUNCT_1:12;
-         hence thesis by A29,A31,A33,A34;
-       end;
-A35:      rng f is finite by A21,A28,FINSET_1:26;
-A36:     GX c= the topology of One-Point_Compactification(X)
-       proof let x be set;
-         assume x in GX;
-          then consider W being Subset of One-Point_Compactification(X)
-           such that
-A37:         x = W and
-A38:         W in F and
-            ex V being Subset of X st V in Gx &
-              (V in F & not V \/ {[#]X} in F & W = V or
-               V \/ {[#]X} in F & W = V \/ {[#]X});
-           W is open by A2,A38,TOPS_2:def 1;
-         hence thesis by A37,PRE_TOPC:def 5;
-       end;
-     reconsider GX as finite Subset-Family of One-Point_Compactification(X)
-        by A30,A35,A36,FINSET_1:13,XBOOLE_1:1;
+    end;
+    consider f being Function such that
+A28: dom f = Gx and rng f c= GX and
+A29: for x being set st x in Gx holds P[x,f.x] from WELLORD2:sch 1(A22);
+A30: GX c= rng f
+    proof
+      let y be set;
+      assume y in GX;
+      then consider W being Subset of One-Point_Compactification(X) such that
+A31:  y = W and W in F and
+A32:  ex V being Subset of X st V in Gx &
+      (V in F & not V \/ {[#]X} in F & W = V or
+      V \/ {[#]X} in F & W = V \/ {[#]X});
+      consider V being Subset of X such that
+A33:  V in Gx and
+A34:  V in F & not V \/ {[#]X} in F & W = V or
+      V \/ {[#]X} in F & W = V \/ {[#]X} by A32;
+      f.V in rng f by A28,A33,FUNCT_1:12;
+      hence thesis by A29,A31,A33,A34;
+    end;
+A35: rng f is finite by A21,A28,FINSET_1:26;
+    GX c= the topology of One-Point_Compactification(X)
+    proof
+      let x be set;
+      assume x in GX;
+      then consider W being Subset of One-Point_Compactification(X) such that
+A36:  x = W and
+A37:  W in F and ex V being Subset of X st V in Gx &
+      (V in F & not V \/ {[#]X} in F & W = V or
+      V \/ {[#]X} in F & W = V \/ {[#]X});
+      W is open by A2,A37,TOPS_2:def 1;
+      hence thesis by A36,PRE_TOPC:def 5;
+    end;
+    then reconsider GX as finite Subset-Family of One-Point_Compactification(X
+    ) by A30,A35,FINSET_1:13,XBOOLE_1:1;
     take G = GX \/ {A};
-A39:   GX c= F
-       proof let P be set;
-        assume P in GX;
-        then ex W being Subset of One-Point_Compactification(X)
-              st P = W & W in F &
-             ex V being Subset of X st V in Gx &
-              (V in F & not V \/ {[#]X} in F & W = V or
-               V \/ {[#]X} in F & W = V \/ {[#]X});
-        hence P in F;
-       end;
-     {A} c= F by A6,ZFMISC_1:37;
-    hence G c= F by A39,XBOOLE_1:8;
-     union G = [#]One-Point_Compactification(X)
-      proof thus union G c= [#]One-Point_Compactification(X);
-       let P be set;
-       assume P in [#]One-Point_Compactification(X);
+A38: GX c= F
+    proof
+      let P be set;
+      assume P in GX;
+      then ex W being Subset of One-Point_Compactification(X)
+      st P = W & W in F & ex V being Subset of X st V in Gx &
+      (V in F & not V \/ {[#]X} in F & W = V or
+      V \/ {[#]X} in F & W = V \/ {[#]X});
+      hence P in F;
+    end;
+    {A} c= F by A6,ZFMISC_1:37;
+    hence G c= F by A38,XBOOLE_1:8;
+    union G = [#]One-Point_Compactification(X)
+    proof thus union G c= [#]One-Point_Compactification(X);
+      let P be set;
+      assume P in [#]One-Point_Compactification(X);
+      then
+A39:  P in succ([#]X) by Def9;
+      per cases by A39,XBOOLE_0:def 2;
+      suppose P in [#]X;
+        then P in U` \/ U by PRE_TOPC:18;
         then
-A40:       P in succ([#]X) by Def9;
-        per cases by A40,XBOOLE_0:def 2;
-        suppose P in [#]X;
-         then P in U` \/ U by PRE_TOPC:18;
-         then
-A41:         P in U` or P in U by XBOOLE_0:def 2;
-         U` c= union Gx by A20,COMPTS_1:def 1;
-         then
-A42:         P in union Gx or P in U by A41;
-          union Gx c= union GX
-           proof let z be set;
-            assume z in union Gx;
-             then consider S being set such that
-A43:           z in S and
-A44:           S in Gx by TARSKI:def 4;
-             S in Fx by A19,A44;
-             then consider Z being Subset of X such that
-A45:           S = Z and Z is open and
-A46:           Z in F & not Z \/ {[#]X} in F or Z \/ {[#]X} in F;
-             per cases by A46;
-             suppose Z in F & not Z \/ {[#]X} in F;
-              then Z in GX by A44,A45;
-              hence z in union GX by A43,A45,TARSKI:def 4;
-             end;
-             suppose
-A47:             Z \/ {[#]X} in F;
-A48:             z in Z \/ {[#]X} by A43,A45,XBOOLE_0:def 2;
-              Z \/ {[#]X} in GX by A44,A45,A47;
-              hence z in union GX by A48,TARSKI:def 4;
-             end;
-           end;
-         then P in union GX or P in A by A8,A42,XBOOLE_0:def 2;
-         then P in union GX or P in union {A} by ZFMISC_1:31;
-         then P in (union GX) \/ (union {A}) by XBOOLE_0:def 2;
-         hence P in union G by ZFMISC_1:96;
+A40:    P in U` or P in U by XBOOLE_0:def 2;
+        U` c= union Gx by A20,COMPTS_1:def 1;
+        then
+A41:    P in union Gx or P in U by A40;
+        union Gx c= union GX
+        proof
+          let z be set;
+          assume z in union Gx;
+          then consider S being set such that
+A42:      z in S and
+A43:      S in Gx by TARSKI:def 4;
+          S in Fx by A19,A43;
+          then consider Z being Subset of X such that
+A44:      S = Z and Z is open and
+A45:      Z in F & not Z \/ {[#]X} in F or Z \/ {[#]X} in F;
+          per cases by A45;
+          suppose Z in F & not Z \/ {[#]X} in F;
+            then Z in GX by A43,A44;
+            hence z in union GX by A42,A44,TARSKI:def 4;
+          end;
+          suppose
+A46:        Z \/ {[#]X} in F;
+A47:        z in Z \/ {[#]X} by A42,A44,XBOOLE_0:def 2;
+            Z \/ {[#]X} in GX by A43,A44,A46;
+            hence z in union GX by A47,TARSKI:def 4;
+          end;
         end;
-        suppose P in {[#]X};
-          then
-A49:         P = [#]X by TARSKI:def 1;
-          A in {A} by TARSKI:def 1;
-          then A in G by XBOOLE_0:def 2;
-         hence P in union G by A5,A49,TARSKI:def 4;
-        end;
+        then P in union GX or P in A by A8,A41,XBOOLE_0:def 2;
+        then P in union GX or P in union {A} by ZFMISC_1:31;
+        then P in (union GX) \/ (union {A}) by XBOOLE_0:def 2;
+        hence P in union G by ZFMISC_1:96;
       end;
+      suppose P in {[#]X};
+        then
+A48:    P = [#]X by TARSKI:def 1;
+        A in {A} by TARSKI:def 1;
+        then A in G by XBOOLE_0:def 2;
+        hence P in union G by A5,A48,TARSKI:def 4;
+      end;
+    end;
     hence G is_a_cover_of One-Point_Compactification(X) by PRE_TOPC:def 8;
     thus G is finite;
   end;
 end;
 
 theorem
-  for X being non empty TopSpace
-   holds X is Hausdorff locally-compact
-          iff One-Point_Compactification(X) is Hausdorff
-proof let X be non empty TopSpace;
+  for X being non empty TopSpace holds X is Hausdorff locally-compact
+  iff One-Point_Compactification(X) is Hausdorff
+proof
+  let X be non empty TopSpace;
   set D = {U \/ {[#]X} where U is Subset of X: U is open & U` is compact};
-A1:  the topology of One-Point_Compactification(X) = (the topology of X) \/ D
-   by Def9;
-A2:  [#]One-Point_Compactification(X) = succ([#]X) by Def9;
-A3:  [#]X c= [#]One-Point_Compactification(X) by Th4;
+A1: the topology of One-Point_Compactification(X) = (the topology of X) \/ D
+  by Def9;
+A2: [#]One-Point_Compactification(X) = succ([#]X) by Def9;
+A3: [#]X c= [#]One-Point_Compactification(X) by Th4;
   thus X is Hausdorff locally-compact
-     implies One-Point_Compactification(X) is Hausdorff
-  proof assume that
-A4:  X is Hausdorff and
-A5:  X is locally-compact;
-  let p, q be Point of One-Point_Compactification(X) such that
-A6:   p <> q;
-  per cases by A2,XBOOLE_0:def 2;
-   suppose p in [#]X & q in [#]X;
-    then consider W, V being Subset of X such that
-A7:      W is open & V is open and
-A8:      p in W & q in V & W misses V by A4,A6,COMPTS_1:def 4;
-     reconsider W,V as Subset of One-Point_Compactification(X)
-         by A3,XBOOLE_1:1;
-     take W,V;
-     W in the topology of X & V in the topology of X by A7,PRE_TOPC:def 5;
-     then W in the topology of One-Point_Compactification(X) &
-          V in the topology of One-Point_Compactification(X)
-       by A1,XBOOLE_0:def 2;
-     hence W is open & V is open by PRE_TOPC:def 5;
-     thus p in W & q in V & W misses V by A8;
-   end;
-   suppose that
+  implies One-Point_Compactification(X) is Hausdorff
+  proof
+    assume that
+A4: X is Hausdorff and
+A5: X is locally-compact;
+    let p, q be Point of One-Point_Compactification(X) such that
+A6: p <> q;
+    per cases by A2,XBOOLE_0:def 2;
+    suppose p in [#]X & q in [#]X;
+      then consider W, V being Subset of X such that
+A7:   W is open & V is open and
+A8:   p in W & q in V & W misses V by A4,A6,COMPTS_1:def 4;
+      reconsider W,V as Subset of One-Point_Compactification(X)
+      by A3,XBOOLE_1:1;
+      take W,V;
+      W in the topology of X & V in the topology of X by A7,PRE_TOPC:def 5;
+      then W in the topology of One-Point_Compactification(X) &
+      V in the topology of One-Point_Compactification(X) by A1,XBOOLE_0:def 2;
+      hence W is open & V is open by PRE_TOPC:def 5;
+      thus p in W & q in V & W misses V by A8;
+    end;
+    suppose that
 A9:   p in [#]X and
-A10:   q in {[#]X};
-     reconsider px = p as Point of X by A9;
-       consider P being a_neighborhood of px such that
-A11:       P is compact by A5,Def6;
-       [#]X c= [#]One-Point_Compactification(X) by A2,XBOOLE_1:7;
-       then reconsider W = Int P as Subset of One-Point_Compactification(X)
-         by XBOOLE_1:1;
-A12:     P`` = P;
-       P is closed by A4,A11,COMPTS_1:16;
-       then P` is open by TOPS_1:29;
-       then P` \/ {[#]X} in D by A11,A12;
-       then
-A13:       P` \/ {[#]X} in the topology of One-Point_Compactification(X)
-            by A1,XBOOLE_0:def 2;
-       then
-       reconsider V = P`\/{[#]X} as Subset of One-Point_Compactification(X);
-       take W,V;
-       W in the topology of X by PRE_TOPC:def 5;
-       then W in the topology of One-Point_Compactification(X)
-          by A1,XBOOLE_0:def 2;
-       hence W is open by PRE_TOPC:def 5;
-       thus V is open by A13,PRE_TOPC:def 5;
-       thus p in W by CONNSP_2:def 1;
-       thus q in V by A10,XBOOLE_0:def 2;
-       Int P c= [#]X & not [#]X in [#]X;
-       then not [#]X in Int P;
-       then
-A14:       Int P misses {[#]X} by ZFMISC_1:56;
-       Int P c= P by TOPS_1:44;
-       then Int P misses P` by SUBSET_1:44;
-       hence W misses V by A14,XBOOLE_1:70;
-   end;
-   suppose that
-A15:    q in [#]X and
-A16:    p in {[#]X};
-     reconsider qx = q as Point of X by A15;
+A10:  q in {[#]X};
+      reconsider px = p as Point of X by A9;
+      consider P being a_neighborhood of px such that
+A11:  P is compact by A5,Def6;
+      [#]X c= [#]One-Point_Compactification(X) by A2,XBOOLE_1:7;
+      then reconsider W = Int P as Subset of One-Point_Compactification(X)
+      by XBOOLE_1:1;
+A12:  P`` = P;
+      P is closed by A4,A11,COMPTS_1:16;
+      then P` is open by TOPS_1:29;
+      then P` \/ {[#]X} in D by A11,A12;
+      then
+A13:  P` \/ {[#]X} in the topology of One-Point_Compactification(X)
+      by A1,XBOOLE_0:def 2;
+      then reconsider V = P`\/{[#]X} as Subset of One-Point_Compactification(X
+      );
+      take W,V;
+      W in the topology of X by PRE_TOPC:def 5;
+      then W in the topology of One-Point_Compactification(X)
+      by A1,XBOOLE_0:def 2;
+      hence W is open by PRE_TOPC:def 5;
+      thus V is open by A13,PRE_TOPC:def 5;
+      thus p in W by CONNSP_2:def 1;
+      thus q in V by A10,XBOOLE_0:def 2;
+      Int P c= [#]X & not [#]X in [#]X;
+      then not [#]X in Int P;
+      then
+A14:  Int P misses {[#]X} by ZFMISC_1:56;
+      Int P c= P by TOPS_1:44;
+      then Int P misses P` by SUBSET_1:44;
+      hence W misses V by A14,XBOOLE_1:70;
+    end;
+    suppose that
+A15:  q in [#]X and
+A16:  p in {[#]X};
+      reconsider qx = q as Point of X by A15;
       consider Q being a_neighborhood of qx such that
-A17:       Q is compact by A5,Def6;
-       [#]X c= [#]One-Point_Compactification(X) by Th4;
-       then reconsider W = Int Q as Subset of One-Point_Compactification(X)
-         by XBOOLE_1:1;
-A18:     Q`` = Q;
-       Q is closed by A4,A17,COMPTS_1:16;
-       then Q` is open by TOPS_1:29;
-       then Q` \/ {[#]X} in D by A17,A18;
-       then
-A19:       Q` \/ {[#]X} in the topology of One-Point_Compactification(X)
-           by A1,XBOOLE_0:def 2;
-       then
-       reconsider V = Q`\/{[#]X} as Subset of One-Point_Compactification(X);
-       take V,W;
-       thus V is open by A19,PRE_TOPC:def 5;
-       W in the topology of X by PRE_TOPC:def 5;
-       then W in the topology of One-Point_Compactification(X)
-         by A1,XBOOLE_0:def 2;
-       hence W is open by PRE_TOPC:def 5;
-       thus p in V by A16,XBOOLE_0:def 2;
-       thus q in W by CONNSP_2:def 1;
-       Int Q c= [#]X & not [#]X in [#]X;
-       then not [#]X in Int Q;
-       then
-A20:       Int Q misses {[#]X} by ZFMISC_1:56;
-       Int Q c= Q by TOPS_1:44;
-       then Int Q misses Q` by SUBSET_1:44;
-       hence V misses W by A20,XBOOLE_1:70;
-   end;
-   suppose p in {[#]X} & q in {[#]X};
-    then p = [#]X & q = [#]X by TARSKI:def 1;
-    hence thesis by A6;
-   end;
+A17:  Q is compact by A5,Def6;
+      [#]X c= [#]One-Point_Compactification(X) by Th4;
+      then reconsider W = Int Q as Subset of One-Point_Compactification(X)
+      by XBOOLE_1:1;
+A18:  Q`` = Q;
+      Q is closed by A4,A17,COMPTS_1:16;
+      then Q` is open by TOPS_1:29;
+      then Q` \/ {[#]X} in D by A17,A18;
+      then
+A19:  Q` \/ {[#]X} in the topology of One-Point_Compactification(X)
+      by A1,XBOOLE_0:def 2;
+      then reconsider V = Q`\/{[#]X} as Subset of One-Point_Compactification(X
+      );
+      take V,W;
+      thus V is open by A19,PRE_TOPC:def 5;
+      W in the topology of X by PRE_TOPC:def 5;
+      then W in the topology of One-Point_Compactification(X)
+      by A1,XBOOLE_0:def 2;
+      hence W is open by PRE_TOPC:def 5;
+      thus p in V by A16,XBOOLE_0:def 2;
+      thus q in W by CONNSP_2:def 1;
+      Int Q c= [#]X & not [#]X in [#]X;
+      then not [#]X in Int Q;
+      then
+A20:  Int Q misses {[#]X} by ZFMISC_1:56;
+      Int Q c= Q by TOPS_1:44;
+      then Int Q misses Q` by SUBSET_1:44;
+      hence V misses W by A20,XBOOLE_1:70;
+    end;
+    suppose p in {[#]X} & q in {[#]X};
+      then p = [#]X & q = [#]X by TARSKI:def 1;
+      hence thesis by A6;
+    end;
   end;
- assume
-A21:  One-Point_Compactification(X) is Hausdorff;
-A22:  X is SubSpace of One-Point_Compactification(X) by Th5;
- hence X is Hausdorff by A21,TOPMETR:3;
- let x be Point of X;
- x in [#]X;
- then reconsider p = x as Point of One-Point_Compactification(X) by A3;
- [#]X in {[#]X} by TARSKI:def 1;
- then reconsider q = [#]X as Point of One-Point_Compactification(X)
-   by A2,XBOOLE_0:def 2;
+  assume
+A21: One-Point_Compactification(X) is Hausdorff;
+A22: X is SubSpace of One-Point_Compactification(X) by Th5;
+  hence X is Hausdorff by A21,TOPMETR:3;
+  let x be Point of X;
+  x in [#]X;
+  then reconsider p = x as Point of One-Point_Compactification(X) by A3;
+  [#]X in {[#]X} by TARSKI:def 1;
+  then reconsider q = [#]X as Point of One-Point_Compactification(X)
+  by A2,XBOOLE_0:def 2;
   not [#]X in [#]X;
- then p <> q;
- then consider V, U being Subset of One-Point_Compactification(X) such that
-A23:   V is open and
-A24:   U is open and
-A25:   p in V and
-A26:   q in U and
-A27:   V misses U by A21,COMPTS_1:def 4;
-A28:   U in the topology of One-Point_Compactification(X) by A24,PRE_TOPC:def 5
-;
-   now assume U in the topology of X;
+  then p <> q;
+  then consider V, U being Subset of One-Point_Compactification(X) such that
+A23: V is open and
+A24: U is open and
+A25: p in V and
+A26: q in U and
+A27: V misses U by A21,COMPTS_1:def 4;
+A28: U in the topology of One-Point_Compactification(X) by A24,PRE_TOPC:def 5;
+  now
+    assume U in the topology of X;
     then q in [#]X by A26;
     hence contradiction;
-   end;
-   then U in D by A1,A28,XBOOLE_0:def 2;
-   then consider W being Subset of X such that
-A29:   U = W \/ {[#]X} and W is open and
-A30:   W` is compact;
-A31:   V c= U` by A27,SUBSET_1:43;
-A32:   [#]X in {[#]X} by TARSKI:def 1;
-   then
-A33:   [#]X in U by A29,XBOOLE_0:def 2;
-A34:   not [#]X in [#]X;
-A35:   [#]X \ U = ([#]X \ W) /\ ([#]X \ {[#]X}) by A29,XBOOLE_1:53
-              .= ([#]X \ W) /\ [#]X by A34,ZFMISC_1:65
-              .= [#]X \ W by XBOOLE_1:28;
-A36:   [#]One-Point_Compactification(X) \ U = ([#]X \ U) \/ ({[#]X} \ U)
-                     by A2,XBOOLE_1:42
-                 .= ([#]X \ W ) \/ {} by A33,A35,ZFMISC_1:68
-                 .= W`;
-    then
-A37:   V c= [#]X by A31,XBOOLE_1:1;
-A38:   now assume V in D;
-       then ex S being Subset of X st V = S \/ {[#]X} &
-         S is open & S` is compact;
-        then [#]X in V by A32,XBOOLE_0:def 2;
-        then [#]X in [#]X by A37;
-        hence contradiction;
-      end;
-   V in the topology of One-Point_Compactification(X) by A23,PRE_TOPC:def 5;
-   then V in the topology of X by A1,A38,XBOOLE_0:def 2;
-   then reconsider Vx = V as open Subset of X by PRE_TOPC:def 5;
-   set K = Cl Vx;
-A39:   U` /\ [#]X = W` by A36,XBOOLE_1:28;
-   U` is closed by A24,TOPS_1:30;
-   then W` is closed by A22,A39,PRE_TOPC:43;
-   then
-A40:  K c= W` by A31,A36,TOPS_1:31;
-A41:  x in Int Vx by A25,TOPS_1:55;
-   Vx c= K by PRE_TOPC:48;
-   then Int Vx c= Int K  by TOPS_1:48;
-   then reconsider K as a_neighborhood of x by A41,CONNSP_2:def 1;
-   take K;
-   thus K is compact by A30,A40,COMPTS_1:18;
+  end;
+  then U in D by A1,A28,XBOOLE_0:def 2;
+  then consider W being Subset of X such that
+A29: U = W \/ {[#]X} and W is open and
+A30: W` is compact;
+A31: V c= U` by A27,SUBSET_1:43;
+A32: [#]X in {[#]X} by TARSKI:def 1;
+  then
+A33: [#]X in U by A29,XBOOLE_0:def 2;
+A34: not [#]X in [#]X;
+A35: [#]X \ U = ([#]X \ W) /\ ([#]X \ {[#]X}) by A29,XBOOLE_1:53
+    .= ([#]X \ W) /\ [#]X by A34,ZFMISC_1:65
+    .= [#]X \ W by XBOOLE_1:28;
+A36: [#]One-Point_Compactification(X) \ U = ([#]X \ U) \/ ({[#]X} \ U)
+  by A2,XBOOLE_1:42
+    .= ([#]X \ W ) \/ {} by A33,A35,ZFMISC_1:68
+    .= W`;
+  then
+A37: V c= [#]X by A31,XBOOLE_1:1;
+A38: now
+    assume V in D;
+    then ex S being Subset of X st V = S \/ {[#]X} &
+    S is open & S` is compact;
+    then [#]X in V by A32,XBOOLE_0:def 2;
+    then [#]X in [#]X by A37;
+    hence contradiction;
+  end;
+  V in the topology of One-Point_Compactification(X) by A23,PRE_TOPC:def 5;
+  then V in the topology of X by A1,A38,XBOOLE_0:def 2;
+  then reconsider Vx = V as open Subset of X by PRE_TOPC:def 5;
+  set K = Cl Vx;
+A39: U` /\ [#]X = W` by A36,XBOOLE_1:28;
+  U` is closed by A24,TOPS_1:30;
+  then
+A40: W` is closed by A22,A39,PRE_TOPC:43;
+A41: x in Int Vx by A25,TOPS_1:55;
+  Int Vx c= Int K by PRE_TOPC:48,TOPS_1:48;
+  then reconsider K as a_neighborhood of x by A41,CONNSP_2:def 1;
+  take K;
+  thus K is compact by A30,A31,A36,A40,COMPTS_1:18,TOPS_1:31;
 end;
 
 theorem Th7:
-  for X being non empty TopSpace
-   holds X is non compact iff
-    ex X' being Subset of One-Point_Compactification(X)
-       st X' = [#]X & X' is dense
-proof let X be non empty TopSpace;
- set D = {U \/ {[#]X} where U is Subset of X: U is open & U` is compact};
-A1:  the topology of One-Point_Compactification(X) = (the topology of X) \/ D
-      by Def9;
-A2:  [#]X in {[#]X} by TARSKI:def 1;
-A3:  [#]One-Point_Compactification(X) = succ([#]X) by Def9;
- thus X is non compact implies
-    ex X' being Subset of One-Point_Compactification(X)
-      st X' = [#]X & X' is dense
-  proof assume X is non compact;
-   then
-A4:  [#]X is non compact by COMPTS_1:10;
-   [#]X c= [#]One-Point_Compactification(X) by Th4;
-   then reconsider X' = [#]X as Subset of One-Point_Compactification(X);
-  take X';
-  thus X' = [#]X;
-  thus Cl(X') c= [#]One-Point_Compactification(X);
-A5:  [#]X c= Cl(X') by PRE_TOPC:48;
-  then
-A6:  [#]One-Point_Compactification(X) c= Cl(X') \/ {[#]X} by A3,XBOOLE_1:9;
-  now assume
-A7:  not [#]X in Cl(X');
-   reconsider Xe = [#]X as Element of One-Point_Compactification(X)
-     by A2,A3,XBOOLE_0:def 2;
-   reconsider XX = {Xe} as Subset of One-Point_Compactification(X);
-    [#]One-Point_Compactification(X) \ Cl(X')
-       = ([#]X \ Cl(X')) \/ ({[#]X} \ Cl(X')) by A3,XBOOLE_1:42
-       .= {} \/ ({[#]X} \ Cl(X')) by A5,XBOOLE_1:37
-       .= XX by A7,ZFMISC_1:67;
-   then
+  for X being non empty TopSpace holds X is non compact iff
+  ex X' being Subset of One-Point_Compactification(X)
+  st X' = [#]X & X' is dense
+proof
+  let X be non empty TopSpace;
+  set D = {U \/ {[#]X} where U is Subset of X: U is open & U` is compact};
+A1: the topology of One-Point_Compactification(X) = (the topology of X) \/ D
+  by Def9;
+A2: [#]X in {[#]X} by TARSKI:def 1;
+A3: [#]One-Point_Compactification(X) = succ([#]X) by Def9;
+  thus X is non compact implies
+  ex X' being Subset of One-Point_Compactification(X)
+  st X' = [#]X & X' is dense
+  proof
+    assume X is non compact;
+    then
+A4: [#]X is non compact by COMPTS_1:10;
+    [#]X c= [#]One-Point_Compactification(X) by Th4;
+    then reconsider X' = [#]X as Subset of One-Point_Compactification(X);
+    take X';
+    thus X' = [#]X;
+    thus Cl(X') c= [#]One-Point_Compactification(X);
+A5: [#]X c= Cl(X') by PRE_TOPC:48;
+A6: [#]One-Point_Compactification(X) c= Cl(X') \/ {[#]X} by A3,PRE_TOPC:48,
+    XBOOLE_1:9;
+    now
+      assume
+A7:   not [#]X in Cl(X');
+      reconsider Xe = [#]X as Element of One-Point_Compactification(X)
+      by A2,A3,XBOOLE_0:def 2;
+      reconsider XX = {Xe} as Subset of One-Point_Compactification(X);
+      [#]One-Point_Compactification(X) \ Cl(X')
+      = ([#]X \ Cl(X')) \/ ({[#]X} \ Cl(X')) by A3,XBOOLE_1:42
+        .= {} \/ ({[#]X} \ Cl(X')) by A5,XBOOLE_1:37
+        .= XX by A7,ZFMISC_1:67;
+      then
 A8:   XX is open by PRE_TOPC:def 6;
-A9:   now assume XX in the topology of X;
-       then [#]X in [#]X by A2;
-       hence contradiction;
+A9:   now
+        assume XX in the topology of X;
+        then [#]X in [#]X by A2;
+        hence contradiction;
       end;
-   XX in the topology of One-Point_Compactification(X) by A8,PRE_TOPC:def 5;
-   then XX in D by A1,A9,XBOOLE_0:def 2;
-   then consider U being Subset of X such that
-A10:     XX = U \/ {[#]X} and U is open and
-A11:     U` is compact;
-   now assume U = XX;
-     then [#]X in [#]X by A2;
-     hence contradiction;
-   end;
-   then U = {}X by A10,ZFMISC_1:43;
-   hence contradiction by A4,A11;
+      XX in the topology of One-Point_Compactification(X) by A8,PRE_TOPC:def 5;
+      then XX in D by A1,A9,XBOOLE_0:def 2;
+      then consider U being Subset of X such that
+A10:  XX = U \/ {[#]X} and U is open and
+A11:  U` is compact;
+      now
+        assume U = XX;
+        then [#]X in [#]X by A2;
+        hence contradiction;
+      end;
+      then U = {}X by A10,ZFMISC_1:43;
+      hence contradiction by A4,A11;
+    end;
+    hence [#]One-Point_Compactification(X) c= Cl(X') by A6,ZFMISC_1:46;
   end;
-  hence [#]One-Point_Compactification(X) c= Cl(X') by A6,ZFMISC_1:46;
- end;
- given X' being Subset of One-Point_Compactification(X) such that
-A12:  X' = [#]X and
-A13:  X' is dense;
+  given X' being Subset of One-Point_Compactification(X) such that
+A12: X' = [#]X and
+A13: X' is dense;
 A14: Cl X'= [#]One-Point_Compactification(X) by A13,TOPS_1:def 3;
- assume X is compact;
+  assume X is compact;
   then [#]X is compact by COMPTS_1:10;
   then ({}X)` is compact;
   then {}X \/ {[#]X} in D;
   then
-A15:  {[#]X} in the topology of One-Point_Compactification(X)
-   by A1,XBOOLE_0:def 2;
+A15: {[#]X} in the topology of One-Point_Compactification(X)
+  by A1,XBOOLE_0:def 2;
   then reconsider X1 = {[#]X} as Subset of One-Point_Compactification(X);
   X1 is open by A15,PRE_TOPC:def 5;
   then X1` is closed by TOPS_1:30;
   then
-A16:  (Cl X1`) = X1` by PRE_TOPC:52;
-A17:   not [#]X in [#]X;
-A18:   X1` = [#]X \ X1 by A3,XBOOLE_1:40
-         .= [#]X by A17,ZFMISC_1:65;
+A16: (Cl X1`) = X1` by PRE_TOPC:52;
+A17: not [#]X in [#]X;
+A18: X1` = [#]X \ X1 by A3,XBOOLE_1:40
+    .= [#]X by A17,ZFMISC_1:65;
   [#]X in [#]One-Point_Compactification(X) by A2,A3,XBOOLE_0:def 2;
   hence contradiction by A12,A14,A16,A18;
 end;
 
 theorem
   for X being non empty TopSpace st X is non compact
-   holds incl(X,One-Point_Compactification X) is compactification
-proof let X be non empty TopSpace;
+  holds incl(X,One-Point_Compactification X) is compactification
+proof
+  let X be non empty TopSpace;
   assume
-A1:  X is non compact;
+A1: X is non compact;
   set h = incl(X,One-Point_Compactification X);
-A2:  [#]X c= [#](One-Point_Compactification X) by Th4;
+A2: [#]X c= [#](One-Point_Compactification X) by Th4;
   then reconsider Xy = [#]X as Subset of One-Point_Compactification(X);
   set D = {U \/ {[#]X} where U is Subset of X: U is open & U` is compact};
-A3:  the topology of One-Point_Compactification(X) = (the topology of X) \/ D
-      by Def9;
-A4:  [#]((One-Point_Compactification X) | Xy) = Xy by PRE_TOPC:def 10;
+A3: the topology of One-Point_Compactification(X) = (the topology of X) \/ D
+  by Def9;
+A4: [#]((One-Point_Compactification X) | Xy) = Xy by PRE_TOPC:def 10;
   the topology of (One-Point_Compactification X) | Xy = the topology of X
-   proof
+  proof
     thus the topology of (One-Point_Compactification X) |Xy
-           c= the topology of X
-     proof let x be set;
+    c= the topology of X
+    proof
+      let x be set;
       assume
-A5:      x in the topology of (One-Point_Compactification X) | Xy;
+A5:   x in the topology of (One-Point_Compactification X) | Xy;
       then reconsider P = x as Subset of (One-Point_Compactification X) | Xy;
       consider Q being Subset of One-Point_Compactification(X) such that
-A6:     Q in the topology of One-Point_Compactification(X) and
-A7:     P = Q /\ [#]((One-Point_Compactification X) | Xy) by A5,PRE_TOPC:def 9;
+A6:   Q in the topology of One-Point_Compactification(X) and
+A7:   P = Q /\ [#]((One-Point_Compactification X) | Xy) by A5,PRE_TOPC:def 9;
       per cases by A3,A6,XBOOLE_0:def 2;
       suppose Q in the topology of X;
-       hence x in the topology of X by A4,A7,XBOOLE_1:28;
+        hence x in the topology of X by A4,A7,XBOOLE_1:28;
       end;
       suppose Q in D;
-       then consider U being Subset of X such that
-A8:       Q = U \/ {[#]X} and
-A9:       U is open and U` is compact;
-       not [#]X in [#]X;
-       then {[#]X} misses [#]X by ZFMISC_1:56;
-       then {[#]X} /\ [#]X = {} by XBOOLE_0:def 7;
-       then P = (U /\ [#]X) \/ {} by A4,A7,A8,XBOOLE_1:23
-              .= U by XBOOLE_1:28;
-       hence x in the topology of X by A9,PRE_TOPC:def 5;
+        then consider U being Subset of X such that
+A8:     Q = U \/ {[#]X} and
+A9:     U is open and U` is compact;
+        not [#]X in [#]X;
+        then {[#]X} misses [#]X by ZFMISC_1:56;
+        then {[#]X} /\ [#]X = {} by XBOOLE_0:def 7;
+        then P = (U /\ [#]X) \/ {} by A4,A7,A8,XBOOLE_1:23
+          .= U by XBOOLE_1:28;
+        hence x in the topology of X by A9,PRE_TOPC:def 5;
       end;
-     end;
+    end;
     let x be set;
     assume
-A10:     x in the topology of X;
+A10: x in the topology of X;
     then reconsider P = x as Subset of (One-Point_Compactification X) | Xy
-      by A4;
+    by A4;
     reconsider Q = P as Subset of One-Point_Compactification(X)
-     by A4,XBOOLE_1:1;
-A11:    Q in the topology of One-Point_Compactification(X)
-         by A3,A10,XBOOLE_0:def 2;
+    by A4,XBOOLE_1:1;
+A11: Q in the topology of One-Point_Compactification(X)
+    by A3,A10,XBOOLE_0:def 2;
     P = Q /\ [#]((One-Point_Compactification X) | Xy) by XBOOLE_1:28;
     hence x in the topology of (One-Point_Compactification X) | Xy
-      by A11,PRE_TOPC:def 9;
-   end;
+    by A11,PRE_TOPC:def 9;
+  end;
   hence h is embedding by A2,Th3;
   thus One-Point_Compactification(X) is compact;
   ex X' being Subset of One-Point_Compactification(X)
-   st X' = [#]X & X' is dense by A1,Th7;
+  st X' = [#]X & X' is dense by A1,Th7;
   hence thesis by A2,Th2;
 end;
+

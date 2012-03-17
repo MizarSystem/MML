@@ -25,27 +25,27 @@ environ
 
 begin :: Preliminaries
 
- reserve X for RealUnitarySpace;
- reserve x for Point of X;
- reserve i, n for Element of NAT;
+reserve X for RealUnitarySpace;
+reserve x for Point of X;
+reserve i, n for Element of NAT;
 
 definition
   let X such that
-   the addF of X is commutative associative & the addF of X has_a_unity;
+ the addF of X is commutative associative & the addF of X has_a_unity;
   let Y be finite Subset of X;
   func setsum Y -> Element of X means
 :: BHSP_6:def 1
+
   ex p being FinSequence of the carrier of X st
-    p is one-to-one & rng p = Y & it = (the addF of X) "**" p;
+  p is one-to-one & rng p = Y & it = (the addF of X) "**" p;
 end;
 
 theorem :: BHSP_6:1
   for X st the addF of X is commutative associative & the addF of X has_a_unity
   for Y be finite Subset of X
   for I be Function of the carrier of X,the carrier of X st
-    Y c= dom I & for x be set st x in dom I holds I.x = x holds
-  setsum(Y)
-    = setopfunc(Y, the carrier of X, the carrier of X, I, the addF of X);
+  Y c= dom I & for x be set st x in dom I holds I.x = x holds setsum(Y)
+  = setopfunc(Y, the carrier of X, the carrier of X, I, the addF of X);
 
 theorem :: BHSP_6:2
   for X st the addF of X is commutative associative & the addF of X has_a_unity
@@ -55,86 +55,92 @@ theorem :: BHSP_6:2
 
 begin :: Summability
 
-definition let X;
+definition
+  let X;
   let Y be Subset of X;
   attr Y is summable_set means
 :: BHSP_6:def 2
-  ex x st
-    for e be Real st e > 0 ex Y0 be finite Subset of X st
-    Y0 is non empty & Y0 c= Y &
-    for Y1 be finite Subset of X st Y0 c= Y1 & Y1 c= Y
-      holds ||.x-setsum(Y1).|| < e;
-end;
 
-definition let X;
-  let Y be Subset of X;
-  assume Y is summable_set;
-  func sum Y -> Point of X means
-:: BHSP_6:def 3
-      for e be Real st e > 0 ex Y0 be finite Subset of X st
+  ex x st
+  for e be Real st e > 0 ex Y0 be finite Subset of X st
   Y0 is non empty & Y0 c= Y &
   for Y1 be finite Subset of X st Y0 c= Y1 & Y1 c= Y
-    holds ||.it-setsum(Y1).|| < e;
+  holds ||.x-setsum(Y1).|| < e;
 end;
 
-definition let X;
-           let L be linear-Functional of X;
+definition
+  let X;
+  let Y be Subset of X;
+  assume
+ Y is summable_set;
+  func sum Y -> Point of X means
+:: BHSP_6:def 3
+  for e be Real st e > 0 ex Y0 be finite Subset of X st
+  Y0 is non empty & Y0 c= Y &
+  for Y1 be finite Subset of X st Y0 c= Y1 & Y1 c= Y
+  holds ||.it-setsum(Y1).|| < e;
+end;
+
+definition
+  let X;
+  let L be linear-Functional of X;
   attr L is Bounded means
 :: BHSP_6:def 4
+
   ex K be Real st K > 0 &
   for x holds abs(L.x) <= K * ||.x.||;
 end;
 
-definition let X;
-           let Y be Subset of X;
+definition
+  let X;
+  let Y be Subset of X;
   attr Y is weakly_summable_set means
 :: BHSP_6:def 5
+
   ex x st
-  for L be linear-Functional of X st L is Bounded
-  for e be Real st e > 0
-  ex Y0 be finite Subset of X st
-  Y0 is non empty & Y0 c= Y &
+  for L be linear-Functional of X st L is Bounded for e be Real st e > 0
+  ex Y0 be finite Subset of X st Y0 is non empty & Y0 c= Y &
   for Y1 be finite Subset of X st Y0 c= Y1 & Y1 c= Y
   holds abs(L.(x-setsum(Y1))) < e;
 end;
 
-definition let X;
-           let Y be Subset of X;
-           let L be Functional of X;
+definition
+  let X;
+  let Y be Subset of X;
+  let L be Functional of X;
   pred Y is_summable_set_by L means
 :: BHSP_6:def 6
+
   ex r be Real st
-    for e be Real st e > 0
-    ex Y0 be finite Subset of X st
-    Y0 is non empty & Y0 c= Y &
-    for Y1 be finite Subset of X st Y0 c= Y1 & Y1 c= Y
-      holds
-    abs(r-setopfunc(Y1,the carrier of X,REAL, L, addreal)) < e;
+  for e be Real st e > 0 ex Y0 be finite Subset of X st
+  Y0 is non empty & Y0 c= Y &
+  for Y1 be finite Subset of X st Y0 c= Y1 & Y1 c= Y holds
+  abs(r-setopfunc(Y1,the carrier of X,REAL, L, addreal)) < e;
 end;
 
-definition let X;
-           let Y be Subset of X;
-           let L be Functional of X;
-  assume Y is_summable_set_by L;
+definition
+  let X;
+  let Y be Subset of X;
+  let L be Functional of X;
+  assume
+ Y is_summable_set_by L;
   func sum_byfunc(Y,L) -> Real means
 :: BHSP_6:def 7
-      for e be Real st e > 0
-    ex Y0 be finite Subset of X st
-    Y0 is non empty & Y0 c= Y &
-    for Y1 be finite Subset of X st Y0 c= Y1 & Y1 c= Y
-      holds
-    abs(it-setopfunc(Y1,the carrier of X,REAL, L, addreal)) < e;
+
+  for e be Real st e > 0
+  ex Y0 be finite Subset of X st Y0 is non empty & Y0 c= Y &
+  for Y1 be finite Subset of X st Y0 c= Y1 & Y1 c= Y holds
+  abs(it-setopfunc(Y1,the carrier of X,REAL, L, addreal)) < e;
 end;
 
 theorem :: BHSP_6:3
-  for Y be Subset of X st Y is summable_set holds
-  Y is weakly_summable_set;
+  for Y be Subset of X st Y is summable_set holds Y is weakly_summable_set;
 
 theorem :: BHSP_6:4
   for L be linear-Functional of X
   for p be FinSequence of the carrier of X st len p >=1
   for q be FinSequence of REAL st dom p = dom q &
-      (for i st i in dom q holds q.i = L.(p.i) )
+  (for i st i in dom q holds q.i = L.(p.i) )
   holds L.((the addF of X) "**" p) = addreal "**" q;
 
 theorem :: BHSP_6:5
@@ -145,43 +151,33 @@ theorem :: BHSP_6:5
 
 theorem :: BHSP_6:6
   for X st the addF of X is commutative associative & the addF of X has_a_unity
-  for Y be Subset of X holds
-  Y is weakly_summable_set implies
-  ex x st
-    for L be linear-Functional of X st L is Bounded
-    for e be Real st e > 0
-    ex Y0 be finite Subset of X st
-    Y0 is non empty & Y0 c= Y &
-    for Y1 be finite Subset of X st Y0 c= Y1 & Y1 c= Y
-    holds abs((L.x)-(setopfunc(Y1,the carrier of X,REAL, L, addreal))) < e;
+  for Y be Subset of X holds Y is weakly_summable_set implies ex x st
+  for L be linear-Functional of X st L is Bounded for e be Real st e > 0
+  ex Y0 be finite Subset of X st Y0 is non empty & Y0 c= Y &
+  for Y1 be finite Subset of X st Y0 c= Y1 & Y1 c= Y
+  holds abs((L.x)-(setopfunc(Y1,the carrier of X,REAL, L, addreal))) < e;
 
 theorem :: BHSP_6:7
   for X st the addF of X is commutative associative & the addF of X has_a_unity
   for Y be Subset of X st Y is weakly_summable_set
-  for L be linear-Functional of X st L is Bounded holds
-  Y is_summable_set_by L;
+  for L be linear-Functional of X st L is Bounded holds Y is_summable_set_by L;
 
 theorem :: BHSP_6:8
-      for X st the addF of X is commutative associative & the addF of X
-has_a_unity
-  for Y be Subset of X st Y is summable_set
+  for X st the addF of X is commutative associative & the addF of X
+  has_a_unity for Y be Subset of X st Y is summable_set
   for L be linear-Functional of X st L is Bounded holds
   Y is_summable_set_by L;
 
 theorem :: BHSP_6:9
-      for Y be finite Subset of X st Y is non empty holds
-  Y is summable_set;
+  for Y be finite Subset of X st Y is non empty holds Y is summable_set;
 
 begin :: Necessary and sufficient condition for summability
 
 theorem :: BHSP_6:10
-      for X st
-    the addF of X is commutative associative &
-    the addF of X has_a_unity & X is_Hilbert_space
+  for X st the addF of X is commutative associative &
+  the addF of X has_a_unity & X is_Hilbert_space
   for Y be Subset of X holds Y is summable_set iff
-  (for e be Real st e > 0 holds
-  ex Y0 be finite Subset of X st
-    Y0 is non empty & Y0 c= Y &
-    (for Y1 be finite Subset of X st
-        Y1 is non empty & Y1 c= Y & Y0 misses Y1
-        holds ||.setsum(Y1).|| < e));
+  (for e be Real st e > 0 holds ex Y0 be finite Subset of X st
+  Y0 is non empty & Y0 c= Y & (for Y1 be finite Subset of X st
+  Y1 is non empty & Y1 c= Y & Y0 misses Y1 holds ||.setsum(Y1).|| < e));
+

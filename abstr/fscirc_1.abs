@@ -24,213 +24,203 @@ begin :: Bit Subtract and Borrow Circuit
 reserve x,y,c for set;
 
 definition
- let x,y,c be set;
- func BitSubtracterOutput(x,y,c) ->
-      Element of InnerVertices 2GatesCircStr(x,y,c, 'xor') equals
+  let x,y,c be set;
+  func BitSubtracterOutput(x,y,c) ->
+  Element of InnerVertices 2GatesCircStr(x,y,c, 'xor') equals
 :: FSCIRC_1:def 1
-    2GatesCircOutput(x,y,c, 'xor');
+  2GatesCircOutput(x,y,c, 'xor');
 end;
 
 definition
- let x,y,c be set;
- func BitSubtracterCirc(x,y,c) ->
-      strict Boolean gate`2=den Circuit of 2GatesCircStr(x,y,c, 'xor') equals
+  let x,y,c be set;
+  func BitSubtracterCirc(x,y,c) ->
+  strict Boolean gate`2=den Circuit of 2GatesCircStr(x,y,c, 'xor') equals
 :: FSCIRC_1:def 2
-    2GatesCircuit(x,y,c, 'xor');
+  2GatesCircuit(x,y,c, 'xor');
 end;
 
 definition
- let x,y,c be set;
- func BorrowIStr(x,y,c) ->
-    unsplit gate`1=arity gate`2isBoolean
-    non void strict non empty ManySortedSign equals
+  let x,y,c be set;
+  func BorrowIStr(x,y,c) -> unsplit gate`1=arity gate`2isBoolean
+  non void strict non empty ManySortedSign equals
 :: FSCIRC_1:def 3
-    1GateCircStr(<*x,y*>, and2a) +* 1GateCircStr(<*y,c*>, and2) +*
-       1GateCircStr(<*x,c*>, and2a);
+  1GateCircStr(<*x,y*>, and2a) +* 1GateCircStr(<*y,c*>, and2) +*
+  1GateCircStr(<*x,c*>, and2a);
 end;
 
 definition
- let x,y,c be set;
- func BorrowStr(x,y,c) ->
-    unsplit gate`1=arity gate`2isBoolean
-    non void strict non empty ManySortedSign equals
+  let x,y,c be set;
+  func BorrowStr(x,y,c) -> unsplit gate`1=arity gate`2isBoolean
+  non void strict non empty ManySortedSign equals
 :: FSCIRC_1:def 4
-    BorrowIStr(x,y,c) +*
-    1GateCircStr(<*[<*x,y*>, and2a], [<*y,c*>, and2], [<*x,c*>, and2a]*>, or3);
+
+  BorrowIStr(x,y,c) +*
+  1GateCircStr(<*[<*x,y*>, and2a], [<*y,c*>, and2], [<*x,c*>, and2a]*>, or3);
 end;
 
 definition
- let x,y,c be set;
- func BorrowICirc(x,y,c) ->
-      strict Boolean gate`2=den Circuit of BorrowIStr(x,y,c) equals
+  let x,y,c be set;
+  func BorrowICirc(x,y,c) ->
+  strict Boolean gate`2=den Circuit of BorrowIStr(x,y,c) equals
 :: FSCIRC_1:def 5
-    1GateCircuit(x,y, and2a) +* 1GateCircuit(y,c, and2) +*
-       1GateCircuit(x,c, and2a);
+  1GateCircuit(x,y, and2a) +* 1GateCircuit(y,c, and2) +*
+  1GateCircuit(x,c, and2a);
 end;
 
 theorem :: FSCIRC_1:1
- InnerVertices BorrowStr(x,y,c) is Relation;
+  InnerVertices BorrowStr(x,y,c) is Relation;
 
 theorem :: FSCIRC_1:2
- for x,y,c being non pair set holds
+  for x,y,c being non pair set holds
   InputVertices BorrowStr(x,y,c) is without_pairs;
 
 theorem :: FSCIRC_1:3
-     for s being State of BorrowICirc(x,y,c), a,b being Element of BOOLEAN
-   st a = s.x & b = s.y holds (Following s).[<*x,y*>,and2a] = 'not' a '&' b;
+  for s being State of BorrowICirc(x,y,c), a,b being Element of BOOLEAN
+  st a = s.x & b = s.y holds (Following s).[<*x,y*>,and2a] = 'not' a '&' b;
 
 theorem :: FSCIRC_1:4
-     for s being State of BorrowICirc(x,y,c), a,b being Element of BOOLEAN
-   st a = s.y & b = s.c holds (Following s).[<*y,c*>, and2] = a '&' b;
+  for s being State of BorrowICirc(x,y,c), a,b being Element of BOOLEAN
+  st a = s.y & b = s.c holds (Following s).[<*y,c*>, and2] = a '&' b;
 
 theorem :: FSCIRC_1:5
-     for s being State of BorrowICirc(x,y,c), a,b being Element of BOOLEAN
-   st a = s.x & b = s.c holds (Following s).[<*x,c*>, and2a] = 'not' a '&' b;
+  for s being State of BorrowICirc(x,y,c), a,b being Element of BOOLEAN
+  st a = s.x & b = s.c holds (Following s).[<*x,c*>, and2a] = 'not' a '&' b;
 
 definition
- let x,y,c be set;
- func BorrowOutput(x,y,c) -> Element of InnerVertices BorrowStr(x,y,c)
-  equals
+  let x,y,c be set;
+  func BorrowOutput(x,y,c) -> Element of InnerVertices BorrowStr(x,y,c) equals
 :: FSCIRC_1:def 6
-    [<*[<*x,y*>,and2a], [<*y,c*>,and2], [<*x,c*>,and2a]*>, or3];
+  [<*[<*x,y*>,and2a], [<*y,c*>,and2], [<*x,c*>,and2a]*>, or3];
 end;
 
 definition
- let x,y,c be set;
- func BorrowCirc(x,y,c) ->
-      strict Boolean gate`2=den Circuit of BorrowStr(x,y,c) equals
+  let x,y,c be set;
+  func BorrowCirc(x,y,c) ->
+  strict Boolean gate`2=den Circuit of BorrowStr(x,y,c) equals
 :: FSCIRC_1:def 7
-       BorrowICirc(x,y,c) +*
-       1GateCircuit([<*x,y*>,and2a],[<*y,c*>,and2],[<*x,c*>,and2a],or3);
+  BorrowICirc(x,y,c) +*
+  1GateCircuit([<*x,y*>,and2a],[<*y,c*>,and2],[<*x,c*>,and2a],or3);
 end;
 
 theorem :: FSCIRC_1:6
- x in the carrier of BorrowStr(x,y,c) &
- y in the carrier of BorrowStr(x,y,c) &
- c in the carrier of BorrowStr(x,y,c);
+  x in the carrier of BorrowStr(x,y,c) &
+  y in the carrier of BorrowStr(x,y,c) & c in the carrier of BorrowStr(x,y,c);
 
 theorem :: FSCIRC_1:7
- [<*x,y*>,and2a] in InnerVertices BorrowStr(x,y,c) &
- [<*y,c*>,and2 ] in InnerVertices BorrowStr(x,y,c) &
- [<*x,c*>,and2a] in InnerVertices BorrowStr(x,y,c);
+  [<*x,y*>,and2a] in InnerVertices BorrowStr(x,y,c) &
+  [<*y,c*>,and2 ] in InnerVertices BorrowStr(x,y,c) &
+  [<*x,c*>,and2a] in InnerVertices BorrowStr(x,y,c);
 
 theorem :: FSCIRC_1:8
- for x,y,c being non pair set holds
-  x in InputVertices BorrowStr(x,y,c) &
-  y in InputVertices BorrowStr(x,y,c) &
-  c in InputVertices BorrowStr(x,y,c);
+  for x,y,c being non pair set holds x in InputVertices BorrowStr(x,y,c) &
+  y in InputVertices BorrowStr(x,y,c) & c in InputVertices BorrowStr(x,y,c);
 
 theorem :: FSCIRC_1:9
- for x,y,c being non pair set holds
-  InputVertices BorrowStr(x,y,c) = {x,y,c} &
-  InnerVertices BorrowStr(x,y,c) =
-    {[<*x,y*>,and2a], [<*y,c*>,and2], [<*x,c*>,and2a]} \/ {BorrowOutput(x,y,c)}
-;
+  for x,y,c being non pair set holds
+  InputVertices BorrowStr(x,y,c) = {x,y,c} & InnerVertices BorrowStr(x,y,c) =
+  {[<*x,y*>,and2a], [<*y,c*>,and2], [<*x,c*>,and2a]} \/ {BorrowOutput(x,y,c)};
 
 theorem :: FSCIRC_1:10
-     for x,y,c being non pair set for s being State of BorrowCirc(x,y,c)
+  for x,y,c being non pair set for s being State of BorrowCirc(x,y,c)
   for a1,a2 being Element of BOOLEAN st a1 = s.x & a2 = s.y
   holds (Following s).[<*x,y*>,and2a] = 'not' a1 '&' a2;
 
 theorem :: FSCIRC_1:11
-     for x,y,c being non pair set for s being State of BorrowCirc(x,y,c)
+  for x,y,c being non pair set for s being State of BorrowCirc(x,y,c)
   for a2,a3 being Element of BOOLEAN st a2 = s.y & a3 = s.c
   holds (Following s).[<*y,c*>,and2] = a2 '&' a3;
 
 theorem :: FSCIRC_1:12
-     for x,y,c being non pair set for s being State of BorrowCirc(x,y,c)
+  for x,y,c being non pair set for s being State of BorrowCirc(x,y,c)
   for a1,a3 being Element of BOOLEAN st a1 = s.x & a3 = s.c
   holds (Following s).[<*x,c*>,and2a] = 'not' a1 '&' a3;
 
 theorem :: FSCIRC_1:13
- for x,y,c being non pair set for s being State of BorrowCirc(x,y,c)
+  for x,y,c being non pair set for s being State of BorrowCirc(x,y,c)
   for a1,a2,a3 being Element of BOOLEAN st
-    a1 = s.[<*x,y*>,and2a] & a2 = s.[<*y,c*>,and2] & a3 = s.[<*x,c*>,and2a]
+  a1 = s.[<*x,y*>,and2a] & a2 = s.[<*y,c*>,and2] & a3 = s.[<*x,c*>,and2a]
   holds (Following s).BorrowOutput(x,y,c) = a1 'or' a2 'or' a3;
 
 theorem :: FSCIRC_1:14
-     for x,y,c being non pair set for s being State of BorrowCirc(x,y,c)
+  for x,y,c being non pair set for s being State of BorrowCirc(x,y,c)
   for a1,a2 being Element of BOOLEAN st a1 = s.x & a2 = s.y
   holds Following(s,2).[<*x,y*>,and2a] = 'not' a1 '&' a2;
 
 theorem :: FSCIRC_1:15
-     for x,y,c being non pair set for s being State of BorrowCirc(x,y,c)
+  for x,y,c being non pair set for s being State of BorrowCirc(x,y,c)
   for a2,a3 being Element of BOOLEAN st a2 = s.y & a3 = s.c
   holds Following(s,2).[<*y,c*>,and2] = a2 '&' a3;
 
 theorem :: FSCIRC_1:16
-     for x,y,c being non pair set for s being State of BorrowCirc(x,y,c)
+  for x,y,c being non pair set for s being State of BorrowCirc(x,y,c)
   for a1,a3 being Element of BOOLEAN st a1 = s.x & a3 = s.c
   holds Following(s,2).[<*x,c*>,and2a] = 'not' a1 '&' a3;
 
 theorem :: FSCIRC_1:17
-     for x,y,c being non pair set for s being State of BorrowCirc(x,y,c)
+  for x,y,c being non pair set for s being State of BorrowCirc(x,y,c)
   for a1,a2,a3 being Element of BOOLEAN st a1 = s.x & a2 = s.y & a3 = s.c
-  holds
-   Following(s,2).BorrowOutput(x,y,c) =
-        'not' a1 '&' a2 'or' a2 '&' a3 'or' 'not' a1 '&' a3;
+  holds Following(s,2).BorrowOutput(x,y,c) =
+  'not' a1 '&' a2 'or' a2 '&' a3 'or' 'not' a1 '&' a3;
 
 theorem :: FSCIRC_1:18
- for x,y,c being non pair set for s being State of BorrowCirc(x,y,c)
+  for x,y,c being non pair set for s being State of BorrowCirc(x,y,c)
   holds Following(s,2) is stable;
 
 begin :: Bit Subtracter with Borrow Circuit
 
 definition
- let x,y,c be set;
- func BitSubtracterWithBorrowStr(x,y,c) ->
-      unsplit gate`1=arity gate`2isBoolean
-      non void strict non empty ManySortedSign
-  equals
+  let x,y,c be set;
+  func BitSubtracterWithBorrowStr(x,y,c) ->
+  unsplit gate`1=arity gate`2isBoolean
+  non void strict non empty ManySortedSign equals
 :: FSCIRC_1:def 8
-     2GatesCircStr(x,y,c, 'xor') +* BorrowStr(x,y,c);
+  2GatesCircStr(x,y,c, 'xor') +* BorrowStr(x,y,c);
 end;
 
 theorem :: FSCIRC_1:19
- for x,y,c being non pair set holds
-   InputVertices BitSubtracterWithBorrowStr(x,y,c) = {x,y,c};
+  for x,y,c being non pair set holds
+  InputVertices BitSubtracterWithBorrowStr(x,y,c) = {x,y,c};
 
 theorem :: FSCIRC_1:20
-     for x,y,c being non pair set holds
-   InnerVertices BitSubtracterWithBorrowStr(x,y,c) =
-     {[<*x,y*>, 'xor'], 2GatesCircOutput(x,y,c,'xor')} \/
-     {[<*x,y*>,and2a], [<*y,c*>,and2], [<*x,c*>,and2a]} \/
- {BorrowOutput(x,y,c)};
+  for x,y,c being non pair set holds
+  InnerVertices BitSubtracterWithBorrowStr(x,y,c) =
+  {[<*x,y*>, 'xor'], 2GatesCircOutput(x,y,c,'xor')} \/
+  {[<*x,y*>,and2a], [<*y,c*>,and2], [<*x,c*>,and2a]} \/ {BorrowOutput(x,y,c)};
 
 theorem :: FSCIRC_1:21
-     for S being non empty ManySortedSign st S = BitSubtracterWithBorrowStr(x,y
-,
-c
-)
-   holds x in the carrier of S & y in the carrier of S & c in the carrier of S;
+  for S being non empty ManySortedSign st S = BitSubtracterWithBorrowStr(x, y
+  , c )
+  holds x in the carrier of S & y in the carrier of S & c in the carrier of S;
 
 definition
- let x,y,c be set;
- func BitSubtracterWithBorrowCirc(x,y,c) ->
-   strict Boolean gate`2=den Circuit of BitSubtracterWithBorrowStr(x,y,c)
- equals
+  let x,y,c be set;
+  func BitSubtracterWithBorrowCirc(x,y,c) ->
+  strict Boolean gate`2=den Circuit of BitSubtracterWithBorrowStr(x,y,c)
+  equals
 :: FSCIRC_1:def 9
-    BitSubtracterCirc(x,y,c) +* BorrowCirc(x,y,c);
+
+  BitSubtracterCirc(x,y,c) +* BorrowCirc(x,y,c);
 end;
 
 theorem :: FSCIRC_1:22
-     InnerVertices BitSubtracterWithBorrowStr(x,y,c) is Relation;
+  InnerVertices BitSubtracterWithBorrowStr(x,y,c) is Relation;
 
 theorem :: FSCIRC_1:23
-     for x,y,c being non pair set holds
+  for x,y,c being non pair set holds
   InputVertices BitSubtracterWithBorrowStr(x,y,c) is without_pairs;
 
 canceled;
 
 theorem :: FSCIRC_1:25
-     for x,y,c being non pair set
- for s being State of BitSubtracterWithBorrowCirc(x,y,c)
- for a1,a2,a3 being Element of BOOLEAN st a1 = s.x & a2 = s.y & a3 = s.c holds
-   Following(s,2).BitSubtracterOutput(x,y,c) = a1 'xor' a2 'xor' a3 &
-   Following(s,2).BorrowOutput(x,y,c)
-           = 'not' a1 '&' a2 'or' a2 '&' a3 'or' 'not' a1 '&' a3;
+  for x,y,c being non pair set
+  for s being State of BitSubtracterWithBorrowCirc(x,y,c)
+  for a1,a2,a3 being Element of BOOLEAN st a1 = s.x & a2 = s.y & a3 = s.c holds
+  Following(s,2).BitSubtracterOutput(x,y,c) = a1 'xor' a2 'xor' a3 &
+  Following(s,2).BorrowOutput(x,y,c)
+  = 'not' a1 '&' a2 'or' a2 '&' a3 'or' 'not' a1 '&' a3;
 
 theorem :: FSCIRC_1:26
-     for x,y,c being non pair set
- for s being State of BitSubtracterWithBorrowCirc(x,y,c)
+  for x,y,c being non pair set
+  for s being State of BitSubtracterWithBorrowCirc(x,y,c)
   holds Following(s,2) is stable;
+

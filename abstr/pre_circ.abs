@@ -29,34 +29,36 @@ begin
 
 scheme :: PRE_CIRC:sch 1
  FraenkelFinIm{ A() -> finite non empty set, F(set) -> set, P[set] }:
- { F(x) where x is Element of A() : P[x] } is finite;
+  { F(x) where x is Element of A() : P[x] } is finite;
 
 canceled;
 
 theorem :: PRE_CIRC:2
-       for f being Function, x, y being set st dom f = {x} & rng f = {y}
-    holds f = { [x,y] };
+  for f being Function, x, y being set st dom f = {x} & rng f = {y}
+  holds f = { [x,y] };
 
 theorem :: PRE_CIRC:3
   for f, g, h being Function st f c= g holds f +* h c= g +* h;
 
 theorem :: PRE_CIRC:4
-       for f, g, h being Function st f c= g & dom f misses dom h
-    holds f c= g +* h;
+  for f, g, h being Function st f c= g & dom f misses dom h holds f c= g +* h;
 
 registration
- cluster finite non empty natural-membered set;
+  cluster finite non empty natural-membered set;
 end;
 
-notation let A be finite non empty real-membered set;
-   synonym max A for upper_bound A;
+notation
+  let A be finite non empty real-membered set;
+  synonym max A for upper_bound A;
 end;
 
-definition let A be finite non empty real-membered set;
- redefine func max A -> real number means
+definition
+  let A be finite non empty real-membered set;
+  redefine func max A -> real number means
 :: PRE_CIRC:def 1
- it in A & for k being real number st k in A holds k <= it;
- end;
+
+  it in A & for k being real number st k in A holds k <= it;
+end;
 
 registration
   let X be finite non empty natural-membered set;
@@ -64,32 +66,35 @@ registration
 end;
 
 begin
+
 ::---------------------------------------------------------------------------
 :: Many Sorted Sets and Functions
 ::---------------------------------------------------------------------------
 
 theorem :: PRE_CIRC:5
-       for I being set, MSS being ManySortedSet of I
-    holds MSS#.<*>I = {{}};
+  for I being set, MSS being ManySortedSet of I holds MSS#.<*>I = {{}};
 
 reserve i,j,x,y for set,
-        g for Function;
+  g for Function;
 
 scheme :: PRE_CIRC:sch 2
  MSSLambda2Part { I() -> set, P [set], F, G (set) -> set }:
-    ex f being ManySortedSet of I() st
-      for i being Element of I() st i in I()
-        holds (P[i] implies f.i = F(i)) & (not P[i] implies f.i = G(i));
+  ex f being ManySortedSet of I() st for i being Element of I() st i in I()
+  holds (P[i] implies f.i = F(i)) & (not P[i] implies f.i = G(i));
 
-notation let I be set; let IT be ManySortedSet of I;
- synonym IT is locally-finite for IT is finite-yielding;
+notation
+  let I be set;
+  let IT be ManySortedSet of I;
+  synonym IT is locally-finite for IT is finite-yielding;
 end;
 
-definition let I be set; let IT be ManySortedSet of I;
- canceled;
- redefine attr IT is locally-finite means
+definition
+  let I be set;
+  let IT be ManySortedSet of I;
+  canceled;
+  redefine attr IT is locally-finite means
 :: PRE_CIRC:def 3
-         for i st i in I holds IT.i is finite;
+  for i st i in I holds IT.i is finite;
 end;
 
 registration
@@ -114,68 +119,62 @@ end;
 
 theorem :: PRE_CIRC:6
   for I being non empty set, B being non-empty ManySortedSet of I
-    holds union rng B is non empty;
+  holds union rng B is non empty;
 
 theorem :: PRE_CIRC:7
   for I being set holds uncurry (I --> {}) = {};
 
 theorem :: PRE_CIRC:8
-       for I being non empty set, A being set,
-    B being non-empty ManySortedSet of I,
-    F being ManySortedFunction of (I --> A), B
-    holds dom commute F = A;
+  for I being non empty set, A being set,
+  B being non-empty ManySortedSet of I,
+  F being ManySortedFunction of (I --> A), B holds dom commute F = A;
 
 scheme :: PRE_CIRC:sch 3
- LambdaRecCorrD {D() -> non empty set,
-                  A() -> Element of D(),
-                  F(Element of NAT, Element of D()) -> Element of D() } :
-    (ex f being Function of NAT, D() st f.0 = A()
-      & for i being Element of NAT holds f.(i+1) = F(i, f.i))
-      & for f1, f2 being Function of NAT, D() st (f1.0 = A()
-          & for i being Element of NAT holds f1.(i+1) = F(i, f1.i))
-          & (f2.0 = A() &
-           for i being Element of NAT holds f2.(i+1) = F(i,f2.i))
-          holds f1 = f2;
+ LambdaRecCorrD {D() -> non empty set, A() -> Element of D(),
+  F(Element of NAT, Element of D()) -> Element of D() } :
+  (ex f being Function of NAT, D() st f.0 = A()
+  & for i being Element of NAT holds f.(i+1) = F(i, f.i))
+  & for f1, f2 being Function of NAT, D() st (f1.0 = A()
+  & for i being Element of NAT holds f1.(i+1) = F(i, f1.i)) & (f2.0 = A() &
+  for i being Element of NAT holds f2.(i+1) = F(i,f2.i)) holds f1 = f2;
 
 scheme :: PRE_CIRC:sch 4
  LambdaMSFD{J() -> non empty set, I() -> Subset of J(),
-    A, B() -> ManySortedSet of I(), F(set) -> set } :
-    ex f being ManySortedFunction of A(), B() st
-      for i being Element of J() st i in I() holds f.i = F(i)
-  provided
-  for i being Element of J() st i in I()
-     holds F(i) is Function of A().i, B().i;
+  A, B() -> ManySortedSet of I(), F(set) -> set } :
+  ex f being ManySortedFunction of A(), B() st
+  for i being Element of J() st i in I() holds f.i = F(i)
+provided
+ for i being Element of J() st i in I()
+holds F(i) is Function of A().i, B().i;
 
 theorem :: PRE_CIRC:9
-       for I being set, f being non-empty ManySortedSet of I, g being Function,
-    s being Element of product f
-      st dom g c= dom f & for x being set st x in dom g holds g.x in f.x
-    holds s+*g is Element of product f;
+  for I being set, f being non-empty ManySortedSet of I, g being Function ,
+  s being Element of product f
+  st dom g c= dom f & for x being set st x in dom g holds g.x in f.x
+  holds s+*g is Element of product f;
 
 theorem :: PRE_CIRC:10
-       for A, B being non empty set,
-    C being non-empty ManySortedSet of A,
-    InpFs being ManySortedFunction of A --> B, C,
-    b being Element of B
-    ex c being ManySortedSet of A st c = (commute InpFs).b & c in C;
+  for A, B being non empty set, C being non-empty ManySortedSet of A,
+  InpFs being ManySortedFunction of A --> B, C, b being Element of B
+  ex c being ManySortedSet of A st c = (commute InpFs).b & c in C;
 
 theorem :: PRE_CIRC:11
-       for I being set, M be ManySortedSet of I,
-    x, g being Function st x in product M
-    holds x * g in product (M * g);
+  for I being set, M be ManySortedSet of I,
+  x, g being Function st x in product M holds x * g in product (M * g);
 
 theorem :: PRE_CIRC:12
-       for n being Element of NAT, a being set
-    holds product ( n |-> {a} ) = { n |-> a };
+  for n being Element of NAT, a being set
+  holds product ( n |-> {a} ) = { n |-> a };
 
 begin
+
 ::---------------------------------------------------------------------------
 :: Trees
 ::---------------------------------------------------------------------------
 
 reserve T,T1 for finite Tree,
-        t,p for Element of T,
-        t1 for Element of T1;
+  t,p for Element of T,
+  t1 for Element of T1;
 
 registration
   let D be non empty set;
@@ -198,75 +197,73 @@ end;
 
 theorem :: PRE_CIRC:14
   T with-replacement (p,T1) =
-    { t : not p is_a_prefix_of t } \/ { p^t1 : not contradiction };
+  { t : not p is_a_prefix_of t } \/ { p^t1 : not contradiction };
 
 theorem :: PRE_CIRC:15
- for f being FinSequence of NAT st f in T with-replacement (p,T1) &
-   p is_a_prefix_of f ex t1 st f = p^t1;
+  for f being FinSequence of NAT st f in T with-replacement (p,T1) &
+  p is_a_prefix_of f ex t1 st f = p^t1;
 
 theorem :: PRE_CIRC:16
- for p being Tree-yielding FinSequence, k being Element of NAT st k+1 in dom p
+  for p being Tree-yielding FinSequence, k being Element of NAT st k+1 in dom p
   holds (tree p)|<*k*> = p.(k+1);
 
 theorem :: PRE_CIRC:17
-       for q being DTree-yielding FinSequence, k being Element of NAT
-       st k+1 in dom q
-        holds <*k*> in tree doms q;
+  for q being DTree-yielding FinSequence, k being Element of NAT
+  st k+1 in dom q holds <*k*> in tree doms q;
 
 theorem :: PRE_CIRC:18
- for p,q being Tree-yielding FinSequence, k being Element of NAT
-   st len p = len q & k+1 in dom p &
-      for i being Element of NAT st i in dom p & i <> k+1 holds p.i = q.i
- for t being Tree st q.(k+1) = t
+  for p,q being Tree-yielding FinSequence, k being Element of NAT
+  st len p = len q & k+1 in dom p &
+  for i being Element of NAT st i in dom p & i <> k+1 holds p.i = q.i
+  for t being Tree st q.(k+1) = t
   holds tree(q) = tree(p) with-replacement (<*k*>, t);
 
 theorem :: PRE_CIRC:19
-       for e1,e2 being finite DecoratedTree, x being set,
-           k being Element of NAT,
-      p being DTree-yielding FinSequence st
-       <*k*> in dom e1 & e1 = x-tree p
+  for e1,e2 being finite DecoratedTree, x being set, k being Element of NAT,
+  p being DTree-yielding FinSequence st <*k*> in dom e1 & e1 = x-tree p
   ex q being DTree-yielding FinSequence st
-   e1 with-replacement (<*k*>,e2) = x-tree q &
-    len q = len p & q.(k+1) = e2 &
-    for i being Element of NAT st i in dom p & i <> k+1 holds q.i = p.i;
+  e1 with-replacement (<*k*>,e2) = x-tree q & len q = len p & q.(k+1) = e2 &
+  for i being Element of NAT st i in dom p & i <> k+1 holds q.i = p.i;
 
 theorem :: PRE_CIRC:20
-       for T being finite Tree, p being Element of T st p <> {}
-    holds card (T|p) < card T;
+  for T being finite Tree, p being Element of T st p <> {}
+  holds card (T|p) < card T;
 
 theorem :: PRE_CIRC:21
- for f being Function holds Card (f qua set) = Card dom f;
+  for f being Function holds Card (f qua set) = Card dom f;
 
 theorem :: PRE_CIRC:22
   for T, T1 being finite Tree, p being Element of T
-    holds card(T with-replacement (p,T1)) + card (T|p) = card T + card T1;
+  holds card(T with-replacement (p,T1)) + card (T|p) = card T + card T1;
 
 theorem :: PRE_CIRC:23
-       for T, T1 being finite DecoratedTree,
-    p being Element of dom T
-    holds card(T with-replacement (p,T1)) + card (T|p) = card T + card T1;
+  for T, T1 being finite DecoratedTree, p being Element of dom T
+  holds card(T with-replacement (p,T1)) + card (T|p) = card T + card T1;
 
-registration let x be set;
- cluster root-tree x -> finite;
+registration
+  let x be set;
+  cluster root-tree x -> finite;
 end;
 
 theorem :: PRE_CIRC:24
-      for x being set
-    holds card root-tree x = 1;
+  for x being set holds card root-tree x = 1;
 
 begin :: Addenda
 
 :: from SFMASTR3, 2006.03.06, A.T.
 
-notation let A be finite non empty real-membered set;
-   synonym min A for lower_bound A;
+notation
+  let A be finite non empty real-membered set;
+  synonym min A for lower_bound A;
 end;
 
-definition let A be finite non empty real-membered set;
- redefine func min A means
+definition
+  let A be finite non empty real-membered set;
+  redefine func min A means
 :: PRE_CIRC:def 4
- it in A & for k being real number st k in A holds it <= k;
- end;
+
+  it in A & for k being real number st k in A holds it <= k;
+end;
 
 :: from AMISTD_2
 
@@ -293,7 +290,5 @@ end;
 :: from AMISTD_1, 2007.07.26, A.T.
 
 theorem :: PRE_CIRC:28
- for r being real number holds max {r} = r;
-
-
+  for r being real number holds max {r} = r;
 

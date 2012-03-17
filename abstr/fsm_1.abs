@@ -23,615 +23,647 @@ environ
 
 begin :: Preliminaries
 
- reserve m, n, i, k for Element of NAT;
+reserve m, n, i, k for Element of NAT;
 
 theorem :: FSM_1:1
   for m, n being Nat holds
-   m < n implies ex p being Element of NAT st n = m+p & 1 <= p;
+  m < n implies ex p being Element of NAT st n = m+p & 1 <= p;
 
 canceled 5;
 
 theorem :: FSM_1:7
   for S being set, D1, D2 being non empty set,
-      f1 being Function of S, D1, f2 being Function of D1, D2 holds
+  f1 being Function of S, D1, f2 being Function of D1, D2 holds
   f1 is bijective & f2 is bijective implies f2*f1 is bijective;
 
 :: Partitions & Equivalence Relations
 
 theorem :: FSM_1:8
- for Y being set, E1, E2 being Equivalence_Relation of Y
+  for Y being set, E1, E2 being Equivalence_Relation of Y
   holds Class E1 = Class E2 implies E1 = E2;
 
 theorem :: FSM_1:9
-  for W being non empty set, PW being a_partition of W
-  holds PW is non empty;
+  for W being non empty set, PW being a_partition of W holds PW is non empty;
 
 theorem :: FSM_1:10
- for Z being finite set, PZ being a_partition of Z
-  holds PZ is finite;
+  for Z being finite set, PZ being a_partition of Z holds PZ is finite;
 
-registration let Z be finite set;
- cluster -> finite a_partition of Z;
+registration
+  let Z be finite set;
+  cluster -> finite a_partition of Z;
 end;
 
-registration let X be non empty finite set;
- cluster non empty finite a_partition of X;
+registration
+  let X be non empty finite set;
+  cluster non empty finite a_partition of X;
 end;
 
- reserve X, A for non empty finite set,
-         PX for a_partition of X,
-         PA1, PA2 for a_partition of A;
+reserve X, A for non empty finite set,
+  PX for a_partition of X,
+  PA1, PA2 for a_partition of A;
 
 theorem :: FSM_1:11
-for X being non empty set, PX being a_partition of X
- for Pi being set st Pi in PX ex x being Element of X st x in Pi;
+  for X being non empty set, PX being a_partition of X
+  for Pi being set st Pi in PX ex x being Element of X st x in Pi;
 
 theorem :: FSM_1:12
- card PX <= card X;
+  card PX <= card X;
 
 theorem :: FSM_1:13
- PA1 is_finer_than PA2 implies card PA2 <= card PA1;
+  PA1 is_finer_than PA2 implies card PA2 <= card PA1;
 
 theorem :: FSM_1:14
-PA1 is_finer_than PA2 implies
-for p2 being Element of PA2 ex p1 being Element of PA1 st p1 c=p2;
+  PA1 is_finer_than PA2 implies
+  for p2 being Element of PA2 ex p1 being Element of PA1 st p1 c=p2;
 
 theorem :: FSM_1:15
   PA1 is_finer_than PA2 & card PA1 = card PA2 implies PA1 = PA2;
 
 begin :: Definitions and terminology for FSM
 
-definition let IAlph be set;
-  struct (1-sorted) FSM over IAlph (#
-        carrier -> set,
-           Tran -> Function of [: the carrier, IAlph :], the carrier,
-          InitS -> Element of the carrier #);
+definition
+  let IAlph be set;
+  struct (1-sorted) FSM over IAlph (# carrier -> set,
+    Tran -> Function of [: the carrier, IAlph :], the carrier,
+    InitS -> Element of the carrier #);
 end;
 
-definition let IAlph be set, fsm be FSM over IAlph;
+definition
+  let IAlph be set, fsm be FSM over IAlph;
   mode State of fsm is Element of fsm;
 end;
 
-registration let X be set;
+registration
+  let X be set;
   cluster non empty finite FSM over X;
 end;
 
- reserve IAlph, OAlph for non empty set,
-         fsm for non empty FSM over IAlph,
-         s for Element of IAlph,
-         w, w1, w2 for FinSequence of IAlph,
-         q, q', q1, q2 for State of fsm;
+reserve IAlph, OAlph for non empty set,
+  fsm for non empty FSM over IAlph,
+  s for Element of IAlph,
+  w, w1, w2 for FinSequence of IAlph,
+  q, q', q1, q2 for State of fsm;
 
-definition let IAlph be non empty set;
- let fsm be non empty FSM over IAlph;
- let s be Element of IAlph, q be State of fsm;
- func s -succ_of q -> State of fsm equals
+definition
+  let IAlph be non empty set;
+  let fsm be non empty FSM over IAlph;
+  let s be Element of IAlph, q be State of fsm;
+  func s -succ_of q -> State of fsm equals
 :: FSM_1:def 1
-   (the Tran of fsm).[q, s];
+
+  (the Tran of fsm).[q, s];
 end;
 
-definition let IAlph be non empty set; let fsm be non empty FSM over IAlph;
-           let q be State of fsm; let w be FinSequence of IAlph;
- func (q, w)-admissible -> FinSequence of the carrier of fsm means
+definition
+  let IAlph be non empty set;
+  let fsm be non empty FSM over IAlph;
+  let q be State of fsm;
+  let w be FinSequence of IAlph;
+  func (q, w)-admissible -> FinSequence of the carrier of fsm means
 :: FSM_1:def 2
 
-  it.1 = q & len it = len w + 1 &
-  for i being Nat st 1 <= i & i <= len w
-   ex wi being Element of IAlph, qi, qi1 being State of fsm st
-    wi = w.i & qi = it.i & qi1 = it.(i+1) & wi-succ_of qi = qi1;
+  it.1 = q & len it = len w + 1 & for i being Nat st 1 <= i & i <= len w
+  ex wi being Element of IAlph, qi, qi1 being State of fsm st
+  wi = w.i & qi = it.i & qi1 = it.(i+1) & wi-succ_of qi = qi1;
 end;
 
 theorem :: FSM_1:16
- (q, <*>IAlph)-admissible = <*q*>;
+  (q, <*>IAlph)-admissible = <*q*>;
 
-definition let IAlph be non empty set;
-           let fsm be non empty FSM over IAlph;
-           let w be FinSequence of IAlph;
-           let q1, q2 be State of fsm;
- pred q1, w-leads_to q2 means
+definition
+  let IAlph be non empty set;
+  let fsm be non empty FSM over IAlph;
+  let w be FinSequence of IAlph;
+  let q1, q2 be State of fsm;
+  pred q1, w-leads_to q2 means
 :: FSM_1:def 3
- (q1, w)-admissible.(len w + 1) = q2;
+
+  (q1, w)-admissible.(len w + 1) = q2;
 end;
 
 theorem :: FSM_1:17
- q, <*>IAlph-leads_to q;
+  q, <*>IAlph-leads_to q;
 
-definition let IAlph be non empty set;
- let fsm be non empty FSM over IAlph;
- let w be FinSequence of IAlph;
- let qseq be FinSequence of the carrier of fsm;
- pred qseq is_admissible_for w means
+definition
+  let IAlph be non empty set;
+  let fsm be non empty FSM over IAlph;
+  let w be FinSequence of IAlph;
+  let qseq be FinSequence of the carrier of fsm;
+  pred qseq is_admissible_for w means
 :: FSM_1:def 4
- ex q1 being State of fsm st q1 = qseq.1 & (q1, w)-admissible = qseq;
+
+  ex q1 being State of fsm st q1 = qseq.1 & (q1, w)-admissible = qseq;
 end;
 
 theorem :: FSM_1:18
-<*q*> is_admissible_for <*>IAlph;
+  <*q*> is_admissible_for <*>IAlph;
 
-definition let IAlph, fsm, q, w;
- func q leads_to_under w -> State of fsm means
+definition
+  let IAlph, fsm, q, w;
+  func q leads_to_under w -> State of fsm means
 :: FSM_1:def 5
- q, w-leads_to it;
+
+  q, w-leads_to it;
 end;
 
 theorem :: FSM_1:19
-   ((q, w)-admissible).(len (q, w)-admissible) = q' iff q, w-leads_to q';
+  ((q, w)-admissible).(len (q, w)-admissible) = q' iff q, w-leads_to q';
 
 theorem :: FSM_1:20
- for k st 1 <= k & k <= len w1
-   holds (q1,w1^w2)-admissible.k = (q1,w1)-admissible.k;
+  for k st 1 <= k & k <= len w1
+  holds (q1,w1^w2)-admissible.k = (q1,w1)-admissible.k;
 
 theorem :: FSM_1:21
-  q1,w1-leads_to q2 implies
- (q1,w1^w2)-admissible.(len w1 + 1) = q2;
+  q1,w1-leads_to q2 implies (q1,w1^w2)-admissible.(len w1 + 1) = q2;
 
 theorem :: FSM_1:22
-  q1,w1-leads_to q2 implies
-  for k st 1 <= k & k <= len w2 + 1
-        holds (q1,w1^w2)-admissible.(len w1 + k) = (q2,w2)-admissible.k;
+  q1,w1-leads_to q2 implies for k st 1 <= k & k <= len w2 + 1
+  holds (q1,w1^w2)-admissible.(len w1 + k) = (q2,w2)-admissible.k;
 
 theorem :: FSM_1:23
- q1,w1-leads_to q2
- implies (q1,w1^w2)-admissible =
-          Del((q1,w1)-admissible,(len w1 + 1))^(q2,w2)-admissible;
+  q1,w1-leads_to q2 implies (q1,w1^w2)-admissible =
+  Del((q1,w1)-admissible,(len w1 + 1))^(q2,w2)-admissible;
 
 begin :: Mealy and Moore machines and their responses
 
-definition let IAlph be set, OAlph be non empty set;
-  struct (FSM over IAlph) Mealy-FSM over IAlph, OAlph (#
-        carrier -> set,
-           Tran -> Function of [: the carrier, IAlph :], the carrier,
-           OFun -> Function of [: the carrier, IAlph :], OAlph,
-          InitS -> Element of the carrier #);
-
-  struct (FSM over IAlph) Moore-FSM over IAlph, OAlph (#
-        carrier -> set,
-           Tran -> Function of [: the carrier, IAlph :], the carrier,
-           OFun -> Function of the carrier, OAlph,
-          InitS -> Element of the carrier #);
+definition
+  let IAlph be set, OAlph be non empty set;
+  struct (FSM over IAlph) Mealy-FSM over IAlph, OAlph (# carrier -> set,
+    Tran -> Function of [: the carrier, IAlph :], the carrier,
+    OFun -> Function of [: the carrier, IAlph :], OAlph,
+    InitS -> Element of the carrier #);
+  struct (FSM over IAlph) Moore-FSM over IAlph, OAlph (# carrier -> set,
+    Tran -> Function of [: the carrier, IAlph :], the carrier,
+    OFun -> Function of the carrier, OAlph,
+    InitS -> Element of the carrier #);
 end;
 
-registration let IAlph be set,
-               X be finite non empty set,
-               T be Function of [: X, IAlph :], X,
-               I be Element of X;
+registration
+  let IAlph be set, X be finite non empty set,
+  T be Function of [: X, IAlph :], X, I be Element of X;
   cluster FSM (# X, T, I #) -> finite non empty;
 end;
 
-registration let IAlph be set, OAlph be non empty set,
-               X be finite non empty set,
-               T be Function of [: X, IAlph :], X,
-               O be Function of [: X, IAlph :], OAlph,
-               I be Element of X;
+registration
+  let IAlph be set, OAlph be non empty set, X be finite non empty set,
+  T be Function of [: X, IAlph :], X, O be Function of [: X, IAlph :], OAlph,
+  I be Element of X;
   cluster Mealy-FSM (# X, T, O, I #) -> finite non empty;
 end;
 
-registration let IAlph be set, OAlph be non empty set,
-               X be finite non empty set,
-               T be Function of [: X, IAlph :], X,
-               O be Function of X, OAlph,
-               I be Element of X;
+registration
+  let IAlph be set, OAlph be non empty set, X be finite non empty set,
+  T be Function of [: X, IAlph :], X, O be Function of X, OAlph,
+  I be Element of X;
   cluster Moore-FSM (# X, T, O, I #) -> finite non empty;
 end;
 
-registration let IAlph be set, OAlph be non empty set;
+registration
+  let IAlph be set, OAlph be non empty set;
   cluster finite non empty Mealy-FSM over IAlph, OAlph;
-
   cluster finite non empty Moore-FSM over IAlph, OAlph;
 end;
 
- reserve tfsm, tfsm1, tfsm2, tfsm3 for non empty Mealy-FSM over IAlph, OAlph,
-         sfsm for non empty Moore-FSM over IAlph, OAlph,
-         qs for State of sfsm,
-         q, q1, q2, q3, qa, qb, qc, qa', qt, q1t, q2t for State of tfsm,
-         q11, q12 for State of tfsm1,
-         q21, q22 for State of tfsm2;
+reserve tfsm, tfsm1, tfsm2, tfsm3 for non empty Mealy-FSM over IAlph, OAlph,
+  sfsm for non empty Moore-FSM over IAlph, OAlph,
+  qs for State of sfsm,
+  q, q1, q2, q3, qa, qb, qc, qa', qt, q1t, q2t for State of tfsm,
+  q11, q12 for State of tfsm1,
+  q21, q22 for State of tfsm2;
 
-definition let IAlph, OAlph, tfsm, qt, w;
- func (qt, w)-response -> FinSequence of OAlph means
+definition
+  let IAlph, OAlph, tfsm, qt, w;
+  func (qt, w)-response -> FinSequence of OAlph means
 :: FSM_1:def 6
 
   len it = len w &
   for i st i in dom w holds
-     it.i = (the OFun of tfsm).[(qt, w)-admissible.i, w.i];
+  it.i = (the OFun of tfsm).[(qt, w)-admissible.i, w.i];
 end;
 
 theorem :: FSM_1:24
-   (qt, <*>IAlph)-response = <*>OAlph;
+  (qt, <*>IAlph)-response = <*>OAlph;
 
-definition let IAlph, OAlph, sfsm, qs, w;
- func (qs, w)-response -> FinSequence of OAlph means
+definition
+  let IAlph, OAlph, sfsm, qs, w;
+  func (qs, w)-response -> FinSequence of OAlph means
 :: FSM_1:def 7
-  len it = len w + 1 &
-  for i st i in Seg (len w + 1) holds
-     it.i = (the OFun of sfsm).((qs, w)-admissible.i);
+
+  len it = len w + 1 & for i st i in Seg (len w + 1) holds
+  it.i = (the OFun of sfsm).((qs, w)-admissible.i);
 end;
 
 theorem :: FSM_1:25
- ((qs, w)-response).1 = (the OFun of sfsm).qs;
+  ((qs, w)-response).1 = (the OFun of sfsm).qs;
 
 theorem :: FSM_1:26
   q1t,w1-leads_to q2t implies
-     (q1t,w1^w2)-response = (q1t,w1)-response ^ (q2t,w2)-response;
+  (q1t,w1^w2)-response = (q1t,w1)-response ^ (q2t,w2)-response;
 
 theorem :: FSM_1:27
-   q11, w1 -leads_to q12 & q21, w1 -leads_to q22 &
-   (q12,w2)-response <> (q22,w2)-response
- implies (q11,w1^w2)-response <> (q21,w1^w2)-response;
+  q11, w1 -leads_to q12 & q21, w1 -leads_to q22 &
+  (q12,w2)-response <> (q22,w2)-response
+  implies (q11,w1^w2)-response <> (q21,w1^w2)-response;
 
- reserve OAlphf for finite non empty set,
-         tfsmf for finite non empty Mealy-FSM over IAlph, OAlphf,
-         sfsmf for finite non empty Moore-FSM over IAlph, OAlphf;
+reserve OAlphf for finite non empty set,
+  tfsmf for finite non empty Mealy-FSM over IAlph, OAlphf,
+  sfsmf for finite non empty Moore-FSM over IAlph, OAlphf;
 
-definition let IAlph, OAlph;
-           let tfsm be non empty Mealy-FSM over IAlph, OAlph;
-           let sfsm be non empty Moore-FSM over IAlph, OAlph;
- pred tfsm is_similar_to sfsm means
+definition
+  let IAlph, OAlph;
+  let tfsm be non empty Mealy-FSM over IAlph, OAlph;
+  let sfsm be non empty Moore-FSM over IAlph, OAlph;
+  pred tfsm is_similar_to sfsm means
 :: FSM_1:def 8
-      for tw being FinSequence of IAlph holds
+
+  for tw being FinSequence of IAlph holds
   <*(the OFun of sfsm).(the InitS of sfsm)*>^((the InitS of tfsm, tw)-response)
-                            = (the InitS of sfsm, tw)-response;
+  = (the InitS of sfsm, tw)-response;
 end;
 
 theorem :: FSM_1:28
-       for sfsm being non empty finite Moore-FSM over IAlph, OAlph
+  for sfsm being non empty finite Moore-FSM over IAlph, OAlph
   ex tfsm being non empty finite Mealy-FSM over IAlph, OAlph
-    st tfsm is_similar_to sfsm;
+  st tfsm is_similar_to sfsm;
 
 theorem :: FSM_1:29
   ex sfsmf st tfsmf is_similar_to sfsmf;
 
 begin :: Equivalence of states and machines (for Mealy machines)
 
-definition let IAlph, OAlph be non empty set,
-           tfsm1, tfsm2 be non empty Mealy-FSM over IAlph, OAlph;
- pred tfsm1, tfsm2-are_equivalent means
+definition
+  let IAlph, OAlph be non empty set,
+  tfsm1, tfsm2 be non empty Mealy-FSM over IAlph, OAlph;
+  pred tfsm1, tfsm2-are_equivalent means
 :: FSM_1:def 9
- for w being FinSequence of IAlph holds
-   (the InitS of tfsm1,w)-response = (the InitS of tfsm2,w)-response;
- reflexivity;
- symmetry;
+
+  for w being FinSequence of IAlph holds
+  (the InitS of tfsm1,w)-response = (the InitS of tfsm2,w)-response;
+  reflexivity;
+  symmetry;
 end;
 
 theorem :: FSM_1:30
- tfsm1, tfsm2-are_equivalent & tfsm2, tfsm3-are_equivalent
+  tfsm1, tfsm2-are_equivalent & tfsm2, tfsm3-are_equivalent
   implies tfsm1, tfsm3-are_equivalent;
 
-definition let IAlph, OAlph, tfsm, qa, qb;
- pred qa, qb-are_equivalent means
+definition
+  let IAlph, OAlph, tfsm, qa, qb;
+  pred qa, qb-are_equivalent means
 :: FSM_1:def 10
- for w holds (qa, w)-response = (qb, w)-response;
- reflexivity;
- symmetry;
+
+  for w holds (qa, w)-response = (qb, w)-response;
+  reflexivity;
+  symmetry;
 end;
 
 canceled 2;
 
 theorem :: FSM_1:33
-   q1, q2-are_equivalent & q2, q3-are_equivalent implies q1, q3
--are_equivalent;
+  q1, q2-are_equivalent & q2, q3-are_equivalent implies q1, q3 -are_equivalent;
 
 theorem :: FSM_1:34
-qa' = (the Tran of tfsm).[qa, s]
-  implies for i st i in Seg (len w + 1) holds
-           (qa, <*s*>^w)-admissible.(i+1) = (qa', w)-admissible.i;
+  qa' = (the Tran of tfsm).[qa, s] implies for i st i in Seg (len w + 1) holds
+  (qa, <*s*>^w)-admissible.(i+1) = (qa', w)-admissible.i;
 
 theorem :: FSM_1:35
-qa' = (the Tran of tfsm).[qa, s] implies
+  qa' = (the Tran of tfsm).[qa, s] implies
   (qa, <*s*>^w)-response = <*(the OFun of tfsm).[qa, s]*>^(qa', w)-response;
 
 theorem :: FSM_1:36
-qa, qb-are_equivalent iff
-   for s holds (the OFun of tfsm).[qa, s] = (the OFun of tfsm).[qb, s] &
-     (the Tran of tfsm).[qa, s], (the Tran of tfsm).[qb, s]-are_equivalent;
+  qa, qb-are_equivalent iff
+  for s holds (the OFun of tfsm).[qa, s] = (the OFun of tfsm).[qb, s] &
+  (the Tran of tfsm).[qa, s], (the Tran of tfsm).[qb, s]-are_equivalent;
 
 theorem :: FSM_1:37
-qa, qb-are_equivalent implies
-     for w, i st i in dom w ex qai, qbi being State of tfsm
-               st qai = (qa, w)-admissible.i & qbi = ((qb, w)-admissible.i) &
-                  qai, qbi-are_equivalent;
+  qa, qb-are_equivalent implies
+  for w, i st i in dom w ex qai, qbi being State of tfsm
+  st qai = (qa, w)-admissible.i & qbi = ((qb, w)-admissible.i) &
+  qai, qbi-are_equivalent;
 
-definition let IAlph, OAlph,tfsm, qa, qb; let k be Nat;
- pred k-equivalent qa, qb means
+definition
+  let IAlph, OAlph,tfsm, qa, qb;
+  let k be Nat;
+  pred k-equivalent qa, qb means
 :: FSM_1:def 11
- for w st len w<=k holds (qa,w)-response = (qb,w)-response;
+
+  for w st len w<=k holds (qa,w)-response = (qb,w)-response;
 end;
 
 theorem :: FSM_1:38
-for k be Nat holds k-equivalent qa, qa;
+  for k be Nat holds k-equivalent qa, qa;
 
 theorem :: FSM_1:39
   for k be Nat st k-equivalent qa, qb holds k-equivalent qb, qa;
 
 theorem :: FSM_1:40
   for k be Nat st k-equivalent qa, qb & k-equivalent qb, qc holds
-    k-equivalent qa, qc;
+  k-equivalent qa, qc;
 
 theorem :: FSM_1:41
- qa,qb-are_equivalent implies k-equivalent qa,qb;
+  qa,qb-are_equivalent implies k-equivalent qa,qb;
 
 theorem :: FSM_1:42
-0-equivalent qa, qb;
+  0-equivalent qa, qb;
 
 theorem :: FSM_1:43
- for k, m be Nat st (k+m)-equivalent qa, qb holds k-equivalent qa, qb;
+  for k, m be Nat st (k+m)-equivalent qa, qb holds k-equivalent qa, qb;
 
 theorem :: FSM_1:44
- for k be Nat st 1 <= k holds
- (k-equivalent qa, qb iff
-  1-equivalent qa, qb &
+  for k be Nat st 1 <= k holds (k-equivalent qa, qb iff 1-equivalent qa, qb &
   for s being Element of IAlph, k1 being Element of NAT st k1 = k - 1
-    holds k1-equivalent (the Tran of tfsm).[qa, s], (the Tran of tfsm).[qb, s])
-;
+  holds k1-equivalent (the Tran of tfsm).[qa, s], (the Tran of tfsm).[qb, s]);
 
-definition let IAlph, OAlph, tfsm; let i be Nat;
- func i-eq_states_EqR tfsm -> Equivalence_Relation of the carrier of tfsm
- means
+definition
+  let IAlph, OAlph, tfsm;
+  let i be Nat;
+  func i-eq_states_EqR tfsm -> Equivalence_Relation of the carrier of tfsm
+  means
 :: FSM_1:def 12
- for qa, qb holds [qa, qb] in it iff i-equivalent qa, qb;
+
+  for qa, qb holds [qa, qb] in it iff i-equivalent qa, qb;
 end;
 
-definition let IAlph, OAlph;
-           let tfsm be non empty Mealy-FSM over IAlph, OAlph;
-           let i be Nat;
- func i-eq_states_partition tfsm ->
-                  non empty a_partition of the carrier of tfsm equals
+definition
+  let IAlph, OAlph;
+  let tfsm be non empty Mealy-FSM over IAlph, OAlph;
+  let i be Nat;
+  func i-eq_states_partition tfsm ->
+  non empty a_partition of the carrier of tfsm equals
 :: FSM_1:def 13
-   Class (i-eq_states_EqR tfsm);
+  Class (i-eq_states_EqR tfsm);
 end;
 
 theorem :: FSM_1:45
- (k+1)-eq_states_partition tfsm is_finer_than k-eq_states_partition tfsm;
+  (k+1)-eq_states_partition tfsm is_finer_than k-eq_states_partition tfsm;
 
 theorem :: FSM_1:46
- for k be Nat holds
- Class (k-eq_states_EqR tfsm) = Class ((k+1)-eq_states_EqR tfsm)implies
-   for m be Nat holds
-   Class ((k+m)-eq_states_EqR tfsm) = Class (k-eq_states_EqR tfsm);
+  for k be Nat holds
+  Class (k-eq_states_EqR tfsm) = Class ((k+1)-eq_states_EqR tfsm)implies
+  for m be Nat holds
+  Class ((k+m)-eq_states_EqR tfsm) = Class (k-eq_states_EqR tfsm);
 
 theorem :: FSM_1:47
   k-eq_states_partition tfsm = (k+1)-eq_states_partition tfsm implies
- for m holds (k+m)-eq_states_partition tfsm = k-eq_states_partition tfsm;
+  for m holds (k+m)-eq_states_partition tfsm = k-eq_states_partition tfsm;
 
 theorem :: FSM_1:48
- (k+1)-eq_states_partition tfsm <> k-eq_states_partition tfsm implies
+  (k+1)-eq_states_partition tfsm <> k-eq_states_partition tfsm implies
   for i st i <= k holds
-     (i+1)-eq_states_partition tfsm <> i-eq_states_partition tfsm;
+  (i+1)-eq_states_partition tfsm <> i-eq_states_partition tfsm;
 
 theorem :: FSM_1:49
-for tfsm being finite non empty Mealy-FSM over IAlph, OAlph holds
-k-eq_states_partition tfsm = (k+1)-eq_states_partition tfsm or
-   card (k-eq_states_partition tfsm) < card ((k+1)-eq_states_partition tfsm);
+  for tfsm being finite non empty Mealy-FSM over IAlph, OAlph holds
+  k-eq_states_partition tfsm = (k+1)-eq_states_partition tfsm or
+  card (k-eq_states_partition tfsm) < card ((k+1)-eq_states_partition tfsm);
 
 theorem :: FSM_1:50
-Class (0-eq_states_EqR tfsm, q) = the carrier of tfsm;
+  Class (0-eq_states_EqR tfsm, q) = the carrier of tfsm;
 
 theorem :: FSM_1:51
-0-eq_states_partition tfsm = { the carrier of tfsm };
+  0-eq_states_partition tfsm = { the carrier of tfsm };
 
 theorem :: FSM_1:52
-for tfsm being finite non empty Mealy-FSM over IAlph, OAlph st
+  for tfsm being finite non empty Mealy-FSM over IAlph, OAlph st
   n+1 = card the carrier of tfsm holds
   (n+1)-eq_states_partition tfsm = n-eq_states_partition tfsm;
 
-definition let IAlph, OAlph;
-           let tfsm be non empty Mealy-FSM over IAlph, OAlph;
- let IT be a_partition of the carrier of tfsm;
- attr IT is final means
+definition
+  let IAlph, OAlph;
+  let tfsm be non empty Mealy-FSM over IAlph, OAlph;
+  let IT be a_partition of the carrier of tfsm;
+  attr IT is final means
 :: FSM_1:def 14
+
   for qa, qb being State of tfsm holds qa, qb-are_equivalent iff
-             ex X being Element of IT st qa in X & qb in X;
+  ex X being Element of IT st qa in X & qb in X;
 end;
 
 theorem :: FSM_1:53
   k-eq_states_partition tfsm is final implies
-     (k+1)-eq_states_EqR tfsm = k-eq_states_EqR tfsm;
+  (k+1)-eq_states_EqR tfsm = k-eq_states_EqR tfsm;
 
 theorem :: FSM_1:54
- k-eq_states_partition tfsm = (k+1)-eq_states_partition tfsm
-   implies k-eq_states_partition tfsm is final;
+  k-eq_states_partition tfsm = (k+1)-eq_states_partition tfsm
+  implies k-eq_states_partition tfsm is final;
 
 theorem :: FSM_1:55
-     for tfsm being finite non empty Mealy-FSM over IAlph, OAlph st
-n+1 = card the carrier of tfsm holds
-     ex k being Element of NAT st k <= n & k-eq_states_partition tfsm is final;
+  for tfsm being finite non empty Mealy-FSM over IAlph, OAlph st
+  n+1 = card the carrier of tfsm holds
+  ex k being Element of NAT st k <= n & k-eq_states_partition tfsm is final;
 
-definition let IAlph, OAlph;
-           let tfsm be finite non empty Mealy-FSM over IAlph, OAlph;
- func final_states_partition tfsm -> a_partition of the carrier of tfsm
- means
+definition
+  let IAlph, OAlph;
+  let tfsm be finite non empty Mealy-FSM over IAlph, OAlph;
+  func final_states_partition tfsm -> a_partition of the carrier of tfsm means
 :: FSM_1:def 15
- it is final;
+
+  it is final;
 end;
 
 theorem :: FSM_1:56
-for tfsm being finite non empty Mealy-FSM over IAlph, OAlph holds
-n+1 = card the carrier of tfsm implies
+  for tfsm being finite non empty Mealy-FSM over IAlph, OAlph holds
+  n+1 = card the carrier of tfsm implies
   final_states_partition tfsm = n-eq_states_partition tfsm;
 
 begin :: The reduction of a Mealy machine
 
- reserve tfsm, rtfsm for finite non empty Mealy-FSM over IAlph, OAlph,
-         q for State of tfsm;
+reserve tfsm, rtfsm for finite non empty Mealy-FSM over IAlph, OAlph,
+  q for State of tfsm;
 
-definition let IAlph, OAlph be non empty set;
-           let tfsm be finite non empty Mealy-FSM over IAlph, OAlph;
-           let qf be Element of final_states_partition tfsm;
-           let s be Element of IAlph;
- func (s,qf)-succ_class -> Element of final_states_partition tfsm means
+definition
+  let IAlph, OAlph be non empty set;
+  let tfsm be finite non empty Mealy-FSM over IAlph, OAlph;
+  let qf be Element of final_states_partition tfsm;
+  let s be Element of IAlph;
+  func (s,qf)-succ_class -> Element of final_states_partition tfsm means
 :: FSM_1:def 16
 
   ex q being State of tfsm, n being Element of NAT st
-   q in qf & (n+1) = card the carrier of tfsm &
-             it = Class(n-eq_states_EqR tfsm, (the Tran of tfsm).[q,s]);
+  q in qf & (n+1) = card the carrier of tfsm &
+  it = Class(n-eq_states_EqR tfsm, (the Tran of tfsm).[q,s]);
 end;
 
-definition let IAlph, OAlph, tfsm;
-           let qf be Element of final_states_partition tfsm, s;
- func (qf,s)-class_response -> Element of OAlph means
+definition
+  let IAlph, OAlph, tfsm;
+  let qf be Element of final_states_partition tfsm, s;
+  func (qf,s)-class_response -> Element of OAlph means
 :: FSM_1:def 17
- ex q st q in qf & it = (the OFun of tfsm).[q,s];
+
+  ex q st q in qf & it = (the OFun of tfsm).[q,s];
 end;
 
-definition let IAlph, OAlph, tfsm;
- func the_reduction_of tfsm -> strict Mealy-FSM over IAlph, OAlph means
+definition
+  let IAlph, OAlph, tfsm;
+  func the_reduction_of tfsm -> strict Mealy-FSM over IAlph, OAlph means
 :: FSM_1:def 18
 
- the carrier of it = final_states_partition tfsm &
- (for Q being State of it, s for q being State of tfsm st q in Q
-   holds (the Tran of tfsm).(q, s) in (the Tran of it).(Q, s) &
-         (the OFun of tfsm).(q, s) = (the OFun of it).(Q, s)) &
+  the carrier of it = final_states_partition tfsm &
+  (for Q being State of it, s for q being State of tfsm st q in Q
+  holds (the Tran of tfsm).(q, s) in (the Tran of it).(Q, s) &
+  (the OFun of tfsm).(q, s) = (the OFun of it).(Q, s)) &
   the InitS of tfsm in the InitS of it;
 end;
 
-registration let IAlph, OAlph, tfsm;
- cluster the_reduction_of tfsm -> non empty finite;
+registration
+  let IAlph, OAlph, tfsm;
+  cluster the_reduction_of tfsm -> non empty finite;
 end;
 
 theorem :: FSM_1:57
-for qr being State of rtfsm st
- rtfsm = the_reduction_of tfsm & q in qr holds
+  for qr being State of rtfsm st rtfsm = the_reduction_of tfsm & q in qr holds
   for k being Element of NAT st k in Seg (len w +1) holds
-   (q,w)-admissible.k in (qr,w)-admissible.k;
+  (q,w)-admissible.k in (qr,w)-admissible.k;
 
 theorem :: FSM_1:58
- tfsm, the_reduction_of tfsm-are_equivalent;
+  tfsm, the_reduction_of tfsm-are_equivalent;
 
 begin :: Machine Isomorphism
 
 reserve qr1, qr2 for State of rtfsm,
-        Tf for Function of the carrier of tfsm1, the carrier of tfsm2;
+  Tf for Function of the carrier of tfsm1, the carrier of tfsm2;
 
-definition let IAlph, OAlph, tfsm1, tfsm2;
- pred tfsm1, tfsm2-are_isomorphic means
+definition
+  let IAlph, OAlph, tfsm1, tfsm2;
+  pred tfsm1, tfsm2-are_isomorphic means
 :: FSM_1:def 19
 
   ex Tf st Tf is bijective & Tf.the InitS of tfsm1 = the InitS of tfsm2 &
-           for q11, s holds
-        Tf.((the Tran of tfsm1).(q11,s))=(the Tran of tfsm2).(Tf.q11, s) &
-        (the OFun of tfsm1).(q11,s) = (the OFun of tfsm2).(Tf.q11, s);
- reflexivity;
- symmetry;
+  for q11, s holds
+  Tf.((the Tran of tfsm1).(q11,s))=(the Tran of tfsm2).(Tf.q11, s) &
+  (the OFun of tfsm1).(q11,s) = (the OFun of tfsm2).(Tf.q11, s);
+  reflexivity;
+  symmetry;
 end;
 
 theorem :: FSM_1:59
- tfsm1,tfsm2-are_isomorphic & tfsm2,tfsm3-are_isomorphic
- implies tfsm1,tfsm3-are_isomorphic;
+  tfsm1,tfsm2-are_isomorphic & tfsm2,tfsm3-are_isomorphic
+  implies tfsm1,tfsm3-are_isomorphic;
 
 theorem :: FSM_1:60
-(for q being State of tfsm1, s
-    holds Tf.((the Tran of tfsm1).(q,s)) = (the Tran of tfsm2).(Tf.q,s))
- implies for k st 1 <= k & k <= len w + 1
-          holds Tf.((q11,w)-admissible.k) = (Tf.q11,w)-admissible.k;
+  (for q being State of tfsm1, s
+  holds Tf.((the Tran of tfsm1).(q,s)) = (the Tran of tfsm2).(Tf.q,s))
+  implies for k st 1 <= k & k <= len w + 1
+  holds Tf.((q11,w)-admissible.k) = (Tf.q11,w)-admissible.k;
 
 theorem :: FSM_1:61
   (Tf.the InitS of tfsm1 = the InitS of tfsm2 &
-   for q being State of tfsm1, s holds
-         Tf.((the Tran of tfsm1).(q, s)) = (the Tran of tfsm2).(Tf.q, s) &
-            (the OFun of tfsm1).(q,s) = (the OFun of tfsm2).(Tf.q, s))
-   implies (q11,q12-are_equivalent iff Tf.q11, Tf.q12 -are_equivalent);
+  for q being State of tfsm1, s holds
+  Tf.((the Tran of tfsm1).(q, s)) = (the Tran of tfsm2).(Tf.q, s) &
+  (the OFun of tfsm1).(q,s) = (the OFun of tfsm2).(Tf.q, s))
+  implies (q11,q12-are_equivalent iff Tf.q11, Tf.q12 -are_equivalent);
 
 theorem :: FSM_1:62
-rtfsm = the_reduction_of tfsm & qr1<>qr2 implies
-                  not qr1,qr2 -are_equivalent;
+  rtfsm = the_reduction_of tfsm & qr1<>qr2 implies not qr1,qr2 -are_equivalent;
 
 begin :: Reduced and Connected Machines
 
-definition let IAlph, OAlph be non empty set;
- let IT be non empty Mealy-FSM over IAlph,OAlph;
- attr IT is reduced means
+definition
+  let IAlph, OAlph be non empty set;
+  let IT be non empty Mealy-FSM over IAlph,OAlph;
+  attr IT is reduced means
 :: FSM_1:def 20
- for qa, qb being State of IT
-           st qa <> qb holds not qa, qb-are_equivalent;
+
+  for qa, qb being State of IT
+  st qa <> qb holds not qa, qb-are_equivalent;
 end;
 
 theorem :: FSM_1:63
- the_reduction_of tfsm is reduced;
+  the_reduction_of tfsm is reduced;
 
-registration let IAlph, OAlph;
- cluster reduced finite (non empty Mealy-FSM over IAlph,OAlph);
+registration
+  let IAlph, OAlph;
+  cluster reduced finite (non empty Mealy-FSM over IAlph,OAlph);
 end;
 
 reserve Rtfsm for reduced (finite non empty Mealy-FSM over IAlph, OAlph);
 
 theorem :: FSM_1:64
- Rtfsm, the_reduction_of Rtfsm-are_isomorphic;
+  Rtfsm, the_reduction_of Rtfsm-are_isomorphic;
 
 theorem :: FSM_1:65
-tfsm is reduced iff
-  ex M being finite non empty Mealy-FSM over IAlph,OAlph
-                 st tfsm, the_reduction_of M-are_isomorphic;
+  tfsm is reduced iff ex M being finite non empty Mealy-FSM over IAlph,OAlph
+  st tfsm, the_reduction_of M-are_isomorphic;
 
-definition let IAlph, OAlph;
-           let tfsm be non empty Mealy-FSM over IAlph,OAlph;
- let IT be State of tfsm;
- attr IT is accessible means
+definition
+  let IAlph, OAlph;
+  let tfsm be non empty Mealy-FSM over IAlph,OAlph;
+  let IT be State of tfsm;
+  attr IT is accessible means
 :: FSM_1:def 21
- ex w st the InitS of tfsm, w-leads_to IT;
+
+  ex w st the InitS of tfsm, w-leads_to IT;
 end;
 
-definition let IAlph, OAlph;
- let IT be non empty Mealy-FSM over IAlph, OAlph;
- attr IT is connected means
+definition
+  let IAlph, OAlph;
+  let IT be non empty Mealy-FSM over IAlph, OAlph;
+  attr IT is connected means
 :: FSM_1:def 22
- for q being State of IT holds q is accessible;
+
+  for q being State of IT holds q is accessible;
 end;
 
-registration let IAlph, OAlph;
- cluster connected (finite non empty Mealy-FSM over IAlph,OAlph);
+registration
+  let IAlph, OAlph;
+  cluster connected (finite non empty Mealy-FSM over IAlph,OAlph);
 end;
 
 reserve Ctfsm, Ctfsm1, Ctfsm2 for connected (finite
   non empty Mealy-FSM over IAlph, OAlph);
 
 theorem :: FSM_1:66
-the_reduction_of Ctfsm is connected;
+  the_reduction_of Ctfsm is connected;
 
-registration let IAlph, OAlph;
- cluster connected reduced finite (non empty Mealy-FSM over IAlph,OAlph);
+registration
+  let IAlph, OAlph;
+  cluster connected reduced finite (non empty Mealy-FSM over IAlph,OAlph);
 end;
 
-definition let IAlph, OAlph;
-           let tfsm be non empty Mealy-FSM over IAlph,OAlph;
- func accessibleStates tfsm equals
+definition
+  let IAlph, OAlph;
+  let tfsm be non empty Mealy-FSM over IAlph,OAlph;
+  func accessibleStates tfsm equals
 :: FSM_1:def 23
-   { q where q is State of tfsm : q is accessible };
+  { q where q is State of tfsm : q is accessible };
 end;
 
-registration let IAlph, OAlph, tfsm;
- cluster accessibleStates tfsm -> finite non empty;
+registration
+  let IAlph, OAlph, tfsm;
+  cluster accessibleStates tfsm -> finite non empty;
 end;
 
 theorem :: FSM_1:67
- accessibleStates tfsm c= the carrier of tfsm &
- for q holds q in accessibleStates tfsm iff q is accessible;
+  accessibleStates tfsm c= the carrier of tfsm &
+  for q holds q in accessibleStates tfsm iff q is accessible;
 
 theorem :: FSM_1:68
- (the Tran of tfsm)|[:accessibleStates tfsm, IAlph:] is
-     Function of [:accessibleStates tfsm, IAlph:], accessibleStates tfsm;
+  (the Tran of tfsm)|[:accessibleStates tfsm, IAlph:] is
+  Function of [:accessibleStates tfsm, IAlph:], accessibleStates tfsm;
 
 theorem :: FSM_1:69
-      for cTran being Function of [:accessibleStates tfsm, IAlph:],
-                             accessibleStates tfsm,
-     cOFun being Function of [:accessibleStates tfsm, IAlph:], OAlph,
-     cInitS being Element of accessibleStates tfsm
+  for cTran being Function of [:accessibleStates tfsm, IAlph:],
+  accessibleStates tfsm,
+  cOFun being Function of [:accessibleStates tfsm, IAlph:], OAlph,
+  cInitS being Element of accessibleStates tfsm
   st cTran = (the Tran of tfsm) | [:accessibleStates tfsm, IAlph:] &
-     cOFun = (the OFun of tfsm) | [:accessibleStates tfsm, IAlph:] &
-     cInitS = the InitS of tfsm
+  cOFun = (the OFun of tfsm) | [:accessibleStates tfsm, IAlph:] &
+  cInitS = the InitS of tfsm
   holds tfsm, Mealy-FSM(#accessibleStates tfsm, cTran, cOFun, cInitS#)
-                       -are_equivalent;
+  -are_equivalent;
 
 theorem :: FSM_1:70
-ex Ctfsm st
-   the Tran of Ctfsm = (the Tran of tfsm)|[:accessibleStates tfsm, IAlph:] &
-   the OFun of Ctfsm = (the OFun of tfsm)|[:accessibleStates tfsm, IAlph:] &
-   the InitS of Ctfsm = the InitS of tfsm & tfsm, Ctfsm-are_equivalent;
+  ex Ctfsm st
+  the Tran of Ctfsm = (the Tran of tfsm)|[:accessibleStates tfsm, IAlph:] &
+  the OFun of Ctfsm = (the OFun of tfsm)|[:accessibleStates tfsm, IAlph:] &
+  the InitS of Ctfsm = the InitS of tfsm & tfsm, Ctfsm-are_equivalent;
 
 begin :: Machine union
 
-definition let IAlph be set, OAlph be non empty set;
-           let tfsm1, tfsm2 be non empty Mealy-FSM over IAlph, OAlph;
- func tfsm1-Mealy_union tfsm2 -> strict Mealy-FSM over IAlph, OAlph means
+definition
+  let IAlph be set, OAlph be non empty set;
+  let tfsm1, tfsm2 be non empty Mealy-FSM over IAlph, OAlph;
+  func tfsm1-Mealy_union tfsm2 -> strict Mealy-FSM over IAlph, OAlph means
 :: FSM_1:def 24
 
   the carrier of it = (the carrier of tfsm1) \/ (the carrier of tfsm2) &
@@ -640,110 +672,104 @@ definition let IAlph be set, OAlph be non empty set;
   the InitS of it = the InitS of tfsm1;
 end;
 
-registration let IAlph be set, OAlph be non empty set;
-           let tfsm1, tfsm2 be non empty finite Mealy-FSM over IAlph, OAlph;
- cluster tfsm1-Mealy_union tfsm2 -> non empty finite;
+registration
+  let IAlph be set, OAlph be non empty set;
+  let tfsm1, tfsm2 be non empty finite Mealy-FSM over IAlph, OAlph;
+  cluster tfsm1-Mealy_union tfsm2 -> non empty finite;
 end;
 
 theorem :: FSM_1:71
   tfsm = tfsm1-Mealy_union tfsm2 &
-    the carrier of tfsm1 misses the carrier of tfsm2 & q11 = q
+  the carrier of tfsm1 misses the carrier of tfsm2 & q11 = q
   implies (q11,w)-admissible = (q,w)-admissible;
 
 theorem :: FSM_1:72
-    tfsm = tfsm1-Mealy_union tfsm2 &
-    the carrier of tfsm1 misses the carrier of tfsm2 & q11 = q
+  tfsm = tfsm1-Mealy_union tfsm2 &
+  the carrier of tfsm1 misses the carrier of tfsm2 & q11 = q
   implies (q11,w)-response = (q,w)-response;
 
 theorem :: FSM_1:73
-   tfsm = tfsm1-Mealy_union tfsm2 &
-   the carrier of tfsm1 misses the carrier of tfsm2 & q21 = q
+  tfsm = tfsm1-Mealy_union tfsm2 &
+  the carrier of tfsm1 misses the carrier of tfsm2 & q21 = q
   implies (q21,w)-admissible = (q,w)-admissible;
 
 theorem :: FSM_1:74
-    tfsm = tfsm1-Mealy_union tfsm2 &
-    the carrier of tfsm1 misses the carrier of tfsm2 & q21 = q
+  tfsm = tfsm1-Mealy_union tfsm2 &
+  the carrier of tfsm1 misses the carrier of tfsm2 & q21 = q
   implies (q21,w)-response = (q,w)-response;
 
 reserve Rtfsm1, Rtfsm2 for reduced (non empty Mealy-FSM over IAlph, OAlph);
 
 theorem :: FSM_1:75
-   tfsm = Rtfsm1-Mealy_union Rtfsm2 &
-   the carrier of Rtfsm1 misses the carrier of Rtfsm2 &
-   Rtfsm1, Rtfsm2-are_equivalent
- implies ex Q being State of the_reduction_of tfsm
-           st the InitS of Rtfsm1 in Q & the InitS of Rtfsm2 in Q &
-              Q = the InitS of the_reduction_of tfsm;
+  tfsm = Rtfsm1-Mealy_union Rtfsm2 &
+  the carrier of Rtfsm1 misses the carrier of Rtfsm2 &
+  Rtfsm1, Rtfsm2-are_equivalent
+  implies ex Q being State of the_reduction_of tfsm
+  st the InitS of Rtfsm1 in Q & the InitS of Rtfsm2 in Q &
+  Q = the InitS of the_reduction_of tfsm;
 
 reserve CRtfsm1, CRtfsm2 for connected reduced
-                 (non empty Mealy-FSM over IAlph, OAlph),
-        q1u, q2u for State of tfsm;
+  (non empty Mealy-FSM over IAlph, OAlph),
+  q1u, q2u for State of tfsm;
 
 theorem :: FSM_1:76
-  for crq11, crq12 being State of CRtfsm1 holds
-   crq11 = q1u & crq12 = q2u &
-   the carrier of CRtfsm1 misses the carrier of CRtfsm2 &
-   CRtfsm1, CRtfsm2-are_equivalent & tfsm = CRtfsm1-Mealy_union CRtfsm2 &
-   not crq11, crq12-are_equivalent
- implies not q1u,q2u-are_equivalent;
+  for crq11, crq12 being State of CRtfsm1 holds crq11 = q1u & crq12 = q2u &
+  the carrier of CRtfsm1 misses the carrier of CRtfsm2 &
+  CRtfsm1, CRtfsm2-are_equivalent & tfsm = CRtfsm1-Mealy_union CRtfsm2 &
+  not crq11, crq12-are_equivalent implies not q1u,q2u-are_equivalent;
 
 theorem :: FSM_1:77
-  for crq21, crq22 being State of CRtfsm2 holds
-    crq21 = q1u & crq22 = q2u &
-    the carrier of CRtfsm1 misses the carrier of CRtfsm2 &
-    CRtfsm1, CRtfsm2-are_equivalent & tfsm = CRtfsm1-Mealy_union CRtfsm2 &
-    not crq21, crq22-are_equivalent
-  implies not q1u, q2u-are_equivalent;
+  for crq21, crq22 being State of CRtfsm2 holds crq21 = q1u & crq22 = q2u &
+  the carrier of CRtfsm1 misses the carrier of CRtfsm2 &
+  CRtfsm1, CRtfsm2-are_equivalent & tfsm = CRtfsm1-Mealy_union CRtfsm2 &
+  not crq21, crq22-are_equivalent implies not q1u, q2u-are_equivalent;
 
 reserve CRtfsm1, CRtfsm2 for connected reduced (finite non empty
-                 Mealy-FSM over IAlph, OAlph);
+  Mealy-FSM over IAlph, OAlph);
 
 theorem :: FSM_1:78
-   the carrier of CRtfsm1 misses the carrier of CRtfsm2 &
-   CRtfsm1, CRtfsm2-are_equivalent &
-   tfsm = CRtfsm1-Mealy_union CRtfsm2
- implies for Q being State of the_reduction_of tfsm holds
-    not ex q1, q2 being Element of Q st
-      q1 in the carrier of CRtfsm1 & q2 in the carrier of CRtfsm1 & q1 <> q2;
+  the carrier of CRtfsm1 misses the carrier of CRtfsm2 &
+  CRtfsm1, CRtfsm2-are_equivalent & tfsm = CRtfsm1-Mealy_union CRtfsm2
+  implies for Q being State of the_reduction_of tfsm holds
+  not ex q1, q2 being Element of Q st
+  q1 in the carrier of CRtfsm1 & q2 in the carrier of CRtfsm1 & q1 <> q2;
 
 theorem :: FSM_1:79
   the carrier of CRtfsm1 misses the carrier of CRtfsm2 &
   CRtfsm1, CRtfsm2-are_equivalent & tfsm = CRtfsm1-Mealy_union CRtfsm2
- implies for Q being State of the_reduction_of tfsm holds
-   not ex q1, q2 being Element of Q st
-       q1 in the carrier of CRtfsm2 & q2 in the carrier of CRtfsm2 & q1 <> q2;
+  implies for Q being State of the_reduction_of tfsm holds
+  not ex q1, q2 being Element of Q st
+  q1 in the carrier of CRtfsm2 & q2 in the carrier of CRtfsm2 & q1 <> q2;
 
 theorem :: FSM_1:80
   the carrier of CRtfsm1 misses the carrier of CRtfsm2 &
-  CRtfsm1, CRtfsm2-are_equivalent &
-  tfsm = CRtfsm1-Mealy_union CRtfsm2
- implies for Q being State of the_reduction_of tfsm
-    ex q1, q2 being Element of Q st
-        q1 in the carrier of CRtfsm1 & q2 in the carrier of CRtfsm2 &
-        for q being Element of Q holds q = q1 or q = q2;
+  CRtfsm1, CRtfsm2-are_equivalent & tfsm = CRtfsm1-Mealy_union CRtfsm2
+  implies for Q being State of the_reduction_of tfsm
+  ex q1, q2 being Element of Q st
+  q1 in the carrier of CRtfsm1 & q2 in the carrier of CRtfsm2 &
+  for q being Element of Q holds q = q1 or q = q2;
 
 begin :: The minimization theorem
 
 theorem :: FSM_1:81
- for tfsm1, tfsm2 being finite non empty Mealy-FSM over IAlph, OAlph
+  for tfsm1, tfsm2 being finite non empty Mealy-FSM over IAlph, OAlph
   ex fsm1, fsm2 being finite non empty Mealy-FSM over IAlph, OAlph st
-    the carrier of fsm1 misses the carrier of fsm2 &
-      fsm1, tfsm1-are_isomorphic & fsm2,tfsm2-are_isomorphic;
+  the carrier of fsm1 misses the carrier of fsm2 &
+  fsm1, tfsm1-are_isomorphic & fsm2,tfsm2-are_isomorphic;
 
 theorem :: FSM_1:82
   tfsm1, tfsm2-are_isomorphic implies tfsm1, tfsm2-are_equivalent;
 
 theorem :: FSM_1:83
-   the carrier of CRtfsm1 misses the carrier of CRtfsm2 &
-   CRtfsm1, CRtfsm2-are_equivalent
- implies CRtfsm1, CRtfsm2-are_isomorphic;
+  the carrier of CRtfsm1 misses the carrier of CRtfsm2 &
+  CRtfsm1, CRtfsm2-are_equivalent implies CRtfsm1, CRtfsm2-are_isomorphic;
 
 theorem :: FSM_1:84
   Ctfsm1, Ctfsm2-are_equivalent implies
   the_reduction_of Ctfsm1, the_reduction_of Ctfsm2-are_isomorphic;
 
 theorem :: FSM_1:85
-      for M1, M2 being connected reduced
-   (finite non empty Mealy-FSM over IAlph, OAlph)
+  for M1, M2 being connected reduced
+  (finite non empty Mealy-FSM over IAlph, OAlph)
   holds M1, M2-are_isomorphic iff M1, M2-are_equivalent;
 

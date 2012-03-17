@@ -26,19 +26,19 @@ environ
 begin :: Preliminaries
 
 registration
- cluster Int-Locations -> non empty;
+  cluster Int-Locations -> non empty;
 end;
 
 registration
- cluster FinSeq-Locations -> non empty;
+  cluster FinSeq-Locations -> non empty;
 end;
 
 begin :: Uniqueness of instruction components
 
- reserve a, b, c, a1, a2, b1, b2 for Int-Location,
-         l, l1, l2 for Instruction-Location of SCM+FSA,
-         f, g, f1, f2 for FinSeq-Location,
-         i, j for Instruction of SCM+FSA;
+reserve a, b, c, a1, a2, b1, b2 for Int-Location,
+  l, l1, l2 for Instruction-Location of SCM+FSA,
+  f, g, f1, f2 for FinSeq-Location,
+  i, j for Instruction of SCM+FSA;
 
 canceled 4;
 
@@ -58,7 +58,7 @@ theorem :: SF_MASTR:9
   Divide(a1,b1) = Divide(a2,b2) implies a1 = a2 & b1 = b2;
 
 theorem :: SF_MASTR:10 :: Lgoto6:
-       goto l1 = goto l2 implies l1 = l2;
+  goto l1 = goto l2 implies l1 = l2;
 
 theorem :: SF_MASTR:11
   a1=0_goto l1 = a2=0_goto l2 implies a1 = a2 & l1 = l2;
@@ -82,299 +82,294 @@ begin :: Integer locations used in a macro instruction
 
 definition
   let i be Instruction of SCM+FSA;
- func UsedIntLoc i -> Element of Fin Int-Locations means
+  func UsedIntLoc i -> Element of Fin Int-Locations means
 :: SF_MASTR:def 1
 
- ex a, b being Int-Location st
+  ex a, b being Int-Location st
   (i = (a := b) or i = AddTo(a, b) or i = SubFrom(a, b) or i = MultBy(a, b) or
-   i = Divide(a, b)) & it = {a, b}
-   if InsCode i in {1, 2, 3, 4, 5},
- ex a being Int-Location, l being Instruction-Location of SCM+FSA
-      st (i = a=0_goto l or i = a>0_goto l) & it = {a}
-   if InsCode i = 7 or InsCode i = 8,
- ex a, b being Int-Location, f being FinSeq-Location
-      st (i = b := (f, a) or i = (f, a) := b) & it = {a, b}
-   if InsCode i = 9 or InsCode i = 10,
- ex a being Int-Location, f being FinSeq-Location
-      st (i = a :=len f or i = f :=<0,...,0>a) & it = {a}
-   if InsCode i = 11 or InsCode i = 12
-   otherwise it = {};
+  i = Divide(a, b)) & it = {a, b} if InsCode i in {1, 2, 3, 4, 5},
+  ex a being Int-Location, l being Instruction-Location of SCM+FSA
+  st (i = a=0_goto l or i = a>0_goto l) & it = {a}
+  if InsCode i = 7 or InsCode i = 8,
+  ex a, b being Int-Location, f being FinSeq-Location
+  st (i = b := (f, a) or i = (f, a) := b) & it = {a, b}
+  if InsCode i = 9 or InsCode i = 10,
+  ex a being Int-Location, f being FinSeq-Location
+  st (i = a :=len f or i = f :=<0,...,0>a) & it = {a}
+  if InsCode i = 11 or InsCode i = 12 otherwise it = {};
 end;
 
 theorem :: SF_MASTR:17
- UsedIntLoc halt SCM+FSA = {};
+  UsedIntLoc halt SCM+FSA = {};
 
 theorem :: SF_MASTR:18
-   i = a:=b or i = AddTo(a, b) or i = SubFrom(a, b) or
-   i = MultBy(a, b) or i = Divide(a, b)
-  implies UsedIntLoc i = {a, b};
+  i = a:=b or i = AddTo(a, b) or i = SubFrom(a, b) or
+  i = MultBy(a, b) or i = Divide(a, b) implies UsedIntLoc i = {a, b};
 
 theorem :: SF_MASTR:19
- UsedIntLoc goto l = {};
+  UsedIntLoc goto l = {};
 
 theorem :: SF_MASTR:20
- i = a=0_goto l or i = a>0_goto l implies UsedIntLoc i = {a};
+  i = a=0_goto l or i = a>0_goto l implies UsedIntLoc i = {a};
 
 theorem :: SF_MASTR:21
- i = b := (f, a) or i = (f, a) := b implies UsedIntLoc i = {a, b};
+  i = b := (f, a) or i = (f, a) := b implies UsedIntLoc i = {a, b};
 
 theorem :: SF_MASTR:22
- i = a :=len f or i = f :=<0,...,0>a implies UsedIntLoc i = {a};
+  i = a :=len f or i = f :=<0,...,0>a implies UsedIntLoc i = {a};
 
 definition
- let p be programmed FinPartState of SCM+FSA;
- func UsedIntLoc p -> Subset of Int-Locations means
+  let p be programmed FinPartState of SCM+FSA;
+  func UsedIntLoc p -> Subset of Int-Locations means
 :: SF_MASTR:def 2
 
-   ex UIL being Function of the Instructions of SCM+FSA, Fin Int-Locations
-    st (for i being Instruction of SCM+FSA holds UIL.i = UsedIntLoc i) &
-       it = Union (UIL * p);
+  ex UIL being Function of the Instructions of SCM+FSA, Fin Int-Locations
+  st (for i being Instruction of SCM+FSA holds UIL.i = UsedIntLoc i) &
+  it = Union (UIL * p);
 end;
 
 registration
- let p be programmed FinPartState of SCM+FSA;
- cluster UsedIntLoc p -> finite;
+  let p be programmed FinPartState of SCM+FSA;
+  cluster UsedIntLoc p -> finite;
 end;
 
 reserve p, r for programmed FinPartState of SCM+FSA,
-        I, J for Macro-Instruction,
-        k, m, n for Element of NAT;
+  I, J for Macro-Instruction,
+  k, m, n for Element of NAT;
 
 theorem :: SF_MASTR:23
   i in rng p implies UsedIntLoc i c= UsedIntLoc p;
 
 theorem :: SF_MASTR:24 :: UFP1:
-      UsedIntLoc (p +* r) c= (UsedIntLoc p) \/ (UsedIntLoc r);
+  UsedIntLoc (p +* r) c= (UsedIntLoc p) \/ (UsedIntLoc r);
 
 theorem :: SF_MASTR:25
- dom p misses dom r implies
+  dom p misses dom r implies
   UsedIntLoc (p +* r) = (UsedIntLoc p) \/ (UsedIntLoc r);
 
 theorem :: SF_MASTR:26
- UsedIntLoc p = UsedIntLoc Shift(p, k);
+  UsedIntLoc p = UsedIntLoc Shift(p, k);
 
 theorem :: SF_MASTR:27
   UsedIntLoc i = UsedIntLoc IncAddr(i, k);
 
 theorem :: SF_MASTR:28
- UsedIntLoc p = UsedIntLoc IncAddr(p, k);
+  UsedIntLoc p = UsedIntLoc IncAddr(p, k);
 
 theorem :: SF_MASTR:29
- UsedIntLoc I = UsedIntLoc ProgramPart Relocated (I, k);
+  UsedIntLoc I = UsedIntLoc ProgramPart Relocated (I, k);
 
 theorem :: SF_MASTR:30
- UsedIntLoc I = UsedIntLoc Directed I;
+  UsedIntLoc I = UsedIntLoc Directed I;
 
 theorem :: SF_MASTR:31
   UsedIntLoc (I ';' J) = (UsedIntLoc I) \/ (UsedIntLoc J);
 
 theorem :: SF_MASTR:32
- UsedIntLoc Macro i = UsedIntLoc i;
+  UsedIntLoc Macro i = UsedIntLoc i;
 
 theorem :: SF_MASTR:33 :: MiJ:
-      UsedIntLoc (i ';' J) = (UsedIntLoc i) \/ UsedIntLoc J;
+  UsedIntLoc (i ';' J) = (UsedIntLoc i) \/ UsedIntLoc J;
 
 theorem :: SF_MASTR:34 :: MIj:
-      UsedIntLoc (I ';' j) = (UsedIntLoc I) \/ UsedIntLoc j;
+  UsedIntLoc (I ';' j) = (UsedIntLoc I) \/ UsedIntLoc j;
 
 theorem :: SF_MASTR:35 :: Mij:
-      UsedIntLoc (i ';' j) = (UsedIntLoc i) \/ UsedIntLoc j;
+  UsedIntLoc (i ';' j) = (UsedIntLoc i) \/ UsedIntLoc j;
 
 begin :: Finite sequence locations used in macro instructions
 
 definition
   let i be Instruction of SCM+FSA;
- func UsedInt*Loc i -> Element of Fin FinSeq-Locations means
+  func UsedInt*Loc i -> Element of Fin FinSeq-Locations means
 :: SF_MASTR:def 3
 
- ex a, b being Int-Location, f being FinSeq-Location
-      st (i = b := (f, a) or i = (f, a) := b) & it = {f}
-   if InsCode i = 9 or InsCode i = 10,
- ex a being Int-Location, f being FinSeq-Location
-      st (i = a :=len f or i = f :=<0,...,0>a) & it = {f}
-   if InsCode i = 11 or InsCode i = 12
-   otherwise it = {};
+  ex a, b being Int-Location, f being FinSeq-Location
+  st (i = b := (f, a) or i = (f, a) := b) & it = {f}
+  if InsCode i = 9 or InsCode i = 10,
+  ex a being Int-Location, f being FinSeq-Location
+  st (i = a :=len f or i = f :=<0,...,0>a) & it = {f}
+  if InsCode i = 11 or InsCode i = 12 otherwise it = {};
 end;
 
 theorem :: SF_MASTR:36
-   i = halt SCM+FSA or i = a:=b or i = AddTo(a, b) or i = SubFrom(a, b) or
-   i = MultBy(a, b) or i = Divide(a, b) or i = goto l or i = a=0_goto l or
-   i = a>0_goto l
- implies UsedInt*Loc i = {};
+  i = halt SCM+FSA or i = a:=b or i = AddTo(a, b) or i = SubFrom(a, b) or
+  i = MultBy(a, b) or i = Divide(a, b) or i = goto l or i = a=0_goto l or
+  i = a>0_goto l implies UsedInt*Loc i = {};
 
 theorem :: SF_MASTR:37
- i = b := (f, a) or i = (f, a) := b implies UsedInt*Loc i = {f};
+  i = b := (f, a) or i = (f, a) := b implies UsedInt*Loc i = {f};
 
 theorem :: SF_MASTR:38
- i = a :=len f or i = f :=<0,...,0>a implies UsedInt*Loc i = {f};
+  i = a :=len f or i = f :=<0,...,0>a implies UsedInt*Loc i = {f};
 
 definition
- let p be programmed FinPartState of SCM+FSA;
- func UsedInt*Loc p -> Subset of FinSeq-Locations means
+  let p be programmed FinPartState of SCM+FSA;
+  func UsedInt*Loc p -> Subset of FinSeq-Locations means
 :: SF_MASTR:def 4
 
-   ex UIL being Function of the Instructions of SCM+FSA, Fin FinSeq-Locations
-    st (for i being Instruction of SCM+FSA holds UIL.i = UsedInt*Loc i) &
-       it = Union (UIL * p);
+  ex UIL being Function of the Instructions of SCM+FSA, Fin FinSeq-Locations
+  st (for i being Instruction of SCM+FSA holds UIL.i = UsedInt*Loc i) &
+  it = Union (UIL * p);
 end;
 
 registration
- let p be programmed FinPartState of SCM+FSA;
- cluster UsedInt*Loc p -> finite;
+  let p be programmed FinPartState of SCM+FSA;
+  cluster UsedInt*Loc p -> finite;
 end;
 
 theorem :: SF_MASTR:39
   i in rng p implies UsedInt*Loc i c= UsedInt*Loc p;
 
 theorem :: SF_MASTR:40 :: FUFP1:
-      UsedInt*Loc (p +* r) c= (UsedInt*Loc p) \/ (UsedInt*Loc r);
+  UsedInt*Loc (p +* r) c= (UsedInt*Loc p) \/ (UsedInt*Loc r);
 
 theorem :: SF_MASTR:41
- dom p misses dom r implies
+  dom p misses dom r implies
   UsedInt*Loc (p +* r) = (UsedInt*Loc p) \/ (UsedInt*Loc r);
 
 theorem :: SF_MASTR:42
- UsedInt*Loc p = UsedInt*Loc Shift(p, k);
+  UsedInt*Loc p = UsedInt*Loc Shift(p, k);
 
 theorem :: SF_MASTR:43
   UsedInt*Loc i = UsedInt*Loc IncAddr(i, k);
 
 theorem :: SF_MASTR:44
- UsedInt*Loc p = UsedInt*Loc IncAddr(p, k);
+  UsedInt*Loc p = UsedInt*Loc IncAddr(p, k);
 
 theorem :: SF_MASTR:45
- UsedInt*Loc I = UsedInt*Loc ProgramPart Relocated (I, k);
+  UsedInt*Loc I = UsedInt*Loc ProgramPart Relocated (I, k);
 
 theorem :: SF_MASTR:46
- UsedInt*Loc I = UsedInt*Loc Directed I;
+  UsedInt*Loc I = UsedInt*Loc Directed I;
 
 theorem :: SF_MASTR:47
   UsedInt*Loc (I ';' J) = (UsedInt*Loc I) \/ (UsedInt*Loc J);
 
 theorem :: SF_MASTR:48
- UsedInt*Loc Macro i = UsedInt*Loc i;
+  UsedInt*Loc Macro i = UsedInt*Loc i;
 
 theorem :: SF_MASTR:49 :: FMiJ:
-      UsedInt*Loc (i ';' J) = (UsedInt*Loc i) \/ UsedInt*Loc J;
+  UsedInt*Loc (i ';' J) = (UsedInt*Loc i) \/ UsedInt*Loc J;
 
 theorem :: SF_MASTR:50 :: FMIj:
-      UsedInt*Loc (I ';' j) = (UsedInt*Loc I) \/ UsedInt*Loc j;
+  UsedInt*Loc (I ';' j) = (UsedInt*Loc I) \/ UsedInt*Loc j;
 
 theorem :: SF_MASTR:51 :: FMij:
-      UsedInt*Loc (i ';' j) = (UsedInt*Loc i) \/ UsedInt*Loc j;
+  UsedInt*Loc (i ';' j) = (UsedInt*Loc i) \/ UsedInt*Loc j;
 
 begin :: Choosing integer location not used in a macro instruction
 
-definition let IT be Int-Location;
- attr IT is read-only means
+definition
+  let IT be Int-Location;
+  attr IT is read-only means
 :: SF_MASTR:def 5
- IT = intloc 0;
- end;
 
-notation let IT be Int-Location;
- antonym IT is read-write for IT is read-only;
+  IT = intloc 0;
+end;
+
+notation
+  let IT be Int-Location;
+  antonym IT is read-write for IT is read-only;
 end;
 
 registration
- cluster intloc 0 -> read-only;
+  cluster intloc 0 -> read-only;
 end;
 
 registration
- cluster read-write Int-Location;
+  cluster read-write Int-Location;
 end;
 
 reserve L for finite Subset of Int-Locations;
 
 definition
- let L be finite Subset of Int-Locations;
- func FirstNotIn L -> Int-Location means
+  let L be finite Subset of Int-Locations;
+  func FirstNotIn L -> Int-Location means
 :: SF_MASTR:def 6
- ex sn being non empty Subset of NAT st
-        it = intloc min sn &
-        sn = {k where k is Element of NAT : not intloc k in L};
+
+  ex sn being non empty Subset of NAT st it = intloc min sn &
+  sn = {k where k is Element of NAT : not intloc k in L};
 end;
 
 theorem :: SF_MASTR:52
   not FirstNotIn L in L;
 
 theorem :: SF_MASTR:53 :: FNI2:
-       FirstNotIn L = intloc m & not intloc n in L implies m <= n;
+  FirstNotIn L = intloc m & not intloc n in L implies m <= n;
 
 definition
- let p be programmed FinPartState of SCM+FSA;
- func FirstNotUsed p -> Int-Location means
+  let p be programmed FinPartState of SCM+FSA;
+  func FirstNotUsed p -> Int-Location means
 :: SF_MASTR:def 7
- ex sil being finite Subset of Int-Locations st
-        sil = UsedIntLoc p \/ {intloc 0} &
-        it = FirstNotIn sil;
+
+  ex sil being finite Subset of Int-Locations st
+  sil = UsedIntLoc p \/ {intloc 0} & it = FirstNotIn sil;
 end;
 
 registration
- let p be programmed FinPartState of SCM+FSA;
- cluster FirstNotUsed p -> read-write;
+  let p be programmed FinPartState of SCM+FSA;
+  cluster FirstNotUsed p -> read-write;
 end;
 
 theorem :: SF_MASTR:54
   not FirstNotUsed p in UsedIntLoc p;
 
 theorem :: SF_MASTR:55 :: FUi15:
-       a:=b in rng p or AddTo(a, b) in rng p or SubFrom(a, b) in rng p or
-     MultBy(a, b) in rng p or Divide(a, b) in rng p
-   implies FirstNotUsed p <> a & FirstNotUsed p <> b;
+  a:=b in rng p or AddTo(a, b) in rng p or SubFrom(a, b) in rng p or
+  MultBy(a, b) in rng p or Divide(a, b) in rng p
+  implies FirstNotUsed p <> a & FirstNotUsed p <> b;
 
 theorem :: SF_MASTR:56 :: FUi78:
-       a=0_goto l in rng p or a>0_goto l in rng p implies FirstNotUsed p <> a;
+  a=0_goto l in rng p or a>0_goto l in rng p implies FirstNotUsed p <> a;
 
 theorem :: SF_MASTR:57 :: FUi910:
-       b := (f, a) in rng p or (f, a) := b in rng p
-   implies FirstNotUsed p <> a & FirstNotUsed p <> b;
+  b := (f, a) in rng p or (f, a) := b in rng p
+  implies FirstNotUsed p <> a & FirstNotUsed p <> b;
 
 theorem :: SF_MASTR:58 :: FUi1112:
-       a :=len f in rng p or f :=<0,...,0>a in rng p
-   implies FirstNotUsed p <> a;
+  a :=len f in rng p or f :=<0,...,0>a in rng p implies FirstNotUsed p <> a;
 
 begin :: Choosing finite sequence location not used in a macro instruction
 
 reserve L for finite Subset of FinSeq-Locations;
 
 definition
- let L be finite Subset of FinSeq-Locations;
- func First*NotIn L -> FinSeq-Location means
+  let L be finite Subset of FinSeq-Locations;
+  func First*NotIn L -> FinSeq-Location means
 :: SF_MASTR:def 8
- ex sn being non empty Subset of NAT st
-        it = fsloc min sn &
-        sn = {k where k is Element of NAT : not fsloc k in L};
+
+  ex sn being non empty Subset of NAT st it = fsloc min sn &
+  sn = {k where k is Element of NAT : not fsloc k in L};
 end;
 
 theorem :: SF_MASTR:59
   not First*NotIn L in L;
 
 theorem :: SF_MASTR:60 :: FFNI2:
-       First*NotIn L = fsloc m & not fsloc n in L implies m <= n;
+  First*NotIn L = fsloc m & not fsloc n in L implies m <= n;
 
 definition
- let p be programmed FinPartState of SCM+FSA;
- func First*NotUsed p -> FinSeq-Location means
+  let p be programmed FinPartState of SCM+FSA;
+  func First*NotUsed p -> FinSeq-Location means
 :: SF_MASTR:def 9
- ex sil being finite Subset of FinSeq-Locations st
-        sil = UsedInt*Loc p &
-        it = First*NotIn sil;
+
+  ex sil being finite Subset of FinSeq-Locations st sil = UsedInt*Loc p &
+  it = First*NotIn sil;
 end;
 
 theorem :: SF_MASTR:61
   not First*NotUsed p in UsedInt*Loc p;
 
 theorem :: SF_MASTR:62 :: FFUi910:
-       b := (f, a) in rng p or (f, a) := b in rng p
-   implies First*NotUsed p <> f;
+  b := (f, a) in rng p or (f, a) := b in rng p implies First*NotUsed p <> f;
 
 theorem :: SF_MASTR:63 :: FFUi1112:
-       a :=len f in rng p or f :=<0,...,0>a in rng p
-   implies First*NotUsed p <> f;
+  a :=len f in rng p or f :=<0,...,0>a in rng p implies First*NotUsed p <> f;
 
 begin :: Semantics
 
- reserve s, t for State of SCM+FSA;
+reserve s, t for State of SCM+FSA;
 
 theorem :: SF_MASTR:64
   dom I misses dom Start-At insloc n;
@@ -386,44 +381,36 @@ theorem :: SF_MASTR:66
   (I +* Start-At insloc n).IC SCM+FSA = insloc n;
 
 theorem :: SF_MASTR:67
- I +* Start-At insloc n c= s implies IC s = insloc n;
+  I +* Start-At insloc n c= s implies IC s = insloc n;
 
 theorem :: SF_MASTR:68
- not c in UsedIntLoc i implies Exec(i, s).c = s.c;
+  not c in UsedIntLoc i implies Exec(i, s).c = s.c;
 
 theorem :: SF_MASTR:69 :: UIOneS:
-       I+*Start-At insloc 0 c= s &
-  (for m st m < n holds IC (Computation s).m in dom I) &
-  not a in UsedIntLoc I
- implies (Computation s).n.a = s.a;
+  I+*Start-At insloc 0 c= s &
+  (for m st m < n holds IC (Computation s).m in dom I) & not a in UsedIntLoc I
+  implies (Computation s).n.a = s.a;
 
 theorem :: SF_MASTR:70
- not f in UsedInt*Loc i implies Exec(i, s).f = s.f;
+  not f in UsedInt*Loc i implies Exec(i, s).f = s.f;
 
 theorem :: SF_MASTR:71 :: UIFOneS:
-       I+*Start-At insloc 0 c= s &
+  I+*Start-At insloc 0 c= s &
   (for m st m < n holds IC (Computation s).m in dom I) &
-  not f in UsedInt*Loc I
- implies (Computation s).n.f = s.f;
+  not f in UsedInt*Loc I implies (Computation s).n.f = s.f;
 
 theorem :: SF_MASTR:72
- s | UsedIntLoc i = t | UsedIntLoc i & s | UsedInt*Loc i = t | UsedInt*Loc i &
- IC s = IC t
- implies
-  IC Exec(i, s) = IC Exec(i, t) &
+  s | UsedIntLoc i = t | UsedIntLoc i & s | UsedInt*Loc i = t | UsedInt*Loc i &
+  IC s = IC t implies IC Exec(i, s) = IC Exec(i, t) &
   Exec(i, s) | UsedIntLoc i = Exec(i, t) | UsedIntLoc i &
   Exec(i, s) | UsedInt*Loc i = Exec(i, t) | UsedInt*Loc i;
 
 theorem :: SF_MASTR:73 :: UITwoS:
-      I+*Start-At insloc 0 c= s & I+*Start-At insloc 0 c= t &
- s | UsedIntLoc I = t | UsedIntLoc I & s | UsedInt*Loc I = t | UsedInt*Loc I &
- (for m st m < n holds IC (Computation s).m in dom I)
- implies
- (for m st m < n holds IC (Computation t).m in dom I) &
- for m st m <= n holds
-  IC (Computation s).m = IC (Computation t).m &
-    (for a st a in UsedIntLoc I
-            holds (Computation s).m.a = (Computation t).m.a) &
-     for f st f in UsedInt*Loc I
-            holds (Computation s).m.f = (Computation t).m.f;
+  I+*Start-At insloc 0 c= s & I+*Start-At insloc 0 c= t &
+  s | UsedIntLoc I = t | UsedIntLoc I & s | UsedInt*Loc I = t | UsedInt*Loc I &
+  (for m st m < n holds IC (Computation s).m in dom I) implies
+  (for m st m < n holds IC (Computation t).m in dom I) & for m st m <= n holds
+  IC (Computation s).m = IC (Computation t).m & (for a st a in UsedIntLoc I
+  holds (Computation s).m.a = (Computation t).m.a) &
+  for f st f in UsedInt*Loc I holds (Computation s).m.f = (Computation t).m.f;
 

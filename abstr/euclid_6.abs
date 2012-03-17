@@ -1,0 +1,316 @@
+:: Heron's Formula and Ptolemy's Theorem
+::  by Marco Riccardi
+::
+:: Received January 10, 2008
+:: Copyright (c) 2008 Association of Mizar Users
+
+environ
+
+ vocabularies ARYTM, FUNCT_1, ABSVALUE, ARYTM_1, COMPLEX1, SQUARE_1, RELAT_1,
+      PRE_TOPC, ARYTM_3, MCART_1, EUCLID, BOOLE, ORDINAL2, PROJPL_1, INCSP_1,
+      EUCLID_2, CARD_3, XCMPLX_0, INT_1, JGRAPH_6, RAT_1, SUPINF_1, RCOMP_1,
+      SIN_COS, INCPROJ, COMPTRIG, PROB_2, FINSEQ_6, BORSUK_1, TOPS_2, COMPLEX2,
+      TOPREAL1, EUCLID_3, TOPMETR, PCOMPS_1, METRIC_1, SIN_COS6, RFUNCT_2,
+      EUCLID_6;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, FUNCT_2,
+      VALUED_1, ORDINAL1, ARYTM_3, ARYTM_1, NUMBERS, XREAL_0, SEQ_1, XXREAL_0,
+      EUCLID_2, XXREAL_1, STRUCT_0, PRE_TOPC, FINSEQ_1, SQUARE_1, EUCLID,
+      INT_1, SIN_COS, ARYTM_0, JGRAPH_6, JORDAN2C, COMPTRIG, COMPLEX2,
+      TOPREAL1, TOPMETR, RCOMP_1, EUCLID_3, TOPS_2, XCMPLX_0, COMPLEX1, REAL_1,
+      METRIC_1, PCOMPS_1, SIN_COS6, RFUNCT_2;
+ constructors ARYTM_1, FRAENKEL, NUMBERS, REAL_1, SQUARE_1, BINOP_2, VALUED_0,
+      VALUED_1, COMPLEX1, FINSEQOP, MONOID_0, SEQ_1, EUCLID_2, ENUMSET1,
+      SETFAM_1, XCMPLX_0, XXREAL_0, ORDINAL1, ARYTM_0, RCOMP_1, FINSOP_1,
+      SIN_COS, JGRAPH_6, FINSEQ_4, COMPTRIG, COMPLEX2, TOPMETR, TOPREAL1,
+      EUCLID_3, TOPS_2, JORDAN2C, METRIC_1, PCOMPS_1, SIN_COS6, RFUNCT_2;
+ registrations XBOOLE_0, FUNCT_1, RELSET_1, NUMBERS, XXREAL_0, XREAL_0,
+      BINOP_2, MEMBERED, SEQ_1, MONOID_0, STRUCT_0, EUCLID, ARYTM_3, INT_1,
+      ORDINAL1, JGRAPH_6, FINSEQ_4, XCMPLX_0, TOPREAL5, TOPREALA, TOPMETR,
+      SQUARE_1, FUNCT_2, TOPREAL1, PRE_TOPC, TOPREAL2, JORDAN2C, METRIC_1,
+      PCOMPS_1, BORSUK_1, SIN_COS6, RFUNCT_2, VALUED_0, VALUED_1;
+ requirements BOOLE, SUBSET, REAL, NUMERALS, ARITHM;
+
+
+begin :: Law of Cosines and Meister-Gauss Formula
+
+reserve p1,p2,p3,p4,p5,p6,p,pc for Point of TOP-REAL 2;
+reserve a,b,c,r,s for real number;
+
+theorem :: EUCLID_6:1
+  sin angle(p1,p2,p3) = sin angle(p4,p5,p6) &
+  cos angle(p1,p2,p3) = cos angle(p4,p5,p6) implies
+  angle(p1,p2,p3) = angle(p4,p5,p6);
+
+theorem :: EUCLID_6:2
+  sin angle(p1,p2,p3) = - sin angle(p3,p2,p1);
+
+theorem :: EUCLID_6:3
+  cos angle(p1,p2,p3) = cos angle(p3,p2,p1);
+
+theorem :: EUCLID_6:4
+  angle(p1,p4,p2)+angle(p2,p4,p3)=angle(p1,p4,p3) or
+  angle(p1,p4,p2)+angle(p2,p4,p3)=angle(p1,p4,p3) + 2*PI;
+
+:: Meister-Gauss formula
+
+definition
+  let p1,p2,p3;
+  func the_area_of_polygon3(p1,p2,p3) -> real number equals
+:: EUCLID_6:def 1
+  ((p1`1*p2`2-p2`1*p1`2)+(p2`1*p3`2-p3`1*p2`2)+(p3`1*p1`2-p1`1*p3`2))/2;
+end;
+
+definition
+  let p1,p2,p3;
+  func the_perimeter_of_polygon3(p1,p2,p3) -> real number equals
+:: EUCLID_6:def 2
+  |.p2-p1.| + |.p3-p2.| + |.p1-p3.|;
+end;
+
+:: Area
+
+theorem :: EUCLID_6:5
+  the_area_of_polygon3(p1,p2,p3) = |.p1-p2.|*|.p3-p2.|*sin angle(p3,p2,p1) / 2;
+
+theorem :: EUCLID_6:6
+  p2<>p1 implies
+  |.p3-p2.| * sin angle(p3,p2,p1) = |.p3-p1.| * sin angle(p2,p1,p3);
+
+:: Law of Cosines
+
+theorem :: EUCLID_6:7
+  a = |.p1-p2.| & b = |.p3-p2.| & c = |.p3-p1.|
+  implies c^2 = a^2 + b^2 - 2*a*b * cos angle(p1,p2,p3);
+
+begin :: Some elementary facts about Euclidean geometry
+
+theorem :: EUCLID_6:8
+  p in LSeg(p1,p2) & p<>p1 & p<>p2 implies angle(p1,p,p2) = PI;
+
+theorem :: EUCLID_6:9
+  p in LSeg(p2,p3) & p<>p2 implies angle(p3,p2,p1)=angle(p,p2,p1);
+
+theorem :: EUCLID_6:10
+  p in LSeg(p2,p3) & p<>p2 implies angle(p1,p2,p3) = angle(p1,p2,p);
+
+theorem :: EUCLID_6:11
+  angle(p1,p,p2) = PI implies p in LSeg(p1,p2);
+
+theorem :: EUCLID_6:12
+  p in LSeg(p1,p3) & p in LSeg(p1,p4) & p3<>p4 & p<>p1 implies
+  p3 in LSeg(p1,p4) or p4 in LSeg(p1,p3);
+
+theorem :: EUCLID_6:13
+  p in LSeg(p1,p3) & p<>p1 & p<>p3 implies
+  angle(p1,p,p2)+angle(p2,p,p3)=PI or angle(p1,p,p2)+angle(p2,p,p3)=3*PI;
+
+theorem :: EUCLID_6:14
+  p in LSeg(p1,p2) & p<>p1 & p<>p2 &
+  (angle(p3,p,p1)=PI/2 or angle(p3,p,p1)=3/2*PI) implies
+  angle(p1,p,p3)=angle(p3,p,p2);
+
+:: Vertical angles
+
+theorem :: EUCLID_6:15
+  p in LSeg(p1,p3) & p in LSeg(p2,p4) & p<>p1 & p<>p2 & p<>p3 & p<>p4 implies
+  angle(p1,p,p2)=angle(p3,p,p4);
+
+:: The Isosceles Triangle Theorem A
+
+theorem :: EUCLID_6:16
+  |.p3-p1.|=|.p2-p3.| & p1<>p2 implies angle(p3,p1,p2)=angle(p1,p2,p3);
+
+theorem :: EUCLID_6:17
+  for p1,p2,p3,p st p in LSeg(p1,p2) & p<>p2 holds
+  |(p3-p,p2-p1)| = 0 iff |(p3-p,p2-p)| = 0;
+
+theorem :: EUCLID_6:18
+  |.p1-p3.|=|.p2-p3.| & p in LSeg(p1,p2) & p<>p3 & p<>p1 &
+  (angle(p3,p,p1)=PI/2 or angle(p3,p,p1)=3/2*PI) implies
+  angle(p1,p3,p)=angle(p,p3,p2);
+
+:: The Isosceles Triangle Theorem B
+
+theorem :: EUCLID_6:19
+  for p1,p2,p3,p st |.p1-p3.|=|.p2-p3.| & p in LSeg(p1,p2) & p<>p3 holds
+  (angle(p1,p3,p)=angle(p,p3,p2) implies |.p1-p.| = |.p-p2.|) &
+  (|.p1-p.| = |.p-p2.| implies |(p3-p,p2-p1)| = 0) &
+  (|(p3-p,p2-p1)| = 0 implies angle(p1,p3,p)=angle(p,p3,p2));
+
+definition
+  let p1,p2,p3;
+  pred p1,p2,p3 is_collinear means
+:: EUCLID_6:def 3
+
+  p1 in LSeg(p2,p3) or p2 in LSeg(p3,p1) or p3 in LSeg(p1,p2);
+end;
+
+notation
+  let p1,p2,p3;
+  antonym p1,p2,p3 is_a_triangle for p1,p2,p3 is_collinear;
+end;
+
+theorem :: EUCLID_6:20
+  p1,p2,p3 is_a_triangle iff p1,p2,p3 are_mutually_different &
+  angle(p1,p2,p3)<>PI & angle(p2,p3,p1)<>PI & angle(p3,p1,p2)<>PI;
+
+theorem :: EUCLID_6:21
+  p1,p2,p3 is_a_triangle & p4,p5,p6 is_a_triangle &
+  angle(p1,p2,p3) = angle(p4,p5,p6) & angle(p3,p1,p2) = angle(p6,p4,p5) implies
+  |.p3-p2.|*|.p4-p6.| = |.p1-p3.|*|.p6-p5.| &
+  |.p3-p2.|*|.p5-p4.| = |.p2-p1.|*|.p6-p5.| &
+  |.p1-p3.|*|.p5-p4.| = |.p2-p1.|*|.p4-p6.|;
+
+theorem :: EUCLID_6:22
+  p1,p2,p3 is_a_triangle & p4,p5,p6 is_a_triangle &
+  angle(p1,p2,p3) = angle(p4,p5,p6) & angle(p3,p1,p2) = angle(p5,p6,p4) implies
+  |.p2-p3.| * |.p4-p6.| = |.p3-p1.| * |.p5-p4.| &
+  |.p2-p3.| * |.p6-p5.| = |.p1-p2.| * |.p5-p4.| &
+  |.p3-p1.| * |.p6-p5.| = |.p1-p2.| * |.p4-p6.|;
+
+theorem :: EUCLID_6:23
+  p1,p2,p3 are_mutually_different & angle(p1,p2,p3)<=PI
+  implies angle(p2,p3,p1)<=PI & angle(p3,p1,p2)<=PI;
+
+theorem :: EUCLID_6:24
+  p1,p2,p3 are_mutually_different & angle(p1,p2,p3)>PI
+  implies angle(p2,p3,p1)>PI & angle(p3,p1,p2)>PI;
+
+theorem :: EUCLID_6:25
+  p in LSeg(p1,p2) & p1,p2,p3 is_a_triangle & angle(p1,p3,p2) = angle(p,p3,p2)
+  implies p=p1;
+
+theorem :: EUCLID_6:26
+  p in LSeg(p1,p2) & not p3 in LSeg(p1,p2) & angle(p1,p3,p2) <= PI
+  implies angle(p,p3,p2) <= angle(p1,p3,p2);
+
+theorem :: EUCLID_6:27
+  p in LSeg(p1,p2) & not p3 in LSeg(p1,p2) & angle(p1,p3,p2) > PI & p<>p2
+  implies angle(p,p3,p2) >= angle(p1,p3,p2);
+
+theorem :: EUCLID_6:28
+  p in LSeg(p1,p2) & not p3 in LSeg(p1,p2) implies
+  ex p4 st p4 in LSeg(p1,p2) & angle(p1,p3,p4) = angle(p,p3,p2);
+
+theorem :: EUCLID_6:29
+  p1 in inside_of_circle(a,b,r) & p2 in outside_of_circle(a,b,r) implies
+  ex p st p in LSeg(p1,p2) /\ circle(a,b,r);
+
+theorem :: EUCLID_6:30
+  p1 in circle(a,b,r) & p3 in circle(a,b,r) & p4 in circle(a,b,r) &
+  p in LSeg(p1,p3) & p in LSeg(p1,p4) & p3<>p4 implies p=p1;
+
+theorem :: EUCLID_6:31
+  p1 in circle(a,b,r) & p2 in circle(a,b,r) & p in circle(a,b,r)
+  & pc = |[a,b]| & pc in LSeg(p,p2) & p1<>p implies
+  2*angle(p1,p,p2) = angle(p1,pc,p2) or
+  2*(angle(p1,p,p2) - PI) = angle(p1,pc,p2);
+
+:: opposite point on circle
+
+theorem :: EUCLID_6:32
+  p1 in circle(a,b,r) & r>0 implies
+  ex p2 st p1<>p2 & p2 in circle(a,b,r) & |[a,b]| in LSeg(p1,p2);
+
+:: The centre angle and the inscribed angle
+
+theorem :: EUCLID_6:33
+  p1 in circle(a,b,r) & p2 in circle(a,b,r) & p in circle(a,b,r)
+  & pc = |[a,b]| & p1<>p & p2<>p implies 2*angle(p1,p,p2) = angle(p1,pc,p2) or
+  2*(angle(p1,p,p2) - PI) = angle(p1,pc,p2);
+
+:: Angles subtended by the same chord
+
+theorem :: EUCLID_6:34
+  p1 in circle(a,b,r) & p2 in circle(a,b,r) & p3 in circle(a,b,r) &
+  p4 in circle(a,b,r) & p1<>p3 & p1<>p4 & p2<>p3 & p2<>p4 implies
+  angle(p1,p3,p2) = angle(p1,p4,p2) or
+  angle(p1,p3,p2) = angle(p1,p4,p2) - PI or
+  angle(p1,p3,p2) = angle(p1,p4,p2) + PI;
+
+theorem :: EUCLID_6:35
+  p1 in circle(a,b,r) & p2 in circle(a,b,r) & p3 in circle(a,b,r) &
+  p1<>p2 & p2<>p3 implies angle(p1,p2,p3)<>PI;
+
+theorem :: EUCLID_6:36
+  p1 in circle(a,b,r) & p2 in circle(a,b,r) & p3 in circle(a,b,r) &
+  p4 in circle(a,b,r) & p in LSeg(p1,p3) & p in LSeg(p2,p4) &
+  p1,p2,p3,p4 are_mutually_different implies angle(p1,p4,p2) = angle(p1,p3,p2);
+
+theorem :: EUCLID_6:37
+  p1 in circle(a,b,r) & p2 in circle(a,b,r) & p3 in circle(a,b,r) &
+  angle(p1,p2,p3) = 0 & p1<>p2 & p2<>p3 implies p1=p3;
+
+:: Intersecting Chords Theorem or
+:: Product of Segments of Chords
+
+theorem :: EUCLID_6:38
+  p1 in circle(a,b,r) & p2 in circle(a,b,r) & p3 in circle(a,b,r) &
+  p4 in circle(a,b,r) & p in LSeg(p1,p3) & p in LSeg(p2,p4) implies
+  |.p1-p.|*|.p-p3.| = |.p2-p.|*|.p-p4.|;
+
+begin :: Heron's Formula and Ptolemy's Theorem
+
+:: Heron's formula
+
+theorem :: EUCLID_6:39
+  a = |.p2-p1.| & b = |.p3-p2.| & c = |.p1-p3.| &
+  s = the_perimeter_of_polygon3(p1,p2,p3)/2 implies
+  abs(the_area_of_polygon3(p1,p2,p3)) = sqrt(s*(s-a)*(s-b)*(s-c));
+
+:: Ptolemy's Theorem
+
+theorem :: EUCLID_6:40
+  p1 in circle(a,b,r) & p2 in circle(a,b,r) & p3 in circle(a,b,r) &
+  p4 in circle(a,b,r) & p in LSeg(p1,p3) & p in LSeg(p2,p4) implies
+  |.p3-p1.|*|.p4-p2.| = |.p2-p1.|*|.p4-p3.| + |.p3-p2.|*|.p4-p1.|;
+
+begin :: Appendix
+
+reserve c1,c2,c3 for Element of COMPLEX;
+
+theorem :: EUCLID_6:41
+  (p1-p2)`1 = p1`1 - p2`1 & (p1-p2)`2 = p1`2 - p2`2;
+
+theorem :: EUCLID_6:42
+  |.p1-p2.| = 0 iff p1=p2;
+
+theorem :: EUCLID_6:43
+  |.p1-p2.| = |.p2-p1.|;
+
+theorem :: EUCLID_6:44
+  not angle(p1,p2,p3) = 2*angle(p4,p5,p6)+2*PI;
+
+theorem :: EUCLID_6:45
+  not angle(p1,p2,p3) = 2*angle(p4,p5,p6)+4*PI;
+
+theorem :: EUCLID_6:46
+  not angle(p1,p2,p3) = 2*angle(p4,p5,p6)-4*PI;
+
+theorem :: EUCLID_6:47
+  not angle(p1,p2,p3) = 2*angle(p4,p5,p6)-6*PI;
+
+theorem :: EUCLID_6:48
+  c1=euc2cpx(p1-p2) & c2=euc2cpx(p3-p2)
+  implies angle(p1,p2,p3) = angle(c1,c2);
+
+theorem :: EUCLID_6:49
+  angle(c1,c2) + angle(c2,c3) = angle(c1,c3) or
+  angle(c1,c2) + angle(c2,c3) = angle(c1,c3) + 2*PI;
+
+theorem :: EUCLID_6:50
+  c1 = euc2cpx(p1-p2) & c2 = euc2cpx(p3-p2) implies
+  Re (c1.|.c2) = (p1`1 - p2`1)*(p3`1 - p2`1)+(p1`2 - p2`2)*(p3`2 - p2`2) &
+  Im (c1.|.c2) = -(p1`1 - p2`1)*(p3`2 - p2`2)+(p1`2 - p2`2)*(p3`1 - p2`1) &
+  |.c1.| = sqrt((p1`1 - p2`1)^2 + (p1`2 - p2`2)^2) & |.p1-p2.|=|.c1.|;
+
+theorem :: EUCLID_6:51
+  for n being Element of NAT, q1 being Point of TOP-REAL n
+  for f being Function of TOP-REAL n,R^1 st
+  (for q being Point of TOP-REAL n holds f.q=|.q-q1.|) holds f is continuous;
+
+theorem :: EUCLID_6:52
+  for n being Element of NAT, q1 being Point of TOP-REAL n
+  ex f being Function of TOP-REAL n, R^1 st
+  (for q being Point of TOP-REAL n holds f.q=|.q-q1.|) & f is continuous;
+

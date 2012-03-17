@@ -23,25 +23,19 @@ environ
 begin
 
 theorem :: BOOLMARK:1
-  for A, B being non empty set,
-      f being Function of A,B,
-      C being Subset of A,
-      v being Element of B
-  holds f +* (C-->v) is Function of A,B;
+  for A, B being non empty set, f being Function of A,B, C being Subset of A,
+  v being Element of B holds f +* (C-->v) is Function of A,B;
 
 theorem :: BOOLMARK:2
-  for X, Y being non empty set,
-      A, B being Subset of X,
-      f being Function of X,Y st f.:A misses f.:B
-  holds A misses B;
+  for X, Y being non empty set, A, B being Subset of X,
+  f being Function of X,Y st f.:A misses f.:B holds A misses B;
 
 theorem :: BOOLMARK:3
-  for A, B being set,
-      f being Function,
-      x being set
+  for A, B being set, f being Function, x being set
   holds A misses B implies (f +* (A --> x)).:B = f.:B;
 
 :: Main definitions, theorems block
+
 begin
 
 :: Boolean Markings of Place/Transition Net
@@ -52,7 +46,7 @@ definition
   equals
 :: BOOLMARK:def 1
 
-     Funcs(the Places of PTN, BOOLEAN);
+  Funcs(the Places of PTN, BOOLEAN);
 end;
 
 definition
@@ -69,8 +63,8 @@ definition
   pred t is_firable_on M0 means
 :: BOOLMARK:def 2
 
-    M0.:*'{t} c= {TRUE};
-  end;
+  M0.:*'{t} c= {TRUE};
+end;
 
 notation
   let PTN be PT_net_Str;
@@ -85,8 +79,7 @@ definition
   let t be transition of PTN;
   func Firing(t,M0) -> Boolean_marking of PTN equals
 :: BOOLMARK:def 3
-
-      M0 +* (*'{t}-->FALSE) +* ({t}*'-->TRUE);
+  M0 +* (*'{t}-->FALSE) +* ({t}*'-->TRUE);
 end;
 
 :: Firable and Firing Conditions for Transition Sequences
@@ -98,15 +91,12 @@ definition
   pred Q is_firable_on M0 means
 :: BOOLMARK:def 4
 
-    Q = {}
-      or
-    ex M being FinSequence of Bool_marks_of PTN st len Q = len M
-      & Q/.1 is_firable_on M0
-      & M/.1 = Firing(Q/.1,M0)
-      & for i being Element of NAT st i < len Q & i > 0
-        holds Q/.(i+1) is_firable_on M/.i & M/.(i+1)
-          = Firing(Q/.(i+1),M/.i);
-  end;
+  Q = {} or
+  ex M being FinSequence of Bool_marks_of PTN st len Q = len M
+  & Q/.1 is_firable_on M0 & M/.1 = Firing(Q/.1,M0)
+  & for i being Element of NAT st i < len Q & i > 0
+  holds Q/.(i+1) is_firable_on M/.i & M/.(i+1) = Firing(Q/.(i+1),M/.i);
+end;
 
 notation
   let PTN be PT_net_Str;
@@ -122,79 +112,61 @@ definition
   func Firing(Q,M0) -> Boolean_marking of PTN means
 :: BOOLMARK:def 5
 
-    it = M0 if Q = {}
-      otherwise
-    ex M being FinSequence of Bool_marks_of PTN
-      st len Q = len M
-         & it = M/.len M
-         & M/.1 = Firing(Q/.1,M0)
-         & for i being Element of NAT st i < len Q & i > 0
-           holds M/.(i+1) = Firing(Q/.(i+1),M/.i);
+  it = M0 if Q = {}
+  otherwise ex M being FinSequence of Bool_marks_of PTN st len Q = len M
+  & it = M/.len M & M/.1 = Firing(Q/.1,M0)
+  & for i being Element of NAT st i < len Q & i > 0
+  holds M/.(i+1) = Firing(Q/.(i+1),M/.i);
 end;
 
 canceled;
 
 theorem :: BOOLMARK:5
-  for A being non empty set,
-      y being set,
-      f being Function
+  for A being non empty set, y being set, f being Function
   holds (f+*(A --> y)).:A = {y};
 
 theorem :: BOOLMARK:6
-  for PTN being PT_net_Str,
-      M0 being Boolean_marking of PTN,
-      t being transition of PTN,
-      s being place of PTN st s in {t}*'
+  for PTN being PT_net_Str, M0 being Boolean_marking of PTN,
+  t being transition of PTN, s being place of PTN st s in {t}*'
   holds Firing(t,M0).s = TRUE;
 
 theorem :: BOOLMARK:7
-      for PTN being PT_net_Str,
-      Sd being non empty Subset of the Places of PTN
-  holds Sd is Deadlock-like
-    iff
+  for PTN being PT_net_Str, Sd being non empty Subset of the Places of PTN
+  holds Sd is Deadlock-like iff
   for M0 being Boolean_marking of PTN st M0.:Sd = {FALSE}
-    for t being transition of PTN st t is_firable_on M0
+  for t being transition of PTN st t is_firable_on M0
   holds Firing(t,M0).:Sd = {FALSE};
 
 theorem :: BOOLMARK:8
- for D being non empty set
- for Q0,Q1 being FinSequence of D, i being Element of NAT st 1<=i & i<=len Q0
+  for D being non empty set
+  for Q0,Q1 being FinSequence of D, i being Element of NAT st 1<=i & i<=len Q0
   holds (Q0^Q1)/.i=Q0/.i;
 
 canceled;
 
 theorem :: BOOLMARK:10
-  for PTN being PT_net_Str,
-      M0 being Boolean_marking of PTN,
-      Q0, Q1 being FinSequence of the Transitions of PTN
+  for PTN being PT_net_Str, M0 being Boolean_marking of PTN,
+  Q0, Q1 being FinSequence of the Transitions of PTN
   holds Firing(Q0^Q1,M0) = Firing(Q1,Firing(Q0,M0));
 
 theorem :: BOOLMARK:11
-  for PTN being PT_net_Str,
-      M0 being Boolean_marking of PTN,
-      Q0, Q1 being FinSequence of the Transitions of PTN
-        st Q0^Q1 is_firable_on M0
+  for PTN being PT_net_Str, M0 being Boolean_marking of PTN,
+  Q0, Q1 being FinSequence of the Transitions of PTN st Q0^Q1 is_firable_on M0
   holds Q1 is_firable_on Firing(Q0,M0) & Q0 is_firable_on M0;
 
 theorem :: BOOLMARK:12
-  for PTN being PT_net_Str,
-      M0 being Boolean_marking of PTN,
-      t being transition of PTN
+  for PTN being PT_net_Str, M0 being Boolean_marking of PTN,
+  t being transition of PTN
   holds t is_firable_on M0 iff <*t*> is_firable_on M0;
 
 theorem :: BOOLMARK:13
-  for PTN being PT_net_Str,
-      M0 being Boolean_marking of PTN,
-      t being transition of PTN
-  holds Firing(t,M0) = Firing(<*t*>,M0);
+  for PTN being PT_net_Str, M0 being Boolean_marking of PTN,
+  t being transition of PTN holds Firing(t,M0) = Firing(<*t*>,M0);
 
 theorem :: BOOLMARK:14
-      for PTN being PT_net_Str,
-      Sd being non empty Subset of the Places of PTN
-  holds Sd is Deadlock-like
-    iff
+  for PTN being PT_net_Str, Sd being non empty Subset of the Places of PTN
+  holds Sd is Deadlock-like iff
   for M0 being Boolean_marking of PTN st M0.:Sd = {FALSE}
-    for Q being FinSequence of the Transitions of PTN
-      st Q is_firable_on M0
+  for Q being FinSequence of the Transitions of PTN st Q is_firable_on M0
   holds Firing(Q,M0).:Sd = {FALSE};
 

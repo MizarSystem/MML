@@ -19,302 +19,342 @@ environ
  schemes XBOOLE_0, FUNCT_1;
 
 begin
- reserve x,z for set;
- reserve k for Element of NAT;
- reserve D for non empty set;
 
-definition let B,A be non empty set, b be Element of B;
- redefine func A --> b -> Element of Funcs(A,B);
- coherence
- proof
+reserve x,z for set;
+reserve k for Element of NAT;
+reserve D for non empty set;
+
+definition
+  let B,A be non empty set, b be Element of B;
+  redefine func A --> b -> Element of Funcs(A,B);
+  coherence
+  proof
 A1: {b} c= B by ZFMISC_1:37;
     set f = A --> b;
-       dom f = A & rng f = {b} by FUNCOP_1:14,19;
-      hence thesis by A1,FUNCT_2:def 2;
- end;
+    dom f = A & rng f = {b} by FUNCOP_1:14,19;
+    hence thesis by A1,FUNCT_2:def 2;
+  end;
 end;
 
-definition let IT be set;
+definition
+  let IT be set;
   attr IT is relation-like means
-  :Def1: (for x being set st x in IT holds x is FinSequence) &
-          for a,b being FinSequence st a in IT & b in IT holds len a = len b;
+  :Def1:
+  (for x being set st x in IT holds x is FinSequence) &
+  for a,b being FinSequence st a in IT & b in IT holds len a = len b;
 end;
 
 registration
   cluster relation-like set;
- existence proof take {};
-  thus (for x being set st x in {} holds x is FinSequence) &
-          for a,b being FinSequence st a in {} & b in {} holds len a = len b;
- end;
+  existence
+  proof
+    take {};
+    thus (for x being set st x in {} holds x is FinSequence) &
+    for a,b being FinSequence st a in {} & b in {} holds len a = len b;
+  end;
 end;
 
 definition
   mode relation is relation-like set;
 end;
 
- reserve X for set;
- reserve p,r for relation;
- reserve a,a1,a2,b for FinSequence;
+reserve X for set;
+reserve p,r for relation;
+reserve a,a1,a2,b for FinSequence;
 
 canceled 6;
 
 theorem
-      X c= p implies X is relation-like
- proof assume A1: x in X implies x in p;
-   thus (for x st x in X holds x is FinSequence)
-    proof let x;
-      assume x in X;
-        then x in p by A1;
-        hence thesis by Def1;
-    end;
-   thus for a,b st a in X & b in X holds len a = len b
-     proof let a,b;
-       assume a in X & b in X;
-         then a in p & b in p by A1;
-         hence thesis by Def1;
-     end;
- end;
+  X c= p implies X is relation-like
+proof
+  assume
+A1: x in X implies x in p;
+  thus (for x st x in X holds x is FinSequence)
+  proof
+    let x;
+    assume x in X;
+    then x in p by A1;
+    hence thesis by Def1;
+  end;
+  thus for a,b st a in X & b in X holds len a = len b
+  proof
+    let a,b;
+    assume a in X & b in X;
+    then a in p & b in p by A1;
+    hence thesis by Def1;
+  end;
+end;
 
 theorem
-      {a} is relation-like
- proof
-   thus for z st z in {a} holds z is FinSequence by TARSKI:def 1;
-   thus for a1,a2 st a1 in {a} & a2 in {a} holds len a1 = len a2
-     proof let a1,a2;
-      assume a1 in {a} & a2 in {a};
-        then a1 = a & a2 = a by TARSKI:def 1;
-        hence thesis;
-     end;
- end;
+  {a} is relation-like
+proof
+  thus for z st z in {a} holds z is FinSequence by TARSKI:def 1;
+  thus for a1,a2 st a1 in {a} & a2 in {a} holds len a1 = len a2
+  proof
+    let a1,a2;
+    assume a1 in {a} & a2 in {a};
+    then a1 = a & a2 = a by TARSKI:def 1;
+    hence thesis;
+  end;
+end;
 
- scheme relexist{A() -> set, P[FinSequence]}:
-    ex r st for a holds a in r iff a in A() & P[a]
-  provided
- A1: for a,b st P[a] & P[b] holds len a = len b
+scheme relexist{A() -> set, P[FinSequence]}:
+  ex r st for a holds a in r iff a in A() & P[a]
+provided
+A1: for a,b st P[a] & P[b] holds len a = len b
 proof
   defpred P1[set] means ex a st P[a] & $1 = a;
-    consider X such that
-  A2: x in X iff x in A() & P1[x] from XBOOLE_0:sch 1;
-   A3: for x being set st x in X holds x is FinSequence
-        proof let x be set;
-            assume x in X;
-             then ex a st P[a] & x = a by A2;
-            hence x is FinSequence;
-        end;
-            for a,b st a in X & b in X holds len a = len b
-        proof let a,b;
-          assume that A4: a in X and A5: b in X;
- A6:               ex c being FinSequence st P[c] & a = c by A2,A4;
-                    ex d being FinSequence st P[d] & b = d by A2,A5;
-          hence thesis by A1,A6;
-        end;
-     then reconsider r = X as relation by A3,Def1;
-         for a holds a in r iff a in A() & P[a]
-     proof let a;
-             now assume A7: a in r;
-                then ex c being FinSequence st P[c] & a = c by A2;
-                hence a in A() & P[a] by A2,A7;
-            end;
-          hence thesis by A2;
-     end;
-     hence thesis;
+  consider X such that
+A2: x in X iff x in A() & P1[x] from XBOOLE_0:sch 1;
+A3: for x being set st x in X holds x is FinSequence
+  proof
+    let x be set;
+    assume x in X;
+    then ex a st P[a] & x = a by A2;
+    hence x is FinSequence;
   end;
+  for a,b st a in X & b in X holds len a = len b
+  proof
+    let a,b;
+    assume that
+A4: a in X and
+A5: b in X;
+A6: ex c being FinSequence st P[c] & a = c by A2,A4;
+    ex d being FinSequence st P[d] & b = d by A2,A5;
+    hence thesis by A1,A6;
+  end;
+  then reconsider r = X as relation by A3,Def1;
+  for a holds a in r iff a in A() & P[a]
+  proof
+    let a;
+    now
+      assume
+A7:   a in r;
+      then ex c being FinSequence st P[c] & a = c by A2;
+      hence a in A() & P[a] by A2,A7;
+    end;
+    hence thesis by A2;
+  end;
+  hence thesis;
+end;
 
 definition
- let p,r;
- redefine pred p = r means   for a holds a in p iff a in r;
- compatibility
+  let p,r;
+  redefine pred p = r means
+
+  for a holds a in p iff a in r;
+  compatibility
   proof
-  thus p = r implies (for a holds a in p iff a in r);
-  thus (for a holds a in p iff a in r) implies p = r
-   proof
-     assume A1: for a holds a in p iff a in r;
-          now let x;
-    A2: now assume A3: x in p;
+    thus p = r implies (for a holds a in p iff a in r);
+    thus (for a holds a in p iff a in r) implies p = r
+    proof
+      assume
+A1:   for a holds a in p iff a in r;
+      now
+        let x;
+A2:     now
+          assume
+A3:       x in p;
           then x is FinSequence by Def1;
           hence x in r by A1,A3;
         end;
-            now assume A4: x in r;
-           then x is FinSequence by Def1;
-           hence x in p by A1,A4;
+        now
+          assume
+A4:       x in r;
+          then x is FinSequence by Def1;
+          hence x in p by A1,A4;
         end;
-     hence x in p iff x in r by A2;
+        hence x in p iff x in r by A2;
+      end;
+      hence thesis by TARSKI:2;
     end;
-   hence thesis by TARSKI:2;
   end;
- end;
 end;
 
 registration
- cluster {} -> relation-like;
- coherence
+  cluster {} -> relation-like;
+  coherence
   proof
-   thus (for x being set st x in {} holds x is FinSequence) &
-          for a,b being FinSequence st a in {} & b in {} holds len a = len b;
+    thus (for x being set st x in {} holds x is FinSequence) &
+    for a,b being FinSequence st a in {} & b in {} holds len a = len b;
   end;
 end;
 
 theorem Th9:
- for p st for a holds not a in p holds p = {}
-  proof let p such that
+  for p st for a holds not a in p holds p = {}
+proof
+  let p such that
 A1: for a holds not a in p;
-   assume p <> {};
-    then consider x being set such that
-A2:   x in p by XBOOLE_0:def 1;
-        x is FinSequence by A2,Def1;
-   hence contradiction by A1,A2;
+  assume p <> {};
+  then consider x being set such that
+A2: x in p by XBOOLE_0:def 1;
+  x is FinSequence by A2,Def1;
+  hence contradiction by A1,A2;
+end;
+
+definition
+  let p;
+  assume
+A1: p <> {};
+  canceled;
+  func the_arity_of p -> Element of NAT means
+  for a st a in p holds it = len a;
+  existence
+  proof
+    consider c being FinSequence such that
+A2: c in p by A1,Th9;
+    for a st a in p holds len c = len a by A2,Def1;
+    hence thesis;
   end;
+  uniqueness
+  proof
+    let n1,n2 be Element of NAT;
+    assume that
+A3: for a st a in p holds n1 = len a and
+A4: for a st a in p holds n2 = len a;
+    consider a such that
+A5: a in p by A1,Th9;
+    len a = n1 & len a = n2 by A3,A4,A5;
+    hence thesis;
+  end;
+end;
 
- definition let p;
-  assume A1: p <> {};
- canceled;
-
-   func the_arity_of p -> Element of NAT means
-         for a st a in p holds it = len a;
-   existence
-    proof
-      consider c being FinSequence such that
-  A2:  c in p by A1,Th9;
-          for a st a in p holds len c = len a by A2,Def1;
-      hence thesis;
-    end;
-   uniqueness
-     proof let n1,n2 be Element of NAT;
-       assume that
-         A3: for a st a in p holds n1 = len a and
-         A4: for a st a in p holds n2 = len a;
-         consider a such that
-           A5: a in p by A1,Th9;
-             len a = n1 & len a = n2 by A3,A4,A5;
-         hence thesis;
-     end;
- end;
-
-definition let k;
+definition
+  let k;
   mode relation_length of k -> relation means
-       for a st a in it holds len a = k;
- existence
-  proof take {}; thus thesis; end;
+    for a st a in it holds len a = k;
+  existence
+  proof
+    take {}; thus thesis;
+  end;
 end;
 
 definition
   let X be set;
   mode relation of X -> relation means
-       for a st a in it holds rng a c= X;
- existence
-  proof take {}; thus thesis; end;
+
+    for a st a in it holds rng a c= X;
+  existence
+  proof
+    take {}; thus thesis;
+  end;
 end;
 
 canceled 10;
 
-theorem
- Th20: {} is relation of X
-  proof
-    thus a in {} implies rng a c= X;
-  end;
-
-theorem
- Th21: {} is relation_length of k
-  proof
-    thus a in {} implies len a = k;
-  end;
-
-definition let X, k;
-  mode relation of X,k -> relation means
-        it is relation of X & it is relation_length of k;
- existence
-   proof take {}; thus thesis by Th20,Th21; end;
+theorem Th20:
+  {} is relation of X
+proof
+  thus a in {} implies rng a c= X;
 end;
 
-definition let D;
-   func relations_on D -> set means
- :Def8: for X holds X in it iff X c= D* &
-    for a,b being FinSequence of D st a in X & b in X holds len a = len b;
- existence
+theorem Th21:
+  {} is relation_length of k
+proof
+  thus a in {} implies len a = k;
+end;
+
+definition
+  let X, k;
+  mode relation of X,k -> relation means
+    it is relation of X & it is relation_length of k;
+  existence
+  proof
+    take {}; thus thesis by Th20,Th21;
+  end;
+end;
+
+definition
+  let D;
+  func relations_on D -> set means
+  :Def8:
+  for X holds X in it iff X c= D* &
+  for a,b being FinSequence of D st a in X & b in X holds len a = len b;
+  existence
   proof
     defpred P[set] means ex Y being set st Y = $1 & Y c= D* &
-        for a,b being FinSequence of D st a in Y & b in Y holds
-         len a = len b;
+    for a,b being FinSequence of D st a in Y & b in Y holds len a = len b;
     consider A being set such that
-A1:   for x holds x in A iff x in bool(D*) & P[x] from XBOOLE_0:sch 1;
+A1: for x holds x in A iff x in bool(D*) & P[x] from XBOOLE_0:sch 1;
     take A;
-          for X being set holds X in A iff X c= D* &
-       for a,b being FinSequence of D st a in X & b in X holds len a = len b
-         proof let X be set;
-           thus X in A implies X c= D* & for a,b being FinSequence of D st
-             a in X & b in X holds len a = len b
-           proof
-             assume X in A;
-             then ex Y being set st
-       Y = X & Y c= D* & for a,b being FinSequence of D st
-                 a in Y & b in Y holds len a=len b by A1;
-             hence thesis;
-           end;
-           thus X c= D* & (for a,b being FinSequence of D st
-              a in X & b in X holds len a = len b) implies X in A by A1;
-         end;
-         hence thesis;
+    for X being set holds X in A iff X c= D* &
+    for a,b being FinSequence of D st a in X & b in X holds len a = len b
+    proof
+      let X be set;
+      thus X in A implies X c= D* & for a,b being FinSequence of D st
+      a in X & b in X holds len a = len b
+      proof
+        assume X in A;
+        then ex Y being set st
+        Y = X & Y c= D* & for a,b being FinSequence of D st
+        a in Y & b in Y holds len a=len b by A1;
+        hence thesis;
+      end;
+      thus X c= D* & (for a,b being FinSequence of D st
+      a in X & b in X holds len a = len b) implies X in A by A1;
+    end;
+    hence thesis;
   end;
- uniqueness
+  uniqueness
   proof
     let A1,A2 be set;
-      assume that
-A2:      for X being set holds X in A1 iff X c= D* &
-           for a,b being FinSequence of D st a in X & b in X holds len a=len b
-       and
-A3:      for X being set holds X in A2 iff X c= D* &
-           for a,b being FinSequence of D st a in X & b in X holds len a=len b;
-           for x being set holds x in A1 iff x in A2
-         proof let x;
-           thus x in A1 implies x in A2
-             proof assume x in A1;
-               then x c= D* &
-               for a,b being FinSequence of D st a in x & b in x holds
-                 len a=len b by A2;
-               hence thesis by A3;
-            end;
-          thus x in A2 implies x in A1
-            proof assume x in A2;
-               then x c= D* &
-               for a,b being FinSequence of D st a in x & b in x holds
-                 len a=len b by A3;
-              hence thesis by A2;
-            end;
-         end;
-       hence thesis by TARSKI:2;
+    assume that
+A2: for X being set holds X in A1 iff X c= D* &
+    for a,b being FinSequence of D st a in X & b in X holds len a=len b and
+A3: for X being set holds X in A2 iff X c= D* &
+    for a,b being FinSequence of D st a in X & b in X holds len a=len b;
+    for x being set holds x in A1 iff x in A2
+    proof
+      let x;
+      thus x in A1 implies x in A2
+      proof
+        assume x in A1;
+        then x c= D* & for a,b being FinSequence of D st a in x & b in x holds
+        len a=len b by A2;
+        hence thesis by A3;
+      end;
+      thus x in A2 implies x in A1
+      proof
+        assume x in A2;
+        then x c= D* & for a,b being FinSequence of D st a in x & b in x holds
+        len a=len b by A3;
+        hence thesis by A2;
+      end;
     end;
+    hence thesis by TARSKI:2;
+  end;
 end;
 
-registration let D;
-   cluster relations_on D -> non empty;
- coherence
+registration
+  let D;
+  cluster relations_on D -> non empty;
+  coherence
   proof
-  defpred P[set] means  ex Y being set st Y = $1 & Y c= D* &
-           for a,b being FinSequence of D st a in Y & b in Y holds
-            len a = len b;
-  consider XX being set such that
-A1:  for x holds x in XX iff x in bool(D*) & P[x] from XBOOLE_0:sch 1;
-A2:      {} c= D* by XBOOLE_1:2;
-        for a,b being FinSequence of D st a in {} & b in {} holds len a = len b
-;
-     then reconsider A = XX as non empty set by A1,A2;
-           for X being set holds X in A iff X c= D* &
-        for a,b being FinSequence of D st a in X & b in X holds len a = len b
-          proof let X be set;
-            thus X in A implies X c= D* & for a,b being FinSequence of D st
-              a in X & b in X holds len a = len b
-            proof
-              assume X in A;
-              then ex Y being set st
-              Y = X & Y c= D* & for a,b being FinSequence of D st
-                  a in Y & b in Y holds len a=len b by A1;
-              hence thesis;
-            end;
-            thus X c= D* & (for a,b being FinSequence of D st
-               a in X & b in X holds len a = len b) implies X in A by A1;
-          end;
-          hence thesis by Def8;
-   end;
+    defpred P[set] means ex Y being set st Y = $1 & Y c= D* &
+    for a,b being FinSequence of D st a in Y & b in Y holds len a = len b;
+    consider XX being set such that
+A1: for x holds x in XX iff x in bool(D*) & P[x] from XBOOLE_0:sch 1;
+A2: {} c= D* by XBOOLE_1:2;
+    for a,b being FinSequence of D st a in {} & b in {} holds len a = len b;
+    then reconsider A = XX as non empty set by A1,A2;
+    for X being set holds X in A iff X c= D* &
+    for a,b being FinSequence of D st a in X & b in X holds len a = len b
+    proof
+      let X be set;
+      thus X in A implies X c= D* & for a,b being FinSequence of D st
+      a in X & b in X holds len a = len b
+      proof
+        assume X in A;
+        then ex Y being set st
+        Y = X & Y c= D* & for a,b being FinSequence of D st
+        a in Y & b in Y holds len a=len b by A1;
+        hence thesis;
+      end;
+      thus X c= D* & (for a,b being FinSequence of D st
+      a in X & b in X holds len a = len b) implies X in A by A1;
+    end;
+    hence thesis by Def8;
+  end;
 end;
 
 definition
@@ -328,293 +368,332 @@ reserve p,r for Element of relations_on D;
 canceled 4;
 
 theorem
-      X c= r implies X is Element of relations_on D
- proof assume A1: X c= r;
-       X in relations_on D
-   proof
-         r c= D* by Def8;
-then A2:  X c= D* by A1,XBOOLE_1:1;
-         for a,b st a in X & b in X holds len a = len b by A1,Def8;
-     hence thesis by A2,Def8;
-   end;
-   hence thesis;
+  X c= r implies X is Element of relations_on D
+proof
+  assume
+A1: X c= r;
+  X in relations_on D
+  proof
+    r c= D* by Def8;
+    then
+A2: X c= D* by A1,XBOOLE_1:1;
+    for a,b st a in X & b in X holds len a = len b by A1,Def8;
+    hence thesis by A2,Def8;
+  end;
+  hence thesis;
 end;
 
 theorem
-      {a} is Element of relations_on D
- proof
-       {a} in relations_on D
-   proof
-         a in D* by FINSEQ_1:def 11;
-then A1:  {a} c= D* by ZFMISC_1:37;
-         for a1,a2 being FinSequence of D st a1 in {a} & a2 in {a} holds
-       len a1 = len a2
-     proof let a1,a2 be FinSequence of D;
-       assume a1 in {a} & a2 in {a};
-         then a1 = a & a2 = a by TARSKI:def 1;
-         hence thesis;
-     end;
-     hence thesis by A1,Def8;
-   end;
-   hence thesis;
+  {a} is Element of relations_on D
+proof
+  {a} in relations_on D
+  proof
+    a in D* by FINSEQ_1:def 11;
+    then
+A1: {a} c= D* by ZFMISC_1:37;
+    for a1,a2 being FinSequence of D st a1 in {a} & a2 in {a} holds
+    len a1 = len a2
+    proof
+      let a1,a2 be FinSequence of D;
+      assume a1 in {a} & a2 in {a};
+      then a1 = a & a2 = a by TARSKI:def 1;
+      hence thesis;
+    end;
+    hence thesis by A1,Def8;
+  end;
+  hence thesis;
 end;
 
 theorem
-      for x,y being Element of D holds {<*x,y*>} is Element of relations_on D
- proof let x,y be Element of D;
-       {<*x,y*>} in relations_on D
-   proof
-         <*x*>^<*y*> is FinSequence of D;
-     then <*x,y*> is FinSequence of D by FINSEQ_1:def 9;
-     then <*x,y*> in D* by FINSEQ_1:def 11;
-then A1:  {<*x,y*>} c= D* by ZFMISC_1:37;
-         for a1,a2 being FinSequence of D st a1 in {<*x,y*>} & a2 in {<*x,y*>}
-       holds len a1 = len a2
-     proof let a1,a2 be FinSequence of D;
-       assume a1 in {<*x,y*>} & a2 in {<*x,y*>};
-         then a1 = <*x,y*> & a2 = <*x,y*> by TARSKI:def 1;
-         hence thesis;
-     end;
-     hence thesis by A1,Def8;
-   end;
-   hence thesis;
+  for x,y being Element of D holds {<*x,y*>} is Element of relations_on D
+proof
+  let x,y be Element of D;
+  {<*x,y*>} in relations_on D
+  proof
+    <*x*>^<*y*> is FinSequence of D;
+    then <*x,y*> is FinSequence of D by FINSEQ_1:def 9;
+    then <*x,y*> in D* by FINSEQ_1:def 11;
+    then
+A1: {<*x,y*>} c= D* by ZFMISC_1:37;
+    for a1,a2 being FinSequence of D st a1 in {<*x,y*>} & a2 in {<*x,y*>}
+    holds len a1 = len a2
+    proof
+      let a1,a2 be FinSequence of D;
+      assume a1 in {<*x,y*>} & a2 in {<*x,y*>};
+      then a1 = <*x,y*> & a2 = <*x,y*> by TARSKI:def 1;
+      hence thesis;
+    end;
+    hence thesis by A1,Def8;
+  end;
+  hence thesis;
 end;
 
 definition
- let D,p,r;
- redefine pred p = r means :Def9: for a holds a in p iff a in r;
- compatibility
+  let D,p,r;
+  redefine pred p = r means
+  :Def9:
+  for a holds a in p iff a in r;
+  compatibility
   proof
-  thus p = r implies (for a holds a in p iff a in r);
-  thus (for a holds a in p iff a in r) implies p = r
-   proof
-     assume A1: for a holds a in p iff a in r;
-          now let x;
-    A2: now
-           A3:  p is Subset of D* by Def8;
-         assume A4: x in p; then x is FinSequence of D by A3,FINSEQ_1:def 11;
-           hence x in r by A1,A4;
+    thus p = r implies (for a holds a in p iff a in r);
+    thus (for a holds a in p iff a in r) implies p = r
+    proof
+      assume
+A1:   for a holds a in p iff a in r;
+      now
+        let x;
+A2:     now
+A3:       p is Subset of D* by Def8;
+          assume
+A4:       x in p;
+          then x is FinSequence of D by A3,FINSEQ_1:def 11;
+          hence x in r by A1,A4;
         end;
-            now
-           A5:  r is Subset of D* by Def8;
-         assume A6: x in r; then x is FinSequence of D by A5,FINSEQ_1:def 11;
-           hence x in p by A1,A6;
+        now
+A5:       r is Subset of D* by Def8;
+          assume
+A6:       x in r;
+          then x is FinSequence of D by A5,FINSEQ_1:def 11;
+          hence x in p by A1,A6;
         end;
-     hence x in p iff x in r by A2;
+        hence x in p iff x in r by A2;
+      end;
+      hence thesis by TARSKI:2;
     end;
-   hence thesis by TARSKI:2;
   end;
- end;
 end;
 
 scheme relDexist{D() -> non empty set, P[FinSequence of D()]}:
   ex r being Element of relations_on D() st
-   for a being FinSequence of D() holds a in r iff P[a]
-  provided
-    A1: for a,b being FinSequence of D() st P[a] & P[b] holds len a = len b
+  for a being FinSequence of D() holds a in r iff P[a]
+provided
+A1: for a,b being FinSequence of D() st P[a] & P[b] holds len a = len b
 proof
-  defpred P1[set] means ex a being FinSequence of D() st P[a] & $1 =  a;
-    consider X being set such that
-  A2: x in X iff x in D()* & P1[x] from XBOOLE_0:sch 1;
-   A3:  X c= D()*
-        proof
-              for x holds x in X implies x in D()* by A2;
-          hence thesis by TARSKI:def 3;
-        end;
-            for a,b being FinSequence of D() st a in X & b in X holds
-                                                           len a = len b
-        proof let a,b be FinSequence of D();
-          assume that A4: a in X and A5: b in X;
- A6:               ex c being FinSequence of D() st P[c] & a = c by A2,A4;
-                    ex d being FinSequence of D() st P[d] & b = d by A2,A5;
-          hence thesis by A1,A6;
-        end;
-     then reconsider r = X as Element of relations_on D() by A3,Def8;
-         for a being FinSequence of D() holds a in r iff P[a]
-     proof let a be FinSequence of D();
-        A7: now assume a in r;
-                   then ex c being FinSequence of D() st P[c] & a = c by A2;
-                hence P[a];
-            end;
-                now assume A8: P[a];
-                    a in D()* by FINSEQ_1:def 11;
-               hence a in r by A2,A8;
-            end;
-          hence thesis by A7;
-     end;
-     hence thesis;
+  defpred P1[set] means ex a being FinSequence of D() st P[a] & $1 = a;
+  consider X being set such that
+A2: x in X iff x in D()* & P1[x] from XBOOLE_0:sch 1;
+A3: X c= D()*
+  proof
+    for x holds x in X implies x in D()* by A2;
+    hence thesis by TARSKI:def 3;
   end;
+  for a,b being FinSequence of D() st a in X & b in X holds len a = len b
+  proof
+    let a,b be FinSequence of D();
+    assume that
+A4: a in X and
+A5: b in X;
+A6: ex c being FinSequence of D() st P[c] & a = c by A2,A4;
+    ex d being FinSequence of D() st P[d] & b = d by A2,A5;
+    hence thesis by A1,A6;
+  end;
+  then reconsider r = X as Element of relations_on D() by A3,Def8;
+  for a being FinSequence of D() holds a in r iff P[a]
+  proof
+    let a be FinSequence of D();
+A7: now
+      assume a in r;
+      then ex c being FinSequence of D() st P[c] & a = c by A2;
+      hence P[a];
+    end;
+    now
+      assume
+A8:   P[a];
+      a in D()* by FINSEQ_1:def 11;
+      hence a in r by A2,A8;
+    end;
+    hence thesis by A7;
+  end;
+  hence thesis;
+end;
 
-definition let D;
+definition
+  let D;
   func empty_rel(D) -> Element of relations_on D means
-  :Def10: not a in it;
- existence
-   proof
-   defpred P[FinSequence of D] means $1 in {} & contradiction;
- A1: P[a] & P[b] implies len a = len b;
+  :Def10:
+  not a in it;
+  existence
+  proof
+    defpred P[FinSequence of D] means $1 in {} & contradiction;
+A1: P[a] & P[b] implies len a = len b;
     consider r such that
 A2: for a holds a in r iff P[a] from relDexist(A1);
     take r;
     thus thesis by A2;
   end;
- uniqueness
-  proof let r1,r2 be Element of relations_on D;
-  assume that A3: not a in r1 and A4: not a in r2;
-        for a holds ( a in r1 iff a in r2) by A3,A4;
-  hence r1 = r2 by Def9;
+  uniqueness
+  proof
+    let r1,r2 be Element of relations_on D;
+    assume that
+A3: not a in r1 and
+A4: not a in r2;
+    for a holds ( a in r1 iff a in r2) by A3,A4;
+    hence r1 = r2 by Def9;
   end;
- end;
+end;
 
 canceled 3;
 
 theorem
-      empty_rel(D) = {}
-  proof
-   assume
-A1:  not thesis;
-    consider x being Element of empty_rel(D);
-            empty_rel(D) is Subset of D* by Def8;
-        then x in D* by A1,TARSKI:def 3;
-        then reconsider a = x as FinSequence of D by FINSEQ_1:def 11;
-            a in empty_rel(D) by A1;
-        hence contradiction by Def10;
-  end;
+  empty_rel(D) = {}
+proof
+  assume
+A1: not thesis;
+  consider x being Element of empty_rel(D);
+  empty_rel(D) is Subset of D* by Def8;
+  then x in D* by A1,TARSKI:def 3;
+  then reconsider a = x as FinSequence of D by FINSEQ_1:def 11;
+  a in empty_rel(D) by A1;
+  hence contradiction by Def10;
+end;
 
 definition
   let D,p;
-  assume A1: p <> empty_rel(D);
-   func the_arity_of p -> Element of NAT means
-         a in p implies it = len a;
-   existence
-     proof
-        consider c being FinSequence of D such that
-           A2: c in p by A1,Def10;
-            a in p implies len c = len a by A2,Def8;
-        hence thesis;
-     end;
-   uniqueness
-     proof let n1,n2 be Element of NAT;
-       assume that
-         A3: a in p implies n1 = len a and
-         A4: a in p implies n2 = len a;
-         consider a such that
-           A5: a in p by A1,Def10;
-             len a = n1 & len a = n2 by A3,A4,A5;
-         hence thesis;
-     end;
- end;
+  assume
+A1: p <> empty_rel(D);
+  func the_arity_of p -> Element of NAT means
 
-scheme relDexist2{D() -> non empty set, k() -> Element of NAT,
-                  P[FinSequence of D()]}:
-  ex r being Element of relations_on D() st
-    for a being FinSequence of D() st len a = k() holds a in r iff P[a]
-proof
-  defpred P1[set] means
-     ex a being FinSequence of D() st len a = k() & P[a] & $1 = a;
-    consider X being set such that
-  A1: x in X iff x in D()* & P1[x] from XBOOLE_0:sch 1;
-   A2:  X c= D()*
-        proof
-              for x holds x in X implies x in D()* by A1;
-          hence thesis by TARSKI:def 3;
-        end;
-            for a,b being FinSequence of D() st a in X & b in X holds
-                                                           len a = len b
-        proof let a,b be FinSequence of D();
-          assume that A3: a in X and A4: b in X;
-A5:       ex c being FinSequence of D() st
-          len c = k() & P[c] & a = c by A1,A3;
-           ex d being FinSequence of D() st
-          len d = k() & P[d] & b = d by A1,A4;
-          hence len a = len b by A5;
-        end;
-     then reconsider r = X as Element of relations_on D() by A2,Def8;
-         for a being FinSequence of D() st len a = k() holds a in r iff P[a]
-     proof let a be FinSequence of D() such that
-        A6: len a = k();
-        A7: now assume a in r;
-                 then ex c being FinSequence of D() st
- len c = k() & P[c] & a = c by A1;
-                hence P[a];
-            end;
-                now assume A8: P[a];
-                    a in D()* by FINSEQ_1:def 11;
-               hence a in r by A1,A6,A8;
-            end;
-          hence thesis by A7;
-     end;
+  a in p implies it = len a;
+  existence
+  proof
+    consider c being FinSequence of D such that
+A2: c in p by A1,Def10;
+    a in p implies len c = len a by A2,Def8;
     hence thesis;
   end;
+  uniqueness
+  proof
+    let n1,n2 be Element of NAT;
+    assume that
+A3: a in p implies n1 = len a and
+A4: a in p implies n2 = len a;
+    consider a such that
+A5: a in p by A1,Def10;
+    len a = n1 & len a = n2 by A3,A4,A5;
+    hence thesis;
+  end;
+end;
 
- definition
-  func BOOLEAN -> set equals    {0,1};
- coherence;
- end;
-
- registration
-  cluster BOOLEAN -> non empty;
- coherence;
- end;
-
- definition
-  redefine
-  func FALSE -> Element of BOOLEAN;
-   coherence by TARSKI:def 2;
-  func TRUE -> Element of BOOLEAN;
-   coherence by TARSKI:def 2;
- end;
+scheme relDexist2{D() -> non empty set, k() -> Element of NAT,
+  P[FinSequence of D()]}: ex r being Element of relations_on D() st
+  for a being FinSequence of D() st len a = k() holds a in r iff P[a]
+proof
+  defpred P1[set] means
+  ex a being FinSequence of D() st len a = k() & P[a] & $1 = a;
+  consider X being set such that
+A1: x in X iff x in D()* & P1[x] from XBOOLE_0:sch 1;
+A2: X c= D()*
+  proof
+    for x holds x in X implies x in D()* by A1;
+    hence thesis by TARSKI:def 3;
+  end;
+  for a,b being FinSequence of D() st a in X & b in X holds len a = len b
+  proof
+    let a,b be FinSequence of D();
+    assume that
+A3: a in X and
+A4: b in X;
+A5: ex c being FinSequence of D() st len c = k() & P[c] & a = c by A1,A3;
+    ex d being FinSequence of D() st len d = k() & P[d] & b = d by A1,A4;
+    hence len a = len b by A5;
+  end;
+  then reconsider r = X as Element of relations_on D() by A2,Def8;
+  for a being FinSequence of D() st len a = k() holds a in r iff P[a]
+  proof
+    let a be FinSequence of D() such that
+A6: len a = k();
+A7: now
+      assume a in r;
+      then ex c being FinSequence of D() st len c = k() & P[c] & a = c by A1;
+      hence P[a];
+    end;
+    now
+      assume
+A8:   P[a];
+      a in D()* by FINSEQ_1:def 11;
+      hence a in r by A1,A6,A8;
+    end;
+    hence thesis by A7;
+  end;
+  hence thesis;
+end;
 
 definition
- let x be set;
- redefine attr x is boolean means
-:Def13: x in BOOLEAN;
- compatibility
+  func BOOLEAN -> set equals
+
+  {0,1};
+  coherence;
+end;
+
+registration
+  cluster BOOLEAN -> non empty;
+  coherence;
+end;
+
+definition
+  redefine
+  func FALSE -> Element of BOOLEAN;
+  coherence by TARSKI:def 2;
+  func TRUE -> Element of BOOLEAN;
+  coherence by TARSKI:def 2;
+end;
+
+definition
+  let x be set;
+  redefine attr x is boolean means
+  :Def13:
+  x in BOOLEAN;
+  compatibility
   proof
-   hereby assume x is boolean;
-     then x = FALSE or x = TRUE by XBOOLEAN:def 3;
-    hence x in BOOLEAN;
-   end;
-   assume x in BOOLEAN;
-   hence x = FALSE or x = TRUE by TARSKI:def 2;
+    hereby
+      assume x is boolean;
+      then x = FALSE or x = TRUE by XBOOLEAN:def 3;
+      hence x in BOOLEAN;
+    end;
+    assume x in BOOLEAN;
+    hence x = FALSE or x = TRUE by TARSKI:def 2;
   end;
 end;
 
 registration
- cluster -> boolean Element of BOOLEAN;
- coherence by Def13;
+  cluster -> boolean Element of BOOLEAN;
+  coherence by Def13;
 end;
 
 reserve u,v,w for boolean set;
 
-  definition
-   redefine
-    let v be boolean set;
+definition
+  redefine
+  let v be boolean set;
   func 'not' v equals
-     TRUE if v = FALSE
-               otherwise FALSE;
+
+  TRUE if v = FALSE otherwise FALSE;
   compatibility
-   proof let w;
+  proof
+    let w;
     thus v = FALSE implies (w = 'not' v iff w = TRUE);
     assume v <> FALSE;
-     then v = TRUE by XBOOLEAN:def 3;
+    then v = TRUE by XBOOLEAN:def 3;
     hence w = 'not' v iff w = FALSE;
-   end;
+  end;
   consistency;
-    let w be boolean set;
+  let w be boolean set;
   func v '&' w equals
-     TRUE if v = TRUE & w =TRUE
-      otherwise FALSE;
+
+  TRUE if v = TRUE & w =TRUE otherwise FALSE;
   compatibility
-   proof let u be set;
+  proof
+    let u be set;
     thus v = TRUE & w =TRUE implies (u = v '&' w iff u = TRUE);
     assume v <> TRUE or w <>TRUE;
-     then v = FALSE or w = FALSE by XBOOLEAN:def 3;
+    then v = FALSE or w = FALSE by XBOOLEAN:def 3;
     hence u = v '&' w iff u = FALSE;
-   end;
+  end;
   consistency;
- end;
+end;
 
-definition let v be Element of BOOLEAN;
+definition
+  let v be Element of BOOLEAN;
   redefine func 'not' v -> Element of BOOLEAN;
   correctness by Def13;
   let w be Element of BOOLEAN;
@@ -625,248 +704,275 @@ end;
 canceled 7;
 
 theorem
-   'not' 'not' v = v;
+  'not' 'not' v = v;
 
 theorem
-  (v = FALSE iff 'not' v = TRUE) &
-      (v = TRUE iff 'not' v = FALSE);
+  (v = FALSE iff 'not' v = TRUE) & (v = TRUE iff 'not' v = FALSE);
 
 canceled 3;
 
 theorem
-    (v '&' w = TRUE iff v = TRUE & w = TRUE) &
-        (v '&' w = FALSE iff v = FALSE or w = FALSE) by XBOOLEAN:101,140;
+  (v '&' w = TRUE iff v = TRUE & w = TRUE) &
+  (v '&' w = FALSE iff v = FALSE or w = FALSE) by XBOOLEAN:101,140;
 
 canceled 3;
 
 theorem
-      FALSE '&' v = FALSE;
+  FALSE '&' v = FALSE;
 
 theorem
-      TRUE '&' v = v;
+  TRUE '&' v = v;
 
 theorem
-      v '&' v = FALSE implies v = FALSE;
+  v '&' v = FALSE implies v = FALSE;
 
 theorem
-      v '&' (w '&' u) = (v '&' w) '&' u;
+  v '&' (w '&' u) = (v '&' w) '&' u;
 
- definition let X;
-    func ALL(X) equals
-    :Def16: TRUE if not FALSE in X
-      otherwise FALSE;
-   correctness;
- end;
+definition
+  let X;
+  func ALL(X) equals
+  :Def16:
+  TRUE if not FALSE in X otherwise FALSE;
+  correctness;
+end;
 
- registration
+registration
   let X;
   cluster ALL X -> boolean;
-   correctness by Def16;
- end;
+  correctness by Def16;
+end;
 
-definition let X;
+definition
+  let X;
   redefine func ALL X -> Element of BOOLEAN;
   correctness by Def13;
 end;
 
 theorem
-      (not FALSE in X iff ALL(X) = TRUE) &
-      (FALSE in X iff ALL(X) = FALSE) by Def16;
+  (not FALSE in X iff ALL(X) = TRUE) &
+  (FALSE in X iff ALL(X) = FALSE) by Def16;
 
 begin :: Addenda
 
 :: from VALUAT_1, 2007.03.15, A.T.
 
-definition let f be Function;
- attr f is boolean-valued means
-:Def17: rng f c= BOOLEAN;
+definition
+  let f be Function;
+  attr f is boolean-valued means
+  :Def17:
+  rng f c= BOOLEAN;
 end;
 
 registration
- cluster boolean-valued Function;
- existence
-  proof take {};
-   thus rng {} c= BOOLEAN by XBOOLE_1:2;
+  cluster boolean-valued Function;
+  existence
+  proof
+    take {};
+    thus rng {} c= BOOLEAN by XBOOLE_1:2;
   end;
 end;
 
-registration let f be boolean-valued Function, x be set;
- cluster f.x -> boolean;
- coherence
+registration
+  let f be boolean-valued Function, x be set;
+  cluster f.x -> boolean;
+  coherence
   proof
-   per cases;
-   suppose not x in dom f;
-    then f.x = FALSE by FUNCT_1:def 4;
-   hence f.x in BOOLEAN;
-   end;
-   suppose x in dom f;
-    then A1:   f.x in rng f by FUNCT_1:def 5;
-        rng f c= BOOLEAN by Def17;
-   hence f.x in BOOLEAN by A1;
-  end;
+    per cases;
+    suppose not x in dom f;
+      then f.x = FALSE by FUNCT_1:def 4;
+      hence f.x in BOOLEAN;
+    end;
+    suppose x in dom f;
+      then
+A1:   f.x in rng f by FUNCT_1:def 5;
+      rng f c= BOOLEAN by Def17;
+      hence f.x in BOOLEAN by A1;
+    end;
   end;
 end;
 
 definition
- let p be boolean-valued Function;
+  let p be boolean-valued Function;
   func 'not' p -> boolean-valued Function means
-:Def18: dom it = dom p &
-   for x being set st x in dom p holds it.x = 'not'(p.x);
- existence
+  :Def18:
+  dom it = dom p &
+  for x being set st x in dom p holds it.x = 'not'(p.x);
+  existence
   proof
-       deffunc F(set) = 'not'(p.$1);
-       consider q being Function such that
-A1:     dom q = dom p and
-  A2:   for x being set st x in dom p holds q.x = F(x) from FUNCT_1:sch 3;
-     q is boolean-valued
-   proof let x be set;
-    assume x in rng q;
-     then consider y being set such that
+    deffunc F(set) = 'not'(p.$1);
+    consider q being Function such that
+A1: dom q = dom p and
+A2: for x being set st x in dom p holds q.x = F(x) from FUNCT_1:sch 3;
+    q is boolean-valued
+    proof
+      let x be set;
+      assume x in rng q;
+      then consider y being set such that
 A3:   y in dom q and
 A4:   x = q.y by FUNCT_1:def 5;
       x = 'not'(p.y) by A1,A2,A3,A4;
-     then x = FALSE or x = TRUE by XBOOLEAN:def 3;
-    hence x in BOOLEAN;
-   end;
-   hence thesis by A1,A2;
+      then x = FALSE or x = TRUE by XBOOLEAN:def 3;
+      hence x in BOOLEAN;
+    end;
+    hence thesis by A1,A2;
   end;
- uniqueness
-   proof let q1,q2 be boolean-valued Function such that
+  uniqueness
+  proof
+    let q1,q2 be boolean-valued Function such that
 A5: dom q1 = dom p and
-   A6:  for x being set st x in dom p holds q1.x = 'not'(p.x) and
+A6: for x being set st x in dom p holds q1.x = 'not'(p.x) and
 A7: dom q2 = dom p and
-   A8:  for x being set st x in dom p holds q2.x = 'not'(p.x);
-            for x being set st x in dom p holds q1.x = q2.x
-        proof let x be set;
-         assume x in dom p;
-          then q1.x = 'not'(p.x) & q2.x = 'not'(p.x) by A6,A8;
-         hence thesis;
-        end;
-     hence thesis by A5,A7,FUNCT_1:9;
-   end;
+A8: for x being set st x in dom p holds q2.x = 'not'(p.x);
+    for x being set st x in dom p holds q1.x = q2.x
+    proof
+      let x be set;
+      assume x in dom p;
+      then q1.x = 'not'(p.x) & q2.x = 'not'(p.x) by A6,A8;
+      hence thesis;
+    end;
+    hence thesis by A5,A7,FUNCT_1:9;
+  end;
   involutiveness
-   proof let q,p be boolean-valued Function;
+  proof
+    let q,p be boolean-valued Function;
     assume that
-A9:  dom q = dom p and
+A9: dom q = dom p and
 A10: for x being set st x in dom p holds q.x = 'not'(p.x);
     thus dom p = dom q by A9;
     let x be set;
     assume
-A11:  x in dom q;
+A11: x in dom q;
     thus p.x = 'not' 'not'(p.x)
-       .= 'not'(q.x) by A9,A10,A11;
-   end;
- let q be boolean-valued Function;
+      .= 'not'(q.x) by A9,A10,A11;
+  end;
+  let q be boolean-valued Function;
   func p '&' q -> boolean-valued Function means
-:Def19: dom it = dom p /\ dom q &
+  :Def19:
+  dom it = dom p /\ dom q &
   for x being set st x in dom it holds it.x = (p.x) '&' (q.x);
- existence
-   proof
-     deffunc F(set) = (p.$1) '&' (q.$1);
-     consider s being Function such that
-A12:   dom s = dom p /\ dom q and
-A13:   for x being set st x in dom p /\ dom q
-            holds s.x = F(x) from FUNCT_1:sch 3;
-      s is boolean-valued
-      proof let x be set;
-       assume x in rng s;
-        then consider y being set such that
-A14:      y in dom s and
-A15:      x = s.y by FUNCT_1:def 5;
-         x = (p.y) '&' (q.y) by A12,A13,A14,A15;
-        then x = FALSE or x = TRUE by XBOOLEAN:def 3;
-       hence x in BOOLEAN;
-      end;
+  existence
+  proof
+    deffunc F(set) = (p.$1) '&' (q.$1);
+    consider s being Function such that
+A12: dom s = dom p /\ dom q and
+A13: for x being set st x in dom p /\ dom q
+    holds s.x = F(x) from FUNCT_1:sch 3;
+    s is boolean-valued
+    proof
+      let x be set;
+      assume x in rng s;
+      then consider y being set such that
+A14:  y in dom s and
+A15:  x = s.y by FUNCT_1:def 5;
+      x = (p.y) '&' (q.y) by A12,A13,A14,A15;
+      then x = FALSE or x = TRUE by XBOOLEAN:def 3;
+      hence x in BOOLEAN;
+    end;
     hence thesis by A12,A13;
-   end;
- uniqueness
- proof let s1,s2 be boolean-valued Function such that
+  end;
+  uniqueness
+  proof
+    let s1,s2 be boolean-valued Function such that
 A16: dom s1 = dom p /\ dom q and
-   A17:  for x being set st x in dom s1 holds s1.x = (p.x) '&' (q.x) and
+A17: for x being set st x in dom s1 holds s1.x = (p.x) '&' (q.x) and
 A18: dom s2 = dom p /\ dom q and
-   A19:  for x being set st x in dom s2 holds s2.x = (p.x) '&' (q.x);
-            for x being set st x in dom s1 holds s1.x = s2.x
-        proof let x be set;
-         assume x in dom s1;
-           then s1.x = (p.x) '&' (q.x) & s2.x = (p.x) '&' (q.x) by A16,A17,A18
-,A19;
-           hence thesis;
-        end;
-        hence thesis by A16,A18,FUNCT_1:9;
+A19: for x being set st x in dom s2 holds s2.x = (p.x) '&' (q.x);
+    for x being set st x in dom s1 holds s1.x = s2.x
+    proof
+      let x be set;
+      assume x in dom s1;
+      then s1.x = (p.x) '&' (q.x) & s2.x = (p.x) '&' (q.x) by A16,A17,A18
+      ,A19;
+      hence thesis;
+    end;
+    hence thesis by A16,A18,FUNCT_1:9;
   end;
- commutativity;
- idempotence;
+  commutativity;
+  idempotence;
 end;
 
-registration let A be set;
- cluster -> boolean-valued Element of Funcs(A,BOOLEAN);
- coherence
-  proof let F be Element of Funcs(A,BOOLEAN);
-        ex f being Function st F = f & dom f = A & rng f c= BOOLEAN
-       by FUNCT_2:def 2;
-   hence rng F c= BOOLEAN;
+registration
+  let A be set;
+  cluster -> boolean-valued Element of Funcs(A,BOOLEAN);
+  coherence
+  proof
+    let F be Element of Funcs(A,BOOLEAN);
+    ex f being Function st F = f & dom f = A & rng f c= BOOLEAN
+    by FUNCT_2:def 2;
+    hence rng F c= BOOLEAN;
   end;
 end;
 
-definition let A be non empty set;
- redefine
- let p be Element of Funcs(A,BOOLEAN);
+definition
+  let A be non empty set;
+  redefine
+  let p be Element of Funcs(A,BOOLEAN);
   func 'not' p -> Element of Funcs(A,BOOLEAN) means
   for x being Element of A holds it.x = 'not'(p.x);
- coherence
-     proof
-         ex f being Function st p = f & dom f = A & rng f c= BOOLEAN
-            by FUNCT_2:def 2;
-     then A1:     dom 'not' p = A by Def18;
-           rng 'not' p c= BOOLEAN by Def17;
-      hence thesis by A1,FUNCT_2:def 2;
-     end;
- compatibility
-  proof let IT be Element of Funcs(A,BOOLEAN);
-   hereby assume
-A2:   IT = 'not' p;
-    let x be Element of A;
-         x in A;
-     then x in dom p by FUNCT_2:def 1;
-    hence IT.x = 'not'(p.x) by A2,Def18;
-   end;
-   assume
-A3:  for x being Element of A holds IT.x = 'not'(p.x);
-A4:  dom IT = A by FUNCT_2:def 1;
-A5:  dom p = A by FUNCT_2:def 1;
-    then for x being set st x in dom p holds IT.x = 'not'(p.x) by A3;
-   hence IT = 'not' p by A4,A5,Def18;
+  coherence
+  proof
+    ex f being Function st p = f & dom f = A & rng f c= BOOLEAN
+    by FUNCT_2:def 2;
+    then
+A1: dom 'not' p = A by Def18;
+    rng 'not' p c= BOOLEAN by Def17;
+    hence thesis by A1,FUNCT_2:def 2;
   end;
- let q be Element of Funcs(A,BOOLEAN);
+  compatibility
+  proof
+    let IT be Element of Funcs(A,BOOLEAN);
+    hereby
+      assume
+A2:   IT = 'not' p;
+      let x be Element of A;
+      x in A;
+      then x in dom p by FUNCT_2:def 1;
+      hence IT.x = 'not'(p.x) by A2,Def18;
+    end;
+    assume
+A3: for x being Element of A holds IT.x = 'not'(p.x);
+A4: dom IT = A by FUNCT_2:def 1;
+A5: dom p = A by FUNCT_2:def 1;
+    then for x being set st x in dom p holds IT.x = 'not'(p.x) by A3;
+    hence IT = 'not' p by A4,A5,Def18;
+  end;
+  let q be Element of Funcs(A,BOOLEAN);
   func p '&' q -> Element of Funcs(A,BOOLEAN) means
   for x being Element of A holds it.x = (p.x) '&' (q.x);
- coherence
-   proof
-A6:  ex f being Function st p = f & dom f = A & rng f c= BOOLEAN
-            by FUNCT_2:def 2;
-         ex f being Function st q = f & dom f = A & rng f c= BOOLEAN
-            by FUNCT_2:def 2;
-     then A7:   dom(p '&' q) = A /\ A by A6,Def19 .= A;
-         rng(p '&' q) c= BOOLEAN by Def17;
+  coherence
+  proof
+A6: ex f being Function st p = f & dom f = A & rng f c= BOOLEAN
+    by FUNCT_2:def 2;
+    ex f being Function st q = f & dom f = A & rng f c= BOOLEAN
+    by FUNCT_2:def 2;
+    then
+A7: dom(p '&' q) = A /\ A by A6,Def19
+      .= A;
+    rng(p '&' q) c= BOOLEAN by Def17;
     hence thesis by A7,FUNCT_2:def 2;
-   end;
- compatibility
-  proof let IT be Element of Funcs(A,BOOLEAN);
-   hereby assume
+  end;
+  compatibility
+  proof
+    let IT be Element of Funcs(A,BOOLEAN);
+    hereby
+      assume
 A8:   IT = p '&' q;
-    let x be Element of A;
-A9:  dom p = A by FUNCT_2:def 1;
-        dom q = A by FUNCT_2:def 1;
-    then dom(p '&' q) = A /\ A by A9,Def19 .= A;
-    hence IT.x = (p.x) '&' (q.x) by A8,Def19;
-   end;
-   assume
-A10:  for x being Element of A holds IT.x = (p.x) '&' (q.x);
-A11:  dom IT = A by FUNCT_2:def 1;
-A12:  dom q = A by FUNCT_2:def 1;
-A13:  dom IT = A /\ A by FUNCT_2:def 1 .= dom p /\ dom q by A12,FUNCT_2:def 1;
-        for x being set st x in dom IT holds IT.x = (p.x) '&' (q.x) by A10,A11;
-   hence IT = p '&' q by A13,Def19;
+      let x be Element of A;
+A9:   dom p = A by FUNCT_2:def 1;
+      dom q = A by FUNCT_2:def 1;
+      then dom(p '&' q) = A /\ A by A9,Def19
+        .= A;
+      hence IT.x = (p.x) '&' (q.x) by A8,Def19;
+    end;
+    assume
+A10: for x being Element of A holds IT.x = (p.x) '&' (q.x);
+A11: dom IT = A by FUNCT_2:def 1;
+A12: dom q = A by FUNCT_2:def 1;
+A13: dom IT = A /\ A by FUNCT_2:def 1
+      .= dom p /\ dom q by A12,FUNCT_2:def 1;
+    for x being set st x in dom IT holds IT.x = (p.x) '&' (q.x) by A10,A11;
+    hence IT = p '&' q by A13,Def19;
   end;
 end;
 

@@ -31,6 +31,7 @@
 <ArticleID name="MATRLIN"/>
 <ArticleID name="FRAENKEL"/>
 <ArticleID name="ENUMSET1"/>
+<ArticleID name="FUNCOP_1"/>
 <ArticleID name="VECTSP_4"/>
 <ArticleID name="VECTSP_6"/>
 <ArticleID name="BSPACE"/>
@@ -41,6 +42,26 @@
 <ArticleID name="NEWTON"/>
 <ArticleID name="POLYFORM"/>
 </Signature>
+<RCluster>
+<ArgTypes/>
+<Typ kind="G" nr="14">
+<Cluster/>
+</Typ>
+<Cluster>
+<Adjective nr="108"/>
+</Cluster>
+</RCluster>
+<RCluster>
+<ArgTypes/>
+<Typ kind="G" nr="14">
+<Cluster/>
+</Typ>
+<Cluster>
+<Adjective nr="109"/>
+<Adjective nr="110"/>
+<Adjective nr="111"/>
+</Cluster>
+</RCluster>
 <FCluster>
 <ArgTypes>
 <Typ kind="M" nr="7">
@@ -63,14 +84,18 @@
 </FCluster>
 <FCluster>
 <ArgTypes>
-<Typ kind="M" nr="20">
-<Cluster/>
+<Typ kind="G" nr="14">
+<Cluster>
+<Adjective nr="109"/>
+<Adjective nr="110"/>
+<Adjective nr="111"/>
+</Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="304">
+<Func kind="K" nr="319">
 <LocusVar nr="1"/>
-<Func kind="K" nr="240">
-<Func kind="K" nr="303">
+<Func kind="K" nr="255">
+<Func kind="K" nr="318">
 <LocusVar nr="1"/>
 </Func>
 <Num nr="1"/>

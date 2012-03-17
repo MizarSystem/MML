@@ -29,2448 +29,2798 @@ environ
 begin
 
 reserve n,m,k for Element of NAT,
-        x,y for set,
-        r for Real;
+  x,y for set,
+  r for Real;
 
-definition let D be non empty set,
-               E be real-membered set,
-               F be PartFunc of D,E,
-               r be Real;
-redefine func r(#)F ->Element of PFuncs(D,REAL);
-coherence
-proof
-  reconsider F as PartFunc of D,E;
-   r(#)F is PartFunc of D,REAL;
-  hence thesis by PARTFUN1:119;
-end;
-end;
-
-Lm1:
-for f be Function,x be set st not x in rng f holds f"{x}={}
- proof let f be Function,x be set; assume
-  A1: not x in rng f;
-      rng f misses {x}
-   proof assume
-A2: rng f /\ {x} <> {};
-    consider y being Element of rng f /\ {x};
-        y in rng f & y in {x} by A2,XBOOLE_0:def 3;
-    hence contradiction by A1,TARSKI:def 1;
-   end;
-  hence thesis by RELAT_1:173;
- end;
-
-definition let IT be FinSequence;
-attr IT is terms've_same_card_as_number means :Def1:
-for n be Nat st 1<=n & n<=len IT
- for B being finite set st B = IT.n holds card B = n;
-attr IT is ascending means :Def2:
-for n be Nat st 1<=n & n<=len IT - 1 holds IT.n c= IT.(n+1);
-end;
-
-Lm2:
- for D be non empty finite set, A be FinSequence of bool D,
-  k be Element of NAT st 1 <= k & k <= len A holds
-   A.k is finite
- proof let D be non empty finite set, A be FinSequence of bool D,
-  k be Element of NAT;
-  assume 1 <= k & k <= len A;
-   then k in dom A by FINSEQ_3:27;
-   then A.k in bool D by FINSEQ_2:13;
-   hence A.k is finite by FINSET_1:13;
- end;
-
-Lm3:
-for D be non empty finite set, A be FinSequence of bool D st
-  len A = card D & A is terms've_same_card_as_number
- for B being finite set st B = A.(len A) holds B = D
- proof let D be non empty finite set, A be FinSequence of bool D; assume
-  A1: len A = card D & A is terms've_same_card_as_number;
-  let B be finite set such that
-A2:B = A.(len A);
-  A3: 0 <= len A;
-      len A <> 0 by A1,CARD_2:59;
-  then A4: 0+1<=len A by A3,NAT_1:13;
-  then A5: card B = card D by A1,A2,Def1;
-      len A in dom A by A4,FINSEQ_3:27;
-  then A6: A.(len A) in bool D by FINSEQ_2:13;
-  assume B <> D;
-  then B c< D by A2,A6,XBOOLE_0:def 8;
-  hence contradiction by A5,CARD_2:67;
- end;
-
-Lm4:
-for D be non empty finite set holds
- ex B be FinSequence of bool(D) st
- len B = card D & B is ascending & B is terms've_same_card_as_number
- proof
- defpred P[Element of NAT] means
-  for D be non empty finite set st card D = $1 holds
-    ex B be FinSequence of bool(D) st
-   len B = card D & B is ascending & B is terms've_same_card_as_number;
-  A1: P[0] by CARD_2:59;
-  A2: for n st P[n] holds P[n+1]
-   proof let n; assume
-    A3: P[n];
-    let D be non empty finite set; assume
-    A4: card D = n+1;
-    consider x being Element of D;
-    set Y = D\{x};
-         {x} c= D by ZFMISC_1:37;
-    then A5: card Y = card D - card {x} by CARD_2:63
-    .= n+1-1 by A4,CARD_1:79
-    .= n;
-        now per cases;
-     case A6: n=0;
-      set f = <*D*>;
-      A7: rng f = {D} & len f = 1 & f.1 = D by FINSEQ_1:56,57;
-          rng f c= bool D
-       proof let z be set; assume z in rng f;
-        then z=D by A7,TARSKI:def 1;
-        hence thesis by ZFMISC_1:def 1;
-       end;
-      then reconsider f as FinSequence of bool D by FINSEQ_1:def 4;
-      take f;
-      thus card D = len f by A4,A6,FINSEQ_1:57;
-      thus f is ascending
-       proof let m be Nat;
-        assume 1<=m & m<=len f - 1;
-        hence thesis by A7,XXREAL_0:2;
-       end;
-      thus f is terms've_same_card_as_number
-       proof let m be Nat;
-        assume 1<=m & m<=len f;
-then A8:     m = 1 by A7,XXREAL_0:1;
-        let B be finite set;
-        assume B = f.m;
-        hence card B = m by A4,A6,A8,FINSEQ_1:57;
-       end;
-     end;
-     case n<>0;
-      then reconsider Y as non empty finite set by A5,CARD_1:47;
-      consider f be FinSequence of bool Y such that
-      A9: len f = card Y &
-       f is ascending & f is terms've_same_card_as_number by A3,A5;
-      set g = f ^ <*D*>;
-        bool Y c= bool D by ZFMISC_1:79;
-      then A10: rng f c= bool D by XBOOLE_1:1;
-      A11: rng <*D*> = {D} & len <*D*> = 1 & <*D*>.1 = D by FINSEQ_1:56,57;
-          D in bool D by ZFMISC_1:def 1;
-      then A12: {D} c= bool D by ZFMISC_1:37;
-          rng g = rng f \/ rng <*D*> by FINSEQ_1:44;
-      then rng g c= bool D \/ bool D by A10,A11,A12,XBOOLE_1:13;
-      then reconsider g as FinSequence of bool D by FINSEQ_1:def 4;
-      take g;
-      A13: len g = len f + 1 by A11,FINSEQ_1:35;
-      thus len g = card D by A4,A5,A9,A11,FINSEQ_1:35;
-      thus g is ascending
-       proof let m be Nat; assume
-        A14: 1 <= m & m <= len g - 1;
-        then m in dom f by A13,FINSEQ_3:27;
-        then A15: g.m = f.m by FINSEQ_1:def 7;
-        per cases;
-         suppose A16: m=len f;
-           then reconsider gm = g.m as finite set by A14,A15,Lm2;
-          A17: gm = Y by A9,A15,A16,Lm3;
-              g.(m+1) = D by A16,FINSEQ_1:59;
-          hence g.m c= g.(m+1) by A17;
-         end;
-         suppose m<>len f;
-          then m<len f & m<=m+1 by A13,A14,NAT_1:11,REAL_1:def 5;
-          then 1<=m+1 & m+1<=len f by A14,NAT_1:13;
-          then A18: m+1 in dom f & m<=len f -1 by FINSEQ_3:27,XREAL_1:21;
-          then g.(m+1) = f.(m+1) by FINSEQ_1:def 7;
-          hence thesis by A9,A14,A15,A18,Def2;
-       end;
-       end;
-      thus g is terms've_same_card_as_number
-       proof let m be Nat such that
-        A19: 1<=m & m<=len g;
-        let B be finite set such that
-A20:     B = g.m;
-         per cases;
-         suppose m=len g;
-          hence card B = m by A4,A5,A9,A13,A20,FINSEQ_1:59;
-         end;
-         suppose m<>len g;
-          then m<len g by A19,REAL_1:def 5;
-          then A21: m<=len f by A13,NAT_1:13;
-          then m in dom f by A19,FINSEQ_3:27;
-          then g.m= f.m by FINSEQ_1:def 7;
-          hence card B = m by A9,A19,A20,A21,Def1;
-         end;
-         end;
-     end;
-     end;
-    hence ex B be FinSequence of bool(D) st
-       len B = card D & B is ascending & B is terms've_same_card_as_number;
-   end;
-  A22: for n holds P[n] from NAT_1:sch 1(A1,A2);
-  let D be non empty finite set;
-  thus thesis by A22;
- end;
-
-definition let X be set;
- let IT be FinSequence of X;
-attr IT is lenght_equal_card_of_set means :Def3:
- ex B being finite set st B = union X & len IT = card B;
-end;
-
-registration let D be non empty finite set;
-cluster terms've_same_card_as_number ascending lenght_equal_card_of_set
-         FinSequence of bool(D);
- existence
+definition
+  let D be non empty set, E be real-membered set, F be PartFunc of D,E,
+  r be Real;
+  redefine func r(#)F ->Element of PFuncs(D,REAL);
+  coherence
   proof
-   consider B be FinSequence of bool(D) such that
-   A1: len B = card D &
-       B is ascending & B is terms've_same_card_as_number by Lm4;
-  take B;
-      union bool D = D by ZFMISC_1:99;
-  hence thesis by A1,Def3;
+    reconsider F as PartFunc of D,E;
+    r(#)F is PartFunc of D,REAL;
+    hence thesis by PARTFUN1:119;
   end;
 end;
 
-definition let D be non empty finite set;
-mode RearrangmentGen of D is
-  terms've_same_card_as_number ascending lenght_equal_card_of_set
-   FinSequence of bool(D);
+Lm1: for f be Function,x be set st not x in rng f holds f"{x}={}
+proof
+  let f be Function,x be set;
+  assume
+A1: not x in rng f;
+  rng f misses {x}
+  proof
+    assume
+A2: rng f /\ {x} <> {};
+    consider y being Element of rng f /\ {x};
+    y in rng f & y in {x} by A2,XBOOLE_0:def 3;
+    hence contradiction by A1,TARSKI:def 1;
+  end;
+  hence thesis by RELAT_1:173;
+end;
+
+definition
+  let IT be FinSequence;
+  attr IT is terms've_same_card_as_number means
+  :Def1:
+  for n be Nat st 1<=n & n<=len IT
+  for B being finite set st B = IT.n holds card B = n;
+  attr IT is ascending means
+  :Def2:
+  for n be Nat st 1<=n & n<=len IT - 1 holds IT.n c= IT.(n+1);
+end;
+
+Lm2: for D be non empty finite set, A be FinSequence of bool D,
+k be Element of NAT st 1 <= k & k <= len A holds A.k is finite
+proof
+  let D be non empty finite set, A be FinSequence of bool D,
+  k be Element of NAT;
+  assume 1 <= k & k <= len A;
+  then k in dom A by FINSEQ_3:27;
+  then A.k in bool D by FINSEQ_2:13;
+  hence A.k is finite by FINSET_1:13;
+end;
+
+Lm3: for D be non empty finite set, A be FinSequence of bool D st
+len A = card D & A is terms've_same_card_as_number
+for B being finite set st B = A.(len A) holds B = D
+proof
+  let D be non empty finite set, A be FinSequence of bool D;
+  assume
+A1: len A = card D & A is terms've_same_card_as_number;
+  let B be finite set such that
+A2: B = A.(len A);
+A3: 0 <= len A;
+  len A <> 0 by A1,CARD_2:59;
+  then
+A4: 0+1<=len A by A3,NAT_1:13;
+  then
+A5: card B = card D by A1,A2,Def1;
+  len A in dom A by A4,FINSEQ_3:27;
+  then
+A6: A.(len A) in bool D by FINSEQ_2:13;
+  assume B <> D;
+  then B c< D by A2,A6,XBOOLE_0:def 8;
+  hence contradiction by A5,CARD_2:67;
+end;
+
+Lm4: for D be non empty finite set holds ex B be FinSequence of bool(D) st
+len B = card D & B is ascending & B is terms've_same_card_as_number
+proof
+  defpred P[Element of NAT] means
+  for D be non empty finite set st card D = $1 holds
+  ex B be FinSequence of bool(D) st
+  len B = card D & B is ascending & B is terms've_same_card_as_number;
+A1: P[0] by CARD_2:59;
+A2: for n st P[n] holds P[n+1]
+  proof
+    let n;
+    assume
+A3: P[n];
+    let D be non empty finite set;
+    assume
+A4: card D = n+1;
+    consider x being Element of D;
+    set Y = D\{x};
+    {x} c= D by ZFMISC_1:37;
+    then
+A5: card Y = card D - card {x} by CARD_2:63
+      .= n+1-1 by A4,CARD_1:79
+      .= n;
+    now per cases;
+      case
+A6:     n=0;
+        set f = <*D*>;
+A7:     rng f = {D} & len f = 1 & f.1 = D by FINSEQ_1:56,57;
+        rng f c= bool D
+        proof
+          let z be set;
+          assume z in rng f;
+          then z=D by A7,TARSKI:def 1;
+          hence thesis by ZFMISC_1:def 1;
+        end;
+        then reconsider f as FinSequence of bool D by FINSEQ_1:def 4;
+        take f;
+        thus card D = len f by A4,A6,FINSEQ_1:57;
+        thus f is ascending
+        proof
+          let m be Nat;
+          assume 1<=m & m<=len f - 1;
+          hence thesis by A7,XXREAL_0:2;
+        end;
+        thus f is terms've_same_card_as_number
+        proof
+          let m be Nat;
+          assume 1<=m & m<=len f;
+          then
+A8:       m = 1 by A7,XXREAL_0:1;
+          let B be finite set;
+          assume B = f.m;
+          hence card B = m by A4,A6,A8,FINSEQ_1:57;
+        end;
+      end;
+      case n<>0;
+        then reconsider Y as non empty finite set by A5,CARD_1:47;
+        consider f be FinSequence of bool Y such that
+A9:     len f = card Y &
+        f is ascending & f is terms've_same_card_as_number by A3,A5;
+        set g = f ^ <*D*>;
+        bool Y c= bool D by ZFMISC_1:79;
+        then
+A10:    rng f c= bool D by XBOOLE_1:1;
+A11:    rng <*D*> = {D} & len <*D*> = 1 & <*D*>.1 = D by FINSEQ_1:56,57;
+        D in bool D by ZFMISC_1:def 1;
+        then
+A12:    {D} c= bool D by ZFMISC_1:37;
+        rng g = rng f \/ rng <*D*> by FINSEQ_1:44;
+        then rng g c= bool D \/ bool D by A10,A11,A12,XBOOLE_1:13;
+        then reconsider g as FinSequence of bool D by FINSEQ_1:def 4;
+        take g;
+A13:    len g = len f + 1 by A11,FINSEQ_1:35;
+        thus len g = card D by A4,A5,A9,A11,FINSEQ_1:35;
+        thus g is ascending
+        proof
+          let m be Nat;
+          assume
+A14:      1 <= m & m <= len g - 1;
+          then m in dom f by A13,FINSEQ_3:27;
+          then
+A15:      g.m = f.m by FINSEQ_1:def 7;
+          per cases;
+          suppose
+A16:        m=len f;
+            then reconsider gm = g.m as finite set by A14,A15,Lm2;
+A17:        gm = Y by A9,A15,A16,Lm3;
+            g.(m+1) = D by A16,FINSEQ_1:59;
+            hence g.m c= g.(m+1) by A17;
+          end;
+          suppose m<>len f;
+            then m<len f & m<=m+1 by A13,A14,NAT_1:11,REAL_1:def 5;
+            then 1<=m+1 & m+1<=len f by A14,NAT_1:13;
+            then
+A18:        m+1 in dom f & m<=len f -1 by FINSEQ_3:27,XREAL_1: 21;
+            then g.(m+1) = f.(m+1) by FINSEQ_1:def 7;
+            hence thesis by A9,A14,A15,A18,Def2;
+          end;
+        end;
+        thus g is terms've_same_card_as_number
+        proof
+          let m be Nat such that
+A19:      1<=m & m<=len g;
+          let B be finite set such that
+A20:      B = g.m;
+          per cases;
+          suppose m=len g;
+            hence card B = m by A4,A5,A9,A13,A20,FINSEQ_1:59;
+          end;
+          suppose m<>len g;
+            then m<len g by A19,REAL_1:def 5;
+            then
+A21:        m<=len f by A13,NAT_1:13;
+            then m in dom f by A19,FINSEQ_3:27;
+            then g.m= f.m by FINSEQ_1:def 7;
+            hence card B = m by A9,A19,A20,A21,Def1;
+          end;
+        end;
+      end;
+    end;
+    hence ex B be FinSequence of bool(D) st
+    len B = card D & B is ascending & B is terms've_same_card_as_number;
+  end;
+A22: for n holds P[n] from NAT_1:sch 1(A1,A2);
+  let D be non empty finite set;
+  thus thesis by A22;
+end;
+
+definition
+  let X be set;
+  let IT be FinSequence of X;
+  attr IT is lenght_equal_card_of_set means
+  :Def3:
+  ex B being finite set st B = union X & len IT = card B;
+end;
+
+registration
+  let D be non empty finite set;
+  cluster terms've_same_card_as_number ascending lenght_equal_card_of_set
+    FinSequence of bool(D);
+  existence
+  proof
+    consider B be FinSequence of bool(D) such that
+A1: len B = card D &
+    B is ascending & B is terms've_same_card_as_number by Lm4;
+    take B;
+    union bool D = D by ZFMISC_1:99;
+    hence thesis by A1,Def3;
+  end;
+end;
+
+definition
+  let D be non empty finite set;
+  mode RearrangmentGen of D is
+    terms've_same_card_as_number ascending lenght_equal_card_of_set
+    FinSequence of bool(D);
 end;
 
 reserve C,D for non empty finite set,
-        a for FinSequence of bool D;
+  a for FinSequence of bool D;
 
 theorem Th1:
-for a be FinSequence of bool D holds
+  for a be FinSequence of bool D holds
   a is lenght_equal_card_of_set iff len a = card D
- proof let A be FinSequence of bool D;
+proof
+  let A be FinSequence of bool D;
   thus A is lenght_equal_card_of_set implies len A = card D
-   proof assume A is lenght_equal_card_of_set;
-     then consider B being finite set such that
-A1:   B = union bool D & len A = card B by Def3;
+  proof
+    assume A is lenght_equal_card_of_set;
+    then consider B being finite set such that
+A1: B = union bool D & len A = card B by Def3;
     thus len A = card D by A1,ZFMISC_1:99;
-   end;
+  end;
   assume
 A2: len A = card D;
-    take D;
+  take D;
   thus thesis by A2,ZFMISC_1:99;
- end;
+end;
 
 theorem Th2:
-for a be FinSequence holds
-a is ascending iff for n,m st n<=m & n in dom a & m in dom a holds a.n c= a.m
- proof let A be FinSequence;
+  for a be FinSequence holds
+  a is ascending iff for n,m st n<=m & n in dom a & m in dom a holds a.n c= a.m
+proof
+  let A be FinSequence;
   thus A is ascending implies
-       for n,m st n<=m & n in dom A & m in dom A holds A.n c= A.m
-   proof assume
-    A1: A is ascending;
+  for n,m st n<=m & n in dom A & m in dom A holds A.n c= A.m
+  proof
+    assume
+A1: A is ascending;
     defpred P[Element of NAT] means
-     for n st n<=$1 & n in dom A & $1 in dom A holds A.n c= A.$1;
-    A2: P[0] by FINSEQ_3:27;
-    A3: for m st P[m] holds P[m+1]
-     proof let m; assume
-      A4: P[m];
-      let n; assume
-      A5: n<=m+1 & n in dom A & m+1 in dom A;
-           now per cases;
-       case n=m+1; hence A.n c= A.(m+1);
-       end;
-       case n<>m+1;
-        then n<m+1 by A5,REAL_1:def 5;
-        then A6: n<=m by NAT_1:13;
-        A7: 1<=n & m+1<=len A & m<=m+1 by A5,FINSEQ_3:27,NAT_1:11;
-        then A8: 1<=m & m<=len A by A6,XXREAL_0:2;
-        then m in dom A by FINSEQ_3:27;
-        then A9: A.n c= A.m by A4,A5,A6;
-            m<=len A - 1 by A7,XREAL_1:21;
-        then A.m c= A.(m+1) by A1,A8,Def2;
-        hence A.n c= A.(m+1) by A9,XBOOLE_1:1;
-       end;
-       end;
+    for n st n<=$1 & n in dom A & $1 in dom A holds A.n c= A.$1;
+A2: P[0] by FINSEQ_3:27;
+A3: for m st P[m] holds P[m+1]
+    proof
+      let m;
+      assume
+A4:   P[m];
+      let n;
+      assume
+A5:   n<=m+1 & n in dom A & m+1 in dom A;
+      now per cases;
+        case n=m+1;
+          hence A.n c= A.(m+1);
+        end;
+        case n<>m+1;
+          then n<m+1 by A5,REAL_1:def 5;
+          then
+A6:       n<=m by NAT_1:13;
+A7:       1<=n & m+1<=len A & m<=m+1 by A5,FINSEQ_3:27,NAT_1:11;
+          then
+A8:       1<=m & m<=len A by A6,XXREAL_0:2;
+          then m in dom A by FINSEQ_3:27;
+          then
+A9:       A.n c= A.m by A4,A5,A6;
+          m<=len A - 1 by A7,XREAL_1:21;
+          then A.m c= A.(m+1) by A1,A8,Def2;
+          hence A.n c= A.(m+1) by A9,XBOOLE_1:1;
+        end;
+      end;
       hence thesis;
-     end;
-    A10: for m holds P[m] from NAT_1:sch 1(A2,A3);
-    let n,m; assume
-        n<=m & n in dom A & m in dom A;
+    end;
+A10: for m holds P[m] from NAT_1:sch 1(A2,A3);
+    let n,m;
+    assume n<=m & n in dom A & m in dom A;
     hence thesis by A10;
-   end; assume
-  A11: for n,m st n<=m & n in dom A & m in dom A holds A.n c= A.m;
-  let n be Nat; assume
-  A12: 1<=n & n<=len A - 1;
-  then A13: n<=n+1 & n+1<=len A by NAT_1:11,XREAL_1:21;
+  end;
+  assume
+A11: for n,m st n<=m & n in dom A & m in dom A holds A.n c= A.m;
+  let n be Nat;
+  assume
+A12: 1<=n & n<=len A - 1;
+  then
+A13: n<=n+1 & n+1<=len A by NAT_1:11,XREAL_1:21;
   then 1<=n+1 & n<=len A by A12,XXREAL_0:2;
   then n in dom A & n+1 in dom A by A12,A13,FINSEQ_3:27;
   hence thesis by A11,A13;
- end;
+end;
 
 theorem Th3:
-for a be terms've_same_card_as_number lenght_equal_card_of_set
-     FinSequence of bool D holds a.(len a) = D
- proof let A be terms've_same_card_as_number lenght_equal_card_of_set
-                FinSequence of bool D;
-
+  for a be terms've_same_card_as_number lenght_equal_card_of_set
+  FinSequence of bool D holds a.(len a) = D
+proof
+  let A be terms've_same_card_as_number lenght_equal_card_of_set
+  FinSequence of bool D;
 A1: len A = card D by Th1;
-  then len A <> 0 by CARD_2:59;
-  then 1 <= len A by NAT_1:14;
+  then 1 <= len A by CARD_2:59,NAT_1:14;
   then A.(len A) is finite set by Lm2;
   hence thesis by A1,Lm3;
- end;
+end;
 
 theorem Th4:
-for a be lenght_equal_card_of_set FinSequence of bool D holds len a <> 0
- proof let A be lenght_equal_card_of_set FinSequence of bool D; assume
-       len A = 0;
+  for a be lenght_equal_card_of_set FinSequence of bool D holds len a <> 0
+proof
+  let A be lenght_equal_card_of_set FinSequence of bool D;
+  assume len A = 0;
   then card(D)=0 by Th1;
   hence contradiction by CARD_2:59;
- end;
+end;
 
 theorem Th5:
-for a be ascending terms've_same_card_as_number FinSequence of bool D holds
-   for n,m holds n in dom a & m in dom a & n<>m implies a.n <> a.m
- proof let A be ascending terms've_same_card_as_number FinSequence of bool D;
-  let n,m; assume that
-  A1: n in dom A & m in dom A & n <> m and
-  A2: A.n = A.m;
-A3:1 <= n & n <= len A & 1 <= m & m <= len A by A1,FINSEQ_3:27;
+  for a be ascending terms've_same_card_as_number FinSequence of bool D holds
+  for n,m holds n in dom a & m in dom a & n<>m implies a.n <> a.m
+proof
+  let A be ascending terms've_same_card_as_number FinSequence of bool D;
+  let n,m;
+  assume that
+A1: n in dom A & m in dom A & n <> m and
+A2: A.n = A.m;
+A3: 1 <= n & n <= len A & 1 <= m & m <= len A by A1,FINSEQ_3:27;
   then reconsider Am = A.m, An = A.n as finite set by Lm2;
-      card(Am)=m & card(An)=n by A3,Def1;
+  card(Am)=m & card(An)=n by A3,Def1;
   hence contradiction by A1,A2;
- end;
+end;
 
 theorem Th6:
-for a be ascending terms've_same_card_as_number FinSequence of bool D holds
+  for a be ascending terms've_same_card_as_number FinSequence of bool D holds
   for n holds 1 <= n & n <= len a - 1 implies a.n <> a.(n+1)
- proof let A be ascending terms've_same_card_as_number FinSequence of bool D;
-  let n; assume
-  A1: 1<=n & n<=len A - 1;
-  then A2: n<=n+1 & n+1<=len A by NAT_1:11,XREAL_1:21;
+proof
+  let A be ascending terms've_same_card_as_number FinSequence of bool D;
+  let n;
+  assume
+A1: 1<=n & n<=len A - 1;
+  then
+A2: n<=n+1 & n+1<=len A by NAT_1:11,XREAL_1:21;
   then 1<=n+1 & n<=len A by A1,XXREAL_0:2;
-  then A3: n in dom A & n+1 in dom A by A1,A2,FINSEQ_3:27;
-      n <> n+1;
+  then
+A3: n in dom A & n+1 in dom A by A1,A2,FINSEQ_3:27;
+  n <> n+1;
   hence thesis by A3,Th5;
- end;
+end;
 
-Lm5:
-n in dom a implies a.n c= D
- proof assume n in dom a;
+Lm5: n in dom a implies a.n c= D
+proof
+  assume n in dom a;
   then a.n in bool D by FINSEQ_2:13;
   hence thesis;
- end;
+end;
 
 theorem Th7:
-for a be terms've_same_card_as_number FinSequence of bool D
-   st n in dom a holds a.n <> {}
- proof let A be terms've_same_card_as_number FinSequence of bool D; assume
-   n in dom A;
-then A1: 1<=n & n<=len A by FINSEQ_3:27;
-  then reconsider An = A.n as finite set by Lm2; assume
-   A.n = {};
-   then A.n = 0;
+  for a be terms've_same_card_as_number FinSequence of bool D
+  st n in dom a holds a.n <> {}
+proof
+  let A be terms've_same_card_as_number FinSequence of bool D;
+  assume n in dom A;
+  then
+A1: 1<=n & n<=len A by FINSEQ_3:27;
+  then reconsider An = A.n as finite set by Lm2;
+  assume A.n = {};
+  then A.n = 0;
   hence contradiction by A1,Def1,CARD_1:78;
- end;
+end;
 
 theorem Th8:
-for a be terms've_same_card_as_number FinSequence of bool D
+  for a be terms've_same_card_as_number FinSequence of bool D
   st 1<=n & n<=len a - 1 holds a.(n+1) \ a.n <> {}
- proof let A be terms've_same_card_as_number FinSequence of bool D; assume
-  A1: 1<=n & n<=len A - 1;
-  then A2: n+1<=len A & n<=n+1 by NAT_1:11,XREAL_1:21;
-then A3: 1<=n+1 & n<=len A by A1,XXREAL_0:2;
+proof
+  let A be terms've_same_card_as_number FinSequence of bool D;
+  assume
+A1: 1<=n & n<=len A - 1;
+  then
+A2: n+1<=len A & n<=n+1 by NAT_1:11,XREAL_1:21;
+  then
+A3: 1<=n+1 & n<=len A by A1,XXREAL_0:2;
   then reconsider An1 = A.(n+1), An = A.n as finite set by A1,A2,Lm2;
-  A4: n in dom A & n+1 in dom A & card (An1) = n+1 & card (An) = n
-     by A1,A2,A3,Def1,FINSEQ_3:27;
+A4: n in dom A & n+1 in dom A & card (An1) = n+1 & card (An) = n
+  by A1,A2,A3,Def1,FINSEQ_3:27;
   assume A.(n+1) \ A.n = {};
   then A.(n+1) c= A.n by XBOOLE_1:37;
   then n+1 <= n by A4,NAT_1:44;
   then 1<=n-n by XREAL_1:21;
   then 1<=0;
   hence contradiction;
- end;
+end;
 
 theorem Th9:
-for a be terms've_same_card_as_number lenght_equal_card_of_set
-     FinSequence of bool D ex d be Element of D st a.1 = {d}
- proof let A be terms've_same_card_as_number lenght_equal_card_of_set
-                FinSequence of bool D;
-      len A <> 0 by Th4;
+  for a be terms've_same_card_as_number lenght_equal_card_of_set
+  FinSequence of bool D ex d be Element of D st a.1 = {d}
+proof
+  let A be terms've_same_card_as_number lenght_equal_card_of_set
+  FinSequence of bool D;
+  len A <> 0 by Th4;
   then 0<len A;
-then A1:0+1<=len A by NAT_1:13;
-   then reconsider A1 = A.1 as finite set by Lm2;
-  A2: card(A1)=1 & 1 in dom A & dom A = dom A
-    by A1,Def1,FINSEQ_3:27;
-  then A3: A.1 c= D by Lm5;
+  then
+A1: 0+1<=len A by NAT_1:13;
+  then reconsider A1 = A.1 as finite set by Lm2;
+A2: card(A1)=1 & 1 in dom A & dom A = dom A by A1,Def1,FINSEQ_3:27;
+  then
+A3: A.1 c= D by Lm5;
   consider x such that
-  A4: {x} = A.1 by A2,CARD_2:60;
+A4: {x} = A.1 by A2,CARD_2:60;
   reconsider x as Element of D by A3,A4,ZFMISC_1:37;
   take x;
   thus thesis by A4;
- end;
+end;
 
 theorem Th10:
-for a be terms've_same_card_as_number ascending FinSequence of bool D
- st 1<=n & n<=len a - 1
- ex d be Element of D st
+  for a be terms've_same_card_as_number ascending FinSequence of bool D
+  st 1<=n & n<=len a - 1 ex d be Element of D st
   a.(n+1) \ a.n = {d} & a.(n+1) = a.n \/ {d} & a.(n+1) \ {d} = a.n
- proof let A be terms've_same_card_as_number ascending FinSequence of bool D;
-  assume A1: 1<=n & n<=len A - 1;
-  then A2:
-  A.n c= A.(n+1) & n<=n+1 & n+1<=len A by Def2,NAT_1:11,XREAL_1:21;
-  then A3: 1<=n+1 & n<=len A & dom A = dom A by A1,XXREAL_0:2;
+proof
+  let A be terms've_same_card_as_number ascending FinSequence of bool D;
+  assume
+A1: 1<=n & n<=len A - 1;
+  then
+A2: A.n c= A.(n+1) & n<=n+1 & n+1<=len A by Def2,NAT_1:11,XREAL_1:21;
+  then
+A3: 1<=n+1 & n<=len A & dom A = dom A by A1,XXREAL_0:2;
   then reconsider An1 = A.(n+1), An = A.n as finite set by A1,A2,Lm2;
-  A4: card(An1) = n+1 & card(An) = n & n+1 in dom A & n in dom A
-     by A1,A2,A3,Def1,FINSEQ_3:27;
-  then A5: A.(n+1) c= D by Lm5;
-      card (An1 \ An) = n+1-n by A2,A4,CARD_2:63
-  .= 1;
+A4: card(An1) = n+1 & card(An) = n & n+1 in dom A & n in dom A
+  by A1,A2,A3,Def1,FINSEQ_3:27;
+  then
+A5: A.(n+1) c= D by Lm5;
+  card (An1 \ An) = n+1-n by A2,A4,CARD_2:63
+    .= 1;
   then consider x such that
-  A6: {x} = A.(n+1) \ A.n by CARD_2:60;
-      x in A.(n+1) \ A.n by A6,ZFMISC_1:37;
-  then A7: x in A.(n+1) & not x in A.n by XBOOLE_0:def 4;
+A6: {x} = A.(n+1) \ A.n by CARD_2:60;
+  x in A.(n+1) \ A.n by A6,ZFMISC_1:37;
+  then
+A7: x in A.(n+1) & not x in A.n by XBOOLE_0:def 4;
   then reconsider x as Element of D by A5;
   take x;
   thus {x} = A.(n+1) \ A.n by A6;
   thus A.n \/ {x} = A.(n+1) \/ A.n by A6,XBOOLE_1:39
-  .= A.(n+1) by A2,XBOOLE_1:12;
+    .= A.(n+1) by A2,XBOOLE_1:12;
   hence A.(n+1) \ {x} = (A.n \ {x}) \/ ({x} \ {x}) by XBOOLE_1:42
-  .= (A.n \ {x}) \/ {} by XBOOLE_1:37
-  .= A.n by A7,ZFMISC_1:65;
- end;
+    .= (A.n \ {x}) \/ {} by XBOOLE_1:37
+    .= A.n by A7,ZFMISC_1:65;
+end;
 
-definition let D be non empty finite set,
-               A be RearrangmentGen of D;
-func Co_Gen A -> RearrangmentGen of D means :Def4:
- for m be Nat st 1 <= m & m <= len it - 1 holds it.m = D \ A.(len A -m);
+definition
+  let D be non empty finite set, A be RearrangmentGen of D;
+  func Co_Gen A -> RearrangmentGen of D means
+  :Def4:
+  for m be Nat st 1 <= m & m <= len it - 1 holds it.m = D \ A.(len A -m);
   existence
-   proof
-    A1: card D = len A & A.(len A) = D by Th1,Th3;
+  proof
+A1: card D = len A & A.(len A) = D by Th1,Th3;
     set c = card D;
-        c <> 0 by CARD_2:59;
+    c <> 0 by CARD_2:59;
     then 0 < c;
     then 0+1 <= c by NAT_1:13;
     then max(0,c -1) = c - 1 by FINSEQ_2:4;
     then reconsider c1=c - 1 as Element of NAT by FINSEQ_2:5;
     deffunc F(Nat)= D \ A.(len A -$1);
     consider f be FinSequence such that
-    A2: len f = c1 and
-    A3: for m be Nat st m in Seg c1 holds f.m = F(m) from FINSEQ_1:sch 2;
-        rng f c= bool D
-     proof let x; assume x in rng f;
+A2: len f = c1 and
+A3: for m be Nat st m in Seg c1 holds f.m = F(m) from FINSEQ_1:sch 2;
+    rng f c= bool D
+    proof
+      let x;
+      assume x in rng f;
       then consider m being Nat such that
-      A4: m in dom f & f.m = x by FINSEQ_2:11;
-A5:    m in Seg len f by A4,FINSEQ_1:def 3;
-          D \ A.(len A -m) c= D;
+A4:   m in dom f & f.m = x by FINSEQ_2:11;
+A5:   m in Seg len f by A4,FINSEQ_1:def 3;
+      D \ A.(len A -m) c= D;
       then x is Subset of D by A2,A3,A4,A5;
       hence x in bool(D);
-     end;
+    end;
     then reconsider f as FinSequence of bool(D) by FINSEQ_1:def 4;
-        D c= D;
+    D c= D;
     then reconsider y = D as Subset of D;
     set C = f^<*y*>;
-    A6: len C = len f + len <*y*> by FINSEQ_1:35
-     .= len f + 1 by FINSEQ_1:56;
-    A7: for m be Nat st 1 <= m & m <= len C - 1 holds C.m c= C.(m+1)
-     proof let m be Nat; assume
-      A8: 1 <= m & m <= len C - 1;
-      then A9: m in dom f by A6,FINSEQ_3:27;
-then A10:      m in Seg len f by FINSEQ_1:def 3;
-      A11: C.m = f.m by A9,FINSEQ_1:def 7
-       .= D \ A.(len A - m) by A2,A3,A10;
-           now per cases;
-       case m = len C - 1;
-        then C.(m+1) = D by A6,FINSEQ_1:59;
-        hence C.m c= C.(m+1) by A11;
-       end;
-       case m <> len C - 1;
-          then A12: m < len C - 1 by A8,REAL_1:def 5;
-        then A13:  m+1 < len A by A1,A2,A6,XREAL_1:22;
-        then  m+1+1<=len A by NAT_1:13;
-        then A14: 1 <= len A - (m+1) by XREAL_1:21;
-            max(0,len A -(m+1)) = len A -(m+1) by A13,FINSEQ_2:4;
-        then reconsider l = len A -(m+1) as Element of NAT by FINSEQ_2:5;
-        A15:  1 <= m+1 & m+1<= len C - 1 by A6,A12,NAT_1:11,13;
-        then l <= len A - 1 by REAL_1:92;
-        then A16:  A.l c= A.(l+1) & A.l <> A.(l+1) by A14,Def2,Th6;
-        A17: m+1 in dom f by A6,A15,FINSEQ_3:27;
-then A18:       m+1 in Seg len f by FINSEQ_1:def 3;
-           C.(m+1) = f.(m+1) by A17,FINSEQ_1:def 7
-             .= D \ A.l by A2,A3,A18;
-        hence C.m c= C.(m+1) by A11,A16,XBOOLE_1:34;
-       end;
-       end;
+A6: len C = len f + len <*y*> by FINSEQ_1:35
+      .= len f + 1 by FINSEQ_1:56;
+A7: for m be Nat st 1 <= m & m <= len C - 1 holds C.m c= C.(m+1)
+    proof
+      let m be Nat;
+      assume
+A8:   1 <= m & m <= len C - 1;
+      then
+A9:   m in dom f by A6,FINSEQ_3:27;
+      then
+A10:  m in Seg len f by FINSEQ_1:def 3;
+A11:  C.m = f.m by A9,FINSEQ_1:def 7
+        .= D \ A.(len A - m) by A2,A3,A10;
+      now per cases;
+        case m = len C - 1;
+          then C.(m+1) = D by A6,FINSEQ_1:59;
+          hence C.m c= C.(m+1) by A11;
+        end;
+        case m <> len C - 1;
+          then
+A12:      m < len C - 1 by A8,REAL_1:def 5;
+          then
+A13:      m+1 < len A by A1,A2,A6,XREAL_1:22;
+          then m+1+1<=len A by NAT_1:13;
+          then
+A14:      1 <= len A - (m+1) by XREAL_1:21;
+          max(0,len A -(m+1)) = len A -(m+1) by A13,FINSEQ_2:4;
+          then reconsider l = len A -(m+1) as Element of NAT by FINSEQ_2:5;
+A15:      1 <= m+1 & m+1<= len C - 1 by A6,A12,NAT_1:11,13;
+          then l <= len A - 1 by REAL_1:92;
+          then
+A16:      A.l c= A.(l+1) & A.l <> A.(l+1) by A14,Def2,Th6;
+A17:      m+1 in dom f by A6,A15,FINSEQ_3:27;
+          then
+A18:      m+1 in Seg len f by FINSEQ_1:def 3;
+          C.(m+1) = f.(m+1) by A17,FINSEQ_1:def 7
+            .= D \ A.l by A2,A3,A18;
+          hence C.m c= C.(m+1) by A11,A16,XBOOLE_1:34;
+        end;
+      end;
       hence thesis;
-     end;
-        C is terms've_same_card_as_number
-     proof let m be Nat; assume
-      A19: 1 <= m & m <= len C;
+    end;
+    C is terms've_same_card_as_number
+    proof
+      let m be Nat;
+      assume
+A19:  1 <= m & m <= len C;
       then max(0,len C -m) = len C -m by FINSEQ_2:4;
       then reconsider l = len C - m as Element of NAT by FINSEQ_2:5;
       let B be finite set such that
-A20:    B = C.m;
-           now per cases;
-       case m = len C;
-        hence card B=m by A2,A6,A20,FINSEQ_1:59;
-       end;
-       case m <> len C;
-        then m < len C by A19,REAL_1:def 5;
-        then m+1 <= len C by NAT_1:13;
-        then A21: m <= len C - 1 & 1 <= l by XREAL_1:21;
-        then A22: m in dom f by A6,A19,FINSEQ_3:27;
-then A23:        m in Seg len f by FINSEQ_1:def 3;
-        A24: C.m = f.m by A22,FINSEQ_1:def 7
-         .= D \ A.l by A1,A2,A3,A6,A23;
-        A25: l <= len A by A1,A2,A6,REAL_2:173;
-        then l in dom A by A21,FINSEQ_3:27;
-then A26:      A.l c= D by Lm5;
-        then reconsider Al = A.l as finite set by FINSET_1:13;
-        thus card B = card(D) - card(Al) by A20,A24,A26,CARD_2:63
-         .= len A - l by A1,A21,A25,Def1
-         .= m by A1,A2,A6;
-       end;
-       end;
+A20:  B = C.m;
+      now per cases;
+        case m = len C;
+          hence card B=m by A2,A6,A20,FINSEQ_1:59;
+        end;
+        case m <> len C;
+          then m < len C by A19,REAL_1:def 5;
+          then m+1 <= len C by NAT_1:13;
+          then
+A21:      m <= len C - 1 & 1 <= l by XREAL_1:21;
+          then
+A22:      m in dom f by A6,A19,FINSEQ_3:27;
+          then
+A23:      m in Seg len f by FINSEQ_1:def 3;
+A24:      C.m = f.m by A22,FINSEQ_1:def 7
+            .= D \ A.l by A1,A2,A3,A6,A23;
+A25:      l <= len A by A1,A2,A6,REAL_2:173;
+          then
+A26:      l in dom A by A21,FINSEQ_3:27;
+          then reconsider Al = A.l as finite set by Lm5,FINSET_1:13;
+          thus card B = card(D) - card(Al) by A20,A24,A26,Lm5,CARD_2:63
+            .= len A - l by A1,A21,A25,Def1
+            .= m by A1,A2,A6;
+        end;
+      end;
       hence card B = m;
-     end;
+    end;
     then reconsider C as RearrangmentGen of D by A2,A6,A7,Def2,Th1;
     take C;
-    let m be Nat; assume
-     1 <= m & m <= len C - 1;
-    then A27: m in Seg c1 by A2,A6,FINSEQ_1:3;
+    let m be Nat;
+    assume 1 <= m & m <= len C - 1;
+    then
+A27: m in Seg c1 by A2,A6,FINSEQ_1:3;
     then m in dom f by A2,FINSEQ_1:def 3;
     hence C.m = f.m by FINSEQ_1:def 7
-    .= D \ A.(len A -m) by A3,A27;
-   end;
+      .= D \ A.(len A -m) by A3,A27;
+  end;
   uniqueness
-   proof let f1,f2 be RearrangmentGen of D such that
-    A28: for m be Nat st 1 <= m & m <= len f1 - 1 holds
+  proof
+    let f1,f2 be RearrangmentGen of D such that
+A28: for m be Nat st 1 <= m & m <= len f1 - 1 holds
     f1.m = D \ A.(len A -m) and
-    A29: for m be Nat st 1 <= m & m <= len f2 - 1 holds
-    f2.m = D \ A.(len A -m);
-    A30: len f1 = card D & len f2 = card D & len A = card D by Th1;
-         now let m be Nat; assume m in Seg len A;
-      then A31: 1<=m & m<=len A by FINSEQ_1:3;
+A29: for m be Nat st 1 <= m & m <= len f2 - 1 holds f2.m = D \ A.(len A -m);
+A30: len f1 = card D & len f2 = card D & len A = card D by Th1;
+    now
+      let m be Nat;
+      assume m in Seg len A;
+      then
+A31:  1<=m & m<=len A by FINSEQ_1:3;
       reconsider m1=m as Element of NAT by ORDINAL1:def 13;
-           now per cases;
-       case m = len A; then f1.m = D & f2.m = D by A30,Th3;
-        hence f1.m = f2.m;
-       end;
-       case m <> len A;
-        then m<len A by A31,REAL_1:def 5;
-        then m+1<=len A by NAT_1:13;
-        then m<=len A - 1 by XREAL_1:21;
-        then f1.m1 = D \ A.(len A -m1) & f2.m1 = D \ A.(len A -m1)
-        by A28,A29,A30,A31;
-        hence f1.m = f2.m;
-       end;
-       end;
+      now per cases;
+        case m = len A;
+          then f1.m = D & f2.m = D by A30,Th3;
+          hence f1.m = f2.m;
+        end;
+        case m <> len A;
+          then m<len A by A31,REAL_1:def 5;
+          then m+1<=len A by NAT_1:13;
+          then m<=len A - 1 by XREAL_1:21;
+          then f1.m1 = D \ A.(len A -m1) & f2.m1 = D \ A.(len A -m1)
+          by A28,A29,A30,A31;
+          hence f1.m = f2.m;
+        end;
+      end;
       hence f1.m = f2.m;
-     end;
+    end;
     hence thesis by A30,FINSEQ_2:10;
-   end;
+  end;
 end;
 
 theorem
-    for A be RearrangmentGen of D holds Co_Gen(Co_Gen A) = A
- proof let A be RearrangmentGen of D;
-  set C = Co_Gen(A),
-      B = Co_Gen(C);
-  A1: dom A=Seg len A & dom C=Seg len C & dom B=Seg len B by FINSEQ_1:def 3;
-  A2: len C = card D & len A = card D & len B = card D by Th1;
+  for A be RearrangmentGen of D holds Co_Gen(Co_Gen A) = A
+proof
+  let A be RearrangmentGen of D;
+  set C = Co_Gen(A), B = Co_Gen(C);
+A1: dom A=Seg len A & dom C=Seg len C & dom B=Seg len B by FINSEQ_1:def 3;
+A2: len C = card D & len A = card D & len B = card D by Th1;
   for m be Nat st m in Seg len A holds A.m = B.m
-   proof
+  proof
     let m be Nat;
     assume m in Seg len A;
-    then A3: m in dom A by FINSEQ_1:def 3;
-    then A4: 1 <= m & m <= len A by FINSEQ_3:27;
-         now per cases;
-     case m = len A;
-      then A.m = D & B.m = D by A2,Th3;
-      hence A.m = B.m;
-     end;
-     case m<> len A;
-      then m < len A by A4,REAL_1:def 5;
-      then A5: m+1 <= len A by NAT_1:13;
-      then A6: m <= len A -1 by XREAL_1:21;
-      A7: 1 <= len A - m by A5,XREAL_1:21;
-      A8:len A - m <= len A -1 by A4,REAL_1:92;
-          max(0,len A - m) = len A - m by A4,FINSEQ_2:4;
-      then reconsider k = len A - m as Element of NAT by FINSEQ_2:5;
-      A9: A.m c= D by A3,Lm5;
-          C.k = D \ A.(len A - k) by A2,A7,A8,Def4
-      .= D \ A.m;
-      hence B.m = D \ (D \ A.m) by A2,A4,A6,Def4
-      .= D /\ A.m by XBOOLE_1:48
-      .= A.m by A9,XBOOLE_1:28;
-     end;
-     end;
+    then
+A3: m in dom A by FINSEQ_1:def 3;
+    then
+A4: 1 <= m & m <= len A by FINSEQ_3:27;
+    now per cases;
+      case m = len A;
+        then A.m = D & B.m = D by A2,Th3;
+        hence A.m = B.m;
+      end;
+      case m<> len A;
+        then m < len A by A4,REAL_1:def 5;
+        then
+A5:     m+1 <= len A by NAT_1:13;
+        then
+A6:     m <= len A -1 by XREAL_1:21;
+A7:     1 <= len A - m by A5,XREAL_1:21;
+A8:     len A - m <= len A -1 by A4,REAL_1:92;
+        max(0,len A - m) = len A - m by A4,FINSEQ_2:4;
+        then reconsider k = len A - m as Element of NAT by FINSEQ_2:5;
+        C.k = D \ A.(len A - k) by A2,A7,A8,Def4
+          .= D \ A.m;
+        hence B.m = D \ (D \ A.m) by A2,A4,A6,Def4
+          .= D /\ A.m by XBOOLE_1:48
+          .= A.m by A3,Lm5,XBOOLE_1:28;
+      end;
+    end;
     hence thesis;
-   end;
+  end;
   hence thesis by A1,A2,FINSEQ_1:17;
- end;
+end;
 
 theorem Th12:
-for F be PartFunc of D,REAL, A be RearrangmentGen of C
- st F is total & card C = card D holds
-  len MIM FinS(F,D) = len CHI(A,C)
- proof let F be PartFunc of D,REAL, A be RearrangmentGen of C;
-  assume A1: F is total & card C = card D;
-  then A2: dom F = D by PARTFUN1:def 4;
+  for F be PartFunc of D,REAL, A be RearrangmentGen of C
+  st F is total & card C = card D holds len MIM FinS(F,D) = len CHI(A,C)
+proof
+  let F be PartFunc of D,REAL, A be RearrangmentGen of C;
+  assume
+A1: F is total & card C = card D;
+  then
+A2: dom F = D by PARTFUN1:def 4;
   then reconsider F' = F as finite Function by FINSET_1:29;
-  A3: D = dom F /\ D by A2
-  .= dom(F|D) by FUNCT_1:68;
-      F|D = F by A2,RELAT_1:97;
-  then A4: F, FinS(F,D) are_fiberwise_equipotent by A3,RFUNCT_3:def 14;
+A3: D = dom F /\ D by A2
+    .= dom(F|D) by FUNCT_1:68;
+  F|D = F by A2,RELAT_1:97;
+  then
+A4: F, FinS(F,D) are_fiberwise_equipotent by A3,RFUNCT_3:def 14;
   set a = FinS(F,D);
-  A5: dom a = Seg len a by FINSEQ_1:def 3;
-   reconsider a' = a as finite Function;
-   reconsider da' = dom a', dF' = dom F' as finite set;
-  A6: card da' = card dF' by A4,RFINSEQ:10;
+A5: dom a = Seg len a by FINSEQ_1:def 3;
+  reconsider a' = a as finite Function;
+  reconsider da' = dom a', dF' = dom F' as finite set;
+A6: card da' = card dF' by A4,RFINSEQ:10;
   thus len CHI(A,C) = len A by RFUNCT_3:def 6
-  .= card C by Th1
-  .= len a by A1,A2,A5,A6,FINSEQ_1:78
-  .= len MIM(a) by RFINSEQ:def 3;
- end;
+    .= card C by Th1
+    .= len a by A1,A2,A5,A6,FINSEQ_1:78
+    .= len MIM(a) by RFINSEQ:def 3;
+end;
 
-definition let D,C be non empty finite set,
-               A be RearrangmentGen of C,
-               F be PartFunc of D,REAL;
-func Rland
-(F,A) -> PartFunc of C,REAL equals
-    Sum (MIM(FinS(F,D)) (#) CHI(A,C));
+definition
+  let D,C be non empty finite set, A be RearrangmentGen of C,
+  F be PartFunc of D,REAL;
+  func Rland (F,A) -> PartFunc of C,REAL equals
+  Sum (MIM(FinS(F,D)) (#) CHI(A,C));
   correctness;
-func Rlor(F,A) -> PartFunc of C,REAL equals
-    Sum (MIM(FinS(F,D)) (#) CHI(Co_Gen A,C));
+  func Rlor(F,A) -> PartFunc of C,REAL equals
+  Sum (MIM(FinS(F,D)) (#) CHI(Co_Gen A,C));
   correctness;
 end;
 
 theorem Th13:
-for F be PartFunc of D,REAL, A be RearrangmentGen of C
+  for F be PartFunc of D,REAL, A be RearrangmentGen of C
   st F is total & card C = card D holds dom Rland(F,A) = C
- proof let F be PartFunc of D,REAL, A be RearrangmentGen of C; assume
-  A1: F is total & card C = card D;
+proof
+  let F be PartFunc of D,REAL, A be RearrangmentGen of C;
+  assume
+A1: F is total & card C = card D;
   thus dom Rland(F,A) c= C;
-  A2: len MIM(FinS(F,D)) = len CHI(A,C) & len CHI(A,C) = len A & len A <> 0 &
+A2: len MIM(FinS(F,D)) = len CHI(A,C) & len CHI(A,C) = len A & len A <> 0 &
   len (MIM(FinS(F,D))(#) CHI(A,C)) = min(len MIM(FinS(F,D)), len CHI(A,C))
-    by A1,Th4,Th12,RFUNCT_3:def 6,def 7;
-  let x; assume x in C;
+  by A1,Th4,Th12,RFUNCT_3:def 6,def 7;
+  let x;
+  assume x in C;
   then reconsider c = x as Element of C;
-      c is_common_for_dom (MIM(FinS(F,D)) (#) CHI(A,C)) by RFUNCT_3:35;
+  c is_common_for_dom (MIM(FinS(F,D)) (#) CHI(A,C)) by RFUNCT_3:35;
   hence thesis by A2,RFUNCT_3:31;
- end;
+end;
 
 theorem Th14:
-for c be Element of C, F be PartFunc of D,REAL, A be RearrangmentGen of C
- st F is total & card C = card D holds
- (c in A.1 implies (MIM(FinS(F,D)) (#) CHI(A,C))#c = MIM(FinS(F,D))) &
- for n st 1<=n & n<len A & c in A.(n+1) \ A.n holds
+  for c be Element of C, F be PartFunc of D,REAL, A be RearrangmentGen of C
+  st F is total & card C = card D holds
+  (c in A.1 implies (MIM(FinS(F,D)) (#) CHI(A,C))#c = MIM(FinS(F,D))) &
+  for n st 1<=n & n<len A & c in A.(n+1) \ A.n holds
   (MIM(FinS(F,D)) (#) CHI(A,C))#c = (n |-> (0 qua Real)) ^ (MIM(FinS(F,D)/^n))
- proof let c be Element of C, F be PartFunc of D,REAL,
-           A be RearrangmentGen of C; assume
-  A1: F is total & card C = card D;
-  set fd = FinS(F,D),
-      mf = MIM(fd),
-       h = CHI(A,C),
-      fh = (mf(#)h)#c;
-  A2: dom A = Seg len A & dom mf = Seg len mf & dom h = Seg len h &
-      dom(mf(#)h) =Seg len(mf(#)h) & dom fh = Seg len fh by FINSEQ_1:def 3;
-  A3: len mf = len h & len h = len A & len mf = len fd &
+proof
+  let c be Element of C, F be PartFunc of D,REAL, A be RearrangmentGen of C;
+  assume
+A1: F is total & card C = card D;
+  set fd = FinS(F,D), mf = MIM(fd), h = CHI(A,C), fh = (mf(#)h)#c;
+A2: dom A = Seg len A & dom mf = Seg len mf & dom h = Seg len h &
+  dom(mf(#)h) =Seg len(mf(#)h) & dom fh = Seg len fh by FINSEQ_1:def 3;
+A3: len mf = len h & len h = len A & len mf = len fd &
   min(len mf,len h) = len(mf(#)h) &
-   len fh =len(mf(#)h) by A1,Th12,RFINSEQ:def 3,RFUNCT_3:def 6,def 7,def 8;
+  len fh =len(mf(#)h) by A1,Th12,RFINSEQ:def 3,RFUNCT_3:def 6,def 7,def 8;
   thus c in A.1 implies (mf (#) h)#c = mf
-   proof assume
-    A4: c in A.1;
-    A5: for n st n in dom A holds c in A.n
-     proof let n; assume
-      A6: n in dom A;
-      then A7: 1<=n & n<=len A by FINSEQ_3:27;
+  proof
+    assume
+A4: c in A.1;
+A5: for n st n in dom A holds c in A.n
+    proof
+      let n;
+      assume
+A6:   n in dom A;
+      then
+A7:   1<=n & n<=len A by FINSEQ_3:27;
       then 1<=len A by XXREAL_0:2;
       then 1 in dom A by FINSEQ_3:27;
       then A.1 c= A.n by A6,A7,Th2;
       hence thesis by A4;
-     end;
-         now let m be Nat; assume A8: m in Seg len mf;
-      then A9: m in dom mf by FINSEQ_1:def 3;
+    end;
+    now
+      let m be Nat;
+      assume
+A8:   m in Seg len mf;
+      then
+A9:   m in dom mf by FINSEQ_1:def 3;
       reconsider m1 = m as Element of NAT by ORDINAL1:def 13;
-      A10: h.m = chi(A.m,C) by A2,A3,A8,RFUNCT_3:def 6;
-      A11: 1<=m & m<=len mf by A9,FINSEQ_3:27;
-      A12: c in A.m by A2,A3,A5,A8;
+A10:  h.m = chi(A.m,C) by A2,A3,A8,RFUNCT_3:def 6;
+A11:  1<=m & m<=len mf by A9,FINSEQ_3:27;
+A12:  c in A.m by A2,A3,A5,A8;
       reconsider r1=fd.m as Real;
-           now per cases;
-       case A13: m=len mf;
-        then mf.m = r1 by A3,RFINSEQ:def 3;
-        then (mf(#)h).m = r1(#)chi(A.m,C) by A2,A3,A8,A10,RFUNCT_3:def 7;
-        then A14: ((mf(#)h)#c).m = (r1(#)chi(A.m,C)).c by A2,A3,A8,
-RFUNCT_3:def 8;
-            dom(r1(#)chi(A.m,C)) = dom chi(A.m,C) by VALUED_1:7,def 5
-        .= C by RFUNCT_1:77;
-        hence ((mf(#)h)#c).m = r1*(chi(A.m,C)).c by A14,VALUED_1:7,def 5
-        .= r1*1 by A12,RFUNCT_1:79
-        .= mf.m by A3,A13,RFINSEQ:def 3;
-       end;
-       case m<>len mf;
-        then m<len mf by A11,REAL_1:def 5;
-         then m+1<=len mf & m<=m+1 by NAT_1:13;
-        then A15: m<=len mf - 1 & 1<=m+1 by A11,XREAL_1:21,XXREAL_0:2;
-        reconsider r2=fd.(m+1) as Real;
-            mf.m1 = r1-r2 by A11,A15,RFINSEQ:def 3;
-        then (mf(#)h).m = (r1-r2)(#)chi(A.m,C) by A2,A3,A8,A10,RFUNCT_3:def 7;
-        then A16: ((mf(#)h)#c).m =((r1-r2)(#)chi(A.m,C)).c
-          by A2,A3,A8,RFUNCT_3:def 8;
-            dom((r1-r2)(#)chi(A.m,C)) = dom chi(A.m,C) by VALUED_1:7,def 5
-        .= C by RFUNCT_1:77;
-        hence ((mf(#)h)#c).m = (r1-r2)*(chi(A.m,C)).c by A16,VALUED_1:7,def 5
-        .= (r1-r2)*1 by A12,RFUNCT_1:79
-        .= mf.m1 by A11,A15,RFINSEQ:def 3;
-       end;
-       end;
+      now per cases;
+        case
+A13:      m=len mf;
+          then mf.m = r1 by A3,RFINSEQ:def 3;
+          then (mf(#)h).m = r1(#)chi(A.m,C) by A2,A3,A8,A10,RFUNCT_3:def 7;
+          then
+A14:      ((mf(#)h)#c).m = (r1(#)chi(A.m,C)).c by A2,A3,A8, RFUNCT_3:def 8;
+          dom(r1(#)chi(A.m,C)) = dom chi(A.m,C) by VALUED_1:def 5
+            .= C by RFUNCT_1:77;
+          hence ((mf(#)h)#c).m = r1*(chi(A.m,C)).c by A14,VALUED_1:def 5
+            .= r1*1 by A12,RFUNCT_1:79
+            .= mf.m by A3,A13,RFINSEQ:def 3;
+        end;
+        case m<>len mf;
+          then m<len mf by A11,REAL_1:def 5;
+          then m+1<=len mf & m<=m+1 by NAT_1:13;
+          then
+A15:      m<=len mf - 1 & 1<=m+1 by A11,XREAL_1:21,XXREAL_0:2;
+          reconsider r2=fd.(m+1) as Real;
+          mf.m1 = r1-r2 by A11,A15,RFINSEQ:def 3;
+
+then (mf(#)h).m = (r1-r2)(#)chi(A.m,C) by A2,A3,A8,A10,RFUNCT_3:def 7;
+          then
+A16:      ((mf(#)h)#c).m =((r1-r2)(#)chi(A.m,C)).c by A2,A3,A8,
+          RFUNCT_3:def 8;
+          dom((r1-r2)(#)chi(A.m,C)) = dom chi(A.m,C) by VALUED_1:def 5
+            .= C by RFUNCT_1:77;
+          hence ((mf(#)h)#c).m = (r1-r2)*(chi(A.m,C)).c by A16,VALUED_1:def 5
+            .= (r1-r2)*1 by A12,RFUNCT_1:79
+            .= mf.m1 by A11,A15,RFINSEQ:def 3;
+        end;
+      end;
       hence ((mf(#)h)#c).m = mf.m;
-     end;
+    end;
     hence thesis by A3,FINSEQ_2:10;
-   end;
+  end;
   let n;
-  set fdn = FinS(F,D)/^n,
-      mfn = MIM(fdn),
-      n0 = n |-> (0 qua Real); assume
-  A17: 1<=n & n<len A & c in A.(n+1) \ A.n;
-  then A18: n<=len A & n+1<=len A & n<=n+1 by NAT_1:13;
-  A19: len fdn = len fd - n & len mfn = len fdn & len n0 = n & 1<=n+1 &
-      len(mf/^n) = len mf - n
-    by A3,A17,FINSEQ_2:69,NAT_1:13,RFINSEQ:def 2,def 3;
-  A20: dom fdn = Seg len fdn & dom mfn = Seg len mfn & dom n0 = Seg len n0 &
-   dom (mf/^n) = Seg len (mf/^n) by FINSEQ_1:def 3;
-  A21: len (n0 ^ mfn) = n + (len fd -n) by A19,FINSEQ_1:35
-  .= len mf by RFINSEQ:def 3;
-  A22: c in A.(n+1) & not c in A.n by A17,XBOOLE_0:def 4;
-  A23: for k st k in dom A & n+1<=k holds c in A.k
-   proof let k; assume
-    A24: k in dom A & n+1<=k;
-        n+1 in dom A by A18,A19,FINSEQ_3:27;
+  set fdn = FinS(F,D)/^n, mfn = MIM(fdn), n0 = n |-> (0 qua Real);
+  assume
+A17: 1<=n & n<len A & c in A.(n+1) \ A.n;
+  then
+A18: n<=len A & n+1<=len A & n<=n+1 by NAT_1:13;
+A19: len fdn = len fd - n & len mfn = len fdn & len n0 = n & 1<=n+1 &
+  len(mf/^n) = len mf - n by A3,A17,FINSEQ_2:69,NAT_1:13,RFINSEQ:def 2,def 3;
+A20: dom fdn = Seg len fdn & dom mfn = Seg len mfn & dom n0 = Seg len n0 &
+  dom (mf/^n) = Seg len (mf/^n) by FINSEQ_1:def 3;
+A21: len (n0 ^ mfn) = n + (len fd -n) by A19,FINSEQ_1:35
+    .= len mf by RFINSEQ:def 3;
+A22: c in A.(n+1) & not c in A.n by A17,XBOOLE_0:def 4;
+A23: for k st k in dom A & n+1<=k holds c in A.k
+  proof
+    let k;
+    assume
+A24: k in dom A & n+1<=k;
+    n+1 in dom A by A18,A19,FINSEQ_3:27;
     then A.(n+1) c= A.k by A24,Th2;
     hence thesis by A22;
-   end;
-  A25: for k st k in dom A & k<=n holds not c in A.k
-   proof let k; assume
-    A26: k in dom A & k<=n;
-        n in dom A by A17,FINSEQ_3:27;
-    then A27: A.k c= A.n by A26,Th2;
+  end;
+A25: for k st k in dom A & k<=n holds not c in A.k
+  proof
+    let k;
+    assume
+A26: k in dom A & k<=n;
+    n in dom A by A17,FINSEQ_3:27;
+    then
+A27: A.k c= A.n by A26,Th2;
     assume c in A.k;
     hence contradiction by A17,A27,XBOOLE_0:def 4;
-   end;
-   now let m be Nat; assume A28: m in Seg len mf;
-    then A29: m in dom mf by FINSEQ_1:def 3;
+  end;
+  now
+    let m be Nat;
+    assume
+A28: m in Seg len mf;
+    then
+A29: m in dom mf by FINSEQ_1:def 3;
     reconsider m1 = m as Element of NAT by ORDINAL1:def 13;
-    A30: h.m = chi(A.m,C) by A2,A3,A28,RFUNCT_3:def 6;
-    A31: 1<=m & m<=len mf & m<=m+1 by A29,FINSEQ_3:27,NAT_1:11;
+A30: h.m = chi(A.m,C) by A2,A3,A28,RFUNCT_3:def 6;
+A31: 1<=m & m<=len mf & m<=m+1 by A29,FINSEQ_3:27,NAT_1:11;
     reconsider r1=fd.m as Real;
-     now per cases;
-     case A32: m<=n;
-      then not c in A.m by A2,A3,A25,A28;
-      then A33: chi(A.m,C).c = 0 by RFUNCT_1:80;
-      A34: m in Seg n by A31,A32,FINSEQ_1:3;
-      then A35: n0.m = 0 by FUNCOP_1:13;
-          m<n+1 by A32,NAT_1:13;
-      then m<len A by A18,XXREAL_0:2;
-       then m+1<=len A by NAT_1:13;
-      then A36: m<=len mf - 1 by A3,XREAL_1:21;
-      reconsider r2=fd.(m+1) as Real;
-          mf.m1 = r1-r2 by A31,A36,RFINSEQ:def 3;
-      then (mf(#)h).m = (r1-r2)(#)chi(A.m,C) by A2,A3,A28,A30,RFUNCT_3:def 7;
-      then A37: ((mf(#)h)#c).m =((r1-r2)(#)chi(A.m,C)).c
-          by A2,A3,A28,RFUNCT_3:def 8;
-          dom((r1-r2)(#)chi(A.m,C)) = dom chi(A.m,C) by VALUED_1:7,def 5
-       .= C by RFUNCT_1:77;
-      hence ((mf(#)h)#c).m = (r1-r2)*(chi(A.m,C)).c by A37,VALUED_1:7,def 5
-      .= (n0^mfn).m by A19,A20,A33,A34,A35,FINSEQ_1:def 7;
-     end;
-     case A38: n<m;
-      then A39: n+1<=m & n<=m by NAT_1:13;
-      then c in A.m by A2,A3,A23,A28;
-      then A40: chi(A.m,C).c = 1 by RFUNCT_1:79;
-          max(0,m-n) = m-n by A38,FINSEQ_2:4;
-      then reconsider mn = m-n as Element of NAT by FINSEQ_2:5;
-      A41: 1<=mn by A39,XREAL_1:21;
-           now per cases;
-       case A42: m = len mf;
-        then mf.m = r1 by A3,RFINSEQ:def 3;
-        then (mf(#)h).m = r1(#)chi(A.m,C) by A2,A3,A28,A30,RFUNCT_3:def 7;
-        then A43: ((mf(#)h)#c).m =(r1(#)chi(A.m,C)).c by A2,A3,A28,
-RFUNCT_3:def 8;
-        A44: mn in dom(mf/^n) by A19,A41,A42,FINSEQ_3:27;
-        A45: (n0^mfn).m = mfn.(m-n) by A19,A21,A31,A38,FINSEQ_1:37
-        .=(mf/^n).mn by RFINSEQ:28
-        .= mf.(mn+n) by A3,A17,A44,RFINSEQ:def 2
-        .= r1 by A3,A42,RFINSEQ:def 3;
-            dom(r1(#)chi(A.m,C)) = dom chi(A.m,C) by VALUED_1:7,def 5
-        .= C by RFUNCT_1:77;
-        hence ((mf(#)h)#c).m = r1*(chi(A.m,C)).c by A43,VALUED_1:7,def 5
-        .= (n0^mfn).m by A40,A45;
-       end;
-       case m<>len mf;
-        then m<len mf by A31,REAL_1:def 5;
-         then m+1<=len mf & m<=m+1 by NAT_1:13;
-        then A46: m<=len mf - 1 & 1<=m+1 by NAT_1:11,XREAL_1:21;
+    now per cases;
+      case
+A32:    m<=n;
+        then not c in A.m by A2,A3,A25,A28;
+        then
+A33:    chi(A.m,C).c = 0 by RFUNCT_1:80;
+A34:    m in Seg n by A31,A32,FINSEQ_1:3;
+        then
+A35:    n0.m = 0 by FUNCOP_1:13;
+        m<n+1 by A32,NAT_1:13;
+        then m<len A by A18,XXREAL_0:2;
+        then m+1<=len A by NAT_1:13;
+        then
+A36:    m<=len mf - 1 by A3,XREAL_1:21;
         reconsider r2=fd.(m+1) as Real;
-          mf.m1 = r1-r2 by A31,A46,RFINSEQ:def 3;
-        then (mf(#)h).m = (r1-r2)(#)chi(A.m,C) by A2,A3,A28,A30,RFUNCT_3:def 7
-;
-        then A47: ((mf(#)h)#c).m =((r1-r2)(#)chi(A.m,C)).c
-          by A2,A3,A28,RFUNCT_3:def 8;
+        mf.m1 = r1-r2 by A31,A36,RFINSEQ:def 3;
+        then (mf(#)h).m = (r1-r2)(#)chi(A.m,C) by A2,A3,A28,A30,RFUNCT_3:def 7;
+        then
+A37:    ((mf(#)h)#c).m =((r1-r2)(#)chi(A.m,C)).c by A2,A3,A28, RFUNCT_3:def 8;
+        dom((r1-r2)(#)chi(A.m,C)) = dom chi(A.m,C) by VALUED_1:def 5
+          .= C by RFUNCT_1:77;
+        hence ((mf(#)h)#c).m = (r1-r2)*(chi(A.m,C)).c by A37,VALUED_1:def 5
+          .= (n0^mfn).m by A19,A20,A33,A34,A35,FINSEQ_1:def 7;
+      end;
+      case
+A38:    n<m;
+        then
+A39:    n+1<=m & n<=m by NAT_1:13;
+        then c in A.m by A2,A3,A23,A28;
+        then
+A40:    chi(A.m,C).c = 1 by RFUNCT_1:79;
+        max(0,m-n) = m-n by A38,FINSEQ_2:4;
+        then reconsider mn = m-n as Element of NAT by FINSEQ_2:5;
+A41:    1<=mn by A39,XREAL_1:21;
+        now per cases;
+          case
+A42:        m = len mf;
+            then mf.m = r1 by A3,RFINSEQ:def 3;
+            then (mf(#)h).m = r1(#)chi(A.m,C) by A2,A3,A28,A30,RFUNCT_3:def 7;
+            then
+A43:        ((mf(#)h)#c).m =(r1(#)chi(A.m,C)).c by A2,A3,A28, RFUNCT_3:def 8;
+A44:        mn in dom(mf/^n) by A19,A41,A42,FINSEQ_3:27;
+A45:        (n0^mfn).m = mfn.(m-n) by A19,A21,A31,A38,FINSEQ_1:37
+              .=(mf/^n).mn by RFINSEQ:28
+              .= mf.(mn+n) by A3,A17,A44,RFINSEQ:def 2
+              .= r1 by A3,A42,RFINSEQ:def 3;
+            dom(r1(#)chi(A.m,C)) = dom chi(A.m,C) by VALUED_1:def 5
+              .= C by RFUNCT_1:77;
+            hence ((mf(#)h)#c).m = r1*(chi(A.m,C)).c by A43,VALUED_1:def 5
+              .= (n0^mfn).m by A40,A45;
+          end;
+          case m<>len mf;
+            then m<len mf by A31,REAL_1:def 5;
+            then m+1<=len mf & m<=m+1 by NAT_1:13;
+            then
+A46:        m<=len mf - 1 & 1<=m+1 by NAT_1:11,XREAL_1:21;
+            reconsider r2=fd.(m+1) as Real;
+            mf.m1 = r1-r2 by A31,A46,RFINSEQ:def 3;
+
+then (mf(#)h).m = (r1-r2)(#)chi(A.m,C) by A2,A3,A28,A30,RFUNCT_3:def 7;
+            then
+A47:        ((mf(#)h)#c).m =((r1-r2)(#)chi(A.m,C)).c
+            by A2,A3,A28,RFUNCT_3:def 8;
             mn<=len(mf/^n) by A19,A31,XREAL_1:11;
-        then A48: mn in dom(mf/^n) by A41,FINSEQ_3:27;
-        A49: (n0^mfn).m = mfn.(m-n) by A19,A21,A31,A38,FINSEQ_1:37
-        .=(mf/^n).mn by RFINSEQ:28
-        .= mf.(mn+n) by A3,A17,A48,RFINSEQ:def 2
-        .= r1-r2 by A31,A46,RFINSEQ:def 3;
-            dom((r1-r2)(#)chi(A.m,C)) = dom chi(A.m,C) by VALUED_1:7,def 5
-        .= C by RFUNCT_1:77;
-        hence ((mf(#)h)#c).m = (r1-r2)*(chi(A.m,C)).c by A47,VALUED_1:7,def 5
-        .= (n0^mfn).m by A40,A49;
-       end;
-       end;
-      hence ((mf(#)h)#c).m = (n0^mfn).m;
-     end;
-     end;
+            then
+A48:        mn in dom(mf/^n) by A41,FINSEQ_3:27;
+A49:        (n0^mfn).m = mfn.(m-n) by A19,A21,A31,A38,FINSEQ_1:37
+              .=(mf/^n).mn by RFINSEQ:28
+              .= mf.(mn+n) by A3,A17,A48,RFINSEQ:def 2
+              .= r1-r2 by A31,A46,RFINSEQ:def 3;
+            dom((r1-r2)(#)chi(A.m,C)) = dom chi(A.m,C) by VALUED_1:def 5
+              .= C by RFUNCT_1:77;
+            hence ((mf(#)h)#c).m = (r1-r2)*(chi(A.m,C)).c by A47,VALUED_1:def 5
+              .= (n0^mfn).m by A40,A49;
+          end;
+        end;
+        hence ((mf(#)h)#c).m = (n0^mfn).m;
+      end;
+    end;
     hence ((mf(#)h)#c).m = (n0^mfn).m;
-   end;
+  end;
   hence thesis by A3,A21,FINSEQ_2:10;
- end;
+end;
 
 theorem Th15:
-for c be Element of C, F be PartFunc of D,REAL, A be RearrangmentGen of C
- st F is total & card C = card D holds
- (c in A.1 implies (Rland(F,A)).c = FinS(F,D).1) &
- for n st 1<=n & n<len A & c in A.(n+1) \ A.n holds
+  for c be Element of C, F be PartFunc of D,REAL, A be RearrangmentGen of C
+  st F is total & card C = card D holds
+  (c in A.1 implies (Rland(F,A)).c = FinS(F,D).1) &
+  for n st 1<=n & n<len A & c in A.(n+1) \ A.n holds
   Rland(F,A).c = FinS(F,D).(n+1)
- proof let c be Element of C, F be PartFunc of D,REAL,
-           B be RearrangmentGen of C;
-  set fd = FinS(F,D),
-      mf = MIM(fd),
-       h = CHI(B,C); assume
-  A1: F is total & card C = card D;
-   c is_common_for_dom mf(#)h by RFUNCT_3:35;
-  then A2: Rland(F,B).c = Sum((mf(#)h)#c) by RFUNCT_3:36;
-  A3: len mf = len h & len h = len B & len mf = len fd
-     by A1,Th12,RFINSEQ:def 3,RFUNCT_3:def 6;
-  A4: len B <> 0 by Th4;
+proof
+  let c be Element of C, F be PartFunc of D,REAL, B be RearrangmentGen of C;
+  set fd = FinS(F,D), mf = MIM(fd), h = CHI(B,C);
+  assume
+A1: F is total & card C = card D;
+A2: Rland(F,B).c = Sum((mf(#)h)#c) by RFUNCT_3:35,36;
+A3: len mf = len h & len h = len B & len mf = len fd
+  by A1,Th12,RFINSEQ:def 3,RFUNCT_3:def 6;
   thus c in B.1 implies Rland(F,B).c = FinS(F,D).1
-   proof assume c in B.1;
+  proof
+    assume c in B.1;
     hence Rland(F,B).c = Sum mf by A1,A2,Th14
-    .= FinS(F,D).1 by A3,A4,RFINSEQ:29;
-   end;
+      .= FinS(F,D).1 by A3,Th4,RFINSEQ:29;
+  end;
   let n;
-  set mfn = MIM(FinS(F,D)/^n); assume
-  A5: 1<=n & n<len B & c in B.(n+1) \ B.n;
+  set mfn = MIM(FinS(F,D)/^n);
+  assume
+A4: 1<=n & n<len B & c in B.(n+1) \ B.n;
   then (mf(#)h)#c = (n |-> (0 qua Real)) ^ mfn by A1,Th14;
   hence Rland(F,B).c = Sum(n |-> (0 qua Real)) + (Sum mfn) by A2,RVSUM_1:105
-  .= 0 + Sum mfn by RVSUM_1:111
-  .= FinS(F,D).(n+1) by A3,A5,RFINSEQ:30;
- end;
+    .= 0 + Sum mfn by RVSUM_1:111
+    .= FinS(F,D).(n+1) by A3,A4,RFINSEQ:30;
+end;
 
 theorem Th16:
-for F be PartFunc of D,REAL, A be RearrangmentGen of C
+  for F be PartFunc of D,REAL, A be RearrangmentGen of C
   st F is total & card C = card D holds rng Rland(F,A) = rng FinS(F,D)
- proof let F be PartFunc of D,REAL, B be RearrangmentGen of C; assume
-  A1: F is total & card C = card D;
-  set fd = FinS(F,D),
-       p = Rland(F,B),
-      mf = MIM(fd),
-       h = CHI(B,C);
-  A2: len mf = len h & len h = len B & len mf = len fd
-        by A1,Th12,RFINSEQ:def 3,RFUNCT_3:def 6;
-  A3: dom p = C & dom F = D
-      by A1,Th13,PARTFUN1:def 4;
-      then reconsider fd' = fd, F' = F as finite Function by FINSET_1:29;
-      reconsider dfd = dom fd', dF = dom F' as finite set;
-  A4: F|D = F by A3,RELAT_1:97;
-  A5: dom fd = Seg len fd & dom B = Seg len B by FINSEQ_1:def 3;
-      fd, F are_fiberwise_equipotent by A3,A4,RFUNCT_3:def 14;
+proof
+  let F be PartFunc of D,REAL, B be RearrangmentGen of C;
+  assume
+A1: F is total & card C = card D;
+  set fd = FinS(F,D), p = Rland(F,B), mf = MIM(fd), h = CHI(B,C);
+A2: len mf = len h & len h = len B & len mf = len fd
+  by A1,Th12,RFINSEQ:def 3,RFUNCT_3:def 6;
+A3: dom p = C & dom F = D by A1,Th13,PARTFUN1:def 4;
+  then reconsider fd' = fd, F' = F as finite Function by FINSET_1:29;
+  reconsider dfd = dom fd', dF = dom F' as finite set;
+A4: F|D = F by A3,RELAT_1:97;
+A5: dom fd = Seg len fd & dom B = Seg len B by FINSEQ_1:def 3;
+  fd, F are_fiberwise_equipotent by A3,A4,RFUNCT_3:def 14;
   then card dfd = card dF & card dfd = len fd & D<>{}
-     by A5,FINSEQ_1:78,RFINSEQ:10;
+  by A5,FINSEQ_1:78,RFINSEQ:10;
   then len fd <> 0 by A3,CARD_2:59;
   then 0<len fd;
-  then A6: 0+1<=len fd by NAT_1:13;
-  then A7: 1 in dom fd & len B in dom B by A2,FINSEQ_3:27;
+  then
+A6: 0+1<=len fd by NAT_1:13;
+  then
+A7: 1 in dom fd & len B in dom B by A2,FINSEQ_3:27;
   thus rng p c= rng fd
-   proof let x; assume x in rng p;
+  proof
+    let x;
+    assume x in rng p;
     then consider c be Element of C such that
-    A8: c in dom p & p.c = x by PARTFUN1:26;
+A8: c in dom p & p.c = x by PARTFUN1:26;
     defpred P[set] means $1 in dom B & c in B.$1;
-    A9: ex n be Nat st P[n]
-     proof
+A9: ex n be Nat st P[n]
+    proof
       take n = len B;
-          B.n = C by Th3;
+      B.n = C by Th3;
       hence n in dom B & c in B.n by A2,A6,FINSEQ_3:27;
-     end;
+    end;
     consider mi be Nat such that
-    A10: P[mi] & for n be Nat st P[n] holds mi<=n from NAT_1:sch 5(A9);
-    A11: 1<=mi & mi<=len B by A10,FINSEQ_3:27;
+A10: P[mi] & for n be Nat st P[n] holds mi<=n from NAT_1:sch 5(A9);
+A11: 1<=mi & mi<=len B by A10,FINSEQ_3:27;
     then max(0,mi-1)=mi-1 by FINSEQ_2:4;
     then reconsider m1 = mi -1 as Element of NAT by FINSEQ_2:5;
-         now per cases;
-     case mi = 1;
-      then p.c = fd.1 by A1,A10,Th15;
-      hence thesis by A7,A8,FUNCT_1:def 5;
-     end;
-     case mi <> 1;
-      then 1<mi by A11,REAL_1:def 5;
-      then 1+1<=mi by NAT_1:13;
-      then A12: 1<=m1 by XREAL_1:21;
-      A13: m1<mi by XREAL_1:46;
-      then A14: m1<len B by A11,XXREAL_0:2;
-          m1<=len B by A11,A13,XXREAL_0:2;
-      then m1 in dom B by A12,FINSEQ_3:27;
-        then not c in B.m1 by A10,A13;
-      then c in B.(m1+1) \ B.m1 by A10,XBOOLE_0:def 4;
-      then p.c = fd.(m1+1) by A1,A12,A14,Th15;
-      hence thesis by A2,A5,A8,A10,FUNCT_1:def 5;
-     end;
-     end;
+    now per cases;
+      case mi = 1;
+        then p.c = fd.1 by A1,A10,Th15;
+        hence thesis by A7,A8,FUNCT_1:def 5;
+      end;
+      case mi <> 1;
+        then 1<mi by A11,REAL_1:def 5;
+        then 1+1<=mi by NAT_1:13;
+        then
+A12:    1<=m1 by XREAL_1:21;
+A13:    m1<mi by XREAL_1:46;
+        then
+A14:    m1<len B by A11,XXREAL_0:2;
+        m1<=len B by A11,A13,XXREAL_0:2;
+        then m1 in dom B by A12,FINSEQ_3:27;
+        then not c in B.m1 by A10,XREAL_1:46;
+        then c in B.(m1+1) \ B.m1 by A10,XBOOLE_0:def 4;
+        then p.c = fd.(m1+1) by A1,A12,A14,Th15;
+        hence thesis by A2,A5,A8,A10,FUNCT_1:def 5;
+      end;
+    end;
     hence x in rng fd;
-   end;
-  let x; assume
-  A15: x in rng fd;
+  end;
+  let x;
+  assume
+A15: x in rng fd;
   defpred P[Nat] means $1 in dom fd & fd.$1 = x;
 A16: ex n be Nat st P[n] by A15,FINSEQ_2:11;
   consider mi be Nat such that
-  A17: P[mi] & for n be Nat st P[n] holds mi<=n from NAT_1:sch 5(A16);
-  A18: 1<=mi & mi<=len fd by A17,FINSEQ_3:27;
+A17: P[mi] & for n be Nat st P[n] holds mi<=n from NAT_1:sch 5(A16);
+A18: 1<=mi & mi<=len fd by A17,FINSEQ_3:27;
   then max(0,mi-1)=mi-1 by FINSEQ_2:4;
   then reconsider m1 = mi -1 as Element of NAT by FINSEQ_2:5;
-       now per cases;
-   case A19: mi=1;
-A20: B.1 <> {} by A2,A5,A7,Th7;
-    consider y being Element of B.1;
-        B.1 c= C by A2,A5,A7,Lm5;
-    then reconsider y as Element of C by A20,TARSKI:def 3;
-        p.y = fd.1 by A1,A20,Th15;
-    hence thesis by A3,A17,A19,FUNCT_1:def 5;
-   end;
-   case mi<>1;
-    then 1<mi by A18,REAL_1:def 5;
-    then 1+1<=mi by NAT_1:13;
-    then A21: 1<=m1 by XREAL_1:21;
-      A22: m1<mi by XREAL_1:46;
-    then A23: m1<len fd by A18,XXREAL_0:2;
+  now per cases;
+    case
+A19:  mi=1;
+A20:  B.1 <> {} by A2,A5,A7,Th7;
+      consider y being Element of B.1;
+      B.1 c= C by A2,A5,A7,Lm5;
+      then reconsider y as Element of C by A20,TARSKI:def 3;
+      p.y = fd.1 by A1,A20,Th15;
+      hence thesis by A3,A17,A19,FUNCT_1:def 5;
+    end;
+    case mi<>1;
+      then 1<mi by A18,REAL_1:def 5;
+      then 1+1<=mi by NAT_1:13;
+      then
+A21:  1<=m1 by XREAL_1:21;
+A22:  m1<mi by XREAL_1:46;
+      then
+A23:  m1<len fd by A18,XXREAL_0:2;
       m1+1<=len fd & m1<=len fd by A18,A22,XXREAL_0:2;
-    then m1<=len fd -1 & m1 in dom fd by A21,FINSEQ_3:27,XREAL_1:21;
-then A24: B.(m1+1) \ B.m1 <> {} by A2,A21,Th8;
-    consider y being Element of B.(m1+1) \ B.m1;
-        y in B.(m1+1) & B.mi c= C by A2,A5,A17,A24,Lm5,XBOOLE_0:def 4;
-    then reconsider y as Element of C;
-        p.y=fd.(m1+1) by A1,A2,A21,A23,A24,Th15;
-    hence thesis by A3,A17,FUNCT_1:def 5;
-   end;
-   end;
+      then m1<=len fd -1 & m1 in dom fd by A21,FINSEQ_3:27,XREAL_1:21;
+      then
+A24:  B.(m1+1) \ B.m1 <> {} by A2,A21,Th8;
+      consider y being Element of B.(m1+1) \ B.m1;
+      y in B.(m1+1) & B.mi c= C by A2,A5,A17,A24,Lm5,XBOOLE_0:def 4;
+      then reconsider y as Element of C;
+      p.y=fd.(m1+1) by A1,A2,A21,A23,A24,Th15;
+      hence thesis by A3,A17,FUNCT_1:def 5;
+    end;
+  end;
   hence thesis;
- end;
+end;
 
 theorem Th17:
-for F be PartFunc of D,REAL, A be RearrangmentGen of C
- st F is total & card C = card D holds
-     Rland(F,A), FinS(F,D) are_fiberwise_equipotent
- proof let F be PartFunc of D,REAL, B be RearrangmentGen of C;
-  set fd = FinS(F,D),
-       p = Rland(F,B),
-      mf = MIM(fd),
-       h = CHI(B,C);
-        dom p is finite;
-    then reconsider p as finite PartFunc of C,REAL by FINSET_1:29;
-   assume
-  A1: F is total & card C = card D;
-  then A2: rng p = rng fd by Th16;
-  A3: len mf = len h & len h = len B & len mf = len fd
-        by A1,Th12,RFINSEQ:def 3,RFUNCT_3:def 6;
-  A4: dom p = C & dom F = D
-      by A1,Th13,PARTFUN1:def 4;
-  A5: dom fd = Seg len fd & dom B = Seg len B by FINSEQ_1:def 3;
-       now let x;
-         now per cases;
-     case not x in rng fd;
-      then fd"{x}={} & p"{x}={} by A2,Lm1;
-      hence card (fd"{x}) = card(p"{x});
-     end;
-     case A6: x in rng fd;
-      defpred P[Nat] means $1 in dom fd & fd.$1 = x;
-A7: ex n be Nat st P[n] by A6,FINSEQ_2:11;
-      then
-      A8: ex n be Nat st P[n];
-      A9: for n be Nat st P[n] holds n<=len fd by FINSEQ_3:27;
-      consider mi be Nat such that
-      A10: P[mi] & for n be Nat st P[n] holds mi<=n from NAT_1:sch 5(A8);
-      consider ma be Nat such that
-A11:  P[ma] & for n being Nat st P[n] holds n<=ma from NAT_1:sch 6(A9,A7);
-      A12: mi<=ma by A10,A11;
-      A13: 1<=mi & mi<=len fd & 1<=ma & ma<=len fd by A10,A11,FINSEQ_3:27;
-      then max(0,mi-1)=mi-1 by FINSEQ_2:4;
-      then reconsider m1 = mi -1 as Element of NAT by FINSEQ_2:5;
-      reconsider r=x as Real by A10;
-          1<=len fd by A13,XXREAL_0:2;
-      then A14: 1 in dom fd by FINSEQ_3:27;
-          m1<=mi by XREAL_1:45;
-      then A15: m1<=ma & m1+1=mi by A12,XXREAL_0:2;
-      then A16: Seg m1 c= Seg ma & Seg ma is finite by FINSEQ_1:7;
-          Seg ma \ Seg m1 = fd"{x}
-       proof
-        thus Seg ma \ Seg m1 c= fd"{x}
-         proof let y; assume A17: y in Seg ma \ Seg m1;
-          then A18: y in Seg ma & not y in Seg m1 &
-          Seg ma c= NAT by XBOOLE_0:def 4;
-          reconsider l=y as Element of NAT by A17;
-          A19: 1<=l & l<=ma & (l<1 or m1<l) by A18,FINSEQ_1:3;
-          then mi<l+1 by XREAL_1:21;
-          then A20: mi<=l by NAT_1:13;
-              l<=len fd by A13,A19,XXREAL_0:2;
-          then A21: l in dom fd by A19,FINSEQ_3:27;
-          reconsider o=fd.l as Real;
-               now per cases;
-           case l=ma;
-            then o in {x} by A11,TARSKI:def 1;
-            hence thesis by A21,FUNCT_1:def 13;
-           end;
-           case l<>ma;
-            then l<ma by A19,REAL_1:def 5;
-            then A22: o>=r by A11,A21,RFINSEQ:32;
-                 now per cases;
-             case l=mi;
-              then o in {x} by A10,TARSKI:def 1;
-              hence thesis by A21,FUNCT_1:def 13;
-             end;
-             case l<>mi;
-              then mi<l by A20,REAL_1:def 5;
-              then r>=o by A10,A21,RFINSEQ:32;
-              then r=o by A22,XXREAL_0:1;
-              then o in {x} by TARSKI:def 1;
-              hence thesis by A21,FUNCT_1:def 13;
-             end;
-             end;
+  for F be PartFunc of D,REAL, A be RearrangmentGen of C
+  st F is total & card C = card D holds
+  Rland(F,A), FinS(F,D) are_fiberwise_equipotent
+proof
+  let F be PartFunc of D,REAL, B be RearrangmentGen of C;
+  set fd = FinS(F,D), p = Rland(F,B), mf = MIM(fd), h = CHI(B,C);
+  dom p is finite;
+  then reconsider p as finite PartFunc of C,REAL by FINSET_1:29;
+  assume
+A1: F is total & card C = card D;
+  then
+A2: rng p = rng fd by Th16;
+A3: len mf = len h & len h = len B & len mf = len fd
+  by A1,Th12,RFINSEQ:def 3,RFUNCT_3:def 6;
+A4: dom p = C & dom F = D by A1,Th13,PARTFUN1:def 4;
+A5: dom fd = Seg len fd & dom B = Seg len B by FINSEQ_1:def 3;
+  now
+    let x;
+    now per cases;
+      case not x in rng fd;
+        then fd"{x}={} & p"{x}={} by A2,Lm1;
+        hence card (fd"{x}) = card(p"{x});
+      end;
+      case
+A6:     x in rng fd;
+        defpred P[Nat] means $1 in dom fd & fd.$1 = x;
+A7:     ex n be Nat st P[n] by A6,FINSEQ_2:11;
+A8:     ex n be Nat st P[n] by A6,FINSEQ_2:11;
+A9:     for n be Nat st P[n] holds n<=len fd by FINSEQ_3:27;
+        consider mi be Nat such that
+A10:    P[mi] & for n be Nat st P[n] holds mi<=n from NAT_1:sch 5(A8);
+        consider ma be Nat such that
+A11:    P[ma] & for n being Nat st P[n] holds n<=ma from NAT_1:sch 6(A9,A7);
+A12:    mi<=ma by A10,A11;
+A13:    1<=mi & mi<=len fd & 1<=ma & ma<=len fd by A10,A11,FINSEQ_3:27;
+        then max(0,mi-1)=mi-1 by FINSEQ_2:4;
+        then reconsider m1 = mi -1 as Element of NAT by FINSEQ_2:5;
+        reconsider r=x as Real by A10;
+        1<=len fd by A13,XXREAL_0:2;
+        then
+A14:    1 in dom fd by FINSEQ_3:27;
+        m1<=mi by XREAL_1:45;
+        then
+A15:    m1<=ma & m1+1=mi by A12,XXREAL_0:2;
+        then
+A16:    Seg m1 c= Seg ma & Seg ma is finite by FINSEQ_1:7;
+        Seg ma \ Seg m1 = fd"{x}
+        proof
+          thus Seg ma \ Seg m1 c= fd"{x}
+          proof
+            let y;
+            assume
+A17:        y in Seg ma \ Seg m1;
+            then
+A18:        y in Seg ma & not y in Seg m1 & Seg ma c= NAT by XBOOLE_0:def 4;
+            reconsider l=y as Element of NAT by A17;
+A19:        1<=l & l<=ma & (l<1 or m1<l) by A18,FINSEQ_1:3;
+            then mi<l+1 by XREAL_1:21;
+            then
+A20:        mi<=l by NAT_1:13;
+            l<=len fd by A13,A19,XXREAL_0:2;
+            then
+A21:        l in dom fd by A19,FINSEQ_3:27;
+            reconsider o=fd.l as Real;
+            now per cases;
+              case l=ma;
+                then o in {x} by A11,TARSKI:def 1;
+                hence thesis by A21,FUNCT_1:def 13;
+              end;
+              case l<>ma;
+                then l<ma by A19,REAL_1:def 5;
+                then
+A22:            o>=r by A11,A21,RFINSEQ:32;
+                now per cases;
+                  case l=mi;
+                    then o in {x} by A10,TARSKI:def 1;
+                    hence thesis by A21,FUNCT_1:def 13;
+                  end;
+                  case l<>mi;
+                    then mi<l by A20,REAL_1:def 5;
+                    then r>=o by A10,A21,RFINSEQ:32;
+                    then r=o by A22,XXREAL_0:1;
+                    then o in {x} by TARSKI:def 1;
+                    hence thesis by A21,FUNCT_1:def 13;
+                  end;
+                end;
+                hence thesis;
+              end;
+            end;
             hence thesis;
-           end;
-           end;
-          hence thesis;
-         end;
-        let y; assume A23: y in fd"{x};
-        then A24: y in dom fd & fd.y in {x} by FUNCT_1:def 13;
-        reconsider l=y as Element of NAT by A23;
-        A25: fd.l=x by A24,TARSKI:def 1;
-        then mi<=l by A10,A24;
-        then mi<l+1 by NAT_1:13;
-        then m1<l or l<1 by XREAL_1:21;
-        then A26: not l in Seg m1 by FINSEQ_1:3;
-            1<=l & l<=ma by A11,A24,A25,FINSEQ_3:27;
-        then l in Seg ma by FINSEQ_1:3;
-        hence thesis by A26,XBOOLE_0:def 4;
-       end;
-      then A27: card(fd"{x}) = card(Seg ma) - card(Seg m1) by A16,CARD_2:63
-      .= ma - card(Seg m1) by FINSEQ_1:78
-      .= ma - m1 by FINSEQ_1:78;
-           now per cases;
-       case A28: mi=1;
+          end;
+          let y;
+          assume
+A23:      y in fd"{x};
+          then
+A24:      y in dom fd & fd.y in {x} by FUNCT_1:def 13;
+          reconsider l=y as Element of NAT by A23;
+A25:      fd.l=x by A24,TARSKI:def 1;
+          then mi<=l by A10,A24;
+          then mi<l+1 by NAT_1:13;
+          then m1<l or l<1 by XREAL_1:21;
+          then
+A26:      not l in Seg m1 by FINSEQ_1:3;
+          1<=l & l<=ma by A11,A24,A25,FINSEQ_3:27;
+          then l in Seg ma by FINSEQ_1:3;
+          hence thesis by A26,XBOOLE_0:def 4;
+        end;
+        then
+A27:    card(fd"{x}) = card(Seg ma) - card(Seg m1) by A16,CARD_2: 63
+          .= ma - card(Seg m1) by FINSEQ_1:78
+          .= ma - m1 by FINSEQ_1:78;
+        now per cases;
+          case
+A28:        mi=1;
             B.ma = p"{x}
-         proof
-          thus B.ma c= p"{x}
-           proof let y; assume
-            A29: y in B.ma;
+            proof
+              thus B.ma c= p"{x}
+              proof
+                let y;
+                assume
+A29:            y in B.ma;
                 B.ma c= C by A3,A5,A11,Lm5;
-            then reconsider cy = y as Element of C by A29;
-            defpred P[Element of NAT] means
-            $1 in dom B & $1<=ma implies
-            for c be Element of C st c in B.$1 holds c in p"{x};
-            A30: P[0] by FINSEQ_3:27;
-            A31: for n st P[n] holds P[n+1]
-             proof let n; assume
-              A32: P[n]; assume
-              A33: n+1 in dom B & n+1<=ma;
-              then 1<=n+1 & n+1<=len B & n<=n+1 by FINSEQ_3:27,NAT_1:11;
-              then A34: n<=len B & n<=ma & n<=len B -1 & n<len B
-                by A33,NAT_1:13,XREAL_1:21;
-              let c be Element of C; assume
-              A35: c in B.(n+1);
-                   now per cases;
-               case n=0;
-                then p.c = x by A1,A10,A28,A35,Th15;
-                then p.c in {x} by TARSKI:def 1;
-                hence thesis by A4,FUNCT_1:def 13;
-               end;
-               case n<>0;
-                then 0<n;
-                then A36: 0+1<=n & 0+1<n+1 by NAT_1:13,XREAL_1:8
-;
-                then B.n c= B.(n+1) by A34,Def2;
-                then A37: B.(n+1) = B.(n+1) \/ B.n by XBOOLE_1:12
-                .= (B.(n+1) \ B.n) \/ B.n by XBOOLE_1:39;
-                     now per cases by A35,A37,XBOOLE_0:def 2;
-                 case c in B.(n+1) \ B.n;
-                  then A38: p.c = fd.(n+1) by A1,A34,A36,Th15;
-                       now per cases;
-                   case n+1=ma;
-                    then p.c in {x} by A11,A38,TARSKI:def 1;
-                    hence thesis by A4,FUNCT_1:def 13;
-                   end;
-                   case n+1<>ma;
-                    then n+1<ma by A33,REAL_1:def 5;
-                    then A39: p.c>=r by A3,A5,A11,A33,A38,RFINSEQ:32;
-                        r>=p.c by A3,A5,A10,A28,A33,A36,A38,RFINSEQ:32;
-                    then r=p.c by A39,XXREAL_0:1;
-                    then p.c in {x} by TARSKI:def 1;
-                    hence thesis by A4,FUNCT_1:def 13;
-                   end;
-                   end;
+                then reconsider cy = y as Element of C by A29;
+                defpred P[Element of NAT] means $1 in dom B & $1<=ma implies
+                for c be Element of C st c in B.$1 holds c in p"{x};
+A30:            P[0] by FINSEQ_3:27;
+A31:            for n st P[n] holds P[n+1]
+                proof
+                  let n;
+                  assume
+A32:              P[n];
+                  assume
+A33:              n+1 in dom B & n+1<=ma;
+                  then 1<=n+1 & n+1<=len B & n<=n+1 by FINSEQ_3:27,NAT_1:11;
+                  then
+A34:              n<=len B & n<=ma & n<=len B -1 & n<len B
+                  by A33,NAT_1:13,XREAL_1:21;
+                  let c be Element of C;
+                  assume
+A35:              c in B.(n+1);
+                  now per cases;
+                    case n=0;
+                      then p.c = x by A1,A10,A28,A35,Th15;
+                      then p.c in {x} by TARSKI:def 1;
+                      hence thesis by A4,FUNCT_1:def 13;
+                    end;
+                    case n<>0;
+                      then 0<n;
+                      then
+A36:                  0+1<=n & 0+1<n+1 by NAT_1:13, XREAL_1:8;
+                      then B.n c= B.(n+1) by A34,Def2;
+                      then
+A37:                  B.(n+1) = B.(n+1) \/ B.n by XBOOLE_1:12
+                        .= (B.(n+1) \ B.n) \/ B.n by XBOOLE_1:39;
+                      now per cases by A35,A37,XBOOLE_0:def 2;
+                        case c in B.(n+1) \ B.n;
+                          then
+A38:                      p.c = fd.(n+1) by A1, A34,A36,Th15;
+                          now per cases;
+                            case n+1=ma;
+                              then p.c in {x} by A11,A38,TARSKI:def 1;
+                              hence thesis by A4,FUNCT_1:def 13;
+                            end;
+                            case n+1<>ma;
+                              then n+1<ma by A33,REAL_1:def 5;
+                              then
+A39:                          p.c>=r by A3, A5,A11,A33,A38,RFINSEQ:32;
+                              r>=p.c by A3,A5,A10,A28,A33,A36,A38,RFINSEQ:32;
+                              then r=p.c by A39,XXREAL_0:1;
+                              then p.c in {x} by TARSKI:def 1;
+                              hence thesis by A4,FUNCT_1:def 13;
+                            end;
+                          end;
+                          hence thesis;
+                        end;
+                        case c in B.n;
+                          hence thesis by A32,A34,A36,FINSEQ_3:27;
+                        end;
+                      end;
+                      hence thesis;
+                    end;
+                  end;
                   hence thesis;
-                 end;
-                 case c in B.n;
-                  hence thesis by A32,A34,A36,FINSEQ_3:27;
-                 end;
-                 end;
-                hence thesis;
-               end;
-               end;
-              hence thesis;
-             end;
-A40:           ma in dom B by A3,A11,FINSEQ_3:31;
+                end;
+A40:            ma in dom B by A3,A11,FINSEQ_3:31;
                 for n holds P[n] from NAT_1:sch 1(A30,A31);
-            then cy in p"{x} by A29,A40;
-            hence thesis;
-           end;
-          let y; assume
-          A41: y in p"{x};
-          then reconsider cy = y as Element of C; assume
-          A42: not y in B.ma;
-              cy in dom p & p.cy in {x} by A41,FUNCT_1:def 13;
-          then A43: p.cy = x by TARSKI:def 1;
-          defpred Q[Nat] means $1 in dom B & ma<$1 & cy in B.$1;
-          A44: ex n be Nat st Q[n]
-           proof
-            take n=len B;
-            A45: B.n= C by Th3;
-                len B <> 0 by Th4;
-            then 0<len B;
-            then 0+1<=len B by NAT_1:13;
-            hence n in dom B by FINSEQ_3:27;
-                 now assume n <= ma;
-              then ma=len B by A3,A13,XXREAL_0:1;
-              then cy in B.ma by A45;
-              hence contradiction by A42;
-             end;
-            hence thesis by A45;
-           end;
-          consider mm be Nat such that
-          A46: Q[mm] & for n be Nat st Q[n] holds mm<=n from NAT_1:sch 5(A44);
-              1<=mm by A46,FINSEQ_3:27;
-          then max(0,mm-1)=mm-1 by FINSEQ_2:4;
-          then reconsider 1m = mm - 1 as Element of NAT by FINSEQ_2:5;
-              ma+1<=mm & mm<=mm+1 & mm<mm+1 by A46,NAT_1:13;
-          then A47: ma<=1m & mm<=len B & 1m<=mm & 1m<mm
-            by A46,FINSEQ_3:27,XREAL_1:21;
-          then A48: 1<=1m & 1m<=len B & 1m<len B by A13,XXREAL_0:2;
-          then A49: 1m in dom B & 1m+1<=len B by FINSEQ_3:27,NAT_1:13;
-A50:           mm in dom fd by A3,A46,FINSEQ_3:31;
-               now per cases;
-           case ma=1m;
-            then cy in B.(1m+1) \ B.(1m) by A42,A46,XBOOLE_0:def 4;
-            then p.cy = fd.mm by A1,A48,Th15;
-            hence contradiction by A11,A43,A46,A50;
-           end;
-           case ma <> 1m;
-            then A51: ma < 1m by A47,REAL_1:def 5;
-                 now assume cy in B.(1m);
-              then mm<=1m by A46,A49,A51;
-              then mm - 1m <=0 by REAL_2:106;
-              hence contradiction;
-             end;
-            then cy in B.(1m+1) \ B.(1m) by A46,XBOOLE_0:def 4;
-            then p.cy = fd.mm by A1,A48,Th15;
-            hence contradiction by A11,A43,A46,A50;
-           end;
-           end;
-          hence contradiction;
-         end;
-        hence card(p"{x}) = card(fd"{x}) by A3,A13,A27,A28,Def1;
-       end;
-       case A52: mi<>1;
-        then 1<mi by A13,REAL_1:def 5;
-        then A53: 1<=m1 & m1<=len fd by A13,A15,NAT_1:13;
-        then A54: m1 in dom B by A3,FINSEQ_3:27;
-        then A55: B.m1 c= B.ma by A3,A5,A11,A15,Th2;
-            B.ma c= C by A3,A5,A11,Lm5;
-         then B.ma is finite by FINSET_1:13;
-        then reconsider Bma = B.ma, Bm1 = B.m1 as finite set by A55,FINSET_1:13
-;
-            B.ma \ B.m1 = p"{x}
-         proof
-          thus B.ma \ B.m1 c= p"{x}
-           proof let y; assume
-            A56: y in B.ma \ B.m1;
-            then A57: y in B.ma & not y in B.m1 by XBOOLE_0:def 4;
-                B.ma c= C by A3,A5,A11,Lm5;
-            then reconsider cy = y as Element of C by A57;
-            defpred P[Element of NAT] means
-            $1 in dom B & mi<=$1 & $1<=ma implies
-            for c be Element of C st c in B.$1 \ B.m1 holds c in p"{x};
-            A58: P[0] by FINSEQ_3:27;
-            A59: for n st P[n] holds P[n+1]
-             proof let n; assume
-              A60: P[n]; assume
-              A61: n+1 in dom B & mi<=n+1 & n+1<=ma;
-              then 1<=n+1 & n+1<=len B & n<=n+1 by FINSEQ_3:27,NAT_1:11;
-              then A62: n<=len B & n<=ma & n<=len B -1 & n<len B
-                by A61,NAT_1:13,XREAL_1:21;
-              let c be Element of C; assume
-              A63: c in B.(n+1) \ B.m1;
-                   now per cases;
-               case A64: n+1=mi;
-                then p.c = fd.(n+1) by A1,A53,A62,A63,Th15;
-                then p.c in {x} by A10,A64,TARSKI:def 1;
-                hence thesis by A4,FUNCT_1:def 13;
-               end;
-               case mi <> n+1;
-                then A65: mi<n+1 & n<=n+1 by A61,NAT_1:11,REAL_1:def 5;
-                then mi<=n & n<=ma by A61,NAT_1:13;
-                then A66: 1<=n & n<=len B by A3,A13,XXREAL_0:2;
-                 then n in dom B by FINSEQ_3:27;
-                then B.n c= B.(n+1) by A61,A65,Th2;
-                then A67: B.(n+1) \ B.m1 = (B.(n+1) \/ B.n) \ B.m1 by
-XBOOLE_1:12
-                .= ((B.(n+1) \B.n) \/ B.n) \ B.m1 by XBOOLE_1:39
-                .= (B.(n+1) \ B.n)\ B.m1 \/ (B.n \ B.m1) by XBOOLE_1:42;
-                     now per cases by A63,A67,XBOOLE_0:def 2;
-                 case c in (B.(n+1) \ B.n) \ B.m1;
-                  then c in B.(n+1) \ B.n by XBOOLE_0:def 4;
-                  then A68: p.c = fd.(n+1) by A1,A62,A66,Th15;
-                       now per cases;
-                   case n+1=ma;
-                    then p.c in {x} by A11,A68,TARSKI:def 1;
-                    hence thesis by A4,FUNCT_1:def 13;
-                   end;
-                   case n+1<>ma;
-                    then n+1<ma by A61,REAL_1:def 5;
-                    then A69: p.c>=r by A3,A5,A11,A61,A68,RFINSEQ:32;
-                        r>=p.c by A3,A5,A10,A61,A65,A68,RFINSEQ:32;
-                    then r=p.c by A69,XXREAL_0:1;
-                    then p.c in {x} by TARSKI:def 1;
-                    hence thesis by A4,FUNCT_1:def 13;
-                   end;
-                   end;
-                  hence thesis;
-                 end;
-                 case c in B.n \ B.m1;
-                  hence thesis by A60,A61,A65,A66,FINSEQ_3:27,NAT_1:13;
-                 end;
-                 end;
+                then cy in p"{x} by A29,A40;
                 hence thesis;
-               end;
-               end;
-              hence thesis;
-             end;
-A70:           ma in dom B by A3,A11,FINSEQ_3:31;
-                for n holds P[n] from NAT_1:sch 1(A58,A59);
-            then cy in p"{x} by A12,A56,A70;
-            hence thesis;
-           end;
-          let y; assume
-          A71: y in p"{x};
-          then reconsider cy = y as Element of C;
-              cy in dom p & p.cy in {x} by A71,FUNCT_1:def 13;
-          then A72: p.cy = x by TARSKI:def 1; assume
-          A73: not y in B.ma \ B.m1;
-               now per cases by A73,XBOOLE_0:def 4;
-           case A74: not y in B.ma;
-            defpred Q[Nat] means $1 in dom B & ma<$1 & cy in B.$1;
-            A75: ex n be Nat st Q[n]
-             proof
-              take n=len B;
-              A76: B.n= C by Th3;
-                  len B <> 0 by Th4;
-              then 0<len B;
-              then 0+1<=len B by NAT_1:13;
-              hence n in dom B by FINSEQ_3:27;
-                   now assume n <= ma;
-                then ma=len B by A3,A13,XXREAL_0:1;
-                then cy in B.ma by A76;
-                hence contradiction by A74;
-               end;
-              hence thesis by A76;
-             end;
-            consider mm be Nat such that
-A77:        Q[mm] & for n be Nat st Q[n] holds mm<=n from NAT_1:sch 5(A75);
-                1<=mm by A77,FINSEQ_3:27;
-            then max(0,mm-1)=mm-1 by FINSEQ_2:4;
-            then reconsider 1m = mm - 1 as Element of NAT by FINSEQ_2:5;
-                ma+1<=mm & mm<=mm+1 & mm<mm+1 by A77,NAT_1:13;
-            then A78: ma<=1m & mm<=len B & 1m<=mm & 1m<mm
-              by A77,FINSEQ_3:27,XREAL_1:21;
-            then A79: 1<=1m & 1m<=len B & 1m<len B by A13,XXREAL_0:2;
-            then A80: 1m in dom B & 1m+1<=len B by FINSEQ_3:27,NAT_1:13;
-A81:           mm in dom fd by A3,A77,FINSEQ_3:31;
-                 now per cases;
-             case ma=1m;
-              then cy in B.(1m+1) \ B.(1m) by A74,A77,XBOOLE_0:def 4;
-              then p.cy = fd.mm by A1,A79,Th15;
-              hence contradiction by A11,A72,A77,A81;
-             end;
-             case ma <> 1m;
-              then A82: ma < 1m by A78,REAL_1:def 5;
-                   now assume cy in B.(1m);
-                then mm<=1m by A77,A80,A82;
-                then mm - 1m <=0 by REAL_2:106;
-                hence contradiction;
-               end;
-              then cy in B.(1m+1) \ B.(1m) by A77,XBOOLE_0:def 4;
-              then p.cy = fd.mm by A1,A79,Th15;
-              hence contradiction by A11,A72,A77,A81;
-             end;
-             end;
-            hence contradiction;
-           end;
-           case A83: y in B.m1;
-            defpred Q[Nat] means $1 in dom B & $1<=m1 & cy in B.$1;
-            A84: ex n be Nat st Q[n] by A54,A83;
-            consider mm be Nat such that
-A85:        Q[mm] & for n be Nat st Q[n] holds mm<=n from NAT_1:sch 5(A84);
-            A86: 1<=mm & mm<=len B by A85,FINSEQ_3:27;
-            then max(0,mm-1)=mm-1 by FINSEQ_2:4;
-            then reconsider 1m=mm-1 as Element of NAT by FINSEQ_2:5;
-A87:           mm in dom fd by A3,A85,FINSEQ_3:31;
-                 now per cases;
-             case mm=1;
-              then p.cy = fd.1 by A1,A85,Th15;
-              then mi<=1 by A10,A14,A72;
-              hence contradiction by A13,A52,XXREAL_0:1;
-             end;
-             case mm<>1;
-              then 1<mm & mm<=mm+1 & mm<mm+1 by A86,NAT_1:13,REAL_1:def 5;
-              then A88: 1+1<=mm & 1m<=mm & 1m<mm by NAT_1:13,XREAL_1:21;
-              then A89: 1<=1m & 1m<=len B & 1m<len B & 1m<=m1
-                by A85,A86,XREAL_1:21,XXREAL_0:2;
-               then 1m in dom B by FINSEQ_3:27;
-              then not cy in B.1m by A85,A88,A89;
-              then cy in B.(1m+1) \ B.1m by A85,XBOOLE_0:def 4;
-              then p.cy = fd.(1m+1) by A1,A89,Th15;
-              then mi<=mm by A10,A72,A87;
-              then m1+1<=m1 by A85,XXREAL_0:2;
-              then 1<=m1-m1 by XREAL_1:21;
-              then 1<=0;
+              end;
+              let y;
+              assume
+A41:          y in p"{x};
+              then reconsider cy = y as Element of C;
+              assume
+A42:          not y in B.ma;
+              cy in dom p & p.cy in {x} by A41,FUNCT_1:def 13;
+              then
+A43:          p.cy = x by TARSKI:def 1;
+              defpred Q[Nat] means $1 in dom B & ma<$1 & cy in B.$1;
+A44:          ex n be Nat st Q[n]
+              proof
+                take n=len B;
+A45:            B.n= C by Th3;
+                len B <> 0 by Th4;
+                then 0<len B;
+                then 0+1<=len B by NAT_1:13;
+                hence n in dom B by FINSEQ_3:27;
+                now
+                  assume n <= ma;
+                  then ma=len B by A3,A13,XXREAL_0:1;
+                  then cy in B.ma by A45;
+                  hence contradiction by A42;
+                end;
+                hence thesis by A45;
+              end;
+              consider mm be Nat such that
+A46:          Q[mm] & for n be Nat st Q[n] holds mm<=n from NAT_1:sch 5(A44);
+              1<=mm by A46,FINSEQ_3:27;
+              then max(0,mm-1)=mm-1 by FINSEQ_2:4;
+              then reconsider 1m = mm - 1 as Element of NAT by FINSEQ_2:5;
+              ma+1<=mm & mm<=mm+1 & mm<mm+1 by A46,NAT_1:13;
+              then
+A47:          ma<=1m & mm<=len B & 1m<=mm & 1m<mm
+              by A46,FINSEQ_3:27,XREAL_1:21;
+              then
+A48:          1<=1m & 1m<=len B & 1m<len B by A13,XXREAL_0:2;
+              then
+A49:          1m in dom B & 1m+1<=len B by FINSEQ_3:27,NAT_1 :13;
+A50:          mm in dom fd by A3,A46,FINSEQ_3:31;
+              now per cases;
+                case ma=1m;
+                  then cy in B.(1m+1) \ B.(1m) by A42,A46,XBOOLE_0:def 4;
+                  then p.cy = fd.mm by A1,A48,Th15;
+                  hence contradiction by A11,A43,A46,A50;
+                end;
+                case ma <> 1m;
+                  then
+A51:              ma < 1m by A47,REAL_1:def 5;
+                  now
+                    assume cy in B.(1m);
+                    then mm<=1m by A46,A49,A51;
+                    then mm - 1m <=0 by REAL_2:106;
+                    hence contradiction;
+                  end;
+                  then cy in B.(1m+1) \ B.(1m) by A46,XBOOLE_0:def 4;
+                  then p.cy = fd.mm by A1,A48,Th15;
+                  hence contradiction by A11,A43,A46,A50;
+                end;
+              end;
               hence contradiction;
-             end;
-             end;
-            hence contradiction;
-           end;
-           end;
-          hence contradiction;
-         end;
-        hence card(p"{x}) = card(Bma) - card(Bm1) by A55,CARD_2:63
-        .= ma - card(Bm1) by A3,A13,Def1
-        .= card (fd"{x}) by A3,A27,A53,Def1;
-       end;
-       end;
-      hence card (fd"{x}) = card(p"{x});
-     end;
-     end;
+            end;
+            hence card(p"{x}) = card(fd"{x}) by A3,A13,A27,A28,Def1;
+          end;
+          case
+A52:        mi<>1;
+            then 1<mi by A13,REAL_1:def 5;
+            then
+A53:        1<=m1 & m1<=len fd by A13,A15,NAT_1:13;
+            then
+A54:        m1 in dom B by A3,FINSEQ_3:27;
+            then
+A55:        B.m1 c= B.ma by A3,A5,A11,A15,Th2;
+            B.ma c= C by A3,A5,A11,Lm5;
+            then B.ma is finite by FINSET_1:13;
+
+then reconsider Bma = B.ma, Bm1 = B.m1 as finite set by A55,FINSET_1:13;
+            B.ma \ B.m1 = p"{x}
+            proof
+              thus B.ma \ B.m1 c= p"{x}
+              proof
+                let y;
+                assume
+A56:            y in B.ma \ B.m1;
+                then
+A57:            y in B.ma & not y in B.m1 by XBOOLE_0:def 4;
+                B.ma c= C by A3,A5,A11,Lm5;
+                then reconsider cy = y as Element of C by A57;
+                defpred P[Element of NAT] means
+                $1 in dom B & mi<=$1 & $1<=ma implies
+                for c be Element of C st c in B.$1 \ B.m1 holds c in p"{x};
+A58:            P[0] by FINSEQ_3:27;
+A59:            for n st P[n] holds P[n+1]
+                proof
+                  let n;
+                  assume
+A60:              P[n];
+                  assume
+A61:              n+1 in dom B & mi<=n+1 & n+1<=ma;
+                  then 1<=n+1 & n+1<=len B & n<=n+1 by FINSEQ_3:27,NAT_1:11;
+                  then
+A62:              n<=len B & n<=ma & n<=len B -1 & n<len B
+                  by A61,NAT_1:13,XREAL_1:21;
+                  let c be Element of C;
+                  assume
+A63:              c in B.(n+1) \ B.m1;
+                  now per cases;
+                    case
+A64:                  n+1=mi;
+                      then p.c = fd.(n+1) by A1,A53,A62,A63,Th15;
+                      then p.c in {x} by A10,A64,TARSKI:def 1;
+                      hence thesis by A4,FUNCT_1:def 13;
+                    end;
+                    case mi <> n+1;
+                      then
+A65:                  mi<n+1 & n<=n+1 by A61,NAT_1: 11,REAL_1:def 5;
+                      then mi<=n & n<=ma by A61,NAT_1:13;
+                      then
+A66:                  1<=n & n<=len B by A3,A13, XXREAL_0:2;
+                      then n in dom B by FINSEQ_3:27;
+                      then B.n c= B.(n+1) by A61,A65,Th2;
+                      then
+A67:                  B.(n+1) \ B.m1 = (B.(n+1) \/ B .n) \ B.m1 by XBOOLE_1:12
+                        .= ((B.(n+1) \B.n) \/ B.n) \ B.m1 by XBOOLE_1:39
+
+.= (B.(n+1) \ B.n)\ B.m1 \/ (B.n \ B.m1) by XBOOLE_1:42;
+                      now per cases by A63,A67,XBOOLE_0:def 2;
+                        case c in (B.(n+1) \ B.n) \ B.m1;
+                          then c in B.(n+1) \ B.n by XBOOLE_0:def 4;
+                          then
+A68:                      p.c = fd.(n+1) by A1, A62,A66,Th15;
+                          now per cases;
+                            case n+1=ma;
+                              then p.c in {x} by A11,A68,TARSKI:def 1;
+                              hence thesis by A4,FUNCT_1:def 13;
+                            end;
+                            case n+1<>ma;
+                              then n+1<ma by A61,REAL_1:def 5;
+                              then
+A69:                          p.c>=r by A3, A5,A11,A61,A68,RFINSEQ:32;
+                              r>=p.c by A3,A5,A10,A61,A65,A68,RFINSEQ:32;
+                              then r=p.c by A69,XXREAL_0:1;
+                              then p.c in {x} by TARSKI:def 1;
+                              hence thesis by A4,FUNCT_1:def 13;
+                            end;
+                          end;
+                          hence thesis;
+                        end;
+                        case c in B.n \ B.m1;
+                          hence thesis by A60,A61,A65,A66,FINSEQ_3:27,NAT_1:13;
+                        end;
+                      end;
+                      hence thesis;
+                    end;
+                  end;
+                  hence thesis;
+                end;
+A70:            ma in dom B by A3,A11,FINSEQ_3:31;
+                for n holds P[n] from NAT_1:sch 1(A58,A59);
+                then cy in p"{x} by A12,A56,A70;
+                hence thesis;
+              end;
+              let y;
+              assume
+A71:          y in p"{x};
+              then reconsider cy = y as Element of C;
+              cy in dom p & p.cy in {x} by A71,FUNCT_1:def 13;
+              then
+A72:          p.cy = x by TARSKI:def 1;
+              assume
+A73:          not y in B.ma \ B.m1;
+              now per cases by A73,XBOOLE_0:def 4;
+                case
+A74:              not y in B.ma;
+                  defpred Q[Nat] means $1 in dom B & ma<$1 & cy in B.$1;
+A75:              ex n be Nat st Q[n]
+                  proof
+                    take n=len B;
+A76:                B.n= C by Th3;
+                    len B <> 0 by Th4;
+                    then 0<len B;
+                    then 0+1<=len B by NAT_1:13;
+                    hence n in dom B by FINSEQ_3:27;
+                    now
+                      assume n <= ma;
+                      then ma=len B by A3,A13,XXREAL_0:1;
+                      then cy in B.ma by A76;
+                      hence contradiction by A74;
+                    end;
+                    hence thesis by A76;
+                  end;
+                  consider mm be Nat such that
+A77:              Q
+
+[mm] & for n be Nat st Q[n] holds mm<=n from NAT_1:sch 5(A75);
+                  1<=mm by A77,FINSEQ_3:27;
+                  then max(0,mm-1)=mm-1 by FINSEQ_2:4;
+                  then reconsider 1m = mm - 1 as Element of NAT by FINSEQ_2:5;
+                  ma+1<=mm & mm<=mm+1 & mm<mm+1 by A77,NAT_1:13;
+                  then
+A78:              ma<=1m & mm<=len B & 1m<=mm & 1m<mm
+                  by A77,FINSEQ_3:27,XREAL_1:21;
+                  then
+A79:              1<=1m & 1m<=len B & 1m<len B by A13, XXREAL_0:2;
+                  then
+A80:              1m in dom B & 1m+1<=len B by FINSEQ_3: 27,NAT_1:13;
+A81:              mm in dom fd by A3,A77,FINSEQ_3:31;
+                  now per cases;
+                    case ma=1m;
+                      then cy in B.(1m+1) \ B.(1m) by A74,A77,XBOOLE_0:def 4;
+                      then p.cy = fd.mm by A1,A79,Th15;
+                      hence contradiction by A11,A72,A77,A81;
+                    end;
+                    case ma <> 1m;
+                      then
+A82:                  ma < 1m by A78,REAL_1:def 5;
+                      now
+                        assume cy in B.(1m);
+                        then mm<=1m by A77,A80,A82;
+                        then mm - 1m <=0 by REAL_2:106;
+                        hence contradiction;
+                      end;
+                      then cy in B.(1m+1) \ B.(1m) by A77,XBOOLE_0:def 4;
+                      then p.cy = fd.mm by A1,A79,Th15;
+                      hence contradiction by A11,A72,A77,A81;
+                    end;
+                  end;
+                  hence contradiction;
+                end;
+                case
+A83:              y in B.m1;
+                  defpred Q[Nat] means $1 in dom B & $1<=m1 & cy in B.$1;
+A84:              ex n be Nat st Q[n] by A54,A83;
+                  consider mm be Nat such that
+A85:              Q
+
+[mm] & for n be Nat st Q[n] holds mm<=n from NAT_1:sch 5(A84);
+A86:              1<=mm & mm<=len B by A85,FINSEQ_3:27;
+                  then max(0,mm-1)=mm-1 by FINSEQ_2:4;
+                  then reconsider 1m=mm-1 as Element of NAT by FINSEQ_2:5;
+A87:              mm in dom fd by A3,A85,FINSEQ_3:31;
+                  now per cases;
+                    case mm=1;
+                      then p.cy = fd.1 by A1,A85,Th15;
+                      then mi<=1 by A10,A14,A72;
+                      hence contradiction by A13,A52,XXREAL_0:1;
+                    end;
+                    case mm<>1;
+
+then 1<mm & mm<=mm+1 & mm<mm+1 by A86,NAT_1:13,REAL_1:def 5;
+                      then
+A88:                  1+1<=mm & 1m<=mm & 1m<mm by NAT_1:13,XREAL_1:21;
+                      then
+A89:                  1<=1m & 1m<=len B & 1m<len B & 1m<=m1
+                      by A85,A86,XREAL_1:21,XXREAL_0:2;
+                      then 1m in dom B by FINSEQ_3:27;
+                      then not cy in B.1m by A85,A88,A89;
+                      then cy in B.(1m+1) \ B.1m by A85,XBOOLE_0:def 4;
+                      then p.cy = fd.(1m+1) by A1,A89,Th15;
+                      then mi<=mm by A10,A72,A87;
+                      then m1+1<=m1 by A85,XXREAL_0:2;
+                      then 1<=m1-m1 by XREAL_1:21;
+                      then 1<=0;
+                      hence contradiction;
+                    end;
+                  end;
+                  hence contradiction;
+                end;
+              end;
+              hence contradiction;
+            end;
+            hence card(p"{x}) = card(Bma) - card(Bm1) by A55,CARD_2:63
+              .= ma - card(Bm1) by A3,A13,Def1
+              .= card (fd"{x}) by A3,A27,A53,Def1;
+          end;
+        end;
+        hence card (fd"{x}) = card(p"{x});
+      end;
+    end;
     hence card (fd"{x}) = card(p"{x});
-   end;
+  end;
   hence thesis by RFINSEQ:def 1;
- end;
+end;
 
 theorem Th18:
-for F be PartFunc of D,REAL, A be RearrangmentGen of C
+  for F be PartFunc of D,REAL, A be RearrangmentGen of C
   st F is total & card C = card D holds FinS(Rland(F,A),C) = FinS(F,D)
- proof let F be PartFunc of D,REAL, B be RearrangmentGen of C; assume
-  A1: F is total & card C = card D;
-  then A2: Rland(F,B), FinS(F,D) are_fiberwise_equipotent by Th17;
-  A3: dom Rland(F,B) = C by A1,Th13;
+proof
+  let F be PartFunc of D,REAL, B be RearrangmentGen of C;
+  assume
+A1: F is total & card C = card D;
+  then
+A2: Rland(F,B), FinS(F,D) are_fiberwise_equipotent by Th17;
+A3: dom Rland(F,B) = C by A1,Th13;
   then (Rland(F,B))|C = Rland(F,B) by RELAT_1:97;
   hence thesis by A2,A3,RFUNCT_3:def 14;
- end;
+end;
 
 theorem Th19:
-for F be PartFunc of D,REAL, A be RearrangmentGen of C
+  for F be PartFunc of D,REAL, A be RearrangmentGen of C
   st F is total & card C = card D holds Sum (Rland(F,A),C) = Sum (F,D)
- proof let F be PartFunc of D,REAL, B be RearrangmentGen of C; assume
-      F is total & card C = card D;
+proof
+  let F be PartFunc of D,REAL, B be RearrangmentGen of C;
+  assume F is total & card C = card D;
   then FinS(Rland(F,B),C) = FinS(F,D) by Th18;
   hence Sum(Rland(F,B),C) = Sum FinS(F,D) by RFUNCT_3:def 15
-  .= Sum (F,D) by RFUNCT_3:def 15;
- end;
+    .= Sum (F,D) by RFUNCT_3:def 15;
+end;
 
 theorem
-    for F be PartFunc of D,REAL, A be RearrangmentGen of C
+  for F be PartFunc of D,REAL, A be RearrangmentGen of C
   st F is total & card C = card D holds
-   FinS(Rland(F,A) - r,C) = FinS(F-r,D) & Sum (Rland(F,A)-r,C) = Sum (F-r,D)
- proof let F be PartFunc of D,REAL, B be RearrangmentGen of C; assume
-  A1: F is total & card C = card D;
-  then A2: Rland(F,B), FinS(F,D) are_fiberwise_equipotent by Th17;
-  A3: dom Rland(F,B) = C & dom F = D
-   by A1,Th13,PARTFUN1:def 4;
+  FinS(Rland(F,A) - r,C) = FinS(F-r,D) & Sum (Rland(F,A)-r,C) = Sum (F-r,D)
+proof
+  let F be PartFunc of D,REAL, B be RearrangmentGen of C;
+  assume
+A1: F is total & card C = card D;
+  then
+A2: Rland(F,B), FinS(F,D) are_fiberwise_equipotent by Th17;
+A3: dom Rland(F,B) = C & dom F = D by A1,Th13,PARTFUN1:def 4;
   then (Rland(F,B))|C = Rland(F,B) & F|D = F by RELAT_1:97;
   then FinS(F,D), F are_fiberwise_equipotent by A3,RFUNCT_3:def 14;
   then Rland(F,B), F are_fiberwise_equipotent by A2,RFINSEQ:2;
-  then A4: Rland(F,B)-r, F-r are_fiberwise_equipotent by RFUNCT_3:54;
-  A5: dom (Rland(F,B) - r) = dom Rland
-(F,B) & dom(F-r) = dom F by VALUED_1:3,def 3;
-  then A6: (Rland(F,B) - r)|C = Rland(F,B) -r & (F-r)|D = F-r by RELAT_1:97;
+  then
+A4: Rland(F,B)-r, F-r are_fiberwise_equipotent by RFUNCT_3:54;
+A5: dom (Rland(F,B) - r) = dom Rland (F,B) & dom(F-r) = dom F by VALUED_1:3;
+  then
+A6: (Rland(F,B) - r)|C = Rland(F,B) -r & (F-r)|D = F-r by RELAT_1:97;
   then FinS(Rland(F,B) - r, C), Rland(F,B) -r are_fiberwise_equipotent
-    by A5,RFUNCT_3:def 14;
-   then FinS(Rland(F,B) - r, C), F-r are_fiberwise_equipotent
-    by A4,RFINSEQ:2;
+  by A5,RFUNCT_3:def 14;
+  then FinS(Rland(F,B) - r, C), F-r are_fiberwise_equipotent by A4,RFINSEQ:2;
   hence FinS(Rland(F,B) - r,C) = FinS(F-r,D) by A5,A6,RFUNCT_3:def 14;
   hence Sum(Rland(F,B)-r,C) = Sum FinS(F-r,D) by RFUNCT_3:def 15
-  .= Sum (F-r,D) by RFUNCT_3:def 15;
- end;
+    .= Sum (F-r,D) by RFUNCT_3:def 15;
+end;
 
 theorem Th21:
-for F be PartFunc of D,REAL, A be RearrangmentGen of C
+  for F be PartFunc of D,REAL, A be RearrangmentGen of C
   st F is total & card C = card D holds dom Rlor(F,A) = C
- proof let F be PartFunc of D,REAL, B be RearrangmentGen of C;
-  set b = Co_Gen(B); assume
-  A1: F is total & card C = card D;
+proof
+  let F be PartFunc of D,REAL, B be RearrangmentGen of C;
+  set b = Co_Gen(B);
+  assume
+A1: F is total & card C = card D;
   thus dom Rlor(F,B) c= C;
-  A2: len MIM(FinS(F,D)) = len CHI(b,C) & len CHI(b,C) = len b & len B <> 0 &
+A2: len MIM(FinS(F,D)) = len CHI(b,C) & len CHI(b,C) = len b & len B <> 0 &
   len (MIM(FinS(F,D))(#) CHI(b,C)) = min(len MIM(FinS(F,D)), len CHI(b,C)) &
   len b = card D & len B = card D by A1,Th1,Th4,Th12,RFUNCT_3:def 6,def 7;
-  let x; assume x in C;
+  let x;
+  assume x in C;
   then reconsider c = x as Element of C;
-      c is_common_for_dom (MIM(FinS(F,D)) (#) CHI(b,C)) by RFUNCT_3:35;
+  c is_common_for_dom (MIM(FinS(F,D)) (#) CHI(b,C)) by RFUNCT_3:35;
   hence thesis by A2,RFUNCT_3:31;
- end;
+end;
 
 theorem Th22:
-for c be Element of C, F be PartFunc of D,REAL, A be RearrangmentGen of C
+  for c be Element of C, F be PartFunc of D,REAL, A be RearrangmentGen of C
   st F is total & card C = card D holds
- (c in (Co_Gen A).1 implies (Rlor(F,A)).c = FinS(F,D).1) &
- for n st 1<=n & n<len (Co_Gen A) & c in (Co_Gen A).(n+1) \ (Co_Gen A).n
+  (c in (Co_Gen A).1 implies (Rlor(F,A)).c = FinS(F,D).1) &
+  for n st 1<=n & n<len (Co_Gen A) & c in (Co_Gen A).(n+1) \ (Co_Gen A).n
   holds Rlor(F,A).c = FinS(F,D).(n+1)
- proof let c be Element of C, F be PartFunc of D,REAL,
-           B be RearrangmentGen of C;
-  set fd = FinS(F,D),
-      mf = MIM(fd),
-       b = Co_Gen B,
-       h = CHI(b,C); assume
-  A1: F is total & card C = card D;
-   c is_common_for_dom mf(#)h by RFUNCT_3:35;
-  then A2: Rlor(F,B).c = Sum((mf(#)h)#c) by RFUNCT_3:36;
-  A3: len mf = len h & len h = len b & len mf = len fd
-     by A1,Th12,RFINSEQ:def 3,RFUNCT_3:def 6;
-  A4: len b <> 0 by Th4;
+proof
+  let c be Element of C, F be PartFunc of D,REAL, B be RearrangmentGen of C;
+  set fd = FinS(F,D), mf = MIM(fd), b = Co_Gen B, h = CHI(b,C);
+  assume
+A1: F is total & card C = card D;
+A2: Rlor(F,B).c = Sum((mf(#)h)#c) by RFUNCT_3:35,36;
+A3: len mf = len h & len h = len b & len mf = len fd
+  by A1,Th12,RFINSEQ:def 3,RFUNCT_3:def 6;
   thus c in b.1 implies Rlor(F,B).c = FinS(F,D).1
-   proof assume c in b.1;
+  proof
+    assume c in b.1;
     hence Rlor(F,B).c = Sum mf by A1,A2,Th14
-    .= FinS(F,D).1 by A3,A4,RFINSEQ:29;
-   end;
+      .= FinS(F,D).1 by A3,Th4,RFINSEQ:29;
+  end;
   let n;
-  set mfn = MIM(FinS(F,D)/^n); assume
-  A5: 1<=n & n<len b & c in b.(n+1) \ b.n;
+  set mfn = MIM(FinS(F,D)/^n);
+  assume
+A4: 1<=n & n<len b & c in b.(n+1) \ b.n;
   then (mf(#)h)#c = (n |-> (0 qua Real)) ^ mfn by A1,Th14;
   hence Rlor(F,B).c = Sum(n |-> (0 qua Real)) + (Sum mfn) by A2,RVSUM_1:105
-  .= 0 + Sum mfn by RVSUM_1:111
-  .= FinS(F,D).(n+1) by A3,A5,RFINSEQ:30;
- end;
+    .= 0 + Sum mfn by RVSUM_1:111
+    .= FinS(F,D).(n+1) by A3,A4,RFINSEQ:30;
+end;
 
 theorem Th23:
-for F be PartFunc of D,REAL, A be RearrangmentGen of C
+  for F be PartFunc of D,REAL, A be RearrangmentGen of C
   st F is total & card C = card D holds rng Rlor(F,A) = rng FinS(F,D)
- proof let F be PartFunc of D,REAL, B be RearrangmentGen of C; assume
-  A1: F is total & card C = card D;
-  set fd = FinS(F,D),
-       p = Rlor(F,B),
-      mf = MIM(fd),
-       b = Co_Gen B,
-       h = CHI(b,C);
-  A2: len mf = len h & len h = len b & len mf = len fd
-       by A1,Th12,RFINSEQ:def 3,RFUNCT_3:def 6;
-  A3: dom p = C & dom F = D by A1,Th21,PARTFUN1:def 4;
-  then A4: F|D = F by RELAT_1:97;
-  A5: dom fd = Seg len fd & dom b = Seg len b by FINSEQ_1:def 3;
-      dom F is finite;
+proof
+  let F be PartFunc of D,REAL, B be RearrangmentGen of C;
+  assume
+A1: F is total & card C = card D;
+  set fd = FinS(F,D), p = Rlor(F,B), mf = MIM(fd), b = Co_Gen B, h = CHI(b,C);
+A2: len mf = len h & len h = len b & len mf = len fd
+  by A1,Th12,RFINSEQ:def 3,RFUNCT_3:def 6;
+A3: dom p = C & dom F = D by A1,Th21,PARTFUN1:def 4;
+  then
+A4: F|D = F by RELAT_1:97;
+A5: dom fd = Seg len fd & dom b = Seg len b by FINSEQ_1:def 3;
+  dom F is finite;
   then reconsider F' = F as finite Function by FINSET_1:29;
   reconsider dfd = dom fd, dF = dom F' as finite set;
-      fd, F are_fiberwise_equipotent by A3,A4,RFUNCT_3:def 14;
+  fd, F are_fiberwise_equipotent by A3,A4,RFUNCT_3:def 14;
   then card dfd = card dF & card dfd = len fd & D<>{}
-     by A5,FINSEQ_1:78,RFINSEQ:10;
+  by A5,FINSEQ_1:78,RFINSEQ:10;
   then len fd <> 0 by A3,CARD_2:59;
   then 0<len fd;
-  then A6: 0+1<=len fd by NAT_1:13;
-  then A7: 1 in dom fd & len b in dom b by A2,FINSEQ_3:27;
+  then
+A6: 0+1<=len fd by NAT_1:13;
+  then
+A7: 1 in dom fd & len b in dom b by A2,FINSEQ_3:27;
   thus rng p c= rng fd
-   proof let x; assume x in rng p;
+  proof
+    let x;
+    assume x in rng p;
     then consider c be Element of C such that
-    A8: c in dom p & p.c = x by PARTFUN1:26;
+A8: c in dom p & p.c = x by PARTFUN1:26;
     defpred P[set] means $1 in dom b & c in b.$1;
-    A9: ex n be Nat st P[n]
-     proof
+A9: ex n be Nat st P[n]
+    proof
       take n = len b;
-          b.n = C by Th3;
+      b.n = C by Th3;
       hence n in dom b & c in b.n by A2,A6,FINSEQ_3:27;
-     end;
+    end;
     consider mi be Nat such that
-    A10: P[mi] & for n be Nat st P[n] holds mi<=n from NAT_1:sch 5(A9);
-    A11: 1<=mi & mi<=len b by A10,FINSEQ_3:27;
+A10: P[mi] & for n be Nat st P[n] holds mi<=n from NAT_1:sch 5(A9);
+A11: 1<=mi & mi<=len b by A10,FINSEQ_3:27;
     then max(0,mi-1)=mi-1 by FINSEQ_2:4;
     then reconsider m1 = mi -1 as Element of NAT by FINSEQ_2:5;
-         now per cases;
-     case mi = 1;
-      then p.c = fd.1 by A1,A10,Th22;
-      hence thesis by A7,A8,FUNCT_1:def 5;
-     end;
-     case mi <> 1;
-      then 1<mi by A11,REAL_1:def 5;
-      then 1+1<=mi by NAT_1:13;
-      then A12: 1<=m1 by XREAL_1:21;
-      A13: m1<mi by XREAL_1:46;
-      then A14: m1<len b by A11,XXREAL_0:2;
-          m1<=len b by A11,A13,XXREAL_0:2;
-      then m1 in dom b by A12,FINSEQ_3:27;
-        then not c in b.m1 by A10,A13;
-      then c in b.(m1+1) \ b.m1 by A10,XBOOLE_0:def 4;
-      then p.c = fd.(m1+1) by A1,A12,A14,Th22;
-      hence thesis by A2,A5,A8,A10,FUNCT_1:def 5;
-     end;
-     end;
+    now per cases;
+      case mi = 1;
+        then p.c = fd.1 by A1,A10,Th22;
+        hence thesis by A7,A8,FUNCT_1:def 5;
+      end;
+      case mi <> 1;
+        then 1<mi by A11,REAL_1:def 5;
+        then 1+1<=mi by NAT_1:13;
+        then
+A12:    1<=m1 by XREAL_1:21;
+A13:    m1<mi by XREAL_1:46;
+        then
+A14:    m1<len b by A11,XXREAL_0:2;
+        m1<=len b by A11,A13,XXREAL_0:2;
+        then m1 in dom b by A12,FINSEQ_3:27;
+        then not c in b.m1 by A10,XREAL_1:46;
+        then c in b.(m1+1) \ b.m1 by A10,XBOOLE_0:def 4;
+        then p.c = fd.(m1+1) by A1,A12,A14,Th22;
+        hence thesis by A2,A5,A8,A10,FUNCT_1:def 5;
+      end;
+    end;
     hence x in rng fd;
-   end;
-  let x; assume
-  A15: x in rng fd;
+  end;
+  let x;
+  assume
+A15: x in rng fd;
   defpred P[Nat] means $1 in dom fd & fd.$1 = x;
-  ex n be Nat st P[n] by A15,FINSEQ_2:11;
-  then
-  A16: ex n be Nat st P[n];
+A16: ex n be Nat st P[n] by A15,FINSEQ_2:11;
   consider mi be Nat such that
-  A17: P[mi] & for n be Nat st P[n] holds mi<=n from NAT_1:sch 5(A16);
-  A18: 1<=mi & mi<=len fd by A17,FINSEQ_3:27;
+A17: P[mi] & for n be Nat st P[n] holds mi<=n from NAT_1:sch 5(A16);
+A18: 1<=mi & mi<=len fd by A17,FINSEQ_3:27;
   then max(0,mi-1)=mi-1 by FINSEQ_2:4;
   then reconsider m1 = mi -1 as Element of NAT by FINSEQ_2:5;
-       now per cases;
-   case A19: mi=1;
-A20: b.1 <> {} by A2,A5,A7,Th7;
-    consider y being Element of b.1;
-        b.1 c= C by A2,A5,A7,Lm5;
-    then reconsider y as Element of C by A20,TARSKI:def 3;
-        p.y = fd.1 by A1,A20,Th22;
-    hence thesis by A3,A17,A19,FUNCT_1:def 5;
-   end;
-   case mi<>1;
-    then 1<mi by A18,REAL_1:def 5;
-    then 1+1<=mi by NAT_1:13;
-    then A21: 1<=m1 by XREAL_1:21;
-      A22: m1<mi by XREAL_1:46;
-    then A23: m1<len fd by A18,XXREAL_0:2;
+  now per cases;
+    case
+A19:  mi=1;
+A20:  b.1 <> {} by A2,A5,A7,Th7;
+      consider y being Element of b.1;
+      b.1 c= C by A2,A5,A7,Lm5;
+      then reconsider y as Element of C by A20,TARSKI:def 3;
+      p.y = fd.1 by A1,A20,Th22;
+      hence thesis by A3,A17,A19,FUNCT_1:def 5;
+    end;
+    case mi<>1;
+      then 1<mi by A18,REAL_1:def 5;
+      then 1+1<=mi by NAT_1:13;
+      then
+A21:  1<=m1 by XREAL_1:21;
+A22:  m1<mi by XREAL_1:46;
+      then
+A23:  m1<len fd by A18,XXREAL_0:2;
       m1+1<=len fd & m1<=len fd by A18,A22,XXREAL_0:2;
-    then m1<=len fd -1 & m1 in dom fd by A21,FINSEQ_3:27,XREAL_1:21;
-then A24: b.(m1+1) \ b.m1 <> {} by A2,A21,Th8;
-    consider y being Element of b.(m1+1) \ b.m1;
-        y in b.(m1+1) & b.mi c= C by A2,A5,A17,A24,Lm5,XBOOLE_0:def 4;
-    then reconsider y as Element of C;
-        p.y=fd.(m1+1) by A1,A2,A21,A23,A24,Th22;
-    hence thesis by A3,A17,FUNCT_1:def 5;
-   end;
-   end;
+      then m1<=len fd -1 & m1 in dom fd by A21,FINSEQ_3:27,XREAL_1:21;
+      then
+A24:  b.(m1+1) \ b.m1 <> {} by A2,A21,Th8;
+      consider y being Element of b.(m1+1) \ b.m1;
+      y in b.(m1+1) & b.mi c= C by A2,A5,A17,A24,Lm5,XBOOLE_0:def 4;
+      then reconsider y as Element of C;
+      p.y=fd.(m1+1) by A1,A2,A21,A23,A24,Th22;
+      hence thesis by A3,A17,FUNCT_1:def 5;
+    end;
+  end;
   hence thesis;
- end;
+end;
 
 theorem Th24:
-for F be PartFunc of D,REAL, A be RearrangmentGen of C
+  for F be PartFunc of D,REAL, A be RearrangmentGen of C
   st F is total & card C = card D
   holds Rlor(F,A), FinS(F,D) are_fiberwise_equipotent
- proof let F be PartFunc of D,REAL, B be RearrangmentGen of C;
-  set fd = FinS(F,D),
-       p = Rlor(F,B),
-      mf = MIM(fd),
-       b = Co_Gen B,
-       h = CHI(b,C); assume
-  A1: F is total & card C = card D;
-  then A2: rng p = rng fd by Th23;
-  A3: len mf = len h & len h = len b & len mf = len fd
-      by A1,Th12,RFINSEQ:def 3,RFUNCT_3:def 6;
-  A4: dom p = C & dom F = D by A1,Th21,PARTFUN1:def 4;
-      then reconsider p as finite PartFunc of C,REAL by FINSET_1:29;
-  A5: dom fd = Seg len fd & dom b = Seg len b by FINSEQ_1:def 3;
-       now let x;
-         now per cases;
-     case not x in rng fd;
-      then fd"{x}={} & p"{x}={} by A2,Lm1;
-      hence card (fd"{x}) = card(p"{x});
-     end;
-     case A6: x in rng fd;
-      defpred P[Nat] means $1 in dom fd & fd.$1 = x;
-A7: ex n be Nat st P[n] by A6,FINSEQ_2:11;
-      A8: for n be Nat st P[n] holds n<=len fd by FINSEQ_3:27;
-      consider mi be Nat such that
-      A9: P[mi] & for n be Nat st P[n] holds mi<=n from NAT_1:sch 5(A7);
-      consider ma be Nat such that
-      A10: P[ma] & for n be Nat st P[n] holds n<=ma from NAT_1:sch 6(A8,A7);
-      A11: mi<=ma by A9,A10;
-      A12: 1<=mi & mi<=len fd & 1<=ma & ma<=len fd by A9,A10,FINSEQ_3:27;
-      then max(0,mi-1)=mi-1 by FINSEQ_2:4;
-      then reconsider m1 = mi -1 as Element of NAT by FINSEQ_2:5;
-      reconsider r=x as Real by A9;
-          1<=len fd by A12,XXREAL_0:2;
-      then A13: 1 in dom fd by FINSEQ_3:27;
-          m1<=mi by XREAL_1:45;
-      then A14: m1<=ma & m1+1=mi by A11,XXREAL_0:2;
-      then A15: Seg m1 c= Seg ma & Seg ma is finite by FINSEQ_1:7;
-          Seg ma \ Seg m1 = fd"{x}
-       proof
-        thus Seg ma \ Seg m1 c= fd"{x}
-         proof let y; assume A16: y in Seg ma \ Seg m1;
-          then A17: y in Seg ma & not y in Seg m1 &
-          Seg ma c= NAT by XBOOLE_0:def 4;
-          reconsider l=y as Element of NAT by A16;
-          A18: 1<=l & l<=ma & (l<1 or m1<l) by A17,FINSEQ_1:3;
-          then mi<l+1 by XREAL_1:21;
-          then A19: mi<=l by NAT_1:13;
-              l<=len fd by A12,A18,XXREAL_0:2;
-          then A20: l in dom fd by A18,FINSEQ_3:27;
-          reconsider o=fd.l as Real;
-               now per cases;
-           case l=ma;
-            then o in {x} by A10,TARSKI:def 1;
-            hence thesis by A20,FUNCT_1:def 13;
-           end;
-           case l<>ma;
-            then l<ma by A18,REAL_1:def 5;
-            then A21: o>=r by A10,A20,RFINSEQ:32;
-                 now per cases;
-             case l=mi;
-              then o in {x} by A9,TARSKI:def 1;
-              hence thesis by A20,FUNCT_1:def 13;
-             end;
-             case l<>mi;
-              then mi<l by A19,REAL_1:def 5;
-              then r>=o by A9,A20,RFINSEQ:32;
-              then r=o by A21,XXREAL_0:1;
-              then o in {x} by TARSKI:def 1;
-              hence thesis by A20,FUNCT_1:def 13;
-             end;
-             end;
+proof
+  let F be PartFunc of D,REAL, B be RearrangmentGen of C;
+  set fd = FinS(F,D), p = Rlor(F,B), mf = MIM(fd), b = Co_Gen B, h = CHI(b,C);
+  assume
+A1: F is total & card C = card D;
+  then
+A2: rng p = rng fd by Th23;
+A3: len mf = len h & len h = len b & len mf = len fd
+  by A1,Th12,RFINSEQ:def 3,RFUNCT_3:def 6;
+A4: dom p = C & dom F = D by A1,Th21,PARTFUN1:def 4;
+  then reconsider p as finite PartFunc of C,REAL by FINSET_1:29;
+A5: dom fd = Seg len fd & dom b = Seg len b by FINSEQ_1:def 3;
+  now
+    let x;
+    now per cases;
+      case not x in rng fd;
+        then fd"{x}={} & p"{x}={} by A2,Lm1;
+        hence card (fd"{x}) = card(p"{x});
+      end;
+      case
+A6:     x in rng fd;
+        defpred P[Nat] means $1 in dom fd & fd.$1 = x;
+A7:     ex n be Nat st P[n] by A6,FINSEQ_2:11;
+A8:     for n be Nat st P[n] holds n<=len fd by FINSEQ_3:27;
+        consider mi be Nat such that
+A9:     P[mi] & for n be Nat st P[n] holds mi<=n from NAT_1:sch 5(A7);
+        consider ma be Nat such that
+A10:    P[ma] & for n be Nat st P[n] holds n<=ma from NAT_1:sch 6(A8,A7);
+A11:    mi<=ma by A9,A10;
+A12:    1<=mi & mi<=len fd & 1<=ma & ma<=len fd by A9,A10,FINSEQ_3:27;
+        then max(0,mi-1)=mi-1 by FINSEQ_2:4;
+        then reconsider m1 = mi -1 as Element of NAT by FINSEQ_2:5;
+        reconsider r=x as Real by A9;
+        1<=len fd by A12,XXREAL_0:2;
+        then
+A13:    1 in dom fd by FINSEQ_3:27;
+        m1<=mi by XREAL_1:45;
+        then
+A14:    m1<=ma & m1+1=mi by A11,XXREAL_0:2;
+        then
+A15:    Seg m1 c= Seg ma & Seg ma is finite by FINSEQ_1:7;
+        Seg ma \ Seg m1 = fd"{x}
+        proof
+          thus Seg ma \ Seg m1 c= fd"{x}
+          proof
+            let y;
+            assume
+A16:        y in Seg ma \ Seg m1;
+            then
+A17:        y in Seg ma & not y in Seg m1 & Seg ma c= NAT by XBOOLE_0:def 4;
+            reconsider l=y as Element of NAT by A16;
+A18:        1<=l & l<=ma & (l<1 or m1<l) by A17,FINSEQ_1:3;
+            then mi<l+1 by XREAL_1:21;
+            then
+A19:        mi<=l by NAT_1:13;
+            l<=len fd by A12,A18,XXREAL_0:2;
+            then
+A20:        l in dom fd by A18,FINSEQ_3:27;
+            reconsider o=fd.l as Real;
+            now per cases;
+              case l=ma;
+                then o in {x} by A10,TARSKI:def 1;
+                hence thesis by A20,FUNCT_1:def 13;
+              end;
+              case l<>ma;
+                then l<ma by A18,REAL_1:def 5;
+                then
+A21:            o>=r by A10,A20,RFINSEQ:32;
+                now per cases;
+                  case l=mi;
+                    then o in {x} by A9,TARSKI:def 1;
+                    hence thesis by A20,FUNCT_1:def 13;
+                  end;
+                  case l<>mi;
+                    then mi<l by A19,REAL_1:def 5;
+                    then r>=o by A9,A20,RFINSEQ:32;
+                    then r=o by A21,XXREAL_0:1;
+                    then o in {x} by TARSKI:def 1;
+                    hence thesis by A20,FUNCT_1:def 13;
+                  end;
+                end;
+                hence thesis;
+              end;
+            end;
             hence thesis;
-           end;
-           end;
-          hence thesis;
-         end;
-        let y; assume A22: y in fd"{x};
-        then A23: y in dom fd & fd.y in {x} by FUNCT_1:def 13;
-        reconsider l=y as Element of NAT by A22;
-        A24: fd.l=x by A23,TARSKI:def 1;
-        then mi<=l by A9,A23;
-        then mi<l+1 by NAT_1:13;
-        then m1<l or l<1 by XREAL_1:21;
-        then A25: not l in Seg m1 by FINSEQ_1:3;
-            1<=l & l<=ma by A10,A23,A24,FINSEQ_3:27;
-        then l in Seg ma by FINSEQ_1:3;
-        hence thesis by A25,XBOOLE_0:def 4;
-       end;
-      then A26: card(fd"{x}) = card(Seg ma) - card(Seg m1) by A15,CARD_2:63
-      .= ma - card(Seg m1) by FINSEQ_1:78
-      .= ma - m1 by FINSEQ_1:78;
-           now per cases;
-       case A27: mi=1;
+          end;
+          let y;
+          assume
+A22:      y in fd"{x};
+          then
+A23:      y in dom fd & fd.y in {x} by FUNCT_1:def 13;
+          reconsider l=y as Element of NAT by A22;
+A24:      fd.l=x by A23,TARSKI:def 1;
+          then mi<=l by A9,A23;
+          then mi<l+1 by NAT_1:13;
+          then m1<l or l<1 by XREAL_1:21;
+          then
+A25:      not l in Seg m1 by FINSEQ_1:3;
+          1<=l & l<=ma by A10,A23,A24,FINSEQ_3:27;
+          then l in Seg ma by FINSEQ_1:3;
+          hence thesis by A25,XBOOLE_0:def 4;
+        end;
+        then
+A26:    card(fd"{x}) = card(Seg ma) - card(Seg m1) by A15,CARD_2: 63
+          .= ma - card(Seg m1) by FINSEQ_1:78
+          .= ma - m1 by FINSEQ_1:78;
+        now per cases;
+          case
+A27:        mi=1;
             b.ma = p"{x}
-         proof
-          thus b.ma c= p"{x}
-           proof let y; assume
-            A28: y in b.ma;
+            proof
+              thus b.ma c= p"{x}
+              proof
+                let y;
+                assume
+A28:            y in b.ma;
                 b.ma c= C by A3,A5,A10,Lm5;
-            then reconsider cy = y as Element of C by A28;
-            defpred P[Element of NAT] means
-            $1 in dom b & $1<=ma implies
-            for c be Element of C st c in b.$1 holds c in p"{x};
-            A29: P[0] by FINSEQ_3:27;
-            A30: for n st P[n] holds P[n+1]
-             proof let n; assume
-              A31: P[n]; assume
-              A32: n+1 in dom b & n+1<=ma;
-              then 1<=n+1 & n+1<=len b & n<=n+1 by FINSEQ_3:27,NAT_1:11;
-              then A33: n<=len b & n<=ma & n<=len b -1 & n<len b
-                by A32,NAT_1:13,XREAL_1:21;
-              let c be Element of C; assume
-              A34: c in b.(n+1);
-                   now per cases;
-               case n=0;
-                then p.c = x by A1,A9,A27,A34,Th22;
-                then p.c in {x} by TARSKI:def 1;
-                hence thesis by A4,FUNCT_1:def 13;
-               end;
-               case n<>0;
-                then 0<n;
-                then A35: 0+1<=n & 0+1<n+1 by NAT_1:13,XREAL_1:8
-;
-                then b.n c= b.(n+1) by A33,Def2;
-                then A36: b.(n+1) = b.(n+1) \/ b.n by XBOOLE_1:12
-                .= (b.(n+1) \ b.n) \/ b.n by XBOOLE_1:39;
-                     now per cases by A34,A36,XBOOLE_0:def 2;
-                 case c in b.(n+1) \ b.n;
-                  then A37: p.c = fd.(n+1) by A1,A33,A35,Th22;
-                       now per cases;
-                   case n+1=ma;
-                    then p.c in {x} by A10,A37,TARSKI:def 1;
-                    hence thesis by A4,FUNCT_1:def 13;
-                   end;
-                   case n+1<>ma;
-                    then n+1<ma by A32,REAL_1:def 5;
-                    then A38: p.c>=r by A3,A5,A10,A32,A37,RFINSEQ:32;
-                        r>=p.c by A3,A5,A9,A27,A32,A35,A37,RFINSEQ:32;
-                    then r=p.c by A38,XXREAL_0:1;
-                    then p.c in {x} by TARSKI:def 1;
-                    hence thesis by A4,FUNCT_1:def 13;
-                   end;
-                   end;
+                then reconsider cy = y as Element of C by A28;
+                defpred P[Element of NAT] means $1 in dom b & $1<=ma implies
+                for c be Element of C st c in b.$1 holds c in p"{x};
+A29:            P[0] by FINSEQ_3:27;
+A30:            for n st P[n] holds P[n+1]
+                proof
+                  let n;
+                  assume
+A31:              P[n];
+                  assume
+A32:              n+1 in dom b & n+1<=ma;
+                  then 1<=n+1 & n+1<=len b & n<=n+1 by FINSEQ_3:27,NAT_1:11;
+                  then
+A33:              n<=len b & n<=ma & n<=len b -1 & n<len b
+                  by A32,NAT_1:13,XREAL_1:21;
+                  let c be Element of C;
+                  assume
+A34:              c in b.(n+1);
+                  now per cases;
+                    case n=0;
+                      then p.c = x by A1,A9,A27,A34,Th22;
+                      then p.c in {x} by TARSKI:def 1;
+                      hence thesis by A4,FUNCT_1:def 13;
+                    end;
+                    case n<>0;
+                      then 0<n;
+                      then
+A35:                  0+1<=n & 0+1<n+1 by NAT_1:13, XREAL_1:8;
+                      then b.n c= b.(n+1) by A33,Def2;
+                      then
+A36:                  b.(n+1) = b.(n+1) \/ b.n by XBOOLE_1:12
+                        .= (b.(n+1) \ b.n) \/ b.n by XBOOLE_1:39;
+                      now per cases by A34,A36,XBOOLE_0:def 2;
+                        case c in b.(n+1) \ b.n;
+                          then
+A37:                      p.c = fd.(n+1) by A1, A33,A35,Th22;
+                          now per cases;
+                            case n+1=ma;
+                              then p.c in {x} by A10,A37,TARSKI:def 1;
+                              hence thesis by A4,FUNCT_1:def 13;
+                            end;
+                            case n+1<>ma;
+                              then n+1<ma by A32,REAL_1:def 5;
+                              then
+A38:                          p.c>=r by A3, A5,A10,A32,A37,RFINSEQ:32;
+                              r>=p.c by A3,A5,A9,A27,A32,A35,A37,RFINSEQ:32;
+                              then r=p.c by A38,XXREAL_0:1;
+                              then p.c in {x} by TARSKI:def 1;
+                              hence thesis by A4,FUNCT_1:def 13;
+                            end;
+                          end;
+                          hence thesis;
+                        end;
+                        case c in b.n;
+                          hence thesis by A31,A33,A35,FINSEQ_3:27;
+                        end;
+                      end;
+                      hence thesis;
+                    end;
+                  end;
                   hence thesis;
-                 end;
-                 case c in b.n;
-                  hence thesis by A31,A33,A35,FINSEQ_3:27;
-                 end;
-                 end;
-                hence thesis;
-               end;
-               end;
-              hence thesis;
-             end;
-A39:           ma in dom b by A3,A10,FINSEQ_3:31;
+                end;
+A39:            ma in dom b by A3,A10,FINSEQ_3:31;
                 for n holds P[n] from NAT_1:sch 1(A29,A30);
-            then cy in p"{x} by A28,A39;
-            hence thesis;
-           end;
-          let y; assume
-          A40: y in p"{x};
-          then reconsider cy = y as Element of C; assume
-          A41: not y in b.ma;
-              cy in dom p & p.cy in {x} by A40,FUNCT_1:def 13;
-          then A42: p.cy = x by TARSKI:def 1;
-          defpred Q[Nat] means $1 in dom b & ma<$1 & cy in b.$1;
-          A43: ex n be Nat st Q[n]
-           proof
-            take n=len b;
-            A44: b.n= C by Th3;
-                len b <> 0 by Th4;
-            then 0<len b;
-            then 0+1<=len b by NAT_1:13;
-            hence n in dom b by FINSEQ_3:27;
-                 now assume n <= ma;
-              then ma=len b by A3,A12,XXREAL_0:1;
-              then cy in b.ma by A44;
-              hence contradiction by A41;
-             end;
-            hence thesis by A44;
-           end;
-          consider mm be Nat such that
-          A45: Q[mm] & for n be Nat st Q[n] holds mm<=n from NAT_1:sch 5(A43);
-              1<=mm by A45,FINSEQ_3:27;
-          then max(0,mm-1)=mm-1 by FINSEQ_2:4;
-          then reconsider 1m = mm - 1 as Element of NAT by FINSEQ_2:5;
-              ma+1<=mm & mm<=mm+1 & mm<mm+1 by A45,NAT_1:13;
-          then A46: ma<=1m & mm<=len b & 1m<=mm & 1m<mm
-            by A45,FINSEQ_3:27,XREAL_1:21;
-          then A47: 1<=1m & 1m<=len b & 1m<len b by A12,XXREAL_0:2;
-          then A48: 1m in dom b & 1m+1<=len b by FINSEQ_3:27,NAT_1:13;
-A49:           mm in dom fd by A3,A45,FINSEQ_3:31;
-               now per cases;
-           case ma=1m;
-            then cy in b.(1m+1) \ b.(1m) by A41,A45,XBOOLE_0:def 4;
-            then p.cy = fd.mm by A1,A47,Th22;
-            hence contradiction by A10,A42,A45,A49;
-           end;
-           case ma <> 1m;
-            then A50: ma < 1m by A46,REAL_1:def 5;
-                 now assume cy in b.(1m);
-              then mm<=1m by A45,A48,A50;
-              then mm - 1m <=0 by REAL_2:106;
-              hence contradiction;
-             end;
-            then cy in b.(1m+1) \ b.(1m) by A45,XBOOLE_0:def 4;
-            then p.cy = fd.mm by A1,A47,Th22;
-            hence contradiction by A10,A42,A45,A49;
-           end;
-           end;
-          hence contradiction;
-         end;
-        hence card(p"{x}) = card(fd"{x}) by A3,A12,A26,A27,Def1;
-       end;
-       case A51: mi<>1;
-        then 1<mi by A12,REAL_1:def 5;
-        then A52: 1<=m1 & m1<=len fd by A12,A14,NAT_1:13;
-        then A53: m1 in dom b by A3,FINSEQ_3:27;
-        then A54: b.m1 c= b.ma by A3,A5,A10,A14,Th2;
-            b.ma c= C by A3,A5,A10,Lm5;
-         then b.ma is finite by FINSET_1:13;
-        then reconsider bma = b.ma, bm1 = b.m1 as finite set by A54,FINSET_1:13
-;
-            b.ma \ b.m1 = p"{x}
-         proof
-          thus b.ma \ b.m1 c= p"{x}
-           proof let y; assume
-            A55: y in b.ma \ b.m1;
-            then A56: y in b.ma & not y in b.m1 by XBOOLE_0:def 4;
-                b.ma c= C by A3,A5,A10,Lm5;
-            then reconsider cy = y as Element of C by A56;
-            defpred P[Element of NAT] means
-            $1 in dom b & mi<=$1 & $1<=ma implies
-            for c be Element of C st c in b.$1 \ b.m1 holds c in p"{x};
-            A57: P[0] by FINSEQ_3:27;
-            A58: for n st P[n] holds P[n+1]
-             proof let n; assume
-              A59: P[n]; assume
-              A60: n+1 in dom b & mi<=n+1 & n+1<=ma;
-              then 1<=n+1 & n+1<=len b & n<=n+1 by FINSEQ_3:27,NAT_1:11;
-              then A61: n<=len b & n<=ma & n<=len b -1 & n<len b
-                by A60,NAT_1:13,XREAL_1:21;
-              let c be Element of C; assume
-              A62: c in b.(n+1) \ b.m1;
-                   now per cases;
-               case A63: n+1=mi;
-                then p.c = fd.(n+1) by A1,A52,A61,A62,Th22;
-                then p.c in {x} by A9,A63,TARSKI:def 1;
-                hence thesis by A4,FUNCT_1:def 13;
-               end;
-               case mi <> n+1;
-                then A64: mi<n+1 & n<=n+1 by A60,NAT_1:11,REAL_1:def 5;
-                then mi<=n & n<=ma by A60,NAT_1:13;
-                then A65: 1<=n & n<=len b by A3,A12,XXREAL_0:2;
-                 then n in dom b by FINSEQ_3:27;
-                then b.n c= b.(n+1) by A60,A64,Th2;
-                then A66: b.(n+1) \ b.m1 = (b.(n+1) \/ b.n) \ b.m1 by
-XBOOLE_1:12
-                .= ((b.(n+1) \b.n) \/ b.n) \ b.m1 by XBOOLE_1:39
-                .= (b.(n+1) \ b.n)\ b.m1 \/ (b.n \ b.m1) by XBOOLE_1:42;
-                     now per cases by A62,A66,XBOOLE_0:def 2;
-                 case c in (b.(n+1) \ b.n) \ b.m1;
-                  then c in b.(n+1) \ b.n by XBOOLE_0:def 4;
-                  then A67: p.c = fd.(n+1) by A1,A61,A65,Th22;
-                       now per cases;
-                   case n+1=ma;
-                    then p.c in {x} by A10,A67,TARSKI:def 1;
-                    hence thesis by A4,FUNCT_1:def 13;
-                   end;
-                   case n+1<>ma;
-                    then n+1<ma by A60,REAL_1:def 5;
-                    then A68: p.c>=r by A3,A5,A10,A60,A67,RFINSEQ:32;
-                        r>=p.c by A3,A5,A9,A60,A64,A67,RFINSEQ:32;
-                    then r=p.c by A68,XXREAL_0:1;
-                    then p.c in {x} by TARSKI:def 1;
-                    hence thesis by A4,FUNCT_1:def 13;
-                   end;
-                   end;
-                  hence thesis;
-                 end;
-                 case c in b.n \ b.m1;
-                  hence thesis by A59,A60,A64,A65,FINSEQ_3:27,NAT_1:13;
-                 end;
-                 end;
+                then cy in p"{x} by A28,A39;
                 hence thesis;
-               end;
-               end;
-              hence thesis;
-             end;
-A69:           ma in dom b by A3,A10,FINSEQ_3:31;
-                for n holds P[n] from NAT_1:sch 1(A57,A58);
-            then cy in p"{x} by A11,A55,A69;
-            hence thesis;
-           end;
-          let y; assume
-          A70: y in p"{x};
-          then reconsider cy = y as Element of C;
-              cy in dom p & p.cy in {x} by A70,FUNCT_1:def 13;
-          then A71: p.cy = x by TARSKI:def 1; assume
-          A72: not y in b.ma \ b.m1;
-               now per cases by A72,XBOOLE_0:def 4;
-           case A73: not y in b.ma;
-            defpred Q[Nat] means $1 in dom b & ma<$1 & cy in b.$1;
-            A74: ex n be Nat st Q[n]
-             proof
-              take n=len b;
-              A75: b.n= C by Th3;
-                  len b <> 0 by Th4;
-              then 0<len b;
-              then 0+1<=len b by NAT_1:13;
-              hence n in dom b by FINSEQ_3:27;
-                   now assume n <= ma;
-                then ma=len b by A3,A12,XXREAL_0:1;
-                then cy in b.ma by A75;
-                hence contradiction by A73;
-               end;
-              hence thesis by A75;
-             end;
-            consider mm be Nat such that
-A76:        Q[mm] & for n be Nat st Q[n] holds mm<=n from NAT_1:sch 5(A74);
-                1<=mm by A76,FINSEQ_3:27;
-            then max(0,mm-1)=mm-1 by FINSEQ_2:4;
-            then reconsider 1m = mm - 1 as Element of NAT by FINSEQ_2:5;
-                ma+1<=mm & mm<=mm+1 & mm<mm+1 by A76,NAT_1:13;
-            then A77: ma<=1m & mm<=len b & 1m<=mm & 1m<mm
-              by A76,FINSEQ_3:27,XREAL_1:21;
-            then A78: 1<=1m & 1m<=len b & 1m<len b by A12,XXREAL_0:2;
-            then A79: 1m in dom b & 1m+1<=len b by FINSEQ_3:27,NAT_1:13;
-A80:           mm in dom fd by A3,A76,FINSEQ_3:31;
-                 now per cases;
-             case ma=1m;
-              then cy in b.(1m+1) \ b.(1m) by A73,A76,XBOOLE_0:def 4;
-              then p.cy = fd.mm by A1,A78,Th22;
-              hence contradiction by A10,A71,A76,A80;
-             end;
-             case ma <> 1m;
-              then A81: ma < 1m by A77,REAL_1:def 5;
-                   now assume cy in b.(1m);
-                then mm<=1m by A76,A79,A81;
-                then mm - 1m <=0 by REAL_2:106;
-                hence contradiction;
-               end;
-              then cy in b.(1m+1) \ b.(1m) by A76,XBOOLE_0:def 4;
-              then p.cy = fd.mm by A1,A78,Th22;
-              hence contradiction by A10,A71,A76,A80;
-             end;
-             end;
-            hence contradiction;
-           end;
-           case A82: y in b.m1;
-            defpred Q[Nat] means $1 in dom b & $1<=m1 & cy in b.$1;
-            A83: ex n be Nat st Q[n] by A53,A82;
-            consider mm be Nat such that
-A84:        Q[mm] & for n be Nat st Q[n] holds mm<=n from NAT_1:sch 5(A83);
-            A85: 1<=mm & mm<=len b by A84,FINSEQ_3:27;
-            then max(0,mm-1)=mm-1 by FINSEQ_2:4;
-            then reconsider 1m=mm-1 as Element of NAT by FINSEQ_2:5;
-A86:           mm in dom fd by A3,A84,FINSEQ_3:31;
-                 now per cases;
-             case mm=1;
-              then p.cy = fd.1 by A1,A84,Th22;
-              then mi<=1 by A9,A13,A71;
-              hence contradiction by A12,A51,XXREAL_0:1;
-             end;
-             case mm<>1;
-              then 1<mm & mm<=mm+1 & mm<mm+1 by A85,NAT_1:13,REAL_1:def 5;
-              then A87: 1+1<=mm & 1m<=mm & 1m<mm by NAT_1:13,XREAL_1:21;
-              then A88: 1<=1m & 1m<=len b & 1m<len b & 1m<=m1
-                by A84,A85,XREAL_1:21,XXREAL_0:2;
-               then 1m in dom b by FINSEQ_3:27;
-              then not cy in b.1m by A84,A87,A88;
-              then cy in b.(1m+1) \ b.1m by A84,XBOOLE_0:def 4;
-              then p.cy = fd.(1m+1) by A1,A88,Th22;
-              then mi<=mm by A9,A71,A86;
-              then m1+1<=m1 by A84,XXREAL_0:2;
-              then 1<=m1-m1 by XREAL_1:21;
-              then 1<=0;
+              end;
+              let y;
+              assume
+A40:          y in p"{x};
+              then reconsider cy = y as Element of C;
+              assume
+A41:          not y in b.ma;
+              cy in dom p & p.cy in {x} by A40,FUNCT_1:def 13;
+              then
+A42:          p.cy = x by TARSKI:def 1;
+              defpred Q[Nat] means $1 in dom b & ma<$1 & cy in b.$1;
+A43:          ex n be Nat st Q[n]
+              proof
+                take n=len b;
+A44:            b.n= C by Th3;
+                len b <> 0 by Th4;
+                then 0<len b;
+                then 0+1<=len b by NAT_1:13;
+                hence n in dom b by FINSEQ_3:27;
+                now
+                  assume n <= ma;
+                  then ma=len b by A3,A12,XXREAL_0:1;
+                  then cy in b.ma by A44;
+                  hence contradiction by A41;
+                end;
+                hence thesis by A44;
+              end;
+              consider mm be Nat such that
+A45:          Q[mm] & for n be Nat st Q[n] holds mm<=n from NAT_1:sch 5(A43);
+              1<=mm by A45,FINSEQ_3:27;
+              then max(0,mm-1)=mm-1 by FINSEQ_2:4;
+              then reconsider 1m = mm - 1 as Element of NAT by FINSEQ_2:5;
+              ma+1<=mm & mm<=mm+1 & mm<mm+1 by A45,NAT_1:13;
+              then
+A46:          ma<=1m & mm<=len b & 1m<=mm & 1m<mm
+              by A45,FINSEQ_3:27,XREAL_1:21;
+              then
+A47:          1<=1m & 1m<=len b & 1m<len b by A12,XXREAL_0:2;
+              then
+A48:          1m in dom b & 1m+1<=len b by FINSEQ_3:27,NAT_1 :13;
+A49:          mm in dom fd by A3,A45,FINSEQ_3:31;
+              now per cases;
+                case ma=1m;
+                  then cy in b.(1m+1) \ b.(1m) by A41,A45,XBOOLE_0:def 4;
+                  then p.cy = fd.mm by A1,A47,Th22;
+                  hence contradiction by A10,A42,A45,A49;
+                end;
+                case ma <> 1m;
+                  then
+A50:              ma < 1m by A46,REAL_1:def 5;
+                  now
+                    assume cy in b.(1m);
+                    then mm<=1m by A45,A48,A50;
+                    then mm - 1m <=0 by REAL_2:106;
+                    hence contradiction;
+                  end;
+                  then cy in b.(1m+1) \ b.(1m) by A45,XBOOLE_0:def 4;
+                  then p.cy = fd.mm by A1,A47,Th22;
+                  hence contradiction by A10,A42,A45,A49;
+                end;
+              end;
               hence contradiction;
-             end;
-             end;
-            hence contradiction;
-           end;
-           end;
-          hence contradiction;
-         end;
-        hence card(p"{x}) = card(bma) - card(bm1) by A54,CARD_2:63
-        .= ma - card(bm1) by A3,A12,Def1
-        .= card (fd"{x}) by A3,A26,A52,Def1;
-       end;
-       end;
-      hence card (fd"{x}) = card(p"{x});
-     end;
-     end;
+            end;
+            hence card(p"{x}) = card(fd"{x}) by A3,A12,A26,A27,Def1;
+          end;
+          case
+A51:        mi<>1;
+            then 1<mi by A12,REAL_1:def 5;
+            then
+A52:        1<=m1 & m1<=len fd by A12,A14,NAT_1:13;
+            then
+A53:        m1 in dom b by A3,FINSEQ_3:27;
+            then
+A54:        b.m1 c= b.ma by A3,A5,A10,A14,Th2;
+            b.ma c= C by A3,A5,A10,Lm5;
+            then b.ma is finite by FINSET_1:13;
+
+then reconsider bma = b.ma, bm1 = b.m1 as finite set by A54,FINSET_1:13;
+            b.ma \ b.m1 = p"{x}
+            proof
+              thus b.ma \ b.m1 c= p"{x}
+              proof
+                let y;
+                assume
+A55:            y in b.ma \ b.m1;
+                then
+A56:            y in b.ma & not y in b.m1 by XBOOLE_0:def 4;
+                b.ma c= C by A3,A5,A10,Lm5;
+                then reconsider cy = y as Element of C by A56;
+                defpred P[Element of NAT] means
+                $1 in dom b & mi<=$1 & $1<=ma implies
+                for c be Element of C st c in b.$1 \ b.m1 holds c in p"{x};
+A57:            P[0] by FINSEQ_3:27;
+A58:            for n st P[n] holds P[n+1]
+                proof
+                  let n;
+                  assume
+A59:              P[n];
+                  assume
+A60:              n+1 in dom b & mi<=n+1 & n+1<=ma;
+                  then 1<=n+1 & n+1<=len b & n<=n+1 by FINSEQ_3:27,NAT_1:11;
+                  then
+A61:              n<=len b & n<=ma & n<=len b -1 & n<len b
+                  by A60,NAT_1:13,XREAL_1:21;
+                  let c be Element of C;
+                  assume
+A62:              c in b.(n+1) \ b.m1;
+                  now per cases;
+                    case
+A63:                  n+1=mi;
+                      then p.c = fd.(n+1) by A1,A52,A61,A62,Th22;
+                      then p.c in {x} by A9,A63,TARSKI:def 1;
+                      hence thesis by A4,FUNCT_1:def 13;
+                    end;
+                    case mi <> n+1;
+                      then
+A64:                  mi<n+1 & n<=n+1 by A60,NAT_1: 11,REAL_1:def 5;
+                      then mi<=n & n<=ma by A60,NAT_1:13;
+                      then
+A65:                  1<=n & n<=len b by A3,A12, XXREAL_0:2;
+                      then n in dom b by FINSEQ_3:27;
+                      then b.n c= b.(n+1) by A60,A64,Th2;
+                      then
+A66:                  b.(n+1) \ b.m1 = (b.(n+1) \/ b .n) \ b.m1 by XBOOLE_1:12
+                        .= ((b.(n+1) \b.n) \/ b.n) \ b.m1 by XBOOLE_1:39
+
+.= (b.(n+1) \ b.n)\ b.m1 \/ (b.n \ b.m1) by XBOOLE_1:42;
+                      now per cases by A62,A66,XBOOLE_0:def 2;
+                        case c in (b.(n+1) \ b.n) \ b.m1;
+                          then c in b.(n+1) \ b.n by XBOOLE_0:def 4;
+                          then
+A67:                      p.c = fd.(n+1) by A1, A61,A65,Th22;
+                          now per cases;
+                            case n+1=ma;
+                              then p.c in {x} by A10,A67,TARSKI:def 1;
+                              hence thesis by A4,FUNCT_1:def 13;
+                            end;
+                            case n+1<>ma;
+                              then n+1<ma by A60,REAL_1:def 5;
+                              then
+A68:                          p.c>=r by A3, A5,A10,A60,A67,RFINSEQ:32;
+                              r>=p.c by A3,A5,A9,A60,A64,A67,RFINSEQ:32;
+                              then r=p.c by A68,XXREAL_0:1;
+                              then p.c in {x} by TARSKI:def 1;
+                              hence thesis by A4,FUNCT_1:def 13;
+                            end;
+                          end;
+                          hence thesis;
+                        end;
+                        case c in b.n \ b.m1;
+                          hence thesis by A59,A60,A64,A65,FINSEQ_3:27,NAT_1:13;
+                        end;
+                      end;
+                      hence thesis;
+                    end;
+                  end;
+                  hence thesis;
+                end;
+A69:            ma in dom b by A3,A10,FINSEQ_3:31;
+                for n holds P[n] from NAT_1:sch 1(A57,A58);
+                then cy in p"{x} by A11,A55,A69;
+                hence thesis;
+              end;
+              let y;
+              assume
+A70:          y in p"{x};
+              then reconsider cy = y as Element of C;
+              cy in dom p & p.cy in {x} by A70,FUNCT_1:def 13;
+              then
+A71:          p.cy = x by TARSKI:def 1;
+              assume
+A72:          not y in b.ma \ b.m1;
+              now per cases by A72,XBOOLE_0:def 4;
+                case
+A73:              not y in b.ma;
+                  defpred Q[Nat] means $1 in dom b & ma<$1 & cy in b.$1;
+A74:              ex n be Nat st Q[n]
+                  proof
+                    take n=len b;
+A75:                b.n= C by Th3;
+                    len b <> 0 by Th4;
+                    then 0<len b;
+                    then 0+1<=len b by NAT_1:13;
+                    hence n in dom b by FINSEQ_3:27;
+                    now
+                      assume n <= ma;
+                      then ma=len b by A3,A12,XXREAL_0:1;
+                      then cy in b.ma by A75;
+                      hence contradiction by A73;
+                    end;
+                    hence thesis by A75;
+                  end;
+                  consider mm be Nat such that
+A76:              Q
+
+[mm] & for n be Nat st Q[n] holds mm<=n from NAT_1:sch 5(A74);
+                  1<=mm by A76,FINSEQ_3:27;
+                  then max(0,mm-1)=mm-1 by FINSEQ_2:4;
+                  then reconsider 1m = mm - 1 as Element of NAT by FINSEQ_2:5;
+                  ma+1<=mm & mm<=mm+1 & mm<mm+1 by A76,NAT_1:13;
+                  then
+A77:              ma<=1m & mm<=len b & 1m<=mm & 1m<mm
+                  by A76,FINSEQ_3:27,XREAL_1:21;
+                  then
+A78:              1<=1m & 1m<=len b & 1m<len b by A12, XXREAL_0:2;
+                  then
+A79:              1m in dom b & 1m+1<=len b by FINSEQ_3: 27,NAT_1:13;
+A80:              mm in dom fd by A3,A76,FINSEQ_3:31;
+                  now per cases;
+                    case ma=1m;
+                      then cy in b.(1m+1) \ b.(1m) by A73,A76,XBOOLE_0:def 4;
+                      then p.cy = fd.mm by A1,A78,Th22;
+                      hence contradiction by A10,A71,A76,A80;
+                    end;
+                    case ma <> 1m;
+                      then
+A81:                  ma < 1m by A77,REAL_1:def 5;
+                      now
+                        assume cy in b.(1m);
+                        then mm<=1m by A76,A79,A81;
+                        then mm - 1m <=0 by REAL_2:106;
+                        hence contradiction;
+                      end;
+                      then cy in b.(1m+1) \ b.(1m) by A76,XBOOLE_0:def 4;
+                      then p.cy = fd.mm by A1,A78,Th22;
+                      hence contradiction by A10,A71,A76,A80;
+                    end;
+                  end;
+                  hence contradiction;
+                end;
+                case
+A82:              y in b.m1;
+                  defpred Q[Nat] means $1 in dom b & $1<=m1 & cy in b.$1;
+A83:              ex n be Nat st Q[n] by A53,A82;
+                  consider mm be Nat such that
+A84:              Q
+
+[mm] & for n be Nat st Q[n] holds mm<=n from NAT_1:sch 5(A83);
+A85:              1<=mm & mm<=len b by A84,FINSEQ_3:27;
+                  then max(0,mm-1)=mm-1 by FINSEQ_2:4;
+                  then reconsider 1m=mm-1 as Element of NAT by FINSEQ_2:5;
+A86:              mm in dom fd by A3,A84,FINSEQ_3:31;
+                  now per cases;
+                    case mm=1;
+                      then p.cy = fd.1 by A1,A84,Th22;
+                      then mi<=1 by A9,A13,A71;
+                      hence contradiction by A12,A51,XXREAL_0:1;
+                    end;
+                    case mm<>1;
+
+then 1<mm & mm<=mm+1 & mm<mm+1 by A85,NAT_1:13,REAL_1:def 5;
+                      then
+A87:                  1+1<=mm & 1m<=mm & 1m<mm by NAT_1:13,XREAL_1:21;
+                      then
+A88:                  1<=1m & 1m<=len b & 1m<len b & 1m<=m1
+                      by A84,A85,XREAL_1:21,XXREAL_0:2;
+                      then 1m in dom b by FINSEQ_3:27;
+                      then not cy in b.1m by A84,A87,A88;
+                      then cy in b.(1m+1) \ b.1m by A84,XBOOLE_0:def 4;
+                      then p.cy = fd.(1m+1) by A1,A88,Th22;
+                      then mi<=mm by A9,A71,A86;
+                      then m1+1<=m1 by A84,XXREAL_0:2;
+                      then 1<=m1-m1 by XREAL_1:21;
+                      then 1<=0;
+                      hence contradiction;
+                    end;
+                  end;
+                  hence contradiction;
+                end;
+              end;
+              hence contradiction;
+            end;
+            hence card(p"{x}) = card(bma) - card(bm1) by A54,CARD_2:63
+              .= ma - card(bm1) by A3,A12,Def1
+              .= card (fd"{x}) by A3,A26,A52,Def1;
+          end;
+        end;
+        hence card (fd"{x}) = card(p"{x});
+      end;
+    end;
     hence card (fd"{x}) = card(p"{x});
-   end;
+  end;
   hence thesis by RFINSEQ:def 1;
- end;
+end;
 
 theorem Th25:
-for F be PartFunc of D,REAL, A be RearrangmentGen of C
+  for F be PartFunc of D,REAL, A be RearrangmentGen of C
   st F is total & card C = card D holds FinS(Rlor(F,A),C) = FinS(F,D)
- proof let F be PartFunc of D,REAL, B be RearrangmentGen of C; assume
-  A1: F is total & card C = card D;
-  then A2: Rlor(F,B), FinS(F,D) are_fiberwise_equipotent by Th24;
-  A3: dom Rlor(F,B) = C by A1,Th21;
+proof
+  let F be PartFunc of D,REAL, B be RearrangmentGen of C;
+  assume
+A1: F is total & card C = card D;
+  then
+A2: Rlor(F,B), FinS(F,D) are_fiberwise_equipotent by Th24;
+A3: dom Rlor(F,B) = C by A1,Th21;
   then (Rlor(F,B))|C = Rlor(F,B) by RELAT_1:97;
   hence thesis by A2,A3,RFUNCT_3:def 14;
- end;
+end;
 
 theorem Th26:
-for F be PartFunc of D,REAL, A be RearrangmentGen of C
+  for F be PartFunc of D,REAL, A be RearrangmentGen of C
   st F is total & card C = card D holds Sum (Rlor(F,A),C) = Sum (F,D)
- proof let F be PartFunc of D,REAL, B be RearrangmentGen of C; assume
-      F is total & card C = card D;
+proof
+  let F be PartFunc of D,REAL, B be RearrangmentGen of C;
+  assume F is total & card C = card D;
   then FinS(Rlor(F,B),C) = FinS(F,D) by Th25;
   hence Sum(Rlor(F,B),C) = Sum FinS(F,D) by RFUNCT_3:def 15
-  .= Sum (F,D) by RFUNCT_3:def 15;
- end;
+    .= Sum (F,D) by RFUNCT_3:def 15;
+end;
 
 theorem
-    for F be PartFunc of D,REAL, A be RearrangmentGen of C
- st F is total & card C = card D
- holds FinS((Rlor(F,A)) - r,C) = FinS(F-r,D) & Sum (Rlor(F,A)-r,C) = Sum
- (F-r,D)
- proof let F be PartFunc of D,REAL, B be RearrangmentGen of C; assume
-  A1: F is total & card C = card D;
-  then A2: Rlor(F,B), FinS(F,D) are_fiberwise_equipotent by Th24;
-  A3: dom Rlor(F,B) = C & dom F = D by A1,Th21,PARTFUN1:def 4;
+  for F be PartFunc of D,REAL, A be RearrangmentGen of C
+  st F is total & card C = card D
+  holds FinS((Rlor(F,A)) - r,C) = FinS(F-r,D) & Sum (Rlor(F,A)-r,C) = Sum
+  (F-r,D)
+proof
+  let F be PartFunc of D,REAL, B be RearrangmentGen of C;
+  assume
+A1: F is total & card C = card D;
+  then
+A2: Rlor(F,B), FinS(F,D) are_fiberwise_equipotent by Th24;
+A3: dom Rlor(F,B) = C & dom F = D by A1,Th21,PARTFUN1:def 4;
   then (Rlor(F,B))|C = Rlor(F,B) & F|D = F by RELAT_1:97;
   then FinS(F,D), F are_fiberwise_equipotent by A3,RFUNCT_3:def 14;
   then Rlor(F,B), F are_fiberwise_equipotent by A2,RFINSEQ:2;
-  then A4: Rlor(F,B)-r, F-r are_fiberwise_equipotent by RFUNCT_3:54;
-  A5: dom (Rlor(F,B) - r) = dom Rlor
-(F,B) & dom(F-r) = dom F by VALUED_1:3,def 3;
-  then A6: (Rlor(F,B) - r)|C = Rlor(F,B) -r & (F-r)|D = F-r by RELAT_1:97;
+  then
+A4: Rlor(F,B)-r, F-r are_fiberwise_equipotent by RFUNCT_3:54;
+A5: dom (Rlor(F,B) - r) = dom Rlor (F,B) & dom(F-r) = dom F by VALUED_1:3;
+  then
+A6: (Rlor(F,B) - r)|C = Rlor(F,B) -r & (F-r)|D = F-r by RELAT_1:97;
   then FinS(Rlor(F,B) - r, C), Rlor(F,B) -r are_fiberwise_equipotent
-    by A5,RFUNCT_3:def 14;
-   then FinS(Rlor(F,B) - r, C), F-r are_fiberwise_equipotent
-    by A4,RFINSEQ:2;
+  by A5,RFUNCT_3:def 14;
+  then FinS(Rlor(F,B) - r, C), F-r are_fiberwise_equipotent by A4,RFINSEQ:2;
   hence FinS(Rlor(F,B) - r,C) = FinS(F-r,D) by A5,A6,RFUNCT_3:def 14;
   hence Sum(Rlor(F,B)-r,C) = Sum FinS(F-r,D) by RFUNCT_3:def 15
-  .= Sum (F-r,D) by RFUNCT_3:def 15;
- end;
+    .= Sum (F-r,D) by RFUNCT_3:def 15;
+end;
 
 theorem
-    for F be PartFunc of D,REAL, A be RearrangmentGen of C
- st F is total & card C = card D
- holds Rlor(F,A), Rland(F,A) are_fiberwise_equipotent &
-        FinS(Rlor(F,A),C) = FinS(Rland(F,A),C) &
-        Sum (Rlor(F,A),C) = Sum (Rland(F,A),C)
- proof let F be PartFunc of D,REAL, B be RearrangmentGen of C; assume
-      F is total & card C = card D;
+  for F be PartFunc of D,REAL, A be RearrangmentGen of C
+  st F is total & card C = card D
+  holds Rlor(F,A), Rland(F,A) are_fiberwise_equipotent &
+  FinS(Rlor(F,A),C) = FinS(Rland(F,A),C) &
+  Sum (Rlor(F,A),C) = Sum (Rland(F,A),C)
+proof
+  let F be PartFunc of D,REAL, B be RearrangmentGen of C;
+  assume F is total & card C = card D;
   then Rland(F,B), FinS(F,D) are_fiberwise_equipotent & FinS(Rland
-(F,B),C) = FinS(F,D) &
-  Sum (Rland(F,B),C) = Sum (F,D) &
+  (F,B),C) = FinS(F,D) & Sum (Rland(F,B),C) = Sum (F,D) &
   Rlor(F,B), FinS(F,D) are_fiberwise_equipotent & FinS(Rlor
-(F,B),C) = FinS(F,D) &
+  (F,B),C) = FinS(F,D) &
   Sum (Rlor(F,B),C) = Sum (F,D) by Th17,Th18,Th19,Th24,Th25,Th26;
   hence thesis by RFINSEQ:2;
- end;
+end;
 
 theorem
-    for F be PartFunc of D,REAL, A be RearrangmentGen of C
- st F is total & card C = card D
- holds max+(Rland(F,A) - r), max+(F - r) are_fiberwise_equipotent &
-       FinS(max+(Rland(F,A) - r), C) = FinS(max+(F - r), D) &
-       Sum (max+(Rland(F,A) - r), C) = Sum (max+(F - r), D)
- proof let F be PartFunc of D,REAL, B be RearrangmentGen of C; assume
-  A1: F is total & card C = card D;
-  then A2: Rland(F,B), FinS(F,D) are_fiberwise_equipotent by Th17;
-  A3: dom Rland(F,B) = C & dom F = D by A1,Th13,PARTFUN1:def 4;
+  for F be PartFunc of D,REAL, A be RearrangmentGen of C
+  st F is total & card C = card D
+  holds max+(Rland(F,A) - r), max+(F - r) are_fiberwise_equipotent &
+  FinS(max+(Rland(F,A) - r), C) = FinS(max+(F - r), D) &
+  Sum (max+(Rland(F,A) - r), C) = Sum (max+(F - r), D)
+proof
+  let F be PartFunc of D,REAL, B be RearrangmentGen of C;
+  assume
+A1: F is total & card C = card D;
+  then
+A2: Rland(F,B), FinS(F,D) are_fiberwise_equipotent by Th17;
+A3: dom Rland(F,B) = C & dom F = D by A1,Th13,PARTFUN1:def 4;
   then (Rland(F,B))|C = Rland(F,B) & F|D = F by RELAT_1:97;
   then FinS(F,D), F are_fiberwise_equipotent by A3,RFUNCT_3:def 14;
   then Rland(F,B), F are_fiberwise_equipotent by A2,RFINSEQ:2;
-  then A4: Rland(F,B)-r, F-r are_fiberwise_equipotent by RFUNCT_3:54;
-  set mp = max+(Rland(F,B)-r),
-      mf = max+(F-r);
-  A5: dom mp = dom (Rland(F,B)-r) & dom mf=dom(F-r) by RFUNCT_3:def 10;
-  thus A6: mp, mf are_fiberwise_equipotent by A4,RFUNCT_3:44;
-  A7: mp|C = mp & mf|D = mf by A5,RELAT_1:97;
+  then
+A4: Rland(F,B)-r, F-r are_fiberwise_equipotent by RFUNCT_3:54;
+  set mp = max+(Rland(F,B)-r), mf = max+(F-r);
+A5: dom mp = dom (Rland(F,B)-r) & dom mf=dom(F-r) by RFUNCT_3:def 10; thus
+A6: mp, mf are_fiberwise_equipotent by A4,RFUNCT_3:44;
+A7: mp|C = mp & mf|D = mf by A5,RELAT_1:97;
   then FinS(mp, C), mp are_fiberwise_equipotent by A5,RFUNCT_3:def 14;
-   then FinS(mp, C), mf are_fiberwise_equipotent by A6,RFINSEQ:2;
+  then FinS(mp, C), mf are_fiberwise_equipotent by A6,RFINSEQ:2;
   hence FinS(mp,C) = FinS(mf,D) by A5,A7,RFUNCT_3:def 14;
   hence Sum(mp,C) = Sum FinS(mf,D) by RFUNCT_3:def 15
-  .= Sum (mf,D) by RFUNCT_3:def 15;
- end;
+    .= Sum (mf,D) by RFUNCT_3:def 15;
+end;
 
 theorem
-    for F be PartFunc of D,REAL, A be RearrangmentGen of C
- st F is total & card C = card D holds
-   max-(Rland(F,A) - r), max-(F - r) are_fiberwise_equipotent &
-   FinS(max-(Rland(F,A) - r), C) = FinS(max-(F - r), D) &
-   Sum (max-(Rland(F,A) - r), C) = Sum (max-(F - r), D)
- proof let F be PartFunc of D,REAL, B be RearrangmentGen of C; assume
-  A1: F is total & card C = card D;
-  then A2: Rland(F,B), FinS(F,D) are_fiberwise_equipotent by Th17;
-  A3: C is finite & dom Rland(F,B) = C & dom F = D
-   by A1,Th13,PARTFUN1:def 4;
+  for F be PartFunc of D,REAL, A be RearrangmentGen of C
+  st F is total & card C = card D holds
+  max-(Rland(F,A) - r), max-(F - r) are_fiberwise_equipotent &
+  FinS(max-(Rland(F,A) - r), C) = FinS(max-(F - r), D) &
+  Sum (max-(Rland(F,A) - r), C) = Sum (max-(F - r), D)
+proof
+  let F be PartFunc of D,REAL, B be RearrangmentGen of C;
+  assume
+A1: F is total & card C = card D;
+  then
+A2: Rland(F,B), FinS(F,D) are_fiberwise_equipotent by Th17;
+A3: C is finite & dom Rland(F,B) = C & dom F = D by A1,Th13,PARTFUN1:def 4;
   then (Rland(F,B))|C = Rland(F,B) & F|D = F by RELAT_1:97;
   then FinS(F,D), F are_fiberwise_equipotent by A3,RFUNCT_3:def 14;
   then Rland(F,B), F are_fiberwise_equipotent by A2,RFINSEQ:2;
-  then A4: Rland(F,B)-r, F-r are_fiberwise_equipotent by RFUNCT_3:54;
-  set mp = max-(Rland(F,B)-r),
-      mf = max-(F-r);
-  A5: dom mp = dom (Rland(F,B)-r) & dom mf=dom(F-r) by RFUNCT_3:def 11;
-  thus A6: mp, mf are_fiberwise_equipotent by A4,RFUNCT_3:45;
-  A7: mp|C = mp & mf|D = mf by A5,RELAT_1:97;
+  then
+A4: Rland(F,B)-r, F-r are_fiberwise_equipotent by RFUNCT_3:54;
+  set mp = max-(Rland(F,B)-r), mf = max-(F-r);
+A5: dom mp = dom (Rland(F,B)-r) & dom mf=dom(F-r) by RFUNCT_3:def 11; thus
+A6: mp, mf are_fiberwise_equipotent by A4,RFUNCT_3:45;
+A7: mp|C = mp & mf|D = mf by A5,RELAT_1:97;
   then FinS(mp, C), mp are_fiberwise_equipotent by A5,RFUNCT_3:def 14;
-   then FinS(mp, C), mf are_fiberwise_equipotent by A6,RFINSEQ:2;
+  then FinS(mp, C), mf are_fiberwise_equipotent by A6,RFINSEQ:2;
   hence FinS(mp,C) = FinS(mf,D) by A5,A7,RFUNCT_3:def 14;
   hence Sum(mp,C) = Sum FinS(mf,D) by RFUNCT_3:def 15
-  .= Sum (mf,D) by RFUNCT_3:def 15;
- end;
+    .= Sum (mf,D) by RFUNCT_3:def 15;
+end;
 
 theorem Th31:
-for F be PartFunc of D,REAL, A be RearrangmentGen of C
+  for F be PartFunc of D,REAL, A be RearrangmentGen of C
   st F is total & card D = card C
   holds len FinS(Rland(F,A),C) = card C & 1<=len FinS(Rland(F,A),C)
- proof let F be PartFunc of D,REAL, B be RearrangmentGen of C;
-  set p = Rland(F,B); assume
-      F is total & card D = card C;
-  then A1: dom p = C by Th13;
-  then A2: p|C = p by RELAT_1:97;
+proof
+  let F be PartFunc of D,REAL, B be RearrangmentGen of C;
+  set p = Rland(F,B);
+  assume F is total & card D = card C;
+  then
+A1: dom p = C by Th13;
+  then
+A2: p|C = p by RELAT_1:97;
   hence len FinS(p,C) = card C by A1,RFUNCT_3:70;
-      card C <> 0 by CARD_2:59;
+  card C <> 0 by CARD_2:59;
   then 0<card C;
   then 0+1<=card C by NAT_1:13;
   hence thesis by A1,A2,RFUNCT_3:70;
- end;
+end;
 
 theorem
-    for F be PartFunc of D,REAL, A be RearrangmentGen of C
- st F is total & card D = card C & n in dom A holds
+  for F be PartFunc of D,REAL, A be RearrangmentGen of C
+  st F is total & card D = card C & n in dom A holds
   FinS(Rland(F,A),C) | n = FinS(Rland(F,A),A.n)
- proof let F be PartFunc of D,REAL, B be RearrangmentGen of C; assume
-  A1: F is total & card D = card C & n in dom B;
+proof
+  let F be PartFunc of D,REAL, B be RearrangmentGen of C;
+  assume
+A1: F is total & card D = card C & n in dom B;
   set p = Rland(F,B);
-  A2: dom B = Seg len B & dom FinS(p,C) = Seg len FinS(p,C) by FINSEQ_1:def 3;
-  A3: len B = card C & len FinS(p,C) = card C by A1,Th1,Th31;
+A2: dom B = Seg len B & dom FinS(p,C) = Seg len FinS(p,C) by FINSEQ_1:def 3;
+A3: len B = card C & len FinS(p,C) = card C by A1,Th1,Th31;
   defpred P[Element of NAT] means
-      $1 in dom B implies FinS(Rland(F,B),C) | $1 = FinS(Rland(F,B),B.$1);
-  A4: P[0] by FINSEQ_3:27;
-  A5: for m st P[m] holds P[m+1]
-   proof let m; assume
-    A6: P[m];
-    set f = FinS(p,C); assume
-    A7: m+1 in dom B;
-    then A8: 1<=m+1 & m+1<=len B & m<=m+1 by FINSEQ_3:27,NAT_1:11;
-    then A9: 1<=len B & m<=len B & m<=len B - 1 & m<len B
-     by NAT_1:13,XREAL_1:21,XXREAL_0:2;
-    then A10: 1 in dom B & dom(f|(m+1)) = Seg len (f|(m+1)) & m+1 in Seg(m+1)
-      by A8,FINSEQ_1:3,def 3,FINSEQ_3:27;
-    A11: len (f|(m+1)) = m+1 by A3,A8,FINSEQ_1:80;
-    A12: dom p = C by A1,Th13;
-         now per cases;
-     case A13: m=0;
-      consider d be Element of C such that
-      A14: B.1 = {d} by Th9;
-          B.1 c= C & dom p = C by A1,A10,Lm5,Th13;
-      then A15: FinS(p, B.(m+1)) = <* p.d *> by A13,A14,RFUNCT_3:72;
-      A16: d in B.1 by A14,TARSKI:def 1;
-      A17: 1 in Seg 1 & 1<=len FinS(p,C) by A1,Th31,FINSEQ_1:3;
-      then A18: 1 in dom FinS(p,C) & len(FinS(p,C)|(m+1)) = 1
-         by A13,FINSEQ_1:80,FINSEQ_3:27;
-      then (FinS(p,C)|(m+1)).1 = FinS(p,C).1 by A13,A17,RFINSEQ:19
-      .= FinS(F,D).1 by A1,Th18
-      .= p.d by A1,A16,Th15;
-      hence thesis by A15,A18,FINSEQ_1:57;
-     end;
-     case m<>0;
-      then 0<m;
-      then A19: 0+1<=m by NAT_1:13;
-      then consider d be Element of C such that
-      A20: B.(m+1) \ B.m = {d} & B.(m+1) = B.m \/ {d} & B.(m+1) \ {d} = B.m
+  $1 in dom B implies FinS(Rland(F,B),C) | $1 = FinS(Rland(F,B),B.$1);
+A4: P[0] by FINSEQ_3:27;
+A5: for m st P[m] holds P[m+1]
+  proof
+    let m;
+    assume
+A6: P[m];
+    set f = FinS(p,C);
+    assume
+A7: m+1 in dom B;
+    then
+A8: 1<=m+1 & m+1<=len B & m<=m+1 by FINSEQ_3:27,NAT_1:11;
+    then
+A9: 1<=len B & m<=len B & m<=len B - 1 & m<len B
+    by NAT_1:13,XREAL_1:21,XXREAL_0:2;
+    then
+A10: 1 in dom B & dom(f|(m+1)) = Seg len (f|(m+1)) & m+1 in Seg(m+1)
+    by A8,FINSEQ_1:3,def 3,FINSEQ_3:27;
+A11: len (f|(m+1)) = m+1 by A3,A8,FINSEQ_1:80;
+A12: dom p = C by A1,Th13;
+    now per cases;
+      case
+A13:    m=0;
+        consider d be Element of C such that
+A14:    B.1 = {d} by Th9;
+        B.1 c= C & dom p = C by A1,A10,Lm5,Th13;
+        then
+A15:    FinS(p, B.(m+1)) = <* p.d *> by A13,A14,RFUNCT_3:72;
+A16:    d in B.1 by A14,TARSKI:def 1;
+A17:    1 in Seg 1 & 1<=len FinS(p,C) by A1,Th31,FINSEQ_1:3;
+        then
+A18:    1 in dom FinS(p,C) & len(FinS(p,C)|(m+1)) = 1
+        by A13,FINSEQ_1:80,FINSEQ_3:27;
+        then (FinS(p,C)|(m+1)).1 = FinS(p,C).1 by A13,A17,RFINSEQ:19
+          .= FinS(F,D).1 by A1,Th18
+          .= p.d by A1,A16,Th15;
+        hence thesis by A15,A18,FINSEQ_1:57;
+      end;
+      case m<>0;
+        then 0<m;
+        then
+A19:    0+1<=m by NAT_1:13;
+        then consider d be Element of C such that
+A20:    B.(m+1) \ B.m = {d} & B.(m+1) = B.m \/ {d} & B.(m+1) \ {d} = B.m
         by A9,Th10;
-      A21: Seg m c= Seg(m+1) by A8,FINSEQ_1:7;
-      A22: (f|(m+1))|m = (f|(m+1))|(Seg m) by FINSEQ_1:def 15
-      .= (f|Seg(m+1))|(Seg m) by FINSEQ_1:def 15
-      .= f|(Seg(m+1) /\ (Seg m)) by RELAT_1:100
-      .= f|(Seg m) by A21,XBOOLE_1:28
-      .= f|m by FINSEQ_1:def 15;
-      A23: d in {d} by TARSKI:def 1;
-      then p.d = FinS(F,D).(m+1) by A1,A9,A19,A20,Th15
-      .= FinS(p,C).(m+1) by A1,Th18
-      .=(f|(m+1)).(m+1) by A2,A3,A7,A10,RFINSEQ:19;
-      then A24: f|(m+1) = f|m ^ <*p.d*> by A11,A22,RFINSEQ:20;
-      A25: B.(m+1) c= C by A7,Lm5;
-      then A26: B.(m+1) is finite by FINSET_1:13;
-       d in dom p /\ B.(m+1) by A12,A20,A23,XBOOLE_0:def 3;
-      then d in dom(p|(B.(m+1))) by FUNCT_1:68;
-      then A27: f|(m+1), p|(B.(m+1)) are_fiberwise_equipotent
-       by A6,A9,A19,A20,A24,A26,FINSEQ_3:27,RFUNCT_3:68;
-          dom(p|(B.(m+1))) = dom p /\ (B.(m+1)) by FUNCT_1:68
-       .= B.(m+1) by A12,A25,XBOOLE_1:28;
-      then FinS(p,B.(m+1)), p|(B.(m+1)) are_fiberwise_equipotent
-         by RFUNCT_3:def 14;
-      then A28: FinS(p,B.(m+1)), f|(m+1) are_fiberwise_equipotent
-        by A27,RFINSEQ:2;
-          (f|(m+1)) is non-increasing by RFINSEQ:33;
-      hence thesis by A28,RFINSEQ:36;
-     end;
-     end;
+A21:    Seg m c= Seg(m+1) by A8,FINSEQ_1:7;
+A22:    (f|(m+1))|m = (f|(m+1))|(Seg m) by FINSEQ_1:def 15
+          .= (f|Seg(m+1))|(Seg m) by FINSEQ_1:def 15
+          .= f|(Seg(m+1) /\ (Seg m)) by RELAT_1:100
+          .= f|(Seg m) by A21,XBOOLE_1:28
+          .= f|m by FINSEQ_1:def 15;
+A23:    d in {d} by TARSKI:def 1;
+        then p.d = FinS(F,D).(m+1) by A1,A9,A19,A20,Th15
+          .= FinS(p,C).(m+1) by A1,Th18
+          .=(f|(m+1)).(m+1) by A2,A3,A7,A10,RFINSEQ:19;
+        then
+A24:    f|(m+1) = f|m ^ <*p.d*> by A11,A22,RFINSEQ:20;
+A25:    B.(m+1) is finite by A7,Lm5,FINSET_1:13;
+        d in dom p /\ B.(m+1) by A12,A20,A23,XBOOLE_0:def 3;
+        then d in dom(p|(B.(m+1))) by FUNCT_1:68;
+        then
+A26:    f|(m+1), p|(B.(m+1)) are_fiberwise_equipotent
+        by A6,A9,A19,A20,A24,A25,FINSEQ_3:27,RFUNCT_3:68;
+A27:    dom(p|(B.(m+1))) = dom p /\ (B.(m+1)) by FUNCT_1:68
+          .= B.(m+1) by A7,A12,Lm5,XBOOLE_1:28;
+        (f|(m+1)) is non-increasing by RFINSEQ:33;
+        hence thesis by A26,A27,RFUNCT_3:def 14;
+      end;
+    end;
     hence thesis;
-   end;
-      for m holds P[m] from NAT_1:sch 1(A4,A5);
+  end;
+  for m holds P[m] from NAT_1:sch 1(A4,A5);
   hence thesis by A1;
- end;
+end;
 
 theorem
-    for F be PartFunc of D,REAL, A be RearrangmentGen of C
- st F is total & card D = card C holds Rland(F-r,A) = Rland(F,A) - r
- proof let F be PartFunc of D,REAL, B be RearrangmentGen of C; assume
-  A1:F is total & card D = card C;
-  then A2: dom F = D by PARTFUN1:def 4;
-  then A3: dom(F-r) = D by VALUED_1:3,def 3;
-  then A4: F-r is total by PARTFUN1:def 4;
-  then A5: dom Rland(F-r,B) = C & dom Rland(F,B) = C by A1,Th13;
-  then A6: dom(Rland(F,B) - r) = C by VALUED_1:3,def 3;
-  A7: F|D = F & (F-r)|D = F-r by A2,A3,RELAT_1:97;
-  then A8: FinS(F-r,D) = FinS(F,D) - (card D |-> r) by A2,RFUNCT_3:76;
-  A9: len FinS(F-r,D) = card D & len FinS(F,D) = card D &
-      len(card D |-> r) = card D by A2,A3,A7,FINSEQ_2:69,RFUNCT_3:70;
-  A10: len B = card C by Th1;
-       now let c be Element of C; assume c in dom Rland(F-r,B);
+  for F be PartFunc of D,REAL, A be RearrangmentGen of C
+  st F is total & card D = card C holds Rland(F-r,A) = Rland(F,A) - r
+proof
+  let F be PartFunc of D,REAL, B be RearrangmentGen of C;
+  assume
+A1: F is total & card D = card C;
+  then
+A2: dom F = D by PARTFUN1:def 4;
+  then
+A3: dom(F-r) = D by VALUED_1:3;
+  then
+A4: F-r is total by PARTFUN1:def 4;
+  then
+A5: dom Rland(F-r,B) = C & dom Rland(F,B) = C by A1,Th13;
+  then
+A6: dom(Rland(F,B) - r) = C by VALUED_1:3;
+A7: F|D = F & (F-r)|D = F-r by A2,A3,RELAT_1:97;
+  then
+A8: FinS(F-r,D) = FinS(F,D) - (card D |-> r) by A2,RFUNCT_3:76;
+A9: len FinS(F-r,D) = card D & len FinS(F,D) = card D &
+  len(card D |-> r) = card D by A2,A3,A7,FINSEQ_2:69,RFUNCT_3:70;
+A10: len B = card C by Th1;
+  now
+    let c be Element of C;
+    assume c in dom Rland(F-r,B);
     defpred P[set] means $1 in dom B & c in B.$1;
-        len B <> 0 by Th4;
+    len B <> 0 by Th4;
     then 0<len B;
-    then A11: 0+1<=len B by NAT_1:13;
-    then A12: len B in dom B & 1 in dom B by FINSEQ_3:27;
-        C = B.(len B) by Th3;
-    then A13: ex n be Nat st P[n] by A12;
+    then
+A11: 0+1<=len B by NAT_1:13;
+    then
+A12: len B in dom B & 1 in dom B by FINSEQ_3:27;
+    C = B.(len B) by Th3;
+    then
+A13: ex n be Nat st P[n] by A12;
     consider mi be Nat such that
-    A14: P[mi] & for n be Nat st P[n] holds mi<=n from NAT_1:sch 5(A13);
-    A15: 1<=mi & mi<=len B by A14,FINSEQ_3:27;
+A14: P[mi] & for n be Nat st P[n] holds mi<=n from NAT_1:sch 5(A13);
+A15: 1<=mi & mi<=len B by A14,FINSEQ_3:27;
     then max(0,mi-1)=mi-1 by FINSEQ_2:4;
     then reconsider m1 = mi - 1 as Element of NAT by FINSEQ_2:5;
-        m1<=len B - 1 & mi<mi+1 & mi<=mi+1 by A15,NAT_1:13,XREAL_1:11;
+    m1<=len B - 1 & mi<mi+1 & mi<=mi+1 by A15,NAT_1:13,XREAL_1:11;
     then m1<=mi & m1<mi by XREAL_1:21;
-    then A16: m1<=len B & m1<len B by A15,XXREAL_0:2;
-         now per cases;
-     case mi=1;
-      then A17: (Rland(F-r,B)).c = FinS(F-r,D).1 & (Rland(F,B)).c = FinS(F,D).1
+    then
+A16: m1<=len B & m1<len B by A15,XXREAL_0:2;
+    now per cases;
+      case mi=1;
+        then
+A17:    (Rland(F-r,B)).c = FinS(F-r,D).1 & (Rland(F,B)).c = FinS(F,D).1
         by A1,A4,A14,Th15;
 A18:    1 in dom FinS(F-r,D) by A1,A9,A10,A11,FINSEQ_3:27;
-          1 in Seg card D by A1,A10,A12,FINSEQ_1:def 3;
-      then (card D |-> r).1 = r by FUNCOP_1:13;
-      hence (Rland(F-r,B)).c = (Rland(F,B)).c - r by A8,A17,A18,VALUED_1:12,13
-,14,15
-      .= (Rland(F,B) - r).c by A5,A6,VALUED_1:3,def 3;
-     end;
-     case mi <> 1;
-      then 1<mi by A15,REAL_1:def 5;
-      then 1+1<=mi by NAT_1:13;
-      then A19: 1<=m1 by XREAL_1:21;
-      then A20: m1 in dom B by A16,FINSEQ_3:27;
-      not c in B.m1 by A14,A20,XREAL_1:46;
-      then c in B.(m1+1) \ B.m1 by A14,XBOOLE_0:def 4;
-      then A21: (Rland(F-r,B)).c = FinS(F-r,D).(m1+1) & (Rland
-(F,B)).c = FinS(F,D).(m1+1)
-        by A1,A4,A16,A19,Th15;
-A22:     m1+1 in dom FinS(F-r,D) by A1,A9,A10,A14,FINSEQ_3:31;
-          m1+1 in Seg card D by A1,A10,A14,FINSEQ_1:def 3;
-     then (card D |-> r).(m1+1) = r by FUNCOP_1:13;
-      hence (Rland(F-r,B)).c = (Rland(F,B)).c - r by A8,A21,A22,VALUED_1:12,13
-,14,15
-      .= (Rland(F,B) - r).c by A5,A6,VALUED_1:3,def 3;
-     end;
-     end;
+        1 in Seg card D by A1,A10,A12,FINSEQ_1:def 3;
+        then (card D |-> r).1 = r by FUNCOP_1:13;
+        hence (Rland(F-r,B)).c = (Rland(F,B)).c - r by A8,A17,A18,VALUED_1:13
+          .= (Rland(F,B) - r).c by A5,VALUED_1:3;
+      end;
+      case mi <> 1;
+        then 1<mi by A15,REAL_1:def 5;
+        then 1+1<=mi by NAT_1:13;
+        then
+A19:    1<=m1 by XREAL_1:21;
+        then m1 in dom B by A16,FINSEQ_3:27;
+        then not c in B.m1 by A14,XREAL_1:46;
+        then c in B.(m1+1) \ B.m1 by A14,XBOOLE_0:def 4;
+        then
+A20:    (Rland(F-r,B)).c = FinS(F-r,D).(m1+1) & (Rland
+        (F,B)).c = FinS(F,D).(m1+1) by A1,A4,A16,A19,Th15;
+A21:    m1+1 in dom FinS(F-r,D) by A1,A9,A10,A14,FINSEQ_3:31;
+        m1+1 in Seg card D by A1,A10,A14,FINSEQ_1:def 3;
+        then (card D |-> r).(m1+1) = r by FUNCOP_1:13;
+        hence (Rland(F-r,B)).c = (Rland(F,B)).c - r by A8,A20,A21,VALUED_1:13
+          .= (Rland(F,B) - r).c by A5,VALUED_1:3;
+      end;
+    end;
     hence (Rland(F-r,B)).c = (Rland(F,B) - r).c;
-   end;
+  end;
   hence thesis by A5,A6,PARTFUN1:34;
- end;
+end;
 
 theorem
-    for F be PartFunc of D,REAL, A be RearrangmentGen of C
- st F is total & card C = card D
- holds max+(Rlor(F,A) - r), max+(F - r) are_fiberwise_equipotent &
-       FinS(max+(Rlor(F,A) - r), C) = FinS(max+(F - r), D) &
-       Sum (max+(Rlor(F,A) - r), C) = Sum (max+(F - r), D)
- proof let F be PartFunc of D,REAL, B be RearrangmentGen of C; assume
-  A1: F is total & card C = card D;
-  then A2: Rlor(F,B), FinS(F,D) are_fiberwise_equipotent by Th24;
-  A3: dom Rlor(F,B) = C & dom F = D by A1,Th21,PARTFUN1:def 4;
+  for F be PartFunc of D,REAL, A be RearrangmentGen of C
+  st F is total & card C = card D
+  holds max+(Rlor(F,A) - r), max+(F - r) are_fiberwise_equipotent &
+  FinS(max+(Rlor(F,A) - r), C) = FinS(max+(F - r), D) &
+  Sum (max+(Rlor(F,A) - r), C) = Sum (max+(F - r), D)
+proof
+  let F be PartFunc of D,REAL, B be RearrangmentGen of C;
+  assume
+A1: F is total & card C = card D;
+  then
+A2: Rlor(F,B), FinS(F,D) are_fiberwise_equipotent by Th24;
+A3: dom Rlor(F,B) = C & dom F = D by A1,Th21,PARTFUN1:def 4;
   then (Rlor(F,B))|C = Rlor(F,B) & F|D = F by RELAT_1:97;
   then FinS(F,D), F are_fiberwise_equipotent by A3,RFUNCT_3:def 14;
   then Rlor(F,B), F are_fiberwise_equipotent by A2,RFINSEQ:2;
-  then A4: Rlor(F,B)-r, F-r are_fiberwise_equipotent by RFUNCT_3:54;
-  set mp = max+(Rlor(F,B)-r),
-      mf = max+(F-r);
-  A5: dom mp = dom (Rlor(F,B)-r) & dom mf=dom(F-r) by RFUNCT_3:def 10;
-  thus A6: mp, mf are_fiberwise_equipotent by A4,RFUNCT_3:44;
-  A7: mp|C = mp & mf|D = mf by A5,RELAT_1:97;
+  then
+A4: Rlor(F,B)-r, F-r are_fiberwise_equipotent by RFUNCT_3:54;
+  set mp = max+(Rlor(F,B)-r), mf = max+(F-r);
+A5: dom mp = dom (Rlor(F,B)-r) & dom mf=dom(F-r) by RFUNCT_3:def 10; thus
+A6: mp, mf are_fiberwise_equipotent by A4,RFUNCT_3:44;
+A7: mp|C = mp & mf|D = mf by A5,RELAT_1:97;
   then FinS(mp, C), mp are_fiberwise_equipotent by A5,RFUNCT_3:def 14;
-   then FinS(mp, C), mf are_fiberwise_equipotent by A6,RFINSEQ:2;
+  then FinS(mp, C), mf are_fiberwise_equipotent by A6,RFINSEQ:2;
   hence FinS(mp,C) = FinS(mf,D) by A5,A7,RFUNCT_3:def 14;
   hence Sum(mp,C) = Sum FinS(mf,D) by RFUNCT_3:def 15
-  .= Sum (mf,D) by RFUNCT_3:def 15;
- end;
+    .= Sum (mf,D) by RFUNCT_3:def 15;
+end;
 
 theorem
-    for F be PartFunc of D,REAL, A be RearrangmentGen of C
- st F is total & card C = card D holds
-   max-(Rlor(F,A) - r), max-(F - r) are_fiberwise_equipotent &
-   FinS(max-(Rlor(F,A) - r), C) = FinS(max-(F - r), D) &
-   Sum (max-(Rlor(F,A) - r), C) = Sum (max-(F - r), D)
- proof let F be PartFunc of D,REAL, B be RearrangmentGen of C; assume
-  A1: F is total & card C = card D;
-  then A2: Rlor(F,B), FinS(F,D) are_fiberwise_equipotent by Th24;
-  A3: C is finite & dom Rlor(F,B) = C & dom F = D
-   by A1,Th21,PARTFUN1:def 4;
+  for F be PartFunc of D,REAL, A be RearrangmentGen of C
+  st F is total & card C = card D holds
+  max-(Rlor(F,A) - r), max-(F - r) are_fiberwise_equipotent &
+  FinS(max-(Rlor(F,A) - r), C) = FinS(max-(F - r), D) &
+  Sum (max-(Rlor(F,A) - r), C) = Sum (max-(F - r), D)
+proof
+  let F be PartFunc of D,REAL, B be RearrangmentGen of C;
+  assume
+A1: F is total & card C = card D;
+  then
+A2: Rlor(F,B), FinS(F,D) are_fiberwise_equipotent by Th24;
+A3: C is finite & dom Rlor(F,B) = C & dom F = D by A1,Th21,PARTFUN1:def 4;
   then (Rlor(F,B))|C = Rlor(F,B) & F|D = F by RELAT_1:97;
   then FinS(F,D), F are_fiberwise_equipotent by A3,RFUNCT_3:def 14;
   then Rlor(F,B), F are_fiberwise_equipotent by A2,RFINSEQ:2;
-  then A4: Rlor(F,B)-r, F-r are_fiberwise_equipotent by RFUNCT_3:54;
-  set mp = max-(Rlor(F,B)-r),
-      mf = max-(F-r);
-  A5: dom mp = dom (Rlor(F,B)-r) & dom mf=dom(F-r) by RFUNCT_3:def 11;
-  thus A6: mp, mf are_fiberwise_equipotent by A4,RFUNCT_3:45;
-  A7: mp|C = mp & mf|D = mf by A5,RELAT_1:97;
+  then
+A4: Rlor(F,B)-r, F-r are_fiberwise_equipotent by RFUNCT_3:54;
+  set mp = max-(Rlor(F,B)-r), mf = max-(F-r);
+A5: dom mp = dom (Rlor(F,B)-r) & dom mf=dom(F-r) by RFUNCT_3:def 11; thus
+A6: mp, mf are_fiberwise_equipotent by A4,RFUNCT_3:45;
+A7: mp|C = mp & mf|D = mf by A5,RELAT_1:97;
   then FinS(mp, C), mp are_fiberwise_equipotent by A5,RFUNCT_3:def 14;
-   then FinS(mp, C), mf are_fiberwise_equipotent by A6,RFINSEQ:2;
+  then FinS(mp, C), mf are_fiberwise_equipotent by A6,RFINSEQ:2;
   hence FinS(mp,C) = FinS(mf,D) by A5,A7,RFUNCT_3:def 14;
   hence Sum(mp,C) = Sum FinS(mf,D) by RFUNCT_3:def 15
-  .= Sum (mf,D) by RFUNCT_3:def 15;
- end;
+    .= Sum (mf,D) by RFUNCT_3:def 15;
+end;
 
 theorem Th36:
-for F be PartFunc of D,REAL, A be RearrangmentGen of C
+  for F be PartFunc of D,REAL, A be RearrangmentGen of C
   st F is total & card D = card C
   holds len FinS(Rlor(F,A),C) = card C & 1<=len FinS(Rlor(F,A),C)
- proof let F be PartFunc of D,REAL, B be RearrangmentGen of C;
-  set p = Rlor(F,B); assume
-      F is total & card D = card C;
-  then A1: dom p = C by Th21;
-  then A2: p|C = p by RELAT_1:97;
+proof
+  let F be PartFunc of D,REAL, B be RearrangmentGen of C;
+  set p = Rlor(F,B);
+  assume F is total & card D = card C;
+  then
+A1: dom p = C by Th21;
+  then
+A2: p|C = p by RELAT_1:97;
   hence len FinS(p,C) = card C by A1,RFUNCT_3:70;
-      card C <> 0 by CARD_2:59;
+  card C <> 0 by CARD_2:59;
   then 0<card C;
   then 0+1<=card C by NAT_1:13;
   hence thesis by A1,A2,RFUNCT_3:70;
- end;
+end;
 
 theorem
-    for F be PartFunc of D,REAL, A be RearrangmentGen of C
- st F is total & card D = card C & n in dom A holds
+  for F be PartFunc of D,REAL, A be RearrangmentGen of C
+  st F is total & card D = card C & n in dom A holds
   FinS(Rlor(F,A),C) | n = FinS(Rlor(F,A),(Co_Gen A).n)
- proof let F be PartFunc of D,REAL, B be RearrangmentGen of C; assume
-  A1: F is total & card D = card C & n in dom B;
+proof
+  let F be PartFunc of D,REAL, B be RearrangmentGen of C;
+  assume
+A1: F is total & card D = card C & n in dom B;
   set p = Rlor(F,B), b = Co_Gen B;
-  A2: dom B = Seg len B & dom b = Seg len b &
-      dom FinS(p,C) = Seg len FinS(p,C) by FINSEQ_1:def 3;
-  A3: len B = card C & len b = card C & len FinS(p,C) = card C by A1,Th1,Th36;
+A2: dom B = Seg len B & dom b = Seg len b &
+  dom FinS(p,C) = Seg len FinS(p,C) by FINSEQ_1:def 3;
+A3: len B = card C & len b = card C & len FinS(p,C) = card C by A1,Th1,Th36;
   defpred P[Element of NAT] means
-      $1 in dom b implies FinS(Rlor(F,B),C) | $1 = FinS(Rlor(F,B),b.$1);
-  A4: P[0] by FINSEQ_3:27;
-  A5: for m st P[m] holds P[m+1]
-   proof let m; assume
-    A6: P[m];
-    set f = FinS(p,C); assume
-    A7: m+1 in dom b;
-    then A8: 1<=m+1 & m+1<=len b & m<=m+1 by FINSEQ_3:27,NAT_1:11;
-    then A9: 1<=len b & m<=len b & m<=len b - 1 & m<len b
-     by NAT_1:13,XREAL_1:21,XXREAL_0:2;
-    then A10: 1 in dom b & dom(f|(m+1)) = Seg len (f|(m+1)) & m+1 in Seg(m+1)
-      by A8,FINSEQ_1:3,def 3,FINSEQ_3:27;
-    A11: len (f|(m+1)) = m+1 by A3,A8,FINSEQ_1:80;
-    A12: dom p = C by A1,Th21;
-         now per cases;
-     case A13: m=0;
-      consider d be Element of C such that
-      A14: b.1 = {d} by Th9;
-          b.1 c= C & dom p = C by A1,A10,Lm5,Th21;
-      then A15: FinS(p, b.(m+1)) = <* p.d *> by A13,A14,RFUNCT_3:72;
-      A16: d in b.1 by A14,TARSKI:def 1;
-      A17: 1 in Seg 1 & 1<=len FinS(p,C) by A1,Th36,FINSEQ_1:3;
-      then A18: 1 in dom FinS(p,C) & len(FinS(p,C)|(m+1)) = 1
-         by A13,FINSEQ_1:80,FINSEQ_3:27;
-      then (FinS(p,C)|(m+1)).1 = FinS(p,C).1 by A13,A17,RFINSEQ:19
-      .= FinS(F,D).1 by A1,Th25
-      .= p.d by A1,A16,Th22;
-      hence thesis by A15,A18,FINSEQ_1:57;
-     end;
-     case m<>0;
-      then 0<m;
-      then A19: 0+1<=m by NAT_1:13;
-      then consider d be Element of C such that
-      A20: b.(m+1) \ b.m = {d} & b.(m+1) = b.m \/ {d} & b.(m+1) \ {d} = b.m
+  $1 in dom b implies FinS(Rlor(F,B),C) | $1 = FinS(Rlor(F,B),b.$1);
+A4: P[0] by FINSEQ_3:27;
+A5: for m st P[m] holds P[m+1]
+  proof
+    let m;
+    assume
+A6: P[m];
+    set f = FinS(p,C);
+    assume
+A7: m+1 in dom b;
+    then
+A8: 1<=m+1 & m+1<=len b & m<=m+1 by FINSEQ_3:27,NAT_1:11;
+    then
+A9: 1<=len b & m<=len b & m<=len b - 1 & m<len b
+    by NAT_1:13,XREAL_1:21,XXREAL_0:2;
+    then
+A10: 1 in dom b & dom(f|(m+1)) = Seg len (f|(m+1)) & m+1 in Seg(m+1)
+    by A8,FINSEQ_1:3,def 3,FINSEQ_3:27;
+A11: len (f|(m+1)) = m+1 by A3,A8,FINSEQ_1:80;
+A12: dom p = C by A1,Th21;
+    now per cases;
+      case
+A13:    m=0;
+        consider d be Element of C such that
+A14:    b.1 = {d} by Th9;
+        b.1 c= C & dom p = C by A1,A10,Lm5,Th21;
+        then
+A15:    FinS(p, b.(m+1)) = <* p.d *> by A13,A14,RFUNCT_3:72;
+A16:    d in b.1 by A14,TARSKI:def 1;
+A17:    1 in Seg 1 & 1<=len FinS(p,C) by A1,Th36,FINSEQ_1:3;
+        then
+A18:    1 in dom FinS(p,C) & len(FinS(p,C)|(m+1)) = 1
+        by A13,FINSEQ_1:80,FINSEQ_3:27;
+        then (FinS(p,C)|(m+1)).1 = FinS(p,C).1 by A13,A17,RFINSEQ:19
+          .= FinS(F,D).1 by A1,Th25
+          .= p.d by A1,A16,Th22;
+        hence thesis by A15,A18,FINSEQ_1:57;
+      end;
+      case m<>0;
+        then 0<m;
+        then
+A19:    0+1<=m by NAT_1:13;
+        then consider d be Element of C such that
+A20:    b.(m+1) \ b.m = {d} & b.(m+1) = b.m \/ {d} & b.(m+1) \ {d} = b.m
         by A9,Th10;
-      A21: Seg m c= Seg(m+1) by A8,FINSEQ_1:7;
-      A22: (f|(m+1))|m = (f|(m+1))|(Seg m) by FINSEQ_1:def 15
-      .= (f|Seg(m+1))|(Seg m) by FINSEQ_1:def 15
-      .= f|(Seg(m+1) /\ (Seg m)) by RELAT_1:100
-      .= f|(Seg m) by A21,XBOOLE_1:28
-      .= f|m by FINSEQ_1:def 15;
-      A23: d in {d} by TARSKI:def 1;
-      then p.d = FinS(F,D).(m+1) by A1,A9,A19,A20,Th22
-      .= FinS(p,C).(m+1) by A1,Th25
-      .=(f|(m+1)).(m+1) by A2,A3,A7,A10,RFINSEQ:19;
-      then A24: f|(m+1) = f|m ^ <*p.d*> by A11,A22,RFINSEQ:20;
-      A25: b.(m+1) c= C by A7,Lm5;
-      then A26: b.(m+1) is finite by FINSET_1:13;
-       d in dom p /\ b.(m+1) by A12,A20,A23,XBOOLE_0:def 3;
-      then d in dom(p|(b.(m+1))) by FUNCT_1:68;
-      then A27: f|(m+1), p|(b.(m+1)) are_fiberwise_equipotent
-       by A6,A9,A19,A20,A24,A26,FINSEQ_3:27,RFUNCT_3:68;
-          dom(p|(b.(m+1))) = dom p /\ (b.(m+1)) by FUNCT_1:68
-       .= b.(m+1) by A12,A25,XBOOLE_1:28;
-      then FinS(p,b.(m+1)), p|(b.(m+1)) are_fiberwise_equipotent
-         by RFUNCT_3:def 14;
-      then A28: FinS(p,b.(m+1)), f|(m+1) are_fiberwise_equipotent by A27,
-RFINSEQ:2;
-          (f|(m+1)) is non-increasing by RFINSEQ:33;
-      hence thesis by A28,RFINSEQ:36;
-     end;
-     end;
+A21:    Seg m c= Seg(m+1) by A8,FINSEQ_1:7;
+A22:    (f|(m+1))|m = (f|(m+1))|(Seg m) by FINSEQ_1:def 15
+          .= (f|Seg(m+1))|(Seg m) by FINSEQ_1:def 15
+          .= f|(Seg(m+1) /\ (Seg m)) by RELAT_1:100
+          .= f|(Seg m) by A21,XBOOLE_1:28
+          .= f|m by FINSEQ_1:def 15;
+A23:    d in {d} by TARSKI:def 1;
+        then p.d = FinS(F,D).(m+1) by A1,A9,A19,A20,Th22
+          .= FinS(p,C).(m+1) by A1,Th25
+          .=(f|(m+1)).(m+1) by A2,A3,A7,A10,RFINSEQ:19;
+        then
+A24:    f|(m+1) = f|m ^ <*p.d*> by A11,A22,RFINSEQ:20;
+A25:    b.(m+1) is finite by A7,Lm5,FINSET_1:13;
+        d in dom p /\ b.(m+1) by A12,A20,A23,XBOOLE_0:def 3;
+        then d in dom(p|(b.(m+1))) by FUNCT_1:68;
+        then
+A26:    f|(m+1), p|(b.(m+1)) are_fiberwise_equipotent
+        by A6,A9,A19,A20,A24,A25,FINSEQ_3:27,RFUNCT_3:68;
+A27:    dom(p|(b.(m+1))) = dom p /\ (b.(m+1)) by FUNCT_1:68
+          .= b.(m+1) by A7,A12,Lm5,XBOOLE_1:28;
+        (f|(m+1)) is non-increasing by RFINSEQ:33;
+        hence thesis by A26,A27,RFUNCT_3:def 14;
+      end;
+    end;
     hence thesis;
-   end;
-      for m holds P[m] from NAT_1:sch 1(A4,A5);
+  end;
+  for m holds P[m] from NAT_1:sch 1(A4,A5);
   hence thesis by A1,A2,A3;
- end;
+end;
 
 theorem
-    for F be PartFunc of D,REAL, A be RearrangmentGen of C
- st F is total & card D = card C holds Rlor(F-r,A) = Rlor(F,A) - r
- proof let F be PartFunc of D,REAL, B be RearrangmentGen of C; assume
-  A1: F is total & card D = card C;
+  for F be PartFunc of D,REAL, A be RearrangmentGen of C
+  st F is total & card D = card C holds Rlor(F-r,A) = Rlor(F,A) - r
+proof
+  let F be PartFunc of D,REAL, B be RearrangmentGen of C;
+  assume
+A1: F is total & card D = card C;
   set b = Co_Gen B;
-  A2: dom F = D by A1,PARTFUN1:def 4;
-  then A3: dom(F-r) = D by VALUED_1:3,def 3;
-  then A4: F-r is total by PARTFUN1:def 4;
-  then A5: dom Rlor(F-r,B) = C & dom Rlor(F,B) = C by A1,Th21;
-  then A6: dom(Rlor(F,B) - r) = C by VALUED_1:3,def 3;
-  A7: F|D = F & (F-r)|D = F-r by A2,A3,RELAT_1:97;
-  then A8: FinS(F-r,D) = FinS(F,D) - (card D |-> r) by A2,RFUNCT_3:76;
-  A9: len FinS(F-r,D) = card D & len FinS(F,D) = card D &
-      len(card D |-> r) = card D by A2,A3,A7,FINSEQ_2:69,RFUNCT_3:70;
-  A10: len B = card C & len b = card C by Th1;
-       now let c be Element of C; assume c in dom Rlor(F-r,B);
+A2: dom F = D by A1,PARTFUN1:def 4;
+  then
+A3: dom(F-r) = D by VALUED_1:3;
+  then
+A4: F-r is total by PARTFUN1:def 4;
+  then
+A5: dom Rlor(F-r,B) = C & dom Rlor(F,B) = C by A1,Th21;
+  then
+A6: dom(Rlor(F,B) - r) = C by VALUED_1:3;
+A7: F|D = F & (F-r)|D = F-r by A2,A3,RELAT_1:97;
+  then
+A8: FinS(F-r,D) = FinS(F,D) - (card D |-> r) by A2,RFUNCT_3:76;
+A9: len FinS(F-r,D) = card D & len FinS(F,D) = card D &
+  len(card D |-> r) = card D by A2,A3,A7,FINSEQ_2:69,RFUNCT_3:70;
+A10: len B = card C & len b = card C by Th1;
+  now
+    let c be Element of C;
+    assume c in dom Rlor(F-r,B);
     defpred P[set] means $1 in dom b & c in b.$1;
-        len b <> 0 by Th4;
+    len b <> 0 by Th4;
     then 0<len b;
-    then A11: 0+1<=len b by NAT_1:13;
-    then A12: len b in dom b & 1 in dom b by FINSEQ_3:27;
-        C = b.(len b) by Th3;
-    then A13: ex n be Nat st P[n] by A12;
+    then
+A11: 0+1<=len b by NAT_1:13;
+    then
+A12: len b in dom b & 1 in dom b by FINSEQ_3:27;
+    C = b.(len b) by Th3;
+    then
+A13: ex n be Nat st P[n] by A12;
     consider mi be Nat such that
-    A14: P[mi] & for n be Nat st P[n] holds mi<=n from NAT_1:sch 5(A13);
-    A15: 1<=mi & mi<=len b by A14,FINSEQ_3:27;
+A14: P[mi] & for n be Nat st P[n] holds mi<=n from NAT_1:sch 5(A13);
+A15: 1<=mi & mi<=len b by A14,FINSEQ_3:27;
     then max(0,mi-1)=mi-1 by FINSEQ_2:4;
     then reconsider m1 = mi - 1 as Element of NAT by FINSEQ_2:5;
-        m1<=len b - 1 & mi<mi+1 & mi<=mi+1 by A15,NAT_1:13,XREAL_1:11;
+    m1<=len b - 1 & mi<mi+1 & mi<=mi+1 by A15,NAT_1:13,XREAL_1:11;
     then m1<=mi & m1<mi by XREAL_1:21;
-    then A16: m1<=len b & m1<len b by A15,XXREAL_0:2;
-         now per cases;
-     case mi=1;
-      then A17: (Rlor(F-r,B)).c = FinS(F-r,D).1 & (Rlor(F,B)).c = FinS(F,D).1
+    then
+A16: m1<=len b & m1<len b by A15,XXREAL_0:2;
+    now per cases;
+      case mi=1;
+        then
+A17:    (Rlor(F-r,B)).c = FinS(F-r,D).1 & (Rlor(F,B)).c = FinS(F,D ).1
         by A1,A4,A14,Th22;
 A18:    1 in dom FinS(F-r,D) by A1,A9,A10,A11,FINSEQ_3:27;
-          1 in Seg card D by A1,A10,A12,FINSEQ_1:def 3;
-      then (card D |-> r).1 = r by FUNCOP_1:13;
-      hence (Rlor(F-r,B)).c = (Rlor(F,B)).c - r by A8,A17,A18,VALUED_1:12,13,14
-,15
-      .= (Rlor(F,B) - r).c by A5,A6,VALUED_1:3,def 3;
-     end;
-     case mi <> 1;
-      then 1<mi by A15,REAL_1:def 5;
-      then 1+1<=mi by NAT_1:13;
-      then A19: 1<=m1 by XREAL_1:21;
-      then A20: m1 in dom b by A16,FINSEQ_3:27;
-      not c in b.m1 by A14,A20,XREAL_1:46;
-      then c in b.(m1+1) \ b.m1 by A14,XBOOLE_0:def 4;
-      then A21: (Rlor(F-r,B)).c = FinS(F-r,D).(m1+1) & (Rlor
-(F,B)).c = FinS(F,D).(m1+1)
-        by A1,A4,A16,A19,Th22;
-A22:     m1+1 in dom FinS(F-r,D) by A1,A9,A10,A14,FINSEQ_3:31;
-          m1+1 in Seg card D by A1,A10,A14,FINSEQ_1:def 3;
-      then (card D |-> r).(m1+1) = r by FUNCOP_1:13;
-      hence (Rlor(F-r,B)).c = (Rlor(F,B)).c - r by A8,A21,A22,VALUED_1:12,13,14
-,15
-      .= (Rlor(F,B) - r).c by A5,A6,VALUED_1:3,def 3;
-     end;
-     end;
+        1 in Seg card D by A1,A10,A12,FINSEQ_1:def 3;
+        then (card D |-> r).1 = r by FUNCOP_1:13;
+        hence (Rlor(F-r,B)).c = (Rlor(F,B)).c - r by A8,A17,A18,VALUED_1:13
+          .= (Rlor(F,B) - r).c by A5,VALUED_1:3;
+      end;
+      case mi <> 1;
+        then 1<mi by A15,REAL_1:def 5;
+        then 1+1<=mi by NAT_1:13;
+        then
+A19:    1<=m1 by XREAL_1:21;
+        then m1 in dom b by A16,FINSEQ_3:27;
+        then not c in b.m1 by A14,XREAL_1:46;
+        then c in b.(m1+1) \ b.m1 by A14,XBOOLE_0:def 4;
+        then
+A20:    (Rlor(F-r,B)).c = FinS(F-r,D).(m1+1) & (Rlor
+        (F,B)).c = FinS(F,D).(m1+1) by A1,A4,A16,A19,Th22;
+A21:    m1+1 in dom FinS(F-r,D) by A1,A9,A10,A14,FINSEQ_3:31;
+        m1+1 in Seg card D by A1,A10,A14,FINSEQ_1:def 3;
+        then (card D |-> r).(m1+1) = r by FUNCOP_1:13;
+        hence (Rlor(F-r,B)).c = (Rlor(F,B)).c - r by A8,A20,A21,VALUED_1:13
+          .= (Rlor(F,B) - r).c by A5,VALUED_1:3;
+      end;
+    end;
     hence (Rlor(F-r,B)).c = (Rlor(F,B) - r).c;
-   end;
+  end;
   hence thesis by A5,A6,PARTFUN1:34;
- end;
+end;
 
 theorem
-    for F be PartFunc of D,REAL, A be RearrangmentGen of C
- st F is total & card D = card C holds
- Rland(F,A) , F are_fiberwise_equipotent & Rlor
- (F,A) , F are_fiberwise_equipotent &
-             rng Rland(F,A) = rng F & rng Rlor(F,A) = rng F
- proof let F be PartFunc of D,REAL, A be RearrangmentGen of C; assume
-  A1: F is total & card D = card C;
-  then A2: Rland(F,A), FinS(F,D) are_fiberwise_equipotent &
-      Rlor(F,A), FinS(F,D) are_fiberwise_equipotent by Th17,Th24;
-  A3: dom F = D by A1,PARTFUN1:def 4;
-       dom(F|D) = dom F /\ D by FUNCT_1:68
-  .= D by A3;
+  for F be PartFunc of D,REAL, A be RearrangmentGen of C
+  st F is total & card D = card C holds
+  Rland(F,A) , F are_fiberwise_equipotent & Rlor
+  (F,A) , F are_fiberwise_equipotent &
+  rng Rland(F,A) = rng F & rng Rlor(F,A) = rng F
+proof
+  let F be PartFunc of D,REAL, A be RearrangmentGen of C;
+  assume
+A1: F is total & card D = card C;
+  then
+A2: Rland(F,A), FinS(F,D) are_fiberwise_equipotent &
+  Rlor(F,A), FinS(F,D) are_fiberwise_equipotent by Th17,Th24;
+A3: dom F = D by A1,PARTFUN1:def 4;
+  dom(F|D) = dom F /\ D by FUNCT_1:68
+    .= D by A3;
   then FinS(F,D), F|D are_fiberwise_equipotent by RFUNCT_3:def 14;
   then Rland(F,A), F|D are_fiberwise_equipotent & Rlor
-(F,A), F|D are_fiberwise_equipotent
-   by A2,RFINSEQ:2;
+  (F,A), F|D are_fiberwise_equipotent by A2,RFINSEQ:2;
   hence Rland(F,A), F are_fiberwise_equipotent &
-        Rlor(F,A), F are_fiberwise_equipotent by A3,RELAT_1:97;
+  Rlor(F,A), F are_fiberwise_equipotent by A3,RELAT_1:97;
   hence thesis by RFINSEQ:1;
- end;
+end;
 

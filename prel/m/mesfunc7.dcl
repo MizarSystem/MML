@@ -28,8 +28,8 @@
 <ArticleID name="MEMBERED"/>
 <ArticleID name="SETFAM_1"/>
 <ArticleID name="SUPINF_1"/>
-<ArticleID name="MESFUNC1"/>
 <ArticleID name="VALUED_0"/>
+<ArticleID name="MESFUNC1"/>
 <ArticleID name="CARD_4"/>
 <ArticleID name="SUPINF_2"/>
 <ArticleID name="SETWISEO"/>
@@ -70,7 +70,7 @@
 </RCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="229"/>
+<Func kind="K" nr="234"/>
 <Cluster>
 <Adjective nr="4"/>
 <Adjective nr="16">
@@ -90,7 +90,7 @@
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="229"/>
+<Func kind="K" nr="234"/>
 <Cluster>
 <Adjective nr="4"/>
 <Adjective nr="16">

@@ -26,69 +26,66 @@ reserve i,j,k for Element of NAT;
 
 scheme :: AMI_4:sch 1
  Euklides' { F(Element of NAT)->Element of NAT,G(Element of NAT)->
-Element of NAT,a()->Element of NAT,b()->Element of NAT } :
+  Element of NAT,a()->Element of NAT,b()->Element of NAT } :
   ex k st F(k) = a() hcf b() & G(k) = 0
-   provided
- 0 < b() and
- b() < a() and
- F(0) = a() and
- G(0) = b() and
+provided
+ 0 < b()
+and
+ b() < a()
+and
+ F(0) = a()
+and
+ G(0) = b()
+and
  for k st G(k) > 0 holds F(k+1) = G(k) & G(k+1) = F(k) mod G(k);
 
 begin :: Euclide algorithm
 
 definition
- func Euclide-Algorithm -> programmed FinPartState of SCM equals
+  func Euclide-Algorithm -> programmed FinPartState of SCM equals
 :: AMI_4:def 1
-
-  (il.0 .--> (dl.2 := dl.1)) +*
-  ((il.1 .--> Divide(dl.0,dl.1)) +*
-   ((il.2 .--> (dl.0 := dl.2)) +*
-    ((il.3 .--> (dl.1 >0_goto il.0)) +*
-     (il.4 .--> halt SCM))));
+  (il.0 .--> (dl.2 := dl.1)) +* ((il.1 .--> Divide(dl.0,dl.1)) +*
+  ((il.2 .--> (dl.0 := dl.2)) +* ((il.3 .--> (dl.1 >0_goto il.0)) +*
+  (il.4 .--> halt SCM))));
 end;
 
 canceled 3;
 
 theorem :: AMI_4:4
- dom (Euclide-Algorithm qua Function) = { il.0,il.1,il.2,il.3,il.4 };
+  dom (Euclide-Algorithm qua Function) = { il.0,il.1,il.2,il.3,il.4 };
 
 begin :: Natural semantics of the program
 
 theorem :: AMI_4:5
   for s being State of SCM st Euclide-Algorithm c= s
-  for k st IC (Computation s).k = il.0
-  holds IC (Computation s).(k+1) = il.1 &
-   (Computation s).(k+1).dl.0 = (Computation s).k.dl.0 &
-   (Computation s).(k+1).dl.1 = (Computation s).k.dl.1 &
-   (Computation s).(k+1).dl.2 = (Computation s).k.dl.1;
+  for k st IC (Computation s).k = il.0 holds IC (Computation s).(k+1) = il.1 &
+  (Computation s).(k+1).dl.0 = (Computation s).k.dl.0 &
+  (Computation s).(k+1).dl.1 = (Computation s).k.dl.1 &
+  (Computation s).(k+1).dl.2 = (Computation s).k.dl.1;
 
 theorem :: AMI_4:6
   for s being State of SCM st Euclide-Algorithm c= s
-  for k st IC (Computation s).k = il.1
-  holds IC (Computation s).(k+1) = il.2 &
-   (Computation s).(k+1).dl.0 =
-    (Computation s).k.dl.0 div (Computation s).k.dl.1 &
-   (Computation s).(k+1).dl.1 =
-    (Computation s).k.dl.0 mod (Computation s).k.dl.1 &
-   (Computation s).(k+1).dl.2 = (Computation s).k.dl.2;
+  for k st IC (Computation s).k = il.1 holds IC (Computation s).(k+1) = il.2 &
+  (Computation s).(k+1).dl.0 =
+  (Computation s).k.dl.0 div (Computation s).k.dl.1 &
+  (Computation s).(k+1).dl.1 =
+  (Computation s).k.dl.0 mod (Computation s).k.dl.1 &
+  (Computation s).(k+1).dl.2 = (Computation s).k.dl.2;
 
 theorem :: AMI_4:7
   for s being State of SCM st Euclide-Algorithm c= s
-  for k st IC (Computation s).k = il.2
-  holds IC (Computation s).(k+1) = il.3 &
-   (Computation s).(k+1).dl.0 = (Computation s).k.dl.2 &
-   (Computation s).(k+1).dl.1 = (Computation s).k.dl.1 &
-   (Computation s).(k+1).dl.2 = (Computation s).k.dl.2;
+  for k st IC (Computation s).k = il.2 holds IC (Computation s).(k+1) = il.3 &
+  (Computation s).(k+1).dl.0 = (Computation s).k.dl.2 &
+  (Computation s).(k+1).dl.1 = (Computation s).k.dl.1 &
+  (Computation s).(k+1).dl.2 = (Computation s).k.dl.2;
 
 theorem :: AMI_4:8
   for s being State of SCM st Euclide-Algorithm c= s
-  for k st IC (Computation s).k = il.3
-  holds
-   ((Computation s).k.dl.1 > 0 implies IC (Computation s).(k+1) = il.0) &
-   ((Computation s).k.dl.1 <= 0 implies IC (Computation s).(k+1) = il.4) &
-   (Computation s).(k+1).dl.0 = (Computation s).k.dl.0 &
-   (Computation s).(k+1).dl.1 = (Computation s).k.dl.1;
+  for k st IC (Computation s).k = il.3 holds
+  ((Computation s).k.dl.1 > 0 implies IC (Computation s).(k+1) = il.0) &
+  ((Computation s).k.dl.1 <= 0 implies IC (Computation s).(k+1) = il.4) &
+  (Computation s).(k+1).dl.0 = (Computation s).k.dl.0 &
+  (Computation s).(k+1).dl.1 = (Computation s).k.dl.1;
 
 theorem :: AMI_4:9
   for s being State of SCM st Euclide-Algorithm c= s
@@ -101,20 +98,22 @@ theorem :: AMI_4:10
   holds (Result s).dl.0 = x gcd y;
 
 definition
- func Euclide-Function -> PartFunc of FinPartSt SCM, FinPartSt SCM means
+  func Euclide-Function -> PartFunc of FinPartSt SCM, FinPartSt SCM means
 :: AMI_4:def 2
+
   for p,q being FinPartState of SCM holds [p,q] in it
-   iff ex x,y being Integer st x > 0 & y > 0 &
-    p = (dl.0,dl.1) --> (x,y) & q = dl.0 .--> (x gcd y);
+  iff ex x,y being Integer st x > 0 & y > 0 &
+  p = (dl.0,dl.1) --> (x,y) & q = dl.0 .--> (x gcd y);
 end;
 
 theorem :: AMI_4:11
- for p being set holds p in dom Euclide-Function iff
-   ex x,y being Integer st x > 0 & y > 0 & p = (dl.0,dl.1) --> (x,y);
+  for p being set holds p in dom Euclide-Function iff
+  ex x,y being Integer st x > 0 & y > 0 & p = (dl.0,dl.1) --> (x,y);
 
 theorem :: AMI_4:12
- for i,j being Integer st i > 0 & j > 0 holds
+  for i,j being Integer st i > 0 & j > 0 holds
   Euclide-Function.((dl.0,dl.1) --> (i,j)) = dl.0 .--> (i gcd j);
 
 theorem :: AMI_4:13
-     (Start-At il.0) +* Euclide-Algorithm computes Euclide-Function;
+  (Start-At il.0) +* Euclide-Algorithm computes Euclide-Function;
+

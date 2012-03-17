@@ -23,564 +23,609 @@ environ
 begin  :: Preliminaries
 
 reserve i, x, I for set,
-        A, B, M for ManySortedSet of I,
-        f, f1 for Function;
+  A, B, M for ManySortedSet of I,
+  f, f1 for Function;
 
-notation let I, A, B;
- synonym A in' B for A in B;
-  end;
+notation
+  let I, A, B;
+  synonym A in' B for A in B;
+end;
 
-notation let I, A, B;
- synonym A c=' B for A c= B;
-  end;
+notation
+  let I, A, B;
+  synonym A c=' B for A c= B;
+end;
 
 theorem :: CLOSURE2:1
-    for M being non empty set
- for X, Y being Element of M st X c= Y
+  for M being non empty set for X, Y being Element of M st X c= Y
   holds (id M).X c= (id M).Y;
 
 canceled;
 
 theorem :: CLOSURE2:3
-for I being non empty set
- for A being ManySortedSet of I
-  for B being ManySortedSubset of A holds
-   rng B c= union rng bool A;
+  for I being non empty set for A being ManySortedSet of I
+  for B being ManySortedSubset of A holds rng B c= union rng bool A;
 
 registration
- cluster empty -> functional set;
+  cluster empty -> functional set;
 end;
 
 registration
- cluster empty functional set;
+  cluster empty functional set;
 end;
 
-registration let f, g be Function;
- cluster { f,g } -> functional;
+registration
+  let f, g be Function;
+  cluster { f,g } -> functional;
 end;
 
 begin  :: Set of Many Sorted Subsets of a Many Sorted Set
 
-definition let I, M;
- func Bool M -> set means
+definition
+  let I, M;
+  func Bool M -> set means
 :: CLOSURE2:def 1
+
   x in it iff x is ManySortedSubset of M;
 end;
 
-registration let I, M;
- cluster Bool M -> non empty functional with_common_domain;
+registration
+  let I, M;
+  cluster Bool M -> non empty functional with_common_domain;
 end;
 
-definition let I, M;
- mode SubsetFamily of M is Subset of Bool M;
+definition
+  let I, M;
+  mode SubsetFamily of M is Subset of Bool M;
 end;
 
-definition let I, M;
- redefine func Bool M -> SubsetFamily of M;
+definition
+  let I, M;
+  redefine func Bool M -> SubsetFamily of M;
 end;
 
-registration let I, M;
- cluster non empty functional with_common_domain SubsetFamily of M;
+registration
+  let I, M;
+  cluster non empty functional with_common_domain SubsetFamily of M;
 end;
 
-registration let I, M;
- cluster empty finite SubsetFamily of M;
+registration
+  let I, M;
+  cluster empty finite SubsetFamily of M;
 end;
 
 reserve SF, SG for SubsetFamily of M;
 
-definition let I, M;
-           let S be non empty SubsetFamily of M;
- redefine mode Element of S -> ManySortedSubset of M;
+definition
+  let I, M;
+  let S be non empty SubsetFamily of M;
+  redefine mode Element of S -> ManySortedSubset of M;
 end;
 
 theorem :: CLOSURE2:4    :: MSSUBFAM:34
-SF \/ SG is SubsetFamily of M;
+  SF \/ SG is SubsetFamily of M;
 
 theorem :: CLOSURE2:5   :: MSSUBFAM:35
-    SF /\ SG is SubsetFamily of M;
+  SF /\ SG is SubsetFamily of M;
 
 theorem :: CLOSURE2:6    :: MSSUBFAM:36
-    SF \ x is SubsetFamily of M;
+  SF \ x is SubsetFamily of M;
 
 theorem :: CLOSURE2:7   :: MSSUBFAM:37
-    SF \+\ SG is SubsetFamily of M;
+  SF \+\ SG is SubsetFamily of M;
 
 theorem :: CLOSURE2:8    :: MSSUBFAM:38
-A c= M implies {A} is SubsetFamily of M;
+  A c= M implies {A} is SubsetFamily of M;
 
 theorem :: CLOSURE2:9    :: MSSUBFAM:39
-A c= M & B c= M implies {A,B} is SubsetFamily of M;
+  A c= M & B c= M implies {A,B} is SubsetFamily of M;
 
 reserve E, T for Element of Bool M;
 
 theorem :: CLOSURE2:10
-E /\ T in Bool M;
+  E /\ T in Bool M;
 
 theorem :: CLOSURE2:11
-E \/ T in Bool M;
+  E \/ T in Bool M;
 
 theorem :: CLOSURE2:12
-    E \ A in Bool M;
+  E \ A in Bool M;
 
 theorem :: CLOSURE2:13
-    E \+\ T in Bool M;
+  E \+\ T in Bool M;
 
 begin  :: Many Sorted Operator corresponding
-       ::  to the Operator on Many Sorted Subsets
 
-definition let S be functional set;
- canceled;
+::  to the Operator on Many Sorted Subsets
 
- func |. S .| -> Function means
+definition
+  let S be functional set;
+  canceled;
+  func |. S .| -> Function means
 :: CLOSURE2:def 3
- ex A being non empty functional set st A = S &
+
+  ex A being non empty functional set st A = S &
   dom it = meet { dom x where x is Element of A : not contradiction } &
-   for i st i in dom it holds
-    it.i = { x.i where x is Element of A : not contradiction }
-     if S <> {}
+  for i st i in dom it holds
+  it.i = { x.i where x is Element of A : not contradiction } if S <> {}
   otherwise it = {};
 end;
 
 theorem :: CLOSURE2:14
-for SF being non empty SubsetFamily of M holds dom |.SF.| = I;
+  for SF being non empty SubsetFamily of M holds dom |.SF.| = I;
 
-registration let S be empty functional set;
- cluster |. S .| -> empty;
+registration
+  let S be empty functional set;
+  cluster |. S .| -> empty;
 end;
 
-definition let I, M;
-           let S be SubsetFamily of M;
- func |: S :| -> ManySortedSet of I equals
+definition
+  let I, M;
+  let S be SubsetFamily of M;
+  func |: S :| -> ManySortedSet of I equals
 :: CLOSURE2:def 4
-   |. S .| if S <> {}
-   otherwise [0]I;
+
+  |. S .| if S <> {}
+  otherwise [0]I;
 end;
 
-registration let I, M;
-           let S be empty SubsetFamily of M;
- cluster |: S :| -> empty-yielding;
+registration
+  let I, M;
+  let S be empty SubsetFamily of M;
+  cluster |: S :| -> empty-yielding;
 end;
 
 theorem :: CLOSURE2:15
-SF is non empty implies
- for i st i in I holds
+  SF is non empty implies for i st i in I holds
   |:SF:|.i = { x.i where x is Element of Bool M : x in SF };
 
-registration let I, M;
-           let SF be non empty SubsetFamily of M;
- cluster |: SF :| -> non-empty;
+registration
+  let I, M;
+  let SF be non empty SubsetFamily of M;
+  cluster |: SF :| -> non-empty;
 end;
 
 theorem :: CLOSURE2:16
-dom |.{f}.| = dom f;
+  dom |.{f}.| = dom f;
 
 theorem :: CLOSURE2:17
-    dom |.{f,f1}.| = dom f /\ dom f1;
+  dom |.{f,f1}.| = dom f /\ dom f1;
 
 theorem :: CLOSURE2:18
-i in dom f implies |.{f}.|.i = {f.i};
+  i in dom f implies |.{f}.|.i = {f.i};
 
 theorem :: CLOSURE2:19
-    i in I & SF = {f} implies |:SF:|.i = {f.i};
+  i in I & SF = {f} implies |:SF:|.i = {f.i};
 
 theorem :: CLOSURE2:20
-i in dom |.{f,f1}.| implies |.{f,f1}.|.i = { f.i , f1.i };
+  i in dom |.{f,f1}.| implies |.{f,f1}.|.i = { f.i, f1.i };
 
 theorem :: CLOSURE2:21
-i in I & SF = {f,f1} implies |:SF:|.i = { f.i , f1.i };
+  i in I & SF = {f,f1} implies |:SF:|.i = { f.i, f1.i };
 
-definition let I, M, SF;
- redefine func |:SF:| -> MSSubsetFamily of M;
+definition
+  let I, M, SF;
+  redefine func |:SF:| -> MSSubsetFamily of M;
 end;
 
 theorem :: CLOSURE2:22
-A in SF implies A in' |:SF:|;
+  A in SF implies A in' |:SF:|;
 
 theorem :: CLOSURE2:23
-SF = {A,B} implies union |:SF:| = A \/ B;
+  SF = {A,B} implies union |:SF:| = A \/ B;
 
 theorem :: CLOSURE2:24    :: SETFAM_1:12
-SF = {E,T} implies meet |:SF:| = E /\ T;
+  SF = {E,T} implies meet |:SF:| = E /\ T;
 
 theorem :: CLOSURE2:25    :: MSSUBFAM:4
-for Z being ManySortedSubset of M st
- for Z1 being ManySortedSet of I st Z1 in SF holds Z c=' Z1 holds
+  for Z being ManySortedSubset of M st
+  for Z1 being ManySortedSet of I st Z1 in SF holds Z c=' Z1 holds
   Z c=' meet |:SF:|;
 
 theorem :: CLOSURE2:26
-    |: Bool M :| = bool M;
+  |: Bool M :| = bool M;
 
-definition let I, M;
- let IT be SubsetFamily of M;
- attr IT is additive means
+definition
+  let I, M;
+  let IT be SubsetFamily of M;
+  attr IT is additive means
 :: CLOSURE2:def 5
-      for A, B st A in IT & B in IT holds A \/ B in IT;
 
- attr IT is absolutely-additive means
+  for A, B st A in IT & B in IT holds A \/ B in IT;
+  attr IT is absolutely-additive means
 :: CLOSURE2:def 6
+
   for F be SubsetFamily of M st F c= IT holds union |:F:| in IT;
-
- attr IT is multiplicative means
+  attr IT is multiplicative means
 :: CLOSURE2:def 7
-      for A, B st A in IT & B in IT holds A /\ B in IT;
-
- attr IT is absolutely-multiplicative means
+  for A, B st A in IT & B in IT holds A /\ B in IT;
+  attr IT is absolutely-multiplicative means
 :: CLOSURE2:def 8
+
   for F be SubsetFamily of M st F c= IT holds meet |:F:| in IT;
-
- attr IT is properly-upper-bound means
+  attr IT is properly-upper-bound means
 :: CLOSURE2:def 9
-  M in IT;
 
- attr IT is properly-lower-bound means
+  M in IT;
+  attr IT is properly-lower-bound means
 :: CLOSURE2:def 10
+
   [0]I in IT;
 end;
 
-registration let I, M;
- cluster non empty functional with_common_domain
-          additive absolutely-additive
-           multiplicative absolutely-multiplicative
-            properly-upper-bound properly-lower-bound
-             SubsetFamily of M;
+registration
+  let I, M;
+  cluster non empty functional with_common_domain additive absolutely-additive
+    multiplicative absolutely-multiplicative
+    properly-upper-bound properly-lower-bound SubsetFamily of M;
 end;
 
-definition let I, M;
- redefine func Bool M -> additive absolutely-additive multiplicative
-       absolutely-multiplicative properly-upper-bound properly-lower-bound
-        SubsetFamily of M;
+definition
+  let I, M;
+  redefine func Bool M -> additive absolutely-additive multiplicative
+  absolutely-multiplicative properly-upper-bound properly-lower-bound
+  SubsetFamily of M;
 end;
 
-registration let I, M;
- cluster absolutely-additive -> additive SubsetFamily of M;
+registration
+  let I, M;
+  cluster absolutely-additive -> additive SubsetFamily of M;
 end;
 
-registration let I, M;
- cluster absolutely-multiplicative -> multiplicative SubsetFamily of M;
+registration
+  let I, M;
+  cluster absolutely-multiplicative -> multiplicative SubsetFamily of M;
 end;
 
-registration let I, M;
- cluster absolutely-multiplicative ->
-                 properly-upper-bound SubsetFamily of M;
+registration
+  let I, M;
+  cluster absolutely-multiplicative -> properly-upper-bound SubsetFamily of M;
 end;
 
-registration let I, M;
- cluster properly-upper-bound -> non empty SubsetFamily of M;
+registration
+  let I, M;
+  cluster properly-upper-bound -> non empty SubsetFamily of M;
 end;
 
-registration let I, M;
- cluster absolutely-additive ->
-                 properly-lower-bound SubsetFamily of M;
+registration
+  let I, M;
+  cluster absolutely-additive -> properly-lower-bound SubsetFamily of M;
 end;
 
-registration let I, M;
- cluster properly-lower-bound -> non empty SubsetFamily of M;
+registration
+  let I, M;
+  cluster properly-lower-bound -> non empty SubsetFamily of M;
 end;
 
 begin  :: Properties of Closure Operators
 
-definition let I, M;
- mode SetOp of M is Function of Bool M, Bool M;
+definition
+  let I, M;
+  mode SetOp of M is Function of Bool M, Bool M;
 end;
 
-definition let I, M;
-           let f be SetOp of M;
-           let x be Element of Bool M;
- redefine func f.x -> Element of Bool M;
+definition
+  let I, M;
+  let f be SetOp of M;
+  let x be Element of Bool M;
+  redefine func f.x -> Element of Bool M;
 end;
 
-definition let I, M;
- let IT be SetOp of M;
- canceled;
-
- attr IT is reflexive means
+definition
+  let I, M;
+  let IT be SetOp of M;
+  canceled;
+  attr IT is reflexive means
 :: CLOSURE2:def 12
+
   for x being Element of Bool M holds x c=' IT.x;
-
- attr IT is monotonic means
+  attr IT is monotonic means
 :: CLOSURE2:def 13
+
   for x, y being Element of Bool M st x c=' y holds IT.x c=' IT.y;
-
- attr IT is idempotent means
+  attr IT is idempotent means
 :: CLOSURE2:def 14
-  for x being Element of Bool M holds IT.x = IT.(IT.x);
 
- attr IT is topological means
+  for x being Element of Bool M holds IT.x = IT.(IT.x);
+  attr IT is topological means
 :: CLOSURE2:def 15
+
   for x, y being Element of Bool M holds IT.(x \/ y) = (IT.x) \/ (IT.y);
 end;
 
-registration let I, M;
- cluster reflexive monotonic idempotent topological SetOp of M;
+registration
+  let I, M;
+  cluster reflexive monotonic idempotent topological SetOp of M;
 end;
 
 theorem :: CLOSURE2:27   :: CLOSURE:11
-    id (Bool A) is reflexive SetOp of A;
+  id (Bool A) is reflexive SetOp of A;
 
 theorem :: CLOSURE2:28   :: CLOSURE:12
-    id (Bool A) is monotonic SetOp of A;
+  id (Bool A) is monotonic SetOp of A;
 
 theorem :: CLOSURE2:29    :: CLOSURE:13
-    id (Bool A) is idempotent SetOp of A;
+  id (Bool A) is idempotent SetOp of A;
 
 theorem :: CLOSURE2:30   :: CLOSURE:15
-    id (Bool A) is topological SetOp of A;
+  id (Bool A) is topological SetOp of A;
 
 reserve g, h for SetOp of M;
 
 theorem :: CLOSURE2:31   :: CLOSURE:16
-    E = M & g is reflexive implies E = g.E;
+  E = M & g is reflexive implies E = g.E;
 
 theorem :: CLOSURE2:32   :: CLOSURE:17
-    (g is reflexive & for X being Element of Bool M holds g.X c= X)
- implies g is idempotent;
+  (g is reflexive & for X being Element of Bool M holds g.X c= X)
+  implies g is idempotent;
 
 theorem :: CLOSURE2:33   :: CLOSURE:18
-    for A being Element of Bool M st A = E /\ T holds
- g is monotonic implies g.A c= g.E /\ g.T;
+  for A being Element of Bool M st A = E /\ T holds
+  g is monotonic implies g.A c= g.E /\ g.T;
 
-registration let I, M;
- cluster topological -> monotonic SetOp of M;
+registration
+  let I, M;
+  cluster topological -> monotonic SetOp of M;
 end;
 
 theorem :: CLOSURE2:34   :: CLOSURE:19
-    for A being Element of Bool M st A = E \ T holds
- g is topological implies g.E \ g.T c= g.A;
+  for A being Element of Bool M st A = E \ T holds
+  g is topological implies g.E \ g.T c= g.A;
 
-definition let I, M, h, g;
- redefine func g * h -> SetOp of M;
+definition
+  let I, M, h, g;
+  redefine func g * h -> SetOp of M;
 end;
 
 theorem :: CLOSURE2:35   :: CLOSURE:21
-    g is reflexive & h is reflexive implies g * h is reflexive;
+  g is reflexive & h is reflexive implies g * h is reflexive;
 
 theorem :: CLOSURE2:36   :: CLOSURE:22
-    g is monotonic & h is monotonic implies g * h is monotonic;
+  g is monotonic & h is monotonic implies g * h is monotonic;
 
 theorem :: CLOSURE2:37    :: CLOSURE:23
-    g is idempotent & h is idempotent & g*h = h*g implies g * h is idempotent;
+  g is idempotent & h is idempotent & g*h = h*g implies g * h is idempotent;
 
 theorem :: CLOSURE2:38   :: CLOSURE:25
-    g is topological & h is topological implies g * h is topological;
+  g is topological & h is topological implies g * h is topological;
 
 begin  :: On the Closure Operator and the Closure System
 
 reserve S for 1-sorted;
 
-definition let S;
- struct(many-sorted over S) ClosureStr over S (#
-       Sorts -> ManySortedSet of the carrier of S,
-       Family -> SubsetFamily of the Sorts #);
+definition
+  let S;
+  struct(many-sorted over S) ClosureStr over S (#
+    Sorts -> ManySortedSet of the carrier of S,
+    Family -> SubsetFamily of the Sorts #);
 end;
 
-reserve
-        MS for many-sorted over S;
+reserve MS for many-sorted over S;
 
-definition let S;
- let IT be ClosureStr over S;
- attr IT is additive means
+definition
+  let S;
+  let IT be ClosureStr over S;
+  attr IT is additive means
 :: CLOSURE2:def 16
+
   the Family of IT is additive;
-
- attr IT is absolutely-additive means
+  attr IT is absolutely-additive means
 :: CLOSURE2:def 17
+
   the Family of IT is absolutely-additive;
-
- attr IT is multiplicative means
+  attr IT is multiplicative means
 :: CLOSURE2:def 18
+
   the Family of IT is multiplicative;
-
- attr IT is absolutely-multiplicative means
+  attr IT is absolutely-multiplicative means
 :: CLOSURE2:def 19
+
   the Family of IT is absolutely-multiplicative;
-
- attr IT is properly-upper-bound means
+  attr IT is properly-upper-bound means
 :: CLOSURE2:def 20
-  the Family of IT is properly-upper-bound;
 
- attr IT is properly-lower-bound means
+  the Family of IT is properly-upper-bound;
+  attr IT is properly-lower-bound means
 :: CLOSURE2:def 21
+
   the Family of IT is properly-lower-bound;
 end;
 
-definition let S, MS;
- func Full MS -> ClosureStr over S equals
+definition
+  let S, MS;
+  func Full MS -> ClosureStr over S equals
 :: CLOSURE2:def 22
-    ClosureStr (#the Sorts of MS, Bool the Sorts of MS#);
+  ClosureStr (#the Sorts of MS, Bool the Sorts of MS#);
 end;
 
-registration let S, MS;
- cluster Full MS -> strict additive absolutely-additive
-                    multiplicative absolutely-multiplicative
-                    properly-upper-bound properly-lower-bound;
+registration
+  let S, MS;
+  cluster Full MS -> strict additive absolutely-additive
+    multiplicative absolutely-multiplicative
+    properly-upper-bound properly-lower-bound;
 end;
 
-registration let S;
-           let MS be non-empty many-sorted over S;
- cluster Full MS -> non-empty;
+registration
+  let S;
+  let MS be non-empty many-sorted over S;
+  cluster Full MS -> non-empty;
 end;
 
-registration let S;
- cluster strict non-empty additive absolutely-additive
-         multiplicative absolutely-multiplicative
-         properly-upper-bound properly-lower-bound ClosureStr over S;
+registration
+  let S;
+  cluster strict non-empty additive absolutely-additive
+    multiplicative absolutely-multiplicative
+    properly-upper-bound properly-lower-bound ClosureStr over S;
 end;
 
-registration let S;
-           let CS be additive ClosureStr over S;
- cluster the Family of CS -> additive;
+registration
+  let S;
+  let CS be additive ClosureStr over S;
+  cluster the Family of CS -> additive;
 end;
 
-registration let S;
-           let CS be absolutely-additive ClosureStr over S;
- cluster the Family of CS -> absolutely-additive;
+registration
+  let S;
+  let CS be absolutely-additive ClosureStr over S;
+  cluster the Family of CS -> absolutely-additive;
 end;
 
-registration let S;
-           let CS be multiplicative ClosureStr over S;
- cluster the Family of CS -> multiplicative;
+registration
+  let S;
+  let CS be multiplicative ClosureStr over S;
+  cluster the Family of CS -> multiplicative;
 end;
 
-registration let S;
-           let CS be absolutely-multiplicative ClosureStr over S;
- cluster the Family of CS -> absolutely-multiplicative;
+registration
+  let S;
+  let CS be absolutely-multiplicative ClosureStr over S;
+  cluster the Family of CS -> absolutely-multiplicative;
 end;
 
-registration let S;
-           let CS be properly-upper-bound ClosureStr over S;
- cluster the Family of CS -> properly-upper-bound;
+registration
+  let S;
+  let CS be properly-upper-bound ClosureStr over S;
+  cluster the Family of CS -> properly-upper-bound;
 end;
 
-registration let S;
-           let CS be properly-lower-bound ClosureStr over S;
- cluster the Family of CS -> properly-lower-bound;
+registration
+  let S;
+  let CS be properly-lower-bound ClosureStr over S;
+  cluster the Family of CS -> properly-lower-bound;
 end;
 
-registration let S;
-           let M be non-empty ManySortedSet of the carrier of S;
-           let F be SubsetFamily of M;
- cluster ClosureStr (#M, F#) -> non-empty;
+registration
+  let S;
+  let M be non-empty ManySortedSet of the carrier of S;
+  let F be SubsetFamily of M;
+  cluster ClosureStr (#M, F#) -> non-empty;
 end;
 
-registration let S, MS;
-           let F be additive SubsetFamily of the Sorts of MS;
- cluster ClosureStr (#the Sorts of MS, F#) -> additive;
+registration
+  let S, MS;
+  let F be additive SubsetFamily of the Sorts of MS;
+  cluster ClosureStr (#the Sorts of MS, F#) -> additive;
 end;
 
-registration let S, MS;
-           let F be absolutely-additive SubsetFamily of the Sorts of MS;
- cluster ClosureStr (#the Sorts of MS, F#) -> absolutely-additive;
+registration
+  let S, MS;
+  let F be absolutely-additive SubsetFamily of the Sorts of MS;
+  cluster ClosureStr (#the Sorts of MS, F#) -> absolutely-additive;
 end;
 
-registration let S, MS;
-           let F be multiplicative SubsetFamily of the Sorts of MS;
- cluster ClosureStr (#the Sorts of MS, F#) -> multiplicative;
+registration
+  let S, MS;
+  let F be multiplicative SubsetFamily of the Sorts of MS;
+  cluster ClosureStr (#the Sorts of MS, F#) -> multiplicative;
 end;
 
-registration let S, MS;
-         let F be absolutely-multiplicative SubsetFamily of the Sorts of MS;
- cluster ClosureStr (#the Sorts of MS, F#) -> absolutely-multiplicative;
+registration
+  let S, MS;
+  let F be absolutely-multiplicative SubsetFamily of the Sorts of MS;
+  cluster ClosureStr (#the Sorts of MS, F#) -> absolutely-multiplicative;
 end;
 
-registration let S, MS;
-           let F be properly-upper-bound SubsetFamily of the Sorts of MS;
- cluster ClosureStr (#the Sorts of MS, F#) -> properly-upper-bound;
+registration
+  let S, MS;
+  let F be properly-upper-bound SubsetFamily of the Sorts of MS;
+  cluster ClosureStr (#the Sorts of MS, F#) -> properly-upper-bound;
 end;
 
-registration let S, MS;
-           let F be properly-lower-bound SubsetFamily of the Sorts of MS;
- cluster ClosureStr (#the Sorts of MS, F#) -> properly-lower-bound;
+registration
+  let S, MS;
+  let F be properly-lower-bound SubsetFamily of the Sorts of MS;
+  cluster ClosureStr (#the Sorts of MS, F#) -> properly-lower-bound;
 end;
 
-registration let S;
- cluster absolutely-additive -> additive ClosureStr over S;
+registration
+  let S;
+  cluster absolutely-additive -> additive ClosureStr over S;
 end;
 
-registration let S;
- cluster absolutely-multiplicative -> multiplicative ClosureStr over S;
+registration
+  let S;
+  cluster absolutely-multiplicative -> multiplicative ClosureStr over S;
 end;
 
-registration let S;
- cluster absolutely-multiplicative -> properly-upper-bound ClosureStr over S;
+registration
+  let S;
+  cluster absolutely-multiplicative -> properly-upper-bound ClosureStr over S;
 end;
 
-registration let S;
- cluster absolutely-additive -> properly-lower-bound ClosureStr over S;
+registration
+  let S;
+  cluster absolutely-additive -> properly-lower-bound ClosureStr over S;
 end;
 
-definition let S;
- mode ClosureSystem of S is absolutely-multiplicative ClosureStr over S;
+definition
+  let S;
+  mode ClosureSystem of S is absolutely-multiplicative ClosureStr over S;
 end;
 
-definition let I, M;
- mode ClosureOperator of M is reflexive monotonic idempotent SetOp of M;
+definition
+  let I, M;
+  mode ClosureOperator of M is reflexive monotonic idempotent SetOp of M;
 end;
 
 theorem :: CLOSURE2:39
-for A being ManySortedSet of the carrier of S
- for f being reflexive monotonic SetOp of A
-  for D being SubsetFamily of A st
-   D = { x where x is Element of Bool A : f.x = x } holds
- ClosureStr (#A, D#) is ClosureSystem of S;
+  for A being ManySortedSet of the carrier of S
+  for f being reflexive monotonic SetOp of A for D being SubsetFamily of A st
+  D = { x where x is Element of Bool A : f.x = x } holds
+  ClosureStr (#A, D#) is ClosureSystem of S;
 
-definition let S;
-           let A be ManySortedSet of the carrier of S;
-           let g be ClosureOperator of A;
- func ClOp->ClSys g -> strict ClosureSystem of S means
+definition
+  let S;
+  let A be ManySortedSet of the carrier of S;
+  let g be ClosureOperator of A;
+  func ClOp->ClSys g -> strict ClosureSystem of S means
 :: CLOSURE2:def 23
+
   the Sorts of it = A &
   the Family of it = { x where x is Element of Bool A : g.x = x };
 end;
 
-definition let S;
-           let A be ClosureSystem of S;
-           let C be ManySortedSubset of the Sorts of A;
- func Cl C -> Element of Bool the Sorts of A means
+definition
+  let S;
+  let A be ClosureSystem of S;
+  let C be ManySortedSubset of the Sorts of A;
+  func Cl C -> Element of Bool the Sorts of A means
 :: CLOSURE2:def 24
+
   ex F being SubsetFamily of the Sorts of A st
-   it = meet |:F:| & F = { X where X is Element of Bool the Sorts of A :
-    C c=' X & X in the Family of A };
+  it = meet |:F:| & F = { X where X is Element of Bool the Sorts of A :
+  C c=' X & X in the Family of A };
 end;
 
 theorem :: CLOSURE2:40
-for D being ClosureSystem of S
- for a being Element of Bool the Sorts of D
-  for f being SetOp of the Sorts of D st
-
-  a in the Family of D &
-   for x being Element of Bool the Sorts of D holds f.x = Cl x
-
-  holds f.a = a;
+  for D being ClosureSystem of S for a being Element of Bool the Sorts of D
+  for f being SetOp of the Sorts of D st a in the Family of D &
+  for x being Element of Bool the Sorts of D holds f.x = Cl x holds f.a = a;
 
 theorem :: CLOSURE2:41
-    for D being ClosureSystem of S
- for a being Element of Bool the Sorts of D
-  for f being SetOp of the Sorts of D st
-
-  f.a = a &
-   for x being Element of Bool the Sorts of D holds f.x = Cl x
-
+  for D being ClosureSystem of S for a being Element of Bool the Sorts of D
+  for f being SetOp of the Sorts of D st f.a = a &
+  for x being Element of Bool the Sorts of D holds f.x = Cl x
   holds a in the Family of D;
 
 theorem :: CLOSURE2:42
-for D being ClosureSystem of S
- for f being SetOp of the Sorts of D st
+  for D being ClosureSystem of S for f being SetOp of the Sorts of D st
   for x being Element of Bool the Sorts of D holds f.x = Cl x
- holds f is reflexive monotonic idempotent;
+  holds f is reflexive monotonic idempotent;
 
-definition let S;
-           let D be ClosureSystem of S;
- func ClSys->ClOp D -> ClosureOperator of the Sorts of D means
+definition
+  let S;
+  let D be ClosureSystem of S;
+  func ClSys->ClOp D -> ClosureOperator of the Sorts of D means
 :: CLOSURE2:def 25
+
   for x being Element of Bool the Sorts of D holds it.x = Cl x;
 end;
 
 theorem :: CLOSURE2:43
-    for A being ManySortedSet of the carrier of S
- for f being ClosureOperator of A holds
-  ClSys->ClOp (ClOp->ClSys f) = f;
+  for A being ManySortedSet of the carrier of S
+  for f being ClosureOperator of A holds ClSys->ClOp (ClOp->ClSys f) = f;
 
 theorem :: CLOSURE2:44
-    for D being ClosureSystem of S holds
- ClOp->ClSys (ClSys->ClOp D) = the ClosureStr of D;
+  for D being ClosureSystem of S holds
+  ClOp->ClSys (ClSys->ClOp D) = the ClosureStr of D;
+

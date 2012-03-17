@@ -17,34 +17,35 @@ environ
 begin
 
 :: TERNARY FIELDS
-
 :: This few lines define the basic algebraic structure (F, 0, 1, T)
 :: used in the whole article.
 
 definition
   struct(ZeroOneStr) TernaryFieldStr (# carrier -> set,
-                      ZeroF, OneF -> Element of the carrier,
-                          TernOp -> TriOp of the carrier #);
+    ZeroF, OneF -> Element of the carrier, TernOp -> TriOp of the carrier #);
 end;
 
 registration
- cluster non empty TernaryFieldStr;
+  cluster non empty TernaryFieldStr;
 end;
 
 reserve F for non empty TernaryFieldStr;
 
 :: The following definitions let us simplify the notation
 
-definition let F;
+definition
+  let F;
   mode Scalar of F is Element of F;
 end;
 
 reserve a,b,c for Scalar of F;
 
-definition let F,a,b,c;
+definition
+  let F,a,b,c;
   func Tern(a,b,c) -> Scalar of F equals
 :: ALGSTR_3:def 1
-    (the TernOp of F).(a,b,c);
+
+  (the TernOp of F).(a,b,c);
 end;
 
 :: The following definition specifies a ternary operation that
@@ -52,9 +53,10 @@ end;
 :: as its TriOp function.
 
 definition
- canceled 2;
+  canceled 2;
   func ternaryreal -> TriOp of REAL means
 :: ALGSTR_3:def 4
+
   for a,b,c being Real holds it.(a,b,c) = a*b + c;
 end;
 
@@ -64,11 +66,11 @@ end;
 definition
   func TernaryFieldEx -> strict TernaryFieldStr equals
 :: ALGSTR_3:def 5
-    TernaryFieldStr (# REAL, 0, 1, ternaryreal #);
+  TernaryFieldStr (# REAL, 0, 1, ternaryreal #);
 end;
 
 registration
- cluster TernaryFieldEx -> non empty;
+  cluster TernaryFieldEx -> non empty;
 end;
 
 :: On the contrary to the Tern() (starting with uppercase), this definition
@@ -78,21 +80,20 @@ definition
   let a,b,c be Scalar of TernaryFieldEx;
   func tern(a,b,c) -> Scalar of TernaryFieldEx equals
 :: ALGSTR_3:def 6
-       (the TernOp of TernaryFieldEx).(a,b,c);
+  (the TernOp of TernaryFieldEx).(a,b,c);
 end;
 
 canceled 2;
 
 theorem :: ALGSTR_3:3
- for u,u',v,v' being Real holds
+  for u,u',v,v' being Real holds
   u <> u' implies ex x being Real st u*x+v = u'*x+v';
 
 canceled;
 
 theorem :: ALGSTR_3:5
- for u,a,v being Scalar of TernaryFieldEx
-        for z,x,y being Real holds
-           u=z & a=x & v=y implies Tern(u,a,v) = z*x + y;
+  for u,a,v being Scalar of TernaryFieldEx for z,x,y being Real holds
+  u=z & a=x & v=y implies Tern(u,a,v) = z*x + y;
 
 :: The 1 defined in TeranaryFieldEx structure is equal to
 :: the ordinary 1 of real numbers.
@@ -102,35 +103,29 @@ canceled;
 theorem :: ALGSTR_3:7
   1 = 1.TernaryFieldEx;
 
-definition let IT be non empty TernaryFieldStr;
+definition
+  let IT be non empty TernaryFieldStr;
   attr IT is Ternary-Field-like means
 :: ALGSTR_3:def 7
-    (0.IT <> 1.IT)
-  & (for a        being Scalar of IT holds Tern(a, 1.IT, 0.IT) = a)
-  & (for a        being Scalar of IT holds Tern(1.IT, a, 0.IT) = a)
-  & (for a,b      being Scalar of IT holds Tern(a, 0.IT, b ) = b)
-  & (for a,b      being Scalar of IT holds Tern(0.IT, a, b ) = b)
-  & (for u,a,b    being Scalar of IT ex v being Scalar of IT st
-     Tern(u,a,v) = b)
+
+  (0.IT <> 1.IT)
+  & (for a being Scalar of IT holds Tern(a, 1.IT, 0.IT) = a)
+  & (for a being Scalar of IT holds Tern(1.IT, a, 0.IT) = a)
+  & (for a,b being Scalar of IT holds Tern(a, 0.IT, b ) = b)
+  & (for a,b being Scalar of IT holds Tern(0.IT, a, b ) = b)
+  & (for u,a,b being Scalar of IT ex v being Scalar of IT st Tern(u,a,v) = b)
   & (for u,a,v,v' being Scalar of IT holds Tern(u,a,v) = Tern(u,a,v')
-     implies v = v')
-  & (for a,a'     being Scalar of IT holds
-     a <> a' implies
-       for b,b' being Scalar of IT
-         ex u,v being Scalar of IT st
-                Tern(u,a,v) = b & Tern(u,a',v) = b')
-  & (for u,u'     being Scalar of IT holds
-     u <> u' implies
-       for v,v' being Scalar of IT
-           ex a being Scalar of IT st
-                Tern(u,a,v) = Tern(u',a,v'))
-  & (for a,a',u,u',v,v' being Scalar of IT holds
-     Tern(u,a,v) = Tern(u',a,v') & Tern(u,a',v) = Tern(u',a',v')
-     implies a = a' or u = u');
+  implies v = v') & (for a,a' being Scalar of IT holds a <> a' implies
+  for b,b' being Scalar of IT ex u,v being Scalar of IT st
+  Tern(u,a,v) = b & Tern(u,a',v) = b') & (for u,u' being Scalar of IT holds
+  u <> u' implies for v,v' being Scalar of IT ex a being Scalar of IT st
+  Tern(u,a,v) = Tern(u',a,v')) & (for a,a',u,u',v,v' being Scalar of IT holds
+  Tern(u,a,v) = Tern(u',a,v') & Tern(u,a',v) = Tern(u',a',v')
+  implies a = a' or u = u');
 end;
 
 registration
- cluster strict Ternary-Field-like (non empty TernaryFieldStr);
+  cluster strict Ternary-Field-like (non empty TernaryFieldStr);
 end;
 
 definition
@@ -141,20 +136,20 @@ reserve F for Ternary-Field;
 reserve a,a',b,c,x,x',u,u',v,v',z for Scalar of F;
 
 theorem :: ALGSTR_3:8
-      a<>a' & Tern(u,a,v) = Tern(u',a,v')
-        & Tern(u,a',v) = Tern(u',a',v')
+  a<>a' & Tern(u,a,v) = Tern(u',a,v') & Tern(u,a',v) = Tern(u',a',v')
   implies u=u' & v=v';
 
 canceled 2;
 
 theorem :: ALGSTR_3:11
-        a<>0.F implies for b,c ex x st Tern(a,x,b) = c;
+  a<>0.F implies for b,c ex x st Tern(a,x,b) = c;
 
 theorem :: ALGSTR_3:12
-        a<>0.F & Tern(a,x,b) = Tern(a,x',b) implies x=x';
+  a<>0.F & Tern(a,x,b) = Tern(a,x',b) implies x=x';
 
 theorem :: ALGSTR_3:13
-        a<>0.F implies for b,c ex x st Tern(x,a,b) = c;
+  a<>0.F implies for b,c ex x st Tern(x,a,b) = c;
 
 theorem :: ALGSTR_3:14
-        a<>0.F & Tern(x,a,b) = Tern(x',a,b) implies x=x';
+  a<>0.F & Tern(x,a,b) = Tern(x',a,b) implies x=x';
+

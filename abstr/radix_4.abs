@@ -21,7 +21,7 @@ environ
 begin :: Some Useful Theorems
 
 reserve i,n,m,k,x,y for Nat,
-        i1 for Integer;
+  i1 for Integer;
 
 theorem :: RADIX_4:1
   2 <= k implies 2 < Radix(k);
@@ -30,66 +30,61 @@ begin :: Carry operation at n+1 digits Radix-2^k SD_Sub number
 
 theorem :: RADIX_4:2
   for x,y be Integer, k be Nat st 3 <= k holds
-    SDSub_Add_Carry( SDSub_Add_Carry(x,k) + SDSub_Add_Carry(y,k), k ) = 0;
+  SDSub_Add_Carry( SDSub_Add_Carry(x,k) + SDSub_Add_Carry(y,k), k ) = 0;
 
 theorem :: RADIX_4:3
-  2 <= k implies
-    DigA_SDSub(SD2SDSub(DecSD(m,n,k)),n+1)
-         = SDSub_Add_Carry( DigA(DecSD(m,n,k),n), k);
+  2 <= k implies DigA_SDSub(SD2SDSub(DecSD(m,n,k)),n+1)
+  = SDSub_Add_Carry( DigA(DecSD(m,n,k),n), k);
 
 theorem :: RADIX_4:4
   2 <= k & m is_represented_by 1,k implies
-    DigA_SDSub(SD2SDSub(DecSD(m,1,k)),1+1) = SDSub_Add_Carry(m, k);
+  DigA_SDSub(SD2SDSub(DecSD(m,1,k)),1+1) = SDSub_Add_Carry(m, k);
 
 theorem :: RADIX_4:5
-  for k,x,n be Nat st
-    n >= 1 & k >= 3 & x is_represented_by (n+1),k holds
-      DigA_SDSub(SD2SDSub(DecSD(x mod (Radix(k) |^ n),n,k)),n+1)
-        = SDSub_Add_Carry(DigA(DecSD(x,n,k),n),k);
+  for k,x,n be Nat st n >= 1 & k >= 3 & x is_represented_by (n+1),k holds
+  DigA_SDSub(SD2SDSub(DecSD(x mod (Radix(k) |^ n),n,k)),n+1)
+  = SDSub_Add_Carry(DigA(DecSD(x,n,k),n),k);
 
 theorem :: RADIX_4:6
   2 <= k & m is_represented_by 1,k implies
-    DigA_SDSub(SD2SDSub(DecSD(m,1,k)),1) = m - SDSub_Add_Carry(m,k)*Radix(k);
+  DigA_SDSub(SD2SDSub(DecSD(m,1,k)),1) = m - SDSub_Add_Carry(m,k)*Radix(k);
 
 theorem :: RADIX_4:7
-  for k,x,n be Nat st
-    n >= 1 & k >= 2 & x is_represented_by (n+1),k holds
-      (Radix(k) |^ n) * DigA_SDSub(SD2SDSub(DecSD(x,n+1,k)),n+1)
-      = (Radix(k) |^ n) * DigA(DecSD(x,n+1,k),n+1)
-        - (Radix(k) |^ (n+1)) * SDSub_Add_Carry(DigA(DecSD(x,n+1,k),n+1),k)
-        + (Radix(k) |^ n) * SDSub_Add_Carry(DigA(DecSD(x,n+1,k),n),k);
+  for k,x,n be Nat st n >= 1 & k >= 2 & x is_represented_by (n+1),k holds
+  (Radix(k) |^ n) * DigA_SDSub(SD2SDSub(DecSD(x,n+1,k)),n+1)
+  = (Radix(k) |^ n) * DigA(DecSD(x,n+1,k),n+1)
+  - (Radix(k) |^ (n+1)) * SDSub_Add_Carry(DigA(DecSD(x,n+1,k),n+1),k)
+  + (Radix(k) |^ n) * SDSub_Add_Carry(DigA(DecSD(x,n+1,k),n),k);
 
 begin :: Definition for adder operation on Radix-2^k SD-Sub number
 
 definition
-  let i,n,k be Nat,
-      x be Tuple of n,(k-SD_Sub), y be Tuple of n,(k-SD_Sub);
-  assume i in Seg n & k >= 2;
+  let i,n,k be Nat, x be Tuple of n,(k-SD_Sub), y be Tuple of n,(k-SD_Sub);
+  assume
+ i in Seg n & k >= 2;
   func SDSubAddDigit(x,y,i,k) -> Element of k-SD_Sub equals
 :: RADIX_4:def 1
 
-    SDSub_Add_Data( DigA_SDSub(x,i) + DigA_SDSub(y,i), k )
-      + SDSub_Add_Carry( DigA_SDSub(x,i -'1) + DigA_SDSub(y,i -'1), k);
+  SDSub_Add_Data( DigA_SDSub(x,i) + DigA_SDSub(y,i), k )
+  + SDSub_Add_Carry( DigA_SDSub(x,i -'1) + DigA_SDSub(y,i -'1), k);
 end;
 
-definition let n,k be Nat,x,y be Tuple of n,(k-SD_Sub);
+definition
+  let n,k be Nat,x,y be Tuple of n,(k-SD_Sub);
   func x '+' y -> Tuple of n,(k-SD_Sub) means
 :: RADIX_4:def 2
 
-    for i st i in Seg n holds DigA_SDSub(it,i) = SDSubAddDigit(x,y,i,k);
+  for i st i in Seg n holds DigA_SDSub(it,i) = SDSubAddDigit(x,y,i,k);
 end;
 
 theorem :: RADIX_4:8
-  for i st i in Seg n holds
-    2 <= k implies
-      SDSubAddDigit(SD2SDSub(DecSD(x,n+1,k)),SD2SDSub(DecSD(y,n+1,k)),i,k)=
-        SDSubAddDigit(
-           SD2SDSub(DecSD((x mod (Radix(k) |^ n)),n,k)),
-           SD2SDSub(DecSD((y mod (Radix(k) |^ n)),n,k)),i,k);
+  for i st i in Seg n holds 2 <= k implies
+  SDSubAddDigit(SD2SDSub(DecSD(x,n+1,k)),SD2SDSub(DecSD(y,n+1,k)),i,k)=
+  SDSubAddDigit( SD2SDSub(DecSD((x mod (Radix(k) |^ n)),n,k)),
+  SD2SDSub(DecSD((y mod (Radix(k) |^ n)),n,k)),i,k);
 
 theorem :: RADIX_4:9
-  for n st n >= 1 holds
-    for k,x,y st
-      k >= 3 & x is_represented_by n,k & y is_represented_by n,k holds
-        x + y =
-          SDSub2IntOut( SD2SDSub(DecSD(x,n,k)) '+' SD2SDSub(DecSD(y,n,k)) );
+  for n st n >= 1 holds for k,x,y st
+  k >= 3 & x is_represented_by n,k & y is_represented_by n,k holds x + y =
+  SDSub2IntOut( SD2SDSub(DecSD(x,n,k)) '+' SD2SDSub(DecSD(y,n,k)) );
+

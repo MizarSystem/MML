@@ -26,61 +26,59 @@ environ
 begin :: Preliminaries
 
 definition
- let A,B' be non empty set;
- let B be non empty Subset of B';
- let f be Function of A,B;
- let x be Element of A;
- redefine func f.x -> Element of B;
- coherence
- proof
-  thus f.x is Element of B;
- end;
+  let A,B' be non empty set;
+  let B be non empty Subset of B';
+  let f be Function of A,B;
+  let x be Element of A;
+  redefine func f.x -> Element of B;
+  coherence
+  proof
+    thus f.x is Element of B;
+  end;
 end;
 
 theorem Th1:
- for A being finite set st card A >= 2 holds
-  for a being Element of A holds
-   ex b being Element of A st b <> a
+  for A being finite set st card A >= 2 holds for a being Element of A holds
+  ex b being Element of A st b <> a
 proof
- let A' be finite set;
- assume
+  let A' be finite set;
+  assume
 A1: card A' >= 2;
- then reconsider A = A' as finite non empty set by CARD_1:47;
- let a be Element of A';
- {a} c= A by ZFMISC_1:37;
- then card (A \ {a}) = card A - card {a} by CARD_2:63
-  .= card A - 1 by CARD_1:79;
- then card (A \ {a}) <> 0 by A1;
- then consider b being set such that
+  then reconsider A = A' as finite non empty set by CARD_1:47;
+  let a be Element of A';
+  {a} c= A by ZFMISC_1:37;
+  then card (A \ {a}) = card A - card {a} by CARD_2:63
+    .= card A - 1 by CARD_1:79;
+  then card (A \ {a}) <> 0 by A1;
+  then consider b being set such that
 A2: b in A \ {a} by CARD_1:47,XBOOLE_0:def 1;
- reconsider b as Element of A' by A2;
- take b;
- not b in {a} by A2,XBOOLE_0:def 4;
- hence thesis by TARSKI:def 1;
+  reconsider b as Element of A' by A2;
+  take b;
+  not b in {a} by A2,XBOOLE_0:def 4;
+  hence thesis by TARSKI:def 1;
 end;
 
 theorem Th2:
- for A being finite set st card A >= 3 holds
-  for a,b being Element of A holds
-   ex c being Element of A st c <> a & c <> b
+  for A being finite set st card A >= 3 holds for a,b being Element of A holds
+  ex c being Element of A st c <> a & c <> b
 proof
- let A' be finite set;
- assume
+  let A' be finite set;
+  assume
 A1: card A' >= 3;
- then reconsider A = A' as finite non empty set by CARD_1:47;
- let a,b be Element of A';
- {a,b} c= A by ZFMISC_1:38;
- then
+  then reconsider A = A' as finite non empty set by CARD_1:47;
+  let a,b be Element of A';
+  {a,b} c= A by ZFMISC_1:38;
+  then
 A2: card (A \ {a,b}) = card A - card {a,b} by CARD_2:63;
- card {a,b} <= 2 by CARD_2:69;
- then card (A \ {a,b}) >= 3 - 2 by A1,A2,XREAL_1:15;
- then card (A \ {a,b}) <> 0;
- then consider c being set such that
+  card {a,b} <= 2 by CARD_2:69;
+  then card (A \ {a,b}) >= 3 - 2 by A1,A2,XREAL_1:15;
+  then card (A \ {a,b}) <> 0;
+  then consider c being set such that
 A3: c in A \ {a,b} by CARD_1:47,XBOOLE_0:def 1;
- reconsider c as Element of A' by A3;
- take c;
- not c in {a,b} by A3,XBOOLE_0:def 4;
- hence thesis by TARSKI:def 2;
+  reconsider c as Element of A' by A3;
+  take c;
+  not c in {a,b} by A3,XBOOLE_0:def 4;
+  hence thesis by TARSKI:def 2;
 end;
 
 begin :: Linear preorders and linear orders
@@ -89,447 +87,441 @@ reserve A for non empty set;
 reserve a,b,c,x,y,z for Element of A;
 
 definition
- let A;
- defpred P[set] means
-  $1 is Relation of A &
+  let A;
+  defpred P[set] means $1 is Relation of A &
   (for a,b holds [a,b] in $1 or [b,a] in $1) &
   (for a,b,c st [a,b] in $1 & [b,c] in $1 holds [a,c] in $1);
- defpred Q[set] means
-  for R being set holds R in $1 iff P[R];
- func LinPreorders A means :Def1:
+  defpred Q[set] means for R being set holds R in $1 iff P[R];
+  func LinPreorders A means
+  :Def1:
   for R being set holds R in it iff
-   R is Relation of A &
-   (for a,b holds [a,b] in R or [b,a] in R) &
-   (for a,b,c st [a,b] in R & [b,c] in R holds [a,c] in R);
- existence
- proof
-  consider it0 being set such that
+  R is Relation of A & (for a,b holds [a,b] in R or [b,a] in R) &
+  (for a,b,c st [a,b] in R & [b,c] in R holds [a,c] in R);
+  existence
+  proof
+    consider it0 being set such that
 A1: for R being set holds R in it0 iff R in bool [:A,A:] & P[R]
     from XBOOLE_0:sch 1;
-  take it0;
-  let R be set;
-  thus R in it0 implies P[R] by A1;
-  assume P[R];
-  then [:A,A:] in bool [:A,A:] & P[R] by ZFMISC_1:def 1;
-  hence thesis by A1;
- end;
- uniqueness
- proof
-  let it1,it2 be set;
-  assume
-A2: Q[it1] & Q[it2];
-  now
-   let R be set;
-    R in it1 iff P[R] by A2;
-   hence R in it1 iff R in it2 by A2;
+    take it0;
+    let R be set;
+    thus R in it0 implies P[R] by A1;
+    assume P[R];
+    then [:A,A:] in bool [:A,A:] & P[R] by ZFMISC_1:def 1;
+    hence thesis by A1;
   end;
-  hence it1 = it2 by TARSKI:2;
- end;
+  uniqueness
+  proof
+    let it1,it2 be set;
+    assume
+A2: Q[it1] & Q[it2];
+    now
+      let R be set;
+      R in it1 iff P[R] by A2;
+      hence R in it1 iff R in it2 by A2;
+    end;
+    hence it1 = it2 by TARSKI:2;
+  end;
 end;
 
 registration
- let A;
- cluster LinPreorders A -> non empty;
- coherence
- proof
-  reconsider R = [:A,A:] as Relation of A by RELSET_1:def 1;
-  (for a holds [a,a] in R) &
-  (for a,b holds [a,b] in R or [b,a] in R) &
-  (for a,b,c st [a,b] in R & [b,c] in R holds [a,c] in R)
-   by ZFMISC_1:106;
-  hence thesis by Def1;
- end;
+  let A;
+  cluster LinPreorders A -> non empty;
+  coherence
+  proof
+    reconsider R = [:A,A:] as Relation of A by RELSET_1:def 1;
+    (for a holds [a,a] in R) & (for a,b holds [a,b] in R or [b,a] in R) &
+    (for a,b,c st [a,b] in R & [b,c] in R holds [a,c] in R) by ZFMISC_1:106;
+    hence thesis by Def1;
+  end;
 end;
 
 definition
- let A;
- defpred P[set] means
-  for a,b st [a,b] in $1 & [b,a] in $1 holds a = b;
- defpred Q[set] means
+  let A;
+  defpred P[set] means for a,b st [a,b] in $1 & [b,a] in $1 holds a = b;
+  defpred Q[set] means
   for R being Element of LinPreorders A holds R in $1 iff P[R];
- func LinOrders A -> Subset of LinPreorders A means :Def2:
+  func LinOrders A -> Subset of LinPreorders A means
+  :Def2:
   for R being Element of LinPreorders A holds R in it iff
-   for a,b st [a,b] in R & [b,a] in R holds a = b;
- existence
- proof
-  consider it0 being set such that
+  for a,b st [a,b] in R & [b,a] in R holds a = b;
+  existence
+  proof
+    consider it0 being set such that
 A1: for R being set holds R in it0 iff R in LinPreorders A & P[R]
     from XBOOLE_0:sch 1;
-  for R being set st R in it0 holds R in LinPreorders A by A1;
-  then reconsider it0 as Subset of LinPreorders A by TARSKI:def 3;
-  take it0;
-  let R be Element of LinPreorders A;
-  thus R in it0 implies P[R] by A1;
-  assume P[R];
-  hence thesis by A1;
- end;
- uniqueness
- proof
-  let it1,it2 be Subset of LinPreorders A;
-  assume
-A2: Q[it1] & Q[it2];
-  now
-   let R be Element of LinPreorders A;
-   (R in it1 iff P[R]) & (R in it2 iff P[R]) by A2;
-   hence R in it1 iff R in it2;
+    for R being set st R in it0 holds R in LinPreorders A by A1;
+    then reconsider it0 as Subset of LinPreorders A by TARSKI:def 3;
+    take it0;
+    let R be Element of LinPreorders A;
+    thus R in it0 implies P[R] by A1;
+    assume P[R];
+    hence thesis by A1;
   end;
-  hence it1 = it2 by SUBSET_1:8;
- end;
+  uniqueness
+  proof
+    let it1,it2 be Subset of LinPreorders A;
+    assume
+A2: Q[it1] & Q[it2];
+    now
+      let R be Element of LinPreorders A;
+      (R in it1 iff P[R]) & (R in it2 iff P[R]) by A2;
+      hence R in it1 iff R in it2;
+    end;
+    hence it1 = it2 by SUBSET_1:8;
+  end;
 end;
 
 registration
- let A be set;
- cluster connected Order of A;
- existence
- proof
-  consider R' being Relation such that
+  let A be set;
+  cluster connected Order of A;
+  existence
+  proof
+    consider R' being Relation such that
 A1: R' well_orders A by WELLORD2:26;
-  set R = R' |_2 A;
+    set R = R' |_2 A;
 A2: field R = A & R is well-ordering by A1,WELLORD2:25;
-  R c= [:A,A:] by XBOOLE_1:17;
-  then reconsider R as Relation of A by RELSET_1:def 1;
-  now
-   let a be set;
-   assume
-A3: a in A;
-   R' is_reflexive_in A by A1,WELLORD1:def 5;
-   then [a,a] in R' & [a,a] in [:A,A:] by A3,RELAT_2:def 1,ZFMISC_1:def 2;
-   then [a,a] in R by XBOOLE_0:def 3;
-   hence a in dom R by RELAT_1:def 4;
+    R c= [:A,A:] by XBOOLE_1:17;
+    then reconsider R as Relation of A by RELSET_1:def 1;
+    now
+      let a be set;
+      assume
+A3:   a in A;
+      R' is_reflexive_in A by A1,WELLORD1:def 5;
+      then [a,a] in R' & [a,a] in [:A,A:] by A3,RELAT_2:def 1,ZFMISC_1:def 2;
+      then [a,a] in R by XBOOLE_0:def 3;
+      hence a in dom R by RELAT_1:def 4;
+    end;
+    then A c= dom R by TARSKI:def 3;
+    then dom R = A by XBOOLE_0:def 10;
+    then reconsider R as Order of A by A2,PARTFUN1:def 4,WELLORD1:def 4;
+    take R;
+    thus R is connected by A2,WELLORD1:def 4;
   end;
-  then A c= dom R by TARSKI:def 3;
-  then dom R = A by XBOOLE_0:def 10;
-  then reconsider R as Order of A by A2,PARTFUN1:def 4,WELLORD1:def 4;
-  take R;
-  thus R is connected by A2,WELLORD1:def 4;
- end;
 end;
 
 definition
- let A;
- redefine func LinOrders A means :Def3:
+  let A;
+  redefine func LinOrders A means
+  :Def3:
   for R being set holds R in it iff R is connected Order of A;
- compatibility
- proof
+  compatibility
+  proof
 A1: now
-   let R be set;
-   assume
-A2: R in LinOrders A;
-   reconsider R' = R as Relation of A by A2,Def1;
-   now
-    let a be set;
-    assume a in A;
-    then [a,a] in R by A2,Def1;
-    hence a in dom R' by RELAT_1:def 4;
-   end;
-   then A c= dom R' by TARSKI:def 3;
-   then
-A3: dom R' = A by XBOOLE_0:def 10;
-   now
-    let a be set;
-    assume a in A;
-    then [a,a] in R by A2,Def1;
-    hence a in rng R' by RELAT_1:def 5;
-   end;
-   then A c= rng R' by TARSKI:def 3;
-   then
-A4: field R' = A \/ A by A3,XBOOLE_0:def 10;
-   for a,b being set st a in A & b in A & a <> b
-    holds [a,b] in R or [b,a] in R by A2,Def1;
-   then
-A5: R' is_connected_in A by RELAT_2:def 6;
-   for a being set st a in A holds [a,a] in R by A2,Def1;
-   then
-A6: R' is_reflexive_in A by RELAT_2:def 1;
-   for a,b being set st a in A & b in A & [a,b] in R & [b,a] in R holds a = b
-    by A2,Def2;
-   then
-A7: R' is_antisymmetric_in A by RELAT_2:def 4;
-   for a,b,c being set st a in A & b in A & c in A & [a,b] in R & [b,c] in R
-     holds [a,c] in R by A2,Def1;
-   then R' is_transitive_in A by RELAT_2:def 8;
-   hence R is connected Order of A
-    by A3,A4,A5,A6,A7,PARTFUN1:def 4,RELAT_2:def 9,def 12,def 14,def 16;
-  end;
+      let R be set;
+      assume
+A2:   R in LinOrders A;
+      then reconsider R' = R as Relation of A by Def1;
+      now
+        let a be set;
+        assume a in A;
+        then [a,a] in R by A2,Def1;
+        hence a in dom R' by RELAT_1:def 4;
+      end;
+      then A c= dom R' by TARSKI:def 3;
+      then
+A3:   dom R' = A by XBOOLE_0:def 10;
+      now
+        let a be set;
+        assume a in A;
+        then [a,a] in R by A2,Def1;
+        hence a in rng R' by RELAT_1:def 5;
+      end;
+      then A c= rng R' by TARSKI:def 3;
+      then
+A4:   field R' = A \/ A by A3,XBOOLE_0:def 10;
+      for a,b being set st a in A & b in A & a <> b
+      holds [a,b] in R or [b,a] in R by A2,Def1;
+      then
+A5:   R' is_connected_in A by RELAT_2:def 6;
+      for a being set st a in A holds [a,a] in R by A2,Def1;
+      then
+A6:   R' is_reflexive_in A by RELAT_2:def 1;
+
+for a,b being set st a in A & b in A & [a,b] in R & [b,a] in R holds a = b
+      by A2,Def2;
+      then
+A7:   R' is_antisymmetric_in A by RELAT_2:def 4;
+      for a,b,c being set st a in A & b in A & c in A & [a,b] in R & [b,c] in
+      R holds [a,c] in R by A2,Def1;
+      then R' is_transitive_in A by RELAT_2:def 8;
+      hence R is connected Order of A
+      by A3,A4,A5,A6,A7,PARTFUN1:def 4,RELAT_2:def 9,def 12,def 14,def 16;
+    end;
 A8: now
-   let R be set;
-   assume
-A9: R is connected Order of  A;
-   then reconsider R' = R as connected Order of A;
-A10: now
-    let a,b;
-    dom R' = A by PARTFUN1:def 4;
-    then A c= dom R' \/ rng R' by XBOOLE_1:7;
-    then field R' = A &
-     R' is_connected_in field R' & R' is_reflexive_in field R' &
-     (a = b or a <> b) by RELAT_2:def 9,def 14,XBOOLE_0:def 10;
-    hence [a,b] in R or [b,a] in R by RELAT_2:def 1,def 6;
-   end;
-   R is Relation of A &
-    (for a,b,c st [a,b] in R & [b,c] in R holds [a,c] in R) by A9,ORDERS_1:14;
-   then R in LinPreorders A &
-    (for a,b st [a,b] in R & [b,a] in R holds a = b)
-     by A9,A10,Def1,ORDERS_1:13;
-   hence R in LinOrders A by Def2;
+      let R be set;
+      assume
+A9:   R is connected Order of A;
+      then reconsider R' = R as connected Order of A;
+A10:  now
+        let a,b;
+        dom R' = A by PARTFUN1:def 4;
+        then A c= dom R' \/ rng R' by XBOOLE_1:7;
+        then field R' = A &
+        R' is_connected_in field R' & R' is_reflexive_in field R' &
+        (a = b or a <> b) by RELAT_2:def 9,def 14,XBOOLE_0:def 10;
+        hence [a,b] in R or [b,a] in R by RELAT_2:def 1,def 6;
+      end;
+      R is Relation of A &
+
+(for a,b,c st [a,b] in R & [b,c] in R holds [a,c] in R) by A9,ORDERS_1:14;
+      then R in LinPreorders A &
+      (for a,b st [a,b] in R & [b,a] in R holds a = b)
+      by A9,A10,Def1,ORDERS_1:13;
+      hence R in LinOrders A by Def2;
+    end;
+    let it0 be Subset of LinPreorders A;
+    thus it0 = LinOrders A implies
+    for R being set holds R in it0 iff R is connected Order of A by A1,A8;
+    assume
+A11: for R being set holds R in it0 iff R is connected Order of A;
+    now
+      let R be set;
+      R in it0 iff R is connected Order of A by A11;
+      hence R in it0 iff R in LinOrders A by A1,A8;
+    end;
+    hence it0 = LinOrders A by TARSKI:2;
   end;
-  let it0 be Subset of LinPreorders A;
-  thus it0 = LinOrders A implies
-   for R being set holds R in it0 iff R is connected Order of A
-    by A1,A8;
-  assume
-A11: for R being set holds R in it0 iff R is connected Order of  A;
-  now
-   let R be set;
-    R in it0 iff R is connected Order of  A by A11;
-   hence R in it0 iff R in LinOrders A by A1,A8;
-  end;
-  hence it0 = LinOrders A by TARSKI:2;
- end;
 end;
 
 registration
- let A;
- cluster LinOrders A -> non empty;
- coherence
- proof
-  consider R being connected Order of A;
-  R in LinOrders A by Def3;
-  hence thesis;
- end;
+  let A;
+  cluster LinOrders A -> non empty;
+  coherence
+  proof
+    consider R being connected Order of A;
+    R in LinOrders A by Def3;
+    hence thesis;
+  end;
 end;
 
 reserve o,o' for Element of LinPreorders A;
 reserve o'' for Element of LinOrders A;
 
 definition
- let A,o,a,b;
- pred a <=_o, b means :Def4:
+  let A,o,a,b;
+  pred a <=_o, b means
+  :Def4:
   [a,b] in o;
 end;
 
 notation
- let A,o,a,b;
- synonym b >=_o, a for a <=_o, b;
- antonym b <_o, a for a <=_o, b;
- antonym a >_o, b for a <=_o, b;
+  let A,o,a,b;
+  synonym b >=_o, a for a <=_o, b;
+  antonym b <_o, a for a <=_o, b;
+  antonym a >_o, b for a <=_o, b;
 end;
 
 theorem Th3:
- a <=_o, a
+  a <=_o, a
 proof
- thus [a,a] in o by Def1;
+  thus [a,a] in o by Def1;
 end;
 
 theorem Th4:
- a <=_o, b or b <=_o, a
+  a <=_o, b or b <=_o, a
 proof
- [a,b] in o or [b,a] in o by Def1;
- hence thesis by Def4;
+  [a,b] in o or [b,a] in o by Def1;
+  hence thesis by Def4;
 end;
 
 theorem Th5:
- (a <=_o, b or a <_o, b) & (b <=_ o, c or b <_o, c) implies a <=_o, c
+  (a <=_o, b or a <_o, b) & (b <=_ o, c or b <_o, c) implies a <=_o, c
 proof
- assume a <=_o, b or a <_o, b;
- then a <=_o, b by Th4;
- then
+  assume a <=_o, b or a <_o, b;
+  then a <=_o, b by Th4;
+  then
 A1: [a,b] in o by Def4;
- assume b <=_o, c or b <_o, c;
- then b <=_o, c by Th4;
- then [b,c] in o by Def4;
- hence [a,c] in o by A1,Def1;
+  assume b <=_o, c or b <_o, c;
+  then b <=_o, c by Th4;
+  then [b,c] in o by Def4;
+  hence [a,c] in o by A1,Def1;
 end;
 
 theorem Th6:
- a <=_o'', b & b <=_o'', a implies a = b
+  a <=_o'', b & b <=_o'', a implies a = b
 proof
- [a,b] in o'' & [b,a] in o'' implies a = b by Def2;
- hence thesis by Def4;
+  [a,b] in o'' & [b,a] in o'' implies a = b by Def2;
+  hence thesis by Def4;
 end;
 
 theorem Th7:
- a <> b & b <> c & a <> c implies ex o st a <_o, b & b <_o, c
+  a <> b & b <> c & a <> c implies ex o st a <_o, b & b <_o, c
 proof
- assume
+  assume
 A1: a <> b & b <> c & a <> c;
- defpred P[set,set] means
-  ($1 = a or $2 <> a) & ($1 <> c or $2 = c);
- consider R being Relation of A such that
+  defpred P[set,set] means ($1 = a or $2 <> a) & ($1 <> c or $2 = c);
+  consider R being Relation of A such that
 A2: for x,y holds [x,y] in R iff P[x,y] from RELSET_1:sch 2;
 A3: now
-  let x,y;
-  P[x,y] or P[y,x] by A1;
-  hence [x,y] in R or [y,x] in R by A2;
- end;
- now
-  let x,y,z;
-  assume [x,y] in R & [y,z] in R;
-  then P[x,y] & P[y,z] by A2;
-  hence [x,z] in R by A2;
- end;
- then reconsider o = R as Element of LinPreorders A by A3,Def1;
- take o;
- not [b,a] in R & not [c,b] in R by A1,A2;
- hence thesis by Def4;
+    let x,y;
+    P[x,y] or P[y,x] by A1;
+    hence [x,y] in R or [y,x] in R by A2;
+  end;
+  now
+    let x,y,z;
+    assume [x,y] in R & [y,z] in R;
+    then P[x,y] & P[y,z] by A2;
+    hence [x,z] in R by A2;
+  end;
+  then reconsider o = R as Element of LinPreorders A by A3,Def1;
+  take o;
+  not [b,a] in R & not [c,b] in R by A1,A2;
+  hence thesis by Def4;
 end;
 
 theorem Th8:
- ex o st for a st a <> b holds b <_o, a
+  ex o st for a st a <> b holds b <_o, a
 proof
- defpred P[set,set] means
-  $1 = b or $2 <> b;
- consider R being Relation of A such that
+  defpred P[set,set] means $1 = b or $2 <> b;
+  consider R being Relation of A such that
 A1: for x,y holds [x,y] in R iff P[x,y] from RELSET_1:sch 2;
 A2: now
-  let x,y;
-  P[x,y] or P[y,x];
-  hence [x,y] in R or [y,x] in R by A1;
- end;
- now
-  let x,y,z;
-  assume [x,y] in R & [y,z] in R;
-  then P[x,y] & P[y,z] by A1;
-  hence [x,z] in R by A1;
- end;
- then reconsider o = R as Element of LinPreorders A by A2,Def1;
- take o;
- let a;
- assume a <> b;
- then not [a,b] in R by A1;
- hence thesis by Def4;
+    let x,y;
+    P[x,y] or P[y,x];
+    hence [x,y] in R or [y,x] in R by A1;
+  end;
+  now
+    let x,y,z;
+    assume [x,y] in R & [y,z] in R;
+    then P[x,y] & P[y,z] by A1;
+    hence [x,z] in R by A1;
+  end;
+  then reconsider o = R as Element of LinPreorders A by A2,Def1;
+  take o;
+  let a;
+  assume a <> b;
+  then not [a,b] in R by A1;
+  hence thesis by Def4;
 end;
 
 theorem Th9:
- ex o st for a st a <> b holds a <_o, b
+  ex o st for a st a <> b holds a <_o, b
 proof
- defpred P[set,set] means
-  $1 <> b or $2 = b;
- consider R being Relation of A such that
+  defpred P[set,set] means $1 <> b or $2 = b;
+  consider R being Relation of A such that
 A1: for x,y holds [x,y] in R iff P[x,y] from RELSET_1:sch 2;
 A2: now
-  let x,y;
-  P[x,y] or P[y,x];
-  hence [x,y] in R or [y,x] in R by A1;
- end;
- now
-  let x,y,z;
-  assume [x,y] in R & [y,z] in R;
-  then P[x,y] & P[y,z] by A1;
-  hence [x,z] in R by A1;
- end;
- then reconsider o = R as Element of LinPreorders A by A2,Def1;
- take o;
- let a;
- assume a <> b;
- then not [b,a] in R by A1;
- hence thesis by Def4;
+    let x,y;
+    P[x,y] or P[y,x];
+    hence [x,y] in R or [y,x] in R by A1;
+  end;
+  now
+    let x,y,z;
+    assume [x,y] in R & [y,z] in R;
+    then P[x,y] & P[y,z] by A1;
+    hence [x,z] in R by A1;
+  end;
+  then reconsider o = R as Element of LinPreorders A by A2,Def1;
+  take o;
+  let a;
+  assume a <> b;
+  then not [b,a] in R by A1;
+  hence thesis by Def4;
 end;
 
 theorem Th10:
- a <> b & a <> c implies ex o st
-  a <_o, b & a <_o, c &
+  a <> b & a <> c implies ex o st a <_o, b & a <_o, c &
   (b <_o, c iff b <_o', c) & (c <_o, b iff c <_o', b)
 proof
- assume
+  assume
 A1: a <> b & a <> c;
- defpred P[Element of A,Element of A] means
+  defpred P[Element of A,Element of A] means
   $1 = a or ($1 <=_o', $2 & $2 <> a);
- consider R being Relation of A such that
+  consider R being Relation of A such that
 A2: for x,y holds [x,y] in R iff P[x,y] from RELSET_1:sch 2;
 A3: now
-  let x,y;
-  P[x,y] or P[y,x] by Th4;
-  hence [x,y] in R or [y,x] in R by A2;
- end;
- now
-  let x,y,z;
-  assume [x,y] in R & [y,z] in R;
-  then P[x,y] & P[y,z] by A2;
-  then P[x,z] by Th5;
-  hence [x,z] in R by A2;
- end;
- then reconsider o = R as Element of LinPreorders A by A3,Def1;
- take o;
- not [b,a] in R & not [c,a] in R &
- (not [c,b] in R iff b <_o', c) & (not [b,c] in R iff c <_o', b) by A1,A2;
- hence thesis by Def4;
+    let x,y;
+    P[x,y] or P[y,x] by Th4;
+    hence [x,y] in R or [y,x] in R by A2;
+  end;
+  now
+    let x,y,z;
+    assume [x,y] in R & [y,z] in R;
+    then P[x,y] & P[y,z] by A2;
+    then P[x,z] by Th5;
+    hence [x,z] in R by A2;
+  end;
+  then reconsider o = R as Element of LinPreorders A by A3,Def1;
+  take o;
+  not [b,a] in R & not [c,a] in R &
+  (not [c,b] in R iff b <_o', c) & (not [b,c] in R iff c <_o', b) by A1,A2;
+  hence thesis by Def4;
 end;
 
 theorem Th11:
- a <> b & a <> c implies ex o st
-  b <_o, a & c <_o, a &
+  a <> b & a <> c implies ex o st b <_o, a & c <_o, a &
   (b <_o, c iff b <_o', c) & (c <_o, b iff c <_o', b)
 proof
- assume
+  assume
 A1: a <> b & a <> c;
- defpred P[Element of A,Element of A] means
+  defpred P[Element of A,Element of A] means
   ($1 <> a & $1 <=_o', $2) or $2 = a;
- consider R being Relation of A such that
+  consider R being Relation of A such that
 A2: for x,y holds [x,y] in R iff P[x,y] from RELSET_1:sch 2;
 A3: now
-  let x,y;
-  P[x,y] or P[y,x] by Th4;
-  hence [x,y] in R or [y,x] in R by A2;
- end;
- now
-  let x,y,z;
-  assume [x,y] in R & [y,z] in R;
-  then P[x,y] & P[y,z] by A2;
-  then P[x,z] by Th5;
-  hence [x,z] in R by A2;
- end;
- then reconsider o = R as Element of LinPreorders A by A3,Def1;
- take o;
- not [a,b] in R & not [a,c] in R &
- (not [c,b] in R iff b <_o', c) & (not [b,c] in R iff c <_o', b) by A1,A2;
- hence thesis by Def4;
+    let x,y;
+    P[x,y] or P[y,x] by Th4;
+    hence [x,y] in R or [y,x] in R by A2;
+  end;
+  now
+    let x,y,z;
+    assume [x,y] in R & [y,z] in R;
+    then P[x,y] & P[y,z] by A2;
+    then P[x,z] by Th5;
+    hence [x,z] in R by A2;
+  end;
+  then reconsider o = R as Element of LinPreorders A by A3,Def1;
+  take o;
+  not [a,b] in R & not [a,c] in R &
+  (not [c,b] in R iff b <_o', c) & (not [b,c] in R iff c <_o', b) by A1,A2;
+  hence thesis by Def4;
 end;
 
 theorem
- for o,o' being Element of LinOrders A holds
+  for o,o' being Element of LinOrders A holds
   ((a <_o, b iff a <_o', b) & (b <_o, a iff b <_o', a)) iff
   (a <_o, b iff a <_o', b)
 proof
- let o,o' be Element of LinOrders A;
- thus (a <_o, b iff a <_o', b) & (b <_o, a iff b <_o', a) implies
+  let o,o' be Element of LinOrders A;
+  thus (a <_o, b iff a <_o', b) & (b <_o, a iff b <_o', a) implies
   (a <_o, b iff a <_o', b);
- assume
+  assume
 A1: a <_o, b iff a <_o', b;
- hence a <_o, b iff a <_o', b;
- hereby
-  assume b <_o, a;
-  then a <> b & b <=_o, a by Th4;
-  hence b <_o', a by A1,Th6;
- end;
- assume b <_o', a;
- then a <> b & b <=_o', a by Th4;
- hence thesis by A1,Th6;
+  hence a <_o, b iff a <_o', b;
+  hereby
+    assume b <_o, a;
+    then a <> b & b <=_o, a by Th4;
+    hence b <_o', a by A1,Th6;
+  end;
+  assume b <_o', a;
+  then a <> b & b <=_o', a by Th4;
+  hence thesis by A1,Th6;
 end;
 
 theorem Th13:
- for o being Element of LinOrders A, o' being Element of LinPreorders A holds
+  for o being Element of LinOrders A, o' being Element of LinPreorders A holds
   (for a,b st a <_o, b holds a <_o', b) iff
   (for a,b holds a <_o, b iff a <_o', b)
 proof
- let o be Element of LinOrders A, o' be Element of LinPreorders A;
- hereby
-  assume
+  let o be Element of LinOrders A, o' be Element of LinPreorders A;
+  hereby
+    assume
 A1: for a,b st a <_o, b holds a <_o', b;
-  let a,b;
-  per cases by Th6;
-  suppose a <_o, b;
-   hence a <_o, b iff a <_o', b by A1;
+    let a,b;
+    per cases by Th6;
+    suppose a <_o, b;
+      hence a <_o, b iff a <_o', b by A1;
+    end;
+    suppose a = b;
+      hence a <_o, b iff a <_o', b by Th3;
+    end;
+    suppose
+A2:   b <_o, a;
+      then b <_o', a by A1;
+      hence a <_o, b iff a <_o', b by A2,Th4;
+    end;
   end;
-  suppose a = b;
-   hence a <_o, b iff a <_o', b by Th3;
-  end;
-  suppose
-A2: b <_o, a;
-   then b <_o', a by A1;
-   hence a <_o, b iff a <_o', b by A2,Th4;
-  end;
- end;
- thus thesis;
+  thus thesis;
 end;
 
 begin :: Arrow's theorem
@@ -545,282 +537,272 @@ reserve f for Function of Funcs(N,LinPreorders A),LinPreorders A;
 reserve k,k',k0,kI,kII,kII' for Nat;
 
 theorem Th14:
- (for p,a,b st for i holds a <_p.i, b holds a <_f.p, b) &
- (for p,p',a,b st
-   for i holds (a <_p.i, b iff a <_p'.i, b) & (b <_p.i, a iff b <_p'.i, a)
-  holds a <_f.p, b iff a <_f.p', b) &
- card A >= 3 implies
- ex n st for p,a,b st a <_p.n, b holds a <_f.p, b
+  (for p,a,b st for i holds a <_p.i, b holds a <_f.p, b) & (for p,p',a,b st
+  for i holds (a <_p.i, b iff a <_p'.i, b) & (b <_p.i, a iff b <_p'.i, a)
+  holds a <_f.p, b iff a <_f.p', b) & card A >= 3 implies
+  ex n st for p,a,b st a <_p.n, b holds a <_f.p, b
 proof
- assume that
+  assume that
 A1: for p,a,b st for i holds a <_p.i, b holds a <_f.p, b and
 A2: for p,p',a,b st
-    for i holds (a <_p.i, b iff a <_p'.i, b) & (b <_p.i, a iff b <_p'.i, a)
-   holds a <_f.p, b iff a <_f.p', b and
+  for i holds (a <_p.i, b iff a <_p'.i, b) & (b <_p.i, a iff b <_p'.i, a)
+  holds a <_f.p, b iff a <_f.p', b and
 A3: card A >= 3;
- defpred extreme[Element of LinPreorders A,Element of A] means
+  defpred extreme[Element of LinPreorders A,Element of A] means
   (for a st a <> $2 holds $2 <_$1, a) or (for a st a <> $2 holds a <_$1, $2);
 A4: for p,b st for i holds extreme[p.i,b] holds extreme[f.p,b]
- proof
-  assume not thesis;
-  then consider p,b such that
+  proof
+    assume not thesis;
+    then consider p,b such that
 A5: (ex a st a <> b & a <=_f.p, b) & (ex c st c <> b & b <=_f.p, c) &
     for i holds extreme[p.i,b];
-  consider a' such that
+    consider a' such that
 A6: a' <> b & a' <=_f.p, b by A5;
-  consider c' such that
+    consider c' such that
 A7: b <> c' & b <=_f.p, c' by A5;
-  ex a,c st a <> b & b <> c & a <> c & a <=_f.p, b & b <=_f.p, c
-  proof
-   per cases;
-   suppose
-A8:  a' <> c';
-    take a',c';
-    thus thesis by A6,A7,A8;
-   end;
-   suppose
-A9:  a' = c';
-    consider d such that
-A10:  d <> b & d <> a' by A3,Th2;
-    per cases by Th4;
-    suppose
-A11:   d <=_f.p, b;
-     take d,c';
-     thus thesis by A7,A9,A10,A11;
+    ex a,c st a <> b & b <> c & a <> c & a <=_f.p, b & b <=_f.p, c
+    proof
+      per cases;
+      suppose
+A8:     a' <> c';
+        take a',c';
+        thus thesis by A6,A7,A8;
+      end;
+      suppose
+A9:     a' = c';
+        consider d such that
+A10:    d <> b & d <> a' by A3,Th2;
+        per cases by Th4;
+        suppose
+A11:      d <=_f.p, b;
+          take d,c';
+          thus thesis by A7,A9,A10,A11;
+        end;
+        suppose
+A12:      b <=_f.p, d;
+          take a',d;
+          thus thesis by A6,A10,A12;
+        end;
+      end;
     end;
-    suppose
-A12:   b <=_f.p, d;
-     take a',d;
-     thus thesis by A6,A10,A12;
-    end;
-   end;
-  end;
-  then consider a,c such that
+    then consider a,c such that
 A13: a <> b & b <> c & a <> c & a <=_f.p, b & b <=_f.p, c;
-  defpred P[Element of N,Element of LinPreorders A] means
-   (a <_p.$1, b iff a <_$2, b) & (b <_p.$1, a iff b <_$2, a) &
-   (b <_p.$1, c iff b <_$2, c) & (c <_p.$1, b iff c <_$2, b) &
-   c <_$2, a;
+    defpred P[Element of N,Element of LinPreorders A] means
+    (a <_p.$1, b iff a <_$2, b) & (b <_p.$1, a iff b <_$2, a) &
+    (b <_p.$1, c iff b <_$2, c) & (c <_p.$1, b iff c <_$2, b) & c <_$2, a;
 A14: for i holds ex o st P[i,o]
-  proof
-   let i;
-   per cases by A5;
-   suppose for c st c <> b holds b <_p.i, c;
-    then
-A15:  b <_p.i, a & b <_p.i, c by A13;
-    consider o such that
-A16: b <_o, c & c <_o, a by A13,Th7;
-    take o;
-    thus thesis by A15,A16,Th4,Th5;
-   end;
-   suppose for a st a <> b holds a <_p.i, b;
-    then
-A17: a <_p.i, b & c <_p.i, b by A13;
-    consider o such that
-A18: c <_o, a & a <_o, b by A13,Th7;
-    take o;
-    thus thesis by A17,A18,Th4,Th5;
-   end;
-  end;
-  consider p' being Function of N,LinPreorders A such that
+    proof
+      let i;
+      per cases by A5;
+      suppose for c st c <> b holds b <_p.i, c;
+        then
+A15:    b <_p.i, a & b <_p.i, c by A13;
+        consider o such that
+A16:    b <_o, c & c <_o, a by A13,Th7;
+        take o;
+        thus thesis by A15,A16,Th4,Th5;
+      end;
+      suppose for a st a <> b holds a <_p.i, b;
+        then
+A17:    a <_p.i, b & c <_p.i, b by A13;
+        consider o such that
+A18:    c <_o, a & a <_o, b by A13,Th7;
+        take o;
+        thus thesis by A17,A18,Th4,Th5;
+      end;
+    end;
+    consider p' being Function of N,LinPreorders A such that
 A19: for i holds P[i,p'.i] from FUNCT_2:sch 3(A14);
-  reconsider p' as Element of Funcs(N,LinPreorders A) by FUNCT_2:11;
-  a <=_f.p', b & b <=_f.p', c by A2,A13,A19;
-  then a <=_f.p', c & c <_f.p', a by A1,A19,Th5;
-  hence contradiction;
- end;
-A20: for b holds ex nb,pI,pII st
-  (for i st i <> nb holds pI.i = pII.i) &
+    reconsider p' as Element of Funcs(N,LinPreorders A) by FUNCT_2:11;
+    a <=_f.p', b & b <=_f.p', c by A2,A13,A19;
+    then a <=_f.p', c & c <_f.p', a by A1,A19,Th5;
+    hence contradiction;
+  end;
+A20: for b holds ex nb,pI,pII st (for i st i <> nb holds pI.i = pII.i) &
   (for i holds extreme[pI.i,b]) & (for i holds extreme[pII.i,b]) &
   (for a st a <> b holds b <_pI.nb, a) &
   (for a st a <> b holds a <_pII.nb, b) &
-  (for a st a <> b holds b <_f.pI, a) &
-  (for a st a <> b holds a <_f.pII, b)
- proof
-  consider t being FinSequence such that
+  (for a st a <> b holds b <_f.pI, a) & (for a st a <> b holds a <_f.pII, b)
+  proof
+    consider t being FinSequence such that
 A21: rng t = N & t is one-to-one by FINSEQ_4:73;
-  reconsider t as FinSequence of N by A21,FINSEQ_1:def 4;
-  let b;
-  consider oI such that
+    reconsider t as FinSequence of N by A21,FINSEQ_1:def 4;
+    let b;
+    consider oI such that
 A22: for a st a <> b holds b <_oI, a by Th8;
-  consider oII such that
+    consider oII such that
 A23: for a st a <> b holds a <_oII, b by Th9;
-A24: for k0 holds ex p st
-   (for k st k in dom t & k < k0 holds p.(t.k) = oII) &
-   (for k st k in dom t & k >= k0 holds p.(t.k) = oI)
-  proof
-   let k0;
-   defpred P[Element of N,Element of LinPreorders A] means
-    ex k st k in dom t & $1 = t.k &
-     (k < k0 implies $2 = oII) & (k >= k0 implies $2 = oI);
-A25: for i holds ex o st P[i,o]
-   proof
-    let i;
-    consider k being set such that
-A26:  k in dom t & i = t.k by A21,FUNCT_1:def 5;
-    reconsider k as Nat by A26,ORDINAL1:def 13;
-    per cases;
-    suppose
-A27:   k < k0;
-     take oII;
-     thus thesis by A26,A27;
+A24: for k0 holds ex p st (for k st k in dom t & k < k0 holds p.(t.k) = oII) &
+    (for k st k in dom t & k >= k0 holds p.(t.k) = oI)
+    proof
+      let k0;
+      defpred P[Element of N,Element of LinPreorders A] means
+      ex k st k in dom t & $1 = t.k &
+      (k < k0 implies $2 = oII) & (k >= k0 implies $2 = oI);
+A25:  for i holds ex o st P[i,o]
+      proof
+        let i;
+        consider k being set such that
+A26:    k in dom t & i = t.k by A21,FUNCT_1:def 5;
+        reconsider k as Nat by A26,ORDINAL1:def 13;
+        per cases;
+        suppose
+A27:      k < k0;
+          take oII;
+          thus thesis by A26,A27;
+        end;
+        suppose
+A28:      k >= k0;
+          take oI;
+          thus thesis by A26,A28;
+        end;
+      end;
+      consider p being Function of N,LinPreorders A such that
+A29:  for i holds P[i,p.i] from FUNCT_2:sch 3(A25);
+      reconsider p as Element of Funcs(N,LinPreorders A) by FUNCT_2:11;
+      take p;
+      thus for k st k in dom t & k < k0 holds p.(t.k) = oII
+      proof
+        let k;
+        assume
+A30:    k in dom t & k < k0;
+        then reconsider i = t.k as Element of N by PARTFUN1:27;
+        P[i,p.i] by A29;
+        hence thesis by A21,A30,FUNCT_1:def 8;
+      end;
+      let k;
+      assume
+A31:  k in dom t & k >= k0;
+      then reconsider i = t.k as Element of N by PARTFUN1:27;
+      P[i,p.i] by A29;
+      hence thesis by A21,A31,FUNCT_1:def 8;
     end;
-    suppose
-A28:   k >= k0;
-     take oI;
-     thus thesis by A26,A28;
-    end;
-   end;
-   consider p being Function of N,LinPreorders A such that
-A29: for i holds P[i,p.i] from FUNCT_2:sch 3(A25);
-   reconsider p as Element of Funcs(N,LinPreorders A) by FUNCT_2:11;
-   take p;
-   thus for k st k in dom t & k < k0 holds p.(t.k) = oII
-   proof
-    let k;
-    assume
-A30: k in dom t & k < k0;
-    then reconsider i = t.k as Element of N by PARTFUN1:27;
-    P[i,p.i] by A29;
-    hence thesis by A21,A30,FUNCT_1:def 8;
-   end;
-   let k;
-   assume
-A31: k in dom t & k >= k0;
-   reconsider i = t.k as Element of N by A31,PARTFUN1:27;
-   P[i,p.i] by A29;
-   hence thesis by A21,A31,FUNCT_1:def 8;
-  end;
-  defpred Q[Nat] means
-   for p st
-     (for k st k in dom t & k < $1 holds p.(t.k) = oII) &
-     (for k st k in dom t & k >= $1 holds p.(t.k) = oI)
+    defpred Q[Nat] means for p st
+    (for k st k in dom t & k < $1 holds p.(t.k) = oII) &
+    (for k st k in dom t & k >= $1 holds p.(t.k) = oI)
     holds for a st a <> b holds a <_f.p, b;
-  reconsider kII' = len t + 1 as Element of NAT by ORDINAL1:def 13;
+    reconsider kII' = len t + 1 as Element of NAT by ORDINAL1:def 13;
 A32: Q[kII']
-  proof
-   let p;
-   assume
-A33: (for k st k in dom t & k < kII' holds p.(t.k) = oII) &
-    (for k st k in dom t & k >= kII' holds p.(t.k) = oI);
-   let a;
-   assume
-A34: a <> b;
-   for i holds a <_p.i, b
-   proof
-    let i;
-    consider k being set such that
-A35: k in dom t & i = t.k by A21,FUNCT_1:def 5;
-    reconsider k as Nat by A35,ORDINAL1:def 13;
-    k <= len t by A35,FINSEQ_3:27;
-    then k + 0 < kII' by XREAL_1:10;
-    then p.i = oII by A33,A35;
-    hence a <_p.i, b by A23,A34;
-   end;
-   hence a <_f.p, b by A1;
-  end;
-  then
+    proof
+      let p;
+      assume
+A33:  (for k st k in dom t & k < kII' holds p.(t.k) = oII) &
+      (for k st k in dom t & k >= kII' holds p.(t.k) = oI);
+      let a;
+      assume
+A34:  a <> b;
+      for i holds a <_p.i, b
+      proof
+        let i;
+        consider k being set such that
+A35:    k in dom t & i = t.k by A21,FUNCT_1:def 5;
+        reconsider k as Nat by A35,ORDINAL1:def 13;
+        k <= len t by A35,FINSEQ_3:27;
+        then k + 0 < kII' by XREAL_1:10;
+        then p.i = oII by A33,A35;
+        hence a <_p.i, b by A23,A34;
+      end;
+      hence a <_f.p, b by A1;
+    end;
+    then
 A36: ex kII' being Nat st Q[kII'];
-  consider kII being Nat such that
-A37: Q[kII] & for k0 being Nat st Q[k0] holds k0 >= kII
-    from NAT_1:sch 5(A36);
-  consider pII such that
+    consider kII being Nat such that
+A37: Q[kII] & for k0 being Nat st Q[k0] holds k0 >= kII from NAT_1:sch 5(A36);
+    consider pII such that
 A38: (for k st k in dom t & k < kII holds pII.(t.k) = oII) &
-     (for k st k in dom t & k >= kII holds pII.(t.k) = oI) by A24;
+    (for k st k in dom t & k >= kII holds pII.(t.k) = oI) by A24;
 A39: kII > 1
-  proof
-   assume
-A40: kII <= 1;
-   card A >= 2 by A3,XXREAL_0:2;
-   then consider a such that
-A41: a <> b by Th1;
-   for i holds b <_pII.i, a
-   proof
-    let i;
-    consider k being set such that
-A42: k in dom t & i = t.k by A21,FUNCT_1:def 5;
-    reconsider k as Nat by A42,ORDINAL1:def 13;
-    k >= 1 by A42,FINSEQ_3:27;
-    then k >= kII by A40,XXREAL_0:2;
-    then pII.i = oI by A38,A42;
-    hence thesis by A22,A41;
-   end;
-   then a <_f.pII, b & b <_f.pII, a by A1,A37,A38,A41;
-   hence contradiction by Th4;
-  end;
-  then reconsider kI = kII - 1 as Nat by NAT_1:20;
-  reconsider kI as Element of NAT by ORDINAL1:def 13;
+    proof
+      assume
+A40:  kII <= 1;
+      card A >= 2 by A3,XXREAL_0:2;
+      then consider a such that
+A41:  a <> b by Th1;
+      for i holds b <_pII.i, a
+      proof
+        let i;
+        consider k being set such that
+A42:    k in dom t & i = t.k by A21,FUNCT_1:def 5;
+        reconsider k as Nat by A42,ORDINAL1:def 13;
+        k >= 1 by A42,FINSEQ_3:27;
+        then k >= kII by A40,XXREAL_0:2;
+        then pII.i = oI by A38,A42;
+        hence thesis by A22,A41;
+      end;
+      then a <_f.pII, b & b <_f.pII, a by A1,A37,A38,A41;
+      hence contradiction by Th4;
+    end;
+    then reconsider kI = kII - 1 as Nat by NAT_1:20;
+    reconsider kI as Element of NAT by ORDINAL1:def 13;
 A43: kII = kI + 1;
-  kI > 1 - 1 by A39,XREAL_1:11;
-  then
+    kI > 1 - 1 by A39,XREAL_1:11;
+    then
 A44: kI >= 0 + 1 by INT_1:20;
-  kII <= kII' by A32,A37;
-  then kI <= kII' - 1 by XREAL_1:11;
-  then
+    kII <= kII' by A32,A37;
+    then kI <= kII' - 1 by XREAL_1:11;
+    then
 A45: kI in dom t by A44,FINSEQ_3:27;
-  then reconsider nb = t.kI as Element of N by PARTFUN1:27;
+    then reconsider nb = t.kI as Element of N by PARTFUN1:27;
 A46: kI + 0 < kII by A43,XREAL_1:10;
-  then consider pI such that
+    then consider pI such that
 A47: (for k st k in dom t & k < kI holds pI.(t.k) = oII) &
-     (for k st k in dom t & k >= kI holds pI.(t.k) = oI) &
-     not (for a st a <> b holds a <_f.pI, b) by A37;
-  take nb,pI,pII;
-  thus for i st i <> nb holds pI.i = pII.i
-  proof
-   let i;
-   assume
-A48: i <> nb;
-   consider k being set such that
-A49: k in dom t & i = t.k by A21,FUNCT_1:def 5;
-   reconsider k as Nat by A49,ORDINAL1:def 13;
-   per cases by A48,A49,XXREAL_0:1;
-   suppose k < kI;
-    then k < kI & k + 0 < kII by A43,XREAL_1:10;
-    then pI.i = oII & pII.i = oII by A38,A47,A49;
-    hence thesis;
-   end;
-   suppose k > kI;
-    then k >= kI & k >= kII by A43,INT_1:20;
-    then pI.i = oI & pII.i = oI by A38,A47,A49;
-    hence thesis;
-   end;
-  end;
-  thus
+    (for k st k in dom t & k >= kI holds pI.(t.k) = oI) &
+    not (for a st a <> b holds a <_f.pI, b) by A37;
+    take nb,pI,pII;
+    thus for i st i <> nb holds pI.i = pII.i
+    proof
+      let i;
+      assume
+A48:  i <> nb;
+      consider k being set such that
+A49:  k in dom t & i = t.k by A21,FUNCT_1:def 5;
+      reconsider k as Nat by A49,ORDINAL1:def 13;
+      per cases by A48,A49,XXREAL_0:1;
+      suppose k < kI;
+        then k < kI & k + 0 < kII by A43,XREAL_1:10;
+        then pI.i = oII & pII.i = oII by A38,A47,A49;
+        hence thesis;
+      end;
+      suppose k > kI;
+        then k >= kI & k >= kII by A43,INT_1:20;
+        then pI.i = oI & pII.i = oI by A38,A47,A49;
+        hence thesis;
+      end;
+    end; thus
 A50: for i holds extreme[pI.i,b]
-  proof
-   let i;
-   consider k being set such that
-A51: k in dom t & i = t.k by A21,FUNCT_1:def 5;
-   reconsider k as Nat by A51,ORDINAL1:def 13;
-   k < kI or k >= kI;
-   then pI.i = oII or pI.i = oI by A47,A51;
-   hence thesis by A22,A23;
+    proof
+      let i;
+      consider k being set such that
+A51:  k in dom t & i = t.k by A21,FUNCT_1:def 5;
+      reconsider k as Nat by A51,ORDINAL1:def 13;
+      k < kI or k >= kI;
+      then pI.i = oII or pI.i = oI by A47,A51;
+      hence thesis by A22,A23;
+    end;
+    thus for i holds extreme[pII.i,b]
+    proof
+      let i;
+      consider k being set such that
+A52:  k in dom t & i = t.k by A21,FUNCT_1:def 5;
+      reconsider k as Nat by A52,ORDINAL1:def 13;
+      k < kII or k >= kII;
+      then pII.i = oII or pII.i = oI by A38,A52;
+      hence thesis by A22,A23;
+    end;
+    pI.nb = oI by A45,A47;
+    hence for a st a <> b holds b <_pI.nb, a by A22;
+    pII.nb = oII by A38,A45,A46;
+    hence for a st a <> b holds a <_pII.nb, b by A23;
+    thus for a st a <> b holds b <_f.pI, a by A4,A47,A50;
+    thus for a st a <> b holds a <_f.pII, b by A37,A38;
   end;
-  thus for i holds extreme[pII.i,b]
-  proof
-   let i;
-   consider k being set such that
-A52: k in dom t & i = t.k by A21,FUNCT_1:def 5;
-   reconsider k as Nat by A52,ORDINAL1:def 13;
-   k < kII or k >= kII;
-   then pII.i = oII or pII.i = oI by A38,A52;
-   hence thesis by A22,A23;
-  end;
-  pI.nb = oI by A45,A47;
-  hence for a st a <> b holds b <_pI.nb, a by A22;
-  pII.nb = oII by A38,A45,A46;
-  hence for a st a <> b holds a <_pII.nb, b by A23;
-  thus for a st a <> b holds b <_f.pI, a by A4,A47,A50;
-  thus for a st a <> b holds a <_f.pII, b by A37,A38;
- end;
-A53: for b holds ex nb,pI,pII st
-  (for i st i <> nb holds pI.i = pII.i) &
+A53: for b holds ex nb,pI,pII st (for i st i <> nb holds pI.i = pII.i) &
   (for i holds extreme[pI.i,b]) &
   (for a st a <> b holds b <_f.pI, a) & (for a st a <> b holds a <_f.pII, b) &
   (for p,a,c st a <> b & c <> b & a <_p.nb, c holds a <_f.p, c)
- proof
-  let b;
-  consider nb,pI,pII such that
+  proof
+    let b;
+    consider nb,pI,pII such that
 A54: for i st i <> nb holds pI.i = pII.i and
 A55: for i holds extreme[pI.i,b] and
 A56: for i holds extreme[pII.i,b] and
@@ -828,167 +810,165 @@ A57: for a st a <> b holds b <_pI.nb, a and
 A58: for a st a <> b holds a <_pII.nb, b and
 A59: for a st a <> b holds b <_f.pI, a and
 A60: for a st a <> b holds a <_f.pII, b by A20;
-  take nb,pI,pII;
-  thus (for i st i <> nb holds pI.i = pII.i) &
-   (for i holds extreme[pI.i,b]) &
-   (for a st a <> b holds b <_f.pI, a) & (for a st a <> b holds a <_f.pII, b)
+    take nb,pI,pII;
+    thus (for i st i <> nb holds pI.i = pII.i) &
+    (for i holds extreme[pI.i,b]) &
+    (for a st a <> b holds b <_f.pI, a) & (for a st a <> b holds a <_f.pII, b)
     by A54,A55,A59,A60;
-  let p,a,c;
-  assume that
+    let p,a,c;
+    assume that
 A61: a <> b & c <> b and
 A62: a <_p.nb, c;
 A63: a <> c by A62,Th3;
-  defpred P[Element of N,Element of LinPreorders A] means
-   (a <_p.$1, c iff a <_$2, c) & (c <_p.$1, a iff c <_$2, a) &
-   ($1 = nb implies a <_$2, b & b <_$2, c) &
-   ($1 <> nb implies
+    defpred P[Element of N,Element of LinPreorders A] means
+    (a <_p.$1, c iff a <_$2, c) & (c <_p.$1, a iff c <_$2, a) &
+    ($1 = nb implies a <_$2, b & b <_$2, c) & ($1 <> nb implies
     ((for d st d <> b holds b <_pII.$1, d) implies b <_$2, a & b <_$2, c) &
     ((for d st d <> b holds d <_pII.$1, b) implies a <_$2, b & c <_$2, b));
 A64: for i holds ex o st P[i,o]
-  proof
-   let i;
-   per cases;
-   suppose
-A65:  i = nb;
-    consider o such that
-A66:  a <_o, b & b <_o, c by A61,A63,Th7;
-    take o;
-    thus thesis by A62,A65,A66,Th4,Th5;
-   end;
-   suppose
-A67: i <> nb;
-    per cases by A56;
-    suppose for d st d <> b holds b <_pII.i, d;
-     then b <_pII.i, a by A61;
-     then
-A68: not a <_pII.i, b by Th4;
-     consider o such that
-A69:  b <_o, a & b <_o, c &
-      (a <_o, c iff a <_p.i, c) & (c <_o, a iff c <_p.i, a) by A61,Th10;
-     take o;
-     thus thesis by A61,A67,A68,A69;
+    proof
+      let i;
+      per cases;
+      suppose
+A65:    i = nb;
+        consider o such that
+A66:    a <_o, b & b <_o, c by A61,A63,Th7;
+        take o;
+        thus thesis by A62,A65,A66,Th4,Th5;
+      end;
+      suppose
+A67:    i <> nb;
+        per cases by A56;
+        suppose for d st d <> b holds b <_pII.i, d;
+          then b <_pII.i, a by A61;
+          then
+A68:      not a <_pII.i, b by Th4;
+          consider o such that
+A69:      b <_o, a & b <_o, c &
+          (a <_o, c iff a <_p.i, c) & (c <_o, a iff c <_p.i, a) by A61,Th10;
+          take o;
+          thus thesis by A61,A67,A68,A69;
+        end;
+        suppose for d st d <> b holds d <_pII.i, b;
+          then a <_pII.i, b by A61;
+          then
+A70:      not b <_pII.i, a by Th4;
+          consider o such that
+A71:      a <_o, b & c <_o, b &
+          (a <_o, c iff a <_p.i, c) & (c <_o, a iff c <_p.i, a) by A61,Th11;
+          take o;
+          thus thesis by A61,A67,A70,A71;
+        end;
+      end;
     end;
-    suppose for d st d <> b holds d <_pII.i, b;
-     then a <_pII.i, b by A61;
-     then
-A70:  not b <_pII.i, a by Th4;
-     consider o such that
-A71:  a <_o, b & c <_o, b &
-      (a <_o, c iff a <_p.i, c) & (c <_o, a iff c <_p.i, a) by A61,Th11;
-     take o;
-     thus thesis by A61,A67,A70,A71;
-    end;
-   end;
-  end;
-  consider pIII being Function of N,LinPreorders A such that
+    consider pIII being Function of N,LinPreorders A such that
 A72: for i holds P[i,pIII.i] from FUNCT_2:sch 3(A64);
-  reconsider pIII as Element of Funcs(N,LinPreorders A) by FUNCT_2:11;
-  for i holds (a <_pII.i, b iff a <_pIII.i, b) &
+    reconsider pIII as Element of Funcs(N,LinPreorders A) by FUNCT_2:11;
+    for i holds (a <_pII.i, b iff a <_pIII.i, b) &
     (b <_pII.i, a iff b <_pIII.i, a)
-  proof
-   let i;
-   per cases;
-   suppose i = nb;
-    then a <_pII.i, b & a <_pIII.i, b by A58,A61,A72;
-    hence thesis by Th4;
-   end;
-   suppose
-A73: i <> nb;
-    per cases by A56;
-    suppose for d st d <> b holds b <_pII.i, d;
-     then b <_pII.i, a & b <_pIII.i, a by A61,A72,A73;
-     hence thesis by Th4;
+    proof
+      let i;
+      per cases;
+      suppose i = nb;
+        then a <_pII.i, b & a <_pIII.i, b by A58,A61,A72;
+        hence thesis by Th4;
+      end;
+      suppose
+A73:    i <> nb;
+        per cases by A56;
+        suppose for d st d <> b holds b <_pII.i, d;
+          then b <_pII.i, a & b <_pIII.i, a by A61,A72,A73;
+          hence thesis by Th4;
+        end;
+        suppose for d st d <> b holds d <_pII.i, b;
+          then a <_pII.i, b & a <_pIII.i, b by A61,A72,A73;
+          hence thesis by Th4;
+        end;
+      end;
     end;
-    suppose for d st d <> b holds d <_pII.i, b;
-     then a <_pII.i, b & a <_pIII.i, b by A61,A72,A73;
-     hence thesis by Th4;
-    end;
-   end;
-  end;
-  then
+    then
 A74: a <_f.pII, b iff a <_f.pIII, b by A2;
-  for i holds (b <_pI.i, c iff b <_pIII.i, c) & (c <_pI.i, b iff c <_pIII.i, b)
-  proof
-   let i;
-   per cases;
-   suppose i = nb;
-    then b <_pI.i, c & b <_pIII.i, c by A57,A61,A72;
-    hence thesis by Th4;
-   end;
-   suppose
-A75: i <> nb;
-    per cases by A56;
-    suppose for d st d <> b holds b <_pII.i, d;
-     then b <_pII.i, c & b <_pIII.i, c by A61,A72,A75;
-     then b <_pI.i, c & b <_pIII.i, c by A54,A75;
-     hence thesis by Th4;
+
+for i holds (b <_pI.i, c iff b <_pIII.i, c) & (c <_pI.i, b iff c <_pIII.i, b )
+    proof
+      let i;
+      per cases;
+      suppose i = nb;
+        then b <_pI.i, c & b <_pIII.i, c by A57,A61,A72;
+        hence thesis by Th4;
+      end;
+      suppose
+A75:    i <> nb;
+        per cases by A56;
+        suppose for d st d <> b holds b <_pII.i, d;
+          then b <_pII.i, c & b <_pIII.i, c by A61,A72,A75;
+          then b <_pI.i, c & b <_pIII.i, c by A54,A75;
+          hence thesis by Th4;
+        end;
+        suppose for d st d <> b holds d <_pII.i, b;
+          then c <_pII.i, b & c <_pIII.i, b by A61,A72,A75;
+          then c <_pI.i, b & c <_pIII.i, b by A54,A75;
+          hence thesis by Th4;
+        end;
+      end;
     end;
-    suppose for d st d <> b holds d <_pII.i, b;
-     then c <_pII.i, b & c <_pIII.i, b by A61,A72,A75;
-     then c <_pI.i, b & c <_pIII.i, b by A54,A75;
-     hence thesis by Th4;
-    end;
-   end;
+    then b <_f.pI, c iff b <_f.pIII, c by A2;
+    then a <_f.pIII, c by A59,A60,A61,A74,Th5;
+    hence thesis by A2,A72;
   end;
-  then b <_f.pI, c iff b <_f.pIII, c by A2;
-  then a <_f.pIII, c by A59,A60,A61,A74,Th5;
-  hence thesis by A2,A72;
- end;
- consider b;
- consider nb,pI,pII such that
+  consider b;
+  consider nb,pI,pII such that
 A76: for i st i <> nb holds pI.i = pII.i and
 A77: for i holds extreme[pI.i,b] and
 A78: for a st a <> b holds b <_f.pI, a and
 A79: for a st a <> b holds a <_f.pII, b and
 A80: for p,a,c st a <> b & c <> b & a <_p.nb, c holds a <_f.p, c by A53;
- take nb;
- let p,a,a';
- assume
+  take nb;
+  let p,a,a';
+  assume
 A81: a <_p.nb, a';
- then
+  then
 A82: a <> a' by Th4;
- per cases;
- suppose a <> b & a' <> b;
-  hence thesis by A80,A81;
- end;
- suppose
-A83: a = b or a' = b;
-  consider c such that
-A84: c <> a & c <> a' by A3,Th2;
-  consider nc,pI',pII' such that
-   for i st i <> nc holds pI'.i = pII'.i and
-   for i holds extreme[pI'.i,c] and
-   for a st a <> c holds c <_f.pI', a and
-   for a st a <> c holds a <_f.pII', c and
-A85: for p,a,a' st a <> c & a' <> c & a <_p.nc, a' holds a <_f.p, a' by A53;
-  nc = nb
-  proof
-   per cases by A83;
-   suppose
-A86: a = b;
-    assume
-A87: nc <> nb;
-    b <_pI.nc, a' or a' <_pI.nc, b by A77,A82,A86;
-    then (b <_pII.nc, a' & a' <_f.pII, b) or
-     (a' <_pI.nc, b & b <_f.pI, a') by A76,A78,A79,A82,A86,A87;
-    then (b <_pII.nc, a' & a' <=_f.pII, b) or
-     (a' <_pI.nc, b & b <=_f.pI, a') by Th4;
-    hence contradiction by A84,A85,A86;
-   end;
-   suppose
-A88: a' = b;
-    assume
-A89: nc <> nb;
-    b <_pI.nc, a or a <_pI.nc, b by A77,A82,A88;
-    then (b <_pII.nc, a & a <_f.pII, b) or
-     (a <_pI.nc, b & b <_f.pI, a) by A76,A78,A79,A82,A88,A89;
-    then (b <_pII.nc, a & a <=_f.pII, b) or
-     (a <_pI.nc, b & b <=_f.pI, a) by Th4;
-    hence contradiction by A84,A85,A88;
-   end;
+  per cases;
+  suppose a <> b & a' <> b;
+    hence thesis by A80,A81;
   end;
-  hence thesis by A81,A84,A85;
- end;
+  suppose
+A83: a = b or a' = b;
+    consider c such that
+A84: c <> a & c <> a' by A3,Th2;
+    consider nc,pI',pII' such that for i st i <> nc holds pI'.i = pII'.i and
+    for i holds extreme[pI'.i,c] and for a st a <> c holds c <_f.pI', a and
+    for a st a <> c holds a <_f.pII', c and
+A85: for p,a,a' st a <> c & a' <> c & a <_p.nc, a' holds a <_f.p, a' by A53;
+    nc = nb
+    proof
+      per cases by A83;
+      suppose
+A86:    a = b;
+        assume
+A87:    nc <> nb;
+        b <_pI.nc, a' or a' <_pI.nc, b by A77,A82,A86;
+        then (b <_pII.nc, a' & a' <_f.pII, b) or
+        (a' <_pI.nc, b & b <_f.pI, a') by A76,A78,A79,A82,A86,A87;
+        then (b <_pII.nc, a' & a' <=_f.pII, b) or
+        (a' <_pI.nc, b & b <=_f.pI, a') by Th4;
+        hence contradiction by A84,A85,A86;
+      end;
+      suppose
+A88:    a' = b;
+        assume
+A89:    nc <> nb;
+        b <_pI.nc, a or a <_pI.nc, b by A77,A82,A88;
+        then (b <_pII.nc, a & a <_f.pII, b) or
+        (a <_pI.nc, b & b <_f.pI, a) by A76,A78,A79,A82,A88,A89;
+        then (b <_pII.nc, a & a <=_f.pII, b) or
+        (a <_pI.nc, b & b <=_f.pI, a) by Th4;
+        hence contradiction by A84,A85,A88;
+      end;
+    end;
+    hence thesis by A81,A84,A85;
+  end;
 end;
 
 :: and then a stronger version
@@ -1000,147 +980,143 @@ reserve q,q' for Element of Funcs(N,LinPreorders A);
 reserve f for Function of Funcs(N,LinOrders A),LinPreorders A;
 
 theorem
- (for p,a,b st for i holds a <_p.i, b holds a <_f.p, b) &
- (for p,p',a,b st
-   for i holds a <_p.i, b iff a <_p'.i, b
-  holds a <_f.p, b iff a <_f.p', b) &
- card A >= 3 implies
- ex n st for p,a,b holds a <_p.n, b iff a <_f.p, b
+  (for p,a,b st for i holds a <_p.i, b holds a <_f.p, b) & (for p,p',a,b st
+  for i holds a <_p.i, b iff a <_p'.i, b holds a <_f.p, b iff a <_f.p', b) &
+  card A >= 3 implies ex n st for p,a,b holds a <_p.n, b iff a <_f.p, b
 proof
- assume that
+  assume that
 A1: for p,a,b st for i holds a <_p.i, b holds a <_f.p, b and
-A2: for p,p',a,b st
-    for i holds a <_p.i, b iff a <_p'.i, b
-   holds a <_f.p, b iff a <_f.p', b and
+A2: for p,p',a,b st for i holds a <_p.i, b iff a <_p'.i, b
+  holds a <_f.p, b iff a <_f.p', b and
 A3: card A >= 3;
- consider o;
- defpred O[Element of LinPreorders A,Element of A,Element of A] means
+  consider o;
+  defpred O[Element of LinPreorders A,Element of A,Element of A] means
   $2 <=_$1, $3 & ($2 <_$1, $3 or $2 <=_o, $3);
- defpred P[Element of LinPreorders A,Element of LinOrders A] means
+  defpred P[Element of LinPreorders A,Element of LinOrders A] means
   for a,b holds O[$1,a,b] iff a <=_$2, b;
 A4: for o' ex o1 st P[o',o1]
- proof
-  let o';
-  defpred Q[Element of A,Element of A] means
-   O[o',$1,$2];
-  consider o1 being Relation of A such that
+  proof
+    let o';
+    defpred Q[Element of A,Element of A] means O[o',$1,$2];
+    consider o1 being Relation of A such that
 A5: for a,b holds [a,b] in o1 iff Q[a,b] from RELSET_1:sch 2;
 A6: now
-   let a,b;
-   Q[a,b] or Q[b,a] by Th4;
-   hence [a,b] in o1 or [b,a] in o1 by A5;
-  end;
-  now
-   let a,b,c;
-   Q[a,b] & Q[b,c] implies Q[a,c] by Th5;
-   hence [a,b] in o1 & [b,c] in o1 implies [a,c] in o1 by A5;
-  end;
-  then reconsider o1 as Element of LinPreorders A by A6,Def1;
-  now
-   let a,b;
-   Q[a,b] & Q[b,a] implies a = b by Th6;
-   hence [a,b] in o1 & [b,a] in o1 implies a = b by A5;
-  end;
-  then reconsider o1 as Element of LinOrders A by Def2;
-  take o1;
-  let a,b;
-  [a,b] in o1 iff Q[a,b] by A5;
-  hence thesis by Def4;
- end;
- defpred R[Element of Funcs(N,LinPreorders A),Element of Funcs(N,LinOrders A)]
- means
-  for i holds P[$1.i,$2.i];
-A7: for q,p,p' st R[q,p] & R[q,p'] holds p = p'
- proof
-  let q,p,p';
-  assume
-A8: R[q,p] & R[q,p'];
-   let i;
-   reconsider pi = p.i as Relation of A by Def1;
-   reconsider pi' = p'.i as Relation of A by Def1;
-   now
+      let a,b;
+      Q[a,b] or Q[b,a] by Th4;
+      hence [a,b] in o1 or [b,a] in o1 by A5;
+    end;
+    now
+      let a,b,c;
+      Q[a,b] & Q[b,c] implies Q[a,c] by Th5;
+      hence [a,b] in o1 & [b,c] in o1 implies [a,c] in o1 by A5;
+    end;
+    then reconsider o1 as Element of LinPreorders A by A6,Def1;
+    now
+      let a,b;
+      Q[a,b] & Q[b,a] implies a = b by Th6;
+      hence [a,b] in o1 & [b,a] in o1 implies a = b by A5;
+    end;
+    then reconsider o1 as Element of LinOrders A by Def2;
+    take o1;
     let a,b;
-    (O[q.i,a,b] iff a <=_p.i, b) & (O[q.i,a,b] iff a <=_p'.i, b) by A8;
-    hence [a,b] in p.i iff [a,b] in p'.i by Def4;
-   end;
-   then pi = pi' by RELSET_1:def 3;
-   hence p.i = p'.i;
- end;
+    [a,b] in o1 iff Q[a,b] by A5;
+    hence thesis by Def4;
+  end;
+  defpred R[Element of Funcs(N,LinPreorders A),Element of Funcs(N,LinOrders A)]
+  means for i holds P[$1.i,$2.i];
+A7: for q,p,p' st R[q,p] & R[q,p'] holds p = p'
+  proof
+    let q,p,p';
+    assume
+A8: R[q,p] & R[q,p'];
+    let i;
+    reconsider pi = p.i as Relation of A by Def1;
+    reconsider pi' = p'.i as Relation of A by Def1;
+    now
+      let a,b;
+      (O[q.i,a,b] iff a <=_p.i, b) & (O[q.i,a,b] iff a <=_p'.i, b) by A8;
+      hence [a,b] in p.i iff [a,b] in p'.i by Def4;
+    end;
+    then pi = pi' by RELSET_1:def 3;
+    hence p.i = p'.i;
+  end;
 A9: for q ex p st R[q,p]
- proof
-  let q;
-  defpred S[Element of N,Element of LinOrders A] means
-   P[q.$1,$2];
+  proof
+    let q;
+    defpred S[Element of N,Element of LinOrders A] means P[q.$1,$2];
 A10: for i ex o1 st S[i,o1] by A4;
-  consider p being Function of N,LinOrders A such that
+    consider p being Function of N,LinOrders A such that
 A11: for i holds S[i,p.i qua Element of LinOrders A] from FUNCT_2:sch 3(A10);
-  reconsider p as Element of Funcs(N,LinOrders A) by FUNCT_2:11;
-  take p;
-  thus thesis by A11;
- end;
- defpred T[Element of Funcs(N,LinPreorders A),Element of LinPreorders A] means
+    reconsider p as Element of Funcs(N,LinOrders A) by FUNCT_2:11;
+    take p;
+    thus thesis by A11;
+  end;
+  defpred T[Element of Funcs(N,LinPreorders A),Element of LinPreorders A] means
   ex p st R[$1,p] & f.p = $2;
 A12: for q ex o' st T[q,o']
- proof
-  let q;
-  consider p such that
+  proof
+    let q;
+    consider p such that
 A13: R[q,p] by A9;
-  take f.p;
-  thus thesis by A13;
- end;
- consider f' being Function of Funcs(N,LinPreorders A),LinPreorders A such that
+    take f.p;
+    thus thesis by A13;
+  end;
+
+consider f' being Function of Funcs(N,LinPreorders A),LinPreorders A such that
 A14: for q holds T[q,f'.q] from FUNCT_2:sch 3(A12);
 A15: for q,a,b st for i holds a <_q.i, b holds a <_f'.q, b
- proof
-  let q,a,b;
-  assume
+  proof
+    let q,a,b;
+    assume
 A16: for i holds a <_q.i, b;
-  consider p such that
+    consider p such that
 A17: R[q,p] & f.p = f'.q by A14;
+    now
+      let i;
+      not O[q.i,b,a] by A16;
+      hence a <_p.i, b by A17;
+    end;
+    hence a <_f'.q, b by A1,A17;
+  end;
   now
-   let i;
-   not O[q.i,b,a] by A16;
-   hence a <_p.i, b by A17;
+    let q,q',a,b;
+    assume
+A18: for i holds (a <_q.i, b iff a <_q'.i, b) & (b <_q.i, a iff b <_q'.i, a);
+    consider p such that
+A19: R[q,p] & f.p = f'.q by A14;
+    consider p' such that
+A20: R[q',p'] & f.p' = f'.q' by A14;
+    for i holds a <_p.i, b iff a <_p'.i, b
+    proof
+      let i;
+      O[q.i,b,a] iff O[q'.i,b,a] by A18;
+      hence thesis by A19,A20;
+    end;
+    hence a <_f'.q, b iff a <_f'.q', b by A2,A19,A20;
   end;
-  hence a <_f'.q, b by A1,A17;
- end;
-A18: now
-  let q,q',a,b;
-  assume
-A19: for i holds (a <_q.i, b iff a <_q'.i, b) & (b <_q.i, a iff b <_q'.i, a);
-  consider p such that
-A20: R[q,p] & f.p = f'.q by A14;
-  consider p' such that
-A21: R[q',p'] & f.p' = f'.q' by A14;
-  for i holds a <_p.i, b iff a <_p'.i, b
-  proof
-   let i;
-   O[q.i,b,a] iff O[q'.i,b,a] by A19;
-   hence thesis by A20,A21;
+  then consider n such that
+A21: for q,a,b st a <_q.n, b holds a <_f'.q, b by A3,A15,Th14;
+  take n;
+  let p;
+  now
+    rng p c= LinOrders A by RELSET_1:12;
+    then dom p = N & rng p c= LinPreorders A by FUNCT_2:def 1,XBOOLE_1:1;
+
+then reconsider q = p as Element of Funcs(N,LinPreorders A) by FUNCT_2:def 2;
+A22: R[q,p]
+    proof
+      let i;
+      let a,b;
+      a <_p.i, b or a = b or a >_p.i, b by Th6;
+      hence O[q.i,a,b] iff a <=_p.i, b by Th4;
+    end;
+    consider p' such that
+A23: R[q,p'] & f.p' = f'.q by A14;
+    let a,b;
+    assume a <_p.n, b;
+    then a <_f'.q, b & p = p' by A7,A21,A22,A23;
+    hence a <_f.p, b by A23;
   end;
-  hence a <_f'.q, b iff a <_f'.q', b by A2,A20,A21;
- end;
- consider n such that
-A22: for q,a,b st a <_q.n, b holds a <_f'.q, b by A3,A15,A18,Th14;
- take n;
- let p;
- now
-  rng p c= LinOrders A by RELSET_1:12;
-  then dom p = N & rng p c= LinPreorders A by FUNCT_2:def 1,XBOOLE_1:1;
-  then reconsider q = p as Element of Funcs(N,LinPreorders A) by FUNCT_2:def 2;
-A23: R[q,p]
-  proof
-   let i;
-   let a,b;
-   a <_p.i, b or a = b or a >_p.i, b by Th6;
-   hence O[q.i,a,b] iff a <=_p.i, b by Th4;
-  end;
-  consider p' such that
-A24: R[q,p'] & f.p' = f'.q by A14;
-  let a,b;
-  assume a <_p.n, b;
-  then a <_f'.q, b & p = p' by A7,A22,A23,A24;
-  hence a <_f.p, b by A24;
- end;
- hence for a,b holds a <_p.n, b iff a <_f.p, b by Th13;
+  hence for a,b holds a <_p.n, b iff a <_f.p, b by Th13;
 end;
+

@@ -8,12 +8,12 @@ environ
 
  vocabularies FUNCT_1, ARYTM, SEQ_1, ARYTM_1, SEQ_2, ORDINAL2, ABSVALUE,
       SETFAM_1, SUBSET_1, FINSUB_1, BOOLE, RELAT_1, FUNCOP_1, TARSKI, PROB_1,
-      RCOMP_1, SUPINF_1;
+      RCOMP_1, SUPINF_1, FUNCT_4;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, FINSUB_1, RELAT_1, FUNCT_1,
-      REAL_1, FUNCT_2, FUNCOP_1, ORDINAL1, CARD_3, NUMBERS, XCMPLX_0, XREAL_0,
-      COMPLEX1, SEQ_1, SEQ_2, SETFAM_1, XXREAL_0, XXREAL_1;
+      REAL_1, FUNCT_2, FUNCOP_1, FUNCT_7, ORDINAL1, CARD_3, NUMBERS, XCMPLX_0,
+      XREAL_0, COMPLEX1, SEQ_1, SEQ_2, SETFAM_1, XXREAL_0, XXREAL_1;
  constructors SETFAM_1, FUNCOP_1, FINSUB_1, XXREAL_1, COMPLEX1, REAL_1, SEQ_2,
-      CARD_3, MEMBERED, SEQ_1;
+      CARD_3, MEMBERED, SEQ_1, FUNCT_7;
  registrations XBOOLE_0, SUBSET_1, FUNCT_1, ORDINAL1, FUNCOP_1, NUMBERS,
       XXREAL_0, XREAL_0, MEMBERED, XXREAL_1, RELAT_1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
@@ -32,8 +32,8 @@ reserve seq for Real_Sequence;
 canceled 2;
 
 theorem :: PROB_1:3
- for r,seq st (ex n st for m st n <= m holds seq.m = r) holds
-     seq is convergent & lim seq = r;
+  for r,seq st (ex n st for m st n <= m holds seq.m = r) holds
+  seq is convergent & lim seq = r;
 
 :::::::::::::::::::::::::::::::::::::::::::::::::::::
 :: DEFINITION AND BASIC PROPERTIES OF              ::
@@ -41,27 +41,29 @@ theorem :: PROB_1:3
 :::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 definition
-   let X be set;
-   let IT be Subset-Family of X;
-   attr IT is compl-closed means
+  let X be set;
+  let IT be Subset-Family of X;
+  attr IT is compl-closed means
 :: PROB_1:def 1
-    for A being Subset of X st A in IT holds A` in IT;
+
+  for A being Subset of X st A in IT holds A` in IT;
 end;
 
-registration let X be set;
-   cluster non empty compl-closed cap-closed Subset-Family of X;
+registration
+  let X be set;
+  cluster non empty compl-closed cap-closed Subset-Family of X;
 end;
 
-definition let X be set;
+definition
+  let X be set;
   mode Field_Subset of X is non empty compl-closed cap-closed
     Subset-Family of X;
 end;
 
- reserve F for Field_Subset of X;
+reserve F for Field_Subset of X;
 
 theorem :: PROB_1:4
-   for A,B being Subset of X holds
-   {A,B} is Subset-Family of X;
+  for A,B being Subset of X holds {A,B} is Subset-Family of X;
 
 canceled;
 
@@ -71,64 +73,55 @@ theorem :: PROB_1:6
 canceled 2;
 
 theorem :: PROB_1:9
-for A, B being set st A in F & B in F holds A \/ B in F;
+  for A, B being set st A in F & B in F holds A \/ B in F;
 
 theorem :: PROB_1:10
-{} in F;
+  {} in F;
 
 theorem :: PROB_1:11
   X in F;
 
 theorem :: PROB_1:12
-  for A,B being Subset of X holds
-  A in F & B in F implies A \ B in F;
+  for A,B being Subset of X holds A in F & B in F implies A \ B in F;
 
 theorem :: PROB_1:13
-      for A, B being set holds
-   (A in F & B in F implies (A \ B) \/ B in F);
+  for A, B being set holds (A in F & B in F implies (A \ B) \/ B in F);
 
 theorem :: PROB_1:14
-      { {}, X } is Field_Subset of X;
+  { {}, X } is Field_Subset of X;
 
 theorem :: PROB_1:15
-     bool X is Field_Subset of X;
+  bool X is Field_Subset of X;
 
 theorem :: PROB_1:16
-      { {} , X } c= F & F c= bool X;
+  { {} , X } c= F & F c= bool X;
 
 canceled;
 
 theorem :: PROB_1:18
-    (for p st p in [:NAT,{X}:] ex x,y st [x,y]=p) &
-(for x,y,z st [x,y] in [:NAT,{X}:] & [x,z] in [:NAT,{X}:] holds y=z);
+  (for p st p in [:NAT,{X}:] ex x,y st [x,y]=p) &
+  (for x,y,z st [x,y] in [:NAT,{X}:] & [x,z] in [:NAT,{X}:] holds y=z);
 
-theorem :: PROB_1:19
- ex f st dom f = NAT & for n holds f.n = X;
-
-definition let X be set;
+definition
+  let X be set;
   mode SetSequence of X is Function of NAT, bool X;
 end;
 
- reserve ASeq,BSeq for SetSequence of Omega;
- reserve A1 for SetSequence of X;
+reserve ASeq,BSeq for SetSequence of Omega;
+reserve A1 for SetSequence of X;
 
-canceled;
+canceled 4;
 
-theorem :: PROB_1:21
-  ex A1 st for n holds A1.n = X;
-
-theorem :: PROB_1:22
-  for A, B being Subset of X
-   ex A1 st (A1.0 = A & for n st n <> 0 holds A1.n = B);
-
-definition let X,A1,n;
+definition
+  let X,A1,n;
   redefine func A1.n -> Subset of X;
 end;
 
 theorem :: PROB_1:23
   union rng A1 is Subset of X;
 
-definition let X be set, A1 be SetSequence of X;
+definition
+  let X be set, A1 be SetSequence of X;
   redefine func Union A1 -> Subset of X;
 end;
 
@@ -140,72 +133,80 @@ theorem :: PROB_1:25
 theorem :: PROB_1:26
   ex B1 being SetSequence of X st for n holds B1.n = (A1.n)`;
 
-definition let X be set, A1 be SetSequence of X;
- canceled 2;
-
+definition
+  let X be set, A1 be SetSequence of X;
+  canceled 2;
   func Complement A1 -> SetSequence of X means
 :: PROB_1:def 4
-     for n holds it.n = (A1.n)`;
- involutiveness;
+
+  for n holds it.n = (A1.n)`;
+  involutiveness;
 end;
 
-definition let X be set, A1 be SetSequence of X;
+definition
+  let X be set, A1 be SetSequence of X;
   func Intersection A1 -> Subset of X equals
 :: PROB_1:def 5
+
   (Union Complement A1)`;
 end;
 
 canceled 2;
 
 theorem :: PROB_1:29
- x in Intersection A1 iff for n holds x in A1.n;
+  x in Intersection A1 iff for n holds x in A1.n;
 
 theorem :: PROB_1:30
   for A, B being Subset of X holds
-  (A1.0 = A & for n st n <> 0 holds A1.n = B) implies
-             Intersection A1 = A /\ B;
+  (A1.0 = A & for n st n <> 0 holds A1.n = B) implies Intersection A1 = A /\ B;
 
-definition let X,A1;
+definition
+  let X,A1;
   attr A1 is non-increasing means
 :: PROB_1:def 6
- for n,m st n <= m holds A1.m c= A1.n;
+
+  for n,m st n <= m holds A1.m c= A1.n;
   attr A1 is non-decreasing means
 :: PROB_1:def 7
-        for n,m st n <= m holds A1.n c= A1.m;
+
+  for n,m st n <= m holds A1.n c= A1.m;
 end;
 
-definition let X be set, F be Subset-Family of X;
- attr F is sigma-multiplicative means
+definition
+  let X be set, F be Subset-Family of X;
+  attr F is sigma-multiplicative means
 :: PROB_1:def 8
- for A1 being SetSequence of X st for n holds A1.n in F
-       holds Intersection A1 in F;
+
+  for A1 being SetSequence of X st for n holds A1.n in F
+  holds Intersection A1 in F;
 end;
 
-registration let X be set;
- cluster compl-closed sigma-multiplicative non empty Subset-Family of X;
+registration
+  let X be set;
+  cluster compl-closed sigma-multiplicative non empty Subset-Family of X;
 end;
 
-definition let X be set;
- mode SigmaField of X
-  is compl-closed sigma-multiplicative non empty Subset-Family of X;
+definition
+  let X be set;
+  mode SigmaField of X
+    is compl-closed sigma-multiplicative non empty Subset-Family of X;
 end;
 
 canceled;
 
 theorem :: PROB_1:32
-   for S being non empty set holds
-   S is SigmaField of X iff
-    (S c= bool X) &
-    (for A1 being SetSequence of X st
-      (for n holds A1.n in S) holds Intersection A1 in S) &
-    (for A being Subset of X st A in S holds A` in S);
+  for S being non empty set holds S is SigmaField of X iff (S c= bool X) &
+  (for A1 being SetSequence of X st
+  (for n holds A1.n in S) holds Intersection A1 in S) &
+  (for A being Subset of X st A in S holds A` in S);
 
 canceled 2;
 
 theorem :: PROB_1:35
   Y is SigmaField of X implies Y is Field_Subset of X;
 
-registration let X be set;
+registration
+  let X be set;
   cluster -> cap-closed compl-closed SigmaField of X;
 end;
 
@@ -215,79 +216,87 @@ reserve Si for SigmaField of X;
 canceled 2;
 
 theorem :: PROB_1:38
-     ex A being Subset of X st A in Si;
+  ex A being Subset of X st A in Si;
 
 canceled 2;
 
 theorem :: PROB_1:41
-     for A,B being Subset of X st A in Si & B in Si holds A \/ B in Si;
+  for A,B being Subset of X st A in Si & B in Si holds A \/ B in Si;
 
 theorem :: PROB_1:42
-     {} in Si;
+  {} in Si;
 
 theorem :: PROB_1:43
-     X in Si;
+  X in Si;
 
 theorem :: PROB_1:44
-    for A,B being Subset of X st A in Si & B in Si holds A \ B in Si;
+  for A,B being Subset of X st A in Si & B in Si holds A \ B in Si;
 
 :: sequences of elements of given sigma-field (subsets of given nonempty set
 :: Omega) Sigma are introduced; also notion of Event from this sigma-field is
 :: introduced; then some previous theorems are reformulated in language of
 :: these notions.
 
-definition let X be set, Si be SigmaField of X;
+definition
+  let X be set, Si be SigmaField of X;
   mode SetSequence of Si -> SetSequence of X means
 :: PROB_1:def 9
-  for n holds it.n in Si;
+
+    for n holds it.n in Si;
 end;
 
 canceled;
 
 theorem :: PROB_1:46
- for ASeq being SetSequence of Si holds Union ASeq in Si;
+  for ASeq being SetSequence of Si holds Union ASeq in Si;
 
-definition let X be set,
-               F be SigmaField of X;
+definition
+  let X be set, F be SigmaField of X;
   mode Event of F -> Subset of X means
 :: PROB_1:def 10
-   it in F;
+
+    it in F;
 end;
 
 canceled;
 
 theorem :: PROB_1:48
-     x in Si implies x is Event of Si;
+  x in Si implies x is Event of Si;
 
 theorem :: PROB_1:49
- for A,B being Event of Si holds A /\ B is Event of Si;
+  for A,B being Event of Si holds A /\ B is Event of Si;
 
 theorem :: PROB_1:50
-     for A being Event of Si holds A` is Event of Si;
+  for A being Event of Si holds A` is Event of Si;
 
 theorem :: PROB_1:51
- for A,B being Event of Si holds A \/ B is Event of Si;
+  for A,B being Event of Si holds A \/ B is Event of Si;
 
 theorem :: PROB_1:52
- {} is Event of Si;
+  {} is Event of Si;
 
 theorem :: PROB_1:53
- X is Event of Si;
+  X is Event of Si;
 
 theorem :: PROB_1:54
- for A,B being Event of Si holds A \ B is Event of Si;
+  for A,B being Event of Si holds A \ B is Event of Si;
 
-registration let X,Si;
+registration
+  let X,Si;
   cluster empty Event of Si;
 end;
 
-definition let X,Si;
+definition
+  let X,Si;
   func [#] Si -> Event of Si equals
 :: PROB_1:def 11
-         X;
+
+  X;
 end;
 
-definition let X,Si; let A,B be Event of Si;
+definition
+  let X,Si;
+  let A,B be Event of Si;
   redefine func A /\ B -> Event of Si;
   func A \/ B -> Event of Si;
   func A \ B -> Event of Si;
@@ -296,49 +305,51 @@ end;
 canceled 2;
 
 theorem :: PROB_1:57
-     ASeq is SetSequence of Sigma iff for n holds ASeq.n is Event of Sigma;
+  ASeq is SetSequence of Sigma iff for n holds ASeq.n is Event of Sigma;
 
 theorem :: PROB_1:58
-      ASeq is SetSequence of Sigma implies Union ASeq is Event of Sigma;
+  ASeq is SetSequence of Sigma implies Union ASeq is Event of Sigma;
 
 :: DEFINITION OF sigma-ADDITIVE PROBABILITY
 
- reserve A, B for Event of Sigma,
-         ASeq for SetSequence of Sigma;
+reserve A, B for Event of Sigma,
+  ASeq for SetSequence of Sigma;
 
 theorem :: PROB_1:59
- ex f st (dom f = Sigma & for D st D in Sigma holds
-     (p in D implies f.D = 1) & (not p in D implies f.D = 0));
+  ex f st (dom f = Sigma & for D st D in Sigma holds
+  (p in D implies f.D = 1) & (not p in D implies f.D = 0));
 
 reserve P for Function of Sigma,REAL;
 
 theorem :: PROB_1:60
-ex P st (for D st D in Sigma holds
-(p in D implies P.D = 1) & (not p in D implies P.D = 0));
+  ex P st (for D st D in Sigma holds
+  (p in D implies P.D = 1) & (not p in D implies P.D = 0));
 
 canceled;
 
 theorem :: PROB_1:62
- P * ASeq is Real_Sequence;
+  P * ASeq is Real_Sequence;
 
-definition let Omega,Sigma,ASeq,P;
+definition
+  let Omega,Sigma,ASeq,P;
   redefine func P * ASeq -> Real_Sequence;
 end;
 
-definition let Omega,Sigma,P,A;
+definition
+  let Omega,Sigma,P,A;
   redefine func P.A -> Real;
 end;
 
-definition let Omega,Sigma;
- canceled;
-
+definition
+  let Omega,Sigma;
+  canceled;
   mode Probability of Sigma -> Function of Sigma,REAL means
 :: PROB_1:def 13
-  (for A holds 0 <= it.A) &
-  (it.Omega = 1) &
-  (for A,B st A misses B holds it.(A \/ B) = it.A + it.B) &
-  (for ASeq st ASeq is non-increasing holds
-   (it * ASeq is convergent & lim (it * ASeq) = it.Intersection ASeq));
+
+    (for A holds 0 <= it.A) & (it.Omega = 1) &
+    (for A,B st A misses B holds it.(A \/ B) = it.A + it.B) &
+    (for ASeq st ASeq is non-increasing holds
+    (it * ASeq is convergent & lim (it * ASeq) = it.Intersection ASeq));
 end;
 
 reserve P for Probability of Sigma;
@@ -346,39 +357,39 @@ reserve P for Probability of Sigma;
 canceled;
 
 theorem :: PROB_1:64
-     P.{} = 0;
+  P.{} = 0;
 
 canceled;
 
 theorem :: PROB_1:66
-     P.([#] Sigma) = 1;
+  P.([#] Sigma) = 1;
 
 theorem :: PROB_1:67
- P.(([#] Sigma) \ A) + P.A = 1;
+  P.(([#] Sigma) \ A) + P.A = 1;
 
 theorem :: PROB_1:68
-     P.(([#] Sigma) \ A) = 1 - P.A;
+  P.(([#] Sigma) \ A) = 1 - P.A;
 
 theorem :: PROB_1:69
- A c= B implies P.(B \ A) = P.B - P.A;
+  A c= B implies P.(B \ A) = P.B - P.A;
 
 theorem :: PROB_1:70
- A c= B implies P.A <= P.B;
+  A c= B implies P.A <= P.B;
 
 theorem :: PROB_1:71
-     P.A <= 1;
+  P.A <= 1;
 
 theorem :: PROB_1:72
- P.(A \/ B) = P.A + P.(B \ A);
+  P.(A \/ B) = P.A + P.(B \ A);
 
 theorem :: PROB_1:73
- P.(A \/ B) = P.A + P.(B \ (A /\ B));
+  P.(A \/ B) = P.A + P.(B \ (A /\ B));
 
 theorem :: PROB_1:74
- P.(A \/ B) = P.A + P.B - P.(A /\ B);
+  P.(A \/ B) = P.A + P.B - P.(A /\ B);
 
 theorem :: PROB_1:75
-     P.(A \/ B) <= P.A + P.B;
+  P.(A \/ B) <= P.A + P.B;
 
 ::  definition of sigma-field generated by families
 ::  of subsets of given set and family of Borel Sets
@@ -387,30 +398,36 @@ reserve D for Subset of REAL;
 reserve S for Subset-Family of Omega;
 
 theorem :: PROB_1:76
- bool Omega is SigmaField of Omega;
+  bool Omega is SigmaField of Omega;
 
-definition let Omega; let X be Subset-Family of Omega;
+definition
+  let Omega;
+  let X be Subset-Family of Omega;
   func sigma(X) -> SigmaField of Omega means
 :: PROB_1:def 14
-      X c= it &
+
+  X c= it &
   for Z st (X c= Z & Z is SigmaField of Omega) holds it c= Z;
 end;
 
-definition let r;
- func halfline r -> Subset of REAL equals
+definition
+  let r;
+  func halfline r -> Subset of REAL equals
 :: PROB_1:def 15
-].-infty,r.[;
+
+  ].-infty,r.[;
 end;
 
 definition
   func Family_of_halflines -> Subset-Family of REAL equals
 :: PROB_1:def 16
-      {D: ex r st D = halfline(r)};
+  {D: ex r st D = halfline(r)};
 end;
 
 definition
- func Borel_Sets -> SigmaField of REAL equals
+  func Borel_Sets -> SigmaField of REAL equals
 :: PROB_1:def 17
-       sigma(Family_of_halflines);
+
+  sigma(Family_of_halflines);
 end;
 

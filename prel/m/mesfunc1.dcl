@@ -25,6 +25,7 @@
 <ArticleID name="MEMBERED"/>
 <ArticleID name="SETFAM_1"/>
 <ArticleID name="SUPINF_1"/>
+<ArticleID name="VALUED_0"/>
 <ArticleID name="MESFUNC1"/>
 </Signature>
 <FCluster>
@@ -36,13 +37,14 @@
 </FCluster>
 <FCluster>
 <ArgTypes>
-<Typ kind="M" nr="3">
-<Cluster/>
-<Func kind="K" nr="46"/>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="13"/>
+</Cluster>
 </Typ>
 </ArgTypes>
 <Func kind="K" nr="152">
-<Func kind="K" nr="57">
+<Func kind="K" nr="56">
 <LocusVar nr="1"/>
 <Num nr="1"/>
 </Func>

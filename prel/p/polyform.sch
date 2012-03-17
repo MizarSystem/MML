@@ -31,6 +31,7 @@
 <ArticleID name="MATRLIN"/>
 <ArticleID name="FRAENKEL"/>
 <ArticleID name="ENUMSET1"/>
+<ArticleID name="FUNCOP_1"/>
 <ArticleID name="VECTSP_4"/>
 <ArticleID name="VECTSP_6"/>
 <ArticleID name="BSPACE"/>
@@ -43,8 +44,12 @@
 </Signature>
 <Scheme>
 <ArgTypes>
-<Typ kind="M" nr="20">
-<Cluster/>
+<Typ kind="G" nr="14">
+<Cluster>
+<Adjective nr="109"/>
+<Adjective nr="110"/>
+<Adjective nr="111"/>
+</Cluster>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -57,7 +62,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="K" nr="23">
-<Func kind="K" nr="304">
+<Func kind="K" nr="319">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 </Func>
@@ -67,7 +72,7 @@
 <For>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="304">
+<Func kind="K" nr="319">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 </Func>
@@ -86,7 +91,7 @@
 </Pred>
 <Pred kind="R" nr="2">
 <Var nr="2"/>
-<Func kind="K" nr="304">
+<Func kind="K" nr="319">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 </Func>
@@ -102,7 +107,7 @@
 </Pred>
 <Pred kind="R" nr="2">
 <Var nr="2"/>
-<Func kind="K" nr="304">
+<Func kind="K" nr="319">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 </Func>

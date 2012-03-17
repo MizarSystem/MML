@@ -22,7 +22,6 @@ environ
 begin
 
 :: Fibonacci commutes with gcd
-
 :: The proof we present is a slight adaptation of the one found in
 :: ``The Fibonacci Numbers'' by N. N. Vorobyov
 
@@ -31,69 +30,61 @@ reserve a,k,m, n, p,r for Element of NAT;
 :: Preliminary lemmas
 
 theorem :: FIB_NUM:1
-for m, n being Element of NAT holds m hcf n = m hcf (n + m);
+  for m, n being Element of NAT holds m hcf n = m hcf (n + m);
 
 theorem :: FIB_NUM:2
- for k, m, n being Element of NAT
- st k hcf m = 1 holds k hcf m * n = k hcf n;
+  for k, m, n being Element of NAT st k hcf m = 1 holds k hcf m * n = k hcf n;
 
 theorem :: FIB_NUM:3
- for s being real number st s > 0
-ex n being Element of NAT st
-(n > 0 & 0 < 1/n & 1/n <= s);
+  for s being real number st s > 0 ex n being Element of NAT st
+  (n > 0 & 0 < 1/n & 1/n <= s);
 
 scheme :: FIB_NUM:sch 1
- FibInd {P[set] } :
-for k being Element of NAT holds P[k]
-    provided
- P[0] and
- P[1] and
+ FibInd {P[set] } : for k being Element of NAT holds P[k]
+provided
+ P[0]
+and
+ P[1]
+and
  for k being Element of NAT st P[k] & P[k+1] holds P[k+2];
 
 scheme :: FIB_NUM:sch 2
- BinInd { P[Nat,Nat] } :
-for m, n  being Element of NAT holds P[m, n]
-    provided
-     for m, n being Element of NAT st P[m,n] holds P[n,m] and
-     for k  being Element of NAT st
-        (for m, n  being Element of NAT st (m < k & n < k) holds P[m,n])
-        holds
-        (for m  being Element of NAT st m <= k holds P[k,m]);
+ BinInd { P[Nat,Nat] } : for m, n being Element of NAT holds P[m, n]
+provided
+ for m, n being Element of NAT st P[m,n] holds P[n,m]
+and
+ for k being Element of NAT st
+(for m, n being Element of NAT st (m < k & n < k) holds P[m,n]) holds
+(for m being Element of NAT st m <= k holds P[k,m]);
 
 theorem :: FIB_NUM:4
- for m, n being Element of NAT holds
-Fib(m + (n + 1)) = (Fib(n) * Fib (m)) +
-                  (Fib(n + 1) * Fib (m + 1));
+  for m, n being Element of NAT holds Fib(m + (n + 1)) = (Fib(n) * Fib (m)) +
+  (Fib(n + 1) * Fib (m + 1));
 
 theorem :: FIB_NUM:5
-    for m, n being Element of NAT holds Fib(m) hcf Fib(n) = Fib(m hcf n);
+  for m, n being Element of NAT holds Fib(m) hcf Fib(n) = Fib(m hcf n);
 
 begin
 
 :: The relationship between the Fibonacci numbers and the
 :: roots of the equation x^2 = x + 1
-
 :: The formula for the roots of a quadratic equation
 
 reserve x, a, b, c for real number;
 
 theorem :: FIB_NUM:6
- for x, a, b, c being real number st
-  (a <> 0 & delta(a,b,c) >= 0) holds
-
-  (a * x^2 + b * x + c = 0) iff
-
-   (x = (- b - sqrt delta(a,b,c))/(2 * a) or
-    x = (- b + sqrt delta(a,b,c))/(2 * a));
+  for x, a, b, c being real number st (a <> 0 & delta(a,b,c) >= 0) holds
+  (a * x^2 + b * x + c = 0) iff (x = (- b - sqrt delta(a,b,c))/(2 * a) or
+  x = (- b + sqrt delta(a,b,c))/(2 * a));
 
 :: The roots of x^2 - x - 1 = 0
-
 :: The value of tau is approximately 1.618
 
 definition
   func tau -> real number equals
 :: FIB_NUM:def 1
-    (1 + sqrt 5)/2;
+
+  (1 + sqrt 5)/2;
 end;
 
 :: The value of tau_bar is approximately -.618
@@ -101,33 +92,31 @@ end;
 definition
   func tau_bar -> real number equals
 :: FIB_NUM:def 2
-    (1 - sqrt 5)/2;
+
+  (1 - sqrt 5)/2;
 end;
 
 theorem :: FIB_NUM:7
-   for n being Element of NAT holds
+  for n being Element of NAT holds
   Fib(n) = ((tau to_power n) - (tau_bar to_power n))/(sqrt 5);
 
 theorem :: FIB_NUM:8
-     for n being Element of NAT holds
-     abs(Fib(n) - (tau to_power n)/(sqrt 5)) < 1;
+  for n being Element of NAT holds abs(Fib(n) - (tau to_power n)/(sqrt 5)) < 1;
 
 reserve F, f, g, h for Real_Sequence;
 
 canceled;
 
 theorem :: FIB_NUM:10
- for f, g, h being Real_Sequence st g is_not_0 holds
-(f /" g) (#) (g /" h) = (f /" h);
+  for f, g, h being Real_Sequence st g is_not_0 holds
+  (f /" g) (#) (g /" h) = (f /" h);
 
 theorem :: FIB_NUM:11
- for f, g being Real_Sequence for n being Element of NAT holds
-(f /" g) . n = (f .n) / (g.n)
-&
-(f /" g) . n = (f.n) * (g.n)";
+  for f, g being Real_Sequence for n being Element of NAT holds
+  (f /" g) . n = (f .n) / (g.n) & (f /" g) . n = (f.n) * (g.n)";
 
 theorem :: FIB_NUM:12
-    for F being Real_Sequence st
-(for n being Element of NAT holds F.n = Fib(n+1)/Fib(n))
-holds
- F is convergent & lim F = tau;
+  for F being Real_Sequence st
+  (for n being Element of NAT holds F.n = Fib(n+1)/Fib(n)) holds
+  F is convergent & lim F = tau;
+

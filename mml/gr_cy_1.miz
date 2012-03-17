@@ -22,10 +22,10 @@ environ
  registrations XBOOLE_0, SUBSET_1, RELAT_1, ORDINAL1, NUMBERS, XXREAL_0,
       XREAL_0, NAT_1, INT_1, BINOP_2, MEMBERED, FINSEQ_1, SEQ_1, RVSUM_1,
       REALSET1, STRUCT_0, GROUP_1, GROUP_2, VALUED_0, ALGSTR_0, VALUED_1,
-      FUNCT_2;
+      FUNCT_2, CARD_1;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
- definitions GROUP_1, FUNCT_1, TARSKI, BINOP_1, REALSET1, FINSEQ_2, FINSEQ_1,
-      GROUP_2, GROUP_4, SETWOP_2, CARD_1, ALGSTR_0, VALUED_1;
+ definitions FUNCT_1, TARSKI, BINOP_1, REALSET1, FINSEQ_2, FINSEQ_1, STRUCT_0,
+      GROUP_1, GROUP_2, GROUP_4, SETWOP_2, CARD_1, ALGSTR_0, VALUED_1;
  theorems BINOP_1, INT_1, INT_2, NAT_1, REAL_1, FINSEQ_1, FINSEQ_2, FINSEQ_4,
       ZFMISC_1, FUNCT_2, FUNCOP_1, GROUP_1, GROUP_2, GROUP_4, TARSKI, FUNCT_1,
       CARD_1, WELLORD2, FINSOP_1, RELSET_1, XBOOLE_0, XBOOLE_1, RELAT_1,
@@ -35,129 +35,131 @@ environ
 
 begin
 
- reserve i1 for Element of INT;
- reserve j1,j2,j3 for Integer;
- reserve p,s,k,n,m for Element of NAT;
- reserve x,y,xp,yp for set;
- reserve G for Group;
- reserve a,b for Element of G;
- reserve F for FinSequence of G;
- reserve I for FinSequence of INT;
+reserve i1 for Element of INT;
+reserve j1,j2,j3 for Integer;
+reserve p,s,k,n,m for Element of NAT;
+reserve x,y,xp,yp for set;
+reserve G for Group;
+reserve a,b for Element of G;
+reserve F for FinSequence of G;
+reserve I for FinSequence of INT;
 
-registration let n be non zero natural number;
- cluster Segm n -> non empty;
- coherence;
+registration
+  let n be non zero natural number;
+  cluster Segm n -> non empty;
+  coherence;
 end;
 
-Lm1:
- for n st n > 0 holds x in Segm (n) implies x is Element of NAT;
+Lm1: for n st n > 0 holds x in Segm (n) implies x is Element of NAT;
 
 canceled 9;
 
 theorem
-  for n,s being natural number st n > 0 holds s in n iff s < n
-                 by NAT_1:45;
+  for n,s being natural number st n > 0 holds s in n iff s < n by NAT_1:45;
 
 canceled;
 
 theorem
-   for n being natural number st n > 0 holds 0 in n by NAT_1:45;
+  for n being natural number st n > 0 holds 0 in n by NAT_1:45;
 
 theorem
   Segm (1) = {0} by CARD_1:87;
 
-       :::::::::::::::::::::::::::::::::::::::::::::::::::::
-       ::              Definition addint                  ::
-       :::::::::::::::::::::::::::::::::::::::::::::::::::::
+:::::::::::::::::::::::::::::::::::::::::::::::::::::
+::              Definition addint                  ::
+:::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 definition
- canceled;
+  canceled;
   redefine func addint means
-   for i1,i2 being Element of INT holds
+
+  for i1,i2 being Element of INT holds
   it.(i1,i2) = addreal.(i1,i2);
   compatibility
-  proof let b be BinOp of INT;
-   hereby assume
+  proof
+    let b be BinOp of INT;
+    hereby
+      assume
 A1:   b = addint;
-    let i1,i2 be Element of INT;
-     A2: i1 in INT & i2 in INT;
-    thus b.(i1,i2) = i1 + i2 by A1,BINOP_2:def 20
+      let i1,i2 be Element of INT;
+A2:   i1 in INT & i2 in INT;
+      thus b.(i1,i2) = i1 + i2 by A1,BINOP_2:def 20
         .= addreal.(i1,i2) by A2,BINOP_2:def 9,NUMBERS:15;
-   end;
-   assume
-A3:  for i1,i2 being Element of INT holds
-      b.(i1,i2) = addreal.(i1,i2);
-     now let i1,i2 be Element of INT;
-      A4: i1 in INT & i2 in INT;
-     thus b.(i1,i2) = addreal.(i1,i2) by A3
+    end;
+    assume
+A3: for i1,i2 being Element of INT holds b.(i1,i2) = addreal.(i1,i2);
+    now
+      let i1,i2 be Element of INT;
+A4:   i1 in INT & i2 in INT;
+      thus b.(i1,i2) = addreal.(i1,i2) by A3
         .= i1 + i2 by A4,BINOP_2:def 9,NUMBERS:15
         .= addint.(i1,i2) by BINOP_2:def 20;
     end;
-   hence b = addint by BINOP_1:2;
+    hence b = addint by BINOP_1:2;
   end;
 end;
 
 theorem Th14:
   addint.(j1,j2)=j1+j2
-  proof
-   reconsider i1=j1, i2=j2 as Element of INT by INT_1:def 2;
-   addint.(i1,i2)=j1+j2 by BINOP_2:def 20;
-   hence thesis;
-  end;
+proof
+  reconsider i1=j1, i2=j2 as Element of INT by INT_1:def 2;
+  addint.(i1,i2)=j1+j2 by BINOP_2:def 20;
+  hence thesis;
+end;
 
 theorem
-   for i1 st i1 = 0 holds i1 is_a_unity_wrt addint by BINOP_2:4,SETWISEO:22;
+  for i1 st i1 = 0 holds i1 is_a_unity_wrt addint by BINOP_2:4,SETWISEO:22;
 
 theorem Th16:
   Sum I = addint $$ I
-  proof
-    rng I c= COMPLEX by NUMBERS:11,XBOOLE_1:1;
-    then reconsider f = I as FinSequence of COMPLEX by FINSEQ_1:def 4;
-    set g = addint, h = addcomplex;
-    consider n being Nat such that
+proof
+  rng I c= COMPLEX by NUMBERS:11,XBOOLE_1:1;
+  then reconsider f = I as FinSequence of COMPLEX by FINSEQ_1:def 4;
+  set g = addint, h = addcomplex;
+  consider n being Nat such that
 A1: dom f = Seg n by FINSEQ_1:def 2;
-    set i = [#](I,the_unity_wrt g);
-    set j = [#](f,the_unity_wrt h);
+  set i = [#](I,the_unity_wrt g);
+  set j = [#](f,the_unity_wrt h);
 A2: g $$ I = g $$ (finSeg n,i) by A1,SETWOP_2:def 2;
 A3: h $$ f = h $$ (finSeg n,j) by A1,SETWOP_2:def 2;
-    defpred P[Nat] means
-      g $$ (finSeg $1,i) = h $$ (finSeg $1,j);
+  defpred P[Nat] means g $$ (finSeg $1,i) = h $$ (finSeg $1,j);
 A4: Seg 0 = {}.NAT by FINSEQ_1:4;
 A5: P[0]
-    proof
-       g $$ (finSeg 0,[#](I,the_unity_wrt g)) =
-           the_unity_wrt h by A4,BINOP_2:1,4,SETWISEO:40
-        .= h $$ (finSeg 0,[#](f,the_unity_wrt h)) by A4,SETWISEO:40;
-      hence thesis;
-    end;
-A6: for k being Nat st P[k] holds P[k+1]
-    proof
-      let k be Nat;
-      assume
-A7:   P[k];
-A8:   i.(k+1) = j.(k+1) by BINOP_2:1,4;
-      set a = i.(k+1);
-      set b = g $$(finSeg k,i);
-A9:   not (k + 1) in Seg k by FINSEQ_3:9;
-       g $$ (finSeg (k+1),i) = g $$ (finSeg k \/ {. k+1 .},i) by FINSEQ_1:11
-        .= g.(b,a) by A9,SETWOP_2:4
-        .= b + a by BINOP_2:def 20
-        .= h.(h $$(finSeg k,j),j.(k+1)) by A7,A8,BINOP_2:def 3
-        .= h $$ (finSeg k \/ {. k+1 .},j) by A9,SETWOP_2:4
-        .= h $$ (finSeg (k+1),j) by FINSEQ_1:11;
-      hence thesis;
-    end;
-     for k being Nat holds P[k] from NAT_1:sch 2(A5,A6);
-    then g $$ I = h $$ f by A2,A3;
-    hence thesis by RVSUM_1:def 11;
+  proof
+    g $$ (finSeg 0,[#](I,the_unity_wrt g)) =
+    the_unity_wrt h by A4,BINOP_2:1,4,SETWISEO:40
+      .= h $$ (finSeg 0,[#](f,the_unity_wrt h)) by A4,SETWISEO:40;
+    hence thesis;
   end;
+A6: for k being Nat st P[k] holds P[k+1]
+  proof
+    let k be Nat;
+    assume
+A7: P[k];
+    set a = i.(k+1);
+    set b = g $$(finSeg k,i);
+A8: not (k + 1) in Seg k by FINSEQ_3:9;
+    g $$ (finSeg (k+1),i) = g $$ (finSeg k \/ {. k+1 .},i) by FINSEQ_1:11
+      .= g.(b,a) by A8,SETWOP_2:4
+      .= b + a by BINOP_2:def 20
+      .= h.(h $$(finSeg k,j),j.(k+1)) by A7,BINOP_2:1,4,def 3
+      .= h $$ (finSeg k \/ {. k+1 .},j) by A8,SETWOP_2:4
+      .= h $$ (finSeg (k+1),j) by FINSEQ_1:11;
+    hence thesis;
+  end;
+  for k being Nat holds P[k] from NAT_1:sch 2(A5,A6);
+  then g $$ I = h $$ f by A2,A3;
+  hence thesis by RVSUM_1:def 11;
+end;
 
-definition let I;
+definition
+  let I;
   redefine func Sum(I) -> Element of INT equals
-   addint $$ I;
+
+  addint $$ I;
   coherence
   proof
-     Sum I = addint $$ I by Th16;
+    Sum I = addint $$ I by Th16;
     hence thesis;
   end;
   compatibility by Th16;
@@ -174,26 +176,29 @@ theorem Th22:
   Sum (<*> INT) = 0 by BINOP_2:4,FINSOP_1:11;
 
 Lm2: Product(((len(<*> INT)) |->a)|^(<*> INT))=a|^Sum(<*> INT)
- proof
-  A1:(<*> the carrier of G)|^(<*> INT)=<*> the carrier of G by GROUP_4:27;
-     len(<*> INT)|->a =0 |-> a by FINSEQ_1:32 .=<*> the carrier of G
-         by FINSEQ_2:72;
-       then Product((len(<*> INT)|->a)|^(<*> INT))=1_G by A1,GROUP_4:11 .=
-a|^(Sum(<*> INT)) by Th22,GROUP_1:59;
- hence thesis;
+proof
+A1: (<*> the carrier of G)|^(<*> INT)=<*> the carrier of G by GROUP_4:27;
+  len(<*> INT)|->a =0 |-> a by FINSEQ_1:32
+    .=<*> the carrier of G
+  by FINSEQ_2:72;
+  then Product((len(<*> INT)|->a)|^(<*> INT))=1_G by A1,GROUP_4:11
+    .= a|^(Sum(<*> INT)) by GROUP_1:59,Th22;
+  hence thesis;
 end;
 
 Lm3: for I being FinSequence of INT for w being Element of INT
 st Product(((len I)|->a)|^I)=a|^Sum I holds
-   Product(((len (I^<*w*>))|->a)|^(I^<*w*>))=a|^Sum(I^<*w*>)
+Product(((len (I^<*w*>))|->a)|^(I^<*w*>))=a|^Sum(I^<*w*>)
 proof
- let I;
- let w be Element of INT;
- assume A1:Product(((len I)|->a)|^I)=a|^Sum I;
- A2:len((len I) |->a) =len I by FINSEQ_2:69;
- A3:len <*a*> = 1 by FINSEQ_1:57 .= len <*w*> by FINSEQ_1:57;
-      Product(((len (I^<*w*>))|->a)|^(I^<*w*>))
-     =Product(((len I+1)|->a)|^(I^<*w*>)) by FINSEQ_2:19
+  let I;
+  let w be Element of INT;
+  assume
+A1: Product(((len I)|->a)|^I)=a|^Sum I;
+A2: len((len I) |->a) =len I by FINSEQ_2:69;
+A3: len <*a*> = 1 by FINSEQ_1:57
+    .= len <*w*> by FINSEQ_1:57;
+  Product(((len (I^<*w*>))|->a)|^(I^<*w*>))
+  =Product(((len I+1)|->a)|^(I^<*w*>)) by FINSEQ_2:19
     .= Product((((len I)|->a)^<*a*>)|^(I^<*w*>)) by FINSEQ_2:74
     .= Product((((len I)|->a)|^I)^(<*a*>|^<*w*>)) by A2,A3,GROUP_4:25
     .= Product((((len I)|->a)|^I))*Product(<*a*>|^<*@(@w)*>) by GROUP_4:8
@@ -209,517 +214,570 @@ canceled;
 theorem Th24:
   for I being FinSequence of INT holds Product(((len I)|->a)|^I) = a|^Sum I
 proof
- defpred P[FinSequence of INT] means
-   Product(((len $1) |->a)|^($1))=a|^Sum($1);
- A1: P[<*> INT] by Lm2;
- A2: for p being FinSequence of INT for x being Element of INT
-      st P[p] holds P[p^<*x*>] by Lm3;
-    for p being FinSequence of INT holds P[p] from FINSEQ_2:sch 2(A1,A2);
- hence thesis;
+  defpred P[FinSequence of INT] means
+  Product(((len $1) |->a)|^($1))=a|^Sum($1);
+A1: P[<*> INT] by Lm2;
+A2: for p being FinSequence of INT for x being Element of INT
+  st P[p] holds P[p^<*x*>] by Lm3;
+  for p being FinSequence of INT holds P[p] from FINSEQ_2:sch 2(A1,A2);
+  hence thesis;
 end;
 
-    :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-    ::          Finite groups and their some properties              ::
-    :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+::          Finite groups and their some properties              ::
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 theorem Th25:
   b in gr {a} iff ex j1 st b=a|^j1
 proof
- A1:b in gr {a} implies ex j1 st b=a|^j1
+A1: b in gr {a} implies ex j1 st b=a|^j1
   proof
-   assume b in gr {a};
-   then consider F,I such that A2: len F = len I and
-   A3: rng F c= {a} and A4: Product(F |^ I ) = b by GROUP_4:37;
-   take Sum I;
-A5:dom ((len F) |-> a) = Seg len F by FUNCOP_1:19
-                      .= dom F by FINSEQ_1:def 3;
-        for p be Nat st p in dom F holds F.p = ((len F)|-> a).p
+    assume b in gr {a};
+    then consider F,I such that
+A2: len F = len I and
+A3: rng F c= {a} and
+A4: Product(F |^ I ) = b by GROUP_4:37;
+    take Sum I;
+A5: dom ((len F) |-> a) = Seg len F by FUNCOP_1:19
+      .= dom F by FINSEQ_1:def 3;
+    for p be Nat st p in dom F holds F.p = ((len F)|-> a).p
     proof
-     let p be Nat;
-A6:  dom F = Seg len F by FINSEQ_1:def 3;
-     assume A7: p in dom F;
-     then F.p in rng F by FUNCT_1:def 5;
-     then F.p = a by A3,TARSKI:def 1 .= ((len F)|-> a).p by A6,A7,FUNCOP_1:13;
-     hence thesis;
+      let p be Nat;
+A6:   dom F = Seg len F by FINSEQ_1:def 3;
+      assume
+A7:   p in dom F;
+      then F.p in rng F by FUNCT_1:def 5;
+      then F.p = a by A3,TARSKI:def 1
+        .= ((len F)|-> a).p by A6,A7,FUNCOP_1:13;
+      hence thesis;
     end;
-   then b= Product(((len I) |-> a)|^I) by A2,A4,A5,FINSEQ_1:17
-           .= a|^Sum I by Th24;
-   hence thesis;
-end;
+    then b= Product(((len I) |-> a)|^I) by A2,A4,A5,FINSEQ_1:17
+      .= a|^Sum I by Th24;
+    hence thesis;
+  end;
   (ex j1 st b=a|^j1) implies b in gr {a}
   proof
-   given j1 such that A8: b =a|^j1;
-   consider n such that A9: j1 = n or j1 = -n by INT_1:8;
-     per cases by A9;
- suppose A10:j1=n;
-         ex F,I st len F = len I & rng F c= {a} & Product(F |^ I) = b
-    proof
-     take F =(n |-> a);
-     A11: len F = n by FINSEQ_2:69 .= len(n |->@ 1) by FINSEQ_2:69;
-     A12: rng F c= {a} by FUNCOP_1:19;
-           Product(F|^(n |->@ 1)) = Product(F|^(len F |->@ 1)) by FINSEQ_2:69
-               .=Product(n |-> a) by GROUP_4:31
-               .=b by A8,A10,GROUP_4:15;
-     hence thesis by A11,A12;
-     end;
-   hence thesis by GROUP_4:37;
-end;
-suppose j1 = -n;
-     then A13: b"=a|^(-(-n)) by A8,GROUP_1:70 .= a|^n;
-          ex F,I st len F = len I & rng F c= {a} & Product(F |^ I) = b"
+    given j1 such that
+A8: b =a|^j1;
+    consider n such that
+A9: j1 = n or j1 = -n by INT_1:8;
+    per cases by A9;
+    suppose
+A10:  j1=n;
+      ex F,I st len F = len I & rng F c= {a} & Product(F |^ I) = b
       proof
-       take F =(n |-> a);
-       A14: len F = n by FINSEQ_2:69 .= len(n |->@ 1) by FINSEQ_2:69;
-       A15: rng F c= {a} by FUNCOP_1:19;
-             Product(F|^(n |->@ 1)) = Product(F|^(len F |->@ 1)) by FINSEQ_2:69
-                 .=Product(n |-> a) by GROUP_4:31 .= b" by A13,GROUP_4:15;
-       hence thesis by A14,A15;
-     end;
-  then b" in gr {a} by GROUP_4:37;
-  then b"" in gr {a} by GROUP_2:60;
-  hence thesis by GROUP_1:19;
- end;
-end;
-hence thesis by A1;
+        take F =(n |-> a);
+A11:    len F = n by FINSEQ_2:69
+          .= len(n |->@ 1) by FINSEQ_2:69;
+A12:    rng F c= {a} by FUNCOP_1:19;
+        Product(F|^(n |->@ 1)) = Product(F|^(len F |->@ 1)) by FINSEQ_2:69
+          .=Product(n |-> a) by GROUP_4:31
+          .=b by A8,A10,GROUP_4:15;
+        hence thesis by A11,A12;
+      end;
+      hence thesis by GROUP_4:37;
+    end;
+    suppose j1 = -n;
+      then
+A13:  b"=a|^(-(-n)) by A8,GROUP_1:70
+        .= a|^n;
+      ex F,I st len F = len I & rng F c= {a} & Product(F |^ I) = b"
+      proof
+        take F =(n |-> a);
+A14:    len F = n by FINSEQ_2:69
+          .= len(n |->@ 1) by FINSEQ_2:69;
+A15:    rng F c= {a} by FUNCOP_1:19;
+        Product(F|^(n |->@ 1)) = Product(F|^(len F |->@ 1)) by FINSEQ_2: 69
+          .=Product(n |-> a) by GROUP_4:31
+          .= b" by A13,GROUP_4:15;
+        hence thesis by A14,A15;
+      end;
+      then b" in gr {a} by GROUP_4:37;
+      then b"" in gr {a} by GROUP_2:60;
+      hence thesis by GROUP_1:19;
+    end;
+  end;
+  hence thesis by A1;
 end;
 
 theorem Th26:
-  G is finite implies a is_not_of_order_0
+  for G being finite Group, a being Element of G holds a is_not_of_order_0
+proof
+  let G be finite Group, a be Element of G;
+  ex n st n<> 0 & a|^n = 1_G
   proof
-    assume A1:G is finite;
-   ex n st n<> 0 & a|^n = 1_G
-   proof
     deffunc F(Nat) = a|^$1;
-    consider F being FinSequence such that A2: len F = ord G +1 and
-    A3: for p be Nat st p in Seg (ord G +1) holds F.p = F(p)
-    from FINSEQ_1:sch 2;
-    A4: dom F = Seg (ord G + 1) by A2,FINSEQ_1:def 3;
-    A5: for y st y in rng F holds ex n st y=a|^n
-      proof
-       let y;
-       assume y in rng F;
-       then consider x such that A6: x in dom F and A7: F.x=y by FUNCT_1:def 5;
-       reconsider n=x as Element of NAT by A6;
-       take n;
-       thus thesis by A3,A4,A6,A7;
-      end;
-        rng F c= the carrier of G
+    consider F being FinSequence such that
+A1: len F = ord G +1 and
+A2: for p be Nat st p in Seg (ord G +1) holds F.p = F(p) from FINSEQ_1:sch 2;
+A3: dom F = Seg (ord G + 1) by A1,FINSEQ_1:def 3;
+A4: for y st y in rng F holds ex n st y=a|^n
     proof
-     for x holds x in rng F implies x in the carrier of G
-       proof
-        let y;
-        assume y in rng F;
-        then ex n st y= a|^n by A5;
-        hence thesis;
-       end;
-      hence thesis by TARSKI:def 3;
-    end;
-then reconsider F'=F as Function of Seg (ord G +1),the carrier of G by A4,
-FUNCT_2:def 1,RELSET_1:11;
-  consider c being finite set such that
-A8: c = the carrier of G & ord G = card c by A1,GROUP_1:def 15;
-A9:Card ord G = Card the carrier of G by A8;
-A10:Card Seg(ord G+1) = Card (ord G +1) by FINSEQ_1:76;
-     ord G < ord G +1 by XREAL_1:31;
-then Card the carrier of G <` Card Seg (ord G +1) by A9,A10,NAT_1:42;
-then consider x,y such that A11:x in Seg (ord G +1) and
-A12: y in Seg (ord G +1) and
-A13:x <> y and A14: F'.x = F'.y by FINSEQ_4:80;
-reconsider p=x,n=y as Element of NAT by A11,A12;
-      per cases by A13,REAL_1:def 5;
-  suppose A15: n>p;
-      then reconsider t = n-p as Element of NAT by INT_1:18;
-      reconsider e=0 as Integer;
-      take t;
-      F'.p =a|^p by A3,A11;
-      then a|^n=a|^p by A3,A12,A14;
-      then a|^(n+-p)=a|^p *a|^(-p) by GROUP_1:64;
-      then a|^t =a|^(p+-p) by GROUP_1:64;
-      hence thesis by A15,GROUP_1:59;
-   end;
-   suppose A16: p>n;
-      then reconsider t = p-n as Element of NAT by INT_1:18;
-      take t;
-      reconsider e=0 as Integer;
-      F'.p =a|^p by A3,A11;
-      then a|^n=a|^p by A3,A12,A14;
-      then a|^(p+-n)=a|^n *a|^(-n) by GROUP_1:64;
-      then a|^t =a|^(n+-n) by GROUP_1:64;
-      hence thesis by A16,GROUP_1:59;
-    end;
-  end;
- hence thesis by GROUP_1:def 11;
-end;
-
-theorem Th27:
-  G is finite implies ord a = ord gr {a}
- proof
-  assume A1:G is finite;
-  then A2:gr {a} is finite by GROUP_2:48;
-  deffunc F(Nat) = a|^$1;
-  consider F being FinSequence such that A3: len F = ord a and
-  A4:  for p be Nat st p in Seg ord a holds F.p = F(p) from FINSEQ_1:sch 2;
-  A5: dom F = Seg ord a by A3,FINSEQ_1:def 3;
-  a is_not_of_order_0 by A1,Th26;
-  then A6:ord a <> 0 by GROUP_1:def 12;
-  then A7:ord a >0;
-   A8: a in rng F
-    proof
-      ex x st x in dom F & F.x=a
-        proof
-         set x'=1;
-         A9:x' in dom F
-           proof
-            (ord a)+x' > 0+x' by A7,XREAL_1:8;
-            then (ord a) >= x' by NAT_1:13;
-            hence thesis by A5;
-           end;
-         then F.x'=a|^x' by A4,A5 .=a by GROUP_1:44;
-         hence thesis by A9;
-        end;
-     hence thesis by FUNCT_1:def 5;
-   end;
-A10: rng F = the carrier of gr {a}
- proof
-   A11:for y st y in rng F holds ex n st y=a|^n
-     proof
       let y;
       assume y in rng F;
       then consider x such that
-A12:  x in dom F and A13: F.x=y by FUNCT_1:def 5;
-      reconsider n=x as Element of NAT by A12;
+A5:   x in dom F and
+A6:   F.x=y by FUNCT_1:def 5;
+      reconsider n=x as Element of NAT by A5;
       take n;
-      thus thesis by A4,A5,A12,A13;
-     end;
-A14: rng F c= the carrier of gr {a}
+      thus thesis by A2,A3,A5,A6;
+    end;
+    rng F c= the carrier of G
+    proof
+      for x holds x in rng F implies x in the carrier of G
+      proof
+        let y;
+        assume y in rng F;
+        then ex n st y= a|^n by A4;
+        hence thesis;
+      end;
+      hence thesis by TARSKI:def 3;
+    end;
+    then reconsider F'=F as Function of Seg (ord G +1),the carrier of G by A3,
+    FUNCT_2:def 1,RELSET_1:11;
+    set c = the carrier of G;
+A7: Card ord G = Card the carrier of G;
+A8: Card Seg(ord G+1) = Card (ord G +1) by FINSEQ_1:76;
+    ord G < ord G +1 by XREAL_1:31;
+    then Card the carrier of G <` Card Seg (ord G +1) by A7,A8,NAT_1:42;
+    then consider x,y such that
+A9: x in Seg (ord G +1) and
+A10: y in Seg (ord G +1) and
+A11: x <> y and
+A12: F'.x = F'.y by FINSEQ_4:80;
+    reconsider p=x,n=y as Element of NAT by A9,A10;
+    per cases by A11,REAL_1:def 5;
+    suppose
+A13:  n>p;
+      then reconsider t = n-p as Element of NAT by INT_1:18;
+      reconsider e=0 as Integer;
+      take t;
+      F'.p =a|^p by A2,A9;
+      then a|^n=a|^p by A2,A10,A12;
+      then a|^(n+-p)=a|^p *a|^(-p) by GROUP_1:64;
+      then a|^t =a|^(p+-p) by GROUP_1:64;
+      hence thesis by A13,GROUP_1:59;
+    end;
+    suppose
+A14:  p>n;
+      then reconsider t = p-n as Element of NAT by INT_1:18;
+      take t;
+      reconsider e=0 as Integer;
+      F'.p =a|^p by A2,A9;
+      then a|^n=a|^p by A2,A10,A12;
+      then a|^(p+-n)=a|^n *a|^(-n) by GROUP_1:64;
+      then a|^t =a|^(n+-n) by GROUP_1:64;
+      hence thesis by A14,GROUP_1:59;
+    end;
+  end;
+  hence thesis by GROUP_1:def 11;
+end;
+
+theorem Th27:
+  for G being finite Group, a being Element of G holds ord a = ord gr {a}
+proof
+  let G be finite Group, a be Element of G;
+  deffunc F(Nat) = a|^$1;
+  consider F being FinSequence such that
+A1: len F = ord a and
+A2: for p be Nat st p in Seg ord a holds F.p = F(p) from FINSEQ_1:sch 2;
+A3: dom F = Seg ord a by A1,FINSEQ_1:def 3;
+  a is_not_of_order_0 by Th26;
+  then
+A4: ord a <> 0 by GROUP_1:def 12;
+  then
+A5: ord a >0;
+A6: a in rng F
+  proof
+    ex x st x in dom F & F.x=a
+    proof
+      set x'=1;
+A7:   x' in dom F
+      proof
+        (ord a)+x' > 0+x' by A5,XREAL_1:8;
+        then (ord a) >= x' by NAT_1:13;
+        hence thesis by A3;
+      end;
+      then F.x'=a|^x' by A2,A3
+        .=a by GROUP_1:44;
+      hence thesis by A7;
+    end;
+    hence thesis by FUNCT_1:def 5;
+  end;
+A8: rng F = the carrier of gr {a}
+  proof
+A9: for y st y in rng F holds ex n st y=a|^n
+    proof
+      let y;
+      assume y in rng F;
+      then consider x such that
+A10:  x in dom F and
+A11:  F.x=y by FUNCT_1:def 5;
+      reconsider n=x as Element of NAT by A10;
+      take n;
+      thus thesis by A2,A3,A10,A11;
+    end;
+A12: rng F c= the carrier of gr {a}
     proof
       for x st x in rng F holds x in the carrier of gr {a}
       proof
-       let y;
-       assume y in rng F;
-       then consider n such that A15:y= a|^n by A11;
-       y in gr {a} by A15,Th25;
-       hence thesis by STRUCT_0:def 5;
+        let y;
+        assume y in rng F;
+        then consider n such that
+A13:    y= a|^n by A9;
+        y in gr {a} by A13,Th25;
+        hence thesis by STRUCT_0:def 5;
       end;
-     hence thesis by TARSKI:def 3;
-   end;
-     the carrier of gr {a} c= rng F
- proof
-   ex H being strict Subgroup of G st the carrier of H = rng F
-   proof
-     reconsider car=rng F as non empty set by A8;
-     A16:dom(the multF of G)=
-     [:the carrier of G,the carrier of G:] by FUNCT_2:def 1;
-     the carrier of gr {a} c= the carrier of G by GROUP_2:def 5;
-     then A17: car c= the carrier of G by A14,XBOOLE_1:1;
-     then [:car,car:] c= [:the carrier of G,the carrier of G:] by ZFMISC_1:119
-;
- then A18:dom((the multF of G)||car)=[:car,car:] by A16,RELAT_1:91;
-          rng((the multF of G)||car) c= car
-       proof
-           for y st y in rng((the multF of G)||car) holds y in car
-            proof
-              set f=(the multF of G)||car;
-              let y;
-              assume y in rng(f);
-              then consider x such that A19:x in dom(f) and
-              A20: f.x=y by FUNCT_1:def 5;
-              consider xp,yp such that A21:[xp,yp]=x
-               by A18,A19,RELAT_1:def 1;
-              xp in car by A18,A19,A21,ZFMISC_1:106;
-              then consider p such that A22:  xp = a|^p by A11;
-              yp in car by A18,A19,A21,ZFMISC_1:106;
-              then consider s such that A23:  yp = a|^s by A11;
-              A24:  y = a|^p*(a|^s) by A19,A20,A21,A22,A23,FUNCT_1:70
-                      .= a|^(p+s) by GROUP_1:48;
-              a|^(p+s) in car
-               proof
-                  ex x st x in dom F & F.x=a|^(p+s)
-                 proof
-                  set t=(p+s) mod (ord a);
-                  A25:t < ord a by A7,NAT_D:1;
-                  per cases;
-                    suppose A26:t=0;
-                A27:ord a in dom F by A5,A6,FINSEQ_1:5;
-  A28:a|^(p+s)=a|^((ord a)*((p+s) div (ord a)) + ((p+s) mod (ord a))) by A7,
-NAT_D:2
-    .=a|^((ord a)*((p+s) div (ord a)))*(a|^ ((p+s) mod (ord a))) by GROUP_1:48
-    .=a|^(ord a)|^((p+s) div (ord a))*(a|^ ((p+s) mod (ord a))) by GROUP_1:50
-    .=(1_G)|^((p+s) div (ord a))*(a|^ ((p+s) mod (ord a))) by GROUP_1:82
-    .=(1_G) *(a|^ ((p+s) mod (ord a))) by GROUP_1:42
-    .=a|^0 by A26,GROUP_1:def 5 .= 1_G by GROUP_1:43
-    .= a|^(ord a) by GROUP_1:82 .= F.ord a by A4,A5,A27;
-     take x = ord a;
-     thus x in dom F & F.x=a|^(p+s) by A5,A6,A28,FINSEQ_1:5;
-     end;
-     suppose t>0;
-       then t+1 > 0+1 by XREAL_1:8;
-       then A29:t >= 1 by NAT_1:13;
-       take x = t;
-       A30:t in dom F by A5,A25,A29;
-       a|^(p+s)=a|^((ord a)*((p+s) div (ord a)) + ((p+s) mod (ord a))) by A7,
-NAT_D:2
-    .=a|^((ord a)*((p+s) div (ord a))) *(a|^ ((p+s) mod (ord a))) by GROUP_1:48
-    .=a|^(ord a)|^((p+s) div (ord a)) *(a|^ ((p+s) mod (ord a))) by GROUP_1:50
-    .=(1_G)|^((p+s) div (ord a)) *(a|^ ((p+s) mod (ord a))) by GROUP_1:82
-    .=(1_G) *(a|^ ((p+s) mod (ord a))) by GROUP_1:42
-    .=a|^ ((p+s) mod (ord a)) by GROUP_1:def 5;
-         hence x in dom F & F.x=a|^(p+s) by A4,A5,A30;
-       end;
-       end;
-       hence thesis by FUNCT_1:def 5;
-     end;
-   hence thesis by A24;
-   end;
-hence thesis by TARSKI:def 3;
-  end;
- then reconsider op=(the multF of G)||car as BinOp of car by A18,FUNCT_2:def 1
-,RELSET_1:11;
- set H=multMagma(#car,op#);
- H is Group
- proof
-A31: for f,g being Element of H, f',g' being Element of G
-    st f = f' & g = g' holds f'*g' = f*g
- proof
-  let f,g be Element of H;
-  let f',g' be Element of G;
-  assume A32: f = f' & g =g';
-  set A = [:car,car:];
-  f*g = ((the multF of G)||car).[f,g];
-  hence thesis by A32,FUNCT_1:72;
-  end;
- A33:for f,g,h being Element of H holds (f * g) * h = f * (g * h)
- proof
-  let f,g,h be Element of H;
-  reconsider f'=f,g'=g,h'=h as Element of G by A17,TARSKI:def 3;
-  A34:  f'*g' = f*g by A31;
-  A35:  g * h = g' * h' by A31;
-  (f*g)*h =(f'*g')*h' by A31,A34 .= f'*(g'*h') by GROUP_1:def 4
- .=f*(g*h) by A31,A35;
-  hence thesis;
- end;
-   ex e being Element of H st
-    for h being Element of H holds
-     h * e = h & e * h = h &
-     ex g being Element of H st h * g = e & g * h = e
-     proof
-       a|^(ord a) in car
-       proof
-          ex x st x in dom F & F.x=a|^(ord a)
-          proof
-           set x'=(ord a);
-           A36: x' in Seg ord a by A6,FINSEQ_1:5;
-           then F.x'=a|^x' by A4;
-           hence thesis by A5,A36;
-          end;
-        hence thesis by FUNCT_1:def 5;
-     end;
- then reconsider e=1_G as Element of H by GROUP_1:82;
- take e;
- for h being Element of H holds
- h * e = h & e * h = h &
- ex g being Element of H st h * g = e & g * h = e
-  proof
-   let h be Element of H;
-   reconsider h'=h as Element of G by A17,TARSKI:def 3;
-   thus h * e = h
-    proof
-     h*e = h' *(1_G) by A31 .= h' by GROUP_1:def 5;
-     hence thesis;
+      hence thesis by TARSKI:def 3;
     end;
-   thus e * h = h
+    the carrier of gr {a} c= rng F
     proof
-     e*h = (1_G)*h' by A31 .= h' by GROUP_1:def 5;
-     hence thesis;
-    end;
-   thus ex g being Element of H st h * g = e & g * h = e
-    proof
-       ex n st h=a|^n & (1 <= n & ord a >= n)
-       proof
-        consider x such that A37: x in dom F and A38: F.x=h by FUNCT_1:def 5;
-        reconsider n=x as Element of NAT by A37;
-        take n;
-        thus thesis by A4,A5,A37,A38,FINSEQ_1:3;
-       end;
-     then consider n such that A39:h=a|^n and A40: ord a >= n;
-      a|^(ord a - n) in car
+      ex H being strict Subgroup of G st the carrier of H = rng F
       proof
-        ex x st x in dom F & F.x =a|^(ord a - n)
+        reconsider car=rng F as non empty set by A6;
+A14:    dom(the multF of G)=
+        [:the carrier of G,the carrier of G:] by FUNCT_2:def 1;
+        the carrier of gr {a} c= the carrier of G by GROUP_2:def 5;
+        then
+A15:    car c= the carrier of G by A12,XBOOLE_1:1;
+        then
+A16:    dom((the multF of G)||car)=[:car,car:] by A14,RELAT_1:91,
+        ZFMISC_1:119;
+        rng((the multF of G)||car) c= car
         proof
-          per cases by A40,REAL_1:def 5;
-              suppose A41: ord a = n;
-                set x = ord a;
-                A42: x in dom F by A5,A6,FINSEQ_1:5;
-                then F.x=a|^x by A4,A5 .= 1_G by GROUP_1:82
-                  .= a|^(ord a - n) by A41,GROUP_1:43;
-                hence thesis by A42;
-              end;
-              suppose A43:ord a > n;
-                then reconsider x = ord a - n as Element of NAT by INT_1:18;
-                take x;
-                x in Seg ord a
-                proof
-                  reconsider r1=ord a ,r2=n as Real;
-                  A44:x >= 1
-                  proof
-                    r1 - r2 > r2 -r2 by A43,XREAL_1:11;
-                    then x >= 0 +1 by NAT_1:13;
-                    hence x >= 1;
-                  end;
-                  x <= ord a
-                  proof
-                    r1 <= r1 + r2 by NAT_1:11;
-                    hence thesis by XREAL_1:22;
-                  end;
-                  hence thesis by A44;
-                end;
-                hence thesis by A3,A4,FINSEQ_1:def 3;
-          end;
-          end;
-        hence thesis by FUNCT_1:def 5;
-      end;
-       then reconsider g =a|^(ord a - n) as Element of H;
-       A45:n+(ord a-n) =ord a;
-     A46: h * g = e
-       proof
-         h * g =a|^n *(a|^(ord a - n)) by A31,A39
-               .=a|^(ord a) by A45,GROUP_1:64
-               .= e by GROUP_1:82;
-         hence thesis;
-       end;
-        g * h = e
-        proof
-           g * h =a|^(ord a - n) * (a|^n) by A31,A39
-               .=a|^(ord a) by A45,GROUP_1:65
-               .= e by GROUP_1:82;
-           hence thesis;
-        end;
-       hence thesis by A46;
-           end;
-           end;
-     hence thesis;
-           end;
- hence thesis by A33,GROUP_1:5;
- end;
-then reconsider H1=H as Group;
-the carrier of gr {a} c= the carrier of G by GROUP_2:def 5;
-then the carrier of H1 c= the carrier of G by A14,XBOOLE_1:1;
-then H1 is Subgroup of G by GROUP_2:def 5;
-hence thesis;
-end;
-then consider H being strict Subgroup of G such that
-A47: the carrier of H = rng F;
-{a} c= the carrier of H by A8,A47,ZFMISC_1:37;
-then gr {a} is Subgroup of H by GROUP_4:def 5;
-hence the carrier of gr {a} c= rng F by A47,GROUP_2:def 5;
-end;
-hence thesis by A14,XBOOLE_0:def 10;
-end;
- F is one-to-one
- proof
-  let x,y;
-  assume that A48: x in dom F and A49: y in dom F and A50: F.x = F.y
-             and A51:x<>y;
-  reconsider p=x as Element of NAT by A48;
-  reconsider s=y as Element of NAT by A49;
-  reconsider s'=s,p'=p,z= ord a as Real;
-  A52:F.p=a|^p by A4,A5,A48;
-  A53:F.s=a|^s by A4,A5,A49;
-   per cases;
-       suppose p<=s;
-         then reconsider r1=s-p as Element of NAT by INT_1:18;
-         1_G=a|^s*(a|^p)" by A50,A52,A53,GROUP_1:def 6;
-         then a|^0=a|^s*(a|^p)" by GROUP_1:43;
-         then a|^0=a|^s*(a|^(-p)) by GROUP_1:71;
-         then a|^0=a|^(s+(-p)) by GROUP_1:64;
-         then A54:1_G=a|^r1 by GROUP_1:43;
-         A55: r1 <> 0 by A51;
-         A56:p >0 by A5,A48,FINSEQ_1:3;
-         A57:r1 < ord a
+          for y st y in rng((the multF of G)||car) holds y in car
+          proof
+            set f=(the multF of G)||car;
+            let y;
+            assume y in rng(f);
+            then consider x such that
+A17:        x in dom(f) and
+A18:        f.x=y by FUNCT_1:def 5;
+            consider xp,yp such that
+A19:        [xp,yp]=x by A16,A17,RELAT_1:def 1;
+            xp in car by A16,A17,A19,ZFMISC_1:106;
+            then consider p such that
+A20:        xp = a|^p by A9;
+            yp in car by A16,A17,A19,ZFMISC_1:106;
+            then consider s such that
+A21:        yp = a|^s by A9;
+A22:        y = a|^p*(a|^s) by A17,A18,A19,A20,A21,FUNCT_1:70
+              .= a|^(p+s) by GROUP_1:48;
+            a|^(p+s) in car
             proof
-             A58: s'<=z by A5,A49,FINSEQ_1:3;
-             z<z+p' by A56,XREAL_1:31;
-             then s'<z+p' by A58,XXREAL_0:2;
-             then s'-p'<z+p'-p' by XREAL_1:11;
-             hence thesis;
+              ex x st x in dom F & F.x=a|^(p+s)
+              proof
+                set t=(p+s) mod (ord a);
+A23:            t < ord a by A5,NAT_D:1;
+                per cases;
+                suppose
+A24:              t=0;
+A25:              a
+
+|^(p+s)=a|^((ord a)*((p+s) div (ord a)) + ((p+s) mod (ord a))) by A5, NAT_D:2
+
+.=a|^((ord a)*((p+s) div (ord a)))*(a|^ ((p+s) mod (ord a))) by GROUP_1:48
+
+.=a|^(ord a)|^((p+s) div (ord a))*(a|^ ((p+s) mod (ord a))) by GROUP_1:50
+
+.=(1_G)|^((p+s) div (ord a))*(a|^ ((p+s) mod (ord a))) by GROUP_1:82
+                    .=(1_G) *(a|^ ((p+s) mod (ord a))) by GROUP_1:42
+                    .=a|^0 by A24,GROUP_1:def 5
+                    .= 1_G by GROUP_1:43
+                    .= a|^(ord a) by GROUP_1:82
+                    .= F.ord a by A2,A4,FINSEQ_1:5;
+                  take x = ord a;
+                  thus x in dom F & F.x=a|^(p+s) by A3,A4,A25,FINSEQ_1:5;
+                end;
+                suppose t>0;
+                  then t+1 > 0+1 by XREAL_1:8;
+                  then
+A26:              t >= 1 by NAT_1:13;
+                  take x = t;
+A27:              t in dom F by A3,A23,A26;
+
+a|^(p+s)=a|^((ord a)*((p+s) div (ord a)) + ((p+s) mod (ord a))) by A5, NAT_D:2
+
+.=a|^((ord a)*((p+s) div (ord a))) *(a|^ ((p+s) mod (ord a))) by GROUP_1:48
+
+.=a|^(ord a)|^((p+s) div (ord a)) *(a|^ ((p+s) mod (ord a))) by GROUP_1:50
+
+.=(1_G)|^((p+s) div (ord a)) *(a|^ ((p+s) mod (ord a))) by GROUP_1:82
+                    .=(1_G) *(a|^ ((p+s) mod (ord a))) by GROUP_1:42
+                    .=a|^ ((p+s) mod (ord a)) by GROUP_1:def 5;
+                  hence x in dom F & F.x=a|^(p+s) by A2,A3,A27;
+                end;
+              end;
+              hence thesis by FUNCT_1:def 5;
             end;
-            a is_not_of_order_0 by A1,Th26;
-       hence thesis by A54,A55,A57,GROUP_1:def 12;
-   end;
-   suppose s<=p;
-        then reconsider r2=p-s as Element of NAT by INT_1:18;
-        1_G=a|^p*(a|^s)" by A50,A52,A53,GROUP_1:def 6;
-        then a|^0=a|^p*(a|^s)" by GROUP_1:43;
-        then a|^0=a|^p*(a|^(-s)) by GROUP_1:71;
-        then a|^0=a|^(p+(-s)) by GROUP_1:64;
-        then A59:1_G=a|^r2 by GROUP_1:43;
-        A60: r2 <> 0 by A51;
-        A61:s >0 by A5,A49,FINSEQ_1:3;
-       A62:r2 < ord a
-         proof
-          A63: p'<=z by A5,A48,FINSEQ_1:3;
-          z<z+s' by A61,XREAL_1:31;
-          then p'<z+s' by A63,XXREAL_0:2;
-          then p'-s'<z+s'-s' by XREAL_1:11;
-          hence thesis;
-         end;
-         a is_not_of_order_0 by A1,Th26;
-     hence thesis by A59,A60,A62,GROUP_1:def 12;
-end;
-end;
-then A64: Seg ord a,the carrier of gr {a} are_equipotent by A5,A10,
-WELLORD2:def 4;
-   consider ca being finite set such that
-A65: ca = the carrier of gr {a} & ord gr {a} = card ca by A2,GROUP_1:def 15;
+            hence thesis by A22;
+          end;
+          hence thesis by TARSKI:def 3;
+        end;
+        then reconsider op=(the multF of G)||car as BinOp of car
+        by A16,FUNCT_2:def 1,RELSET_1:11;
+        set H=multMagma(#car,op#);
+        H is Group
+        proof
+A28:      for f,g being Element of H, f',g' being Element of G
+          st f = f' & g = g' holds f'*g' = f*g
+          proof
+            let f,g be Element of H;
+            let f',g' be Element of G;
+            assume
+A29:        f = f' & g =g';
+            set A = [:car,car:];
+            f*g = ((the multF of G)||car).[f,g];
+            hence thesis by A29,FUNCT_1:72;
+          end;
+A30:      for f,g,h being Element of H holds (f * g) * h = f * (g * h)
+          proof
+            let f,g,h be Element of H;
+            reconsider f'=f,g'=g,h'=h as Element of G by A15,TARSKI:def 3;
+A31:        f'*g' = f*g by A28;
+A32:        g * h = g' * h' by A28;
+            (f*g)*h =(f'*g')*h' by A28,A31
+              .= f'*(g'*h') by GROUP_1:def 4
+              .=f*(g*h) by A28,A32;
+            hence thesis;
+          end;
+          ex e being Element of H st for h being Element of H holds
+          h * e = h & e * h = h &
+          ex g being Element of H st h * g = e & g * h = e
+          proof
+            a|^(ord a) in car
+            proof
+              ex x st x in dom F & F.x=a|^(ord a)
+              proof
+                set x'=(ord a);
+                F.x'=a|^x' by A2,A4,FINSEQ_1:5;
+                hence thesis by A3,A4,FINSEQ_1:5;
+              end;
+              hence thesis by FUNCT_1:def 5;
+            end;
+            then reconsider e=1_G as Element of H by GROUP_1:82;
+            take e;
+            for h being Element of H holds h * e = h & e * h = h &
+            ex g being Element of H st h * g = e & g * h = e
+            proof
+              let h be Element of H;
+              reconsider h'=h as Element of G by A15,TARSKI:def 3;
+              thus h * e = h
+              proof
+                h*e = h' *(1_G) by A28
+                  .= h' by GROUP_1:def 5;
+                hence thesis;
+              end;
+              thus e * h = h
+              proof
+                e*h = (1_G)*h' by A28
+                  .= h' by GROUP_1:def 5;
+                hence thesis;
+              end;
+              thus ex g being Element of H st h * g = e & g * h = e
+              proof
+                ex n st h=a|^n & (1 <= n & ord a >= n)
+                proof
+                  consider x such that
+A33:              x in dom F and
+A34:              F.x=h by FUNCT_1:def 5;
+                  reconsider n=x as Element of NAT by A33;
+                  take n;
+                  thus thesis by A2,A3,A33,A34,FINSEQ_1:3;
+                end;
+                then consider n such that
+A35:            h=a|^n and
+A36:            ord a >= n;
+                a|^(ord a - n) in car
+                proof
+                  ex x st x in dom F & F.x =a|^(ord a - n)
+                  proof
+                    per cases by A36,REAL_1:def 5;
+                    suppose
+A37:                  ord a = n;
+                      set x = ord a;
+                      F.x=a|^x by A2,A4,FINSEQ_1:5
+                        .= 1_G by GROUP_1:82
+                        .= a|^(ord a - n) by A37,GROUP_1:43;
+                      hence thesis by A3,A4,FINSEQ_1:5;
+                    end;
+                    suppose
+A38:                  ord a > n;
+
+then reconsider x = ord a - n as Element of NAT by INT_1:18;
+                      take x;
+                      x in Seg ord a
+                      proof
+                        reconsider r1=ord a,r2=n as Real;
+A39:                    x >= 1
+                        proof
+                          r1 - r2 > r2 -r2 by A38,XREAL_1:11;
+                          then x >= 0 +1 by NAT_1:13;
+                          hence x >= 1;
+                        end;
+                        x <= ord a
+                        proof
+                          r1 <= r1 + r2 by NAT_1:11;
+                          hence thesis by XREAL_1:22;
+                        end;
+                        hence thesis by A39;
+                      end;
+                      hence thesis by A1,A2,FINSEQ_1:def 3;
+                    end;
+                  end;
+                  hence thesis by FUNCT_1:def 5;
+                end;
+                then reconsider g =a|^(ord a - n) as Element of H;
+A40:            n+(ord a-n) =ord a;
+A41:            h * g = e
+                proof
+                  h * g =a|^n *(a|^(ord a - n)) by A28,A35
+                    .=a|^(ord a) by A40,GROUP_1:64
+                    .= e by GROUP_1:82;
+                  hence thesis;
+                end;
+                g * h = e
+                proof
+                  g * h =a|^(ord a - n) * (a|^n) by A28,A35
+                    .=a|^(ord a) by A40,GROUP_1:65
+                    .= e by GROUP_1:82;
+                  hence thesis;
+                end;
+                hence thesis by A41;
+              end;
+            end;
+            hence thesis;
+          end;
+          hence thesis by A30,GROUP_1:5;
+        end;
+        then reconsider H1=H as Group;
+        the carrier of gr {a} c= the carrier of G by GROUP_2:def 5;
+        then the carrier of H1 c= the carrier of G by A12,XBOOLE_1:1;
+        then H1 is Subgroup of G by GROUP_2:def 5;
+        hence thesis;
+      end;
+      then consider H being strict Subgroup of G such that
+A42:  the carrier of H = rng F;
+      {a} c= the carrier of H by A6,A42,ZFMISC_1:37;
+      then gr {a} is Subgroup of H by GROUP_4:def 5;
+      hence the carrier of gr {a} c= rng F by A42,GROUP_2:def 5;
+    end;
+    hence thesis by A12,XBOOLE_0:def 10;
+  end;
+  F is one-to-one
+  proof
+    let x,y;
+    assume that
+A43: x in dom F and
+A44: y in dom F and
+A45: F.x = F.y and
+A46: x<>y;
+    reconsider p=x as Element of NAT by A43;
+    reconsider s=y as Element of NAT by A44;
+    reconsider s'=s,p'=p,z= ord a as Real;
+A47: F.p=a|^p by A2,A3,A43;
+A48: F.s=a|^s by A2,A3,A44;
+    per cases;
+    suppose p<=s;
+      then reconsider r1=s-p as Element of NAT by INT_1:18;
+      1_G=a|^s*(a|^p)" by A45,A47,A48,GROUP_1:def 6;
+      then a|^0=a|^s*(a|^p)" by GROUP_1:43;
+      then a|^0=a|^s*(a|^(-p)) by GROUP_1:71;
+      then a|^0=a|^(s+(-p)) by GROUP_1:64;
+      then
+A49:  1_G=a|^r1 by GROUP_1:43;
+A50:  r1 <> 0 by A46;
+A51:  p >0 by A3,A43,FINSEQ_1:3;
+A52:  r1 < ord a
+      proof
+A53:    s'<=z by A3,A44,FINSEQ_1:3;
+        z<z+p' by A51,XREAL_1:31;
+        then s'<z+p' by A53,XXREAL_0:2;
+        then s'-p'<z+p'-p' by XREAL_1:11;
+        hence thesis;
+      end;
+      a is_not_of_order_0 by Th26;
+      hence thesis by A49,A50,A52,GROUP_1:def 12;
+    end;
+    suppose s<=p;
+      then reconsider r2=p-s as Element of NAT by INT_1:18;
+      1_G=a|^p*(a|^s)" by A45,A47,A48,GROUP_1:def 6;
+      then a|^0=a|^p*(a|^s)" by GROUP_1:43;
+      then a|^0=a|^p*(a|^(-s)) by GROUP_1:71;
+      then a|^0=a|^(p+(-s)) by GROUP_1:64;
+      then
+A54:  1_G=a|^r2 by GROUP_1:43;
+A55:  r2 <> 0 by A46;
+A56:  s >0 by A3,A44,FINSEQ_1:3;
+A57:  r2 < ord a
+      proof
+A58:    p'<=z by A3,A43,FINSEQ_1:3;
+        z<z+s' by A56,XREAL_1:31;
+        then p'<z+s' by A58,XXREAL_0:2;
+        then p'-s'<z+s'-s' by XREAL_1:11;
+        hence thesis;
+      end;
+      a is_not_of_order_0 by Th26;
+      hence thesis by A54,A55,A57,GROUP_1:def 12;
+    end;
+  end;
+  then
+A59: Seg ord a,the carrier of gr {a} are_equipotent by A3,A8, WELLORD2:
+  def 4;
+  set ca = the carrier of gr {a};
   reconsider So = Seg ord a as finite set;
-  card So = card ca by A64,A65,CARD_1:21;
-  hence thesis by A65,FINSEQ_1:78;
+  card So = card ca by A59,CARD_1:21;
+  hence thesis by FINSEQ_1:78;
 end;
 
 theorem Th28:
-  G is finite implies ord a divides ord G
+  for G being finite Group, a being Element of G holds ord a divides ord G
 proof
- assume A1: G is finite;
- then ord a = ord gr {a} by Th27;
- hence ord a divides ord G by A1,GROUP_2:178;
+  let G be finite Group, a be Element of G;
+  ord a = ord gr {a} by Th27;
+  hence ord a divides ord G by GROUP_2:178;
 end;
 
 theorem Th29:
-  G is finite implies a|^ord G = 1_G
+  for G being finite Group, a being Element of G holds a|^ord G = 1_G
 proof
- assume G is finite;
- then ord a divides ord G by Th28;
- then consider t being Nat such that
- A1: ord G = ord a * t by NAT_D:def 3;
- a|^ord G = a |^ ord a |^ t by A1,GROUP_1:50
-         .= (1_G) |^ t by GROUP_1:82 .= 1_G by GROUP_1:42;
- hence thesis;
+  let G be finite Group, a be Element of G;
+  ord a divides ord G by Th28;
+  then consider t being Nat such that
+A1: ord G = ord a * t by NAT_D:def 3;
+  a|^ord G = a |^ ord a |^ t by A1,GROUP_1:50
+    .= (1_G) |^ t by GROUP_1:82
+    .= 1_G by GROUP_1:42;
+  hence thesis;
 end;
 
 theorem Th30:
-  G is finite implies (a|^n)" = a|^(ord G - (n mod ord G))
-  proof
-   assume A1: G is finite;
-   set q = ord G;
-   set p' = n mod q;
-   A2: q >=1 by A1,GROUP_1:90;
-   then n mod q <=q by NAT_D:1;
-   then reconsider q'=q -( n mod q) as Element of NAT by INT_1:18;
-   a|^n*(a|^(q-(n mod q)))=a|^(n+q') by GROUP_1:48
-   .= a|^((q*(n div q)+(n mod q))+q') by A2,NAT_D:2
-   .= a|^(q*(n div q)+q +(-p'+p'))
-   .= a|^(q*(n div q)+q)*(a|^(-p'+p')) by GROUP_1:64
-   .= a|^(q*(n div q)+q)*(a|^(-p')*(a|^p')) by GROUP_1:65
-   .= a|^(q*(n div q)+q)*((a|^p')"*(a|^p')) by GROUP_1:71
-   .= a|^(q*(n div q)+q)*(1_G) by GROUP_1:def 6
-   .= a|^(q*(n div q+1)) by GROUP_1:def 5
-   .= a|^q|^(n div q+1) by GROUP_1:50
-   .= (1_G)|^(n div q+1) by A1,Th29
-   .= 1_G by GROUP_1:42;
-   hence thesis by GROUP_1:20;
-  end;
+  for G being finite Group, a being Element of G holds
+  (a|^n)" = a|^(ord G - (n mod ord G))
+proof
+  let G be finite Group;
+  let a be Element of G;
+  set q = ord G;
+  set p' = n mod q;
+A1: q >=1 by GROUP_1:90;
+  then n mod q <=q by NAT_D:1;
+  then reconsider q'=q -( n mod q) as Element of NAT by INT_1:18;
+  a|^n*(a|^(q-(n mod q)))=a|^(n+q') by GROUP_1:48
+    .= a|^((q*(n div q)+(n mod q))+q') by A1,NAT_D:2
+    .= a|^(q*(n div q)+q +(-p'+p'))
+    .= a|^(q*(n div q)+q)*(a|^(-p'+p')) by GROUP_1:64
+    .= a|^(q*(n div q)+q)*(a|^(-p')*(a|^p')) by GROUP_1:65
+    .= a|^(q*(n div q)+q)*((a|^p')"*(a|^p')) by GROUP_1:71
+    .= a|^(q*(n div q)+q)*(1_G) by GROUP_1:def 6
+    .= a|^(q*(n div q+1)) by GROUP_1:def 5
+    .= a|^q|^(n div q+1) by GROUP_1:50
+    .= (1_G)|^(n div q+1) by Th29
+    .= 1_G by GROUP_1:42;
+  hence thesis by GROUP_1:20;
+end;
 
-registration let G be associative (non empty multMagma);
+registration
+  let G be associative (non empty multMagma);
   cluster the multMagma of G -> associative;
   coherence
   proof
@@ -727,15 +785,12 @@ registration let G be associative (non empty multMagma);
 A1: the multF of G is associative by GROUP_1:31;
     let x,y,z be Element of H;
     reconsider a = x, b = y, c = z as Element of G;
-    (x*y)*z = (the multF of G).((x*y),z)
-           .= (the multF of G).((the multF of G).(x,y),z)
-           .= (the multF of G).(x,(the multF of G).(y,z)) by A1,BINOP_1:def 3
-           .= x*(y*z);
-    hence thesis;
+    thus thesis by A1,BINOP_1:def 3;
   end;
 end;
 
-registration let G be Group;
+registration
+  let G be Group;
   cluster the multMagma of G -> Group-like;
   coherence
   proof
@@ -744,74 +799,86 @@ registration let G be Group;
     take e;
     let h be Element of H;
     reconsider h' = h as Element of G;
-    thus h * e = (the multF of G).(h,e) .= h' * 1_G .= h by GROUP_1:def 5;
-    thus e * h = (the multF of G).(e,h) .= 1_G * h' .= h by GROUP_1:def 5;
+    thus h * e = h' * 1_G
+      .= h by GROUP_1:def 5;
+    thus e * h = 1_G * h'
+      .= h by GROUP_1:def 5;
     reconsider g = h'" as Element of H;
     take g;
-    thus h * g = (the multF of G).(h,g) .= h' * h'" .= e by GROUP_1:def 6;
-    thus g * h = (the multF of G).(g,h) .= h'" * h' .= e by GROUP_1:def 6;
+    thus h * g = h' * h'"
+      .= e by GROUP_1:def 6;
+    thus g * h = h'" * h'
+      .= e by GROUP_1:def 6;
   end;
 end;
 
 theorem Th31:
-  for G being strict Group st
-  ord G > 1 holds ex a being Element of G st a <> 1_G
-  proof let G be strict Group;
-   assume that A1: ord G > 1 and
- A2: for a being Element of G holds a = 1_G;
-     for a being Element of G holds a in (1).G
-     proof
-      let a be Element of G;
-      a = 1_G by A2;
-      then a in {1_G} by TARSKI:def 1;
-      then a in the carrier of (1).G by GROUP_2:def 7;
-      hence thesis by STRUCT_0:def 5;
-     end;
-   then the multMagma of G = (1).G by GROUP_2:71;
-   hence contradiction by A1,GROUP_2:81;
- end;
+  for G being strict finite Group st ord G > 1
+  ex a being Element of G st a <> 1_G
+proof
+  let G be strict finite Group;
+  assume that
+A1: ord G > 1 and
+A2: for a being Element of G holds a = 1_G;
+  for a being Element of G holds a in (1).G
+  proof
+    let a be Element of G;
+    a = 1_G by A2;
+    then a in {1_G} by TARSKI:def 1;
+    then a in the carrier of (1).G by GROUP_2:def 7;
+    hence thesis by STRUCT_0:def 5;
+  end;
+  then the multMagma of G = (1).G by GROUP_2:71;
+  hence contradiction by A1,GROUP_2:81;
+end;
 
 theorem
-  for G being strict Group st
-  G is finite & ord G = p & p is prime holds
-   for H being strict Subgroup of G holds H = (1).G or H = G
- proof let G be strict Group;
-  assume that A1: G is finite and A2: ord G = p and A3: p is prime;
+  for G being strict finite Group st ord G = p & p is prime holds
+  for H being strict Subgroup of G holds H = (1).G or H = G
+proof
+  let G be strict finite Group;
+  assume that
+A1: ord G = p and
+A2: p is prime;
   let H be strict Subgroup of G;
-  A4:H is finite by A1,GROUP_2:48;
-  ord H divides p by A1,A2,GROUP_2:178;
-  then ord H = 1 or ord H = p by A3,INT_2:def 5;
-  hence thesis by A1,A2,A4,GROUP_2:82,85;
- end;
+  ord H divides p by A1,GROUP_2:178;
+  then ord H = 1 or ord H = p by A2,INT_2:def 5;
+  hence thesis by A1,GROUP_2:82,85;
+end;
 
 theorem Th33:
   multMagma(#INT,addint#) is associative Group-like
 proof
   set G = multMagma (# INT, addint #);
   thus for h,g,f being Element of G holds (h * g) * f = h * (g * f)
-   proof let h,g,f be Element of G;
-     reconsider A=h,B = g, C = f as Integer by INT_1:def 2;
-     A1: h * g = A + B by Th14;
-     A2: g * f = B + C by Th14;
- thus (h * g) * f = A + B + C by A1,Th14
-                 .= A + (B + C)
-                 .= h * (g * f) by A2,Th14;
-   end;
+  proof
+    let h,g,f be Element of G;
+    reconsider A=h,B = g, C = f as Integer by INT_1:def 2;
+A1: h * g = A + B by Th14;
+A2: g * f = B + C by Th14;
+    thus (h * g) * f = A + B + C by A1,Th14
+      .= A + (B + C)
+      .= h * (g * f) by A2,Th14;
+  end;
   reconsider e=0 as Element of G by INT_1:def 2;
   take e;
   let h be Element of G;
   reconsider A = h as Integer by INT_1:def 2;
-  thus h * e = A + 0 by Th14 .= h;
-  thus e * h = 0 + A by Th14 .= h;
+  thus h * e = A + 0 by Th14
+    .= h;
+  thus e * h = 0 + A by Th14
+    .= h;
   reconsider g = - A as Element of G by INT_1:def 2;
   take g;
-  thus h * g = A + (- A) by Th14  .= e;
-  thus g * h = (- A) + A by Th14  .= e;
+  thus h * g = A + (- A) by Th14
+    .= e;
+  thus g * h = (- A) + A by Th14
+    .= e;
 end;
 
 definition
   func INT.Group -> strict Group equals
-    multMagma(#INT,addint#);
+  multMagma(#INT,addint#);
   coherence by Th33;
 end;
 
@@ -820,261 +887,285 @@ registration
   coherence by INT_1:def 2;
 end;
 
-registration let a,b be Element of INT.Group;
+registration
+  let a,b be Element of INT.Group;
   identify a*b with a+b;
   compatibility by BINOP_2:def 20;
 end;
 
-registration let n be natural number;
- cluster -> natural Element of Segm n;
- coherence;
+registration
+  let n be natural number;
+  cluster -> natural Element of Segm n;
+  coherence;
 end;
 
-definition let n be natural number such that A1:n > 0;
- func addint(n) -> BinOp of Segm(n) means
- :Def5: for k,l being Element of Segm(n) holds
-  it.(k,l) = (k+l) mod n;
- existence
+definition
+  let n be natural number such that
+A1: n > 0;
+  func addint(n) -> BinOp of Segm(n) means
+  :Def5:
+  for k,l being Element of Segm(n) holds it.(k,l) = (k+l) mod n;
+  existence
   proof
-   reconsider n as non zero natural number by A1;
+    reconsider n as non zero natural number by A1;
     defpred P[Element of Segm n,Element of Segm n,set] means
-      $3 = ($1+$2) mod n;
-    A2: for k,l being Element of Segm(n) ex c being Element of Segm(n) st
-      P[k,l,c]
-       proof
-       let k,l be Element of Segm(n);
-       reconsider k'=k,l'=l as Element of NAT;
-       ((k'+l') mod n) < n by NAT_D:1;
-        then reconsider c = (k'+l') mod n as Element of Segm(n) by NAT_1:45;
-       take c;
-       thus thesis;
-       end;
-          ex o being BinOp of Segm n st
-         for a,b being Element of Segm n holds
-           P[a,b,o.(a,b)] from BINOP_1:sch 3(A2);
-       hence thesis;
-         end;
- uniqueness
-   proof
-        let i1,i2 be BinOp of Segm(n) such that
-      A3:for k,l being Element of Segm(n) holds
-        i1.(k,l)=((k+l) mod n) and
-      A4:for k,l being Element of Segm(n) holds
-        i2.(k,l)=((k+l) mod n);
-           for k,l being Element of Segm(n) holds i1.(k,l)=i2.(k,l)
-        proof
-         let k,l be Element of Segm(n);
-         thus i1.(k,l)=((k+l) mod n) by A3 .=i2.(k,l) by A4;
-        end;
-         hence thesis by BINOP_1:2;
-     end;
+    $3 = ($1+$2) mod n;
+A2: for k,l being Element of Segm(n) ex c being Element of Segm(n) st P[k,l,c]
+    proof
+      let k,l be Element of Segm(n);
+      reconsider k'=k,l'=l as Element of NAT;
+      ((k'+l') mod n) < n by NAT_D:1;
+      then reconsider c = (k'+l') mod n as Element of Segm(n) by NAT_1:45;
+      take c;
+      thus thesis;
+    end;
+    ex o being BinOp of Segm n st for a,b being Element of Segm n holds
+    P[a,b,o.(a,b)] from BINOP_1:sch 3(A2);
+    hence thesis;
+  end;
+  uniqueness
+  proof
+    let i1,i2 be BinOp of Segm(n) such that
+A3: for k,l being Element of Segm(n) holds i1.(k,l)=((k+l) mod n) and
+A4: for k,l being Element of Segm(n) holds i2.(k,l)=((k+l) mod n);
+    for k,l being Element of Segm(n) holds i1.(k,l)=i2.(k,l)
+    proof
+      let k,l be Element of Segm(n);
+      thus i1.(k,l)=((k+l) mod n) by A3
+        .=i2.(k,l) by A4;
+    end;
+    hence thesis by BINOP_1:2;
+  end;
 end;
 
 theorem Th34:
   for n being non zero natural number holds
   multMagma(#Segm(n),addint(n)#) is associative Group-like
+proof
+  let n be non zero natural number;
+  set G = multMagma (# Segm(n), addint(n) #);
+  thus for h,g,f being Element of G holds (h * g) * f = h * (g * f)
   proof
-   let n be non zero natural number;
-   set G = multMagma (# Segm(n), addint(n) #);
-   thus for h,g,f being Element of G
-    holds (h * g) * f = h * (g * f)
-    proof let h,g,f be Element of G;
-     reconsider A = h, B = g, C = f as Element of Segm(n);
-     A1: h * g = (A + B) mod n by Def5;
-     A2: g * f = (B + C) mod n by Def5;
-     thus (h * g) * f = (((A + B) mod n) + C) mod n by A1,Def5
-                     .= ((A + B) + C) mod n by NAT_D:22
-                     .=(A + (B + C)) mod n
-                     .=(A + ((B + C) mod n)) mod n by NAT_D:22
-                     .= h * (g * f) by A2,Def5;
-     end;
-    reconsider e=0 as Element of G by NAT_1:45;
-    take e;
-    let h be Element of G;
-    reconsider A = h as Element of Segm(n);
-reconsider A as Element of NAT;
-    A3:A < n by NAT_1:45;
+    let h,g,f be Element of G;
+    reconsider A = h, B = g, C = f as Element of Segm(n);
+A1: h * g = (A + B) mod n by Def5;
+A2: g * f = (B + C) mod n by Def5;
+    thus (h * g) * f = (((A + B) mod n) + C) mod n by A1,Def5
+      .= ((A + B) + C) mod n by NAT_D:22
+      .=(A + (B + C)) mod n
+      .=(A + ((B + C) mod n)) mod n by NAT_D:22
+      .= h * (g * f) by A2,Def5;
+  end;
+  reconsider e=0 as Element of G by NAT_1:45;
+  take e;
+  let h be Element of G;
+  reconsider A = h as Element of Segm(n);
+  reconsider A as Element of NAT;
+A3: A < n by NAT_1:45;
   thus h * e = (A + 0) mod n by Def5
-            .= h by A3,NAT_D:24;
+    .= h by A3,NAT_D:24;
   thus e * h = (0 + A) mod n by Def5
-              .= h by A3,NAT_D:24;
-consider p being Nat such that A4: n=A+p by A3,NAT_1:10;
-A5:     p <= n by A4,NAT_1:12;
-     (p mod n) < n by NAT_D:1;
-     then reconsider g = p mod n as Element of G by NAT_1:45;
-     take g;
-    reconsider B=g as Element of Segm(n);
-    thus h * g =e
-    proof
-      per cases by A5,REAL_1:def 5;
-       suppose A6:p = n;
-         h * g = (A +B) mod n by Def5
-              .= (0 * n) mod n by A4,A6,NAT_D:25
-              .= e by NAT_D:13;
-         hence thesis;
-       end;
-       suppose A7:p < n;
-         h * g = (A +B) mod n by Def5
-              .= n mod n by A4,A7,NAT_D:24
-              .= e by NAT_D:25;
-         hence thesis;
-       end;
-     end;
-   thus g * h = e
+    .= h by A3,NAT_D:24;
+  consider p being Nat such that
+A4: n=A+p by A3,NAT_1:10;
+A5: p <= n by A4,NAT_1:12;
+  (p mod n) < n by NAT_D:1;
+  then reconsider g = p mod n as Element of G by NAT_1:45;
+  take g;
+  reconsider B=g as Element of Segm(n);
+  thus h * g =e
   proof
     per cases by A5,REAL_1:def 5;
-      suppose p = n;
-        then g * h = (n mod n + 0) mod n by A4,Def5
-               .= (0 * n) mod n by NAT_D:25
-               .= e by NAT_D:13;
-        hence thesis;
-      end;
-      suppose A8:p < n;
-        g * h = (A + B) mod n by Def5
-             .= n mod n by A4,A8,NAT_D:24
-             .= e by NAT_D:25;
-        hence thesis;
-      end;
+    suppose
+A6:   p = n;
+      h * g = (A +B) mod n by Def5
+        .= (0 * n) mod n by A4,A6,NAT_D:25
+        .= e by NAT_D:13;
+      hence thesis;
+    end;
+    suppose
+A7:   p < n;
+      h * g = (A +B) mod n by Def5
+        .= n mod n by A4,A7,NAT_D:24
+        .= e by NAT_D:25;
+      hence thesis;
     end;
   end;
+  thus g * h = e
+  proof
+    per cases by A5,REAL_1:def 5;
+    suppose p = n;
+      then g * h = (n mod n + 0) mod n by A4,Def5
+        .= (0 * n) mod n by NAT_D:25
+        .= e by NAT_D:13;
+      hence thesis;
+    end;
+    suppose
+A8:   p < n;
+      g * h = (A + B) mod n by Def5
+        .= n mod n by A4,A8,NAT_D:24
+        .= e by NAT_D:25;
+      hence thesis;
+    end;
+  end;
+end;
 
-definition let n be natural number such that A1: n > 0;
- func INT.Group(n) -> strict Group equals
-:Def6: multMagma(#Segm(n),addint(n)#);
-coherence
- proof reconsider n as non zero natural number by A1;
+definition
+  let n be natural number such that
+A1: n > 0;
+  func INT.Group(n) -> strict Group equals
+  :Def6:
+  multMagma(#Segm(n),addint(n)#);
+  coherence
+  proof reconsider n as non zero natural number by A1;
     multMagma(#Segm n, addint n#) is associative Group-like by Th34;
-  hence thesis;
- end;
+    hence thesis;
+  end;
+end;
+
+registration
+  let n be non zero natural number;
+  cluster INT.Group(n) -> finite;
+  coherence
+  proof
+    INT.Group(n) = multMagma(#Segm(n),addint(n)#) by Def6;
+    hence the carrier of INT.Group(n) is finite;
+  end;
 end;
 
 theorem Th35:
   1_INT.Group = 0
-  proof
+proof
   reconsider e = 0 as Element of INT by INT_1:def 2;
   reconsider e as Element of INT.Group;
-   for h being Element of INT.Group holds h * e = h & e * h = h;
- hence thesis by GROUP_1:10;
- end;
+  for h being Element of INT.Group holds h * e = h & e * h = h;
+  hence thesis by GROUP_1:10;
+end;
 
 theorem Th36:
   for n be natural number st n>0 holds 1_INT.Group(n) = 0
+proof
+  let n be natural number;
+  assume
+A1: n>0;
+  then
+A2: INT.Group(n) = multMagma(#Segm(n),addint(n)#) by Def6;
+  reconsider e = 0 as Element of Segm(n) by A1,NAT_1:45;
+  reconsider e as Element of INT.Group(n) by A2;
+  for h being Element of INT.Group(n) holds h * e = h & e * h = h
   proof
-   let n be natural number;
-   assume A1: n>0;
-   then A2: INT.Group(n) = multMagma(#Segm(n),addint(n)#) by Def6;
-   reconsider e = 0 as Element of Segm(n) by A1,NAT_1:45;
-   reconsider e as Element of INT.Group(n) by A2;
-    for h being Element of INT.Group(n)
-   holds h * e = h & e * h = h
-   proof
     let h be Element of INT.Group(n);
     reconsider A = h as Element of Segm(n) by A2;
     reconsider A as Element of NAT by ORDINAL1:def 13;
-    A3:A < n by A1,NAT_1:45;
-    A4: h * e = (A + 0) mod n by A1,A2,Def5
-             .= h by A3,NAT_D:24;
-          e * h = (0 + A) mod n by A1,A2,Def5
-             .= h by A3,NAT_D:24;
-  hence thesis by A4;
- end;
-hence thesis by GROUP_1:10;
+A3: A < n by A1,NAT_1:45;
+A4: h * e = (A + 0) mod n by A1,A2,Def5
+      .= h by A3,NAT_D:24;
+    e * h = (0 + A) mod n by A1,A2,Def5
+      .= h by A3,NAT_D:24;
+    hence thesis by A4;
+  end;
+  hence thesis by GROUP_1:10;
 end;
 
 definition
- let h be Integer;
- canceled;
+  let h be Integer;
+  canceled;
+  func @'h -> Element of INT.Group equals
 
- func @'h -> Element of INT.Group equals
-   h;
- coherence by INT_1:def 2;
+  h;
+  coherence by INT_1:def 2;
 end;
 
 theorem Th37:
   for h being Element of INT.Group holds h" = -h
 proof
-   let h be Element of INT.Group;
-   reconsider g=-h as Element of INT.Group by INT_1:def 2;
-   h *g =1_INT.Group by Th35;
-   hence thesis by GROUP_1:20;
+  let h be Element of INT.Group;
+  reconsider g=-h as Element of INT.Group by INT_1:def 2;
+  h *g =1_INT.Group by Th35;
+  hence thesis by GROUP_1:20;
 end;
 
- reserve G1 for Subgroup of INT.Group;
+reserve G1 for Subgroup of INT.Group;
 
 theorem Th38:
   (@'1) |^ k = k
-  proof
+proof
   defpred P[Element of NAT] means (@'1)|^$1=$1;
 A1: P[0] by Th35,GROUP_1:43;
- A2: for k st P[k] holds P[k+1]
+A2: for k st P[k] holds P[k+1]
   proof
-    let k; assume (@'1)|^k = k;
+    let k;
+    assume (@'1)|^k = k;
     then (@'1)|^k * (@'1) = k + 1;
     hence thesis by GROUP_1:49;
   end;
-    for k holds P[k] from NAT_1:sch 1(A1,A2);
-   hence thesis;
-  end;
+  for k holds P[k] from NAT_1:sch 1(A1,A2);
+  hence thesis;
+end;
 
 theorem Th39:
   j1 = (@'1) |^ j1
-  proof
-   consider k such that A1:j1 = k or j1 = -k by INT_1:8;
-   per cases by A1;
-    suppose j1=k;
-      hence thesis by Th38;
-    end;
-    suppose A2: j1=-k;
-      reconsider k'=k as Integer;
-      reconsider k' as Element of INT.Group by INT_1:def 2;
-       (@'1)|^j1 = ((@'1)|^k)" by A2,GROUP_1:71
-      .= (k')" by Th38 .= j1 by A2,Th37;
-      hence thesis;
-    end;
-  end;
-
-       :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-       ::             Definition of cyclic group                  ::
-       :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-
-Lm4:
- INT.Group = gr {@'1}
 proof
- reconsider h = 1 as Element of INT by INT_1:def 2;
- reconsider h as Element of INT.Group;
- {h} c= the carrier of (Omega).INT.Group &
- (for G1 being strict Subgroup of INT.Group
-  st {h} c= the carrier of G1 holds
- (Omega).INT.Group is Subgroup of G1 )
+  consider k such that
+A1: j1 = k or j1 = -k by INT_1:8;
+  per cases by A1;
+  suppose j1=k;
+    hence thesis by Th38;
+  end;
+  suppose
+A2: j1=-k;
+    reconsider k'=k as Integer;
+    reconsider k' as Element of INT.Group by INT_1:def 2;
+    (@'1)|^j1 = ((@'1)|^k)" by A2,GROUP_1:71
+      .= (k')" by Th38
+      .= j1 by A2,Th37;
+    hence thesis;
+  end;
+end;
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+::             Definition of cyclic group                  ::
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+Lm4: INT.Group = gr {@'1}
+proof
+  reconsider h = 1 as Element of INT by INT_1:def 2;
+  reconsider h as Element of INT.Group;
+  {h} c= the carrier of (Omega).INT.Group &
+  (for G1 being strict Subgroup of INT.Group st {h} c= the carrier of G1 holds
+  (Omega).INT.Group is Subgroup of G1 )
   proof
-   for G1 st {h} c= the carrier of G1 holds (Omega).
-   INT.Group is Subgroup of G1
+    for G1 st {h} c= the carrier of G1 holds (Omega).
+    INT.Group is Subgroup of G1
     proof
       let G1;
-      assume A1:{h} c= the carrier of G1;
+      assume
+A1:   {h} c= the carrier of G1;
       the carrier of (Omega).INT.Group c= the carrier of G1
       proof
         let x;
-        assume that A2: x in the carrier of (Omega).INT.Group and
-        A3: not x in the carrier of G1;
-        x in INT by A2;
-        then reconsider x'=x as Integer by INT_1:def 2;
+        assume that
+A2:     x in the carrier of (Omega).INT.Group and
+A3:     not x in the carrier of G1;
+        reconsider x'=x as Integer by A2,INT_1:def 2;
         h in {h} by TARSKI:def 1;
         then reconsider h''=h as Element of G1 by A1;
-        A4: (h'')|^x' in the carrier of G1;
+A4:     (h'')|^x' in the carrier of G1;
         (h'')|^x'=h|^x' by GROUP_4:4;
         hence contradiction by A3,A4,Th39;
       end;
-hence thesis by GROUP_2:66;
-end;
-hence thesis;
-end;
-hence thesis by GROUP_4:def 5;
+      hence thesis by GROUP_2:66;
+    end;
+    hence thesis;
+  end;
+  hence thesis by GROUP_4:def 5;
 end;
 
-definition let IT be Group;
-  attr IT is cyclic means :Def9:
-    ex a being Element of IT st the multMagma of IT = gr {a};
+definition
+  let IT be Group;
+  attr IT is cyclic means
+  :Def9:
+  ex a being Element of IT st the multMagma of IT = gr {a};
 end;
 
 registration
@@ -1087,338 +1178,356 @@ end;
 
 theorem Th40:
   (1).G is cyclic
- proof
+proof
   1_G in {1_G} by TARSKI:def 1;
   then reconsider PG=1_G as Element of (1).G by GROUP_2:def 7;
   take PG;
   {PG} c= the carrier of (Omega).(1).G &
   ( for G1 being strict Subgroup of (1).G st {PG} c= the carrier of G1 holds
   (Omega).(1).G is Subgroup of G1 )
-   proof
-     for G1 being Subgroup of (1).G st {PG} c= the carrier of G1 holds
-     (Omega).(1).G is Subgroup of G1
-     proof
-       let G1 be Subgroup of (1).G;
-       assume A1:{PG} c= the carrier of G1;
-       the carrier of (Omega).(1).G c=the carrier of G1
-         by A1,GROUP_2:def 7;
-       hence thesis by GROUP_2:66;
-     end;
-     hence thesis;
-   end;
+  proof
+    for G1 being Subgroup of (1).G st {PG} c= the carrier of G1 holds
+    (Omega).(1).G is Subgroup of G1
+    proof
+      let G1 be Subgroup of (1).G;
+      assume {PG} c= the carrier of G1;
+      then the carrier of (Omega).(1).G c=the carrier of G1 by GROUP_2:def 7;
+      hence thesis by GROUP_2:66;
+    end;
+    hence thesis;
+  end;
   hence thesis by GROUP_4:def 5;
- end;
+end;
 
-registration let G be Group;
+registration
+  let G be Group;
   cluster (1).G -> cyclic;
   coherence by Th40;
 end;
 
+registration
+  cluster strict finite cyclic Group;
+  existence
+  proof
+    consider G be Group;
+    take (1).G;
+    thus thesis;
+  end;
+end;
+
 theorem Th41:
   G is cyclic Group iff ex a being Element of G st
-   for b being Element of G ex j1 st b=a|^j1
- proof
-   thus G is cyclic Group implies ex a being Element of G st
+  for b being Element of G ex j1 st b=a|^j1
+proof
+  thus G is cyclic Group implies ex a being Element of G st
+  for b being Element of G ex j1 st b=a|^j1
+  proof
+    assume G is cyclic Group;
+    then consider a being Element of G such that
+A1: the multMagma of G = gr {a} by Def9;
+    take a;
     for b being Element of G ex j1 st b=a|^j1
-     proof
-      assume G is cyclic Group;
-      then consider a being Element of G such that
-       A1: the multMagma of G = gr {a} by Def9;
-      take a;
-        for b being Element of G ex j1 st b=a|^j1
-       proof
-        let b be Element of G;
-         b in gr {a} by A1,STRUCT_0:def 5;
-        hence thesis by Th25;
-       end;
-     hence thesis;
+    proof
+      let b be Element of G;
+      b in gr {a} by A1,STRUCT_0:def 5;
+      hence thesis by Th25;
     end;
-      given a being Element of G such that
-      A2:for b being Element of G
-      ex j1 st b = a|^j1;
-      for b being Element of G holds b in gr {a}
-       proof
-        let b be Element of G;
-         ex j1 st b=a|^j1 by A2;
-        hence thesis by Th25;
-       end;
-      then the multMagma of G = gr {a} by GROUP_2:71;
-      hence thesis by Def9;
+    hence thesis;
+  end;
+  given a being Element of G such that
+A2: for b being Element of G ex j1 st b = a|^j1;
+  for b being Element of G holds b in gr {a}
+  proof
+    let b be Element of G;
+    ex j1 st b=a|^j1 by A2;
+    hence thesis by Th25;
+  end;
+  then the multMagma of G = gr {a} by GROUP_2:71;
+  hence thesis by Def9;
 end;
 
 theorem Th42:
-  G is finite implies (G is cyclic Group iff
-  ex a being Element of G st
-  for b being Element of G ex n st b = a|^n)
- proof
-  assume A1: G is finite;
-  thus G is cyclic Group implies
-  ex a being Element of G st
+  for G being finite Group holds
+  G is cyclic iff ex a being Element of G st
+  for b being Element of G ex n st b = a|^n
+proof
+  let G be finite Group;
+  thus G is cyclic implies ex a being Element of G st
   for b being Element of G ex n st b=a|^n
-     proof
-       assume G is cyclic Group;
-       then consider a being Element of G such that
-       A2: for b being Element of G ex j2 st b=a|^j2 by Th41;
-       take a;
-       let b be Element of G;
-       consider j2 such that A3: b = a|^j2 by A2;
-       consider n such that A4:j2=n or j2=-n by INT_1:8;
-       per cases by A4;
-       suppose j2=n; hence thesis by A3;
-       end;
-       suppose A5:j2=-n;
-       ord G >=1 by A1,GROUP_1:90;
-       then n mod ord G <=ord G by NAT_D:1;
-       then reconsider q'=ord G -( n mod ord G) as Element of NAT by INT_1:18;
-       take q';
-       b=(a|^n)" by A3,A5,GROUP_1:71
-       .= a|^q' by A1,Th30;
-       hence thesis;
+  proof
+    assume G is cyclic;
+    then consider a being Element of G such that
+A1: for b being Element of G ex j2 st b=a|^j2 by Th41;
+    take a;
+    let b be Element of G;
+    consider j2 such that
+A2: b = a|^j2 by A1;
+    consider n such that
+A3: j2=n or j2=-n by INT_1:8;
+    per cases by A3;
+    suppose j2=n;
+      hence thesis by A2;
+    end;
+    suppose
+A4:   j2=-n;
+      ord G >=1 by GROUP_1:90;
+      then n mod ord G <=ord G by NAT_D:1;
+      then reconsider q'=ord G -( n mod ord G) as Element of NAT by INT_1:18;
+      take q';
+      b=(a|^n)" by A2,A4,GROUP_1:71
+        .= a|^q' by Th30;
+      hence thesis;
     end;
   end;
   given a being Element of G such that
-A6:  for b being Element of G ex n st b=a|^n;
-     for b being Element of G ex j2 st b=a|^j2
-     proof
-       let b be Element of G;
-       consider n such that A7:b=a|^n by A6;
-       reconsider n as Integer;
-       take n;
-       thus thesis by A7;
-     end;
-   hence thesis by Th41;
- end;
-
-Lm5: for G, H being Group st G is finite &
-  the multMagma of G = the multMagma of H holds ord G = ord H
+A5: for b being Element of G ex n st b=a|^n;
+  for b being Element of G ex j2 st b=a|^j2
   proof
-    let G, H be Group;
-    assume A1:G is finite & the multMagma of G = the multMagma of H; then
-    the carrier of G is finite by STRUCT_0:def 11; then
-A2: H is finite by A1,STRUCT_0:def 11;
-    consider B being finite set such that
-A3: B = the carrier of G & ord G = card B by A1,GROUP_1:def 15;
-    consider C being finite set such that
-A4: C = the carrier of H & ord H = card C by A2,GROUP_1:def 15;
-    thus thesis by A1,A3,A4;
+    let b be Element of G;
+    consider n such that
+A6: b=a|^n by A5;
+    reconsider n as Integer;
+    take n;
+    thus thesis by A6;
   end;
+  hence thesis by Th41;
+end;
 
 theorem Th43:
-  for G being Group st G is finite holds
-   ( G is cyclic Group iff
-      ex a being Element of G st ord a = ord G )
-proof let G be Group;
-  assume A1: G is finite;
-  thus G is cyclic Group implies
-  ex a being Element of G st ord a = ord G
+  for G being finite Group holds
+  ( G is cyclic iff ex a being Element of G st ord a = ord G )
+proof
+  let G be finite Group;
+  thus G is cyclic implies ex a being Element of G st ord a = ord G
   proof
-     assume G is cyclic Group;
-     then consider a being Element of G such that
- A2: the multMagma of G = gr {a} by Def9;
-     take a;
-     reconsider H = the multMagma of G as Group;
-     ord a = ord H by A1,A2,Th27;
-     hence thesis by A1,Lm5;
-   end;
-   given a being Element of G such that A3:ord a = ord G;
-   ex a being Element of G st the multMagma of G = gr {a}
-   proof
-     consider a being Element of G such that
- A4: ord a = ord G by A3;
-     take a;
-     ord gr {a} = ord G by A1,A4,Th27;
-     hence thesis by A1,GROUP_2:85;
-   end;
-   hence thesis by Def9;
+    assume G is cyclic;
+    then consider a being Element of G such that
+A1: the multMagma of G = gr {a} by Def9;
+    take a;
+    reconsider H = the multMagma of G as Group;
+    ord a = Ord H by A1,Th27;
+    hence thesis;
+  end;
+  given a being Element of G such that
+A2: ord a = ord G;
+  ex a being Element of G st the multMagma of G = gr {a}
+  proof
+    consider a being Element of G such that
+A3: ord a = ord G by A2;
+    take a;
+    ord gr {a} = ord G by A3,Th27;
+    hence thesis by GROUP_2:85;
+  end;
+  hence thesis by Def9;
 end;
 
 theorem
-  for H being strict Subgroup of G st
-      G is finite & G is cyclic Group holds
-    H is cyclic Group
- proof let H be strict Subgroup of G;
-  assume that A1: G is finite and A2:G is cyclic Group;
-  consider a such that
-  A3: for b being Element of G ex n st b = a|^n by A1,A2,Th42;
-  A4: H is finite by A1,GROUP_2:48;
-  then A5: ord H >= 1 by GROUP_1:90;
-  per cases by A5,REAL_1:def 5;
-     suppose ord H = 1;
-       then H = (1).G by A4,GROUP_2:82;
-       hence thesis;
-     end;
-     suppose ord H > 1;
-       then consider h being Element of H such that
-       A6:h <> 1_H by Th31;
-       defpred P[Nat] means
-          $1 > 0 & a|^$1 is Element of H;
-          h is Element of G by GROUP_2:51;
-          then consider n such that A7: h = a|^n by A3;
-          n <> 0
-           proof
-            assume n = 0;
-            then h = 1_G by A7,GROUP_1:59 .= 1_H by GROUP_2:53;
-            hence contradiction by A6;
-           end;
-           then n > 0;
-           then A8: ex n being Nat st P[n] by A7;
-          ex h1 being Element of H st
-       for b being Element of H ex s st b = h1|^s
+  for G being finite Group, H being strict Subgroup of G st G is cyclic holds
+  H is cyclic
+proof
+  let G be finite Group, H be strict Subgroup of G;
+  assume
+A1: G is cyclic;
+  consider a be Element of G such that
+A2: for b being Element of G ex n st b = a|^n by A1,Th42;
+A3: ord H >= 1 by GROUP_1:90;
+  per cases by A3,REAL_1:def 5;
+  suppose ord H = 1;
+    then H = (1).G by GROUP_2:82;
+    hence thesis;
+  end;
+  suppose ord H > 1;
+    then consider h being Element of H such that
+A4: h <> 1_H by Th31;
+    defpred P[Nat] means $1 > 0 & a|^$1 is Element of H;
+    h is Element of G by GROUP_2:51;
+    then consider n such that
+A5: h = a|^n by A2;
+    n <> 0
+    proof
+      assume n = 0;
+      then h = 1_G by A5,GROUP_1:59
+        .= 1_H by GROUP_2:53;
+      hence contradiction by A4;
+    end;
+    then n > 0;
+    then
+A6: ex n being Nat st P[n] by A5;
+    ex h1 being Element of H st for b being Element of H ex s st b = h1|^s
+    proof
+      ex k be Nat st P[k] & for n be Nat st P[n] holds k <= n
+      from NAT_1:sch 5(A6);
+      then consider n being Nat such that
+A7:   n>0 & a|^n is Element of H and
+A8:  for k be Nat st (k>0 & a|^k is Element of H) holds n <= k;
+      consider h1 being Element of H such that
+A9:  h1 = a|^n by A7;
+      take h1;
+      for b being Element of H ex s st b = h1|^s
       proof
-       ex k be Nat st P[k] & for n be Nat st P[n] holds k <= n
-         from NAT_1:sch 5(A8);
-       then consider n being Nat such that
-       A9: n>0 & a|^n is Element of H and
-       A10: for k be Nat st
-       (k>0 & a|^k is Element of H) holds n <= k;
-       consider h1 being Element of H such that
-       A11: h1 = a|^n by A9;
-       take h1;
-       for b being Element of H ex s st b = h1|^s
-       proof
-         let b be Element of H;
-         b is Element of G by GROUP_2:51;
-         then consider p such that A12: b = a|^p by A3;
-         consider s,r being Nat such that A13: p = (n*s) + r and
-         A14:r < n by A9,NAT_1:17;
-         reconsider s,r as Element of NAT by ORDINAL1:def 13;
-   A15:  r =0
-         proof
-           assume r<>0;
-          then A16: r >0;
-A17:      a|^p = a|^(n*s) * (a|^r) by A13,GROUP_1:48;
-          h1|^s=a|^n|^s by A11,GROUP_4:3;
-     then (h1|^s)"=(a|^n|^s)" by GROUP_2:57 .= (a|^(n * s ))" by GROUP_1:50;
+        let b be Element of H;
+        b is Element of G by GROUP_2:51;
+        then consider p such that
+A10:    b = a|^p by A2;
+        consider s,r being Nat such that
+A11:    p = (n*s) + r and
+A12:    r < n by A7,NAT_1:17;
+        reconsider s,r as Element of NAT by ORDINAL1:def 13;
+A13:    r =0
+        proof
+          assume r<>0;
+          then
+A14:      r >0;
+A15:      a|^p = a|^(n*s) * (a|^r) by A11,GROUP_1:48;
+          h1|^s=a|^n|^s by A9,GROUP_4:3;
+          then (h1|^s)"=(a|^n|^s)" by GROUP_2:57
+            .= (a|^(n * s ))" by GROUP_1:50;
           then reconsider g= (a|^(n*s))" as Element of H;
-          reconsider b=a|^p as Element of H by A12;
+          reconsider b=a|^p as Element of H by A10;
           (a|^(n*s))" * (a|^p)
-          = ((a|^(n*s))" *(a|^(n*s)))*(a|^r) by A17,GROUP_1:def 4
-          .= 1_G *(a|^r) by GROUP_1:def 6 .= a|^ r by GROUP_1:def 5;
+          = ((a|^(n*s))" *(a|^(n*s)))*(a|^r) by A15,GROUP_1:def 4
+            .= 1_G *(a|^r) by GROUP_1:def 6
+            .= a|^ r by GROUP_1:def 5;
           then g*b = a|^r by GROUP_2:52;
-          hence contradiction by A10,A14,A16;
+          hence contradiction by A8,A12,A14;
         end;
-     take s;
-     a|^p = a|^n|^s by A13,A15,GROUP_1:50 .= h1|^s by A11,GROUP_4:3;
-     hence thesis by A12;
-   end;
- hence thesis;
-end;
-hence thesis by A4,Th42;
-end;
+        take s;
+        a|^p = a|^n|^s by A11,A13,GROUP_1:50
+          .= h1|^s by A9,GROUP_4:3;
+        hence thesis by A10;
+      end;
+      hence thesis;
+    end;
+    hence thesis by Th42;
+  end;
 end;
 
 theorem
-  for G being strict Group holds
-  G is finite & ord G = p & p is prime implies
-   G is cyclic Group
- proof let G be strict Group;
-  assume that A1: G is finite and A2: ord (G) = p and
-              A3: p is prime;
+  for G being strict finite Group holds ord G = p & p is prime implies
+  G is cyclic Group
+proof
+  let G be strict finite Group;
+  assume that
+A1: ord (G) = p and
+A2: p is prime;
   ex a being Element of G st ord a = p
   proof
-   assume A4: for a being Element of G holds ord a <> p;
-   A5: now let a be Element of G;
-   ord a divides p by A1,A2,Th28;
-   then ord a = 1 or ord a = p by A3,INT_2:def 5;
-   hence ord a = 1 by A4;
-end;
-the carrier of G c= the carrier of (1).G
- proof
-   for x being set holds x in the carrier of G implies
+    assume
+A3: for a being Element of G holds ord a <> p;
+A4: now
+      let a be Element of G;
+      ord a divides p by A1,Th28;
+      then ord a = 1 or ord a = p by A2,INT_2:def 5;
+      hence ord a = 1 by A3;
+    end;
+    the carrier of G c= the carrier of (1).G
+    proof
+      for x being set holds x in the carrier of G implies
       x in the carrier of (1).G
       proof
-       let x be set;
-       assume x in the carrier of G;
-       then reconsider x'=x as Element of G;
-       ord x' = 1 by A5;
-       then x' = 1_G by GROUP_1:85;
-       then x' in {1_G} by TARSKI:def 1;
-      hence thesis by GROUP_2:def 7;
-     end;
- hence thesis by TARSKI:def 3;
-end;
- then G = (1).G by GROUP_2:70;
- then ord G = 1 by GROUP_2:81;
- hence contradiction by A2,A3,INT_2:def 5;
-end;
-hence thesis by A1,A2,Th43;
+        let x be set;
+        assume x in the carrier of G;
+        then reconsider x'=x as Element of G;
+        ord x' = 1 by A4;
+        then x' = 1_G by GROUP_1:85;
+        then x' in {1_G} by TARSKI:def 1;
+        hence thesis by GROUP_2:def 7;
+      end;
+      hence thesis by TARSKI:def 3;
+    end;
+    then G = (1).G by GROUP_2:70;
+    then ord G = 1 by GROUP_2:81;
+    hence contradiction by A1,A2,INT_2:def 5;
+  end;
+  hence thesis by A1,Th43;
 end;
 
 theorem Th46:
   for n st n>0 ex g being Element of INT.Group(n) st
   for b being Element of INT.Group(n) ex j1 st b = g|^j1
-  proof
-   let n;
-   assume A1:n>0;
-   then A2: INT.Group(n) = multMagma(#Segm(n),addint(n)#) by Def6;
-   0 +1 < n+1 by A1,XREAL_1:8;
-   then A3:n >=1 by NAT_1:13;
-   now per cases by A3,REAL_1:def 5;
-     suppose n=1;
-     then the carrier of INT.Group(n) = {1_INT.Group(n)} by A2,Th36,CARD_1:87
-      .= the carrier of (1).INT.Group(n) by GROUP_2:def 7;
-    then INT.Group(n) = (1).INT.Group(n) by GROUP_2:70;
-    hence thesis by Th41;
-   end;
-   suppose n>1;
-     then reconsider g'= 1 as Element of Segm(n) by NAT_1:45;
-     reconsider g=g' as Element of INT.Group(n) by A2;
+proof
+  let n;
+  assume
+A1: n>0;
+  then
+A2: INT.Group(n) = multMagma(#Segm(n),addint(n)#) by Def6;
+  0 +1 < n+1 by A1,XREAL_1:8;
+  then
+A3: n >=1 by NAT_1:13;
+  now per cases by A3,REAL_1:def 5;
+    suppose n=1;
+      then the carrier of INT.Group(n) = {1_INT.Group(n)} by A2,Th36,CARD_1:87
+        .= the carrier of (1).INT.Group(n) by GROUP_2:def 7;
+      then INT.Group(n) = (1).INT.Group(n) by GROUP_2:70;
+      hence thesis by Th41;
+    end;
+    suppose n>1;
+      then reconsider g'= 1 as Element of Segm(n) by NAT_1:45;
+      reconsider g=g' as Element of INT.Group(n) by A2;
       for b being Element of INT.Group(n) ex j1 st b = g|^j1
       proof
-       let b be Element of INT.Group(n);
-       reconsider b'=b as Element of NAT by A1,A2,Lm1;
-       defpred P[Element of NAT] means g|^$1 = $1 mod n;
-       g|^0 = 1_INT.Group(n) by GROUP_1:43 .= 0 by A1,Th36
-             .= 0 mod n by NAT_D:26;
-       then A4:P[0];
-       A5: for k st P[k] holds P[k+1]
-       proof
-        let k;
-        k mod n < n by A1,NAT_D:1;
-        then reconsider e=(k mod n) as Element of Segm(n) by NAT_1:45;
-        assume A6: g|^k = k mod n;
-        g|^(k+1) =g|^k*(g|^1) by GROUP_1:48 .=g|^k*g by GROUP_1:44
-               .= (e +g') mod n by A1,A2,A6,Def5 .=(k+1) mod n by NAT_D:22;
-        hence thesis;
-       end;
-  A7:  for k holds P[k] from NAT_1:sch 1(A4,A5);
-  A8:  b'<n by A2,NAT_1:45;
-A9:   g|^b'=b' mod n by A7 .= b by A8,NAT_D:24;
+        let b be Element of INT.Group(n);
+        reconsider b'=b as Element of NAT by A1,A2,Lm1;
+        defpred P[Element of NAT] means g|^$1 = $1 mod n;
+        g|^0 = 1_INT.Group(n) by GROUP_1:43
+          .= 0 by A1,Th36
+          .= 0 mod n by NAT_D:26;
+        then
+A4:     P[0];
+A5:     for k st P[k] holds P[k+1]
+        proof
+          let k;
+          k mod n < n by A1,NAT_D:1;
+          then reconsider e=(k mod n) as Element of Segm(n) by NAT_1:45;
+          assume
+A6:       g|^k = k mod n;
+          g|^(k+1) =g|^k*(g|^1) by GROUP_1:48
+            .=g|^k*g by GROUP_1:44
+            .= (e +g') mod n by A1,A2,A6,Def5
+            .=(k+1) mod n by NAT_D:22;
+          hence thesis;
+        end;
+A7:     for k holds P[k] from NAT_1:sch 1(A4,A5);
+A8:     b'<n by A2,NAT_1:45;
+A9:     g|^b'=b' mod n by A7
+          .= b by A8,NAT_D:24;
         reconsider b' as Integer;
         take b';
         thus thesis by A9;
+      end;
+      hence thesis;
     end;
-    hence thesis;
-  end;
   end;
   hence thesis;
 end;
 
 registration
- cluster cyclic -> commutative Group;
- coherence
-proof let G;
- assume A1:G is cyclic;
- for a,b being Element of G holds a * b = b * a
- proof
-  let a,b be Element of G;
-  ex e being Element of G st
-   (ex j2 st a=e|^j2 & ex j3 st b=e|^j3)
+  cluster cyclic -> commutative Group;
+  coherence
   proof
-   consider e being Element of G such that
-   A2:for d being Element of G ex j3 st d=e|^j3 by A1,Th41;
-   take e;
-   A3:ex j2 st a=e|^j2 by A2;
-   ex j3 st b=e|^j3 by A2;
-   hence thesis by A3;
+    let G;
+    assume
+A1: G is cyclic;
+    for a,b being Element of G holds a * b = b * a
+    proof
+      let a,b be Element of G;
+      ex e being Element of G st (ex j2 st a=e|^j2 & ex j3 st b=e|^j3)
+      proof
+        consider e being Element of G such that
+A2:     for d being Element of G ex j3 st d=e|^j3 by A1,Th41;
+        take e;
+A3:     ex j2 st a=e|^j2 by A2;
+        ex j3 st b=e|^j3 by A2;
+        hence thesis by A3;
+      end;
+      then consider e being Element of G,j2,j3 such that
+A4:   a = e|^j2 & b = e|^j3;
+      a * b = e |^(j3 + j2) by A4,GROUP_1:63
+        .= b * a by A4,GROUP_1:63;
+      hence thesis;
+    end;
+    hence thesis by GROUP_1:def 16;
   end;
-  then consider e being Element of G,j2,j3 such that
-  A4: a = e|^j2 & b = e|^j3;
-  a * b = e |^(j3 + j2) by A4,GROUP_1:63 .= b * a by A4,GROUP_1:63;
-  hence thesis;
- end;
- hence thesis by GROUP_1:def 16;
-end;
 end;
 
 theorem
@@ -1439,10 +1548,10 @@ end;
 theorem
   n > 0 implies INT.Group(n) is cyclic
 proof
- assume n > 0;
- then ex g being Element of INT.Group(n) st
- for b being Element of INT.Group(n) ex j1 st b = g|^j1 by Th46;
- hence thesis by Th41;
+  assume n > 0;
+  then ex g being Element of INT.Group(n) st
+  for b being Element of INT.Group(n) ex j1 st b = g|^j1 by Th46;
+  hence thesis by Th41;
 end;
 
 theorem
@@ -1450,13 +1559,15 @@ theorem
 
 theorem
   0 < m & m <= n implies Segm m c= Segm n
-proof assume
+proof
+  assume
 A1: 0 < m & m <= n;
- let x;
- assume
+  let x;
+  assume
 A2: x in Segm m;
   then reconsider x as Element of NAT;
   x < m by A2,NAT_1:45;
   then x < n by A1,XXREAL_0:2;
   hence thesis by NAT_1:45;
 end;
+

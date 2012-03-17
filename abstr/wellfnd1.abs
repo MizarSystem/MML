@@ -28,208 +28,193 @@ begin :: Preliminaries
 :: General preliminaries :::::::::::::::::::::::::::::::::::::::::::::
 
 definition
- let R be 1-sorted, X be set,
-     p be PartFunc of the carrier of R, X;
- redefine func dom p -> Subset of R;
+  let R be 1-sorted, X be set, p be PartFunc of the carrier of R, X;
+  redefine func dom p -> Subset of R;
 end;
 
 theorem :: WELLFND1:1
- for X being set, f, g being Function
-  st f c= g & X c= dom f holds f|X = g|X;
+  for X being set, f, g being Function st f c= g & X c= dom f holds f|X = g|X;
 
 theorem :: WELLFND1:2
- for X being functional set
+  for X being functional set
   st for f, g being Function st f in X & g in X holds f tolerates g
-   holds union X is Function;
+  holds union X is Function;
 
 scheme :: WELLFND1:sch 1
  PFSeparation {X, Y() -> set, P[set]}:
- ex PFS being Subset of PFuncs(X(), Y()) st
+  ex PFS being Subset of PFuncs(X(), Y()) st
   for pfs being PartFunc of X(), Y() holds pfs in PFS iff P[pfs];
 
 :: Cardinals ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 registration
- let X be set;
- cluster nextcard X -> non empty;
+  let X be set;
+  cluster nextcard X -> non empty;
 end;
 
 registration
- cluster regular Aleph;
+  cluster regular Aleph;
 end;
 
 theorem :: WELLFND1:3
- for M being regular Aleph, X being set
+  for M being regular Aleph, X being set
   st X c= M & Card X in M holds sup X in M;
 
 :: Relational structures ::::::::::::::::::::::::::::::::::::::::::::::
 
 theorem :: WELLFND1:4
- for R being RelStr, x being set
+  for R being RelStr, x being set
   holds (the InternalRel of R)-Seg x c= the carrier of R;
 
 definition
- let R be RelStr, X be Subset of R;
- redefine
- attr X is lower means
+  let R be RelStr, X be Subset of R;
+  redefine
+  attr X is lower means
 :: WELLFND1:def 1
+
   for x, y being set
-   st x in X & [y, x] in the InternalRel of R holds y in X;
+  st x in X & [y, x] in the InternalRel of R holds y in X;
 end;
 
 theorem :: WELLFND1:5
- for R being RelStr, X being Subset of R, x being set
+  for R being RelStr, X being Subset of R, x being set
   st X is lower & x in X holds (the InternalRel of R)-Seg x c= X;
 
 theorem :: WELLFND1:6
- for R being RelStr, X being lower Subset of R,
-     Y being Subset of R, x being set
-  st Y = X \/ {x} & (the InternalRel of R)-Seg x c= X
-   holds Y is lower;
+  for R being RelStr, X being lower Subset of R,
+  Y being Subset of R, x being set
+  st Y = X \/ {x} & (the InternalRel of R)-Seg x c= X holds Y is lower;
 
 begin :: Well-founded relational structures
 
 definition
- let R be RelStr;
- attr R is well_founded means
+  let R be RelStr;
+  attr R is well_founded means
 :: WELLFND1:def 2
- the InternalRel of R is_well_founded_in the carrier of R;
+
+  the InternalRel of R is_well_founded_in the carrier of R;
 end;
 
 registration
- cluster non empty well_founded RelStr;
+  cluster non empty well_founded RelStr;
 end;
 
 definition
- let R be RelStr, X be Subset of R;
- attr X is well_founded means
+  let R be RelStr, X be Subset of R;
+  attr X is well_founded means
 :: WELLFND1:def 3
- the InternalRel of R is_well_founded_in X;
+
+  the InternalRel of R is_well_founded_in X;
 end;
 
 registration
- let R be RelStr;
- cluster well_founded Subset of R;
+  let R be RelStr;
+  cluster well_founded Subset of R;
 end;
 
 definition
- let R be RelStr;
- func well_founded-Part R -> Subset of R means
+  let R be RelStr;
+  func well_founded-Part R -> Subset of R means
 :: WELLFND1:def 4
+
   it = union {S where S is Subset of R : S is well_founded lower};
 end;
 
 registration
- let R be RelStr;
- cluster well_founded-Part R -> lower well_founded;
+  let R be RelStr;
+  cluster well_founded-Part R -> lower well_founded;
 end;
 
 theorem :: WELLFND1:7
- for R being non empty RelStr, x be Element of R
+  for R being non empty RelStr, x be Element of R
   holds {x} is well_founded Subset of R;
 
 theorem :: WELLFND1:8
- for R being RelStr, X, Y being well_founded Subset of R
+  for R being RelStr, X, Y being well_founded Subset of R
   st X is lower holds X \/ Y is well_founded Subset of R;
 
 theorem :: WELLFND1:9
- for R being RelStr
+  for R being RelStr
   holds R is well_founded iff well_founded-Part R = the carrier of R;
 
 theorem :: WELLFND1:10
- for R being non empty RelStr,
-     x being Element of R
+  for R being non empty RelStr, x being Element of R
   st (the InternalRel of R)-Seg x c= well_founded-Part R
-   holds x in well_founded-Part R;
+  holds x in well_founded-Part R;
 
 :: Well-founded induction :::::::::::::::::::::::::::::::::::::::::::::
 
 scheme :: WELLFND1:sch 2
- WFMin {R() -> non empty RelStr,
-              x() -> Element of R(),
-              P[set]}:
- ex x being Element of R() st P[x] &
-   not ex y being Element of R()
-        st x <> y & P[y] & [y,x] in the InternalRel of R()
+ WFMin {R() -> non empty RelStr, x() -> Element of R(), P[set]}:
+  ex x being Element of R() st P[x] & not ex y being Element of R()
+  st x <> y & P[y] & [y,x] in the InternalRel of R()
 provided
- P[x()] and
+ P[x()]
+and
  R() is well_founded;
 
 theorem :: WELLFND1:11  :: WF iff WFInduction
-for R being non empty RelStr holds
- R is well_founded iff
- for S being set
+  for R being non empty RelStr holds R is well_founded iff for S being set
   st for x being Element of R
-      st (the InternalRel of R)-Seg x c= S holds x in S
-   holds the carrier of R c= S;
+  st (the InternalRel of R)-Seg x c= S holds x in S
+  holds the carrier of R c= S;
 
 scheme :: WELLFND1:sch 3
  WFInduction {R() -> non empty RelStr, P[set]}:
- for x being Element of R() holds P[x]
+  for x being Element of R() holds P[x]
 provided
- for x being Element of R()
-      st for y being Element of R()
-          st y <> x & [y,x] in the InternalRel of R() holds P[y]
-       holds P[x]
-    and
+ for x being Element of R() st for y being Element of R()
+st y <> x & [y,x] in the InternalRel of R() holds P[y] holds P[x]
+and
  R() is well_founded;
 
 :: Well-foundedness and recursive definitions :::::::::::::::::::::::::
 
 definition
- let R be non empty RelStr, V be non empty set,
-     H be Function of
-       [:the carrier of R, PFuncs(the carrier of R, V):], V,
-     F be Function;
- pred F is_recursively_expressed_by H means
+  let R be non empty RelStr, V be non empty set, H be Function of
+  [:the carrier of R, PFuncs(the carrier of R, V):], V, F be Function;
+  pred F is_recursively_expressed_by H means
 :: WELLFND1:def 5
+
   for x being Element of R
-   holds F.x = H.(x, F|(the InternalRel of R)-Seg x);
+  holds F.x = H.(x, F|(the InternalRel of R)-Seg x);
 end;
 
 theorem :: WELLFND1:12 :: Well foundedness and existence
-     for R being non empty RelStr holds
- R is well_founded iff
- for V being non empty set,
-     H being Function of
-       [:the carrier of R, PFuncs(the carrier of R, V):], V
+  for R being non empty RelStr holds R is well_founded iff
+  for V being non empty set, H being Function of
+  [:the carrier of R, PFuncs(the carrier of R, V):], V
   ex F being Function of the carrier of R, V
-   st F is_recursively_expressed_by H;
+  st F is_recursively_expressed_by H;
 
 theorem :: WELLFND1:13 :: Uniqueness implies well-foundedness
-     for R being non empty RelStr,
-    V being non trivial set
- st for H being Function of
-                [:the carrier of R, PFuncs(the carrier of R, V):], V,
-        F1, F2 being Function of the carrier of R, V
-     st F1 is_recursively_expressed_by H &
-        F2 is_recursively_expressed_by H
-      holds F1 = F2
-  holds R is well_founded;
+  for R being non empty RelStr, V being non trivial set
+  st for H being Function of
+  [:the carrier of R, PFuncs(the carrier of R, V):], V,
+  F1, F2 being Function of the carrier of R, V
+  st F1 is_recursively_expressed_by H & F2 is_recursively_expressed_by H
+  holds F1 = F2 holds R is well_founded;
 
 theorem :: WELLFND1:14 :: Well-foundedness implies uniqueness
-      for R being non empty well_founded RelStr,
-     V being non empty set,
-     H being Function of
-             [:the carrier of R, PFuncs(the carrier of R, V):], V,
-     F1, F2 being Function of the carrier of R, V
-   st F1 is_recursively_expressed_by H &
-      F2 is_recursively_expressed_by H
-    holds F1 = F2;
+  for R being non empty well_founded RelStr, V being non empty set,
+  H being Function of [:the carrier of R, PFuncs(the carrier of R, V):], V,
+  F1, F2 being Function of the carrier of R, V
+  st F1 is_recursively_expressed_by H & F2 is_recursively_expressed_by H
+  holds F1 = F2;
 
 :: Well-foundedness and omega chains  :::::::::::::::::::::::::::::::::
 
 definition
   let R be RelStr, f be sequence of R;
- canceled;
-
- attr f is descending means
+  canceled;
+  attr f is descending means
 :: WELLFND1:def 7
- for n being Element of NAT
+
+  for n being Element of NAT
   holds f.(n+1) <> f.n & [f.(n+1), f.n] in the InternalRel of R;
 end;
 
 theorem :: WELLFND1:15 :: omega chains
-      for R being non empty RelStr holds
+  for R being non empty RelStr holds
   R is well_founded iff not ex f being sequence of R st f is descending;
 

@@ -15,35 +15,35 @@ environ
  constructors BINOP_1, SETWISEO, XXREAL_0, REAL_1, NAT_1, NAT_D, BINOP_2,
       INT_2, FINSEQOP, RLVECT_1, ALGSTR_0, VALUED_1, PARTFUN1, SEQ_1;
  registrations ORDINAL1, RELSET_1, FINSET_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1,
-      INT_1, STRUCT_0, XBOOLE_0, ALGSTR_0, VALUED_1, FUNCT_2;
+      INT_1, STRUCT_0, XBOOLE_0, ALGSTR_0, VALUED_1, FUNCT_2, CARD_1;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
 
 
 begin
 
- reserve n for Element of NAT;
- reserve i,j for Integer;
+reserve n for Element of NAT;
+reserve i,j for Integer;
+reserve S for non empty multMagma;
+reserve r,r1,r2,s,s1,s2,t,t1,t2 for Element of S;
 
- reserve S for non empty multMagma;
- reserve r,r1,r2,s,s1,s2,t,t1,t2 for Element of S;
-
-definition let IT be non empty multMagma;
- canceled;
+definition
+  let IT be non empty multMagma;
+  canceled;
   attr IT is unital means
 :: GROUP_1:def 2
-   ex e being Element of IT st
-        for h being Element of IT holds
-         h * e = h & e * h = h;
+
+  ex e being Element of IT st
+  for h being Element of IT holds h * e = h & e * h = h;
   attr IT is Group-like means
 :: GROUP_1:def 3
-   ex e being Element of IT st
-        for h being Element of IT holds
-         h * e = h & e * h = h &
-         ex g being Element of IT st h * g = e & g * h = e;
+
+  ex e being Element of IT st
+  for h being Element of IT holds h * e = h & e * h = h &
+  ex g being Element of IT st h * g = e & g * h = e;
   attr IT is associative means
 :: GROUP_1:def 4
-  for x,y,z being Element of IT holds
-          (x*y)*z = x*(y*z);
+
+  for x,y,z being Element of IT holds (x*y)*z = x*(y*z);
 end;
 
 registration
@@ -61,29 +61,28 @@ end;
 canceled 4;
 
 theorem :: GROUP_1:5
-  ((for r,s,t holds (r * s) * t = r * (s * t)) &
-   ex t st
-    for s1 holds s1 * t = s1 & t * s1 = s1 &
-     ex s2 st s1 * s2 = t & s2 * s1 = t) implies S is Group;
+  ((for r,s,t holds (r * s) * t = r * (s * t)) & ex t st
+  for s1 holds s1 * t = s1 & t * s1 = s1 &
+  ex s2 st s1 * s2 = t & s2 * s1 = t) implies S is Group;
 
 theorem :: GROUP_1:6
-  (for r,s,t holds r * s * t = r * (s * t)) &
-  (for r,s holds
-   (ex t st r * t = s) & (ex t st t * r = s)) implies
-    S is associative Group-like;
+  (for r,s,t holds r * s * t = r * (s * t)) & (for r,s holds
+  (ex t st r * t = s) & (ex t st t * r = s)) implies
+  S is associative Group-like;
 
 theorem :: GROUP_1:7
   multMagma (# REAL, addreal #) is associative Group-like;
 
- reserve G for Group-like (non empty multMagma);
- reserve e,h for Element of G;
+reserve G for Group-like (non empty multMagma);
+reserve e,h for Element of G;
 
-definition let G be non empty multMagma such that
+definition
+  let G be non empty multMagma such that
  G is unital;
- func 1_G -> Element of G means
+  func 1_G -> Element of G means
 :: GROUP_1:def 5
-   for h being Element of G
-    holds h * it = h & it * h = h;
+
+  for h being Element of G holds h * it = h & it * h = h;
 end;
 
 canceled 2;
@@ -91,13 +90,15 @@ canceled 2;
 theorem :: GROUP_1:10
   (for h holds h * e = h & e * h = h) implies e = 1_G;
 
- reserve G for Group;
- reserve e,f,g,h for Element of G;
+reserve G for Group;
+reserve e,f,g,h for Element of G;
 
-definition let G,h;
+definition
+  let G,h;
   func h" -> Element of G means
 :: GROUP_1:def 6
-    h * it = 1_G & it * h = 1_G;
+
+  h * it = 1_G & it * h = 1_G;
 end;
 
 canceled;
@@ -154,29 +155,30 @@ theorem :: GROUP_1:28
 
 reserve u for UnOp of the carrier of G;
 
-definition let G;
- func inverse_op(G) -> UnOp of the carrier of G means
+definition
+  let G;
+  func inverse_op(G) -> UnOp of the carrier of G means
 :: GROUP_1:def 7
-   it.h = h";
+
+  it.h = h";
 end;
 
 canceled 2;
 
 theorem :: GROUP_1:31
- for G being associative (non empty multMagma)
- holds the multF of G is associative;
+  for G being associative (non empty multMagma)
+  holds the multF of G is associative;
 
 theorem :: GROUP_1:32
   for G being unital (non empty multMagma)
- holds 1_G is_a_unity_wrt the multF of G;
+  holds 1_G is_a_unity_wrt the multF of G;
 
 theorem :: GROUP_1:33
   for G being unital (non empty multMagma)
- holds the_unity_wrt the multF of G = 1_G;
+  holds the_unity_wrt the multF of G = 1_G;
 
 theorem :: GROUP_1:34
-  for G being unital (non empty multMagma)
- holds the multF of G has_a_unity;
+  for G being unital (non empty multMagma) holds the multF of G has_a_unity;
 
 theorem :: GROUP_1:35
   inverse_op(G) is_an_inverseOp_wrt the multF of G;
@@ -187,27 +189,32 @@ theorem :: GROUP_1:36
 theorem :: GROUP_1:37
   the_inverseOp_wrt the multF of G = inverse_op(G);
 
-definition let G be non empty multMagma;
- func power G -> Function of [:the carrier of G,NAT:], the carrier of G means
+definition
+  let G be non empty multMagma;
+  func power G -> Function of [:the carrier of G,NAT:], the carrier of G means
 :: GROUP_1:def 8
-   for h being Element of G
-   holds it.(h,0) = 1_G & for n holds it.(h,n + 1) = it.(h,n) * h;
+
+  for h being Element of G
+  holds it.(h,0) = 1_G & for n holds it.(h,n + 1) = it.(h,n) * h;
 end;
 
-definition let G,i,h;
+definition
+  let G,i,h;
   func h |^ i -> Element of G equals
 :: GROUP_1:def 9
-    power(G).(h,abs(i)) if 0 <= i otherwise
-        (power(G).(h,abs(i)))";
+
+  power(G).(h,abs(i)) if 0 <= i otherwise (power(G).(h,abs(i)))";
 end;
 
-definition let G,n,h;
+definition
+  let G,n,h;
   redefine func h |^ n equals
 :: GROUP_1:def 10
-    power(G).(h,n);
+
+  power(G).(h,n);
 end;
 
- reserve m,n for Nat;
+reserve m,n for Nat;
 
 canceled 4;
 
@@ -254,12 +261,12 @@ theorem :: GROUP_1:55
   0 <= i implies h |^ i = h |^ abs(i);
 
 theorem :: GROUP_1:56
-  not 0 <= i implies h |^ i = (h |^ abs(i))";
+  0 > i implies h |^ i = (h |^ abs(i))";
 
 canceled 2;
 
 theorem :: GROUP_1:59
-  i = 0 implies h |^ i = 1_G;
+  h |^ 0 = 1_G;
 
 theorem :: GROUP_1:60
   i <= 0 implies h |^ i = (h |^ abs(i))";
@@ -314,15 +321,18 @@ canceled;
 theorem :: GROUP_1:77
   g * h = h * g implies g * (h |^ i) = h |^ i * g;
 
-definition let G,h;
+definition
+  let G,h;
   attr h is being_of_order_0 means
 :: GROUP_1:def 11
-   h |^ n = 1_G implies n = 0;
+
+  h |^ n = 1_G implies n = 0;
 end;
 
-notation let G,h;
- antonym h is_not_of_order_0 for h is being_of_order_0;
- synonym h is_of_order_0 for h is being_of_order_0;
+notation
+  let G,h;
+  antonym h is_not_of_order_0 for h is being_of_order_0;
+  synonym h is_of_order_0 for h is being_of_order_0;
 end;
 
 canceled;
@@ -330,12 +340,13 @@ canceled;
 theorem :: GROUP_1:79
   1_G is_not_of_order_0;
 
-definition let G,h;
- func ord h -> Element of NAT means
+definition
+  let G,h;
+  func ord h -> Element of NAT means
 :: GROUP_1:def 12
-   it = 0 if h is_of_order_0 otherwise
-         h |^ it = 1_G & it <> 0 &
-          for m st h |^ m = 1_G & m <> 0 holds it <= m;
+
+  it = 0 if h is_of_order_0 otherwise h |^ it = 1_G & it <> 0 &
+  for m st h |^ m = 1_G & m <> 0 holds it <= m;
 end;
 
 canceled 2;
@@ -354,40 +365,48 @@ theorem :: GROUP_1:85
 theorem :: GROUP_1:86
   h |^ n = 1_G implies ord h divides n;
 
-definition let G;
+definition
+  let G be 1-sorted;
   func Ord G -> Cardinal equals
 :: GROUP_1:def 13
-     Card the carrier of G;
+  Card the carrier of G;
 end;
 
-definition let G;
- canceled;
- assume
-  G is finite;
- func ord G -> Element of NAT means
+notation
+  let G be finite 1-sorted;
+  synonym ord G for Ord G;
+end;
+
+definition
+  let G be finite 1-sorted;
+  canceled;
+  redefine func ord G -> Element of NAT equals
 :: GROUP_1:def 15
-   ex B being finite set st B = the carrier of G & it = card B;
+  card the carrier of G;
 end;
 
 canceled 3;
 
 theorem :: GROUP_1:90
-  G is finite implies ord G >= 1;
+  for G being non empty finite 1-sorted holds ord G >= 1;
 
-definition let IT be non empty multMagma;
- attr IT is commutative means
+definition
+  let IT be non empty multMagma;
+  attr IT is commutative means
 :: GROUP_1:def 16
+
   for x,y being Element of IT holds x*y = y*x;
 end;
 
 registration
- cluster strict commutative Group;
+  cluster strict commutative Group;
 end;
 
-definition let FS be commutative (non empty multMagma);
- let x,y be Element of FS;
- redefine func x*y;
- commutativity;
+definition
+  let FS be commutative (non empty multMagma);
+  let x,y be Element of FS;
+  redefine func x*y;
+  commutativity;
 end;
 
 canceled;
@@ -411,33 +430,33 @@ theorem :: GROUP_1:96
 
 theorem :: GROUP_1:97
   addLoopStr (# the carrier of A, the multF of A, 1_A #)
-    is Abelian add-associative right_zeroed right_complementable;
+  is Abelian add-associative right_zeroed right_complementable;
 
 begin :: Addenda
 
 :: from COMPTRIG, 2006.08.12, A.T.
 
 theorem :: GROUP_1:98
-  for L be unital (non empty multMagma)
-  for x be Element of L holds
-    (power L).(x,1) = x;
+  for L be unital (non empty multMagma) for x be Element of L holds
+  (power L).(x,1) = x;
 
 theorem :: GROUP_1:99
-  for L be unital (non empty multMagma)
-  for x be Element of L holds
-    (power L).(x,2) = x*x;
+  for L be unital (non empty multMagma) for x be Element of L holds
+  (power L).(x,2) = x*x;
 
 theorem :: GROUP_1:100
   for L be associative commutative unital (non empty multMagma)
-  for x,y be Element of L
-  for n be Element of NAT holds
-    (power L).(x*y,n) = (power L).(x,n) * (power L).(y,n);
+  for x,y be Element of L for n be Element of NAT holds
+  (power L).(x*y,n) = (power L).(x,n) * (power L).(y,n);
 
 :: Moved from ENDALG, 17.01_2006, AK
 
-definition let G,H be non empty multMagma;
+definition
+  let G,H be non empty multMagma;
   let IT be Function of G,H;
   attr IT is unity-preserving means
 :: GROUP_1:def 17
-   IT.1_G = 1_H;
+
+  IT.1_G = 1_H;
 end;
+

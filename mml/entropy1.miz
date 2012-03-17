@@ -34,414 +34,457 @@ environ
 
 begin :: Preliminaries
 
- reserve D for non empty set,
-         i,j,k,l for Element of NAT,
-         n,m for Nat,
-         x,y for set,
-         a,b,c,b1,r,r1,r2 for Real,
-         p,q for FinSequence of REAL,
-         MR,MR1 for Matrix of REAL;
+reserve D for non empty set,
+  i,j,k,l for Element of NAT,
+  n,m for Nat,
+  x,y for set,
+  a,b,c,b1,r,r1,r2 for Real,
+  p,q for FinSequence of REAL,
+  MR,MR1 for Matrix of REAL;
 
 theorem Th1:
-  k <> 0 & i < l & l <= j & k divides l implies
-    i div k < j div k
-  proof assume
+  k <> 0 & i < l & l <= j & k divides l implies i div k < j div k
+proof
+  assume
 A1: k <> 0 & i < l & l <= j & k divides l;
-then A2: l mod k = 0 by PEPIN:6;
+  then
+A2: l mod k = 0 by PEPIN:6;
 A3: k > 0 by A1;
-    then l = k * (l div k) + (l mod k) by NAT_D:2
-     .= k * (l div k) by A2;
-    then k / k * (l div k) = l / k by XCMPLX_1:75;
-then A4: 1 * (l div k) = l / k by A1,XCMPLX_1:60;
-     i = k * (i div k) + (i mod k) by A3,NAT_D:2;
-    then k / k * (i div k) = (i - (i mod k)) / k by XCMPLX_1:75;
-then A5: 1 * (i div k) = (i - (i mod k)) / k by A1,XCMPLX_1:60;
-     i + (i mod k) >= i by NAT_1:11;
-    then i - (i mod k) <= (i + (i mod k)) - (i mod k) by XREAL_1:11;
-    then i - (i mod k) < l by A1,XXREAL_0:2;
-then A6: (i - (i mod k)) / k < l / k by A3,REAL_1:73;
-     l div k <= j div k by A1,NAT_2:26;
-    hence thesis by A4,A5,A6,XXREAL_0:2;
-  end;
+  then l = k * (l div k) + (l mod k) by NAT_D:2
+    .= k * (l div k) by A2;
+  then k / k * (l div k) = l / k by XCMPLX_1:75;
+  then
+A4: 1 * (l div k) = l / k by A1,XCMPLX_1:60;
+  i = k * (i div k) + (i mod k) by A3,NAT_D:2;
+  then k / k * (i div k) = (i - (i mod k)) / k by XCMPLX_1:75;
+  then
+A5: 1 * (i div k) = (i - (i mod k)) / k by A1,XCMPLX_1:60;
+  i + (i mod k) >= i by NAT_1:11;
+  then i - (i mod k) <= (i + (i mod k)) - (i mod k) by XREAL_1:11;
+  then i - (i mod k) < l by A1,XXREAL_0:2;
+  then
+A6: (i - (i mod k)) / k < l / k by A3,REAL_1:73;
+  l div k <= j div k by A1,NAT_2:26;
+  hence thesis by A4,A5,A6,XXREAL_0:2;
+end;
 
 theorem Th2:
   r > 0 implies ((log_ number_e).r <= r - 1) &
-    (r = 1 iff (log_ number_e).r = r - 1) &
-    (r <> 1 iff (log_ number_e).r < r - 1)
-  proof
-    set Z = right_open_halfline(0);
-    defpred P[set] means $1 in REAL;
-    deffunc G(Real) = $1-1;
-    consider f1 being PartFunc of REAL,REAL such that
+  (r = 1 iff (log_ number_e).r = r - 1) &
+  (r <> 1 iff (log_ number_e).r < r - 1)
+proof
+  set Z = right_open_halfline(0);
+  defpred P[set] means $1 in REAL;
+  deffunc G(Real) = $1-1;
+  consider f1 being PartFunc of REAL,REAL such that
 A1: (for r holds r in dom f1 iff P[r]) &
-    for r st r in dom f1 holds f1.r=G(r) from SEQ_1:sch 3;
-     dom f1 is Subset of REAL by RELSET_1:12;
-then A2: dom f1 = REAL by A1,FDIFF_1:1;
-    defpred P[set] means $1 in Z;
-    deffunc G(Real) = (log_ number_e).$1;
-    reconsider f2 = log_ number_e as PartFunc of REAL, REAL;
+  for r st r in dom f1 holds f1.r=G(r) from SEQ_1:sch 3;
+  dom f1 is Subset of REAL by RELSET_1:12;
+  then
+A2: dom f1 = REAL by A1,FDIFF_1:1;
+  defpred P[set] means $1 in Z;
+  deffunc G(Real) = (log_ number_e).$1;
+  reconsider f2 = log_ number_e as PartFunc of REAL, REAL;
 A3: dom f2 = Z by TAYLOR_1:def 2;
-    defpred P[set] means $1 in Z;
-    deffunc F(Real) = ($1 - 1) - (log_ number_e).$1;
-    set f = f1 - f2;
-A4: dom f = Z /\ REAL by A2,A3,VALUED_1:12,13,14,15
-         .= Z by XBOOLE_1:28;
+  defpred P[set] means $1 in Z;
+  deffunc F(Real) = ($1 - 1) - (log_ number_e).$1;
+  set f = f1 - f2;
+A4: dom f = Z /\ REAL by A2,A3,VALUED_1:12
+    .= Z by XBOOLE_1:28;
 A5: for r st r in Z holds f1.r = 1*r + (-1)
-    proof let r such that r in Z;
-       f1.r = r - 1 by A1,A2;
-      hence thesis;
-    end;
+  proof
+    let r such that r in Z;
+    f1.r = r - 1 by A1,A2;
+    hence thesis;
+  end;
 A6: f1 is_differentiable_on Z & for r st r in Z holds diff(f1,r) = 1
-    proof
-A7:   f1 is_differentiable_on Z & for r st r in Z holds (f1`|Z).r = 1
-        by A2,A5,FDIFF_1:31;
-       now let r such that
-A8:     r in Z;
-        thus diff(f1,r) = (f1`|Z).r by A7,A8,FDIFF_1:def 8
-          .= 1 by A2,A5,A8,FDIFF_1:31;
-      end;
-      hence thesis by A2,A5,FDIFF_1:31;
+  proof
+A7: f1 is_differentiable_on Z & for r st r in Z holds (f1`|Z).r = 1
+    by A2,A5,FDIFF_1:31;
+    now
+      let r such that
+A8:   r in Z;
+      thus diff(f1,r) = (f1`|Z).r by A7,A8,FDIFF_1:def 8
+        .= 1 by A2,A5,A8,FDIFF_1:31;
     end;
+    hence thesis by A2,A5,FDIFF_1:31;
+  end;
 A9: f is_differentiable_on Z & for r st r in Z holds diff(f,r)=1 - 1/r
-    proof
-      thus
-A10:   f is_differentiable_on Z
-        by A4,A6,FDIFF_1:27,TAYLOR_1:18,def 3;
-      hereby let r such that
-A11:     r in Z;
-     ((f1-f2)`|Z).r = diff(f1,r) - diff(f2,r)
-          by A4,A6,A11,FDIFF_1:27,TAYLOR_1:18,def 3
-          .= 1 - diff(f2,r) by A6,A11
-          .= 1 - 1/r by A11,TAYLOR_1:18,def 3;
-        hence diff(f,r) = 1 - 1/r by A10,A11,FDIFF_1:def 8;
-      end;
+  proof thus
+A10: f is_differentiable_on Z by A4,A6,FDIFF_1:27,TAYLOR_1:18,def 3;
+    hereby
+      let r such that
+A11:  r in Z;
+      ((f1-f2)`|Z).r = diff(f1,r) - diff(f2,r)
+      by A4,A6,A11,FDIFF_1:27,TAYLOR_1:18,def 3
+        .= 1 - diff(f2,r) by A6,A11
+        .= 1 - 1/r by A11,TAYLOR_1:18,def 3;
+      hence diff(f,r) = 1 - 1/r by A10,A11,FDIFF_1:def 8;
     end;
-     1 in {g where g is Real: 0 < g};
-then A12: 1 in Z by LIMFUNC1:152;
+  end;
+  1 in {g where g is Real: 0 < g};
+  then
+A12: 1 in Z by LIMFUNC1:152;
 A13: number_e > 0 & number_e <> 1 by TAYLOR_1:11;
 A14: for x be Real st x > 0 holds f.x = (x - 1) - (log_ number_e).x
-    proof let x be Real such that
-A15:   x > 0;
-       x in {g where g is Real : 0<g} by A15;
-then A16:   x in dom f by A4,LIMFUNC1:152;
-then A17:   f.x = f1.x - f2.x by VALUED_1:12,13,14,15;
-       x in dom f1 /\ dom f2 by A16,VALUED_1:12,13,14,15;
-      then x in dom f1 & x in dom f2 by XBOOLE_0:def 3;
-      hence thesis by A1,A17;
-    end;
-then A18: f.1 = (1 - 1) - (log_ number_e).1 .= - (log_ number_e).1
-      .= - log(number_e,1) by A12,TAYLOR_1:def 2
-      .= - 0 by A13,POWER:59 .= 0;
-    set Z1 = right_open_halfline(1);
+  proof
+    let x be Real such that
+A15: x > 0;
+    x in {g where g is Real : 0<g} by A15;
+    then
+A16: x in dom f by A4,LIMFUNC1:152;
+    then
+A17: f.x = f1.x - f2.x by VALUED_1:13;
+    x in dom f1 /\ dom f2 by A16,VALUED_1:12;
+    then x in dom f1 & x in dom f2 by XBOOLE_0:def 3;
+    hence thesis by A1,A17;
+  end;
+  then
+A18: f.1 = (1 - 1) - (log_ number_e).1
+    .= - (log_ number_e).1
+    .= - log(number_e,1) by A12,TAYLOR_1:def 2
+    .= - 0 by A13,POWER:59
+    .= 0;
+  set Z1 = right_open_halfline(1);
 A19: Z1 c= Z by LIMFUNC1:8;
-then A20: f is_differentiable_on Z1 by A9,FDIFF_1:34;
+  then
+A20: f is_differentiable_on Z1 by A9,FDIFF_1:34;
 A21: for r st r in Z1 holds diff(f,r) > 0
-    proof let r such that
-A22:   r in Z1;
-       r in {g where g is Real: 1 < g} by A22,LIMFUNC1:152;
-      then ex g1 being Real st g1 = r & 1 < g1;
-then A23:   1/r < 1 by SQUARE_1:2;
-       diff(f,r) = 1 - 1/r by A9,A19,A22;
-      hence thesis by A23,XREAL_1:52;
-    end;
-    set Z2 = ].0,1.[;
+  proof
+    let r such that
+A22: r in Z1;
+    r in {g where g is Real: 1 < g} by A22,LIMFUNC1:152;
+    then
+A23: ex g1 being Real st g1 = r & 1 < g1;
+    diff(f,r) = 1 - 1/r by A9,A19,A22;
+    hence thesis by A23,SQUARE_1:2,XREAL_1:52;
+  end;
+  set Z2 = ].0,1.[;
 A24: Z2 c= Z by LIMFUNC1:11;
-then A25: f is_differentiable_on Z2 by A9,FDIFF_1:34;
+  then
+A25: f is_differentiable_on Z2 by A9,FDIFF_1:34;
 A26: for r st r in Z2 holds diff(f,r) < 0
-    proof let r; assume
-A27:   r in Z2;
-      then ex g1 being Real st g1 = r & 0 < g1 & g1 < 1;
-then A28:   1 < 1/r by XREAL_1:189;
-       diff(f,r) = 1 - 1/r by A9,A24,A27;
-      hence thesis by A28,XREAL_1:51;
-    end;
+  proof
+    let r;
+    assume
+A27: r in Z2;
+    then ex g1 being Real st g1 = r & 0 < g1 & g1 < 1;
+    then
+A28: 1 < 1/r by XREAL_1:189;
+    diff(f,r) = 1 - 1/r by A9,A24,A27;
+    hence thesis by A28,XREAL_1:51;
+  end;
 A29: f is_continuous_on Z & f is_continuous_on Z1 & f is_continuous_on Z2
-      by A9,A20,A25,FDIFF_1:33;
+  by A9,A20,A25,FDIFF_1:33;
 A30: for r st r in Z1 holds f.r > 0
-    proof
-      assume not for r st r in Z1 holds f.r > 0;
-      then consider r1 such that
-A31:   r1 in Z1 & f.r1 <= 0;
-       r1 in {g where g is Real: 1 < g} by A31,LIMFUNC1:152;
-then A32:   ex g1 being Real st g1 = r1 & 1 < g1;
-       [.1,r1.] c= Z by LIMFUNC1:21;
-then A33:   f is_continuous_on [.1,r1.] by A29,FCONT_1:17;
-       ].1,r1.[ c= Z by LIMFUNC1:20;
-then A34:   f is_differentiable_on ].1,r1.[ by A9,FDIFF_1:34;
-      per cases by A31;
-      suppose f.r1 = 0;
-        then consider r2 being Real such that
-A35:     r2 in ].1,r1.[ & diff(f,r2)=0 by A18,A32,A33,A34,ROLLE:1;
-         ex g1 being Real st g1 = r2 & 1 < g1 & g1 < r1 by A35;
-        then r2 in {g where g is Real : 1<g};
-        then r2 in Z1 by LIMFUNC1:152;
-        hence contradiction by A21,A35;
-      end;
-      suppose
-A36:     f.r1 < 0;
-        consider r3 being Real such that
-A37:     r3 in ].1,r1.[ & diff(f,r3)=(f.r1-f.1)/(r1-1) by A32,A33,A34,ROLLE:3;
-         ex g1 being Real st g1 = r3 & 1 < g1 & g1 < r1 by A37;
-        then r3 in {g where g is Real : 1<g};
-then A38:     r3 in Z1 by LIMFUNC1:152;
-         r1 -1 > 0 by A32,XREAL_1:52;
-        then diff(f,r3) < 0 by A18,A36,A37,REAL_2:128;
-        hence contradiction by A21,A38;
-      end;
+  proof
+    assume not for r st r in Z1 holds f.r > 0;
+    then consider r1 such that
+A31: r1 in Z1 & f.r1 <= 0;
+    r1 in {g where g is Real: 1 < g} by A31,LIMFUNC1:152;
+    then
+A32: ex g1 being Real st g1 = r1 & 1 < g1;
+A33: f is_continuous_on [.1,r1.] by A29,FCONT_1:17,LIMFUNC1:21;
+    ].1,r1.[ c= Z by LIMFUNC1:20;
+    then
+A34: f is_differentiable_on ].1,r1.[ by A9,FDIFF_1:34;
+    per cases by A31;
+    suppose f.r1 = 0;
+      then consider r2 being Real such that
+A35:  r2 in ].1,r1.[ & diff(f,r2)=0 by A18,A32,A33,A34,ROLLE:1;
+      ex g1 being Real st g1 = r2 & 1 < g1 & g1 < r1 by A35;
+      then r2 in {g where g is Real : 1<g};
+      then r2 in Z1 by LIMFUNC1:152;
+      hence contradiction by A21,A35;
     end;
+    suppose
+A36:  f.r1 < 0;
+      consider r3 being Real such that
+A37:  r3 in ].1,r1.[ & diff(f,r3)=(f.r1-f.1)/(r1-1) by A32,A33,A34,ROLLE:3;
+      ex g1 being Real st g1 = r3 & 1 < g1 & g1 < r1 by A37;
+      then r3 in {g where g is Real : 1<g};
+      then
+A38:  r3 in Z1 by LIMFUNC1:152;
+      r1 -1 > 0 by A32,XREAL_1:52;
+      then diff(f,r3) < 0 by A18,A36,A37,REAL_2:128;
+      hence contradiction by A21,A38;
+    end;
+  end;
 A39: for r st r in Z2 holds f.r > 0
-    proof
-      assume not for r st r in Z2 holds f.r > 0;
-      then consider r1 such that
-A40:   r1 in Z2 & f.r1 <= 0;
-A41:   ex g1 being Real st g1 = r1 & 0<g1 & g1<1 by A40;
-      then [.r1,1.] c= Z by LIMFUNC1:21;
-then A42:   f is_continuous_on [.r1,1.] by A29,FCONT_1:17;
-       ].r1,1.[ c= Z by A41,LIMFUNC1:20;
-then A43:   f is_differentiable_on ].r1,1.[ by A9,FDIFF_1:34;
-      per cases by A40;
-      suppose f.r1 = 0;
-        then consider r2 being Real such that
-A44:     r2 in ].r1,1.[ & diff(f,r2)=0 by A18,A41,A42,A43,ROLLE:1;
-         ex g1 being Real st g1 = r2 & r1 < g1 & g1 < 1 by A44;
-        then r2 in {g where g is Real : 0<g & g<1 } by A41;
-        hence contradiction by A26,A44;
+  proof
+    assume not for r st r in Z2 holds f.r > 0;
+    then consider r1 such that
+A40: r1 in Z2 & f.r1 <= 0;
+A41: ex g1 being Real st g1 = r1 & 0<g1 & g1<1 by A40;
+    then
+A42: f is_continuous_on [.r1,1.] by A29,FCONT_1:17,LIMFUNC1:21;
+    ].r1,1.[ c= Z by A41,LIMFUNC1:20;
+    then
+A43: f is_differentiable_on ].r1,1.[ by A9,FDIFF_1:34;
+    per cases by A40;
+    suppose f.r1 = 0;
+      then consider r2 being Real such that
+A44:  r2 in ].r1,1.[ & diff(f,r2)=0 by A18,A41,A42,A43,ROLLE:1;
+      ex g1 being Real st g1 = r2 & r1 < g1 & g1 < 1 by A44;
+      then r2 in {g where g is Real : 0<g & g<1 } by A41;
+      hence contradiction by A26,A44;
+    end;
+    suppose
+A45:  f.r1 < 0;
+      consider r3 being Real such that
+A46:  r3 in ].r1,1.[ & diff(f,r3)=(f.1-f.r1)/(1-r1) by A41,A42,A43,ROLLE:3;
+      ex g1 being Real st g1 = r3 & r1 < g1 & g1 < 1 by A46;
+      then
+A47:  r3 in Z2 by A41;
+A48:  f.1 - f.r1 > 0 by A18,A45,XREAL_1:52;
+      1 -r1 > 0 by A41,XREAL_1:52;
+      then diff(f,r3) > 0 by A46,A48,REAL_2:127;
+      hence contradiction by A26,A47;
+    end;
+  end;
+A49: for r st r > 0 & r < 1 holds f.r > 0
+  proof
+    let r such that
+A50: r > 0 & r < 1;
+    r in {g where g is Real : 0<g & g<1 } by A50;
+    hence thesis by A39;
+  end;
+A51: for r st r > 1 holds f.r > 0
+  proof
+    let r such that
+A52: r > 1;
+    r in {g where g is Real : 1<g } by A52;
+    then r in Z1 by LIMFUNC1:152;
+    hence thesis by A30;
+  end;
+A53: for r st r > 0 holds f.r >= 0
+  proof
+    let r such that
+A54: r > 0;
+    per cases by XXREAL_0:1;
+    suppose r < 1;
+      hence thesis by A49,A54;
+    end;
+    suppose r = 1;
+      hence thesis by A18;
+    end;
+    suppose r > 1;
+      hence thesis by A51;
+    end;
+  end;
+  assume
+A55: r > 0;
+  then f.r >= 0 by A53;
+  then (r - 1) - (log_ number_e).r >= 0 by A14,A55;
+  then (r - 1) - 0 >= (log_ number_e).r by XREAL_1:13;
+  hence (log_ number_e).r <= r - 1; thus
+A56: r = 1 iff (log_ number_e).r = r - 1
+  proof
+    hereby
+      assume r = 1;
+      then (r - 1) - (log_ number_e).r = 0 by A14,A18;
+      hence (log_ number_e).r = r - 1;
+    end;
+    assume (log_ number_e).r = r - 1;
+    then
+A57: (r - 1) - (log_ number_e).r = 0;
+    assume
+A58: r <> 1;
+    per cases by A58,XXREAL_0:1;
+    suppose r < 1;
+      then f.r > 0 by A49,A55;
+      hence contradiction by A14,A55,A57;
+    end;
+    suppose
+A59:  r > 1;
+      then f.r > 0 by A51;
+      hence contradiction by A14,A57,A59;
+    end;
+  end;
+  thus r <> 1 iff (log_ number_e).r < r - 1
+  proof
+    hereby
+      assume r <> 1;
+      then
+A60:  r-1>0 or 1-r>0 by XREAL_1:57;
+      per cases by A60,REAL_2:106;
+      suppose r < 1;
+        then f.r > 0 by A49,A55;
+        then (r - 1) - (log_ number_e).r > 0 by A14,A55;
+        hence (log_ number_e).r < r - 1 by REAL_2:106;
       end;
       suppose
-A45:     f.r1 < 0;
-        consider r3 being Real such that
-A46:     r3 in ].r1,1.[ & diff(f,r3)=(f.1-f.r1)/(1-r1) by A41,A42,A43,ROLLE:3;
-         ex g1 being Real st g1 = r3 & r1 < g1 & g1 < 1 by A46;
-then A47:     r3 in Z2 by A41;
-A48:     f.1 - f.r1 > 0 by A18,A45,XREAL_1:52;
-         1 -r1 > 0 by A41,XREAL_1:52;
-        then diff(f,r3) > 0 by A46,A48,REAL_2:127;
-        hence contradiction by A26,A47;
-      end;
-    end;
-A49: for r st r > 0 & r < 1 holds f.r > 0
-    proof let r such that
-A50:   r > 0 & r < 1;
-       r in {g where g is Real : 0<g & g<1 } by A50;
-      hence thesis by A39;
-    end;
-A51: for r st r > 1 holds f.r > 0
-    proof let r such that
-A52:   r > 1;
-       r in {g where g is Real : 1<g } by A52;
-      then r in Z1 by LIMFUNC1:152;
-      hence thesis by A30;
-    end;
-A53: for r st r > 0 holds f.r >= 0
-    proof let r such that
-A54:   r > 0;
-      per cases by XXREAL_0:1;
-      suppose r < 1;
-        hence thesis by A49,A54;
-      end;
-      suppose r = 1;
-        hence thesis by A18;
-      end;
-      suppose r > 1;
-        hence thesis by A51;
+A61:    r > 1;
+        then f.r > 0 by A51;
+        then (r - 1) - (log_ number_e).r > 0 by A14,A61;
+        hence (log_ number_e).r < r - 1 by REAL_2:106;
       end;
     end;
     assume
-A55: r > 0;
-    then f.r >= 0 by A53;
-    then (r - 1) - (log_ number_e).r >= 0 by A14,A55;
-    then (r - 1) - 0 >= (log_ number_e).r by XREAL_1:13;
-    hence (log_ number_e).r <= r - 1;
-    thus
-A56: r = 1 iff (log_ number_e).r = r - 1
-    proof
-      hereby assume r = 1;
-        then (r - 1) - (log_ number_e).r = 0 by A14,A18;
-        hence (log_ number_e).r = r - 1;
-      end;
-      assume (log_ number_e).r = r - 1;
-then A57:   (r - 1) - (log_ number_e).r = 0;
-      assume
-A58:   r <> 1;
-      per cases by A58,XXREAL_0:1;
-      suppose r < 1;
-        then f.r > 0 by A49,A55;
-        hence contradiction by A14,A55,A57;
-      end;
-      suppose
-A59:     r > 1;
-        then f.r > 0 by A51;
-        hence contradiction by A14,A57,A59;
-      end;
-    end;
-    thus r <> 1 iff (log_ number_e).r < r - 1
-    proof
-      hereby assume r <> 1;
-then A60:     r-1>0 or 1-r>0 by XREAL_1:57;
-        per cases by A60,REAL_2:106;
-        suppose r < 1;
-          then f.r > 0 by A49,A55;
-          then (r - 1) - (log_ number_e).r > 0 by A14,A55;
-          hence (log_ number_e).r < r - 1 by REAL_2:106;
-        end;
-        suppose
-A61:       r > 1;
-          then f.r > 0 by A51;
-          then (r - 1) - (log_ number_e).r > 0 by A14,A61;
-          hence (log_ number_e).r < r - 1 by REAL_2:106;
-        end;
-      end;
-      assume
-A62:   (log_ number_e).r < r - 1;
-      assume r = 1;
-      hence contradiction by A56,A62;
-    end;
+A62: (log_ number_e).r < r - 1;
+    assume r = 1;
+    hence contradiction by A56,A62;
   end;
+end;
 
 theorem Th3:
   r > 0 implies (log(number_e,r) <= r - 1) &
-    (r = 1 iff log(number_e,r) = r - 1) &
-    (r <> 1 iff log(number_e,r) < r - 1)
-  proof assume
+  (r = 1 iff log(number_e,r) = r - 1) & (r <> 1 iff log(number_e,r) < r - 1)
+proof
+  assume
 A1: r>0;
-    then r in {g where g is Real : 0<g};
-    then r in right_open_halfline(0) by LIMFUNC1:152;
-    then log(number_e,r) = (log_ number_e).r by TAYLOR_1:def 2;
-    hence thesis by A1,Th2;
-  end;
+  then r in {g where g is Real : 0<g};
+  then r in right_open_halfline(0) by LIMFUNC1:152;
+  then log(number_e,r) = (log_ number_e).r by TAYLOR_1:def 2;
+  hence thesis by A1,Th2;
+end;
 
 theorem Th4:
   a>1 & b>1 implies log(a,b) > 0
-  proof assume
+proof
+  assume
 A1: a>1 & b>1;
-then A2: a to_power log(a,b) > 1 by POWER:def 3;
-    assume
+  then
+A2: a to_power log(a,b) > 1 by POWER:def 3;
+  assume
 A3: log(a,b) <=0;
-    per cases by A3;
-    suppose log(a,b) =0;
-     hence contradiction by A2,POWER:29;
-    end;
-    suppose log(a,b) <0;
-     hence contradiction by A1,A2,POWER:41;
-    end;
+  per cases by A3;
+  suppose log(a,b) =0;
+    hence contradiction by A2,POWER:29;
   end;
+  suppose log(a,b) <0;
+    hence contradiction by A1,A2,POWER:41;
+  end;
+end;
 
 theorem Th5:
   a>0 & a<>1 & b>0 implies -log(a,b) = log(a,1/b)
-  proof assume
+proof
+  assume
 A1: a>0 & a<>1 & b>0;
-    thus -log(a,b) = 0 - log(a,b) .= log(a,1) - log(a,b) by A1,POWER:59
-      .= log(a,1/b) by A1,POWER:62;
-  end;
+  thus -log(a,b) = 0 - log(a,b)
+    .= log(a,1) - log(a,b) by A1,POWER:59
+    .= log(a,1/b) by A1,POWER:62;
+end;
 
 theorem Th6:
   a>0 & a<>1 & b>=0 & c>=0 implies b*c*log(a,b*c) = b*c*log(a,b)+b*c*log(a,c)
-  proof assume
+proof
+  assume
 A1: a>0 & a<>1 & b>=0 & c>=0;
-    per cases by A1;
-    suppose b>0 & c = 0;
-      hence thesis;
-    end;
-    suppose b=0 & c = 0;
-      hence thesis;
-    end;
-    suppose b=0 & c > 0;
-      hence thesis;
-    end;
-    suppose b>0 & c > 0;
-      hence b*c*log(a,b*c) = b*c*(log(a,b) + log(a,c)) by A1,POWER:61
-        .= b*c*log(a,b)+b*c*log(a,c);
-    end;
+  per cases by A1;
+  suppose b>0 & c = 0;
+    hence thesis;
   end;
+  suppose b=0 & c = 0;
+    hence thesis;
+  end;
+  suppose b=0 & c > 0;
+    hence thesis;
+  end;
+  suppose b>0 & c > 0;
+    hence b*c*log(a,b*c) = b*c*(log(a,b) + log(a,c)) by A1,POWER:61
+      .= b*c*log(a,b)+b*c*log(a,c);
+  end;
+end;
 
 theorem Th7:
   for q,q1,q2 being FinSequence of REAL st len q1 = len q & len q1 = len q2 &
-    (for k st k in dom q1 holds q.k = q1.k + q2.k) holds
-      Sum q = Sum q1 + Sum q2
-  proof let q,q1,q2 be FinSequence of REAL such that
+  (for k st k in dom q1 holds q.k = q1.k + q2.k) holds Sum q = Sum q1 + Sum q2
+proof
+  let q,q1,q2 be FinSequence of REAL such that
 A1: len q1 = len q & len q1 = len q2 &
-    for k st k in dom q1 holds q.k = q1.k + q2.k;
-     for k st k in dom q1 holds q.k = q1/.k + q2/.k
-    proof let k such that
-A2:  k in dom q1;
-A3:  k in dom q2 by A1,A2,FINSEQ_3:31;
-     thus q.k = q1.k + q2.k by A1,A2
-       .= q1/.k + q2.k by A2,PARTFUN1:def 8
-       .= q1/.k + q2/.k by A3,PARTFUN1:def 8;
-    end;
-    hence thesis by A1,INTEGRA1:23;
+  for k st k in dom q1 holds q.k = q1.k + q2.k;
+  for k st k in dom q1 holds q.k = q1/.k + q2/.k
+  proof
+    let k such that
+A2: k in dom q1;
+A3: k in dom q2 by A1,A2,FINSEQ_3:31;
+    thus q.k = q1.k + q2.k by A1,A2
+      .= q1/.k + q2.k by A2,PARTFUN1:def 8
+      .= q1/.k + q2/.k by A3,PARTFUN1:def 8;
   end;
+  hence thesis by A1,INTEGRA1:23;
+end;
 
 theorem Th8:
   for q,q1,q2 being FinSequence of REAL st len q1 = len q & len q1 = len q2 &
-    (for k st k in dom q1 holds q.k = q1.k - q2.k) holds
-      Sum q = Sum q1 - Sum q2
-  proof let q,q1,q2 be FinSequence of REAL such that
+  (for k st k in dom q1 holds q.k = q1.k - q2.k) holds Sum q = Sum q1 - Sum q2
+proof
+  let q,q1,q2 be FinSequence of REAL such that
 A1: len q1 = len q & len q1 = len q2 &
-    for k st k in dom q1 holds q.k = q1.k - q2.k;
-     for k st k in dom q1 holds q.k = q1/.k - q2/.k
-    proof let k such that
-A2:   k in dom q1;
-A3:   k in dom q2 by A1,A2,FINSEQ_3:31;
-     thus q.k = q1.k - q2.k by A1,A2
-       .= q1/.k - q2.k by A2,PARTFUN1:def 8
-       .= q1/.k - q2/.k by A3,PARTFUN1:def 8;
-    end;
-    hence thesis by A1,INTEGRA1:24;
+  for k st k in dom q1 holds q.k = q1.k - q2.k;
+  for k st k in dom q1 holds q.k = q1/.k - q2/.k
+  proof
+    let k such that
+A2: k in dom q1;
+A3: k in dom q2 by A1,A2,FINSEQ_3:31;
+    thus q.k = q1.k - q2.k by A1,A2
+      .= q1/.k - q2.k by A2,PARTFUN1:def 8
+      .= q1/.k - q2/.k by A3,PARTFUN1:def 8;
   end;
+  hence thesis by A1,INTEGRA1:24;
+end;
 
 theorem Th9:
   len p >= 1 implies ex q st len q = len p & q.1 = p.1 &
-    (for k st 0 <> k & k < len p holds q.(k+1) = q.k + p.(k+1)) &
-    Sum p = q.(len p)
-  proof assume
+  (for k st 0 <> k & k < len p holds q.(k+1) = q.k + p.(k+1)) &
+  Sum p = q.(len p)
+proof
+  assume
 A1: len p >= 1;
-    then consider r be Real_Sequence such that
-A2: r.1 = p.1 &
-    (for n st 0 <> n & n < len p holds
-      r.(n+1) = r.n + p.(n+1)) & Sum p = r.(len p) by PROB_3:68;
-    deffunc F(Nat) = r.$1;
-    consider q being FinSequence such that
+  then consider r be Real_Sequence such that
+A2: r.1 = p.1 & (for n st 0 <> n & n < len p holds
+  r.(n+1) = r.n + p.(n+1)) & Sum p = r.(len p) by PROB_3:68;
+  deffunc F(Nat) = r.$1;
+  consider q being FinSequence such that
 A3: len q = len p & for k be Nat st k in Seg len p holds q.k = F(k)
-      from FINSEQ_1:sch 2;
+  from FINSEQ_1:sch 2;
 A4: 1 in Seg len p by A1,FINSEQ_1:3;
-     rng q c= REAL
-    proof let x such that
-A5:   x in rng q;
-      consider j being Nat such that
-A6:   j in dom q & q.j = x by A5,FINSEQ_2:11;
-       j in Seg len p by A3,A6,FINSEQ_1:def 3;
-      then q.j = r.j by A3;
-      hence x in REAL by A6;
-    end;
-    then reconsider q as FinSequence of REAL by FINSEQ_1:def 4;
-A7: now let k such that
-A8:   0 <> k & k < len p;
-       k >= 1 & k <= len p &
-      k+1 >= 1 & k+1 <= len p by A8,NAT_1:13,14;
-then A9:   k in Seg len p & k+1 in Seg len p by FINSEQ_1:3;
-      hence q.(k+1) = r.(k+1) by A3 .= r.k + p.(k+1) by A2,A8
-        .= q.k + p.(k+1) by A3,A9;
-    end;
-A10: len p in Seg len p by A1,FINSEQ_1:5;
-    take q;
-    thus thesis by A2,A3,A4,A7,A10;
+  rng q c= REAL
+  proof
+    let x such that
+A5: x in rng q;
+    consider j being Nat such that
+A6: j in dom q & q.j = x by A5,FINSEQ_2:11;
+    j in Seg len p by A3,A6,FINSEQ_1:def 3;
+    then q.j = r.j by A3;
+    hence x in REAL by A6;
   end;
+  then reconsider q as FinSequence of REAL by FINSEQ_1:def 4;
+A7: now
+    let k such that
+A8: 0 <> k & k < len p;
+    k >= 1 & k <= len p & k+1 >= 1 & k+1 <= len p by A8,NAT_1:13,14;
+    then
+A9: k in Seg len p & k+1 in Seg len p by FINSEQ_1:3;
+    hence q.(k+1) = r.(k+1) by A3
+      .= r.k + p.(k+1) by A2,A8
+      .= q.k + p.(k+1) by A3,A9;
+  end;
+A10: len p in Seg len p by A1,FINSEQ_1:5;
+  take q;
+  thus thesis by A2,A3,A4,A7,A10;
+end;
 
-notation let p;
+notation
+  let p;
   synonym p is nonnegative for p is nonnegative-yielding;
 end;
 
-definition let p;
-  redefine attr p is nonnegative means :Def1:
-    for i st i in dom p holds p.i >= 0;
+definition
+  let p;
+  redefine attr p is nonnegative means
+  :Def1:
+  for i st i in dom p holds p.i >= 0;
   compatibility
   proof
-    hereby assume
+    hereby
+      assume
 A1:   p is nonnegative;
       let i such that
 A2:   i in dom p;
-       p.i in rng p by A2,FUNCT_1:12;
+      p.i in rng p by A2,FUNCT_1:12;
       hence p.i >= 0 by A1,PARTFUN3:def 4;
     end;
     assume
@@ -461,10 +504,11 @@ registration
 A1: <*1*> is nonnegative
     proof
       set p=<*1*>;
-       for i st i in dom p holds p.i >= 0
-      proof let i such that
+      for i st i in dom p holds p.i >= 0
+      proof
+        let i such that
 A2:     i in dom p;
-         i in Seg 1 by A2,FINSEQ_1:def 8;
+        i in Seg 1 by A2,FINSEQ_1:def 8;
         then i >= 1 & i <= 1 by FINSEQ_1:3;
         then i = 1 by XXREAL_0:1;
         hence thesis by FINSEQ_1:57;
@@ -478,263 +522,306 @@ end;
 
 theorem Th10:
   p is nonnegative & r>=0 implies r*p is nonnegative
-  proof assume
+proof
+  assume
 A1: p is nonnegative & r>=0;
-     now let k such that
-A2:   k in dom (r*p);
-       k in dom p by A2,VALUED_1:7,def 5;
-then A3:   p.k >= 0 by A1,Def1;
-       (r*p).k = r*(p.k) by RVSUM_1:66;
-      hence (r*p).k >= 0 by A1,A3,XREAL_1:129;
-    end;
-    hence thesis by Def1;
+  now
+    let k such that
+A2: k in dom (r*p);
+    k in dom p by A2,VALUED_1:def 5;
+    then
+A3: p.k >= 0 by A1,Def1;
+    (r*p).k = r*(p.k) by RVSUM_1:66;
+    hence (r*p).k >= 0 by A1,A3,XREAL_1:129;
   end;
+  hence thesis by Def1;
+end;
 
-definition let p,k;
-  pred p has_onlyone_value_in k means :Def2:
-    k in dom p & for i st i in dom p & i<>k holds p.i=0;
+definition
+  let p,k;
+  pred p has_onlyone_value_in k means
+  :Def2:
+  k in dom p & for i st i in dom p & i<>k holds p.i=0;
 end;
 
 theorem
-   p has_onlyone_value_in k & i<>k implies p.i=0
-  proof assume
+  p has_onlyone_value_in k & i<>k implies p.i=0
+proof
+  assume
 A1: p has_onlyone_value_in k & i<>k;
-    per cases;
-    suppose not i in dom p;
-      hence thesis by FUNCT_1:def 4;
-    end;
-    suppose i in dom p;
-      hence thesis by A1,Def2;
-    end;
+  per cases;
+  suppose not i in dom p;
+    hence thesis by FUNCT_1:def 4;
   end;
+  suppose i in dom p;
+    hence thesis by A1,Def2;
+  end;
+end;
 
 theorem Th12:
   len p = len q & p has_onlyone_value_in k implies
-    mlt(p,q) has_onlyone_value_in k & mlt(p,q).k = p.k * q.k
-  proof assume
+  mlt(p,q) has_onlyone_value_in k & mlt(p,q).k = p.k * q.k
+proof
+  assume
 A1: len p = len q & p has_onlyone_value_in k;
-    then len mlt(p,q) = len p by MATRPROB:30;
-then A2: dom mlt(p,q) = dom p by FINSEQ_3:31;
-then A3: k in dom mlt(p,q) by A1,Def2;
-     now let i such that
-A4:   i in dom mlt(p,q) & i <> k;
-      thus (mlt(p,q)).i = p.i * q.i by A4,RVSUM_1:86
-        .= 0*q.i by A1,A2,A4,Def2
-        .= 0;
-    end;
-    hence thesis by A3,Def2,RVSUM_1:86;
+  then len mlt(p,q) = len p by MATRPROB:30;
+  then
+A2: dom mlt(p,q) = dom p by FINSEQ_3:31;
+  then
+A3: k in dom mlt(p,q) by A1,Def2;
+  now
+    let i such that
+A4: i in dom mlt(p,q) & i <> k;
+    thus (mlt(p,q)).i = p.i * q.i by A4,RVSUM_1:86
+      .= 0*q.i by A1,A2,A4,Def2
+      .= 0;
   end;
+  hence thesis by A3,Def2,RVSUM_1:86;
+end;
 
 theorem Th13:
   p has_onlyone_value_in k implies Sum p = p.k
-  proof
-    assume
+proof
+  assume
 A1: k in dom p & for i st i in dom p & i<>k holds p.i=0;
-    reconsider a=p.k as Element of REAL;
+  reconsider a=p.k as Element of REAL;
 A2: 1 <= k & k <= len p by A1,FINSEQ_3:27;
-    reconsider p1=p|Seg k as FinSequence of REAL by FINSEQ_1:23;
-     p1 c= p by TREES_1:def 1;
-    then consider p2 being FinSequence such that
+  reconsider p1=p|Seg k as FinSequence of REAL by FINSEQ_1:23;
+  p1 c= p by TREES_1:def 1;
+  then consider p2 being FinSequence such that
 A3: p=p1^p2 by TREES_1:8;
-     k in Seg k by A2,FINSEQ_1:5;
-    then k in (dom p) /\ (Seg k) by A1,XBOOLE_0:def 3;
-then A4: k in dom p1 by RELAT_1:90;
-    then p1 <> {} by FINSEQ_1:26;
-    then len p1<>0 by FINSEQ_1:25;
-    then consider p3 being FinSequence of REAL,x being Element of REAL such
-that
+  k in Seg k by A2,FINSEQ_1:5;
+  then k in (dom p) /\ (Seg k) by A1,XBOOLE_0:def 3;
+  then
+A4: k in dom p1 by RELAT_1:90;
+  then p1 <> {} by FINSEQ_1:26;
+  then len p1<>0 by FINSEQ_1:25;
+  then consider p3 being FinSequence of REAL,x being Element of REAL such that
 A5: p1=p3^<*x*> by FINSEQ_2:22;
-    reconsider p2 as FinSequence of REAL by A3,FINSEQ_1:50;
+  reconsider p2 as FinSequence of REAL by A3,FINSEQ_1:50;
 A6: k =len p1 by A2,FINSEQ_1:21
-      .=len p3+ len <*x*> by A5,FINSEQ_1:35
-      .= len p3 + 1 by FINSEQ_1:56;
-then A7: x =p1.k by A5,FINSEQ_1:59 .=a by A3,A4,FINSEQ_1:def 7;
+    .=len p3+ len <*x*> by A5,FINSEQ_1:35
+    .= len p3 + 1 by FINSEQ_1:56;
+  then
+A7: x =p1.k by A5,FINSEQ_1:59
+    .=a by A3,A4,FINSEQ_1:def 7;
 A8: for i st i in Seg len p2 holds p2.i=0
-    proof let i;
-      assume i in Seg len p2;
-then A9:  i in dom p2 by FINSEQ_1:def 3;
-A10:  1 <= k & k <=len p1 by A4,FINSEQ_3:27;
-       0<>i by A9,FINSEQ_3:27;
-then A11:  len p1<>len p1 + i;
-       len p1 <= len p1 + i by NAT_1:12;
-then A12:  k<>len p1 + i by A10,A11,REAL_1:def 5;
-A13:  (len p1+ i) in dom p by A3,A9,FINSEQ_1:41;
-      thus p2.i=p.(len p1+i) by A3,A9,FINSEQ_1:def 7
-        .=0 by A1,A12,A13;
-    end;
-A14:p2=len p2 |->0
-    proof
-A15:  len (len p2 |->0)=len p2 by FINSEQ_2:69;
-       now let j be Nat; assume
-A16:    j in Seg len p2;
-        hence p2.j =0 by A8
-          .= (len p2 |->0).j by A16,FINSEQ_1:4,FINSEQ_2:71;
-      end;
-      hence thesis by A15,FINSEQ_2:10;
-    end;
-A17:for i st i in Seg len p3 holds p3.i=0
-    proof let i; assume
-A18:  i in Seg len p3;
-      then 1<=i & i <= len p3 by FINSEQ_1:3;
-then A19:  i <> k by A6,NAT_1:13;
-A20:  i in dom p3 by A18,FINSEQ_1:def 3;
-then A21:  i in dom p1 by A5,FINSEQ_2:18;
-then A22:  i in dom p & i in dom p1 by A3,FINSEQ_2:18;
-      thus p3.i=p1.i by A5,A20,FINSEQ_1:def 7
-        .=p.i by A3,A21,FINSEQ_1:def 7
-        .=0 by A1,A19,A22;
-    end;
-A23:p3=len p3 |->0
-    proof
-A24:  len (len p3 |->0)=len p3 by FINSEQ_2:69;
-       now let j be Nat; assume
-A25:    j in Seg len p3;
-        hence p3.j =0 by A17
-          .= (len p3 |->0).j by A25,FINSEQ_1:4,FINSEQ_2:71;
-      end;
-      hence thesis by A24,FINSEQ_2:10;
-    end;
-     Sum p=Sum(p3^<*x*>) + Sum(len p2 |->0) by A3,A5,A14,RVSUM_1:105
-      .=Sum(p3^<*x*>) + 0 by RVSUM_1:111
-      .=Sum(len p3 |->0) + x by A23,RVSUM_1:104
-      .=0 + a by A7,RVSUM_1:111
-      .=p.k;
-    hence thesis;
+  proof
+    let i;
+    assume i in Seg len p2;
+    then
+A9: i in dom p2 by FINSEQ_1:def 3;
+A10: 1 <= k & k <=len p1 by A4,FINSEQ_3:27;
+    0<>i by A9,FINSEQ_3:27;
+    then
+A11: len p1<>len p1 + i;
+    len p1 <= len p1 + i by NAT_1:12;
+    then
+A12: k<>len p1 + i by A10,A11,REAL_1:def 5;
+    thus p2.i=p.(len p1+i) by A3,A9,FINSEQ_1:def 7
+      .=0 by A1,A3,A9,A12,FINSEQ_1:41;
   end;
+A13: p2=len p2 |->0
+  proof
+A14: len (len p2 |->0)=len p2 by FINSEQ_2:69;
+    now
+      let j be Nat;
+      assume
+A15:  j in Seg len p2;
+      hence p2.j =0 by A8
+        .= (len p2 |->0).j by A15,FINSEQ_1:4,FINSEQ_2:71;
+    end;
+    hence thesis by A14,FINSEQ_2:10;
+  end;
+A16: for i st i in Seg len p3 holds p3.i=0
+  proof
+    let i;
+    assume
+A17: i in Seg len p3;
+    then 1<=i & i <= len p3 by FINSEQ_1:3;
+    then
+A18: i <> k by A6,NAT_1:13;
+A19: i in dom p3 by A17,FINSEQ_1:def 3;
+    then
+A20: i in dom p1 by A5,FINSEQ_2:18;
+    thus p3.i=p1.i by A5,A19,FINSEQ_1:def 7
+      .=p.i by A3,A20,FINSEQ_1:def 7
+      .=0 by A1,A3,A18,A20,FINSEQ_2:18;
+  end;
+A21: p3=len p3 |->0
+  proof
+A22: len (len p3 |->0)=len p3 by FINSEQ_2:69;
+    now
+      let j be Nat;
+      assume
+A23:  j in Seg len p3;
+      hence p3.j =0 by A16
+        .= (len p3 |->0).j by A23,FINSEQ_1:4,FINSEQ_2:71;
+    end;
+    hence thesis by A22,FINSEQ_2:10;
+  end;
+  Sum p=Sum(p3^<*x*>) + Sum(len p2 |->0) by A3,A5,A13,RVSUM_1:105
+    .=Sum(p3^<*x*>) + 0 by RVSUM_1:111
+    .=Sum(len p3 |->0) + x by A21,RVSUM_1:104
+    .=0 + a by A7,RVSUM_1:111
+    .=p.k;
+  hence thesis;
+end;
 
 theorem Th14:
   p is nonnegative implies
-    for k st k in dom p & p.k = Sum p holds p has_onlyone_value_in k
-  proof assume
+  for k st k in dom p & p.k = Sum p holds p has_onlyone_value_in k
+proof
+  assume
 A1: p is nonnegative;
-    let k1 being Element of NAT such that
+  let k1 being Element of NAT such that
 A2: k1 in dom p & p.k1 =Sum p;
 A3: k1 >=1 & k1 <= len p by A2,FINSEQ_3:27;
-    then consider j1 being Nat such that
+  then consider j1 being Nat such that
 A4: k1 + j1 = len p by NAT_1:10;
-    reconsider j1 as Element of NAT by ORDINAL1:def 13;
-     not ex i st i in dom p & i<>k1 & p.i <> 0
-    proof assume ex i st i in dom p & i<>k1 & p.i <> 0;
-      then consider k2 being Element of NAT such that
-A5:   k2 in dom p & k2<>k1 & p.k2<>0;
-A6:   k2 >=1 & k2 <= len p by A5,FINSEQ_3:27;
-      then consider j2 being Nat such that
-A7:   k2 + j2 = len p by NAT_1:10;
-      reconsider j2 as Element of NAT by ORDINAL1:def 13;
-A8:   p.k2 > 0 by A1,A5,Def1;
-      per cases by A5,REAL_1:def 5;
-      suppose k1 > k2;
-then A9:     not k1 in Seg k2 by FINSEQ_1:3;
-        consider p1,p2 being FinSequence of REAL such that
-A10:     len p1 = k2 & len p2 = j2 & p = p1 ^ p2 by A7,FINSEQ_2:26;
-         k2 in Seg k2 by A6,FINSEQ_1:5;
-then A11:     k2 in dom p1 by A10,FINSEQ_1:def 3;
-         p1.k2 > 0 & for k be Nat st k in dom p1 holds p1.k >= 0
-        proof
-          thus p1.k2 > 0 by A8,A10,A11,FINSEQ_1:def 7;
-          let k be Nat such that
-A12:       k in dom p1;
-A13:       dom p1 c= dom p by A10,FINSEQ_1:39;
-           p1.k = p.k by A10,A12,FINSEQ_1:def 7;
-          hence thesis by A1,A12,A13,Def1;
-        end;
-then A14:     Sum p1 > 0 by A11,RVSUM_1:115;
-         not k1 in dom p1 by A9,A10,FINSEQ_1:def 3;
-        then consider kk be Nat such that
-A15:     kk in dom p2 & k1 = k2 + kk by A2,A10,FINSEQ_1:38;
-A16:     p2.kk = p.k1 by A10,A15,FINSEQ_1:def 7;
-         for k being Nat st k in dom p2 holds p2.k >= 0
-        proof let k be Nat such that
-A17:       k in dom p2;
-           k >= 1 & k <= j2 by A10,A17,FINSEQ_3:27;
-          then k2+k>=1+0 & k2+k <= len p by A7,XREAL_1:9;
-then A18:       k2+k in dom p by FINSEQ_3:27;
-           p2.k = p.(k2+k) by A10,A17,FINSEQ_1:def 7;
-          hence thesis by A1,A18,Def1;
-        end;
-then A19:     Sum p2 >= p.k1 by A15,A16,MATRPROB:5;
-         Sum p = Sum p1 + Sum p2 by A10,RVSUM_1:105;
-        then Sum p > p.k1 + 0 by A14,A19,XREAL_1:10;
-        hence thesis by A2;
+  reconsider j1 as Element of NAT by ORDINAL1:def 13;
+  not ex i st i in dom p & i<>k1 & p.i <> 0
+  proof
+    assume ex i st i in dom p & i<>k1 & p.i <> 0;
+    then consider k2 being Element of NAT such that
+A5: k2 in dom p & k2<>k1 & p.k2<>0;
+A6: k2 >=1 & k2 <= len p by A5,FINSEQ_3:27;
+    then consider j2 being Nat such that
+A7: k2 + j2 = len p by NAT_1:10;
+    reconsider j2 as Element of NAT by ORDINAL1:def 13;
+A8: p.k2 > 0 by A1,A5,Def1;
+    per cases by A5,REAL_1:def 5;
+    suppose k1 > k2;
+      then
+A9:   not k1 in Seg k2 by FINSEQ_1:3;
+      consider p1,p2 being FinSequence of REAL such that
+A10:  len p1 = k2 & len p2 = j2 & p = p1 ^ p2 by A7,FINSEQ_2:26;
+      k2 in Seg k2 by A6,FINSEQ_1:5;
+      then
+A11:  k2 in dom p1 by A10,FINSEQ_1:def 3;
+      p1.k2 > 0 & for k be Nat st k in dom p1 holds p1.k >= 0
+      proof
+        thus p1.k2 > 0 by A8,A10,A11,FINSEQ_1:def 7;
+        let k be Nat such that
+A12:    k in dom p1;
+A13:    dom p1 c= dom p by A10,FINSEQ_1:39;
+        p1.k = p.k by A10,A12,FINSEQ_1:def 7;
+        hence thesis by A1,A12,A13,Def1;
       end;
-      suppose k1 < k2;
-then A20:     not k2 in Seg k1 by FINSEQ_1:3;
-        consider p1,p2 being FinSequence of REAL such that
-A21:     len p1 = k1 & len p2 = j1 & p = p1 ^ p2 by A4,FINSEQ_2:26;
-         k1 in Seg k1 by A3,FINSEQ_1:5;
-then A22:     k1 in dom p1 by A21,FINSEQ_1:def 3;
-         p1.k1 = p.k1 & for k be Nat st k in dom p1 holds p1.k >= 0
-        proof
-          thus p1.k1 = p.k1 by A21,A22,FINSEQ_1:def 7;
-          let k be Nat such that
-A23:       k in dom p1;
-A24:       dom p1 c= dom p by A21,FINSEQ_1:39;
-           p1.k = p.k by A21,A23,FINSEQ_1:def 7;
-          hence thesis by A1,A23,A24,Def1;
-        end;
-then A25:     Sum p1 >= p.k1 by A22,MATRPROB:5;
-         not k2 in dom p1 by A20,A21,FINSEQ_1:def 3;
-        then consider kk be Nat such that
-A26:     kk in dom p2 & k2 = k1 + kk by A5,A21,FINSEQ_1:38;
-A27:     p2.kk = p.k2 by A21,A26,FINSEQ_1:def 7;
-         for k be Nat st k in dom p2 holds p2.k >= 0
-        proof let k be Nat such that
-A28:       k in dom p2;
-           k >= 1 & k <= j1 by A21,A28,FINSEQ_3:27;
-          then k1+k>=1+0 & k1+k <= len p by A4,XREAL_1:9;
-then A29:       k1+k in dom p by FINSEQ_3:27;
-           p2.k =p.(k1+k) by A21,A28,FINSEQ_1:def 7;
-          hence thesis by A1,A29,Def1;
-        end;
-then A30:     Sum p2 > 0 by A8,A26,A27,RVSUM_1:115;
-         Sum p = Sum p1 + Sum p2 by A21,RVSUM_1:105;
-        then Sum p > p.k1 + 0 by A25,A30,XREAL_1:10;
-        hence thesis by A2;
+      then
+A14:  Sum p1 > 0 by A11,RVSUM_1:115;
+      not k1 in dom p1 by A9,A10,FINSEQ_1:def 3;
+      then consider kk be Nat such that
+A15:  kk in dom p2 & k1 = k2 + kk by A2,A10,FINSEQ_1:38;
+A16:  p2.kk = p.k1 by A10,A15,FINSEQ_1:def 7;
+      for k being Nat st k in dom p2 holds p2.k >= 0
+      proof
+        let k be Nat such that
+A17:    k in dom p2;
+        k >= 1 & k <= j2 by A10,A17,FINSEQ_3:27;
+        then k2+k>=1+0 & k2+k <= len p by A7,XREAL_1:9;
+        then
+A18:    k2+k in dom p by FINSEQ_3:27;
+        p2.k = p.(k2+k) by A10,A17,FINSEQ_1:def 7;
+        hence thesis by A1,A18,Def1;
       end;
+      then
+A19:  Sum p2 >= p.k1 by A15,A16,MATRPROB:5;
+      Sum p = Sum p1 + Sum p2 by A10,RVSUM_1:105;
+      then Sum p > p.k1 + 0 by A14,A19,XREAL_1:10;
+      hence thesis by A2;
     end;
-    hence thesis by A2,Def2;
+    suppose k1 < k2;
+      then
+A20:  not k2 in Seg k1 by FINSEQ_1:3;
+      consider p1,p2 being FinSequence of REAL such that
+A21:  len p1 = k1 & len p2 = j1 & p = p1 ^ p2 by A4,FINSEQ_2:26;
+      k1 in Seg k1 by A3,FINSEQ_1:5;
+      then
+A22:  k1 in dom p1 by A21,FINSEQ_1:def 3;
+      p1.k1 = p.k1 & for k be Nat st k in dom p1 holds p1.k >= 0
+      proof
+        thus p1.k1 = p.k1 by A21,A22,FINSEQ_1:def 7;
+        let k be Nat such that
+A23:    k in dom p1;
+A24:    dom p1 c= dom p by A21,FINSEQ_1:39;
+        p1.k = p.k by A21,A23,FINSEQ_1:def 7;
+        hence thesis by A1,A23,A24,Def1;
+      end;
+      then
+A25:  Sum p1 >= p.k1 by A22,MATRPROB:5;
+      not k2 in dom p1 by A20,A21,FINSEQ_1:def 3;
+      then consider kk be Nat such that
+A26:  kk in dom p2 & k2 = k1 + kk by A5,A21,FINSEQ_1:38;
+A27:  p2.kk = p.k2 by A21,A26,FINSEQ_1:def 7;
+      for k be Nat st k in dom p2 holds p2.k >= 0
+      proof
+        let k be Nat such that
+A28:    k in dom p2;
+        k >= 1 & k <= j1 by A21,A28,FINSEQ_3:27;
+        then k1+k>=1+0 & k1+k <= len p by A4,XREAL_1:9;
+        then
+A29:    k1+k in dom p by FINSEQ_3:27;
+        p2.k =p.(k1+k) by A21,A28,FINSEQ_1:def 7;
+        hence thesis by A1,A29,Def1;
+      end;
+      then
+A30:  Sum p2 > 0 by A8,A26,A27,RVSUM_1:115;
+      Sum p = Sum p1 + Sum p2 by A21,RVSUM_1:105;
+      then Sum p > p.k1 + 0 by A25,A30,XREAL_1:10;
+      hence thesis by A2;
+    end;
   end;
+  hence thesis by A2,Def2;
+end;
 
 registration
   cluster ProbFinS -> non empty nonnegative FinSequence of REAL;
   coherence
-  proof let p be FinSequence of REAL; assume
+  proof
+    let p be FinSequence of REAL;
+    assume
 A1: p is ProbFinS;
     hence p is non empty by MATRPROB:def 5,RVSUM_1:102;
-     for i st i in dom p holds p.i >= 0 by A1,MATRPROB:def 5;
+    for i st i in dom p holds p.i >= 0 by A1,MATRPROB:def 5;
     hence thesis by Def1;
   end;
 end;
 
 theorem Th15:
   for p being ProbFinS FinSequence of REAL
-   for k st k in dom p & p.k = 1 holds p has_onlyone_value_in k
-  proof let p be ProbFinS FinSequence of REAL;
-    let k such that
+  for k st k in dom p & p.k = 1 holds p has_onlyone_value_in k
+proof
+  let p be ProbFinS FinSequence of REAL;
+  let k such that
 A1: k in dom p & p.k = 1;
-     p.k = Sum p by A1,MATRPROB:def 5;
-    hence thesis by A1,Th14;
-  end;
+  p.k = Sum p by A1,MATRPROB:def 5;
+  hence thesis by A1,Th14;
+end;
 
 theorem Th16:
   for i being non empty Nat holds
-    (i |-> (1/i)) is ProbFinS FinSequence of REAL
-  proof let i be non empty Nat;
-    reconsider i as non empty Element of NAT by ORDINAL1:def 13;
-A1: Sum(i |-> (1/i)) = i * (1/i) by RVSUM_1:110 .= 1 by XCMPLX_1:107;
-     for k st k in dom (i |-> (1/i)) holds (i |-> (1/i)).k >= 0
-    proof let k such that
-A2:   k in dom (i |-> (1/i));
-       k in Seg i by A2,FUNCOP_1:19;
-      hence thesis by FUNCOP_1:13;
-    end;
-    hence thesis by A1,MATRPROB:def 5;
+  (i |-> (1/i)) is ProbFinS FinSequence of REAL
+proof
+  let i be non empty Nat;
+  reconsider i as non empty Element of NAT by ORDINAL1:def 13;
+A1: Sum(i |-> (1/i)) = i * (1/i) by RVSUM_1:110
+    .= 1 by XCMPLX_1:107;
+  for k st k in dom (i |-> (1/i)) holds (i |-> (1/i)).k >= 0
+  proof
+    let k such that
+A2: k in dom (i |-> (1/i));
+    k in Seg i by A2,FUNCOP_1:19;
+    hence thesis by FUNCOP_1:13;
   end;
+  hence thesis by A1,MATRPROB:def 5;
+end;
 
 registration
   cluster with_sum=1 -> non empty-yielding Matrix of REAL;
   coherence
-  proof let M be Matrix of REAL such that
+  proof
+    let M be Matrix of REAL such that
 A1: M is with_sum=1;
     assume
 A2: M is empty-yielding;
@@ -745,255 +832,292 @@ A2: M is empty-yielding;
     end;
     suppose width M = 0 & len M > 0;
       then reconsider M1 = M as Matrix of len M,0,REAL by MATRIX_1:20;
-       SumAll M1 = 0 by MATRPROB:24;
+      SumAll M1 = 0 by MATRPROB:24;
       hence thesis by A1,MATRPROB:def 7;
     end;
   end;
   cluster Joint_Probability -> non empty-yielding Matrix of REAL;
   coherence
-  proof let M be Matrix of REAL such that
+  proof
+    let M be Matrix of REAL such that
 A3: M is Joint_Probability;
     reconsider M1=M as with_sum=1 Matrix of REAL by A3,MATRPROB:def 8;
-     M1 is non empty-yielding Matrix of REAL;
+    M1 is non empty-yielding Matrix of REAL;
     hence thesis;
   end;
 end;
 
 theorem
-   for M being Matrix of REAL st M = {} holds SumAll M = 0
-  proof let M be Matrix of REAL;
-    assume M = {};
-    then reconsider M1=M as Matrix of 0,width M,REAL by MATRIX_1:13;
-     len M1 = 0 by MATRIX_1:23;
-    hence thesis by MATRPROB:23;
-  end;
+  for M being Matrix of REAL st M = {} holds SumAll M = 0
+proof
+  let M be Matrix of REAL;
+  assume M = {};
+  then reconsider M1=M as Matrix of 0,width M,REAL by MATRIX_1:13;
+  len M1 = 0 by MATRIX_1:23;
+  hence thesis by MATRPROB:23;
+end;
 
 theorem Th18:
   for M being Matrix of D holds
-    for i st i in dom M holds dom(M.i) = Seg width M
-  proof let M be Matrix of D;
-    let i; assume i in dom M;
-    hence dom(M.i) = dom Line(M,i) by MATRIX_2:18
-      .= Seg len Line(M,i) by FINSEQ_1:def 3
-      .= Seg width M by MATRIX_1:def 8;
-  end;
+  for i st i in dom M holds dom(M.i) = Seg width M
+proof
+  let M be Matrix of D;
+  let i;
+  assume i in dom M;
+  hence dom(M.i) = dom Line(M,i) by MATRIX_2:18
+    .= Seg len Line(M,i) by FINSEQ_1:def 3
+    .= Seg width M by MATRIX_1:def 8;
+end;
 
 theorem Th19:
-   MR is m-nonnegative iff
-    (for i st i in dom MR holds Line(MR,i) is nonnegative)
-  proof
-    hereby assume
-A1: MR is m-nonnegative;
-      let i such that
-A2:   i in dom MR;
-       now let k such that
-A3:     k in dom Line(MR,i);
-A4:     k in dom (MR.i) by A2,A3,MATRIX_2:18;
-then A5:     k in Seg width MR by A2,Th18;
-A6:     [i,k] in Indices MR by A2,A4,MATRPROB:13;
-         (Line(MR,i)).k = MR*(i,k) by A5,MATRIX_1:def 8;
-        hence (Line(MR,i)).k >= 0 by A1,A6,MATRPROB:def 6;
-      end;
-      hence Line(MR,i) is nonnegative by Def1;
-    end;
+  MR is m-nonnegative iff
+  (for i st i in dom MR holds Line(MR,i) is nonnegative)
+proof
+  hereby
     assume
-A7: for i st i in dom MR holds Line(MR,i) is nonnegative;
-     now let i,j such that
-A8:   [i,j] in Indices MR;
-A9:   i in Seg len MR & j in Seg width MR by A8,MATRPROB:12;
-      then j in Seg len Line(MR,i) by MATRIX_1:def 8;
-then A10:   i in dom MR & j in dom Line(MR,i) by A9,FINSEQ_1:def 3;
-then A11:   Line(MR,i) is nonnegative by A7;
-       MR*(i,j) = Line(MR,i).j by A9,MATRIX_1:def 8;
-      hence MR*(i,j) >= 0 by A10,A11,Def1;
+A1: MR is m-nonnegative;
+    let i such that
+A2: i in dom MR;
+    now
+      let k such that
+A3:   k in dom Line(MR,i);
+A4:   k in dom (MR.i) by A2,A3,MATRIX_2:18;
+      then
+A5:   k in Seg width MR by A2,Th18;
+A6:   [i,k] in Indices MR by A2,A4,MATRPROB:13;
+      (Line(MR,i)).k = MR*(i,k) by A5,MATRIX_1:def 8;
+      hence (Line(MR,i)).k >= 0 by A1,A6,MATRPROB:def 6;
     end;
-    hence MR is m-nonnegative by MATRPROB:def 6;
+    hence Line(MR,i) is nonnegative by Def1;
   end;
+  assume
+A7: for i st i in dom MR holds Line(MR,i) is nonnegative;
+  now
+    let i,j such that
+A8: [i,j] in Indices MR;
+A9: i in Seg len MR & j in Seg width MR by A8,MATRPROB:12;
+    then j in Seg len Line(MR,i) by MATRIX_1:def 8;
+    then
+A10: i in dom MR & j in dom Line(MR,i) by A9,FINSEQ_1:def 3;
+    then
+A11: Line(MR,i) is nonnegative by A7;
+    MR*(i,j) = Line(MR,i).j by A9,MATRIX_1:def 8;
+    hence MR*(i,j) >= 0 by A10,A11,Def1;
+  end;
+  hence MR is m-nonnegative by MATRPROB:def 6;
+end;
 
 begin :: Properties on Transformations between Vector and Matrix
 
 theorem Th20:
   for j st j in dom p holds Col(LineVec2Mx p,j) = <*p.j*>
-  proof
-    set M = LineVec2Mx p;
-    let j such that
+proof
+  set M = LineVec2Mx p;
+  let j such that
 A1: j in dom p;
 A2: len Col(M,j) = len M by MATRIX_1:def 9;
-then A3: len Col(M,j) = 1 by MATRIXR1:def 10;
+  then
+A3: len Col(M,j) = 1 by MATRIXR1:def 10;
 A4: dom <*p.j*> = Seg 1 by FINSEQ_1:def 8;
-then A5: dom Col(M,j) = dom <*p.j*> by A3,FINSEQ_1:def 3;
-     now let k be Nat such that
-A6:   k in dom Col(M,j);
-       k >= 1  & k <= 1 by A4,A5,A6,FINSEQ_1:3;
-then A7:   k = 1 by XXREAL_0:1;
-       k in dom M by A2,A6,FINSEQ_3:31;
-      hence (Col(M,j)).k = M*(k,j) by MATRIX_1:def 9
-         .= p.j by A1,A7,MATRIXR1:def 10
-         .= (<*p.j*>).k by A7,FINSEQ_1:def 8;
-    end;
-    hence thesis by A5,FINSEQ_1:17;
+  then
+A5: dom Col(M,j) = dom <*p.j*> by A3,FINSEQ_1:def 3;
+  now
+    let k be Nat such that
+A6: k in dom Col(M,j);
+    k >= 1 & k <= 1 by A4,A5,A6,FINSEQ_1:3;
+    then
+A7: k = 1 by XXREAL_0:1;
+    k in dom M by A2,A6,FINSEQ_3:31;
+    hence (Col(M,j)).k = M*(k,j) by MATRIX_1:def 9
+      .= p.j by A1,A7,MATRIXR1:def 10
+      .= (<*p.j*>).k by A7,FINSEQ_1:def 8;
   end;
+  hence thesis by A5,FINSEQ_1:17;
+end;
 
 theorem Th21:
   for p being non empty FinSequence of REAL for q being FinSequence of REAL
-    for M being Matrix of REAL holds
-    M = (ColVec2Mx p) * (LineVec2Mx q) iff
-      (len M = len p & width M = len q &
-      for i,j st [i,j] in Indices M holds M*(i,j) = p.i * q.j)
-  proof let p be non empty FinSequence of REAL;
-        let q be FinSequence of REAL;
-        let M be Matrix of REAL;
-    set M1 = ColVec2Mx p;
-    set M2 = LineVec2Mx q;
-     len p <> 0 by FINSEQ_1:25;
-then A1: len p > 0;
-then A2: len M1 = len p & width M1 = 1 &
-    for j st j in dom p holds M1.j = <*p.j*> by MATRIXR1:def 9;
+  for M being Matrix of REAL holds M = (ColVec2Mx p) * (LineVec2Mx q) iff
+  (len M = len p & width M = len q &
+  for i,j st [i,j] in Indices M holds M*(i,j) = p.i * q.j)
+proof
+  let p be non empty FinSequence of REAL;
+  let q be FinSequence of REAL;
+  let M be Matrix of REAL;
+  set M1 = ColVec2Mx p;
+  set M2 = LineVec2Mx q;
+  len p <> 0 by FINSEQ_1:25;
+  then
+A1: len p > 0;
+  then
+A2: len M1 = len p & width M1 = 1 &
+  for j st j in dom p holds M1.j = <*p.j*> by MATRIXR1:def 9;
 A3: len M2 = 1 & width M2 = len q &
-    for j st j in dom q holds M2*(1,j) =q.j by MATRIXR1:def 10;
-    hereby assume
-A4:   M = M1 * M2;
-then A5:   len M = len M1 & width M = width M2 &
-      for i,j st [i,j] in Indices M holds
-        M*(i,j) = Line(M1,i) "*" Col(M2,j) by A2,A3,MATRPROB:39;
-      thus len M = len p & width M = len q
-        by A2,A3,A4,MATRPROB:39;
-      thus for i,j st [i,j] in Indices M holds M*(i,j) = p.i * q.j
-      proof let i,j such that
-A6:     [i,j] in Indices M;
-A7:     i in Seg len M & j in Seg width M by A6,MATRPROB:12;
-then A8:     i in dom M1 by A5,FINSEQ_1:def 3;
-A9:     i in dom p & j in dom q by A2,A3,A5,A7,FINSEQ_1:def 3;
-A10:     Line(M1,i) = M1.i by A8,MATRIX_2:18 .= <*p.i*> by A1,A9,MATRIXR1:def 9
-;
-        thus M*(i,j) = Line(M1,i) "*" Col(M2,j) by A2,A3,A4,A6,MATRPROB:39
-          .= <*p.i*> "*" <*q.j*> by A9,A10,Th20
-          .= Sum mlt(<*p.i*>,<*q.j*>) by EUCLID_2:def 1
-          .= Sum <*p.i * q.j*> by RVSUM_1:89
-          .= p.i * q.j by RVSUM_1:103;
-      end;
-    end;
+  for j st j in dom q holds M2*(1,j) =q.j by MATRIXR1:def 10;
+  hereby
     assume
+A4: M = M1 * M2;
+    then
+A5: len M = len M1 & width M = width M2 & for i,j st [i,j] in Indices M holds
+    M*(i,j) = Line(M1,i) "*" Col(M2,j) by A2,A3,MATRPROB:39;
+    thus len M = len p & width M = len q by A2,A3,A4,MATRPROB:39;
+    thus for i,j st [i,j] in Indices M holds M*(i,j) = p.i * q.j
+    proof
+      let i,j such that
+A6:   [i,j] in Indices M;
+A7:   i in Seg len M & j in Seg width M by A6,MATRPROB:12;
+      then
+A8:   i in dom M1 by A5,FINSEQ_1:def 3;
+A9:   i in dom p & j in dom q by A2,A3,A5,A7,FINSEQ_1:def 3;
+A10:  Line(M1,i) = M1.i by A8,MATRIX_2:18
+        .= <*p.i*> by A1,A9,MATRIXR1:def 9;
+      thus M*(i,j) = Line(M1,i) "*" Col(M2,j) by A2,A3,A4,A6,MATRPROB:39
+        .= <*p.i*> "*" <*q.j*> by A9,A10,Th20
+        .= Sum mlt(<*p.i*>,<*q.j*>) by EUCLID_2:def 1
+        .= Sum <*p.i * q.j*> by RVSUM_1:89
+        .= p.i * q.j by RVSUM_1:103;
+    end;
+  end;
+  assume
 A11: len M = len p & width M = len q &
-      for i,j st [i,j] in Indices M holds M*(i,j) = p.i * q.j;
-     for i,j st [i,j] in Indices M holds
-      M*(i,j) = Line(M1,i) "*" Col(M2,j)
-    proof let i,j such that
-A12:   [i,j] in Indices M;
-A13:     i in Seg len M & j in Seg width M by A12,MATRPROB:12;
-then A14:     i in dom M1 by A2,A11,FINSEQ_1:def 3;
-A15:     i in dom p & j in dom q by A11,A13,FINSEQ_1:def 3;
-then A16:     <*p.i*> = M1.i by A1,MATRIXR1:def 9 .= Line(M1,i) by A14,
-MATRIX_2:18;
-      thus M*(i,j) = p.i * q.j by A11,A12
+  for i,j st [i,j] in Indices M holds M*(i,j) = p.i * q.j;
+  for i,j st [i,j] in Indices M holds M*(i,j) = Line(M1,i) "*" Col(M2,j)
+  proof
+    let i,j such that
+A12: [i,j] in Indices M;
+A13: i in Seg len M & j in Seg width M by A12,MATRPROB:12;
+    then
+A14: i in dom M1 by A2,A11,FINSEQ_1:def 3;
+A15: i in dom p & j in dom q by A11,A13,FINSEQ_1:def 3;
+    then
+A16: <*p.i*> = M1.i by A1,MATRIXR1:def 9
+      .= Line(M1,i) by A14, MATRIX_2:18;
+    thus M*(i,j) = p.i * q.j by A11,A12
       .= Sum <*p.i * q.j*> by RVSUM_1:103
       .= Sum mlt(<*p.i*>,<*q.j*>) by RVSUM_1:89
       .= <*p.i*> "*" <*q.j*> by EUCLID_2:def 1
       .= Line(M1,i) "*" Col(M2,j) by A15,A16,Th20;
-    end;
-    hence M = M1 * M2 by A2,A3,A11,MATRPROB:39;
   end;
+  hence M = M1 * M2 by A2,A3,A11,MATRPROB:39;
+end;
 
 theorem Th22:
   for p being non empty FinSequence of REAL for q being FinSequence of REAL
-    for M being Matrix of REAL holds
-    M = (ColVec2Mx p) * (LineVec2Mx q) iff
-      (len M = len p & width M = len q &
-      for i st i in dom M holds Line(M,i) = p.i * q)
-  proof let p be non empty FinSequence of REAL,
-            q be FinSequence of REAL,
-            M be Matrix of REAL;
-    set M1 = ColVec2Mx p;
-    set M2 = LineVec2Mx q;
-    hereby assume
-A1:   M = M1 * M2;
-      hence len M = len p & width M = len q by Th21;
-      thus for i st i in dom M holds Line(M,i) = p.i * q
-      proof let i such that
-A2:     i in dom M;
-A3:     i in Seg len M by A2,FINSEQ_1:def 3;
-A4:     dom Line(M,i) = Seg len Line(M,i) by FINSEQ_1:def 3
-          .= Seg width M by MATRIX_1:def 8 .= Seg len q by A1,Th21
-          .= dom q by FINSEQ_1:def 3 .= dom(p.i * q) by VALUED_1:7,def 5;
-         for j be Nat st j in dom Line(M,i) holds (Line(M,i)).j = (p.i * q).j
-        proof let j be Nat such that
-A5:       j in dom Line(M,i);
-A6:       j in NAT by ORDINAL1:def 13;
-           j in Seg len Line(M,i) by A5,FINSEQ_1:def 3;
-then A7:       j in Seg width M by MATRIX_1:def 8;
-then A8:       [i,j] in Indices M by A3,MATRPROB:12;
-          thus (Line(M,i)).j = M*(i,j) by A7,MATRIX_1:def 8
-            .= p.i * q.j by A1,A6,A8,Th21 .= (p.i * q).j by RVSUM_1:66;
-        end;
-        hence thesis by A4,FINSEQ_1:17;
-      end;
-    end;
+  for M being Matrix of REAL holds M = (ColVec2Mx p) * (LineVec2Mx q) iff
+  (len M = len p & width M = len q &
+  for i st i in dom M holds Line(M,i) = p.i * q)
+proof
+  let p be non empty FinSequence of REAL, q be FinSequence of REAL,
+  M be Matrix of REAL;
+  set M1 = ColVec2Mx p;
+  set M2 = LineVec2Mx q;
+  hereby
     assume
-A9: len M = len p & width M = len q &
-    for i st i in dom M holds Line(M,i) = p.i * q;
-     for i,j st [i,j] in Indices M holds M*(i,j) = p.i * q.j
-    proof let i,j such that
-A10:   [i,j] in Indices M;
-A11:   i in dom M & j in dom(M.i) by A10,MATRPROB:13;
-       j in Seg width M by A10,MATRPROB:12;
-      hence M*(i,j) = (Line(M,i)).j by MATRIX_1:def 8
-        .= (p.i * q).j by A9,A11
-        .= p.i * q.j by RVSUM_1:66;
+A1: M = M1 * M2;
+    hence len M = len p & width M = len q by Th21;
+    thus for i st i in dom M holds Line(M,i) = p.i * q
+    proof
+      let i such that
+A2:   i in dom M;
+A3:   i in Seg len M by A2,FINSEQ_1:def 3;
+A4:   dom Line(M,i) = Seg len Line(M,i) by FINSEQ_1:def 3
+        .= Seg width M by MATRIX_1:def 8
+        .= Seg len q by A1,Th21
+        .= dom q by FINSEQ_1:def 3
+        .= dom(p.i * q) by VALUED_1:def 5;
+      for j be Nat st j in dom Line(M,i) holds (Line(M,i)).j = (p.i * q).j
+      proof
+        let j be Nat such that
+A5:     j in dom Line(M,i);
+A6:     j in NAT by ORDINAL1:def 13;
+        j in Seg len Line(M,i) by A5,FINSEQ_1:def 3;
+        then
+A7:     j in Seg width M by MATRIX_1:def 8;
+        then
+A8:     [i,j] in Indices M by A3,MATRPROB:12;
+        thus (Line(M,i)).j = M*(i,j) by A7,MATRIX_1:def 8
+          .= p.i * q.j by A1,A6,A8,Th21
+          .= (p.i * q).j by RVSUM_1:66;
+      end;
+      hence thesis by A4,FINSEQ_1:17;
     end;
-    hence M = M1 * M2 by A9,Th21;
   end;
+  assume
+A9: len M = len p & width M = len q &
+  for i st i in dom M holds Line(M,i) = p.i * q;
+  for i,j st [i,j] in Indices M holds M*(i,j) = p.i * q.j
+  proof
+    let i,j such that
+A10: [i,j] in Indices M;
+A11: i in dom M & j in dom(M.i) by A10,MATRPROB:13;
+    j in Seg width M by A10,MATRPROB:12;
+    hence M*(i,j) = (Line(M,i)).j by MATRIX_1:def 8
+      .= (p.i * q).j by A9,A11
+      .= p.i * q.j by RVSUM_1:66;
+  end;
+  hence M = M1 * M2 by A9,Th21;
+end;
 
 theorem Th23:
   for p,q being ProbFinS FinSequence of REAL holds
-    (ColVec2Mx p) * (LineVec2Mx q) is Joint_Probability
-  proof let p,q be ProbFinS FinSequence of REAL;
-    set M = (ColVec2Mx p) * (LineVec2Mx q);
+  (ColVec2Mx p) * (LineVec2Mx q) is Joint_Probability
+proof
+  let p,q be ProbFinS FinSequence of REAL;
+  set M = (ColVec2Mx p) * (LineVec2Mx q);
 A1: len M = len p & width M = len q &
-    for i st i in dom M holds Line(M,i) = p.i * q by Th22;
+  for i st i in dom M holds Line(M,i) = p.i * q by Th22;
 A2: M is m-nonnegative
-    proof
-       now let i,j such that
-A3:     [i,j] in Indices M;
-         i in Seg len p & j in Seg len q by A1,A3,MATRPROB:12;
-        then i in dom p & j in dom q by FINSEQ_1:def 3;
-then A4:     p.i >= 0 & q.j >= 0 by MATRPROB:def 5;
-         M*(i,j) = p.i * q.j by A3,Th21;
-        hence M*(i,j) >= 0 by A4,XREAL_1:129;
-      end;
-      hence thesis by MATRPROB:def 6;
+  proof
+    now
+      let i,j such that
+A3:   [i,j] in Indices M;
+      i in Seg len p & j in Seg len q by A1,A3,MATRPROB:12;
+      then i in dom p & j in dom q by FINSEQ_1:def 3;
+      then
+A4:   p.i >= 0 & q.j >= 0 by MATRPROB:def 5;
+      M*(i,j) = p.i * q.j by A3,Th21;
+      hence M*(i,j) >= 0 by A4,XREAL_1:129;
     end;
-     M is with_sum=1
-    proof
-A5:   LineSum M = p
-      proof
-        set M1=LineSum M;
-A6:     len M1 = len M &
-        for k st k in Seg len M holds M1.k = Sum(Line(M,k)) by MATRPROB:20;
-then A7:     dom M1 = dom p & dom M1 = dom M by A1,FINSEQ_3:31;
-         now let k be Nat such that
-A8:       k in dom M1;
-           k in Seg len M by A6,A8,FINSEQ_1:def 3;
-          hence M1.k = Sum(Line(M,k)) by MATRPROB:20
-            .= Sum(p.k * q) by A7,A8,Th22
-            .= p.k * Sum q by RVSUM_1:117 .= p.k * 1 by MATRPROB:def 5
-            .= p.k;
-        end;
-        hence thesis by A7,FINSEQ_1:17;
-      end;
-       SumAll M = Sum LineSum M by MATRPROB:def 3
-        .= 1 by A5,MATRPROB:def 5;
-      hence thesis by MATRPROB:def 7;
-    end;
-    hence thesis by A2,MATRPROB:def 8;
+    hence thesis by MATRPROB:def 6;
   end;
-
-definition let n;
-           let MR be Matrix of n,REAL;
-  attr MR is diagonal means :Def3:
-    for i,j st [i,j] in Indices MR & MR*(i,j) <> 0 holds i=j;
+  M is with_sum=1
+  proof
+A5: LineSum M = p
+    proof
+      set M1=LineSum M;
+A6:   len M1 = len M &
+      for k st k in Seg len M holds M1.k = Sum(Line(M,k)) by MATRPROB:20;
+      then
+A7:   dom M1 = dom p & dom M1 = dom M by A1,FINSEQ_3:31;
+      now
+        let k be Nat such that
+A8:     k in dom M1;
+        k in Seg len M by A6,A8,FINSEQ_1:def 3;
+        hence M1.k = Sum(Line(M,k)) by MATRPROB:20
+          .= Sum(p.k * q) by A7,A8,Th22
+          .= p.k * Sum q by RVSUM_1:117
+          .= p.k * 1 by MATRPROB:def 5
+          .= p.k;
+      end;
+      hence thesis by A7,FINSEQ_1:17;
+    end;
+    SumAll M = Sum LineSum M by MATRPROB:def 3
+      .= 1 by A5,MATRPROB:def 5;
+    hence thesis by MATRPROB:def 7;
+  end;
+  hence thesis by A2,MATRPROB:def 8;
 end;
 
-registration let n;
+definition
+  let n;
+  let MR be Matrix of n,REAL;
+  attr MR is diagonal means
+  :Def3:
+  for i,j st [i,j] in Indices MR & MR*(i,j) <> 0 holds i=j;
+end;
+
+registration
+  let n;
   cluster diagonal Matrix of n,REAL;
   existence
   proof
@@ -1001,7 +1125,7 @@ registration let n;
     deffunc F(set,set) = 0;
     consider M being Matrix of n1,REAL such that
 A1: for i,j being Nat st [i,j] in Indices M holds M*(i,j) = F(i,j)
-      from MATRIX_1:sch 1;
+    from MATRIX_1:sch 1;
 A2: for i,j st [i,j] in Indices M & M*(i,j) <> 0 holds i=j by A1;
     reconsider M1=M as Matrix of n,REAL;
     take M1;
@@ -1010,103 +1134,120 @@ A2: for i,j st [i,j] in Indices M & M*(i,j) <> 0 holds i=j by A1;
 end;
 
 theorem Th24:
-  for MR being Matrix of n,REAL holds
-    MR is diagonal iff
-      for i st i in dom MR holds Line(MR,i) has_onlyone_value_in i
-  proof let MR be Matrix of n,REAL;
-     len MR = n & width MR = n by MATRIX_1:25;
-then A1: dom MR = Seg width MR by FINSEQ_1:def 3;
-    hereby assume
-A2:   MR is diagonal;
-       now let i such that
-A3:     i in dom MR;
-A4:     len Line(MR,i) = width MR by MATRIX_1:def 8;
-then A5:     i in Seg width MR & i in dom Line(MR,i) by A1,A3,FINSEQ_1:def 3;
-         now let j such that
-A6:       j in dom Line(MR,i) & j<>i;
-A7:       j in dom (MR.i) & j in Seg width MR
-            by A3,A4,A6,FINSEQ_1:def 3,MATRIX_2:18;
-then A8:       [i,j] in Indices MR by A3,MATRPROB:13;
-          thus Line(MR,i).j = MR*(i,j) by A7,MATRIX_1:def 8
-            .= 0 by A2,A6,A8,Def3;
-        end;
-        hence Line(MR,i) has_onlyone_value_in i by A5,Def2;
-      end;
-      hence for i st i in dom MR holds Line(MR,i) has_onlyone_value_in i;
-    end;
+  for MR being Matrix of n,REAL holds MR is diagonal iff
+  for i st i in dom MR holds Line(MR,i) has_onlyone_value_in i
+proof
+  let MR be Matrix of n,REAL;
+  len MR = n & width MR = n by MATRIX_1:25;
+  then
+A1: dom MR = Seg width MR by FINSEQ_1:def 3;
+  hereby
     assume
-A9: for i st i in dom MR holds Line(MR,i) has_onlyone_value_in i;
-     for i,j st [i,j] in Indices MR & MR*(i,j) <> 0 holds i=j
-    proof let i,j such that
-A10:   [i,j] in Indices MR & MR*(i,j) <> 0; assume
-A11:   i<>j;
-A12:   i in dom MR & j in dom(MR.i) by A10,MATRPROB:13;
-then A13:   j in dom Line(MR,i) by MATRIX_2:18;
-A14:   Line(MR,i) has_onlyone_value_in i by A9,A12;
-       len Line(MR,i) = width MR by MATRIX_1:def 8;
-      then dom Line(MR,i) = Seg width MR by FINSEQ_1:def 3;
-      then MR*(i,j) = Line(MR,i).j by A13,MATRIX_1:def 8
-        .= 0 by A11,A13,A14,Def2;
-      hence thesis by A10;
+A2: MR is diagonal;
+    now
+      let i such that
+A3:   i in dom MR;
+A4:   len Line(MR,i) = width MR by MATRIX_1:def 8;
+      then
+A5:   i in Seg width MR & i in dom Line(MR,i) by A1,A3,FINSEQ_1:def 3;
+      now
+        let j such that
+A6:     j in dom Line(MR,i) & j<>i;
+A7:     j in dom (MR.i) & j in Seg width MR
+        by A3,A4,A6,FINSEQ_1:def 3,MATRIX_2:18;
+        then
+A8:     [i,j] in Indices MR by A3,MATRPROB:13;
+        thus Line(MR,i).j = MR*(i,j) by A7,MATRIX_1:def 8
+          .= 0 by A2,A6,A8,Def3;
+      end;
+      hence Line(MR,i) has_onlyone_value_in i by A5,Def2;
     end;
-    hence thesis by Def3;
+    hence for i st i in dom MR holds Line(MR,i) has_onlyone_value_in i;
   end;
+  assume
+A9: for i st i in dom MR holds Line(MR,i) has_onlyone_value_in i;
+  for i,j st [i,j] in Indices MR & MR*(i,j) <> 0 holds i=j
+  proof
+    let i,j such that
+A10: [i,j] in Indices MR & MR*(i,j) <> 0;
+    assume
+A11: i<>j;
+A12: i in dom MR & j in dom(MR.i) by A10,MATRPROB:13;
+    then
+A13: j in dom Line(MR,i) by MATRIX_2:18;
+A14: Line(MR,i) has_onlyone_value_in i by A9,A12;
+    len Line(MR,i) = width MR by MATRIX_1:def 8;
+    then dom Line(MR,i) = Seg width MR by FINSEQ_1:def 3;
+    then MR*(i,j) = Line(MR,i).j by A13,MATRIX_1:def 8
+      .= 0 by A11,A13,A14,Def2;
+    hence thesis by A10;
+  end;
+  hence thesis by Def3;
+end;
 
-definition let p;
-  func Vec2DiagMx p -> diagonal Matrix of len p,REAL means :Def4:
-    for j st j in dom p holds it*(j,j) = p.j;
+definition
+  let p;
+  func Vec2DiagMx p -> diagonal Matrix of len p,REAL means
+  :Def4:
+  for j st j in dom p holds it*(j,j) = p.j;
   existence
   proof
     defpred P[Nat,Nat,Element of REAL] means
     ($1=$2 implies $3=p.$1) & ($1 <> $2 implies $3=0);
 A1: for i,j being Nat st [i,j] in [:Seg len p, Seg len p:]
-      for x1,x2 being Element of REAL st P[i,j,x1] & P[i,j,x2]
-      holds x1 = x2;
+    for x1,x2 being Element of REAL st P[i,j,x1] & P[i,j,x2] holds x1 = x2;
 A2: for i,j being Nat st [i,j] in [:Seg len p, Seg len p:]
-     ex x being Element of REAL st P[i,j,x]
+    ex x being Element of REAL st P[i,j,x]
     proof
       let i,j be Nat;
       assume [i,j] in [:Seg len p, Seg len p:];
-       (i=j implies P[i,j,p.i]) & (i<>j implies P[i,j,0]);
+      (i=j implies P[i,j,p.i]) & (i<>j implies P[i,j,0]);
       hence thesis;
     end;
     consider M being Matrix of len p,REAL such that
 A3: for i,j being Nat st [i,j] in Indices M holds P[i,j,M*(i,j)]
-      from MATRIX_1:sch 2(A1,A2);
+    from MATRIX_1:sch 2(A1,A2);
 A4: width M = len p & len M = len p by MATRIX_1:25;
-     for i,j st [i,j] in Indices M & M*(i,j) <> 0 holds i=j by A3;
+    for i,j st [i,j] in Indices M & M*(i,j) <> 0 holds i=j by A3;
     then reconsider M1 = M as diagonal Matrix of len p,REAL by Def3;
 A5: Seg width M1 = dom p & dom M1 = dom p & Seg len M1 = dom p
-      by A4,FINSEQ_1:def 3,FINSEQ_3:31;
+    by A4,FINSEQ_1:def 3,FINSEQ_3:31;
 A6: for j st j in dom p holds M1*(j,j) = p.j
-    proof let j such that
+    proof
+      let j such that
 A7:   j in dom p;
-       [j,j] in Indices M1 by A5,A7,MATRPROB:12;
+      [j,j] in Indices M1 by A5,A7,MATRPROB:12;
       hence M1*(j,j) = p.j by A3;
     end;
     take M1;
     thus thesis by A6;
   end;
   uniqueness
-  proof let M1,M2 be diagonal Matrix of len p,REAL such that
+  proof
+    let M1,M2 be diagonal Matrix of len p,REAL such that
 A8: for j st j in dom p holds M1*(j,j) = p.j and
 A9: for j st j in dom p holds M2*(j,j) = p.j;
 A10: Indices M1 = Indices M2 by MATRIX_1:27;
-     width M1 = len p & width M2 = len p by MATRIX_1:25;
-then A11: Seg width M1 = dom p & Seg width M2 = dom p by FINSEQ_1:def 3;
-     now let i,j being Nat such that
-A12:   [i,j] in Indices M1;
+    width M1 = len p & width M2 = len p by MATRIX_1:25;
+    then
+A11: Seg width M1 = dom p & Seg width M2 = dom p by FINSEQ_1:def 3;
+    now
+      let i,j being Nat such that
+A12:  [i,j] in Indices M1;
       reconsider i1=i,j1=j as Element of NAT by ORDINAL1:def 13;
-A13:   [i1,j1] in Indices M1 by A12;
-then A14:   j1 in Seg width M1 by MATRPROB:12;
+A13:  [i1,j1] in Indices M1 by A12;
+      then
+A14:  j1 in Seg width M1 by MATRPROB:12;
       per cases;
       suppose
-A15:     i=j;
-        hence M1*(i,j) = p.j by A8,A11,A14 .= M2*(i,j) by A9,A11,A14,A15;
+A15:    i=j;
+        hence M1*(i,j) = p.j by A8,A11,A14
+          .= M2*(i,j) by A9,A11,A14,A15;
       end;
       suppose
-A16:     i<>j;
-        hence M1*(i,j) = 0 by A13,Def3 .= M2*(i,j) by A10,A13,A16,Def3;
+A16:    i<>j;
+        hence M1*(i,j) = 0 by A13,Def3
+          .= M2*(i,j) by A10,A13,A16,Def3;
       end;
     end;
     hence thesis by MATRIX_1:28;
@@ -1115,562 +1256,619 @@ end;
 
 theorem Th25:
   MR=Vec2DiagMx p iff
-    len MR = len p & width MR = len p & for i st i in dom MR holds
-      Line(MR,i) has_onlyone_value_in i & Line(MR,i).i=p.i
-  proof
-    hereby assume
-A1:   MR=Vec2DiagMx p;
-      then reconsider M1=MR as diagonal Matrix of len p,REAL;
-A2:   len M1 = len p & width M1 = len p by MATRIX_1:25;
-then A3:   dom MR = dom p & Seg width MR = dom p by FINSEQ_1:def 3,FINSEQ_3:31;
-      thus len MR = len p & width MR = len p by A2;
-      thus for i st i in dom MR holds Line(MR,i) has_onlyone_value_in i &
-        Line(MR,i).i=p.i
-      proof let i such that
-A4:     i in dom MR;
-A5:     Line(M1,i) has_onlyone_value_in i by A4,Th24;
-         Line(MR,i).i = MR*(i,i) by A3,A4,MATRIX_1:def 8
-          .= p.i by A1,A3,A4,Def4;
-        hence thesis by A5;
-      end;
-    end; assume
-A6: len MR = len p & width MR = len p &
-    for i st i in dom MR holds Line(MR,i) has_onlyone_value_in i &
-    Line(MR,i).i=p.i;
-    then reconsider MM = MR as Matrix of len p,REAL by MATRIX_2:7;
-     for i st i in dom MM holds Line(MM,i) has_onlyone_value_in i by A6;
-    then reconsider MM as diagonal Matrix of len p,REAL by Th24;
-     for j st j in dom p holds MM*(j,j) = p.j
-    proof let j such that
-A7:   j in dom p;
-A8:   dom MM = dom p & Seg width MM = dom p by A6,FINSEQ_1:def 3,FINSEQ_3:31;
-      hence MM*(j,j) = Line(MM,j).j by A7,MATRIX_1:def 8 .= p.j by A6,A7,A8;
+  len MR = len p & width MR = len p & for i st i in dom MR holds
+  Line(MR,i) has_onlyone_value_in i & Line(MR,i).i=p.i
+proof
+  hereby
+    assume
+A1: MR=Vec2DiagMx p;
+    then reconsider M1=MR as diagonal Matrix of len p,REAL;
+A2: len M1 = len p & width M1 = len p by MATRIX_1:25;
+    then
+A3: dom MR = dom p & Seg width MR = dom p by FINSEQ_1:def 3,FINSEQ_3: 31;
+    thus len MR = len p & width MR = len p by A2;
+    thus for i st i in dom MR holds Line(MR,i) has_onlyone_value_in i &
+    Line(MR,i).i=p.i
+    proof
+      let i such that
+A4:   i in dom MR;
+A5:   Line(M1,i) has_onlyone_value_in i by A4,Th24;
+      Line(MR,i).i = MR*(i,i) by A3,A4,MATRIX_1:def 8
+        .= p.i by A1,A3,A4,Def4;
+      hence thesis by A5;
     end;
-    hence thesis by Def4;
   end;
+  assume
+A6: len MR = len p & width MR = len p &
+  for i st i in dom MR holds Line(MR,i) has_onlyone_value_in i &
+  Line(MR,i).i=p.i;
+  then reconsider MM = MR as Matrix of len p,REAL by MATRIX_2:7;
+  for i st i in dom MM holds Line(MM,i) has_onlyone_value_in i by A6;
+  then reconsider MM as diagonal Matrix of len p,REAL by Th24;
+  for j st j in dom p holds MM*(j,j) = p.j
+  proof
+    let j such that
+A7: j in dom p;
+A8: dom MM = dom p & Seg width MM = dom p by A6,FINSEQ_1:def 3,FINSEQ_3:31;
+    hence MM*(j,j) = Line(MM,j).j by A7,MATRIX_1:def 8
+      .= p.j by A6,A7,A8;
+  end;
+  hence thesis by Def4;
+end;
 
 theorem Th26:
-  len p = len MR implies
-    (MR1 = (Vec2DiagMx p) * MR iff
-      len MR1 = len p & width MR1 = width MR &
-      for i,j st [i,j] in Indices MR1 holds MR1*(i,j) = p.i * (MR*(i,j)))
-  proof assume
+  len p = len MR implies (MR1 = (Vec2DiagMx p) * MR iff
+  len MR1 = len p & width MR1 = width MR &
+  for i,j st [i,j] in Indices MR1 holds MR1*(i,j) = p.i * (MR*(i,j)))
+proof
+  assume
 A1: len p = len MR;
-then A2: dom p = dom MR by FINSEQ_3:31;
-    set MM = Vec2DiagMx p;
+  then
+A2: dom p = dom MR by FINSEQ_3:31;
+  set MM = Vec2DiagMx p;
 A3: len MM = len p & width MM = len p &
-    for i st i in dom MM holds Line(MM,i) has_onlyone_value_in i &
-      Line(MM,i).i=p.i by Th25;
-    hereby assume
-A4:   MR1 = MM * MR;
-      then len MR1 = len MM & width MR1 = width MR &
-      for i,j st [i,j] in Indices MR1 holds
-        MR1*(i,j) = Line(MM,i) "*" Col(MR,j) by A1,A3,MATRPROB:39;
-then A5:   dom MR1 = dom p & dom MR1 = dom MM & Seg width MR1 = Seg width MR
-        by A3,FINSEQ_3:31;
-      thus len MR1 = len p & width MR1 = width MR by A1,A3,A4,MATRPROB:39;
-      thus for i,j st [i,j] in Indices MR1 holds MR1*(i,j) = p.i *(MR*(i,j))
-      proof let i,j such that
-A6:     [i,j] in Indices MR1;
-        set q = mlt(Line(MM,i),Col(MR,j));
-         i in Seg len MR1 & j in Seg width MR1 by A6,MATRPROB:12;
-then A7:     i in dom MR1 by FINSEQ_1:def 3;
-then A8:     Line(MM,i) has_onlyone_value_in i & Line(MM,i).i=p.i by A5,Th25;
-         len Line(MM,i) = width MM & len Col(MR,j) = len MR
-          by MATRIX_1:def 8,def 9;
-then A9:     q has_onlyone_value_in i & q.i = (Line(MM,i).i) * (Col(MR,j).i)
-          by A1,A3,A8,Th12;
-        thus MR1*(i,j) = Line(MM,i) "*" Col(MR,j) by A1,A3,A4,A6,MATRPROB:39
-          .= Sum q by EUCLID_2:def 1
-          .= p.i * (Col(MR,j).i) by A8,A9,Th13
-          .= p.i*(MR*(i,j)) by A2,A5,A7,MATRIX_1:def 9;
-      end;
-    end;
+  for i st i in dom MM holds Line(MM,i) has_onlyone_value_in i &
+  Line(MM,i).i=p.i by Th25;
+  hereby
     assume
-A10: len MR1 = len p & width MR1 = width MR &
-    for i,j st [i,j] in Indices MR1 holds MR1*(i,j) = p.i*(MR*(i,j));
-then A11: dom MR1 = dom MM & dom MR = dom MR1 by A1,A3,FINSEQ_3:31;
-     for i,j st [i,j] in Indices MR1 holds
-      MR1*(i,j) = Line(MM,i) "*" Col(MR,j)
-    proof let i,j such that
-A12:   [i,j] in Indices MR1;
+A4: MR1 = MM * MR;
+    then len MR1 = len MM & width MR1 = width MR &
+    for i,j st [i,j] in Indices MR1 holds
+    MR1*(i,j) = Line(MM,i) "*" Col(MR,j) by A1,A3,MATRPROB:39;
+    then
+A5: dom MR1 = dom p & dom MR1 = dom MM & Seg width MR1 = Seg width MR
+    by A3,FINSEQ_3:31;
+    thus len MR1 = len p & width MR1 = width MR by A1,A3,A4,MATRPROB:39;
+    thus for i,j st [i,j] in Indices MR1 holds MR1*(i,j) = p.i *(MR*(i,j))
+    proof
+      let i,j such that
+A6:   [i,j] in Indices MR1;
       set q = mlt(Line(MM,i),Col(MR,j));
-       i in Seg len MR1 & j in Seg width MR1 by A12,MATRPROB:12;
-then A13:   i in dom MR1 by FINSEQ_1:def 3;
-then A14:   Line(MM,i) has_onlyone_value_in i & Line(MM,i).i=p.i by A11,Th25;
-       len Line(MM,i) = width MM & len Col(MR,j) = len MR
-        by MATRIX_1:def 8,def 9;
-then A15:   q has_onlyone_value_in i & q.i = (Line(MM,i).i) * (Col(MR,j).i)
-        by A1,A3,A14,Th12;
-      thus MR1*(i,j) = p.i*(MR*(i,j)) by A10,A12
-        .= p.i * (Col(MR,j).i) by A11,A13,MATRIX_1:def 9
-        .= Sum q by A14,A15,Th13
-        .= Line(MM,i) "*" Col(MR,j) by EUCLID_2:def 1;
+      i in Seg len MR1 & j in Seg width MR1 by A6,MATRPROB:12;
+      then
+A7:   i in dom MR1 by FINSEQ_1:def 3;
+      then
+A8:   Line(MM,i) has_onlyone_value_in i & Line(MM,i).i=p.i by A5, Th25;
+      len Line(MM,i) = width MM & len Col(MR,j) = len MR
+      by MATRIX_1:def 8,def 9;
+      then
+A9:   q has_onlyone_value_in i & q.i = (Line(MM,i).i) * (Col(MR,j).i )
+      by A1,A3,A8,Th12;
+      thus MR1*(i,j) = Line(MM,i) "*" Col(MR,j) by A1,A3,A4,A6,MATRPROB:39
+        .= Sum q by EUCLID_2:def 1
+        .= p.i * (Col(MR,j).i) by A8,A9,Th13
+        .= p.i*(MR*(i,j)) by A2,A5,A7,MATRIX_1:def 9;
     end;
-    hence MR1 = MM * MR by A1,A3,A10,MATRPROB:39;
   end;
+  assume
+A10: len MR1 = len p & width MR1 = width MR &
+  for i,j st [i,j] in Indices MR1 holds MR1*(i,j) = p.i*(MR*(i,j));
+  then
+A11: dom MR1 = dom MM & dom MR = dom MR1 by A1,A3,FINSEQ_3:31;
+  for i,j st [i,j] in Indices MR1 holds MR1*(i,j) = Line(MM,i) "*" Col(MR,j)
+  proof
+    let i,j such that
+A12: [i,j] in Indices MR1;
+    set q = mlt(Line(MM,i),Col(MR,j));
+    i in Seg len MR1 & j in Seg width MR1 by A12,MATRPROB:12;
+    then
+A13: i in dom MR1 by FINSEQ_1:def 3;
+    then
+A14: Line(MM,i) has_onlyone_value_in i & Line(MM,i).i=p.i by A11,Th25;
+    len Line(MM,i) = width MM & len Col(MR,j) = len MR
+    by MATRIX_1:def 8,def 9;
+    then
+A15: q has_onlyone_value_in i & q.i = (Line(MM,i).i) * (Col(MR,j).i)
+    by A1,A3,A14,Th12;
+    thus MR1*(i,j) = p.i*(MR*(i,j)) by A10,A12
+      .= p.i * (Col(MR,j).i) by A11,A13,MATRIX_1:def 9
+      .= Sum q by A14,A15,Th13
+      .= Line(MM,i) "*" Col(MR,j) by EUCLID_2:def 1;
+  end;
+  hence MR1 = MM * MR by A1,A3,A10,MATRPROB:39;
+end;
 
 theorem Th27:
-  len p = len MR implies
-    (MR1 = (Vec2DiagMx p) * MR iff
-      len MR1 = len p & width MR1 = width MR &
-      for i st i in dom MR1 holds Line(MR1,i) = p.i * Line(MR,i))
-  proof
-    assume
+  len p = len MR implies (MR1 = (Vec2DiagMx p) * MR iff
+  len MR1 = len p & width MR1 = width MR &
+  for i st i in dom MR1 holds Line(MR1,i) = p.i * Line(MR,i))
+proof
+  assume
 A1: len p = len MR;
-    set MM = Vec2DiagMx p;
-    hereby assume
-A2:   MR1 = MM * MR;
-then A3:   len MR1 = len p & width MR1 = width MR &
-      for i,j st [i,j] in Indices MR1 holds MR1*(i,j) = p.i*(MR*(i,j))
-        by A1,Th26;
-      thus len MR1 = len p & width MR1 = width MR by A1,A2,Th26;
-      thus for i st i in dom MR1 holds Line(MR1,i) = p.i * Line(MR,i)
-      proof let i such that
-A4:     i in dom MR1;
-A5:     i in Seg len MR1 by A4,FINSEQ_1:def 3;
-A6:     dom Line(MR1,i) = Seg len Line(MR1,i) by FINSEQ_1:def 3
-          .= Seg width MR1 by MATRIX_1:def 8
-          .= Seg len Line(MR,i) by A3,MATRIX_1:def 8
-          .= dom Line(MR,i) by FINSEQ_1:def 3
-          .= dom(p.i * Line(MR,i)) by VALUED_1:7,def 5;
-         for j be Nat st j in dom Line(MR1,i) holds
-          (Line(MR1,i)).j = (p.i * Line(MR,i)).j
-        proof let j be Nat such that
-A7:       j in dom Line(MR1,i);
-A8: j in NAT by ORDINAL1:def 13;
-           j in Seg len Line(MR1,i) by A7,FINSEQ_1:def 3;
-then A9:       j in Seg width MR1 by MATRIX_1:def 8;
-then A10:       [i,j] in Indices MR1 by A5,MATRPROB:12;
-          thus (Line(MR1,i)).j = MR1*(i,j) by A9,MATRIX_1:def 8
-            .= p.i*(MR*(i,j)) by A1,A2,A8,A10,Th26
-            .= p.i*(Line(MR,i).j) by A3,A9,MATRIX_1:def 8
-            .= (p.i * Line(MR,i)).j by RVSUM_1:66;
-        end;
-        hence thesis by A6,FINSEQ_1:17;
-      end;
-    end;
+  set MM = Vec2DiagMx p;
+  hereby
     assume
-A11: len MR1 = len p & width MR1 = width MR &
-    for i st i in dom MR1 holds Line(MR1,i) = p.i*Line(MR,i);
-     for i,j st [i,j] in Indices MR1 holds MR1*(i,j) = p.i*(MR*(i,j))
-    proof let i,j such that
-A12:   [i,j] in Indices MR1;
-A13:   i in dom MR1 & j in dom(MR1.i) by A12,MATRPROB:13;
-A14:   j in Seg width MR1 by A12,MATRPROB:12;
-      hence MR1*(i,j) = (Line(MR1,i)).j by MATRIX_1:def 8
-        .= (p.i*Line(MR,i)).j by A11,A13
-        .= p.i * Line(MR,i).j by RVSUM_1:66
-        .= p.i*(MR*(i,j)) by A11,A14,MATRIX_1:def 8;
+A2: MR1 = MM * MR;
+    then
+A3: len MR1 = len p & width MR1 = width MR &
+    for i,j st [i,j] in Indices MR1 holds MR1*(i,j) = p.i*(MR*(i,j))
+    by A1,Th26;
+    thus len MR1 = len p & width MR1 = width MR by A1,A2,Th26;
+    thus for i st i in dom MR1 holds Line(MR1,i) = p.i * Line(MR,i)
+    proof
+      let i such that
+A4:   i in dom MR1;
+A5:   i in Seg len MR1 by A4,FINSEQ_1:def 3;
+A6:   dom Line(MR1,i) = Seg len Line(MR1,i) by FINSEQ_1:def 3
+        .= Seg width MR1 by MATRIX_1:def 8
+        .= Seg len Line(MR,i) by A3,MATRIX_1:def 8
+        .= dom Line(MR,i) by FINSEQ_1:def 3
+        .= dom(p.i * Line(MR,i)) by VALUED_1:def 5;
+      for j be Nat st j in dom Line(MR1,i) holds
+      (Line(MR1,i)).j = (p.i * Line(MR,i)).j
+      proof
+        let j be Nat such that
+A7:     j in dom Line(MR1,i);
+A8:     j in NAT by ORDINAL1:def 13;
+        j in Seg len Line(MR1,i) by A7,FINSEQ_1:def 3;
+        then
+A9:     j in Seg width MR1 by MATRIX_1:def 8;
+        then
+A10:    [i,j] in Indices MR1 by A5,MATRPROB:12;
+        thus (Line(MR1,i)).j = MR1*(i,j) by A9,MATRIX_1:def 8
+          .= p.i*(MR*(i,j)) by A1,A2,A8,A10,Th26
+          .= p.i*(Line(MR,i).j) by A3,A9,MATRIX_1:def 8
+          .= (p.i * Line(MR,i)).j by RVSUM_1:66;
+      end;
+      hence thesis by A6,FINSEQ_1:17;
     end;
-    hence MR1 = MM * MR by A1,A11,Th26;
   end;
+  assume
+A11: len MR1 = len p & width MR1 = width MR &
+  for i st i in dom MR1 holds Line(MR1,i) = p.i*Line(MR,i);
+  for i,j st [i,j] in Indices MR1 holds MR1*(i,j) = p.i*(MR*(i,j))
+  proof
+    let i,j such that
+A12: [i,j] in Indices MR1;
+A13: i in dom MR1 & j in dom(MR1.i) by A12,MATRPROB:13;
+A14: j in Seg width MR1 by A12,MATRPROB:12;
+    hence MR1*(i,j) = (Line(MR1,i)).j by MATRIX_1:def 8
+      .= (p.i*Line(MR,i)).j by A11,A13
+      .= p.i * Line(MR,i).j by RVSUM_1:66
+      .= p.i*(MR*(i,j)) by A11,A14,MATRIX_1:def 8;
+  end;
+  hence MR1 = MM * MR by A1,A11,Th26;
+end;
 
 theorem Th28:
   for p being ProbFinS FinSequence of REAL
   for M being non empty-yielding Conditional_Probability Matrix of REAL
-    st len p = len M holds (Vec2DiagMx p) * M is Joint_Probability
-  proof let p be ProbFinS FinSequence of REAL;
-        let M be non empty-yielding Conditional_Probability Matrix of REAL;
-    assume
+  st len p = len M holds (Vec2DiagMx p) * M is Joint_Probability
+proof
+  let p be ProbFinS FinSequence of REAL;
+  let M be non empty-yielding Conditional_Probability Matrix of REAL;
+  assume
 A1: len p = len M;
-    set M1 = (Vec2DiagMx p) * M;
+  set M1 = (Vec2DiagMx p) * M;
 A2: len M1 = len p & width M1 = width M &
-    for i,j st [i,j] in Indices M1 holds M1*(i,j) = p.i*(M*(i,j))
-      by A1,Th26;
+  for i,j st [i,j] in Indices M1 holds M1*(i,j) = p.i*(M*(i,j)) by A1,Th26;
 A3: M1 is m-nonnegative
-    proof
-       now let i,j such that
-A4:     [i,j] in Indices M1;
-         i in Seg len p & i in Seg len M & j in Seg width M
-          by A1,A2,A4,MATRPROB:12;
-        then i in dom p & [i,j] in Indices M by FINSEQ_1:def 3,MATRPROB:12;
-then A5:     p.i >= 0 & M*(i,j) >= 0 by MATRPROB:def 5,def 6;
-         M1*(i,j) = p.i *(M*(i,j)) by A1,A4,Th26;
-        hence M1*(i,j) >= 0 by A5,XREAL_1:129;
-      end;
-      hence thesis by MATRPROB:def 6;
+  proof
+    now
+      let i,j such that
+A4:   [i,j] in Indices M1;
+      i in Seg len p & i in Seg len M & j in Seg width M
+      by A1,A2,A4,MATRPROB:12;
+      then i in dom p & [i,j] in Indices M by FINSEQ_1:def 3,MATRPROB:12;
+      then
+A5:   p.i >= 0 & M*(i,j) >= 0 by MATRPROB:def 5,def 6;
+      M1*(i,j) = p.i *(M*(i,j)) by A1,A4,Th26;
+      hence M1*(i,j) >= 0 by A5,XREAL_1:129;
     end;
-     M1 is with_sum=1
-    proof
-A6:   LineSum M1 = p
-      proof
-        set M2=LineSum M1;
-A7:     len M2 = len M1 &
-        for k st k in Seg len M1 holds M2.k = Sum(Line(M1,k)) by MATRPROB:20;
-then A8:     dom M2 = dom M1 & dom M2 = dom M & dom M2 = dom p
-          by A1,A2,FINSEQ_3:31;
-         now let k be Nat such that
-A9:       k in dom M2;
-           k in Seg len M1 by A7,A9,FINSEQ_1:def 3;
-          hence M2.k = Sum(Line(M1,k)) by MATRPROB:20
-            .= Sum(p.k*Line(M,k)) by A1,A8,A9,Th27
-            .= p.k * Sum Line(M,k) by RVSUM_1:117
-            .= p.k * Sum(M.k) by A8,A9,MATRIX_2:18
-            .= p.k * 1 by A8,A9,MATRPROB:def 9
-            .= p.k;
-        end;
-        hence thesis by A8,FINSEQ_1:17;
-      end;
-       SumAll M1 = Sum LineSum M1 by MATRPROB:def 3
-        .= 1 by A6,MATRPROB:def 5;
-      hence thesis by MATRPROB:def 7;
-    end;
-    hence thesis by A3,MATRPROB:def 8;
+    hence thesis by MATRPROB:def 6;
   end;
+  M1 is with_sum=1
+  proof
+A6: LineSum M1 = p
+    proof
+      set M2=LineSum M1;
+A7:   len M2 = len M1 &
+      for k st k in Seg len M1 holds M2.k = Sum(Line(M1,k)) by MATRPROB:20;
+      then
+A8:   dom M2 = dom M1 & dom M2 = dom M & dom M2 = dom p by A1,A2, FINSEQ_3:31;
+      now
+        let k be Nat such that
+A9:     k in dom M2;
+        k in Seg len M1 by A7,A9,FINSEQ_1:def 3;
+        hence M2.k = Sum(Line(M1,k)) by MATRPROB:20
+          .= Sum(p.k*Line(M,k)) by A1,A8,A9,Th27
+          .= p.k * Sum Line(M,k) by RVSUM_1:117
+          .= p.k * Sum(M.k) by A8,A9,MATRIX_2:18
+          .= p.k * 1 by A8,A9,MATRPROB:def 9
+          .= p.k;
+      end;
+      hence thesis by A8,FINSEQ_1:17;
+    end;
+    SumAll M1 = Sum LineSum M1 by MATRPROB:def 3
+      .= 1 by A6,MATRPROB:def 5;
+    hence thesis by MATRPROB:def 7;
+  end;
+  hence thesis by A3,MATRPROB:def 8;
+end;
 
 theorem Th29:
   for M being Matrix of D for p being FinSequence of D* st
-    len p = len M & p.1 = M.1 &
-    (for k st k >= 1 & k < len M holds p.(k+1) = (p.k) ^ M.(k+1)) holds
-      for k st k in dom p holds len (p.k) = k * width M
-  proof let M be Matrix of D;
-        let p be FinSequence of D* such that
+  len p = len M & p.1 = M.1 &
+  (for k st k >= 1 & k < len M holds p.(k+1) = (p.k) ^ M.(k+1)) holds
+  for k st k in dom p holds len (p.k) = k * width M
+proof
+  let M be Matrix of D;
+  let p be FinSequence of D* such that
 A1: len p = len M and
 A2: p.1 = M.1 and
 A3: for k st k >= 1 & k < len M holds p.(k+1) = (p.k) ^ M.(k+1);
-    defpred P[Element of NAT] means
-      $1 >= 1 & $1 <= len M implies len (p.$1) = $1 * width M;
+  defpred P[Element of NAT] means
+  $1 >= 1 & $1 <= len M implies len (p.$1) = $1 * width M;
 A4: P[0];
 A5: for n being Element of NAT st P[n] holds P[n + 1]
-    proof let n be Element of NAT;
-      assume
-A6:   n >= 1 & n <= len M implies len (p.n) = n * width M;
-      assume
-A7:   n + 1 >= 1 & n + 1 <= len M;
-       now per cases;
-        suppose
-A8:       n = 0;
-then       1 in dom M by A7,FINSEQ_3:27;
-          hence thesis by A2,A8,GOBRD13:4;
-        end;
-          suppose
-A9:         n <> 0;
-then A10:         n >= 1 by NAT_1:14;
-A11:         n + 1 in dom M by A7,FINSEQ_3:27;
-             n < len M by A7,NAT_1:13;
-            then p.(n + 1) = (p.n) ^ M.(n+1) by A3,A10;
-            then len (p.(n + 1)) = len (p.n) + len (M.(n+1)) by FINSEQ_1:35
-              .= (n * width M) + width M
-                by A6,A7,A9,A11,GOBRD13:4,NAT_1:13,14
-              .= (n + 1) * width M;
-            hence thesis;
-          end;
-        end;
-        hence len (p.(n + 1)) = (n + 1) * width M;
+  proof
+    let n be Element of NAT;
+    assume
+A6: n >= 1 & n <= len M implies len (p.n) = n * width M;
+    assume
+A7: n + 1 >= 1 & n + 1 <= len M;
+    now per cases;
+      suppose
+A8:     n = 0;
+        then 1 in dom M by A7,FINSEQ_3:27;
+        hence thesis by A2,A8,GOBRD13:4;
       end;
-A12:   for n being Element of NAT holds P[n] from NAT_1:sch 1(A4,A5);
-      let k such that
-A13:   k in dom p;
-       k in Seg len p by A13,FINSEQ_1:def 3;
-      then k >= 1 & k <= len p by FINSEQ_1:3;
-      hence thesis by A1,A12;
+      suppose
+A9:     n <> 0;
+A10:    n + 1 in dom M by A7,FINSEQ_3:27;
+        n < len M by A7,NAT_1:13;
+        then p.(n + 1) = (p.n) ^ M.(n+1) by A3,A9,NAT_1:14;
+        then len (p.(n + 1)) = len (p.n) + len (M.(n+1)) by FINSEQ_1:35
+          .= (n * width M) + width M by A6,A7,A9,A10,GOBRD13:4,NAT_1:13,14
+          .= (n + 1) * width M;
+        hence thesis;
+      end;
     end;
+    hence len (p.(n + 1)) = (n + 1) * width M;
+  end;
+A11: for n being Element of NAT holds P[n] from NAT_1:sch 1(A4,A5);
+  let k such that
+A12: k in dom p;
+  k in Seg len p by A12,FINSEQ_1:def 3;
+  then k >= 1 & k <= len p by FINSEQ_1:3;
+  hence thesis by A1,A11;
+end;
 
 theorem Th30:
   for M being Matrix of D for p being FinSequence of D* st
-    len p = len M & p.1 = M.1 &
-    (for k st k >= 1 & k < len M holds p.(k+1) = (p.k) ^ M.(k+1)) holds
-      for i,j st i in dom p & j in dom p & i <= j holds dom (p.i) c= dom (p.j)
-  proof let M be Matrix of D;
-        let p be FinSequence of D* such that
+  len p = len M & p.1 = M.1 &
+  (for k st k >= 1 & k < len M holds p.(k+1) = (p.k) ^ M.(k+1)) holds
+  for i,j st i in dom p & j in dom p & i <= j holds dom (p.i) c= dom (p.j)
+proof
+  let M be Matrix of D;
+  let p be FinSequence of D* such that
 A1: len p = len M & p.1 = M.1 &
-    for k st k >= 1 & k < len M holds p.(k+1) = (p.k) ^ M.(k+1);
-    let i,j such that
+  for k st k >= 1 & k < len M holds p.(k+1) = (p.k) ^ M.(k+1);
+  let i,j such that
 A2: i in dom p & j in dom p & i <= j;
-     len (p.i) = i * width M & len (p.j) = j * width M by A1,A2,Th29;
-    then len (p.i) <= len (p.j) by A2,NAT_1:4;
-    then Seg len (p.i) c= Seg len (p.j) by FINSEQ_1:7;
-    then dom (p.i) c= Seg len (p.j) by FINSEQ_1:def 3;
-    hence thesis by FINSEQ_1:def 3;
-  end;
+  len (p.i) = i * width M & len (p.j) = j * width M by A1,A2,Th29;
+  then len (p.i) <= len (p.j) by A2,NAT_1:4;
+  then Seg len (p.i) c= Seg len (p.j) by FINSEQ_1:7;
+  then dom (p.i) c= Seg len (p.j) by FINSEQ_1:def 3;
+  hence thesis by FINSEQ_1:def 3;
+end;
 
 theorem Th31:
   for M being Matrix of D for p being FinSequence of D* st
-    len p = len M & p.1 = M.1 &
-    (for k st k >= 1 & k < len M holds p.(k+1) = (p.k) ^ M.(k+1)) holds
-      len (p.1) = width M & (for j st [1,j] in Indices M holds
-      j in dom (p.1) & (p.1).j = M*(1,j))
-  proof let M be Matrix of D;
-        let p be FinSequence of D* such that
+  len p = len M & p.1 = M.1 &
+  (for k st k >= 1 & k < len M holds p.(k+1) = (p.k) ^ M.(k+1)) holds
+  len (p.1) = width M & (for j st [1,j] in Indices M holds
+  j in dom (p.1) & (p.1).j = M*(1,j))
+proof
+  let M be Matrix of D;
+  let p be FinSequence of D* such that
 A1: len p = len M & p.1 = M.1 &
-    for k st k >= 1 & k < len M holds p.(k+1) = (p.k) ^ M.(k+1);
-    per cases;
-    suppose
-A2:   len M = 0;
-then A3:   width M = 0 by MATRIX_1:def 4;
-       p = {} by A1,A2,FINSEQ_1:25;
-      then dom p = {} by FINSEQ_1:26;
-      then p.1 = {} by FUNCT_1:def 4;
-      hence len(p.1)=width M by A3,FINSEQ_1:25;
-      let j such that
-A4:   [1,j] in Indices M;
-      thus thesis by A2,A4,FINSEQ_1:4,MATRPROB:12;
-   end;
-    suppose len M > 0;
-      then 1 <= len p by A1,NAT_1:14;
-      then 1 in Seg len p by FINSEQ_1:3;
-then   1 in dom p by FINSEQ_1:def 3;
-      hence A5:   len (p.1) = 1 * width M by A1,Th29 .= width M;
-      let j such that
-A6:   [1,j] in Indices M;
-       j in Seg width M by A6,MATRPROB:12;
-      hence thesis by A1,A5,A6,FINSEQ_1:def 3,MATRPROB:14;
-    end;
+  for k st k >= 1 & k < len M holds p.(k+1) = (p.k) ^ M.(k+1);
+  per cases;
+  suppose
+A2: len M = 0;
+    then p = {} by A1,FINSEQ_1:25;
+    then dom p = {} by FINSEQ_1:26;
+    then p.1 = {} by FUNCT_1:def 4;
+    hence len(p.1)=width M by A2,MATRIX_1:def 4;
+    let j such that
+A3: [1,j] in Indices M;
+    thus thesis by A2,A3,FINSEQ_1:4,MATRPROB:12;
   end;
+  suppose len M > 0;
+    then 1 <= len p by A1,NAT_1:14;
+    then 1 in Seg len p by FINSEQ_1:3;
+    then 1 in dom p by FINSEQ_1:def 3;
+    hence
+A4: len (p.1) = 1 * width M by A1,Th29
+      .= width M;
+    let j such that
+A5: [1,j] in Indices M;
+    j in Seg width M by A5,MATRPROB:12;
+    hence thesis by A1,A4,A5,FINSEQ_1:def 3,MATRPROB:14;
+  end;
+end;
 
 theorem Th32:
   for M being Matrix of D for p being FinSequence of D* st
-     len p = len M & p.1 = M.1 &
-     (for k st k >= 1 & k < len M holds p.(k+1) = (p.k) ^ M.(k+1)) holds
-       for j st j >= 1 & j < len p holds
-       (for l st l in dom(p.j) holds (p.j).l = (p.(j+1)).l)
-  proof let M be Matrix of D;
-        let p be FinSequence of D* such that
+  len p = len M & p.1 = M.1 &
+  (for k st k >= 1 & k < len M holds p.(k+1) = (p.k) ^ M.(k+1)) holds
+  for j st j >= 1 & j < len p holds
+  (for l st l in dom(p.j) holds (p.j).l = (p.(j+1)).l)
+proof
+  let M be Matrix of D;
+  let p be FinSequence of D* such that
 A1: len p = len M & p.1 = M.1 &
-    for k st k >= 1 & k < len M holds p.(k+1) = (p.k) ^ M.(k+1);
-    let j such that
+  for k st k >= 1 & k < len M holds p.(k+1) = (p.k) ^ M.(k+1);
+  let j such that
 A2: j >= 1 & j < len p;
-    let l such that
+  let l such that
 A3: l in dom(p.j);
-     p.(j+1) = (p.j) ^ M.(j+1) by A1,A2;
-    hence (p.j).l = (p.(j+1)).l by A3,FINSEQ_1:def 7;
-  end;
+  p.(j+1) = (p.j) ^ M.(j+1) by A1,A2;
+  hence (p.j).l = (p.(j+1)).l by A3,FINSEQ_1:def 7;
+end;
 
 theorem Th33:
   for M being Matrix of D for p being FinSequence of D* st
-     len p = len M & p.1 = M.1 &
-     (for k st k >= 1 & k < len M holds p.(k+1) = (p.k) ^ M.(k+1)) holds
-       for i,j st i in dom p & j in dom p & i <= j holds
-       (for l st l in dom(p.i) holds (p.i).l = (p.j).l)
-  proof let M be Matrix of D;
-        let p be FinSequence of D* such that
+  len p = len M & p.1 = M.1 &
+  (for k st k >= 1 & k < len M holds p.(k+1) = (p.k) ^ M.(k+1)) holds
+  for i,j st i in dom p & j in dom p & i <= j holds
+  (for l st l in dom(p.i) holds (p.i).l = (p.j).l)
+proof
+  let M be Matrix of D;
+  let p be FinSequence of D* such that
 A1: len p = len M & p.1 = M.1 &
-    for k st k >= 1 & k < len M holds p.(k+1) = (p.k) ^ M.(k+1);
-    defpred P[Element of NAT] means $1 in dom p implies
-      for i st i in dom p & i<=$1 holds
-        (for l st l in dom(p.i) holds (p.i).l = (p.$1).l);
+  for k st k >= 1 & k < len M holds p.(k+1) = (p.k) ^ M.(k+1);
+  defpred P[Element of NAT] means $1 in dom p implies
+  for i st i in dom p & i<=$1 holds
+  (for l st l in dom(p.i) holds (p.i).l = (p.$1).l);
 A2: P[0]
-    proof
-       not 0 in Seg len p by FINSEQ_1:3;
-      hence thesis by FINSEQ_1:def 3;
-    end;
+  proof
+    not 0 in Seg len p by FINSEQ_1:3;
+    hence thesis by FINSEQ_1:def 3;
+  end;
 A3: for j st P[j] holds P[j+1]
-    proof let j such that
-A4:   j in dom p implies for i st i in dom p & i<=j holds
-        for l st l in dom(p.i) holds(p.i).l=(p.j).l;
-      assume j+1 in dom p;
-then A5:   j+1 >= 1 & j+1 <= len p by FINSEQ_3:27;
-then A6:   j+1 = 1 or j+1 > 1 by REAL_1:def 5;
-      let i such that
-A7:   i in dom p & i<=j+1;
-       i in Seg len p by A7,FINSEQ_1:def 3;
-then A8:   i >= 1 & i <= len p by FINSEQ_1:3;
-      per cases by A6,NAT_1:13;
-      suppose j+1 = 1;
-        hence thesis by A7,A8,XXREAL_0:1;
-      end;
-      suppose
-A9:     j >= 1;
-A10:     j < len p by A5,NAT_1:13;
-then A11:     j in Seg len p by A9,FINSEQ_1:3;
-then A12:     j in dom p by FINSEQ_1:def 3;
-        thus for l st l in dom(p.i) holds (p.i).l=(p.(j+1)).l
-        proof let l such that
-A13:       l in dom(p.i);
-          per cases by A7,NAT_1:8;
-          suppose
-A14:         i <= j;
-then A15:         dom(p.i) c= dom(p.j) by A1,A7,A12,Th30;
-            thus (p.i).l=(p.j).l by A4,A7,A11,A13,A14,FINSEQ_1:def 3
-              .= (p.(j+1)).l by A1,A9,A10,A13,A15,Th32;
-          end;
-          suppose
-             i = j+1;
-            hence thesis;
-          end;
+  proof
+    let j such that
+A4: j in dom p implies for i st i in dom p & i<=j holds
+    for l st l in dom(p.i) holds(p.i).l=(p.j).l;
+    assume j+1 in dom p;
+    then
+A5: j+1 >= 1 & j+1 <= len p by FINSEQ_3:27;
+    then
+A6: j+1 = 1 or j+1 > 1 by REAL_1:def 5;
+    let i such that
+A7: i in dom p & i<=j+1;
+    i in Seg len p by A7,FINSEQ_1:def 3;
+    then
+A8: i >= 1 & i <= len p by FINSEQ_1:3;
+    per cases by A6,NAT_1:13;
+    suppose j+1 = 1;
+      hence thesis by A7,A8,XXREAL_0:1;
+    end;
+    suppose
+A9:   j >= 1;
+A10:  j < len p by A5,NAT_1:13;
+      then
+A11:  j in Seg len p by A9,FINSEQ_1:3;
+      then
+A12:  j in dom p by FINSEQ_1:def 3;
+      thus for l st l in dom(p.i) holds (p.i).l=(p.(j+1)).l
+      proof
+        let l such that
+A13:    l in dom(p.i);
+        per cases by A7,NAT_1:8;
+        suppose
+A14:      i <= j;
+          then
+A15:      dom(p.i) c= dom(p.j) by A1,A7,A12,Th30;
+          thus (p.i).l=(p.j).l by A4,A7,A11,A13,A14,FINSEQ_1:def 3
+            .= (p.(j+1)).l by A1,A9,A10,A13,A15,Th32;
+        end;
+        suppose i = j+1;
+          hence thesis;
         end;
       end;
     end;
-     for j holds P[j] from NAT_1:sch 1(A2,A3);
-    hence thesis;
   end;
+  for j holds P[j] from NAT_1:sch 1(A2,A3);
+  hence thesis;
+end;
 
 theorem Th34:
   for M being Matrix of D for p being FinSequence of D* st
-     len p = len M & p.1 = M.1 &
-     (for k st k >= 1 & k < len M holds p.(k+1) = (p.k) ^ M.(k+1)) holds
-       for j st j >= 1 & j < len p holds
-       (for l st l in Seg width M holds (j*width M+l) in dom (p.(j+1)) &
-       (p.(j+1)).(j*width M+l)=(M.(j+1)).l)
-  proof let M be Matrix of D;
-        let p be FinSequence of D* such that
+  len p = len M & p.1 = M.1 &
+  (for k st k >= 1 & k < len M holds p.(k+1) = (p.k) ^ M.(k+1)) holds
+  for j st j >= 1 & j < len p holds
+  (for l st l in Seg width M holds (j*width M+l) in dom (p.(j+1)) &
+  (p.(j+1)).(j*width M+l)=(M.(j+1)).l)
+proof
+  let M be Matrix of D;
+  let p be FinSequence of D* such that
 A1: len p = len M & p.1 = M.1 &
-    for k st k >= 1 & k < len M holds p.(k+1) = (p.k) ^ M.(k+1);
+  for k st k >= 1 & k < len M holds p.(k+1) = (p.k) ^ M.(k+1);
 A2: dom p = dom M by A1,FINSEQ_3:31;
-    let j such that
+  let j such that
 A3: j >= 1 & j < len p;
-    let l such that
+  let l such that
 A4: l in Seg width M;
 A5: l >= 1 & l <= width M by A4,FINSEQ_1:3;
 A6: p.(j+1) = (p.j) ^ M.(j+1) by A1,A3;
-     j+1 >=1 & j+1 <= len M by A1,A3,NAT_1:13;
-    then j+1 in Seg len M by FINSEQ_1:3;
-then A7: j+1 in dom M by FINSEQ_1:def 3;
-then A8: l in dom(M.(j+1)) by A4,Th18;
-     j in Seg len p by A3,FINSEQ_1:3;
-then A9: j in dom p by FINSEQ_1:def 3;
-     len(p.(j+1)) = (j+1) * width M by A1,A2,A7,Th29
-      .= j * width M + width M;
-then A10: j*width M + l <= len(p.(j+1)) by A5,XREAL_1:9;
-     j*width M + l >= 0+1 by A5,XREAL_1:9;
-    then j*width M + l in Seg len(p.(j+1)) by A10,FINSEQ_1:3;
-    hence j*width M + l in dom(p.(j+1)) by FINSEQ_1:def 3;
-     len(p.j) = j * width M by A1,A9,Th29;
-    hence thesis by A6,A8,FINSEQ_1:def 7;
-  end;
+  j+1 >=1 & j+1 <= len M by A1,A3,NAT_1:13;
+  then j+1 in Seg len M by FINSEQ_1:3;
+  then
+A7: j+1 in dom M by FINSEQ_1:def 3;
+  then
+A8: l in dom(M.(j+1)) by A4,Th18;
+  j in Seg len p by A3,FINSEQ_1:3;
+  then
+A9: j in dom p by FINSEQ_1:def 3;
+  len(p.(j+1)) = (j+1) * width M by A1,A2,A7,Th29
+    .= j * width M + width M;
+  then
+A10: j*width M + l <= len(p.(j+1)) by A5,XREAL_1:9;
+  j*width M + l >= 0+1 by A5,XREAL_1:9;
+  then j*width M + l in Seg len(p.(j+1)) by A10,FINSEQ_1:3;
+  hence j*width M + l in dom(p.(j+1)) by FINSEQ_1:def 3;
+  len(p.j) = j * width M by A1,A9,Th29;
+  hence thesis by A6,A8,FINSEQ_1:def 7;
+end;
 
 theorem Th35:
   for M being Matrix of D for p being FinSequence of D* st
-    len p = len M & p.1 = M.1 &
-    (for k st k >= 1 & k < len M holds p.(k+1) = (p.k) ^ M.(k+1)) holds
-      for i,j st [i,j] in Indices M holds (i-1)*(width M)+j in dom(p.i) &
-        M*(i,j) = (p.i).((i-1)*(width M)+j)
-  proof let M be Matrix of D;
-        let p be FinSequence of D* such that
+  len p = len M & p.1 = M.1 &
+  (for k st k >= 1 & k < len M holds p.(k+1) = (p.k) ^ M.(k+1)) holds
+  for i,j st [i,j] in Indices M holds (i-1)*(width M)+j in dom(p.i) &
+  M*(i,j) = (p.i).((i-1)*(width M)+j)
+proof
+  let M be Matrix of D;
+  let p be FinSequence of D* such that
 A1: len p = len M & p.1 = M.1 &
-    for k st k >= 1 & k < len M holds p.(k+1) = (p.k) ^ M.(k+1);
-    let i,j such that
+  for k st k >= 1 & k < len M holds p.(k+1) = (p.k) ^ M.(k+1);
+  let i,j such that
 A2: [i,j] in Indices M;
 A3: i in Seg len M & j in Seg width M by A2,MATRPROB:12;
-    then i in dom M by FINSEQ_1:def 3;
-then A4: i >= 1 & i <= len M by FINSEQ_3:27;
-    per cases by A4,REAL_1:def 5;
-    suppose
-A5:   i > 1;
-      then reconsider ii = i - 1 as Element of NAT by NAT_1:20;
-       ii + 1 > 1 by A5;
-then A6:   ii >= 1 by NAT_1:13;
-       i < len M + 1 by A4,NAT_1:13;
-      then i - 1 < (len M + 1) - 1 by REAL_1:92;
-      then (ii*width M+j) in dom(p.(ii+1)) &
-        (p.(ii+1)).(ii*width M+j)=(M.(ii+1)).j by A1,A3,A6,Th34;
-      hence thesis by A2,MATRPROB:14;
-    end;
-    suppose i = 1;
-      hence thesis by A1,A2,Th31;
-    end;
+  then i in dom M by FINSEQ_1:def 3;
+  then
+A4: i >= 1 & i <= len M by FINSEQ_3:27;
+  per cases by A4,REAL_1:def 5;
+  suppose
+A5: i > 1;
+    then reconsider ii = i - 1 as Element of NAT by NAT_1:20;
+    ii + 1 > 1 by A5;
+    then
+A6: ii >= 1 by NAT_1:13;
+    i < len M + 1 by A4,NAT_1:13;
+    then i - 1 < (len M + 1) - 1 by REAL_1:92;
+    then (ii*width M+j) in dom(p.(ii+1)) &
+    (p.(ii+1)).(ii*width M+j)=(M.(ii+1)).j by A1,A3,A6,Th34;
+    hence thesis by A2,MATRPROB:14;
   end;
+  suppose i = 1;
+    hence thesis by A1,A2,Th31;
+  end;
+end;
 
 theorem Th36:
   for M being Matrix of D for p being FinSequence of D* st
-    len p = len M & p.1 = M.1 &
-    (for k st k >= 1 & k < len M holds p.(k+1) = (p.k) ^ M.(k+1)) holds
-      for i,j st [i,j] in Indices M holds (i-1)*(width M)+j in dom(p.(len M))
-      & M*(i,j) = (p.(len M)).((i-1)*(width M)+j)
-  proof let M be Matrix of D;
-        let p be FinSequence of D* such that
+  len p = len M & p.1 = M.1 &
+  (for k st k >= 1 & k < len M holds p.(k+1) = (p.k) ^ M.(k+1)) holds
+  for i,j st [i,j] in Indices M holds (i-1)*(width M)+j in dom(p.(len M))
+  & M*(i,j) = (p.(len M)).((i-1)*(width M)+j)
+proof
+  let M be Matrix of D;
+  let p be FinSequence of D* such that
 A1: len p = len M & p.1 = M.1 &
-    for k st k >= 1 & k < len M holds p.(k+1) = (p.k) ^ M.(k+1);
-    let i,j such that
+  for k st k >= 1 & k < len M holds p.(k+1) = (p.k) ^ M.(k+1);
+  let i,j such that
 A2: [i,j] in Indices M;
 A3: i in Seg len M & j in Seg width M by A2,MATRPROB:12;
-then A4: i >=1 & i <= len M by FINSEQ_1:3;
+  then
+A4: i >=1 & i <= len M by FINSEQ_1:3;
 A5: i in dom p by A1,A3,FINSEQ_1:def 3;
-     len M >= 1 & len M <= len p by A1,A3,FINSEQ_1:4,NAT_1:14;
-    then len M in Seg len p by FINSEQ_1:3;
-then A6: len M in dom p by FINSEQ_1:def 3;
-     i > 0 by A3,FINSEQ_1:3;
-    then reconsider ii = i-1 as Element of NAT by NAT_1:20;
-    set jj=ii*(width M)+j;
+  len M >= 1 & len M <= len p by A1,A3,FINSEQ_1:4,NAT_1:14;
+  then len M in Seg len p by FINSEQ_1:3;
+  then
+A6: len M in dom p by FINSEQ_1:def 3;
+  i > 0 by A3,FINSEQ_1:3;
+  then reconsider ii = i-1 as Element of NAT by NAT_1:20;
+  set jj=ii*(width M)+j;
 A7: (i-1)*(width M)+j in dom(p.i) &
-    M*(i,j) = (p.i).((i-1)*(width M)+j) by A1,A2,Th35;
-     dom(p.i) c= dom(p.(len M)) by A1,A4,A5,A6,Th30;
-    hence (i-1)*(width M)+j in dom(p.(len M)) &
-    M*(i,j) = (p.(len M)).((i-1)*(width M)+j) by A1,A4,A5,A6,A7,Th33;
-  end;
+  M*(i,j) = (p.i).((i-1)*(width M)+j) by A1,A2,Th35;
+  dom(p.i) c= dom(p.(len M)) by A1,A4,A5,A6,Th30;
+  hence (i-1)*(width M)+j in dom(p.(len M)) &
+  M*(i,j) = (p.(len M)).((i-1)*(width M)+j) by A1,A4,A5,A6,A7,Th33;
+end;
 
 theorem Th37:
   for M being Matrix of REAL for p being FinSequence of REAL* st
-    len p = len M & p.1 = M.1 &
-    (for k st k >= 1 & k < len M holds p.(k+1)=(p.k) ^ M.(k+1)) holds
-      for k st k >= 1 & k < len M holds Sum(p.(k+1))=Sum(p.k)+Sum(M.(k+1))
-  proof let M be Matrix of REAL;
-        let p be FinSequence of REAL* such that
-     len p = len M and
-     p.1 = M.1 and
+  len p = len M & p.1 = M.1 &
+  (for k st k >= 1 & k < len M holds p.(k+1)=(p.k) ^ M.(k+1)) holds
+  for k st k >= 1 & k < len M holds Sum(p.(k+1))=Sum(p.k)+Sum(M.(k+1))
+proof
+  let M be Matrix of REAL;
+  let p be FinSequence of REAL* such that len p = len M and p.1 = M.1 and
 A1: for k st k >= 1 & k < len M holds p.(k+1) = (p.k) ^ M.(k+1);
-    let k such that
+  let k such that
 A2: k >= 1 & k < len M;
-     p.(k+1) = (p.k) ^ M.(k+1) by A1,A2;
-    hence thesis by RVSUM_1:105;
-  end;
+  p.(k+1) = (p.k) ^ M.(k+1) by A1,A2;
+  hence thesis by RVSUM_1:105;
+end;
 
 theorem Th38:
   for M being Matrix of REAL for p being FinSequence of REAL* st
-    len p = len M & p.1 = M.1 &
-    (for k st k >= 1 & k < len M holds p.(k+1)=(p.k) ^ M.(k+1)) holds
-      SumAll M = Sum(p.(len M))
-  proof let M be Matrix of REAL;
-        let p be FinSequence of REAL* such that
+  len p = len M & p.1 = M.1 &
+  (for k st k >= 1 & k < len M holds p.(k+1)=(p.k) ^ M.(k+1)) holds
+  SumAll M = Sum(p.(len M))
+proof
+  let M be Matrix of REAL;
+  let p be FinSequence of REAL* such that
 A1: len p = len M and
 A2: p.1 = M.1 and
 A3: for k st k >= 1 & k < len M holds p.(k+1) = (p.k) ^ M.(k+1);
-    per cases;
-    suppose
-A4:   len M = 0;
-      then p = {} by A1,FINSEQ_1:25;
-      then dom p = {} by FINSEQ_1:26;
-      hence Sum(p.(len M)) = 0 by FUNCT_1:def 4,RVSUM_1:102
-        .= SumAll M by A4,MATRPROB:23;
-    end;
-    suppose
-A5:   len M > 0;
+  per cases;
+  suppose
+A4: len M = 0;
+    then p = {} by A1,FINSEQ_1:25;
+    then dom p = {} by FINSEQ_1:26;
+    hence Sum(p.(len M)) = 0 by FUNCT_1:def 4,RVSUM_1:102
+      .= SumAll M by A4,MATRPROB:23;
+  end;
+  suppose
+A5: len M > 0;
     set q = LineSum M;
 A6: len q = len M by MATRPROB:def 1;
-then A7: len M >= 1 & len q >= 1 by A5,NAT_1:14;
+    then
+A7: len M >= 1 & len q >= 1 by A5,NAT_1:14;
 A8: len M in Seg len M by A5,FINSEQ_1:5;
 A9: len Sum p = len p by MATRPROB:def 1;
-then A10: len M in dom Sum p by A1,A8,FINSEQ_1:def 3;
+    then
+A10: len M in dom Sum p by A1,A8,FINSEQ_1:def 3;
     consider qq being FinSequence of REAL such that
 A11: len qq = len q & qq.1 = q.1 &
     (for k st 0 <> k & k < len q holds qq.(k+1) = qq.k + q.(k+1)) &
-      Sum q = qq.(len q) by A7,Th9;
+    Sum q = qq.(len q) by A7,Th9;
 A12: qq = Sum p
     proof
-A13:   len qq = len M by A11,MATRPROB:def 1 .= len Sum p by A1,MATRPROB:def 1;
-A14:   dom Sum p = dom p by A9,FINSEQ_3:31;
-       for j be Nat st j in Seg len qq holds qq.j = (Sum p).j
+A13:  len qq = len M by A11,MATRPROB:def 1
+        .= len Sum p by A1,MATRPROB:def 1;
+A14:  dom Sum p = dom p by A9,FINSEQ_3:31;
+      for j be Nat st j in Seg len qq holds qq.j = (Sum p).j
       proof
         defpred P[Nat] means $1 in Seg len qq implies qq.$1 = (Sum p).$1;
-A15:     P[0] by FINSEQ_1:3;
-A16:     for k st P[k] holds P[k+1]
-        proof let k such that
-A17:       P[k];
+A15:    P[0] by FINSEQ_1:3;
+A16:    for k st P[k] holds P[k+1]
+        proof
+          let k such that
+A17:      P[k];
           assume
-A18:       k+1 in Seg len qq;
-then A19:       k+1 in dom M & k+1 in dom Sum p by A1,A6,A9,A11,FINSEQ_1:def 3;
-A20:       k+1 >= 1 & k+1 <= len qq by A18,FINSEQ_1:3;
-then A21:       k+1 = 1 or k+1 > 1 by REAL_1:def 5;
+A18:      k+1 in Seg len qq;
+          then
+A19:      k+1 in dom M & k+1 in dom Sum p by A1,A6,A9,A11, FINSEQ_1:def 3;
+A20:      k+1 >= 1 & k+1 <= len qq by A18,FINSEQ_1:3;
+          then
+A21:      k+1 = 1 or k+1 > 1 by REAL_1:def 5;
           per cases by A21,NAT_1:13;
           suppose
-A22:         k+1 = 1;
-A23:         1 in Seg len M by A7,FINSEQ_1:3;
-then A24:         1 in dom M & 1 in dom p by A1,FINSEQ_1:def 3;
-             qq.(k+1) = Sum Line(M,1) by A11,A22,A23,MATRPROB:20
+A22:        k+1 = 1;
+A23:        1 in Seg len M by A7,FINSEQ_1:3;
+            then
+A24:        1 in dom M & 1 in dom p by A1,FINSEQ_1:def 3;
+            qq.(k+1) = Sum Line(M,1) by A11,A22,A23,MATRPROB:20
               .= Sum(M.1) by A24,MATRIX_2:18
               .= (Sum p).1 by A2,A14,A24,MATRPROB:def 1;
             hence thesis by A22;
           end;
           suppose
-A25:         k >= 1;
-A26:         k < len qq by A20,NAT_1:13;
+A25:        k >= 1;
+A26:        k < len qq by A20,NAT_1:13;
             then k in Seg len qq by A25,FINSEQ_1:3;
-then A27:         k in dom Sum p by A13,FINSEQ_1:def 3;
-A28:         k < len M by A11,A26,MATRPROB:def 1;
-             qq.(k+1) = qq.k + q.(k+1) by A11,A25,A26
+            then
+A27:        k in dom Sum p by A13,FINSEQ_1:def 3;
+A28:        k < len M by A11,A26,MATRPROB:def 1;
+            qq.(k+1) = qq.k + q.(k+1) by A11,A25,A26
               .= Sum(p.k) + q.(k+1) by A17,A25,A26,A27,FINSEQ_1:3
-,MATRPROB:def 1
+            ,MATRPROB:def 1
               .= Sum(p.k) + Sum Line(M,(k+1)) by A6,A11,A18,MATRPROB:20
               .= Sum(p.k) + Sum(M.(k+1)) by A19,MATRIX_2:18
               .= Sum(p.(k+1)) by A1,A2,A3,A25,A28,Th37
@@ -1678,7 +1876,7 @@ A28:         k < len M by A11,A26,MATRPROB:def 1;
             hence thesis;
           end;
         end;
-         for j holds P[j] from NAT_1:sch 1(A15,A16);
+        for j holds P[j] from NAT_1:sch 1(A15,A16);
         hence thesis;
       end;
       hence thesis by A13,FINSEQ_2:10;
@@ -1686,40 +1884,43 @@ A28:         k < len M by A11,A26,MATRPROB:def 1;
     thus SumAll M = Sum q by MATRPROB:def 3
       .= (Sum p).(len M) by A11,A12,MATRPROB:def 1
       .=Sum(p.(len M)) by A10,MATRPROB:def 1;
-    end;
   end;
+end;
 
-definition let D be non empty set;
-           let M be Matrix of D;
-  func Mx2FinS(M) -> FinSequence of D means :Def5:
+definition
+  let D be non empty set;
+  let M be Matrix of D;
+  func Mx2FinS(M) -> FinSequence of D means
+  :Def5:
   it = {} if len M = 0 otherwise
-  ex p being FinSequence of D* st it = p.(len M) &
-    len p = len M & p.1 = M.1 &
-    for k st k >= 1 & k < len M holds p.(k+1) = (p.k) ^ M.(k+1);
+  ex p being FinSequence of D* st it = p.(len M) & len p = len M & p.1 = M.1 &
+  for k st k >= 1 & k < len M holds p.(k+1) = (p.k) ^ M.(k+1);
   existence
   proof
     thus len M = 0 implies ex z being FinSequence of D st z = {}
-    proof assume len M = 0;
-       {} is FinSequence of D by FINSEQ_1:29;
+    proof
+      assume len M = 0;
+      {} is FinSequence of D by FINSEQ_1:29;
       hence thesis;
     end;
     thus len M <> 0 implies (ex z being FinSequence of D st
-      ex p being FinSequence of D* st z = p.(len M) &
-      len p = len M & p.1 = M.1 &
-      for k st k >= 1 & k < len M holds p.(k+1) = (p.k) ^ M.(k+1))
-    proof assume
+    ex p being FinSequence of D* st z = p.(len M) &
+    len p = len M & p.1 = M.1 &
+    for k st k >= 1 & k < len M holds p.(k+1) = (p.k) ^ M.(k+1))
+    proof
+      assume
 A1:   len M <> 0;
       defpred P[Element of NAT,set,set] means
-        ex p1,q1 being Element of D* st q1 = $2 & p1 = M.($1+1) & $3 = q1 ^ p1;
-       reconsider M1 = M.1 as Element of D* by FINSEQ_1:def 11;
+      ex p1,q1 being Element of D* st q1 = $2 & p1 = M.($1+1) & $3 = q1 ^ p1;
+      reconsider M1 = M.1 as Element of D* by FINSEQ_1:def 11;
 A2:   for n being Element of NAT st 1 <= n & n < len M
-        for x being Element of D* ex y being Element of D* st P[n,x,y]
+      for x being Element of D* ex y being Element of D* st P[n,x,y]
       proof
         let n be Element of NAT such that
 A3:     1 <= n & n < len M;
         let x be Element of D*;
 A4:     1 <= n+1 by NAT_1:11;
-         n+1 <= len M by A3,NAT_1:13;
+        n+1 <= len M by A3,NAT_1:13;
         then n+1 in dom M by A4,FINSEQ_3:27;
         then reconsider p1 = M.(n+1) as Element of D* by FINSEQ_2:13;
         set y = x ^ p1;
@@ -1727,21 +1928,20 @@ A4:     1 <= n+1 by NAT_1:11;
         take y, p1, x;
         thus thesis;
       end;
-       ex p being FinSequence of D* st len p = len M &
-        (p.1 = M1 or len M = 0) & for n being Element of NAT st
-        1 <= n & n < len M holds P[n,p.n,p.(n+1)]
-          from RECDEF_1:sch 6(A2);
+      ex p being FinSequence of D* st len p = len M &
+      (p.1 = M1 or len M = 0) & for n being Element of NAT st
+      1 <= n & n < len M holds P[n,p.n,p.(n+1)] from RECDEF_1:sch 6(A2);
       then consider p being FinSequence of D* such that
-A5:     len p = len M and
-A6:     p.1 = M1 or len M = 0 and
-A7:   for n being Element of NAT st 1 <= n & n < len M holds
-        P[n,p.n,p.(n+1)];
+A5:   len p = len M and
+A6:   p.1 = M1 or len M = 0 and
+A7:   for n being Element of NAT st 1 <= n & n < len M holds P[n,p.n,p.(n+1)];
 A8:   for n being Element of NAT st 1 <= n & n < len M holds
-        p.(n+1)= (p.n) ^ M.(n+1)
-      proof let n be Element of NAT such that
+      p.(n+1)= (p.n) ^ M.(n+1)
+      proof
+        let n be Element of NAT such that
 A9:     1 <= n & n < len M;
         consider p1,q1 being Element of D* such that
-A10:     q1 = p.n & p1 = M.(n+1) & p.(n+1) = q1 ^ p1 by A7,A9;
+A10:    q1 = p.n & p1 = M.(n+1) & p.(n+1) = q1 ^ p1 by A7,A9;
         thus thesis by A10;
       end;
       reconsider z = p.len M as FinSequence of D;
@@ -1750,37 +1950,39 @@ A10:     q1 = p.n & p1 = M.(n+1) & p.(n+1) = q1 ^ p1 by A7,A9;
     end;
   end;
   uniqueness
-  proof let z1,z2 be FinSequence of D;
+  proof
+    let z1,z2 be FinSequence of D;
     thus len M = 0 & z1 ={} & z2={} implies z1=z2;
-    assume
-     len M <> 0;
-then A11: len M >= 1 by NAT_1:14;
+    assume len M <> 0;
+    then
+A11: len M >= 1 by NAT_1:14;
     given p1 being FinSequence of D* such that
-A12:   z1 = p1.(len M) & len p1 = len M & p1.1 = M.1 &
-      for k st k >= 1 & k < len M holds p1.(k+1) = (p1.k) ^ M.(k+1);
+A12: z1 = p1.(len M) & len p1 = len M & p1.1 = M.1 &
+    for k st k >= 1 & k < len M holds p1.(k+1) = (p1.k) ^ M.(k+1);
     given p2 being FinSequence of D* such that
-A13:   z2 = p2.(len M) & len p2 = len M & p2.1 = M.1 &
-      for k st k >= 1 & k < len M holds p2.(k+1) = (p2.k) ^ M.(k+1);
- for k st k >= 1 & k <= len M holds p1.k = p2.k
+A13: z2 = p2.(len M) & len p2 = len M & p2.1 = M.1 &
+    for k st k >= 1 & k < len M holds p2.(k+1) = (p2.k) ^ M.(k+1);
+    for k st k >= 1 & k <= len M holds p1.k = p2.k
     proof
       defpred P[Element of NAT] means
       $1 >= 1 & $1 <= len M implies p1.$1 = p2.$1;
-A14:   P[0];
-A15:   for n being Element of NAT st P[n] holds P[n + 1]
-      proof let n being Element of NAT;
+A14:  P[0];
+A15:  for n being Element of NAT st P[n] holds P[n + 1]
+      proof
+        let n being Element of NAT;
         assume
-A16:     n >= 1 & n <= len M implies p1.n = p2.n;
+A16:    n >= 1 & n <= len M implies p1.n = p2.n;
         assume
-A17:     n + 1 >= 1 & n + 1 <= len M;
-         now per cases;
+A17:    n + 1 >= 1 & n + 1 <= len M;
+        now per cases;
           suppose n = 0;
             hence thesis by A12,A13;
           end;
-          suppose n <> 0;
-then A18:         n >= 1 by NAT_1:14;
-A19:         n < len M by A17,NAT_1:13;
-            hence p1.(n + 1) = (p2.n) ^ M.(n+1) by A12,A16,A18
-              .= p2.(n + 1) by A13,A18,A19;
+          suppose
+A18:        n <> 0;
+A19:        n < len M by A17,NAT_1:13;
+            hence p1.(n + 1) = (p2.n) ^ M.(n+1) by A12,A16,A18,NAT_1:14
+              .= p2.(n + 1) by A13,A18,A19,NAT_1:14;
           end;
         end;
         hence p1.(n + 1) = p2.(n + 1);
@@ -1793,187 +1995,198 @@ A19:         n < len M by A17,NAT_1:13;
 end;
 
 theorem Th39:
-  for M being Matrix of D holds
-    len Mx2FinS(M) = len M * width M
-  proof let M be Matrix of D;
-    per cases;
-    suppose
-A1:   len M = 0;
-      then Mx2FinS(M) = {} by Def5;
-      hence len Mx2FinS(M) = len M * width M by A1;
-    end;
-    suppose
-A2:   len M > 0;
-then A3:   len M in Seg len M by FINSEQ_1:5;
-      consider p being FinSequence of D* such that
-A4:   Mx2FinS(M) = p.(len M) and
-A5:   len p = len M & p.1 = M.1 &
-      for k st k >= 1 & k < len M holds
-        p.(k+1) = (p.k) ^ M.(k+1) by A2,Def5;
-   len M in dom p by A3,A5,FINSEQ_1:def 3;
-      hence len Mx2FinS(M) = len M * width M by A4,A5,Th29;
-    end;
+  for M being Matrix of D holds len Mx2FinS(M) = len M * width M
+proof
+  let M be Matrix of D;
+  per cases;
+  suppose
+A1: len M = 0;
+    then Mx2FinS(M) = {} by Def5;
+    hence len Mx2FinS(M) = len M * width M by A1;
   end;
+  suppose
+A2: len M > 0;
+    then
+A3: len M in Seg len M by FINSEQ_1:5;
+    consider p being FinSequence of D* such that
+A4: Mx2FinS(M) = p.(len M) and
+A5: len p = len M & p.1 = M.1 & for k st k >= 1 & k < len M holds
+    p.(k+1) = (p.k) ^ M.(k+1) by A2,Def5;
+    len M in dom p by A3,A5,FINSEQ_1:def 3;
+    hence len Mx2FinS(M) = len M * width M by A4,A5,Th29;
+  end;
+end;
 
 theorem Th40:
   for M being Matrix of D for i,j st [i,j] in Indices M holds
-    (i-1) * (width M) + j in dom Mx2FinS M &
-    M*(i,j) = (Mx2FinS(M)).((i-1) * (width M) + j)
-  proof let M be Matrix of D;
-        let i,j such that
+  (i-1) * (width M) + j in dom Mx2FinS M &
+  M*(i,j) = (Mx2FinS(M)).((i-1) * (width M) + j)
+proof
+  let M be Matrix of D;
+  let i,j such that
 A1: [i,j] in Indices M;
- len M <> 0 & width M <> 0 by A1,FINSEQ_1:4,MATRPROB:12;
-    then consider p being FinSequence of D* such that
+  len M <> 0 & width M <> 0 by A1,FINSEQ_1:4,MATRPROB:12;
+  then consider p being FinSequence of D* such that
 A2: Mx2FinS(M) = p.(len M) and
-A3: len p = len M & p.1 = M.1 &
-    for k st k >= 1 & k < len M holds
-    p.(k+1) = (p.k) ^ M.(k+1) by Def5;
-    thus thesis by A1,A2,A3,Th36;
-  end;
+A3: len p = len M & p.1 = M.1 & for k st k >= 1 & k < len M holds
+  p.(k+1) = (p.k) ^ M.(k+1) by Def5;
+  thus thesis by A1,A2,A3,Th36;
+end;
 
 theorem Th41:
-  for M being Matrix of D for k,l st
-    k in dom(Mx2FinS(M)) & l = k - 1 holds
-    [((l div width M)+1),((l mod width M)+1)] in Indices M &
-    (Mx2FinS(M)).k = M*(((l div width M)+1),((l mod width M)+1))
-  proof let M be Matrix of D;
-        let k,l such that
+  for M being Matrix of D for k,l st k in dom(Mx2FinS(M)) & l = k - 1 holds
+  [((l div width M)+1),((l mod width M)+1)] in Indices M &
+  (Mx2FinS(M)).k = M*(((l div width M)+1),((l mod width M)+1))
+proof
+  let M be Matrix of D;
+  let k,l such that
 A1: k in dom(Mx2FinS(M)) & l = k - 1;
 A2: Mx2FinS(M) <> {} by A1,FINSEQ_1:26;
 A3: len Mx2FinS(M) = len M * width M by Th39;
-then A4: len M <> 0 & width M <> 0 by A2,FINSEQ_1:25;
-then A5: len M > 0 & width M > 0;
-    set ii = (l div width M)+1;
-    set jj = (l mod width M)+1;
-     k in Seg len Mx2FinS(M) by A1,FINSEQ_1:def 3;
-    then k >= 1 & k <= len Mx2FinS(M) by FINSEQ_1:3;
-    then k < len M * width M + 1 by A3,NAT_1:13;
-then A6: k - 1 < len M * width M + 1 - 1 by XREAL_1:11;
-     width M divides len M * width M by NAT_D:def 3;
-    then l div width M < (len M * width M) div width M by A1,A4,A6,Th1;
-    then l div width M < len M by A4,NAT_D:18;
-then A7: ii <= len M by NAT_1:13;
-     l mod width M < width M by A5,NAT_D:1;
-then A8: jj <= width M by NAT_1:13;
+  then
+A4: len M <> 0 & width M <> 0 by A2,FINSEQ_1:25;
+  then
+A5: len M > 0 & width M > 0;
+  set ii = (l div width M)+1;
+  set jj = (l mod width M)+1;
+  k in Seg len Mx2FinS(M) by A1,FINSEQ_1:def 3;
+  then k >= 1 & k <= len Mx2FinS(M) by FINSEQ_1:3;
+  then k < len M * width M + 1 by A3,NAT_1:13;
+  then
+A6: k - 1 < len M * width M + 1 - 1 by XREAL_1:11;
+  width M divides len M * width M by NAT_D:def 3;
+  then l div width M < (len M * width M) div width M by A1,A4,A6,Th1;
+  then l div width M < len M by A4,NAT_D:18;
+  then
+A7: ii <= len M by NAT_1:13;
+  l mod width M < width M by A5,NAT_D:1;
+  then
+A8: jj <= width M by NAT_1:13;
 A9: ii >= 1 & jj >= 1 by NAT_1:11;
-then A10: ii in Seg len M by A7,FINSEQ_1:3;
+  then
+A10: ii in Seg len M by A7,FINSEQ_1:3;
 A11: jj in Seg width M by A8,A9,FINSEQ_1:3;
 A12: l = (l div width M) * (width M) + (l mod width M) by A5,NAT_D:2;
-    thus [ii,jj] in Indices M by A10,A11,MATRPROB:12;
-    then M*(ii,jj) = (Mx2FinS(M)).((ii-1) * (width M) + jj) by Th40
-      .= (Mx2FinS(M)).k by A1,A12;
-    hence thesis;
-  end;
+  thus [ii,jj] in Indices M by A10,A11,MATRPROB:12;
+  then M*(ii,jj) = (Mx2FinS(M)).((ii-1) * (width M) + jj) by Th40
+    .= (Mx2FinS(M)).k by A1,A12;
+  hence thesis;
+end;
 
 theorem Th42:
   SumAll MR = Sum Mx2FinS MR
-  proof
-    per cases;
-    suppose
-A1:   len MR = 0;
-      hence Sum Mx2FinS MR = 0 by Def5,RVSUM_1:102
-        .= SumAll MR by A1,MATRPROB:23;
-    end;
-    suppose
-   len MR > 0;
-      then consider p being FinSequence of REAL* such that
-A2:   Mx2FinS(MR) = p.(len MR) and
-A3:   len p = len MR & p.1 = MR.1 &
-      for k st k >= 1 & k < len MR holds
-        p.(k+1) = (p.k) ^ MR.(k+1) by Def5;
-      thus Sum Mx2FinS(MR) = SumAll MR by A2,A3,Th38;
-    end;
+proof
+  per cases;
+  suppose
+A1: len MR = 0;
+    hence Sum Mx2FinS MR = 0 by Def5,RVSUM_1:102
+      .= SumAll MR by A1,MATRPROB:23;
   end;
+  suppose len MR > 0;
+    then consider p being FinSequence of REAL* such that
+A2: Mx2FinS(MR) = p.(len MR) and
+A3: len p = len MR & p.1 = MR.1 & for k st k >= 1 & k < len MR holds
+    p.(k+1) = (p.k) ^ MR.(k+1) by Def5;
+    thus Sum Mx2FinS(MR) = SumAll MR by A2,A3,Th38;
+  end;
+end;
 
 theorem Th43:
   MR is m-nonnegative iff Mx2FinS(MR) is nonnegative
-  proof
-    hereby assume
-A1:   MR is m-nonnegative;
-       for k st k in dom(Mx2FinS(MR)) holds (Mx2FinS(MR)).k >= 0
-      proof
-          let i such that
-A2:       i in dom Mx2FinS(MR);
-           i in Seg len Mx2FinS(MR) by A2,FINSEQ_1:def 3;
-          then i >= 1 & i <= len Mx2FinS(MR) by FINSEQ_1:3;
-          then reconsider l = i - 1 as Element of NAT by NAT_1:21;
-           [((l div width MR)+1),((l mod width MR)+1)] in Indices MR &
-            (Mx2FinS(MR)).i = MR*(((l div width MR)+1),((l mod width MR)+1))
-             by A2,Th41;
-          hence thesis by A1,MATRPROB:def 6;
-      end;
-      hence Mx2FinS(MR) is nonnegative by Def1;
-    end;
+proof
+  hereby
     assume
-A3: Mx2FinS(MR) is nonnegative;
-     now let i,j such that
-A4:   [i,j] in Indices MR;
-       (i-1) * (width MR) + j in dom Mx2FinS MR &
-      MR*(i,j) = (Mx2FinS(MR)).((i-1) * (width MR) + j) by A4,Th40;
-      hence MR*(i,j) >= 0 by A3,Def1;
+A1: MR is m-nonnegative;
+    for k st k in dom(Mx2FinS(MR)) holds (Mx2FinS(MR)).k >= 0
+    proof
+      let i such that
+A2:   i in dom Mx2FinS(MR);
+      i in Seg len Mx2FinS(MR) by A2,FINSEQ_1:def 3;
+      then i >= 1 & i <= len Mx2FinS(MR) by FINSEQ_1:3;
+      then reconsider l = i - 1 as Element of NAT by NAT_1:21;
+      [((l div width MR)+1),((l mod width MR)+1)] in Indices MR &
+      (Mx2FinS(MR)).i = MR*(((l div width MR)+1),((l mod width MR)+1))
+      by A2,Th41;
+      hence thesis by A1,MATRPROB:def 6;
     end;
-    hence MR is m-nonnegative by MATRPROB:def 6;
+    hence Mx2FinS(MR) is nonnegative by Def1;
   end;
+  assume
+A3: Mx2FinS(MR) is nonnegative;
+  now
+    let i,j such that
+A4: [i,j] in Indices MR;
+    (i-1) * (width MR) + j in dom Mx2FinS MR &
+    MR*(i,j) = (Mx2FinS(MR)).((i-1) * (width MR) + j) by A4,Th40;
+    hence MR*(i,j) >= 0 by A3,Def1;
+  end;
+  hence MR is m-nonnegative by MATRPROB:def 6;
+end;
 
 theorem Th44:
   MR is Joint_Probability iff Mx2FinS(MR) is ProbFinS
-  proof
-    hereby assume
-       MR is Joint_Probability;
-      then reconsider MRR = MR as Joint_Probability Matrix of REAL;
-A1:   MRR is m-nonnegative with_sum=1 Matrix of REAL;
-      then Mx2FinS(MR) is nonnegative by Th43;
-then A2:   for i st i in dom Mx2FinS(MR) holds (Mx2FinS(MR)).i >= 0 by Def1;
-   Sum Mx2FinS(MR) = SumAll MR by Th42
-        .= 1 by A1,MATRPROB:def 7;
-      hence Mx2FinS(MR) is ProbFinS by A2,MATRPROB:def 5;
-    end;
-    assume Mx2FinS(MR) is ProbFinS;
-    then reconsider pp=Mx2FinS(MR) as ProbFinS FinSequence of REAL;
-    reconsider p=pp as non empty ProbFinS FinSequence of REAL;
-      p is nonnegative;
-then A3: MR is m-nonnegative by Th43;
-     SumAll MR = Sum p by Th42 .= 1 by MATRPROB:def 5;
-    then MR is with_sum=1 by MATRPROB:def 7;
-    hence thesis by A3,MATRPROB:def 8;
+proof
+  hereby
+    assume MR is Joint_Probability;
+    then reconsider MRR = MR as Joint_Probability Matrix of REAL;
+A1: MRR is m-nonnegative with_sum=1 Matrix of REAL;
+    then Mx2FinS(MR) is nonnegative by Th43;
+    then
+A2: for i st i in dom Mx2FinS(MR) holds (Mx2FinS(MR)).i >= 0 by Def1;
+    Sum Mx2FinS(MR) = SumAll MR by Th42
+      .= 1 by A1,MATRPROB:def 7;
+    hence Mx2FinS(MR) is ProbFinS by A2,MATRPROB:def 5;
   end;
+  assume Mx2FinS(MR) is ProbFinS;
+  then reconsider pp=Mx2FinS(MR) as ProbFinS FinSequence of REAL;
+  reconsider p=pp as non empty ProbFinS FinSequence of REAL;
+  p is nonnegative;
+  then
+A3: MR is m-nonnegative by Th43;
+  SumAll MR = Sum p by Th42
+    .= 1 by MATRPROB:def 5;
+  then MR is with_sum=1 by MATRPROB:def 7;
+  hence thesis by A3,MATRPROB:def 8;
+end;
 
 theorem Th45:
   for p,q being ProbFinS FinSequence of REAL holds
-    Mx2FinS((ColVec2Mx p) * (LineVec2Mx q)) is ProbFinS
-  proof let p,q be ProbFinS FinSequence of REAL;
-     (ColVec2Mx p) * (LineVec2Mx q) is Joint_Probability Matrix of REAL
-      by Th23;
-    hence thesis by Th44;
-  end;
+  Mx2FinS((ColVec2Mx p) * (LineVec2Mx q)) is ProbFinS
+proof
+  let p,q be ProbFinS FinSequence of REAL;
+  (ColVec2Mx p) * (LineVec2Mx q) is Joint_Probability Matrix of REAL by Th23;
+  hence thesis by Th44;
+end;
 
 theorem Th46:
   for p being ProbFinS FinSequence of REAL
   for M being non empty-yielding Conditional_Probability Matrix of REAL st
-  len p = len M holds
-    Mx2FinS((Vec2DiagMx p) * M) is ProbFinS
-  proof let p be non empty ProbFinS FinSequence of REAL;
-    let M be non empty-yielding Conditional_Probability Matrix of REAL;
-    assume len p = len M;
-    then (Vec2DiagMx p) * M is Joint_Probability Matrix of REAL by Th28;
-    hence thesis by Th44;
-  end;
+  len p = len M holds Mx2FinS((Vec2DiagMx p) * M) is ProbFinS
+proof
+  let p be non empty ProbFinS FinSequence of REAL;
+  let M be non empty-yielding Conditional_Probability Matrix of REAL;
+  assume len p = len M;
+  then (Vec2DiagMx p) * M is Joint_Probability Matrix of REAL by Th28;
+  hence thesis by Th44;
+end;
 
 begin :: Information Entropy
 
-definition let a,p;
-  assume A1: a > 0 & a <> 1 & p is nonnegative;
-  func FinSeq_log(a,p) -> FinSequence of REAL means :Def6:
-    len it = len p & for k be Nat st k in dom it holds
-      (p.k > 0 implies it.k = log(a,p.k))  &
-      (p.k = 0 implies it.k = 0);
+definition
+  let a,p;
+  assume
+A1: a > 0 & a <> 1 & p is nonnegative;
+  func FinSeq_log(a,p) -> FinSequence of REAL means
+  :Def6:
+  len it = len p & for k be Nat st k in dom it holds
+  (p.k > 0 implies it.k = log(a,p.k)) & (p.k = 0 implies it.k = 0);
   existence
   proof
-    defpred P[Nat,set] means
-      (p.$1 > 0 implies $2 = log(a,p.$1)) &
-      (p.$1 = 0 implies $2 = 0);
+    defpred P[Nat,set] means (p.$1 > 0 implies $2 = log(a,p.$1)) &
+    (p.$1 = 0 implies $2 = 0);
 A2: for k be Nat st k in Seg len p ex x being Element of REAL st P[k,x]
-    proof let k be Nat such that
+    proof
+      let k be Nat such that
 A3:   k in Seg len p;
 A4:   k in dom p by A3,FINSEQ_1:def 3;
       per cases by A1,A4,Def1;
@@ -1991,262 +2204,302 @@ A6:     p.k=0;
     consider pp being FinSequence of REAL such that
 A7: dom pp = Seg len p &
     for k be Nat st k in Seg len p holds P[k,pp.k] from FINSEQ_1:sch 5(A2);
-     len pp = len p by A7,FINSEQ_1:def 3;
+    len pp = len p by A7,FINSEQ_1:def 3;
     hence thesis by A7;
   end;
   uniqueness
-  proof let p1,p2 be FinSequence of REAL such that
+  proof
+    let p1,p2 be FinSequence of REAL such that
 A8: len p1 = len p & for k be Nat st k in dom p1 holds
     (p.k > 0 implies p1.k = log(a,p.k)) & (p.k = 0 implies p1.k = 0) and
 A9: len p2 = len p & for k be Nat st k in dom p2 holds
     (p.k > 0 implies p2.k = log(a,p.k)) & (p.k = 0 implies p2.k = 0);
-A10: dom p1 = Seg len p2 by A8,A9,FINSEQ_1:def 3 .= dom p2 by FINSEQ_1:def 3;
-     for k be Nat st k in dom p1 holds p1.k = p2.k
-    proof let k be Nat;
+A10: dom p1 = Seg len p2 by A8,A9,FINSEQ_1:def 3
+      .= dom p2 by FINSEQ_1:def 3;
+    for k be Nat st k in dom p1 holds p1.k = p2.k
+    proof
+      let k be Nat;
       assume
-A11:   k in dom p1;
-then A12:   k in dom p & k in dom p2 by A8,A9,FINSEQ_3:31;
+A11:  k in dom p1;
+      then
+A12:  k in dom p & k in dom p2 by A8,A9,FINSEQ_3:31;
       per cases by A1,A12,Def1;
       suppose
-A13:     p.k>0;
-        hence p1.k = log(a,p.k) by A8,A11 .= p2.k by A9,A12,A13;
+A13:    p.k>0;
+        hence p1.k = log(a,p.k) by A8,A11
+          .= p2.k by A9,A12,A13;
       end;
       suppose
-A14:     p.k=0;
-        hence p1.k = 0 by A8,A11 .= p2.k by A9,A12,A14;
+A14:    p.k=0;
+        hence p1.k = 0 by A8,A11
+          .= p2.k by A9,A12,A14;
       end;
     end;
     hence thesis by A10,FINSEQ_1:17;
   end;
 end;
 
-definition let p;
+definition
+  let p;
   func Infor_FinSeq_of p -> FinSequence of REAL equals
-     mlt(p,FinSeq_log(2,p));
+
+  mlt(p,FinSeq_log(2,p));
   correctness;
 end;
 
 theorem Th47:
-  for p being nonnegative FinSequence of REAL
-  for q holds
-    q = Infor_FinSeq_of p iff
-    len q = len p & for k st k in dom q holds q.k = p.k * log(2,p.k)
-  proof let p be nonnegative FinSequence of REAL;
-        let q;
-    set pp = mlt(p,FinSeq_log(2,p));
+  for p being nonnegative FinSequence of REAL for q holds
+  q = Infor_FinSeq_of p iff
+  len q = len p & for k st k in dom q holds q.k = p.k * log(2,p.k)
+proof
+  let p be nonnegative FinSequence of REAL;
+  let q;
+  set pp = mlt(p,FinSeq_log(2,p));
 A1: len p = len FinSeq_log(2,p) by Def6;
-then A2: dom p = dom FinSeq_log(2,p) by FINSEQ_3:31;
+  then
+A2: dom p = dom FinSeq_log(2,p) by FINSEQ_3:31;
 A3: len pp = len p by A1,MATRPROB:30;
-    hereby assume A4: q = Infor_FinSeq_of p;
-      thus len q = len p & for k st k in dom q holds q.k = p.k * log(2,p.k)
-      proof
-        thus len q = len p by A1,A4,MATRPROB:30;
-        let k such that
-A5:     k in dom q;
-A6:     dom q = dom pp & dom p = dom q by A3,A4,FINSEQ_3:31;
-A7:     q.k = p.k * (FinSeq_log(2,p)).k by A4,A5,RVSUM_1:86;
-A8:     k in dom FinSeq_log(2,p) by A1,A3,A4,A5,FINSEQ_3:31;
-        per cases by A5,A6,Def1;
-        suppose p.k=0;
-          hence q.k = p.k * log(2,p.k) by A7;
-        end;
-        suppose p.k>0;
-          hence q.k = p.k * log(2,p.k) by A7,A8,Def6;
-        end;
-      end;
-    end;
+  hereby
     assume
-A9: len q = len p & for k st k in dom q holds q.k = p.k * log(2,p.k);
-    then len q = len pp by A1,MATRPROB:30;
-then A10: dom q = dom pp & dom q = dom p by A9,FINSEQ_3:31;
-     now let k be Nat such that
-A11:   k in dom q;
-A12:   pp.k = p.k * (FinSeq_log(2,p)).k by A10,A11,RVSUM_1:86;
-      per cases by A10,A11,Def1;
-      suppose
-A13:     p.k=0;
-        hence q.k = 0 * log(2,p.k) by A9,A11 .= pp.k by A12,A13;
+A4: q = Infor_FinSeq_of p;
+    thus len q = len p & for k st k in dom q holds q.k = p.k * log(2,p.k)
+    proof
+      thus len q = len p by A1,A4,MATRPROB:30;
+      let k such that
+A5:   k in dom q;
+A6:   dom q = dom pp & dom p = dom q by A3,A4,FINSEQ_3:31;
+A7:   q.k = p.k * (FinSeq_log(2,p)).k by A4,A5,RVSUM_1:86;
+A8:   k in dom FinSeq_log(2,p) by A1,A3,A4,A5,FINSEQ_3:31;
+      per cases by A5,A6,Def1;
+      suppose p.k=0;
+        hence q.k = p.k * log(2,p.k) by A7;
       end;
       suppose p.k>0;
-        then (FinSeq_log(2,p)).k = log(2,p.k) by A2,A10,A11,Def6;
-        hence pp.k = p.k * log(2,p.k) by A10,A11,RVSUM_1:86
-          .= q.k by A9,A11;
+        hence q.k = p.k * log(2,p.k) by A7,A8,Def6;
       end;
     end;
-    hence thesis by A10,FINSEQ_1:17;
   end;
+  assume
+A9: len q = len p & for k st k in dom q holds q.k = p.k * log(2,p.k);
+  then len q = len pp by A1,MATRPROB:30;
+  then
+A10: dom q = dom pp & dom q = dom p by A9,FINSEQ_3:31;
+  now
+    let k be Nat such that
+A11: k in dom q;
+A12: pp.k = p.k * (FinSeq_log(2,p)).k by A10,A11,RVSUM_1:86;
+    per cases by A10,A11,Def1;
+    suppose
+A13:  p.k=0;
+      hence q.k = 0 * log(2,p.k) by A9,A11
+        .= pp.k by A12,A13;
+    end;
+    suppose p.k>0;
+      then (FinSeq_log(2,p)).k = log(2,p.k) by A2,A10,A11,Def6;
+      hence pp.k = p.k * log(2,p.k) by A10,A11,RVSUM_1:86
+        .= q.k by A9,A11;
+    end;
+  end;
+  hence thesis by A10,FINSEQ_1:17;
+end;
 
 theorem Th48:
   for p being nonnegative FinSequence of REAL for k st k in dom p holds
-    (p.k = 0 implies (Infor_FinSeq_of p).k = 0) &
-    (p.k > 0 implies (Infor_FinSeq_of p).k = p.k * log(2,p.k))
-  proof
-    let p be nonnegative FinSequence of REAL;
-    let k such that
-A1:   k in dom p;
-A2:   dom p = Seg len p by FINSEQ_1:def 3
-        .= Seg len (Infor_FinSeq_of p) by Th47
-        .= dom (Infor_FinSeq_of p) by FINSEQ_1:def 3;
-    hereby assume p.k=0;
-      hence (Infor_FinSeq_of p).k = 0*log(2,p.k) by A1,A2,Th47 .=0;
-    end;
-    thus thesis by A1,A2,Th47;
+  (p.k = 0 implies (Infor_FinSeq_of p).k = 0) &
+  (p.k > 0 implies (Infor_FinSeq_of p).k = p.k * log(2,p.k))
+proof
+  let p be nonnegative FinSequence of REAL;
+  let k such that
+A1: k in dom p;
+A2: dom p = Seg len p by FINSEQ_1:def 3
+    .= Seg len (Infor_FinSeq_of p) by Th47
+    .= dom (Infor_FinSeq_of p) by FINSEQ_1:def 3;
+  hereby
+    assume p.k=0;
+    hence (Infor_FinSeq_of p).k = 0*log(2,p.k) by A1,A2,Th47
+      .=0;
   end;
+  thus thesis by A1,A2,Th47;
+end;
 
 theorem
-   for p being nonnegative FinSequence of REAL
+  for p being nonnegative FinSequence of REAL
   for q holds q = - Infor_FinSeq_of p iff
-    (len q = len p & for k st k in dom q holds q.k = p.k * log(2,1/(p.k)))
-  proof let p be nonnegative FinSequence of REAL, q;
-    set p0 = Infor_FinSeq_of p;
-    hereby assume
-A1:   q = -p0;
-      thus len q = len p & for k st k in dom q holds
-        q.k = p.k * log(2,1/(p.k))
+  (len q = len p & for k st k in dom q holds q.k = p.k * log(2,1/(p.k)))
+proof
+  let p be nonnegative FinSequence of REAL, q;
+  set p0 = Infor_FinSeq_of p;
+  hereby
+    assume
+A1: q = -p0;
+    thus len q = len p & for k st k in dom q holds q.k = p.k * log(2,1/(p.k))
+    proof
+A2:   dom q = dom p0 by A1,VALUED_1:8;
+A3:   Seg len q = dom q by FINSEQ_1:def 3
+        .= Seg len p0 by A2,FINSEQ_1:def 3
+        .= Seg len p by Th47;
+      hence len q = len p by FINSEQ_1:8;
+      thus for k st k in dom q holds q.k = p.k * log(2,1/(p.k))
       proof
-A2:     dom q = dom p0 by A1,VALUED_1:8;
-A3:     Seg len q = dom q by FINSEQ_1:def 3 .= Seg len p0 by A2,FINSEQ_1:def 3
-          .= Seg len p by Th47;
-        hence len q = len p by FINSEQ_1:8;
-        thus for k st k in dom q holds q.k = p.k * log(2,1/(p.k))
-        proof let k such that
-A4:       k in dom q;
-           k in Seg len q by A4,FINSEQ_1:def 3;
-then A5:       k in dom p by A3,FINSEQ_1:def 3;
-A6:       q.k = -p0.k by A1,RVSUM_1:35;
-then A7:       q.k = -(p.k * log(2,p.k)) by A2,A4,Th47
-            .= p.k * (-log(2,p.k));
-          per cases by A5,Def1;
-          suppose A8: p.k=0;
-            then p0.k=0 by A5,Th48;
-            hence q.k = p.k * log(2,1/(p.k)) by A6,A8;
-          end;
-          suppose p.k>0;
-            hence q.k = p.k * log(2,1/(p.k)) by A7,Th5;
-          end;
+        let k such that
+A4:     k in dom q;
+        k in Seg len q by A4,FINSEQ_1:def 3;
+        then
+A5:     k in dom p by A3,FINSEQ_1:def 3;
+A6:     q.k = -p0.k by A1,RVSUM_1:35;
+        then
+A7:     q.k = -(p.k * log(2,p.k)) by A2,A4,Th47
+          .= p.k * (-log(2,p.k));
+        per cases by A5,Def1;
+        suppose
+A8:       p.k=0;
+          then p0.k=0 by A5,Th48;
+          hence q.k = p.k * log(2,1/(p.k)) by A6,A8;
+        end;
+        suppose p.k>0;
+          hence q.k = p.k * log(2,1/(p.k)) by A7,Th5;
         end;
       end;
     end;
-    assume
-A9: len q = len p & for k st k in dom q holds q.k = p.k * log(2,1/(p.k));
-A10: dom q = Seg len q by FINSEQ_1:def 3 .= Seg len p0 by A9,Th47
-      .= dom p0 by FINSEQ_1:def 3;
-then A11: dom q = dom -p0 by VALUED_1:8;
-    for k be Nat st k in dom q holds (-p0).k = q.k
-    proof let k be Nat; assume
-A12:   k in dom q;
-      then k in Seg len p by A9,FINSEQ_1:def 3;
-then A13:   k in dom p by FINSEQ_1:def 3;
-      per cases by A13,Def1;
-      suppose A14: p.k = 0;
-        thus (-p0).k = -p0.k by RVSUM_1:35
-          .= -0 by A13,A14,Th48
-          .= p.k * log(2,1/(p.k)) by A14
-          .= q.k by A9,A12;
-      end;
-      suppose A15: p.k > 0;
-        thus (-p0).k = -p0.k by RVSUM_1:35
-          .= -(p.k * log(2,p.k)) by A10,A12,Th47
-          .= p.k * (-log(2,p.k)) .= p.k * log(2,1/(p.k)) by A15,Th5
-          .= q.k by A9,A12;
-      end;
-    end;
-    hence thesis by A11,FINSEQ_1:17;
   end;
+  assume
+A9: len q = len p & for k st k in dom q holds q.k = p.k * log(2,1/(p.k));
+A10: dom q = Seg len q by FINSEQ_1:def 3
+    .= Seg len p0 by A9,Th47
+    .= dom p0 by FINSEQ_1:def 3;
+  then
+A11: dom q = dom -p0 by VALUED_1:8;
+  for k be Nat st k in dom q holds (-p0).k = q.k
+  proof
+    let k be Nat;
+    assume
+A12: k in dom q;
+    then k in Seg len p by A9,FINSEQ_1:def 3;
+    then
+A13: k in dom p by FINSEQ_1:def 3;
+    per cases by A13,Def1;
+    suppose
+A14:  p.k = 0;
+      thus (-p0).k = -p0.k by RVSUM_1:35
+        .= -0 by A13,A14,Th48
+        .= p.k * log(2,1/(p.k)) by A14
+        .= q.k by A9,A12;
+    end;
+    suppose
+A15:  p.k > 0;
+      thus (-p0).k = -p0.k by RVSUM_1:35
+        .= -(p.k * log(2,p.k)) by A10,A12,Th47
+        .= p.k * (-log(2,p.k))
+        .= p.k * log(2,1/(p.k)) by A15,Th5
+        .= q.k by A9,A12;
+    end;
+  end;
+  hence thesis by A11,FINSEQ_1:17;
+end;
 
 theorem Th50:
   for p being nonnegative FinSequence of REAL st r1>=0 & r2>=0 holds
-    for i st i in dom p & p.i = r1*r2 holds
-      (Infor_FinSeq_of p).i = r1*r2*log(2,r1) + r1*r2*log(2,r2)
-  proof let p be nonnegative FinSequence of REAL such that
+  for i st i in dom p & p.i = r1*r2 holds
+  (Infor_FinSeq_of p).i = r1*r2*log(2,r1) + r1*r2*log(2,r2)
+proof
+  let p be nonnegative FinSequence of REAL such that
 A1: r1>=0 & r2>=0;
-    let i such that
+  let i such that
 A2: i in dom p & p.i = r1*r2;
-     len p = len Infor_FinSeq_of p by Th47;
-then i in dom Infor_FinSeq_of p by A2,FINSEQ_3:31;
-    hence (Infor_FinSeq_of p).i = r1*r2*log(2,r1*r2) by A2,Th47
-      .= r1*r2*log(2,r1) + r1*r2*log(2,r2) by A1,Th6;
-  end;
+  len p = len Infor_FinSeq_of p by Th47;
+  then i in dom Infor_FinSeq_of p by A2,FINSEQ_3:31;
+  hence (Infor_FinSeq_of p).i = r1*r2*log(2,r1*r2) by A2,Th47
+    .= r1*r2*log(2,r1) + r1*r2*log(2,r2) by A1,Th6;
+end;
 
 theorem Th51:
   for p being nonnegative FinSequence of REAL st r>=0 holds
-    Infor_FinSeq_of (r*p) = (r*log(2,r)*p) + (r*mlt(p,FinSeq_log(2,p)))
-  proof let p be nonnegative FinSequence of REAL such that
+  Infor_FinSeq_of (r*p) = (r*log(2,r)*p) + (r*mlt(p,FinSeq_log(2,p)))
+proof
+  let p be nonnegative FinSequence of REAL such that
 A1: r>=0;
-    reconsider q=r*p as nonnegative FinSequence of REAL by A1,Th10;
-    set qq = Infor_FinSeq_of q;
-A2: dom q = dom p by VALUED_1:7,def 5;
-     len q = len qq by Th47;
-then A3: dom q = dom qq by FINSEQ_3:31;
-A4: dom (r*log(2,r)*p) = dom p by VALUED_1:7,def 5;
+  reconsider q=r*p as nonnegative FinSequence of REAL by A1,Th10;
+  set qq = Infor_FinSeq_of q;
+A2: dom q = dom p by VALUED_1:def 5;
+  len q = len qq by Th47;
+  then
+A3: dom q = dom qq by FINSEQ_3:31;
+A4: dom (r*log(2,r)*p) = dom p by VALUED_1:def 5;
 A5: len FinSeq_log(2,p) = len p by Def6;
-then A6: dom FinSeq_log(2,p) = dom p by FINSEQ_3:31;
-     len mlt(p,FinSeq_log(2,p)) = len p by A5,MATRPROB:30;
-then A7: dom mlt(p,FinSeq_log(2,p)) = dom p by FINSEQ_3:31;
-    then dom (r*mlt(p,FinSeq_log(2,p))) = dom p by VALUED_1:7,def 5;
-    then len (r*log(2,r)*p) = len (r*mlt(p,FinSeq_log(2,p)))
-      by A4,FINSEQ_3:31;
-    then len ((r*log(2,r)*p) + (r*mlt(p,FinSeq_log(2,p)))) = len (r*log(2,r)*p
-)
-      by INTEGRA5:2;
-then A8: dom ((r*log(2,r)*p) + (r*mlt(p,FinSeq_log(2,p)))) = dom (r*log(2,r)*p)
-      by FINSEQ_3:31;
-     now let k be Nat such that
-A9:   k in dom qq;
-       p.k>=0 & q.k = r*p.k by A2,A3,A9,Def1,RVSUM_1:66;
-then A10:   qq.k = r*p.k*log(2,r) + r*p.k*log(2,p.k)
-      by A1,A3,A9,Th50;
-A11:   (r*log(2,r)*p).k = r*log(2,r)*p.k by RVSUM_1:66;
-A12:   (r*mlt(p,FinSeq_log(2,p))).k = r*(mlt(p,FinSeq_log(2,p))).k
-        by RVSUM_1:66
-        .= r*(p.k*(FinSeq_log(2,p)).k) by A2,A3,A7,A9,RVSUM_1:86
-        .= r*p.k*(FinSeq_log(2,p)).k;
-      per cases by A2,A3,A9,Def1;
-      suppose p.k>0;
-        then qq.k = (r*log(2,r)*p).k + (r*mlt(p,FinSeq_log(2,p))).k
-          by A2,A3,A6,A9,A10,A11,A12,Def6;
-        hence qq.k = ((r*log(2,r)*p)+(r*mlt(p,FinSeq_log(2,p)))).k
-          by A2,A3,A4,A8,A9,VALUED_1:1,def 1;
-      end;
-      suppose p.k=0;
-        hence qq.k = ((r*log(2,r)*p)+(r*mlt(p,FinSeq_log(2,p)))).k
-          by A2,A3,A4,A8,A9,A10,A11,A12,VALUED_1:1,def 1;
-      end;
+  then
+A6: dom FinSeq_log(2,p) = dom p by FINSEQ_3:31;
+  len mlt(p,FinSeq_log(2,p)) = len p by A5,MATRPROB:30;
+  then
+A7: dom mlt(p,FinSeq_log(2,p)) = dom p by FINSEQ_3:31;
+  then dom (r*mlt(p,FinSeq_log(2,p))) = dom p by VALUED_1:def 5;
+  then len (r*log(2,r)*p) = len (r*mlt(p,FinSeq_log(2,p))) by A4,FINSEQ_3:31;
+  then len ((r*log(2,r)*p) + (r*mlt(p,FinSeq_log(2,p)))) = len (r*log(2,r)*p )
+  by INTEGRA5:2;
+  then
+A8: dom ((r*log(2,r)*p) + (r*mlt(p,FinSeq_log(2,p)))) = dom (r*log(2,r)* p)
+  by FINSEQ_3:31;
+  now
+    let k be Nat such that
+A9: k in dom qq;
+    p.k>=0 & q.k = r*p.k by A2,A3,A9,Def1,RVSUM_1:66;
+    then
+A10: qq.k = r*p.k*log(2,r) + r*p.k*log(2,p.k) by A1,A3,A9,Th50;
+A11: (r*log(2,r)*p).k = r*log(2,r)*p.k by RVSUM_1:66;
+A12: (r*mlt(p,FinSeq_log(2,p))).k = r*(mlt(p,FinSeq_log(2,p))).k by RVSUM_1:66
+      .= r*(p.k*(FinSeq_log(2,p)).k) by A2,A3,A7,A9,RVSUM_1:86
+      .= r*p.k*(FinSeq_log(2,p)).k;
+    per cases by A2,A3,A9,Def1;
+    suppose p.k>0;
+      then qq.k = (r*log(2,r)*p).k + (r*mlt(p,FinSeq_log(2,p))).k
+      by A2,A3,A6,A9,A10,A11,A12,Def6;
+      hence qq.k = ((r*log(2,r)*p)+(r*mlt(p,FinSeq_log(2,p)))).k
+      by A2,A3,A4,A8,A9,VALUED_1:def 1;
     end;
-    hence thesis by A2,A3,A4,A8,FINSEQ_1:17;
+    suppose p.k=0;
+      hence qq.k = ((r*log(2,r)*p)+(r*mlt(p,FinSeq_log(2,p)))).k
+      by A2,A3,A4,A8,A9,A10,A11,A12,VALUED_1:def 1;
+    end;
   end;
+  hence thesis by A2,A3,A4,A8,FINSEQ_1:17;
+end;
 
 theorem Th52:
   for p being non empty ProbFinS FinSequence of REAL
-    for k st k in dom p holds (Infor_FinSeq_of p).k <= 0
-  proof let p be non empty ProbFinS FinSequence of REAL, k such that
+  for k st k in dom p holds (Infor_FinSeq_of p).k <= 0
+proof
+  let p be non empty ProbFinS FinSequence of REAL, k such that
 A1: k in dom p;
-    per cases by A1,MATRPROB:53,def 5;
-    suppose p.k = 0;
-      hence thesis by A1,Th48;
-    end;
-    suppose A2: p.k > 0 & p.k <= 1;
-then A3:   (Infor_FinSeq_of p).k = p.k * log(2,p.k) by A1,Th48;
-      thus (Infor_FinSeq_of p).k <= 0
-      proof
-A4:     log(2,1) = 0 by POWER:59;
-        per cases by A2,REAL_1:def 5;
-        suppose p.k < 1;
-          then log(2,p.k) < 0 by A2,A4,POWER:65;
-          hence thesis by A2,A3,XREAL_1:134;
-        end;
-        suppose p.k = 1;
-          hence thesis by A3,POWER:59;
-        end;
+  per cases by A1,MATRPROB:53,def 5;
+  suppose p.k = 0;
+    hence thesis by A1,Th48;
+  end;
+  suppose
+A2: p.k > 0 & p.k <= 1;
+    then
+A3: (Infor_FinSeq_of p).k = p.k * log(2,p.k) by A1,Th48;
+    thus (Infor_FinSeq_of p).k <= 0
+    proof
+A4:   log(2,1) = 0 by POWER:59;
+      per cases by A2,REAL_1:def 5;
+      suppose p.k < 1;
+        then log(2,p.k) < 0 by A2,A4,POWER:65;
+        hence thesis by A2,A3,XREAL_1:134;
+      end;
+      suppose p.k = 1;
+        hence thesis by A3,POWER:59;
       end;
     end;
   end;
+end;
 
-definition let MR;
-  assume A1: MR is m-nonnegative;
-  func Infor_FinSeq_of MR -> Matrix of REAL means :Def8:
-    len it = len MR & width it = width MR &
-    for k st k in dom it holds it.k=mlt(Line(MR,k),FinSeq_log(2,Line(MR,k)));
+definition
+  let MR;
+  assume
+A1: MR is m-nonnegative;
+  func Infor_FinSeq_of MR -> Matrix of REAL means
+  :Def8:
+  len it = len MR & width it = width MR &
+  for k st k in dom it holds it.k=mlt(Line(MR,k),FinSeq_log(2,Line(MR,k)));
   existence
   proof
     deffunc F(Nat) = mlt(Line(MR,$1),FinSeq_log(2,Line(MR,$1)));
@@ -2255,49 +2508,50 @@ A2: len p = len MR and
 A3: for k be Nat st k in Seg len MR holds p.k = F(k) from FINSEQ_1:sch 2;
 A4: dom p = dom MR by A2,FINSEQ_3:31;
 A5: dom MR = Seg len MR by FINSEQ_1:def 3;
-A6: for x st x in rng p
-      ex q being FinSequence st q=x & len q = width MR
+A6: for x st x in rng p ex q being FinSequence st q=x & len q = width MR
     proof
       set n=width MR;
       let x such that
-A7:     x in rng p;
-        consider j be Nat such that
-A8:     j in dom p & x = p.j by A7,FINSEQ_2:11;
-         j in Seg len p by A8,FINSEQ_1:def 3;
-then A9:     x = mlt(Line(MR,j),FinSeq_log(2,Line(MR,j))) by A2,A3,A8;
-         j in dom MR by A2,A8,FINSEQ_3:31;
-        then Line(MR,j) is nonnegative by A1,Th19;
-        then len Line(MR,j)=width MR &
-        len FinSeq_log(2,Line(MR,j)) = len Line(MR,j)
-          by Def6,MATRIX_1:def 8;
-        then len mlt(Line(MR,j),FinSeq_log(2,Line(MR,j))) = width MR by
-MATRPROB:30;
-        hence ex q being FinSequence st q=x & len q = n by A9;
-    end;
-     rng p c= REAL*
-    proof let x such that
-A10:   x in rng p;
+A7:   x in rng p;
       consider j be Nat such that
-A11:   j in dom p & x = p.j by A10,FINSEQ_2:11;
-       j in Seg len p by A11,FINSEQ_1:def 3;
+A8:   j in dom p & x = p.j by A7,FINSEQ_2:11;
+      j in Seg len p by A8,FINSEQ_1:def 3;
+      then
+A9:   x = mlt(Line(MR,j),FinSeq_log(2,Line(MR,j))) by A2,A3,A8;
+      j in dom MR by A2,A8,FINSEQ_3:31;
+      then Line(MR,j) is nonnegative by A1,Th19;
+      then len Line(MR,j)=width MR &
+      len FinSeq_log(2,Line(MR,j)) = len Line(MR,j) by Def6,MATRIX_1:def 8;
+      then len mlt(Line(MR,j),FinSeq_log(2,Line(MR,j))) = width MR by
+      MATRPROB:30;
+      hence ex q being FinSequence st q=x & len q = n by A9;
+    end;
+    rng p c= REAL*
+    proof
+      let x such that
+A10:  x in rng p;
+      consider j be Nat such that
+A11:  j in dom p & x = p.j by A10,FINSEQ_2:11;
+      j in Seg len p by A11,FINSEQ_1:def 3;
       then p.j = mlt(Line(MR,j),FinSeq_log(2,Line(MR,j))) by A2,A3;
       hence x in REAL* by A11,FINSEQ_1:def 11;
     end;
     then reconsider p as Matrix of REAL by A6,FINSEQ_1:def 4,MATRIX_1:def 1;
- A12: width p = width MR
+A12: width p = width MR
     proof
       per cases;
       suppose
-A13:     len MR = 0;
+A13:    len MR = 0;
         then width p = 0 by A2,MATRIX_1:def 4;
         hence thesis by A13,MATRIX_1:def 4;
       end;
       suppose
-A14:     len MR > 0;
+A14:    len MR > 0;
         then len p >= 1 by A2,NAT_1:14;
         then 1 in Seg len p by FINSEQ_1:3;
         then 1 in dom p by FINSEQ_1:def 3;
-then A15:     p.1 in rng p by FUNCT_1:12;
+        then
+A15:    p.1 in rng p by FUNCT_1:12;
         then ex q being FinSequence st q=p.1 & len q = width MR by A6;
         hence thesis by A2,A14,A15,MATRIX_1:def 4;
       end;
@@ -2306,14 +2560,16 @@ then A15:     p.1 in rng p by FUNCT_1:12;
     thus thesis by A2,A3,A4,A5,A12;
   end;
   uniqueness
-  proof let M1,M2 be Matrix of REAL such that
+  proof
+    let M1,M2 be Matrix of REAL such that
 A16: len M1 = len MR & width M1 = width MR & for k st k in dom M1 holds
-      M1.k = mlt(Line(MR,k),FinSeq_log(2,Line(MR,k))) and
+    M1.k = mlt(Line(MR,k),FinSeq_log(2,Line(MR,k))) and
 A17: len M2 = len MR & width M2 = width MR & for k st k in dom M2 holds
-      M2.k = mlt(Line(MR,k),FinSeq_log(2,Line(MR,k)));
+    M2.k = mlt(Line(MR,k),FinSeq_log(2,Line(MR,k)));
 A18: dom M1 = dom M2 by A16,A17,FINSEQ_3:31;
-     now let k be Nat such that
-A19:   k in dom M1;
+    now
+      let k be Nat such that
+A19:  k in dom M1;
       thus M1.k = mlt(Line(MR,k),FinSeq_log(2,Line(MR,k))) by A16,A19
         .= M2.k by A17,A18,A19;
     end;
@@ -2322,508 +2578,559 @@ A19:   k in dom M1;
 end;
 
 theorem Th53:
-  for M being m-nonnegative Matrix of REAL
-    for k st k in dom M holds
-      Line(Infor_FinSeq_of M,k) = Infor_FinSeq_of Line(M,k)
-  proof let M be m-nonnegative Matrix of REAL;
-        let k such that
+  for M being m-nonnegative Matrix of REAL for k st k in dom M holds
+  Line(Infor_FinSeq_of M,k) = Infor_FinSeq_of Line(M,k)
+proof
+  let M be m-nonnegative Matrix of REAL;
+  let k such that
 A1: k in dom M;
-    reconsider p = Line(M,k) as nonnegative FinSequence of REAL by A1,Th19;
-    set M1 = Infor_FinSeq_of M;
-     len M1 = len M by Def8;
-then A2: dom M1 = dom M by FINSEQ_3:31;
-    hence Line(M1,k) = M1.k by A1,MATRIX_2:18
-      .= Infor_FinSeq_of Line(M,k) by A1,A2,Def8;
-  end;
+  reconsider p = Line(M,k) as nonnegative FinSequence of REAL by A1,Th19;
+  set M1 = Infor_FinSeq_of M;
+  len M1 = len M by Def8;
+  then
+A2: dom M1 = dom M by FINSEQ_3:31;
+  hence Line(M1,k) = M1.k by A1,MATRIX_2:18
+    .= Infor_FinSeq_of Line(M,k) by A1,A2,Def8;
+end;
 
 theorem Th54:
-  for M being m-nonnegative Matrix of REAL
-  for M1 being Matrix of REAL holds
-    M1 = Infor_FinSeq_of M iff
-      len M1 = len M & width M1 = width M &
-      for i,j st [i,j] in Indices M1 holds M1*(i,j)=M*(i,j)*log(2,M*(i,j))
-  proof let M be m-nonnegative Matrix of REAL;
-        let M1 be Matrix of REAL;
-    hereby assume
-A1:   M1 = Infor_FinSeq_of M;
-then A2:   len M1 = len M & width M1 = width M by Def8;
-       now let i,j such that
-A3:     [i,j] in Indices M1;
-A4:     i in Seg len M1 & j in Seg width M1 by A3,MATRPROB:12;
-then A5:     i in dom M by A2,FINSEQ_1:def 3;
-        then reconsider p=Line(M,i) as nonnegative FinSequence of REAL by Th19;
-A6:     len p = width M by MATRIX_1:def 8;
-A7:     p.j = M*(i,j) by A2,A4,MATRIX_1:def 8;
-         len p = len Infor_FinSeq_of p by Th47;
-then A8:     j in dom Infor_FinSeq_of p by A2,A4,A6,FINSEQ_1:def 3;
-        thus M1*(i,j) = Line(M1,i).j by A4,MATRIX_1:def 8
-          .= (Infor_FinSeq_of p).j by A1,A5,Th53
-          .= M*(i,j)*log(2,M*(i,j)) by A7,A8,Th47;
-      end;
-      hence len M1 = len M & width M1 = width M &
-      for i,j st [i,j] in Indices M1 holds M1*(i,j)=M*(i,j)*log(2,M*(i,j))
-        by A1,Def8;
-    end;
+  for M being m-nonnegative Matrix of REAL for M1 being Matrix of REAL holds
+  M1 = Infor_FinSeq_of M iff len M1 = len M & width M1 = width M &
+  for i,j st [i,j] in Indices M1 holds M1*(i,j)=M*(i,j)*log(2,M*(i,j))
+proof
+  let M be m-nonnegative Matrix of REAL;
+  let M1 be Matrix of REAL;
+  hereby
     assume
-A9: len M1 = len M & width M1 = width M &
-    for i,j st [i,j] in Indices M1 holds M1*(i,j)=M*(i,j)*log(2,M*(i,j));
-then A10: dom M1 = dom M & Seg width M1 = Seg width M by FINSEQ_3:31;
-     for k st k in dom M1 holds M1.k = mlt(Line(M,k),FinSeq_log(2,Line(M,k)))
-    proof let k such that
-A11:   k in dom M1;
-      reconsider p=Line(M,k) as nonnegative FinSequence of REAL by A10,A11,Th19
-;
-A12:   k in Seg len M by A9,A11,FINSEQ_1:def 3;
-A13:   len p = width M & len FinSeq_log(2,p) = len p
-        by Def6,MATRIX_1:def 8;
-then A14:   len mlt(p,FinSeq_log(2,p)) = len p by MATRPROB:30;
-A15:   len (M1.k) = width M1 by A11,GOBRD13:4;
-then A16:   dom (M1.k) = dom mlt(p,FinSeq_log(2,p)) by A9,A13,A14,FINSEQ_3:31;
-       now let j be Nat such that
-A17:     j in dom (M1.k);
-A18:      j in NAT by ORDINAL1:def 13;
-A19:     j in Seg width M by A9,A15,A17,FINSEQ_1:def 3;
-then A20:     [k,j] in Indices M by A12,MATRPROB:12;
-A21:     [k,j] in Indices M1 by A11,A17,MATRPROB:13;
-A22:     j in dom FinSeq_log(2,p) by A13,A19,FINSEQ_1:def 3;
-A23:     (M1.k).j = M1*(k,j) by A18,A21,MATRPROB:14
-          .= M*(k,j)*log(2,M*(k,j)) by A9,A18,A21;
-A24:      p.j=M*(k,j) by A19,MATRIX_1:def 8;
-A25:      (mlt(p,FinSeq_log(2,p))).j = p.j * (FinSeq_log(2,p)).j
-          by A16,A17,RVSUM_1:86
-          .= M*(k,j)*(FinSeq_log(2,p)).j by A19,MATRIX_1:def 8;
-         per cases by A18,A20,MATRPROB:def 6;
-         suppose M*(k,j)=0;
-           hence (M1.k).j = (mlt(p,FinSeq_log(2,p))).j by A23,A25;
-         end;
-         suppose M*(k,j)>0;
-           hence (mlt(p,FinSeq_log(2,p))).j
-             = (M1.k).j by A22,A23,A24,A25,Def6;
-         end;
-      end;
-      hence thesis by A16,FINSEQ_1:17;
+A1: M1 = Infor_FinSeq_of M;
+    then
+A2: len M1 = len M & width M1 = width M by Def8;
+    now
+      let i,j such that
+A3:   [i,j] in Indices M1;
+A4:   i in Seg len M1 & j in Seg width M1 by A3,MATRPROB:12;
+      then
+A5:   i in dom M by A2,FINSEQ_1:def 3;
+      then reconsider p=Line(M,i) as nonnegative FinSequence of REAL by Th19;
+A6:   len p = width M by MATRIX_1:def 8;
+A7:   p.j = M*(i,j) by A2,A4,MATRIX_1:def 8;
+      len p = len Infor_FinSeq_of p by Th47;
+      then
+A8:   j in dom Infor_FinSeq_of p by A2,A4,A6,FINSEQ_1:def 3;
+      thus M1*(i,j) = Line(M1,i).j by A4,MATRIX_1:def 8
+        .= (Infor_FinSeq_of p).j by A1,A5,Th53
+        .= M*(i,j)*log(2,M*(i,j)) by A7,A8,Th47;
     end;
-    hence thesis by A9,Def8;
+    hence len M1 = len M & width M1 = width M &
+    for i,j st [i,j] in Indices M1 holds M1*(i,j)=M*(i,j)*log(2,M*(i,j))
+    by A1,Def8;
   end;
+  assume
+A9: len M1 = len M & width M1 = width M &
+  for i,j st [i,j] in Indices M1 holds M1*(i,j)=M*(i,j)*log(2,M*(i,j));
+  then
+A10: dom M1 = dom M & Seg width M1 = Seg width M by FINSEQ_3:31;
+  for k st k in dom M1 holds M1.k = mlt(Line(M,k),FinSeq_log(2,Line(M,k)))
+  proof
+    let k such that
+A11: k in dom M1;
+    reconsider p=Line(M,k) as nonnegative FinSequence of REAL by A10,A11,Th19;
+A12: k in Seg len M by A9,A11,FINSEQ_1:def 3;
+A13: len p = width M & len FinSeq_log(2,p) = len p by Def6,MATRIX_1:def 8;
+    then
+A14: len mlt(p,FinSeq_log(2,p)) = len p by MATRPROB:30;
+A15: len (M1.k) = width M1 by A11,GOBRD13:4;
+    then
+A16: dom (M1.k) = dom mlt(p,FinSeq_log(2,p)) by A9,A13,A14,FINSEQ_3:31;
+    now
+      let j be Nat such that
+A17:  j in dom (M1.k);
+A18:  j in NAT by ORDINAL1:def 13;
+A19:  j in Seg width M by A9,A15,A17,FINSEQ_1:def 3;
+      then
+A20:  [k,j] in Indices M by A12,MATRPROB:12;
+A21:  [k,j] in Indices M1 by A11,A17,MATRPROB:13;
+A22:  j in dom FinSeq_log(2,p) by A13,A19,FINSEQ_1:def 3;
+A23:  (M1.k).j = M1*(k,j) by A18,A21,MATRPROB:14
+        .= M*(k,j)*log(2,M*(k,j)) by A9,A18,A21;
+A24:  p.j=M*(k,j) by A19,MATRIX_1:def 8;
+A25:  (mlt(p,FinSeq_log(2,p))).j = p.j * (FinSeq_log(2,p)).j
+      by A16,A17,RVSUM_1:86
+        .= M*(k,j)*(FinSeq_log(2,p)).j by A19,MATRIX_1:def 8;
+      per cases by A18,A20,MATRPROB:def 6;
+      suppose M*(k,j)=0;
+        hence (M1.k).j = (mlt(p,FinSeq_log(2,p))).j by A23,A25;
+      end;
+      suppose M*(k,j)>0;
+        hence (mlt(p,FinSeq_log(2,p))).j = (M1.k).j by A22,A23,A24,A25,Def6;
+      end;
+    end;
+    hence thesis by A16,FINSEQ_1:17;
+  end;
+  hence thesis by A9,Def8;
+end;
 
-definition let p being FinSequence of REAL;
+definition
+  let p being FinSequence of REAL;
   func Entropy p -> Real equals
-     -Sum Infor_FinSeq_of p;
+
+  -Sum Infor_FinSeq_of p;
   correctness;
 end;
 
 theorem
-   for p being non empty ProbFinS FinSequence of REAL
-    holds Entropy p >= 0
-  proof let p be non empty ProbFinS FinSequence of REAL;
-    set p1 = - Infor_FinSeq_of p;
+  for p being non empty ProbFinS FinSequence of REAL holds Entropy p >= 0
+proof
+  let p be non empty ProbFinS FinSequence of REAL;
+  set p1 = - Infor_FinSeq_of p;
 A1: dom p = Seg len p by FINSEQ_1:def 3
-      .= Seg len Infor_FinSeq_of p by Th47
-      .= dom Infor_FinSeq_of p by FINSEQ_1:def 3;
+    .= Seg len Infor_FinSeq_of p by Th47
+    .= dom Infor_FinSeq_of p by FINSEQ_1:def 3;
 A2: for k be Nat st k in dom p1 holds p1.k >= 0
-    proof let k be Nat such that
-A3:   k in dom p1;
-       k in dom p by A1,A3,VALUED_1:8;
-      then (Infor_FinSeq_of p).k <= 0 by Th52;
-      then -((Infor_FinSeq_of p).k) >= -0 by XREAL_1:26;
-      hence thesis by RVSUM_1:35;
-    end;
-     Entropy p = Sum p1 by RVSUM_1:118;
-    hence thesis by A2,RVSUM_1:114;
+  proof
+    let k be Nat such that
+A3: k in dom p1;
+    k in dom p by A1,A3,VALUED_1:8;
+    then (Infor_FinSeq_of p).k <= 0 by Th52;
+    then -((Infor_FinSeq_of p).k) >= -0 by XREAL_1:26;
+    hence thesis by RVSUM_1:35;
   end;
+  Entropy p = Sum p1 by RVSUM_1:118;
+  hence thesis by A2,RVSUM_1:114;
+end;
 
 theorem
-   for p being non empty ProbFinS FinSequence of REAL
-   st ex k st k in dom p & p.k = 1 holds
-     Entropy p = 0
-  proof let p be non empty ProbFinS FinSequence of REAL such that
+  for p being non empty ProbFinS FinSequence of REAL
+  st ex k st k in dom p & p.k = 1 holds Entropy p = 0
+proof
+  let p be non empty ProbFinS FinSequence of REAL such that
 A1: ex k st k in dom p & p.k = 1;
-    consider k1 being Element of NAT such that
+  consider k1 being Element of NAT such that
 A2: k1 in dom p & p.k1 = 1 by A1;
 A3: p has_onlyone_value_in k1 by A2,Th15;
-    set q = Infor_FinSeq_of p;
-     len q = len p by Th47;
-then A4: dom q = dom p by FINSEQ_3:31;
-     for k st k in dom q holds q.k = 0
-    proof let k such that
-A5:   k in dom q;
-      per cases;
-      suppose
-     k=k1;
-        hence q.k = 1*log(2,1) by A2,A5,Th47 .= 0 by POWER:59;
-      end;
-      suppose k<>k1;
-then A6:     p.k = 0 by A3,A4,A5,Def2;
-        thus q.k = p.k * log(2,p.k) by A5,Th47
-          .= 0 by A6;
-      end;
+  set q = Infor_FinSeq_of p;
+  len q = len p by Th47;
+  then
+A4: dom q = dom p by FINSEQ_3:31;
+  for k st k in dom q holds q.k = 0
+  proof
+    let k such that
+A5: k in dom q;
+    per cases;
+    suppose k=k1;
+      hence q.k = 1*log(2,1) by A2,A5,Th47
+        .= 0 by POWER:59;
     end;
-    then for x st x in dom q holds q.x = 0;
-    then q = dom q --> 0 by FUNCOP_1:17;
-    then q = len q |-> 0 by FINSEQ_1:def 3;
-    then Sum q = 0 by RVSUM_1:111;
-    hence Entropy p = 0;
+    suppose k<>k1;
+      then
+A6:   p.k = 0 by A3,A4,A5,Def2;
+      thus q.k = p.k * log(2,p.k) by A5,Th47
+        .= 0 by A6;
+    end;
   end;
+  then for x st x in dom q holds q.x = 0;
+  then q = dom q --> 0 by FUNCOP_1:17;
+  then q = len q |-> 0 by FINSEQ_1:def 3;
+  then Sum q = 0 by RVSUM_1:111;
+  hence Entropy p = 0;
+end;
 
 theorem Th57:
   for p,q being non empty ProbFinS FinSequence of REAL,
-    pp,qq being FinSequence of REAL st len p = len q &
-    len pp = len p & len qq = len q &
-    (for k st k in dom p holds p.k > 0 & q.k > 0 &
-      pp.k=-p.k*log(2,p.k) & qq.k = -p.k*log(2,q.k)) holds
-        Sum pp <= Sum qq &
-        ((for k st k in dom p holds p.k=q.k) iff Sum pp = Sum qq) &
-        ((ex k st k in dom p & p.k<>q.k) iff Sum pp < Sum qq)
-   proof let p,q be non empty ProbFinS FinSequence of REAL,
-             pp,qq be FinSequence of REAL such that
+  pp,qq being FinSequence of REAL st len p = len q &
+  len pp = len p & len qq = len q &
+  (for k st k in dom p holds p.k > 0 & q.k > 0 &
+  pp.k=-p.k*log(2,p.k) & qq.k = -p.k*log(2,q.k)) holds Sum pp <= Sum qq &
+  ((for k st k in dom p holds p.k=q.k) iff Sum pp = Sum qq) &
+  ((ex k st k in dom p & p.k<>q.k) iff Sum pp < Sum qq)
+proof
+  let p,q be non empty ProbFinS FinSequence of REAL,
+  pp,qq be FinSequence of REAL such that
 A1: len p = len q & len pp = len p & len qq = len q and
 A2: for k st k in dom p holds p.k > 0 & q.k > 0 &
-    pp.k=-p.k*log(2,p.k) & qq.k=-p.k*log(2,q.k);
-    set n = len p;
+  pp.k=-p.k*log(2,p.k) & qq.k=-p.k*log(2,q.k);
+  set n = len p;
 A3: dom p = Seg n by FINSEQ_1:def 3;
 A4: number_e > 0 & number_e <> 1 by TAYLOR_1:11;
 A5: len (pp - qq) = len p by A1,EUCLID_2:7;
-then A6: dom (pp - qq) = dom pp & dom (pp - qq) = dom qq by A1,FINSEQ_3:31;
-A7: dom pp = Seg len pp by FINSEQ_1:def 3 .= dom p by A1,FINSEQ_1:def 3;
-     for k st k in dom pp holds (pp - qq).k = pp.k - qq.k
-      by A6,VALUED_1:12,13,14,15;
-then A8: Sum pp - Sum qq = Sum(pp-qq) by A1,A5,Th8;
-    set p1 = pp-qq;
+  then
+A6: dom (pp - qq) = dom pp & dom (pp - qq) = dom qq by A1,FINSEQ_3:31;
+A7: dom pp = Seg len pp by FINSEQ_1:def 3
+    .= dom p by A1,FINSEQ_1:def 3;
+  for k st k in dom pp holds (pp - qq).k = pp.k - qq.k by A6,VALUED_1:13;
+  then
+A8: Sum pp - Sum qq = Sum(pp-qq) by A1,A5,Th8;
+  set p1 = pp-qq;
 A9: len p1 = len p & for k st k in dom p holds
-      p1.k = p.k*log(2,number_e)*log(number_e,(q.k)/(p.k))
+  p1.k = p.k*log(2,number_e)*log(number_e,(q.k)/(p.k))
+  proof
+    thus len p1 = len p by A1,EUCLID_2:7;
+    thus for k st k in dom p holds
+    p1.k = p.k*log(2,number_e)*log(number_e,(q.k)/(p.k))
     proof
-      thus len p1 = len p by A1,EUCLID_2:7;
-      thus for k st k in dom p holds
-        p1.k = p.k*log(2,number_e)*log(number_e,(q.k)/(p.k))
-      proof let k such that
-A10:     k in dom p;
-A11:     p.k > 0 & q.k > 0 &
-        pp.k=-p.k*log(2,p.k) &
-        qq.k=-p.k*log(2,q.k) by A2,A10;
-then A12:     1/(p.k) > 0 & (q.k)/(p.k) > 0 by REAL_2:127;
-A13:     -log(2,p.k)=log(2,1/(p.k)) by A11,Th5;
-A14:     log(2,(q.k)/(p.k))
-          = log(2,number_e)*log(number_e,(q.k)/(p.k)) by A4,A12,POWER:64;
-        thus p1.k = pp.k - qq.k by A6,A7,A10,VALUED_1:12,13,14,15
-          .= p.k*(log(2,1/(p.k)) + log(2,(q.k))) by A11,A13
-          .= p.k*log(2,(1/(p.k))*(q.k)) by A11,A12,POWER:61
-          .= p.k*log(2,(1*(q.k))/(p.k)) by XCMPLX_1:75
-          .= p.k*log(2,number_e)*log(number_e,(q.k)/(p.k)) by A14;
-      end;
+      let k such that
+A10:  k in dom p;
+A11:  p.k > 0 & q.k > 0 & pp.k=-p.k*log(2,p.k) &
+      qq.k=-p.k*log(2,q.k) by A2,A10;
+      then
+A12:  1/(p.k) > 0 & (q.k)/(p.k) > 0 by REAL_2:127;
+A13:  -log(2,p.k)=log(2,1/(p.k)) by A11,Th5;
+A14:  log(2,(q.k)/(p.k))
+      = log(2,number_e)*log(number_e,(q.k)/(p.k)) by A4,A12,POWER:64;
+      thus p1.k = pp.k - qq.k by A6,A7,A10,VALUED_1:13
+        .= p.k*(log(2,1/(p.k)) + log(2,(q.k))) by A11,A13
+        .= p.k*log(2,(1/(p.k))*(q.k)) by A11,A12,POWER:61
+        .= p.k*log(2,(1*(q.k))/(p.k)) by XCMPLX_1:75
+        .= p.k*log(2,number_e)*log(number_e,(q.k)/(p.k)) by A14;
     end;
-    deffunc F(Nat) = p.$1*log(2,number_e)*(((q.$1)/(p.$1))-1);
-    consider p2 be FinSequence of REAL such that
+  end;
+  deffunc F(Nat) = p.$1*log(2,number_e)*(((q.$1)/(p.$1))-1);
+  consider p2 be FinSequence of REAL such that
 A15: len p2 = n and
 A16: for k be Nat st k in Seg n holds p2.k = F(k) from FINSEQ_2:sch 1;
-A17: dom p2 = Seg len p2 by FINSEQ_1:def 3 .= dom p by A15,FINSEQ_1:def 3;
+A17: dom p2 = Seg len p2 by FINSEQ_1:def 3
+    .= dom p by A15,FINSEQ_1:def 3;
 A18: dom p1 = dom p2 by A9,A15,FINSEQ_3:31;
-     number_e-0 > 2-1 by TAYLOR_1:11,XREAL_1:17;
-then A19: log(2,number_e) > 0 by Th4;
+  number_e-0 > 2-1 by TAYLOR_1:11,XREAL_1:17;
+  then
+A19: log(2,number_e) > 0 by Th4;
 A20: for k be Nat st k in Seg n holds p1.k <= p2.k
-    proof let k be Nat such that
-A21:   k in Seg n;
-A22:   k in dom p by A21,FINSEQ_1:def 3;
-then A23:   p.k > 0 & q.k > 0 by A2;
-      then (q.k)/(p.k) > 0 by REAL_2:127;
-then A24:   log(number_e,(q.k)/(p.k)) <= ((q.k)/(p.k))-1 by Th3;
-       p.k * log(2,number_e) > 0 by A19,A23,REAL_2:122;
-      then p.k * log(2,number_e)*log(number_e,(q.k)/(p.k))<=
-        p.k * log(2,number_e)*(((q.k)/(p.k))-1) by A24,XREAL_1:66;
-      then p1.k <= p.k * log(2,number_e) *(((q.k)/(p.k))-1) by A9,A22;
-      hence thesis by A16,A21;
-    end;
+  proof
+    let k be Nat such that
+A21: k in Seg n;
+A22: k in dom p by A21,FINSEQ_1:def 3;
+    then
+A23: p.k > 0 & q.k > 0 by A2;
+    then (q.k)/(p.k) > 0 by REAL_2:127;
+    then
+A24: log(number_e,(q.k)/(p.k)) <= ((q.k)/(p.k))-1 by Th3;
+    p.k * log(2,number_e) > 0 by A19,A23,REAL_2:122;
+    then p.k * log(2,number_e)*log(number_e,(q.k)/(p.k))<=
+    p.k * log(2,number_e)*(((q.k)/(p.k))-1) by A24,XREAL_1:66;
+    then p1.k <= p.k * log(2,number_e) *(((q.k)/(p.k))-1) by A9,A22;
+    hence thesis by A16,A21;
+  end;
 A25: p1 is Element of n-tuples_on REAL by A9,FINSEQ_2:110;
 A26: p2 is Element of n-tuples_on REAL by A15,FINSEQ_2:110;
 A27: len(q-p)=len q by A1,EUCLID_2:7;
-then A28: dom(q-p)=dom p2 by A1,A15,FINSEQ_3:31;
-then A29: dom p2 = dom(log(2,number_e)*(q-p)) by VALUED_1:7,def 5;
+  then
+A28: dom(q-p)=dom p2 by A1,A15,FINSEQ_3:31;
+  then
+A29: dom p2 = dom(log(2,number_e)*(q-p)) by VALUED_1:def 5;
 A30: for k be Nat st k in dom p2 holds p2.k=(log(2,number_e)*(q-p)).k
-    proof let k be Nat such that
-A31:   k in dom p2;
-A32:   k in Seg n by A17,A31,FINSEQ_1:def 3;
-A33:   p.k>0 by A2,A17,A31;
-      thus p2.k = log(2,number_e)*p.k*(((q.k)/(p.k))-1) by A16,A32
-        .= log(2,number_e)*(p.k*((q.k)/(p.k))-p.k)
-        .= log(2,number_e)*(((p.k)*(q.k))/(p.k)-p.k) by XCMPLX_1:75
-        .= log(2,number_e)*(((p.k)/(p.k))*(q.k)-p.k) by XCMPLX_1:75
-        .= log(2,number_e)*(1*(q.k)-p.k) by A33,XCMPLX_1:60
-        .= log(2,number_e)*(q-p).k by A28,A31,VALUED_1:12,13,14,15
-        .= (log(2,number_e)*(q-p)).k by RVSUM_1:66;
-    end;
-A34: for k st k in dom q holds (q-p).k=q.k-p.k
-    proof let k such that
-A35:   k in dom q;
-       k in dom(q-p) by A27,A35,FINSEQ_3:31;
-      hence thesis by VALUED_1:12,13,14,15;
-    end;
-A36: Sum p2 = Sum(log(2,number_e)*(q-p)) by A29,A30,FINSEQ_1:17
-      .= log(2,number_e)* Sum(q-p) by RVSUM_1:117
-      .= log(2,number_e)* (Sum q - Sum p) by A1,A27,A34,Th8
-      .= log(2,number_e)*(1-Sum p) by MATRPROB:def 5
-      .= log(2,number_e)*(1-1) by MATRPROB:def 5 .=0;
-    then Sum pp +- Sum qq <=0 by A8,A20,A25,A26,RVSUM_1:112; hence Sum pp <=
-Sum qq by REAL_2:105;
-A37: (ex k st k in Seg n & p.k<>q.k) implies Sum pp < Sum qq
-    proof assume ex k st k in Seg n & p.k<>q.k;
-      then consider k1 being Nat such that
-A38:   k1 in Seg n & p.k1 <> q.k1;
-A39:   k1 in dom p by A38,FINSEQ_1:def 3;
-then A40:   p.k1 > 0 & q.k1 > 0 by A2;
-then A41:   q.k1/p.k1 >0 by REAL_2:127;
-       q.k1/p.k1 <> 1 by A38,XCMPLX_1:58;
-then A42:   log(number_e,(q.k1)/(p.k1)) < ((q.k1)/(p.k1)-1) by A41,Th3;
-       p.k1 * log(2,number_e) > 0 by A19,A40,REAL_2:122;
-      then p.k1 * log(2,number_e) * log(number_e,(q.k1)/(p.k1)) <
-        p.k1 * log(2,number_e) * ((q.k1)/(p.k1)-1) by A42,XREAL_1:70;
-      then p1.k1 < p.k1 * log(2,number_e) * ((q.k1)/(p.k1)-1) by A9,A39;
-      then p1.k1 < p2.k1 by A16,A38;
-      then Sum pp +- Sum qq < 0 by A8,A20,A25,A26,A36,A38,RVSUM_1:113;
-      hence Sum pp < Sum qq by REAL_2:106;
-    end;
-    thus
- (for k st k in dom p holds p.k=q.k) iff Sum pp = Sum qq
-    proof
-      hereby assume
-A43:     for k st k in dom p holds p.k=q.k;
-         for k be Nat st k in dom p holds p1.k = p2.k
-        proof let k be Nat such that
-A44:       k in dom p;
-A45:       k in Seg n by A44,FINSEQ_1:def 3;
-A46:       p.k > 0 by A2,A44;
-           p.k = q.k by A43,A44;
-          then q.k/p.k = 1 by A46,XCMPLX_1:60;
-          then p.k * log(2,number_e) * log(number_e,(q.k)/(p.k)) =
-            p.k * log(2,number_e) * ((q.k)/(p.k)-1) by Th3;
-          then p1.k = p.k * log(2,number_e) * ((q.k)/(p.k)-1) by A9,A44;
-          hence thesis by A16,A45;
-        end;
-        then Sum p1 = 0 by A17,A18,A36,FINSEQ_1:17;
-        hence Sum pp = Sum qq by A8;
-      end;
-      assume
-A47:   Sum pp = Sum qq;
-      assume not for k st k in dom p holds p.k=q.k;
-      hence contradiction by A3,A37,A47;
-    end;
-    hence thesis by A3,A37;
+  proof
+    let k be Nat such that
+A31: k in dom p2;
+A32: k in Seg n by A17,A31,FINSEQ_1:def 3;
+A33: p.k>0 by A2,A17,A31;
+    thus p2.k = log(2,number_e)*p.k*(((q.k)/(p.k))-1) by A16,A32
+      .= log(2,number_e)*(p.k*((q.k)/(p.k))-p.k)
+      .= log(2,number_e)*(((p.k)*(q.k))/(p.k)-p.k) by XCMPLX_1:75
+      .= log(2,number_e)*(((p.k)/(p.k))*(q.k)-p.k) by XCMPLX_1:75
+      .= log(2,number_e)*(1*(q.k)-p.k) by A33,XCMPLX_1:60
+      .= log(2,number_e)*(q-p).k by A28,A31,VALUED_1:13
+      .= (log(2,number_e)*(q-p)).k by RVSUM_1:66;
   end;
+A34: for k st k in dom q holds (q-p).k=q.k-p.k
+  proof
+    let k such that
+A35: k in dom q;
+    k in dom(q-p) by A27,A35,FINSEQ_3:31;
+    hence thesis by VALUED_1:13;
+  end;
+A36: Sum p2 = Sum(log(2,number_e)*(q-p)) by A29,A30,FINSEQ_1:17
+    .= log(2,number_e)* Sum(q-p) by RVSUM_1:117
+    .= log(2,number_e)* (Sum q - Sum p) by A1,A27,A34,Th8
+    .= log(2,number_e)*(1-Sum p) by MATRPROB:def 5
+    .= log(2,number_e)*(1-1) by MATRPROB:def 5
+    .=0;
+  then Sum pp +- Sum qq <=0 by A8,A20,A25,A26,RVSUM_1:112;
+  hence Sum pp <= Sum qq by REAL_2:105;
+A37: (ex k st k in Seg n & p.k<>q.k) implies Sum pp < Sum qq
+  proof
+    assume ex k st k in Seg n & p.k<>q.k;
+    then consider k1 being Nat such that
+A38: k1 in Seg n & p.k1 <> q.k1;
+A39: k1 in dom p by A38,FINSEQ_1:def 3;
+    then
+A40: p.k1 > 0 & q.k1 > 0 by A2;
+    then
+A41: q.k1/p.k1 >0 by REAL_2:127;
+    q.k1/p.k1 <> 1 by A38,XCMPLX_1:58;
+    then
+A42: log(number_e,(q.k1)/(p.k1)) < ((q.k1)/(p.k1)-1) by A41,Th3;
+    p.k1 * log(2,number_e) > 0 by A19,A40,REAL_2:122;
+    then p.k1 * log(2,number_e) * log(number_e,(q.k1)/(p.k1)) <
+    p.k1 * log(2,number_e) * ((q.k1)/(p.k1)-1) by A42,XREAL_1:70;
+    then p1.k1 < p.k1 * log(2,number_e) * ((q.k1)/(p.k1)-1) by A9,A39;
+    then p1.k1 < p2.k1 by A16,A38;
+    then Sum pp +- Sum qq < 0 by A8,A20,A25,A26,A36,A38,RVSUM_1:113;
+    hence Sum pp < Sum qq by REAL_2:106;
+  end; thus
+  (for k st k in dom p holds p.k=q.k) iff Sum pp = Sum qq
+  proof
+    hereby
+      assume
+A43:  for k st k in dom p holds p.k=q.k;
+      for k be Nat st k in dom p holds p1.k = p2.k
+      proof
+        let k be Nat such that
+A44:    k in dom p;
+A45:    k in Seg n by A44,FINSEQ_1:def 3;
+A46:    p.k > 0 by A2,A44;
+        p.k = q.k by A43,A44;
+        then q.k/p.k = 1 by A46,XCMPLX_1:60;
+        then p.k * log(2,number_e) * log(number_e,(q.k)/(p.k)) =
+        p.k * log(2,number_e) * ((q.k)/(p.k)-1) by Th3;
+        then p1.k = p.k * log(2,number_e) * ((q.k)/(p.k)-1) by A9,A44;
+        hence thesis by A16,A45;
+      end;
+      then Sum p1 = 0 by A17,A18,A36,FINSEQ_1:17;
+      hence Sum pp = Sum qq by A8;
+    end;
+    assume
+A47: Sum pp = Sum qq;
+    assume not for k st k in dom p holds p.k=q.k;
+    hence contradiction by A3,A37,A47;
+  end;
+  hence thesis by A3,A37;
+end;
 
 theorem
-   for p being non empty ProbFinS FinSequence of REAL st
-    (for k st k in dom p holds p.k>0) holds
-      (Entropy p <= log(2,len p)) &
-      ((for k st k in dom p holds p.k=1/(len p)) iff Entropy p=log(2,len p)) &
-      ((ex k st k in dom p & p.k<>1/(len p)) iff Entropy p<log(2,len p))
-  proof let p be non empty ProbFinS FinSequence of REAL such that
+  for p being non empty ProbFinS FinSequence of REAL st
+  (for k st k in dom p holds p.k>0) holds (Entropy p <= log(2,len p)) &
+  ((for k st k in dom p holds p.k=1/(len p)) iff Entropy p=log(2,len p)) &
+  ((ex k st k in dom p & p.k<>1/(len p)) iff Entropy p<log(2,len p))
+proof
+  let p be non empty ProbFinS FinSequence of REAL such that
 A1: for k st k in dom p holds p.k > 0;
-    set n = len p;
-    reconsider n1=n as non empty Element of NAT by FINSEQ_1:25;
+  set n = len p;
+  reconsider n1=n as non empty Element of NAT by FINSEQ_1:25;
 A2: dom p = Seg len p by FINSEQ_1:def 3;
-    deffunc F(Nat) = 1/n1;
-    consider p1 be FinSequence of REAL such that
+  deffunc F(Nat) = 1/n1;
+  consider p1 be FinSequence of REAL such that
 A3: len p1 = n and
 A4: for k be Nat st k in Seg n holds p1.k = F(k) from FINSEQ_2:sch 1;
 A5: 1/n1 > 0 by REAL_2:127;
- dom p1 = Seg n by A3,FINSEQ_1:def 3;
-    then for k being Nat st k in dom p1 holds p1.k = 1/n1 by A4;
-    then p1 =(n1 |-> (1/n1)) by A3,MATRPROB:1;
-then A6: p1 is non empty ProbFinS FinSequence of REAL by Th16;
-    deffunc F(Nat) = -p.$1*log(2,p1.$1);
-    consider p2 be FinSequence of REAL such that
+  dom p1 = Seg n by A3,FINSEQ_1:def 3;
+  then p1 =(n1 |-> (1/n1)) by A3,A4,MATRPROB:1;
+  then
+A6: p1 is non empty ProbFinS FinSequence of REAL by Th16;
+  deffunc F(Nat) = -p.$1*log(2,p1.$1);
+  consider p2 be FinSequence of REAL such that
 A7: len p2 = n and
 A8: for k be Nat st k in Seg n holds p2.k = F(k) from FINSEQ_2:sch 1;
-    set p3 = - Infor_FinSeq_of p;
+  set p3 = - Infor_FinSeq_of p;
 A9: dom p = Seg n by FINSEQ_1:def 3;
-A10: dom Infor_FinSeq_of p
-      = Seg len Infor_FinSeq_of p by FINSEQ_1:def 3
-     .= Seg n by Th47;
+A10: dom Infor_FinSeq_of p = Seg len Infor_FinSeq_of p by FINSEQ_1:def 3
+    .= Seg n by Th47;
 A11: len p3 = n & for k st k in Seg n holds p3.k=-p.k*log(2,p.k)
-    proof
-       dom p3 = Seg n by A10,VALUED_1:8;
-      hence len p3 = n by FINSEQ_1:def 3;
-      hereby let k such that
-A12:     k in Seg n;
-        thus p3.k = -((Infor_FinSeq_of p).k) by RVSUM_1:35
-          .= -p.k*log(2,p.k) by A10,A12,Th47;
-      end;
-    end;
-then A13: for k st k in dom p holds p.k > 0 & p1.k > 0 &
-      p3.k=-p.k*log(2,p.k) & p2.k = -p.k*log(2,p1.k)
-      by A1,A2,A4,A5,A8;
-then A14: Sum p3 <= Sum p2 &
-      ((for k st k in dom p holds p.k=p1.k) iff Sum p3 = Sum p2) &
-      ((ex k st k in dom p & p.k<>p1.k) iff Sum p3 < Sum p2)
-        by A3,A6,A7,A11,Th57;
-A15: Sum p3 = Entropy p by RVSUM_1:118;
-A16: dom p2 = dom p by A7,FINSEQ_3:31;
- p2 = (-log(2,1/n1))*p
-    proof
-A17:   dom p2 = dom((-log(2,1/n1))*p) by A16,VALUED_1:7,def 5;
-       for k be Nat st k in dom p2 holds p2.k = ((-log(2,1/n1))*p).k
-      proof let k be Nat such that
-A18:     k in dom p2;
-        thus p2.k = -p.k*log(2,p1.k) by A8,A9,A16,A18
-          .= -p.k*log(2,1/n1) by A4,A9,A16,A18 .= (-log(2,1/n1))*p.k
-          .= ((-log(2,1/n1))*p).k by RVSUM_1:66;
-      end;
-      hence thesis by A17,FINSEQ_1:17;
-    end;
-then A19: Sum p2 = (-log(2,1/n1)) * Sum p by RVSUM_1:117
-        .= (-log(2,1/n1)) * 1 by MATRPROB:def 5
-        .= log(2,1/(1/n1)) by A5,Th5
-        .= log(2,n) by XCMPLX_1:56;
-    hence Entropy p <= log(2,len p) by A3,A6,A7,A11,A13,A15,Th57;
-    thus (for k st k in dom p holds p.k=1/(len p)) iff Entropy p=log(2,len p)
-    proof
-      hereby assume
-A20:     for k st k in dom p holds p.k=1/(len p);
-         now let k such that
-A21:       k in dom p;
-          thus p.k = 1/n by A20,A21 .= p1.k by A2,A4,A21;
-        end;
-        hence Entropy p=log(2,n) by A3,A6,A7,A11,A13,A15,A19,Th57;
-      end;
-      assume
-A22:   Entropy p=log(2,n);
-      hereby let k; assume
-A23:     k in dom p;
-        hence p.k = p1.k by A3,A6,A7,A11,A13,A15,A19,A22,Th57
-          .= 1/n by A2,A4,A23;
-      end;
-    end;
-    thus (ex k st k in dom p & p.k<>1/(len p)) iff Entropy p<log(2,len p)
-    proof
-      hereby assume
-         ex k st k in dom p & p.k<>1/(len p);
-        then consider k1 being Nat such that
-A24:     k1 in dom p & p.k1<>1/n;
-         p1.k1 <> p.k1 by A2,A4,A24;
-        hence Entropy p<log(2,n) by A3,A6,A7,A11,A13,A15,A19,A24,Th57;
-      end;
-      assume Entropy p<log(2,n);
-      then consider k1 being Nat such that
-A25:   k1 in dom p & p.k1<>p1.k1 by A14,A19,RVSUM_1:118;
-       p1.k1 = 1/n by A2,A4,A25;
-      hence thesis by A25;
+  proof
+    dom p3 = Seg n by A10,VALUED_1:8;
+    hence len p3 = n by FINSEQ_1:def 3;
+    hereby
+      let k such that
+A12:  k in Seg n;
+      thus p3.k = -((Infor_FinSeq_of p).k) by RVSUM_1:35
+        .= -p.k*log(2,p.k) by A10,A12,Th47;
     end;
   end;
+  then
+A13: for k st k in dom p holds p.k > 0 & p1.k > 0 &
+  p3.k=-p.k*log(2,p.k) & p2.k = -p.k*log(2,p1.k) by A1,A2,A4,A5,A8;
+  then
+A14: Sum p3 <= Sum p2 &
+  ((for k st k in dom p holds p.k=p1.k) iff Sum p3 = Sum p2) &
+  ((ex k st k in dom p & p.k<>p1.k) iff Sum p3 < Sum p2) by A3,A6,A7,A11,Th57;
+A15: Sum p3 = Entropy p by RVSUM_1:118;
+A16: dom p2 = dom p by A7,FINSEQ_3:31;
+  p2 = (-log(2,1/n1))*p
+  proof
+A17: dom p2 = dom((-log(2,1/n1))*p) by A16,VALUED_1:def 5;
+    for k be Nat st k in dom p2 holds p2.k = ((-log(2,1/n1))*p).k
+    proof
+      let k be Nat such that
+A18:  k in dom p2;
+      thus p2.k = -p.k*log(2,p1.k) by A8,A9,A16,A18
+        .= -p.k*log(2,1/n1) by A4,A9,A16,A18
+        .= (-log(2,1/n1))*p.k
+        .= ((-log(2,1/n1))*p).k by RVSUM_1:66;
+    end;
+    hence thesis by A17,FINSEQ_1:17;
+  end;
+  then
+A19: Sum p2 = (-log(2,1/n1)) * Sum p by RVSUM_1:117
+    .= (-log(2,1/n1)) * 1 by MATRPROB:def 5
+    .= log(2,1/(1/n1)) by A5,Th5
+    .= log(2,n) by XCMPLX_1:56;
+  hence Entropy p <= log(2,len p) by A3,A6,A7,A11,A13,A15,Th57;
+  thus (for k st k in dom p holds p.k=1/(len p)) iff Entropy p=log(2,len p)
+  proof
+    hereby
+      assume
+A20:  for k st k in dom p holds p.k=1/(len p);
+      now
+        let k such that
+A21:    k in dom p;
+        thus p.k = 1/n by A20,A21
+          .= p1.k by A2,A4,A21;
+      end;
+      hence Entropy p=log(2,n) by A3,A6,A7,A11,A13,A15,A19,Th57;
+    end;
+    assume
+A22: Entropy p=log(2,n);
+    hereby
+      let k;
+      assume
+A23:  k in dom p;
+      hence p.k = p1.k by A3,A6,A7,A11,A13,A15,A19,A22,Th57
+        .= 1/n by A2,A4,A23;
+    end;
+  end;
+  thus (ex k st k in dom p & p.k<>1/(len p)) iff Entropy p<log(2,len p)
+  proof
+    hereby
+      assume ex k st k in dom p & p.k<>1/(len p);
+      then consider k1 being Nat such that
+A24:  k1 in dom p & p.k1<>1/n;
+      p1.k1 <> p.k1 by A2,A4,A24;
+      hence Entropy p<log(2,n) by A3,A6,A7,A11,A13,A15,A19,A24,Th57;
+    end;
+    assume Entropy p<log(2,n);
+    then consider k1 being Nat such that
+A25: k1 in dom p & p.k1<>p1.k1 by A14,A19,RVSUM_1:118;
+    p1.k1 = 1/n by A2,A4,A25;
+    hence thesis by A25;
+  end;
+end;
 
 theorem Th59:
   for M being m-nonnegative Matrix of REAL holds
-    Mx2FinS(Infor_FinSeq_of M) = Infor_FinSeq_of Mx2FinS(M)
-  proof let M be m-nonnegative Matrix of REAL;
-    reconsider p=Mx2FinS(M) as nonnegative FinSequence of REAL by Th43;
-    set qq=Mx2FinS(Infor_FinSeq_of M);
-    set pp=Infor_FinSeq_of p;
-    set MM=Infor_FinSeq_of M;
+  Mx2FinS(Infor_FinSeq_of M) = Infor_FinSeq_of Mx2FinS(M)
+proof
+  let M be m-nonnegative Matrix of REAL;
+  reconsider p=Mx2FinS(M) as nonnegative FinSequence of REAL by Th43;
+  set qq=Mx2FinS(Infor_FinSeq_of M);
+  set pp=Infor_FinSeq_of p;
+  set MM=Infor_FinSeq_of M;
 A1: len p = len M * width M by Th39;
 A2: len pp = len p by Th47;
 A3: len MM = len M & width MM = width M by Def8;
-then len qq = len M * width M by Th39;
-then A4: dom qq = dom pp & dom qq = dom p by A1,A2,FINSEQ_3:31;
-       now let k be Nat such that
-A5:     k in dom qq;
-         k in Seg len qq by A5,FINSEQ_1:def 3;
-        then k >= 1 & k <= len qq by FINSEQ_1:3;
-        then reconsider l = k - 1 as Element of NAT by NAT_1:21;
-        set ii=(l div width MM)+1;
-        set jj=(l mod width MM)+1;
-A6:     [ii,jj] in Indices MM & qq.k = MM*(ii,jj) by A5,Th41;
-A7:     p.k = M*(ii,jj) by A3,A4,A5,Th41;
-        thus pp.k = p.k *log(2,p.k) by A4,A5,Th47
-          .= qq.k by A6,A7,Th54;
-      end;
-      hence thesis by A4,FINSEQ_1:17;
+  then len qq = len M * width M by Th39;
+  then
+A4: dom qq = dom pp & dom qq = dom p by A1,A2,FINSEQ_3:31;
+  now
+    let k be Nat such that
+A5: k in dom qq;
+    k in Seg len qq by A5,FINSEQ_1:def 3;
+    then k >= 1 & k <= len qq by FINSEQ_1:3;
+    then reconsider l = k - 1 as Element of NAT by NAT_1:21;
+    set ii=(l div width MM)+1;
+    set jj=(l mod width MM)+1;
+A6: [ii,jj] in Indices MM & qq.k = MM*(ii,jj) by A5,Th41;
+A7: p.k = M*(ii,jj) by A3,A4,A5,Th41;
+    thus pp.k = p.k *log(2,p.k) by A4,A5,Th47
+      .= qq.k by A6,A7,Th54;
   end;
+  hence thesis by A4,FINSEQ_1:17;
+end;
 
 theorem Th60:
   for p,q being ProbFinS FinSequence of REAL
-    for M being Matrix of REAL st M=(ColVec2Mx p)*(LineVec2Mx q) holds
-      SumAll Infor_FinSeq_of M = Sum Infor_FinSeq_of p+Sum Infor_FinSeq_of q
-  proof let p,q be ProbFinS FinSequence of REAL;
-        let M be Matrix of REAL such that
+  for M being Matrix of REAL st M=(ColVec2Mx p)*(LineVec2Mx q) holds
+  SumAll Infor_FinSeq_of M = Sum Infor_FinSeq_of p+Sum Infor_FinSeq_of q
+proof
+  let p,q be ProbFinS FinSequence of REAL;
+  let M be Matrix of REAL such that
 A1: M=(ColVec2Mx p)*(LineVec2Mx q);
-    reconsider M as Joint_Probability Matrix of REAL
-      by A1,Th23;
-    set M1 = Infor_FinSeq_of M;
-    set L = LineSum M1;
+  reconsider M as Joint_Probability Matrix of REAL by A1,Th23;
+  set M1 = Infor_FinSeq_of M;
+  set L = LineSum M1;
 A2: len M = len p & width M = len q by A1,Th22;
 A3: len M1 = len M & width M1 = width M by Def8;
 A4: len L = len M1 by MATRPROB:def 1;
-then A5: dom L = dom M1 & dom M1 = dom M & dom M = dom p by A2,A3,FINSEQ_3:31;
-     len FinSeq_log(2,q) = len q & len FinSeq_log(2,p) = len p by Def6;
-then A6: len mlt(q,FinSeq_log(2,q)) = len q by MATRPROB:30;
-A7: now let k such that
-A8:   k in dom L;
-      reconsider pp=Line(M,k) as nonnegative FinSequence of REAL
-        by A5,A8,Th19;
-A9:   pp = p.k * q by A1,A5,A8,Th22;
-A10:   p.k>=0 by A5,A8,Def1;
-       dom (p.k*log(2,p.k)*q) = dom q by VALUED_1:7,def 5;
-then A11:   len (p.k*log(2,p.k)*q) = len q by FINSEQ_3:31;
-       dom (p.k*mlt(q,FinSeq_log(2,q))) = dom mlt(q,FinSeq_log(2,q))
-        by VALUED_1:7,def 5;
-then A12:   len (p.k*log(2,p.k)*q) = len (p.k*mlt(q,FinSeq_log(2,q)))
-        by A6,A11,FINSEQ_3:31;
-      thus L.k = Sum(M1.k) by A8,MATRPROB:def 1
-        .= Sum(Line(M1,k)) by A5,A8,MATRIX_2:18
-        .= Sum(Infor_FinSeq_of pp) by A5,A8,Th53
-        .= Sum((p.k*log(2,p.k)*q)+(p.k*mlt(q,FinSeq_log(2,q))))
-          by A9,A10,Th51
-        .= Sum(p.k*log(2,p.k)*q)+Sum(p.k*mlt(q,FinSeq_log(2,q)))
-          by A12,INTEGRA5:2
-        .= p.k*log(2,p.k)*Sum q+Sum(p.k*mlt(q,FinSeq_log(2,q)))
-          by RVSUM_1:117
-        .= p.k*log(2,p.k)*1+Sum(p.k*mlt(q,FinSeq_log(2,q)))
-          by MATRPROB:def 5
-        .= p.k*log(2,p.k)+p.k*Sum Infor_FinSeq_of q by RVSUM_1:117;
-    end;
-    set p1= Infor_FinSeq_of p;
-    set p2= (Sum Infor_FinSeq_of q)*p;
-A13: len p1 = len p by Th47;
-     dom p2 = dom p by VALUED_1:7,def 5;
-then A14: len p1 = len L & len p1 = len p2 & dom p1 = dom L & dom p1 = dom p2
-      by A2,A3,A4,A13,FINSEQ_3:31;
-     now let k such that
-A15:   k in dom p1;
-      thus L.k = p.k*log(2,p.k)+p.k*Sum Infor_FinSeq_of q by A7,A14,A15
-        .= p1.k + p.k*Sum Infor_FinSeq_of q by A15,Th47
-        .= p1.k + p2.k by RVSUM_1:66;
-    end;
-    then Sum L = Sum p1 + Sum p2 by A14,Th7
-      .= Sum p1 + (Sum Infor_FinSeq_of q)*Sum p by RVSUM_1:117
-      .= Sum p1 + (Sum Infor_FinSeq_of q)*1 by MATRPROB:def 5
-      .= Sum Infor_FinSeq_of p+Sum Infor_FinSeq_of q;
-    hence thesis by MATRPROB:def 3;
+  then
+A5: dom L = dom M1 & dom M1 = dom M & dom M = dom p by A2,A3,FINSEQ_3:31;
+  len FinSeq_log(2,q) = len q & len FinSeq_log(2,p) = len p by Def6;
+  then
+A6: len mlt(q,FinSeq_log(2,q)) = len q by MATRPROB:30;
+A7: now
+    let k such that
+A8: k in dom L;
+    reconsider pp=Line(M,k) as nonnegative FinSequence of REAL by A5,A8,Th19;
+A9: pp = p.k * q by A1,A5,A8,Th22;
+A10: p.k>=0 by A5,A8,Def1;
+    dom (p.k*log(2,p.k)*q) = dom q by VALUED_1:def 5;
+    then
+A11: len (p.k*log(2,p.k)*q) = len q by FINSEQ_3:31;
+    dom (p.k*mlt(q,FinSeq_log(2,q))) = dom mlt(q,FinSeq_log(2,q))
+    by VALUED_1:def 5;
+    then
+A12: len (p.k*log(2,p.k)*q) = len (p.k*mlt(q,FinSeq_log(2,q)))
+    by A6,A11,FINSEQ_3:31;
+    thus L.k = Sum(M1.k) by A8,MATRPROB:def 1
+      .= Sum(Line(M1,k)) by A5,A8,MATRIX_2:18
+      .= Sum(Infor_FinSeq_of pp) by A5,A8,Th53
+      .= Sum((p.k*log(2,p.k)*q)+(p.k*mlt(q,FinSeq_log(2,q)))) by A9,A10,Th51
+      .= Sum(p.k*log(2,p.k)*q)+Sum(p.k*mlt(q,FinSeq_log(2,q)))
+    by A12,INTEGRA5:2
+      .= p.k*log(2,p.k)*Sum q+Sum(p.k*mlt(q,FinSeq_log(2,q)))
+    by RVSUM_1:117
+      .= p.k*log(2,p.k)*1+Sum(p.k*mlt(q,FinSeq_log(2,q)))
+    by MATRPROB:def 5
+      .= p.k*log(2,p.k)+p.k*Sum Infor_FinSeq_of q by RVSUM_1:117;
   end;
+  set p1= Infor_FinSeq_of p;
+  set p2= (Sum Infor_FinSeq_of q)*p;
+A13: len p1 = len p by Th47;
+  dom p2 = dom p by VALUED_1:def 5;
+  then
+A14: len p1 = len L & len p1 = len p2 & dom p1 = dom L & dom p1 = dom p2
+  by A2,A3,A4,A13,FINSEQ_3:31;
+  now
+    let k such that
+A15: k in dom p1;
+    thus L.k = p.k*log(2,p.k)+p.k*Sum Infor_FinSeq_of q by A7,A14,A15
+      .= p1.k + p.k*Sum Infor_FinSeq_of q by A15,Th47
+      .= p1.k + p2.k by RVSUM_1:66;
+  end;
+  then Sum L = Sum p1 + Sum p2 by A14,Th7
+    .= Sum p1 + (Sum Infor_FinSeq_of q)*Sum p by RVSUM_1:117
+    .= Sum p1 + (Sum Infor_FinSeq_of q)*1 by MATRPROB:def 5
+    .= Sum Infor_FinSeq_of p+Sum Infor_FinSeq_of q;
+  hence thesis by MATRPROB:def 3;
+end;
 
-definition let MR;
+definition
+  let MR;
   func Entropy_of_Joint_Prob MR -> Real equals
-     Entropy Mx2FinS MR;
+
+  Entropy Mx2FinS MR;
   coherence;
 end;
 
 theorem
-   for p,q being ProbFinS FinSequence of REAL holds
-    Entropy_of_Joint_Prob ((ColVec2Mx p) * (LineVec2Mx q)) =
-      Entropy p + Entropy q
-  proof let p,q be ProbFinS FinSequence of REAL;
-    set pp = Mx2FinS((ColVec2Mx p) * (LineVec2Mx q));
-    set M = (ColVec2Mx p) * (LineVec2Mx q);
-    reconsider M as Joint_Probability Matrix of REAL by Th23;
-    reconsider pp as ProbFinS FinSequence of REAL by Th45;
-     Entropy p + Entropy q
-       = -(Sum Infor_FinSeq_of p + Sum Infor_FinSeq_of q)
-      .= -(SumAll (Infor_FinSeq_of M)) by Th60
-      .= -(Sum (Mx2FinS(Infor_FinSeq_of M))) by Th42
-      .= -(Sum (Infor_FinSeq_of pp)) by Th59;
-    hence thesis;
-  end;
+  for p,q being ProbFinS FinSequence of REAL holds
+  Entropy_of_Joint_Prob ((ColVec2Mx p) * (LineVec2Mx q)) =
+  Entropy p + Entropy q
+proof
+  let p,q be ProbFinS FinSequence of REAL;
+  set pp = Mx2FinS((ColVec2Mx p) * (LineVec2Mx q));
+  set M = (ColVec2Mx p) * (LineVec2Mx q);
+  reconsider M as Joint_Probability Matrix of REAL by Th23;
+  reconsider pp as ProbFinS FinSequence of REAL by Th45;
+  Entropy p + Entropy q = -(Sum Infor_FinSeq_of p + Sum Infor_FinSeq_of q)
+    .= -(SumAll (Infor_FinSeq_of M)) by Th60
+    .= -(Sum (Mx2FinS(Infor_FinSeq_of M))) by Th42
+    .= -(Sum (Infor_FinSeq_of pp)) by Th59;
+  hence thesis;
+end;
 
-definition let MR;
-  func Entropy_of_Cond_Prob MR -> FinSequence of REAL means :Def11:
-    len it = len MR &
-    for k st k in dom it holds it.k = Entropy Line(MR,k);
+definition
+  let MR;
+  func Entropy_of_Cond_Prob MR -> FinSequence of REAL means
+  :Def11:
+  len it = len MR & for k st k in dom it holds it.k = Entropy Line(MR,k);
   existence
   proof
     deffunc F(Nat) = Entropy Line(MR,$1);
@@ -2831,19 +3138,20 @@ definition let MR;
 A1: len p = len MR and
 A2: for k be Nat st k in Seg len MR holds p.k = F(k) from FINSEQ_2:sch 1;
     take p;
-     dom p = Seg len MR by A1,FINSEQ_1:def 3;
+    dom p = Seg len MR by A1,FINSEQ_1:def 3;
     hence thesis by A1,A2;
   end;
   uniqueness
-  proof let p1,p2 be FinSequence of REAL such that
-A3: len p1 = len MR &
-    for k st k in dom p1 holds p1.k = Entropy Line(MR,k) and
-A4: len p2 = len MR &
-    for k st k in dom p2 holds p2.k = Entropy Line(MR,k);
+  proof
+    let p1,p2 be FinSequence of REAL such that
+A3: len p1 = len MR & for k st k in dom p1 holds p1.k = Entropy Line(MR,k) and
+A4: len p2 = len MR & for k st k in dom p2 holds p2.k = Entropy Line(MR,k);
 A5: dom p1 = dom p2 by A3,A4,FINSEQ_3:31;
-     now let k be Nat such that
+    now
+      let k be Nat such that
 A6:   k in dom p1;
-      thus p1.k = Entropy Line(MR,k) by A3,A6 .= p2.k by A4,A5,A6;
+      thus p1.k = Entropy Line(MR,k) by A3,A6
+        .= p2.k by A4,A5,A6;
     end;
     hence thesis by A5,FINSEQ_1:17;
   end;
@@ -2851,179 +3159,188 @@ end;
 
 theorem Th62:
   for M being non empty-yielding Conditional_Probability Matrix of REAL
-  for p being FinSequence of REAL holds
-    p = Entropy_of_Cond_Prob M iff
-      len p = len M &
-      for k st k in dom p holds p.k = -Sum ((Infor_FinSeq_of M).k)
-  proof let M be non empty-yielding Conditional_Probability Matrix of REAL;
-        let p be FinSequence of REAL;
-A1: len Infor_FinSeq_of M = len M & width Infor_FinSeq_of M = width M
-      by Def8;
-then A2: dom Infor_FinSeq_of M = dom M & Seg width Infor_FinSeq_of M = Seg
-width M
-      by FINSEQ_3:31;
-  hereby assume
-A3:   p = Entropy_of_Cond_Prob M;
-then A4:   len p = len M &
-      for k st k in dom p holds p.k = Entropy Line(M,k) by Def11;
-then A5:   dom p = dom M by FINSEQ_3:31;
-       now let k such that
-A6:     k in dom p;
-A7:     k in dom (Infor_FinSeq_of M) by A1,A4,A6,FINSEQ_3:31;
-        thus p.k = Entropy Line(M,k) by A3,A6,Def11
-          .= -Sum Line(Infor_FinSeq_of M,k) by A5,A6,Th53
-          .= -Sum ((Infor_FinSeq_of M).k) by A7,MATRIX_2:18;
-      end;
-      hence len p = len M &
-      for k st k in dom p holds p.k = -Sum ((Infor_FinSeq_of M).k) by A3,Def11;
-    end; assume
-A8: len p = len M &
-    for k st k in dom p holds p.k = -Sum ((Infor_FinSeq_of M).k);
-then A9: dom p = dom M by FINSEQ_3:31;
-     now let k such that
-A10:  k in dom p;
-     thus p.k = -Sum ((Infor_FinSeq_of M).k) by A8,A10
-       .= -Sum Line(Infor_FinSeq_of M,k) by A2,A9,A10,MATRIX_2:18
-       .= Entropy Line(M,k) by A9,A10,Th53;
+  for p being FinSequence of REAL holds p = Entropy_of_Cond_Prob M iff
+  len p = len M & for k st k in dom p holds p.k = -Sum ((Infor_FinSeq_of M).k)
+proof
+  let M be non empty-yielding Conditional_Probability Matrix of REAL;
+  let p be FinSequence of REAL;
+A1: len Infor_FinSeq_of M = len M & width Infor_FinSeq_of M = width M by Def8;
+  then
+A2: dom Infor_FinSeq_of M = dom M & Seg width Infor_FinSeq_of M = Seg width M
+  by FINSEQ_3:31;
+  hereby
+    assume
+A3: p = Entropy_of_Cond_Prob M;
+    then
+A4: len p = len M &
+    for k st k in dom p holds p.k = Entropy Line(M,k) by Def11;
+    then
+A5: dom p = dom M by FINSEQ_3:31;
+    now
+      let k such that
+A6:   k in dom p;
+A7:   k in dom (Infor_FinSeq_of M) by A1,A4,A6,FINSEQ_3:31;
+      thus p.k = Entropy Line(M,k) by A3,A6,Def11
+        .= -Sum Line(Infor_FinSeq_of M,k) by A5,A6,Th53
+        .= -Sum ((Infor_FinSeq_of M).k) by A7,MATRIX_2:18;
     end;
-    hence p = Entropy_of_Cond_Prob M by A8,Def11;
+    hence len p = len M &
+    for k st k in dom p holds p.k = -Sum ((Infor_FinSeq_of M).k) by A3,Def11;
   end;
+  assume
+A8: len p = len M &
+  for k st k in dom p holds p.k = -Sum ((Infor_FinSeq_of M).k);
+  then
+A9: dom p = dom M by FINSEQ_3:31;
+  now
+    let k such that
+A10: k in dom p;
+    thus p.k = -Sum ((Infor_FinSeq_of M).k) by A8,A10
+      .= -Sum Line(Infor_FinSeq_of M,k) by A2,A9,A10,MATRIX_2:18
+      .= Entropy Line(M,k) by A9,A10,Th53;
+  end;
+  hence p = Entropy_of_Cond_Prob M by A8,Def11;
+end;
 
 theorem Th63:
   for M being non empty-yielding Conditional_Probability Matrix of REAL holds
-    Entropy_of_Cond_Prob M = -LineSum Infor_FinSeq_of M
-  proof let M be non empty-yielding Conditional_Probability Matrix of REAL;
-    set p=Entropy_of_Cond_Prob M;
-    set q=-LineSum Infor_FinSeq_of M;
+  Entropy_of_Cond_Prob M = -LineSum Infor_FinSeq_of M
+proof
+  let M be non empty-yielding Conditional_Probability Matrix of REAL;
+  set p=Entropy_of_Cond_Prob M;
+  set q=-LineSum Infor_FinSeq_of M;
 A1: len p = len M &
-    for k st k in dom p holds p.k = -Sum ((Infor_FinSeq_of M).k) by Th62;
+  for k st k in dom p holds p.k = -Sum ((Infor_FinSeq_of M).k) by Th62;
 A2: dom q = dom LineSum Infor_FinSeq_of M by VALUED_1:8;
-    then len q = len LineSum Infor_FinSeq_of M by FINSEQ_3:31;
-    then len q = len Infor_FinSeq_of M by MATRPROB:def 1;
-    then len q = len M by Def8;
-then A3: dom p = dom q & dom p = dom M by A1,FINSEQ_3:31;
-     now let k be Nat such that
-A4:   k in dom p;
-      thus p.k = -Sum ((Infor_FinSeq_of M).k) by A4,Th62
-        .= -(Sum Infor_FinSeq_of M).k by A2,A3,A4,MATRPROB:def 1
-        .= q.k by RVSUM_1:35;
-    end;
-    hence thesis by A3,FINSEQ_1:17;
+  then len q = len LineSum Infor_FinSeq_of M by FINSEQ_3:31;
+  then len q = len Infor_FinSeq_of M by MATRPROB:def 1;
+  then len q = len M by Def8;
+  then
+A3: dom p = dom q & dom p = dom M by A1,FINSEQ_3:31;
+  now
+    let k be Nat such that
+A4: k in dom p;
+    thus p.k = -Sum ((Infor_FinSeq_of M).k) by A4,Th62
+      .= -(Sum Infor_FinSeq_of M).k by A2,A3,A4,MATRPROB:def 1
+      .= q.k by RVSUM_1:35;
   end;
+  hence thesis by A3,FINSEQ_1:17;
+end;
 
 theorem Th64:
   for p being ProbFinS FinSequence of REAL
   for M being non empty-yielding Conditional_Probability Matrix of REAL st
   len p = len M holds
-    for M1 being Matrix of REAL st M1=(Vec2DiagMx p) * M holds
-    SumAll Infor_FinSeq_of M1 =
-      Sum Infor_FinSeq_of p + Sum mlt(p,LineSum(Infor_FinSeq_of M))
-  proof let p be ProbFinS FinSequence of REAL;
-    let M be non empty-yielding Conditional_Probability Matrix of REAL;
-    assume
+  for M1 being Matrix of REAL st M1=(Vec2DiagMx p) * M holds
+  SumAll Infor_FinSeq_of M1 =
+  Sum Infor_FinSeq_of p + Sum mlt(p,LineSum(Infor_FinSeq_of M))
+proof
+  let p be ProbFinS FinSequence of REAL;
+  let M be non empty-yielding Conditional_Probability Matrix of REAL;
+  assume
 A1: len p = len M;
-    let M1 be Matrix of REAL such that
+  let M1 be Matrix of REAL such that
 A2: M1=(Vec2DiagMx p)*M;
-    reconsider M1 as Joint_Probability Matrix of REAL by A1,A2,Th28;
-    set M2= Infor_FinSeq_of M1;
-    set L = LineSum M2;
+  reconsider M1 as Joint_Probability Matrix of REAL by A1,A2,Th28;
+  set M2= Infor_FinSeq_of M1;
+  set L = LineSum M2;
 A3: len M1 = len p & width M1 = width M by A1,A2,Th26;
 A4: len M2 = len M1 & width M2 = width M1 by Def8;
 A5: len L = len M2 by MATRPROB:def 1;
-then A6: dom L = dom M2 & dom M2 = dom M1 & dom M1 = dom p & dom p = dom M
-      by A1,A3,A4,FINSEQ_3:31;
+  then
+A6: dom L = dom M2 & dom M2 = dom M1 & dom M1 = dom p & dom p = dom M
+  by A1,A3,A4,FINSEQ_3:31;
 A7: for k st k in dom L holds L.k =
-      p.k*log(2,p.k)+p.k*Sum Infor_FinSeq_of Line(M,k)
-    proof let k such that
-A8:   k in dom L;
-      reconsider pp=Line(M1,k) as nonnegative FinSequence of REAL
-        by A6,A8,Th19;
-      reconsider q=Line(M,k) as non empty ProbFinS FinSequence of REAL
-        by A6,A8,MATRPROB:60;
-       len FinSeq_log(2,q) = len q by Def6;
-then A9:   len mlt(q,FinSeq_log(2,q)) = len q by MATRPROB:30;
-A10:   pp = p.k * q by A1,A2,A6,A8,Th27;
-A11:   p.k>=0 by A6,A8,Def1;
-       dom (p.k*log(2,p.k)*q) = dom q by VALUED_1:7,def 5;
-then A12:   len (p.k*log(2,p.k)*q) = len q by FINSEQ_3:31;
-       dom (p.k*mlt(q,FinSeq_log(2,q))) = dom mlt(q,FinSeq_log(2,q))
-        by VALUED_1:7,def 5;
-then A13:   len (p.k*mlt(q,FinSeq_log(2,q))) = len mlt(q,FinSeq_log(2,q))
-        by FINSEQ_3:31;
-        L.k = Sum(M2.k) by A8,MATRPROB:def 1
-        .= Sum(Line(M2,k)) by A6,A8,MATRIX_2:18
-        .= Sum(Infor_FinSeq_of pp) by A6,A8,Th53
-        .= Sum((p.k*log(2,p.k)*q)+
-          (p.k*mlt(q,FinSeq_log(2,q)))) by A10,A11,Th51
-        .= Sum(p.k*log(2,p.k)*q)+Sum(p.k*mlt(q,FinSeq_log(2,q)))
-          by A9,A12,A13,INTEGRA5:2
-        .= p.k*log(2,p.k)*Sum q+Sum(p.k*mlt(q,FinSeq_log(2,q)))
-          by RVSUM_1:117
-        .= p.k*log(2,p.k)*1+Sum(p.k*mlt(q,FinSeq_log(2,q)))
-          by MATRPROB:def 5
-        .= p.k*log(2,p.k)+p.k*Sum Infor_FinSeq_of q by RVSUM_1:117;
-      hence thesis;
-    end;
-    set M3 = Infor_FinSeq_of M;
-    set L2 = LineSum M3;
-     len M3 = len M & width M3 = width M by Def8;
-then A14: len L2 = len M & len L2 = len p & len L2 = len M3 by A1,
-MATRPROB:def 1;
-    set p1 = Infor_FinSeq_of p;
-    set p2 = mlt(p,L2);
+  p.k*log(2,p.k)+p.k*Sum Infor_FinSeq_of Line(M,k)
+  proof
+    let k such that
+A8: k in dom L;
+    reconsider pp=Line(M1,k) as nonnegative FinSequence of REAL by A6,A8,Th19;
+    reconsider q=Line(M,k) as non empty ProbFinS FinSequence of REAL
+    by A6,A8,MATRPROB:60;
+    len FinSeq_log(2,q) = len q by Def6;
+    then
+A9: len mlt(q,FinSeq_log(2,q)) = len q by MATRPROB:30;
+A10: pp = p.k * q by A1,A2,A6,A8,Th27;
+A11: p.k>=0 by A6,A8,Def1;
+    dom (p.k*log(2,p.k)*q) = dom q by VALUED_1:def 5;
+    then
+A12: len (p.k*log(2,p.k)*q) = len q by FINSEQ_3:31;
+    dom (p.k*mlt(q,FinSeq_log(2,q))) = dom mlt(q,FinSeq_log(2,q))
+    by VALUED_1:def 5;
+    then
+A13: len (p.k*mlt(q,FinSeq_log(2,q))) = len mlt(q,FinSeq_log(2,q))
+    by FINSEQ_3:31;
+    L.k = Sum(M2.k) by A8,MATRPROB:def 1
+      .= Sum(Line(M2,k)) by A6,A8,MATRIX_2:18
+      .= Sum(Infor_FinSeq_of pp) by A6,A8,Th53
+      .= Sum((p.k*log(2,p.k)*q)+
+    (p.k*mlt(q,FinSeq_log(2,q)))) by A10,A11,Th51
+      .= Sum(p.k*log(2,p.k)*q)+Sum(p.k*mlt(q,FinSeq_log(2,q)))
+    by A9,A12,A13,INTEGRA5:2
+      .= p.k*log(2,p.k)*Sum q+Sum(p.k*mlt(q,FinSeq_log(2,q))) by RVSUM_1:117
+      .= p.k*log(2,p.k)*1+Sum(p.k*mlt(q,FinSeq_log(2,q))) by MATRPROB:def 5
+      .= p.k*log(2,p.k)+p.k*Sum Infor_FinSeq_of q by RVSUM_1:117;
+    hence thesis;
+  end;
+  set M3 = Infor_FinSeq_of M;
+  set L2 = LineSum M3;
+  len M3 = len M & width M3 = width M by Def8;
+  then
+A14: len L2 = len M & len L2 = len p & len L2 = len M3 by A1, MATRPROB: def 1;
+  set p1 = Infor_FinSeq_of p;
+  set p2 = mlt(p,L2);
 A15: len p1 = len p by Th47;
 A16: len p2 = len p by A14,MATRPROB:30;
-then A17: dom p1 = dom L & dom p1 = dom p2 & dom L2 = dom p1 & dom p1 = dom M3
-&
-    dom p1 = dom M by A3,A4,A5,A14,A15,FINSEQ_3:31;
-     now let k such that
-A18:   k in dom p1;
-A19:   p2.k = p.k*L2.k by A17,A18,RVSUM_1:86
-        .= p.k*Sum (M3.k) by A17,A18,MATRPROB:def 1
-        .= p.k*Sum (Line(M3,k)) by A17,A18,MATRIX_2:18
-        .= p.k*Sum (Infor_FinSeq_of Line(M,k)) by A17,A18,Th53;
-      thus L.k = p.k*log(2,p.k)+p.k*Sum Infor_FinSeq_of Line(M,k) by A7,A17,A18
-        .= p1.k + p2.k by A18,A19,Th47;
-    end;
-    then Sum L = Sum Infor_FinSeq_of p+Sum mlt(p,LineSum(Infor_FinSeq_of M))
-      by A3,A4,A5,A15,A16,Th7;
-    hence thesis by MATRPROB:def 3;
+  then
+A17: dom p1 = dom L & dom p1 = dom p2 & dom L2 = dom p1 & dom p1 = dom M3 &
+  dom p1 = dom M by A3,A4,A5,A14,A15,FINSEQ_3:31;
+  now
+    let k such that
+A18: k in dom p1;
+A19: p2.k = p.k*L2.k by A17,A18,RVSUM_1:86
+      .= p.k*Sum (M3.k) by A17,A18,MATRPROB:def 1
+      .= p.k*Sum (Line(M3,k)) by A17,A18,MATRIX_2:18
+      .= p.k*Sum (Infor_FinSeq_of Line(M,k)) by A17,A18,Th53;
+    thus L.k = p.k*log(2,p.k)+p.k*Sum Infor_FinSeq_of Line(M,k) by A7,A17, A18
+      .= p1.k + p2.k by A18,A19,Th47;
   end;
+  then Sum L = Sum Infor_FinSeq_of p+Sum mlt(p,LineSum(Infor_FinSeq_of M))
+  by A3,A4,A5,A15,A16,Th7;
+  hence thesis by MATRPROB:def 3;
+end;
 
 theorem
-   for p being ProbFinS FinSequence of REAL
+  for p being ProbFinS FinSequence of REAL
   for M being non empty-yielding Conditional_Probability Matrix of REAL st
-  len p = len M holds
-    Entropy_of_Joint_Prob ((Vec2DiagMx p) * M) =
-      Entropy p + Sum mlt(p,Entropy_of_Cond_Prob M)
-  proof let p be ProbFinS FinSequence of REAL;
-        let M be non empty-yielding Conditional_Probability Matrix of REAL;
-    assume
+  len p = len M holds Entropy_of_Joint_Prob ((Vec2DiagMx p) * M) =
+  Entropy p + Sum mlt(p,Entropy_of_Cond_Prob M)
+proof
+  let p be ProbFinS FinSequence of REAL;
+  let M be non empty-yielding Conditional_Probability Matrix of REAL;
+  assume
 A1: len p = len M;
-    set pp = Mx2FinS((Vec2DiagMx p) * M);
-    set M1 = (Vec2DiagMx p) * M;
-     len LineSum Infor_FinSeq_of M = len Infor_FinSeq_of M by MATRPROB:def 1
-      .= len p by A1,Def8;
-then A2: p is Element of (len p)-tuples_on REAL &
-    LineSum Infor_FinSeq_of M is Element of (len p)-tuples_on REAL
-      by FINSEQ_2:110;
-    reconsider M1 as Joint_Probability Matrix of REAL by A1,Th28;
-    reconsider pp as ProbFinS FinSequence of REAL by A1,Th46;
+  set pp = Mx2FinS((Vec2DiagMx p) * M);
+  set M1 = (Vec2DiagMx p) * M;
+  len LineSum Infor_FinSeq_of M = len Infor_FinSeq_of M by MATRPROB:def 1
+    .= len p by A1,Def8;
+  then
+A2: p is Element of (len p)-tuples_on REAL &
+  LineSum Infor_FinSeq_of M is Element of (len p)-tuples_on REAL
+  by FINSEQ_2:110;
+  reconsider M1 as Joint_Probability Matrix of REAL by A1,Th28;
+  reconsider pp as ProbFinS FinSequence of REAL by A1,Th46;
 A3: Entropy_of_Joint_Prob M1 = -Sum Mx2FinS Infor_FinSeq_of M1 by Th59
-      .= -SumAll Infor_FinSeq_of M1 by Th42
-      .= -(Sum Infor_FinSeq_of p + Sum mlt(p,LineSum Infor_FinSeq_of M))
-        by A1,Th64
-      .= -Sum Infor_FinSeq_of p - Sum mlt(p,LineSum Infor_FinSeq_of M);
-     Entropy p + Sum mlt(p,Entropy_of_Cond_Prob M)
-       =-Sum Infor_FinSeq_of p + Sum mlt(p,-LineSum Infor_FinSeq_of M)
-        by Th63
-      .=-Sum Infor_FinSeq_of p + Sum mlt(p,(-1)*LineSum Infor_FinSeq_of M)
-       by EUCLID_2:3
-       .=-Sum Infor_FinSeq_of p + Sum ((-1)*mlt(p,LineSum Infor_FinSeq_of M))
-        by A2,RVSUM_1:94
-      .=-Sum Infor_FinSeq_of p + Sum -mlt(p,LineSum Infor_FinSeq_of M)
-        by EUCLID_2:3
-      .=-Sum Infor_FinSeq_of p + -Sum mlt(p,LineSum Infor_FinSeq_of M)
-        by RVSUM_1:118;
-    hence thesis by A3;
-  end;
+    .= -SumAll Infor_FinSeq_of M1 by Th42
+    .= -(Sum Infor_FinSeq_of p + Sum mlt(p,LineSum Infor_FinSeq_of M))
+  by A1,Th64
+    .= -Sum Infor_FinSeq_of p - Sum mlt(p,LineSum Infor_FinSeq_of M);
+  Entropy p + Sum mlt(p,Entropy_of_Cond_Prob M)
+  =-Sum Infor_FinSeq_of p + Sum mlt(p,-LineSum Infor_FinSeq_of M) by Th63
+    .=-Sum Infor_FinSeq_of p + Sum -mlt(p,LineSum Infor_FinSeq_of M) by A2,
+  RVSUM_1:94
+    .=-Sum Infor_FinSeq_of p + -Sum mlt(p,LineSum Infor_FinSeq_of M)
+  by RVSUM_1:118;
+  hence thesis by A3;
+end;
+

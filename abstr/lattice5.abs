@@ -31,96 +31,102 @@ begin :: Preliminaries
 
 scheme :: LATTICE5:sch 1
  RecChoice{A() -> set,P[set,set,set]}:
-   ex f being Function st dom f = NAT & f.0 = A() &
-     for n being Element of NAT holds P[n,f.n,f.(n+1)]
- provided
-  for n being Element of NAT for x being set ex y being set st P[n,x,y];
+  ex f being Function st dom f = NAT & f.0 = A() &
+  for n being Element of NAT holds P[n,f.n,f.(n+1)]
+provided
+ for n being Element of NAT for x being set ex y being set st P[n,x,y];
 
 theorem :: LATTICE5:1
-for f being Function, F being Function-yielding Function
- st f = union rng F holds dom f = union rng doms F;
+  for f being Function, F being Function-yielding Function
+  st f = union rng F holds dom f = union rng doms F;
 
 theorem :: LATTICE5:2
-for A,B being non empty set holds [:union A, union B:] = union { [:a,b:]
- where a is Element of A, b is Element of B : a in A & b in B };
+  for A,B being non empty set holds [:union A, union B:] = union { [:a,b:]
+  where a is Element of A, b is Element of B : a in A & b in B };
 
 theorem :: LATTICE5:3
-for A being non empty set st A is c=-linear holds
- [:union A, union A:] = union { [:a,a:] where a is Element of A : a in A };
+  for A being non empty set st A is c=-linear holds
+  [:union A, union A:] = union { [:a,a:] where a is Element of A : a in A };
 
 begin :: An equivalence lattice of a set
 
 reserve X for non empty set;
 
-definition let A be set;
-func EqRelLATT A -> Poset equals
+definition
+  let A be set;
+  func EqRelLATT A -> Poset equals
 :: LATTICE5:def 1
-   LattPOSet EqRelLatt A;
+
+  LattPOSet EqRelLatt A;
 end;
 
-registration let A be set;
- cluster EqRelLATT A -> with_infima with_suprema;
+registration
+  let A be set;
+  cluster EqRelLATT A -> with_infima with_suprema;
 end;
 
 theorem :: LATTICE5:4
-for A, x being set holds
- x in the carrier of EqRelLATT A iff x is Equivalence_Relation of A;
+  for A, x being set holds
+  x in the carrier of EqRelLATT A iff x is Equivalence_Relation of A;
 
 theorem :: LATTICE5:5
-for A being set, x,y being Element of EqRelLatt A
- holds x [= y iff x c= y;
+  for A being set, x,y being Element of EqRelLatt A holds x [= y iff x c= y;
 
 theorem :: LATTICE5:6
-for A being set, a,b being Element of EqRelLATT A
- holds a <= b iff a c= b;
+  for A being set, a,b being Element of EqRelLATT A holds a <= b iff a c= b;
 
 theorem :: LATTICE5:7
-for L being Lattice, a,b being Element of LattPOSet L
+  for L being Lattice, a,b being Element of LattPOSet L
   holds a "/\" b = %a "/\" %b;
 
 theorem :: LATTICE5:8
-for A being set, a,b being Element of EqRelLATT A
- holds a "/\" b = a /\ b;
+  for A being set, a,b being Element of EqRelLATT A holds a "/\" b = a /\ b;
 
 theorem :: LATTICE5:9
-for L being Lattice, a,b being Element of LattPOSet L
- holds a "\/" b = %a "\/" %b;
+  for L being Lattice, a,b being Element of LattPOSet L
+  holds a "\/" b = %a "\/" %b;
 
 theorem :: LATTICE5:10
-for A being set, a,b being Element of EqRelLATT A
- for E1,E2 being Equivalence_Relation of A st a = E1 & b = E2
+  for A being set, a,b being Element of EqRelLATT A
+  for E1,E2 being Equivalence_Relation of A st a = E1 & b = E2
   holds a "\/" b = E1 "\/" E2;
 
-definition let L be non empty RelStr;
- redefine attr L is complete means
+definition
+  let L be non empty RelStr;
+  redefine attr L is complete means
 :: LATTICE5:def 2
-      for X being Subset of L
-   ex a being Element of L st a is_<=_than X &
-   for b being Element of L st b is_<=_than X holds b <= a;
+
+  for X being Subset of L
+  ex a being Element of L st a is_<=_than X &
+  for b being Element of L st b is_<=_than X holds b <= a;
 end;
 
-registration let A be set;
-cluster EqRelLATT A -> complete;
+registration
+  let A be set;
+  cluster EqRelLATT A -> complete;
 end;
 
 begin :: A type of a sublattice of equivalence lattice of a set
 
-registration let L1,L2 be LATTICE;
+registration
+  let L1,L2 be LATTICE;
   cluster meet-preserving join-preserving Function of L1,L2;
 end;
 
-definition let L1,L2 be LATTICE;
- mode Homomorphism of L1,L2 is meet-preserving join-preserving Function
- of L1,L2;
+definition
+  let L1,L2 be LATTICE;
+  mode Homomorphism of L1,L2 is meet-preserving join-preserving Function
+    of L1,L2;
 end;
 
-registration let L be LATTICE;
+registration
+  let L be LATTICE;
   cluster meet-inheriting join-inheriting strict SubRelStr of L;
 end;
 
 definition
- let L be non empty RelStr;
- mode Sublattice of L is meet-inheriting join-inheriting SubRelStr of L;
+  let L be non empty RelStr;
+  mode Sublattice of L is meet-inheriting join-inheriting SubRelStr of L;
 end;
 
 definition
@@ -130,408 +136,466 @@ definition
 end;
 
 reserve e,e1,e2,e1',e2' for Equivalence_Relation of X,
-        x,y,x',y' for set;
+  x,y,x',y' for set;
 
-definition let X; let f be non empty FinSequence of X; let x,y;
-           let R1, R2 be Relation;
+definition
+  let X;
+  let f be non empty FinSequence of X;
+  let x,y;
+  let R1, R2 be Relation;
   pred x,y are_joint_by f,R1,R2 means
 :: LATTICE5:def 3
-    f.1 = x & f.(len f) = y &
-    for i being Element of NAT st 1 <= i & i < len f holds
-      (i is odd implies [f.i,f.(i+1)] in R1) &
-      (i is even implies [f.i,f.(i+1)] in R2);
+
+  f.1 = x & f.(len f) = y &
+  for i being Element of NAT st 1 <= i & i < len f holds
+  (i is odd implies [f.i,f.(i+1)] in R1) &
+  (i is even implies [f.i,f.(i+1)] in R2);
 end;
 
 canceled;
 
 theorem :: LATTICE5:12
-for x being set, o being Element of NAT, R1,R2 being Relation,
- f being non empty FinSequence of X st
+  for x being set, o being Element of NAT, R1,R2 being Relation,
+  f being non empty FinSequence of X st
   R1 is_reflexive_in X & R2 is_reflexive_in X & f = o |-> x
   holds x,x are_joint_by f,R1,R2;
 
 canceled;
 
 theorem :: LATTICE5:14
-for x,y being set, R1,R2 being Relation, n,m being Element of NAT st
- (n <= m & R1 is_reflexive_in X & R2 is_reflexive_in X &
-    ex f being non empty FinSequence of X st
-      len f = n & x,y are_joint_by f,R1,R2)
+  for x,y being set, R1,R2 being Relation, n,m being Element of NAT st
+  (n <= m & R1 is_reflexive_in X & R2 is_reflexive_in X &
+  ex f being non empty FinSequence of X st
+  len f = n & x,y are_joint_by f,R1,R2)
   ex h being non empty FinSequence of X st
-      len h = m & x,y are_joint_by h,R1,R2;
+  len h = m & x,y are_joint_by h,R1,R2;
 
 definition
- let X;let Y be Sublattice of EqRelLATT X;
- given e such that
+  let X;
+  let Y be Sublattice of EqRelLATT X;
+  given e such that
  e in the carrier of Y and
  e <> id X;
- given o being Element of NAT such that
+  given o being Element of NAT such that
  for e1,e2,x,y st e1 in the carrier of Y & e2 in the carrier of Y &
-                     [x,y] in e1 "\/" e2 holds
-     ex F being non empty FinSequence of X st
-      len F = o & x,y are_joint_by F,e1,e2;
- func type_of Y -> Element of NAT means
+  [x,y] in e1 "\/" e2 holds ex F being non empty FinSequence of X st
+  len F = o & x,y are_joint_by F,e1,e2;
+  func type_of Y -> Element of NAT means
 :: LATTICE5:def 4
- (for e1,e2,x,y st e1 in the carrier of Y & e2 in the carrier of Y &
-                       [x,y] in e1 "\/" e2 holds
-     (ex F being non empty FinSequence of X st
-         len F = it+2 & x,y are_joint_by F,e1,e2)) &
- (ex e1,e2,x,y st e1 in the carrier of Y & e2 in the carrier of Y &
-                      [x,y] in e1 "\/" e2 &
- not (ex F being non empty FinSequence of X st
-     len F = it+1 & x,y are_joint_by F,e1,e2));
+
+  (for e1,e2,x,y st e1 in the carrier of Y & e2 in the carrier of Y &
+  [x,y] in e1 "\/" e2 holds (ex F being non empty FinSequence of X st
+  len F = it+2 & x,y are_joint_by F,e1,e2)) &
+  (ex e1,e2,x,y st e1 in the carrier of Y & e2 in the carrier of Y &
+  [x,y] in e1 "\/" e2 & not (ex F being non empty FinSequence of X st
+  len F = it+1 & x,y are_joint_by F,e1,e2));
 end;
 
 theorem :: LATTICE5:15
-for Y being Sublattice of EqRelLATT X, n being Element of NAT st
- (ex e st e in the carrier of Y & e <> id X) &
- (for e1,e2,x,y st e1 in the carrier of Y & e2 in the carrier of Y &
-    [x,y] in e1 "\/" e2 holds
-   (ex F being non empty FinSequence of X st
-     len F = n+2 & x,y are_joint_by F,e1,e2))
-  holds type_of Y <= n;
+  for Y being Sublattice of EqRelLATT X, n being Element of NAT st
+  (ex e st e in the carrier of Y & e <> id X) &
+  (for e1,e2,x,y st e1 in the carrier of Y & e2 in the carrier of Y &
+  [x,y] in e1 "\/" e2 holds (ex F being non empty FinSequence of X st
+  len F = n+2 & x,y are_joint_by F,e1,e2)) holds type_of Y <= n;
 
 begin :: A meet-representation of a lattice
 
 reserve A for non empty set,
-        L for lower-bounded LATTICE;
+  L for lower-bounded LATTICE;
 
-definition let A be set, L be 1-sorted;
- mode BiFunction of A,L is Function of [:A,A:],the carrier of L;
+definition
+  let A be set, L be 1-sorted;
+  mode BiFunction of A,L is Function of [:A,A:],the carrier of L;
 end;
 
-definition let A be non empty set, L be 1-sorted;
- let f be BiFunction of A,L;let x,y be Element of A;
- redefine func f.(x,y) -> Element of L;
+definition
+  let A be non empty set, L be 1-sorted;
+  let f be BiFunction of A,L;
+  let x,y be Element of A;
+  redefine func f.(x,y) -> Element of L;
 end;
 
-definition let A; let L be 1-sorted; let f be BiFunction of A,L;
- canceled;
-
-attr f is symmetric means
+definition
+  let A;
+  let L be 1-sorted;
+  let f be BiFunction of A,L;
+  canceled;
+  attr f is symmetric means
 :: LATTICE5:def 6
- for x,y being Element of A holds f.(x,y) = f.(y,x);
+
+  for x,y being Element of A holds f.(x,y) = f.(y,x);
 end;
 
-definition let A,L; let f be BiFunction of A,L;
-attr f is zeroed means
+definition
+  let A,L;
+  let f be BiFunction of A,L;
+  attr f is zeroed means
 :: LATTICE5:def 7
- for x being Element of A holds f.(x,x) = Bottom L;
-attr f is u.t.i. means
+
+  for x being Element of A holds f.(x,x) = Bottom L;
+  attr f is u.t.i. means
 :: LATTICE5:def 8
- for x,y,z being Element of A holds f.(x,y) "\/" f.(y,z) >= f.(x,z);
+
+  for x,y,z being Element of A holds f.(x,y) "\/" f.(y,z) >= f.(x,z);
 end;
 
 :: f is u.t.i. means that f satisfies the triangle inequality
 
-registration let A, L;
- cluster symmetric zeroed u.t.i. BiFunction of A,L;
+registration
+  let A, L;
+  cluster symmetric zeroed u.t.i. BiFunction of A,L;
 end;
 
-definition let A, L;
- mode distance_function of A,L is symmetric zeroed u.t.i. BiFunction of A,L;
+definition
+  let A, L;
+  mode distance_function of A,L is symmetric zeroed u.t.i. BiFunction of A,L;
 end;
 
-definition let A, L; let d be distance_function of A,L;
- func alpha d -> Function of L,EqRelLATT A means
+definition
+  let A, L;
+  let d be distance_function of A,L;
+  func alpha d -> Function of L,EqRelLATT A means
 :: LATTICE5:def 9
-  for e being Element of L
-   ex E being Equivalence_Relation of A st E = it.e &
-   for x,y be Element of A holds [x,y] in E iff d.(x,y) <= e;
+
+  for e being Element of L ex E being Equivalence_Relation of A st E = it.e &
+  for x,y be Element of A holds [x,y] in E iff d.(x,y) <= e;
 end;
 
 theorem :: LATTICE5:16
-for d being distance_function of A,L holds alpha d is meet-preserving;
+  for d being distance_function of A,L holds alpha d is meet-preserving;
 
 theorem :: LATTICE5:17
-for d being distance_function of A,L st d is onto holds alpha d is one-to-one;
+  for d being distance_function of A,L st d is onto holds alpha d is one-to-one
+;
 
 begin :: J\'onsson theorem
 
-definition let A be set;
- func new_set A equals
+definition
+  let A be set;
+  func new_set A equals
 :: LATTICE5:def 10
-   A \/ {{A}, {{A}}, {{{A}}} };
+
+  A \/ {{A}, {{A}}, {{{A}}} };
 end;
 
-registration let A be set;
- cluster new_set A -> non empty;
+registration
+  let A be set;
+  cluster new_set A -> non empty;
 end;
 
-definition let A,L; let d be BiFunction of A,L;
+definition
+  let A,L;
+  let d be BiFunction of A,L;
   let q be Element of [:A,A,the carrier of L,the carrier of L:];
-func new_bi_fun(d,q) -> BiFunction of new_set A,L means
+  func new_bi_fun(d,q) -> BiFunction of new_set A,L means
 :: LATTICE5:def 11
- (for u,v being Element of A holds it.(u,v) = d.(u,v) ) &
- it.({A},{A}) = Bottom L & it.({{A}},{{A}}) = Bottom
-L & it.({{{A}}},{{{A}}}) = Bottom L &
- it.({{A}},{{{A}}}) = q`3 & it.({{{A}}},{{A}}) = q`3 &
- it.({A},{{A}}) = q`4 & it.({{A}},{A}) = q`4 &
- it.({A},{{{A}}}) = q`3"\/"q`4 & it.({{{A}}},{A}) = q`3"\/"q`4 &
- for u being Element of A holds
+
+  (for u,v being Element of A holds it.(u,v) = d.(u,v) ) &
+  it.({A},{A}) = Bottom L & it.({{A}},{{A}}) = Bottom
+  L & it.({{{A}}},{{{A}}}) = Bottom L &
+  it.({{A}},{{{A}}}) = q`3 & it.({{{A}}},{{A}}) = q`3 &
+  it.({A},{{A}}) = q`4 & it.({{A}},{A}) = q`4 &
+  it.({A},{{{A}}}) = q`3"\/"q`4 & it.({{{A}}},{A}) = q`3"\/"q`4 &
+  for u being Element of A holds
   (it.(u,{A}) = d.(u,q`1)"\/"q`3 & it.({A},u) = d.(u,q`1)"\/"q`3 &
   it.(u,{{A}}) = d.(u,q`1)"\/"q`3"\/"q`4 & it.({{A}},u) = d.(u,q`1)"\/"q`3"\/"
-q`4 &
+  q`4 &
   it.(u,{{{A}}}) = d.(u,q`2)"\/"q`4 & it.({{{A}}},u) = d.(u,q`2)"\/"q`4);
 end;
 
 theorem :: LATTICE5:18
-for d being BiFunction of A,L st d is zeroed
- for q being Element of [:A,A,the carrier of L,the carrier of L:]
+  for d being BiFunction of A,L st d is zeroed
+  for q being Element of [:A,A,the carrier of L,the carrier of L:]
   holds new_bi_fun(d,q) is zeroed;
 
 theorem :: LATTICE5:19
-for d being BiFunction of A,L st d is symmetric
- for q being Element of [:A,A,the carrier of L,the carrier of L:]
+  for d being BiFunction of A,L st d is symmetric
+  for q being Element of [:A,A,the carrier of L,the carrier of L:]
   holds new_bi_fun(d,q) is symmetric;
 
 theorem :: LATTICE5:20
-for d being BiFunction of A,L st d is symmetric & d is u.t.i.
- for q being Element of [:A,A,the carrier of L,the carrier of L:]
-  st d.(q`1,q`2) <= q`3"\/"q`4
-  holds new_bi_fun(d,q) is u.t.i.;
+  for d being BiFunction of A,L st d is symmetric & d is u.t.i.
+  for q being Element of [:A,A,the carrier of L,the carrier of L:]
+  st d.(q`1,q`2) <= q`3"\/"q`4 holds new_bi_fun(d,q) is u.t.i.;
 
 canceled;
 
 theorem :: LATTICE5:22
-for d be BiFunction of A,L
- for q be Element of [:A,A,the carrier of L,the carrier of L:]
+  for d be BiFunction of A,L
+  for q be Element of [:A,A,the carrier of L,the carrier of L:]
   holds d c= new_bi_fun(d,q);
 
-definition let A,L; let d be BiFunction of A,L;
- func DistEsti(d) -> Cardinal means
+definition
+  let A,L;
+  let d be BiFunction of A,L;
+  func DistEsti(d) -> Cardinal means
 :: LATTICE5:def 12
-   it,{ [x,y,a,b] where x is Element of A, y is Element of A,
-   a is Element of L, b is Element of L: d.(x,y) <= a"\/"b} are_equipotent;
+
+  it,{ [x,y,a,b] where x is Element of A, y is Element of A,
+  a is Element of L, b is Element of L: d.(x,y) <= a"\/"b} are_equipotent;
 end;
 
 theorem :: LATTICE5:23
- for d be distance_function of A,L holds DistEsti(d) <> {};
+  for d be distance_function of A,L holds DistEsti(d) <> {};
 
-reserve T,L1 for T-Sequence, O,O1,O2,O3,C for Ordinal;
+reserve T,L1 for T-Sequence,
+  O,O1,O2,O3,C for Ordinal;
 
-definition let A; let O;
- func ConsecutiveSet(A,O) means
+definition
+  let A;
+  let O;
+  func ConsecutiveSet(A,O) means
 :: LATTICE5:def 13
-  ex L0 being T-Sequence st it = last L0 & dom L0 = succ O &
-   L0.{} = A &
-   (for C being Ordinal st
-    succ C in succ O holds L0.succ C = new_set L0.C) &
-      for C being Ordinal st C in succ O & C <> {} & C is_limit_ordinal
-             holds L0.C = union rng (L0|C);
+
+  ex L0 being T-Sequence st it = last L0 & dom L0 = succ O & L0.{} = A &
+  (for C being Ordinal st succ C in succ O holds L0.succ C = new_set L0.C) &
+  for C being Ordinal st C in succ O & C <> {} & C is_limit_ordinal
+  holds L0.C = union rng (L0|C);
 end;
 
 theorem :: LATTICE5:24
-ConsecutiveSet(A,{}) = A;
+  ConsecutiveSet(A,{}) = A;
 
 theorem :: LATTICE5:25
-ConsecutiveSet(A,succ O) = new_set ConsecutiveSet(A,O);
+  ConsecutiveSet(A,succ O) = new_set ConsecutiveSet(A,O);
 
 theorem :: LATTICE5:26
-O <> {} & O is_limit_ordinal & dom T = O &
- (for O1 being Ordinal st O1 in O holds T.O1 = ConsecutiveSet(A,O1))
+  O <> {} & O is_limit_ordinal & dom T = O &
+  (for O1 being Ordinal st O1 in O holds T.O1 = ConsecutiveSet(A,O1))
   implies ConsecutiveSet(A,O) = union rng T;
 
-registration let A; let O;
- cluster ConsecutiveSet(A,O) -> non empty;
+registration
+  let A;
+  let O;
+  cluster ConsecutiveSet(A,O) -> non empty;
 end;
 
 theorem :: LATTICE5:27
-A c= ConsecutiveSet(A,O);
+  A c= ConsecutiveSet(A,O);
 
-definition let A,L; let d be BiFunction of A,L;
- mode QuadrSeq of d -> T-Sequence of [:A,A,the carrier of L,the carrier of L:]
-  means
+definition
+  let A,L;
+  let d be BiFunction of A,L;
+  mode QuadrSeq of d -> T-Sequence of [:A,A,the carrier of L,the carrier of L:]
+    means
 :: LATTICE5:def 14
-   dom it is Cardinal &
-   it is one-to-one &
-   rng it ={[x,y,a,b] where x is Element of A, y is Element of A,
-          a is Element of L, b is Element of L: d.(x,y) <= a"\/"b};
+
+    dom it is Cardinal & it is one-to-one &
+    rng it ={[x,y,a,b] where x is Element of A, y is Element of A,
+    a is Element of L, b is Element of L: d.(x,y) <= a"\/"b};
 end;
 
-definition let A,L; let d be BiFunction of A,L; let q be QuadrSeq of d;
- let O;
-assume  O in dom q;
- func Quadr(q,O) -> Element of [:ConsecutiveSet(A,O),ConsecutiveSet(A,O),
-       the carrier of L,the carrier of L:] equals
+definition
+  let A,L;
+  let d be BiFunction of A,L;
+  let q be QuadrSeq of d;
+  let O;
+  assume
+ O in dom q;
+  func Quadr(q,O) -> Element of [:ConsecutiveSet(A,O),ConsecutiveSet(A,O),
+  the carrier of L,the carrier of L:] equals
 :: LATTICE5:def 15
+
   q.O;
 end;
 
 theorem :: LATTICE5:28
-for d being BiFunction of A,L, q being QuadrSeq of d holds
+  for d being BiFunction of A,L, q being QuadrSeq of d holds
   O in DistEsti(d) iff O in dom q;
 
-definition let A,L;
- let z be set;
- assume
-  z is BiFunction of A,L;
- func BiFun(z,A,L) -> BiFunction of A,L equals
+definition
+  let A,L;
+  let z be set;
+  assume
+ z is BiFunction of A,L;
+  func BiFun(z,A,L) -> BiFunction of A,L equals
 :: LATTICE5:def 16
+
   z;
 end;
 
-definition let A,L; let d be BiFunction of A,L; let q be QuadrSeq of d;
-           let O;
- func ConsecutiveDelta(q,O) means
+definition
+  let A,L;
+  let d be BiFunction of A,L;
+  let q be QuadrSeq of d;
+  let O;
+  func ConsecutiveDelta(q,O) means
 :: LATTICE5:def 17
-  ex L0 being T-Sequence st it = last L0 & dom L0 = succ O &
-   L0.{} = d &
-   (for C being Ordinal st succ C in succ O holds
-    L0.succ C = new_bi_fun(BiFun(L0.C,ConsecutiveSet(A,C),L),Quadr(q,C))) &
-      for C being Ordinal st C in succ O & C <> {} & C is_limit_ordinal
-             holds L0.C = union rng(L0|C);
+
+  ex L0 being T-Sequence st it = last L0 & dom L0 = succ O & L0.{} = d &
+  (for C being Ordinal st succ C in succ O holds
+  L0.succ C = new_bi_fun(BiFun(L0.C,ConsecutiveSet(A,C),L),Quadr(q,C))) &
+  for C being Ordinal st C in succ O & C <> {} & C is_limit_ordinal
+  holds L0.C = union rng(L0|C);
 end;
 
 theorem :: LATTICE5:29
-for d being BiFunction of A,L for q being QuadrSeq of d
+  for d being BiFunction of A,L for q being QuadrSeq of d
   holds ConsecutiveDelta(q,{}) = d;
 
 theorem :: LATTICE5:30
-for d be BiFunction of A,L for q being QuadrSeq of d holds
- ConsecutiveDelta(q,succ O) = new_bi_fun(BiFun(ConsecutiveDelta(q,O),
-   ConsecutiveSet(A,O),L),Quadr(q,O));
+  for d be BiFunction of A,L for q being QuadrSeq of d holds
+  ConsecutiveDelta(q,succ O) = new_bi_fun(BiFun(ConsecutiveDelta(q,O),
+  ConsecutiveSet(A,O),L),Quadr(q,O));
 
 theorem :: LATTICE5:31
-for d be BiFunction of A,L for q being QuadrSeq of d holds
- O <> {} & O is_limit_ordinal & dom T = O &
- (for O1 being Ordinal st O1 in O holds T.O1 = ConsecutiveDelta(q,O1))
- implies ConsecutiveDelta(q,O) = union rng T;
+  for d be BiFunction of A,L for q being QuadrSeq of d holds
+  O <> {} & O is_limit_ordinal & dom T = O &
+  (for O1 being Ordinal st O1 in O holds T.O1 = ConsecutiveDelta(q,O1))
+  implies ConsecutiveDelta(q,O) = union rng T;
 
 theorem :: LATTICE5:32
-O1 c= O2 implies ConsecutiveSet(A,O1) c= ConsecutiveSet(A,O2);
+  O1 c= O2 implies ConsecutiveSet(A,O1) c= ConsecutiveSet(A,O2);
 
 theorem :: LATTICE5:33
-for d be BiFunction of A,L for q being QuadrSeq of d
- holds ConsecutiveDelta(q,O) is BiFunction of ConsecutiveSet(A,O),L;
+  for d be BiFunction of A,L for q being QuadrSeq of d
+  holds ConsecutiveDelta(q,O) is BiFunction of ConsecutiveSet(A,O),L;
 
-definition let A,L; let d be BiFunction of A,L; let q be QuadrSeq of d;
-           let O;
+definition
+  let A,L;
+  let d be BiFunction of A,L;
+  let q be QuadrSeq of d;
+  let O;
   redefine func ConsecutiveDelta(q,O) -> BiFunction of ConsecutiveSet(A,O),L;
 end;
 
 theorem :: LATTICE5:34
-for d be BiFunction of A,L for q being QuadrSeq of d holds
- d c= ConsecutiveDelta(q,O);
+  for d be BiFunction of A,L for q being QuadrSeq of d holds
+  d c= ConsecutiveDelta(q,O);
 
 theorem :: LATTICE5:35
- for d being BiFunction of A,L for q being QuadrSeq of d st O1 c= O2 holds
-   ConsecutiveDelta(q,O1) c= ConsecutiveDelta(q,O2);
+  for d being BiFunction of A,L for q being QuadrSeq of d st O1 c= O2 holds
+  ConsecutiveDelta(q,O1) c= ConsecutiveDelta(q,O2);
 
 theorem :: LATTICE5:36
-for d be BiFunction of A,L st d is zeroed
- for q being QuadrSeq of d holds ConsecutiveDelta(q,O) is zeroed;
+  for d be BiFunction of A,L st d is zeroed
+  for q being QuadrSeq of d holds ConsecutiveDelta(q,O) is zeroed;
 
 theorem :: LATTICE5:37
-for d be BiFunction of A,L st d is symmetric
- for q being QuadrSeq of d holds ConsecutiveDelta(q,O) is symmetric;
+  for d be BiFunction of A,L st d is symmetric
+  for q being QuadrSeq of d holds ConsecutiveDelta(q,O) is symmetric;
 
 theorem :: LATTICE5:38
-for d be BiFunction of A,L st d is symmetric u.t.i.
- for q being QuadrSeq of d st O c= DistEsti(d) holds
+  for d be BiFunction of A,L st d is symmetric u.t.i.
+  for q being QuadrSeq of d st O c= DistEsti(d) holds
   ConsecutiveDelta(q,O) is u.t.i.;
 
 theorem :: LATTICE5:39
-    for d being distance_function of A,L
- for q being QuadrSeq of d st O c= DistEsti(d) holds
+  for d being distance_function of A,L
+  for q being QuadrSeq of d st O c= DistEsti(d) holds
   ConsecutiveDelta(q,O) is distance_function of ConsecutiveSet(A,O),L;
 
-definition let A,L; let d be BiFunction of A,L;
- func NextSet(d) equals
+definition
+  let A,L;
+  let d be BiFunction of A,L;
+  func NextSet(d) equals
 :: LATTICE5:def 18
-   ConsecutiveSet(A,DistEsti(d));
+
+  ConsecutiveSet(A,DistEsti(d));
 end;
 
-registration let A,L; let d be BiFunction of A,L;
- cluster NextSet(d) -> non empty;
+registration
+  let A,L;
+  let d be BiFunction of A,L;
+  cluster NextSet(d) -> non empty;
 end;
 
-definition let A,L; let d be BiFunction of A,L; let q be QuadrSeq of d;
- func NextDelta(q) equals
+definition
+  let A,L;
+  let d be BiFunction of A,L;
+  let q be QuadrSeq of d;
+  func NextDelta(q) equals
 :: LATTICE5:def 19
-   ConsecutiveDelta(q,DistEsti(d));
+
+  ConsecutiveDelta(q,DistEsti(d));
 end;
 
-definition let A,L; let d be distance_function of A,L; let q be QuadrSeq of d;
-redefine func NextDelta(q) -> distance_function of NextSet(d),L;
+definition
+  let A,L;
+  let d be distance_function of A,L;
+  let q be QuadrSeq of d;
+  redefine func NextDelta(q) -> distance_function of NextSet(d),L;
 end;
 
-definition let A,L; let d be distance_function of A,L;
-           let Aq be non empty set, dq be distance_function of Aq,L;
+definition
+  let A,L;
+  let d be distance_function of A,L;
+  let Aq be non empty set, dq be distance_function of Aq,L;
   pred Aq, dq is_extension_of A,d means
 :: LATTICE5:def 20
-   ex q being QuadrSeq of d st Aq = NextSet(d) & dq = NextDelta(q);
+
+  ex q being QuadrSeq of d st Aq = NextSet(d) & dq = NextDelta(q);
 end;
 
 theorem :: LATTICE5:40
-for d be distance_function of A,L
-for Aq be non empty set, dq be distance_function of Aq,L
-   st Aq, dq is_extension_of A,d
+  for d be distance_function of A,L
+  for Aq be non empty set, dq be distance_function of Aq,L
+  st Aq, dq is_extension_of A,d
   for x,y being Element of A, a,b being Element of L st d.(x,y) <= a "\/" b
-    ex z1,z2,z3 being Element of Aq st
-    dq.(x,z1) = a & dq.(z2,z3) = a & dq.(z1,z2) = b & dq.(z3,y) = b;
+  ex z1,z2,z3 being Element of Aq st
+  dq.(x,z1) = a & dq.(z2,z3) = a & dq.(z1,z2) = b & dq.(z3,y) = b;
 
-definition let A,L; let d be distance_function of A,L;
-mode ExtensionSeq of A,d -> Function means
+definition
+  let A,L;
+  let d be distance_function of A,L;
+  mode ExtensionSeq of A,d -> Function means
 :: LATTICE5:def 21
-   dom it = NAT & it.0 = [A,d] &
-    for n being Element of NAT holds
+
+    dom it = NAT & it.0 = [A,d] & for n being Element of NAT holds
     ex A' being non empty set, d' being distance_function of A',L,
-       Aq being non empty set, dq being distance_function of Aq,L st
-     Aq, dq is_extension_of A',d' & it.n = [A',d'] & it.(n+1) = [Aq,dq];
+    Aq being non empty set, dq being distance_function of Aq,L st
+    Aq, dq is_extension_of A',d' & it.n = [A',d'] & it.(n+1) = [Aq,dq];
 end;
 
 theorem :: LATTICE5:41
- for d be distance_function of A,L for S being ExtensionSeq of A,d
- for k,l being Element of NAT st k <= l holds (S.k)`1 c= (S.l)`1;
+  for d be distance_function of A,L for S being ExtensionSeq of A,d
+  for k,l being Element of NAT st k <= l holds (S.k)`1 c= (S.l)`1;
 
 theorem :: LATTICE5:42
- for d be distance_function of A,L for S being ExtensionSeq of A,d
- for k,l being Element of NAT st k <= l holds (S.k)`2 c= (S.l)`2;
+  for d be distance_function of A,L for S being ExtensionSeq of A,d
+  for k,l being Element of NAT st k <= l holds (S.k)`2 c= (S.l)`2;
 
-definition let L;
-func BasicDF(L) -> distance_function of the carrier of L,L means
+definition
+  let L;
+  func BasicDF(L) -> distance_function of the carrier of L,L means
 :: LATTICE5:def 22
- for x,y being Element of L holds
-  (x <> y implies it.(x,y) = x"\/"y) &
+
+  for x,y being Element of L holds (x <> y implies it.(x,y) = x"\/"y) &
   (x = y implies it.(x,y) = Bottom L);
 end;
 
 theorem :: LATTICE5:43
-BasicDF(L) is onto;
+  BasicDF(L) is onto;
 
 theorem :: LATTICE5:44
   for S being ExtensionSeq of the carrier of L, BasicDF(L)
   for FS being non empty set st
-    FS = union { (S.i)`1 where i is Element of NAT: not contradiction} holds
+  FS = union { (S.i)`1 where i is Element of NAT: not contradiction} holds
   union { (S.i)`2 where i is Element of NAT: not contradiction}
-   is distance_function of FS,L;
+  is distance_function of FS,L;
 
 theorem :: LATTICE5:45
   for S being ExtensionSeq of the carrier of L, BasicDF(L)
-  for FS being non empty set,
-      FD being distance_function of FS,L
- for x,y being Element of FS for a,b being Element of L st
- FS = union { (S.i)`1 where i is Element of NAT: not contradiction} &
- FD = union { (S.i)`2 where i is Element of NAT: not contradiction} &
- FD.(x,y) <= a"\/"b
+  for FS being non empty set, FD being distance_function of FS,L
+  for x,y being Element of FS for a,b being Element of L st
+  FS = union { (S.i)`1 where i is Element of NAT: not contradiction} &
+  FD = union { (S.i)`2 where i is Element of NAT: not contradiction} &
+  FD.(x,y) <= a"\/"b
   ex z1,z2,z3 being Element of FS st FD.(x,z1) = a & FD.(z2,z3) = a &
-   FD.(z1,z2) = b & FD.(z3,y) = b;
+  FD.(z1,z2) = b & FD.(z3,y) = b;
 
 theorem :: LATTICE5:46
   for S being ExtensionSeq of the carrier of L, BasicDF(L)
-  for FS being non empty set
-  for FD being distance_function of FS,L
-  for f being Homomorphism of L,EqRelLATT FS
-  for x, y being Element of FS
+  for FS being non empty set for FD being distance_function of FS,L
+  for f being Homomorphism of L,EqRelLATT FS for x, y being Element of FS
   for e1,e2 being Equivalence_Relation of FS,x,y st f = alpha FD &
-    FS = union { (S.i)`1 where i is Element of NAT: not contradiction} &
-    FD = union { (S.i)`2 where i is Element of NAT: not contradiction} &
-       e1 in the carrier of Image f & e2 in the carrier of Image f &
-       [x,y] in e1 "\/" e2
-      ex F being non empty FinSequence of FS st
-           len F = 3+2 & x,y are_joint_by F,e1,e2;
+  FS = union { (S.i)`1 where i is Element of NAT: not contradiction} &
+  FD = union { (S.i)`2 where i is Element of NAT: not contradiction} &
+  e1 in the carrier of Image f & e2 in the carrier of Image f &
+  [x,y] in e1 "\/" e2 ex F being non empty FinSequence of FS st
+  len F = 3+2 & x,y are_joint_by F,e1,e2;
 
 theorem :: LATTICE5:47
-    ex A being non empty set, f being Homomorphism of L,EqRelLATT A st
+  ex A being non empty set, f being Homomorphism of L,EqRelLATT A st
   f is one-to-one & type_of Image f <= 3;
+

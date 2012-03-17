@@ -32,23 +32,26 @@ begin :: Preliminaries
 :: More general than GRAPH_2:4
 
 theorem :: LEXBFS:1
- for A,B being Element of NAT, X being non empty set
-for F being Function of NAT, X st F is one-to-one
+  for A,B being Element of NAT, X being non empty set
+  for F being Function of NAT, X st F is one-to-one
   holds Card {F.w where w is Element of NAT: A <= w & w <= A + B} = B+1;
 
 theorem :: LEXBFS:2
-for n,m,k being natural number st m <= k & n < m holds k -' m < k -' n;
+  for n,m,k being natural number st m <= k & n < m holds k -' m < k -' n;
 
 theorem :: LEXBFS:3
-for n,k being natural number st n < k holds k -' (n+1) + 1 = k -' n;
+  for n,k being natural number st n < k holds k -' (n+1) + 1 = k -' n;
 
 theorem :: LEXBFS:4  :: Div00
+
 for n,m,k being natural number st k <> 0 holds (n + m*k) div k = (n div k) + m;
 
-definition let S be set;
+definition
+  let S be set;
   attr S is with_finite-elements means
 :: LEXBFS:def 1
-    for x being Element of S holds x is finite;
+
+  for x being Element of S holds x is finite;
 end;
 
 registration
@@ -56,69 +59,81 @@ registration
   cluster non empty finite with_finite-elements Subset of bool NAT;
 end;
 
-registration let S be with_finite-elements set;
+registration
+  let S be with_finite-elements set;
   cluster -> finite Element of S;
 end;
 
-definition  let f,g be Function;
+definition
+  let f,g be Function;
   func f .\/ g -> Function means
 :: LEXBFS:def 2
-    dom it = dom f \/ dom g &
-    for x being set st x in dom f \/ dom g holds it.x = f.x \/ g.x;
+
+  dom it = dom f \/ dom g &
+  for x being set st x in dom f \/ dom g holds it.x = f.x \/ g.x;
 end;
 
 theorem :: LEXBFS:5
-for m,n,k being natural number holds
+  for m,n,k being natural number holds
   m in ((Seg k) \ Seg (k -' n)) iff k -' n < m & m <= k;
 
 theorem :: LEXBFS:6
-for n,k,m being natural number st n <= m holds
+  for n,k,m being natural number st n <= m holds
   ((Seg k) \ Seg (k -' n)) c= ((Seg k) \ Seg (k -' m));
 
 theorem :: LEXBFS:7
-for n,k being natural number st n < k holds
+  for n,k being natural number st n < k holds
   ((Seg k) \ Seg (k -' n)) \/ {k -' n} = (Seg k) \ Seg (k -' (n+1));
 
-definition let f be Relation;
+definition
+  let f be Relation;
   attr f is natsubset-yielding means
 :: LEXBFS:def 3
-    rng f c= bool NAT;
+
+  rng f c= bool NAT;
 end;
 
 registration
   cluster finite-yielding natsubset-yielding Function;
 end;
 
-definition let f be finite-yielding natsubset-yielding Function, x be set;
+definition
+  let f be finite-yielding natsubset-yielding Function, x be set;
   redefine func f.x -> finite Subset of NAT;
 end;
 
 theorem :: LEXBFS:8
-for X being Ordinal, a, b be finite Subset of X st a <> b
+  for X being Ordinal, a, b be finite Subset of X st a <> b
   holds (a,1)-bag <> (b,1)-bag;
 
-definition let F be natural-yielding Function, S be set, k be natural number;
-   func F.incSubset(S,k) -> natural-yielding Function means
+definition
+  let F be natural-yielding Function, S be set, k be natural number;
+  func F.incSubset(S,k) -> natural-yielding Function means
 :: LEXBFS:def 4
-   dom it = dom F &
-   for y being set holds (y in S & y in dom F implies it.y = F.y + k) &
-                         (not y in S implies it.y = F.y);
+
+  dom it = dom F &
+  for y being set holds (y in S & y in dom F implies it.y = F.y + k) &
+  (not y in S implies it.y = F.y);
 end;
 
-definition let n be Ordinal, T be connected TermOrder of n,
-           B be non empty finite Subset of Bags n;
+definition
+  let n be Ordinal, T be connected TermOrder of n,
+  B be non empty finite Subset of Bags n;
   func max(B,T) -> bag of n means
 :: LEXBFS:def 5
-     it in B & for x being bag of n st x in B holds x <= it,T;
+
+  it in B & for x being bag of n st x in B holds x <= it,T;
 end;
 
-registration let O be Ordinal;
+registration
+  let O be Ordinal;
   cluster InvLexOrder O -> connected;
 end;
 
 begin :: Miscellany on graphs
 
-registration let G be _Graph;
+registration
+  let G be _Graph;
   cluster non empty one-to-one VertexSeq of G;
 end;
 
@@ -126,7 +141,8 @@ definition
   let G be _Graph, V being non empty VertexSeq of G;
   mode Walk of V -> Walk of G means
 :: LEXBFS:def 6
-  it.vertexSeq() = V;
+
+    it.vertexSeq() = V;
 end;
 
 registration
@@ -135,20 +151,22 @@ registration
 end;
 
 theorem :: LEXBFS:9 :: PathLike20
- for G being _Graph, W1,W2 being Walk of G
- st W1 is trivial & W1.last() = W2.first() holds W1.append(W2) = W2;
+  for G being _Graph, W1,W2 being Walk of G
+  st W1 is trivial & W1.last() = W2.first() holds W1.append(W2) = W2;
 
 theorem :: LEXBFS:10
- for G, H being _Graph, A, B, C being set,
-    G1 being (inducedSubgraph of G,A), H1 being (inducedSubgraph of H,B),
-    G2 being (inducedSubgraph of G1,C), H2 being (inducedSubgraph of H1,C)
- st G == H & A c= B & C c= A & C is non empty Subset of the_Vertices_of G
+  for G, H being _Graph, A, B, C being set,
+  G1 being (inducedSubgraph of G,A), H1 being (inducedSubgraph of H,B),
+  G2 being (inducedSubgraph of G1,C), H2 being (inducedSubgraph of H1,C)
+  st G == H & A c= B & C c= A & C is non empty Subset of the_Vertices_of G
   holds G2 == H2;
 
-definition let G be VGraph;
+definition
+  let G be VGraph;
   attr G is natural-vlabeled means
 :: LEXBFS:def 7
-    the_VLabel_of G is natural-yielding;
+
+  the_VLabel_of G is natural-yielding;
 end;
 
 begin :: Graphs with two vertex labels
@@ -156,19 +174,22 @@ begin :: Graphs with two vertex labels
 definition
   func V2LabelSelector -> natural number equals
 :: LEXBFS:def 8
-8;
+
+  8;
 end;
 
-definition let G be GraphStruct;
+definition
+  let G be GraphStruct;
   attr G is [V2Labeled] means
-:: LEXBFS:def 9  ::dV2LABELED
-    V2LabelSelector in dom G &
-    ex f being Function st G.V2LabelSelector = f & dom f c= the_Vertices_of G;
+:: LEXBFS:def 9
+   ::dV2LABELED
+  V2LabelSelector in dom G &
+  ex f being Function st G.V2LabelSelector = f & dom f c= the_Vertices_of G;
 end;
 
 registration
   cluster [Graph-like] [Weighted] [ELabeled] [VLabeled] [V2Labeled]
-          GraphStruct;
+    GraphStruct;
 end;
 
 definition
@@ -176,125 +197,151 @@ definition
   mode VVGraph is [VLabeled] [V2Labeled] _Graph;
 end;
 
-definition let G be V2Graph;
+definition
+  let G be V2Graph;
   func the_V2Label_of G -> Function equals
 :: LEXBFS:def 10
-G.V2LabelSelector;
+
+  G.V2LabelSelector;
 end;
 
 theorem :: LEXBFS:11
-for G being V2Graph holds dom the_V2Label_of G c= the_Vertices_of G;
+  for G being V2Graph holds dom the_V2Label_of G c= the_Vertices_of G;
 
-registration let G be _Graph, X be set;
-  cluster G.set(V2LabelSelector,  X) -> [Graph-like];
+registration
+  let G be _Graph, X be set;
+  cluster G.set(V2LabelSelector, X) -> [Graph-like];
 end;
 
 theorem :: LEXBFS:12
-for G being _Graph, X being set holds G.set(V2LabelSelector, X) == G;
+  for G being _Graph, X being set holds G.set(V2LabelSelector, X) == G;
 
-registration let G be finite _Graph, X be set;
-  cluster G.set(V2LabelSelector,  X) -> finite;
+registration
+  let G be finite _Graph, X be set;
+  cluster G.set(V2LabelSelector, X) -> finite;
 end;
 
-registration let G be loopless _Graph, X be set;
-  cluster G.set(V2LabelSelector,  X) -> loopless;
+registration
+  let G be loopless _Graph, X be set;
+  cluster G.set(V2LabelSelector, X) -> loopless;
 end;
 
-registration let G be trivial _Graph, X be set;
-  cluster G.set(V2LabelSelector,  X) -> trivial;
+registration
+  let G be trivial _Graph, X be set;
+  cluster G.set(V2LabelSelector, X) -> trivial;
 end;
 
-registration let G be non trivial _Graph, X be set;
-  cluster G.set(V2LabelSelector,  X) -> non trivial;
+registration
+  let G be non trivial _Graph, X be set;
+  cluster G.set(V2LabelSelector, X) -> non trivial;
 end;
 
-registration let G be non-multi _Graph, X be set;
-  cluster G.set(V2LabelSelector,  X) -> non-multi;
+registration
+  let G be non-multi _Graph, X be set;
+  cluster G.set(V2LabelSelector, X) -> non-multi;
 end;
 
-registration let G be non-Dmulti _Graph, X be set;
-  cluster G.set(V2LabelSelector,  X) -> non-Dmulti;
+registration
+  let G be non-Dmulti _Graph, X be set;
+  cluster G.set(V2LabelSelector, X) -> non-Dmulti;
 end;
 
-registration let G be connected _Graph, X be set;
-  cluster G.set(V2LabelSelector,  X) -> connected;
+registration
+  let G be connected _Graph, X be set;
+  cluster G.set(V2LabelSelector, X) -> connected;
 end;
 
-registration let G be acyclic _Graph, X be set;
-  cluster G.set(V2LabelSelector,  X) -> acyclic;
+registration
+  let G be acyclic _Graph, X be set;
+  cluster G.set(V2LabelSelector, X) -> acyclic;
 end;
 
-registration let G be VGraph, X be set;
+registration
+  let G be VGraph, X be set;
   cluster G.set(V2LabelSelector, X) -> [VLabeled];
 end;
 
-registration let G be EGraph, X be set;
+registration
+  let G be EGraph, X be set;
   cluster G.set(V2LabelSelector, X) -> [ELabeled];
 end;
 
-registration let G be WGraph, X be set;
+registration
+  let G be WGraph, X be set;
   cluster G.set(V2LabelSelector, X) -> [Weighted];
 end;
 
-registration let G be V2Graph, X be set;
+registration
+  let G be V2Graph, X be set;
   cluster G.set(VLabelSelector, X) -> [V2Labeled];
 end;
 
-registration let G be _Graph, Y be set, X be PartFunc of the_Vertices_of G,Y;
-  cluster G.set(V2LabelSelector,  X) -> [V2Labeled];
+registration
+  let G be _Graph, Y be set, X be PartFunc of the_Vertices_of G,Y;
+  cluster G.set(V2LabelSelector, X) -> [V2Labeled];
 end;
 
-registration let G be _Graph, X be ManySortedSet of the_Vertices_of G;
-  cluster G.set(V2LabelSelector,  X) -> [V2Labeled];
+registration
+  let G be _Graph, X be ManySortedSet of the_Vertices_of G;
+  cluster G.set(V2LabelSelector, X) -> [V2Labeled];
 end;
 
-registration let G be _Graph;
+registration
+  let G be _Graph;
   cluster G.set(V2LabelSelector, {}) -> [V2Labeled];
 end;
 
-definition let G be V2Graph;
+definition
+  let G be V2Graph;
   attr G is natural-v2labeled means
 :: LEXBFS:def 11
-    the_V2Label_of G is natural-yielding;
+
+  the_V2Label_of G is natural-yielding;
   attr G is finite-v2labeled means
 :: LEXBFS:def 12
-    the_V2Label_of G is finite-yielding;
+
+  the_V2Label_of G is finite-yielding;
   attr G is natsubset-v2labeled means
 :: LEXBFS:def 13
-    the_V2Label_of G is natsubset-yielding;
+
+  the_V2Label_of G is natsubset-yielding;
 end;
 
 registration
   cluster finite natural-vlabeled finite-v2labeled natsubset-v2labeled chordal
-          ([Weighted] [ELabeled] [VLabeled] [V2Labeled] _Graph);
-
+    ([Weighted] [ELabeled] [VLabeled] [V2Labeled] _Graph);
   cluster finite natural-vlabeled natural-v2labeled chordal
-          ([Weighted] [ELabeled] [VLabeled] [V2Labeled] _Graph);
+    ([Weighted] [ELabeled] [VLabeled] [V2Labeled] _Graph);
 end;
 
-registration let G be natural-vlabeled VGraph;
+registration
+  let G be natural-vlabeled VGraph;
   cluster the_VLabel_of G -> natural-yielding;
 end;
 
-registration let G be natural-v2labeled V2Graph;
+registration
+  let G be natural-v2labeled V2Graph;
   cluster the_V2Label_of G -> natural-yielding;
 end;
 
-registration let G be finite-v2labeled V2Graph;
+registration
+  let G be finite-v2labeled V2Graph;
   cluster the_V2Label_of G -> finite-yielding;
 end;
 
-registration let G be natsubset-v2labeled V2Graph;
+registration
+  let G be natsubset-v2labeled V2Graph;
   cluster the_V2Label_of G -> natsubset-yielding;
 end;
 
-registration let G be VVGraph, v,x be set;
+registration
+  let G be VVGraph, v,x be set;
   cluster G.labelVertex(v,x) -> [V2Labeled];
 end;
 
 theorem :: LEXBFS:13
-for G being VVGraph, v,x being set
- holds the_V2Label_of G = the_V2Label_of G.labelVertex(v,x);
+  for G being VVGraph, v,x being set
+  holds the_V2Label_of G = the_V2Label_of G.labelVertex(v,x);
 
 registration
   let G be natural-vlabeled VVGraph, v be set, x be natural number;
@@ -318,72 +365,88 @@ end;
 
 :: Subgraphs and inheritence
 
-registration let G be _Graph;
+registration
+  let G be _Graph;
   cluster [VLabeled] [V2Labeled] Subgraph of G;
 end;
 
-definition let G be V2Graph, G2 be [V2Labeled] Subgraph of G;
+definition
+  let G be V2Graph, G2 be [V2Labeled] Subgraph of G;
   attr G2 is v2label-inheriting means
 :: LEXBFS:def 14
-    the_V2Label_of G2 = (the_V2Label_of G) | the_Vertices_of G2;
+
+  the_V2Label_of G2 = (the_V2Label_of G) | the_Vertices_of G2;
 end;
 
-registration let G be V2Graph;
+registration
+  let G be V2Graph;
   cluster v2label-inheriting ([V2Labeled] Subgraph of G);
 end;
 
-definition let G be V2Graph;
+definition
+  let G be V2Graph;
   mode V2Subgraph of G is v2label-inheriting ([V2Labeled] Subgraph of G);
 end;
 
-registration let G be VVGraph;
+registration
+  let G be VVGraph;
   cluster vlabel-inheriting v2label-inheriting
-          ([VLabeled] [V2Labeled] Subgraph of G);
+    ([VLabeled] [V2Labeled] Subgraph of G);
 end;
 
-definition let G be VVGraph;
+definition
+  let G be VVGraph;
   mode VVSubgraph of G is vlabel-inheriting v2label-inheriting
-                           ([VLabeled] [V2Labeled] Subgraph of G);
+    ([VLabeled] [V2Labeled] Subgraph of G);
 end;
 
-registration let G be natural-vlabeled VGraph;
+registration
+  let G be natural-vlabeled VGraph;
   cluster -> natural-vlabeled VSubgraph of G;
 end;
 
 registration
   let G be _Graph, V,E be set;
- cluster [Weighted] [ELabeled] [VLabeled] [V2Labeled] inducedSubgraph of G,V,E;
+
+cluster [Weighted] [ELabeled] [VLabeled] [V2Labeled] inducedSubgraph of G,V,E;
 end;
 
 registration
   let G be VVGraph, V, E being set;
   cluster vlabel-inheriting v2label-inheriting
-     ([VLabeled] [V2Labeled] inducedSubgraph of G,V,E);
+    ([VLabeled] [V2Labeled] inducedSubgraph of G,V,E);
 end;
 
-definition let G be VVGraph, V,E be set;
+definition
+  let G be VVGraph, V,E be set;
   mode inducedVVSubgraph of G,V,E is vlabel-inheriting v2label-inheriting
-       ([VLabeled] [V2Labeled] inducedSubgraph of G,V,E);
+    ([VLabeled] [V2Labeled] inducedSubgraph of G,V,E);
 end;
 
-definition let G be VVGraph, V be set;
+definition
+  let G be VVGraph, V be set;
   mode inducedVVSubgraph of G,V is inducedVVSubgraph of G,V,G.edgesBetween(V);
 end;
 
 begin :: More on Graph Sequences
 
 :::::::::::::: this should go into glib
-definition let s be ManySortedSet of NAT;
+
+definition
+  let s be ManySortedSet of NAT;
   attr s is iterative means
-:: LEXBFS:def 15                  ::dGSITERATIVE:
-    for k, n being natural number st s.k = s.n holds s.(k+1) = s.(n+1);
+:: LEXBFS:def 15
+   ::dGSITERATIVE:
+  for k, n being natural number st s.k = s.n holds s.(k+1) = s.(n+1);
 end;
 
-definition let GS be ManySortedSet of NAT;
+definition
+  let GS be ManySortedSet of NAT;
   attr GS is eventually-constant means
 :: LEXBFS:def 16
-    ex n being natural number
-     st for m being natural number st n <= m holds GS.n = GS.m;
+
+  ex n being natural number
+  st for m being natural number st n <= m holds GS.n = GS.m;
 end;
 
 registration
@@ -391,7 +454,7 @@ registration
 end;
 
 theorem :: LEXBFS:14
-for Gs being ManySortedSet of NAT
+  for Gs being ManySortedSet of NAT
   st Gs is halting & Gs is iterative holds Gs is eventually-constant;
 
 registration
@@ -399,7 +462,7 @@ registration
 end;
 
 theorem :: LEXBFS:15
-for Gs being ManySortedSet of NAT
+  for Gs being ManySortedSet of NAT
   st Gs is eventually-constant holds Gs is halting;
 
 registration
@@ -407,32 +470,38 @@ registration
 end;
 
 theorem :: LEXBFS:16
-for Gs being iterative eventually-constant ManySortedSet of NAT
-for n being natural number st Gs.Lifespan() <= n
+  for Gs being iterative eventually-constant ManySortedSet of NAT
+  for n being natural number st Gs.Lifespan() <= n
   holds Gs.(Gs.Lifespan()) = Gs.n;
 
 theorem :: LEXBFS:17
-for Gs being iterative eventually-constant ManySortedSet of NAT
-for n,m being natural number st Gs.Lifespan() <= n & n <= m
+  for Gs being iterative eventually-constant ManySortedSet of NAT
+  for n,m being natural number st Gs.Lifespan() <= n & n <= m
   holds Gs.m = Gs.n;
 
-definition let GS be VGraphSeq;
+definition
+  let GS be VGraphSeq;
   attr GS is natural-vlabeled means
-:: LEXBFS:def 17                 ::dGSEQVNATVL:
-    for x being natural number holds GS.x is natural-vlabeled;
+:: LEXBFS:def 17
+   ::dGSEQVNATVL:
+  for x being natural number holds GS.x is natural-vlabeled;
 end;
 
-definition let GS be GraphSeq;
+definition
+  let GS be GraphSeq;
   attr GS is chordal means
-:: LEXBFS:def 18                         ::dGSEQCHORDAL
-    for x being natural number holds GS.x is chordal;
+:: LEXBFS:def 18
+   ::dGSEQCHORDAL
+  for x being natural number holds GS.x is chordal;
   attr GS is fixed-vertices means
 :: LEXBFS:def 19
-    for n,m being natural number holds
-       (the_Vertices_of (GS.n)) = (the_Vertices_of (GS.m));
+
+  for n,m being natural number holds
+  (the_Vertices_of (GS.n)) = (the_Vertices_of (GS.m));
   attr GS is [V2Labeled] means
-:: LEXBFS:def 20                    ::dGSEQV2LABEL
-    for x being natural number holds GS.x is [V2Labeled];
+:: LEXBFS:def 20
+   ::dGSEQV2LABEL
+  for x being natural number holds GS.x is [V2Labeled];
 end;
 
 registration
@@ -444,40 +513,46 @@ definition
   mode VVGraphSeq is [VLabeled] [V2Labeled] GraphSeq;
 end;
 
-registration let GSq be V2GraphSeq, x be natural number;
+registration
+  let GSq be V2GraphSeq, x be natural number;
   cluster GSq.x -> [V2Labeled] _Graph;
 end;
 
-definition let GSq be V2GraphSeq;
-   attr GSq is natural-v2labeled means
-:: LEXBFS:def 21               ::dGSEQNATV2L
-     for x being natural number holds GSq.x is natural-v2labeled;
-   attr GSq is finite-v2labeled means
-:: LEXBFS:def 22      ::dGSEQNATSUB
-     for x being natural number holds GSq.x is finite-v2labeled;
-   attr GSq is natsubset-v2labeled means
-:: LEXBFS:def 23      ::dGSEQNATSUB
-     for x being natural number holds GSq.x is natsubset-v2labeled;
-
+definition
+  let GSq be V2GraphSeq;
+  attr GSq is natural-v2labeled means
+:: LEXBFS:def 21
+   ::dGSEQNATV2L
+  for x being natural number holds GSq.x is natural-v2labeled;
+  attr GSq is finite-v2labeled means
+:: LEXBFS:def 22
+   ::dGSEQNATSUB
+  for x being natural number holds GSq.x is finite-v2labeled;
+  attr GSq is natsubset-v2labeled means
+:: LEXBFS:def 23
+   ::dGSEQNATSUB
+  for x being natural number holds GSq.x is natsubset-v2labeled;
 end;
 
 registration
   cluster finite natural-vlabeled finite-v2labeled natsubset-v2labeled chordal
-          ([Weighted] [ELabeled] [VLabeled] [V2Labeled] GraphSeq);
-
+    ([Weighted] [ELabeled] [VLabeled] [V2Labeled] GraphSeq);
   cluster finite natural-vlabeled natural-v2labeled chordal
-          ([Weighted] [ELabeled] [VLabeled] [V2Labeled] GraphSeq);
+    ([Weighted] [ELabeled] [VLabeled] [V2Labeled] GraphSeq);
 end;
 
-definition let Gs be VGraphSeq, x be natural number;
+definition
+  let Gs be VGraphSeq, x be natural number;
   redefine func Gs.x -> VGraph;
 end;
 
-registration let GSq be natural-vlabeled VGraphSeq, x be natural number;
+registration
+  let GSq be natural-vlabeled VGraphSeq, x be natural number;
   cluster GSq.x -> natural-vlabeled VGraph;
 end;
 
-registration let GSq be natural-v2labeled V2GraphSeq, x be natural number;
+registration
+  let GSq be natural-v2labeled V2GraphSeq, x be natural number;
   cluster GSq.x -> natural-v2labeled V2Graph;
 end;
 
@@ -491,81 +566,87 @@ registration
   cluster GSq.x -> natsubset-v2labeled V2Graph;
 end;
 
-registration let GSq be chordal GraphSeq, x be natural number;
+registration
+  let GSq be chordal GraphSeq, x be natural number;
   cluster GSq.x -> chordal _Graph;
 end;
 
-definition let Gs be VGraphSeq, n being natural number;
+definition
+  let Gs be VGraphSeq, n being natural number;
   redefine func Gs.n -> VGraph;
 end;
 
-registration let Gs be finite VGraphSeq, n be natural number;
+registration
+  let Gs be finite VGraphSeq, n be natural number;
   cluster Gs.n -> finite VGraph;
 end;
 
-
-definition let Gs be VVGraphSeq, n being natural number;
+definition
+  let Gs be VVGraphSeq, n being natural number;
   redefine func Gs.n -> VVGraph;
 end;
 
-registration let Gs be finite VVGraphSeq, n be natural number;
+registration
+  let Gs be finite VVGraphSeq, n be natural number;
   cluster Gs.n -> finite VVGraph;
 end;
 
-registration let Gs be chordal VVGraphSeq, n be natural number;
+registration
+  let Gs be chordal VVGraphSeq, n be natural number;
   cluster Gs.n -> chordal VVGraph;
 end;
 
-registration let Gs be natural-vlabeled VVGraphSeq, n be natural number;
+registration
+  let Gs be natural-vlabeled VVGraphSeq, n be natural number;
   cluster Gs.n -> natural-vlabeled VVGraph;
 end;
 
-registration let Gs be finite-v2labeled VVGraphSeq,
-                 n be natural number;
+registration
+  let Gs be finite-v2labeled VVGraphSeq, n be natural number;
   cluster Gs.n -> finite-v2labeled VVGraph;
 end;
 
-registration let Gs be natsubset-v2labeled VVGraphSeq,
-                 n be natural number;
+registration
+  let Gs be natsubset-v2labeled VVGraphSeq, n be natural number;
   cluster Gs.n -> natsubset-v2labeled VVGraph;
 end;
 
-registration let Gs be natural-v2labeled VVGraphSeq, n be natural number;
+registration
+  let Gs be natural-v2labeled VVGraphSeq, n be natural number;
   cluster Gs.n -> natural-v2labeled VVGraph;
 end;
 
 begin :: Vertices numbering sequences
 
-definition let GS be VGraphSeq;
-
+definition
+  let GS be VGraphSeq;
   attr GS is vlabel-initially-empty means
-:: LEXBFS:def 24   ::dVLINITEMPTY
-    the_VLabel_of (GS.0) = {};
-
+:: LEXBFS:def 24
+   ::dVLINITEMPTY
+  the_VLabel_of (GS.0) = {};
   attr GS is adds-one-at-a-step means
-:: LEXBFS:def 25  ::dVLNUMBERSONE
-    for n being natural number st n < GS.Lifespan() holds
-     (ex w being set st not w in dom (the_VLabel_of (GS.n)) &
-       the_VLabel_of (GS.(n+1)) =
-       (the_VLabel_of (GS.n)) +* (w .--> (GS.Lifespan()-'n)));
+:: LEXBFS:def 25
+   ::dVLNUMBERSONE
+  for n being natural number st n < GS.Lifespan() holds
+  (ex w being set st not w in dom (the_VLabel_of (GS.n)) &
+  the_VLabel_of (GS.(n+1)) =
+  (the_VLabel_of (GS.n)) +* (w .--> (GS.Lifespan()-'n)));
 end;
 
-definition let GS be VGraphSeq;
+definition
+  let GS be VGraphSeq;
   attr GS is vlabel-numbering means
 :: LEXBFS:def 26
+
   GS is iterative
-        eventually-constant
-        finite
-        fixed-vertices
-        natural-vlabeled
-        vlabel-initially-empty
-        adds-one-at-a-step;
+  eventually-constant finite fixed-vertices natural-vlabeled
+  vlabel-initially-empty adds-one-at-a-step;
 end;
 
 registration
   cluster iterative eventually-constant finite
-          fixed-vertices natural-vlabeled vlabel-initially-empty
-          adds-one-at-a-step VGraphSeq;
+    fixed-vertices natural-vlabeled vlabel-initially-empty
+    adds-one-at-a-step VGraphSeq;
 end;
 
 registration
@@ -586,276 +667,279 @@ definition
   mode VLabelNumberingSeq is vlabel-numbering VGraphSeq;
 end;
 
-definition let GS be VLabelNumberingSeq, n be natural number;
+definition
+  let GS be VLabelNumberingSeq, n be natural number;
   func GS.PickedAt(n) -> set means
 :: LEXBFS:def 27
-    it = choose (the_Vertices_of (GS.0)) if n >= GS.Lifespan() otherwise
-    not it in dom (the_VLabel_of (GS.n)) & the_VLabel_of (GS.(n+1)) =
-        (the_VLabel_of (GS.n)) +* (it .--> (GS.Lifespan()-'n));
+
+  it = choose (the_Vertices_of (GS.0)) if n >= GS.Lifespan() otherwise
+  not it in dom (the_VLabel_of (GS.n)) & the_VLabel_of (GS.(n+1)) =
+  (the_VLabel_of (GS.n)) +* (it .--> (GS.Lifespan()-'n));
 end;
 
 theorem :: LEXBFS:18
-for GS being VLabelNumberingSeq,
-    n being natural number st n < GS.Lifespan()
+  for GS being VLabelNumberingSeq, n being natural number st n < GS.Lifespan()
   holds GS.PickedAt(n) in (GS.(n+1)).labeledV() &
-        (GS.(n+1)).labeledV() = (GS.n).labeledV() \/ {GS.PickedAt(n)};
+  (GS.(n+1)).labeledV() = (GS.n).labeledV() \/ {GS.PickedAt(n)};
 
 theorem :: LEXBFS:19
-for GS being VLabelNumberingSeq, n
-    being natural number st n < GS.Lifespan()
+  for GS being VLabelNumberingSeq, n being natural number st n < GS.Lifespan()
   holds (the_VLabel_of (GS.(n+1))).(GS.PickedAt(n)) = GS.Lifespan()-'n;
 
 theorem :: LEXBFS:20
- for GS being VLabelNumberingSeq, n being natural number
- st n <= GS.Lifespan() holds card ((GS.n).labeledV()) = n;
+  for GS being VLabelNumberingSeq, n being natural number
+  st n <= GS.Lifespan() holds card ((GS.n).labeledV()) = n;
 
 theorem :: LEXBFS:21
-for GS being VLabelNumberingSeq, n being natural number holds
+  for GS being VLabelNumberingSeq, n being natural number holds
   rng the_VLabel_of (GS.n) = (Seg GS.Lifespan()) \ Seg (GS.Lifespan()-'n);
 
 theorem :: LEXBFS:22
-for GS being VLabelNumberingSeq, n being natural number, x being set
+  for GS being VLabelNumberingSeq, n being natural number, x being set
   holds (the_VLabel_of (GS.n)).x <= GS.Lifespan() &
-        ((x in (GS.n).labeledV()) implies 1 <= (the_VLabel_of (GS.n)).x);
+  ((x in (GS.n).labeledV()) implies 1 <= (the_VLabel_of (GS.n)).x);
 
 theorem :: LEXBFS:23
-for GS being VLabelNumberingSeq, n,m being natural number
- st GS.Lifespan() -' n < m & m <= GS.Lifespan()
-  ex v being Vertex of GS.n
-   st v in (GS.n).labeledV() & (the_VLabel_of (GS.n)).v = m;
+  for GS being VLabelNumberingSeq, n,m being natural number
+  st GS.Lifespan() -' n < m & m <= GS.Lifespan() ex v being Vertex of GS.n
+  st v in (GS.n).labeledV() & (the_VLabel_of (GS.n)).v = m;
 
 theorem :: LEXBFS:24
-for GS being VLabelNumberingSeq, m,n being natural number st m <= n
+  for GS being VLabelNumberingSeq, m,n being natural number st m <= n
   holds the_VLabel_of (GS.m) c= the_VLabel_of (GS.n);
 
 theorem :: LEXBFS:25
-for GS being VLabelNumberingSeq, n being natural number
- holds the_VLabel_of (GS.n) is one-to-one;
+  for GS being VLabelNumberingSeq, n being natural number
+  holds the_VLabel_of (GS.n) is one-to-one;
 
 theorem :: LEXBFS:26
-for GS being VLabelNumberingSeq, m,n being natural number
-for v being set st v in (GS.m).labeledV() & v in (GS.n).labeledV()
+  for GS being VLabelNumberingSeq, m,n being natural number
+  for v being set st v in (GS.m).labeledV() & v in (GS.n).labeledV()
   holds (the_VLabel_of (GS.m)).v = (the_VLabel_of (GS.n)).v;
 
 theorem :: LEXBFS:27
-for GS being VLabelNumberingSeq, v being set, m,n being natural number
- st (v in (GS.m).labeledV() & (the_VLabel_of (GS.m)).v = n)
+  for GS being VLabelNumberingSeq, v being set, m,n being natural number
+  st (v in (GS.m).labeledV() & (the_VLabel_of (GS.m)).v = n)
   holds GS.PickedAt(GS.Lifespan()-'n) = v;
 
 theorem :: LEXBFS:28
-for GS being VLabelNumberingSeq, m,n being natural number
- st n < GS.Lifespan() & n < m
-   holds GS.PickedAt(n) in (GS.m).labeledV() &
-         (the_VLabel_of (GS.m)).(GS.PickedAt(n)) = GS.Lifespan() -' n;
+  for GS being VLabelNumberingSeq, m,n being natural number
+  st n < GS.Lifespan() & n < m holds GS.PickedAt(n) in (GS.m).labeledV() &
+  (the_VLabel_of (GS.m)).(GS.PickedAt(n)) = GS.Lifespan() -' n;
 
 :: Inequalities relating the vlabel and the current iteration
+
 theorem :: LEXBFS:29
-for GS being VLabelNumberingSeq, m being natural number, v being set
+  for GS being VLabelNumberingSeq, m being natural number, v being set
   st v in (GS.m).labeledV()
-   holds GS.Lifespan() -' (the_VLabel_of (GS.m)).v < m &
-         GS.Lifespan() -' m < (the_VLabel_of (GS.m)).v;
+  holds GS.Lifespan() -' (the_VLabel_of (GS.m)).v < m &
+  GS.Lifespan() -' m < (the_VLabel_of (GS.m)).v;
 
 :: If a vertex has a larger vlabel than we do at some point in the
 :: algorithm, then it must have been in the vlabel when we were picked
+
 theorem :: LEXBFS:30
-for GS being VLabelNumberingSeq
-for i being natural number, a,b being set
- st a in (GS.i).labeledV() & b in (GS.i).labeledV() &
-    (the_VLabel_of (GS.i)).a < (the_VLabel_of (GS.i)).b
+  for GS being VLabelNumberingSeq for i being natural number, a,b being set
+  st a in (GS.i).labeledV() & b in (GS.i).labeledV() &
+  (the_VLabel_of (GS.i)).a < (the_VLabel_of (GS.i)).b
   holds b in (GS.(GS.Lifespan() -' (the_VLabel_of (GS.i)).a)).labeledV();
 
 theorem :: LEXBFS:31
-for GS being VLabelNumberingSeq
-for i being natural number, a,b being set
- st a in (GS.i).labeledV() & b in (GS.i).labeledV() &
-    (the_VLabel_of (GS.i)).a < (the_VLabel_of (GS.i)).b
- holds not a in (GS.(GS.Lifespan() -' (the_VLabel_of (GS.i)).b)).labeledV();
+  for GS being VLabelNumberingSeq for i being natural number, a,b being set
+  st a in (GS.i).labeledV() & b in (GS.i).labeledV() &
+  (the_VLabel_of (GS.i)).a < (the_VLabel_of (GS.i)).b
+  holds not a in (GS.(GS.Lifespan() -' (the_VLabel_of (GS.i)).b)).labeledV();
 
 begin :: Lexicographical Breadth-First Search
 
-definition let G be _Graph;
-  func LexBFS:Init(G) ->
-                  natural-vlabeled finite-v2labeled natsubset-v2labeled
-                  VVGraph equals
+definition
+  let G be _Graph;
+  func LexBFS:Init(G) -> natural-vlabeled finite-v2labeled natsubset-v2labeled
+  VVGraph equals
 :: LEXBFS:def 28
-     G.set(VLabelSelector, {}).set(V2LabelSelector, the_Vertices_of G --> {});
+  G.set(VLabelSelector, {}).set(V2LabelSelector, the_Vertices_of G --> {});
 end;
 
-definition let G be finite _Graph;
-  redefine func LexBFS:Init(G)
-                -> finite natural-vlabeled
-                   finite-v2labeled natsubset-v2labeled VVGraph;
+definition
+  let G be finite _Graph;
+  redefine func LexBFS:Init(G) -> finite natural-vlabeled
+  finite-v2labeled natsubset-v2labeled VVGraph;
 end;
 
-definition let G be finite finite-v2labeled natsubset-v2labeled VVGraph;
-  assume  dom the_V2Label_of G = the_Vertices_of G;
+definition
+  let G be finite finite-v2labeled natsubset-v2labeled VVGraph;
+  assume
+ dom the_V2Label_of G = the_Vertices_of G;
   func LexBFS:PickUnnumbered(G) -> Vertex of G means
 :: LEXBFS:def 29
+
   it = choose the_Vertices_of G if dom the_VLabel_of G = the_Vertices_of G
-  otherwise
-  ex S being non empty finite Subset of bool NAT,
-     B being non empty finite Subset of Bags NAT,
-     F being Function
-  st S = rng F &
-     F = ((the_V2Label_of G) | (the_Vertices_of G \ dom the_VLabel_of G)) &
-     (for x being finite Subset of NAT holds x in S implies ((x,1)-bag in B)) &
-     (for x being set holds x in B implies
-            ex y being finite Subset of NAT st y in S & x = (y,1)-bag) &
-   it = choose (F " {support max(B,InvLexOrder NAT)});
+  otherwise ex S being non empty finite Subset of bool NAT,
+  B being non empty finite Subset of Bags NAT, F being Function st S = rng F &
+  F = ((the_V2Label_of G) | (the_Vertices_of G \ dom the_VLabel_of G)) &
+  (for x being finite Subset of NAT holds x in S implies ((x,1)-bag in B)) &
+  (for x being set holds x in B implies
+  ex y being finite Subset of NAT st y in S & x = (y,1)-bag) &
+  it = choose (F " {support max(B,InvLexOrder NAT)});
 end;
 
-definition let G be VVGraph, v be set, k be natural number;
- func LexBFS:LabelAdjacent(G, v, k) -> VVGraph equals
+definition
+  let G be VVGraph, v be set, k be natural number;
+  func LexBFS:LabelAdjacent(G, v, k) -> VVGraph equals
 :: LEXBFS:def 30
   G.set(V2LabelSelector, (the_V2Label_of G) .\/
-                        ((G.AdjacentSet({v}) \ dom the_VLabel_of G)-->{k}));
+  ((G.AdjacentSet({v}) \ dom the_VLabel_of G)-->{k}));
 end;
 
 theorem :: LEXBFS:32
-for G being VVGraph, v,x being set, k being natural number
- st not x in G.AdjacentSet({v})
+  for G being VVGraph, v,x being set, k being natural number
+  st not x in G.AdjacentSet({v})
   holds (the_V2Label_of G).x = (the_V2Label_of LexBFS:LabelAdjacent(G,v,k)).x;
 
 theorem :: LEXBFS:33
-for G being VVGraph, v,x being set, k being natural number
- st x in dom (the_VLabel_of G) holds
-   (the_V2Label_of G).x = (the_V2Label_of LexBFS:LabelAdjacent(G,v,k)).x;
+  for G being VVGraph, v,x being set, k being natural number
+  st x in dom (the_VLabel_of G) holds
+  (the_V2Label_of G).x = (the_V2Label_of LexBFS:LabelAdjacent(G,v,k)).x;
 
 theorem :: LEXBFS:34
-for G being VVGraph, v,x being set, k being natural number
- st x in G.AdjacentSet({v}) & not x in dom (the_VLabel_of G)
+  for G being VVGraph, v,x being set, k being natural number
+  st x in G.AdjacentSet({v}) & not x in dom (the_VLabel_of G)
   holds (the_V2Label_of LexBFS:LabelAdjacent(G,v,k)).x =
-        (the_V2Label_of G).x \/ {k};
+  (the_V2Label_of G).x \/ {k};
 
 theorem :: LEXBFS:35
-for G being VVGraph, v being set, k being natural number
- st dom (the_V2Label_of G) = the_Vertices_of G
+  for G being VVGraph, v being set, k being natural number
+  st dom (the_V2Label_of G) = the_Vertices_of G
   holds dom (the_V2Label_of LexBFS:LabelAdjacent(G,v,k)) = the_Vertices_of G;
 
-definition let G be finite natural-vlabeled finite-v2labeled
-                    natsubset-v2labeled VVGraph,
-               v be Vertex of G, k be natural number;
-  redefine func LexBFS:LabelAdjacent(G, v, k) ->
-                    finite natural-vlabeled
-                    finite-v2labeled natsubset-v2labeled VVGraph;
+definition
+  let G be finite natural-vlabeled finite-v2labeled
+  natsubset-v2labeled VVGraph, v be Vertex of G, k be natural number;
+  redefine func LexBFS:LabelAdjacent(G, v, k) -> finite natural-vlabeled
+  finite-v2labeled natsubset-v2labeled VVGraph;
 end;
 
-definition let G be finite natural-vlabeled
-                    finite-v2labeled natsubset-v2labeled VVGraph,
-               v be Vertex of G, n be natural number;
-   func LexBFS:Update(G, v, n) ->
-             finite natural-vlabeled
-             finite-v2labeled natsubset-v2labeled VVGraph equals
+definition
+  let G be finite natural-vlabeled
+  finite-v2labeled natsubset-v2labeled VVGraph,
+  v be Vertex of G, n be natural number;
+  func LexBFS:Update(G, v, n) -> finite natural-vlabeled
+  finite-v2labeled natsubset-v2labeled VVGraph equals
 :: LEXBFS:def 31
-      LexBFS:LabelAdjacent(G.labelVertex(v, G.order()-'n), v, G.order()-'n);
+  LexBFS:LabelAdjacent(G.labelVertex(v, G.order()-'n), v, G.order()-'n);
 end;
 
-definition let G be finite natural-vlabeled
-                    finite-v2labeled natsubset-v2labeled VVGraph;
-  func LexBFS:Step(G) ->
-           finite natural-vlabeled
-           finite-v2labeled natsubset-v2labeled VVGraph equals
+definition
+  let G be finite natural-vlabeled
+  finite-v2labeled natsubset-v2labeled VVGraph;
+  func LexBFS:Step(G) -> finite natural-vlabeled
+  finite-v2labeled natsubset-v2labeled VVGraph equals
 :: LEXBFS:def 32
-   G if G.order() <= card (dom the_VLabel_of G)
-                otherwise LexBFS:Update(G,
-                                        LexBFS:PickUnnumbered(G),
-                                        card (dom the_VLabel_of G));
+
+  G if G.order() <= card (dom the_VLabel_of G) otherwise LexBFS:Update(G,
+  LexBFS:PickUnnumbered(G), card (dom the_VLabel_of G));
 end;
 
-definition let G be finite _Graph;
-  func LexBFS:CSeq(G) ->
-       finite natural-vlabeled
-       finite-v2labeled natsubset-v2labeled VVGraphSeq means
+definition
+  let G be finite _Graph;
+  func LexBFS:CSeq(G) -> finite natural-vlabeled
+  finite-v2labeled natsubset-v2labeled VVGraphSeq means
 :: LEXBFS:def 33
- it.0 = LexBFS:Init(G) &
-           for n being natural number holds it.(n+1) = LexBFS:Step(it.n);
+
+  it.0 = LexBFS:Init(G) &
+  for n being natural number holds it.(n+1) = LexBFS:Step(it.n);
 end;
 
 theorem :: LEXBFS:36
-for G being finite _Graph holds LexBFS:CSeq(G) is iterative;
+  for G being finite _Graph holds LexBFS:CSeq(G) is iterative;
 
-registration let G be finite _Graph;
+registration
+  let G be finite _Graph;
   cluster LexBFS:CSeq(G) -> iterative;
 end;
 
 theorem :: LEXBFS:37  :: tLexBFSINIT01:
-for G being _Graph holds the_VLabel_of LexBFS:Init(G) = {};
+  for G being _Graph holds the_VLabel_of LexBFS:Init(G) = {};
 
 theorem :: LEXBFS:38  :: tLexBFSINIT02:
-for G being _Graph, v being set
+  for G being _Graph, v being set
   holds dom the_V2Label_of LexBFS:Init(G) = the_Vertices_of G &
-        (the_V2Label_of LexBFS:Init(G)).v = {};
+  (the_V2Label_of LexBFS:Init(G)).v = {};
 
 theorem :: LEXBFS:39  :: tLexBFSINIT03:
-for G being _Graph holds G == LexBFS:Init(G);
+  for G being _Graph holds G == LexBFS:Init(G);
 
 :: the vertex picked has the largest v2label
+
 theorem :: LEXBFS:40  :: tLexBFSPick01:
-for G being finite finite-v2labeled natsubset-v2labeled VVGraph, x being set
- st not x in dom the_VLabel_of G &
-    dom the_V2Label_of G = the_Vertices_of G &
-    dom the_VLabel_of G <> the_Vertices_of G
- holds ((the_V2Label_of G).x,1)-bag <=
-       ((the_V2Label_of G).(LexBFS:PickUnnumbered(G)),1)-bag, InvLexOrder NAT;
+  for G being finite finite-v2labeled natsubset-v2labeled VVGraph, x being set
+  st not x in dom the_VLabel_of G & dom the_V2Label_of G = the_Vertices_of G &
+  dom the_VLabel_of G <> the_Vertices_of G
+  holds ((the_V2Label_of G).x,1)-bag <=
+  ((the_V2Label_of G).(LexBFS:PickUnnumbered(G)),1)-bag, InvLexOrder NAT;
 
 :: the vertex picked is not currently in the vlabel
+
 theorem :: LEXBFS:41  :: tLexBFSPick02:
-for G being finite finite-v2labeled natsubset-v2labeled VVGraph
- st dom the_V2Label_of G = the_Vertices_of G &
-    dom the_VLabel_of G <> the_Vertices_of G
- holds not LexBFS:PickUnnumbered(G) in dom the_VLabel_of G;
+  for G being finite finite-v2labeled natsubset-v2labeled VVGraph
+  st dom the_V2Label_of G = the_Vertices_of G &
+  dom the_VLabel_of G <> the_Vertices_of G
+  holds not LexBFS:PickUnnumbered(G) in dom the_VLabel_of G;
 
 theorem :: LEXBFS:42
-for G being finite _Graph, n being natural number
+  for G being finite _Graph, n being natural number
   holds (LexBFS:CSeq(G)).n == G;
 
 :: show lexbfs has static vertices
+
 theorem :: LEXBFS:43
-for G being finite _Graph, m,n being natural number
+  for G being finite _Graph, m,n being natural number
   holds (LexBFS:CSeq(G)).m == (LexBFS:CSeq(G)).n;
 
 theorem :: LEXBFS:44
-for G being finite _Graph, n being natural number
- st card (dom the_VLabel_of ((LexBFS:CSeq(G)).n)) < G.order()
-holds
-   the_VLabel_of ((LexBFS:CSeq(G)).(n+1)) =
-   (the_VLabel_of ((LexBFS:CSeq(G)).n)) +*
-   (LexBFS:PickUnnumbered((LexBFS:CSeq(G)).n) .-->
-      (G.order()-'(card (dom the_VLabel_of ((LexBFS:CSeq(G)).n)))));
+  for G being finite _Graph, n being natural number
+  st card (dom the_VLabel_of ((LexBFS:CSeq(G)).n)) < G.order() holds
+  the_VLabel_of ((LexBFS:CSeq(G)).(n+1)) =
+  (the_VLabel_of ((LexBFS:CSeq(G)).n)) +*
+  (LexBFS:PickUnnumbered((LexBFS:CSeq(G)).n) .-->
+  (G.order()-'(card (dom the_VLabel_of ((LexBFS:CSeq(G)).n)))));
 
 theorem :: LEXBFS:45
-for G being finite _Graph, n being natural number
- holds dom (the_V2Label_of ((LexBFS:CSeq(G)).n)) =
-            the_Vertices_of ((LexBFS:CSeq(G)).n);
+  for G being finite _Graph, n being natural number
+  holds dom (the_V2Label_of ((LexBFS:CSeq(G)).n)) =
+  the_Vertices_of ((LexBFS:CSeq(G)).n);
 
 theorem :: LEXBFS:46
-for G being finite _Graph, n being natural number st n <= G.order()
- holds card dom the_VLabel_of ((LexBFS:CSeq(G)).n) = n;
+  for G being finite _Graph, n being natural number st n <= G.order()
+  holds card dom the_VLabel_of ((LexBFS:CSeq(G)).n) = n;
 
 theorem :: LEXBFS:47
-for G being finite _Graph, n being natural number st G.order() <= n
+  for G being finite _Graph, n being natural number st G.order() <= n
   holds (LexBFS:CSeq(G)).(G.order()) = (LexBFS:CSeq(G)).n;
 
 theorem :: LEXBFS:48
+
 for G being finite _Graph, m,n being natural number st G.order() <= m & m <= n
   holds (LexBFS:CSeq(G)).m = (LexBFS:CSeq(G)).n;
 
 theorem :: LEXBFS:49
-for G being finite _Graph holds LexBFS:CSeq(G) is eventually-constant;
+  for G being finite _Graph holds LexBFS:CSeq(G) is eventually-constant;
 
-registration let G be finite _Graph;
+registration
+  let G be finite _Graph;
   cluster LexBFS:CSeq(G) -> eventually-constant;
 end;
 
 theorem :: LEXBFS:50
-for G being finite _Graph, n being natural number holds
-    dom the_VLabel_of((LexBFS:CSeq(G)).n) = the_Vertices_of((LexBFS:CSeq(G)).n)
-iff G.order() <= n;
+  for G being finite _Graph, n being natural number holds
+  dom the_VLabel_of((LexBFS:CSeq(G)).n) = the_Vertices_of((LexBFS:CSeq(G)).n)
+  iff G.order() <= n;
 
 theorem :: LEXBFS:51
-for G being finite _Graph holds (LexBFS:CSeq(G)).Lifespan() = G.order();
+  for G being finite _Graph holds (LexBFS:CSeq(G)).Lifespan() = G.order();
 
-registration let G be finite chordal _Graph, i be natural number;
+registration
+  let G be finite chordal _Graph, i be natural number;
   cluster (LexBFS:CSeq(G)).i -> chordal VVGraph;
 end;
 
@@ -865,354 +949,373 @@ registration
 end;
 
 theorem :: LEXBFS:52
-for G being finite _Graph holds LexBFS:CSeq(G) is vlabel-numbering;
+  for G being finite _Graph holds LexBFS:CSeq(G) is vlabel-numbering;
 
-registration let G be finite _Graph;
+registration
+  let G be finite _Graph;
   cluster LexBFS:CSeq(G) -> vlabel-numbering;
 end;
 
 theorem :: LEXBFS:53
-for G being finite _Graph, n being natural number st n < G.order()
+  for G being finite _Graph, n being natural number st n < G.order()
   holds (LexBFS:CSeq(G)).PickedAt(n) =
-        LexBFS:PickUnnumbered((LexBFS:CSeq(G)).n);
+  LexBFS:PickUnnumbered((LexBFS:CSeq(G)).n);
 
 theorem :: LEXBFS:54
-for G being finite _Graph, n being natural number st n < G.order()
- ex w being Vertex of (LexBFS:CSeq(G)).n
-   st w = LexBFS:PickUnnumbered((LexBFS:CSeq(G)).n) &
-   for v being set holds
-    ((v in G.AdjacentSet({w}) &
-      not v in dom (the_VLabel_of ((LexBFS:CSeq(G)).n))
-       implies
-        (the_V2Label_of ((LexBFS:CSeq(G)).(n+1))).v =
-        (the_V2Label_of ((LexBFS:CSeq(G)).n)).v \/ {G.order() -' n}) &
-    ((not v in G.AdjacentSet({w}) or
-          v in dom (the_VLabel_of ((LexBFS:CSeq(G)).n)))
-       implies
-        (the_V2Label_of ((LexBFS:CSeq(G)).(n+1))).v =
-        (the_V2Label_of ((LexBFS:CSeq(G)).n)).v));
+  for G being finite _Graph, n being natural number st n < G.order()
+  ex w being Vertex of (LexBFS:CSeq(G)).n
+  st w = LexBFS:PickUnnumbered((LexBFS:CSeq(G)).n) & for v being set holds
+  ((v in G.AdjacentSet({w}) &
+  not v in dom (the_VLabel_of ((LexBFS:CSeq(G)).n)) implies
+  (the_V2Label_of ((LexBFS:CSeq(G)).(n+1))).v =
+  (the_V2Label_of ((LexBFS:CSeq(G)).n)).v \/ {G.order() -' n}) &
+  ((not v in G.AdjacentSet({w}) or
+  v in dom (the_VLabel_of ((LexBFS:CSeq(G)).n))) implies
+  (the_V2Label_of ((LexBFS:CSeq(G)).(n+1))).v =
+  (the_V2Label_of ((LexBFS:CSeq(G)).n)).v));
 
 theorem :: LEXBFS:55
-for G being finite _Graph, i being natural number, v being set holds
+  for G being finite _Graph, i being natural number, v being set holds
+
 (the_V2Label_of ((LexBFS:CSeq(G)).i)).v c= (Seg G.order()) \ Seg (G.order()-'i)
 ;
 
 :: LexBFS: Property L1
+
 theorem :: LEXBFS:56
-for G being finite _Graph, x being set, i,j being natural number st i <= j
- holds    (the_V2Label_of ((LexBFS:CSeq(G)).i)).x
-       c= (the_V2Label_of ((LexBFS:CSeq(G)).j)).x;
+  for G being finite _Graph, x being set, i,j being natural number st i <= j
+  holds (the_V2Label_of ((LexBFS:CSeq(G)).i)).x
+  c= (the_V2Label_of ((LexBFS:CSeq(G)).j)).x;
 
 theorem :: LEXBFS:57
-for G being finite _Graph, m,n being natural number, x, y being set
- st n < G.order() & n < m & y = LexBFS:PickUnnumbered((LexBFS:CSeq(G)).n) &
-    not x in dom (the_VLabel_of ((LexBFS:CSeq(G)).n)) & x in G.AdjacentSet({y})
+  for G being finite _Graph, m,n being natural number, x, y being set
+  st n < G.order() & n < m & y = LexBFS:PickUnnumbered((LexBFS:CSeq(G)).n) &
+  not x in dom (the_VLabel_of ((LexBFS:CSeq(G)).n)) & x in G.AdjacentSet({y})
   holds (G.order() -' n) in (the_V2Label_of ((LexBFS:CSeq(G)).m)).x;
 
 theorem :: LEXBFS:58
-for G being finite _Graph, m,n being natural number st m < n
-for x being set
- st not G.order()-'m in (the_V2Label_of ((LexBFS:CSeq(G)).(m+1))).x
+  for G being finite _Graph, m,n being natural number st m < n for x being set
+  st not G.order()-'m in (the_V2Label_of ((LexBFS:CSeq(G)).(m+1))).x
   holds not G.order()-'m in (the_V2Label_of ((LexBFS:CSeq(G)).n)).x;
 
 :: More general version of the above:
 :: if the value added during step k doesn't appear in a later step (n),
 :: then that value cannot appear in an even later step (m)
+
 theorem :: LEXBFS:59
-for G being finite _Graph, m,n,k being natural number st k < n & n <= m
-for x being set
- st not G.order()-'k in (the_V2Label_of ((LexBFS:CSeq(G)).n)).x
+  for G being finite _Graph, m,n,k being natural number st k < n & n <= m
+  for x being set
+  st not G.order()-'k in (the_V2Label_of ((LexBFS:CSeq(G)).n)).x
   holds not G.order()-'k in (the_V2Label_of ((LexBFS:CSeq(G)).m)).x;
 
 :: relates a value in a vertex's v2label to the vertex chosen at that time
-theorem :: LEXBFS:60
-for G being finite _Graph, m,n being natural number
-for x being Vertex of ((LexBFS:CSeq(G)).m)
-  st n in (the_V2Label_of ((LexBFS:CSeq(G)).m)).x
-    ex y being Vertex of ((LexBFS:CSeq(G)).m)
-     st ((LexBFS:PickUnnumbered((LexBFS:CSeq(G)).(G.order()-'n))) = y &
-        not y in dom (the_VLabel_of ((LexBFS:CSeq(G)).(G.order()-'n))) &
-        x in G.AdjacentSet({y}));
 
-definition let Gs be finite natural-vlabeled VVGraphSeq;
+theorem :: LEXBFS:60
+  for G being finite _Graph, m,n being natural number
+  for x being Vertex of ((LexBFS:CSeq(G)).m)
+  st n in (the_V2Label_of ((LexBFS:CSeq(G)).m)).x
+  ex y being Vertex of ((LexBFS:CSeq(G)).m)
+  st ((LexBFS:PickUnnumbered((LexBFS:CSeq(G)).(G.order()-'n))) = y &
+  not y in dom (the_VLabel_of ((LexBFS:CSeq(G)).(G.order()-'n))) &
+  x in G.AdjacentSet({y}));
+
+definition
+  let Gs be finite natural-vlabeled VVGraphSeq;
   redefine func Gs.Result() -> finite natural-vlabeled VVGraph;
 end;
 
 theorem :: LEXBFS:61
-for G being finite _Graph holds
-    ((LexBFS:CSeq(G)).Result()).labeledV() = the_Vertices_of G;
+  for G being finite _Graph holds
+  ((LexBFS:CSeq(G)).Result()).labeledV() = the_Vertices_of G;
 
 theorem :: LEXBFS:62  :: tLexBFS05:
-for G being finite _Graph
- holds (the_VLabel_of (LexBFS:CSeq(G)).Result())" is VertexScheme of G;
+  for G being finite _Graph
+  holds (the_VLabel_of (LexBFS:CSeq(G)).Result())" is VertexScheme of G;
 
 :: A vertex with a vlabel of k must have had the largest v2label when chosen
+
 theorem :: LEXBFS:63
-for G being finite _Graph, i,j being natural number,
-    a,b being Vertex of (LexBFS:CSeq(G)).i
- st a in dom the_VLabel_of ((LexBFS:CSeq(G)).i) &
-    b in dom the_VLabel_of ((LexBFS:CSeq(G)).i) &
-    (the_VLabel_of ((LexBFS:CSeq(G)).i)).a <
-                                      (the_VLabel_of ((LexBFS:CSeq(G)).i)).b &
-    j = G.order() -' (the_VLabel_of ((LexBFS:CSeq(G)).i)).b
+  for G being finite _Graph, i,j being natural number,
+  a,b being Vertex of (LexBFS:CSeq(G)).i
+  st a in dom the_VLabel_of ((LexBFS:CSeq(G)).i) &
+  b in dom the_VLabel_of ((LexBFS:CSeq(G)).i) &
+  (the_VLabel_of ((LexBFS:CSeq(G)).i)).a <
+  (the_VLabel_of ((LexBFS:CSeq(G)).i)).b &
+  j = G.order() -' (the_VLabel_of ((LexBFS:CSeq(G)).i)).b
   holds ((the_V2Label_of ((LexBFS:CSeq(G)).j)).a,1)-bag <=
-        ((the_V2Label_of ((LexBFS:CSeq(G)).j)).b,1)-bag, InvLexOrder NAT;
+  ((the_V2Label_of ((LexBFS:CSeq(G)).j)).b,1)-bag, InvLexOrder NAT;
 
 :: Any value in our v2label corresponds to a vertex that we are
 :: adjacent to in our in our vlabel
-theorem :: LEXBFS:64
-for G being finite _Graph, i,j being natural number,
-    v being Vertex of (LexBFS:CSeq(G)).i
- st j in (the_V2Label_of ((LexBFS:CSeq(G)).i)).v
-  ex w being Vertex of (LexBFS:CSeq(G)).i st
-     w in dom the_VLabel_of ((LexBFS:CSeq(G)).i) &
-     (the_VLabel_of ((LexBFS:CSeq(G)).i)).w = j & v in G.AdjacentSet{w};
 
-definition let G be natural-vlabeled VGraph;
+theorem :: LEXBFS:64
+  for G being finite _Graph, i,j being natural number,
+  v being Vertex of (LexBFS:CSeq(G)).i
+  st j in (the_V2Label_of ((LexBFS:CSeq(G)).i)).v
+  ex w being Vertex of (LexBFS:CSeq(G)).i st
+  w in dom the_VLabel_of ((LexBFS:CSeq(G)).i) &
+  (the_VLabel_of ((LexBFS:CSeq(G)).i)).w = j & v in G.AdjacentSet{w};
+
+definition
+  let G be natural-vlabeled VGraph;
   attr G is with_property_L3 means
 :: LEXBFS:def 34
-for a,b,c being Vertex of G st a in dom the_VLabel_of G &
-    b in dom the_VLabel_of G & c in dom the_VLabel_of G &
-    (the_VLabel_of G).a < (the_VLabel_of G).b &
-    (the_VLabel_of G).b < (the_VLabel_of G).c &
-    a,c are_adjacent & not b,c are_adjacent
+
+  for a,b,c being Vertex of G st a in dom the_VLabel_of G &
+  b in dom the_VLabel_of G & c in dom the_VLabel_of G &
+  (the_VLabel_of G).a < (the_VLabel_of G).b &
+  (the_VLabel_of G).b < (the_VLabel_of G).c &
+  a,c are_adjacent & not b,c are_adjacent
   ex d being Vertex of G st d in dom the_VLabel_of G &
-     (the_VLabel_of G).c < (the_VLabel_of G).d &
-     b,d are_adjacent & not a,d are_adjacent &
-     for e being Vertex of G
-       st e <> d & e,b are_adjacent & not e,a are_adjacent
-        holds (the_VLabel_of G).e < (the_VLabel_of G).d;
+  (the_VLabel_of G).c < (the_VLabel_of G).d &
+  b,d are_adjacent & not a,d are_adjacent & for e being Vertex of G
+  st e <> d & e,b are_adjacent & not e,a are_adjacent
+  holds (the_VLabel_of G).e < (the_VLabel_of G).d;
 end;
 
 theorem :: LEXBFS:65
-for G being finite _Graph, n being natural number
+  for G being finite _Graph, n being natural number
   holds (LexBFS:CSeq(G)).n is with_property_L3;
 
 theorem :: LEXBFS:66  :: Theorem 4.3, Golumbic p. 86
-for G being finite chordal natural-vlabeled VGraph
+  for G being finite chordal natural-vlabeled VGraph
   st G is with_property_L3 & dom the_VLabel_of G = the_Vertices_of G
-   for V being VertexScheme of G st V" = the_VLabel_of G holds V is perfect;
+  for V being VertexScheme of G st V" = the_VLabel_of G holds V is perfect;
 
 theorem :: LEXBFS:67 :: Theorem 4.3, Golumbic p. 86
- for G being finite chordal VVGraph holds
+  for G being finite chordal VVGraph holds
   (the_VLabel_of (LexBFS:CSeq(G)).Result())" is perfect VertexScheme of G;
 
 begin :: The Maximum Cardinality Search algorithm
 
-definition let G be finite _Graph;
+definition
+  let G be finite _Graph;
   func MCS:Init(G) -> finite natural-vlabeled natural-v2labeled VVGraph equals
 :: LEXBFS:def 35
-     G.set(VLabelSelector, {}).set(V2LabelSelector, the_Vertices_of G --> 0);
+  G.set(VLabelSelector, {}).set(V2LabelSelector, the_Vertices_of G --> 0);
 end;
 
-definition let G be finite natural-v2labeled VVGraph;
-  assume  dom the_V2Label_of G = the_Vertices_of G;
+definition
+  let G be finite natural-v2labeled VVGraph;
+  assume
+ dom the_V2Label_of G = the_Vertices_of G;
   func MCS:PickUnnumbered(G) -> Vertex of G means
 :: LEXBFS:def 36
+
   it = choose the_Vertices_of G if dom the_VLabel_of G = the_Vertices_of G
   otherwise ex S being finite non empty natural-membered set, F being Function
-             st S = rng F
-           & F = (the_V2Label_of G) | (the_Vertices_of G \ dom the_VLabel_of G)
-           & it = choose (F " {max S});
+  st S = rng F
+  & F = (the_V2Label_of G) | (the_Vertices_of G \ dom the_VLabel_of G)
+  & it = choose (F " {max S});
 end;
 
-definition let G be finite natural-v2labeled VVGraph, v be set;
- func MCS:LabelAdjacent(G, v) -> finite natural-v2labeled VVGraph equals
+definition
+  let G be finite natural-v2labeled VVGraph, v be set;
+  func MCS:LabelAdjacent(G, v) -> finite natural-v2labeled VVGraph equals
 :: LEXBFS:def 37
   G.set(V2LabelSelector, (the_V2Label_of G).incSubset(G.AdjacentSet({v})
-                                                   \ dom (the_VLabel_of G),1));
-end;
-
-definition let G be finite natural-vlabeled natural-v2labeled VVGraph,
-               v be Vertex of G;
-  redefine func MCS:LabelAdjacent(G, v) -> finite natural-vlabeled
-                                           natural-v2labeled VVGraph;
+  \ dom (the_VLabel_of G),1));
 end;
 
 definition
   let G be finite natural-vlabeled natural-v2labeled VVGraph,
-      v be Vertex of G, n be natural number;
+  v be Vertex of G;
+  redefine func MCS:LabelAdjacent(G, v) -> finite natural-vlabeled
+  natural-v2labeled VVGraph;
+end;
+
+definition
+  let G be finite natural-vlabeled natural-v2labeled VVGraph,
+  v be Vertex of G, n be natural number;
   func MCS:Update(G, v, n) -> finite natural-vlabeled natural-v2labeled
-                              VVGraph equals
+  VVGraph equals
 :: LEXBFS:def 38
-        MCS:LabelAdjacent(G.labelVertex(v, G.order()-'n), v);
+
+  MCS:LabelAdjacent(G.labelVertex(v, G.order()-'n), v);
 end;
 
-definition let G be finite natural-vlabeled natural-v2labeled VVGraph;
-  func MCS:Step(G)
-       -> finite natural-vlabeled natural-v2labeled VVGraph equals
+definition
+  let G be finite natural-vlabeled natural-v2labeled VVGraph;
+  func MCS:Step(G) -> finite natural-vlabeled natural-v2labeled VVGraph equals
 :: LEXBFS:def 39
-           G if G.order() <= card (dom the_VLabel_of G)
-                  otherwise MCS:Update(G,
-                                       MCS:PickUnnumbered(G),
-                                       card (dom the_VLabel_of G));
+
+  G if G.order() <= card (dom the_VLabel_of G) otherwise MCS:Update(G,
+  MCS:PickUnnumbered(G), card (dom the_VLabel_of G));
 end;
 
-definition let G be finite _Graph;
+definition
+  let G be finite _Graph;
   func MCS:CSeq(G)
-       -> finite natural-vlabeled natural-v2labeled VVGraphSeq means
+  -> finite natural-vlabeled natural-v2labeled VVGraphSeq means
 :: LEXBFS:def 40
-        it.0 = MCS:Init(G) &
-              for n being natural number holds it.(n+1) = MCS:Step(it.n);
+
+  it.0 = MCS:Init(G) &
+  for n being natural number holds it.(n+1) = MCS:Step(it.n);
 end;
 
 theorem :: LEXBFS:68
-for G being finite _Graph holds MCS:CSeq(G) is iterative;
+  for G being finite _Graph holds MCS:CSeq(G) is iterative;
 
-registration let G be finite _Graph;
+registration
+  let G be finite _Graph;
   cluster MCS:CSeq(G) -> iterative;
 end;
 
 theorem :: LEXBFS:69
-for G being finite _Graph holds the_VLabel_of MCS:Init(G) = {};
+  for G being finite _Graph holds the_VLabel_of MCS:Init(G) = {};
 
 theorem :: LEXBFS:70
-for G being finite _Graph, v being set
+  for G being finite _Graph, v being set
   holds dom the_V2Label_of MCS:Init(G) = the_Vertices_of G &
-        (the_V2Label_of MCS:Init(G)).v = 0;
+  (the_V2Label_of MCS:Init(G)).v = 0;
 
 theorem :: LEXBFS:71
-for G being finite _Graph holds G == MCS:Init(G);
+  for G being finite _Graph holds G == MCS:Init(G);
 
 theorem :: LEXBFS:72
-for G being finite natural-v2labeled VVGraph, x being set
- st not x in dom the_VLabel_of G &
-    dom the_V2Label_of G = the_Vertices_of G &
-    dom the_VLabel_of G <> the_Vertices_of G
- holds (the_V2Label_of G).x <= (the_V2Label_of G).(MCS:PickUnnumbered(G));
+  for G being finite natural-v2labeled VVGraph, x being set
+  st not x in dom the_VLabel_of G & dom the_V2Label_of G = the_Vertices_of G &
+  dom the_VLabel_of G <> the_Vertices_of G
+  holds (the_V2Label_of G).x <= (the_V2Label_of G).(MCS:PickUnnumbered(G));
 
 theorem :: LEXBFS:73
-for G being finite natural-v2labeled VVGraph
- st dom the_V2Label_of G = the_Vertices_of G &
-    dom the_VLabel_of G <> the_Vertices_of G
- holds not MCS:PickUnnumbered(G) in dom the_VLabel_of G;
+  for G being finite natural-v2labeled VVGraph
+  st dom the_V2Label_of G = the_Vertices_of G &
+  dom the_VLabel_of G <> the_Vertices_of G
+  holds not MCS:PickUnnumbered(G) in dom the_VLabel_of G;
 
 theorem :: LEXBFS:74
-for G being finite natural-v2labeled VVGraph, v,x being set
- st not x in G.AdjacentSet({v})
+  for G being finite natural-v2labeled VVGraph, v,x being set
+  st not x in G.AdjacentSet({v})
   holds (the_V2Label_of G).x = (the_V2Label_of (MCS:LabelAdjacent(G,v))).x;
 
 theorem :: LEXBFS:75
-for G being finite natural-v2labeled VVGraph, v,x being set
- st x in dom (the_VLabel_of G)
+  for G being finite natural-v2labeled VVGraph, v,x being set
+  st x in dom (the_VLabel_of G)
   holds (the_V2Label_of G).x = (the_V2Label_of (MCS:LabelAdjacent(G,v))).x;
 
 theorem :: LEXBFS:76
-for G being finite natural-v2labeled VVGraph, v,x being set
- st x in dom the_V2Label_of G &
-    x in G.AdjacentSet{v} & not x in dom the_VLabel_of G
+  for G being finite natural-v2labeled VVGraph, v,x being set
+  st x in dom the_V2Label_of G &
+  x in G.AdjacentSet{v} & not x in dom the_VLabel_of G
   holds (the_V2Label_of (MCS:LabelAdjacent(G,v))).x = (the_V2Label_of G).x + 1;
 
 theorem :: LEXBFS:77
-for G being finite natural-v2labeled VVGraph, v being set
- st dom (the_V2Label_of G) = the_Vertices_of G
+  for G being finite natural-v2labeled VVGraph, v being set
+  st dom (the_V2Label_of G) = the_Vertices_of G
   holds dom (the_V2Label_of (MCS:LabelAdjacent(G,v))) = the_Vertices_of G;
 
 theorem :: LEXBFS:78
-for G being finite _Graph, n being natural number holds (MCS:CSeq(G)).n == G;
+  for G being finite _Graph, n being natural number holds (MCS:CSeq(G)).n == G;
 
 theorem :: LEXBFS:79
-for G being finite _Graph, m, n being natural number
- holds (MCS:CSeq(G)).m == (MCS:CSeq(G)).n;
+  for G being finite _Graph, m, n being natural number
+  holds (MCS:CSeq(G)).m == (MCS:CSeq(G)).n;
 
-registration let G be finite chordal _Graph, n be natural number;
+registration
+  let G be finite chordal _Graph, n be natural number;
   cluster (MCS:CSeq(G)).n -> chordal VVGraph;
 end;
 
-registration let G be finite chordal _Graph;
+registration
+  let G be finite chordal _Graph;
   cluster MCS:CSeq(G) -> chordal;
 end;
 
 theorem :: LEXBFS:80
-for G being finite _Graph, n being natural number holds
+  for G being finite _Graph, n being natural number holds
   dom (the_V2Label_of ((MCS:CSeq(G)).n)) = the_Vertices_of ((MCS:CSeq(G)).n);
 
 theorem :: LEXBFS:81
-for G being finite _Graph, n being natural number
+  for G being finite _Graph, n being natural number
   st card (dom the_VLabel_of ((MCS:CSeq(G)).n)) < G.order()
- holds the_VLabel_of ((MCS:CSeq(G)).(n+1)) =
-       (the_VLabel_of ((MCS:CSeq(G)).n)) +*
-                  (MCS:PickUnnumbered((MCS:CSeq(G)).n) .-->
-                  (G.order()-'(card (dom the_VLabel_of ((MCS:CSeq(G)).n)))));
+  holds the_VLabel_of ((MCS:CSeq(G)).(n+1)) =
+  (the_VLabel_of ((MCS:CSeq(G)).n)) +*
+  (MCS:PickUnnumbered((MCS:CSeq(G)).n) .-->
+  (G.order()-'(card (dom the_VLabel_of ((MCS:CSeq(G)).n)))));
 
 theorem :: LEXBFS:82
-for G being finite _Graph, n being natural number st n <= G.order()
- holds card dom the_VLabel_of ((MCS:CSeq(G)).n) = n;
+  for G being finite _Graph, n being natural number st n <= G.order()
+  holds card dom the_VLabel_of ((MCS:CSeq(G)).n) = n;
 
 theorem :: LEXBFS:83
-for G being finite _Graph, n being natural number st G.order() <= n
+  for G being finite _Graph, n being natural number st G.order() <= n
   holds (MCS:CSeq(G)).(G.order()) = (MCS:CSeq(G)).n;
 
 theorem :: LEXBFS:84
+
 for G being finite _Graph, m,n being natural number st G.order() <= m & m <= n
   holds (MCS:CSeq(G)).m = (MCS:CSeq(G)).n;
 
 theorem :: LEXBFS:85
-for G being finite _Graph holds MCS:CSeq(G) is eventually-constant;
+  for G being finite _Graph holds MCS:CSeq(G) is eventually-constant;
 
-registration let G be finite _Graph;
+registration
+  let G be finite _Graph;
   cluster MCS:CSeq(G) -> eventually-constant;
 end;
 
 theorem :: LEXBFS:86
-for G being finite _Graph, n being natural number holds
-       dom the_VLabel_of ((MCS:CSeq(G)).n) = the_Vertices_of ((MCS:CSeq(G)).n)
-   iff G.order() <= n;
+  for G being finite _Graph, n being natural number holds
+  dom the_VLabel_of ((MCS:CSeq(G)).n) = the_Vertices_of ((MCS:CSeq(G)).n)
+  iff G.order() <= n;
 
 theorem :: LEXBFS:87
-for G being finite _Graph holds (MCS:CSeq(G)).Lifespan() = G.order();
+  for G being finite _Graph holds (MCS:CSeq(G)).Lifespan() = G.order();
 
 theorem :: LEXBFS:88
-for G being finite _Graph holds MCS:CSeq(G) is vlabel-numbering;
+  for G being finite _Graph holds MCS:CSeq(G) is vlabel-numbering;
 
-registration let G be finite _Graph;
+registration
+  let G be finite _Graph;
   cluster MCS:CSeq(G) -> vlabel-numbering;
 end;
 
 theorem :: LEXBFS:89
-for G being finite _Graph, n being natural number st n < G.order()
+  for G being finite _Graph, n being natural number st n < G.order()
   holds (MCS:CSeq(G)).PickedAt(n) = MCS:PickUnnumbered((MCS:CSeq(G)).n);
 
 theorem :: LEXBFS:90
-for G being finite _Graph, n being natural number st n < G.order()
- ex w being Vertex of (MCS:CSeq(G)).n
-   st w = MCS:PickUnnumbered((MCS:CSeq(G)).n) &
-   for v being set holds
-    (v in G.AdjacentSet({w}) & not v in dom (the_VLabel_of ((MCS:CSeq(G)).n))
-       implies (the_V2Label_of ((MCS:CSeq(G)).(n+1))).v =
-                                     (the_V2Label_of ((MCS:CSeq(G)).n)).v + 1)
+  for G being finite _Graph, n being natural number st n < G.order()
+  ex w being Vertex of (MCS:CSeq(G)).n
+  st w = MCS:PickUnnumbered((MCS:CSeq(G)).n) & for v being set holds
+  (v in G.AdjacentSet({w}) & not v in dom (the_VLabel_of ((MCS:CSeq(G)).n))
+  implies (the_V2Label_of ((MCS:CSeq(G)).(n+1))).v =
+  (the_V2Label_of ((MCS:CSeq(G)).n)).v + 1)
   & (not v in G.AdjacentSet({w}) or v in dom (the_VLabel_of ((MCS:CSeq(G)).n))
-       implies (the_V2Label_of ((MCS:CSeq(G)).(n+1))).v =
-                                         (the_V2Label_of ((MCS:CSeq(G)).n)).v);
+  implies (the_V2Label_of ((MCS:CSeq(G)).(n+1))).v =
+  (the_V2Label_of ((MCS:CSeq(G)).n)).v);
 
 theorem :: LEXBFS:91
-for G being finite _Graph, n being natural number, x being set
- st not x in (dom the_VLabel_of ((MCS:CSeq(G)).n))
+  for G being finite _Graph, n being natural number, x being set
+  st not x in (dom the_VLabel_of ((MCS:CSeq(G)).n))
   holds (the_V2Label_of ((MCS:CSeq(G)).n)).x =
-        card (G.AdjacentSet({x}) /\ (dom the_VLabel_of ((MCS:CSeq(G)).n)));
+  card (G.AdjacentSet({x}) /\ (dom the_VLabel_of ((MCS:CSeq(G)).n)));
 
-definition let G be natural-vlabeled VGraph;
+definition
+  let G be natural-vlabeled VGraph;
   attr G is with_property_T means
 :: LEXBFS:def 41
-for a,b,c being Vertex of G st a in dom the_VLabel_of G &
-    b in dom the_VLabel_of G & c in dom the_VLabel_of G &
-    (the_VLabel_of G).a < (the_VLabel_of G).b &
-    (the_VLabel_of G).b < (the_VLabel_of G).c &
-    a,c are_adjacent & not b,c are_adjacent
+
+  for a,b,c being Vertex of G st a in dom the_VLabel_of G &
+  b in dom the_VLabel_of G & c in dom the_VLabel_of G &
+  (the_VLabel_of G).a < (the_VLabel_of G).b &
+  (the_VLabel_of G).b < (the_VLabel_of G).c &
+  a,c are_adjacent & not b,c are_adjacent
   ex d being Vertex of G st d in dom the_VLabel_of G &
-     (the_VLabel_of G).b < (the_VLabel_of G).d &
-     b,d are_adjacent & not a,d are_adjacent;
+  (the_VLabel_of G).b < (the_VLabel_of G).d &
+  b,d are_adjacent & not a,d are_adjacent;
 end;
 
 theorem :: LEXBFS:92
- for G being finite _Graph, n being natural number
+  for G being finite _Graph, n being natural number
   holds (MCS:CSeq(G)).n is with_property_T;
 
 theorem :: LEXBFS:93  :: LexBFS also has property T
- for G being finite _Graph
-  holds (LexBFS:CSeq(G)).Result() is with_property_T;
+  for G being finite _Graph holds (LexBFS:CSeq(G)).Result() is with_property_T;
 
 theorem :: LEXBFS:94 :: Tarjan (SIAM Journal of Computing; 13(3):August 1984)
- for G being finite chordal natural-vlabeled VGraph
+  for G being finite chordal natural-vlabeled VGraph
   st G is with_property_T & dom the_VLabel_of G = the_Vertices_of G
-   for V being VertexScheme of G st V" = the_VLabel_of G holds V is perfect;
+  for V being VertexScheme of G st V" = the_VLabel_of G holds V is perfect;
+

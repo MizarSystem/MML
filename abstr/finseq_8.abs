@@ -20,228 +20,250 @@ environ
 
 begin
 
-definition let D be set,f,g be FinSequence of D;
-redefine func f^g -> FinSequence of D;
+definition
+  let D be set,f,g be FinSequence of D;
+  redefine func f^g -> FinSequence of D;
 end;
 
 theorem :: FINSEQ_8:1
-for D being non empty set,
-f,g being FinSequence of D st len f>=1 holds
-   mid(f^g,1,len f)=f;
+  for D being non empty set, f,g being FinSequence of D st len f>=1 holds
+  mid(f^g,1,len f)=f;
 
 theorem :: FINSEQ_8:2
-for D being set,f being FinSequence of D,i being Element of NAT
-st i>=len f holds f/^i=<*>D;
+  for D being set,f being FinSequence of D,i being Element of NAT
+  st i>=len f holds f/^i=<*>D;
 
 theorem :: FINSEQ_8:3
-for D being non empty set,k1,k2 being Element of NAT holds
+  for D being non empty set,k1,k2 being Element of NAT holds
   mid(<*>D,k1,k2)=<*>D;
 
-definition let D be set,f be FinSequence of D,k1,k2 be Nat;
-func smid(f,k1,k2) -> FinSequence of D equals
+definition
+  let D be set,f be FinSequence of D,k1,k2 be Nat;
+  func smid(f,k1,k2) -> FinSequence of D equals
 :: FINSEQ_8:def 1
+
   (f/^(k1-'1))|(k2+1-'k1);
 end;
 
 theorem :: FINSEQ_8:4
-for D being non empty set,
- f being FinSequence of D,k1,k2 being Element of NAT st k1<=k2 holds
- smid(f,k1,k2)=mid(f,k1,k2);
+  for D being non empty set,
+  f being FinSequence of D,k1,k2 being Element of NAT st k1<=k2 holds
+  smid(f,k1,k2)=mid(f,k1,k2);
 
 theorem :: FINSEQ_8:5
-for D being non empty set,
- f being FinSequence of D,k2 being Element of NAT holds
- smid(f,1,k2)=f|k2;
+  for D being non empty set,
+  f being FinSequence of D,k2 being Element of NAT holds smid(f,1,k2)=f|k2;
 
 theorem :: FINSEQ_8:6
-for D being non empty set,
- f being FinSequence of D,k2 being Element of NAT st len f<=k2 holds
- smid(f,1,k2)=f;
+  for D being non empty set,
+  f being FinSequence of D,k2 being Element of NAT st len f<=k2 holds
+  smid(f,1,k2)=f;
 
 theorem :: FINSEQ_8:7
-for D being set,
- f being FinSequence of D,k1,k2 being Element of NAT st k1>k2 holds
- smid(f,k1,k2)={};
+  for D being set,
+  f being FinSequence of D,k1,k2 being Element of NAT st k1>k2 holds
+  smid(f,k1,k2)={};
 
 theorem :: FINSEQ_8:8
-for D being set,
- f being FinSequence of D,k2 being Element of NAT holds
- smid(f,0,k2)=smid(f,1,k2+1);
+  for D being set, f being FinSequence of D,k2 being Element of NAT holds
+  smid(f,0,k2)=smid(f,1,k2+1);
 
 theorem :: FINSEQ_8:9
-for D being non empty set,
-f,g being FinSequence of D holds
-   smid(f^g,len f+1,len f+len g)=g;
+  for D being non empty set, f,g being FinSequence of D holds
+  smid(f^g,len f+1,len f+len g)=g;
 
 :: Overlapping Part
-definition let D be non empty set,f,g be FinSequence of D;
-func ovlpart(f,g) -> FinSequence of D means
+
+definition
+  let D be non empty set,f,g be FinSequence of D;
+  func ovlpart(f,g) -> FinSequence of D means
 :: FINSEQ_8:def 2
- len it <=len g &
- it=smid(g,1,len it) & it=smid(f,len f-'len it+1,len f)
-& for j being Nat st j<=len g & smid(g,1,j)=smid(f,len f-'j+1,len f)
- holds j<=len it;
+
+  len it <=len g &
+  it=smid(g,1,len it) & it=smid(f,len f-'len it+1,len f)
+  & for j being Nat st j<=len g & smid(g,1,j)=smid(f,len f-'j+1,len f)
+  holds j<=len it;
 end;
 
 theorem :: FINSEQ_8:10
-for D being non empty set,f,g being FinSequence of D
-holds len ovlpart(f,g)<=len f;
+  for D being non empty set,f,g being FinSequence of D
+  holds len ovlpart(f,g)<=len f;
 
 ::Concatination Reducing Overlapping Part
-definition let D be non empty set,f,g be FinSequence of D;
-func ovlcon(f,g) -> FinSequence of D equals
+
+definition
+  let D be non empty set,f,g be FinSequence of D;
+  func ovlcon(f,g) -> FinSequence of D equals
 :: FINSEQ_8:def 3
+
   f^(g/^(len ovlpart(f,g)));
 end;
 
 theorem :: FINSEQ_8:11
-for D being non empty set,f,g being FinSequence of D
-holds ovlcon(f,g)=(f|(len f-'len ovlpart(f,g)))^g;
+  for D being non empty set,f,g being FinSequence of D
+  holds ovlcon(f,g)=(f|(len f-'len ovlpart(f,g)))^g;
 
 ::Overlapping Left Difference
-definition let D be non empty set,f,g be FinSequence of D;
-func ovlldiff(f,g) -> FinSequence of D equals
+
+definition
+  let D be non empty set,f,g be FinSequence of D;
+  func ovlldiff(f,g) -> FinSequence of D equals
 :: FINSEQ_8:def 4
+
   (f|(len f-'len ovlpart(f,g)));
 end;
 
 ::Overlapping Right Difference
-definition let D be non empty set,f,g be FinSequence of D;
-func ovlrdiff(f,g) -> FinSequence of D equals
+
+definition
+  let D be non empty set,f,g be FinSequence of D;
+  func ovlrdiff(f,g) -> FinSequence of D equals
 :: FINSEQ_8:def 5
+
   (g/^(len ovlpart(f,g)));
 end;
 
 theorem :: FINSEQ_8:12
-for D being non empty set,f,g being FinSequence of D
-holds ovlcon(f,g)
-  =ovlldiff(f,g)^ovlpart(f,g)^ovlrdiff(f,g) &
- ovlcon(f,g)
+  for D being non empty set,f,g being FinSequence of D holds ovlcon(f,g)
+  =ovlldiff(f,g)^ovlpart(f,g)^ovlrdiff(f,g) & ovlcon(f,g)
   =ovlldiff(f,g)^(ovlpart(f,g)^ovlrdiff(f,g));
 
 theorem :: FINSEQ_8:13
-for D being non empty set,f being FinSequence of D
-holds ovlcon(f,f)=f & ovlpart(f,f)=f
-  & ovlldiff(f,f)={} & ovlrdiff(f,f)={};
+  for D being non empty set,f being FinSequence of D
+  holds ovlcon(f,f)=f & ovlpart(f,f)=f & ovlldiff(f,f)={} & ovlrdiff(f,f)={};
 
 theorem :: FINSEQ_8:14
-for D being non empty set,f,g being FinSequence of D
- holds ovlpart(f^g,g)=g & ovlpart(f,f^g)=f;
+  for D being non empty set,f,g being FinSequence of D
+  holds ovlpart(f^g,g)=g & ovlpart(f,f^g)=f;
 
 theorem :: FINSEQ_8:15
-for D being non empty set,f,g being FinSequence of D
-holds len ovlcon(f,g)=len f+len g -len ovlpart(f,g) &
-      len ovlcon(f,g)=len f+len g -'len ovlpart(f,g) &
-      len ovlcon(f,g)=len f+(len g -'len ovlpart(f,g));
+  for D being non empty set,f,g being FinSequence of D
+  holds len ovlcon(f,g)=len f+len g -len ovlpart(f,g) &
+  len ovlcon(f,g)=len f+len g -'len ovlpart(f,g) &
+  len ovlcon(f,g)=len f+(len g -'len ovlpart(f,g));
 
 theorem :: FINSEQ_8:16
-for D being non empty set,f,g being FinSequence of D holds
-    len ovlpart(f,g)<=len f & len ovlpart(f,g)<=len g;
+  for D being non empty set,f,g being FinSequence of D holds
+  len ovlpart(f,g)<=len f & len ovlpart(f,g)<=len g;
 
-definition let D be non empty set,CR be FinSequence of D;
-pred CR separates_uniquely means
+definition
+  let D be non empty set,CR be FinSequence of D;
+  pred CR separates_uniquely means
 :: FINSEQ_8:def 6
- for f being FinSequence of D,i,j being Element of NAT
- st 1<=i & i<j & j+len CR-'1<=len f &
- smid(f,i,i+len CR-'1)=smid(f,j,j+len CR-'1) &
- smid(f,i,i+len CR-'1)=CR
- holds j-'i>=len CR;
+
+  for f being FinSequence of D,i,j being Element of NAT
+  st 1<=i & i<j & j+len CR-'1<=len f &
+  smid(f,i,i+len CR-'1)=smid(f,j,j+len CR-'1) & smid(f,i,i+len CR-'1)=CR
+  holds j-'i>=len CR;
 end;
 
 theorem :: FINSEQ_8:17
-for D being non empty set,CR being FinSequence of D holds
-CR separates_uniquely iff len ovlpart(CR/^1,CR) =0;
+  for D being non empty set,CR being FinSequence of D holds
+  CR separates_uniquely iff len ovlpart(CR/^1,CR) =0;
 
-definition let D be non empty set,f,g be FinSequence of D,n be Element of NAT;
-pred g is_substring_of f,n means
+definition
+  let D be non empty set,f,g be FinSequence of D,n be Element of NAT;
+  pred g is_substring_of f,n means
 :: FINSEQ_8:def 7
- len g>0 implies
-      ex i being Element of NAT st n<=i & i<=len f  & mid(f,i,(i-'1)+len g)=g;
+
+  len g>0 implies
+  ex i being Element of NAT st n<=i & i<=len f & mid(f,i,(i-'1)+len g)=g;
 end;
 
 theorem :: FINSEQ_8:18
-for D being non empty set,f,g being FinSequence of D,
-n,m being Element of NAT
-st m>=n & g is_substring_of f,m holds g is_substring_of f,n;
+  for D being non empty set,f,g being FinSequence of D,
+  n,m being Element of NAT
+  st m>=n & g is_substring_of f,m holds g is_substring_of f,n;
 
 theorem :: FINSEQ_8:19
-for D  being non empty set,f being FinSequence of D
-   st 1<= len f holds f is_substring_of f,1;
+  for D being non empty set,f being FinSequence of D
+  st 1<= len f holds f is_substring_of f,1;
 
 theorem :: FINSEQ_8:20
-for D  being non empty set,f,g being FinSequence of D
-st g is_substring_of f,0 holds g is_substring_of f,1;
+  for D being non empty set,f,g being FinSequence of D
+  st g is_substring_of f,0 holds g is_substring_of f,1;
 
-notation let D be non empty set,g,f be FinSequence of D;
- synonym g is_preposition_of f for g c= f;
+notation
+  let D be non empty set,g,f be FinSequence of D;
+  synonym g is_preposition_of f for g c= f;
 end;
 
-definition let D be non empty set,g,f be FinSequence of D;
-redefine pred g c= f means
+definition
+  let D be non empty set,g,f be FinSequence of D;
+  redefine pred g c= f means
 :: FINSEQ_8:def 8
- len g>0 implies 1<=len f & mid(f,1,len g)=g;
+
+  len g>0 implies 1<=len f & mid(f,1,len g)=g;
 end;
 
 theorem :: FINSEQ_8:21
-for D being non empty set,f,g
-being FinSequence of D st len g>0 & g is_preposition_of f holds
-g.1=f.1;
+  for D being non empty set,f,g
+  being FinSequence of D st len g>0 & g is_preposition_of f holds g.1=f.1;
 
-definition let D be non empty set,f,g be FinSequence of D;
-pred g is_postposition_of f means
+definition
+  let D be non empty set,f,g be FinSequence of D;
+  pred g is_postposition_of f means
 :: FINSEQ_8:def 9
+
   Rev g is_preposition_of Rev f;
 end;
 
 theorem :: FINSEQ_8:22
-for D being non empty set,f,g being FinSequence of D
-st len g=0 holds g is_postposition_of f;
+  for D being non empty set,f,g being FinSequence of D
+  st len g=0 holds g is_postposition_of f;
 
 theorem :: FINSEQ_8:23
-for D being non empty set,f,g being FinSequence of D
-st g is_postposition_of f holds len g <=len f;
+  for D being non empty set,f,g being FinSequence of D
+  st g is_postposition_of f holds len g <=len f;
 
 theorem :: FINSEQ_8:24
-for D being non empty set,f,g being FinSequence of D
-st g is_postposition_of f holds
+  for D being non empty set,f,g being FinSequence of D
+  st g is_postposition_of f holds
   len g>0 implies len g<=len f & mid(f,(len f+1) -' len g,len f)=g;
 
 theorem :: FINSEQ_8:25
-for D being non empty set,f,g being FinSequence of D
-st (len g>0 implies len g<=len f & mid(f,(len f+1) -' len g,len f)=g)
-holds g is_postposition_of f;
+  for D being non empty set,f,g being FinSequence of D
+  st (len g>0 implies len g<=len f & mid(f,(len f+1) -' len g,len f)=g)
+  holds g is_postposition_of f;
 
 theorem :: FINSEQ_8:26
-for D being non empty set,f,g being FinSequence of D
-st 1<=len f & g is_preposition_of f holds g is_substring_of f,1;
+  for D being non empty set,f,g being FinSequence of D
+  st 1<=len f & g is_preposition_of f holds g is_substring_of f,1;
 
 theorem :: FINSEQ_8:27
-for D being non empty set,f,g being FinSequence of D,
-n being Element of NAT
-st not g is_substring_of f,n holds for i being Element of NAT st n <= i & 0 < i
-holds mid(f,i,(i-'1)+len g) <> g;
+  for D being non empty set,f,g being FinSequence of D, n being Element of NAT
 
-definition let D be non empty set,f,g be FinSequence of D,n be Element of NAT;
-func instr(n,f,g) -> Element of NAT means
+st not g is_substring_of f,n holds for i being Element of NAT st n <= i & 0 < i
+  holds mid(f,i,(i-'1)+len g) <> g;
+
+definition
+  let D be non empty set,f,g be FinSequence of D,n be Element of NAT;
+  func instr(n,f,g) -> Element of NAT means
 :: FINSEQ_8:def 10
- (it <> 0 implies n <= it & g is_preposition_of f/^(it-'1) &
-for j being Element of NAT st j >= n & j > 0
-   & (g is_preposition_of f/^(j-'1)) holds j >= it)
-   & (it=0 implies not(g is_substring_of f,n));
+
+  (it <> 0 implies n <= it & g is_preposition_of f/^(it-'1) &
+  for j being Element of NAT st j >= n & j > 0
+  & (g is_preposition_of f/^(j-'1)) holds j >= it)
+  & (it=0 implies not(g is_substring_of f,n));
 end;
 
-definition let D be non empty set,f,CR be FinSequence of D;
-func addcr(f,CR) -> FinSequence of D equals
+definition
+  let D be non empty set,f,CR be FinSequence of D;
+  func addcr(f,CR) -> FinSequence of D equals
 :: FINSEQ_8:def 11
+
   ovlcon(f,CR);
 end;
 
-definition let D be non empty set, r,CR be FinSequence of D;
-pred r is_terminated_by CR means
+definition
+  let D be non empty set, r,CR be FinSequence of D;
+  pred r is_terminated_by CR means
 :: FINSEQ_8:def 12
-(len CR >0 implies len r>=len CR & instr(1,r,CR) = len r + 1 -'len CR);
+
+  (len CR >0 implies len r>=len CR & instr(1,r,CR) = len r + 1 -'len CR);
 end;
 
 theorem :: FINSEQ_8:28
-for D being non empty set,f being FinSequence of D holds
-f is_terminated_by f;
+  for D being non empty set,f being FinSequence of D holds
+  f is_terminated_by f;
+

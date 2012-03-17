@@ -21,69 +21,77 @@ environ
 begin
 
 definition
- struct(1-sorted) MetrStruct
-                (# carrier -> set,
-                 distance -> Function of [:the carrier,the carrier:],REAL #);
+  struct(1-sorted) MetrStruct (# carrier -> set,
+    distance -> Function of [:the carrier,the carrier:],REAL #);
 end;
 
 registration
   cluster non empty strict MetrStruct;
 end;
 
-definition let A,B be set, f be PartFunc of [:A,B:],REAL;
-  let a be Element of A; let b be Element of B;
-redefine func f.(a,b) -> Real;
+definition
+  let A,B be set, f be PartFunc of [:A,B:],REAL;
+  let a be Element of A;
+  let b be Element of B;
+  redefine func f.(a,b) -> Real;
 end;
 
-definition let M be MetrStruct;
-           let a, b be Element of M;
+definition
+  let M be MetrStruct;
+  let a, b be Element of M;
   func dist(a,b) -> Real equals
 :: METRIC_1:def 1
-     (the distance of M).(a,b);
+
+  (the distance of M).(a,b);
 end;
 
 definition
   func Empty^2-to-zero -> Function of [:{{}},{{}}:], REAL equals
 :: METRIC_1:def 2
-     [:{{}},{{}}:] --> 0;
+  [:{{}},{{}}:] --> 0;
 end;
 
-definition let A be set; let f be PartFunc of [:A,A:], REAL;
+definition
+  let A be set;
+  let f be PartFunc of [:A,A:], REAL;
   attr f is Reflexive means
 :: METRIC_1:def 3
-   for a being Element of A holds f.(a,a) = 0;
 
+  for a being Element of A holds f.(a,a) = 0;
   attr f is discerning means
 :: METRIC_1:def 4
-   for a, b being Element of A holds
-    f.(a,b) = 0 implies a = b;
 
+  for a, b being Element of A holds
+  f.(a,b) = 0 implies a = b;
   attr f is symmetric means
 :: METRIC_1:def 5
-   for a, b being Element of A holds f.(a,b) = f.(b,a);
 
+  for a, b being Element of A holds f.(a,b) = f.(b,a);
   attr f is triangle means
 :: METRIC_1:def 6
-   for a, b, c being Element of A holds
-     f.(a,c) <= f.(a,b) + f.(b,c);
+
+  for a, b, c being Element of A holds
+  f.(a,c) <= f.(a,b) + f.(b,c);
 end;
 
-definition let M be MetrStruct;
+definition
+  let M be MetrStruct;
   attr M is Reflexive means
 :: METRIC_1:def 7
-   the distance of M is Reflexive;
 
+  the distance of M is Reflexive;
   attr M is discerning means
 :: METRIC_1:def 8
-   the distance of M is discerning;
 
+  the distance of M is discerning;
   attr M is symmetric means
 :: METRIC_1:def 9
-   the distance of M is symmetric;
 
+  the distance of M is symmetric;
   attr M is triangle means
 :: METRIC_1:def 10
-   the distance of M is triangle;
+
+  the distance of M is triangle;
 end;
 
 registration
@@ -96,69 +104,69 @@ end;
 
 theorem :: METRIC_1:1
   for M being MetrStruct holds
-  ( for a being Element of M holds dist(a,a) = 0 ) iff
-    M is Reflexive;
+  ( for a being Element of M holds dist(a,a) = 0 ) iff M is Reflexive;
 
 theorem :: METRIC_1:2
-       for M being MetrStruct holds
+  for M being MetrStruct holds
   ( for a, b being Element of M st dist(a,b) = 0 holds a = b )
-    iff M is discerning;
+  iff M is discerning;
 
 theorem :: METRIC_1:3
   for M being MetrStruct holds
   ( for a, b being Element of M holds dist(a,b) = dist(b,a) )
-    iff M is symmetric;
+  iff M is symmetric;
 
 theorem :: METRIC_1:4
-  for M being MetrStruct holds
-  ( for a, b, c being Element of M holds
-    dist(a,c) <= dist(a,b) + dist(b,c) ) iff M is triangle;
+  for M being MetrStruct holds ( for a, b, c being Element of M holds
+  dist(a,c) <= dist(a,b) + dist(b,c) ) iff M is triangle;
 
-definition let M be symmetric MetrStruct;
-           let a, b be Element of M;
+definition
+  let M be symmetric MetrStruct;
+  let a, b be Element of M;
   redefine func dist(a,b);
   commutativity;
 end;
 
 theorem :: METRIC_1:5
-       for M being symmetric triangle Reflexive MetrStruct,
-      a, b being Element of M holds
-  0 <= dist(a,b);
+  for M being symmetric triangle Reflexive MetrStruct,
+  a, b being Element of M holds 0 <= dist(a,b);
 
 theorem :: METRIC_1:6
-  for M being MetrStruct st
-  (for a, b, c being Element of M holds
-         (dist(a,b) = 0 iff a=b) &
-         dist(a,b) = dist(b,a) &
-         dist(a,c) <= dist(a,b) + dist(b,c)) holds
-         M is MetrSpace;
+  for M being MetrStruct st (for a, b, c being Element of M holds
+  (dist(a,b) = 0 iff a=b) & dist(a,b) = dist(b,a) &
+  dist(a,c) <= dist(a,b) + dist(b,c)) holds M is MetrSpace;
 
-definition let A be set;
+definition
+  let A be set;
   func discrete_dist A -> Function of [:A,A:], REAL means
 :: METRIC_1:def 11
-   for x,y being Element of A holds
-     it.(x,x) = 0 &
-     (x <> y implies it.(x,y) = 1);
+
+  for x,y being Element of A holds it.(x,x) = 0 &
+  (x <> y implies it.(x,y) = 1);
 end;
 
-definition let A be set;
+definition
+  let A be set;
   func DiscreteSpace A -> strict MetrStruct equals
 :: METRIC_1:def 12
-     MetrStruct (#A,discrete_dist A#);
+  MetrStruct (#A,discrete_dist A#);
 end;
 
-registration let A be non empty set;
+registration
+  let A be non empty set;
   cluster DiscreteSpace A -> non empty;
 end;
 
-registration let A be set;
+registration
+  let A be set;
   cluster DiscreteSpace A -> Reflexive discerning symmetric triangle;
 end;
 
 definition
   func real_dist -> Function of [:REAL,REAL:], REAL means
 :: METRIC_1:def 13
-    for x,y being Element of REAL holds it.(x,y) = abs(x-y);
+
+  for x,y being Element of REAL holds it.(x,y) = abs(x-y);
 end;
 
 canceled 2;
@@ -171,12 +179,13 @@ theorem :: METRIC_1:10
 
 theorem :: METRIC_1:11
   for x,y,z being Element of REAL holds
-    real_dist.(x,y) <= real_dist.(x,z) + real_dist.(z,y);
+  real_dist.(x,y) <= real_dist.(x,z) + real_dist.(z,y);
 
 definition
   func RealSpace -> strict MetrStruct equals
 :: METRIC_1:def 14
-     MetrStruct (# REAL, real_dist #);
+
+  MetrStruct (# REAL, real_dist #);
 end;
 
 registration
@@ -187,73 +196,70 @@ registration
   cluster RealSpace -> Reflexive discerning symmetric triangle;
 end;
 
-definition let M be MetrStruct, p be Element of M,
-           r be real number;
- func Ball(p,r) -> Subset of M means
+definition
+  let M be MetrStruct, p be Element of M, r be real number;
+  func Ball(p,r) -> Subset of M means
 :: METRIC_1:def 15
+
   ex M' being non empty MetrStruct, p' being Element of M' st
-   M' = M & p' = p &
-   it = {q where q is Element of M' : dist(p',q) < r}
-    if M is non empty
-  otherwise it is empty;
+  M' = M & p' = p & it = {q where q is Element of M' : dist(p',q) < r}
+  if M is non empty otherwise it is empty;
 end;
 
-definition let M be MetrStruct, p be Element of M,
-           r be real number;
- func cl_Ball(p,r) -> Subset of M means
+definition
+  let M be MetrStruct, p be Element of M, r be real number;
+  func cl_Ball(p,r) -> Subset of M means
 :: METRIC_1:def 16
+
   ex M' being non empty MetrStruct, p' being Element of M' st
-   M' = M & p' = p &
-   it = {q where q is Element of M' : dist(p',q) <= r}
-    if M is non empty
-  otherwise it is empty;
+  M' = M & p' = p & it = {q where q is Element of M' : dist(p',q) <= r}
+  if M is non empty otherwise it is empty;
 end;
 
-definition let M be MetrStruct, p be Element of M,
-           r be real number;
+definition
+  let M be MetrStruct, p be Element of M, r be real number;
   func Sphere(p,r) -> Subset of M means
 :: METRIC_1:def 17
+
   ex M' being non empty MetrStruct, p' being Element of M' st
-   M' = M & p' = p &
-   it = {q where q is Element of M' : dist(p',q) = r}
-    if M is non empty
-  otherwise it is empty;
+  M' = M & p' = p & it = {q where q is Element of M' : dist(p',q) = r}
+  if M is non empty otherwise it is empty;
 end;
 
 reserve r for real number;
 
 theorem :: METRIC_1:12
   for M being MetrStruct, p, x being Element of M holds
-     x in Ball(p,r) iff M is non empty & dist(p,x) < r;
+  x in Ball(p,r) iff M is non empty & dist(p,x) < r;
 
 theorem :: METRIC_1:13
   for M being MetrStruct, p, x being Element of M holds
-     x in cl_Ball(p,r) iff M is non empty & dist(p,x) <= r;
+  x in cl_Ball(p,r) iff M is non empty & dist(p,x) <= r;
 
 theorem :: METRIC_1:14
   for M being MetrStruct, p, x being Element of M holds
-     x in Sphere(p,r) iff M is non empty & dist(p,x) = r;
+  x in Sphere(p,r) iff M is non empty & dist(p,x) = r;
 
 theorem :: METRIC_1:15
-  for M being MetrStruct, p being Element of M holds
-    Ball(p,r) c= cl_Ball(p,r);
+  for M being MetrStruct, p being Element of M holds Ball(p,r) c= cl_Ball(p,r);
 
 theorem :: METRIC_1:16
   for M being MetrStruct, p being Element of M holds
-    Sphere(p,r) c= cl_Ball(p,r);
+  Sphere(p,r) c= cl_Ball(p,r);
 
 theorem :: METRIC_1:17
-       for M being MetrStruct, p being Element of M holds
-    Sphere(p,r) \/ Ball(p,r) = cl_Ball(p,r);
+  for M being MetrStruct, p being Element of M holds
+  Sphere(p,r) \/ Ball(p,r) = cl_Ball(p,r);
 
 theorem :: METRIC_1:18
-      for M being non empty MetrStruct, p being Element of M holds
+  for M being non empty MetrStruct, p being Element of M holds
   Ball(p,r) = {q where q is Element of M: dist(p,q) < r};
 
 theorem :: METRIC_1:19
-      for M being non empty MetrStruct, p being Element of M holds
+  for M being non empty MetrStruct, p being Element of M holds
   cl_Ball(p,r) = {q where q is Element of M: dist(p,q) <= r};
 
 theorem :: METRIC_1:20
-      for M being non empty MetrStruct, p being Element of M holds
+  for M being non empty MetrStruct, p being Element of M holds
   Sphere(p,r) = {q where q is Element of M: dist(p,q) = r};
+

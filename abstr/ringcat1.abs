@@ -24,20 +24,22 @@ reserve x,y for set;
 reserve D for non empty set;
 reserve UN for Universe;
 
-               ::
-               ::  1a. Maps of the carriers of rings
-               ::
+::
+::  1a. Maps of the carriers of rings
+::
 
-definition let G,H be non empty doubleLoopStr;
- let IT be Function of G,H;
- canceled;
-
- attr IT is linear means
+definition
+  let G,H be non empty doubleLoopStr;
+  let IT be Function of G,H;
+  canceled;
+  attr IT is linear means
 :: RINGCAT1:def 2
+
   IT is additive multiplicative unity-preserving;
 end;
 
-registration let G,H be non empty doubleLoopStr;
+registration
+  let G,H be non empty doubleLoopStr;
   cluster linear -> additive multiplicative unity-preserving Function of G,H;
   cluster additive multiplicative unity-preserving -> linear Function of G,H;
 end;
@@ -45,397 +47,438 @@ end;
 canceled 2;
 
 theorem :: RINGCAT1:3
-for G1,G2,G3 being non empty doubleLoopStr,
-        f being Function of G1,G2, g being Function of G2,G3
-      st f is linear & g is linear holds g*f is linear;
+  for G1,G2,G3 being non empty doubleLoopStr,
+  f being Function of G1,G2, g being Function of G2,G3
+  st f is linear & g is linear holds g*f is linear;
 
-                      ::
-                      ::  1b. Morphisms of rings
-                      ::
+::
+::  1b. Morphisms of rings
+::
 
 definition
   struct RingMorphismStr (# Dom,Cod -> Ring,
-                         Fun -> Function of the Dom, the Cod #);
+    Fun -> Function of the Dom, the Cod #);
 end;
 
 reserve f for RingMorphismStr;
 
-definition let f;
- func dom(f) -> Ring equals
+definition
+  let f;
+  func dom(f) -> Ring equals
 :: RINGCAT1:def 3
-    the Dom of f;
- func cod(f) -> Ring equals
+
+  the Dom of f;
+  func cod(f) -> Ring equals
 :: RINGCAT1:def 4
-    the Cod of f;
- func fun(f) -> Function of the Dom of f, the Cod of f equals
+
+  the Cod of f;
+  func fun(f) -> Function of the Dom of f, the Cod of f equals
 :: RINGCAT1:def 5
-    the Fun of f;
+
+  the Fun of f;
 end;
 
 reserve G,H,G1,G2,G3,G4 for Ring;
 
-registration let G be non empty doubleLoopStr;
+registration
+  let G be non empty doubleLoopStr;
   cluster id G -> linear;
 end;
 
-definition let IT be RingMorphismStr;
- attr IT is RingMorphism-like means
+definition
+  let IT be RingMorphismStr;
+  attr IT is RingMorphism-like means
 :: RINGCAT1:def 6
+
   fun(IT) is linear;
 end;
 
 registration
- cluster strict RingMorphism-like RingMorphismStr;
+  cluster strict RingMorphism-like RingMorphismStr;
 end;
 
 definition
- mode RingMorphism is RingMorphism-like RingMorphismStr;
+  mode RingMorphism is RingMorphism-like RingMorphismStr;
 end;
 
-definition let G;
- func ID G -> RingMorphism equals
+definition
+  let G;
+  func ID G -> RingMorphism equals
 :: RINGCAT1:def 7
-    RingMorphismStr(# G,G,id G#);
+
+  RingMorphismStr(# G,G,id G#);
 end;
 
-registration let G;
- cluster ID G -> strict;
+registration
+  let G;
+  cluster ID G -> strict;
 end;
 
 reserve F for RingMorphism;
 
-definition let G,H;
- pred G <= H means
+definition
+  let G,H;
+  pred G <= H means
 :: RINGCAT1:def 8
+
   ex F being RingMorphism st dom(F) = G & cod(F) = H;
- reflexivity;
+  reflexivity;
 end;
 
-definition let G,H;
- assume  G <= H;
- mode Morphism of G,H -> strict RingMorphism means
+definition
+  let G,H;
+  assume
+ G <= H;
+  mode Morphism of G,H -> strict RingMorphism means
 :: RINGCAT1:def 9
-  dom(it) = G & cod(it) = H;
+
+    dom(it) = G & cod(it) = H;
 end;
 
-registration let G,H;
- cluster strict Morphism of G,H;
+registration
+  let G,H;
+  cluster strict Morphism of G,H;
 end;
 
-definition let G;
- redefine func ID G -> strict Morphism of G,G;
+definition
+  let G;
+  redefine func ID G -> strict Morphism of G,G;
 end;
 
 canceled;
 
 theorem :: RINGCAT1:5
-for g,f being RingMorphism st dom(g) = cod(f) ex G1,G2,G3 st
-        G1 <= G2 & G2 <= G3 &
-       the RingMorphismStr of g is Morphism of G2,G3 &
-       the RingMorphismStr of f is Morphism of G1,G2;
+  for g,f being RingMorphism st dom(g) = cod(f) ex G1,G2,G3 st
+  G1 <= G2 & G2 <= G3 & the RingMorphismStr of g is Morphism of G2,G3 &
+  the RingMorphismStr of f is Morphism of G1,G2;
 
 theorem :: RINGCAT1:6
-
-for F being strict RingMorphism
- holds F is Morphism of dom(F),cod(F) & dom(F) <= cod(F);
+  for F being strict RingMorphism
+  holds F is Morphism of dom(F),cod(F) & dom(F) <= cod(F);
 
 theorem :: RINGCAT1:7
-    for F being strict RingMorphism
- ex G,H st ex f being Function of G,H st
-          F is Morphism of G,H
-        & F = RingMorphismStr(#G,H,f#)
-        & f is linear;
+  for F being strict RingMorphism ex G,H st ex f being Function of G,H st
+  F is Morphism of G,H & F = RingMorphismStr(#G,H,f#) & f is linear;
 
-definition let G,F be RingMorphism;
- assume  dom(G) = cod(F);
- func G*F -> strict RingMorphism means
+definition
+  let G,F be RingMorphism;
+  assume
+ dom(G) = cod(F);
+  func G*F -> strict RingMorphism means
 :: RINGCAT1:def 10
- for G1,G2,G3 for g being Function of G2,G3, f being Function of G1,G2
-       st the RingMorphismStr of G = RingMorphismStr(#G2,G3,g#) &
-          the RingMorphismStr of F = RingMorphismStr(#G1,G2,f#)
-       holds it = RingMorphismStr(#G1,G3,g*f#);
+
+  for G1,G2,G3 for g being Function of G2,G3, f being Function of G1,G2
+  st the RingMorphismStr of G = RingMorphismStr(#G2,G3,g#) &
+  the RingMorphismStr of F = RingMorphismStr(#G1,G2,f#)
+  holds it = RingMorphismStr(#G1,G3,g*f#);
 end;
 
 theorem :: RINGCAT1:8
- G1 <= G2 & G2 <= G3 implies G1 <= G3;
+  G1 <= G2 & G2 <= G3 implies G1 <= G3;
 
 theorem :: RINGCAT1:9
-for G being Morphism of G2,G3, F being Morphism of G1,G2
-      st G1 <= G2 & G2 <= G3 holds G*F is Morphism of G1,G3;
+  for G being Morphism of G2,G3, F being Morphism of G1,G2
+  st G1 <= G2 & G2 <= G3 holds G*F is Morphism of G1,G3;
 
-definition let G1,G2,G3; let G be Morphism of G2,G3, F be Morphism of G1,G2;
- assume  G1 <= G2 & G2 <= G3;
- func G*'F -> strict Morphism of G1,G3 equals
+definition
+  let G1,G2,G3;
+  let G be Morphism of G2,G3, F be Morphism of G1,G2;
+  assume
+ G1 <= G2 & G2 <= G3;
+  func G*'F -> strict Morphism of G1,G3 equals
 :: RINGCAT1:def 11
-   G*F;
+
+  G*F;
 end;
 
 theorem :: RINGCAT1:10
-for f,g being strict RingMorphism st dom g = cod f holds
-       ex G1,G2,G3 st ex f0 being Function of G1,G2, g0 being Function of G2,G3
-          st f = RingMorphismStr(#G1,G2,f0#)
-           & g = RingMorphismStr(#G2,G3,g0#)
-           & g*f = RingMorphismStr(#G1,G3,g0*f0#);
+  for f,g being strict RingMorphism st dom g = cod f holds
+  ex G1,G2,G3 st ex f0 being Function of G1,G2, g0 being Function of G2,G3
+  st f = RingMorphismStr(#G1,G2,f0#) & g = RingMorphismStr(#G2,G3,g0#)
+  & g*f = RingMorphismStr(#G1,G3,g0*f0#);
 
- theorem :: RINGCAT1:11
- for f,g being strict RingMorphism st dom g = cod f holds
-     dom(g*f) = dom f & cod (g*f) = cod g;
+theorem :: RINGCAT1:11
+  for f,g being strict RingMorphism st dom g = cod f holds
+  dom(g*f) = dom f & cod (g*f) = cod g;
 
- theorem :: RINGCAT1:12
- for f being Morphism of G1,G2, g being Morphism of G2,G3,
-          h being Morphism of G3,G4 st G1 <= G2 & G2 <= G3 & G3 <= G4
-         holds h*(g*f) = (h*g)*f;
+theorem :: RINGCAT1:12
+  for f being Morphism of G1,G2, g being Morphism of G2,G3,
+  h being Morphism of G3,G4 st G1 <= G2 & G2 <= G3 & G3 <= G4
+  holds h*(g*f) = (h*g)*f;
 
- theorem :: RINGCAT1:13
- for f,g,h being strict RingMorphism st dom h = cod g & dom g = cod f
-        holds h*(g*f) = (h*g)*f;
+theorem :: RINGCAT1:13
+  for f,g,h being strict RingMorphism st dom h = cod g & dom g = cod f
+  holds h*(g*f) = (h*g)*f;
 
- theorem :: RINGCAT1:14
-  dom ID(G) = G
-      & cod ID(G) = G
-      & (for f being strict RingMorphism st cod f = G holds (ID G)*f = f)
-      & (for g being strict RingMorphism st dom g = G holds g*(ID G) = g);
+theorem :: RINGCAT1:14
+  dom ID(G) = G & cod ID(G) = G
+  & (for f being strict RingMorphism st cod f = G holds (ID G)*f = f)
+  & (for g being strict RingMorphism st dom g = G holds g*(ID G) = g);
 
-                        ::
-                        ::  2. Domains of rings
-                        ::
+::
+::  2. Domains of rings
+::
 
-definition let IT be set;
- attr IT is Ring_DOMAIN-like means
+definition
+  let IT be set;
+  attr IT is Ring_DOMAIN-like means
 :: RINGCAT1:def 12
- for x being Element of IT holds x is strict Ring;
+
+  for x being Element of IT holds x is strict Ring;
 end;
 
 registration
- cluster Ring_DOMAIN-like non empty set;
+  cluster Ring_DOMAIN-like non empty set;
 end;
 
 definition
- mode Ring_DOMAIN is Ring_DOMAIN-like non empty set;
+  mode Ring_DOMAIN is Ring_DOMAIN-like non empty set;
 end;
 
 reserve V for Ring_DOMAIN;
 
-definition let V;
- redefine mode Element of V -> Ring;
+definition
+  let V;
+  redefine mode Element of V -> Ring;
 end;
 
-registration let V;
- cluster strict Element of V;
+registration
+  let V;
+  cluster strict Element of V;
 end;
 
-definition let IT be set;
- attr IT is RingMorphism_DOMAIN-like means
+definition
+  let IT be set;
+  attr IT is RingMorphism_DOMAIN-like means
 :: RINGCAT1:def 13
+
   for x being set st x in IT holds x is strict RingMorphism;
 end;
 
 registration
- cluster RingMorphism_DOMAIN-like (non empty set);
+  cluster RingMorphism_DOMAIN-like (non empty set);
 end;
 
 definition
- mode RingMorphism_DOMAIN is RingMorphism_DOMAIN-like non empty set;
+  mode RingMorphism_DOMAIN is RingMorphism_DOMAIN-like non empty set;
 end;
 
-definition let M be RingMorphism_DOMAIN;
- redefine mode Element of M -> RingMorphism;
+definition
+  let M be RingMorphism_DOMAIN;
+  redefine mode Element of M -> RingMorphism;
 end;
 
-registration let M be RingMorphism_DOMAIN;
- cluster strict Element of M;
+registration
+  let M be RingMorphism_DOMAIN;
+  cluster strict Element of M;
 end;
 
 canceled 2;
 
 theorem :: RINGCAT1:17
-for f being strict RingMorphism holds {f} is RingMorphism_DOMAIN;
+  for f being strict RingMorphism holds {f} is RingMorphism_DOMAIN;
 
-definition let G,H;
- mode RingMorphism_DOMAIN of G,H -> RingMorphism_DOMAIN means
+definition
+  let G,H;
+  mode RingMorphism_DOMAIN of G,H -> RingMorphism_DOMAIN means
 :: RINGCAT1:def 14
- for x being Element of it holds x is Morphism of G,H;
+
+    for x being Element of it holds x is Morphism of G,H;
 end;
 
 theorem :: RINGCAT1:18
- D is RingMorphism_DOMAIN of G,H
+  D is RingMorphism_DOMAIN of G,H
   iff for x being Element of D holds x is Morphism of G,H;
 
 theorem :: RINGCAT1:19
-    for f being Morphism of G,H holds {f} is RingMorphism_DOMAIN of G,H;
+  for f being Morphism of G,H holds {f} is RingMorphism_DOMAIN of G,H;
 
-definition let G,H;
- assume  G <= H;
- func Morphs(G,H) -> RingMorphism_DOMAIN of G,H means
+definition
+  let G,H;
+  assume
+ G <= H;
+  func Morphs(G,H) -> RingMorphism_DOMAIN of G,H means
 :: RINGCAT1:def 15
+
   x in it iff x is Morphism of G,H;
 end;
 
-definition let G,H; let M be RingMorphism_DOMAIN of G,H;
- redefine mode Element of M -> Morphism of G,H;
+definition
+  let G,H;
+  let M be RingMorphism_DOMAIN of G,H;
+  redefine mode Element of M -> Morphism of G,H;
 end;
 
-registration let G,H; let M be RingMorphism_DOMAIN of G,H;
- cluster strict Element of M;
+registration
+  let G,H;
+  let M be RingMorphism_DOMAIN of G,H;
+  cluster strict Element of M;
 end;
 
-                     ::
-                     ::  4a. Category of rings  - objects
-                     ::
+::
+::  4a. Category of rings  - objects
+::
 
-definition let x,y;
- pred GO x,y means
+definition
+  let x,y;
+  pred GO x,y means
 :: RINGCAT1:def 16
+
   ex x1,x2,x3,x4,x5,x6 being set st x = [[x1,x2,x3,x4],x5,x6] &
-  ex G being strict Ring
-    st y = G
-    & x1 = the carrier of G
-    & x2 = the addF of G
-    & x3 = comp G
-    & x4 = 0.G
-    & x5 = the multF of G
-    & x6 = 1.G;
+  ex G being strict Ring st y = G & x1 = the carrier of G & x2 = the addF of G
+  & x3 = comp G & x4 = 0.G & x5 = the multF of G & x6 = 1.G;
 end;
 
 theorem :: RINGCAT1:20
-for x,y1,y2 being set st GO x,y1 & GO x,y2 holds y1 = y2;
+  for x,y1,y2 being set st GO x,y1 & GO x,y2 holds y1 = y2;
 
 theorem :: RINGCAT1:21
- ex x st x in UN & GO x,Z3;
+  ex x st x in UN & GO x,Z3;
 
-definition let UN;
- func RingObjects(UN) -> set means
+definition
+  let UN;
+  func RingObjects(UN) -> set means
 :: RINGCAT1:def 17
- for y holds y in it iff ex x st x in UN & GO x,y;
+
+  for y holds y in it iff ex x st x in UN & GO x,y;
 end;
 
 theorem :: RINGCAT1:22
- Z3 in RingObjects(UN);
+  Z3 in RingObjects(UN);
 
-registration let UN;
- cluster RingObjects(UN) -> non empty;
+registration
+  let UN;
+  cluster RingObjects(UN) -> non empty;
 end;
 
 theorem :: RINGCAT1:23
-for x being Element of RingObjects(UN) holds x is strict Ring;
+  for x being Element of RingObjects(UN) holds x is strict Ring;
 
-registration let UN;
+registration
+  let UN;
   cluster RingObjects(UN) -> Ring_DOMAIN-like;
 end;
 
-      ::
-      ::  4b. Category of rings  - morphisms
-      ::
+::
+::  4b. Category of rings  - morphisms
+::
 
-definition let V;
- func Morphs(V) -> RingMorphism_DOMAIN means
+definition
+  let V;
+  func Morphs(V) -> RingMorphism_DOMAIN means
 :: RINGCAT1:def 18
 
   x in it iff ex G,H being Element of V st G <= H & x is Morphism of G,H;
 end;
 
-      ::
-      ::  4c. Category of rings  - dom,cod,id
-      ::
+::
+::  4c. Category of rings  - dom,cod,id
+::
 
-definition let V; let F be Element of Morphs(V);
- redefine func dom(F) -> Element of V;
- func cod(F) -> Element of V;
+definition
+  let V;
+  let F be Element of Morphs(V);
+  redefine func dom(F) -> Element of V;
+  func cod(F) -> Element of V;
 end;
 
-definition let V; let G be Element of V;
- func ID(G) -> strict Element of Morphs(V) equals
+definition
+  let V;
+  let G be Element of V;
+  func ID(G) -> strict Element of Morphs(V) equals
 :: RINGCAT1:def 19
-   ID(G);
+
+  ID(G);
 end;
 
-definition let V;
- func dom(V) -> Function of Morphs(V),V means
+definition
+  let V;
+  func dom(V) -> Function of Morphs(V),V means
 :: RINGCAT1:def 20
- for f being Element of Morphs(V) holds it.f = dom(f);
- func cod(V) -> Function of Morphs(V),V means
-:: RINGCAT1:def 21
- for f being Element of Morphs(V) holds it.f = cod(f);
- func ID(V) -> Function of V,Morphs(V) means
-:: RINGCAT1:def 22
- for G being Element of V holds it.G = ID(G);
- end;
 
-             ::
-             ::  4d. Category of rings  - superposition
-             ::
+  for f being Element of Morphs(V) holds it.f = dom(f);
+  func cod(V) -> Function of Morphs(V),V means
+:: RINGCAT1:def 21
+
+  for f being Element of Morphs(V) holds it.f = cod(f);
+  func ID(V) -> Function of V,Morphs(V) means
+:: RINGCAT1:def 22
+
+  for G being Element of V holds it.G = ID(G);
+end;
+
+::
+::  4d. Category of rings  - superposition
+::
 
 theorem :: RINGCAT1:24
-for g,f being Element of Morphs(V) st dom(g) = cod(f)
-      ex G1,G2,G3 being Element of V st G1 <= G2 & G2 <= G3
-       & g is Morphism of G2,G3 & f is Morphism of G1,G2;
+  for g,f being Element of Morphs(V) st dom(g) = cod(f)
+  ex G1,G2,G3 being Element of V st G1 <= G2 & G2 <= G3
+  & g is Morphism of G2,G3 & f is Morphism of G1,G2;
 
 theorem :: RINGCAT1:25
-for g,f being Element of Morphs(V) st dom(g) = cod(f)
-      holds g*f in Morphs(V);
+  for g,f being Element of Morphs(V) st dom(g) = cod(f) holds g*f in Morphs(V);
 
-definition let V;
- func comp(V) -> PartFunc of [:Morphs(V),Morphs(V):],Morphs(V) means
+definition
+  let V;
+  func comp(V) -> PartFunc of [:Morphs(V),Morphs(V):],Morphs(V) means
 :: RINGCAT1:def 23
 
- (for g,f being Element of Morphs(V) holds [g,f] in dom it iff dom(g) = cod(f))
- & (for g,f being Element of Morphs(V)
-     st [g,f] in dom it holds it.(g,f) = g*f);
+
+(for g,f being Element of Morphs(V) holds [g,f] in dom it iff dom(g) = cod(f))
+  & (for g,f being Element of Morphs(V)
+  st [g,f] in dom it holds it.(g,f) = g*f);
 end;
 
-             ::
-             ::  4e. Definition of Category of rings
-             ::
+::
+::  4e. Definition of Category of rings
+::
 
-definition let UN;
- func RingCat(UN) -> CatStr equals
+definition
+  let UN;
+  func RingCat(UN) -> CatStr equals
 :: RINGCAT1:def 24
-    CatStr(#RingObjects(UN),Morphs(RingObjects(UN)),
-                   dom(RingObjects(UN)),cod(RingObjects(UN)),
-                   comp(RingObjects(UN)),ID(RingObjects(UN))#);
+  CatStr(#RingObjects(UN),Morphs(RingObjects(UN)),
+    dom(RingObjects(UN)),cod(RingObjects(UN)),
+    comp(RingObjects(UN)),ID(RingObjects(UN))#);
 end;
 
-registration let UN;
- cluster RingCat(UN) -> strict;
+registration
+  let UN;
+  cluster RingCat(UN) -> strict;
 end;
 
 theorem :: RINGCAT1:26
- for f,g being Morphism of RingCat(UN) holds
-        [g,f] in dom(the Comp of RingCat(UN)) iff dom g = cod f;
+  for f,g being Morphism of RingCat(UN) holds
+  [g,f] in dom(the Comp of RingCat(UN)) iff dom g = cod f;
 
 theorem :: RINGCAT1:27
- for f being (Morphism of RingCat(UN)),
-           f' being Element of Morphs(RingObjects(UN)),
-           b being Object of RingCat(UN),
-           b' being Element of RingObjects(UN)
-       holds f is strict Element of Morphs(RingObjects(UN))
-           & f' is Morphism of RingCat(UN)
-           & b is strict Element of RingObjects(UN)
-           & b' is Object of RingCat(UN);
+  for f being (Morphism of RingCat(UN)),
+  f' being Element of Morphs(RingObjects(UN)), b being Object of RingCat(UN),
+  b' being Element of RingObjects(UN)
+  holds f is strict Element of Morphs(RingObjects(UN))
+  & f' is Morphism of RingCat(UN) & b is strict Element of RingObjects(UN)
+  & b' is Object of RingCat(UN);
 
 theorem :: RINGCAT1:28
- for b being Object of RingCat(UN),
-           b' being Element of RingObjects(UN)
-       st b = b' holds id b = ID(b');
+  for b being Object of RingCat(UN), b' being Element of RingObjects(UN)
+  st b = b' holds id b = ID(b');
 
- theorem :: RINGCAT1:29
- for f being Morphism of RingCat(UN)
-for f' being Element of Morphs(RingObjects(UN))
-       st f = f'
-       holds dom f = dom f'
-           & cod f = cod f';
+theorem :: RINGCAT1:29
+  for f being Morphism of RingCat(UN)
+  for f' being Element of Morphs(RingObjects(UN)) st f = f'
+  holds dom f = dom f' & cod f = cod f';
 
- theorem :: RINGCAT1:30
- for f,g being (Morphism of RingCat(UN)),
-           f',g' being Element of Morphs(RingObjects(UN))
-       st f = f' & g = g'
-       holds (dom g = cod f iff dom g' = cod f')
-           & (dom g = cod f iff [g',f'] in dom comp(RingObjects(UN)))
-           & (dom g = cod f implies g*f = g'*f')
-           & (dom f = dom g iff dom f' = dom g')
-           & (cod f = cod g iff cod f' = cod g');
+theorem :: RINGCAT1:30
+  for f,g being (Morphism of RingCat(UN)),
+  f',g' being Element of Morphs(RingObjects(UN)) st f = f' & g = g'
+  holds (dom g = cod f iff dom g' = cod f')
+  & (dom g = cod f iff [g',f'] in dom comp(RingObjects(UN)))
+  & (dom g = cod f implies g*f = g'*f') & (dom f = dom g iff dom f' = dom g')
+  & (cod f = cod g iff cod f' = cod g');
 
-registration let UN;
- cluster RingCat(UN) -> Category-like;
+registration
+  let UN;
+  cluster RingCat(UN) -> Category-like;
 end;
 

@@ -246,7 +246,7 @@
 </RCluster>
 <RCluster>
 <ArgTypes>
-<Typ kind="G" nr="20">
+<Typ kind="G" nr="19">
 <Cluster/>
 </Typ>
 </ArgTypes>
@@ -264,7 +264,7 @@
 </RCluster>
 <RCluster>
 <ArgTypes>
-<Typ kind="G" nr="20">
+<Typ kind="G" nr="19">
 <Cluster/>
 </Typ>
 </ArgTypes>
@@ -2599,7 +2599,7 @@
 </CCluster>
 <CCluster>
 <ArgTypes>
-<Typ kind="G" nr="20">
+<Typ kind="G" nr="19">
 <Cluster/>
 </Typ>
 </ArgTypes>

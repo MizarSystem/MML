@@ -24,15 +24,15 @@ environ
 
 begin :: Further Properties of Substitution
 
- reserve a,b,b1 for set,
-         i,j,k,n for Element of NAT,
-         p,q,r,s for Element of CQC-WFF,
-         x,y,y1 for bound_QC-variable,
-         P for QC-pred_symbol of k,
-         l,ll for CQC-variable_list of k,
-         Sub,Sub1 for CQC_Substitution,
-         S,S1,S2 for Element of CQC-Sub-WFF,
-         P1,P2 for Element of QC-pred_symbols;
+reserve a,b,b1 for set,
+  i,j,k,n for Element of NAT,
+  p,q,r,s for Element of CQC-WFF,
+  x,y,y1 for bound_QC-variable,
+  P for QC-pred_symbol of k,
+  l,ll for CQC-variable_list of k,
+  Sub,Sub1 for CQC_Substitution,
+  S,S1,S2 for Element of CQC-Sub-WFF,
+  P1,P2 for Element of QC-pred_symbols;
 
 theorem :: SUBSTUT2:1
   for Sub holds ex S st S`1 = VERUM & S`2 = Sub;
@@ -41,96 +41,99 @@ theorem :: SUBSTUT2:2
   for Sub holds ex S st S`1 = P!ll & S`2 = Sub;
 
 theorem :: SUBSTUT2:3
-   for k,l being Element of NAT st
-      P is (QC-pred_symbol of k) &
-      P is (QC-pred_symbol of l) holds k = l;
+  for k,l being Element of NAT st P is (QC-pred_symbol of k) &
+  P is (QC-pred_symbol of l) holds k = l;
 
 theorem :: SUBSTUT2:4
   (for Sub holds ex S st S`1 = p & S`2 = Sub) implies
-    for Sub holds ex S st S`1 = 'not' p & S`2 = Sub;
+  for Sub holds ex S st S`1 = 'not' p & S`2 = Sub;
 
 theorem :: SUBSTUT2:5
   (for Sub holds ex S st S`1 = p & S`2 = Sub) &
-       (for Sub holds ex S st S`1 = q & S`2 = Sub)
-        implies for Sub holds ex S st S`1 = p '&' q & S`2 = Sub;
+  (for Sub holds ex S st S`1 = q & S`2 = Sub)
+  implies for Sub holds ex S st S`1 = p '&' q & S`2 = Sub;
 
-definition let p, Sub;
+definition
+  let p, Sub;
   redefine func [p,Sub] -> Element of [:QC-WFF,vSUB:];
 end;
 
 theorem :: SUBSTUT2:6
   dom RestrictSub(x,All(x,p),Sub) misses {x};
 
-
-
 theorem :: SUBSTUT2:7
   x in rng RestrictSub(x,All(x,p),Sub) implies
-      S_Bound([All(x,p),Sub]) = x.upVar(RestrictSub(x,All(x,p),Sub),p);
+  S_Bound([All(x,p),Sub]) = x.upVar(RestrictSub(x,All(x,p),Sub),p);
 
 theorem :: SUBSTUT2:8
-  not x in rng RestrictSub(x,All(x,p),Sub) implies
-    S_Bound([All(x,p),Sub]) = x;
+  not x in rng RestrictSub(x,All(x,p),Sub) implies S_Bound([All(x,p),Sub]) = x;
 
 theorem :: SUBSTUT2:9
   ExpandSub(x,p,RestrictSub(x,All(x,p),Sub)) =
-          @RestrictSub(x,All(x,p),Sub) +* (x|S_Bound([All(x,p),Sub]));
+  @RestrictSub(x,All(x,p),Sub) +* (x|S_Bound([All(x,p),Sub]));
 
 theorem :: SUBSTUT2:10
   S`2 = @RestrictSub(x,All(x,p),Sub) +* (x|S_Bound([All(x,p),Sub])) &
-    S`1 = p implies [S,x] is quantifiable & ex S1 st S1 = [All(x,p),Sub];
+  S`1 = p implies [S,x] is quantifiable & ex S1 st S1 = [All(x,p),Sub];
 
 theorem :: SUBSTUT2:11
   (for Sub holds ex S st S`1 = p & S`2 = Sub) implies
-       for Sub holds ex S st S`1 = All(x,p) & S`2 = Sub;
+  for Sub holds ex S st S`1 = All(x,p) & S`2 = Sub;
 
 theorem :: SUBSTUT2:12
   for p, Sub holds ex S st S`1 = p & S`2 = Sub;
 
-definition let p,Sub;
+definition
+  let p,Sub;
   redefine func [p,Sub] -> Element of CQC-Sub-WFF;
 end;
 
-definition let x,y;
+definition
+  let x,y;
   func Sbst(x,y) -> CQC_Substitution equals
 :: SUBSTUT2:def 1
-     x .--> y;
+
+  x .--> y;
 end;
 
 begin :: Facts about Substitution and Quantifiers of a Formula
 
-definition let p,x,y;
+definition
+  let p,x,y;
   func p.(x,y) -> Element of CQC-WFF equals
 :: SUBSTUT2:def 2
-     CQC_Sub([p,Sbst(x,y)]);
+
+  CQC_Sub([p,Sbst(x,y)]);
 end;
 
 scheme :: SUBSTUT2:sch 1
- CQCInd1 {P[set]} :
-  for p holds P[p]
-    provided
- for p st QuantNbr(p) = 0 holds P[p] and
+ CQCInd1 {P[set]} : for p holds P[p]
+provided
+ for p st QuantNbr(p) = 0 holds P[p]
+and
  for k st for p st QuantNbr(p) = k holds P[p] holds
-             for p st QuantNbr(p) = k+1 holds P[p];
+for p st QuantNbr(p) = k+1 holds P[p];
 
 scheme :: SUBSTUT2:sch 2
- CQCInd2 {P[set]}:
-  for p holds P[p]
-    provided
- for p st QuantNbr(p) <= 0 holds P[p] and
+ CQCInd2 {P[set]}: for p holds P[p]
+provided
+ for p st QuantNbr(p) <= 0 holds P[p]
+and
  for k st for p st QuantNbr(p) <= k holds P[p] holds
-             for p st QuantNbr(p) <= k+1 holds P[p];
+for p st QuantNbr(p) <= k+1 holds P[p];
 
 theorem :: SUBSTUT2:13
-   VERUM.(x,y) = VERUM;
+  VERUM.(x,y) = VERUM;
 
 theorem :: SUBSTUT2:14
-   (P!l).(x,y) = P!CQC_Subst(l,Sbst(x,y)) &
-        QuantNbr(P!l) = QuantNbr((P!l).(x,y));
+  (P!l).(x,y) = P!CQC_Subst(l,Sbst(x,y)) &
+  QuantNbr(P!l) = QuantNbr((P!l).(x,y));
 
 theorem :: SUBSTUT2:15
   QuantNbr(P!l) = QuantNbr(CQC_Sub([P!l,Sub]));
 
-definition let S be Element of QC-Sub-WFF;
+definition
+  let S be Element of QC-Sub-WFF;
   redefine func S`2 -> CQC_Substitution;
 end;
 
@@ -138,121 +141,118 @@ theorem :: SUBSTUT2:16
   ['not' p,Sub] = Sub_not [p,Sub];
 
 theorem :: SUBSTUT2:17
-   'not' p.(x,y) = 'not' (p.(x,y)) &
-       (QuantNbr(p) = QuantNbr(p.(x,y)) implies
-                  QuantNbr('not' p) = QuantNbr('not' p.(x,y)));
+  'not' p.(x,y) = 'not' (p.(x,y)) & (QuantNbr(p) = QuantNbr(p.(x,y)) implies
+  QuantNbr('not' p) = QuantNbr('not' p.(x,y)));
 
 theorem :: SUBSTUT2:18
   (for Sub holds QuantNbr(p) = QuantNbr(CQC_Sub([p,Sub]))) implies
-      for Sub holds  QuantNbr('not' p) = QuantNbr(CQC_Sub(['not' p,Sub]));
+  for Sub holds QuantNbr('not' p) = QuantNbr(CQC_Sub(['not' p,Sub]));
 
 theorem :: SUBSTUT2:19
   [p '&' q,Sub] = CQCSub_&([p,Sub],[q,Sub]);
 
 theorem :: SUBSTUT2:20
-   (p '&' q).(x,y) = (p.(x,y)) '&' (q.(x,y)) &
-      ((QuantNbr(p) = QuantNbr(p.(x,y)) &
-                  QuantNbr(q) = QuantNbr(q.(x,y))) implies
-                             QuantNbr(p '&'q) = QuantNbr((p '&' q).(x,y)));
+  (p '&' q).(x,y) = (p.(x,y)) '&' (q.(x,y)) &
+  ((QuantNbr(p) = QuantNbr(p.(x,y)) & QuantNbr(q) = QuantNbr(q.(x,y))) implies
+  QuantNbr(p '&'q) = QuantNbr((p '&' q).(x,y)));
 
 theorem :: SUBSTUT2:21
   ((for Sub holds QuantNbr(p) = QuantNbr(CQC_Sub([p,Sub]))) &
-        (for Sub holds QuantNbr(q) = QuantNbr(CQC_Sub([q,Sub])))) implies
-        for Sub holds QuantNbr(p '&' q) = QuantNbr(CQC_Sub[p '&' q,Sub]);
+  (for Sub holds QuantNbr(q) = QuantNbr(CQC_Sub([q,Sub])))) implies
+  for Sub holds QuantNbr(p '&' q) = QuantNbr(CQC_Sub[p '&' q,Sub]);
 
 definition
   func CFQ -> Function of CQC-Sub-WFF,vSUB equals
 :: SUBSTUT2:def 3
-     QSub|CQC-Sub-WFF;
+
+  QSub|CQC-Sub-WFF;
 end;
 
-
-
-definition let p,x,Sub;
+definition
+  let p,x,Sub;
   func QScope(p,x,Sub) ->
-          CQC-WFF-like Element of [:QC-Sub-WFF,bound_QC-variables:] equals
+  CQC-WFF-like Element of [:QC-Sub-WFF,bound_QC-variables:] equals
 :: SUBSTUT2:def 4
-    [[p,CFQ.[All(x,p),Sub]],x];
+  [[p,CFQ.[All(x,p),Sub]],x];
 end;
 
-definition let p,x,Sub;
+definition
+  let p,x,Sub;
   func Qsc(p,x,Sub) -> second_Q_comp of QScope(p,x,Sub) equals
 :: SUBSTUT2:def 5
-    Sub;
+
+  Sub;
 end;
 
 theorem :: SUBSTUT2:22
   [All(x,p),Sub] = CQCSub_All(QScope(p,x,Sub),Qsc(p,x,Sub)) &
-                                  QScope(p,x,Sub) is quantifiable;
+  QScope(p,x,Sub) is quantifiable;
 
 theorem :: SUBSTUT2:23
   (for Sub holds QuantNbr(p) = QuantNbr(CQC_Sub([p,Sub]))) implies
-   for Sub holds QuantNbr(All(x,p)) = QuantNbr(CQC_Sub([All(x,p),Sub]));
+  for Sub holds QuantNbr(All(x,p)) = QuantNbr(CQC_Sub([All(x,p),Sub]));
 
 theorem :: SUBSTUT2:24
   QuantNbr(VERUM) = QuantNbr(CQC_Sub([VERUM,Sub]));
 
 theorem :: SUBSTUT2:25
-   for p, Sub holds QuantNbr(p) = QuantNbr(CQC_Sub([p,Sub]));
+  for p, Sub holds QuantNbr(p) = QuantNbr(CQC_Sub([p,Sub]));
 
 theorem :: SUBSTUT2:26
-   p is atomic implies ex k,P,ll st p = P!ll;
+  p is atomic implies ex k,P,ll st p = P!ll;
 
 scheme :: SUBSTUT2:sch 3
- CQCInd3 {P[set]} :
-  for p st QuantNbr(p) = 0 holds P[p]
-    provided
+ CQCInd3 {P[set]} : for p st QuantNbr(p) = 0 holds P[p]
+provided
  for r,s,x,k for l being CQC-variable_list of k
-     for P being QC-pred_symbol of k holds
-      P[VERUM] & P[P!l] &
-      (P[r] implies P['not' r]) &
-      (P[r] & P[s] implies P[r '&' s]);
+for P being QC-pred_symbol of k holds P[VERUM] & P[P!l] &
+(P[r] implies P['not' r]) & (P[r] & P[s] implies P[r '&' s]);
 
 begin :: Results about the Construction of Formulas
 
- reserve F1,F2,F3,F4 for QC-formula,
-         L for FinSequence;
+reserve F1,F2,F3,F4 for QC-formula,
+  L for FinSequence;
 
-definition let G,H be QC-formula;
-  assume  G is_subformula_of H;
+definition
+  let G,H be QC-formula;
+  assume
+ G is_subformula_of H;
   mode PATH of G,H -> FinSequence means
 :: SUBSTUT2:def 6
-   1 <= len it & it.1 = G & it.(len it) = H &
-    for k st 1 <= k & k < len it
-     ex G1,H1 being Element of QC-WFF st it.k = G1 & it.(k+1) = H1 &
-      G1 is_immediate_constituent_of H1;
+
+    1 <= len it & it.1 = G & it.(len it) = H & for k st 1 <= k & k < len it
+    ex G1,H1 being Element of QC-WFF st it.k = G1 & it.(k+1) = H1 &
+    G1 is_immediate_constituent_of H1;
 end;
 
 theorem :: SUBSTUT2:27
-   for L being PATH of F1,F2 st
-    F1 is_subformula_of F2 & 1 <= i & i <= len L holds
-      ex F3 st F3 = L.i & F3 is_subformula_of F2;
+  for L being PATH of F1,F2 st
+  F1 is_subformula_of F2 & 1 <= i & i <= len L holds
+  ex F3 st F3 = L.i & F3 is_subformula_of F2;
 
 theorem :: SUBSTUT2:28
   for L being PATH of F1,p st
-    F1 is_subformula_of p & 1 <= i & i <= len L holds
-      L.i is Element of CQC-WFF;
+  F1 is_subformula_of p & 1 <= i & i <= len L holds L.i is Element of CQC-WFF;
 
 theorem :: SUBSTUT2:29
   for L being PATH of q,p st
-    QuantNbr(p) <= n & q is_subformula_of p & 1 <= i & i <= len L holds
-      ex r st r = L.i & QuantNbr(r) <= n;
+  QuantNbr(p) <= n & q is_subformula_of p & 1 <= i & i <= len L holds
+  ex r st r = L.i & QuantNbr(r) <= n;
 
 theorem :: SUBSTUT2:30
-   QuantNbr(p) = n & q is_subformula_of p implies QuantNbr(q) <= n;
+  QuantNbr(p) = n & q is_subformula_of p implies QuantNbr(q) <= n;
 
 theorem :: SUBSTUT2:31
-   for n,p st
-    (for q st q is_subformula_of p holds QuantNbr(q) = n) holds n = 0;
+  for n,p st (for q st q is_subformula_of p holds QuantNbr(q) = n) holds n = 0;
 
 theorem :: SUBSTUT2:32
-   for p st
-    (for q st q is_subformula_of p holds for x,r holds q <> All(x,r))
-       holds QuantNbr(p) = 0;
+  for p st (for q st q is_subformula_of p holds for x,r holds q <> All(x,r))
+  holds QuantNbr(p) = 0;
 
 theorem :: SUBSTUT2:33
   for p st for q st q is_subformula_of p holds QuantNbr(q) <> 1 holds
-    QuantNbr(p) = 0;
+  QuantNbr(p) = 0;
 
 theorem :: SUBSTUT2:34
-   1 <= QuantNbr(p) implies ex q st q is_subformula_of p & QuantNbr(q)=1;
+  1 <= QuantNbr(p) implies ex q st q is_subformula_of p & QuantNbr(q)=1;
+

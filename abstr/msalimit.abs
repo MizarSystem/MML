@@ -26,111 +26,133 @@ environ
 
 begin :: Inverse Limits of Many Sorted Algebras
 
- reserve P for non empty Poset,
-         i, j, k for Element of P;
- reserve S for non void non empty ManySortedSign;
+reserve P for non empty Poset,
+  i, j, k for Element of P;
 
-registration let I be non empty set, S;
- let AF be MSAlgebra-Family of I,S; let i be Element of I;
- let o be OperSymbol of S;
+reserve S for non void non empty ManySortedSign;
+
+registration
+  let I be non empty set, S;
+  let AF be MSAlgebra-Family of I,S;
+  let i be Element of I;
+  let o be OperSymbol of S;
   cluster ((OPER AF).i).o -> Function-like Relation-like;
 end;
 
-registration let I be non empty set, S;
- let AF be MSAlgebra-Family of I,S; let s be SortSymbol of S;
+registration
+  let I be non empty set, S;
+  let AF be MSAlgebra-Family of I,S;
+  let s be SortSymbol of S;
   cluster (SORTS AF).s -> functional;
 end;
 
-definition let P, S;
- mode OrderedAlgFam of P,S -> MSAlgebra-Family of the carrier of P,S means
+definition
+  let P, S;
+  mode OrderedAlgFam of P,S -> MSAlgebra-Family of the carrier of P,S means
 :: MSALIMIT:def 1
 
-  ex F be ManySortedFunction of the InternalRel of P st
-   for i,j,k st i >= j & j >= k
-    ex f1 be ManySortedFunction of it.i, it.j,
-       f2 be ManySortedFunction of it.j, it.k st f1 = F.(j,i) & f2 = F.(k,j) &
-     F.(k,i) = f2 ** f1 & f1 is_homomorphism it.i, it.j;
+    ex F be ManySortedFunction of the InternalRel of P st
+    for i,j,k st i >= j & j >= k ex f1 be ManySortedFunction of it.i, it.j,
+    f2 be ManySortedFunction of it.j, it.k st f1 = F.(j,i) & f2 = F.(k,j) &
+    F.(k,i) = f2 ** f1 & f1 is_homomorphism it.i, it.j;
 end;
 
- reserve OAF for OrderedAlgFam of P, S;
+reserve OAF for OrderedAlgFam of P, S;
 
-definition let P, S, OAF;
- mode Binding of OAF -> ManySortedFunction of the InternalRel of P means
+definition
+  let P, S, OAF;
+  mode Binding of OAF -> ManySortedFunction of the InternalRel of P means
 :: MSALIMIT:def 2
-  for i,j,k st i >= j & j >= k
-  ex f1 be ManySortedFunction of OAF.i, OAF.j,
-     f2 be ManySortedFunction of OAF.j, OAF.k st
+
+    for i,j,k st i >= j & j >= k
+    ex f1 be ManySortedFunction of OAF.i, OAF.j,
+    f2 be ManySortedFunction of OAF.j, OAF.k st
     f1 = it.(j,i) & f2 = it.(k,j) &
     it.(k,i) = f2 ** f1 & f1 is_homomorphism OAF.i, OAF.j;
 end;
 
-definition let P, S, OAF; let B be Binding of OAF, i,j;
- assume  i >= j;
- func bind (B,i,j) -> ManySortedFunction of OAF.i, OAF.j equals
+definition
+  let P, S, OAF;
+  let B be Binding of OAF, i,j;
+  assume
+ i >= j;
+  func bind (B,i,j) -> ManySortedFunction of OAF.i, OAF.j equals
 :: MSALIMIT:def 3
-   B.(j,i);
+
+  B.(j,i);
 end;
 
- reserve B for Binding of OAF;
+reserve B for Binding of OAF;
 
 theorem :: MSALIMIT:1
- i >= j & j >= k implies bind (B,j,k) ** bind (B,i,j) = bind (B,i,k);
+  i >= j & j >= k implies bind (B,j,k) ** bind (B,i,j) = bind (B,i,k);
 
-definition let P, S, OAF;
- let IT be Binding of OAF;
- attr IT is normalized means
+definition
+  let P, S, OAF;
+  let IT be Binding of OAF;
+  attr IT is normalized means
 :: MSALIMIT:def 4
+
   for i holds IT.(i,i) = id (the Sorts of OAF.i);
 end;
 
 theorem :: MSALIMIT:2
- for P,S,OAF,B,i,j st i >= j
+  for P,S,OAF,B,i,j st i >= j
   for f be ManySortedFunction of OAF.i,OAF.j st f = bind (B,i,j) holds
-   f is_homomorphism OAF.i,OAF.j;
+  f is_homomorphism OAF.i,OAF.j;
 
-definition let P, S, OAF, B;
- func Normalized B -> Binding of OAF means
+definition
+  let P, S, OAF, B;
+  func Normalized B -> Binding of OAF means
 :: MSALIMIT:def 5
+
   for i, j st i >= j holds it.(j,i) = IFEQ (j, i, id (the Sorts of OAF.i),
-                    bind (B,i,j) ** id (the Sorts of OAF.i) );
+  bind (B,i,j) ** id (the Sorts of OAF.i) );
 end;
 
 theorem :: MSALIMIT:3
   for i, j st i >= j & i <> j holds B.(j,i) = (Normalized B).(j,i);
 
-registration let P, S, OAF, B;
- cluster Normalized B -> normalized;
+registration
+  let P, S, OAF, B;
+  cluster Normalized B -> normalized;
 end;
 
-registration let P, S, OAF;
- cluster normalized Binding of OAF;
+registration
+  let P, S, OAF;
+  cluster normalized Binding of OAF;
 end;
 
 theorem :: MSALIMIT:4
-     for NB be normalized Binding of OAF
+  for NB be normalized Binding of OAF
   for i, j st i >= j holds (Normalized NB).(j,i) = NB.(j,i);
 
-definition let P, S, OAF; let B be Binding of OAF;
- func InvLim B -> strict MSSubAlgebra of product OAF means
+definition
+  let P, S, OAF;
+  let B be Binding of OAF;
+  func InvLim B -> strict MSSubAlgebra of product OAF means
 :: MSALIMIT:def 6
-  for s be SortSymbol of S
-   for f be Element of (SORTS OAF).s holds
-    f in (the Sorts of it).s iff
+
+  for s be SortSymbol of S for f be Element of (SORTS OAF).s holds
+  f in (the Sorts of it).s iff
   for i,j st i >= j holds (bind (B,i,j).s).(f.i) = f.j;
 end;
 
 theorem :: MSALIMIT:5
-      for DP be discrete non empty Poset, S for OAF be OrderedAlgFam of DP,S
-   for B be normalized Binding of OAF holds InvLim B = product OAF;
+  for DP be discrete non empty Poset, S for OAF be OrderedAlgFam of DP,S
+  for B be normalized Binding of OAF holds InvLim B = product OAF;
 
 begin  :: Sets and Morphisms of Many Sorted Signatures
 
- reserve x for set, A for non empty set;
+reserve x for set,
+  A for non empty set;
 
-definition let X be set;
+definition
+  let X be set;
   attr X is MSS-membered means
 :: MSALIMIT:def 7
-    x in X implies x is strict non empty non void ManySortedSign;
+
+  x in X implies x is strict non empty non void ManySortedSign;
 end;
 
 registration
@@ -138,9 +160,10 @@ registration
 end;
 
 definition
- func TrivialMSSign -> strict ManySortedSign means
+  func TrivialMSSign -> strict ManySortedSign means
 :: MSALIMIT:def 8
-   it is empty void;
+
+  it is empty void;
 end;
 
 registration
@@ -152,30 +175,35 @@ registration
 end;
 
 theorem :: MSALIMIT:6
-     for S be void ManySortedSign
-  holds id the carrier of S, id the OperSymbols of S
-   form_morphism_between S,S;
+  for S be void ManySortedSign
+  holds id the carrier of S, id the OperSymbols of S form_morphism_between S,S;
 
-definition let A;
+definition
+  let A;
   func MSS_set A means
 :: MSALIMIT:def 9
-   x in it iff
-    ex S be strict non empty non void ManySortedSign st x = S &
-     ( the carrier of S c= A & the OperSymbols of S c= A );
+
+  x in it iff
+  ex S be strict non empty non void ManySortedSign st x = S &
+  ( the carrier of S c= A & the OperSymbols of S c= A );
 end;
 
-registration let A;
+registration
+  let A;
   cluster MSS_set A -> non empty MSS-membered;
 end;
 
-definition let A be non empty MSS-membered set;
+definition
+  let A be non empty MSS-membered set;
   redefine mode Element of A -> strict non empty non void ManySortedSign;
 end;
 
-definition let S1,S2 be ManySortedSign;
+definition
+  let S1,S2 be ManySortedSign;
   func MSS_morph (S1,S2) means
 :: MSALIMIT:def 10
-       x in it iff
-     ex f,g be Function st x = [f,g] & f,g form_morphism_between S1,S2;
+
+  x in it iff
+  ex f,g be Function st x = [f,g] & f,g form_morphism_between S1,S2;
 end;
 

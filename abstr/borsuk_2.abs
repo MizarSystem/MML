@@ -28,23 +28,22 @@ environ
 
 begin :: Preliminaries
 
- reserve T,T1,T2,S for non empty TopSpace;
+reserve T,T1,T2,S for non empty TopSpace;
 
 scheme :: BORSUK_2:sch 1
- FrCard { A() -> non empty set, X() -> set,
-       F(set) -> set, P[set] }:
- Card { F(w) where w is Element of A(): w in X() & P[w] } <=` Card X();
+ FrCard { A() -> non empty set, X() -> set, F(set) -> set, P[set] }:
+  Card { F(w) where w is Element of A(): w in X() & P[w] } <=` Card X();
 
 theorem :: BORSUK_2:1
-   for f being Function of T1,S, g being Function of T2,S st
-  T1 is SubSpace of T & T2 is SubSpace of T &
-   ([#] T1) \/ ([#] T2) = [#] T &
-    T1 is compact & T2 is compact & T is_T2 &
-     f is continuous & g is continuous &
+  for f being Function of T1,S, g being Function of T2,S st
+  T1 is SubSpace of T & T2 is SubSpace of T & ([#] T1) \/ ([#] T2) = [#] T &
+  T1 is compact & T2 is compact & T is_T2 &
+  f is continuous & g is continuous &
   ( for p be set st p in ([#] T1) /\ ([#] T2) holds f.p = g.p )
   ex h being Function of T,S st h = f+*g & h is continuous;
 
-registration let T be TopStruct;
+registration
+  let T be TopStruct;
   cluster id T -> open continuous;
 end;
 
@@ -56,9 +55,8 @@ end;
 canceled;
 
 theorem :: BORSUK_2:3
-   for S, T being non empty TopSpace,
-      f being Function of S, T st f is_homeomorphism holds
-   f" is open;
+  for S, T being non empty TopSpace,
+  f being Function of S, T st f is_homeomorphism holds f" is open;
 
 begin :: Paths and arcwise connected spaces
 
@@ -67,13 +65,14 @@ registration
 end;
 
 theorem :: BORSUK_2:4
- for T be non empty TopSpace, a be Point of T
+  for T be non empty TopSpace, a be Point of T
   ex f be Function of I[01], T st f is continuous & f.0 = a & f.1 = a;
 
 definition
   let T be TopStruct, a,b be Point of T;
   pred a,b are_connected means
 :: BORSUK_2:def 1
+
   ex f being Function of I[01], T st f is continuous & f.0 = a & f.1 = b;
 end;
 
@@ -83,44 +82,55 @@ definition
   reflexivity;
 end;
 
-definition let T be TopStruct; let a, b be Point of T;
-  assume  a, b are_connected;
+definition
+  let T be TopStruct;
+  let a, b be Point of T;
+  assume
+ a, b are_connected;
   mode Path of a, b -> Function of I[01], T means
 :: BORSUK_2:def 2
-  it is continuous & it.0 = a & it.1 = b;
+
+    it is continuous & it.0 = a & it.1 = b;
 end;
 
-registration let T be non empty TopSpace; let a be Point of T;
- cluster continuous Path of a, a;
+registration
+  let T be non empty TopSpace;
+  let a be Point of T;
+  cluster continuous Path of a, a;
 end;
 
-definition let T be TopStruct;
+definition
+  let T be TopStruct;
   attr T is arcwise_connected means
 :: BORSUK_2:def 3
+
   for a, b being Point of T holds a, b are_connected;
 end;
 
 registration
- cluster arcwise_connected non empty TopSpace;
+  cluster arcwise_connected non empty TopSpace;
 end;
 
-definition let T be arcwise_connected TopStruct;
+definition
+  let T be arcwise_connected TopStruct;
   let a, b be Point of T;
   redefine mode Path of a, b means
 :: BORSUK_2:def 4
-  it is continuous & it.0 = a & it.1 = b;
+
+    it is continuous & it.0 = a & it.1 = b;
 end;
 
-registration let T be arcwise_connected TopStruct;
+registration
+  let T be arcwise_connected TopStruct;
   let a, b be Point of T;
   cluster -> continuous Path of a, b;
 end;
 
 reserve GY for non empty TopSpace,
-        r,s for Real;
+  r,s for Real;
 
 theorem :: BORSUK_2:5
- for GX being non empty TopSpace st
+  for GX being non empty TopSpace st
   GX is arcwise_connected holds GX is connected;
 
 registration
@@ -129,98 +139,93 @@ end;
 
 begin
 
-definition let T be non empty TopSpace;
+definition
+  let T be non empty TopSpace;
   let a, b, c be Point of T;
-  let P be Path of a, b,
-      Q be Path of b, c such that
-       a,b are_connected and
-       b,c are_connected;
+  let P be Path of a, b, Q be Path of b, c such that
+ a,b are_connected and
+ b,c are_connected;
   func P + Q -> Path of a, c means
 :: BORSUK_2:def 5
-   for t being Point of I[01] holds
-    ( t <= 1/2 implies it.t = P.(2*t) ) &
-    ( 1/2 <= t implies it.t = Q.(2*t-1) );
+
+  for t being Point of I[01] holds
+  ( t <= 1/2 implies it.t = P.(2*t) ) & ( 1/2 <= t implies it.t = Q.(2*t-1) );
 end;
 
-registration let T be non empty TopSpace;
+registration
+  let T be non empty TopSpace;
   let a be Point of T;
   cluster constant Path of a, a;
 end;
 
 theorem :: BORSUK_2:6
-   for T being non empty TopSpace,
-      a being Point of T,
-      P being constant Path of a, a holds P = I[01] --> a;
+  for T being non empty TopSpace, a being Point of T,
+  P being constant Path of a, a holds P = I[01] --> a;
 
 theorem :: BORSUK_2:7
-  for T being non empty TopSpace,
-      a being Point of T,
-      P being constant Path of a, a holds P + P = P;
+  for T being non empty TopSpace, a being Point of T,
+  P being constant Path of a, a holds P + P = P;
 
-registration let T be non empty TopSpace,
-               a be Point of T,
-               P be constant Path of a, a;
- cluster P + P -> constant;
+registration
+  let T be non empty TopSpace, a be Point of T, P be constant Path of a, a;
+  cluster P + P -> constant;
 end;
 
-definition let T be non empty TopSpace;
+definition
+  let T be non empty TopSpace;
   let a, b be Point of T;
   let P be Path of a, b;
-  assume  a,b are_connected;
+  assume
+ a,b are_connected;
   func - P -> Path of b, a means
 :: BORSUK_2:def 6
+
   for t being Point of I[01] holds it.t = P.(1-t);
 end;
 
 theorem :: BORSUK_2:8
-  for T being non empty TopSpace,
-      a being Point of T,
-      P being constant Path of a, a holds - P = P;
+  for T being non empty TopSpace, a being Point of T,
+  P being constant Path of a, a holds - P = P;
 
-registration let T be non empty TopSpace,
-               a be Point of T,
-               P be constant Path of a, a;
+registration
+  let T be non empty TopSpace, a be Point of T, P be constant Path of a, a;
   cluster - P -> constant;
 end;
 
 begin :: The product of two topological spaces
 
 theorem :: BORSUK_2:9
-  for X, Y being non empty TopSpace
-  for A being Subset-Family of Y
-  for f being Function of X, Y holds
-    f"(union A) = union (f"A);
+  for X, Y being non empty TopSpace for A being Subset-Family of Y
+  for f being Function of X, Y holds f"(union A) = union (f"A);
 
-definition let S1, S2, T1, T2 be non empty TopSpace;
+definition
+  let S1, S2, T1, T2 be non empty TopSpace;
   let f be Function of S1, S2, g be Function of T1, T2;
   redefine func [:f, g:] -> Function of [:S1, T1:], [:S2, T2:];
 end;
 
 theorem :: BORSUK_2:10
- for S1, S2, T1, T2 be non empty TopSpace,
-     f be continuous Function of S1, T1,
-     g be continuous Function of S2, T2,
-     P1, P2 being Subset of [:T1, T2:] holds
-       (P2 in Base-Appr P1 implies [:f,g:]"P2 is open);
+  for S1, S2, T1, T2 be non empty TopSpace,
+  f be continuous Function of S1, T1, g be continuous Function of S2, T2,
+  P1, P2 being Subset of [:T1, T2:] holds
+  (P2 in Base-Appr P1 implies [:f,g:]"P2 is open);
 
 theorem :: BORSUK_2:11
- for S1, S2, T1, T2 be non empty TopSpace,
-     f be continuous Function of S1, T1,
-     g be continuous Function of S2, T2,
-     P2 being Subset of [:T1, T2:] holds
-       (P2 is open implies [:f,g:]"P2 is open);
+  for S1, S2, T1, T2 be non empty TopSpace,
+  f be continuous Function of S1, T1, g be continuous Function of S2, T2,
+  P2 being Subset of [:T1, T2:] holds (P2 is open implies [:f,g:]"P2 is open);
 
 theorem :: BORSUK_2:12
- for S1, S2, T1, T2 be non empty TopSpace,
-     f be continuous Function of S1, T1,
-     g be continuous Function of S2, T2 holds
-   [:f,g:] is continuous;
+  for S1, S2, T1, T2 be non empty TopSpace,
+  f be continuous Function of S1, T1, g be continuous Function of S2, T2 holds
+  [:f,g:] is continuous;
 
 registration
   cluster empty -> T_0 TopStruct;
 end;
 
-registration let T1, T2 be discerning (non empty TopSpace);
+registration
+  let T1, T2 be discerning (non empty TopSpace);
   cluster [:T1, T2:] -> discerning;
 end;
 
@@ -228,38 +233,42 @@ canceled;
 
 theorem :: BORSUK_2:14
   for T1, T2 be non empty TopSpace holds
-   T1 is_T1 & T2 is_T1 implies [:T1, T2:] is_T1;
+  T1 is_T1 & T2 is_T1 implies [:T1, T2:] is_T1;
 
-registration let T1, T2 be being_T1 (non empty TopSpace);
- cluster [:T1, T2:] -> being_T1;
-end;
-
-registration let T1, T2 be being_T2 non empty TopSpace;
- cluster [:T1, T2:] -> being_T2;
+registration
+  let T1, T2 be being_T1 (non empty TopSpace);
+  cluster [:T1, T2:] -> being_T1;
 end;
 
 registration
- cluster I[01] -> compact being_T2;
+  let T1, T2 be being_T2 non empty TopSpace;
+  cluster [:T1, T2:] -> being_T2;
 end;
 
-definition let T be non empty TopStruct;
+registration
+  cluster I[01] -> compact being_T2;
+end;
+
+definition
+  let T be non empty TopStruct;
   let a, b be Point of T;
   let P, Q be Path of a, b;
   pred P, Q are_homotopic means
 :: BORSUK_2:def 7
-     ex f being Function of [:I[01],I[01]:], T st
-    f is continuous &
-    for t being Point of I[01] holds f.(t,0) = P.t & f.(t,1) = Q.t &
-        f.(0,t) = a & f.(1,t) = b;
+
+  ex f being Function of [:I[01],I[01]:], T st
+  f is continuous &
+  for t being Point of I[01] holds f.(t,0) = P.t & f.(t,1) = Q.t &
+  f.(0,t) = a & f.(1,t) = b;
   symmetry;
 end;
 
 theorem :: BORSUK_2:15
   for T being non empty TopSpace, a, b being Point of T,
-      P being Path of a, b st a,b are_connected
-  holds P, P are_homotopic;
+  P being Path of a, b st a,b are_connected holds P, P are_homotopic;
 
-definition let T be non empty arcwise_connected TopSpace;
+definition
+  let T be non empty arcwise_connected TopSpace;
   let a, b be Point of T;
   let P, Q be Path of a, b;
   redefine pred P, Q are_homotopic;
@@ -267,32 +276,30 @@ definition let T be non empty arcwise_connected TopSpace;
 end;
 
 theorem :: BORSUK_2:16
-  for G being non empty TopSpace,
-      w1,w2,w3 being Point of G,
-      h1,h2 being Function of I[01],G st
-    h1 is continuous & w1=h1.0 & w2=h1.1 &
-    h2 is continuous & w2=h2.0 & w3=h2.1 holds
-   ex h3 being Function of I[01],G st h3 is continuous & w1=h3.0 & w3=h3.1 &
-      rng h3 c= (rng h1) \/ (rng h2);
+  for G being non empty TopSpace, w1,w2,w3 being Point of G,
+  h1,h2 being Function of I[01],G st h1 is continuous & w1=h1.0 & w2=h1.1 &
+  h2 is continuous & w2=h2.0 & w3=h2.1 holds
+  ex h3 being Function of I[01],G st h3 is continuous & w1=h3.0 & w3=h3.1 &
+  rng h3 c= (rng h1) \/ (rng h2);
 
 theorem :: BORSUK_2:17
-   for T being non empty TopSpace,a,b,c being Point of T,
-      G1 being Path of a,b, G2 being Path of b,c st
-    G1 is continuous & G2 is continuous & G1.0=a & G1.1=b & G2.0=b & G2.1=c
-   holds G1+G2 is continuous & (G1+G2).0=a & (G1+G2).1=c;
+  for T being non empty TopSpace,a,b,c being Point of T,
+  G1 being Path of a,b, G2 being Path of b,c st
+  G1 is continuous & G2 is continuous & G1.0=a & G1.1=b & G2.0=b & G2.1=c
+  holds G1+G2 is continuous & (G1+G2).0=a & (G1+G2).1=c;
 
-registration let T be non empty TopSpace;
+registration
+  let T be non empty TopSpace;
   cluster non empty compact connected Subset of T;
 end;
 
 :: Moved from BORSUK_5:11, AK, 20.02.2006
 
 theorem :: BORSUK_2:18
-  for T being non empty TopSpace,
-      a, b being Point of T st
-    (ex f being Function
- of I[01], T st f is continuous & f.0 = a & f.1 = b) holds
-     ex g being Function of I[01], T st g is continuous & g.0 = b & g.1 = a;
+  for T being non empty TopSpace, a, b being Point of T st
+  (ex f being Function
+  of I[01], T st f is continuous & f.0 = a & f.1 = b) holds
+  ex g being Function of I[01], T st g is continuous & g.0 = b & g.1 = a;
 
 registration
   cluster I[01] -> arcwise_connected;

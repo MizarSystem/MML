@@ -23,411 +23,432 @@ begin :: Preliminaries
 
 reserve i,j,k,x for set;
 
-registration let A be functional set;
- cluster -> functional Subset of A;
+registration
+  let A be functional set;
+  cluster -> functional Subset of A;
 end;
 
-registration let f be Function-yielding Function, C be set;
- cluster f|C -> Function-yielding;
+registration
+  let f be Function-yielding Function, C be set;
+  cluster f|C -> Function-yielding;
 end;
 
-registration let f be Function;
- cluster {f} -> functional;
+registration
+  let f be Function;
+  cluster {f} -> functional;
 end;
 
 canceled;
 
 theorem :: ALTCAT_1:2
- for A being set holds id A in Funcs(A,A);
+  for A being set holds id A in Funcs(A,A);
 
 theorem :: ALTCAT_1:3
- Funcs({},{}) = { id {} };
+  Funcs({},{}) = { id {} };
 
 theorem :: ALTCAT_1:4
- for A,B,C being set, f,g being Function st f in Funcs(A,B) & g in Funcs(B,C)
+  for A,B,C being set, f,g being Function st f in Funcs(A,B) & g in Funcs(B,C)
   holds g*f in Funcs(A,C);
 
 theorem :: ALTCAT_1:5
- for A,B,C being set st Funcs(A,B) <> {} & Funcs(B,C) <> {}
+  for A,B,C being set st Funcs(A,B) <> {} & Funcs(B,C) <> {}
   holds Funcs(A,C) <> {};
 
 canceled;
 
 theorem :: ALTCAT_1:7
-       for A,B being set,
-     F being ManySortedSet of [:B,A:],
-     C being Subset of A, D being Subset of B,
-     x,y being set st x in C & y in D holds
-   F.(y,x) = (F|([:D,C:] qua set)).(y,x);
+  for A,B being set, F being ManySortedSet of [:B,A:],
+  C being Subset of A, D being Subset of B,
+  x,y being set st x in C & y in D holds F.(y,x) = (F|([:D,C:] qua set)).(y,x);
 
- scheme :: ALTCAT_1:sch 1
+scheme :: ALTCAT_1:sch 1
  MSSLambda2{ A,B() -> set, F(set,set) -> set }:
   ex M being ManySortedSet of [:A(),B():] st
-   for i,j st i in A() & j in B() holds M.(i,j) = F(i,j);
+  for i,j st i in A() & j in B() holds M.(i,j) = F(i,j);
 
- scheme :: ALTCAT_1:sch 2
+scheme :: ALTCAT_1:sch 2
  MSSLambda2D{ A,B() -> non empty set, F(set,set) -> set }:
   ex M being ManySortedSet of [:A(),B():] st
-   for i being Element of A(), j being Element of B()
-    holds M.(i,j) = F(i,j);
+  for i being Element of A(), j being Element of B() holds M.(i,j) = F(i,j);
 
- scheme :: ALTCAT_1:sch 3
+scheme :: ALTCAT_1:sch 3
  MSSLambda3{ A,B,C() -> set, F(set,set,set) -> set }:
   ex M being ManySortedSet of [:A(),B(),C():] st
-   for i,j,k st i in A() & j in B() & k in C()
-    holds M.(i,j,k) = F(i,j,k);
+  for i,j,k st i in A() & j in B() & k in C() holds M.(i,j,k) = F(i,j,k);
 
- scheme :: ALTCAT_1:sch 4
+scheme :: ALTCAT_1:sch 4
  MSSLambda3D{ A,B,C() -> non empty set, F(set,set,set) -> set }:
   ex M being ManySortedSet of [:A(),B(),C():] st
-   for i being Element of A(), j being Element of B(), k being Element of C()
-    holds M.(i,j,k) = F(i,j,k);
+  for i being Element of A(), j being Element of B(), k being Element of C()
+  holds M.(i,j,k) = F(i,j,k);
 
 theorem :: ALTCAT_1:8
   for A,B being set, N,M being ManySortedSet of [:A,B:]
-   st for i,j st i in A & j in B holds N.(i,j) = M.(i,j)
-  holds M = N;
+  st for i,j st i in A & j in B holds N.(i,j) = M.(i,j) holds M = N;
 
 theorem :: ALTCAT_1:9
   for A,B being non empty set, N,M being ManySortedSet of [:A,B:]
-   st for i being Element of A, j being Element of B holds N.(i,j) = M.(i,j)
+  st for i being Element of A, j being Element of B holds N.(i,j) = M.(i,j)
   holds M = N;
 
 theorem :: ALTCAT_1:10
   for A being set, N,M being ManySortedSet of [:A,A,A:]
-   st for i,j,k st i in A & j in A & k in A holds N.(i,j,k) = M.(i,j,k)
+  st for i,j,k st i in A & j in A & k in A holds N.(i,j,k) = M.(i,j,k)
   holds M = N;
 
 theorem :: ALTCAT_1:11
- (i,j):->k = [i,j].-->k;
+  (i,j):->k = [i,j].-->k;
 
 theorem :: ALTCAT_1:12
- ((i,j):->k).(i,j) = k;
+  ((i,j):->k).(i,j) = k;
 
 begin :: Alternative Graphs
 
 definition
- struct(1-sorted) AltGraph
-   (# carrier -> set,
-       Arrows -> ManySortedSet of [:the carrier, the carrier:]
-   #);
+  struct(1-sorted) AltGraph (# carrier -> set,
+    Arrows -> ManySortedSet of [:the carrier, the carrier:] #);
 end;
 
- definition let G be AltGraph;
-   mode object of G is Element of G;
- end;
+definition
+  let G be AltGraph;
+  mode object of G is Element of G;
+end;
 
- definition let G be AltGraph;
+definition
+  let G be AltGraph;
   let o1,o2 be object of G;
- canceled;
-
+  canceled;
   func <^o1,o2^> equals
 :: ALTCAT_1:def 2
+
   (the Arrows of G).(o1,o2);
- end;
+end;
 
- definition let G be AltGraph;
+definition
+  let G be AltGraph;
   let o1,o2 be object of G;
-   mode Morphism of o1,o2 is Element of <^o1,o2^>;
- end;
+  mode Morphism of o1,o2 is Element of <^o1,o2^>;
+end;
 
- definition let G be AltGraph;
- canceled;
-
+definition
+  let G be AltGraph;
+  canceled;
   attr G is transitive means
 :: ALTCAT_1:def 4
- for o1,o2,o3 being object of G st <^o1,o2^> <> {} & <^o2,o3^> <> {}
-       holds <^o1,o3^> <> {};
- end;
+
+  for o1,o2,o3 being object of G st <^o1,o2^> <> {} & <^o2,o3^> <> {}
+  holds <^o1,o3^> <> {};
+end;
 
 begin :: Binary Compositions
 
 definition
- let I be set;
- let G be ManySortedSet of [:I,I:];
- func {|G|} -> ManySortedSet of [:I,I,I:] means
+  let I be set;
+  let G be ManySortedSet of [:I,I:];
+  func {|G|} -> ManySortedSet of [:I,I,I:] means
 :: ALTCAT_1:def 5
- for i,j,k st i in I & j in I & k in I holds it.(i,j,k) = G.(i,k);
- let H be ManySortedSet of [:I,I:];
- func {|G,H|} -> ManySortedSet of [:I,I,I:] means
+
+  for i,j,k st i in I & j in I & k in I holds it.(i,j,k) = G.(i,k);
+  let H be ManySortedSet of [:I,I:];
+  func {|G,H|} -> ManySortedSet of [:I,I,I:] means
 :: ALTCAT_1:def 6
- for i,j,k st i in I & j in I & k in I holds
-    it.(i,j,k) = [:H.(j,k),G.(i,j):];
+
+  for i,j,k st i in I & j in I & k in I holds
+  it.(i,j,k) = [:H.(j,k),G.(i,j):];
 end;
 
- definition let I be set;
+definition
+  let I be set;
   let G be ManySortedSet of [:I,I:];
   mode BinComp of G is ManySortedFunction of {|G,G|},{|G|};
- end;
+end;
 
- definition let I be non empty set; let G be ManySortedSet of [:I,I:];
+definition
+  let I be non empty set;
+  let G be ManySortedSet of [:I,I:];
   let o be BinComp of G;
   let i,j,k be Element of I;
   redefine func o.(i,j,k) -> Function of [:G.(j,k),G.(i,j):], G.(i,k);
- end;
+end;
 
- definition let I be non empty set; let G be ManySortedSet of [:I,I:];
+definition
+  let I be non empty set;
+  let G be ManySortedSet of [:I,I:];
   let IT be BinComp of G;
   attr IT is associative means
 :: ALTCAT_1:def 7
 
-   for i,j,k,l being Element of I
-   for f,g,h being set st f in G.(i,j) & g in G.(j,k) & h in G.(k,l)
-    holds IT.(i,k,l).(h,IT.(i,j,k).(g,f)) = IT.(i,j,l).(IT.(j,k,l).(h,g),f);
+  for i,j,k,l being Element of I
+  for f,g,h being set st f in G.(i,j) & g in G.(j,k) & h in G.(k,l)
+  holds IT.(i,k,l).(h,IT.(i,j,k).(g,f)) = IT.(i,j,l).(IT.(j,k,l).(h,g),f);
   attr IT is with_right_units means
 :: ALTCAT_1:def 8
 
-   for i being Element of I ex e being set st e in G.(i,i) &
-    for j being Element of I, f be set st f in G.(i,j)
-     holds IT.(i,i,j).(f,e) = f;
+  for i being Element of I ex e being set st e in G.(i,i) &
+  for j being Element of I, f be set st f in G.(i,j)
+  holds IT.(i,i,j).(f,e) = f;
   attr IT is with_left_units means
 :: ALTCAT_1:def 9
 
-   for j being Element of I ex e being set st e in G.(j,j) &
-    for i being Element of I, f be set st f in G.(i,j)
-     holds IT.(i,j,j).(e,f) = f;
- end;
+  for j being Element of I ex e being set st e in G.(j,j) &
+  for i being Element of I, f be set st f in G.(i,j)
+  holds IT.(i,j,j).(e,f) = f;
+end;
 
 begin :: Alternative categories
 
 definition
- struct(AltGraph) AltCatStr
-   (# carrier -> set,
-       Arrows -> ManySortedSet of [:the carrier, the carrier:],
-         Comp -> BinComp of the Arrows
-   #);
+  struct(AltGraph) AltCatStr (# carrier -> set,
+    Arrows -> ManySortedSet of [:the carrier, the carrier:],
+    Comp -> BinComp of the Arrows #);
 end;
 
 registration
- cluster strict non empty AltCatStr;
+  cluster strict non empty AltCatStr;
 end;
 
- definition let C be non empty AltCatStr;
-   let o1,o2,o3 be object of C such that
-  <^o1,o2^> <> {} & <^o2,o3^> <> {};
-   let f be Morphism of o1,o2, g be Morphism of o2,o3;
-    func g*f -> Morphism of o1,o3 equals
+definition
+  let C be non empty AltCatStr;
+  let o1,o2,o3 be object of C such that
+ <^o1,o2^> <> {} & <^o2,o3^> <> {};
+  let f be Morphism of o1,o2, g be Morphism of o2,o3;
+  func g*f -> Morphism of o1,o3 equals
 :: ALTCAT_1:def 10
- (the Comp of C).(o1,o2,o3).(g,f);
- end;
 
- definition let IT be Function;
+  (the Comp of C).(o1,o2,o3).(g,f);
+end;
+
+definition
+  let IT be Function;
   attr IT is compositional means
 :: ALTCAT_1:def 11
-  x in dom IT implies
-    ex f,g being Function st x = [g,f] & IT.x = g*f;
- end;
 
- registration let A,B be functional set;
+  x in dom IT implies
+  ex f,g being Function st x = [g,f] & IT.x = g*f;
+end;
+
+registration
+  let A,B be functional set;
   cluster compositional ManySortedFunction of [:A,B:];
- end;
+end;
 
 theorem :: ALTCAT_1:13
- for A,B being functional set
- for F being compositional ManySortedSet of [:A,B:],
-     g,f being Function st g in A & f in B
-  holds F.(g,f) = g*f;
+  for A,B being functional set
+  for F being compositional ManySortedSet of [:A,B:],
+  g,f being Function st g in A & f in B holds F.(g,f) = g*f;
 
- definition let A,B be functional set;
+definition
+  let A,B be functional set;
   func FuncComp(A,B) -> compositional ManySortedFunction of [:B,A:] means
 :: ALTCAT_1:def 12
-   not contradiction;
- end;
+
+  not contradiction;
+end;
 
 theorem :: ALTCAT_1:14
- for A,B,C being set holds
-  rng FuncComp(Funcs(A,B),Funcs(B,C)) c= Funcs(A,C);
+  for A,B,C being set holds rng FuncComp(Funcs(A,B),Funcs(B,C)) c= Funcs(A,C);
 
 theorem :: ALTCAT_1:15
- for o be set holds FuncComp({id o},{id o}) = (id o,id o) :-> id o;
+  for o be set holds FuncComp({id o},{id o}) = (id o,id o) :-> id o;
 
 theorem :: ALTCAT_1:16
- for A,B being functional set, A1 being Subset of A, B1 being Subset of B
+  for A,B being functional set, A1 being Subset of A, B1 being Subset of B
   holds FuncComp(A1,B1) = FuncComp(A,B)|([:B1,A1:] qua set);
 
 :: Kategorie przeksztalcen, Semadeni Wiweger, 1.2.2, str.15
 
-definition let C be non empty AltCatStr;
- attr C is quasi-functional means
+definition
+  let C be non empty AltCatStr;
+  attr C is quasi-functional means
 :: ALTCAT_1:def 13
- for a1,a2 being object of C holds <^a1,a2^> c= Funcs(a1,a2);
- attr C is semi-functional means
-:: ALTCAT_1:def 14
-  for a1,a2,a3 being object of C st
-     <^a1,a2^> <> {} & <^a2,a3^> <> {} & <^a1,a3^> <> {}
-   for f being Morphism of a1,a2, g being Morphism of a2,a3,
-       f',g' being Function st f = f' & g = g'
-    holds g*f =g'*f';
- attr C is pseudo-functional means
-:: ALTCAT_1:def 15
- for o1,o2,o3 being object of C holds
-     (the Comp of C).(o1,o2,o3) =
-       FuncComp(Funcs(o1,o2),Funcs(o2,o3))|([:<^o2,o3^>,<^o1,o2^>:] qua set);
-end;
 
-registration let X be non empty set, A be ManySortedSet of [:X,X:],
-               C be BinComp of A;
- cluster AltCatStr(#X,A,C#) -> non empty;
+  for a1,a2 being object of C holds <^a1,a2^> c= Funcs(a1,a2);
+  attr C is semi-functional means
+:: ALTCAT_1:def 14
+
+  for a1,a2,a3 being object of C st
+  <^a1,a2^> <> {} & <^a2,a3^> <> {} & <^a1,a3^> <> {}
+  for f being Morphism of a1,a2, g being Morphism of a2,a3,
+  f',g' being Function st f = f' & g = g' holds g*f =g'*f';
+  attr C is pseudo-functional means
+:: ALTCAT_1:def 15
+
+  for o1,o2,o3 being object of C holds (the Comp of C).(o1,o2,o3) =
+  FuncComp(Funcs(o1,o2),Funcs(o2,o3))|([:<^o2,o3^>,<^o1,o2^>:] qua set);
 end;
 
 registration
- cluster strict pseudo-functional (non empty AltCatStr);
+  let X be non empty set, A be ManySortedSet of [:X,X:], C be BinComp of A;
+  cluster AltCatStr(#X,A,C#) -> non empty;
+end;
+
+registration
+  cluster strict pseudo-functional (non empty AltCatStr);
 end;
 
 theorem :: ALTCAT_1:17
   for C being non empty AltCatStr, a1,a2,a3 being object of C
   holds (the Comp of C).(a1,a2,a3)
-     is Function of [:<^a2,a3^>,<^a1,a2^>:],<^a1,a3^>;
+  is Function of [:<^a2,a3^>,<^a1,a2^>:],<^a1,a3^>;
 
 theorem :: ALTCAT_1:18
- for C being pseudo-functional (non empty AltCatStr)
-   for a1,a2,a3 being object of C st
-     <^a1,a2^> <> {} & <^a2,a3^> <> {} & <^a1,a3^> <> {}
-   for f being Morphism of a1,a2, g being Morphism of a2,a3,
-       f',g' being Function st f = f' & g = g'
-    holds g*f =g'*f';
+  for C being pseudo-functional (non empty AltCatStr)
+  for a1,a2,a3 being object of C st
+  <^a1,a2^> <> {} & <^a2,a3^> <> {} & <^a1,a3^> <> {}
+  for f being Morphism of a1,a2, g being Morphism of a2,a3,
+  f',g' being Function st f = f' & g = g' holds g*f =g'*f';
 
 :: Kategorie EnsCat(A), Semadeni Wiweger 1.2.3, str. 15
 :: ale bez parametryzacji
 
-definition let A be non empty set;
- func EnsCat A -> strict pseudo-functional (non empty AltCatStr) means
+definition
+  let A be non empty set;
+  func EnsCat A -> strict pseudo-functional (non empty AltCatStr) means
 :: ALTCAT_1:def 16
- the carrier of it = A &
-     for a1,a2 being object of it holds <^a1,a2^> = Funcs(a1,a2);
+
+  the carrier of it = A &
+  for a1,a2 being object of it holds <^a1,a2^> = Funcs(a1,a2);
 end;
 
- definition let C be non empty AltCatStr;
+definition
+  let C be non empty AltCatStr;
   attr C is associative means
 :: ALTCAT_1:def 17
 
-   the Comp of C is associative;
+  the Comp of C is associative;
   attr C is with_units means
 :: ALTCAT_1:def 18
 
-   the Comp of C is with_left_units with_right_units;
- end;
+  the Comp of C is with_left_units with_right_units;
+end;
 
- registration
+registration
   cluster transitive associative with_units strict (non empty AltCatStr);
- end;
+end;
 
 canceled;
 
 theorem :: ALTCAT_1:20
-       for C being transitive non empty AltCatStr, a1,a2,a3 being object of C
- holds dom((the Comp of C).(a1,a2,a3)) = [:<^a2,a3^>,<^a1,a2^>:]
+  for C being transitive non empty AltCatStr, a1,a2,a3 being object of C
+  holds dom((the Comp of C).(a1,a2,a3)) = [:<^a2,a3^>,<^a1,a2^>:]
   & rng((the Comp of C).(a1,a2,a3)) c= <^a1,a3^>;
 
 theorem :: ALTCAT_1:21
- for C being with_units (non empty AltCatStr)
- for o being object of C holds <^o,o^> <> {};
+  for C being with_units (non empty AltCatStr)
+  for o being object of C holds <^o,o^> <> {};
 
-registration let A be non empty set;
- cluster EnsCat A -> transitive associative with_units;
+registration
+  let A be non empty set;
+  cluster EnsCat A -> transitive associative with_units;
 end;
 
 registration
- cluster quasi-functional semi-functional transitive
-              -> pseudo-functional (non empty AltCatStr);
+  cluster quasi-functional semi-functional transitive
+    -> pseudo-functional (non empty AltCatStr);
   cluster with_units pseudo-functional transitive
-        -> quasi-functional semi-functional (non empty AltCatStr);
- end;
+    -> quasi-functional semi-functional (non empty AltCatStr);
+end;
 
 :: Definicja kategorii, Semadeni Wiweger 1.3.1, str. 16-17
 
- definition
+definition
   mode category is transitive associative with_units (non empty AltCatStr);
- end;
+end;
 
 begin
 
- definition let C be with_units (non empty AltCatStr);
+definition
+  let C be with_units (non empty AltCatStr);
   let o be object of C;
   func idm o -> Morphism of o,o means
 :: ALTCAT_1:def 19
- for o' being object of C st <^o,o'^> <> {}
-      for a being Morphism of o,o' holds a*it = a;
- end;
+
+  for o' being object of C st <^o,o'^> <> {}
+  for a being Morphism of o,o' holds a*it = a;
+end;
 
 canceled;
 
 theorem :: ALTCAT_1:23
- for C being with_units (non empty AltCatStr)
- for o being object of C holds idm o in <^o,o^>;
+  for C being with_units (non empty AltCatStr)
+  for o being object of C holds idm o in <^o,o^>;
 
 theorem :: ALTCAT_1:24
-       for C being with_units (non empty AltCatStr)
- for o1,o2 being object of C st <^o1,o2^> <> {}
- for a being Morphism of o1,o2 holds (idm o2)*a = a;
+  for C being with_units (non empty AltCatStr)
+  for o1,o2 being object of C st <^o1,o2^> <> {}
+  for a being Morphism of o1,o2 holds (idm o2)*a = a;
 
 theorem :: ALTCAT_1:25
-       for C being associative transitive (non empty AltCatStr)
- for o1,o2,o3,o4 being object of C st
+  for C being associative transitive (non empty AltCatStr)
+  for o1,o2,o3,o4 being object of C st
   <^o1,o2^> <> {} & <^o2,o3^> <> {} & <^o3,o4^> <> {}
- for a being Morphism of o1,o2,
-     b being Morphism of o2,o3, c being Morphism of o3,o4
-  holds c*(b*a) = (c*b)*a;
+  for a being Morphism of o1,o2,
+  b being Morphism of o2,o3, c being Morphism of o3,o4 holds c*(b*a) = (c*b)*a;
 
 begin
 
 :: kategoria dyskretna, Semadeni Wiweger, 1.3.1, str.18
 
-definition let C be AltCatStr;
- attr C is quasi-discrete means
+definition
+  let C be AltCatStr;
+  attr C is quasi-discrete means
 :: ALTCAT_1:def 20
- for i,j being object of C st <^i,j^> <> {} holds i = j;
-  :: to sa po prostu zbiory monoidow
- attr C is pseudo-discrete means
+
+  for i,j being object of C st <^i,j^> <> {} holds i = j;
+
+:: to sa po prostu zbiory monoidow
+  attr C is pseudo-discrete means
 :: ALTCAT_1:def 21
- for i being object of C holds <^i,i^> is trivial;
+
+  for i being object of C holds <^i,i^> is trivial;
 end;
 
 theorem :: ALTCAT_1:26
-       for C being with_units (non empty AltCatStr) holds C is pseudo-discrete
-iff
-   for o being object of C holds <^o,o^> = { idm o };
+  for C being with_units (non empty AltCatStr) holds C is pseudo-discrete iff
+  for o being object of C holds <^o,o^> = { idm o };
 
 registration
- cluster trivial non empty -> quasi-discrete AltCatStr;
+  cluster trivial non empty -> quasi-discrete AltCatStr;
 end;
 
 theorem :: ALTCAT_1:27
- EnsCat 1 is pseudo-discrete trivial;
+  EnsCat 1 is pseudo-discrete trivial;
 
 registration
- cluster pseudo-discrete trivial strict category;
+  cluster pseudo-discrete trivial strict category;
 end;
 
 registration
- cluster quasi-discrete pseudo-discrete trivial strict category;
+  cluster quasi-discrete pseudo-discrete trivial strict category;
 end;
 
 definition
- mode discrete_category is quasi-discrete pseudo-discrete category;
+  mode discrete_category is quasi-discrete pseudo-discrete category;
 end;
 
-definition let A be non empty set;
- func DiscrCat A -> quasi-discrete strict non empty AltCatStr means
+definition
+  let A be non empty set;
+  func DiscrCat A -> quasi-discrete strict non empty AltCatStr means
 :: ALTCAT_1:def 22
- the carrier of it = A &
-     for i being object of it holds <^i,i^> = { id i };
+
+  the carrier of it = A & for i being object of it holds <^i,i^> = { id i };
 end;
 
 registration
- cluster quasi-discrete -> transitive AltCatStr;
+  cluster quasi-discrete -> transitive AltCatStr;
 end;
 
 theorem :: ALTCAT_1:28
- for A being non empty set, o1,o2,o3 being object of DiscrCat A
+  for A being non empty set, o1,o2,o3 being object of DiscrCat A
   st o1 <> o2 or o2 <> o3 holds (the Comp of DiscrCat A).(o1,o2,o3) = {};
 
 theorem :: ALTCAT_1:29
- for A being non empty set, o being object of DiscrCat A
+  for A being non empty set, o being object of DiscrCat A
   holds (the Comp of DiscrCat A).(o,o,o) = (id o,id o) :-> id o;
 
-registration let A be non empty set;
- cluster DiscrCat A ->
-   pseudo-functional pseudo-discrete with_units associative;
+registration
+  let A be non empty set;
+  cluster DiscrCat A ->
+    pseudo-functional pseudo-discrete with_units associative;
 end;
 

@@ -21,279 +21,307 @@ environ
 begin
 
 reserve S for non void non empty ManySortedSign,
-        U1,U2 for MSAlgebra over S,
-        o for OperSymbol of S,
-        n for Nat;
+  U1,U2 for MSAlgebra over S,
+  o for OperSymbol of S,
+  n for Nat;
 
-      :::::::::::::::::::::::::::::::::::::::::::::::::
-      ::                                             ::
-      ::    PRELIMINARIES - MANY SORTED FUNCTIONS    ::
-      ::                                             ::
-      :::::::::::::::::::::::::::::::::::::::::::::::::
+:::::::::::::::::::::::::::::::::::::::::::::::::
+::                                             ::
+::    PRELIMINARIES - MANY SORTED FUNCTIONS    ::
+::                                             ::
+:::::::::::::::::::::::::::::::::::::::::::::::::
 
-definition let I be non empty set,
-               A,B be ManySortedSet of I,
-               F be ManySortedFunction of A,B,
-               i be Element of I;
- redefine func F.i -> Function of A.i,B.i;
+definition
+  let I be non empty set, A,B be ManySortedSet of I,
+  F be ManySortedFunction of A,B, i be Element of I;
+  redefine func F.i -> Function of A.i,B.i;
 end;
 
-definition let S; let U1,U2 be MSAlgebra over S;
-mode ManySortedFunction of U1,U2 is
-     ManySortedFunction of the Sorts of U1, the Sorts of U2;
+definition
+  let S;
+  let U1,U2 be MSAlgebra over S;
+  mode ManySortedFunction of U1,U2 is
+    ManySortedFunction of the Sorts of U1, the Sorts of U2;
 end;
 
-definition let I be set,A be ManySortedSet of I;
-func id A -> ManySortedFunction of A,A means
+definition
+  let I be set,A be ManySortedSet of I;
+  func id A -> ManySortedFunction of A,A means
 :: MSUALG_3:def 1
-for i be set st i in I holds it.i = id (A.i);
+
+  for i be set st i in I holds it.i = id (A.i);
 end;
 
-definition let IT be Function;
-attr IT is "1-1" means
+definition
+  let IT be Function;
+  attr IT is "1-1" means
 :: MSUALG_3:def 2
-for i be set, f be Function st i in dom IT & IT.i = f holds f is one-to-one;
+
+  for i be set, f be Function st i in dom IT & IT.i = f holds f is one-to-one;
 end;
 
-registration let I be set;
-cluster "1-1" ManySortedFunction of I;
+registration
+  let I be set;
+  cluster "1-1" ManySortedFunction of I;
 end;
 
 theorem :: MSUALG_3:1
-for I be set,F be ManySortedFunction of I holds
-F is "1-1" iff
-for i be set st i in I holds F.i is one-to-one;
+  for I be set,F be ManySortedFunction of I holds F is "1-1" iff
+  for i be set st i in I holds F.i is one-to-one;
 
-definition let I be set, A,B be ManySortedSet of I;
-let IT be ManySortedFunction of A,B;
-attr IT is "onto" means
+definition
+  let I be set, A,B be ManySortedSet of I;
+  let IT be ManySortedFunction of A,B;
+  attr IT is "onto" means
 :: MSUALG_3:def 3
-for i be set st i in I holds rng(IT.i) = B.i;
+
+  for i be set st i in I holds rng(IT.i) = B.i;
 end;
 
 theorem :: MSUALG_3:2
- for I be set, A,B,C be ManySortedSet of I,
+  for I be set, A,B,C be ManySortedSet of I,
   F be ManySortedFunction of A,B, G be ManySortedFunction of B,C holds
-  dom (G ** F) = I &
- for i be set st i in I holds (G**F).i = (G.i)*(F.i);
+  dom (G ** F) = I & for i be set st i in I holds (G**F).i = (G.i)*(F.i);
 
-definition let I be set,
-               A be ManySortedSet of I,
-               B,C be non-empty ManySortedSet of I,
-               F be ManySortedFunction of A,B,
-               G be ManySortedFunction of B,C;
- redefine func G**F -> ManySortedFunction of A,C;
+definition
+  let I be set, A be ManySortedSet of I, B,C be non-empty ManySortedSet of I,
+  F be ManySortedFunction of A,B, G be ManySortedFunction of B,C;
+  redefine func G**F -> ManySortedFunction of A,C;
 end;
 
 theorem :: MSUALG_3:3
-    for I be set,A,B be ManySortedSet of I,
+  for I be set,A,B be ManySortedSet of I,
   F be ManySortedFunction of A,B holds F**(id A) = F;
 
 theorem :: MSUALG_3:4
-for I be set, A,B be ManySortedSet of I
+  for I be set, A,B be ManySortedSet of I
   for F be ManySortedFunction of A, B holds (id B)**F = F;
 
-definition let I be set,
-               A,B be ManySortedSet of I,
-               F be ManySortedFunction of A,B;
-assume  F is "1-1" & F is "onto";
- canceled;
-
-func F"" -> ManySortedFunction of B,A means
+definition
+  let I be set, A,B be ManySortedSet of I, F be ManySortedFunction of A,B;
+  assume
+ F is "1-1" & F is "onto";
+  canceled;
+  func F"" -> ManySortedFunction of B,A means
 :: MSUALG_3:def 5
- for i be set st i in I holds it.i = (F.i)";
+
+  for i be set st i in I holds it.i = (F.i)";
 end;
 
 theorem :: MSUALG_3:5
-for I be set,A,B be non-empty ManySortedSet of I,
- H be ManySortedFunction of A,B, H1 be ManySortedFunction of B,A st
+  for I be set,A,B be non-empty ManySortedSet of I,
+  H be ManySortedFunction of A,B, H1 be ManySortedFunction of B,A st
   H is "1-1" "onto" & H1 = H"" holds H**H1 = id B & H1**H = id A;
 
-registration let S; let U1 be non-empty MSAlgebra over S; let o;
-cluster Args(o,U1) -> functional;
+registration
+  let S;
+  let U1 be non-empty MSAlgebra over S;
+  let o;
+  cluster Args(o,U1) -> functional;
 end;
 
 begin
 
-        :::::::::::::::::::::::::::::::::::::::::::::::
-        ::                                           ::
-        ::   HOMOMORPHISMS OF MANY SORTED ALGEBRAS   ::
-        ::                                           ::
-        :::::::::::::::::::::::::::::::::::::::::::::::
+:::::::::::::::::::::::::::::::::::::::::::::::
+::                                           ::
+::   HOMOMORPHISMS OF MANY SORTED ALGEBRAS   ::
+::                                           ::
+:::::::::::::::::::::::::::::::::::::::::::::::
 
 theorem :: MSUALG_3:6
-for U1 being MSAlgebra over S
-for x be Function st x in Args(o,U1) holds dom x = dom (the_arity_of o) &
+  for U1 being MSAlgebra over S
+  for x be Function st x in Args(o,U1) holds dom x = dom (the_arity_of o) &
   for y be set st y in dom ((the Sorts of U1) * (the_arity_of o)) holds
-    x.y in ((the Sorts of U1) * (the_arity_of o)).y;
+  x.y in ((the Sorts of U1) * (the_arity_of o)).y;
 
-definition let S; let U1,U2 be MSAlgebra over S; let o;
-           let F be ManySortedFunction of U1,U2;
-           let x be Element of Args(o,U1);
-assume that
+definition
+  let S;
+  let U1,U2 be MSAlgebra over S;
+  let o;
+  let F be ManySortedFunction of U1,U2;
+  let x be Element of Args(o,U1);
+  assume that
  Args(o,U1) <> {} and
  Args(o,U2) <> {};
- canceled;
-
-func F # x -> Element of Args(o,U2) equals
+  canceled;
+  func F # x -> Element of Args(o,U2) equals
 :: MSUALG_3:def 7
+
   (Frege(F*the_arity_of o)).x;
 end;
 
-definition let S; let U1,U2 be non-empty MSAlgebra over S; let o;
-           let F be ManySortedFunction of U1,U2;
-           let x be Element of Args(o,U1);
-redefine func F # x -> Element of Args(o,U2 )
-  means
+definition
+  let S;
+  let U1,U2 be non-empty MSAlgebra over S;
+  let o;
+  let F be ManySortedFunction of U1,U2;
+  let x be Element of Args(o,U1);
+  redefine func F # x -> Element of Args(o,U2 ) means
 :: MSUALG_3:def 8
- for n st n in dom x holds it.n = (F.((the_arity_of o)/.n)).(x.n);
+
+  for n st n in dom x holds it.n = (F.((the_arity_of o)/.n)).(x.n);
 end;
 
 theorem :: MSUALG_3:7
-for S,o for U1 being MSAlgebra over S st Args(o,U1) <> {}
- for x be Element of Args(o,U1) holds
-   x = ((id (the Sorts of U1))#x);
+  for S,o for U1 being MSAlgebra over S st Args(o,U1) <> {}
+  for x be Element of Args(o,U1) holds x = ((id (the Sorts of U1))#x);
 
 theorem :: MSUALG_3:8
-for U1,U2,U3 being non-empty MSAlgebra over S
-for H1 be ManySortedFunction of U1,U2, H2 be ManySortedFunction of U2,U3,
+  for U1,U2,U3 being non-empty MSAlgebra over S
+  for H1 be ManySortedFunction of U1,U2, H2 be ManySortedFunction of U2,U3,
   x be Element of Args(o,U1) holds (H2**H1)#x = H2#(H1#x);
 
-definition let S; let U1,U2 be MSAlgebra over S;
-           let F be ManySortedFunction of U1,U2;
-pred F is_homomorphism U1,U2 means
+definition
+  let S;
+  let U1,U2 be MSAlgebra over S;
+  let F be ManySortedFunction of U1,U2;
+  pred F is_homomorphism U1,U2 means
 :: MSUALG_3:def 9
-for o be OperSymbol of S st Args(o,U1) <> {}
-for x be Element of Args(o,U1) holds
-    (F.(the_result_sort_of o)).(Den(o,U1).x) = Den(o,U2).(F#x);
+
+  for o be OperSymbol of S st Args(o,U1) <> {}
+  for x be Element of Args(o,U1) holds
+  (F.(the_result_sort_of o)).(Den(o,U1).x) = Den(o,U2).(F#x);
 end;
 
 theorem :: MSUALG_3:9
-for U1 being MSAlgebra over S holds
-id (the Sorts of U1) is_homomorphism U1,U1;
+  for U1 being MSAlgebra over S holds
+  id (the Sorts of U1) is_homomorphism U1,U1;
 
 theorem :: MSUALG_3:10
-for U1,U2,U3 being non-empty MSAlgebra over S
-for H1 be ManySortedFunction of U1,U2, H2 be ManySortedFunction of U2,U3 st
- H1 is_homomorphism U1,U2 & H2 is_homomorphism U2,U3 holds
- H2 ** H1 is_homomorphism U1,U3;
+  for U1,U2,U3 being non-empty MSAlgebra over S
+  for H1 be ManySortedFunction of U1,U2, H2 be ManySortedFunction of U2,U3 st
+  H1 is_homomorphism U1,U2 & H2 is_homomorphism U2,U3 holds
+  H2 ** H1 is_homomorphism U1,U3;
 
-definition let S; let U1,U2 be MSAlgebra over S;
-           let F be ManySortedFunction of U1,U2;
-pred F is_epimorphism U1,U2 means
+definition
+  let S;
+  let U1,U2 be MSAlgebra over S;
+  let F be ManySortedFunction of U1,U2;
+  pred F is_epimorphism U1,U2 means
 :: MSUALG_3:def 10
-     F is_homomorphism U1,U2 & F is "onto";
+
+  F is_homomorphism U1,U2 & F is "onto";
 end;
 
 theorem :: MSUALG_3:11
-for U1,U2,U3 being non-empty MSAlgebra over S
-for F be ManySortedFunction of U1,U2, G be ManySortedFunction of U2,U3 st
- F is_epimorphism U1,U2 & G is_epimorphism U2,U3 holds
+  for U1,U2,U3 being non-empty MSAlgebra over S
+  for F be ManySortedFunction of U1,U2, G be ManySortedFunction of U2,U3 st
+  F is_epimorphism U1,U2 & G is_epimorphism U2,U3 holds
   G**F is_epimorphism U1,U3;
 
-definition let S; let U1,U2 be MSAlgebra over S;
-           let F be ManySortedFunction of U1,U2;
-pred F is_monomorphism U1,U2 means
+definition
+  let S;
+  let U1,U2 be MSAlgebra over S;
+  let F be ManySortedFunction of U1,U2;
+  pred F is_monomorphism U1,U2 means
 :: MSUALG_3:def 11
-     F is_homomorphism U1,U2 & F is "1-1";
+
+  F is_homomorphism U1,U2 & F is "1-1";
 end;
 
 theorem :: MSUALG_3:12
-for U1,U2,U3 being non-empty MSAlgebra over S
-for F be ManySortedFunction of U1,U2, G be ManySortedFunction of U2,U3 st
- F is_monomorphism U1,U2 & G is_monomorphism U2,U3 holds
+  for U1,U2,U3 being non-empty MSAlgebra over S
+  for F be ManySortedFunction of U1,U2, G be ManySortedFunction of U2,U3 st
+  F is_monomorphism U1,U2 & G is_monomorphism U2,U3 holds
   G**F is_monomorphism U1,U3;
 
-definition let S; let U1,U2 be MSAlgebra over S;
-           let F be ManySortedFunction of U1,U2;
-pred F is_isomorphism U1,U2 means
+definition
+  let S;
+  let U1,U2 be MSAlgebra over S;
+  let F be ManySortedFunction of U1,U2;
+  pred F is_isomorphism U1,U2 means
 :: MSUALG_3:def 12
-     F is_epimorphism U1,U2 & F is_monomorphism U1,U2;
+
+  F is_epimorphism U1,U2 & F is_monomorphism U1,U2;
 end;
 
 theorem :: MSUALG_3:13
-for F be ManySortedFunction of U1,U2 holds
-F is_isomorphism U1,U2 iff
-F is_homomorphism U1,U2 & F is "onto" & F is "1-1";
+  for F be ManySortedFunction of U1,U2 holds F is_isomorphism U1,U2 iff
+  F is_homomorphism U1,U2 & F is "onto" & F is "1-1";
 
 theorem :: MSUALG_3:14
- for U1,U2 being non-empty MSAlgebra over S
-for H be ManySortedFunction of U1,U2, H1 be ManySortedFunction of U2,U1 st
-H is_isomorphism U1,U2 & H1 = H"" holds H1 is_isomorphism U2,U1;
+  for U1,U2 being non-empty MSAlgebra over S
+  for H be ManySortedFunction of U1,U2, H1 be ManySortedFunction of U2,U1 st
+  H is_isomorphism U1,U2 & H1 = H"" holds H1 is_isomorphism U2,U1;
 
 theorem :: MSUALG_3:15
-for U1,U2,U3 being non-empty MSAlgebra over S
-for H be ManySortedFunction of U1,U2, H1 be ManySortedFunction of U2,U3 st
-H is_isomorphism U1,U2 & H1 is_isomorphism U2,U3
-holds H1 ** H is_isomorphism U1,U3;
+  for U1,U2,U3 being non-empty MSAlgebra over S
+  for H be ManySortedFunction of U1,U2, H1 be ManySortedFunction of U2,U3 st
+  H is_isomorphism U1,U2 & H1 is_isomorphism U2,U3
+  holds H1 ** H is_isomorphism U1,U3;
 
-definition let S; let U1,U2 be MSAlgebra over S;
-pred U1,U2 are_isomorphic means
+definition
+  let S;
+  let U1,U2 be MSAlgebra over S;
+  pred U1,U2 are_isomorphic means
 :: MSUALG_3:def 13
- ex F be ManySortedFunction of U1,U2 st F is_isomorphism U1,U2;
+
+  ex F be ManySortedFunction of U1,U2 st F is_isomorphism U1,U2;
 end;
 
 theorem :: MSUALG_3:16
-for U1 being MSAlgebra over S holds
+  for U1 being MSAlgebra over S holds
   id the Sorts of U1 is_isomorphism U1,U1 & U1,U1 are_isomorphic;
 
-definition let S; let U1, U2 be MSAlgebra over S;
- redefine pred U1, U2 are_isomorphic;
- reflexivity;
+definition
+  let S;
+  let U1, U2 be MSAlgebra over S;
+  redefine pred U1, U2 are_isomorphic;
+  reflexivity;
 end;
 
 theorem :: MSUALG_3:17
-     for U1,U2 being non-empty MSAlgebra over S holds
- U1,U2 are_isomorphic implies U2,U1 are_isomorphic;
+  for U1,U2 being non-empty MSAlgebra over S holds
+  U1,U2 are_isomorphic implies U2,U1 are_isomorphic;
 
 theorem :: MSUALG_3:18
-    for U1,U2,U3 being non-empty MSAlgebra over S holds
- U1,U2 are_isomorphic & U2,U3 are_isomorphic implies U1,U3 are_isomorphic;
+  for U1,U2,U3 being non-empty MSAlgebra over S holds
+  U1,U2 are_isomorphic & U2,U3 are_isomorphic implies U1,U3 are_isomorphic;
 
-definition let S; let U1,U2 be non-empty MSAlgebra over S;
-           let F be ManySortedFunction of U1,U2;
-assume  F is_homomorphism U1,U2;
-func Image F -> strict non-empty MSSubAlgebra of U2 means
+definition
+  let S;
+  let U1,U2 be non-empty MSAlgebra over S;
+  let F be ManySortedFunction of U1,U2;
+  assume
+ F is_homomorphism U1,U2;
+  func Image F -> strict non-empty MSSubAlgebra of U2 means
 :: MSUALG_3:def 14
+
   the Sorts of it = F.:.:(the Sorts of U1);
 end;
 
 theorem :: MSUALG_3:19
-    for U1 being non-empty MSAlgebra over S,
-    U2 being strict non-empty MSAlgebra over S,
-    F be ManySortedFunction of U1,U2
-st F is_homomorphism U1,U2 holds F is_epimorphism U1,U2 iff Image F = U2;
+  for U1 being non-empty MSAlgebra over S,
+  U2 being strict non-empty MSAlgebra over S, F be ManySortedFunction of U1,U2
+  st F is_homomorphism U1,U2 holds F is_epimorphism U1,U2 iff Image F = U2;
 
 theorem :: MSUALG_3:20
-for U1,U2 being non-empty MSAlgebra over S
-for F be ManySortedFunction of U1,U2, G be ManySortedFunction of U1,Image F
- st F = G & F is_homomorphism U1,U2 holds G is_epimorphism U1,Image F;
+  for U1,U2 being non-empty MSAlgebra over S
+  for F be ManySortedFunction of U1,U2, G be ManySortedFunction of U1,Image F
+  st F = G & F is_homomorphism U1,U2 holds G is_epimorphism U1,Image F;
 
 theorem :: MSUALG_3:21
-    for U1,U2 being non-empty MSAlgebra over S
-for F be ManySortedFunction of U1,U2 st F is_homomorphism U1,U2
- ex G be ManySortedFunction of U1,Image F
+  for U1,U2 being non-empty MSAlgebra over S
+  for F be ManySortedFunction of U1,U2 st F is_homomorphism U1,U2
+  ex G be ManySortedFunction of U1,Image F
   st F = G & G is_epimorphism U1,Image F;
 
 theorem :: MSUALG_3:22
-for U1 being non-empty MSAlgebra over S
-for U2 be non-empty MSSubAlgebra of U1,
-    G be ManySortedFunction of U2,U1 st
- G = id (the Sorts of U2) holds G is_monomorphism U2,U1;
+  for U1 being non-empty MSAlgebra over S
+  for U2 be non-empty MSSubAlgebra of U1, G be ManySortedFunction of U2,U1 st
+  G = id (the Sorts of U2) holds G is_monomorphism U2,U1;
 
 theorem :: MSUALG_3:23
-    for U1,U2 being non-empty MSAlgebra over S
-for F be ManySortedFunction of U1,U2 st F is_homomorphism U1,U2
- ex F1 be ManySortedFunction of U1,Image F,
-    F2 be ManySortedFunction of Image F,U2 st
-     F1 is_epimorphism U1,Image F & F2 is_monomorphism Image F,U2 &
-     F = F2**F1;
+  for U1,U2 being non-empty MSAlgebra over S
+  for F be ManySortedFunction of U1,U2 st F is_homomorphism U1,U2
+  ex F1 be ManySortedFunction of U1,Image F,
+  F2 be ManySortedFunction of Image F,U2 st
+  F1 is_epimorphism U1,Image F & F2 is_monomorphism Image F,U2 & F = F2**F1;
 
 theorem :: MSUALG_3:24
-     for S for U1,U2 being MSAlgebra over S for o
- for F being ManySortedFunction of U1,U2
- for x being Element of Args(o,U1), f,u being Function
-  st x = f & x in Args(o,U1) & u in Args(o,U2)
-  holds u = F#x iff
-     for n st n in dom f holds u.n = (F.((the_arity_of o)/.n)).(f.n);
+  for S for U1,U2 being MSAlgebra over S for o
+  for F being ManySortedFunction of U1,U2
+  for x being Element of Args(o,U1), f,u being Function
+  st x = f & x in Args(o,U1) & u in Args(o,U2) holds u = F#x iff
+  for n st n in dom f holds u.n = (F.((the_arity_of o)/.n)).(f.n);
 

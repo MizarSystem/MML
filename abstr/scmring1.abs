@@ -26,10 +26,10 @@ environ
 begin  :: The construction of { \bf SCM } over ring
 
 reserve i, j, k for Element of NAT,
-        I for Element of Segm 8,
-        i1, i2 for Element of SCM-Instr-Loc,
-        d1, d2, d3, d4 for Element of SCM-Data-Loc,
-        S for non empty 1-sorted;
+  I for Element of Segm 8,
+  i1, i2 for Element of SCM-Instr-Loc,
+  d1, d2, d3, d4 for Element of SCM-Data-Loc,
+  S for non empty 1-sorted;
 
 registration
   cluster infinite -> non trivial set;
@@ -37,284 +37,286 @@ registration
 end;
 
 registration
- cluster trivial -> Abelian add-associative right_zeroed right_complementable
-                    (non empty addLoopStr);
- cluster trivial -> well-unital right-distributive (non empty doubleLoopStr);
+  cluster trivial -> Abelian add-associative right_zeroed right_complementable
+    (non empty addLoopStr);
+  cluster trivial -> well-unital right-distributive (non empty doubleLoopStr);
 end;
 
 registration
- cluster SCM-Instr -> non trivial;
- cluster SCM-Instr-Loc -> infinite;
+  cluster SCM-Instr -> non trivial;
+  cluster SCM-Instr-Loc -> infinite;
 end;
 
-definition let S be non empty 1-sorted;
- func SCM-Instr S ->
-      Subset of [: NAT, (union {the carrier of S} \/ SCM-Memory)* :] equals
+definition
+  let S be non empty 1-sorted;
+  func SCM-Instr S ->
+  Subset of [: NAT, (union {the carrier of S} \/ SCM-Memory)* :] equals
 :: SCMRING1:def 1
-
-   { [0,{}] } \/
-  { [I,<*a,b*>] where I is Element of Segm 8,
-                      a, b is Element of SCM-Data-Loc: I in { 1,2,3,4 } } \/
+  { [0,{}] } \/ { [I,<*a,b*>] where I is Element of Segm 8,
+  a, b is Element of SCM-Data-Loc: I in { 1,2,3,4 } } \/
   { [6,<*i*>] where i is Element of SCM-Instr-Loc: not contradiction } \/
   { [7,<*i,a*>] where i is Element of SCM-Instr-Loc,
-                      a is Element of SCM-Data-Loc: not contradiction } \/
+  a is Element of SCM-Data-Loc: not contradiction } \/
   { [5,<*a,r*>] where a is Element of SCM-Data-Loc,
-                      r is Element of S: not contradiction };
+  r is Element of S: not contradiction };
 end;
 
-registration let S be non empty 1-sorted;
- cluster SCM-Instr S -> non trivial;
+registration
+  let S be non empty 1-sorted;
+  cluster SCM-Instr S -> non trivial;
 end;
 
-definition let S be non empty 1-sorted;
- attr S is good means
+definition
+  let S be non empty 1-sorted;
+  attr S is good means
 :: SCMRING1:def 2
+
   the carrier of S <> SCM-Instr-Loc & the carrier of S <> SCM-Instr S;
 end;
 
 registration
- cluster trivial -> good (non empty 1-sorted);
+  cluster trivial -> good (non empty 1-sorted);
 end;
 
 registration
- cluster trivial non empty 1-sorted;
+  cluster trivial non empty 1-sorted;
 end;
 
 registration
- cluster strict trivial non empty doubleLoopStr;
+  cluster strict trivial non empty doubleLoopStr;
 end;
 
 registration
- cluster strict trivial Ring;
+  cluster strict trivial Ring;
 end;
 
 reserve G for good (non empty 1-sorted);
 
-definition let S be non empty 1-sorted;
- func SCM-OK S ->
-    Function of SCM-Memory,
-           {the carrier of S} \/ { SCM-Instr S, SCM-Instr-Loc } means
+definition
+  let S be non empty 1-sorted;
+  func SCM-OK S -> Function of SCM-Memory,
+  {the carrier of S} \/ { SCM-Instr S, SCM-Instr-Loc } means
 :: SCMRING1:def 3
 
   for k being Element of SCM-Memory holds
-   (k = NAT implies it.k = SCM-Instr-Loc) &
-   (k in SCM-Data-Loc implies it.k = the carrier of S) &
-   (k in SCM-Instr-Loc implies it.k = SCM-Instr S);
+  (k = NAT implies it.k = SCM-Instr-Loc) &
+  (k in SCM-Data-Loc implies it.k = the carrier of S) &
+  (k in SCM-Instr-Loc implies it.k = SCM-Instr S);
 end;
 
-definition let S be non empty 1-sorted;
- mode SCM-State of S is Element of product SCM-OK S;
+definition
+  let S be non empty 1-sorted;
+  mode SCM-State of S is Element of product SCM-OK S;
 end;
 
 theorem :: SCMRING1:1
- SCM-Instr-Loc <> SCM-Instr S;
+  SCM-Instr-Loc <> SCM-Instr S;
 
 theorem :: SCMRING1:2
- for i being Element of SCM-Memory holds
- (SCM-OK G).i = SCM-Instr-Loc iff i = NAT;
+  for i being Element of SCM-Memory holds
+  (SCM-OK G).i = SCM-Instr-Loc iff i = NAT;
 
 theorem :: SCMRING1:3
- for i being Element of SCM-Memory holds
- (SCM-OK G).i = the carrier of G iff i in SCM-Data-Loc;
+  for i being Element of SCM-Memory holds
+  (SCM-OK G).i = the carrier of G iff i in SCM-Data-Loc;
 
 theorem :: SCMRING1:4
- for i being Element of SCM-Memory holds
- (SCM-OK G).i = SCM-Instr G iff i in SCM-Instr-Loc;
+  for i being Element of SCM-Memory holds
+  (SCM-OK G).i = SCM-Instr G iff i in SCM-Instr-Loc;
 
 theorem :: SCMRING1:5
- (SCM-OK G).d1 = the carrier of G;
+  (SCM-OK G).d1 = the carrier of G;
 
 theorem :: SCMRING1:6
- (SCM-OK G).i1 = SCM-Instr G;
+  (SCM-OK G).i1 = SCM-Instr G;
 
 theorem :: SCMRING1:7
- pi(product SCM-OK S,NAT) = SCM-Instr-Loc;
+  pi(product SCM-OK S,NAT) = SCM-Instr-Loc;
 
 theorem :: SCMRING1:8
- pi(product SCM-OK G,d1) = the carrier of G;
+  pi(product SCM-OK G,d1) = the carrier of G;
 
 theorem :: SCMRING1:9
-      pi(product SCM-OK G,i1) = SCM-Instr G;
+  pi(product SCM-OK G,i1) = SCM-Instr G;
 
-definition let S be non empty 1-sorted, s be SCM-State of S;
- func IC s -> Element of SCM-Instr-Loc equals
+definition
+  let S be non empty 1-sorted, s be SCM-State of S;
+  func IC s -> Element of SCM-Instr-Loc equals
 :: SCMRING1:def 4
-   s.NAT;
+
+  s.NAT;
 end;
 
-definition let R be good (non empty 1-sorted),
-               s be SCM-State of R,
-               u be Element of SCM-Instr-Loc;
- func SCM-Chg(s,u) -> SCM-State of R equals
+definition
+  let R be good (non empty 1-sorted), s be SCM-State of R,
+  u be Element of SCM-Instr-Loc;
+  func SCM-Chg(s,u) -> SCM-State of R equals
 :: SCMRING1:def 5
-   s +* (NAT .--> u);
+
+  s +* (NAT .--> u);
 end;
 
 theorem :: SCMRING1:10
-      for s being SCM-State of G, u being Element of SCM-Instr-Loc
+  for s being SCM-State of G, u being Element of SCM-Instr-Loc
   holds SCM-Chg(s,u).NAT = u;
 
 theorem :: SCMRING1:11
-      for s being SCM-State of G, u being Element of SCM-Instr-Loc,
-     mk being Element of SCM-Data-Loc
-  holds SCM-Chg(s,u).mk = s.mk;
+  for s being SCM-State of G, u being Element of SCM-Instr-Loc,
+  mk being Element of SCM-Data-Loc holds SCM-Chg(s,u).mk = s.mk;
 
 theorem :: SCMRING1:12
-      for s being SCM-State of G,
-     u, v being Element of SCM-Instr-Loc
+  for s being SCM-State of G, u, v being Element of SCM-Instr-Loc
   holds SCM-Chg(s,u).v = s.v;
 
-definition let R be good (non empty 1-sorted),
-               s be SCM-State of R,
-               t be Element of SCM-Data-Loc,
-               u be Element of R;
- func SCM-Chg(s,t,u) -> SCM-State of R equals
+definition
+  let R be good (non empty 1-sorted), s be SCM-State of R,
+  t be Element of SCM-Data-Loc, u be Element of R;
+  func SCM-Chg(s,t,u) -> SCM-State of R equals
 :: SCMRING1:def 6
-   s +* (t .--> u);
+
+  s +* (t .--> u);
 end;
 
 theorem :: SCMRING1:13
-      for s being SCM-State of G, t being Element of SCM-Data-Loc,
-     u being Element of G
-  holds SCM-Chg(s,t,u).NAT = s.NAT;
+  for s being SCM-State of G, t being Element of SCM-Data-Loc,
+  u being Element of G holds SCM-Chg(s,t,u).NAT = s.NAT;
 
 theorem :: SCMRING1:14
-      for s being SCM-State of G, t being Element of SCM-Data-Loc,
-     u being Element of G
-  holds SCM-Chg(s,t,u).t = u;
+  for s being SCM-State of G, t being Element of SCM-Data-Loc,
+  u being Element of G holds SCM-Chg(s,t,u).t = u;
 
 theorem :: SCMRING1:15
-      for s being SCM-State of G, t being Element of SCM-Data-Loc,
-     u being Element of G,
-     mk being Element of SCM-Data-Loc st mk <> t
+  for s being SCM-State of G, t being Element of SCM-Data-Loc,
+  u being Element of G, mk being Element of SCM-Data-Loc st mk <> t
   holds SCM-Chg(s,t,u).mk = s.mk;
 
 theorem :: SCMRING1:16
-      for s being SCM-State of G, t being Element of SCM-Data-Loc,
-     u being Element of G,
-     v being Element of SCM-Instr-Loc
+  for s being SCM-State of G, t being Element of SCM-Data-Loc,
+  u being Element of G, v being Element of SCM-Instr-Loc
   holds SCM-Chg(s,t,u).v = s.v;
 
-definition let R be good (non empty 1-sorted),
-               s be SCM-State of R,
-               a be Element of SCM-Data-Loc;
- redefine func s.a -> Element of R;
+definition
+  let R be good (non empty 1-sorted), s be SCM-State of R,
+  a be Element of SCM-Data-Loc;
+  redefine func s.a -> Element of R;
 end;
 
-definition let S be non empty 1-sorted, x be Element of SCM-Instr S;
- given mk, ml being Element of SCM-Data-Loc, I such that
+definition
+  let S be non empty 1-sorted, x be Element of SCM-Instr S;
+  given mk, ml being Element of SCM-Data-Loc, I such that
  x = [ I, <*mk, ml*>];
- func x address_1 -> Element of SCM-Data-Loc means
+  func x address_1 -> Element of SCM-Data-Loc means
 :: SCMRING1:def 7
-  ex f being FinSequence of SCM-Data-Loc st f = x`2 & it = f/.1;
 
- func x address_2 -> Element of SCM-Data-Loc means
+  ex f being FinSequence of SCM-Data-Loc st f = x`2 & it = f/.1;
+  func x address_2 -> Element of SCM-Data-Loc means
 :: SCMRING1:def 8
+
   ex f being FinSequence of SCM-Data-Loc st f = x`2 & it = f/.2;
 end;
 
 theorem :: SCMRING1:17
-      for x being Element of SCM-Instr S, mk, ml being Element of SCM-Data-Loc
-  st x = [ I, <*mk, ml*>] holds
- x address_1 = mk & x address_2 = ml;
+  for x being Element of SCM-Instr S, mk, ml being Element of SCM-Data-Loc
+  st x = [ I, <*mk, ml*>] holds x address_1 = mk & x address_2 = ml;
 
-definition let R be non empty 1-sorted, x be Element of SCM-Instr R;
- given mk being Element of SCM-Instr-Loc, I such that
+definition
+  let R be non empty 1-sorted, x be Element of SCM-Instr R;
+  given mk being Element of SCM-Instr-Loc, I such that
  x = [ I, <*mk*>];
- func x jump_address -> Element of SCM-Instr-Loc means
+  func x jump_address -> Element of SCM-Instr-Loc means
 :: SCMRING1:def 9
+
   ex f being FinSequence of SCM-Instr-Loc st f = x`2 & it = f/.1;
 end;
 
 theorem :: SCMRING1:18
-      for x being Element of SCM-Instr S, mk being Element of SCM-Instr-Loc
-  st x = [ I, <*mk*>] holds
- x jump_address = mk;
+  for x being Element of SCM-Instr S, mk being Element of SCM-Instr-Loc
+  st x = [ I, <*mk*>] holds x jump_address = mk;
 
-definition let S be non empty 1-sorted, x be Element of SCM-Instr S;
- given mk being Element of SCM-Instr-Loc,
-       ml being Element of SCM-Data-Loc, I such that
+definition
+  let S be non empty 1-sorted, x be Element of SCM-Instr S;
+  given mk being Element of SCM-Instr-Loc,
+  ml being Element of SCM-Data-Loc, I such that
  x = [ I, <*mk,ml*>];
- func x cjump_address -> Element of SCM-Instr-Loc means
+  func x cjump_address -> Element of SCM-Instr-Loc means
 :: SCMRING1:def 10
-  ex mk being Element of SCM-Instr-Loc,
-     ml being Element of SCM-Data-Loc st <*mk,ml*> = x`2 & it = <*mk,ml*>/.1;
 
- func x cond_address -> Element of SCM-Data-Loc means
-:: SCMRING1:def 11
   ex mk being Element of SCM-Instr-Loc,
-     ml being Element of SCM-Data-Loc st <*mk,ml*> = x`2 & it = <*mk,ml*>/.2;
+  ml being Element of SCM-Data-Loc st <*mk,ml*> = x`2 & it = <*mk,ml*>/.1;
+  func x cond_address -> Element of SCM-Data-Loc means
+:: SCMRING1:def 11
+
+  ex mk being Element of SCM-Instr-Loc,
+  ml being Element of SCM-Data-Loc st <*mk,ml*> = x`2 & it = <*mk,ml*>/.2;
 end;
 
 theorem :: SCMRING1:19
-      for x being Element of SCM-Instr S, mk being Element of SCM-Instr-Loc,
-     ml being Element of SCM-Data-Loc
-  st x = [ I, <*mk,ml*>]
+  for x being Element of SCM-Instr S, mk being Element of SCM-Instr-Loc,
+  ml being Element of SCM-Data-Loc st x = [ I, <*mk,ml*>]
   holds x cjump_address = mk & x cond_address = ml;
 
-definition let S be non empty 1-sorted, d be Element of SCM-Data-Loc,
-               s be Element of S;
- redefine func <*d,s*> -> FinSequence of SCM-Data-Loc \/ the carrier of S;
+definition
+  let S be non empty 1-sorted, d be Element of SCM-Data-Loc,
+  s be Element of S;
+  redefine func <*d,s*> -> FinSequence of SCM-Data-Loc \/ the carrier of S;
 end;
 
-definition let S be non empty 1-sorted, x be Element of SCM-Instr S;
- given mk being Element of SCM-Data-Loc, r being Element of S,
-       I such that
+definition
+  let S be non empty 1-sorted, x be Element of SCM-Instr S;
+  given mk being Element of SCM-Data-Loc, r being Element of S, I such that
  x = [ I, <*mk, r*>];
- func x const_address -> Element of SCM-Data-Loc means
+  func x const_address -> Element of SCM-Data-Loc means
 :: SCMRING1:def 12
-  ex f being FinSequence of SCM-Data-Loc \/ the carrier of S
-   st f = x`2 & it = f/.1;
 
- func x const_value -> Element of S means
-:: SCMRING1:def 13
   ex f being FinSequence of SCM-Data-Loc \/ the carrier of S
-   st f = x`2 & it = f/.2;
+  st f = x`2 & it = f/.1;
+  func x const_value -> Element of S means
+:: SCMRING1:def 13
+
+  ex f being FinSequence of SCM-Data-Loc \/ the carrier of S
+  st f = x`2 & it = f/.2;
 end;
 
 theorem :: SCMRING1:20
-      for x being Element of SCM-Instr S, mk being Element of SCM-Data-Loc,
-     r being Element of S st x = [ I, <*mk, r*>] holds
+  for x being Element of SCM-Instr S, mk being Element of SCM-Data-Loc,
+  r being Element of S st x = [ I, <*mk, r*>] holds
   x const_address = mk & x const_value = r;
 
-definition let R be good Ring,
-               x be Element of SCM-Instr R,
-               s be SCM-State of R;
- func SCM-Exec-Res (x,s) -> SCM-State of R equals
+definition
+  let R be good Ring, x be Element of SCM-Instr R, s be SCM-State of R;
+  func SCM-Exec-Res (x,s) -> SCM-State of R equals
 :: SCMRING1:def 14
-       SCM-Chg(SCM-Chg(s, x address_1, s.(x address_2)), Next IC s)
-        if ex mk, ml being Element of SCM-Data-Loc st x = [ 1, <*mk, ml*>],
-  SCM-Chg(SCM-Chg(s, x address_1,
-            s.(x address_1)+s.(x address_2)), Next IC s)
-        if ex mk, ml being Element of SCM-Data-Loc st x = [ 2, <*mk, ml*>],
-  SCM-Chg(SCM-Chg(s, x address_1,
-            s.(x address_1)-s.(x address_2)), Next IC s)
-        if ex mk, ml being Element of SCM-Data-Loc st x = [ 3, <*mk, ml*>],
-  SCM-Chg(SCM-Chg(s, x address_1,
-            s.(x address_1)*s.(x address_2)), Next IC s)
-        if ex mk, ml being Element of SCM-Data-Loc st x = [ 4, <*mk, ml*>],
+  SCM-Chg(SCM-Chg(s, x address_1, s.(x address_2)), Next IC s)
+  if ex mk, ml being Element of SCM-Data-Loc st x = [ 1, <*mk, ml*>],
+  SCM-Chg(SCM-Chg(s, x address_1, s.(x address_1)+s.(x address_2)), Next IC s)
+  if ex mk, ml being Element of SCM-Data-Loc st x = [ 2, <*mk, ml*>],
+  SCM-Chg(SCM-Chg(s, x address_1, s.(x address_1)-s.(x address_2)), Next IC s)
+  if ex mk, ml being Element of SCM-Data-Loc st x = [ 3, <*mk, ml*>],
+  SCM-Chg(SCM-Chg(s, x address_1, s.(x address_1)*s.(x address_2)), Next IC s)
+  if ex mk, ml being Element of SCM-Data-Loc st x = [ 4, <*mk, ml*>],
   SCM-Chg(s, x jump_address)
-        if ex mk being Element of SCM-Instr-Loc st x = [ 6, <*mk*>],
+  if ex mk being Element of SCM-Instr-Loc st x = [ 6, <*mk*>],
   SCM-Chg(s, IFEQ(s.(x cond_address), 0.R, x cjump_address, Next IC s))
-        if ex mk being Element of SCM-Instr-Loc,
-              ml being Element of SCM-Data-Loc st x = [ 7, <*mk, ml*>],
+  if ex mk being Element of SCM-Instr-Loc,
+  ml being Element of SCM-Data-Loc st x = [ 7, <*mk, ml*>],
   SCM-Chg(SCM-Chg(s, x const_address, x const_value), Next IC s)
-        if ex mk being Element of SCM-Data-Loc,
-               r being Element of R st x = [ 5, <*mk, r*>]
-  otherwise s;
+  if ex mk being Element of SCM-Data-Loc,
+  r being Element of R st x = [ 5, <*mk, r*>] otherwise s;
 end;
 
-registration let S be non empty 1-sorted,
-     f be Function of SCM-Instr S, Funcs(product SCM-OK S, product SCM-OK S),
-     x be Element of SCM-Instr S;
- cluster f.x -> Function-like Relation-like;
+registration
+  let S be non empty 1-sorted,
+  f be Function of SCM-Instr S, Funcs(product SCM-OK S, product SCM-OK S),
+  x be Element of SCM-Instr S;
+  cluster f.x -> Function-like Relation-like;
 end;
 
-definition let R be good Ring;
- func SCM-Exec R ->
-      Function of SCM-Instr R, Funcs(product SCM-OK R, product SCM-OK R) means
+definition
+  let R be good Ring;
+  func SCM-Exec R ->
+  Function of SCM-Instr R, Funcs(product SCM-OK R, product SCM-OK R) means
 :: SCMRING1:def 15
-       for x being Element of SCM-Instr R, y being SCM-State of R holds
-   (it.x).y = SCM-Exec-Res (x,y);
+  for x being Element of SCM-Instr R, y being SCM-State of R holds
+  (it.x).y = SCM-Exec-Res (x,y);
 end;
 

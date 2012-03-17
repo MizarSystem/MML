@@ -23,31 +23,38 @@ begin :: Chap. 1  Boolean Operations
 
 reserve Y for set;
 
-notation let k,l be boolean set;
- synonym k '<' l for k <= l;
+notation
+  let k,l be boolean set;
+  synonym k '<' l for k <= l;
 end;
 
-definition let k,l be boolean set;
- canceled 2;
- redefine  pred k '<' l means
+definition
+  let k,l be boolean set;
+  canceled 2;
+  redefine pred k '<' l means
 :: BVFUNC_1:def 3
+
   k => l = TRUE;
- end;
+end;
 
 begin :: Chap.2   Boolean Valued Functions
 
-definition let Y;
+definition
+  let Y;
   func BVF(Y) equals
 :: BVFUNC_1:def 4
-   Funcs(Y,BOOLEAN);
+
+  Funcs(Y,BOOLEAN);
 end;
 
-registration let Y be set;
- cluster BVF(Y) -> functional non empty;
+registration
+  let Y be set;
+  cluster BVF(Y) -> functional non empty;
 end;
 
-registration let Y be set;
- cluster -> boolean-valued Element of BVF Y;
+registration
+  let Y be set;
+  cluster -> boolean-valued Element of BVF Y;
 end;
 
 reserve Y for non empty set;
@@ -55,101 +62,119 @@ reserve B for Subset of Y;
 
 scheme :: BVFUNC_1:sch 1
  BVFUniq1 {Y() -> non empty set, F(set) -> set}:
-for f1,f2 being Element of Funcs(Y(),BOOLEAN) st
-(for x being Element of Y() holds f1.x = F(x)) &
-(for x being Element of Y() holds f2.x = F(x)) holds
-  f1 = f2;
+  for f1,f2 being Element of Funcs(Y(),BOOLEAN) st
+  (for x being Element of Y() holds f1.x = F(x)) &
+  (for x being Element of Y() holds f2.x = F(x)) holds f1 = f2;
 
-definition let Y;let a be Element of BVF(Y);
- redefine
- func 'not' a ->Element of BVF(Y);
- let b be Element of BVF(Y);
- func a '&' b ->Element of BVF(Y);
+definition
+  let Y;
+  let a be Element of BVF(Y);
+  redefine
+  func 'not' a ->Element of BVF(Y);
+  let b be Element of BVF(Y);
+  func a '&' b ->Element of BVF(Y);
 end;
 
 definition
- let p,q be boolean-valued Function;
+  let p,q be boolean-valued Function;
   func p 'or' q -> boolean-valued Function means
 :: BVFUNC_1:def 5
- dom it = dom p /\ dom q &
+
+  dom it = dom p /\ dom q &
   for x being set st x in dom it holds it.x = (p.x) 'or' (q.x);
- commutativity;
- idempotence;
+  commutativity;
+  idempotence;
   func p 'xor' q -> Function means
 :: BVFUNC_1:def 6
- dom it = dom p /\ dom q &
+
+  dom it = dom p /\ dom q &
   for x being set st x in dom it holds it.x = (p.x) 'xor' (q.x);
- commutativity;
+  commutativity;
 end;
 
 registration
- let p,q be boolean-valued Function;
+  let p,q be boolean-valued Function;
   cluster p 'xor' q -> boolean-valued;
 end;
 
-definition let A be non empty set;
- redefine
- let p,q be Element of Funcs(A,BOOLEAN);
+definition
+  let A be non empty set;
+  redefine
+  let p,q be Element of Funcs(A,BOOLEAN);
   func p 'or' q -> Element of Funcs(A,BOOLEAN) means
 :: BVFUNC_1:def 7
- for x being Element of A holds it.x = (p.x) 'or' (q.x);
+
+  for x being Element of A holds it.x = (p.x) 'or' (q.x);
   func p 'xor' q -> Element of Funcs(A,BOOLEAN) means
 :: BVFUNC_1:def 8
-     for x being Element of A holds it.x = (p.x) 'xor' (q.x);
-end;
-
-definition let Y;let a,b be Element of BVF(Y);
- redefine
- func a 'or' b ->Element of BVF(Y);
- func a 'xor' b ->Element of BVF(Y);
+  for x being Element of A holds it.x = (p.x) 'xor' (q.x);
 end;
 
 definition
- let p,q be boolean-valued Function;
+  let Y;
+  let a,b be Element of BVF(Y);
+  redefine
+  func a 'or' b ->Element of BVF(Y);
+  func a 'xor' b ->Element of BVF(Y);
+end;
+
+definition
+  let p,q be boolean-valued Function;
   func p 'imp' q -> Function means
 :: BVFUNC_1:def 9
- dom it = dom p /\ dom q &
+
+  dom it = dom p /\ dom q &
   for x being set st x in dom it holds it.x = (p.x) => (q.x);
   func p 'eqv' q -> Function means
 :: BVFUNC_1:def 10
- dom it = dom p /\ dom q &
+
+  dom it = dom p /\ dom q &
   for x being set st x in dom it holds it.x = (p.x) <=> (q.x);
- commutativity;
+  commutativity;
 end;
 
 registration
- let p,q be boolean-valued Function;
+  let p,q be boolean-valued Function;
   cluster p 'imp' q -> boolean-valued;
   cluster p 'eqv' q -> boolean-valued;
 end;
 
-definition let A be non empty set;
- redefine
- let p,q be Element of Funcs(A,BOOLEAN);
+definition
+  let A be non empty set;
+  redefine
+  let p,q be Element of Funcs(A,BOOLEAN);
   func p 'imp' q -> Element of Funcs(A,BOOLEAN) means
 :: BVFUNC_1:def 11
- for x being Element of A holds it.x = 'not' p.x 'or' q.x;
+
+  for x being Element of A holds it.x = 'not' p.x 'or' q.x;
   func p 'eqv' q -> Element of Funcs(A,BOOLEAN) means
 :: BVFUNC_1:def 12
- for x being Element of A holds it.x = 'not' (p.x 'xor' q.x);
+
+  for x being Element of A holds it.x = 'not' (p.x 'xor' q.x);
 end;
 
-definition let Y;let a,b be Element of BVF(Y);
- redefine
- func a 'imp' b ->Element of BVF(Y);
- func a 'eqv' b ->Element of BVF(Y);
+definition
+  let Y;
+  let a,b be Element of BVF(Y);
+  redefine
+  func a 'imp' b ->Element of BVF(Y);
+  func a 'eqv' b ->Element of BVF(Y);
 end;
 
-definition let Y;
- func O_el(Y) ->Element of Funcs(Y,BOOLEAN) means
+definition
+  let Y;
+  func O_el(Y) ->Element of Funcs(Y,BOOLEAN) means
 :: BVFUNC_1:def 13
- for x being Element of Y holds it.x= FALSE;
+
+  for x being Element of Y holds it.x= FALSE;
 end;
 
-definition let Y;
- func I_el(Y) ->Element of Funcs(Y,BOOLEAN) means
+definition
+  let Y;
+  func I_el(Y) ->Element of Funcs(Y,BOOLEAN) means
 :: BVFUNC_1:def 14
- for x being Element of Y holds it.x= TRUE;
+
+  for x being Element of Y holds it.x= TRUE;
 end;
 
 canceled 3;
@@ -158,254 +183,258 @@ theorem :: BVFUNC_1:4
   for a being boolean-valued Function holds 'not' 'not' a=a;
 
 theorem :: BVFUNC_1:5
- 'not' I_el(Y)=O_el(Y) & 'not' O_el(Y)=I_el(Y);
+  'not' I_el(Y)=O_el(Y) & 'not' O_el(Y)=I_el(Y);
 
 theorem :: BVFUNC_1:6
-for a,b being Element of Funcs(Y,BOOLEAN) holds
- a '&' a=a;
+  for a,b being Element of Funcs(Y,BOOLEAN) holds a '&' a=a;
 
 theorem :: BVFUNC_1:7
-for a,b,c being Element of Funcs(Y,BOOLEAN) holds
- a '&' b '&' c = a '&' (b '&' c);
+  for a,b,c being Element of Funcs(Y,BOOLEAN) holds
+  a '&' b '&' c = a '&' (b '&' c);
 
 theorem :: BVFUNC_1:8
-for a being Element of Funcs(Y,BOOLEAN) holds
- a '&' O_el(Y)=O_el(Y);
+  for a being Element of Funcs(Y,BOOLEAN) holds a '&' O_el(Y)=O_el(Y);
 
 theorem :: BVFUNC_1:9
-for a being Element of Funcs(Y,BOOLEAN) holds
- a '&' I_el(Y)=a;
+  for a being Element of Funcs(Y,BOOLEAN) holds a '&' I_el(Y)=a;
 
 theorem :: BVFUNC_1:10
-for a being Element of Funcs(Y,BOOLEAN) holds
- a 'or' a=a;
+  for a being Element of Funcs(Y,BOOLEAN) holds a 'or' a=a;
 
 theorem :: BVFUNC_1:11
-for a,b,c being Element of Funcs(Y,BOOLEAN) holds
- a 'or' b 'or' c = a 'or' (b 'or' c);
+  for a,b,c being Element of Funcs(Y,BOOLEAN) holds
+  a 'or' b 'or' c = a 'or' (b 'or' c);
 
 theorem :: BVFUNC_1:12
-for a being Element of Funcs(Y,BOOLEAN) holds
- a 'or' O_el(Y)=a;
+  for a being Element of Funcs(Y,BOOLEAN) holds a 'or' O_el(Y)=a;
 
 theorem :: BVFUNC_1:13
-for a being Element of Funcs(Y,BOOLEAN) holds
- a 'or' I_el(Y)=I_el(Y);
+  for a being Element of Funcs(Y,BOOLEAN) holds a 'or' I_el(Y)=I_el(Y);
 
 theorem :: BVFUNC_1:14  ::Distributive
-     for a,b,c being Element of Funcs(Y,BOOLEAN) holds
- (a '&' b) 'or' c = (a 'or' c) '&' (b 'or' c);
+  for a,b,c being Element of Funcs(Y,BOOLEAN) holds
+  (a '&' b) 'or' c = (a 'or' c) '&' (b 'or' c);
 
 theorem :: BVFUNC_1:15  ::Distributive
-     for a,b,c being Element of Funcs(Y,BOOLEAN) holds
- (a 'or' b) '&' c = (a '&' c) 'or' (b '&' c);
+  for a,b,c being Element of Funcs(Y,BOOLEAN) holds
+  (a 'or' b) '&' c = (a '&' c) 'or' (b '&' c);
 
 theorem :: BVFUNC_1:16  ::De'Morgan
-     for a,b being Element of Funcs(Y,BOOLEAN) holds
- 'not' (a 'or' b)=('not' a) '&' ('not' b);
+  for a,b being Element of Funcs(Y,BOOLEAN) holds
+  'not' (a 'or' b)=('not' a) '&' ('not' b);
 
 theorem :: BVFUNC_1:17  ::De'Morgan
-     for a,b being Element of Funcs(Y,BOOLEAN) holds
+  for a,b being Element of Funcs(Y,BOOLEAN) holds
   'not' (a '&' b)=('not' a) 'or' ('not' b);
 
-definition let Y;let a,b be Element of Funcs(Y,BOOLEAN);
- pred a '<' b means
+definition
+  let Y;
+  let a,b be Element of Funcs(Y,BOOLEAN);
+  pred a '<' b means
 :: BVFUNC_1:def 15
- for x being Element of Y st a.x= TRUE holds b.x=TRUE;
-reflexivity;
+
+  for x being Element of Y st a.x= TRUE holds b.x=TRUE;
+  reflexivity;
 end;
 
 theorem :: BVFUNC_1:18
-for a,b,c being Element of Funcs(Y,BOOLEAN) holds
-((a '<' b) & (b '<' a) implies a=b)&
-((a '<' b) & (b '<' c) implies a '<' c);
+  for a,b,c being Element of Funcs(Y,BOOLEAN) holds
+  ((a '<' b) & (b '<' a) implies a=b)& ((a '<' b) & (b '<' c) implies a '<' c);
 
 theorem :: BVFUNC_1:19
-for a,b being Element of Funcs(Y,BOOLEAN) holds
- (a 'imp' b)=I_el(Y) iff a '<' b;
+  for a,b being Element of Funcs(Y,BOOLEAN) holds
+  (a 'imp' b)=I_el(Y) iff a '<' b;
 
 theorem :: BVFUNC_1:20
-for a,b being Element of Funcs(Y,BOOLEAN) holds
-(a 'eqv' b)=I_el(Y) iff a = b;
+  for a,b being Element of Funcs(Y,BOOLEAN) holds
+  (a 'eqv' b)=I_el(Y) iff a = b;
 
 theorem :: BVFUNC_1:21
-for a being Element of Funcs(Y,BOOLEAN) holds
- O_el(Y) '<' a & a '<' I_el(Y);
+  for a being Element of Funcs(Y,BOOLEAN) holds O_el(Y) '<' a & a '<' I_el(Y);
 
 begin :: Chap. 3  Infimum and Supremum
 
-definition let Y;let a be Element of Funcs(Y,BOOLEAN);
- func B_INF(a) ->Element of Funcs(Y,BOOLEAN) means
+definition
+  let Y;
+  let a be Element of Funcs(Y,BOOLEAN);
+  func B_INF(a) ->Element of Funcs(Y,BOOLEAN) means
 :: BVFUNC_1:def 16
-  it = I_el(Y) if (for x being Element of Y holds a.x=TRUE)
-   otherwise it = O_el(Y);
 
- func B_SUP(a) ->Element of Funcs(Y,BOOLEAN) means
+  it = I_el(Y) if (for x being Element of Y holds a.x=TRUE)
+  otherwise it = O_el(Y);
+  func B_SUP(a) ->Element of Funcs(Y,BOOLEAN) means
 :: BVFUNC_1:def 17
+
   it = O_el(Y) if (for x being Element of Y holds a.x=FALSE)
-   otherwise it = I_el(Y);
+  otherwise it = I_el(Y);
 end;
 
 theorem :: BVFUNC_1:22
-for a being Element of Funcs(Y,BOOLEAN) holds
-     'not' B_INF(a) = B_SUP('not' a) & 'not' B_SUP(a)=B_INF('not' a);
+  for a being Element of Funcs(Y,BOOLEAN) holds
+  'not' B_INF(a) = B_SUP('not' a) & 'not' B_SUP(a)=B_INF('not' a);
 
 theorem :: BVFUNC_1:23
-         B_INF(O_el(Y)) = O_el(Y) & B_INF(I_el(Y))=I_el(Y) &
-     B_SUP(O_el(Y)) = O_el(Y) & B_SUP(I_el(Y))=I_el(Y);
+  B_INF(O_el(Y)) = O_el(Y) & B_INF(I_el(Y))=I_el(Y) &
+  B_SUP(O_el(Y)) = O_el(Y) & B_SUP(I_el(Y))=I_el(Y);
 
-registration let Y;
- cluster O_el(Y) -> constant;
-end;
-
-registration let Y;
- cluster I_el(Y) -> constant;
+registration
+  let Y;
+  cluster O_el(Y) -> constant;
 end;
 
 registration
- let Y be non empty set;
- cluster constant Element of Funcs(Y,BOOLEAN);
+  let Y;
+  cluster I_el(Y) -> constant;
+end;
+
+registration
+  let Y be non empty set;
+  cluster constant Element of Funcs(Y,BOOLEAN);
 end;
 
 theorem :: BVFUNC_1:24
-for a being constant Element of Funcs(Y,BOOLEAN) holds
- a=O_el(Y) or a=I_el(Y);
+  for a being constant Element of Funcs(Y,BOOLEAN) holds
+  a=O_el(Y) or a=I_el(Y);
 
 theorem :: BVFUNC_1:25
-for d being constant Element of Funcs(Y,BOOLEAN) holds
+  for d being constant Element of Funcs(Y,BOOLEAN) holds
   B_INF(d) = d & B_SUP(d) = d;
 
 theorem :: BVFUNC_1:26
-for a,b being Element of Funcs(Y,BOOLEAN) holds
-     B_INF(a '&' b) = B_INF(a) '&' B_INF(b) &
-     B_SUP(a 'or' b) = B_SUP(a) 'or' B_SUP(b);
+  for a,b being Element of Funcs(Y,BOOLEAN) holds
+  B_INF(a '&' b) = B_INF(a) '&' B_INF(b) &
+  B_SUP(a 'or' b) = B_SUP(a) 'or' B_SUP(b);
 
 theorem :: BVFUNC_1:27
-for a being Element of Funcs(Y,BOOLEAN),
-                   d being constant Element of Funcs(Y,BOOLEAN) holds
-     B_INF(d 'imp' a) = d 'imp' B_INF(a) &
-     B_INF(a 'imp' d) = B_SUP(a) 'imp' d;
+  for a being Element of Funcs(Y,BOOLEAN),
+  d being constant Element of Funcs(Y,BOOLEAN) holds
+  B_INF(d 'imp' a) = d 'imp' B_INF(a) & B_INF(a 'imp' d) = B_SUP(a) 'imp' d;
 
 theorem :: BVFUNC_1:28
-for a being Element of Funcs(Y,BOOLEAN),
-                   d being constant Element of Funcs(Y,BOOLEAN) holds
-     B_INF(d 'or' a) = d 'or' B_INF(a) &
-     B_SUP(d '&' a) = d '&' B_SUP(a) &
-     B_SUP(a '&' d) = B_SUP(a) '&' d;
+  for a being Element of Funcs(Y,BOOLEAN),
+  d being constant Element of Funcs(Y,BOOLEAN) holds
+  B_INF(d 'or' a) = d 'or' B_INF(a) & B_SUP(d '&' a) = d '&' B_SUP(a) &
+  B_SUP(a '&' d) = B_SUP(a) '&' d;
 
 theorem :: BVFUNC_1:29
-for a being Element of Funcs(Y,BOOLEAN),x being Element of Y holds
-     (B_INF a).x '<' a.x;
+  for a being Element of Funcs(Y,BOOLEAN),x being Element of Y holds
+  (B_INF a).x '<' a.x;
 
 theorem :: BVFUNC_1:30
-for a being Element of Funcs(Y,BOOLEAN),x being Element of Y holds
-     a.x '<' (B_SUP a).x;
+  for a being Element of Funcs(Y,BOOLEAN),x being Element of Y holds
+  a.x '<' (B_SUP a).x;
 
 begin :: Chap. 4  Boolean Valued Functions and Partitions
 
-definition let Y;let a be Element of Funcs(Y,BOOLEAN),PA be a_partition of Y;
-pred a is_dependent_of PA means
+definition
+  let Y;
+  let a be Element of Funcs(Y,BOOLEAN),PA be a_partition of Y;
+  pred a is_dependent_of PA means
 :: BVFUNC_1:def 18
- for F being set st F in PA
+
+  for F being set st F in PA
   for x1,x2 being set st x1 in F & x2 in F holds a.x1=a.x2;
 end;
 
 theorem :: BVFUNC_1:31
-for a being Element of Funcs(Y,BOOLEAN) holds
-  a is_dependent_of %I(Y);
+  for a being Element of Funcs(Y,BOOLEAN) holds a is_dependent_of %I(Y);
 
 theorem :: BVFUNC_1:32
-for a being constant Element of Funcs(Y,BOOLEAN) holds
+  for a being constant Element of Funcs(Y,BOOLEAN) holds
   a is_dependent_of %O(Y);
 
-definition let Y;let PA be a_partition of Y;
- redefine mode Element of PA -> Subset of Y;
+definition
+  let Y;
+  let PA be a_partition of Y;
+  redefine mode Element of PA -> Subset of Y;
 end;
 
-definition let Y;let x be Element of Y;let PA be a_partition of Y;
- redefine func EqClass(x,PA) -> Element of PA;
- end;
+definition
+  let Y;
+  let x be Element of Y;
+  let PA be a_partition of Y;
+  redefine func EqClass(x,PA) -> Element of PA;
+end;
 
-definition let Y;let a be Element of Funcs(Y,BOOLEAN),PA be a_partition of Y;
- func B_INF(a,PA) -> Element of Funcs(Y,BOOLEAN) means
+definition
+  let Y;
+  let a be Element of Funcs(Y,BOOLEAN),PA be a_partition of Y;
+  func B_INF(a,PA) -> Element of Funcs(Y,BOOLEAN) means
 :: BVFUNC_1:def 19
+
   for y being Element of Y holds
-   ( (for x being Element of Y st x in EqClass(y,PA) holds a.x=TRUE)
-         implies it.y = TRUE ) &
-   (not (for x being Element of Y st x in EqClass(y,PA) holds a.x=TRUE)
-         implies it.y = FALSE);
+  ( (for x being Element of Y st x in EqClass(y,PA) holds a.x=TRUE)
+  implies it.y = TRUE ) &
+  (not (for x being Element of Y st x in EqClass(y,PA) holds a.x=TRUE)
+  implies it.y = FALSE);
 end;
 
-definition let Y;let a be Element of Funcs(Y,BOOLEAN),PA be a_partition of Y;
- func B_SUP(a,PA) -> Element of Funcs(Y,BOOLEAN) means
+definition
+  let Y;
+  let a be Element of Funcs(Y,BOOLEAN),PA be a_partition of Y;
+  func B_SUP(a,PA) -> Element of Funcs(Y,BOOLEAN) means
 :: BVFUNC_1:def 20
+
   for y being Element of Y holds
-   ( (ex x being Element of Y st x in EqClass(y,PA) & a.x=TRUE)
-         implies it.y = TRUE ) &
-   (not (ex x being Element of Y st x in EqClass(y,PA) & a.x=TRUE)
-         implies it.y = FALSE);
+  ( (ex x being Element of Y st x in EqClass(y,PA) & a.x=TRUE)
+  implies it.y = TRUE ) &
+  (not (ex x being Element of Y st x in EqClass(y,PA) & a.x=TRUE)
+  implies it.y = FALSE);
 end;
 
 theorem :: BVFUNC_1:33
-for a being Element of Funcs(Y,BOOLEAN),PA being a_partition of Y
-holds
+  for a being Element of Funcs(Y,BOOLEAN),PA being a_partition of Y holds
   B_INF(a,PA) is_dependent_of PA;
 
 theorem :: BVFUNC_1:34
-for a being Element of Funcs(Y,BOOLEAN),PA being a_partition of Y
-holds
+  for a being Element of Funcs(Y,BOOLEAN),PA being a_partition of Y holds
   B_SUP(a,PA) is_dependent_of PA;
 
 theorem :: BVFUNC_1:35
-for a being Element of Funcs(Y,BOOLEAN),PA being a_partition of Y
-holds
-   B_INF(a,PA) '<' a;
+  for a being Element of Funcs(Y,BOOLEAN),PA being a_partition of Y holds
+  B_INF(a,PA) '<' a;
 
 theorem :: BVFUNC_1:36
-for a being Element of Funcs(Y,BOOLEAN),PA being a_partition of Y
-holds
-   a '<' B_SUP(a,PA);
+  for a being Element of Funcs(Y,BOOLEAN),PA being a_partition of Y holds
+  a '<' B_SUP(a,PA);
 
 theorem :: BVFUNC_1:37
-for a being Element of Funcs(Y,BOOLEAN),PA being a_partition of Y
-holds
-   'not' B_INF(a,PA) = B_SUP('not' a,PA);
+  for a being Element of Funcs(Y,BOOLEAN),PA being a_partition of Y holds
+  'not' B_INF(a,PA) = B_SUP('not' a,PA);
 
 theorem :: BVFUNC_1:38
-for a being Element of Funcs(Y,BOOLEAN) holds
-  B_INF(a,%O(Y))=B_INF(a);
+  for a being Element of Funcs(Y,BOOLEAN) holds B_INF(a,%O(Y))=B_INF(a);
 
 theorem :: BVFUNC_1:39
-for a being Element of Funcs(Y,BOOLEAN) holds
-  B_SUP(a,%O(Y))=B_SUP(a);
+  for a being Element of Funcs(Y,BOOLEAN) holds B_SUP(a,%O(Y))=B_SUP(a);
 
 theorem :: BVFUNC_1:40
-for a being Element of Funcs(Y,BOOLEAN) holds
-  B_INF(a,%I(Y))=a;
+  for a being Element of Funcs(Y,BOOLEAN) holds B_INF(a,%I(Y))=a;
 
 theorem :: BVFUNC_1:41
-for a being Element of Funcs(Y,BOOLEAN) holds
-  B_SUP(a,%I(Y))=a;
+  for a being Element of Funcs(Y,BOOLEAN) holds B_SUP(a,%I(Y))=a;
 
 theorem :: BVFUNC_1:42
-for a,b being Element of Funcs(Y,BOOLEAN),PA being a_partition of Y
+  for a,b being Element of Funcs(Y,BOOLEAN),PA being a_partition of Y
   holds B_INF(a '&' b,PA)=B_INF(a,PA) '&' B_INF(b,PA);
 
 theorem :: BVFUNC_1:43
-for a,b being Element of Funcs(Y,BOOLEAN),PA being a_partition of Y
- holds B_SUP(a 'or' b,PA)=B_SUP(a,PA) 'or' B_SUP(b,PA);
+  for a,b being Element of Funcs(Y,BOOLEAN),PA being a_partition of Y
+  holds B_SUP(a 'or' b,PA)=B_SUP(a,PA) 'or' B_SUP(b,PA);
 
-definition let Y;let f be Element of Funcs(Y,BOOLEAN);
- func GPart(f) -> a_partition of Y equals
+definition
+  let Y;
+  let f be Element of Funcs(Y,BOOLEAN);
+  func GPart(f) -> a_partition of Y equals
 :: BVFUNC_1:def 21
-    {{x where x is Element of Y:f.x = TRUE },
-    {x' where x' is Element of Y:f.x' = FALSE}} \ {{}};
+  {{x where x is Element of Y:f.x = TRUE },
+  {x' where x' is Element of Y:f.x' = FALSE}} \ {{}};
 end;
 
 theorem :: BVFUNC_1:44
-for a being Element of Funcs(Y,BOOLEAN) holds
-  a is_dependent_of GPart(a);
+  for a being Element of Funcs(Y,BOOLEAN) holds a is_dependent_of GPart(a);
 
 theorem :: BVFUNC_1:45
-for a being Element of Funcs(Y,BOOLEAN),PA being a_partition of Y
+  for a being Element of Funcs(Y,BOOLEAN),PA being a_partition of Y
   st a is_dependent_of PA holds PA is_finer_than GPart(a);
+

@@ -34,217 +34,253 @@ theorem :: MIDSP_3:2
 
 theorem :: MIDSP_3:3
   p = q^<*c*>^r & i = len q + 1
-      implies (for l st 1 <= l & l <= len q holds p.l = q.l)
-              & p.i = c
-              & (for l st i + 1 <= l & l <= len p holds p.l = r.(l-i));
+  implies (for l st 1 <= l & l <= len q holds p.l = q.l) & p.i = c
+  & (for l st i + 1 <= l & l <= len p holds p.l = r.(l-i));
 
 theorem :: MIDSP_3:4
- l<=j or l=j+1 or j+2<=l;
+  l<=j or l=j+1 or j+2<=l;
 
 theorem :: MIDSP_3:5
   l in Seg(n)\{i} & i=j+1 implies 1<=l & l<=j or i+1<=l & l<=n;
 
-definition let D,n; let p be Element of n-tuples_on D; let i,d;
- redefine
+definition
+  let D,n;
+  let p be Element of n-tuples_on D;
+  let i,d;
+  redefine
   func p+*(i,d) -> Element of n-tuples_on D;
 end;
 
 ::Section 2: Reper Algebra Structure and its properties
+
 begin
 
-definition let n;
- struct(MidStr) ReperAlgebraStr over n
-  (#carrier -> set,
-   MIDPOINT -> BinOp of the carrier,
-   reper -> Function of n-tuples_on the carrier, the carrier#);
+definition
+  let n;
+  struct(MidStr) ReperAlgebraStr over n (#carrier -> set,
+    MIDPOINT -> BinOp of the carrier,
+    reper -> Function of n-tuples_on the carrier, the carrier#);
 end;
 
-registration let n; let A be non empty set, m be BinOp of A,
-               r be Function of n-tuples_on A,A;
- cluster ReperAlgebraStr(#A,m,r#) -> non empty;
+registration
+  let n;
+  let A be non empty set, m be BinOp of A, r be Function of n-tuples_on A,A;
+  cluster ReperAlgebraStr(#A,m,r#) -> non empty;
 end;
 
-registration let n;
- cluster non empty ReperAlgebraStr over n;
+registration
+  let n;
+  cluster non empty ReperAlgebraStr over n;
 end;
 
-registration let n;
- cluster MidSp-like (non empty ReperAlgebraStr over n+2);
+registration
+  let n;
+  cluster MidSp-like (non empty ReperAlgebraStr over n+2);
 end;
 
 reserve RAS for MidSp-like (non empty ReperAlgebraStr over n+2);
 reserve a,b,d,pii,p'i for Point of RAS;
 
-definition let n,RAS,i;
- mode Tuple of i,RAS is Tuple of i,the carrier of RAS;
+definition
+  let n,RAS,i;
+  mode Tuple of i,RAS is Tuple of i,the carrier of RAS;
 end;
 
 reserve p,q for Tuple of (n+1),RAS;
 
-definition let n,RAS,a;
- redefine func <*a*> -> Tuple of 1,RAS;
+definition
+  let n,RAS,a;
+  redefine func <*a*> -> Tuple of 1,RAS;
 end;
 
-definition let n,RAS,i,j; let p be Tuple of i,RAS, q be Tuple of j,RAS;
- redefine func p^q -> Tuple of (i+j),RAS;
+definition
+  let n,RAS,i,j;
+  let p be Tuple of i,RAS, q be Tuple of j,RAS;
+  redefine func p^q -> Tuple of (i+j),RAS;
 end;
 
-definition let n,RAS,a,p;
- canceled;
- func *'(a,p) -> Point of RAS equals
+definition
+  let n,RAS,a,p;
+  canceled;
+  func *'(a,p) -> Point of RAS equals
 :: MIDSP_3:def 2
-    (the reper of RAS).(<*a*>^p);
+
+  (the reper of RAS).(<*a*>^p);
 end;
 
 canceled;
 
 theorem :: MIDSP_3:7
   i in Seg(n+1) implies (p+*(i,d)).i = d
-                       & for l st l in (dom p)\{i} holds (p+*(i,d)).l = p.l;
+  & for l st l in (dom p)\{i} holds (p+*(i,d)).l = p.l;
 
-definition let n;
- canceled;
- mode Nat of n -> Element of NAT means
+definition
+  let n;
+  canceled;
+  mode Nat of n -> Element of NAT means
 :: MIDSP_3:def 4
-  1<=it & it<=n+1;
+
+    1<=it & it<=n+1;
 end;
 
 reserve m for Nat of n;
 
 theorem :: MIDSP_3:8
- i is Nat of n iff i in Seg(n+1);
+  i is Nat of n iff i in Seg(n+1);
 
 canceled;
 
 theorem :: MIDSP_3:10
- i<=n implies i+1 is Nat of n;
+  i<=n implies i+1 is Nat of n;
 
 theorem :: MIDSP_3:11
- (for m holds p.m = q.m) implies p = q;
+  (for m holds p.m = q.m) implies p = q;
 
 theorem :: MIDSP_3:12
- for l being Nat of n st l=i holds (p+*(i,d)).l = d;
+  for l being Nat of n st l=i holds (p+*(i,d)).l = d;
 
-definition let n,D; let p be Element of (n+1)-tuples_on D; let m;
- redefine func p.m -> Element of D;
+definition
+  let n,D;
+  let p be Element of (n+1)-tuples_on D;
+  let m;
+  redefine func p.m -> Element of D;
 end;
 
-definition let n,RAS;
- attr RAS is being_invariance means
+definition
+  let n,RAS;
+  attr RAS is being_invariance means
 :: MIDSP_3:def 5
-  for a,b,p,q st (for m holds a@(q.m) = b@(p.m))
-                   holds a@*'(b,q) = b@*'(a,p);
-  end;
 
-notation let n,RAS;
- synonym RAS is_invariance for RAS is being_invariance;
+  for a,b,p,q st (for m holds a@(q.m) = b@(p.m)) holds a@*'(b,q) = b@*'(a,p);
 end;
 
-definition let n,i,RAS;
- pred RAS has_property_of_zero_in i means
+notation
+  let n,RAS;
+  synonym RAS is_invariance for RAS is being_invariance;
+end;
+
+definition
+  let n,i,RAS;
+  pred RAS has_property_of_zero_in i means
 :: MIDSP_3:def 6
+
   for a,p holds *'(a,(p+*(i,a))) = a;
 end;
 
-definition let n,i,RAS;
- pred RAS is_semi_additive_in i means
+definition
+  let n,i,RAS;
+  pred RAS is_semi_additive_in i means
 :: MIDSP_3:def 7
+
   for a,pii,p st p.i = pii holds *'(a,(p+*(i,a@pii))) = a@*'(a,p);
 end;
 
 theorem :: MIDSP_3:13
- RAS is_semi_additive_in m implies
-         for a,d,p,q st q = (p+*(m,d)) holds *'(a,(p+*(m,a@d))) = a@*'(a,q);
+  RAS is_semi_additive_in m implies
+  for a,d,p,q st q = (p+*(m,d)) holds *'(a,(p+*(m,a@d))) = a@*'(a,q);
 
-definition let n,i,RAS;
- pred RAS is_additive_in i means
+definition
+  let n,i,RAS;
+  pred RAS is_additive_in i means
 :: MIDSP_3:def 8
+
   for a,pii,p'i,p st p.i = pii
-            holds *'(a,(p+*(i,pii@p'i))) = *'(a,p)@*'(a,(p+*(i,p'i)));
+  holds *'(a,(p+*(i,pii@p'i))) = *'(a,p)@*'(a,(p+*(i,p'i)));
 end;
 
-definition let n,i,RAS;
- pred RAS is_alternative_in i means
+definition
+  let n,i,RAS;
+  pred RAS is_alternative_in i means
 :: MIDSP_3:def 9
+
   for a,p,pii st p.i = pii holds *'(a,(p+*(i+1,pii))) = a;
 end;
 
 reserve W for ATLAS of RAS;
 reserve v for Vector of W;
 
-definition let n,RAS,W,i;
- mode Tuple of i,W is Tuple of i,the carrier of the algebra of W;
+definition
+  let n,RAS,W,i;
+  mode Tuple of i,W is Tuple of i,the carrier of the algebra of W;
 end;
 
 reserve x,y for Tuple of (n+1),W;
 
 theorem :: MIDSP_3:14
   i in Seg(n+1) implies (x+*(i,v)).i = v
-                  & for l st l in (dom x)\{i} holds (x+*(i,v)).l = x.l;
+  & for l st l in (dom x)\{i} holds (x+*(i,v)).l = x.l;
 
 theorem :: MIDSP_3:15
- (for l being Nat of n st l=i holds (x+*(i,v)).l = v)
-      & for l,i being Nat of n st l<>i holds (x+*(i,v)).l = x.l;
+  (for l being Nat of n st l=i holds (x+*(i,v)).l = v)
+  & for l,i being Nat of n st l<>i holds (x+*(i,v)).l = x.l;
 
 theorem :: MIDSP_3:16
- (for m holds x.m = y.m) implies x = y;
+  (for m holds x.m = y.m) implies x = y;
 
 scheme :: MIDSP_3:sch 1
  SeqLambdaD'{n()->Element of NAT,D()->non empty set,
-               F(set)->Element of D()}:
-  ex z being FinSequence of D() st len z = n()+1 &
-   for j being Nat of n() holds z.j = F(j);
+  F(set)->Element of D()}: ex z being FinSequence of D() st len z = n()+1 &
+  for j being Nat of n() holds z.j = F(j);
 
-definition let n,RAS,W,a,x;
- canceled;
- func (a,x).W -> Tuple of (n+1),RAS means
+definition
+  let n,RAS,W,a,x;
+  canceled;
+  func (a,x).W -> Tuple of (n+1),RAS means
 :: MIDSP_3:def 11
+
   it.m = (a,x.m).W;
 end;
 
-definition let n,RAS,W,a,p;
- func W.(a,p) -> Tuple of (n+1),W means
+definition
+  let n,RAS,W,a,p;
+  func W.(a,p) -> Tuple of (n+1),W means
 :: MIDSP_3:def 12
+
   it.m = W.(a,p.m);
 end;
 
 theorem :: MIDSP_3:17
- W.(a,p) = x iff (a,x).W = p;
+  W.(a,p) = x iff (a,x).W = p;
 
 theorem :: MIDSP_3:18
-    W.(a,(a,x).W) = x;
+  W.(a,(a,x).W) = x;
 
 theorem :: MIDSP_3:19
-    (a,W.(a,p)).W = p;
+  (a,W.(a,p)).W = p;
 
-definition let n,RAS,W,a,x;
- func Phi(a,x) -> Vector of W equals
+definition
+  let n,RAS,W,a,x;
+  func Phi(a,x) -> Vector of W equals
 :: MIDSP_3:def 13
-    W.(a,*'(a,(a,x).W));
+
+  W.(a,*'(a,(a,x).W));
 end;
 
 theorem :: MIDSP_3:20
- W.(a,p) = x & W.(a,b) = v implies (*'(a,p) = b iff Phi(a,x) = v);
+  W.(a,p) = x & W.(a,b) = v implies (*'(a,p) = b iff Phi(a,x) = v);
 
 theorem :: MIDSP_3:21
- RAS is_invariance iff for a,b,x holds Phi(a,x) = Phi(b,x);
+  RAS is_invariance iff for a,b,x holds Phi(a,x) = Phi(b,x);
 
 theorem :: MIDSP_3:22
- 1 in Seg(n+1);
+  1 in Seg(n+1);
 
 canceled;
 
 theorem :: MIDSP_3:24
- 1 is Nat of n;
+  1 is Nat of n;
 
 ::Section 3: Reper Algebra and its atlas
+
 begin
 
-definition let n;
- mode ReperAlgebra of n -> MidSp-like (non empty ReperAlgebraStr over n+2)
- means
+definition
+  let n;
+  mode ReperAlgebra of n -> MidSp-like (non empty ReperAlgebraStr over n+2)
+    means
 :: MIDSP_3:def 14
-  it is_invariance;
+
+    it is_invariance;
 end;
 
 reserve RAS for ReperAlgebra of n;
@@ -255,51 +291,50 @@ reserve v for Vector of W;
 reserve x for Tuple of (n+1),W;
 
 theorem :: MIDSP_3:25
- Phi(a,x) = Phi(b,x);
+  Phi(a,x) = Phi(b,x);
 
-definition let n,RAS,W,x;
- func Phi(x) -> Vector of W means
+definition
+  let n,RAS,W,x;
+  func Phi(x) -> Vector of W means
 :: MIDSP_3:def 15
+
   for a holds it = Phi(a,x);
 end;
 
 theorem :: MIDSP_3:26
- W.(a,p) = x & W.(a,b) = v & Phi(x) = v implies *'(a,p) = b;
+  W.(a,p) = x & W.(a,b) = v & Phi(x) = v implies *'(a,p) = b;
 
 theorem :: MIDSP_3:27
- (a,x).W = p & (a,v).W = b & *'(a,p) = b implies Phi(x) = v;
+  (a,x).W = p & (a,v).W = b & *'(a,p) = b implies Phi(x) = v;
 
 theorem :: MIDSP_3:28
- W.(a,p) = x & W.(a,b) = v implies W.(a,(p+*(m,b))) = (x+*(m,v));
+  W.(a,p) = x & W.(a,b) = v implies W.(a,(p+*(m,b))) = (x+*(m,v));
 
 theorem :: MIDSP_3:29
- (a,x).W = p & (a,v).W = b implies (a,(x+*(m,v))).W = (p+*(m,b));
+  (a,x).W = p & (a,v).W = b implies (a,(x+*(m,v))).W = (p+*(m,b));
 
 theorem :: MIDSP_3:30
-    RAS has_property_of_zero_in m iff for x holds Phi((x+*(m,0.W))) = 0.W;
+  RAS has_property_of_zero_in m iff for x holds Phi((x+*(m,0.W))) = 0.W;
 
 theorem :: MIDSP_3:31
- RAS is_semi_additive_in m iff for x holds
+  RAS is_semi_additive_in m iff for x holds
   Phi((x+*(m,Double(x.m)))) = Double Phi(x);
 
 theorem :: MIDSP_3:32
- RAS has_property_of_zero_in m & RAS is_additive_in m
-       implies RAS is_semi_additive_in m;
+  RAS has_property_of_zero_in m & RAS is_additive_in m
+  implies RAS is_semi_additive_in m;
 
 theorem :: MIDSP_3:33
-    RAS has_property_of_zero_in m implies (RAS is_additive_in m
-                   iff for x,v holds Phi((x+*(m,(x.m)+v))) = Phi(x) + Phi
-((x+*(m,v))));
+  RAS has_property_of_zero_in m implies (RAS is_additive_in m
+  iff for x,v holds Phi((x+*(m,(x.m)+v))) = Phi(x) + Phi ((x+*(m,v))));
 
 theorem :: MIDSP_3:34
- W.(a,p) = x & m<= n implies W.(a,(p+*(m+1,p.m))) = (x+*(m+1,x.m));
+  W.(a,p) = x & m<= n implies W.(a,(p+*(m+1,p.m))) = (x+*(m+1,x.m));
 
 theorem :: MIDSP_3:35
- (a,x).W = p & m<=n implies (a,(x+*(m+1,x.m))).W = (p+*(m+1,p.m));
+  (a,x).W = p & m<=n implies (a,(x+*(m+1,x.m))).W = (p+*(m+1,p.m));
 
 theorem :: MIDSP_3:36
-    m<=n implies (RAS is_alternative_in m iff for x holds Phi((x+*(m+1,x.m))) =
-0.
-W
-);
+  m<=n implies (RAS is_alternative_in m iff for x holds Phi((x+*(m+1,x.m))) =
+  0. W );
 

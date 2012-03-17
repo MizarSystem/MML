@@ -1,0 +1,2457 @@
+:: Helly property for subtrees
+::  by Jessica Enright and Piotr Rudnicki
+::
+:: Received January 10, 2008
+:: Copyright (c) 2008 Association of Mizar Users
+
+environ
+
+ vocabularies HELLY, TARSKI, BOOLE, SETFAM_1, TREES_1, GRAPH_1, CARD_1,
+      ORDINAL2, FINSET_1, REALSET1, PRE_TOPC, ARYTM_1, MEMBERED, FUNCT_1,
+      RELAT_1, FINSEQ_1, SQUARE_1, MATRIX_2, GRAPH_2, GLIB_000, GLIB_001,
+      MSAFREE2, NEWTON, ARYTM;
+ notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, FINSET_1, CARD_1, NUMBERS,
+      XCMPLX_0, XREAL_0, XXREAL_0, SETFAM_1, FUNCT_1, FINSEQ_1, MEMBERED,
+      NAT_1, TREES_1, PRE_CIRC, ABIAN, GRAPH_2, GLIB_000, GLIB_001, GLIB_002;
+ constructors DOMAIN_1, SETFAM_1, XXREAL_0, XREAL_0, PRE_CIRC, NAT_1, GRAPH_2,
+      GLIB_001, GLIB_002, RAT_1;
+ registrations SUBSET_1, ORDINAL1, XBOOLE_0, FINSET_1, XREAL_0, XXREAL_0,
+      NAT_1, INT_1, RELAT_1, FINSEQ_1, ABIAN, MEMBERED, HEYTING3, PRE_CIRC,
+      GLIB_000, GLIB_001, GLIB_002;
+ requirements BOOLE, SUBSET, NUMERALS, ARITHM, REAL;
+ definitions TARSKI, XBOOLE_0, GLIB_001;
+ theorems TARSKI, FINSET_1, NAT_1, GRAPH_5, SETFAM_1, XBOOLE_0, XBOOLE_1,
+      GRFUNC_1, FUNCT_1, ZFMISC_1, ORDINAL1, FINSEQ_1, FINSEQ_2, FINSEQ_3,
+      REAL_1, INT_1, EULER_1, CARD_1, XREAL_1, XXREAL_0, CHORD, HEYTING3,
+      GLIB_000, GLIB_001, GLIB_002, MSSCYC_1, CHAIN_1, MEMBERED, PRE_CIRC,
+      HILBERT3, GRAPH_2, FSM_1, LEXBFS;
+ schemes NAT_1, FINSEQ_1;
+
+begin :: General preliminaries
+
+theorem
+  for p being non empty FinSequence holds <*p.1*>^'p = p
+proof
+  let p be non empty FinSequence;
+  set o = <*p.1*>^'p;
+A1: len o +1 = len <*p.1*> + len p by GRAPH_2:13;
+  then
+A2: len o +1 = 1 + len p by FINSEQ_1:56;
+A3: len <*p.1*> = 1 by FINSEQ_1:56;
+  now
+    let k be Nat such that
+A4: 1<=k and
+A5: k <= len o;
+    per cases;
+    suppose
+A6:   k <= len <*p.1*>;
+      then k <= 1 by FINSEQ_1:56;
+      then
+A7:   k = 1 by A4, XXREAL_0:1;
+      hence o.k = <*p.1*>.1 by A6, GRAPH_2:14
+        .= p.k by A7, FINSEQ_1:57;
+    end;
+    suppose k > len <*p.1*>;
+      then consider i being Element of NAT such that
+A8:   k = len <*p.1*>+i and
+A9:   1 <= i by FSM_1:1;
+      i < len p by A8, A3, A5, A1, NAT_1:13;
+      hence o.k = p.k by A9, A3, A8, GRAPH_2:15;
+    end;
+  end;
+  hence <*p.1*>^'p = p by A2, FINSEQ_1:18;
+end;
+
+definition
+  let p, q be FinSequence;
+  func maxPrefix(p,q) -> FinSequence means
+  :Def1:
+  it is_a_prefix_of p & it is_a_prefix_of q &
+  for r being FinSequence st r is_a_prefix_of p & r is_a_prefix_of q
+  holds r is_a_prefix_of it;
+  existence
+  proof
+    defpred P[set] means
+    ex r being FinSequence st r c= p & r c= q & len r = $1;
+    deffunc F(set) = $1;
+    set S = { F(k) where k is Element of NAT : 0 <= k & k <= len p & P[k] };
+    now
+      reconsider e = {} as FinSequence by FINSEQ_1:14;
+      take e;
+      thus e c= p by XBOOLE_1:2;
+      thus e c= q by XBOOLE_1:2;
+      thus len e = 0 by FINSEQ_1:25;
+    end;
+    then
+A1: 0 in S;
+A2: for x being set st x in S holds x is natural
+    proof
+      let x be set;
+      assume x in S;
+      then consider n being Element of NAT such that
+A3:   x = n and 0 <= n & n <= len p & P[n];
+      thus x is natural by A3;
+    end;
+    S is finite from FINSEQ_1:sch 6;
+    then reconsider S as finite non empty natural-membered set by A1, A2,
+    MEMBERED:def 6;
+    set maxk = max S;
+    maxk in S by PRE_CIRC:def 1;
+    then consider K being Element of NAT such that
+A4: K = maxk and 0 <= K and K <= len p and
+A5: P[K];
+    consider R being FinSequence such that
+A6: R c= p and
+A7: R c= q and
+A8: len R = K by A5;
+    take R;
+    thus R c= p by A6;
+    thus R c= q by A7;
+    let r be FinSequence such that
+A9: r c= p and
+A10: r c= q;
+    dom r c= dom p by A9, GRFUNC_1:8;
+    then len r <= len p by FINSEQ_3:32;
+    then len r in S by A9, A10;
+    then len r <= len R by A4, A8, PRE_CIRC:def 1;
+    then
+A11: dom r c= dom R by FINSEQ_3:32;
+    now
+      let x be set;
+      assume
+A12:  x in dom r;
+      hence r.x = p.x by A9, GRFUNC_1:8
+        .= R.x by A6, A12, A11, GRFUNC_1:8;
+    end;
+    hence r c= R by A11, GRFUNC_1:8;
+  end;
+  uniqueness
+  proof
+    let it1, it2 be FinSequence such that
+A13: it1 c= p and
+A14: it1 c= q and
+A15: for r being FinSequence st r c= p & r c= q holds r c= it1 and
+A16: it2 c= p and
+A17: it2 c= q and
+A18: for r being FinSequence st r c= p & r c= q holds r c= it2;
+A19: it1 c= it2 by A13, A14, A18;
+    it2 c= it1 by A16, A17, A15;
+    hence it1 = it2 by A19, XBOOLE_0:def 10;
+  end;
+  commutativity;
+end;
+
+theorem
+  for p, q being FinSequence holds p is_a_prefix_of q iff maxPrefix(p,q) = p
+proof
+  let p, q be FinSequence;
+  hereby
+    assume
+A1: p c= q;
+A2: maxPrefix(p,q) c= p by Def1;
+    p c= maxPrefix(p,q) by A1, Def1;
+    hence maxPrefix(p,q) = p by A2, XBOOLE_0:def 10;
+  end;
+  assume maxPrefix(p,q) = p;
+  hence p c= q by Def1;
+end;
+
+theorem Th3:
+  for p, q being FinSequence holds len maxPrefix(p,q)<= len p
+proof
+  let p, q be FinSequence;
+  maxPrefix(p,q) c= p by Def1;
+  hence len maxPrefix(p,q) <= len p by FINSEQ_1:84;
+end;
+
+theorem Th4:
+  for p being non empty FinSequence holds <*p.1*> is_a_prefix_of p
+proof
+  let p be non empty FinSequence;
+  len p >= 1 by FINSEQ_1:28;
+  then len <*p.1*> <= len p by FINSEQ_1:56;
+  then
+A1: dom <*p.1*> c= dom p by FINSEQ_3:32;
+  now
+    let x be set;
+    assume
+A2: x in dom <*p.1*>;
+    dom <*p.1*> = Seg 1 by FINSEQ_1:def 8;
+    then x = 1 by A2, FINSEQ_1:4, TARSKI:def 1;
+    hence <*p.1*>.x = p.x by FINSEQ_1:def 8;
+  end;
+  hence <*p.1*> c= p by A1, GRFUNC_1:8;
+end;
+
+theorem Th5:
+  for p, q being non empty FinSequence st p.1 = q.1
+  holds 1 <= len maxPrefix(p,q)
+proof
+  let p, q be non empty FinSequence such that
+A1: p.1 = q.1 and
+A2: 1 > len maxPrefix(p,q);
+A3: <*p.1*> c= p by Th4;
+  <*p.1*> c= q by A1, Th4;
+  then <*p.1*> c= maxPrefix(p,q) by A3, Def1;
+  then len <*p.1*> <= len maxPrefix(p,q) by FINSEQ_1:84;
+  hence contradiction by A2, FINSEQ_1:56;
+end;
+
+theorem Th6:
+  for p, q being FinSequence
+  for j being Nat st j <= len maxPrefix(p,q) holds maxPrefix(p,q).j = p.j
+proof
+  let p, q be FinSequence;
+  let j be Nat such that
+A1: j <= len maxPrefix(p,q);
+A2: maxPrefix(p,q) c= p by Def1;
+  per cases;
+  suppose
+A3: j = 0;
+    then
+A4: not j in dom p by FINSEQ_3:26;
+    not j in dom maxPrefix(p,q) by A3, FINSEQ_3:26;
+    hence maxPrefix(p,q).j = 0 by FUNCT_1:def 4
+      .= p.j by A4, FUNCT_1:def 4;
+  end;
+  suppose j <> 0;
+    then 0 < j;
+    then 0+1 <= j by NAT_1:13;
+    then j in dom maxPrefix(p,q) by A1, FINSEQ_3:27;
+    hence maxPrefix(p,q).j = p.j by A2, GRFUNC_1:8;
+  end;
+end;
+
+theorem Th7:
+  for p, q being FinSequence
+  for j being Nat st j <= len maxPrefix(p,q) holds p.j = q.j
+proof
+  let p, q be FinSequence;
+  let j be Nat such that
+A1: j <= len maxPrefix(p,q);
+  thus p.j = maxPrefix(p,q).j by A1, Th6
+    .= q.j by A1, Th6;
+end;
+
+theorem Th8:
+  for p, q being FinSequence
+  holds not p is_a_prefix_of q iff len maxPrefix(p,q) < len p
+proof
+  let p, q be FinSequence;
+  hereby
+    assume
+A1: not p c= q;
+A2: now
+      assume len maxPrefix(p,q) = len p;
+      then
+A3:   dom maxPrefix(p,q) = dom p by FINSEQ_3:31;
+      maxPrefix(p,q) c= p by Def1;
+      then maxPrefix(p,q) = p by A3, GRFUNC_1:9;
+      hence contradiction by A1, Def1;
+    end;
+    maxPrefix(p,q) c= p by Def1;
+    then len maxPrefix(p,q) <= len p by FINSEQ_1:84;
+    hence len maxPrefix(p,q) < len p by A2, REAL_1:def 5;
+  end;
+  assume that
+A4: len maxPrefix(p,q) < len p and
+A5: p c= q;
+A6: maxPrefix(p,q) c= p by Def1;
+  p c= maxPrefix(p,q) by A5, Def1;
+  hence contradiction by A4, A6, XBOOLE_0:def 10;
+end;
+
+theorem Th9:
+  for p, q being FinSequence
+  st not p is_a_prefix_of q & not q is_a_prefix_of p
+  holds p.(len maxPrefix(p,q) +1) <> q.(len maxPrefix(p,q) +1)
+proof
+  let p, q be FinSequence such that
+A1: not p c= q and
+A2: not q c= p and
+A3: p.(len maxPrefix(p,q) +1) = q.(len maxPrefix(p,q) +1);
+  set mP = maxPrefix(p,q);
+  set dI = len maxPrefix(p,q);
+  set lmP = mP^<*p.(dI+1)*>;
+A4: len lmP = len mP + 1 by FINSEQ_2:19;
+  len mP < len p by A1, Th8;
+  then len lmP <= len p by A4, NAT_1:13;
+  then
+A5: dom lmP c= dom p by FINSEQ_3:32;
+  now
+    let x be set such that
+A6: x in dom lmP;
+    x is Element of NAT by A6;
+    then reconsider n = x as Nat;
+A7: 1 <= n by A6, FINSEQ_3:27;
+    n <= len lmP by A6, FINSEQ_3:27;
+    then
+A8: n <= len mP + 1 by FINSEQ_2:19;
+    per cases by A8, NAT_1:8;
+    suppose
+A9:   n <= dI;
+      then n in dom mP by A7, FINSEQ_3:27;
+      hence lmP.x = mP.x by FINSEQ_1:def 7
+        .= p.x by A9, Th6;
+    end;
+    suppose n = dI + 1;
+      hence lmP.x = p.x by FINSEQ_1:59;
+    end;
+  end;
+  then
+A10: lmP c= p by A5, GRFUNC_1:8;
+  len mP < len q by A2, Th8;
+  then len lmP <= len q by A4, NAT_1:13;
+  then
+A11: dom lmP c= dom q by FINSEQ_3:32;
+  now
+    let x be set such that
+A12: x in dom lmP;
+    x is Element of NAT by A12;
+    then reconsider n = x as Nat;
+A13: 1 <= n by A12, FINSEQ_3:27;
+    n <= len lmP by A12, FINSEQ_3:27;
+    then
+A14: n <= len mP + 1 by FINSEQ_2:19;
+    per cases by A14, NAT_1:8;
+    suppose
+A15:  n <= dI;
+      then n in dom mP by A13, FINSEQ_3:27;
+      hence lmP.x = mP.x by FINSEQ_1:def 7
+        .= q.x by A15, Th6;
+    end;
+    suppose n = dI + 1;
+      hence lmP.x = q.x by A3, FINSEQ_1:59;
+    end;
+  end;
+  then lmP c= q by A11, GRFUNC_1:8;
+  then lmP c= mP by A10, Def1;
+  then len lmP <= len mP by FINSEQ_1:84;
+  then len mP + 1 <= len mP by FINSEQ_2:19;
+  hence contradiction by NAT_1:13;
+end;
+
+begin :: Graph preliminaries
+
+theorem Th10:
+  for G being _Graph, W be Walk of G, m, n being Nat
+  holds len W.cut(m,n) <= len W
+proof
+  let G be _Graph, W be Walk of G, m, n be Nat;
+  reconsider m' = m, n' = n as Element of NAT by ORDINAL1:def 13;
+  per cases;
+  suppose m is odd & n is odd & m <= n & n <= len W;
+    then W.cut(m,n) = (m,n)-cut W by GLIB_001:def 11;
+    then len W.cut(m',n') <= len W by MSSCYC_1:8;
+    hence thesis;
+  end;
+  suppose not (m is odd & n is odd & m <= n & n <= len W);
+    hence len W.cut(m,n) <= len W by GLIB_001:def 11;
+  end;
+end;
+
+theorem Th11:
+  for G being _Graph, W being Walk of G, m, n being Nat
+  st W.cut(m,n) is non trivial holds W is non trivial
+proof
+  let G be _Graph, W be Walk of G, m, n be Nat such that
+A1: W.cut(m,n) is non trivial and
+A2: W is trivial;
+  reconsider m' = m, n' = n as Element of NAT by ORDINAL1:def 13;
+  reconsider W as trivial Walk of G by A2;
+  W.cut(m',n') is trivial;
+  hence thesis by A1;
+end;
+
+theorem Th12:
+  for G being _Graph, W being Walk of G for m, n, i being odd Nat
+  st m <= n & n <= len W & i <= len W.cut(m,n)
+  ex j being odd Nat st W.cut(m,n).i = W.j & j = m+i-1 & j <= len W
+proof
+  let G be _Graph, W be Walk of G;
+  let m, n, i being odd Nat such that
+A1: m <= n and
+A2: n <= len W and
+A3: i <= len W.cut(m,n);
+  set j = m+i-1;
+  m >= 1 & i >= 1 by HEYTING3:1;
+  then m+i >= 1+1 by XREAL_1:9;
+  then m+i-1 >= 1+1-1 by XREAL_1:11;
+  then j is odd Element of NAT by INT_1:16;
+  then reconsider j as odd Nat;
+  take j;
+  i >= 1 by HEYTING3:1;
+  then i-1 >= 1-1 by XREAL_1:11;
+  then reconsider i1 = i-1 as Element of NAT by INT_1:16;
+  i < len W.cut(m,n) +1 by A3, NAT_1:13;
+  then
+A4: i1 < len W.cut(m,n) +1 -1 by XREAL_1:11;
+  reconsider m'= m, n' = n as odd Element of NAT by ORDINAL1:def 13;
+  thus W.cut(m,n).i = W.cut(m',n').(i1+1)
+    .= W.(m+i1) by A1, A2, A4, GLIB_001:37
+    .= W.j;
+  thus j = m+i-1;
+  m+i <= len W.cut(m,n)+m by A3, XREAL_1:9;
+  then m'+i <= n'+1 by A1, A2, GLIB_001:37;
+  then m+i-1 <= n+1-1 by XREAL_1:11;
+  hence j <= len W by A2, XXREAL_0:2;
+end;
+
+registration  :: not in GLIB_000 ?
+  let G be _Graph;
+  cluster -> non empty Walk of G;
+  correctness
+  proof
+    let W be Walk of G;
+    len W <> 0;
+    hence W is non empty by FINSEQ_1:25;
+  end;
+end;
+
+theorem Th13:
+  for G being _Graph for W1, W2 being Walk of G
+  st W1 is_a_prefix_of W2 holds W1.vertices() c= W2.vertices()
+proof
+  let G be _Graph, W1, W2 be Walk of G such that
+A1: W1 c= W2;
+  let x be set;
+  assume x in W1.vertices();
+  then consider n being odd Element of NAT such that
+A2: n <= len W1 and
+A3: W1.n = x by GLIB_001:88;
+  len W1 <= len W2 by A1, FINSEQ_1:84;
+  then
+A4: n <= len W2 by A2, XXREAL_0:2;
+  1 <= n by HEYTING3:1;
+  then n in dom W1 by A2, FINSEQ_3:27;
+  then W2.n = x by A1, A3, GRFUNC_1:8;
+  hence x in W2.vertices() by A4, GLIB_001:88;
+end;
+
+theorem :: unused PathInclEdges:
+  for G being _Graph for W1, W2 being Walk of G
+  st W1 is_a_prefix_of W2 holds W1.edges() c= W2.edges()
+proof
+  let G be _Graph, W1, W2 be Walk of G such that
+A1: W1 c= W2;
+  let x be set;
+  assume x in W1.edges();
+  then consider n being even Element of NAT such that
+A2: 1 <= n and
+A3: n <= len W1 and
+A4: W1.n = x by GLIB_001:100;
+  len W1 <= len W2 by A1, FINSEQ_1:84;
+  then
+A5: n <= len W2 by A3, XXREAL_0:2;
+  n in dom W1 by A3, A2, FINSEQ_3:27;
+  then W2.n = x by A1, A4, GRFUNC_1:8;
+  hence x in W2.edges() by A5, A2, GLIB_001:100;
+end;
+
+theorem Th15:
+  for G being _Graph for W1, W2 being Walk of G
+  holds W1 is_a_prefix_of W1.append(W2)
+proof
+  let G be _Graph, W1, W2 be Walk of G;
+  set W1a = W1.append(W2);
+  per cases;
+  suppose W1.last() = W2.first();
+    then len W1 <= len W1a by GLIB_001:30;
+    then
+A1: dom W1 c= dom W1a by FINSEQ_3:32;
+    for x being set st x in dom W1 holds W1.x = W1a.x by GLIB_001:33;
+    hence W1 c= W1.append(W2) by A1, GRFUNC_1:8;
+  end;
+  suppose W1.last() <> W2.first();
+    hence thesis by GLIB_001:def 10;
+  end;
+end;
+
+theorem Th16:
+  for G being _Graph for W1, W2 being Trail of G
+  st W1.last() = W2.first() & W1.edges() misses W2.edges()
+  holds W1.append(W2) is Trail-like
+proof
+  let G be _Graph, W1, W2 be Trail of G such that
+A1: W1.last() = W2.first() and
+A2: W1.edges() misses W2.edges();
+  set W = W1.append(W2);
+  now
+    let m,n be even Element of NAT such that
+A3: 1 <= m and
+A4: m < n and
+A5: n <= len W;
+    1 <= n by A3, A4, XXREAL_0:2;
+    then
+A6: n in dom W by A5, FINSEQ_3:27;
+    m <= len W by A4, A5, XXREAL_0:2;
+    then
+A7: m in dom W by A3, FINSEQ_3:27;
+    per cases by A6, GLIB_001:35;
+    suppose
+A8:   n in dom W1;
+      then
+A9:   n <= len W1 by FINSEQ_3:27;
+      then
+A10:  W1.m <> W1.n by A3, A4, GLIB_001:139;
+      m <= len W1 by A4, A9, XXREAL_0:2;
+      then m in dom W1 by A3, FINSEQ_3:27;
+      then W1.m = W.m by GLIB_001:33;
+      hence W.m <> W.n by A10, A8, GLIB_001:33;
+    end;
+    suppose ex k being Element of NAT st k < len W2 & n = len W1 + k;
+      then consider k being Element of NAT such that
+A11:  k < len W2 and
+A12:  n = len W1 + k;
+      reconsider k as odd Element of NAT by A12, CHAIN_1:7;
+A13:  W.n = W2.(k+1) by A11, A12, A1, GLIB_001:34;
+A14:  k+1 <= len W2 by A11, NAT_1:13;
+      1 <= k+1 by NAT_1:11;
+      then
+A15:  W2.(k+1) in W2.edges() by A14, GLIB_001:100;
+      per cases by A7, GLIB_001:35;
+      suppose
+A16:    m in dom W1;
+        then
+A17:    W.m = W1.m by GLIB_001:33;
+        1 <= m & m <= len W1 by A16, FINSEQ_3:27;
+        then W1.m in W1.edges() by GLIB_001:100;
+        hence W.m <> W.n by A15,A13, A17, A2, XBOOLE_0:3;
+      end;
+      suppose ex l being Element of NAT st l < len W2 & m = len W1 + l;
+        then consider l being Element of NAT such that
+A18:    l < len W2 and
+A19:    m = len W1 + l;
+        reconsider l as odd Element of NAT by A19, CHAIN_1:7;
+A20:    W.m = W2.(l+1) by A1, A18, A19, GLIB_001:34;
+A21:    1 <= l+1 by NAT_1:11;
+        l < k by A4, A12, A19, XREAL_1:8;
+        then l+1 < k+1 by XREAL_1:8;
+        hence W.m <> W.n by A13, A20, A14, A21, GLIB_001:139;
+      end;
+    end;
+  end;
+  hence W1.append(W2) is Trail-like by GLIB_001:139;
+end;
+
+theorem Th17:
+  for G being _Graph for P1, P2 being Path of G
+  st P1.last() = P2.first() & P1 is open & P2 is open &
+  P1.edges() misses P2.edges() &
+  (P1.first() in P2.vertices() implies P1.first() = P2.last()) &
+  P1.vertices() /\ P2.vertices() c= {P1.first(), P1.last()}
+  holds P1.append(P2) is Path-like
+proof
+  let G be _Graph, P1, P2 be Path of G such that
+A1: P1.last() = P2.first() and
+A2: P1 is open and
+A3: P2 is open and
+A4: P1.edges() misses P2.edges() and
+A5: P1.first() in P2.vertices() implies P1.first() = P2.last() and
+A6: P1.vertices() /\ P2.vertices() c= {P1.first(), P1.last()};
+  set P = P1.append(P2);
+  thus P1.append(P2) is Trail-like by A1, A4, Th16;
+  let m, n be odd Element of NAT such that
+A7: m < n and
+A8: n <= len P and
+A9: P.m = P.n and
+A10: m <> 1 or n <> len P;
+  1 <= n by HEYTING3:1;
+  then
+A11: n in dom P by A8, FINSEQ_3:27;
+A12: 1 <= m & m <= len P by HEYTING3:1, A7, A8, XXREAL_0:2;
+  then
+A13: m in dom P by FINSEQ_3:27;
+  per cases by A11, GLIB_001:35;
+  suppose ex k being Element of NAT st k < len P2 & n = len P1 + k;
+    then consider k being Element of NAT such that
+A14: k < len P2 and
+A15: n = len P1 + k;
+A16: P.n = P2.(k+1) by A14, A15, A1, GLIB_001:34;
+    reconsider k as even Element of NAT by A15, CHAIN_1:7;
+A17: k+1 <= len P2 by A14, NAT_1:13;
+    then
+A18: P2.(k+1) in P2.vertices() by GLIB_001:88;
+    per cases by A13, GLIB_001:35;
+    suppose ex k being Element of NAT st k < len P2 & m = len P1 + k;
+      then consider l being Element of NAT such that
+A19:  l < len P2 and
+A20:  m = len P1 + l;
+A21:  P.m = P2.(l+1) by A19, A20, A1, GLIB_001:34;
+      l < k by A7, A15, A20, XREAL_1:8;
+      then
+A22:  l+1 < k+1 by XREAL_1:8;
+      reconsider l as even Element of NAT by A20, CHAIN_1:7;
+      l+1 is odd;
+      then P2.first() = P2.(l+1) & P2.last() = P2.(k+1)
+      by A16, A21, A9, A22, A17, GLIB_001:def 28;
+      hence contradiction by A3, A16, A21, A9, GLIB_001:def 24;
+    end;
+    suppose
+A23:  m in dom P1;
+      then
+A24:  P1.m = P.m by GLIB_001:33;
+A25:  m <= len P1 by A23, FINSEQ_3:27;
+      then
+A26:  P1.m in P1.vertices() by GLIB_001:88;
+      set x = P1.m;
+A27:  x in P1.vertices() /\ P2.vertices()
+      by A26, A18, A9, A16, A24, XBOOLE_0:def 3;
+      per cases by A6, A27, TARSKI:def 2;
+      suppose
+A28:    x = P1.last();
+A29:    now
+          assume m < len P1;
+          then P1.first() = P1.m by A28, GLIB_001:def 28;
+          hence contradiction by A2, A28, GLIB_001:def 24;
+        end;
+A30:    now
+          assume 2*0+1 < k+1;
+          then P2.first() = P2.last() by A17, A28, A24, A16, A9, A1, GLIB_001
+          :def 28;
+          hence contradiction by A3, GLIB_001:def 24;
+        end;
+        1 <= k+1 by NAT_1:11;
+        then 1 = k+1 by A30, XXREAL_0:1;
+        hence contradiction by A29, A15, A7;
+      end;
+      suppose
+A31:    x = P1.first();
+        then
+A32:    x = P1.(2*0+1);
+A33:    now
+          assume m <> 1;
+          then 1 < m by A12, REAL_1:def 5;
+          then x = P1.last() by A25, A32, GLIB_001:def 28;
+          hence contradiction by A31, A2, GLIB_001:def 24;
+        end;
+A34:    P2.(k+1) = P2.last() by A5, A31, A16, A9, A18, A23, GLIB_001:33;
+        now
+          assume k+1 = len P2;
+          then len P +1 = len P1 + (k+1) by A1, GLIB_001:29;
+          hence contradiction by A33, A10, A15;
+        end;
+        then k+1 < len P2 by A17, REAL_1:def 5;
+        then P2.first() = P2.last() by A34, GLIB_001:def 28;
+        hence contradiction by A3, GLIB_001:def 24;
+      end;
+    end;
+  end;
+  suppose
+A35: n in dom P1;
+    then
+A36: 1 <= n & n <= len P1 by FINSEQ_3:27;
+    then 1 <= m & m <= len P1 by A7, XXREAL_0:2, HEYTING3:1;
+    then m in dom P1 by FINSEQ_3:27;
+    then
+A37: P1.m = P.m by GLIB_001:33
+      .= P1.n by A9, A35, GLIB_001:33;
+    then m = 1 & n = len P1 by A36, A7, GLIB_001:def 28;
+    then P1.first() = P1.last() by A37;
+    hence contradiction by A2, GLIB_001:def 24;
+  end;
+end;
+
+theorem Th18:
+  for G being _Graph for P1, P2 being Path of G
+  st P1.last() = P2.first() & P1 is open & P2 is open &
+  P1.vertices() /\ P2.vertices() = {P1.last()}
+  holds P1.append(P2) is open Path-like
+proof
+  let G be _Graph, P1, P2 be Path of G such that
+A1: P1.last() = P2.first() and
+A2: P1 is open and
+A3: P2 is open and
+A4: P1.vertices() /\ P2.vertices() = {P1.last()};
+  set P = P1.append(P2);
+A5: P1.edges() misses P2.edges()
+  proof
+    assume P1.edges() /\ P2.edges() <> {};
+    then consider x being set such that
+A6: x in P1.edges() /\ P2.edges() by XBOOLE_0:def 1;
+A7: x in P1.edges() by A6, XBOOLE_0:def 3;
+A8: x in P2.edges() by A6, XBOOLE_0:def 3;
+    consider v1, v2 being Vertex of G, n being odd Element of NAT such that
+A9: n+2 <= len P1 and
+A10: v1 = P1.n and x = P1.(n+1) and
+A11: v2 = P1.(n+2) and
+A12: x Joins v1, v2, G by A7, GLIB_001:104;
+    consider u1, u2 being Vertex of G, m being odd Element of NAT such that
+A13: m+2 <= len P2 and
+A14: u1 = P2.m and x = P2.(m+1) and
+A15: u2 = P2.(m+2) and
+A16: x Joins u1, u2, G by A8, GLIB_001:104;
+A17: n+0 < n+2 by XREAL_1:10;
+    per cases;
+    suppose
+A18:  v1 <> v2;
+      n <= len P1 by A17, A9, XXREAL_0:2;
+      then
+A19:  v1 in P1.vertices() by A10, GLIB_001:88;
+A20:  v2 in P1.vertices() by A9, A11, GLIB_001:88;
+      m+0 < m+2 by XREAL_1:10;
+      then m <= len P2 by A13, XXREAL_0:2;
+      then
+A21:  u1 in P2.vertices() by A14, GLIB_001:88;
+A22:  u2 in P2.vertices() by A13, A15, GLIB_001:88;
+A23:  v1 = u1 & v2 = u2 or v1 = u2 & v2 = u1 by A12, A16, GLIB_000:18;
+A24:  {v1, v2} c= P1.vertices() by A19, A20, ZFMISC_1:38;
+      {u1, u2} c= P2.vertices() by A21, A22, ZFMISC_1:38;
+      then v1 = P1.last() & v2 = P1.last()
+      by A4, ZFMISC_1:26, A24, A23, XBOOLE_1:19;
+      hence contradiction by A18;
+    end;
+    suppose
+A25:  v1 = v2;
+      then P1.first() = v1 by A9, A10, A11, A17, GLIB_001:def 28
+        .= P1.last() by A25, A9, A10, A11, A17, GLIB_001:def 28;
+      hence contradiction by A2, GLIB_001:def 24;
+    end;
+  end;
+  thus P is open
+  proof
+    assume
+A26: P.first() = P.last();
+    P.first() = P1.first() & P.last() = P2.last() by A1, GLIB_001:31;
+    then P1.first() in P1.vertices() & P1.first() in P2.vertices()
+    by A26, GLIB_001:89;
+    then P1.first() in {P1.last()} by A4, XBOOLE_0:def 3;
+    then P1.first() = P1.last() by TARSKI:def 1;
+    hence contradiction by A2, GLIB_001:def 24;
+  end;
+A27: now
+    assume
+A28: P1.first() in P2.vertices();
+    P1.first() in P1.vertices() by GLIB_001:89;
+    then P1.first() in {P1.last()} by A4, A28, XBOOLE_0:def 3;
+    then P1.first() = P1.last() by TARSKI:def 1;
+    hence contradiction by A2, GLIB_001:def 24;
+  end;
+  P1.vertices() /\ P2.vertices() c= {P1.first(), P1.last()} by A4, ZFMISC_1:12;
+  hence P is Path-like by A27, A1, A2, A3, A5, Th17;
+end;
+
+theorem Th19:
+  for G being _Graph for P1, P2 being Path of G
+  st P1.last() = P2.first() & P2.last() = P1.first() &
+  P1 is open & P2 is open & P1.edges() misses P2.edges() &
+  P1.vertices() /\ P2.vertices() = {P1.last(), P1.first()}
+  holds P1.append(P2) is Cycle-like
+proof
+  let G be _Graph, P1, P2 be Path of G such that
+A1: P1.last() = P2.first() and
+A2: P2.last() = P1.first() and
+A3: P1 is open and
+A4: P2 is open and
+A5: P1.edges() misses P2.edges() and
+A6: P1.vertices() /\ P2.vertices() = {P1.last(), P1.first()};
+  set P = P1.append(P2);
+  P.first() = P1.first() & P.last() = P2.last() by A1, GLIB_001:31;
+  hence P is closed by A2, GLIB_001:def 24;
+  thus P is Path-like by A1, A2, A3, A4, A5, A6, Th17;
+  P1.first() <> P1.last() by A3, GLIB_001:def 24;
+  then P1 is non trivial by GLIB_001:128;
+  then
+A7: len P1 >= 3 by GLIB_001:126;
+  len P >= len P1 by A1, GLIB_001:30;
+  then len P >= 3 by A7, XXREAL_0:2;
+  hence P is non trivial by GLIB_001:126;
+end;
+
+theorem :: unused SimpleG1:
+  for G being simple _Graph for W1, W2 being Walk of G for k being odd Nat
+
+st k <= len W1 & k <= len W2 & for j being odd Nat st j <= k holds W1.j = W2.j
+  holds for j being Nat st 1 <= j & j <= k holds W1.j = W2.j
+proof
+  let G be simple _Graph, W1, W2 be Walk of G, k be odd Nat such that
+A1: k <= len W1 and
+A2: k <= len W2 and
+A3: for j being odd Nat st j <= k holds W1.j = W2.j;
+  let j be Nat such that
+A4: 1 <= j and
+A5: j <= k;
+  per cases;
+  suppose j is odd;
+    hence thesis by A3, A5;
+  end;
+  suppose j is even;
+    then reconsider j' = j as even Nat;
+    1-1 <= j-1 by A4, XREAL_1:11;
+    then reconsider j1 = j'-1 as odd Element of NAT by INT_1:16;
+A6: j1 < j by XREAL_1:46;
+    j <= len W1 by A1, A5, XXREAL_0:2;
+    then j1 < len W1 by A6, XXREAL_0:2;
+    then
+A7: W1.(j1+1) Joins W1.j1, W1.(j1+2), G by GLIB_001:def 3;
+    j <= len W2 by A2, A5, XXREAL_0:2;
+    then j1 < len W2 by A6, XXREAL_0:2;
+    then
+A8: W2.(j1+1) Joins W2.j1, W2.(j1+2), G by GLIB_001:def 3;
+A9: W1.j1 = W2.j1 by A3, A6, A5, XXREAL_0:2;
+    j1+1 < k by A5, REAL_1:def 5;
+    then j1+1+1 <= k by NAT_1:13;
+    then W1.(j1+2) = W2.(j1+2) by A3;
+    hence W1.j = W2.j by A7, A8, A9, GLIB_000:def 22;
+  end;
+end;
+
+theorem Th21:
+  for G being _Graph for W1, W2 being Walk of G
+  st W1.first() = W2.first() holds len maxPrefix(W1,W2) is odd
+proof
+  let G be _Graph, W1, W2 be Walk of G;
+  assume that
+A1: W1.first() = W2.first() and
+A2: len maxPrefix(W1,W2) is even;
+  set dI = len maxPrefix(W1,W2);
+  set mP = maxPrefix(W1,W2);
+A3: 1 <= dI by A1, Th5;
+A4: dI <= len W1 by Th3;
+A5: dI <= len W2 by Th3;
+A6: dI < len W1 by A4, A2, REAL_1:def 5;
+A7: dI < len W2 by A5, A2, REAL_1:def 5;
+  reconsider dIp = dI-1 as odd Element of NAT by A3, INT_1:18, A2, HILBERT3:1;
+A8: dIp < dI by XREAL_1:148;
+A9: dIp < len W1 by XREAL_1:148, A4, XXREAL_0:2;
+A10: dI = dIp+1;
+  then
+A11: W1.dI Joins W1.dIp, W1.(dIp+2), G by A9, GLIB_001:def 3;
+  dIp < len W2 by XREAL_1:148, A5, XXREAL_0:2;
+  then
+A12: W2.dI Joins W2.dIp, W2.(dIp+2), G by A10, GLIB_001:def 3;
+  W1.dI = W2.dI by Th7;
+  then
+A13: W1.dIp = W2.dIp & W1.(dIp+2) = W2.(dIp+2)
+  or W1.dIp = W2.(dIp+2) & W1.(dIp+2) = W2.dIp by A11, A12, GLIB_000:18;
+  set lmP = mP^<*W1.(dI+1)*>;
+A14: len lmP = len mP + 1 by FINSEQ_2:19;
+  then len lmP <= len W1 by A6, NAT_1:13;
+  then
+A15: dom lmP c= dom W1 by FINSEQ_3:32;
+  now
+    let x be set such that
+A16: x in dom lmP;
+    x is Element of NAT by A16;
+    then reconsider n = x as Nat;
+A17: 1 <= n by A16, FINSEQ_3:27;
+    n <= len lmP by A16, FINSEQ_3:27;
+    then
+A18: n <= len mP + 1 by FINSEQ_2:19;
+    per cases by A18, NAT_1:8;
+    suppose
+A19:  n <= dI;
+      then n in dom mP by A17, FINSEQ_3:27;
+      hence lmP.x = mP.x by FINSEQ_1:def 7
+        .= W1.x by A19, Th6;
+    end;
+    suppose n = dI + 1;
+      hence lmP.x = W1.x by FINSEQ_1:59;
+    end;
+  end;
+  then
+A20: lmP c= W1 by A15, GRFUNC_1:8;
+  len lmP <= len W2 by A7, A14, NAT_1:13;
+  then
+A21: dom lmP c= dom W2 by FINSEQ_3:32;
+  now
+    let x be set such that
+A22: x in dom lmP;
+    x is Element of NAT by A22;
+    then reconsider n = x as Nat;
+A23: 1 <= n by A22, FINSEQ_3:27;
+    n <= len lmP by A22, FINSEQ_3:27;
+    then
+A24: n <= len mP + 1 by FINSEQ_2:19;
+    per cases by A24, NAT_1:8;
+    suppose
+A25:  n <= dI;
+      then n in dom mP by A23, FINSEQ_3:27;
+      hence lmP.x = mP.x by FINSEQ_1:def 7
+        .= W2.x by A25, Th6;
+    end;
+    suppose
+A26:  n = dI + 1;
+      hence lmP.x = W1.(dI+1) by FINSEQ_1:59
+        .= W2.x by A26, A13, A8, Th7;
+    end;
+  end;
+  then lmP c= W2 by A21, GRFUNC_1:8;
+  then lmP c= mP by A20, Def1;
+  then len lmP <= len mP by FINSEQ_1:84;
+  then len mP + 1 <= len mP by FINSEQ_2:19;
+  hence contradiction by NAT_1:13;
+end;
+
+theorem Th22:
+  for G being _Graph for W1, W2 being Walk of G
+  st W1.first() = W2.first() & not W1 is_a_prefix_of W2
+  holds len maxPrefix(W1,W2) +2 <= len W1
+proof
+  let G be _Graph, W1, W2 be Walk of G such that
+A1: W1.first() = W2.first() and
+A2: not W1 c= W2;
+A3: len maxPrefix(W1,W2) < len W1 by A2, Th8;
+  len maxPrefix(W1,W2) is odd Nat by A1, Th21;
+  hence len maxPrefix(W1,W2) +2 <= len W1 by A3, CHORD:4;
+end;
+
+theorem Th23:
+  for G being non-multi _Graph for W1, W2 being Walk of G
+  st W1.first() = W2.first() &
+  not W1 is_a_prefix_of W2 & not W2 is_a_prefix_of W1
+  holds W1.(len maxPrefix(W1,W2) +2) <> W2.(len maxPrefix(W1,W2) +2)
+proof
+  let G be non-multi _Graph, W1, W2 be Walk of G such that
+A1: W1.first() = W2.first() and
+A2: not W1 c= W2 and
+A3: not W2 c= W1 and
+A4: W1.(len maxPrefix(W1,W2) +2) = W2.(len maxPrefix(W1,W2) +2);
+  set dI = len maxPrefix(W1,W2);
+A5: dI is odd by A1, Th21;
+A6: W1.(dI +1) <> W2.(dI +1) by A2, A3, Th9;
+A7: W1.dI = W2.dI by Th7;
+A8: dI < len W1 by A2, Th8;
+A9: dI < len W2 by A3, Th8;
+A10: W1.(dI+1) Joins W1.dI,W1.(dI+2), G by A5, A8, GLIB_001:def 3;
+  W2.(dI+1) Joins W2.dI,W2.(dI+2), G by A5, A9, GLIB_001:def 3;
+  hence contradiction by A10, A4, A6, A7, GLIB_000:def 22;
+end;
+
+begin :: Trees
+
+definition
+  mode _Tree is Tree-like _Graph;
+  let G be _Graph;
+  mode _Subtree of G is Tree-like Subgraph of G;
+end;
+
+registration
+  let T be _Tree;
+  cluster Trail-like -> Path-like Walk of T;
+  correctness
+  proof
+    let W be Walk of T such that
+A1: W is Trail-like;
+    assume not W is Path-like;
+    then consider m, n being odd Element of NAT such that
+A2: m < n and
+A3: n <= len W and
+A4: W.m = W.n and m <> 1 or n <> len W by A1, GLIB_001:def 28;
+    defpred P[Nat] means $1 is odd & $1 <= len W &
+    ex k being odd Element of NAT st k < $1 & W.k = W.$1;
+A5: ex p being Nat st P[p] by A2, A3, A4;
+    consider p being Nat such that
+A6: P[p] and
+A7: for r being Nat st P[r] holds p <= r from NAT_1:sch 5(A5);
+    reconsider P = p as Element of NAT by ORDINAL1:def 13;
+    consider k being odd Element of NAT such that
+A8: k < p and p <= len W and
+A9: W.k = W.p by A6;
+    set Wc = W.cut(k,P);
+    len Wc + k = P+1 by A6, A8, GLIB_001:37;
+    then len Wc <> 1 by A8;
+    then
+A10: Wc is non trivial by GLIB_001:127;
+A11: Wc is Trail-like by A1, GLIB_001:142;
+A12: Wc.first() = W.k by A6,A8, GLIB_001:38;
+A13: Wc.last() = W.p by A6, A8, GLIB_001:38;
+A14: Wc is Path-like
+    proof
+      assume not thesis;
+      then consider m, n being odd Element of NAT such that
+A15:  m < n and
+A16:  n <= len Wc and
+A17:  Wc.m = Wc.n and
+A18:  m <> 1 or n <> len Wc by A11, GLIB_001:def 28;
+A19:  1 <= m by HEYTING3:1;
+A20:  m <= len Wc by A15, A16, XXREAL_0:2;
+A21:  m < len Wc by A15, A16, XXREAL_0:2;
+      consider km1 being odd Nat such that
+A22:  Wc.m = W.km1 and
+A23:  km1 = k+m-1 and
+A24:  km1 <= len W by A6, A8, A20, Th12;
+      reconsider km1 as odd Element of NAT by ORDINAL1:def 13;
+      consider kn1 being odd Nat such that
+A25:  Wc.n = W.kn1 and
+A26:  kn1 = k+n-1 and
+A27:  kn1 <= len W by A6, A8, A16, Th12;
+      reconsider kn1 as odd Element of NAT by ORDINAL1:def 13;
+      per cases by A16, REAL_1:def 5;
+      suppose n < len Wc;
+        then k+n < k+len Wc by XREAL_1:8;
+        then k+n < p+1 by A6, A8, GLIB_001:37;
+        then
+A28:    kn1 < p by A26, XREAL_1:21;
+        k+m < k+n by A15, XREAL_1:8;
+        then km1 < kn1 by A23, A26, XREAL_1:11;
+        hence contradiction by A7, A27, A28, A22, A25, A17;
+      end;
+      suppose
+A29:    n = len Wc;
+        then 1 < m by A18, A19, REAL_1:def 5;
+        then k+1 < k+m by XREAL_1:8;
+        then
+A30:    k < km1 by A23, XREAL_1:22;
+        k+m < len Wc + k by A21, XREAL_1:8;
+        then k+m < p+1 by A6, A8, GLIB_001:37;
+        then km1 < p by A23, XREAL_1:21;
+        hence contradiction by A7, A30, A22, A24, A13, A9, A29, A17;
+      end;
+    end;
+    Wc is closed by A12, A13, A9, GLIB_001:def 24;
+    then Wc is Cycle-like by A10, A14, GLIB_001:def 31;
+    hence contradiction by GLIB_002:def 2;
+  end;
+end;
+
+theorem Th24:
+  for T being _Tree for P being Path of T st P is non trivial holds P is open
+proof
+  let T be _Tree, P be Path of T;
+  assume not thesis;
+  then P is Cycle-like by GLIB_001:def 31;
+  hence contradiction by GLIB_002:def 2;
+end;
+
+registration
+  let T be _Tree;
+  cluster non trivial -> open Path of T;
+  correctness by Th24;
+end;
+
+theorem Th25:  :: Only for _Tree as it is not true for cyclic paths
+  for T being _Tree for P being Path of T for i, j being odd Nat
+  st i < j & j <= len P holds P.i <> P.j
+proof
+  let T be _Tree, P be Path of T, i, j be odd Nat such that
+A1: i < j and
+A2: j <= len P and
+A3: P.i = P.j;
+  reconsider i, j as odd Element of NAT by ORDINAL1:def 13;
+  i < j by A1;
+  then
+A4: i = 1 & j = len P by A2, A3, GLIB_001:def 28;
+  then
+A5: P is non trivial by A1, GLIB_001:127;
+  P.first() = P.last() by A4, A3;
+  then P is closed by GLIB_001:def 24;
+  hence contradiction by A5, Th24;
+end;
+
+theorem Th26:
+  for T being _Tree for a, b being Vertex of T for P1, P2 being Path of T
+  st P1 is_Walk_from a, b & P2 is_Walk_from a, b holds P1 = P2
+proof  :: follow CLRS
+  let T be _Tree;
+  let a, b be Vertex of T;
+  let P1, P2 be Path of T such that
+A1: P1 is_Walk_from a, b and
+A2: P2 is_Walk_from a, b;
+A3: P1.first() = a by A1, GLIB_001:def 23;
+A4: P2.first() = a by A2, GLIB_001:def 23;
+  assume
+A5: P1 <> P2;
+A6: not P1 c= P2
+  proof
+    assume
+A7: P1 c= P2;
+    then
+A8: len P1 <> len P2 by A5, FINSEQ_2:149;
+    len P1 <= len P2 by A7, FINSEQ_1:84;
+    then
+A9: len P1 < len P2 by A8, REAL_1:def 5;
+    1 <= len P1 by HEYTING3:1;
+    then len P1 in dom P1 by FINSEQ_3:27;
+    then
+A10: P1.len P1 = P2.len P1 by A7, GRFUNC_1:8;
+A11: P1.len P1 = P1.last()
+      .= b by A1, GLIB_001:def 23;
+    P2.len P2 = P2.last()
+      .= b by A2, GLIB_001:def 23;
+    hence contradiction by A10, A11, A9, Th25;
+  end;
+A12: not P2 c= P1
+  proof
+    assume
+A13: P2 c= P1;
+    then
+A14: len P2 <> len P1 by A5, FINSEQ_2:149;
+    len P2 <= len P1 by A13, FINSEQ_1:84;
+    then
+A15: len P2 < len P1 by A14, REAL_1:def 5;
+    1 <= len P2 by HEYTING3:1;
+    then len P2 in dom P2 by FINSEQ_3:27;
+    then
+A16: P2.len P2 = P1.len P2 by A13, GRFUNC_1:8;
+A17: P2.len P2 = P2.last()
+      .= b by A2, GLIB_001:def 23;
+    P1.len P1 = P1.last()
+      .= b by A1, GLIB_001:def 23;
+    hence contradiction by A16, A17, A15, Th25;
+  end;
+  set di = len maxPrefix(P1,P2);
+  reconsider di as odd Element of NAT by A3, A4, Th21;
+  set d = P1.di;
+  defpred P[Nat] means
+  $1 is odd & di < $1 & $1 <= len P2 & P2.$1 in P1.vertices();
+A18: ex k being Nat st P[k]
+  proof
+    take k = len P2;
+    thus k is odd;
+A19: di +2 <= len P2 by A3, A4, A12, Th22;
+    di < di+2 by NAT_1:19;
+    hence di < k by A19, XXREAL_0:2;
+    thus k <= len P2;
+    P2.k = P2.last()
+      .= b by A2, GLIB_001:def 23
+      .= P1.last() by A1, GLIB_001:def 23;
+    hence P2.k in P1.vertices() by GLIB_001:89;
+  end;
+  consider ei being Nat such that
+A20: P[ei] and
+A21: for n being Nat st P[n] holds ei <= n from NAT_1:sch 5(A18);
+  reconsider ei as odd Element of NAT by A20, ORDINAL1:def 13;
+  set e = P2.ei;
+  set fi = P1.find(e);
+A22: fi <= len P1 by A20, GLIB_001:def 19;
+A23: e = P1.fi by GLIB_001:def 19, A20;
+  len P2 <> 1
+  proof
+    assume len P2 = 1;
+    then di < 1 by A20, XXREAL_0:2;
+    hence contradiction by HEYTING3:1;
+  end;
+  then
+A24: not P2 is trivial by GLIB_001:127;
+A25: di < fi
+  proof
+    assume
+A26: di >= fi;
+    then
+A27: P1.fi = P2.fi by Th7;
+    ei > fi by A26, A20, XXREAL_0:2;
+    then P2.first() = e & P2.last() = e by A23, A27, A20, GLIB_001:def 28;
+    then P2 is closed by GLIB_001:def 24;
+    then P2 is Cycle-like by A24, GLIB_001:def 31;
+    hence contradiction by GLIB_002:def 2;
+  end;
+  set pde = P2.cut(di,ei), pdf = P1.cut(di,fi);
+A28: pde is non trivial by A20, GLIB_001:132;
+  then
+A29: pde is open by Th24;
+A30: P2.di = P1.di by Th7;
+  then
+A31: pde.first() = d by A20, GLIB_001:38;
+A32: pde.last() = e by A20, GLIB_001:38;
+  set rpdf = pdf.reverse();
+A33: pdf is non trivial by A25, A22, GLIB_001:132;
+  then rpdf is non trivial by GLIB_001:130;
+  then
+A34: rpdf is open by Th24;
+  P1 is non trivial by A33, Th11;
+  then
+A35: P1 is open by Th24;
+  P2 is non trivial by A28, Th11;
+  then
+A36: P2 is open by Th24;
+  pdf.last() = e by A23, A25, A22, GLIB_001:38;
+  then
+A37: rpdf.first() = e by GLIB_001:23;
+  pdf.first() = d by A25, A22, GLIB_001:38;
+  then
+A38: rpdf.last() = d by GLIB_001:23;
+A39: fi <= len P1 by A20, GLIB_001:def 19;
+  rpdf.vertices() = pdf.vertices() by GLIB_001:93;
+  then
+A40: rpdf.vertices() c= P1.vertices() by A39, A25, GLIB_001:95;
+  set C = pde.append(rpdf);
+A41: pde.vertices() /\ rpdf.vertices() = {e, d}
+  proof
+    thus pde.vertices() /\ rpdf.vertices() c= {e, d}
+    proof
+      assume not thesis;
+      then consider g being set such that
+A42:  g in pde.vertices() /\ rpdf.vertices() and
+A43:  not g in {e, d} by TARSKI:def 3;
+      g in pde.vertices() by A42, XBOOLE_0:def 3;
+      then consider gii being odd Element of NAT such that
+A44:  gii <= len pde and
+A45:  pde.gii = g by GLIB_001:88;
+      consider gi being odd Nat such that
+A46:  P2.gi = pde.gii and
+A47:  gi = di+gii-1 and
+A48:  gi <= len P2 by A44, A20, Th12;
+      reconsider gi as odd Element of NAT by ORDINAL1:def 13;
+A49:  gii <> 1 by A31, A43, A45, TARSKI:def 2;
+      gii >= 1 by HEYTING3:1;
+      then
+A50:  gii > 1 by A49, REAL_1:def 5;
+A51:  di < gi
+      proof
+        assume di >= gi;
+        then di+gii > gi+1 by A50, XREAL_1:10;
+        hence contradiction by A47;
+      end;
+A52:  gi < ei
+      proof
+        assume
+A53:    gi >= ei;
+A54:    len pde + di = ei+1 by A20, GLIB_001:37;
+        per cases by A53, REAL_1:def 5;
+        suppose gi = ei;
+          then pde.gii = pde.last() by A47, A54
+            .= e by A20, GLIB_001:38;
+          hence contradiction by A43, A45, TARSKI:def 2;
+        end;
+        suppose gi > ei;
+          then gi+1 > ei+1 by XREAL_1:8;
+          hence contradiction by A44, A47, A54, XREAL_1:8;
+        end;
+      end;
+      g in rpdf.vertices() by A42, XBOOLE_0:def 3;
+      hence contradiction by A51, A48, A45, A46, A52, A21, A40;
+    end;
+    thus {e, d} c= pde.vertices() /\ rpdf.vertices()
+    proof
+      let x be set;
+      assume
+A55:  x in {e, d};
+      per cases by A55, TARSKI:def 2;
+      suppose x = e;
+        then x in pde.vertices() & x in rpdf.vertices() by A32, A37, GLIB_001:
+        89;
+        hence x in pde.vertices() /\ rpdf.vertices() by XBOOLE_0:def 3;
+      end;
+      suppose x = d;
+        then x in pde.vertices() & x in rpdf.vertices() by A31, A38, GLIB_001:
+        89;
+        hence x in pde.vertices() /\ rpdf.vertices() by XBOOLE_0:def 3;
+      end;
+    end;
+  end;
+  pde.edges() misses rpdf.edges()
+  proof
+    assume pde.edges() /\ rpdf.edges() <> {};
+    then consider x being set such that
+A56: x in pde.edges() /\ rpdf.edges() by XBOOLE_0:def 1;
+A57: x in pde.edges() by A56, XBOOLE_0:def 3;
+A58: x in rpdf.edges() by A56, XBOOLE_0:def 3;
+A59: pdf.edges() = rpdf.edges() by GLIB_001:108;
+A60: pdf.vertices() = rpdf.vertices() by GLIB_001:93;
+    consider v1, v2 being Vertex of T, n being odd Element of NAT such that
+A61: n+2 <= len pde and
+A62: v1 = pde.n and x = pde.(n+1) and
+A63: v2 = pde.(n+2) and
+A64: x Joins v1, v2, T by A57, GLIB_001:104;
+    consider u1, u2 being Vertex of T, m being odd Element of NAT such that
+A65: m+2 <= len pdf and
+A66: u1 = pdf.m and x = pdf.(m+1) and
+A67: u2 = pdf.(m+2) and
+A68: x Joins u1, u2, T by A58, A59, GLIB_001:104;
+A69: n+0 < n+2 by XREAL_1:10;
+    per cases;
+    suppose
+A70:  v1 <> v2;
+      n <= len pde by A69, A61, XXREAL_0:2;
+      then
+A71:  v1 in pde.vertices() by A62, GLIB_001:88;
+A72:  v2 in pde.vertices() by A61, A63, GLIB_001:88;
+      n+0 < n+2 by XREAL_1:10;
+      then
+A73:  n <= len pde by A61, XXREAL_0:2;
+      m+0 < m+2 by XREAL_1:10;
+      then
+A74:  m <= len pdf by A65, XXREAL_0:2;
+      then
+A75:  u1 in pdf.vertices() by A66, GLIB_001:88;
+A76:  u2 in pdf.vertices() by A65, A67, GLIB_001:88;
+A77:  v1 = u1 & v2 = u2 or v1 = u2 & v2 = u1 by A64, A68, GLIB_000:18;
+A78:  {v1, v2} c= pde.vertices() by A71, A72, ZFMISC_1:38;
+      {u1, u2} c= rpdf.vertices() by A60, A75, A76, ZFMISC_1:38;
+      then
+A79:  (v1 = e or v1 = d) & (v2 = e or v2 = d) by A41, ZFMISC_1:28,
+      A78, A77, XBOOLE_1:19;
+      1 <= m by HEYTING3:1;
+      then consider im being Nat such that
+A80:  m = im+1 by NAT_1:6;
+      reconsider im as Element of NAT by ORDINAL1:def 13;
+A81:  im < len pdf by A80, A74, NAT_1:13;
+      then
+A82:  pdf.m = P1.(di+im) by A25, A22, A80, GLIB_001:37;
+A83:  m+2 = m+1+1;
+      then
+A84:  m+1 < len pdf by A65, NAT_1:13;
+      then
+A85:  pdf.(m+2) = P1.(di+(m+1)) by A83, A25, A22, GLIB_001:37;
+      1 <= n by HEYTING3:1;
+      then consider ni being Nat such that
+A86:  n = ni+1 by NAT_1:6;
+      reconsider ni as Element of NAT by ORDINAL1:def 13;
+A87:  ni < len pde by A86, A73, NAT_1:13;
+      then
+A88:  pde.n = P2.(di+ni) by A20, A86, GLIB_001:37;
+A89:  n+2 = n+1+1;
+      then
+A90:  n+1 < len pde by A61, NAT_1:13;
+      then
+A91:  pde.(n+2) = P2.(di+(n+1)) by A89, A20, GLIB_001:37;
+A92:  P1.(di+2) = e
+      proof
+        per cases by A79, A70, A64, A68, GLIB_000:18;
+        suppose
+A93:      u1 = e & u2 = d;
+          di <= di+m by NAT_1:11;
+          then
+A94:      di < di+m+1 by NAT_1:13;
+          di+(m+2) <= len pdf +di by A65, XREAL_1:8;
+          then di+m+1+1 <= fi+1 by A25, A22, GLIB_001:37;
+          then di+m+1 <= fi by XREAL_1:8;
+          then di+(m+1) <= len P1 by A22, XXREAL_0:2;
+          then P1.first() = d & P1.last() = d
+          by A93, A94, A85, A67, GLIB_001:def 28;
+          hence thesis by A35, GLIB_001:def 24;
+        end;
+        suppose
+A95:      u1 = d & u2 = e;
+          im = 0
+          proof
+            assume
+A96:        im <> 0;
+            di+im < len pdf +di by A81, XREAL_1:8;
+            then di+im < fi+1 by A25, A22, GLIB_001:37;
+            then di+im <= fi by NAT_1:13;
+            then
+A97:        di+im <= len P1 by A22, XXREAL_0:2;
+            m-1 = im by A80;
+            then reconsider im as even Element of NAT;
+            im > 0 by A96;
+            then di+0 < di+im by XREAL_1:8;
+            then P1.first() = d & P1.last() = d
+            by A95, A66, A82, A97, GLIB_001:def 28;
+            hence contradiction by A35, GLIB_001:def 24;
+          end;
+          hence thesis by A80, A67, A95, A84, A25, A22, GLIB_001:37;
+        end;
+      end;
+      P2.(di+2) = e
+      proof
+        per cases by A79, A70;
+        suppose
+A98:      v1 = e & v2 = d;
+          di <= di+n by NAT_1:11;
+          then
+A99:      di < di+n+1 by NAT_1:13;
+          di+(n+2) <= len pde +di by A61, XREAL_1:8;
+          then di+n+1+1 <= ei+1 by A20, GLIB_001:37;
+          then di+n+1 <= ei by XREAL_1:8;
+          then di+(n+1) <= len P2 by A20, XXREAL_0:2;
+          then P2.first() = d & P2.last() = d
+          by A30, A98, A99, A91, A63, GLIB_001:def 28;
+          hence thesis by A36, GLIB_001:def 24;
+        end;
+        suppose
+A100:     v1 = d & v2 = e;
+          ni = 0
+          proof
+            assume
+A101:       ni <> 0;
+            di+ni < len pde +di by A87, XREAL_1:8;
+            then di+ni < ei+1 by A20, GLIB_001:37;
+            then di+ni <= ei by NAT_1:13;
+            then
+A102:       di+ni <= len P2 by A20, XXREAL_0:2;
+            n-1 = ni by A86;
+            then reconsider ni as even Element of NAT;
+            ni > 0 by A101;
+            then di+0 < di+ni by XREAL_1:8;
+            then P2.first() = d & P2.last() = d
+            by A30, A100, A62, A88, A102, GLIB_001:def 28;
+            hence contradiction by A36, GLIB_001:def 24;
+          end;
+          hence thesis by A86, A63, A100, A90, A20, GLIB_001:37;
+        end;
+      end;
+      hence contradiction by A92, A3, A4, A6, A12, Th23;
+    end;
+    suppose v1 = v2;
+      then pde.first() = v1 & pde.last() = v1
+      by A62, A63, A61, A69, GLIB_001:def 28;
+      hence contradiction by A29, GLIB_001:def 24;
+    end;
+  end;
+  then C is Cycle-like by A32, A37, A38, A31, A29, A34, A41, Th19;
+  hence contradiction by GLIB_002:def 2;
+end;
+
+definition
+  let T be _Tree;
+  let a, b be Vertex of T;
+  func T.pathBetween(a,b) -> Path of T means
+  :Def2:
+  it is_Walk_from a, b;
+  existence
+  proof
+    consider W being Walk of T such that
+A1: W is_Walk_from a,b by GLIB_002:def 1;
+    consider P being Path-like Subwalk of W;
+    take P;
+    P is_Walk_from W.first(), W.last() by GLIB_001:def 32;
+    then P is_Walk_from a, W.last() by A1, GLIB_001:def 23;
+    hence P is_Walk_from a, b by A1, GLIB_001:def 23;
+  end;
+  uniqueness by Th26;
+end;
+
+theorem Th27:
+  for T being _Tree, a, b being Vertex of T
+  holds T.pathBetween(a,b).first() = a & T.pathBetween(a,b).last() = b
+proof
+  let T be _Tree, a, b be Vertex of T;
+A1: T.pathBetween(a,b) is_Walk_from a, b by Def2;
+  hence T.pathBetween(a,b).first() = a by GLIB_001:def 23;
+  thus T.pathBetween(a,b).last() = b by A1, GLIB_001:def 23;
+end;
+
+:: more theorems about pathBetween ?
+
+theorem Th28:
+  for T being _Tree, a, b being Vertex of T
+  holds a in T.pathBetween(a,b).vertices() & b in T.pathBetween(a,b).vertices()
+proof
+  let T be _Tree, a, b be Vertex of T;
+  T.pathBetween(a,b).first() = a by Th27;
+  hence a in T.pathBetween(a,b).vertices() by GLIB_001:89;
+  T.pathBetween(a,b).last() = b by Th27;
+  hence b in T.pathBetween(a,b).vertices() by GLIB_001:89;
+end;
+
+registration
+  let T be _Tree, a be Vertex of T;
+  cluster T.pathBetween(a, a) -> closed;
+  correctness
+  proof
+    T.pathBetween(a, a) is_Walk_from a, a by Def2;
+    hence thesis by GLIB_001:120;
+  end;
+end;
+
+registration
+  let T be _Tree, a be Vertex of T;
+  cluster T.pathBetween(a, a) -> trivial;
+  correctness
+  proof
+    assume T.pathBetween(a, a) is non trivial;
+    then T.pathBetween(a, a) is Cycle-like by GLIB_001:def 31;
+    hence contradiction by GLIB_002:def 2;
+  end;
+end;
+
+theorem Th29:
+  for T being _Tree, a being Vertex of T
+  holds T.pathBetween(a,a).vertices() = {a}
+proof
+  let T be _Tree, a be Vertex of T;
+  set P = T.pathBetween(a,a);
+  consider v being Vertex of T such that
+A1: P = T.walkOf(v) by GLIB_001:129;
+A2: a = P.first() by Th27;
+  T.walkOf(v).first() = v by GLIB_001:14;
+  hence P.vertices() = {a} by A1, A2, GLIB_001:91;
+end;
+
+theorem Th30:
+  for T being _Tree, a, b being Vertex of T
+  holds T.pathBetween(a,b).reverse() = T.pathBetween(b,a)
+proof
+  let T be _Tree, a, b be Vertex of T;
+  set P = T.pathBetween(a,b), R = T.pathBetween(b,a);
+  P is_Walk_from a, b by Def2;
+  then P.reverse() is_Walk_from b, a by GLIB_001:24;
+  hence P.reverse() = R by Def2;
+end;
+
+theorem Th31:
+  for T being _Tree, a, b being Vertex of T
+  holds T.pathBetween(a,b).vertices() = T.pathBetween(b,a).vertices()
+proof
+  let T be _Tree, a, b be Vertex of T;
+  T.pathBetween(a,b).reverse() = T.pathBetween(b,a) by Th30;
+  hence T.pathBetween(a,b).vertices() = T.pathBetween(b,a).vertices()
+  by GLIB_001:93;
+end;
+
+theorem Th32:
+  for T being _Tree for a, b being Vertex of T for t being _Subtree of T
+  for a', b' being Vertex of t st a = a' & b = b'
+  holds T.pathBetween(a,b) = t.pathBetween(a',b')
+proof
+  let T be _Tree;
+  let a, b be Vertex of T;
+  let t be _Subtree of T;
+  let a', b' be Vertex of t such that
+A1: a = a' and
+A2: b = b';
+  set Tp = T.pathBetween(a,b);
+  set tp = t.pathBetween(a',b');
+A3: tp is_Walk_from a', b' by Def2;
+  reconsider tp' = tp as Walk of T by GLIB_001:168;
+A4: tp' is Path-like by GLIB_001:177;
+A5: tp'.first() = tp.first()
+    .= a by A1, A3, GLIB_001:def 23;
+  tp'.last() = tp.last()
+    .= b by A2, A3, GLIB_001:def 23;
+  then tp' is_Walk_from a, b by A5, GLIB_001:def 23;
+  hence T.pathBetween(a,b) = t.pathBetween(a',b') by A4, Def2;
+end;
+
+theorem Th33:
+  for T being _Tree for a, b being Vertex of T
+  for t being _Subtree of T st a in the_Vertices_of t & b in the_Vertices_of t
+  holds T.pathBetween(a,b).vertices() c= the_Vertices_of t
+proof
+  let T be _Tree, a, b be Vertex of T, t be _Subtree of T such that
+A1: a in the_Vertices_of t and
+A2: b in the_Vertices_of t;
+  reconsider a' = a, b' = b as Vertex of t by A1, A2;
+  set Tp = T.pathBetween(a,b), tp = t.pathBetween(a',b');
+  Tp.vertices() = tp.vertices() by Th32, GLIB_001:77;
+  hence T.pathBetween(a,b).vertices() c= the_Vertices_of t;
+end;
+
+theorem Th34:
+  for T being _Tree for P being Path of T for a, b being Vertex of T
+  for i, j being odd Nat st i <= j & j <= len P & P.i = a & P.j = b
+  holds T.pathBetween(a,b) = P.cut(i, j)
+proof
+
+let T be _Tree, P be Path of T, a, b be Vertex of T, i, j be odd Nat such that
+A1: i <= j & j <= len P & P.i = a & P.j = b;
+  reconsider i' = i, j' = j as odd Element of NAT by ORDINAL1:def 13;
+  P.cut(i', j') is_Walk_from a, b by A1, GLIB_001:38;
+  hence T.pathBetween(a,b) = P.cut(i, j) by Def2;
+end;
+
+theorem Th35:
+  for T being _Tree for a, b, c being Vertex of T
+  holds c in T.pathBetween(a,b).vertices()
+  iff T.pathBetween(a,b) = T.pathBetween(a,c).append(T.pathBetween(c,b))
+proof
+  let T be _Tree, a, b, c be Vertex of T;
+  set P = T.pathBetween(a,b);
+  set ci = P.find(c);
+  set pac = T.pathBetween(a,c), pcb = T.pathBetween(c,b);
+  hereby
+    assume
+A1: c in P.vertices();
+A2: 1 <= ci by HEYTING3:1;
+A3: ci <= len P by A1, GLIB_001:def 19;
+A4: 1 = 2*0+1;
+A5: P.1 = P.first()
+      .= a by Th27;
+A6: P.ci = c by A1, GLIB_001:def 19;
+A7: P.len P = P.last()
+      .= b by Th27;
+A8: pac = P.cut(1,ci) by A2, A3, A4, A5, A6, Th34;
+A9: pcb = P.cut(ci, len P) by A3, A6, A7, Th34;
+    P = P.cut(1, len P) by GLIB_001:40;
+    hence P = T.pathBetween(a,c).append(T.pathBetween(c,b))
+    by A2, A3, A4, A8, A9, GLIB_001:39;
+  end;
+  assume
+A10: P = pac.append(pcb);
+A11: c in pac.vertices() by Th28;
+  pac.vertices() c= P.vertices() by A10, Th15, Th13;
+  hence c in P.vertices() by A11;
+end;
+
+theorem Th36:
+  for T being _Tree for a, b, c being Vertex of T
+  holds c in T.pathBetween(a,b).vertices()
+  iff T.pathBetween(a,c) is_a_prefix_of T.pathBetween(a,b)
+proof
+  let T be _Tree, a, b, c be Vertex of T;
+  hereby
+    assume c in T.pathBetween(a,b).vertices();
+    then T.pathBetween(a,b) = T.pathBetween(a,c).append(T.pathBetween(c,b))
+    by Th35;
+    hence T.pathBetween(a,c) c= T.pathBetween(a,b) by Th15;
+  end;
+  assume T.pathBetween(a,c) c= T.pathBetween(a,b);
+  then
+A1: T.pathBetween(a,c).vertices() c= T.pathBetween(a,b).vertices() by Th13;
+  c in T.pathBetween(a,c).vertices() by Th28;
+  hence c in T.pathBetween(a,b).vertices() by A1;
+end;
+
+theorem Th37:
+  for T being _Tree for P1, P2 being Path of T
+  st P1.last() = P2.first() & P1.vertices() /\ P2.vertices() = {P1.last()}
+  holds P1.append(P2) is Path-like
+proof  :: open/trivial cases and PathCatopen
+  let T be _Tree, P1, P2 be Path of T such that
+A1: P1.last() = P2.first() and
+A2: P1.vertices() /\ P2.vertices() = {P1.last()};
+  per cases;
+  suppose P1 is trivial;
+    hence P1.append(P2) is Path-like by A1, LEXBFS:9;
+  end;
+  suppose P2 is trivial;
+    hence P1.append(P2) is Path-like by GLIB_001:131;
+  end;
+  suppose P1 is non trivial & P2 is non trivial;
+    then P1 is open & P2 is open by Th24;
+    hence P1.append(P2) is Path-like by A1, A2, Th18;
+  end;
+end;
+
+theorem Th38:
+  for T being _Tree for a, b, c being Vertex of T
+  holds c in T.pathBetween(a,b).vertices()
+  iff T.pathBetween(a,c).vertices() /\ T.pathBetween(c,b).vertices() = {c}
+proof
+  let T be _Tree, a, b, c be Vertex of T;
+  set Pac = T.pathBetween(a,c), Pcb = T.pathBetween(c,b),
+  Pab = T.pathBetween(a,b);
+  thus c in Pab.vertices() implies Pac.vertices() /\ Pcb.vertices() = {c}
+  proof
+    assume
+A1: c in T.pathBetween(a,b).vertices();
+    thus Pac.vertices() /\ Pcb.vertices() c= {c}
+    proof
+      let x be set;
+      assume x in Pac.vertices() /\ Pcb.vertices();
+      then
+A2:   x in Pac.vertices() & x in Pcb.vertices() by XBOOLE_0:def 3;
+A3:   Pab.first() = a by Th27;
+A4:   Pab.last() = b by Th27;
+A5:   Pab = Pac.append(Pcb) by A1, Th35;
+A6:   Pac.last() = c by Th27;
+A7:   Pcb.first() = c by Th27;
+      per cases;
+      suppose Pab is trivial;
+        then Pab.first() = Pab.last() by GLIB_001:128;
+        then
+A8:     Pab.vertices() = {a} by A3, A4, Th29;
+        x in Pac.vertices() \/ Pcb.vertices() by A2, XBOOLE_0:def 2;
+        then x in Pab.vertices() by A6, A7, A5, GLIB_001:94;
+        hence thesis by A8, A1, TARSKI:def 1;
+      end;
+      suppose
+A9:     Pab is non trivial;
+        consider m being odd Element of NAT such that
+A10:    m <= len Pac and
+A11:    Pac.m = x by A2, GLIB_001:88;
+        1 <= m by HEYTING3:1;
+        then m in dom Pac by A10, FINSEQ_3:27;
+        then
+A12:    Pab.m = x by A5, A11, GLIB_001:33;
+        consider n being odd Element of NAT such that
+A13:    n <= len Pcb and
+A14:    Pcb.n = x by A2, GLIB_001:88;
+        1 <= n by HEYTING3:1;
+        then 1-1 <= n-1 by XREAL_1:11;
+        then reconsider n1 = n-1 as even Element of NAT by INT_1:16;
+A15:    n1+1 = n;
+        then n1 < len Pcb by A13, NAT_1:13;
+        then
+A16:    Pab.(len Pac + n1) = x by A5, A6, A7, A14, A15, GLIB_001: 34;
+        len Pac + (n1+1) <= len Pac + len Pcb by A13, XREAL_1:8;
+        then len Pac + n1+1 -1 <= len Pac + len Pcb -1 by XREAL_1:11;
+        then
+A17:    len Pac + n1+1-1 <= len Pab +1 -1 by A6, A7, A5, GLIB_001 :29;
+A18:    m <= len Pac + n1 by A10, NAT_1:12;
+        per cases by A18, REAL_1:def 5;
+        suppose
+A19:      m < len Pac + n1;
+          then Pab.first() = x by A17, A12, A16, GLIB_001:def 28
+            .= Pab.last() by A19, A17, A12, A16, GLIB_001:def 28;
+          then Pab is closed by GLIB_001:def 24;
+          hence x in {c} by A9, Th24;
+        end;
+        suppose
+A20:      m = len Pac + n1;
+          then n1 = 0 by A10, NAT_1:16;
+          hence x in {c} by A20, A6, A11, TARSKI:def 1;
+        end;
+      end;
+    end;
+    let x be set;
+    assume x in {c};
+    then x = c by TARSKI:def 1;
+    then x = Pac.last() & x = Pcb.first() by Th27;
+    then x in Pac.vertices() & x in Pcb.vertices() by GLIB_001:89;
+    hence x in Pac.vertices() /\ Pcb.vertices() by XBOOLE_0:def 3;
+  end;
+  assume
+A21: Pac.vertices() /\ Pcb.vertices() = {c};
+A22: Pac.last() = c by Th27
+    .= Pcb.first() by Th27;
+  Pac.vertices() /\ Pcb.vertices() = {Pac.last()} by A21, Th27;
+  then
+A23: Pac.append(Pcb) is Path-like by A22, Th37;
+A24: Pac.first() = a by Th27;
+  Pcb.last() = b by Th27;
+  then Pac.append(Pcb) is_Walk_from a, b by A22, A24, GLIB_001:31;
+  then Pab = Pac.append(Pcb) by A23, Def2;
+  hence c in Pab.vertices() by Th35;
+end;
+
+theorem Th39:
+  for T being _Tree for a, b, c, d being Vertex of T
+  for P1, P2 being Path of T
+  st P1 = T.pathBetween(a,b) & P2 = T.pathBetween(a,c) &
+  not P1 is_a_prefix_of P2 & not P2 is_a_prefix_of P1 &
+  d = P1.len maxPrefix(P1,P2)
+
+holds (T.pathBetween(d,b)).vertices() /\ (T.pathBetween(d,c)).vertices() = {d}
+proof
+  let T being _Tree;
+  let a, b, c, d being Vertex of T;
+  let P1, P2 being Path of T such that
+A1: P1 = T.pathBetween(a,b) and
+A2: P2 = T.pathBetween(a,c) and
+A3: not P1 c= P2 and
+A4: not P2 c= P1 and
+A5: d = P1.len maxPrefix(P1,P2);
+A6: P1.first() = a by A1, Th27;
+A7: P2.first() = a by A2, Th27;
+  set di = len maxPrefix(P1,P2);
+  reconsider di as odd Element of NAT by A6, A7, Th21;
+A8: d = P2.len maxPrefix(P1,P2) by A5, Th7;
+A9: di+2 <= len P1 by A6, A7, A3, Th22;
+  di <= di+2 by NAT_1:11;
+  then
+A10: di <= len P1 by A9, XXREAL_0:2;
+A11: di+2 <= len P2 by A6, A7, A4, Th22;
+  di <= di+2 by NAT_1:11;
+  then
+A12: di <= len P2 by A11, XXREAL_0:2;
+A13: 1 <= di by HEYTING3:1;
+  set Pdb = T.pathBetween(d,b);
+A14: Pdb.first() = d by Th27;
+A15: Pdb.1 = Pdb.first()
+    .= d by Th27;
+  set Pdc = T.pathBetween(d,c);
+A16: Pdc.first() = d by Th27;
+A17: Pdc.1 = Pdc.first()
+    .= d by Th27;
+  set Pad = T.pathBetween(a,d);
+A18: Pad.last() = d by Th27;
+  d in P1.vertices() by A5, A10, GLIB_001:88;
+  then
+A19: P1 = Pad.append(Pdb) by A1, Th35;
+  d in P2.vertices() by A8, A12, GLIB_001:88;
+  then
+A20: P2 = Pad.append(Pdc) by A2, Th35;
+  Pad = P1.cut(2*0+1,di) by A6, A10, A13, A5, Th34;
+  then
+A21: len Pad + ((2*0)+1) = di + 1 by A10, A13, GLIB_001:37;
+  thus Pdb.vertices() /\ Pdc.vertices() = {d}
+  proof
+    hereby
+      assume not Pdb.vertices() /\ Pdc.vertices() c= {d};
+      then consider e being set such that
+A22:  e in Pdb.vertices() /\ Pdc.vertices() and
+A23:  not e in {d} by TARSKI:def 3;
+A24:  e in Pdb.vertices() by A22, XBOOLE_0:def 3;
+A25:  e in Pdc.vertices() by A22, XBOOLE_0:def 3;
+      reconsider e as Vertex of T by A22;
+      consider ebi be odd Element of NAT such that
+A26:  ebi <= len Pdb and
+A27:  e = Pdb.ebi by A24, GLIB_001:88;
+A28:  1 <= ebi by HEYTING3:1;
+      consider eci be odd Element of NAT such that
+A29:  eci <= len Pdc and
+A30:  e = Pdc.eci by A25, GLIB_001:88;
+A31:  1 <= eci by HEYTING3:1;
+      set Pdeb = Pdb.cut(1,ebi);
+      set Pdec = Pdc.cut(1,eci);
+      2*0+1 is odd Element of NAT;
+      then
+A32:  Pdeb is_Walk_from d, e by A15, A26, A27, A28, GLIB_001:38;
+      2*0+1 is odd Element of NAT;
+      then
+A33:  Pdec is_Walk_from d, e by A17, A29, A30, A31, GLIB_001:38;
+      1 < len Pdeb
+      proof
+        assume
+A34:    1 >= len Pdeb;
+        per cases by A34, NAT_1:26;
+        suppose len Pdeb = 2*0;
+          hence contradiction;
+        end;
+        suppose len Pdeb = 1;
+          then Pdeb.1 = d & Pdeb.1 = e by A32, GLIB_001:18;
+          hence contradiction by A23, TARSKI:def 1;
+        end;
+      end;
+      then
+A35:  (2*0+1)+2 <= len Pdeb by CHORD:4;
+      1 < len Pdec
+      proof
+        assume
+A36:    1 >= len Pdec;
+        per cases by A36, NAT_1:26;
+        suppose len Pdec = 2*0;
+          hence contradiction;
+        end;
+        suppose len Pdec = 1;
+          then Pdec.1 = d & Pdec.1 = e by A33, GLIB_001:18;
+          hence contradiction by A23, TARSKI:def 1;
+        end;
+      end;
+      then
+A37:  (2*0+1)+2 <= len Pdec by CHORD:4;
+A38:  Pdeb.(1+2) = Pdec.(1+2) by A32, A33, Th26;
+A39:  len Pdeb <= len Pdb by Th10;
+      2 < len Pdeb by A35, XXREAL_0:2;
+      then 2 < len Pdb by A39, XXREAL_0:2;
+      then
+A40:  P1.(di+2) = Pdb.(1+2) by A18, A14, A21, A19, GLIB_001:34;
+      1+2 in dom Pdeb by A35, FINSEQ_3:27;
+      then
+A41:  Pdeb.(1+2) = Pdb.(1+2) by A26, GLIB_001:47;
+A42:  len Pdec <= len Pdc by Th10;
+      2 < len Pdec by A37, XXREAL_0:2;
+      then 2 < len Pdc by A42, XXREAL_0:2;
+      then
+A43:  P2.(di+2) = Pdc.(1+2) by A18, A16, A21, A20, GLIB_001:34;
+      1+2 in dom Pdec by A37, FINSEQ_3:27;
+      hence contradiction by A38, A40, A41, A43, A6, A7, A3, A4, Th23,
+      A29, GLIB_001:47;
+    end;
+    d in Pdb.vertices() & d in Pdc.vertices() by A14, A16, GLIB_001:89;
+    then d in Pdb.vertices() /\ Pdc.vertices() by XBOOLE_0:def 3;
+    hence {d} c= Pdb.vertices() /\ Pdc.vertices() by ZFMISC_1:37;
+  end;
+end;
+
+Lm1: for T being _Tree for a, b, c being Vertex of T
+st c in T.pathBetween(a,b).vertices() holds T.pathBetween(a,b).vertices()
+/\ T.pathBetween(b,c).vertices() /\ T.pathBetween(c,a).vertices() = {c}
+proof
+  let T be _Tree, a, b, c be Vertex of T such that
+A1: c in T.pathBetween(a,b).vertices();
+
+set P1 = T.pathBetween(a,b), P2 = T.pathBetween(b,c), P3 = T.pathBetween(c,a);
+  P1.vertices() = T.pathBetween(b,a).vertices() by Th31;
+  then P2.vertices() /\ P3.vertices() = {c} by A1, Th38;
+  then P1.vertices() /\ (P2.vertices() /\ P3.vertices())={c} by A1,ZFMISC_1:52;
+  hence P1.vertices() /\ P2.vertices() /\ P3.vertices() = {c} by XBOOLE_1:16;
+end;
+
+Lm2: for T being _Tree for a, b, c being Vertex of T
+for P1, P4 being Path of T
+st P1 = T.pathBetween(a,b) & P4 = T.pathBetween(a,c) &
+not P1 c= P4 & not P4 c= P1 holds P1.vertices()
+/\ T.pathBetween(b,c).vertices()
+/\ T.pathBetween(c,a).vertices() = {P1.len maxPrefix(P1,P4)}
+proof
+  let T be _Tree, a, b, c be Vertex of T, P1, P4 be Path of T such that
+A1: P1 = T.pathBetween(a,b) and
+A2: P4 = T.pathBetween(a,c) and
+A3: not P1 c= P4 and
+A4: not P4 c= P1;
+  set P2 = T.pathBetween(b,c);
+  set P3 = T.pathBetween(c,a);
+A5: now
+    assume c in P1.vertices();
+    then P1 = T.pathBetween(a,c).append(T.pathBetween(c,b)) by A1, Th35;
+    hence contradiction by A2, A4, Th15;
+  end;
+A6: now
+    assume b in P3.vertices();
+    then b in P4.vertices() by A2, Th31;
+    then P4 = T.pathBetween(a,b).append(T.pathBetween(b,c)) by A2, Th35;
+    hence contradiction by A1, A3, Th15;
+  end;
+A7: P3.vertices() = P4.vertices() by A2, Th31;
+  P1.first() = a by A1, Th27;
+  then
+A8: P1.first() = P4.first() by A2, Th27;
+  set i = len maxPrefix(P1,P4);
+  reconsider i' = i as odd Element of NAT by A8, Th21;
+A9: i <= i+2 by NAT_1:11;
+A10: i+2 <= len P1 by A8, A3, Th22;
+  then
+A11: i <= len P1 by A9, XXREAL_0:2;
+  i+2 <= len P4 by A8, A4, Th22;
+  then
+A12: i <= len P4 by A9, XXREAL_0:2;
+  set x = P1.i';
+  reconsider x as Vertex of T by A9, XXREAL_0:2, GLIB_001:8,A10;
+  set P1b = P1.cut(i',len P1);
+  set P4c = P4.cut(i',len P4);
+A13: P1b.first() = P1.i' by A11, GLIB_001:38;
+A14: P1.len P1 = P1.last()
+    .= b by A1, Th27;
+  then
+A15: P1b is_Walk_from x, b by A11, GLIB_001:38;
+A16: P1b.last() = b by A11, A14, GLIB_001:38;
+A17: x = P4.i' by Th7;
+  then
+A18: x <> b by A6, A12, A7, GLIB_001:88;
+A19: x <> c by A5, A11, GLIB_001:88;
+  P4.len P4 = P4.last()
+    .= c by A2, Th27;
+  then
+A20: P4c is_Walk_from x, c by A12, A17, GLIB_001:38;
+A21: P1b = T.pathBetween(x,b) by Def2, A15;
+A22: P4c = T.pathBetween(x,c) by Def2, A20;
+A23: P4c.vertices() c= P4.vertices() by A12, GLIB_001:95;
+  set P1br = P1b.reverse();
+  set Pbc = P1br.append(P4c);
+A24: P1br.last() = x by A13, GLIB_001:23;
+A25: P4c.first() = x by A22, Th27;
+A26: P1br.first() = b by A16, GLIB_001:23;
+A27: P4c.last() = c by A22, Th27;
+  set j = len P1br;
+A28: j <= len Pbc by A24, A25, GLIB_001:30;
+  1 <= j by CHORD:2;
+  then j in dom P1br by FINSEQ_3:27;
+  then
+A29: Pbc.j = x by A24,GLIB_001:33;
+A30: P1br is open by A18, A24, A26, GLIB_001:def 24;
+A31: P4c is open by A19, A25, A27, GLIB_001:def 24;
+A32: P1br.vertices() = P1b.vertices() by GLIB_001:93;
+  P1b.vertices() /\ P4c.vertices() = {x} by A1, A2, A21, A22, A3, A4, Th39;
+  then
+A33: P1br.vertices() /\ P4c.vertices() c= {P1br.first(), P1br.last()}
+  by A24, A32, ZFMISC_1:12;
+A34: not P1br.first() in P4c.vertices() by A6, A7, A26, A23;
+  P1br.edges() misses P4c.edges()
+  proof
+    assume not thesis;
+    then P1br.edges() /\ P4c.edges() <> {} by XBOOLE_0:def 7;
+    then consider e being set such that
+A35: e in P1br.edges() /\ P4c.edges() by XBOOLE_0:def 1;
+A36: e in P1br.edges() by A35, XBOOLE_0:def 3;
+A37: e in P4c.edges() by A35, XBOOLE_0:def 3;
+    consider v1br, v2br being Vertex of T,
+    n being odd Element of NAT such that
+A38: n+2 <= len P1br and
+A39: v1br = P1br.n and e = P1br.(n+1) and
+A40: v2br = P1br.(n+2) and
+A41: e Joins v1br, v2br, T by A36, GLIB_001:104;
+    consider v1c, v2c being Vertex of T, m being odd Element of NAT such that
+A42: m+2 <= len P4c and
+A43: v1c = P4c.m and e = P4c.(m+1) and
+A44: v2c = P4c.(m+2) and
+A45: e Joins v1c, v2c, T by A37, GLIB_001:104;
+A46: v1br = v1c & v2br = v2c or v1br = v2c & v2br = v1c
+    by A41, A45, GLIB_000:18;
+    n <= n+2 by NAT_1:11;
+    then n <= len P1br by A38, XXREAL_0:2;
+    then v1br in P1br.vertices() & v2br in P1br.vertices()
+    by A38, A39, A40, GLIB_001:88;
+    then
+A47: {v1br, v2br} c= P1br.vertices() by ZFMISC_1:38;
+    m <= m+2 by NAT_1:11;
+    then m <= len P4c by A42, XXREAL_0:2;
+    then
+A48: v1c in P4c.vertices() & v2c in P4c.vertices()
+    by A42, A43, A44, GLIB_001:88;
+    then {v1c, v2c} c= P4c.vertices() by ZFMISC_1:38;
+    then {v1c, v2c} c= P1br.vertices() /\ P4c.vertices()
+    by A46, A47, XBOOLE_1:19;
+    then (v1c = b or v1c = x) & (v2c = b or v2c = x) by ZFMISC_1:28,
+    A24, A26, A33, XBOOLE_1:1;
+    hence contradiction by A7, A6, A23, A48, A45, GLIB_000:21;
+  end;
+  then
+A49: Pbc is Path of T by A24, A25, A30, A31, A33, A34, Th17;
+  Pbc is_Walk_from b,c by A24, A25, A26, A27, GLIB_001:31;
+  then
+A50: Pbc = P2 by A49, Def2;
+A51: x in P1.vertices() by A11, GLIB_001:88;
+A52: x in P4.vertices() by A17, A12, GLIB_001:88;
+A53: x in P2.vertices() by A50, A28, A29, GLIB_001:88;
+  then x in P1.vertices() /\ P2.vertices() by A51, XBOOLE_0:def 3;
+  then x in P1.vertices() /\ P2.vertices() /\ P3.vertices()
+  by A7,A52,XBOOLE_0:def 3;
+  then
+A54: {x} c= P1.vertices() /\ P2.vertices() /\ P3.vertices() by ZFMISC_1: 37;
+  P1.vertices() /\ P2.vertices() /\ P3.vertices() c= {x}
+  proof
+    let z be set;
+    assume
+A55: z in P1.vertices() /\ P2.vertices() /\ P3.vertices();
+    then
+A56: z in P1.vertices() /\ P2.vertices() by XBOOLE_0:def 3;
+    then
+A57: z in P1.vertices() by XBOOLE_0:def 3;
+A58: z in P2.vertices() by A56, XBOOLE_0:def 3;
+A59: z in P3.vertices() by A55, XBOOLE_0:def 3;
+    set Pax = T.pathBetween(a,x), Pxb = T.pathBetween(x,b);
+    set Pbx = T.pathBetween(b,x), Pxc = T.pathBetween(x,c);
+    set Pcx = T.pathBetween(c,x), Pxa = T.pathBetween(x,a);
+A60: P1 = Pax.append(Pxb) by A1, A51, Th35;
+A61: P2 = Pbx.append(Pxc) by A53, Th35;
+A62: P3 = Pcx.append(Pxa) by A52, A7, Th35;
+    Pax.last() = x by Th27
+      .= Pxb.first() by Th27;
+    then P1.vertices() = Pax.vertices() \/ Pxb.vertices() by A60, GLIB_001:94;
+    then
+A63: z in Pax.vertices() or z in Pxb.vertices() by A57, XBOOLE_0:def 2;
+    Pbx.last() = x by Th27
+      .= Pxc.first() by Th27;
+    then P2.vertices() = Pbx.vertices() \/ Pxc.vertices() by A61, GLIB_001:94;
+    then
+A64: z in Pbx.vertices() or z in Pxc.vertices() by A58, XBOOLE_0:def 2;
+    Pcx.last() = x by Th27
+      .= Pxa.first() by Th27;
+    then P3.vertices() = Pcx.vertices() \/ Pxa.vertices() by A62, GLIB_001:94;
+    then
+A65: z in Pcx.vertices() or z in Pxa.vertices() by A59, XBOOLE_0:def 2;
+A66: Pbx.vertices() = Pxb.vertices() by Th31;
+A67: Pcx.vertices() = Pxc.vertices() by Th31;
+    per cases by A63, A64, A65, Th31;
+    suppose z in Pax.vertices() & z in Pbx.vertices();
+      then z in Pax.vertices() /\ Pxb.vertices() by A66, XBOOLE_0:def 3;
+      hence z in {x} by A1, A51, Th38;
+    end;
+    suppose z in Pax.vertices() & z in Pcx.vertices();
+      then z in Pax.vertices() /\ Pxc.vertices() by A67, XBOOLE_0:def 3;
+      hence z in {x} by A2, A52, Th38;
+    end;
+    suppose z in Pbx.vertices() & z in Pcx.vertices();
+      then z in Pbx.vertices() /\ Pxc.vertices() by A67, XBOOLE_0:def 3;
+      hence z in {x} by A53, Th38;
+    end;
+  end;
+  hence thesis by A54, XBOOLE_0:def 10;
+end;
+
+definition
+  let T be _Tree, a, b, c be Vertex of T;
+  func MiddleVertex(a, b, c) -> Vertex of T means
+  :Def3:
+  T.pathBetween(a,b).vertices() /\ T.pathBetween(b,c).vertices()
+  /\ T.pathBetween(c,a).vertices() = { it };
+  existence
+  proof
+    set P1 = T.pathBetween(a,b);
+    set P2 = T.pathBetween(b,c);
+    set P3 = T.pathBetween(c,a);
+    defpred P[Vertex of T,Vertex of T,Vertex of T,Vertex of T] means
+    T.pathBetween($1,$2).vertices() /\ (T.pathBetween($2,$3)).vertices()
+    /\ (T.pathBetween($3,$1)).vertices() = { $4 };
+    per cases;
+    suppose
+A1:   c in P1.vertices() or a in P2.vertices() or b in P3.vertices();
+      per cases by A1;
+      suppose c in P1.vertices();
+        then P[a, b, c, c] by Lm1;
+        hence thesis;
+      end;
+      suppose a in P2.vertices();
+        then P[b, c, a, a] by Lm1;
+        hence thesis by XBOOLE_1:16;
+      end;
+      suppose b in P3.vertices();
+        then P[c, a, b, b] by Lm1;
+        hence thesis by XBOOLE_1:16;
+      end;
+    end;
+    suppose
+A2:   not c in P1.vertices() & not a in P2.vertices() &
+      not b in P3.vertices();
+      set P4 = T.pathBetween(a,c);
+A3:   P3.vertices() = P4.vertices() by Th31;
+      P1.first() = a by Th27;
+      then
+A4:   P1.first() = P4.first() by Th27;
+      P1.last() = b by Th27;
+      then b in P1.vertices() by GLIB_001:89;
+      then
+A5:   not P1.vertices() c= P4.vertices() by A2, A3;
+      then
+A6:   not P1 c= P4 by Th13;
+      P4.last() = c by Th27;
+      then c in P4.vertices() by GLIB_001:89;
+      then not P4.vertices() c= P1.vertices() by A2;
+      then
+A7:   not P4 c= P1 by Th13;
+      set i = len maxPrefix(P1,P4);
+      reconsider i' = i as odd Element of NAT by A4, Th21;
+A8:   i <= i+2 by NAT_1:11;
+A9:   i+2 <= len P1 by A4, A5, Th22,Th13;
+      set x = P1.i';
+      reconsider x as Vertex of T by A8, XXREAL_0:2, GLIB_001:8,A9;
+      take x;
+      thus thesis by A6, A7, Lm2;
+    end;
+  end;
+  uniqueness by ZFMISC_1:6;
+end;
+
+theorem Th40: :: PMV(a,b,c) = PMV(a,c,b)
+  for T being _Tree for a, b, c being Vertex of T
+  holds MiddleVertex(a,b,c) = MiddleVertex(a,c,b)
+proof
+  let T be _Tree;
+  let a, b, c be Vertex of T;
+  set PMV1 = MiddleVertex(a,b,c);
+  set PMV2 = MiddleVertex(a,c,b);
+A1: T.pathBetween(a,b).vertices() /\ T.pathBetween(b,c).vertices()
+  /\ T.pathBetween(c,a).vertices() = { PMV1 } by Def3;
+A2: T.pathBetween(a,c).vertices() /\ T.pathBetween(c,b).vertices()
+  /\ T.pathBetween(b,a).vertices() = { PMV2 } by Def3;
+A3: T.pathBetween(a,b).vertices() = T.pathBetween(b,a).vertices() by Th31;
+A4: T.pathBetween(b,c).vertices() = T.pathBetween(c,b).vertices() by Th31;
+  T.pathBetween(c,a).vertices() = T.pathBetween(a,c).vertices() by Th31;
+  then {PMV1} = {PMV2} by A1, A2, A3, A4, XBOOLE_1:16;
+  hence thesis by ZFMISC_1:6;
+end;
+
+theorem Th41:  :: PMV(a,b,c) = PMV(b,a,c)
+  for T being _Tree for a, b, c being Vertex of T
+  holds MiddleVertex(a,b,c) = MiddleVertex(b,a,c)
+proof
+  let T be _Tree;
+  let a, b, c be Vertex of T;
+  set PMV1 = MiddleVertex(a,b,c);
+  set PMV2 = MiddleVertex(b,a,c);
+A1: T.pathBetween(a,b).vertices() /\ T.pathBetween(b,c).vertices()
+  /\ T.pathBetween(c,a).vertices() = { PMV1 } by Def3;
+A2: T.pathBetween(b,a).vertices() /\ T.pathBetween(a,c).vertices()
+  /\ T.pathBetween(c,b).vertices() = { PMV2 } by Def3;
+A3: T.pathBetween(a,b).vertices() = T.pathBetween(b,a).vertices() by Th31;
+A4: T.pathBetween(b,c).vertices() = T.pathBetween(c,b).vertices() by Th31;
+  T.pathBetween(c,a).vertices() = T.pathBetween(a,c).vertices() by Th31;
+  then {PMV1} = {PMV2} by A1, A2, A3, A4, XBOOLE_1:16;
+  hence thesis by ZFMISC_1:6;
+end;
+
+theorem ::PMV102: :: PMV(a,b,c) = PMV(b,c,a)
+  for T being _Tree for a, b, c being Vertex of T
+  holds MiddleVertex(a,b,c) = MiddleVertex(b,c,a)
+proof
+  let T be _Tree;
+  let a, b, c be Vertex of T;
+  thus MiddleVertex(a,b,c) = MiddleVertex(b,a,c) by Th41
+    .= MiddleVertex(b,c,a) by Th40;
+end;
+
+theorem Th43: :: PMV(a,b,c) = PMV(c,a,b)
+  for T being _Tree for a, b, c being Vertex of T
+  holds MiddleVertex(a,b,c) = MiddleVertex(c,a,b)
+proof
+  let T be _Tree;
+  let a, b, c be Vertex of T;
+  thus MiddleVertex(a,b,c) = MiddleVertex(a,c,b) by Th40
+    .= MiddleVertex(c,a,b) by Th41;
+end;
+
+theorem :: PMV104: :: PMV(a,b,c) = PMV(c,b,a)
+  for T being _Tree for a, b, c being Vertex of T
+  holds MiddleVertex(a,b,c) = MiddleVertex(c,b,a)
+proof
+  let T be _Tree;
+  let a, b, c be Vertex of T;
+  thus MiddleVertex(a,b,c) = MiddleVertex(c,a,b) by Th43
+    .= MiddleVertex(c,b,a) by Th40;
+end;
+
+theorem Th45:
+  for T being _Tree for a, b, c being Vertex of T
+  st c in T.pathBetween(a,b).vertices() holds MiddleVertex(a,b,c) = c
+proof
+  let T be _Tree;
+  let a, b, c be Vertex of T;
+  assume c in T.pathBetween(a,b).vertices();
+  then T.pathBetween(a,b).vertices() /\ T.pathBetween(b,c).vertices()
+  /\ T.pathBetween(c,a).vertices() = {c} by Lm1;
+  hence MiddleVertex(a,b,c) = c by Def3;
+end;
+
+theorem :: PMV200: :: PMV(a,a,a) = a;
+  for T being _Tree for a being Vertex of T holds MiddleVertex(a,a,a) = a
+proof
+  let T be _Tree;
+  let a be Vertex of T;
+  a in {a} by TARSKI:def 1;
+  then a in T.pathBetween(a,a).vertices() by Th29;
+  hence MiddleVertex(a,a,a) = a by Th45;
+end;
+
+theorem Th47: :: PMV(a,a,b) = a;
+  for T being _Tree for a, b being Vertex of T holds MiddleVertex(a,a,b) = a
+proof
+  let T be _Tree;
+  let a,b be Vertex of T;
+A1: MiddleVertex(a,a,b) = MiddleVertex(a,b,a) by Th40;
+  T.pathBetween(a,b).first() = a by Th27;
+  then a in T.pathBetween(a,b).vertices() by GLIB_001:89;
+  hence MiddleVertex(a,a,b) = a by A1, Th45;
+end;
+
+theorem Th48: :: PMV(a,b,a) = a;
+  for T being _Tree for a, b being Vertex of T holds MiddleVertex(a,b,a) = a
+proof
+  let T be _Tree;
+  let a,b be Vertex of T;
+  MiddleVertex(a,a,b) = MiddleVertex(a,b,a) by Th40;
+  hence MiddleVertex(a,b,a) = a by Th47;
+end;
+
+theorem :: PMV203: :: PMV(a,b,b) = b;
+  for T being _Tree for a, b being Vertex of T holds MiddleVertex(a,b,b) = b
+proof
+  let T be _Tree;
+  let a,b be Vertex of T;
+  MiddleVertex(a,b,b) = MiddleVertex(b,a,b) by Th41;
+  hence MiddleVertex(a,b,b) = b by Th48;
+end;
+
+theorem Th50:
+  for T being _Tree for P1, P2 be Path of T for a, b, c being Vertex of T
+  st P1 = T.pathBetween(a,b) & P2 = T.pathBetween(a,c) &
+  not b in P2.vertices() & not c in P1.vertices()
+  holds MiddleVertex(a, b, c) = P1.len maxPrefix(P1,P2)
+proof
+  let T be _Tree, P1, P2 be Path of T, a, b, c be Vertex of T such that
+A1: P1 = T.pathBetween(a,b) and
+A2: P2 = T.pathBetween(a,c) and
+A3: not b in P2.vertices() and
+A4: not c in P1.vertices();
+A5: not P1 c= P2 by A3, A1, A2, Th36;
+A6: not P2 c= P1 by A4, A1, A2, Th36;
+A7: T.pathBetween(a,b).vertices() /\ T.pathBetween(b,c).vertices()
+  /\ T.pathBetween(c,a).vertices() = { MiddleVertex(a, b, c) } by Def3;
+  T.pathBetween(a,b).vertices() /\ T.pathBetween(b,c).vertices()
+  /\ T.pathBetween(c,a).vertices() = { P1.len maxPrefix(P1,P2) }
+  by A1, A2, A5, A6, Lm2;
+  hence MiddleVertex(a, b, c) = P1.len maxPrefix(P1,P2) by A7,ZFMISC_1:6;
+end;
+
+theorem :: PMV302:
+  for T being _Tree for P1, P2, P3, P4 be Path of T
+  for a, b, c being Vertex of T
+  st P1 = T.pathBetween(a,b) & P2 = T.pathBetween(a,c) &
+  P3 = T.pathBetween(b,a) & P4 = T.pathBetween(b,c) &
+  not b in P2.vertices() & not c in P1.vertices() & not a in P4.vertices()
+  holds P1.len maxPrefix(P1,P2) = P3.len maxPrefix(P3,P4)
+proof
+  let T be _Tree, P1, P2, P3, P4 be Path of T, a, b, c be Vertex of T
+  such that
+A1: P1 = T.pathBetween(a,b) and
+A2: P2 = T.pathBetween(a,c) and
+A3: P3 = T.pathBetween(b,a) and
+A4: P4 = T.pathBetween(b,c) and
+A5: not b in P2.vertices() and
+A6: not c in P1.vertices() and
+A7: not a in P4.vertices();
+  now
+    assume P4 c= P3;
+    then
+A8: P4.vertices() c= P3.vertices() by Th13;
+    c in P4.vertices() by A4, Th28;
+    then c in P3.vertices() by A8;
+    hence contradiction by A6, A3, A1, Th31;
+  end;
+  then
+A9: not c in P3.vertices() by A3, A4, Th36;
+A10: MiddleVertex(a,b,c) = P1.len maxPrefix(P1,P2) by A1, A2, A5, A6, Th50;
+  MiddleVertex(b,a,c) = P3.len maxPrefix(P3,P4) by A3, A4, A7, A9, Th50;
+  hence P1.len maxPrefix(P1,P2) = P3.len maxPrefix(P3,P4) by A10, Th41;
+end;
+
+theorem Th52:
+  for T being _Tree for a, b, c being Vertex of T for S being non empty set
+  st for s being set st s in S
+  holds (ex t being _Subtree of T st s = the_Vertices_of t)
+  & (a in s & b in s or a in s & c in s or b in s & c in s) holds meet S <> {}
+proof
+  let T be _Tree;
+  let a, b, c be Vertex of T;
+  let S be non empty set;
+  assume
+A1: for s being set st s in S
+  holds (ex t being _Subtree of T st s = the_Vertices_of t)
+  & (a in s & b in s or a in s & c in s or b in s & c in s);
+  set Pab = T.pathBetween(a,b);
+  set Pac = T.pathBetween(a,c);
+  set Pbc = T.pathBetween(b,c);
+  set Pca = T.pathBetween(c,a);
+  set VPab = Pab.vertices();
+  set VPac = Pac.vertices();
+  set VPbc = Pbc.vertices();
+  set VPca = Pca.vertices();
+A2: VPca = VPac by Th31;
+  set m = MiddleVertex(a,b,c);
+  VPab /\ VPbc /\ VPca = {m} by Def3;
+  then
+A3: m in VPab /\ VPbc /\ VPca by TARSKI:def 1;
+  then
+A4: m in VPab /\ VPbc by XBOOLE_0:def 3;
+  then
+A5: m in VPab by XBOOLE_0:def 3;
+A6: m in VPac by A3, A2, XBOOLE_0:def 3;
+A7: m in VPbc by A4, XBOOLE_0:def 3;
+  now
+    let s be set;
+    assume
+A8: s in S;
+    then consider t being _Subtree of T such that
+A9: s = the_Vertices_of t by A1;
+    per cases by A8, A1;
+    suppose a in s & b in s;
+      then VPab c= s by A9, Th33;
+      hence m in s by A5;
+    end;
+    suppose a in s & c in s;
+      then VPac c= s by A9, Th33;
+      hence m in s by A6;
+    end;
+    suppose b in s & c in s;
+      then VPbc c= s by A9, Th33;
+      hence m in s by A7;
+    end;
+  end;
+  hence meet S <> {} by SETFAM_1:def 1;
+end;
+
+begin :: The Helly property
+
+definition
+  let F be set;
+  attr F is with_Helly_property means
+
+  for H being non empty set
+  st H c= F & for x, y being set st x in H & y in H holds x meets y
+  holds meet H <> {};
+end;
+
+:: At some point one would like to define allSubtrees of a Tree
+:: The claim below does not hold when T is infinite and we consider
+:: infinite families of subtrees.  Example: half-line tree with
+:: subtrees T_i = {j >= i}.
+
+theorem :: main Prop4p7:
+  for T being _Tree, X being finite set
+
+st for x being set st x in X ex t being _Subtree of T st x = the_Vertices_of t
+  holds X is with_Helly_property
+proof
+  let T be _Tree, X be finite set such that
+A1: for x being set
+  st x in X ex t being _Subtree of T st x = the_Vertices_of t;
+  defpred P[Nat] means for H being non empty finite set st card H = $1 &
+  H c= X & for x, y being set st x in H & y in H holds x meets y
+  holds meet H <> {};
+A2: for k being Nat st for n being Nat st n < k holds P[n] holds P[k]
+  proof
+    let k be Nat such that
+A3: for n being Nat st n < k holds P[n];
+    let H be non empty finite set such that
+A4: card H = k and
+A5: H c= X and
+A6: for x, y being set st x in H & y in H holds x meets y;
+    per cases by NAT_1:26;
+    suppose k = 0;
+      hence meet H <> {} by A4, GRAPH_5:5;
+    end;
+    suppose k = 1;
+      then consider x being Element of H such that
+A7:   H = { x } by A4, GRAPH_5:7;
+      x in H;
+      then ex t being _Subtree of T st x = the_Vertices_of t by A1, A5;
+      hence meet H <> {} by A7, SETFAM_1:11;
+    end;
+    suppose
+A8:   k > 1;
+      set cH = choose H;
+      set A = H \ {cH};
+A9:   card A = card H - card {cH} by EULER_1:5
+        .= k - 1 by A4, CARD_1:50;
+      k-1 > 1-1 by A8, XREAL_1:11;
+      then reconsider A as non empty finite set by A9, CARD_1:47;
+      set cA = choose A;
+A10:  cA in A & A c= H;
+      set B = H \ {cA};
+      set C = {cH, cA};
+A11:  cA <> cH by ZFMISC_1:64;
+A12:  A c= X by A5, XBOOLE_1:1;
+A13:  for x, y being set st x in A & y in A holds x meets y by A6;
+      card A < k by A9, XREAL_1:46;
+      then reconsider mA = meet A as non empty set by A12, A13, A3;
+A14:  card B = card H - card {cA} by A10, EULER_1:5
+        .= k - 1 by A4, CARD_1:50;
+      k-1 > 1-1 by A8, XREAL_1:11;
+      then reconsider B as non empty finite set by A14, CARD_1:47;
+A15:  B c= X by A5, XBOOLE_1:1;
+A16:  for x, y being set st x in B & y in B holds x meets y by A6;
+      card B < k by A14, XREAL_1:46;
+      then reconsider mB = meet B as non empty set by A15, A16, A3;
+A17:  cH meets cA by A10, A6;
+      meet C = cH /\ cA by SETFAM_1:12;
+      then reconsider mC = meet C as non empty set by A17, XBOOLE_0:def 7;
+      cH in H;
+      then
+A18:  C c= X by A10, A12, A5, ZFMISC_1:38;
+      set a = choose mA, b = choose mB, c = choose mC;
+A19:  a in mA;
+      mA c= union A by SETFAM_1:3;
+      then consider aa being set such that
+A20:  a in aa and
+A21:  aa in A by TARSKI:def 4, A19;
+      consider aat being _Subtree of T such that
+A22:  aa = the_Vertices_of aat by A1, A12, A21;
+A23:  b in mB;
+      mB c= union B by SETFAM_1:3;
+      then consider bb being set such that
+A24:  b in bb and
+A25:  bb in B by TARSKI:def 4, A23;
+      consider bbt being _Subtree of T such that
+A26:  bb = the_Vertices_of bbt by A1, A15, A25;
+A27:  c in mC;
+      mC c= union C by SETFAM_1:3;
+      then consider cc being set such that
+A28:  c in cc and
+A29:  cc in C by TARSKI:def 4, A27;
+      consider cct being _Subtree of T such that
+A30:  cc = the_Vertices_of cct by A1, A18, A29;
+      reconsider a, b, c as Vertex of T by A20, A22, A24, A26, A28, A30;
+      now
+        let s be set;
+        assume
+A31:    s in H;
+        hence ex t being _Subtree of T st s = the_Vertices_of t by A1, A5;
+        thus a in s & b in s or a in s & c in s or b in s & c in s
+        proof
+          per cases;
+          suppose
+A32:        s = cH;
+            then
+A33:        s in C by TARSKI:def 2;
+            s in B by A32, A11, ZFMISC_1:64;
+            hence a in s & b in s or a in s & c in s or b in s & c in s
+            by A33, SETFAM_1:def 1;
+          end;
+          suppose
+A34:        s = cA;
+            then s in C by TARSKI:def 2;
+            hence a in s & b in s or a in s & c in s or b in s & c in s
+            by A34, SETFAM_1:def 1;
+          end;
+          suppose s <> cH & s <> cA;
+            then s in A & s in B by A31, ZFMISC_1:64;
+            hence a in s & b in s or a in s & c in s or b in s & c in s
+            by SETFAM_1:def 1;
+          end;
+        end;
+      end;
+      hence meet H <> {} by Th52;
+    end;
+  end;
+A35: for n being Nat holds P[n] from NAT_1:sch 4 (A2);
+  let H be non empty set such that
+A36: H c= X and
+A37: for x, y being set st x in H & y in H holds x meets y;
+  reconsider H' = H as finite set by A36, FINSET_1:13;
+  card H' = card H';
+  hence meet H <> {} by A36, A37, A35;
+end;
+

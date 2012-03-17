@@ -22,70 +22,81 @@ environ
 
 begin :: A small concrete machine
 
- reserve i,j,k for Element of NAT;
+reserve i,j,k for Element of NAT;
 
 definition
- func SCM -> strict AMI-Struct over NAT, { INT } equals
+  func SCM -> strict AMI-Struct over NAT, { INT } equals
 :: AMI_3:def 1
-
-    AMI-Struct(#SCM-Memory,In(NAT,SCM-Memory),SCM-Instr,SCM-OK,SCM-Exec#);
+  AMI-Struct(#SCM-Memory,In(NAT,SCM-Memory),SCM-Instr,SCM-OK,SCM-Exec#);
 end;
 
 registration
- cluster SCM -> standard-ins non empty stored-program;
+  cluster SCM -> standard-ins non empty stored-program;
 end;
 
 canceled;
 
 theorem :: AMI_3:2
- SCM is definite;
+  SCM is definite;
 
 registration
- cluster SCM -> IC-Ins-separated definite;
+  cluster SCM -> IC-Ins-separated definite;
 end;
 
 definition
- mode Data-Location -> Object of SCM means
+  mode Data-Location -> Object of SCM means
 :: AMI_3:def 2
- it in SCM-Data-Loc;
+
+    it in SCM-Data-Loc;
 end;
 
-definition let s be State of SCM, d be Data-Location;
- redefine func s.d -> Integer;
+definition
+  let s be State of SCM, d be Data-Location;
+  redefine func s.d -> Integer;
 end;
 
 reserve a,b,c for Data-Location,
-        loc for Instruction-Location of SCM,
-        I for Instruction of SCM;
+  loc for Instruction-Location of SCM,
+  I for Instruction of SCM;
 
-definition let a,b;
- func a := b -> Instruction of SCM equals
+definition
+  let a,b;
+  func a := b -> Instruction of SCM equals
 :: AMI_3:def 3
+
   [ 1, <*a, b*>];
- func AddTo(a,b) -> Instruction of SCM equals
+  func AddTo(a,b) -> Instruction of SCM equals
 :: AMI_3:def 4
+
   [ 2, <*a, b*>];
- func SubFrom(a,b) -> Instruction of SCM equals
+  func SubFrom(a,b) -> Instruction of SCM equals
 :: AMI_3:def 5
+
   [ 3, <*a, b*>];
- func MultBy(a,b) -> Instruction of SCM equals
+  func MultBy(a,b) -> Instruction of SCM equals
 :: AMI_3:def 6
+
   [ 4, <*a, b*>];
- func Divide(a,b) -> Instruction of SCM equals
+  func Divide(a,b) -> Instruction of SCM equals
 :: AMI_3:def 7
+
   [ 5, <*a, b*>];
 end;
 
-definition let loc;
- func goto loc -> Instruction of SCM equals
+definition
+  let loc;
+  func goto loc -> Instruction of SCM equals
 :: AMI_3:def 8
+
   [ 6, <*loc*>];
- let a;
- func a=0_goto loc -> Instruction of SCM equals
+  let a;
+  func a=0_goto loc -> Instruction of SCM equals
 :: AMI_3:def 9
+
   [ 7, <*loc,a*>];
- func a>0_goto loc -> Instruction of SCM equals
+  func a>0_goto loc -> Instruction of SCM equals
 :: AMI_3:def 10
+
   [ 8, <*loc,a*>];
 end;
 
@@ -96,69 +107,67 @@ canceled;
 theorem :: AMI_3:4
   IC SCM = NAT;
 
-definition let loc be Instruction-Location of SCM;
- func Next loc -> Instruction-Location of SCM means
+definition
+  let loc be Instruction-Location of SCM;
+  func Next loc -> Instruction-Location of SCM means
 :: AMI_3:def 11
- ex mj being Element of NAT st mj = loc & it = Next mj;
+
+  ex mj being Element of NAT st mj = loc & it = Next mj;
 end;
 
 canceled;
 
 theorem :: AMI_3:6
   for loc being Instruction-Location of SCM,
-     mj being Element of NAT st mj = loc
- holds Next mj = Next loc;
+  mj being Element of NAT st mj = loc holds Next mj = Next loc;
 
 begin :: Users guide
 
 canceled;
 
 theorem :: AMI_3:8
- Exec(a:=b, s).IC SCM = Next IC s &
- Exec(a:=b, s).a = s.b &
- for c st c <> a holds Exec(a:=b, s).c = s.c;
+  Exec(a:=b, s).IC SCM = Next IC s & Exec(a:=b, s).a = s.b &
+  for c st c <> a holds Exec(a:=b, s).c = s.c;
 
 theorem :: AMI_3:9
- Exec(AddTo(a,b), s).IC SCM = Next IC s &
- Exec(AddTo(a,b), s).a = s.a + s.b &
- for c st c <> a holds Exec(AddTo(a,b), s).c = s.c;
+  Exec(AddTo(a,b), s).IC SCM = Next IC s & Exec(AddTo(a,b), s).a = s.a + s.b &
+  for c st c <> a holds Exec(AddTo(a,b), s).c = s.c;
 
 theorem :: AMI_3:10
- Exec(SubFrom(a,b), s).IC SCM = Next IC s &
- Exec(SubFrom(a,b), s).a = s.a - s.b &
- for c st c <> a holds Exec(SubFrom(a,b), s).c = s.c;
+  Exec(SubFrom(a,b), s).IC SCM = Next IC s &
+  Exec(SubFrom(a,b), s).a = s.a - s.b &
+  for c st c <> a holds Exec(SubFrom(a,b), s).c = s.c;
 
 theorem :: AMI_3:11
- Exec(MultBy(a,b), s).IC SCM = Next IC s &
- Exec(MultBy(a,b), s).a = s.a * s.b &
- for c st c <> a holds Exec(MultBy(a,b), s).c = s.c;
+  Exec(MultBy(a,b), s).IC SCM = Next IC s &
+  Exec(MultBy(a,b), s).a = s.a * s.b &
+  for c st c <> a holds Exec(MultBy(a,b), s).c = s.c;
 
 theorem :: AMI_3:12
- Exec(Divide(a,b), s).IC SCM = Next IC s &
- (a <> b implies Exec(Divide(a,b), s).a = s.a div s.b) &
- Exec(Divide(a,b), s).b = s.a mod s.b &
- for c st c <> a & c <> b holds Exec(Divide(a,b), s).c = s.c;
+  Exec(Divide(a,b), s).IC SCM = Next IC s &
+  (a <> b implies Exec(Divide(a,b), s).a = s.a div s.b) &
+  Exec(Divide(a,b), s).b = s.a mod s.b &
+  for c st c <> a & c <> b holds Exec(Divide(a,b), s).c = s.c;
 
 theorem :: AMI_3:13
-     Exec(goto loc, s).IC SCM = loc &
- Exec(goto loc, s).c = s.c;
+  Exec(goto loc, s).IC SCM = loc & Exec(goto loc, s).c = s.c;
 
 theorem :: AMI_3:14
- (s.a = 0 implies Exec(a =0_goto loc, s).IC SCM = loc) &
- (s.a <> 0 implies Exec(a=0_goto loc, s).IC SCM = Next IC s) &
- Exec(a=0_goto loc, s).c = s.c;
+  (s.a = 0 implies Exec(a =0_goto loc, s).IC SCM = loc) &
+  (s.a <> 0 implies Exec(a=0_goto loc, s).IC SCM = Next IC s) &
+  Exec(a=0_goto loc, s).c = s.c;
 
 theorem :: AMI_3:15
- (s.a > 0 implies Exec(a >0_goto loc, s).IC SCM = loc) &
- (s.a <= 0 implies Exec(a>0_goto loc, s).IC SCM = Next IC s) &
- Exec(a>0_goto loc, s).c = s.c;
+  (s.a > 0 implies Exec(a >0_goto loc, s).IC SCM = loc) &
+  (s.a <= 0 implies Exec(a>0_goto loc, s).IC SCM = Next IC s) &
+  Exec(a>0_goto loc, s).c = s.c;
 
 reserve Y,K,T for Element of Segm 9,
-        a1,a2,a3 for Element of NAT,
-        b1,b2,c1,c2,c3 for Element of SCM-Data-Loc;
+  a1,a2,a3 for Element of NAT,
+  b1,b2,c1,c2,c3 for Element of SCM-Data-Loc;
 
 registration
- cluster SCM -> halting;
+  cluster SCM -> halting;
 end;
 
 begin
@@ -169,101 +178,99 @@ theorem :: AMI_3:51
   SCM is realistic;
 
 registration
- cluster SCM -> steady-programmed realistic;
+  cluster SCM -> steady-programmed realistic;
 end;
 
-definition let k be natural number;
- canceled 7;
- func dl.k -> Data-Location equals
+definition
+  let k be natural number;
+  canceled 7;
+  func dl.k -> Data-Location equals
 :: AMI_3:def 19
-   [1,k];
- func il.k -> Instruction-Location of SCM equals
+
+  [1,k];
+  func il.k -> Instruction-Location of SCM equals
 :: AMI_3:def 20
-   k;
+
+  k;
 end;
 
 reserve i,j,k for natural number;
 
 theorem :: AMI_3:52
-   i <> j implies dl.i <> dl.j;
+  i <> j implies dl.i <> dl.j;
 
 theorem :: AMI_3:53
-   i <> j implies il.i <> il.j;
+  i <> j implies il.i <> il.j;
 
 theorem :: AMI_3:54
-     Next il.k = il.(k+1);
+  Next il.k = il.(k+1);
 
 theorem :: AMI_3:55
- for l being Data-Location holds ObjectKind l = INT;
+  for l being Data-Location holds ObjectKind l = INT;
 
 definition
- let la be Data-Location;
- let a be Integer;
- redefine func la .--> a -> FinPartState of SCM;
+  let la be Data-Location;
+  let a be Integer;
+  redefine func la .--> a -> FinPartState of SCM;
 end;
 
 definition
- let la,lb be Data-Location;
- let a, b be Integer;
- redefine func (la,lb) --> (a,b) -> FinPartState of SCM;
+  let la,lb be Data-Location;
+  let a, b be Integer;
+  redefine func (la,lb) --> (a,b) -> FinPartState of SCM;
 end;
 
 theorem :: AMI_3:56
   dl.i <> il.j;
 
 theorem :: AMI_3:57
- IC SCM <> dl.i & IC SCM <> il.i;
+  IC SCM <> dl.i & IC SCM <> il.i;
 
 begin  :: Halt Instruction
 
 theorem :: AMI_3:58
-     for I being Instruction of SCM st
-  ex s st Exec(I,s).IC SCM = Next IC s
- holds I is non halting;
+  for I being Instruction of SCM st ex s st Exec(I,s).IC SCM = Next IC s
+  holds I is non halting;
 
 theorem :: AMI_3:59
-     for I being Instruction of SCM st I = [0,{}] holds I is halting;
+  for I being Instruction of SCM st I = [0,{}] holds I is halting;
 
 theorem :: AMI_3:60
-     a := b is non halting;
+  a := b is non halting;
 
 theorem :: AMI_3:61
-     AddTo(a,b) is non halting;
+  AddTo(a,b) is non halting;
 
 theorem :: AMI_3:62
-     SubFrom(a,b) is non halting;
+  SubFrom(a,b) is non halting;
 
 theorem :: AMI_3:63
-     MultBy(a,b) is non halting;
+  MultBy(a,b) is non halting;
 
 theorem :: AMI_3:64
-     Divide(a,b) is non halting;
+  Divide(a,b) is non halting;
 
 theorem :: AMI_3:65
-     goto loc is non halting;
+  goto loc is non halting;
 
 theorem :: AMI_3:66
-     a=0_goto loc is non halting;
+  a=0_goto loc is non halting;
 
 theorem :: AMI_3:67
-     a>0_goto loc is non halting;
+  a>0_goto loc is non halting;
 
 canceled;
 
 theorem :: AMI_3:69
-     for I being set holds I is Instruction of SCM iff
-  I = [0,{}] or
-  (ex a,b st I = a:=b) or
-  (ex a,b st I = AddTo(a,b)) or
-  (ex a,b st I = SubFrom(a,b)) or
-  (ex a,b st I = MultBy(a,b)) or
-  (ex a,b st I = Divide(a,b)) or
-  (ex loc st I = goto loc) or
-  (ex a,loc st I = a=0_goto loc) or
-  ex a,loc st I = a>0_goto loc;
+  for I being set holds I is Instruction of SCM iff I = [0,{}] or
+  (ex a,b st I = a:=b) or (ex a,b st I = AddTo(a,b)) or
+  (ex a,b st I = SubFrom(a,b)) or (ex a,b st I = MultBy(a,b)) or
+  (ex a,b st I = Divide(a,b)) or (ex loc st I = goto loc) or
+  (ex a,loc st I = a=0_goto loc) or ex a,loc st I = a>0_goto loc;
 
 theorem :: AMI_3:70
-     for I being Instruction of SCM st I is halting holds I = halt SCM;
+  for I being Instruction of SCM st I is halting holds I = halt SCM;
 
 theorem :: AMI_3:71
-     halt SCM = [0,{}];
+  halt SCM = [0,{}];
+

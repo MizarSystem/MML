@@ -44,42 +44,38 @@ definition
   func Set-Constants SCS -> ManySortedSet of SortsWithConstants IIG means
 :: CIRCUIT1:def 1
 
-    for x being Vertex of IIG st x in dom it
-      holds it.x in Constants (SCS, x);
+  for x being Vertex of IIG st x in dom it
+  holds it.x in Constants (SCS, x);
 end;
 
 theorem :: CIRCUIT1:1
-       for IIG
-  for SCS being non-empty Circuit of IIG,
-    v being Vertex of IIG,
-    e being Element of (the Sorts of SCS).v
-      st v in SortsWithConstants IIG & e in Constants (SCS, v)
-    holds (Set-Constants SCS).v = e;
+  for IIG for SCS being non-empty Circuit of IIG, v being Vertex of IIG,
+  e being Element of (the Sorts of SCS).v
+  st v in SortsWithConstants IIG & e in Constants (SCS, v)
+  holds (Set-Constants SCS).v = e;
 
 definition
   let IIG;
   let CS be Circuit of IIG;
   mode InputFuncs of CS is ManySortedFunction of
-    ((InputVertices IIG) --> NAT),
-    ((the Sorts of CS) | InputVertices IIG);
+    ((InputVertices IIG) --> NAT), ((the Sorts of CS) | InputVertices IIG);
 end;
 
 theorem :: CIRCUIT1:2
   for IIG
   for SCS being non-empty Circuit of IIG, InpFs being InputFuncs of SCS,
-      n being Element of NAT
-    st IIG is with_input_V
-    holds (commute InpFs).n is InputValues of SCS;
+  n being Element of NAT st IIG is with_input_V
+  holds (commute InpFs).n is InputValues of SCS;
 
 definition
   let IIG such that
-  IIG is with_input_V;
-  let SCS be non-empty Circuit of IIG,
-    InpFs be InputFuncs of SCS,
-    n be Element of NAT;
+ IIG is with_input_V;
+  let SCS be non-empty Circuit of IIG, InpFs be InputFuncs of SCS,
+  n be Element of NAT;
   func n-th_InputValues InpFs -> InputValues of SCS equals
 :: CIRCUIT1:def 2
-         (commute InpFs).n;
+
+  (commute InpFs).n;
 end;
 
 definition
@@ -91,92 +87,73 @@ end;
 canceled;
 
 theorem :: CIRCUIT1:4
-       for IIG
-  for SCS being non-empty Circuit of IIG, s being State of SCS
-    holds dom s = the carrier of IIG;
+  for IIG for SCS being non-empty Circuit of IIG, s being State of SCS
+  holds dom s = the carrier of IIG;
 
 theorem :: CIRCUIT1:5
-       for IIG
-  for SCS being non-empty Circuit of IIG, s being State of SCS,
-    v being Vertex of IIG
-    holds s.v in (the Sorts of SCS).v;
+  for IIG for SCS being non-empty Circuit of IIG, s being State of SCS,
+  v being Vertex of IIG holds s.v in (the Sorts of SCS).v;
 
 definition
   let IIG;
-  let SCS be non-empty Circuit of IIG,
-    s be State of SCS,
-    o be OperSymbol of IIG;
+  let SCS be non-empty Circuit of IIG, s be State of SCS,
+  o be OperSymbol of IIG;
   func o depends_on_in s -> Element of Args (o, SCS) equals
 :: CIRCUIT1:def 3
-                s * (the_arity_of o);
+  s * (the_arity_of o);
 end;
 
-reserve IIG for monotonic Circuit-like
-  (non void non empty ManySortedSign);
+reserve IIG for monotonic Circuit-like (non void non empty ManySortedSign);
 
 theorem :: CIRCUIT1:6
-  for IIG
-  for SCS being locally-finite non-empty MSAlgebra over IIG,
-    v, w being Vertex of IIG,
-    e1 being Element of (the Sorts of FreeEnv SCS).v,
-    q1 being DTree-yielding FinSequence
-      st v in InnerVertices IIG &
-         e1 = [action_at v,the carrier of IIG]-tree q1
-    holds
-      for k being Element of NAT st k in dom q1
-        & q1.k in (the Sorts of FreeEnv SCS).w
-        holds w = (the_arity_of action_at v)/.k;
+  for IIG for SCS being locally-finite non-empty MSAlgebra over IIG,
+  v, w being Vertex of IIG, e1 being Element of (the Sorts of FreeEnv SCS).v,
+  q1 being DTree-yielding FinSequence st v in InnerVertices IIG &
+  e1 = [action_at v,the carrier of IIG]-tree q1 holds
+  for k being Element of NAT st k in dom q1
+  & q1.k in (the Sorts of FreeEnv SCS).w
+  holds w = (the_arity_of action_at v)/.k;
 
 registration
   let IIG;
-  let SCS be locally-finite non-empty MSAlgebra over IIG,
-    v be Vertex of IIG;
+  let SCS be locally-finite non-empty MSAlgebra over IIG, v be Vertex of IIG;
   cluster -> finite non empty
-   Function-like Relation-like Element of (the Sorts of FreeEnv SCS).v;
+    Function-like Relation-like Element of (the Sorts of FreeEnv SCS).v;
 end;
 
 registration
   let IIG;
-  let SCS be locally-finite non-empty MSAlgebra over IIG,
-    v be Vertex of IIG;
+  let SCS be locally-finite non-empty MSAlgebra over IIG, v be Vertex of IIG;
   cluster -> DecoratedTree-like Element of (the Sorts of FreeEnv SCS).v;
 end;
 
 theorem :: CIRCUIT1:7
-  for IIG
-  for SCS being locally-finite non-empty MSAlgebra over IIG,
-    v, w being Vertex of IIG,
-    e1 being Element of (the Sorts of FreeEnv SCS).v,
-    e2 being Element of (the Sorts of FreeEnv SCS).w,
-    q1 being DTree-yielding FinSequence, k1 being Element of NAT
-      st v in InnerVertices IIG \ SortsWithConstants IIG
-        & e1 = [action_at v,the carrier of IIG]-tree q1
-        & k1+1 in dom q1
-        & q1.(k1+1) in (the Sorts of FreeEnv SCS).w
-      holds e1 with-replacement (<*k1*>,e2) in (the Sorts of FreeEnv SCS).v;
+  for IIG for SCS being locally-finite non-empty MSAlgebra over IIG,
+  v, w being Vertex of IIG, e1 being Element of (the Sorts of FreeEnv SCS).v,
+  e2 being Element of (the Sorts of FreeEnv SCS).w,
+  q1 being DTree-yielding FinSequence, k1 being Element of NAT
+  st v in InnerVertices IIG \ SortsWithConstants IIG
+  & e1 = [action_at v,the carrier of IIG]-tree q1 & k1+1 in dom q1
+  & q1.(k1+1) in (the Sorts of FreeEnv SCS).w
+  holds e1 with-replacement (<*k1*>,e2) in (the Sorts of FreeEnv SCS).v;
 
 theorem :: CIRCUIT1:8
-  for IIG
-  for A being locally-finite non-empty MSAlgebra over IIG,
-    v being Element of IIG,
-    e being Element of (the Sorts of FreeEnv A).v
-      st 1 < card e
-    ex o being OperSymbol of IIG st e.{} = [o,the carrier of IIG];
+  for IIG for A being locally-finite non-empty MSAlgebra over IIG,
+  v being Element of IIG, e being Element of (the Sorts of FreeEnv A).v
+  st 1 < card e ex o being OperSymbol of IIG st e.{} = [o,the carrier of IIG];
 
 theorem :: CIRCUIT1:9
-       for IIG being non void Circuit-like (non empty ManySortedSign)
+  for IIG being non void Circuit-like (non empty ManySortedSign)
   for SCS being non-empty Circuit of IIG, s being State of SCS,
-    o being OperSymbol of IIG
-    holds (Den(o,SCS)).(o depends_on_in s)
-      in (the Sorts of SCS).(the_result_sort_of o);
+  o being OperSymbol of IIG holds (Den(o,SCS)).(o depends_on_in s)
+  in (the Sorts of SCS).(the_result_sort_of o);
 
 theorem :: CIRCUIT1:10
-  for IIG
-  for A being non-empty Circuit of IIG, v being Vertex of IIG,
-    e being Element of (the Sorts of FreeEnv A).v
-      st e.{} = [action_at v,the carrier of IIG]
-   ex p being DTree-yielding FinSequence st
-        e = [action_at v,the carrier of IIG]-tree p;
+  for IIG for A being non-empty Circuit of IIG, v being Vertex of IIG,
+  e being Element of (the Sorts of FreeEnv A).v
+  st e.{} = [action_at v,the carrier of IIG]
+  ex p being DTree-yielding FinSequence st
+  e = [action_at v,the carrier of IIG]-tree p;
 
 begin :: Size
 
@@ -184,7 +161,7 @@ registration
   let IIG be monotonic non void (non empty ManySortedSign);
   let A be locally-finite non-empty MSAlgebra over IIG;
   let v be SortSymbol of IIG;
- cluster (the Sorts of FreeEnv A).v -> finite;
+  cluster (the Sorts of FreeEnv A).v -> finite;
 end;
 
 definition
@@ -194,133 +171,108 @@ definition
   func size(v,A) -> natural number means
 :: CIRCUIT1:def 4
 
-    ex s being finite non empty Subset of NAT
-      st s = { card t where t is Element of (the Sorts of FreeEnv A).v :
-                 not contradiction }
-        & it = max s;
+  ex s being finite non empty Subset of NAT
+  st s = { card t where t is Element of (the Sorts of FreeEnv A).v :
+  not contradiction } & it = max s;
 end;
 
 theorem :: CIRCUIT1:11
-  for IIG
-  for A being locally-finite non-empty MSAlgebra over IIG,
-    v being Element of IIG
-    holds size(v,A) = 1
-      iff v in InputVertices IIG \/ SortsWithConstants IIG;
+  for IIG for A being locally-finite non-empty MSAlgebra over IIG,
+  v being Element of IIG holds size(v,A) = 1
+  iff v in InputVertices IIG \/ SortsWithConstants IIG;
 
 theorem :: CIRCUIT1:12
-       for IIG
-  for SCS being locally-finite non-empty MSAlgebra over IIG,
-    v, w being Vertex of IIG,
-    e1 being Element of (the Sorts of FreeEnv SCS).v,
-    e2 being Element of (the Sorts of FreeEnv SCS).w,
-    q1 being DTree-yielding FinSequence
-      st v in InnerVertices IIG \ SortsWithConstants IIG
-        & card e1 = size(v,SCS)
-        & e1 = [action_at v,the carrier of IIG]-tree q1
-        & e2 in rng q1
-    holds card e2 = size(w,SCS);
+  for IIG for SCS being locally-finite non-empty MSAlgebra over IIG,
+  v, w being Vertex of IIG, e1 being Element of (the Sorts of FreeEnv SCS).v,
+  e2 being Element of (the Sorts of FreeEnv SCS).w,
+  q1 being DTree-yielding FinSequence
+  st v in InnerVertices IIG \ SortsWithConstants IIG & card e1 = size(v,SCS)
+  & e1 = [action_at v,the carrier of IIG]-tree q1 & e2 in rng q1
+  holds card e2 = size(w,SCS);
 
 theorem :: CIRCUIT1:13
-  for IIG
-  for A being locally-finite non-empty MSAlgebra over IIG,
-    v being Vertex of IIG,
-    e being Element of (the Sorts of FreeEnv A).v
-      st v in (InnerVertices IIG \ SortsWithConstants IIG)
-        & card e = size(v,A)
-    ex q being DTree-yielding FinSequence st
-       e = [action_at v,the carrier of IIG]-tree q;
+  for IIG for A being locally-finite non-empty MSAlgebra over IIG,
+  v being Vertex of IIG, e being Element of (the Sorts of FreeEnv A).v
+  st v in (InnerVertices IIG \ SortsWithConstants IIG) & card e = size(v,A)
+  ex q being DTree-yielding FinSequence st
+  e = [action_at v,the carrier of IIG]-tree q;
 
 theorem :: CIRCUIT1:14
-       for IIG
-  for A being locally-finite non-empty MSAlgebra over IIG,
-    v being Vertex of IIG,
-    e being Element of (the Sorts of FreeEnv A).v
-      st v in (InnerVertices IIG \ SortsWithConstants IIG)
-        & card e = size(v,A)
-    ex o being OperSymbol of IIG st e.{} = [o,the carrier of IIG];
+  for IIG for A being locally-finite non-empty MSAlgebra over IIG,
+  v being Vertex of IIG, e being Element of (the Sorts of FreeEnv A).v
+  st v in (InnerVertices IIG \ SortsWithConstants IIG) & card e = size(v,A)
+  ex o being OperSymbol of IIG st e.{} = [o,the carrier of IIG];
 
 definition
   let S be non void (non empty ManySortedSign),
-      A be locally-finite non-empty MSAlgebra over S,
-    v be SortSymbol of S,
-    e be Element of (the Sorts of FreeEnv A).v;
+  A be locally-finite non-empty MSAlgebra over S, v be SortSymbol of S,
+  e be Element of (the Sorts of FreeEnv A).v;
   func depth e -> Element of NAT means
 :: CIRCUIT1:def 5
- ex e' being Element of (the Sorts of FreeMSA the Sorts of A).v st
-      e = e' & it = depth e';
+
+  ex e' being Element of (the Sorts of FreeMSA the Sorts of A).v st
+  e = e' & it = depth e';
 end;
 
 theorem :: CIRCUIT1:15
-  for IIG
-  for A being locally-finite non-empty MSAlgebra over IIG,
-    v, w being Element of IIG
-      st v in InnerVertices IIG & w in rng the_arity_of action_at v
-    holds size(w,A) < size(v,A);
+  for IIG for A being locally-finite non-empty MSAlgebra over IIG,
+  v, w being Element of IIG
+  st v in InnerVertices IIG & w in rng the_arity_of action_at v
+  holds size(w,A) < size(v,A);
 
 theorem :: CIRCUIT1:16
-  for IIG
-  for A being locally-finite non-empty MSAlgebra over IIG,
-    v being SortSymbol of IIG
-    holds size(v,A) > 0;
+  for IIG for A being locally-finite non-empty MSAlgebra over IIG,
+  v being SortSymbol of IIG holds size(v,A) > 0;
 
 theorem :: CIRCUIT1:17
-       for IIG
-  for A being non-empty Circuit of IIG, v being Vertex of IIG,
-    e being Element of (the Sorts of FreeEnv A).v,
-    p being DTree-yielding FinSequence
-      st v in InnerVertices IIG
-        & e = [action_at v,the carrier of IIG]-tree p
-        & for k being Element of NAT st k in dom p
-            ex ek being Element of (the Sorts of FreeEnv A)
-              .((the_arity_of action_at v)/.k) st ek = p.k
-              & card ek = size ((the_arity_of action_at v)/.k, A)
-    holds card e = size(v,A);
+  for IIG for A being non-empty Circuit of IIG, v being Vertex of IIG,
+  e being Element of (the Sorts of FreeEnv A).v,
+  p being DTree-yielding FinSequence st v in InnerVertices IIG
+  & e = [action_at v,the carrier of IIG]-tree p
+  & for k being Element of NAT st k in dom p
+  ex ek being Element of (the Sorts of FreeEnv A)
+  .((the_arity_of action_at v)/.k) st ek = p.k
+  & card ek = size ((the_arity_of action_at v)/.k, A) holds card e = size(v,A);
 
 begin :: Depth
 
 definition
   let S be monotonic non void (non empty ManySortedSign),
-    A be locally-finite non-empty MSAlgebra over S,
-    v be SortSymbol of S;
+  A be locally-finite non-empty MSAlgebra over S, v be SortSymbol of S;
   func depth(v,A) -> natural number means
 :: CIRCUIT1:def 6
 
-    ex s being finite non empty Subset of NAT st
-      s = { depth t where t is Element of (the Sorts of FreeEnv A).v :
-               not contradiction }
-      & it = max s;
+  ex s being finite non empty Subset of NAT st
+  s = { depth t where t is Element of (the Sorts of FreeEnv A).v :
+  not contradiction } & it = max s;
 end;
 
 definition
   let IIG be finite monotonic
-    Circuit-like non void (non empty ManySortedSign),
-    A be non-empty Circuit of IIG;
+  Circuit-like non void (non empty ManySortedSign),
+  A be non-empty Circuit of IIG;
   func depth A -> natural number means
 :: CIRCUIT1:def 7
 
-    ex Ds being finite non empty Subset of NAT st
-      Ds = { depth(v,A) where v is Element of IIG :
-      v in the carrier of IIG }
-      & it = max Ds;
+  ex Ds being finite non empty Subset of NAT st
+  Ds = { depth(v,A) where v is Element of IIG : v in the carrier of IIG }
+  & it = max Ds;
 end;
 
 theorem :: CIRCUIT1:18
-       for IIG being finite monotonic
-    Circuit-like (non void non empty ManySortedSign),
-    A being non-empty Circuit of IIG,
-    v being Vertex of IIG
-    holds depth(v,A) <= depth A;
+  for IIG being finite monotonic
+  Circuit-like (non void non empty ManySortedSign),
+  A being non-empty Circuit of IIG, v being Vertex of IIG
+  holds depth(v,A) <= depth A;
 
 theorem :: CIRCUIT1:19
-  for IIG
-  for A being non-empty Circuit of IIG, v being Vertex of IIG
-    holds depth(v,A) = 0
-      iff v in InputVertices IIG or v in SortsWithConstants IIG;
+  for IIG for A being non-empty Circuit of IIG, v being Vertex of IIG
+  holds depth(v,A) = 0
+  iff v in InputVertices IIG or v in SortsWithConstants IIG;
 
 theorem :: CIRCUIT1:20
-       for IIG
-  for A being locally-finite non-empty MSAlgebra over IIG,
-    v, v1 being SortSymbol of IIG
-      st v in InnerVertices IIG & v1 in rng the_arity_of action_at v
-    holds depth(v1,A) < depth(v,A);
+  for IIG for A being locally-finite non-empty MSAlgebra over IIG,
+  v, v1 being SortSymbol of IIG
+  st v in InnerVertices IIG & v1 in rng the_arity_of action_at v
+  holds depth(v1,A) < depth(v,A);
 

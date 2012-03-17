@@ -19,6 +19,7 @@ environ
 
 
 begin
+
 ::----------------------
 ::----------------------
 ::  Non overwriting program is a program where each variable used in it
@@ -113,41 +114,38 @@ begin
 ::-------------------------
 
 theorem :: PRGCOR_1:1
-for n,m,k being Element of NAT holds (n+k)-'(m+k)=n-'m;
+  for n,m,k being Element of NAT holds (n+k)-'(m+k)=n-'m;
 
 theorem :: PRGCOR_1:2
-for n,k being Element of NAT st k>0 & n mod (2*k)>=k holds
+  for n,k being Element of NAT st k>0 & n mod (2*k)>=k holds
   n mod (2*k)-k= n mod k & (n mod k) +k = n mod (2*k);
 
 theorem :: PRGCOR_1:3
-for n,k being Element of NAT st k>0 & n mod (2*k)>=k holds
+  for n,k being Element of NAT st k>0 & n mod (2*k)>=k holds
   n div k= (n div (2*k))*2+1;
 
 theorem :: PRGCOR_1:4
-for n,k being Element of NAT st k>0 & n mod (2*k)<k holds
+  for n,k being Element of NAT st k>0 & n mod (2*k)<k holds
   n mod (2*k)= n mod k;
 
 theorem :: PRGCOR_1:5
-for n,k being Element of NAT st k>0 & n mod (2*k)<k holds
+  for n,k being Element of NAT st k>0 & n mod (2*k)<k holds
   n div k= (n div (2*k))*2;
 
-registration let C be set, f be PartFunc of C, INT, x be set;
- cluster f.x -> integer;
+registration
+  let C be set, f be PartFunc of C, INT, x be set;
+  cluster f.x -> integer;
 end;
 
 theorem :: PRGCOR_1:6
-for m,n being Element of NAT st m>0
-ex i being Element of NAT st
- (for k2 being Element of NAT st k2<i holds m*(2|^k2)<=n)
- & m*(2|^i)>n;
+  for m,n being Element of NAT st m>0 ex i being Element of NAT st
+  (for k2 being Element of NAT st k2<i holds m*(2|^k2)<=n) & m*(2|^i)>n;
 
 theorem :: PRGCOR_1:7
-for i being Integer,f being FinSequence st 1<=i & i<=len f
-holds i in dom f;
+  for i being Integer,f being FinSequence st 1<=i & i<=len f holds i in dom f;
 
 :: Overwrting program to divide n by m (n>=0&m>0),where division / used is
 :: special, because it is achieved by shifting a word.
-
 :: int idiv1_prg(int n,int m){
 ::   int sm,sn,pn,i,j;
 ::   if(n<m){return 0;}
@@ -159,9 +157,7 @@ holds i in dom f;
 ::   }
 ::   return pn;
 :: }
-
 :: Non overwrting program same as above, assuming n>=0 & m>0
-
 :: int idiv1_prg(int n,int m){
 ::    int sm[n+1+1],sn[n+1+1],pn[n+1+1],i,j;
 ::    if (n<m){return 0;}
@@ -179,119 +175,75 @@ holds i in dom f;
 ::     return pn[1];
 ::   }
 
-definition let n,m be Integer;
-assume  n>=0 & m>0;
-func idiv1_prg(n,m) -> Integer means
+definition
+  let n,m be Integer;
+  assume
+ n>=0 & m>0;
+  func idiv1_prg(n,m) -> Integer means
 :: PRGCOR_1:def 1
-    ex sm,sn,pn being FinSequence of INT st
-      len sm=n+1 & len sn=n+1 & len pn=n+1 &
-    (n<m implies it=0)&
-    (not (n<m) implies
-    sm.1=m &
-     ( ex i being Integer st 1<=i & i<=n &
-       ((for k being Integer st 1<=k & k<i holds
-            sm.(k+1)=sm.(k)*2 & not(sm.(k+1)>n))
-        &   sm.(i+1)=sm.(i)*2 & sm.(i+1)>n
-       )
-       &
-       pn.(i+1)=0 & sn.(i+1)=n &
-       (for j being Integer st 1<=j & j<=i holds
-        (sn.(i+1- (j- 1))>=sm.(i+1- j) implies
-             sn.(i+1- j)=sn.(i+1- (j- 1))-sm.(i+1- j)
-             &
-             pn.(i+1- j)=pn.(i+1- (j- 1))*2+1
-        )&
-        (not sn.(i+1- (j- 1))>=sm.(i+1- j) implies
-             sn.(i+1- j)=sn.(i+1- (j- 1))
-             &
-             pn.(i+1- j)=pn.(i+1- (j- 1))*2
-        )
-       )&
-       it=pn.1
-     )
-    );
+
+  ex sm,sn,pn being FinSequence of INT st
+  len sm=n+1 & len sn=n+1 & len pn=n+1 & (n<m implies it=0)&
+  (not (n<m) implies sm.1=m & ( ex i being Integer st 1<=i & i<=n &
+  ((for k being Integer st 1<=k & k<i holds
+  sm.(k+1)=sm.(k)*2 & not(sm.(k+1)>n)) & sm.(i+1)=sm.(i)*2 & sm.(i+1)>n ) &
+  pn.(i+1)=0 & sn.(i+1)=n & (for j being Integer st 1<=j & j<=i holds
+  (sn.(i+1- (j- 1))>=sm.(i+1- j) implies
+  sn.(i+1- j)=sn.(i+1- (j- 1))-sm.(i+1- j) & pn.(i+1- j)=pn.(i+1- (j- 1))*2+1
+  )& (not sn.(i+1- (j- 1))>=sm.(i+1- j) implies sn.(i+1- j)=sn.(i+1- (j- 1)) &
+  pn.(i+1- j)=pn.(i+1- (j- 1))*2 ) )& it=pn.1 ) );
 end;
 
 :: The following theorem is about array index area checking.
 :: Each index of an array appeared in the program is checked
 :: at the place just in front of the place the array is used,
 :: if it remains in the defined area of array.
+
 theorem :: PRGCOR_1:8
-for n,m being Integer st n>=0 & m>0 holds
-   for sm,sn,pn being FinSequence of INT,i being Integer st
-      len sm=n+1 & len sn=n+1 & len pn=n+1 &
-    (not (n<m) implies
-     sm.1=m &
-     ( 1<=i & i<=n &
-       ((for k being Integer st 1<=k & k<i holds
-        sm.(k+1)=sm.(k)*2 & not(sm.(k+1)>n))
-        & sm.(i+1)=sm.(i)*2 & sm.(i+1)>n
-       )
-       &
-       pn.(i+1)=0 & sn.(i+1)=n &
-       (for j being Integer st 1<=j & j<=i holds
-        (sn.(i+1- (j- 1))>=sm.(i+1- j) implies
-             sn.(i+1- j)=sn.(i+1- (j- 1))-sm.(i+1- j) &
-             pn.(i+1- j)=pn.(i+1- (j- 1))*2+1
-        )&
-        (not sn.(i+1- (j- 1))>=sm.(i+1- j) implies
-             sn.(i+1- j)=sn.(i+1- (j- 1))
-             &
-             pn.(i+1- j)=pn.(i+1- (j- 1))*2
-        )
-       )& idiv1_prg(n,m)=pn.1
-     )
-    )
-    holds
-      len sm=n+1 & len sn=n+1 & len pn=n+1 &
-    (n<m implies idiv1_prg(n,m)=0)&
-    (not (n<m) implies
-    1 in dom sm & sm.1=m &
-     ( 1<=i & i<=n &
-       ((for k being Integer st 1<=k & k<i holds
-        k+1 in dom sm & k in dom sm & sm.(k+1)=sm.(k)*2 & not(sm.(k+1)>n))
-        & i+1 in dom sm & i in dom sm & sm.(i+1)=sm.(i)*2 & sm.(i+1)>n
-       )
-       &
-       i+1 in dom pn & pn.(i+1)=0 & i+1 in dom sn & sn.(i+1)=n &
-       (for j being Integer st 1<=j & j<=i holds
-        i+1-(j-1) in dom sn & i+1-j in dom sm &
-        (sn.(i+1- (j- 1))>=sm.(i+1- j) implies
-           i+1-j in dom sn & i+1-j in dom sm &
-             sn.(i+1- j)=sn.(i+1- (j- 1))-sm.(i+1- j)
-             & i+1-j in dom pn & i+1-(j-1) in dom pn &
-             pn.(i+1- j)=pn.(i+1- (j- 1))*2+1
-        )&
-        (not sn.(i+1- (j- 1))>=sm.(i+1- j) implies
-             i+1-j in dom sn & i+1-(j-1) in dom sn &
-             sn.(i+1- j)=sn.(i+1- (j- 1))
-             & i+1-j in dom pn & i+1-(j-1) in dom pn &
-             pn.(i+1- j)=pn.(i+1- (j- 1))*2
-        )
-       ) & 1 in dom pn &
-       idiv1_prg(n,m) =pn.1
-     )
-    );
+  for n,m being Integer st n>=0 & m>0 holds
+  for sm,sn,pn being FinSequence of INT,i being Integer st
+  len sm=n+1 & len sn=n+1 & len pn=n+1 & (not (n<m) implies sm.1=m &
+  ( 1<=i & i<=n & ((for k being Integer st 1<=k & k<i holds
+  sm.(k+1)=sm.(k)*2 & not(sm.(k+1)>n)) & sm.(i+1)=sm.(i)*2 & sm.(i+1)>n ) &
+  pn.(i+1)=0 & sn.(i+1)=n & (for j being Integer st 1<=j & j<=i holds
+  (sn.(i+1- (j- 1))>=sm.(i+1- j) implies
+  sn.(i+1- j)=sn.(i+1- (j- 1))-sm.(i+1- j) & pn.(i+1- j)=pn.(i+1- (j- 1))*2+1
+  )& (not sn.(i+1- (j- 1))>=sm.(i+1- j) implies sn.(i+1- j)=sn.(i+1- (j- 1)) &
+  pn.(i+1- j)=pn.(i+1- (j- 1))*2 ) )& idiv1_prg(n,m)=pn.1 ) ) holds
+  len sm=n+1 & len sn=n+1 & len pn=n+1 & (n<m implies idiv1_prg(n,m)=0)&
+  (not (n<m) implies 1 in dom sm & sm.1=m & ( 1<=i & i<=n &
+  ((for k being Integer st 1<=k & k<i holds
+  k+1 in dom sm & k in dom sm & sm.(k+1)=sm.(k)*2 & not(sm.(k+1)>n))
+  & i+1 in dom sm & i in dom sm & sm.(i+1)=sm.(i)*2 & sm.(i+1)>n ) &
+  i+1 in dom pn & pn.(i+1)=0 & i+1 in dom sn & sn.(i+1)=n &
+  (for j being Integer st 1<=j & j<=i holds
+  i+1-(j-1) in dom sn & i+1-j in dom sm &
+  (sn.(i+1- (j- 1))>=sm.(i+1- j) implies i+1-j in dom sn & i+1-j in dom sm &
+  sn.(i+1- j)=sn.(i+1- (j- 1))-sm.(i+1- j)
+  & i+1-j in dom pn & i+1-(j-1) in dom pn & pn.(i+1- j)=pn.(i+1- (j- 1))*2+1
+  )& (not sn.(i+1- (j- 1))>=sm.(i+1- j) implies
+  i+1-j in dom sn & i+1-(j-1) in dom sn & sn.(i+1- j)=sn.(i+1- (j- 1))
+  & i+1-j in dom pn & i+1-(j-1) in dom pn & pn.(i+1- j)=pn.(i+1- (j- 1))*2 )
+  ) & 1 in dom pn & idiv1_prg(n,m) =pn.1 ) );
 
 theorem :: PRGCOR_1:9
-for n,m being Element of NAT st m>0 holds
- idiv1_prg(n qua Integer,m qua Integer)=n div m;
+  for n,m being Element of NAT st m>0 holds
+  idiv1_prg(n qua Integer,m qua Integer)=n div m;
 
 theorem :: PRGCOR_1:10
-for n,m being Integer st n>=0 & m>0 holds
- idiv1_prg(n,m)=n div m;
+  for n,m being Integer st n>=0 & m>0 holds idiv1_prg(n,m)=n div m;
 
 theorem :: PRGCOR_1:11
-for n,m being Integer,n2,m2 being Element of NAT holds
- (m=0 & n2=n & m2=m implies n div m=0 & n2 div m2=0)&
- (n>=0 & m>0 & n2=n & m2=m implies n div m =n2 div m2)&
- (n>=0 & m<0 & n2=n & m2= -m implies
-    (m2*(n2 div m2)=n2 implies n div m =-(n2 div m2))
-    &(m2*(n2 div m2)<>n2 implies n div m =-(n2 div m2)-1))&
- (n<0 & m>0 & n2= -n & m2=m implies
-    (m2*(n2 div m2)=n2 implies n div m =-(n2 div m2))
-    &(m2*(n2 div m2)<>n2 implies n div m =-(n2 div m2)-1))&
- (n<0 & m<0 & n2= -n & m2= -m implies n div m =n2 div m2);
+  for n,m being Integer,n2,m2 being Element of NAT holds
+  (m=0 & n2=n & m2=m implies n div m=0 & n2 div m2=0)&
+  (n>=0 & m>0 & n2=n & m2=m implies n div m =n2 div m2)&
+  (n>=0 & m<0 & n2=n & m2= -m implies
+  (m2*(n2 div m2)=n2 implies n div m =-(n2 div m2))
+  &(m2*(n2 div m2)<>n2 implies n div m =-(n2 div m2)-1))&
+  (n<0 & m>0 & n2= -n & m2=m implies
+  (m2*(n2 div m2)=n2 implies n div m =-(n2 div m2))
+  &(m2*(n2 div m2)<>n2 implies n div m =-(n2 div m2)-1))&
+  (n<0 & m<0 & n2= -n & m2= -m implies n div m =n2 div m2);
 
 ::
 :: int idiv_prg(int n,int m){
@@ -312,36 +264,21 @@ for n,m being Integer,n2,m2 being Element of NAT holds
 :: One time writing program
 ::  Same as above.
 
-definition let n,m be Integer;
-func idiv_prg(n,m) -> Integer means
+definition
+  let n,m be Integer;
+  func idiv_prg(n,m) -> Integer means
 :: PRGCOR_1:def 2
- ex i being Integer st
- (m=0 implies it=0)&
- (not m=0 implies
-   (n>=0 & m>0 implies it= idiv1_prg(n,m))&
-   (not (n>=0 & m>0) implies
-    (n>=0 & m<0 implies i=idiv1_prg(n,-m) &
-     ((-m)*i=n implies it=-i
-     )&
-     ((-m)*i <> n implies it= -i-1
-     )
-    )&
-    (not (n>=0 & m<0) implies
-     (n<0 & m>0 implies i=idiv1_prg(-n,m) &
-      (m*i= -n implies it=-i
-      )&
-      (m*i <> -n implies it=-i-1
-      )
-     )&
-     (not (n<0 & m>0) implies
-       it=idiv1_prg(-n,-m)
-     )
-    )
-   )
- );
+
+  ex i being Integer st
+  (m=0 implies it=0)& (not m=0 implies
+  (n>=0 & m>0 implies it= idiv1_prg(n,m))& (not (n>=0 & m>0) implies
+  (n>=0 & m<0 implies i=idiv1_prg(n,-m) & ((-m)*i=n implies it=-i )&
+  ((-m)*i <> n implies it= -i-1 ) )& (not (n>=0 & m<0) implies
+  (n<0 & m>0 implies i=idiv1_prg(-n,m) & (m*i= -n implies it=-i )&
+  (m*i <> -n implies it=-i-1 ) )& (not (n<0 & m>0) implies it=idiv1_prg(-n,-m)
+  ) ) ) );
 end;
 
 theorem :: PRGCOR_1:12
-for n,m being Integer holds
- idiv_prg(n,m)=n div m;
+  for n,m being Integer holds idiv_prg(n,m)=n div m;
 

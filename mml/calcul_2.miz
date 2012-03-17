@@ -25,430 +25,483 @@ environ
 
 begin :: f is Subsequence of g^f
 
- reserve p,q,p1,p2,q1 for Element of CQC-WFF,
-         k,m,n,i,j1 for Element of NAT,
-         f,f1,f2,g for FinSequence of CQC-WFF,
-         a,b,b1,b2,c for natural number;
+reserve p,q,p1,p2,q1 for Element of CQC-WFF,
+  k,m,n,i,j1 for Element of NAT,
+  f,f1,f2,g for FinSequence of CQC-WFF,
+  a,b,b1,b2,c for natural number;
 
-definition let m,n be natural number;
+definition
+  let m,n be natural number;
   func seq(m,n) -> set equals
-     {k : 1+m <= k & k <= n+m };
+
+  {k : 1+m <= k & k <= n+m };
   coherence;
 end;
 
-definition let m,n be natural number;
+definition
+  let m,n be natural number;
   redefine func seq(m,n) -> Subset of NAT;
   coherence
-   proof
+  proof
     set X = seq(m,n);
-     X c= NAT
-    proof let x be set; assume x in X;
+    X c= NAT
+    proof
+      let x be set;
+      assume x in X;
       then ex i st x = i & 1+m <= i & i <= n+m;
       hence x in NAT;
     end;
     hence thesis;
-   end;
+  end;
 end;
 
 theorem Th1:
   c in seq(a,b) iff 1+a <= c & c <= b+a
-  proof
+proof
 A1: c is Element of NAT by ORDINAL1:def 13;
-     c in { m : 1+a <= m & m <= b+a } iff ex m st c = m & 1+a <= m & m <= b+a;
-    hence thesis by A1;
-  end;
+  c in { m : 1+a <= m & m <= b+a } iff ex m st c = m & 1+a <= m & m <= b+a;
+  hence thesis by A1;
+end;
 
 theorem Th2:
   seq(a,0) = {}
-  proof
-    hereby consider x being Element of seq(a,0);
-      assume
-A1:   seq(a,0) <> {};
-      then reconsider x as Element of NAT by TARSKI:def 3;
-       1+a <= x & x <= 0+a by A1,Th1;
-      hence contradiction by NAT_1:13;
-    end;
+proof
+  hereby consider x being Element of seq(a,0);
+    assume
+A1: seq(a,0) <> {};
+    then reconsider x as Element of NAT by TARSKI:def 3;
+    1+a <= x & x <= 0+a by A1,Th1;
+    hence contradiction by NAT_1:13;
   end;
+end;
 
 theorem Th3:
   b = 0 or b+a in seq(a,b)
-   proof assume b <> 0;
-   then consider c be Nat such that
+proof
+  assume b <> 0;
+  then consider c be Nat such that
 A1: b = c + 1 by NAT_1:6;
 A2: b+a is Element of NAT by ORDINAL1:def 13;
-     1 <= b by A1,NAT_1:11;
-    then 1+a <= b+a & b+a <= b+a by XREAL_1:8;
-   hence b+a in seq(a,b) by A2;
-  end;
+  1 <= b by A1,NAT_1:11;
+  then 1+a <= b+a & b+a <= b+a by XREAL_1:8;
+  hence b+a in seq(a,b) by A2;
+end;
 
 theorem Th4:
   b1 <= b2 iff seq(a,b1) c= seq(a,b2)
+proof
+  thus b1 <= b2 implies seq(a,b1) c= seq(a,b2)
   proof
-    thus b1 <= b2 implies seq(a,b1) c= seq(a,b2)
-    proof
-      assume A1: b1 <= b2;
-      let b be set such that A2: b in seq(a,b1);
-      reconsider c = b as Element of NAT by A2;
-A3:   1+a <= c & c <= b1+a by A2,Th1;
-       b1+a <= b2+a by A1,XREAL_1:8;
-      then c <= b2+a by A3,XXREAL_0:2;
-      hence b in seq(a,b2) by A3;
-    end;
-    assume A4: seq(a,b1) c= seq(a,b2);
-     now assume b1 <> 0; then b1+a in seq(a,b1) by Th3;
-      then b1+a <= b2+a by A4,Th1;
-      hence b1 <= b2 by XREAL_1:8;
-    end;
-   hence thesis;
+    assume
+A1: b1 <= b2;
+    let b be set such that
+A2: b in seq(a,b1);
+    reconsider c = b as Element of NAT by A2;
+A3: 1+a <= c & c <= b1+a by A2,Th1;
+    b1+a <= b2+a by A1,XREAL_1:8;
+    then c <= b2+a by A3,XXREAL_0:2;
+    hence b in seq(a,b2) by A3;
   end;
+  assume
+A4: seq(a,b1) c= seq(a,b2);
+  now
+    assume b1 <> 0;
+    then b1+a in seq(a,b1) by Th3;
+    then b1+a <= b2+a by A4,Th1;
+    hence b1 <= b2 by XREAL_1:8;
+  end;
+  hence thesis;
+end;
 
 theorem Th5:
   seq(a,b) \/ {a+b+1} = seq(a,b+1)
+proof
+  thus seq(a,b) \/ {a+b+1} c= seq(a,b+1)
   proof
-    thus seq(a,b) \/ {a+b+1} c= seq(a,b+1)
-    proof
-       b+0 <= b+1 by XREAL_1:9;
-then A1:   seq(a,b) c= seq(a,b+1) by Th4;
-      let x be set such that A2: x in seq(a,b) \/ {a+b+1};
-       x in seq(a,b) or x in {a+b+1} by A2,XBOOLE_0:def 2;
-      then x in seq(a,b+1) or x = a+(b+1) by A1,TARSKI:def 1;
-      hence thesis by Th3;
-    end;
-    let x be set such that A3: x in seq(a,b+1);
-    reconsider x as Element of NAT by A3;
-     1+a <= x & x <= b+1+a by A3,Th1;
-    then 1+a <= x & (x <= a+b or x = a+b+1) by NAT_1:8;
-    then x in seq(a,b) or x in {a+b+1} by TARSKI:def 1;
-    hence thesis by XBOOLE_0:def 2;
+    b+0 <= b+1 by XREAL_1:9;
+    then
+A1: seq(a,b) c= seq(a,b+1) by Th4;
+    let x be set such that
+A2: x in seq(a,b) \/ {a+b+1};
+    x in seq(a,b) or x in {a+b+1} by A2,XBOOLE_0:def 2;
+    then x in seq(a,b+1) or x = a+(b+1) by A1,TARSKI:def 1;
+    hence thesis by Th3;
   end;
+  let x be set such that
+A3: x in seq(a,b+1);
+  reconsider x as Element of NAT by A3;
+  1+a <= x & x <= b+1+a by A3,Th1;
+  then 1+a <= x & (x <= a+b or x = a+b+1) by NAT_1:8;
+  then x in seq(a,b) or x in {a+b+1} by TARSKI:def 1;
+  hence thesis by XBOOLE_0:def 2;
+end;
 
 theorem Th6:
   seq(m,n),n are_equipotent
-  proof
-    defpred P[Element of NAT] means seq(m,$1),$1 are_equipotent;
+proof
+  defpred P[Element of NAT] means seq(m,$1),$1 are_equipotent;
 A1: P[0] by Th2;
 A2: for n st P[n] holds P[n+1]
-    proof let n such that
-A3:    seq(m,n),n are_equipotent;
-       reconsider i = m+n as Element of NAT;
-A4:    seq(m,n+1) = seq(m,n) \/ { i+1 } by Th5;
-A5:    n+1 = succ n by NAT_1:39 .= n \/ { n } by ORDINAL1:def 1;
-A6:    { i+1 },{ n } are_equipotent by CARD_1:48;
-A7:   now assume n meets { n };
-        then consider x being set such that
-A8:      x in n & x in { n } by XBOOLE_0:3;
-            x = n by A8,TARSKI:def 1;
-        hence contradiction by A8;
-       end;
-         now assume seq(m,n) meets { i+1 };
-        then consider x being set such that
-A9:      x in seq(m,n) & x in { i+1 } by XBOOLE_0:3;
-A10:      x = i+1 & n+m <= i by A9,TARSKI:def 1;
-           not i+1 <= i by NAT_1:13;
-        hence contradiction by A9,A10,Th1;
-       end;
-      hence thesis by A3,A4,A5,A6,A7,CARD_1:58;
-     end;
-      for n holds P[n] from NAT_1:sch 1(A1,A2);
-   hence thesis;
+  proof
+    let n such that
+A3: seq(m,n),n are_equipotent;
+    reconsider i = m+n as Element of NAT;
+A4: seq(m,n+1) = seq(m,n) \/ { i+1 } by Th5;
+A5: n+1 = succ n by NAT_1:39
+      .= n \/ { n } by ORDINAL1:def 1;
+A6: { i+1 },{ n } are_equipotent by CARD_1:48;
+A7: now
+      assume n meets { n };
+      then consider x being set such that
+A8:   x in n & x in { n } by XBOOLE_0:3;
+      x = n by A8,TARSKI:def 1;
+      hence contradiction by A8;
+    end;
+    now
+      assume seq(m,n) meets { i+1 };
+      then consider x being set such that
+A9:   x in seq(m,n) & x in { i+1 } by XBOOLE_0:3;
+A10:  x = i+1 & n+m <= i by A9,TARSKI:def 1;
+      not i+1 <= i by NAT_1:13;
+      hence contradiction by A9,A10,Th1;
+    end;
+    hence thesis by A3,A4,A5,A6,A7,CARD_1:58;
   end;
+  for n holds P[n] from NAT_1:sch 1(A1,A2);
+  hence thesis;
+end;
 
-registration let m,n;
+registration
+  let m,n;
   cluster seq(m,n) -> finite;
   coherence
   proof
 A1: n is finite by CARD_1:69;
-     n,seq(m,n) are_equipotent by Th6;
+    n,seq(m,n) are_equipotent by Th6;
     hence thesis by A1,CARD_1:68;
   end;
 end;
 
-registration let f;
+registration
+  let f;
   cluster len f -> finite;
   coherence by CARD_1:69;
 end;
 
 theorem Th7:
   seq(m,n) c= Seg (m+n)
-  proof
-    let x be set;
-    assume A1: x in seq(m,n);
-    then reconsider x as Element of NAT;
+proof
+  let x be set;
+  assume
+A1: x in seq(m,n);
+  then reconsider x as Element of NAT;
 A2: 1+m <= x & x <= n+m by A1,Th1;
-     1 <= 1+m by NAT_1:11;
-    then 1 <= x by A2,XXREAL_0:2;
-    hence thesis by A2,FINSEQ_1:3;
-  end;
+  1 <= 1+m by NAT_1:11;
+  then 1 <= x by A2,XXREAL_0:2;
+  hence thesis by A2,FINSEQ_1:3;
+end;
 
 theorem
-   Seg n misses seq(n,m)
-  proof
-    assume Seg n meets seq(n,m);
-      then consider a being set such that
-A1:   a in Seg n & a in seq(n,m) by XBOOLE_0:3;
-      reconsider i = a as Element of NAT by A1;
-       i <= n & n+1 <= i by A1,Th1,FINSEQ_1:3;
-      hence contradiction by NAT_1:13;
-  end;
+  Seg n misses seq(n,m)
+proof
+  assume Seg n meets seq(n,m);
+  then consider a being set such that
+A1: a in Seg n & a in seq(n,m) by XBOOLE_0:3;
+  reconsider i = a as Element of NAT by A1;
+  i <= n & n+1 <= i by A1,Th1,FINSEQ_1:3;
+  hence contradiction by NAT_1:13;
+end;
 
 theorem
-   for f,g be FinSequence holds
-   dom(f^g) = dom f \/ seq(len f,len g)
-  proof
-    let f,g be FinSequence;
-     now let a be set such that A1: a in dom(f^g);
-      reconsider i = a as Element of NAT by A1;
-A2:   1 <= i & i <= len(f^g) by A1,FINSEQ_3:27;
-     per cases;
-      suppose i <= len f;
-then A3:     i in dom f by A2,FINSEQ_3:27;
-         dom f c= dom f \/ seq(len f,len g) by XBOOLE_1:7;
-        hence a in dom f \/ seq(len f,len g) by A3;
-      end;
-      suppose len f < i;
-        then len f+1 <= i & i <= len f+len g by A2,FINSEQ_1:35,NAT_1:13;
-then A4:     a in seq(len f,len g);
-         seq(len f,len g) c= dom f \/ seq(len f,len g) by XBOOLE_1:7;
-        hence a in dom f \/ seq(len f,len g) by A4;
-      end;
+  for f,g be FinSequence holds dom(f^g) = dom f \/ seq(len f,len g)
+proof
+  let f,g be FinSequence;
+  now
+    let a be set such that
+A1: a in dom(f^g);
+    reconsider i = a as Element of NAT by A1;
+A2: 1 <= i & i <= len(f^g) by A1,FINSEQ_3:27;
+    per cases;
+    suppose i <= len f;
+      then
+A3:   i in dom f by A2,FINSEQ_3:27;
+      dom f c= dom f \/ seq(len f,len g) by XBOOLE_1:7;
+      hence a in dom f \/ seq(len f,len g) by A3;
     end;
-    hence dom(f^g) c= dom f \/ seq(len f,len g) by TARSKI:def 3;
-    let a be set such that A5: a in dom f \/ seq(len f,len g);
-    per cases by A5,XBOOLE_0:def 2;
-    suppose A6: a in dom f;
-      then reconsider i = a as Element of NAT;
-A7:  1 <= i & i <= len f by A6,FINSEQ_3:27;
-       len f <= len (f^g) by CALCUL_1:6;
-      then i <= len (f^g) by A7,XXREAL_0:2;
-      hence a in dom(f^g) by A7,FINSEQ_3:27;
-    end;
-    suppose A8: a in seq(len f,len g);
-      then reconsider i = a as Element of NAT;
-A9:  1+len f <= i & i <= len g+len f by A8,Th1;
-then A10:  i <= len (f^g) by FINSEQ_1:35;
-       1 <= 1+len f by NAT_1:11;
-      then 1 <= i by A9,XXREAL_0:2;
-      hence a in dom(f^g) by A10,FINSEQ_3:27;
+    suppose len f < i;
+      then len f+1 <= i & i <= len f+len g by A2,FINSEQ_1:35,NAT_1:13;
+      then
+A4:   a in seq(len f,len g);
+      seq(len f,len g) c= dom f \/ seq(len f,len g) by XBOOLE_1:7;
+      hence a in dom f \/ seq(len f,len g) by A4;
     end;
   end;
+  hence dom(f^g) c= dom f \/ seq(len f,len g) by TARSKI:def 3;
+  let a be set such that
+A5: a in dom f \/ seq(len f,len g);
+  per cases by A5,XBOOLE_0:def 2;
+  suppose
+A6: a in dom f;
+    then reconsider i = a as Element of NAT;
+A7: 1 <= i & i <= len f by A6,FINSEQ_3:27;
+    len f <= len (f^g) by CALCUL_1:6;
+    then i <= len (f^g) by A7,XXREAL_0:2;
+    hence a in dom(f^g) by A7,FINSEQ_3:27;
+  end;
+  suppose
+A8: a in seq(len f,len g);
+    then reconsider i = a as Element of NAT;
+A9: 1+len f <= i & i <= len g+len f by A8,Th1;
+    then
+A10: i <= len (f^g) by FINSEQ_1:35;
+    1 <= 1+len f by NAT_1:11;
+    then 1 <= i by A9,XXREAL_0:2;
+    hence a in dom(f^g) by A10,FINSEQ_3:27;
+  end;
+end;
 
 theorem Th10:
   len Sgm(seq(len g,len f)) = len f
-  proof
-     seq(len g,len f), len f are_equipotent by Th6;
-    then card seq(len g,len f) = card len f by CARD_1:81;
-then A1: card seq(len g,len f) = len f;
-     seq(len g,len f) c= Seg (len g + len f) by Th7;
-    hence thesis by A1,FINSEQ_3:44;
-  end;
+proof
+A1: card seq(len g,len f) = card len f by Th6,CARD_1:81;
+  seq(len g,len f) c= Seg (len g + len f) by Th7;
+  hence thesis by A1,FINSEQ_3:44;
+end;
 
 theorem Th11:
   dom Sgm(seq(len g,len f)) = dom f
-  proof
-     len Sgm(seq(len g,len f)) = len f by Th10;
-    hence thesis by FINSEQ_3:31;
-  end;
+proof
+  len Sgm(seq(len g,len f)) = len f by Th10;
+  hence thesis by FINSEQ_3:31;
+end;
 
 theorem Th12:
   rng Sgm(seq(len g,len f)) = seq(len g,len f)
-  proof
-     seq(len g,len f) c= Seg (len g+len f) by Th7;
-    hence thesis by FINSEQ_1:def 13;
-  end;
+proof
+  seq(len g,len f) c= Seg (len g+len f) by Th7;
+  hence thesis by FINSEQ_1:def 13;
+end;
 
 theorem Th13:
-  i in dom Sgm(seq(len g,len f)) implies
-    Sgm(seq(len g,len f)).i = len g+i
-  proof
-    assume i in dom Sgm(seq(len g,len f));
-    then i in dom f by Th11;
-then A1: 1 <= i & i <= len f by FINSEQ_3:27;
-    defpred P[Element of NAT] means 1 <= $1 & $1 <= len f implies
-       for i st 1 <= i & i <= $1 holds Sgm(seq(len g,len f)).i = len g+i;
+  i in dom Sgm(seq(len g,len f)) implies Sgm(seq(len g,len f)).i = len g+i
+proof
+  assume i in dom Sgm(seq(len g,len f));
+  then i in dom f by Th11;
+  then
+A1: 1 <= i & i <= len f by FINSEQ_3:27;
+  defpred P[Element of NAT] means 1 <= $1 & $1 <= len f implies
+  for i st 1 <= i & i <= $1 holds Sgm(seq(len g,len f)).i = len g+i;
 A2: P[0];
 A3: for k st P[k] holds P[k+1]
-    proof
-      let k such that A4: P[k];
-      assume A5: 1 <= k+1 & k+1 <= len f;
-      let n such that A6: 1 <= n & n <= k+1;
-A7:   n <= k implies thesis by A4,A5,A6,NAT_1:13,XXREAL_0:2;
-       now assume A8: n = k+1;
-         dom Sgm(seq(len g,len f)) = dom f by Th11;
-        then n in dom Sgm(seq(len g,len f)) by A5,A8,FINSEQ_3:27;
-        then Sgm(seq(len g,len f)).n in rng Sgm(seq(len g,len f)) by FUNCT_1:12
-;
-        then reconsider i = Sgm(seq(len g,len f)).n as Element of NAT;
-A9:     now assume A10: i < len g+(k+1);
-A11:       now assume A12: k = 0;
-            then not i in seq(len g,len f) by A10,Th1;
-then A13:        not i in rng Sgm(seq(len g,len f)) by Th12;
-             1 <= len f by A5,XXREAL_0:2;
-            then 1 in dom f by FINSEQ_3:27;
-            then 1 in dom Sgm(seq(len g,len f)) by Th11;
-            hence contradiction by A8,A12,A13,FUNCT_1:12;
-          end;
-           now assume A14: k <> 0;
-A15:        i < len g+k+1 by A10;
-             0 < k by A14;
-then A16:        0+1 <= k & k <= k+1 by NAT_1:13;
-then A17:        Sgm(seq(len g,len f)).k = len g+k by A4,A5,XXREAL_0:2;
-            then reconsider j = Sgm(seq(len g,len f)).k as Element of NAT;
-A18:        1 <= k & k < k+1 & k+1 <= len Sgm(seq(len g,len f))
-                                          by A5,A16,Th10,NAT_1:13;
-             i <= j & seq(len g,len f) c= Seg (len g+len f)
-                                                       by A15,A17,Th7,NAT_1:13;
-            hence contradiction by A8,A18,FINSEQ_1:def 13;
-          end;
-          hence contradiction by A11;
+  proof
+    let k such that
+A4: P[k];
+    assume
+A5: 1 <= k+1 & k+1 <= len f;
+    let n such that
+A6: 1 <= n & n <= k+1;
+A7: n <= k implies thesis by A4,A5,A6,NAT_1:13,XXREAL_0:2;
+    now
+      assume
+A8:   n = k+1;
+      dom Sgm(seq(len g,len f)) = dom f by Th11;
+      then n in dom Sgm(seq(len g,len f)) by A5,A8,FINSEQ_3:27;
+      then Sgm(seq(len g,len f)).n in rng Sgm(seq(len g,len f)) by FUNCT_1:
+      12;
+      then reconsider i = Sgm(seq(len g,len f)).n as Element of NAT;
+A9:   now
+        assume
+A10:    i < len g+(k+1);
+A11:    now
+          assume
+A12:      k = 0;
+          then not i in seq(len g,len f) by A10,Th1;
+          then
+A13:      not i in rng Sgm(seq(len g,len f)) by Th12;
+          1 <= len f by A5,XXREAL_0:2;
+          then 1 in dom f by FINSEQ_3:27;
+          then 1 in dom Sgm(seq(len g,len f)) by Th11;
+          hence contradiction by A8,A12,A13,FUNCT_1:12;
         end;
-         now assume A19: i > len g+(k+1);
-A20:      1+len g <= 1+len g+k by NAT_1:11;
-           len g+(k+1) <= len f+len g by A5,XREAL_1:8;
-          then len g+(k+1) in seq(len g,len f) by A20;
-          then len g+(k+1) in rng Sgm(seq(len g,len f)) by Th12;
-          then consider l being Nat such that
-A21:      l in dom Sgm(seq(len g,len f)) &
-          Sgm(seq(len g,len f)).l = len g+(k+1) by FINSEQ_2:11;
-A22:      now assume A23: l <= k+1;
-             now assume A24: l <= k;
-               now assume 1 <= l;
-                then len g+(k+1) = len g+l by A4,A5,A21,A24,NAT_1:13,XXREAL_0:2
-;
-                hence contradiction by A24,NAT_1:13;
-              end;
-              hence contradiction by A21,FINSEQ_3:27;
-            end;
-            hence contradiction by A8,A19,A21,A23,NAT_1:8;
-          end;
-          reconsider l' = Sgm(seq(len g,len f)).l as Element of NAT by A21;
-A25:      1 <= n & n < l & l <= len Sgm(seq(len g,len f))
-                                            by A8,A21,A22,FINSEQ_3:27,NAT_1:11;
-           seq(len g,len f) c= Seg (len g+len f) by Th7;
-          hence contradiction by A19,A21,A25,FINSEQ_1:def 13;
+        now
+          assume
+A14:      k <> 0;
+A15:      i < len g+k+1 by A10;
+          0 < k by A14;
+          then
+A16:      0+1 <= k & k <= k+1 by NAT_1:13;
+          then
+A17:      Sgm(seq(len g,len f)).k = len g+k by A4,A5,XXREAL_0:2;
+          then reconsider j = Sgm(seq(len g,len f)).k as Element of NAT;
+A18:      1 <= k & k < k+1 & k+1 <= len Sgm(seq(len g,len f))
+          by A5,A16,Th10,NAT_1:13;
+          i <= j & seq(len g,len f) c= Seg (len g+len f)
+          by A15,A17,Th7,NAT_1:13;
+          hence contradiction by A8,A18,FINSEQ_1:def 13;
         end;
-        hence Sgm(seq(len g,len f)).n = len g+n by A8,A9,XXREAL_0:1;
+        hence contradiction by A11;
       end;
-      hence thesis by A6,A7,NAT_1:8;
+      now
+        assume
+A19:    i > len g+(k+1);
+A20:    1+len g <= 1+len g+k by NAT_1:11;
+        len g+(k+1) <= len f+len g by A5,XREAL_1:8;
+        then len g+(k+1) in seq(len g,len f) by A20;
+        then len g+(k+1) in rng Sgm(seq(len g,len f)) by Th12;
+        then consider l being Nat such that
+A21:    l in dom Sgm(seq(len g,len f)) &
+        Sgm(seq(len g,len f)).l = len g+(k+1) by FINSEQ_2:11;
+A22:    now
+          assume
+A23:      l <= k+1;
+          now
+            assume
+A24:        l <= k;
+            now
+              assume 1 <= l;
+              then len g+(k+1) = len g+l by A4,A5,A21,A24,NAT_1:13,XXREAL_0:
+              2;
+              hence contradiction by A24,NAT_1:13;
+            end;
+            hence contradiction by A21,FINSEQ_3:27;
+          end;
+          hence contradiction by A8,A19,A21,A23,NAT_1:8;
+        end;
+        reconsider l' = Sgm(seq(len g,len f)).l as Element of NAT by A21;
+A25:    1 <= n & n < l & l <= len Sgm(seq(len g,len f))
+        by A8,A21,A22,FINSEQ_3:27,NAT_1:11;
+        seq(len g,len f) c= Seg (len g+len f) by Th7;
+        hence contradiction by A19,A21,A25,FINSEQ_1:def 13;
+      end;
+      hence Sgm(seq(len g,len f)).n = len g+n by A8,A9,XXREAL_0:1;
     end;
-       for n holds P[n] from NAT_1:sch 1(A2,A3);
-      hence Sgm(seq(len g,len f)).i = len g+i by A1;
+    hence thesis by A6,A7,NAT_1:8;
   end;
+  for n holds P[n] from NAT_1:sch 1(A2,A3);
+  hence Sgm(seq(len g,len f)).i = len g+i by A1;
+end;
 
 theorem Th14:
   seq(len g,len f) c= dom (g^f)
-  proof
-     now let a be set such that A1: a in seq(len g,len f);
-      reconsider n = a as Element of NAT by A1;
-A2:   1+len g <= n & n <= len f+len g by A1,Th1;
-       1 <= 1+len g by NAT_1:11;
-      then 1 <= n & n <= len (g^f) by A2,FINSEQ_1:35,XXREAL_0:2;
-      hence a in dom (g^f) by FINSEQ_3:27;
-    end;
-    hence thesis by TARSKI:def 3;
+proof
+  now
+    let a be set such that
+A1: a in seq(len g,len f);
+    reconsider n = a as Element of NAT by A1;
+A2: 1+len g <= n & n <= len f+len g by A1,Th1;
+    1 <= 1+len g by NAT_1:11;
+    then 1 <= n & n <= len (g^f) by A2,FINSEQ_1:35,XXREAL_0:2;
+    hence a in dom (g^f) by FINSEQ_3:27;
   end;
+  hence thesis by TARSKI:def 3;
+end;
 
 theorem Th15:
   dom((g^f)|seq(len g,len f)) = seq(len g,len f)
-  proof
-A1: dom((g^f)|seq(len g,len f)) = dom (g^f) /\ seq(len g,len f) by RELAT_1:90;
-     seq(len g,len f) c= dom (g^f) by Th14;
-    hence thesis by A1,XBOOLE_1:28;
-  end;
+proof
+  dom((g^f)|seq(len g,len f)) = dom (g^f) /\ seq(len g,len f) by RELAT_1:90;
+  hence thesis by Th14,XBOOLE_1:28;
+end;
 
 theorem Th16:
   Seq((g^f)|seq(len g,len f)) = Sgm(seq(len g,len f)) * (g^f)
-  proof
-    reconsider gf = (g^f)|seq(len g,len f) as FinSubsequence;
-     Seq(gf) = gf * Sgm(dom(gf)) by FINSEQ_1:def 14
-           .= gf * Sgm(seq(len g,len f)) by Th15
-           .= (((g^f)|rng Sgm(seq(len g,len f))) qua Function) *
-                (Sgm(seq(len g,len f)) qua Function) by Th12
-           .= ((g^f) qua Function) * (Sgm(seq(len g,len f)) qua Function)
-             by FUNCT_4:2;
-    hence thesis;
-  end;
+proof
+  reconsider gf = (g^f)|seq(len g,len f) as FinSubsequence;
+  Seq(gf) = gf * Sgm(dom(gf)) by FINSEQ_1:def 14
+    .= gf * Sgm(seq(len g,len f)) by Th15
+    .= (((g^f)|rng Sgm(seq(len g,len f))) qua Function) *
+  (Sgm(seq(len g,len f)) qua Function) by Th12
+    .= ((g^f) qua Function) * (Sgm(seq(len g,len f)) qua Function)
+  by FUNCT_4:2;
+  hence thesis;
+end;
 
 theorem Th17:
   dom Seq((g^f)|seq(len g,len f)) = dom f
-  proof
-     rng Sgm(seq(len g,len f)) = seq(len g,len f) by Th12;
-then A1: rng Sgm(seq(len g,len f)) c= dom (g^f) by Th14;
-     dom Seq((g^f)|seq(len g,len f)) =
-                      dom (Sgm(seq(len g,len f)) * (g^f)) by Th16;
-    then dom Seq((g^f)|seq(len g,len f)) = dom Sgm(seq(len g,len f))
-                                                         by A1,RELAT_1:46;
-    hence thesis by Th11;
-  end;
+proof
+  rng Sgm(seq(len g,len f)) = seq(len g,len f) by Th12;
+  then
+A1: rng Sgm(seq(len g,len f)) c= dom (g^f) by Th14;
+  dom Seq((g^f)|seq(len g,len f)) =
+  dom (Sgm(seq(len g,len f)) * (g^f)) by Th16;
+  then dom Seq((g^f)|seq(len g,len f)) = dom Sgm(seq(len g,len f))
+  by A1,RELAT_1:46;
+  hence thesis by Th11;
+end;
 
 theorem Th18:
   f is_Subsequence_of g^f
-  proof
+proof
 A1: for i be Nat st i in dom Seq((g^f)|seq(len g,len f)) holds
-                                 Seq((g^f)|seq(len g,len f)).i = f.i
-    proof
-      let i be Nat such that A2: i in dom Seq((g^f)|seq(len g,len f));
-A3:   Seq((g^f)|seq(len g,len f)).i = (Sgm(seq(len g,len f)) * (g^f)).i
-                                                                by Th16;
-A4:   i in dom f by A2,Th17;
-then A5:   i in dom Sgm(seq(len g,len f)) by Th11;
-      then Seq((g^f)|seq(len g,len f)).i = (g^f).(Sgm(seq(len g,len f)).i)
-                                              by A3,FUNCT_1:23;
-      then Seq((g^f)|seq(len g,len f)).i = (g^f).(len g+i) by A5,Th13;
-      hence thesis by A4,FINSEQ_1:def 7;
-    end;
-     dom Seq((g^f)|seq(len g,len f)) = dom f by Th17;
-    then Seq((g^f)|seq(len g,len f)) = f by A1,FINSEQ_1:17;
-    hence thesis by CALCUL_1:def 4;
+  Seq((g^f)|seq(len g,len f)).i = f.i
+  proof
+    let i be Nat such that
+A2: i in dom Seq((g^f)|seq(len g,len f));
+A3: Seq((g^f)|seq(len g,len f)).i = (Sgm(seq(len g,len f)) * (g^f)).i by Th16;
+A4: i in dom f by A2,Th17;
+    then
+A5: i in dom Sgm(seq(len g,len f)) by Th11;
+    then Seq((g^f)|seq(len g,len f)).i = (g^f).(Sgm(seq(len g,len f)).i)
+    by A3,FUNCT_1:23;
+    then Seq((g^f)|seq(len g,len f)).i = (g^f).(len g+i) by A5,Th13;
+    hence thesis by A4,FINSEQ_1:def 7;
   end;
+  dom Seq((g^f)|seq(len g,len f)) = dom f by Th17;
+  then Seq((g^f)|seq(len g,len f)) = f by A1,FINSEQ_1:17;
+  hence thesis by CALCUL_1:def 4;
+end;
 
-definition let D be non empty set, f be FinSequence of D;
-           let P be Permutation of dom f;
+definition
+  let D be non empty set, f be FinSequence of D;
+  let P be Permutation of dom f;
   func Per(f,P) -> FinSequence of D equals
-    P*f;
+
+  P*f;
   coherence
   proof
-     P is onto by FUNCT_2:def 4;
-then A1: rng P = dom f by FUNCT_2:def 3;
+A1: rng P = dom f by FUNCT_2:def 3;
     then dom (P*f) = dom P by RELAT_1:46;
     then dom (P*f) = dom f by FUNCT_2:67;
-    then consider n being Nat such that A2: dom (P*f) = Seg n
-    by FINSEQ_1:def 2;
+    then consider n being Nat such that
+A2: dom (P*f) = Seg n by FINSEQ_1:def 2;
     reconsider F = P*f as FinSequence by A2,FINSEQ_1:def 2;
-     rng F = rng f by A1,RELAT_1:47;
+    rng F = rng f by A1,RELAT_1:47;
     hence thesis by FINSEQ_1:def 4;
   end;
 end;
 
- reserve P for Permutation of dom f;
+reserve P for Permutation of dom f;
 
 theorem Th19:
   dom Per(f,P) = dom f
-  proof
-     P is onto by FUNCT_2:def 4;
-    then rng P = dom f by FUNCT_2:def 3;
-    then dom (P*f) = dom P by RELAT_1:46;
-    hence thesis by FUNCT_2:67;
-  end;
+proof
+  rng P = dom f by FUNCT_2:def 3;
+  then dom (P*f) = dom P by RELAT_1:46;
+  hence thesis by FUNCT_2:67;
+end;
 
 theorem Th20:
   |- f^<*p*> implies |- g^f^<*p*>
-  proof
-    assume A1: |- f^<*p*>;
+proof
+  assume
+A1: |- f^<*p*>;
 A2: Ant(f^<*p*>) = f & Suc(f^<*p*>) = p by CALCUL_1:5;
-    then Ant(f^<*p*>) is_Subsequence_of g^f by Th18;
-    then Ant(f^<*p*>) is_Subsequence_of Ant(g^f^<*p*>) &
-    Suc(f^<*p*>) = Suc(g^f^<*p*>) by A2,CALCUL_1:5;
-    hence thesis by A1,CALCUL_1:36;
-  end;
+  then Ant(f^<*p*>) is_Subsequence_of g^f by Th18;
+  then Ant(f^<*p*>) is_Subsequence_of Ant(g^f^<*p*>) &
+  Suc(f^<*p*>) = Suc(g^f^<*p*>) by A2,CALCUL_1:5;
+  hence thesis by A1,CALCUL_1:36;
+end;
 
 begin :: The Ordering of the Antecedent is Irrelevant
 
-definition let f;
+definition
+  let f;
   func Begin(f) -> Element of CQC-WFF means
-  :Def3:  it = f.1 if 1 <= len f otherwise it = VERUM;
+  :Def3:
+  it = f.1 if 1 <= len f otherwise it = VERUM;
   existence
   proof
- 1 <= len f implies ex p st p = f.1
+    1 <= len f implies ex p st p = f.1
     proof
       assume 1 <= len f;
       then 1 in dom f by FINSEQ_3:27;
@@ -461,409 +514,472 @@ definition let f;
   consistency;
 end;
 
-definition let f;
-  assume A1: 1 <= len f;
+definition
+  let f;
+  assume
+A1: 1 <= len f;
   func Impl(f) -> Element of CQC-WFF means
-  :Def4: ex F being FinSequence of CQC-WFF st it = F.(len f) & len F = len f &
-          (F.1 = Begin(f) or len f = 0)  &
-    for n st 1 <= n & n < len f holds ex p,q st p = f.(n+1) & q = F.n &
-                                                             F.(n+1) = p => q;
-   existence
-   proof
-     defpred P[Element of NAT,set,set] means
-                       ex p,q st p = f.($1+1) & q = $2 & $3 = p => q;
-A2:  for n st 1 <= n & n < len f holds for x being Element of CQC-WFF
-      ex y being Element of CQC-WFF st P[n,x,y]
-     proof
-       let n such that A3: 1 <= n & n < len f;
-       let x be Element of CQC-WFF;
- A4:   1 <= n+1 by NAT_1:11;
-        n+1 <= len f by A3,NAT_1:13;
-       then n+1 in dom f by A4,FINSEQ_3:27;
-       then reconsider p = f.(n+1) as Element of CQC-WFF by FINSEQ_2:13;
-       take y = p => x;
-       take p;
-       take x;
-       thus thesis;
-     end;
-     consider F being FinSequence of CQC-WFF such that
-A5:  len F = len f & (F.1 = Begin(f) or len f = 0) &
-           for n st 1 <= n & n < len f holds P[n,F.n,F.(n+1)]
-                                 from RECDEF_1:sch 6(A2);
-      len f in dom F by A1,A5,FINSEQ_3:27;
-     then reconsider p = F.(len f) as Element of CQC-WFF by FINSEQ_2:13;
-     take p;
-     thus thesis by A5;
-   end;
- uniqueness
- proof
-   defpred P[Element of NAT,set,set] means
-                       ex p,q st p = f.($1+1) & q = $2 & $3 = p => q;
-  let p1,p2 such that
+  :Def4:
+  ex F being FinSequence of CQC-WFF st it = F.(len f) & len F = len f &
+  (F.1 = Begin(f) or len f = 0) &
+  for n st 1 <= n & n < len f holds ex p,q st p = f.(n+1) & q = F.n &
+  F.(n+1) = p => q;
+  existence
+  proof
+    defpred P[Element of NAT,set,set] means
+    ex p,q st p = f.($1+1) & q = $2 & $3 = p => q;
+A2: for n st 1 <= n & n < len f holds for x being Element of CQC-WFF
+    ex y being Element of CQC-WFF st P[n,x,y]
+    proof
+      let n such that
+A3:   1 <= n & n < len f;
+      let x be Element of CQC-WFF;
+A4:   1 <= n+1 by NAT_1:11;
+      n+1 <= len f by A3,NAT_1:13;
+      then n+1 in dom f by A4,FINSEQ_3:27;
+      then reconsider p = f.(n+1) as Element of CQC-WFF by FINSEQ_2:13;
+      take y = p => x;
+      take p;
+      take x;
+      thus thesis;
+    end;
+    consider F being FinSequence of CQC-WFF such that
+A5: len F = len f & (F.1 = Begin(f) or len f = 0) &
+    for n st 1 <= n & n < len f holds P[n,F.n,F.(n+1)]
+    from RECDEF_1:sch 6(A2);
+    len f in dom F by A1,A5,FINSEQ_3:27;
+    then reconsider p = F.(len f) as Element of CQC-WFF by FINSEQ_2:13;
+    take p;
+    thus thesis by A5;
+  end;
+  uniqueness
+  proof
+    defpred P[Element of NAT,set,set] means
+    ex p,q st p = f.($1+1) & q = $2 & $3 = p => q;
+    let p1,p2 such that
 A6: ex F being FinSequence of CQC-WFF st p1 = F.(len f) & len F = len f &
-          (F.1 = Begin(f) or len f = 0)  &
+    (F.1 = Begin(f) or len f = 0) &
     for n st 1 <= n & n < len f holds P[n,F.n,F.(n+1)] and
 A7: ex F being FinSequence of CQC-WFF st p2 = F.(len f) & len F = len f &
-          (F.1 = Begin(f) or len f = 0)  &
+    (F.1 = Begin(f) or len f = 0) &
     for n st 1 <= n & n < len f holds P[n,F.n,F.(n+1)];
     consider G being FinSequence of CQC-WFF such that
 A8: p1 = G.(len f) and
-A9: len G = len f & (G.1 = Begin(f) or len f = 0)  &
-             for n st 1 <= n & n < len f holds P[n,G.n,G.(n+1)] by A6;
+A9: len G = len f & (G.1 = Begin(f) or len f = 0) &
+    for n st 1 <= n & n < len f holds P[n,G.n,G.(n+1)] by A6;
     consider H being FinSequence of CQC-WFF such that
 A10: p2 = H.(len f) and
-A11: len H = len f & (H.1 = Begin(f) or len f = 0)  &
-             for n st 1 <= n & n < len f holds P[n,H.n,H.(n+1)] by A7;
+A11: len H = len f & (H.1 = Begin(f) or len f = 0) &
+    for n st 1 <= n & n < len f holds P[n,H.n,H.(n+1)] by A7;
 A12: for n st 1 <= n & n < len f for x,y1,y2 being Element of CQC-WFF
-         st P[n,x,y1] & P[n,x,y2] holds y1 = y2;
-      G = H from RECDEF_1:sch 15(A12,A9,A11);
-     hence thesis by A8,A10;
- end;
+    st P[n,x,y1] & P[n,x,y2] holds y1 = y2;
+    G = H from RECDEF_1:sch 15(A12,A9,A11);
+    hence thesis by A8,A10;
+  end;
 end;
 
 :: Some details about the calculus in CALCUL_1
 
 theorem Th21:
   |- f^<*p*>^<*p*>
-  proof
-     len(f^<*p*>) in dom(f^<*p*>) by CALCUL_1:10;
-    then len f + len <*p*> in dom(f^<*p*>) by FINSEQ_1:35;
-    then A1: len f+1 in dom(f^<*p*>) by FINSEQ_1:56;
-     (f^<*p*>).(len f+1) = p by FINSEQ_1:59;
-    then p is_tail_of f^<*p*> by A1,CALCUL_1:def 3;
-    then Suc(f^<*p*>^<*p*>) is_tail_of f^<*p*> by CALCUL_1:5;
-    then Suc(f^<*p*>^<*p*>) is_tail_of Ant(f^<*p*>^<*p*>) by CALCUL_1:5;
-    hence thesis by CALCUL_1:33;
-  end;
+proof
+  len(f^<*p*>) in dom(f^<*p*>) by CALCUL_1:10;
+  then len f + len <*p*> in dom(f^<*p*>) by FINSEQ_1:35;
+  then
+A1: len f+1 in dom(f^<*p*>) by FINSEQ_1:56;
+  (f^<*p*>).(len f+1) = p by FINSEQ_1:59;
+  then p is_tail_of f^<*p*> by A1,CALCUL_1:def 3;
+  then Suc(f^<*p*>^<*p*>) is_tail_of f^<*p*> by CALCUL_1:5;
+  then Suc(f^<*p*>^<*p*>) is_tail_of Ant(f^<*p*>^<*p*>) by CALCUL_1:5;
+  hence thesis by CALCUL_1:33;
+end;
 
 theorem Th22:
   |- f^<*p '&' q*> implies |- f^<*p*>
-  proof
-    assume A1: |- f^<*p '&' q*>;
-     p '&' q = Suc(f^<*p '&' q*>) by CALCUL_1:5;
-    then |- Ant(f^<*p '&' q*>)^<*p*> by A1,CALCUL_1:40;
-    hence thesis by CALCUL_1:5;
-  end;
+proof
+  assume
+A1: |- f^<*p '&' q*>;
+  p '&' q = Suc(f^<*p '&' q*>) by CALCUL_1:5;
+  then |- Ant(f^<*p '&' q*>)^<*p*> by A1,CALCUL_1:40;
+  hence thesis by CALCUL_1:5;
+end;
 
 theorem Th23:
   |- f^<*p '&' q*> implies |- f^<*q*>
-  proof
-    assume A1: |- f^<*p '&' q*>;
-     p '&' q = Suc(f^<*p '&' q*>) by CALCUL_1:5;
-    then |- Ant(f^<*p '&' q*>)^<*q*> by A1,CALCUL_1:41;
-    hence thesis by CALCUL_1:5;
-  end;
+proof
+  assume
+A1: |- f^<*p '&' q*>;
+  p '&' q = Suc(f^<*p '&' q*>) by CALCUL_1:5;
+  then |- Ant(f^<*p '&' q*>)^<*q*> by A1,CALCUL_1:41;
+  hence thesis by CALCUL_1:5;
+end;
 
 theorem Th24:
   |- f^<*p*> & |- f^<*p*>^<*q*> implies |- f^<*q*>
-  proof
-    assume A1: |- f^<*p*> & |- f^<*p*>^<*q*>;
-     1 <= len (f^<*p*>) by CALCUL_1:10;
-    then |- Ant(f^<*p*>)^<*q*> by A1,CALCUL_1:45;
-    hence thesis by CALCUL_1:5;
-  end;
+proof
+  assume
+A1: |- f^<*p*> & |- f^<*p*>^<*q*>;
+  1 <= len (f^<*p*>) by CALCUL_1:10;
+  then |- Ant(f^<*p*>)^<*q*> by A1,CALCUL_1:45;
+  hence thesis by CALCUL_1:5;
+end;
 
 theorem Th25:
   |- f^<*p*> & |- f^<*'not' p*> implies |- f^<*q*>
-  proof
-    assume A1: |- f^<*p*> & |- f^<*'not' p*>;
- Ant(f^<*p*>) = f & Suc(f^<*p*>) = p by CALCUL_1:5;
-    hence thesis by A1,CALCUL_1:44;
-  end;
+proof
+  assume
+A1: |- f^<*p*> & |- f^<*'not' p*>;
+  Ant(f^<*p*>) = f & Suc(f^<*p*>) = p by CALCUL_1:5;
+  hence thesis by A1,CALCUL_1:44;
+end;
 
 theorem Th26:
   |- f^<*p*>^<*q*> & |- f^<*'not' p*>^<*q*> implies |- f^<*q*>
- proof
-   set f1 = f^<*p*>^<*q*>;
-   set f2 = f^<*'not' p*>^<*q*>;
-   assume A1: |- f1 & |- f2;
+proof
+  set f1 = f^<*p*>^<*q*>;
+  set f2 = f^<*'not' p*>^<*q*>;
+  assume
+A1: |- f1 & |- f2;
 A2: Ant(f1) = f^<*p*> & Ant(f2) = f^<*'not' p*> by CALCUL_1:5;
-then A3: Ant(Ant(f1)) = f & Suc(Ant(f1)) = p by CALCUL_1:5;
-then A4: Ant(Ant(f1)) = Ant(Ant(f2)) &
-                 'not' Suc(Ant(f1)) = Suc(Ant(f2)) by A2,CALCUL_1:5;
+  then
+A3: Ant(Ant(f1)) = f & Suc(Ant(f1)) = p by CALCUL_1:5;
+  then
+A4: Ant(Ant(f1)) = Ant(Ant(f2)) &
+  'not' Suc(Ant(f1)) = Suc(Ant(f2)) by A2,CALCUL_1:5;
 A5: Suc(f1) = q & 1 < len f1 & 1 < len f2 by CALCUL_1:5,9;
-   then Suc(f1) = Suc(f2) by CALCUL_1:5;
-   hence thesis by A1,A3,A4,A5,CALCUL_1:37;
- end;
+  then Suc(f1) = Suc(f2) by CALCUL_1:5;
+  hence thesis by A1,A3,A4,A5,CALCUL_1:37;
+end;
 
 theorem Th27:
   |- f^<*p*>^<*q*> implies |- f^<*p => q*>
-  proof
-    assume A1: |- f^<*p*>^<*q*>;
+proof
+  assume
+A1: |- f^<*p*>^<*q*>;
 A2: |- f^<*p '&' 'not' q*>^<*p '&' 'not' q*> by Th21;
-then A3: |- f^<*p '&' 'not' q*>^<*p*> by Th22;
-    set g = f^<*p*>^<*q*>;
+  then
+A3: |- f^<*p '&' 'not' q*>^<*p*> by Th22;
+  set g = f^<*p*>^<*q*>;
 A4: Ant(g) = f^<*p*> & Suc(g) = q by CALCUL_1:5;
-then A5: Ant(Ant(g)) = f & Suc(Ant(g)) = p by CALCUL_1:5;
-     0+1 <= len Ant(g) by A4,CALCUL_1:10;
-then A6: Ant(g) is_Subsequence_of
-         Ant(Ant(g))^<*p '&' 'not' q*>^<*Suc(Ant(g))*> by CALCUL_1:13;
-    set g1 = f^<*p '&' 'not' q*>^<*p*>^<*q*>;
-     Suc(g1) = Suc(g) & Ant(g1) = f^<*p '&' 'not' q*>^<*p*>
-                                         by A4,CALCUL_1:5;
-    then |- g1 by A1,A5,A6,CALCUL_1:36;
-then A7: |- f^<*p '&' 'not' q*>^<*q*> by A3,Th24;
-     |- f^<*p '&' 'not' q*>^<*'not' q*> by A2,Th23;
-then A8: |- f^<*p '&' 'not' q*>^<*'not' (p '&' 'not' q)*> by A7,Th25;
-     |- f^<*'not' (p '&' 'not' q)*>^<*'not' (p '&' 'not' q)*> by Th21;
-    then |- f^<*'not' (p '&' 'not' q)*> by A8,Th26;
-    hence thesis by QC_LANG2:def 2;
-  end;
+  then
+A5: Ant(Ant(g)) = f & Suc(Ant(g)) = p by CALCUL_1:5;
+A6: 0+1 <= len Ant(g) by A4,CALCUL_1:10;
+  set g1 = f^<*p '&' 'not' q*>^<*p*>^<*q*>;
+  Suc(g1) = Suc(g) & Ant(g1) = f^<*p '&' 'not' q*>^<*p*> by A4,CALCUL_1:5;
+  then |- g1 by A1,A5,A6,CALCUL_1:13,36;
+  then
+A7: |- f^<*p '&' 'not' q*>^<*q*> by A3,Th24;
+  |- f^<*p '&' 'not' q*>^<*'not' q*> by A2,Th23;
+  then
+A8: |- f^<*p '&' 'not' q*>^<*'not' (p '&' 'not' q)*> by A7,Th25;
+  |- f^<*'not' (p '&' 'not' q)*>^<*'not' (p '&' 'not' q)*> by Th21;
+  then |- f^<*'not' (p '&' 'not' q)*> by A8,Th26;
+  hence thesis by QC_LANG2:def 2;
+end;
 
 theorem Th28:
   1 <= len g & |- f^g implies |- f^<*Impl(Rev g)*>
-  proof
-    set h = Rev g;
-    assume A1: 1 <= len g & |- f^g;
-then A2: 1 <= len h by FINSEQ_5:def 3;
-    then consider F being FinSequence of CQC-WFF such that
-A3: Impl(h) = F.(len h) & len F = len h & (F.1 = Begin(h) or len h = 0)  &
-    for n st 1 <= n & n < len h holds ex p,q st p = h.(n+1) & q = F.n &
-                                         F.(n+1) = p => q by Def4;
-    defpred P[Element of NAT] means 1 <= $1 & $1 <= len F implies
-     ex f1,f2,n st
-         $1+n = len (f^g) & f1 = (f^g)|Seg n & f2 = f1^<*F.$1*> & |- f2;
+proof
+  set h = Rev g;
+  assume
+A1: 1 <= len g & |- f^g;
+  then
+A2: 1 <= len h by FINSEQ_5:def 3;
+  then consider F being FinSequence of CQC-WFF such that
+A3: Impl(h) = F.(len h) & len F = len h & (F.1 = Begin(h) or len h = 0) &
+  for n st 1 <= n & n < len h holds ex p,q st p = h.(n+1) & q = F.n &
+  F.(n+1) = p => q by Def4;
+  defpred P[Element of NAT] means 1 <= $1 & $1 <= len F implies ex f1,f2,n st
+  $1+n = len (f^g) & f1 = (f^g)|Seg n & f2 = f1^<*F.$1*> & |- f2;
 A4: P[0];
 A5: for k st P[k] holds P[k+1]
-    proof
-      let k such that A6: P[k];
-      assume A7: 1 <= k+1 & k+1 <= len F;
-then A8:   k+1 <= len g by A3,FINSEQ_5:def 3;
-       len g <= len (f^g) by CALCUL_1:6;
-then A9:   k+1 <= len (f^g) by A8,XXREAL_0:2;
-      then consider n being Nat such that A10: len (f^g) = (k+1)+n by NAT_1:10;
-      reconsider n as Element of NAT by ORDINAL1:def 13;
-A11:   now assume A12: k = 0;
-        set f1 = (f^g)|Seg n;
-        reconsider f1 as FinSequence of CQC-WFF by FINSEQ_1:23;
-        set f2 = f1^<*F.1*>;
-         F.1 = h.1 by A2,A3,Def3;
-then A13:    F.1 = g.(len g) by FINSEQ_5:65;
-         1 <= len(f^g) by A7,A9,XXREAL_0:2;
-then    len(f^g) in dom (f^g) by FINSEQ_3:27;
-then A14:    (f^g)|Seg(n+1) = f1^<*(f^g).(n+1)*> by A10,A12,FINSEQ_5:11;
-A15:    len g in dom g by A1,FINSEQ_3:27;
-         (f^g).(n+1) = (f^g).(len f+len g) by A10,A12,FINSEQ_1:35;
-        then f2 = (f^g)|Seg(len (f^g)) by A10,A12,A13,A14,A15,FINSEQ_1:def 7;
-then A16:    f2 = (f^g)|dom(f^g) by FINSEQ_1:def 3;
-        then reconsider f2 as FinSequence of CQC-WFF by RELAT_1:98;
-A17:    |- f2 by A1,A16,RELAT_1:98;
-        take f1,f2,n;
-        thus thesis by A10,A12,A17;
-      end;
-       now assume k <> 0;
-        then 0 < k & k <= k+1 by NAT_1:11;
- then A18:   0+1 <= k & k <= len F by A7,NAT_1:13;
-        then consider f1k being FinSequence of CQC-WFF such that
-A19:    ex f2,n st k+n = len (f^g) & f1k = (f^g)|Seg n &
-                                         f2 = f1k^<*F.k*> & |- f2 by A6;
-        consider f2k being FinSequence of CQC-WFF such that
-A20:    ex n st k+n = len (f^g) & f1k = (f^g)|Seg n &
-                                         f2k = f1k^<*F.k*> & |- f2k by A19;
-        consider nk being Element of NAT such that
-A21:    k+nk = len (f^g) & f1k = (f^g)|Seg nk &
-                                         f2k = f1k^<*F.k*> & |- f2k by A20;
-A22:    n+1 = nk by A10,A21;
-         len(f^g) <= len(f^g) + k by NAT_1:11;
-then A23:    len(f^g) - k <= len(f^g) + k - k by XREAL_1:11;
-        set f1 = (f^g)|Seg n;
-        reconsider f1 as FinSequence of CQC-WFF by FINSEQ_1:23;
-         1 <= n+1 by NAT_1:11;
- then A24:   nk in dom (f^g) by A10,A21,A23,FINSEQ_3:27;
- then A25:   f2k = f1^<*(f^g).nk*>^<*F.k*> & |- f2k by A21,A22,FINSEQ_5:11;
-         k in dom F by A18,FINSEQ_3:27;
-        then reconsider q = F.k as Element of CQC-WFF by FINSEQ_2:13;
-        reconsider p = (f^g).nk as Element of CQC-WFF by A24,FINSEQ_2:13;
-A26:    1 <= k & k < len h by A3,A7,A18,NAT_1:13;
-        then consider p1,q1 such that A27: p1 = h.(k+1) & q1 = F.k &
-                                         F.(k+1) = p1 => q1 by A3;
-         k+1 in dom h by A3,A7,FINSEQ_3:27;
-        then k+1 in dom g by FINSEQ_5:60;
-then A28:    p1 = g.(len g - (k+1) +1) by A27,FINSEQ_5:61
-          .= g.(len g - k);
-         k < len g by A26,FINSEQ_5:def 3;
-then A29:    k+(-k) < len g+(-k) by XREAL_1:10;
-        then reconsider i = len g-k as Element of NAT by INT_1:16;
-A30:    0+1 <= i by A29,INT_1:20;
-         len g <= k+len g by NAT_1:11;
-        then i <= len g by XREAL_1:22;
-        then i in dom g by A30,FINSEQ_3:27;
-then A31:    p1 = (f^g).(len f+i) by A28,FINSEQ_1:def 7
-          .= (f^g).(len f+len g-k)
-          .= (f^g).(len(f^g)-k) by FINSEQ_1:35
-          .= p by A21;
-         k+1 in dom F by A7,FINSEQ_3:27;
-        then reconsider r = F.(k+1) as Element of CQC-WFF by FINSEQ_2:13;
-        set f2 = f1^<*r*>;
-         |- f2 by A25,A27,A31,Th27;
-        hence thesis by A10;
-      end;
-      hence thesis by A11;
+  proof
+    let k such that
+A6: P[k];
+    assume
+A7: 1 <= k+1 & k+1 <= len F;
+    then
+A8: k+1 <= len g by A3,FINSEQ_5:def 3;
+    len g <= len (f^g) by CALCUL_1:6;
+    then
+A9: k+1 <= len (f^g) by A8,XXREAL_0:2;
+    then consider n being Nat such that
+A10: len (f^g) = (k+1)+n by NAT_1:10;
+    reconsider n as Element of NAT by ORDINAL1:def 13;
+A11: now
+      assume
+A12:  k = 0;
+      set f1 = (f^g)|Seg n;
+      reconsider f1 as FinSequence of CQC-WFF by FINSEQ_1:23;
+      set f2 = f1^<*F.1*>;
+      F.1 = h.1 by A2,A3,Def3;
+      then
+A13:  F.1 = g.(len g) by FINSEQ_5:65;
+      1 <= len(f^g) by A7,A9,XXREAL_0:2;
+      then len(f^g) in dom (f^g) by FINSEQ_3:27;
+      then
+A14:  (f^g)|Seg(n+1) = f1^<*(f^g).(n+1)*> by A10,A12,FINSEQ_5:11;
+A15:  len g in dom g by A1,FINSEQ_3:27;
+      (f^g).(n+1) = (f^g).(len f+len g) by A10,A12,FINSEQ_1:35;
+      then f2 = (f^g)|Seg(len (f^g)) by A10,A12,A13,A14,A15,FINSEQ_1:def 7;
+      then
+A16:  f2 = (f^g)|dom(f^g) by FINSEQ_1:def 3;
+      then reconsider f2 as FinSequence of CQC-WFF by RELAT_1:98;
+A17:  |- f2 by A1,A16,RELAT_1:98;
+      take f1,f2,n;
+      thus thesis by A10,A12,A17;
     end;
-A32: for k holds P[k] from NAT_1:sch 1(A4,A5);
-      1 <= len h & len h <= len F by A1,A3,FINSEQ_5:def 3;
-     then consider f1 such that
-A33: ex f2,n st len h+n = len (f^g) & f1 = (f^g)|Seg n &
-                                    f2 = f1^<*F.(len h)*> & |- f2 by A32;
-     consider f2 such that
-A34: ex n st len h+n = len (f^g) & f1 = (f^g)|Seg n &
-                                   f2 = f1^<*F.(len h)*> & |- f2 by A33;
-     consider n such that
-A35: len h+n = len (f^g) & f1 = (f^g)|Seg n &
-                           f2 = f1^<*F.(len h)*> & |- f2 by A34;
-      n+len h-len h = len(f^g)-len g by A35,FINSEQ_5:def 3;
-     then n+len h+(-len h) = len f + len g-len g by FINSEQ_1:35;
-     then Seg n = dom f by FINSEQ_1:def 3;
-     hence thesis by A3,A35,FINSEQ_1:33;
+    now
+      assume k <> 0;
+      then 0 < k & k <= k+1 by NAT_1:11;
+      then
+A18:  0+1 <= k & k <= len F by A7,NAT_1:13;
+      then consider f1k being FinSequence of CQC-WFF such that
+A19:  ex f2,n st k+n = len (f^g) & f1k = (f^g)|Seg n &
+      f2 = f1k^<*F.k*> & |- f2 by A6;
+      consider f2k being FinSequence of CQC-WFF such that
+A20:  ex n st k+n = len (f^g) & f1k = (f^g)|Seg n &
+      f2k = f1k^<*F.k*> & |- f2k by A19;
+      consider nk being Element of NAT such that
+A21:  k+nk = len (f^g) & f1k = (f^g)|Seg nk &
+      f2k = f1k^<*F.k*> & |- f2k by A20;
+A22:  n+1 = nk by A10,A21;
+      len(f^g) <= len(f^g) + k by NAT_1:11;
+      then
+A23:  len(f^g) - k <= len(f^g) + k - k by XREAL_1:11;
+      set f1 = (f^g)|Seg n;
+      reconsider f1 as FinSequence of CQC-WFF by FINSEQ_1:23;
+      1 <= n+1 by NAT_1:11;
+      then
+A24:  nk in dom (f^g) by A10,A21,A23,FINSEQ_3:27;
+      then
+A25:  f2k = f1^<*(f^g).nk*>^<*F.k*> & |- f2k by A21,A22,FINSEQ_5:11;
+      k in dom F by A18,FINSEQ_3:27;
+      then reconsider q = F.k as Element of CQC-WFF by FINSEQ_2:13;
+      reconsider p = (f^g).nk as Element of CQC-WFF by A24,FINSEQ_2:13;
+A26:  1 <= k & k < len h by A3,A7,A18,NAT_1:13;
+      then consider p1,q1 such that
+A27:  p1 = h.(k+1) & q1 = F.k & F.(k+1) = p1 => q1 by A3;
+      k+1 in dom h by A3,A7,FINSEQ_3:27;
+      then k+1 in dom g by FINSEQ_5:60;
+      then
+A28:  p1 = g.(len g - (k+1) +1) by A27,FINSEQ_5:61
+        .= g.(len g - k);
+      k < len g by A26,FINSEQ_5:def 3;
+      then
+A29:  k+(-k) < len g+(-k) by XREAL_1:10;
+      then reconsider i = len g-k as Element of NAT by INT_1:16;
+A30:  0+1 <= i by A29,INT_1:20;
+      len g <= k+len g by NAT_1:11;
+      then i <= len g by XREAL_1:22;
+      then i in dom g by A30,FINSEQ_3:27;
+      then
+A31:  p1 = (f^g).(len f+i) by A28,FINSEQ_1:def 7
+        .= (f^g).(len f+len g-k)
+        .= (f^g).(len(f^g)-k) by FINSEQ_1:35
+        .= p by A21;
+      k+1 in dom F by A7,FINSEQ_3:27;
+      then reconsider r = F.(k+1) as Element of CQC-WFF by FINSEQ_2:13;
+      set f2 = f1^<*r*>;
+      |- f2 by A25,A27,A31,Th27;
+      hence thesis by A10;
+    end;
+    hence thesis by A11;
   end;
+A32: for k holds P[k] from NAT_1:sch 1(A4,A5);
+  1 <= len h & len h <= len F by A1,A3,FINSEQ_5:def 3;
+  then consider f1 such that
+A33: ex f2,n st len h+n = len (f^g) & f1 = (f^g)|Seg n &
+  f2 = f1^<*F.(len h)*> & |- f2 by A32;
+  consider f2 such that
+A34: ex n st len h+n = len (f^g) & f1 = (f^g)|Seg n &
+  f2 = f1^<*F.(len h)*> & |- f2 by A33;
+  consider n such that
+A35: len h+n = len (f^g) & f1 = (f^g)|Seg n &
+  f2 = f1^<*F.(len h)*> & |- f2 by A34;
+  n+len h-len h = len(f^g)-len g by A35,FINSEQ_5:def 3;
+  then n+len h+(-len h) = len f + len g-len g by FINSEQ_1:35;
+  then Seg n = dom f by FINSEQ_1:def 3;
+  hence thesis by A3,A35,FINSEQ_1:33;
+end;
 
 theorem Th29:
   |- Per(f,P)^<*Impl(Rev (f^<*p*>))*> implies |- Per(f,P)^<*p*>
-  proof
-    set g = f^<*p*>;
-    set h = Rev g;
-    assume A1: |- Per(f,P)^<*Impl(Rev (f^<*p*>))*>;
-    A2: 1 <= len g by CALCUL_1:10;
-then A3: 1 <= len h by FINSEQ_5:def 3;
-    then consider F being FinSequence of CQC-WFF such that A4:
-       Impl(h) = F.(len h) & len F = len h & (F.1 = Begin(h) or len h = 0)  &
-       for n st 1 <= n & n < len h holds ex p,q st p = h.(n+1) & q = F.n &
-                                                   F.(n+1) = p => q by Def4;
-    set H = Rev F;
-    defpred P[Element of NAT] means 1 <= $1 & $1 <= len H implies
-                        ex p st p = H.$1 & |- Per(f,P)^<*p*>;
+proof
+  set g = f^<*p*>;
+  set h = Rev g;
+  assume
+A1: |- Per(f,P)^<*Impl(Rev (f^<*p*>))*>;
+A2: 1 <= len g by CALCUL_1:10;
+  then
+A3: 1 <= len h by FINSEQ_5:def 3;
+  then consider F being FinSequence of CQC-WFF such that
+A4: Impl(h) = F.(len h) & len F = len h & (F.1 = Begin(h) or len h = 0) &
+  for n st 1 <= n & n < len h holds ex p,q st p = h.(n+1) & q = F.n &
+  F.(n+1) = p => q by Def4;
+  set H = Rev F;
+  defpred P[Element of NAT] means 1 <= $1 & $1 <= len H implies
+  ex p st p = H.$1 & |- Per(f,P)^<*p*>;
 A5: P[0];
 A6: for k st P[k] holds P[k+1]
-    proof
-      let k such that A7: P[k];
-      assume A8: 1 <= k+1 & k+1 <= len H;
-A9:   now assume A10: k = 0;
-         1 <= len H by A3,A4,FINSEQ_5:def 3;
-then A11:    1 in dom H by FINSEQ_3:27;
-        then reconsider p = H.1 as Element of CQC-WFF by FINSEQ_2:13;
-        take p;
-         1 in dom F by A11,FINSEQ_5:60;
-        then p = F.(len F-1+1) by FINSEQ_5:61
-         .= Impl(h) by A4;
-        hence thesis by A1,A10;
-      end;
-       now assume k <> 0;
-then A12:    0 < k & k <= k+1 by NAT_1:13;
-then A13:    0+1 <= k & k < len H by A8,NAT_1:13;
-        then consider pk being Element of CQC-WFF such that
-A14:    pk = H.k & |- Per(f,P)^<*pk*> by A7;
-         k in dom H by A13,FINSEQ_3:27;
-then A15:    k in dom F by FINSEQ_5:60;
-         0+k < len F by A13,FINSEQ_5:def 3;
-then A16:    0+k+(-k) < len F+(-k) by XREAL_1:10;
-        then reconsider i = len F-k as Element of NAT by INT_1:16;
-A17:    0+1 <= i by A16,NAT_1:13;
-         len F < len F+k by A12,XREAL_1:31;
-then A18:    len F+(-k) < len F+k+(-k) by XREAL_1:10;
-        then consider p1,q1 such that
-A19:    p1 = h.(i+1) & q1 = F.i & F.(i+1) = p1 => q1 by A4,A17;
-A20:    pk = p1 => q1 by A14,A15,A19,FINSEQ_5:61;
-         1 <= i+1 & i+1 <= len h by A4,A17,A18,NAT_1:13;
-        then i+1 in dom h by FINSEQ_3:27;
-        then i+1 in dom g by FINSEQ_5:60;
-then A21:    p1 = g.(len g - (i+1) + 1) by A19,FINSEQ_5:61
-          .= g.(len g - i);
-A22:    len g-i = len g - (len g-k) by A4,FINSEQ_5:def 3
-               .= k;
-        then reconsider j = len g-i as Element of NAT;
-        set g1 = Per(f,P)^<*p1*>;
-         len g < len g+i by A16,XREAL_1:31;
-        then len g+(-i) < len g+i+(-i) by XREAL_1:10;
-        then j < len f+len <*p*> by FINSEQ_1:35;
-        then j < len f+1 by FINSEQ_1:56;
-        then j <= len f by NAT_1:13;
-then A23:    j in dom f by A13,A22,FINSEQ_3:27;
-then A24:    g.j = (g|dom f).j by FUNCT_1:72;
-         P is onto by FUNCT_2:def 4;
-        then j in rng P by A23,FUNCT_2:def 3;
-        then consider a being set such that
-A25:    a in dom P & P.a = j by FUNCT_1:def 5;
-A26:    a in dom f by A25;
-        then reconsider j1 = a as Element of NAT;
-         j1 in dom Per(f,P) by A26,Th19;
-then A27:    j1 in dom Ant(g1) by CALCUL_1:5;
-         p1 = f.(P.j1) by A21,A24,A25,FINSEQ_1:33;
-        then p1 = (P*f).j1 by A25,FUNCT_1:23;
-        then Suc(g1) = Per(f,P).j1 by CALCUL_1:5;
-        then Suc(g1) = (Ant(g1)).j1 by CALCUL_1:5;
-        then Suc(g1) is_tail_of Ant(g1) by A27,CALCUL_1:def 3;
-        then |- g1 by CALCUL_1:33;
-then A28:    |- Per(f,P)^<*q1*> by A14,A20,CALCUL_1:56;
-A29:    i = len F-(k+1)+1;
-         k+1 in dom H by A8,FINSEQ_3:27;
-        then k+1 in dom F by FINSEQ_5:60;
-then A30:    q1 = H.(k+1) by A19,A29,FINSEQ_5:61;
-        take q1;
-        thus thesis by A28,A30;
-      end;
-      hence thesis by A9;
-    end;
-A31: for k holds P[k] from NAT_1:sch 1(A5,A6);
+  proof
+    let k such that
+A7: P[k];
+    assume
+A8: 1 <= k+1 & k+1 <= len H;
+A9: now
+      assume
+A10:  k = 0;
       1 <= len H by A3,A4,FINSEQ_5:def 3;
-     then consider q such that A32: q = H.(len H) & |- Per(f,P)^<*q*> by A31;
-      q = H.(len F) by A32,FINSEQ_5:def 3;
-     then q = Begin(h) by A2,A4,FINSEQ_5:65,def 3;
-     then q = h.1 by A3,Def3;
-     then q = g.(len g) by FINSEQ_5:65;
-     then q = g.(len f+len <*p*>) by FINSEQ_1:35;
-     then q = g.(len f+1) by FINSEQ_1:56;
-     hence thesis by A32,FINSEQ_1:59;
+      then
+A11:  1 in dom H by FINSEQ_3:27;
+      then reconsider p = H.1 as Element of CQC-WFF by FINSEQ_2:13;
+      take p;
+      1 in dom F by A11,FINSEQ_5:60;
+      then p = F.(len F-1+1) by FINSEQ_5:61
+        .= Impl(h) by A4;
+      hence thesis by A1,A10;
+    end;
+    now
+      assume k <> 0;
+      then
+A12:  0 < k & k <= k+1 by NAT_1:13;
+      then
+A13:  0+1 <= k & k < len H by A8,NAT_1:13;
+      then consider pk being Element of CQC-WFF such that
+A14:  pk = H.k & |- Per(f,P)^<*pk*> by A7;
+      k in dom H by A13,FINSEQ_3:27;
+      then
+A15:  k in dom F by FINSEQ_5:60;
+      0+k < len F by A13,FINSEQ_5:def 3;
+      then
+A16:  0+k+(-k) < len F+(-k) by XREAL_1:10;
+      then reconsider i = len F-k as Element of NAT by INT_1:16;
+A17:  0+1 <= i by A16,NAT_1:13;
+      len F < len F+k by A12,XREAL_1:31;
+      then
+A18:  len F+(-k) < len F+k+(-k) by XREAL_1:10;
+      then consider p1,q1 such that
+A19:  p1 = h.(i+1) & q1 = F.i & F.(i+1) = p1 => q1 by A4,A17;
+A20:  pk = p1 => q1 by A14,A15,A19,FINSEQ_5:61;
+      1 <= i+1 & i+1 <= len h by A4,A17,A18,NAT_1:13;
+      then i+1 in dom h by FINSEQ_3:27;
+      then i+1 in dom g by FINSEQ_5:60;
+      then
+A21:  p1 = g.(len g - (i+1) + 1) by A19,FINSEQ_5:61
+        .= g.(len g - i);
+A22:  len g-i = len g - (len g-k) by A4,FINSEQ_5:def 3
+        .= k;
+      then reconsider j = len g-i as Element of NAT;
+      set g1 = Per(f,P)^<*p1*>;
+      len g < len g+i by A16,XREAL_1:31;
+      then len g+(-i) < len g+i+(-i) by XREAL_1:10;
+      then j < len f+len <*p*> by FINSEQ_1:35;
+      then j < len f+1 by FINSEQ_1:56;
+      then j <= len f by NAT_1:13;
+      then
+A23:  j in dom f by A13,A22,FINSEQ_3:27;
+      then
+A24:  g.j = (g|dom f).j by FUNCT_1:72;
+      j in rng P by A23,FUNCT_2:def 3;
+      then consider a being set such that
+A25:  a in dom P & P.a = j by FUNCT_1:def 5;
+A26:  a in dom f by A25;
+      then reconsider j1 = a as Element of NAT;
+      j1 in dom Per(f,P) by A26,Th19;
+      then
+A27:  j1 in dom Ant(g1) by CALCUL_1:5;
+      p1 = f.(P.j1) by A21,A24,A25,FINSEQ_1:33;
+      then p1 = (P*f).j1 by A25,FUNCT_1:23;
+      then Suc(g1) = Per(f,P).j1 by CALCUL_1:5;
+      then Suc(g1) = (Ant(g1)).j1 by CALCUL_1:5;
+      then Suc(g1) is_tail_of Ant(g1) by A27,CALCUL_1:def 3;
+      then |- g1 by CALCUL_1:33;
+      then
+A28:  |- Per(f,P)^<*q1*> by A14,A20,CALCUL_1:56;
+A29:  i = len F-(k+1)+1;
+      k+1 in dom H by A8,FINSEQ_3:27;
+      then k+1 in dom F by FINSEQ_5:60;
+      then
+A30:  q1 = H.(k+1) by A19,A29,FINSEQ_5:61;
+      take q1;
+      thus thesis by A28,A30;
+    end;
+    hence thesis by A9;
   end;
+A31: for k holds P[k] from NAT_1:sch 1(A5,A6);
+  1 <= len H by A3,A4,FINSEQ_5:def 3;
+  then consider q such that
+A32: q = H.(len H) & |- Per(f,P)^<*q*> by A31;
+  q = H.(len F) by A32,FINSEQ_5:def 3;
+  then q = Begin(h) by A2,A4,FINSEQ_5:65,def 3;
+  then q = h.1 by A3,Def3;
+  then q = g.(len g) by FINSEQ_5:65;
+  then q = g.(len f+len <*p*>) by FINSEQ_1:35;
+  then q = g.(len f+1) by FINSEQ_1:56;
+  hence thesis by A32,FINSEQ_1:59;
+end;
 
 theorem
-   |- f^<*p*> implies |- Per(f,P)^<*p*>
-   proof
-     assume |- f^<*p*>;
-then A1:  |- Per(f,P)^f^<*p*> by Th20;
-     set g = f^<*p*>;
-A2:  |- Per(f,P)^g by A1,FINSEQ_1:45;
-      1 <= len(g) by CALCUL_1:10;
-     then |- Per(f,P)^<*Impl(Rev g)*> by A2,Th28;
-     hence thesis by Th29;
-   end;
+  |- f^<*p*> implies |- Per(f,P)^<*p*>
+proof
+  assume |- f^<*p*>;
+  then
+A1: |- Per(f,P)^f^<*p*> by Th20;
+  set g = f^<*p*>;
+A2: |- Per(f,P)^g by A1,FINSEQ_1:45;
+  1 <= len(g) by CALCUL_1:10;
+  then |- Per(f,P)^<*Impl(Rev g)*> by A2,Th28;
+  hence thesis by Th29;
+end;
 
 begin :: Multiple Occurrence in the Antecedent is Irrelevant
 
-notation let n; let c be set;
+notation
+  let n;
+  let c be set;
   synonym IdFinS(c,n) for n |-> c;
 end;
 
 theorem Th31:
   for c being set st 1 <= n holds rng IdFinS(c,n) = rng <*c*>
+proof
+  let c be set such that
+A1: 1 <= n;
+  thus rng IdFinS(c,n) c= rng <*c*>
   proof
-    let c be set such that A1: 1 <= n;
-    thus rng IdFinS(c,n) c= rng <*c*>
-    proof
-      let a be set such that A2: a in rng IdFinS(c,n);
-      consider i being Nat such that
-A3:   i in dom IdFinS(c,n) & IdFinS(c,n).i = a by A2,FINSEQ_2:11;
-       i in Seg len IdFinS(c,n) by A3,FINSEQ_1:def 3;
-      then i in Seg n by FINSEQ_2:69;
-      then a = c by A3,FUNCOP_1:13;
-      then a in {c} by TARSKI:def 1;
-      hence thesis by FINSEQ_1:55;
-    end;
-    let a be set such that A4: a in rng <*c*>;
-     a in {c} by A4,FINSEQ_1:55;
-then A5: a = c by TARSKI:def 1;
-     n = len IdFinS(c,n) by FINSEQ_2:69;
-then A6: n in dom IdFinS(c,n) by A1,FINSEQ_3:27;
-     n in Seg n by A1,FINSEQ_1:3;
-    then IdFinS(c,n).n = c by FUNCOP_1:13;
-    hence thesis by A5,A6,FUNCT_1:def 5;
+    let a be set such that
+A2: a in rng IdFinS(c,n);
+    consider i being Nat such that
+A3: i in dom IdFinS(c,n) & IdFinS(c,n).i = a by A2,FINSEQ_2:11;
+    i in Seg len IdFinS(c,n) by A3,FINSEQ_1:def 3;
+    then i in Seg n by FINSEQ_2:69;
+    then a = c by A3,FUNCOP_1:13;
+    then a in {c} by TARSKI:def 1;
+    hence thesis by FINSEQ_1:55;
   end;
+  let a be set such that
+A4: a in rng <*c*>;
+  a in {c} by A4,FINSEQ_1:55;
+  then
+A5: a = c by TARSKI:def 1;
+  n = len IdFinS(c,n) by FINSEQ_2:69;
+  then
+A6: n in dom IdFinS(c,n) by A1,FINSEQ_3:27;
+  n in Seg n by A1,FINSEQ_1:3;
+  then IdFinS(c,n).n = c by FUNCOP_1:13;
+  hence thesis by A5,A6,FUNCT_1:def 5;
+end;
 
-definition let D be non empty set, n be Element of NAT, p be Element of D;
+definition
+  let D be non empty set, n be Element of NAT, p be Element of D;
   redefine func IdFinS(p,n) -> FinSequence of D;
   coherence
   proof
-     now let i be Nat such that A1: i in dom IdFinS(p,n);
-       i in Seg len IdFinS(p,n) by A1,FINSEQ_1:def 3;
+    now
+      let i be Nat such that
+A1:   i in dom IdFinS(p,n);
+      i in Seg len IdFinS(p,n) by A1,FINSEQ_1:def 3;
       then i in Seg n by FINSEQ_2:69;
       then IdFinS(p,n).i = p by FUNCOP_1:13;
       hence IdFinS(p,n).i in D;
@@ -873,99 +989,120 @@ definition let D be non empty set, n be Element of NAT, p be Element of D;
 end;
 
 theorem
-   1 <= n & |- f^IdFinS(p,n)^<*q*> implies |- f^<*p*>^<*q*>
-  proof
-   assume A1: 1 <= n & |- f^IdFinS(p,n)^<*q*>;
-    then |- f^<*p*>^(f^IdFinS(p,n))^<*q*> by Th20;
-then A2: |- f^<*p*>^(f^IdFinS(p,n)^<*q*>) by FINSEQ_1:45;
-   set g = f^IdFinS(p,n)^<*q*>;
-   set h = Rev g;
+  1 <= n & |- f^IdFinS(p,n)^<*q*> implies |- f^<*p*>^<*q*>
+proof
+  assume
+A1: 1 <= n & |- f^IdFinS(p,n)^<*q*>;
+  then |- f^<*p*>^(f^IdFinS(p,n))^<*q*> by Th20;
+  then
+A2: |- f^<*p*>^(f^IdFinS(p,n)^<*q*>) by FINSEQ_1:45;
+  set g = f^IdFinS(p,n)^<*q*>;
+  set h = Rev g;
 A3: 1 <= len g by CALCUL_1:10;
-then A4: |- f^<*p*>^<*Impl(Rev g)*> by A2,Th28;
+  then
+A4: |- f^<*p*>^<*Impl(Rev g)*> by A2,Th28;
 A5: 1 <= len h by A3,FINSEQ_5:def 3;
-   then consider F being FinSequence of CQC-WFF such that
-A6:Impl(h) = F.(len h) & len F = len h & (F.1 = Begin(h) or len h = 0)  &
-   for n st 1 <= n & n < len h holds ex p,q st p = h.(n+1) & q = F.n &
-                                                   F.(n+1) = p => q by Def4;
-   set H = Rev F;
-   defpred P[Element of NAT] means 1 <= $1 & $1 <= len H implies
-                        ex p1 st p1 = H.$1 & |- f^<*p*>^<*p1*>;
+  then consider F being FinSequence of CQC-WFF such that
+A6: Impl(h) = F.(len h) & len F = len h & (F.1 = Begin(h) or len h = 0) &
+  for n st 1 <= n & n < len h holds ex p,q st p = h.(n+1) & q = F.n &
+  F.(n+1) = p => q by Def4;
+  set H = Rev F;
+  defpred P[Element of NAT] means 1 <= $1 & $1 <= len H implies
+  ex p1 st p1 = H.$1 & |- f^<*p*>^<*p1*>;
 A7: P[0];
 A8: for k st P[k] holds P[k+1]
-    proof
-      let k such that A9: P[k];
-      assume A10: 1 <= k+1 & k+1 <= len H;
-A11:   now assume A12: k = 0;
-         len H = len h by A6,FINSEQ_5:def 3;
-then A13:    1 in dom H by A5,FINSEQ_3:27;
-        then reconsider p1 = H.1 as Element of CQC-WFF by FINSEQ_2:13;
-        take p1;
-         1 in dom F by A13,FINSEQ_5:60;
-        then p1 = F.(len F-1+1) by FINSEQ_5:61
-         .= Impl(h) by A6;
-        hence thesis by A4,A12;
-       end;
-        now assume k <> 0;
-then A14:    0 < k & k <= k+1 by NAT_1:13;
-then A15:    0+1 <= k & k < len H by A10,NAT_1:13;
-        then consider pk being Element of CQC-WFF such that
-A16:    pk = H.k & |- f^<*p*>^<*pk*> by A9;
-         k in dom H by A15,FINSEQ_3:27;
-then A17:    k in dom F by FINSEQ_5:60;
-         0+k < len F by A15,FINSEQ_5:def 3;
-then A18:    0+k+(-k) < len F+(-k) by XREAL_1:10;
-        then reconsider i = len F-k as Element of NAT by INT_1:16;
-A19:    0+1 <= i by A18,NAT_1:13;
-         len F < len F+k by A14,XREAL_1:31;
-then A20:    len F+(-k) < len F+k+(-k) by XREAL_1:10;
-        then consider p1,q1 such that
-A21:    p1 = h.(i+1) & q1 = F.i & F.(i+1) = p1 => q1 by A6,A19;
-A22:    pk = p1 => q1 by A16,A17,A21,FINSEQ_5:61;
-         1 <= i+1 & i+1 <= len h by A6,A19,A20,NAT_1:13;
-        then i+1 in dom h by FINSEQ_3:27;
-        then i+1 in dom g by FINSEQ_5:60;
-then A23:    p1 = g.(len g - (i+1) + 1) by A21,FINSEQ_5:61
-          .= g.(len g - i);
-A24:    len g-i = len g - (len g-k) by A6,FINSEQ_5:def 3
-               .= k;
-        then reconsider j = len g-i as Element of NAT;
-        set g1 = f^<*p*>^<*p1*>;
-         len g < len g+i by A18,XREAL_1:31;
-        then len g+(-i) < len g+i+(-i) by XREAL_1:10;
-        then j < len(f^IdFinS(p,n)) + len <*q*> by FINSEQ_1:35;
-        then j < len(f^IdFinS(p,n))+1 by FINSEQ_1:56;
-        then j <= len(f^IdFinS(p,n)) by NAT_1:13;
-then A25:    j in dom (f^IdFinS(p,n)) by A15,A24,FINSEQ_3:27;
-        then g.j = (g|dom(f^IdFinS(p,n))).j by FUNCT_1:72;
-then A26:    p1 = (f^IdFinS(p,n)).j by A23,FINSEQ_1:33;
-A27:    (f^IdFinS(p,n)).j in rng (f^IdFinS(p,n)) by A25,FUNCT_1:12;
-         rng (f^IdFinS(p,n)) = (rng f \/ rng IdFinS(p,n)) by FINSEQ_1:44
-                           .=(rng f \/ rng <*p*>) by A1,Th31
-                           .= rng (f^<*p*>) by FINSEQ_1:44;
-        then (f^IdFinS(p,n)).j in rng Ant(g1) by A27,CALCUL_1:5;
-        then consider j1 being Nat such that
-A28:    j1 in dom Ant(g1) & (Ant(g1)).j1 = p1 by A26,FINSEQ_2:11;
-         Suc(g1) = p1 by CALCUL_1:5;
-        then Suc(g1) is_tail_of Ant(g1) by A28,CALCUL_1:def 3;
-        then |- g1 by CALCUL_1:33;
-then A29:    |- f^<*p*>^<*q1*> by A16,A22,CALCUL_1:56;
-A30:    i = len F-(k+1)+1;
-         k+1 in dom H by A10,FINSEQ_3:27;
-        then k+1 in dom F by FINSEQ_5:60;
-then A31:    q1 = H.(k+1) by A21,A30,FINSEQ_5:61;
-        take q1;
-        thus thesis by A29,A31;
-       end;
-       hence thesis by A11;
-     end;
+  proof
+    let k such that
+A9: P[k];
+    assume
+A10: 1 <= k+1 & k+1 <= len H;
+A11: now
+      assume
+A12:  k = 0;
+      len H = len h by A6,FINSEQ_5:def 3;
+      then
+A13:  1 in dom H by A5,FINSEQ_3:27;
+      then reconsider p1 = H.1 as Element of CQC-WFF by FINSEQ_2:13;
+      take p1;
+      1 in dom F by A13,FINSEQ_5:60;
+      then p1 = F.(len F-1+1) by FINSEQ_5:61
+        .= Impl(h) by A6;
+      hence thesis by A4,A12;
+    end;
+    now
+      assume k <> 0;
+      then
+A14:  0 < k & k <= k+1 by NAT_1:13;
+      then
+A15:  0+1 <= k & k < len H by A10,NAT_1:13;
+      then consider pk being Element of CQC-WFF such that
+A16:  pk = H.k & |- f^<*p*>^<*pk*> by A9;
+      k in dom H by A15,FINSEQ_3:27;
+      then
+A17:  k in dom F by FINSEQ_5:60;
+      0+k < len F by A15,FINSEQ_5:def 3;
+      then
+A18:  0+k+(-k) < len F+(-k) by XREAL_1:10;
+      then reconsider i = len F-k as Element of NAT by INT_1:16;
+A19:  0+1 <= i by A18,NAT_1:13;
+      len F < len F+k by A14,XREAL_1:31;
+      then
+A20:  len F+(-k) < len F+k+(-k) by XREAL_1:10;
+      then consider p1,q1 such that
+A21:  p1 = h.(i+1) & q1 = F.i & F.(i+1) = p1 => q1 by A6,A19;
+A22:  pk = p1 => q1 by A16,A17,A21,FINSEQ_5:61;
+      1 <= i+1 & i+1 <= len h by A6,A19,A20,NAT_1:13;
+      then i+1 in dom h by FINSEQ_3:27;
+      then i+1 in dom g by FINSEQ_5:60;
+      then
+A23:  p1 = g.(len g - (i+1) + 1) by A21,FINSEQ_5:61
+        .= g.(len g - i);
+A24:  len g-i = len g - (len g-k) by A6,FINSEQ_5:def 3
+        .= k;
+      then reconsider j = len g-i as Element of NAT;
+      set g1 = f^<*p*>^<*p1*>;
+      len g < len g+i by A18,XREAL_1:31;
+      then len g+(-i) < len g+i+(-i) by XREAL_1:10;
+      then j < len(f^IdFinS(p,n)) + len <*q*> by FINSEQ_1:35;
+      then j < len(f^IdFinS(p,n))+1 by FINSEQ_1:56;
+      then j <= len(f^IdFinS(p,n)) by NAT_1:13;
+      then
+A25:  j in dom (f^IdFinS(p,n)) by A15,A24,FINSEQ_3:27;
+      then g.j = (g|dom(f^IdFinS(p,n))).j by FUNCT_1:72;
+      then
+A26:  p1 = (f^IdFinS(p,n)).j by A23,FINSEQ_1:33;
+A27:  (f^IdFinS(p,n)).j in rng (f^IdFinS(p,n)) by A25,FUNCT_1:12;
+      rng (f^IdFinS(p,n)) = (rng f \/ rng IdFinS(p,n)) by FINSEQ_1:44
+        .=(rng f \/ rng <*p*>) by A1,Th31
+        .= rng (f^<*p*>) by FINSEQ_1:44;
+      then (f^IdFinS(p,n)).j in rng Ant(g1) by A27,CALCUL_1:5;
+      then consider j1 being Nat such that
+A28:  j1 in dom Ant(g1) & (Ant(g1)).j1 = p1 by A26,FINSEQ_2:11;
+      Suc(g1) = p1 by CALCUL_1:5;
+      then Suc(g1) is_tail_of Ant(g1) by A28,CALCUL_1:def 3;
+      then |- g1 by CALCUL_1:33;
+      then
+A29:  |- f^<*p*>^<*q1*> by A16,A22,CALCUL_1:56;
+A30:  i = len F-(k+1)+1;
+      k+1 in dom H by A10,FINSEQ_3:27;
+      then k+1 in dom F by FINSEQ_5:60;
+      then
+A31:  q1 = H.(k+1) by A21,A30,FINSEQ_5:61;
+      take q1;
+      thus thesis by A29,A31;
+    end;
+    hence thesis by A11;
+  end;
 A32: for k holds P[k] from NAT_1:sch 1(A7,A8);
-      1 <= len H by A5,A6,FINSEQ_5:def 3;
-     then consider p1 such that A33: p1 = H.(len H) & |- f^<*p*>^<*p1*> by A32;
-      p1 = H.(len F) by A33,FINSEQ_5:def 3;
-     then p1 = Begin(h) by A3,A6,FINSEQ_5:65,def 3;
-     then p1 = h.1 by A5,Def3;
-     then p1 = g.(len g) by FINSEQ_5:65;
-     then p1 = g.(len(f^IdFinS(p,n))+len <*q*>) by FINSEQ_1:35;
-     then p1 = g.(len(f^IdFinS(p,n))+1) by FINSEQ_1:56;
-     hence thesis by A33,FINSEQ_1:59;
-  end; 
+  1 <= len H by A5,A6,FINSEQ_5:def 3;
+  then consider p1 such that
+A33: p1 = H.(len H) & |- f^<*p*>^<*p1*> by A32;
+  p1 = H.(len F) by A33,FINSEQ_5:def 3;
+  then p1 = Begin(h) by A3,A6,FINSEQ_5:65,def 3;
+  then p1 = h.1 by A5,Def3;
+  then p1 = g.(len g) by FINSEQ_5:65;
+  then p1 = g.(len(f^IdFinS(p,n))+len <*q*>) by FINSEQ_1:35;
+  then p1 = g.(len(f^IdFinS(p,n))+1) by FINSEQ_1:56;
+  hence thesis by A33,FINSEQ_1:59;
+end;
+

@@ -25,108 +25,118 @@ definition
   mode Nat is natural number;
 end;
 
- reserve x for Real,
-         p,k,l,m,n,s,h,i,j,k1,t,t1 for Nat,
-         X for Subset of REAL;
+reserve x for Real,
+  p,k,l,m,n,s,h,i,j,k1,t,t1 for Nat,
+  X for Subset of REAL;
 
 :: The results of axioms of natural numbers
 
-theorem                       :: axiom of induction
- Th1: for X st 0 in X & for x st x in X holds x + 1 in X
-  for n holds n in X
-   proof let A be Subset of REAL such that
-A1:  0 in A;
-     assume x in A implies x + 1 in A;
-     then for x being real number st x in A holds x + 1 in A;
-then A2:  NAT c= A by A1,AXIOMS:29;
-    let n;
-     n in NAT by ORDINAL1:def 13;
-    hence n in A by A2;
-   end;
+theorem Th1:
+  for X st 0 in X & for x st x in X holds x + 1 in X for n holds n in X
+proof
+  let A be Subset of REAL such that
+A1: 0 in A;
+  assume x in A implies x + 1 in A;
+  then for x being real number st x in A holds x + 1 in A;
+  then
+A2: NAT c= A by A1,AXIOMS:29;
+  let n;
+  n in NAT by ORDINAL1:def 13;
+  hence n in A by A2;
+end;
 
 :: Addition and multiplication
-
 :: The natural numbers are real numbers therefore some theorems of real
 :: numbers are translated for natural numbers.
 
-registration let n,k be Nat;
+registration
+  let n,k be Nat;
   cluster n + k -> natural;
   coherence
   proof
-     defpred P[Real] means ex k st $1 = k & n + k is natural;
-     consider X such that
-A1:  x in X iff P[x] from REAL_1:sch 1;
-     n + 0 = n;
-     then A2:    0 in X by A1;
-      now let x; assume x in X;
-       then consider k such that
-A3:    x = k & n + k is natural by A1;
-A4:    (n + k) + 1 = n + (k + 1);
-       reconsider k as Element of NAT by ORDINAL1:def 13;
-       n + k is Element of NAT by A3,ORDINAL1:def 13;
-       then k + 1 is Element of NAT & (n + k) + 1 is Element of NAT
-       by AXIOMS:28;
-       hence x + 1 in X by A1,A3,A4;
-     end;
-     then k in X by A2,Th1;
-     then ex m st k = m & n + m is natural by A1;
-     hence thesis;
+    defpred P[Real] means ex k st $1 = k & n + k is natural;
+    consider X such that
+A1: x in X iff P[x] from REAL_1:sch 1;
+    n + 0 = n;
+    then
+A2: 0 in X by A1;
+    now
+      let x;
+      assume x in X;
+      then consider k such that
+A3:   x = k & n + k is natural by A1;
+A4:   (n + k) + 1 = n + (k + 1);
+      reconsider k as Element of NAT by ORDINAL1:def 13;
+      n + k is Element of NAT by A3,ORDINAL1:def 13;
+      then k + 1 is Element of NAT & (n + k) + 1 is Element of NAT
+      by AXIOMS:28;
+      hence x + 1 in X by A1,A3,A4;
+    end;
+    then k in X by A2,Th1;
+    then ex m st k = m & n + m is natural by A1;
+    hence thesis;
   end;
 end;
 
-definition let n be Nat, k be Element of NAT;
+definition
+  let n be Nat, k be Element of NAT;
   redefine func n + k -> Element of NAT;
   coherence by ORDINAL1:def 13;
- end;
+end;
 
-definition let n be Element of NAT, k be Nat;
+definition
+  let n be Element of NAT, k be Nat;
   redefine func n + k -> Element of NAT;
   coherence by ORDINAL1:def 13;
- end;
+end;
 
 :: Now we can form and prove the scheme of induction.
 
-scheme Ind { P[Nat] } :
- for k being Element of NAT holds P[k]
-   provided
-A1:   P[0] and
-A2:   for k being Element of NAT st P[k] holds P[k + 1]
-proof let k;
+scheme Ind { P[Nat] } : for k being Element of NAT holds P[k]
+provided
+A1: P[0]
+and
+A2: for k being Element of NAT st P[k] holds P[k + 1]
+proof
+  let k;
   defpred P1[Real] means ex k st P[k] & k = $1;
-    consider X such that
-A3:   x in X iff P1[x] from REAL_1:sch 1;
-A4:   0 in X by A1,A3;
-       for x st x in X holds x + 1 in X
-      proof let x; assume x in X;
-       then consider k such that
-A5:      P[k] & k = x by A3;
-         reconsider k as Element of NAT by ORDINAL1:def 13;
-          P[k + 1] by A2,A5;
-       hence thesis by A3,A5;
-      end;
-     then k in X by A4,Th1;
-     then ex n st P[n] & n = k by A3;
-    hence thesis;
-   end;
+  consider X such that
+A3: x in X iff P1[x] from REAL_1:sch 1;
+A4: 0 in X by A1,A3;
+  for x st x in X holds x + 1 in X
+  proof
+    let x;
+    assume x in X;
+    then consider k such that
+A5: P[k] & k = x by A3;
+    reconsider k as Element of NAT by ORDINAL1:def 13;
+    P[k + 1] by A2,A5;
+    hence thesis by A3,A5;
+  end;
+  then k in X by A4,Th1;
+  then ex n st P[n] & n = k by A3;
+  hence thesis;
+end;
 
-scheme NatInd { P[Nat] } :
- for k being Nat holds P[k]
-   provided
-A1:   P[0] and
-A2:   for k be Nat st P[k] holds P[k + 1]
+scheme NatInd { P[Nat] } : for k being Nat holds P[k]
+provided
+A1: P[0]
+and
+A2: for k be Nat st P[k] holds P[k + 1]
 proof
 A3: P[0] by A1;
-A4:   for k be Element of NAT st P[k] holds P[k + 1] by A2;
-A5:   for k be Element of NAT holds P[k] from Ind(A3,A4);
-      let k be Nat;
-       k is Element of NAT by ORDINAL1:def 13;
-      hence thesis by A5;
-   end;
+A4: for k be Element of NAT st P[k] holds P[k + 1] by A2;
+A5: for k be Element of NAT holds P[k] from Ind(A3,A4);
+  let k be Nat;
+  k is Element of NAT by ORDINAL1:def 13;
+  hence thesis by A5;
+end;
 
 :: Like addition, the result of multiplication of two natural numbers is
 :: a natural number.
 
-registration let n,k be Nat;
+registration
+  let n,k be Nat;
   cluster n * k -> natural;
   coherence
   proof
@@ -145,74 +155,80 @@ A2: for m be Nat holds P[m] implies P[m+1]
   end;
 end;
 
-definition let n be Nat, k be Element of NAT;
+definition
+  let n be Nat, k be Element of NAT;
   redefine func n * k -> Element of NAT;
   coherence by ORDINAL1:def 13;
 end;
 
-definition let n be Element of NAT, k be Nat;
+definition
+  let n be Element of NAT, k be Nat;
   redefine func n * k -> Element of NAT;
   coherence by ORDINAL1:def 13;
 end;
 
-                ::::::::::::::::::::
-                :: Order relation ::
-                ::::::::::::::::::::
-
+::::::::::::::::::::
+:: Order relation ::
+::::::::::::::::::::
 :: Some theorems of not great relation "<=" in real numbers are translated
 :: to natural number easy and it is necessary to have them here.
 
 theorem Th2:
   0 <= i
-  proof
-     defpred P[Nat] means 0 <= $1;
-A1:  P[0];
-A2:  now let n; assume P[n];
-      then 0 + 1 <= n + 1 by XREAL_1:8;
-      hence P[n + 1];
-     end;
-    for k holds P[k] from NatInd(A1,A2);
-   hence thesis;
+proof
+  defpred P[Nat] means 0 <= $1;
+A1: P[0];
+A2: now
+    let n;
+    assume P[n];
+    then 0 + 1 <= n + 1 by XREAL_1:8;
+    hence P[n + 1];
   end;
+  for k holds P[k] from NatInd(A1,A2);
+  hence thesis;
+end;
 
 theorem
-   0 <> i implies 0 < i by Th2;
+  0 <> i implies 0 < i by Th2;
 
 theorem
-   i <= j implies i * h <= j * h
-  proof assume
-A1:  i <= j;
-    0 <= h by Th2;
-   hence thesis by A1,XREAL_1:66;
-  end;
+  i <= j implies i * h <= j * h
+proof
+  assume
+A1: i <= j;
+  0 <= h by Th2;
+  hence thesis by A1,XREAL_1:66;
+end;
 
 theorem
-   0 < i + 1
-  proof assume
+  0 < i + 1
+proof
+  assume
 A1: 0 >= i + 1;
-     0 <= i by Th2;
-    then 0 + 1 <= 0 by A1,XREAL_1:9;
-    hence contradiction;
-  end;
+  0 <= i by Th2;
+  then 0 + 1 <= 0 by A1,XREAL_1:9;
+  hence contradiction;
+end;
 
 theorem Th6:
   i = 0 or ex k st i = k + 1
-  proof
-    defpred P[Nat] means $1 = 0 or ex k st $1 = k + 1;
+proof
+  defpred P[Nat] means $1 = 0 or ex k st $1 = k + 1;
 A1: P[0];
 A2: P[h] implies P[h + 1];
-     for i holds P[i] from NatInd(A1,A2);
-    hence thesis;
-  end;
+  for i holds P[i] from NatInd(A1,A2);
+  hence thesis;
+end;
 
 theorem Th7:
   i + j = 0 implies i = 0 & j = 0
-  proof assume
-A1:  i + j = 0;
-    0 <= i & 0 <= j by Th2;
-   then 0 + i <= j + i & 0 + j <= i + j & 0 + i = i & 0 + j = j by XREAL_1:9;
-   hence thesis by A1,Th2;
-  end;
+proof
+  assume
+A1: i + j = 0;
+  0 <= i & 0 <= j by Th2;
+  then 0 + i <= j + i & 0 + j <= i + j & 0 + i = i & 0 + j = j by XREAL_1:9;
+  hence thesis by A1,Th2;
+end;
 
 registration
   cluster non zero Nat;
@@ -223,7 +239,8 @@ registration
   end;
 end;
 
-registration let m be Nat, n be non zero Nat;
+registration
+  let m be Nat, n be non zero Nat;
   cluster m + n -> non zero;
   coherence by Th7;
   cluster n + m -> non zero;
@@ -232,346 +249,371 @@ end;
 
 scheme DefbyInd { N()->Nat, F(Nat,Nat)->Nat, P[Nat,Nat] } :
   (for k being Nat ex n being Nat st P[k,n]) &
-    for k,n,m being Nat st P[k,n] & P[k,m] holds n = m
-     provided
-A1:    for k,n being Nat holds P[k,n] iff
-       k = 0 & n = N() or
-       ex m,l being Nat st k = m + 1 & P[m,l] & n = F(k,l)
-  proof
-    reconsider N = N() as Element of NAT by ORDINAL1:def 13;
-      defpred P[Nat] means ex n being Nat st P[$1,n];
-       P[0,N] by A1;
-then A2:   P[0];
+  for k,n,m being Nat st P[k,n] & P[k,m] holds n = m
+provided
+A1: for k,n being Nat holds P[k,n] iff k = 0 & n = N() or
+ex m,l being Nat st k = m + 1 & P[m,l] & n = F(k,l)
+proof
+  reconsider N = N() as Element of NAT by ORDINAL1:def 13;
+  defpred P[Nat] means ex n being Nat st P[$1,n];
+  P[0,N] by A1;
+  then
+A2: P[0];
 A3: for k being Nat holds P[k] implies P[k+1]
-      proof let k be Nat;
-        given n being Nat such that
-A4:    P[k,n];
-       reconsider F = F(k+1,n) as Element of NAT by ORDINAL1:def 13;
-       take F;
-       thus P[k+1,F] by A1,A4;
-      end;
-    thus for k being Nat holds P[k] from NatInd(A2,A3);
-    defpred P[Nat] means
-    for n,m being Nat st P[$1,n] & P[$1,m] holds n = m;
-A5:   P[0]
-      proof let n,m be Nat such that
-A6:     P[0,n] & P[0,m];
-        (not ex m,l being Nat st 0 = m + 1 & P[m,l] & n = F(0,l))&
-        not ex n,l being Nat st 0 = n + 1 & P[n,l] & m = F(0,l);
-        then n = N() & m = N() by A1,A6;
-       hence n = m;
-      end;
-A7:   for k being Nat st P[k] holds P[k+1]
-      proof let k be Nat such that
-A8:      for n,m being Nat st P[k,n] & P[k,m] holds n = m;
-       let n,m be Nat such that
-A9:      P[k+1,n] & P[k+1,m];
-       consider l,u being Nat such that
-A10:   k + 1 = l + 1 & P[l,u] & n = F(k + 1,u) by A1,A9;
-       ex v,w being Nat  st k + 1 = v + 1 & P[v,w] & m = F(k + 1,w)
-         by A1,A9;
-       hence n = m by A8,A10;
-      end;
-    thus for k being Nat holds P[k] from NatInd(A5,A7);
-   end;
+  proof
+    let k be Nat;
+    given n being Nat such that
+A4: P[k,n];
+    reconsider F = F(k+1,n) as Element of NAT by ORDINAL1:def 13;
+    take F;
+    thus P[k+1,F] by A1,A4;
+  end;
+  thus for k being Nat holds P[k] from NatInd(A2,A3);
+  defpred P[Nat] means for n,m being Nat st P[$1,n] & P[$1,m] holds n = m;
+A5: P[0]
+  proof
+    let n,m be Nat such that
+A6: P[0,n] & P[0,m];
+    (not ex m,l being Nat st 0 = m + 1 & P[m,l] & n = F(0,l))&
+    not ex n,l being Nat st 0 = n + 1 & P[n,l] & m = F(0,l);
+    then n = N() & m = N() by A1,A6;
+    hence n = m;
+  end;
+A7: for k being Nat st P[k] holds P[k+1]
+  proof
+    let k be Nat such that
+A8: for n,m being Nat st P[k,n] & P[k,m] holds n = m;
+    let n,m be Nat such that
+A9: P[k+1,n] & P[k+1,m];
+    consider l,u being Nat such that
+A10: k + 1 = l + 1 & P[l,u] & n = F(k + 1,u) by A1,A9;
+    ex v,w being Nat st k + 1 = v + 1 & P[v,w] & m = F(k + 1,w) by A1,A9;
+    hence n = m by A8,A10;
+  end;
+  thus for k being Nat holds P[k] from NatInd(A5,A7);
+end;
 
 theorem Th8:
   i <= j + 1 implies i <= j or i = j + 1
+proof
+  defpred P[Nat] means for j holds $1 <= j + 1 implies $1 <= j or $1 = j+1;
+A1: P[0] by Th2;
+A2: for i st P[i] holds P[i+1]
   proof
-     defpred P[Nat] means
-     for j holds $1 <= j + 1 implies $1 <= j or $1 = j+1;
-A1:  P[0] by Th2;
-A2:  for i st P[i] holds P[i+1]
-     proof let i such that
-A3:     for j holds i <= j + 1 implies i <= j or i = j + 1;
-        let j;
-        assume that
-A4:     i + 1 <= j + 1;
-A5:     now assume
-A6:       j = 0;
-then A7:       i <= 0 by A4,XREAL_1:8;
-             0 <= i by Th2;
-        hence thesis by A6,A7,XXREAL_0:1;
-       end;
-         now given k such that
-A8:       j = k + 1;
-          i <= k + 1 by A4,A8,XREAL_1:8;
-         then i <= k or i = k + 1 by A3;
-        hence thesis by A8,XREAL_1:8;
-       end;
-     hence thesis by A5,Th6;
+    let i such that
+A3: for j holds i <= j + 1 implies i <= j or i = j + 1;
+    let j;
+    assume that
+A4: i + 1 <= j + 1;
+A5: now
+      assume
+A6:   j = 0;
+      then
+A7:   i <= 0 by A4,XREAL_1:8;
+      0 <= i by Th2;
+      hence thesis by A6,A7,XXREAL_0:1;
     end;
-     for i holds P[i] from NatInd(A1,A2);
-    hence thesis;
+    now
+      given k such that
+A8:   j = k + 1;
+      i <= k + 1 by A4,A8,XREAL_1:8;
+      then i <= k or i = k + 1 by A3;
+      hence thesis by A8,XREAL_1:8;
+    end;
+    hence thesis by A5,Th6;
   end;
+  for i holds P[i] from NatInd(A1,A2);
+  hence thesis;
+end;
 
 theorem
-   i <= j & j <= i + 1 implies i = j or j = i + 1
-  proof assume
-A1:  i <= j & j <= i + 1;
-     then j <= i or j = i + 1 by Th8;
-     hence thesis by A1,XXREAL_0:1;
-  end;
+  i <= j & j <= i + 1 implies i = j or j = i + 1
+proof
+  assume
+A1: i <= j & j <= i + 1;
+  then j <= i or j = i + 1 by Th8;
+  hence thesis by A1,XXREAL_0:1;
+end;
 
 theorem Th10:
   i <= j implies ex k st j = i + k
-  proof
-     defpred P[Nat] means
-     i <= $1 implies ex k st $1 = i + k;
+proof
+  defpred P[Nat] means i <= $1 implies ex k st $1 = i + k;
 A1: P[0]
-     proof assume
-A2:   i <= 0;
-      take 0;
-      thus thesis by A2,Th2;
-     end;
-A3:  for j st P[j] holds P[j+1]
-     proof let j such that
-A4:   i <= j implies ex k st j = i + k;
-      assume
-A5:     i <= j + 1;
-A6:     now assume i <= j;
-        then consider k such that
-A7:     j = i + k by A4;
-         i + k + 1 = i + (k + 1);
-        hence thesis by A7;
-       end;
-       now assume i = j + 1; then j + 1 = i + 0;
-        hence thesis;
-       end;
-      hence thesis by A5,A6,Th8;
-     end;
-    for j holds P[j] from NatInd(A1,A3);
-   hence thesis;
+  proof
+    assume
+A2: i <= 0;
+    take 0;
+    thus thesis by A2,Th2;
   end;
+A3: for j st P[j] holds P[j+1]
+  proof
+    let j such that
+A4: i <= j implies ex k st j = i + k;
+    assume
+A5: i <= j + 1;
+A6: now
+      assume i <= j;
+      then consider k such that
+A7:   j = i + k by A4;
+      i + k + 1 = i + (k + 1);
+      hence thesis by A7;
+    end;
+    now
+      assume i = j + 1;
+      then j + 1 = i + 0;
+      hence thesis;
+    end;
+    hence thesis by A5,A6,Th8;
+  end;
+  for j holds P[j] from NatInd(A1,A3);
+  hence thesis;
+end;
 
 theorem Th11:
   i <= i + j
-  proof
-A1:  0 + i = i;
-    0 <= j by Th2;
-   hence thesis by A1,XREAL_1:9;
-  end;
+proof
+A1: 0 + i = i;
+  0 <= j by Th2;
+  hence thesis by A1,XREAL_1:9;
+end;
 
-scheme CompInd { P[Nat] } :
-  for k being Nat holds P[k]
-   provided
-A1:   for k being Nat st
-      for n being Nat st n < k holds P[n] holds P[k]
+scheme CompInd { P[Nat] } : for k being Nat holds P[k]
+provided
+A1: for k being Nat st for n being Nat st n < k holds P[n] holds P[k]
+proof
+  defpred P1[Nat] means for n being Nat st n < $1 holds P[n];
+A2: P1[0] by Th2;
+A3: for k be Nat holds P1[k] implies P1[k+1]
   proof
-      defpred P1[Nat] means
-      for n being Nat st n < $1 holds P[n];
-A2:   P1[0] by Th2;
-A3:   for k be Nat holds P1[k] implies P1[k+1]
-      proof
-        let k be Nat;
-        assume
-A4:   for n being Nat st n < k holds P[n];
-      let n be Nat; assume n < k + 1;
-      then n <= k by Th8;
-      then n < k or n = k & n <= k by REAL_1:def 5;
-      hence thesis by A1,A4;
-    end;
     let k be Nat;
-    for k being Nat holds P1[k] from NatInd(A2,A3);
-    then for n being Nat st n < k holds P[n];
-    hence thesis by A1;
-   end;
+    assume
+A4: for n being Nat st n < k holds P[n];
+    let n be Nat;
+    assume n < k + 1;
+    then n <= k by Th8;
+    then n < k or n = k & n <= k by REAL_1:def 5;
+    hence thesis by A1,A4;
+  end;
+  let k be Nat;
+  for k being Nat holds P1[k] from NatInd(A2,A3);
+  then for n being Nat st n < k holds P[n];
+  hence thesis by A1;
+end;
 
 :: Principle of minimum
 
-scheme Min { P[Nat] } :
- ex k being Nat st P[k] &
- for n being Nat st P[n] holds k <= n
-  provided
-A1:  ex k being Nat st P[k]
-     proof assume A2: not thesis;
-      defpred P1[Nat] means not P[$1];
-A3:   for k being Nat st
-      for n being Nat st n < k holds P1[n] holds P1[k]
-      proof let k be Nat;
-A4:    not (ex n being Nat st P[n] & not k <= n) implies not P[k]
-       by A2;
-       assume for n being Nat st n < k holds not P[n];
-       hence thesis by A4;
-      end;
-      for k be Nat holds P1[k] from CompInd(A3);
-    hence contradiction by A1;
-   end;
+scheme Min { P[Nat] } : ex k being Nat st P[k] &
+  for n being Nat st P[n] holds k <= n
+provided
+A1: ex k being Nat st P[k]
+proof
+  assume
+A2: not thesis;
+  defpred P1[Nat] means not P[$1];
+A3: for k being Nat st for n being Nat st n < k holds P1[n] holds P1[k]
+  proof
+    let k be Nat;
+A4: not (ex n being Nat st P[n] & not k <= n) implies not P[k] by A2;
+    assume for n being Nat st n < k holds not P[n];
+    hence thesis by A4;
+  end;
+  for k be Nat holds P1[k] from CompInd(A3);
+  hence contradiction by A1;
+end;
 
 :: Principle of maximum
 
-scheme Max { P[Nat], N()->Nat } :
-  ex k being Nat st P[k] &
+scheme Max { P[Nat], N()->Nat } : ex k being Nat st P[k] &
   for n being Nat st P[n] holds n <= k
-   provided
-A1:   for k being Nat st P[k] holds k <= N() and
-A2:   ex k being Nat st P[k]
+provided
+A1: for k being Nat st P[k] holds k <= N()
+and
+A2: ex k being Nat st P[k]
+proof
+  defpred P1[Nat] means for n being Nat st P[n] holds n <= $1;
+A3: ex k being Nat st P1[k] by A1;
+  consider k being Nat such that
+A4: P1[k] and
+A5: for m being Nat st P1[m] holds k <= m from Min(A3);
+  take k;
+  thus P[k]
   proof
-      defpred P1[Nat] means
-      for n being Nat st P[n] holds n <= $1;
-       A3:   ex k being Nat st P1[k] by A1;
-    consider k being Nat such that
-A4:   P1[k] and
-A5:   for m being Nat st P1[m] holds k <= m from Min(A3);
-    take k;
-    thus P[k]
-      proof assume
-A6:      not P[k];
-       consider n being Nat such that
-A7:      P[n] by A2;
-         n <= k & n <> k by A4,A6,A7;
-       then k <> 0 by Th2;
-       then consider m such that
-A8:      k = m + 1 by Th6;
-        for n being Nat st P[n] holds n <= m by A4,A6,A8,Th8;
-        then A9:    k <= m by A5;
-        -m + m + 1 = -m + (m + 1) & -m + m + 0 = -m + (m + 0);
-       hence contradiction by A8,A9,XREAL_1:8;
-      end;
-    thus thesis by A4;
-   end;
+    assume
+A6: not P[k];
+    consider n being Nat such that
+A7: P[n] by A2;
+    n <= k & n <> k by A4,A6,A7;
+    then k <> 0 by Th2;
+    then consider m such that
+A8: k = m + 1 by Th6;
+    for n being Nat st P[n] holds n <= m by A4,A6,A8,Th8;
+    then
+A9: k <= m by A5;
+    -m + m + 1 = -m + (m + 1) & -m + m + 0 = -m + (m + 0);
+    hence contradiction by A8,A9,XREAL_1:8;
+  end;
+  thus thesis by A4;
+end;
 
 theorem Th12:
   i <= j implies i <= j + h
-  proof assume
-A1:  i <= j;
-        0 <= h by Th2;
-    then i + 0 <= i + h & i + h <= j + h & i + 0 = i by A1,XREAL_1:9;
-   hence i <= j + h by XXREAL_0:2;
-  end;
+proof
+  assume
+A1: i <= j;
+  0 <= h by Th2;
+  then i + 0 <= i + h & i + h <= j + h & i + 0 = i by A1,XREAL_1:9;
+  hence i <= j + h by XXREAL_0:2;
+end;
 
 theorem Th13:
   i < j + 1 iff i <= j
-  proof
-   thus i < j + 1 implies i <= j by Th8;
-   assume
-A1:  i <= j;
-   hence i <= j + 1 by Th12;
-   assume A2: i = j + 1;
-A3:  j + (- j) = 0;
-    j + 1 + (- j) = 1;
-   hence contradiction by A1,A2,A3,XREAL_1:8;
-  end;
+proof
+  thus i < j + 1 implies i <= j by Th8;
+  assume
+A1: i <= j;
+  hence i <= j + 1 by Th12;
+  assume
+A2: i = j + 1;
+A3: j + (- j) = 0;
+  j + 1 + (- j) = 1;
+  hence contradiction by A1,A2,A3,XREAL_1:8;
+end;
 
 theorem Th14:
   j < 1 implies j = 0
- proof
+proof
   assume j < 1;
-    then j < 0 + 1;
-    then A1: j <= 0 by Th13;
-   assume j <> 0;
+  then j < 0 + 1;
+  then
+A1: j <= 0 by Th13;
+  assume j <> 0;
   hence thesis by A1,Th2;
- end;
+end;
 
 theorem
-   i * j = 1 implies i = 1
-  proof assume
-A1:  i * j = 1;
-    then i <> 0;
-   then consider m such that
-A2:  i = m + 1 by Th6;
-     j <> 0 by A1;
-   then consider l such that
-A3:  j = l + 1 by Th6;
-     m * l + m + l + 1 = 0 + 1 by A1,A2,A3;
-    then m * l + m = 0 & l = 0 by Th7;
-   hence thesis by A2;
-  end;
+  i * j = 1 implies i = 1
+proof
+  assume
+A1: i * j = 1;
+  then i <> 0;
+  then consider m such that
+A2: i = m + 1 by Th6;
+  j <> 0 by A1;
+  then consider l such that
+A3: j = l + 1 by Th6;
+  m * l + m + l + 1 = 0 + 1 by A1,A2,A3;
+  then m * l + m = 0 & l = 0 by Th7;
+  hence thesis by A2;
+end;
 
 theorem Th16:
   k <> 0 implies n < n + k
- proof
-  assume k <> 0;
-   then A1: n <> n + k;
-     n <= n + k & n <= k + n by Th12;
-  hence n < n + k by A1,REAL_1:def 5;
- end;
-
-scheme Regr { P[Nat] } :
-  P[0]
-  provided
-A1:  ex k being Nat st P[k] and
-A2:  for k being Nat st k <> 0 & P[k]
-     ex n being Nat st n < k & P[n]
 proof
-   consider k being Nat such that
-A3:  P[k] & for n being Nat st P[n] holds k <= n from Min(A1);
-     now assume k <> 0;
-       then ex n being Nat st n < k & P[n] by A2,A3;
-       hence contradiction by A3;
-    end;
-   hence P[0] by A3;
+  assume k <> 0;
+  then
+A1: n <> n + k;
+  n <= n + k & n <= k + n by Th12;
+  hence n < n + k by A1,REAL_1:def 5;
+end;
+
+scheme Regr { P[Nat] } : P[0]
+provided
+A1: ex k being Nat st P[k]
+and
+A2: for k being Nat st k <> 0 & P[k] ex n being Nat st n < k & P[n]
+proof
+  consider k being Nat such that
+A3: P[k] & for n being Nat st P[n] holds k <= n from Min(A1);
+  now
+    assume k <> 0;
+    then ex n being Nat st n < k & P[n] by A2,A3;
+    hence contradiction by A3;
   end;
+  hence P[0] by A3;
+end;
 
 :: Exact division and rest of division
 
 theorem
-   0 < m implies for n ex k,t st n = (m*k)+t & t < m
-   proof
-    assume
-A1:   0 < m;
-     defpred P[Nat] means ex k,t st $1 = (m*k)+t & t < m;
-         0 = m*0+0;
-then A2:   P[0] by A1;
-A3:   for n st P[n] holds P[n+1]
-      proof let n;
-       given k1,t1 such that
-A4:     n = (m*k1)+t1 & t1 < m;
-A5:        t1+1 <= m by A4,Th13;
-A6:     t1+1 < m implies ex k,t st n+1 = (m*k)+t & t < m
-         proof assume
-A7:        t1+1 < m;
-          take k = k1 , t = t1+1;
-          thus n+1 = m*k+t by A4;
-          thus t < m by A7;
-         end;
-            t1+1 = m implies ex k,t st n+1 = (m*k)+t & t < m
-         proof assume
-A8:        t1+1 = m;
-          take k = k1+1 , t = 0;
-          thus n+1 = m*k+t by A4,A8;
-          thus t < m by A1;
-         end;
-       hence ex k,t st n+1 = (m*k)+t & t < m by A5,A6,REAL_1:def 5;
-      end;
-    thus for n holds P[n] from NatInd(A2,A3);
-   end;
+  0 < m implies for n ex k,t st n = (m*k)+t & t < m
+proof
+  assume
+A1: 0 < m;
+  defpred P[Nat] means ex k,t st $1 = (m*k)+t & t < m;
+  0 = m*0+0;
+  then
+A2: P[0] by A1;
+A3: for n st P[n] holds P[n+1]
+  proof
+    let n;
+    given k1,t1 such that
+A4: n = (m*k1)+t1 & t1 < m;
+A5: t1+1 <= m by A4,Th13;
+A6: t1+1 < m implies ex k,t st n+1 = (m*k)+t & t < m
+    proof
+      assume
+A7:   t1+1 < m;
+      take k = k1, t = t1+1;
+      thus n+1 = m*k+t by A4;
+      thus t < m by A7;
+    end;
+    t1+1 = m implies ex k,t st n+1 = (m*k)+t & t < m
+    proof
+      assume
+A8:   t1+1 = m;
+      take k = k1+1 , t = 0;
+      thus n+1 = m*k+t by A4,A8;
+      thus t < m by A1;
+    end;
+    hence ex k,t st n+1 = (m*k)+t & t < m by A5,A6,REAL_1:def 5;
+  end;
+  thus for n holds P[n] from NatInd(A2,A3);
+end;
 
 theorem
-   n = m*k+t & t < m & n = m*k1+t1 & t1 < m implies k = k1 & t = t1
-   proof
-    assume
-A1:   n = m*k+t & t < m & n = m*k1+t1 & t1 < m;
-A2:   now assume k <= k1;
-      then consider u being Nat such that
-A3:     k1 = k + u by Th10;
-           m * (k + u) + t1 = m * k + (m * u + t1);
-then A4:     m * u + t1 = t by A1,A3,XCMPLX_1:2;
-           now given w being Nat such that
-A5:       u = w + 1;
-           m * u + t1 = m + (m * w + t1) by A5;
-        hence contradiction by A1,A4,Th11;
-       end;
-then A6:     u = 0 by Th6;
-      hence k = k1 by A3;
-      thus t = t1 by A1,A3,A6,XCMPLX_1:2;
-     end;
-         now assume k1 <= k;
-      then consider u being Nat such that
-A7:     k = k1 + u by Th10;
-           m * (k1 + u) + t = m * k1 + (m * u + t);
-then A8:     m * u + t = t1 by A1,A7,XCMPLX_1:2;
-           now given w being Nat such that
-A9:       u = w + 1;
-           m * u + t = m + (m * w + t) by A9;
-        hence contradiction by A1,A8,Th11;
-       end;
-then A10:     u = 0 by Th6;
-      hence k = k1 by A7;
-       thus t = t1 by A1,A7,A10,XCMPLX_1:2;
-     end;
-    hence thesis by A2;
-   end;
+  n = m*k+t & t < m & n = m*k1+t1 & t1 < m implies k = k1 & t = t1
+proof
+  assume
+A1: n = m*k+t & t < m & n = m*k1+t1 & t1 < m;
+A2: now
+    assume k <= k1;
+    then consider u being Nat such that
+A3: k1 = k + u by Th10;
+    m * (k + u) + t1 = m * k + (m * u + t1);
+    then
+A4: m * u + t1 = t by A1,A3,XCMPLX_1:2;
+    now
+      given w being Nat such that
+A5:   u = w + 1;
+      m * u + t1 = m + (m * w + t1) by A5;
+      hence contradiction by A1,A4,Th11;
+    end;
+    then
+A6: u = 0 by Th6;
+    hence k = k1 by A3;
+    thus t = t1 by A1,A3,A6,XCMPLX_1:2;
+  end;
+  now
+    assume k1 <= k;
+    then consider u being Nat such that
+A7: k = k1 + u by Th10;
+    m * (k1 + u) + t = m * k1 + (m * u + t);
+    then
+A8: m * u + t = t1 by A1,A7,XCMPLX_1:2;
+    now
+      given w being Nat such that
+A9:   u = w + 1;
+      m * u + t = m + (m * w + t) by A9;
+      hence contradiction by A1,A8,Th11;
+    end;
+    then
+A10: u = 0 by Th6;
+    hence k = k1 by A7;
+    thus t = t1 by A1,A7,A10,XCMPLX_1:2;
+  end;
+  hence thesis by A2;
+end;
 
 registration
   cluster -> ordinal Nat;
@@ -580,50 +622,57 @@ end;
 
 registration
   cluster non empty ordinal Subset of REAL;
-  existence proof take NAT; thus thesis; end;
+  existence
+  proof
+    take NAT; thus thesis;
+  end;
 end;
 
 theorem
-   k < k + n iff 1 <= n
- proof
+  k < k + n iff 1 <= n
+proof
   thus k < k + n implies 1 <= n
-   proof assume A1: k < k + n;
-     assume not 1 <= n;
-      then n = 0 by Th14;
+  proof
+    assume
+A1: k < k + n;
+    assume not 1 <= n;
+    then n = 0 by Th14;
     hence thesis by A1;
-   end;
-   assume 1 <= n;
-   hence thesis by Th16;
- end;
+  end;
+  assume 1 <= n;
+  hence thesis by Th16;
+end;
 
 theorem
-   k < n implies n - 1 is Element of NAT
- proof
-   assume k < n;
-   then k + 1 <= n by Th13;
-   then consider j being Nat such that A1: n = k + 1 + j by Th10;
-    n - 1 = k + j by A1;
-   hence thesis by ORDINAL1:def 13;
- end;
+  k < n implies n - 1 is Element of NAT
+proof
+  assume k < n;
+  then k + 1 <= n by Th13;
+  then consider j being Nat such that
+A1: n = k + 1 + j by Th10;
+  n - 1 = k + j by A1;
+  hence thesis by ORDINAL1:def 13;
+end;
 
 theorem
-   k <= n implies n - k is Element of NAT
- proof
-   assume
+  k <= n implies n - k is Element of NAT
+proof
+  assume
 A1: k <= n;
-   per cases by A1,REAL_1:def 5;
-   suppose k < n;
-   then k + 1 <= n by Th13;
-   then consider j being Nat such that A2: n = k + 1 + j by Th10;
-   reconsider j as Element of NAT by ORDINAL1:def 13;
+  per cases by A1,REAL_1:def 5;
+  suppose k < n;
+    then k + 1 <= n by Th13;
+    then consider j being Nat such that
+A2: n = k + 1 + j by Th10;
+    reconsider j as Element of NAT by ORDINAL1:def 13;
     n - k = 1 + j by A2;
-   hence thesis;
-   end;
-   suppose k = n;
-   then n - k = 0;
-   hence thesis;
-   end;
- end;
+    hence thesis;
+  end;
+  suppose k = n;
+    then n - k = 0;
+    hence thesis;
+  end;
+end;
 
 begin :: Addenda
 
@@ -631,19 +680,19 @@ begin :: Addenda
 
 theorem Th22:
   m < n+1 implies m < n or m = n
- proof
+proof
   assume m<n+1;
   then m<=n by Th13;
   hence thesis by REAL_1:def 5;
- end;
+end;
 
 theorem
-   k < 2 implies k = 0 or k = 1
- proof
+  k < 2 implies k = 0 or k = 1
+proof
   assume k<2;
   then k<1+1;
   hence thesis by Th14,Th22;
- end;
+end;
 
 registration
   cluster non zero Element of NAT;
@@ -668,12 +717,13 @@ end;
 
 theorem
   i <> 0 & h = j*i implies j <= h
-proof assume i<>0;
+proof
+  assume i<>0;
   then consider k such that
 A1: i = k+1 by Th6;
- assume h=j*i;
+  assume h=j*i;
   then h=j*k+j*1 by A1;
- hence j<=h by Th11;
+  hence j<=h by Th11;
 end;
 
 :: from SCMFSA_7, 2006.03.15, A.T.
@@ -682,69 +732,75 @@ canceled; :: Th25 - refer to Th11 and Th13
 
 :: from BINOM, 2006.05.28, A.T.
 
-scheme Ind1{M() -> Nat, P[Nat]} :
-  for i being Nat st M() <= i holds P[i]
+scheme Ind1{M() -> Nat, P[Nat]} : for i being Nat st M() <= i holds P[i]
 provided
-  A1:P[M()] and
-  A2:for j being Nat st M() <= j holds P[j] implies P[j+1]
+A1: P[M()]
+and
+A2: for j being Nat st M() <= j holds P[j] implies P[j+1]
 proof
-let i;
-assume A3: M() <= i;
-defpred Q[Nat] means P[M() + $1];
+  let i;
+  assume
+A3: M() <= i;
+  defpred Q[Nat] means P[M() + $1];
 A4: Q[0] by A1;
-    reconsider M = M() as Element of NAT by ORDINAL1:def 13;
-A5: now let m be Element of NAT;
-    assume  Q[m];
-     then P[M+m+1] by A2,Th11;
+  reconsider M = M() as Element of NAT by ORDINAL1:def 13;
+A5: now
+    let m be Element of NAT;
+    assume Q[m];
+    then P[M+m+1] by A2,Th11;
     hence Q[m+1];
-    end;
+  end;
 A6: for m being Element of NAT holds Q[m] from Ind(A4,A5);
-    consider m being Nat such that
+  consider m being Nat such that
 A7: i = M() + m by A3,Th10;
-     m in NAT by ORDINAL1:def 13;
-   hence thesis by A6,A7;
+  m in NAT by ORDINAL1:def 13;
+  hence thesis by A6,A7;
 end;
 
 :: from INT_2, 2006.05.30, AG
 
 scheme CompInd1 { a() -> Nat, P[Nat] } :
   for k being Nat st k >= a() holds P[k]
-  provided
-  A1: for k being Nat st k>=a() &
-  (for n being Nat st n>=a() & n<k holds P[n]) holds P[k]
+provided
+A1: for k being Nat st k>=a() &
+(for n being Nat st n>=a() & n<k holds P[n]) holds P[k]
 proof
-     defpred P1[Nat] means
-      for n being Nat st (n>=a() & n<$1) holds P[n];
+  defpred P1[Nat] means for n being Nat st (n>=a() & n<$1) holds P[n];
 A2: P1[a()];
 A3: for k being Nat st k>=a() holds P1[k] implies P1[k+1]
-     proof
-      let k be Nat;
-      assume k>=a();
-      assume A4: for n being Nat st n>=a() & n<k holds P[n];
-      let n be Nat;
-      assume A5: n>=a() & n<k+1;
-      then n<=k by Th13;
-      then n<k or n = k by REAL_1:def 5;
-      hence thesis by A1,A4,A5;
-     end;
+  proof
     let k be Nat;
+    assume k>=a();
+    assume
+A4: for n being Nat st n>=a() & n<k holds P[n];
+    let n be Nat;
+    assume
+A5: n>=a() & n<k+1;
+    then n<=k by Th13;
+    then n<k or n = k by REAL_1:def 5;
+    hence thesis by A1,A4,A5;
+  end;
+  let k be Nat;
 A6: for k being Nat st k>=a() holds P1[k] from Ind1(A2,A3);
-    assume A7: k>=a();
-    then for n being Nat st (n>=a() & n<k) holds P[n] by A6;
-    hence P[k] by A1,A7;
-   end;
+  assume
+A7: k>=a();
+  then for n being Nat st (n>=a() & n<k) holds P[n] by A6;
+  hence P[k] by A1,A7;
+end;
 
 :: Moved from CQC_THE1 on 07.07.2006 by AK
 
 theorem Th26:
   n <= 1 implies n = 0 or n = 1
- proof
-  assume A1: n <= 1;
-  assume A2: not (n = 0 or n = 1);
+proof
+  assume
+A1: n <= 1;
+  assume
+A2: not (n = 0 or n = 1);
   then n < 0+1 by A1,REAL_1:def 5;
   then n <= 0 by Th13;
   hence contradiction by A2;
- end;
+end;
 
 theorem Th27:
   n <= 2 implies n = 0 or n = 1 or n = 2
@@ -805,7 +861,7 @@ proof
 end;
 
 theorem Th34:
-   n <= 9 implies n = 0 or n = 1 or n = 2 or n = 3
+  n <= 9 implies n = 0 or n = 1 or n = 2 or n = 3
   or n = 4 or n = 5 or n = 6 or n = 7 or n = 8 or n = 9
 proof
   assume n <= 9;
@@ -814,7 +870,7 @@ proof
 end;
 
 theorem Th35:
-   n <= 10 implies n = 0 or n = 1 or n = 2 or n = 3
+  n <= 10 implies n = 0 or n = 1 or n = 2 or n = 3
   or n = 4 or n = 5 or n = 6 or n = 7 or n = 8 or n = 9 or n = 10
 proof
   assume n <= 10;
@@ -823,9 +879,8 @@ proof
 end;
 
 theorem Th36:
-   n <= 11 implies n = 0 or n = 1 or n = 2 or n = 3
-  or n = 4 or n = 5 or n = 6 or n = 7 or n = 8 or n = 9 or n = 10
-  or n = 11
+  n <= 11 implies n = 0 or n = 1 or n = 2 or n = 3
+  or n = 4 or n = 5 or n = 6 or n = 7 or n = 8 or n = 9 or n = 10 or n = 11
 proof
   assume n <= 11;
   then n <= 10+1;
@@ -833,7 +888,7 @@ proof
 end;
 
 theorem Th37:
-   n <= 12 implies n = 0 or n = 1 or n = 2 or n = 3
+  n <= 12 implies n = 0 or n = 1 or n = 2 or n = 3
   or n = 4 or n = 5 or n = 6 or n = 7 or n = 8 or n = 9 or n = 10
   or n = 11 or n = 12
 proof
@@ -843,7 +898,7 @@ proof
 end;
 
 theorem
-   n <= 13 implies n = 0 or n = 1 or n = 2 or n = 3
+  n <= 13 implies n = 0 or n = 1 or n = 2 or n = 3
   or n = 4 or n = 5 or n = 6 or n = 7 or n = 8 or n = 9 or n = 10
   or n = 11 or n = 12 or n = 13
 proof
@@ -854,68 +909,68 @@ end;
 
 :: compare BINARITH:sch 1, 2006.07.19, A.T.
 
-scheme Indfrom1 { P[Nat] } :
-  for k being non empty Nat holds P[k]
-  provided
-A1: P[1] and
+scheme Indfrom1 { P[Nat] } : for k being non empty Nat holds P[k]
+provided
+A1: P[1]
+and
 A2: for k being non empty Nat st P[k] holds P[k + 1]
-    proof
-      defpred P[Nat] means $1 is non empty implies P[$1];
-A3:   P[0];
-A4:   now
-        let k be Nat;
-        assume A5: P[k];
-         now
-          assume k+1 is non empty;
-           k is empty or k is non empty;
-          hence P[k+1] by A1,A2,A5;
-        end;
-        hence P[k+1];
-      end;
-       for k being Nat holds P[k] from NatInd(A3,A4);
-      hence thesis;
-   end;
+proof
+  defpred P[Nat] means $1 is non empty implies P[$1];
+A3: P[0];
+A4: now
+    let k be Nat;
+    assume
+A5: P[k];
+    now
+      assume k+1 is non empty;
+      k is empty or k is non empty;
+      hence P[k+1] by A1,A2,A5;
+    end;
+    hence P[k+1];
+  end;
+  for k being Nat holds P[k] from NatInd(A3,A4);
+  hence thesis;
+end;
 
 :: from HENMODEL, 2007.03.15, A.T.
 
-definition let A be set;
+definition
+  let A be set;
   func min* A -> Element of NAT means
-    (it in A & for k st k in A holds it <= k) if
-                                   A is non empty Subset of NAT
-          otherwise it = 0;
-   existence
-   proof
-      A is non empty Subset of NAT implies
-        ex i st i in A & for k be Nat st k in A holds i <= k
-     proof
-       assume A1: A is non empty Subset of NAT;
-       consider x being Element of A;
-       defpred P[Nat] means $1 in A;
-        x is Element of NAT by A1,TARSKI:def 3;
-        then
-A2:     ex k be Nat st P[k] by A1;
-       ex k be Nat st
-       P[k] & for i be Nat st P[i] holds k <= i from Min(A2);
-       hence thesis;
-     end;
-     hence thesis;
-   end;
-   uniqueness
-   proof
-     let i,n be Element of NAT;
-      A is non empty Subset of NAT &
-       (i in A & for k st k in A holds i <= k) &
-          (n in A & for k st k in A holds n <= k) implies i = n
-     proof
-       assume A is non empty Subset of NAT &
-         (i in A & for k st k in A holds i <= k) &
-         (n in A & for k st k in A holds n <= k);
-       then i <= n & n <= i;
-       hence thesis by XXREAL_0:1;
-     end;
-     hence thesis;
-   end;
-   consistency;
+  (it in A & for k st k in A holds it <= k) if A is non empty Subset of NAT
+  otherwise it = 0;
+  existence
+  proof
+    A is non empty Subset of NAT implies
+    ex i st i in A & for k be Nat st k in A holds i <= k
+    proof
+      assume
+A1:   A is non empty Subset of NAT;
+      consider x being Element of A;
+      defpred P[Nat] means $1 in A;
+      x is Element of NAT by A1,TARSKI:def 3;
+      then
+A2:   ex k be Nat st P[k] by A1;
+      ex k be Nat st P[k] & for i be Nat st P[i] holds k <= i from Min(A2);
+      hence thesis;
+    end;
+    hence thesis;
+  end;
+  uniqueness
+  proof
+    let i,n be Element of NAT;
+    A is non empty Subset of NAT & (i in A & for k st k in A holds i <= k) &
+    (n in A & for k st k in A holds n <= k) implies i = n
+    proof
+      assume A is non empty Subset of NAT &
+      (i in A & for k st k in A holds i <= k) &
+      (n in A & for k st k in A holds n <= k);
+      then i <= n & n <= i;
+      hence thesis by XXREAL_0:1;
+    end;
+    hence thesis;
+  end;
+  consistency;
 end;
 
 :: from CARD_1, 2007.10.28,A.T.
@@ -923,156 +978,163 @@ end;
 reserve x,X,Y,Z for set;
 
 theorem Th39:
- for n being natural number holds succ n = n + 1
-  proof let n be natural number;
-A1:  n = {K where K is Element of NAT: K < n} &
-     n+1 = {L where L is Element of NAT: L < n+1} by AXIOMS:30;
-   thus succ n c= n+1
-     proof let x such that
-A2:     x in succ n;
-      per cases by A2,ORDINAL1:13;
-      suppose x in n;
-        then consider K being Element of NAT such that
-A3:      x = K and
-A4:      K < n by A1;
-        K < n+1 by A4,Th13;
-       hence thesis by A1,A3;
-      end;
-      suppose
-A5:      x = n;
-        reconsider n as Element of NAT by ORDINAL1:def 13;
-        n < n+1 by Th13;
-       hence thesis by A1,A5;
-      end;
-     end;
-   let x; assume x in n+1;
-   then consider K being Element of NAT such that
-A6:  x = K & K < n+1 by A1;
-        K <= n by A6,Th13;
-    then K = n or K < n by REAL_1:def 5;
-    then x = n or x in n by A1,A6;
-   hence thesis by ORDINAL1:13;
+  for n being natural number holds succ n = n + 1
+proof
+  let n be natural number;
+A1: n = {K where K is Element of NAT: K < n} &
+  n+1 = {L where L is Element of NAT: L < n+1} by AXIOMS:30;
+  thus succ n c= n+1
+  proof
+    let x such that
+A2: x in succ n;
+    per cases by A2,ORDINAL1:13;
+    suppose x in n;
+      then consider K being Element of NAT such that
+A3:   x = K and
+A4:   K < n by A1;
+      K < n+1 by A4,Th13;
+      hence thesis by A1,A3;
+    end;
+    suppose
+A5:   x = n;
+      reconsider n as Element of NAT by ORDINAL1:def 13;
+      n < n+1 by Th13;
+      hence thesis by A1,A5;
+    end;
   end;
+  let x;
+  assume x in n+1;
+  then consider K being Element of NAT such that
+A6: x = K & K < n+1 by A1;
+  K <= n by A6,Th13;
+  then K = n or K < n by REAL_1:def 5;
+  then x = n or x in n by A1,A6;
+  hence thesis by ORDINAL1:13;
+end;
 
 theorem Th40:
- n <= m iff n c= m
+  n <= m iff n c= m
+proof
+  defpred P[Nat] means for m holds $1 <= m iff $1 c= m;
+A1: P[0] by XBOOLE_1:2;
+A2: for n st P[n] holds P[n+1]
   proof
-defpred P[Nat] means for m holds $1 <= m iff $1 c= m;
-A1:  P[0] by XBOOLE_1:2;
-A2:  for n st P[n] holds P[n+1]
-     proof let n such that
-A3:    P[n];
-      let m;
-      thus n+1 <= m implies (n+1) c= m
-        proof assume n+1 <= m;
-         then consider k being Nat such that
-A4:       m = n+1+k by Th10;
-          reconsider k as Element of NAT by ORDINAL1:def 13;
-              n <= n+k by Th11;
-          then n c= (n+k) by A3;
+    let n such that
+A3: P[n];
+    let m;
+    thus n+1 <= m implies (n+1) c= m
+    proof
+      assume n+1 <= m;
+      then consider k being Nat such that
+A4:   m = n+1+k by Th10;
+      reconsider k as Element of NAT by ORDINAL1:def 13;
+      n <= n+k by Th11;
+      then n c= (n+k) by A3;
       then succ n c= succ (n+k) & (n+1) = succ n &
-          (n+k+1) = succ (n+k) by Th39,ORDINAL2:1;
-         hence thesis by A4;
-        end;
-      assume
-A5:    (n+1) c= m;
-           (n+1) = succ n by Th39;
-        then n in m by A5,ORDINAL1:33;
-        then n c= m & n <> m by ORDINAL1:def 2;
-       then n <= m & n <> m by A3;
-       then n < m by REAL_1:def 5;
-      hence thesis by Th13;
-     end;
-      for n holds P[n] from NatInd(A1,A2);
-   hence thesis;
+      (n+k+1) = succ (n+k) by Th39,ORDINAL2:1;
+      hence thesis by A4;
+    end;
+    assume
+A5: (n+1) c= m;
+    (n+1) = succ n by Th39;
+    then n in m by A5,ORDINAL1:33;
+    then n c= m & n <> m by ORDINAL1:def 2;
+    then n <= m & n <> m by A3;
+    then n < m by REAL_1:def 5;
+    hence thesis by Th13;
   end;
+  for n holds P[n] from NatInd(A1,A2);
+  hence thesis;
+end;
 
-theorem
- Th41: Card n <=` Card m iff n <= m
-  proof reconsider n,m as Element of NAT by ORDINAL1:def 13;
-        (Card n <=` Card m iff Card n c= Card m) &
-     Card n = n & Card m = m &
-      ( n c= m iff n <= m) by Th40,CARD_1:def 5;
-   hence thesis;
-  end;
+theorem Th41:
+  Card n <=` Card m iff n <= m
+proof reconsider n,m as Element of NAT by ORDINAL1:def 13;
+  (Card n <=` Card m iff Card n c= Card m) & Card n = n & Card m = m &
+  ( n c= m iff n <= m) by Th40,CARD_1:def 5;
+  hence thesis;
+end;
 
-theorem
- Th42: Card n <` Card m iff n < m
-  proof
-     Card n c< Card m iff Card n c= Card m & Card n <> Card m by XBOOLE_0:def 8
-;
-    then (Card n <=` Card m & Card n <> Card m iff Card n <` Card m) &
-     (Card n = Card m iff n = m) &
-      (n <= m & n <> m iff n < m) &
-    (Card n <=` Card m iff n <= m)
-     by Th41,CARD_1:71,ORDINAL1:21,def 2,REAL_1:def 5;
-   hence thesis;
-  end;
+theorem Th42:
+  Card n <` Card m iff n < m
+proof
+  Card n c< Card m iff Card n c= Card m & Card n <> Card m by XBOOLE_0:def 8;
+  then (Card n <=` Card m & Card n <> Card m iff Card n <` Card m) &
+  (Card n = Card m iff n = m) & (n <= m & n <> m iff n < m) &
+  (Card n <=` Card m iff n <= m)
+  by Th41,CARD_1:71,ORDINAL1:21,def 2,REAL_1:def 5;
+  hence thesis;
+end;
 
 reserve M,N for Cardinal;
 
 theorem
   nextcard Card n = Card(n+1)
-  proof reconsider n as Element of NAT by ORDINAL1:def 13;
-      n < n+1 & Card Card n = Card n by Th13;
-then A1:  Card Card n <` Card(n+1) by Th42;
-        for M st Card Card n <` M holds Card(n+1) <=` M
-     proof let M such that
-A2:     Card Card n in M;
-         Card n = n & M = M by CARD_1:def 5;
-       then succ n c= M & (n+1) = succ n &
-        Card(n+1) = (n+1) by A2,Th39,CARD_1:def 5,ORDINAL1:33;
-      hence Card(n+1) c= M;
-     end;
-   hence thesis by A1,CARD_1:def 6;
+proof reconsider n as Element of NAT by ORDINAL1:def 13;
+  n < n+1 & Card Card n = Card n by Th13;
+  then
+A1: Card Card n <` Card(n+1) by Th42;
+  for M st Card Card n <` M holds Card(n+1) <=` M
+  proof
+    let M such that
+A2: Card Card n in M;
+    Card n = n & M = M by CARD_1:def 5;
+    then succ n c= M & (n+1) = succ n &
+    Card(n+1) = (n+1) by A2,Th39,CARD_1:def 5,ORDINAL1:33;
+    hence Card(n+1) c= M;
   end;
+  hence thesis by A1,CARD_1:def 6;
+end;
 
-definition let n be natural number;
- redefine func succ n equals n+1;
- compatibility by Th39;
+definition
+  let n be natural number;
+  redefine func succ n equals
+
+  n+1;
+  compatibility by Th39;
 end;
 
 theorem
-     for X,Y being finite set holds
-   X c= Y implies card X <= card Y
-  proof let X,Y be finite set;
-   assume
-      X c= Y;
-    then Card X <=` Card Y by CARD_1:27;
-   hence card X <= card Y by Th40;
-  end;
+  for X,Y being finite set holds X c= Y implies card X <= card Y
+proof
+  let X,Y be finite set;
+  assume X c= Y;
+  then Card X <=` Card Y by CARD_1:27;
+  hence card X <= card Y by Th40;
+end;
 
 reserve l for Element of NAT;
 
 theorem
   k in n iff k < n
-  proof
-   hereby assume k in n;
-     then k in { l : l < n } by AXIOMS:30;
-     then ex l st k = l & l < n;
+proof
+  hereby
+    assume k in n;
+    then k in { l : l < n } by AXIOMS:30;
+    then ex l st k = l & l < n;
     hence k < n;
-   end;
-   assume
-A1:  k < n;
-    reconsider k as Element of NAT by ORDINAL1:def 13;
-     k in { l : l < n } by A1;
-   hence thesis by AXIOMS:30;
   end;
+  assume
+A1: k < n;
+  reconsider k as Element of NAT by ORDINAL1:def 13;
+  k in { l : l < n } by A1;
+  hence thesis by AXIOMS:30;
+end;
 
 theorem
   n in n+1
-  proof
-    reconsider n as Element of NAT by ORDINAL1:def 13;
-     n<n+1 by XREAL_1:31;
-    then n in {l:l<n+1};
-    hence thesis by AXIOMS:30;
-  end;
+proof
+  reconsider n as Element of NAT by ORDINAL1:def 13;
+  n<n+1 by XREAL_1:31;
+  then n in {l:l<n+1};
+  hence thesis by AXIOMS:30;
+end;
 
 theorem
-   k <= n implies k = k /\ n
+  k <= n implies k = k /\ n
 proof
-   assume k <= n;
-    then Segm k c= Segm n by Th40;
-   hence thesis by XBOOLE_1:28;
+  assume k <= n;
+  then Segm k c= Segm n by Th40;
+  hence thesis by XBOOLE_1:28;
 end;
 
