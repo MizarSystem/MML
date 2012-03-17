@@ -31,12 +31,12 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="26" value="false"/>
-<Adjective nr="27"/>
-<Adjective nr="29"/>
+<Adjective nr="27" value="false"/>
+<Adjective nr="28"/>
 <Adjective nr="30"/>
-<Adjective nr="57"/>
+<Adjective nr="31"/>
 <Adjective nr="58"/>
+<Adjective nr="59"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -45,27 +45,27 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="59"/>
-</Cluster>
-</RCluster>
-<RCluster>
-<ArgTypes/>
-<Typ kind="G" nr="8">
-<Cluster/>
-</Typ>
-<Cluster>
-<Adjective nr="46"/>
-<Adjective nr="59" value="false"/>
-</Cluster>
-</RCluster>
-<RCluster>
-<ArgTypes/>
-<Typ kind="G" nr="8">
-<Cluster/>
-</Typ>
-<Cluster>
-<Adjective nr="46"/>
 <Adjective nr="60"/>
+</Cluster>
+</RCluster>
+<RCluster>
+<ArgTypes/>
+<Typ kind="G" nr="8">
+<Cluster/>
+</Typ>
+<Cluster>
+<Adjective nr="47"/>
+<Adjective nr="60" value="false"/>
+</Cluster>
+</RCluster>
+<RCluster>
+<ArgTypes/>
+<Typ kind="G" nr="8">
+<Cluster/>
+</Typ>
+<Cluster>
+<Adjective nr="47"/>
+<Adjective nr="61"/>
 </Cluster>
 </RCluster>
 </Registrations>

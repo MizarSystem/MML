@@ -47,10 +47,10 @@
 <Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="23"/>
-<Adjective nr="26"/>
-<Adjective nr="36"/>
+<Adjective nr="27"/>
 <Adjective nr="37"/>
-<Adjective nr="38">
+<Adjective nr="38"/>
+<Adjective nr="39">
 <Func kind="K" nr="18">
 <LocusVar nr="1"/>
 </Func>

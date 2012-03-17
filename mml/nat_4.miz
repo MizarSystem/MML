@@ -35,7 +35,7 @@ environ
       ABSVALUE, NEWTON, SCMFSA9A, XCMPLX_1, ORDINAL1, XREAL_1, PEPIN, SCMP_GCD,
       NAT_3, POLYNOM1, CARD_4, XBOOLE_0, PRE_CIRC, MEMBERED, INT_2, ABIAN,
       FINSEQ_3, RVSUM_1, FUNCT_1, FINSEQ_2, ZFMISC_1, FUNCT_2, FUNCOP_1,
-      PROB_3, INTEGRA5, COMPTRIG, SCPINVAR, CQC_THE1, HEINE;
+      PROB_3, INTEGRA5, COMPTRIG, SCPINVAR, CQC_THE1, HEINE, XXREAL_0;
  schemes NAT_1, FINSEQ_1;
 
 begin :: Some theorems on real and natural numbers.
@@ -657,7 +657,7 @@ proof
   assume A2: x=p |^ (p |-count a); then
   reconsider b = x as Element of NAT by ORDINAL1:def 13;
   take b;
-  thus b=x by A2;
+  thus b=x;
   p >= 1 by INT_2:def 5;
   hence 1 <= b by A2,PREPOWER:19;
 A4: a > 0 by A1;
@@ -2683,20 +2683,16 @@ theorem Th46:
         hence x<m by C2,XREAL_1:2;
       end;
       consider m being Element of NAT such that B2: x<m by B1;
-      set B={p where p is Element of NAT:p<m & p is prime};
+      set B=SetPrimenumber m;
       B3: B is finite by NEWTON:91;
       A c= B
       proof
         let y be set;
-        y in A implies y in B
-        proof
-          assume y in {p where p is Prime:p<=x}; then
-          consider y' be Prime such that
-          C1: y'=y & y'<=x;
-          y' is prime Element of NAT & y'=y & y'<m by B2,C1,XREAL_1:2;
-          hence thesis;
-        end;
-        hence thesis;
+        assume y in {p where p is Prime:p<=x}; then
+        consider y' be Prime such that
+        C1: y'=y & y'<=x;
+        y'=y & y'<m by B2,C1,XREAL_1:2;
+        hence thesis by NEWTON:def 7;
       end;
       hence thesis by B3,FINSET_1:13;  
     end;
@@ -2973,7 +2969,7 @@ C4:   rng f c= NAT by TARSKI:def 3;
       thus len f = n+1 by C5,C7,C8,FINSEQ_1:def 3;
       thus (for k being Element of NAT st k in dom f
       holds f.k=[\ (n+1)/(p|^k) /])
-      proof 
+      proof
         let k be Element of NAT;
         assume D1: k in dom f; then
         D2: f.k = fn0.k + fn1.k by RVSUM_1:26;
@@ -3116,7 +3112,7 @@ theorem Th49:
     hence len f = 2*n by FINSEQ_1:def 3;
     thus (for k being Element of NAT st k in dom f
        holds f.k=[\(2*n)/(p|^k)/]- 2*[\n/(p|^k)/] )
-    proof 
+    proof
       let k be Element of NAT;
       assume B1: k in dom f;
       B2: k in dom f2 by B1,A10,A4,FINSEQ_1:def 3;
@@ -3290,7 +3286,7 @@ Lm8:
         C2: n0 in dom ((2*n -' r)|-> 0) & k=len (r |-> 1)+ n0 by C1;
         C3: n0 in Seg (2*n -' r) by C2,FINSEQ_2:68;
         C4: k=r + n0 by C2,FINSEQ_2:69;
-        reconsider k1=k as Element of NAT by ORDINAL1:def 13;
+        reconsider k1=k as Element of NAT;
         1<=n0 by FINSEQ_1:3,C3; then
         1+r<=n0+r by XREAL_1:8; then
         r+1<k or r+1=k by C4,XREAL_1:1; then
@@ -3343,7 +3339,7 @@ Lm9:
       thus p |-count (2*n choose n) <= r by Lm8,B1,B2,B3,B4;
     end;
     thus (p>2*n implies p |-count (2*n choose n) = 0)
-    proof 
+    proof
       assume B1: p>2*n;
       set r = 0;
       B3: n>=2 by A1,XREAL_1:2; then
@@ -3355,7 +3351,7 @@ Lm9:
       hence p |-count (2*n choose n) = 0;
     end;
     thus (n<p & p<=2*n implies p |-count (2*n choose n) <= 1)
-    proof 
+    proof
       assume B1: n<p;
       assume B2: p<=2*n;
       set r = 1;
@@ -3370,7 +3366,7 @@ Lm9:
       hence p |-count (2*n choose n) <= 1 by A2,B4,B5;
     end;
     thus (2*n/3<p & p<=n implies p |-count (2*n choose n) = 0)
-    proof 
+    proof
       assume B1: 2*n/3<p;
       assume B2: p<=n;
       consider f be FinSequence of REAL such that
@@ -3462,7 +3458,7 @@ Lm9:
       hence p |-count (2*n choose n) = 0 by B5;
     end;
     thus (sqrt(2*n)<p & p<=2*n/3 implies p |-count (2*n choose n) <= 1)
-    proof 
+    proof
       assume B1: sqrt(2*n)<p;
       assume B2: p<=2*n/3;
       set r = 1;
@@ -4635,8 +4631,12 @@ proof
     sqrt(2*n)>0 by B5,SQUARE_1:93; then
     sqrt(2*n)+1>0+1 by XREAL_1:8; then
     B25: (sqrt(2*n)+1)*3>0*3 by XREAL_1:70;
+    reconsider 2n=2*n as real number;
+F:  6-root(2*n) to_power 6 = 6-root(2n) |^ 6 by POWER:47
+       .= 2n by COMPTRIG:17;
     6-root(2*n) to_power 6 < (n1+1) to_power 6 by B22,B21,POWER:42; then
-    2*n < (n1+1) to_power 6 by COMPTRIG:17; then
+    2*n < (n1+1) |^ 6 by POWER:47,F; then
+    2*n < (n1+1) to_power 6 by POWER:47; then
     2*n < (2 to_power (6-root(2*n))) to_power 6 by B24,XREAL_1:2; then
     2*n < 2 to_power ((6-root(2*n))*6) by POWER:38; then
     (2*n) to_power ((sqrt(2*n)+1)*3) <

@@ -72,8 +72,8 @@
 <ArgTypes>
 <Typ kind="G" nr="11">
 <Cluster>
-<Adjective nr="39" value="false"/>
-<Adjective nr="85" value="false"/>
+<Adjective nr="40" value="false"/>
+<Adjective nr="86" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="27">
@@ -91,15 +91,15 @@
 </Func>
 <Cluster>
 <Adjective nr="7" value="false"/>
-<Adjective nr="31"/>
+<Adjective nr="32"/>
 </Cluster>
 </FCluster>
 <CCluster>
 <ArgTypes>
 <Typ kind="G" nr="11">
 <Cluster>
-<Adjective nr="39" value="false"/>
-<Adjective nr="85" value="false"/>
+<Adjective nr="40" value="false"/>
+<Adjective nr="86" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="27">

@@ -52,7 +52,7 @@
 </ArgTypes>
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="38"/>
+<Adjective nr="39"/>
 </Cluster>
 <Typ kind="M" nr="5">
 <Cluster/>
@@ -61,7 +61,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="65"/>
+<Adjective nr="66"/>
 </Cluster>
 </CCluster>
 <CCluster>
@@ -74,7 +74,7 @@
 </ArgTypes>
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="64"/>
+<Adjective nr="65"/>
 </Cluster>
 <Typ kind="M" nr="5">
 <Cluster/>
@@ -83,7 +83,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="66"/>
+<Adjective nr="67"/>
 </Cluster>
 </CCluster>
 </Registrations>

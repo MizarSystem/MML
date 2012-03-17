@@ -18,7 +18,7 @@ environ
  registrations RELSET_1, FINSEQ_2, NAT_1, MEMBERED, FUNCT_1, FUNCT_2, BINOP_2,
       XCMPLX_0, XREAL_0, SQUARE_1, FUNCOP_1, ORDINAL1, FINSEQ_1;
  requirements NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions BINOP_1, FINSEQOP, FINSEQ_1, SQUARE_1, BINOP_2, FINSEQ_2;
+ definitions BINOP_1, FINSEQOP, FINSEQ_1, SQUARE_1, BINOP_2, FINSEQ_2, TARSKI;
  theorems SQUARE_1, FUNCT_1, FUNCT_2, BINOP_1, FINSEQ_1, FUNCOP_1, FINSEQ_2,
       FINSEQOP, SETWOP_2, RELAT_1, FINSOP_1, XREAL_0, ZFMISC_1, XCMPLX_0,
       XCMPLX_1, BINOP_2, SETWISEO, XREAL_1, SEQ_1, NUMBERS, XBOOLE_1, FINSEQ_3;
@@ -1713,3 +1713,68 @@ theorem
    thus Product sqr R = Product (mlt(R,R)) by Th97
                .= (Product R)^2 by Th137;
  end;
+
+begin :: Addenda
+
+:: 2006.07.13, A.T.
+
+reserve z,z1,z2 for Element of COMPLEX;
+
+definition let i be Nat, z be Element of COMPLEX;
+ redefine func i |-> z -> FinSequence of COMPLEX;
+ coherence
+  proof
+   let x be set;
+   assume x in rng (i |-> z);
+   then consider y be set such that A1: y in dom (i |-> z) and
+    A2: x = (i |-> z).y by FUNCT_1:def 5;
+   A3: y in Seg i by A1,FUNCOP_1:19;
+   then reconsider y as Element of NAT by A1;
+   reconsider r1 = (i |-> z).y as complex number by A3,FUNCOP_1:13;
+   r1 = x by A2;
+   hence x in COMPLEX by XCMPLX_0:def 2;
+  end;
+end;
+
+theorem Lm123c:
+  for F being FinSequence of COMPLEX holds
+    Product F = multcomplex $$ F
+  proof
+    let F be FinSequence of COMPLEX;
+    thus thesis by Def12;
+  end;
+
+theorem
+  Product ((i+j)|->z) = (Product (i|->z))*(Product (j|->z))
+ proof
+   thus Product ((i+j)|->z) = multcomplex$$((i+j)|->z) by Lm123c
+     .= multcomplex.(multcomplex$$(i|->z),multcomplex$$(j|->z)) by SETWOP_2:37
+     .= (multcomplex$$(i|->z))*(multcomplex$$(j|->z)) by BINOP_2:def 5
+     .= (multcomplex$$(i|->z))*(Product (j|->z)) by Lm123c
+     .= (Product (i|->z))*(Product (j|->z)) by Lm123c;
+ end;
+
+theorem
+  Product ((i*j)|->z) = Product (j |-> (Product (i|->z)))
+  proof
+    Product ((i*j) |-> z) =
+         multcomplex $$ ((i*j) |-> z) by Lm123c
+      .= multcomplex $$ (j |-> (multcomplex $$ (i|->z)))
+                  by SETWOP_2:38
+      .= Product (j |-> (multcomplex $$ (i|->z))) by Lm123c
+      .= Product (j |-> (Product (i|->z))) by Lm123c;
+    hence thesis;
+  end;
+
+theorem
+  Product (i|->(z1*z2)) = (Product (i|->z1))*(Product (i|->z2))
+ proof
+   thus Product (i|->(z1*z2)) = multcomplex$$(i|->(z1*z2)) by Lm123c
+     .= multcomplex$$(i|->multcomplex.(z1,z2)) by BINOP_2:def 5
+     .= multcomplex.(multcomplex$$(i|->z1),multcomplex$$(i|->z2))
+                by SETWOP_2:47
+     .= (multcomplex$$(i|->z1))*(multcomplex$$(i|->z2)) by BINOP_2:def 5
+     .= (multcomplex$$(i|->z1))*(Product (i|->z2)) by Lm123c
+     .= (Product (i|->z1))*(Product (i|->z2)) by Lm123c;
+ end;
+

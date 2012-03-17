@@ -39,9 +39,9 @@
 <Adjective nr="12"/>
 <Adjective nr="13"/>
 <Adjective nr="18"/>
-<Adjective nr="21"/>
-<Adjective nr="23"/>
-<Adjective nr="32"/>
+<Adjective nr="22"/>
+<Adjective nr="24"/>
+<Adjective nr="33"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -54,8 +54,8 @@
 <Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="7" value="false"/>
-<Adjective nr="21"/>
-<Adjective nr="34"/>
+<Adjective nr="22"/>
+<Adjective nr="35"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -66,8 +66,8 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="28"/>
-<Adjective nr="35" value="false"/>
+<Adjective nr="29"/>
+<Adjective nr="36" value="false"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -79,7 +79,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="28"/>
+<Adjective nr="29"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -90,8 +90,8 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="28"/>
-<Adjective nr="35" value="false"/>
+<Adjective nr="29"/>
+<Adjective nr="36" value="false"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -103,14 +103,14 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="28"/>
+<Adjective nr="29"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="28"/>
+<Adjective nr="29"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -122,8 +122,8 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="28"/>
-<Adjective nr="35" value="false"/>
+<Adjective nr="29"/>
+<Adjective nr="36" value="false"/>
 </Cluster>
 </FCluster>
 </Registrations>

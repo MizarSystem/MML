@@ -48,21 +48,21 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="23"/>
-<Adjective nr="100"/>
+<Adjective nr="24"/>
+<Adjective nr="101"/>
 </Cluster>
 </RCluster>
 <FCluster>
 <ArgTypes>
 <Typ kind="G" nr="14">
 <Cluster>
-<Adjective nr="28" value="false"/>
-<Adjective nr="91" value="false"/>
+<Adjective nr="29" value="false"/>
+<Adjective nr="92" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="16">
 <Cluster>
-<Adjective nr="94">
+<Adjective nr="95">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -82,7 +82,7 @@
 </Func>
 <Cluster>
 <Adjective nr="14" value="false"/>
-<Adjective nr="99"/>
+<Adjective nr="100"/>
 </Cluster>
 </FCluster>
 </Registrations>

@@ -344,8 +344,8 @@
 <Cluster>
 <Adjective nr="2"/>
 <Adjective nr="5"/>
-<Adjective nr="21"/>
-<Adjective nr="23"/>
+<Adjective nr="22"/>
+<Adjective nr="24"/>
 </Cluster>
 </Typ>
 <Pred kind="P" nr="1">
@@ -360,8 +360,8 @@
 <Cluster>
 <Adjective nr="2"/>
 <Adjective nr="5"/>
-<Adjective nr="21"/>
-<Adjective nr="23"/>
+<Adjective nr="22"/>
+<Adjective nr="24"/>
 </Cluster>
 </Typ>
 <Not>

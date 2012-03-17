@@ -1,0 +1,475 @@
+:: The Definition of Finite Sequences and Matrices of Probability, and 
+:: Addition of Matrices of Real Elements
+::  by Bo Zhang and Yatsuka Nakamura
+:: 
+:: Received August 18, 2006
+:: Copyright (c) 2006 Association of Mizar Users
+
+environ
+
+ vocabularies ARYTM, FINSEQ_1, SQUARE_1, BOOLE, FUNCT_1, RELAT_1, MEASURE6,
+      MATRIXC1, RVSUM_1, EUCLID_2, MATRIX_2, FINSEQ_2, INCSP_1, QC_LANG1,
+      MATRIXR1, CAT_3, SEQ_1, RLVECT_1, MATRIX_1, MATRPROB, TREES_1, VECTSP_1;
+ notations TARSKI, SUBSET_1, XBOOLE_0, XCMPLX_0, XXREAL_0, XREAL_0, REAL_1,
+      NAT_1, ORDINAL1, NUMBERS, PARTFUN1, RELAT_1, FUNCT_1, SEQ_1, ZFMISC_1,
+      FUNCOP_1, GROUP_1, BINOP_1, EUCLID_2, RLVECT_1, BINOP_2, SQUARE_1,
+      VECTSP_1, FINSOP_1, FUNCT_2, RVSUM_1, FVSUM_1, FINSEQ_1, FINSEQ_2,
+      FINSEQOP, NEWTON, STRUCT_0, MATRLIN, MATRIXR1, MATRIX_3, MATRIX_1,
+      GOBOARD1, EUCLID;
+ constructors FVSUM_1, SETWOP_2, NUMBERS, REAL_1, XREAL_0, XCMPLX_0, XBOOLE_0,
+      BINOP_2, INT_2, VECTSP_2, MATRIX_1, SEQ_1, MATRIX_4, MATRIX_3, FINSOP_1,
+      VECTSP_1, MATRIXR1, MATRIX_2, MEMBERED, BINOP_1, XXREAL_0, FINSEQ_3,
+      TOPREAL1, PARTFUN1, FUNCOP_1, FINSEQ_2, RVSUM_1, NEWTON, SQUARE_1,
+      RFINSEQ, MATRLIN, EUCLID_2, GOBOARD1, NAT_1;
+ registrations GOBOARD1, STRUCT_0, INT_1, RELSET_1, VECTSP_1, NUMBERS, REAL_1,
+      XREAL_0, FINSEQ_1, FINSEQ_2, XXREAL_0, NAT_1, MEMBERED, BINOP_2,
+      ORDINAL1, MATRIX_1, ORDINAL2, MATRLIN;
+ requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
+
+
+begin
+
+ reserve D for non empty set,
+         i,j,k for Element of NAT,
+         n,m for Nat,
+         r for Real,
+         e for FinSequence of REAL;
+
+definition let d be set,
+               g be FinSequence of d*,
+               n be Nat;
+  redefine func g.n -> FinSequence of d;
+end;
+
+definition let x be real number;
+  redefine func <*x*> -> FinSequence of REAL;
+end;
+
+theorem :: MATRPROB:1
+  for a being Element of D, m being non empty Nat,
+      g being FinSequence of D holds
+    (len g = m & for i be Nat st i in dom g holds g.i = a) iff g = m |-> a;
+
+theorem :: MATRPROB:2
+  for a,b being Element of D holds
+    ex g be FinSequence of D st len g = n & (for i be Nat st i in Seg n holds
+      (i in Seg k implies g.i = a) & (not i in Seg k implies g.i = b));
+
+theorem :: MATRPROB:3
+  (for i be Nat st i in dom e holds 0 <= e.i) implies
+    (for f being Real_Sequence st f.1 = e.1 &
+      (for n be Nat st 0 <> n & n < len e holds f.(n+1) = f.n+e.(n+1)) holds
+        (for n,m be Nat st n in dom e & m in dom e & n <= m holds f.n <= f.m));
+
+theorem :: MATRPROB:4
+  len e >= 1 & (for i be Nat st i in dom e holds 0 <= e.i) implies
+    (for f being Real_Sequence st f.1 = e.1 &
+      (for n be Nat st 0 <> n & n < len e holds f.(n+1) = f.n+e.(n+1)) holds
+        (for n be Nat st n in dom e holds e.n <= f.n));
+
+theorem :: MATRPROB:5
+  (for i be Nat st i in dom e holds 0 <= e.i) implies
+    for k be Nat st k in dom e holds e.k <= Sum e;
+
+theorem :: MATRPROB:6
+  for r1,r2 being Real, k being Nat, seq1 being Real_Sequence holds
+    ex seq being Real_Sequence st seq.0=r1 & for n holds
+      (n<>0 & n <= k implies seq.n=seq1.n) &
+      (n > k implies seq.n=r2);
+
+theorem :: MATRPROB:7
+  for F being FinSequence of REAL holds
+    ex f being Real_Sequence st f.0 = 0 &
+    (for i be Nat st i < len F holds f.(i+1) = f.i+(F.(i+1))) &
+    Sum F = f.len F;
+
+theorem :: MATRPROB:8
+  for D being set, e1 being FinSequence of D holds
+    n |-> e1 is FinSequence of D*;
+
+theorem :: MATRPROB:9
+  for D being set, e1,e2 being FinSequence of D holds
+    ex e being FinSequence of D* st len e = n &
+    (for i be Nat st i in Seg n holds
+      (i in Seg k implies e.i = e1) & (not i in Seg k implies e.i = e2));
+
+theorem :: MATRPROB:10
+  for D being set, s being FinSequence holds
+    (s is Matrix of D iff
+      ex n st for i st i in dom s holds
+        ex p being FinSequence of D st s.i = p & len p = n);
+
+theorem :: MATRPROB:11
+  for D being set, e being FinSequence of D* holds
+    (ex n st for i st i in dom e holds len(e.i) = n) iff e is Matrix of D;
+
+theorem :: MATRPROB:12
+  for M being tabular FinSequence holds
+    [i,j] in Indices M iff i in Seg len M & j in Seg width M;
+
+theorem :: MATRPROB:13
+  for D being non empty set, M being Matrix of D holds
+    [i,j] in Indices M iff i in dom M & j in dom (M.i);
+
+theorem :: MATRPROB:14
+  for D being non empty set, M being Matrix of D st
+    [i,j] in Indices M holds M*(i,j)=(M.i).j;
+
+theorem :: MATRPROB:15
+  for D being non empty set, M being Matrix of D holds
+    [i,j] in Indices M iff i in dom Col(M,j) & j in dom Line(M,i);
+
+theorem :: MATRPROB:16
+  for D1,D2 being non empty set,
+      M1 being (Matrix of D1),M2 being Matrix of D2 st M1 = M2 holds
+    for i st i in dom M1 holds Line(M1,i) = Line(M2,i);
+
+theorem :: MATRPROB:17
+  for D1,D2 being non empty set,M1 being (Matrix of D1),M2 being Matrix of D2
+    st M1 = M2 holds for j st j in Seg width M1 holds
+      Col(M1,j) = Col(M2,j);
+
+theorem :: MATRPROB:18
+  for e1 being FinSequence of D st len e1 = m holds
+    n |-> e1 is Matrix of n,m,D;
+
+theorem :: MATRPROB:19
+  for e1,e2 being FinSequence of D st len e1 = m & len e2 = m holds
+    ex M being Matrix of n,m,D st (for i be Nat st i in Seg n holds
+      (i in Seg k implies M.i = e1) & (not i in Seg k implies M.i = e2));
+
+definition let e be FinSequence of REAL*;
+  func Sum e -> FinSequence of REAL means
+:: MATRPROB:def 1
+    len it = len e & for k st k in dom it holds it.k = Sum(e.k);
+end;
+
+notation let m be Matrix of REAL;
+  synonym LineSum m for Sum m;
+end;
+
+theorem :: MATRPROB:20
+  for m being Matrix of REAL holds len Sum m = len m &
+    for i st i in Seg len m holds (Sum m).i=Sum Line(m,i);
+
+definition let m be Matrix of REAL;
+  func ColSum m -> FinSequence of REAL means
+:: MATRPROB:def 2
+    len it = width m &
+      for j st j in Seg width m holds it.j=Sum Col(m,j);
+end;
+
+theorem :: MATRPROB:21
+  for M be Matrix of REAL st width M > 0 holds
+    LineSum M = ColSum(M@);
+
+theorem :: MATRPROB:22
+  for M be Matrix of REAL holds
+    ColSum M = LineSum(M@);
+
+definition let M be Matrix of REAL;
+  func SumAll M -> Element of REAL equals
+:: MATRPROB:def 3
+    Sum Sum M;
+end;
+
+theorem :: MATRPROB:23
+  for M be Matrix of REAL st len M = 0 holds
+    SumAll M = 0;
+
+theorem :: MATRPROB:24
+  for M be Matrix of m,0,REAL holds SumAll M = 0;
+
+theorem :: MATRPROB:25
+  for M1 be Matrix of n,k,REAL for M2 being Matrix of m,k,REAL holds
+    Sum (M1^M2) = (Sum M1)^(Sum M2);
+
+theorem :: MATRPROB:26
+  for M1,M2 be Matrix of REAL holds
+    Sum M1 + Sum M2 = Sum (M1 ^^ M2);
+
+theorem :: MATRPROB:27
+  for M1,M2 be Matrix of REAL st len M1 = len M2 holds
+    SumAll M1 + SumAll M2 = SumAll(M1 ^^ M2);
+
+theorem :: MATRPROB:28
+  for M be Matrix of REAL holds
+    SumAll M = SumAll(M@);
+
+theorem :: MATRPROB:29
+  for M be Matrix of REAL holds
+    SumAll M = Sum ColSum M;
+
+theorem :: MATRPROB:30
+  for x,y being FinSequence of REAL st len x = len y holds
+    len mlt(x,y)=len x;
+
+theorem :: MATRPROB:31
+  for i for R being Element of i-tuples_on REAL holds
+    mlt(i|->1,R) = R;
+
+theorem :: MATRPROB:32
+  for x being FinSequence of REAL holds
+    mlt((len x|->1),x) = x;
+
+theorem :: MATRPROB:33
+  for x,y being FinSequence of REAL st
+    (for i st i in dom x holds x.i >= 0) &
+    (for i st i in dom y holds y.i >= 0) holds
+      for k st k in dom mlt(x,y) holds (mlt(x,y)).k >= 0;
+
+theorem :: MATRPROB:34
+  for i for e1,e2 being Element of i-tuples_on REAL
+    for f1,f2 being Element of i-tuples_on the carrier of F_Real
+      st e1 = f1 & e2 = f2 holds mlt(e1,e2) = mlt(f1,f2);
+
+theorem :: MATRPROB:35
+  for e1,e2 being FinSequence of REAL
+    for f1,f2 being FinSequence of F_Real
+      st len e1 = len e2 & e1 = f1 & e2 = f2 holds
+        mlt(e1,e2) = mlt(f1,f2);
+
+theorem :: MATRPROB:36
+  for e being FinSequence of REAL
+    for f being FinSequence of F_Real st e = f holds
+      Sum e = Sum f;
+
+notation let e1,e2 be FinSequence of REAL;
+  synonym e1 "*" e2 for |( e1,e2 )|;
+end;
+
+theorem :: MATRPROB:37
+  for i for e1,e2 being Element of i-tuples_on REAL
+    for f1,f2 being Element of i-tuples_on the carrier of F_Real
+      st e1 = f1 & e2 = f2 holds
+        e1 "*" e2 = f1 "*" f2;
+
+theorem :: MATRPROB:38
+  for e1,e2 being FinSequence of REAL
+    for f1,f2 being FinSequence of F_Real
+      st len e1 = len e2 & e1 = f1 & e2 = f2 holds
+        e1 "*" e2 = f1 "*" f2;
+
+theorem :: MATRPROB:39
+  for M,M1,M2 being Matrix of REAL st width M1 = len M2 holds
+    M = M1*M2 iff
+      len M = len M1 &
+      width M = width M2 &
+      for i,j st [i,j] in Indices M holds
+        M*(i,j) = Line(M1,i) "*" Col(M2,j);
+
+theorem :: MATRPROB:40
+  for M  being Matrix of REAL for p being FinSequence of REAL st
+    len M = len p holds
+      for i st i in Seg len (p*M) holds (p*M).i = p "*" Col(M,i);
+
+theorem :: MATRPROB:41
+  for M  being Matrix of REAL for p being FinSequence of REAL st
+    width M = len p & width M > 0 holds
+      for i st i in Seg len (M*p) holds (M*p).i = Line(M,i) "*" p;
+
+theorem :: MATRPROB:42
+  for M,M1,M2 being Matrix of REAL st
+    width M1 = len M2 & width M1 > 0 & width M2 > 0 holds
+      M = M1*M2 iff
+        len M = len M1 &
+        width M = width M2 &
+        for i st i in Seg len M holds Line(M,i) = Line(M1,i) * M2;
+
+registration let n,m,k be non empty Nat,
+                 M1 be Matrix of n,k,REAL,
+                 M2 be Matrix of k,m,REAL;
+  cluster M1 * M2 -> Matrix of n,m,REAL;
+end;
+
+definition let x,y be FinSequence of REAL,M be Matrix of REAL;
+  assume len x = len M & len y = width M;
+  func QuadraticForm(x,M,y) -> Matrix of REAL means
+:: MATRPROB:def 4
+    len it = len x & width it = len y &
+    for i,j be Nat st [i,j] in Indices M holds
+      it*(i,j)=(x.i)*(M*(i,j))*(y.j);
+end;
+
+theorem :: MATRPROB:43
+  for x,y being FinSequence of REAL,M being Matrix of REAL st
+    len x = len M & len y = width M & len x > 0 & len y > 0 holds
+      (QuadraticForm(x,M,y))@ = QuadraticForm(y,M@,x);
+
+theorem :: MATRPROB:44
+  for x,y being FinSequence of REAL,M being Matrix of REAL st
+    len x = len M & len y = width M & len x>0 & len y>0 holds
+      |(x,M*y)| = SumAll QuadraticForm(x,M,y);
+
+theorem :: MATRPROB:45
+  for x being FinSequence of REAL holds
+    |(x,(len x |-> 1))| = Sum x;
+
+theorem :: MATRPROB:46
+  for x,y being FinSequence of REAL,M being Matrix of REAL st
+    len x = len M & len y = width M & len x>0 & len y>0 holds
+      |(x*M,y)| = SumAll QuadraticForm(x,M,y);
+
+theorem :: MATRPROB:47
+  for x,y being FinSequence of REAL,M being Matrix of REAL st
+    len x = len M & len y = width M & len x>0 & len y>0 holds
+       |((x*M),y)| = |(x,(M*y))|;
+
+theorem :: MATRPROB:48
+  for x,y being FinSequence of REAL,M being Matrix of REAL st
+    len y=len M & len x =width M & len x>0 & len y>0 holds
+      |((M*x),y)| = |(x,(M@*y))|;
+
+theorem :: MATRPROB:49
+  for x,y being FinSequence of REAL,M being Matrix of REAL st
+    len y=len M & len x =width M & len x>0 & len y>0 holds
+      |(x,(y*M))| = |((x*M@),y)|;
+
+theorem :: MATRPROB:50
+  for x being FinSequence of REAL,M being Matrix of REAL st
+    len x = len M & x = len x |-> 1 holds
+      for k st k in Seg len(x*M) holds (x*M).k = Sum Col(M,k);
+
+theorem :: MATRPROB:51
+  for x being FinSequence of REAL,M being Matrix of REAL st
+    len x = width M & width M > 0 & x = (len x |-> 1) holds
+      for k st k in Seg len(M*x) holds (M*x).k = Sum Line(M,k);
+
+theorem :: MATRPROB:52
+  for n being non empty Nat ex P being FinSequence of REAL st
+    len P = n & (for i st i in dom P holds P.i >= 0) & Sum P = 1;
+
+definition let p be FinSequence of REAL;
+  attr p is ProbFinS means
+:: MATRPROB:def 5
+    (for i st i in dom p holds p.i >= 0) & Sum p = 1;
+end;
+
+registration
+  cluster non empty ProbFinS FinSequence of REAL;
+end;
+
+theorem :: MATRPROB:53
+  for p being non empty ProbFinS FinSequence of REAL holds
+    for k st k in dom p holds p.k <= 1;
+
+theorem :: MATRPROB:54
+  for M being non empty-yielding Matrix of D holds
+    1<=len M & 1<=width M;
+
+definition let M be Matrix of REAL;
+  attr M is m-nonnegative means
+:: MATRPROB:def 6
+    for i,j st [i,j] in Indices M holds M*(i,j) >= 0;
+end;
+
+definition let M be Matrix of REAL;
+  attr M is with_sum=1 means
+:: MATRPROB:def 7
+    SumAll M = 1;
+end;
+
+definition let M be Matrix of REAL;
+  attr M is Joint_Probability means
+:: MATRPROB:def 8
+    M is m-nonnegative with_sum=1;
+end;
+
+registration
+  cluster Joint_Probability -> m-nonnegative with_sum=1 Matrix of REAL;
+  cluster m-nonnegative with_sum=1 -> Joint_Probability Matrix of REAL;
+end;
+
+theorem :: MATRPROB:55
+  for n,m being non empty Nat holds ex M be Matrix of n,m,REAL st
+    M is m-nonnegative & SumAll M = 1;
+
+registration
+  cluster non empty-yielding Joint_Probability Matrix of REAL;
+end;
+
+registration let n, m be non empty Nat;
+             let D be non empty set;
+             let M be Matrix of n,m,D;
+  cluster M@ -> Matrix of m,n,D;
+end;
+
+theorem :: MATRPROB:56
+  for M being non empty-yielding Joint_Probability Matrix of REAL holds
+    M@ is non empty-yielding Joint_Probability Matrix of REAL;
+
+theorem :: MATRPROB:57
+  for M being non empty-yielding Joint_Probability Matrix of REAL holds
+    for i,j st [i,j] in Indices M holds M*(i,j) <= 1;
+
+definition let M be Matrix of REAL;
+  attr M is with_line_sum=1 means
+:: MATRPROB:def 9
+    for k st k in dom M holds Sum (M.k) = 1;
+end;
+
+theorem :: MATRPROB:58
+  for n,m being non empty Nat holds ex M being Matrix of n,m,REAL st
+    M is m-nonnegative with_line_sum=1;
+
+definition let M be Matrix of REAL;
+  attr M is Conditional_Probability means
+:: MATRPROB:def 10
+    M is m-nonnegative with_line_sum=1;
+end;
+
+registration
+  cluster Conditional_Probability -> m-nonnegative with_line_sum=1
+    Matrix of REAL;
+  cluster m-nonnegative with_line_sum=1 -> Conditional_Probability
+    Matrix of REAL;
+end;
+
+registration
+  cluster non empty-yielding Conditional_Probability Matrix of REAL;
+end;
+
+theorem :: MATRPROB:59
+  for M being non empty-yielding Conditional_Probability Matrix of REAL holds
+    for i,j st [i,j] in Indices M holds M*(i,j) <= 1;
+
+theorem :: MATRPROB:60
+  for M being non empty-yielding Matrix of REAL holds
+    M is non empty-yielding Conditional_Probability Matrix of REAL iff
+      for i st i in dom M holds
+        Line(M,i) is non empty ProbFinS FinSequence of REAL;
+
+theorem :: MATRPROB:61
+  for M being non empty-yielding with_line_sum=1 Matrix of REAL holds
+    SumAll M = len M;
+
+notation let M be Matrix of REAL;
+  synonym Row_Marginal M for LineSum M;
+  synonym Column_Marginal M for ColSum M;
+end;
+
+registration let M be non empty-yielding Joint_Probability Matrix of REAL;
+  cluster Row_Marginal M -> non empty ProbFinS;
+  cluster Column_Marginal M -> non empty ProbFinS;
+end;
+
+registration let M be non empty-yielding Matrix of REAL;
+  cluster M@ -> non empty-yielding;
+end;
+
+registration let M be non empty-yielding Joint_Probability Matrix of REAL;
+  cluster M@ -> Joint_Probability;
+end;
+
+theorem :: MATRPROB:62
+  for p being non empty ProbFinS FinSequence of REAL
+    for P being non empty-yielding Conditional_Probability Matrix of REAL st
+      len p = len P holds
+      p * P is non empty ProbFinS FinSequence of REAL & len (p * P) = width P;
+
+theorem :: MATRPROB:63
+  for P1, P2 being non empty-yielding Conditional_Probability
+    Matrix of REAL st width P1 = len P2 holds
+      P1 * P2 is non empty-yielding Conditional_Probability Matrix of REAL &
+      len (P1 * P2) = len P1 & width (P1 * P2) = width P2;
+

@@ -107,8 +107,6 @@ end;
 
 Lm1: for a,b being real number st a>=0 & b>=0 holds a+b>=0 by XREAL_1:35;
 
-Lm2: for a,b being real number st a>0 & b>=0 holds a+b>0 by XREAL_1:36;
-
 canceled 2;
 
 theorem Th7: for f being FinSequence st rng f={x,y} & len f=2
@@ -217,44 +215,9 @@ proof
   .=-q by EUCLID:52;
 end;
 
-theorem Th14:
+theorem
 for P being Subset of TOP-REAL n st P is convex
- holds P is connected
-proof let P be Subset of TOP-REAL n; assume that
-A1:for w3,w4 being Point of TOP-REAL n
-         st w3 in P & w4 in P holds LSeg(w3,w4) c= P;
-         for w1,w2 being Point of TOP-REAL n st w1 in P & w2 in P & w1<>w2
-       ex h being Function of I[01],(TOP-REAL n)|P st h is continuous
-                        & w1=h.0 & w2=h.1
-   proof
-    let w1,w2 be Point of TOP-REAL n;
-    assume A2:w1 in P & w2 in P & w1<>w2;
-    then A3: LSeg(w1,w2) c= P by A1;
-         LSeg(w1,w2) is_an_arc_of w1,w2 by A2,TOPREAL1:15;
-    then consider f being Function of I[01], (TOP-REAL n)|LSeg(w1,w2) such that
-A4: f is_homeomorphism & f.0 = w1 & f.1 = w2 by TOPREAL1:def 2;
-    A5:f is continuous by A4,TOPS_2:def 5;
-    A6: rng f = [#]((TOP-REAL n)|LSeg(w1,w2)) by A4,TOPS_2:def 5;
-    then A7: rng f c= P by A3,PRE_TOPC:def 10;
-    then [#]((TOP-REAL n)|LSeg(w1,w2)) c= [#]((TOP-REAL n)|P)
-              by A6,PRE_TOPC:def 10;
-    then [#]((TOP-REAL n)|LSeg(w1,w2))
-          c=the carrier of ((TOP-REAL n)|P);
-    then the carrier of ((TOP-REAL n)|LSeg(w1,w2))
-       c= the carrier of ((TOP-REAL n)|P);
-    then A8:(TOP-REAL n)|LSeg(w1,w2)
-           is SubSpace of (TOP-REAL n)|P by TOPMETR:4;
-         dom f=[.0 qua Real,1 qua Real.] by BORSUK_1:83,FUNCT_2:def 1;
-    then reconsider g=f as Function of [.0 qua Real,1 qua Real.],P
-                                  by A7,FUNCT_2:4;
-          the carrier of (TOP-REAL n)|P = P by PRE_TOPC:29;
-    then reconsider gt=g as Function of I[01],(TOP-REAL n)|P
-      by BORSUK_1:83;
-         gt is continuous by A5,A8,TOPMETR:7;
-    hence thesis by A4;
-   end;
-   hence thesis by JORDAN1:5;
-end;
+ holds P is connected by JORDAN1:9;
 
 theorem Th15:for G being non empty TopSpace,
 P being Subset of G,A being Subset of G,
@@ -371,8 +334,7 @@ A2: B is_outside_component_of A iff
      given C being Subset of ((TOP-REAL n)|(A`)) such that
      A5:C=B & C is_a_component_of ((TOP-REAL n)|(A`)) &
        C is not bounded Subset of Euclid n;
-     not B is bounded Subset of Euclid n by A5;
-     then A6:not B is Bounded by Def2;
+     A6:not B is Bounded by Def2,A5;
           B is_a_component_of A` by A5,CONNSP_1:def 6;
     hence thesis by A6,Def4;
 end;
@@ -444,7 +406,7 @@ end;
 
 theorem Th22:  [#](TOP-REAL n) is connected
 proof [#](TOP-REAL n) is convex by Th21;
- hence [#](TOP-REAL n) is connected by Th14;
+ hence [#](TOP-REAL n) is connected by JORDAN1:9;
 end;
 
 registration let n;
@@ -536,9 +498,7 @@ proof let A be Subset of TOP-REAL n,
  let x;assume A2:x in B;
         B in {B2 where B2 is Subset of TOP-REAL n:
         B2 is_inside_component_of A} by A1;
-   then x in union{B2 where B2 is Subset of TOP-REAL n:
-        B2 is_inside_component_of A} by A2,TARSKI:def 4;
-  hence x in BDD A;
+  hence x in BDD A by A2,TARSKI:def 4;
 end;
 
 theorem Th27: for A being Subset of TOP-REAL n,
@@ -550,9 +510,7 @@ proof let A be Subset of TOP-REAL n,
   let x;assume A2:x in B;
         B in {B2 where B2 is Subset of TOP-REAL n:
         B2 is_outside_component_of A} by A1;
-   then x in union{B2 where B2 is Subset of TOP-REAL n:
-        B2 is_outside_component_of A} by A2,TARSKI:def 4;
-  hence x in UBD A;
+  hence x in UBD A by A2,TARSKI:def 4;
 end;
 
 theorem Th28:for A being Subset of TOP-REAL n holds
@@ -560,9 +518,8 @@ theorem Th28:for A being Subset of TOP-REAL n holds
 proof let A be Subset of TOP-REAL n;
  assume A1:(BDD A) /\ (UBD A) <>{};
    consider x being Element of (BDD A) /\ (UBD A);
-   A2:x in BDD A & x in UBD A by A1,XBOOLE_0:def 3;
-   then x in union{B where B is Subset of TOP-REAL n:
-           B is_inside_component_of A};
+   x in union{B where B is Subset of TOP-REAL n:
+           B is_inside_component_of A} by A1,XBOOLE_0:def 3;
    then consider y being set such that
    A3:x in y & y in {B where B is Subset of TOP-REAL n:
            B is_inside_component_of A} by TARSKI:def 4;
@@ -572,7 +529,7 @@ proof let A be Subset of TOP-REAL n;
    A5: C=B & C is_a_component_of ((TOP-REAL n)|(A`)) &
      C is bounded Subset of Euclid n by A4,Th17;
         x in union{B2 where B2 is Subset of TOP-REAL n:
-           B2 is_outside_component_of A} by A2;
+           B2 is_outside_component_of A} by A1,XBOOLE_0:def 3;
    then consider y2 being set such that
    A6:x in y2 & y2 in {B2 where B2 is Subset of TOP-REAL n:
            B2 is_outside_component_of A} by TARSKI:def 4;
@@ -639,14 +596,6 @@ reserve u for Point of Euclid n;
 
 canceled;
 
-Lm3: for G being non empty TopSpace,
-   w1,w2,w3 being Point of G,
-   h1,h2 being Function of I[01],G
-   st h1 is continuous & w1=h1.0 & w2=h1.1 &
-  h2 is continuous & w2=h2.0 & w3=h2.1 holds
-  ex h3 being Function of I[01],G st h3 is continuous & w1=h3.0 & w3=h3.1 &
-  rng h3 c= (rng h1) \/ (rng h2) by BORSUK_2:16;
-
 theorem Th33: for P being Subset of TOP-REAL n
  st P=REAL n holds P is connected
  proof let P be Subset of TOP-REAL n;
@@ -659,7 +608,7 @@ theorem Th33: for P being Subset of TOP-REAL n
    hence LSeg(p1,p2) c= P by A1;
   end;
   then P is convex by JORDAN1:def 1;
-  hence P is connected by Th14;
+  hence P is connected by JORDAN1:9;
  end;
 
 definition let n;
@@ -728,16 +677,13 @@ theorem Th39: for W being Subset of Euclid n
      A2:0<r & for x,y being Point of Euclid n st
      x in W & y in W holds dist(x,y)<=r by TBSP_1:def 9;
      reconsider x0=(r+1)*(1.REAL n) as Point of Euclid n by TOPREAL3:13;
-     A3:x0 in W by A1;
      reconsider y0=0.REAL n as Point of Euclid n;
-     y0 in W by A1;
-     then dist(x0,y0)<=r by A2,A3;
+     dist(x0,y0)<=r by A2,A1;
      then |.(r+1)*(1.REAL n) -0.REAL n.|<=r by JGRAPH_1:45;
      then |.(r+1)*(1.REAL n).|<=r by Th13;
      then abs(r+1)*|.(1.REAL n).|<=r by TOPRNS_1:8;
      then A4:abs(r+1)*(sqrt n)<=r by Th37;
-          r+1>r by XREAL_1:31;
-     then A5:r+1>0 by A2;
+     A5:r+1>0 by A2,XREAL_1:31;
      then A6:(r+1)*(sqrt n)<=r by A4,ABSVALUE:def 1;
           (sqrt 1)<=(sqrt n) by A1,SQUARE_1:94;
      then (r+1)*1<=(r+1)*(sqrt n) by A5,XREAL_1:66,SQUARE_1:83;
@@ -798,7 +744,7 @@ end;
     then A10:0<r by TOPRNS_1:26;
     reconsider o=0.REAL n as Point of Euclid n;
     set R0=r+r;
-    A11:0<R0 by A10,Lm2;
+    A11:0<R0 by A10,XREAL_1:36;
          for x,y being Point of (Euclid n) st x in C & y in C holds dist(x,y)
 <=
 R0
@@ -846,9 +792,8 @@ proof assume A1:n>=1;
     A5:[#]((TOP-REAL n)|A`) is_a_component_of (TOP-REAL n)|A` by A3,Th23;
          now assume A6:for D being Subset of Euclid n
       st D=[#]((TOP-REAL n)|A`) holds D is bounded;
-           [#]((TOP-REAL n)|A`)=the carrier of TOP-REAL n by A3;
-      then [#]((TOP-REAL n)|A`) c= the carrier of Euclid n by TOPREAL3:13;
-     then reconsider D1=[#]((TOP-REAL n)|A`) as Subset of Euclid n;
+     reconsider D1=[#]((TOP-REAL n)|A`) as Subset of Euclid n
+       by TOPREAL3:13,A3;
            D1 is bounded by A6;
       then [#](TOP-REAL n) is Bounded by A3,Def2;
      hence contradiction by A1,Th41;
@@ -859,9 +804,7 @@ proof assume A1:n>=1;
     then x in [#](TOP-REAL n) & [#](TOP-REAL n) in
       {B2 where B2 is Subset of TOP-REAL n:
          B2 is_outside_component_of {}(TOP-REAL n)};
-    then x in union{B2 where B2 is Subset of TOP-REAL n:
-         B2 is_outside_component_of {}(TOP-REAL n)} by TARSKI:def 4;
-   hence x in UBD {}(TOP-REAL n);
+   hence x in UBD {}(TOP-REAL n) by TARSKI:def 4;
 end;
 
 theorem Th43:for w1,w2,w3 being Point of TOP-REAL n,
@@ -1061,11 +1004,10 @@ TOPREAL1:def 2;
     then A6: rng f c= P by A1,PRE_TOPC:def 10;
     then [#]((TOP-REAL n)|LSeg(w1,w2)) c= [#]((TOP-REAL n)|P)
               by A5,PRE_TOPC:def 10;
-    then [#]((TOP-REAL n)|LSeg(w1,w2))
-          c=the carrier of ((TOP-REAL n)|P);
     then the carrier of ((TOP-REAL n)|LSeg(w1,w2))
        c= the carrier of ((TOP-REAL n)|P);
-    then A7:(TOP-REAL n)|LSeg(w1,w2)
+    then
+    A7:(TOP-REAL n)|LSeg(w1,w2)
            is SubSpace of (TOP-REAL n)|P by TOPMETR:4;
          dom f= ([.0 qua Real ,1 qua Real.]) by BORSUK_1:83,FUNCT_2:def 1;
     then reconsider g=f as Function of ([.0 qua Real,1 qua Real.]),P
@@ -1084,11 +1026,10 @@ TOPREAL1:def 2;
     then A11: rng f2 c= P by A1,PRE_TOPC:def 10;
     then [#]((TOP-REAL n)|LSeg(w2,w3)) c= [#]((TOP-REAL n)|P)
               by A10,PRE_TOPC:def 10;
-    then [#]((TOP-REAL n)|LSeg(w2,w3))
-          c=the carrier of ((TOP-REAL n)|P);
     then the carrier of ((TOP-REAL n)|LSeg(w2,w3))
        c= the carrier of ((TOP-REAL n)|P);
-    then A12:(TOP-REAL n)|LSeg(w2,w3)
+    then
+    A12:(TOP-REAL n)|LSeg(w2,w3)
            is SubSpace of (TOP-REAL n)|P by TOPMETR:4;
          dom f2=[.0 qua Real,1 qua Real.] by BORSUK_1:83,FUNCT_2:def 1;
     then reconsider g2=f2 as Function of ([.0 qua Real,1 qua Real.]),P
@@ -1102,7 +1043,7 @@ TOPREAL1:def 2;
          gt is continuous & w1'=gt.0 & w2'=gt.1 by A3,A4,A7,TOPMETR:7;
    then ex h being Function of I[01],(TOP-REAL n)|Y st h is continuous
        & w1'=h.0 & w3'=h.1 & rng h c= (rng gt) \/ (rng gt2)
-                        by A8,A13,Lm3;
+                        by A8,A13,BORSUK_2:16;
   hence ex h being Function of I[01],(TOP-REAL n)|P st h is continuous
                         & w1=h.0 & w3=h.1;
   end;
@@ -1120,7 +1061,8 @@ TOPREAL1:def 2;
           c=the carrier of ((TOP-REAL n)|P);
     then the carrier of ((TOP-REAL n)|LSeg(w1,w3))
        c= the carrier of ((TOP-REAL n)|P);
-    then A19:(TOP-REAL n)|LSeg(w1,w3)
+    then
+    A19:(TOP-REAL n)|LSeg(w1,w3)
            is SubSpace of (TOP-REAL n)|P by TOPMETR:4;
          dom f=[.0 qua Real ,1 qua Real.] by BORSUK_1:83,FUNCT_2:def 1;
     then reconsider g=f as Function of ([.0 qua Real,1 qua Real.]),P
@@ -1152,7 +1094,8 @@ TOPREAL1:def 2;
           c=the carrier of ((TOP-REAL n)|P);
     then the carrier of ((TOP-REAL n)|LSeg(w1,w3))
        c= the carrier of ((TOP-REAL n)|P);
-    then A25:(TOP-REAL n)|LSeg(w1,w3)
+    then
+    A25:(TOP-REAL n)|LSeg(w1,w3)
            is SubSpace of (TOP-REAL n)|P by TOPMETR:4;
          dom f=[.0 qua Real,1 qua Real.] by BORSUK_1:83,FUNCT_2:def 1;
     then reconsider g=f as Function of [.0 qua Real,1 qua Real.],P
@@ -1207,7 +1150,8 @@ TOPREAL1:def 2;
           c=the carrier of ((TOP-REAL n)|P);
     then the carrier of ((TOP-REAL n)|LSeg(w3,w4))
        c= the carrier of ((TOP-REAL n)|P);
-    then A7:(TOP-REAL n)|LSeg(w3,w4)
+    then
+    A7:(TOP-REAL n)|LSeg(w3,w4)
            is SubSpace of (TOP-REAL n)|P by TOPMETR:4;
          dom f=[.0 qua Real,1 qua Real.] by BORSUK_1:83,FUNCT_2:def 1;
     then reconsider g=f as Function of [.0 qua Real,1 qua Real.],P
@@ -1220,7 +1164,8 @@ TOPREAL1:def 2;
     then reconsider w1'=w1,w3'=w3,w4'=w4 as Point of (TOP-REAL n)|P by A1;
          h2 is continuous & w1'=h2.0 & w3'=h2.1 by A2;
    then ex h being Function of I[01],(TOP-REAL n)|Y st h is continuous
-          & w1'=h.0 & w4'=h.1 & rng h c= (rng h2) \/ (rng gt) by A3,A8,Lm3;
+          & w1'=h.0 & w4'=h.1 & rng h c= (rng h2) \/ (rng gt)
+           by A3,A8,BORSUK_2:16;
    hence thesis;
    end;
    suppose w3=w4;
@@ -1272,7 +1217,8 @@ proof let w1,w2 be Point of TOP-REAL n;
       then w2=((-s)"*(1-s))*w1 by EUCLID:33;
      hence contradiction by A1;
     end;
-    suppose -s=0; then 1+-s=1+0; then 1-s=1;
+    suppose -s=0;
+      then 1-s=1;
       then (-s)*w2=w1 by A3,EUCLID:33;
      hence contradiction by A1;
 end;
@@ -1318,8 +1264,7 @@ A4:  for x being set holds x in (dist_min(P0)).:(Q) iff x=(dist_min(P0)).o
                        by A8,A9,SEQ_4:22;
   then A10:dist(x1,x2)=(dist_min(P)).(0.REAL n) by A3,WEIERSTR:def 9;
   A11:x2=0.REAL n by A3,TARSKI:def 1;
-       x1 in P1 by A3;
-  then reconsider w01=x1 as Point of TOP-REAL n;
+  reconsider w01=x1 as Point of TOP-REAL n by A3;
   A12: |.w01.|=|.w01-0.REAL n.| by Th13 .=dist(x1,x2) by A11,JGRAPH_1:45;
   A13: |.w01.|>=0 by TOPRNS_1:26;
        |.w01.| <> 0 by A1,A3,TOPRNS_1:25;
@@ -1488,9 +1433,8 @@ then A30:   |.w5.| >=|.w0.| by Th13;
         end;
        hence |.(1-r)*w1 + r*w2.|>a;
        end;
-       case A37:a<0;
-            |.(1-r)*w1 + r*w2.|>=0 by TOPRNS_1:26;
-        hence |.(1-r)*w1 + r*w2.|>a by A37;
+       case a<0;
+        hence |.(1-r)*w1 + r*w2.|>a by TOPRNS_1:26;
        end;
        end;
       hence x in Q by A1,A21;
@@ -1575,9 +1519,8 @@ A51:    a+r>=a+0 by A38,XREAL_1:8;
         end;
        hence |.(1-r)*w4 + r*w3.|>a;
        end;
-       case A55:a<0;
-            |.(1-r)*w4 + r*w3.|>=0 by TOPRNS_1:26;
-        hence |.(1-r)*w4 + r*w3.|>a by A55;
+       case a<0;
+        hence |.(1-r)*w4 + r*w3.|>a by TOPRNS_1:26;
        end;
        end;
       hence x in Q by A1,A38;
@@ -1826,9 +1769,7 @@ theorem Th52:for f being FinSequence of REAL holds f is Element of REAL (len f)
  & f is Point of TOP-REAL (len f)
 proof let f be FinSequence of REAL;
        f is Element of REAL* by FINSEQ_1:def 11;
- then f in { s where s is Element of REAL*: len s = len f };
  then f in ((len f)-tuples_on REAL);
-  then f is Element of REAL (len f);
  hence thesis by EUCLID:25;
 end;
 
@@ -1839,8 +1780,7 @@ proof let x be Element of REAL n,f,g be FinSequence of REAL,r be Real;
   assume A1: f=x & g=r*x;
    then A2:len f=n by FINSEQ_2:109;
    A3:len g=n by A1,FINSEQ_2:109;
-        g=(r multreal)*x by A1;
-   then A4:g=(multreal[;](r,id REAL))*x;
+   A4:g=(multreal[;](r,id REAL))*x by A1;
  set h1= (dom (id REAL)) --> r;
  reconsider h2= (id REAL) as Function;
   A5:g= (multreal * (<:h1, h2:>))*x by A4,FUNCOP_1:def 5;
@@ -1859,9 +1799,7 @@ A12: dom h1=dom (id REAL) by FUNCOP_1:19 .=REAL by FUNCT_1:34;
      then A13:(<:h1, h2:>).(x.i)=[h1.(x.i),h2.(x.i)] by A10,FUNCT_3:def 8;
      A14:h1.(x.i) = r by A9,FUNCOP_1:13;
      A15:h2.(x.i)=x.i by FUNCT_1:34;
-          (multreal * (<:h1, h2:>)).(x.i)=multreal.((<:h1, h2:>).(x.i))
-                                          by A10,A12,FUNCT_1:23;
-     then g.i=multreal.(r,f.i) by A1,A8,A13,A14,A15;
+     g.i=multreal.(r,f.i) by A1,A8,A13,A14,A15,A10,A12,FUNCT_1:23;
      then g.i=r*(f/.i) by A11,BINOP_2:def 11;
     hence g/.i=r*f/.i by A2,A3,A7,FINSEQ_4:24;
    end;
@@ -1899,7 +1837,6 @@ proof let x be Element of REAL n,f be FinSequence;
       end;
     then f=[:Seg n,{0}:] by ZFMISC_1:def 2;
     then f=(Seg n -->0) by FUNCOP_1:def 2;
-    then x=(n |-> (0 qua Real)) by A1;
    hence contradiction by A1;
 end;
 
@@ -1945,7 +1882,7 @@ proof let x be Element of REAL n;
         A20:g/.1=r*f/.1 by A11,A14,Th53;
              g/.1=g.1 by A9,A14,FINSEQ_4:24;
         then f/.1+1=1 * f/.1 by A19,A20,FINSEQ_1:58;
-        then f/.1+1-f/.1=0; hence contradiction;
+        hence contradiction;
       end;
       suppose A21:x=r*y2;
         A22:g/.i2=g.i2 by A2,A3,A9,FINSEQ_4:24;
@@ -1967,7 +1904,7 @@ proof let x be Element of REAL n;
         A30:f/.1=r*g/.1 by A9,A21,A24,Th53;
              g/.1=g.1 by A9,A24,FINSEQ_4:24;
         then f/.1+1=1 * f/.1 by A29,A30,FINSEQ_1:58;
-        then f/.1+1-f/.1=0; hence contradiction;
+        hence contradiction;
     end;
     end;
    hence ex y being Element of REAL n st (not ex r being Real st
@@ -2002,8 +1939,7 @@ A35:1+1-1<=len f-1 by A1,A3,XREAL_1:11;
         A47:g/.len f=g.len f by A39,A44,FINSEQ_4:24;
              g.len f= g.(len f -1+1)
         .=f/.len f+1 by A38,FINSEQ_1:59;
-        then f/.len f+1-f/.len f=0 by A45,A46,A47;
-       hence contradiction;
+       hence contradiction by A45,A46,A47;
       end;
       suppose A48:x=r*y2;
         A49:g/.i2=g.i2 by A2,A3,A39,FINSEQ_4:24;
@@ -2017,8 +1953,7 @@ A35:1+1-1<=len f-1 by A1,A3,XREAL_1:11;
         A54:g/.len f=g.len f by A39,A51,FINSEQ_4:24;
              g.len f=g.(len f-1+1)
         .=f/.len f+1 by A38,FINSEQ_1:59;
-        then f/.len f+1-f/.len f=0 by A52,A53,A54;
-     hence contradiction;
+     hence contradiction by A52,A53,A54;
     end;
     end;
    hence thesis;
@@ -2048,7 +1983,7 @@ proof let a be Real,
         now assume A5:w1=0.REAL n;
           ex q st q=w1 & (|.q.|)>a by A1;
     hence contradiction by A3,A5,TOPRNS_1:24;
-   end; then y1<>0*n;
+   end;
    then consider y being Element of REAL n such that
    A6:  (not ex r being Real st y=r*y1 or y1=r*y) by A1,Th55;
    set y4=((a+1)/|.y.|)*y;
@@ -2197,7 +2132,7 @@ proof let a be Real,
      then |.w1.|=0 by TOPRNS_1:24;
      then w1 in {q : (|.q.|) < a } by A3;
     hence contradiction by A1,XBOOLE_0:def 4;
-   end; then y1<>0*n;
+   end;
    then consider y being Element of REAL n such that
    A4:  (not ex r being Real st y=r*y1 or y1=r*y) by A1,Th55;
    set y4=(a/|.y.|)*y;
@@ -2511,8 +2446,7 @@ then A17:     abs(a+r+1)*1<=abs(a+r+1)*sqrt n by A16,XREAL_1:66,SQUARE_1:83;
     A23:q=d & (|.q.|) < a;
    thus contradiction by A20,A23,TOPRNS_1:26;
   end;
-  then P=the carrier of TOP-REAL n by A1,EUCLID:25;
-  then P=[#](TOP-REAL n);
+  then P=[#](TOP-REAL n) by A1,EUCLID:25;
  hence not P is Bounded by A1,Th41;
 end;
 end;
@@ -2613,7 +2547,7 @@ theorem Th65: for a being Real,P being Subset of TOP-REAL 1
 proof let a be Real,P be Subset of TOP-REAL 1;
  assume P={q where q is Point of TOP-REAL 1 : ex r st q=<*r*> & r > a };
   then P is convex by Th63;
- hence thesis by Th14;
+ hence thesis by JORDAN1:9;
 end;
 
 theorem Th66: for a being Real,P being Subset of TOP-REAL 1
@@ -2622,7 +2556,7 @@ theorem Th66: for a being Real,P being Subset of TOP-REAL 1
 proof let a be Real,P be Subset of TOP-REAL 1;
  assume P={q where q is Point of TOP-REAL 1 : ex r st q=<*r*> & r < -a };
   then P is convex by Th64;
- hence P is connected by Th14;
+ hence P is connected by JORDAN1:9;
 end;
 
 theorem Th67: for W being Subset of Euclid 1,a being Real,
@@ -2702,7 +2636,8 @@ then A6:    -a> -(3*(r+abs(a))) by XREAL_1:26;
        .=<*((-3*(r+abs(a)))*1)*> by RVSUM_1:69;
 then A7:    (-3*(r+abs(a)))*(1.REAL 1) in {q where q is Point of TOP-REAL 1:
       ex r st q=<*r*> & r< -a } by A6;
-   then reconsider z1=(-3*(r+abs(a)))*(1.REAL 1) as Point of Euclid 1 by A1;
+   then
+   reconsider z1=(-3*(r+abs(a)))*(1.REAL 1) as Point of Euclid 1 by A1,A6;
        A8:a<=abs(a) by ABSVALUE:11;
             0+abs(a)<r+abs(a) by A2,XREAL_1:8;
        then a<r+abs(a) by A8,XXREAL_0:2;
@@ -2874,7 +2809,6 @@ then A2:W <> {}Euclid n;
 A3: W /\ Q = {} by A1,XBOOLE_0:def 7;
         now assume Q`={};
      then Q=({}(the carrier of TOP-REAL n))`;
-     then Q=[#](the carrier of TOP-REAL n);
      then Q=the carrier of TOP-REAL n;
     hence contradiction by A1,A2,A3,XBOOLE_1:28;
    end;
@@ -2950,8 +2884,7 @@ proof let A be Subset of TOP-REAL n;
  suppose A={};
 then A5: A = {}(Euclid n);
    reconsider A1=A as Subset of Euclid n by TOPREAL3:13;
-        A1 is bounded by A5;
- hence thesis by Def2;
+ thus thesis by Def2,A5;
 end;
 end;
 
@@ -2973,8 +2906,7 @@ proof let A be Subset of TOP-REAL n;
        r<=abs(r) by ABSVALUE:11;
   then r<=|.r*(1.REAL n).| by A3,A5,XXREAL_0:2;
   then not r*(1.REAL n) in A by A2;
-  then r*(1.REAL n) in (the carrier of TOP-REAL n)\A by XBOOLE_0:def 4;
- hence A` <>{};
+ hence A` <>{} by XBOOLE_0:def 4;
 end;
 
 theorem Th75: for r being Real holds
@@ -3004,13 +2936,12 @@ proof let r be Real;
         thus |.q.|<r by A4;
        end;
      then C is Bounded by Th40;
-     then C is bounded Subset of Euclid n by Def2;
-    hence A is bounded by A3;
+    hence A is bounded by A3,Def2;
 end;
 
 theorem Th76:
 for A being Subset of TOP-REAL n st n>=2 & A is Bounded
- ex B being Subset of TOP-REAL n st B is_outside_component_of A & B=UBD A
+  holds UBD A is_outside_component_of A
 proof let A be Subset of TOP-REAL n;
   assume A1: n>=2 & A is Bounded;
   then reconsider C=A as bounded Subset of Euclid n by Def2;
@@ -3051,7 +2982,6 @@ A9:  not z in {q where q is Point of TOP-REAL n:(|.q.|) < R0 }
       then r+dist(o,x0)+1<=dist(o,x0)+r by A11,XXREAL_0:2;
       then r+dist(o,x0)+1-(r+dist(o,x0))<=r+dist(o,x0)-(r+dist(o,x0))
                              by XREAL_1:11;
-      then 1<=0;
      hence contradiction;
     end;
     then A14:P1 is_outside_component_of A by A6,Th71;
@@ -3077,8 +3007,7 @@ A9:  not z in {q where q is Point of TOP-REAL n:(|.q.|) < R0 }
       A22:now assume A23:W /\ C2={};
         A24:C2 c= {q : (|.q.|) < R0 }
          proof let x8 be set;assume A25:x8 in C2;
-          then x8 in the carrier of TOP-REAL n by A18;
-          then A26:x8 in REAL n by EUCLID:25;
+          then A26:x8 in REAL n by EUCLID:25,A18;
           assume not x8 in {q : (|.q.|) < R0 };
             then x8 in W by A26,XBOOLE_0:def 4;
            hence contradiction by A23,A25,XBOOLE_0:def 3;
@@ -3106,9 +3035,7 @@ A9:  not z in {q where q is Point of TOP-REAL n:(|.q.|) < R0 }
          hence z in D2 by A19;
         end;
             the carrier of Euclid n=the carrier of TOP-REAL n by TOPREAL3:13;
-       then (the carrier of Euclid n)\D2 c= (the carrier of TOP-REAL n)\A
-                           by A28,XBOOLE_1:34;
-       then D2` c= (the carrier of TOP-REAL n)\A;
+       then D2` c= (the carrier of TOP-REAL n)\A by A28,XBOOLE_1:34;
        then A35: D2` c= A`;
   A36:  W c= D2` by A20,SUBSET_1:43;
        A37:P c= A` by A7,SUBSET_1:43;
@@ -3120,8 +3047,7 @@ A9:  not z in {q where q is Point of TOP-REAL n:(|.q.|) < R0 }
 A40:   W /\ D2` /\ C2 <>{} by A22,A36,XBOOLE_1:28;
             P /\ D2` c= (P /\ A`) by A35,XBOOLE_1:26;
        then P /\ D2` /\ C2 c= (P /\ A`) /\ C2 by XBOOLE_1:26;
-      then (P /\ A`) /\ C2 <>{} by A40,XBOOLE_1:3;
-      then Down(P,A`)/\ C2 <>{};
+      then Down(P,A`)/\ C2 <>{} by A40,XBOOLE_1:3;
       then A41:Down(P,A`) meets C2 by XBOOLE_0:def 7;
     reconsider G=A` as non empty Subset of TOP-REAL n
       by A1,A2,Th74;
@@ -3129,9 +3055,7 @@ A40:   W /\ D2` /\ C2 <>{} by A22,A36,XBOOLE_1:28;
       then C2 c= skl (Down(P,A`)) by A21,A39,A41,CONNSP_3:16;
      hence z in P1 by A16,A17,A18;
     end;
-    then P1=UBD A by A15,XBOOLE_0:def 10;
-   hence ex B being Subset of TOP-REAL n st
-    B is_outside_component_of A & B=UBD A by A14;
+   hence UBD A is_outside_component_of A by A14,A15,XBOOLE_0:def 10;
   end;
   suppose A42:C={};
     then A43:A={}(TOP-REAL n);
@@ -3196,7 +3120,6 @@ proof let a be Real,
       hence x in P by A1;
       end;
       suppose 1-r<=0; then 1-r+r=0+r by A9,XXREAL_0:1;
-       then 1=r;
        then A14:r>0;
        A15:abs(1-r)*|.p1.|<=abs(1-r)*a by A3,A9,A10,XREAL_1:66;
        A16: |.r*p2.|=abs(r)*|.p2.| by TOPRNS_1:8;
@@ -3273,7 +3196,6 @@ proof let a be Real,
       hence x in P by A8;
       end;
       suppose 1-r<=0; then 1-r+r=0+r by A14,XXREAL_0:1;
-       then 1=r;
        then A19:r>0;
        A20:abs(1-r)*|.p-p1.|<=abs(1-r)*a by A5,A14,A15,XREAL_1:66;
        A21: |.r*(p-p2).|=abs(r)*|.p-p2.| by TOPRNS_1:8;
@@ -3297,7 +3219,7 @@ proof let a be Real,
   P be Subset of TOP-REAL n;
   assume P={q : |.q.| < a };
   then P is convex by Th77;
- hence P is connected by Th14;
+ hence P is connected by JORDAN1:9;
 end;
 
 reserve R for Subset of TOP-REAL n;
@@ -3345,7 +3267,7 @@ p in Ball(u,r) & p2 in Ball(u,r);
      A6:rng f2=LSeg(p2,p) by A4,PRE_TOPC:def 10;
     consider h3 being Function of I[01],(TOP-REAL n) such that
     A7: h3 is continuous & p1=h3.0 & p=h3.1 &
-    rng h3 c= rng f \/ rng f2 by A1,A3,A5,Lm3;
+    rng h3 c= rng f \/ rng f2 by A1,A3,A5,BORSUK_2:16;
          rng f \/ rng f2 c= rng f \/ Ball(u,r) by A2,A6,XBOOLE_1:9;
     then rng h3 c= rng f \/ Ball(u,r) by A7,XBOOLE_1:1;
     hence ex h being Function of I[01],TOP-REAL n st h is continuous
@@ -3687,7 +3609,6 @@ proof let A be Subset of TOP-REAL n, a be real number;
     ex r be real number st r>0 & Ball(p,r) c= P1
     proof let p be Point of Euclid n;
     assume p in P1;
-    then p in (the carrier of TOP-REAL n)\A;
       then A2: not p in A by XBOOLE_0:def 4;
       reconsider q1=p as Point of TOP-REAL n by TOPREAL3:13;
       A3: |.q1.|<>a by A1,A2;
@@ -3710,8 +3631,7 @@ proof let A be Subset of TOP-REAL n, a be real number;
              then r1-r1>r1 by XREAL_1:22;
            hence contradiction by A5,REAL_2:127;
           end;
-          then q2 in (the carrier of TOP-REAL n)\A by XBOOLE_0:def 4;
-         hence x in P1;
+         hence x in P1 by XBOOLE_0:def 4;
         end;
        hence ex r be real number st r>0 & Ball(p,r) c= P1 by A6;
       end;
@@ -3732,8 +3652,7 @@ A14,A15,XXREAL_0:2;
              then r1-r1>r1 by XREAL_1:22;
            hence contradiction by A11,REAL_2:127;
           end;
-          then q2 in (the carrier of TOP-REAL n)\A by XBOOLE_0:def 4;
-         hence x in P1;
+         hence x in P1 by XBOOLE_0:def 4;
         end;
        hence ex r be real number st r>0 & Ball(p,r) c= P1 by A12;
       end;
@@ -3790,7 +3709,7 @@ A3: C1 = C & C1 is_a_component_of ((TOP-REAL n)|B)|A by CONNSP_1:def 6;
          then consider x being set such that
          A11:x in Ball(p,r1) & not x in C0 by TARSKI:def 3;
                BL1 is convex by Th78;
-          then BL1 is connected by Th14;
+          then BL1 is connected by JORDAN1:9;
           then BL2 is connected by Th15;
          then A12:BL is connected by Th15;
               p in BL by A9,GOBOARD6:4;
@@ -3959,7 +3878,6 @@ theorem Th95:q=<*r*> implies |.q.|=abs(r)
 proof assume A1:q=<*r*>;
  reconsider xr=<*r*> as Element of REAL 1;
       q is Element of REAL n by EUCLID:25;
- then q is Element of (n-tuples_on REAL);
  then len <*r*> =n by A1,FINSEQ_2:109;
  then n=1 by FINSEQ_1:56;
  then A2: |.q.|=|.xr.| by A1,JGRAPH_1:def 5
@@ -3975,10 +3893,10 @@ then A5: sqr xr=<*(Proj(q,1))^2*> by A4,FINSEQ_1:57;
 hence thesis by A2,A5,FINSOP_1:12;
 end;
 
-theorem    for A being Subset of TOP-REAL n,a being Real
+theorem
+ for A being Subset of TOP-REAL n,a being Real
 st n>=1 & a>0 & A={q: |.q.|=a}
-holds ex B being Subset of TOP-REAL n st
-B is_inside_component_of A & B=BDD A
+holds BDD A is_inside_component_of A
 proof let A be Subset of TOP-REAL n,a be Real;
   assume A1:n>=1 & a>0 & A={q: |.q.|=a};
          {q where q is Point of TOP-REAL n:
@@ -4003,8 +3921,7 @@ proof let A be Subset of TOP-REAL n,a be Real;
            then ex q2 st q2=q & |.q2.|=a by A1;
           hence contradiction by A6;
          end;
-         then x in (the carrier of TOP-REAL n) \A by XBOOLE_0:def 4;
-        hence x in A`;
+        hence x in A` by XBOOLE_0:def 4;
        end;
             |.0.REAL n.|=0 by TOPRNS_1:24;
        then A7:0.REAL n in P by A1;
@@ -4036,8 +3953,7 @@ A14: P c= skl (Down(P,A`)) by A7,A8,A10,A11,CONNSP_3:13;
           A17:p <> q by A1,A15,TOPRNS_1:24;
                D c= the carrier of (TOP-REAL n)|A`;
           then A18:D2 c= A` by PRE_TOPC:29;
-          then D2=D2 /\ A` by XBOOLE_1:28;
-          then A19:D2=Down(D2,A`);
+          then A19:D2=Down(D2,A`) by XBOOLE_1:28;
           reconsider B=A` as non empty Subset of TOP-REAL n
            by A4,A7;
           reconsider RR=(TOP-REAL n)|B as non empty TopSpace;
@@ -4069,8 +3985,7 @@ XBOOLE_0:def 3;
             then A meets A` by XBOOLE_0:def 7;
          hence contradiction by XBOOLE_1:79;
         end;
-        then D2 is bounded Subset of Euclid n by Def2;
-       hence skl Down(P,A`) is bounded Subset of Euclid n;
+       hence skl Down(P,A`) is bounded Subset of Euclid n by Def2;
       end;
    then A26: P1 is_inside_component_of A by A12,Th17;
   A27:P1 c= union{B where B is Subset of TOP-REAL n:
@@ -4101,9 +4016,8 @@ XBOOLE_0:def 3;
        reconsider E=A` as non empty Subset of TOP-REAL n
                                           by A4,A7;
 A34:   p in the carrier of ((TOP-REAL n)|E);
-       then p in (the carrier of TOP-REAL n)\A by A32;
-       then A35:p in (the carrier of TOP-REAL n) & not p in A by XBOOLE_0:def 4
-;
+       then A35:p in (the carrier of TOP-REAL n) & not p in A
+        by XBOOLE_0:def 4,A32;
        reconsider q2=p as Point of TOP-REAL n by A32,A34;
             |.q2.|<>a by A1,A35;
 then A36:   |.q2.|<a or |.q2.|>a by REAL_1:def 5;
@@ -4116,8 +4030,7 @@ then A36:   |.q2.|<a or |.q2.|>a by REAL_1:def 5;
              then ex q2 st q2=q & |.q2.|=a by A1;
             hence contradiction by A38;
            end;
-           then q in (the carrier of TOP-REAL n) \ A by XBOOLE_0:def 4;
-          hence z in A` by A38;
+          hence z in A` by A38,XBOOLE_0:def 4;
          end;
         then reconsider Q={q: |.q.|>a} as
                       Subset of (TOP-REAL n)|A` by PRE_TOPC:29;
@@ -4169,7 +4082,6 @@ then A50:     p in skl Q by A37;
      end;
   then P1=union{B where B is Subset of TOP-REAL n:
            B is_inside_component_of A} by A27,XBOOLE_0:def 10;
-   then P1=BDD A;
  hence ex B being Subset of TOP-REAL n st
    B is_inside_component_of A & B=BDD A by A26;
  end;
@@ -4196,8 +4108,8 @@ then A50:     p in skl Q by A37;
                                           by A4,A7;
 A57:   p in the carrier of ((TOP-REAL n)|E);
        then p in (the carrier of TOP-REAL n)\A by A55;
-       then A58:p in (the carrier of TOP-REAL n) & not p in A by XBOOLE_0:def 4
-;
+       then
+       A58:p in (the carrier of TOP-REAL n) & not p in A by XBOOLE_0:def 4;
        reconsider q2=p as Point of TOP-REAL n
         by A55,A57;
             |.q2.|<>a by A1,A58;
@@ -4205,8 +4117,7 @@ then A59:    |.q2.|<a or |.q2.|>a by REAL_1:def 5;
             now per cases by A59;
        case p in {q: |.q.|>a}; then consider q0 being Point of TOP-REAL n
           such that A60:q0=p & |.q0.|>a;
-                q0 is Element of REAL n by EUCLID:25;
-           then q0 is Element of (n-tuples_on REAL);
+           q0 is Element of (n-tuples_on REAL) by EUCLID:25;
            then consider r0 being Real such that
            A61: q0=<*r0*> by A52,FINSEQ_2:117;
            A62: |.q0.|=abs r0 by A61,Th95;
@@ -4246,8 +4157,7 @@ then A72:          |.q.|=abs(r) by A68,A71,FINSOP_1:12.=r by A67,ABSVALUE:def 1
              then ex q2 st q2=q & |.q2.|=a by A1;
             hence contradiction by A66,A72;
            end;
-           then q in (the carrier of TOP-REAL n) \ A by XBOOLE_0:def 4;
-          hence z in A` by A65;
+          hence z in A` by A65,XBOOLE_0:def 4;
          end;
         then reconsider Q={q:ex r st q=<*r*> & r>a} as
                       Subset of (TOP-REAL n)|A` by PRE_TOPC:29;
@@ -4297,8 +4207,7 @@ then A87:         sqr xr=<*(Proj(q,1))^2*> by A86,FINSEQ_1:57;
                  sqrt (Proj(q,1))^2 =abs(Proj(q,1)) by COMPLEX1:158
             .=abs(r) by A85,FINSEQ_1:57;
             then A88: |.q.|=abs(r) by A84,A87,FINSOP_1:12;
-                 r>0 by A1,A83;
-            then r=abs(r) by ABSVALUE:def 1;
+            r=abs(r) by ABSVALUE:def 1,A1,A83;
            hence z in W2 by A82,A83,A88;
           end;
          then A89: W3 /\ A c= W2 /\ A by XBOOLE_1:26;
@@ -4344,8 +4253,7 @@ ABSVALUE:def 1;
              then ex q2 st q2=q & |.q2.|=a by A1;
             hence contradiction by A98,A104;
            end;
-           then q in (the carrier of TOP-REAL n) \ A by XBOOLE_0:def 4;
-          hence z in A` by A97;
+          hence z in A` by A97,XBOOLE_0:def 4;
          end;
         then reconsider Q={q:ex r st q=<*r*> & r< -a} as
                       Subset of (TOP-REAL n)|A` by PRE_TOPC:29;
@@ -4432,7 +4340,6 @@ then A128:      p in skl Q by A96;
      end;
   then P1=union{B where B is Subset of TOP-REAL n:
            B is_inside_component_of A} by A27,XBOOLE_0:def 10;
-   then P1=BDD A;
  hence ex B being Subset of TOP-REAL n st
    B is_inside_component_of A & B=BDD A by A26;
  end;
@@ -4698,8 +4605,7 @@ A1:for q being Point of TOP-REAL 2 st q in (LeftComp f) holds |.q.|<r by Th40;
    set r1=|. (1/2)*(f/.1+f/.2).|;
    A4:r1>=0 by TOPRNS_1:26;
     A5: r1<r1+r by A2,A3,XREAL_1:31;
-        r1+r<r1+r+1 by XREAL_1:31;
-   then A6:0<r1+r+1 by A4,A5;
+   A6:0<r1+r+1 by A4,A5,XREAL_1:31;
    set q1=|[0,r1+r+1]|+(1/2)*(f/.1+f/.2);
    A7: |.q1.|>=|.(|[0,r1+r+1]|).|-r1 by TOPRNS_1:32;
    set p=|[0,r1+r+1]|;
@@ -5007,7 +4913,6 @@ A3:not LeftComp f is Bounded by Th98;
     hence z in (the carrier of TOP-REAL 2)\(L~f) by A8,XBOOLE_0:def 4;
    end;
   then P /\ ((the carrier of TOP-REAL 2)\(L~f))=P by XBOOLE_1:28;
-  then P /\ (L~f)`=P;
   then A11:P=Down(P,(L~f)`);
   then A12: Down(P,(L~f)`) is connected by A7,Th15;
   consider q3 being Point of TOP-REAL 2 such that
@@ -5127,7 +5032,6 @@ A2 meets V by A3,A4,PRE_TOPC:def 13;
 A5:  z in A` & z in V by XBOOLE_0:3;
          z in [#]G \ A by A5;
     then z in (the carrier of G) \ A;
-    then z in A`;
     then reconsider p=z as Point of G|A` by PRE_TOPC:29;
     reconsider A1=A` as non empty Subset of G by A1;
 A6: G|A1 is non empty;
@@ -5207,15 +5111,12 @@ assume A1: A`<>{};
       D2 is_a_component_of (TOP-REAL 2)|A` by A3;
           A=(A1 \/ A2)` by A3;
      then A5:A=A1` /\ A2` by XBOOLE_1:53;
-          (Cl A1)\ A1 c= (the carrier of (TOP-REAL 2))\ A1 by XBOOLE_1:33;
-     then A6:(Cl A1) \A1 c= A1`;
-          (Cl A2)\ A2 c= (the carrier of (TOP-REAL 2))\ A2 by XBOOLE_1:33;
-     then (Cl A2) \A2 c= A2`;
+     A6:(Cl A1) \A1 c= A1` by XBOOLE_1:33;
+     (Cl A2) \A2 c= A2` by XBOOLE_1:33;
      then A7:(Cl A1) \A1 c= A by A3,A5,A6,XBOOLE_1:19;
           A c= (Cl A1) \ A1
      proof let z be set;assume A8:z in A;
-       then not z in (the carrier of (TOP-REAL 2)) \A by XBOOLE_0:def 4;
-       then not z in A`;
+       then not z in A` by XBOOLE_0:def 4;
        then A9:not (z in A1 or z in A2) by A3,XBOOLE_0:def 2;
             for G being Subset of (TOP-REAL 2) st G is open holds
                         z in G implies (A1 \/ A2) meets G
@@ -5324,8 +5225,7 @@ proof let p be Point of TOP-REAL n,
         consider r be real number such that
         A7:r>0 & Ball(ez,r) c= G1 by A5,A6,TOPMETR:22;
         reconsider r as Real by XREAL_0:def 1;
-             0<n by A1;
-        then A8:0<sqrt n by SQUARE_1:93;
+        A8:0<sqrt n by SQUARE_1:93,A1;
         A9: r/2>0 by A7,REAL_2:127;
         set p2=p-(r/2/sqrt n)*(1.REAL n);
         reconsider ep2=p2 as Point of Euclid n by TOPREAL3:13;
@@ -5343,16 +5243,14 @@ proof let p be Point of TOP-REAL n,
            then A11:p2 in Ball(ez,r) by METRIC_1:12;
                 p<>p2 by A9,A10,TOPRNS_1:29;
            then not p2 in P by A2,TARSKI:def 1;
-           then p2 in (the carrier of TOP-REAL n) \P by XBOOLE_0:def 4;
-           then p2 in P`;
+           then p2 in P` by XBOOLE_0:def 4;
        hence (P`) meets G1 by A7,A11,XBOOLE_0:3;
       end;
      end;
      hence z in Cl (P`) by A3,PRE_TOPC:def 13;
     end;
     suppose z<>p; then not z in P by A2,TARSKI:def 1;
-      then z in (the carrier of (TOP-REAL n)) \ P by A3,XBOOLE_0:def 4;
-      then A12: z in P`;
+      then A12: z in P` by A3,XBOOLE_0:def 4;
            P` c= Cl(P`) by PRE_TOPC:48;
      hence z in Cl (P`) by A12;
   end;
@@ -5370,14 +5268,12 @@ proof let p,q be Point of TOP-REAL 2,r;
   then p=|[r*(-p`2),r*(p`1)]| by EUCLID:61;
   then A1:p`1=r*(-p`2)& p`2=r*(p`1) by EUCLID:56;
   then p`1=-(r*(r*(p`1))) by XCMPLX_1:175 .=-(r*r*(p`1));
-  then 1 *p`1+r*r*(p`1)=0;
   then A2:(1+r*r)*p`1=0;
        r*r>=0 by XREAL_1:65;
 then A3:1+r*r>0+0 by XREAL_1:10;
  hence A4:p`1=0 by A2,XCMPLX_1:6;
        p`2=r*(-(r*(p`2))) by A1
   .=-(r*r*(p`2));
-  then 1 * p`2+r*r*(p`2)=0;
   then (1+r*r)*p`2=0;
  hence p`2=0 by A3,XCMPLX_1:6;
  hence p=0.REAL 2 by A4,EUCLID:57,58;
@@ -5412,8 +5308,7 @@ proof let q1,q2 be Point of TOP-REAL 2;
       assume A6:G1 is open;
       thus z in G1 implies (P`) meets G1
       proof assume A7:z in G1;
-             TOP-REAL 2=TopSpaceMetr(Euclid 2) by EUCLID:def 8;
-        then consider r be real number such that
+        consider r be real number such that
         A8:r>0 & Ball(ez,r) c= G1 by A6,A7,TOPMETR:22;
         reconsider r as Real by XREAL_0:def 1;
         A9: r/2>0 by A8,REAL_2:127;
@@ -5454,7 +5349,6 @@ proof let q1,q2 be Point of TOP-REAL 2;
 )
                                            by A14,EUCLID:34;
                   now assume s-s2=0;
-               then s=0+s2;
                then (r/2/|.p1.|)*|[-p1`2,p1`1]|=p-p by A13,EUCLID:52;
                then A16:(r/2/|.p1.|)*|[-p1`2,p1`1]|=0.REAL 2 by EUCLID:46;
                     (|.p1.|)" <>0 by A4,XCMPLX_1:203;
@@ -5645,8 +5539,7 @@ proof let a be Real,p be Point of TOP-REAL 2;
    .=A2 by A2,XBOOLE_1:21;
    then A5:Down(A1,A`) is_a_component_of (TOP-REAL 2)|A` &
    Down(A2,A`) is_a_component_of (TOP-REAL 2)|A` by A2,A3;
-   consider B being Subset of TOP-REAL 2 such that
-   A6:B is_outside_component_of A & B=UBD A by Th76;
+   A6:UBD A is_outside_component_of A by Th76;
         UBD (L~SpStSeq D) is_a_component_of A` by A6,Def4;
    then consider B1 being Subset of (TOP-REAL 2)|A` such that
    A7: B1 = UBD (L~SpStSeq D) & B1 is_a_component_of (TOP-REAL 2)|A`
@@ -5911,7 +5804,7 @@ A10: y=B3 & B3 is_inside_component_of A by A9;
        end;
      end;
     then P1 is convex by JORDAN1:def 1;
-    then A57:P1 is connected by Th14;
+    then A57:P1 is connected by JORDAN1:9;
          for w1,w2 being Point of TOP-REAL n
       st w1 in P2 & w2 in P2 holds LSeg(w1,w2) c= P2
      proof let w1,w2 be Point of TOP-REAL n;
@@ -5953,7 +5846,7 @@ A10: y=B3 & B3 is_inside_component_of A by A9;
        end;
      end;
     then P2 is convex by JORDAN1:def 1;
-    then A73:P2 is connected by Th14;
+    then A73:P2 is connected by JORDAN1:9;
     A74:now assume P1 is Bounded;
       then consider r being Real such that
       A75: for q being Point of TOP-REAL n st q in P1 holds |.q.|<r by Th40;
@@ -6103,8 +5996,7 @@ proof let A be Subset of TOP-REAL 2;
      by A1,JORDAN1:def 2;
    A8:(TOP-REAL 2)|D is non empty;
    then A9:Down(A2,A`)<>{}((TOP-REAL 2)|A`) by A5,CONNSP_1:34;
-     consider B being Subset of TOP-REAL 2 such that
-     A10:B is_outside_component_of A & B=UBD A by A1,Th76;
+     A10:UBD A is_outside_component_of A by A1,Th76;
           UBD A is_a_component_of A` by A10,Def4;
      then consider B1 being Subset of (TOP-REAL 2)|A` such that
      A11:B1 = UBD A & B1 is_a_component_of (TOP-REAL 2)|A` by CONNSP_1:def 6;
@@ -6377,18 +6269,16 @@ A1: 2 <= n;
     let A, B, P be Subset of TOP-REAL n such that
 A2: P is Bounded and
 A3: A is_outside_component_of P & B is_outside_component_of P;
-    consider D being Subset of TOP-REAL n such that
-A4: D is_outside_component_of P and
-A5: D = UBD P by A1,A2,Th76;
+A4: UBD P is_outside_component_of P by A1,A2,Th76;
 A6: A is_a_component_of P` & B is_a_component_of P`
     by A3,Def4;
     1 <= n by A1,XXREAL_0:2;
     then P` is non empty by A2,Th74;
     then A7: A <> {} & B <> {} by A6,SPRECT_1:6;
-A8: D is_a_component_of P` by A4,Def4;
+A8: UBD P is_a_component_of P` by A4,Def4;
     A c= UBD P & B c= UBD P by A3,Th27;
-    then A meets D & B meets D by A5,A7,XBOOLE_1:69;
-    then A = D & B = D by A6,A8,GOBOARD9:3;
+    then A meets UBD P & B meets UBD P by A7,XBOOLE_1:69;
+    then A = UBD P & B = UBD P by A6,A8,GOBOARD9:3;
     hence thesis;
   end;
 
@@ -6449,8 +6339,7 @@ registration let C be compact Subset of TOP-REAL 2;
  cluster UBD C -> connected;
 coherence
   proof
-    ex B being Subset of TOP-REAL 2 st B is_outside_component_of C &
-      B = UBD C by Th76;
+    UBD C is_outside_component_of C by Th76;
     hence thesis by Th124;
   end;
 end;
@@ -6464,8 +6353,7 @@ Lm4:
       p is Point of Euclid 2
   proof
     let p be Point of TOP-REAL 2;
-        TopSpaceMetr Euclid 2 = TOP-REAL 2 by EUCLID:def 8;
-    then TOP-REAL 2 = TopStruct (#the carrier of Euclid 2,
+    TOP-REAL 2 = TopStruct (#the carrier of Euclid 2,
       Family_open_set Euclid 2#) by PCOMPS_1:def 6;
     hence thesis;
   end;
@@ -6574,10 +6462,8 @@ registration let C be compact Subset of TOP-REAL 2;
  cluster UBD C -> non empty;
  coherence
   proof
-   consider B being Subset of TOP-REAL 2 such that
-A1: B is_outside_component_of C and
-A2: B = UBD C by Th76;
-A3:  UBD C is_a_component_of C` by A1,A2,Def4;
+A1: UBD C is_outside_component_of C by Th76;
+A3:  UBD C is_a_component_of C` by A1,Def4;
      C` <> {} by Th74;
    hence thesis by A3,SPRECT_1:6;
   end;

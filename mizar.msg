@@ -141,6 +141,10 @@ Inconsistent cluster
 Only standard functors and selectors can be used in a functorial cluster registration
 # 97
 Non clusterable attribute
+# 98
+Cannot mix left and right pattern arguments
+# 99
+The argument(s) must belong to the left or right pattern
 # 100
 Unused locus
 # 101
@@ -219,6 +223,8 @@ Non registered cluster
 "SUBSET" missing in the "requirements" directive
 # 138
 Cannot identify a local constant, free in the default type
+# 139
+Invalid type of an argument. 
 # 140
 Unknown variable
 # 141
@@ -311,6 +317,8 @@ Accessible mode format has empty list of arguments
 Accessible structure format has empty list of arguments
 # 185
 Unknown structured mode format
+# 189
+Not equal argument(s) on the left or right pattern
 # 190
 Inaccessible theorem
 # 191
@@ -387,8 +395,6 @@ Redefined mode cannot be expandable
 It's meaningless to redefine cluster
 # 274
 "means" not allowed in a definition of an expandable mode
-# 278
-Identifier expected
 # 300
 Identifier expected
 # 301
@@ -473,6 +479,8 @@ Associative notation must not be used for "iff" and "implies"
 "as" expected
 # 389
 "proof" expected
+# 390
+"and" expected
 # 391
 Incorrect beginning of a text item
 # 392

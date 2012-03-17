@@ -35,16 +35,16 @@
 <ArgTypes>
 <Typ kind="G" nr="12">
 <Cluster>
-<Adjective nr="32" value="false"/>
-<Adjective nr="35"/>
+<Adjective nr="33" value="false"/>
 <Adjective nr="36"/>
 <Adjective nr="37"/>
 <Adjective nr="38"/>
 <Adjective nr="39"/>
-<Adjective nr="42"/>
-<Adjective nr="51"/>
-<Adjective nr="69"/>
-<Adjective nr="78"/>
+<Adjective nr="40"/>
+<Adjective nr="43"/>
+<Adjective nr="52"/>
+<Adjective nr="70"/>
+<Adjective nr="79"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">

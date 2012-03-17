@@ -27,15 +27,6 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="34"/>
-</Cluster>
-</RCluster>
-<RCluster>
-<ArgTypes/>
-<Typ kind="G" nr="1">
-<Cluster/>
-</Typ>
-<Cluster>
 <Adjective nr="35"/>
 </Cluster>
 </RCluster>
@@ -45,8 +36,17 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="34"/>
+<Adjective nr="36"/>
+</Cluster>
+</RCluster>
+<RCluster>
+<ArgTypes/>
+<Typ kind="G" nr="1">
+<Cluster/>
+</Typ>
+<Cluster>
 <Adjective nr="35"/>
+<Adjective nr="36"/>
 </Cluster>
 </RCluster>
 </Registrations>

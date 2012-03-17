@@ -169,9 +169,9 @@
 <Adjective nr="21"/>
 <Adjective nr="22"/>
 <Adjective nr="29"/>
-<Adjective nr="32"/>
-<Adjective nr="34"/>
+<Adjective nr="33"/>
 <Adjective nr="35"/>
+<Adjective nr="36"/>
 </Cluster>
 </FCluster>
 <FCluster>

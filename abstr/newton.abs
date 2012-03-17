@@ -14,16 +14,17 @@ environ
       XREAL_0, CARD_1, REAL_1, RELAT_1, FUNCT_1, SEQ_1, FINSET_1, FINSEQ_1,
       FINSEQ_2, FINSEQ_4, INT_1, INT_2, NAT_1, RVSUM_1, SQUARE_1, XXREAL_0;
  constructors PARTFUN1, WELLORD2, SQUARE_1, NAT_1, BINOP_2, FINSEQOP, SEQ_1,
-      FINSEQ_4, FINSOP_1, SETWOP_2, RVSUM_1, INT_2, ORDINAL2;
+      FINSEQ_4, FINSOP_1, SETWOP_2, RVSUM_1, INT_2, ORDINAL2, DOMAIN_1;
  registrations RELSET_1, FINSEQ_2, INT_1, XREAL_0, NAT_1, MEMBERED, ORDINAL2,
-      FINSEQ_1, FINSET_1, RVSUM_1, XXREAL_0, FUNCT_1, ORDINAL1, ARYTM_3;
+      FINSEQ_1, FINSET_1, RVSUM_1, XXREAL_0, FUNCT_1, ORDINAL1, ARYTM_3,
+      XCMPLX_0;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
 
 
 begin
 
  reserve i,k,n,m,l for Element of NAT;
- reserve s,t,r for natural number;
+ reserve s,t,r for Nat;
  reserve a,b,x,y for real number;
  reserve F,G,H for FinSequence of REAL;
 
@@ -90,6 +91,8 @@ theorem :: NEWTON:11
 registration let x, n be natural number;
   cluster x|^n -> natural;
 end;
+
+reserve x,y for complex number;
 
 theorem :: NEWTON:12
   (x*y)|^s = x|^s * y|^s;
@@ -389,11 +392,12 @@ theorem :: NEWTON:81
 definition
   func SetPrimes -> Subset of NAT means
 :: NEWTON:def 6
- for n being Element of NAT holds n in it iff n is prime;
+ for n being Nat holds n in it iff n is prime;
 end;
 
 registration
   cluster prime Element of NAT;
+  cluster prime Nat;
 end;
 
 definition
@@ -403,66 +407,75 @@ end;
  reserve p,f for Prime,
          x for set;
 
-definition let p be Element of NAT;
+definition let p be Nat;
   func SetPrimenumber p -> Subset of NAT means
 :: NEWTON:def 7
-    for q being Element of NAT holds q in it iff (q < p & q is prime);
+    for q being Nat holds q in it iff q < p & q is prime;
 end;
 
 theorem :: NEWTON:82
-  for p being Element of NAT holds SetPrimenumber p c= SetPrimes;
+  for p being Nat holds SetPrimenumber p c= SetPrimes;
 
 theorem :: NEWTON:83
-  for p,q being Element of NAT st p < q holds
+  for p,q being Nat st p <= q holds
     SetPrimenumber p c= SetPrimenumber q;
 
 theorem :: NEWTON:84
-  for p being Element of NAT holds SetPrimenumber p c= Seg p;
+  for p being Nat holds SetPrimenumber p c= Seg p;
 
 theorem :: NEWTON:85
-  for p being Element of NAT holds SetPrimenumber p is finite;
+  for p being Nat holds SetPrimenumber p is finite;
+
+registration
+  let n be Nat;
+  cluster SetPrimenumber n -> finite;
+end;
 
  reserve p for Prime;
 
 theorem :: NEWTON:86
-  for l holds ex p st p is prime & p>l;
+  for l being Nat ex p st p is prime & p>l;
 
 theorem :: NEWTON:87
   SetPrimes <> {};
 
 theorem :: NEWTON:88
-  {k:k<2 & k is prime} = {};
+  SetPrimenumber 2 = {};
+
+registration
+  cluster SetPrimenumber 2 -> empty;
+end;
 
 theorem :: NEWTON:89
-  for p holds {k:k<p & k is prime} c= NAT;
+  SetPrimenumber n c= NAT;
 
 theorem :: NEWTON:90
-  for m holds {k:k<m & k is prime} c= Seg m;
+  SetPrimenumber m c= Seg m;
 
 theorem :: NEWTON:91
-  for m holds {k:k<m & k is prime} is finite;
+  SetPrimenumber n is finite;
 
 theorem :: NEWTON:92
-  for f being Element of NAT holds not f in {k: k<f & k is prime};
+  k>=m implies not k in SetPrimenumber m;
 
 theorem :: NEWTON:93
-  for f being Element of NAT holds {k: k<f & k is prime}\/{f} is finite;
+  for f being Nat holds SetPrimenumber f \/ {f} is finite;
 
 theorem :: NEWTON:94
-  for f,g being Prime st f<g holds
-    {k1: k1<f & k1 is prime} \/ {f} c= {k2: k2<g & k2 is prime};
+  for f being Prime, g being Nat st f < g holds
+  SetPrimenumber f \/ {f} c= SetPrimenumber g;
 
 theorem :: NEWTON:95
-  for k st k>m holds not k in {k1:k1<m & k1 is prime};
+  k>=m implies not k in SetPrimenumber m;
 
-definition let n;
+definition let n be Nat;
   func primenumber n -> Prime means
 :: NEWTON:def 8
-    ex B being finite set st B = {k:k<it & k is prime} & n = card B;
+  n = card SetPrimenumber it;
 end;
 
 theorem :: NEWTON:96
-  SetPrimenumber p = {k:k<p & k is prime};
+  SetPrimenumber n = {k: k<n & k is prime};
 
 theorem :: NEWTON:97  :: Euclid
   SetPrimes is infinite;
@@ -500,3 +513,7 @@ theorem :: NEWTON:101
 theorem :: NEWTON:102
  x > 0 implies x|^k > 0;
 
+:: missing, 2006.07.17, A.T.
+
+theorem :: NEWTON:103
+ n > 0 implies  0 |^ n = 0;

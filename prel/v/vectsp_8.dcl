@@ -32,36 +32,36 @@
 <Typ kind="G" nr="8">
 <Cluster>
 <Adjective nr="13" value="false"/>
-<Adjective nr="28"/>
 <Adjective nr="29"/>
 <Adjective nr="30"/>
 <Adjective nr="31"/>
-<Adjective nr="39"/>
-<Adjective nr="42"/>
-<Adjective nr="49"/>
+<Adjective nr="32"/>
+<Adjective nr="40"/>
+<Adjective nr="43"/>
 <Adjective nr="50"/>
 <Adjective nr="51"/>
-<Adjective nr="52" value="false"/>
+<Adjective nr="52"/>
+<Adjective nr="53" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="9">
 <Cluster>
 <Adjective nr="13" value="false"/>
-<Adjective nr="28"/>
 <Adjective nr="29"/>
 <Adjective nr="30"/>
 <Adjective nr="31"/>
-<Adjective nr="53">
+<Adjective nr="32"/>
+<Adjective nr="54">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="54">
+<Adjective nr="55">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
 <LocusVar nr="1"/>
 </Typ>
 </ArgTypes>
-<Typ kind="M" nr="13">
+<Typ kind="M" nr="12">
 <Cluster/>
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>

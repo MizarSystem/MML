@@ -26,8 +26,8 @@
 <Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="15"/>
-<Adjective nr="18"/>
-<Adjective nr="20"/>
+<Adjective nr="19"/>
+<Adjective nr="21"/>
 </Cluster>
 </RCluster>
 <FCluster>

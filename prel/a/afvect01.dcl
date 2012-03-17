@@ -33,10 +33,10 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="26" value="false"/>
-<Adjective nr="59" value="false"/>
-<Adjective nr="61"/>
-<Adjective nr="64"/>
+<Adjective nr="27" value="false"/>
+<Adjective nr="60" value="false"/>
+<Adjective nr="62"/>
+<Adjective nr="65"/>
 </Cluster>
 </RCluster>
 <FCluster>
@@ -63,8 +63,8 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="26" value="false"/>
-<Adjective nr="61"/>
+<Adjective nr="27" value="false"/>
+<Adjective nr="62"/>
 </Cluster>
 </FCluster>
 </Registrations>

@@ -47,9 +47,9 @@
 <Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="19"/>
-<Adjective nr="22"/>
-<Adjective nr="30"/>
-<Adjective nr="93"/>
+<Adjective nr="23"/>
+<Adjective nr="31"/>
+<Adjective nr="94"/>
 </Cluster>
 </RCluster>
 </Registrations>

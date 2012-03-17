@@ -80,8 +80,8 @@
 <Cluster>
 <Adjective nr="8"/>
 <Adjective nr="18"/>
-<Adjective nr="33"/>
 <Adjective nr="34"/>
+<Adjective nr="35"/>
 </Cluster>
 </FCluster>
 </Registrations>

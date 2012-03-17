@@ -32,7 +32,7 @@
 <CCluster>
 <ArgTypes/>
 <Cluster/>
-<Typ kind="M" nr="13">
+<Typ kind="M" nr="12">
 <Cluster/>
 <Func kind="K" nr="12">
 <Func kind="K" nr="81"/>

@@ -31,12 +31,12 @@
 <Typ kind="G" nr="7">
 <Cluster>
 <Adjective nr="20" value="false"/>
-<Adjective nr="33"/>
 <Adjective nr="34"/>
 <Adjective nr="35"/>
 <Adjective nr="36"/>
 <Adjective nr="37"/>
-<Adjective nr="45"/>
+<Adjective nr="38"/>
+<Adjective nr="46"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -52,12 +52,12 @@
 <Typ kind="G" nr="7">
 <Cluster>
 <Adjective nr="20" value="false"/>
-<Adjective nr="33"/>
 <Adjective nr="34"/>
 <Adjective nr="35"/>
 <Adjective nr="36"/>
 <Adjective nr="37"/>
-<Adjective nr="45"/>
+<Adjective nr="38"/>
+<Adjective nr="46"/>
 </Cluster>
 </Typ>
 </ArgTypes>

@@ -2,6 +2,7 @@
 <Schemes>
 <Signature>
 <ArticleID name="HIDDEN"/>
+<ArticleID name="RELAT_1"/>
 <ArticleID name="TARSKI"/>
 <ArticleID name="FINSET_1"/>
 </Signature>
@@ -65,7 +66,7 @@
 <Pred kind="P" nr="1">
 <Func kind="F" nr="1"/>
 </Pred>
-<Pred kind="V" nr="1">
+<Pred kind="V" nr="4">
 <Func kind="F" nr="1"/>
 </Pred>
 </Scheme>

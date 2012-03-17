@@ -14,14 +14,14 @@ environ
       RELAT_1, RELAT_2, RLVECT_1, SQUARE_1, TARSKI, TREES_1, UPROOTS;
  notations TARSKI, XBOOLE_0, ZFMISC_1, ENUMSET1, NUMBERS, SUBSET_1, XCMPLX_0,
       XXREAL_0, XREAL_0, DOMAIN_1, REAL_1, RELAT_1, PARTFUN1, FUNCT_1,
-      FINSEQ_1, FINSEQ_2, SEQ_1, CARD_1, PBOOLE, FUNCT_2, RVSUM_1,
+      FINSEQ_1, FINSEQ_2, SEQ_1, CARD_1, PBOOLE, FUNCT_2, RVSUM_1, ABIAN,
       ORDINAL1, SQUARE_1, POLYNOM1, UPROOTS, FINSET_1, NAT_1, CQC_LANG,
-      FUNCT_4, GLIB_000, GLIB_001, GLIB_002, ABIAN, GLIB_003;
+      FUNCT_4, GLIB_000, GLIB_001, GLIB_002, GLIB_003;
  constructors DOMAIN_1, FUNCT_4, REAL_1, SQUARE_1, BINOP_2, CQC_LANG, SETWOP_2,
       RVSUM_1, UPROOTS, GLIB_002, GLIB_003;
  registrations SUBSET_1, RELSET_1, FINSET_1, XREAL_0, CARD_1, INT_1, ABIAN,
       FUNCT_1, XBOOLE_0, RELAT_1, MEMBERED, ORDINAL1, POLYNOM1, GLIB_000,
-      GLIB_001, GLIB_002, GLIB_003, XXREAL_0;
+      GLIB_001, GLIB_002, GLIB_003, XXREAL_0, XCMPLX_0;
  requirements ARITHM, BOOLE, NUMERALS, REAL, SUBSET;
  definitions TARSKI, GLIB_000, GLIB_003;
  theorems BAGORDER, CARD_1, CARD_2, CQC_LANG, ENUMSET1, FINSEQ_1, FINSEQ_2,
@@ -592,10 +592,23 @@ definition let G be real-weighted WGraph, src be Vertex of G;
    end;
 end;
 
+definition let s be WEVGraphSeq, n be Nat;
+ redefine func s.n -> WEVGraph;
+ coherence
+  proof
+   thus s.n is [Weighted] [ELabeled] [VLabeled] _Graph;
+  end;
+end;
+
+registration let s be real-WEV WEVGraphSeq, n be Nat;
+ cluster s.n -> real-WEV WEVGraph;
+ coherence by GLIB_003:def 31;
+end;
+
 definition let G be real-weighted WGraph, src be Vertex of G;
   func DIJK:CompSeq(G,src) -> real-WEV WEVGraphSeq means :Def7: ::dDIJKCS
-    it.->0 = DIJK:Init(G,src) &
-    for n being Element of NAT holds it.->(n+1) = DIJK:Step(it.->n);
+    it.0 = DIJK:Init(G,src) &
+    for n being Element of NAT holds it.(n+1) = DIJK:Step(it.n);
   existence proof
     defpred P[set,set,set] means
       ($2 is real-WEV WEVGraph &
@@ -632,37 +645,41 @@ A5: now let n be Element of NAT; assume P2[n]; then
 A7: for n being Element of NAT holds P2[n] from NAT_1:sch 1(A4,A5); then
     for n being Element of NAT holds IT.n is _Graph; then
     reconsider IT as GraphSeq by GLIB_000:def 55;
-A8: for n be Element of NAT holds
-      IT.->n is real-WEV WEVGraph by A7; then
-    for n being Element of NAT holds
-      IT.->n is [Weighted] & IT.->n is [ELabeled] & IT.->n is [VLabeled]; then
+A8: for n be Nat holds IT.n is real-WEV WEVGraph
+    proof
+      let n be Nat;
+      n in NAT by ORDINAL1:def 13;
+      hence thesis by A7; 
+    end; then
+    for n being Nat holds
+      IT.n is [Weighted] & IT.n is [ELabeled] & IT.n is [VLabeled]; then
     reconsider IT as WEVGraphSeq
       by GLIB_003:def 24, GLIB_003:def 25, GLIB_003:def 26;
-    for n being Element of NAT holds IT.->n is real-WEV by A8; then
+    for n being Nat holds IT.n is real-WEV by A8; then
     reconsider IT as real-WEV WEVGraphSeq by GLIB_003:def 31;
     take IT;
-    thus IT.->0 = DIJK:Init(G,src) by A3;
+    thus IT.0 = DIJK:Init(G,src) by A3;
     let n be Element of NAT;
     IT.n is real-WEV WEVGraph by A7; then
     consider Gn,Gn1 being real-WEV WEVGraph such that
 A9: IT.n = Gn & IT.(n+1) = Gn1 & Gn1 = DIJK:Step(Gn) by A3;
-    thus IT.->(n+1) = DIJK:Step(IT.->n) by A9;
+    thus IT.(n+1) = DIJK:Step(IT.n) by A9;
   end;
   uniqueness proof
     let IT1,IT2 be real-WEV WEVGraphSeq such that
-A10: IT1.->0 = DIJK:Init(G,src) &
-    for n being Element of NAT holds IT1.->(n+1) = DIJK:Step(IT1.->n) and
-A11: IT2.->0 = DIJK:Init(G,src) &
-    for n being Element of NAT holds IT2.->(n+1) = DIJK:Step(IT2.->n);
+A10: IT1.0 = DIJK:Init(G,src) &
+    for n being Element of NAT holds IT1.(n+1) = DIJK:Step(IT1.n) and
+A11: IT2.0 = DIJK:Init(G,src) &
+    for n being Element of NAT holds IT2.(n+1) = DIJK:Step(IT2.n);
     defpred P[Element of NAT] means IT1.$1 = IT2.$1;
-    IT1.0 = IT2.->0 by A10,A11; then
+    IT1.0 = IT2.0 by A10,A11; then
 A12: P[0];
     now let n be Element of NAT; assume P[n]; then
-        IT1.n = IT2.->n; then
-    A13: IT1.->n = IT2.-> n;
-        IT1.->(n+1) = DIJK:Step(IT2.->n) by A13, A10
-                   .= IT2.->(n+1) by A11; then
-        IT1.(n+1) = IT2.->(n+1);
+        IT1.n = IT2.n; then
+    A13: IT1.n = IT2. n;
+        IT1.(n+1) = DIJK:Step(IT2.n) by A13, A10
+                   .= IT2.(n+1) by A11; then
+        IT1.(n+1) = IT2.(n+1);
         hence P[n+1];
     end; then
 A14: for n being Element of NAT st P[n] holds P[n+1];
@@ -676,17 +693,23 @@ registration let G be finite real-weighted WGraph, src be Vertex of G;
   cluster DIJK:CompSeq(G,src) -> finite;
   coherence proof
     set DCS = DIJK:CompSeq(G,src);
-    defpred P[Element of NAT] means DCS.->$1 is finite;
-    DCS.->0 = DIJK:Init(G,src) by Def7
+    defpred P[Nat] means DCS.$1 is finite;
+    DCS.0 = DIJK:Init(G,src) by Def7
            .= G.set(ELabelSelector,{})
                .set(VLabelSelector,((src.-->0)));then
 A1: P[0];
 A2: now let n be Element of NAT; assume P[n]; then
-        reconsider Gn = DCS.->n as finite real-WEV WEVGraph;
-        DCS.->(n+1) = DIJK:Step(Gn) by Def7;
+        reconsider Gn = DCS.n as finite real-WEV WEVGraph;
+        DCS.(n+1) = DIJK:Step(Gn) by Def7;
         hence P[n+1];
     end;
-    for n being Element of NAT holds P[n] from NAT_1:sch 1(A1,A2);
+AA: for n being Element of NAT holds P[n] from NAT_1:sch 1(A1,A2);
+    for n being Nat holds P[n]
+    proof
+      let n be Nat;
+      n in NAT by ORDINAL1:def 13;
+      hence thesis by AA;
+    end;
     hence thesis by GLIB_000:def 60;
   end;
 end;
@@ -695,17 +718,22 @@ registration let G be nonnegative-weighted WGraph, src be Vertex of G;
   cluster DIJK:CompSeq(G,src) -> nonnegative-weighted;
   coherence proof
     set DCS = DIJK:CompSeq(G,src);
-    defpred P[Element of NAT] means DCS.->$1 is nonnegative-weighted;
-    DCS.->0 = DIJK:Init(G,src) by Def7
+    defpred P[Nat] means DCS.$1 is nonnegative-weighted;
+    DCS.0 = DIJK:Init(G,src) by Def7
            .= G.set(ELabelSelector,{})
                .set(VLabelSelector,(src.-->0));then
 A1: P[0];
 A2: now let n be Element of NAT; assume P[n]; then
-        reconsider Gn = DCS.->n as nonnegative-weighted real-WEV WEVGraph;
-        DCS.->(n+1) = DIJK:Step(Gn) by Def7;
+        reconsider Gn = DCS.n as nonnegative-weighted real-WEV WEVGraph;
+        DCS.(n+1) = DIJK:Step(Gn) by Def7;
         hence P[n+1];
     end;
-    for n being Element of NAT holds P[n] from NAT_1:sch 1(A1,A2);
+AA: for n being Element of NAT holds P[n] from NAT_1:sch 1(A1,A2);
+    for n being Nat holds P[n] 
+    proof
+      let n be Nat; n in NAT by ORDINAL1:def 13;
+      hence thesis by AA;
+    end;
     hence thesis by GLIB_003:def 28;
   end;
 end;
@@ -716,7 +744,7 @@ definition let G be real-weighted WGraph, src be Vertex of G;
   coherence proof
     set DCS = DIJK:CompSeq(G,src);
     DCS.Result() = DCS.(DCS.Lifespan())
-                .= DCS.->(DCS.Lifespan());
+                .= DCS.(DCS.Lifespan());
     hence thesis;
   end;
 end;
@@ -725,10 +753,11 @@ registration let G be finite real-weighted WGraph, src be Vertex of G;
   cluster DIJK:SSSP(G,src) -> finite;
   coherence proof
     set DCS = DIJK:CompSeq(G,src);
-    DIJK:SSSP(G,src) = DCS.Result()
+A:  DIJK:SSSP(G,src) = DCS.Result()
                     .= DCS.(DCS.Lifespan())
-                    .= DCS.->(DCS.Lifespan());
-    hence thesis;
+                    .= DCS.(DCS.Lifespan());
+     DCS is finite;
+    hence thesis by A, GLIB_000:def 60;
   end;
 end;
 
@@ -971,62 +1000,62 @@ theorem Th16: ::tDCS01
   for G being real-weighted WGraph, src being Vertex of G,
   i,j being Element of NAT
    st i <= j holds
-   (DIJK:CompSeq(G,src).->i).labeledV() c=
-     (DIJK:CompSeq(G,src).->j).labeledV() &
-   (DIJK:CompSeq(G,src).->i).labeledE() c=
-     (DIJK:CompSeq(G,src).->j).labeledE()
+   (DIJK:CompSeq(G,src).i).labeledV() c=
+     (DIJK:CompSeq(G,src).j).labeledV() &
+   (DIJK:CompSeq(G,src).i).labeledE() c=
+     (DIJK:CompSeq(G,src).j).labeledE()
 proof
     let G be real-weighted WGraph, src be Vertex of G, i,j be Element of NAT;
     set DCS = DIJK:CompSeq(G,src);
-    set dDCS = (DCS.->i).labeledV();
-    set eDCS = (DCS.->i).labeledE(); assume i <= j; then
+    set dDCS = (DCS.i).labeledV();
+    set eDCS = (DCS.i).labeledE(); assume i <= j; then
     consider x being Nat such that
 aA1: j = i + x by NAT_1:28;
     reconsider x as Element of NAT by ORDINAL1:def 13;
 A1: j = i + x by aA1;
-    defpred P[Element of NAT] means dDCS c= (DCS.->(i+$1)).labeledV() &
-                         eDCS c= (DCS.->(i+$1)).labeledE();
+    defpred P[Element of NAT] means dDCS c= (DCS.(i+$1)).labeledV() &
+                         eDCS c= (DCS.(i+$1)).labeledE();
 A2: P[0];
     now let k be Element of NAT; assume
-    A3: dDCS c= (DCS.->(i+k)).labeledV() &
-        eDCS c= (DCS.->(i+k)).labeledE();
-        DCS.->(i+k+1) = DIJK:Step(DCS.->(i+k)) by Def7; then
-        (DCS.->(i+k)).labeledV() c= (DCS.->(i+k+1)).labeledV() &
-        (DCS.->(i+k)).labeledE() c= (DCS.->(i+k+1)).labeledE()
+    A3: dDCS c= (DCS.(i+k)).labeledV() &
+        eDCS c= (DCS.(i+k)).labeledE();
+        DCS.(i+k+1) = DIJK:Step(DCS.(i+k)) by Def7; then
+        (DCS.(i+k)).labeledV() c= (DCS.(i+k+1)).labeledV() &
+        (DCS.(i+k)).labeledE() c= (DCS.(i+k+1)).labeledE()
           by Th14;
-        hence dDCS c= (DCS.->(i+(k+1))).labeledV() &
-              eDCS c= (DCS.->(i+(k+1))).labeledE() by A3, XBOOLE_1:1;
+        hence dDCS c= (DCS.(i+(k+1))).labeledV() &
+              eDCS c= (DCS.(i+(k+1))).labeledE() by A3, XBOOLE_1:1;
     end; then
 A4: for k being Element of NAT st P[k] holds P[k+1];
     for k being Element of NAT holds P[k] from NAT_1:sch 1(A2,A4);
-    hence dDCS c= (DCS.->j).labeledV() & eDCS c= (DCS.->j).labeledE() by A1;
+    hence dDCS c= (DCS.j).labeledV() & eDCS c= (DCS.j).labeledE() by A1;
 end;
 
 theorem Th17: ::tDCS02
   for G being real-weighted WGraph, src being Vertex of G,
   n being Element of NAT holds
-    G == DIJK:CompSeq(G,src).->n &
-    the_Weight_of G = the_Weight_of (DIJK:CompSeq(G,src).->n)
+    G == DIJK:CompSeq(G,src).n &
+    the_Weight_of G = the_Weight_of (DIJK:CompSeq(G,src).n)
 proof
     let G be real-weighted WGraph, src be Vertex of G;
     set DCS = DIJK:CompSeq(G,src);
     defpred P[Element of NAT] means
-      G == DIJK:CompSeq(G,src).->$1 &
-      the_Weight_of G  = the_Weight_of (DIJK:CompSeq(G,src).->$1);
-    DCS.->0 = DIJK:Init(G,src) by Def7; then
-A1: DCS.->0=G.set(ELabelSelector,{})
+      G == DIJK:CompSeq(G,src).$1 &
+      the_Weight_of G  = the_Weight_of (DIJK:CompSeq(G,src).$1);
+    DCS.0 = DIJK:Init(G,src) by Def7; then
+A1: DCS.0=G.set(ELabelSelector,{})
              .set(VLabelSelector,src.-->0); then
-A2: DCS.->0 == G.set(ELabelSelector,{}) by GLIB_003:8;
+A2: DCS.0 == G.set(ELabelSelector,{}) by GLIB_003:8;
 A3: G == G.set(ELabelSelector, {}) by GLIB_003:8;
     the_Weight_of G = the_Weight_of G.set(ELabelSelector,{}) by GLIB_000:12
-                   .= the_Weight_of (DCS.->0) by A1,GLIB_000:12; then
+                   .= the_Weight_of (DCS.0) by A1,GLIB_000:12; then
 A4: P[0] by A2,A3,GLIB_000:88;
     now let k be Element of NAT; assume
-    A5: G == DCS.->k & the_Weight_of G = the_Weight_of (DCS.->k);
-    A6: DCS.->(k+1) = DIJK:Step(DCS.->k) by Def7; then
-        DCS.->k == DCS.->(k+1) by Th14;
-        hence G == DCS.->(k+1) by A5, GLIB_000:88;
-        thus the_Weight_of G = the_Weight_of (DCS.->(k+1)) by A5,A6,Th14;
+    A5: G == DCS.k & the_Weight_of G = the_Weight_of (DCS.k);
+    A6: DCS.(k+1) = DIJK:Step(DCS.k) by Def7; then
+        DCS.k == DCS.(k+1) by Th14;
+        hence G == DCS.(k+1) by A5, GLIB_000:88;
+        thus the_Weight_of G = the_Weight_of (DCS.(k+1)) by A5,A6,Th14;
     end; then
 A7: for k being Element of NAT st P[k] holds P[k+1];
     for n being Element of NAT holds P[n] from NAT_1:sch 1(A4,A7);
@@ -1036,19 +1065,19 @@ end;
 theorem Th18: ::tDCS03
   for G being finite real-weighted WGraph, src being Vertex of G,
       n being Element of NAT holds
-    (DIJK:CompSeq(G,src).->n).labeledV() c= G.reachableDFrom(src)
+    (DIJK:CompSeq(G,src).n).labeledV() c= G.reachableDFrom(src)
 proof
     let G be finite real-weighted WGraph, src be Vertex of G;
     set DCS = DIJK:CompSeq(G,src);
     defpred P[Element of NAT] means
-     (DCS.->$1).labeledV() c= G.reachableDFrom(src);
-    DCS.->0 = DIJK:Init(G, src) by Def7; then
-A1: (DCS.->0).labeledV() = {src} by Th15;
+     (DCS.$1).labeledV() c= G.reachableDFrom(src);
+    DCS.0 = DIJK:Init(G, src) by Def7; then
+A1: (DCS.0).labeledV() = {src} by Th15;
     src in G.reachableDFrom(src) by GLIB_002:18; then
 A2: P[0] by A1, ZFMISC_1:37;
     now let k be Element of NAT such that
-    A3: (DCS.->k).labeledV() c= G.reachableDFrom(src);
-        set Gk = DCS.->k, NextG = DCS.->(k+1);
+    A3: (DCS.k).labeledV() c= G.reachableDFrom(src);
+        set Gk = DCS.k, NextG = DCS.(k+1);
         set VGk = (the_VLabel_of Gk), VNextG = (the_VLabel_of NextG);
         set BestEdges = DIJK:NextBestEdges(Gk), e = choose BestEdges;
         set NextEG = Gk.labelEdge(e,1);
@@ -1056,7 +1085,7 @@ A2: P[0] by A1, ZFMISC_1:37;
         set pc = (the_VLabel_of Gk).v1, ec = (the_Weight_of Gk).e;
     A4: NextG = DIJK:Step(Gk) by Def7;
         now let x be set; assume
-        A5: x in (DCS.->(k+1)).labeledV();
+        A5: x in (DCS.(k+1)).labeledV();
             now per cases;
             suppose BestEdges = {}; then
                 Gk = NextG by A4, Def5;
@@ -1065,7 +1094,7 @@ A2: P[0] by A1, ZFMISC_1:37;
             A6: BestEdges <> {}; then
             A7: NextG = NextEG.labelVertex(target, pc+ec) by A4, Def5;
                 set xx = x, GE = NextEG.labelVertex(target,pc+ec);
-                G == DCS.->(k+1) by Th17; then
+                G == DCS.(k+1) by Th17; then
                 reconsider xx as Vertex of G by A5,GLIB_000:def 36;
                 e DSJoins Gk.labeledV(),the_Vertices_of Gk \ Gk.labeledV(),Gk
                   by A6, Def4; then
@@ -1098,7 +1127,7 @@ A2: P[0] by A1, ZFMISC_1:37;
             end;
             hence x in G.reachableDFrom(src);
         end;
-        hence (DCS.->(k+1)).labeledV() c= G.reachableDFrom(src)
+        hence (DCS.(k+1)).labeledV() c= G.reachableDFrom(src)
           by TARSKI:def 3;
     end; then
 A13: for k being Element of NAT st P[k] holds P[k+1];
@@ -1106,16 +1135,21 @@ A13: for k being Element of NAT st P[k] holds P[k+1];
     hence thesis;
 end;
 
+registration let s be finite WEVGraphSeq, n be Nat;
+ cluster s.n -> finite WEVGraph;
+ coherence by GLIB_000:def 60;
+end;
+
 theorem Th19: ::tDCS05
   for G being finite real-weighted WGraph, src being Vertex of G,
   n being Element of NAT
-    holds DIJK:NextBestEdges(DIJK:CompSeq(G,src).->n) = {} iff
-   (DIJK:CompSeq(G,src).->n).labeledV() = G.reachableDFrom(src)
+    holds DIJK:NextBestEdges(DIJK:CompSeq(G,src).n) = {} iff
+   (DIJK:CompSeq(G,src).n).labeledV() = G.reachableDFrom(src)
 proof
     let G be finite real-weighted WGraph, src be Vertex of G,
     n be Element of NAT;
     set DCS = DIJK:CompSeq(G,src), RFS = G.reachableDFrom(src);
-    set Gn = DCS.->n, Gn1a = DCS.->(n+1), VGn = the_VLabel_of Gn;
+    set Gn = DCS.n, Gn1a = DCS.(n+1), VGn = the_VLabel_of Gn;
     set BestEdges = DIJK:NextBestEdges(Gn), e = choose BestEdges;
     set SG = the_Source_of G, SGn = the_Source_of Gn;
     set TG = the_Target_of G, TGn = the_Target_of Gn;
@@ -1131,6 +1165,7 @@ A1: Gn1a = DIJK:Step(Gn) by Def7;
             consider BE1 being Subset of the_Edges_of Gn such that
         A5: for x being set holds x in BE1 iff x in the_Edges_of Gn & P[x]
               from SUBSET_1:sch 1;
+            Gn is finite;
             now assume
             A6: BE1 = {};
                 consider v being set such that
@@ -1138,10 +1173,10 @@ A1: Gn1a = DIJK:Step(Gn) by Def7;
                 reconsider v as Vertex of G by A7;
                 consider W being directed Walk of G such that
             A8: W is_Walk_from src, v by A7, GLIB_002:def 6;
-                DCS.->0 = DIJK:Init(G, src) by Def7; then
-                (DCS.->0).labeledV() = {src} by Th15; then
-            A9: src in (DCS.->0).labeledV() by TARSKI:def 1;
-            A10: (DCS.->0).labeledV() c= Gn.labeledV() by Th16;
+                DCS.0 = DIJK:Init(G, src) by Def7; then
+                (DCS.0).labeledV() = {src} by Th15; then
+            A9: src in (DCS.0).labeledV() by TARSKI:def 1;
+            A10: (DCS.0).labeledV() c= Gn.labeledV() by Th16;
                 defpred P[Element of NAT] means $1 is odd & $1 <= len W &
                   not (W.$1 in Gn.labeledV());
                 W.(len W) = W.last() by GLIB_001:def 7
@@ -1176,7 +1211,7 @@ A1: Gn1a = DIJK:Step(Gn) by Def7;
                 end;
                 hence contradiction;
             end; then
-            reconsider BE1 as non empty finite set;
+            reconsider BE1 as non empty finite set by GLIB_000:def 60;
             deffunc F(Element of BE1) =
                (the_VLabel_of Gn).((the_Source_of Gn).$1) +
                (the_Weight_of Gn).($1);
@@ -1205,10 +1240,10 @@ A1: Gn1a = DIJK:Step(Gn) by Def7;
             end;
             hence contradiction by A2, A20, Def4;
         end;
-        hence (DCS.->n).labeledV() = RFS;
+        hence (DCS.n).labeledV() = RFS;
     end;
     assume
-A23: (DCS.->n).labeledV() = RFS;
+A23: (DCS.n).labeledV() = RFS;
     now assume BestEdges <> {}; then
     A24: card Gn1a.labeledV() = card RFS + 1 by A1, A23, Th13;
         Gn1a.labeledV() c= RFS by Th18;  then
@@ -1222,15 +1257,15 @@ end;
 theorem Th20: ::tDCS06
   for G being finite real-weighted WGraph, src being Vertex of G,
   n being Element of NAT
-    holds Card (DIJK:CompSeq(G,src).->n).labeledV() =
+    holds Card (DIJK:CompSeq(G,src).n).labeledV() =
       min(n+1, card(G.reachableDFrom(src)))
 proof
     let G be finite real-weighted WGraph, src be Vertex of G;
-     set DCS = DIJK:CompSeq(G, src), VL0 = (DCS.->0).labeledV();
+     set DCS = DIJK:CompSeq(G, src), VL0 = (DCS.0).labeledV();
      set RFS = G.reachableDFrom(src);
-     defpred P[Element of NAT] means Card (DCS.->$1).labeledV() =
+     defpred P[Element of NAT] means Card (DCS.$1).labeledV() =
        min($1+1, card(G.reachableDFrom(src)));
-     DCS.->0 = DIJK:Init(G,src) by Def7; then
+     DCS.0 = DIJK:Init(G,src) by Def7; then
 A1:  Card VL0 = Card {src} by Th15
              .= 1 by CARD_1:79;
      src in RFS by GLIB_002:18; then
@@ -1239,9 +1274,9 @@ A1:  Card VL0 = Card {src} by Th15
      0+1 <= card RFS by CARD_1:79; then
 A2:  P[0] by A1, XXREAL_0:def 8;
      now let k be Element of NAT such that
-     A3: Card (DCS.->k).labeledV() = min(k+1, card RFS);
-     A4: DCS.->(k+1) = DIJK:Step(DCS.->k) by Def7;
-         set Gk = DCS.->k, Gk1b = DCS.->(k+1);
+     A3: Card (DCS.k).labeledV() = min(k+1, card RFS);
+     A4: DCS.(k+1) = DIJK:Step(DCS.k) by Def7;
+         set Gk = DCS.k, Gk1b = DCS.(k+1);
          set VGk = the_VLabel_of Gk;
          set BestEdges = DIJK:NextBestEdges(Gk), e = choose BestEdges;
          now per cases;
@@ -1275,7 +1310,7 @@ A2:  P[0] by A1, XXREAL_0:def 8;
              hence Card Gk1b.labeledV() = min((k+1)+1, card RFS)
                by A14, XXREAL_0:def 8; end;
          end;
-         hence Card (DCS.->(k+1)).labeledV() = min((k+1)+1, card RFS);
+         hence Card (DCS.(k+1)).labeledV() = min((k+1)+1, card RFS);
      end; then
 A17: for k being Element of NAT st P[k] holds P[k+1];
     for n being Element of NAT holds P[n] from NAT_1:sch 1(A2,A17);
@@ -1285,13 +1320,13 @@ end;
 theorem Th21: ::tDCS07
   for G being finite real-weighted WGraph, src being Vertex of G,
   n being Element of NAT
-    holds (DIJK:CompSeq(G,src).->n).labeledE() c= (DIJK:CompSeq(G,src).->n)
-      .edgesBetween((DIJK:CompSeq(G,src).->n).labeledV())
+    holds (DIJK:CompSeq(G,src).n).labeledE() c= (DIJK:CompSeq(G,src).n)
+      .edgesBetween((DIJK:CompSeq(G,src).n).labeledV())
 proof
     let G be finite real-weighted WGraph, src be Vertex of G;
-    set DCS = DIJK:CompSeq(G,src), D0 = DCS.->0;
-    defpred P[Element of NAT] means (DCS.->$1).labeledE() c=
-      (DCS.->$1).edgesBetween((DCS.->$1).labeledV());
+    set DCS = DIJK:CompSeq(G,src), D0 = DCS.0;
+    defpred P[Element of NAT] means (DCS.$1).labeledE() c=
+      (DCS.$1).edgesBetween((DCS.$1).labeledV());
     D0=DIJK:Init(G, src) by Def7; then
     D0=G.set(ELabelSelector,{}).set(VLabelSelector,src.-->0); then
 A1: the_ELabel_of D0 = the_ELabel_of G.set(ELabelSelector,{}) by GLIB_000:12
@@ -1301,7 +1336,7 @@ A1: the_ELabel_of D0 = the_ELabel_of G.set(ELabelSelector,{}) by GLIB_000:12
       holds x in D0.edgesBetween(D0.labeledV())
       by A1,RELAT_1:60; then
 A2: P[0] by TARSKI:def 3;
-    now let n be Element of NAT; set Dn = DCS.->n, Dn1 = DCS.->(n+1);
+    now let n be Element of NAT; set Dn = DCS.n, Dn1 = DCS.(n+1);
         set BE = DIJK:NextBestEdges(Dn), e = choose BE;
         set target = (the_Target_of Dn).e;
         set val=(the_VLabel_of Dn).((the_Source_of Dn).e)+(the_Weight_of Dn).e;
@@ -1373,21 +1408,21 @@ end;
 theorem Th22: ::tDCS08
   for G being finite nonnegative-weighted WGraph, src being Vertex of G,
     n being Element of NAT, G2 being inducedWSubgraph of
-    G,(DIJK:CompSeq(G,src).->n).labeledV(),
-      (DIJK:CompSeq(G,src).->n).labeledE()
+    G,(DIJK:CompSeq(G,src).n).labeledV(),
+      (DIJK:CompSeq(G,src).n).labeledE()
   holds G2 is_mincost_DTree_rooted_at src &
-  for v being Vertex of G st v in (DIJK:CompSeq(G,src).->n).labeledV()
+  for v being Vertex of G st v in (DIJK:CompSeq(G,src).n).labeledV()
     holds G.min_DPath_cost(src,v) =
-          (the_VLabel_of (DIJK:CompSeq(G,src).->n)).v
+          (the_VLabel_of (DIJK:CompSeq(G,src).n)).v
 proof
     let G be finite nonnegative-weighted WGraph, src be Vertex of G;
-    set DCS = DIJK:CompSeq(G,src), D0 = DCS.->0;
+    set DCS = DIJK:CompSeq(G,src), D0 = DCS.0;
     defpred P[Element of NAT] means
      for G2 being inducedWSubgraph of
-          G,(DCS.->$1).labeledV(),(DCS.->$1).labeledE() holds
+          G,(DCS.$1).labeledV(),(DCS.$1).labeledE() holds
        G2 is_mincost_DTree_rooted_at src &
-       for v being Vertex of G st v in (DCS.->$1).labeledV()
-         holds G.min_DPath_cost(src,v) = (the_VLabel_of (DCS.->$1)).v;
+       for v being Vertex of G st v in (DCS.$1).labeledV()
+         holds G.min_DPath_cost(src,v) = (the_VLabel_of (DCS.$1)).v;
     reconsider EL = {} as PartFunc of the_Edges_of G, REAL by  PARTFUN1:56;
 A1: D0 = DIJK:Init(G,src) by Def7
       .= G.set(ELabelSelector,EL)
@@ -1440,7 +1475,7 @@ A4: D0.labeledE() = {} by RELAT_1:60;
           by A11,A3,TARSKI:def 1,A13;
     end; then
 A16: P[0];
-    now let n be Element of NAT; set Dn = DCS.->n, Dn1 = DCS.->(n+1);
+    now let n be Element of NAT; set Dn = DCS.n, Dn1 = DCS.(n+1);
         set BE = DIJK:NextBestEdges(Dn), e = choose BE;
         set source = (the_Source_of Dn).e, target = (the_Target_of Dn).e;
         set DnE = Dn.labelEdge(e,1);
@@ -1892,7 +1927,7 @@ proof
     let G be finite real-weighted WGraph, src be Vertex of G;
     set DCS = DIJK:CompSeq(G, src);
     now take n = card G.reachableDFrom(src);
-        set Gn = DCS.->n, Gn1a = DCS.->(n+1), VGn = the_VLabel_of Gn;
+        set Gn = DCS.n, Gn1a = DCS.(n+1), VGn = the_VLabel_of Gn;
         set BestEdges = DIJK:NextBestEdges(Gn), e = choose BestEdges;
         set NextEG = Gn.labelEdge(e, 1), target = (the_Target_of Gn).e;
         set RSize = card G.reachableDFrom(src);
@@ -1901,10 +1936,10 @@ proof
     A1: Gn1a = DIJK:Step(Gn) by Def7;
         now per cases;
         suppose BestEdges = {};
-            hence DCS.->n = DCS.->(n+1) by A1, Def5; end;
+            hence DCS.n = DCS.(n+1) by A1, Def5; end;
         suppose
         A2: BestEdges <> {};
-        A3: Card (DCS.->n).labeledV() = min(n+1, RSize) by Th20;
+        A3: Card (DCS.n).labeledV() = min(n+1, RSize) by Th20;
             RSize <= RSize + 1 by NAT_1:29; then
         A4: card Gn.labeledV() = RSize by A3, XXREAL_0:def 8;
         A5: card (DIJK:Step(Gn)).labeledV() =
@@ -1914,9 +1949,9 @@ proof
         A7: RSize <= (n + 1) + 1 by A6, XXREAL_0:2;
             card Gn1a.labeledV() = min((n+1)+1, RSize) by Th20
                                  .= RSize by A7, XXREAL_0:def 8;
-            hence DCS.->n = DCS.->(n+1) by A4, A5, Def7; end;
+            hence DCS.n = DCS.(n+1) by A4, A5, Def7; end;
         end;
-        hence DCS.->n = DCS.->(n+1);
+        hence DCS.n = DCS.(n+1);
     end;
     hence thesis by GLIB_000:def 68;
 end;
@@ -1939,20 +1974,20 @@ proof
     consider k being Nat such that
 A1: card RFS = k + 1 by NAT_1:22;
     reconsider k as Element of NAT by ORDINAL1:def 13;
-    set Gk = DCS.->k, Gk1 = DCS.->(k+1);
+    set Gk = DCS.k, Gk1 = DCS.(k+1);
 A2: Gk1 = DIJK:Step(Gk) by Def7;
 A3: card Gk1.labeledV() = min(card RFS+1, card RFS) by A1, Th20;
 A4: card RFS <= card RFS + 1 by NAT_1:29;
     card Gk.labeledV() = min(card RFS, card RFS) by A1, Th20; then
     card Gk1.labeledV() = card Gk.labeledV() by A3, A4, XXREAL_0:def 8; then
     DIJK:NextBestEdges(Gk) = {} by A2, Th13; then
-A5: DCS.->k = DCS.->(k+1) by A2, Def5;
-A6: DCS.k = DCS.->(k+1) by A5
+A5: DCS.k = DCS.(k+1) by A2, Def5;
+A6: DCS.k = DCS.(k+1) by A5
          .= DCS.(k+1);
     now let n be Element of NAT; assume
-    A7: DCS.n = DCS.(n+1); set Gn = DCS.->n, Gn1 = DCS.->(n+1);
-    A8: DCS.->n = DCS.(n+1) by A7
-               .= DCS.->(n+1);
+    A7: DCS.n = DCS.(n+1); set Gn = DCS.n, Gn1 = DCS.(n+1);
+    A8: DCS.n = DCS.(n+1) by A7
+               .= DCS.(n+1);
         now assume n < k; then
         A9: n + 1 < card RFS by A1, XREAL_1:10;
             card Gn.labeledV() = min(n+1, card RFS) by Th20; then
@@ -1975,7 +2010,7 @@ proof
     let G be finite real-weighted WGraph, src be Vertex of G;
     set Gn = DIJK:SSSP(G, src), RFS = G.reachableDFrom(src);
     set DCS = DIJK:CompSeq(G,src), n = DCS.Lifespan();
-A1: Gn = DCS.->n; then
+A1: Gn = DCS.n; then
 A2: card Gn.labeledV() = min(n+1, card RFS) by Th20
                              .= min(card RFS, card RFS) by Th24
                              .= card RFS;
@@ -2003,7 +2038,7 @@ proof
     set Res = DIJK:SSSP(G,src), DCS = DIJK:CompSeq(G,src);
 A1: Res = DCS.Result()
        .= DCS.(DCS.Lifespan())
-       .= DCS.->(DCS.Lifespan());
+       .= DCS.(DCS.Lifespan());
     hence G2 is_mincost_DTree_rooted_at src by Th22;
     let v being Vertex of G; assume
 A2: v in G.reachableDFrom(src); then
@@ -2526,8 +2561,8 @@ end;
 
 definition let G be real-weighted WGraph;
   func PRIM:CompSeq(G) ->  real-WEV WEVGraphSeq means :Def15: ::dPRIMCS
-    it.->0 = PRIM:Init(G) &
-    for n being Element of NAT holds it.->(n+1) = PRIM:Step(it.->n);
+    it.0 = PRIM:Init(G) &
+    for n being Element of NAT holds it.(n+1) = PRIM:Step(it.n);
   existence
   proof
     defpred P[set,set,set] means
@@ -2566,36 +2601,44 @@ A7: for n being Element of NAT holds P2[n] from NAT_1:sch 1(A4,A5); then
     for n being Element of NAT holds IT.n is _Graph; then
     reconsider IT as GraphSeq by GLIB_000:def 55;
 A8: for n be Element of NAT holds
-       IT.->n is real-WEV WEVGraph by A7; then
-    for n being Element of NAT holds
-      IT.->n is [Weighted] & IT.->n is [ELabeled] & IT.->n is [VLabeled]; then
+       IT.n is real-WEV WEVGraph by A7;
+    for n being Nat holds
+      IT.n is [Weighted] & IT.n is [ELabeled] & IT.n is [VLabeled]
+    proof
+      let n be Nat; n in NAT by ORDINAL1:def 13;
+      hence thesis by A8;
+    end; then
     reconsider IT as WEVGraphSeq
       by GLIB_003:def 24, GLIB_003:def 25, GLIB_003:def 26;
-    for n being Element of NAT holds IT.->n is real-WEV by A8; then
+    for n being Nat holds IT.n is real-WEV
+    proof
+      let n be Nat; n in NAT by ORDINAL1:def 13;
+      hence thesis by A8; 
+    end; then
     reconsider IT as real-WEV WEVGraphSeq by GLIB_003:def 31;
     take IT;
-    thus IT.->0 = PRIM:Init(G) by A3;
+    thus IT.0 = PRIM:Init(G) by A3;
     let n be Element of NAT;
     IT.n is real-WEV WEVGraph by A7; then
     consider Gn,Gn1 being real-WEV WEVGraph such that
 A9: IT.n = Gn & IT.(n+1) = Gn1 & Gn1 = PRIM:Step(Gn) by A3;
-    thus IT.->(n+1) = PRIM:Step(IT.->n) by A9;
+    thus IT.(n+1) = PRIM:Step(IT.n) by A9;
   end;
   uniqueness proof
     let IT1,IT2 be real-WEV WEVGraphSeq such that
-A10: IT1.->0 = PRIM:Init(G) &
-    for n being Element of NAT holds IT1.->(n+1) = PRIM:Step(IT1.->n) and
-A11: IT2.->0 = PRIM:Init(G) &
-    for n being Element of NAT holds IT2.->(n+1) = PRIM:Step(IT2.->n);
+A10: IT1.0 = PRIM:Init(G) &
+    for n being Element of NAT holds IT1.(n+1) = PRIM:Step(IT1.n) and
+A11: IT2.0 = PRIM:Init(G) &
+    for n being Element of NAT holds IT2.(n+1) = PRIM:Step(IT2.n);
     defpred P[Element of NAT] means IT1.$1 = IT2.$1;
-    IT1.0 = IT2.->0 by A10,A11; then
+    IT1.0 = IT2.0 by A10,A11; then
 A12: P[0];
     now let n be Element of NAT; assume P[n]; then
-        IT1.n = IT2.->n; then
-    A13: IT1.->n = IT2.-> n;
-        IT1.->(n+1) = PRIM:Step(IT2.->n) by A13, A10
-                   .= IT2.->(n+1) by A11; then
-        IT1.(n+1) = IT2.->(n+1);
+        IT1.n = IT2.n; then
+    A13: IT1.n = IT2. n;
+        IT1.(n+1) = PRIM:Step(IT2.n) by A13, A10
+                   .= IT2.(n+1) by A11; then
+        IT1.(n+1) = IT2.(n+1);
         hence P[n+1];
     end; then
 A14: for n being Element of NAT st P[n] holds P[n+1];
@@ -2610,14 +2653,14 @@ registration let G be finite real-weighted WGraph;
   coherence
   proof
     set PCS = PRIM:CompSeq(G);
-    defpred P[Element of NAT] means PCS.->$1 is finite;
-    (PCS.->0) = PRIM:Init(G) by Def15
+    defpred P[Nat] means PCS.$1 is finite;
+    (PCS.0) = PRIM:Init(G) by Def15
              .= G.set(VLabelSelector,(choose the_Vertices_of G).-->1)
                  .set(ELabelSelector,{}); then
 A1: P[0];
 A2: now let n be Element of NAT; assume P[n]; then
-        reconsider Gn = (PCS.->n) as finite real-WEV WEVGraph;
-        set Gn1 = PCS.->(n+1);
+        reconsider Gn = (PCS.n) as finite real-WEV WEVGraph;
+        set Gn1 = PCS.(n+1);
         set Next = PRIM:NextBestEdges(Gn), e = choose Next;
     A3: Gn1 = PRIM:Step(Gn) by Def15;
         now per cases;
@@ -2633,11 +2676,16 @@ A2: now let n be Element of NAT; assume P[n]; then
             Gn1 = Gn.labelEdge(e,1).labelVertex((the_Source_of Gn).e,1)
               by A3,Def14;
             hence P[n+1];
-            end;
+          end;
         end;
         hence P[n+1];
     end;
-    for n being Element of NAT holds P[n] from NAT_1:sch 1(A1,A2);
+AA: for n being Element of NAT holds P[n] from NAT_1:sch 1(A1,A2);
+    for n being Nat holds P[n]
+    proof
+      let n be Nat; n in NAT by ORDINAL1:def 13;
+      hence thesis by AA; 
+    end;
     hence thesis by GLIB_000:def 60;
   end;
 end;
@@ -2649,7 +2697,7 @@ definition let G be real-weighted WGraph;
   proof
     set PCS = PRIM:CompSeq(G);
     PCS.Result() = PCS.(PCS.Lifespan())
-                .= PCS.->(PCS.Lifespan());
+                .= PCS.(PCS.Lifespan());
     hence thesis;
   end;
 end;
@@ -2661,7 +2709,7 @@ registration let G be finite real-weighted WGraph;
     set PCS = PRIM:CompSeq(G);
     PRIM:MST(G) = PCS.Result()
                .= PCS.(PCS.Lifespan())
-               .= PCS.->(PCS.Lifespan());
+               .= PCS.(PCS.Lifespan());
     hence thesis;
   end;
 end;
@@ -2773,15 +2821,15 @@ end;
 
 Lm8:
   for G being finite real-weighted WGraph, n being Element of NAT holds
-     G == PRIM:CompSeq(G).->n &
-     the_Weight_of (PRIM:CompSeq(G).->n) = the_Weight_of G
+     G == PRIM:CompSeq(G).n &
+     the_Weight_of (PRIM:CompSeq(G).n) = the_Weight_of G
 proof
    let G be finite real-weighted WGraph; set PCS = PRIM:CompSeq(G);
     defpred P[Element of NAT] means
-    G == PCS.->$1 & the_Weight_of (PCS.->$1) = the_Weight_of G;
-    PCS.->0 = PRIM:Init(G) by Def15; then
+    G == PCS.$1 & the_Weight_of (PCS.$1) = the_Weight_of G;
+    PCS.0 = PRIM:Init(G) by Def15; then
 A1: P[0] by Lm4;
-A2: now let n be Element of NAT; set Gn = PCS.->n, Gn1 = PCS.->(n+1);assume
+A2: now let n be Element of NAT; set Gn = PCS.n, Gn1 = PCS.(n+1);assume
     A3: P[n];
         Gn1 = PRIM:Step(Gn) by Def15; then
         Gn1 == Gn & the_Weight_of Gn1 = the_Weight_of Gn
@@ -2794,27 +2842,27 @@ end;
 
 Lm9:
   for G being finite real-weighted WGraph, n being Element of NAT holds
-   (PRIM:CompSeq(G).->n).labeledV() is non empty Subset of the_Vertices_of G &
-   (PRIM:CompSeq(G).->n).labeledE() c=
-     G.edgesBetween((PRIM:CompSeq(G).->n).labeledV())
+   (PRIM:CompSeq(G).n).labeledV() is non empty Subset of the_Vertices_of G &
+   (PRIM:CompSeq(G).n).labeledE() c=
+     G.edgesBetween((PRIM:CompSeq(G).n).labeledV())
 proof
     let G be finite real-weighted WGraph;
     set PCS = PRIM:CompSeq(G);
     defpred P[Element of NAT] means
-      (PCS.->$1).labeledV() is non empty Subset of the_Vertices_of G &
-      (PCS.->$1).labeledE() c= G.edgesBetween((PCS.->$1).labeledV());
-    now (PCS.->0).labeledV() = PRIM:Init(G).labeledV() by Def15
+      (PCS.$1).labeledV() is non empty Subset of the_Vertices_of G &
+      (PCS.$1).labeledE() c= G.edgesBetween((PCS.$1).labeledV());
+    now (PCS.0).labeledV() = PRIM:Init(G).labeledV() by Def15
                             .= {choose the_Vertices_of G} by Lm5;
-        hence (PCS.->0).labeledV() is non empty Subset of the_Vertices_of G;
-        (PCS.->0).labeledE() = PRIM:Init(G).labeledE() by Def15
+        hence (PCS.0).labeledV() is non empty Subset of the_Vertices_of G;
+        (PCS.0).labeledE() = PRIM:Init(G).labeledE() by Def15
                             .= {} by Lm5;
-        hence (PCS.->0).labeledE() c=
-          G.edgesBetween((PRIM:CompSeq(G).->0).labeledV()) by XBOOLE_1:2;
+        hence (PCS.0).labeledE() c=
+          G.edgesBetween((PRIM:CompSeq(G).0).labeledV()) by XBOOLE_1:2;
     end; then
 A1: P[0];
     now let n be Element of NAT; assume
     A2: P[n];
-        set Gn = PCS.->n, Gn1 = PCS.->(n+1);
+        set Gn = PCS.n, Gn1 = PCS.(n+1);
         set Next = PRIM:NextBestEdges(Gn), e = choose Next;
     A3: Gn1 = PRIM:Step(Gn) by Def15;
         now per cases;
@@ -2944,15 +2992,15 @@ end;
 
 Lm10:
   for G1 being finite real-weighted WGraph, n being Element of NAT,
-      G2 being inducedSubgraph of G1,(PRIM:CompSeq(G1).->n).labeledV(),
-                                     (PRIM:CompSeq(G1).->n).labeledE()
+      G2 being inducedSubgraph of G1,(PRIM:CompSeq(G1).n).labeledV(),
+                                     (PRIM:CompSeq(G1).n).labeledE()
   holds G2 is connected
 proof
     let G1 be finite real-weighted WGraph;
     defpred P[Element of NAT] means
-    for G2 being inducedSubgraph of G1, (PRIM:CompSeq(G1).->$1).labeledV(),
-      (PRIM:CompSeq(G1).->$1).labeledE() holds G2 is connected;
-    set G0 = PRIM:CompSeq(G1).->0, v = choose the_Vertices_of G1;
+    for G2 being inducedSubgraph of G1, (PRIM:CompSeq(G1).$1).labeledV(),
+      (PRIM:CompSeq(G1).$1).labeledE() holds G2 is connected;
+    set G0 = PRIM:CompSeq(G1).0, v = choose the_Vertices_of G1;
     now let G be inducedSubgraph of G1, G0.labeledV(), G0.labeledE();
       G0 = PRIM:Init(G1) by Def15; then
       G0.labeledV() = {v} & G0.labeledE() = {} by Lm5; then
@@ -2963,7 +3011,7 @@ proof
 A1: P[0];
     now let n be Element of NAT; assume
     A2: P[n];
-        set Gn = PRIM:CompSeq(G1).->n, Gn1 = PRIM:CompSeq(G1).->(n+1);
+        set Gn = PRIM:CompSeq(G1).n, Gn1 = PRIM:CompSeq(G1).(n+1);
         set e = choose PRIM:NextBestEdges(Gn);
         set v1 = (the_Target_of Gn).e, v2 = (the_Source_of Gn).e;
     A3: Gn1 = PRIM:Step(Gn) by Def15;
@@ -3116,12 +3164,12 @@ end;
 
 Lm11:
   for G1 being finite real-weighted WGraph, n being Element of NAT,
-      G2 being inducedSubgraph of G1, (PRIM:CompSeq(G1).->n).labeledV()
+      G2 being inducedSubgraph of G1, (PRIM:CompSeq(G1).n).labeledV()
     holds G2 is connected
 proof
     let G1 be finite real-weighted WGraph, n be Element of NAT;
-    set V = (PRIM:CompSeq(G1).->n).labeledV();
-    set E = (PRIM:CompSeq(G1).->n).labeledE();
+    set V = (PRIM:CompSeq(G1).n).labeledV();
+    set E = (PRIM:CompSeq(G1).n).labeledE();
     let G2 be inducedSubgraph of G1, V;
     reconsider V as non empty Subset of the_Vertices_of G1 by Lm9;
     reconsider E as Subset of G1.edgesBetween(V) by Lm9;
@@ -3137,28 +3185,28 @@ end;
 
 registration let G1 be finite real-weighted WGraph, n being Element of NAT;
   cluster
-  -> connected inducedSubgraph of G1,(PRIM:CompSeq(G1).->n).labeledV();
+  -> connected inducedSubgraph of G1,(PRIM:CompSeq(G1).n).labeledV();
   coherence by Lm11;
 end;
 
 registration let G1 be finite real-weighted WGraph, n being Element of NAT;
   cluster
-  -> connected inducedSubgraph of G1, (PRIM:CompSeq(G1).->n).labeledV(),
-                                      (PRIM:CompSeq(G1).->n).labeledE();
+  -> connected inducedSubgraph of G1, (PRIM:CompSeq(G1).n).labeledV(),
+                                      (PRIM:CompSeq(G1).n).labeledE();
   coherence by Lm10;
 end;
 
 Lm12:
   for G being finite real-weighted WGraph, n being Element of NAT holds
-    (PRIM:CompSeq(G).->n).labeledV() c=
+    (PRIM:CompSeq(G).n).labeledV() c=
       G.reachableFrom(choose the_Vertices_of G)
 proof
     let G be finite real-weighted WGraph;
     set src = choose the_Vertices_of G;
     defpred P[Element of NAT] means
-    (PRIM:CompSeq(G).->$1).labeledV() c=
+    (PRIM:CompSeq(G).$1).labeledV() c=
       G.reachableFrom(choose the_Vertices_of G);
-    set G0 = PRIM:CompSeq(G).->0;
+    set G0 = PRIM:CompSeq(G).0;
     G0 = PRIM:Init(G) by Def15; then
     the_VLabel_of G0 = src.-->1 by Lm4; then
     dom the_VLabel_of G0 = {src} by CQC_LANG:5; then
@@ -3167,7 +3215,7 @@ A1: G0.labeledV() = {src};
 A2: P[0] by A1, ZFMISC_1:37;
 A3: now let n be Element of NAT; assume
     A4: P[n];
-        set Gn = PRIM:CompSeq(G).->n, Gn1 = PRIM:CompSeq(G).->(n+1);
+        set Gn = PRIM:CompSeq(G).n, Gn1 = PRIM:CompSeq(G).(n+1);
         set Next = PRIM:NextBestEdges(Gn), e = choose Next;
         set sc = (the_Source_of Gn).e, tar = (the_Target_of Gn).e;
     A5: Gn1 = PRIM:Step(Gn) by Def15;
@@ -3237,47 +3285,47 @@ end;
 Lm13:
   for G being finite real-weighted WGraph, i,j being Element of NAT
   st i <= j holds
-    (PRIM:CompSeq(G).->i).labeledV() c=
-    (PRIM:CompSeq(G).->j).labeledV() &
-    (PRIM:CompSeq(G).->i).labeledE() c=
-    (PRIM:CompSeq(G).->j).labeledE()
+    (PRIM:CompSeq(G).i).labeledV() c=
+    (PRIM:CompSeq(G).j).labeledV() &
+    (PRIM:CompSeq(G).i).labeledE() c=
+    (PRIM:CompSeq(G).j).labeledE()
 proof
     let G be finite real-weighted WGraph, i,j be Element of NAT;
     set PCS = PRIM:CompSeq(G);
-    set vPCS = (PCS.->i).labeledV(), ePCS = (PCS.->i).labeledE();
+    set vPCS = (PCS.i).labeledV(), ePCS = (PCS.i).labeledE();
     assume i <= j; then
     consider x being Nat such that
 aA1: j = i + x by NAT_1:28;
     reconsider x as Element of NAT by ORDINAL1:def 13;
 A1: j = i+x by aA1;
-    defpred P[Element of NAT] means vPCS c= (PCS.->(i+$1)).labeledV() &
-                         ePCS c= (PCS.->(i+$1)).labeledE();
+    defpred P[Element of NAT] means vPCS c= (PCS.(i+$1)).labeledV() &
+                         ePCS c= (PCS.(i+$1)).labeledE();
 A2: P[0];
     now let k be Element of NAT; assume
-    A3: vPCS c= (PCS.->(i+k)).labeledV() &
-        ePCS c= (PCS.->(i+k)).labeledE();
-        PCS.->(i+k+1) = PRIM:Step(PCS.->(i+k)) by Def15; then
-        (PCS.->(i+k)).labeledV() c= (PCS.->(i+k+1)).labeledV() &
-        (PCS.->(i+k)).labeledE() c= (PCS.->(i+k+1)).labeledE()
+    A3: vPCS c= (PCS.(i+k)).labeledV() &
+        ePCS c= (PCS.(i+k)).labeledE();
+        PCS.(i+k+1) = PRIM:Step(PCS.(i+k)) by Def15; then
+        (PCS.(i+k)).labeledV() c= (PCS.(i+k+1)).labeledV() &
+        (PCS.(i+k)).labeledE() c= (PCS.(i+k+1)).labeledE()
           by Lm7;
-        hence vPCS c= (PCS.->(i+(k+1))).labeledV() &
-              ePCS c= (PCS.->(i+(k+1))).labeledE() by A3, XBOOLE_1:1;
+        hence vPCS c= (PCS.(i+(k+1))).labeledV() &
+              ePCS c= (PCS.(i+(k+1))).labeledE() by A3, XBOOLE_1:1;
     end; then
 A4: for k being Element of NAT st P[k] holds P[k+1];
     for k being Element of NAT holds P[k] from NAT_1:sch 1(A2,A4);
-    hence vPCS c= (PCS.->j).labeledV() & ePCS c= (PCS.->j).labeledE() by A1;
+    hence vPCS c= (PCS.j).labeledV() & ePCS c= (PCS.j).labeledE() by A1;
 end;
 
 Lm14:
     for G being finite real-weighted WGraph, n being Element of NAT holds
-      PRIM:NextBestEdges(PRIM:CompSeq(G).->n) = {} iff
-   (PRIM:CompSeq(G).->n).labeledV() =
+      PRIM:NextBestEdges(PRIM:CompSeq(G).n) = {} iff
+   (PRIM:CompSeq(G).n).labeledV() =
      G.reachableFrom(choose the_Vertices_of G)
 proof
     let G be finite real-weighted WGraph, n be Element of NAT;
     set src = choose the_Vertices_of G;
     set PCS = PRIM:CompSeq(G), RFS = G.reachableFrom(src);
-    set Gn = PCS.->n, Gn1 = PCS.->(n+1);
+    set Gn = PCS.n, Gn1 = PCS.(n+1);
     set Next = PRIM:NextBestEdges(Gn), e = choose Next;
     set GnV = Gn.labeledV(), GnVg = the_Vertices_of Gn \ GnV;
     hereby assume
@@ -3299,8 +3347,8 @@ proof
             A7: W is_Walk_from src, v by A6, GLIB_002:def 5;
                 src in {src} by TARSKI:def 1; then
                 src in PRIM:Init(G).labeledV() by Lm5; then
-            A8: src in (PCS.->0).labeledV() by Def15;
-            A9: (PCS.->0).labeledV() c= Gn.labeledV() by Lm13;
+            A8: src in (PCS.0).labeledV() by Def15;
+            A9: (PCS.0).labeledV() c= Gn.labeledV() by Lm13;
                 defpred P2[Element of NAT] means
                   $1 is odd & $1 <= len W & not W.$1 in GnV;
                 W.(len W) = W.last() by GLIB_001:def 7
@@ -3387,15 +3435,15 @@ end;
 
 Lm15:
   for G being finite real-weighted WGraph, n being Element of NAT holds
-    card (PRIM:CompSeq(G).->n).labeledV() =
+    card (PRIM:CompSeq(G).n).labeledV() =
       min(n+1, card(G.reachableFrom(choose the_Vertices_of G)))
 proof
     let G be finite real-weighted WGraph;
     set CS = PRIM:CompSeq(G), src = choose the_Vertices_of G;
     defpred P[Element of NAT] means
-    card (PRIM:CompSeq(G).->$1).labeledV() =
+    card (PRIM:CompSeq(G).$1).labeledV() =
       min($1+1, card(G.reachableFrom(src)));
-    set G0 = CS.->0;
+    set G0 = CS.0;
     G0 = PRIM:Init(G) by Def15; then
     the_VLabel_of G0 = src.-->1 by Lm4; then
     {src} = dom the_VLabel_of G0 by CQC_LANG:5
@@ -3408,7 +3456,7 @@ A1: card G0.labeledV() = 1 by CARD_1:79;
 A2: P[0] by A1, XXREAL_0:def 8;
 A3: now let n be Element of NAT; assume
     A4: P[n];
-        set Gn = PRIM:CompSeq(G).->n, Gn1 = PRIM:CompSeq(G).->(n+1);
+        set Gn = PRIM:CompSeq(G).n, Gn1 = PRIM:CompSeq(G).(n+1);
         set e = choose PRIM:NextBestEdges(Gn);
     A5: Gn1 = PRIM:Step(Gn) by Def15;
         now per cases;
@@ -3463,7 +3511,7 @@ proof
     consider n being Nat such that
 A1: n + 1 = card RFS by NAT_1:22;
     reconsider n as Element of NAT by ORDINAL1:def 13;
-    set Gn = PCS.->n, Gn1 = PCS.->(n+1);
+    set Gn = PCS.n, Gn1 = PCS.(n+1);
 A2: card RFS <= card RFS + 1 by NAT_1:29;
 A3: card Gn.labeledV() = min(card RFS, card RFS) by A1,Lm15
                       .= card RFS;
@@ -3493,7 +3541,7 @@ A10: Gn1 = Gn by A5, Def14;
 A11: PRIM:CompSeq(G) is halting by A10, GLIB_000:def 56;
     now let m be Element of NAT; assume
     A12: PCS.m = PCS.(m+1);
-        set Gm = PCS.->m, Gm1 = PCS.->(m+1);
+        set Gm = PCS.m, Gm1 = PCS.(m+1);
     A13: Gm = PCS.(m+1) by A12
           .= Gm1;
         now assume m < n; then
@@ -3515,17 +3563,17 @@ end;
 
 Lm17:
   for G1 being finite real-weighted WGraph, n being Element of NAT,
-      G2 being inducedSubgraph of G1, (PRIM:CompSeq(G1).->n).labeledV(),
-                                      (PRIM:CompSeq(G1).->n).labeledE()
+      G2 being inducedSubgraph of G1, (PRIM:CompSeq(G1).n).labeledV(),
+                                      (PRIM:CompSeq(G1).n).labeledE()
   holds G2 is Tree-like
 proof
     let G1 be finite real-weighted WGraph;
     set PCS = PRIM:CompSeq(G1);
     defpred P[Element of NAT] means
-       for G2 being inducedSubgraph of G1,(PCS.->$1).labeledV(),
-                                           (PCS.->$1).labeledE()
+       for G2 being inducedSubgraph of G1,(PCS.$1).labeledV(),
+                                           (PCS.$1).labeledE()
          holds G2 is Tree-like;
-    set G0 = PCS.->0, src = choose the_Vertices_of G1;
+    set G0 = PCS.0, src = choose the_Vertices_of G1;
     G0 = PRIM:Init(G1) by Def15; then
 A1: G0.labeledV() = {src} & G0.labeledE() = {} by Lm5;
     now let G2 be inducedSubgraph of G1,G0.labeledV(),G0.labeledE();
@@ -3536,7 +3584,7 @@ A1: G0.labeledV() = {src} & G0.labeledE() = {} by Lm5;
 A2: P[0];
     now let n be Element of NAT; assume
     A3: P[n];
-        set Gn = PCS.->n, Gn1 = PCS.->(n+1);
+        set Gn = PCS.n, Gn1 = PCS.(n+1);
         set Next = PRIM:NextBestEdges(Gn), e = choose Next;
     A4: Gn1 = PRIM:Step(Gn) by Def15;
         consider G3 being inducedSubgraph of G1,Gn.labeledV(),Gn.labeledE();
@@ -3614,7 +3662,7 @@ proof
     set src = choose the_Vertices_of G, RFS = G.reachableFrom(src);
 A1: M = PCS.Result()
      .= PCS.(PCS.Lifespan())
-     .= PCS.->(PCS.Lifespan());
+     .= PCS.(PCS.Lifespan());
 
     PCS.Lifespan() + 1 = card RFS by Lm16; then
 A2: card V = min(card RFS,card RFS) by A1,Lm15;
@@ -3631,17 +3679,17 @@ registration let G be finite connected real-weighted WGraph;
   existence
   proof
     set PCS = PRIM:CompSeq(G), n = PCS.Lifespan();
-    consider IT being inducedWSubgraph of G,(PCS.->n).labeledV(),
-                                            (PCS.->n).labeledE();
+    consider IT being inducedWSubgraph of G,(PCS.n).labeledV(),
+                                            (PCS.n).labeledE();
     take IT;
-    (PCS.->n).labeledV() is non empty Subset of the_Vertices_of G &
-    (PCS.->n).labeledE() c= G.edgesBetween((PCS.->n).labeledV())
+    (PCS.n).labeledV() is non empty Subset of the_Vertices_of G &
+    (PCS.n).labeledE() c= G.edgesBetween((PCS.n).labeledV())
       by Lm9; then
-A1: the_Vertices_of IT = (PCS.->n).labeledV() by GLIB_000:def 39;
+A1: the_Vertices_of IT = (PCS.n).labeledV() by GLIB_000:def 39;
     PRIM:MST(G) = PCS.Result()
                .= PCS.n
-               .= PCS.->n; then
-    (PCS.->n).labeledV() = the_Vertices_of G by Lm18;
+               .= PCS.n; then
+    (PCS.n).labeledV() = the_Vertices_of G by Lm18;
     hence IT is spanning by A1, GLIB_000:def 35;
     thus IT is Tree-like by Lm17;
   end;
@@ -3789,48 +3837,48 @@ theorem ::tPRIMSTEP01
 
 theorem ::tPRIMCS03
   for G being finite real-weighted WGraph, n being Element of NAT holds
-     G == PRIM:CompSeq(G).->n &
-     the_Weight_of (PRIM:CompSeq(G).->n) = the_Weight_of G by Lm8;
+     G == PRIM:CompSeq(G).n &
+     the_Weight_of (PRIM:CompSeq(G).n) = the_Weight_of G by Lm8;
 
 theorem ::tPRIMCS05
   for G being finite real-weighted WGraph, n being Element of NAT holds
-   (PRIM:CompSeq(G).->n).labeledV() is non empty Subset of the_Vertices_of G &
-   (PRIM:CompSeq(G).->n).labeledE() c=
-     G.edgesBetween((PRIM:CompSeq(G).->n).labeledV()) by Lm9;
+   (PRIM:CompSeq(G).n).labeledV() is non empty Subset of the_Vertices_of G &
+   (PRIM:CompSeq(G).n).labeledE() c=
+     G.edgesBetween((PRIM:CompSeq(G).n).labeledV()) by Lm9;
 
 theorem ::tPRIMCS02
   for G1 being finite real-weighted WGraph, n being Element of NAT,
-      G2 being inducedSubgraph of G1,(PRIM:CompSeq(G1).->n).labeledV(),
-                                     (PRIM:CompSeq(G1).->n).labeledE()
+      G2 being inducedSubgraph of G1,(PRIM:CompSeq(G1).n).labeledV(),
+                                     (PRIM:CompSeq(G1).n).labeledE()
   holds G2 is connected;
 
 theorem ::tPRIMCS04
   for G1 being finite real-weighted WGraph, n being Element of NAT,
-      G2 being inducedSubgraph of G1, (PRIM:CompSeq(G1).->n).labeledV()
+      G2 being inducedSubgraph of G1, (PRIM:CompSeq(G1).n).labeledV()
     holds G2 is connected;
 
 theorem ::tPRIMCS08
   for G being finite real-weighted WGraph, n being Element of NAT holds
-    (PRIM:CompSeq(G).->n).labeledV() c=
+    (PRIM:CompSeq(G).n).labeledV() c=
       G.reachableFrom(choose the_Vertices_of G) by Lm12;
 
 theorem ::tPRIMCS13
   for G being finite real-weighted WGraph, i,j being Element of NAT
   st i <= j holds
-    (PRIM:CompSeq(G).->i).labeledV() c=
-    (PRIM:CompSeq(G).->j).labeledV() &
-    (PRIM:CompSeq(G).->i).labeledE() c=
-    (PRIM:CompSeq(G).->j).labeledE() by Lm13;
+    (PRIM:CompSeq(G).i).labeledV() c=
+    (PRIM:CompSeq(G).j).labeledV() &
+    (PRIM:CompSeq(G).i).labeledE() c=
+    (PRIM:CompSeq(G).j).labeledE() by Lm13;
 
 theorem ::tPRIMCS07
     for G being finite real-weighted WGraph, n being Element of NAT holds
-      PRIM:NextBestEdges(PRIM:CompSeq(G).->n) = {} iff
-   (PRIM:CompSeq(G).->n).labeledV() =
+      PRIM:NextBestEdges(PRIM:CompSeq(G).n) = {} iff
+   (PRIM:CompSeq(G).n).labeledV() =
      G.reachableFrom(choose the_Vertices_of G) by Lm14;
 
 theorem ::tPRIMCS06
   for G being finite real-weighted WGraph, n being Element of NAT holds
-    card (PRIM:CompSeq(G).->n).labeledV() =
+    card (PRIM:CompSeq(G).n).labeledV() =
       min(n+1, card(G.reachableFrom(choose the_Vertices_of G))) by Lm15;
 
 theorem ::tPRIMCS09
@@ -3840,8 +3888,8 @@ theorem ::tPRIMCS09
 
 theorem ::tPRIMCS11
   for G1 being finite real-weighted WGraph, n being Element of NAT,
-      G2 being inducedSubgraph of G1, (PRIM:CompSeq(G1).->n).labeledV(),
-                                      (PRIM:CompSeq(G1).->n).labeledE()
+      G2 being inducedSubgraph of G1, (PRIM:CompSeq(G1).n).labeledV(),
+                                      (PRIM:CompSeq(G1).n).labeledE()
   holds G2 is Tree-like by Lm17;
 
 theorem ::tPRIMMST02
@@ -3851,20 +3899,20 @@ theorem ::tPRIMMST02
 theorem Th52: ::tPRIMMST03
   for G being finite connected real-weighted WGraph, n being Element of NAT
   holds
-   (PRIM:CompSeq(G).->n).labeledE() c= PRIM:MST(G).labeledE()
+   (PRIM:CompSeq(G).n).labeledE() c= PRIM:MST(G).labeledE()
 proof
     let G be finite connected real-weighted WGraph, n be Element of NAT;
     set PCS = PRIM:CompSeq(G), PMST = PRIM:MST(G);
 A1: PMST = PCS.Result()
         .= PCS.(PCS.Lifespan())
-        .= PCS.->(PCS.Lifespan());
+        .= PCS.(PCS.Lifespan());
     defpred P[Element of NAT] means
-      (PCS.->(PCS.Lifespan()+$1)) = PRIM:MST(G);
+      (PCS.(PCS.Lifespan()+$1)) = PRIM:MST(G);
 A2: P[0];
 A3: now let n be Element of NAT; assume
     A4: P[n];
         set off = PCS.Lifespan();
-        set Gn = PCS.->(off+n), Gn1 = PCS.->(off+n+1);
+        set Gn = PCS.(off+n), Gn1 = PCS.(off+n+1);
         set Next = PRIM:NextBestEdges(Gn), e = choose Next;
     A5: Gn1 = PRIM:Step(Gn) by Def15;
     A6: Gn.labeledV() = the_Vertices_of G by A4,Lm18;
@@ -3904,7 +3952,7 @@ proof
     set PCS = PRIM:CompSeq(G1);
 A1: PMST = PCS.Result()
         .= PCS.(PCS.Lifespan())
-        .= PCS.->(PCS.Lifespan()); then
+        .= PCS.(PCS.Lifespan()); then
     PMST == G1 & the_Weight_of G1 = the_Weight_of PMST by Lm8; then
 A2: the_Edges_of G1 = the_Edges_of PMST by GLIB_000:def 36;
 A3: PMST.labeledV() = the_Vertices_of G1 by Lm18;
@@ -3938,9 +3986,9 @@ A6: G2 is Tree-like & G2 is spanning by A1,Lm17, GLIB_000:def 35;
         end; then
         reconsider X as non empty finite Subset of G1.allWSubgraphs();
         defpred Z[finite _Graph, Element of NAT] means
-          not (PCS.->($2+1)).labeledE() c= the_Edges_of $1 &
+          not (PCS.($2+1)).labeledE() c= the_Edges_of $1 &
           for n being Element of NAT st n <= $2 holds
-            (PCS.->n).labeledE() c= the_Edges_of $1;
+            (PCS.n).labeledE() c= the_Edges_of $1;
         defpred P[finite _Graph, finite _Graph] means
            card (the_Edges_of $1 /\ the_Edges_of G2) >
            card (the_Edges_of $2 /\ the_Edges_of G2) or
@@ -3963,7 +4011,7 @@ A6: G2 is Tree-like & G2 is spanning by A1,Lm17, GLIB_000:def 35;
                 hence contradiction by A7,A14,Th36;
             end;
             defpred P4[Element of NAT] means
-             not (PCS.->$1).labeledE()c= the_Edges_of G';
+             not (PCS.$1).labeledE()c= the_Edges_of G';
             now assume the_Edges_of G2 c= the_Edges_of G'; then
                 the_Edges_of G2 c< the_Edges_of G' by A12,XBOOLE_0:def 8; then
                 card the_Edges_of G2 < card the_Edges_of G' by CARD_2:67; then
@@ -3988,10 +4036,10 @@ A6: G2 is Tree-like & G2 is spanning by A1,Lm17, GLIB_000:def 35;
         A19: k2 + 1 = k3 by NAT_1:22;
         reconsider k2 as Element of NAT by ORDINAL1:def 13;
             k2 + 1 - 1 < k3 - 0 by A19, REAL_1:92; then
-        A20: (PCS.->k2).labeledE() c= the_Edges_of G' by A17;
+        A20: (PCS.k2).labeledE() c= the_Edges_of G' by A17;
             now let n be Element of NAT; assume n <= k2; then
-             (PCS.->n).labeledE() c= (PCS.->k2).labeledE() by Lm13;
-                hence (PCS.->n).labeledE() c= the_Edges_of G'
+             (PCS.n).labeledE() c= (PCS.k2).labeledE() by Lm13;
+                hence (PCS.n).labeledE() c= the_Edges_of G'
                   by A20, XBOOLE_1:1;
             end;
             hence ex k1 being Element of NAT st Z[G,k1] by A17,A19;
@@ -4120,7 +4168,7 @@ A6: G2 is Tree-like & G2 is spanning by A1,Lm17, GLIB_000:def 35;
             hence contradiction by A7,A46,Th36;
         end;
         defpred P2[Element of NAT] means
-         not (PCS.->$1).labeledE() c= the_Edges_of M;
+         not (PCS.$1).labeledE() c= the_Edges_of M;
         now assume the_Edges_of G2 c= the_Edges_of M; then
             the_Edges_of G2 c< the_Edges_of M by A44,XBOOLE_0:def 8; then
             card the_Edges_of G2 < card the_Edges_of M by CARD_2:67; then
@@ -4145,7 +4193,7 @@ A6: G2 is Tree-like & G2 is spanning by A1,Lm17, GLIB_000:def 35;
         consider k1o being Nat such that
     A51: k = k1o + 1 by NAT_1:22;
     reconsider k1o as Element of NAT by ORDINAL1:def 13;
-        set Gk1b = PCS.->k1o, Gk = PCS.->k;
+        set Gk1b = PCS.k1o, Gk = PCS.k;
     A52: Gk = PRIM:Step(Gk1b) by A51, Def15;
         k1o + 1 - 1 < k - 0 by A51, REAL_1:92; then
     A53: Gk1b.labeledE() c= the_Edges_of M by A49;
@@ -4411,10 +4459,10 @@ then
         dom M2' = WGraphSelectors by Lm3; then
         M2' in G1.allWSubgraphs() by Def10; then
     A137: M2' in X;
-    A138: now thus not (PCS.->(k1o+1)).labeledE() c= the_Edges_of M by A49,A51;
+    A138: now thus not (PCS.(k1o+1)).labeledE() c= the_Edges_of M by A49,A51;
             let n be Element of NAT; assume n <= k1o; then
-            (PCS.->n).labeledE() c= Gk1b.labeledE() by Lm13;
-            hence (PCS.->n).labeledE() c= the_Edges_of M by A53, XBOOLE_1:1;
+            (PCS.n).labeledE() c= Gk1b.labeledE() by Lm13;
+            hence (PCS.n).labeledE() c= the_Edges_of M by A53, XBOOLE_1:1;
         end;
     A139: now assume
         A140: em in the_Edges_of G2; then
@@ -4469,7 +4517,7 @@ end;
         A151: Gk.labeledE() c= the_Edges_of M2' by TARSKI:def 3;
         A152: now assume k2 < k; then
                 k2+1 <= k by NAT_1:38; then
-                (PCS.->(k2+1)).labeledE() c= Gk.labeledE() by Lm13;
+                (PCS.(k2+1)).labeledE() c= Gk.labeledE() by Lm13;
                 hence contradiction by A143,A151,XBOOLE_1:1;
             end;
         A153: k1o >= k2 by A142,A137,A138,A41,A143;

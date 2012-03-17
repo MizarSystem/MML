@@ -5,6 +5,7 @@
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
+<ArticleID name="RELAT_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="FINSUB_1"/>
 </Signature>
@@ -15,10 +16,10 @@
 </Typ>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="3"/>
-<Adjective nr="4"/>
-<Adjective nr="5"/>
-<Adjective nr="6"/>
+<Adjective nr="7"/>
+<Adjective nr="8"/>
+<Adjective nr="9"/>
+<Adjective nr="10"/>
 </Cluster>
 </RCluster>
 <FCluster>
@@ -32,9 +33,9 @@
 </Func>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="3"/>
-<Adjective nr="5"/>
-<Adjective nr="6"/>
+<Adjective nr="7"/>
+<Adjective nr="9"/>
+<Adjective nr="10"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -43,40 +44,40 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="24">
+<Func kind="K" nr="34">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="3"/>
-<Adjective nr="5"/>
-<Adjective nr="6"/>
+<Adjective nr="7"/>
+<Adjective nr="9"/>
+<Adjective nr="10"/>
 </Cluster>
 </FCluster>
 <CCluster>
 <ArgTypes/>
 <Cluster>
-<Adjective nr="6"/>
+<Adjective nr="10"/>
 </Cluster>
 <Typ kind="M" nr="1">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="3"/>
-<Adjective nr="5"/>
+<Adjective nr="7"/>
+<Adjective nr="9"/>
 </Cluster>
 </CCluster>
 <CCluster>
 <ArgTypes/>
 <Cluster>
-<Adjective nr="3"/>
-<Adjective nr="5"/>
+<Adjective nr="7"/>
+<Adjective nr="9"/>
 </Cluster>
 <Typ kind="M" nr="1">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="6"/>
+<Adjective nr="10"/>
 </Cluster>
 </CCluster>
 <CCluster>
@@ -88,12 +89,12 @@
 <Cluster/>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="24">
+<Func kind="K" nr="34">
 <LocusVar nr="1"/>
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="2"/>
+<Adjective nr="5"/>
 </Cluster>
 </CCluster>
 </Registrations>

@@ -28,7 +28,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="36"/>
+<Adjective nr="37"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -37,8 +37,8 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="27" value="false"/>
-<Adjective nr="36"/>
+<Adjective nr="28" value="false"/>
+<Adjective nr="37"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -47,11 +47,11 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="27" value="false"/>
-<Adjective nr="36"/>
+<Adjective nr="28" value="false"/>
 <Adjective nr="37"/>
 <Adjective nr="38"/>
 <Adjective nr="39"/>
+<Adjective nr="40"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -60,8 +60,8 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="25"/>
-<Adjective nr="41" value="false"/>
+<Adjective nr="26"/>
+<Adjective nr="42" value="false"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -70,12 +70,12 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="27" value="false"/>
-<Adjective nr="36"/>
+<Adjective nr="28" value="false"/>
 <Adjective nr="37"/>
 <Adjective nr="38"/>
 <Adjective nr="39"/>
-<Adjective nr="42"/>
+<Adjective nr="40"/>
+<Adjective nr="43"/>
 </Cluster>
 </RCluster>
 <FCluster>
@@ -108,15 +108,15 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="27" value="false"/>
-<Adjective nr="36"/>
+<Adjective nr="28" value="false"/>
+<Adjective nr="37"/>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster>
-<Adjective nr="41" value="false"/>
+<Adjective nr="42" value="false"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -162,22 +162,22 @@
 <LocusVar nr="3"/>
 </Func>
 <Cluster>
-<Adjective nr="27" value="false"/>
-<Adjective nr="28"/>
+<Adjective nr="28" value="false"/>
+<Adjective nr="29"/>
 </Cluster>
 </FCluster>
 <CCluster>
 <ArgTypes/>
 <Cluster>
-<Adjective nr="27" value="false"/>
-<Adjective nr="38"/>
+<Adjective nr="28" value="false"/>
+<Adjective nr="39"/>
 </Cluster>
 <Typ kind="G" nr="5">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="27" value="false"/>
-<Adjective nr="37"/>
+<Adjective nr="28" value="false"/>
+<Adjective nr="38"/>
 </Cluster>
 </CCluster>
 </Registrations>

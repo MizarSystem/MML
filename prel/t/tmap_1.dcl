@@ -24,13 +24,13 @@
 <Adjective nr="15"/>
 </Cluster>
 </Typ>
-<Typ kind="M" nr="7">
+<Typ kind="M" nr="6">
 <Cluster>
 <Adjective nr="13" value="false"/>
 </Cluster>
 <LocusVar nr="1"/>
 </Typ>
-<Typ kind="M" nr="7">
+<Typ kind="M" nr="6">
 <Cluster>
 <Adjective nr="13" value="false"/>
 </Cluster>
@@ -83,7 +83,7 @@
 <Adjective nr="15"/>
 </Cluster>
 </Typ>
-<Typ kind="M" nr="7">
+<Typ kind="M" nr="6">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>

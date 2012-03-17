@@ -24,47 +24,48 @@
 <ArticleID name="INT_1"/>
 <ArticleID name="GROUP_1"/>
 <ArticleID name="VECTSP_1"/>
+<ArticleID name="COMPTRIG"/>
 <ArticleID name="COMPLFLD"/>
 </Signature>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="163"/>
+<Func kind="K" nr="164"/>
 <Cluster>
-<Adjective nr="26" value="false"/>
-<Adjective nr="46"/>
+<Adjective nr="27" value="false"/>
+<Adjective nr="47"/>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="163"/>
+<Func kind="K" nr="164"/>
 <Cluster>
-<Adjective nr="26" value="false"/>
-<Adjective nr="38"/>
-<Adjective nr="46"/>
-<Adjective nr="49"/>
-<Adjective nr="51"/>
+<Adjective nr="27" value="false"/>
+<Adjective nr="39"/>
+<Adjective nr="47"/>
+<Adjective nr="50"/>
+<Adjective nr="52"/>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="163"/>
+<Func kind="K" nr="164"/>
 <Cluster>
-<Adjective nr="26" value="false"/>
-<Adjective nr="29"/>
+<Adjective nr="27" value="false"/>
 <Adjective nr="30"/>
 <Adjective nr="31"/>
 <Adjective nr="32"/>
-<Adjective nr="38"/>
-<Adjective nr="40"/>
-<Adjective nr="43"/>
-<Adjective nr="46"/>
+<Adjective nr="33"/>
+<Adjective nr="39"/>
+<Adjective nr="41"/>
+<Adjective nr="44"/>
 <Adjective nr="47"/>
 <Adjective nr="48"/>
 <Adjective nr="49"/>
 <Adjective nr="50"/>
 <Adjective nr="51"/>
 <Adjective nr="52"/>
-<Adjective nr="53" value="false"/>
+<Adjective nr="53"/>
+<Adjective nr="54" value="false"/>
 </Cluster>
 </FCluster>
 <CCluster>
@@ -73,7 +74,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="163"/>
+<Func kind="K" nr="164"/>
 </Func>
 </Typ>
 <Cluster>

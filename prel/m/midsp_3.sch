@@ -61,7 +61,7 @@
 </Func>
 </Pred>
 <For>
-<Typ kind="M" nr="15">
+<Typ kind="M" nr="14">
 <Cluster/>
 <Func kind="F" nr="1"/>
 </Typ>

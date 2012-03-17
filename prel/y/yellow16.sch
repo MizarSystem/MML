@@ -41,15 +41,15 @@
 </Typ>
 <Typ kind="M" nr="11">
 <Cluster>
-<Adjective nr="64"/>
-<Adjective nr="67"/>
+<Adjective nr="65"/>
+<Adjective nr="68"/>
 </Cluster>
 <Func kind="F" nr="1"/>
 </Typ>
 <Typ kind="M" nr="11">
 <Cluster>
-<Adjective nr="64"/>
-<Adjective nr="67"/>
+<Adjective nr="65"/>
+<Adjective nr="68"/>
 </Cluster>
 <Func kind="F" nr="1"/>
 </Typ>
@@ -147,9 +147,9 @@
 <Func kind="F" nr="3"/>
 <Var nr="1"/>
 </Func>
-<Typ kind="M" nr="20">
+<Typ kind="M" nr="19">
 <Cluster>
-<Adjective nr="54">
+<Adjective nr="55">
 <Func kind="K" nr="177">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
@@ -222,16 +222,16 @@
 </Typ>
 <Typ kind="G" nr="4">
 <Cluster>
-<Adjective nr="37" value="false"/>
-<Adjective nr="47"/>
+<Adjective nr="38" value="false"/>
 <Adjective nr="48"/>
 <Adjective nr="49"/>
+<Adjective nr="50"/>
 </Cluster>
 </Typ>
-<Typ kind="M" nr="20">
+<Typ kind="M" nr="19">
 <Cluster>
-<Adjective nr="37" value="false"/>
-<Adjective nr="54">
+<Adjective nr="38" value="false"/>
+<Adjective nr="55">
 <Func kind="F" nr="2"/>
 </Adjective>
 </Cluster>
@@ -351,15 +351,15 @@
 </Typ>
 <Typ kind="M" nr="11">
 <Cluster>
-<Adjective nr="64"/>
-<Adjective nr="67"/>
+<Adjective nr="65"/>
+<Adjective nr="68"/>
 </Cluster>
 <Func kind="F" nr="1"/>
 </Typ>
 <Typ kind="M" nr="11">
 <Cluster>
-<Adjective nr="64"/>
-<Adjective nr="67"/>
+<Adjective nr="65"/>
+<Adjective nr="68"/>
 </Cluster>
 <Func kind="F" nr="1"/>
 </Typ>
@@ -457,9 +457,9 @@
 <Func kind="F" nr="3"/>
 <Var nr="1"/>
 </Func>
-<Typ kind="M" nr="20">
+<Typ kind="M" nr="19">
 <Cluster>
-<Adjective nr="54">
+<Adjective nr="55">
 <Func kind="K" nr="177">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
@@ -532,16 +532,16 @@
 </Typ>
 <Typ kind="G" nr="4">
 <Cluster>
-<Adjective nr="37" value="false"/>
-<Adjective nr="47"/>
+<Adjective nr="38" value="false"/>
 <Adjective nr="48"/>
 <Adjective nr="49"/>
+<Adjective nr="50"/>
 </Cluster>
 </Typ>
-<Typ kind="M" nr="20">
+<Typ kind="M" nr="19">
 <Cluster>
-<Adjective nr="37" value="false"/>
-<Adjective nr="54">
+<Adjective nr="38" value="false"/>
+<Adjective nr="55">
 <Func kind="F" nr="2"/>
 </Adjective>
 </Cluster>

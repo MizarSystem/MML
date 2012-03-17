@@ -46,8 +46,8 @@
 <ArgTypes>
 <Typ kind="G" nr="11">
 <Cluster>
-<Adjective nr="39" value="false"/>
-<Adjective nr="85" value="false"/>
+<Adjective nr="40" value="false"/>
+<Adjective nr="86" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="27">
@@ -60,7 +60,7 @@
 </Typ>
 </ArgTypes>
 <For>
-<Typ kind="M" nr="37">
+<Typ kind="M" nr="36">
 <Cluster/>
 <Func kind="U" nr="1">
 <Func kind="K" nr="324">
@@ -118,7 +118,7 @@
 </Func>
 </Typ>
 <For>
-<Typ kind="M" nr="40">
+<Typ kind="M" nr="39">
 <Cluster/>
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
@@ -131,7 +131,7 @@
 <Not>
 <And>
 <For>
-<Typ kind="M" nr="37">
+<Typ kind="M" nr="36">
 <Cluster/>
 <Func kind="U" nr="1">
 <Func kind="K" nr="324">
@@ -190,13 +190,13 @@
 <ArgTypes>
 <Typ kind="G" nr="11">
 <Cluster>
-<Adjective nr="39" value="false"/>
-<Adjective nr="85" value="false"/>
+<Adjective nr="40" value="false"/>
+<Adjective nr="86" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="13">
 <Cluster>
-<Adjective nr="88">
+<Adjective nr="89">
 <Func kind="F" nr="1"/>
 </Adjective>
 </Cluster>
@@ -212,7 +212,7 @@
 </Typ>
 </ArgTypes>
 <For>
-<Typ kind="M" nr="37">
+<Typ kind="M" nr="36">
 <Cluster/>
 <Func kind="U" nr="1">
 <Func kind="K" nr="324">
@@ -325,7 +325,7 @@
 </Func>
 </Typ>
 <For>
-<Typ kind="M" nr="40">
+<Typ kind="M" nr="39">
 <Cluster/>
 <Func kind="F" nr="1"/>
 <Func kind="K" nr="170">
@@ -356,7 +356,7 @@
 <Not>
 <And>
 <For>
-<Typ kind="M" nr="37">
+<Typ kind="M" nr="36">
 <Cluster/>
 <Func kind="U" nr="1">
 <Func kind="K" nr="324">
@@ -465,13 +465,13 @@
 <ArgTypes>
 <Typ kind="G" nr="11">
 <Cluster>
-<Adjective nr="39" value="false"/>
-<Adjective nr="85" value="false"/>
+<Adjective nr="40" value="false"/>
+<Adjective nr="86" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="13">
 <Cluster>
-<Adjective nr="88">
+<Adjective nr="89">
 <Func kind="F" nr="1"/>
 </Adjective>
 </Cluster>
@@ -487,7 +487,7 @@
 </Typ>
 </ArgTypes>
 <For>
-<Typ kind="M" nr="37">
+<Typ kind="M" nr="36">
 <Cluster/>
 <Func kind="U" nr="1">
 <Func kind="K" nr="324">
@@ -602,7 +602,7 @@
 </Func>
 </Typ>
 <For>
-<Typ kind="M" nr="40">
+<Typ kind="M" nr="39">
 <Cluster/>
 <Func kind="F" nr="1"/>
 <Func kind="K" nr="170">
@@ -633,7 +633,7 @@
 <Not>
 <And>
 <For>
-<Typ kind="M" nr="37">
+<Typ kind="M" nr="36">
 <Cluster/>
 <Func kind="U" nr="1">
 <Func kind="K" nr="324">

@@ -46,8 +46,8 @@
 <Typ kind="M" nr="15">
 <Cluster>
 <Adjective nr="7"/>
-<Adjective nr="31"/>
-<Adjective nr="41"/>
+<Adjective nr="32"/>
+<Adjective nr="42"/>
 </Cluster>
 <Func kind="F" nr="1"/>
 </Typ>
@@ -112,8 +112,8 @@
 <Typ kind="M" nr="15">
 <Cluster>
 <Adjective nr="7"/>
-<Adjective nr="31"/>
-<Adjective nr="41"/>
+<Adjective nr="32"/>
+<Adjective nr="42"/>
 </Cluster>
 <Func kind="F" nr="1"/>
 </Typ>

@@ -1,0 +1,783 @@
+:: Chordal Graphs
+::  by Broderick Arneson and Piotr Rudnicki
+:: 
+:: Received August 18, 2006
+:: Copyright (c) 2006 Association of Mizar Users
+
+environ
+
+ vocabularies ARYTM, ARYTM_1, BOOLE, CARD_1, CAT_1, ORDINAL2, FINSET_1,
+      FUNCT_1, FINSEQ_1, FINSEQ_4, GRAPH_1, GLIB_000, GLIB_001, GLIB_002,
+      MATRIX_2, MSAFREE2, XREAL_0, NAT_1, INT_1, PRE_TOPC, REALSET1, RELAT_1,
+      RELAT_2, CHORD, TOPGEN_1, SQUARE_1, GRAPH_2, MEMBERED, BHSP_3;
+ notations TARSKI, XBOOLE_0, CQC_SIM1, SUBSET_1, ORDINAL1, XCMPLX_0, XXREAL_0,
+      DOMAIN_1, RELAT_1, FUNCT_1, FUNCT_2, FINSEQ_1, CARD_1, FINSET_1, INT_1,
+      NAT_1, GLIB_000, GLIB_001, GLIB_002, ZFMISC_1, CQC_LANG, ABIAN, ENUMSET1,
+      FINSEQ_4, NUMBERS, GRAPH_2, PRE_CIRC, MEMBERED;
+ constructors DOMAIN_1, NAT_1, AMISTD_2, BINARITH, FINSEQ_4, GLIB_001,
+      GLIB_002, CQC_SIM1, GRAPH_2, PRE_CIRC, XXREAL_0;
+ registrations RELSET_1, NAT_1, XBOOLE_0, MEMBERED, GLIB_000, FINSEQ_1,
+      GLIB_001, GLIB_002, SUBSET_1, FINSET_1, INT_1, ABIAN, JORDAN1D, ORDINAL1,
+      RELAT_1, PRE_CIRC, PNPROC_1, HEYTING3;
+ requirements ARITHM, BOOLE, NUMERALS, REAL, SUBSET;
+
+
+begin :: Preliminaries
+
+theorem :: CHORD:1  :: Nat00
+for n being non zero natural number holds n-1 is natural number & 1 <= n;
+
+theorem :: CHORD:2  :: Nat02
+for n being odd natural number holds n-1 is natural number & 1 <= n;
+
+theorem :: CHORD:3  :: EvenOdd02
+for n,m being odd Integer st n < m holds n <= m-2;
+
+theorem :: CHORD:4   :: EvenOdd03:
+for n,m being odd Integer st m < n holds m+2 <= n;
+
+theorem :: CHORD:5  :: EvenOdd04:
+for n being odd natural number st 1 <> n
+  ex m being odd natural number st m+2 = n;
+
+theorem :: CHORD:6  :: Odd100
+for n being odd natural number st n<=2 holds n=1;
+
+theorem :: CHORD:7  :: Odd101
+for n being odd natural number st n<=4 holds n=1 or n=3;
+
+theorem :: CHORD:8  :: Odd102
+for n being odd natural number st n<=6 holds n=1 or n=3 or n=5;
+
+theorem :: CHORD:9
+for n being odd natural number st n<=8 holds n=1 or n=3 or n=5 or n=7;
+
+theorem :: CHORD:10  :: Even100
+for n being even natural number st n<=1 holds n=0;
+
+theorem :: CHORD:11  :: Even101
+for n being even natural number st n<=3 holds n=0 or n=2;
+
+theorem :: CHORD:12  :: Even102
+for n being even natural number st n<=5 holds n=0 or n=2 or n=4;
+
+theorem :: CHORD:13  :: Even103
+for n being even natural number st n<=7 holds n=0 or n=2 or n=4 or n=6;
+
+theorem :: CHORD:14
+for p being FinSequence, n being non zero natural number
+ st p is one-to-one & n <= len p holds (p.n)..p = n;
+
+theorem :: CHORD:15  :: Index01
+for p being non empty FinSequence, T being non empty Subset of rng p
+  ex x being set st x in T & for y being set st y in T holds x..p <= y..p;
+
+definition let p be FinSequence, n be natural number;
+  func p.followSet(n) -> finite set equals
+:: CHORD:def 1
+    rng (n,len p)-cut p;
+end;
+
+theorem :: CHORD:16  :: Follow00
+for p being FinSequence, x being set, n being natural number
+ st x in rng p & n in dom p & p is one-to-one
+  holds x in p.followSet(n) iff x..p >= n;
+
+theorem :: CHORD:17  :: Follow03
+for p, q being FinSequence, x being set st p = <*x*>^q
+for n being non zero natural number holds p.followSet(n+1) = q.followSet(n);
+
+theorem :: CHORD:18  :: FinSubseq00
+for X being set, f being FinSequence of X, g being FinSubsequence of f
+ st len Seq g = len f holds Seq g = f;
+
+begin :: Miscellany on graphs
+
+theorem :: CHORD:19   :: :: Joins01:
+for G being _Graph, S being Subset of the_Vertices_of G
+for H being inducedSubgraph of G,S
+for u,v being set st u in S & v in S
+for e being set st e Joins u,v,G holds e Joins u,v,H;
+
+theorem :: CHORD:20
+for G being _Graph, W being Walk of G
+ holds W is Trail-like iff len W = 2*(card W.edges())+1;
+
+theorem :: CHORD:21  :: Walk02
+for G being _Graph, S being Subset of the_Vertices_of G
+for H being removeVertices of G,S
+for W being Walk of G
+ st (for n being odd natural number st n <= len W holds not W.n in S)
+  holds W is Walk of H;
+
+theorem :: CHORD:22  :: Walk03
+for G being _Graph, a,b be set st a<>b
+for W being Walk of G st W.vertices() = {a,b}
+ holds ex e being set st e Joins a,b,G;
+
+theorem :: CHORD:23  :: Walk04
+for G being _Graph, S being non empty Subset of the_Vertices_of G
+for H being inducedSubgraph of G,S
+for W being Walk of G st W.vertices() c= S holds W is Walk of H;
+
+theorem :: CHORD:24  :: Cyclelike01
+for G1,G2 being _Graph st G1 == G2
+for W1 be Walk of G1, W2 being Walk of G2
+ st W1 = W2 holds W1 is Cycle-like implies W2 is Cycle-like;
+
+theorem :: CHORD:25  :: Path01
+for G being _Graph, P being Path of G, m, n being odd natural number
+ st m <= len P & n <= len P & P.m = P.n
+  holds m = n or (m = 1 & n = len P) or (m = len P & n = 1);
+
+theorem :: CHORD:26
+for G being _Graph, P being Path of G st P is open
+for a,e,b being set
+ st not a in P.vertices() & b = P.first() & e Joins a,b,G
+  holds G.walkOf(a,e,b).append(P) is Path-like;
+
+theorem :: CHORD:27  :: PathLike03
+:: A similar theorem is needed for obtaining non closed Path
+for G being _Graph, P,H being Path of G
+ st P.edges() misses H.edges() &
+    P is non trivial & P is open & H is non trivial & H is open &
+    P.vertices() /\ H.vertices() = { P.first(), P.last() } &
+    H.first() = P.last() & H.last() = P.first()
+  holds P.append(H) is Cycle-like;
+
+theorem :: CHORD:28  :: PathLike04
+for G being _Graph, W1,W2 being Walk of G st W1.last() = W2.first()
+ holds W1.append(W2).length() = W1.length() + W2.length();
+
+theorem :: CHORD:29  :: Subgraph01
+for G being _Graph, A,B being non empty Subset of the_Vertices_of G st B c= A
+for H1 being inducedSubgraph of G,A
+for H2 being inducedSubgraph of H1,B
+  holds H2 is inducedSubgraph of G,B;
+
+theorem :: CHORD:30  :: Subgraph01a
+for G being _Graph, A,B being non empty Subset of the_Vertices_of G st B c= A
+for H1 being inducedSubgraph of G,A
+for H2 being inducedSubgraph of G,B
+  holds H2 is inducedSubgraph of H1,B;
+
+theorem :: CHORD:31  :: Subgraph02
+for G being _Graph, S,T being non empty Subset of the_Vertices_of G st T c= S
+for G2 being inducedSubgraph of G,S
+  holds G2.edgesBetween(T) = G.edgesBetween(T);
+
+:: we do not consider infinite graphs
+scheme :: CHORD:sch 1
+ FinGraphOrderCompInd{P[set]}:
+    for G being finite _Graph holds P[G]
+    provided
+ for k being non zero natural number st
+    (for Gk being finite _Graph st Gk.order() < k holds P[Gk]) holds
+    (for Gk1 being finite _Graph st Gk1.order() = k holds P[Gk1]);
+
+:: should be in GLIBs
+theorem :: CHORD:32  :: PDistinct
+for G being _Graph, W being Walk of G
+ st W is open & W is Path-like holds W is vertex-distinct;
+
+:: should be in GLIB
+theorem :: CHORD:33   :: PathLike15
+for G being _Graph, P being Path of G st P is open & len P > 3
+for e being set
+ st e Joins P.last(),P.first(),G holds P.addEdge(e) is Cycle-like;
+
+begin :: Shortest topological path
+
+definition let G be _Graph, W be Walk of G;
+  attr W is minlength means
+:: CHORD:def 2
+    for W2 being Walk of G st W2 is_Walk_from W.first(),W.last()
+      holds len W2 >= len W;
+end;
+
+theorem :: CHORD:34  :: WalkSubwalk00
+for G being _Graph, W being Walk of G, S being Subwalk of W
+ st S.first() = W.first() & S.edgeSeq() = W.edgeSeq() holds S = W;
+
+theorem :: CHORD:35  :: LenSubwalk00
+for G being _Graph, W being Walk of G, S being Subwalk of W
+ st len S = len W holds S = W;
+
+theorem :: CHORD:36
+for G being _Graph, W being Walk of G st W is minlength holds W is Path-like;
+
+theorem :: CHORD:37
+for G being _Graph, W being Walk of G st W is minlength holds W is Path-like;
+
+theorem :: CHORD:38  :: TopPath01
+for G being _Graph, W being Walk of G
+ holds (for P being Path of G
+         st P is_Walk_from W.first(),W.last() holds len P >= len W)
+       implies W is minlength;
+
+theorem :: CHORD:39  :: TopPath02
+for G being _Graph, W being Walk of G
+  ex P being Path of G st P is_Walk_from W.first(),W.last() & P is minlength;
+
+theorem :: CHORD:40  :: TopPath03
+for G being _Graph, W being Walk of G st W is minlength
+ holds for m,n being odd natural number st m+2 < n & n <= len W
+        holds not ex e being set st e Joins W.m,W.n,G;
+
+theorem :: CHORD:41  :: TopPath04
+for G being _Graph, S being non empty Subset of the_Vertices_of G
+for H being inducedSubgraph of G,S
+for W being Walk of H st W is minlength
+for m,n being odd natural number st m+2 < n & n <= len W
+ holds not ex e being set st e Joins W.m,W.n,G;
+
+theorem :: CHORD:42  :: TopPath05
+for G being _Graph for W being Walk of G st W is minlength
+for m,n being odd natural number st m<=n & n<=len W
+  holds W.cut(m,n) is minlength;
+
+theorem :: CHORD:43
+for G being _Graph st G is connected
+for A,B being non empty Subset of the_Vertices_of G st A misses B holds
+  ex P being Path of G st P is minlength & P is non trivial &
+  P.first() in A & P.last() in B &
+  for n being odd natural number st 1 < n & n < len P
+    holds not P.n in A & not P.n in B;
+
+begin :: Adjacency and complete graphs
+
+definition let G be _Graph, a,b be Vertex of G;
+  pred a,b are_adjacent means
+:: CHORD:def 3                :: DefAdjacent
+    ex e being set st e Joins a,b,G;
+  symmetry;
+end;
+
+theorem :: CHORD:44  :: VAdjacent00
+for G1,G2 being _Graph st G1 == G2
+for u1,v1 being Vertex of G1 st u1,v1 are_adjacent
+for u2,v2 being Vertex of G2 st u1=u2 & v1=v2 holds u2,v2 are_adjacent;
+
+theorem :: CHORD:45  :: VAdjacent01
+for G being _Graph, S being non empty Subset of the_Vertices_of G
+for H being inducedSubgraph of G,S
+for u, v being Vertex of G, t, w being Vertex of H
+  st u = t & v = w holds u,v are_adjacent iff t,w are_adjacent;
+
+theorem :: CHORD:46  :: PathLike05
+for G being _Graph, W being Walk of G
+ st W.first() <> W.last() & not W.first(),W.last() are_adjacent
+  holds W.length() >= 2;
+
+theorem :: CHORD:47  :: PathBuilder00
+:: add sequences of vertices and edges
+for G being _Graph, v1,v2,v3 being Vertex of G st
+    v1<>v2 & v1<>v3 & v2<>v3 & v1,v2 are_adjacent & v2,v3 are_adjacent
+  ex P being Path of G, e1,e2 being set st
+     P is open & len P = 5 & P.length() = 2 &
+     e1 Joins v1,v2,G & e2 Joins v2,v3,G & P.edges() = {e1,e2} &
+     P.vertices() = {v1,v2,v3} & P.1 = v1 & P.3 = v2 & P.5 = v3;
+
+theorem :: CHORD:48   :: PathBuilder01
+for G being _Graph, v1,v2,v3,v4 being Vertex of G st
+  v1<>v2 & v1<>v3 & v2<>v3 & v2<>v4 & v3<>v4 &
+  v1,v2 are_adjacent & v2,v3 are_adjacent & v3,v4 are_adjacent
+ ex P being Path of G st len P = 7 & P.length() = 3 &
+     P.vertices() = {v1,v2,v3,v4} & P.1 = v1 & P.3 = v2 & P.5 = v3 & P.7 = v4;
+
+definition let G be _Graph, S be set;
+  func G.AdjacentSet(S) -> Subset of the_Vertices_of G equals
+:: CHORD:def 4
+      {u where u is Vertex of G :
+         not u in S & ex v being Vertex of G st (v in S & u,v are_adjacent)};
+end;
+
+theorem :: CHORD:49
+for G being _Graph, S, x being set st x in G.AdjacentSet(S) holds not x in S;
+
+theorem :: CHORD:50  :: Adjacent00
+for G being _Graph, S being set
+for u being Vertex of G
+ holds u in G.AdjacentSet(S) iff
+       not u in S & ex v being Vertex of G st (v in S & u,v are_adjacent);
+
+theorem :: CHORD:51  :: Adjacent01
+for G1,G2 being _Graph st G1 == G2 for S being set
+ holds G1.AdjacentSet(S) = G2.AdjacentSet(S);
+
+theorem :: CHORD:52  :: AdjacentV00
+for G being _Graph, u,v being Vertex of G
+ holds u in G.AdjacentSet({v}) iff (u <> v & v,u are_adjacent);
+
+theorem :: CHORD:53
+for G being _Graph, x,y being set
+ holds x in G.AdjacentSet({y}) iff y in G.AdjacentSet({x});
+
+theorem :: CHORD:54
+for G being _Graph, C being Path of G st C is Cycle-like & C.length() > 3
+for x being Vertex of G st x in C.vertices()
+  ex m,n being odd Nat st m+2 < n & n <= len C & not (m=1 & n = len C) &
+                          not (m=1 & n = len C-2) & not (m=3 & n = len C) &
+         C.m <> C.n & C.m in G.AdjacentSet({x}) & C.n in G.AdjacentSet({x});
+
+theorem :: CHORD:55  :: Cycle01a
+for G being _Graph, C being Path of G st C is Cycle-like & C.length() > 3
+for x being Vertex of G st x in C.vertices()
+ ex m,n being odd natural number st m+2 < n & n <= len C &
+         C.m <> C.n & C.m in G.AdjacentSet({x}) & C.n in G.AdjacentSet({x}) &
+         for e being set st e in C.edges() holds not e Joins C.m,C.n,G;
+
+:: Gilbert's definition of isolated does not allow a vertex to have a
+:: loop and a vertex just with a loop on it is NOT isolated.
+:: This needs to be fixed, e.g.
+::       v is isolated means G.AdjacentSet({v}) = {}
+:: But we can keep the old one and the new one can be expressed just
+:: by G.AdjacentSet({v}) = {}.  Should this be revised?
+:: Ask Lorna and Ryan.  For loopless graphs it
+:: does not matter, see below.
+
+theorem :: CHORD:56 :: AdjacentV01: :: :: AdjacentV01
+for G being loopless _Graph, u being Vertex of G
+ holds G.AdjacentSet({u}) = {} iff u is isolated;
+
+theorem :: CHORD:57  :: Connected0
+for G being _Graph, G0 being Subgraph of G,
+    S being non empty Subset of the_Vertices_of G,
+    x being Vertex of G,
+    G1 being (inducedSubgraph of G,S),
+    G2 being (inducedSubgraph of G,S\/{x})
+ st G1 is connected & x in G.AdjacentSet(the_Vertices_of G1)
+  holds G2 is connected;
+
+theorem :: CHORD:58  :: Simplicial2a
+for G being _Graph for S being non empty Subset of the_Vertices_of G
+for H being inducedSubgraph of G,S
+for u being Vertex of G st u in S & G.AdjacentSet({u}) c= S
+for v being Vertex of H st u=v holds G.AdjacentSet({u}) = H.AdjacentSet({v});
+
+:: Adjacency set as a subgraph of G
+definition let G be _Graph, S be set;
+  mode AdjGraph of G,S -> Subgraph of G means
+:: CHORD:def 5
+    it is inducedSubgraph of G,G.AdjacentSet(S)
+    if S is Subset of the_Vertices_of G;
+end;
+
+theorem :: CHORD:59  :: AdjGraph00
+for G1, G2 be _Graph st G1 == G2
+for u1 being Vertex of G1, u2 being Vertex of G2 st u1 = u2
+for H1 being AdjGraph of G1,{u1}, H2 being AdjGraph of G2,{u2} holds H1 == H2;
+
+theorem :: CHORD:60  :: Simplicial2b
+for G being _Graph for S being non empty Subset of the_Vertices_of G
+for H being inducedSubgraph of G,S
+for u being Vertex of G
+  st u in S & G.AdjacentSet({u}) c= S & G.AdjacentSet({u}) <> {}
+for v being Vertex of H st u=v
+for Ga being AdjGraph of G,{u}, Ha being AdjGraph of H,{v} holds Ga == Ha;
+
+definition let G be _Graph;
+  attr G is complete means
+:: CHORD:def 6
+    for u,v being Vertex of G st u <> v holds u,v are_adjacent;
+end;
+
+theorem :: CHORD:61  :: Completetr
+for G being _Graph st G is trivial holds G is complete;
+
+registration
+  cluster trivial -> complete _Graph;
+end;
+
+registration
+  cluster trivial simple complete _Graph;
+
+  cluster non trivial finite simple complete _Graph;
+end;
+
+theorem :: CHORD:62  :: Complete00
+for G1,G2 being _Graph st G1 == G2 holds G1 is complete implies G2 is complete;
+
+theorem :: CHORD:63  :: Complete01
+for G being complete _Graph, S being Subset of the_Vertices_of G
+for H being inducedSubgraph of G,S holds H is complete;
+
+begin :: Simplicial vertex :: Golumbic p. 81
+
+definition let G be _Graph, v be Vertex of G;
+  attr v is simplicial means
+:: CHORD:def 7
+   G.AdjacentSet({v}) <> {} implies
+       for G2 being AdjGraph of G,{v} holds G2 is complete;
+end;
+
+theorem :: CHORD:64  :: Simplicial0
+for G being complete _Graph, v being Vertex of G holds v is simplicial;
+
+theorem :: CHORD:65  :: Simplicial01
+for G being trivial _Graph, v being Vertex of G holds v is simplicial;
+
+theorem :: CHORD:66  :: Simplicial1
+for G1,G2 being _Graph st G1 == G2
+for u1 being Vertex of G1, u2 being Vertex of G2
+ st u1=u2 & u1 is simplicial holds u2 is simplicial;
+
+theorem :: CHORD:67  :: Simplicial2
+for G being _Graph for S being non empty Subset of the_Vertices_of G
+for H being inducedSubgraph of G,S
+for u being Vertex of G st u in S & G.AdjacentSet({u}) c= S
+for v being Vertex of H st u=v holds u is simplicial iff v is simplicial;
+
+theorem :: CHORD:68  :: Simplicial03
+for G being _Graph, v being Vertex of G st v is simplicial
+for a,b being set st a<>b & a in G.AdjacentSet({v}) & b in G.AdjacentSet({v})
+  holds ex e being set st e Joins a,b,G;
+
+theorem :: CHORD:69  :: Simplicial03a
+for G being _Graph, v being Vertex of G
+ st not v is simplicial
+   ex a,b being Vertex of G st a<>b & v<>a & v<>b &
+          v,a are_adjacent & v,b are_adjacent & not a,b are_adjacent;
+
+begin :: Vertex separator  :: Golumbic, p. 84
+
+definition let G be _Graph, a,b be Vertex of G;
+ assume  a<>b & not a,b are_adjacent;
+ mode VertexSeparator of a,b -> Subset of the_Vertices_of G means
+:: CHORD:def 8
+  not a in it & not b in it &
+  for G2 being removeVertices of G,it holds
+     not (ex W being Walk of G2 st W is_Walk_from a,b);
+end;
+
+theorem :: CHORD:70  :: VS01
+for G being _Graph, a,b being Vertex of G st a<>b & not a,b are_adjacent
+for S being VertexSeparator of a,b holds S is VertexSeparator of b,a;
+
+:: alternate characterization of Vertex Separator
+theorem :: CHORD:71  :: VS02
+for G being _Graph, a,b being Vertex of G st a<>b & not a,b are_adjacent
+for S being Subset of the_Vertices_of G holds
+   S is VertexSeparator of a,b iff
+   (not a in S & not b in S &
+    for W being Walk of G st W is_Walk_from a,b holds
+       ex x being Vertex of G st x in S & x in W.vertices());
+
+theorem :: CHORD:72  :: VS07
+for G being _Graph, a,b being Vertex of G st a<>b & not a,b are_adjacent
+for S being VertexSeparator of a,b
+for W being Walk of G st W is_Walk_from a,b
+   ex k being odd Nat st 1 < k & k < len W & W.k in S;
+
+theorem :: CHORD:73  :: VS08a
+for G being _Graph, a,b being Vertex of G st a<>b & not a,b are_adjacent
+for S being VertexSeparator of a,b
+ st S = {} holds not ex W being Walk of G st W is_Walk_from a,b;
+
+theorem :: CHORD:74
+for G being _Graph, a,b being Vertex of G
+ st a<>b &not a,b are_adjacent & not ex W being Walk of G st W is_Walk_from a,b
+  holds {} is VertexSeparator of a,b;
+
+theorem :: CHORD:75  :: VS11
+for G being _Graph, a,b being Vertex of G st a<>b & not a,b are_adjacent
+for S being VertexSeparator of a,b, G2 being removeVertices of G,S
+for a2 being Vertex of G2 st a2=a holds G2.reachableFrom(a2) /\ S = {};
+
+theorem :: CHORD:76  :: VS11b
+for G being _Graph, a,b being Vertex of G st a<>b & not a,b are_adjacent
+for S being VertexSeparator of a,b, G2 being removeVertices of G,S
+for a2,b2 being Vertex of G2 st a2=a & b2=b holds
+   G2.reachableFrom(a2) /\ G2.reachableFrom(b2) = {};
+
+theorem :: CHORD:77  :: VS10
+for G being _Graph, a,b being Vertex of G st a<>b & not a,b are_adjacent
+for S being VertexSeparator of a,b for G2 being removeVertices of G,S
+ holds a is Vertex of G2 & b is Vertex of G2;
+
+definition let G be _Graph, a,b be Vertex of G;
+  let S be VertexSeparator of a,b;
+  attr S is minimal means
+:: CHORD:def 9
+     for T being Subset of S st T <> S holds not T is VertexSeparator of a,b;
+end;
+
+theorem :: CHORD:78  :: VS000
+for G being  _Graph, a,b being Vertex of G
+for S being VertexSeparator of a,b st S = {} holds S is minimal;
+
+theorem :: CHORD:79  :: minVSexistance
+for G being finite _Graph for a,b being Vertex of G
+ ex S being VertexSeparator of a,b st S is minimal;
+
+theorem :: CHORD:80  :: VS13
+:: Property "symmetry" for 2 argument modes could be used if we had it
+:: as VertexSeparator of a,b is a VertexSeparator of b,a
+:: then this theorem would not be needed
+for G being _Graph, a,b being Vertex of G st a<>b & not a,b are_adjacent
+for S being VertexSeparator of a,b st S is minimal
+for T being VertexSeparator of b,a st S=T holds T is minimal;
+
+theorem :: CHORD:81 :: VS06: :: :: VS06
+for G being _Graph, a,b being Vertex of G st a<>b & not a,b are_adjacent
+for S being VertexSeparator of a,b st S is minimal
+for x being Vertex of G st x in S
+    ex W being Walk of G st W is_Walk_from a,b & x in W.vertices();
+
+theorem :: CHORD:82  :: VertexSep0
+for G being _Graph
+for a,b being Vertex of G st a<>b & not a,b are_adjacent
+for S being VertexSeparator of a,b st S is minimal
+for H being removeVertices of G,S for aa being Vertex of H st aa=a
+for x being Vertex of G st x in S
+    ex y being Vertex of G st y in H.reachableFrom(aa) & x,y are_adjacent;
+
+theorem :: CHORD:83  :: VertexSep01
+:: Property "symmetry" for 2 argument modes could be used if we had it
+:: as VertexSeparator of a,b is a VertexSeparator of b,a
+for G being _Graph
+for a,b being Vertex of G st a<>b & not a,b are_adjacent
+for S being VertexSeparator of a,b st S is minimal
+for H being removeVertices of G,S for aa being Vertex of H st aa=b
+for x being Vertex of G st x in S
+    ex y being Vertex of G st y in H.reachableFrom(aa) & x,y are_adjacent;
+
+begin :: Chordal graphs :: Golumbic, p. 81
+
+:: The notion of a chord.  Is it worthwhile having it?
+
+:: definition let G be _Graph, W be Walk of G, e be set;
+::   pred e is_chord_of W means
+::   ex m, n being odd Nat st m < n & n <= len W & W.m <> W.n &
+::      e Joins W.m,W.n,G &
+::      for f being set st f in W.edges() holds not f Joins W.m,W.n,G;
+:: end;
+
+:: More general notion of a chordal Walk.  Is such a notion useful? Or
+:: should we stick with chordal Path?
+
+definition let G be _Graph, W be Walk of G;
+  attr W is chordal means
+:: CHORD:def 10
+  ex m, n being odd natural number st m+2 < n & n <= len W & W.m <> W.n &
+     (ex e being set st e Joins W.m,W.n,G) &
+     for f being set st f in W.edges() holds not f Joins W.m,W.n,G;
+end;
+
+notation let G be _Graph, W be Walk of G;
+  antonym W is chordless for W is chordal;
+end;
+
+:: The other characterization of chordal is 'more' technical and
+:: sometimes more convenient to work with.  Is this really true?
+:: I have tried to save as much as possible of what Broderic has already done.
+:: Need separate theorems for walks and paths!  They cannot be put as an iff.
+
+theorem :: CHORD:84  :: ChordalWalk01
+for G being _Graph, W being Walk of G
+ st W is chordal
+  ex m,n being odd natural number st m+2 < n & n <= len W & W.m <> W.n &
+     (ex e being set st e Joins W.m,W.n,G) &
+     (W is Cycle-like implies  not (m=1 & n = len W) &
+                               not (m=1 & n = len W-2) &
+                               not (m=3 & n = len W));
+
+theorem :: CHORD:85  :: ChordalPath01
+for G being _Graph, P being Path of G
+ st ex m,n being odd natural number st m+2 < n & n <= len P &
+       (ex e being set st e Joins P.m,P.n,G) &
+       (P is Cycle-like implies  not (m=1 & n = len P) &
+                                 not (m=1 & n = len P-2) &
+                                 not (m=3 & n = len P))
+  holds P is chordal;
+
+theorem :: CHORD:86  :: ChordalWalk02
+for G1,G2 being _Graph st G1 == G2
+for W1 being Walk of G1, W2 being Walk of G2
+ st W1=W2 holds W1 is chordal implies  W2 is chordal;
+
+theorem :: CHORD:87  :: ChordalWalk03
+for G being _Graph, S being non empty Subset of the_Vertices_of G,
+    H being (inducedSubgraph of G,S), W1 being Walk of G, W2 being Walk of H
+  st W1 = W2 holds W2 is chordal iff W1 is chordal;
+
+theorem :: CHORD:88
+for G being _Graph, W being Walk of G
+ st W is Cycle-like & W is chordal & W.length()=4
+    holds ex e being set st e Joins W.1,W.5,G or e Joins W.3,W.7,G;
+
+theorem :: CHORD:89  :: MinChordal01
+for G being _Graph, W being Walk of G st W is minlength holds W is chordless;
+
+theorem :: CHORD:90
+for G being _Graph, W being Walk of G
+ st W is open & len W = 5 & not W.first(),W.last() are_adjacent
+  holds W is chordless;
+
+theorem :: CHORD:91
+for G being _Graph, W being Walk of G
+  holds W is chordal iff W.reverse() is chordal;
+
+theorem :: CHORD:92  :: CPath03
+for G being _Graph, P being Path of G st P is open & P is chordless
+  for m,n being odd natural number st m < n & n <= len P holds
+    (ex e being set st e Joins P.m,P.n,G) iff m+2 = n;
+
+theorem :: CHORD:93
+for G being _Graph, P being Path of G st P is open & P is chordless
+for m,n being odd natural number st m < n & n <= len P
+  holds P.cut(m,n) is chordless & P.cut(m,n) is open;
+
+theorem :: CHORD:94
+for G being _Graph, S being non empty Subset of the_Vertices_of G,
+    H being (inducedSubgraph of G,S), W being Walk of G, V being Walk of H
+ st W = V holds W is chordless iff V is chordless;
+
+definition let G be _Graph;
+ attr G is chordal means
+:: CHORD:def 11
+  for P being Walk of G st P.length() > 3 & P is Cycle-like holds P is chordal;
+end;
+
+theorem :: CHORD:95  :: Chordal01
+for G1,G2 being _Graph st G1 == G2 holds G1 is chordal implies G2 is chordal;
+
+theorem :: CHORD:96  :: Chordal02
+for G being finite _Graph st card the_Vertices_of G <= 3 holds G is chordal;
+
+registration
+  cluster trivial finite chordal _Graph;
+
+  cluster non trivial finite simple chordal _Graph;
+
+  cluster complete -> chordal _Graph;
+end;
+
+registration let G be chordal _Graph, V be set;
+  cluster -> chordal inducedSubgraph of G,V;
+end;
+
+theorem :: CHORD:97
+for G being chordal _Graph, P being Path of G st P is open & P is chordless
+for x,e being set st (not x in P.vertices() & e Joins P.last(),x,G &
+                      not ex f being set st f Joins P.(len P-2),x,G)
+  holds P.addEdge(e) is Path-like & P.addEdge(e) is open &
+        P.addEdge(e) is chordless;
+
+
+:: Golumbic, page 83. Theorem 4.1  (i) ==> (iii)
+theorem :: CHORD:98   :: :: Chordal41:  : PR
+for G being chordal _Graph, a,b being Vertex of G
+ st a<>b & not a,b are_adjacent
+  for S being VertexSeparator of a,b st S is minimal & S is non empty
+  for H being inducedSubgraph of G,S holds H is complete;
+
+:: Golumbic, page 83, Theorem 4.1 (iii)->(i)
+theorem :: CHORD:99 ::: DiracThm2: :: :: DiracThm2
+for G being finite _Graph
+ st for a,b being Vertex of G st a<>b & not a,b are_adjacent
+    for S being VertexSeparator of a,b st S is minimal & S is non empty
+    for G2 being inducedSubgraph of G,S holds G2 is complete
+  holds G is chordal;
+
+:: Exercise 12, p. 101.
+:: This needs "finite-branching", we do it for finite though
+theorem :: CHORD:100  :: tExercise12
+for G being finite chordal _Graph, a, b being Vertex of G
+ st a <> b & not a,b are_adjacent
+for S being VertexSeparator of a,b st S is minimal
+for H being removeVertices of G,S, a1 being Vertex of H st a = a1
+ ex c being Vertex of G st c in H.reachableFrom(a1) &
+   for x being Vertex of G st x in S holds c,x are_adjacent;
+
+theorem :: CHORD:101 :: Remark p. 83
+for G being finite chordal _Graph, a, b being Vertex of G
+ st a <> b & not a,b are_adjacent
+for S being VertexSeparator of a,b st S is minimal
+for H being removeVertices of G,S, a1 being Vertex of H st a = a1
+for x, y being Vertex of G st x in S & y in S holds
+ ex c being Vertex of G
+  st c in H.reachableFrom(a1) & c,x are_adjacent & c,y are_adjacent;
+
+:: Golumbic, page 83, Lemma 4.2.
+theorem :: CHORD:102  :: DiracLemma2
+for G being non trivial finite chordal _Graph
+ st not G is complete
+  ex a,b being Vertex of G
+   st a<>b & not a,b are_adjacent & a is simplicial & b is simplicial;
+
+theorem :: CHORD:103  :: DiracLemma1
+for G being finite chordal _Graph ex v being Vertex of G st v is simplicial;
+
+begin :: Vertex Elimination Scheme :: Golumbic, p. 82
+
+definition let G be finite _Graph;
+  mode VertexScheme of G -> FinSequence of the_Vertices_of G means
+:: CHORD:def 12
+    it is one-to-one & rng it = the_Vertices_of G;
+end;
+
+registration
+  let G be finite _Graph;
+  cluster -> non empty VertexScheme of G;
+end;
+
+theorem :: CHORD:104
+for G being finite _Graph, S being VertexScheme of G
+ holds len S = card the_Vertices_of G;
+
+theorem :: CHORD:105
+for G being finite _Graph, S being VertexScheme of G holds 1 <= len S;
+
+theorem :: CHORD:106
+for G, H being finite _Graph, g being VertexScheme of G
+ st G == H holds g is VertexScheme of H;
+
+definition let G be finite _Graph, S be VertexScheme of G, x be Vertex of G;
+  redefine func x..S -> non zero Element of NAT;
+end;
+
+definition let G be finite _Graph, S be VertexScheme of G, n be Nat;
+  redefine func S.followSet(n) -> Subset of the_Vertices_of G;
+end;
+
+theorem :: CHORD:107  :: NeVSchFol:
+for G being finite _Graph, S being VertexScheme of G,
+    n being non zero natural number st n <= len S
+  holds S.followSet(n) is non empty;
+
+definition let G be finite _Graph, S be VertexScheme of G;
+  attr S is perfect means
+:: CHORD:def 13
+    for n being non zero natural number st n <= len S
+    for Gf being inducedSubgraph of G,S.followSet(n)
+    for v being Vertex of Gf st v = S.n holds v is simplicial;
+end;
+
+:: finite is needed unless we add loopless
+theorem :: CHORD:108  :: PerScheme01
+for G being finite trivial _Graph, v being Vertex of G
+  ex S being VertexScheme of G st S = <*v*> & S is perfect;
+
+theorem :: CHORD:109
+for G being finite _Graph, V being VertexScheme of G holds
+  V is perfect iff
+  for a,b,c being Vertex of G st b<>c & a,b are_adjacent & a,c are_adjacent
+  for va,vb,vc being natural number
+    st va in dom V & vb in dom V & vc in dom V & V.va = a &
+       V.vb = b & V.vc = c & va < vb & va < vc
+      holds b,c are_adjacent;
+
+:: Golubmic pg 83-84, Theorem 4.1 (i) ==> (ii)
+registration let G be finite chordal _Graph;
+  cluster perfect VertexScheme of G;
+end;
+
+theorem :: CHORD:110
+for G, H being finite chordal _Graph, g being perfect VertexScheme of G
+ st G == H holds g is perfect VertexScheme of H;
+
+:: Golubmic pg 83-84,  Theorem 4.1 (ii) ==> (i)
+theorem :: CHORD:111 :: Chordal41c:
+for G being finite _Graph
+ st ex S being VertexScheme of G st S is perfect holds G is chordal;

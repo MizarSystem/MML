@@ -55,9 +55,9 @@
 <Func kind="K" nr="61"/>
 </Adjective>
 <Adjective nr="27"/>
-<Adjective nr="35"/>
-<Adjective nr="37"/>
+<Adjective nr="36"/>
 <Adjective nr="38"/>
+<Adjective nr="39"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -71,9 +71,9 @@
 <Func kind="K" nr="61"/>
 </Adjective>
 <Adjective nr="27"/>
-<Adjective nr="35"/>
-<Adjective nr="37"/>
+<Adjective nr="36"/>
 <Adjective nr="38"/>
+<Adjective nr="39"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -94,9 +94,9 @@
 <Func kind="K" nr="61"/>
 </Adjective>
 <Adjective nr="27"/>
-<Adjective nr="35"/>
-<Adjective nr="37"/>
+<Adjective nr="36"/>
 <Adjective nr="38"/>
+<Adjective nr="39"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -111,7 +111,7 @@
 <Func kind="K" nr="65"/>
 <Func kind="K" nr="61"/>
 </Adjective>
-<Adjective nr="35"/>
+<Adjective nr="36"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -132,9 +132,9 @@
 <Func kind="K" nr="61"/>
 </Adjective>
 <Adjective nr="27"/>
-<Adjective nr="35"/>
-<Adjective nr="37"/>
+<Adjective nr="36"/>
 <Adjective nr="38"/>
+<Adjective nr="39"/>
 </Cluster>
 </FCluster>
 </Registrations>

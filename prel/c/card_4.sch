@@ -29,7 +29,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Pred kind="V" nr="24">
+<Pred kind="V" nr="25">
 <Fraenkel>
 <Typ kind="M" nr="3">
 <Cluster/>
@@ -51,7 +51,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Pred kind="V" nr="24">
+<Pred kind="V" nr="25">
 <Fraenkel>
 <Typ kind="M" nr="3">
 <Cluster/>
@@ -80,7 +80,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Pred kind="V" nr="24">
+<Pred kind="V" nr="25">
 <Fraenkel>
 <Typ kind="M" nr="3">
 <Cluster/>

@@ -71,12 +71,12 @@
 </Func>
 </Func>
 <Cluster>
-<Adjective nr="35" value="false"/>
-<Adjective nr="78"/>
+<Adjective nr="36" value="false"/>
 <Adjective nr="79"/>
 <Adjective nr="80"/>
 <Adjective nr="81"/>
-<Adjective nr="87"/>
+<Adjective nr="82"/>
+<Adjective nr="88"/>
 </Cluster>
 </FCluster>
 </Registrations>

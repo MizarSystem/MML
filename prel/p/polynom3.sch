@@ -33,6 +33,7 @@
 <ArticleID name="TREES_2"/>
 <ArticleID name="TREES_3"/>
 <ArticleID name="TREES_4"/>
+<ArticleID name="CARD_3"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="NORMSP_1"/>
@@ -40,7 +41,6 @@
 <ArticleID name="PBOOLE"/>
 <ArticleID name="RELAT_2"/>
 <ArticleID name="PARTFUN1"/>
-<ArticleID name="CARD_3"/>
 <ArticleID name="SEQM_3"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="SEQ_1"/>
@@ -184,7 +184,7 @@
 <ArgTypes>
 <Typ kind="G" nr="3">
 <Cluster>
-<Adjective nr="48" value="false"/>
+<Adjective nr="50" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="3">
@@ -210,7 +210,7 @@
 <Func kind="F" nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="61">
+<Adjective nr="63">
 <Func kind="F" nr="1"/>
 </Adjective>
 </Cluster>
@@ -222,7 +222,7 @@
 <Not>
 <And>
 <Pred kind="R" nr="13">
-<Func kind="K" nr="247">
+<Func kind="K" nr="254">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 </Func>
@@ -244,7 +244,7 @@
 </Not>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="238">
+<Func kind="K" nr="245">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 <Var nr="2"/>

@@ -30,7 +30,7 @@ environ
 
 begin :: Auxiliary Facts about Complex Numbers
 
-Lm1:0 = [**0,0**];
+Lm1:0 = 0 +0*<i>;
 
 theorem Th1:
 for a be complex number st a = a*' holds Im a = 0
@@ -230,12 +230,12 @@ theorem Th15:
 for r,s be Real holds [**r,0**]*[**s,0**] =[**r*s,0**] by COMPLFLD:6;
 
 theorem Th16:
-for a be Element of F_Complex holds a*a*' = [**|.a.|^2,0**]
+for a be Element of F_Complex holds a*a*' = |.a.|^2
  proof let z be Element of F_Complex;
   reconsider a = z, b = z*' as Element of COMPLEX by COMPLFLD:def 1;
   thus z*z*' = a * b by COMPLFLD:6 .= |.a.|^2+0*<i> by Th4
   .= |.a.|^2+0*<i>
-  .= [**|.z.|^2,0**];
+  .= |.z.|^2;
  end;
 
 theorem Th17:
@@ -1156,14 +1156,14 @@ end;
 theorem Th31:
 for V be non empty VectSpStr over F_Complex, f be Functional of V,
 v be Vector of V
-holds (FormFunctional(f,f*')).(v,v) = [**|. f.v .|^2, 0 **]
+holds (FormFunctional(f,f*')).(v,v) = |. f.v .|^2
  proof
   let V be non empty VectSpStr over F_Complex, f be Functional of V,
       v be Vector of V;
   set g = FormFunctional(f,f*');
   thus g.(v,v) = f.v * (f*').v by BILINEAR:def 11
   .= f.v * (f.v)*' by Def2
-  .= [** |. f.v .|^2, 0 **] by Th16;
+  .= |. f.v .|^2 by Th16;
  end;
 
 registration
@@ -1176,9 +1176,9 @@ cluster FormFunctional(f,f*') -> diagReR+0valued hermitan diagRvalued;
    thus g is diagReR+0valued
     proof
      let v be Vector of V;
-     A1: g.(v,v) = [** |. f.v .|^2, 0 **] by Th31;
-        g.(v,v) = [**Re (g.(v,v)), Im (g.(v,v)) **] by COMPTRIG:9;
-     then Re (g.(v,v)) = |. f.v .|^2 by A1,COMPTRIG:8;
+     A1: g.(v,v) = |. f.v .|^2 + 0 *<i> by Th31;
+        g.(v,v) = Re (g.(v,v)) + Im (g.(v,v)) *<i> by COMPLEX1:29;
+     then Re (g.(v,v)) = |. f.v .|^2 by A1,COMPLEX1:163;
      hence thesis by XREAL_1:65;
     end;
    thus g is hermitan
@@ -1194,8 +1194,8 @@ cluster FormFunctional(f,f*') -> diagReR+0valued hermitan diagRvalued;
     end;
    let v be Vector of V;
    A2: g.(v,v) = [** |. f.v .|^2, 0 **] by Th31;
-      g.(v,v) = [**Re (g.(v,v)), Im (g.(v,v)) **] by COMPTRIG:9;
-   hence thesis by A2,COMPTRIG:8;
+      g.(v,v) = Re (g.(v,v)) + Im (g.(v,v)) *<i> by COMPLEX1:29;
+   hence thesis by A2,COMPLEX1:163;
   end;
 end;
 
@@ -1864,8 +1864,7 @@ A1: quasinorm(f) is subadditive
         .= r*(r*' * f.(v,v)) by Th30
         .= r*r*' * f.(v,v) by GROUP_1:def 4
         .= [**|.r.|^2,0**] * f.(v,v) by Th16
-        .= [**|.r.|^2,0**] * [**Re(f.(v,v)),Im (f.(v,v))**]
-              by COMPTRIG:9
+        .= [**|.r.|^2,0**] * [**Re(f.(v,v)),Im (f.(v,v))**] by COMPLEX1:29
         .= [**|.r.|^2,0**] * [**Re(f.(v,v)),0**] by Def6
         .= [**|.r.|^2 * Re(f.(v,v)),0**] by Th15;
     A5: 0 <= |.r.|^2 & 0 <= |.r.| & 0 <= Re(f.(v,v))
@@ -2089,8 +2088,10 @@ for v be Vector of V st Re (f.(v,v))= 0 holds f.(v,v)= 0.F_Complex
       v be Vector of V;
   assume A1: Re (f.(v,v)) = 0;
 A2:Im (f.(v,v)) = 0 by Def6;
+  then
+X: f.(v,v) = 0 + 0*<i> by A1,COMPLEX1:29;
   0.F_Complex = 0c by COMPLFLD:9 .= 0;
-  hence f.(v,v) = 0.F_Complex by A1,A2,COMPTRIG:9,Lm1;
+  hence f.(v,v) = 0.F_Complex by A1,A2,COMPLEX1:163,X;
  end;
 
 theorem Th61:
@@ -2719,8 +2720,8 @@ registration
     suppose v = 0.V;
      then A2: f.(v,v) = 0.F_Complex by A1,BILINEAR:31;
      0.F_Complex = 0c by COMPLFLD:9 .= 0; then
-     [**Re (0.F_Complex), Im(0.F_Complex)**] = [**0,0**] by COMPTRIG:9;
-     hence thesis by A2,COMPTRIG:8;
+     [**Re (0.F_Complex), Im(0.F_Complex)**] = [**0,0**] by COMPLEX1:29;
+     hence thesis by A2,COMPLEX1:163;
     end;
     suppose v <> 0.V; hence thesis by A1,Def13;
   end;
@@ -2739,8 +2740,8 @@ registration
     suppose v = 0.V;
      then A2: f.(v,v) = 0.F_Complex by A1,BILINEAR:30;
      0.F_Complex = 0c by COMPLFLD:9 .= 0; then
-     [**Re (0.F_Complex), Im(0.F_Complex)**] = [**0,0**] by COMPTRIG:9;
-     hence thesis by A2,COMPTRIG:8;
+     [**Re (0.F_Complex), Im(0.F_Complex)**] = [**0,0**] by COMPLEX1:29;
+     hence thesis by A2,COMPLEX1:163;
     end;
     suppose v <> 0.V;
      hence thesis by A1,Def13;

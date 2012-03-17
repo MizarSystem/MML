@@ -47,11 +47,11 @@
 <Typ kind="G" nr="9">
 <Cluster>
 <Adjective nr="17"/>
-<Adjective nr="47"/>
 <Adjective nr="48"/>
 <Adjective nr="49"/>
-<Adjective nr="71"/>
+<Adjective nr="50"/>
 <Adjective nr="72"/>
+<Adjective nr="73"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -80,7 +80,7 @@
 </For>
 <Not>
 <For>
-<Typ kind="M" nr="19">
+<Typ kind="M" nr="18">
 <Cluster/>
 <Func kind="F" nr="1"/>
 </Typ>

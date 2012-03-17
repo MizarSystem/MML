@@ -9,18 +9,16 @@ environ
  vocabularies RLVECT_1, VECTSP_1, COMPLEX1, ARYTM_1, SQUARE_1, ABSVALUE,
       COMPLFLD, HAHNBAN1, GROUP_1, FUNCT_1, BINOP_1, POWER, RAT_1, PREPOWER,
       RCOMP_1, SIN_COS, ARYTM_3, RFUNCT_2, FDIFF_1, PRE_TOPC, BOOLE, RELAT_1,
-      FCONT_1, PARTFUN1, COMPTRIG, ARYTM, XCMPLX_0;
- notations TARSKI, XBOOLE_0, SUBSET_1, STRUCT_0, ORDINAL1, NUMBERS, ARYTM_0,
-      XCMPLX_0, XREAL_0, REAL_1, SQUARE_1, NAT_1, RAT_1, COMPLEX1, NEWTON,
-      PREPOWER, POWER, RLVECT_1, VECTSP_1, BINOP_1, RELAT_1, FUNCT_1, RFUNCT_2,
-      FCONT_1, FDIFF_1, SEQ_1, PARTFUN1, PARTFUN2, BINARITH, RCOMP_1, GROUP_1,
-      SIN_COS, COMPLFLD, HAHNBAN1, XXREAL_0;
+      FCONT_1, PARTFUN1, COMPTRIG, ARYTM, XCMPLX_0, ZF_LANG;
+ notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, ARYTM_0, XCMPLX_0,
+      XREAL_0, COMPLEX1, REAL_1, SQUARE_1, NAT_1, RAT_1, NEWTON, PREPOWER,
+      POWER, BINOP_1, RELAT_1, FUNCT_1, RFUNCT_2, FCONT_1, FDIFF_1, SEQ_1,
+      PARTFUN1, PARTFUN2, BINARITH, RCOMP_1, SIN_COS, XXREAL_0;
  constructors PARTFUN1, BINOP_1, ARYTM_0, REAL_1, SQUARE_1, NAT_1, RCOMP_1,
       PARTFUN2, RFUNCT_1, RFUNCT_2, FCONT_1, FDIFF_1, PREPOWER, POWER,
-      COMSEQ_3, BINARITH, SIN_COS, HAHNBAN1;
- registrations XREAL_0, STRUCT_0, RELSET_1, PARTFUN2, GROUP_1, COMPLFLD, NAT_1,
-      MEMBERED, ORDINAL2, COMPLEX1, XCMPLX_0, SIN_COS, VECTSP_1, XXREAL_0,
-      ORDINAL1;
+      COMSEQ_3, BINARITH, SIN_COS, ARYTM_3;
+ registrations XREAL_0, RELSET_1, PARTFUN2, NAT_1, MEMBERED, ORDINAL2,
+      COMPLEX1, XCMPLX_0, SIN_COS, XXREAL_0, ORDINAL1, NEWTON, ARYTM_3, REAL_1;
  requirements NUMERALS, BOOLE, SUBSET, REAL, ARITHM;
 
 
@@ -32,9 +30,9 @@ scheme :: COMPTRIG:sch 1
  Regrwithout0 { P[Nat] } :
   P[1]
   provided
- ex k be non empty Element of NAT st P[k] and
- for k be non empty Element of NAT st k <> 1 & P[k]
-    ex n be non empty Element of NAT st n < k & P[n];
+ ex k be non empty Nat st P[k] and
+ for k be non empty Nat st k <> 1 & P[k]
+    ex n be non empty Nat st n < k & P[n];
 
 canceled 2;
 
@@ -52,46 +50,15 @@ theorem :: COMPTRIG:7
   for z be complex number holds
     |.z.|^2 = (Re z)^2 + (Im z)^2;
 
-theorem :: COMPTRIG:8
-  for x1,x2,y1,y2 be Real holds
-    [**x1,x2**] = [**y1,y2**] implies x1 = y1 & x2 = y2;
-
-theorem :: COMPTRIG:9
-  for z be complex number holds
-    z = [**Re z,Im z**];
-
-canceled 2;
-
-theorem :: COMPTRIG:12
-  for L be unital (non empty HGrStr)
-  for x be Element of L holds
-    (power L).(x,1) = x;
-
-theorem :: COMPTRIG:13
-  for L be unital (non empty HGrStr)
-  for x be Element of L holds
-    (power L).(x,2) = x*x;
-
-theorem :: COMPTRIG:14
-  for L be add-associative right_zeroed right_complementable
-            right-distributive unital (non empty doubleLoopStr)
-  for n be Element of NAT st n > 0 holds
-    (power L).(0.L,n) = 0.L;
-
-theorem :: COMPTRIG:15
-  for L be associative commutative unital (non empty HGrStr)
-  for x,y be Element of L
-  for n be Element of NAT holds
-    (power L).(x*y,n) = (power L).(x,n) * (power L).(y,n);
-
-  theorem :: COMPTRIG:16
-   for x be Real st x > 0
-   for n be Element of NAT holds
-    (power F_Complex).([**x,0**],n) = [**x to_power n,0**];
+canceled 9;
 
   theorem :: COMPTRIG:17
-   for n be Element of NAT st x >= 0 & n <> 0 holds
-    (n-root x) to_power n = x;
+   for n be Nat st x >= 0 & n <> 0 holds
+     (n-root x) |^ n = x;
+
+ registration
+  cluster PI -> non negative;
+ end;
 
 begin
 
@@ -216,26 +183,22 @@ begin  :: Argument of Complex Number
     0 <= Arg z & Arg z < 2*PI;
 
   theorem :: COMPTRIG:53
-   for x be Real st x >= 0 holds
-    Arg [**x,0**] = 0;
+   for x be Real st x >= 0 holds Arg x = 0;
 
   theorem :: COMPTRIG:54
-   for x be Real st x < 0 holds
-    Arg [**x,0**] = PI;
+   for x be Real st x < 0 holds Arg x = PI;
 
   theorem :: COMPTRIG:55
-   for x be Real st x > 0 holds
-    Arg [**0,x**] = PI/2;
+   for x be Real st x > 0 holds Arg (x*<i>) = PI/2;
 
 theorem :: COMPTRIG:56
-  for x be Real st x < 0 holds
-    Arg [**0,x**] = 3/2*PI;
+  for x be Real st x < 0 holds Arg (x*<i>) = 3/2*PI;
 
 theorem :: COMPTRIG:57
-  Arg 1.(F_Complex) = 0;
+  Arg 1 = 0;
 
 theorem :: COMPTRIG:58
-  Arg i_FC = PI/2;
+  Arg <i> = PI/2;
 
 theorem :: COMPTRIG:59
   for z be complex number holds
@@ -286,57 +249,56 @@ theorem :: COMPTRIG:70
     cos Arg z <= 0;
 
 theorem :: COMPTRIG:71
-  for x be Real, n be Element of NAT holds
-    (power F_Complex).([**cos x,sin x**],n) = [**cos (n*x),sin (n*x)**];
+  for x be real number, n be Nat holds
+    (cos x+(sin x)*<i>)|^n = cos (n*x)+sin (n*x)*<i>;
 
   theorem :: COMPTRIG:72
-   for z be Element of F_Complex
-   for n be Element of NAT st z <> 0.F_Complex or n <> 0 holds
-    (power F_Complex).(z,n) =
-    [**(|.z.| to_power n)*cos (n*Arg z),(|.z.| to_power n)*sin (n*Arg z)**];
+   for z be Element of COMPLEX
+   for n be Nat st z <> 0 or n <> 0 holds
+    z|^n = (|.z.| |^ n)*cos (n*Arg z)+(|.z.| |^ n)*sin (n*Arg z)*<i>;
 
   theorem :: COMPTRIG:73
-   for x be Real, n,k be Element of NAT st n <> 0 holds
-    (power F_Complex).([**cos((x+2*PI*k)/n),sin((x+2*PI*k)/n)**],n) =
-     [**cos x,sin x**];
+   for x be Real, n,k be Nat st n <> 0 holds
+    (cos((x+2*PI*k)/n)+sin((x+2*PI*k)/n)*<i>)|^n = (cos x+(sin x)*<i>);
 
   theorem :: COMPTRIG:74
-   for z be Element of F_Complex
-   for n,k be Element of NAT st n <> 0 holds
-    z = (power F_Complex).([**(n-root |.z.|)*cos((Arg z+2*PI*k)/n),
-                              (n-root |.z.|)*sin((Arg z+2*PI*k)/n)**],n);
+   for z be complex number
+   for n,k be Nat st n <> 0 holds
+    z = ((n-root |.z.|)*cos((Arg z+2*PI*k)/n)+
+                              (n-root |.z.|)*sin((Arg z+2*PI*k)/n)*<i>)|^n;
 
   definition
-   let x be Element of F_Complex;
-   let n be non empty Element of NAT;
-   mode CRoot of n,x -> Element of F_Complex means
+   let x be complex number;
+   let n be non empty Nat;
+   mode CRoot of n,x -> complex number means
 :: COMPTRIG:def 2
-    (power F_Complex).(it,n) = x;
+ it|^n = x;
   end;
 
   theorem :: COMPTRIG:75
-   for x be Element of F_Complex
-   for n be non empty Element of NAT
-   for k be Element of NAT holds
-    [**(n-root |.x.|)*cos((Arg x+2*PI*k)/n),
-       (n-root |.x.|)*sin((Arg x+2*PI*k)/n)**] is CRoot of n,x;
+   for x be Element of COMPLEX
+   for n be non empty Nat
+   for k be Nat holds
+    (n-root |. x .|)*cos((Arg x+2*PI*k)/n)+
+       (n-root |. x .|)*sin((Arg x+2*PI*k)/n)*<i> is CRoot of n,x;
 
   theorem :: COMPTRIG:76
-   for x be Element of F_Complex
+   for x be Element of COMPLEX
    for v be CRoot of 1,x holds
     v = x;
 
   theorem :: COMPTRIG:77
-   for n be non empty Element of NAT
-   for v be CRoot of n,0.F_Complex holds
-    v = 0.F_Complex;
+   for n be non empty Nat
+   for v be CRoot of n,0 holds v = 0;
 
   theorem :: COMPTRIG:78
-   for n be non empty Element of NAT
-   for x be Element of F_Complex
-   for v be CRoot of n,x st v = 0.F_Complex holds
-    x = 0.F_Complex;
+   for n be non empty Nat
+   for x be Element of COMPLEX
+   for v be CRoot of n,x st v = 0 holds x = 0;
 
 theorem :: COMPTRIG:79 :: COMPTRIG:17: AK, 21.02.2006
 for a being real number st 0 <= a & a < 2*PI & cos(a) = 1 holds a = 0;
 
+theorem :: COMPTRIG:80
+ for z being complex number holds
+  z = |.z.|*cos Arg z + |.z.|*sin Arg z * <i>;

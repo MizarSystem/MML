@@ -12,11 +12,12 @@ environ
       PRE_TOPC, REALSET1, RELAT_1, RELAT_2, TARSKI, TOPGEN_1, TREES_1,
       SETFAM_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, NUMBERS, SUBSET_1, SETFAM_1, DOMAIN_1,
- XCMPLX_0,
+      XCMPLX_0, ABIAN, XXREAL_0,
       REAL_1, RELAT_1, FUNCT_1, CARD_1, PBOOLE, FUNCT_2, ORDINAL1, ORDINAL2,
-      FINSEQ_1, FINSET_1, NAT_1, CQC_LANG, GLIB_000, GLIB_001, ABIAN, XXREAL_0;
+      FINSEQ_1, FINSET_1, NAT_1, CQC_LANG, GLIB_000, GLIB_001;
  constructors DOMAIN_1, XXREAL_0, REAL_1, BINOP_2, MEMBERED, CQC_LANG,
-      REALSET1, CARD_FIL, GRAPH_2, MATRLIN, GLIB_001, ORDINAL2, NAT_1;
+      REALSET1, CARD_FIL, GRAPH_2, MATRLIN, GLIB_001, ORDINAL2, NAT_1,
+      FUNCT_4;
  registrations RELSET_1, FINSET_1, NAT_1, CARD_1, INT_1, ABIAN, JORDAN1D,
       ORDINAL2, GLIB_000, GLIB_001, POLYNOM1, ORDINAL1;
  requirements ARITHM, BOOLE, NUMERALS, REAL, SUBSET;
@@ -1873,13 +1874,13 @@ end;
 
 definition let GSq be GraphSeq;
   attr GSq is connected means :Def12: ::dGSEQCONNECT
-    for n being Element of NAT holds GSq.->n is connected;
+    for n being Nat holds GSq.n is connected;
 
   attr GSq is acyclic means :Def13: ::dGSEQACYCLIC
-    for n being Element of NAT holds GSq.->n is acyclic;
+    for n being Nat holds GSq.n is acyclic;
 
   attr GSq is Tree-like means :Def14: ::dGSEQTREE
-    for n being Element of NAT holds GSq.->n is Tree-like;
+    for n being Nat holds GSq.n is Tree-like;
 end;
 
 registration
@@ -1887,29 +1888,29 @@ registration
   coherence proof
     let GSq be GraphSeq; assume
 A1: GSq is trivial;
-    let n be Element of NAT;
-    reconsider G = GSq.->n as trivial _Graph by A1,GLIB_000:def 62;
+    let n be Nat;
+    reconsider G = GSq.n as trivial _Graph by A1,GLIB_000:def 62;
     G is connected;
-    hence GSq.-> n is connected;
+    hence GSq. n is connected;
   end;
   cluster trivial loopless -> Tree-like GraphSeq;
   coherence proof
     let GSq be GraphSeq; assume
 A2: GSq is trivial & GSq is loopless;
-    let n be Element of NAT;
-    reconsider G = GSq.->n as trivial loopless _Graph
+    let n be Nat;
+    reconsider G = GSq.n as trivial loopless _Graph
       by A2,GLIB_000:def 61,GLIB_000:def 62;
     G is Tree-like;
-    hence GSq.-> n is Tree-like;
+    hence GSq. n is Tree-like;
   end;
   cluster acyclic -> simple GraphSeq;
   coherence proof
     let GSq be GraphSeq; assume
 A3: GSq is acyclic;
-    now let n be Element of NAT;
-        reconsider G = GSq.->n as acyclic _Graph by A3,Def13;
+    now let n be Nat;
+        reconsider G = GSq.n as acyclic _Graph by A3,Def13;
         G is simple;
-        hence GSq.-> n is simple;
+        hence GSq. n is simple;
     end;
     hence thesis by GLIB_000:def 66;
   end;
@@ -1917,10 +1918,10 @@ A3: GSq is acyclic;
   coherence proof
     let GSq be GraphSeq; assume
 A4: GSq is Tree-like;
-    now let n be Element of NAT;
-        reconsider G = GSq.->n as Tree-like _Graph by A4,Def14;
+    now let n be Nat;
+        reconsider G = GSq.n as Tree-like _Graph by A4,Def14;
         G is acyclic & G is connected;
-        hence GSq.->n is acyclic & GSq.->n is connected;
+        hence GSq.n is acyclic & GSq.n is connected;
     end;
     hence thesis by Def13,Def12;
   end;
@@ -1928,8 +1929,8 @@ A4: GSq is Tree-like;
   coherence proof
     let GSq be GraphSeq; assume
 A5: GSq is acyclic & GSq is connected;
-    let n be Element of NAT;
-    reconsider G = GSq.->n as acyclic connected _Graph
+    let n be Nat;
+    reconsider G = GSq.n as acyclic connected _Graph
       by A5,Def13,Def12;
     G is Tree-like;
     hence thesis;
@@ -1953,28 +1954,29 @@ A1: dom F = NAT by FUNCOP_1:19; then
     F.1 in {G} & F.(1+1) in {G} by FUNCOP_1:14; then
     F.1 = G & F.(1+1) = G by TARSKI:def 1;
     hence F is halting by GLIB_000:def 56;
-    now let x be Element of NAT;
+    now let x be Nat; 
+        x in NAT by ORDINAL1:def 13; then
         F.x in rng F by A1, FUNCT_1:12; then
         F.x in {G} by FUNCOP_1:14; then
         F.x = G by TARSKI:def 1;
-        hence F.->x is finite & F.->x is Tree-like by GLIB_000:def 59;
+        hence F.x is finite & F.x is Tree-like;
     end;
     hence thesis by GLIB_000:def 60,Def14;
   end;
 end;
 
-registration let GSq be connected GraphSeq, n be Element of NAT;
-  cluster GSq.->n -> connected;
+registration let GSq be connected GraphSeq, n be Nat;
+  cluster GSq.n -> connected_Graph;
   coherence by Def12;
 end;
 
-registration let GSq be acyclic GraphSeq, n be Element of NAT;
-  cluster GSq.->n -> acyclic;
+registration let GSq be acyclic GraphSeq, n be Nat;
+  cluster GSq.n -> acyclic_Graph;
   coherence by Def13;
 end;
 
-registration let GSq be Tree-like GraphSeq, n be Element of NAT;
-  cluster GSq.->n -> Tree-like;
+registration let GSq be Tree-like GraphSeq, n be Nat;
+  cluster GSq.n -> Tree-like_Graph;
   coherence;
 end;
 

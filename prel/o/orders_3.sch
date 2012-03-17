@@ -42,7 +42,7 @@
 <For>
 <Typ kind="G" nr="4">
 <Cluster>
-<Adjective nr="38"/>
+<Adjective nr="39"/>
 </Cluster>
 </Typ>
 <Not>
@@ -203,13 +203,13 @@
 <For>
 <Typ kind="G" nr="4">
 <Cluster>
-<Adjective nr="38"/>
+<Adjective nr="39"/>
 </Cluster>
 </Typ>
 <For>
 <Typ kind="G" nr="4">
 <Cluster>
-<Adjective nr="38"/>
+<Adjective nr="39"/>
 </Cluster>
 </Typ>
 <Not>

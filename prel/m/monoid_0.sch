@@ -32,7 +32,7 @@
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
-<Adjective nr="26" value="false"/>
+<Adjective nr="27" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
@@ -48,10 +48,10 @@
 </ArgTypes>
 <Not>
 <For>
-<Typ kind="M" nr="13">
+<Typ kind="M" nr="12">
 <Cluster>
-<Adjective nr="26" value="false"/>
-<Adjective nr="37"/>
+<Adjective nr="27" value="false"/>
+<Adjective nr="38"/>
 </Cluster>
 <Func kind="F" nr="1"/>
 </Typ>
@@ -66,15 +66,19 @@
 </For>
 </Not>
 <For>
-<Typ kind="M" nr="11">
+<Typ kind="M" nr="3">
 <Cluster/>
+<Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
+</Func>
 <Func kind="F" nr="2"/>
 </Typ>
 <For>
-<Typ kind="M" nr="11">
+<Typ kind="M" nr="3">
 <Cluster/>
+<Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
+</Func>
 <Func kind="F" nr="2"/>
 </Typ>
 <Pred kind="R" nr="2">
@@ -92,16 +96,16 @@
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
-<Adjective nr="26" value="false"/>
+<Adjective nr="27" value="false"/>
 </Cluster>
 </Typ>
 </ArgTypes>
 <Not>
 <For>
-<Typ kind="M" nr="13">
+<Typ kind="M" nr="12">
 <Cluster>
-<Adjective nr="26" value="false"/>
-<Adjective nr="37"/>
+<Adjective nr="27" value="false"/>
+<Adjective nr="38"/>
 </Cluster>
 <Func kind="F" nr="1"/>
 </Typ>
@@ -204,7 +208,7 @@
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="26" value="false"/>
+<Adjective nr="27" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
@@ -220,10 +224,10 @@
 </ArgTypes>
 <Not>
 <For>
-<Typ kind="M" nr="14">
+<Typ kind="M" nr="13">
 <Cluster>
-<Adjective nr="26" value="false"/>
-<Adjective nr="44"/>
+<Adjective nr="27" value="false"/>
+<Adjective nr="45"/>
 </Cluster>
 <Func kind="F" nr="1"/>
 </Typ>
@@ -238,15 +242,19 @@
 </For>
 </Not>
 <For>
-<Typ kind="M" nr="11">
+<Typ kind="M" nr="3">
 <Cluster/>
+<Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
+</Func>
 <Func kind="F" nr="2"/>
 </Typ>
 <For>
-<Typ kind="M" nr="11">
+<Typ kind="M" nr="3">
 <Cluster/>
+<Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
+</Func>
 <Func kind="F" nr="2"/>
 </Typ>
 <Pred kind="R" nr="2">
@@ -270,16 +278,16 @@
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="26" value="false"/>
+<Adjective nr="27" value="false"/>
 </Cluster>
 </Typ>
 </ArgTypes>
 <Not>
 <For>
-<Typ kind="M" nr="14">
+<Typ kind="M" nr="13">
 <Cluster>
-<Adjective nr="26" value="false"/>
-<Adjective nr="44"/>
+<Adjective nr="27" value="false"/>
+<Adjective nr="45"/>
 </Cluster>
 <Func kind="F" nr="1"/>
 </Typ>

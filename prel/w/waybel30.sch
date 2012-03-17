@@ -46,12 +46,12 @@
 <Typ kind="G" nr="9">
 <Cluster>
 <Adjective nr="15"/>
-<Adjective nr="35"/>
 <Adjective nr="36"/>
 <Adjective nr="37"/>
-<Adjective nr="104"/>
+<Adjective nr="38"/>
 <Adjective nr="105"/>
-<Adjective nr="131"/>
+<Adjective nr="106"/>
+<Adjective nr="132"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">

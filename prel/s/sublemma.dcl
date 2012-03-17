@@ -37,7 +37,7 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="46"/>
+<Adjective nr="47"/>
 </Cluster>
 </RCluster>
 </Registrations>

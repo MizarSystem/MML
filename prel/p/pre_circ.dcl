@@ -30,7 +30,6 @@
 <ArticleID name="TREES_2"/>
 <ArticleID name="TREES_3"/>
 <ArticleID name="TREES_4"/>
-<ArticleID name="PRE_CIRC"/>
 </Signature>
 <RCluster>
 <ArgTypes/>
@@ -40,11 +39,11 @@
 <Cluster>
 <Adjective nr="14" value="false"/>
 <Adjective nr="22"/>
-<Adjective nr="31"/>
 <Adjective nr="32"/>
 <Adjective nr="33"/>
 <Adjective nr="34"/>
 <Adjective nr="35"/>
+<Adjective nr="36"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -61,9 +60,7 @@
 <Adjective nr="1"/>
 <Adjective nr="2"/>
 <Adjective nr="4"/>
-<Adjective nr="50">
-<LocusVar nr="1"/>
-</Adjective>
+<Adjective nr="23"/>
 </Cluster>
 </RCluster>
 <FCluster>
@@ -72,7 +69,7 @@
 <Cluster>
 <Adjective nr="14" value="false"/>
 <Adjective nr="22"/>
-<Adjective nr="35"/>
+<Adjective nr="36"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -86,7 +83,7 @@
 <Adjective nr="13"/>
 <Adjective nr="18"/>
 <Adjective nr="21"/>
-<Adjective nr="30"/>
+<Adjective nr="31"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -119,7 +116,7 @@
 <Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="22"/>
-<Adjective nr="43"/>
+<Adjective nr="44"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="3">
@@ -137,7 +134,7 @@
 <Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="22"/>
-<Adjective nr="43"/>
+<Adjective nr="44"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -147,7 +144,7 @@
 <Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="22"/>
-<Adjective nr="43"/>
+<Adjective nr="44"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="3">
@@ -161,7 +158,7 @@
 <Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="22"/>
-<Adjective nr="43"/>
+<Adjective nr="44"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -174,7 +171,7 @@
 <Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="22"/>
-<Adjective nr="43"/>
+<Adjective nr="44"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -190,7 +187,7 @@
 <Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="22"/>
-<Adjective nr="43"/>
+<Adjective nr="44"/>
 </Cluster>
 </FCluster>
 <CCluster>

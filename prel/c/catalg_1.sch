@@ -74,7 +74,7 @@
 <For>
 <Typ kind="G" nr="14">
 <Cluster>
-<Adjective nr="97">
+<Adjective nr="98">
 <Func kind="K" nr="425">
 <Func kind="F" nr="1"/>
 </Func>

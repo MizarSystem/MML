@@ -91,7 +91,7 @@
 <And>
 <Not>
 <And>
-<Pred kind="V" nr="32">
+<Pred kind="V" nr="33">
 <Var nr="2"/>
 </Pred>
 <Not>
@@ -111,7 +111,7 @@
 </Not>
 <Not>
 <And>
-<Pred kind="V" nr="33">
+<Pred kind="V" nr="34">
 <Var nr="2"/>
 </Pred>
 <Not>
@@ -139,7 +139,7 @@
 </Not>
 <Not>
 <And>
-<Pred kind="V" nr="34">
+<Pred kind="V" nr="35">
 <Var nr="2"/>
 </Pred>
 <Not>
@@ -175,7 +175,7 @@
 </Not>
 <Not>
 <And>
-<Pred kind="V" nr="35">
+<Pred kind="V" nr="36">
 <Var nr="2"/>
 </Pred>
 <Not>
@@ -308,7 +308,7 @@
 <For>
 <Typ kind="M" nr="11">
 <Cluster>
-<Adjective nr="41">
+<Adjective nr="42">
 <Var nr="2"/>
 </Adjective>
 </Cluster>
@@ -593,7 +593,7 @@
 <For>
 <Typ kind="M" nr="11">
 <Cluster>
-<Adjective nr="41">
+<Adjective nr="42">
 <Var nr="1"/>
 </Adjective>
 </Cluster>
@@ -762,7 +762,7 @@
 <For>
 <Typ kind="M" nr="11">
 <Cluster>
-<Adjective nr="41">
+<Adjective nr="42">
 <Var nr="1"/>
 </Adjective>
 </Cluster>
@@ -1062,7 +1062,7 @@
 <For>
 <Typ kind="M" nr="11">
 <Cluster>
-<Adjective nr="41">
+<Adjective nr="42">
 <Var nr="1"/>
 </Adjective>
 </Cluster>

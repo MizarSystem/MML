@@ -18,7 +18,7 @@ environ
       CQC_LANG, REALSET1, FINSEQ_5, ABIAN, GRAPH_2, GLIB_000;
  registrations SUBSET_1, RELSET_1, FINSET_1, XREAL_0, PNPROC_1, INT_1, ABIAN,
       FINSEQ_1, GRAPH_3, NAT_1, FUNCT_1, JORDAN1D, XBOOLE_0, RELAT_1, NUMBERS,
-      ORDINAL1, GLIB_000, XXREAL_0, CQC_LANG;
+      ORDINAL1, GLIB_000, XXREAL_0, CQC_LANG, HEYTING3;
  requirements ARITHM, BOOLE, NUMERALS, REAL, SUBSET;
  theorems CARD_1, CARD_2, CQC_LANG, CQC_THE1, ENUMSET1, FINSEQ_1, FINSEQ_2,
       FINSEQ_3, FINSEQ_4, FINSEQ_5, FINSEQ_6, FINSET_1, FUNCT_1, FUNCT_4,
@@ -213,10 +213,10 @@ end;
 
 definition let G be _Graph;
   mode Walk of G -> FinSequence of the_Vertices_of G \/ the_Edges_of G means
-    :Def3: ::dWALK
+  :Def3: ::dWALK
     len it is odd & it.1 in the_Vertices_of G &
     for n being odd Element of NAT st n < len it
-    holds it.(n+1) Joins it.n, it.(n+2), G;
+     holds it.(n+1) Joins it.n, it.(n+2), G;
   existence proof
     set VE = (the_Vertices_of G) \/ (the_Edges_of G);
     consider v being set such that
@@ -316,19 +316,20 @@ definition let G be _Graph, W be Walk of G;
   end;
 end;
 
-definition let G be _Graph, W be Walk of G, n be Element of NAT;
+definition let G be _Graph, W be Walk of G, n be Nat;
   func W.vertexAt(n) -> Vertex of G equals :Def8: ::dWVAT
     W.n if n is odd & n <= len W otherwise W.first();
   correctness proof
     hereby assume
     A1: n is odd & n <= len W;
+        reconsider n1 = n as Element of NAT by ORDINAL1:def 13;
         now per cases;
         suppose n = len W; then
             W.n = W.last();
             hence W.n is Vertex of G; end;
         suppose n <> len W; then
             n < len W by A1, REAL_1:def 5; then
-            W.(n+1) Joins W.n, W.(n+2), G by A1, Def3;
+            W.(n1+1) Joins W.n, W.(n+2), G by A1, Def3;
             hence W.n is Vertex of G by GLIB_000:16; end;
         end;
         hence W.n is Vertex of G;
@@ -361,8 +362,12 @@ A1: len W' = len W by FINSEQ_5:def 3;
         end; then
     A6: n <= len W & n+1 <= len W & n+2 <= len W by FINSEQ_3:27;
         set rn = len W-n+1, rnaa1 = len W-(n+1)+1, rn2 = len W-(n+2)+1;
-        reconsider rn, rn2 as odd Element of NAT by A6, FINSEQ_5:1;
-        reconsider rnaa1 as even Element of NAT by A6, FINSEQ_5:1;
+    A6a: n is Element of NAT by ORDINAL1:def 13;
+    A6b: n+1 is Element of NAT by ORDINAL1:def 13;
+    A6c: n+2 is Element of NAT  by ORDINAL1:def 13;
+        reconsider rn as odd Element of NAT by A6a, A6, FINSEQ_5:1;
+        reconsider rn2 as odd Element of NAT by A6c, A6, FINSEQ_5:1;
+        reconsider rnaa1 as even Element of NAT by A6b, A6, FINSEQ_5:1;
         1+0 < n+2 by XREAL_1:10; then
         len W - (n+2) < len W - 1 by REAL_1:92; then
         len W - (n+2) + 1 < len W - 1 + 1 by XREAL_1:10; then
@@ -403,10 +408,12 @@ definition let G be _Graph, W1, W2 be Walk of G;
             A8: 1 <= n+1 & 1 <= n+2 by NAT_1:37;
                 n < n+2 by NAT_1:41; then
             A9: n < len W1 by A6, XXREAL_0:2;
+            A9a: n is Element of NAT & n+1 is Element of NAT &
+                 n+2 is Element of NAT by ORDINAL1:def 13;
                 n+2-2 <= len W1-0 & n+2-1 <= len W1-0 by A6, REAL_1:92; then
                 W.n = W1.n & W.(n+1) = W1.(n+1) & W.(n+2) = W1.(n+2)
-                  by A6,A7,A8,GRAPH_2:14;
-                hence W.(n+1) Joins W.n,W.(n+2),G by A9, Def3; end;
+                  by A9a, A6,A7,A8,GRAPH_2:14;
+                hence W.(n+1) Joins W.n,W.(n+2),G by A9a, A9, Def3; end;
             suppose
             A10: len W1 < n+2; then consider k being Nat such that
             A11: n + 2 = len W1 + k by NAT_1:28;
@@ -484,13 +491,13 @@ definition let G be _Graph, W1, W2 be Walk of G;
   end;
 end;
 
-definition let G be _Graph, W be Walk of G, m, n being Element of NAT;
+definition let G be _Graph, W be Walk of G, m, n being Nat;
   func W.cut(m,n) -> Walk of G equals :Def11: ::dWCUT
      (m,n)-cut W if m is odd & n is odd & m <= n & n <= len W otherwise W;
   correctness proof
     hereby assume
     A1: m is odd & n is odd & m <= n & n <= len W;
-        reconsider m4 = m, n4 = n as odd Element of NAT by A1;
+        reconsider m4 = m, n4 = n as odd Nat by A1;
         set W2 = (m,n)-cut W, VG = the_Vertices_of G, EG = the_Edges_of G;
     A2: 1 <= m & m <= n & n <= len W by A1, HEYTING3:1; then
         len W2 + m4 - m4 = n4 + 1 - m4 by GRAPH_2:def 1; then
@@ -522,10 +529,10 @@ definition let G be _Graph, W be Walk of G, m, n being Element of NAT;
             reconsider x=m4+i-1 as odd Element of NAT by INT_1:18;
             m + i - 1 < len W - 0 by A5, REAL_1:92; then
             W.(x+1) Joins W.x, W.(x+2), G by Def3;
-            hence W2.(i+1) Joins W2.i, W2.(i+2), G
-              by A6,A2,A4,GRAPH_2:def 1,A7;
+          hence W2.(i+1) Joins W2.i, W2.(i+2), G by A6,A2,A4,GRAPH_2:def 1,A7;
         end;
         hence (m,n)-cut W is Walk of G by Def3;
+
     end;
     thus thesis;
   end;

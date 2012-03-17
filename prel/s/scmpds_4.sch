@@ -66,9 +66,11 @@
 <Adjective nr="16"/>
 </Cluster>
 </Typ>
-<Typ kind="M" nr="9">
+<Typ kind="M" nr="4">
 <Cluster/>
+<Func kind="U" nr="1">
 <Func kind="K" nr="223"/>
+</Func>
 <Func kind="U" nr="4">
 <Func kind="K" nr="11">
 <Func kind="K" nr="44"/>

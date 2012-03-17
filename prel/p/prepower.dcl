@@ -44,7 +44,7 @@
 <Func kind="K" nr="78"/>
 </Adjective>
 <Adjective nr="30"/>
-<Adjective nr="37"/>
+<Adjective nr="38"/>
 </Cluster>
 </RCluster>
 <FCluster>

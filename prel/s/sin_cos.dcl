@@ -73,10 +73,10 @@
 <Func kind="K" nr="88"/>
 <Func kind="K" nr="85"/>
 </Adjective>
-<Adjective nr="31"/>
 <Adjective nr="32"/>
-<Adjective nr="39"/>
+<Adjective nr="33"/>
 <Adjective nr="40"/>
+<Adjective nr="41"/>
 </Cluster>
 </FCluster>
 <FCluster>

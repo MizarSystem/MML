@@ -50,45 +50,45 @@
 <Cluster>
 <Adjective nr="1" value="false"/>
 <Adjective nr="7" value="false"/>
-<Adjective nr="81">
+<Adjective nr="82">
 <Func kind="U" nr="1">
-<Func kind="K" nr="199">
+<Func kind="K" nr="200">
 <Num nr="2"/>
 </Func>
 </Func>
 </Adjective>
-<Adjective nr="82"/>
 <Adjective nr="83"/>
-<Adjective nr="87"/>
+<Adjective nr="84"/>
 <Adjective nr="88"/>
+<Adjective nr="89"/>
 </Cluster>
 <Func kind="U" nr="1">
-<Func kind="K" nr="199">
+<Func kind="K" nr="200">
 <Num nr="2"/>
 </Func>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="246">
+<Func kind="K" nr="247">
 <Num nr="2"/>
-<Func kind="K" nr="233">
+<Func kind="K" nr="234">
 <Num nr="2"/>
 <LocusVar nr="1"/>
 </Func>
 </Func>
 <Cluster>
-<Adjective nr="32">
-<Func kind="K" nr="199">
+<Adjective nr="33">
+<Func kind="K" nr="200">
 <Num nr="2"/>
 </Func>
 </Adjective>
-<Adjective nr="36">
-<Func kind="K" nr="199">
+<Adjective nr="37">
+<Func kind="K" nr="200">
 <Num nr="2"/>
 </Func>
 </Adjective>
-<Adjective nr="78">
-<Func kind="K" nr="199">
+<Adjective nr="79">
+<Func kind="K" nr="200">
 <Num nr="2"/>
 </Func>
 </Adjective>
@@ -98,11 +98,11 @@
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="99"/>
+<Adjective nr="100"/>
 </Cluster>
 <Func kind="K" nr="10">
 <Func kind="U" nr="1">
-<Func kind="K" nr="199">
+<Func kind="K" nr="200">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -113,28 +113,28 @@
 <Func kind="K" nr="65"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="143">
-<Func kind="K" nr="199">
+<Func kind="K" nr="144">
+<Func kind="K" nr="200">
 <Num nr="2"/>
 </Func>
-<Func kind="K" nr="245">
-<Func kind="K" nr="253">
+<Func kind="K" nr="246">
+<Func kind="K" nr="254">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 </Func>
 </Func>
 <Cluster>
-<Adjective nr="33">
-<Func kind="K" nr="199">
+<Adjective nr="34">
+<Func kind="K" nr="200">
 <Num nr="2"/>
 </Func>
 </Adjective>
-<Adjective nr="89">
+<Adjective nr="90">
 <Num nr="2"/>
 </Adjective>
-<Adjective nr="95">
-<Func kind="K" nr="199">
+<Adjective nr="96">
+<Func kind="K" nr="200">
 <Num nr="2"/>
 </Func>
 </Adjective>

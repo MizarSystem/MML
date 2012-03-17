@@ -31,6 +31,7 @@
 <ArticleID name="TREES_2"/>
 <ArticleID name="TREES_3"/>
 <ArticleID name="TREES_4"/>
+<ArticleID name="CARD_3"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="GROUP_1"/>
@@ -41,7 +42,6 @@
 <ArticleID name="REALSET1"/>
 <ArticleID name="REALSET2"/>
 <ArticleID name="RELAT_2"/>
-<ArticleID name="CARD_3"/>
 <ArticleID name="SEQM_3"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="SEQ_1"/>
@@ -111,15 +111,15 @@
 </Typ>
 <Typ kind="G" nr="8">
 <Cluster>
-<Adjective nr="48" value="false"/>
-<Adjective nr="51"/>
-<Adjective nr="52"/>
+<Adjective nr="50" value="false"/>
 <Adjective nr="53"/>
 <Adjective nr="54"/>
-<Adjective nr="58"/>
+<Adjective nr="55"/>
+<Adjective nr="56"/>
 <Adjective nr="60"/>
-<Adjective nr="70"/>
-<Adjective nr="94" value="false"/>
+<Adjective nr="62"/>
+<Adjective nr="72"/>
+<Adjective nr="96" value="false"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -128,26 +128,26 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="48" value="false"/>
-<Adjective nr="51"/>
-<Adjective nr="52"/>
+<Adjective nr="50" value="false"/>
 <Adjective nr="53"/>
 <Adjective nr="54"/>
-<Adjective nr="58"/>
+<Adjective nr="55"/>
+<Adjective nr="56"/>
 <Adjective nr="60"/>
-<Adjective nr="66"/>
-<Adjective nr="67"/>
+<Adjective nr="62"/>
 <Adjective nr="68"/>
 <Adjective nr="69"/>
 <Adjective nr="70"/>
 <Adjective nr="71"/>
-<Adjective nr="77"/>
-<Adjective nr="78"/>
+<Adjective nr="72"/>
+<Adjective nr="73"/>
 <Adjective nr="79"/>
 <Adjective nr="80"/>
 <Adjective nr="81"/>
 <Adjective nr="82"/>
-<Adjective nr="94" value="false"/>
+<Adjective nr="83"/>
+<Adjective nr="84"/>
+<Adjective nr="96" value="false"/>
 </Cluster>
 </FCluster>
 </Registrations>

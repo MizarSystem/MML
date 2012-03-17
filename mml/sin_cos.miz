@@ -10,11 +10,12 @@ environ
       FUNCT_1, RELAT_1, QC_LANG1, PREPOWER, SERIES_1, ABSVALUE, RLVECT_1,
       SEQM_3, SEQ_2, SUPINF_2, ORDINAL2, PROB_1, SQUARE_1, PARTFUN1, INCSP_1,
       RCOMP_1, PRE_TOPC, BOOLE, FCONT_1, SUBSET_1, SIN_COS, FINSEQ_4, GROUP_1,
-      XCMPLX_0, FUNCOP_1, FRECHET2;
+      XCMPLX_0, FUNCOP_1, FRECHET2, SIN_COS4;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, ARYTM_0, XCMPLX_0,
-      XXREAL_0, XREAL_0, REAL_1, RELAT_1, FUNCT_1, RELSET_1, FCONT_1, FUNCT_2,
+      XXREAL_0, XREAL_0,
+      COMPLEX1,  REAL_1, RELAT_1, FUNCT_1, RELSET_1, FCONT_1, FUNCT_2,
       SEQ_1, SEQ_2, FDIFF_1, FUNCOP_1, SERIES_1, NAT_1, FINSEQ_4, NEWTON,
-      COMPLEX1, SQUARE_1, PARTFUN1, SEQM_3, RCOMP_1, BINARITH, RFUNCT_1,
+      SQUARE_1, PARTFUN1, SEQM_3, RCOMP_1, BINARITH, RFUNCT_1,
       RFUNCT_2, COMSEQ_1, COMSEQ_2, COMSEQ_3, PREPOWER;
  constructors PARTFUN1, FUNCT_4, ARYTM_3, ARYTM_0, REAL_1, SQUARE_1, NAT_1,
       SEQ_2, RCOMP_1, FINSEQ_4, RFUNCT_1, RFUNCT_2, FCONT_1, FDIFF_1, COMSEQ_1,
@@ -4520,7 +4521,16 @@ XREAL_1:50;
  hence thesis by A4,A5,Th41;
  end;
 
-theorem Th75: [.0,1 .] c= dom (sin/cos) & ].0,1 .[c=dom(sin/cos)
+definition
+ func tan -> PartFunc of REAL, REAL equals
+  sin/cos;
+ correctness;
+ func cot -> PartFunc of REAL, REAL equals
+  cos/sin;
+ correctness;
+end;
+
+theorem Th75: [.0,1 .] c= dom tan & ].0,1 .[c=dom tan
 proof
    [.0,1 .] c= dom cos \ cos"{0}
    proof
@@ -4540,22 +4550,22 @@ proof
       hence thesis by A1,XBOOLE_1:83;
    end;
     then [.0,1 .] c= dom sin /\ (dom cos \ cos"{0}) by Th27,XBOOLE_1:19;
-   then A5:[.0,1 .] c= dom (sin/cos) by RFUNCT_1:def 4;
+   then A5:[.0,1 .] c= dom tan by RFUNCT_1:def 4;
        ].0,1 .[c=[.0,1 .] by RCOMP_1:15;
    hence thesis by A5,XBOOLE_1:1;
 end;
 
-Lm20: dom((sin/cos)|[.0,1 .]) = [.0,1 .] &
-      (for th st th in [.0,1 .] holds (sin/cos)|[.0,1 .].th=(sin/cos).th)
+Lm20: dom(tan|[.0,1 .]) = [.0,1 .] &
+      (for th st th in [.0,1 .] holds tan|[.0,1 .].th=tan.th)
 proof
-     dom((sin/cos)|[.0,1 .])=dom (sin/cos) /\ [.0,1 .] by RELAT_1:90;
- then dom((sin/cos)|[.0,1 .]) = [.0,1 .] by Th75,XBOOLE_1:28;
+     dom(tan|[.0,1 .])=dom tan /\ [.0,1 .] by RELAT_1:90;
+ then dom(tan|[.0,1 .]) = [.0,1 .] by Th75,XBOOLE_1:28;
  hence thesis by FUNCT_1:68;
 end;
 
 Lm21:
-sin/cos is_differentiable_on ].0,1 .[ & for th st th in ].0,1 .[ holds
-diff(sin/cos,th)>0
+tan is_differentiable_on ].0,1 .[ & for th st th in ].0,1 .[ holds
+diff(tan,th)>0
 proof
  A1: sin is_differentiable_on ].0,1 .[ by Th73,FDIFF_1:34;
  A2: cos is_differentiable_on ].0,1 .[ by Th72,FDIFF_1:34;
@@ -4566,7 +4576,7 @@ proof
      ].0,1 .[ c=[.0,1 .] by RCOMP_1:15;
      hence cos.th<>0 by A4,Th74;
      end;
-     for th st th in ].0,1 .[ holds diff(sin/cos,th)>0
+     for th st th in ].0,1 .[ holds diff(tan,th)>0
   proof
   let th such that
   A5: th in ].0,1 .[;
@@ -4574,7 +4584,7 @@ A6: th is Real by XREAL_0:def 1;
   A7: cos is_differentiable_in th by Th68;
   A8: sin is_differentiable_in th by Th69;
   A9: cos.th<>0 by A3,A5;
-  then A10: diff(sin/cos,th)=(diff(sin,th)*cos.th-diff(cos,th)*sin.th)/(cos.th)
+  then A10: diff(tan,th)=(diff(sin,th)*cos.th-diff(cos,th)*sin.th)/(cos.th)
 ^2
  by A6,A7,A8,FDIFF_2:14
             .=(cos.th*cos.th-diff(cos,th)*sin.th)/(cos.th)^2 by Th69
@@ -4589,10 +4599,10 @@ A6: th is Real by XREAL_0:def 1;
    hence thesis by A1,A2,A3,FDIFF_2:21;
    end;
 
-theorem Th76: sin/cos is_continuous_on [. 0, 1 .]
+theorem Th76: tan is_continuous_on [. 0, 1 .]
 proof
    for th be real number st th in [.0,1 .] holds
-   (sin/cos)|[.0,1 .] is_continuous_in th
+   tan|[.0,1 .] is_continuous_in th
      proof
       let th be real number such that
       A1: th in [.0,1 .];
@@ -4603,53 +4613,53 @@ A2:    th is Real by XREAL_0:def 1;
            cos is_differentiable_in th by A2,A3,Th72,FCONT_3:4,FDIFF_1:16;
       then A5: cos is_continuous_in th by FDIFF_1:32;
            cos.(th) <> 0 by A1,Th74;
-      then A6: sin/cos is_continuous_in th by A4,A5,FCONT_1:11;
-          th in dom ((sin/cos)|[.0,1 .]) &
-      for rseq st rng rseq c= dom ((sin/cos)|[.0,1 .]) &
+      then A6: tan is_continuous_in th by A4,A5,FCONT_1:11;
+          th in dom (tan|[.0,1 .]) &
+      for rseq st rng rseq c= dom (tan|[.0,1 .]) &
       rseq is convergent & lim rseq = th
-      holds ((sin/cos)|[.0,1 .])*rseq is convergent
-      & ((sin/cos)|[.0,1 .]).th = lim (((sin/cos)|[.0,1 .])*rseq)
+      holds (tan|[.0,1 .])*rseq is convergent
+      & (tan|[.0,1 .]).th = lim ((tan|[.0,1 .])*rseq)
        proof
            now
           let rseq; assume
-          A7: rng rseq c= dom ((sin/cos)|[.0,1 .]) &
+          A7: rng rseq c= dom (tan|[.0,1 .]) &
                rseq is convergent & lim rseq = th;
-          then A8:rng rseq c= dom (sin/cos) by Lm20,Th75,XBOOLE_1:1;
-          then A9: (sin/cos)*rseq is convergent & (sin/cos).th
-          = lim ((sin/cos)*rseq) by A6,A7,FCONT_1:def 1;
-             ((sin/cos)|[.0,1 .])*rseq =(sin/cos)*rseq
+          then A8:rng rseq c= dom tan by Lm20,Th75,XBOOLE_1:1;
+          then A9: tan*rseq is convergent & tan.th
+          = lim (tan*rseq) by A6,A7,FCONT_1:def 1;
+             (tan|[.0,1 .])*rseq =tan*rseq
           proof
             now let k1 be Element of NAT;
                  dom (rseq) = NAT by SEQ_1:3;
              then rseq.k1 in rng rseq by FUNCT_1:def 5;
-            then A10: ((sin/cos)|[.0,1 .]).(rseq.k1)=(sin/cos).(rseq.k1) by A7,
+            then A10: (tan|[.0,1 .]).(rseq.k1)=tan.(rseq.k1) by A7,
 Lm20;
-                  ((sin/cos)|[.0,1 .]).(rseq.k1)=(((sin/cos)|[.0,1 .])*rseq).k1
+                  (tan|[.0,1 .]).(rseq.k1)=((tan|[.0,1 .])*rseq).k1
  by A7,RFUNCT_2:21;
-             hence (((sin/cos)|[.0,1 .])*rseq).k1=((sin/cos)*rseq).k1
+             hence ((tan|[.0,1 .])*rseq).k1=(tan*rseq).k1
  by A8,A10,RFUNCT_2:21;
              end;
             hence thesis by FUNCT_2:113;
           end;
-       hence ((sin/cos)|[.0,1 .])*rseq is convergent
-           & ((sin/cos)|[.0,1 .]).th = lim (((sin/cos)|[.0,1 .])*rseq)
+       hence (tan|[.0,1 .])*rseq is convergent
+           & (tan|[.0,1 .]).th = lim ((tan|[.0,1 .])*rseq)
  by A1,A9,Lm20;
           end;
        hence thesis by A1,Lm20;
       end;
       hence thesis by FCONT_1:def 1;
    end;
-   hence sin/cos is_continuous_on [. 0, 1 .] by Th75,FCONT_1:def 2;
+   hence tan is_continuous_on [. 0, 1 .] by Th75,FCONT_1:def 2;
   end;
 
 theorem Th77: th1 in ].0,1 .[ & th2 in ].0,1 .[ &
-(sin/cos).th1=(sin/cos).th2 implies th1=th2
+tan.th1=tan.th2 implies th1=th2
 proof
   assume
-  A1: th1 in ].0,1 .[ & th2 in ].0,1 .[ & (sin/cos).(th1)=(sin/cos).(th2);
+  A1: th1 in ].0,1 .[ & th2 in ].0,1 .[ & tan.(th1)=tan.(th2);
   then A2: 0<th1 & th1<1 & 0<th2 & th2<1 by RCOMP_1:47;
   assume A3: th1<>th2;
-      ex th st th in ].0,1 .[ & diff((sin/cos),(th))=0
+      ex th st th in ].0,1 .[ & diff(tan,(th))=0
   proof
       now per cases by A3,REAL_1:def 5;
     suppose A4: th1<th2;
@@ -4675,13 +4685,13 @@ proof
            end;
          hence thesis by A6,SUBSET_1:7;
       end;
-      then A10: (sin/cos) is_differentiable_on ].th1,th2.[ by Lm21,FDIFF_1:34;
-           (sin/cos) is_continuous_on [.th1,th2.] by A5,Th76,FCONT_1:17;
+      then A10: tan is_differentiable_on ].th1,th2.[ by Lm21,FDIFF_1:34;
+           tan is_continuous_on [.th1,th2.] by A5,Th76,FCONT_1:17;
        then consider r such that
-      A11: r in ].th1,th2.[ & diff((sin/cos),r)=0
+      A11: r in ].th1,th2.[ & diff(tan,r)=0
  by A1,A4,A10,ROLLE:1;
        take th=r;
-    thus th in ].0,1 .[ & diff((sin/cos),(th))=0 by A5,A11;
+    thus th in ].0,1 .[ & diff(tan,(th))=0 by A5,A11;
     end;
     suppose A12: th2<th1;
       A13: ].th2,th1 .[ is open Subset of REAL & ].th2,th1 .[c=].0,1 .[&
@@ -4705,14 +4715,14 @@ proof
                       end;
                    hence thesis by A14,SUBSET_1:7;
              end;
-            then A17: (sin/cos) is_differentiable_on ].th2,th1 .[ by Lm21,
+            then A17: tan is_differentiable_on ].th2,th1 .[ by Lm21,
 FDIFF_1:34;
-                 (sin/cos) is_continuous_on [.th2,th1 .] by A13,Th76,FCONT_1:17
+                 tan is_continuous_on [.th2,th1 .] by A13,Th76,FCONT_1:17
 ;
             then consider r such that
-            A18: r in ].th2,th1 .[ & diff((sin/cos),r)=0 by A1,A12,A17,ROLLE:1;
+            A18: r in ].th2,th1 .[ & diff(tan,r)=0 by A1,A12,A17,ROLLE:1;
             take th=r;
-    thus th in ].0,1 .[ & diff((sin/cos),(th))=0 by A13,A18;
+    thus th in ].0,1 .[ & diff(tan,(th))=0 by A13,A18;
    end;
    end;
    hence thesis;
@@ -4720,13 +4730,13 @@ FDIFF_1:34;
   hence thesis by Lm21;
 end;
 
-Lm22: (sin/cos).(0) =0 & (sin/cos).(1) >1
+Lm22: tan.(0) =0 & tan.(1) >1
 proof
      0 in [.0,1 .] by RCOMP_1:48;
- then A1: (sin/cos).(0)=(sin.0)* (cos.0)" by Th75,RFUNCT_1:def 4
+ then A1: tan.(0)=(sin.0)* (cos.0)" by Th75,RFUNCT_1:def 4
           .=0 by Th33;
      1 in [.0,1 .] by RCOMP_1:48;
- then (sin/cos).(1)=(sin.1)* (cos.1)" by Th75,RFUNCT_1:def 4
+ then tan.(1)=(sin.1)* (cos.1)" by Th75,RFUNCT_1:def 4
           .=(sin.1)/ (cos.1) by XCMPLX_0:def 9;
   hence thesis by A1,Th47,REAL_2:142;
 end;
@@ -4735,32 +4745,32 @@ begin :: Existence of Circle Ratio
 
 definition
 func PI -> real number means :Def30:
- (sin/cos).(it/4) = 1 & it in ]. 0, 4 .[;
+ tan.(it/4) = 1 & it in ]. 0, 4 .[;
 existence
 proof
-A1:  1 in [.(sin/cos).0,(sin/cos).1 .]
+A1:  1 in [.tan.0,tan.1 .]
      proof
-            [.(sin/cos).0,(sin/cos).1 .] = {r : (sin/cos).0<=r & r<=
-(sin/cos).1 }
+            [.tan.0,tan.1 .] = {r : tan.0<=r & r<=
+tan.1 }
  by RCOMP_1:def 1;
-        hence 1 in [.(sin/cos).0,(sin/cos).1 .] by Lm22;
+        hence 1 in [.tan.0,tan.1 .] by Lm22;
      end;
-      [.(sin/cos).1,(sin/cos).0 .]= {} by RCOMP_1:13,Lm22;
-     then 1 in [.(sin/cos).0,(sin/cos).1 .] \/ [.(sin/cos).1,(sin/cos).0 .]
+      [.tan.1,tan.0 .]= {} by RCOMP_1:13,Lm22;
+     then 1 in [.tan.0,tan.1 .] \/ [.tan.1,tan.0 .]
  by A1;
      then consider th be Real such that
-     A2:  th in [.0, 1 .] & (sin/cos).(th)=1 by Th76,FCONT_2:16;
+     A2:  th in [.0, 1 .] & tan.(th)=1 by Th76,FCONT_2:16;
           0<=th & th <= 1 by A2,RCOMP_1:48;
     then A3: 0 <th & th <1 by A2,Lm22,REAL_1:def 5;
      take th1 =th*4;
-     thus (sin/cos).(th1/4)=1 by A2;
+     thus tan.(th1/4)=1 by A2;
     0*4<th*4 & th*4<1*4 by A3,XREAL_1:70;
 hence thesis by RCOMP_1:47;
 end;
 uniqueness
 proof let th1,th2 be real number such that
-A4: (sin/cos).(th1/4) = 1 & th1 in ]. 0, 4 .[ and
-A5: (sin/cos).(th2/4) = 1 & th2 in ]. 0, 4 .[;
+A4: tan.(th1/4) = 1 & th1 in ]. 0, 4 .[ and
+A5: tan.(th2/4) = 1 & th2 in ]. 0, 4 .[;
      th1/4 in ].0,1 .[ & th2/4 in ]. 0, 1 .[
 proof
         0<th1 & th1 <4 by A4,RCOMP_1:47;
@@ -4787,7 +4797,7 @@ proof
    then 0< PI & PI < 4 by RCOMP_1:47;
   then 0/4 <PI/4 & PI/4 < 4/4 by REAL_1:73;
   then A1: PI/4 in ].0,1 .[ by RCOMP_1:47;
-      (sin/cos).(PI/4) =1 by Def30;
+      tan.(PI/4) =1 by Def30;
   then sin.(PI/4) * (cos.(PI/4))"=1 by A1,Th75,RFUNCT_1:def 4;
   hence sin.(PI/4) = cos.(PI/4) by XCMPLX_1:210;
 end;
@@ -4983,12 +4993,12 @@ A4: th is Real by XREAL_0:def 1;
   A12: ].0,1 .[ c= [.0,1 .] by RCOMP_1:15;
   then A13: cos.(th2/2) > 0 by A11,Th74;
   A14: sin.(th2/2) >= -0 by A11,A12,Lm23;
-       (2*th2) in ].0,4.[ & (sin/cos).((2*th2)/4) = 1
+       (2*th2) in ].0,4.[ & tan.((2*th2)/4) = 1
    proof
     4*0 < 4*(th2/2) & 4*(th2/2) < 4*1 by A9,XREAL_1:70;
    hence (2*th2) in ].0,4.[ by RCOMP_1:47;
     (sin.(th2/2)) * (cos.(th2/2))"=1 by A10,A13,A14,XREAL_1:26,XCMPLX_0:def 7;
-   hence (sin/cos).((2*th2)/4) =1 by A11,Th75,RFUNCT_1:def 4;
+   hence tan.((2*th2)/4) =1 by A11,Th75,RFUNCT_1:def 4;
    end;
    then A15: 2*th2 =PI by Def30;
    th2 = th2*(2/2)

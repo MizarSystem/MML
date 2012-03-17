@@ -13,27 +13,8 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="RELSET_1"/>
-<ArticleID name="MCART_1"/>
-<ArticleID name="FUNCT_2"/>
-<ArticleID name="FINSET_1"/>
-<ArticleID name="CARD_1"/>
-<ArticleID name="FINSEQ_1"/>
-<ArticleID name="FUNCOP_1"/>
-<ArticleID name="FINSEQ_2"/>
 <ArticleID name="XREAL_0"/>
-<ArticleID name="FINSEQ_3"/>
-<ArticleID name="RVSUM_1"/>
 <ArticleID name="INT_1"/>
-<ArticleID name="COMPLEX1"/>
-<ArticleID name="INT_2"/>
-<ArticleID name="NEWTON"/>
-<ArticleID name="FUNCT_6"/>
-<ArticleID name="FUNCT_3"/>
-<ArticleID name="TREES_1"/>
-<ArticleID name="TREES_2"/>
-<ArticleID name="TREES_3"/>
-<ArticleID name="TREES_4"/>
-<ArticleID name="WSIERP_1"/>
 </Signature>
 <FCluster>
 <ArgTypes>
@@ -45,7 +26,7 @@
 <Adjective nr="7"/>
 </Cluster>
 <LocusVar nr="1"/>
-<Func kind="K" nr="270"/>
+<Func kind="K" nr="48"/>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -58,8 +39,8 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="18"/>
-<Adjective nr="28"/>
-<Adjective nr="30"/>
+<Adjective nr="19"/>
+<Adjective nr="20"/>
 </Cluster>
 </FCluster>
 </Registrations>

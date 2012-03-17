@@ -21,7 +21,7 @@ environ
  definitions CQC_LANG;
  theorems CARD_1, CARD_2, CQC_LANG, ENUMSET1, FINSEQ_1, FINSET_1, FUNCOP_1,
       FUNCT_1, FUNCT_2, FUNCT_4, NAT_1, PBOOLE, RELAT_1, RLSUB_2, FINSEQ_4,
-      TARSKI, XBOOLE_0, XBOOLE_1, ZFMISC_1, XREAL_1, XXREAL_0;
+      TARSKI, XBOOLE_0, XBOOLE_1, ZFMISC_1, XREAL_1, XXREAL_0, ORDINAL1;
  schemes BINARITH, NAT_1, SUBSET_1;
 
 begin :: Definitions
@@ -158,7 +158,7 @@ registration let x,y be set;
   end;
 end;
 
-definition let G be GraphStruct, n be Element of NAT, x be set;
+definition let G be GraphStruct, n be Nat, x be set;
   func G.set(n,x) -> GraphStruct equals  ::dGSET
     G +* (n .--> x);
   coherence
@@ -166,8 +166,10 @@ definition let G be GraphStruct, n be Element of NAT, x be set;
     set IT = G +* (n .--> x);
 A1: dom IT = dom G \/ dom (n .--> x) by FUNCT_4:def 1;
 A2: dom G c= NAT by Def1;
+    n in NAT by ORDINAL1:def 13; then
+A3: {n} c= NAT by ZFMISC_1:37;    
     dom (n .--> x) = {n} by CQC_LANG:5; then
-    dom IT c= NAT by A1,A2,XBOOLE_1:8;
+    dom IT c= NAT by A1,A2,A3,XBOOLE_1:8;
     hence G +* (n .--> x) is GraphStruct by Def1;
   end;
 end;
@@ -1299,7 +1301,8 @@ end;
 
 definition let F be ManySortedSet of NAT;
   func F.Lifespan() -> Element of NAT means ::dLIFESPAN
-    F.it = F.(it+1) & for n being Element of NAT st F.n = F.(n+1) holds it <= n
+    F.it = F.(it+1) & for n being Element of NAT
+       st F.n = F.(n+1) holds it <= n
     if F is halting otherwise it = 0;
   existence
   proof
@@ -1356,47 +1359,52 @@ definition
   mode GraphSeq is Graph-yielding ManySortedSet of NAT;
 end;
 
-definition let GSq be GraphSeq, x be Element of NAT;
-  func GSq.->x -> _Graph equals  ::dGSEQ
-    GSq.x;
-  coherence by Def55;
+definition let GSq be GraphSeq, x be Nat;
+ canceled;
+ redefine
+  func GSq.x -> _Graph;
+  coherence proof
+     x in NAT by ORDINAL1:def 13; then
+     GSq.x is _Graph by Def55;
+    hence thesis;
+  end;
 end;
 
 definition let GSq be GraphSeq;
   attr GSq is finite means :Def60:   ::dGSEQFINITE
-    for x being Element of NAT holds GSq.->x is finite;
+    for x being Nat holds GSq.x is finite;
   attr GSq is loopless means :Def61: ::dGSEQLOOPLESS
-    for x being Element of NAT holds GSq.->x is loopless;
+    for x being Nat holds GSq.x is loopless;
   attr GSq is trivial means :Def62: ::dGSEQTRIVIAL
-    for x being Element of NAT holds GSq.->x is trivial;
+    for x being Nat holds GSq.x is trivial;
   attr GSq is non-trivial means :Def63: ::dGSEQNONTRIVIAL
-    for x being Element of NAT holds GSq.->x is non trivial;
+    for x being Nat holds GSq.x is non trivial;
   attr GSq is non-multi means :Def64: ::dGSEQNONMULTI
-    for x being Element of NAT holds GSq.->x is non-multi;
+    for x being Nat holds GSq.x is non-multi;
   attr GSq is non-Dmulti means :Def65: ::dGSEQNONDMULTI
-    for x being Element of NAT holds GSq.->x is non-Dmulti;
+    for x being Nat holds GSq.x is non-Dmulti;
   attr GSq is simple means :Def66: ::dGSEQSIMPLE
-    for x being Element of NAT holds GSq.->x is simple;
+    for x being Nat holds GSq.x is simple;
   attr GSq is Dsimple means :Def67: ::dGSEQDSIMPLE
-    for x being Element of NAT holds GSq.->x is Dsimple;
+    for x being Nat holds GSq.x is Dsimple;
 end;
 
 definition let GSq be GraphSeq;
    redefine attr GSq is halting means ::dGSQHALTING
-    ex n being Element of NAT st GSq.->n = GSq.->(n+1);
+    ex n being Element of NAT st GSq.n = GSq.(n+1);
    compatibility
    proof
     hereby assume GSq is halting; then
         consider n being Element of NAT such that
     A1: GSq.n = GSq.(n+1) by Def56;
-        GSq.->n = GSq.(n+1) by A1
-               .= GSq.->(n+1);
-        hence ex n being Element of NAT st GSq.->n = GSq.->(n+1);
+        GSq.n = GSq.(n+1) by A1
+               .= GSq.(n+1);
+        hence ex n being Element of NAT st GSq.n = GSq.(n+1);
     end;
-    assume ex n being Element of NAT st GSq.->n = GSq.->(n+1); then
+    assume ex n being Element of NAT st GSq.n = GSq.(n+1); then
     consider n being Element of NAT such that
-A2: GSq.->n = GSq.->(n+1);
-    GSq.n = GSq.->(n+1) by A2
+A2: GSq.n = GSq.(n+1);
+    GSq.n = GSq.(n+1) by A2
          .= GSq.(n+1);
     hence GSq is halting by Def56;
    end;
@@ -1422,13 +1430,14 @@ A1: dom F = NAT by FUNCOP_1:19; then
     F.1 in {G} & F.(1+1) in {G} by FUNCOP_1:14; then
     F.1 = G & F.(1+1) = G by TARSKI:def 1;
     hence F is halting by Def56;
-    now let x be Element of NAT;
+    now let x be Nat;
+        x in NAT by ORDINAL1:def 13; then
         F.x in rng F by A1, FUNCT_1:12; then
         F.x in {G} by FUNCOP_1:14; then
         F.x = G by TARSKI:def 1;
-        hence F.->x is finite & F.->x is loopless & F.->x is trivial &
-          F.->x is non-multi & F.->x is non-Dmulti & F.->x is simple &
-          F.->x is Dsimple;
+        hence F.x is finite & F.x is loopless & F.x is trivial &
+          F.x is non-multi & F.x is non-Dmulti & F.x is simple &
+          F.x is Dsimple;
     end;
     hence thesis by Def60, Def61, Def62,
       Def64,Def65,Def66,Def67;
@@ -1453,56 +1462,57 @@ A2: dom F = NAT by FUNCOP_1:19; then
     F.1 in {G} & F.(1+1) in {G} by FUNCOP_1:14; then
     F.1 = G & F.(1+1) = G by TARSKI:def 1;
     hence F is halting by Def56;
-    now let x be Element of NAT;
+    now let x be Nat;
+        x in NAT by ORDINAL1:def 13; then
         F.x in rng F by A2, FUNCT_1:12; then
         F.x in {G} by FUNCOP_1:14; then
         F.x = G by TARSKI:def 1;
-        hence F.->x is finite & F.->x is loopless & F.->x is non trivial &
-          F.->x is non-multi & F.->x is non-Dmulti & F.->x is simple &
-          F.->x is Dsimple;
+        hence F.x is finite & F.x is loopless & F.x is non trivial &
+          F.x is non-multi & F.x is non-Dmulti & F.x is simple &
+          F.x is Dsimple;
     end;
     hence thesis by Def60, Def61, Def63,
       Def64,Def65,Def66,Def67;
   end;
 end;
 
-registration let GSq be finite GraphSeq, x be Element of NAT;
-  cluster GSq.->x -> finite;
+registration let GSq be finite GraphSeq, x be Nat;
+  cluster GSq.x -> finite;
   coherence by Def60;
 end;
 
-registration let GSq be loopless GraphSeq, x be Element of NAT;
-  cluster GSq.->x -> loopless;
+registration let GSq be loopless GraphSeq, x be Nat;
+  cluster GSq.x -> loopless _Graph;
   coherence by Def61;
 end;
 
-registration let GSq be trivial GraphSeq, x be Element of NAT;
-  cluster GSq.->x -> trivial;
+registration let GSq be trivial GraphSeq, x be Nat;
+  cluster GSq.x -> trivial _Graph;
   coherence by Def62;
 end;
 
-registration let GSq be non-trivial GraphSeq, x be Element of NAT;
-  cluster GSq.->x -> non trivial;
+registration let GSq be non-trivial GraphSeq, x be Nat;
+  cluster GSq.x -> non trivial _Graph;
   coherence by Def63;
 end;
 
-registration let GSq be non-multi GraphSeq, x be Element of NAT;
-  cluster GSq.->x -> non-multi;
+registration let GSq be non-multi GraphSeq, x be Nat;
+  cluster GSq.x -> non-multi _Graph;
   coherence by Def64;
 end;
 
-registration let GSq be non-Dmulti GraphSeq, x be Element of NAT;
-  cluster GSq.->x -> non-Dmulti;
+registration let GSq be non-Dmulti GraphSeq, x be Nat;
+  cluster GSq.x -> non-Dmulti _Graph;
   coherence by Def65;
 end;
 
-registration let GSq be simple GraphSeq, x be Element of NAT;
-  cluster GSq.->x -> simple;
+registration let GSq be simple GraphSeq, x be Nat;
+  cluster GSq.x -> simple _Graph;
   coherence by Def66;
 end;
 
-registration let GSq be Dsimple GraphSeq, x be Element of NAT;
-  cluster GSq.->x -> Dsimple;
+registration let GSq be Dsimple GraphSeq, x be Nat;
+  cluster GSq.x -> Dsimple _Graph;
   coherence by Def67;
 end;
 
@@ -1512,7 +1522,7 @@ registration
   proof
     let GS be GraphSeq; assume GS is non-multi; then
     reconsider GS' = GS as non-multi GraphSeq;
-    for x being Element of NAT holds GS'.->x is non-Dmulti;
+    for x being Nat holds GS'.x is non-Dmulti;
     hence thesis by Def65;
   end;
 end;
@@ -1523,9 +1533,9 @@ registration
   proof
     let GS be GraphSeq; assume GS is simple; then
     reconsider GS' = GS as simple GraphSeq;
-    for x being Element of NAT holds GS'.->x is loopless;
+    for x being Nat holds GS'.x is loopless;
     hence GS is loopless by Def61;
-    for x being Element of NAT holds GS'.->x is non-multi;
+    for x being Nat holds GS'.x is non-multi;
     hence thesis by Def64;
   end;
 end;
@@ -1536,7 +1546,7 @@ registration
   proof
     let GS be GraphSeq; assume GS is loopless & GS is non-multi; then
     reconsider GS' = GS as loopless non-multi GraphSeq;
-    for x being Element of NAT holds GS'.->x is simple;
+    for x being Nat holds GS'.x is simple;
     hence thesis by Def66;
   end;
 end;
@@ -1547,7 +1557,7 @@ registration
   proof
     let GS be GraphSeq; assume GS is loopless & GS is non-Dmulti; then
     reconsider GS'=GS as loopless non-Dmulti GraphSeq;
-    for x being Element of NAT holds GS'.->x is Dsimple;
+    for x being Nat holds GS'.x is Dsimple;
     hence thesis by Def67;
   end;
 end;
@@ -1558,9 +1568,9 @@ registration
   proof
     let GS be GraphSeq; assume GS is Dsimple; then
     reconsider GS'=GS as Dsimple GraphSeq;
-    for x being Element of NAT holds GS'.->x is loopless;
+    for x being Nat holds GS'.x is loopless;
     hence GS is loopless by Def61;
-    for x being Element of NAT holds GS'.->x is non-Dmulti;
+    for x being Nat holds GS'.x is non-Dmulti;
     hence thesis by Def65;
   end;
 end;
@@ -1571,7 +1581,7 @@ registration
   proof
     let GS be GraphSeq; assume GS is trivial & GS is loopless; then
     reconsider GS'=GS as trivial loopless GraphSeq;
-    for x being Element of NAT holds GS'.->x is finite;
+    for x being Nat holds GS'.x is finite;
     hence thesis by Def60;
   end;
 end;
@@ -1582,7 +1592,7 @@ registration
   proof
     let GS be GraphSeq; assume GS is trivial & GS is non-Dmulti; then
     reconsider GS'=GS as trivial non-Dmulti GraphSeq;
-    for x being Element of NAT holds GS'.->x is finite;
+    for x being Nat holds GS'.x is finite;
     hence thesis by Def60;
   end;
 end;
@@ -1592,7 +1602,7 @@ begin :: Theorems
 reserve GS for GraphStruct;
 reserve G,G1,G2,G3 for _Graph;
 reserve e,x,x1,x2,y,y1,y2,E,V,X,Y for set;
-reserve n,n1,n2,m,m1 for Element of NAT;
+reserve n,n1,n2,m,m1 for Nat;
 reserve v,v1,v2,v3,v4 for Vertex of G;
 
 theorem ::tSELECT01

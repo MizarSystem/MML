@@ -39,7 +39,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="23"/>
+<Adjective nr="24"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -63,17 +63,17 @@
 <ArgTypes>
 <Typ kind="G" nr="4">
 <Cluster>
-<Adjective nr="28" value="false"/>
-<Adjective nr="34"/>
-<Adjective nr="43"/>
+<Adjective nr="29" value="false"/>
+<Adjective nr="35"/>
 <Adjective nr="44"/>
+<Adjective nr="45"/>
 </Cluster>
 </Typ>
-<Typ kind="M" nr="21">
+<Typ kind="M" nr="20">
 <Cluster>
-<Adjective nr="28" value="false"/>
-<Adjective nr="34"/>
-<Adjective nr="70">
+<Adjective nr="29" value="false"/>
+<Adjective nr="35"/>
+<Adjective nr="71">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -85,11 +85,7 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="76">
-<LocusVar nr="2"/>
-<LocusVar nr="1"/>
-</Adjective>
-<Adjective nr="78">
+<Adjective nr="77">
 <LocusVar nr="2"/>
 <LocusVar nr="1"/>
 </Adjective>
@@ -101,11 +97,15 @@
 <LocusVar nr="2"/>
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="82">
+<Adjective nr="81">
 <LocusVar nr="2"/>
 <LocusVar nr="1"/>
 </Adjective>
 <Adjective nr="83">
+<LocusVar nr="2"/>
+<LocusVar nr="1"/>
+</Adjective>
+<Adjective nr="84">
 <LocusVar nr="2"/>
 <LocusVar nr="1"/>
 </Adjective>
@@ -115,17 +115,17 @@
 <ArgTypes>
 <Typ kind="G" nr="4">
 <Cluster>
-<Adjective nr="28" value="false"/>
-<Adjective nr="34"/>
-<Adjective nr="43"/>
+<Adjective nr="29" value="false"/>
+<Adjective nr="35"/>
 <Adjective nr="44"/>
+<Adjective nr="45"/>
 </Cluster>
 </Typ>
-<Typ kind="M" nr="21">
+<Typ kind="M" nr="20">
 <Cluster>
-<Adjective nr="28" value="false"/>
-<Adjective nr="34"/>
-<Adjective nr="70">
+<Adjective nr="29" value="false"/>
+<Adjective nr="35"/>
+<Adjective nr="71">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -137,11 +137,7 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="76">
-<LocusVar nr="2"/>
-<LocusVar nr="1"/>
-</Adjective>
-<Adjective nr="78">
+<Adjective nr="77">
 <LocusVar nr="2"/>
 <LocusVar nr="1"/>
 </Adjective>
@@ -153,11 +149,15 @@
 <LocusVar nr="2"/>
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="82">
+<Adjective nr="81">
 <LocusVar nr="2"/>
 <LocusVar nr="1"/>
 </Adjective>
 <Adjective nr="83">
+<LocusVar nr="2"/>
+<LocusVar nr="1"/>
+</Adjective>
+<Adjective nr="84">
 <LocusVar nr="2"/>
 <LocusVar nr="1"/>
 </Adjective>

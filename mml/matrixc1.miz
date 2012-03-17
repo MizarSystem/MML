@@ -10,7 +10,8 @@ environ
       COMPLSP1, COMPLEX1, EUCLID_2, ARYTM_3, XCMPLX_0, ARYTM, RLVECT_1,
       MATRIX_1, TREES_1, BOOLE, QC_LANG1, INCSP_1, MATRIXC1, SETWISEO,
       FINSEQ_4, MATRIX_5, COMPLFLD, VECTSP_1;
- notations TARSKI, SUBSET_1, NUMBERS, XCMPLX_0, XXREAL_0, RELAT_1, FUNCT_1,
+ notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XCMPLX_0, XXREAL_0, RELAT_1,
+      FUNCT_1,
       RELSET_1, FUNCT_2, ZFMISC_1, NAT_1, PARTFUN1, BINOP_1, FUNCOP_1,
       FINSEQ_1, FINSEQOP, COMPLSP1, COMPLEX1, RVSUM_1, FINSEQ_2, BINOP_2,
       EUCLID_2, ORDINAL1, MATRIX_5, MATRIX_1, MATRIX_3, MATRIX_4, RLVECT_1,
@@ -18,7 +19,8 @@ environ
  constructors PARTFUN1, SETWISEO, XXREAL_0, NAT_1, FINSEQ_4, FINSOP_1,
       BINARITH, MATRIX_3, EUCLID_2, MATRIX_4, MATRIX_5, COMPLSP2;
  registrations RELSET_1, FINSEQ_2, NAT_1, FUNCT_1, FUNCT_2, BINOP_2, COMPLEX1,
-      XREAL_0, XCMPLX_0, NUMBERS, RELAT_1, ORDINAL1, COMPLFLD, XXREAL_0;
+      XREAL_0, XCMPLX_0, NUMBERS, RELAT_1, ORDINAL1, COMPLFLD, XXREAL_0,
+      XBOOLE_0, MATRIX_1;
  requirements NUMERALS, BOOLE, SUBSET, REAL, ARITHM;
  definitions MATRIX_1;
  theorems FINSEQ_1, FUNCT_1, NAT_1, MATRIX_1, FINSEQ_2, COMPLEX1, BINOP_2,
@@ -76,9 +78,9 @@ A8:   dom M1 = dom M by A5,FINSEQ_3:31;
 end;
 
 theorem Th1:
-  for M being Matrix of COMPLEX holds
+  for M be tabular FinSequence holds
     [i,j] in Indices M iff 1<= i & i<=len M & 1<=j & j<=width M
-proof let M be Matrix of COMPLEX;
+proof let M be tabular FinSequence;
   thus [i,j] in Indices M implies 1<= i & i<=len M & 1<=j & j<=width M
   proof
     assume [i,j] in Indices M;then
@@ -133,10 +135,9 @@ end;
 
 theorem Th4:
   for i,j being Nat,a being complex number,M being Matrix of COMPLEX st
-    len (a*M) =len M & width (a*M)=width M & [i,j] in Indices M holds
-      (a*M)*(i,j) = a*(M*(i,j))
+    [i,j] in Indices M holds (a*M)*(i,j) = a*(M*(i,j))
 proof let i,j be Nat,a be complex number,M be Matrix of COMPLEX;
-  assume A1: len (a*M) =len M & width (a*M)=width M & [i,j] in Indices M;
+  assume A1: [i,j] in Indices M;
   a in COMPLEX by XCMPLX_0:def 2;then
   reconsider aa=a as Element of F_Complex by COMPLFLD:def 1;
 A2: COMPLEX2Field(a*M)
@@ -162,13 +163,13 @@ proof
   reconsider aa = a as Element of COMPLEX by XCMPLX_0:def 2;
 A1: len (a*M) = len M by Th3;
 A2: len ((a*M)*') = len (a*M) by Def1;
-A3: len (a*'*(M*')) = len (M*') by Th3;then
+   len (a*'*(M*')) = len (M*') by Th3;then
   len (a*'*(M*')) = len M by Def1;then
 A4: len ((a*M)*')=len (a*'*(M*')) by Th3,A2;
 A5: len M = len (M*') by Def1;
 A6: width (a*M) = width M by Th3;
 A7: width ((a*M)*') = width (a*M) by Def1;
-A8: width (a*'*(M*')) = width (M*') by Th3;then
+    width (a*'*(M*')) = width (M*') by Th3;then
   width (a*'*(M*')) = width M by Def1;then
 A9: width ((a*M)*')=width (a*'*(M*')) by Th3,A7;
 A10: width M = width (M*') by Def1;
@@ -179,10 +180,10 @@ A12: [i,j] in Indices (a*M) by Th1;
 A13: [i,j] in Indices M by Th1,A1,A6,A11;
 A14: [i,j] in Indices (M*') by A1,A5,A6,A10,A11,Th1;
   ((a*M)*')*(i,j) = ((a*M)*(i,j))*' by Def1,A12;
-  hence (a*M)*'*(i,j) = (aa*(M*(i,j)))*' by Th4,A13,A1,A6
+  hence (a*M)*'*(i,j) = (aa*(M*(i,j)))*' by Th4,A13
         .= aa*'*(M*(i,j))*' by COMPLEX1:121
         .= a*'*((M*')*(i,j)) by A13,Def1
-        .= (a*'*(M*'))*(i,j) by Th4,A14,A3,A8;
+        .= (a*'*(M*'))*(i,j) by Th4,A14;
   end;
   hence thesis by MATRIX_1:21,A4,A9;
 end;
@@ -318,7 +319,7 @@ A4: width ((-1)*M) = width M by Th3;
     assume [i,j] in Indices ((-1)*M);then
 A5: 1<= i & i<=len M & 1<=j & j<=width M by A2,A4,Th1;
 A6: [i,j] in Indices M by Th1,A5;
-    hence ((-1)*M)*(i,j) = (-1)*(M*(i,j)) by Th4,A2,A4
+    hence ((-1)*M)*(i,j) = (-1)*(M*(i,j)) by Th4
          .= -(M*(i,j))
          .= (-M)*(i,j) by Th10,A6,A1,A3;
   end;
@@ -1519,8 +1520,7 @@ A2: for j be Element of NAT st j in Seg len M holds z.j = F(j)
     take z;
     thus len z = len M by A1;
     let j be Nat;
-    j in NAT by ORDINAL1:def 13;
-    hence thesis by A2;
+    thus thesis by A2;
   end;
   uniqueness
     proof
@@ -1554,8 +1554,7 @@ A2: for j be Element of NAT st j in Seg width M holds f.j = F(j)
     take f;
     thus len f = width M by A1;
     let j be Nat;
-    j in NAT by ORDINAL1:def 13;
-    hence thesis by A2;
+    thus thesis by A2;
     end;
   uniqueness
     proof

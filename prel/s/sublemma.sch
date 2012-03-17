@@ -73,7 +73,7 @@
 <For>
 <Typ kind="M" nr="9">
 <Cluster>
-<Adjective nr="33">
+<Adjective nr="34">
 <Var nr="5"/>
 </Adjective>
 </Cluster>
@@ -103,7 +103,7 @@
 </Pred>
 <Not>
 <And>
-<Pred kind="V" nr="40">
+<Pred kind="V" nr="41">
 <Var nr="1"/>
 </Pred>
 <Not>
@@ -155,7 +155,7 @@
 </Not>
 <Not>
 <And>
-<Pred kind="V" nr="41">
+<Pred kind="V" nr="42">
 <Func kind="K" nr="249">
 <Var nr="1"/>
 <Var nr="3"/>

@@ -27,27 +27,27 @@
 <ArgTypes/>
 <Func kind="K" nr="149"/>
 <Cluster>
-<Adjective nr="31" value="false"/>
-<Adjective nr="34"/>
+<Adjective nr="32" value="false"/>
 <Adjective nr="35"/>
 <Adjective nr="36"/>
 <Adjective nr="37"/>
-<Adjective nr="41"/>
-<Adjective nr="47"/>
+<Adjective nr="38"/>
+<Adjective nr="42"/>
+<Adjective nr="48"/>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes/>
 <Func kind="K" nr="149"/>
 <Cluster>
-<Adjective nr="31" value="false"/>
-<Adjective nr="34"/>
+<Adjective nr="32" value="false"/>
 <Adjective nr="35"/>
 <Adjective nr="36"/>
 <Adjective nr="37"/>
-<Adjective nr="41"/>
-<Adjective nr="47"/>
-<Adjective nr="52"/>
+<Adjective nr="38"/>
+<Adjective nr="42"/>
+<Adjective nr="48"/>
+<Adjective nr="53"/>
 </Cluster>
 </FCluster>
 </Registrations>

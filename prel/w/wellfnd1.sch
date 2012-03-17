@@ -99,7 +99,7 @@
 <ArgTypes>
 <Typ kind="G" nr="3">
 <Cluster>
-<Adjective nr="38" value="false"/>
+<Adjective nr="39" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
@@ -165,7 +165,7 @@
 <Pred kind="P" nr="1">
 <Func kind="F" nr="2"/>
 </Pred>
-<Pred kind="V" nr="47">
+<Pred kind="V" nr="48">
 <Func kind="F" nr="1"/>
 </Pred>
 </Scheme>
@@ -173,7 +173,7 @@
 <ArgTypes>
 <Typ kind="G" nr="3">
 <Cluster>
-<Adjective nr="38" value="false"/>
+<Adjective nr="39" value="false"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -243,7 +243,7 @@
 </And>
 </Not>
 </For>
-<Pred kind="V" nr="47">
+<Pred kind="V" nr="48">
 <Func kind="F" nr="1"/>
 </Pred>
 </Scheme>

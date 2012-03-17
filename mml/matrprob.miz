@@ -1,0 +1,2476 @@
+:: The Definition of Finite Sequences and Matrices of Probability, and 
+:: Addition of Matrices of Real Elements
+::  by Bo Zhang and Yatsuka Nakamura
+:: 
+:: Received August 18, 2006
+:: Copyright (c) 2006 Association of Mizar Users
+
+environ
+
+ vocabularies ARYTM, FINSEQ_1, SQUARE_1, BOOLE, FUNCT_1, RELAT_1, MEASURE6,
+      MATRIXC1, RVSUM_1, EUCLID_2, MATRIX_2, FINSEQ_2, INCSP_1, QC_LANG1,
+      MATRIXR1, CAT_3, SEQ_1, RLVECT_1, MATRIX_1, MATRPROB, TREES_1, VECTSP_1;
+ notations TARSKI, SUBSET_1, XBOOLE_0, XCMPLX_0, XXREAL_0, XREAL_0, REAL_1,
+      NAT_1, ORDINAL1, NUMBERS, PARTFUN1, RELAT_1, FUNCT_1, SEQ_1, ZFMISC_1,
+      FUNCOP_1, GROUP_1, BINOP_1, EUCLID_2, RLVECT_1, BINOP_2, SQUARE_1,
+      VECTSP_1, FINSOP_1, FUNCT_2, RVSUM_1, FVSUM_1, FINSEQ_1, FINSEQ_2,
+      FINSEQOP, NEWTON, STRUCT_0, MATRLIN, MATRIXR1, MATRIX_3, MATRIX_1,
+      GOBOARD1, EUCLID;
+ constructors FVSUM_1, SETWOP_2, NUMBERS, REAL_1, XREAL_0, XCMPLX_0, XBOOLE_0,
+      BINOP_2, INT_2, VECTSP_2, MATRIX_1, SEQ_1, MATRIX_4, MATRIX_3, FINSOP_1,
+      VECTSP_1, MATRIXR1, MATRIX_2, MEMBERED, BINOP_1, XXREAL_0, FINSEQ_3,
+      TOPREAL1, PARTFUN1, FUNCOP_1, FINSEQ_2, RVSUM_1, NEWTON, SQUARE_1,
+      RFINSEQ, MATRLIN, EUCLID_2, GOBOARD1, NAT_1;
+ registrations GOBOARD1, STRUCT_0, INT_1, RELSET_1, VECTSP_1, NUMBERS, REAL_1,
+      XREAL_0, FINSEQ_1, FINSEQ_2, XXREAL_0, NAT_1, MEMBERED, BINOP_2,
+      ORDINAL1, MATRIX_1, ORDINAL2, MATRLIN;
+ requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
+ definitions TARSKI, XBOOLE_0, EUCLID_2;
+ theorems FUNCT_1, SEQ_1, NAT_1, TARSKI, ZFMISC_1, REAL_2, MATRIX_3, MATRIX_2,
+      XREAL_1, GOBOARD1, BINOP_2, FVSUM_1, VECTSP_1, RLVECT_1, MATRLIN,
+      XBOOLE_0, FINSEQ_1, PROB_3, MATRIX_1, GOBRD13, FINSEQ_2, FUNCOP_1,
+      RFINSEQ, FINSEQ_3, RVSUM_1, EUCLID_2, MATRIXR1, ORDINAL1, XREAL_0,
+      MATRIXC1;
+ schemes FUNCT_1, FINSEQ_2, PARTFUN1, SEQ_1, NAT_1, MATRIX_1;
+
+begin
+
+ reserve D for non empty set,
+         i,j,k for Element of NAT,
+         n,m for Nat,
+         r for Real,
+         e for FinSequence of REAL;
+
+definition let d be set,
+               g be FinSequence of d*,
+               n be Nat;
+  redefine func g.n -> FinSequence of d;
+  correctness
+  proof
+    per cases;
+    suppose n in dom g; then
+a1:   g.n in rng g by FUNCT_1:12;
+      rng g c= d* by FINSEQ_1:def 4; then
+      g.n is Element of d* by a1;
+      hence thesis;
+    end;
+    suppose not n in dom g; then
+      g.n = {} by FUNCT_1:def 4;
+      hence thesis by FINSEQ_1:29;
+    end;
+  end;
+end;
+
+definition let x be real number;
+  redefine func <*x*> -> FinSequence of REAL;
+  coherence
+  proof
+    rng <*x*> c= REAL
+    proof
+      let y be set;
+      assume y in rng <*x*>; then
+      y in {x} by FINSEQ_1:56; then
+      y = x by TARSKI:def 1;
+      hence y in REAL by XREAL_0:def 1;
+    end;
+    hence thesis by FINSEQ_1:def 4;
+  end;
+end;
+
+theorem th55:
+  for a being Element of D, m being non empty Nat,
+      g being FinSequence of D holds
+    (len g = m & for i be Nat st i in dom g holds g.i = a) iff g = m |-> a
+  proof let a be Element of D, m be non empty Nat, g be FinSequence of D;
+    hereby assume that
+a1:   len g = m and
+a2:   for i be Nat st i in dom g holds g.i = a;
+      dom g = dom(m |-> a) & for i st i in dom g holds g.i = (m |-> a).i
+      proof
+        thus dom g = Seg m by a1,FINSEQ_1:def 3
+          .= dom(m |-> a) by FINSEQ_2:68;
+        let i such that
+b1:     i in dom g;
+b2:     i in Seg m by b1,a1,FINSEQ_1:def 3;
+        thus g.i = a by b1,a2 .= (m |-> a).i by b2,FINSEQ_2:71;
+      end;
+      hence g = m |-> a by FINSEQ_1:17;
+    end;
+    assume
+a4: g = m |-> a; then
+    dom g = Seg m by FINSEQ_2:68; 
+    hence thesis by a4,FINSEQ_2:69,FINSEQ_2:71;
+  end;
+
+theorem th1:
+  for a,b being Element of D holds
+    ex g be FinSequence of D st len g = n & (for i be Nat st i in Seg n holds
+      (i in Seg k implies g.i = a) & (not i in Seg k implies g.i = b))
+  proof let a,b be Element of D;
+    defpred c[set] means $1 in Seg k;
+    deffunc f(set) = a;
+    deffunc g(set) = b;
+AA: n in NAT by ORDINAL1:def 13;
+    ex f being Function st dom f = Seg n &
+      for x being set st x in Seg n holds
+        (c[x] implies f.x=f(x)) & (not c[x] implies f.x=g(x))
+          from PARTFUN1:sch 1; then
+    consider f being Function such that
+a1: dom f = Seg n and
+a2: for x being set st x in Seg n holds
+      (x in Seg k implies f.x=a) & (not x in Seg k implies f.x=b);
+    reconsider p = f as FinSequence by a1,FINSEQ_1:def 2,AA;
+    rng p c= D
+    proof
+      let y be set such that
+b1:   y in rng p;
+      consider j be set such that
+b2:   j in dom p & y = p.j by b1,FUNCT_1:def 5;
+      (j in Seg k implies p.j=a) & (not j in Seg k implies p.j=b)
+        by a1,a2,b2;
+      hence y in D by b2;
+    end; then
+    reconsider p as FinSequence of D by FINSEQ_1:def 4;
+    take p;
+    thus thesis by a1,a2,FINSEQ_1:def 3,AA;
+  end;
+
+theorem th20:
+  (for i be Nat st i in dom e holds 0 <= e.i) implies
+    (for f being Real_Sequence st f.1 = e.1 &
+      (for n be Nat st 0 <> n & n < len e holds f.(n+1) = f.n+e.(n+1)) holds
+        (for n,m be Nat st n in dom e & m in dom e & n <= m holds f.n <= f.m))
+  proof assume
+a2: for i be Nat st i in dom e holds 0 <= e.i;
+    let f being Real_Sequence such that
+a3: f.1 = e.1 &
+    (for n be Nat st 0 <> n & n < len e holds f.(n+1) = f.n+e.(n+1));
+a4: for n st n <> 0 & n < len e holds f.n <= f.(n+1)
+    proof let n such that
+b0:   n <> 0 & n < len e;
+      n+1 >=1 & n+1 <= len e by b0,NAT_1:38,NAT_1:39; then
+      n+1 in dom e by FINSEQ_3:27; then
+      e.(n+1) >= 0 by a2; then
+      f.n + e.(n+1) >= f.n by XREAL_1:33;
+      hence thesis by a3,b0;
+    end;
+    for n be Nat st n in dom e holds
+      (for m holds m in dom e & n <=m implies f.n <= f.m)
+    proof
+      let n be Nat such that
+c0:   n in dom e;
+c1:   n >= 1 & n <= len e by c0,FINSEQ_3:27;
+      defpred p[Nat] means
+        $1 in dom e & n <= $1 implies f.$1 >= f.n;
+c2:   p[0] by FINSEQ_3:27;
+c3:   now let k such that
+c4:     p[k];
+        now
+          assume k + 1 in dom e & n <= k + 1; then
+c5:       k + 1 >= n & k + 1 <= len e by FINSEQ_3:27;
+          per cases by c5,NAT_1:38,NAT_1:26;
+          suppose k + 1 = n & k < len e;
+            hence f.(k+1) >= f.n;
+          end;
+          suppose
+c9:         k >= n & k < len e; then
+            k >= 1 & k < len e by c1,NAT_1:39; then
+            f.(k+1) >= f.k & f.k >= f.n by c9,a4,c4,FINSEQ_3:27;
+            hence f.(k+1) >= f.n by XREAL_1:2;
+          end;
+        end;
+        hence p[k+1];
+      end;
+      for n be Element of NAT holds p[n] from NAT_1:sch 1(c2,c3);
+      hence thesis;
+    end;
+    hence thesis;
+  end;
+
+theorem th21:
+  len e >= 1 & (for i be Nat st i in dom e holds 0 <= e.i) implies
+    (for f being Real_Sequence st f.1 = e.1 &
+      (for n be Nat st 0 <> n & n < len e holds f.(n+1) = f.n+e.(n+1)) holds
+        (for n be Nat st n in dom e holds e.n <= f.n))
+    proof assume that
+a1: len e >= 1 and
+a2: for i be Nat st i in dom e holds 0 <= e.i;
+    let f being Real_Sequence such that
+a3: f.1 = e.1 &
+    (for n be Nat st 0 <> n & n < len e holds f.(n+1) = f.n+e.(n+1));
+    defpred p[Nat] means $1 in dom e implies e.$1 <= f.$1;
+d1: p[0] by FINSEQ_3:27;
+d2: now let k be Nat such that p[k];
+      now
+        assume k + 1 in dom e; then
+d4:     k + 1 >= 1 & k + 1 <= len e by FINSEQ_3:27;
+        per cases by d4,NAT_1:38;
+        suppose k = 0 & k < len e;
+          hence e.(k+1) <= f.(k+1) by a3;
+        end;
+        suppose
+d6:       k > 0 & k < len e; then
+          1 <= len e & k >=1 & k <= len e by NAT_1:39; then
+          1 in dom e & k in dom e & k >= 1 by FINSEQ_3:27; then
+d7:       e.1 <= f.k by a2,a3,th20;
+          1 in dom e by a1,FINSEQ_3:27; then
+          f.k >= 0 by a2,d7; then
+          f.k + e.(k+1) >= e.(k+1) by XREAL_1:33;
+          hence e.(k+1) <= f.(k+1) by a3,d6;
+        end;
+      end;
+      hence p[k+1];
+    end;
+    for n holds p[n] from NAT_1:sch 2(d1,d2);
+    hence thesis;
+  end;
+
+theorem th2:
+  (for i be Nat st i in dom e holds 0 <= e.i) implies
+    for k be Nat st k in dom e holds e.k <= Sum e
+  proof assume
+a1: for i be Nat st i in dom e holds 0 <= e.i;
+    per cases;
+    suppose len e = 0; then
+      e = {} by FINSEQ_1:25; 
+      hence thesis by FINSEQ_1:26;
+    end;
+    suppose len e <> 0; then
+a2:   len e >= 1 by NAT_1:39; then
+      consider f be Real_Sequence such that
+a3:   f.1 = e.1 & (for n be Nat st 0 <> n & n < len e holds
+        f.(n+1) = f.n+e.(n+1)) & Sum e = f.len e by PROB_3:68;
+      let n be Nat;
+      assume
+b3:   n in dom e;
+      reconsider n as Element of NAT by ORDINAL1:def 13;
+      n <= len e & len e in dom e by a2,b3,FINSEQ_3:27; then
+      f.n <= f.len e & e.n <= f.n by b3,a1,a2,a3,th20,th21;
+      hence thesis by a3,XREAL_1:2;
+    end;
+  end;
+  
+theorem th193:
+  for r1,r2 being Real, k being Nat, seq1 being Real_Sequence holds
+    ex seq being Real_Sequence st seq.0=r1 & for n holds
+      (n<>0 & n <= k implies seq.n=seq1.n) &
+      (n > k implies seq.n=r2)
+  proof let r1,r2 be Real, k be Nat, seq1 be Real_Sequence;
+    ex seq being Real_Sequence st for n holds
+      ((n=0 implies seq.n=r1) &
+      (n<>0 & n <= k implies seq.n=seq1.n) &
+      (n<>0 & n > k implies seq.n=r2))
+    proof
+    defpred P[set,set] means ex n be Element of NAT st (n=$1 &
+      (n = 0 implies $2=r1) &
+      (n <> 0 & n <= k implies $2=seq1.n) &
+      (n <> 0 & n > k implies $2=r2));
+a1: for x being set st x in NAT ex y being set st P[x,y]
+    proof let x be set;
+      assume x in NAT;then
+      reconsider n=x as Element of NAT;
+      now per cases;
+        case n=0;
+          hence P[x,r1];
+        end;
+        case n <> 0 & n <= k;
+          hence P[x,seq1.n];
+        end;
+        case n <> 0 & not n <= k;
+          hence P[x,r2];
+        end;
+      end;
+      hence thesis;
+    end;
+a2: for x,y,z being set st x in NAT & P[x,y] & P[x,z] holds y=z;
+    consider f1 being Function such that
+A27:dom f1=NAT & for x being set st x in NAT holds P[x,f1.x]
+      from FUNCT_1:sch 2(a2,a1);
+    now let x be set;
+      assume x in NAT; then
+      ex n be Element of NAT st n=x &
+        (n = 0 implies f1.x=r1) &
+        (n <> 0 & n <= k implies f1.x=seq1.n) &
+        (n <> 0 & n > k implies f1.x=r2) by A27;
+      hence f1.x is real;
+    end; then
+    reconsider f1 as Real_Sequence by A27,SEQ_1:3;
+    take seq=f1;
+    let n be Nat;
+    reconsider n as Element of NAT by ORDINAL1:def 13;
+    ex k1 being Element of NAT st k1=n &
+      (k1=0 implies seq.n=r1) &
+      (k1<>0 & k1 <= k implies seq.n=seq1.k1) &
+      (k1<>0 & k1 > k implies seq.n=r2) by A27;
+    hence thesis;
+    end; then
+    consider seq being Real_Sequence such that
+b1: for n holds
+      ((n=0 implies seq.n=r1) &
+      (n<>0 & n <= k implies seq.n=seq1.n) &
+      (n<>0 & n > k implies seq.n=r2));
+    take seq;
+    thus thesis by b1;
+  end;
+  
+theorem th192:  
+  for F being FinSequence of REAL holds
+    ex f being Real_Sequence st f.0 = 0 &
+    (for i be Nat st i < len F holds f.(i+1) = f.i+(F.(i+1))) &
+    Sum F = f.len F
+  proof let F be FinSequence of REAL;
+    per cases;
+    suppose
+b0:   len F = 0; 
+      deffunc F(Real)= 0;
+      ex f being Real_Sequence st for i holds f.i = F(i)
+        from SEQ_1:sch 1; then
+      consider f being Real_Sequence such that
+ba:   for i be Element of NAT holds f.i = 0;
+b2:   for i be Nat holds f.i = 0
+      proof
+        let i be Nat;
+        i in NAT by ORDINAL1:def 13;
+        hence thesis by ba;
+      end;
+b3:   for i be Nat st i < len F holds f.(i+1) = f.i+(F.(i+1)) by b0;
+b4:   Sum(F) = 0 by b0,PROB_3:67 .= f.(len F) by b2;
+      f.0 = 0 by b2;
+      hence thesis by b4,b3;
+    end;
+    suppose
+cc:   len F > 0; then
+c0:   len F >= 1 by NAT_1:39; then
+      consider f being Real_Sequence such that
+c1:   f.1 = F.1 &
+      (for i be Nat st 0 <> i & i < len F holds f.(i+1) = f.i + F.(i+1)) &
+      Sum F = f.len F by PROB_3:68;
+      consider f1 being Real_Sequence such that
+c2:   for n holds f1.0=0 &
+        (n<>0 & n <= len F implies f1.n=f.n) &
+        (n > len F implies f1.n=0) by th193;
+c3:   for i be Nat st i < len F holds f1.(i+1) = f1.i+F.(i+1)
+      proof let i be Nat such that
+d1:     i < len F;
+        set r = F.(i+1);
+        per cases;
+        suppose i = 0;
+          hence f1.(i+1) = f1.i + r by c2,c1,c0;
+        end;
+        suppose
+e2:       i <> 0; 
+          i + 1 <> 0 & i + 1 <= len F by d1,NAT_1:38; 
+          hence f1.(i+1) = f.(i+1) by c2 
+            .= f.i + F.(i+1) by d1,e2,c1
+            .= f1.i + r by e2,d1,c2;
+        end;
+      end;
+      Sum(F) = f1.len F by c1,cc,c2;
+      hence thesis by c3,c2;
+    end;
+  end;
+
+theorem th29:
+  for D being set, e1 being FinSequence of D holds
+    n |-> e1 is FinSequence of D*
+  proof let D be set, e1 be FinSequence of D;
+    e1 in D* by FINSEQ_1:def 11;
+    hence thesis by FINSEQ_2:77;
+  end;
+
+theorem th30:
+  for D being set, e1,e2 being FinSequence of D holds
+    ex e being FinSequence of D* st len e = n &
+    (for i be Nat st i in Seg n holds
+      (i in Seg k implies e.i = e1) & (not i in Seg k implies e.i = e2))
+  proof let D be set, e1,e2 be FinSequence of D;
+    e1 in D* & e2 in D* by FINSEQ_1:def 11;
+    hence thesis by th1;
+  end;
+
+theorem th25:
+  for D being set, s being FinSequence holds
+    (s is Matrix of D iff
+      ex n st for i st i in dom s holds
+        ex p being FinSequence of D st s.i = p & len p = n)
+  proof let D be set, s be FinSequence;
+    thus s is Matrix of D implies
+      ex n st for i st i in dom s holds
+        ex p being FinSequence of D st s.i = p & len p = n
+    proof assume
+b0:   s is Matrix of D; then
+      reconsider v=s as FinSequence of D*;
+      consider n be Nat such that
+b1:   for x being set st
+        x in rng v ex t being FinSequence st t=x & len t = n
+          by b0,MATRIX_1:def 1;
+b2:   for i st i in dom v holds
+        ex p being FinSequence of D st v.i = p & len p = n
+      proof let i such that
+c1:     i in dom v;
+        v.i in rng s by c1,FUNCT_1:12; then
+        consider t being FinSequence such that
+c2:     t=v.i & len t=n by b1;
+        take t;
+        thus thesis by c2;
+      end;
+      reconsider n as Element of NAT by ORDINAL1:def 13;
+      take n;
+      thus thesis by b2;
+    end;
+    given n such that
+b3: for i st i in dom s holds
+    ex p being FinSequence of D st s.i = p & len p = n;
+b4: for x being set st x in rng s holds
+      (ex v being FinSequence st v=x & len v = n) & x in D*
+    proof let x be set such that
+d1:   x in rng s;
+      consider i be set such that
+d2:   i in dom s & x = s.i by d1,FUNCT_1:def 5;
+      consider p being FinSequence of D such that
+d3:   s.i = p & len p = n by d2,b3;
+      thus ex v being FinSequence st v=x & len v = n by d3,d2;
+      thus x in D* by d3,d2,FINSEQ_1:def 11;
+    end; then
+d4: for x being set st x in rng s holds
+      ex v being FinSequence st v=x & len v = n; 
+    for x being set st x in rng s holds x in D* by b4; then
+    rng s c= D* by TARSKI:def 3; 
+    hence s is Matrix of D by d4,MATRIX_1:def 1,FINSEQ_1:def 4;
+  end;
+
+theorem th26:
+  for D being set, e being FinSequence of D* holds
+    (ex n st for i st i in dom e holds len(e.i) = n) iff e is Matrix of D
+  proof let D be set, e be FinSequence of D*;
+    hereby given n such that
+a1:   for i st i in dom e holds len(e.i) = n;
+      for i st i in dom e holds ex p being FinSequence of D st
+        e.i = p & len p = n
+      proof let i;
+        assume i in dom e; then
+        len (e.i) = n by a1;
+        hence thesis;
+      end;
+      hence e is Matrix of D by th25;
+    end;
+    assume e is Matrix of D; then
+    consider n such that
+b2: for i st i in dom e holds
+      ex p being FinSequence of D st e.i = p & len p = n by th25;
+    for i st i in dom e holds len(e.i) = n
+    proof let i such that
+b3:   i in dom e;
+      ex p being FinSequence of D st e.i = p & len p = n by b2,b3;
+      hence thesis;
+    end;
+    hence thesis;
+  end;
+  
+theorem th50:
+  for M being tabular FinSequence holds
+    [i,j] in Indices M iff i in Seg len M & j in Seg width M
+  proof let M be tabular FinSequence;
+    hereby assume [i,j] in Indices M; then
+      [i,j] in [:dom M,Seg width M:] by MATRIX_1:def 5; then
+      i in dom M & j in Seg width M by ZFMISC_1:106;
+      hence i in Seg len M & j in Seg width M by FINSEQ_1:def 3;
+    end;
+    assume i in Seg len M & j in Seg width M; then
+    i in dom M & j in Seg width M by FINSEQ_1:def 3; then
+    [i,j] in [:dom M,Seg width M:] by ZFMISC_1:106;
+    hence [i,j] in Indices M by MATRIX_1:def 5;
+  end;
+
+theorem th160:
+  for D being non empty set, M being Matrix of D holds
+    [i,j] in Indices M iff i in dom M & j in dom (M.i)
+  proof let D be non empty set, M be Matrix of D;
+    hereby assume [i,j] in Indices M; then
+b1:   i in Seg len M & j in Seg width M by th50; then
+      i in dom M by FINSEQ_1:def 3; then
+      j in Seg len(M.i) by b1,GOBRD13:4;
+      hence i in dom M & j in dom (M.i) by b1,FINSEQ_1:def 3;
+    end;
+    assume i in dom M & j in dom (M.i);
+    hence [i,j] in Indices M by GOBRD13:5;
+  end;
+
+theorem th161:  
+  for D being non empty set, M being Matrix of D st
+    [i,j] in Indices M holds M*(i,j)=(M.i).j
+  proof let D be non empty set, M be Matrix of D;
+    assume [i,j] in Indices M; then
+    consider p being FinSequence of D such that
+b1: p=M.i & M*(i,j)=p.j by MATRIX_1:def 6;
+    thus M*(i,j)=(M.i).j by b1;
+  end;
+
+theorem th162:  
+  for D being non empty set, M being Matrix of D holds
+    [i,j] in Indices M iff i in dom Col(M,j) & j in dom Line(M,i)
+  proof let D be non empty set, M be Matrix of D;
+    hereby assume [i,j] in Indices M; then
+b1:   i in dom M & j in dom (M.i) by th160; then
+      i in Seg len M by FINSEQ_1:def 3; then
+      i in Seg len Col(M,j) by MATRIX_1:def 9;
+      hence i in dom Col(M,j) by FINSEQ_1:def 3;
+      thus j in dom Line(M,i) by b1,MATRIX_2:18;
+    end;
+    assume
+a1: i in dom Col(M,j) & j in dom Line(M,i); then
+    i in Seg len Col(M,j) by FINSEQ_1:def 3; then
+    i in Seg len M by MATRIX_1:def 9; then
+a2: i in dom M by FINSEQ_1:def 3; then
+    j in dom (M.i) by a1,MATRIX_2:18;
+    hence thesis by a2,th160;
+  end;
+
+theorem th189:
+  for D1,D2 being non empty set,
+      M1 being (Matrix of D1),M2 being Matrix of D2 st M1 = M2 holds
+    for i st i in dom M1 holds Line(M1,i) = Line(M2,i)
+  proof let D1,D2 be non empty set,
+            M1 be (Matrix of D1),
+            M2 be Matrix of D2 such that
+a1: M1 = M2;
+    hereby let i; assume i in dom M1; then
+      Line(M1,i) = M1.i & Line(M2,i) = M2.i by a1,MATRIX_2:18;
+      hence Line(M1,i) = Line(M2,i) by a1;
+    end;
+  end;
+
+theorem th188:
+  for D1,D2 being non empty set,M1 being (Matrix of D1),M2 being Matrix of D2
+    st M1 = M2 holds for j st j in Seg width M1 holds
+      Col(M1,j) = Col(M2,j)
+  proof let D1,D2 be non empty set,
+            M1 be (Matrix of D1),
+            M2 be Matrix of D2 such that
+a1: M1 = M2;
+    hereby let j such that
+b1:   j in Seg width M1;
+b2:   dom Col(M1,j) = Seg len Col(M1,j) by FINSEQ_1:def 3 
+        .= Seg len M1 by MATRIX_1:def 9
+        .= Seg len Col(M2,j) by a1,MATRIX_1:def 9
+        .= dom Col(M2,j) by FINSEQ_1:def 3;
+      for k st k in dom Col(M1,j) holds (Col(M1,j)).k = (Col(M2,j)).k 
+      proof let k such that
+c1:     k in dom Col(M1,j);
+        k in Seg len Col(M1,j) by c1,FINSEQ_1:def 3; then
+        k in Seg len M1 by MATRIX_1:def 9; then
+c2:     [k,j] in Indices M1 & k in dom M1 by b1,th50,FINSEQ_1:def 3;
+        hence (Col(M1,j)).k = M1*(k,j) by MATRIX_1:def 9
+          .= M2*(k,j) by c2,a1,MATRIXR1:23
+          .= (Col(M2,j)).k by c2,a1,MATRIX_1:def 9; 
+      end;
+      hence Col(M1,j) = Col(M2,j) by b2,FINSEQ_1:17;
+    end;
+  end;
+
+theorem th71:
+  for e1 being FinSequence of D st len e1 = m holds
+    n |-> e1 is Matrix of n,m,D
+  proof let e1 be FinSequence of D such that
+a1: len e1 = m;
+    reconsider e = n |-> e1 as FinSequence of D* by th29;
+a2: len e = n by FINSEQ_2:69;
+a4: for i st i in dom e holds len(e.i) = m
+    proof let i such that
+b1:   i in dom e;
+      i in Seg n by b1,a2,FINSEQ_1:def 3;
+      hence thesis by FINSEQ_2:70,a1;
+    end; then
+    reconsider e as Matrix of D by th26;
+    for p being FinSequence of D st p in rng e holds len p = m
+    proof let p be FinSequence of D such that
+b3:   p in rng e;
+      consider i be set such that
+b4:   i in dom e & p = e.i by b3,FUNCT_1:def 5;
+      thus thesis by a4,b4;
+    end;
+    hence thesis by a2,MATRIX_1:def 3;
+  end;
+
+theorem th32:
+  for e1,e2 being FinSequence of D st len e1 = m & len e2 = m holds
+    ex M being Matrix of n,m,D st (for i be Nat st i in Seg n holds
+      (i in Seg k implies M.i = e1) & (not i in Seg k implies M.i = e2))
+  proof let e1,e2 be FinSequence of D such that
+a1: len e1 = m & len e2 = m;
+    consider e being FinSequence of D* such that
+a2: len e = n and
+a3: for i be Nat st i in Seg n holds
+      (i in Seg k implies e.i = e1) & (not i in Seg k implies e.i = e2)
+        by th30;
+a4: for i st i in dom e holds len(e.i) = m
+    proof let i such that
+b1:   i in dom e;
+b2:   i in Seg k or not i in Seg k;
+      i in Seg n by b1,a2,FINSEQ_1:def 3; 
+      hence thesis by a1,a3,b2;
+    end; then
+    reconsider e as Matrix of D by th26;
+    for p being FinSequence of D st p in rng e holds len p = m
+    proof let p be FinSequence of D;
+      assume p in rng e; then
+      consider i be set such that
+b4:   i in dom e & p = e.i by FUNCT_1:def 5;
+      thus thesis by a4,b4;
+    end; then
+    e is Matrix of n,m,D by a2,MATRIX_1:def 3;
+    hence thesis by a3;
+  end;
+
+Lm10:
+  for m being Matrix of REAL holds
+    (for i,j st [i,j] in Indices m holds m*(i,j) >= r) iff
+      (for i,j st i in dom m & j in dom(m.i) holds (m.i).j >= r)
+    proof let m be Matrix of REAL;
+    hereby assume 
+b0:   for i,j st [i,j] in Indices m holds m*(i,j) >=r;
+      hereby let i,j such that
+b1:     i in dom m & j in dom(m.i);
+        [i,j] in Indices m by th160,b1; then
+        m*(i,j) >=r & m*(i,j) = (m.i).j by b0,th161; 
+        hence (m.i).j >= r; 
+      end;
+    end;
+    assume
+a1: for i,j st i in dom m & j in dom(m.i) holds (m.i).j >= r;
+    hereby let i,j such that
+d1:   [i,j] in Indices m;
+      i in dom m & j in dom(m.i) by d1,th160; then
+      (m.i).j >=r & m*(i,j) = (m.i).j by a1,d1,th161; 
+      hence m*(i,j) >= r;
+    end;
+  end;
+  
+Lm11:
+  for m being Matrix of REAL holds
+    (for i,j st [i,j] in Indices m holds m*(i,j) >=r) iff
+      for i,j st i in dom m & j in dom Line(m,i) holds
+        Line(m,i).j >=r
+  proof let m be Matrix of REAL;
+    hereby
+      assume
+a1:   for i,j st [i,j] in Indices m holds m*(i,j) >=r; 
+      hereby 
+        let i,j such that
+a2:     i in dom m & j in dom(Line(m,i));
+        m.i = Line(m,i) by a2,MATRIX_2:18;
+        hence  Line(m,i).j >=r by a1,a2,Lm10;
+      end;
+    end;
+    assume
+c1: for i,j st i in dom m & j in dom(Line(m,i)) holds
+      Line(m,i).j >=r;
+    now let i such that
+d1:   i in dom m;
+      m.i = Line(m,i) by d1,MATRIX_2:18;
+      hence for j st j in dom(m.i) holds (m.i).j >= r by d1,c1;
+    end; then
+    for i,j st i in dom m & j in dom(m.i) holds (m.i).j >= r;
+    hence thesis by Lm10;
+  end;
+
+Lm12:
+  for m being Matrix of REAL holds
+    (for i,j st [i,j] in Indices m holds m*(i,j) >=r) iff
+      for i,j st j in Seg width m & i in dom Col(m,j) holds
+        Col(m,j).i >=r
+  proof let m be Matrix of REAL;
+    hereby
+      assume
+a1:   for i,j st [i,j] in Indices m holds m*(i,j) >=r;
+      hereby
+        let i,j such that
+a2:     j in Seg width m & i in dom Col(m,j);
+        j in Seg len Line(m,i) by a2,MATRIX_1:def 8; then
+a3:     j in dom Line(m,i) by FINSEQ_1:def 3; then
+        [i,j] in Indices m by th162,a2; then
+a4:     i in dom m by th160; then
+        Line(m,i).j >=r by a3,a1,Lm11;
+        hence Col(m,j).i >=r by a4,a2,GOBOARD1:17;
+      end;
+    end;
+    assume
+c1: for i,j st j in Seg width m & i in dom Col(m,j) holds
+      Col(m,j).i >= r;
+    for i,j st i in dom m & j in dom Line(m,i) holds
+      Line(m,i).j >=r
+    proof let i,j such that
+b1:   i in dom m & j in dom Line(m,i);
+      j in Seg len Line(m,i) by b1,FINSEQ_1:def 3; then
+b3:   j in Seg width m by MATRIX_1:def 8; 
+      i in Seg len m by b1,FINSEQ_1:def 3; then
+      i in Seg len Col(m,j) by MATRIX_1:def 9; then
+      i in dom Col(m,j) by FINSEQ_1:def 3; then
+      Col(m,j).i >=r by b3,c1;
+      hence Line(m,i).j >=r by b3,b1,GOBOARD1:17;
+    end;
+    hence thesis by Lm11;
+  end;
+
+definition let e be FinSequence of REAL*;
+  func Sum e -> FinSequence of REAL means :def2:
+    len it = len e & for k st k in dom it holds it.k = Sum(e.k);
+  existence
+  proof
+    deffunc f(Nat) = Sum(e.$1);
+    consider e1 being FinSequence of REAL such that
+a1: len e1 = len e & for k st k in Seg len e holds e1.k = f(k)
+      from FINSEQ_2:sch 1;
+    take e1;
+    Seg len e1 = dom e1 by FINSEQ_1:def 3; 
+    hence thesis by a1;
+  end;
+  uniqueness
+  proof let e1,e2 being FinSequence of REAL such that
+b1: len e1 = len e & for k st k in dom e1 holds e1.k = Sum(e.k) and
+b2: len e2 = len e & for k st k in dom e2 holds e2.k = Sum(e.k);
+    dom e1 = dom e2 & (for k st k in dom e1 holds e1.k = e2.k)
+    proof
+b3:   dom e1 = Seg len e by FINSEQ_1:def 3,b1
+            .= dom e2 by FINSEQ_1:def 3,b2;
+      for k st k in dom e1 holds e1.k = e2.k
+      proof let k such that
+c1:     k in dom e1;
+        thus e1.k = Sum(e.k) by c1,b1 .= e2.k by c1,b3,b2;
+      end;
+      hence thesis by b3;
+    end;
+    hence thesis by FINSEQ_1:17;
+  end;
+end;
+
+notation let m be Matrix of REAL;
+  synonym LineSum m for Sum m;
+end;
+
+theorem th80:
+  for m being Matrix of REAL holds len Sum m = len m &
+    for i st i in Seg len m holds (Sum m).i=Sum Line(m,i)
+  proof let m be Matrix of REAL;
+    thus len Sum m = len m by def2;
+    thus for k st k in Seg len m holds (Sum m).k=Sum Line(m,k)
+    proof let k such that
+b0:   k in Seg len m;
+b3:   k in dom m by b0,FINSEQ_1:def 3;
+      k in Seg len Sum m by def2,b0; then
+      k in dom Sum m by FINSEQ_1:def 3;
+      hence (Sum m).k = Sum(m.k) by def2
+        .= Sum(Line(m,k)) by b3,MATRIX_2:18;
+    end;
+    thus thesis;
+  end;
+
+definition let m be Matrix of REAL;
+  func ColSum m -> FinSequence of REAL means :def6:
+    len it = width m &
+      for j st j in Seg width m holds it.j=Sum Col(m,j);
+  existence
+  proof
+    deffunc f(Nat) = Sum Col(m,$1);
+    consider e being FinSequence of REAL such that
+a1: len e = width m & for k st k in Seg width m holds e.k = f(k)
+      from FINSEQ_2:sch 1;
+    thus thesis by a1;
+  end;
+  uniqueness
+  proof let p1,p2 being FinSequence of REAL such that
+b1: len p1 = width m &
+      for i st i in Seg width m holds p1.i = Sum Col(m,i) and
+b2: len p2 = width m &
+      for i st i in Seg width m holds p2.i = Sum Col(m,i);
+    for j st j in Seg width m holds p1.j=p2.j
+    proof
+      let j;
+      assume j in Seg width m;
+      then p1.j = Sum Col(m,j) & p2.j = Sum Col(m,j) by b1,b2;
+      hence thesis;
+    end;
+    hence thesis by b1,b2,FINSEQ_2:10;
+  end;
+end;
+
+theorem
+  for M be Matrix of REAL st width M > 0 holds
+    LineSum M = ColSum(M@)
+  proof let M be Matrix of REAL such that
+a0: width M > 0;
+a1: len LineSum M = len M by th80;
+a2: len ColSum (M@) = width (M@) by def6;
+aa: len M = width (M@) by a0,MATRIX_2:12; then
+a3: len ColSum (M@)=len LineSum M by a1,def6;
+    now let i; assume
+a4:   1 <= i & i <= len ColSum (M@); then
+      1 <= i & i <= len LineSum M by aa,a1,def6; then
+a6:   i in Seg len LineSum M by FINSEQ_1:3;
+a7:   i in Seg len M by th80,a6; then
+a8:   i in dom M by FINSEQ_1:def 3;
+      i in Seg width (M@) by FINSEQ_1:3,a4,a2;
+      hence (ColSum (M@)).i = Sum Col((M@),i) by def6
+        .= Sum (Line(M,i)) by MATRIX_2:16,a8
+        .= (LineSum M).i by th80,a7;
+    end;
+    hence thesis by FINSEQ_1:18,a3;
+  end;
+
+theorem th64:
+  for M be Matrix of REAL holds
+    ColSum M = LineSum(M@)
+    proof let M be Matrix of REAL;
+a1:   len (LineSum(M@))=len (M@) by th80;
+a2:   len ColSum M=width M by def6;
+a3:   len ColSum M=len LineSum(M@) by MATRIX_1:def 7,a1,a2;
+      now let i; assume
+a4:     1 <= i & i <= len ColSum M;
+a5:     1 <= i & i <= len LineSum(M@) by a4,MATRIX_1:def 7,a1,a2;
+a6:     i in Seg len LineSum(M@) by FINSEQ_1:3,a5;
+a7:     i in Seg len (M@) by th80,a6;
+a8:     i in Seg width M by FINSEQ_1:3,a4,a2;
+        hence (ColSum M).i = Sum Col(M,i) by def6
+          .= Sum (Line(M@,i)) by MATRIX_2:17,a8
+          .= (LineSum(M@)).i by th80,a7;
+      end;
+      hence thesis by FINSEQ_1:18,a3;
+    end;
+
+definition let M be Matrix of REAL;
+  func SumAll M -> Element of REAL equals
+    Sum Sum M;
+  coherence;
+end;
+
+theorem th17:
+  for M be Matrix of REAL st len M = 0 holds 
+    SumAll M = 0
+  proof let M be Matrix of REAL;
+    assume len M = 0; then
+    len Sum M = 0 by def2; 
+    hence SumAll M = 0 by RVSUM_1:102,FINSEQ_1:32;
+  end;
+
+theorem th18:
+  for M be Matrix of m,0,REAL holds SumAll M = 0
+  proof let M be Matrix of m,0,REAL;
+    per cases;
+    suppose m = 0; then
+      len M = 0 by MATRIX_1:def 3;
+      hence SumAll M = 0 by th17;
+    end;
+    suppose A1: m > 0;
+    len Sum M > 0 & for k be Nat st k in dom Sum M holds (Sum M).k = 0
+    proof 
+      len M = len Sum M by def2; then
+A3:   dom M = dom Sum M by FINSEQ_3:31;
+      len M > 0 by A1,MATRIX_1:def 3;
+      hence len Sum M > 0 by def2;
+      hereby let k be Nat such that
+A5:     k in dom Sum M;
+        M.k in rng M by A5,A3,FUNCT_1:def 5; then
+A6:     len (M.k) = 0 by MATRIX_1:def 3; 
+        thus (Sum M).k = Sum (M.k) by A5,def2
+          .= 0 by A6,FINSEQ_1:32,RVSUM_1:102;
+      end;
+    end; 
+    hence SumAll M = Sum ((len Sum M) |-> 0) by th55
+      .= (len Sum M) * 0 by RVSUM_1:110 .= 0;
+    end;
+  end;
+
+theorem th31:
+  for M1 be Matrix of n,k,REAL for M2 being Matrix of m,k,REAL holds
+    Sum (M1^M2) = (Sum M1)^(Sum M2)
+  proof let M1 be Matrix of n,k,REAL;
+        let M2 be Matrix of m,k,REAL;
+a1: len Sum(M1^M2) = len (M1^M2) by def2 .= len M1 + len M2 by FINSEQ_1:35
+      .= len Sum M1 + len M2 by def2 .= len Sum M1 + len Sum M2 by def2
+      .= len ((Sum M1)^(Sum M2)) by FINSEQ_1:35;
+    now let i; assume
+a2:   i in Seg len Sum(M1^M2); then
+a3:   i in dom Sum(M1^M2) by FINSEQ_1:def 3;
+      i in Seg len (M1^M2) by a2,def2; then
+a4:   i in dom (M1^M2) by FINSEQ_1:def 3;
+      now
+        per cases by a4,FINSEQ_1:38;
+        suppose
+a5:       i in dom M1;
+          len M1 = len Sum M1 by def2; then
+a6:       dom M1 = dom Sum M1 by FINSEQ_3:31;
+          thus Sum(M1^M2).i = Sum ((M1^M2).i) by a3,def2 
+            .= Sum (M1.i) by a5,FINSEQ_1:def 7
+            .= (Sum M1).i by a5,a6,def2 
+            .= ((Sum M1)^(Sum M2)).i by a5,a6,FINSEQ_1:def 7;
+        end;
+        suppose ex n be Element of NAT st n in dom M2 & i = len M1 + n; then
+          consider n be Element of NAT such that
+      a7: n in dom M2 & i = len M1 + n;
+a8:       len M1 = len Sum M1 by def2;
+          len M2 = len Sum M2 by def2; then
+a9:       dom M2 = dom Sum M2 by FINSEQ_3:31;
+          thus Sum(M1^M2).i = Sum ((M1^M2).i) by a3,def2 
+            .= Sum (M2.n) by a7,FINSEQ_1:def 7
+            .= (Sum M2).n by a7,a9,def2 
+            .= ((Sum M1)^(Sum M2)).i by a7,a8,a9,FINSEQ_1:def 7;
+        end;
+      end;
+      hence Sum(M1^M2).i = ((Sum M1)^(Sum M2)).i;
+    end;
+    hence thesis by a1,FINSEQ_2:10;
+  end;
+
+theorem th33:
+  for M1,M2 be Matrix of REAL holds
+    Sum M1 + Sum M2 = Sum (M1 ^^ M2)
+  proof let M1,M2 be Matrix of REAL;
+    reconsider M = min(len M1,len M2) as Element of NAT by FINSEQ_2:1;
+a1: Seg M = Seg len M1 /\ Seg len M2 by FINSEQ_2:2
+      .= Seg len M1 /\ dom M2 by FINSEQ_1:def 3
+      .= dom M1 /\ dom M2 by FINSEQ_1:def 3
+      .= dom (M1 ^^ M2) by MATRLIN:def 2
+      .= Seg len (M1 ^^ M2) by FINSEQ_1:def 3;
+a2: len (Sum M1 + Sum M2) = len (addreal.:(Sum M1,Sum M2)) by RVSUM_1:def 4
+      .= min(len Sum M1,len Sum M2) by FINSEQ_2:85
+      .= min(len M1,len Sum M2) by def2
+      .= min(len M1,len M2) by def2
+      .= len (M1 ^^ M2) by a1,FINSEQ_1:8
+      .= len Sum(M1 ^^ M2) by def2;
+    now let i; assume
+a3:   i in Seg len (Sum M1 + Sum M2); then
+      i in dom (Sum M1 + Sum M2) by FINSEQ_1:def 3; then
+a4:   i in dom (addreal.:(Sum M1, Sum M2)) by RVSUM_1:def 4;
+a5:   i in dom Sum(M1 ^^ M2) by a2,a3,FINSEQ_1:def 3;
+      i in Seg len (M1 ^^ M2) by a2,a3,def2; then
+a6:   i in dom (M1 ^^ M2) by FINSEQ_1:def 3; then
+      i in dom M1 /\ dom M2 by MATRLIN:def 2; then
+      i in dom M1 & i in dom M2 by XBOOLE_0:def 3; then
+      i in Seg len M1 & i in Seg len M2 by FINSEQ_1:def 3; then
+      i in Seg len Sum M1 & i in Seg len Sum M2 by def2; then
+a8:   i in dom Sum M1 & i in dom Sum M2 by FINSEQ_1:def 3;
+      reconsider m1 = M1.i,m2 = M2.i as FinSequence;
+a9:   ((M1.i) ^ (M2.i)) = (M1 ^^ M2).i by a6,MATRLIN:def 2;
+      thus (Sum M1 + Sum M2).i
+        = (addreal.:(Sum M1,Sum M2)).i by RVSUM_1:def 4
+        .= (addreal).((Sum M1).i,(Sum M2).i) by a4,FUNCOP_1:28
+        .= ((Sum M1).i) + ((Sum M2).i) by BINOP_2:def 9
+        .= Sum (M1.i) + (Sum M2.i) by a8,def2
+        .= Sum (M1.i) + Sum (M2.i) by a8,def2
+        .= Sum ((M1 ^^ M2).i) by a9,RVSUM_1:105
+        .= (Sum(M1 ^^ M2)).i by a5,def2;
+    end;
+    hence thesis by a2,FINSEQ_2:10;
+  end;
+
+theorem th35:
+  for M1,M2 be Matrix of REAL st len M1 = len M2 holds
+    SumAll M1 + SumAll M2 = SumAll(M1 ^^ M2)
+  proof let M1,M2 be Matrix of REAL such that
+a1: len M1 = len M2;
+    len Sum M1 = len M1 by def2 .= len Sum M2 by a1,def2; then
+    reconsider p1=Sum M1, p2 = Sum M2 as 
+      Element of (len Sum M1)-tuples_on REAL by FINSEQ_2:110;
+    thus SumAll M1 + SumAll M2 = Sum (p1 + p2) by RVSUM_1:119
+      .= SumAll(M1 ^^ M2) by th33;
+  end;
+
+theorem th37:
+  for M be Matrix of REAL holds
+    SumAll M = SumAll(M@)
+  proof
+a1: for p be FinSequence of REAL holds SumAll <*p*> = SumAll(<*p*>@)
+    proof let p be FinSequence of REAL;
+      defpred x[FinSequence of REAL] means SumAll <*$1*> = SumAll(<*$1*>@);
+a2:   x[<*>(REAL)]
+      proof
+a3:     <*<*>(REAL)*> is Matrix of 0+1,0,REAL by MATRIX_1:14;
+        len <*<*>(REAL)*> = 1 by MATRIX_1:def 3; then
+        width <*<*>(REAL)*> = 0 by a3,MATRIX_1:20; then
+a4:     len (<*<*>(REAL)*>@) = 0 by MATRIX_1:def 7;
+        thus SumAll <*<*>(REAL)*> = 0 by a3,th18
+          .= SumAll (<*<*>(REAL)*>@) by a4,th17;
+      end;
+a5:   for p being FinSequence of REAL, x being Element of REAL st x[p] holds
+        x[p^<*x*>]
+      proof let p be FinSequence of REAL,
+                x be Element of REAL such that
+a6:   SumAll <*p*> = SumAll (<*p*>@);
+      Seg len (<*p*> ^^ <*<*x*>*>) = dom (<*p*> ^^ <*<*x*>*>)
+        by FINSEQ_1:def 3
+        .= dom <*p*> /\ dom <*<*x*>*> by MATRLIN:def 2
+        .= Seg 1 /\ dom <*<*x*>*> by FINSEQ_1:55
+        .= Seg 1 /\ Seg 1 by FINSEQ_1:55
+        .= Seg 1; then
+a7:   len (<*p*> ^^ <*<*x*>*>) = 1 by FINSEQ_1:8
+        .= len <*p^<*x*>*> by FINSEQ_1:56;
+a8:   now let i; assume
+a9:     i in Seg len <*p^<*x*>*>; then
+a10:    i in dom (<*p*> ^^ <*<*x*>*>) by a7,FINSEQ_1:def 3;
+        i in { 1 } by a9,FINSEQ_1:4,57; then
+a12:    i = 1 by TARSKI:def 1;
+        reconsider M1 = <*p*>.i ,M2 = <*<*x*>*>.i as FinSequence;
+        thus (<*p*> ^^ <*<*x*>*>).i = M1 ^ M2 by a10,MATRLIN:def 2
+          .= p ^ M2 by a12,FINSEQ_1:57 .= p ^ <*x*> by a12,FINSEQ_1:57
+          .= <*p^<*x*>*>.i by a12,FINSEQ_1:57;
+      end;
+      per cases;
+      suppose len p = 0; then
+a13:    p = {} by FINSEQ_1:25;
+        hence SumAll <*p^<*x*>*> = SumAll <*<*x*>*> by FINSEQ_1:47
+          .= SumAll (<*<*x*>*>@) by MATRLIN:19
+          .= SumAll (<*p^<*x*>*>@) by a13,FINSEQ_1:47;
+      end;
+      suppose len p <> 0; then
+a14:    len p > 0;
+a15:    len <*p*> = 1 by FINSEQ_1:57; then
+a16:    width <*p*> = len p by MATRIX_1:20;
+a17:    len <*<*x*>*> = 1 by FINSEQ_1:57; then
+a18:    width <*<*x*>*> = len <*x*> by MATRIX_1:20
+          .= 1 by FINSEQ_1:57;
+a19:    len <*p^<*x*>*> = 1 by FINSEQ_1:57; then
+a20:    width <*p^<*x*>*> = len (p^<*x*>) by MATRIX_1:20
+          .= len p + len <*x*> by FINSEQ_1:35
+          .= len p + 1 by FINSEQ_1:57; 
+a22:    width (<*p*>@) = len <*p*> by a14,a16,MATRIX_2:12
+          .= width (<*<*x*>*>@) by a15,a17,a18,MATRIX_2:12;
+a23:    len ((<*p*>@) ^ (<*<*x*>*>@)) = len (<*p*>@) + len (<*<*x*>*>@)
+          by FINSEQ_1:35
+          .= width <*p*> + len (<*<*x*>*>@) by MATRIX_1:def 7
+          .= width <*p*> + width <*<*x*>*> by MATRIX_1:def 7
+          .= len (<*p^<*x*>*>@) by a16,a18,a20,MATRIX_1:def 7;
+a24:    len (<*p*>@) = len p by a16,MATRIX_1:def 7;
+        width (<*p*>@) = 1 by a14,a15,a16,MATRIX_2:12; then
+        reconsider d1 = <*p*>@ as Matrix of len p,1,REAL
+          by a14,a24,MATRIX_1:20;
+a25:    len (<*<*x*>*>@) = 1 by a18,MATRIX_1:def 7;
+        width (<*<*x*>*>@) = 1 by a14,a15,a16,a22,MATRIX_2:12; then
+        reconsider d2 = <*<*x*>*>@ as Matrix of 1,1,REAL
+          by a25,MATRIX_1:20;
+a26:    (<*<*x*>*>@)@ = <*<*x*>*> by a17,a18,MATRIX_2:15;
+a27:    (d1 ^ d2)@ = ((<*p*>@)@) ^^ ((<*<*x*>*>@)@) by a22,MATRLIN:32
+          .= <*p*> ^^ <*<*x*>*> by a14,a15,a16,a26,MATRIX_2:15
+          .= <*p^<*x*>*> by a7,a8,FINSEQ_2:10
+          .= (<*p^<*x*>*>@)@ by a19,a20,MATRIX_2:15;
+        thus SumAll <*p^<*x*>*> = SumAll (<*p*> ^^ <*<*x*>*>)
+          by a7,a8,FINSEQ_2:10
+          .= SumAll (<*p*>@) + SumAll <*<*x*>*> by a6,a15,a17,th35
+          .= SumAll (<*p*>@) + SumAll (<*<*x*>*>@) by MATRLIN:19
+          .= Sum (Sum d1 ^ Sum d2) by RVSUM_1:105
+          .= SumAll (d1 ^ d2) by th31
+          .= SumAll (<*p^<*x*>*>@) by a23,a27,MATRIX_2:11;
+        end;
+      end;
+      for p be FinSequence of REAL holds x[p] from FINSEQ_2:sch 2(a2,a5);
+      hence thesis;
+    end;
+    defpred x[Nat] means for M be Matrix of REAL st
+    len M = $1 holds SumAll M = SumAll (M@);
+a28:x[0]
+    proof let M be Matrix of REAL; assume
+a29:  len M = 0; then
+      width M = 0 by MATRIX_1:def 4; then
+a30:  len (M@) = 0 by MATRIX_1:def 7;
+      thus SumAll M = 0 by a29,th17
+        .= SumAll (M@) by a30,th17;
+    end;
+a31:for n st x[n] holds x[n+1]
+    proof let n such that
+a32:  for M be Matrix of REAL st len M = n holds
+        SumAll M = SumAll (M@);
+      thus for M be Matrix of REAL st len M = n+1 holds
+        SumAll M = SumAll (M@)
+      proof let M be Matrix of REAL such that
+a33:    len M = n+1;
+a34:    dom M = Seg len M by FINSEQ_1:def 3;
+        per cases;
+        suppose
+a35:      n = 0; 
+          reconsider g = M.1 as FinSequence of REAL;
+          M = <*g*> by a33,a35,FINSEQ_1:57;
+          hence SumAll M = SumAll (M@) by a1;
+        end;
+        suppose
+a36:      n > 0;
+a37:      len (Del(M,n+1)) = n by a33,MATRLIN:3;
+          n + 1 in dom M by a33,a34,FINSEQ_1:6; then
+a38:      M.(n+1) = Line(M,n+1) by MATRIX_2:18;
+          reconsider M1 = M.(n+1) as FinSequence of REAL;
+          reconsider M' = M as Matrix of n+1,width M,REAL
+            by a33,MATRIX_1:20;
+          reconsider r = <*M1*> as Matrix of 1,width M,REAL
+            by a38,MATRIX_1:def 8;
+          reconsider w = Del(M',n+1) as Matrix of n,width M,REAL
+            by MATRLIN:5;
+a39:      width w = width M' by a36,MATRLIN:4
+            .= width r by MATRLIN:4;
+a40:      len (w@) = width w by MATRIX_1:def 7
+            .= len (r@) by a39,MATRIX_1:def 7;
+          thus SumAll M = SumAll (w ^ r) by a33,MATRLIN:6
+            .= Sum (Sum w ^ Sum r) by th31
+            .= SumAll (Del(M,n+1)) + SumAll r by RVSUM_1:105
+            .= SumAll (Del(M,n+1)@) + SumAll r by a32,a37
+            .= SumAll (Del(M,n+1)@) + SumAll (r@) by a1
+            .= SumAll ((w@) ^^ (r@)) by a40,th35
+            .= SumAll ((w ^ r)@) by a39,MATRLIN:32
+            .= SumAll (M@) by a33,MATRLIN:6;
+        end;
+      end;
+    end;
+    let M be Matrix of REAL;
+    for n holds x[n] from NAT_1:sch 2(a28,a31); then
+    x[len M];
+    hence thesis;
+  end;
+  
+theorem th65:
+  for M be Matrix of REAL holds
+    SumAll M = Sum ColSum M
+  proof let M be Matrix of REAL;
+    thus Sum ColSum M = SumAll (M@) by th64 .= SumAll M by th37;
+  end;
+
+theorem th180:
+  for x,y being FinSequence of REAL st len x = len y holds
+    len mlt(x,y)=len x
+  proof let x,y be FinSequence of REAL such that
+A1: len x = len y;
+    mlt(x,y) = multreal.:(x,y) by RVSUM_1:def 9;
+    hence thesis by A1,FINSEQ_2:86;
+  end;
+
+theorem th59:
+  for i for R being Element of i-tuples_on REAL holds
+    mlt(i|->1,R) = R
+  proof let i;
+    let R be Element of i-tuples_on REAL;
+    thus mlt(i|->1,R) = 1*R by RVSUM_1:92 .= R by RVSUM_1:74;
+  end;
+
+theorem th59a:
+  for x being FinSequence of REAL holds
+    mlt((len x|->1),x) = x
+  proof let x be FinSequence of REAL;
+    reconsider y=x as Element of (len x)-tuples_on REAL
+      by FINSEQ_2:110;
+    mlt(len x|->1,y) = y by th59;
+    hence thesis;
+  end;
+
+theorem th88a:
+  for x,y being FinSequence of REAL st
+    (for i st i in dom x holds x.i >= 0) &
+    (for i st i in dom y holds y.i >= 0) holds
+      for k st k in dom mlt(x,y) holds (mlt(x,y)).k >= 0
+  proof let x,y be FinSequence of REAL such that
+A1: for i st i in dom x holds x.i >= 0 and
+A2: for i st i in dom y holds y.i >= 0;
+A3: for z being FinSequence of REAL st
+      (for i st i in dom z holds z.i >= 0) holds
+        for i holds z.i >=0
+    proof let z be FinSequence of REAL such that
+C1:   for i st i in dom z holds z.i >=0;
+      hereby let i;
+        per cases;
+        suppose not i in dom z;
+          hence z.i >= 0 by FUNCT_1:def 4; 
+        end;
+        suppose i in dom z;
+          hence z.i >=0 by C1;
+        end;
+      end;
+    end;
+    hereby let k such that  
+B1:   k in dom mlt(x,y);
+B2:   x.k >=0 & y.k >=0 by A1,A2,A3;
+      (mlt(x,y)).k = x.k * y.k by B1,RVSUM_1:86;
+      hence (mlt(x,y)).k >= 0 by B2,REAL_2:121;
+    end;
+  end;
+
+theorem th191:
+  for i for e1,e2 being Element of i-tuples_on REAL
+    for f1,f2 being Element of i-tuples_on the carrier of F_Real
+      st e1 = f1 & e2 = f2 holds mlt(e1,e2) = mlt(f1,f2)
+  proof let i;
+        let e1,e2 be Element of i-tuples_on REAL;
+        let f1,f2 be  Element of i-tuples_on the carrier of F_Real such that
+a1: e1 = f1 & e2 = f2;
+a2: dom (mlt(e1,e2)) = Seg len (mlt(e1,e2)) by FINSEQ_1:def 3
+      .= Seg i by FINSEQ_2:109 .= Seg len mlt(f1,f2) by FINSEQ_2:109
+      .= dom mlt(f1,f2) by FINSEQ_1:def 3;
+    for i st i in dom(mlt(e1,e2)) holds (mlt(e1,e2)).i = (mlt(f1,f2)).i
+    proof let i such that
+b1:   i in dom mlt(e1,e2);
+      reconsider a1 = e1.i, a2 = e2.i as Element of F_Real
+        by VECTSP_1:def 15;
+      thus (mlt(e1,e2)).i = e1.i * e2.i by b1,RVSUM_1:86 .= a1 * a2
+        by MATRIXR1:2
+        .= (mlt(f1,f2)).i by a1,b1,a2,FVSUM_1:73;
+    end;
+    hence thesis by a2,FINSEQ_1:17;
+  end;
+
+theorem th191a:
+  for e1,e2 being FinSequence of REAL
+    for f1,f2 being FinSequence of F_Real
+      st len e1 = len e2 & e1 = f1 & e2 = f2 holds
+        mlt(e1,e2) = mlt(f1,f2)
+  proof let e1,e2 being FinSequence of REAL;
+        let f1,f2 being FinSequence of F_Real such that
+a1: len e1 = len e2 & e1 = f1 & e2 = f2;
+   set l = len e1;
+   set Y = { e where e is Element of REAL*: len e = l};
+   set Z = { f where f is Element of (the carrier of F_Real)*: len f = l}; 
+   reconsider e3=e1 as Element of l-tuples_on REAL by FINSEQ_2:110;
+   len e2 = l & e2 is Element of REAL* by a1,FINSEQ_1:def 11; then 
+   e2 in Y; then
+   reconsider e4=e2 as Element of l-tuples_on REAL by FINSEQ_2:def 4;
+   len f1 = l & f1 is Element of (the carrier of F_Real)* 
+     by a1,FINSEQ_1:def 11; then 
+   f1 in Z; then
+   reconsider f3=f1 as Element of l-tuples_on the carrier of F_Real 
+     by FINSEQ_2:def 4;
+   len f2 = l & f2 is Element of (the carrier of F_Real)* 
+     by a1,FINSEQ_1:def 11; then 
+   f2 in Z; then
+   reconsider f4=f2 as Element of l-tuples_on the carrier of F_Real 
+     by FINSEQ_2:def 4;
+   mlt(e3,e4) = mlt(f3,f4) by a1,th191;
+   hence thesis;
+ end;
+
+theorem th194:
+  for e being FinSequence of REAL
+    for f being FinSequence of F_Real st e = f holds
+      Sum e = Sum f
+  proof let e be FinSequence of REAL;
+    let f be FinSequence of F_Real such that
+a1: e = f;
+    consider e1 being Function of NAT,REAL such that
+a2: e1.0 = 0 &
+    (for i be Nat st i < len e holds e1.(i+1) = e1.i+e.(i+1)) &
+    Sum e = e1.len e by th192;
+    consider f1 being Function of NAT,the carrier of F_Real such that
+a3: Sum f = f1.len f &
+    f1.0 = 0.F_Real &
+    for j for v being Element of F_Real st j < len f & v = f.(j + 1) holds
+      f1.(j + 1) = f1.j + v by RLVECT_1:def 12;
+a4: for n holds n <= len e implies e1.n = f1.n
+    proof let n;
+      defpred p[Nat] means $1 <= len e implies e1.$1 = f1.$1;
+b1:   p[0] by a3,a2,VECTSP_1:def 15,RLVECT_1:def 2;
+b2:   now let k be Nat such that
+c1:     p[k];
+        now assume cc:k+1 <= len e; then
+c2:       k < len e by NAT_1:38;
+          reconsider a = e.(k+1) as Element of F_Real by VECTSP_1:def 15;
+          reconsider k'=k as Element of NAT by ORDINAL1:def 13;
+          e1.(k+1) = e1.k + e.(k+1) by c2,a2
+            .= f1.k' + a by cc,c1,MATRIXR1:1,NAT_1:38
+            .= f1.(k+1) by c2,a3,a1;
+          hence e1.(k+1) = f1.(k+1);
+        end;
+        hence p[k+1];
+      end;
+      for n be Nat holds p[n] from NAT_1:sch 2(b1,b2);
+      hence thesis;
+    end;
+    thus Sum e = Sum f by a1,a2,a4,a3; 
+  end;
+
+notation let e1,e2 be FinSequence of REAL;
+  synonym e1 "*" e2 for |( e1,e2 )|;
+end;
+
+theorem 
+  for i for e1,e2 being Element of i-tuples_on REAL
+    for f1,f2 being Element of i-tuples_on the carrier of F_Real
+      st e1 = f1 & e2 = f2 holds 
+        e1 "*" e2 = f1 "*" f2
+  proof let i;
+        let e1,e2 be Element of i-tuples_on REAL;
+        let f1,f2 be Element of i-tuples_on the carrier of F_Real such that
+a1: e1 = f1 & e2 = f2;
+a2: mlt(e1,e2) = mlt(f1,f2) by a1,th191;
+    thus e1 "*" e2 = Sum mlt(f1,f2) by a2,th194
+      .= f1 "*" f2 by FVSUM_1:def 10;
+  end;
+
+theorem th195a:
+  for e1,e2 being FinSequence of REAL
+    for f1,f2 being FinSequence of F_Real
+      st len e1 = len e2 & e1 = f1 & e2 = f2 holds
+        e1 "*" e2 = f1 "*" f2
+  proof let e1,e2 be FinSequence of REAL;
+        let f1,f2 be FinSequence of F_Real;
+    assume len e1 = len e2 & e1 = f1 & e2 = f2; then
+    mlt(e1,e2) = mlt(f1,f2) by th191a;
+    hence e1 "*" e2 = Sum mlt(f1,f2) by th194
+      .= f1 "*" f2 by FVSUM_1:def 10;
+  end;
+
+theorem th190:
+  for M,M1,M2 being Matrix of REAL st width M1 = len M2 holds
+    M = M1*M2 iff
+      len M = len M1 &
+      width M = width M2 &
+      for i,j st [i,j] in Indices M holds
+        M*(i,j) = Line(M1,i) "*" Col(M2,j)
+  proof let M,M1,M2 be Matrix of REAL such that
+a1: width M1 = len M2;
+    set M3 = MXR2MXF M1;
+    set M4 = MXR2MXF M2;
+aa: M3 = M1 & M4 = M2 by MATRIXR1:def 1; 
+    MXF2MXR(M3 * M4) = M1 * M2 by MATRIXR1:def 6; then
+a0: M3 * M4 = M1 * M2 by MATRIXR1:def 2; 
+    hereby assume
+b1:   M = M1 * M2; 
+      hence
+b2:   len M = len M1 by a0,aa,a1,MATRIX_3:def 4;
+      thus 
+b3:   width M = width M2 by b1,a0,aa,a1,MATRIX_3:def 4;
+      thus for i,j st [i,j] in Indices M holds
+        M*(i,j) = Line(M1,i) "*" Col(M2,j)
+      proof let i,j such that
+c1:     [i,j] in Indices M;
+c3:     i in Seg len M1 & j in Seg width M2 by c1,th50,b2,b3; then 
+        i in dom M1 by FINSEQ_1:def 3; then
+c4:     Line(M3,i) = Line(M1,i) by th189,aa; 
+c5:     Col(M4,j) = Col(M2,j) by c3,th188,aa;
+c6:     len(Line(M1,i)) = width M1 by MATRIX_1:def 8 
+          .= len(Col(M2,j)) by a1,MATRIX_1:def 9; 
+        M = MXF2MXR (M3 * M4) by b1,MATRIXR1:def 6; then
+        M = (M3*M4) by MATRIXR1:def 2; then
+        [i,j] in Indices (M3 * M4) &
+        M*(i,j) = (M3 * M4)*(i,j) by c1,MATRIXR1:23; 
+        hence M*(i,j) = Line(M3,i) "*" Col(M4,j)
+          by aa,a1,MATRIX_3:def 4
+          .= Line(M1,i) "*" Col(M2,j) by c6,c4,c5,th195a; 
+      end;
+    end;
+    assume
+a3: len M = len M1 & width M = width M2 &
+    for i,j st [i,j] in Indices M holds M*(i,j) = Line(M1,i) "*" Col(M2,j);
+    set MM = MXR2MXF M;
+dd: MM = M by MATRIXR1:def 1;
+    MM = M3 * M4
+    proof
+d1:   len MM = len M by MATRIXR1:def 1 .= len M3 by a3,MATRIXR1:def 1;
+d2:   width MM = width M by MATRIXR1:def 1 .= width M4 by a3,MATRIXR1:def 1;
+      for i,j be Nat st [i,j] in Indices MM holds
+        MM*(i,j)= Line(M3,i) "*" Col(M4,j)
+      proof let i,j be Nat such that
+e1:     [i,j] in Indices MM;
+XX:     i in NAT & j in NAT by ORDINAL1:def 13; then
+e2:     i in Seg len M3 & j in Seg width M4 by e1,th50,d1,d2; then
+        i in dom M3 by FINSEQ_1:def 3; then
+e3:     Line(M3,i) = Line(M1,i) by th189,aa; 
+e4:     Col(M4,j) = Col(M2,j) by e2,th188,aa;
+e5:     len(Line(M1,i)) = width M1 by MATRIX_1:def 8 
+          .= len(Col(M2,j)) by a1,MATRIX_1:def 9;
+        [i,j] in Indices M &
+        MM*(i,j)= M*(i,j) by dd,e1,MATRIXR1:23;
+        hence MM*(i,j)= Line(M1,i) "*" Col(M2,j) by a3,XX
+          .= Line(M3,i) "*" Col(M4,j) by e3,e4,e5,th195a;
+      end;
+      hence thesis by d1,d2,aa,a1,MATRIX_3:def 4;
+    end; then
+    M = MXF2MXR(M3 * M4) by dd,MATRIXR1:def 2; 
+    hence thesis by MATRIXR1:def 6;
+  end;
+
+theorem th200: 
+  for M  being Matrix of REAL for p being FinSequence of REAL st
+    len M = len p holds
+      for i st i in Seg len (p*M) holds (p*M).i = p "*" Col(M,i)
+  proof let M be Matrix of REAL;
+        let p be FinSequence of REAL such that
+a1: len M = len p;
+a2: len (p*M) = len Line((LineVec2Mx p)*M,1) by MATRIXR1:def 12
+      .= width ((LineVec2Mx p)*M) by MATRIX_1:def 8;
+    hereby let i such that
+b1:   i in Seg len (p*M);
+b3:   (Line((LineVec2Mx p)*M,1)).i = ((LineVec2Mx p)*M)*(1,i)
+        by b1,a2,MATRIX_1:def 8;
+b5:   width (LineVec2Mx p) = len M by a1,MATRIXR1:def 10; then
+      len ((LineVec2Mx p)*M) = len (LineVec2Mx p) &
+      width ((LineVec2Mx p)*M) = width M by th190; then
+      len ((LineVec2Mx p)*M) = 1 &
+      width ((LineVec2Mx p)*M) = width M by MATRIXR1:48; then
+      1 in Seg len ((LineVec2Mx p)*M) &
+      i in Seg width ((LineVec2Mx p)*M) by b1,a2,FINSEQ_1:3; then
+      [1,i] in Indices ((LineVec2Mx p)*M) by th50; then
+      ((LineVec2Mx p)*M)*(1,i) = Line((LineVec2Mx p),1) "*" Col(M,i)
+        by b5,th190 .= p "*" Col(M,i) by MATRIXR1:48;
+      hence p "*" Col(M,i) = (p*M).i by b3,MATRIXR1:def 12;
+    end;
+  end;
+
+theorem th201: 
+  for M  being Matrix of REAL for p being FinSequence of REAL st
+    width M = len p & width M > 0 holds
+      for i st i in Seg len (M*p) holds (M*p).i = Line(M,i) "*" p
+  proof let M be Matrix of REAL;
+        let p be FinSequence of REAL such that
+a1: width M = len p & width M > 0;
+a2: len (M*p) = len Col(M*(ColVec2Mx p),1) by MATRIXR1:def 11
+      .= len (M*(ColVec2Mx p)) by MATRIX_1:def 9;
+    hereby let i such that
+b1:   i in Seg len (M*p);
+      i in dom (M*(ColVec2Mx p)) by b1,a2,FINSEQ_1:def 3;then 
+b3:   (Col(M*(ColVec2Mx p),1)).i = (M*(ColVec2Mx p))*(i,1)
+        by MATRIX_1:def 9;
+b5:   len (ColVec2Mx p) = width M by a1,MATRIXR1:def 9; then
+      len (M*(ColVec2Mx p)) = len M &
+      width (M*(ColVec2Mx p)) = width ColVec2Mx p by th190; then
+      len (M*(ColVec2Mx p)) = len M &
+      width (M*(ColVec2Mx p)) = 1 by a1,MATRIXR1:def 9; then
+      1 in Seg width (M*(ColVec2Mx p)) &
+      i in Seg len (M*(ColVec2Mx p)) by b1,a2,FINSEQ_1:3; then
+      [i,1] in Indices (M*(ColVec2Mx p)) by th50; then
+      ((M*(ColVec2Mx p)))*(i,1) = Line(M,i) "*" Col((ColVec2Mx p),1)
+        by b5,th190 .= Line(M,i) "*" p by a1,MATRIXR1:45;
+      hence Line(M,i) "*" p = (M*p).i by b3,MATRIXR1:def 11;
+    end;
+  end;
+
+theorem th190a:
+  for M,M1,M2 being Matrix of REAL st
+    width M1 = len M2 & width M1 > 0 & width M2 > 0 holds
+      M = M1*M2 iff
+        len M = len M1 &
+        width M = width M2 &
+        for i st i in Seg len M holds Line(M,i) = Line(M1,i) * M2
+  proof let M,M1,M2 be Matrix of REAL such that
+A1: width M1 = len M2 & width M1 > 0 & width M2 > 0;
+    hereby assume
+B1:   M = M1*M2;
+      hence 
+B2:   len M = len M1 &
+      width M = width M2 by A1,th190;
+      thus for i st i in Seg len M holds Line(M,i) = Line(M1,i) * M2
+      proof let i such that
+C1:     i in Seg len M;
+C2:     i in dom M by C1,FINSEQ_1:def 3;
+C3:     len Line(M,i) = width M by MATRIX_1:def 8;
+C4:     len Line(M1,i) = len M2 by A1,MATRIX_1:def 8; then
+C5:     len(Line(M1,i) * M2) = width M2 by A1,MATRIXR1:62; 
+C6:     dom(Line(M,i)) = Seg width M2 by C3,B2,FINSEQ_1:def 3
+          .= dom(Line(M1,i) * M2) by C5,FINSEQ_1:def 3;
+        for j st j in dom Line(M,i) holds (Line(M,i)).j=(Line(M1,i) * M2).j
+        proof let j such that
+D1:       j in dom Line(M,i);
+          j in Seg len Line(M,i) by D1,FINSEQ_1:def 3; then
+          j in Seg width M by MATRIX_1:def 8; then
+D4:       [i,j] in Indices M by C1,th50;
+D5:       j in Seg len(Line(M1,i) * M2) by D1,C6,FINSEQ_1:def 3;
+          thus (Line(M,i)).j = (M.i).j by C2,MATRIX_2:18
+            .= M*(i,j) by D4,MATRIX_1:def 6
+            .= Line(M1,i) "*" Col(M2,j) by A1,D4,B1,th190
+            .= (Line(M1,i) * M2).j by C4,D5,th200;
+          end;
+        hence thesis by C6,FINSEQ_1:17;
+      end;
+    end;
+    assume
+A2: len M = len M1 &
+    width M = width M2 &
+    for i st i in Seg len M holds Line(M,i) = Line(M1,i) * M2;
+    for i,j st [i,j] in Indices M holds M*(i,j) = Line(M1,i) "*" Col(M2,j)
+    proof let i,j such that
+E1:   [i,j] in Indices M;
+E2:   i in Seg len M & j in Seg width M by E1,th50; then
+E3:   i in dom M by FINSEQ_1:def 3;
+E4:   len Line(M1,i) = len M2 by A1,MATRIX_1:def 8; then
+E5:   j in Seg len(Line(M1,i) * M2) by E2,A2,A1,MATRIXR1:62;
+      thus M*(i,j) = (M.i).j by E1,MATRIX_1:def 6
+        .= (Line(M,i)).j by E3,MATRIX_2:18
+        .= (Line(M1,i) * M2).j by E2,A2
+        .= Line(M1,i) "*" Col(M2,j) by E4,E5,th200;
+    end;
+    hence M = M1 * M2 by A1,A2,th190;
+  end;
+
+registration let n,m,k be non empty Nat,
+                 M1 be Matrix of n,k,REAL,
+                 M2 be Matrix of k,m,REAL;
+  cluster M1 * M2 -> Matrix of n,m,REAL;
+  coherence
+  proof
+A1: len M1 = n & len M2 = k by MATRIX_1:def 3; then
+    width M1 = k & width M2 = m by MATRIX_1:20; then
+    len(M1 * M2) = n & width(M1 * M2) = m by A1,th190a;
+    hence thesis by MATRIX_2:7; 
+  end;
+end;
+
+definition let x,y be FinSequence of REAL,M be Matrix of REAL;
+  assume A1:len x = len M & len y = width M;
+  func QuadraticForm(x,M,y) -> Matrix of REAL means :Def13:
+    len it = len x & width it = len y &
+    for i,j be Nat st [i,j] in Indices M holds
+      it*(i,j)=(x.i)*(M*(i,j))*(y.j);
+  existence
+  proof
+    deffunc F(Nat,Nat) = (x.$1)*(M*($1,$2))*(y.$2);
+    consider M1 being Matrix of len M,width M,REAL such that
+A2: for i,j be Nat st
+      [i,j] in Indices M1 holds M1*(i,j) = F(i,j)
+        from MATRIX_1:sch 1;
+    take M1;
+A3: len M1=len x by MATRIX_1:def 3,A1;
+A4: now per cases;
+      case A5:len M=0; then
+        width M1=0 by A3,MATRIX_1:def 4,A1;
+        hence width M1=len y by A5,MATRIX_1:def 4,A1;
+      end;
+      case len M>0;
+        hence width M1=len y by MATRIX_1:24,A1;
+      end;
+    end;
+    dom M = dom M1 by A3,FINSEQ_3:31,A1;then
+    Indices M1=[:dom M,Seg width M:] & Indices M =[:dom M,Seg width M:]
+      by A4,MATRIX_1:def 5,A1;
+    hence thesis by A2,MATRIX_1:def 3,A1,A4;
+  end;
+  uniqueness
+  proof
+    let M1,M2 be Matrix of REAL;
+    assume that
+A6: len M1=len x & width M1=len y & for i,j be Nat st
+    [i,j] in Indices M holds M1*(i,j)=(x.i)*(M*(i,j))*(y.j) and
+A7: len M2=len x & width M2=len y & for i,j be Nat st
+    [i,j] in Indices M holds M2*(i,j)=(x.i)*(M*(i,j))*(y.j);
+    now let i,j be Nat; assume
+A8:   [i,j] in Indices M1;
+      dom M1 = dom M by A6,FINSEQ_3:31,A1; then
+A9:   Indices M1=[:dom M,Seg width M:] & Indices M= [:dom M,Seg width M:]
+        by A6,MATRIX_1:def 5,A1;
+      hence M1*(i,j)=(x.i)*(M*(i,j))*(y.j) by A6,A8
+        .=M2*(i,j) by A7,A8,A9;
+    end;
+    hence M1=M2 by A6,A7,MATRIX_1:21;
+  end;
+end;
+
+theorem 
+  for x,y being FinSequence of REAL,M being Matrix of REAL st
+    len x = len M & len y = width M & len x > 0 & len y > 0 holds
+      (QuadraticForm(x,M,y))@ = QuadraticForm(y,M@,x)
+  proof let x,y be FinSequence of REAL,M be Matrix of REAL; assume
+A1: len x = len M & len y = width M & len x > 0& len y > 0;
+A3: len (M@) = len y by A1,MATRIX_1:def 7;
+A4: width (M@) = len x by A1,MATRIX_2:12;
+A5: len ((QuadraticForm(x,M,y))@) = width (QuadraticForm(x,M,y))
+      by MATRIX_1:def 7 .= len y by Def13,A1;
+A6: len ((QuadraticForm(x,M,y))@) = width (QuadraticForm(x,M,y))
+      by MATRIX_1:def 7;
+A7: len QuadraticForm(y,M@,x) = len y by Def13,A3,A4;
+A8: width QuadraticForm(x,M,y)=len y by Def13,A1;
+A12:width ((QuadraticForm(x,M,y))@)
+      = len QuadraticForm(x,M,y) by MATRIX_2:12,A1,A8;
+A13:width ((QuadraticForm(x,M,y))@)
+      = len QuadraticForm(x,M,y) by MATRIX_2:12,A1,A8
+      .= len x by Def13,A1;
+A14:width QuadraticForm(y,M@,x) = len x by Def13,A3,A4;
+    for i,j be Nat st [i,j] in Indices ((QuadraticForm(x,M,y))@) holds
+      (QuadraticForm(y,M@,x))*(i,j) = ((QuadraticForm(x,M,y))@)*(i,j)
+    proof let i,j be Nat;
+      assume K1:[i,j] in Indices ((QuadraticForm(x,M,y))@);
+      reconsider i,j as Element of NAT by ORDINAL1:def 13;
+A16:  1<=i & i<=width QuadraticForm(x,M,y) &
+      1<=j & j<=len QuadraticForm(x,M,y) by K1,A6,A12,MATRIXC1:1;
+A18:  1<=i & i<=width M & 1<=j & j<=len M by Def13,A16,A1;
+A19:  [j,i] in Indices M by A18,MATRIXC1:1;
+      1<=i & i<=len (M@) & 1<=j & j<=width (M@)
+        by Def13,A16,A1,A3,A4; then
+A24:  [i,j] in Indices M@ by MATRIXC1:1;
+A25:  [j,i] in Indices (QuadraticForm(x,M,y)) by A16,MATRIXC1:1;
+      (QuadraticForm(y,M@,x))*(i,j)
+        = (y.i)*((M@)*(i,j))*(x.j) by Def13,A3,A4,A24
+        .= (y.i)*(M*(j,i))*(x.j) by MATRIX_1:def 7,A19 .=(x.j)*(M*(j,i))*(y.i)
+        .= (QuadraticForm(x,M,y))*(j,i) by Def13,A19,A1
+        .= ((QuadraticForm(x,M,y))@)*(i,j) by MATRIX_1:def 7,A25;
+      hence thesis;
+    end;
+    hence thesis by MATRIX_1:21,A5,A7,A13,A14;
+  end;
+
+theorem th58:
+  for x,y being FinSequence of REAL,M being Matrix of REAL st
+    len x = len M & len y = width M & len x>0 & len y>0 holds
+      |(x,M*y)| = SumAll QuadraticForm(x,M,y)
+  proof let x,y be FinSequence of REAL,M be Matrix of REAL;
+    set Z=QuadraticForm(x,M,y);
+    assume
+A1: len x = len M & len y = width M & len x>0 & len y>0; 
+A3: width Z = len y by Def13,A1;
+A6: len LineSum Z = len Z by th80;
+    len(M*y) = len x by A1,MATRIXR1:61; then 
+A11:len mlt(x,M*y) = len x by th180 .= len LineSum Z by A6,A1,Def13;
+    for i st 1<=i & i<=len (LineSum Z) holds
+      (LineSum Z).i = (mlt(x,M*y)).i
+    proof let i;assume 1<=i & i<=len LineSum Z; then
+A14:  i in Seg len LineSum Z by FINSEQ_1:3; then
+A16:  i in dom mlt(x,M*y) by A11,FINSEQ_1:def 3; 
+A19:  i in Seg len M by A6,Def13,A1,A14; then
+A22:  1<=i & i<=len M by FINSEQ_1:3;
+A20:  i in Seg len (M*y) by A1,MATRIXR1:61,A19;
+A23:  len(Line(M,i))=len y by A1,MATRIX_1:def 8; then
+A27:  len mlt(Line(M,i),y) = len y by th180;
+A25:  (mlt(x,M*y)).i = (x.i)*((M*y).i) by A16,RVSUM_1:86
+        .=(x.i)*(Line(M,i) "*" y) by A1,A20,th201
+        .=Sum((x.i)*(mlt(Line(M,i),y))) by RVSUM_1:117;
+      len Line(Z,i) = len y by A3,MATRIX_1:def 8; then
+A28:  len ((x.i)*(mlt(Line(M,i),y))) 
+        =len Line(Z,i) by A27,EUCLID_2:8;
+      for j st 1<=j & j<=len (Line(Z,i)) holds
+        ((x.i)*(mlt(Line(M,i),y))).j = (Line(Z,i)).j
+      proof let j such that
+A30:    1<=j & j<=len Line(Z,i);
+        j in Seg len Line(Z,i) by FINSEQ_1:3,A30; then
+A32:    j in Seg width Z by MATRIX_1:def 8; then
+        j in Seg len mlt(Line(M,i),y) by A3,A23,th180; then
+A34:    j in dom mlt(Line(M,i),y) by FINSEQ_1:def 3;
+        1<=j & j<=width M by A30,A3,MATRIX_1:def 8,A1; then
+A37:    [i,j] in Indices M by A22,MATRIXC1:1;
+        thus ((x.i)*(mlt(Line(M,i),y))).j
+           =(x.i)*((mlt(Line(M,i),y)).j) by RVSUM_1:66
+          .=(x.i)*((Line(M,i)).j*y.j) by A34,RVSUM_1:86
+          .=(x.i)*(M*(i,j)*y.j) by MATRIX_1:def 8,A32,A3,A1
+          .=(x.i)*(M*(i,j))*(y.j)
+          .=Z*(i,j) by Def13,A1,A37
+          .=(Line(Z,i)).j by A32,MATRIX_1:def 8;
+      end; then
+      (x.i)*(mlt(Line(M,i),y)) = Line(Z,i) by A28,FINSEQ_1:18;
+      hence (mlt(x,(M*y))).i=(LineSum Z).i by A25,th80,A6,A14;
+    end;
+    hence |(x,(M*y))| = SumAll Z by FINSEQ_1:18,A11;
+  end;
+
+theorem
+  for x being FinSequence of REAL holds
+    |(x,(len x |-> 1))| = Sum x by th59a;
+
+theorem th58a:
+  for x,y being FinSequence of REAL,M being Matrix of REAL st
+    len x = len M & len y = width M & len x>0 & len y>0 holds
+      |(x*M,y)| = SumAll QuadraticForm(x,M,y)
+  proof let x,y be FinSequence of REAL,M be Matrix of REAL;
+    set Z=QuadraticForm(x,M,y);
+    assume
+A1: len x = len M & len y = width M & len x>0 & len y>0; 
+A3: len Z = len x by Def13,A1;
+A6: len ColSum Z = width Z by def6;
+    len(x*M) = len y by A1,MATRIXR1:62; then 
+A11:len mlt(x*M,y) = len y by th180 .= len ColSum Z by A6,A1,Def13;
+    for i st 1<=i & i<=len (ColSum Z) holds
+      (ColSum Z).i = (mlt(x*M,y)).i
+    proof let i;assume 1<=i & i<=len ColSum Z; then
+A14:  i in Seg len ColSum Z by FINSEQ_1:3; then
+A16:  i in dom mlt(x*M,y) by A11,FINSEQ_1:def 3; 
+A19:  i in Seg width M by A6,Def13,A1,A14; then
+A22:  1<=i & i<=width M by FINSEQ_1:3;
+A20:  i in Seg len (x*M) by A1,MATRIXR1:62,A19;
+A23:  len(Col(M,i))= len x by A1,MATRIX_1:def 9; then
+A27:  len mlt(x,Col(M,i)) = len x by th180;
+A25:  (mlt(x*M,y)).i = ((x*M).i)*(y.i) by A16,RVSUM_1:86
+        .=(x "*" Col(M,i))*(y.i) by A1,A20,th200
+        .=Sum((y.i)* (mlt(x,Col(M,i)))) by RVSUM_1:117;
+      len Col(Z,i) = len x by A3,MATRIX_1:def 9; then
+A28:  len ((y.i)*(mlt(x,Col(M,i)))) 
+        =len Col(Z,i) by EUCLID_2:8,A27;
+      for j st 1<=j & j<=len (Col(Z,i)) holds
+        ((y.i)*(mlt(x,Col(M,i)))).j =(Col(Z,i)).j
+      proof let j such that
+A30:    1<=j & j<=len (Col(Z,i));
+        j in Seg len (Col(Z,i)) by FINSEQ_1:3,A30; then
+A32:    j in Seg len Z by MATRIX_1:def 9; then
+        j in Seg len mlt(x,Col(M,i)) by A3,A23,th180; then
+A34:    j in dom mlt(x,Col(M,i)) by FINSEQ_1:def 3;
+A35:    j in dom Z by A32,FINSEQ_1:def 3;
+A24:    j in dom M by A32,A3,A1,FINSEQ_1:def 3;
+        1<=j & j<=len M by A30,A3,MATRIX_1:def 9,A1; then
+A37:    [j,i] in Indices M by A22,MATRIXC1:1;
+        thus ((y.i)*(mlt(x,Col(M,i)))).j
+          =(y.i)*((mlt(x,Col(M,i))).j) by RVSUM_1:66
+          .=(y.i)*(x.j*(Col(M,i)).j) by A34,RVSUM_1:86
+          .=(y.i)*(x.j*(M*(j,i))) by MATRIX_1:def 9,A24
+          .=Z*(j,i) by Def13,A1,A37
+          .=(Col(Z,i)).j by A35,MATRIX_1:def 9;
+      end; then
+      (y.i)*(mlt(x,Col(M,i))) = Col(Z,i) by A28,FINSEQ_1:18;
+      hence (mlt((x*M),y)).i = (ColSum(Z)).i by def6,A6,A14,A25;
+    end;
+    hence |((x*M),y)| = Sum ColSum Z by FINSEQ_1:18,A11
+      .= SumAll Z by th65;
+  end;
+
+theorem th58b:
+  for x,y being FinSequence of REAL,M being Matrix of REAL st
+    len x = len M & len y = width M & len x>0 & len y>0 holds
+       |((x*M),y)| = |(x,(M*y))|
+  proof let x,y be FinSequence of REAL,
+            M be Matrix of REAL such that
+A1: len x = len M & len y = width M & len x>0 & len y>0;
+    thus |((x*M),y)| = SumAll QuadraticForm(x,M,y) by A1,th58a
+      .= |(x,(M*y))| by A1,th58;
+  end;
+
+theorem 
+  for x,y being FinSequence of REAL,M being Matrix of REAL st
+    len y=len M & len x =width M & len x>0 & len y>0 holds
+      |((M*x),y)| = |(x,(M@*y))|
+  proof let x,y be FinSequence of REAL,
+            M be Matrix of REAL such that
+A1: len y=len M & len x =width M & len x>0 & len y>0;
+A3: len (M@) = width M & width (M@) = len M by A1,MATRIX_2:12; 
+    thus |((M*x),y)| = |((x*M@),y)| by A1,MATRIXR1:53
+      .= |(x,(M@*y))| by A1,A3,th58b;
+  end;
+
+theorem th58d:
+  for x,y being FinSequence of REAL,M being Matrix of REAL st
+    len y=len M & len x =width M & len x>0 & len y>0 holds
+      |(x,(y*M))| = |((x*M@),y)|
+  proof let x,y be FinSequence of REAL,
+            M be Matrix of REAL such that
+A1: len y=len M & len x =width M & len x>0 & len y>0;
+A3: len (M@) = width M & width (M@) = len M by A1,MATRIX_2:12; 
+    thus |(x,(y*M))| = |(x,(M@*y))| by A1,MATRIXR1:52
+      .= |((x*M@),y)| by A1,A3,th58b;
+  end;
+
+theorem th59b:
+  for x being FinSequence of REAL,M being Matrix of REAL st
+    len x = len M & x = len x |-> 1 holds
+      for k st k in Seg len(x*M) holds (x*M).k = Sum Col(M,k)
+  proof let x be FinSequence of REAL,
+            M be Matrix of REAL such that
+A1: len x = len M & x = len x |-> 1;
+    hereby let k such that
+B1:   k in Seg len(x*M);
+B2:   len Col(M,k) = len x by A1,MATRIX_1:def 9;
+      thus (x*M).k = x "*" Col(M,k) by A1,B1,th200
+        .= Sum Col(M,k) by A1,th59a,B2;
+    end;
+  end;
+
+theorem 
+  for x being FinSequence of REAL,M being Matrix of REAL st
+    len x = width M & width M > 0 & x = (len x |-> 1) holds
+      for k st k in Seg len(M*x) holds (M*x).k = Sum Line(M,k)
+  proof let x be FinSequence of REAL,
+            M be Matrix of REAL such that
+A1: len x = width M & width M > 0 & x = (len x |-> 1);
+    hereby let k such that
+B1:   k in Seg len(M*x);
+B2:   len Line(M,k) = len x by A1,MATRIX_1:def 8;
+      thus (M*x).k =Line(M,k)"*" x by A1,B1,th201
+        .= Sum Line(M,k) by A1,th59a,B2;
+    end;
+  end;
+
+theorem th171:
+  for n being non empty Nat ex P being FinSequence of REAL st
+    len P = n & (for i st i in dom P holds P.i >= 0) & Sum P = 1 
+  proof let n be non empty Nat;
+    reconsider n as non empty Element of NAT by ORDINAL1:def 13;
+aa: n >= 1 by NAT_1:39;
+    consider e such that
+a1: (len e = n & (for i be Nat st i in Seg n holds
+      (i in Seg 1 implies e.i = 1) & (not i in Seg 1 implies e.i = 0)))
+        by th1;
+a2: for i st i in dom e holds e.i >= 0
+    proof let i such that
+b1:   i in dom e;
+b2:   i in Seg n by b1,a1,FINSEQ_1:def 3;
+      (i in Seg 1 implies e.i = 1) & (not i in Seg 1 implies e.i = 0)
+        by b2,a1;
+      hence thesis;
+    end;
+a3: Sum e = 1
+    proof
+      consider f be Real_Sequence such that
+c1:   f.1 = e.1 &
+      (for n be Nat st 0 <> n & n < len e holds
+      f.(n+1) = f.n+e.(n+1)) & Sum e = f.len e by aa,a1,PROB_3:68;
+      for n st n <> 0 & n <= len e holds f.n = 1
+      proof
+        defpred p[Nat] means
+          $1 <> 0 & $1 <= len e implies f.$1 = 1;
+d1:     p[0];
+d2:     now let k be Nat such that
+d3:       p[k];
+          now
+            assume
+d4:         k+1 <> 0 & k+1 <= len e; 
+            per cases by d4,NAT_1:38;
+            suppose 
+d6:           k = 0 & k < len e; 
+              1 in Seg 1 & 1 in Seg n by aa,FINSEQ_1:3; 
+              hence f.(k+1) = 1 by d6,c1,a1;
+            end;
+            suppose
+d7:           k > 0 & k < len e; then
+              k >= 1 by NAT_1:39; then
+              k + 1 > 1 by NAT_1:38; then
+d8:           k + 1 in Seg n & not k + 1 in Seg 1 by d4,a1,FINSEQ_1:3;
+              thus f.(k+1) =1 + e.(k+1) by c1,d3,d7
+                .= 1 + 0 by a1,d8 .= 1;
+            end;
+          end;
+          hence p[k+1];
+        end;
+        for n holds p[n] from NAT_1:sch 2(d1,d2);
+        hence thesis;
+      end;
+      hence thesis by a1,c1;
+    end;
+    take e;
+    thus thesis by a1,a2,a3;
+  end;
+
+definition let p be FinSequence of REAL;
+  attr p is ProbFinS means :def10:
+    (for i st i in dom p holds p.i >= 0) & Sum p = 1;
+end;
+
+registration
+  cluster non empty ProbFinS FinSequence of REAL;
+  existence
+  proof
+    set n = 1;
+    consider p be FinSequence of REAL such that
+a1: len p = n & (for i st i in dom p holds p.i >= 0) & Sum p = 1 by th171;
+    take p;
+    thus thesis by a1,FINSEQ_1:25,def10;
+ end;
+end;
+
+theorem
+  for p being non empty ProbFinS FinSequence of REAL holds
+    for k st k in dom p holds p.k <= 1
+  proof let p be non empty ProbFinS FinSequence of REAL;
+    Sum p = 1 & for i be Nat st i in dom p holds p.i >= 0 by def10;
+    hence thesis by th2;
+  end;
+
+theorem th170:
+  for M being non empty-yielding Matrix of D holds
+    1<=len M & 1<=width M
+proof
+  let M be non empty-yielding Matrix of D;
+  not (len M=0 or width M=0) by GOBOARD1:def 5;
+  hence thesis by NAT_1:39;
+end;
+
+definition let M be Matrix of REAL;
+  attr M is m-nonnegative means :def4a:
+    for i,j st [i,j] in Indices M holds M*(i,j) >= 0;
+end;
+
+definition let M be Matrix of REAL;
+  attr M is with_sum=1 means :def3a:
+    SumAll M = 1;
+end;
+
+definition let M be Matrix of REAL;
+  attr M is Joint_Probability means :def3:
+    M is m-nonnegative with_sum=1;
+end;
+
+registration
+  cluster Joint_Probability -> m-nonnegative with_sum=1 Matrix of REAL;
+  coherence by def3;
+  cluster m-nonnegative with_sum=1 -> Joint_Probability Matrix of REAL;
+  coherence by def3;
+end;
+
+theorem th290:
+  for n,m being non empty Nat holds ex M be Matrix of n,m,REAL st
+    M is m-nonnegative & SumAll M = 1
+  proof let n,m be non empty Nat;
+    consider m1 being Nat such that
+a0: m = m1 + 1 by NAT_1:22;
+    consider n1 being Nat such that
+0a: n = n1 + 1 by NAT_1:22;
+    reconsider m1, n1 as Element of NAT by ORDINAL1:def 13;
+    reconsider n,m as non empty Element of NAT by ORDINAL1:def 13;
+    consider e1 being FinSequence of REAL such that
+a1: len e1 = m & (for i be Nat st i in Seg m holds
+      (i in Seg m1 implies e1.i=0) & (not i in Seg m1 implies e1.i=1))
+        by th1;
+    reconsider e2 = m |-> 0 as FinSequence of REAL;
+a2: len e2 = m & (for i be Nat st i in Seg m holds e2.i=0) by FINSEQ_2:69,70;
+    consider M1 being Matrix of n,m,REAL such that
+a3: for i be Nat st i in Seg n holds
+      (i in Seg n1 implies M1.i = e2) & (not i in Seg n1 implies M1.i = e1)
+        by a1,a2,th32;
+a4: dom e2 = Seg m & dom e1 = Seg m by a1,a2,FINSEQ_1:def 3;
+a5: Sum e2 = m * 0 by RVSUM_1:110 .= 0;
+a6: m1+1 in Seg m by a0,FINSEQ_1:6;
+a7: m1+1 > m1 & m > m1 by a0,NAT_1:38; then
+    not m1+1 in Seg m1 by FINSEQ_1:3; then
+    e1.(m1+1) = 1 & len e1 = m1+1 by a6,a1,a0; then
+ab: e1 = (e1|m1) ^ <*1*> by RFINSEQ:20;
+    reconsider e3 = e1|m1 as FinSequence of REAL;
+a8: len e3 = m1 by a1,a7,FINSEQ_1:80;
+bb: Sum e1 = 1
+    proof
+      per cases;
+      suppose m1 = 0; then
+        len e3 = 0 by a1,FINSEQ_1:80; then
+b0:     Sum e3 = 0 by FINSEQ_1:32,RVSUM_1:102;
+        thus Sum e1 = Sum (e1|m1) + 1 by RVSUM_1:104,ab .= 1 by b0;
+      end;
+      suppose
+ac:     m1 <> 0; then
+ad:     m1 > 0;
+        for i be Nat st i in dom e3 holds e3.i = 0
+        proof let i be Nat such that
+b1:       i in dom e3;
+b3:       i in Seg m1 by b1,a8,FINSEQ_1:def 3;
+          m1+1 in Seg(m1+1) by FINSEQ_1:6; then
+          m1 in Seg m by a0,ad,FINSEQ_1:82; then
+          m1 in dom e1 by a1,FINSEQ_1:def 3; then
+          e3.i = e1.i & i in dom e1 by b3,RFINSEQ:19;
+          hence thesis by a4,b3,a1;
+        end; then
+        e3 = m1 |-> 0 by ac,a8,th55; then
+b4:     Sum e3 = m1 * 0 by RVSUM_1:110 .= 0;
+        thus Sum e1 = Sum (e1|m1) + 1 by ab,RVSUM_1:104 .= 1 by b4;
+      end;
+    end;
+cc: len Sum M1 = n & for i st i in Seg n holds
+      (i in Seg n1 implies (Sum M1).i = 0) &
+        (not i in Seg n1 implies (Sum M1).i = 1)
+    proof
+      thus
+c0:   len Sum M1 = len M1 by def2 .= n by MATRIX_1:def 3;
+      let i such that
+c1:   i in Seg n;
+c2:   i in dom Sum M1 by c1,c0,FINSEQ_1:def 3;
+      thus i in Seg n1 implies (Sum M1).i = 0
+      proof assume
+c3:     i in Seg n1;
+        thus (Sum M1).i = Sum(M1.i) by c2,def2 .= 0 by a5,a3,c3,c1;
+      end;
+      assume
+c4:   not i in Seg n1;
+      thus (Sum M1).i = Sum(M1.i) by c2,def2 .= 1 by bb,a3,c4,c1;
+    end;
+dd: SumAll M1 = 1
+    proof
+      reconsider e4 = Sum M1 as FinSequence of REAL;
+d1:   dom e4 = Seg n by cc,FINSEQ_1:def 3;
+d2:   n1+1 in Seg n by 0a,FINSEQ_1:6;
+d3:   n1+1 > n1 & n > n1 by 0a,NAT_1:38; then
+      not n1+1 in Seg n1 by FINSEQ_1:3; then
+d4:   e4.(n1+1) = 1 & len e4 = n1+1 by d2,cc,0a;
+      reconsider e5 = e4|n1 as FinSequence of REAL;
+d5:   len e5 = n1 by cc,d3,FINSEQ_1:80;
+      Sum e4 = 1
+      proof
+        per cases;
+        suppose n1 = 0; then
+          len e5 = 0 by cc,FINSEQ_1:80; then
+e1:       e5 = <*>REAL by FINSEQ_1:32; 
+          thus Sum e4 = Sum ((e4|n1) ^ <*1*>) by d4,RFINSEQ:20
+          .= Sum (e4|n1) + 1 by RVSUM_1:104 .= 1 by e1,RVSUM_1:102;
+        end;
+        suppose
+e2:       n1 <> 0; then
+e3:       n1 > 0;
+          for i be Nat st i in dom e5 holds e5.i = 0
+          proof let i be Nat such that
+f1:         i in dom e5;
+f2:         i in Seg n1 by f1,d5,FINSEQ_1:def 3;
+            n1+1 in Seg(n1+1) by FINSEQ_1:6; then
+            n1 in Seg n by 0a,e3,FINSEQ_1:82; then
+            n1 in dom e4 by cc,FINSEQ_1:def 3; then
+            e5.i = e4.i & i in dom e4 by f2,RFINSEQ:19;
+            hence thesis by d1,f2,cc;
+          end; then
+          e5 = n1 |-> 0 by e2,d5,th55; then
+e4:       Sum e5 = n1 * 0 by RVSUM_1:110 .= 0;
+          thus Sum e4 = Sum ((e4|n1) ^ <*1*>) by d4,RFINSEQ:20
+            .= Sum (e4|n1) + 1 by RVSUM_1:104 .= 1 by e4;
+        end;
+      end;
+      hence thesis;
+    end;
+    for i,j st [i,j] in Indices M1 holds M1*(i,j) >=0
+    proof let i,j such that
+g1:   [i,j] in Indices M1;
+      consider p1 being FinSequence of REAL such that
+g2:   p1 = M1.i & M1*(i,j) = p1.j by g1,MATRIX_1:def 6;
+      [i,j] in [:dom M1,Seg width M1:] by g1,MATRIX_1:def 5; then
+g3:   i in dom M1 & j in Seg width M1 by ZFMISC_1:106;
+g4:   i in Seg n1 or not i in Seg n1;
+g5:   len M1 = n & len M1 <> 0 by MATRIX_1:def 3; then
+g6:   i in Seg n by g3,FINSEQ_1:def 3; 
+g7:   j in Seg m by g3,g5,MATRIX_1:20;
+      per cases by g6,g4,a3,g2;
+      suppose p1 = e2; 
+        hence thesis by g7,FINSEQ_2:70,g2;
+      end;
+      suppose
+g8:     p1 = e1;
+        j in Seg m1 or not j in Seg m1; 
+        hence thesis by g2,g8,g7,a1;
+      end;
+    end; then
+    M1 is m-nonnegative by def4a;
+    hence thesis by dd;
+  end;
+
+registration
+  cluster non empty-yielding Joint_Probability Matrix of REAL;
+  existence 
+  proof
+    set n = 1, m = 1;
+    consider M be Matrix of n,m,REAL such that 
+a1: M is m-nonnegative & SumAll M = 1 by th290;
+a2: len M = 1 by MATRIX_1:def 3; then
+aa: width M = 1 by MATRIX_1:20;
+    take M;
+    M is with_sum=1 by a1,def3a;
+    hence thesis by a1,def3,aa,a2,GOBOARD1:def 5;
+  end;
+end;
+
+registration let n, m be non empty Nat;
+             let D be non empty set;
+             let M be Matrix of n,m,D;
+  cluster M@ -> Matrix of m,n,D;
+  coherence
+  proof
+A1: len M = n by MATRIX_1:def 3; then
+    width M = m by MATRIX_1:20; then
+    len (M@) = m & width (M@) = n by A1,MATRIX_2:12;
+    hence thesis by MATRIX_2:7; 
+  end;
+end;
+
+theorem th66:
+  for M being non empty-yielding Joint_Probability Matrix of REAL holds
+    M@ is non empty-yielding Joint_Probability Matrix of REAL
+  proof let M be non empty-yielding Joint_Probability Matrix of REAL;
+    set n = len M;
+    set m = width M;
+b0: n > 0 & m > 0 by th170; then
+ba: len (M@) = m & width (M@) = n by MATRIX_2:12; then
+    reconsider M1=M@ as Matrix of m,n,REAL by MATRIX_2:7;
+    for i,j st [i,j] in Indices M1 holds M1*(i,j) >=0
+    proof let i,j; assume [i,j] in Indices M1; then
+      [j,i] in Indices M by MATRIX_1:def 7; then
+      M1*(i,j) = M*(j,i) & M*(j,i) >= 0 by def4a,MATRIX_1:def 7;
+      hence thesis;
+    end; then
+X1: M1 is m-nonnegative by def4a;
+    SumAll M1 = SumAll M by th37 .= 1 by def3a; then
+    M1 is with_sum=1 by def3a;
+    hence thesis by def3,b0,ba,GOBOARD1:def 5,X1;
+  end;
+
+theorem 
+  for M being non empty-yielding Joint_Probability Matrix of REAL holds
+    for i,j st [i,j] in Indices M holds M*(i,j) <= 1
+  proof let M be non empty-yielding Joint_Probability Matrix of REAL;
+a1: for i,j st [i,j] in Indices M holds M*(i,j) >=0 by def4a;
+a2: for i st i in dom M holds for j st j in dom(M.i) holds (M.i).j <= Sum(M.i)
+    proof let i such that
+d1:   i in dom M;
+      for j be Nat st j in dom(M.i) holds (M.i).j >= 0 by a1,d1,Lm10;
+      hence thesis by th2;
+    end;
+a3: for i be Nat st i in dom Sum M holds (Sum M).i >= 0
+    proof let i be Nat such that
+e1:   i in dom Sum M;
+      i in Seg len Sum M by e1,FINSEQ_1:def 3; then
+      i in Seg len M by def2; then
+      i in dom M by FINSEQ_1:def 3; then
+      for j st j in dom(M.i) holds (M.i).j >= 0 by a1,Lm10; then
+      Sum(M.i) >= 0 by RVSUM_1:114;
+      hence thesis by e1,def2;
+    end;
+a4: for i st i in dom Sum M holds (Sum M).i <= 1
+    proof let i such that
+f1:   i in dom Sum M;
+      (Sum M).i <= SumAll M by f1,th2,a3;
+      hence thesis by def3a;
+    end;
+a5: for i st i in dom M holds for j st j in dom(M.i) holds (M.i).j <= 1
+    proof let i such that
+g1:   i in dom M;
+      let j such that
+g2:   j in dom(M.i);
+      i in Seg len M by g1,FINSEQ_1:def 3; then
+      i in Seg len Sum M by def2; then
+g3:   i in dom Sum M by FINSEQ_1:def 3; then
+      (Sum M).i <= 1 by a4; then
+g4:   Sum(M.i) <= 1 by g3,def2;
+      (M.i).j <= Sum(M.i) by g1,g2,a2;
+      hence thesis by g4,XREAL_1:2;
+    end;
+    let i,j such that
+a6: [i,j] in Indices M;
+a7: i in Seg len M & j in Seg width M by a6,th50; then
+a8: i in dom M by FINSEQ_1:def 3; then
+    j in Seg len(M.i) by a7,GOBRD13:4; then
+a9: j in dom(M.i) by FINSEQ_1:def 3; 
+    consider p1 being FinSequence of REAL such that
+aa: p1 = M.i & M*(i,j) = p1.j by a6,MATRIX_1:def 6;
+    thus thesis by aa,a9,a8,a5;
+  end;
+
+definition let M be Matrix of REAL;
+  attr M is with_line_sum=1 means :def4b:
+    for k st k in dom M holds Sum (M.k) = 1;
+end;
+
+theorem th172:
+  for n,m being non empty Nat holds ex M being Matrix of n,m,REAL st
+    M is m-nonnegative with_line_sum=1
+  proof let n,m be non empty Nat;
+    consider m1 being Nat such that
+a2: m = m1 + 1 by NAT_1:22;
+    reconsider m1 as Element of NAT by ORDINAL1:def 13;
+    consider e1 being FinSequence of REAL such that
+a3: len e1 = m & (for i be Nat st i in Seg m holds
+      (i in Seg m1 implies e1.i=0) & (not i in Seg m1 implies e1.i=1))
+        by th1;
+    reconsider M1 = n |-> e1 as Matrix of n,m,REAL by a3,th71;
+    take M1;
+a5: dom e1 = Seg m by a3,FINSEQ_1:def 3;
+a6: m1+1 in Seg m by a2,FINSEQ_1:6;
+a7: m1+1 > m1 & m > m1 by a2,NAT_1:38; then
+    not m1+1 in Seg m1 by FINSEQ_1:3; then
+    e1.(m1+1) = 1 & len e1 = m1+1 by a6,a3,a2; then
+ab: e1 = (e1|m1) ^ <*1*> by RFINSEQ:20;
+    reconsider e3 = e1|m1 as FinSequence of REAL;
+a8: len e3 = m1 by a3,a7,FINSEQ_1:80; 
+bb: Sum e1 = 1
+    proof
+      per cases;
+      suppose m1 = 0; then
+b0:     e3 = <*>REAL by a8,FINSEQ_1:32; 
+        thus Sum e1=Sum (e1|m1)+1 by ab,RVSUM_1:104 
+          .=1 by b0,RVSUM_1:102;
+      end;
+      suppose
+b1:     m1 <> 0; then
+b2:     m1 > 0;
+        for i be Nat st i in dom e3 holds e3.i = 0
+        proof let i be Nat;
+          assume i in dom e3; then
+b4:       i in Seg m1 by a8,FINSEQ_1:def 3;
+          m1+1 in Seg(m1+1) by FINSEQ_1:6; then
+          m1 in Seg m by a2,b2,FINSEQ_1:82; then
+          m1 in dom e1 by a3,FINSEQ_1:def 3; then
+          e3.i = e1.i & i in dom e1 by b4,RFINSEQ:19;
+          hence thesis by a5,b4,a3;
+        end; then
+        e3 = m1 |-> 0 by b1,a8,th55; then
+b5:     Sum e3 = m1 * 0 by RVSUM_1:110 .= 0;
+        thus Sum e1=Sum (e1|m1)+1 by ab,RVSUM_1:104 .=1 by b5;
+      end;
+    end;
+aa: len M1 = n & len M1 <> 0 by MATRIX_1:def 3;
+cc: for i st i in dom M1 holds Sum(M1.i) = 1
+    proof let i such that
+c0:   i in dom M1;
+      i in Seg n by aa,c0,FINSEQ_1:def 3; 
+      hence Sum(M1.i) = 1 by FINSEQ_2:70,bb;
+    end;
+    for i,j st [i,j] in Indices M1 holds M1*(i,j) >=0
+    proof let i,j such that
+d1:   [i,j] in Indices M1;
+      consider p1 being FinSequence of REAL such that
+d2:   p1 = M1.i & M1*(i,j) = p1.j by d1,MATRIX_1:def 6;
+      [i,j] in [:dom M1,Seg width M1:] by d1,MATRIX_1:def 5; then
+d3:   i in dom M1 & j in Seg width M1 by ZFMISC_1:106; then
+      i in Seg n by aa,FINSEQ_1:def 3; then
+d4:   p1 = e1 by FINSEQ_2:70,d2;
+d5:   j in Seg m by aa,MATRIX_1:20,d3;
+      j in Seg m1 or not j in Seg m1;
+      hence thesis by d2,d4,d5,a3;
+    end;
+    hence thesis by cc,def4a,def4b;
+  end;
+
+definition let M be Matrix of REAL;
+  attr M is Conditional_Probability means :def4:
+    M is m-nonnegative with_line_sum=1;
+end;
+
+registration
+  cluster Conditional_Probability -> m-nonnegative with_line_sum=1
+    Matrix of REAL;
+  coherence by def4;
+  cluster m-nonnegative with_line_sum=1 -> Conditional_Probability
+    Matrix of REAL;
+  coherence by def4;
+end;
+
+registration
+  cluster non empty-yielding Conditional_Probability Matrix of REAL;
+  existence
+  proof
+    set n = 1, m = 1;
+    consider M be Matrix of n,m,REAL such that 
+a1: M is m-nonnegative with_line_sum=1 by th172;
+a2: len M = 1 by MATRIX_1:def 3; then
+aa: width M = 1 by MATRIX_1:20;
+    take M;
+    thus thesis by a1,def4,aa,a2,GOBOARD1:def 5;
+  end;
+end;
+
+theorem 
+  for M being non empty-yielding Conditional_Probability Matrix of REAL holds
+    for i,j st [i,j] in Indices M holds M*(i,j) <= 1
+  proof let M be non empty-yielding Conditional_Probability
+      Matrix of REAL;
+a1: for i,j st [i,j] in Indices M holds M*(i,j) >= 0 by def4a;
+a2: for i st i in dom M holds for j st j in dom(M.i) holds (M.i).j <= 1
+    proof let i such that
+d1:   i in dom M;
+d2:   for j be Nat st j in dom(M.i) holds (M.i).j >= 0 by d1,a1,Lm10;
+      let j such that
+d3:   j in dom(M.i);
+      (M.i).j <= Sum(M.i) by d2,d3,th2;
+      hence thesis by d1,def4b;
+    end;
+    let i,j such that
+a6: [i,j] in Indices M;
+a7: i in Seg len M & j in Seg width M by a6,th50; then
+a8: i in dom M by FINSEQ_1:def 3; then
+    j in Seg len(M.i) by a7,GOBRD13:4; then
+a9: j in dom(M.i) by FINSEQ_1:def 3; 
+    consider p1 being FinSequence of REAL such that
+aa: p1 = M.i & M*(i,j) = p1.j by a6,MATRIX_1:def 6;
+    thus thesis by aa,a9,a8,a2;
+  end;
+  
+theorem th43:
+  for M being non empty-yielding Matrix of REAL holds
+    M is non empty-yielding Conditional_Probability Matrix of REAL iff
+      for i st i in dom M holds
+        Line(M,i) is non empty ProbFinS FinSequence of REAL 
+  proof let M be non empty-yielding Matrix of REAL;
+    hereby assume
+B1:   M is non empty-yielding Conditional_Probability Matrix of REAL;
+      hereby let i such that
+C1:     i in dom M;
+        set n = len M;
+        set m = width M;
+C2:     n > 0 & m > 0 by th170;
+C3:     len Line(M,i) = m by MATRIX_1:def 8;
+C5:     Sum Line(M,i) = Sum (M.i) by C1,MATRIX_2:18 .= 1 by C1,B1,def4b;
+        (for i,j st [i,j] in Indices M holds M*(i,j) >=0) &
+        for k st k in dom M holds Sum (M.k) = 1 by B1,def4a,def4b; then
+        for j st j in dom Line(M,i) holds Line(M,i).j >=0 by C1,Lm11;
+        hence Line(M,i) is non empty ProbFinS FinSequence of REAL
+          by C3,C5,def10,C2,FINSEQ_1:25;
+      end;
+    end;
+    assume
+A1: for i st i in dom M holds
+      Line(M,i) is non empty ProbFinS FinSequence of REAL; 
+    for i,j st i in dom M & j in dom Line(M,i) holds Line(M,i).j >=0
+    proof let i,j such that
+D1:   i in dom M & j in dom Line(M,i);
+      Line(M,i) is ProbFinS by D1,A1;
+      hence thesis by D1,def10;
+    end; then
+    for i,j st [i,j] in Indices M holds M*(i,j) >=0 by Lm11; then
+A2: M is m-nonnegative by def4a;
+    now let k such that
+E1:   k in dom M;
+      Line(M,k) is ProbFinS by E1,A1; then
+E2:   (for j st j in dom Line(M,k) holds Line(M,k).j >=0) &
+      Sum Line(M,k) = 1 by def10;
+      thus Sum(M.k) = 1 by E2,E1,MATRIX_2:18;
+    end;
+    then M is with_line_sum=1 by def4b;
+    hence thesis by A2,def4;
+  end;
+
+theorem 
+  for M being non empty-yielding with_line_sum=1 Matrix of REAL holds
+    SumAll M = len M
+  proof let M be non empty-yielding with_line_sum=1 Matrix of REAL;
+    set n = len M;
+a1: n > 0 by th170; 
+    len Sum M = n & for i be Nat st i in dom Sum M holds (Sum M).i = 1
+    proof
+      thus len Sum M = n by def2;
+      hereby let i be Nat; assume
+a2:     i in dom Sum M; then
+        i in Seg len Sum M by FINSEQ_1:def 3; then
+        i in Seg len M by def2; then
+        i in dom M by FINSEQ_1:def 3; then
+        Sum(M.i) = 1 by def4b;
+        hence (Sum M).i = 1 by a2,def2;
+      end;
+    end; then
+    Sum M = n |-> 1 by a1,th55;
+    hence SumAll M = n * 1 by RVSUM_1:110 .= n;
+  end;
+
+notation let M be Matrix of REAL;
+  synonym Row_Marginal M for LineSum M;
+  synonym Column_Marginal M for ColSum M;
+end;
+
+registration let M be non empty-yielding Joint_Probability Matrix of REAL;
+  cluster Row_Marginal M -> non empty ProbFinS;
+  coherence
+  proof
+a0: for i,j st [i,j] in Indices M holds M*(i,j) >= 0 by def4a;
+    set e = LineSum M;
+    set n = len M;
+aa: n > 0 by th170;
+a1: len e = len M & for k st k in Seg len M holds e.k = Sum Line(M,k)
+      by th80;
+a2: len e = n by th80;
+a3: for i st i in dom e holds e.i >= 0
+    proof let i such that
+b1:   i in dom e;
+b2:   i in Seg len M by b1,FINSEQ_1:def 3,a1; then
+      i in dom M by FINSEQ_1:def 3; then
+      for j st j in dom Line(M,i) holds (Line(M,i)).j >= 0 by a0,Lm11; then
+      Sum Line(M,i) >= 0 by RVSUM_1:114;
+      hence thesis by b2,th80;
+    end;
+    Sum e = SumAll M .= 1 by def3a;
+    hence thesis by a2,aa,FINSEQ_1:25,a3,def10;
+  end;
+  cluster Column_Marginal M -> non empty ProbFinS;
+  coherence
+  proof
+    set n = len M;
+    set m = width M;
+aa: n > 0 & m > 0 by th170;
+a0: for i,j st [i,j] in Indices M holds M*(i,j) >= 0 by def4a;
+    set e = ColSum M;
+a1: len e = width M & for k st k in Seg width M holds e.k = Sum Col(M,k)
+      by def6;
+a2: len e = m by def6;
+a3: for i st i in dom e holds e.i >= 0
+    proof let i such that
+b1:   i in dom e;
+b2:   i in Seg width M by a1,b1,FINSEQ_1:def 3; then
+      for j st j in dom Col(M,i) holds (Col(M,i)).j >= 0 by a0,Lm12; then
+      Sum Col(M,i) >= 0 by RVSUM_1:114;
+      hence thesis by b2,def6;
+    end;
+    Sum e = SumAll M by th65 .= 1 by def3a;
+    hence thesis by a2,aa,FINSEQ_1:25,a3,def10;
+  end;
+end;
+
+registration let M be non empty-yielding Matrix of REAL;
+  cluster M@ -> non empty-yielding;
+  coherence
+  proof
+    width M <> 0 by GOBOARD1:def 5; then
+    width M > 0; then
+    width (M@) = len M & len (M@) = width M by MATRIX_2:12; then
+    width (M@) <> 0 & len (M@) <> 0 by GOBOARD1:def 5;
+    hence thesis by GOBOARD1:def 5;
+  end;
+end;
+
+registration let M be non empty-yielding Joint_Probability Matrix of REAL;
+  cluster M@ -> Joint_Probability;
+  coherence by th66;
+end;
+
+theorem th88b:
+  for p being non empty ProbFinS FinSequence of REAL 
+    for P being non empty-yielding Conditional_Probability Matrix of REAL st
+      len p = len P holds
+      p * P is non empty ProbFinS FinSequence of REAL & len (p * P) = width P
+  proof let p be non empty ProbFinS FinSequence of REAL;
+        let P be non empty-yielding Conditional_Probability Matrix of REAL
+        such that
+A0: len p = len P;
+    set n = len p;
+    set m = width P;
+A2: n > 0 & m > 0 by A0,th170; then
+A3: len(p * P) = width P by A0,MATRIXR1:62;
+    set e = m |-> 1;
+A4: len e = m by FINSEQ_2:69;
+A6: len(P@) = width P & width(P@) = len P by A2,MATRIX_2:12; then
+A8: len(e*P@) = n by A0,A2,A4,MATRIXR1:62;
+A9: e*P@ = n |-> 1
+    proof
+      for k be Nat st k in dom(e*P@) holds (e*P@).k = 1
+      proof let k be Nat such that
+C1:     k in dom(e*P@);
+C2:     k in Seg len(e*P@) by C1,FINSEQ_1:def 3;then
+C3:     k in dom P by A8,A0,FINSEQ_1:def 3;
+        thus (e*P@).k = Sum Col(P@,k) by C2,A4,A6,th59b
+          .= Sum Line(P,k) by C3,MATRIX_2:16
+          .= Sum (P.k) by C3,MATRIX_2:18
+          .= 1 by C3,def4b;
+      end; 
+      hence thesis by A2,A8,th55;
+    end;
+AA: Sum(p*P) = |((p*P),e)| by A3,th59a
+      .= |(p,e*P@)| by A2,A0,A4,th58d
+      .= Sum p by A9,th59a .= 1 by def10;
+    for i st i in dom (p*P) holds (p*P).i >= 0
+    proof let i such that
+B1:   i in dom(p*P);
+B2:   i in Seg len (p*P) by B1,FINSEQ_1:def 3;
+B3:   for i st i in dom p holds p.i >= 0 by def10;
+B4:   for i,j st [i,j] in Indices P holds P*(i,j) >=0 by def4a;
+      i in Seg width P by B1,FINSEQ_1:def 3,A3; then
+      for j st j in dom Col(P,i) holds (Col(P,i)).j >=0 by B4,Lm12; then
+B5:   for k st k in dom mlt(p,Col(P,i)) holds (mlt(p,Col(P,i))).k >= 0
+        by B3,th88a; 
+      (p*P).i = p "*" Col(P,i) by B2,A0,th200
+        .= Sum(mlt(p,Col(P,i)));
+      hence thesis by B5,RVSUM_1:114;
+    end;
+    hence thesis by A3,AA,A2,FINSEQ_1:25,def10;
+  end;
+
+theorem 
+  for P1, P2 being non empty-yielding Conditional_Probability
+    Matrix of REAL st width P1 = len P2 holds
+      P1 * P2 is non empty-yielding Conditional_Probability Matrix of REAL &
+      len (P1 * P2) = len P1 & width (P1 * P2) = width P2
+  proof let P1, P2 be non empty-yielding Conditional_Probability
+      Matrix of REAL such that
+A0: width P1 = len P2;
+    set n1 = len P1;
+    set m = len P2;
+    set n2 = width P2;
+A1: n1 > 0 & m > 0 & n2 > 0 by th170;
+A3: len(P1 * P2) = n1 & width(P1 * P2) = n2 &
+    for i st i in Seg len(P1 * P2) holds Line((P1 * P2),i) = Line(P1,i) * P2
+      by A0,A1,th190a; then
+    reconsider P = P1 * P2 as Matrix of n1,n2,REAL by MATRIX_2:7; 
+A4: P is non empty-yielding Matrix of REAL by A1,A3,GOBOARD1:def 5;
+    for i st i in dom P holds
+      Line(P,i) is non empty ProbFinS FinSequence of REAL
+    proof let i such that
+B1:   i in dom P;
+B2:   i in Seg len P by B1,FINSEQ_1:def 3; then
+      i in dom P1 by A3,FINSEQ_1:def 3; then
+      reconsider p = Line(P1,i) as non empty ProbFinS FinSequence of REAL
+        by th43;
+      len p = m by A0,MATRIX_1:def 8; then
+      p * P2 is non empty ProbFinS FinSequence of REAL &
+        len (p * P2) = n2 by th88b;
+      hence thesis by B2,A0,A1,th190a;
+    end;
+    hence thesis by A0,A1,th190a,A4,th43;
+  end;
+

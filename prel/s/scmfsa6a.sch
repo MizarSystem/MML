@@ -45,16 +45,18 @@
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="21"/>
+<Adjective nr="22"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="8">
 <Cluster/>
 <Func kind="K" nr="75"/>
 </Typ>
-<Typ kind="M" nr="9">
+<Typ kind="M" nr="3">
 <Cluster/>
+<Func kind="U" nr="1">
 <Func kind="K" nr="209"/>
+</Func>
 <Func kind="U" nr="4">
 <Func kind="K" nr="44">
 <Func kind="K" nr="75"/>

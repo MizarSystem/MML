@@ -34,12 +34,12 @@
 <ArgTypes>
 <Typ kind="G" nr="4">
 <Cluster>
-<Adjective nr="31"/>
-<Adjective nr="46"/>
+<Adjective nr="32"/>
 <Adjective nr="47"/>
 <Adjective nr="48"/>
-<Adjective nr="70"/>
+<Adjective nr="49"/>
 <Adjective nr="71"/>
+<Adjective nr="72"/>
 </Cluster>
 </Typ>
 </ArgTypes>

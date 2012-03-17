@@ -59,7 +59,7 @@
 <Adjective nr="21" value="false"/>
 <Adjective nr="22"/>
 <Adjective nr="23"/>
-<Adjective nr="24"/>
+<Adjective nr="25"/>
 </Cluster>
 </FCluster>
 <CCluster>
@@ -84,7 +84,7 @@
 <Adjective nr="21" value="false"/>
 <Adjective nr="22"/>
 <Adjective nr="23"/>
-<Adjective nr="24"/>
+<Adjective nr="25"/>
 </Cluster>
 </CCluster>
 </Registrations>

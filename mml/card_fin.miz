@@ -24,7 +24,7 @@ environ
       FINSET_1, INT_1, FUNCT_2, FUNCT_4, FINSEQ_1, WSIERP_1, FRAENKEL,
       CQC_LANG, XREAL_0;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions TARSKI, XBOOLE_0, FUNCT_1, CQC_LANG;
+ definitions TARSKI, XBOOLE_0, FUNCT_1, CQC_LANG, FINSET_1;
  theorems AFINSQ_1, TARSKI, FINSEQ_1, FUNCT_1, XBOOLE_0, ZFMISC_1, RELAT_1,
       XBOOLE_1, NAT_1, FUNCT_2, FINSET_1, XCMPLX_1, REAL_1, CARD_2, INT_1,
       ORDINAL1, WELLORD2, EULER_1, SUBSET_1, ENUMSET1, CARD_1, CARD_5, BINOP_2,
@@ -1453,9 +1453,32 @@ proof
 end;
 
 definition
-  let F be Function; :: PRE_CIRC:def 3
+  let F be Function;
+ redefine
   attr F is finite-yielding means :Def3:
     for x holds F.x is finite;
+  compatibility
+   proof
+     hereby assume
+Z:    F is finite-yielding;
+      let x;
+      per cases;
+      suppose x in dom F;
+       then F.x in rng F by FUNCT_1:12;
+      hence F.x is finite by Z,FINSET_1:def 2;
+      end;
+      suppose not x in dom F;
+       then F.x = {} by  FUNCT_1:def 4;
+      hence F.x is finite;
+      end;
+     end;
+    assume
+Z:   for x holds F.x is finite;
+    let x;
+    assume x in rng F;
+     then ex y st y in dom F & x = F.y by FUNCT_1:def 5;
+    hence x is finite by Z;
+   end;
 end;
 
 registration

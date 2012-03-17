@@ -37,9 +37,9 @@
 <Adjective nr="4"/>
 <Adjective nr="7" value="false"/>
 <Adjective nr="15"/>
-<Adjective nr="18"/>
-<Adjective nr="23"/>
-<Adjective nr="24">
+<Adjective nr="19"/>
+<Adjective nr="24"/>
+<Adjective nr="25">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -61,9 +61,9 @@
 <Adjective nr="4"/>
 <Adjective nr="7" value="false"/>
 <Adjective nr="15"/>
-<Adjective nr="18"/>
-<Adjective nr="23" value="false"/>
-<Adjective nr="24">
+<Adjective nr="19"/>
+<Adjective nr="24" value="false"/>
+<Adjective nr="25">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -90,8 +90,8 @@
 <Adjective nr="4"/>
 <Adjective nr="7" value="false"/>
 <Adjective nr="15"/>
-<Adjective nr="18"/>
-<Adjective nr="23" value="false"/>
+<Adjective nr="19"/>
+<Adjective nr="24" value="false"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -101,7 +101,7 @@
 <Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="7" value="false"/>
-<Adjective nr="18"/>
+<Adjective nr="19"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -113,7 +113,7 @@
 <Adjective nr="4"/>
 <Adjective nr="7" value="false"/>
 <Adjective nr="15"/>
-<Adjective nr="18"/>
+<Adjective nr="19"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -122,7 +122,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="18"/>
+<Adjective nr="19"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -141,7 +141,7 @@
 <Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="15"/>
-<Adjective nr="18"/>
+<Adjective nr="19"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -172,7 +172,7 @@
 <Adjective nr="4"/>
 <Adjective nr="7" value="false"/>
 <Adjective nr="15"/>
-<Adjective nr="18"/>
+<Adjective nr="19"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -189,7 +189,7 @@
 <Typ kind="M" nr="7">
 <Cluster>
 <Adjective nr="7" value="false"/>
-<Adjective nr="24">
+<Adjective nr="25">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -206,8 +206,8 @@
 <Adjective nr="4"/>
 <Adjective nr="7" value="false"/>
 <Adjective nr="15"/>
-<Adjective nr="18"/>
-<Adjective nr="24">
+<Adjective nr="19"/>
+<Adjective nr="25">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

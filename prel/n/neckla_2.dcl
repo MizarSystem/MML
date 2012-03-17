@@ -34,10 +34,10 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="32" value="false"/>
-<Adjective nr="38"/>
-<Adjective nr="45"/>
-<Adjective nr="50"/>
+<Adjective nr="33" value="false"/>
+<Adjective nr="39"/>
+<Adjective nr="46"/>
+<Adjective nr="51"/>
 </Cluster>
 </RCluster>
 <FCluster>
@@ -102,7 +102,7 @@
 <Adjective nr="16"/>
 <Adjective nr="18" value="false"/>
 <Adjective nr="19"/>
-<Adjective nr="21"/>
+<Adjective nr="22"/>
 </Cluster>
 </CCluster>
 </Registrations>

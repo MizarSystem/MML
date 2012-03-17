@@ -264,7 +264,7 @@
 <For>
 <Typ kind="M" nr="9">
 <Cluster>
-<Adjective nr="42">
+<Adjective nr="43">
 <Var nr="4"/>
 </Adjective>
 </Cluster>

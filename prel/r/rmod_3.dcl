@@ -31,24 +31,24 @@
 <Typ kind="G" nr="8">
 <Cluster>
 <Adjective nr="13" value="false"/>
-<Adjective nr="28"/>
 <Adjective nr="29"/>
 <Adjective nr="30"/>
 <Adjective nr="31"/>
-<Adjective nr="39"/>
-<Adjective nr="48"/>
+<Adjective nr="32"/>
+<Adjective nr="40"/>
 <Adjective nr="49"/>
 <Adjective nr="50"/>
+<Adjective nr="51"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="10">
 <Cluster>
 <Adjective nr="13" value="false"/>
-<Adjective nr="28"/>
 <Adjective nr="29"/>
 <Adjective nr="30"/>
 <Adjective nr="31"/>
-<Adjective nr="60">
+<Adjective nr="32"/>
+<Adjective nr="61">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

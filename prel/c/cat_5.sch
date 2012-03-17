@@ -50,9 +50,9 @@
 <For>
 <Typ kind="G" nr="1">
 <Cluster>
-<Adjective nr="38"/>
 <Adjective nr="39"/>
-<Adjective nr="48"/>
+<Adjective nr="40"/>
+<Adjective nr="49"/>
 </Cluster>
 </Typ>
 <Not>
@@ -512,17 +512,17 @@
 <For>
 <Typ kind="G" nr="1">
 <Cluster>
-<Adjective nr="38"/>
 <Adjective nr="39"/>
-<Adjective nr="48"/>
+<Adjective nr="40"/>
+<Adjective nr="49"/>
 </Cluster>
 </Typ>
 <For>
 <Typ kind="G" nr="1">
 <Cluster>
-<Adjective nr="38"/>
 <Adjective nr="39"/>
-<Adjective nr="48"/>
+<Adjective nr="40"/>
+<Adjective nr="49"/>
 </Cluster>
 </Typ>
 <Not>
@@ -1047,12 +1047,12 @@
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster>
-<Adjective nr="39"/>
+<Adjective nr="40"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="1">
 <Cluster>
-<Adjective nr="39"/>
+<Adjective nr="40"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">

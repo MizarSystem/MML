@@ -30,7 +30,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="12"/>
+<Adjective nr="13"/>
 </Cluster>
 </RCluster>
 <CCluster>
@@ -43,7 +43,7 @@
 </ArgTypes>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="12"/>
+<Adjective nr="13"/>
 </Cluster>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -54,7 +54,7 @@
 <Cluster>
 <Adjective nr="1" value="false"/>
 <Adjective nr="8"/>
-<Adjective nr="12"/>
+<Adjective nr="13"/>
 </Cluster>
 </CCluster>
 </Registrations>
