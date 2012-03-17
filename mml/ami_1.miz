@@ -16,11 +16,11 @@ environ
       SETFAM_1, XXREAL_0;
  registrations SUBSET_1, FUNCT_1, INT_1, FRAENKEL, RELAT_1, FINSET_1, RELSET_1,
       FINSEQ_1, FUNCOP_1, FUNCT_4, CQC_LANG, STRUCT_0, XBOOLE_0, FUNCT_2,
-      ORDINAL2, SETFAM_1;
+      ORDINAL2, SETFAM_1, CARD_3;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM;
  theorems ZFMISC_1, FUNCT_2, TARSKI, NAT_1, CQC_LANG, CARD_3, CARD_5, FINSEQ_1,
       FUNCT_4, FUNCOP_1, FRAENKEL, FINSET_1, PARTFUN1, FUNCT_1, GRFUNC_1,
-      RELAT_1, RELSET_1, XBOOLE_0, XBOOLE_1, SETFAM_1;
+      RELAT_1, RELSET_1, XBOOLE_0, XBOOLE_1;
  schemes NAT_1, RECDEF_1, FRAENKEL, XBOOLE_0;
  definitions TARSKI, FRAENKEL, STRUCT_0, XBOOLE_0, CQC_LANG;
 
@@ -30,7 +30,7 @@ begin :: Preliminaries
 
 canceled;
 
-theorem Th2:
+theorem
  for a,b being set holds 1 <> [a,b] by ZFMISC_1:8, CARD_5:1;
 
 theorem
@@ -38,40 +38,9 @@ theorem
 
 canceled;
 
-theorem Th5:
+theorem
  for a,b,c,d being set st a <> b holds
-  product (a,b) --> ({c},{d}) = { (a,b) --> (c,d) }
- proof let a,b,c,d be set such that
-A1: a <> b;
-  set X = { (a,b) --> (c,d) },
-      f = (a,b) --> ({c},{d});
-A2: dom f = {a,b} by FUNCT_4:65;
-      now let x;
-    thus x in X implies ex g being Function st x = g & dom g = dom f &
-       for x st x in dom f holds g.x in f.x
-     proof assume
-A3:    x in X;
-      take g = (a,b) --> (c,d);
-      thus x = g by A3,TARSKI:def 1;
-      thus dom g = dom f by A2,FUNCT_4:65;
-      let x;
-      assume x in dom f;
-       then A4:     x = a or x = b by A2,TARSKI:def 2;
-          g.a = c & f.a = {c} & g.b = d & f.b = {d} by A1,FUNCT_4:66;
-      hence g.x in f.x by A4,TARSKI:def 1;
-     end;
-    given g being Function such that
-A5:  x = g and
-A6:  dom g = dom f and
-A7:  for x st x in dom f holds g.x in f.x;
-        a in dom f & b in dom f by A2,TARSKI:def 2;
-     then g.a in f.a & g.b in f.b & f.a = {c} & f.b = {d} by A1,A7,FUNCT_4:66;
-     then g.a = c & g.b = d by TARSKI:def 1;
-     then g = (a,b) --> (c,d) by A2,A6,FUNCT_4:69;
-    hence x in X by A5,TARSKI:def 1;
-   end;
-  hence product (a,b) --> ({c},{d}) = { (a,b) --> (c,d) } by CARD_3:def 5;
- end;
+  product (a,b) --> ({c},{d}) = { (a,b) --> (c,d) } by CARD_3:63;
 
 begin :: General concepts
 
@@ -183,29 +152,6 @@ definition let N be set; let S be non empty AMI-Struct over N;
  correctness;
 end;
 
-registration let f be Function;
- cluster product f -> functional;
- coherence
-  proof
-    set d = product f;
-     let x be set; assume x in d;
-       then ex g being Function
-      st x = g & dom g= dom f & for x being set st x in dom f holds g.x in f.x
-         by CARD_3:def 5;
-      hence x is Function;
-  end;
-end;
-
-registration let A be set; let B be with_non-empty_elements set;
- let f be Function of A,B;
- cluster product f -> non empty;
- coherence
-  proof
-    not {} in rng f by SETFAM_1:def 9;
-    hence thesis by CARD_3:37;
-  end;
-end;
-
 definition let N be set; let S be AMI-Struct over N;
   mode State of S is Element of product the Object-Kind of S;
 end;
@@ -254,7 +200,7 @@ A1:{[0,{}]} = the Instructions of T by Def2;
     let s be State of T;
 A2: product the Object-Kind of T
       = product (0,1) --> ({1},{[0,{}]}) by Def2
-     .= { (0,1) --> (1,[0,{}]) } by Th5;
+     .= { (0,1) --> (1,[0,{}]) } by CARD_3:63;
     hence Exec(I,s) = (0,1) --> (1,[0,{}]) by TARSKI:def 1
      .= s by A2,TARSKI:def 1;
    end;
@@ -355,7 +301,7 @@ A1:  IC Trivial-AMI E = the Instruction-Counter of Trivial-AMI E
 theorem Th8:
  Trivial-AMI E is data-oriented
  proof let x be set;
-A1:   1 <> [0,{}] by Th2;
+A1:   1 <> [0,{}] by ZFMISC_1:8, CARD_5:1;
   assume
 A2:  x in (the Object-Kind of Trivial-AMI E)"
              { the Instructions of Trivial-AMI E };
@@ -379,7 +325,7 @@ theorem Th9:
  proof let s1,s2 be State of Trivial-AMI E;
 A1:  product the Object-Kind of Trivial-AMI E
    = product (0,1) --> ({1},{[0,{}]}) by Def2
-  .= { (0,1) --> (1,[0,{}]) } by Th5;
+  .= { (0,1) --> (1,[0,{}]) } by CARD_3:63;
   hence s1 = (0,1) --> (1,[0,{}]) by TARSKI:def 1
      .= s2 by A1,TARSKI:def 1;
  end;
@@ -518,30 +464,15 @@ theorem Th18:
    (x1,x2)-->(y1,y2) = (x1 .--> y1) +* (x2 .--> y2) by FUNCT_4:def 4;
 
 theorem Th19:
- for x,y holds x .--> y = {[x,y]}
-  proof let x,y;
-   thus x .--> y = [:{x},{y}:] by FUNCOP_1:def 2
-     .= {[x,y]} by ZFMISC_1:35;
-  end;
+ for x,y holds x .--> y = {[x,y]} by CQC_LANG:45;
 
-theorem Th20:
- for a,b,c being set holds (a,a) --> (b,c) = a .--> c
- proof let a,b,c be set;
-A1: dom(a .-->c) = {a} by FUNCOP_1:19
-        .= dom({a} -->b) by FUNCOP_1:19;
-  thus (a,a) --> (b,c) = (a .--> b) +* (a .-->c) by FUNCT_4:def 4
-     .= a .--> c by A1,FUNCT_4:20;
- end;
+theorem
+ for a,b,c being set holds (a,a) --> (b,c) = a .--> c by CQC_LANG:44;
 
 canceled;
 
 theorem
-    x in product f implies x is Function
- proof assume x in product f;
-   then ex g st x = g & dom g = dom f &
-       for x st x in dom f holds g.x in f.x by CARD_3:def 5;
-  hence x is Function;
- end;
+    x in product f implies x is Function by CARD_3:64;
 
 begin :: Superproducts
 
@@ -1460,7 +1391,7 @@ A6:    la <> lb & x = lb;
      end;
      suppose
 A7:    la = lb & x = la;
-       then p = la .--> b by Th20;
+       then p = la .--> b by CQC_LANG:44;
        then p.x = b by A7,CQC_LANG:6;
        then p.x in ObjectKind lb by A1;
       hence p.x in (the Object-Kind of S).x by A7;
@@ -1530,7 +1461,7 @@ A1: the Instructions of Trivial-AMI E = {[0,{}]} &
   assume the Instructions of Trivial-AMI E
       = the Instruction-Locations of Trivial-AMI E;
    then [0,{}] = 1 by A1,ZFMISC_1:6;
-  hence contradiction by Th2;
+  hence contradiction by ZFMISC_1:8, CARD_5:1;
  end;
 
 theorem Th61:

@@ -179,6 +179,45 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
+<Adjective nr="18"/>
+</Cluster>
+</Typ>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="18"/>
+</Cluster>
+</Typ>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="18"/>
+</Cluster>
+</Typ>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="18"/>
+</Cluster>
+</Typ>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="18"/>
+</Cluster>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="75">
+<LocusVar nr="1"/>
+<LocusVar nr="2"/>
+<LocusVar nr="3"/>
+<LocusVar nr="4"/>
+<LocusVar nr="5"/>
+</Func>
+<Cluster>
+<Adjective nr="18"/>
+</Cluster>
+</FCluster>
+<FCluster>
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster>
 <Adjective nr="19"/>
 </Cluster>
 </Typ>

@@ -36,20 +36,6 @@
 <ArticleID name="AMISTD_1"/>
 </Signature>
 <RCluster>
-<ArgTypes/>
-<Typ kind="M" nr="1">
-<Cluster/>
-</Typ>
-<Cluster>
-<Adjective nr="1" value="false"/>
-<Adjective nr="2"/>
-<Adjective nr="5"/>
-<Adjective nr="18"/>
-<Adjective nr="21"/>
-<Adjective nr="39" value="false"/>
-</Cluster>
-</RCluster>
-<RCluster>
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -606,27 +592,6 @@
 </Func>
 <Cluster>
 <Adjective nr="18"/>
-</Cluster>
-</FCluster>
-<FCluster>
-<ArgTypes>
-<Typ kind="M" nr="1">
-<Cluster/>
-</Typ>
-<Typ kind="M" nr="1">
-<Cluster/>
-</Typ>
-</ArgTypes>
-<Func kind="K" nr="197">
-<LocusVar nr="1"/>
-<LocusVar nr="2"/>
-</Func>
-<Cluster>
-<Adjective nr="1" value="false"/>
-<Adjective nr="2"/>
-<Adjective nr="5"/>
-<Adjective nr="39"/>
-<Adjective nr="57"/>
 </Cluster>
 </FCluster>
 <FCluster>

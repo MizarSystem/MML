@@ -56,6 +56,19 @@
 <Adjective nr="25"/>
 </Cluster>
 </RCluster>
+<RCluster>
+<ArgTypes/>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+<Cluster>
+<Adjective nr="2"/>
+<Adjective nr="5"/>
+<Adjective nr="21" value="false"/>
+<Adjective nr="22"/>
+<Adjective nr="25"/>
+</Cluster>
+</RCluster>
 <FCluster>
 <ArgTypes>
 <Typ kind="M" nr="1">

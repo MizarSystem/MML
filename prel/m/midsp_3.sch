@@ -24,6 +24,8 @@
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="MIDSP_1"/>
 <ArticleID name="MIDSP_2"/>
+<ArticleID name="FUNCOP_1"/>
+<ArticleID name="FUNCT_7"/>
 <ArticleID name="MIDSP_3"/>
 </Signature>
 <Scheme>
@@ -61,7 +63,7 @@
 </Func>
 </Pred>
 <For>
-<Typ kind="M" nr="13">
+<Typ kind="M" nr="15">
 <Cluster/>
 <Func kind="F" nr="1"/>
 </Typ>

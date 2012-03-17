@@ -24,6 +24,8 @@
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="MIDSP_1"/>
 <ArticleID name="MIDSP_2"/>
+<ArticleID name="FUNCOP_1"/>
+<ArticleID name="FUNCT_7"/>
 <ArticleID name="MIDSP_3"/>
 </Signature>
 <RCluster>
@@ -38,7 +40,7 @@
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="43">
+<Adjective nr="45">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -131,7 +133,7 @@
 </Func>
 <Cluster>
 <Adjective nr="29" value="false"/>
-<Adjective nr="43">
+<Adjective nr="45">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

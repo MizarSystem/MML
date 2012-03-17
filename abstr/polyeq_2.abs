@@ -6,32 +6,36 @@
 
 environ
 
- vocabularies SQUARE_1, ABSVALUE, RELAT_1, FUNCT_3, POWER, POLYEQ_1, ARYTM_1,
-      ARYTM_3, POLYEQ_2, GROUP_1, ARYTM;
+ vocabularies SQUARE_1, ABSVALUE, RELAT_1, FUNCT_3, POWER, ARYTM_1, ARYTM_3,
+      POLYEQ_1, POLYEQ_2, GROUP_1, ARYTM, XCMPLX_0;
  notations ORDINAL1, XCMPLX_0, XREAL_0, SQUARE_1, NEWTON, POWER, COMPLEX1,
-      POLYEQ_1, QUIN_1, XXREAL_0;
+      QUIN_1, XXREAL_0, POLYEQ_1;
  constructors NAT_1, SQUARE_1, PREPOWER, POLYEQ_1, QUIN_1, SERIES_1, MEMBERED,
       XXREAL_0;
- registrations XREAL_0, NEWTON, SQUARE_1, QUIN_1, MEMBERED;
+ registrations XREAL_0, NEWTON, SQUARE_1, QUIN_1, MEMBERED, XCMPLX_0;
  requirements REAL, SUBSET, NUMERALS, ARITHM;
 
 
 begin
 
-definition let a,b,c,d,e,x be real number;
-  func Four(a,b,c,d,e,x) equals
+definition let a,b,c,d,e,x be complex number;
+  func Polynom(a,b,c,d,e,x) equals
 :: POLYEQ_2:def 1
     a*(x |^ 4)+b*(x |^ 3)+c*(x^2)+d*x+e;
 end;
 
+registration let a,b,c,d,e,x be complex number;
+  cluster Polynom(a,b,c,d,e,x) -> complex;
+end;
+
 registration let a,b,c,d,e,x be real number;
-  cluster Four(a,b,c,d,e,x) -> real;
+  cluster Polynom(a,b,c,d,e,x) -> real;
 end;
 
 theorem :: POLYEQ_2:1
      for a,c,e,x being real number st a <> 0 &
     e <> 0 & c^2 - (4*a*e) > 0 holds
-      Four(a,0,c,0,e,x) = 0 implies
+      Polynom(a,0,c,0,e,x) = 0 implies
       x <> 0 &
       (x = sqrt((-c + sqrt delta(a,c,e))/(2*a)) or
       x = sqrt((-c - sqrt delta(a,c,e))/(2*a)) or
@@ -40,13 +44,13 @@ theorem :: POLYEQ_2:1
 
 theorem :: POLYEQ_2:2
   for a,b,c,x,y being real number st a <> 0 & y = x + 1/x holds
-      Four(a,b,c,b,a,x) = 0 implies
+      Polynom(a,b,c,b,a,x) = 0 implies
       x <> 0 & a*y^2 + b*y + c - 2*a = 0;
 
 theorem :: POLYEQ_2:3
      for a,b,c,x,y being real number st a <> 0 &
     b^2-4*a*c + 8*a^2 > 0 & y = x + 1/x holds
-    Four(a,b,c,b,a,x) = 0 implies
+    Polynom(a,b,c,b,a,x) = 0 implies
     (for y1,y2 being real number st
        y1 = (-b+sqrt(b^2-4*a*c+8*a^2))/(2*a) &
        y2 = (-b-sqrt(b^2-4*a*c+8*a^2))/(2*a) holds
@@ -72,19 +76,19 @@ theorem :: POLYEQ_2:6
 theorem :: POLYEQ_2:7
   for a1,a2,a3,a4,a5,b1,b2,b3,b4,b5 being real number holds
     (for x being real number holds
-    Four(a1,a2,a3,a4,a5,x) = Four(b1,b2,b3,b4,b5,x)) implies
+    Polynom(a1,a2,a3,a4,a5,x) = Polynom(b1,b2,b3,b4,b5,x)) implies
       a5=b5 & a1-a2+a3-a4 = b1-b2+b3-b4 & a1+a2+a3+a4 = b1+b2+b3+b4;
 
 theorem :: POLYEQ_2:8
   for a1,a2,a3,a4,a5,b1,b2,b3,b4,b5 being real number holds
     (for x being real number holds
-    Four(a1,a2,a3,a4,a5,x)=Four(b1,b2,b3,b4,b5,x)) implies
+    Polynom(a1,a2,a3,a4,a5,x)=Polynom(b1,b2,b3,b4,b5,x)) implies
       a1-b1=b3-a3 & a2-b2=b4-a4;
 
 theorem :: POLYEQ_2:9
   for a1,a2,a3,a4,a5,b1,b2,b3,b4,b5 being real number st
   (for x being real number holds
-     Four(a1,a2,a3,a4,a5,x) = Four(b1,b2,b3,b4,b5,x)) holds
+     Polynom(a1,a2,a3,a4,a5,x) = Polynom(b1,b2,b3,b4,b5,x)) holds
      a1 = b1 & a2 = b2 & a3 = b3 & a4 = b4 & a5 = b5;
 
 definition let a1,x1,x2,x3,x4,x be real number;
@@ -100,7 +104,7 @@ end;
 theorem :: POLYEQ_2:10
   for a1,a2,a3,a4,a5,x,x1,x2,x3,x4 being real number st a1 <> 0 holds
     (for x being real number holds
-    Four(a1,a2,a3,a4,a5,x) = Four0(a1,x1,x2,x3,x4,x))
+    Polynom(a1,a2,a3,a4,a5,x) = Four0(a1,x1,x2,x3,x4,x))
     implies
       (a1*(x|^ 4)+a2*(x|^ 3)+a3*x^2+a4*x+a5)/a1
        = x^2*x^2-(x1+x2+x3)*(x^2*x)+(x1*x3+x2*x3+x1*x2)*x^2
@@ -109,7 +113,7 @@ theorem :: POLYEQ_2:10
 theorem :: POLYEQ_2:11
   for a1,a2,a3,a4,a5,x,x1,x2,x3,x4 being real number st a1 <> 0 holds
     (for x being real number holds
-    Four(a1,a2,a3,a4,a5,x) = Four0(a1,x1,x2,x3,x4,x)) implies
+    Polynom(a1,a2,a3,a4,a5,x) = Four0(a1,x1,x2,x3,x4,x)) implies
       (a1*(x|^ 4)+a2*(x|^ 3)+a3*x^2+a4*x+a5)/a1 = x|^ 4-(x1+x2+x3+x4)*x|^ 3
         +((x1*x2+x1*x3+x1*x4)+(x2*x3+x2*x4)+x3*x4)*x^2
         -(x1*x2*x3+x1*x2*x4+x1*x3*x4+x2*x3*x4)*x+(x1*x2*x3*x4);
@@ -117,7 +121,7 @@ theorem :: POLYEQ_2:11
 theorem :: POLYEQ_2:12
      for a1,a2,a3,a4,a5,x1,x2,x3,x4 being real number st a1 <> 0 &
     (for x being real number holds
-    Four(a1,a2,a3,a4,a5,x) = Four0(a1,x1,x2,x3,x4,x)) holds
+    Polynom(a1,a2,a3,a4,a5,x) = Four0(a1,x1,x2,x3,x4,x)) holds
       a2/a1 = -(x1+x2+x3+x4)
     & a3/a1 = (x1*x2+x1*x3+x1*x4)+(x2*x3+x2*x4)+x3*x4
     & a4/a1 = -(x1*x2*x3+x1*x2*x4+x1*x3*x4+x2*x3*x4)

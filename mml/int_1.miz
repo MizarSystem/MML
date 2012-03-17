@@ -252,7 +252,7 @@ coherence
   end;
 end;
 
- reserve i,i0,i1,i2,i3,i4,i5,i7,i8,i9 for Integer;
+ reserve i,i0,i1,i2,i3,i4,i5,i7,i8,i9,j for Integer;
 
 :: Now we are ready to redefine some functions
 :: Redefinition of functions "+", "*" and "-"
@@ -1362,8 +1362,27 @@ A2: r-1 < [\ r /] by Def4;
 end;
 
 theorem
- for m,n being natural number holds 0 <= m qua Integer div n
-proof let m,n be natural number;
- thus 0 <= m qua Integer div n by Th2;
-end;
+ for m,n being natural number holds 0 <= m qua Integer div n by Th2;
 
+:: from SCMFSA9A, 2006.03.14, A.T.
+
+theorem
+ 0 < i & 1 < j implies i div j < i
+proof assume that
+A1: 0 < i and
+A2: 1 < j;
+A3: 0 <= j by A2;
+A4: j <> 0 by A2;
+   assume
+A5: i <= i div j;
+   then 0 < i div j by A1;
+   then A6: 0 < (i div j)" by XREAL_1:124;
+   i div j <= i/j by Def4;
+   then j * (i div j) <= j * (i/j) by A3,XREAL_1:66;
+   then j * (i div j) <= i by A4,XCMPLX_1:88;
+   then j * (i div j) <= i div j by A5,XXREAL_0:2;
+   then j * (i div j) * (i div j)" <= (i div j) * (i div j)" by A6,XREAL_1:66;
+   then j * ((i div j) * (i div j)") <= (i div j) * (i div j)";
+   then j * 1 <= (i div j) * (i div j)" by A1,A5,XCMPLX_0:def 7;
+ hence contradiction by A1,A2,A5,XCMPLX_0:def 7;
+end;

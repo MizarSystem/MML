@@ -207,12 +207,12 @@
 <LocusVar nr="1"/>
 <LocusVar nr="1"/>
 </Func>
-<Func kind="K" nr="202">
+<Func kind="K" nr="201">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="2"/>
 </Func>
-<Func kind="K" nr="201">
+<Func kind="K" nr="200">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -236,7 +236,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="206">
+<Func kind="K" nr="205">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -256,7 +256,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="208">
+<Func kind="K" nr="207">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

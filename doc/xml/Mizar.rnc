@@ -165,7 +165,10 @@ Requirements =
 
 ## Adjective is a possibly negated (and paramaterized) attribute
 ## Optionally the article id (aid) and order in article (absnr)
-## can be given.   
+## can be given. If available, presentational info
+## (number of the Pattern) is given in pid. The heuristic for
+## for displaying clusters is that attributes without pid have been
+## added automatically by cluster mechanisms.   
 ## The attribute kind (kind) 'V' can be added explicitly.   
 Adjective =
  element Adjective {
@@ -174,6 +177,7 @@ Adjective =
    ( attribute absnr { xsd:integer },
      attribute aid { xsd:string } )?,
    attribute kind { "V" }?,
+   attribute pid { xsd:integer }?,
    Term*
  }
 
@@ -188,13 +192,15 @@ Cluster =
 ## replaced by more correct "L" in Mizar gradually.   
 ## First goes the LowerCluster, than UpperCluster
 ## Optionally the article id (aid) and order in article (absnr)
-## can be given.   
+## can be given. If available, presentational info
+## (number of the Pattern) is given in pid.
 Typ =
  element Typ {
    attribute kind { "M" | "G" | "L" | "errortyp" },
    attribute nr { xsd:integer }?,
    ( attribute absnr { xsd:integer },
      attribute aid { xsd:string } )?,
+   attribute pid { xsd:integer }?,
    Cluster*,
    Term*
  }
@@ -206,32 +212,40 @@ Is =
  }
 
 ## Universally quantified formula
+## If available, presentational info is given in pid.   
 For =
  element For {
+   attribute pid { xsd:integer }?,
    Typ, Formula
  }
 
-## Conjunctive formula
+## Conjunctive formula.
+## If available, presentational info is given in pid.
 And =
  element And {
+   attribute pid { xsd:integer }?,
    Formula*
  }
 
-## Negation
+## Negation.
+## If available, presentational info is given in pid.
 Not =
  element Not {
+   attribute pid { xsd:integer }?,
    Formula
  }
 
 ## Atomic predicate formulas - schematic, attributive and normal
 ## Optionally the article id (aid) and order in article (absnr)
-## can be given.   
+## can be given. If available, presentational info
+## (number of the Pattern) is given in pid.
 Pred =
  element Pred {
    attribute kind { "P" | "V" | "R" },
    attribute nr { xsd:integer },
    ( attribute absnr { xsd:integer },
      attribute aid { xsd:string } )?,
+   attribute pid { xsd:integer }?,
    Term*
  }
 
@@ -287,13 +301,15 @@ Num =
 
 ## Functor terms - schematic, aggregates, normal and selectors
 ## Optionally the article id (aid) and order in article (absnr)
-## can be given.   
+## can be given. If available, presentational info
+## (number of the Pattern) is given in pid.
 Func =
  element Func {
    attribute kind { "F" | "G" | "K" | "U" },
    attribute nr { xsd:integer },
    ( attribute absnr { xsd:integer },
      attribute aid { xsd:string } )?,
+   attribute pid { xsd:integer }?,
    Term*
  }
 
@@ -536,7 +552,10 @@ EndPosition =
 ## The invalid ConstrKind J is now used for forgetful functors,
 ## this should be changed.   
 ## Optionally the article id (aid) and order in article (nr)
-## can be given.  
+## can be given.  relnr optionally gives its serial number
+## in environment for a particular article (it is not in prels). 
+## redefnr optonally gives the relative number of the 
+## original pattern to which the current is defined as synonym/antonym.
 Pattern =
  element Pattern {
    attribute kind { 'M' | 'L' | 'V' | 'R' | 'K' | 'U' | 'G' | 'J' },
@@ -547,6 +566,8 @@ Pattern =
    attribute constrkind { 'M' | 'L' | 'V' | 'R' | 'K' | 'U' | 'G' | 'J' },
    attribute constrnr { xsd:integer},
    attribute antonymic { xsd:boolean }?,
+   attribute relnr { xsd:integer }?,
+   attribute redefnr { xsd:integer }?,
    ArgTypes,
    element Visible { Int*},
    element Expansion { Typ }?
@@ -626,7 +647,7 @@ Article =
    ( DefinitionBlock | RegistrationBlock |
      NotationBlock | Reservation | SchemeBlock |
      JustifiedTheorem | DefTheorem | Definiens |
-     Canceled | Pattern | AuxiliaryItem )*
+     Canceled | AuxiliaryItem )*
  }
 
 ## Numbers of Definiens used in expanding the thesis,
@@ -951,7 +972,8 @@ SchemeBlock =
 ## Sometimes no constructor is created (e.g. for expandable modes).   
 ## The second optional form creating three or more constructors
 ## is for structure definitions, which define the aggregate functor,
-## the structure mode, the strict attribute and zero or more selectors.
+## the structure mode, the strict attribute and zero or more selectors,
+## and create existential registration for the strict attribute.
 ## If any definientia and definitional theorems are created,
 ## they follow immediately after the enclosing definitional block
 ## (this might be changed in the future).      
@@ -962,9 +984,10 @@ Definition =
    attribute expandable { xsd:boolean }?,
    ( attribute nr { xsd:integer }, Position )?,
    ( ( CorrectnessCondition*, Correctness?,
-       JustifiedProperty*, Constructor? )
+       JustifiedProperty*, Constructor?, Pattern? )
    | ( Constructor, Constructor, Constructor+,
-       CorrectnessCondition*, Correctness? ))
+       Registration, CorrectnessCondition*,
+       Correctness?, Pattern+ ))
  }
 
 ## A block of one or more (possibly canceled) (re)definitions,
@@ -1001,7 +1024,7 @@ RegistrationBlock =
 NotationBlock = 
  element NotationBlock {
    Position,
-   ( Let | AuxiliaryItem )*,
+   ( Let | AuxiliaryItem | Pattern)*,
    EndPosition
  }
 

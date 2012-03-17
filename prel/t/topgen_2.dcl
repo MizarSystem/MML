@@ -33,6 +33,7 @@
 <ArticleID name="VECTSP_1"/>
 <ArticleID name="REALSET1"/>
 <ArticleID name="REALSET2"/>
+<ArticleID name="COMPTS_1"/>
 <ArticleID name="TOPGEN_2"/>
 </Signature>
 <RCluster>
@@ -69,7 +70,8 @@
 <Adjective nr="4" value="false"/>
 <Adjective nr="15"/>
 <Adjective nr="59"/>
-<Adjective nr="79"/>
+<Adjective nr="80"/>
+<Adjective nr="85"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -82,7 +84,7 @@
 <Adjective nr="15"/>
 <Adjective nr="59" value="false"/>
 <Adjective nr="77" value="false"/>
-<Adjective nr="79" value="false"/>
+<Adjective nr="85" value="false"/>
 </Cluster>
 </RCluster>
 <FCluster>
@@ -133,13 +135,13 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="79"/>
+<Adjective nr="85"/>
 </Cluster>
 </CCluster>
 <CCluster>
 <ArgTypes/>
 <Cluster>
-<Adjective nr="79" value="false"/>
+<Adjective nr="85" value="false"/>
 </Cluster>
 <Typ kind="G" nr="3">
 <Cluster/>

@@ -28,12 +28,12 @@
 <ArticleID name="RELAT_2"/>
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="EQREL_1"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="REALSET1"/>
 <ArticleID name="REALSET2"/>
 <ArticleID name="UNIALG_1"/>
 <ArticleID name="PBOOLE"/>
 <ArticleID name="MSUALG_1"/>
+<ArticleID name="SETFAM_1"/>
 <ArticleID name="PUA2MSS1"/>
 </Signature>
 <RCluster>
@@ -84,10 +84,10 @@
 <Adjective nr="5"/>
 <Adjective nr="18"/>
 <Adjective nr="24"/>
-<Adjective nr="79">
+<Adjective nr="77">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="80">
+<Adjective nr="78">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -96,12 +96,12 @@
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
+<Adjective nr="79"/>
 <Adjective nr="81"/>
-<Adjective nr="83"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="238">
+<Func kind="K" nr="237">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -123,12 +123,12 @@
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
+<Adjective nr="79"/>
 <Adjective nr="81"/>
-<Adjective nr="83"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="241">
+<Func kind="K" nr="240">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -150,8 +150,8 @@
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
+<Adjective nr="79"/>
 <Adjective nr="81"/>
-<Adjective nr="83"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="23">
@@ -159,21 +159,21 @@
 <LocusVar nr="1"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="243">
+<Func kind="K" nr="242">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
 <Adjective nr="28" value="false"/>
-<Adjective nr="86"/>
-<Adjective nr="87" value="false"/>
+<Adjective nr="84"/>
+<Adjective nr="85" value="false"/>
 </Cluster>
 </FCluster>
 <CCluster>
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="69"/>
+<Adjective nr="90"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -189,7 +189,7 @@
 <CCluster>
 <ArgTypes/>
 <Cluster>
-<Adjective nr="83"/>
+<Adjective nr="81"/>
 </Cluster>
 <Typ kind="G" nr="10">
 <Cluster/>

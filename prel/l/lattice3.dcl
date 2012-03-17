@@ -194,6 +194,35 @@
 </FCluster>
 <FCluster>
 <ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="128">
+<LocusVar nr="1"/>
+</Func>
+<Cluster>
+<Adjective nr="13" value="false"/>
+<Adjective nr="16"/>
+<Adjective nr="17"/>
+<Adjective nr="18"/>
+<Adjective nr="19"/>
+<Adjective nr="20"/>
+<Adjective nr="21"/>
+<Adjective nr="22"/>
+<Adjective nr="23"/>
+<Adjective nr="24"/>
+<Adjective nr="25"/>
+<Adjective nr="26"/>
+<Adjective nr="27"/>
+<Adjective nr="28"/>
+<Adjective nr="29"/>
+<Adjective nr="30"/>
+<Adjective nr="54"/>
+</Cluster>
+</FCluster>
+<FCluster>
+<ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
 <Adjective nr="13" value="false"/>

@@ -20,16 +20,16 @@ environ
       WSIERP_1, PRE_FF, SCPISORT, XXREAL_0;
  constructors DOMAIN_1, AMI_5, RECDEF_1, SCMPDS_4, SCM_1, SCMPDS_6, SCMP_GCD,
       SCMPDS_8, SCMPDS_5, SQUARE_1, PRE_FF, SCPISORT, NAT_1, WSIERP_1, RAT_1,
-      BINOP_2, XXREAL_0;
+      BINOP_2, XXREAL_0, PREPOWER, REAL_1;
  registrations AMI_1, INT_1, FUNCT_1, SCMPDS_2, SCMFSA_4, SCMPDS_4, SCMPDS_6,
       SCMPDS_8, SCMPDS_5, RELSET_1, WSIERP_1, FRAENKEL, NUMBERS, ORDINAL2,
-      SETFAM_1, XREAL_0;
+      SETFAM_1, XREAL_0, CARD_3;
  requirements NUMERALS, REAL, SUBSET, ARITHM;
  theorems AMI_1, AMI_3, NAT_1, REAL_1, TARSKI, FUNCT_4, INT_1, AMI_5, SCMPDS_2,
       SCMPDS_3, ABSVALUE, GRFUNC_1, SCMPDS_4, SCMPDS_5, REAL_2, SCMPDS_6,
       ENUMSET1, INT_2, SCMPDS_8, RELAT_1, SCMP_GCD, SCMPDS_7, FUNCT_1,
       SCMFSA6B, SCM_1, SQUARE_1, FINSEQ_1, RVSUM_1, FINSEQ_2, PRE_FF, SCPISORT,
-      XBOOLE_1, XREAL_1, COMPLEX1, XXREAL_0;
+      XBOOLE_1, XREAL_1, COMPLEX1, XXREAL_0, PREPOWER;
  schemes NAT_1, SCMPDS_8, FUNCT_2;
 
 begin :: Preliminaries
@@ -39,97 +39,19 @@ reserve m,n for Nat,
         I for Program-block,
         a for Int_position;
 
-theorem Th1:
+theorem
  for n,m,l be Nat st n divides m & n divides l holds n divides m-l
-proof let n,m,l be Nat;
-    assume A1: n divides m & n divides l;
-then A2:  m = n * (m div n) by NAT_1:49;
-A3:  -l =-n*(l div n) by A1,NAT_1:49
-     .=n*(-(l div n));
-          m - l = m+ -l
-     .=n * ((m div n) + -(l div n)) by A2,A3;
-    hence n divides m - l by INT_1:def 9;
-end;
+            by PREPOWER:108;
 
-theorem Th2:
-   m divides n iff m divides (n qua Integer)
-proof
-   reconsider nn=n as Integer;
-   thus m divides n implies m divides (n qua Integer)
-   proof
-       assume m divides n;
-     then consider t be Nat such that
-A1:   n = m * t by NAT_1:def 3;
-      thus m divides (n qua Integer) by A1,INT_1:def 9;
-   end;
-   hereby
-       assume A2: m divides (n qua Integer);
-       per cases;
-       suppose n=0;
-       hence m divides n by NAT_1:53;
-       end;
-       suppose n<>0;
-then A3:    n > 0 by NAT_1:19;
-     consider t be Integer such that
-A4:   nn = m * t by A2,INT_1:def 9;
-       0 < m & 0 < t or m < 0 & t < 0 by A3,A4,XREAL_1:136;
-      then reconsider k=t as Nat by INT_1:16,NAT_1:18;
-           n = m * k by A4;
-     hence m divides n by NAT_1:def 3;
-    end;
-    end;
-end;
+theorem
+   m divides n iff m divides (n qua Integer) by PREPOWER:109;
 
-theorem Th3:
-  m hcf n= m hcf abs(n-m)
-proof
-   set x=m hcf n,
-       y=m hcf abs( n - m );
-A1:  x divides m & x divides n by NAT_1:def 5;
-A2:  y divides m by NAT_1:def 5;
-    per cases;
-    suppose A3: n-m >= 0;
-      then reconsider nm=n-m as Nat by INT_1:16;
-A4:   abs( n - m )=nm by A3,ABSVALUE:def 1;
-           x divides n-m by A1,Th1;
-then x divides abs( nm ) by A4,Th2;
-then A5:   x divides y by A1,NAT_1:def 5;
-           y divides nm by A4,NAT_1:def 5;
-then   y divides nm+m by A2,NAT_1:55;
-      then y divides x by A2,NAT_1:def 5;
-     hence x=y by A5,NAT_1:52;
-
-    end;
-    suppose n-m < 0;
-then A6:   abs( n - m )=-(n-m) by ABSVALUE:def 1
-      .=m-n;
-      then reconsider mn=m-n as Nat;
-           x divides m-n by A1,Th1;
-then x divides abs( n-m ) by A6,Th2;
-then A7:   x divides y by A1,NAT_1:def 5;
-           y divides mn by A6,NAT_1:def 5;
-then A8:   y divides mn-m by A2,Th1;
-    reconsider nn=n as Integer;
-           mn-m=-n;
-      then y divides nn by A8,INT_2:14;
-      then y divides n by Th2;
-      then y divides x by A2,NAT_1:def 5;
-     hence x=y by A7,NAT_1:52;
-end;
-end;
+theorem
+  m hcf n= m hcf abs(n-m) by PREPOWER:110;
 
 theorem Th4:
   for a,b be Integer st a>=0 & b>=0 holds a gcd b = a gcd (b-a)
-proof
-   let a,b be Integer;
-   assume A1: a>=0 & b>=0;
-  thus
-       a gcd b=abs(a) hcf abs(b) by INT_2:def 3
-  .=abs(a) hcf abs(abs(b)-abs(a)) by Th3
-  .=abs(a) hcf abs(b-abs(a)) by A1,ABSVALUE:def 1
-  .=abs(a) hcf abs(b-a) by A1,ABSVALUE:def 1
-  .=a gcd (b-a) by INT_2:def 3;
-end;
+            by PREPOWER:111;
 
 theorem Th5:
    (i ';' j ';' I).inspos 0=i & (i ';' j ';' I).inspos 1=j

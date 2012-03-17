@@ -77,6 +77,7 @@
       
       
       
+      
     (
         <link linkend="Term">%Term;</link>
       )*
@@ -150,6 +151,15 @@
 <para/>
 </entry>
 </row>
+<row>
+<entry>pid</entry>
+<entry>
+	    xsd:integer</entry>
+<entry>Optional</entry>
+<entry>
+<para/>
+</entry>
+</row>
 </tbody>
 </entrytbl>
 </row>
@@ -179,6 +189,11 @@
       <optional>
         <attribute name="kind">
           <value>V</value>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="pid">
+          <data type="integer"/>
         </attribute>
       </optional>
       <zeroOrMore>
@@ -215,6 +230,7 @@
 <entry>
 <para>
       
+      
     (
         <link linkend="Formula">%Formula;</link>
       )*
@@ -224,11 +240,48 @@
 </row>
 <row>
 <entry role="header" valign="top">
+<para>Attributes</para>
+</entry>
+<entrytbl cols="3">
+<tbody>
+<row>
+<entry role="header">
+<para>Attribute</para>
+</entry>
+<entry role="header">
+<para>Type</para>
+</entry>
+<entry role="header">
+<para>Use</para>
+</entry>
+<entry role="header">
+<para>Documentation</para>
+</entry>
+</row>
+<row>
+<entry>pid</entry>
+<entry>
+	    xsd:integer</entry>
+<entry>Optional</entry>
+<entry>
+<para/>
+</entry>
+</row>
+</tbody>
+</entrytbl>
+</row>
+<row>
+<entry role="header" valign="top">
 <para>Source</para>
 </entry>
 <entry>
 <programlisting><![CDATA[
 <element name="And" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns="http://relaxng.org/ns/structure/1.0">
+      <optional>
+        <attribute name="pid">
+          <data type="integer"/>
+        </attribute>
+      </optional>
       <zeroOrMore>
         <ref name="Formula"/>
       </zeroOrMore>
@@ -359,7 +412,7 @@
     (
         
     ( 
-    <link linkend="DefinitionBlock">%DefinitionBlock;</link> | <link linkend="RegistrationBlock">%RegistrationBlock;</link> | <link linkend="NotationBlock">%NotationBlock;</link> | <link linkend="Reservation">%Reservation;</link> | <link linkend="SchemeBlock">%SchemeBlock;</link> | <link linkend="JustifiedTheorem">%JustifiedTheorem;</link> | <link linkend="DefTheorem">%DefTheorem;</link> | <link linkend="Definiens">%Definiens;</link> | <link linkend="Canceled">%Canceled;</link> | <link linkend="Pattern">%Pattern;</link> | <link linkend="AuxiliaryItem">%AuxiliaryItem;</link>
+    <link linkend="DefinitionBlock">%DefinitionBlock;</link> | <link linkend="RegistrationBlock">%RegistrationBlock;</link> | <link linkend="NotationBlock">%NotationBlock;</link> | <link linkend="Reservation">%Reservation;</link> | <link linkend="SchemeBlock">%SchemeBlock;</link> | <link linkend="JustifiedTheorem">%JustifiedTheorem;</link> | <link linkend="DefTheorem">%DefTheorem;</link> | <link linkend="Definiens">%Definiens;</link> | <link linkend="Canceled">%Canceled;</link> | <link linkend="AuxiliaryItem">%AuxiliaryItem;</link>
     )
   
       )*
@@ -420,7 +473,6 @@
           <ref name="DefTheorem"/>
           <ref name="Definiens"/>
           <ref name="Canceled"/>
-          <ref name="Pattern"/>
           <ref name="AuxiliaryItem"/>
         </choice>
       </zeroOrMore>
@@ -3060,6 +3112,10 @@
           
             <link linkend="Constructor">%Constructor;</link>
           ?
+      ,
+          
+            <link linkend="Pattern">%Pattern;</link>
+          ?
       
         )
    | 
@@ -3071,6 +3127,7 @@
             <link linkend="Constructor">%Constructor;</link>
           )+
     ,
+          <link linkend="Registration">%Registration;</link>, 
           
     (
             <link linkend="CorrectnessCondition">%CorrectnessCondition;</link>
@@ -3079,7 +3136,12 @@
           
             <link linkend="Correctness">%Correctness;</link>
           ?
-      
+      ,
+          
+    (
+            <link linkend="Pattern">%Pattern;</link>
+          )+
+    
         )
   
     )
@@ -3220,6 +3282,9 @@
           <optional>
             <ref name="Constructor"/>
           </optional>
+          <optional>
+            <ref name="Pattern"/>
+          </optional>
         </group>
         <group>
           <ref name="Constructor"/>
@@ -3227,12 +3292,16 @@
           <oneOrMore>
             <ref name="Constructor"/>
           </oneOrMore>
+          <ref name="Registration"/>
           <zeroOrMore>
             <ref name="CorrectnessCondition"/>
           </zeroOrMore>
           <optional>
             <ref name="Correctness"/>
           </optional>
+          <oneOrMore>
+            <ref name="Pattern"/>
+          </oneOrMore>
         </group>
       </choice>
     </element>]]></programlisting>
@@ -4080,10 +4149,43 @@
 </entry>
 <entry>
 <para>
+      
       <link linkend="Typ">%Typ;</link>
       <link linkend="Formula">%Formula;</link>
     </para>
 </entry>
+</row>
+<row>
+<entry role="header" valign="top">
+<para>Attributes</para>
+</entry>
+<entrytbl cols="3">
+<tbody>
+<row>
+<entry role="header">
+<para>Attribute</para>
+</entry>
+<entry role="header">
+<para>Type</para>
+</entry>
+<entry role="header">
+<para>Use</para>
+</entry>
+<entry role="header">
+<para>Documentation</para>
+</entry>
+</row>
+<row>
+<entry>pid</entry>
+<entry>
+	    xsd:integer</entry>
+<entry>Optional</entry>
+<entry>
+<para/>
+</entry>
+</row>
+</tbody>
+</entrytbl>
 </row>
 <row>
 <entry role="header" valign="top">
@@ -4092,6 +4194,11 @@
 <entry>
 <programlisting><![CDATA[
 <element name="For" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns="http://relaxng.org/ns/structure/1.0">
+      <optional>
+        <attribute name="pid">
+          <data type="integer"/>
+        </attribute>
+      </optional>
       <ref name="Typ"/>
       <ref name="Formula"/>
     </element>]]></programlisting>
@@ -4702,6 +4809,7 @@
       
       
       
+      
     (
         <link linkend="Term">%Term;</link>
       )*
@@ -4773,6 +4881,15 @@
 <para/>
 </entry>
 </row>
+<row>
+<entry>pid</entry>
+<entry>
+	    xsd:integer</entry>
+<entry>Optional</entry>
+<entry>
+<para/>
+</entry>
+</row>
 </tbody>
 </entrytbl>
 </row>
@@ -4800,6 +4917,11 @@
         </attribute>
         <attribute name="aid">
           <data type="string"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="pid">
+          <data type="integer"/>
         </attribute>
       </optional>
       <zeroOrMore>
@@ -5996,9 +6118,42 @@
 </entry>
 <entry>
 <para>
+      
       <link linkend="Formula">%Formula;</link>
     </para>
 </entry>
+</row>
+<row>
+<entry role="header" valign="top">
+<para>Attributes</para>
+</entry>
+<entrytbl cols="3">
+<tbody>
+<row>
+<entry role="header">
+<para>Attribute</para>
+</entry>
+<entry role="header">
+<para>Type</para>
+</entry>
+<entry role="header">
+<para>Use</para>
+</entry>
+<entry role="header">
+<para>Documentation</para>
+</entry>
+</row>
+<row>
+<entry>pid</entry>
+<entry>
+	    xsd:integer</entry>
+<entry>Optional</entry>
+<entry>
+<para/>
+</entry>
+</row>
+</tbody>
+</entrytbl>
 </row>
 <row>
 <entry role="header" valign="top">
@@ -6007,6 +6162,11 @@
 <entry>
 <programlisting><![CDATA[
 <element name="Not" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns="http://relaxng.org/ns/structure/1.0">
+      <optional>
+        <attribute name="pid">
+          <data type="integer"/>
+        </attribute>
+      </optional>
       <ref name="Formula"/>
     </element>]]></programlisting>
 </entry>
@@ -6043,7 +6203,7 @@
     (
         
     ( 
-    <link linkend="Let">%Let;</link> | <link linkend="AuxiliaryItem">%AuxiliaryItem;</link>
+    <link linkend="Let">%Let;</link> | <link linkend="AuxiliaryItem">%AuxiliaryItem;</link> | <link linkend="Pattern">%Pattern;</link>
     )
   
       )*
@@ -6105,6 +6265,7 @@
         <choice>
           <ref name="Let"/>
           <ref name="AuxiliaryItem"/>
+          <ref name="Pattern"/>
         </choice>
       </zeroOrMore>
       <ref name="EndPosition"/>
@@ -6561,6 +6722,8 @@
       
       
       
+      
+      
       <link linkend="ArgTypes">%ArgTypes;</link>, 
       <link linkend="Pattern.Pattern.Visible">Visible</link>,
       
@@ -6685,6 +6848,24 @@
 <para/>
 </entry>
 </row>
+<row>
+<entry>relnr</entry>
+<entry>
+	    xsd:integer</entry>
+<entry>Optional</entry>
+<entry>
+<para/>
+</entry>
+</row>
+<row>
+<entry>redefnr</entry>
+<entry>
+	    xsd:integer</entry>
+<entry>Optional</entry>
+<entry>
+<para/>
+</entry>
+</row>
 </tbody>
 </entrytbl>
 </row>
@@ -6739,6 +6920,16 @@
       <optional>
         <attribute name="antonymic">
           <data type="boolean"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="relnr">
+          <data type="integer"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="redefnr">
+          <data type="integer"/>
         </attribute>
       </optional>
       <ref name="ArgTypes"/>
@@ -7231,6 +7422,7 @@
       
       
       
+      
     (
         <link linkend="Term">%Term;</link>
       )*
@@ -7300,6 +7492,15 @@
 <para/>
 </entry>
 </row>
+<row>
+<entry>pid</entry>
+<entry>
+	    xsd:integer</entry>
+<entry>Optional</entry>
+<entry>
+<para/>
+</entry>
+</row>
 </tbody>
 </entrytbl>
 </row>
@@ -7326,6 +7527,11 @@
         </attribute>
         <attribute name="aid">
           <data type="string"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="pid">
+          <data type="integer"/>
         </attribute>
       </optional>
       <zeroOrMore>
@@ -11160,6 +11366,7 @@
       
       
       
+      
     (
         <link linkend="Cluster">%Cluster;</link>
       )*
@@ -11236,6 +11443,15 @@
 <para/>
 </entry>
 </row>
+<row>
+<entry>pid</entry>
+<entry>
+	    xsd:integer</entry>
+<entry>Optional</entry>
+<entry>
+<para/>
+</entry>
+</row>
 </tbody>
 </entrytbl>
 </row>
@@ -11265,6 +11481,11 @@
         </attribute>
         <attribute name="aid">
           <data type="string"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="pid">
+          <data type="integer"/>
         </attribute>
       </optional>
       <zeroOrMore>
@@ -11764,7 +11985,10 @@
 <entry>
 <para>Adjective is a possibly negated (and paramaterized) attribute
 Optionally the article id (aid) and order in article (absnr)
-can be given.   
+can be given. If available, presentational info
+(number of the Pattern) is given in pid. The heuristic for
+for displaying clusters is that attributes without pid have been
+added automatically by cluster mechanisms.   
 The attribute kind (kind) 'V' can be added explicitly.   </para>
 </entry>
 </row>
@@ -11803,7 +12027,8 @@ The attribute kind (kind) 'V' can be added explicitly.   </para>
 <para>Documentation</para>
 </entry>
 <entry>
-<para>Conjunctive formula</para>
+<para>Conjunctive formula.
+If available, presentational info is given in pid.</para>
 </entry>
 </row>
 <row valign="top">
@@ -13096,7 +13321,8 @@ with optional label, properties and correctness conditions.
 Sometimes no constructor is created (e.g. for expandable modes).   
 The second optional form creating three or more constructors
 is for structure definitions, which define the aggregate functor,
-the structure mode, the strict attribute and zero or more selectors.
+the structure mode, the strict attribute and zero or more selectors,
+and create existential registration for the strict attribute.
 If any definientia and definitional theorems are created,
 they follow immediately after the enclosing definitional block
 (this might be changed in the future).      </para>
@@ -13452,7 +13678,8 @@ The selector kind (kind) 'U' can can be added explicitly.</para>
 <para>Documentation</para>
 </entry>
 <entry>
-<para>Universally quantified formula</para>
+<para>Universally quantified formula
+If available, presentational info is given in pid.   </para>
 </entry>
 </row>
 <row valign="top">
@@ -13768,7 +13995,8 @@ directive - this should be changed to a user option eventually.   </para>
 <entry>
 <para>Functor terms - schematic, aggregates, normal and selectors
 Optionally the article id (aid) and order in article (absnr)
-can be given.   </para>
+can be given. If available, presentational info
+(number of the Pattern) is given in pid.</para>
 </entry>
 </row>
 <row valign="top">
@@ -14475,7 +14703,8 @@ Their types are given elsewhere in data using them - see e.g. Constructor</para>
 <para>Documentation</para>
 </entry>
 <entry>
-<para>Negation</para>
+<para>Negation.
+If available, presentational info is given in pid.</para>
 </entry>
 </row>
 <row valign="top">
@@ -14761,7 +14990,10 @@ is uniform for all of them, so it does not have to be given.
 The invalid ConstrKind J is now used for forgetful functors,
 this should be changed.   
 Optionally the article id (aid) and order in article (nr)
-can be given.  </para>
+can be given.  relnr optionally gives its serial number
+in environment for a particular article (it is not in prels). 
+redefnr optonally gives the relative number of the 
+original pattern to which the current is defined as synonym/antonym.</para>
 </entry>
 </row>
 <row valign="top">
@@ -15031,7 +15263,8 @@ Arguments are generally polynoms with complex coefficients.   </para>
 <entry>
 <para>Atomic predicate formulas - schematic, attributive and normal
 Optionally the article id (aid) and order in article (absnr)
-can be given.   </para>
+can be given. If available, presentational info
+(number of the Pattern) is given in pid.</para>
 </entry>
 </row>
 <row valign="top">
@@ -16631,7 +16864,8 @@ The kinds "L" and "G" are equivalent, "G" is going to be
 replaced by more correct "L" in Mizar gradually.   
 First goes the LowerCluster, than UpperCluster
 Optionally the article id (aid) and order in article (absnr)
-can be given.   </para>
+can be given. If available, presentational info
+(number of the Pattern) is given in pid.</para>
 </entry>
 </row>
 <row valign="top">

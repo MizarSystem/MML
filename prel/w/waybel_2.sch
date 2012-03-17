@@ -14,22 +14,8 @@
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="ORDERS_1"/>
 <ArticleID name="ORDERS_2"/>
-<ArticleID name="ORDINAL1"/>
-<ArticleID name="ORDINAL2"/>
-<ArticleID name="NUMBERS"/>
-<ArticleID name="FINSET_1"/>
-<ArticleID name="CARD_1"/>
-<ArticleID name="FINSEQ_1"/>
-<ArticleID name="FUNCOP_1"/>
-<ArticleID name="FINSEQ_2"/>
-<ArticleID name="PBOOLE"/>
 <ArticleID name="YELLOW_0"/>
 <ArticleID name="WAYBEL_0"/>
-<ArticleID name="RELAT_2"/>
-<ArticleID name="PARTFUN1"/>
-<ArticleID name="WELLORD2"/>
-<ArticleID name="YELLOW_1"/>
-<ArticleID name="YELLOW_2"/>
 </Signature>
 <Scheme>
 <ArgTypes>
@@ -41,7 +27,7 @@
 <Typ kind="G" nr="4">
 <Cluster>
 <Adjective nr="10" value="false"/>
-<Adjective nr="54"/>
+<Adjective nr="36"/>
 </Cluster>
 <Func kind="F" nr="1"/>
 </Typ>
@@ -57,7 +43,7 @@
 <Typ kind="G" nr="4">
 <Cluster>
 <Adjective nr="10" value="false"/>
-<Adjective nr="54"/>
+<Adjective nr="36"/>
 </Cluster>
 <Func kind="F" nr="1"/>
 </Typ>
@@ -89,11 +75,13 @@
 </Func>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="190">
+<Func kind="K" nr="69">
 <Func kind="U" nr="1">
 <Var nr="1"/>
 </Func>
+<Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
+</Func>
 <Func kind="U" nr="4">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>

@@ -48,8 +48,8 @@
 <ArticleID name="YELLOW_6"/>
 <ArticleID name="WAYBEL_9"/>
 <ArticleID name="WAYBEL11"/>
-<ArticleID name="CARD_3"/>
 <ArticleID name="UNIALG_1"/>
+<ArticleID name="CARD_3"/>
 <ArticleID name="WAYBEL_3"/>
 <ArticleID name="PRALG_1"/>
 <ArticleID name="WAYBEL18"/>
@@ -235,7 +235,7 @@
 </Typ>
 </ArgTypes>
 <Func kind="K" nr="6">
-<Func kind="K" nr="229">
+<Func kind="K" nr="227">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -259,7 +259,7 @@
 <LocusVar nr="1"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="210">
+<Func kind="K" nr="209">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -304,9 +304,9 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="339">
+<Func kind="K" nr="337">
 <LocusVar nr="1"/>
-<Func kind="K" nr="203">
+<Func kind="K" nr="202">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -334,9 +334,9 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="339">
+<Func kind="K" nr="337">
 <LocusVar nr="1"/>
-<Func kind="K" nr="203">
+<Func kind="K" nr="202">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>

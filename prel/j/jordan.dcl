@@ -47,7 +47,7 @@
 <ArticleID name="TOPALG_2"/>
 <ArticleID name="JORDAN1"/>
 <ArticleID name="JGRAPH_6"/>
-<ArticleID name="GOBRD14"/>
+<ArticleID name="TOPREAL6"/>
 <ArticleID name="TOPREAL2"/>
 <ArticleID name="JORDAN21"/>
 <ArticleID name="SPPOL_1"/>

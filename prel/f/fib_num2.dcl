@@ -28,8 +28,8 @@
 <ArticleID name="RELAT_2"/>
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="ABIAN"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="XXREAL_0"/>
+<ArticleID name="SETFAM_1"/>
 </Signature>
 <RCluster>
 <ArgTypes/>
@@ -44,7 +44,7 @@
 <Adjective nr="32"/>
 <Adjective nr="33"/>
 <Adjective nr="34"/>
-<Adjective nr="50"/>
+<Adjective nr="53"/>
 </Cluster>
 </RCluster>
 <FCluster>
@@ -64,7 +64,7 @@
 <Adjective nr="19"/>
 <Adjective nr="23"/>
 <Adjective nr="48" value="false"/>
-<Adjective nr="52"/>
+<Adjective nr="50"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -84,7 +84,7 @@
 <Adjective nr="19"/>
 <Adjective nr="23"/>
 <Adjective nr="48"/>
-<Adjective nr="52"/>
+<Adjective nr="50"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -104,7 +104,7 @@
 <Cluster>
 <Adjective nr="24"/>
 <Adjective nr="34"/>
-<Adjective nr="50"/>
+<Adjective nr="53"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -149,7 +149,7 @@
 <Adjective nr="32"/>
 <Adjective nr="33"/>
 <Adjective nr="34"/>
-<Adjective nr="50"/>
+<Adjective nr="53"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -167,7 +167,7 @@
 <Adjective nr="32"/>
 <Adjective nr="33"/>
 <Adjective nr="34"/>
-<Adjective nr="50"/>
+<Adjective nr="53"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -182,14 +182,14 @@
 </Func>
 <Cluster>
 <Adjective nr="24"/>
-<Adjective nr="50"/>
+<Adjective nr="53"/>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="50"/>
+<Adjective nr="53"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -201,14 +201,14 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="50"/>
+<Adjective nr="53"/>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="50"/>
+<Adjective nr="53"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -220,14 +220,14 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="50"/>
+<Adjective nr="53"/>
 </Cluster>
 </FCluster>
 <CCluster>
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="50"/>
+<Adjective nr="53"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -239,7 +239,7 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="50"/>
+<Adjective nr="53"/>
 </Cluster>
 </CCluster>
 </Registrations>

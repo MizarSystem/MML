@@ -263,9 +263,8 @@
 <Adjective nr="21"/>
 </Cluster>
 </Typ>
-<Typ kind="M" nr="2">
+<Typ kind="M" nr="1">
 <Cluster/>
-<Func kind="K" nr="87"/>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster/>

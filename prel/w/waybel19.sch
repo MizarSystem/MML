@@ -150,7 +150,7 @@
 </For>
 <Not>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="294">
+<Func kind="K" nr="292">
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>
@@ -203,7 +203,7 @@
 </For>
 </For>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="188">
+<Func kind="K" nr="186">
 <Func kind="F" nr="1"/>
 </Func>
 </Pred>

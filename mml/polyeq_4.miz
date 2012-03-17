@@ -7,13 +7,13 @@
 
 environ
 
- vocabularies SQUARE_1, ARYTM_3, ARYTM_1, GROUP_1, FUNCT_3, POWER, POLYEQ_1,
-      POLYEQ_4, POLYEQ_2, RELAT_1;
- notations REAL_1, SQUARE_1, POWER, NAT_1, POLYEQ_1, QUIN_1, POLYEQ_2, NEWTON,
-      XXREAL_0;
+ vocabularies SQUARE_1, ARYTM_3, ARYTM_1, GROUP_1, FUNCT_3, POWER, RELAT_1,
+      XCMPLX_0, ARYTM, POLYEQ_1;
+ notations REAL_1, SQUARE_1, POWER, POLYEQ_1, QUIN_1, POLYEQ_2, NEWTON,
+      ORDINAL1, XCMPLX_0, XXREAL_0, XREAL_0, NAT_1;
  constructors REAL_1, NAT_1, SQUARE_1, POWER, PREPOWER, QUIN_1, POLYEQ_1,
-      POLYEQ_2, XXREAL_0;
- registrations NAT_1, REAL_1;
+      POLYEQ_2, XXREAL_0, MEMBERED, RVSUM_1;
+ registrations NAT_1, REAL_1, XCMPLX_0, XREAL_0, NEWTON, SQUARE_1, QUIN_1;
  requirements SUBSET, NUMERALS, REAL, ARITHM;
  definitions SQUARE_1;
  theorems REAL_2, SQUARE_1, PREPOWER, QUIN_1, POLYEQ_1, POWER, NEWTON,
@@ -263,10 +263,10 @@ A4:  n>=1 by A3,REAL_2:137;
  end;
 
 theorem Th5:
-  a <> 0 & Poly2(a,b,0,x) = 0 implies x=0 or x = -(b/a)
+  a <> 0 & Polynom(a,b,0,x) = 0 implies x=0 or x = -(b/a)
 proof
      assume
-A1:  a<>0 & Poly2(a,b,0,x) = 0;
+A1:  a<>0 & Polynom(a,b,0,x) = 0;
      a*x^2+b*x+0=0 by A1,POLYEQ_1:def 2;
      then a*(x*x)+b*x+0*x=0;
      then a*x*x+b*x+0*x=0;
@@ -279,10 +279,10 @@ A1:  a<>0 & Poly2(a,b,0,x) = 0;
 end;
 
 theorem
-  a <> 0 & Poly2(a,0,0,x) = 0 implies x=0
+  a <> 0 & Polynom(a,0,0,x) = 0 implies x=0
 proof
    assume
-A1:a<>0 & Poly2(a,0,0,x) = 0; then
+A1:a<>0 & Polynom(a,0,0,x) = 0; then
    a*x^2+0*x+0=0 by POLYEQ_1:def 2;
    then x^2=0 by A1,XCMPLX_1:6;
    hence x=0 by XCMPLX_1:6;
@@ -290,12 +290,12 @@ end;
 
 theorem
   a <> 0 & (ex m st n=2*m+1) & delta(a,b,c) >= 0 &
-    Poly2(a,b,c,x|^ n) = 0 implies
+    Polynom(a,b,c,x|^ n) = 0 implies
       x = n-root((-b+sqrt delta(a,b,c))/(2*a))
       or x = n-root((-b-sqrt delta(a,b,c))/(2*a))
 proof
      assume
-A1:  a <>0 & (ex m st n=2*m+1) & delta(a,b,c)>=0 & Poly2(a,b,c,x|^ n)=0;
+A1:  a <>0 & (ex m st n=2*m+1) & delta(a,b,c)>=0 & Polynom(a,b,c,x|^ n)=0;
      set y = x|^ n;
      x|^ n = (-b+sqrt delta(a,b,c))/(2*a)
      or x|^ n = (-b-sqrt delta(a,b,c))/(2*a) by A1,POLYEQ_1:5;
@@ -305,7 +305,7 @@ end;
 
 theorem
   a <> 0 & b/a<0 & c/a>0 & (ex m st n=2*m & m>=1) & delta(a,b,c) >= 0
-  & Poly2(a,b,c,x|^ n) = 0 implies
+  & Polynom(a,b,c,x|^ n) = 0 implies
        x = n-root((-b+sqrt delta(a,b,c))/(2*a))
        or x = -n-root((-b+sqrt delta(a,b,c))/(2*a))
        or x = n-root((-b-sqrt delta(a,b,c))/(2*a))
@@ -313,7 +313,7 @@ theorem
 proof
      assume
 A1:  a <>0 & b/a<0 & c/a>0 & (ex m st n=2*m & m>=1) & delta(a,b,c)>=0
-     & Poly2(a,b,c,x|^ n)=0;
+     & Polynom(a,b,c,x|^ n)=0;
         set y = x|^ n;
  A2:  (-b+sqrt delta(a,b,c))/(2*a)>0 &(-b-sqrt delta(a,b,c))/(2*a)>0
                                                            by A1,Th1;
@@ -335,11 +335,11 @@ A1:  a <>0 & b/a<0 & c/a>0 & (ex m st n=2*m & m>=1) & delta(a,b,c)>=0
 end;
 
 theorem
-  a <> 0 & (ex m st n=2*m+1) & Poly2(a,b,0,x|^ n) = 0 implies
+  a <> 0 & (ex m st n=2*m+1) & Polynom(a,b,0,x|^ n) = 0 implies
     x=0 or x = n-root -(b/a)
 proof
      assume
-A1:  a<>0 & (ex m st n=2*m+1) & Poly2(a,b,0,x|^ n) = 0;
+A1:  a<>0 & (ex m st n=2*m+1) & Polynom(a,b,0,x|^ n) = 0;
      set y = x|^ n;
      now per cases by A1,Th5;
      suppose x|^ n = 0;
@@ -353,11 +353,11 @@ A1:  a<>0 & (ex m st n=2*m+1) & Poly2(a,b,0,x|^ n) = 0;
 end;
 
 theorem
-  a <> 0 & b/a<0 & (ex m st n=2*m & m>=1) & Poly2(a,b,0,x|^ n) = 0 implies
+  a <> 0 & b/a<0 & (ex m st n=2*m & m>=1) & Polynom(a,b,0,x|^ n) = 0 implies
     x=0 or x = n-root -(b/a) or x = -n-root -(b/a)
 proof
     assume
-A1:  a<>0 & b/a<0 & (ex m st n=2*m & m>=1) & Poly2(a,b,0,x|^ n) = 0;
+A1:  a<>0 & b/a<0 & (ex m st n=2*m & m>=1) & Polynom(a,b,0,x|^ n) = 0;
 A2:  -(b/a)>0 by A1,XREAL_1:60;
     set y = x|^ n;
     now per cases by A1,Th5;
@@ -416,12 +416,12 @@ hence thesis by A1;
 end;
 
 theorem
-   a<>0 & b^2-2*a*b-3*a^2>=0 & Poly3(a,b,b,a,x)=0 implies
+   a<>0 & b^2-2*a*b-3*a^2>=0 & Polynom(a,b,b,a,x)=0 implies
    x=-1 or x= (a-b+sqrt(b^2-2*a*b-3*a^2))/(2*a)
        or x= (a-b-sqrt(b^2-2*a*b-3*a^2))/(2*a)
 proof
      assume
- A1: a<>0 & b^2-2*a*b-3*a^2>=0 & Poly3(a,b,b,a,x)=0;
+ A1: a<>0 & b^2-2*a*b-3*a^2>=0 & Polynom(a,b,b,a,x)=0;
         a*(x|^ 3)+b*x^2+b*x+a=0 by A1,POLYEQ_1:def 4;
        then a*(x|^ 3)+(b*x^2+b*x)+a=0;
        then (x|^ 3)*a+1*a+0*a+(b*x^2+b*x)=0;
@@ -442,7 +442,7 @@ proof
        end;
        case a*x^2-(a-b)*x+a=0;
        then a*x^2+(-a+b)*x+a=0;
- then A3: Poly2(a,-a+b,a,x)=0 by POLYEQ_1:def 2;
+ then A3: Polynom(a,-a+b,a,x)=0 by POLYEQ_1:def 2;
        A4: delta(a,-a+b,a)
         =(-a+b)^2-4*a*a by QUIN_1:def 1
        .=(b-a)^2-4*(a*a)
@@ -458,14 +458,24 @@ proof
   hence thesis;
 end;
 
-definition let a,b,c,d,e,f,x be Real;
-  func Poly5(a,b,c,d,e,f,x) equals
+definition let a,b,c,d,e,f,x be complex number;
+  func Polynom(a,b,c,d,e,f,x) equals
     a*(x|^5)+b*(x|^4)+c*(x|^3)+d*(x^2)+e*x+f;
   coherence;
 end;
 
+registration let a,b,c,d,e,f,x be complex number;
+ cluster Polynom(a,b,c,d,e,f,x) -> complex;
+  coherence;
+end;
+
+registration let a,b,c,d,e,f,x be real number;
+ cluster Polynom(a,b,c,d,e,f,x) -> real;
+  coherence;
+end;
+
 theorem
-   a<>0 & b^2+2*a*b+5*a^2-4*a*c>0 & Poly5(a,b,c,c,b,a,x)=0 implies
+   a<>0 & b^2+2*a*b+5*a^2-4*a*c>0 & Polynom(a,b,c,c,b,a,x)=0 implies
        (for y1,y2 being Real st
         y1 = (a-b+sqrt(b^2+2*a*b+5*a^2-4*a*c))/(2*a) &
         y2 = (a-b-sqrt(b^2+2*a*b+5*a^2-4*a*c))/(2*a) holds
@@ -476,7 +486,7 @@ theorem
         x = (y2 - sqrt delta(1,(-y2),1))/2)
 proof
     assume
-A1: a<>0 & b^2+2*a*b+5*a^2-4*a*c>0 & Poly5(a,b,c,c,b,a,x)=0;
+A1: a<>0 & b^2+2*a*b+5*a^2-4*a*c>0 & Polynom(a,b,c,c,b,a,x)=0;
     let y1,y2 be Real;
     assume
 A2: y1 = (a-b+sqrt(b^2+2*a*b+5*a^2-4*a*c))/(2*a)
@@ -542,7 +552,7 @@ A2: y1 = (a-b+sqrt(b^2+2*a*b+5*a^2-4*a*c))/(2*a)
        .=a*x|^4+(-a+b)*x|^3+(a+c-b)*(x|^1*x)+(-a+b)*x+a by NEWTON:11
        .=a*x|^4+(-a+b)*x|^3+(a+c-b)*(x*x)+(-a+b)*x+a by NEWTON:10
        .=a*x|^4+(-a+b)*x|^3+(a+c-b)*x^2+(-a+b)*x+a;
- then A4: Four(a,-a+b,a+c-b,-a+b,a,x)=0 by POLYEQ_2:def 1;
+ then A4: Polynom(a,-a+b,a+c-b,-a+b,a,x)=0 by POLYEQ_2:def 1;
        set y=x+1/x;
  A5:  y=x+1/x;
         y1 = (-(-a+b)+sqrt((-a+b)^2-4*a*(a+c-b)+8*a^2))/(2*a) &
@@ -567,7 +577,7 @@ A1: x+y=p & x*y=q & p^2-4*q>=0;
     p*y-y*y+0*y=q by A1;
     then p*y-y^2=q;
     then 1*y^2+(-p)*y+q=0;
- then A2: Poly2(1,-p,q,y)=0 by POLYEQ_1:def 2;
+ then A2: Polynom(1,-p,q,y)=0 by POLYEQ_1:def 2;
  A3: delta(1,-p,q)=(-p)^2-4*1*q by QUIN_1:def 1
        .=p^2-4*q;
        then A4: y=(-(-p)+sqrt delta(1,-p,q))/(2*1)

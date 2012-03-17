@@ -55,8 +55,8 @@
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="VECTSP_1"/>
 <ArticleID name="QUANTAL1"/>
-<ArticleID name="CARD_3"/>
 <ArticleID name="UNIALG_1"/>
+<ArticleID name="CARD_3"/>
 <ArticleID name="WAYBEL_3"/>
 <ArticleID name="PRALG_1"/>
 <ArticleID name="GR_CY_1"/>
@@ -208,7 +208,7 @@
 <LocusVar nr="1"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="345">
+<Func kind="K" nr="343">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -237,7 +237,7 @@
 </Cluster>
 <Func kind="K" nr="40">
 <Func kind="U" nr="1">
-<Func kind="K" nr="346">
+<Func kind="K" nr="344">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -248,7 +248,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="452">
+<Func kind="K" nr="453">
 <LocusVar nr="4"/>
 <LocusVar nr="3"/>
 </Func>
@@ -276,7 +276,7 @@
 </Cluster>
 <Func kind="K" nr="40">
 <Func kind="U" nr="1">
-<Func kind="K" nr="345">
+<Func kind="K" nr="343">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -287,7 +287,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="452">
+<Func kind="K" nr="453">
 <LocusVar nr="4"/>
 <LocusVar nr="3"/>
 </Func>
@@ -312,7 +312,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="346">
+<Func kind="K" nr="344">
 <LocusVar nr="2"/>
 <LocusVar nr="1"/>
 </Func>

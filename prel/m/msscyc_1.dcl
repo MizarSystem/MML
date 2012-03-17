@@ -36,7 +36,6 @@
 <ArticleID name="MEMBERED"/>
 <ArticleID name="SEQ_4"/>
 <ArticleID name="PRE_CIRC"/>
-<ArticleID name="CARD_3"/>
 <ArticleID name="LANG1"/>
 <ArticleID name="FUNCT_6"/>
 <ArticleID name="FUNCT_3"/>
@@ -45,6 +44,7 @@
 <ArticleID name="TREES_3"/>
 <ArticleID name="TREES_4"/>
 <ArticleID name="DTCONSTR"/>
+<ArticleID name="CARD_3"/>
 <ArticleID name="MSAFREE"/>
 <ArticleID name="MSAFREE2"/>
 <ArticleID name="MSSCYC_1"/>
@@ -240,7 +240,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="366">
+<Func kind="K" nr="365">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -281,6 +281,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="2"/>
+<Adjective nr="5"/>
 <Adjective nr="6"/>
 <Adjective nr="21"/>
 <Adjective nr="33">

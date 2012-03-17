@@ -11,6 +11,51 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
+<Adjective nr="1"/>
+</Cluster>
+</Typ>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="1"/>
+</Cluster>
+</Typ>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="1"/>
+</Cluster>
+</Typ>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="1"/>
+</Cluster>
+</Typ>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="1"/>
+</Cluster>
+</Typ>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="1"/>
+</Cluster>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="12">
+<LocusVar nr="1"/>
+<LocusVar nr="2"/>
+<LocusVar nr="3"/>
+<LocusVar nr="4"/>
+<LocusVar nr="5"/>
+<LocusVar nr="6"/>
+</Func>
+<Cluster>
+<Adjective nr="1"/>
+</Cluster>
+</FCluster>
+<FCluster>
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster>
 <Adjective nr="2"/>
 </Cluster>
 </Typ>

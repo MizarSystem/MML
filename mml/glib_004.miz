@@ -17,7 +17,7 @@ environ
       FINSEQ_1, FINSEQ_2, SEQ_1, CARD_1, PBOOLE, CARD_FIL, FUNCT_2, RVSUM_1,
       ORDINAL1, SQUARE_1, POLYNOM1, UPROOTS, FINSET_1, NAT_1, CQC_LANG,
       FUNCT_4, GLIB_000, GLIB_001, GLIB_002, ABIAN, GLIB_003;
- constructors SQUARE_1, DOMAIN_1, CARD_FIL, REAL_1, AMISTD_2, PSCOMP_1,
+ constructors SQUARE_1, DOMAIN_1, CARD_FIL, REAL_1, CQC_LANG, PSCOMP_1,
       UPROOTS, BINOP_2, GLIB_002, GLIB_003, XXREAL_0, SETWOP_2, FINSOP_1;
  registrations SUBSET_1, RELSET_1, FINSET_1, XREAL_0, CARD_1, INT_1, ABIAN,
       FUNCT_1, XBOOLE_0, RELAT_1, MEMBERED, ORDINAL2, POLYNOM1, GLIB_000,
@@ -27,9 +27,9 @@ environ
  theorems BAGORDER, CARD_1, CARD_2, CQC_LANG, ENUMSET1, FINSEQ_1, FINSEQ_2,
       FINSEQ_3, FINSET_1, FRAENKEL, FUNCOP_1, FUNCT_1, FUNCT_2, FUNCT_4,
       GLIB_000, GLIB_001, GLIB_002, GLIB_003, HEYTING3, INT_1, JORDAN12, NAT_1,
-      PARTFUN1, PBOOLE, POLYNOM1, REAL_1, RELAT_1, RLSUB_2, RVSUM_1, SCMPDS_9,
-      SEQ_1, SQUARE_1, TARSKI, TREES_1, UPROOTS, XBOOLE_0, XBOOLE_1, XREAL_0,
-      YELLOW14, ZFMISC_1, XREAL_1, XXREAL_0, FINSOP_1;
+      PARTFUN1, PBOOLE, POLYNOM1, REAL_1, RELAT_1, RLSUB_2, RVSUM_1,
+      SEQ_1, TARSKI, TREES_1, UPROOTS, XBOOLE_0, XBOOLE_1, XREAL_0, YELLOW14,
+      ZFMISC_1, XREAL_1, XXREAL_0;
  schemes NAT_1, SUBSET_1, RECDEF_1, GRAPH_5, CQC_SIM1;
 
 begin :: Preliminaries on Sum of RBag
@@ -61,7 +61,7 @@ A1: (f +* (x.-->y)).a <> 0 by POLYNOM1:def 7;
     suppose a = x; then a in {x} by TARSKI:def 1;
         hence a in support f \/ {x} by XBOOLE_0:def 2; end;
     suppose a <> x; then
-        (f +* (x.-->y)).a  = f.a by SCMPDS_9:6; then
+        (f +* (x.-->y)).a  = f.a by CQC_LANG:46; then
         a in support f by A1, POLYNOM1:def 7;
         hence a in support f \/ {x} by XBOOLE_0:def 2; end;
 end;
@@ -306,7 +306,7 @@ A4: x in X by ZFMISC_1:37;
 A5: support b c= S proof let a be set; assume a in support b; then
    A6: b.a <> 0 by POLYNOM1:def 7;
     assume not a in S; then a <> x by TARSKI:def 1; then
-      b.a = (EmptyBag X).a by A1, SCMPDS_9:6;
+      b.a = (EmptyBag X).a by A1, CQC_LANG:46;
     hence contradiction by A6, POLYNOM1:56;
    end;
    consider f being FinSequence of REAL such that
@@ -382,9 +382,9 @@ A21: support c is finite by A20, FINSET_1:13;
                  .= 0 + b.i by A23, YELLOW14:3 .= b1.i by A23, YELLOW14:3;
     end;
     suppose A24: i <> x;
-     thus (a+b).i = a.i + b.i by POLYNOM1:def 5 .= b1.i + b.i by A24, SCMPDS_9:
-6
-       .= b1.i + 0 by A24, A22, SCMPDS_9:6        .= b1.i;
+     thus (a+b).i = a.i + b.i by POLYNOM1:def 5
+       .= b1.i + b.i by A24, CQC_LANG:46
+       .= b1.i + 0 by A24, A22, CQC_LANG:46        .= b1.i;
     end;
    end; then
    b1 = a+b by PBOOLE:3; then
@@ -399,9 +399,9 @@ A27: Sum b = b1.x by Th8;
                .= a.i + c.i by A29, YELLOW14:3 .= (a+c).i by POLYNOM1:def 5;
      end;
      suppose A30: i <> x;
-     A31: c.i = 0 by A30, A28, SCMPDS_9:6;
-      thus b2.i = b1.i by A1, A30, SCMPDS_9:6
-               .= a.i + c.i by A31, A30, SCMPDS_9:6
+     A31: c.i = 0 by A30, A28, CQC_LANG:46;
+      thus b2.i = b1.i by A1, A30, CQC_LANG:46
+               .= a.i + c.i by A31, A30, CQC_LANG:46
                .= (a+c).i by POLYNOM1:def 5;
      end;
    end; then
@@ -632,9 +632,8 @@ A5: now let n be Nat; assume P2[n]; then
 A7: for n being Nat holds P2[n] from NAT_1:sch 1(A4,A5); then
     for n being Nat holds IT.n is _Graph; then
     reconsider IT as GraphSeq by GLIB_000:def 55;
-A8: now let n be Nat;
-        thus IT.->n is real-WEV WEVGraph by A7;
-    end; then
+A8: for n be Nat holds
+      IT.->n is real-WEV WEVGraph by A7; then
     for n being Nat holds
       IT.->n is [Weighted] & IT.->n is [ELabeled] & IT.->n is [VLabeled]; then
     reconsider IT as WEVGraphSeq
@@ -2553,9 +2552,8 @@ A5: now let n be Nat; assume P2[n]; then
 A7: for n being Nat holds P2[n] from NAT_1:sch 1(A4,A5); then
     for n being Nat holds IT.n is _Graph; then
     reconsider IT as GraphSeq by GLIB_000:def 55;
-A8: now let n be Nat;
-        thus IT.->n is real-WEV WEVGraph by A7;
-    end; then
+A8: for n be Nat holds
+       IT.->n is real-WEV WEVGraph by A7; then
     for n being Nat holds
       IT.->n is [Weighted] & IT.->n is [ELabeled] & IT.->n is [VLabeled]; then
     reconsider IT as WEVGraphSeq

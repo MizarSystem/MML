@@ -20,11 +20,11 @@
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="RELAT_2"/>
 <ArticleID name="PARTFUN1"/>
-<ArticleID name="CARD_3"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="UNIALG_1"/>
 <ArticleID name="PBOOLE"/>
+<ArticleID name="CARD_3"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="ORDERS_1"/>
 <ArticleID name="ORDERS_2"/>
@@ -57,7 +57,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="231">
+<Func kind="K" nr="230">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 </Func>
@@ -70,7 +70,7 @@
 <Func kind="F" nr="1"/>
 </Typ>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="233">
+<Func kind="K" nr="232">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Var nr="1"/>
@@ -92,7 +92,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="232">
+<Func kind="K" nr="231">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Var nr="1"/>

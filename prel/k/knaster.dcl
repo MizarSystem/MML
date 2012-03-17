@@ -97,35 +97,6 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<FCluster>
-<ArgTypes>
-<Typ kind="M" nr="1">
-<Cluster/>
-</Typ>
-</ArgTypes>
-<Func kind="K" nr="304">
-<LocusVar nr="1"/>
-</Func>
-<Cluster>
-<Adjective nr="75" value="false"/>
-<Adjective nr="78"/>
-<Adjective nr="79"/>
-<Adjective nr="80"/>
-<Adjective nr="81"/>
-<Adjective nr="82"/>
-<Adjective nr="83"/>
-<Adjective nr="84"/>
-<Adjective nr="85"/>
-<Adjective nr="86"/>
-<Adjective nr="87"/>
-<Adjective nr="88"/>
-<Adjective nr="89"/>
-<Adjective nr="90"/>
-<Adjective nr="91"/>
-<Adjective nr="92"/>
-<Adjective nr="107"/>
-</Cluster>
-</FCluster>
 <CCluster>
 <ArgTypes/>
 <Cluster>

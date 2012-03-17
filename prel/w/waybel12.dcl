@@ -270,7 +270,7 @@
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
-<Func kind="K" nr="317">
+<Func kind="K" nr="315">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>

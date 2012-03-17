@@ -8,19 +8,20 @@ environ
 
  vocabularies ARYTM, INT_1, RAT_1, SEQ_1, SEQ_2, FUNCT_1, ORDINAL2, SEQM_3,
       GROUP_1, SQUARE_1, ARYTM_3, RELAT_1, ARYTM_1, SEQ_4, ABSVALUE, LATTICES,
-      PREPOWER, FUNCOP_1;
+      PREPOWER, FUNCOP_1, NAT_1, INT_2;
  notations SUBSET_1, ORDINAL1, ORDINAL2, NUMBERS, XCMPLX_0, XXREAL_0, XREAL_0,
-      REAL_1, NAT_1, NEWTON, FUNCT_1, FUNCOP_1, SEQ_1, SEQ_2, SEQM_3, INT_1,
+      REAL_1, INT_2,
+      INT_1, NAT_1, NEWTON, FUNCT_1, FUNCOP_1, SEQ_1, SEQ_2, SEQM_3,
       SQUARE_1, SEQ_4, RAT_1, COMPLEX1;
  constructors REAL_1, NAT_1, SEQ_2, SEQM_3, SQUARE_1, SEQ_4, RAT_1, NEWTON,
-      FUNCOP_1, XXREAL_0;
+      FUNCOP_1, XXREAL_0, INT_2;
  registrations INT_1, RAT_1, XREAL_0, SEQ_1, RELSET_1, NEWTON, NAT_1, MEMBERED,
-      ORDINAL2, SEQM_3, XXREAL_0;
+      ORDINAL2, SEQM_3, XXREAL_0, ARYTM_3;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  theorems REAL_1, ABSVALUE, NAT_1, SEQ_1, SEQ_2, SEQM_3, INT_1, SQUARE_1,
       SEQ_4, RAT_1, RFUNCT_2, REAL_2, TARSKI, FUNCT_2, NEWTON, XREAL_0,
       XCMPLX_0, XCMPLX_1, ORDINAL2, FUNCOP_1, COMPLEX1, XREAL_1, AXIOMS,
-      XXREAL_0;
+      XXREAL_0, INT_2;
  schemes NAT_1, SEQ_1, FUNCT_2;
 
 begin
@@ -3061,4 +3062,96 @@ theorem
           r |^ m >= 1 by A2,Th19;
       hence thesis by A4,A5,REAL_2:146;
     end;
+
+:: from SCPINVAR, 2006.03.14, A.T.
+
+theorem Th1:
+ for n,m,l be Nat st n divides m & n divides l holds n divides m-l
+proof let n,m,l be Nat;
+    assume A1: n divides m & n divides l;
+then A2:  m = n * (m div n) by NAT_1:49;
+A3:  -l =-n*(l div n) by A1,NAT_1:49
+     .=n*(-(l div n));
+          m - l = m+ -l
+     .=n * ((m div n) + -(l div n)) by A2,A3;
+    hence n divides m - l by INT_1:def 9;
+end;
+
+theorem Th2:
+   m divides n iff m divides (n qua Integer)
+proof
+   reconsider nn=n as Integer;
+   thus m divides n implies m divides (n qua Integer)
+   proof
+       assume m divides n;
+     then consider t be Nat such that
+A1:   n = m * t by NAT_1:def 3;
+      thus m divides (n qua Integer) by A1,INT_1:def 9;
+   end;
+   hereby
+       assume A2: m divides (n qua Integer);
+       per cases;
+       suppose n=0;
+       hence m divides n by NAT_1:53;
+       end;
+       suppose n<>0;
+then A3:    n > 0;
+     consider t be Integer such that
+A4:   nn = m * t by A2,INT_1:def 9;
+       0 < m & 0 < t or m < 0 & t < 0 by A3,A4,XREAL_1:136;
+      then reconsider k=t as Nat by INT_1:16;
+           n = m * k by A4;
+     hence m divides n by NAT_1:def 3;
+    end;
+    end;
+end;
+
+theorem Th3:
+  m hcf n= m hcf abs(n-m)
+proof
+   set x=m hcf n,
+       y=m hcf abs( n - m );
+A1:  x divides m & x divides n by NAT_1:def 5;
+A2:  y divides m by NAT_1:def 5;
+    per cases;
+    suppose n-m >= 0;
+      then reconsider nm=n-m as Nat by INT_1:16;
+A4:   abs( n - m )=nm by ABSVALUE:def 1;
+           x divides n-m by A1,Th1;
+then x divides abs( nm ) by A4,Th2;
+then A5:   x divides y by A1,NAT_1:def 5;
+           y divides nm by A4,NAT_1:def 5;
+then   y divides nm+m by A2,NAT_1:55;
+      then y divides x by A2,NAT_1:def 5;
+     hence x=y by A5,NAT_1:52;
+    end;
+    suppose n-m < 0;
+then A6:   abs( n - m )=-(n-m) by ABSVALUE:def 1
+      .=m-n;
+      then reconsider mn=m-n as Nat;
+           x divides m-n by A1,Th1;
+then x divides abs( n-m ) by A6,Th2;
+then A7:   x divides y by A1,NAT_1:def 5;
+           y divides mn by A6,NAT_1:def 5;
+then A8:   y divides mn-m by A2,Th1;
+    reconsider nn=n as Integer;
+           mn-m=-n;
+      then y divides nn by A8,INT_2:14;
+      then y divides n by Th2;
+      then y divides x by A2,NAT_1:def 5;
+     hence x=y by A7,NAT_1:52;
+end;
+end;
+
+theorem 
+  for a,b be Integer st a>=0 & b>=0 holds a gcd b = a gcd (b-a)
+proof
+   let a,b be Integer;
+   assume A1: a>=0 & b>=0;
+  thus a gcd b=abs(a) hcf abs(b) by INT_2:def 3
+  .=abs(a) hcf abs(abs(b)-abs(a)) by Th3
+  .=abs(a) hcf abs(b-abs(a)) by A1,ABSVALUE:def 1
+  .=abs(a) hcf abs(b-a) by A1,ABSVALUE:def 1
+  .=a gcd (b-a) by INT_2:def 3;
+end;
 

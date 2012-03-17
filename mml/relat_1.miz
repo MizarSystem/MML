@@ -1119,7 +1119,25 @@ A3:   [x,y] in R & [y,z] in P by A2,Def8;
 
 definition let R be Relation;
   attr R is non-empty means
-      not {} in rng R;
+:Def9:  not {} in rng R;
+end;
+
+registration
+ cluster non-empty Relation;
+ existence
+  proof take {};
+   thus not {} in rng {};
+  end;
+end;
+
+registration let R be Relation, S be non-empty Relation;
+ cluster R*S -> non-empty;
+ coherence
+  proof
+A: rng(R*S) c= rng S by Th45;
+    not {} in rng S by Def9;
+   hence not {} in rng(R*S) by A;
+  end;
 end;
 
 ::             IDENTITY RELATION
@@ -2251,20 +2269,39 @@ A5:     [x,y] in P by A4,Def5;
    hence thesis by TARSKI:2;
  end;
 
-theorem
-     (R|X).:Y c= R.:Y
+theorem Th161:
+  (R|X).:Y c= R.:Y
  proof (R|X) c= R by Th88; hence thesis by Th157; end;
 
-canceled;
+theorem
+  for R be Relation, X, Y be set st X c= Y holds (R|Y).:X = R.:X
+  proof
+   let R be Relation,
+       X, Y be set such that
+A1: X c= Y;
+   thus (R|Y).:X c= R.:X by Th161;
+   let y be set;
+   assume y in R.:X;
+   then consider x1 be set such that
+A2: [x1,y] in R and
+A3: x1 in X by Def13;
+      ex x be set st [x,y] in R|Y & x in X
+   proof
+    take x = x1;
+    thus [x,y] in R|Y by A1,A2,A3,Def11;
+    thus thesis by A3;
+   end;
+   hence y in (R|Y).:X by Def13;
+  end; 
 
 theorem
-     (dom R) /\ X c= (R~).:(R.:X)
+   (dom R) /\ X c= (R~).:(R.:X)
  proof
    let x; assume x in (dom R) /\ X;
     then A1: x in dom R & x in X by XBOOLE_0:def 3;
     then consider y such that A2: [x,y] in R by Def4;
-     A3: y in R.:X by A1,A2,Def13;
-            [y,x] in R~ by A2,Def7;
+A3: y in R.:X by A1,A2,Def13;
+    [y,x] in R~ by A2,Def7;
     hence x in (R~).:(R.:X) by A3,Def13;
  end;
 
@@ -2289,7 +2326,6 @@ A2:  [x,y] in R & y in Y;
         x in dom R by A2,Def4;
     hence x in X by A1,A2;
    end;
-
   uniqueness
   proof let X1,X2;
    assume that A3: x in X1 iff ex y st [x,y] in R & y in Y and

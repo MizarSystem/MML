@@ -148,7 +148,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="370">
+<Func kind="K" nr="368">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -172,7 +172,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="370">
+<Func kind="K" nr="368">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -198,7 +198,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="371">
+<Func kind="K" nr="369">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -225,7 +225,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="370">
+<Func kind="K" nr="368">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -256,7 +256,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="370">
+<Func kind="K" nr="368">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -286,7 +286,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="370">
+<Func kind="K" nr="368">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -310,7 +310,7 @@
 <LocusVar nr="1"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="298">
+<Func kind="K" nr="296">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -332,7 +332,7 @@
 <LocusVar nr="1"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="298">
+<Func kind="K" nr="296">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -358,7 +358,7 @@
 <LocusVar nr="1"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="298">
+<Func kind="K" nr="296">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>

@@ -8,13 +8,14 @@ environ
 
  vocabularies FINSEQ_1, TREES_3, RELAT_1, FUNCT_1, FINSET_1, TREES_2, BOOLE,
       TREES_4, FUNCT_3, MCART_1, LANG1, TDGROUP, PROB_1, TARSKI, TREES_1,
-      FUNCT_6, BINOP_1, FINSOP_1, FINSEQ_2, DTCONSTR;
+      FUNCT_6, BINOP_1, FINSOP_1, FINSEQ_2, DTCONSTR, SETWISEO;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, NAT_1, RELSET_1,
       RELAT_1, STRUCT_0, FUNCT_1, FUNCT_2, FINSEQ_1, FINSEQ_2, FINSET_1,
       MCART_1, CARD_3, DOMAIN_1, BINOP_1, FINSOP_1, LANG1, TREES_1, TREES_2,
-      TREES_3, TREES_4, FINSEQOP, XXREAL_0;
+      FINSEQ_4, TREES_3, TREES_4, SETWISEO,
+      FINSEQOP, XXREAL_0;
  constructors NAT_1, CARD_3, DOMAIN_1, BINOP_1, FINSOP_1, LANG1, TREES_4,
-      PARTFUN1, FINSEQOP, XREAL_0, XXREAL_0;
+      PARTFUN1, FINSEQOP, XREAL_0, XXREAL_0, FINSEQ_4, SETWISEO;
  registrations SUBSET_1, LANG1, TREES_1, TREES_2, TREES_3, TREES_4, RELSET_1,
       FINSEQ_1, STRUCT_0, XREAL_0, NAT_1, ORDINAL2, XXREAL_0;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
@@ -22,7 +23,7 @@ environ
  theorems TARSKI, NAT_1, ZFMISC_1, RELAT_1, FUNCT_1, FUNCT_2, FUNCT_6, MCART_1,
       FINSOP_1, BINOP_1, LANG1, FINSEQ_1, FINSEQ_2, FINSEQ_3, CARD_5, TREES_1,
       TREES_2, TREES_3, TREES_4, STRUCT_0, CARD_3, RELSET_1, XBOOLE_0,
-      XBOOLE_1, XREAL_1, MEASURE2, XXREAL_0;
+      XBOOLE_1, MEASURE2, XXREAL_0, SETWISEO;
  schemes NAT_1, RECDEF_1, CQC_SIM1, FINSEQ_1, BINOP_1, RELSET_1, FRAENKEL,
       FUNCT_2, WELLORD2;
 
@@ -2844,3 +2845,87 @@ end;
 :: - partial trees (grown from the root towards the leaves)
 :: - phrases
 
+begin :: Addenda
+
+:: from SCMFSA_7, 2006.03.14, A.T.
+
+theorem
+ for D being set holds
+     FlattenSeq <*>(D*) = <*>D
+ proof
+    let D be set;
+    consider g being BinOp of D* such that
+A1: for d1,d2 being Element of D* holds g.(d1,d2) = d1^d2 and
+A2: FlattenSeq <*>(D*) = g "**" <*>(D*) by Def14;
+A3: {} is Element of D* by FINSEQ_1:66;
+    reconsider p = {} as Element of D* by FINSEQ_1:66;
+       now let a be Element of D*;
+       thus g.({},a) = {} ^ a by A1,A3
+       .= a by FINSEQ_1:47;
+       thus g.(a,{}) = a ^ {} by A1,A3
+       .= a by FINSEQ_1:47;
+      end;
+then A4: p is_a_unity_wrt g by BINOP_1:11;
+ then g has_a_unity by SETWISEO:def 2;
+    then g "**" <*>(D*) = the_unity_wrt g by FINSOP_1:11;
+    hence thesis by A2,A4,BINOP_1:def 8;
+ end;
+
+theorem
+ for D being set, F,G be FinSequence of D* holds
+     FlattenSeq (F ^ G) = FlattenSeq F ^ FlattenSeq G
+ proof
+    let D be set, F,G be FinSequence of D*;
+    consider g being BinOp of D* such that
+A1:     for d1,d2 being Element of D* holds g.(d1,d2) = d1^d2 and
+A2:     FlattenSeq (F ^ G) = g "**" F ^ G by Def14;
+       now let a,b,c be Element of D*;
+       thus g.(a,g.(b,c)) = a ^ g.(b,c) by A1
+       .= a ^ (b ^ c) by A1
+       .= a ^ b ^ c by FINSEQ_1:45
+       .= g.(a,b) ^ c by A1
+       .= g.(g.(a,b),c) by A1;
+      end;
+then A3: g is associative by BINOP_1:def 3;
+A4: {} is Element of D* by FINSEQ_1:66;
+    reconsider p = {} as Element of D* by FINSEQ_1:66;
+       now let a be Element of D*;
+       thus g.({},a) = {} ^ a by A1,A4
+       .= a by FINSEQ_1:47;
+       thus g.(a,{}) = a ^ {} by A1,A4
+       .= a by FINSEQ_1:47;
+      end;
+    then p is_a_unity_wrt g by BINOP_1:11;
+then g has_a_unity or len F >= 1 & len G >= 1 by SETWISEO:def 2;
+    hence FlattenSeq (F ^ G) = g.(g "**" F,g "**" G) by A2,A3,FINSOP_1:6
+    .= (g "**" F) ^ (g "**" G) by A1
+    .= FlattenSeq F ^ (g "**" G) by A1,Def14
+    .= FlattenSeq F ^ FlattenSeq G by A1,Def14;
+ end;
+
+theorem
+    for D being set, p,q be Element of D* holds
+     FlattenSeq <* p,q *> = p ^ q
+ proof
+    let D be set, p,q be Element of D*;
+    consider g being BinOp of D* such that
+A1:     for d1,d2 being Element of D* holds g.(d1,d2) = d1^d2 and
+A2:     FlattenSeq <* p,q *> = g "**" <* p,q *> by Def14;
+    thus FlattenSeq <* p,q *> = g.(p,q) by A2,FINSOP_1:13
+    .= p ^ q by A1;
+ end;
+
+theorem
+    for D being set, p,q,r be Element of D* holds
+     FlattenSeq <* p,q,r *> = p ^ q ^ r
+ proof
+    let D be set, p,q,r be Element of D*;
+    consider g being BinOp of D* such that
+A1:     for d1,d2 being Element of D* holds g.(d1,d2) = d1^d2 and
+A2:     FlattenSeq <* p,q,r *> = g "**" <* p,q,r *> by Def14;
+    thus FlattenSeq <* p,q,r *> = g.(g.(p,q),r) by A2,FINSOP_1:15
+    .= g.(p,q) ^ r by A1
+    .= p ^ q ^ r by A1;
+ end;
+
+ 

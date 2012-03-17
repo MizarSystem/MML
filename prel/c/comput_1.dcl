@@ -18,8 +18,8 @@
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="FUNCT_2"/>
-<ArticleID name="STRUCT_0"/>
 <ArticleID name="FRAENKEL"/>
+<ArticleID name="STRUCT_0"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FINSEQ_2"/>
@@ -43,7 +43,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="30"/>
+<Adjective nr="27"/>
 <Adjective nr="58"/>
 </Cluster>
 </RCluster>
@@ -266,7 +266,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="30"/>
+<Adjective nr="27"/>
 <Adjective nr="65"/>
 </Cluster>
 </RCluster>
@@ -457,7 +457,7 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="30"/>
+<Adjective nr="27"/>
 <Adjective nr="58"/>
 </Cluster>
 </Typ>
@@ -651,7 +651,7 @@
 </Func>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="30"/>
+<Adjective nr="27"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -709,7 +709,7 @@
 <Func kind="K" nr="249"/>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="30"/>
+<Adjective nr="27"/>
 <Adjective nr="65"/>
 </Cluster>
 </FCluster>
@@ -1479,7 +1479,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="30"/>
+<Adjective nr="27"/>
 </Cluster>
 </CCluster>
 <CCluster>

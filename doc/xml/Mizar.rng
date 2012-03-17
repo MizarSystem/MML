@@ -379,7 +379,10 @@ the article id (aid) and order in article (absnr).</a:documentation>
   <define name="Adjective">
     <a:documentation>Adjective is a possibly negated (and paramaterized) attribute
 Optionally the article id (aid) and order in article (absnr)
-can be given.   
+can be given. If available, presentational info
+(number of the Pattern) is given in pid. The heuristic for
+for displaying clusters is that attributes without pid have been
+added automatically by cluster mechanisms.   
 The attribute kind (kind) 'V' can be added explicitly.   </a:documentation>
     <element name="Adjective">
       <attribute name="nr">
@@ -403,6 +406,11 @@ The attribute kind (kind) 'V' can be added explicitly.   </a:documentation>
           <value>V</value>
         </attribute>
       </optional>
+      <optional>
+        <attribute name="pid">
+          <data type="integer"/>
+        </attribute>
+      </optional>
       <zeroOrMore>
         <ref name="Term"/>
       </zeroOrMore>
@@ -422,7 +430,8 @@ The kinds "L" and "G" are equivalent, "G" is going to be
 replaced by more correct "L" in Mizar gradually.   
 First goes the LowerCluster, than UpperCluster
 Optionally the article id (aid) and order in article (absnr)
-can be given.   </a:documentation>
+can be given. If available, presentational info
+(number of the Pattern) is given in pid.</a:documentation>
     <element name="Typ">
       <attribute name="kind">
         <choice>
@@ -445,6 +454,11 @@ can be given.   </a:documentation>
           <data type="string"/>
         </attribute>
       </optional>
+      <optional>
+        <attribute name="pid">
+          <data type="integer"/>
+        </attribute>
+      </optional>
       <zeroOrMore>
         <ref name="Cluster"/>
       </zeroOrMore>
@@ -461,30 +475,49 @@ can be given.   </a:documentation>
     </element>
   </define>
   <define name="For">
-    <a:documentation>Universally quantified formula</a:documentation>
+    <a:documentation>Universally quantified formula
+If available, presentational info is given in pid.   </a:documentation>
     <element name="For">
+      <optional>
+        <attribute name="pid">
+          <data type="integer"/>
+        </attribute>
+      </optional>
       <ref name="Typ"/>
       <ref name="Formula"/>
     </element>
   </define>
   <define name="And">
-    <a:documentation>Conjunctive formula</a:documentation>
+    <a:documentation>Conjunctive formula.
+If available, presentational info is given in pid.</a:documentation>
     <element name="And">
+      <optional>
+        <attribute name="pid">
+          <data type="integer"/>
+        </attribute>
+      </optional>
       <zeroOrMore>
         <ref name="Formula"/>
       </zeroOrMore>
     </element>
   </define>
   <define name="Not">
-    <a:documentation>Negation</a:documentation>
+    <a:documentation>Negation.
+If available, presentational info is given in pid.</a:documentation>
     <element name="Not">
+      <optional>
+        <attribute name="pid">
+          <data type="integer"/>
+        </attribute>
+      </optional>
       <ref name="Formula"/>
     </element>
   </define>
   <define name="Pred">
     <a:documentation>Atomic predicate formulas - schematic, attributive and normal
 Optionally the article id (aid) and order in article (absnr)
-can be given.   </a:documentation>
+can be given. If available, presentational info
+(number of the Pattern) is given in pid.</a:documentation>
     <element name="Pred">
       <attribute name="kind">
         <choice>
@@ -502,6 +535,11 @@ can be given.   </a:documentation>
         </attribute>
         <attribute name="aid">
           <data type="string"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="pid">
+          <data type="integer"/>
         </attribute>
       </optional>
       <zeroOrMore>
@@ -606,7 +644,8 @@ Their types are given elsewhere in data using them - see e.g. Constructor</a:doc
   <define name="Func">
     <a:documentation>Functor terms - schematic, aggregates, normal and selectors
 Optionally the article id (aid) and order in article (absnr)
-can be given.   </a:documentation>
+can be given. If available, presentational info
+(number of the Pattern) is given in pid.</a:documentation>
     <element name="Func">
       <attribute name="kind">
         <choice>
@@ -625,6 +664,11 @@ can be given.   </a:documentation>
         </attribute>
         <attribute name="aid">
           <data type="string"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="pid">
+          <data type="integer"/>
         </attribute>
       </optional>
       <zeroOrMore>
@@ -1119,7 +1163,10 @@ is uniform for all of them, so it does not have to be given.
 The invalid ConstrKind J is now used for forgetful functors,
 this should be changed.   
 Optionally the article id (aid) and order in article (nr)
-can be given.  </a:documentation>
+can be given.  relnr optionally gives its serial number
+in environment for a particular article (it is not in prels). 
+redefnr optonally gives the relative number of the 
+original pattern to which the current is defined as synonym/antonym.</a:documentation>
     <element name="Pattern">
       <attribute name="kind">
         <choice>
@@ -1165,6 +1212,16 @@ can be given.  </a:documentation>
       <optional>
         <attribute name="antonymic">
           <data type="boolean"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="relnr">
+          <data type="integer"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="redefnr">
+          <data type="integer"/>
         </attribute>
       </optional>
       <ref name="ArgTypes"/>
@@ -1317,7 +1374,6 @@ aid specifies its name in uppercase.</a:documentation>
           <ref name="DefTheorem"/>
           <ref name="Definiens"/>
           <ref name="Canceled"/>
-          <ref name="Pattern"/>
           <ref name="AuxiliaryItem"/>
         </choice>
       </zeroOrMore>
@@ -1926,7 +1982,8 @@ with optional label, properties and correctness conditions.
 Sometimes no constructor is created (e.g. for expandable modes).   
 The second optional form creating three or more constructors
 is for structure definitions, which define the aggregate functor,
-the structure mode, the strict attribute and zero or more selectors.
+the structure mode, the strict attribute and zero or more selectors,
+and create existential registration for the strict attribute.
 If any definientia and definitional theorems are created,
 they follow immediately after the enclosing definitional block
 (this might be changed in the future).      </a:documentation>
@@ -1970,6 +2027,9 @@ they follow immediately after the enclosing definitional block
           <optional>
             <ref name="Constructor"/>
           </optional>
+          <optional>
+            <ref name="Pattern"/>
+          </optional>
         </group>
         <group>
           <ref name="Constructor"/>
@@ -1977,12 +2037,16 @@ they follow immediately after the enclosing definitional block
           <oneOrMore>
             <ref name="Constructor"/>
           </oneOrMore>
+          <ref name="Registration"/>
           <zeroOrMore>
             <ref name="CorrectnessCondition"/>
           </zeroOrMore>
           <optional>
             <ref name="Correctness"/>
           </optional>
+          <oneOrMore>
+            <ref name="Pattern"/>
+          </oneOrMore>
         </group>
       </choice>
     </element>
@@ -2049,6 +2113,7 @@ semantically irrelevant and are not printed yet - fix this.</a:documentation>
         <choice>
           <ref name="Let"/>
           <ref name="AuxiliaryItem"/>
+          <ref name="Pattern"/>
         </choice>
       </zeroOrMore>
       <ref name="EndPosition"/>
