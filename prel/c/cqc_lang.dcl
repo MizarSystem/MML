@@ -44,8 +44,8 @@
 <Func kind="K" nr="132"/>
 </Adjective>
 <Adjective nr="6"/>
-<Adjective nr="31"/>
-<Adjective nr="33">
+<Adjective nr="32"/>
+<Adjective nr="34">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -54,7 +54,7 @@
 <ArgTypes/>
 <Func kind="K" nr="172"/>
 <Cluster>
-<Adjective nr="10" value="false"/>
+<Adjective nr="11" value="false"/>
 </Cluster>
 </FCluster>
 </Registrations>

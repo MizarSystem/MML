@@ -42,7 +42,7 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="24"/>
+<Adjective nr="25"/>
 </Cluster>
 </FCluster>
 <FCluster aid="GRAPHSP" nr="2">
@@ -63,7 +63,7 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="24"/>
+<Adjective nr="25"/>
 </Cluster>
 </FCluster>
 </Registrations>

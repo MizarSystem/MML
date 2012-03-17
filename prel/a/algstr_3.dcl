@@ -24,7 +24,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="42"/>
+<Adjective nr="43"/>
 </Cluster>
 </RCluster>
 <RCluster aid="ALGSTR_3" nr="2">
@@ -33,7 +33,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="31" value="false"/>
+<Adjective nr="32" value="false"/>
 </Cluster>
 </RCluster>
 <RCluster aid="ALGSTR_3" nr="3">
@@ -42,17 +42,17 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="31" value="false"/>
-<Adjective nr="42"/>
+<Adjective nr="32" value="false"/>
 <Adjective nr="43"/>
+<Adjective nr="44"/>
 </Cluster>
 </RCluster>
 <FCluster aid="ALGSTR_3" nr="1">
 <ArgTypes/>
 <Func kind="K" nr="105"/>
 <Cluster>
-<Adjective nr="31" value="false"/>
-<Adjective nr="42"/>
+<Adjective nr="32" value="false"/>
+<Adjective nr="43"/>
 </Cluster>
 </FCluster>
 </Registrations>

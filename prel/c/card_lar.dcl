@@ -21,24 +21,24 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="10"/>
 <Adjective nr="11"/>
 <Adjective nr="12"/>
 <Adjective nr="13"/>
-<Adjective nr="17" value="false"/>
-<Adjective nr="20" value="false"/>
-<Adjective nr="24"/>
-<Adjective nr="31" value="false"/>
-<Adjective nr="33"/>
+<Adjective nr="14"/>
+<Adjective nr="18" value="false"/>
+<Adjective nr="21" value="false"/>
+<Adjective nr="25"/>
+<Adjective nr="32" value="false"/>
+<Adjective nr="34"/>
 </Cluster>
 </RCluster>
 <RCluster aid="CARD_LAR" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="20" value="false"/>
-<Adjective nr="24"/>
-<Adjective nr="31" value="false"/>
+<Adjective nr="21" value="false"/>
+<Adjective nr="25"/>
+<Adjective nr="32" value="false"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -47,19 +47,19 @@
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="10"/>
 <Adjective nr="11"/>
 <Adjective nr="12"/>
-<Adjective nr="20" value="false"/>
-<Adjective nr="24"/>
+<Adjective nr="13"/>
+<Adjective nr="21" value="false"/>
+<Adjective nr="25"/>
 </Cluster>
 </RCluster>
 <FCluster aid="CARD_LAR" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="12"/>
-<Adjective nr="17" value="false"/>
+<Adjective nr="13"/>
+<Adjective nr="18" value="false"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -67,53 +67,53 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="17" value="false"/>
+<Adjective nr="18" value="false"/>
 </Cluster>
 </FCluster>
 <CCluster aid="CARD_LAR" nr="1">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="12"/>
-<Adjective nr="20" value="false"/>
-<Adjective nr="24"/>
+<Adjective nr="13"/>
+<Adjective nr="21" value="false"/>
+<Adjective nr="25"/>
 </Cluster>
 <Typ kind="M" nr="1">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="12"/>
 <Adjective nr="13"/>
+<Adjective nr="14"/>
 </Cluster>
 </CCluster>
 <CCluster aid="CARD_LAR" nr="2">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="12"/>
 <Adjective nr="13"/>
-<Adjective nr="17" value="false"/>
+<Adjective nr="14"/>
+<Adjective nr="18" value="false"/>
 </Cluster>
 <Typ kind="M" nr="1">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="12"/>
-<Adjective nr="20" value="false"/>
+<Adjective nr="13"/>
+<Adjective nr="21" value="false"/>
 </Cluster>
 </CCluster>
 <CCluster aid="CARD_LAR" nr="3">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="20" value="false"/>
-<Adjective nr="24"/>
-<Adjective nr="25" value="false"/>
+<Adjective nr="21" value="false"/>
+<Adjective nr="25"/>
+<Adjective nr="26" value="false"/>
 </Cluster>
 <Typ kind="M" nr="1">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="20" value="false"/>
-<Adjective nr="24"/>
-<Adjective nr="31" value="false"/>
+<Adjective nr="21" value="false"/>
+<Adjective nr="25"/>
+<Adjective nr="32" value="false"/>
 </Cluster>
 </CCluster>
 </Registrations>

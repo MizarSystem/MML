@@ -2099,31 +2099,6 @@ reserve p1,p2 for FinSequence;
 theorem Th62:
   dom (p1 \/ ((len p1) Shift p2)) = Seg (len p1 + len p2)
 proof
-  per cases;
-  suppose
-A1: p1 = {} & p2 = {};
-    then
-A2: dom (p1 \/ ((len p1) Shift p2)) = dom p1 by Th55;
-    len p2 = 0 by A1;
-    hence thesis by A2,FINSEQ_1:def 3;
-  end;
-  suppose
-A3: p1 <> {} & p2 = {};
-    then
-A4: (len p1) Shift p2 = {} by Th55;
-    len p2 = 0 by A3;
-    hence thesis by A4,FINSEQ_1:def 3;
-  end;
-  suppose
-A5: p1 = {} & p2 <> {};
-    then dom (p1 \/ ((len p1) Shift p2)) = dom (0 Shift p2)
-      .= dom p2 by Th52
-      .= Seg (0 qua Nat+len p2) by FINSEQ_1:def 3
-      .= Seg (len p1 + len p2) by A5;
-    hence thesis;
-  end;
-  suppose
-    p1 <> {} & p2 <> {};
 A6: Seg (len p1 + len p2) = {j: 1 <= j & j <= len p1 + len p2}
     by FINSEQ_1:def 1;
 A7: dom (p1 \/ ((len p1) Shift p2)) = dom p1 \/ dom ((len p1) Shift p2)
@@ -2156,7 +2131,6 @@ A14: j <= len p1 + len p2 by A6;
     1 <= j & j <= i0 or i0 + 1 <= j & j <= i0 + len p2 by A13,A14,INT_1:20;
     then x in dom p1 or x in dom ((len p1) Shift p2) by A8,A9,A12;
     hence thesis by A7,XBOOLE_0:def 3;
-  end;
 end;
 
 theorem Th63:
@@ -2725,13 +2699,6 @@ theorem Th71:
   for p1,p2 being FinSequence holds len p1 Shift p2 c= p1^p2
 proof
   let p1,p2 be FinSequence;
-  per cases;
-  suppose p2 = {};
-    then len p1 Shift p2 = {} by Th55;
-    hence thesis by XBOOLE_1:2;
-  end;
-  suppose
-    p2 <> {};
 A1: dom (len p1 Shift p2) = {len p1 + k: k in dom p2} by Def15;
 A2: dom (len p1 Shift p2) = {k: len p1 + 1 <= k & k <= len p1 + len p2}
     by Th54;
@@ -2757,7 +2724,6 @@ A12: j in dom p2 by A1,A5;
     y = p2.j by A6,A11,A12,Def15
       .= (p1^p2).x by A11,A12,FINSEQ_1:def 7;
     hence thesis by A10,FUNCT_1:8;
-  end;
 end;
 
 theorem Th72:
@@ -3101,20 +3067,6 @@ proof
   assume that
 A1: q1 c= p1 and
 A2: q2 c= p2;
-  per cases;
-  suppose
-A3: q2 = {};
-    consider ss being FinSubsequence such that
-A4: ss = q1 \/ (len p1 Shift q2) by A1,Th79;
-    (len p1 Shift q2) = {} by A3,Th55;
-    then
-A5: dom Seq ss = Seg len Seq q1 by A4,FINSEQ_1:def 3;
-    Seq q2 = {} by A3,Th2;
-    then len Seq q2 = 0;
-    hence thesis by A4,A5;
-  end;
-  suppose
-    q2 <> {};
     consider ss being FinSubsequence such that
 A6: ss = q1 \/ (len p1 Shift q2) by A1,Th79;
 A7: ex k1 be Nat st ( dom q1 c= Seg k1) by FINSEQ_1:def 12;
@@ -3137,7 +3089,6 @@ A14: len Sgm dom q1 = card q1 by A12,CARD_1:104;
 A15: len Sgm dom (len p1 Shift q2) = len Seq q2 by A13,Th7;
     len Sgm dom q1 = len Seq q1 by A14,Th7;
     hence thesis by A6,A10,A15;
-  end;
 end;
 
 theorem Th81:
@@ -3153,35 +3104,6 @@ A2: q2 c= p2;
   consider ss being FinSubsequence such that
 A3: ss = q1 \/ (len p1 Shift q2) and
 A4: dom Seq ss = Seg (len Seq q1 + len Seq q2) by A1,A2,Th80;
-  per cases;
-  suppose
-A5: q1 = {} & q2 = {};
-    then (len p1 Shift q2) = {} by Th55;
-    then
-A6: Seq ss = {} by A3,A5,Th2;
-    Seq q1 = {} by A5,Th2;
-    then Seq q1 \/ (len Seq q1 Shift Seq q2) = {} by A5,Th55;
-    hence thesis by A3,A4,A6;
-  end;
-  suppose
-A7: q1 = {} & q2 <> {};
-    then
-A8: Seq ss = Seq q2 by A3,Th77;
-A9: Seq q1 = {} by A7,Th2;
-    then len Seq q1 = 0;
-    then Seq q1 \/ (len Seq q1 Shift Seq q2) = Seq q2 by A9,Th52;
-    hence thesis by A3,A4,A8;
-  end;
-  suppose
-A10: q1 <> {} & q2 = {};
-    then
-A11: (len p1 Shift q2) = {} by Th55;
-    Seq q2 = {} by A10,Th2;
-    then (len Seq q1 Shift Seq q2) = {} by Th55;
-    hence thesis by A3,A4,A11;
-  end;
-  suppose
-    q1 <> {} & q2 <> {};
 A12: Seg (len Seq q1 + len Seq q2)
     = {k: 1 <= k & k <= len Seq q1 + len Seq q2} by FINSEQ_1:def 1;
 A13: dom Seq q1 = Seg len Seq q1 by FINSEQ_1:def 3
@@ -3310,7 +3232,6 @@ A52:    (Sgm dom (len p1 Shift q2)).j in dom (len p1 Shift q2) by
     end;
     then Seq ss = ss1 by A4,A15,A30,FUNCT_1:9;
     hence thesis by A3,A4;
-  end;
 end;
 
 theorem Th82:

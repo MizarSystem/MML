@@ -8,7 +8,7 @@ environ
 
  vocabularies ARYTM, FINSEQ_2, FINSEQ_1, FUNCT_1, ABSVALUE, ARYTM_1, RVSUM_1,
       COMPLEX1, SQUARE_1, RLVECT_1, RELAT_1, PCOMPS_1, METRIC_1, PRE_TOPC,
-      FUNCT_2, MCART_1, EUCLID, BOOLE, MONOID_0, ZF_LANG, SEQ_1, XREAL_0,
+      FUNCT_2, MCART_1, EUCLID, MONOID_0, ZF_LANG, SEQ_1, XREAL_0,
       SUBSET_1, VALUED_0, RLTOPSP1, FUNCSDOM, SETFAM_1, STRUCT_0, ALGSTR_0,
       VECTSP_1, FUNCOP_1, MIDSP_3;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0,
@@ -186,9 +186,10 @@ end;
 
 canceled 2;
 
-theorem Th3:
-  dom x = Seg n
+theorem
+  for x being n-long FinSequence holds dom x = Seg n
 proof
+  let x be n-long FinSequence;
   len x = n by FINSEQ_1:def 18;
   hence thesis by FINSEQ_1:def 3;
 end;
@@ -198,29 +199,8 @@ theorem
 
 canceled;
 
-theorem Th6:
-  r = x .k implies (abs x).k = abs r
-proof
-  assume
-A1: r = x .k;
-  per cases;
-  suppose
-A2: k in Seg n;
-    len abs x = n by FINSEQ_1:def 18;
-    then k in dom abs x by A2,FINSEQ_1:def 3;
-    hence (abs x).k = absreal.r by A1,FUNCT_1:22
-      .= abs r by Def2;
-  end;
-  suppose
-A3: not k in Seg n;
-    then not k in dom abs x by Th3;
-    then
-A4: (abs x).k = 0 by FUNCT_1:def 4;
-    not k in dom x by A3,Th3;
-    then r = {} by A1,FUNCT_1:def 4;
-    hence thesis by A4,ABSVALUE:def 1;
-  end;
-end;
+theorem
+  (abs x).k = abs (x .k) by VALUED_1:18;
 
 Lm1: f is FinSequence of REAL
 proof
@@ -245,41 +225,25 @@ proof
 end;
 
 theorem Th8:
-  abs -f = abs f
-proof
-  set n = len f;
-  reconsider x=f as Element of REAL n by Lm2;
-  now
-    let j such that
-    j in Seg n;
-    reconsider r = f.j, r' = (-f).j as Element of REAL;
-    thus (abs -x).j = abs r' by Th6
-      .= abs (-r) by RVSUM_1:35
-      .= abs r by COMPLEX1:138
-      .= (abs x).j by Th6;
+  for f being complex-valued Function holds abs -f = abs f
+  proof
+    let f be complex-valued Function;
+a1: dom abs(-f) = dom(-f) by VALUED_1:def 11;
+a2: dom abs(f) = dom f by VALUED_1:def 11;
+a3: dom -f = dom f by VALUED_1:8;
+    now
+      let x be set;
+      assume x in dom abs(-f);
+      thus abs(-f).x = abs((-f).x) by VALUED_1:18
+      .= abs(-f.x) by VALUED_1:8
+      .= abs(f.x) by COMPLEX1:138
+      .= abs(f).x by VALUED_1:18;
+    end;
+    hence thesis by a1,a2,a3,FUNCT_1:9;
   end;
-  hence thesis by FINSEQ_2:139;
-end;
 
 theorem Th9:
-  abs(r*f) = abs(r)*(abs f)
-proof
-  set n = len f;
-  reconsider n as Element of NAT;
-  reconsider x=f as Element of REAL n by Lm2;
-  now
-    let j such that
-    j in Seg n;
-    reconsider r' = x .j, rr = (r*x).j as Element of REAL;
-    reconsider ar = (abs x).j as Real;
-    thus (abs(r*x)).j = abs(rr) by Th6
-      .= abs(r*r') by RVSUM_1:66
-      .= abs(r)*abs(r') by COMPLEX1:151
-      .= abs(r)*ar by Th6
-      .= (abs(r)*(abs x)).j by RVSUM_1:67;
-  end;
-  hence thesis by FINSEQ_2:139;
-end;
+  abs(r*f) = abs(r)*(abs f) by RFUNCT_1:37;
 
 theorem Th10:
   |.0*n.| = 0
@@ -298,7 +262,7 @@ proof
     assume
     k in Seg n;
     thus (sqr abs x).k = ((abs x).k)^2 by VALUED_1:11
-      .= (abs (x .k))^2 by Th6
+      .= (abs (x .k))^2 by VALUED_1:18
       .= (x .k)^2 by COMPLEX1:161
       .= (sqr x).k by VALUED_1:11;
   end;
@@ -318,7 +282,7 @@ A2: j in Seg n;
     Sum sqr x = 0 by A1,RVSUM_1:116,SQUARE_1:92;
     then Sum sqr abs x = 0 by Lm3;
     then (abs x).j = (n|->0).j by RVSUM_1:121;
-    then abs r = (n|-> 0).j by Th6;
+    then abs r = (n|-> 0).j by VALUED_1:18;
     then abs r = 0 by A2,FUNCOP_1:13;
     then r = 0 by ABSVALUE:7;
     hence x .j = (n|->(0 qua Real)).j by A2,FUNCOP_1:13;
@@ -381,19 +345,19 @@ A6: k in Seg n;
     reconsider r11 = x1.k, r22 = x2.k as Element of REAL;
     abs(r11 + r22) <= abs(r11) + abs(r22) by COMPLEX1:142;
     then abs(r12) <= abs(r11) + abs(r22) by A6,A5,VALUED_1:def 1;
-    then abs(r12) <= abs(r11) + abs2 by Th6;
+    then abs(r12) <= abs(r11) + abs2 by VALUED_1:18;
     then
-A7: abs(r12) <= abs1 + abs2 by Th6;
+A7: abs(r12) <= abs1 + abs2 by VALUED_1:18;
     reconsider abs'12 = (abs (x1 + x2)).k as Real;
     reconsider abs12 = (abs x1 + abs x2).k as Real;
     set r2 = (sqr (abs x1 + abs x2)).k;
     abs(r12) >= 0 by COMPLEX1:132;
     then
-A8: 0 <= abs'12 by Th6;
+A8: 0 <= abs'12 by VALUED_1:18;
     len(abs x1 + abs x2) = n by FINSEQ_1:def 18;
     then dom(abs x1 + abs x2) = Seg n by FINSEQ_1:def 3;
     then abs(r12) <= abs12 by A6,A7,VALUED_1:def 1;
-    then abs'12 <= abs12 by Th6;
+    then abs'12 <= abs12 by VALUED_1:18;
     then (abs'12)^2 <= (abs12)^2 by A8,SQUARE_1:77;
     then (abs'12)^2 <= r2 by VALUED_1:11;
     hence thesis by VALUED_1:11;
@@ -408,7 +372,7 @@ A10: k in Seg n implies 0 <= (mlt(abs x1,abs x2)).k
     k in Seg n;
     set r = (mlt(abs x1,abs x2)).k;
     reconsider r1 = x1.k, r2 = x2.k as Element of REAL;
-    (abs x1).k = abs(r1) & (abs x2).k = abs(r2) by Th6;
+    (abs x1).k = abs(r1) & (abs x2).k = abs(r2) by VALUED_1:18;
     then
 A11: r = abs(r1)*abs(r2) by RVSUM_1:87;
     0 <= abs(r1) & 0 <= abs(r2) by COMPLEX1:132;

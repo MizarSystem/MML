@@ -2473,7 +2473,7 @@ end;
 definition
   let f be Function;
   redefine attr f is empty-yielding means
-  for x st x in dom f holds f.x is
+:Def15: for x st x in dom f holds f.x is
   empty;
   compatibility
   proof
@@ -3199,19 +3199,82 @@ registration
   end;
 end;
 
-theorem Th173:
-  for F being functional set, B being set st B c= F holds B is
-  functional
-proof
-  let F be functional set, B be set such that
-A1: B c= F;
-  let x be set;
-  thus thesis by A1;
-end;
-
 registration
   let A be functional set;
   cluster -> functional Subset of A;
-  coherence by Th173;
+  coherence
+proof
+  let B be Subset of A;
+  let x be set;
+  thus thesis;
+end;
 end;
 
+:: new, 2009.09.30, A.T.
+
+definition let g,f be Function;
+ attr f is g-compatible means
+:Def20: x in dom f implies f.x in g.x;
+end;
+
+theorem
+  f is g-compatible & dom f = dom g implies g is non-empty
+ proof assume
+Z: f is g-compatible & dom f = dom g;
+  let x;
+  assume x in dom g;
+   then f.x in g.x by Z,Def20;
+  hence g.x is non empty;
+ end;
+
+theorem Th174:
+ {} is f-compatible
+ proof
+  let x;
+  thus thesis by Def20;
+ end;
+
+registration
+ let I be set, f be Function;
+ cluster empty I-defined f-compatible Function;
+ existence
+  proof
+   take {};
+   thus thesis by Th174,RELAT_1:206;
+  end;
+end;
+
+registration let X be set;
+ let f be Function, g be f-compatible Function;
+ cluster g|X -> f-compatible;
+ coherence
+  proof let x;
+F:  dom(g|X) c= dom g by RELAT_1:89;
+   assume
+Z:   x in dom(g|X);
+    then x in dom g by F;
+    then g.x in f.x by Def20;
+   hence (g|X).x in f.x by Z,Th70;
+  end;
+end;
+
+registration let I be set;
+ cluster non-empty I-defined Function;
+ existence
+  proof
+   take {};
+   thus {} is non-empty;
+   thus dom {} c= I by XBOOLE_1:2;
+  end;
+end;
+
+theorem
+ for g being f-compatible Function
+  holds dom g c= dom f
+ proof
+  let g be f-compatible Function;
+  let x be set;
+  assume x in dom g;
+   then g.x in f.x by Def20;
+  hence x in dom f by Def4;
+ end;

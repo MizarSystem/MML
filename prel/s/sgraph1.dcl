@@ -26,19 +26,19 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="46"/>
+<Adjective nr="47"/>
 </Cluster>
 </RCluster>
 <FCluster aid="SGRAPH1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="16"/>
+<Adjective nr="17"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="16"/>
+<Adjective nr="17"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -47,7 +47,7 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="24"/>
+<Adjective nr="25"/>
 </Cluster>
 </FCluster>
 <FCluster aid="SGRAPH1" nr="2">
@@ -60,7 +60,7 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="17" value="false"/>
+<Adjective nr="18" value="false"/>
 </Cluster>
 </FCluster>
 </Registrations>

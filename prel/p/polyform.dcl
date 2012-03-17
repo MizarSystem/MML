@@ -55,7 +55,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="161"/>
+<Adjective nr="162"/>
 </Cluster>
 </RCluster>
 <RCluster aid="POLYFORM" nr="2">
@@ -64,9 +64,9 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="162"/>
 <Adjective nr="163"/>
 <Adjective nr="164"/>
+<Adjective nr="165"/>
 </Cluster>
 </RCluster>
 <FCluster aid="POLYFORM" nr="1">
@@ -77,7 +77,7 @@
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="19"/>
+<Adjective nr="20"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -86,31 +86,31 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="48"/>
+<Adjective nr="49"/>
 </Cluster>
 </FCluster>
 <FCluster aid="POLYFORM" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="15">
 <Cluster>
-<Adjective nr="162"/>
 <Adjective nr="163"/>
 <Adjective nr="164"/>
+<Adjective nr="165"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="422">
+<Func kind="K" nr="423">
 <LocusVar nr="1"/>
 <Func kind="K" nr="56">
-<Func kind="K" nr="421">
+<Func kind="K" nr="422">
 <LocusVar nr="1"/>
 </Func>
 <Num nr="1"/>
 </Func>
 </Func>
 <Cluster>
-<Adjective nr="10" value="false"/>
-<Adjective nr="25"/>
+<Adjective nr="11" value="false"/>
+<Adjective nr="26"/>
 </Cluster>
 </FCluster>
 </Registrations>

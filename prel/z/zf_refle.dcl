@@ -24,8 +24,8 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="17" value="false"/>
-<Adjective nr="41"/>
+<Adjective nr="18" value="false"/>
+<Adjective nr="42"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -34,15 +34,15 @@
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="17" value="false"/>
+<Adjective nr="18" value="false"/>
 </Cluster>
 </RCluster>
 <RCluster aid="ZF_REFLE" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="17" value="false"/>
-<Adjective nr="41"/>
+<Adjective nr="18" value="false"/>
+<Adjective nr="42"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -56,8 +56,8 @@
 <LocusVar nr="1"/>
 </Adjective>
 <Adjective nr="6"/>
-<Adjective nr="14"/>
-<Adjective nr="42">
+<Adjective nr="15"/>
+<Adjective nr="43">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

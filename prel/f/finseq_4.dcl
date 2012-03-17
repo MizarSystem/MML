@@ -93,7 +93,7 @@
 <LocusVar nr="4"/>
 </Func>
 <Cluster>
-<Adjective nr="26"/>
+<Adjective nr="27"/>
 </Cluster>
 </FCluster>
 <FCluster aid="FINSEQ_4" nr="4">
@@ -122,7 +122,7 @@
 <LocusVar nr="5"/>
 </Func>
 <Cluster>
-<Adjective nr="26"/>
+<Adjective nr="27"/>
 </Cluster>
 </FCluster>
 <FCluster aid="FINSEQ_4" nr="5">
@@ -147,7 +147,7 @@
 <LocusVar nr="4"/>
 </Func>
 <Cluster>
-<Adjective nr="28">
+<Adjective nr="29">
 <Num nr="4"/>
 </Adjective>
 </Cluster>
@@ -178,7 +178,7 @@
 <LocusVar nr="5"/>
 </Func>
 <Cluster>
-<Adjective nr="28">
+<Adjective nr="29">
 <Num nr="5"/>
 </Adjective>
 </Cluster>

@@ -19,14 +19,14 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="10" value="false"/>
-<Adjective nr="30"/>
+<Adjective nr="11" value="false"/>
+<Adjective nr="31"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="10" value="false"/>
-<Adjective nr="30"/>
+<Adjective nr="11" value="false"/>
+<Adjective nr="31"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -34,8 +34,8 @@
 <For>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="10" value="false"/>
-<Adjective nr="30"/>
+<Adjective nr="11" value="false"/>
+<Adjective nr="31"/>
 </Cluster>
 </Typ>
 <Not>
@@ -44,7 +44,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="6"/>
-<Adjective nr="26"/>
+<Adjective nr="27"/>
 </Cluster>
 </Typ>
 <And>

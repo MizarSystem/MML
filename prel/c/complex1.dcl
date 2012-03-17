@@ -18,7 +18,7 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="20"/>
+<Adjective nr="21"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -26,14 +26,14 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="21"/>
+<Adjective nr="22"/>
 </Cluster>
 </FCluster>
 <FCluster aid="COMPLEX1" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="20"/>
+<Adjective nr="21"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -41,14 +41,14 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="21"/>
+<Adjective nr="22"/>
 </Cluster>
 </FCluster>
 <FCluster aid="COMPLEX1" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="20"/>
+<Adjective nr="21"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -56,8 +56,8 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="20"/>
 <Adjective nr="21"/>
+<Adjective nr="22"/>
 </Cluster>
 </FCluster>
 </Registrations>

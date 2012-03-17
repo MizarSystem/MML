@@ -1,0 +1,154 @@
+:: Complex Integral
+::  by Masahiko Yamazaki , Hiroshi Yamazaki , Katsumi Wasaki and Yasunari Shidama
+:: 
+:: Received October 10, 2009
+:: Copyright (c) 2009 Association of Mizar Users
+
+environ
+
+ vocabularies INTEGRA1, ARYTM_1, RELAT_1, FUNCT_1, PARTFUN1, SEQ_1, BOOLE,
+      RFUNCT_1, LATTICES, SEQ_2, ABSVALUE, ORDINAL2, ARYTM_3, FDIFF_1, RCOMP_1,
+      PRE_TOPC, INTEGRA5, ARYTM, SIN_COS, CFUNCT_1, INTEGR1C, TOPMETR,
+      COMPLEX1, XCMPLX_0, SEQM_3, FDIFF_3, OPPCAT_1, MCART_1;
+ notations TARSKI, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, RELSET_1, PARTFUN1,
+      FUNCT_2, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0, XXREAL_0, COMPLEX1,
+      REAL_1, BINOP_1, RCOMP_1, FUNCT_3, SEQ_1, SEQ_2, FCONT_1, FDIFF_1,
+      TOPMETR, MCART_1, INTEGRA1, INTEGRA5, SIN_COS, CFUNCT_1, VALUED_1,
+      MESFUN6C, PRE_TOPC, FDIFF_3, STRUCT_0, XXREAL_2;
+ constructors REAL_1, FDIFF_1, RFUNCT_3, FCONT_1, BINOP_2, INTEGRA5, RSSPACE,
+      SIN_COS, TOPMETR, FDIFF_3, SEQ_1, MESFUN6C, SEQ_2;
+ registrations XREAL_0, INTEGRA1, FUNCT_2, NUMBERS, ORDINAL1, MEMBERED,
+      SIN_COS, FDIFF_1, SUBSET_1, XCMPLX_0, RELAT_1, XXREAL_0, XBOOLE_0,
+      VALUED_0, VALUED_1;
+ requirements NUMERALS, BOOLE, SUBSET, REAL, ARITHM;
+
+
+begin :: The Definition of Complex Curve and Complex Integral
+
+reserve n,n1,m for Element of NAT;
+reserve r,t,x1 for Element of REAL;
+reserve h for convergent_to_0 Real_Sequence;
+reserve c1 for constant Real_Sequence;
+reserve p1 for real number;
+
+definition
+  func R2-to-C -> Function of [:REAL,REAL:],COMPLEX means
+:: INTEGR1C:def 1
+  for p be Element of [:REAL,REAL:], a,b be Element of REAL st
+  a = p`1 & b = p`2 holds
+  it.([a,b]) = a+b*<i>;
+end;
+
+definition
+  let a,b be Real;
+  let x,y be PartFunc of REAL,REAL, Z be Subset of REAL;
+  let f be PartFunc of COMPLEX, COMPLEX;
+  func integral(f,x,y,a,b,Z) -> Complex means
+:: INTEGR1C:def 2
+  ex u0, v0 be PartFunc of REAL,REAL st
+  u0 = (Re f)* (R2-to-C) *<:x,y:> & v0 = (Im f)* (R2-to-C) *<:x,y:> &
+  it = integral( u0(#)(x`|Z) - v0(#)(y`|Z) ,a,b )
+  + integral( v0(#)(x`|Z) + u0(#)(y`|Z) ,a,b )*<i>;
+end;
+
+definition
+  let C be PartFunc of REAL,COMPLEX;
+  attr C is C1-curve-like means
+:: INTEGR1C:def 3
+  ex a,b be Real,
+  x,y be PartFunc of REAL,REAL,
+  Z be Subset of REAL st
+  a <= b & [.a,b.]=dom C & [.a,b.] c= dom x & [.a,b.] c= dom y &
+  Z is open & [.a,b.] c= Z & x is_differentiable_on Z &
+  y is_differentiable_on Z & x`|Z is continuous & y`|Z is continuous &
+  C = (x+<i>(#)y) | [.a,b.];
+end;
+
+registration
+  cluster C1-curve-like PartFunc of REAL,COMPLEX;
+end;
+
+definition
+  mode C1-curve is C1-curve-like PartFunc of REAL,COMPLEX;
+end;
+
+definition
+  let f be PartFunc of COMPLEX,COMPLEX;
+  let C be C1-curve;
+  assume
+ rng C c= dom f;
+  func integral(f,C) -> Complex means
+:: INTEGR1C:def 4
+  ex a,b be Real,x,y be PartFunc of REAL,REAL,
+  Z be Subset of REAL st
+  a <= b & [.a,b.]=dom C & [.a,b.] c= dom x & [.a,b.] c= dom y &
+  Z is open & [.a,b.] c= Z & x is_differentiable_on Z &
+  y is_differentiable_on Z & x`|Z  is continuous &
+  y`|Z is continuous & C = (x+<i>(#)y) | [.a,b.]
+  & it = integral(f,x,y,a,b,Z);
+end;
+
+definition
+  let f be PartFunc of COMPLEX,COMPLEX;
+  let C be C1-curve;
+  pred f is_integrable_on C means
+:: INTEGR1C:def 5
+  for a,b be Real,
+  x,y be PartFunc of REAL,REAL,
+  Z be Subset of REAL,
+  u0,v0 be PartFunc of REAL,REAL st
+  (a <= b & [.a,b.]=dom C & [.a,b.] c= dom x & [.a,b.] c= dom y &
+  Z is open & [.a,b.] c= Z & x is_differentiable_on Z &
+  y is_differentiable_on Z & x`|Z is continuous & y`|Z is continuous &
+  C = (x+<i>(#)y) | [.a,b.] ) holds
+  (u0(#)(x`|Z) - v0(#)(y`|Z)) is_integrable_on [' a,b '] &
+  (v0(#)(x`|Z) + u0(#)(y`|Z)) is_integrable_on [' a,b '];
+end;
+
+definition
+  let f be PartFunc of COMPLEX, COMPLEX;
+  let C be C1-curve;
+  pred f is_bounded_on C means
+:: INTEGR1C:def 6
+  for a,b be Real,
+  x,y be PartFunc of REAL,REAL,
+  Z be Subset of REAL,
+  u0, v0 be PartFunc of REAL,REAL st
+  (a <= b & [.a,b.]=dom C & [.a,b.] c= dom x & [.a,b.] c= dom y &
+  Z is open & [.a,b.] c= Z & x is_differentiable_on Z &
+  y is_differentiable_on Z & x`|Z is continuous & y`|Z is continuous &
+  C = (x+<i>(#)y) | [.a,b.] ) holds
+  (u0(#)(x`|Z) - v0(#)(y`|Z))|[' a,b '] is bounded &
+  (v0(#)(x`|Z) + u0(#)(y`|Z))|[' a,b '] is bounded;
+end;
+
+begin :: Linearity of Complex Intergal
+
+theorem :: INTEGR1C:1
+  for f,g be PartFunc of COMPLEX,COMPLEX,
+  C be C1-curve
+  st rng C c= dom f & rng C c= dom g &
+  f is_integrable_on C & g is_integrable_on C &
+  f is_bounded_on C & g is_bounded_on C
+  holds
+  integral(f+g,C) = integral(f,C) + integral(g,C);
+
+theorem :: INTEGR1C:2
+  for f be PartFunc of COMPLEX,COMPLEX,
+  C be C1-curve st rng C c= dom f & f is_integrable_on C &
+  f is_bounded_on C holds
+  for r be Real holds
+  integral(r(#)f,C) = r*integral(f,C);
+
+begin :: Complex Integral of Complex Curve's Connection
+
+theorem :: INTEGR1C:3
+  for f be PartFunc of COMPLEX,COMPLEX,
+  C,C1,C2 be C1-curve,
+  a,b,d be Real
+  st rng C c= dom f & f is_integrable_on C & f is_bounded_on C &
+  a <= b & dom C = [.a,b.] & d in [.a,b.] &
+  dom C1 = [.a,d.] & dom C2 = [.d,b.] &
+  (for t st t in dom C1 holds C.t = C1.t) &
+  (for t st t in dom C2 holds C.t = C2.t) holds
+  integral(f,C) = integral(f,C1) + integral(f,C2);

@@ -36,18 +36,18 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="6"/>
-<Adjective nr="10" value="false"/>
-<Adjective nr="13">
+<Adjective nr="11" value="false"/>
+<Adjective nr="14">
 <Func kind="K" nr="55"/>
 </Adjective>
-<Adjective nr="23">
+<Adjective nr="24">
 <Func kind="K" nr="55"/>
 <Func kind="K" nr="38">
 <Func kind="K" nr="51"/>
 <Func kind="K" nr="51"/>
 </Func>
 </Adjective>
-<Adjective nr="38"/>
+<Adjective nr="39"/>
 </Cluster>
 </RCluster>
 </Registrations>

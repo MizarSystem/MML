@@ -21,7 +21,7 @@
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="23"/>
+<Adjective nr="24"/>
 </Cluster>
 </Typ>
 </ArgTypes>

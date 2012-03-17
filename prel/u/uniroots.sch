@@ -17,7 +17,7 @@
 <For>
 <Typ kind="M" nr="3">
 <Cluster>
-<Adjective nr="17" value="false"/>
+<Adjective nr="18" value="false"/>
 </Cluster>
 <Func kind="K" nr="44"/>
 <Func kind="K" nr="48"/>
@@ -29,7 +29,7 @@
 <For>
 <Typ kind="M" nr="3">
 <Cluster>
-<Adjective nr="17" value="false"/>
+<Adjective nr="18" value="false"/>
 </Cluster>
 <Func kind="K" nr="44"/>
 <Func kind="K" nr="48"/>
@@ -39,7 +39,7 @@
 <For>
 <Typ kind="M" nr="3">
 <Cluster>
-<Adjective nr="17" value="false"/>
+<Adjective nr="18" value="false"/>
 </Cluster>
 <Func kind="K" nr="44"/>
 <Func kind="K" nr="48"/>

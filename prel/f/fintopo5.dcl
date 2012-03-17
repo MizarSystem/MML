@@ -25,13 +25,13 @@
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="10" value="false"/>
+<Adjective nr="11" value="false"/>
 </Cluster>
 <Func kind="K" nr="48"/>
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="10" value="false"/>
+<Adjective nr="11" value="false"/>
 </Cluster>
 <Func kind="K" nr="48"/>
 </Typ>
@@ -41,21 +41,21 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="38" value="false"/>
-<Adjective nr="49"/>
+<Adjective nr="39" value="false"/>
+<Adjective nr="50"/>
 </Cluster>
 </FCluster>
 <FCluster aid="FINTOPO5" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="10" value="false"/>
+<Adjective nr="11" value="false"/>
 </Cluster>
 <Func kind="K" nr="48"/>
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="10" value="false"/>
+<Adjective nr="11" value="false"/>
 </Cluster>
 <Func kind="K" nr="48"/>
 </Typ>
@@ -65,8 +65,8 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="38" value="false"/>
-<Adjective nr="49"/>
+<Adjective nr="39" value="false"/>
+<Adjective nr="50"/>
 </Cluster>
 </FCluster>
 </Registrations>

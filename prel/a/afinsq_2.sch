@@ -13,10 +13,6 @@
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="NUMBERS"/>
-<ArticleID name="ORDINAL2"/>
-<ArticleID name="SETFAM_1"/>
-<ArticleID name="CLASSES2"/>
-<ArticleID name="ORDINAL4"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
@@ -28,12 +24,12 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="16"/>
+<Adjective nr="17"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="17" value="false"/>
+<Adjective nr="18" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
@@ -50,14 +46,14 @@
 <Func kind="F" nr="2"/>
 </Adjective>
 <Adjective nr="6"/>
-<Adjective nr="14"/>
-<Adjective nr="32"/>
+<Adjective nr="15"/>
+<Adjective nr="26"/>
 </Cluster>
 </Typ>
 <Not>
 <And>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="190">
+<Func kind="K" nr="146">
 <Var nr="1"/>
 </Func>
 <Func kind="F" nr="1"/>
@@ -65,7 +61,7 @@
 <For>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="16"/>
+<Adjective nr="17"/>
 </Cluster>
 </Typ>
 <Not>

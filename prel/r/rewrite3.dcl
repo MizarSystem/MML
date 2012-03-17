@@ -19,10 +19,6 @@
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="ENUMSET1"/>
 <ArticleID name="DOMAIN_1"/>
-<ArticleID name="ORDINAL2"/>
-<ArticleID name="SETFAM_1"/>
-<ArticleID name="CLASSES2"/>
-<ArticleID name="ORDINAL4"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FUNCT_7"/>
 <ArticleID name="AFINSQ_1"/>
@@ -40,7 +36,7 @@
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="56">
+<Adjective nr="50">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -49,13 +45,13 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="17" value="false"/>
+<Adjective nr="18" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="K" nr="30">
-<Func kind="K" nr="236">
+<Func kind="K" nr="191">
 <LocusVar nr="1"/>
 </Func>
 </Func>
@@ -66,12 +62,12 @@
 <LocusVar nr="2"/>
 </Typ>
 <Cluster>
-<Adjective nr="35" value="false"/>
-<Adjective nr="41"/>
-<Adjective nr="56">
+<Adjective nr="36" value="false"/>
+<Adjective nr="42"/>
+<Adjective nr="50">
 <LocusVar nr="2"/>
 </Adjective>
-<Adjective nr="57">
+<Adjective nr="51">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>

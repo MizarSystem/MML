@@ -23,7 +23,7 @@
 <LocusVar nr="1"/>
 </Adjective>
 <Adjective nr="6"/>
-<Adjective nr="13">
+<Adjective nr="14">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -40,10 +40,10 @@
 <LocusVar nr="1"/>
 </Adjective>
 <Adjective nr="6"/>
-<Adjective nr="13">
+<Adjective nr="14">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="15"/>
+<Adjective nr="16"/>
 </Cluster>
 </FCluster>
 <FCluster aid="PZFMISC1" nr="2">
@@ -58,7 +58,7 @@
 <LocusVar nr="1"/>
 </Adjective>
 <Adjective nr="6"/>
-<Adjective nr="13">
+<Adjective nr="14">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -70,7 +70,7 @@
 <LocusVar nr="1"/>
 </Adjective>
 <Adjective nr="6"/>
-<Adjective nr="13">
+<Adjective nr="14">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -88,10 +88,10 @@
 <LocusVar nr="1"/>
 </Adjective>
 <Adjective nr="6"/>
-<Adjective nr="13">
+<Adjective nr="14">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="15"/>
+<Adjective nr="16"/>
 </Cluster>
 </FCluster>
 </Registrations>

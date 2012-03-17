@@ -11,12 +11,12 @@ environ
       AMI_5, RELOC, SCMFSA_7, FINSEQ_1, UNIALG_2, SCMFSA8A, CARD_3, ARYTM,
       AMISTD_2, SCMNORM;
  notations TARSKI, XBOOLE_0, SUBSET_1, CARD_1, NUMBERS, NAT_1, FUNCOP_1,
-      RELAT_1, FUNCT_1, FUNCT_4, FUNCT_7, FINSEQ_1, STRUCT_0, AMI_1, SCMNORM,
-      SCMFSA_2, SCMFSA_4, SCMFSA_5, SCMFSA_7, SCMFSA6A, SF_MASTR, SCMFSA6B,
-      SCMFSA6C, SCMFSA7B, XXREAL_0;
+      RELAT_1, FUNCT_1, FUNCT_4, FUNCT_7, FINSEQ_1, VALUED_1, STRUCT_0, AMI_1,
+      SCMNORM, SCMFSA_2, SCMFSA_4, SCMFSA_5, SCMFSA_7, SCMFSA6A, SF_MASTR,
+      SCMFSA6B, SCMFSA6C, SCMFSA7B, XXREAL_0;
  constructors PARTFUN1, DOMAIN_1, XXREAL_0, NAT_1, SCMFSA_5, SCMFSA_7,
       SCMFSA6A, SF_MASTR, SCMFSA6B, SCMFSA6C, SCMFSA7B, SCMNORM, SCMFSA_4,
-      AFINSQ_1, RELSET_1, PRE_POLY;
+      AFINSQ_1, RELSET_1, PRE_POLY, SCMFSA_1;
  registrations XBOOLE_0, SETFAM_1, FUNCT_1, RELSET_1, FUNCOP_1, NUMBERS,
       XXREAL_0, MEMBERED, CARD_3, AMI_1, SCMFSA_2, SCMFSA6A, SF_MASTR,
       SCMFSA7B, FINSET_1, SCMNORM, ORDINAL1, FINSEQ_1, VALUED_1;
@@ -33,11 +33,11 @@ theorem :: SCMFSA8A:3
   for s being State of SCM+FSA holds dom (s | NAT) = NAT;
 
 theorem :: SCMFSA8A:4
-  for s being State of SCM+FSA st s is halting for k being Element
+  for s being State of SCM+FSA st ProgramPart s halts_on s for k being Element
   of NAT st LifeSpan s <= k holds CurInstr Computation(s,k) = halt SCM+FSA;
 
 theorem :: SCMFSA8A:5
-  for s being State of SCM+FSA st s is halting for k being Element
+  for s being State of SCM+FSA st ProgramPart s halts_on s for k being Element
 of NAT st LifeSpan s <= k holds IC Computation(s,k) = IC Computation(s,LifeSpan
   s);
 
@@ -319,8 +319,9 @@ theorem :: SCMFSA8A:54
 
 theorem :: SCMFSA8A:55
   for I being Program of SCM+FSA, s being State of SCM+FSA st I
-is_closed_on Initialize s & I is_halting_on Initialize s holds s +* Initialized
-  (I ';' Stop SCM+FSA) is halting;
+is_closed_on Initialize s & I is_halting_on Initialize s
+ holds ProgramPart(s +* Initialized(I ';' Stop SCM+FSA))
+  halts_on s +* Initialized(I ';' Stop SCM+FSA);
 
 theorem :: SCMFSA8A:56
   for I being Program of SCM+FSA, s being State of SCM+FSA st I
@@ -340,13 +341,19 @@ theorem :: SCMFSA8A:58
 
 theorem :: SCMFSA8A:59
   for I,J being Program of SCM+FSA, s being State of SCM+FSA st I
-  is_closed_on s & I is_halting_on s holds s +* (I ';' Goto insloc (card J + 1)
-  ';' J ';' Stop SCM+FSA +* Start-At insloc 0) is halting;
+  is_closed_on s & I is_halting_on s
+   holds ProgramPart(s +* (I ';' Goto insloc (card J + 1)
+  ';' J ';' Stop SCM+FSA +* Start-At insloc 0))
+   halts_on s +* (I ';' Goto insloc (card J + 1)
+  ';' J ';' Stop SCM+FSA +* Start-At insloc 0);
 
 theorem :: SCMFSA8A:60
   for I,J being Program of SCM+FSA, s being State of SCM+FSA st I
-is_closed_on Initialize s & I is_halting_on Initialize s holds s +* Initialized
-  (I ';' Goto insloc (card J + 1) ';' J ';' Stop SCM+FSA) is halting;
+is_closed_on Initialize s & I is_halting_on Initialize s
+ holds ProgramPart(s +* Initialized
+  (I ';' Goto insloc (card J + 1) ';' J ';' Stop SCM+FSA))
+   halts_on s +* Initialized
+  (I ';' Goto insloc (card J + 1) ';' J ';' Stop SCM+FSA);
 
 theorem :: SCMFSA8A:61
   for I,J being Program of SCM+FSA, s being State of SCM+FSA st I

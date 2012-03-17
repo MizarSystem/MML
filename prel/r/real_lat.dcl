@@ -24,24 +24,24 @@
 <ArgTypes/>
 <Func kind="K" nr="113"/>
 <Cluster>
-<Adjective nr="32" value="false"/>
-<Adjective nr="45"/>
+<Adjective nr="33" value="false"/>
+<Adjective nr="46"/>
 </Cluster>
 </FCluster>
 <FCluster aid="REAL_LAT" nr="2">
 <ArgTypes/>
 <Func kind="K" nr="113"/>
 <Cluster>
-<Adjective nr="45"/>
-<Adjective nr="52"/>
+<Adjective nr="46"/>
+<Adjective nr="53"/>
 </Cluster>
 </FCluster>
 <FCluster aid="REAL_LAT" nr="3">
 <ArgTypes/>
 <Func kind="K" nr="113"/>
 <Cluster>
-<Adjective nr="45"/>
-<Adjective nr="53"/>
+<Adjective nr="46"/>
+<Adjective nr="54"/>
 </Cluster>
 </FCluster>
 <CCluster aid="REAL_LAT" nr="1">
@@ -54,7 +54,7 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="20"/>
+<Adjective nr="21"/>
 </Cluster>
 </CCluster>
 </Registrations>

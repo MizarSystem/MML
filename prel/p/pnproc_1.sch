@@ -29,7 +29,7 @@
 <Typ kind="M" nr="2">
 <Cluster>
 <Adjective nr="6"/>
-<Adjective nr="21">
+<Adjective nr="22">
 <Func kind="F" nr="1"/>
 <Func kind="K" nr="75"/>
 </Adjective>

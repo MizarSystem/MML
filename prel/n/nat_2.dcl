@@ -23,12 +23,12 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="3" value="false"/>
-<Adjective nr="14" value="false"/>
-<Adjective nr="18"/>
-<Adjective nr="22"/>
+<Adjective nr="15" value="false"/>
+<Adjective nr="19"/>
 <Adjective nr="23"/>
 <Adjective nr="24"/>
 <Adjective nr="25"/>
+<Adjective nr="26"/>
 </Cluster>
 </RCluster>
 </Registrations>

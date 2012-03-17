@@ -7,15 +7,15 @@
 environ
 
  vocabularies ORDINAL2, ORDINAL1, FUNCT_1, TARSKI, RELAT_1, BOOLE, FINSEQ_1,
-      ORDINAL3, CLASSES2, CARD_1, ORDINAL4, ZFREFLE1;
+      ORDINAL3, CLASSES2, CARD_1, ORDINAL4, ZFREFLE1, FINSET_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, FUNCT_2,
-      ORDINAL1, ORDINAL2, ORDINAL3, CARD_1, CLASSES2;
+      FINSET_1, ORDINAL1, ORDINAL2, ORDINAL3, CARD_1, CLASSES2;
  constructors WELLORD2, FUNCOP_1, ORDINAL3, CARD_1, CLASSES1, CLASSES2,
       RELSET_1;
  registrations XBOOLE_0, FUNCT_1, ORDINAL1, ORDINAL2, ORDINAL3, CARD_1,
       CLASSES2, RELSET_1;
  requirements SUBSET, BOOLE, NUMERALS;
- definitions ORDINAL1, TARSKI, ORDINAL2, XBOOLE_0;
+ definitions ORDINAL1, TARSKI, ORDINAL2, XBOOLE_0, RELAT_1;
  theorems ZFMISC_1, FUNCT_1, GRFUNC_1, ORDINAL1, ORDINAL2, ORDINAL3, CARD_2,
       CLASSES2, RELAT_1, CLASSES1, XBOOLE_0, XBOOLE_1, FUNCT_2, RELSET_1;
  schemes ORDINAL1, ORDINAL2, FINSET_1;
@@ -153,6 +153,40 @@ A13:      (dom fi)+^(A-^dom fi) = A by ORDINAL3:def 6;
   end;
 end;
 
+theorem Th2:
+ rng(fi^psi) c= rng fi \/ rng psi
+   proof set f = fi^psi, A1 = rng fi, A2 = rng psi;
+X:  dom(fi^psi) = (dom fi)+^(dom psi) by Def1;
+    let y;
+      assume
+      y in rng f;
+      then consider x such that
+A5:   x in dom f and
+A6:   y = f.x by FUNCT_1:def 5;
+      reconsider x as Ordinal by A5;
+        per cases;
+        suppose
+A8:       x in dom fi;
+          then
+A9:       fi.x in rng fi by FUNCT_1:def 5;
+          y = fi.x by A6,A8,Def1;
+          then y in A1 by A9;
+          hence thesis by XBOOLE_0:def 3;
+        end;
+        suppose
+          not x in dom fi;
+          then dom fi c= x by ORDINAL1:26;
+          then
+A10:      (dom fi)+^(x-^dom fi) = x by ORDINAL3:def 6;
+          then
+A11:      x-^dom fi in dom psi by X,A5,ORDINAL3:25;
+          then y = psi.(x-^dom fi) by A6,A10,Def1;
+          then y in rng psi by A11,FUNCT_1:def 5;
+          then y in A2;
+          hence thesis by XBOOLE_0:def 3;
+        end;
+    end;
+
 registration
   let fi,psi;
   cluster fi^psi -> Ordinal-yielding;
@@ -164,47 +198,17 @@ A1: rng fi c= A1 by ORDINAL2:def 8;
     consider A2 being Ordinal such that
 A2: rng psi c= A2 by ORDINAL2:def 8;
 A3: dom f = dom fi +^ dom psi by Def1;
-    rng f c= A1+^A2
-    proof
-      let y;
 A4:   A2 c= A1+^A2 by ORDINAL3:27;
-      assume
-      y in rng f;
-      then consider x such that
-A5:   x in dom f and
-A6:   y = f.x by FUNCT_1:def 5;
-      reconsider x as Ordinal by A5;
 A7:   A1 c= A1+^A2 by ORDINAL3:27;
-      now
-        per cases;
-        suppose
-A8:       x in dom fi;
-          then
-A9:       fi.x in rng fi by FUNCT_1:def 5;
-          y = fi.x by A6,A8,Def1;
-          then y in A1 by A1,A9;
-          hence thesis by A7;
-        end;
-        suppose
-          not x in dom fi;
-          then dom fi c= x by ORDINAL1:26;
-          then
-A10:      (dom fi)+^(x-^dom fi) = x by ORDINAL3:def 6;
-          then
-A11:      x-^dom fi in dom psi by A3,A5,ORDINAL3:25;
-          then y = psi.(x-^dom fi) by A6,A10,Def1;
-          then y in rng psi by A11,FUNCT_1:def 5;
-          then y in A2 by A2;
-          hence thesis by A4;
-        end;
-      end;
-      hence thesis;
-    end;
+    then
+X1:   A1 \/ A2 c= A1+^A2 by A4,XBOOLE_1:8;
+X2:  rng f c= rng fi \/ rng psi by Th2;
+    rng fi \/ rng psi c= A1 \/ A2 by A1,A2,XBOOLE_1:13;
+    then rng f c= A1 \/ A2 by X2,XBOOLE_1:1;
+    then rng f c= A1+^A2 by X1,XBOOLE_1:1;
     hence thesis by ORDINAL2:def 8;
   end;
 end;
-
-canceled;
 
 theorem Th3:
   A is_limes_of psi implies A is_limes_of fi^psi
@@ -2455,4 +2459,20 @@ A10:  b = psi.e by A1,A7,FUNCT_1:def 5;
   end;
   thus thesis by A1,A3,A4,Th16;
 end;
+
+:: from 2009.09.28, A.T.
+
+registration let D;
+  let f,g be T-Sequence of D;
+  cluster f^g -> D-valued;
+  coherence
+  proof
+    rng f c= D & rng g c= D by RELAT_1:def 19;
+    then
+X:  rng f \/ rng g c= D by XBOOLE_1:8;
+    rng(f^g) c= rng f \/ rng g by Th2;
+   hence rng(f^g) c= D by X,XBOOLE_1:1;
+  end;
+end;
+
 

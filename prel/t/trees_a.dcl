@@ -19,8 +19,8 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="10" value="false"/>
-<Adjective nr="30"/>
+<Adjective nr="11" value="false"/>
+<Adjective nr="31"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -29,8 +29,8 @@
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="10" value="false"/>
-<Adjective nr="31"/>
+<Adjective nr="11" value="false"/>
+<Adjective nr="32"/>
 </Cluster>
 </RCluster>
 </Registrations>

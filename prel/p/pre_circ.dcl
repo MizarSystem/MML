@@ -40,10 +40,10 @@
 <LocusVar nr="1"/>
 </Adjective>
 <Adjective nr="6"/>
-<Adjective nr="20">
+<Adjective nr="21">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="25"/>
+<Adjective nr="26"/>
 </Cluster>
 </RCluster>
 <FCluster aid="PRE_CIRC" nr="1">
@@ -84,7 +84,7 @@
 <LocusVar nr="1"/>
 </Adjective>
 <Adjective nr="6"/>
-<Adjective nr="20">
+<Adjective nr="21">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -110,7 +110,7 @@
 <LocusVar nr="1"/>
 </Adjective>
 <Adjective nr="6"/>
-<Adjective nr="20">
+<Adjective nr="21">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -132,7 +132,7 @@
 <LocusVar nr="3"/>
 </Adjective>
 <Adjective nr="6"/>
-<Adjective nr="20">
+<Adjective nr="21">
 <LocusVar nr="3"/>
 </Adjective>
 </Cluster>
@@ -158,7 +158,7 @@
 <LocusVar nr="1"/>
 </Adjective>
 <Adjective nr="6"/>
-<Adjective nr="20">
+<Adjective nr="21">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -176,7 +176,7 @@
 </Func>
 <Cluster>
 <Adjective nr="1"/>
-<Adjective nr="20">
+<Adjective nr="21">
 <LocusVar nr="3"/>
 </Adjective>
 </Cluster>
@@ -209,8 +209,8 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="6"/>
-<Adjective nr="24"/>
-<Adjective nr="39"/>
+<Adjective nr="25"/>
+<Adjective nr="40"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
@@ -227,8 +227,8 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="6"/>
-<Adjective nr="24"/>
-<Adjective nr="39"/>
+<Adjective nr="25"/>
+<Adjective nr="40"/>
 </Cluster>
 </FCluster>
 <FCluster aid="PRE_CIRC" nr="7">
@@ -237,8 +237,8 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="6"/>
-<Adjective nr="24"/>
-<Adjective nr="39"/>
+<Adjective nr="25"/>
+<Adjective nr="40"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
@@ -251,8 +251,8 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="6"/>
-<Adjective nr="24"/>
-<Adjective nr="39"/>
+<Adjective nr="25"/>
+<Adjective nr="40"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -264,8 +264,8 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="6"/>
-<Adjective nr="24"/>
-<Adjective nr="39"/>
+<Adjective nr="25"/>
+<Adjective nr="40"/>
 </Cluster>
 </FCluster>
 <FCluster aid="PRE_CIRC" nr="8">
@@ -280,15 +280,15 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="6"/>
-<Adjective nr="24"/>
-<Adjective nr="39"/>
+<Adjective nr="25"/>
+<Adjective nr="40"/>
 </Cluster>
 </FCluster>
 <CCluster aid="PRE_CIRC" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="17" value="false"/>
+<Adjective nr="18" value="false"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -300,7 +300,7 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="24"/>
+<Adjective nr="25"/>
 </Cluster>
 </CCluster>
 </Registrations>

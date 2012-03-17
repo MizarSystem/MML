@@ -25,18 +25,18 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="17" value="false"/>
-<Adjective nr="24"/>
+<Adjective nr="18" value="false"/>
 <Adjective nr="25"/>
 <Adjective nr="26"/>
-<Adjective nr="35"/>
+<Adjective nr="27"/>
+<Adjective nr="36"/>
 </Cluster>
 </RCluster>
 <FCluster aid="MEASURE6" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="35"/>
+<Adjective nr="36"/>
 </Cluster>
 <Func kind="K" nr="30">
 <Func kind="K" nr="44"/>
@@ -44,7 +44,7 @@
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="20"/>
+<Adjective nr="21"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -53,7 +53,7 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="35"/>
+<Adjective nr="36"/>
 </Cluster>
 </FCluster>
 </Registrations>

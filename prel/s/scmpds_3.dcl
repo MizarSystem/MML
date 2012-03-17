@@ -38,28 +38,34 @@
 <Cluster/>
 <Func kind="K" nr="192">
 <Func kind="U" nr="9">
-<Func kind="K" nr="264"/>
 <Func kind="K" nr="1">
 <Func kind="K" nr="67"/>
 </Func>
-<Func kind="K" nr="277"/>
+<Func kind="K" nr="279"/>
 </Func>
 </Func>
 </Typ>
 <Cluster>
 <Adjective nr="4"/>
 <Adjective nr="7" value="false">
-<Func kind="K" nr="264"/>
+<Func kind="K" nr="266"/>
 </Adjective>
 <Adjective nr="9"/>
-<Adjective nr="26"/>
-<Adjective nr="65"/>
-<Adjective nr="84">
-<Func kind="K" nr="264"/>
+<Adjective nr="13">
+<Func kind="U" nr="9">
 <Func kind="K" nr="1">
 <Func kind="K" nr="67"/>
 </Func>
-<Func kind="K" nr="277"/>
+<Func kind="K" nr="279"/>
+</Func>
+</Adjective>
+<Adjective nr="27"/>
+<Adjective nr="66"/>
+<Adjective nr="84">
+<Func kind="K" nr="1">
+<Func kind="K" nr="67"/>
+</Func>
+<Func kind="K" nr="279"/>
 </Adjective>
 </Cluster>
 </RCluster>

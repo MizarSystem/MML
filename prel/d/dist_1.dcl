@@ -49,7 +49,7 @@
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="20"/>
+<Adjective nr="21"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -65,14 +65,14 @@
 </Adjective>
 <Adjective nr="9"/>
 <Adjective nr="11"/>
-<Adjective nr="20"/>
-<Adjective nr="32"/>
+<Adjective nr="21"/>
 <Adjective nr="33"/>
 <Adjective nr="34"/>
-<Adjective nr="56"/>
+<Adjective nr="35"/>
 <Adjective nr="57"/>
-<Adjective nr="167"/>
-<Adjective nr="170"/>
+<Adjective nr="58"/>
+<Adjective nr="168"/>
+<Adjective nr="171"/>
 </Cluster>
 </RCluster>
 <FCluster aid="DIST_1" nr="1">
@@ -80,7 +80,7 @@
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="20"/>
+<Adjective nr="21"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -90,7 +90,7 @@
 <Cluster>
 <Adjective nr="9"/>
 <Adjective nr="10"/>
-<Adjective nr="25">
+<Adjective nr="26">
 <Func kind="K" nr="381">
 <LocusVar nr="1"/>
 </Func>

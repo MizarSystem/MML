@@ -34,35 +34,35 @@
 <Func kind="K" nr="163"/>
 </Func>
 <Cluster>
-<Adjective nr="83"/>
 <Adjective nr="84"/>
+<Adjective nr="85"/>
 </Cluster>
 </FCluster>
 <FCluster aid="RSSPACE" nr="2">
 <ArgTypes/>
 <Func kind="K" nr="165"/>
 <Cluster>
-<Adjective nr="36" value="false"/>
-<Adjective nr="83"/>
+<Adjective nr="37" value="false"/>
+<Adjective nr="84"/>
 </Cluster>
 </FCluster>
 <FCluster aid="RSSPACE" nr="3">
 <ArgTypes/>
 <Func kind="K" nr="165"/>
 <Cluster>
-<Adjective nr="59"/>
-<Adjective nr="84"/>
+<Adjective nr="60"/>
 <Adjective nr="85"/>
 <Adjective nr="86"/>
 <Adjective nr="87"/>
+<Adjective nr="88"/>
 </Cluster>
 </FCluster>
 <FCluster aid="RSSPACE" nr="4">
 <ArgTypes/>
 <Func kind="K" nr="169"/>
 <Cluster>
-<Adjective nr="10" value="false"/>
-<Adjective nr="89">
+<Adjective nr="11" value="false"/>
+<Adjective nr="90">
 <Func kind="K" nr="165"/>
 </Adjective>
 </Cluster>
@@ -86,20 +86,20 @@
 <Func kind="K" nr="170"/>
 </Func>
 <Cluster>
-<Adjective nr="36" value="false"/>
-<Adjective nr="93"/>
+<Adjective nr="37" value="false"/>
+<Adjective nr="94"/>
 </Cluster>
 </FCluster>
 <FCluster aid="RSSPACE" nr="6">
 <ArgTypes/>
 <Func kind="K" nr="171"/>
 <Cluster>
-<Adjective nr="36" value="false"/>
-<Adjective nr="59"/>
-<Adjective nr="84"/>
+<Adjective nr="37" value="false"/>
+<Adjective nr="60"/>
 <Adjective nr="85"/>
 <Adjective nr="86"/>
 <Adjective nr="87"/>
+<Adjective nr="88"/>
 </Cluster>
 </FCluster>
 </Registrations>

@@ -38,9 +38,9 @@
 <Func kind="K" nr="81"/>
 </Adjective>
 <Adjective nr="6"/>
-<Adjective nr="25"/>
 <Adjective nr="26"/>
 <Adjective nr="27"/>
+<Adjective nr="28"/>
 </Cluster>
 </RCluster>
 </Registrations>

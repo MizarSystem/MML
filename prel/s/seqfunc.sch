@@ -42,7 +42,7 @@
 <Typ kind="M" nr="2">
 <Cluster>
 <Adjective nr="6"/>
-<Adjective nr="14">
+<Adjective nr="15">
 <Func kind="K" nr="85"/>
 <Func kind="K" nr="38">
 <Func kind="F" nr="1"/>
@@ -64,7 +64,7 @@
 <For>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="23"/>
+<Adjective nr="24"/>
 </Cluster>
 </Typ>
 <Pred kind="R" nr="20">

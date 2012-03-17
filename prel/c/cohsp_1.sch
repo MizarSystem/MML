@@ -69,7 +69,7 @@
 <Func kind="F" nr="1"/>
 </Pred>
 </And>
-<Pred kind="V" nr="10">
+<Pred kind="V" nr="11">
 <Func kind="F" nr="1"/>
 </Pred>
 </Scheme>

@@ -21,9 +21,9 @@
 <For>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="13"/>
-<Adjective nr="15"/>
-<Adjective nr="21">
+<Adjective nr="14"/>
+<Adjective nr="16"/>
+<Adjective nr="22">
 <Func kind="F" nr="1"/>
 </Adjective>
 </Cluster>

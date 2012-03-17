@@ -26,7 +26,7 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="24"/>
+<Adjective nr="25"/>
 </Cluster>
 </FCluster>
 <FCluster aid="SIN_COS2" nr="2">
@@ -39,7 +39,7 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="24"/>
+<Adjective nr="25"/>
 </Cluster>
 </FCluster>
 <FCluster aid="SIN_COS2" nr="3">
@@ -52,7 +52,7 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="24"/>
+<Adjective nr="25"/>
 </Cluster>
 </FCluster>
 </Registrations>

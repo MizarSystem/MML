@@ -41,24 +41,24 @@
 <LocusVar nr="1"/>
 </Adjective>
 <Adjective nr="6"/>
-<Adjective nr="13">
+<Adjective nr="14">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="30"/>
-<Adjective nr="86"/>
+<Adjective nr="31"/>
+<Adjective nr="87"/>
 </Cluster>
 </RCluster>
 <FCluster aid="MSUALG_3" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
-<Adjective nr="36" value="false"/>
-<Adjective nr="45" value="false"/>
+<Adjective nr="37" value="false"/>
+<Adjective nr="46" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="12">
 <Cluster>
-<Adjective nr="81">
+<Adjective nr="82">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

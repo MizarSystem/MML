@@ -11,7 +11,6 @@
 <ArticleID name="TARSKI"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
-<ArticleID name="XCMPLX_0"/>
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
@@ -65,7 +64,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="10" value="false"/>
+<Adjective nr="11" value="false"/>
 <Adjective nr="102" value="false"/>
 </Cluster>
 </RCluster>
@@ -73,7 +72,7 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="19"/>
+<Adjective nr="20"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -339,7 +338,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="132">
+<Func kind="K" nr="125">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -359,7 +358,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="137">
+<Func kind="K" nr="130">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -385,7 +384,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="138">
+<Func kind="K" nr="131">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -427,7 +426,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="74">
+<Func kind="K" nr="67">
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
@@ -450,25 +449,25 @@
 <Cluster>
 <Adjective nr="6"/>
 <Adjective nr="22">
-<Func kind="K" nr="195">
+<Func kind="K" nr="189">
 <Num nr="2"/>
-<Func kind="K" nr="374"/>
+<Func kind="K" nr="368"/>
 </Func>
-<Func kind="K" nr="374"/>
+<Func kind="K" nr="368"/>
 </Adjective>
 </Cluster>
 <Func kind="K" nr="29">
 <Func kind="K" nr="30">
-<Func kind="K" nr="195">
+<Func kind="K" nr="189">
 <Num nr="2"/>
-<Func kind="K" nr="374"/>
+<Func kind="K" nr="368"/>
 </Func>
-<Func kind="K" nr="374"/>
+<Func kind="K" nr="368"/>
 </Func>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="384">
+<Func kind="K" nr="377">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -487,26 +486,26 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="10" value="false"/>
+<Adjective nr="11" value="false"/>
 </Cluster>
 </CCluster>
 <CCluster aid="FACIRC_1" nr="2">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="19"/>
+<Adjective nr="20"/>
 </Cluster>
 <Typ kind="M" nr="1">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="19"/>
+<Adjective nr="20"/>
 <Adjective nr="101" value="false"/>
 </Cluster>
 </CCluster>
 <CCluster aid="FACIRC_1" nr="3">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="10"/>
+<Adjective nr="11"/>
 </Cluster>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -525,7 +524,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="10"/>
+<Adjective nr="11"/>
 </Cluster>
 </CCluster>
 </Registrations>

@@ -20,10 +20,6 @@
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="ORDINAL2"/>
-<ArticleID name="SETFAM_1"/>
-<ArticleID name="CLASSES2"/>
-<ArticleID name="ORDINAL4"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FUNCT_7"/>
 <ArticleID name="AFINSQ_1"/>
@@ -41,16 +37,16 @@
 <Func kind="K" nr="110"/>
 </Adjective>
 <Adjective nr="6"/>
-<Adjective nr="14"/>
-<Adjective nr="17"/>
-<Adjective nr="25"/>
-<Adjective nr="44"/>
-<Adjective nr="45"/>
-<Adjective nr="46"/>
-<Adjective nr="47"/>
-<Adjective nr="48"/>
-<Adjective nr="49"/>
-<Adjective nr="56"/>
+<Adjective nr="15"/>
+<Adjective nr="18"/>
+<Adjective nr="26"/>
+<Adjective nr="38"/>
+<Adjective nr="39"/>
+<Adjective nr="40"/>
+<Adjective nr="41"/>
+<Adjective nr="42"/>
+<Adjective nr="43"/>
+<Adjective nr="50"/>
 </Cluster>
 </RCluster>
 <RCluster aid="CATALAN2" nr="2">
@@ -64,16 +60,16 @@
 <Func kind="K" nr="110"/>
 </Adjective>
 <Adjective nr="6"/>
-<Adjective nr="14"/>
-<Adjective nr="17" value="false"/>
-<Adjective nr="25"/>
-<Adjective nr="44"/>
-<Adjective nr="45"/>
-<Adjective nr="46"/>
-<Adjective nr="47"/>
-<Adjective nr="48"/>
-<Adjective nr="49"/>
-<Adjective nr="56"/>
+<Adjective nr="15"/>
+<Adjective nr="18" value="false"/>
+<Adjective nr="26"/>
+<Adjective nr="38"/>
+<Adjective nr="39"/>
+<Adjective nr="40"/>
+<Adjective nr="41"/>
+<Adjective nr="42"/>
+<Adjective nr="43"/>
+<Adjective nr="50"/>
 </Cluster>
 </RCluster>
 <FCluster aid="CATALAN2" nr="1">
@@ -87,12 +83,12 @@
 <Func kind="K" nr="110"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="243">
+<Func kind="K" nr="198">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="25"/>
+<Adjective nr="26"/>
 </Cluster>
 </FCluster>
 </Registrations>

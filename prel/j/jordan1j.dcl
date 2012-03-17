@@ -66,17 +66,17 @@
 <Adjective nr="6"/>
 <Adjective nr="7"/>
 <Adjective nr="8" value="false"/>
-<Adjective nr="10" value="false"/>
 <Adjective nr="11" value="false"/>
-<Adjective nr="26"/>
-<Adjective nr="32"/>
+<Adjective nr="12" value="false"/>
+<Adjective nr="27"/>
 <Adjective nr="33"/>
-<Adjective nr="162"/>
+<Adjective nr="34"/>
 <Adjective nr="163"/>
 <Adjective nr="164"/>
 <Adjective nr="165"/>
-<Adjective nr="167"/>
+<Adjective nr="166"/>
 <Adjective nr="168"/>
+<Adjective nr="169"/>
 </Cluster>
 </RCluster>
 <FCluster aid="JORDAN1J" nr="1">
@@ -85,15 +85,15 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="6"/>
-<Adjective nr="10" value="false"/>
-<Adjective nr="32"/>
+<Adjective nr="11" value="false"/>
+<Adjective nr="33"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="6"/>
-<Adjective nr="32"/>
+<Adjective nr="33"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -104,8 +104,8 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="6"/>
-<Adjective nr="10" value="false"/>
-<Adjective nr="32"/>
+<Adjective nr="11" value="false"/>
+<Adjective nr="33"/>
 </Cluster>
 </FCluster>
 </Registrations>

@@ -19,7 +19,7 @@ environ
  definitions TARSKI, FINSET_1, FUNCT_1, WELLORD2, XBOOLE_0, RELAT_1;
  theorems TARSKI, AXIOMS, FUNCT_1, NAT_1, ZFMISC_1, RELAT_1, RELSET_1,
       WELLORD2, ORDINAL1, CARD_1, FINSET_1, XBOOLE_0, XBOOLE_1, FUNCOP_1,
-      XREAL_1, XXREAL_0, SETFAM_1, ORDINAL3;
+      XREAL_1, XXREAL_0, SETFAM_1, ORDINAL3, SUBSET_1;
  schemes FUNCT_1, SUBSET_1, NAT_1, XBOOLE_0, WELLORD2, RELAT_1, CLASSES1;
 
 begin
@@ -2058,8 +2058,7 @@ registration
  coherence
 proof
   let p be Function;
-  assume
-Z:  p is FinSequence-like;
+  assume p is FinSequence-like;
    then reconsider p as FinSequence;
   dom p = Seg len p by Def3;
   hence thesis by Def12;
@@ -3305,7 +3304,7 @@ A1: dom q = dom p /\ Seg n by RELAT_1:90;
   hence thesis by Th7;
 end;
 
-theorem Th101:
+theorem
   for p,r being FinSequence st r = p|Seg n ex q being FinSequence st p = r^q
 proof
   let p,r be FinSequence;
@@ -3596,6 +3595,18 @@ A: union Z c= Y by ORDINAL3:1;
  hence thesis by Def11;
 end;
 
+registration
+  let X be FinSequence-membered set;
+  cluster -> FinSequence-like Element of X;
+  coherence
+  proof
+    let e be Element of X;
+    X is empty or X is non empty;
+    then e is empty or e in X by SUBSET_1:def 2;
+    hence thesis by Def19;
+  end;
+end;
+
 registration let X be FinSequence-membered set;
  cluster -> FinSequence-membered Subset of X;
  coherence
@@ -3658,5 +3669,24 @@ A11: q = {} by A2,A10;
     thus p = <*x*> by A1,A11,Th47;
   end;
   thus thesis by A3,A6;
+end;
+
+:: missing, 2009.09.26, A.T.
+
+theorem
+ for f being n-long FinSequence holds dom f = Seg n
+  proof let f be n-long FinSequence;
+    len f = n by Def18;
+   hence dom f = Seg n by Def3;
+  end;
+
+registration let n,m;
+ let f be n-long FinSequence, g be m-long FinSequence;
+ cluster f^g -> (n+m)-long;
+ coherence
+  proof
+   len f = n & len g = m by Def18;
+   hence len(f^g) = n+m by Th35;
+  end;
 end;
 

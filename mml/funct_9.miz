@@ -1,0 +1,1606 @@
+:: Basic Properties of Periodic Functions
+::  by Bo Li , Yanhong Men , Dailu Li and Xiquan Liang
+:: 
+:: Received October 10, 2009
+:: Copyright (c) 2009 Association of Mizar Users
+
+environ
+
+ vocabularies ARYTM, ARYTM_1, RELAT_1, SQUARE_1, FUNCT_9, FUNCT_1, PARTFUN1,
+      BOOLE, SIN_COS, ARYTM_3, SIN_COS4, SEQ_1, COMPLEX1, FUNCOP_1, VALUED_0,
+      XREAL_0;
+ notations TARSKI, XBOOLE_0, COMPLEX1, XCMPLX_0, ORDINAL1, NUMBERS, XREAL_0,
+      REAL_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FUNCOP_1,
+      SIN_COS, VALUED_0, VALUED_1, NAT_1, SQUARE_1, FDIFF_9;
+ constructors REAL_1, RCOMP_1, SEQ_1, EUCLID, SQUARE_1, LIMFUNC1, PBOOLE,
+      SIN_COS2, RFUNCT_1, MESFUNC1, SIN_COS9, SIN_COS, FINSEQ_4, PARTFUN1,
+      FDIFF_9, FDIFF_1, JORDAN16, SEQ_2, RELSET_1;
+ registrations XXREAL_0, MEMBERED, XCMPLX_0, NUMBERS, VALUED_0, RELAT_1,
+      RFUNCT_1, RFUNCT_2, FDIFF_1, VALUED_1, FUNCT_2, JORDAN16, ORDINAL1,
+      NAT_1, SIN_COS6, FUNCOP_1, XREAL_0;
+ requirements REAL, NUMERALS, SUBSET, ARITHM, BOOLE;
+ definitions XBOOLE_0, VALUED_1, SIN_COS, XCMPLX_0, LIMFUNC1, SQUARE_1,
+      FDIFF_9;
+ theorems COMPLEX1, XBOOLE_0, XCMPLX_1, VALUED_1, XBOOLE_1, SIN_COS, RFUNCT_1,
+      FUNCT_1, TARSKI, FUNCOP_1, XREAL_0;
+ schemes NAT_1;
+
+begin :: The Basic Properties of period function
+
+reserve x,s,t,t1,t2,r,a,b for real number;
+reserve F,G for real-valued Function;
+reserve i,j,k for Nat;
+
+definition
+  let t be real number;
+  let F be Function;
+  attr F is t-periodic means :Def1:
+  t <> 0 &
+  for x holds (x in dom F iff x+t in dom F) &
+              (x in dom F implies F.x = F.(x+t));
+end;
+
+definition
+  let F be Function;
+  attr F is periodic means  :Def2:
+  ex t st F is t-periodic;
+end;
+
+theorem Th1:
+  F is t-periodic iff t<>0 &
+  for x st x in dom F holds x+t in dom F & x-t in dom F & F.x=F.(x+t)
+proof
+ thus F is t-periodic implies t<>0 &
+ for x st x in dom F holds x+t in dom F & x-t in dom F & F.x=F.(x+t)
+  proof
+    assume
+A1: F is t-periodic;
+  for x st x in dom F holds x+t in dom F & x-t in dom F & F.x=F.(x+t)
+  proof
+   let x;
+    assume x in dom F;
+    then x-t+t in dom F;
+    hence thesis by A1,Def1;
+  end;
+  hence thesis by A1,Def1;
+  end;
+   assume
+A3:t<>0 &
+   for x st x in dom F holds (x+t in dom F & x-t in dom F) & F.x=F.(x+t);
+   for x holds (x in dom F iff x+t in dom F) &
+               (x in dom F implies F.x = F.(x+t))
+   proof
+     let x;
+     x in dom F iff x+t in dom F
+     proof
+       x+t in dom F implies x in dom F
+       proof
+         assume x+t in dom F;
+         then x+t-t in dom F by A3;
+         hence thesis;
+       end;
+       hence thesis by A3;
+     end;
+     hence thesis by A3;
+   end;
+   hence thesis by A3,Def1;
+ end;
+
+theorem
+  F is t-periodic & G is t-periodic implies F+G is t-periodic
+proof
+  assume that
+A1: F is t-periodic and
+A2: G is t-periodic;
+A3: t<>0 & for x st x in dom F holds (x+t in dom F & x-t in dom F)
+    & F.x=F.(x+t) by A1,Th1;
+    for x st x in dom (F + G)
+    holds (x+t in dom (F + G) & x-t in dom (F + G)) & (F + G).x=(F + G).(x+t)
+    proof
+      let x;
+      assume
+B1:   x in dom (F + G); then
+A5:   x in dom F /\ dom G by VALUED_1:def 1;
+A6:   dom F /\ dom G c= dom F & dom F /\ dom G c= dom G by XBOOLE_1:17;
+      then
+A7:   x+t in dom F & x-t in dom F by A1,Th1,A5;
+      x+t in dom G & x-t in dom G by A2,Th1,A5,A6; then
+A8:   x+t in dom F /\ dom G & x-t in dom F /\ dom G by A7,XBOOLE_0:def 4;
+        then
+A9:   x+t in dom (F + G) & x-t in dom (F + G) by VALUED_1:def 1;
+      (F + G).x=F.x + G.x by B1,VALUED_1:def 1
+              .=F.(x+t)+G.x by A1,Th1,A5,A6
+              .=F.(x+t)+G.(x+t) by A2,Th1,A5,A6
+              .=(F + G).(x+t) by A9,VALUED_1:def 1;
+      hence thesis by A8, VALUED_1:def 1;
+    end;
+    hence thesis by A3,Th1;
+end;
+
+theorem
+  F is t-periodic & G is t-periodic implies F-G is t-periodic
+proof
+    assume that
+A1: F is t-periodic and
+A2: G is t-periodic;
+A3: t<>0 & for x st x in dom F holds (x+t in dom F & x-t in dom F)
+    & F.x=F.(x+t) by A1,Th1;
+    for x st x in dom (F - G)
+    holds (x+t in dom (F - G) & x-t in dom (F - G)) & (F - G).x=(F - G).(x+t)
+    proof
+      let x;
+      assume
+B1:   x in dom (F - G); then
+A5:   x in dom F /\ dom G by VALUED_1:12;
+A6:   dom F /\ dom G c= dom F & dom F /\ dom G c= dom G by XBOOLE_1:17;
+      then
+A7:   x+t in dom F & x-t in dom F by A1,A5,Th1;
+      x+t in dom G & x-t in dom G by A2,Th1,A5,A6; then
+A8:   x+t in dom F /\ dom G & x-t in dom F /\ dom G by A7,XBOOLE_0:def 4;
+      then
+A9:   x+t in dom (F - G) & x-t in dom (F - G) by VALUED_1:12;
+      (F - G).x=F.x - G.x by B1,VALUED_1:13
+                 .=F.(x+t)-G.x by A1,Th1,A5,A6
+                 .=F.(x+t)-G.(x+t) by A2,Th1,A5,A6
+                 .=(F - G).(x+t) by A9,VALUED_1:13;
+      hence thesis by A8,VALUED_1:12;
+    end;
+    hence thesis by A3,Th1;
+end;
+
+theorem
+  F is t-periodic & G is t-periodic implies F(#)G is t-periodic
+proof
+  assume that
+A1: F is t-periodic and
+A2: G is t-periodic;
+A3: t<>0 & for x st x in dom F holds (x+t in dom F & x-t in dom F)
+    & F.x=F.(x+t) by A1,Th1;
+    for x st x in dom (F (#) G) holds
+    (x+t in dom (F (#) G) & x-t in dom (F (#) G)) & (F (#) G).x=(F (#) G).(x+t)
+      proof
+        let x;
+        assume
+B1: x in dom (F (#) G); then
+A5:     x in dom F /\ dom G by VALUED_1:def 4;
+A6:     dom F /\ dom G c= dom F & dom F /\ dom G c= dom G by XBOOLE_1:17;
+        then
+A7:     x+t in dom F & x-t in dom F by A1,Th1,A5;
+        x+t in dom G & x-t in dom G by A2,Th1,A5,A6; then
+A8:    x+t in dom F /\ dom G & x-t in dom F /\ dom G
+       by A7,XBOOLE_0:def 4; then
+A9:    x+t in dom (F (#) G) & x-t in dom (F (#) G) by VALUED_1:def 4;
+        (F (#) G).x=F.x * G.x by B1,VALUED_1:def 4
+                 .=F.(x+t)*G.x by A1,Th1,A5,A6
+                 .=F.(x+t)*G.(x+t) by A2,Th1,A5,A6
+                 .=(F (#) G).(x+t) by A9,VALUED_1:def 4;
+          hence thesis by A8,VALUED_1:def 4;
+      end;
+ hence thesis by A3,Th1;
+end;
+
+theorem
+  F is t-periodic & G is t-periodic implies F /" G is t-periodic
+proof
+   assume that
+A1: F is t-periodic and
+A2: G is t-periodic;
+A3: t<>0 & for x st x in dom F holds (x+t in dom F & x-t in dom F)
+    & F.x=F.(x+t) by A1,Th1;
+    for x st x in dom (F /" G) holds (x+t in dom (F /" G) &
+    x-t in dom (F /" G)) & (F /" G).x=(F /" G).(x+t)
+      proof
+        let x;
+        assume x in dom (F /" G); then
+A5:     x in dom F /\ dom G by VALUED_1:16;
+A6:     dom F /\ dom G c= dom F & dom F /\ dom G c= dom G by XBOOLE_1:17;
+        then
+A7:     x+t in dom F & x-t in dom F by A1,Th1,A5;
+        x+t in dom G & x-t in dom G by A2,Th1,A5,A6;
+        then
+A8:  x+t in dom F /\ dom G & x-t in dom F /\ dom G by A7,XBOOLE_0:def 4;
+        (F /" G).x=F.x / G.x by VALUED_1:17
+                 .=F.(x+t) / G.x by A1,Th1,A5,A6
+                 .=F.(x+t) / G.(x+t) by A2,Th1,A5,A6
+                 .=(F /" G).(x+t) by VALUED_1:17;
+          hence thesis by A8,VALUED_1:16;
+      end;
+ hence thesis by A3,Th1;
+end;
+
+theorem Th6:
+  F is t-periodic implies -F is t-periodic
+proof
+  assume
+A1: F is t-periodic;
+    then
+A3: t<>0 & for x st x in dom F holds (x+t in dom F & x-t in dom F)
+    & F.x=F.(x+t) by Th1;
+   for x st x in dom -F holds (x+t in dom -F & x-t in dom -F) &
+   (-F).x=(-F).(x+t)
+      proof
+        let x;
+        assume x in dom (-F); then
+A5:     x in dom F by VALUED_1:8;
+        then
+A6:     x+t in dom F & x-t in dom F by A1,Th1;
+        (-F).x=-F.x by VALUED_1:8
+                 .=-F.(x+t) by A1,Th1,A5
+                 .=(-F).(x+t) by VALUED_1:8;
+          hence thesis by A6,VALUED_1:8;
+      end;
+ hence thesis by A3,Th1;
+end;
+
+theorem Th7:
+  F is t-periodic implies r (#) F is t-periodic
+proof
+assume
+A1: F is t-periodic;
+A3: t<>0 & for x st x in dom F holds (x+t in dom F & x-t in dom F)
+    & F.x=F.(x+t) by A1,Th1;
+    for x st x in dom (r (#) F) holds (x+t in dom (r (#) F)
+    & x-t in dom (r (#) F)) & (r (#) F).x=(r (#) F).(x+t)
+      proof
+        let x;
+        assume
+B1:     x in dom (r (#) F); then
+A5:     x in dom F by VALUED_1:def 5; then
+A6:    x+t in dom F & x-t in dom F by A1,Th1; then
+A8:     x+t in dom (r (#) F) & x-t in dom (r (#) F) by VALUED_1:def 5;
+        (r (#) F).x=r * F.x by B1,VALUED_1:def 5
+                 .=r * F.(x+t) by A1,Th1,A5
+                 .=(r (#) F).(x+t) by A8,VALUED_1:def 5;
+          hence thesis by A6,VALUED_1:def 5;
+      end;
+ hence thesis by A3,Th1;
+end;
+
+theorem Th8:
+  F is t-periodic implies r+F is t-periodic
+proof
+assume
+A1: F is t-periodic;
+A3: t<>0 & for x st x in dom F holds (x+t in dom F & x-t in dom F)
+    & F.x=F.(x+t) by A1,Th1;
+   for x st x in dom (r+F) holds (x+t in dom (r+F) & x-t in dom (r+F)) &
+   (r+F).x=(r+F).(x+t)
+      proof
+        let x;
+        assume
+B1:     x in dom (r+F); then
+A5:     x in dom F by VALUED_1:def 2; then
+A6:     x+t in dom F & x-t in dom F by A1,Th1; then
+A8:     x+t in dom (r + F) & x-t in dom (r + F) by VALUED_1:def 2;
+        (r+F).x=r + F.x by B1,VALUED_1:def 2
+                 .=r + F.(x+t) by A1,Th1,A5
+                 .=(r+F).(x+t) by A8,VALUED_1:def 2;
+          hence thesis by A6,VALUED_1:def 2;
+      end;
+   hence thesis by A3,Th1;
+end;
+
+theorem
+  F is t-periodic implies F-r is t-periodic by Th8;
+
+theorem Th10:
+  F is t-periodic implies |. F .| is t-periodic
+proof
+    assume
+A1: F is t-periodic;
+A3: t<>0 & for x st x in dom F holds (x+t in dom F & x-t in dom F)
+    & F.x=F.(x+t) by A1,Th1;
+   for x st x in dom |. F .| holds (x+t in dom |. F .| & x-t in dom |. F .|) &
+   |. F .|.x=|. F .|.(x+t)
+    proof
+      let x;
+      assume
+B1:   x in dom |. F .|; then
+A5:   x in dom F by VALUED_1:def 11; then
+A6:   x+t in dom F & x-t in dom F by A1,Th1; then
+A8:   x+t in dom |. F .| & x-t in dom |. F .| by VALUED_1:def 11;
+      |. F .|.x=|. F.x .| by B1,VALUED_1:def 11
+              .=|. F.(x+t) .| by A1,Th1,A5
+              .=|. F .|.(x+t) by A8,VALUED_1:def 11;
+      hence thesis by A6,VALUED_1:def 11;
+    end;
+    hence thesis by A3,Th1;
+end;
+
+theorem Th11:
+  F is t-periodic implies F" is t-periodic
+proof
+assume
+A1: F is t-periodic;
+A3: t<>0 & for x st x in dom F holds (x+t in dom F & x-t in dom F)
+    & F.x=F.(x+t) by A1,Th1;
+   for x st x in dom (F") holds (x+t in dom (F") & x-t in dom (F")) &
+   (F").x=(F").(x+t)
+      proof
+        let x;
+        assume
+B1: x in dom (F"); then
+A5:     x in dom F by VALUED_1:def 7; then
+A6:     x+t in dom F & x-t in dom F by A1,Th1;
+       then
+A8:     x+t in dom (F") & x-t in dom (F") by VALUED_1:def 7;
+        F".x=(F.x)" by B1,VALUED_1:def 7
+                 .=(F.(x+t))" by A1,Th1,A5
+                 .=F".(x+t) by A8,VALUED_1:def 7;
+          hence thesis by A6,VALUED_1:def 7;
+      end;
+ hence thesis by A3,Th1;
+end;
+
+theorem Th12:
+  F is t-periodic implies F^2 is t-periodic
+proof
+assume
+A1: F is t-periodic;
+A3: t<>0 & for x st x in dom F holds (x+t in dom F & x-t in dom F)
+    & F.x=F.(x+t) by A1,Th1;
+   for x st x in dom F^2 holds (x+t in dom F^2 & x-t in dom F^2) &
+   (F^2).x=(F^2).(x+t)
+      proof
+        let x;
+        assume x in dom F^2; then
+A5:     x in dom F by VALUED_1:11; then
+A6:    x+t in dom F & x-t in dom F by A1,Th1;
+        (F^2).x=(F.x)^2 by VALUED_1:11
+                 .=(F.(x+t))^2 by A1,Th1,A5
+                 .=(F^2).(x+t) by VALUED_1:11;
+          hence thesis by A6,VALUED_1:11;
+      end;
+ hence thesis by A3,Th1;
+end;
+
+theorem Th83:
+  F is t-periodic implies for x st x in dom F holds F.x=F.(x-t)
+proof
+  assume
+A1: F is t-periodic;
+    let x;
+    assume x in dom F; then
+    x+t in dom F & x-t in dom F by A1,Th1;
+    then F.(x-t)=F.(x-t+t) by A1,Th1
+                       .=F.x;
+    hence thesis;
+end;
+
+theorem
+  F is t-periodic implies F is -t -periodic
+proof
+assume
+A1:  F is t-periodic;
+B1:  -t<>0 by A1,Th1;
+ for x st x in dom F holds
+ (x+(-t) in dom F & x-(-t) in dom F) & F.x=F.(x+(-t))
+   proof
+   let x;
+       assume
+A4:    x in dom F; then
+    x+t in dom F & x-t in dom F by A1,Th1;
+      hence thesis by A1,Th83,A4;
+      end;
+   hence thesis by B1,Th1;
+end;
+
+theorem
+  F is t1-periodic & F is t2-periodic & t1+t2<>0 implies F is (t1+t2)-periodic
+proof
+  assume
+A1:F is t1-periodic & F is t2-periodic & t1+t2<>0;
+   for x st x in dom F holds (x+(t1+t2) in dom F & x-(t1+t2) in dom F)
+     & F.x=F.(x+(t1+t2))
+      proof
+       let x;
+       assume
+A4:    x in dom F; then
+       x+t1 in dom F & x-t1 in dom F by A1,Th1;
+       then x+t1+t2 in dom F & x-t1-t2 in dom F
+       & F.(x+t1)=F.((x+t1)+t2) by A1,Th1;
+       hence thesis by A1,Th1,A4;
+      end;
+   hence thesis by A1,Th1;
+end;
+
+theorem
+  F is t1-periodic & F is t2-periodic & t1-t2<>0 implies F is (t1-t2)-periodic
+proof
+assume
+A1:  F is t1-periodic & F is t2-periodic & t1-t2<>0;
+  for x st x in dom F holds (x+(t1-t2) in dom F & x-(t1-t2) in dom F)
+     & F.x=F.(x+(t1-t2))
+      proof
+       let x;
+       assume
+A4:    x in dom F; then
+       x+t1 in dom F & x-t1 in dom F by A1,Th1; then
+B3:    x+t1-t2 in dom F & x-t1+t2 in dom F by A1,Th1;
+B4:    x-t2 in dom F by A1,Th1,A4;
+       then F.(x-t2+t1)=F.(x-t2) by A1,Th1
+                      .=F.(x-t2+t2) by A1,Th1,B4
+                      .=F.x;
+      hence thesis by B3;
+      end;
+   hence thesis by A1,Th1;
+end;
+
+theorem
+  (t<>0 & for x st x in dom F holds (x+t in dom F & x-t in dom F &
+  F.(x+t)=F.(x-t))) implies F is (2*t)-periodic & F is periodic
+proof
+assume that
+A1: t<>0 and
+A2: for x st x in dom F holds (x+t in dom F & x-t in dom F & F.(x+t)=F.(x-t));
+ for x st x in dom F
+holds (x+2*t in dom F & x-2*t in dom F) & F.x=F.(x+2*t)
+  proof
+  let x;
+  assume x in dom F; then
+A3: x+t in dom F & x-t in dom F by A2; then
+A4: x+t+t in dom F & x-t-t in dom F by A2;
+   F.(x+2*t)=F.(x+t+t)
+               .=F.(x+t-t) by A2,A3
+               .=F.x;
+  hence thesis by A4;
+  end;
+then F is (2*t)-periodic by A1,Th1;
+hence thesis by Def2;
+end;
+
+theorem
+  (t1+t2<>0 & for x st x in dom F holds (x+t1 in dom F & x-t1 in dom F &
+  x+t2 in dom F & x-t2 in dom F &
+  F.(x+t1)=F.(x-t2))) implies F is (t1+t2)-periodic & F is periodic
+proof
+assume that
+A1: t1+t2<>0 and
+A2: for x st x in dom F holds (x+t1 in dom F & x-t1 in dom F &
+ x+t2 in dom F & x-t2 in dom F & F.(x+t1)=F.(x-t2));
+ for x st x in dom F
+holds (x+(t1+t2) in dom F & x-(t1+t2) in dom F) & F.x=F.(x+(t1+t2))
+  proof
+  let x;
+  assume x in dom F; then
+A3: x+t1 in dom F & x-t1 in dom F & x+t2 in dom F & x-t2 in dom F by A2;
+  then
+A4: x+t1+t2 in dom F & x-t1-t2 in dom F by A2;
+   F.(x+(t1+t2))=F.(x+t2+t1)
+               .=F.(x+t2-t2) by A2,A3
+               .=F.x;
+  hence thesis by A4;
+  end;
+then F is (t1+t2)-periodic by Th1,A1;
+hence thesis by Def2;
+end;
+
+theorem
+  (t1-t2<>0 & for x st x in dom F holds (x+t1 in dom F & x-t1 in dom F &
+  x+t2 in dom F & x-t2 in dom F &
+  F.(x+t1)=F.(x+t2))) implies F is (t1-t2)-periodic & F is periodic
+proof
+assume that
+A1: t1-t2<>0 and
+A2: for x st x in dom F holds (x+t1 in dom F & x-t1 in dom F &
+ x+t2 in dom F & x-t2 in dom F & F.(x+t1)=F.(x+t2));
+ for x st x in dom F
+holds (x+(t1-t2) in dom F & x-(t1-t2) in dom F) & F.x=F.(x+(t1-t2))
+  proof
+  let x;
+  assume x in dom F; then
+A3: x+t1 in dom F & x-t1 in dom F & x+t2 in dom F & x-t2 in dom F by A2;
+  then
+A4: x+t1-t2 in dom F & x-t1+t2 in dom F by A2;
+  F.(x+(t1-t2))=F.(x-t2+t1)
+               .=F.(x-t2+t2) by A2,A3
+               .=F.x;
+  hence thesis by A4;
+  end;
+then F is (t1-t2)-periodic by Th1,A1;
+hence thesis by Def2;
+end;
+
+theorem
+  (t<>0 & for x st x in dom F holds (x+t in dom F & x-t in dom F &
+  F.(x+t)=(F.x)")) implies F is (2*t)-periodic & F is periodic
+  proof
+assume that
+A1: t<>0 and
+A2: for x st x in dom F holds (x+t in dom F & x-t in dom F & F.(x+t)=(F.x)");
+ for x st x in dom F
+holds (x+2*t in dom F & x-2*t in dom F) & F.x=F.(x+2*t)
+  proof
+  let x;
+  assume
+A0:x in dom F; then
+A3: x+t in dom F & x-t in dom F by A2; then
+A4: x+t+t in dom F & x-t-t in dom F by A2;
+   F.(x+2*t)=F.(x+t+t)
+               .=(F.(x+t))" by A2,A3
+               .=((F.x)")" by A2,A0
+               .=F.x;
+  hence thesis by A4;
+  end;
+then F is (2*t)-periodic by A1,Th1;
+hence thesis by Def2;
+end;
+
+L1: sin is (2 * PI)-periodic
+proof
+  (for x st x in dom sin holds (x+2 * PI in dom sin & x-2 * PI in dom sin)
+   & sin.x=sin.(x+2 * PI)) by SIN_COS:27,SIN_COS:83;
+  hence thesis by Th1;
+end;
+
+registration
+  cluster periodic real-valued Function;
+  existence
+  proof
+    take sin;
+    thus thesis by L1,Def2;
+  end;
+  cluster periodic PartFunc of REAL, REAL;
+  existence
+  proof
+    take sin;
+    thus thesis by L1,Def2;
+  end;
+end;
+
+registration let F be periodic real-valued Function;
+  cluster -F -> periodic;
+  coherence
+  proof
+    consider t such that
+A1: F is t-periodic by Def2;
+    -F is t-periodic by A1,Th6;
+    hence thesis by Def2;
+  end;
+end;
+
+registration let F be periodic real-valued Function;
+             let r be Real;
+  cluster r (#) F -> periodic;
+  coherence
+  proof
+    consider t such that
+A1: F is t-periodic by Def2;
+    r (#) F is t-periodic by A1,Th7;
+    hence thesis by Def2;
+  end;
+  cluster r+F -> periodic;
+  coherence
+  proof
+    consider t such that
+A1: F is t-periodic by Def2;
+    r+F is t-periodic by A1,Th8;
+    hence thesis by Def2;
+  end;
+  cluster F-r -> periodic;
+  coherence
+  proof
+    consider t such that
+A1: F is t-periodic by Def2;
+    F-r is t-periodic by A1,Th8;
+    hence thesis by Def2;
+  end;
+end;
+
+registration let F be periodic real-valued Function;
+  cluster |. F .| -> periodic;
+  coherence
+  proof
+    consider t such that
+A1: F is t-periodic by Def2;
+    |. F .| is t-periodic by A1,Th10;
+    hence thesis by Def2;
+  end;
+  cluster F" -> periodic;
+  coherence
+  proof
+    consider t such that
+A1: F is t-periodic by Def2;
+    F" is t-periodic by A1,Th11;
+    hence thesis by Def2;
+  end;
+  cluster F^2 -> periodic;
+  coherence
+  proof
+    consider t such that
+A1: F is t-periodic by Def2;
+    F^2 is t-periodic by A1,Th12;
+    hence thesis by Def2;
+  end;
+end;
+
+begin :: Some examples
+
+L2:cos is 2 * PI -periodic
+proof
+  (for x st x in dom cos holds (x+2 * PI in dom cos & x-2 * PI in dom cos)
+    & cos.x=cos.(x+2 * PI)) by SIN_COS:27,SIN_COS:83;
+  hence thesis by Th1;
+end;
+
+registration
+  cluster sin -> periodic;
+  coherence by Def2,L1;
+  cluster cos -> periodic;
+  coherence by Def2,L2;
+end;
+
+theorem
+  sin is 2*PI*(k+1) -periodic
+proof
+  defpred X[Nat] means sin is 2*PI*($1+1) -periodic;
+A1: X[0] by L1;
+A2: for k being Nat st X[k] holds X[k+1]
+  proof
+    let k be Nat such that
+A3: sin is 2*PI*(k+1) -periodic;
+    sin is 2*PI*(k+1+1) -periodic
+    proof
+A7:   for x st x in dom sin holds sin.x=sin.(x+2*PI*(k+1+1))
+      proof
+        let x;
+        assume
+A8:     x in dom sin;
+        sin.(x+2*PI*(k+1))=sin.(x+2*PI*(k+1)+2*PI) by SIN_COS:83;
+        hence thesis by A3,Th1,A8;
+      end;
+    2*PI*(k+1+1)<>0 & for x st x in dom sin holds
+    (x+2*PI*(k+1+1) in dom sin & x-2*PI*(k+1+1) in dom sin)
+    & sin.x=sin.(x+2*PI*(k+1+1)) by  SIN_COS:27,A7;
+  hence thesis by Th1;
+    end;
+    hence thesis;
+  end;
+  for n being Nat holds X[n] from NAT_1:sch 2(A1,A2);
+  hence thesis;
+end;
+
+theorem
+  cos is 2*PI*(k+1) -periodic
+proof
+  defpred X[Nat] means cos is 2*PI*($1+1) -periodic;
+A1: X[0] by L2;
+A2: for k being Nat st X[k] holds X[k+1]
+  proof
+    let k be Nat such that
+A3: cos is 2*PI*(k+1) -periodic;
+    cos is 2*PI*(k+1+1) -periodic
+    proof
+A7:   for x st x in dom cos holds cos.x=cos.(x+2*PI*(k+1+1))
+      proof
+        let x;
+        assume
+A8:     x in dom cos;
+        cos.(x+2*PI*(k+1))=cos.(x+2*PI*(k+1)+2*PI) by SIN_COS:83;
+        hence thesis by A3,Th1,A8;
+      end;
+  2*PI*(k+1+1)<>0 & for x st x in dom cos holds
+    (x+2*PI*(k+1+1) in dom cos & x-2*PI*(k+1+1) in dom cos) &
+    cos.x=cos.(x+2*PI*(k+1+1)) by  SIN_COS:27,A7;
+  hence thesis by Th1;
+    end;
+    hence thesis;
+  end;
+  for n being Nat holds X[n] from NAT_1:sch 2(A1,A2);
+  hence thesis;
+end;
+
+L3: cosec is 2 * PI -periodic
+ proof
+  for x st x in dom cosec holds (x+2 * PI in dom cosec & x-2 * PI in dom cosec)
+   & cosec.x=cosec.(x+2 * PI)
+    proof
+     let x;
+     assume
+A1: x in dom cosec;
+     then x in dom sin \ sin"{0} by RFUNCT_1:def 8;
+     then x in dom sin & not x in sin"{0} by XBOOLE_0:def 5;
+     then
+A2: not sin.x in {0} by FUNCT_1:def 13;
+     then sin.x<>0 by TARSKI:def 1;
+     then sin.(x+2 * PI)<>0 by SIN_COS:83;
+     then not sin.(x+2 * PI) in {0} by TARSKI:def 1;
+     then x+2 * PI in dom sin & not x+2 * PI in sin"{0}
+    by FUNCT_1:def 13,SIN_COS:27; then
+A3: x+2 * PI in dom sin \ sin"{0} by XBOOLE_0:def 5;
+     sin.(x-2 * PI)=sin.(x-2 * PI+2 * PI) by L1,Th1,SIN_COS:27;
+     then x-2 * PI in dom sin & not x-2 * PI in sin"{0}
+    by A2,FUNCT_1:def 13,SIN_COS:27; then
+A4: x-2 * PI in dom sin \ sin"{0} by XBOOLE_0:def 5; then
+A5: x+2 * PI in dom cosec & x-2 * PI in dom cosec by A3,RFUNCT_1:def 8;
+    cosec.(x+2 * PI)=(sin.(x+2 * PI))" by A5,RFUNCT_1:def 8
+                   .=(sin.x)" by SIN_COS:83
+                   .=cosec.x by A1,RFUNCT_1:def 8;
+    hence thesis by A3,A4,RFUNCT_1:def 8;
+    end;
+  hence thesis by Th1;
+  end;
+
+L4: sec is 2 * PI -periodic
+ proof
+  for x st x in dom sec holds (x+2 * PI in dom sec & x-2 * PI in dom sec)
+   & sec.x=sec.(x+2 * PI)
+    proof
+     let x;
+     assume
+A1: x in dom sec;
+     then x in dom cos \ cos"{0} by RFUNCT_1:def 8;
+     then x in dom cos & not x in cos"{0} by XBOOLE_0:def 5;
+     then
+A2: not cos.x in {0} by FUNCT_1:def 13;
+     then cos.x<>0 by TARSKI:def 1;
+     then cos.(x+2 * PI)<>0 by SIN_COS:83;
+     then not cos.(x+2 * PI) in {0} by TARSKI:def 1;
+     then x+2 * PI in dom cos & not x+2 * PI in cos"{0}
+    by FUNCT_1:def 13,SIN_COS:27; then
+A3: x+2 * PI in dom cos \ cos"{0} by XBOOLE_0:def 5;
+     cos.(x-2 * PI)=cos.(x-2 * PI+2 * PI) by L2,Th1,SIN_COS:27;
+     then x-2 * PI in dom cos & not x-2 * PI in cos"{0}
+    by A2,FUNCT_1:def 13,SIN_COS:27; then
+A4: x-2 * PI in dom cos \ cos"{0} by XBOOLE_0:def 5; then
+A5: x+2 * PI in dom sec & x-2 * PI in dom sec by A3,RFUNCT_1:def 8;
+    sec.(x+2 * PI)=(cos.(x+2 * PI))" by A5,RFUNCT_1:def 8
+                   .=(cos.x)" by SIN_COS:83
+                   .=sec.x by A1,RFUNCT_1:def 8;
+    hence thesis by A3,A4,RFUNCT_1:def 8;
+    end;
+  hence thesis by Th1;
+  end;
+
+registration
+  cluster cosec -> periodic;
+  coherence by Def2,L3;
+  cluster sec -> periodic;
+  coherence by Def2,L4;
+end;
+
+theorem
+  sec is 2*PI*(k+1) -periodic
+proof
+  defpred X[Nat] means sec is 2*PI*($1+1) -periodic;
+A1: X[0] by L4;
+A2: for k being Nat st X[k] holds X[k+1]
+  proof
+    let k be Nat such that
+A3: sec is 2*PI*(k+1) -periodic;
+    sec is 2*PI*(k+1+1) -periodic
+    proof
+  for x st x in dom sec holds
+    (x+2*PI*(k+1+1) in dom sec & x-2*PI*(k+1+1) in dom sec) &
+    sec.x=sec.(x+2*PI*(k+1+1))
+      proof
+        let x;
+        assume x in dom sec; then
+A9:  x+2*PI*(k+1) in dom sec & x-2*PI*(k+1) in dom sec &
+    sec.x=sec.(x+2*PI*(k+1)) by A3,Th1;
+then x+2*PI*(k+1) in dom cos \ cos"{0} & x-2*PI*(k+1) in dom cos \ cos"{0}
+  by RFUNCT_1:def 8;
+     then x+2*PI*(k+1) in dom cos & not x+2*PI*(k+1) in cos"{0}
+    & x-2*PI*(k+1) in dom cos & not x-2*PI*(k+1) in cos"{0} by XBOOLE_0:def 5;
+     then
+B2: not cos.(x+2*PI*(k+1)) in {0} & not cos.(x-2*PI*(k+1)) in {0}
+by FUNCT_1:def 13;
+     then cos.(x+2*PI*(k+1))<>0 by TARSKI:def 1;
+     then cos.(x+2*PI*(k+1)+2*PI)<>0 by SIN_COS:83;
+     then not cos.(x+2*PI*(k+1)+2*PI) in {0} by TARSKI:def 1;
+     then x+2*PI*(k+1)+2*PI in dom cos & not x+2*PI*(k+1)+2*PI in cos"{0}
+    by FUNCT_1:def 13,SIN_COS:27; then
+B3: x+2*PI*(k+1+1) in dom cos \ cos"{0} by XBOOLE_0:def 5;
+     cos.(x-2*PI*(k+1+1))= cos.(x-2*PI*(k+1+1)+2*PI) by L2,Th1,SIN_COS:27;
+     then x-2*PI*(k+1+1) in dom cos & not x-2*PI*(k+1+1) in cos"{0}
+    by B2,FUNCT_1:def 13,SIN_COS:27; then
+B4: x-2*PI*(k+1+1) in dom cos \ cos"{0} by XBOOLE_0:def 5; then
+B5: x+2*PI*(k+1+1) in dom sec & x-2*PI*(k+1+1) in dom sec
+  by B3,RFUNCT_1:def 8;
+sec.(x+2*PI*(k+1+1))=(cos.(x+2*PI*(k+1)+2*PI))" by B5,RFUNCT_1:def 8
+                   .=(cos.(x+2*PI*(k+1)))" by SIN_COS:83
+                   .=sec.x by A9,RFUNCT_1:def 8;
+       hence thesis by B3,RFUNCT_1:def 8,B4;
+      end;
+  hence thesis by Th1;
+    end;
+    hence thesis;
+  end;
+  for n being Nat holds X[n] from NAT_1:sch 2(A1,A2);
+  hence thesis;
+end;
+
+theorem
+  cosec is 2*PI*(k+1) -periodic
+proof
+  defpred X[Nat] means cosec is 2*PI*($1+1) -periodic;
+A1: X[0] by L3;
+A2: for k being Nat st X[k] holds X[k+1]
+  proof
+    let k be Nat such that
+A3: cosec is 2*PI*(k+1) -periodic;
+    cosec is 2*PI*(k+1+1) -periodic
+    proof
+  for x st x in dom cosec holds
+    (x+2*PI*(k+1+1) in dom cosec & x-2*PI*(k+1+1) in dom cosec) &
+    cosec.x=cosec.(x+2*PI*(k+1+1))
+      proof
+        let x;
+        assume x in dom cosec; then
+A9:  x+2*PI*(k+1) in dom cosec & x-2*PI*(k+1) in dom cosec &
+    cosec.x=cosec.(x+2*PI*(k+1)) by A3,Th1;
+then x+2*PI*(k+1) in dom sin \ sin"{0} & x-2*PI*(k+1) in dom sin \ sin"{0}
+  by RFUNCT_1:def 8;
+     then x+2*PI*(k+1) in dom sin & not x+2*PI*(k+1) in sin"{0}
+    & x-2*PI*(k+1) in dom sin & not x-2*PI*(k+1) in sin"{0} by XBOOLE_0:def 5;
+     then
+B2: not sin.(x+2*PI*(k+1)) in {0} & not sin.(x-2*PI*(k+1)) in {0}
+by FUNCT_1:def 13;
+     then sin.(x+2*PI*(k+1))<>0 by TARSKI:def 1;
+     then sin.(x+2*PI*(k+1)+2*PI)<>0 by SIN_COS:83;
+     then not sin.(x+2*PI*(k+1)+2*PI) in {0} by TARSKI:def 1;
+     then x+2*PI*(k+1)+2*PI in dom sin & not x+2*PI*(k+1)+2*PI in sin"{0}
+    by FUNCT_1:def 13,SIN_COS:27; then
+B3: x+2*PI*(k+1+1) in dom sin \ sin"{0} by XBOOLE_0:def 5;
+     sin.(x-2*PI*(k+1+1))= sin.(x-2*PI*(k+1+1)+2*PI) by L1,Th1,SIN_COS:27;
+     then x-2*PI*(k+1+1) in dom sin & not x-2*PI*(k+1+1) in sin"{0}
+    by B2,FUNCT_1:def 13,SIN_COS:27; then
+B4: x-2*PI*(k+1+1) in dom sin \ sin"{0} by XBOOLE_0:def 5; then
+B5: x+2*PI*(k+1+1) in dom cosec & x-2*PI*(k+1+1) in dom cosec
+  by B3,RFUNCT_1:def 8;
+cosec.(x+2*PI*(k+1+1))=(sin.(x+2*PI*(k+1)+2*PI))" by B5,RFUNCT_1:def 8
+                     .=(sin.(x+2*PI*(k+1)))" by SIN_COS:83
+                     .=cosec.x by A9,RFUNCT_1:def 8;
+       hence thesis by B3,RFUNCT_1:def 8,B4;
+      end;
+     hence thesis by Th1;
+    end;
+    hence thesis;
+  end;
+  for n being Nat holds X[n] from NAT_1:sch 2(A1,A2);
+  hence thesis;
+end;
+
+L5: tan is PI -periodic
+ proof
+  for x st x in dom tan holds (x+PI in dom tan & x-PI in dom tan)
+   & tan.x=tan.(x+PI)
+    proof
+     let x;
+     assume
+A1: x in dom tan;
+     then x in dom sin /\ (dom cos \ cos"{0}) by RFUNCT_1:def 4;
+     then x in dom sin & x in dom cos \ cos"{0} by XBOOLE_0:def 4;
+     then x in dom sin & x in dom cos & not x in cos"{0}
+    by XBOOLE_0:def 5;
+     then not cos.x in {0} by FUNCT_1:def 13; then
+B1: cos.x<>0 by TARSKI:def 1;
+B2: cos.(x+PI)=-cos.x by SIN_COS:83;
+     then not cos.(x+PI) in {0} by TARSKI:def 1, B1;
+     then x+PI in dom sin & x+PI in dom cos & not x+ PI in cos"{0}
+    by FUNCT_1:def 13,SIN_COS:27;
+    then x+PI in dom sin & x+PI in dom cos \ cos"{0} by XBOOLE_0:def 5;
+    then
+A3: x+PI in dom sin /\ (dom cos \ cos"{0}) by XBOOLE_0:def 4;
+     cos.(x-PI)=cos.(x-PI+2*PI) by SIN_COS:83
+              .=cos.(x+PI);
+    then not cos.(x-PI) in {0} by B1,B2,TARSKI:def 1;
+     then x-PI in dom sin & x-PI in dom cos & not x-PI in cos"{0}
+    by FUNCT_1:def 13,SIN_COS:27;
+    then x-PI in dom sin & x-PI in dom cos \ cos"{0} by XBOOLE_0:def 5;
+    then
+A4: x-PI in dom sin /\ (dom cos \ cos"{0}) by XBOOLE_0:def 4; then
+A5: x+PI in dom tan & x-PI in dom tan by A3,RFUNCT_1:def 4;
+    tan.(x+PI)=(sin.(x+PI))/(cos.(x+PI)) by A5,RFUNCT_1:def 4
+                   .=(-sin.x)/(cos.(x+PI)) by SIN_COS:83
+                   .=(-sin.x)/(-cos.x) by SIN_COS:83
+                   .=sin.x/cos.x by XCMPLX_1:192
+                   .=tan.x by A1,RFUNCT_1:def 4;
+    hence thesis by A3,A4,RFUNCT_1:def 4;
+    end;
+  hence thesis by Th1;
+  end;
+
+L6: cot is PI -periodic
+ proof
+  for x st x in dom cot holds (x+PI in dom cot & x-PI in dom cot)
+   & cot.x=cot.(x+PI)
+    proof
+     let x;
+     assume
+A1: x in dom cot;
+     then x in dom cos /\ (dom sin \ sin"{0}) by RFUNCT_1:def 4;
+     then x in dom cos & x in dom sin \ sin"{0} by XBOOLE_0:def 4;
+     then x in dom cos & x in dom sin & not x in sin"{0}
+    by XBOOLE_0:def 5;
+     then not sin.x in {0} by FUNCT_1:def 13; then
+B1: sin.x<>0 by TARSKI:def 1;
+B2: sin.(x+PI)=-sin.x by SIN_COS:83;
+     then not sin.(x+PI) in {0} by TARSKI:def 1, B1;
+     then x+PI in dom cos & x+PI in dom sin& not x+ PI in sin"{0}
+       by FUNCT_1:def 13,SIN_COS:27;
+     then x+PI in dom cos & x+PI in dom sin \ sin"{0} by XBOOLE_0:def 5; then
+A3:  x+PI in dom cos /\ (dom sin \ sin"{0}) by XBOOLE_0:def 4;
+     sin.(x-PI)=sin.(x-PI+2*PI) by SIN_COS:83
+              .=sin.(x+PI);
+     then not sin.(x-PI) in {0} by B1,B2,TARSKI:def 1;
+     then x-PI in dom cos & x-PI in dom sin & not x-PI in sin"{0}
+    by FUNCT_1:def 13,SIN_COS:27;
+    then x-PI in dom cos & x-PI in dom sin \ sin"{0} by XBOOLE_0:def 5;then
+A4: x-PI in dom cos /\ (dom sin \ sin"{0}) by XBOOLE_0:def 4; then
+A5: x+PI in dom cot & x-PI in dom cot by A3,RFUNCT_1:def 4;
+    cot.(x+PI)=(cos.(x+PI))/(sin.(x+PI)) by A5,RFUNCT_1:def 4
+                   .=(-cos.x)/(sin.(x+PI)) by SIN_COS:83
+                   .=(-cos.x)/(-sin.x) by SIN_COS:83
+                   .=cos.x/sin.x by XCMPLX_1:192
+                   .=cot.x by A1,RFUNCT_1:def 4;
+    hence thesis by A3,A4,RFUNCT_1:def 4;
+    end;
+  hence thesis by Th1;
+  end;
+
+registration
+  cluster tan -> periodic;
+  coherence by Def2,L5;
+  cluster cot -> periodic;
+  coherence by Def2,L6;
+end;
+
+theorem
+  tan is PI*(k+1) -periodic
+proof
+  defpred X[Nat] means tan is PI*($1+1) -periodic;
+A1: X[0] by L5;
+A2: for k being Nat st X[k] holds X[k+1]
+  proof
+    let k be Nat such that
+A3: tan is PI*(k+1) -periodic;
+    tan is PI*(k+1+1) -periodic
+    proof
+  for x st x in dom tan holds
+    (x+PI*(k+1+1) in dom tan & x-PI*(k+1+1) in dom tan) &
+    tan.x=tan.(x+PI*(k+1+1))
+      proof
+        let x;
+        assume x in dom tan; then
+A9:  x+PI*(k+1) in dom tan & x-PI*(k+1) in dom tan &
+    tan.x=tan.(x+PI*(k+1)) by A3,Th1;
+    then x+PI*(k+1) in dom sin /\ (dom cos \ cos"{0})
+     & x-PI*(k+1) in dom sin /\ (dom cos \ cos"{0}) by RFUNCT_1:def 4;
+    then x+PI*(k+1) in dom sin & x+PI*(k+1) in dom cos \ cos"{0} &
+    x-PI*(k+1) in dom sin & x-PI*(k+1) in dom cos \ cos"{0} by XBOOLE_0:def 4;
+    then x+PI*(k+1) in dom sin & x+PI*(k+1) in dom cos
+    & not x+PI*(k+1) in cos"{0} & x-PI*(k+1) in dom sin & x-PI*(k+1) in dom cos
+    & not x-PI*(k+1) in cos"{0} by XBOOLE_0:def 5;
+     then not cos.(x+PI*(k+1)) in {0} & not cos.(x-PI*(k+1)) in {0}
+    by FUNCT_1:def 13;
+     then
+B1: cos.(x+PI*(k+1))<>0 & cos.(x-PI*(k+1))<>0 by TARSKI:def 1;
+    cos.(x+PI*(k+1)+PI)=-cos.(x+PI*(k+1)) by SIN_COS:83;
+     then not cos.(x+PI*(k+1)+PI) in {0} by TARSKI:def 1, B1;
+     then x+PI*(k+1)+PI in dom sin & x+PI*(k+1)+PI in dom cos
+     & not x+PI*(k+1)+PI in cos"{0} by FUNCT_1:def 13,SIN_COS:27;
+    then x+PI*(k+1)+PI in dom sin & x+PI*(k+1)+PI in dom cos \ cos"{0}
+   by XBOOLE_0:def 5;
+    then
+B2: x+PI*(k+1)+PI in dom sin /\ (dom cos \ cos"{0}) by XBOOLE_0:def 4;
+      cos.(x-PI*(k+1+1)+PI)=-cos.(x-PI*(k+1+1)) by SIN_COS:83;
+    then cos.(x-PI*(k+1+1))=-cos.(x-PI*(k+1));
+then not cos.(x-PI*(k+1+1)) in {0} by B1,TARSKI:def 1;
+     then x-PI*(k+1+1) in dom sin & x-PI*(k+1+1) in dom cos &
+     not x-PI*(k+1+1) in cos"{0} by FUNCT_1:def 13,SIN_COS:27;
+    then x-PI*(k+1+1) in dom sin & x-PI*(k+1+1) in dom cos \ cos"{0}
+   by XBOOLE_0:def 5; then
+B3:x-PI*(k+1+1) in dom sin /\ (dom cos \ cos"{0}) by XBOOLE_0:def 4; then
+B5: x+PI*(k+1+1) in dom tan & x-PI*(k+1+1) in dom tan
+  by B2,RFUNCT_1:def 4;
+        tan.(x+PI*(k+1+1))
+      =(sin.(x+PI*(k+1)+PI))/(cos.(x+PI*(k+1)+PI)) by B5,RFUNCT_1:def 4
+      .=(-sin.(x+PI*(k+1)))/(cos.(x+PI*(k+1)+PI)) by SIN_COS:83
+      .=(-sin.(x+PI*(k+1)))/(-cos.(x+PI*(k+1))) by SIN_COS:83
+      .=sin.(x+PI*(k+1))/cos.(x+PI*(k+1)) by XCMPLX_1:192
+      .=tan.x by A9,RFUNCT_1:def 4;
+      hence thesis by B3,B2,RFUNCT_1:def 4;
+      end;
+  hence thesis by Th1;
+    end;
+    hence thesis;
+  end;
+  for n being Nat holds X[n] from NAT_1:sch 2(A1,A2);
+  hence thesis;
+end;
+
+theorem
+  cot is PI*(k+1) -periodic
+proof
+  defpred X[Nat] means cot is PI*($1+1) -periodic;
+A1: X[0] by L6;
+A2: for k being Nat st X[k] holds X[k+1]
+  proof
+    let k be Nat such that
+A3: cot is PI*(k+1) -periodic;
+    cot is PI*(k+1+1) -periodic
+    proof
+  for x st x in dom cot holds
+    (x+PI*(k+1+1) in dom cot & x-PI*(k+1+1) in dom cot) &
+    cot.x=cot.(x+PI*(k+1+1))
+      proof
+        let x;
+        assume x in dom cot; then
+A9:  x+PI*(k+1) in dom cot & x-PI*(k+1) in dom cot &
+    cot.x=cot.(x+PI*(k+1)) by A3,Th1;
+    then x+PI*(k+1) in dom cos /\ (dom sin \ sin"{0})
+     & x-PI*(k+1) in dom cos /\ (dom sin \ sin"{0}) by RFUNCT_1:def 4;
+    then x+PI*(k+1) in dom cos & x+PI*(k+1) in dom sin \ sin"{0} &
+    x-PI*(k+1) in dom cos & x-PI*(k+1) in dom sin \ sin"{0} by XBOOLE_0:def 4;
+    then x+PI*(k+1) in dom cos & x+PI*(k+1) in dom sin
+    & not x+PI*(k+1) in sin"{0} & x-PI*(k+1) in dom cos & x-PI*(k+1) in dom sin
+    & not x-PI*(k+1) in sin"{0} by XBOOLE_0:def 5;
+     then not sin.(x+PI*(k+1)) in {0} & not sin.(x-PI*(k+1)) in {0}
+    by FUNCT_1:def 13; then
+B1: sin.(x+PI*(k+1))<>0 & sin.(x-PI*(k+1))<>0 by TARSKI:def 1;
+    sin.(x+PI*(k+1)+PI)=-sin.(x+PI*(k+1)) by SIN_COS:83;
+     then not sin.(x+PI*(k+1)+PI) in {0} by TARSKI:def 1, B1;
+     then x+PI*(k+1)+PI in dom cos & x+PI*(k+1)+PI in dom sin
+     & not x+PI*(k+1)+PI in sin"{0} by FUNCT_1:def 13,SIN_COS:27;
+    then x+PI*(k+1)+PI in dom cos & x+PI*(k+1)+PI in dom sin \ sin"{0}
+   by XBOOLE_0:def 5; then
+B2: x+PI*(k+1)+PI in dom cos /\ (dom sin \ sin"{0}) by XBOOLE_0:def 4;
+      sin.(x-PI*(k+1+1)+PI)=-sin.(x-PI*(k+1+1)) by SIN_COS:83;
+    then sin.(x-PI*(k+1+1))=-sin.(x-PI*(k+1));
+then not sin.(x-PI*(k+1+1)) in {0} by B1,TARSKI:def 1;
+     then x-PI*(k+1+1) in dom cos & x-PI*(k+1+1) in dom sin &
+     not x-PI*(k+1+1) in sin"{0} by FUNCT_1:def 13,SIN_COS:27;
+    then x-PI*(k+1+1) in dom cos & x-PI*(k+1+1) in dom sin \ sin"{0}
+   by XBOOLE_0:def 5; then
+B3:x-PI*(k+1+1) in dom cos /\ (dom sin \ sin"{0})
+   by XBOOLE_0:def 4; then
+B5: x+PI*(k+1+1) in dom cot & x-PI*(k+1+1) in dom cot
+  by B2,RFUNCT_1:def 4;
+        cot.(x+PI*(k+1+1))
+      =(cos.(x+PI*(k+1)+PI))/(sin.(x+PI*(k+1)+PI)) by B5,RFUNCT_1:def 4
+      .=(-cos.(x+PI*(k+1)))/(sin.(x+PI*(k+1)+PI)) by SIN_COS:83
+      .=(-cos.(x+PI*(k+1)))/(-sin.(x+PI*(k+1))) by SIN_COS:83
+      .=cos.(x+PI*(k+1))/sin.(x+PI*(k+1)) by XCMPLX_1:192
+      .=cot.x by A9,RFUNCT_1:def 4;
+      hence thesis by B3,B2,RFUNCT_1:def 4;
+      end;
+  hence thesis by Th1;
+    end;
+    hence thesis;
+  end;
+  for n being Nat holds X[n] from NAT_1:sch 2(A1,A2);
+  hence thesis;
+end;
+
+L7: |. sin .| is PI-periodic
+proof
+  for x st x in dom |. sin .| holds (x+PI in dom |. sin .|
+& x-PI in dom |. sin .|) & |. sin .|.x=|. sin .|.(x+PI)
+    proof
+     let x;
+     assume
+A1: x in dom |. sin .|;
+A2: x+PI in dom sin & x-PI in dom sin by SIN_COS:27; then
+A3: x+PI in dom |. sin .| & x-PI in dom |. sin .| by VALUED_1:def 11;
+    |. sin .|.(x+PI)=|. sin(x+PI) .| by A3,VALUED_1:def 11
+                   .=|. -sin.x .| by SIN_COS:83
+                   .=|. sin.x .| by COMPLEX1:138
+                   .=|. sin .|.x by A1,VALUED_1:def 11;
+    hence thesis by A2,VALUED_1:def 11;
+    end;
+  hence thesis by Th1;
+  end;
+
+L8:|. cos .| is PI-periodic
+proof
+  for x st x in dom |. cos .| holds (x+PI in dom |. cos .|
+& x-PI in dom |. cos .|) & |. cos .|.x=|. cos .|.(x+PI)
+    proof
+     let x; assume
+A1: x in dom |. cos .|;
+A2: x+PI in dom cos & x-PI in dom cos by SIN_COS:27; then
+A3: x+PI in dom |. cos .| & x-PI in dom |. cos .| by VALUED_1:def 11;
+    |. cos .|.(x+PI)=|. cos(x+PI) .| by A3,VALUED_1:def 11
+                   .=|. -cos.x .| by SIN_COS:83
+                   .=|. cos.x .| by COMPLEX1:138
+                   .=|. cos .|.x by A1,VALUED_1:def 11;
+    hence thesis by A2,VALUED_1:def 11;
+    end;
+  hence thesis by Th1;
+  end;
+
+theorem
+  |. sin .| is PI*(k+1) -periodic
+proof
+  defpred X[Nat] means |. sin .| is PI*($1+1) -periodic;
+A1: X[0] by L7;
+A2: for k being Nat st X[k] holds X[k+1]
+  proof
+    let k be Nat such that
+A3: |. sin .| is PI*(k+1) -periodic;
+    |. sin .| is PI*(k+1+1) -periodic
+    proof
+ for x st x in dom |. sin .| holds (x+PI*(k+1+1) in dom |. sin .| &
+ x-PI*(k+1+1) in dom |. sin .|) & |. sin .|.x=|. sin .|.(x+PI*(k+1+1))
+      proof
+       let x;
+       assume
+A7:    x in dom |. sin .|; then
+A8:x+PI*(k+1) in dom |. sin .| & x-PI*(k+1) in dom |. sin .| by A3,Th1;
+A9:x+PI*(k+1+1) in dom sin & x-PI*(k+1+1) in dom sin by SIN_COS:27;
+       then x+PI*(k+1+1) in dom |. sin .| & x-PI*(k+1+1) in dom |. sin .|
+   by VALUED_1:def 11;
+then |. sin .|.(x+PI*(k+1+1))=|. sin.(x+PI*(k+1)+PI) .| by VALUED_1:def 11
+                            .=|. -sin.(x+PI*(k+1)) .| by SIN_COS:83
+                            .=|. sin.(x+PI*(k+1)) .| by COMPLEX1:138
+                            .=|. sin .|.(x+PI*(k+1)) by A8,VALUED_1:def 11;
+             hence thesis by A3,Th1,A7,A9,VALUED_1:def 11;
+      end;
+    hence thesis by Th1;
+    end;
+    hence thesis;
+  end;
+  for n being Nat holds X[n] from NAT_1:sch 2(A1,A2);
+  hence thesis;
+end;
+
+theorem
+  |. cos .| is PI*(k+1) -periodic
+proof
+  defpred X[Nat] means |. cos .| is PI*($1+1) -periodic;
+A1: X[0] by L8;
+A2: for k being Nat st X[k] holds X[k+1]
+  proof
+    let k be Nat such that
+A3: |. cos .| is PI*(k+1) -periodic;
+    |. cos .| is PI*(k+1+1) -periodic
+    proof
+ for x st x in dom |. cos .| holds (x+PI*(k+1+1) in dom |. cos .| &
+ x-PI*(k+1+1) in dom |. cos .|) & |. cos .|.x=|. cos .|.(x+PI*(k+1+1))
+      proof
+       let x;
+       assume
+A7:    x in dom |. cos .|; then
+A8:x+PI*(k+1) in dom |. cos .| & x-PI*(k+1) in dom |. cos .| by A3,Th1;
+A9:x+PI*(k+1+1) in dom cos & x-PI*(k+1+1) in dom cos by SIN_COS:27;
+       then x+PI*(k+1+1) in dom |. cos .| & x-PI*(k+1+1) in dom |. cos .|
+   by VALUED_1:def 11;
+then |. cos .|.(x+PI*(k+1+1))=|. cos.(x+PI*(k+1)+PI) .| by VALUED_1:def 11
+                            .=|. -cos.(x+PI*(k+1)) .| by SIN_COS:83
+                            .=|. cos.(x+PI*(k+1)) .| by COMPLEX1:138
+                            .=|. cos .|.(x+PI*(k+1)) by A8,VALUED_1:def 11;
+             hence thesis by A3,Th1,A7,A9,VALUED_1:def 11;
+      end;
+      hence thesis by Th1;
+    end;
+    hence thesis;
+  end;
+  for n being Nat holds X[n] from NAT_1:sch 2(A1,A2);
+  hence thesis;
+end;
+
+L9:|. sin .| + |. cos .| is PI/2 -periodic
+proof
+  for x st x in dom(|. sin .| + |. cos .|) holds
+(x+PI/2 in dom(|. sin .| + |. cos .|) & x-PI/2 in dom(|. sin .| + |. cos .|))
+& (|. sin .| + |. cos .|).x=(|. sin .| + |. cos .|).(x+PI/2)
+    proof
+     let x;
+     assume
+A1: x in dom(|. sin .| + |. cos .|);
+A2: dom(|. sin .| + |. cos .|)=REAL & dom |. sin .|=REAL & dom |. cos .|=REAL
+      proof
+A3:   dom(|. sin .| + |. cos .|)=dom |. sin .| /\ dom |. cos .|
+     by VALUED_1:def 1;
+      dom |. sin .|=REAL & dom |. cos .|=REAL by SIN_COS:27,VALUED_1:def 11;
+      hence thesis by A3;
+      end;
+      (|. sin .| + |. cos .|).(x+PI/2)=|. sin .|.(x+PI/2)+|. cos .|.(x+PI/2)
+  by A2,VALUED_1:def 1
+   .=|. sin.(x+PI/2) .|+|. cos .|.(x+PI/2) by VALUED_1:def 11,A2
+   .=|. sin.(x+PI/2) .|+|. cos.(x+PI/2) .| by VALUED_1:def 11,A2
+   .=|. cos.x .|+|. cos.(x+PI/2) .| by SIN_COS:83
+   .=|. cos.x .|+|. -sin.x .| by SIN_COS:83
+   .=|. cos.x .|+|. sin.x .| by COMPLEX1:138
+   .=|. cos .|.x +|. sin.x .| by VALUED_1:def 11,A1,A2
+   .=|. cos .|.x+|. sin .|.x by VALUED_1:def 11,A1,A2
+   .=(|. sin .| + |. cos .|).x by VALUED_1:def 1,A1;
+    hence thesis by A2;
+    end;
+  hence thesis by Th1;
+  end;
+
+theorem
+  |. sin .| + |. cos .| is (PI/2)*(k+1) -periodic
+proof
+  defpred X[Nat] means |. sin .| + |. cos .| is (PI/2)*($1+1) -periodic;
+A1: X[0] by L9;
+A2: for k being Nat st X[k] holds X[k+1]
+  proof
+    let k be Nat such that
+A3: |. sin .| + |. cos .| is (PI/2)*(k+1) -periodic;
+B1: dom(|. sin .| + |. cos .|)=REAL & dom |. sin .|=REAL & dom |. cos .|=REAL
+      proof
+B2:   dom(|. sin .| + |. cos .|)=dom |. sin .| /\ dom |. cos .|
+     by VALUED_1:def 1;
+      dom |. sin .|=REAL & dom |. cos .|=REAL by SIN_COS:27,VALUED_1:def 11;
+      hence thesis by B2;
+      end;
+    |. sin .| + |. cos .| is (PI/2)*(k+1+1) -periodic
+    proof
+  for x st x in dom (|. sin .| + |. cos .|) holds (x+(PI/2)*(k+1+1) in
+dom (|. sin .| + |. cos .|) & x-(PI/2)*(k+1+1) in dom (|. sin .| + |. cos .|))
+& (|. sin .| + |. cos .|).x=(|. sin .| + |. cos .|).(x+(PI/2)*(k+1+1))
+      proof
+       let x;
+       assume
+Z1:    x in dom (|. sin .| + |. cos .|);
+  (|. sin .| + |. cos .|).(x+(PI/2)*(k+1+1))
+ =|. sin .|.(x+(PI/2)*(k+1+1))+|. cos .|.(x+(PI/2)*(k+1+1))
+ by B1,VALUED_1:def 1
+.=|. sin.(x+(PI/2)*(k+1+1)) .|+|. cos .|.(x+(PI/2)*(k+1+1))
+  by VALUED_1:def 11,B1
+.=|. sin.(x+(PI/2)*(k+1)+PI/2) .|+|. cos.(x+(PI/2)*(k+1)+PI/2) .|
+ by VALUED_1:def 11,B1
+.=|. cos.(x+(PI/2)*(k+1)) .|+|. cos.(x+(PI/2)*(k+1)+PI/2) .|
+ by SIN_COS:83
+.=|. cos.(x+(PI/2)*(k+1)) .|+|. -sin.(x+(PI/2)*(k+1)) .| by SIN_COS:83
+.=|. cos.(x+(PI/2)*(k+1)) .|+|. sin.(x+(PI/2)*(k+1)) .| by COMPLEX1:138
+.=|. cos .|.(x+(PI/2)*(k+1)) +|. sin.(x+(PI/2)*(k+1)) .|
+  by VALUED_1:def 11,B1
+.=|. cos .|.(x+(PI/2)*(k+1))+|. sin .|.(x+(PI/2)*(k+1))
+  by VALUED_1:def 11,B1
+.=(|. sin .| + |. cos .|).(x+(PI/2)*(k+1)) by VALUED_1:def 1,B1;
+             hence thesis by A3,Th1,B1,Z1;
+      end;
+    hence thesis by Th1;
+    end;
+    hence thesis;
+  end;
+  for n being Nat holds X[n] from NAT_1:sch 2(A1,A2);
+  hence thesis;
+end;
+
+L10: sin^2 is PI-periodic
+proof
+  for x st x in dom(sin^2) holds (x+PI in dom(sin^2)
+& x-PI in dom(sin^2)) & (sin^2).x=(sin^2).(x+PI)
+    proof
+     let x;
+     assume x in dom(sin^2);
+A2: x+PI in dom sin & x-PI in dom sin by SIN_COS:27;
+    (sin^2).(x+PI)=(sin(x+PI))^2 by VALUED_1:11
+                   .=(-sin.x)^2 by SIN_COS:83
+                   .=(sin.x)^2
+                   .=(sin^2).x by VALUED_1:11;
+    hence thesis by A2,VALUED_1:11;
+    end;
+  hence thesis by Th1;
+  end;
+
+L11:cos^2 is PI-periodic
+proof
+  for x st x in dom(cos^2) holds (x+PI in dom(cos^2)
+& x-PI in dom(cos^2)) & (cos^2).x=(cos^2).(x+PI)
+    proof
+     let x;
+     assume x in dom(cos^2);
+A2: x+PI in dom cos & x-PI in dom cos by SIN_COS:27;
+    (cos^2).(x+PI)=(cos(x+PI))^2 by VALUED_1:11
+                 .=(-cos.x)^2 by SIN_COS:83
+                 .=(cos.x)^2
+                 .=(cos^2).x by VALUED_1:11;
+    hence thesis by A2,VALUED_1:11;
+    end;
+  hence thesis by Th1;
+  end;
+
+theorem
+  sin^2 is PI*(k+1) -periodic
+proof
+  defpred X[Nat] means sin^2 is PI*($1+1) -periodic;
+A1: X[0] by L10;
+A2: for k being Nat st X[k] holds X[k+1]
+  proof
+    let k be Nat such that
+A3: sin^2 is PI*(k+1) -periodic;
+    sin^2 is PI*(k+1+1) -periodic
+    proof
+ for x st x in dom(sin^2) holds (x+PI*(k+1+1) in dom(sin^2) &
+ x-PI*(k+1+1) in dom(sin^2)) & (sin^2).x=(sin^2).(x+PI*(k+1+1))
+      proof
+       let x;
+       assume
+A7:    x in dom(sin^2);
+A9:x+PI*(k+1+1) in dom sin & x-PI*(k+1+1) in dom sin by SIN_COS:27;
+ (sin^2).(x+PI*(k+1+1))=(sin.(x+PI*(k+1)+PI))^2 by VALUED_1:11
+                            .=(-sin.(x+PI*(k+1)))^2by SIN_COS:83
+                            .=(sin.(x+PI*(k+1)))^2
+                            .=(sin^2).(x+PI*(k+1)) by VALUED_1:11;
+             hence thesis by A3,Th1,A7,A9,VALUED_1:11;
+      end;
+    hence thesis by Th1;
+    end;
+    hence thesis;
+  end;
+  for n being Nat holds X[n] from NAT_1:sch 2(A1,A2);
+  hence thesis;
+end;
+
+theorem
+  cos^2 is PI*(k+1) -periodic
+proof
+  defpred X[Nat] means cos^2 is PI*($1+1) -periodic;
+A1: X[0] by L11;
+A2: for k being Nat st X[k] holds X[k+1]
+  proof
+    let k be Nat such that
+A3: cos^2 is PI*(k+1) -periodic;
+    cos^2 is PI*(k+1+1) -periodic
+    proof
+ for x st x in dom(cos^2) holds (x+PI*(k+1+1) in dom(cos^2) &
+ x-PI*(k+1+1) in dom(cos^2)) & (cos^2).x=(cos^2).(x+PI*(k+1+1))
+      proof
+       let x;
+       assume
+A7:    x in dom(cos^2);
+A9:x+PI*(k+1+1) in dom cos & x-PI*(k+1+1) in dom cos by SIN_COS:27;
+ (cos^2).(x+PI*(k+1+1))=(cos.(x+PI*(k+1)+PI))^2 by VALUED_1:11
+                            .=(-cos.(x+PI*(k+1)))^2 by SIN_COS:83
+                            .=(cos.(x+PI*(k+1)))^2
+                            .=(cos^2).(x+PI*(k+1)) by VALUED_1:11;
+             hence thesis by A3,Th1,A7,A9,VALUED_1:11;
+      end;
+  hence thesis by Th1;
+    end;
+    hence thesis;
+  end;
+  for n being Nat holds X[n] from NAT_1:sch 2(A1,A2);
+  hence thesis;
+end;
+
+L12:sin (#) cos is PI-periodic
+proof
+  for x st x in dom(sin (#) cos) holds (x+PI in dom(sin (#) cos)
+& x-PI in dom(sin (#) cos)) & (sin (#) cos).x=(sin (#) cos).(x+PI)
+    proof
+     let x;
+     assume
+A1: x in dom(sin (#) cos);
+A2: x+PI in dom sin /\ dom cos & x-PI in dom sin /\ dom cos
+      by SIN_COS:27; then
+A3: x+PI in dom(sin (#) cos) & x-PI in dom(sin (#) cos) by VALUED_1:def 4;
+    (sin (#) cos).(x+PI)=sin.(x+PI) * cos.(x+PI) by A3,VALUED_1:def 4
+                   .=(-sin.x) * cos.(x+PI) by SIN_COS:83
+                   .=(-sin.x) * (-cos.x) by SIN_COS:83
+                   .=sin.x * cos.x
+                   .=(sin (#) cos).x by A1,VALUED_1:def 4;
+    hence thesis by A2,VALUED_1:def 4;
+    end;
+  hence thesis by Th1;
+  end;
+
+theorem
+  sin (#) cos is PI*(k+1) -periodic
+proof
+  defpred X[Nat] means sin (#) cos is PI*($1+1) -periodic;
+A1: X[0] by L12;
+A2: for k being Nat st X[k] holds X[k+1]
+  proof
+    let k be Nat such that
+A3: sin (#) cos is PI*(k+1) -periodic;
+    sin (#) cos is PI*(k+1+1) -periodic
+    proof
+ for x st x in dom(sin (#) cos) holds (x+PI*(k+1+1) in dom(sin (#) cos)
+ & x-PI*(k+1+1) in dom(sin (#) cos)) &
+(sin (#) cos).x=(sin (#) cos).(x+PI*(k+1+1))
+      proof
+       let x;
+       assume
+A7:    x in dom(sin (#) cos); then
+A8:x+PI*(k+1) in dom(sin (#) cos) & x-PI*(k+1) in dom(sin (#) cos)
+     by A3,Th1;
+A9:x+PI*(k+1+1) in dom cos /\ dom sin &
+   x-PI*(k+1+1) in dom cos /\ dom sin by SIN_COS:27;
+then x+PI*(k+1+1) in dom(sin (#) cos) &
+   x-PI*(k+1+1) in dom(sin (#) cos) by VALUED_1:def 4;
+then (sin (#) cos).(x+PI*(k+1+1))
+    =(sin.(x+PI*(k+1)+PI)) * (cos.(x+PI*(k+1)+PI)) by VALUED_1:def 4
+   .=(-sin.(x+PI*(k+1))) * (cos.(x+PI*(k+1)+PI)) by SIN_COS:83
+   .=(-sin.(x+PI*(k+1))) * (-cos.(x+PI*(k+1))) by SIN_COS:83
+   .=(sin.(x+PI*(k+1))) * (cos.(x+PI*(k+1)))
+   .=(sin (#) cos).(x+PI*(k+1)) by A8,VALUED_1:def 4;
+      hence thesis by A3,Th1,A7,A9,VALUED_1:def 4;
+      end;
+    hence thesis by Th1;
+    end;
+    hence thesis;
+  end;
+  for n being Nat holds X[n] from NAT_1:sch 2(A1,A2);
+  hence thesis;
+end;
+
+canceled;
+
+L14: b + a (#) sin is 2*PI-periodic
+proof
+  for x st x in dom(b + a (#) sin) holds (x+2*PI in dom(b + a (#) sin)
+& x-2*PI in dom(b + a (#) sin)) & (b + a (#) sin).x=(b + a (#) sin).(x+2*PI)
+    proof
+     let x;
+     assume x in dom(b + a (#) sin);
+     x in REAL by XREAL_0:def 1;
+     then
+A0: x in dom(a (#) sin) by SIN_COS:27,VALUED_1:def 5; then
+A1: x in dom(b + a (#) sin) & x in dom(b + a (#) sin) by VALUED_1:def 2;
+    x+2*PI in dom sin & x-2*PI in dom sin by SIN_COS:27; then
+A3: x+2*PI in dom(a (#) sin) & x-2*PI in dom(a (#) sin) by VALUED_1:def 5;
+then
+A4: x+2*PI in dom(b + a (#) sin) & x-2*PI in dom(b + a (#) sin)
+    by VALUED_1:def 2;
+    (b + a (#) sin).(x+2*PI)
+    =b + (a (#) sin).(x+2*PI) by VALUED_1:def 2,A4
+   .=b + a * sin.(x+2*PI) by VALUED_1:def 5,A3
+   .=b + a * sin.x by SIN_COS:83
+   .=b + (a (#) sin).x by VALUED_1:def 5,A0
+   .=(b + a (#) sin).x by VALUED_1:def 2,A1;
+    hence thesis by A3,VALUED_1:def 2;
+    end;
+  hence thesis by Th1;
+  end;
+
+L16:b + a (#) cos is 2*PI -periodic
+proof
+  for x st x in dom(b + a (#) cos) holds (x+2*PI in dom(b + a (#) cos)
+& x-2*PI in dom(b + a (#) cos)) & (b + a (#) cos).x=(b + a (#) cos).(x+2*PI)
+    proof
+     let x;
+     assume x in dom(b + a (#) cos);
+     x in REAL by XREAL_0:def 1;
+     then
+A0: x in dom(a (#) cos) by SIN_COS:27,VALUED_1:def 5; then
+A1: x in dom(b + a (#) cos) & x in dom(b + a (#) cos) by VALUED_1:def 2;
+    x+2*PI in dom cos & x-2*PI in dom cos by SIN_COS:27; then
+A3: x+2*PI in dom(a (#) cos) & x-2*PI in dom(a (#) cos) by VALUED_1:def 5;
+then
+A4: x+2*PI in dom(b + a (#) cos) & x-2*PI in dom(b + a (#) cos)
+    by VALUED_1:def 2;
+    (b + a (#) cos).(x+2*PI)
+    =b + (a (#) cos).(x+2*PI) by VALUED_1:def 2,A4
+   .=b + a * cos.(x+2*PI) by VALUED_1:def 5,A3
+   .=b + a * cos.x by SIN_COS:83
+   .=b + (a (#) cos).x by VALUED_1:def 5,A0
+   .=(b + a (#) cos).x by VALUED_1:def 2,A1;
+    hence thesis by A3,VALUED_1:def 2;
+    end;
+  hence thesis by Th1;
+  end;
+
+theorem WW:
+  b + a (#) sin is 2*PI*(k+1) -periodic
+proof
+  defpred X[Nat] means b + a (#) sin is 2*PI*($1+1) -periodic;
+A1: X[0] by L14;
+A2: for k being Nat st X[k] holds X[k+1]
+  proof
+    let k be Nat such that
+A3: b + a (#) sin is 2*PI*(k+1) -periodic;
+    b + a (#) sin is 2*PI*(k+1+1) -periodic
+    proof
+ for x st x in dom(b + a (#) sin) holds (x+2*PI*(k+1+1) in dom(b + a (#) sin) &
+ x-2*PI*(k+1+1) in dom(b + a (#) sin)) &
+(b + a (#) sin).x=(b + a (#) sin).(x+2*PI*(k+1+1))
+      proof
+       let x;
+       assume x in dom(b + a (#) sin);
+       x in REAL by XREAL_0:def 1;
+then x in dom(a (#) sin) by SIN_COS:27,VALUED_1:def 5; then
+A9: x in dom(b + a (#) sin) by VALUED_1:def 2;
+    x+2*PI*(k+1+1) in dom sin & x-2*PI*(k+1+1) in dom sin &
+x+2*PI*(k+1) in dom sin & x-2*PI*(k+1) in dom sin by SIN_COS:27; then
+A11: x+2*PI*(k+1+1) in dom(a (#) sin) & x-2*PI*(k+1+1) in dom(a (#) sin) &
+x+2*PI*(k+1) in dom(a (#) sin) & x-2*PI*(k+1) in dom(a (#) sin)
+by VALUED_1:def 5; then
+A12: x+2*PI*(k+1+1) in dom(b + a (#) sin)
+& x-2*PI*(k+1+1) in dom(b + a (#) sin) & x+2*PI*(k+1) in dom(b + a (#) sin)
+& x-2*PI*(k+1) in dom(b + a (#) sin) by VALUED_1:def 2;
+then (b + a (#) sin).(x+2*PI*(k+1+1))
+    =b + (a (#) sin).(x+2*PI*(k+1+1)) by VALUED_1:def 2
+   .=b + a * sin.(x+2*PI*(k+1)+2*PI) by VALUED_1:def 5,A11
+   .=b + a * sin.(x+2*PI*(k+1)) by SIN_COS:83
+   .=b + (a (#) sin).(x+2*PI*(k+1)) by VALUED_1:def 5,A11
+   .=(b + a (#) sin).(x+2*PI*(k+1)) by VALUED_1:def 2,A12;
+   hence thesis by A3,Th1,A11,A9,VALUED_1:def 2;
+      end;
+    hence thesis by Th1;
+    end;
+    hence thesis;
+  end;
+  for n being Nat holds X[n] from NAT_1:sch 2(A1,A2);
+  hence thesis;
+end;
+
+theorem
+  a (#) sin - b is 2*PI*(k+1) -periodic by WW;
+
+theorem NN:
+  b + a (#) cos is 2*PI*(k+1) -periodic
+proof
+  defpred X[Nat] means b + a (#) cos is 2*PI*($1+1) -periodic;
+A1: X[0] by L16;
+A2: for k being Nat st X[k] holds X[k+1]
+  proof
+    let k be Nat such that
+A3: b + a (#) cos is 2*PI*(k+1) -periodic;
+    b + a (#) cos is 2*PI*(k+1+1) -periodic
+    proof
+ for x st x in dom(b + a (#) cos) holds (x+2*PI*(k+1+1) in dom(b + a (#) cos) &
+ x-2*PI*(k+1+1) in dom(b + a (#) cos)) &
+(b + a (#) cos).x=(b + a (#) cos).(x+2*PI*(k+1+1))
+      proof
+       let x;
+       assume x in dom(b + a (#) cos);
+       x in REAL by XREAL_0:def 1;
+       then x in dom(a (#) cos) by SIN_COS:27,VALUED_1:def 5;then
+A9: x in dom(b + a (#) cos) by VALUED_1:def 2;
+    x+2*PI*(k+1+1) in dom cos & x-2*PI*(k+1+1) in dom cos &
+x+2*PI*(k+1) in dom cos & x-2*PI*(k+1) in dom cos by SIN_COS:27; then
+A11: x+2*PI*(k+1+1) in dom(a (#) cos) & x-2*PI*(k+1+1) in dom(a (#) cos) &
+x+2*PI*(k+1) in dom(a (#) cos) & x-2*PI*(k+1) in dom(a (#) cos)
+by VALUED_1:def 5; then
+A12: x+2*PI*(k+1+1) in dom(b + a (#) cos)
+& x-2*PI*(k+1+1) in dom(b + a (#) cos) & x+2*PI*(k+1) in dom(b + a (#) cos)
+& x-2*PI*(k+1) in dom(b + a (#) cos) by VALUED_1:def 2;
+then (b + a (#) cos).(x+2*PI*(k+1+1))
+    =b + (a (#) cos).(x+2*PI*(k+1+1)) by VALUED_1:def 2
+   .=b + a * cos.(x+2*PI*(k+1)+2*PI) by VALUED_1:def 5,A11
+   .=b + a * cos.(x+2*PI*(k+1)) by SIN_COS:83
+   .=b + (a (#) cos).(x+2*PI*(k+1)) by VALUED_1:def 5,A11
+   .=(b + a (#) cos).(x+2*PI*(k+1)) by VALUED_1:def 2,A12;
+   hence thesis by A3,Th1,A11,A9,VALUED_1:def 2;
+      end;
+    hence thesis by Th1;
+    end;
+    hence thesis;
+  end;
+  for n being Nat holds X[n] from NAT_1:sch 2(A1,A2);
+  hence thesis;
+end;
+
+theorem
+  a (#) cos - b is 2*PI*(k+1) -periodic by NN;
+
+theorem TT:
+  t <> 0 implies REAL --> a is t -periodic
+proof
+  set F = REAL --> a;
+  assume t <> 0;
+  hence t <> 0;
+  let x;
+A1: x in REAL & x+t in REAL by XREAL_0:def 1;
+  hence x in dom F iff x+t in dom F by FUNCOP_1:19;
+  assume x in dom F;
+  thus F.x = a by A1,FUNCOP_1:13
+  .= F.(x+t) by A1,FUNCOP_1:13;
+end;
+
+registration
+  let a;
+  cluster REAL --> a -> periodic;
+  coherence
+  proof
+    take 1;
+    thus thesis by TT;
+  end;
+end;
+
+registration
+  let t be non zero (real number);
+  cluster t-periodic Function of REAL,REAL;
+  existence
+  proof
+    take REAL --> the Real;
+    thus thesis by TT;
+  end;
+end;

@@ -20,7 +20,7 @@
 <ArgTypes/>
 <Cluster>
 <Adjective nr="6"/>
-<Adjective nr="26"/>
+<Adjective nr="27"/>
 </Cluster>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -33,10 +33,10 @@
 </Typ>
 <Cluster>
 <Adjective nr="6"/>
-<Adjective nr="21">
+<Adjective nr="22">
 <Func kind="K" nr="44"/>
 </Adjective>
-<Adjective nr="26"/>
+<Adjective nr="27"/>
 </Cluster>
 </CCluster>
 </Registrations>

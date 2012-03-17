@@ -27,14 +27,14 @@
 <Cluster>
 <Adjective nr="4"/>
 <Adjective nr="9"/>
-<Adjective nr="34"/>
+<Adjective nr="35"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="4"/>
 <Adjective nr="9"/>
-<Adjective nr="34"/>
+<Adjective nr="35"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -253,7 +253,7 @@
 </And>
 </Not>
 </For>
-<Pred kind="V" nr="38">
+<Pred kind="V" nr="39">
 <Func kind="F" nr="1"/>
 </Pred>
 <For>

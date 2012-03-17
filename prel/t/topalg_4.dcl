@@ -57,16 +57,16 @@
 <ArgTypes>
 <Typ kind="G" nr="12">
 <Cluster>
-<Adjective nr="39" value="false"/>
-<Adjective nr="119"/>
-<Adjective nr="161"/>
+<Adjective nr="40" value="false"/>
+<Adjective nr="120"/>
+<Adjective nr="162"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="12">
 <Cluster>
-<Adjective nr="39" value="false"/>
-<Adjective nr="119"/>
-<Adjective nr="161"/>
+<Adjective nr="40" value="false"/>
+<Adjective nr="120"/>
+<Adjective nr="162"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -75,23 +75,23 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="118"/>
 <Adjective nr="119"/>
-<Adjective nr="161"/>
+<Adjective nr="120"/>
+<Adjective nr="162"/>
 </Cluster>
 </FCluster>
 <FCluster aid="TOPALG_4" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="12">
 <Cluster>
-<Adjective nr="39" value="false"/>
-<Adjective nr="119"/>
+<Adjective nr="40" value="false"/>
+<Adjective nr="120"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="12">
 <Cluster>
-<Adjective nr="39" value="false"/>
-<Adjective nr="119"/>
+<Adjective nr="40" value="false"/>
+<Adjective nr="120"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
@@ -116,7 +116,7 @@
 <Cluster>
 <Adjective nr="9"/>
 <Adjective nr="10"/>
-<Adjective nr="23">
+<Adjective nr="24">
 <Func kind="U" nr="1">
 <Func kind="K" nr="451">
 <Func kind="K" nr="369">
@@ -150,7 +150,7 @@
 </Func>
 </Func>
 </Adjective>
-<Adjective nr="24">
+<Adjective nr="25">
 <Func kind="U" nr="1">
 <Func kind="K" nr="259">
 <Func kind="K" nr="2">

@@ -26,7 +26,7 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="10" value="false"/>
+<Adjective nr="11" value="false"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -54,17 +54,17 @@
 </Func>
 </Adjective>
 <Adjective nr="6"/>
-<Adjective nr="10" value="false"/>
-<Adjective nr="25">
+<Adjective nr="11" value="false"/>
+<Adjective nr="26">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="26">
+<Adjective nr="27">
 <LocusVar nr="1"/>
 <Func kind="K" nr="44"/>
 </Adjective>
-<Adjective nr="29"/>
 <Adjective nr="30"/>
 <Adjective nr="31"/>
+<Adjective nr="32"/>
 </Cluster>
 </RCluster>
 <FCluster aid="FUZZY_1" nr="1">
@@ -95,7 +95,7 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="10" value="false"/>
+<Adjective nr="11" value="false"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -107,7 +107,7 @@
 </Func>
 </Adjective>
 <Adjective nr="6"/>
-<Adjective nr="26">
+<Adjective nr="27">
 <LocusVar nr="1"/>
 <Func kind="K" nr="44"/>
 </Adjective>
@@ -129,11 +129,11 @@
 </Func>
 </Adjective>
 <Adjective nr="6"/>
-<Adjective nr="26">
+<Adjective nr="27">
 <LocusVar nr="1"/>
 <Func kind="K" nr="44"/>
 </Adjective>
-<Adjective nr="31"/>
+<Adjective nr="32"/>
 </Cluster>
 </CCluster>
 </Registrations>

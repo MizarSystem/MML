@@ -13,11 +13,11 @@ environ
       PRE_TOPC, TOPS_2, CARD_3, FUNCOP_1;
  constructors SETFAM_1, FUNCOP_1, SETWISEO, CARD_3, TOPS_2, RELSET_1;
  registrations XBOOLE_0, SUBSET_1, RELSET_1, FUNCOP_1, FINSET_1, CARD_3,
-      PRE_TOPC, COMPLSP1, FUNCT_1;
+      PRE_TOPC, COMPLSP1, FUNCT_1, TOPS_2;
  requirements BOOLE, SUBSET;
  definitions PRE_TOPC, TARSKI, TOPS_2, XBOOLE_0, STRUCT_0;
  theorems ZFMISC_1, PRE_TOPC, SUBSET_1, SETFAM_1, BORSUK_1, FINSET_1, FUNCT_2,
-      FUNCT_1, TARSKI, FINSUB_1, RELAT_1, XBOOLE_0, XBOOLE_1;
+      FUNCT_1, TARSKI, FINSUB_1, RELAT_1, XBOOLE_0, XBOOLE_1, TOPS_2;
  schemes SUBSET_1, FUNCT_2, SETWISEO;
 
 begin
@@ -55,28 +55,41 @@ A2: for x being Subset of X holds x in F2 iff ex Y being Subset-Family
 end;
 
 definition
+  let X be TopStruct, F be Subset-Family of X;
+  attr F is quasi_basis means
+:Def2:
+  the topology of X c= UniCl F;
+end;
+
+registration
   let X be TopStruct;
-  mode Basis of X -> Subset-Family of X means
-    :Def2:
-    it c= the topology of X &
-    the topology of X c= UniCl it;
+  cluster the topology of X -> quasi_basis;
+  coherence
+  proof
+    set F = the topology of X;
+    let A be set;
+    assume
+A2: A in F;
+    then reconsider B = {A} as Subset-Family of X by SUBSET_1:63;
+A1: B c= F by A2,ZFMISC_1:37;
+    A = union B by ZFMISC_1:31;
+    hence A in UniCl F by A1,Def1;
+  end;
+end;
+
+registration
+  let X be TopStruct;
+  cluster open quasi_basis Subset-Family of X;
   existence
   proof
-    reconsider T = the topology of X as Subset-Family of X;
-    take T;
-    thus T c= the topology of X;
-    now
-      let A be Subset of X;
-      reconsider B = {A} as Subset-Family of X by SUBSET_1:63;
-      assume
-      A in the topology of X;
-      then
-A1:   B c= T by ZFMISC_1:37;
-      A = union B by ZFMISC_1:31;
-      hence A in UniCl T by A1,Def1;
-    end;
-    hence thesis by SUBSET_1:7;
+    take the topology of X;
+    thus thesis;
   end;
+end;
+
+definition
+  let X be TopStruct;
+  mode Basis of X is open quasi_basis Subset-Family of X;
 end;
 
 theorem Th1:
@@ -89,29 +102,16 @@ proof
 A1: x in A;
   then reconsider x'=x as Subset of X;
   reconsider s = {x'} as Subset-Family of X by SUBSET_1:63;
-  reconsider s as Subset-Family of X;
 A2: x = union s by ZFMISC_1:31;
   s c= A by A1,ZFMISC_1:37;
   hence thesis by A2,Def1;
 end;
 
-theorem Th2:
-  for S being TopStruct holds the topology of S is Basis of S
-proof
-  let S be TopStruct;
-  the topology of S c= UniCl the topology of S by Th1;
-  hence thesis by Def2;
-end;
+theorem
+  for S being TopStruct holds the topology of S is Basis of S;
 
 theorem
-  for S being TopStruct holds the topology of S is open
-proof
-  let S be TopStruct;
-  let P be Subset of S;
-  assume
-  P in the topology of S;
-  hence thesis by PRE_TOPC:def 5;
-end;
+  for S being TopStruct holds the topology of S is open;
 
 definition
   let X be set;
@@ -119,9 +119,8 @@ definition
   canceled;
   func FinMeetCl(A) -> Subset-Family of X means
   :Def4:
-  for x being Subset of X
-  holds x in it iff ex Y being Subset-Family of X st Y c=A & Y is finite & x =
-  Intersect Y;
+  for x being Subset of X holds x in it iff
+  ex Y being Subset-Family of X st Y c= A & Y is finite & x = Intersect Y;
   existence
   proof
     defpred P[set] means ex Y being Subset-Family of X st Y c=A & Y is finite
@@ -148,8 +147,7 @@ A2: for x being Subset of X holds x in B2 iff ex Y being Subset-Family
 end;
 
 theorem Th4:
-  for X being set for A being Subset-Family of X holds A c=
-  FinMeetCl A
+  for X being set for A being Subset-Family of X holds A c= FinMeetCl A
 proof
   let X be set;
   let A be Subset-Family of X;
@@ -158,7 +156,6 @@ proof
 A1: x in A;
   then reconsider x'=x as Subset of X;
   reconsider s = {x'} as Subset-Family of X by SUBSET_1:63;
-  reconsider s as Subset-Family of X;
   x = meet s by SETFAM_1:11;
   then
 A2: x = Intersect s by SETFAM_1:def 10;
@@ -602,29 +599,47 @@ A15: INTERSECTION(F,G) c= FinMeetCl A by A10,A12,Th15;
 end;
 
 definition
+  let X be TopStruct, F be Subset-Family of X;
+  attr F is quasi_prebasis means
+:Def5:
+  ex G being Basis of X st G c= FinMeetCl F;
+end;
+
+registration
   let X be TopStruct;
-  mode prebasis of X -> Subset-Family of X means
-    :Def5:
-    it c= the topology of
-    X & ex F being Basis of X st F c= FinMeetCl it;
-  existence
+  cluster the topology of X -> quasi_prebasis;
+  coherence
   proof
-    reconsider F = the topology of X as Basis of X by Th2;
-    reconsider T = the topology of X as Subset-Family of X;
-    take T;
-    thus T c= the topology of X;
+    take the topology of X;
+    thus thesis by Th4;
+  end;
+  cluster -> quasi_prebasis Basis of X;
+  coherence
+  proof
+    let F be Basis of X;
     take F;
     thus thesis by Th4;
   end;
+  cluster open quasi_prebasis Subset-Family of X;
+  existence
+  proof
+    take the topology of X;
+    thus thesis;
+  end;
+end;
+
+definition
+  let X be TopStruct;
+  mode prebasis of X is open quasi_prebasis Subset-Family of X;
 end;
 
 theorem Th18:
-  for X being non empty set, Y being Subset-Family of X holds Y is
-  Basis of TopStruct (#X, UniCl Y#)
+  for X being non empty set, Y being Subset-Family of X holds
+  Y is Basis of TopStruct (#X, UniCl Y#)
 proof
   let X be non empty set, Y be Subset-Family of X;
   Y c= UniCl Y by Th1;
-  hence thesis by Def2;
+  hence thesis by TOPS_2:78,Def2;
 end;
 
 theorem Th19:
@@ -637,11 +652,11 @@ A2: P is prebasis of T2;
   reconsider P' = P as prebasis of T2 by A2;
   consider B1 being Basis of T1 such that
 A3: B1 c= FinMeetCl P by Def5;
-  P c= the topology of T1 by Def5;
+  P c= the topology of T1 by TOPS_2:78;
   then FinMeetCl P c= FinMeetCl the topology of T1 by Th16;
   then
 A4: UniCl FinMeetCl P c= UniCl FinMeetCl the topology of T1 by Th9;
-  P' c= the topology of T2 by Def5;
+  P' c= the topology of T2 by TOPS_2:78;
   then FinMeetCl P' c= FinMeetCl the topology of T2 by Th16;
   then
 A5: UniCl FinMeetCl P' c= UniCl FinMeetCl the topology of T2 by Th9;
@@ -664,29 +679,32 @@ A11: UniCl FinMeetCl P' = the topology of T2 by
 end;
 
 theorem Th20:
-  for X being non empty set, Y being Subset-Family of X holds Y is
-  prebasis of TopStruct (#X, UniCl FinMeetCl Y#)
+  for X being non empty set, Y being Subset-Family of X holds
+  Y is prebasis of TopStruct (#X, UniCl FinMeetCl Y#)
 proof
   let X be non empty set, A be Subset-Family of X;
   set T = TopStruct (#X, UniCl FinMeetCl A#);
   reconsider A' = A as Subset-Family of T;
-  A' is prebasis of T
-  proof
+  now
     A' c= FinMeetCl A & FinMeetCl A c= the topology of T by Th1,Th4;
-    hence A' c= the topology of T by XBOOLE_1:1;
-    reconsider B = FinMeetCl A' as Basis of T by Th18;
-    take B;
-    thus thesis;
+    then A' c= the topology of T by XBOOLE_1:1;
+    hence A' is open by TOPS_2:78;
+    thus A' is quasi_prebasis
+    proof      
+      reconsider B = FinMeetCl A' as Basis of T by Th18;
+      take B;
+      thus thesis;
+    end;
   end;
   hence thesis;
 end;
 
 definition
   func the_Cantor_set -> strict non empty TopSpace means
-  the carrier of it =
-  product (NAT-->{0,1}) & ex P being prebasis of it st for X being Subset of
-product (NAT-->{0,1}) holds X in P iff ex N,n being Nat st for F being Element
-  of product (NAT-->{0,1}) holds F in X iff F.N=n;
+  the carrier of it = product (NAT-->{0,1}) &
+  ex P being prebasis of it st for X being Subset of product (NAT-->{0,1})
+  holds X in P iff ex N,n being Nat st
+  for F being Element of product (NAT-->{0,1}) holds F in X iff F.N=n;
   existence
   proof
     defpred P[set] means ex N,n being Nat st for F being Element of product (

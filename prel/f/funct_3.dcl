@@ -19,7 +19,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="6"/>
-<Adjective nr="10"/>
+<Adjective nr="11"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -36,7 +36,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="6"/>
-<Adjective nr="10"/>
+<Adjective nr="11"/>
 </Cluster>
 </FCluster>
 <FCluster aid="FUNCT_3" nr="2">
@@ -45,7 +45,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="6"/>
-<Adjective nr="10"/>
+<Adjective nr="11"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -62,7 +62,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="6"/>
-<Adjective nr="10"/>
+<Adjective nr="11"/>
 </Cluster>
 </FCluster>
 </Registrations>

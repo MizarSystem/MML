@@ -17,6 +17,7 @@
 <ArticleID name="CARD_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PRE_TOPC"/>
+<ArticleID name="TOPS_2"/>
 <ArticleID name="RELAT_2"/>
 <ArticleID name="EQREL_1"/>
 <ArticleID name="ORDERS_1"/>
@@ -37,12 +38,12 @@
 <ArgTypes>
 <Typ kind="G" nr="12">
 <Cluster>
-<Adjective nr="46"/>
-<Adjective nr="71"/>
-<Adjective nr="72"/>
-<Adjective nr="73"/>
-<Adjective nr="96"/>
-<Adjective nr="97"/>
+<Adjective nr="47"/>
+<Adjective nr="75"/>
+<Adjective nr="76"/>
+<Adjective nr="77"/>
+<Adjective nr="100"/>
+<Adjective nr="101"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -57,7 +58,7 @@
 </Typ>
 <Not>
 <And>
-<Pred kind="V" nr="47">
+<Pred kind="V" nr="48">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 </Pred>
@@ -71,9 +72,22 @@
 </For>
 <Not>
 <For>
-<Typ kind="M" nr="15">
-<Cluster/>
+<Typ kind="M" nr="2">
+<Cluster>
+<Adjective nr="58">
 <Func kind="F" nr="1"/>
+</Adjective>
+<Adjective nr="107">
+<Func kind="F" nr="1"/>
+</Adjective>
+</Cluster>
+<Func kind="K" nr="10">
+<Func kind="K" nr="10">
+<Func kind="U" nr="1">
+<Func kind="F" nr="1"/>
+</Func>
+</Func>
+</Func>
 </Typ>
 <Not>
 <For>

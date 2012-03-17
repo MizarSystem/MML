@@ -29,8 +29,8 @@
 <ArticleID name="TREES_1"/>
 <ArticleID name="TREES_2"/>
 <ArticleID name="AMI_1"/>
-<ArticleID name="AMI_2"/>
 <ArticleID name="AMI_3"/>
+<ArticleID name="AMI_2"/>
 </Signature>
 <RCluster aid="AMI_5" nr="1">
 <ArgTypes/>
@@ -38,36 +38,42 @@
 <Cluster/>
 <Func kind="K" nr="192">
 <Func kind="U" nr="9">
-<Func kind="K" nr="264"/>
 <Func kind="K" nr="1">
 <Func kind="K" nr="67"/>
 </Func>
-<Func kind="K" nr="277"/>
+<Func kind="K" nr="262"/>
 </Func>
 </Func>
 </Typ>
 <Cluster>
 <Adjective nr="4"/>
 <Adjective nr="7" value="false">
-<Func kind="K" nr="264"/>
+<Func kind="K" nr="280"/>
 </Adjective>
 <Adjective nr="9"/>
-<Adjective nr="24"/>
-<Adjective nr="65"/>
-<Adjective nr="84">
-<Func kind="K" nr="264"/>
+<Adjective nr="13">
+<Func kind="U" nr="9">
 <Func kind="K" nr="1">
 <Func kind="K" nr="67"/>
 </Func>
-<Func kind="K" nr="277"/>
+<Func kind="K" nr="262"/>
+</Func>
+</Adjective>
+<Adjective nr="25"/>
+<Adjective nr="66"/>
+<Adjective nr="84">
+<Func kind="K" nr="1">
+<Func kind="K" nr="67"/>
+</Func>
+<Func kind="K" nr="262"/>
 </Adjective>
 </Cluster>
 </RCluster>
 <FCluster aid="AMI_5" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="261"/>
+<Func kind="K" nr="277"/>
 <Cluster>
-<Adjective nr="24" value="false"/>
+<Adjective nr="25" value="false"/>
 </Cluster>
 </FCluster>
 </Registrations>

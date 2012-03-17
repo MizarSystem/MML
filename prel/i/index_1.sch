@@ -33,7 +33,7 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="10" value="false"/>
+<Adjective nr="11" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -43,10 +43,10 @@
 <Func kind="F" nr="1"/>
 </Adjective>
 <Adjective nr="6"/>
-<Adjective nr="13">
+<Adjective nr="14">
 <Func kind="F" nr="1"/>
 </Adjective>
-<Adjective nr="73"/>
+<Adjective nr="74"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -56,10 +56,10 @@
 <Func kind="F" nr="1"/>
 </Adjective>
 <Adjective nr="6"/>
-<Adjective nr="13">
+<Adjective nr="14">
 <Func kind="F" nr="1"/>
 </Adjective>
-<Adjective nr="73"/>
+<Adjective nr="74"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">

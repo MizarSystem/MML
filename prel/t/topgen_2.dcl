@@ -26,7 +26,7 @@
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="48"/>
+<Adjective nr="49"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -42,7 +42,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="59">
+<Adjective nr="60">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -53,8 +53,8 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="48"/>
-<Adjective nr="65" value="false"/>
+<Adjective nr="49"/>
+<Adjective nr="69" value="false"/>
 </Cluster>
 </RCluster>
 <FCluster aid="TOPGEN_2" nr="1">
@@ -66,13 +66,13 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="120">
+<Func kind="K" nr="121">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="47"/>
 <Adjective nr="48"/>
+<Adjective nr="49"/>
 </Cluster>
 </FCluster>
 <FCluster aid="TOPGEN_2" nr="2">
@@ -86,37 +86,37 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="120">
+<Func kind="K" nr="121">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="36" value="false"/>
-<Adjective nr="47"/>
+<Adjective nr="37" value="false"/>
+<Adjective nr="48"/>
 </Cluster>
 </FCluster>
 <CCluster aid="TOPGEN_2" nr="1">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="42"/>
+<Adjective nr="43"/>
 </Cluster>
 <Typ kind="G" nr="6">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="65"/>
+<Adjective nr="69"/>
 </Cluster>
 </CCluster>
 <CCluster aid="TOPGEN_2" nr="2">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="65" value="false"/>
+<Adjective nr="69" value="false"/>
 </Cluster>
 <Typ kind="G" nr="6">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="42" value="false"/>
+<Adjective nr="43" value="false"/>
 </Cluster>
 </CCluster>
 </Registrations>

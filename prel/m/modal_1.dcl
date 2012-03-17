@@ -38,9 +38,9 @@
 </Func>
 </Adjective>
 <Adjective nr="6"/>
-<Adjective nr="24"/>
-<Adjective nr="39"/>
+<Adjective nr="25"/>
 <Adjective nr="40"/>
+<Adjective nr="41"/>
 </Cluster>
 </RCluster>
 <RCluster aid="MODAL_1" nr="2">
@@ -60,9 +60,9 @@
 </Func>
 </Adjective>
 <Adjective nr="6"/>
-<Adjective nr="24"/>
-<Adjective nr="39"/>
-<Adjective nr="41"/>
+<Adjective nr="25"/>
+<Adjective nr="40"/>
+<Adjective nr="42"/>
 </Cluster>
 </RCluster>
 <RCluster aid="MODAL_1" nr="3">
@@ -82,9 +82,9 @@
 </Func>
 </Adjective>
 <Adjective nr="6"/>
-<Adjective nr="24"/>
-<Adjective nr="39"/>
-<Adjective nr="42"/>
+<Adjective nr="25"/>
+<Adjective nr="40"/>
+<Adjective nr="43"/>
 </Cluster>
 </RCluster>
 <RCluster aid="MODAL_1" nr="4">
@@ -104,23 +104,23 @@
 </Func>
 </Adjective>
 <Adjective nr="6"/>
-<Adjective nr="24"/>
-<Adjective nr="39"/>
-<Adjective nr="43"/>
+<Adjective nr="25"/>
+<Adjective nr="40"/>
+<Adjective nr="44"/>
 </Cluster>
 </RCluster>
 <FCluster aid="MODAL_1" nr="1">
 <ArgTypes/>
 <Func kind="K" nr="150"/>
 <Cluster>
-<Adjective nr="10" value="false"/>
+<Adjective nr="11" value="false"/>
 </Cluster>
 </FCluster>
 <FCluster aid="MODAL_1" nr="2">
 <ArgTypes/>
 <Func kind="K" nr="151"/>
 <Cluster>
-<Adjective nr="10" value="false"/>
+<Adjective nr="11" value="false"/>
 </Cluster>
 </FCluster>
 <CCluster aid="MODAL_1" nr="1">
@@ -131,7 +131,7 @@
 <Func kind="K" nr="153"/>
 </Typ>
 <Cluster>
-<Adjective nr="24"/>
+<Adjective nr="25"/>
 </Cluster>
 </CCluster>
 </Registrations>

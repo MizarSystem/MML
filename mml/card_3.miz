@@ -10,19 +10,19 @@ environ
       TARSKI, MCART_1, PROB_1, RLVECT_1, CARD_2, ORDINAL2, FINSET_1, ARYTM_1,
       CLASSES1, ZFMISC_1, WELLORD1, WELLORD2, RELAT_2, CARD_3, HAHNBAN,
       FRAENKEL, AMI_1, ZF_REFLE, PARTFUN1, FUNCT_4, CAT_1, ARYTM, SETFAM_1,
-      AMISTD_2, PRALG_2, CARD_4, SUPINF_2, FINSUB_1;
+      AMISTD_2, PRALG_2, CARD_4, SUPINF_2, FINSUB_1, BORSUK_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0,
       NAT_1, RELAT_1, RELAT_2, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, SETFAM_1,
       ORDINAL1, ORDINAL2, WELLORD1, MCART_1, WELLORD2, FUNCOP_1, FUNCT_4,
       FINSET_1, FINSUB_1, CARD_2, CLASSES1, XXREAL_0;
  constructors SETFAM_1, RELAT_2, WELLORD1, PARTFUN1, WELLORD2, FUNCOP_1,
       FUNCT_4, XREAL_0, NAT_1, CARD_2, CLASSES1, ORDINAL2, ORDINAL3, XXREAL_0,
-      FINSUB_1, RELSET_1;
+      FINSUB_1, RELSET_1, FUNCT_1;
  registrations XBOOLE_0, SUBSET_1, SETFAM_1, RELAT_1, FUNCT_1, ORDINAL1,
       FUNCOP_1, FUNCT_4, FINSET_1, XREAL_0, CARD_1, FINSUB_1;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, FUNCT_1, RELAT_2, WELLORD1, WELLORD2, XBOOLE_0, FUNCOP_1,
-      RELAT_1, ORDINAL1;
+      RELAT_1, ORDINAL1, PARTFUN1;
  theorems TARSKI, ZFMISC_1, FUNCT_1, FUNCT_2, MCART_1, ORDINAL1, RELAT_1,
       RELAT_2, WELLORD1, WELLORD2, CARD_1, FUNCOP_1, FUNCT_5, CARD_2, CLASSES1,
       GRFUNC_1, XBOOLE_0, XBOOLE_1, SETFAM_1, FUNCT_4, PARTFUN1, RELSET_1,
@@ -2245,6 +2245,15 @@ A1: dom {} c= dom f by XBOOLE_1:2;
   hence thesis by A1,Def9;
 end;
 
+registration let f;
+ cluster empty Element of sproduct f;
+ existence
+  proof
+    {} in sproduct f by Th66;
+   hence thesis;
+  end;
+end;
+
 theorem Th67:
   product f c= sproduct f
 proof
@@ -4338,4 +4347,133 @@ registration let X be with_common_domain set;
    hence thesis by Def10;
   end;
 end;
+
+:: from PRALG_3, 2009.09.18, A.T.
+
+definition
+  let f be Function, x be set;
+  func proj(f,x) -> Function means
+:Def17:
+  dom it = product f & for y being
+  Function st y in dom it holds it.y = y.x;
+  existence
+  proof
+    defpred P[set,set] means for g be Function st $1 = g holds $2 = g.x;
+A1: now
+      let q be set;
+      assume
+      q in product f;
+      then reconsider q1 = q as Function;
+      take y = q1.x;
+      thus P[q,y];
+    end;
+    consider F be Function such that
+A2: dom F = product f & for a being set st a in product f holds P[a,F.
+    a] from CLASSES1:sch 1(A1);
+    take F;
+    thus thesis by A2;
+  end;
+  uniqueness
+  proof
+    let F,G be Function such that
+A3: dom F = product f and
+A4: for y being Function st y in dom F holds F.y = y.x and
+A5: dom G = product f and
+A6: for y being Function st y in dom G holds G.y = y.x;
+    now
+      let y be set;
+      assume
+A7:   y in product f;
+      then reconsider x1 = y as Function;
+      thus F.y = x1.x by A3,A4,A7
+        .= G.y by A5,A6,A7;
+    end;
+    hence thesis by A3,A5,FUNCT_1:9;
+  end;
+end;
+
+registration
+  let f be Function, x be set;
+  cluster proj(f,x) -> (product f)-defined;
+  coherence
+   proof
+     dom proj(f,x) = product f by Def17;
+    hence thesis by RELAT_1:def 18;
+   end;
+end;
+
+registration
+  let f be Function, x be set;
+  cluster proj(f,x) -> total;
+  coherence
+   proof
+     dom proj(f,x) = product f by Def17;
+    hence thesis by PARTFUN1:def 4;
+   end;
+end;
+
+registration
+  let f be non-empty Function;
+  cluster -> f-compatible Element of product f;
+  coherence
+   proof let e be Element of product f;
+    let x;
+    assume x in dom e;
+     then x in dom f by Th18;
+    hence e.x in f.x by Th18;
+   end;
+end;
+
+registration
+  let I be set; let f be I-defined non-empty Function;
+  cluster -> I-defined Element of product f;
+  coherence
+   proof let e be Element of product f;
+     dom f c= I by RELAT_1:def 18;
+    hence dom e c= I by Th18;
+   end;
+end;
+
+registration
+  let f be Function;
+  cluster -> f-compatible Element of sproduct f;
+  coherence
+   proof let e be Element of sproduct f;
+    let x;
+    assume x in dom e;
+    hence e.x in f.x by Th65;
+   end;
+end;
+
+registration
+  let I be set; let f be I-defined Function;
+  cluster -> I-defined Element of sproduct f;
+  coherence
+   proof let e be Element of sproduct f;
+A:   dom f c= I by RELAT_1:def 18;
+     dom e c= dom f by Th65;
+    hence dom e c= I by A,XBOOLE_1:1;
+   end;
+end;
+
+registration
+  let I be set; let f be total (I-defined non-empty Function);
+  cluster -> total Element of product f;
+  coherence
+   proof let e be Element of product f;
+    thus dom e = dom f by Th18
+           .= I by PARTFUN1:def 4;
+   end;
+end;
+
+theorem
+ for I being set, f being non-empty I-defined Function
+ for p being f-compatible I-defined Function
+  holds p in sproduct f
+ proof let I be set, f be non-empty I-defined Function;
+  let p be f-compatible I-defined Function;
+A: dom p c= dom f by FUNCT_1:175;
+   then for x being set st x in dom p holds p.x in f.x by FUNCT_1:def 20;
+  hence p in sproduct f by A,Def9;
+ end;
 

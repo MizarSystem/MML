@@ -30,7 +30,7 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="25">
+<Adjective nr="26">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -70,7 +70,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="25">
+<Adjective nr="26">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -86,7 +86,7 @@
 </Func>
 <Cluster>
 <Adjective nr="12"/>
-<Adjective nr="24">
+<Adjective nr="25">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -103,7 +103,7 @@
 <Cluster>
 <Adjective nr="14"/>
 <Adjective nr="19"/>
-<Adjective nr="24">
+<Adjective nr="25">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -119,7 +119,7 @@
 <Cluster>
 <Adjective nr="14"/>
 <Adjective nr="19"/>
-<Adjective nr="24">
+<Adjective nr="25">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -150,7 +150,7 @@
 <Cluster>
 <Adjective nr="14"/>
 <Adjective nr="19"/>
-<Adjective nr="24">
+<Adjective nr="25">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

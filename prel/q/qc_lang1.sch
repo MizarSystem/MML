@@ -45,7 +45,7 @@
 <For>
 <Typ kind="M" nr="7">
 <Cluster>
-<Adjective nr="32">
+<Adjective nr="33">
 <Var nr="1"/>
 </Adjective>
 </Cluster>
@@ -161,7 +161,7 @@
 <And>
 <Not>
 <And>
-<Pred kind="V" nr="35">
+<Pred kind="V" nr="36">
 <Var nr="1"/>
 </Pred>
 <Not>
@@ -176,7 +176,7 @@
 </Pred>
 <Not>
 <And>
-<Pred kind="V" nr="36">
+<Pred kind="V" nr="37">
 <Var nr="1"/>
 </Pred>
 <Pred kind="P" nr="1">
@@ -193,7 +193,7 @@
 </Not>
 <Not>
 <And>
-<Pred kind="V" nr="37">
+<Pred kind="V" nr="38">
 <Var nr="1"/>
 </Pred>
 <Pred kind="P" nr="1">
@@ -215,7 +215,7 @@
 </Not>
 <Not>
 <And>
-<Pred kind="V" nr="38">
+<Pred kind="V" nr="39">
 <Var nr="1"/>
 </Pred>
 <Pred kind="P" nr="1">
@@ -237,7 +237,7 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="10" value="false"/>
+<Adjective nr="11" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
@@ -266,7 +266,7 @@
 <Typ kind="M" nr="2">
 <Cluster>
 <Adjective nr="6"/>
-<Adjective nr="14">
+<Adjective nr="15">
 <Func kind="K" nr="120"/>
 <Func kind="F" nr="1"/>
 </Adjective>
@@ -297,7 +297,7 @@
 <And>
 <Not>
 <And>
-<Pred kind="V" nr="35">
+<Pred kind="V" nr="36">
 <Var nr="2"/>
 </Pred>
 <Not>
@@ -317,7 +317,7 @@
 </Not>
 <Not>
 <And>
-<Pred kind="V" nr="36">
+<Pred kind="V" nr="37">
 <Var nr="2"/>
 </Pred>
 <Not>
@@ -344,7 +344,7 @@
 </Not>
 <Not>
 <And>
-<Pred kind="V" nr="37">
+<Pred kind="V" nr="38">
 <Var nr="2"/>
 </Pred>
 <Not>
@@ -379,7 +379,7 @@
 </Not>
 <Not>
 <And>
-<Pred kind="V" nr="38">
+<Pred kind="V" nr="39">
 <Var nr="2"/>
 </Pred>
 <Not>

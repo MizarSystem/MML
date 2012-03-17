@@ -24,8 +24,8 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="6"/>
-<Adjective nr="28"/>
-<Adjective nr="40"/>
+<Adjective nr="29"/>
+<Adjective nr="41"/>
 </Cluster>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -33,9 +33,9 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="6"/>
-<Adjective nr="28"/>
-<Adjective nr="38"/>
+<Adjective nr="29"/>
 <Adjective nr="39"/>
+<Adjective nr="40"/>
 </Cluster>
 </CCluster>
 <CCluster aid="SEQ_2" nr="2">
@@ -43,9 +43,9 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="6"/>
-<Adjective nr="28"/>
-<Adjective nr="38"/>
+<Adjective nr="29"/>
 <Adjective nr="39"/>
+<Adjective nr="40"/>
 </Cluster>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -53,8 +53,8 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="6"/>
-<Adjective nr="28"/>
-<Adjective nr="40"/>
+<Adjective nr="29"/>
+<Adjective nr="41"/>
 </Cluster>
 </CCluster>
 </Registrations>

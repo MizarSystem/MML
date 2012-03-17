@@ -23,7 +23,7 @@
 <Typ kind="M" nr="2">
 <Cluster>
 <Adjective nr="6"/>
-<Adjective nr="22">
+<Adjective nr="23">
 <Func kind="K" nr="48"/>
 <Func kind="K" nr="50"/>
 </Adjective>
@@ -41,11 +41,11 @@
 </Func>
 <Cluster>
 <Adjective nr="6"/>
-<Adjective nr="22">
+<Adjective nr="23">
 <Func kind="K" nr="48"/>
 <Func kind="K" nr="50"/>
 </Adjective>
-<Adjective nr="34"/>
+<Adjective nr="35"/>
 </Cluster>
 </FCluster>
 <FCluster aid="RINFSUP2" nr="2">
@@ -53,7 +53,7 @@
 <Typ kind="M" nr="2">
 <Cluster>
 <Adjective nr="6"/>
-<Adjective nr="22">
+<Adjective nr="23">
 <Func kind="K" nr="48"/>
 <Func kind="K" nr="50"/>
 </Adjective>
@@ -71,11 +71,11 @@
 </Func>
 <Cluster>
 <Adjective nr="6"/>
-<Adjective nr="22">
+<Adjective nr="23">
 <Func kind="K" nr="48"/>
 <Func kind="K" nr="50"/>
 </Adjective>
-<Adjective nr="33"/>
+<Adjective nr="34"/>
 </Cluster>
 </FCluster>
 </Registrations>

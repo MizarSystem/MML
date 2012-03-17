@@ -28,13 +28,13 @@
 <ArgTypes>
 <Typ kind="G" nr="14">
 <Cluster>
-<Adjective nr="36" value="false"/>
-<Adjective nr="59"/>
-<Adjective nr="84"/>
+<Adjective nr="37" value="false"/>
+<Adjective nr="60"/>
 <Adjective nr="85"/>
 <Adjective nr="86"/>
 <Adjective nr="87"/>
-<Adjective nr="93"/>
+<Adjective nr="88"/>
+<Adjective nr="94"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -43,20 +43,20 @@
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="25"/>
+<Adjective nr="26"/>
 </Cluster>
 </RCluster>
 <RCluster aid="BHSP_5" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="14">
 <Cluster>
-<Adjective nr="36" value="false"/>
-<Adjective nr="59"/>
-<Adjective nr="84"/>
+<Adjective nr="37" value="false"/>
+<Adjective nr="60"/>
 <Adjective nr="85"/>
 <Adjective nr="86"/>
 <Adjective nr="87"/>
-<Adjective nr="93"/>
+<Adjective nr="88"/>
+<Adjective nr="94"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -65,7 +65,7 @@
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="25"/>
+<Adjective nr="26"/>
 </Cluster>
 </RCluster>
 </Registrations>

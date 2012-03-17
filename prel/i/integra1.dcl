@@ -36,10 +36,10 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="54"/>
 <Adjective nr="55"/>
 <Adjective nr="56"/>
-<Adjective nr="66"/>
+<Adjective nr="57"/>
+<Adjective nr="67"/>
 </Cluster>
 </RCluster>
 <RCluster aid="INTEGRA1" nr="2">
@@ -51,18 +51,18 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="54"/>
 <Adjective nr="55"/>
 <Adjective nr="56"/>
-<Adjective nr="66"/>
+<Adjective nr="57"/>
+<Adjective nr="67"/>
 </Cluster>
 </RCluster>
 <FCluster aid="INTEGRA1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="10" value="false"/>
-<Adjective nr="29"/>
+<Adjective nr="11" value="false"/>
+<Adjective nr="30"/>
 </Cluster>
 <Func kind="K" nr="21">
 <Func kind="K" nr="51"/>
@@ -73,13 +73,13 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="10" value="false"/>
+<Adjective nr="11" value="false"/>
 </Cluster>
 </FCluster>
 <CCluster aid="INTEGRA1" nr="1">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="66"/>
+<Adjective nr="67"/>
 </Cluster>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -88,14 +88,14 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="10" value="false"/>
-<Adjective nr="29"/>
+<Adjective nr="11" value="false"/>
+<Adjective nr="30"/>
 </Cluster>
 </CCluster>
 <CCluster aid="INTEGRA1" nr="2">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="66"/>
+<Adjective nr="67"/>
 </Cluster>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -104,15 +104,15 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="64"/>
+<Adjective nr="65"/>
 </Cluster>
 </CCluster>
 <CCluster aid="INTEGRA1" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="10" value="false"/>
-<Adjective nr="29"/>
+<Adjective nr="11" value="false"/>
+<Adjective nr="30"/>
 </Cluster>
 <Func kind="K" nr="21">
 <Func kind="K" nr="51"/>
@@ -135,8 +135,8 @@
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="10" value="false"/>
-<Adjective nr="29"/>
+<Adjective nr="11" value="false"/>
+<Adjective nr="30"/>
 </Cluster>
 <Func kind="K" nr="21">
 <Func kind="K" nr="51"/>
@@ -151,8 +151,8 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="38"/>
-<Adjective nr="44"/>
+<Adjective nr="39"/>
+<Adjective nr="45"/>
 </Cluster>
 </CCluster>
 </Registrations>

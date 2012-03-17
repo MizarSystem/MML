@@ -34,21 +34,21 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="26"/>
+<Adjective nr="27"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="19"/>
+<Adjective nr="20"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="250">
+<Func kind="K" nr="249">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="26"/>
+<Adjective nr="27"/>
 </Cluster>
 </FCluster>
 <FCluster aid="WSIERP_1" nr="2">
@@ -66,7 +66,7 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="26"/>
+<Adjective nr="27"/>
 </Cluster>
 </FCluster>
 <FCluster aid="WSIERP_1" nr="3">
@@ -80,8 +80,8 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="20"/>
-<Adjective nr="26"/>
+<Adjective nr="21"/>
+<Adjective nr="27"/>
 </Cluster>
 </FCluster>
 <CCluster aid="WSIERP_1" nr="1">
@@ -92,7 +92,7 @@
 <Func kind="K" nr="47"/>
 </Typ>
 <Cluster>
-<Adjective nr="43"/>
+<Adjective nr="44"/>
 </Cluster>
 </CCluster>
 <CCluster aid="WSIERP_1" nr="2">
@@ -103,7 +103,7 @@
 <Func kind="K" nr="48"/>
 </Typ>
 <Cluster>
-<Adjective nr="41"/>
+<Adjective nr="42"/>
 </Cluster>
 </CCluster>
 <CCluster aid="WSIERP_1" nr="3">
@@ -111,7 +111,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="6"/>
-<Adjective nr="43"/>
+<Adjective nr="44"/>
 </Cluster>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -119,7 +119,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="6"/>
-<Adjective nr="41"/>
+<Adjective nr="42"/>
 </Cluster>
 </CCluster>
 </Registrations>

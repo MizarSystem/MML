@@ -10,7 +10,7 @@ environ
       INT_1, FUNCT_1, SCMP_GCD, GRAPH_2, RELAT_1, RFINSEQ, AMI_2, SCMPDS_8,
       SCMPDS_5, SCMFSA6B, UNIALG_2, SCMFSA7B, SCMFSA_7, SCMPDS_7, ARYTM_1,
       RELOC, FUNCT_4, SCMPDS_3, SCM_1, BOOLE, AMI_5, SCMISORT, SCMFSA_9,
-      SCMFSA8B, ABSVALUE, SCPISORT, ARYTM;
+      SCMFSA8B, ABSVALUE, SCPISORT, ARYTM, SCMNORM;
  notations TARSKI, XBOOLE_0, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0, RELAT_1,
       FUNCT_1, FUNCT_4, INT_1, NAT_1, COMPLEX1, AMI_1, CARD_3, SCMNORM, AMI_2,
       SCMPDS_2, SCMPDS_3, SCMPDS_4, SCMPDS_5, SCMPDS_6, SCMP_GCD, DOMAIN_1,
@@ -21,7 +21,7 @@ environ
  registrations SETFAM_1, RELAT_1, FUNCT_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1,
       INT_1, MEMBERED, CARD_3, SCMPDS_2, SCMPDS_4, SCMPDS_5, SCMPDS_6,
       SCMPDS_7, SCMPDS_8, XBOOLE_0, VALUED_0, SCMNORM, ORDINAL1, CARD_1,
-      VALUED_1;
+      VALUED_1, AMI_1;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
  definitions SCMPDS_2, SCMP_GCD, AMI_3, SCMPDS_3, SCMNORM;
  theorems AMI_1, AMI_3, NAT_1, TARSKI, FUNCT_4, INT_1, SCMPDS_2, GRFUNC_1,
@@ -181,13 +181,11 @@ proof
   let s be State of SCMPDS,I be No-StopCode Program of SCMPDS,j be parahalting
   shiftable Instruction of SCMPDS;
   set Mj = Load j;
-A1: Mj is_closed_on IExec(I,s) & Mj is_halting_on IExec(I,s) by SCMPDS_6:34,
-  35;
+A1: Mj is_closed_on IExec(I,s) & Mj is_halting_on IExec(I,s) by SCMPDS_6:34,35;
   assume
   I is_closed_on s & I is_halting_on s;
-  then (I ';' Mj) is_closed_on s & (I ';' Mj) is_halting_on s by
-  A1,SCMPDS_7
-  :43;
+  then (I ';' Mj) is_closed_on s & (I ';' Mj) is_halting_on s by A1,SCMPDS_7:43
+;
   hence thesis by SCMPDS_4:def 5;
 end;
 
@@ -253,11 +251,11 @@ proof
   let s be State of SCMPDS,I be Program of SCMPDS,j be shiftable parahalting
   Instruction of SCMPDS;
 A1: Load j is_closed_on IExec(I,s) & Load j is_halting_on IExec(I,s) by
-  SCMPDS_6:34,35;
+SCMPDS_6:34,35;
   assume
   I is_closed_on s & I is_halting_on s;
   then I ';' Load j is_closed_on s & I ';' Load j is_halting_on s by A1,
-  SCMPDS_7:43;
+SCMPDS_7:43;
   hence thesis by SCMPDS_4:def 5;
 end;
 
@@ -353,16 +351,15 @@ A11:    now
           assume
           a() in dom (t | A);
           then reconsider l=a() as Instruction-Location of SCMPDS by A10,
-          AMI_1:
-          def 4;
+AMI_1:def 4;
           l=a();
           hence contradiction by SCMPDS_2:53;
         end;
 A12:    now
           assume
           b in dom (t | A);
-          then reconsider l=b as Instruction-Location of SCMPDS by A10,AMI_1:
-          def 4;
+          then reconsider l=b as Instruction-Location of SCMPDS by A10,
+AMI_1:def 4;
           l=b;
           hence contradiction by SCMPDS_2:53;
         end;
@@ -416,8 +413,9 @@ A31:    l1 in dom FOR by A23,SCMPDS_7:61;
 A32:    t6=t5 by AMI_1:51;
         J is_halting_on t by A28,Th6;
         then
-A33:    t2 is halting by SCMPDS_6:def 3;
-        then t2 +* IsJ is halting by A16,FUNCT_4:79;
+A33:    ProgramPart t2 halts_on t2 by SCMPDS_6:def 3;
+        t2 = t2+*IsJ by A16,FUNCT_4:79;
+        then ProgramPart(t2+*IsJ) halts_on t2+*IsJ by A16,FUNCT_4:79,A33;
         then
 A34:    J is_halting_on t2 by SCMPDS_6:def 3;
         set m4=m3+1, t7=Computation(t3,m4);
@@ -433,16 +431,16 @@ A38:    IC t4 = t4.IC SCMPDS by AMI_1:def 15
           .= Next IC t3 by A9,A18,A26,SCMPDS_2:68
           .= inspos(0+1) by A27;
         then
-A39:    DataPart Computation(t2,m2) = DataPart t5 by A23,A16,A34,A30,
-        A20,A37,SCMPDS_7:36;
+A39:    DataPart Computation(t2,m2) = DataPart t5 by A23,A16,A34,A30,A20,A37,
+SCMPDS_7:36;
         then
 A40:    DataPart t5 = DataPart(Result t2) by A33,AMI_1:122
-          .= DataPart(Result t2 +* t | A) by A24,AMI_2:29,FUNCT_4:76,
-        SCMPDS_2:100
+          .= DataPart(Result t2 +* t | A) by A24,AMI_2:29,FUNCT_4:76
+,SCMPDS_2:100
           .= DataPart Jt by SCMPDS_4:def 8;
 A41:    IC t5=l1 by A23,A16,A34,A30,A38,A20,A37,SCMPDS_7:36;
         then
-A42:    CurInstr t6=t5.l1 by A32,AMI_1:def 17
+A42:    CurInstr t6=t5.l1 by A32,AMI_1:def 16
           .=t4.l1 by AMI_1:54
           .=t3.l1 by AMI_1:54
           .=FOR.l1 by A31,A36,GRFUNC_1:8
@@ -487,8 +485,7 @@ A50:            k <= m2;
                   per cases;
                   suppose
                     k=0;
-                    hence IC Computation(t3,k) in dom pFOR by A13,A27,
-                    AMI_1:13;
+                    hence IC Computation(t3,k) in dom pFOR by A13,A27,AMI_1:13;
                   end;
                   suppose
                     k<>0;
@@ -496,15 +493,13 @@ A50:            k <= m2;
 A51:                k=kn+1 by NAT_1:6;
                     reconsider kn as Element of NAT by ORDINAL1:def 13;
                     reconsider lm = IC Computation(t2,kn) as Element of NAT by
-                    ORDINAL1:def 13;
+ORDINAL1:def 13;
                     kn < k by A51,XREAL_1:31;
                     then kn < m2 by A50,XXREAL_0:2;
                     then IC Computation(t2,kn) + 1 = IC Computation(t4,kn) by
-                    A23,A16,A34,A30,A38,A20,A37,SCMPDS_7:34;
+A23,A16,A34,A30,A38,A20,A37,SCMPDS_7:34;
                     then
-A52:                IC Computation(t3,k) =inspos (lm+1) by A51,
-                    AMI_1
-                    :51;
+A52:                IC Computation(t3,k) =inspos (lm+1) by A51,AMI_1:51;
                     IC Computation(t2,kn) in dom pJ by A29,SCMPDS_6:def 2;
                     then lm < card pJ by SCMPDS_4:1;
                     then lm < card J+1 by SCMPDS_5:7;
@@ -513,8 +508,7 @@ A53:                lm+1 <= card J +1 by INT_1:20;
                     card I() + 2 < card I() + 4 by XREAL_1:8;
                     then lm+1 < card I() +4 by A23,A53,XXREAL_0:2;
                     then lm+1 < card pFOR by Lm2;
-                    hence IC Computation(t3,k) in dom pFOR by A52, SCMPDS_4
-                    :1;
+                    hence IC Computation(t3,k) in dom pFOR by A52,SCMPDS_4:1;
                   end;
                 end;
               end;
@@ -522,8 +516,8 @@ A53:                lm+1 <= card J +1 by INT_1:20;
 A54:            k=m3;
                 l1 in dom pFOR by A31,SCMPDS_6:18;
                 hence
-                IC Computation(t3,k) in dom pFOR by A23,A16,A34,A30,A38,
-                A20,A37,A32,A54,SCMPDS_7:36;
+                IC Computation(t3,k) in dom pFOR by A23,A16,A34,A30,A38,A20,A37
+,A32,A54,SCMPDS_7:36;
               end;
             end;
           end;
@@ -532,15 +526,15 @@ A54:            k=m3;
             then consider nn be Nat such that
 A55:        k=m4+nn by NAT_1:10;
             reconsider nn as Element of NAT by ORDINAL1:def 13;
-            Computation(t3,k)=Computation(t7+*iFOR,nn) by A45,A55,AMI_1:
-            51;
+            Computation(t3,k)=Computation(t7+*iFOR,nn) by A45,A55,AMI_1:51;
             hence IC Computation(t3,k) in dom pFOR by A48,SCMPDS_6:def 2;
           end;
         end;
         hence FOR is_closed_on t by SCMPDS_6:def 2;
         FOR is_halting_on t7 by A5,A47,A44,A46,A15;
-        then t7 is halting by A45,SCMPDS_6:def 3;
-        then t3 is halting by AMI_1:93;
+        then ProgramPart t7 halts_on t7 by A45,SCMPDS_6:def 3;
+        then ProgramPart t3 halts_on t7 by AMI_1:93,144;
+        then ProgramPart t3 halts_on t3 by AMI_1:93;
         hence FOR is_halting_on t by SCMPDS_6:def 3;
       end;
     end;
@@ -590,8 +584,9 @@ A6: I() is_closed_on s() & I() is_halting_on s() by A2,A3,A4;
 A7: J is_closed_on sJ by SCMPDS_6:38;
   J is_halting_on s() by A6,Th6;
   then
-A8: sJ is halting by SCMPDS_6:def 3;
-  then sJ +* iJ is halting by A5,FUNCT_4:79;
+A8: ProgramPart sJ halts_on sJ by SCMPDS_6:def 3;
+  sJ = sJ+*iJ by A5,FUNCT_4:79;
+  then ProgramPart(sJ+*iJ) halts_on sJ+*iJ by A5,FUNCT_4:79,A8;
   then
 A9: J is_halting_on sJ by SCMPDS_6:def 3;
 A10: FOR = i1 ';' (J ';' i3) by Lm3;
@@ -645,15 +640,15 @@ A26: IC s4 = s4.IC SCMPDS by AMI_1:def 15
   then
 A27: IC s5=l1 by A13,A5,A9,A7,A19,A22,SCMPDS_7:36;
   then
-A28: CurInstr s6=s5.l1 by A17,AMI_1:def 17
+A28: CurInstr s6=s5.l1 by A17,AMI_1:def 16
     .=s4.l1 by AMI_1:54
     .=s1.l1 by AMI_1:54
     .=FOR.l1 by A16,A21,GRFUNC_1:8
     .=i3 by A13,SCMPDS_7:62;
 A29: s7 = Following s6 by AMI_1:14
     .= Exec(i3,s6) by A28,AMI_1:def 18;
-A30: DataPart Computation(sJ,mJ) = DataPart s5 by A13,A5,A9,A7,A26,A19,A22
-  ,SCMPDS_7:36;
+A30: DataPart Computation(sJ,mJ) = DataPart s5 by A13,A5,A9,A7,A26,A19,A22,
+SCMPDS_7:36;
   now
     let x be Int_position;
     not x in dom iFOR by SCMPDS_4:31;
@@ -662,8 +657,7 @@ A31: s2.x=IExec(J,s()).x by FUNCT_4:12;
 A32: now
       assume
       x in dom (s() | A);
-      then reconsider l=x as Instruction-Location of SCMPDS by A24,
-      AMI_1:def 4;
+      then reconsider l=x as Instruction-Location of SCMPDS by A24,AMI_1:def 4;
       l=x;
       hence contradiction by SCMPDS_2:53;
     end;
@@ -683,7 +677,7 @@ A35: P[Dstate s()] by A3;
   (P[s()] or not P[s()]) & for-down(a(),i(),n(),I()) is_closed_on s() &
   for-down(a(),i(),n(),I()) is_halting_on s() from ForDownHalt(A1,A35,A34);
   then
-A36: s1 is halting by SCMPDS_6:def 3;
+A36: ProgramPart s1 halts_on s1 by SCMPDS_6:def 3;
   set Es=IExec(J,s()), bj=DataLoc(Es.a(),i());
   Es.a()=s().a() by A2,A3,A4;
   then
@@ -694,7 +688,7 @@ A38: P[Dstate Es] by A2,A3,A4;
   (P[Es] or not P[Es]) & FOR is_closed_on Es & FOR is_halting_on Es from
   ForDownHalt(A1,A38,A37);
   then
-A39: s2 is halting by SCMPDS_6:def 3;
+A39: ProgramPart s2 halts_on s2 by SCMPDS_6:def 3;
   IC s7=s7.IC SCMPDS by AMI_1:def 15
     .=ICplusConst(s6,0-(card I()+2)) by A29,SCMPDS_2:66
     .=inspos 0 by A13,A27,A17,SCMPDS_7:1;
@@ -1382,8 +1376,7 @@ A80:  t2.DataLoc(t2.GBP,5) <= 0;
         .=s.a4 by A24,A37,AMI_3:52,SCMPDS_2:58;
       then IExec(B1,s).a4=s.a4 by SCMPDS_5:39;
 
-      hence IExec(B1,s).a4 >= 7+IExec(B1,s).a6 by A1,A4,A38,A80,
-      XXREAL_0:2;
+      hence IExec(B1,s).a4 >= 7+IExec(B1,s).a6 by A1,A4,A38,A80,XXREAL_0:2;
 
     end;
     suppose
@@ -1547,7 +1540,7 @@ A123: y<>DataLoc(t3.a,6) by ZFMISC_1:33;
     hence IExec(B1,s).y=s.x by SCMPDS_5:39;
 
     thus IExec(B1,s).a6=s.a6-1 & IExec(B1,s).a4=s.a4-1 by A19,A108,A78,A122,
-    SCMP_GCD:5;
+SCMP_GCD:5;
 
   end;
 A124: abs(t02.a+6)=0+6 by A37,ZFMISC_1:33;
@@ -1598,7 +1591,7 @@ A8: t.a4 >= 7+t.a6 by A3,A5;
     then Bt.a4 >= 7+Bt.a6 by A2,A3,A6,Lm8;
 
     hence for x st x in {a4} holds IExec(B1,t).x >= 7+IExec(B1,t).b by A3,
-    TARSKI:def 1;
+TARSKI:def 1;
 
   end;
   for x st x in {a4} holds s.x >= 7+s.b by A1,TARSKI:def 1;
@@ -1669,7 +1662,7 @@ A19:      v.a4 >= 7+v.a6 by A13,A16;
           then Iv.a4 >= 7+Iv.a6 by A12,A13,A17,Lm8;
 
           hence for x st x in {a4} holds IExec(B1,v).x >= 7+IExec(B1,v).bt by
-          A13,TARSKI:def 1;
+A13,TARSKI:def 1;
 
         end;
         set It=IExec(B1,t);
@@ -1950,7 +1943,7 @@ theorem
 proof
   set i1= GBP:=0, i2= (GBP,1):=0, i3= (GBP,2):=(n-1), i4= (GBP,3):=p0;
   thus card insert-sort (n,p0) =card(i1 ';' i2 ';' i3 ';' i4) + card FR by
-  SCMPDS_4:45
+SCMPDS_4:45
     .=card(i1 ';' i2 ';' i3)+1 + card FR by SCMP_GCD:8
     .=card(i1 ';' i2)+1+1 + card FR by SCMP_GCD:8
     .=2+1+1+card FR by SCMP_GCD:9
@@ -2026,7 +2019,7 @@ A9: t.a4 >= 7+t.a6 by A4,A6;
     then Bt.a4 >= 7+Bt.a6 by A2,A4,A7,Lm8;
 
     hence for x st x in {a4} holds IExec(B1,t).x >= 7+IExec(B1,t).b by A4,
-    TARSKI:def 1;
+TARSKI:def 1;
 
   end;
   for x st x in {a4} holds s.x >= 7+s.b by A1,A4,TARSKI:def 1;
@@ -2084,8 +2077,7 @@ A16:  x=DataLoc(m,k+1) by A7,A8
         .=intpos(m+(k+1)) by SCMP_GCD:5;
 A17:  t.x > t.y implies Bt.x=t.y & Bt.y =t.x & Bt.a6=t.a6-1 & Bt.a4=t.a4-
       1 by A5,A6,A7,Lm8;
-A18:  t.x <= t.y implies Bt.x=t.x & Bt.y =t.y & Bt.a6=0 by A5,A6,A7,
-      Lm8;
+A18:  t.x <= t.y implies Bt.x=t.x & Bt.y =t.y & Bt.a6=0 by A5,A6,A7,Lm8;
 A19:  y=intpos(m+(k+2)) by A7,A8,SCMP_GCD:5;
 A20:  Bt.a4 >= 7+Bt.a6 by A5,A6,A7,Lm8;
       per cases;
@@ -2158,16 +2150,14 @@ A48:    Bt.a4-Bt.a6-1=m by A8,A17,A21;
 A49:    h.(k+1)=t.y by A12,A16,A17,A21,A24,A25,NAT_1:11;
         then h.(k+1)=f1.(k+2) by A9,A19,A45,A43,Def1;
         then
-A50:    f1,h are_fiberwise_equipotent by A12,A24,A27,A44,A45,A43,
-        A47,
-        Th4;
+A50:    f1,h are_fiberwise_equipotent by A12,A24,A27,A44,A45,A43,A47,Th4;
 A51:    h is_FinSequence_on Bt,m by A25,Def1;
         then
-        h,f2 are_fiberwise_equipotent by A4,A7,A11,A14,A20,A17,A21,A24,
-        A48,A22,A26,A42;
+        h,f2 are_fiberwise_equipotent by A4,A7,A11,A14,A20,A17,A21,A24,A48,A22
+,A26,A42;
         hence f1,f2 are_fiberwise_equipotent by A50,CLASSES1:84;
-A52:    f2 is_non_decreasing_on 1, k+1 by A4,A7,A11,A14,A20,A17,A21,A24
-        ,A48,A51,A22,A26,A42;
+A52:    f2 is_non_decreasing_on 1, k+1 by A4,A7,A11,A14,A20,A17,A21,A24,A48,A51
+,A22,A26,A42;
         now
           let i,j be Element of NAT;
           assume that
@@ -2194,17 +2184,16 @@ A56:        j = k+1+1;
                 then consider mm be Element of NAT such that
 A57:            1 <= mm and
 A58:            mm <= k+1 and
-A59:            f2.i=h.mm by A4,A7,A11,A14,A20,A17,A21,A24,A48,A51,
-                A22,A26,A42,A53;
-A60:            f2.j=h.(k+2) by A4,A7,A11,A14,A20,A17,A21,A24,A48,A51,
-                A22,A26,A42,A23,A43,A56;
+A59:            f2.i=h.mm by A4,A7,A11,A14,A20,A17,A21,A24,A48,A51,A22,A26,A42
+,A53;
+A60:            f2.j=h.(k+2) by A4,A7,A11,A14,A20,A17,A21,A24,A48,A51,A22,A26
+,A42,A23,A43,A56;
                 hereby
                   per cases;
                   suppose
                     mm=k+1;
                     hence
-                    f2.i <= f2.j by A12,A16,A17,A18,A24,A25,A46,A57,A59,
-                    A60;
+                    f2.i <= f2.j by A12,A16,A17,A18,A24,A25,A46,A57,A59,A60;
                   end;
                   suppose
 A61:                mm<>k+1;
@@ -2213,8 +2202,7 @@ A61:                mm<>k+1;
                     then
 A62:                h.mm=f1.mm by A24,A27,A23,A57,A58,A61;
                     f2.j=f1.(k+1) by A9,A12,A16,A44,A46,A60,Def1;
-                    hence f2.i <= f2.j by A13,A57,A58,A59,A62, GRAPH_2:def
-                    13;
+                    hence f2.i <= f2.j by A13,A57,A58,A59,A62,GRAPH_2:def 13;
                   end;
                 end;
               end;
@@ -2234,7 +2222,7 @@ A66:      i > k+1 by A63,XXREAL_0:2;
           then
 A67:      1 <= i by A66,XXREAL_0:2;
           thus f2.i=h.i by A4,A7,A11,A14,A20,A17,A21,A24,A48,A51,A22,A26,A42
-          ,A64,A66
+,A64,A66
             .=f1.i by A27,A63,A64,A65,A67;
         end;
         hereby
@@ -2248,8 +2236,8 @@ A70:        i=k+1+1;
             take j=k+1;
             thus 1 <= j by NAT_1:11;
             thus j <= (k+1)+1 by NAT_1:11;
-            thus f2.i=f1.j by A4,A7,A11,A14,A20,A17,A21,A24,A48,A51,A22,A26
-            ,A42,A23,A43,A47,A70;
+            thus f2.i=f1.j by A4,A7,A11,A14,A20,A17,A21,A24,A48,A51,A22,A26,A42
+,A23,A43,A47,A70;
           end;
           suppose
             i<>k+1+1;
@@ -2258,8 +2246,7 @@ A70:        i=k+1+1;
             then consider mm be Element of NAT such that
 A71:        1 <= mm and
 A72:        mm <= k+1 and
-A73:        f2.i=h.mm by A4,A7,A11,A14,A20,A17,A21,A24,A48,A51,A22
-            ,A26,A42,A68;
+A73:        f2.i=h.mm by A4,A7,A11,A14,A20,A17,A21,A24,A48,A51,A22,A26,A42,A68;
             hereby
 A74:          k+2=(k+1)+1;
               per cases;
@@ -2300,15 +2287,13 @@ A84:      m+i >= 7 by A15,XXREAL_0:2;
           per cases;
           suppose
 A85:        m+i=t.a4-1;
-            hence f1.i=IExec(WH,Bt).x by A7,A8,A16,A18,A77,A82,A83,
-            SCMPDS_8:23
+            hence f1.i=IExec(WH,Bt).x by A7,A8,A16,A18,A77,A82,A83,SCMPDS_8:23
               .=IExec(WH,t).x by A5,A6,A7,Lm15
               .=f2.i by A7,A8,A10,A11,A12,A16,A79,A85,Def1;
           end;
           suppose
 A86:        m+i=t.a4;
-            hence f1.i=IExec(WH,Bt).y by A7,A8,A19,A18,A77,A82,A83,
-            SCMPDS_8:23
+            hence f1.i=IExec(WH,Bt).y by A7,A8,A19,A18,A77,A82,A83,SCMPDS_8:23
               .=IExec(WH,t).y by A5,A6,A7,Lm15
               .=f2.i by A7,A8,A10,A11,A19,A79,A80,A86,Def1;
           end;
@@ -2347,7 +2332,7 @@ A91:        j = k+1+1;
                 then i < j by A89,XXREAL_0:1;
                 then i <= k+1 by A91,NAT_1:13;
                 then
-A92:            f1.i <= f1.(k+1) by A13,A88, GRAPH_2:def 13;
+A92:            f1.i <= f1.(k+1) by A13,A88,GRAPH_2:def 13;
                 1<=k+1 by NAT_1:11;
                 then
 A93:            f1.(k+1)=t.x by A9,A12,A16,Def1;
@@ -2391,8 +2376,8 @@ A102: i in NAT by ORDINAL1:def 13;
     end;
     hence f1,f2 are_fiberwise_equipotent by A98,FINSEQ_1:18;
     thus f2 is_non_decreasing_on 1,0+1 by Th1;
-    thus for i be Element of NAT st i>0+1 & i <= len f1 holds f1.i=f2.i by
-    A100;
+    thus for i be Element of NAT st i>0+1 & i <= len f1 holds f1.i=f2.i by A100
+;
     f1=f2 by A98,A100,FINSEQ_1:18;
     hence thesis;
   end;
@@ -2534,21 +2519,19 @@ A47:    h is_FinSequence_on Bt,p0 by Def1;
 A48:    t1.a =0 by A13,Lm11;
 
         then
-A49:    f1,h are_fiberwise_equipotent by A14,A16,A17,A20,
-        A22,A40,A31,
-        A38,A37,A42,A39,Th17;
+A49:    f1,h are_fiberwise_equipotent by A14,A16,A17,A20,A22,A40,A31,A38,A37
+,A42,A39,Th17;
 
-A50:    h is_non_decreasing_on 1,m +1 by A14,A16,A17,A20,A48,A22,A40,A31,
-        A38,A37,A42,A39,Th17;
+A50:    h is_non_decreasing_on 1,m +1 by A14,A16,A17,A20,A48,A22,A40,A31,A38
+,A37,A42,A39,Th17;
 
-        then h,f2 are_fiberwise_equipotent by A12,A15,A16,A21,A40,
-        A24,A28,
-        A26,A29,A47,A32;
+        then h,f2 are_fiberwise_equipotent by A12,A15,A16,A21,A40,A24,A28,A26
+,A29,A47,A32;
 
         hence f1,f2 are_fiberwise_equipotent by A49,CLASSES1:84;
 
-        thus f2 is_non_decreasing_on 1,n by A12,A15,A16,A21,A40,A50,A24,A28,
-        A26,A29,A47,A32;
+        thus f2 is_non_decreasing_on 1,n by A12,A15,A16,A21,A40,A50,A24,A28,A26
+,A29,A47,A32;
 
       end;
       hence P[k+1];

@@ -30,8 +30,8 @@
 <ArgTypes/>
 <Func kind="K" nr="208"/>
 <Cluster>
-<Adjective nr="22"/>
-<Adjective nr="25" value="false"/>
+<Adjective nr="23"/>
+<Adjective nr="26" value="false"/>
 </Cluster>
 </FCluster>
 </Registrations>

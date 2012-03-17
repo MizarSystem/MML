@@ -68,30 +68,30 @@
 </Adjective>
 <Adjective nr="6"/>
 <Adjective nr="8" value="false"/>
-<Adjective nr="10" value="false"/>
 <Adjective nr="11" value="false"/>
-<Adjective nr="26"/>
-<Adjective nr="32"/>
+<Adjective nr="12" value="false"/>
+<Adjective nr="27"/>
 <Adjective nr="33"/>
-<Adjective nr="155">
+<Adjective nr="34"/>
+<Adjective nr="156">
 <Func kind="U" nr="1">
 <Func kind="K" nr="276">
 <Num nr="2"/>
 </Func>
 </Func>
 </Adjective>
-<Adjective nr="156"/>
 <Adjective nr="157"/>
-<Adjective nr="161"/>
+<Adjective nr="158"/>
 <Adjective nr="162"/>
-<Adjective nr="164"/>
+<Adjective nr="163"/>
+<Adjective nr="165"/>
 </Cluster>
 </RCluster>
 <FCluster aid="SPRECT_2" nr="1">
 <ArgTypes/>
 <Func kind="K" nr="297"/>
 <Cluster>
-<Adjective nr="62">
+<Adjective nr="63">
 <Func kind="K" nr="276">
 <Num nr="2"/>
 </Func>
@@ -102,14 +102,14 @@
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="10" value="false"/>
-<Adjective nr="62">
+<Adjective nr="11" value="false"/>
+<Adjective nr="63">
 <Func kind="K" nr="276">
 <Num nr="2"/>
 </Func>
 </Adjective>
-<Adjective nr="152" value="false"/>
 <Adjective nr="153" value="false"/>
+<Adjective nr="154" value="false"/>
 </Cluster>
 <Func kind="K" nr="21">
 <Func kind="U" nr="1">
@@ -124,7 +124,7 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="164"/>
+<Adjective nr="165"/>
 </Cluster>
 </FCluster>
 <FCluster aid="SPRECT_2" nr="3">
@@ -132,18 +132,18 @@
 <Typ kind="M" nr="6">
 <Cluster>
 <Adjective nr="8" value="false"/>
-<Adjective nr="10" value="false"/>
-<Adjective nr="155">
+<Adjective nr="11" value="false"/>
+<Adjective nr="156">
 <Func kind="U" nr="1">
 <Func kind="K" nr="276">
 <Num nr="2"/>
 </Func>
 </Func>
 </Adjective>
-<Adjective nr="156"/>
 <Adjective nr="157"/>
-<Adjective nr="161"/>
+<Adjective nr="158"/>
 <Adjective nr="162"/>
+<Adjective nr="163"/>
 </Cluster>
 <Func kind="U" nr="1">
 <Func kind="K" nr="276">
@@ -157,7 +157,7 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="149"/>
+<Adjective nr="150"/>
 </Cluster>
 </FCluster>
 </Registrations>

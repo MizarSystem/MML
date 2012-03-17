@@ -22,8 +22,8 @@
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="31" value="false"/>
-<Adjective nr="43"/>
+<Adjective nr="32" value="false"/>
+<Adjective nr="44"/>
 </Cluster>
 </Typ>
 </ArgTypes>

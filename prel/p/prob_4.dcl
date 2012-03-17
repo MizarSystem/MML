@@ -48,17 +48,17 @@
 </Func>
 </Adjective>
 <Adjective nr="6"/>
-<Adjective nr="10" value="false"/>
-<Adjective nr="13">
+<Adjective nr="11" value="false"/>
+<Adjective nr="14">
 <Func kind="K" nr="75"/>
 </Adjective>
-<Adjective nr="21">
+<Adjective nr="22">
 <Func kind="K" nr="75"/>
 <Func kind="K" nr="21">
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="42"/>
+<Adjective nr="43"/>
 </Cluster>
 </RCluster>
 <RCluster aid="PROB_4" nr="2">
@@ -68,11 +68,11 @@
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="10" value="false"/>
-<Adjective nr="38">
+<Adjective nr="11" value="false"/>
+<Adjective nr="39">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="41">
+<Adjective nr="42">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -108,17 +108,17 @@
 </Func>
 </Adjective>
 <Adjective nr="6"/>
-<Adjective nr="10" value="false"/>
-<Adjective nr="13">
+<Adjective nr="11" value="false"/>
+<Adjective nr="14">
 <Func kind="K" nr="75"/>
 </Adjective>
-<Adjective nr="21">
+<Adjective nr="22">
 <Func kind="K" nr="75"/>
 <Func kind="K" nr="21">
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="42"/>
+<Adjective nr="43"/>
 </Cluster>
 </RCluster>
 </Registrations>

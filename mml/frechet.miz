@@ -20,7 +20,8 @@ environ
       XXREAL_0, XREAL_0, NAT_1, MEMBERED, STRUCT_0, PRE_TOPC, METRIC_1,
       COMPLSP1, PCOMPS_1, TOPMETR;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
- definitions TARSKI, TOPS_2, XBOOLE_0, SUBSET_1, STRUCT_0, RELAT_1, XCMPLX_0;
+ definitions TARSKI, TOPS_2, XBOOLE_0, SUBSET_1, STRUCT_0, RELAT_1, XCMPLX_0,
+      TOPMETR;
  theorems TARSKI, ZFMISC_1, SUBSET_1, SETFAM_1, PRE_TOPC, FUNCT_1, FUNCT_2,
       FUNCT_4, FUNCOP_1, NORMSP_1, NAT_1, ORDINAL1, RELAT_1, YELLOW_8, TOPS_1,
       TOPS_2, TOPMETR, RCOMP_1, METRIC_1, PCOMPS_1, GOBOARD6, RELSET_1,
@@ -351,12 +352,12 @@ theorem
   A ex r being Real st r >0 & ].x-r, x+r.[ c= A
 proof
   let A be Subset of R^1;
-  reconsider A1=A as Subset of RealSpace by TOPMETR:16,def 7;
+  reconsider A1=A as Subset of RealSpace by TOPMETR:16;
   thus A is open implies for x being Real st x in A ex r being Real st r >0 &
   ].x-r, x+r.[ c= A
   proof
     reconsider A1=A as Subset of R^1;
-A1: the topology of R^1 = Family_open_set(RealSpace) by TOPMETR:16,def 7;
+A1: the topology of R^1 = Family_open_set(RealSpace) by TOPMETR:16;
     assume
     A is open;
     then
@@ -390,7 +391,7 @@ A7: ].x1-r, x1+r.[ c= A1 by A5;
   end;
   then
 A8: A1 in Family_open_set(RealSpace) by PCOMPS_1:def 5;
-  the topology of R^1 = Family_open_set(RealSpace) by TOPMETR:16,def 7;
+  the topology of R^1 = Family_open_set(RealSpace) by TOPMETR:16;
   hence thesis by A8,PRE_TOPC:def 5;
 end;
 
@@ -399,7 +400,7 @@ theorem Th9:
   S.n in ]. n - 1/4 , n + 1/4 .[) holds rng S is closed
 proof
   let S be sequence of R^1;
-  reconsider B=rng S as Subset of TopSpaceMetr(RealSpace) by TOPMETR:def 7;
+  reconsider B=rng S as Subset of R^1;
   assume
 A1: for n being Element of NAT holds S.n in ]. n - 1/4 , n + 1/4 .[;
   for x being Point of RealSpace st x in B` ex r being real number st r>0
@@ -412,7 +413,7 @@ A2: x in B`;
     per cases;
     suppose
 A3:   ]. x1 - 1/4 , x1 + 1/4 .[ /\ B = {};
-      reconsider C=Ball(x,1/4) as Subset of TopSpaceMetr(RealSpace) by TOPMETR
+      reconsider C=Ball(x,1/4) as Subset of R^1 by TOPMETR
       :16;
       Ball(x,1/4) /\ B`` = {} by A3,Th7;
       then C misses B`` by XBOOLE_0:def 7;
@@ -430,7 +431,7 @@ A7:   n1 in dom S and
 A8:   y = S.n1 by A6,FUNCT_1:def 5;
       reconsider n1 as Element of NAT by A7;
       reconsider r=abs (x1 - y) as Real;
-      reconsider C=Ball(x,r) as Subset of TopSpaceMetr(RealSpace) by TOPMETR:
+      reconsider C=Ball(x,r) as Subset of R^1 by TOPMETR:
       16;
       abs(y-x1) < 1/4 by A5,RCOMP_1:8;
       then abs(-(x1-y)) < 1/4;
@@ -549,7 +550,7 @@ A26:  C c= B` by SUBSET_1:44;
       hence thesis by A26;
     end;
   end;
-  then [#](R^1)\(rng S) is open by TOPMETR:22,def 7;
+  then [#](R^1)\(rng S) is open by TOPMETR:22;
   hence thesis by PRE_TOPC:def 6;
 end;
 
@@ -577,106 +578,132 @@ A5: - 1/4 + n < 0 + n by XREAL_1:10;
     then x in {r where r is Real : n - 1/4 < r & r < n + 1/4} by A5;
     hence thesis by RCOMP_1:def 2;
   end;
-  assume
-  B = NAT;
-  hence thesis by A2,A4,Th9;
+  thus thesis by A2,A4,Th9;
+end;
+
+definition
+  let M be non empty MetrStruct, x be Point of TopSpaceMetr(M);
+  func Balls(x) -> Subset-Family of TopSpaceMetr(M) means
+:Def10:
+  ex y being Point of M st y = x &
+  it = { Ball(y,1/n) where n is Element of NAT: n <> 0 };
+  existence
+  proof
+A1: the carrier of M = the carrier of TopSpaceMetr M by TOPMETR:16;
+    then reconsider y = x as Point of M;
+    set B = { Ball(y,1/n) where n is Element of NAT: n <> 0 };
+    B c= bool(the carrier of TopSpaceMetr(M))
+    proof
+      let A be set;
+      assume A in B;
+      then ex n being Element of NAT st A = Ball(y,1/n) & n <> 0;
+      hence thesis by A1;
+    end;
+    hence thesis;
+  end;
+  uniqueness;
+end;
+
+definition
+  let M be non empty MetrSpace, x be Point of TopSpaceMetr(M);
+  redefine func Balls(x) -> Basis of x;
+  coherence
+  proof
+    set B = Balls(x);
+    consider x' being Point of M such that
+A0: x' = x & B = { Ball(x',1/n) where n is Element of NAT: n <> 0 } by Def10;
+A2: B c= the topology of TopSpaceMetr(M)
+    proof
+      let A be set;
+      assume
+      A in B;
+      then consider n being Element of NAT such that
+A3:   A = Ball(x',1/n) and
+      n<>0 by A0;
+      Ball(x',1/n) in Family_open_set M by PCOMPS_1:33;
+      hence thesis by A3,TOPMETR:16;
+    end;
+A5: for O being set st O in B holds x in O
+    proof
+      let O be set;
+      assume
+      O in B;
+      then ex n being Element of NAT st O = Ball(x',1/n) & n<>0 by A0;
+      hence thesis by A0,GOBOARD6:4;
+    end;
+A6: for O being Subset of TopSpaceMetr(M) st O is open & x in O ex V being
+    Subset of TopSpaceMetr(M) st V in B & V c= O
+    proof
+      let O be Subset of TopSpaceMetr(M);
+      assume
+      O is open & x in O;
+      then consider r being real number such that
+A7:   r>0 and
+A8:   Ball(x',r) c= O by A0,TOPMETR:22;
+      reconsider r as Real by XREAL_0:def 1;
+      consider n being Element of NAT such that
+A9:   1/n < r and
+A10:  n > 0 by A7,Lm1;
+      reconsider Ba=Ball(x',1/n) as Subset of TopSpaceMetr(M) by TOPMETR:16;
+      reconsider Ba as Subset of TopSpaceMetr(M);
+      take Ba;
+      thus Ba in B by A0,A10;
+      Ball(x',1/n) c= Ball(x',r) by A9,PCOMPS_1:1;
+      hence thesis by A8,XBOOLE_1:1;
+    end;
+A11: Ball(x',1/1) in B by A0;
+     then Intersect B = meet B by SETFAM_1:def 10;
+     then x in Intersect B by A11,A5,SETFAM_1:def 1;
+     hence thesis by A2,A6,TOPS_2:78,YELLOW_8:def 2;
+   end;
+ end;
+
+registration
+  let M be non empty MetrSpace, x be Point of TopSpaceMetr(M);
+  cluster Balls(x) -> countable;
+  coherence
+  proof
+    set B = Balls(x);
+    consider x' being Point of M such that
+A0: x' = x & B = { Ball(x',1/n) where n is Element of NAT: n <> 0 } by Def10;
+    deffunc F(Element of NAT) = Ball(x',1/$1);
+    defpred P[Element of NAT] means $1 <> 0;
+    { F(n) where n is Element of NAT : P[n] } is countable from CARD_4:sch 1;
+    hence thesis by A0;
+  end;
 end;
 
 theorem Th11:
-  for M being non empty MetrSpace,x being Point of TopSpaceMetr(M)
-, x' being Point of M st x=x' ex B being Basis of x st B={Ball(x',1/n) where n
-is Element of NAT:n<>0} & B is countable & ex f being Function of NAT,B st for
-n being set st n in NAT holds ex n' being Element of NAT st n=n' & f.n = Ball(
-  x',1/(n'+1))
+  for M being non empty MetrSpace, x being Point of TopSpaceMetr(M),
+      x' being Point of M st x = x'
+  ex f being Function of NAT,Balls(x) st
+  for n being Element of NAT holds f.n = Ball(x',1/(n+1))
 proof
-  let M be non empty MetrSpace,x be Point of TopSpaceMetr(M),x' be Point of M;
-  set B = { Ball(x',1/n) where n is Element of NAT:n<>0};
-  B c= bool(the carrier of TopSpaceMetr(M))
-  proof
-    let A be set;
-    assume
-    A in B;
-    then consider n being Element of NAT such that
-A1: A = Ball(x',1/n) and
-    n<>0;
-    Ball(x',1/n) c= the carrier of M;
-    then Ball(x',1/n) c= the carrier of TopSpaceMetr(M) by TOPMETR:16;
-    hence thesis by A1;
-  end;
-  then reconsider B as Subset-Family of TopSpaceMetr(M);
-A2: B c= the topology of TopSpaceMetr(M)
-  proof
-    let A be set;
-    assume
-    A in B;
-    then consider n being Element of NAT such that
-A3: A = Ball(x',1/n) and
-    n<>0;
-    Ball(x',1/n) in Family_open_set M by PCOMPS_1:33;
-    hence thesis by A3,TOPMETR:16;
-  end;
+  let M be non empty MetrSpace, x be Point of TopSpaceMetr(M),
+  x' be Point of M;
   assume
-A4: x=x';
-A5: for O being set st O in B holds x in O
-  proof
-    let O be set;
-    assume
-    O in B;
-    then ex n being Element of NAT st O = Ball(x',1/n) & n<>0;
-    hence thesis by A4,GOBOARD6:4;
-  end;
-A6: for O being Subset of TopSpaceMetr(M) st O is open & x in O ex V being
-  Subset of TopSpaceMetr(M) st V in B & V c= O
-  proof
-    let O be Subset of TopSpaceMetr(M);
-    assume
-    O is open & x in O;
-    then consider r being real number such that
-A7: r>0 and
-A8: Ball(x',r) c= O by A4,TOPMETR:22;
-    reconsider r as Real by XREAL_0:def 1;
-    consider n being Element of NAT such that
-A9: 1/n < r and
-A10: n > 0 by A7,Lm1;
-    reconsider Ba=Ball(x',1/n) as Subset of TopSpaceMetr(M) by TOPMETR:16;
-    reconsider Ba as Subset of TopSpaceMetr(M);
-    take Ba;
-    thus Ba in B by A10;
-    Ball(x',1/n) c= Ball(x',r) by A9,PCOMPS_1:1;
-    hence thesis by A8,XBOOLE_1:1;
-  end;
-A11: Ball(x',1/1) in B;
-  then Intersect B = meet B by SETFAM_1:def 10;
-  then x in Intersect B by A11,A5,SETFAM_1:def 1;
-  then reconsider B as Basis of x by A2,A6,YELLOW_8:def 2;
-  take B;
-  deffunc F(Element of NAT) = Ball(x',1/$1);
-  defpred P[Element of NAT] means $1 <> 0;
-  thus B={Ball(x',1/n) where n is Element of NAT:n<>0};
-  defpred P[set,set] means ex n' being Element of NAT st $1=n' & $2 = Ball(x',
-  1/(n'+1));
-  { F(n) where n is Element of NAT : P[n] } is countable from CARD_4:sch
-  1;
-  hence B is countable;
+A4: x = x';
+  set B = Balls(x);
+  consider x' being Point of M such that
+A0: x' = x & B = { Ball(x',1/n) where n is Element of NAT: n <> 0 } by Def10;
+  defpred P[set,set] means ex n' being Element of NAT st $1=n' &
+  $2 = Ball(x',1/(n'+1));
 A12: for n being set st n in NAT ex O being set st O in B & P[n,O]
   proof
     let n be set;
-    assume
-    n in NAT;
-    then reconsider n'=n as Element of NAT;
-    reconsider O=Ball(x',1/(n'+1)) as set;
-    take O;
-    thus O in B;
-    take n';
-    thus n=n';
-    thus thesis;
+    assume n in NAT;
+    then reconsider n as Element of NAT;
+    take Ball(x',1/(n+1));
+    thus thesis by A0;
   end;
   consider f being Function such that
 A13: dom f = NAT & rng f c= B and
 A14: for n being set st n in NAT holds P[n,f.n] from WELLORD2:sch 1(A12);
   reconsider f as Function of NAT,B by A13,FUNCT_2:4;
   take f;
-  thus thesis by A14;
+  let n be Element of NAT;
+  P[n,f.n] by A14;
+  hence thesis by A0,A4;
 end;
 
 theorem Th12:
@@ -1019,43 +1046,33 @@ definition
   let T be non empty TopStruct;
   attr T is first-countable means
   :Def1:
-  for x be Point of T ex B be Basis of
-  x st B is countable;
+  for x be Point of T ex B be Basis of x st B is countable;
 end;
 
 theorem Th21:
-  for M being non empty MetrSpace holds TopSpaceMetr(M) is
-  first-countable
+  for M being non empty MetrSpace holds TopSpaceMetr(M) is first-countable
 proof
   let M be non empty MetrSpace;
   let x be Point of TopSpaceMetr(M);
-  reconsider x' = x as Element of TopSpaceMetr(M);
-  reconsider x' as Element of M by TOPMETR:16;
-  reconsider x' as Point of M;
-  consider B being Basis of x such that
-  B={Ball(x',1/n) where n is Element of NAT:n<>0} and
-A1: B is countable and
-  ex f being Function of NAT,B st for n being set st n in NAT holds ex n'
-  being Element of NAT st n=n' & f.n = Ball(x',1/(n'+1)) by Th11;
-  take B;
-  thus thesis by A1;
+  take Balls(x);
+  thus thesis;
 end;
 
 theorem
-  R^1 is first-countable by Th21,TOPMETR:def 7;
+  R^1 is first-countable by Th21;
 
 registration
   cluster R^1 -> first-countable;
-  coherence by Th21,TOPMETR:def 7;
+  coherence by Th21;
 end;
 
 definition
   let T be TopStruct, S be sequence of T, x be Point of T;
   pred S is_convergent_to x means
   :Def2:
-  for U1 being Subset of T st U1 is
-open & x in U1 ex n being Element of NAT st for m being Element of NAT st n <=
-  m holds S.m in U1;
+  for U1 being Subset of T st U1 is open & x in U1
+  ex n being Element of NAT st for m being Element of NAT st n <= m holds
+  S.m in U1;
 end;
 
 theorem Th23:
@@ -1166,11 +1183,9 @@ A10:  f.n in f.:succ n by FUNCT_1:def 12;
       f.(n+1) in B;
       then consider H1 being Subset of T such that
 A11:  H1 = f.(n+1);
-      reconsider H1 as Subset of T;
 A12:  H1 is open by A11,YELLOW_8:21;
       consider H being Subset of T such that
 A13:  H = H1 /\ G;
-      reconsider H as Subset of T;
       take H;
       meet (f.:succ (n+1)) = meet (f.:({n+1} \/ (n+1))) by ORDINAL1:def 1
         .= meet ((f.:({n+1} \/ (succ n)))) by NAT_1:39
@@ -1180,8 +1195,7 @@ A13:  H = H1 /\ G;
         .= H by A7,A11,A13,SETFAM_1:11;
       hence thesis by A8,A12,A13,TOPS_1:38;
     end;
-    assume
-    n in NAT;
+    assume n in NAT;
     then reconsider n as Element of NAT;
 A14: P[0]
     proof
@@ -1901,7 +1915,7 @@ A4: n in NAT;
 A5: h.n in rng h by FUNCT_1:def 5;
     then reconsider Bn=h.n as Subset of REAL? by A2;
     reconsider m'=m as Point of RealSpace by METRIC_1:def 14;
-    reconsider Kn = Ball(m',1/4) as Subset of TopSpaceMetr(RealSpace) by
+    reconsider Kn = Ball(m',1/4) as Subset of R^1 by
     TOPMETR:16;
     reconsider Bn as Subset of REAL?;
     Bn is open & y in Bn by A5,YELLOW_8:21;
@@ -1909,10 +1923,10 @@ A5: h.n in rng h by FUNCT_1:def 5;
 A6: An is open and
 A7: NAT c= An and
 A8: Bn = (An \ NAT) \/ {REAL} by Th31;
-    reconsider An'=An as Subset of TopSpaceMetr(RealSpace) by TOPMETR:def 7;
+    reconsider An'=An as Subset of R^1;
     Kn is open by TOPMETR:21;
     then
-A9: An' /\ Kn is open by A6,TOPMETR:def 7,TOPS_1:38;
+A9: An' /\ Kn is open by A6,TOPS_1:38;
     dist(m',m')=0 by METRIC_1:1;
     then m' in Ball(m',1/4) by METRIC_1:12;
     then n in An /\ Ball(m',1/4) by A4,A7,XBOOLE_0:def 4;
@@ -2211,52 +2225,38 @@ A28:    k in NAT and
 A29:    for U1 being set holds k in U1 & U1 in the topology of R^1
         implies not U1 /\ A' = {};
         reconsider k as Point of R^1 by A28,TOPMETR:24;
-        reconsider k''=k as Point of TopSpaceMetr(RealSpace) by TOPMETR:def 7;
+        reconsider k''=k as Point of TopSpaceMetr(RealSpace);
         reconsider k'=k'' as Point of RealSpace by TOPMETR:16;
-        consider Bs being Basis of k'' such that
-A30:    Bs={Ball(k',1/n) where n is Element of NAT:n<>0} and
-        Bs is countable and
-A31:    ex f being Function of NAT,Bs st for n being set st n in NAT
-holds ex n' being Element of NAT st n=n' & f.n = Ball(k',1/(n'+1)) by Th11;
+        set Bs = Balls(k'');
         consider h being Function of NAT,Bs such that
-A32:    for n being set st n in NAT holds ex n' being Element of NAT
-        st n=n' & h.n = Ball(k',1/(n'+1)) by A31;
+A32:    for n being Element of NAT holds h.n = Ball(k',1/(n+1)) by Th11;
         defpred P[set,set] means $2 in h.$1 /\ A';
 A33:    for n being set st n in NAT ex z being set st z in the carrier of
         R^1 & P[n,z]
         proof
           let n be set;
-          assume
-          n in NAT;
-          then ex n' being Element of NAT st n=n' & h.n=Ball(k',1/(n'+1 )) by
-          A32;
+          assume n in NAT;
+          then reconsider n as Element of NAT;
+A34:      h.n in Bs;
+          then reconsider H=h.n as Subset of R^1;
+          take z = the Element of H /\ A';
+          Bs c= the topology of R^1 by TOPS_2:78;
           then
-A34:      h.n in Bs by A30;
-          then reconsider H=h.n as Subset of TopSpaceMetr(RealSpace);
-          reconsider H as Subset of TopSpaceMetr(RealSpace);
-          consider z being Element of H /\ A';
-          take z;
-          Bs c= the topology of TopSpaceMetr(RealSpace) by YELLOW_8:def 2;
-          then
-A35:      H /\ A' <> {} by A29,A34,TOPMETR:def 7,YELLOW_8:21;
+A35:      H /\ A' <> {} by A29,A34,YELLOW_8:21;
           then z in H by XBOOLE_0:def 4;
-          hence thesis by A35,TOPMETR:def 7;
+          hence thesis by A35;
         end;
         consider S' being Function such that
 A36:    dom S' = NAT & rng S' c= the carrier of R^1 and
-A37:    for n being set st n in NAT holds P[n,S'.n] from WELLORD2:sch
-        1(A33 );
+A37:    for n being set st n in NAT holds P[n,S'.n] from WELLORD2:sch 1(A33);
         reconsider S' as Function of NAT,the carrier of R^1 by A36,FUNCT_2:4;
 A38:    S' is_convergent_to k
         proof
           let U1 be Subset of R^1;
-          reconsider U2=U1 as Subset of TopSpaceMetr(RealSpace) by TOPMETR:def
-          7;
-          assume
-          U1 is open & k in U1;
+          assume U1 is open & k in U1;
           then consider r being real number such that
 A39:      r > 0 and
-A40:      Ball(k',r) c= U2 by TOPMETR:22,def 7;
+A40:      Ball(k',r) c= U1 by TOPMETR:22;
           reconsider r as Real by XREAL_0:def 1;
           consider n being Element of NAT such that
 A41:      1/n < r and
@@ -2275,9 +2275,8 @@ A43:        S'.m in h.m by XBOOLE_0:def 4;
             then Ball(k',1/(m+1)) c= Ball(k',r) by A41,PCOMPS_1:1 ,
             XXREAL_0:2;
             then
-A44:        Ball(k',1/(m+1)) c= U2 by A40,XBOOLE_1:1;
-            ex m' being Element of NAT st m=m' & h.m = Ball(k',1/(m' +1))
-            by A32;
+A44:        Ball(k',1/(m+1)) c= U1 by A40,XBOOLE_1:1;
+            h.m = Ball(k',1/(m+1)) by A32;
             hence thesis by A44,A43;
           end;
         end;

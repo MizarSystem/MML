@@ -59,18 +59,6 @@ registration
 end;
 
 registration
-  let I be set;
-  cluster id I -> I-defined;
-  coherence;
-end;
-
-registration
-  let I be set;
-  cluster id I -> total (I-defined Function);
-  coherence;
-end;
-
-registration
   let X be with_non-empty_elements set;
   cluster id X -> non-empty;
   coherence
@@ -853,49 +841,8 @@ end;
 begin :: The Projection of Family of Many Sorted Algebras
 
 definition
-  let f be Function, x be set;
-  func proj(f,x) -> Function means
-  :Def2:
-  dom it = product f & for y being
-  Function st y in dom it holds it.y = y.x;
-  existence
-  proof
-    defpred P[set,set] means for x' be Function st $1 = x' holds $2 = x'.x;
-A1: now
-      let q be set;
-      assume
-      q in product f;
-      then reconsider q1 = q as Function;
-      take y = q1.x;
-      thus P[q,y];
-    end;
-    consider F be Function such that
-A2: dom F = product f & for a being set st a in product f holds P[a,F.
-    a] from CLASSES1:sch 1(A1);
-    take F;
-    thus thesis by A2;
-  end;
-  uniqueness
-  proof
-    let F,G be Function such that
-A3: dom F = product f and
-A4: for y being Function st y in dom F holds F.y = y.x and
-A5: dom G = product f and
-A6: for y being Function st y in dom G holds G.y = y.x;
-    now
-      let x' be set;
-      assume
-A7:   x' in product f;
-      then reconsider x1 = x' as Function;
-      thus F.x' = x1.x by A3,A4,A7
-        .= G.x' by A5,A6,A7;
-    end;
-    hence thesis by A3,A5,FUNCT_1:9;
-  end;
-end;
-
-definition
   let I,S;
+canceled;
   let A be MSAlgebra-Family of I,S, i be Element of I;
   func proj(A,i) -> ManySortedFunction of product A,A.i means
   :Def3:
@@ -927,13 +874,13 @@ A.i & ( Carrier(A,s') ).i = (the Sorts of U0).s' by PARTFUN1:def 4,PRALG_2:def
           then consider x1 be set such that
 A5:       x1 in dom (proj (Carrier(A,s'),i)) and
 A6:       y = (proj (Carrier(A,s'),i)).x1 by FUNCT_1:def 5;
-A7:       x1 in product (Carrier(A,s')) by A5,Def2;
+A7:       x1 in product (Carrier(A,s')) by A5,CARD_3:def 17;
           then reconsider x1 as Function;
-          y = x1.i by A5,A6,Def2;
+          y = x1.i by A5,A6,CARD_3:def 17;
           hence thesis by A7,A4,CARD_3:18;
         end;
         dom F' = dom (proj (Carrier(A,s'),i)) by A1
-          .= product (Carrier(A,s')) by Def2
+          .= product (Carrier(A,s')) by CARD_3:def 17
           .= (the Sorts of product A).s by PRALG_2:def 17;
         hence thesis by A2,A3,FUNCT_2:def 1,RELSET_1:11;
       end;
@@ -982,7 +929,7 @@ A6: rng x c= Funcs(I,C) by A2,FUNCT_2:169;
 A7: n in dom (the_arity_of o);
     x.n in product Carrier(A,(the_arity_of o)/.n) by A7,Th16;
     then
-A8: x.n in dom (proj (Carrier(A,(the_arity_of o)/.n),i)) by Def2;
+A8: x.n in dom (proj (Carrier(A,(the_arity_of o)/.n),i)) by CARD_3:def 17;
     n in dom x by A2,A7,FUNCT_2:169;
     then x.n in rng x by FUNCT_1:def 5;
     then consider g be Function such that
@@ -992,7 +939,7 @@ A9: g = x.n and
     thus ((proj(A,i))#x).n = ((proj(A,i)).((the_arity_of o)/.n)).(x.n) by A7,
     Th14
       .= (proj (Carrier(A,(the_arity_of o)/.n),i)).(x.n) by Def3
-      .= g.i by A9,A8,Def2
+      .= g.i by A9,A8,CARD_3:def 17
       .= ((commute x).i).n by A2,A7,A9,FUNCT_6:86;
   end;
 A10: x in product doms ((proj(A,i))*the_arity_of o) by Th13;
@@ -1037,14 +984,14 @@ A2: Result(o,product A) = ((the Sorts of product A) * the ResultSort of S)
 A3:     the_arity_of o = {};
         then const(o,product A) in product(Carrier(A,s)) by A2,Th6;
         then
-A4:     const(o,product A) in dom (proj (Carrier(A,s),i)) by Def2;
+A4:     const(o,product A) in dom (proj (Carrier(A,s),i)) by CARD_3:def 17;
 A5:     Args(o,product A) = {{}} by A3,PRALG_2:11;
         then
 A6:     x = {} by TARSKI:def 1;
         (F.s).(Den(o,product A).x) = (F.s).(const(o,product A)) by A5,
         TARSKI:def 1
           .= (proj (Carrier(A,s),i)).(const(o,product A)) by Def3
-          .= (const(o,product A)).i by A4,Def2
+          .= (const(o,product A)).i by A4,CARD_3:def 17
           .= const(o,A.i) by A3,Th10
           .= Den(o,A.i).(F#x) by A3,A6,Th12;
         hence thesis;
@@ -1055,10 +1002,10 @@ A7:     the_arity_of o <> {};
         (Den(o,product A).x) in product Carrier(A,s) by A2;
         then
 A8:     (Den(o,product A).x) in dom (proj (Carrier(A,s),i)) by
-        Def2;
+        CARD_3:def 17;
         (F.s).(Den(o,product A).x) = (proj (Carrier(A,s),i)).(Den(o,
         product A).x) by Def3
-          .= D.i by A8,Def2
+          .= D.i by A8,CARD_3:def 17
           .= (Den(o,A.i)).((commute x).i) by A7,Th23
           .= (Den(o,A.i)).(proj(A,i)#x) by A7,Th24;
         hence thesis;
@@ -1502,7 +1449,7 @@ A57:    x' in dom f' and
 A58:    f'.x' = y by FUNCT_1:def 5;
         (commute (commute F).s1).x' in product (Carrier(A,s1)) by A1,A56
         ,A57,Th29;
-        hence thesis by A55,A58,Def2;
+        hence thesis by A55,A58,CARD_3:def 17;
       end;
       then
 A59:  dom ((proj(A,i) ** H).s') = SU.s' by A55,A56,A54,RELAT_1:46;
@@ -1514,10 +1461,10 @@ A61:    x in SU.s';
         Th29;
         then
 A62:    ((commute (commute F).s1).x) in dom (proj (Carrier(A,s1),i )) by
-        Def2;
+        CARD_3:def 17;
         thus ((proj(A,i) ** H).s').x = (proj (Carrier(A,s1),i)).((commute (
         commute F).s1).x) by A54,A59,A61,FUNCT_1:22
-          .= ((commute (commute F).s1).x).i by A62,Def2
+          .= ((commute (commute F).s1).x).i by A62,CARD_3:def 17
           .= F1.s'.x by A1,A51,A61,Th28;
       end;
       dom (F1.s') = dom (F1.s1)

@@ -32,19 +32,19 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="38" value="false"/>
-<Adjective nr="47" value="false"/>
-<Adjective nr="59"/>
-<Adjective nr="69"/>
+<Adjective nr="39" value="false"/>
+<Adjective nr="48" value="false"/>
+<Adjective nr="60"/>
+<Adjective nr="70"/>
 </Cluster>
 </RCluster>
 <RCluster aid="NATTRA_1" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
-<Adjective nr="38" value="false"/>
-<Adjective nr="47" value="false"/>
-<Adjective nr="59"/>
+<Adjective nr="39" value="false"/>
+<Adjective nr="48" value="false"/>
+<Adjective nr="60"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -53,11 +53,11 @@
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="38" value="false"/>
-<Adjective nr="47" value="false"/>
-<Adjective nr="58"/>
+<Adjective nr="39" value="false"/>
+<Adjective nr="48" value="false"/>
 <Adjective nr="59"/>
-<Adjective nr="69"/>
+<Adjective nr="60"/>
+<Adjective nr="70"/>
 </Cluster>
 </RCluster>
 </Registrations>

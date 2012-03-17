@@ -54,7 +54,7 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="55">
+<Adjective nr="56">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

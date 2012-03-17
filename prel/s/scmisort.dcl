@@ -33,9 +33,7 @@
 <ArticleID name="TREES_1"/>
 <ArticleID name="TREES_2"/>
 <ArticleID name="AMI_1"/>
-<ArticleID name="AMI_2"/>
 <ArticleID name="FINSEQ_2"/>
-<ArticleID name="SCMFSA_1"/>
 <ArticleID name="SCMFSA_2"/>
 <ArticleID name="RAT_1"/>
 <ArticleID name="MEMBERED"/>
@@ -53,41 +51,40 @@
 <Adjective nr="127"/>
 </Cluster>
 <Func kind="U" nr="8">
-<Func kind="K" nr="307"/>
 <Func kind="K" nr="2">
 <Func kind="K" nr="89"/>
-<Func kind="K" nr="300">
+<Func kind="K" nr="285">
 <Func kind="K" nr="89"/>
 </Func>
 </Func>
-<Func kind="K" nr="323"/>
+<Func kind="K" nr="288"/>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="423">
+<Func kind="K" nr="387">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="7">
-<Func kind="K" nr="307"/>
+<Func kind="K" nr="90"/>
 </Adjective>
-<Adjective nr="43"/>
+<Adjective nr="44"/>
 <Adjective nr="120"/>
 <Adjective nr="122"/>
 </Cluster>
 </FCluster>
 <FCluster aid="SCMISORT" nr="2">
 <ArgTypes>
-<Typ kind="M" nr="30">
+<Typ kind="M" nr="29">
 <Cluster>
 <Adjective nr="123" value="false"/>
 </Cluster>
 </Typ>
-<Typ kind="M" nr="30">
+<Typ kind="M" nr="29">
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="330">
+<Func kind="K" nr="295">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>

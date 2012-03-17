@@ -29,10 +29,10 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="36" value="false"/>
-<Adjective nr="41" value="false"/>
-<Adjective nr="89"/>
-<Adjective nr="92"/>
+<Adjective nr="37" value="false"/>
+<Adjective nr="42" value="false"/>
+<Adjective nr="90"/>
+<Adjective nr="93"/>
 </Cluster>
 </RCluster>
 <RCluster aid="DIRAF" nr="2">
@@ -41,18 +41,18 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="36" value="false"/>
-<Adjective nr="41" value="false"/>
-<Adjective nr="89"/>
-<Adjective nr="92"/>
+<Adjective nr="37" value="false"/>
+<Adjective nr="42" value="false"/>
+<Adjective nr="90"/>
 <Adjective nr="93"/>
+<Adjective nr="94"/>
 </Cluster>
 </RCluster>
 <FCluster aid="DIRAF" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="13">
 <Cluster>
-<Adjective nr="36" value="false"/>
+<Adjective nr="37" value="false"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -60,8 +60,8 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="36" value="false"/>
-<Adjective nr="89"/>
+<Adjective nr="37" value="false"/>
+<Adjective nr="90"/>
 </Cluster>
 </FCluster>
 </Registrations>

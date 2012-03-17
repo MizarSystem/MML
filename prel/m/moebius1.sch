@@ -35,7 +35,7 @@
 <Typ kind="M" nr="2">
 <Cluster>
 <Adjective nr="9"/>
-<Adjective nr="22">
+<Adjective nr="23">
 <Func kind="K" nr="48"/>
 <Func kind="F" nr="2"/>
 </Adjective>

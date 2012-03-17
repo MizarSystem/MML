@@ -28,7 +28,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="89"/>
+<Adjective nr="90"/>
 </Cluster>
 </RCluster>
 <RCluster aid="NORMSP_1" nr="2">
@@ -37,8 +37,8 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="36" value="false"/>
-<Adjective nr="89"/>
+<Adjective nr="37" value="false"/>
+<Adjective nr="90"/>
 </Cluster>
 </RCluster>
 <RCluster aid="NORMSP_1" nr="3">
@@ -47,27 +47,27 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="36" value="false"/>
-<Adjective nr="59"/>
-<Adjective nr="84"/>
+<Adjective nr="37" value="false"/>
+<Adjective nr="60"/>
 <Adjective nr="85"/>
 <Adjective nr="86"/>
 <Adjective nr="87"/>
-<Adjective nr="89"/>
+<Adjective nr="88"/>
 <Adjective nr="90"/>
+<Adjective nr="91"/>
 </Cluster>
 </RCluster>
 <FCluster aid="NORMSP_1" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="13">
 <Cluster>
-<Adjective nr="36" value="false"/>
-<Adjective nr="59"/>
-<Adjective nr="84"/>
+<Adjective nr="37" value="false"/>
+<Adjective nr="60"/>
 <Adjective nr="85"/>
 <Adjective nr="86"/>
 <Adjective nr="87"/>
-<Adjective nr="90"/>
+<Adjective nr="88"/>
+<Adjective nr="91"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -78,7 +78,7 @@
 </Func>
 </Func>
 <Cluster>
-<Adjective nr="10"/>
+<Adjective nr="11"/>
 </Cluster>
 </FCluster>
 </Registrations>

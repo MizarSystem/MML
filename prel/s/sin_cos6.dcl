@@ -34,8 +34,8 @@
 <ArgTypes/>
 <Func kind="K" nr="226"/>
 <Cluster>
-<Adjective nr="22"/>
-<Adjective nr="24"/>
+<Adjective nr="23"/>
+<Adjective nr="25"/>
 </Cluster>
 </FCluster>
 <FCluster aid="SIN_COS6" nr="2">

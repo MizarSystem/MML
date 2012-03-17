@@ -1,0 +1,3918 @@
+:: Vector Function and its Differentiation Formulas in 3-dimensional Euclidean 
+:: Spaces
+::  by Xiquan Liang , Piqing Zhao and Ou Bai
+:: 
+:: Received October 10, 2009
+:: Copyright (c) 2009 Association of Mizar Users
+
+environ
+
+ vocabularies SEQ_1, FDIFF_1, ARYTM, FINSEQ_1, FINSEQ_2, EUCLID, EUCLID_2,
+      RLVECT_1, RVSUM_1, ARYTM_1, RELAT_1, FUNCT_1, EUCLID_5, EUCLID_3,
+      SQUARE_1, ARYTM_3, COMPLEX1, ABSVALUE, BHSP_1, PARTFUN1, FDIFF_3,
+      RCOMP_1, EUCLID_8;
+ notations RELAT_1, VALUED_0, VALUED_1, FDIFF_1, SUBSET_1, ORDINAL1, NUMBERS,
+      XREAL_0, REAL_1, FUNCT_1, FINSEQ_1, FINSEQ_2, FINSEQ_4, SEQ_1, RVSUM_1,
+      EUCLID, SQUARE_1, COMPLEX1, PARTFUN1, FUNCT_2, RFUNCT_1, EUCLIDLP,
+      EUCLID_5, BINOP_2, XBOOLE_0, FDIFF_3, RCOMP_1, XXREAL_1, XXREAL_0,
+      TARSKI;
+ constructors FDIFF_1, REAL_1, BINOP_2, FINSEQOP, FINSEQ_4, MONOID_0, SEQ_1,
+      SQUARE_1, COMPLEX1, RFUNCT_1, EUCLIDLP, VALUED_0, FUNCT_2, EUCLID_5,
+      VALUED_1, RELAT_1, XBOOLE_0, PARTFUN1, FDIFF_3, RCOMP_1, XXREAL_1,
+      EUCLID_3, SEQ_2;
+ registrations RELSET_1, NUMBERS, MEMBERED, MONOID_0, EUCLID, VALUED_0,
+      XBOOLE_0, XCMPLX_0, XREAL_0, RLVECT_1, RVSUM_1, FUNCT_2, RELAT_1,
+      PARTFUN1, RCOMP_1, XXREAL_1, XREAL_1, FUNCT_1, ORDINAL1, FUNCOP_1,
+      SQUARE_1, NAT_1, BINOP_2, FINSEQ_1, FINSEQ_2, VALUED_1, XXREAL_0, REAL_1,
+      FINSEQ_4, CARD_1;
+ requirements SUBSET, NUMERALS, ARITHM, BOOLE;
+ definitions VALUED_1, EUCLID, SQUARE_1, EUCLIDLP, FUNCT_2, EUCLID_5, RELAT_1,
+      XBOOLE_0, PARTFUN1, RCOMP_1, XXREAL_1, XREAL_0, RLVECT_1, RVSUM_1;
+ theorems RVSUM_1, FINSEQ_2, FINSEQ_1, XREAL_0, EUCLID_4, FINSEQ_3, EUCLID_5,
+      SQUARE_1, XCMPLX_1, EUCLIDLP, FDIFF_1, FDIFF_2, EUCLID, FUNCT_2,
+      VALUED_1, FDIFF_3, XREAL_1;
+ schemes FUNCT_2;
+
+begin :: Preliminaries
+
+reserve a, b, c, d, a1, a2, a3, b1, b2, b3, c1, c2, c3, d1, d2, d3,
+        r, r1, r2, r3, x, y, z, x1, x2, x3, y1, y2, y3, z1, z2, z3
+        for Element of REAL;
+reserve f, g, f1, f2, f3, g1, g2, g3, h1, h2, h3 for FinSequence of REAL;
+reserve R, R1, R2, R3 for Element of 3-tuples_on REAL;
+reserve p, q, p1, p2, p3, q1, q2, q3, e1, e2, e3 for Element of REAL 3;
+reserve f1, f2, f3, g1, g2, g3, h1, h2, h3 for PartFunc of REAL,REAL;
+reserve t, t0, t1, t2 for Real;
+
+definition let x, y, z be real number;
+  redefine func |[ x,y,z ]| -> Element of REAL 3;
+coherence
+proof
+  reconsider x,y,z as Real by XREAL_0:def 1;
+  <*x,y,z*> is Element of REAL 3 by FINSEQ_2:124;
+  hence thesis;
+end;
+end;
+
+Lm1:
+  p = |[ p.1, p.2, p.3 ]|
+proof
+    consider x,y,z such that
+A1: p = <*x,y,z*> by FINSEQ_2:123;
+A2: p.1 = x by A1,FINSEQ_1:62;
+    p.2 = y by A1,FINSEQ_1:62;
+    hence thesis by A1,A2,FINSEQ_1:62;
+end;
+
+Lm2:
+  p = <*p.1,p.2,p.3*>
+proof
+    consider x,y,z being Element of REAL such that
+A1: p = <*x,y,z*> by FINSEQ_2:123;
+    <*x,y,z*> = <*p.1,y,z*> by A1,FINSEQ_1:62
+    .= <*p.1,p.2,z*> by A1,FINSEQ_1:62
+    .= <*p.1,p.2,p.3*> by A1,FINSEQ_1:62;
+    hence thesis by A1;
+end;
+
+Lm3:
+  for r being real number holds r*p = |[ r*p.1, r*p.2, r*p.3 ]|
+proof
+  let r be real number;
+A1: (r*p).1 = r*(p.1) by RVSUM_1:66;
+A2: (r*p).2 = r*(p.2) by RVSUM_1:66;
+    (r*p).3 = r*(p.3) by RVSUM_1:66;
+    hence thesis by A1,A2,Lm2;
+end;
+
+Lm4:
+  p1+p2 = |[ p1.1+p2.1, p1.2+p2.2, p1.3+p2.3 ]|
+proof
+A1: (p1+p2).1 = p1.1+p2.1 by RVSUM_1:27;
+A2: (p1+p2).2 = p1.2+p2.2 by RVSUM_1:27;
+    (p1+p2).3 = p1.3+p2.3 by RVSUM_1:27;
+    hence thesis by A1,A2,Lm1;
+end;
+
+LmTh2:
+  (-p).1 = -p.1 & (-p).2 = -p.2 & (-p).3 = -p.3
+proof
+  -p = |[ (-1)*p.1, (-1)*p.2, (-1)*p.3 ]| by Lm3
+  .= |[ -p.1, -p.2, -p.3 ]|;
+  hence thesis by FINSEQ_1:62;
+end;
+
+theorem
+  for f being FinSequence of REAL st len f = 3 holds
+  f is Element of REAL 3
+proof
+    let f be FinSequence of REAL;
+    assume
+A1: len f = 3;
+    consider x1,x2,x3 being Element of REAL such that
+A2: f.1 = x1 & f.2 = x2 & f.3 = x3;
+    <*x1,x2,x3*> is Element of 3-tuples_on REAL
+    by FINSEQ_2:124;
+    hence thesis by A1,A2,FINSEQ_1:62;
+end;
+
+Lm7:
+  p1-p2 = |[ p1.1-p2.1, p1.2-p2.2, p1.3-p2.3 ]|
+proof
+A2: (-p2).1 = -p2.1 by LmTh2;
+A3: (-p2).2 = -p2.2 by LmTh2;
+A4: (-p2).3 = -p2.3 by LmTh2;
+    p1+-p2 = |[ p1.1+-p2.1, p1.2+-p2.2, p1.3+-p2.3 ]| by A2,A3,A4,Lm4;
+    hence thesis;
+end;
+
+Lm8:
+  |(p1,p2)| = p1.1*p2.1 + p1.2*p2.2 + p1.3*p2.3
+proof
+    reconsider f1=p1, f2=p2 as FinSequence of REAL;
+A1: len f1 = len <* p1.1, p1.2, p1.3 *> by Lm2
+   .= 3 by FINSEQ_1:62;
+A2: len f2 = len <* p2.1, p2.2, p2.3 *> by Lm2
+   .= 3 by FINSEQ_1:62;
+    |(p1,p2)| = Sum <* f1.1*f2.1, f1.2*f2.2, f1.3*f2.3 *>
+      by A1,A2,EUCLID_5:28
+   .= p1.1*p2.1 + p1.2*p2.2 + p1.3*f2.3 by RVSUM_1:108;
+    hence thesis;
+end;
+
+LmA8:
+  r*|[ x,y,z ]| = |[ r*x, r*y, r*z ]|
+proof
+    set p = |[ x,y,z ]|;
+    r*p = |[ r*p.1, r*p.2, r*p.3 ]| by Lm3
+    .=|[ r*x, r*p.2, r*p.3 ]| by FINSEQ_1:62
+    .=|[ r*x, r*y, r*p.3 ]| by FINSEQ_1:62
+    .=|[ r*x, r*y, r*z ]| by FINSEQ_1:62;
+    hence thesis;
+end;
+
+LmA26:
+  p1+-p2 = |[ p1.1-p2.1, p1.2-p2.2, p1.3-p2.3 ]|
+proof
+A1: -p2 = |[ (-1)*p2.1, (-1)*p2.2, (-1)*p2.3 ]| by Lm3
+        .= |[ -p2.1, -p2.2, -p2.3 ]|;
+    p1 + -p2 = |[ (p1).1+(-p2).1, (p1).2+(-p2).2, (p1).3 +(-p2).3]| by Lm4
+             .= |[ p1.1+-p2.1, (p1).2+(-p2).2, (p1).3+(-p2).3 ]|
+                by A1,FINSEQ_1:62
+             .= |[ p1.1+-p2.1, p1.2+-p2.2, (p1).3+(-p2).3 ]| by A1,FINSEQ_1:62
+             .= |[ p1.1+-p2.1, p1.2+-p2.2, p1.3+-p2.3 ]| by A1,FINSEQ_1:62;
+    hence thesis;
+end;
+
+LmA31:
+ |[ x1,x2,x3 ]| + |[ y1,y2,y3 ]| = |[ x1+y1, x2+y2, x3+y3 ]|
+proof
+A1:  |[ y1,y2,y3 ]|.1 = y1 by FINSEQ_1:62;
+A2:  |[ y1,y2,y3 ]|.2 = y2 by FINSEQ_1:62;
+A3:  |[ y1,y2,y3 ]|.3 = y3 by FINSEQ_1:62;
+A4:  |[ x1,x2,x3 ]|.1 + |[ y1,y2,y3 ]|.1 = x1+y1 by A1,FINSEQ_1:62;
+A5:  |[ x1,x2,x3 ]|.2 + |[ y1,y2,y3 ]|.2 = x2+y2 by A2,FINSEQ_1:62;
+     |[ x1,x2,x3 ]|.3 + |[ y1,y2,y3 ]|.3 = x3+y3 by A3,FINSEQ_1:62;
+     hence thesis by A4,A5,Lm4;
+end;
+
+LmB30:
+  |(p1,p2)| = p1.1*p2.1 + p1.2*p2.2 + p1.3*p2.3
+proof
+    reconsider f1=p1, f2=p2 as FinSequence of REAL;
+A1: len f1 = len <* p1.1, p1.2, p1.3 *> by Lm2
+    .= 3 by FINSEQ_1:62;
+A2: len f2 = len <* p2.1, p2.2, p2.3 *> by Lm2
+    .= 3 by FINSEQ_1:62;
+    |(p1,p2)| = Sum <* f1.1*f2.1, f1.2*f2.2, f1.3*f2.3 *> by A1,A2,EUCLID_5:28
+    .= p1.1*p2.1 + p1.2*p2.2 + p1.3*f2.3 by RVSUM_1:108;
+    hence thesis;
+end;
+
+LmAA30:
+  |(r*p1,p2)| = r*|(p1,p2)|
+proof
+A1:  r*p1 = |[ r*p1.1, r*p1.2, r*p1.3]| by Lm3;
+A2:  r*|(p1,p2)| = r*(p1.1*p2.1 + p1.2*p2.2 + p1.3*p2.3 ) by LmB30;
+A3:  (r*p1).1*p2.1 = (r*p1.1)*p2.1 by A1,FINSEQ_1:62
+     .= r*(p1.1*p2.1);
+A4:  (r*p1).2*p2.2 =(r*p1.2)*p2.2 by A1,FINSEQ_1:62
+     .=r*(p1.2*p2.2);
+A5:  (r*p1).3*p2.3 = (r*p1.3)*p2.3 by A1,FINSEQ_1:62
+     .= r*(p1.3*p2.3);
+     |(r*p1,p2)| = (r*(p1.1*p2.1) + r*(p1.2*p2.2)) + r*(p1.3*p2.3)
+     by A3,A4,A5,LmB30;
+     hence thesis by A2;
+end;
+
+LmA52:
+  |( |[ x1, x2, x3 ]|, |[ y1, y2, y3 ]| )| = x1*y1 + x2*y2 + x3*y3
+proof
+    set p1 = |[ x1, x2, x3 ]|;
+A2: p1.1 = x1 & p1.2 = x2 & p1.3 = x3 by FINSEQ_1:62;
+    set p2 = |[ y1, y2, y3 ]|;
+    p2.1 = y1 & p2.2 = y2 & p2.3 = y3 by FINSEQ_1:62;
+    hence thesis by A2,LmB30;
+end;
+
+LmB3:
+  (p1+p2)+(q1+q2) = (p1+q1)+(p2+q2)
+proof
+  thus (p1+p2)+(q1+q2) = (p1+p2)+q1+q2 by RVSUM_1:32
+ .= (p1+q1)+p2+q2 by RVSUM_1:32
+ .= (p1+q1)+(p2+q2) by RVSUM_1:32;
+end;
+
+LmA62:
+  (p1+p2)-(q1+q2) = (p1-q1)+(p2-q2)
+proof
+  thus (p1+p2)-(q1+q2) = (p1+ p2)-q1-q2 by RVSUM_1:60
+ .= (p1+p2)+(-q1+-q2) by RVSUM_1:32
+ .= (p1-q1)+(p2-q2) by LmB3;
+end;
+
+LmA63:
+  |[ x1,x2,x3 ]| - |[ y1,y2,y3 ]| = |[ x1-y1,x2-y2,x3-y3 ]|
+proof
+A1: |[ y1,y2,y3 ]|.1 = y1 by FINSEQ_1:62;
+A2: |[ y1,y2,y3 ]|.2 = y2 by FINSEQ_1:62;
+A3: |[ y1,y2,y3 ]|.3 = y3 by FINSEQ_1:62;
+A4: |[ x1,x2,x3 ]|.1 - |[ y1,y2,y3 ]|.1 = x1-y1 by A1,FINSEQ_1:62;
+A5: |[ x1,x2,x3 ]|.2 - |[ y1,y2,y3 ]|.2 = x2-y2 by A2,FINSEQ_1:62;
+    |[ x1,x2,x3 ]|.3 - |[ y1,y2,y3 ]|.3 = x3-y3 by A3,FINSEQ_1:62;
+    hence thesis by A4,A5,LmA26;
+end;
+
+definition
+  func <e1> -> Element of REAL 3 equals
+    |[ 1,0,0 ]|;
+  coherence;
+  func <e2> -> Element of REAL 3 equals
+    |[ 0,1,0 ]|;
+  coherence;
+  func <e3> -> Element of REAL 3 equals
+    |[ 0,0,1 ]|;
+  coherence;
+end;
+
+LmTh8:
+  p = |[ x,y,z ]| implies |(p,p)| = x^2 + y^2 + z^2
+proof
+  assume p = |[ x,y,z ]|;
+  then p.1 = x & p.2 = y & p.3 = z by FINSEQ_1:62;
+  hence thesis by Lm8;
+end;
+
+definition let p1, p2;
+  func p1 <X> p2 -> Element of REAL 3 equals
+  |[ (p1.2*p2.3)-(p1.3*p2.2),(p1.3*p2.1)-(p1.1*p2.3),
+  (p1.1*p2.2)-(p1.2*p2.1) ]|;
+  correctness;
+end;
+
+Lm11:
+  |[ x1,x2,x3 ]| <X> |[ y1,y2,y3 ]|
+  = |[ (x2*y3)-(x3*y2),(x3*y1)-(x1*y3),(x1*y2)-(x2*y1) ]|
+proof
+    set p1 = |[ x1,x2,x3 ]|;
+A2: p1.1 = x1 & p1.2 = x2 & p1.3 = x3 by FINSEQ_1:62;
+    set p2 = |[ y1,y2,y3 ]|;
+    p2.1 = y1 & p2.2 = y2 & p2.3 = y3 by FINSEQ_1:62;
+    hence thesis by A2;
+end;
+
+Lm12:
+  (r*p1)<X>p2 = r*(p1<X>p2) &
+  (r*p1)<X>p2 = p1<X>(r*p2)
+proof
+A0: (p1<X>p2).1 = (p1.2*p2.3)-(p1.3*p2.2) &
+    (p1<X>p2).2 = (p1.3*p2.1)-(p1.1*p2.3) &
+    (p1<X>p2).3 = (p1.1*p2.2)-(p1.2*p2.1) by FINSEQ_1:62;
+A1: (r*p1)<X>p2 = |[ r*p1.1,r*p1.2,r*p1.3 ]|<X>p2 by Lm3
+   .= |[ r*p1.1,r*p1.2,r*p1.3 ]|<X>|[ p2.1,p2.2,p2.3 ]| by Lm1
+   .= |[ (r*p1.2*p2.3)-(r*p1.3*p2.2),(r*p1.3*p2.1)-(r*p1.1*p2.3),
+      (r*p1.1*p2.2)-(r*p1.2*p2.1) ]| by Lm11;then
+A2: (r*p1)<X>p2
+    = |[ r*(p1<X>p2).1,r*(p1<X>p2).2,r*(p1<X>p2).3 ]| by A0
+   .= r*(p1<X>p2) by Lm3;
+      (r*p1)<X>p2
+    = |[ p1.2*(r*p2.3)-p1.3*(r*p2.2),p1.3*(r*p2.1)-p1.1*(r*p2.3),
+      p1.1*(r*p2.2)-p1.2*(r*p2.1) ]| by A1
+   .= |[ p1.1,p1.2,p1.3 ]|<X>|[ r*p2.1,r*p2.2,r*p2.3 ]| by Lm11
+   .= p1<X>|[ r*p2.1,r*p2.2,r*p2.3 ]| by Lm2
+   .= p1<X>(r*p2) by Lm3;
+    hence thesis by A2;
+end;
+
+theorem
+  p1,p2 are_ldependent2 implies p1<X>p2 = 0.REAL 3
+proof
+    assume p1,p2 are_ldependent2;then
+A1: ex a1,a2 being Real st a1*p1+a2*p2 = 0.REAL 3
+    & (a1 <> 0 or a2 <> 0) by EUCLIDLP:def 2;
+    now per cases by A1;
+    case
+  A2: ex a1,a2 being Real st a1*p1+a2*p2 = 0.REAL 3 & a1 <> 0;
+      consider a1,a2 being Real such that
+  A3: a1 <> 0 & a1*p1+a2*p2 = 0.REAL 3 by A2;
+  A5: (1/a1)*(a1*p1) = (1/a1)*(-a2*p2) by A3,RVSUM_1:41
+     .= (1/a1)*(((-1)*a2)*p2) by RVSUM_1:71
+     .= (1/a1)*((-a2)*p2);
+  A6: (1/a1)*(a1*p1) = (a1*(1/a1))*p1 by EUCLID_4:4
+     .= 1*p1 by A3,XCMPLX_1:107;
+  A7: 1*p1 = |[ 1*p1.1,1*p1.2,1*p1.3]| by Lm3
+     .= p1 by Lm1;
+  A8: 0.REAL 3 = |[0,0,0 ]| by FINSEQ_2:76;
+      p1<X>p2 = (((-a2)*(1/a1))*p2)<X>p2 by A5,A6,A7,EUCLID_4:4
+     .= ((-a2)/a1*p2)<X>p2 by XCMPLX_1:100;then
+      p1<X>p2 = (-a2)/a1*(p2<X>p2) by Lm12;then
+      p1<X>p2 = ((-a2)/a1)*0.REAL 3 by FINSEQ_2:76
+     .= |[ ((-a2)/a1)*(0.REAL 3).1,((-a2)/a1)*(0.REAL 3).2,
+        ((-a2)/a1)*(0.REAL 3).3 ]| by Lm3
+     .= |[ ((-a2)/a1)*0,((-a2)/a1)*(0.REAL 3).2,
+        ((-a2)/a1)*(0.REAL 3).3 ]| by A8,FINSEQ_1:62
+     .= |[ 0,((-a2)/a1)*0,((-a2)/a1)*(0.REAL 3).3 ]|
+        by A8,FINSEQ_1:62
+     .= 0.REAL 3 by A8,FINSEQ_1:62;
+      hence thesis;
+    end;
+    case
+ A9:  ex a1,a2 being Real st a1*p1+a2*p2 = 0.REAL 3 & a2 <> 0;
+      consider a1,a2 being Real such that
+ A10: a2 <> 0 & a1*p1+a2*p2 = 0.REAL 3 by A9;
+ A12: (1/a2)*(a2*p2) = (1/a2)*(-a1*p1) by A10,RVSUM_1:41
+     .= (1/a2)*(((-1)*a1)*p1) by RVSUM_1:71
+     .= (1/a2)*((-a1)*p1);
+ A13: (1/a2)*(a2*p2) = (a2*(1/a2))*p2 by EUCLID_4:4
+     .= 1*p2 by A10,XCMPLX_1:107;
+ A14: 1*p2 = |[ 1*p2.1,1*p2.2,1*p2.3]| by Lm3
+     .= p2 by Lm1;
+ A15: 0.REAL 3 = |[0,0,0 ]| by FINSEQ_2:76;
+      p1<X>p2 = p1<X>(((-a1)*(1/a2))*p1) by A12,A13,A14,EUCLID_4:4
+     .= p1<X>((-a1)/a2*p1) by XCMPLX_1:100
+     .= (-a1)/a2*p1<X>p1 by Lm12
+     .= (-a1)/a2*(p1<X>p1) by Lm12
+     .= ((-a1)/a2)*0.REAL 3 by FINSEQ_2:76
+     .= |[ ((-a1)/a2)*(0.REAL 3).1,((-a1)/a2)*(0.REAL 3).2,
+        ((-a1)/a2)*(0.REAL 3).3 ]| by Lm3
+     .= |[ ((-a1)/a2)*0,((-a1)/a2)*(0.REAL 3).2,
+        ((-a1)/a2)*(0.REAL 3).3 ]| by A15,FINSEQ_1:62
+     .= |[ 0,((-a1)/a2)*0,((-a1)/a2)*(0.REAL 3).3 ]|
+        by A15,FINSEQ_1:62
+     .= 0.REAL 3 by A15,FINSEQ_1:62;
+      hence thesis;
+    end;
+  end;
+  hence thesis;
+end;
+
+begin :: Vector Function in 3-dimensional Euclidean Spaces
+
+theorem
+  |. <e1> .| = 1
+proof
+  |(<e1>,<e1>)| = 1^2 + 0^2 + 0^2 by LmTh8 .= 1;
+  hence thesis by SQUARE_1:83;
+end;
+
+theorem
+  |. <e2> .| = 1
+proof
+  |(<e2>,<e2>)| = 0^2 + 1^2 + 0^2 by LmTh8  .= 1;
+  hence thesis by SQUARE_1:83;
+end;
+
+theorem
+  |. <e3> .| = 1
+proof
+  |(<e3>,<e3>)| = 0^2 + 0^2 + 1^2 by LmTh8  .= 1;
+  hence thesis by SQUARE_1:83;
+end;
+
+theorem
+  <e1>,<e2> are_orthogonal
+proof
+  <e1>.1 = 1 & <e1>.2 = 0 & <e1>.3 = 0 &
+  <e2>.1 = 0 & <e2>.2 = 1 & <e2>.3 = 0 by FINSEQ_1:62;
+  then |(<e1>,<e2>)| = 1 * 0 + 0 * 1 + 0 * 0 by Lm8
+  .= 0;
+  hence <e1>,<e2> are_orthogonal by RVSUM_1:def 18;
+end;
+
+theorem
+  <e1>,<e3> are_orthogonal
+proof
+  <e1>.1 = 1 & <e1>.2 = 0 & <e1>.3 = 0 &
+  <e3>.1 = 0 & <e3>.2 = 0 & <e3>.3 = 1 by FINSEQ_1:62;
+  then |(<e1>,<e3>)| = 1 * 0 + 0 * 0 + 0 * 1 by Lm8
+  .= 0;
+  hence <e1>,<e3> are_orthogonal by RVSUM_1:def 18;
+end;
+
+theorem
+  <e2>,<e3> are_orthogonal
+proof
+  <e2>.1 = 0 & <e2>.2 = 1 & <e2>.3 = 0 &
+  <e3>.1 = 0 & <e3>.2 = 0 & <e3>.3 = 1 by FINSEQ_1:62;
+  then |(<e2>,<e3>)| = 0 * 0 + 1 * 0 + 0 * 1 by Lm8
+  .= 0;
+  hence <e2>,<e3> are_orthogonal by RVSUM_1:def 18;
+end;
+
+theorem
+  |(<e1>,<e1>)| = 1
+proof
+  <e1>.1 = 1 & <e1>.2 = 0 & <e1>.3 = 0 by FINSEQ_1:62;
+  then |(<e1>,<e1>)| = 1 * 1 + 0 * 0 + 0 * 0 by Lm8
+  .= 1;
+  hence thesis;
+end;
+
+theorem
+  |(<e2>,<e2>)| = 1
+proof
+  <e2>.1 = 0 & <e2>.2 = 1 & <e2>.3 = 0 by FINSEQ_1:62;
+  then |(<e2>,<e2>)| = 0 * 0 + 1 * 1 + 0 * 0 by Lm8
+  .= 1;
+  hence thesis;
+end;
+
+theorem
+  |(<e3>,<e3>)| = 1
+proof
+  <e3>.1 = 0 & <e3>.2 = 0 & <e3>.3 = 1 by FINSEQ_1:62;
+  then |(<e3>,<e3>)| = 0 * 0 + 0 * 0 + 1 * 1 by Lm8
+  .= 1;
+  hence thesis;
+end;
+
+theorem
+ |(<e1>,|[ 0,0,0 ]|)| = 0
+proof
+A1: <e1>.1 = 1 & <e1>.2 = 0 & <e1>.3 = 0 by FINSEQ_1:62;
+  set e = |[ 0,0,0 ]|;
+  e.1 = 0 & e.2 = 0 & e.3 = 0 by FINSEQ_1:62;
+  then |(<e1>,e)| = 1 * 0 + 0 * 0 + 0 * 0 by A1,Lm8
+  .= 0;
+  hence thesis;
+end;
+
+theorem
+ |(<e2>,|[ 0,0,0 ]|)| = 0
+proof
+A1: <e2>.1 = 0 & <e2>.2 = 1 & <e2>.3 = 0 by FINSEQ_1:62;
+  set e = |[ 0,0,0 ]|;
+  e.1 = 0 & e.2 = 0 & e.3 = 0 by FINSEQ_1:62;
+  then |(<e2>,e)| = 0 * 0 + 1 * 0 + 0 * 0 by A1,Lm8
+  .= 0;
+  hence thesis;
+end;
+
+theorem
+ |(<e3>,|[ 0,0,0 ]|)| = 0
+proof
+A1:<e3>.1 = 0 & <e3>.2 = 0 & <e3>.3 = 1 by FINSEQ_1:62;
+  set e = |[ 0,0,0 ]|;
+  e.1 = 0 & e.2 = 0 & e.3 = 0 by FINSEQ_1:62;
+  then |(<e3>,e)| = 0 * 0 + 0 * 0 + 1 * 0 by A1,Lm8
+  .= 0;
+  hence thesis;
+end;
+
+theorem
+  <e1><X><e2> = <e3>
+proof
+  <e1><X><e2> = |[ (0 * 0)-(0 * 1),(0 * 0)-(1 * 0),(1 * 1)-(0 * 0) ]| by Lm11
+ .= <e3>;
+  hence thesis;
+end;
+
+theorem
+  <e2><X><e3> = <e1>
+proof
+   <e2><X><e3>
+   = |[ (1 * 1)-(0 * 0),(0 * 0)-(0 * 1),(0 * 0)-(1 * 0) ]| by Lm11
+  .= <e1>;
+   hence thesis;
+end;
+
+theorem
+  <e3><X><e1> = <e2>
+proof
+  <e3><X><e1> = |[ (0 * 0)-(1 * 0),(1 * 1)-(0 * 0),(0 * 0)-(0 * 1) ]| by Lm11
+ .= <e2>;
+  hence thesis;
+end;
+
+theorem
+  <e3><X><e2> = -<e1>
+proof
+A2: <e1>.1 = 1 & <e1>.2 = 0 & <e1>.3 = 0 by FINSEQ_1:62;
+    <e3><X><e2> = |[ (0 * 0)-(1*1),(1 * 0)-(0 * 0),(0 * 1)-(0 * 0) ]| by Lm11
+   .= |[ (-1)*<e1>.1,(-1)*<e1>.2,(-1)*<e1>.3 ]| by A2
+   .= -<e1> by Lm3;
+    hence thesis;
+end;
+
+theorem
+  <e1><X><e3> = -<e2>
+proof
+A2: <e2>.1 = 0 & <e2>.2 = 1 & <e2>.3 = 0 by FINSEQ_1:62;
+     <e1><X><e3>
+    = |[ (0 * 1)-(0 * 0),(0 * 0)-(1 * 1),(1 * 0)-(0 * 0 )]| by Lm11
+   .= |[ (-1)*<e2>.1,(-1)*<e2>.2,(-1)*<e2>.3 ]| by A2
+   .= -<e2> by Lm3;
+    hence thesis;
+end;
+
+theorem
+  <e2><X><e1> = -<e3>
+proof
+A2: <e3>.1 = 0 & <e3>.2 = 0 & <e3>.3 = 1 by FINSEQ_1:62;
+    <e2><X><e1>
+   = |[ (1 * 0)-(0 * 0),(0 * 1)-(0 * 0),(0 * 0)-(1 * 1) ]| by Lm11
+   .= |[ (-1)*<e3>.1,(-1)*<e3>.2,(-1)*<e3>.3 ]| by A2
+   .= -<e3> by Lm3;
+    hence thesis;
+end;
+
+theorem
+  <e1><X>|[ 0,0,0 ]| = |[ 0,0,0 ]|
+proof
+  <e1><X>|[ 0,0,0 ]|
+  = |[ (0 * 0)-(0 * 0),(0 * 0)-(1 * 0),(1 * 0)-(0 * 0) ]| by Lm11
+ .= |[ 0,0,0 ]|;
+  hence thesis;
+end;
+
+theorem
+  <e2><X>|[ 0,0,0 ]| = |[ 0,0,0 ]|
+proof
+   <e2><X>|[ 0,0,0 ]|
+ = |[ (1 * 0)-(0 * 0),(0 * 0)-(0 * 0),(0 * 0)-(1 * 0) ]| by Lm11
+  .= |[ 0,0,0 ]|;
+   hence thesis;
+end;
+
+theorem
+  <e3><X>|[ 0,0,0 ]| = |[ 0,0,0 ]|
+proof
+  <e3><X>|[ 0,0,0 ]|
+ = |[ (0 * 0)-(1 * 0),(1 * 0)-(0 * 0),(0 * 0)-(0 * 0) ]| by Lm11
+ .= |[ 0,0,0 ]|;
+  hence thesis;
+end;
+
+theorem ThA11:
+  r*<e1> = |[ r,0,0 ]|
+proof
+A2:<e1>.1 = 1 & <e1>.2 = 0 & <e1>.3 = 0 by FINSEQ_1:62;
+    r*<e1> = |[ r*1,r*0,r*0 ]| by A2,Lm3  .= |[ r,0,0 ]|;
+   hence thesis;
+end;
+
+theorem ThA12:
+  r*<e2> = |[ 0,r,0 ]|
+proof
+A2:<e2>.1 = 0 & <e2>.2 = 1 & <e2>.3 = 0 by FINSEQ_1:62;
+    r*<e2> = |[ r*0,r*1,r*0 ]| by A2,Lm3 .= |[ 0,r,0 ]|;
+   hence thesis;
+end;
+
+theorem ThA13:
+  r*<e3> = |[ 0,0,r ]|
+proof
+A2:<e3>.1 = 0 & <e3>.2 = 0 & <e3>.3 = 1 by FINSEQ_1:62;
+    r*<e3> = |[ r*0,r*0,r*1 ]| by A2,Lm3 .= |[ 0,0,r ]|;
+   hence thesis;
+end;
+
+theorem
+  1*<e1> = <e1>
+proof
+A1:<e1>.1 = 1 & <e1>.2 = 0 & <e1>.3 = 0 by FINSEQ_1:62;
+    1*<e1> = |[ 1*1,1*0,1*0 ]| by A1,Lm3  .= <e1>;
+   hence thesis;
+end;
+
+theorem
+  1*<e2> = <e2>
+proof
+A2:<e2>.1 = 0 & <e2>.2 = 1 & <e2>.3 = 0 by FINSEQ_1:62;
+    1*<e2> = |[ 1*0,1*1,1*0 ]| by A2,Lm3  .= <e2>;
+   hence thesis;
+end;
+
+theorem
+  1*<e3> = <e3>
+proof
+A1:<e3>.1 = 0 & <e3>.2 = 0 & <e3>.3 = 1 by FINSEQ_1:62;
+    1*<e3> = |[ 1*0,1*0,1*1 ]| by A1,Lm3  .= <e3>;
+   hence thesis;
+end;
+
+theorem
+  -<e1> = |[ -1,0,0 ]|
+proof
+A1:<e1>.1 = 1 & <e1>.2 = 0 & <e1>.3 = 0 by FINSEQ_1:62;
+  -<e1> = |[ (-1)*<e1>.1, (-1)*<e1>.2, (-1)*<e1>.3 ]| by Lm3
+      .= |[ -1,0,0 ]| by A1;
+  hence thesis;
+end;
+
+theorem
+  -<e2> = |[ 0,-1,0 ]|
+proof
+A1:<e2>.1 = 0 & <e2>.2 = 1 & <e2>.3 = 0 by FINSEQ_1:62;
+  -<e2> = |[ (-1)*<e2>.1, (-1)*<e2>.2, (-1)*<e2>.3 ]| by Lm3
+      .= |[ 0,-1,0 ]| by A1;
+  hence thesis;
+end;
+
+theorem
+  -<e3> = |[ 0,0,-1 ]|
+proof
+A1:<e3>.1 = 0 & <e3>.2 = 0 & <e3>.3 = 1 by FINSEQ_1:62;
+  -<e3> = |[ (-1)*<e3>.1, (-1)*<e3>.2, (-1)*<e3>.3 ]| by Lm3
+      .= |[ 0,0,-1 ]| by A1;
+  hence thesis;
+end;
+
+theorem
+  0 * <e1> = |[ 0,0,0 ]|
+proof
+A1:<e1>.1 = 1 & <e1>.2 = 0 & <e1>.3 = 0 by FINSEQ_1:62;
+   0 * <e1> = |[ 0 * 1,0 * 0,0 * 0 ]| by A1,Lm3
+ .= |[ 0,0,0 ]|;
+   hence thesis;
+end;
+
+theorem
+  0 * <e2> = |[ 0,0,0 ]|
+proof
+A2:<e2>.1 = 0 & <e2>.2 = 1 & <e2>.3 = 0 by FINSEQ_1:62;
+    0 * <e2> = |[ 0 * 0,0 * 1,0 * 0 ]| by A2,Lm3
+ .= |[ 0,0,0 ]|;
+   hence thesis;
+end;
+
+theorem
+  0 * <e3> = |[ 0,0,0 ]|
+proof
+A1:<e3>.1 = 0 & <e3>.2 = 0 & <e3>.3 = 1 by FINSEQ_1:62;
+    0 * <e3> = |[ 0 * 0,0 * 0,0 * 1 ]| by A1,Lm3
+     .= |[ 0,0,0 ]|;
+   hence thesis;
+end;
+
+theorem
+  p = p.1*<e1> + p.2*<e2> + p.3*<e3>
+proof
+A2:  <e1>.1 = 1 & <e1>.2 = 0 & <e1>.3 = 0 by FINSEQ_1:62;
+A3:  <e2>.1 = 0 & <e2>.2 = 1 & <e2>.3 = 0 by FINSEQ_1:62;
+A4:  <e3>.1 = 0 & <e3>.2 = 0 & <e3>.3 = 1 by FINSEQ_1:62;
+A5:  p.1*<e1> + p.2*<e2> + p.3*<e3>
+     = |[ p.1*1,p.1*0,p.1*0 ]| + p.2*<e2> + p.3*<e3>
+       by A2,Lm3
+    .= |[ p.1,0,0 ]| + |[ p.2*0,p.2*1,p.2*0 ]| + p.3*<e3>
+       by A3,Lm3
+    .= |[ p.1,0,0 ]| + |[ 0,p.2,0 ]| + |[ p.3*0,p.3*0,p.3*1 ]|
+       by A4,Lm3
+    .= |[ p.1,0,0 ]| + |[ 0,p.2,0 ]| + |[ 0,0,p.3 ]|;
+A6:  |[ p.1,0,0 ]|.1 = p.1 & |[ p.1,0,0 ]|.2 = 0 & |[ p.1,0,0 ]|.3 = 0
+     by FINSEQ_1:62;
+A7:  |[ 0,p.2,0 ]|.1 = 0 & |[ 0,p.2,0 ]|.2 = p.2 & |[ 0,p.2,0 ]|.3 = 0
+     by FINSEQ_1:62;
+A8:  |[ 0,0,p.3 ]|.1 = 0 & |[ 0,0,p.3 ]|.2 = 0 & |[ 0,0,p.3 ]|.3 = p.3
+     by FINSEQ_1:62;
+A9:  p.1*<e1> + p.2*<e2> + p.3*<e3>
+     = |[ p.1+0,0+p.2,0+0 ]| + |[ 0,0,p.3 ]| by A5,A6,A7,Lm4
+    .= |[ p.1,p.2,0 ]| + |[ 0,0,p.3 ]|;
+A10: |[ p.1,p.2,0 ]|.1 = p.1 & |[ p.1,p.2,0 ]|.2 = p.2 &
+     |[ p.1,p.2,0 ]|.3 = 0 by FINSEQ_1:62;
+     p.1*<e1> + p.2*<e2> + p.3*<e3>
+     = |[ p.1+0,p.2+0,0 +p.3]| by A8,A9,A10,Lm4
+    .= |[ p.1,p.2,p.3 ]|;
+     hence p = p.1*<e1> + p.2*<e2> + p.3*<e3> by Lm1;
+end;
+
+theorem ThA7:
+  r*p = r*p.1*<e1> + r*p.2*<e2> + r*p.3*<e3>
+proof
+A2:  <e1>.1 = 1 & <e1>.2 = 0 & <e1>.3 = 0 by FINSEQ_1:62;
+A3:  <e2>.1 = 0 & <e2>.2 = 1 & <e2>.3 = 0 by FINSEQ_1:62;
+A4:  <e3>.1 = 0 & <e3>.2 = 0 & <e3>.3 = 1 by FINSEQ_1:62;
+A5:  r*p.1*<e1> + r*p.2*<e2> + r*p.3*<e3>
+     = |[ r*p.1*1,r*p.1*0,r*p.1*0 ]| + r*p.2*<e2> + r*p.3*<e3>
+       by A2,Lm3
+    .= |[ r*p.1,0,0 ]| + |[ r*p.2*0,r*p.2*1,r*p.2*0 ]| + r*p.3*<e3>
+       by A3,Lm3
+    .= |[ r*p.1,0,0 ]| + |[ 0,r*p.2,0 ]| + |[ r*p.3*0,r*p.3*0,r*p.3*1 ]|
+       by A4,Lm3
+    .= |[ r*p.1,0,0 ]| + |[ 0,r*p.2,0 ]| + |[ 0,0,r*p.3 ]|;
+A6:  |[ r*p.1,0,0 ]|.1 = r*p.1 & |[ r*p.1,0,0 ]|.2 = 0 & |[ r*p.1,0,0 ]|.3 = 0
+     by FINSEQ_1:62;
+A7:  |[ 0,r*p.2,0 ]|.1 = 0 & |[ 0,r*p.2,0 ]|.2 = r*p.2 & |[ 0,r*p.2,0 ]|.3 = 0
+     by FINSEQ_1:62;
+A8:  |[ 0,0,r*p.3 ]|.1 = 0 & |[ 0,0,r*p.3 ]|.2 = 0 & |[ 0,0,r*p.3 ]|.3 = r*p.3
+     by FINSEQ_1:62;
+A9:  r*p.1*<e1> + r*p.2*<e2> + r*p.3*<e3>
+     = |[ r*p.1+0,0+r*p.2,0+0 ]| + |[ 0,0,r*p.3 ]| by A5,A6,A7,Lm4
+    .= |[ r*p.1,r*p.2,0 ]| + |[ 0,0,r*p.3 ]|;
+A10: |[ r*p.1,r*p.2,0 ]|.1 = r*p.1 & |[ r*p.1,r*p.2,0 ]|.2 = r*p.2 &
+     |[ r*p.1,r*p.2,0 ]|.3 = 0 by FINSEQ_1:62;
+     r*p.1*<e1> + r*p.2*<e2> + r*p.3*<e3>
+     = |[ r*p.1+0,r*p.2+0,0+r*p.3]| by A8,A9,A10,Lm4
+    .= |[ r*p.1,r*p.2,r*p.3 ]|;
+     hence r*p = r*p.1*<e1> + r*p.2*<e2> + r*p.3*<e3> by Lm3;
+end;
+
+theorem Th29:
+  |[ x,y,z ]| = x*<e1> + y*<e2> + z*<e3>
+proof
+A2:  <e1>.1 = 1 & <e1>.2 = 0 & <e1>.3 = 0 by FINSEQ_1:62;
+A3:  <e2>.1 = 0 & <e2>.2 = 1 & <e2>.3 = 0 by FINSEQ_1:62;
+A4:  <e3>.1 = 0 & <e3>.2 = 0 & <e3>.3 = 1 by FINSEQ_1:62;
+    set p = |[ x,y,z ]|;
+ A6:  x*<e1> + y*<e2> + z*<e3>
+      = |[ x*1,x*0,x*0 ]| + y*<e2> + z*<e3> by A2,Lm3
+     .= |[ x,0,0 ]| + |[ y*0,y*1,y*0 ]| + z*<e3> by A3,Lm3
+     .= |[ x,0,0 ]| + |[ 0,y,0 ]| + |[ z*0,z*0,z*1 ]| by A4,Lm3
+     .= |[ x,0,0 ]| + |[ 0,y,0 ]| + |[ 0,0,z ]|;
+ A7:  |[ x,0,0 ]|.1 = x & |[ x,0,0 ]|.2 = 0 & |[ x,0,0 ]|.3 = 0
+      by FINSEQ_1:62;
+ A8:  |[ 0,y,0 ]|.1 = 0 & |[ 0,y,0 ]|.2 = y & |[ 0,y,0 ]|.3 = 0
+      by FINSEQ_1:62;
+ A9:  |[ 0,0,z ]|.1 = 0 & |[ 0,0,z ]|.2 = 0 & |[ 0,0,z ]|.3 = z
+      by FINSEQ_1:62;
+ A10: x*<e1> + y*<e2> + z*<e3>
+      = |[ x+0,y+0,0+0 ]| + |[ 0,0,z ]| by A6,A7,A8,Lm4
+     .= |[ x,y,0 ]| + |[ 0,0,z ]|;
+ A11: |[ x,y,0 ]|.1 = x & |[ x,y,0 ]|.2 = y & |[ x,y,0 ]|.3 = 0
+      by FINSEQ_1:62;
+      x*<e1> + y*<e2> + z*<e3> = |[ x+0,y+0,0+z ]| by A9,A10,A11,Lm4
+       .= |[ x,y,z ]|;
+      hence p = x*<e1> + y*<e2> + z*<e3>;
+end;
+
+theorem ThA8:
+  r*|[ x,y,z ]| = r*x*<e1> + r*y*<e2> + r*z*<e3>
+proof
+A2:  <e1>.1 = 1 & <e1>.2 = 0 & <e1>.3 = 0 by FINSEQ_1:62;
+A3:  <e2>.1 = 0 & <e2>.2 = 1 & <e2>.3 = 0 by FINSEQ_1:62;
+A4:  <e3>.1 = 0 & <e3>.2 = 0 & <e3>.3 = 1 by FINSEQ_1:62;
+    set p = |[ x,y,z ]|;
+ A6:  r*x*<e1> + r*y*<e2> + r*z*<e3>
+      = |[ r*x*1,r*x*0,r*x*0 ]| + r*y*<e2> + r*z*<e3> by A2,Lm3
+     .= |[ r*x,0,0 ]| + |[ r*y*0,r*y*1,r*y*0 ]| + r*z*<e3> by A3,Lm3
+     .= |[ r*x,0,0 ]| + |[ 0,r*y,0 ]| + |[ r*z*0,r*z*0,r*z*1 ]| by A4,Lm3
+     .= |[ r*x,0,0 ]| + |[ 0,r*y,0 ]| + |[ 0,0,r*z ]|;
+ A7:  |[ r*x,0,0 ]|.1 = r*x & |[ r*x,0,0 ]|.2 = 0 & |[ r*x,0,0 ]|.3 = 0
+      by FINSEQ_1:62;
+ A8:  |[ 0,r*y,0 ]|.1 = 0 & |[ 0,r*y,0 ]|.2 = r*y & |[ 0,r*y,0 ]|.3 = 0
+      by FINSEQ_1:62;
+ A9:  |[ 0,0,r*z ]|.1 = 0 & |[ 0,0,r*z ]|.2 = 0 & |[ 0,0,r*z ]|.3 = r*z
+      by FINSEQ_1:62;
+ A10: r*x*<e1> + r*y*<e2> + r*z*<e3>
+      = |[ r*x+0,r*y+0,0+0 ]| + |[ 0,0,r*z ]| by A6,A7,A8,Lm4
+     .= |[ r*x,r*y,0 ]| + |[ 0,0,r*z ]|;
+ A11: |[ r*x,r*y,0 ]|.1 = r*x & |[ r*x,r*y,0 ]|.2 = r*y & |[ r*x,r*y,0 ]|.3 = 0
+      by FINSEQ_1:62;
+      r*x*<e1> + r*y*<e2> + r*z*<e3>
+       = |[ r*x+0,r*y+0,0+r*z ]| by A9,A10,A11,Lm4
+      .= |[ r*x,r*y,r*z ]|;
+      hence r*p = r*x*<e1> + r*y*<e2> + r*z*<e3> by LmA8;
+end;
+
+theorem
+  -p = - p.1*<e1> - p.2*<e2> - p.3*<e3>
+proof
+   set r = -1;
+   -1 is Element of REAL by XREAL_0:def 1; then
+   -p = (-1)*p.1*<e1> + (-1)*p.2*<e2> + (-1)*p.3*<e3> by ThA7
+     .= -p.1*<e1> + ((-1)*p.2)*<e2> + (-p.3)*<e3> by RVSUM_1:71
+     .= -p.1*<e1> + -p.2*<e2> +((-1)*p.3)*<e3> by RVSUM_1:71
+     .= - p.1*<e1> - p.2*<e2> - p.3*<e3> by RVSUM_1:71;
+   hence thesis;
+end;
+
+theorem
+  -|[ x,y,z ]| = -x*<e1> - y*<e2> - z*<e3>
+proof
+  -1 in REAL by XREAL_0:def 1; then
+  -|[ x,y,z ]| = (-1)*x*<e1> + (-1)*y*<e2> + (-1)*z*<e3> by ThA8
+  .=-x*<e1> + ((-1)*y)*<e2> + (-z)*<e3> by RVSUM_1:71
+  .=-x*<e1> + -y*<e2> + ((-1)*z)*<e3> by RVSUM_1:71
+  .=-x*<e1> - y*<e2> - z*<e3> by RVSUM_1:71;
+  hence thesis;
+end;
+
+theorem
+  p1+p2 = (p1.1+p2.1)*<e1>+(p1.2+p2.2)*<e2>+(p1.3+p2.3)*<e3>
+proof
+A1:  <e1>.1 = 1 & <e1>.2 = 0 & <e1>.3 = 0 by FINSEQ_1:62;
+A2:  <e2>.1 = 0 & <e2>.2 = 1 & <e2>.3 = 0 by FINSEQ_1:62;
+A3:  <e3>.1 = 0 & <e3>.2 = 0 & <e3>.3 = 1 by FINSEQ_1:62;
+A4: (p1+p2).1 = p1.1+p2.1 by RVSUM_1:27;
+A5: (p1+p2).2 = p1.2+p2.2 by RVSUM_1:27;
+A6: (p1+p2).3 = p1.3+p2.3 by RVSUM_1:27;
+A0: (p1+p2).1*<e1> + (p1+p2).2*<e2> + (p1+p2).3*<e3>
+  = |[ (p1+p2).1*1,(p1+p2).1*0,(p1+p2).1*0 ]| + (p1+p2).2*<e2>
+    + (p1+p2).3*<e3> by A1,Lm3
+ .= |[ (p1+p2).1,0,0 ]| + |[ (p1+p2).2*0,(p1+p2).2*1,(p1+p2).2*0 ]|
+    + (p1+p2).3*<e3> by A2,Lm3
+ .= |[ (p1+p2).1,0,0 ]| + |[ 0,(p1+p2).2,0 ]|
+    + |[ (p1+p2).3*0,(p1+p2).3*0,(p1+p2).3*1 ]| by A3,Lm3
+ .= |[ (p1+p2).1,0,0 ]| + |[ 0,(p1+p2).2,0 ]| + |[ 0,0,(p1+p2).3 ]|;
+A7: |[ (p1+p2).1,0,0 ]|.1 = (p1+p2).1 & |[ (p1+p2).1,0,0 ]|.2 = 0 &
+    |[ (p1+p2).1,0,0 ]|.3 = 0 by FINSEQ_1:62;
+A8: |[ 0,(p1+p2).2,0 ]|.1 = 0 & |[ 0,(p1+p2).2,0 ]|.2 = (p1+p2).2 &
+    |[ 0,(p1+p2).2,0 ]|.3 = 0 by FINSEQ_1:62;
+A9: |[ 0,0,(p1+p2).3 ]|.1 = 0 & |[ 0,0,(p1+p2).3 ]|.2 = 0 &
+    |[ 0,0,(p1+p2).3 ]|.3 = (p1+p2).3 by FINSEQ_1:62;
+A10: (p1+p2).1*<e1> + (p1+p2).2*<e2> + (p1+p2).3*<e3>
+  = |[ (p1+p2).1+0,0+(p1+p2).2,0+0 ]| + |[ 0,0,(p1+p2).3 ]|
+    by A0,A7,A8,Lm4
+ .= |[ (p1+p2).1,(p1+p2).2,0 ]| + |[ 0,0,(p1+p2).3 ]|;
+A11: |[ (p1+p2).1,(p1+p2).2,0 ]|.1 = (p1+p2).1 &
+     |[ (p1+p2).1,(p1+p2).2,0 ]|.2 = (p1+p2).2 &
+     |[ (p1+p2).1,(p1+p2).2,0 ]|.3 = 0 by FINSEQ_1:62;
+ (p1+p2).1*<e1> + (p1+p2).2*<e2> + (p1+p2).3*<e3>
+   = |[ (p1+p2).1+0,(p1+p2).2+0,0 +(p1+p2).3]| by A9,A10,A11,Lm4
+  .= |[ (p1+p2).1,(p1+p2).2,(p1+p2).3 ]|;
+     hence thesis by A4,A5,A6,Lm1;
+end;
+
+theorem ThA18:
+  p1-p2 = (p1.1-p2.1)*<e1>+(p1.2-p2.2)*<e2>+(p1.3-p2.3)*<e3>
+proof
+A1:  <e1>.1 = 1 & <e1>.2 = 0 & <e1>.3 = 0 by FINSEQ_1:62;
+A2:  <e2>.1 = 0 & <e2>.2 = 1 & <e2>.3 = 0 by FINSEQ_1:62;
+A3:  <e3>.1 = 0 & <e3>.2 = 0 & <e3>.3 = 1 by FINSEQ_1:62;
+A4: (p1-p2).1 = p1.1-p2.1 by RVSUM_1:48;
+A5: (p1-p2).2 = p1.2-p2.2 by RVSUM_1:48;
+A6: (p1-p2).3 = p1.3-p2.3 by RVSUM_1:48;
+A0: (p1-p2).1*<e1> + (p1-p2).2*<e2> + (p1-p2).3*<e3>
+  = |[ (p1-p2).1*1,(p1-p2).1*0,(p1-p2).1*0 ]| + (p1-p2).2*<e2>
+    + (p1-p2).3*<e3> by A1,Lm3
+ .= |[ (p1-p2).1,0,0 ]| + |[ (p1-p2).2*0,(p1-p2).2*1,(p1-p2).2*0 ]|
+    + (p1-p2).3*<e3> by A2,Lm3
+ .= |[ (p1-p2).1,0,0 ]| + |[ 0,(p1-p2).2,0 ]|
+    + |[ (p1-p2).3*0,(p1-p2).3*0,(p1-p2).3*1 ]| by A3,Lm3
+ .= |[ (p1-p2).1,0,0 ]| + |[ 0,(p1-p2).2,0 ]| + |[ 0,0,(p1-p2).3 ]|;
+A7: |[ (p1-p2).1,0,0 ]|.1 = (p1-p2).1 & |[ (p1-p2).1,0,0 ]|.2 = 0 &
+    |[ (p1-p2).1,0,0 ]|.3 = 0 by FINSEQ_1:62;
+A8: |[ 0,(p1-p2).2,0 ]|.1 = 0 & |[ 0,(p1-p2).2,0 ]|.2 = (p1-p2).2 &
+    |[ 0,(p1-p2).2,0 ]|.3 = 0 by FINSEQ_1:62;
+A9: |[ 0,0,(p1-p2).3 ]|.1 = 0 & |[ 0,0,(p1-p2).3 ]|.2 = 0 &
+    |[ 0,0,(p1-p2).3 ]|.3 = (p1-p2).3 by FINSEQ_1:62;
+A10: (p1-p2).1*<e1> + (p1-p2).2*<e2> + (p1-p2).3*<e3>
+  = |[ (p1-p2).1+0,0+(p1-p2).2,0+0 ]| + |[ 0,0,(p1-p2).3 ]|
+    by A0,A7,A8,Lm4
+ .= |[ (p1-p2).1,(p1-p2).2,0 ]| + |[ 0,0,(p1-p2).3 ]|;
+A11: |[ (p1-p2).1,(p1-p2).2,0 ]|.1 = (p1-p2).1 &
+     |[ (p1-p2).1,(p1-p2).2,0 ]|.2 = (p1-p2).2 &
+     |[ (p1-p2).1,(p1-p2).2,0 ]|.3 = 0 by FINSEQ_1:62;
+    (p1-p2).1*<e1> + (p1-p2).2*<e2> + (p1-p2).3*<e3>
+   = |[ (p1-p2).1+0,(p1-p2).2+0,0 +(p1-p2).3]| by A9,A10,A11,Lm4
+  .= |[ (p1-p2).1,(p1-p2).2,(p1-p2).3 ]|;
+     hence thesis by A4,A5,A6,Lm1;
+end;
+
+theorem
+  |[ x1,x2,x3 ]| + |[ y1,y2,y3 ]| = (x1+y1)*<e1>
+                 + (x2+y2)*<e2> + (x3+y3)*<e3>
+proof
+A2:  <e1>.1 = 1 & <e1>.2 = 0 & <e1>.3 = 0 by FINSEQ_1:62;
+A3:  <e2>.1 = 0 & <e2>.2 = 1 & <e2>.3 = 0 by FINSEQ_1:62;
+A4:  <e3>.1 = 0 & <e3>.2 = 0 & <e3>.3 = 1 by FINSEQ_1:62;
+A1: (x1+y1)*<e1> + (x2+y2)*<e2> + (x3+y3)*<e3>
+  = |[ (x1+y1)*1,(x1+y1)*0,(x1+y1)*0 ]| + (x2+y2)*<e2>
+    + (x3+y3)*<e3> by A2,Lm3
+ .= |[ x1+y1,0,0 ]| + |[ (x2+y2)*0,(x2+y2)*1,(x2+y2)*0 ]|
+    + (x3+y3)*<e3> by A3,Lm3
+ .= |[ x1+y1,0,0 ]| + |[ 0,x2+y2,0 ]|
+    + |[ (x3+y3)*0,(x3+y3)*0,(x3+y3)*1 ]| by A4,Lm3
+ .= |[ x1+y1,0,0 ]| + |[ 0,x2+y2,0 ]| + |[ 0,0,x3+y3 ]|;
+A5: |[ x1+y1,0,0 ]|.1 = x1+y1 & |[ x1+y1,0,0 ]|.2 = 0
+    & |[ x1+y1,0,0 ]|.3 = 0 by FINSEQ_1:62;
+A6: |[ 0,x2+y2,0 ]|.1 = 0 & |[ 0,x2+y2,0 ]|.2 = x2+y2
+    & |[ 0,x2+y2,0 ]|.3 = 0 by FINSEQ_1:62;
+A7: |[ 0,0,x3+y3 ]|.1 = 0 & |[ 0,0,x3+y3 ]|.2 = 0
+    & |[ 0,0,x3+y3 ]|.3 = x3+y3 by FINSEQ_1:62;
+A0: (x1+y1)*<e1> + (x2+y2)*<e2> + (x3+y3)*<e3>
+  = |[ (x1+y1) + 0,0 + (x2+y2),0 + 0 ]| + |[ 0,0,x3+y3 ]| by A1,A5,A6,Lm4
+ .= |[ x1+y1,x2+y2,0 ]| + |[ 0,0,x3+y3 ]|;
+A8: |[ x1+y1,x2+y2,0 ]|.1 = x1+y1 & |[ x1+y1,x2+y2,0 ]|.2 = x2+y2
+    & |[ x1+y1,x2+y2,0 ]|.3 = 0 by FINSEQ_1:62;
+A9: (x1+y1)*<e1> + (x2+y2)*<e2> + (x3+y3)*<e3>
+  = |[ (x1+y1) + 0 ,(x2+y2) + 0,0 + (x3+y3) ]| by A0,A7,A8,Lm4
+ .= |[ x1+y1,x2+y2,x3+y3 ]|;
+B1: |[ x1,x2,x3 ]|.1 = x1 & |[ x1,x2,x3 ]|.2 = x2 & |[ x1,x2,x3 ]|.3 = x3
+    by FINSEQ_1:62;
+ |[ y1,y2,y3 ]|.1 = y1 & |[ y1,y2,y3 ]|.2 = y2 & |[ y1,y2,y3 ]|.3 = y3
+    by FINSEQ_1:62;
+   hence thesis by B1,Lm4,A9;
+end;
+
+theorem
+  |[ x1,x2,x3 ]| - |[ y1,y2,y3 ]| = (x1-y1)*<e1>
+                 + (x2-y2)*<e2> + (x3-y3)*<e3>
+proof
+A1: |[ y1,y2,y3 ]|.1 = y1 by FINSEQ_1:62;
+A2: |[ y1,y2,y3 ]|.2 = y2 by FINSEQ_1:62;
+A3: |[ y1,y2,y3 ]|.3 = y3 by FINSEQ_1:62;
+A4: |[ x1,x2,x3 ]|.1 - |[ y1,y2,y3 ]|.1 = x1-y1 by A1,FINSEQ_1:62;
+A5: |[ x1,x2,x3 ]|.2 - |[ y1,y2,y3 ]|.2 = x2-y2 by A2,FINSEQ_1:62;
+ |[ x1,x2,x3 ]|.3 - |[ y1,y2,y3 ]|.3 = x3-y3 by A3,FINSEQ_1:62;
+    hence thesis by A4,A5,ThA18;
+end;
+
+theorem
+  p1.1*<e1> + p1.2*<e2> + p1.3*<e3>
+ = (p2.1 + p3.1)*<e1> + (p2.2 + p3.2)*<e2>
+ + (p2.3 + p3.3)*<e3> iff
+  p2.1*<e1> + p2.2*<e2> + p2.3*<e3>
+ = (p1.1 - p3.1)*<e1> + (p1.2 - p3.2)*<e2>
+ + (p1.3 - p3.3)*<e3>
+proof
+F1:R1 + R2 - R3 = R1 - R3 + R2 by RVSUM_1:32;
+F2:r1*R - r2*R = (r1-r2)*R
+proof
+   r1*R - r2*R = r1*R + ((-1)*r2)*R by RVSUM_1:71
+.= (r1 + -r2)*R by RVSUM_1:72;
+   hence thesis;
+end;
+A1:  <e1>.1 = 1 & <e1>.2 = 0 & <e1>.3 = 0 by FINSEQ_1:62;
+A2:  <e2>.1 = 0 & <e2>.2 = 1 & <e2>.3 = 0 by FINSEQ_1:62;
+A3:  <e3>.1 = 0 & <e3>.2 = 0 & <e3>.3 = 1 by FINSEQ_1:62;
+    thus p1.1*<e1> + p1.2*<e2> + p1.3*<e3>
+  = (p2.1 + p3.1)*<e1> + (p2.2 + p3.2)*<e2> + (p2.3 + p3.3)*<e3> implies
+    p2.1*<e1> + p2.2*<e2> + p2.3*<e3>
+  = (p1.1 - p3.1)*<e1> + (p1.2 - p3.2)*<e2> + (p1.3 - p3.3)*<e3>
+    proof
+      assume
+A4: p1.1*<e1> + p1.2*<e2> + p1.3*<e3>
+  = (p2.1 + p3.1)*<e1> + (p2.2 + p3.2)*<e2> + (p2.3 + p3.3)*<e3>;
+A8: p1.1*<e1> + (p1.2*<e2> + p1.3*<e3>) - p3.1*<e1> - p3.2*<e2> - p3.3*<e3>
+  = (p2.1 + p3.1)*<e1> + (p2.2 + p3.2)*<e2>
+    + (p2.3 + p3.3)*<e3> - p3.1*<e1> - p3.2*<e2> - p3.3*<e3> by A4,RVSUM_1:32;
+B1: p1.1*<e1> - p3.1*<e1> + (p1.2*<e2> + p1.3*<e3>) - p3.2*<e2> - p3.3*<e3>
+  = (p2.1 + p3.1)*<e1> + (p2.2 + p3.2)*<e2>
+    + (p2.3 + p3.3)*<e3> - p3.1*<e1> - p3.2*<e2> - p3.3*<e3> by A8,F1;
+B2: (p1.1 - p3.1)*<e1> + (p1.2*<e2> + p1.3*<e3>) - p3.2*<e2> - p3.3*<e3>
+  = (p2.1 + p3.1)*<e1> + (p2.2 + p3.2)*<e2>
+    + (p2.3 + p3.3)*<e3> - p3.1*<e1> - p3.2*<e2> - p3.3*<e3> by B1,F2;
+B3: (p1.1 - p3.1)*<e1> + p1.2*<e2> + p1.3*<e3> - p3.2*<e2> - p3.3*<e3>
+  = (p2.1 + p3.1)*<e1> + (p2.2 + p3.2)*<e2>
+    + (p2.3 + p3.3)*<e3> - p3.1*<e1> - p3.2*<e2> - p3.3*<e3> by B2,RVSUM_1:32;
+B4: (p1.1 - p3.1)*<e1> + p1.2*<e2> - p3.2*<e2> + p1.3*<e3> - p3.3*<e3>
+  = (p2.1 + p3.1)*<e1> + (p2.2 + p3.2)*<e2>
+    + (p2.3 + p3.3)*<e3> - p3.1*<e1> - p3.2*<e2> - p3.3*<e3> by B3,F1;
+B7: (p1.1 - p3.1)*<e1> + (p1.2*<e2> + -p3.2*<e2>) + p1.3*<e3> + -p3.3*<e3>
+  = (p2.1 + p3.1)*<e1> + (p2.2 + p3.2)*<e2>
+    + (p2.3 + p3.3)*<e3> - p3.1*<e1> - p3.2*<e2> - p3.3*<e3> by B4,RVSUM_1:32;
+B9: (p1.1 - p3.1)*<e1> + (p1.2*<e2> - p3.2*<e2>) + (p1.3*<e3> - p3.3*<e3>)
+  = (p2.1 + p3.1)*<e1> + (p2.2 + p3.2)*<e2>
+    + (p2.3 + p3.3)*<e3> - p3.1*<e1> - p3.2*<e2> - p3.3*<e3> by B7,RVSUM_1:32;
+B10: (p1.1 - p3.1)*<e1> + (p1.2 - p3.2)*<e2> + (p1.3*<e3> - p3.3*<e3>)
+  = (p2.1 + p3.1)*<e1> + (p2.2 + p3.2)*<e2>
+    + (p2.3 + p3.3)*<e3> - p3.1*<e1> - p3.2*<e2> - p3.3*<e3> by B9,F2;
+B11: (p1.1 - p3.1)*<e1> + (p1.2 - p3.2)*<e2> + (p1.3 - p3.3)*<e3>
+  = (p2.1 + p3.1)*<e1> + (p2.2 + p3.2)*<e2>
+    + (p2.3 + p3.3)*<e3> - p3.1*<e1> - p3.2*<e2> - p3.3*<e3> by B10,F2;
+B12: (p1.1 - p3.1)*<e1> + (p1.2 - p3.2)*<e2> + (p1.3 - p3.3)*<e3>
+  = (p2.1 + p3.1)*<e1> + (p2.2 + p3.2)*<e2>
+    - p3.1*<e1> + (p2.3 + p3.3)*<e3> - p3.2*<e2> - p3.3*<e3> by B11,F1;
+B13: (p1.1 - p3.1)*<e1> + (p1.2 - p3.2)*<e2> + (p1.3 - p3.3)*<e3>
+  = (p2.1 + p3.1)*<e1> - p3.1*<e1> + (p2.2 + p3.2)*<e2>
+     + (p2.3 + p3.3)*<e3> - p3.2*<e2> - p3.3*<e3> by B12,F1;
+B14: (p1.1 - p3.1)*<e1> + (p1.2 - p3.2)*<e2> + (p1.3 - p3.3)*<e3>
+  = (p2.1 + p3.1)*<e1> - p3.1*<e1> + (p2.2 + p3.2)*<e2> - p3.2*<e2>
+     + (p2.3 + p3.3)*<e3> - p3.3*<e3> by B13,F1;
+B16: (p1.1 - p3.1)*<e1> + (p1.2 - p3.2)*<e2> + (p1.3 - p3.3)*<e3>
+  = (p2.1*<e1> + p3.1*<e1> + -p3.1*<e1> + (p2.2 + p3.2)*<e2>- p3.2*<e2>)
+    + (p2.3 + p3.3)*<e3> - p3.3*<e3> by B14,RVSUM_1:72;
+B18: (p1.1 - p3.1)*<e1> + (p1.2 - p3.2)*<e2> + (p1.3 - p3.3)*<e3>
+  = p2.1*<e1> + (p3.1*<e1> - p3.1*<e1>) + (p2.2 + p3.2)*<e2> - p3.2*<e2>
+     + (p2.3 + p3.3)*<e3> - p3.3*<e3> by B16,RVSUM_1:32;
+B19: (p1.1 - p3.1)*<e1> + (p1.2 - p3.2)*<e2> + (p1.3 - p3.3)*<e3>
+  = p2.1*<e1> + 0.REAL 3 + (p2.2 + p3.2)*<e2> - p3.2*<e2>
+     + (p2.3 + p3.3)*<e3> - p3.3*<e3> by B18,EUCLIDLP:7;
+B20: (p1.1 - p3.1)*<e1> + (p1.2 - p3.2)*<e2> + (p1.3 - p3.3)*<e3>
+  = p2.1*<e1> + (p2.2 + p3.2)*<e2> - p3.2*<e2>
+     + (p2.3 + p3.3)*<e3> - p3.3*<e3> by B19,EUCLID_4:1;
+B21: (p1.1 - p3.1)*<e1> + (p1.2 - p3.2)*<e2> + (p1.3 - p3.3)*<e3>
+  = p2.1*<e1> + (p2.2*<e2> + p3.2*<e2>) - p3.2*<e2>
+     + (p2.3 + p3.3)*<e3> - p3.3*<e3> by B20,RVSUM_1:72;
+E1: (p1.1 - p3.1)*<e1> + (p1.2 - p3.2)*<e2> + (p1.3 - p3.3)*<e3>
+  = (p2.1*<e1> + p2.2*<e2>) + p3.2*<e2> + -p3.2*<e2>
+     + (p2.3 + p3.3)*<e3> - p3.3*<e3> by B21,RVSUM_1:32;
+E2: (p1.1 - p3.1)*<e1> + (p1.2 - p3.2)*<e2> + (p1.3 - p3.3)*<e3>
+  = (p2.1*<e1> + p2.2*<e2>) + (p3.2*<e2> + -p3.2*<e2>)
+     + (p2.3 + p3.3)*<e3> - p3.3*<e3> by E1,RVSUM_1:32;
+B24: (p1.1 - p3.1)*<e1> + (p1.2 - p3.2)*<e2> + (p1.3 - p3.3)*<e3>
+  = p2.1*<e1> + p2.2*<e2> + 0.REAL 3
+     + (p2.3 + p3.3)*<e3> - p3.3*<e3> by E2,EUCLIDLP:7;
+B25: (p1.1 - p3.1)*<e1> + (p1.2 - p3.2)*<e2> + (p1.3 - p3.3)*<e3>
+  = p2.1*<e1> + p2.2*<e2> + (p2.3 + p3.3)*<e3> - p3.3*<e3> by B24,EUCLID_4:1;
+B26: (p1.1 - p3.1)*<e1> + (p1.2 - p3.2)*<e2> + (p1.3 - p3.3)*<e3>
+  = p2.1*<e1> + p2.2*<e2> + (p2.3*<e3> + p3.3*<e3>) - p3.3*<e3>
+    by B25,RVSUM_1:72;
+B27: (p1.1 - p3.1)*<e1> + (p1.2 - p3.2)*<e2> + (p1.3 - p3.3)*<e3>
+  = p2.1*<e1> + p2.2*<e2> + p2.3*<e3> + p3.3*<e3> - p3.3*<e3>
+    by B26,RVSUM_1:32;
+B28: (p1.1 - p3.1)*<e1> + (p1.2 - p3.2)*<e2> + (p1.3 - p3.3)*<e3>
+  = p2.1*<e1> + p2.2*<e2> + p2.3*<e3> + (p3.3*<e3> + -p3.3*<e3>)
+    by B27,RVSUM_1:32;
+ (p1.1 - p3.1)*<e1> + (p1.2 - p3.2)*<e2> + (p1.3 - p3.3)*<e3>
+  = p2.1*<e1> + p2.2*<e2> + p2.3*<e3> + 0.REAL 3 by B28,EUCLIDLP:7;
+      hence thesis by EUCLID_4:1;
+    end;
+      now assume
+C1: p2.1*<e1> + p2.2*<e2> + p2.3*<e3>
+  = (p1.1 - p3.1)*<e1> + (p1.2 - p3.2)*<e2> + (p1.3 - p3.3)*<e3>;
+C3: (p2.1*<e1> + p2.2*<e2> + p2.3*<e3> + p3.1*<e1>)
+    + p3.2*<e2> + p3.3*<e3>
+  = (p2.1*<e1> + p2.2*<e2> + p2.3*<e3>) + (p3.1*<e1> + p3.2*<e2> + p3.3*<e3>)
+    proof
+D1: (p2.1*<e1>).1 = p2.1*1 by A1,RVSUM_1:66 .= p2.1;
+D2: (p2.1*<e1>).2 = p2.1*0 by A1,RVSUM_1:66 .= 0;
+D3: (p2.1*<e1>).3 = p2.1*0 by A1,RVSUM_1:66 .= 0;
+D4: (p2.2*<e2>).1 = p2.2*<e2>.1 by RVSUM_1:66 .= 0 by A2;
+D5: (p2.2*<e2>).2 = p2.2*1 by A2,RVSUM_1:66 .= p2.2;
+D6: (p2.2*<e2>).3 = p2.2*0 by A2,RVSUM_1:66 .= 0;
+D7: (p2.3*<e3>).1 = p2.3*0 by A3,RVSUM_1:66 .= 0;
+D8: (p2.3*<e3>).2 = p2.3*0 by A3,RVSUM_1:66 .= 0;
+D9: (p2.3*<e3>).3 = p2.3*1 by A3,RVSUM_1:66 .= p2.3;
+D10: (p3.1*<e1>).1 = p3.1*1 by A1,RVSUM_1:66 .= p3.1;
+D11: (p3.1*<e1>).2 = p3.1*0 by A1,RVSUM_1:66 .= 0;
+D12: (p3.1*<e1>).3 = p3.1*0 by A1,RVSUM_1:66 .= 0;
+D13: (p3.2*<e2>).1 = p3.2*<e2>.1 by RVSUM_1:66 .= 0 by A2 ;
+D14: (p3.2*<e2>).2 = p3.2*1 by A2,RVSUM_1:66 .= p3.2;
+D15: (p3.2*<e2>).3 = p3.2*0 by A2,RVSUM_1:66 .= 0;
+D16: (p3.3*<e3>).1 = p3.3*0 by A3,RVSUM_1:66 .= 0;
+D17: (p3.3*<e3>).2 = p3.3*0 by A3,RVSUM_1:66 .= 0;
+D18: (p3.3*<e3>).3 = p3.3*1 by A3,RVSUM_1:66 .= p3.3;
+D19: p2.1*<e1> + p2.2*<e2> + p2.3*<e3>
+   = p2.1*<e1> + (p2.2*<e2> + p2.3*<e3>) by RVSUM_1:32
+  .= p2.1*<e1> + |[ 0+0, p2.2+0, 0+p2.3 ]| by D4,D5,D6,D7,D8,D9,Lm4
+  .= |[ p2.1, 0, 0 ]| + |[ 0, p2.2, p2.3 ]| by D1,D2,D3,Lm1
+  .= |[ p2.1+0, 0+p2.2, 0+p2.3 ]| by LmA31
+  .= |[ p2.1, p2.2, p2.3 ]|;
+D20: p3.1*<e1> + p3.2*<e2> + p3.3*<e3>
+   = p3.1*<e1> + (p3.2*<e2> + p3.3*<e3>) by RVSUM_1:32
+  .= p3.1*<e1> + |[ 0+0, p3.2+0, 0+p3.3 ]| by D13,D14,D15,D16,D17,D18,Lm4
+  .= |[ p3.1, 0, 0 ]| + |[ 0, p3.2, p3.3 ]| by D10,D11,D12,Lm1
+  .= |[ p3.1+0, 0+p3.2, 0+p3.3 ]| by LmA31
+  .= |[ p3.1, p3.2, p3.3 ]|;
+     (p2.1*<e1> + p2.2*<e2> + p2.3*<e3> + p3.1*<e1>)
+     + p3.2*<e2> + p3.3*<e3>
+   = p2.1*<e1> + (p2.2*<e2> + p2.3*<e3>) + p3.1*<e1> + p3.2*<e2> + p3.3*<e3>
+      by RVSUM_1:32
+  .= p2.1*<e1> + |[ 0+0, p2.2+0, 0+p2.3 ]| + p3.1*<e1> + p3.2*<e2> + p3.3*<e3>
+     by D4,D5,D6,D7,D8,D9,Lm4
+  .= |[ p2.1, 0, 0 ]| + |[ 0, p2.2, p2.3 ]| + p3.1*<e1> + p3.2*<e2> + p3.3*<e3>
+     by D1,D2,D3,Lm1
+  .= |[ p2.1+0, 0+p2.2, 0+p2.3 ]| + p3.1*<e1> + p3.2*<e2> + p3.3*<e3> by LmA31
+  .= |[ p2.1, p2.2, p2.3 ]| + |[ p3.1, 0, 0 ]| + p3.2*<e2> + p3.3*<e3>
+     by D10,D11,D12,Lm1
+  .= |[ p2.1+p3.1, p2.2+0, p2.3+0 ]| + p3.2*<e2> + p3.3*<e3> by LmA31
+  .= |[ p2.1+p3.1, p2.2, p2.3 ]| + |[ 0, p3.2, 0 ]| + p3.3*<e3>
+     by D13,D14,D15,Lm1
+  .= |[ p2.1+p3.1+0, p2.2+p3.2, p2.3+0 ]| + p3.3*<e3> by LmA31
+  .= |[ p2.1+p3.1, p2.2+p3.2, p2.3 ]| + |[ 0, 0, p3.3 ]| by D16,D17,D18,Lm1
+  .= |[ p2.1+p3.1+0, p2.2+p3.2+0, p2.3+p3.3 ]| by LmA31;
+      hence thesis by D19,D20,LmA31;
+    end;
+C6: (p2.1 + p3.1)*<e1> + (p2.2 + p3.2)*<e2> + (p2.3 + p3.3)*<e3>
+  = (p1.1 - p3.1)*<e1> + (p1.2 - p3.2)*<e2> + (p1.3 - p3.3)*<e3>
+    + p3.1*<e1> + p3.2*<e2> + p3.3*<e3> by EUCLIDLP:29,C1,C3;
+C7: (p2.1 + p3.1)*<e1> + (p2.2 + p3.2)*<e2> + (p2.3 + p3.3)*<e3>
+  = (p1.1 - p3.1)*<e1> + ((p1.2 - p3.2)*<e2> + (p1.3 - p3.3)*<e3>)
+    + p3.1*<e1> + p3.2*<e2> + p3.3*<e3> by C6,RVSUM_1:32;
+C8: (p2.1 + p3.1)*<e1> + (p2.2 + p3.2)*<e2> + (p2.3 + p3.3)*<e3>
+  = p1.1*<e1> - p3.1*<e1> + ((p1.2 - p3.2)*<e2> + (p1.3 - p3.3)*<e3>)
+    + p3.1*<e1> + p3.2*<e2> + p3.3*<e3> by C7,F2;
+C9: (p2.1 + p3.1)*<e1> + (p2.2 + p3.2)*<e2> + (p2.3 + p3.3)*<e3>
+  = p1.1*<e1> + ((p1.2 - p3.2)*<e2> + (p1.3 - p3.3)*<e3>) - p3.1*<e1>
+    + p3.1*<e1> + p3.2*<e2> + p3.3*<e3> by C8,F1;
+C13: (p2.1 + p3.1)*<e1> + (p2.2 + p3.2)*<e2> + (p2.3 + p3.3)*<e3>
+  = p1.1*<e1> + ((p1.2 - p3.2)*<e2> + (p1.3 - p3.3)*<e3>)
+    + (p3.1*<e1> - p3.1*<e1>) + p3.2*<e2> + p3.3*<e3> by C9,RVSUM_1:32;
+C14: (p2.1 + p3.1)*<e1> + (p2.2 + p3.2)*<e2> + (p2.3 + p3.3)*<e3>
+  = p1.1*<e1> + ((p1.2 - p3.2)*<e2> + (p1.3 - p3.3)*<e3>)
+    + 0.REAL 3 + p3.2*<e2> + p3.3*<e3> by C13,RVSUM_1:58;
+C15: (p2.1 + p3.1)*<e1> + (p2.2 + p3.2)*<e2> + (p2.3 + p3.3)*<e3>
+  = p1.1*<e1> + ((p1.2 - p3.2)*<e2> + (p1.3 - p3.3)*<e3>)
+    + p3.2*<e2> + p3.3*<e3> by C14,EUCLID_4:1;
+C16: (p2.1 + p3.1)*<e1> + (p2.2 + p3.2)*<e2> + (p2.3 + p3.3)*<e3>
+  = p1.1*<e1> + (p1.2 - p3.2)*<e2> + (p1.3 - p3.3)*<e3>
+    + p3.2*<e2> + p3.3*<e3> by C15,RVSUM_1:32;
+C17: (p2.1 + p3.1)*<e1> + (p2.2 + p3.2)*<e2> + (p2.3 + p3.3)*<e3>
+  = p1.1*<e1> + (p1.2 - p3.2)*<e2> + (p1.3*<e3> - p3.3*<e3>)
+    + p3.2*<e2> + p3.3*<e3> by C16,F2;
+C20: (p2.1 + p3.1)*<e1> + (p2.2 + p3.2)*<e2> + (p2.3 + p3.3)*<e3>
+  = (p1.1*<e1> + (p1.2 - p3.2)*<e2> + p1.3*<e3> - p3.3*<e3>)
+    + p3.2*<e2> + p3.3*<e3> by C17,RVSUM_1:32;
+C21: (p2.1 + p3.1)*<e1> + (p2.2 + p3.2)*<e2> + (p2.3 + p3.3)*<e3>
+  = (p1.1*<e1> + (p1.2 - p3.2)*<e2> + p1.3*<e3> + p3.2*<e2>)
+     - p3.3*<e3> + p3.3*<e3> by C20,F1;
+C25: (p2.1 + p3.1)*<e1> + (p2.2 + p3.2)*<e2> + (p2.3 + p3.3)*<e3>
+  = p1.1*<e1> + (p1.2 - p3.2)*<e2> + p1.3*<e3> + p3.2*<e2>
+    + (p3.3*<e3> - p3.3*<e3>) by C21,RVSUM_1:32;
+C26: (p2.1 + p3.1)*<e1> + (p2.2 + p3.2)*<e2> + (p2.3 + p3.3)*<e3>
+  = p1.1*<e1> + (p1.2 - p3.2)*<e2> + p1.3*<e3> + p3.2*<e2> + 0.REAL 3
+    by C25,RVSUM_1:58;
+C27: (p2.1 + p3.1)*<e1> + (p2.2 + p3.2)*<e2> + (p2.3 + p3.3)*<e3>
+  = p1.1*<e1> + (p1.2 - p3.2)*<e2> + p1.3*<e3> + p3.2*<e2> by C26,EUCLID_4:1;
+C28: (p2.1 + p3.1)*<e1> + (p2.2 + p3.2)*<e2> + (p2.3 + p3.3)*<e3>
+  = p1.1*<e1> + (p1.2 - p3.2)*<e2> + (p1.3*<e3> + p3.2*<e2>) by C27,RVSUM_1:32;
+C29: (p2.1 + p3.1)*<e1> + (p2.2 + p3.2)*<e2> + (p2.3 + p3.3)*<e3>
+  = p1.1*<e1> + (p1.2*<e2> - p3.2*<e2>) + (p1.3*<e3> + p3.2*<e2>) by C28,F2;
+C31: (p2.1 + p3.1)*<e1> + (p2.2 + p3.2)*<e2> + (p2.3 + p3.3)*<e3>
+  = p1.1*<e1> + p1.2*<e2> + -p3.2*<e2> + (p1.3*<e3> + p3.2*<e2>)
+    by C29,RVSUM_1:32;
+C33: (p2.1 + p3.1)*<e1> + (p2.2 + p3.2)*<e2> + (p2.3 + p3.3)*<e3>
+  = p1.1*<e1> + p1.2*<e2> - p3.2*<e2> + p1.3*<e3> + p3.2*<e2>
+    by C31,RVSUM_1:32;
+C34: (p2.1 + p3.1)*<e1> + (p2.2 + p3.2)*<e2> + (p2.3 + p3.3)*<e3>
+  = p1.1*<e1> + p1.2*<e2> + p1.3*<e3> - p3.2*<e2> + p3.2*<e2> by C33,F1;
+C38: (p2.1 + p3.1)*<e1> + (p2.2 + p3.2)*<e2> + (p2.3 + p3.3)*<e3>
+  = p1.1*<e1> + p1.2*<e2> + p1.3*<e3> + (p3.2*<e2> - p3.2*<e2>)
+    by C34,RVSUM_1:32;
+ (p2.1 + p3.1)*<e1> + (p2.2 + p3.2)*<e2> + (p2.3 + p3.3)*<e3>
+  = p1.1*<e1> + p1.2*<e2> + p1.3*<e3> + 0.REAL 3 by C38,RVSUM_1:58;
+      hence thesis by EUCLID_4:1;
+    end;
+  hence thesis;
+end;
+
+definition
+  let f1,f2,f3 be PartFunc of REAL,REAL;
+  func VFunc(f1,f2,f3) -> Function of REAL,REAL 3 means :Def1:
+  for t holds it.t = |[ f1.t,f2.t,f3.t ]|;
+existence
+proof
+    defpred P[set,set] means $2 = |[ f1.$1,f2.$1,f3.$1 ]|;
+A1: for x being Element of REAL ex y being Element of REAL 3 st P[x,y];
+    consider F being Function of REAL,REAL 3 such that
+A2: for t be Element of REAL holds P[t,F.t] from FUNCT_2:sch 3(A1);
+    take F;
+    thus thesis by A2;
+end;
+uniqueness
+proof
+    let F,G be Function of REAL,REAL 3;
+    assume that
+A4: for t holds F.t = |[ f1.t,f2.t,f3.t ]| and
+A5: for t holds G.t = |[ f1.t,f2.t,f3.t ]|;
+    now
+      let t be Element of REAL;
+      F.t = |[ f1.t,f2.t,f3.t ]| by A4;
+      hence F.t = G.t by A5;
+    end;
+    hence thesis by FUNCT_2:113;
+end;
+end;
+
+theorem
+  VFunc(f1,f2,f3).t = f1.t*<e1> + f2.t*<e2> + f3.t*<e3>
+proof
+A2:  <e1>.1 = 1 & <e1>.2 = 0 & <e1>.3 = 0 by FINSEQ_1:62;
+A3:  <e2>.1 = 0 & <e2>.2 = 1 & <e2>.3 = 0 by FINSEQ_1:62;
+A4:  <e3>.1 = 0 & <e3>.2 = 0 & <e3>.3 = 1 by FINSEQ_1:62;
+A5:  f1.t*<e1> + f2.t*<e2> + f3.t*<e3>
+     = |[ f1.t*1,f1.t*0,f1.t*0 ]| + f2.t*<e2> + f3.t*<e3>
+       by A2,Lm3
+    .= |[ f1.t,0,0 ]| + |[ f2.t*0,f2.t*1,f2.t*0 ]| + f3.t*<e3>
+       by A3,Lm3
+    .= |[ f1.t,0,0 ]| + |[ 0,f2.t,0 ]| + |[ f3.t*0,f3.t*0,f3.t*1 ]|
+       by A4,Lm3
+    .= |[ f1.t,0,0 ]| + |[ 0,f2.t,0 ]| + |[ 0,0,f3.t ]|;
+A6:  |[ f1.t,0,0 ]|.1 = f1.t & |[ f1.t,0,0 ]|.2 = 0 & |[ f1.t,0,0 ]|.3 = 0
+     by FINSEQ_1:62;
+A7:  |[ 0,f2.t,0 ]|.1 = 0 & |[ 0,f2.t,0 ]|.2 = f2.t & |[ 0,f2.t,0 ]|.3 = 0
+     by FINSEQ_1:62;
+A8:  |[ 0,0,f3.t ]|.1 = 0 & |[ 0,0,f3.t ]|.2 = 0 & |[ 0,0,f3.t ]|.3 = f3.t
+     by FINSEQ_1:62;
+A9:  f1.t*<e1> + f2.t*<e2> + f3.t*<e3>
+     = |[ f1.t+0,0+f2.t,0+0 ]| + |[ 0,0,f3.t ]| by A5,A6,A7,Lm4
+    .= |[ f1.t,f2.t,0 ]| + |[ 0,0,f3.t ]|;
+A10: |[ f1.t,f2.t,0 ]|.1 = f1.t & |[ f1.t,f2.t,0 ]|.2 = f2.t &
+     |[ f1.t,f2.t,0 ]|.3 = 0 by FINSEQ_1:62;
+     f1.t*<e1> + f2.t*<e2> + f3.t*<e3>
+     = |[ f1.t+0,f2.t+0,0+f3.t ]| by A8,A9,A10,Lm4
+    .= |[ f1.t,f2.t,f3.t ]|;
+     hence VFunc(f1,f2,f3).t = f1.t*<e1> + f2.t*<e2> + f3.t*<e3> by Def1;
+end;
+
+theorem Th34:
+  p = VFunc(f1,f2,f3).t iff p.1 = f1.t & p.2 = f2.t & p.3 = f3.t
+proof
+  thus p = VFunc(f1,f2,f3).t implies p.1 = f1.t & p.2 = f2.t & p.3 = f3.t
+  proof
+    assume p = VFunc(f1,f2,f3).t;
+    then p = |[ f1.t,f2.t,f3.t ]| by Def1;
+    hence thesis by FINSEQ_1:62;
+  end;
+  assume p.1 = f1.t & p.2 = f2.t & p.3 = f3.t;
+  then p = |[ f1.t,f2.t,f3.t ]| by Lm1;
+  hence p = VFunc(f1,f2,f3).t by Def1;
+end;
+
+theorem Th35:
+  p = VFunc(f1,f2,f3).t implies len p = 3 & dom p = Seg 3
+proof
+  assume p = VFunc(f1,f2,f3).t;
+  then p = |[ f1.t,f2.t,f3.t ]| by Def1;
+  hence thesis by FINSEQ_1:62,FINSEQ_3:30;
+end;
+
+theorem Th36:
+  p = VFunc(f1,f2,f3).t1 & q = VFunc(g1,g2,g3).t2 implies
+  mlt(p,q) = <* f1.t1*g1.t2, f2.t1*g2.t2, f3.t1*g3.t2 *>
+proof
+    assume
+A1: p = VFunc(f1,f2,f3).t1 & q = VFunc(g1,g2,g3).t2;
+A2: len p = 3 & len q = 3 by A1,Th35;
+    mlt(p,q) = <* p.1*q.1, p.2*q.2, p.3*q.3 *> by A2,EUCLID_5:28
+   .= <* f1.t1*q.1, p.2*q.2, p.3*q.3 *> by A1,Th34
+   .= <* f1.t1*q.1, f2.t1*q.2, p.3*q.3 *> by A1,Th34
+   .= <* f1.t1*q.1, f2.t1*q.2, f3.t1*q.3 *> by A1,Th34
+   .= <* f1.t1*g1.t2, f2.t1*q.2, f3.t1*q.3 *> by A1,Th34
+   .= <* f1.t1*g1.t2, f2.t1*g2.t2, f3.t1*q.3 *> by A1,Th34
+   .= <* f1.t1*g1.t2, f2.t1*g2.t2, f3.t1*g3.t2 *> by A1,Th34;
+    hence thesis;
+end;
+
+theorem Th38:
+  p = VFunc(f1,f2,f3).t implies r*p = |[ r*f1.t, r*f2.t, r*f3.t ]|
+proof
+    assume
+A1: p = VFunc(f1,f2,f3).t;
+    r*p = |[ r*p.1, r*p.2, r*p.3 ]| by Lm3
+   .= |[ r*f1.t, r*p.2, r*p.3 ]| by A1,Th34
+   .= |[ r*f1.t, r*f2.t, r*p.3 ]| by A1,Th34
+   .= |[ r*f1.t, r*f2.t, r*f3.t ]| by A1,Th34;
+    hence thesis;
+end;
+
+theorem Th39:
+  p = VFunc(f1,f2,f3).t implies -p = |[ -f1.t,-f2.t,-f3.t ]|
+proof
+    assume
+A1: p = VFunc(f1,f2,f3).t;
+    -p = |[ (-1)*p.1,(-1)*p.2,(-1)*p.3 ]| by Lm3
+    .= |[ -p.1,-p.2,-p.3 ]|
+    .= |[ -f1.t,-p.2,-p.3 ]| by A1,Th34
+    .= |[ -f1.t,-f2.t,-p.3 ]| by A1,Th34
+    .= |[ -f1.t,-f2.t,-f3.t ]| by A1,Th34;
+    hence thesis;
+end;
+
+theorem
+  p = VFunc(f1,f2,f3).t implies (-p).1 = -f1.t & (-p).2 = -f2.t &
+  (-p).3 = -f3.t
+proof
+  assume p = VFunc(f1,f2,f3).t;then
+  -p = |[ -f1.t,-f2.t,-f3.t ]| by Th39;
+  hence thesis by FINSEQ_1:62;
+end;
+
+theorem
+  p = VFunc(f1,f2,f3).t implies len(-p) = 3
+proof
+  assume p = VFunc(f1,f2,f3).t;
+  then -p = |[ -f1.t,-f2.t,-f3.t ]| by Th39;
+  hence len(-p) = 3 by FINSEQ_1:62;
+end;
+
+theorem
+  p = VFunc(f1,f2,f3).t implies len(-p) = len p
+proof
+    assume
+A1: p = VFunc(f1,f2,f3).t;then
+A2: len p = 3 & dom p = Seg 3 by Th35;
+    -p = |[ -f1.t,-f2.t,-f3.t ]| by A1,Th39;
+    hence thesis by A2,FINSEQ_1:62;
+end;
+
+theorem
+  p = VFunc(f1,f2,f3).t1 & q = VFunc(g1,g2,g3).t2
+  implies len(p+q) = 3
+proof
+  assume p = VFunc(f1,f2,f3).t1 & q = VFunc(g1,g2,g3).t2;
+  dom (p+q) = Seg 3 by FINSEQ_2:144;
+  hence thesis by FINSEQ_1:def 3;
+end;
+
+theorem Th44:
+  p = VFunc(f1,f2,f3).t1 & q = VFunc(g1,g2,g3).t2 implies
+  p+q = |[ f1.t1+g1.t2,f2.t1+g2.t2,f3.t1+g3.t2 ]|
+proof
+    assume
+A1: p = VFunc(f1,f2,f3).t1 & q = VFunc(g1,g2,g3).t2;
+    p+q = |[ p.1+q.1, p.2+q.2, p.3+q.3 ]| by Lm4
+   .= |[ f1.t1+q.1, p.2+q.2, p.3+q.3 ]| by A1,Th34
+   .= |[ f1.t1+q.1, f2.t1+q.2, p.3+q.3 ]| by A1,Th34
+   .= |[ f1.t1+q.1, f2.t1+q.2, f3.t1+q.3 ]| by A1,Th34
+   .= |[ f1.t1+g1.t2, f2.t1+q.2, f3.t1+q.3 ]| by A1,Th34
+   .= |[ f1.t1+g1.t2, f2.t1+g2.t2, f3.t1+q.3 ]| by A1,Th34
+   .= |[ f1.t1+g1.t2, f2.t1+g2.t2, f3.t1+g3.t2 ]| by A1,Th34;
+    hence thesis;
+end;
+
+theorem
+  (p = VFunc(f1,f2,f3).t1 & q = VFunc(g1,g2,g3).t2 & p = q) implies
+  (f1.t1 = g1.t2 & f2.t1 = g2.t2 & f3.t1 = g3.t2)
+proof
+    assume
+A1: p = VFunc(f1,f2,f3).t1 & q = VFunc(g1,g2,g3).t2 & p = q;
+A3: p.1 = f1.t1 & q.1 = g1.t2 by A1,Th34;
+A4: p.2 = f2.t1 & q.2 = g2.t2 by A1,Th34;
+    p.3 = f3.t1 & q.3 = g3.t2 by A1,Th34;
+    hence thesis by A1,A3,A4;
+end;
+
+theorem
+  (f1.t1 = g1.t2 & f2.t1 = g2.t2 & f3.t1 = g3.t2) implies
+  VFunc(f1,f2,f3).t1 = VFunc(g1,g2,g3).t2
+proof
+    assume
+A1: f1.t1 = g1.t2 & f2.t1 = g2.t2 & f3.t1 = g3.t2;
+    set p = |[ f1.t1,f2.t1,f3.t1 ]|;
+    set q = |[ g1.t2,g2.t2,g3.t2 ]|;
+    p = VFunc(f1,f2,f3).t1 & q = VFunc(g1,g2,g3).t2 by Def1;
+    hence thesis by A1;
+end;
+
+theorem Th47:
+  p = VFunc(f1,f2,f3).t1 & q = VFunc(g1,g2,g3).t2 implies
+  p+q = |[ f1.t1+g1.t2,f2.t1+g2.t2,f3.t1+g3.t2 ]|
+proof
+    assume p = VFunc(f1,f2,f3).t1 & q = VFunc(g1,g2,g3).t2;then
+A1: p = |[ f1.t1,f2.t1,f3.t1 ]| &
+    q = |[ g1.t2,g2.t2,g3.t2 ]| by Def1;
+A2: p.1 = f1.t1 & p.2 = f2.t1 & p.3 = f3.t1 by A1,FINSEQ_1:62;
+    q.1 = g1.t2 & q.2 = g2.t2 & q.3 = g3.t2 by A1,FINSEQ_1:62;
+    hence thesis by A2,Lm4;
+end;
+
+theorem
+  p = VFunc(f1,f2,f3).t1 & q = VFunc(g1,g2,g3).t2 implies
+  p+-q = |[ f1.t1-g1.t2,f2.t1-g2.t2,f3.t1-g3.t2 ]|
+proof
+    assume
+A1: p = VFunc(f1,f2,f3).t1 & q = VFunc(g1,g2,g3).t2;
+A2: -q = |[ (-1)*q.1,(-1)*q.2,(-1)*q.3 ]| by Lm3
+    .= |[ -q.1,-q.2,-q.3 ]|;
+    p+-q = |[ p.1+(-q).1, p.2+(-q).2, p.3+(-q).3 ]| by Lm4
+   .= |[ p.1+(-q.1), p.2+(-q).2, p.3+(-q).3 ]| by A2,FINSEQ_1:62
+   .= |[ p.1+(-q.1), p.2+(-q.2), p.3+(-q).3 ]| by A2,FINSEQ_1:62
+   .= |[ p.1+(-q.1), p.2+(-q.2), p.3+(-q.3) ]| by A2,FINSEQ_1:62
+   .= |[ p.1-q.1, p.2-q.2, p.3-q.3 ]|
+   .= |[ f1.t1-q.1, p.2-q.2, p.3-q.3 ]| by A1,Th34
+   .= |[ f1.t1-q.1, f2.t1-q.2, p.3-q.3 ]| by A1,Th34
+   .= |[ f1.t1-q.1, f2.t1-q.2, f3.t1-q.3 ]| by A1,Th34
+   .= |[ f1.t1-g1.t2, f2.t1-q.2, f3.t1-q.3 ]| by A1,Th34
+   .= |[ f1.t1-g1.t2, f2.t1-g2.t2, f3.t1-q.3 ]| by A1,Th34
+   .= |[ f1.t1-g1.t2, f2.t1-g2.t2, f3.t1-g3.t2 ]| by A1,Th34;
+    hence thesis;
+end;
+
+theorem Th49:
+  p = VFunc(f1,f2,f3).t1 & q = VFunc(g1,g2,g3).t2 implies
+  p-q = |[ f1.t1-g1.t2,f2.t1-g2.t2,f3.t1-g3.t2 ]|
+proof
+    assume
+A1: p = VFunc(f1,f2,f3).t1 & q = VFunc(g1,g2,g3).t2;
+    p-q = |[ p.1-q.1,p.2-q.2,p.3-q.3 ]| by Lm7
+   .= |[ f1.t1-q.1,p.2-q.2,p.3-q.3 ]| by A1,Th34
+   .= |[ f1.t1-q.1, f2.t1-q.2, p.3-q.3 ]| by A1,Th34
+   .= |[ f1.t1-q.1, f2.t1-q.2, f3.t1-q.3 ]| by A1,Th34
+   .= |[ f1.t1-g1.t2, f2.t1-q.2, f3.t1-q.3 ]| by A1,Th34
+   .= |[ f1.t1-g1.t2, f2.t1-g2.t2, f3.t1-q.3 ]| by A1,Th34
+   .= |[ f1.t1-g1.t2, f2.t1-g2.t2, f3.t1-g3.t2 ]| by A1,Th34;
+    hence thesis;
+end;
+
+theorem
+  p = VFunc(f1,f2,f3).t1 & q = VFunc(g1,g2,g3).t2 implies len(p-q) = 3
+proof
+  assume p = VFunc(f1,f2,f3).t1 & q = VFunc(g1,g2,g3).t2;
+  then p-q = |[ f1.t1-g1.t2, f2.t1-g2.t2, f3.t1-g3.t2 ]| by Th49;
+  hence thesis by FINSEQ_1:62;
+end;
+
+theorem Th51:
+  p = VFunc(f1,f2,f3).t1 & q = VFunc(g1,g2,g3).t2 implies
+  |(p,q)| = f1.t1*g1.t2+f2.t1*g2.t2+f3.t1*g3.t2
+proof
+    assume
+A1: p = VFunc(f1,f2,f3).t1 & q = VFunc(g1,g2,g3).t2;
+    |(p,q)| = p.1*q.1 + p.2*q.2 + p.3*q.3 by Lm8
+   .= f1.t1*q.1 + p.2*q.2 + p.3*q.3 by A1,Th34
+   .= f1.t1*q.1 + f2.t1*q.2 + p.3*q.3 by A1,Th34
+   .= f1.t1*q.1 + f2.t1*q.2 + f3.t1*q.3 by A1,Th34
+   .= f1.t1*g1.t2 + f2.t1*q.2 + f3.t1*q.3 by A1,Th34
+   .= f1.t1*g1.t2 + f2.t1*g2.t2 + f3.t1*q.3 by A1,Th34
+   .= f1.t1*g1.t2 + f2.t1*g2.t2 + f3.t1*g3.t2 by A1,Th34;
+    hence thesis;
+end;
+
+theorem Th52:
+  p = VFunc(f1,f2,f3).t implies |(p,p)| = (f1.t)^2 + (f2.t)^2 + (f3.t)^2
+proof
+  assume p = VFunc(f1,f2,f3).t;
+  then p = |[ f1.t,f2.t,f3.t ]| by Def1;
+  hence |(p,p)| = (f1.t)^2 + (f2.t)^2 + (f3.t)^2 by LmTh8;
+end;
+
+theorem Th53:
+  p = VFunc(f1,f2,f3).t implies
+  |.p.| = sqrt ((f1.t)^2+(f2.t)^2+(f3.t)^2)
+proof
+    assume
+A1: p = VFunc(f1,f2,f3).t;
+    reconsider f = p as FinSequence of REAL;
+    |.p.| = sqrt Sum<* f1.t*f1.t,f2.t*f2.t,f3.t*f3.t *> by A1,Th36
+      .= sqrt ((f1.t)^2+(f2.t)^2+(f3.t)^2) by RVSUM_1:108;
+    hence thesis;
+end;
+
+theorem
+  p = VFunc(f1,f2,f3).t implies
+  |.r*p.| = abs(r)*(sqrt ((f1.t)^2+(f2.t)^2+(f3.t)^2))
+proof
+    assume
+A1: p = VFunc(f1,f2,f3).t;
+    reconsider f = p as FinSequence of REAL;
+    |.r*p.| = abs(r)*|.p.| by EUCLID:14
+   .= abs(r)*(sqrt ((f1.t)^2+(f2.t)^2+(f3.t)^2)) by A1,Th53;
+    hence thesis;
+end;
+
+theorem Th55:
+  p = VFunc(f1,f2,f3).t1 & q = VFunc(g1,g2,g3).t2 implies
+  p<X>q = |[ (f2.t1*g3.t2)-(f3.t1*g2.t2),(f3.t1*g1.t2)-(f1.t1*g3.t2),
+  (f1.t1*g2.t2)-(f2.t1*g1.t2) ]|
+proof
+  assume p = VFunc(f1,f2,f3).t1 & q = VFunc(g1,g2,g3).t2;
+  then p = |[ f1.t1,f2.t1,f3.t1 ]| &
+  q = |[ g1.t2,g2.t2,g3.t2 ]| by Def1;
+  hence p<X>q = |[ (f2.t1*g3.t2)-(f3.t1*g2.t2),(f3.t1*g1.t2)-(f1.t1*g3.t2),
+  (f1.t1*g2.t2)-(f2.t1*g1.t2) ]| by Lm11;
+end;
+
+theorem
+  p = VFunc(f1,f2,f3).t implies r1*p+r2*p = (r1+r2)*|[ f1.t, f2.t, f3.t ]|
+proof
+  r1*p+r2*p = (r1+r2)*p by RVSUM_1:72;
+  hence thesis by Def1;
+end;
+
+theorem
+  p = VFunc(f1,f2,f3).t implies r1*p-r2*p = (r1-r2)*|[ f1.t, f2.t, f3.t ]|
+proof
+  r1*R - r2*R = (r1-r2)*R
+  proof
+    r1*R - r2*R = r1*R + ((-1)*r2)*R by RVSUM_1:71
+     .= (r1 + -r2)*R by RVSUM_1:72;
+    hence thesis;
+  end; then
+  r1*p-r2*p = (r1-r2)*p;
+  hence thesis by Def1;
+end;
+
+theorem
+  p = VFunc(f1,f2,f3).t1 & q = VFunc(g1,g2,g3).t2
+  implies |(r*p,q)| = r*(f1.t1*g1.t2+f2.t1*g2.t2+f3.t1*g3.t2)
+proof
+   assume
+A1:p = VFunc(f1,f2,f3).t1 & q = VFunc(g1,g2,g3).t2;
+   |(r*p,q)| = r*|(p,q)| by LmAA30;
+   hence thesis by A1,Th51;
+end;
+
+theorem
+  p = VFunc(f1,f2,f3).t implies |(p,0.REAL 3)| = 0
+proof
+  assume
+A0: p = VFunc(f1,f2,f3).t;
+A1: 0.REAL 3 = |[ 0,0,0 ]| by FINSEQ_2:76;
+A2: (0.REAL 3).1 = 0 by A1,FINSEQ_1:62;
+A3: (0.REAL 3).2 = 0 by A1,FINSEQ_1:62;
+A4: (0.REAL 3).3 = 0 by A1,FINSEQ_1:62;
+B0: p = |[ f1.t,f2.t,f3.t ]| by A0,Def1;
+B1: p.1 = f1.t by B0,FINSEQ_1:62;
+B2: p.2 = f2.t by B0,FINSEQ_1:62;
+B3: p.3 = f3.t by B0,FINSEQ_1:62;
+    |(p,0.REAL 3)| = f1.t*0 +f2.t*0 +f3.t*0 by A2,A3,A4,B1,B2,B3,Lm8;
+    hence thesis;
+end;
+
+theorem
+  p = VFunc(f1,f2,f3).t1 & q = VFunc(g1,g2,g3).t2 implies
+    |(-p,q)| = -|(p,q)|
+proof
+  assume
+B0: p = VFunc(f1,f2,f3).t1 & q = VFunc(g1,g2,g3).t2;
+A0: p = |[ f1.t1,f2.t1,f3.t1 ]| by B0,Def1;
+B1: p.1 = f1.t1 by A0,FINSEQ_1:62;
+B2: p.2 = f2.t1 by A0,FINSEQ_1:62;
+B3: p.3 = f3.t1 by A0,FINSEQ_1:62;
+A2: -p = |[ -f1.t1,-f2.t1,-f3.t1 ]| by B0,Th39;
+A3: (-p).1 = -f1.t1 by A2,FINSEQ_1:62;
+A4: (-p).2 = -f2.t1 by A2,FINSEQ_1:62;
+A5: (-p).3 = -f3.t1 by A2,FINSEQ_1:62;
+C0: q = |[ g1.t2,g2.t2,g3.t2 ]| by B0,Def1;
+C1: q.1 = g1.t2 by C0,FINSEQ_1:62;
+C2: q.2 = g2.t2 by C0,FINSEQ_1:62;
+C3: q.3 = g3.t2 by C0,FINSEQ_1:62;
+    |(-p,q)|
+  = (-f1.t1)*g1.t2 + (-f2.t1)*g2.t2 + (-f3.t1)*g3.t2 by A3,A4,A5,C1,C2,C3,Lm8
+  .= -(f1.t1*g1.t2 + f2.t1*g2.t2 + f3.t1*g3.t2)
+  .= -|(p,q)| by B1,B2,B3,C1,C2,C3,Lm8;
+     hence thesis;
+end;
+
+theorem
+  p = VFunc(f1,f2,f3).t1 & q = VFunc(g1,g2,g3).t2 implies
+    |(-p,-q)| = |(p,q)|
+proof
+  assume
+B0: p = VFunc(f1,f2,f3).t1 & q = VFunc(g1,g2,g3).t2;
+A0: p = |[ f1.t1,f2.t1,f3.t1 ]| by B0,Def1;
+B1: p.1 = f1.t1 by A0,FINSEQ_1:62;
+B2: p.2 = f2.t1 by A0,FINSEQ_1:62;
+B3: p.3 = f3.t1 by A0,FINSEQ_1:62;
+A2: -p = |[ -f1.t1,-f2.t1,-f3.t1 ]| by B0,Th39;
+A3: (-p).1 = -f1.t1 by A2,FINSEQ_1:62;
+A4: (-p).2 = -f2.t1 by A2,FINSEQ_1:62;
+A5: (-p).3 = -f3.t1 by A2,FINSEQ_1:62;
+C0: q = |[ g1.t2,g2.t2,g3.t2 ]| by B0,Def1;
+C1: q.1 = g1.t2 by C0,FINSEQ_1:62;
+C2: q.2 = g2.t2 by C0,FINSEQ_1:62;
+C3: q.3 = g3.t2 by C0,FINSEQ_1:62;
+C4: -q = |[ -g1.t2,-g2.t2,-g3.t2 ]| by B0,Th39;
+C5: (-q).1 = -g1.t2 by C4,FINSEQ_1:62;
+C6: (-q).2 = -g2.t2 by C4,FINSEQ_1:62;
+C7: (-q).3 = -g3.t2 by C4,FINSEQ_1:62;
+    |(-p,-q)| = (-f1.t1)*(-g1.t2) + (-f2.t1)*(-g2.t2) + (-f3.t1)*(-g3.t2)
+     by A3,A4,A5,C5,C6,C7,Lm8
+  .= f1.t1*g1.t2 + f2.t1*g2.t2 + f3.t1*g3.t2
+  .= |(p,q)| by B1,B2,B3,C1,C2,C3,Lm8;
+  hence thesis;
+end;
+
+theorem
+  p1 = VFunc(f1,f2,f3).t1 & p2 = VFunc(f1,f2,f3).t2 & q = VFunc(g1,g2,g3).t2
+    implies |(p1-p2,q)| = |(p1,q)| - |(p2,q)|
+proof
+  assume
+B0: p1 = VFunc(f1,f2,f3).t1 & p2 = VFunc(f1,f2,f3).t2 & q = VFunc(g1,g2,g3).t2;
+A0: p1 = |[ f1.t1,f2.t1,f3.t1 ]| by B0,Def1;
+B1: p1.1 = f1.t1 by A0,FINSEQ_1:62;
+B2: p1.2 = f2.t1 by A0,FINSEQ_1:62;
+B3: p1.3 = f3.t1 by A0,FINSEQ_1:62;
+A2: p2 = |[ f1.t2,f2.t2,f3.t2 ]| by B0,Def1;
+A3: p2.1 = f1.t2 by A2,FINSEQ_1:62;
+A4: p2.2 = f2.t2 by A2,FINSEQ_1:62;
+A5: p2.3 = f3.t2 by A2,FINSEQ_1:62;
+C0: q = |[ g1.t2,g2.t2,g3.t2 ]| by B0,Def1;
+C1: q.1 = g1.t2 by C0,FINSEQ_1:62;
+C2: q.2 = g2.t2 by C0,FINSEQ_1:62;
+C3: q.3 = g3.t2 by C0,FINSEQ_1:62;
+A8: p1-p2 = |[ p1.1-p2.1, p1.2-p2.2, p1.3-p2.3 ]| by Lm7;
+   set p = p1-p2;
+A10: p.2 = p1.2-p2.2 by A8,FINSEQ_1:62;
+A11: p.3 = p1.3-p2.3 by A8,FINSEQ_1:62;
+A12: |(p,q)| = p.1*q.1+p.2*q.2+p.3*q.3 by Lm8;
+    |(p,q)| = (f1.t1-f1.t2)*g1.t2+(f2.t1-f2.t2)*g2.t2+(f3.t1-f3.t2)*g3.t2
+     by C1,C2,C3,A3,A4,A5,B1,B2,B3,A8,A10,A11,A12,FINSEQ_1:62
+  .= (f1.t1*g1.t2+f2.t1*g2.t2+f3.t1*g3.t2)
+    -(f2.t2*g2.t2+f1.t2*g1.t2+f3.t2*g3.t2)
+  .= |(p1,q)| - (f2.t2*g2.t2+f1.t2*g1.t2+f3.t2*g3.t2)
+      by B1,B2,B3,C1,C2,C3,Lm8
+  .= |(p1,q)| - |(p2,q)| by A3,A4,A5,C1,C2,C3,Lm8;
+     hence thesis;
+end;
+
+theorem
+  p1 = VFunc(f1,f2,f3).t1 & p2 = VFunc(f1,f2,f3).t2 & q = VFunc(g1,g2,g3).t2
+  implies |(p1+p2,q)| = |(p1,q)|+|(p2,q)|
+proof
+  assume
+B0: p1 = VFunc(f1,f2,f3).t1 & p2 = VFunc(f1,f2,f3).t2 & q = VFunc(g1,g2,g3).t2;
+A0: p1 = |[ f1.t1,f2.t1,f3.t1 ]| by B0,Def1;
+B1: p1.1 = f1.t1 by A0,FINSEQ_1:62;
+B2: p1.2 = f2.t1 by A0,FINSEQ_1:62;
+B3: p1.3 = f3.t1 by A0,FINSEQ_1:62;
+A2: p2 = |[ f1.t2,f2.t2,f3.t2 ]| by B0,Def1;
+A3: p2.1 = f1.t2 by A2,FINSEQ_1:62;
+A4: p2.2 = f2.t2 by A2,FINSEQ_1:62;
+A5: p2.3 = f3.t2 by A2,FINSEQ_1:62;
+C0: q = |[ g1.t2,g2.t2,g3.t2 ]| by B0,Def1;
+C1: q.1 = g1.t2 by C0,FINSEQ_1:62;
+C2: q.2 = g2.t2 by C0,FINSEQ_1:62;
+C3: q.3 = g3.t2 by C0,FINSEQ_1:62;
+D3: p1+p2 = |[ p1.1+p2.1, p1.2+p2.2, p1.3+p2.3]| by Lm4;
+  set p = p1+p2;
+D5: p.2 = p1.2 + p2.2 by D3,FINSEQ_1:62;
+D6: p.3 = p1.3 + p2.3 by D3,FINSEQ_1:62;
+D7: |(p,q)| = p.1*q.1 + p.2*q.2 + p.3*q.3 by Lm8;
+    |(p,q)| = (f1.t1+f1.t2)*g1.t2 + (f2.t1+f2.t2)*g2.t2 + (f3.t1+f3.t2)*g3.t2
+    by C1,C2,C3,A3,A4,A5,B1,B2,B3,D3,D5,D6,D7,FINSEQ_1:62
+ .= (f1.t1*g1.t2+f2.t1*g2.t2+f3.t1*g3.t2)
+    +(f1.t2*g1.t2 +f2.t2*g2.t2+f3.t2*g3.t2)
+ .= |(p1,q)|+(f1.t2*g1.t2 +f2.t2*g2.t2+f3.t2*g3.t2)
+    by B1,B2,B3,C1,C2,C3,Lm8
+ .= |(p1,q)| + |(p2,q)| by A3,A4,A5,C1,C2,C3,Lm8;
+  hence thesis;
+end;
+
+theorem
+  p1 = VFunc(f1,f2,f3).t1 & p2 = VFunc(f1,f2,f3).t2 & q = VFunc(g1,g2,g3).t2
+  implies |(r1*p1+r2*p2,q)| = r1*|(p1,q)| + r2*|(p2,q)|
+proof
+  assume
+A1:p1 = VFunc(f1,f2,f3).t1 & p2 = VFunc(f1,f2,f3).t2 & q = VFunc(g1,g2,g3).t2;
+A10:q = |[ g1.t2,g2.t2,g3.t2 ]| by A1,Def1;
+A11:q.1 = g1.t2 by A10,FINSEQ_1:62;
+A12:q.2 = g2.t2 by A10,FINSEQ_1:62;
+A13:q.3 = g3.t2 by A10,FINSEQ_1:62;
+A14:r1*|(p1,q)| = r1*(f1.t1*g1.t2 + f2.t1*g2.t2 + f3.t1*g3.t2) by A1,Th51;
+A15:r2*|(p2,q)| = r2*(f1.t2*g1.t2 + f2.t2*g2.t2 + f3.t2*g3.t2) by A1,Th51;
+A16:r1*p1+r2*p2 = |[r1*f1.t1,r1*f2.t1,r1*f3.t1]|+r2*p2 by A1,Th38
+.= |[r1*f1.t1,r1*f2.t1,r1*f3.t1]|+|[r2*f1.t2,r2*f2.t2,r2*f3.t2]| by A1,Th38
+.= |[r1*f1.t1+r2*f1.t2,r1*f2.t1+r2*f2.t2,r1*f3.t1+r2*f3.t2]| by LmA31;
+  set p = r1*p1+r2*p2;
+  |(r1*p1+r2*p2,q)| = p.1*q.1 + p.2*q.2 + p.3*q.3 by Lm8
+ .= (r1*f1.t1+r2*f1.t2)*q.1 + p.2*q.2 + p.3*q.3 by A16,FINSEQ_1:62
+ .= (r1*f1.t1+r2*f1.t2)*q.1 + (r1*f2.t1+r2*f2.t2)*q.2 + p.3*q.3
+    by A16,FINSEQ_1:62
+ .= r1*f1.t1*g1.t2+(r1*f2.t1+r2*f2.t2)*g2.t2+r2*f1.t2*g1.t2
+    + (r1*f3.t1+r2*f3.t2)*g3.t2 by A11,A12,A13,A16,FINSEQ_1:62
+ .= r1*|(p1,q)|+r2*|(p2,q)| by A14,A15;
+  hence thesis;
+end;
+
+theorem
+  p1 = VFunc(f1,f2,f3).t1 & p2 = VFunc(f1,f2,f3).t2 & q1 = VFunc(g1,g2,g3).t1
+  & q2 = VFunc(g1,g2,g3).t2 implies
+  |(p1+p2,q1+q2)| = |(p1,q1)|+|(p1,q2)|+|(p2,q1)|+|(p2,q2)|
+proof
+  assume
+A1:p1 = VFunc(f1,f2,f3).t1 & p2 = VFunc(f1,f2,f3).t2 & q1 = VFunc(g1,g2,g3).t1
+  & q2 = VFunc(g1,g2,g3).t2;
+A2:p1 = |[ f1.t1,f2.t1,f3.t1 ]| by A1,Def1;
+A3:p1.1 = f1.t1 by A2,FINSEQ_1:62;
+A4:p1.2 = f2.t1 by A2,FINSEQ_1:62;
+A5:p1.3 = f3.t1 by A2,FINSEQ_1:62;
+A6:p2 = |[ f1.t2,f2.t2,f3.t2 ]| by A1,Def1;
+A7:p2.1 = f1.t2 by A6,FINSEQ_1:62;
+A8:p2.2 = f2.t2 by A6,FINSEQ_1:62;
+A9:p2.3 = f3.t2 by A6,FINSEQ_1:62;
+A10:q1 = |[ g1.t1,g2.t1,g3.t1 ]| by A1,Def1;
+A11:q1.1 = g1.t1 by A10,FINSEQ_1:62;
+A12:q1.2 = g2.t1 by A10,FINSEQ_1:62;
+A13:q1.3 = g3.t1 by A10,FINSEQ_1:62;
+A14:q2 = |[ g1.t2,g2.t2,g3.t2 ]| by A1,Def1;
+A15:q2.1 = g1.t2 by A14,FINSEQ_1:62;
+A16:q2.2 = g2.t2 by A14,FINSEQ_1:62;
+A17:q2.3 = g3.t2 by A14,FINSEQ_1:62;
+  set q = q1+q2;
+A19:q = |[ g1.t1+g1.t2,g2.t1+g2.t2,g3.t1+g3.t2 ]| by A1,Th44;
+   set p = p1+p2;
+A21:p = |[ f1.t1+f1.t2,f2.t1+f2.t2,f3.t1+f3.t2 ]| by A1,Th44;
+   |(p1+p2,q1+q2)| = p.1*q.1 + p.2*q.2 + p.3*q.3 by Lm8
+ .= (f1.t1+f1.t2)*q.1 + p.2*q.2 + p.3*q.3 by A21,FINSEQ_1:62
+ .= (f1.t1+f1.t2)*q.1 + (f2.t1+f2.t2)*q.2 + p.3*q.3 by A21,FINSEQ_1:62
+ .= (f1.t1+f1.t2)*q.1 + (f2.t1+f2.t2)*q.2 + (f3.t1+f3.t2)*q.3
+    by A21,FINSEQ_1:62
+ .= (f1.t1+f1.t2)*(g1.t1+g1.t2) + (f2.t1+f2.t2)*q.2 + (f3.t1+f3.t2)*q.3
+    by A19,FINSEQ_1:62
+ .= (f1.t1+f1.t2)*(g1.t1+g1.t2) + (f2.t1+f2.t2)*(g2.t1+g2.t2)
+    + (f3.t1+f3.t2)*q.3 by A19,FINSEQ_1:62
+ .= (f1.t1*g1.t1+f1.t2*g1.t1+f1.t1*g1.t2+f1.t2*g1.t2)
+    + (f2.t1*g2.t1+f2.t2*g2.t1+f2.t1*g2.t2+f2.t2*g2.t2)
+    + (f3.t1+f3.t2)*(g3.t1+g3.t2) by A19,FINSEQ_1:62
+ .= (f1.t1*g1.t1+f2.t1*g2.t1+f3.t1*g3.t1)
+    +(f1.t1*g1.t2+f2.t1*g2.t2+f3.t1*g3.t2)
+    +(f1.t2*g1.t1+f2.t2*g2.t1+f3.t2*g3.t1)
+    +(f1.t2*g1.t2+f2.t2*g2.t2+f3.t2*g3.t2)
+ .= |(p1,q1)|+(f1.t1*g1.t2+f2.t1*g2.t2+f3.t1*g3.t2)
+    +(f1.t2*g1.t1+f2.t2*g2.t1+f3.t2*g3.t1)
+    +(f1.t2*g1.t2+f2.t2*g2.t2+f3.t2*g3.t2) by A3,A4,A5,A11,A12,A13,Lm8
+ .= |(p1,q1)|+|(p1,q2)|+(f1.t2*g1.t1+f2.t2*g2.t1+f3.t2*g3.t1)
+    +(f1.t2*g1.t2+f2.t2*g2.t2+f3.t2*g3.t2) by A3,A4,A5,A15,A16,A17,Lm8
+ .= |(p1,q1)|+|(p1,q2)|+|(p2,q1)|
+    +(f1.t2*g1.t2+f2.t2*g2.t2+f3.t2*g3.t2) by A7,A8,A9,A11,A12,A13,Lm8
+ .= |(p1,q1)|+|(p1,q2)|+|(p2,q1)|+|(p2,q2)| by A7,A8,A9,A15,A16,A17,Lm8;
+  hence thesis;
+end;
+
+theorem
+  p1 = VFunc(f1,f2,f3).t1 & p2 = VFunc(f1,f2,f3).t2 & q1 = VFunc(g1,g2,g3).t1
+  & q2 = VFunc(g1,g2,g3).t2 implies
+  |(p1-p2,q1-q2)| = |(p1,q1)|-|(p1,q2)|-|(p2,q1)|+|(p2,q2)|
+proof
+  assume
+A1:p1 = VFunc(f1,f2,f3).t1 & p2 = VFunc(f1,f2,f3).t2 & q1 = VFunc(g1,g2,g3).t1
+  & q2 = VFunc(g1,g2,g3).t2;
+A2:p1 = |[ f1.t1,f2.t1,f3.t1 ]| by A1,Def1;
+A3:p1.1 = f1.t1 by A2,FINSEQ_1:62;
+A4:p1.2 = f2.t1 by A2,FINSEQ_1:62;
+A5:p1.3 = f3.t1 by A2,FINSEQ_1:62;
+A6:p2 = |[ f1.t2,f2.t2,f3.t2 ]| by A1,Def1;
+A7:p2.1 = f1.t2 by A6,FINSEQ_1:62;
+A8:p2.2 = f2.t2 by A6,FINSEQ_1:62;
+A9:p2.3 = f3.t2 by A6,FINSEQ_1:62;
+A10:q1 = |[ g1.t1,g2.t1,g3.t1 ]| by A1,Def1;
+A11:q1.1 = g1.t1 by A10,FINSEQ_1:62;
+A12:q1.2 = g2.t1 by A10,FINSEQ_1:62;
+A13:q1.3 = g3.t1 by A10,FINSEQ_1:62;
+A14:q2 = |[ g1.t2,g2.t2,g3.t2 ]| by A1,Def1;
+A15:q2.1 = g1.t2 by A14,FINSEQ_1:62;
+A16:q2.2 = g2.t2 by A14,FINSEQ_1:62;
+A17:q2.3 = g3.t2 by A14,FINSEQ_1:62;
+  set q = q1-q2;
+A19:q = |[ g1.t1-g1.t2,g2.t1-g2.t2,g3.t1-g3.t2 ]| by A1,Th49;
+  set p = p1-p2;
+A21:p = |[ f1.t1-f1.t2,f2.t1-f2.t2,f3.t1-f3.t2 ]| by A1,Th49;
+   |(p1-p2,q1-q2)| = p.1*q.1 + p.2*q.2 + p.3*q.3 by Lm8
+ .= (f1.t1-f1.t2)*q.1 + p.2*q.2 + p.3*q.3 by A21,FINSEQ_1:62
+ .= (f1.t1-f1.t2)*q.1 + (f2.t1-f2.t2)*q.2 + p.3*q.3 by A21,FINSEQ_1:62
+ .= (f1.t1-f1.t2)*q.1 + (f2.t1-f2.t2)*q.2 + (f3.t1-f3.t2)*q.3
+    by A21,FINSEQ_1:62
+ .= (f1.t1-f1.t2)*(g1.t1-g1.t2) + (f2.t1-f2.t2)*q.2 + (f3.t1-f3.t2)*q.3
+    by A19,FINSEQ_1:62
+ .= (f1.t1-f1.t2)*(g1.t1-g1.t2) + (f2.t1-f2.t2)*(g2.t1-g2.t2)
+    + (f3.t1-f3.t2)*q.3 by A19,FINSEQ_1:62
+ .= (f1.t1*g1.t1-f1.t2*g1.t1-f1.t1*g1.t2+f1.t2*g1.t2)
+    + (f2.t1*g2.t1-f2.t2*g2.t1-f2.t1*g2.t2+f2.t2*g2.t2)
+    + (f3.t1-f3.t2)*(g3.t1-g3.t2) by A19,FINSEQ_1:62
+ .= (f1.t1*g1.t1+f2.t1*g2.t1+f3.t1*g3.t1)
+    -(f1.t1*g1.t2+f2.t1*g2.t2+f3.t1*g3.t2)
+    -(f1.t2*g1.t1+f2.t2*g2.t1+f3.t2*g3.t1)
+    +(f1.t2*g1.t2+f2.t2*g2.t2+f3.t2*g3.t2)
+ .= |(p1,q1)|-(f1.t1*g1.t2+f2.t1*g2.t2+f3.t1*g3.t2)
+    -(f1.t2*g1.t1+f2.t2*g2.t1+f3.t2*g3.t1)
+    +(f1.t2*g1.t2+f2.t2*g2.t2+f3.t2*g3.t2) by A3,A4,A5,A11,A12,A13,Lm8
+ .= |(p1,q1)|-|(p1,q2)|-(f1.t2*g1.t1+f2.t2*g2.t1+f3.t2*g3.t1)
+    +(f1.t2*g1.t2+f2.t2*g2.t2+f3.t2*g3.t2) by A3,A4,A5,A15,A16,A17,Lm8
+ .= |(p1,q1)|-|(p1,q2)|-|(p2,q1)|
+    +(f1.t2*g1.t2+f2.t2*g2.t2+f3.t2*g3.t2) by A7,A8,A9,A11,A12,A13,Lm8
+ .= |(p1,q1)|-|(p1,q2)|-|(p2,q1)|+|(p2,q2)| by A7,A8,A9,A15,A16,A17,Lm8;
+  hence thesis;
+end;
+
+theorem ThA41:
+  for p st p = VFunc(f1,f2,f3).t holds |(p,p)| = 0 iff p = 0.REAL 3
+proof
+  let p;
+  assume
+A1:p = VFunc(f1,f2,f3).t;
+  thus |(p,p)|=0 implies p =0.REAL 3
+  proof
+    assume
+A2: |(p,p)|= 0;
+    Sum sqr(p) = 0 by A2;
+    hence thesis by RVSUM_1:121;
+  end;
+  assume p= 0.REAL 3; then
+A4:p = |[ 0,0,0 ]| by FINSEQ_2:76;
+A8:p = |[ f1.t,f2.t,f3.t ]| by A1,Def1;
+A5:p.1 = f1.t by A8,FINSEQ_1:62;
+A6:p.2 = f2.t by A8,FINSEQ_1:62;
+A7:p.3 = f3.t by A8,FINSEQ_1:62;
+A9:f1.t = 0 by A4,FINSEQ_1:62,A5;
+A10:f2.t = 0 by A4,FINSEQ_1:62,A6;
+A11:f3.t = 0 by A4,FINSEQ_1:62,A7;
+   |(p,p)| = 0^2 + 0^2 + 0^2 by A1,A9,A10,A11,Th52;
+  hence |(p,p)| = 0;
+end;
+
+theorem
+  for p st p = VFunc(f1,f2,f3).t holds |.p.| = 0 iff p = 0.REAL 3
+proof
+  let p;
+  assume
+A1:p = VFunc(f1,f2,f3).t;
+  thus |.p.| = 0 implies p = 0.REAL 3
+  proof
+    assume
+A2: |.p.| = 0;
+A3: |(p, p)| >= 0 by RVSUM_1:149;
+    (sqrt|(p,p)|)^2 = |(p,p)| by A3,SQUARE_1:def 4;
+    hence thesis by A1,A2,ThA41;
+  end;
+    assume p = 0.REAL 3; then
+A4: p = |[ 0,0,0 ]| by FINSEQ_2:76;
+A5:p.1 = 0 by A4,FINSEQ_1:62;
+A6:p.2 = 0 by A4,FINSEQ_1:62;
+A7:p.3 = 0 by A4,FINSEQ_1:62;
+A8:p = |[ f1.t,f2.t,f3.t ]| by A1,Def1;
+A12:f1.t = 0 by A8,FINSEQ_1:62,A5;
+A13:f2.t = 0 by A8,FINSEQ_1:62,A6;
+A14:f3.t = 0 by A8,FINSEQ_1:62,A7;
+   |(p,p)| = 0^2 + 0^2 + 0^2 by A12,A13,A14,A1,Th52;
+   hence thesis by SQUARE_1:82;
+end;
+
+theorem
+  p = VFunc(f1,f2,f3).t & q = VFunc(g1,g2,g3).t
+  implies |(p-q,p-q)| = |(p,p)|-2*|(p,q)|+|(q,q)|
+proof
+  assume
+A1:p = VFunc(f1,f2,f3).t & q = VFunc(g1,g2,g3).t;
+A2:p = |[ f1.t,f2.t,f3.t ]| by A1,Def1;
+A3:p.1 = f1.t by A2,FINSEQ_1:62;
+A4:p.2 = f2.t by A2,FINSEQ_1:62;
+A5:p.3 = f3.t by A2,FINSEQ_1:62;
+A6:q = |[ g1.t,g2.t,g3.t ]| by A1,Def1;
+A7:q.1 = g1.t by A6,FINSEQ_1:62;
+A8:q.2 = g2.t by A6,FINSEQ_1:62;
+A9:q.3 = g3.t by A6,FINSEQ_1:62;
+  set p1 = p-q;
+A11:p1 = |[ f1.t-g1.t,f2.t-g2.t,f3.t-g3.t ]| by A1,Th49;
+   |(p-q,p-q)| = p1.1*p1.1 + p1.2*p1.2 + p1.3*p1.3 by Lm8
+ .= (f1.t-g1.t)*p1.1 + p1.2*p1.2 + p1.3*p1.3 by A11,FINSEQ_1:62
+ .= (f1.t-g1.t)*p1.1 + (f2.t-g2.t)*p1.2 + p1.3*p1.3 by A11,FINSEQ_1:62
+ .= (f1.t-g1.t)*p1.1 + (f2.t-g2.t)*p1.2 + (f3.t-g3.t)*p1.3
+    by A11,FINSEQ_1:62
+ .= (f1.t-g1.t)*(f1.t-g1.t) + (f2.t-g2.t)*p1.2 + (f3.t-g3.t)*p1.3
+    by A11,FINSEQ_1:62
+ .= (f1.t-g1.t)*(f1.t-g1.t) + (f2.t-g2.t)*(f2.t-g2.t) + (f3.t-g3.t)*p1.3
+    by A11,FINSEQ_1:62
+ .= (f1.t*f1.t-f1.t*g1.t-g1.t*f1.t+g1.t*g1.t)
+    + (f2.t*f2.t-f2.t*g2.t-g2.t*f2.t+g2.t*g2.t)
+    + (f3.t-g3.t)*(f3.t-g3.t) by A11,FINSEQ_1:62
+ .= (f1.t*f1.t+f2.t*f2.t+f3.t*f3.t)
+    -(f1.t*g1.t+f2.t*g2.t+f3.t*g3.t)
+    -(g1.t*f1.t+g2.t*f2.t+g3.t*f3.t)
+    +(g1.t*g1.t+g2.t*g2.t+g3.t*g3.t)
+ .= |(p,p)|-(f1.t*g1.t+f2.t*g2.t+f3.t*g3.t)
+    -(g1.t*f1.t+g2.t*f2.t+g3.t*f3.t)
+    +(g1.t*g1.t+g2.t*g2.t+g3.t*g3.t) by A3,A4,A5,Lm8
+ .= |(p,p)|-|(p,q)|-(g1.t*f1.t+g2.t*f2.t+g3.t*f3.t)
+    +(g1.t*g1.t+g2.t*g2.t+g3.t*g3.t) by A3,A4,A5,A7,A8,A9,Lm8
+ .= |(p,p)|-|(p,q)|-|(q,p)|
+    +(g1.t*g1.t+g2.t*g2.t+g3.t*g3.t) by A3,A4,A5,A7,A8,A9,Lm8
+ .= |(p,p)|-|(p,q)|-|(q,p)|+|(q,q)| by A7,A8,A9,Lm8;
+  hence thesis;
+end;
+
+theorem
+  p = VFunc(f1,f2,f3).t & q = VFunc(g1,g2,g3).t
+  implies |(p+q,p+q)| = |(p,p)|+2*|(p,q)|+|(q,q)|
+proof
+  assume
+A1:p = VFunc(f1,f2,f3).t & q = VFunc(g1,g2,g3).t;
+A2:p = |[ f1.t,f2.t,f3.t ]| by A1,Def1;
+A3:p.1 = f1.t by A2,FINSEQ_1:62;
+A4:p.2 = f2.t by A2,FINSEQ_1:62;
+A5:p.3 = f3.t by A2,FINSEQ_1:62;
+A6:q = |[ g1.t,g2.t,g3.t ]| by A1,Def1;
+A7:q.1 = g1.t by A6,FINSEQ_1:62;
+A8:q.2 = g2.t by A6,FINSEQ_1:62;
+A9:q.3 = g3.t by A6,FINSEQ_1:62;
+  set p1 = p+q;
+A11:p1 = |[ f1.t+g1.t,f2.t+g2.t,f3.t+g3.t ]| by A1,Th47;
+   |(p+q,p+q)| = p1.1*p1.1 + p1.2*p1.2 + p1.3*p1.3 by Lm8
+ .= (f1.t+g1.t)*p1.1 + p1.2*p1.2 + p1.3*p1.3 by A11,FINSEQ_1:62
+ .= (f1.t+g1.t)*p1.1 + (f2.t+g2.t)*p1.2 + p1.3*p1.3 by A11,FINSEQ_1:62
+ .= (f1.t+g1.t)*p1.1 + (f2.t+g2.t)*p1.2 + (f3.t+g3.t)*p1.3
+    by A11,FINSEQ_1:62
+ .= (f1.t+g1.t)*(f1.t+g1.t) + (f2.t+g2.t)*p1.2 + (f3.t+g3.t)*p1.3
+    by A11,FINSEQ_1:62
+ .= (f1.t+g1.t)*(f1.t+g1.t) + (f2.t+g2.t)*(f2.t+g2.t) + (f3.t+g3.t)*p1.3
+    by A11,FINSEQ_1:62
+ .= (f1.t*f1.t+f1.t*g1.t+g1.t*f1.t+g1.t*g1.t)
+    + (f2.t*f2.t+f2.t*g2.t+g2.t*f2.t+g2.t*g2.t)
+    + (f3.t+g3.t)*(f3.t+g3.t) by A11,FINSEQ_1:62
+ .= (f1.t*f1.t+f2.t*f2.t+f3.t*f3.t)
+    +(f1.t*g1.t+f2.t*g2.t+f3.t*g3.t)
+    +(g1.t*f1.t+g2.t*f2.t+g3.t*f3.t)
+    +(g1.t*g1.t+g2.t*g2.t+g3.t*g3.t)
+ .= |(p,p)|+(f1.t*g1.t+f2.t*g2.t+f3.t*g3.t)
+    +(g1.t*f1.t+g2.t*f2.t+g3.t*f3.t)
+    +(g1.t*g1.t+g2.t*g2.t+g3.t*g3.t) by A3,A4,A5,Lm8
+ .= |(p,p)|+|(p,q)|+(g1.t*f1.t+g2.t*f2.t+g3.t*f3.t)
+    +(g1.t*g1.t+g2.t*g2.t+g3.t*g3.t) by A3,A4,A5,A7,A8,A9,Lm8
+ .= |(p,p)|+|(p,q)|+|(q,p)|
+    +(g1.t*g1.t+g2.t*g2.t+g3.t*g3.t) by A3,A4,A5,A7,A8,A9,Lm8
+ .= |(p,p)|+|(p,q)|+|(q,p)|+|(q,q)| by A7,A8,A9,Lm8;
+  hence thesis;
+end;
+
+theorem
+  p = VFunc(f1,f2,f3).t & q = VFunc(g1,g2,g3).t
+  implies (r*p)<X>q = r*(p<X>q) & (r*p)<X>q = p<X>(r*q)
+proof
+  assume
+A1:p = VFunc(f1,f2,f3).t & q = VFunc(g1,g2,g3).t;
+A2:(r*p)<X>q = |[ r*f1.t, r*f2.t, r*f3.t ]|<X>q by A1,Th38
+.= |[ r*f1.t, r*f2.t, r*f3.t ]|<X>|[ g1.t,g2.t,g3.t ]| by A1,Def1
+.= |[ (r*f2.t*g3.t)-(r*f3.t*g2.t),(r*f3.t*g1.t)-(r*f1.t*g3.t),
+      (r*f1.t*g2.t)-(r*f2.t*g1.t) ]| by Lm11;
+A3:(r*p)<X>q
+ = |[ r*((f2.t*g3.t)-(f3.t*g2.t)),r*((f3.t*g1.t)-(f1.t*g3.t)),
+      r*((f1.t*g2.t)-(f2.t*g1.t)) ]| by A2
+.= r*|[ ((f2.t*g3.t)-(f3.t*g2.t)),((f3.t*g1.t)-(f1.t*g3.t)),
+      ((f1.t*g2.t)-(f2.t*g1.t)) ]| by LmA8
+.= r*(p<X>q) by A1,Th55;
+(r*p)<X>q = |[ f2.t*(r*g3.t)-f3.t*(r*g2.t),f3.t*(r*g1.t)-f1.t*(r*g3.t),
+      f1.t*(r*g2.t)-f2.t*(r*g1.t) ]| by A2
+.= |[ f1.t,f2.t,f3.t ]|<X>|[ r*g1.t,r*g2.t,r*g3.t ]| by Lm11
+.= p<X>|[ r*g1.t,r*g2.t,r*g3.t ]| by A1,Def1
+.= p<X>(r*q) by A1,Th38;
+  hence thesis by A3;
+end;
+
+theorem
+  p1 = VFunc(f1,f2,f3).t1 & p2 = VFunc(f1,f2,f3).t2
+  & q = VFunc(g1,g2,g3).t implies
+  p1<X>(p2+q) = (p1<X>p2)+(p1<X>q)
+proof
+  assume
+A1:p1 = VFunc(f1,f2,f3).t1 & p2 = VFunc(f1,f2,f3).t2
+  & q = VFunc(g1,g2,g3).t;
+A2:p2+q = |[ f1.t2+g1.t, f2.t2+g2.t, f3.t2+g3.t ]| by A1,Th44;
+A3:(p2+q).1 = f1.t2+g1.t by A2,FINSEQ_1:62;
+A4:(p2+q).2 = f2.t2+g2.t by A2,FINSEQ_1:62;
+A5:(p2+q).3 = f3.t2+g3.t by A2,FINSEQ_1:62;
+B2:p1 = |[ f1.t1,f2.t1,f3.t1 ]| by A1,Def1;
+B3:p1.1 = f1.t1 by B2,FINSEQ_1:62;
+B4:p1.2 = f2.t1 by B2,FINSEQ_1:62;
+B5:p1.3 = f3.t1 by B2,FINSEQ_1:62;
+   (p1<X>p2)+(p1<X>q)
+ = |[ (f2.t1*f3.t2)-(f3.t1*f2.t2),(f3.t1*f1.t2)-(f1.t1*f3.t2),
+   (f1.t1*f2.t2)-(f2.t1*f1.t2) ]|+(p1<X>q) by A1,Th55
+.= |[ (f2.t1*f3.t2)-(f3.t1*f2.t2),(f3.t1*f1.t2)-(f1.t1*f3.t2),
+   (f1.t1*f2.t2)-(f2.t1*f1.t2) ]|
+   +|[ (f2.t1*g3.t)-(f3.t1*g2.t),(f3.t1*g1.t)-(f1.t1*g3.t),
+   (f1.t1*g2.t)-(f2.t1*g1.t) ]| by A1,Th55
+.= |[ (f2.t1*f3.t2-f3.t1*f2.t2)+(f2.t1*g3.t-f3.t1*g2.t),
+   (f3.t1*f1.t2-f1.t1*f3.t2)+(f3.t1*g1.t-f1.t1*g3.t),
+   (f1.t1*f2.t2-f2.t1*f1.t2)+(f1.t1*g2.t-f2.t1*g1.t) ]| by LmA31
+.= p1<X>(p2+q) by A4,A3,A5,B3,B4,B5;
+  hence thesis;
+end;
+
+theorem
+  p1 = VFunc(f1,f2,f3).t1 & p2 = VFunc(f1,f2,f3).t2
+  & q = VFunc(g1,g2,g3).t implies
+  (p1+p2)<X>q = (p1<X>q)+(p2<X>q)
+proof
+  assume
+A1:p1 = VFunc(f1,f2,f3).t1 & p2 = VFunc(f1,f2,f3).t2
+  & q = VFunc(g1,g2,g3).t;
+A2:p1+p2 = |[ f1.t1+f1.t2, f2.t1+f2.t2, f3.t1+f3.t2 ]| by A1,Th44;
+A3:(p1+p2).1 = f1.t1+f1.t2 by A2,FINSEQ_1:62;
+A4:(p1+p2).2 = f2.t1+f2.t2 by A2,FINSEQ_1:62;
+A5:(p1+p2).3 = f3.t1+f3.t2 by A2,FINSEQ_1:62;
+B2:q = |[ g1.t,g2.t,g3.t ]| by A1,Def1;
+B3:q.1 = g1.t by B2,FINSEQ_1:62;
+B4:q.2 = g2.t by B2,FINSEQ_1:62;
+B5:q.3 = g3.t by B2,FINSEQ_1:62;
+   (p1<X>q)+(p2<X>q)
+ = |[ (f2.t1*g3.t)-(f3.t1*g2.t),(f3.t1*g1.t)-(f1.t1*g3.t),
+   (f1.t1*g2.t)-(f2.t1*g1.t) ]|+(p2<X>q) by A1,Th55
+.= |[ (f2.t1*g3.t)-(f3.t1*g2.t),(f3.t1*g1.t)-(f1.t1*g3.t),
+   (f1.t1*g2.t)-(f2.t1*g1.t) ]|
+   +|[ (f2.t2*g3.t)-(f3.t2*g2.t),(f3.t2*g1.t)-(f1.t2*g3.t),
+   (f1.t2*g2.t)-(f2.t2*g1.t) ]| by A1,Th55
+.= |[ (f2.t1*g3.t-f3.t1*g2.t)+(f2.t2*g3.t-f3.t2*g2.t),
+   (f3.t1*g1.t-f1.t1*g3.t)+(f3.t2*g1.t-f1.t2*g3.t),
+   (f1.t1*g2.t-f2.t1*g1.t)+(f1.t2*g2.t-f2.t2*g1.t) ]| by LmA31
+.= |[ (p1+p2).2*q.3-(p1+p2).3*q.2,
+   (p1+p2).3*q.1-(p1+p2).1*q.3,
+   (p1+p2).1*q.2-(p1+p2).2*q.1 ]| by A3,A4,A5,B5,B4,B3;
+  hence thesis;
+end;
+
+definition let p1,p2,p3;
+  func |{ p1,p2,p3 }| -> real number equals
+  |(p1,p2<X>p3)|;
+  coherence;
+end;
+
+theorem
+  p1 = VFunc(f1,f2,f3).t1 & p2 = VFunc(f1,f2,f3).t2
+  implies |{ p1,p1,p2 }| = 0
+proof
+ assume
+A1:p1 = VFunc(f1,f2,f3).t1 & p2 = VFunc(f1,f2,f3).t2;
+A2:p1 = |[ f1.t1,f2.t1,f3.t1 ]| by A1,Def1;
+A3:p1.1 = f1.t1 by A2,FINSEQ_1:62;
+A4:p1.2 = f2.t1 by A2,FINSEQ_1:62;
+A5:p1.3 = f3.t1 by A2,FINSEQ_1:62;
+A6:p1<X>p2 = |[ (f2.t1*f3.t2)-(f3.t1*f2.t2),(f3.t1*f1.t2)-(f1.t1*f3.t2),
+   (f1.t1*f2.t2)-(f2.t1*f1.t2) ]| by A1,Th55;
+A7:(p1<X>p2).1 = (f2.t1*f3.t2)-(f3.t1*f2.t2) by A6,FINSEQ_1:62;
+A8:(p1<X>p2).2 = (f3.t1*f1.t2)-(f1.t1*f3.t2) by A6,FINSEQ_1:62;
+A9:(p1<X>p2).3 = (f1.t1*f2.t2)-(f2.t1*f1.t2) by A6,FINSEQ_1:62;
+   |{ p1,p1,p2 }| = f1.t1*((f2.t1*f3.t2)-(f3.t1*f2.t2))
+   +f2.t1*((f3.t1*f1.t2)-(f1.t1*f3.t2))
+   +f3.t1*((f1.t1*f2.t2)-(f2.t1*f1.t2)) by A9,A8,A7,A3,A4,A5,Lm8
+.= 0;
+   hence thesis;
+end;
+
+theorem
+  p1 = VFunc(f1,f2,f3).t1 & p2 = VFunc(f1,f2,f3).t2
+  implies |{ p2,p1,p2 }| = 0
+proof
+  assume
+A1:p1 = VFunc(f1,f2,f3).t1 & p2 = VFunc(f1,f2,f3).t2;
+A2:p2 = |[ f1.t2,f2.t2,f3.t2 ]| by A1,Def1;
+A3:p2.1 = f1.t2 by A2,FINSEQ_1:62;
+A4:p2.2 = f2.t2 by A2,FINSEQ_1:62;
+A5:p2.3 = f3.t2 by A2,FINSEQ_1:62;
+A6:p1<X>p2 = |[ (f2.t1*f3.t2)-(f3.t1*f2.t2),(f3.t1*f1.t2)-(f1.t1*f3.t2),
+   (f1.t1*f2.t2)-(f2.t1*f1.t2) ]| by A1,Th55;
+A7:(p1<X>p2).1 = (f2.t1*f3.t2)-(f3.t1*f2.t2) by A6,FINSEQ_1:62;
+A8:(p1<X>p2).2 = (f3.t1*f1.t2)-(f1.t1*f3.t2) by A6,FINSEQ_1:62;
+A9:(p1<X>p2).3 = (f1.t1*f2.t2)-(f2.t1*f1.t2) by A6,FINSEQ_1:62;
+   |{ p2,p1,p2 }| = f1.t2*((f2.t1*f3.t2)-(f3.t1*f2.t2))
+  +f2.t2*((f3.t1*f1.t2)-(f1.t1*f3.t2))
+  +f3.t2*((f1.t1*f2.t2)-(f2.t1*f1.t2)) by A9,A8,A7,A3,A4,A5,Lm8
+.= 0;
+  hence thesis;
+end;
+
+theorem
+  p1 = VFunc(f1,f2,f3).t1 & p2 = VFunc(f1,f2,f3).t2
+  implies |{ p1,p2,p2 }| = 0
+proof
+  assume
+A1:p1 = VFunc(f1,f2,f3).t1 & p2 = VFunc(f1,f2,f3).t2;
+A2:p1 = |[ f1.t1,f2.t1,f3.t1 ]| by A1,Def1;
+A3:p1.1 = f1.t1 by A2,FINSEQ_1:62;
+A4:p1.2 = f2.t1 by A2,FINSEQ_1:62;
+A5:p1.3 = f3.t1 by A2,FINSEQ_1:62;
+A7:(p2<X>p2).1 = (f2.t2*f3.t2)-(f3.t2*f2.t2) by FINSEQ_1:62;
+A8:(p2<X>p2).2 = (f3.t2*f1.t2)-(f1.t2*f3.t2) by FINSEQ_1:62;
+A9:(p2<X>p2).3 = (f1.t2*f2.t2)-(f2.t2*f1.t2) by FINSEQ_1:62;
+   |{ p1,p2,p2 }| = f1.t1*((f2.t2*f3.t2)-(f3.t2*f2.t2))
+   +f2.t1*((f3.t2*f1.t2)-(f1.t2*f3.t2))
+   +f3.t1*((f1.t2*f2.t2)-(f2.t2*f1.t2)) by A9,A8,A7,A5,A4,A3,Lm8
+.= 0;
+  hence thesis;
+end;
+
+theorem ThA52:
+  p1 = VFunc(f1,f2,f3).t1 & p2 = VFunc(f1,f2,f3).t2
+  & q = VFunc(g1,g2,g3).t implies |{ p1,p2,q }| = |{ p2,q,p1 }|
+proof
+  assume
+A1:p1 = VFunc(f1,f2,f3).t1 & p2 = VFunc(f1,f2,f3).t2
+   & q = VFunc(g1,g2,g3).t;
+A2:p1 = |[ f1.t1,f2.t1,f3.t1 ]| by A1,Def1;
+A3:p1.1 = f1.t1 by A2,FINSEQ_1:62;
+A4:p1.2 = f2.t1 by A2,FINSEQ_1:62;
+A5:p1.3 = f3.t1 by A2,FINSEQ_1:62;
+A6:p2<X>q = |[ (f2.t2*g3.t)-(f3.t2*g2.t),(f3.t2*g1.t)-(f1.t2*g3.t),
+   (f1.t2*g2.t)-(f2.t2*g1.t) ]| by A1,Th55;
+A7:(p2<X>q).1 = (f2.t2*g3.t)-(f3.t2*g2.t) by A6,FINSEQ_1:62;
+A8:(p2<X>q).2 = (f3.t2*g1.t)-(f1.t2*g3.t) by A6,FINSEQ_1:62;
+A9:(p2<X>q).3 = (f1.t2*g2.t)-(f2.t2*g1.t) by A6,FINSEQ_1:62;
+A10:p2 = |[ f1.t2,f2.t2,f3.t2 ]| by A1,Def1;
+A11:q<X>p1 = |[ f3.t1*g2.t-f2.t1*g3.t,f1.t1*g3.t-f3.t1*g1.t,
+   f2.t1*g1.t-f1.t1*g2.t ]| by A1,Th55;
+   |{ p1,p2,q }| = f1.t1*((f2.t2*g3.t)-(f3.t2*g2.t))
+    +f2.t1*((f3.t2*g1.t)-(f1.t2*g3.t))
+    +f3.t1*((f1.t2*g2.t)-(f2.t2*g1.t)) by A9,A8,A7,A5,A4,A3,Lm8
+ .= f1.t2*(f3.t1*g2.t-f2.t1*g3.t)
+    +f2.t2*(f1.t1*g3.t-f3.t1*g1.t)
+    +f3.t2*(f2.t1*g1.t-f1.t1*g2.t)
+ .= |( p2,q<X>p1 )| by A10,A11,LmA52;
+  hence thesis;
+end;
+
+theorem
+  p1 = VFunc(f1,f2,f3).t1 & p2 = VFunc(f1,f2,f3).t2
+  & q = VFunc(g1,g2,g3).t implies |{ p1,p2,q }| = |(p1<X>p2,q)|
+proof
+  assume
+A1:p1 = VFunc(f1,f2,f3).t1 & p2 = VFunc(f1,f2,f3).t2
+   & q = VFunc(g1,g2,g3).t;
+A2:p1 = |[ f1.t1,f2.t1,f3.t1 ]| by A1,Def1;
+A3:p1.1 = f1.t1 by A2,FINSEQ_1:62;
+A4:p1.2 = f2.t1 by A2,FINSEQ_1:62;
+A5:p1.3 = f3.t1 by A2,FINSEQ_1:62;
+A6:p2<X>q
+ = |[ (f2.t2*g3.t)-(f3.t2*g2.t),(f3.t2*g1.t)-(f1.t2*g3.t),
+   (f1.t2*g2.t)-(f2.t2*g1.t) ]| by A1,Th55;
+A7:(p2<X>q).1 = (f2.t2*g3.t)-(f3.t2*g2.t) by A6,FINSEQ_1:62;
+A8:(p2<X>q).2 = (f3.t2*g1.t)-(f1.t2*g3.t) by A6,FINSEQ_1:62;
+A9:(p2<X>q).3 = (f1.t2*g2.t)-(f2.t2*g1.t) by A6,FINSEQ_1:62;
+A10:p1<X>p2
+ = |[ f2.t1*f3.t2-f3.t1*f2.t2,f3.t1*f1.t2-f1.t1*f3.t2,
+   f1.t1*f2.t2-f2.t1*f1.t2 ]| by A1,Th55;
+A12:q = |[ g1.t,g2.t,g3.t ]| by A1,Def1;
+  |{ p1,p2,q }| = f1.t1*((f2.t2*g3.t)-(f3.t2*g2.t))
+    +f2.t1*((f3.t2*g1.t)-(f1.t2*g3.t))
+    +f3.t1*((f1.t2*g2.t)-(f2.t2*g1.t)) by A9,A8,A7,A5,A4,A3,Lm8
+.= (f2.t1*f3.t2-f3.t1*f2.t2)*g1.t
+   +(f3.t1*f1.t2-f1.t1*f3.t2)*g2.t
+   +(f1.t1*f2.t2-f2.t1*f1.t2)*g3.t
+.= |(p1<X>p2,q)| by A12,A10,LmA52;
+  hence thesis;
+end;
+
+theorem
+  p1 = VFunc(f1,f2,f3).t1 & p2 = VFunc(f1,f2,f3).t2
+  & q = VFunc(g1,g2,g3).t implies |{ p1,p2,q }| = |(q<X>p1,p2)|
+proof
+   assume
+A1:p1 = VFunc(f1,f2,f3).t1 & p2 = VFunc(f1,f2,f3).t2
+     & q = VFunc(g1,g2,g3).t;
+   |{ p1,p2,q }| = |{ p2,q,p1 }| by A1,ThA52;
+   hence thesis;
+end;
+
+begin :: the Differentiation Formulas of Vector Function in 3-dimensional Euclidean Spaces
+
+definition
+  let f1,f2,f3 be PartFunc of REAL,REAL;
+  let t0 be Real;
+  func VFuncdiff(f1,f2,f3,t0) -> Element of REAL 3 equals
+  |[ diff(f1,t0),diff(f2,t0),diff(f3,t0) ]|;
+  coherence;
+end;
+
+theorem
+  f1 is_differentiable_in t0 & f2 is_differentiable_in t0 &
+  f3 is_differentiable_in t0 implies VFuncdiff(f1,f2,f3,t0) =
+  diff(f1,t0)*<e1>+diff(f2,t0)*<e2>+diff(f3,t0)*<e3> by Th29;
+
+theorem Th57:
+  (f1 is_differentiable_in t0 & f2 is_differentiable_in t0 &
+  f3 is_differentiable_in t0) & (g1 is_differentiable_in t0 &
+  g2 is_differentiable_in t0 & g3 is_differentiable_in t0)
+  implies VFuncdiff(f1+g1,f2+g2,f3+g3,t0) =
+  VFuncdiff(f1,f2,f3,t0)+VFuncdiff(g1,g2,g3,t0)
+proof
+    assume that
+A1: f1 is_differentiable_in t0 &
+    f2 is_differentiable_in t0 &
+    f3 is_differentiable_in t0 and
+A2: g1 is_differentiable_in t0 &
+    g2 is_differentiable_in t0 &
+    g3 is_differentiable_in t0;
+    set p = |[ diff(f1,t0),diff(f2,t0),diff(f3,t0) ]|;
+    set q = |[ diff(g1,t0),diff(g2,t0),diff(g3,t0) ]|;
+A4: p.1 = diff(f1,t0) & p.2 = diff(f2,t0) & p.3 = diff(f3,t0) by FINSEQ_1:62;
+A5: q.1 = diff(g1,t0) & q.2 = diff(g2,t0) & q.3 = diff(g3,t0) by FINSEQ_1:62;
+    VFuncdiff(f1+g1,f2+g2,f3+g3,t0)
+    = |[ diff(f1,t0)+diff(g1,t0),diff(f2+g2,t0),diff(f3+g3,t0) ]|
+      by A1,A2,FDIFF_1:21
+   .= |[ diff(f1,t0)+diff(g1,t0),diff(f2,t0)+diff(g2,t0),diff(f3+g3,t0) ]|
+      by A1,A2,FDIFF_1:21
+   .= |[ p.1+q.1,p.2+q.2,p.3+q.3 ]| by A1,A2,A4,A5,FDIFF_1:21
+   .= VFuncdiff(f1,f2,f3,t0)+VFuncdiff(g1,g2,g3,t0) by Lm4;
+    hence thesis;
+end;
+
+theorem Th58:
+  (f1 is_differentiable_in t0 & f2 is_differentiable_in t0 &
+  f3 is_differentiable_in t0) & (g1 is_differentiable_in t0 &
+  g2 is_differentiable_in t0 & g3 is_differentiable_in t0)
+  implies VFuncdiff(f1-g1,f2-g2,f3-g3,t0) =
+  VFuncdiff(f1,f2,f3,t0)-VFuncdiff(g1,g2,g3,t0)
+proof
+    assume that
+A1: f1 is_differentiable_in t0 & f2 is_differentiable_in t0 &
+    f3 is_differentiable_in t0 and
+A2: g1 is_differentiable_in t0 & g2 is_differentiable_in t0 &
+    g3 is_differentiable_in t0;
+    set p = |[ diff(f1,t0),diff(f2,t0),diff(f3,t0) ]|;
+    set q = |[ diff(g1,t0),diff(g2,t0),diff(g3,t0) ]|;
+A4: p.1 = diff(f1,t0) & p.2 = diff(f2,t0) &
+    p.3 = diff(f3,t0) by FINSEQ_1:62;
+A5: q.1 = diff(g1,t0) & q.2 = diff(g2,t0) &
+    q.3 = diff(g3,t0) by FINSEQ_1:62;
+    VFuncdiff(f1-g1,f2-g2,f3-g3,t0)
+    = |[ diff(f1,t0)-diff(g1,t0),diff(f2-g2,t0),diff(f3-g3,t0) ]|
+      by A1,A2,FDIFF_1:22
+   .= |[ diff(f1,t0)-diff(g1,t0),diff(f2,t0)-diff(g2,t0),diff(f3-g3,t0) ]|
+      by A1,A2,FDIFF_1:22
+   .= |[ p.1-q.1,p.2-q.2,p.3-q.3 ]| by A1,A2,A4,A5,FDIFF_1:22
+   .= VFuncdiff(f1,f2,f3,t0)-VFuncdiff(g1,g2,g3,t0) by Lm7;
+    hence thesis;
+end;
+
+theorem Th59:
+  (f1 is_differentiable_in t0 & f2 is_differentiable_in t0 &
+  f3 is_differentiable_in t0) implies
+  VFuncdiff(r(#)f1,r(#)f2,r(#)f3,t0) = r*VFuncdiff(f1,f2,f3,t0)
+proof
+    assume
+A1: f1 is_differentiable_in t0 & f2 is_differentiable_in t0 &
+    f3 is_differentiable_in t0;
+    set p = |[ diff(f1,t0),diff(f2,t0),diff(f3,t0) ]|;
+A3: p.1 = diff(f1,t0) & p.2 = diff(f2,t0) &
+    p.3 = diff(f3,t0) by FINSEQ_1:62;
+    VFuncdiff(r(#)f1,r(#)f2,r(#)f3,t0)
+    = |[ r*diff(f1,t0),diff(r(#)f2,t0),diff(r(#)f3,t0) ]| by A1,FDIFF_1:23
+   .= |[ r*diff(f1,t0),r*diff(f2,t0),diff(r(#)f3,t0) ]| by A1,FDIFF_1:23
+   .= |[ r*p.1,r*p.2,r*p.3 ]| by A1,A3,FDIFF_1:23
+   .= r*VFuncdiff(f1,f2,f3,t0) by Lm3;
+    hence thesis;
+end;
+
+theorem Th60:
+  (f1 is_differentiable_in t0 & f2 is_differentiable_in t0 &
+  f3 is_differentiable_in t0) & (g1 is_differentiable_in t0 &
+  g2 is_differentiable_in t0 & g3 is_differentiable_in t0)
+  implies VFuncdiff(f1(#)g1,f2(#)g2,f3(#)g3,t0) =
+  |[ (g1.t0)*diff(f1,t0),(g2.t0)*diff(f2,t0),(g3.t0)*diff(f3,t0) ]|+
+  |[ (f1.t0)*diff(g1,t0),(f2.t0)*diff(g2,t0),(f3.t0)*diff(g3,t0) ]|
+proof
+    assume that
+A1: f1 is_differentiable_in t0 & f2 is_differentiable_in t0 &
+    f3 is_differentiable_in t0 and
+A2: g1 is_differentiable_in t0 & g2 is_differentiable_in t0 &
+    g3 is_differentiable_in t0;
+    set p = |[ (g1.t0)*diff(f1,t0),(g2.t0)*diff(f2,t0),(g3.t0)*diff(f3,t0) ]|;
+    set q = |[ (f1.t0)*diff(g1,t0),(f2.t0)*diff(g2,t0),(f3.t0)*diff(g3,t0) ]|;
+A4: p.1 = (g1.t0)*diff(f1,t0) & p.2 = (g2.t0)*diff(f2,t0) &
+    p.3 = (g3.t0)*diff(f3,t0) by FINSEQ_1:62;
+A5: q.1 = (f1.t0)*diff(g1,t0) & q.2 = (f2.t0)*diff(g2,t0) &
+    q.3 = (f3.t0)*diff(g3,t0) by FINSEQ_1:62;
+    VFuncdiff(f1(#)g1,f2(#)g2,f3(#)g3,t0)
+    = |[ (g1.t0)*diff(f1,t0)+(f1.t0)*diff(g1,t0),diff(f2(#)g2,t0),
+      diff(f3(#)g3,t0) ]| by A1,A2,FDIFF_1:24
+   .= |[ (g1.t0)*diff(f1,t0)+(f1.t0)*diff(g1,t0),
+      (g2.t0)*diff(f2,t0)+(f2.t0)*diff(g2,t0),diff(f3(#)g3,t0) ]|
+      by A1,A2,FDIFF_1:24
+   .= |[ p.1+q.1,p.2+q.2,p.3+q.3 ]| by A1,A2,A4,A5,FDIFF_1:24
+   .= |[ (g1.t0)*diff(f1,t0),(g2.t0)*diff(f2,t0),(g3.t0)*diff(f3,t0) ]|+
+      |[ (f1.t0)*diff(g1,t0),(f2.t0)*diff(g2,t0),(f3.t0)*diff(g3,t0) ]|
+      by Lm4;
+    hence thesis;
+end;
+
+theorem Th61:
+  (f1 is_differentiable_in t0 & f2 is_differentiable_in t0 &
+  f3 is_differentiable_in t0) & (g1 is_differentiable_in f1.t0 &
+  g2 is_differentiable_in f2.t0 & g3 is_differentiable_in f3.t0)
+  implies VFuncdiff(g1*f1,g2*f2,g3*f3,t0) =
+  |[ diff(g1,f1.t0)*diff(f1,t0),diff(g2,f2.t0)*diff(f2,t0),
+  diff(g3,f3.t0)*diff(f3,t0) ]|
+proof
+    assume that
+A1: f1 is_differentiable_in t0 & f2 is_differentiable_in t0 &
+    f3 is_differentiable_in t0 and
+A2: g1 is_differentiable_in f1.t0 & g2 is_differentiable_in f2.t0 &
+    g3 is_differentiable_in f3.t0;
+    VFuncdiff(g1*f1,g2*f2,g3*f3,t0)
+    = |[ diff(g1,f1.t0)*diff(f1,t0),diff(g2*f2,t0),diff(g3*f3,t0) ]|
+      by A1,A2,FDIFF_2:13
+   .= |[ diff(g1,f1.t0)*diff(f1,t0),diff(g2,f2.t0)*diff(f2,t0),
+      diff(g3*f3,t0) ]| by A1,A2,FDIFF_2:13
+   .= |[ diff(g1,f1.t0)*diff(f1,t0),diff(g2,f2.t0)*diff(f2,t0),
+      diff(g3,f3.t0)*diff(f3,t0) ]| by A1,A2,FDIFF_2:13;
+    hence thesis;
+end;
+
+theorem
+  (f1 is_differentiable_in t0 & f2 is_differentiable_in t0 &
+  f3 is_differentiable_in t0) & (g1 is_differentiable_in t0 &
+  g2 is_differentiable_in t0 & g3 is_differentiable_in t0) &
+  (g1.t0 <> 0 & g2.t0 <> 0 & g3.t0 <> 0) implies
+  VFuncdiff(f1/g1,f2/g2,f3/g3,t0) =
+  |[ (diff(f1,t0)*(g1.t0)-diff(g1,t0)*(f1.t0))/(g1.t0)^2,
+  (diff(f2,t0)*(g2.t0)-diff(g2,t0)*(f2.t0))/(g2.t0)^2,
+  (diff(f3,t0)*(g3.t0)-diff(g3,t0)*(f3.t0))/(g3.t0)^2  ]|
+proof
+    assume that
+A1: f1 is_differentiable_in t0 & f2 is_differentiable_in t0 &
+    f3 is_differentiable_in t0 and
+A2: g1 is_differentiable_in t0 & g2 is_differentiable_in t0 &
+    g3 is_differentiable_in t0 and
+A3: g1.t0 <> 0 & g2.t0 <> 0 & g3.t0 <> 0;
+    VFuncdiff(f1/g1,f2/g2,f3/g3,t0)
+    = |[ (diff(f1,t0)*(g1.t0)-diff(g1,t0)*(f1.t0))/(g1.t0)^2,
+      diff(f2/g2,t0),diff(f3/g3,t0) ]| by A1,A2,A3,FDIFF_2:14
+   .= |[ (diff(f1,t0)*(g1.t0)-diff(g1,t0)*(f1.t0))/(g1.t0)^2,
+      (diff(f2,t0)*(g2.t0)-diff(g2,t0)*(f2.t0))/(g2.t0)^2,
+      diff(f3/g3,t0) ]| by A1,A2,A3,FDIFF_2:14
+   .= |[ (diff(f1,t0)*(g1.t0)-diff(g1,t0)*(f1.t0))/(g1.t0)^2,
+      (diff(f2,t0)*(g2.t0)-diff(g2,t0)*(f2.t0))/(g2.t0)^2,
+      (diff(f3,t0)*(g3.t0)-diff(g3,t0)*(f3.t0))/(g3.t0)^2 ]|
+      by A1,A2,A3,FDIFF_2:14;
+    hence thesis;
+end;
+
+theorem Th63:
+  (f1 is_differentiable_in t0 & f2 is_differentiable_in t0 &
+  f3 is_differentiable_in t0) & (f1.t0 <> 0 & f2.t0 <> 0 & f3.t0 <> 0)
+  implies VFuncdiff(f1^,f2^,f3^,t0) =
+  - |[ diff(f1,t0)/(f1.t0)^2,diff(f2,t0)/(f2.t0)^2,
+  diff(f3,t0)/(f3.t0)^2 ]|
+proof
+    assume that
+A1: f1 is_differentiable_in t0 & f2 is_differentiable_in t0 &
+    f3 is_differentiable_in t0 and
+A2: f1.t0 <> 0 & f2.t0 <> 0 & f3.t0 <> 0;
+    set p = |[ diff(f1,t0)/(f1.t0)^2,diff(f2,t0)/(f2.t0)^2,
+    diff(f3,t0)/(f3.t0)^2 ]|;
+A4: p.1 = diff(f1,t0)/(f1.t0)^2 & p.2 = diff(f2,t0)/(f2.t0)^2 &
+    p.3 = diff(f3,t0)/(f3.t0)^2 by FINSEQ_1:62;
+    VFuncdiff(f1^,f2^,f3^,t0)
+    = |[ -diff(f1,t0)/(f1.t0)^2,diff(f2^,t0),diff(f3^,t0) ]|
+      by A1,A2,FDIFF_2:15
+   .= |[ -diff(f1,t0)/(f1.t0)^2,-diff(f2,t0)/(f2.t0)^2,diff(f3^,t0) ]|
+      by A1,A2,FDIFF_2:15
+   .= |[ -diff(f1,t0)/(f1.t0)^2,-diff(f2,t0)/(f2.t0)^2,
+      -diff(f3,t0)/(f3.t0)^2 ]| by A1,A2,FDIFF_2:15
+   .= |[ (-1)*p.1,(-1)*p.2,(-1)*p.3 ]| by A4
+   .= - |[ diff(f1,t0)/(f1.t0)^2,diff(f2,t0)/(f2.t0)^2,
+      diff(f3,t0)/(f3.t0)^2 ]| by Lm3;
+    hence thesis;
+end;
+
+theorem
+  f1 is_differentiable_in t0 & f2 is_differentiable_in t0 &
+  f3 is_differentiable_in t0 implies
+  VFuncdiff(r(#)f1,r(#)f2,r(#)f3,t0) = r*diff(f1,t0)*<e1>
+  +r*diff(f2,t0)*<e2>+r*diff(f3,t0)*<e3>
+proof
+    assume
+A1: f1 is_differentiable_in t0 &
+    f2 is_differentiable_in t0 & f3 is_differentiable_in t0;
+ VFuncdiff(r(#)f1,r(#)f2,r(#)f3,t0)
+  = r*VFuncdiff(f1,f2,f3,t0) by A1,Th59
+ .= r*( diff(f1,t0)*<e1>+diff(f2,t0)*<e2>
+    +diff(f3,t0)*<e3> ) by Th29
+ .= r*( |[ diff(f1,t0),0,0 ]|+diff(f2,t0)*<e2>
+    +diff(f3,t0)*<e3> ) by ThA11
+ .= r*( |[ diff(f1,t0),0,0 ]|+|[ 0,diff(f2,t0),0 ]|
+    +diff(f3,t0)*<e3> ) by ThA12
+ .= r*( (|[ diff(f1,t0),0,0 ]|+|[ 0,diff(f2,t0),0 ]|)
+    +|[ 0,0,diff(f3,t0) ]| ) by ThA13
+ .= r*( |[ diff(f1,t0)+0,0+diff(f2,t0),0+0 ]|
+    +|[ 0,0,diff(f3,t0) ]| ) by LmA31
+ .= r*|[ diff(f1,t0)+0,diff(f2,t0)+0,0+diff(f3,t0) ]| by LmA31
+ .= r*diff(f1,t0)*<e1>+r*diff(f2,t0)*<e2>
+    +r*diff(f3,t0)*<e3> by ThA8;
+   hence thesis;
+end;
+
+theorem
+  (f1 is_differentiable_in t0 & f2 is_differentiable_in t0 &
+  f3 is_differentiable_in t0) & (g1 is_differentiable_in t0 &
+  g2 is_differentiable_in t0 & g3 is_differentiable_in t0)
+  implies VFuncdiff(r(#)(f1+g1),r(#)(f2+g2),r(#)(f3+g3),t0) =
+  r*VFuncdiff(f1,f2,f3,t0)+r*VFuncdiff(g1,g2,g3,t0)
+proof
+    assume that
+A1: f1 is_differentiable_in t0 & f2 is_differentiable_in t0 &
+    f3 is_differentiable_in t0 and
+A2: g1 is_differentiable_in t0 & g2 is_differentiable_in t0 &
+    g3 is_differentiable_in t0;
+B1: f1+g1 is_differentiable_in t0 &
+    f2+g2 is_differentiable_in t0 &
+    f3+g3 is_differentiable_in t0 by A1,A2,FDIFF_1:21;
+ VFuncdiff(r(#)(f1+g1),r(#)(f2+g2),r(#)(f3+g3),t0)
+ = r*VFuncdiff(f1+g1,f2+g2,f3+g3,t0) by B1,Th59
+.= r*(VFuncdiff(f1,f2,f3,t0)+VFuncdiff(g1,g2,g3,t0)) by A1,A2,Th57
+.= r*VFuncdiff(f1,f2,f3,t0)+r*VFuncdiff(g1,g2,g3,t0) by EUCLID_4:6;
+    hence thesis;
+end;
+
+theorem
+  (f1 is_differentiable_in t0 & f2 is_differentiable_in t0 &
+  f3 is_differentiable_in t0) & (g1 is_differentiable_in t0 &
+  g2 is_differentiable_in t0 & g3 is_differentiable_in t0)
+  implies VFuncdiff(r(#)(f1-g1),r(#)(f2-g2),r(#)(f3-g3),t0) =
+  r*VFuncdiff(f1,f2,f3,t0)-r*VFuncdiff(g1,g2,g3,t0)
+proof
+    assume that
+A1: f1 is_differentiable_in t0 & f2 is_differentiable_in t0 &
+    f3 is_differentiable_in t0 and
+A2: g1 is_differentiable_in t0 & g2 is_differentiable_in t0 &
+    g3 is_differentiable_in t0;
+B1: f1-g1 is_differentiable_in t0 &
+    f2-g2 is_differentiable_in t0 &
+    f3-g3 is_differentiable_in t0 by A1,A2,FDIFF_1:22;
+VFuncdiff(r(#)(f1-g1),r(#)(f2-g2),r(#)(f3-g3),t0)
+ = r*VFuncdiff(f1-g1,f2-g2,f3-g3,t0) by B1,Th59
+.= r*(VFuncdiff(f1,f2,f3,t0)-VFuncdiff(g1,g2,g3,t0)) by A1,A2,Th58
+.= r*VFuncdiff(f1,f2,f3,t0)-r*VFuncdiff(g1,g2,g3,t0) by EUCLIDLP:17;
+    hence thesis;
+end;
+
+theorem
+  (f1 is_differentiable_in t0 & f2 is_differentiable_in t0 &
+  f3 is_differentiable_in t0) & (g1 is_differentiable_in t0 &
+  g2 is_differentiable_in t0 & g3 is_differentiable_in t0)
+  implies VFuncdiff(r(#)f1(#)g1,r(#)f2(#)g2,r(#)f3(#)g3,t0) =
+  r*|[ (g1.t0)*diff(f1,t0),(g2.t0)*diff(f2,t0),(g3.t0)*diff(f3,t0) ]|+
+  r*|[ (f1.t0)*diff(g1,t0),(f2.t0)*diff(g2,t0),(f3.t0)*diff(g3,t0) ]|
+proof
+    assume that
+A1: f1 is_differentiable_in t0 & f2 is_differentiable_in t0 &
+    f3 is_differentiable_in t0 and
+A2: g1 is_differentiable_in t0 & g2 is_differentiable_in t0 &
+    g3 is_differentiable_in t0;
+B2: r(#)f1 is_differentiable_in t0 & r(#)f2 is_differentiable_in t0 &
+    r(#)f3 is_differentiable_in t0 by A1,FDIFF_1:23;
+   VFuncdiff(r(#)f1(#)g1,r(#)f2(#)g2,r(#)f3(#)g3,t0)
+ = |[ (g1.t0)*diff(r(#)f1,t0),(g2.t0)*diff(r(#)f2,t0),
+    (g3.t0)*diff(r(#)f3,t0) ]|+
+    |[ ((r(#)f1).t0)*diff(g1,t0),((r(#)f2).t0)*diff(g2,t0),
+    ((r(#)f3).t0)*diff(g3,t0) ]| by A2,B2,Th60
+ .= |[ (g1.t0)*(r*diff(f1,t0)),(g2.t0)*diff(r(#)f2,t0),
+    (g3.t0)*diff(r(#)f3,t0) ]|+
+    |[ ((r(#)f1).t0)*diff(g1,t0),((r(#)f2).t0)*diff(g2,t0),
+    ((r(#)f3).t0)*diff(g3,t0) ]| by A1,FDIFF_1:23
+ .= |[ (g1.t0)*(r*diff(f1,t0)),(g2.t0)*(r*diff(f2,t0)),
+    (g3.t0)*diff(r(#)f3,t0) ]|+
+    |[ ((r(#)f1).t0)*diff(g1,t0),((r(#)f2).t0)*diff(g2,t0),
+    ((r(#)f3).t0)*diff(g3,t0) ]| by A1,FDIFF_1:23
+ .= |[ (g1.t0)*(r*diff(f1,t0)),(g2.t0)*(r*diff(f2,t0)),
+    (g3.t0)*(r*diff(f3,t0)) ]|+
+    |[ ((r(#)f1).t0)*diff(g1,t0),((r(#)f2).t0)*diff(g2,t0),
+    ((r(#)f3).t0)*diff(g3,t0) ]| by A1,FDIFF_1:23
+ .= |[ (g1.t0)*(r*diff(f1,t0)),(g2.t0)*(r*diff(f2,t0)),
+    (g3.t0)*(r*diff(f3,t0)) ]|+
+    |[ (r*f1.t0)*diff(g1,t0),((r(#)f2).t0)*diff(g2,t0),
+    ((r(#)f3).t0)*diff(g3,t0) ]| by VALUED_1:6
+ .= |[ (g1.t0)*(r*diff(f1,t0)),(g2.t0)*(r*diff(f2,t0)),
+    (g3.t0)*(r*diff(f3,t0)) ]|+
+    |[ (r*f1.t0)*diff(g1,t0),(r*f2.t0)*diff(g2,t0),
+    ((r(#)f3).t0)*diff(g3,t0) ]| by VALUED_1:6
+ .= |[ (g1.t0)*(r*diff(f1,t0)),(g2.t0)*(r*diff(f2,t0)),
+    (g3.t0)*(r*diff(f3,t0)) ]|+
+    |[ r*(f1.t0)*diff(g1,t0),r*(f2.t0)*diff(g2,t0),
+    r*(f3.t0)*diff(g3,t0) ]| by VALUED_1:6
+ .= |[ (g1.t0)*(r*diff(f1,t0)),(g2.t0)*(r*diff(f2,t0)),
+    (g3.t0)*(r*diff(f3,t0)) ]|+
+    |[ r*((f1.t0)*diff(g1,t0)),r*((f2.t0)*diff(g2,t0)),
+    r*((f3.t0)*diff(g3,t0)) ]|
+ .= |[ r*((g1.t0)*diff(f1,t0)),r*((g2.t0)*diff(f2,t0)),
+    r*((g3.t0)*diff(f3,t0)) ]|+
+    r*|[ (f1.t0)*diff(g1,t0),(f2.t0)*diff(g2,t0),
+    (f3.t0)*diff(g3,t0) ]| by LmA8
+ .= r*|[ (g1.t0)*diff(f1,t0),(g2.t0)*diff(f2,t0),
+    (g3.t0)*diff(f3,t0) ]|+
+    r*|[ (f1.t0)*diff(g1,t0),(f2.t0)*diff(g2,t0),
+    (f3.t0)*diff(g3,t0) ]| by LmA8;
+    hence thesis;
+end;
+
+theorem
+  (f1 is_differentiable_in t0 & f2 is_differentiable_in t0 &
+  f3 is_differentiable_in t0) & (g1 is_differentiable_in f1.t0 &
+  g2 is_differentiable_in f2.t0 & g3 is_differentiable_in f3.t0)
+  implies VFuncdiff(r(#)g1*f1,r(#)g2*f2,r(#)g3*f3,t0) =
+  r*|[ diff(g1,f1.t0)*diff(f1,t0),diff(g2,f2.t0)*diff(f2,t0),
+  diff(g3,f3.t0)*diff(f3,t0) ]|
+proof
+  assume that
+A1: f1 is_differentiable_in t0 & f2 is_differentiable_in t0 &
+    f3 is_differentiable_in t0 and
+A2: g1 is_differentiable_in f1.t0 & g2 is_differentiable_in f2.t0 &
+    g3 is_differentiable_in f3.t0;
+A3: r(#)g1 is_differentiable_in f1.t0 & r(#)g2 is_differentiable_in f2.t0 &
+    r(#)g3 is_differentiable_in f3.t0 by A2,FDIFF_1:23;
+   VFuncdiff(r(#)g1*f1,r(#)g2*f2,r(#)g3*f3,t0)
+  = |[ diff(r(#)g1,f1.t0)*diff(f1,t0),diff(r(#)g2,f2.t0)*diff(f2,t0),
+    diff(r(#)g3,f3.t0)*diff(f3,t0) ]| by A1,A3,Th61
+ .= |[ r*diff(g1,f1.t0)*diff(f1,t0),diff(r(#)g2,f2.t0)*diff(f2,t0),
+    diff(r(#)g3,f3.t0)*diff(f3,t0) ]| by A2,FDIFF_1:23
+ .= |[ r*diff(g1,f1.t0)*diff(f1,t0),r*diff(g2,f2.t0)*diff(f2,t0),
+    diff(r(#)g3,f3.t0)*diff(f3,t0) ]| by A2,FDIFF_1:23
+ .= |[ r*diff(g1,f1.t0)*diff(f1,t0),r*diff(g2,f2.t0)*diff(f2,t0),
+    r*diff(g3,f3.t0)*diff(f3,t0) ]| by A2,FDIFF_1:23
+ .= |[ r*(diff(g1,f1.t0)*diff(f1,t0)),r*(diff(g2,f2.t0)*diff(f2,t0)),
+    r*(diff(g3,f3.t0)*diff(f3,t0)) ]|
+ .= r*|[ diff(g1,f1.t0)*diff(f1,t0),diff(g2,f2.t0)*diff(f2,t0),
+    diff(g3,f3.t0)*diff(f3,t0) ]| by LmA8;
+  hence thesis;
+end;
+
+theorem
+   (f1 is_differentiable_in t0 & f2 is_differentiable_in t0 &
+  f3 is_differentiable_in t0) & (g1 is_differentiable_in t0 &
+  g2 is_differentiable_in t0 & g3 is_differentiable_in t0) &
+  (g1.t0 <> 0 & g2.t0 <> 0 & g3.t0 <> 0) implies
+  VFuncdiff(r(#)f1/g1,r(#)f2/g2,r(#)f3/g3,t0) =
+  r*|[ (diff(f1,t0)*(g1.t0)-diff(g1,t0)*(f1.t0))/(g1.t0)^2,
+  (diff(f2,t0)*(g2.t0)-diff(g2,t0)*(f2.t0))/(g2.t0)^2,
+  (diff(f3,t0)*(g3.t0)-diff(g3,t0)*(f3.t0))/(g3.t0)^2  ]|
+proof
+    assume that
+A1: f1 is_differentiable_in t0 & f2 is_differentiable_in t0 &
+    f3 is_differentiable_in t0 and
+A2: g1 is_differentiable_in t0 & g2 is_differentiable_in t0 &
+    g3 is_differentiable_in t0 and
+A3: g1.t0 <> 0 & g2.t0 <> 0 & g3.t0 <> 0;
+A4: r(#)f1 is_differentiable_in t0 & r(#)f2 is_differentiable_in t0 &
+    r(#)f3 is_differentiable_in t0 by A1,FDIFF_1:23;
+    VFuncdiff(r(#)f1/g1,r(#)f2/g2,r(#)f3/g3,t0)
+ = |[ (diff(r(#)f1,t0)*(g1.t0)-diff(g1,t0)*((r(#)f1).t0))/(g1.t0)^2,
+      diff((r(#)f2)/g2,t0),diff((r(#)f3)/g3,t0) ]|
+      by A2,A3,A4,FDIFF_2:14
+ .= |[ (diff(r(#)f1,t0)*(g1.t0)-diff(g1,t0)*((r(#)f1).t0))/(g1.t0)^2,
+      (diff(r(#)f2,t0)*(g2.t0)-diff(g2,t0)*((r(#)f2).t0))/(g2.t0)^2,
+      diff((r(#)f3)/g3,t0) ]| by A2,A3,A4,FDIFF_2:14
+ .= |[ (diff(r(#)f1,t0)*(g1.t0)-diff(g1,t0)*((r(#)f1).t0))/(g1.t0)^2,
+      (diff(r(#)f2,t0)*(g2.t0)-diff(g2,t0)*((r(#)f2).t0))/(g2.t0)^2,
+      (diff(r(#)f3,t0)*(g3.t0)-diff(g3,t0)*((r(#)f3).t0))/(g3.t0)^2 ]|
+      by A2,A3,A4,FDIFF_2:14
+ .= |[ (r*diff(f1,t0)*(g1.t0)-diff(g1,t0)*((r(#)f1).t0))/(g1.t0)^2,
+      (diff(r(#)f2,t0)*(g2.t0)-diff(g2,t0)*((r(#)f2).t0))/(g2.t0)^2,
+      (diff(r(#)f3,t0)*(g3.t0)-diff(g3,t0)*((r(#)f3).t0))/(g3.t0)^2 ]|
+      by A1,FDIFF_1:23
+ .= |[ (r*diff(f1,t0)*(g1.t0)-diff(g1,t0)*((r(#)f1).t0))/(g1.t0)^2,
+      (r*diff(f2,t0)*(g2.t0)-diff(g2,t0)*((r(#)f2).t0))/(g2.t0)^2,
+      (diff(r(#)f3,t0)*(g3.t0)-diff(g3,t0)*((r(#)f3).t0))/(g3.t0)^2 ]|
+      by A1,FDIFF_1:23
+ .= |[ (r*diff(f1,t0)*(g1.t0)-diff(g1,t0)*((r(#)f1).t0))/(g1.t0)^2,
+      (r*diff(f2,t0)*(g2.t0)-diff(g2,t0)*((r(#)f2).t0))/(g2.t0)^2,
+      (r*diff(f3,t0)*(g3.t0)-diff(g3,t0)*((r(#)f3).t0))/(g3.t0)^2 ]|
+      by A1,FDIFF_1:23
+ .= |[ (r*diff(f1,t0)*(g1.t0)-diff(g1,t0)*(r*f1.t0))/(g1.t0)^2,
+      (r*diff(f2,t0)*(g2.t0)-diff(g2,t0)*((r(#)f2).t0))/(g2.t0)^2,
+      (r*diff(f3,t0)*(g3.t0)-diff(g3,t0)*((r(#)f3).t0))/(g3.t0)^2 ]|
+      by VALUED_1:6
+ .= |[ (r*diff(f1,t0)*(g1.t0)-diff(g1,t0)*(r*f1.t0))/(g1.t0)^2,
+      (r*diff(f2,t0)*(g2.t0)-diff(g2,t0)*(r*f2.t0))/(g2.t0)^2,
+      (r*diff(f3,t0)*(g3.t0)-diff(g3,t0)*((r(#)f3).t0))/(g3.t0)^2 ]|
+      by VALUED_1:6
+ .= |[ (r*diff(f1,t0)*(g1.t0)-diff(g1,t0)*(r*f1.t0))/(g1.t0)^2,
+      (r*diff(f2,t0)*(g2.t0)-diff(g2,t0)*(r*f2.t0))/(g2.t0)^2,
+      (r*diff(f3,t0)*(g3.t0)-diff(g3,t0)*(r*f3.t0))/(g3.t0)^2 ]|
+      by VALUED_1:6
+ .= |[ (r*(diff(f1,t0)*(g1.t0)-diff(g1,t0)*(f1.t0)))/(g1.t0)^2,
+      (r*(diff(f2,t0)*(g2.t0)-diff(g2,t0)*(f2.t0)))/(g2.t0)^2,
+      (r*(diff(f3,t0)*(g3.t0)-diff(g3,t0)*(f3.t0)))/(g3.t0)^2 ]|
+ .= |[ r*((diff(f1,t0)*(g1.t0)-diff(g1,t0)*(f1.t0))/(g1.t0)^2),
+      (r*(diff(f2,t0)*(g2.t0)-diff(g2,t0)*(f2.t0)))/(g2.t0)^2,
+      (r*(diff(f3,t0)*(g3.t0)-diff(g3,t0)*(f3.t0)))/(g3.t0)^2 ]|
+      by XCMPLX_1:75
+ .= |[ r*((diff(f1,t0)*(g1.t0)-diff(g1,t0)*(f1.t0))/(g1.t0)^2),
+      r*((diff(f2,t0)*(g2.t0)-diff(g2,t0)*(f2.t0))/(g2.t0)^2),
+      (r*(diff(f3,t0)*(g3.t0)-diff(g3,t0)*(f3.t0)))/(g3.t0)^2 ]|
+      by XCMPLX_1:75
+ .= |[ r*((diff(f1,t0)*(g1.t0)-diff(g1,t0)*(f1.t0))/(g1.t0)^2),
+      r*((diff(f2,t0)*(g2.t0)-diff(g2,t0)*(f2.t0))/(g2.t0)^2),
+      r*((diff(f3,t0)*(g3.t0)-diff(g3,t0)*(f3.t0))/(g3.t0)^2) ]|
+      by XCMPLX_1:75
+ .= r*|[ (diff(f1,t0)*(g1.t0)-diff(g1,t0)*(f1.t0))/(g1.t0)^2,
+      (diff(f2,t0)*(g2.t0)-diff(g2,t0)*(f2.t0))/(g2.t0)^2,
+      (diff(f3,t0)*(g3.t0)-diff(g3,t0)*(f3.t0))/(g3.t0)^2 ]| by LmA8;
+    hence thesis;
+end;
+
+theorem
+  (f1 is_differentiable_in t0 & f2 is_differentiable_in t0 &
+  f3 is_differentiable_in t0) & (f1.t0 <> 0 & f2.t0 <> 0 & f3.t0 <> 0) &
+  r <> 0 implies VFuncdiff(r(#)f1^,r(#)f2^,r(#)f3^,t0) =
+  - 1/r*|[ diff(f1,t0)/(f1.t0)^2,diff(f2,t0)/(f2.t0)^2,
+  diff(f3,t0)/(f3.t0)^2 ]|
+proof
+    assume that
+A1: f1 is_differentiable_in t0 & f2 is_differentiable_in t0 &
+    f3 is_differentiable_in t0 and
+A2: f1.t0 <> 0 & f2.t0 <> 0 & f3.t0 <> 0 and
+B0: r <> 0;
+A3: r(#)f1 is_differentiable_in t0 &
+    r(#)f2 is_differentiable_in t0 &
+    r(#)f3 is_differentiable_in t0 by A1,FDIFF_1:23;
+B1: (r(#)f1).t0 = r*(f1.t0) by VALUED_1:6;
+B2: (r(#)f2).t0 = r*(f2.t0) by VALUED_1:6;
+B3: (r(#)f3).t0 = r*(f3.t0) by VALUED_1:6;
+  VFuncdiff(r(#)f1^,r(#)f2^,r(#)f3^,t0)
+ = - |[ diff(r(#)f1,t0)/((r(#)f1).t0)^2,diff(r(#)f2,t0)/((r(#)f2).t0)^2,
+         diff(r(#)f3,t0)/((r(#)f3).t0)^2 ]|
+         by A3,B1,B2,B3,A2,B0,Th63
+ .= - |[ r*diff(f1,t0)/((r(#)f1).t0)^2,diff(r(#)f2,t0)/((r(#)f2).t0)^2,
+         diff(r(#)f3,t0)/((r(#)f3).t0)^2 ]| by A1,FDIFF_1:23
+ .= - |[ r*diff(f1,t0)/((r(#)f1).t0)^2,r*diff(f2,t0)/((r(#)f2).t0)^2,
+         diff(r(#)f3,t0)/((r(#)f3).t0)^2 ]| by A1,FDIFF_1:23
+ .= - |[ (r*diff(f1,t0))/((r(#)f1).t0)^2,(r*diff(f2,t0))/((r(#)f2).t0)^2,
+         (r*diff(f3,t0))/((r(#)f3).t0)^2 ]| by A1,FDIFF_1:23
+ .= - |[ r*(diff(f1,t0)/((r(#)f1).t0)^2),(r*diff(f2,t0))/((r(#)f2).t0)^2,
+         (r*diff(f3,t0))/((r(#)f3).t0)^2 ]| by XCMPLX_1:75
+ .= - |[ r*(diff(f1,t0)/((r(#)f1).t0)^2),r*(diff(f2,t0)/((r(#)f2).t0)^2),
+         (r*diff(f3,t0))/((r(#)f3).t0)^2 ]| by XCMPLX_1:75
+ .= - |[ r*(diff(f1,t0)/((r(#)f1).t0)^2),r*(diff(f2,t0)/((r(#)f2).t0)^2),
+         r*(diff(f3,t0)/((r(#)f3).t0)^2) ]| by XCMPLX_1:75
+ .= - r*|[ diff(f1,t0)/(r^2*(f1.t0)^2),diff(f2,t0)/(r^2*(f2.t0)^2),
+         diff(f3,t0)/(r^2*(f3.t0)^2) ]| by B3,B2,B1,LmA8
+ .= - r*|[ diff(f1,t0)/r^2/(f1.t0)^2,diff(f2,t0)/(r^2*(f2.t0)^2),
+         diff(f3,t0)/(r^2*(f3.t0)^2) ]| by XCMPLX_1:79
+ .= - r*|[ diff(f1,t0)/r^2/(f1.t0)^2,diff(f2,t0)/r^2/(f2.t0)^2,
+         diff(f3,t0)/(r^2*(f3.t0)^2) ]| by XCMPLX_1:79
+ .= - r*|[ diff(f1,t0)/r^2/(f1.t0)^2,diff(f2,t0)/r^2/(f2.t0)^2,
+         diff(f3,t0)/r^2/(f3.t0)^2 ]| by XCMPLX_1:79
+ .= - r*|[ diff(f1,t0)/(f1.t0)^2/r^2,diff(f2,t0)/r^2/(f2.t0)^2,
+         diff(f3,t0)/r^2/(f3.t0)^2 ]| by XCMPLX_1:48
+ .= - r*|[ diff(f1,t0)/(f1.t0)^2/r^2,diff(f2,t0)/(f2.t0)^2/r^2,
+         diff(f3,t0)/r^2/(f3.t0)^2 ]| by XCMPLX_1:48
+ .= - r*|[ diff(f1,t0)/(f1.t0)^2/r^2,diff(f2,t0)/(f2.t0)^2/r^2,
+         diff(f3,t0)/(f3.t0)^2/r^2 ]| by XCMPLX_1:48
+ .= - r*|[ (diff(f1,t0)/(f1.t0)^2)/(1/r^2)",diff(f2,t0)/(f2.t0)^2/r^2,
+         diff(f3,t0)/(f3.t0)^2/r^2 ]| by XCMPLX_1:219
+ .= - r*|[ (1/r^2)*(diff(f1,t0)/(f1.t0)^2),diff(f2,t0)/(f2.t0)^2/r^2,
+         diff(f3,t0)/(f3.t0)^2/r^2 ]| by XCMPLX_1:221
+ .= - r*|[ (1/r^2)*(diff(f1,t0)/(f1.t0)^2),(diff(f2,t0)/(f2.t0)^2)/(1/r^2)",
+         diff(f3,t0)/(f3.t0)^2/r^2 ]| by XCMPLX_1:219
+ .= - r*|[ (1/r^2)*(diff(f1,t0)/(f1.t0)^2),(1/r^2)*(diff(f2,t0)/(f2.t0)^2),
+         diff(f3,t0)/(f3.t0)^2/r^2 ]| by XCMPLX_1:221
+ .= - r*|[ (1/r^2)*(diff(f1,t0)/(f1.t0)^2),(1/r^2)*(diff(f2,t0)/(f2.t0)^2),
+         diff(f3,t0)/(f3.t0)^2/(1/r^2)" ]| by XCMPLX_1:219
+ .= - r*|[ (1/r^2)*(diff(f1,t0)/(f1.t0)^2),(1/r^2)*(diff(f2,t0)/(f2.t0)^2),
+         (1/r^2)*(diff(f3,t0)/(f3.t0)^2) ]| by XCMPLX_1:221
+ .= - r*((1/r^2)*|[ diff(f1,t0)/(f1.t0)^2,diff(f2,t0)/(f2.t0)^2,
+         diff(f3,t0)/(f3.t0)^2 ]|) by LmA8
+ .= - (r*(1/r^2))*|[ diff(f1,t0)/(f1.t0)^2,diff(f2,t0)/(f2.t0)^2,
+         diff(f3,t0)/(f3.t0)^2 ]| by EUCLID_4:4
+ .= - ((r*1)/r^2)*|[ diff(f1,t0)/(f1.t0)^2,diff(f2,t0)/(f2.t0)^2,
+         diff(f3,t0)/(f3.t0)^2 ]| by XCMPLX_1:75
+ .= - (r/r/r)*|[ diff(f1,t0)/(f1.t0)^2,diff(f2,t0)/(f2.t0)^2,
+         diff(f3,t0)/(f3.t0)^2 ]| by XCMPLX_1:79
+ .= - (1/r)*|[ diff(f1,t0)/(f1.t0)^2,diff(f2,t0)/(f2.t0)^2,
+         diff(f3,t0)/(f3.t0)^2 ]| by B0,XCMPLX_1:60;
+    hence thesis;
+end;
+
+::p37-4(3)
+theorem
+  (f1 is_differentiable_in t0 & f2 is_differentiable_in t0 &
+  f3 is_differentiable_in t0) & (g1 is_differentiable_in t0 &
+  g2 is_differentiable_in t0 & g3 is_differentiable_in t0)
+  implies VFuncdiff( f2(#)g3-f3(#)g2,f3(#)g1-f1(#)g3,
+                     f1(#)g2-f2(#)g1,t0 )
+  = |[ (f2.t0)*diff(g3,t0)-(f3.t0)*diff(g2,t0),
+       (f3.t0)*diff(g1,t0)-(f1.t0)*diff(g3,t0),
+       (f1.t0)*diff(g2,t0)-(f2.t0)*diff(g1,t0) ]|
+  + |[ diff(f2,t0)*(g3.t0)-diff(f3,t0)*(g2.t0),
+       diff(f3,t0)*(g1.t0)-diff(f1,t0)*(g3.t0),
+       diff(f1,t0)*(g2.t0)-diff(f2,t0)*(g1.t0) ]|
+proof
+    assume that
+A1: f1 is_differentiable_in t0 &
+    f2 is_differentiable_in t0 &
+    f3 is_differentiable_in t0 and
+A2: g1 is_differentiable_in t0 &
+    g2 is_differentiable_in t0 &
+    g3 is_differentiable_in t0;
+A3: f2(#)g3 is_differentiable_in t0 &
+    f3(#)g2 is_differentiable_in t0 &
+    f3(#)g1 is_differentiable_in t0 &
+    f1(#)g3 is_differentiable_in t0 &
+    f1(#)g2 is_differentiable_in t0 &
+    f2(#)g1 is_differentiable_in t0 by A1,A2,FDIFF_1:24;
+  VFuncdiff( f2(#)g3-f3(#)g2,f3(#)g1-f1(#)g3,
+                f1(#)g2-f2(#)g1,t0 )
+  = VFuncdiff( f2(#)g3,f3(#)g1,f1(#)g2,t0 )
+   - VFuncdiff( f3(#)g2,f1(#)g3,f2(#)g1,t0 ) by A3,Th58
+ .= (|[ (g3.t0)*diff(f2,t0),(g1.t0)*diff(f3,t0),
+        (g2.t0)*diff(f1,t0) ]|+
+    |[ (f2.t0)*diff(g3,t0),(f3.t0)*diff(g1,t0),
+       (f1.t0)*diff(g2,t0) ]|)-
+    VFuncdiff( f3(#)g2,f1(#)g3,f2(#)g1,t0 ) by A1,A2,Th60
+ .= (|[ (g3.t0)*diff(f2,t0),(g1.t0)*diff(f3,t0),
+        (g2.t0)*diff(f1,t0) ]|+
+    |[ (f2.t0)*diff(g3,t0),(f3.t0)*diff(g1,t0),
+       (f1.t0)*diff(g2,t0) ]|)-
+    (|[ (g2.t0)*diff(f3,t0),(g3.t0)*diff(f1,t0),
+        (g1.t0)*diff(f2,t0) ]|+
+    |[ (f3.t0)*diff(g2,t0),(f1.t0)*diff(g3,t0),
+       (f2.t0)*diff(g1,t0) ]|) by A1,A2,Th60
+ .= (|[ (g3.t0)*diff(f2,t0),(g1.t0)*diff(f3,t0),
+        (g2.t0)*diff(f1,t0) ]|-
+     |[ (g2.t0)*diff(f3,t0),(g3.t0)*diff(f1,t0),
+        (g1.t0)*diff(f2,t0) ]|)+
+     (|[ (f2.t0)*diff(g3,t0),(f3.t0)*diff(g1,t0),
+         (f1.t0)*diff(g2,t0) ]|-
+      |[ (f3.t0)*diff(g2,t0),(f1.t0)*diff(g3,t0),
+         (f2.t0)*diff(g1,t0) ]|) by LmA62
+ .= (|[ (g3.t0)*diff(f2,t0)-(g2.t0)*diff(f3,t0),
+     (g1.t0)*diff(f3,t0)-(g3.t0)*diff(f1,t0),
+     (g2.t0)*diff(f1,t0)-(g1.t0)*diff(f2,t0) ]|)+
+    (|[ (f2.t0)*diff(g3,t0),(f3.t0)*diff(g1,t0),
+      (f1.t0)*diff(g2,t0) ]|-
+      |[ (f3.t0)*diff(g2,t0),(f1.t0)*diff(g3,t0),
+      (f2.t0)*diff(g1,t0) ]|) by LmA63
+ .= |[ (g3.t0)*diff(f2,t0)-(g2.t0)*diff(f3,t0),
+     (g1.t0)*diff(f3,t0)-(g3.t0)*diff(f1,t0),
+     (g2.t0)*diff(f1,t0)-(g1.t0)*diff(f2,t0) ]|+
+    |[ (f2.t0)*diff(g3,t0)-(f3.t0)*diff(g2,t0),
+     (f3.t0)*diff(g1,t0)-(f1.t0)*diff(g3,t0),
+      (f1.t0)*diff(g2,t0)-(f2.t0)*diff(g1,t0) ]| by LmA63;
+   hence thesis;
+end;
+
+::p37-4(5.1) A*(BXC)
+theorem
+  (f1 is_differentiable_in t0 & f2 is_differentiable_in t0 &
+  f3 is_differentiable_in t0) & (g1 is_differentiable_in t0 &
+  g2 is_differentiable_in t0 & g3 is_differentiable_in t0) &
+  (h1 is_differentiable_in t0 & h2 is_differentiable_in t0 &
+   h3 is_differentiable_in t0) implies
+  VFuncdiff( h1(#)(f2(#)g3-f3(#)g2),
+             h2(#)(f3(#)g1-f1(#)g3),
+             h3(#)(f1(#)g2-f2(#)g1),t0 )
+  = |[ diff(h1,t0)*(f2.t0*g3.t0-f3.t0*g2.t0),
+       diff(h2,t0)*(f3.t0*g1.t0-f1.t0*g3.t0),
+       diff(h3,t0)*(f1.t0*g2.t0-f2.t0*g1.t0) ]|+
+    |[ (h1.t0)*(diff(f2,t0)*(g3.t0)-diff(f3,t0)*(g2.t0)),
+       (h2.t0)*(diff(f3,t0)*(g1.t0)-diff(f1,t0)*(g3.t0)),
+       (h3.t0)*(diff(f1,t0)*(g2.t0)-diff(f2,t0)*(g1.t0)) ]|+
+    |[ (h1.t0)*((f2.t0)*diff(g3,t0)-(f3.t0)*diff(g2,t0)),
+       (h2.t0)*((f3.t0)*diff(g1,t0)-(f1.t0)*diff(g3,t0)),
+       (h3.t0)*((f1.t0)*diff(g2,t0)-(f2.t0)*diff(g1,t0)) ]|
+proof
+    assume that
+A1: f1 is_differentiable_in t0 &
+    f2 is_differentiable_in t0 &
+    f3 is_differentiable_in t0 and
+A2: g1 is_differentiable_in t0 &
+    g2 is_differentiable_in t0 &
+    g3 is_differentiable_in t0 and
+B1: h1 is_differentiable_in t0 &
+    h2 is_differentiable_in t0 &
+    h3 is_differentiable_in t0;
+A3: f2(#)g3 is_differentiable_in t0 &
+    f3(#)g2 is_differentiable_in t0 &
+    f3(#)g1 is_differentiable_in t0 &
+    f1(#)g3 is_differentiable_in t0 &
+    f1(#)g2 is_differentiable_in t0 &
+    f2(#)g1 is_differentiable_in t0 by A1,A2,FDIFF_1:24;
+A5: f2(#)g3-f3(#)g2 is_differentiable_in t0 &
+    f3(#)g1-f1(#)g3 is_differentiable_in t0 &
+    f1(#)g2-f2(#)g1 is_differentiable_in t0 by A3,FDIFF_1:22;
+B3: f2(#)g3-f3(#)g2 is_left_differentiable_in t0 by A5,FDIFF_3:22;
+B0: t0 in dom (f2(#)g3-f3(#)g2)
+  proof
+    consider r such that
+C3: 0 < r & [.t0 - r,t0.] c= dom (f2(#)g3-f3(#)g2) by B3,FDIFF_3:def 4;
+    t0 - r <= t0 by C3,XREAL_1:46;
+    then t0 in [.t0 - r,t0.];
+    hence thesis by C3;
+  end;
+B6: f3(#)g1-f1(#)g3 is_left_differentiable_in t0 by A5,FDIFF_3:22;
+B4: t0 in dom (f3(#)g1-f1(#)g3)
+proof
+    consider r1 such that
+C2: 0 < r1 & [.t0 - r1,t0.] c= dom (f3(#)g1-f1(#)g3) by B6,FDIFF_3:def 4;
+    t0 - r1 <= t0 by C2,XREAL_1:46;
+    then t0 in [.t0 - r1,t0.];
+    hence thesis by C2;
+  end;
+B8: f1(#)g2-f2(#)g1 is_left_differentiable_in t0 by A5,FDIFF_3:22;
+B9: t0 in dom (f1(#)g2-f2(#)g1)
+proof
+    consider r2 such that
+C1: 0 < r2 & [.t0 - r2,t0.] c= dom (f1(#)g2-f2(#)g1) by B8,FDIFF_3:def 4;
+    t0 - r2 <= t0 by C1,XREAL_1:46;
+    then t0 in [.t0 - r2,t0.];
+    hence thesis by C1;
+  end;
+ VFuncdiff( h1(#)(f2(#)g3-f3(#)g2),
+               h2(#)(f3(#)g1-f1(#)g3),
+               h3(#)(f1(#)g2-f2(#)g1),t0 )
+ = |[ ((f2(#)g3-f3(#)g2).t0)*diff(h1,t0),
+      ((f3(#)g1-f1(#)g3).t0)*diff(h2,t0),
+      ((f1(#)g2-f2(#)g1).t0)*diff(h3,t0) ]|+
+   |[ (h1.t0)*diff((f2(#)g3-f3(#)g2),t0),
+      (h2.t0)*diff((f3(#)g1-f1(#)g3),t0),
+      (h3.t0)*diff((f1(#)g2-f2(#)g1),t0) ]| by B1,A5,Th60
+.= |[ ((f2(#)g3-f3(#)g2).t0)*diff(h1,t0),
+      ((f3(#)g1-f1(#)g3).t0)*diff(h2,t0),
+      ((f1(#)g2-f2(#)g1).t0)*diff(h3,t0) ]|+
+   |[ (h1.t0)*(diff(f2(#)g3,t0)-diff(f3(#)g2,t0)),
+      (h2.t0)*diff((f3(#)g1-f1(#)g3),t0),
+      (h3.t0)*diff((f1(#)g2-f2(#)g1),t0) ]| by A3,FDIFF_1:22
+.= |[ ((f2(#)g3-f3(#)g2).t0)*diff(h1,t0),
+      ((f3(#)g1-f1(#)g3).t0)*diff(h2,t0),
+      ((f1(#)g2-f2(#)g1).t0)*diff(h3,t0) ]|+
+   |[ (h1.t0)*(diff(f2(#)g3,t0)-diff(f3(#)g2,t0)),
+      (h2.t0)*(diff(f3(#)g1,t0)-diff(f1(#)g3,t0)),
+      (h3.t0)*diff((f1(#)g2-f2(#)g1),t0) ]| by A3,FDIFF_1:22
+.= |[ ((f2(#)g3-f3(#)g2).t0)*diff(h1,t0),
+      ((f3(#)g1-f1(#)g3).t0)*diff(h2,t0),
+      ((f1(#)g2-f2(#)g1).t0)*diff(h3,t0) ]|+
+   |[ (h1.t0)*(diff(f2(#)g3,t0)-diff(f3(#)g2,t0)),
+      (h2.t0)*(diff(f3(#)g1,t0)-diff(f1(#)g3,t0)),
+      (h3.t0)*(diff(f1(#)g2,t0)-diff(f2(#)g1,t0)) ]| by A3,FDIFF_1:22
+.= |[ ((f2(#)g3-f3(#)g2).t0)*diff(h1,t0),
+      ((f3(#)g1-f1(#)g3).t0)*diff(h2,t0),
+      ((f1(#)g2-f2(#)g1).t0)*diff(h3,t0) ]|+
+   |[ (h1.t0)*((g3.t0)*diff(f2,t0)+(f2.t0)*diff(g3,t0)
+      -diff(f3(#)g2,t0)),
+      (h2.t0)*(diff(f3(#)g1,t0)-diff(f1(#)g3,t0)),
+      (h3.t0)*(diff(f1(#)g2,t0)-diff(f2(#)g1,t0)) ]| by A1,A2,FDIFF_1:24
+.= |[ ((f2(#)g3-f3(#)g2).t0)*diff(h1,t0),
+      ((f3(#)g1-f1(#)g3).t0)*diff(h2,t0),
+      ((f1(#)g2-f2(#)g1).t0)*diff(h3,t0) ]|+
+   |[ (h1.t0)*((g3.t0)*diff(f2,t0)+(f2.t0)*diff(g3,t0)
+      -((g2.t0)*diff(f3,t0)+(f3.t0)*diff(g2,t0))),
+      (h2.t0)*(diff(f3(#)g1,t0)-diff(f1(#)g3,t0)),
+      (h3.t0)*(diff(f1(#)g2,t0)-diff(f2(#)g1,t0)) ]| by A1,A2,FDIFF_1:24
+.= |[ ((f2(#)g3-f3(#)g2).t0)*diff(h1,t0),
+      ((f3(#)g1-f1(#)g3).t0)*diff(h2,t0),
+      ((f1(#)g2-f2(#)g1).t0)*diff(h3,t0) ]|+
+   |[ (h1.t0)*((g3.t0)*diff(f2,t0)+(f2.t0)*diff(g3,t0)
+      -((g2.t0)*diff(f3,t0)+(f3.t0)*diff(g2,t0))),
+      (h2.t0)*((g1.t0)*diff(f3,t0)+(f3.t0)*diff(g1,t0)
+      -diff(f1(#)g3,t0)),
+      (h3.t0)*(diff(f1(#)g2,t0)-diff(f2(#)g1,t0)) ]| by A1,A2,FDIFF_1:24
+.= |[ ((f2(#)g3-f3(#)g2).t0)*diff(h1,t0),
+      ((f3(#)g1-f1(#)g3).t0)*diff(h2,t0),
+      ((f1(#)g2-f2(#)g1).t0)*diff(h3,t0) ]|+
+   |[ (h1.t0)*((g3.t0)*diff(f2,t0)+(f2.t0)*diff(g3,t0)
+      -((g2.t0)*diff(f3,t0)+(f3.t0)*diff(g2,t0))),
+      (h2.t0)*((g1.t0)*diff(f3,t0)+(f3.t0)*diff(g1,t0)
+      -((g3.t0)*diff(f1,t0)+(f1.t0)*diff(g3,t0))),
+      (h3.t0)*(diff(f1(#)g2,t0)-diff(f2(#)g1,t0)) ]| by A1,A2,FDIFF_1:24
+.= |[ ((f2(#)g3-f3(#)g2).t0)*diff(h1,t0),
+      ((f3(#)g1-f1(#)g3).t0)*diff(h2,t0),
+      ((f1(#)g2-f2(#)g1).t0)*diff(h3,t0) ]|+
+   |[ (h1.t0)*((g3.t0)*diff(f2,t0)+(f2.t0)*diff(g3,t0)
+      -((g2.t0)*diff(f3,t0)+(f3.t0)*diff(g2,t0))),
+      (h2.t0)*((g1.t0)*diff(f3,t0)+(f3.t0)*diff(g1,t0)
+      -((g3.t0)*diff(f1,t0)+(f1.t0)*diff(g3,t0))),
+      (h3.t0)*((g2.t0)*diff(f1,t0)+(f1.t0)*diff(g2,t0)
+      -diff(f2(#)g1,t0)) ]| by A1,A2,FDIFF_1:24
+.= |[ ((f2(#)g3-f3(#)g2).t0)*diff(h1,t0),
+      ((f3(#)g1-f1(#)g3).t0)*diff(h2,t0),
+      ((f1(#)g2-f2(#)g1).t0)*diff(h3,t0) ]|+
+   |[ (h1.t0)*((g3.t0)*diff(f2,t0)+(f2.t0)*diff(g3,t0)
+      -((g2.t0)*diff(f3,t0)+(f3.t0)*diff(g2,t0))),
+      (h2.t0)*((g1.t0)*diff(f3,t0)+(f3.t0)*diff(g1,t0)
+      -((g3.t0)*diff(f1,t0)+(f1.t0)*diff(g3,t0))),
+      (h3.t0)*((g2.t0)*diff(f1,t0)+(f1.t0)*diff(g2,t0)
+      -((g1.t0)*diff(f2,t0)+(f2.t0)*diff(g1,t0))) ]| by A1,A2,FDIFF_1:24
+.= |[ ((f2(#)g3).t0-(f3(#)g2).t0)*diff(h1,t0),
+      ((f3(#)g1-f1(#)g3).t0)*diff(h2,t0),
+      ((f1(#)g2-f2(#)g1).t0)*diff(h3,t0) ]|+
+   |[ (h1.t0)*((g3.t0)*diff(f2,t0)+(f2.t0)*diff(g3,t0)
+      -((g2.t0)*diff(f3,t0)+(f3.t0)*diff(g2,t0))),
+      (h2.t0)*((g1.t0)*diff(f3,t0)+(f3.t0)*diff(g1,t0)
+      -((g3.t0)*diff(f1,t0)+(f1.t0)*diff(g3,t0))),
+      (h3.t0)*((g2.t0)*diff(f1,t0)+(f1.t0)*diff(g2,t0)
+      -((g1.t0)*diff(f2,t0)+(f2.t0)*diff(g1,t0))) ]| by B0,VALUED_1:13
+.= |[ (f2.t0*g3.t0-(f3(#)g2).t0)*diff(h1,t0),
+      ((f3(#)g1-f1(#)g3).t0)*diff(h2,t0),
+      ((f1(#)g2-f2(#)g1).t0)*diff(h3,t0) ]|+
+   |[ (h1.t0)*((g3.t0)*diff(f2,t0)+(f2.t0)*diff(g3,t0)
+      -((g2.t0)*diff(f3,t0)+(f3.t0)*diff(g2,t0))),
+      (h2.t0)*((g1.t0)*diff(f3,t0)+(f3.t0)*diff(g1,t0)
+      -((g3.t0)*diff(f1,t0)+(f1.t0)*diff(g3,t0))),
+      (h3.t0)*((g2.t0)*diff(f1,t0)+(f1.t0)*diff(g2,t0)
+      -((g1.t0)*diff(f2,t0)+(f2.t0)*diff(g1,t0))) ]| by VALUED_1:5
+.= |[ (f2.t0*g3.t0-f3.t0*g2.t0)*diff(h1,t0),
+      ((f3(#)g1-f1(#)g3).t0)*diff(h2,t0),
+      ((f1(#)g2-f2(#)g1).t0)*diff(h3,t0) ]|+
+   |[ (h1.t0)*((g3.t0)*diff(f2,t0)+(f2.t0)*diff(g3,t0)
+      -((g2.t0)*diff(f3,t0)+(f3.t0)*diff(g2,t0))),
+      (h2.t0)*((g1.t0)*diff(f3,t0)+(f3.t0)*diff(g1,t0)
+      -((g3.t0)*diff(f1,t0)+(f1.t0)*diff(g3,t0))),
+      (h3.t0)*((g2.t0)*diff(f1,t0)+(f1.t0)*diff(g2,t0)
+      -((g1.t0)*diff(f2,t0)+(f2.t0)*diff(g1,t0))) ]| by VALUED_1:5
+.= |[ (f2.t0*g3.t0-f3.t0*g2.t0)*diff(h1,t0),
+      ((f3(#)g1).t0-(f1(#)g3).t0)*diff(h2,t0),
+      ((f1(#)g2-f2(#)g1).t0)*diff(h3,t0) ]|+
+   |[ (h1.t0)*((g3.t0)*diff(f2,t0)+(f2.t0)*diff(g3,t0)
+      -((g2.t0)*diff(f3,t0)+(f3.t0)*diff(g2,t0))),
+      (h2.t0)*((g1.t0)*diff(f3,t0)+(f3.t0)*diff(g1,t0)
+      -((g3.t0)*diff(f1,t0)+(f1.t0)*diff(g3,t0))),
+      (h3.t0)*((g2.t0)*diff(f1,t0)+(f1.t0)*diff(g2,t0)
+      -((g1.t0)*diff(f2,t0)+(f2.t0)*diff(g1,t0))) ]| by B4,VALUED_1:13
+.= |[ (f2.t0*g3.t0-f3.t0*g2.t0)*diff(h1,t0),
+      (f3.t0*g1.t0-(f1(#)g3).t0)*diff(h2,t0),
+      ((f1(#)g2-f2(#)g1).t0)*diff(h3,t0) ]|+
+   |[ (h1.t0)*((g3.t0)*diff(f2,t0)+(f2.t0)*diff(g3,t0)
+      -((g2.t0)*diff(f3,t0)+(f3.t0)*diff(g2,t0))),
+      (h2.t0)*((g1.t0)*diff(f3,t0)+(f3.t0)*diff(g1,t0)
+      -((g3.t0)*diff(f1,t0)+(f1.t0)*diff(g3,t0))),
+      (h3.t0)*((g2.t0)*diff(f1,t0)+(f1.t0)*diff(g2,t0)
+      -((g1.t0)*diff(f2,t0)+(f2.t0)*diff(g1,t0))) ]| by VALUED_1:5
+.= |[ (f2.t0*g3.t0-f3.t0*g2.t0)*diff(h1,t0),
+      (f3.t0*g1.t0-f1.t0*g3.t0)*diff(h2,t0),
+      ((f1(#)g2-f2(#)g1).t0)*diff(h3,t0) ]|+
+   |[ (h1.t0)*((g3.t0)*diff(f2,t0)+(f2.t0)*diff(g3,t0)
+      -((g2.t0)*diff(f3,t0)+(f3.t0)*diff(g2,t0))),
+      (h2.t0)*((g1.t0)*diff(f3,t0)+(f3.t0)*diff(g1,t0)
+      -((g3.t0)*diff(f1,t0)+(f1.t0)*diff(g3,t0))),
+      (h3.t0)*((g2.t0)*diff(f1,t0)+(f1.t0)*diff(g2,t0)
+      -((g1.t0)*diff(f2,t0)+(f2.t0)*diff(g1,t0))) ]| by VALUED_1:5
+.= |[ (f2.t0*g3.t0-f3.t0*g2.t0)*diff(h1,t0),
+      (f3.t0*g1.t0-f1.t0*g3.t0)*diff(h2,t0),
+      ((f1(#)g2).t0-(f2(#)g1).t0)*diff(h3,t0) ]|+
+   |[ (h1.t0)*((g3.t0)*diff(f2,t0)+(f2.t0)*diff(g3,t0)
+      -((g2.t0)*diff(f3,t0)+(f3.t0)*diff(g2,t0))),
+      (h2.t0)*((g1.t0)*diff(f3,t0)+(f3.t0)*diff(g1,t0)
+      -((g3.t0)*diff(f1,t0)+(f1.t0)*diff(g3,t0))),
+      (h3.t0)*((g2.t0)*diff(f1,t0)+(f1.t0)*diff(g2,t0)
+      -((g1.t0)*diff(f2,t0)+(f2.t0)*diff(g1,t0))) ]| by B9,VALUED_1:13
+.= |[ (f2.t0*g3.t0-f3.t0*g2.t0)*diff(h1,t0),
+      (f3.t0*g1.t0-f1.t0*g3.t0)*diff(h2,t0),
+      (f1.t0*g2.t0-(f2(#)g1).t0)*diff(h3,t0) ]|+
+   |[ (h1.t0)*((g3.t0)*diff(f2,t0)+(f2.t0)*diff(g3,t0)
+      -((g2.t0)*diff(f3,t0)+(f3.t0)*diff(g2,t0))),
+      (h2.t0)*((g1.t0)*diff(f3,t0)+(f3.t0)*diff(g1,t0)
+      -((g3.t0)*diff(f1,t0)+(f1.t0)*diff(g3,t0))),
+      (h3.t0)*((g2.t0)*diff(f1,t0)+(f1.t0)*diff(g2,t0)
+      -((g1.t0)*diff(f2,t0)+(f2.t0)*diff(g1,t0))) ]| by VALUED_1:5
+.= |[ diff(h1,t0)*(f2.t0*g3.t0-f3.t0*g2.t0),
+      diff(h2,t0)*(f3.t0*g1.t0-f1.t0*g3.t0),
+      diff(h3,t0)*(f1.t0*g2.t0-f2.t0*g1.t0) ]|+
+   |[ ((h1.t0)*(g3.t0)*diff(f2,t0)-(h1.t0)*(g2.t0)*diff(f3,t0))
+      +((h1.t0)*(f2.t0)*diff(g3,t0)-(h1.t0)*(f3.t0)*diff(g2,t0)),
+      ((h2.t0)*(g1.t0)*diff(f3,t0)-(h2.t0)*(g3.t0)*diff(f1,t0))
+      +((h2.t0)*(f3.t0)*diff(g1,t0)-(h2.t0)*(f1.t0)*diff(g3,t0)),
+      ((h3.t0)*(g2.t0)*diff(f1,t0)-(h3.t0)*(g1.t0)*diff(f2,t0))
+      +((h3.t0)*(f1.t0)*diff(g2,t0)-(h3.t0)*(f2.t0)*diff(g1,t0)) ]|
+    by VALUED_1:5
+.= |[ diff(h1,t0)*(f2.t0*g3.t0-f3.t0*g2.t0),
+      diff(h2,t0)*(f3.t0*g1.t0-f1.t0*g3.t0),
+      diff(h3,t0)*(f1.t0*g2.t0-f2.t0*g1.t0) ]|+
+   (|[ (h1.t0)*(g3.t0)*diff(f2,t0)-(h1.t0)*(g2.t0)*diff(f3,t0),
+      (h2.t0)*(g1.t0)*diff(f3,t0)-(h2.t0)*(g3.t0)*diff(f1,t0),
+      (h3.t0)*(g2.t0)*diff(f1,t0)-(h3.t0)*(g1.t0)*diff(f2,t0) ]|+
+   |[ (h1.t0)*(f2.t0)*diff(g3,t0)-(h1.t0)*(f3.t0)*diff(g2,t0),
+      (h2.t0)*(f3.t0)*diff(g1,t0)-(h2.t0)*(f1.t0)*diff(g3,t0),
+      (h3.t0)*(f1.t0)*diff(g2,t0)-(h3.t0)*(f2.t0)*diff(g1,t0) ]|) by LmA31
+.= |[ diff(h1,t0)*(f2.t0*g3.t0-f3.t0*g2.t0),
+       diff(h2,t0)*(f3.t0*g1.t0-f1.t0*g3.t0),
+       diff(h3,t0)*(f1.t0*g2.t0-f2.t0*g1.t0) ]|+
+    |[ (h1.t0)*(diff(f2,t0)*(g3.t0)-diff(f3,t0)*(g2.t0)),
+       (h2.t0)*(diff(f3,t0)*(g1.t0)-diff(f1,t0)*(g3.t0)),
+       (h3.t0)*(diff(f1,t0)*(g2.t0)-diff(f2,t0)*(g1.t0)) ]|+
+    |[ (h1.t0)*((f2.t0)*diff(g3,t0)-(f3.t0)*diff(g2,t0)),
+       (h2.t0)*((f3.t0)*diff(g1,t0)-(f1.t0)*diff(g3,t0)),
+       (h3.t0)*((f1.t0)*diff(g2,t0)-(f2.t0)*diff(g1,t0)) ]| by RVSUM_1:32;
+   hence thesis;
+end;
+
+::p37-4(5.2) A*BXC
+theorem
+  (f1 is_differentiable_in t0 & f2 is_differentiable_in t0 &
+  f3 is_differentiable_in t0) & (g1 is_differentiable_in t0 &
+  g2 is_differentiable_in t0 & g3 is_differentiable_in t0) &
+  (h1 is_differentiable_in t0 & h2 is_differentiable_in t0 &
+   h3 is_differentiable_in t0) implies
+  VFuncdiff( h2(#)f2(#)g3-h3(#)f3(#)g2,
+             h3(#)f3(#)g1-h1(#)f1(#)g3,
+             h1(#)f1(#)g2-h2(#)f2(#)g1,t0 )
+  = |[ (h2.t0)*(f2.t0)*diff(g3,t0)-(h3.t0)*(f3.t0)*diff(g2,t0),
+       (h3.t0)*(f3.t0)*diff(g1,t0)-(h1.t0)*(f1.t0)*diff(g3,t0),
+       (h1.t0)*(f1.t0)*diff(g2,t0)-(h2.t0)*(f2.t0)*diff(g1,t0) ]|+
+    |[ (h2.t0)*diff(f2,t0)*(g3.t0)-(h3.t0)*diff(f3,t0)*(g2.t0),
+       (h3.t0)*diff(f3,t0)*(g1.t0)-(h1.t0)*diff(f1,t0)*(g3.t0),
+       (h1.t0)*diff(f1,t0)*(g2.t0)-(h2.t0)*diff(f2,t0)*(g1.t0) ]|+
+    |[ diff(h2,t0)*(f2.t0)*(g3.t0)-diff(h3,t0)*(f3.t0)*(g2.t0),
+       diff(h3,t0)*(f3.t0)*(g1.t0)-diff(h1,t0)*(f1.t0)*(g3.t0),
+       diff(h1,t0)*(f1.t0)*(g2.t0)-diff(h2,t0)*(f2.t0)*(g1.t0) ]|
+proof
+  assume that
+A1: f1 is_differentiable_in t0 & f2 is_differentiable_in t0 &
+    f3 is_differentiable_in t0 and
+A2: g1 is_differentiable_in t0 & g2 is_differentiable_in t0 &
+    g3 is_differentiable_in t0 and
+A3: h1 is_differentiable_in t0 &
+    h2 is_differentiable_in t0 & h3 is_differentiable_in t0;
+B1: h3(#)f3 is_differentiable_in t0 &
+    h1(#)f1 is_differentiable_in t0 &
+    h2(#)f2 is_differentiable_in t0 by A1,A3,FDIFF_1:24;
+B2: h3(#)f3(#)g1 is_differentiable_in t0 &
+    h3(#)f3(#)g2 is_differentiable_in t0 &
+    h1(#)f1(#)g2 is_differentiable_in t0 &
+    h1(#)f1(#)g3 is_differentiable_in t0 &
+    h2(#)f2(#)g3 is_differentiable_in t0 &
+    h2(#)f2(#)g1 is_differentiable_in t0 by A2,B1,FDIFF_1:24;
+F1: R1 + R2 - R3 = R1 - R3 + R2 by RVSUM_1:32;
+ VFuncdiff( h2(#)f2(#)g3-h3(#)f3(#)g2,
+             h3(#)f3(#)g1-h1(#)f1(#)g3,
+             h1(#)f1(#)g2-h2(#)f2(#)g1,t0 )
+ = VFuncdiff( h2(#)f2(#)g3,h3(#)f3(#)g1,h1(#)f1(#)g2,t0 )-
+   VFuncdiff( h3(#)f3(#)g2,h1(#)f1(#)g3,h2(#)f2(#)g1,t0 ) by B2,Th58
+.= |[ (g3.t0)*diff(h2(#)f2,t0),(g1.t0)*diff(h3(#)f3,t0),
+      (g2.t0)*diff(h1(#)f1,t0) ]|+
+   |[ (h2(#)f2).t0*diff(g3,t0),(h3(#)f3).t0*diff(g1,t0),
+      (h1(#)f1).t0*diff(g2,t0) ]|-
+   VFuncdiff( h3(#)f3(#)g2,h1(#)f1(#)g3,h2(#)f2(#)g1,t0 ) by A2,B1,Th60
+.= |[ (g3.t0)*diff(h2(#)f2,t0),(g1.t0)*diff(h3(#)f3,t0),
+      (g2.t0)*diff(h1(#)f1,t0) ]|+
+   |[ (h2(#)f2).t0*diff(g3,t0),(h3(#)f3).t0*diff(g1,t0),
+      (h1(#)f1).t0*diff(g2,t0) ]|-
+   (|[ (g2.t0)*diff(h3(#)f3,t0),(g3.t0)*diff(h1(#)f1,t0),
+      (g1.t0)*diff(h2(#)f2,t0) ]|+
+   |[ (h3(#)f3).t0*diff(g2,t0),(h1(#)f1).t0*diff(g3,t0),
+      (h2(#)f2).t0*diff(g1,t0) ]|) by A2,B1,Th60
+.= |[ (g3.t0)*((f2.t0)*diff(h2,t0)+(h2.t0)*diff(f2,t0)),
+      (g1.t0)*diff(h3(#)f3,t0),(g2.t0)*diff(h1(#)f1,t0) ]|+
+   |[ (h2(#)f2).t0*diff(g3,t0),(h3(#)f3).t0*diff(g1,t0),
+      (h1(#)f1).t0*diff(g2,t0) ]|-
+   (|[ (g2.t0)*diff(h3(#)f3,t0),(g3.t0)*diff(h1(#)f1,t0),
+      (g1.t0)*diff(h2(#)f2,t0) ]|+
+   |[ (h3(#)f3).t0*diff(g2,t0),(h1(#)f1).t0*diff(g3,t0),
+      (h2(#)f2).t0*diff(g1,t0) ]|) by A1,A3,FDIFF_1:24
+.= |[ (g3.t0)*((f2.t0)*diff(h2,t0)+(h2.t0)*diff(f2,t0)),
+      (g1.t0)*((f3.t0)*diff(h3,t0)+(h3.t0)*diff(f3,t0)),
+      (g2.t0)*diff(h1(#)f1,t0) ]|+
+   |[ (h2(#)f2).t0*diff(g3,t0),(h3(#)f3).t0*diff(g1,t0),
+      (h1(#)f1).t0*diff(g2,t0) ]|-
+   (|[ (g2.t0)*diff(h3(#)f3,t0),(g3.t0)*diff(h1(#)f1,t0),
+      (g1.t0)*diff(h2(#)f2,t0) ]|+
+   |[ (h3(#)f3).t0*diff(g2,t0),(h1(#)f1).t0*diff(g3,t0),
+      (h2(#)f2).t0*diff(g1,t0) ]|) by A1,A3,FDIFF_1:24
+.= |[ (g3.t0)*((f2.t0)*diff(h2,t0)+(h2.t0)*diff(f2,t0)),
+      (g1.t0)*((f3.t0)*diff(h3,t0)+(h3.t0)*diff(f3,t0)),
+      (g2.t0)*((f1.t0)*diff(h1,t0)+(h1.t0)*diff(f1,t0)) ]|+
+   |[ (h2(#)f2).t0*diff(g3,t0),(h3(#)f3).t0*diff(g1,t0),
+      (h1(#)f1).t0*diff(g2,t0) ]|-
+   (|[ (g2.t0)*diff(h3(#)f3,t0),(g3.t0)*diff(h1(#)f1,t0),
+      (g1.t0)*diff(h2(#)f2,t0) ]|+
+   |[ (h3(#)f3).t0*diff(g2,t0),(h1(#)f1).t0*diff(g3,t0),
+      (h2(#)f2).t0*diff(g1,t0) ]|) by A1,A3,FDIFF_1:24
+.= |[ (g3.t0)*((f2.t0)*diff(h2,t0)+(h2.t0)*diff(f2,t0)),
+      (g1.t0)*((f3.t0)*diff(h3,t0)+(h3.t0)*diff(f3,t0)),
+      (g2.t0)*((f1.t0)*diff(h1,t0)+(h1.t0)*diff(f1,t0)) ]|+
+   |[ h2.t0*f2.t0*diff(g3,t0),(h3(#)f3).t0*diff(g1,t0),
+      (h1(#)f1).t0*diff(g2,t0) ]|-
+   (|[ (g2.t0)*diff(h3(#)f3,t0),(g3.t0)*diff(h1(#)f1,t0),
+      (g1.t0)*diff(h2(#)f2,t0) ]|+
+   |[ (h3(#)f3).t0*diff(g2,t0),(h1(#)f1).t0*diff(g3,t0),
+      (h2(#)f2).t0*diff(g1,t0) ]|) by VALUED_1:5
+.= |[ (g3.t0)*((f2.t0)*diff(h2,t0)+(h2.t0)*diff(f2,t0)),
+      (g1.t0)*((f3.t0)*diff(h3,t0)+(h3.t0)*diff(f3,t0)),
+      (g2.t0)*((f1.t0)*diff(h1,t0)+(h1.t0)*diff(f1,t0)) ]|+
+   |[ h2.t0*f2.t0*diff(g3,t0),h3.t0*f3.t0*diff(g1,t0),
+      (h1(#)f1).t0*diff(g2,t0) ]|-
+   (|[ (g2.t0)*diff(h3(#)f3,t0),(g3.t0)*diff(h1(#)f1,t0),
+      (g1.t0)*diff(h2(#)f2,t0) ]|+
+   |[ (h3(#)f3).t0*diff(g2,t0),(h1(#)f1).t0*diff(g3,t0),
+      (h2(#)f2).t0*diff(g1,t0) ]|) by VALUED_1:5
+.= |[ (g3.t0)*((f2.t0)*diff(h2,t0)+(h2.t0)*diff(f2,t0)),
+      (g1.t0)*((f3.t0)*diff(h3,t0)+(h3.t0)*diff(f3,t0)),
+      (g2.t0)*((f1.t0)*diff(h1,t0)+(h1.t0)*diff(f1,t0)) ]|+
+   |[ h2.t0*f2.t0*diff(g3,t0),h3.t0*f3.t0*diff(g1,t0),
+      h1.t0*f1.t0*diff(g2,t0) ]|-
+   (|[ (g2.t0)*diff(h3(#)f3,t0),(g3.t0)*diff(h1(#)f1,t0),
+      (g1.t0)*diff(h2(#)f2,t0) ]|+
+   |[ (h3(#)f3).t0*diff(g2,t0),(h1(#)f1).t0*diff(g3,t0),
+      (h2(#)f2).t0*diff(g1,t0) ]|) by VALUED_1:5
+.= |[ (g3.t0)*((f2.t0)*diff(h2,t0)+(h2.t0)*diff(f2,t0)),
+      (g1.t0)*((f3.t0)*diff(h3,t0)+(h3.t0)*diff(f3,t0)),
+      (g2.t0)*((f1.t0)*diff(h1,t0)+(h1.t0)*diff(f1,t0)) ]|+
+   |[ h2.t0*f2.t0*diff(g3,t0),h3.t0*f3.t0*diff(g1,t0),
+      h1.t0*f1.t0*diff(g2,t0) ]|-
+   (|[ (g2.t0)*diff(h3(#)f3,t0),(g3.t0)*diff(h1(#)f1,t0),
+      (g1.t0)*diff(h2(#)f2,t0) ]|+
+   |[ h3.t0*f3.t0*diff(g2,t0),(h1(#)f1).t0*diff(g3,t0),
+      (h2(#)f2).t0*diff(g1,t0) ]|) by VALUED_1:5
+.= |[ (g3.t0)*((f2.t0)*diff(h2,t0)+(h2.t0)*diff(f2,t0)),
+      (g1.t0)*((f3.t0)*diff(h3,t0)+(h3.t0)*diff(f3,t0)),
+      (g2.t0)*((f1.t0)*diff(h1,t0)+(h1.t0)*diff(f1,t0)) ]|+
+   |[ h2.t0*f2.t0*diff(g3,t0),h3.t0*f3.t0*diff(g1,t0),
+      h1.t0*f1.t0*diff(g2,t0) ]|-
+   (|[ (g2.t0)*diff(h3(#)f3,t0),(g3.t0)*diff(h1(#)f1,t0),
+      (g1.t0)*diff(h2(#)f2,t0) ]|+
+   |[ h3.t0*f3.t0*diff(g2,t0),h1.t0*f1.t0*diff(g3,t0),
+      (h2(#)f2).t0*diff(g1,t0) ]|) by VALUED_1:5
+.= |[ (g3.t0)*((f2.t0)*diff(h2,t0)+(h2.t0)*diff(f2,t0)),
+      (g1.t0)*((f3.t0)*diff(h3,t0)+(h3.t0)*diff(f3,t0)),
+      (g2.t0)*((f1.t0)*diff(h1,t0)+(h1.t0)*diff(f1,t0)) ]|+
+   |[ h2.t0*f2.t0*diff(g3,t0),h3.t0*f3.t0*diff(g1,t0),
+      h1.t0*f1.t0*diff(g2,t0) ]|-
+   (|[ (g2.t0)*diff(h3(#)f3,t0),(g3.t0)*diff(h1(#)f1,t0),
+      (g1.t0)*diff(h2(#)f2,t0) ]|+
+   |[ h3.t0*f3.t0*diff(g2,t0),h1.t0*f1.t0*diff(g3,t0),
+      h2.t0*f2.t0*diff(g1,t0) ]|) by VALUED_1:5
+.= |[ (g3.t0)*((f2.t0)*diff(h2,t0)+(h2.t0)*diff(f2,t0)),
+      (g1.t0)*((f3.t0)*diff(h3,t0)+(h3.t0)*diff(f3,t0)),
+      (g2.t0)*((f1.t0)*diff(h1,t0)+(h1.t0)*diff(f1,t0)) ]|+
+   |[ h2.t0*f2.t0*diff(g3,t0),h3.t0*f3.t0*diff(g1,t0),
+      h1.t0*f1.t0*diff(g2,t0) ]|-
+   (|[ (g2.t0)*((f3.t0)*diff(h3,t0)+(h3.t0)*diff(f3,t0)),
+     (g3.t0)*diff(h1(#)f1,t0),(g1.t0)*diff(h2(#)f2,t0) ]|+
+   |[ h3.t0*f3.t0*diff(g2,t0),h1.t0*f1.t0*diff(g3,t0),
+      h2.t0*f2.t0*diff(g1,t0) ]|) by A1,A3,FDIFF_1:24
+.= |[ (g3.t0)*((f2.t0)*diff(h2,t0)+(h2.t0)*diff(f2,t0)),
+      (g1.t0)*((f3.t0)*diff(h3,t0)+(h3.t0)*diff(f3,t0)),
+      (g2.t0)*((f1.t0)*diff(h1,t0)+(h1.t0)*diff(f1,t0)) ]|+
+   |[ h2.t0*f2.t0*diff(g3,t0),h3.t0*f3.t0*diff(g1,t0),
+      h1.t0*f1.t0*diff(g2,t0) ]|-
+   (|[ (g2.t0)*((f3.t0)*diff(h3,t0)+(h3.t0)*diff(f3,t0)),
+     (g3.t0)*((f1.t0)*diff(h1,t0)+(h1.t0)*diff(f1,t0)),
+     (g1.t0)*diff(h2(#)f2,t0) ]|+
+   |[ h3.t0*f3.t0*diff(g2,t0),h1.t0*f1.t0*diff(g3,t0),
+      h2.t0*f2.t0*diff(g1,t0) ]|) by A1,A3,FDIFF_1:24
+.= |[ (g3.t0)*((f2.t0)*diff(h2,t0)+(h2.t0)*diff(f2,t0)),
+      (g1.t0)*((f3.t0)*diff(h3,t0)+(h3.t0)*diff(f3,t0)),
+      (g2.t0)*((f1.t0)*diff(h1,t0)+(h1.t0)*diff(f1,t0)) ]|+
+   |[ h2.t0*f2.t0*diff(g3,t0),h3.t0*f3.t0*diff(g1,t0),
+      h1.t0*f1.t0*diff(g2,t0) ]|-
+   (|[ (g2.t0)*((f3.t0)*diff(h3,t0)+(h3.t0)*diff(f3,t0)),
+     (g3.t0)*((f1.t0)*diff(h1,t0)+(h1.t0)*diff(f1,t0)),
+     (g1.t0)*((f2.t0)*diff(h2,t0)+(h2.t0)*diff(f2,t0)) ]|+
+   |[ h3.t0*f3.t0*diff(g2,t0),h1.t0*f1.t0*diff(g3,t0),
+      h2.t0*f2.t0*diff(g1,t0) ]|) by A1,A3,FDIFF_1:24
+.= |[ (g3.t0)*((f2.t0)*diff(h2,t0)+(h2.t0)*diff(f2,t0)),
+      (g1.t0)*((f3.t0)*diff(h3,t0)+(h3.t0)*diff(f3,t0)),
+      (g2.t0)*((f1.t0)*diff(h1,t0)+(h1.t0)*diff(f1,t0)) ]|+
+   |[ h2.t0*f2.t0*diff(g3,t0),h3.t0*f3.t0*diff(g1,t0),
+      h1.t0*f1.t0*diff(g2,t0) ]|-
+   |[ (g2.t0)*((f3.t0)*diff(h3,t0)+(h3.t0)*diff(f3,t0)),
+     (g3.t0)*((f1.t0)*diff(h1,t0)+(h1.t0)*diff(f1,t0)),
+     (g1.t0)*((f2.t0)*diff(h2,t0)+(h2.t0)*diff(f2,t0)) ]|-
+   |[ h3.t0*f3.t0*diff(g2,t0),h1.t0*f1.t0*diff(g3,t0),
+      h2.t0*f2.t0*diff(g1,t0) ]| by RVSUM_1:60
+.= (|[ (g3.t0)*((f2.t0)*diff(h2,t0)+(h2.t0)*diff(f2,t0)),
+      (g1.t0)*((f3.t0)*diff(h3,t0)+(h3.t0)*diff(f3,t0)),
+      (g2.t0)*((f1.t0)*diff(h1,t0)+(h1.t0)*diff(f1,t0)) ]|-
+   |[ (g2.t0)*((f3.t0)*diff(h3,t0)+(h3.t0)*diff(f3,t0)),
+     (g3.t0)*((f1.t0)*diff(h1,t0)+(h1.t0)*diff(f1,t0)),
+     (g1.t0)*((f2.t0)*diff(h2,t0)+(h2.t0)*diff(f2,t0)) ]|)+
+   |[ h2.t0*f2.t0*diff(g3,t0),h3.t0*f3.t0*diff(g1,t0),
+      h1.t0*f1.t0*diff(g2,t0) ]|+
+   -|[ h3.t0*f3.t0*diff(g2,t0),h1.t0*f1.t0*diff(g3,t0),
+      h2.t0*f2.t0*diff(g1,t0) ]| by F1
+.= (|[ (g3.t0)*((f2.t0)*diff(h2,t0)+(h2.t0)*diff(f2,t0)),
+      (g1.t0)*((f3.t0)*diff(h3,t0)+(h3.t0)*diff(f3,t0)),
+      (g2.t0)*((f1.t0)*diff(h1,t0)+(h1.t0)*diff(f1,t0)) ]|-
+   |[ (g2.t0)*((f3.t0)*diff(h3,t0)+(h3.t0)*diff(f3,t0)),
+     (g3.t0)*((f1.t0)*diff(h1,t0)+(h1.t0)*diff(f1,t0)),
+     (g1.t0)*((f2.t0)*diff(h2,t0)+(h2.t0)*diff(f2,t0)) ]|)+
+   (|[ h2.t0*f2.t0*diff(g3,t0),h3.t0*f3.t0*diff(g1,t0),
+      h1.t0*f1.t0*diff(g2,t0) ]|-
+    |[ h3.t0*f3.t0*diff(g2,t0),h1.t0*f1.t0*diff(g3,t0),
+      h2.t0*f2.t0*diff(g1,t0) ]|) by RVSUM_1:32
+.= (|[ (g3.t0)*((f2.t0)*diff(h2,t0)+(h2.t0)*diff(f2,t0)),
+      (g1.t0)*((f3.t0)*diff(h3,t0)+(h3.t0)*diff(f3,t0)),
+      (g2.t0)*((f1.t0)*diff(h1,t0)+(h1.t0)*diff(f1,t0)) ]|-
+   |[ (g2.t0)*((f3.t0)*diff(h3,t0)+(h3.t0)*diff(f3,t0)),
+     (g3.t0)*((f1.t0)*diff(h1,t0)+(h1.t0)*diff(f1,t0)),
+     (g1.t0)*((f2.t0)*diff(h2,t0)+(h2.t0)*diff(f2,t0)) ]|)+
+   |[ h2.t0*f2.t0*diff(g3,t0)-h3.t0*f3.t0*diff(g2,t0),
+       h3.t0*f3.t0*diff(g1,t0)-h1.t0*f1.t0*diff(g3,t0),
+       h1.t0*f1.t0*diff(g2,t0)-h2.t0*f2.t0*diff(g1,t0) ]| by LmA63
+.= |[  h2.t0*f2.t0*diff(g3,t0)-h3.t0*f3.t0*diff(g2,t0),
+       h3.t0*f3.t0*diff(g1,t0)-h1.t0*f1.t0*diff(g3,t0),
+       h1.t0*f1.t0*diff(g2,t0)-h2.t0*f2.t0*diff(g1,t0) ]|+
+   |[ (g3.t0)*((f2.t0)*diff(h2,t0)+(h2.t0)*diff(f2,t0))-
+       (g2.t0)*((f3.t0)*diff(h3,t0)+(h3.t0)*diff(f3,t0)),
+      (g1.t0)*((f3.t0)*diff(h3,t0)+(h3.t0)*diff(f3,t0))-
+      (g3.t0)*((f1.t0)*diff(h1,t0)+(h1.t0)*diff(f1,t0)),
+      (g2.t0)*((f1.t0)*diff(h1,t0)+(h1.t0)*diff(f1,t0))-
+      (g1.t0)*((f2.t0)*diff(h2,t0)+(h2.t0)*diff(f2,t0)) ]| by LmA63
+.= |[  h2.t0*f2.t0*diff(g3,t0)-h3.t0*f3.t0*diff(g2,t0),
+       h3.t0*f3.t0*diff(g1,t0)-h1.t0*f1.t0*diff(g3,t0),
+       h1.t0*f1.t0*diff(g2,t0)-h2.t0*f2.t0*diff(g1,t0) ]|+
+   |[ ((g3.t0)*(h2.t0)*diff(f2,t0)-(g2.t0)*(h3.t0)*diff(f3,t0))
+      +((g3.t0)*(f2.t0)*diff(h2,t0)-(g2.t0)*(f3.t0)*diff(h3,t0)),
+      ((g1.t0)*(h3.t0)*diff(f3,t0)-(g3.t0)*(h1.t0)*diff(f1,t0))
+      +((g1.t0)*(f3.t0)*diff(h3,t0)-(g3.t0)*(f1.t0)*diff(h1,t0)),
+      ((g2.t0)*(h1.t0)*diff(f1,t0)-(g1.t0)*(h2.t0)*diff(f2,t0))
+      +((g2.t0)*(f1.t0)*diff(h1,t0)-(g1.t0)*(f2.t0)*diff(h2,t0)) ]|
+.= |[  h2.t0*f2.t0*diff(g3,t0)-h3.t0*f3.t0*diff(g2,t0),
+       h3.t0*f3.t0*diff(g1,t0)-h1.t0*f1.t0*diff(g3,t0),
+       h1.t0*f1.t0*diff(g2,t0)-h2.t0*f2.t0*diff(g1,t0) ]|+
+   (|[ (g3.t0)*(h2.t0)*diff(f2,t0)-(g2.t0)*(h3.t0)*diff(f3,t0),
+      (g1.t0)*(h3.t0)*diff(f3,t0)-(g3.t0)*(h1.t0)*diff(f1,t0),
+      (g2.t0)*(h1.t0)*diff(f1,t0)-(g1.t0)*(h2.t0)*diff(f2,t0) ]|+
+  |[ (g3.t0)*(f2.t0)*diff(h2,t0)-(g2.t0)*(f3.t0)*diff(h3,t0),
+     (g1.t0)*(f3.t0)*diff(h3,t0)-(g3.t0)*(f1.t0)*diff(h1,t0),
+     (g2.t0)*(f1.t0)*diff(h1,t0)-(g1.t0)*(f2.t0)*diff(h2,t0) ]|) by LmA31
+.= |[  h2.t0*f2.t0*diff(g3,t0)-h3.t0*f3.t0*diff(g2,t0),
+       h3.t0*f3.t0*diff(g1,t0)-h1.t0*f1.t0*diff(g3,t0),
+       h1.t0*f1.t0*diff(g2,t0)-h2.t0*f2.t0*diff(g1,t0) ]|+
+   |[ (g3.t0)*(h2.t0)*diff(f2,t0)-(g2.t0)*(h3.t0)*diff(f3,t0),
+      (g1.t0)*(h3.t0)*diff(f3,t0)-(g3.t0)*(h1.t0)*diff(f1,t0),
+      (g2.t0)*(h1.t0)*diff(f1,t0)-(g1.t0)*(h2.t0)*diff(f2,t0) ]|+
+  |[ (g3.t0)*(f2.t0)*diff(h2,t0)-(g2.t0)*(f3.t0)*diff(h3,t0),
+     (g1.t0)*(f3.t0)*diff(h3,t0)-(g3.t0)*(f1.t0)*diff(h1,t0),
+     (g2.t0)*(f1.t0)*diff(h1,t0)-(g1.t0)*(f2.t0)*diff(h2,t0) ]|
+     by RVSUM_1:32;
+  hence thesis;
+end;
+
+::p37-4(6) AX(BXC)
+theorem
+  (f1 is_differentiable_in t0 & f2 is_differentiable_in t0 &
+  f3 is_differentiable_in t0) & (g1 is_differentiable_in t0 &
+  g2 is_differentiable_in t0 & g3 is_differentiable_in t0) &
+  (h1 is_differentiable_in t0 & h2 is_differentiable_in t0 &
+   h3 is_differentiable_in t0) implies
+   VFuncdiff( h2(#)(f1(#)g2-f2(#)g1)-h3(#)(f3(#)g1-f1(#)g3),
+              h3(#)(f2(#)g3-f3(#)g2)-h1(#)(f1(#)g2-f2(#)g1),
+              h1(#)(f3(#)g1-f1(#)g3)-h2(#)(f2(#)g3-f3(#)g2),t0 )
+ = |[ (h2.t0)*((f1.t0)*diff(g2,t0)-(f2.t0)*diff(g1,t0))-
+      (h3.t0)*((f3.t0)*diff(g1,t0)-(f1.t0)*diff(g3,t0)),
+      (h3.t0)*((f2.t0)*diff(g3,t0)-(f3.t0)*diff(g2,t0))-
+      (h1.t0)*((f1.t0)*diff(g2,t0)-(f2.t0)*diff(g1,t0)),
+      (h1.t0)*((f3.t0)*diff(g1,t0)-(f1.t0)*diff(g3,t0))-
+      (h2.t0)*((f2.t0)*diff(g3,t0)-(f3.t0)*diff(g2,t0)) ]|+
+   |[ (h2.t0)*(diff(f1,t0)*(g2.t0)-diff(f2,t0)*(g1.t0))-
+      (h3.t0)*(diff(f3,t0)*(g1.t0)-diff(f1,t0)*(g3.t0)),
+      (h3.t0)*(diff(f2,t0)*(g3.t0)-diff(f3,t0)*(g2.t0))-
+      (h1.t0)*(diff(f1,t0)*(g2.t0)-diff(f2,t0)*(g1.t0)),
+      (h1.t0)*(diff(f3,t0)*(g1.t0)-diff(f1,t0)*(g3.t0))-
+      (h2.t0)*(diff(f2,t0)*(g3.t0)-diff(f3,t0)*(g2.t0)) ]|+
+   |[ diff(h2,t0)*((f1.t0)*(g2.t0)-(f2.t0)*(g1.t0))-
+      diff(h3,t0)*((f3.t0)*(g1.t0)-(f1.t0)*(g3.t0)),
+      diff(h3,t0)*((f2.t0)*(g3.t0)-(f3.t0)*(g2.t0))-
+      diff(h1,t0)*((f1.t0)*(g2.t0)-(f2.t0)*(g1.t0)),
+      diff(h1,t0)*((f3.t0)*(g1.t0)-(f1.t0)*(g3.t0))-
+      diff(h2,t0)*((f2.t0)*(g3.t0)-(f3.t0)*(g2.t0)) ]|
+proof
+  assume that
+A1: f1 is_differentiable_in t0 & f2 is_differentiable_in t0 &
+    f3 is_differentiable_in t0 and
+A2: g1 is_differentiable_in t0 & g2 is_differentiable_in t0 &
+    g3 is_differentiable_in t0 and
+A3: h1 is_differentiable_in t0 & h2 is_differentiable_in t0 &
+    h3 is_differentiable_in t0;
+B1: f2(#)g3 is_differentiable_in t0 &
+    f3(#)g2 is_differentiable_in t0 &
+    f3(#)g1 is_differentiable_in t0 &
+    f1(#)g3 is_differentiable_in t0 &
+    f1(#)g2 is_differentiable_in t0 &
+    f2(#)g1 is_differentiable_in t0 by A1,A2,FDIFF_1:24;
+B2: f2(#)g3-f3(#)g2 is_differentiable_in t0 &
+    f3(#)g1-f1(#)g3 is_differentiable_in t0 &
+    f1(#)g2-f2(#)g1 is_differentiable_in t0 by B1,FDIFF_1:22;
+B3: h3(#)(f2(#)g3-f3(#)g2) is_differentiable_in t0 &
+    h3(#)(f3(#)g1-f1(#)g3) is_differentiable_in t0 &
+    h2(#)(f1(#)g2-f2(#)g1) is_differentiable_in t0 &
+    h2(#)(f2(#)g3-f3(#)g2) is_differentiable_in t0 &
+    h1(#)(f3(#)g1-f1(#)g3) is_differentiable_in t0 &
+    h1(#)(f1(#)g2-f2(#)g1) is_differentiable_in t0
+    by A3,B2,FDIFF_1:24;
+C2: f1(#)g2-f2(#)g1 is_left_differentiable_in t0 by B2,FDIFF_3:22;
+C3: t0 in dom (f1(#)g2-f2(#)g1)
+  proof
+    consider r such that
+C4: 0 < r & [.t0 - r,t0.] c= dom (f1(#)g2-f2(#)g1) by C2,FDIFF_3:def 4;
+    t0 - r <= t0 by C4,XREAL_1:46;
+    then t0 in [.t0 - r,t0.];
+    hence thesis by C4;
+  end;
+C6: f2(#)g3-f3(#)g2 is_left_differentiable_in t0 by B2,FDIFF_3:22;
+C7: t0 in dom (f2(#)g3-f3(#)g2)
+  proof
+    consider r1 such that
+C8: 0 < r1 & [.t0 - r1,t0.] c= dom (f2(#)g3-f3(#)g2) by C6,FDIFF_3:def 4;
+    t0 - r1 <= t0 by C8,XREAL_1:46;
+    then t0 in [.t0 - r1,t0.];
+    hence thesis by C8;
+  end;
+C10: f3(#)g1-f1(#)g3 is_left_differentiable_in t0 by B2,FDIFF_3:22;
+C11: t0 in dom (f3(#)g1-f1(#)g3)
+  proof
+    consider r2 such that
+C12: 0 < r2 & [.t0 - r2,t0.] c= dom (f3(#)g1-f1(#)g3)
+    by C10,FDIFF_3:def 4;
+    t0 - r2 <= t0 by C12,XREAL_1:46;
+    then t0 in [.t0 - r2,t0.];
+    hence thesis by C12;
+  end;
+F1:R1 + R2 - R3 = R1 - R3 + R2 by RVSUM_1:32;
+ VFuncdiff( h2(#)(f1(#)g2-f2(#)g1)-h3(#)(f3(#)g1-f1(#)g3),
+               h3(#)(f2(#)g3-f3(#)g2)-h1(#)(f1(#)g2-f2(#)g1),
+               h1(#)(f3(#)g1-f1(#)g3)-h2(#)(f2(#)g3-f3(#)g2),t0 )
+ = VFuncdiff( h2(#)(f1(#)g2-f2(#)g1),
+              h3(#)(f2(#)g3-f3(#)g2),
+              h1(#)(f3(#)g1-f1(#)g3),t0 )-
+   VFuncdiff( h3(#)(f3(#)g1-f1(#)g3),
+              h1(#)(f1(#)g2-f2(#)g1),
+              h2(#)(f2(#)g3-f3(#)g2),t0 ) by B3,Th58
+.= |[ (f1(#)g2-f2(#)g1).t0*diff(h2,t0),
+      (f2(#)g3-f3(#)g2).t0*diff(h3,t0),
+      (f3(#)g1-f1(#)g3).t0*diff(h1,t0) ]|+
+   |[ h2.t0*diff((f1(#)g2-f2(#)g1),t0),
+      h3.t0*diff((f2(#)g3-f3(#)g2),t0),
+      h1.t0*diff((f3(#)g1-f1(#)g3),t0) ]|-
+   VFuncdiff( h3(#)(f3(#)g1-f1(#)g3),
+              h1(#)(f1(#)g2-f2(#)g1),
+              h2(#)(f2(#)g3-f3(#)g2),t0 ) by A3,B2,Th60
+.= |[ (f1(#)g2-f2(#)g1).t0*diff(h2,t0),
+      (f2(#)g3-f3(#)g2).t0*diff(h3,t0),
+      (f3(#)g1-f1(#)g3).t0*diff(h1,t0) ]|+
+   |[ h2.t0*diff((f1(#)g2-f2(#)g1),t0),
+      h3.t0*diff((f2(#)g3-f3(#)g2),t0),
+      h1.t0*diff((f3(#)g1-f1(#)g3),t0) ]|-
+   (|[ (f3(#)g1-f1(#)g3).t0*diff(h3,t0),
+      (f1(#)g2-f2(#)g1).t0*diff(h1,t0),
+      (f2(#)g3-f3(#)g2).t0*diff(h2,t0) ]|+
+   |[ h3.t0*diff((f3(#)g1-f1(#)g3),t0),
+      h1.t0*diff((f1(#)g2-f2(#)g1),t0),
+      h2.t0*diff((f2(#)g3-f3(#)g2),t0) ]|) by A3,B2,Th60
+.= |[ ((f1(#)g2).t0-(f2(#)g1).t0)*diff(h2,t0),
+      (f2(#)g3-f3(#)g2).t0*diff(h3,t0),
+      (f3(#)g1-f1(#)g3).t0*diff(h1,t0) ]|+
+   |[ h2.t0*diff((f1(#)g2-f2(#)g1),t0),
+      h3.t0*diff((f2(#)g3-f3(#)g2),t0),
+      h1.t0*diff((f3(#)g1-f1(#)g3),t0) ]|-
+   (|[ (f3(#)g1-f1(#)g3).t0*diff(h3,t0),
+      (f1(#)g2-f2(#)g1).t0*diff(h1,t0),
+      (f2(#)g3-f3(#)g2).t0*diff(h2,t0) ]|+
+   |[ h3.t0*diff((f3(#)g1-f1(#)g3),t0),
+      h1.t0*diff((f1(#)g2-f2(#)g1),t0),
+      h2.t0*diff((f2(#)g3-f3(#)g2),t0) ]|)
+      by C3,VALUED_1:13
+.= |[ ((f1(#)g2).t0-(f2(#)g1).t0)*diff(h2,t0),
+      ((f2(#)g3).t0-(f3(#)g2).t0)*diff(h3,t0),
+      (f3(#)g1-f1(#)g3).t0*diff(h1,t0) ]|+
+   |[ h2.t0*diff((f1(#)g2-f2(#)g1),t0),
+      h3.t0*diff((f2(#)g3-f3(#)g2),t0),
+      h1.t0*diff((f3(#)g1-f1(#)g3),t0) ]|-
+   (|[ (f3(#)g1-f1(#)g3).t0*diff(h3,t0),
+      (f1(#)g2-f2(#)g1).t0*diff(h1,t0),
+      (f2(#)g3-f3(#)g2).t0*diff(h2,t0) ]|+
+   |[ h3.t0*diff((f3(#)g1-f1(#)g3),t0),
+      h1.t0*diff((f1(#)g2-f2(#)g1),t0),
+      h2.t0*diff((f2(#)g3-f3(#)g2),t0) ]|) by C7,VALUED_1:13
+.= |[ ((f1(#)g2).t0-(f2(#)g1).t0)*diff(h2,t0),
+      ((f2(#)g3).t0-(f3(#)g2).t0)*diff(h3,t0),
+      ((f3(#)g1).t0-(f1(#)g3).t0)*diff(h1,t0) ]|+
+   |[ h2.t0*diff((f1(#)g2-f2(#)g1),t0),
+      h3.t0*diff((f2(#)g3-f3(#)g2),t0),
+      h1.t0*diff((f3(#)g1-f1(#)g3),t0) ]|-
+   (|[ (f3(#)g1-f1(#)g3).t0*diff(h3,t0),
+      (f1(#)g2-f2(#)g1).t0*diff(h1,t0),
+      (f2(#)g3-f3(#)g2).t0*diff(h2,t0) ]|+
+   |[ h3.t0*diff((f3(#)g1-f1(#)g3),t0),
+      h1.t0*diff((f1(#)g2-f2(#)g1),t0),
+      h2.t0*diff((f2(#)g3-f3(#)g2),t0) ]|) by C11,VALUED_1:13
+.= |[ ((f1(#)g2).t0-(f2(#)g1).t0)*diff(h2,t0),
+      ((f2(#)g3).t0-(f3(#)g2).t0)*diff(h3,t0),
+      ((f3(#)g1).t0-(f1(#)g3).t0)*diff(h1,t0) ]|+
+   |[ h2.t0*diff((f1(#)g2-f2(#)g1),t0),
+      h3.t0*diff((f2(#)g3-f3(#)g2),t0),
+      h1.t0*diff((f3(#)g1-f1(#)g3),t0) ]|-
+   (|[ ((f3(#)g1).t0-(f1(#)g3).t0)*diff(h3,t0),
+      (f1(#)g2-f2(#)g1).t0*diff(h1,t0),
+      (f2(#)g3-f3(#)g2).t0*diff(h2,t0) ]|+
+   |[ h3.t0*diff((f3(#)g1-f1(#)g3),t0),
+      h1.t0*diff((f1(#)g2-f2(#)g1),t0),
+      h2.t0*diff((f2(#)g3-f3(#)g2),t0) ]|) by C11,VALUED_1:13
+.= |[ ((f1(#)g2).t0-(f2(#)g1).t0)*diff(h2,t0),
+      ((f2(#)g3).t0-(f3(#)g2).t0)*diff(h3,t0),
+      ((f3(#)g1).t0-(f1(#)g3).t0)*diff(h1,t0) ]|+
+   |[ h2.t0*diff((f1(#)g2-f2(#)g1),t0),
+      h3.t0*diff((f2(#)g3-f3(#)g2),t0),
+      h1.t0*diff((f3(#)g1-f1(#)g3),t0) ]|-
+   (|[ ((f3(#)g1).t0-(f1(#)g3).t0)*diff(h3,t0),
+      ((f1(#)g2).t0-(f2(#)g1).t0)*diff(h1,t0),
+      (f2(#)g3-f3(#)g2).t0*diff(h2,t0) ]|+
+   |[ h3.t0*diff((f3(#)g1-f1(#)g3),t0),
+      h1.t0*diff((f1(#)g2-f2(#)g1),t0),
+      h2.t0*diff((f2(#)g3-f3(#)g2),t0) ]|) by C3,VALUED_1:13
+.= |[ ((f1(#)g2).t0-(f2(#)g1).t0)*diff(h2,t0),
+      ((f2(#)g3).t0-(f3(#)g2).t0)*diff(h3,t0),
+      ((f3(#)g1).t0-(f1(#)g3).t0)*diff(h1,t0) ]|+
+   |[ h2.t0*diff((f1(#)g2-f2(#)g1),t0),
+      h3.t0*diff((f2(#)g3-f3(#)g2),t0),
+      h1.t0*diff((f3(#)g1-f1(#)g3),t0) ]|-
+   (|[ ((f3(#)g1).t0-(f1(#)g3).t0)*diff(h3,t0),
+      ((f1(#)g2).t0-(f2(#)g1).t0)*diff(h1,t0),
+      ((f2(#)g3).t0-(f3(#)g2).t0)*diff(h2,t0) ]|+
+   |[ h3.t0*diff((f3(#)g1-f1(#)g3),t0),
+      h1.t0*diff((f1(#)g2-f2(#)g1),t0),
+      h2.t0*diff((f2(#)g3-f3(#)g2),t0) ]|) by C7,VALUED_1:13
+.= |[ ((f1.t0*g2.t0)-(f2(#)g1).t0)*diff(h2,t0),
+      ((f2(#)g3).t0-(f3(#)g2).t0)*diff(h3,t0),
+      ((f3(#)g1).t0-(f1(#)g3).t0)*diff(h1,t0) ]|+
+   |[ h2.t0*diff((f1(#)g2-f2(#)g1),t0),
+      h3.t0*diff((f2(#)g3-f3(#)g2),t0),
+      h1.t0*diff((f3(#)g1-f1(#)g3),t0) ]|-
+   (|[ ((f3(#)g1).t0-(f1(#)g3).t0)*diff(h3,t0),
+      ((f1(#)g2).t0-(f2(#)g1).t0)*diff(h1,t0),
+      ((f2(#)g3).t0-(f3(#)g2).t0)*diff(h2,t0) ]|+
+   |[ h3.t0*diff((f3(#)g1-f1(#)g3),t0),
+      h1.t0*diff((f1(#)g2-f2(#)g1),t0),
+      h2.t0*diff((f2(#)g3-f3(#)g2),t0) ]|) by VALUED_1:5
+.= |[ ((f1.t0*g2.t0)-(f2.t0*g1.t0))*diff(h2,t0),
+      ((f2(#)g3).t0-(f3(#)g2).t0)*diff(h3,t0),
+      ((f3(#)g1).t0-(f1(#)g3).t0)*diff(h1,t0) ]|+
+   |[ h2.t0*diff((f1(#)g2-f2(#)g1),t0),
+      h3.t0*diff((f2(#)g3-f3(#)g2),t0),
+      h1.t0*diff((f3(#)g1-f1(#)g3),t0) ]|-
+   (|[ ((f3(#)g1).t0-(f1(#)g3).t0)*diff(h3,t0),
+      ((f1(#)g2).t0-(f2(#)g1).t0)*diff(h1,t0),
+      ((f2(#)g3).t0-(f3(#)g2).t0)*diff(h2,t0) ]|+
+   |[ h3.t0*diff((f3(#)g1-f1(#)g3),t0),
+      h1.t0*diff((f1(#)g2-f2(#)g1),t0),
+      h2.t0*diff((f2(#)g3-f3(#)g2),t0) ]|) by VALUED_1:5
+.= |[ ((f1.t0*g2.t0)-(f2.t0*g1.t0))*diff(h2,t0),
+      ((f2.t0*g3.t0)-(f3(#)g2).t0)*diff(h3,t0),
+      ((f3(#)g1).t0-(f1(#)g3).t0)*diff(h1,t0) ]|+
+   |[ h2.t0*diff((f1(#)g2-f2(#)g1),t0),
+      h3.t0*diff((f2(#)g3-f3(#)g2),t0),
+      h1.t0*diff((f3(#)g1-f1(#)g3),t0) ]|-
+   (|[ ((f3(#)g1).t0-(f1(#)g3).t0)*diff(h3,t0),
+      ((f1(#)g2).t0-(f2(#)g1).t0)*diff(h1,t0),
+      ((f2(#)g3).t0-(f3(#)g2).t0)*diff(h2,t0) ]|+
+   |[ h3.t0*diff((f3(#)g1-f1(#)g3),t0),
+      h1.t0*diff((f1(#)g2-f2(#)g1),t0),
+      h2.t0*diff((f2(#)g3-f3(#)g2),t0) ]|) by VALUED_1:5
+.= |[ ((f1.t0*g2.t0)-(f2.t0*g1.t0))*diff(h2,t0),
+      ((f2.t0*g3.t0)-(f3.t0*g2.t0))*diff(h3,t0),
+      ((f3(#)g1).t0-(f1(#)g3).t0)*diff(h1,t0) ]|+
+   |[ h2.t0*diff((f1(#)g2-f2(#)g1),t0),
+      h3.t0*diff((f2(#)g3-f3(#)g2),t0),
+      h1.t0*diff((f3(#)g1-f1(#)g3),t0) ]|-
+   (|[ ((f3(#)g1).t0-(f1(#)g3).t0)*diff(h3,t0),
+      ((f1(#)g2).t0-(f2(#)g1).t0)*diff(h1,t0),
+      ((f2(#)g3).t0-(f3(#)g2).t0)*diff(h2,t0) ]|+
+   |[ h3.t0*diff((f3(#)g1-f1(#)g3),t0),
+      h1.t0*diff((f1(#)g2-f2(#)g1),t0),
+      h2.t0*diff((f2(#)g3-f3(#)g2),t0) ]|) by VALUED_1:5
+.= |[ ((f1.t0*g2.t0)-(f2.t0*g1.t0))*diff(h2,t0),
+      ((f2.t0*g3.t0)-(f3.t0*g2.t0))*diff(h3,t0),
+      ((f3.t0*g1.t0)-(f1(#)g3).t0)*diff(h1,t0) ]|+
+   |[ h2.t0*diff((f1(#)g2-f2(#)g1),t0),
+      h3.t0*diff((f2(#)g3-f3(#)g2),t0),
+      h1.t0*diff((f3(#)g1-f1(#)g3),t0) ]|-
+   (|[ ((f3(#)g1).t0-(f1(#)g3).t0)*diff(h3,t0),
+      ((f1(#)g2).t0-(f2(#)g1).t0)*diff(h1,t0),
+      ((f2(#)g3).t0-(f3(#)g2).t0)*diff(h2,t0) ]|+
+   |[ h3.t0*diff((f3(#)g1-f1(#)g3),t0),
+      h1.t0*diff((f1(#)g2-f2(#)g1),t0),
+      h2.t0*diff((f2(#)g3-f3(#)g2),t0) ]|) by VALUED_1:5
+.= |[ ((f1.t0*g2.t0)-(f2.t0*g1.t0))*diff(h2,t0),
+      ((f2.t0*g3.t0)-(f3.t0*g2.t0))*diff(h3,t0),
+      ((f3.t0*g1.t0)-(f1.t0*g3.t0))*diff(h1,t0) ]|+
+   |[ h2.t0*diff((f1(#)g2-f2(#)g1),t0),
+      h3.t0*diff((f2(#)g3-f3(#)g2),t0),
+      h1.t0*diff((f3(#)g1-f1(#)g3),t0) ]|-
+   (|[ ((f3(#)g1).t0-(f1(#)g3).t0)*diff(h3,t0),
+      ((f1(#)g2).t0-(f2(#)g1).t0)*diff(h1,t0),
+      ((f2(#)g3).t0-(f3(#)g2).t0)*diff(h2,t0) ]|+
+   |[ h3.t0*diff((f3(#)g1-f1(#)g3),t0),
+      h1.t0*diff((f1(#)g2-f2(#)g1),t0),
+      h2.t0*diff((f2(#)g3-f3(#)g2),t0) ]|) by VALUED_1:5
+.= |[ ((f1.t0*g2.t0)-(f2.t0*g1.t0))*diff(h2,t0),
+      ((f2.t0*g3.t0)-(f3.t0*g2.t0))*diff(h3,t0),
+      ((f3.t0*g1.t0)-(f1.t0*g3.t0))*diff(h1,t0) ]|+
+   |[ h2.t0*diff((f1(#)g2-f2(#)g1),t0),
+      h3.t0*diff((f2(#)g3-f3(#)g2),t0),
+      h1.t0*diff((f3(#)g1-f1(#)g3),t0) ]|-
+   (|[ ((f3.t0*g1.t0)-(f1(#)g3).t0)*diff(h3,t0),
+      ((f1(#)g2).t0-(f2(#)g1).t0)*diff(h1,t0),
+      ((f2(#)g3).t0-(f3(#)g2).t0)*diff(h2,t0) ]|+
+   |[ h3.t0*diff((f3(#)g1-f1(#)g3),t0),
+      h1.t0*diff((f1(#)g2-f2(#)g1),t0),
+      h2.t0*diff((f2(#)g3-f3(#)g2),t0) ]|) by VALUED_1:5
+.= |[ ((f1.t0*g2.t0)-(f2.t0*g1.t0))*diff(h2,t0),
+      ((f2.t0*g3.t0)-(f3.t0*g2.t0))*diff(h3,t0),
+      ((f3.t0*g1.t0)-(f1.t0*g3.t0))*diff(h1,t0) ]|+
+   |[ h2.t0*diff((f1(#)g2-f2(#)g1),t0),
+      h3.t0*diff((f2(#)g3-f3(#)g2),t0),
+      h1.t0*diff((f3(#)g1-f1(#)g3),t0) ]|-
+   (|[ ((f3.t0*g1.t0)-(f1.t0*g3.t0))*diff(h3,t0),
+      ((f1(#)g2).t0-(f2(#)g1).t0)*diff(h1,t0),
+      ((f2(#)g3).t0-(f3(#)g2).t0)*diff(h2,t0) ]|+
+   |[ h3.t0*diff((f3(#)g1-f1(#)g3),t0),
+      h1.t0*diff((f1(#)g2-f2(#)g1),t0),
+      h2.t0*diff((f2(#)g3-f3(#)g2),t0) ]|) by VALUED_1:5
+.= |[ ((f1.t0*g2.t0)-(f2.t0*g1.t0))*diff(h2,t0),
+      ((f2.t0*g3.t0)-(f3.t0*g2.t0))*diff(h3,t0),
+      ((f3.t0*g1.t0)-(f1.t0*g3.t0))*diff(h1,t0) ]|+
+   |[ h2.t0*diff((f1(#)g2-f2(#)g1),t0),
+      h3.t0*diff((f2(#)g3-f3(#)g2),t0),
+      h1.t0*diff((f3(#)g1-f1(#)g3),t0) ]|-
+   (|[ ((f3.t0*g1.t0)-(f1.t0*g3.t0))*diff(h3,t0),
+      ((f1.t0*g2.t0)-(f2(#)g1).t0)*diff(h1,t0),
+      ((f2(#)g3).t0-(f3(#)g2).t0)*diff(h2,t0) ]|+
+   |[ h3.t0*diff((f3(#)g1-f1(#)g3),t0),
+      h1.t0*diff((f1(#)g2-f2(#)g1),t0),
+      h2.t0*diff((f2(#)g3-f3(#)g2),t0) ]|) by VALUED_1:5
+.= |[ ((f1.t0*g2.t0)-(f2.t0*g1.t0))*diff(h2,t0),
+      ((f2.t0*g3.t0)-(f3.t0*g2.t0))*diff(h3,t0),
+      ((f3.t0*g1.t0)-(f1.t0*g3.t0))*diff(h1,t0) ]|+
+   |[ h2.t0*diff((f1(#)g2-f2(#)g1),t0),
+      h3.t0*diff((f2(#)g3-f3(#)g2),t0),
+      h1.t0*diff((f3(#)g1-f1(#)g3),t0) ]|-
+   (|[ ((f3.t0*g1.t0)-(f1.t0*g3.t0))*diff(h3,t0),
+      ((f1.t0*g2.t0)-(f2.t0*g1.t0))*diff(h1,t0),
+      ((f2(#)g3).t0-(f3(#)g2).t0)*diff(h2,t0) ]|+
+   |[ h3.t0*diff((f3(#)g1-f1(#)g3),t0),
+      h1.t0*diff((f1(#)g2-f2(#)g1),t0),
+      h2.t0*diff((f2(#)g3-f3(#)g2),t0) ]|) by VALUED_1:5
+.= |[ ((f1.t0*g2.t0)-(f2.t0*g1.t0))*diff(h2,t0),
+      ((f2.t0*g3.t0)-(f3.t0*g2.t0))*diff(h3,t0),
+      ((f3.t0*g1.t0)-(f1.t0*g3.t0))*diff(h1,t0) ]|+
+   |[ h2.t0*diff((f1(#)g2-f2(#)g1),t0),
+      h3.t0*diff((f2(#)g3-f3(#)g2),t0),
+      h1.t0*diff((f3(#)g1-f1(#)g3),t0) ]|-
+   (|[ ((f3.t0*g1.t0)-(f1.t0*g3.t0))*diff(h3,t0),
+      ((f1.t0*g2.t0)-(f2.t0*g1.t0))*diff(h1,t0),
+      ((f2.t0*g3.t0)-(f3(#)g2).t0)*diff(h2,t0) ]|+
+   |[ h3.t0*diff((f3(#)g1-f1(#)g3),t0),
+      h1.t0*diff((f1(#)g2-f2(#)g1),t0),
+      h2.t0*diff((f2(#)g3-f3(#)g2),t0) ]|) by VALUED_1:5
+.= |[ ((f1.t0*g2.t0)-(f2.t0*g1.t0))*diff(h2,t0),
+      ((f2.t0*g3.t0)-(f3.t0*g2.t0))*diff(h3,t0),
+      ((f3.t0*g1.t0)-(f1.t0*g3.t0))*diff(h1,t0) ]|+
+   |[ h2.t0*diff((f1(#)g2-f2(#)g1),t0),
+      h3.t0*diff((f2(#)g3-f3(#)g2),t0),
+      h1.t0*diff((f3(#)g1-f1(#)g3),t0) ]|-
+   (|[ ((f3.t0*g1.t0)-(f1.t0*g3.t0))*diff(h3,t0),
+      ((f1.t0*g2.t0)-(f2.t0*g1.t0))*diff(h1,t0),
+      ((f2.t0*g3.t0)-(f3.t0*g2.t0))*diff(h2,t0) ]|+
+   |[ h3.t0*diff((f3(#)g1-f1(#)g3),t0),
+      h1.t0*diff((f1(#)g2-f2(#)g1),t0),
+      h2.t0*diff((f2(#)g3-f3(#)g2),t0) ]|) by VALUED_1:5
+.= |[ ((f1.t0*g2.t0)-(f2.t0*g1.t0))*diff(h2,t0),
+      ((f2.t0*g3.t0)-(f3.t0*g2.t0))*diff(h3,t0),
+      ((f3.t0*g1.t0)-(f1.t0*g3.t0))*diff(h1,t0) ]|+
+   |[ h2.t0*(diff(f1(#)g2,t0)-diff(f2(#)g1,t0)),
+      h3.t0*diff((f2(#)g3-f3(#)g2),t0),
+      h1.t0*diff((f3(#)g1-f1(#)g3),t0) ]|-
+   (|[ ((f3.t0*g1.t0)-(f1.t0*g3.t0))*diff(h3,t0),
+      ((f1.t0*g2.t0)-(f2.t0*g1.t0))*diff(h1,t0),
+      ((f2.t0*g3.t0)-(f3.t0*g2.t0))*diff(h2,t0) ]|+
+   |[ h3.t0*diff((f3(#)g1-f1(#)g3),t0),
+      h1.t0*diff((f1(#)g2-f2(#)g1),t0),
+      h2.t0*diff((f2(#)g3-f3(#)g2),t0) ]|) by B1,FDIFF_1:22
+.= |[ ((f1.t0*g2.t0)-(f2.t0*g1.t0))*diff(h2,t0),
+      ((f2.t0*g3.t0)-(f3.t0*g2.t0))*diff(h3,t0),
+      ((f3.t0*g1.t0)-(f1.t0*g3.t0))*diff(h1,t0) ]|+
+   |[ h2.t0*(diff(f1(#)g2,t0)-diff(f2(#)g1,t0)),
+      h3.t0*(diff(f2(#)g3,t0)-diff(f3(#)g2,t0)),
+      h1.t0*diff((f3(#)g1-f1(#)g3),t0) ]|-
+   (|[ ((f3.t0*g1.t0)-(f1.t0*g3.t0))*diff(h3,t0),
+      ((f1.t0*g2.t0)-(f2.t0*g1.t0))*diff(h1,t0),
+      ((f2.t0*g3.t0)-(f3.t0*g2.t0))*diff(h2,t0) ]|+
+   |[ h3.t0*diff((f3(#)g1-f1(#)g3),t0),
+      h1.t0*diff((f1(#)g2-f2(#)g1),t0),
+      h2.t0*diff((f2(#)g3-f3(#)g2),t0) ]|) by B1,FDIFF_1:22
+.= |[ ((f1.t0*g2.t0)-(f2.t0*g1.t0))*diff(h2,t0),
+      ((f2.t0*g3.t0)-(f3.t0*g2.t0))*diff(h3,t0),
+      ((f3.t0*g1.t0)-(f1.t0*g3.t0))*diff(h1,t0) ]|+
+   |[ h2.t0*(diff(f1(#)g2,t0)-diff(f2(#)g1,t0)),
+      h3.t0*(diff(f2(#)g3,t0)-diff(f3(#)g2,t0)),
+      h1.t0*(diff(f3(#)g1,t0)-diff(f1(#)g3,t0)) ]|-
+   (|[ ((f3.t0*g1.t0)-(f1.t0*g3.t0))*diff(h3,t0),
+      ((f1.t0*g2.t0)-(f2.t0*g1.t0))*diff(h1,t0),
+      ((f2.t0*g3.t0)-(f3.t0*g2.t0))*diff(h2,t0) ]|+
+   |[ h3.t0*diff((f3(#)g1-f1(#)g3),t0),
+      h1.t0*diff((f1(#)g2-f2(#)g1),t0),
+      h2.t0*diff((f2(#)g3-f3(#)g2),t0) ]|) by B1,FDIFF_1:22
+.= |[ ((f1.t0*g2.t0)-(f2.t0*g1.t0))*diff(h2,t0),
+      ((f2.t0*g3.t0)-(f3.t0*g2.t0))*diff(h3,t0),
+      ((f3.t0*g1.t0)-(f1.t0*g3.t0))*diff(h1,t0) ]|+
+   |[ h2.t0*(diff(f1(#)g2,t0)-diff(f2(#)g1,t0)),
+      h3.t0*(diff(f2(#)g3,t0)-diff(f3(#)g2,t0)),
+      h1.t0*(diff(f3(#)g1,t0)-diff(f1(#)g3,t0)) ]|-
+   (|[ ((f3.t0*g1.t0)-(f1.t0*g3.t0))*diff(h3,t0),
+      ((f1.t0*g2.t0)-(f2.t0*g1.t0))*diff(h1,t0),
+      ((f2.t0*g3.t0)-(f3.t0*g2.t0))*diff(h2,t0) ]|+
+   |[ h3.t0*(diff(f3(#)g1,t0)-diff(f1(#)g3,t0)),
+      h1.t0*diff((f1(#)g2-f2(#)g1),t0),
+      h2.t0*diff((f2(#)g3-f3(#)g2),t0) ]|) by B1,FDIFF_1:22
+.= |[ ((f1.t0*g2.t0)-(f2.t0*g1.t0))*diff(h2,t0),
+      ((f2.t0*g3.t0)-(f3.t0*g2.t0))*diff(h3,t0),
+      ((f3.t0*g1.t0)-(f1.t0*g3.t0))*diff(h1,t0) ]|+
+   |[ h2.t0*(diff(f1(#)g2,t0)-diff(f2(#)g1,t0)),
+      h3.t0*(diff(f2(#)g3,t0)-diff(f3(#)g2,t0)),
+      h1.t0*(diff(f3(#)g1,t0)-diff(f1(#)g3,t0)) ]|-
+   (|[ ((f3.t0*g1.t0)-(f1.t0*g3.t0))*diff(h3,t0),
+      ((f1.t0*g2.t0)-(f2.t0*g1.t0))*diff(h1,t0),
+      ((f2.t0*g3.t0)-(f3.t0*g2.t0))*diff(h2,t0) ]|+
+   |[ h3.t0*(diff(f3(#)g1,t0)-diff(f1(#)g3,t0)),
+      h1.t0*(diff(f1(#)g2,t0)-diff(f2(#)g1,t0)),
+      h2.t0*diff((f2(#)g3-f3(#)g2),t0) ]|) by B1,FDIFF_1:22
+.= |[ ((f1.t0*g2.t0)-(f2.t0*g1.t0))*diff(h2,t0),
+      ((f2.t0*g3.t0)-(f3.t0*g2.t0))*diff(h3,t0),
+      ((f3.t0*g1.t0)-(f1.t0*g3.t0))*diff(h1,t0) ]|+
+   |[ h2.t0*(diff(f1(#)g2,t0)-diff(f2(#)g1,t0)),
+      h3.t0*(diff(f2(#)g3,t0)-diff(f3(#)g2,t0)),
+      h1.t0*(diff(f3(#)g1,t0)-diff(f1(#)g3,t0)) ]|-
+   (|[ ((f3.t0*g1.t0)-(f1.t0*g3.t0))*diff(h3,t0),
+      ((f1.t0*g2.t0)-(f2.t0*g1.t0))*diff(h1,t0),
+      ((f2.t0*g3.t0)-(f3.t0*g2.t0))*diff(h2,t0) ]|+
+   |[ h3.t0*(diff(f3(#)g1,t0)-diff(f1(#)g3,t0)),
+      h1.t0*(diff(f1(#)g2,t0)-diff(f2(#)g1,t0)),
+      h2.t0*(diff(f2(#)g3,t0)-diff(f3(#)g2,t0)) ]|) by B1,FDIFF_1:22
+.= |[ ((f1.t0*g2.t0)-(f2.t0*g1.t0))*diff(h2,t0),
+      ((f2.t0*g3.t0)-(f3.t0*g2.t0))*diff(h3,t0),
+      ((f3.t0*g1.t0)-(f1.t0*g3.t0))*diff(h1,t0) ]|+
+   |[ h2.t0*((g2.t0)*diff(f1,t0)+(f1.t0)*diff(g2,t0)
+      -diff(f2(#)g1,t0)),
+      h3.t0*(diff(f2(#)g3,t0)-diff(f3(#)g2,t0)),
+      h1.t0*(diff(f3(#)g1,t0)-diff(f1(#)g3,t0)) ]|-
+   (|[ ((f3.t0*g1.t0)-(f1.t0*g3.t0))*diff(h3,t0),
+      ((f1.t0*g2.t0)-(f2.t0*g1.t0))*diff(h1,t0),
+      ((f2.t0*g3.t0)-(f3.t0*g2.t0))*diff(h2,t0) ]|+
+   |[ h3.t0*(diff(f3(#)g1,t0)-diff(f1(#)g3,t0)),
+      h1.t0*(diff(f1(#)g2,t0)-diff(f2(#)g1,t0)),
+      h2.t0*(diff(f2(#)g3,t0)-diff(f3(#)g2,t0)) ]|) by A1,A2,FDIFF_1:24
+.= |[ ((f1.t0*g2.t0)-(f2.t0*g1.t0))*diff(h2,t0),
+      ((f2.t0*g3.t0)-(f3.t0*g2.t0))*diff(h3,t0),
+      ((f3.t0*g1.t0)-(f1.t0*g3.t0))*diff(h1,t0) ]|+
+   |[ h2.t0*((g2.t0)*diff(f1,t0)+(f1.t0)*diff(g2,t0)
+      -((g1.t0)*diff(f2,t0)+(f2.t0)*diff(g1,t0))),
+      h3.t0*(diff(f2(#)g3,t0)-diff(f3(#)g2,t0)),
+      h1.t0*(diff(f3(#)g1,t0)-diff(f1(#)g3,t0)) ]|-
+   (|[ ((f3.t0*g1.t0)-(f1.t0*g3.t0))*diff(h3,t0),
+      ((f1.t0*g2.t0)-(f2.t0*g1.t0))*diff(h1,t0),
+      ((f2.t0*g3.t0)-(f3.t0*g2.t0))*diff(h2,t0) ]|+
+   |[ h3.t0*(diff(f3(#)g1,t0)-diff(f1(#)g3,t0)),
+      h1.t0*(diff(f1(#)g2,t0)-diff(f2(#)g1,t0)),
+      h2.t0*(diff(f2(#)g3,t0)-diff(f3(#)g2,t0)) ]|) by A1,A2,FDIFF_1:24
+.= |[ ((f1.t0*g2.t0)-(f2.t0*g1.t0))*diff(h2,t0),
+      ((f2.t0*g3.t0)-(f3.t0*g2.t0))*diff(h3,t0),
+      ((f3.t0*g1.t0)-(f1.t0*g3.t0))*diff(h1,t0) ]|+
+   |[ h2.t0*((g2.t0)*diff(f1,t0)+(f1.t0)*diff(g2,t0)
+      -((g1.t0)*diff(f2,t0)+(f2.t0)*diff(g1,t0))),
+      h3.t0*((g3.t0)*diff(f2,t0)+(f2.t0)*diff(g3,t0)
+      -diff(f3(#)g2,t0)),
+      h1.t0*(diff(f3(#)g1,t0)-diff(f1(#)g3,t0)) ]|-
+   (|[ ((f3.t0*g1.t0)-(f1.t0*g3.t0))*diff(h3,t0),
+      ((f1.t0*g2.t0)-(f2.t0*g1.t0))*diff(h1,t0),
+      ((f2.t0*g3.t0)-(f3.t0*g2.t0))*diff(h2,t0) ]|+
+   |[ h3.t0*(diff(f3(#)g1,t0)-diff(f1(#)g3,t0)),
+      h1.t0*(diff(f1(#)g2,t0)-diff(f2(#)g1,t0)),
+      h2.t0*(diff(f2(#)g3,t0)-diff(f3(#)g2,t0)) ]|) by A1,A2,FDIFF_1:24
+.= |[ ((f1.t0*g2.t0)-(f2.t0*g1.t0))*diff(h2,t0),
+      ((f2.t0*g3.t0)-(f3.t0*g2.t0))*diff(h3,t0),
+      ((f3.t0*g1.t0)-(f1.t0*g3.t0))*diff(h1,t0) ]|+
+   |[ h2.t0*((g2.t0)*diff(f1,t0)+(f1.t0)*diff(g2,t0)
+      -((g1.t0)*diff(f2,t0)+(f2.t0)*diff(g1,t0))),
+      h3.t0*((g3.t0)*diff(f2,t0)+(f2.t0)*diff(g3,t0)
+      -((g2.t0)*diff(f3,t0)+(f3.t0)*diff(g2,t0))),
+      h1.t0*(diff(f3(#)g1,t0)-diff(f1(#)g3,t0)) ]|-
+   (|[ ((f3.t0*g1.t0)-(f1.t0*g3.t0))*diff(h3,t0),
+      ((f1.t0*g2.t0)-(f2.t0*g1.t0))*diff(h1,t0),
+      ((f2.t0*g3.t0)-(f3.t0*g2.t0))*diff(h2,t0) ]|+
+   |[ h3.t0*(diff(f3(#)g1,t0)-diff(f1(#)g3,t0)),
+      h1.t0*(diff(f1(#)g2,t0)-diff(f2(#)g1,t0)),
+      h2.t0*(diff(f2(#)g3,t0)-diff(f3(#)g2,t0)) ]|) by A1,A2,FDIFF_1:24
+.= |[ ((f1.t0*g2.t0)-(f2.t0*g1.t0))*diff(h2,t0),
+      ((f2.t0*g3.t0)-(f3.t0*g2.t0))*diff(h3,t0),
+      ((f3.t0*g1.t0)-(f1.t0*g3.t0))*diff(h1,t0) ]|+
+   |[ h2.t0*((g2.t0)*diff(f1,t0)+(f1.t0)*diff(g2,t0)
+      -((g1.t0)*diff(f2,t0)+(f2.t0)*diff(g1,t0))),
+      h3.t0*((g3.t0)*diff(f2,t0)+(f2.t0)*diff(g3,t0)
+      -((g2.t0)*diff(f3,t0)+(f3.t0)*diff(g2,t0))),
+      h1.t0*((g1.t0)*diff(f3,t0)+(f3.t0)*diff(g1,t0)
+      -diff(f1(#)g3,t0)) ]|-
+   (|[ ((f3.t0*g1.t0)-(f1.t0*g3.t0))*diff(h3,t0),
+      ((f1.t0*g2.t0)-(f2.t0*g1.t0))*diff(h1,t0),
+      ((f2.t0*g3.t0)-(f3.t0*g2.t0))*diff(h2,t0) ]|+
+   |[ h3.t0*(diff(f3(#)g1,t0)-diff(f1(#)g3,t0)),
+      h1.t0*(diff(f1(#)g2,t0)-diff(f2(#)g1,t0)),
+      h2.t0*(diff(f2(#)g3,t0)-diff(f3(#)g2,t0)) ]|) by A1,A2,FDIFF_1:24
+.= |[ ((f1.t0*g2.t0)-(f2.t0*g1.t0))*diff(h2,t0),
+      ((f2.t0*g3.t0)-(f3.t0*g2.t0))*diff(h3,t0),
+      ((f3.t0*g1.t0)-(f1.t0*g3.t0))*diff(h1,t0) ]|+
+   |[ h2.t0*((g2.t0)*diff(f1,t0)+(f1.t0)*diff(g2,t0)
+      -((g1.t0)*diff(f2,t0)+(f2.t0)*diff(g1,t0))),
+      h3.t0*((g3.t0)*diff(f2,t0)+(f2.t0)*diff(g3,t0)
+      -((g2.t0)*diff(f3,t0)+(f3.t0)*diff(g2,t0))),
+      h1.t0*((g1.t0)*diff(f3,t0)+(f3.t0)*diff(g1,t0)
+      -((g3.t0)*diff(f1,t0)+(f1.t0)*diff(g3,t0))) ]|-
+   (|[ ((f3.t0*g1.t0)-(f1.t0*g3.t0))*diff(h3,t0),
+      ((f1.t0*g2.t0)-(f2.t0*g1.t0))*diff(h1,t0),
+      ((f2.t0*g3.t0)-(f3.t0*g2.t0))*diff(h2,t0) ]|+
+   |[ h3.t0*(diff(f3(#)g1,t0)-diff(f1(#)g3,t0)),
+      h1.t0*(diff(f1(#)g2,t0)-diff(f2(#)g1,t0)),
+      h2.t0*(diff(f2(#)g3,t0)-diff(f3(#)g2,t0)) ]|) by A1,A2,FDIFF_1:24
+.= |[ ((f1.t0*g2.t0)-(f2.t0*g1.t0))*diff(h2,t0),
+      ((f2.t0*g3.t0)-(f3.t0*g2.t0))*diff(h3,t0),
+      ((f3.t0*g1.t0)-(f1.t0*g3.t0))*diff(h1,t0) ]|+
+   |[ h2.t0*((g2.t0)*diff(f1,t0)+(f1.t0)*diff(g2,t0)
+      -((g1.t0)*diff(f2,t0)+(f2.t0)*diff(g1,t0))),
+      h3.t0*((g3.t0)*diff(f2,t0)+(f2.t0)*diff(g3,t0)
+      -((g2.t0)*diff(f3,t0)+(f3.t0)*diff(g2,t0))),
+      h1.t0*((g1.t0)*diff(f3,t0)+(f3.t0)*diff(g1,t0)
+      -((g3.t0)*diff(f1,t0)+(f1.t0)*diff(g3,t0))) ]|-
+   (|[ ((f3.t0*g1.t0)-(f1.t0*g3.t0))*diff(h3,t0),
+      ((f1.t0*g2.t0)-(f2.t0*g1.t0))*diff(h1,t0),
+      ((f2.t0*g3.t0)-(f3.t0*g2.t0))*diff(h2,t0) ]|+
+   |[ h3.t0*((g1.t0)*diff(f3,t0)+(f3.t0)*diff(g1,t0)
+      -diff(f1(#)g3,t0)),
+      h1.t0*(diff(f1(#)g2,t0)-diff(f2(#)g1,t0)),
+      h2.t0*(diff(f2(#)g3,t0)-diff(f3(#)g2,t0)) ]|) by A1,A2,FDIFF_1:24
+.= |[ ((f1.t0*g2.t0)-(f2.t0*g1.t0))*diff(h2,t0),
+      ((f2.t0*g3.t0)-(f3.t0*g2.t0))*diff(h3,t0),
+      ((f3.t0*g1.t0)-(f1.t0*g3.t0))*diff(h1,t0) ]|+
+   |[ h2.t0*((g2.t0)*diff(f1,t0)+(f1.t0)*diff(g2,t0)
+      -((g1.t0)*diff(f2,t0)+(f2.t0)*diff(g1,t0))),
+      h3.t0*((g3.t0)*diff(f2,t0)+(f2.t0)*diff(g3,t0)
+      -((g2.t0)*diff(f3,t0)+(f3.t0)*diff(g2,t0))),
+      h1.t0*((g1.t0)*diff(f3,t0)+(f3.t0)*diff(g1,t0)
+      -((g3.t0)*diff(f1,t0)+(f1.t0)*diff(g3,t0))) ]|-
+   (|[ ((f3.t0*g1.t0)-(f1.t0*g3.t0))*diff(h3,t0),
+      ((f1.t0*g2.t0)-(f2.t0*g1.t0))*diff(h1,t0),
+      ((f2.t0*g3.t0)-(f3.t0*g2.t0))*diff(h2,t0) ]|+
+   |[ h3.t0*((g1.t0)*diff(f3,t0)+(f3.t0)*diff(g1,t0)
+      -((g3.t0)*diff(f1,t0)+(f1.t0)*diff(g3,t0))),
+      h1.t0*(diff(f1(#)g2,t0)-diff(f2(#)g1,t0)),
+      h2.t0*(diff(f2(#)g3,t0)-diff(f3(#)g2,t0)) ]|) by A1,A2,FDIFF_1:24
+.= |[ ((f1.t0*g2.t0)-(f2.t0*g1.t0))*diff(h2,t0),
+      ((f2.t0*g3.t0)-(f3.t0*g2.t0))*diff(h3,t0),
+      ((f3.t0*g1.t0)-(f1.t0*g3.t0))*diff(h1,t0) ]|+
+   |[ h2.t0*((g2.t0)*diff(f1,t0)+(f1.t0)*diff(g2,t0)
+      -((g1.t0)*diff(f2,t0)+(f2.t0)*diff(g1,t0))),
+      h3.t0*((g3.t0)*diff(f2,t0)+(f2.t0)*diff(g3,t0)
+      -((g2.t0)*diff(f3,t0)+(f3.t0)*diff(g2,t0))),
+      h1.t0*((g1.t0)*diff(f3,t0)+(f3.t0)*diff(g1,t0)
+      -((g3.t0)*diff(f1,t0)+(f1.t0)*diff(g3,t0))) ]|-
+   (|[ ((f3.t0*g1.t0)-(f1.t0*g3.t0))*diff(h3,t0),
+      ((f1.t0*g2.t0)-(f2.t0*g1.t0))*diff(h1,t0),
+      ((f2.t0*g3.t0)-(f3.t0*g2.t0))*diff(h2,t0) ]|+
+   |[ h3.t0*((g1.t0)*diff(f3,t0)+(f3.t0)*diff(g1,t0)
+      -((g3.t0)*diff(f1,t0)+(f1.t0)*diff(g3,t0))),
+      h1.t0*((g2.t0)*diff(f1,t0)+(f1.t0)*diff(g2,t0)
+      -diff(f2(#)g1,t0)),
+      h2.t0*(diff(f2(#)g3,t0)-diff(f3(#)g2,t0)) ]|) by A1,A2,FDIFF_1:24
+.= |[ ((f1.t0*g2.t0)-(f2.t0*g1.t0))*diff(h2,t0),
+      ((f2.t0*g3.t0)-(f3.t0*g2.t0))*diff(h3,t0),
+      ((f3.t0*g1.t0)-(f1.t0*g3.t0))*diff(h1,t0) ]|+
+   |[ h2.t0*((g2.t0)*diff(f1,t0)+(f1.t0)*diff(g2,t0)
+      -((g1.t0)*diff(f2,t0)+(f2.t0)*diff(g1,t0))),
+      h3.t0*((g3.t0)*diff(f2,t0)+(f2.t0)*diff(g3,t0)
+      -((g2.t0)*diff(f3,t0)+(f3.t0)*diff(g2,t0))),
+      h1.t0*((g1.t0)*diff(f3,t0)+(f3.t0)*diff(g1,t0)
+      -((g3.t0)*diff(f1,t0)+(f1.t0)*diff(g3,t0))) ]|-
+   (|[ ((f3.t0*g1.t0)-(f1.t0*g3.t0))*diff(h3,t0),
+      ((f1.t0*g2.t0)-(f2.t0*g1.t0))*diff(h1,t0),
+      ((f2.t0*g3.t0)-(f3.t0*g2.t0))*diff(h2,t0) ]|+
+   |[ h3.t0*((g1.t0)*diff(f3,t0)+(f3.t0)*diff(g1,t0)
+      -((g3.t0)*diff(f1,t0)+(f1.t0)*diff(g3,t0))),
+      h1.t0*((g2.t0)*diff(f1,t0)+(f1.t0)*diff(g2,t0)
+      -((g1.t0)*diff(f2,t0)+(f2.t0)*diff(g1,t0))),
+      h2.t0*(diff(f2(#)g3,t0)-diff(f3(#)g2,t0)) ]|)
+      by A1,A2,FDIFF_1:24
+.= |[ ((f1.t0*g2.t0)-(f2.t0*g1.t0))*diff(h2,t0),
+      ((f2.t0*g3.t0)-(f3.t0*g2.t0))*diff(h3,t0),
+      ((f3.t0*g1.t0)-(f1.t0*g3.t0))*diff(h1,t0) ]|+
+   |[ h2.t0*((g2.t0)*diff(f1,t0)+(f1.t0)*diff(g2,t0)
+      -((g1.t0)*diff(f2,t0)+(f2.t0)*diff(g1,t0))),
+      h3.t0*((g3.t0)*diff(f2,t0)+(f2.t0)*diff(g3,t0)
+      -((g2.t0)*diff(f3,t0)+(f3.t0)*diff(g2,t0))),
+      h1.t0*((g1.t0)*diff(f3,t0)+(f3.t0)*diff(g1,t0)
+      -((g3.t0)*diff(f1,t0)+(f1.t0)*diff(g3,t0))) ]|-
+   (|[ ((f3.t0*g1.t0)-(f1.t0*g3.t0))*diff(h3,t0),
+      ((f1.t0*g2.t0)-(f2.t0*g1.t0))*diff(h1,t0),
+      ((f2.t0*g3.t0)-(f3.t0*g2.t0))*diff(h2,t0) ]|+
+   |[ h3.t0*((g1.t0)*diff(f3,t0)+(f3.t0)*diff(g1,t0)
+      -((g3.t0)*diff(f1,t0)+(f1.t0)*diff(g3,t0))),
+      h1.t0*((g2.t0)*diff(f1,t0)+(f1.t0)*diff(g2,t0)
+      -((g1.t0)*diff(f2,t0)+(f2.t0)*diff(g1,t0))),
+      h2.t0*((g3.t0)*diff(f2,t0)+(f2.t0)*diff(g3,t0)
+      -diff(f3(#)g2,t0)) ]|) by A1,A2,FDIFF_1:24
+.= |[ ((f1.t0*g2.t0)-(f2.t0*g1.t0))*diff(h2,t0),
+      ((f2.t0*g3.t0)-(f3.t0*g2.t0))*diff(h3,t0),
+      ((f3.t0*g1.t0)-(f1.t0*g3.t0))*diff(h1,t0) ]|+
+   |[ h2.t0*((g2.t0)*diff(f1,t0)+(f1.t0)*diff(g2,t0)
+      -((g1.t0)*diff(f2,t0)+(f2.t0)*diff(g1,t0))),
+      h3.t0*((g3.t0)*diff(f2,t0)+(f2.t0)*diff(g3,t0)
+      -((g2.t0)*diff(f3,t0)+(f3.t0)*diff(g2,t0))),
+      h1.t0*((g1.t0)*diff(f3,t0)+(f3.t0)*diff(g1,t0)
+      -((g3.t0)*diff(f1,t0)+(f1.t0)*diff(g3,t0))) ]|-
+   (|[ ((f3.t0*g1.t0)-(f1.t0*g3.t0))*diff(h3,t0),
+      ((f1.t0*g2.t0)-(f2.t0*g1.t0))*diff(h1,t0),
+      ((f2.t0*g3.t0)-(f3.t0*g2.t0))*diff(h2,t0) ]|+
+   |[ h3.t0*((g1.t0)*diff(f3,t0)+(f3.t0)*diff(g1,t0)
+      -((g3.t0)*diff(f1,t0)+(f1.t0)*diff(g3,t0))),
+      h1.t0*((g2.t0)*diff(f1,t0)+(f1.t0)*diff(g2,t0)
+      -((g1.t0)*diff(f2,t0)+(f2.t0)*diff(g1,t0))),
+      h2.t0*((g3.t0)*diff(f2,t0)+(f2.t0)*diff(g3,t0)
+      -((g2.t0)*diff(f3,t0)+(f3.t0)*diff(g2,t0))) ]|)
+      by A1,A2,FDIFF_1:24
+.= |[ (h2.t0)*((f1.t0)*diff(g2,t0)-(f2.t0)*diff(g1,t0))+
+      (h2.t0)*(diff(f1,t0)*(g2.t0)-diff(f2,t0)*(g1.t0)),
+      (h3.t0)*((f2.t0)*diff(g3,t0)-(f3.t0)*diff(g2,t0))+
+      (h3.t0)*(diff(f2,t0)*(g3.t0)-diff(f3,t0)*(g2.t0)),
+      (h1.t0)*((f3.t0)*diff(g1,t0)-(f1.t0)*diff(g3,t0))+
+      (h1.t0)*(diff(f3,t0)*(g1.t0)-diff(f1,t0)*(g3.t0)) ]|+
+   |[ diff(h2,t0)*((f1.t0)*(g2.t0)-(f2.t0)*(g1.t0)),
+      diff(h3,t0)*((f2.t0)*(g3.t0)-(f3.t0)*(g2.t0)),
+      diff(h1,t0)*((f3.t0)*(g1.t0)-(f1.t0)*(g3.t0)) ]|-
+   |[ diff(h3,t0)*((f3.t0)*(g1.t0)-(f1.t0)*(g3.t0)),
+      diff(h1,t0)*((f1.t0)*(g2.t0)-(f2.t0)*(g1.t0)),
+      diff(h2,t0)*((f2.t0)*(g3.t0)-(f3.t0)*(g2.t0)) ]|-
+   |[ (h3.t0)*((f3.t0)*diff(g1,t0)-(f1.t0)*diff(g3,t0))+
+      (h3.t0)*(diff(f3,t0)*(g1.t0)-diff(f1,t0)*(g3.t0)),
+      (h1.t0)*((f1.t0)*diff(g2,t0)-(f2.t0)*diff(g1,t0))+
+      (h1.t0)*(diff(f1,t0)*(g2.t0)-diff(f2,t0)*(g1.t0)),
+      (h2.t0)*((g3.t0)*diff(f2,t0)-(g2.t0)*diff(f3,t0))+
+      (h2.t0)*((f2.t0)*diff(g3,t0)-(f3.t0)*diff(g2,t0)) ]| by RVSUM_1:60
+.= |[ (h2.t0)*((f1.t0)*diff(g2,t0)-(f2.t0)*diff(g1,t0))+
+      (h2.t0)*(diff(f1,t0)*(g2.t0)-diff(f2,t0)*(g1.t0)),
+      (h3.t0)*((f2.t0)*diff(g3,t0)-(f3.t0)*diff(g2,t0))+
+      (h3.t0)*(diff(f2,t0)*(g3.t0)-diff(f3,t0)*(g2.t0)),
+      (h1.t0)*((f3.t0)*diff(g1,t0)-(f1.t0)*diff(g3,t0))+
+      (h1.t0)*(diff(f3,t0)*(g1.t0)-diff(f1,t0)*(g3.t0)) ]|+
+   (|[ diff(h2,t0)*((f1.t0)*(g2.t0)-(f2.t0)*(g1.t0)),
+      diff(h3,t0)*((f2.t0)*(g3.t0)-(f3.t0)*(g2.t0)),
+      diff(h1,t0)*((f3.t0)*(g1.t0)-(f1.t0)*(g3.t0)) ]|-
+   |[ diff(h3,t0)*((f3.t0)*(g1.t0)-(f1.t0)*(g3.t0)),
+      diff(h1,t0)*((f1.t0)*(g2.t0)-(f2.t0)*(g1.t0)),
+      diff(h2,t0)*((f2.t0)*(g3.t0)-(f3.t0)*(g2.t0)) ]|)-
+   |[ (h3.t0)*((f3.t0)*diff(g1,t0)-(f1.t0)*diff(g3,t0))+
+      (h3.t0)*(diff(f3,t0)*(g1.t0)-diff(f1,t0)*(g3.t0)),
+      (h1.t0)*((f1.t0)*diff(g2,t0)-(f2.t0)*diff(g1,t0))+
+      (h1.t0)*(diff(f1,t0)*(g2.t0)-diff(f2,t0)*(g1.t0)),
+      (h2.t0)*((g3.t0)*diff(f2,t0)-(g2.t0)*diff(f3,t0))+
+      (h2.t0)*((f2.t0)*diff(g3,t0)-(f3.t0)*diff(g2,t0)) ]| by RVSUM_1:32
+.= |[ (h2.t0)*((f1.t0)*diff(g2,t0)-(f2.t0)*diff(g1,t0))+
+      (h2.t0)*(diff(f1,t0)*(g2.t0)-diff(f2,t0)*(g1.t0)),
+      (h3.t0)*((f2.t0)*diff(g3,t0)-(f3.t0)*diff(g2,t0))+
+      (h3.t0)*(diff(f2,t0)*(g3.t0)-diff(f3,t0)*(g2.t0)),
+      (h1.t0)*((f3.t0)*diff(g1,t0)-(f1.t0)*diff(g3,t0))+
+      (h1.t0)*(diff(f3,t0)*(g1.t0)-diff(f1,t0)*(g3.t0)) ]|+
+   |[ diff(h2,t0)*((f1.t0)*(g2.t0)-(f2.t0)*(g1.t0))-
+      diff(h3,t0)*((f3.t0)*(g1.t0)-(f1.t0)*(g3.t0)),
+      diff(h3,t0)*((f2.t0)*(g3.t0)-(f3.t0)*(g2.t0))-
+      diff(h1,t0)*((f1.t0)*(g2.t0)-(f2.t0)*(g1.t0)),
+      diff(h1,t0)*((f3.t0)*(g1.t0)-(f1.t0)*(g3.t0))-
+      diff(h2,t0)*((f2.t0)*(g3.t0)-(f3.t0)*(g2.t0)) ]|-
+   |[ (h3.t0)*((f3.t0)*diff(g1,t0)-(f1.t0)*diff(g3,t0))+
+      (h3.t0)*(diff(f3,t0)*(g1.t0)-diff(f1,t0)*(g3.t0)),
+      (h1.t0)*((f1.t0)*diff(g2,t0)-(f2.t0)*diff(g1,t0))+
+      (h1.t0)*(diff(f1,t0)*(g2.t0)-diff(f2,t0)*(g1.t0)),
+      (h2.t0)*((g3.t0)*diff(f2,t0)-(g2.t0)*diff(f3,t0))+
+      (h2.t0)*((f2.t0)*diff(g3,t0)-(f3.t0)*diff(g2,t0)) ]| by LmA63
+.= |[ (h2.t0)*((f1.t0)*diff(g2,t0)-(f2.t0)*diff(g1,t0))+
+      (h2.t0)*(diff(f1,t0)*(g2.t0)-diff(f2,t0)*(g1.t0)),
+      (h3.t0)*((f2.t0)*diff(g3,t0)-(f3.t0)*diff(g2,t0))+
+      (h3.t0)*(diff(f2,t0)*(g3.t0)-diff(f3,t0)*(g2.t0)),
+      (h1.t0)*((f3.t0)*diff(g1,t0)-(f1.t0)*diff(g3,t0))+
+      (h1.t0)*(diff(f3,t0)*(g1.t0)-diff(f1,t0)*(g3.t0)) ]|-
+   |[ (h3.t0)*((f3.t0)*diff(g1,t0)-(f1.t0)*diff(g3,t0))+
+      (h3.t0)*(diff(f3,t0)*(g1.t0)-diff(f1,t0)*(g3.t0)),
+      (h1.t0)*((f1.t0)*diff(g2,t0)-(f2.t0)*diff(g1,t0))+
+      (h1.t0)*(diff(f1,t0)*(g2.t0)-diff(f2,t0)*(g1.t0)),
+      (h2.t0)*((g3.t0)*diff(f2,t0)-(g2.t0)*diff(f3,t0))+
+      (h2.t0)*((f2.t0)*diff(g3,t0)-(f3.t0)*diff(g2,t0)) ]|+
+   |[ diff(h2,t0)*((f1.t0)*(g2.t0)-(f2.t0)*(g1.t0))-
+      diff(h3,t0)*((f3.t0)*(g1.t0)-(f1.t0)*(g3.t0)),
+      diff(h3,t0)*((f2.t0)*(g3.t0)-(f3.t0)*(g2.t0))-
+      diff(h1,t0)*((f1.t0)*(g2.t0)-(f2.t0)*(g1.t0)),
+      diff(h1,t0)*((f3.t0)*(g1.t0)-(f1.t0)*(g3.t0))-
+      diff(h2,t0)*((f2.t0)*(g3.t0)-(f3.t0)*(g2.t0)) ]|
+      by F1
+.= |[ (h2.t0)*((f1.t0)*diff(g2,t0)-(f2.t0)*diff(g1,t0))+
+      (h2.t0)*(diff(f1,t0)*(g2.t0)-diff(f2,t0)*(g1.t0))-
+      ((h3.t0)*((f3.t0)*diff(g1,t0)-(f1.t0)*diff(g3,t0))+
+      (h3.t0)*(diff(f3,t0)*(g1.t0)-diff(f1,t0)*(g3.t0))),
+      (h3.t0)*((f2.t0)*diff(g3,t0)-(f3.t0)*diff(g2,t0))+
+      (h3.t0)*(diff(f2,t0)*(g3.t0)-diff(f3,t0)*(g2.t0))-
+      ((h1.t0)*((f1.t0)*diff(g2,t0)-(f2.t0)*diff(g1,t0))+
+      (h1.t0)*(diff(f1,t0)*(g2.t0)-diff(f2,t0)*(g1.t0))),
+      (h1.t0)*((f3.t0)*diff(g1,t0)-(f1.t0)*diff(g3,t0))+
+      (h1.t0)*(diff(f3,t0)*(g1.t0)-diff(f1,t0)*(g3.t0))-
+      ((h2.t0)*((g3.t0)*diff(f2,t0)-(g2.t0)*diff(f3,t0))+
+      (h2.t0)*((f2.t0)*diff(g3,t0)-(f3.t0)*diff(g2,t0))) ]|+
+   |[ diff(h2,t0)*((f1.t0)*(g2.t0)-(f2.t0)*(g1.t0))-
+      diff(h3,t0)*((f3.t0)*(g1.t0)-(f1.t0)*(g3.t0)),
+      diff(h3,t0)*((f2.t0)*(g3.t0)-(f3.t0)*(g2.t0))-
+      diff(h1,t0)*((f1.t0)*(g2.t0)-(f2.t0)*(g1.t0)),
+      diff(h1,t0)*((f3.t0)*(g1.t0)-(f1.t0)*(g3.t0))-
+      diff(h2,t0)*((f2.t0)*(g3.t0)-(f3.t0)*(g2.t0)) ]| by LmA63
+.= |[ ((h2.t0)*((f1.t0)*diff(g2,t0)-(f2.t0)*diff(g1,t0))-
+      (h3.t0)*((f3.t0)*diff(g1,t0)-(f1.t0)*diff(g3,t0)))+
+      ((h2.t0)*(diff(f1,t0)*(g2.t0)-diff(f2,t0)*(g1.t0))-
+      (h3.t0)*(diff(f3,t0)*(g1.t0)-diff(f1,t0)*(g3.t0))),
+      ((h3.t0)*((f2.t0)*diff(g3,t0)-(f3.t0)*diff(g2,t0))-
+      (h1.t0)*((f1.t0)*diff(g2,t0)-(f2.t0)*diff(g1,t0)))+
+      ((h3.t0)*(diff(f2,t0)*(g3.t0)-diff(f3,t0)*(g2.t0))-
+      (h1.t0)*(diff(f1,t0)*(g2.t0)-diff(f2,t0)*(g1.t0))),
+      ((h1.t0)*((f3.t0)*diff(g1,t0)-(f1.t0)*diff(g3,t0))-
+      (h2.t0)*((f2.t0)*diff(g3,t0)-(f3.t0)*diff(g2,t0)))+
+      ((h1.t0)*(diff(f3,t0)*(g1.t0)-diff(f1,t0)*(g3.t0))-
+      (h2.t0)*((g3.t0)*diff(f2,t0)-(g2.t0)*diff(f3,t0))) ]|+
+   |[ diff(h2,t0)*((f1.t0)*(g2.t0)-(f2.t0)*(g1.t0))-
+      diff(h3,t0)*((f3.t0)*(g1.t0)-(f1.t0)*(g3.t0)),
+      diff(h3,t0)*((f2.t0)*(g3.t0)-(f3.t0)*(g2.t0))-
+      diff(h1,t0)*((f1.t0)*(g2.t0)-(f2.t0)*(g1.t0)),
+      diff(h1,t0)*((f3.t0)*(g1.t0)-(f1.t0)*(g3.t0))-
+      diff(h2,t0)*((f2.t0)*(g3.t0)-(f3.t0)*(g2.t0)) ]|
+.= |[ (h2.t0)*((f1.t0)*diff(g2,t0)-(f2.t0)*diff(g1,t0))-
+      (h3.t0)*((f3.t0)*diff(g1,t0)-(f1.t0)*diff(g3,t0)),
+      (h3.t0)*((f2.t0)*diff(g3,t0)-(f3.t0)*diff(g2,t0))-
+      (h1.t0)*((f1.t0)*diff(g2,t0)-(f2.t0)*diff(g1,t0)),
+      (h1.t0)*((f3.t0)*diff(g1,t0)-(f1.t0)*diff(g3,t0))-
+      (h2.t0)*((f2.t0)*diff(g3,t0)-(f3.t0)*diff(g2,t0)) ]|+
+   |[ (h2.t0)*(diff(f1,t0)*(g2.t0)-diff(f2,t0)*(g1.t0))-
+      (h3.t0)*(diff(f3,t0)*(g1.t0)-diff(f1,t0)*(g3.t0)),
+      (h3.t0)*(diff(f2,t0)*(g3.t0)-diff(f3,t0)*(g2.t0))-
+      (h1.t0)*(diff(f1,t0)*(g2.t0)-diff(f2,t0)*(g1.t0)),
+      (h1.t0)*(diff(f3,t0)*(g1.t0)-diff(f1,t0)*(g3.t0))-
+      (h2.t0)*(diff(f2,t0)*(g3.t0)-diff(f3,t0)*(g2.t0)) ]|+
+   |[ diff(h2,t0)*((f1.t0)*(g2.t0)-(f2.t0)*(g1.t0))-
+      diff(h3,t0)*((f3.t0)*(g1.t0)-(f1.t0)*(g3.t0)),
+      diff(h3,t0)*((f2.t0)*(g3.t0)-(f3.t0)*(g2.t0))-
+      diff(h1,t0)*((f1.t0)*(g2.t0)-(f2.t0)*(g1.t0)),
+      diff(h1,t0)*((f3.t0)*(g1.t0)-(f1.t0)*(g3.t0))-
+      diff(h2,t0)*((f2.t0)*(g3.t0)-(f3.t0)*(g2.t0)) ]| by LmA31;
+  hence thesis;
+end;

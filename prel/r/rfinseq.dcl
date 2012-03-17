@@ -35,13 +35,13 @@
 <Func kind="K" nr="51"/>
 </Adjective>
 <Adjective nr="6"/>
-<Adjective nr="25"/>
-<Adjective nr="31"/>
+<Adjective nr="26"/>
 <Adjective nr="32"/>
-<Adjective nr="35"/>
+<Adjective nr="33"/>
 <Adjective nr="36"/>
 <Adjective nr="37"/>
-<Adjective nr="44"/>
+<Adjective nr="38"/>
+<Adjective nr="45"/>
 </Cluster>
 </RCluster>
 <FCluster aid="RFINSEQ" nr="1">
@@ -50,7 +50,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="6"/>
-<Adjective nr="31"/>
+<Adjective nr="32"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -62,30 +62,7 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="25"/>
-</Cluster>
-</FCluster>
-<FCluster aid="RFINSEQ" nr="2">
-<ArgTypes>
-<Typ kind="M" nr="1">
-<Cluster>
-<Adjective nr="1"/>
-<Adjective nr="6"/>
-</Cluster>
-</Typ>
-<Typ kind="M" nr="1">
-<Cluster>
-<Adjective nr="25"/>
-</Cluster>
-</Typ>
-</ArgTypes>
-<Func kind="K" nr="7">
-<LocusVar nr="1"/>
-<LocusVar nr="2"/>
-</Func>
-<Cluster>
-<Adjective nr="1"/>
-<Adjective nr="25"/>
+<Adjective nr="26"/>
 </Cluster>
 </FCluster>
 </Registrations>

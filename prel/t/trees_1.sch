@@ -20,9 +20,9 @@
 <For>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="17" value="false"/>
-<Adjective nr="20"/>
-<Adjective nr="30"/>
+<Adjective nr="18" value="false"/>
+<Adjective nr="21"/>
+<Adjective nr="31"/>
 </Cluster>
 </Typ>
 <Pred kind="P" nr="1">
@@ -32,9 +32,9 @@
 <For>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="17" value="false"/>
-<Adjective nr="20"/>
-<Adjective nr="30"/>
+<Adjective nr="18" value="false"/>
+<Adjective nr="21"/>
+<Adjective nr="31"/>
 </Cluster>
 </Typ>
 <Not>

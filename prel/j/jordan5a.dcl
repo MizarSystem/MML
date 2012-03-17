@@ -61,13 +61,13 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="39" value="false"/>
-<Adjective nr="50"/>
+<Adjective nr="40" value="false"/>
 <Adjective nr="51"/>
-<Adjective nr="55"/>
+<Adjective nr="52"/>
 <Adjective nr="56"/>
 <Adjective nr="57"/>
-<Adjective nr="62"/>
+<Adjective nr="58"/>
+<Adjective nr="63"/>
 </Cluster>
 </RCluster>
 <FCluster aid="JORDAN5A" nr="1">
@@ -81,8 +81,8 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="144"/>
-<Adjective nr="168"/>
+<Adjective nr="145"/>
+<Adjective nr="169"/>
 </Cluster>
 </FCluster>
 </Registrations>

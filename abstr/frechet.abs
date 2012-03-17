@@ -76,12 +76,30 @@ theorem :: FRECHET:9
 theorem :: FRECHET:10
   for B being Subset of R^1 holds B = NAT implies B is closed;
 
+definition
+  let M be non empty MetrStruct, x be Point of TopSpaceMetr(M);
+  func Balls(x) -> Subset-Family of TopSpaceMetr(M) means
+:: FRECHET:def 1
+
+  ex y being Point of M st y = x &
+  it = { Ball(y,1/n) where n is Element of NAT: n <> 0 };
+end;
+
+definition
+  let M be non empty MetrSpace, x be Point of TopSpaceMetr(M);
+  redefine func Balls(x) -> Basis of x;
+ end;
+
+registration
+  let M be non empty MetrSpace, x be Point of TopSpaceMetr(M);
+  cluster Balls(x) -> countable;
+end;
+
 theorem :: FRECHET:11
-  for M being non empty MetrSpace,x being Point of TopSpaceMetr(M)
-, x' being Point of M st x=x' ex B being Basis of x st B={Ball(x',1/n) where n
-is Element of NAT:n<>0} & B is countable & ex f being Function of NAT,B st for
-n being set st n in NAT holds ex n' being Element of NAT st n=n' & f.n = Ball(
-  x',1/(n'+1));
+  for M being non empty MetrSpace, x being Point of TopSpaceMetr(M),
+      x' being Point of M st x = x'
+  ex f being Function of NAT,Balls(x) st
+  for n being Element of NAT holds f.n = Ball(x',1/(n+1));
 
 theorem :: FRECHET:12
   for f,g being Function holds rng(f+*g)=f.:(dom f\dom g) \/ rng g;
@@ -124,15 +142,13 @@ begin
 definition
   let T be non empty TopStruct;
   attr T is first-countable means
-:: FRECHET:def 1
+:: FRECHET:def 2
 
-  for x be Point of T ex B be Basis of
-  x st B is countable;
+  for x be Point of T ex B be Basis of x st B is countable;
 end;
 
 theorem :: FRECHET:21
-  for M being non empty MetrSpace holds TopSpaceMetr(M) is
-  first-countable;
+  for M being non empty MetrSpace holds TopSpaceMetr(M) is first-countable;
 
 theorem :: FRECHET:22
   R^1 is first-countable;
@@ -144,11 +160,11 @@ end;
 definition
   let T be TopStruct, S be sequence of T, x be Point of T;
   pred S is_convergent_to x means
-:: FRECHET:def 2
+:: FRECHET:def 3
 
-  for U1 being Subset of T st U1 is
-open & x in U1 ex n being Element of NAT st for m being Element of NAT st n <=
-  m holds S.m in U1;
+  for U1 being Subset of T st U1 is open & x in U1
+  ex n being Element of NAT st for m being Element of NAT st n <= m holds
+  S.m in U1;
 end;
 
 theorem :: FRECHET:23
@@ -158,7 +174,7 @@ theorem :: FRECHET:23
 definition
   let T be TopStruct, S be sequence of T;
   attr S is convergent means
-:: FRECHET:def 3
+:: FRECHET:def 4
 
   ex x being Point of T st S
   is_convergent_to x;
@@ -167,7 +183,7 @@ end;
 definition
   let T be non empty TopStruct, S be sequence of T;
   func Lim S -> Subset of T means
-:: FRECHET:def 4
+:: FRECHET:def 5
 
   for x being Point of T holds x in it
   iff S is_convergent_to x;
@@ -176,7 +192,7 @@ end;
 definition
   let T be non empty TopStruct;
   attr T is Frechet means
-:: FRECHET:def 5
+:: FRECHET:def 6
 
   for A being Subset of T,x being Point of T st
   x in Cl(A) ex S being sequence of T st rng S c= A & x in Lim S;
@@ -185,7 +201,7 @@ end;
 definition
   let T be non empty TopStruct;
   attr T is sequential means
-:: FRECHET:def 6
+:: FRECHET:def 7
   for A being Subset of T holds A is closed iff for
   S being sequence of T st S is convergent & rng S c= A holds Lim S c= A;
 end;
@@ -225,7 +241,7 @@ begin
 
 definition
   func REAL? -> strict non empty TopSpace means
-:: FRECHET:def 7
+:: FRECHET:def 8
 
   the carrier of it = (
   REAL \ NAT) \/ {REAL} & ex f being Function of R^1, it st f = (id REAL)+*(NAT

@@ -32,12 +32,12 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="26"/>
+<Adjective nr="27"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="26"/>
+<Adjective nr="27"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -46,59 +46,59 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="26"/>
+<Adjective nr="27"/>
 </Cluster>
 </FCluster>
 <FCluster aid="QUATERN2" nr="2">
 <ArgTypes/>
 <Func kind="K" nr="221"/>
 <Cluster>
-<Adjective nr="39" value="false"/>
-<Adjective nr="57"/>
+<Adjective nr="40" value="false"/>
+<Adjective nr="58"/>
 </Cluster>
 </FCluster>
 <FCluster aid="QUATERN2" nr="3">
 <ArgTypes/>
 <Func kind="K" nr="221"/>
 <Cluster>
-<Adjective nr="57"/>
-<Adjective nr="62"/>
-<Adjective nr="87"/>
+<Adjective nr="58"/>
+<Adjective nr="63"/>
 <Adjective nr="88"/>
 <Adjective nr="89"/>
+<Adjective nr="90"/>
 </Cluster>
 </FCluster>
 <FCluster aid="QUATERN2" nr="4">
 <ArgTypes/>
 <Func kind="K" nr="222"/>
 <Cluster>
-<Adjective nr="39" value="false"/>
-<Adjective nr="85"/>
+<Adjective nr="40" value="false"/>
+<Adjective nr="86"/>
 </Cluster>
 </FCluster>
 <FCluster aid="QUATERN2" nr="5">
 <ArgTypes/>
 <Func kind="K" nr="222"/>
 <Cluster>
-<Adjective nr="85"/>
-<Adjective nr="101"/>
+<Adjective nr="86"/>
+<Adjective nr="102"/>
 </Cluster>
 </FCluster>
 <FCluster aid="QUATERN2" nr="6">
 <ArgTypes/>
 <Func kind="K" nr="222"/>
 <Cluster>
-<Adjective nr="43" value="false"/>
-<Adjective nr="62"/>
-<Adjective nr="83"/>
-<Adjective nr="85"/>
-<Adjective nr="87"/>
+<Adjective nr="44" value="false"/>
+<Adjective nr="63"/>
+<Adjective nr="84"/>
+<Adjective nr="86"/>
 <Adjective nr="88"/>
 <Adjective nr="89"/>
-<Adjective nr="94"/>
-<Adjective nr="100"/>
-<Adjective nr="102"/>
+<Adjective nr="90"/>
+<Adjective nr="95"/>
+<Adjective nr="101"/>
 <Adjective nr="103"/>
+<Adjective nr="104"/>
 </Cluster>
 </FCluster>
 <CCluster aid="QUATERN2" nr="1">
@@ -111,7 +111,7 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="26"/>
+<Adjective nr="27"/>
 </Cluster>
 </CCluster>
 <CCluster aid="QUATERN2" nr="2">
@@ -124,7 +124,7 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="26"/>
+<Adjective nr="27"/>
 </Cluster>
 </CCluster>
 </Registrations>

@@ -42,13 +42,13 @@
 <Func kind="K" nr="51"/>
 </Adjective>
 <Adjective nr="6"/>
-<Adjective nr="26"/>
 <Adjective nr="27"/>
 <Adjective nr="28"/>
-<Adjective nr="44"/>
-<Adjective nr="50"/>
+<Adjective nr="29"/>
+<Adjective nr="45"/>
 <Adjective nr="51"/>
-<Adjective nr="64"/>
+<Adjective nr="52"/>
+<Adjective nr="65"/>
 </Cluster>
 </RCluster>
 </Registrations>

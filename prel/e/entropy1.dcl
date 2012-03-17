@@ -59,20 +59,20 @@
 <Func kind="K" nr="44"/>
 </Adjective>
 <Adjective nr="6"/>
-<Adjective nr="28"/>
-<Adjective nr="34"/>
+<Adjective nr="29"/>
 <Adjective nr="35"/>
-<Adjective nr="100"/>
+<Adjective nr="36"/>
 <Adjective nr="101"/>
 <Adjective nr="102"/>
-<Adjective nr="175"/>
+<Adjective nr="103"/>
+<Adjective nr="176"/>
 </Cluster>
 </RCluster>
 <RCluster aid="ENTROPY1" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="19"/>
+<Adjective nr="20"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -93,11 +93,11 @@
 </Func>
 </Adjective>
 <Adjective nr="6"/>
-<Adjective nr="28"/>
-<Adjective nr="34"/>
+<Adjective nr="29"/>
 <Adjective nr="35"/>
-<Adjective nr="92"/>
-<Adjective nr="176">
+<Adjective nr="36"/>
+<Adjective nr="93"/>
+<Adjective nr="177">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -105,38 +105,21 @@
 <CCluster aid="ENTROPY1" nr="1">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="116"/>
+<Adjective nr="117"/>
 </Cluster>
 <Typ kind="M" nr="6">
 <Cluster/>
 <Func kind="K" nr="44"/>
 </Typ>
 <Cluster>
-<Adjective nr="10" value="false"/>
-<Adjective nr="175"/>
+<Adjective nr="11" value="false"/>
+<Adjective nr="176"/>
 </Cluster>
 </CCluster>
 <CCluster aid="ENTROPY1" nr="2">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="92"/>
-<Adjective nr="118"/>
-</Cluster>
-<Typ kind="M" nr="6">
-<Cluster/>
-<Func kind="K" nr="131">
-<Func kind="K" nr="44"/>
-</Func>
-</Typ>
-<Cluster>
-<Adjective nr="3" value="false"/>
-<Adjective nr="92"/>
-</Cluster>
-</CCluster>
-<CCluster aid="ENTROPY1" nr="3">
-<ArgTypes/>
-<Cluster>
-<Adjective nr="92"/>
+<Adjective nr="93"/>
 <Adjective nr="119"/>
 </Cluster>
 <Typ kind="M" nr="6">
@@ -147,7 +130,24 @@
 </Typ>
 <Cluster>
 <Adjective nr="3" value="false"/>
-<Adjective nr="92"/>
+<Adjective nr="93"/>
+</Cluster>
+</CCluster>
+<CCluster aid="ENTROPY1" nr="3">
+<ArgTypes/>
+<Cluster>
+<Adjective nr="93"/>
+<Adjective nr="120"/>
+</Cluster>
+<Typ kind="M" nr="6">
+<Cluster/>
+<Func kind="K" nr="131">
+<Func kind="K" nr="44"/>
+</Func>
+</Typ>
+<Cluster>
+<Adjective nr="3" value="false"/>
+<Adjective nr="93"/>
 </Cluster>
 </CCluster>
 </Registrations>

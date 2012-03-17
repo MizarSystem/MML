@@ -41,7 +41,7 @@
 <LocusVar nr="1"/>
 </Adjective>
 <Adjective nr="6"/>
-<Adjective nr="13">
+<Adjective nr="14">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -59,11 +59,11 @@
 <LocusVar nr="1"/>
 </Adjective>
 <Adjective nr="6"/>
-<Adjective nr="13">
+<Adjective nr="14">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="96"/>
-<Adjective nr="97">
+<Adjective nr="97"/>
+<Adjective nr="98">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>
@@ -73,33 +73,33 @@
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
-<Adjective nr="39" value="false"/>
-<Adjective nr="48" value="false"/>
+<Adjective nr="40" value="false"/>
+<Adjective nr="49" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="12">
 <Cluster>
-<Adjective nr="89">
+<Adjective nr="90">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
 <LocusVar nr="1"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="226">
+<Func kind="K" nr="227">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="52"/>
-<Adjective nr="64"/>
+<Adjective nr="53"/>
+<Adjective nr="65"/>
 </Cluster>
 </FCluster>
 <CCluster aid="MSUALG_5" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
-<Adjective nr="39" value="false"/>
+<Adjective nr="40" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="12">
@@ -108,7 +108,7 @@
 </Typ>
 </ArgTypes>
 <Cluster>
-<Adjective nr="98">
+<Adjective nr="99">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>
@@ -128,7 +128,7 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="97">
+<Adjective nr="98">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>

@@ -21,7 +21,7 @@
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="43"/>
+<Adjective nr="44"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
@@ -58,7 +58,7 @@
 <Typ kind="M" nr="2">
 <Cluster>
 <Adjective nr="9"/>
-<Adjective nr="21">
+<Adjective nr="22">
 <Func kind="F" nr="2"/>
 <Func kind="F" nr="3"/>
 </Adjective>

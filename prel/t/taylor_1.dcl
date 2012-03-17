@@ -33,7 +33,7 @@
 <Cluster>
 <Adjective nr="6"/>
 <Adjective nr="7"/>
-<Adjective nr="23">
+<Adjective nr="24">
 <Func kind="K" nr="51"/>
 <Func kind="K" nr="51"/>
 </Adjective>
@@ -45,7 +45,7 @@
 <Func kind="K" nr="56"/>
 </Func>
 <Cluster>
-<Adjective nr="10" value="false"/>
+<Adjective nr="11" value="false"/>
 </Cluster>
 </FCluster>
 </Registrations>

@@ -31,9 +31,7 @@
 <ArticleID name="TREES_1"/>
 <ArticleID name="TREES_2"/>
 <ArticleID name="AMI_1"/>
-<ArticleID name="AMI_2"/>
 <ArticleID name="FINSEQ_2"/>
-<ArticleID name="SCMFSA_1"/>
 <ArticleID name="SCMFSA_2"/>
 <ArticleID name="RAT_1"/>
 <ArticleID name="VALUED_0"/>
@@ -47,33 +45,32 @@
 <Typ kind="M" nr="2">
 <Cluster>
 <Adjective nr="4">
-<Func kind="K" nr="300"/>
+<Func kind="K" nr="75"/>
 </Adjective>
-<Adjective nr="27"/>
+<Adjective nr="28"/>
 <Adjective nr="116"/>
 </Cluster>
 <Func kind="K" nr="206">
 <Func kind="U" nr="9">
-<Func kind="K" nr="300"/>
 <Func kind="K" nr="43">
 <Func kind="K" nr="74"/>
-<Func kind="K" nr="293">
+<Func kind="K" nr="278">
 <Func kind="K" nr="74"/>
 </Func>
 </Func>
-<Func kind="K" nr="316"/>
+<Func kind="K" nr="281"/>
 </Func>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="417">
+<Func kind="K" nr="381">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="4">
-<Func kind="K" nr="300"/>
+<Func kind="K" nr="75"/>
 </Adjective>
-<Adjective nr="27"/>
+<Adjective nr="28"/>
 <Adjective nr="116"/>
 </Cluster>
 </FCluster>
@@ -82,26 +79,25 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="8">
-<Func kind="K" nr="300"/>
 <Func kind="K" nr="43">
 <Func kind="K" nr="74"/>
-<Func kind="K" nr="293">
+<Func kind="K" nr="278">
 <Func kind="K" nr="74"/>
 </Func>
 </Func>
-<Func kind="K" nr="316"/>
+<Func kind="K" nr="281"/>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="418">
+<Func kind="K" nr="382">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="4">
-<Func kind="K" nr="300"/>
+<Func kind="K" nr="75"/>
 </Adjective>
-<Adjective nr="10" value="false"/>
-<Adjective nr="27"/>
+<Adjective nr="11" value="false"/>
+<Adjective nr="28"/>
 <Adjective nr="116"/>
 </Cluster>
 </FCluster>
@@ -110,53 +106,50 @@
 <Typ kind="M" nr="2">
 <Cluster>
 <Adjective nr="4">
-<Func kind="K" nr="300"/>
+<Func kind="K" nr="75"/>
 </Adjective>
-<Adjective nr="27"/>
+<Adjective nr="28"/>
 </Cluster>
 <Func kind="K" nr="206">
 <Func kind="U" nr="9">
-<Func kind="K" nr="300"/>
 <Func kind="K" nr="43">
 <Func kind="K" nr="74"/>
-<Func kind="K" nr="293">
+<Func kind="K" nr="278">
 <Func kind="K" nr="74"/>
 </Func>
 </Func>
-<Func kind="K" nr="316"/>
+<Func kind="K" nr="281"/>
 </Func>
 </Func>
 </Typ>
 <Typ kind="M" nr="20">
 <Cluster/>
-<Func kind="K" nr="300"/>
 <Func kind="K" nr="43">
 <Func kind="K" nr="74"/>
-<Func kind="K" nr="293">
+<Func kind="K" nr="278">
 <Func kind="K" nr="74"/>
 </Func>
 </Func>
-<Func kind="K" nr="316"/>
+<Func kind="K" nr="281"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="416">
+<Func kind="K" nr="380">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
 <Adjective nr="4">
-<Func kind="K" nr="300"/>
+<Func kind="K" nr="75"/>
 </Adjective>
-<Adjective nr="27"/>
+<Adjective nr="28"/>
 <Adjective nr="92">
-<Func kind="K" nr="300"/>
 <Func kind="K" nr="43">
 <Func kind="K" nr="74"/>
-<Func kind="K" nr="293">
+<Func kind="K" nr="278">
 <Func kind="K" nr="74"/>
 </Func>
 </Func>
-<Func kind="K" nr="316"/>
+<Func kind="K" nr="281"/>
 </Adjective>
 </Cluster>
 </FCluster>
@@ -165,41 +158,39 @@
 <Typ kind="M" nr="2">
 <Cluster>
 <Adjective nr="4">
-<Func kind="K" nr="300"/>
+<Func kind="K" nr="75"/>
 </Adjective>
-<Adjective nr="27"/>
+<Adjective nr="28"/>
 </Cluster>
 <Func kind="K" nr="206">
 <Func kind="U" nr="9">
-<Func kind="K" nr="300"/>
 <Func kind="K" nr="43">
 <Func kind="K" nr="74"/>
-<Func kind="K" nr="293">
+<Func kind="K" nr="278">
 <Func kind="K" nr="74"/>
 </Func>
 </Func>
-<Func kind="K" nr="316"/>
+<Func kind="K" nr="281"/>
 </Func>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="417">
+<Func kind="K" nr="381">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="4">
-<Func kind="K" nr="300"/>
+<Func kind="K" nr="75"/>
 </Adjective>
-<Adjective nr="27"/>
+<Adjective nr="28"/>
 <Adjective nr="92">
-<Func kind="K" nr="300"/>
 <Func kind="K" nr="43">
 <Func kind="K" nr="74"/>
-<Func kind="K" nr="293">
+<Func kind="K" nr="278">
 <Func kind="K" nr="74"/>
 </Func>
 </Func>
-<Func kind="K" nr="316"/>
+<Func kind="K" nr="281"/>
 </Adjective>
 </Cluster>
 </FCluster>

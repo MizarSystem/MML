@@ -42,14 +42,14 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="48"/>
+<Adjective nr="49"/>
 </Cluster>
 </FCluster>
 <FCluster aid="JORDAN1D" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="48"/>
+<Adjective nr="49"/>
 </Cluster>
 <Func kind="K" nr="48"/>
 </Typ>
@@ -65,7 +65,7 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="48"/>
+<Adjective nr="49"/>
 </Cluster>
 </FCluster>
 </Registrations>

@@ -16,8 +16,10 @@
 <ArticleID name="XREAL_0"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
+<ArticleID name="CARD_3"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PRE_TOPC"/>
+<ArticleID name="TOPS_2"/>
 <ArticleID name="ENUMSET1"/>
 <ArticleID name="DOMAIN_1"/>
 <ArticleID name="RELAT_2"/>
@@ -34,20 +36,48 @@
 <ArticleID name="FRECHET"/>
 </Signature>
 <FCluster aid="FRECHET" nr="1">
-<ArgTypes/>
-<Func kind="K" nr="203"/>
+<ArgTypes>
+<Typ kind="G" nr="7">
 <Cluster>
-<Adjective nr="43"/>
-<Adjective nr="44"/>
-<Adjective nr="89"/>
+<Adjective nr="38" value="false"/>
+<Adjective nr="83"/>
+<Adjective nr="84"/>
+<Adjective nr="85"/>
+<Adjective nr="86"/>
+</Cluster>
+</Typ>
+<Typ kind="M" nr="2">
+<Cluster/>
+<Func kind="U" nr="1">
+<Func kind="K" nr="185">
+<LocusVar nr="1"/>
+</Func>
+</Func>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="221">
+<LocusVar nr="1"/>
+<LocusVar nr="2"/>
+</Func>
+<Cluster>
+<Adjective nr="35"/>
+</Cluster>
+</FCluster>
+<FCluster aid="FRECHET" nr="2">
+<ArgTypes/>
+<Func kind="K" nr="217"/>
+<Cluster>
+<Adjective nr="49"/>
+<Adjective nr="50"/>
+<Adjective nr="99"/>
 </Cluster>
 </FCluster>
 <CCluster aid="FRECHET" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="32" value="false"/>
-<Adjective nr="44"/>
+<Adjective nr="38" value="false"/>
+<Adjective nr="50"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
@@ -57,46 +87,66 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Cluster/>
-<Typ kind="M" nr="12">
-<Cluster/>
+<Cluster>
+<Adjective nr="61">
+<LocusVar nr="1"/>
+</Adjective>
+<Adjective nr="95">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
+</Adjective>
+</Cluster>
+<Typ kind="M" nr="2">
+<Cluster/>
+<Func kind="K" nr="10">
+<Func kind="K" nr="10">
+<Func kind="U" nr="1">
+<LocusVar nr="1"/>
+</Func>
+</Func>
+</Func>
 </Typ>
 <Cluster>
 <Adjective nr="1" value="false"/>
+<Adjective nr="61">
+<LocusVar nr="1"/>
+</Adjective>
+<Adjective nr="95">
+<LocusVar nr="1"/>
+<LocusVar nr="2"/>
+</Adjective>
 </Cluster>
 </CCluster>
 <CCluster aid="FRECHET" nr="2">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="32" value="false"/>
-<Adjective nr="44"/>
-<Adjective nr="89"/>
+<Adjective nr="38" value="false"/>
+<Adjective nr="50"/>
+<Adjective nr="99"/>
 </Cluster>
 <Typ kind="G" nr="6">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="32" value="false"/>
-<Adjective nr="44"/>
-<Adjective nr="91"/>
+<Adjective nr="38" value="false"/>
+<Adjective nr="50"/>
+<Adjective nr="101"/>
 </Cluster>
 </CCluster>
 <CCluster aid="FRECHET" nr="3">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="32" value="false"/>
-<Adjective nr="44"/>
-<Adjective nr="91"/>
+<Adjective nr="38" value="false"/>
+<Adjective nr="50"/>
+<Adjective nr="101"/>
 </Cluster>
 <Typ kind="G" nr="6">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="32" value="false"/>
-<Adjective nr="44"/>
-<Adjective nr="92"/>
+<Adjective nr="38" value="false"/>
+<Adjective nr="50"/>
+<Adjective nr="102"/>
 </Cluster>
 </CCluster>
 </Registrations>

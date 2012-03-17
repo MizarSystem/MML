@@ -22,7 +22,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="6"/>
-<Adjective nr="11"/>
+<Adjective nr="12"/>
 </Cluster>
 </RCluster>
 <RCluster aid="TOPREAL8" nr="2">
@@ -34,9 +34,9 @@
 <Adjective nr="1"/>
 <Adjective nr="6"/>
 <Adjective nr="8" value="false"/>
-<Adjective nr="20"/>
-<Adjective nr="26"/>
+<Adjective nr="21"/>
 <Adjective nr="27"/>
+<Adjective nr="28"/>
 </Cluster>
 </RCluster>
 </Registrations>

@@ -44,96 +44,96 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="36" value="false"/>
-<Adjective nr="41"/>
+<Adjective nr="37" value="false"/>
 <Adjective nr="42"/>
-<Adjective nr="71"/>
-<Adjective nr="73"/>
+<Adjective nr="43"/>
+<Adjective nr="72"/>
 <Adjective nr="74"/>
 <Adjective nr="75"/>
-<Adjective nr="77"/>
-<Adjective nr="151"/>
+<Adjective nr="76"/>
+<Adjective nr="78"/>
 <Adjective nr="152"/>
+<Adjective nr="153"/>
 </Cluster>
 </RCluster>
 <FCluster aid="WAYBEL31" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
-<Adjective nr="73"/>
 <Adjective nr="74"/>
 <Adjective nr="75"/>
-<Adjective nr="77"/>
-<Adjective nr="151"/>
-<Adjective nr="159"/>
+<Adjective nr="76"/>
+<Adjective nr="78"/>
+<Adjective nr="152"/>
+<Adjective nr="160"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="18">
 <Cluster>
-<Adjective nr="168">
+<Adjective nr="169">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
 <LocusVar nr="1"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="146">
-<Func kind="K" nr="137">
-<Func kind="K" nr="130">
+<Func kind="K" nr="147">
+<Func kind="K" nr="138">
+<Func kind="K" nr="131">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 </Func>
 </Func>
 <Cluster>
-<Adjective nr="71"/>
-<Adjective nr="112"/>
+<Adjective nr="72"/>
+<Adjective nr="113"/>
 </Cluster>
 </FCluster>
 <FCluster aid="WAYBEL31" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
-<Adjective nr="73"/>
 <Adjective nr="74"/>
 <Adjective nr="75"/>
-<Adjective nr="77"/>
-<Adjective nr="151"/>
-<Adjective nr="159"/>
+<Adjective nr="76"/>
+<Adjective nr="78"/>
+<Adjective nr="152"/>
+<Adjective nr="160"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="146">
-<Func kind="K" nr="196">
+<Func kind="K" nr="147">
+<Func kind="K" nr="197">
 <LocusVar nr="1"/>
 </Func>
 </Func>
 <Cluster>
-<Adjective nr="71"/>
-<Adjective nr="151"/>
-<Adjective nr="159"/>
+<Adjective nr="72"/>
+<Adjective nr="152"/>
+<Adjective nr="160"/>
 </Cluster>
 </FCluster>
 <CCluster aid="WAYBEL31" nr="1">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="42"/>
-<Adjective nr="73"/>
+<Adjective nr="43"/>
 <Adjective nr="74"/>
 <Adjective nr="75"/>
-<Adjective nr="151"/>
+<Adjective nr="76"/>
 <Adjective nr="152"/>
+<Adjective nr="153"/>
 </Cluster>
 <Typ kind="G" nr="7">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="73"/>
 <Adjective nr="74"/>
 <Adjective nr="75"/>
-<Adjective nr="113"/>
-<Adjective nr="151"/>
+<Adjective nr="76"/>
+<Adjective nr="114"/>
 <Adjective nr="152"/>
+<Adjective nr="153"/>
 </Cluster>
 </CCluster>
 </Registrations>

@@ -49,7 +49,7 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="23"/>
+<Adjective nr="24"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -58,7 +58,7 @@
 </Func>
 <Cluster>
 <Adjective nr="6"/>
-<Adjective nr="14">
+<Adjective nr="15">
 <Func kind="U" nr="1">
 <Func kind="K" nr="351">
 <LocusVar nr="1"/>
@@ -68,7 +68,7 @@
 <Func kind="K" nr="323"/>
 </Func>
 </Adjective>
-<Adjective nr="50">
+<Adjective nr="51">
 <Func kind="K" nr="351">
 <LocusVar nr="1"/>
 </Func>

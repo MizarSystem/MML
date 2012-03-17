@@ -33,10 +33,10 @@
 <Func kind="K" nr="96"/>
 </Adjective>
 <Adjective nr="6"/>
-<Adjective nr="20"/>
-<Adjective nr="26"/>
+<Adjective nr="21"/>
 <Adjective nr="27"/>
-<Adjective nr="28">
+<Adjective nr="28"/>
+<Adjective nr="29">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -45,35 +45,35 @@
 <ArgTypes/>
 <Func kind="K" nr="96"/>
 <Cluster>
-<Adjective nr="10" value="false"/>
+<Adjective nr="11" value="false"/>
 </Cluster>
 </FCluster>
 <FCluster aid="QC_LANG1" nr="2">
 <ArgTypes/>
 <Func kind="K" nr="97"/>
 <Cluster>
-<Adjective nr="10" value="false"/>
+<Adjective nr="11" value="false"/>
 </Cluster>
 </FCluster>
 <FCluster aid="QC_LANG1" nr="3">
 <ArgTypes/>
 <Func kind="K" nr="98"/>
 <Cluster>
-<Adjective nr="10" value="false"/>
+<Adjective nr="11" value="false"/>
 </Cluster>
 </FCluster>
 <FCluster aid="QC_LANG1" nr="4">
 <ArgTypes/>
 <Func kind="K" nr="99"/>
 <Cluster>
-<Adjective nr="10" value="false"/>
+<Adjective nr="11" value="false"/>
 </Cluster>
 </FCluster>
 <FCluster aid="QC_LANG1" nr="5">
 <ArgTypes/>
 <Func kind="K" nr="100"/>
 <Cluster>
-<Adjective nr="10" value="false"/>
+<Adjective nr="11" value="false"/>
 </Cluster>
 </FCluster>
 <FCluster aid="QC_LANG1" nr="6">
@@ -87,7 +87,7 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="10" value="false"/>
+<Adjective nr="11" value="false"/>
 </Cluster>
 </FCluster>
 </Registrations>

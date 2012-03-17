@@ -45,14 +45,14 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="25"/>
+<Adjective nr="26"/>
 </Cluster>
 </FCluster>
 <FCluster aid="SIN_COS" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="24"/>
+<Adjective nr="25"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -61,18 +61,18 @@
 </Func>
 <Cluster>
 <Adjective nr="6"/>
-<Adjective nr="14">
+<Adjective nr="15">
 <Func kind="K" nr="85"/>
 <Func kind="K" nr="82"/>
 </Adjective>
-<Adjective nr="53"/>
+<Adjective nr="54"/>
 </Cluster>
 </FCluster>
 <FCluster aid="SIN_COS" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="25"/>
+<Adjective nr="26"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -80,14 +80,14 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="25"/>
+<Adjective nr="26"/>
 </Cluster>
 </FCluster>
 <FCluster aid="SIN_COS" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="25"/>
+<Adjective nr="26"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -95,14 +95,14 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="25"/>
+<Adjective nr="26"/>
 </Cluster>
 </FCluster>
 <FCluster aid="SIN_COS" nr="5">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="25"/>
+<Adjective nr="26"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -110,7 +110,7 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="25"/>
+<Adjective nr="26"/>
 </Cluster>
 </FCluster>
 <FCluster aid="SIN_COS" nr="6">
@@ -118,11 +118,11 @@
 <Func kind="K" nr="204"/>
 <Cluster>
 <Adjective nr="6"/>
-<Adjective nr="14">
+<Adjective nr="15">
 <Func kind="K" nr="81"/>
 <Func kind="K" nr="81"/>
 </Adjective>
-<Adjective nr="38"/>
+<Adjective nr="39"/>
 </Cluster>
 </FCluster>
 <FCluster aid="SIN_COS" nr="7">
@@ -130,11 +130,11 @@
 <Func kind="K" nr="207"/>
 <Cluster>
 <Adjective nr="6"/>
-<Adjective nr="14">
+<Adjective nr="15">
 <Func kind="K" nr="81"/>
 <Func kind="K" nr="81"/>
 </Adjective>
-<Adjective nr="38"/>
+<Adjective nr="39"/>
 </Cluster>
 </FCluster>
 <FCluster aid="SIN_COS" nr="8">
@@ -142,11 +142,11 @@
 <Func kind="K" nr="212"/>
 <Cluster>
 <Adjective nr="6"/>
-<Adjective nr="14">
+<Adjective nr="15">
 <Func kind="K" nr="81"/>
 <Func kind="K" nr="81"/>
 </Adjective>
-<Adjective nr="38"/>
+<Adjective nr="39"/>
 </Cluster>
 </FCluster>
 </Registrations>

@@ -2205,7 +2205,7 @@ A2: IC SCM R in dom p;
   hereby
     assume
 A3: p is halting;
-    thus Relocated (p,k) is halting
+    thus Relocated(p,k) is halting
     proof
       let t be State of SCM R;
       assume
@@ -2213,16 +2213,18 @@ A4:   Relocated(p,k) c= t;
       set s = t +* p;
       reconsider s3 = s +* DataPart t as State of SCM R;
 A5:   p c= s by FUNCT_4:26;
-      then s is halting by A3,AMI_1:def 26;
+      then ProgramPart s halts_on s by A3,AMI_1:def 26;
       then consider u being Element of NAT such that
-A6:   CurInstr(Computation(s,u)) = halt SCM R by AMI_1:def 20;
+A6:   CurInstr(Computation(s,u)) = halt SCM R by AMI_1:146;
       take u;
+     IC Computation(t,u) in NAT by AMI_1:def 4;
+    hence IC Computation(t,u) in dom ProgramPart t by AMI_1:143;
       s3 = s3;
       then
       CurInstr(Computation(t,u)) = IncAddr(halt SCM R, k) by A1,A2,A4,A5,A6
 ,Th35
         .= halt SCM R by AMISTD_2:29;
-      hence thesis;
+      hence thesis by AMI_1:145;
     end;
   end;
   assume
@@ -2230,17 +2232,20 @@ A7: Relocated (p,k) is halting;
   let t be State of SCM R;
   reconsider s = t +* Relocated(p, k) as State of SCM R;
 A8: Relocated (p,k) c= t +* Relocated (p,k) by FUNCT_4:26;
-  then s is halting by A7,AMI_1:def 26;
+  then ProgramPart s halts_on s by A7,AMI_1:def 26;
   then consider u being Element of NAT such that
-A9: CurInstr(Computation(s,u)) = halt SCM R by AMI_1:def 20;
+A9: CurInstr(Computation(s,u)) = halt SCM R by AMI_1:146;
   reconsider s3 = t +* DataPart s as State of SCM R;
   assume
 A10: p c= t;
   take u;
+     IC Computation(t,u) in NAT by AMI_1:def 4;
+    hence IC Computation(t,u) in dom ProgramPart t by AMI_1:143;
   s3 = s3;
   then IncAddr(CurInstr(Computation(t,u)), k) = halt SCM R by A1,A2,A10,A8,A9
 ,Th35;
-  hence thesis by AMISTD_2:35;
+  then CurInstr(Computation(t,u)) = halt SCM R by AMISTD_2:35;
+  hence thesis by AMI_1:145;
 end;
 
 theorem
@@ -2886,7 +2891,7 @@ A3: IC SCM R in dom p;
 A4: Relocated(p,k) is halting & Relocated(p,k) is autonomic by A2,A3,Th36,Th40;
   consider s being State of SCM R such that
 A5: p c= s by CARD_3:97;
-  s is halting by A5,AMI_1:def 26;
+  ProgramPart s halts_on s by A5,AMI_1:def 26;
   then consider j1 being Element of NAT such that
 A6: Result(s) = Computation(s,j1) and
 A7: CurInstr(Result(s)) = halt SCM R by AMI_1:def 22;

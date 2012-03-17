@@ -1,0 +1,2687 @@
+:: On the Lattice of Intervals and Rough Sets
+::  by Adam Grabowski and Magdalena Jastrz\c{e}bska
+:: 
+:: Received October 10, 2009
+:: Copyright (c) 2009 Association of Mizar Users
+
+environ
+
+ vocabularies ROUGHS_1, SQUARE_1, FUNCT_1, BOOLE, TARSKI, SUBSET_1, FINSEQ_1,
+      INTERVA1, MCART_1, LATTICES, BINOP_1, QC_LANG1, BHSP_3, LATTICE3,
+      SETFAM_1, LEXBFS, MSUALG_6;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XXREAL_0, SETFAM_1,
+      REAL_1, NAT_1, SQUARE_1, RELAT_1, FUNCT_1, MCART_1, BINOP_1, FINSEQ_1,
+      RVSUM_1, FINSEQ_2, RELSET_1, PARTFUN1, FUNCT_2, REALSET1, STRUCT_0,
+      PRE_TOPC, LATTICES, LATTICE3, ROUGHS_1;
+ constructors RELAT_2, MCART_1, WELLORD1, PRE_TOPC, PARTFUN1, MEMBERED,
+      XBOOLE_0, ORDERS_2, EQREL_1, SUBSET_1, CARD_1, CARD_2, XCMPLX_0, NUMBERS,
+      LATTICE3, SETFAM_1, XXREAL_0, FILTER_0, FILTER_1, LATTICE4, RELSET_1,
+      XREAL_0, FINSET_1, SQUARE_1, NAT_1, ORDINAL2, ORDINAL1, REAL_1, REALSET2,
+      FUNCT_3, FINSEQ_1, RVSUM_1, FUNCOP_1, FINSEQ_2, ROUGHS_1, BINOP_1,
+      LATTICES, STRUCT_0;
+ registrations RELSET_1, STRUCT_0, PRE_TOPC, SUBSET_1, MEMBERED, ZFMISC_1,
+      PARTFUN1, XBOOLE_0, XREAL_0, FINSET_1, ORDINAL2, ORDERS_2, EQREL_1,
+      REALSET2, FINSEQ_1, FUNCOP_1, BINOP_2, REALSET1, ROUGHS_1, LATTICES;
+ requirements BOOLE, SUBSET, ARITHM, NUMERALS, REAL;
+ definitions XBOOLE_0, TARSKI, LATTICES, SUBSET_1, PRE_TOPC, LATTICE3,
+      VECTSP_8, STRUCT_0;
+ theorems ROUGHS_1, ZFMISC_1, MCART_1, XBOOLE_1, BINOP_1, LATTICES, TARSKI,
+      LATTICE3, SETFAM_1, XBOOLE_0, TOPGEN_4, SUBSET_1;
+ schemes BINOP_1, XBOOLE_0;
+
+begin :: Interval Sets
+
+definition let U be set;
+           let X, Y be Subset of U;
+  func Inter (X,Y) -> Subset-Family of U equals
+    { A where A is Subset of U : X c= A & A c= Y };
+  coherence
+  proof
+    set IT = { A where A is Subset of U : X c= A & A c= Y };
+    IT c= bool U
+    proof
+      let x be set;
+      assume x in IT; then
+      x in { A where A is Subset of U : X c= A & A c= Y }; then
+      consider B being Subset of U such that
+C1:   x = B & X c= B & B c= Y;
+      thus thesis by C1;
+    end; then
+    IT is Subset-Family of U;
+    hence thesis;
+  end;
+end;
+
+ reserve U for set,
+         X, Y, Z for Subset of U;
+
+theorem Lemacik:
+  for x being set holds x in Inter (X,Y) iff X c= x & x c= Y
+  proof
+    let x be set;
+    hereby assume x in Inter (X,Y); then
+      consider A' being Element of bool U such that
+A1:   x = A' & X c= A' & A' c= Y;
+      thus X c= x & x c= Y by A1;
+    end;
+    assume
+A2: X c= x & x c= Y; then
+    x is Subset of U by XBOOLE_1:1;
+    hence thesis by A2;
+  end;
+
+theorem KonceWInter:
+  Inter (X,Y) <> {} implies
+    X in Inter (X,Y) & Y in Inter (X,Y)
+  proof
+    assume Inter (X,Y) <> {}; then
+    consider x being set such that
+A1: x in Inter (X,Y) by XBOOLE_0:def 1;
+    X c= x & x c= Y by A1,Lemacik; then
+    X c= Y by XBOOLE_1:1;
+    hence thesis;
+  end;
+
+theorem ThA2:
+  for U being set,
+      A, B being Subset of U st not A c= B holds
+    Inter (A, B) = {}
+  proof
+    let U be set, A, B be Subset of U;
+    assume
+A0: not A c= B;
+    assume Inter (A, B) <> {}; then
+    consider x being set such that
+A1: x in Inter (A, B) by XBOOLE_0:def 1;
+    A c= x & x c= B by A1,Lemacik;
+    hence thesis by A0,XBOOLE_1:1;
+  end;
+
+theorem
+   for U being set,
+     A, B being Subset of U st Inter (A,B) = {} holds
+   not A c= B by Lemacik;
+
+theorem NEmptyInter:
+  for A, B being Subset of U st
+    Inter (A, B) <> {} holds A c= B
+  proof
+    let A, B be Subset of U;
+    assume Inter (A, B) <> {}; then
+    consider x being set such that
+A1: x in Inter (A, B) by XBOOLE_0:def 1;
+    A c= x & x c= B by A1,Lemacik;
+    hence thesis by XBOOLE_1:1;
+  end;
+
+theorem Pik:
+  for A, B, C, D being Subset of U st
+    Inter (A, B) <> {} & Inter (A, B) = Inter (C, D) holds
+      A = C & B = D
+  proof
+    let A,B,C,D be Subset of U;
+    assume A0: Inter (A,B) <> {} & Inter (A,B) = Inter (C,D);
+    A in Inter (A,B) by A0,KonceWInter; then
+T1: C c= A & A c= D by Lemacik,A0;
+    C in Inter (C,D) by A0,KonceWInter; then
+t2: A c= C & C c= B by A0,Lemacik;
+    B in Inter (A,B) by A0,KonceWInter; then
+T4: B c= D by Lemacik,A0;
+    D in Inter (C,D) by A0,KonceWInter; then
+    D c= B by A0,Lemacik;
+    hence thesis by t2,XBOOLE_0:def 10,T4,T1;
+  end;
+
+theorem Tha2:
+  for U being non empty set,
+      A being non empty Subset of U holds
+    Inter (A, {}U) = {}
+  proof
+    let U be non empty set,
+        A be non empty Subset of U;
+    thus Inter (A,{}U) c= {}
+    proof
+      let x be set;
+      assume x in Inter (A,{}U); then
+      A c= x & x c= {}U by Lemacik;
+      hence thesis;
+    end;
+    thus thesis by XBOOLE_1:2;
+  end;
+
+theorem ThA1:
+  for A being Subset of U holds
+    Inter (A, A) = { A }
+  proof
+    let A be Subset of U;
+    thus Inter (A, A) c= { A }
+    proof
+      let x be set;
+      assume x in Inter (A,A); then
+      A c= x & x c= A by Lemacik; then
+      A = x by XBOOLE_0:def 10;
+      hence thesis by TARSKI:def 1;
+    end;
+    let x be set;
+    assume x in { A }; then
+    x = A by TARSKI:def 1;
+    hence thesis;
+  end;
+
+definition let U;
+  mode IntervalSet of U -> Subset-Family of U means :WW:
+    ex A, B be Subset of U st
+      it = Inter (A, B);
+  existence
+  proof
+    consider A being Subset of U;
+    set IT = { A };
+    IT = Inter (A,A) by ThA1;
+    hence thesis;
+  end;
+end;
+
+theorem
+  for U being non empty set holds
+    {} is IntervalSet of U
+  proof
+    let U be non empty set;
+    consider A being non empty Subset of U;
+    Inter (A, {}U) = {} by Tha2;
+    hence thesis by WW;
+  end;
+
+theorem ThB1:
+  for U being non empty set,
+      A being Subset of U holds
+    { A } is IntervalSet of U
+  proof
+    let U be non empty set,
+        A be Subset of U;
+    Inter (A, A) = { A } by ThA1;
+    hence thesis by WW;
+  end;
+
+definition let U; let A, B be Subset of U;
+  redefine func Inter (A, B) -> IntervalSet of U;
+  correctness by WW;
+end;
+
+registration let U be non empty set;
+  cluster non empty IntervalSet of U;
+  existence
+  proof
+    consider A being Subset of U;
+    { A } is IntervalSet of U by ThB1;
+    hence thesis;
+  end;
+end;
+
+theorem U2:
+  for U being non empty set,
+      A being set holds
+    A is non empty IntervalSet of U iff
+      ex A1, A2 being Subset of U st A1 c= A2 & A = Inter (A1, A2)
+  proof
+    let U be non empty set,
+        A be set;
+    hereby assume
+A0:   A is non empty IntervalSet of U; then
+      consider A1, A2 be Subset of U such that
+a1:   A = Inter (A1, A2) by WW;
+      take A1, A2;
+      thus A1 c= A2 by A0,a1,ThA2;
+      thus A = Inter (A1, A2) by a1;
+    end;
+    given A1, A2 being Subset of U such that
+B1: A1 c= A2 & A = Inter (A1, A2);
+    A1 in Inter (A1,A2) by B1;
+    hence thesis by B1;
+  end;
+
+theorem LemmaA:
+  for U being non empty set,
+      A1, A2, B1, B2 being Subset of U st
+        A1 c= A2 & B1 c= B2 holds
+    INTERSECTION (Inter (A1,A2), Inter (B1,B2)) =
+      { C where C is Subset of U : A1 /\ B1 c= C & C c= A2 /\ B2 }
+  proof
+    let U be non empty set,
+        A1, A2, B1, B2 be Subset of U;
+    assume that
+A1: A1 c= A2 and
+A2: B1 c= B2;
+    set A = Inter (A1,A2), B = Inter (B1,B2);
+    set LAB = A1 /\ B1;
+    set UAB = A2 /\ B2;
+    set IT = INTERSECTION (Inter (A1,A2), Inter (B1,B2));
+    thus IT c= { C where C is Subset of U : LAB c= C & C c= UAB }
+    proof
+      let x be set;
+      assume x in IT; then
+      consider X, Y be set such that
+B1:   X in A & Y in B & x = X /\ Y by SETFAM_1:def 5;
+      x c= X by B1,XBOOLE_1:17; then
+B2:   x is Subset of U by B1,XBOOLE_1:1;
+B4:   A1 c= X by Lemacik,B1;
+      B1 c= Y by Lemacik,B1; then
+B3:   LAB c= x by B4,B1,XBOOLE_1:27;
+B5:   X c= A2 by Lemacik,B1;
+      Y c= B2 by Lemacik,B1; then
+      x c= UAB by B5,XBOOLE_1:27,B1;
+      hence thesis by B3,B2;
+    end;
+    let x be set;
+    assume x in { C where C is Subset of U : LAB c= C & C c= UAB };
+    then consider C' being Subset of U such that
+B1: C' = x & LAB c= C' & C' c= UAB;
+    set x1 = (x \/ A1) /\ A2;
+    set x2 = (x \/ B1) /\ B2;
+T1: LAB \/ x = x by B1,XBOOLE_1:12;
+T2: UAB /\ x = x by B1,XBOOLE_1:28;
+T4: x1 /\ x2 = (x \/ A1) /\ (A2 /\ ((x \/ B1) /\ B2)) by XBOOLE_1:16
+            .= (x \/ A1) /\ ((x \/ B1) /\ (B2 /\ A2)) by XBOOLE_1:16
+            .= (x \/ A1) /\ (x \/ B1) /\ UAB by XBOOLE_1:16
+            .= x by T1,T2,XBOOLE_1:24;
+J1: A1 /\ A2 = A1 by A1,XBOOLE_1:28;
+    x1 = (x /\ A2) \/ A1 by J1,XBOOLE_1:23; then
+H1: A1 c= x1 by XBOOLE_1:7;
+    x1 c= A2 by XBOOLE_1:17; then
+Y2: x1 in A by H1;
+J2: B1 /\ B2 = B1 by A2,XBOOLE_1:28;
+    x2 = (x /\ B2) \/ B1 by J2,XBOOLE_1:23; then
+H2: B1 c= x2 by XBOOLE_1:7;
+    x2 c= B2 by XBOOLE_1:17; then
+    x2 in B by H2;
+    hence thesis by T4,Y2,SETFAM_1:def 5;
+  end;
+
+theorem LemmaB:
+  for U being non empty set,
+      A1, A2, B1, B2 being Subset of U st
+        A1 c= A2 & B1 c= B2 holds
+    UNION (Inter (A1,A2), Inter (B1,B2)) =
+      { C where C is Subset of U : A1 \/ B1 c= C & C c= A2 \/ B2 }
+  proof
+    let U be non empty set,
+        A1, A2, B1, B2 be Subset of U;
+    assume that
+A1: A1 c= A2 and
+A2: B1 c= B2;
+    set A = Inter (A1,A2), B = Inter (B1,B2);
+    set LAB = A1 \/ B1;
+    set UAB = A2 \/ B2;
+    set IT = UNION (A, B);
+    thus IT c= { C where C is Subset of U : LAB c= C & C c= UAB }
+    proof
+      let x be set;
+      assume x in IT; then
+      consider X, Y be set such that
+B1:   X in A & Y in B & x = X \/ Y by SETFAM_1:def 4;
+B2:   x is Subset of U by B1,XBOOLE_1:8;
+B4:   A1 c= X by Lemacik,B1;
+      B1 c= Y by Lemacik,B1; then
+B3:   LAB c= x by B4,B1,XBOOLE_1:13;
+B5:   X c= A2 by Lemacik,B1;
+      Y c= B2 by Lemacik,B1; then
+      x c= UAB by B5,XBOOLE_1:13,B1;
+      hence thesis by B2,B3;
+    end;
+    let x be set;
+    assume x in { C where C is Subset of U : LAB c= C & C c= UAB };
+    then consider C' being Subset of U such that
+B1: C' = x & LAB c= C' & C' c= UAB;
+    set x1 = (x \/ A1) /\ A2;
+    set x2 = (x \/ B1) /\ B2;
+T1: LAB \/ x = x by B1,XBOOLE_1:12;
+T2: UAB /\ x = x by B1,XBOOLE_1:28;
+H1: A1 /\ A2 = A1 by A1,XBOOLE_1:28;
+H2: B1 /\ B2 = B1 by A2,XBOOLE_1:28;
+T4: x1 \/ x2 = ((x /\ A2) \/ (A1 /\ A2)) \/ ((x \/ B1) /\ B2)
+                by XBOOLE_1:23
+            .= ((x /\ A2) \/ A1) \/ ((x /\ B2) \/ (B1 /\ B2))
+                by H1,XBOOLE_1:23
+            .= (x /\ A2) \/ (A1 \/ ((x /\ B2) \/ B1)) by H2,XBOOLE_1:4
+            .= (x /\ A2) \/ ((x /\ B2) \/ LAB) by XBOOLE_1:4
+            .= (x /\ A2) \/ (x /\ B2) \/ LAB by XBOOLE_1:4
+            .= x by T1,T2,XBOOLE_1:23;
+J1: A1 /\ A2 = A1 by A1,XBOOLE_1:28;
+    x1 = (x /\ A2) \/ A1 by J1,XBOOLE_1:23; then
+H1: A1 c= x1 by XBOOLE_1:7;
+    x1 c= A2 by XBOOLE_1:17; then
+Y2: x1 in A by H1;
+J2: B1 /\ B2 = B1 by A2,XBOOLE_1:28;
+    x2 = (x /\ B2) \/ B1 by J2,XBOOLE_1:23; then
+H2: B1 c= x2 by XBOOLE_1:7;
+    x2 c= B2 by XBOOLE_1:17; then
+    x2 in B by H2;
+    hence thesis by T4,Y2,SETFAM_1:def 4;
+  end;
+
+definition let U be non empty set,
+               A, B be non empty IntervalSet of U;
+  func A _/\_ B -> IntervalSet of U equals
+    INTERSECTION (A, B);
+  coherence
+  proof
+    set IT = INTERSECTION (A, B);
+    consider A1, A2 being Subset of U such that
+A1: A1 c= A2 & A = Inter (A1, A2) by U2;
+    consider B1, B2 being Subset of U such that
+A2: B1 c= B2 & B = Inter (B1, B2) by U2;
+    set LAB = A1 /\ B1;
+    set UAB = A2 /\ B2;
+    IT = Inter (LAB, UAB) by LemmaA,A1,A2;
+    hence thesis;
+  end;
+  func A _\/_ B -> IntervalSet of U equals
+    UNION (A, B);
+  coherence
+  proof
+    set IT = UNION (A, B);
+    consider A1, A2 being Subset of U such that
+A1: A1 c= A2 & A = Inter (A1, A2) by U2;
+    consider B1, B2 being Subset of U such that
+A2: B1 c= B2 & B = Inter (B1, B2) by U2;
+    set LAB = A1 \/ B1;
+    set UAB = A2 \/ B2;
+    IT = Inter (LAB, UAB) by LemmaB,A1,A2;
+    hence thesis;
+  end;
+end;
+
+registration let U be non empty set,
+                 A, B be non empty IntervalSet of U;
+  cluster A _/\_ B -> non empty;
+  coherence by TOPGEN_4:31;
+  cluster A _\/_ B -> non empty;
+  coherence by TOPGEN_4:30;
+end;
+
+ reserve U for non empty set,
+         A, B, C for non empty IntervalSet of U;
+
+definition let U, A;
+  func A``1 -> Subset of U means :Def4:
+    ex B being Subset of U st A = Inter (it, B);
+  existence
+  proof
+    consider A1, A2 being Subset of U such that
+f3: A1 c= A2 & A = Inter (A1, A2) by U2;
+    thus thesis by f3;
+  end;
+  uniqueness by Pik;
+
+  func A``2 -> Subset of U means :Def5:
+    ex B being Subset of U st A = Inter (B, it);
+  existence
+  proof
+    consider A1, A2 being Subset of U such that
+f3: A1 c= A2 & A = Inter (A1, A2) by U2;
+    thus thesis by f3;
+  end;
+  uniqueness by Pik;
+end;
+
+theorem Wazne:
+  for X being set holds
+    X in A iff A``1 c= X & X c= A``2
+  proof
+    let X be set;
+A1: X in A implies A``1 c= X & X c= A``2
+    proof
+      assume v0: X in A;
+v1:   A``1 c= X
+      proof
+        consider B being Subset of U such that
+v3:     A = Inter (A``1, B) by Def4;
+        thus thesis by Lemacik,v0,v3;
+      end;
+      X c= A``2
+      proof
+        consider B being Subset of U such that
+v4:     A = Inter (B, A``2) by Def5;
+        thus thesis by Lemacik,v0,v4;
+      end;
+      hence thesis by v1;
+    end;
+    A``1 c= X & X c= A``2 implies X in A
+    proof
+      assume A``1 c= X & X c= A``2; then
+v0:   X in Inter (A``1,A``2) by Lemacik;
+      consider B being Subset of U such that v1: A = Inter (A``1, B) by Def4;
+      consider C being Subset of U such that v2: A = Inter (C, A``2) by Def5;
+      thus thesis by v1,v0,Pik,v2;
+    end;
+    hence thesis by A1;
+  end;
+
+theorem Wazne33:
+  A = Inter (A``1,A``2)
+    proof
+b1: Inter (A``1,A``2) c= A
+    proof
+      let x be set;
+      assume x in Inter (A``1,A``2); then
+      A``1 c= x & x c= A``2 by Lemacik;
+      hence thesis by Wazne;
+    end;
+    A c= Inter (A``1,A``2)
+    proof
+      let x be set;
+      assume x in A; then
+      A``1 c= x & x c=  A``2 by Wazne;
+      hence thesis by Lemacik;
+    end;
+    hence thesis by b1,XBOOLE_0:def 10;
+  end;
+
+theorem wazne2:
+  A``1 c= A``2
+  proof
+      consider B being Subset of U such that a1: A = Inter (A``1,B) by Def4;
+      consider C being Subset of U such that a2: A = Inter (C,A``2) by Def5;
+      A``1 = C by Pik,a2,a1;
+      hence thesis by NEmptyInter,a2;
+  end;
+
+theorem Un:
+  A _\/_ B = Inter (A``1 \/ B``1, A``2 \/ B``2)
+  proof
+    thus A _\/_ B c= Inter (A``1 \/ B``1, A``2 \/ B``2)
+    proof
+      let x be set;
+      assume
+P1:   x in A _\/_ B; then
+      consider X, Y being set such that
+A3:   X in A & Y in B & x = X \/ Y by SETFAM_1:def 4;
+A2:   A``1 c= X & X c= A``2 by A3,Wazne;
+A4:   B``1 c= Y & Y c= B``2 by A3,Wazne; then
+A5:   x c= A``2 \/ B``2 by A2,A3,XBOOLE_1:13;
+      A``1 \/ B``1 c= x by A2,A3,A4,XBOOLE_1:13;
+      hence thesis by P1,A5;
+    end;
+    thus Inter (A``1 \/ B``1, A``2 \/ B``2) c= A _\/_ B
+    proof
+      let x be set;
+      assume x in Inter (A``1 \/ B``1, A``2 \/ B``2); then
+      consider Z being Element of bool U such that
+T1:   x = Z & A``1 \/ B``1 c= Z & Z c= A``2 \/ B``2;
+      A``1 c= (Z \/ A``1) /\ A``2
+      proof
+        let x be set;
+        assume a0: x in A``1;
+        assume aa: not x in (Z \/ A``1) /\ A``2;
+        per cases by aa,XBOOLE_0:def 4;
+        suppose not x in Z \/ A``1;
+          hence thesis by a0,XBOOLE_0:def 3;
+        end;
+        suppose b1: not x in A``2;
+          A``1 c= A``2 & x in A``1 by a0,wazne2;
+          hence thesis by b1;
+        end;
+      end; then
+      A``1 c= (Z \/ A``1) /\ A``2 & (Z \/ A``1) /\ A``2 c= A``2
+      by XBOOLE_1:17; then
+e1:   (Z \/ A``1) /\ A``2 in A by Wazne;
+      B``1 c= (Z \/ B``1) /\ B``2
+      proof
+        let x be set;
+        assume a1: x in B``1; then
+a2:     x in Z \/ B``1 by XBOOLE_0:def 3;
+        B``1 c= B``2 by wazne2;
+        hence thesis by a1,a2,XBOOLE_0:def 4;
+      end; then
+      B``1 c= (Z \/ B``1) /\ B``2 & (Z \/ B``1) /\ B``2 c= B``2
+        by XBOOLE_1:17; then
+e2:   (Z \/ B``1) /\ B``2 in B by Wazne;
+      ((Z \/ A``1) /\ A``2) \/ ((Z \/ B``1) /\ B``2) = (((Z \/ A``1) /\ A``2)
+      \/ (Z \/ B``1)) /\ (((Z \/ A``1) /\ A``2) \/ B``2) by XBOOLE_1:24
+      .= (((Z \/ A``1) \/ (Z \/ B``1)) /\ (A``2 \/ (Z \/ B``1)))
+      /\ (((Z \/ A``1) /\ A``2) \/ B``2) by XBOOLE_1:24
+      .= ((Z \/ (A``1 \/  B``1)) /\ (A``2 \/ (Z \/ B``1)))
+      /\ (((Z \/ A``1) /\ A``2) \/ B``2) by XBOOLE_1:5
+      .= (Z /\ (A``2 \/ (Z \/ B``1)))
+      /\ (((Z \/ A``1) /\ A``2) \/ B``2) by T1,XBOOLE_1:12
+      .= ((Z /\ A``2) \/ (Z /\ (Z \/ B``1)))
+      /\ (((Z \/ A``1) /\ A``2) \/ B``2) by XBOOLE_1:23
+      .= ((Z /\ A``2) \/ Z)
+      /\ (((Z \/ A``1) /\ A``2) \/ B``2) by XBOOLE_1:28,XBOOLE_1:7
+      .= Z  /\ (B``2 \/ ((Z \/ A``1) /\ A``2)) by XBOOLE_1:12,XBOOLE_1:17
+      .= Z /\ (((Z \/ A``1) \/ B``2) /\ (A``2 \/ B``2)) by XBOOLE_1:24
+      .= Z /\ ((Z \/ (A``1 \/ B``2)) /\ (A``2 \/ B``2)) by XBOOLE_1:4
+      .= Z /\ ((Z /\ (A``2 \/ B``2)) \/ ((A``1 \/ B``2) /\ (A``2 \/ B``2)))
+        by XBOOLE_1:23
+      .= Z /\ (Z \/ ((A``1 \/ B``2) /\ (A``2 \/ B``2))) by T1,XBOOLE_1:28
+      .= Z /\ ((Z \/ (A``1 \/ B``2)) /\ (Z \/ (A``2 \/ B``2))) by XBOOLE_1:24
+      .= (Z /\ (Z \/ (A``1 \/ B``2))) /\ (Z \/ (A``2 \/ B``2)) by XBOOLE_1:16
+      .= Z /\ (Z \/ (A``2 \/ B``2)) by XBOOLE_1:28,XBOOLE_1:7
+      .= Z by XBOOLE_1:28,XBOOLE_1:7; then
+      consider X,Y being Subset of U such that
+r1:   X in A & Y in B & Z = X \/ Y by e1,e2;
+      thus thesis by SETFAM_1:def 4,r1,T1;
+    end;
+  end;
+
+theorem Int:
+  A _/\_ B = Inter (A``1 /\ (B``1), A``2 /\ B``2)
+    proof
+v1: A _/\_ B c= Inter (A``1 /\ (B``1), A``2 /\ B``2)
+    proof
+      let x be set;
+      assume x in A _/\_ B; then
+      consider X,Y being set such that
+v2:   X in A & Y in B & x = X /\ Y by SETFAM_1:def 5;
+      A``1 c= X & B``1 c= Y & X c= A``2 & Y c= B``2 by v2,Wazne; then
+      A``1 /\ (B``1) c= x & x c= A``2 /\ B``2 by XBOOLE_1:27,v2;
+      hence thesis by Lemacik;
+    end;
+    Inter (A``1 /\ (B``1), A``2 /\ B``2) c= A _/\_ B
+    proof
+      let x be set;
+      assume x in Inter (A``1 /\ (B``1), A``2 /\ B``2); then
+      consider Z being Element of bool U such that
+z2:   x = Z & A``1 /\ (B``1) c= Z & Z c= A``2 /\ B``2;
+      A``1 c= (Z \/ A``1) /\ A``2
+      proof
+        let x be set;
+        assume a0: x in A``1;
+        assume aa: not x in (Z \/ A``1) /\ A``2;
+        per cases by aa,XBOOLE_0:def 4;
+        suppose not x in Z \/ A``1;
+          hence thesis by a0,XBOOLE_0:def 3;
+        end;
+        suppose b1: not x in A``2;
+          A``1 c= A``2 & x in A``1 by a0,wazne2;
+          hence thesis by b1;
+        end;
+      end; then
+      A``1 c= (Z \/ A``1) /\ A``2 & (Z \/ A``1) /\ A``2 c= A``2
+      by XBOOLE_1:17; then
+e1:   (Z \/ A``1) /\ A``2 in A by Wazne;
+      B``1 c= (Z \/ B``1) /\ B``2
+      proof
+        let x be set;
+        assume a1: x in B``1; then
+a2:     x in Z \/ B``1 by XBOOLE_0:def 3;
+        B``1 c= B``2 by wazne2;
+        hence thesis by a1,a2,XBOOLE_0:def 4;
+      end; then
+      B``1 c= (Z \/ B``1) /\ B``2 & (Z \/ B``1) /\ B``2 c= B``2
+      by XBOOLE_1:17; then
+e2:   (Z \/ B``1) /\ B``2 in B by Wazne;
+      ((Z \/ A``1) /\ A``2) /\ ((Z \/ B``1) /\ B``2)
+      = (A``2 /\ (Z \/ A``1)) /\ (Z \/ B``1) /\ B``2 by XBOOLE_1:16
+      .=A``2 /\ ((Z \/ A``1) /\ (Z \/ B``1)) /\ B``2 by XBOOLE_1:16
+      .= A``2 /\ (Z \/ (A``1 /\ (B``1))) /\ B``2 by XBOOLE_1:24
+      .= A``2 /\ Z /\ B``2 by z2,XBOOLE_1:12
+      .= Z /\ (A``2 /\ B``2) by XBOOLE_1:16
+      .= Z by z2,XBOOLE_1:28;
+      hence thesis by SETFAM_1:def 5,z2,e1,e2;
+    end;
+    hence thesis by v1,XBOOLE_0:def 10;
+  end;
+
+definition let U; let A, B;
+  redefine pred A = B means
+    A``1 = B``1 & A``2 = B``2;
+  compatibility
+  proof
+    thus A = B implies A``1 = B``1 & A``2 = B``2;
+    assume that
+A1: A``1 = B``1 and
+A2: A``2 = B``2;
+d1: A c= B
+    proof
+      let x be set;
+      assume
+T0:   x in A;
+      consider A1, B1 be Subset of U such that
+T1:   A = Inter (A1, B1) by WW;
+      consider C1 being Subset of U such that
+W1:   A = Inter (A``1, C1) by Def4;
+v1:   A1 = B``1 by A1,T1,Pik,W1;
+      consider C2 being Subset of U such that
+V1:   B = Inter (B``1,C2) by Def4;
+      consider D1 being Subset of U such that
+V2:   A = Inter (D1,A``2) by Def5;
+v4:   B``2 = B1 by A2,V2,T1,Pik;
+      consider D2 being Subset of U such that
+V3:   B = Inter (D2,B``2) by Def5;
+      thus thesis by T0,T1,v1,V1,v4,V3,Pik;
+    end;
+    B c= A
+    proof
+      let x be set;
+      assume T0: x in B;
+      consider A1, B1 be Subset of U such that
+T1:   B = Inter (A1, B1) by WW;
+      consider C1 being Subset of U such that
+W1:   B = Inter (B``1, C1) by Def4;
+v1:   A``1 = A1 by A1,W1,Pik,T1;
+      consider C2 being Subset of U such that
+V1:   A = Inter (A``1,C2) by Def4;
+      consider D1 being Subset of U such that
+V2:   B = Inter (D1,B``2) by Def5;
+v4:   A``2 = B1 by A2,V2,T1,Pik;
+      consider D2 being Subset of U such that
+V3:   A = Inter (D2,A``2) by Def5;
+      thus thesis by T0,T1,v1,V1,v4,V3,Pik;
+    end;
+    hence thesis by d1,XBOOLE_0:def 10;
+  end;
+end;
+
+theorem
+  A _\/_ A = A
+  proof
+    set B = A _\/_ A;
+A1: A _\/_ A c= A
+    proof
+      let x be set;
+      assume x in A _\/_ A; then
+      consider X, Y being set such that
+A3:   X in A & Y in A & x = X \/ Y by SETFAM_1:def 4;
+A2:   A``1 c= X & X c= A``2 by A3,Wazne;
+      A``1 c= Y & Y c= A``2 by A3,Wazne; then
+A4:   X \/ Y c= A``2 by A2,XBOOLE_1:8;
+      X c= X \/ Y by XBOOLE_1:7; then
+      A``1 c= X \/ Y by A2,XBOOLE_1:1;
+      hence thesis by Wazne,A4,A3;
+    end;
+    A c= A _\/_ A
+    proof
+      let x be set;
+      assume
+D:    x in A;
+      x = x \/ x;
+      hence thesis by D, SETFAM_1:def 4;
+    end;
+    hence thesis by A1, XBOOLE_0:def 10;
+  end;
+
+theorem
+  A _/\_ A = A
+  proof
+    set B = A _/\_ A;
+C1: A _/\_ A c= A
+    proof
+      let x be set;
+      assume x in A _/\_ A; then
+      consider X, Y being set such that
+C2:   X in A & Y in A & x = X /\ Y by SETFAM_1:def 5;
+C3:   A``1 c= X & X c= A``2 by C2, Wazne;
+      A``1 c= Y & Y c= A``2 by C2, Wazne; then
+C4:   A``1 c= X /\ Y by C3, XBOOLE_1:19;
+      X /\ Y c= X by XBOOLE_1:17; then
+      X /\ Y c= A``2 by C3,XBOOLE_1:1;
+      hence thesis by C4, C2, Wazne;
+    end;
+    A c= A _/\_ A
+    proof
+      let x be set;
+      assume
+X2:   x in A;
+      x = x /\ x;
+      hence thesis by X2,SETFAM_1:def 5;
+    end;
+    hence thesis by C1, XBOOLE_0:def 10;
+  end;
+
+theorem
+  A _\/_ B = B _\/_ A;
+
+theorem
+  A _/\_ B = B _/\_ A;
+
+theorem Asso1:
+  A _\/_ B _\/_ C = A _\/_ (B _\/_ C)
+  proof
+A1: A _\/_ B _\/_ C c= A _\/_ (B _\/_ C)
+    proof
+      let x be set;
+      assume x in A _\/_ B _\/_ C; then
+      consider X, Y being set such that
+A3:   X in UNION (A, B) & Y in C & x = X \/ Y by SETFAM_1:def 4;
+      consider Z, W being set such that
+A4:   Z in A & W in B & X = Z \/ W by SETFAM_1:def 4, A3;
+      W \/ Y in UNION (B,C) by A3,A4,SETFAM_1:def 4; then
+      Z \/ (W \/ Y) in UNION (A,UNION (B,C)) by A4,SETFAM_1:def 4;
+      hence thesis by A3,A4,XBOOLE_1:4;
+    end;
+    A _\/_ (B _\/_ C) c= A _\/_ B _\/_ C
+    proof
+      let x be set;
+      assume x in A _\/_ (B _\/_ C); then
+      consider X, Y being set such that
+A5:   X in A & Y in UNION (B, C) & x = X \/ Y by SETFAM_1:def 4;
+      consider Z, W being set such that
+A6:   Z in B & W in C & Y = Z \/ W by SETFAM_1:def 4, A5;
+      X \/ Z in UNION (A,B) by A5, A6, SETFAM_1:def 4; then
+      (X \/ Z) \/ W in UNION (UNION (A,B), C) by A6, SETFAM_1:def 4;
+      hence thesis by A5, A6, XBOOLE_1:4;
+    end;
+    hence thesis by A1, XBOOLE_0:def 10;
+  end;
+
+theorem Prz1:
+  A _/\_ B _/\_ C = A _/\_ (B _/\_ C)
+  proof
+A1: A _/\_ B _/\_ C c= A _/\_ (B _/\_ C)
+    proof
+      let x be set;
+      assume x in A _/\_ B _/\_ C; then
+      consider X, Y being set such that
+A3:   X in INTERSECTION (A, B) & Y in C & x = X /\ Y by SETFAM_1:def 5;
+      consider Z, W being set such that
+A4:   Z in A & W in B & X = Z /\ W by SETFAM_1:def 5, A3;
+      W /\ Y in INTERSECTION (B,C) by A3,A4,SETFAM_1:def 5; then
+      Z /\ (W /\ Y) in INTERSECTION (A,INTERSECTION (B,C))
+        by A4,SETFAM_1:def 5;
+      hence thesis by A3,A4,XBOOLE_1:16;
+    end;
+    A _/\_ (B _/\_ C) c= A _/\_ B _/\_ C
+    proof
+      let x be set;
+      assume x in A _/\_ (B _/\_ C); then
+      consider X, Y being set such that
+A5:   X in A & Y in INTERSECTION (B, C) & x = X /\ Y by SETFAM_1:def 5;
+      consider Z, W being set such that
+A6:   Z in B & W in C & Y = Z /\ W by SETFAM_1:def 5, A5;
+      X /\ Z in INTERSECTION (A,B) by A5, A6, SETFAM_1:def 5; then
+      (X /\ Z) /\ W in INTERSECTION (INTERSECTION (A,B), C)
+        by A6, SETFAM_1:def 5;
+      hence thesis by A5,A6,XBOOLE_1:16;
+    end;
+    hence thesis by A1, XBOOLE_0:def 10;
+  end;
+
+Lemacik1:
+  for X being set,
+      A, B, C being Subset-Family of X holds
+    UNION (A, INTERSECTION (B,C)) c=
+      INTERSECTION (UNION (A,B), UNION (A,C))
+    proof
+      let X be set, A, B, C be Subset-Family of X;
+      let x be set;
+      assume x in UNION (A, INTERSECTION (B,C)); then
+      consider X, Y being set such that
+A1:   X in A & Y in INTERSECTION (B,C) & x = X \/ Y by SETFAM_1:def 4;
+      consider W, Z being set such that
+A2:   W in B & Z in C & Y = W /\ Z by A1,SETFAM_1:def 5;
+A3:   x = (X \/ W) /\ (X \/ Z) by A1, A2, XBOOLE_1:24;
+A4:   X \/ W in UNION (A,B) by A1,A2,SETFAM_1:def 4;
+      X \/ Z in UNION (A,C) by A1,A2,SETFAM_1:def 4;
+      hence thesis by A3, A4, SETFAM_1:def 5;
+    end;
+
+definition let X be set; let F be Subset-Family of X;
+  attr F is ordered means :DefOr:
+    ex A, B being set st
+      A in F & B in F & for Y being set holds
+        Y in F iff A c= Y & Y c= B;
+end;
+
+registration let X be set;
+  cluster non empty ordered Subset-Family of X;
+  existence
+  proof
+    reconsider F = {X} as Subset-Family of X by ZFMISC_1:80;
+    take F;
+    ex A, B being set st
+      A in F & B in F & for Y being set holds
+        Y in F iff A c= Y & Y c= B
+    proof
+      take X, X;
+      thus X in F & X in F by TARSKI:def 1;
+      let Y be set;
+      thus Y in F implies X c= Y & Y c= X by TARSKI:def 1;
+      assume X c= Y & Y c= X; then
+      X = Y by XBOOLE_0:def 10;
+      hence thesis by TARSKI:def 1;
+    end;
+    hence thesis by DefOr;
+  end;
+end;
+
+theorem nowosc1:
+  for A,B being Subset of U st A c= B holds
+    Inter (A,B) is non empty ordered Subset-Family of U
+  proof
+    let A,B be Subset of U;
+    assume a: A c= B;
+    consider C,D being set such that
+a2: C=A & D=B;
+    C in Inter(A,B) & D in Inter(A,B) & for Y being set holds
+    Y in Inter(A,B) iff C c= Y & Y c= D by a2,Lemacik,a;
+    hence thesis by DefOr;
+  end;
+
+theorem CorNowosc1:
+  for A being non empty IntervalSet of U holds
+    A is non empty ordered Subset-Family of U
+  proof
+    let A be non empty IntervalSet of U;
+    A = Inter (A``1,A``2) & A``1 c= A``2 by Wazne33,wazne2;
+    hence thesis by nowosc1;
+  end;
+
+notation let X be set;
+  synonym min X for meet X;
+  synonym max X for union X;
+end;
+
+definition let X be set;
+           let F be non empty ordered Subset-Family of X;
+  redefine func min F -> Element of F;
+  correctness
+  proof
+    consider A, B being set such that
+A1: A in F & B in F &
+    for Y being set holds Y in F iff A c= Y & Y c= B by DefOr;
+    for Z1 being set st Z1 in F holds A c= Z1 by A1; then
+A2: A c= meet F by SETFAM_1:6;
+    meet F c= B by A1,SETFAM_1:4;
+    hence thesis by A1,A2;
+  end;
+  redefine func max F -> Element of F;
+  correctness
+  proof
+    consider A, B being set such that
+A1: A in F & B in F &
+    for Y being set holds Y in F iff A c= Y & Y c= B by DefOr;
+K:  for Z1 being set st Z1 in F holds Z1 c= B by A1;
+A2: A c= union F by A1,ZFMISC_1:92;
+    union F c= B by K,ZFMISC_1:94;
+    hence thesis by A1,A2;
+  end;
+end;
+
+DefMi:
+for X being set, F being non empty ordered Subset-Family of X,
+    G being set st G in F holds
+  G = min F iff for Y being set st Y in F holds G c= Y
+proof
+  let X be set, F be non empty ordered Subset-Family of X, G be set;
+  assume A: G in F;
+  hereby
+    assume A1: G = min F;
+    let Y be set; assume Y in F;
+    hence G c= Y by A1,SETFAM_1:4;
+  end;
+  assume for Y being set st Y in F holds G c= Y; then
+B2:  G c= min F;
+  min F c= G by A,SETFAM_1:4;
+  hence thesis by B2,XBOOLE_0:def 10;
+end;
+
+DefMa:
+for X being set, F being non empty ordered Subset-Family of X,
+    G being set st G in F holds
+  G = max F iff for Y being set st Y in F holds Y c= G
+proof
+  let X be set, F be non empty ordered Subset-Family of X, G be set;
+  assume A: G in F;
+  hereby
+    assume A1: G = max F;
+    let Y be set; assume Y in F;
+    hence Y c= G by A1,ZFMISC_1:92;
+  end;
+  assume B1: for Y being set st Y in F holds Y c= G;
+B2: G c= max F by A,ZFMISC_1:92;
+  max F c= G by B1;
+  hence thesis by B2,XBOOLE_0:def 10;
+end;
+
+theorem nowosc2:
+  for A,B being Subset of U,
+      F being ordered non empty Subset-Family of U st
+      F = Inter (A,B) holds
+      min F = A & max F = B
+  proof
+    let A,B be Subset of U;
+    let F be ordered non empty Subset-Family of U;
+    assume a0: F = Inter (A,B);
+    A is Element of F & for Y being set st Y in F holds A c= Y
+      by KonceWInter,a0,Lemacik; then
+c1: A = min F by DefMi;
+    B is Element of F & for Y being set st Y in F holds Y c= B
+      by KonceWInter,a0,Lemacik;
+    hence thesis by c1,DefMa;
+  end;
+
+theorem Nowe1:
+  for X,Y being set, A being non empty ordered Subset-Family of X holds
+    Y in A iff min A c= Y & Y c= max A
+  proof
+    let X,Y be set;
+    let A be non empty ordered Subset-Family of X;
+    min A c= Y & Y c= max A implies Y in A
+    proof
+      assume b1: min A c= Y & Y c= max A;
+      consider C,D being set such that
+b2:   C in A & D in A & for X being set holds X in A iff C c= X & X c= D
+        by DefOr;
+XZ:   min A c= C & D c= max A by DefMi,DefMa,b2;
+      C c= min A & max A c= D by b2; then
+      min A = C & max A = D by XZ,XBOOLE_0:def 10;
+      hence thesis by b2,b1;
+    end;
+    hence thesis by DefMi,DefMa;
+  end;
+
+theorem Nowe2:
+  for A being non empty IntervalSet of U holds
+    A is non empty ordered Subset-Family of U
+  proof
+    let A be non empty IntervalSet of U;
+    consider A1, A2 being Subset of U such that
+a0: A1 c= A2 & A = Inter (A1, A2) by U2;
+    A1 in A & A2 in A & for Y being set holds Y in A iff A1 c= Y & Y c= A2
+      by a0,Lemacik;
+    hence thesis by DefOr;
+  end;
+
+theorem Wazne1:
+  for X being set,
+      A, B, C being non empty ordered Subset-Family of X holds
+    UNION (A, INTERSECTION (B,C)) =
+      INTERSECTION (UNION (A,B), UNION (A,C))
+  proof
+    let X be set,
+        A, B, C be non empty ordered Subset-Family of X;
+S:  UNION (A, INTERSECTION (B,C)) c=
+      INTERSECTION (UNION (A,B), UNION (A,C)) by Lemacik1;
+    INTERSECTION (UNION (A,B), UNION (A,C)) c=
+       UNION (A, INTERSECTION (B,C))
+    proof
+      let x be set;
+      assume x in INTERSECTION (UNION (A,B), UNION (A,C)); then
+      consider X,Y being set such that
+a0:   X in UNION (A,B) & Y in UNION (A,C) & x = X /\ Y by SETFAM_1:def 5;
+      consider X1,X2 being set such that
+a1:   X1 in A & X2 in B & X = X1 \/ X2 by a0,SETFAM_1:def 4;
+      consider Y1,Y2 being set such that
+a2:   Y1 in A & Y2 in C & Y = Y1 \/ Y2 by a0,SETFAM_1:def 4;
+a3:   x = (X1 /\ (Y1 \/ Y2)) \/ (X2 /\ (Y1 \/ Y2)) by XBOOLE_1:23,a0,a1,a2
+       .= ((X1 /\ Y1) \/ (X1 /\ Y2)) \/ (X2 /\ (Y1 \/ Y2)) by XBOOLE_1:23
+       .= (X1 /\ Y1) \/ (X1 /\ Y2) \/
+           ((X2 /\ Y1) \/ (X2 /\ Y2)) by XBOOLE_1:23
+       .= ((X1 /\ Y1) \/ (X1 /\ Y2) \/ (X2 /\ Y1)) \/ (X2 /\ Y2)
+          by XBOOLE_1:4;
+      set A1 = min A, A2 = max A;
+      A1 c= X1 & X1 c= A2 & A1 c= Y1 & Y1 c= A2 by a1,a2,Nowe1; then
+m2:   A1 /\ A1 c= X1 /\ Y1 & X1 /\ Y1 c= A2 /\ A2 by XBOOLE_1:27;
+      Y1 c= A2 & X2 /\ Y1 c= Y1 by a2,Nowe1,XBOOLE_1:17; then
+      X2 /\ Y1 c= A2 by XBOOLE_1:1; then
+m3:   A1 c= (X1 /\ Y1) \/ (X2 /\ Y1) &
+      (X1 /\ Y1) \/ (X2 /\ Y1) c= A2 by XBOOLE_1:10,8,m2;
+      X1 c= A2 & X1 /\ Y2 c= X1 by a1,Nowe1,XBOOLE_1:17; then
+      (X1 /\ Y2) c= A2 by XBOOLE_1:1; then
+      (X1 /\ Y1) \/ (X2 /\ Y1) \/ (X1 /\ Y2) c= A2 by m3,XBOOLE_1:8; then
+      A1 c= (X1 /\ Y1) \/ (X2 /\ Y1) \/ (X1 /\ Y2) &
+        (X1 /\ Y1) \/ (X1 /\ Y2) \/ (X2 /\ Y1) c= A2
+      by XBOOLE_1:4,m3,XBOOLE_1:10; then
+      A1 c= (X1 /\ Y1) \/ (X1 /\ Y2) \/ (X2 /\ Y1) &
+        (X1 /\ Y1) \/ (X1 /\ Y2) \/ (X2 /\ Y1) c= A2
+      by XBOOLE_1:4; then
+l1:   (X1 /\ Y1) \/ (X1 /\ Y2) \/ (X2 /\ Y1) in A by Nowe1;
+      (X2 /\ Y2) in INTERSECTION (B,C) by a1,a2,SETFAM_1:def 5;
+      hence thesis by l1,a3,SETFAM_1:def 4;
+    end;
+    hence thesis by S, XBOOLE_0:def 10;
+  end;
+
+Lemacik2:
+  for X being set,
+      A, B, C being Subset-Family of X holds
+    INTERSECTION (A, UNION (B,C)) c=
+       UNION (INTERSECTION (A,B), INTERSECTION (A,C))
+  proof
+    let X be set, A, B, C be Subset-Family of X;
+      let x be set;
+      assume x in INTERSECTION (A, UNION (B,C)); then
+      consider X, Y being set such that
+Q1:   X in A & Y in UNION (B,C) & x = X /\ Y by SETFAM_1:def 5;
+      consider Z, W being set such that
+Q2:   Z in B & W in C & Y = Z \/ W by Q1, SETFAM_1:def 4;
+Q3:   x = (X /\ Z) \/ (X /\ W) by Q1, Q2, XBOOLE_1:23;
+Q4:   X /\ Z in INTERSECTION (A,B) by Q1, Q2, SETFAM_1:def 5;
+      X /\ W in INTERSECTION (A,C) by Q1, Q2, SETFAM_1:def 5;
+      hence thesis by Q3, Q4, SETFAM_1:def 4;
+end;
+
+theorem Wazne2:
+  for X being set,
+      A, B, C being non empty ordered Subset-Family of X holds
+    INTERSECTION (A, UNION (B,C)) =
+       UNION (INTERSECTION (A,B), INTERSECTION (A,C))
+  proof
+    let X be set, A, B, C be non empty ordered Subset-Family of X;
+R:  INTERSECTION (A, UNION (B,C)) c=
+      UNION (INTERSECTION (A,B), INTERSECTION (A,C)) by Lemacik2;
+    UNION (INTERSECTION (A,B), INTERSECTION (A,C)) c=
+      INTERSECTION (A, UNION (B,C))
+    proof
+      let x be set;
+      assume x in UNION (INTERSECTION (A,B), INTERSECTION (A,C)); then
+      consider X, Y being set such that
+Q5:   X in INTERSECTION (A,B) & Y in INTERSECTION (A,C) & x = X \/ Y
+      by SETFAM_1:def 4;
+      consider X1,X2 being set such that
+Q6:   X1 in A & X2 in B & X = X1 /\ X2 by SETFAM_1:def 5, Q5;
+      consider Y1,Y2 being set such that
+Q7:   Y1 in A & Y2 in C & Y = Y1 /\ Y2 by SETFAM_1:def 5, Q5;
+Q8:   x = ((X1 /\ X2) \/ Y1) /\ ((X1 /\ X2) \/ Y2) by XBOOLE_1:24,Q5,Q6,Q7
+       .= (Y1 \/ (X1 /\ X2)) /\ ((Y2 \/ X1) /\ (Y2 \/ X2)) by XBOOLE_1:24
+       .= ((Y1 \/ X1) /\ (Y1 \/ X2)) /\ ((Y2 \/ X1) /\ (Y2 \/ X2))
+           by XBOOLE_1:24
+       .= ((Y1 \/ X1) /\ (Y1 \/ X2) /\ (Y2 \/ X1)) /\ (Y2 \/ X2)
+           by XBOOLE_1:16;
+       set A1 = min A, A2 = max A;
+ww:    A1 c= Y1 & A1 c= X1 by Q6,Q7,Nowe1; then
+w0:    A1 \/ A1 c= Y1 \/ X1 by XBOOLE_1:13;
+       Y1 c= Y1 \/ X2 by XBOOLE_1:7; then
+       A1 c= Y1 \/ X2 by ww,XBOOLE_1:1; then
+w2:    A1 /\ A1 c= (Y1 \/ X1) /\ (Y1 \/ X2) by XBOOLE_1:27,w0;
+       A1 c= X1 & X1 c= Y2 \/ X1 by Nowe1,Q6,XBOOLE_1:7; then
+       A1 c= Y2 \/ X1 by XBOOLE_1:1; then
+w1:    A1 c= (Y1 \/ X1) /\ (Y1 \/ X2) /\ (Y2 \/ X1) by XBOOLE_1:19,w2;
+       Y1 c= A2 & X1 c= A2 by Q6,Q7,Nowe1; then
+       (Y1 \/ X1) /\ ((Y1 \/ X2) /\ (Y2 \/ X1)) c= Y1 \/ X1 & Y1 \/ X1 c= A2
+         by XBOOLE_1:8,17; then
+       A1 c= (Y1 \/ X1) /\ (Y1 \/ X2) /\ (Y2 \/ X1) &
+         (Y1 \/ X1) /\ ((Y1 \/ X2) /\ (Y2 \/ X1)) c= A2 by XBOOLE_1:1,w1;then
+       A1 c= (Y1 \/ X1) /\ (Y1 \/ X2) /\ (Y2 \/ X1) &
+         (Y1 \/ X1) /\ (Y1 \/ X2) /\ (Y2 \/ X1) c= A2
+       by XBOOLE_1:16; then
+Q9:    (Y1 \/ X1) /\ (Y1 \/ X2) /\ (Y2 \/ X1) in A by Nowe1;
+       Y2 \/ X2 in UNION (B,C) by SETFAM_1:def 4,Q6,Q7;
+      hence thesis by SETFAM_1:def 5,Q8,Q9;
+    end;
+    hence thesis by R, XBOOLE_0:def 10;
+  end;
+
+theorem
+  A _\/_ (B _/\_ C) = (A _\/_ B) _/\_ (A _\/_ C)
+  proof
+W0: A _\/_ (B _/\_ C) c= (A _\/_ B) _/\_ (A _\/_ C)
+    proof
+      let x be set;
+      assume x in A _\/_ (B _/\_ C); then
+      consider X, Y being set such that
+W1:   X in A & Y in INTERSECTION (B, C) & x = X \/ Y by SETFAM_1:def 4;
+      consider Z, W being set such that
+W2:   Z in B & W in C & Y = Z /\ W by SETFAM_1:def 5, W1;
+ZZ:   UNION (A, INTERSECTION (B,C)) c=
+        INTERSECTION (UNION (A,B), UNION (A,C)) by Lemacik1;
+      X \/ Z /\ W in UNION (A, INTERSECTION (B,C)) by W1,W2,SETFAM_1:def 4;
+      hence thesis by ZZ,W1,W2;
+    end;
+    (A _\/_ B) _/\_ (A _\/_ C) c= A _\/_ (B _/\_ C)
+    proof
+      let x be set;
+      assume x in (A _\/_ B) _/\_ (A _\/_ C); then
+      consider X, Y being set such that
+E1:   X in UNION (A,B) & Y in UNION (A,C) & x = X /\ Y by SETFAM_1:def 5;
+P3:   A is non empty ordered Subset-Family of U &
+        B is non empty ordered Subset-Family of U &
+        C is non empty ordered Subset-Family of U by Nowe2;
+      x in INTERSECTION (UNION (A,B), UNION (A,C)) by SETFAM_1:def 5,E1;
+      hence thesis by Wazne1,P3;
+    end;
+    hence thesis by W0, XBOOLE_0:def 10;
+  end;
+
+theorem
+  A _/\_ (B _\/_ C) = (A _/\_ B) _\/_ (A _/\_ C)
+  proof
+P0:  A _/\_ (B _\/_ C) c= (A _/\_ B) _\/_ (A _/\_ C)
+     proof
+       let x be set;
+       assume x in A _/\_ (B _\/_ C); then
+       consider X, Y being set such that
+P1:    X in A & Y in UNION (B,C) & x = X /\ Y by SETFAM_1:def 5;
+       consider Z, W being set such that
+P2:    Z in B & W in C & Y = Z \/ W by SETFAM_1:def 4, P1;
+P3:    A is non empty ordered Subset-Family of U &
+         B is non empty ordered Subset-Family of U &
+         C is non empty ordered Subset-Family of U by Nowe2;
+       X /\ (Z \/ W) in INTERSECTION (A, UNION (B,C))
+         by SETFAM_1:def 5, P1,P2;
+       hence thesis by P1, P2, Wazne2,P3;
+     end;
+    (A _/\_ B) _\/_ (A _/\_ C) c= A _/\_ (B _\/_ C)
+    proof
+      let x be set;
+      assume x in (A _/\_ B) _\/_ (A _/\_ C); then
+      consider X,Y being set such that
+K1:   X in INTERSECTION (A,B) & Y in INTERSECTION (A,C) & x = X \/ Y
+        by SETFAM_1:def 4;
+P3:   A is non empty ordered Subset-Family of U & B is non empty ordered
+      Subset-Family of U & C is non empty ordered Subset-Family of U by Nowe2;
+      x in UNION (INTERSECTION (A,B), INTERSECTION (A,C))
+        by SETFAM_1:def 4, K1;
+      hence thesis by Wazne2,P3;
+    end;
+    hence thesis by P0, XBOOLE_0:def 10;
+ end;
+
+theorem Wazne3:
+   for X being set,
+     A, B being non empty ordered Subset-Family of X holds
+     INTERSECTION (A, (UNION (A,B))) = A
+   proof
+     let X be set;
+     let A,B be non empty ordered Subset-Family of X;
+     set A1 = min A, A2 = max A;
+a1:  INTERSECTION (A, (UNION (A,B))) c= A
+     proof
+       let x be set;
+       assume x in INTERSECTION (A, (UNION (A,B))); then
+       consider Y,Z being set such that
+a3:    Y in A & Z in UNION (A,B) & x = Y /\ Z by SETFAM_1:def 5;
+       consider Z1,Z2 being set such that
+a4:    Z1 in A & Z2 in B & Z = Z1 \/ Z2 by SETFAM_1:def 4,a3;
+a5:    x = (Y /\ Z1) \/ (Y /\ Z2) by XBOOLE_1:23,a3,a4;
+a8:    (A1 c= Y & Y c= A2) & (A1 c= Z1 & Z1 c= A2) by Nowe1,a3,a4; then
+       A1 c= Y /\ Z1 & Y /\ Z1 c= A2 /\ A2 by XBOOLE_1:19,27; then
+a6:    A1 c= Y /\ Z1 & Y /\ Z1 c= A2 & Y /\ Z1 c= (Y /\ Z1) \/ (Y /\ Z2)
+         by XBOOLE_1:7; then
+a7:    A1 c= (Y /\ Z1) \/ (Y /\ Z2) by XBOOLE_1:1;
+       Y /\ Z2 c= Y by XBOOLE_1:17; then
+       Y /\ Z2 c= A2 by a8,XBOOLE_1:1; then
+       (Y /\ Z1) \/ (Y /\ Z2) c= A2 by XBOOLE_1:8,a6;
+       hence thesis by Nowe1,a5,a7;
+     end;
+     A c= INTERSECTION (A, (UNION (A,B)))
+     proof
+       let x be set;
+       assume b0: x in A;
+       consider b being Element of B;
+L1:    x = x /\ (x \/ b) by XBOOLE_1:21;
+       x \/ b in UNION (A,B) by b0,SETFAM_1:def 4;
+       hence thesis by b0,L1,SETFAM_1:def 5;
+     end;
+     hence thesis by a1,XBOOLE_0:def 10;
+   end;
+
+theorem Wazne4:
+   for X being set,
+     A, B being non empty ordered Subset-Family of X holds
+     UNION (INTERSECTION(A,B),B) = B
+   proof
+     let X be set;
+     let A,B be non empty ordered Subset-Family of X;
+a0:  UNION (INTERSECTION(A,B),B) c= B
+     proof
+       let x be set;
+       set B1 = min B, B2 = max B;
+       assume x in UNION (INTERSECTION(A,B),B); then
+       consider Y,Z being set such that
+a2:    Y in INTERSECTION(A,B) & Z in B & x = Y \/ Z by SETFAM_1:def 4;
+       consider Y1,Y2 being set such that
+a3:    Y1 in A & Y2 in B & Y = Y1 /\ Y2 by SETFAM_1:def 5,a2;
+       B1 c= Y2 & Y2 c= B2 & Y1 /\ Y2 c= Y2 by a3,Nowe1,XBOOLE_1:17; then
+a5:    Y1 /\ Y2 c= B2 by XBOOLE_1:1;
+       Z c= B2 by a2,Nowe1; then
+a6:    x c= B2 by a2,a3,a5,XBOOLE_1:8;
+       B1 c= Z & Z c= x by a2,Nowe1,XBOOLE_1:7; then
+       B1 c= x & x c= B2 by a6,XBOOLE_1:1;
+       hence thesis by Nowe1;
+     end;
+     B c= UNION (INTERSECTION(A,B),B)
+     proof
+       let x be set;
+       set B1 = min B, B2 = max B;
+       assume a1: x in B;
+       consider b being Element of A;
+L1:    x = x \/ (x /\ b) by XBOOLE_1:22;
+       b /\ x in INTERSECTION (A,B) by a1,SETFAM_1:def 5;
+       hence thesis by L1,a1,SETFAM_1:def 4;
+     end;
+     hence thesis by XBOOLE_0:def 10,a0;
+   end;
+
+theorem Abs1:
+  A _/\_ (A _\/_ B) = A
+  proof
+    A is non empty ordered Subset-Family of U &
+      B is non empty ordered Subset-Family of U by Nowe2;
+    hence thesis by Wazne3;
+ end;
+
+theorem Abs2:
+  (A _/\_ B) _\/_ B = B
+  proof
+    A is non empty ordered Subset-Family of U &
+      B is non empty ordered Subset-Family of U by Nowe2;
+    hence thesis by Wazne4;
+  end;
+
+begin :: Families of Subsets
+
+theorem Diff1:
+  for U being non empty set,
+      A, B being Subset-Family of U holds
+    DIFFERENCE (A,B) is Subset-Family of U
+  proof
+    let U be non empty set,
+        A, B be Subset-Family of U;
+    DIFFERENCE (A,B) c= bool U
+    proof
+      let x be set; assume x in DIFFERENCE (A,B); then
+      consider Y,Z being set such that b2: Y in A & Z in B & x = Y \ Z
+        by SETFAM_1:def 6;
+      Y \ Z c= U by b2,XBOOLE_1:109;
+      hence thesis by b2;
+    end;
+    hence thesis;
+  end;
+
+theorem LemmaC0:
+  for U being non empty set,
+      A,B being non empty ordered Subset-Family of U holds
+    DIFFERENCE (A,B) = {C where C is Subset of U :
+      min A \ max B c= C & C c= max A \ min B}
+  proof
+    let U be non empty set;
+    let A,B be non empty ordered Subset-Family of U;
+    set A1 = min A, B1 = min B, A2 = max A, B2 = max B;
+a0: DIFFERENCE (A,B) c= {C where C is Subset of U :
+      min A \ max B c= C & C c= max A \ min B}
+    proof
+      let x be set;
+      assume b1: x in DIFFERENCE (A,B); then
+      consider Y,Z being set such that b2: Y in A & Z in B & x = Y \ Z
+        by SETFAM_1:def 6;
+      DIFFERENCE (A,B) is Subset-Family of U by Diff1; then
+      reconsider x as Subset of U by b1;
+      A1 c= Y & Y c= A2 & B1 c= Z & Z c= B2 by b2,Nowe1; then
+      A1 \ B2 c= x & x c= A2 \ B1 by XBOOLE_1:35,b2;
+      hence thesis;
+    end;
+    {C where C is Subset of U : min A \ max B c= C & C c= max A \ min B}
+      c= DIFFERENCE (A,B)
+    proof
+      let x be set;
+      assume x in {C where C is Subset of U :
+        min A \ max B c= C & C c= max A \ min B}; then
+      consider x' being Subset of U such that
+e0:   x' = x & min A \ max B c= x' & x' c= max A \ min B;
+      set A1 = min A, A2 = max A, B1 = min B, B2 = max B;
+      set z1 = (x' \/ A1) /\ A2;
+      set z2 = ((x' \/ B2`) /\ B1`)`;
+      B1 c= B2 by DefMi; then
+F7:   B2` c= B1` by SUBSET_1:31;
+      (x' \/ B2`) /\ B1` = (x' /\ B1`) \/ (B2` /\ B1`) by XBOOLE_1:23
+        .= (x' /\ B1`) \/ B2` by F7,XBOOLE_1:28; then
+F6:   B2` c= (x' \/ B2`) /\ B1` by XBOOLE_1:7;
+      (x' \/ B2`) /\ B1` c= B1` by XBOOLE_1:17; then
+F5:   ((x' \/ B2`) /\ B1`)` c= B2`` &
+        B1`` c= ((x' \/ B2`) /\ B1`)` by F6,SUBSET_1:31;
+      z1 = (x' /\ A2) \/ (A1 /\ A2) by XBOOLE_1:23
+        .= (x' /\ A2) \/ A1 by SETFAM_1:3,XBOOLE_1:28; then
+      A1 c= z1 & z1 c= A2 by XBOOLE_1:17,7; then
+F3:   z1 in A & z2 in B by Nowe1,F5;
+F1:   (x' \/ (A1 \ B2)) /\ (A2 \ B1) = x' /\ (A2 \ B1) by e0,XBOOLE_1:12
+        .= x' by e0,XBOOLE_1:28;
+      z1 \ z2 = z1 /\ z2` by SUBSET_1:32
+          .= (x' \/ A1) /\ (A2 /\ ((x' \/ B2`) /\ B1`)) by XBOOLE_1:16
+          .= (x' \/ A1) /\ ((x' \/ B2`) /\ (B1` /\ A2)) by XBOOLE_1:16
+          .= (x' \/ A1) /\ ((x' \/ B2`) /\ (A2 \ B1)) by SUBSET_1:32
+          .= ((x' \/ A1) /\ (x' \/ B2`)) /\ (A2 \ B1) by XBOOLE_1:16
+          .= (x' \/ (A1 /\ B2`)) /\ (A2 \ B1) by XBOOLE_1:24
+          .= x' by F1,SUBSET_1:32;
+      hence thesis by SETFAM_1:def 6,e0,F3;
+    end;
+    hence thesis by a0,XBOOLE_0:def 10;
+  end;
+
+theorem LemmaC:
+  for U being non empty set,
+      A1, A2, B1, B2 being Subset of U st
+        A1 c= A2 & B1 c= B2 holds
+      DIFFERENCE (Inter (A1,A2), Inter (B1,B2)) =
+      { C where C is Subset of U : A1 \ B2 c= C & C c= A2 \ B1 }
+  proof
+    let U be non empty set;
+    let A1,A2,B1,B2 be Subset of U;
+    assume A1 c= A2 & B1 c= B2; then
+    reconsider A12 = Inter (A1,A2), B12 = Inter (B1,B2)
+      as non empty ordered Subset-Family of U by nowosc1;
+a2: min A12 = A1 & max A12 = A2 by nowosc2;
+    min B12 = B1 & max B12 = B2 by nowosc2;
+    hence thesis by LemmaC0,a2;
+  end;
+
+definition let U be non empty set,
+               A, B be non empty IntervalSet of U;
+  func A _\_ B -> IntervalSet of U equals
+    DIFFERENCE (A, B);
+  coherence
+  proof
+    set IT = DIFFERENCE (A, B);
+    consider A1, A2 being Subset of U such that
+A1: A1 c= A2 & A = Inter (A1, A2) by U2;
+    consider B1, B2 being Subset of U such that
+A2: B1 c= B2 & B = Inter (B1, B2) by U2;
+    set LAB = A1 \ B2;
+    set UAB = A2 \ B1;
+    IT = Inter (LAB, UAB) by LemmaC,A1,A2;
+    hence thesis;
+  end;
+end;
+
+registration let U be non empty set,
+                 A, B be non empty IntervalSet of U;
+  cluster A _\_ B -> non empty;
+  coherence
+  proof
+    A _\_ B <> {}
+    proof
+      assume Q1:A _\_ B = {};
+      consider A1, A2 being Subset of U such that
+p1:   A1 c= A2 & A = Inter (A1, A2) by U2;
+      consider B1, B2 being Subset of U such that
+p2:   B1 c= B2 & B = Inter (B1, B2) by U2;
+      consider y being set such that q4: y = A1 \ B1;
+      not (A1 in A & B1 in B & y = A1 \ B1) by SETFAM_1:def 6,Q1;
+      hence thesis by q4,p1,p2;
+    end;
+    hence thesis;
+  end;
+end;
+
+theorem Dif:
+  A _\_ B = Inter (A``1 \ B``2, A``2 \ B``1)
+  proof
+    reconsider AA = A, BB = B as non empty ordered Subset-Family of U
+      by CorNowosc1;
+    AA = Inter (A``1,A``2) & BB = Inter (B``1,B``2) by Wazne33; then
+    min AA = A``1 & min BB = B``1 & max AA = A``2 & max BB = B``2
+      by nowosc2;
+    hence thesis by LemmaC0;
+  end;
+
+theorem Dif2:
+  for X,Y being Subset of U st A = Inter (X,Y) holds
+    A _\_ C = Inter (X \ C``2, Y \ C``1)
+  proof
+    let X,Y be Subset of U;
+    assume a0: A = Inter (X,Y);
+    A = Inter (A``1,A``2) by Wazne33; then
+    X = A``1 & Y = A``2 by a0,Pik;
+    hence thesis by Dif;
+  end;
+
+theorem Dif3:
+  for X,Y,W,Z being Subset of U st A = Inter (X,Y) & C = Inter (W,Z) holds
+    A _\_ C = Inter (X \ Z, Y \ W)
+  proof
+    let X,Y,W,Z be Subset of U;
+    assume a0: A = Inter (X,Y) & C = Inter (W,Z);
+    A= Inter (A``1,A``2) & C = Inter (C``1,C``2) by Wazne33; then
+    A``1 = X & A``2 = Y & C``1 =  W & C``2 = Z by a0,Pik;
+    hence thesis by Dif;
+  end;
+
+theorem Niep:
+  for U being non empty set holds
+    Inter ([#]U,[#]U) is non empty IntervalSet of U
+  proof
+    let U be non empty set;
+    Inter ([#]U,[#]U) = {[#]U} by ThA1;
+    hence thesis;
+  end;
+
+theorem Niep1:
+  for U being non empty set holds
+    Inter ({}U,{}U) is non empty IntervalSet of U
+  proof
+    let U be non empty set;
+    Inter ({}U,{}U) = {{}} by ThA1;
+    hence thesis;
+  end;
+
+registration let U be non empty set;
+  cluster Inter ([#]U,[#]U) -> non empty;
+  coherence by Niep;
+  cluster Inter ({}U,{}U) -> non empty;
+  coherence by Niep1;
+end;
+
+definition let U be non empty set, A be non empty IntervalSet of U;
+  func A ^ -> non empty IntervalSet of U equals
+    Inter ([#]U,[#]U) _\_ A;
+  coherence;
+end;
+
+theorem ThDop0:
+  for U being non empty set, A being non empty IntervalSet of U holds
+    A^ = Inter ((A``2)`,(A``1)`) by Dif2;
+
+theorem ThDop1:
+  for X,Y being Subset of U st A = Inter (X,Y) & X c= Y holds
+    A^ = Inter (Y`,X`)
+  proof
+    let X,Y be Subset of U;
+    assume a0: A = Inter (X,Y) & X c= Y;
+    Inter (X,Y) = Inter (A``1,A``2) by Wazne33,a0; then
+    X = A``1 & Y = A``2 by Pik,a0;
+    hence thesis by Dif2;
+  end;
+
+theorem
+  (Inter ({}U,{}U))^ = Inter ([#]U,[#]U)
+  proof
+    (Inter ({}U,{}U))^ = Inter ([#]U,({}U)`) by ThDop1;
+    hence thesis;
+  end;
+
+theorem
+  (Inter ([#]U,[#]U))^ = Inter ({}U,{}U)
+  proof
+    (Inter ([#]U,[#]U))^ = Inter (([#]U)`,([#]U)`) by ThDop1
+      .= Inter ({}U,([#]U)`) by XBOOLE_1:37;
+    hence thesis by XBOOLE_1:37;
+  end;
+
+begin :: Counterexamples
+
+theorem
+  ex A being non empty IntervalSet of U st A _/\_ A^ <> Inter ({}U,{}U)
+  proof
+a0: [#]U in Inter ({}U,[#]U); then
+    consider A being non empty IntervalSet of U such that
+a1: A = Inter ({}U,[#]U);
+d2: A^ = Inter (([#]U)`,({}U)`) by a1,ThDop1
+    .= Inter ({}U,[#]U);
+    A^ = Inter (A^``1,A^``2) by Wazne33; then
+    A^``1 = {}U & A^``2 = [#]U by Pik,d2; then
+a2: A _/\_ A^ = Inter ({}U /\ {}U, [#]U /\ [#]U) by a1,Int,d2
+    .= Inter ({}U, [#]U);
+    not [#]U c= {}U; then
+    not [#]U in Inter ({}U,{}U) by Lemacik;
+    hence thesis by a2,a0;
+  end;
+
+theorem
+  ex A being non empty IntervalSet of U st A _\/_ A^ <> Inter ([#]U,[#]U)
+  proof
+    not [#]U c= {}U; then
+a2: not {}U in Inter ([#]U,[#]U) by Lemacik;
+a1: {}U in Inter ({}U,[#]U); then
+    consider A being non empty IntervalSet of U such that
+b1: A = Inter ({}U,[#]U);
+d2: A^ = Inter (([#]U)`,({}U)`) by ThDop1,b1
+      .= Inter ({}U,[#]U);
+    A^ = Inter (A^``1,A^``2) by Wazne33; then
+    A^``1 = {}U & A^``2 = [#]U by Pik,d2; then
+    A _\/_ A^ = Inter ({}U \/ {}U, [#]U \/ [#]U) by Un,b1,d2
+             .= Inter ({}U,[#]U);
+    hence thesis by a1,a2;
+  end;
+
+theorem
+  ex A being non empty IntervalSet of U st A _\_ A <> Inter ({}U,{}U)
+  proof
+    Inter ({}U,[#]U) <> {} by Lemacik; then
+    consider A being non empty IntervalSet of U such that
+a1: A = Inter ({}U,[#]U);
+a3: A _\_ A = Inter ({}U \ [#]U, [#]U \ {}U) by Dif3,a1
+    .= Inter ({}U, [#]U);
+    not U c= {}; then
+    [#]U in Inter ({}U,[#]U) & not [#]U in Inter ({}U,{}U) by Lemacik;
+    hence thesis by a3;
+  end;
+
+theorem
+  for A being non empty IntervalSet of U holds
+    U in A _\/_ (A^)
+  proof
+    let A be non empty IntervalSet of U;
+b1: U c= A``2 \/ (A``1)`
+    proof
+      let x be set;
+      assume c1: x in U;
+      A``1 c= A``2 by wazne2; then
+c2:   (A``2)` c= (A``1)` by SUBSET_1:31;
+      x in A``2 or x in (A``2)` by c1,XBOOLE_0:def 5;
+      hence thesis by c2,XBOOLE_0:def 3;
+    end;
+a1: A^ = Inter ((A``2)`,(A``1)`) by ThDop0;
+    A^ = Inter (A^``1,A^``2) by Wazne33; then
+ab: A^``1 = (A``2)` & A^``2 = (A``1)` by Pik,a1;
+    A _\/_ (A^) = Inter (A``1 \/ (A``2)`, A``2 \/ (A``1)`) by ab,Un;
+    hence thesis by b1;
+  end;
+
+theorem
+  for A being non empty IntervalSet of U holds
+    {} in A _/\_ (A^)
+    proof
+    let A be non empty IntervalSet of U;
+a0: A``1 /\ (A``2)` c= {}
+    proof
+      let x be set;
+c1:   A``1 c= A``2 by wazne2;
+      assume x in  A``1 /\ (A``2)`; then
+      x in A``1 & x in (A``2)` by XBOOLE_0:def 4;
+      hence thesis by c1,XBOOLE_0:def 5;
+    end;
+e1: A^ = Inter ((A``2)`,(A``1)`) by ThDop0;
+    A^ = Inter ((A^)``1, (A^)``2) by Wazne33; then
+e3: A^``1 = (A``2)` & A^``2 = (A``1)` by Pik,e1;
+a1: A _/\_ (A^) = Inter (A``1 /\ (A``2)`, A``2 /\ (A``1)`) by e3,Int;
+    A``1 /\ (A``2)` c= {} & {} c= A``2 /\ (A``1)` by a0,XBOOLE_1:2;
+    hence thesis by a1,Lemacik;
+  end;
+
+theorem
+  for A being non empty IntervalSet of U holds
+    {} in A _\_ A
+  proof
+    let A be non empty IntervalSet of U;
+b0: A _\_ A = Inter (A``1 \ A``2, A``2 \ A``1) by Dif;
+a0: A``1 \ A``2 c= {}
+    proof
+      let x be set;
+      assume x in A``1 \ A``2; then
+      x in A``1 & not x in A``2 & A``1 c= A``2 by wazne2,XBOOLE_0:def 5;
+      hence thesis;
+    end;
+    {} c= A``2 \ A``1 by XBOOLE_1:2;
+    hence thesis by Lemacik, a0,b0;
+  end;
+
+begin :: Lattice of Interval Sets
+
+definition let U be non empty set;
+  func IntervalSets U -> non empty set means :DefAG:
+    for x being set holds x in it iff x is non empty IntervalSet of U;
+  existence
+  proof
+    defpred P[set] means $1 is non empty IntervalSet of U;
+    ex X being set st for x being set holds
+    x in X iff x in bool bool U & P[x] from XBOOLE_0:sch 1; then
+    consider X being set such that
+A1: for x being set holds x in X iff x in bool bool U & P[x];
+    consider x being Element of U;
+    reconsider E = {x} as Subset of U by ZFMISC_1:37;
+    {E} is non empty IntervalSet of U by ThB1; then
+    reconsider X as non empty set by A1;
+    take X;
+    thus thesis by A1;
+  end;
+  uniqueness
+  proof
+    let S1,S2 be non empty set such that
+A1: for x being set holds x in S1 iff x is non empty IntervalSet of U and
+A2: for x being set holds x in S2 iff x is non empty IntervalSet of U;
+    for x being set holds x in S1 iff x in S2
+    proof
+      let x be set;
+      thus x in S1 implies x in S2
+      proof
+        assume x in S1; then
+        x is non empty IntervalSet of U by A1;
+        hence thesis by A2;
+      end;
+      assume x in S2; then
+      x is non empty IntervalSet of U by A2;
+      hence thesis by A1;
+    end;
+    hence thesis by TARSKI:2;
+  end;
+end;
+
+definition let U be non empty set;
+  func InterLatt U -> strict non empty LattStr means :DefLLL:
+    the carrier of it = IntervalSets U &
+    for a, b being Element of the carrier of it,
+        a', b' being non empty IntervalSet of U st a' = a & b' = b holds
+      (the L_join of it).(a,b) = a' _\/_ b' &
+      (the L_meet of it).(a,b) = a' _/\_ b';
+  existence
+  proof
+    deffunc F(non empty IntervalSet of U,non empty IntervalSet of U) =
+      $1 _\/_ $2;
+    deffunc G(non empty IntervalSet of U,non empty IntervalSet of U) =
+      $1 _/\_ $2;
+    set B = IntervalSets U;
+    defpred P[Element of B,Element of B,Element of B] means
+      ex a', b' being non empty IntervalSet of U st a' = $1 & b' = $2 &
+      $3 = a' _\/_ b';
+A1: for x,y being Element of B ex z being Element of B st P[x,y,z]
+    proof
+      let x,y be Element of B;
+      reconsider x' = x, y' = y as non empty IntervalSet of U by DefAG;
+      reconsider z = x' _\/_ y' as Element of B by DefAG;
+      take z;
+      thus thesis;
+    end;
+    consider B1 being BinOp of B such that A6:
+     for x,y being Element of B holds P[x,y,B1.(x,y)] from BINOP_1:sch 3(A1);
+    defpred R[Element of B,Element of B,Element of B] means
+      ex a', b' being non empty IntervalSet of U st a' = $1 & b' = $2 &
+      $3 = a' _/\_ b';
+A1: for x,y being Element of B ex z being Element of B st R[x,y,z]
+    proof
+      let x,y be Element of B;
+      reconsider x' = x, y' = y as non empty IntervalSet of U by DefAG;
+      reconsider z = x' _/\_ y' as Element of B by DefAG;
+      take z;
+      thus thesis;
+    end;
+    consider B2 being BinOp of B such that
+A7: for x,y being Element of B holds R[x,y,B2.(x,y)] from BINOP_1:sch 3(A1);
+    take IT = LattStr (# B, B1, B2 #);
+    thus the carrier of IT = IntervalSets U;
+    let a, b be Element of the carrier of IT,
+        a', b' be non empty IntervalSet of U;
+    assume
+F0: a' = a & b' = b;
+    reconsider x = a, y = b as Element of B;
+    consider a', b' being non empty IntervalSet of U such that
+F1: a' = x & b' = y & B1.(x,y) = a' _\/_ b' by A6;
+    consider a1, b1 being non empty IntervalSet of U such that
+F2: a1 = x & b1 = y & B2.(x,y) = a1 _/\_ b1 by A7;
+    thus thesis by F1,F2,F0;
+  end;
+  uniqueness
+  proof
+    let L1,L2 be strict non empty LattStr such that
+A1: the carrier of L1 = IntervalSets U &
+    for a, b being Element of the carrier of L1,
+        a', b' being non empty IntervalSet of U st a' = a & b' = b holds
+      (the L_join of L1).(a,b) = a' _\/_ b' &
+      (the L_meet of L1).(a,b) = a' _/\_ b' and
+A2: the carrier of L2 = IntervalSets U &
+    for a, b being Element of the carrier of L2,
+        a', b' being non empty IntervalSet of U st a' = a & b' = b holds
+      (the L_join of L2).(a,b) = a' _\/_ b' &
+      (the L_meet of L2).(a,b) = a' _/\_ b';
+    for a, b being Element of L1 holds
+      (the L_join of L1).(a,b) = (the L_join of L2).(a,b)
+    proof
+      let a,b be Element of L1;
+      reconsider a' = a, b' = b as non empty IntervalSet of U by A1,DefAG;
+B3:   (the L_join of L1).(a,b) = a' _\/_ b' by A1
+        .= (the L_join of L2).(a,b) by A2,A1;
+      thus thesis by B3;
+    end; then
+Z1: the L_join of L1 = the L_join of L2 by A1,A2,BINOP_1:2;
+    for a, b being Element of L1 holds
+      (the L_meet of L1).(a,b) = (the L_meet of L2).(a,b)
+    proof
+      let a,b be Element of L1;
+      reconsider a' = a, b' = b as non empty IntervalSet of U by A1,DefAG;
+      (the L_meet of L1).(a,b) = a' _/\_ b' by A1
+        .= (the L_meet of L2).(a,b) by A1,A2;
+      hence thesis;
+    end;
+    hence thesis by A1,A2,Z1,BINOP_1:2;
+  end;
+end;
+
+registration let U be non empty set;
+  cluster InterLatt U -> Lattice-like;
+  correctness
+  proof
+a0: InterLatt U is join-commutative
+    proof
+      for a,b being Element of InterLatt U holds a"\/"b = b"\/"a
+      proof
+        let a,b be Element of InterLatt U;
+        a in the carrier of InterLatt U &
+          b in the carrier of InterLatt U; then
+        a in IntervalSets U & b in IntervalSets U by DefLLL; then
+        reconsider a' = a, b' = b as non empty IntervalSet of U by DefAG;
+        a "\/" b = a' _\/_ b' by DefLLL
+        .= b' _\/_ a'
+        .= b "\/" a by DefLLL;
+        hence thesis;
+      end;
+      hence thesis by LATTICES:def 4;
+    end;
+a1: InterLatt U is join-associative
+    proof
+      for a,b,c being Element of InterLatt U
+        holds a"\/"(b"\/"c) = (a"\/"b)"\/"c
+      proof
+        let a,b,c be Element of InterLatt U;
+        a in the carrier of InterLatt U &
+        b in the carrier of InterLatt U &
+        c in the carrier of InterLatt U; then
+        a in IntervalSets U & b in IntervalSets U & c in IntervalSets U
+          by DefLLL; then
+        reconsider a' = a, b' = b, c' = c as non empty IntervalSet of U
+          by DefAG;
+        reconsider bc = b' _\/_ c' as non empty IntervalSet of U;
+        reconsider ab = a' _\/_ b' as non empty IntervalSet of U;
+        bc in IntervalSets U & ab in IntervalSets U by DefAG; then
+Y:      bc in the carrier of InterLatt U & ab in the carrier of InterLatt U
+          by DefLLL;
+        a "\/" (b "\/" c) = (the L_join of InterLatt U).(a,bc) by DefLLL
+        .= a' _\/_ bc by DefLLL,Y
+        .= (a' _\/_ b') _\/_ c' by Asso1
+        .= (the L_join of InterLatt U).(ab,c') by DefLLL,Y
+        .= a "\/" b "\/" c by DefLLL;
+        hence thesis;
+      end;
+      hence thesis by LATTICES:def 5;
+    end;
+a2: InterLatt U is meet-absorbing
+    proof
+      for a,b being Element of InterLatt U holds (a"/\"b)"\/"b = b
+      proof
+        let a,b be Element of InterLatt U;
+        a in the carrier of InterLatt U &
+        b in the carrier of InterLatt U; then
+        a in IntervalSets U & b in IntervalSets U by DefLLL; then
+        reconsider a' = a, b' = b as non empty IntervalSet of U
+        by DefAG;
+        reconsider ab = a' _/\_ b' as non empty IntervalSet of U;
+        ab in IntervalSets U by DefAG; then
+Y:      ab in the carrier of InterLatt U by DefLLL;
+        (a"/\"b)"\/"b = (the L_join of InterLatt U).(ab,b) by DefLLL
+        .= ab _\/_ b' by DefLLL,Y
+        .= b by Abs2;
+        hence thesis;
+      end;
+      hence thesis by LATTICES:def 8;
+    end;
+a3: InterLatt U is meet-associative
+    proof
+      for a,b,c being Element of InterLatt U holds
+        a"/\"(b"/\"c) = (a"/\"b) "/\"c
+      proof
+        let a,b,c be Element of InterLatt U;
+        a in the carrier of InterLatt U &
+        b in the carrier of InterLatt U &
+        c in the carrier of InterLatt U; then
+        a in IntervalSets U & b in IntervalSets U & c in IntervalSets U
+          by DefLLL; then
+        reconsider a' = a, b' = b, c' = c as non empty IntervalSet of U
+          by DefAG;
+        reconsider bc = b' _/\_ c', ab = a' _/\_ b'
+          as non empty IntervalSet of U;
+        bc in IntervalSets U & ab in IntervalSets U by DefAG; then
+Y:      bc in the carrier of InterLatt U & ab in the carrier of InterLatt U
+          by DefLLL;
+        a"/\"(b"/\"c) = (the L_meet of InterLatt U).(a,bc) by DefLLL
+        .= a' _/\_ bc by DefLLL,Y
+        .= (a' _/\_ b') _/\_ c' by Prz1
+        .= (the L_meet of InterLatt U).(ab,c') by DefLLL,Y
+        .= (a"/\"b)"/\"c by DefLLL;
+        hence thesis;
+      end;
+      hence thesis by LATTICES:def 7;
+    end;
+a4: InterLatt U is join-absorbing
+    proof
+      for a,b being Element of the carrier of InterLatt U holds a"/\"(a"\/"b)=a
+      proof
+        let a,b be Element of the carrier of InterLatt U;
+        a in the carrier of InterLatt U &
+          b in the carrier of InterLatt U; then
+        a in IntervalSets U & b in IntervalSets U by DefLLL; then
+        reconsider a' = a, b' = b as non empty IntervalSet of U by DefAG;
+        reconsider ab = a' _\/_ b' as non empty IntervalSet of U;
+        ab in IntervalSets U by DefAG; then
+X:      ab in the carrier of InterLatt U by DefLLL;
+        a "/\" (a "\/" b)
+         = (the L_meet of InterLatt U).(a',a' _\/_ b') by DefLLL
+        .= a' _/\_ ab by DefLLL,X
+        .= a by Abs1;
+        hence thesis;
+      end;
+      hence thesis by LATTICES:def 9;
+    end;
+    InterLatt U is meet-commutative
+    proof
+      for a,b being Element of the carrier of InterLatt U holds a"/\"b = b"/\"a
+      proof
+        let a,b be Element of the carrier of InterLatt U;
+        a in the carrier of InterLatt U &
+          b in the carrier of InterLatt U; then
+        a in IntervalSets U & b in IntervalSets U by DefLLL; then
+        reconsider a' = a, b' = b as non empty IntervalSet of U by DefAG;
+        a' _/\_ b' = b' _/\_ a'; then
+        (the L_meet of InterLatt U).(a,b) = b' _/\_ a' by DefLLL
+          .= (the L_meet of InterLatt U).(b,a) by DefLLL;
+        hence thesis;
+      end;
+      hence thesis by LATTICES:def 6;
+    end;
+    hence thesis by a0,a1,a2,a3,a4;
+  end;
+end;
+
+definition let X be Tolerance_Space;
+  mode RoughSet of X ->
+    Element of [:bool the carrier of X, bool the carrier of X:] means :Def1':
+    not contradiction;
+  existence;
+end;
+
+theorem Def1:
+  for X being Tolerance_Space,
+      A being RoughSet of X holds
+    ex B, C being Subset of X st A = [B,C]
+  proof
+    let X be Tolerance_Space,
+        A be RoughSet of X;
+    consider A1, A2 being set such that
+A1: A1 in bool the carrier of X & A2 in bool the carrier of X & A = [A1,A2]
+      by ZFMISC_1:def 2;
+    reconsider A1, A2 as Subset of X by A1;
+    take A1, A2;
+    thus thesis by A1;
+  end;
+
+definition let X be Tolerance_Space, A be Subset of X;
+  func RS A -> RoughSet of X equals
+    [LAp A, UAp A];
+  coherence
+  proof
+    [LAp A, UAp A] in [:bool the carrier of X, bool the carrier of X:]
+      by ZFMISC_1:106;
+    hence thesis by Def1';
+  end;
+end;
+
+definition let X be Tolerance_Space, A be RoughSet of X;
+  func LAp A -> Subset of X equals
+    A`1;
+  coherence
+  proof
+    consider A', B' being Subset of X such that
+A1: A = [A', B'] by Def1;
+    thus thesis by A1,MCART_1:7;
+  end;
+  func UAp A -> Subset of X equals
+    A`2;
+  coherence
+  proof
+    consider A', B' being Subset of X such that
+A1: A = [A', B'] by Def1;
+    thus thesis by A1,MCART_1:7;
+  end;
+end;
+
+definition let X be Tolerance_Space; let A, B be RoughSet of X;
+  redefine pred A = B means :Def5:
+    LAp A = LAp B &
+    UAp A = UAp B;
+  compatibility
+  proof
+    hereby assume
+A0:   A = B;
+      thus LAp A = LAp B & UAp A = UAp B by A0;
+    end;
+    assume A1: LAp A = LAp B & UAp A = UAp B;
+    consider A1, B1 being Subset of X such that
+A2: A = [A1, B1] by Def1;
+    consider A2, B2 being Subset of X such that
+A3: B = [A2, B2] by Def1;
+    LAp A = A1 by A2,MCART_1:7; then
+A6: A1 = A2 by A1,A3,MCART_1:7;
+    UAp A = B1 by A2,MCART_1:7;
+    hence thesis by A2,A6,A3,A1,MCART_1:7;
+  end;
+end;
+
+definition let X be Tolerance_Space; let A, B be RoughSet of X;
+  func A _\/_ B -> RoughSet of X equals
+    [LAp A \/ LAp B, UAp A \/ UAp B];
+  coherence
+  proof
+    [LAp A \/ LAp B, UAp A \/ UAp B] in
+      [:bool the carrier of X, bool the carrier of X:] by ZFMISC_1:106;
+    hence thesis by Def1';
+  end;
+
+  func A _/\_ B -> RoughSet of X equals
+    [LAp A /\ LAp B, UAp A /\ UAp B];
+  coherence
+  proof
+    [LAp A /\ LAp B, UAp A /\ UAp B] in
+      [:bool the carrier of X, bool the carrier of X:] by ZFMISC_1:106;
+    hence thesis by Def1';
+  end;
+end;
+
+ reserve X for Tolerance_Space,
+         A, B, C for RoughSet of X;
+
+theorem Th1:
+  LAp (A _\/_ B) = LAp A \/ LAp B
+  proof
+    thus LAp (A _\/_ B) c= LAp A \/ LAp B
+    proof
+      let x be set;
+      assume x in LAp (A _\/_ B);
+      hence thesis by MCART_1:7;
+    end;
+    thus LAp A \/ LAp B c= LAp (A _\/_ B)
+    proof
+      let x be set;
+      assume x in LAp A \/ LAp B;
+      hence thesis by MCART_1:7;
+    end;
+  end;
+
+theorem Th2:
+  UAp (A _\/_ B) = UAp A \/ UAp B
+  proof
+    thus UAp (A _\/_ B) c= UAp A \/ UAp B
+    proof
+      let x be set;
+      assume x in UAp (A _\/_ B);
+      hence thesis by MCART_1:7;
+    end;
+    thus UAp A \/ UAp B c= UAp (A _\/_ B)
+    proof
+      let x be set;
+      assume x in UAp A \/ UAp B;
+      hence thesis by MCART_1:7;
+    end;
+  end;
+
+theorem Th3:
+  LAp (A _/\_ B) = LAp A /\ LAp B
+  proof
+    thus LAp (A _/\_ B) c= LAp A /\ LAp B
+    proof
+      let x be set;
+      assume x in LAp (A _/\_ B);
+      hence thesis by MCART_1:7;
+    end;
+    thus LAp A /\ LAp B c= LAp (A _/\_ B)
+    proof
+      let x be set;
+      assume x in LAp A /\ LAp B;
+      hence thesis by MCART_1:7;
+    end;
+  end;
+
+theorem Th4:
+  UAp (A _/\_ B) = UAp A /\ UAp B
+  proof
+    thus UAp (A _/\_ B) c= UAp A /\ UAp B
+    proof
+      let x be set;
+      assume x in UAp (A _/\_ B);
+      hence thesis by MCART_1:7;
+    end;
+    thus UAp A /\ UAp B c= UAp (A _/\_ B)
+    proof
+      let x be set;
+      assume x in UAp A /\ UAp B;
+      hence thesis by MCART_1:7;
+    end;
+  end;
+
+:: Properties
+
+theorem
+  A _\/_ A = A
+  proof
+A1: LAp (A _\/_ A) = LAp A by Th1;
+    UAp (A _\/_ A) = UAp A \/ UAp A by Th2;
+    hence thesis by A1,Def5;
+  end;
+
+theorem Th21:
+  A _/\_ A = A
+  proof
+A1: LAp (A _/\_ A) = LAp A by Th3;
+    UAp (A _/\_ A) = UAp A /\ UAp A by Th4;
+    hence thesis by A1, Def5;
+  end;
+
+theorem
+  A _\/_ B = B _\/_ A;
+
+theorem
+  A _/\_ B = B _/\_ A;
+
+theorem Th7:
+  A _\/_ B _\/_ C = A _\/_ (B _\/_ C)
+  proof
+a:  LAp (A _\/_ B) \/ LAp C = LAp A \/ LAp B \/ LAp C by Th1;
+s:  (LAp A \/ LAp B) \/ LAp C = LAp A \/ (LAp B \/ LAp C) by XBOOLE_1:4;
+d:  LAp A \/ (LAp B \/ LAp C) = LAp A \/ LAp (B _\/_ C) by Th1;
+A1: LAp A \/ LAp (B _\/_ C) = LAp (A _\/_ (B _\/_ C)) by Th1;
+T1: LAp (A _\/_ B _\/_ C) = LAp (A _\/_ (B _\/_ C)) by Th1,A1,a,s,d;
+A2: UAp (A _\/_ B _\/_ C) = UAp (A _\/_ B) \/ UAp C by Th2;
+q:  UAp (A _\/_ B) \/ UAp C = UAp A \/ UAp B \/ UAp C by Th2;
+w:  (UAp A \/ UAp B) \/ UAp C = UAp A \/ (UAp B \/ UAp C) by XBOOLE_1:4;
+e:  UAp A \/ (UAp B \/ UAp C) = UAp A \/ UAp (B _\/_ C) by Th2;
+    UAp A \/ UAp (B _\/_ C) = UAp (A _\/_ (B _\/_ C)) by Th2;
+    hence thesis by T1,Def5,A2,q,w,e;
+  end;
+
+theorem Th8:
+  A _/\_ B _/\_ C = A _/\_ (B _/\_ C)
+  proof
+a:  LAp (A _/\_ B) /\ LAp C = LAp A /\ LAp B /\ LAp C by Th3;
+s:  (LAp A /\ LAp B) /\ LAp C = LAp A /\ (LAp B /\ LAp C) by XBOOLE_1:16;
+q:  UAp (A _/\_ B) /\ UAp C = UAp A /\ UAp B /\ UAp C by Th4;
+w:  (UAp A /\ UAp B) /\ UAp C = UAp A /\ (UAp B /\ UAp C) by XBOOLE_1:16;
+    UAp A /\ (UAp B /\ UAp C) = UAp A /\ UAp (B _/\_ C) by Th4;
+    hence thesis by a,s,Th3,q,w;
+  end;
+
+theorem Th9:
+  A _/\_ (B _\/_ C) = (A _/\_ B) _\/_ (A _/\_ C)
+  proof
+A0: LAp (A _/\_ (B _\/_ C)) = LAp A /\ LAp (B _\/_ C) by Th3;
+A1: LAp A /\ LAp (B _\/_ C) = LAp A /\ (LAp B \/ LAp C) by Th1;
+A2: LAp A /\ (LAp B \/ LAp C) = (LAp A /\ LAp B) \/ (LAp A /\ LAp C)
+      by XBOOLE_1:23;
+A3: (LAp A /\ LAp B) \/ (LAp A /\ LAp C) =
+      (LAp (A _/\_ B)) \/ (LAp A /\ LAp C) by Th3;
+    (LAp (A _/\_ B)) \/ (LAp A /\ LAp C) =
+      (LAp (A _/\_ B)) \/ (LAp (A _/\_ C)) by Th3; then
+T1: LAp (A _/\_ (B _\/_ C)) = LAp ((A _/\_ B) _\/_ (A _/\_ C))
+      by A0,A1,A2,A3,Th1;
+B0: UAp (A _/\_ (B _\/_ C)) = UAp A /\ UAp (B _\/_ C) by Th4;
+B1: UAp A /\ UAp (B _\/_ C) = UAp A /\ (UAp B \/ UAp C) by Th2;
+B2: UAp A /\ (UAp B \/ UAp C) = (UAp A /\ UAp B) \/ (UAp A /\ UAp C)
+      by XBOOLE_1:23;
+B3: (UAp A /\ UAp B) \/ (UAp A /\ UAp C) =
+      (UAp (A _/\_ B)) \/ (UAp A /\ UAp C) by Th4;
+    (UAp (A _/\_ B)) \/ (UAp A /\ UAp C) =
+      (UAp (A _/\_ B)) \/ (UAp (A _/\_ C)) by Th4; then
+    UAp (A _/\_ (B _\/_ C)) = UAp ((A _/\_ B) _\/_ (A _/\_ C))
+      by B0,B1,B2,B3,Th2;
+    hence thesis by T1,Def5;
+  end;
+
+theorem Th10:
+  A _\/_ (A _/\_ B) = A
+  proof
+A1: LAp (A _\/_ (A _/\_ B)) = LAp A \/ LAp (A _/\_ B) by Th1
+      .= LAp A \/ (LAp A /\ LAp B) by Th3
+      .= LAp A by XBOOLE_1:22;
+    UAp (A _\/_ (A _/\_ B)) = UAp A \/ UAp (A _/\_ B) by Th2
+      .= UAp A \/ (UAp A /\ UAp B) by Th4
+      .= UAp A by XBOOLE_1:22;
+    hence thesis by A1,Def5;
+  end;
+
+theorem
+  A _/\_ (A _\/_ B) = A
+  proof
+A1: LAp (A _/\_ (A _\/_ B)) = LAp A /\ LAp (A _\/_ B) by Th3
+      .= LAp A /\ (LAp A \/ LAp B) by Th1
+      .= LAp A by XBOOLE_1:21;
+    UAp (A _/\_ (A _\/_ B)) = UAp A /\ UAp (A _\/_ B) by Th4
+      .= UAp A /\ (UAp A \/ UAp B) by Th2
+      .= UAp A by XBOOLE_1:21;
+    hence thesis by A1,Def5;
+  end;
+
+begin :: Lattice of Rough Sets
+
+definition let X;
+  func RoughSets X means :DefRSX:
+    for x being set holds x in it iff x is RoughSet of X;
+  existence
+  proof
+    defpred P[set] means $1 is RoughSet of X;
+    consider F being set such that
+A1: for x being set holds x in F iff
+    x in [:bool the carrier of X,bool the carrier of X:] & P[x]
+     from XBOOLE_0:sch 1;
+    take F;
+    let x be set;
+    thus x in F implies x is RoughSet of X by A1;
+    assume x is RoughSet of X;
+    hence thesis by A1;
+  end;
+  uniqueness
+  proof
+    let F1,F2 be set such that
+A3: (for x being set holds x in F1 iff x is RoughSet of X) &
+    (for x being set holds x in F2 iff x is RoughSet of X);
+    now let x be set;
+      (x in F1 iff x is RoughSet of X) &
+      (x in F2 iff x is RoughSet of X) by A3;
+      hence x in F1 iff x in F2;
+    end;
+    hence thesis by TARSKI:2;
+  end;
+end;
+
+registration let X;
+  cluster RoughSets X -> non empty;
+  coherence
+  proof
+    consider A being RoughSet of X;
+    A in RoughSets X by DefRSX;
+    hence thesis;
+  end;
+end;
+
+definition let X; let R be Element of RoughSets X;
+  func @R -> RoughSet of X equals
+    R;
+  coherence by DefRSX;
+end;
+
+definition let X; let R be RoughSet of X;
+  func R@ -> Element of RoughSets X equals
+    R;
+  coherence by DefRSX;
+end;
+
+definition let X;
+  func RSLattice X -> strict LattStr means :Def8:
+    the carrier of it = RoughSets X &
+    for A, B being Element of RoughSets X,
+        A', B' being RoughSet of X st A = A' & B = B' holds
+     (the L_join of it).(A,B) = A' _\/_ B' &
+     (the L_meet of it).(A,B) = A' _/\_ B';
+  existence
+  proof
+    deffunc U(Element of RoughSets X,
+              Element of RoughSets X) = (@$1 _\/_ @$2)@;
+    consider j being BinOp of RoughSets X such that
+A1: for x,y being Element of RoughSets X holds j.(x,y) = U(x,y)
+      from BINOP_1:sch 4;
+    deffunc W(Element of RoughSets X,
+              Element of RoughSets X) = (@$1 _/\_ @$2)@;
+    consider m being BinOp of RoughSets X such that
+A2: for x,y being Element of RoughSets X holds m.(x,y) = W(x,y)
+      from BINOP_1:sch 4;
+    take IT = LattStr (# RoughSets X, j, m #);
+    thus the carrier of IT = RoughSets X;
+    let A, B be Element of RoughSets X,
+        A', B' be RoughSet of X;
+    assume
+B2: A = A' & B = B';
+    thus (the L_join of IT).(A,B) = U(A,B) by A1
+       .= A' _\/_ B' by B2;
+    thus (the L_meet of IT).(A,B) = W(A,B) by A2
+       .= A' _/\_ B' by B2;
+  end;
+  uniqueness
+  proof
+    let A1, A2 be strict LattStr such that
+A3: the carrier of A1 = RoughSets X &
+    for A, B being Element of RoughSets X,
+        A', B' being RoughSet of X st A = A' & B = B' holds
+    (the L_join of A1).(A,B) = A' _\/_ B' &
+    (the L_meet of A1).(A,B) = A' _/\_ B' and
+A4: the carrier of A2 = RoughSets X &
+    for A, B being Element of RoughSets X,
+        A', B' being RoughSet of X st A = A' & B = B' holds
+    (the L_join of A2).(A,B) = A' _\/_ B' &
+    (the L_meet of A2).(A,B) = A' _/\_ B';
+    reconsider a3 = the L_meet of A1, a4 = the L_meet of A2,
+               a1 = the L_join of A1, a2 = the L_join of A2
+        as BinOp of RoughSets X by A3,A4;
+    now let x,y be Element of RoughSets X;
+      thus a1.(x,y) = @x _\/_ @y by A3
+        .= a2.(x,y) by A4;
+    end;
+    then A5: a1 = a2 by BINOP_1:2;
+    now let x,y be Element of RoughSets X;
+      thus a3.(x,y) = @x _/\_ @y by A3
+         .= a4.(x,y) by A4;
+    end;
+    hence thesis by A3,A4,A5,BINOP_1:2;
+  end;
+end;
+
+registration let X;
+  cluster RSLattice X -> non empty;
+  coherence
+  proof
+    the carrier of RSLattice X = RoughSets X by Def8;
+    hence thesis;
+  end;
+end;
+
+Lm6: for a,b being Element of RSLattice X holds
+       a "\/" b = b "\/" a
+  proof
+    set G = RSLattice X;
+    let a,b be Element of G;
+    reconsider a1 = a, b1 = b as Element of RoughSets X by Def8;
+    reconsider a' = a1, b' = b1 as RoughSet of X by DefRSX;
+    a "\/" b = a' _\/_ b' by Def8
+               .= b' _\/_ a'
+               .= b "\/" a by Def8;
+    hence thesis;
+  end;
+
+Lm7:for a,b,c being Element of RSLattice X
+     holds a"\/"(b"\/"c) = (a"\/"b)"\/"c
+  proof
+    let a, b, c be Element of RSLattice X;
+    reconsider a1 = a, b1 = b, c1 = c as Element of RoughSets X by Def8;
+    reconsider a' = a1, b' = b1, c' = c1 as RoughSet of X by DefRSX;
+    set G = RSLattice X;
+XX: b' _\/_ c' is Element of RoughSets X by DefRSX;
+XY: a' _\/_ b' is Element of RoughSets X by DefRSX;
+    a"\/"(b"\/"c) = (the L_join of G).(a,(b' _\/_ c')) by Def8
+          .= a' _\/_ (b' _\/_ c') by Def8, XX
+          .= (a' _\/_ b') _\/_ c' by Th7
+          .= (the L_join of G).((a' _\/_ b'), c1) by Def8, XY
+          .= (a"\/"b)"\/"c by Def8;
+    hence thesis;
+  end;
+
+ reserve K,L,M for Element of RoughSets X;
+ reserve K',L',M' for RoughSet of X;
+
+Lm8:(the L_join of RSLattice X).
+     ((the L_meet of RSLattice X).(K,L), L) = L
+  proof
+    reconsider K' = K, L' = L as RoughSet of X by DefRSX;
+A1: K' _/\_ L' is Element of RoughSets X by DefRSX;
+    thus (the L_join of RSLattice X).
+      ((the L_meet of RSLattice X).(K,L), L) =
+      (the L_join of RSLattice X).((K' _/\_ L'),L) by Def8
+       .= (K' _/\_ L') _\/_ L' by Def8, A1
+       .= L' _\/_ (L' _/\_ K')
+       .= L by Th10;
+  end;
+
+Lm9: for a,b being Element of RSLattice X holds
+      (a"/\"b)"\/"b = b
+  proof
+    let a,b be Element of RSLattice X;
+    set G = RSLattice X;
+    reconsider a1 = a, b1 = b as Element of RoughSets X by Def8;
+    reconsider a' = a1, b' = b1 as RoughSet of X by DefRSX;
+    thus (a"/\"b)"\/"b
+      = (the L_join of G).((the L_meet of G).(a1,b1), b1)
+     .= b by Lm8;
+  end;
+
+Lm10: for a,b being Element of RSLattice X holds
+        a"/\"b = b"/\"a
+  proof
+    set G = RSLattice X;
+    let a, b be Element of RSLattice X;
+    reconsider a1 = a, b1 = b as Element of RoughSets X by Def8;
+    reconsider a' = a1, b' = b1 as RoughSet of X by DefRSX;
+    a"/\"b = a' _/\_ b' by Def8
+         .= b' _/\_ a'
+         .= b"/\"a by Def8;
+    hence thesis;
+  end;
+
+Lm11: for a,b,c being Element of RSLattice X holds
+        a"/\"(b"/\"c) = (a"/\"b)"/\"c
+  proof
+    let a, b, c be Element of RSLattice X;
+    reconsider a1 = a, b1 = b, c1 = c as Element of RoughSets X by Def8;
+    reconsider a' = a1, b' = b1, c' = c1 as RoughSet of X by DefRSX;
+    set G = RSLattice X;
+XX: b' _/\_ c' is Element of RoughSets X by DefRSX;
+XY: a' _/\_ b' is Element of RoughSets X by DefRSX;
+    a"/\"(b"/\"c) = (the L_meet of G).(a1,(b' _/\_ c')) by Def8
+       .= a' _/\_ (b' _/\_ c') by Def8,XX
+       .= (a' _/\_ b') _/\_ c' by Th8
+       .= (the L_meet of G).((a' _/\_ b'), c1) by Def8,XY
+       .= (a"/\"b)"/\"c by Def8;
+    hence thesis;
+  end;
+
+Lm12: (the L_meet of RSLattice X).(K,(the L_join of RSLattice X).(L,M)) =
+  (the L_join of RSLattice X).((the L_meet of RSLattice X).(K,L),
+  (the L_meet of RSLattice X).(K,M))
+  proof
+    set G = RSLattice X;
+    reconsider K' = K, L' = L, M' = M as RoughSet of X by DefRSX;
+XX: L' _\/_ M' is Element of RoughSets X by DefRSX;
+XY: K' _/\_ L' is Element of RoughSets X by DefRSX;
+XQ: K' _/\_ M' is Element of RoughSets X by DefRSX;
+    (the L_meet of G).(K,(the L_join of G).(L,M)) =
+    (the L_meet of G).(K,(L' _\/_ M'))  by Def8
+     .= K' _/\_ (L' _\/_ M') by Def8, XX
+     .= (K' _/\_ L') _\/_ (K' _/\_ M') by Th9
+     .= (the L_join of G).((K' _/\_ L'),(K' _/\_ M')) by Def8 ,XY,XQ
+     .= (the L_join of G).((the L_meet of G).(K,L),(K' _/\_ M')) by Def8
+     .= (the L_join of G).((the L_meet of G).(K,L),(the L_meet of G).(K,M))
+      by Def8;
+    hence thesis;
+  end;
+
+Lm13: for a,b being Element of RSLattice X holds a"/\"(a"\/"b)=a
+  proof
+    let a, b be Element of RSLattice X;
+    set G = RSLattice X;
+    reconsider a1 = a, b1 = b as Element of RoughSets X by Def8;
+    reconsider a' = a1, b' = b1 as RoughSet of X by DefRSX;
+    thus a"/\"(a"\/"b)
+       = (the L_join of G).((the L_meet of G).(a1,a1),
+       (the L_meet of G).(a1,b1)) by Lm12
+      .= (the L_join of G).(a' _/\_ a',
+       (the L_meet of G).(a1,b1)) by Def8
+      .= a"\/"(a"/\"b) by Th21
+      .= (a"/\"b)"\/"a by Lm6
+      .= (b"/\"a)"\/"a by Lm10
+                  .= a by Lm9;
+  end;
+
+ reserve A,B,C for Element of RSLattice X;
+
+registration let X;
+  cluster RSLattice X -> Lattice-like;
+  coherence
+  proof
+    set G = RSLattice X;
+    thus for u,v being Element of G holds u"\/"v = v"\/"u by Lm6;
+    thus for u,v,w being Element of G holds
+      u"\/"(v"\/"w) = (u"\/"v)"\/"w by Lm7;
+    thus for u,v being Element of G holds (u"/\"v)"\/"v = v by Lm9;
+    thus for u,v being Element of G holds u"/\"v = v"/\"u by Lm10;
+    thus for u,v,w being Element of G holds
+      u"/\"(v"/\"w) = (u"/\"v)"/\"w by Lm11;
+    let u,v be Element of G;
+    thus u"/\"(u"\/"v) = u by Lm13;
+  end;
+end;
+
+registration let X;
+  cluster RSLattice X -> distributive;
+  coherence
+  proof
+    let u,v,w be Element of RSLattice X;
+    reconsider K = u, L = v, M = w as Element of RoughSets X by Def8;
+    thus u "/\" (v "\/" w) =
+      (the L_join of RSLattice X).((the L_meet of RSLattice X).(K,L),
+       (the L_meet of RSLattice X).(K,M)) by Lm12
+      .= (u "/\" v) "\/" (u "/\" w);
+  end;
+end;
+
+definition let X;
+  func ERS X -> RoughSet of X equals
+    [{},{}];
+  coherence
+  proof
+    reconsider A = {} as Subset of X by XBOOLE_1:2;
+    A = {}X; then
+A1: LAp A = {} & UAp A = {} by ROUGHS_1:19, ROUGHS_1:18;
+    [LAp A, UAp A] in [:bool the carrier of X, bool the carrier of X:]
+      by ZFMISC_1:106;
+    hence thesis by Def1', A1;
+  end;
+end;
+
+Th22:
+  ERS X in RoughSets X by DefRSX;
+
+theorem Th23:
+  for A being RoughSet of X holds
+    ERS X _\/_ A = A
+  proof
+    let A be RoughSet of X;
+A0: LAp ERS X = {} by MCART_1:7;
+A2: UAp ERS X = {} by MCART_1:7;
+A1: LAp (ERS X _\/_ A) = LAp A by A0,Th1;
+    UAp (ERS X _\/_ A) = UAp A by A2,Th2;
+    hence thesis by A1, Def5;
+  end;
+
+definition let X;
+  func TRS X -> RoughSet of X equals
+    [[#]X,[#]X];
+  coherence
+  proof
+    reconsider A = [#]X as Subset of X;
+A1: LAp A = [#]X & UAp A = [#]X by ROUGHS_1:21,20;
+    [LAp A, UAp A] in [:bool the carrier of X, bool the carrier of X:]
+      by ZFMISC_1:106;
+    hence thesis by Def1', A1;
+  end;
+end;
+
+Th24:
+  TRS X in RoughSets X by DefRSX;
+
+theorem Th25:
+  for A being RoughSet of X holds
+    TRS X _/\_ A = A
+  proof
+    let A be RoughSet of X;
+A0: LAp TRS X = [#]X by MCART_1:7;
+A2: UAp TRS X = [#]X by MCART_1:7;
+A1: LAp (TRS X _/\_ A) = LAp TRS X /\ LAp A by Th3
+       .= LAp A by A0,XBOOLE_1:28;
+    UAp (TRS X _/\_ A) = UAp TRS X /\ UAp A by Th4
+       .= UAp A by A2,XBOOLE_1:28;
+    hence thesis by A1, Def5;
+  end;
+
+registration let X;
+  cluster RSLattice X -> bounded;
+  coherence
+  proof
+    thus RSLattice X is lower-bounded
+    proof
+      reconsider E = ERS X as Element of RoughSets X by Th22;
+      reconsider e = E as Element of RSLattice X by Def8;
+      take e;
+      let u be Element of RSLattice X;
+      reconsider K = u as Element of RoughSets X by Def8;
+      reconsider E' = E , K' = K as RoughSet of X by DefRSX;
+      e"\/"u = E' _\/_ K' by Def8
+            .= u by Th23; then
+      e "/\" u = e & u "/\" e = e by LATTICES:def 9;
+      hence thesis;
+    end;
+    thus RSLattice X is upper-bounded
+    proof
+      reconsider E = TRS X as Element of RoughSets X by Th24;
+      reconsider e = E as Element of RSLattice X by Def8;
+      take e;
+      let u be Element of RSLattice X;
+      reconsider K = u as Element of RoughSets X by Def8;
+      reconsider E' = E , K' = K as RoughSet of X by DefRSX;
+      e"/\"u = E' _/\_ K' by Def8
+            .= u by Th25; then
+      e "\/" u = e & u "\/" e = e by LATTICES:def 8;
+      hence thesis;
+   end;
+ end;
+end;
+
+theorem WazneX:
+  for X being Tolerance_Space,
+      A, B being Element of RSLattice X,
+      A', B' being RoughSet of X st A = A' & B = B' holds
+    A [= B iff
+      LAp A' c= LAp B' & UAp A' c= UAp B'
+  proof
+    let X be Tolerance_Space,
+        A, B be Element of RSLattice X,
+        A', B' be RoughSet of X;
+    assume
+Z1: A = A' & B = B';
+Z2: A is Element of RoughSets X & B is Element of RoughSets X by Def8;
+    thus A [= B implies LAp A' c= LAp B' & UAp A' c= UAp B'
+    proof
+      assume A [= B; then
+      A "\/" B = B by LATTICES:def 3; then
+      A' _\/_ B' = B' by Z1,Def8,Z2; then
+      LAp A' \/ LAp B' = LAp B' & UAp A' \/ UAp B' = UAp B' by Th1, Th2;
+      hence thesis by XBOOLE_1:11;
+    end;
+    assume LAp A' c= LAp B' & UAp A' c= UAp B'; then
+    LAp A' \/ LAp B' = LAp B' & UAp A' \/ UAp B' = UAp B'
+      by XBOOLE_1:12; then
+    LAp (A' _\/_ B') = LAp B' & UAp (A' _\/_ B') = UAp B' by Th1, Th2; then
+A1: A' _\/_ B' = B' by Def5;
+    reconsider A1 = A, B1 = B as Element of RoughSets X by Def8;
+    reconsider A' = A1, B' = B1 as RoughSet of X by DefRSX;
+    A' _\/_ B' = A "\/" B by Def8;
+    hence thesis by LATTICES:def 3,A1,Z1;
+  end;
+
+Th30: RSLattice X is complete
+  proof
+    let Y be Subset of RSLattice X;
+    ex a being Element of RSLattice X st a is_less_than Y &
+    for b being Element of RSLattice X st b is_less_than Y holds
+      b [= a
+    proof
+      per cases;
+      suppose A1: Y is empty;
+        take a = Top RSLattice X;
+        for q be Element of RSLattice X st q in Y holds a [= q by A1;
+        hence a is_less_than Y by LATTICE3:def 16;
+        let b be Element of RSLattice X;
+        assume b is_less_than Y;
+        thus b [= a by LATTICES:45;
+      end;
+      suppose A2: Y is non empty;
+        set A1 = { LAp a1 where a1 is RoughSet of X : a1 in Y };
+        set A2 = { UAp a1 where a1 is RoughSet of X : a1 in Y };
+        set a' = [ meet A1, meet A2 ];
+        consider f being set such that
+Z1:     f in Y by A2,XBOOLE_0:def 1;
+        Y is Subset of RoughSets X by Def8; then
+        reconsider f as RoughSet of X by Z1,DefRSX;
+b1:     LAp f in A1 by Z1; then
+B1:     A1 <> {};
+        consider g being set such that
+Z2:     g in Y by A2,XBOOLE_0:def 1;
+        Y is Subset of RoughSets X by Def8; then
+        reconsider g as RoughSet of X by Z2,DefRSX;
+        UAp g in A2 by Z2; then
+B3:     A2 <> {};
+X1:     meet A1 c= the carrier of X
+        proof
+          let x be set;
+          assume x in meet A1; then
+W1:       for Z being set holds Z in A1 implies x in Z by SETFAM_1:def 1;
+          consider c being set such that
+      B2: c in A1 by b1;
+          consider c' being RoughSet of X such that
+      B4: c = LAp c' & c' in Y by B2;
+W2:       c in bool the carrier of X by B4;
+          x in c by B2,W1;
+          hence thesis by W2;
+        end;
+        a' is RoughSet of X
+        proof
+          meet A2 c= the carrier of X
+            proof
+              let x be set;
+              assume x in meet A2; then
+W1:           for Z being set holds Z in A2 implies x in Z by SETFAM_1:def 1;
+              consider c being set such that
+          B2: c in A2 by B3, XBOOLE_0:def 1;
+              consider c' being RoughSet of X such that
+          B4: c = UAp c' & c' in Y by B2;
+W2:           c c= the carrier of X by B4;
+              x in c by B2,W1;
+              hence thesis by W2;
+            end; then
+            [ meet A1, meet A2 ] in
+            [:bool the carrier of X, bool the carrier of X:]
+              by X1,ZFMISC_1:106;
+           hence thesis by Def1';
+         end;
+        then reconsider a' as RoughSet of X;
+        a' in RoughSets X by DefRSX; then
+        reconsider a = a' as Element of RSLattice X by Def8;
+        take a;
+        thus a is_less_than Y
+        proof
+          let q be Element of RSLattice X;
+          assume
+AA:       q in Y;
+          q in the carrier of RSLattice X; then
+          q in RoughSets X by Def8; then
+          reconsider q' = q as RoughSet of X by DefRSX;
+          consider q1, q2 being Subset of X such that
+A3:       q' = [q1,q2] by Def1;
+A5:       q1 = LAp q' by A3,MCART_1:7; then
+A4:       q1 in A1 by AA;
+          meet A1 c= LAp q'
+          proof
+            let x be set;
+            assume x in meet A1;
+            hence thesis by A5,A4,SETFAM_1:def 1;
+          end; then
+A1:       LAp a' c= LAp q' by MCART_1:7;
+C2:       UAp a' = meet A2 by MCART_1:7;
+C5:       q2 = UAp q' by A3,MCART_1:7; then
+C4:       q2 in A2 by AA;
+          meet A2 c= UAp q'
+          proof
+            let x be set;
+            assume x in meet A2;
+            hence thesis by C5,C4,SETFAM_1:def 1;
+          end;
+          hence a [= q by A1,WazneX,C2;
+        end;
+        thus for b being Element of RSLattice X st b is_less_than Y holds
+          b [= a
+        proof
+          let b be Element of RSLattice X;
+          assume
+K1:       b is_less_than Y;
+          b is Element of RoughSets X by Def8; then
+          reconsider b' = b as RoughSet of X by DefRSX;
+          reconsider a' = a as RoughSet of X;
+F0:       for q being Element of RSLattice X st q in Y holds b [= q
+            by K1,LATTICE3:def 16;
+          for Z1 be set st Z1 in A1 holds LAp b' c= Z1
+          proof
+            let Z1 be set;
+            assume Z1 in A1; then
+            consider c1 being RoughSet of X such that
+F2:         Z1 = LAp c1 & c1 in Y;
+            reconsider c1' = c1 as Element of RSLattice X by F2;
+            b [= c1' by K1,LATTICE3:def 16,F2;
+            hence thesis by F2,WazneX;
+          end; then
+A2:       LAp b' c= meet A1 by B1,SETFAM_1:6;
+          meet A1 c= LAp a'
+          proof
+            let x be set;
+            assume x in meet A1;
+            hence thesis by MCART_1:7;
+          end; then
+B1:       LAp b' c= LAp a' by A2,XBOOLE_1:1;
+          for Z1 be set st Z1 in A2 holds UAp b' c= Z1
+          proof
+            let Z1 be set;
+            assume Z1 in A2; then
+            consider c2 being RoughSet of X such that
+F3:         Z1 = UAp c2 & c2 in Y;
+            reconsider c2' = c2 as Element of RSLattice X by F3;
+            b [= c2' by F0,F3;
+            hence thesis by F3,WazneX;
+          end; then
+C2:       UAp b' c= meet A2 by B3, SETFAM_1:6;
+          meet A2 c= UAp a'
+          proof
+            let x be set;
+            assume x in meet A2;
+            hence thesis by MCART_1:7;
+          end; then
+          UAp b' c= UAp a' by C2,XBOOLE_1:1;
+          hence thesis by B1,WazneX;
+        end;
+      end;
+    end;
+    hence thesis;
+  end;
+
+registration let X;
+  cluster RSLattice X -> complete;
+  coherence by Th30;
+end;

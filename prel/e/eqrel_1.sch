@@ -23,7 +23,7 @@
 <Cluster>
 <Adjective nr="11"/>
 <Adjective nr="16"/>
-<Adjective nr="21">
+<Adjective nr="22">
 <Func kind="F" nr="1"/>
 </Adjective>
 </Cluster>

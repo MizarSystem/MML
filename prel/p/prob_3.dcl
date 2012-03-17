@@ -44,10 +44,10 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="89">
+<Adjective nr="90">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="90">
+<Adjective nr="91">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

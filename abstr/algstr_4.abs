@@ -1,0 +1,639 @@
+:: Free Magmas
+::  by Marco Riccardi
+:: 
+:: Received October 20, 2009
+:: Copyright (c) 2009 Association of Mizar Users
+
+environ
+
+ vocabularies TARSKI, ORDINAL2, FUNCT_1, BOOLE, RELAT_1, ORDINAL1, ARYTM_1,
+      FINSEQ_1, ARYTM, CLASSES1, PROB_1, AFINSQ_1, FUNCT_2, YELLOW_6, BINOP_1,
+      ALGSTR_0, SGRAPH1, REALSET1, COHSP_1, CARD_3, MCART_1, NAT_LAT, XREAL_0,
+      PARTFUN1, SETFAM_1, EQREL_1, GROUP_6, MSUALG_6, CIRCUIT2, ALGSTR_4;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, XCMPLX_0, RELAT_1, FUNCT_1,
+      FUNCOP_1, ORDINAL1, REAL_1, NAT_1, CARD_1, NUMBERS, SETFAM_1, FUNCT_6,
+      FUNCT_2, XXREAL_0, CLASSES1, FINSEQ_1, CARD_3, AFINSQ_1, NAT_D, YELLOW_6,
+      BINOP_1, STRUCT_0, ALGSTR_0, RELSET_1, ENUMSET1, FACIRC_1, GROUP_6,
+      MCART_1, NAT_LAT, PARTFUN1, REALSET1, EQREL_1, ALG_1, GROUP_2;
+ constructors WELLORD2, FUNCOP_1, FUNCT_6, FUNCT_2, XXREAL_0, XREAL_0, NAT_1,
+      CARD_1, CLASSES1, FINSEQ_1, CARD_3, AFINSQ_1, FINSET_1, NAT_D, INT_1,
+      XBOOLE_0, YELLOW_6, BINOP_1, STRUCT_0, ALGSTR_0, RELSET_1, ENUMSET1,
+      FACIRC_1, GROUP_6, MCART_1, NAT_LAT, REALSET1, SETFAM_1, EQREL_1,
+      RELAT_2, GROUP_2;
+ registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCOP_1,
+      FINSET_1, XXREAL_0, XREAL_0, NAT_1, CARD_1, NUMBERS, FUNCT_2, CLASSES1,
+      FINSEQ_1, CARD_3, AFINSQ_1, RFINSEQ, INT_1, YELLOW_6, BINOP_1, STRUCT_0,
+      ALGSTR_0, RELSET_1, FACIRC_1, GROUP_6, NAT_LAT, FUNCT_3, REALSET1,
+      SETFAM_1, EQREL_1, GROUP_2;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+
+
+begin :: Preliminaries
+
+registration
+  let X be set;
+  let f be Function of NAT, X;
+  let n be natural number;
+  cluster f|n -> T-Sequence-like;
+end;
+
+definition
+  let X,x be set;
+  func IFXFinSequence(x,X) -> XFinSequence of X equals
+:: ALGSTR_4:def 1
+  x if x is XFinSequence of X
+  otherwise <%>X;
+end;
+
+definition
+  let X be non empty set;
+  let f be Function of X^omega, X;
+  let c be XFinSequence of X;
+  redefine func f.c -> Element of X;
+end;
+
+theorem :: ALGSTR_4:1
+  for X,Y,Z being set st Y c= the_universe_of X & Z c= the_universe_of X
+  holds [:Y,Z:] c= the_universe_of X;
+
+scheme :: ALGSTR_4:sch 1
+ FuncRecursiveUniq { F(set) -> set, F1,F2() -> Function }:
+  F1() = F2()
+  provided
+ dom F1() = NAT & for n being natural number holds F1().n = F(F1()|n)
+  and
+ dom F2() = NAT & for n being natural number holds F2().n = F(F2()|n);
+
+scheme :: ALGSTR_4:sch 2
+ FuncRecursiveExist { F(set) -> set }:
+  ex f being Function st dom f = NAT &
+  for n being natural number holds f.n = F(f|n);
+
+scheme :: ALGSTR_4:sch 3
+ FuncRecursiveUniqu2
+  { X() -> non empty set, F(XFinSequence of X()) -> Element of X(),
+    F1,F2() -> Function of NAT, X()}:
+  F1() = F2()
+  provided
+ for n being natural number holds F1().n = F(F1()|n)
+  and
+ for n being natural number holds F2().n = F(F2()|n);
+
+scheme :: ALGSTR_4:sch 4
+ FuncRecursiveExist2
+  { X() -> non empty set, F(XFinSequence of X()) -> Element of X() }:
+  ex f being Function of NAT, X() st
+  for n being natural number holds f.n = F(f|n);
+
+definition
+  let f,g be Function;
+  pred f extends g means
+:: ALGSTR_4:def 2
+  dom g c= dom f & f tolerates g;
+end;
+
+registration
+  cluster empty multMagma;
+end;
+
+begin :: Equivalence Relations and Relators
+
+:: Ch I §1.6 Def.11 Algebra I Bourbaki
+definition
+  let M be multMagma;
+  let R be Equivalence_Relation of M;
+  attr R is compatible means
+:: ALGSTR_4:def 3
+  for v,v',w,w' being Element of M st v in Class(R,v') & w in Class(R,w')
+  holds v*w in Class(R,v'*w');
+end;
+
+registration
+  let M be multMagma;
+  cluster nabla the carrier of M -> compatible;
+end;
+
+registration
+  let M be multMagma;
+  cluster compatible Equivalence_Relation of M;
+end;
+
+theorem :: ALGSTR_4:2
+  for M being multMagma, R being Equivalence_Relation of M holds
+  R is compatible iff for v,v',w,w' being Element of M
+    st Class(R,v) = Class(R,v') & Class(R,w) = Class(R,w')
+    holds Class(R,v*w) = Class(R,v'*w');
+
+definition
+  let M be multMagma;
+  let R be compatible Equivalence_Relation of M;
+  func ClassOp R -> BinOp of Class R means
+:: ALGSTR_4:def 4
+  for x,y being Element of Class R, v,w being Element of M
+    st x = Class(R,v) & y = Class(R,w) holds it.(x,y) = Class(R,v*w)
+    if M is non empty otherwise it = {};
+end;
+
+:: Ch I §1.6 Def.11 Algebra I Bourbaki
+definition
+  let M be multMagma;
+  let R be compatible Equivalence_Relation of M;
+  func M ./. R -> multMagma equals
+:: ALGSTR_4:def 5
+  multMagma(# Class R, ClassOp R #);
+end;
+
+registration
+  let M be multMagma;
+  let R be compatible Equivalence_Relation of M;
+  cluster M ./. R -> strict;
+end;
+
+registration
+  let M be non empty multMagma;
+  let R be compatible Equivalence_Relation of M;
+  cluster M ./. R -> non empty;
+end;
+
+definition
+  let M be non empty multMagma;
+  let R be compatible Equivalence_Relation of M;
+  func nat_hom R -> Function of M, M ./. R means
+:: ALGSTR_4:def 6
+  for v being Element of M holds it.v = Class(R,v);
+end;
+
+registration
+  let M be non empty multMagma;
+  let R be compatible Equivalence_Relation of M;
+  cluster nat_hom R -> multiplicative;
+end;
+
+registration
+  let M be non empty multMagma;
+  let R be compatible Equivalence_Relation of M;
+  cluster nat_hom R -> onto;
+end;
+
+definition
+  let M be multMagma;
+  mode Relators of M is [:the carrier of M,the carrier of M:]-valued Function;
+end;
+
+:: Ch I §1.6 Algebra I Bourbaki
+definition
+  let M be multMagma;
+  let r be Relators of M;
+  func equ_rel r -> Equivalence_Relation of M equals
+:: ALGSTR_4:def 7
+  meet {R where R is compatible Equivalence_Relation of M:
+     for i being set, v,w being Element of M st i in dom r & r.i = [v,w]
+       holds v in Class(R,w)};
+end;
+
+theorem :: ALGSTR_4:3
+  for M being multMagma,
+      r being Relators of M,
+      R being compatible Equivalence_Relation of M
+  st (for i being set, v,w being Element of M st i in dom r & r.i = [v,w]
+       holds v in Class(R,w))
+  holds equ_rel r c= R;
+
+registration
+  let M be multMagma;
+  let r be Relators of M;
+  cluster equ_rel r -> compatible;
+end;
+
+definition
+  let X,Y be set;
+  let f be Function of X,Y;
+  func equ_kernel f -> Equivalence_Relation of X means
+:: ALGSTR_4:def 8
+  for x,y being set holds [x,y] in it iff x in X & y in X & f.x = f.y;
+end;
+
+reserve M,N for non empty multMagma,
+  f for Function of M, N;
+
+theorem :: ALGSTR_4:4
+  f is multiplicative implies equ_kernel f is compatible;
+
+theorem :: ALGSTR_4:5
+  f is multiplicative implies
+  ex r being Relators of M st equ_kernel f = equ_rel r;
+
+begin :: Submagmas and Stable Subsets
+
+definition
+  let M be multMagma;
+  mode multSubmagma of M -> multMagma means
+:: ALGSTR_4:def 9
+    the carrier of it c= the carrier of M &
+    the multF of it = (the multF of M)||the carrier of it;
+end;
+
+registration
+  let M be multMagma;
+  cluster strict multSubmagma of M;
+end;
+
+registration
+  let M be non empty multMagma;
+  cluster non empty multSubmagma of M;
+end;
+
+reserve M for multMagma;
+reserve N,K for multSubmagma of M;
+
+:: like GROUP_2:64
+theorem :: ALGSTR_4:6
+  N is multSubmagma of K & K is multSubmagma of N
+  implies the multMagma of N = the multMagma of K;
+
+theorem :: ALGSTR_4:7
+  the carrier of N = the carrier of M
+  implies the multMagma of N = the multMagma of M;
+
+:: Ch I §1.4 Def.6 Algebra I Bourbaki
+definition
+  let M be multMagma;
+  let A be Subset of M;
+  attr A is stable means
+:: ALGSTR_4:def 10
+  for v,w being Element of M st v in A & w in A holds v*w in A;
+end;
+
+registration
+  let M be multMagma;
+  cluster stable Subset of M;
+end;
+
+theorem :: ALGSTR_4:8
+  the carrier of N is stable Subset of M;
+
+registration
+  let M be multMagma;
+  let N be multSubmagma of M;
+  cluster the carrier of N -> stable Subset of M;
+end;
+
+theorem :: ALGSTR_4:9
+  for F being Function st
+  (for i being set st i in dom F holds F.i is stable Subset of M) holds
+  meet F is stable Subset of M;
+
+reserve M,N for non empty multMagma,
+  A for Subset of M,
+  f,g for Function of M,N,
+  X for stable Subset of M,
+  Y for stable Subset of N;
+
+theorem :: ALGSTR_4:10
+  A is stable iff A * A c= A;
+
+:: Ch I §1.4 Pro.1 Algebra I Bourbaki
+theorem :: ALGSTR_4:11
+  f is multiplicative implies f.:X is stable Subset of N;
+
+:: Ch I §1.4 Pro.1 Algebra I Bourbaki
+theorem :: ALGSTR_4:12
+  f is multiplicative implies f"Y is stable Subset of M;
+
+:: Ch I §1.4 Pro.1 Algebra I Bourbaki
+theorem :: ALGSTR_4:13
+  f is multiplicative & g is multiplicative
+  implies {v where v is Element of M: f.v=g.v} is stable Subset of M;
+
+:: Ch I §1.4 Def.6 Algebra I Bourbaki
+definition
+  let M be multMagma;
+  let A be stable Subset of M;
+  func the_mult_induced_by A -> BinOp of A equals
+:: ALGSTR_4:def 11
+  (the multF of M) || A;
+end;
+
+:: like GROUP_4:def 5
+definition
+  let M be multMagma;
+  let A be Subset of M;
+  func the_submagma_generated_by A -> strict multSubmagma of M means
+:: ALGSTR_4:def 12
+  A c= the carrier of it &
+  for N being strict multSubmagma of M
+  st A c= the carrier of N holds it is multSubmagma of N;
+end;
+
+theorem :: ALGSTR_4:14
+  for M being multMagma,
+      A being Subset of M
+  holds A is empty iff the_submagma_generated_by A is empty;
+
+registration
+  let M be multMagma;
+  let A be empty Subset of M;
+  cluster the_submagma_generated_by A -> empty;
+end;
+
+:: Ch I §1.4 Pro.1 Algebra I Bourbaki
+theorem :: ALGSTR_4:15
+  for M,N being non empty multMagma,
+      f being Function of M,N,
+      X being Subset of M st f is multiplicative holds
+  f.:the carrier of the_submagma_generated_by X =
+  the carrier of the_submagma_generated_by f.:X;
+
+begin :: Free Magmas
+
+:: Ch I §7.1 Algebra I Bourbaki
+definition
+  let X be set;
+  func free_magma_seq X ->
+    Function of NAT, bool the_universe_of(X \/ NAT) means
+:: ALGSTR_4:def 13
+    it.0 = {} & it.1 = X &
+    for n being natural number st n>=2 holds
+      ex fs being FinSequence st len fs = n-1 &
+      (for p being natural number st p>=1 & p<=n-1 holds
+      fs.p = [: it.p, it.(n-p) :] ) & it.n = Union disjoin fs;
+end;
+
+definition
+  let X be set;
+  let n be natural number;
+  func free_magma(X,n) equals
+:: ALGSTR_4:def 14
+(free_magma_seq X).n;
+end;
+
+registration
+  let X be non empty set;
+  let n be non zero natural number;
+  cluster free_magma(X,n) -> non empty;
+end;
+
+reserve X for set;
+
+theorem :: ALGSTR_4:16
+  free_magma(X,0) = {};
+
+theorem :: ALGSTR_4:17
+  free_magma(X,1) = X;
+
+theorem :: ALGSTR_4:18
+  free_magma(X,2) = [:[:X,X:],{1}:];
+
+theorem :: ALGSTR_4:19
+  free_magma(X,3) = [:[:X,[:[:X,X:],{1}:]:],{1}:] \/
+    [:[:[:[:X,X:],{1}:],X:],{2}:];
+
+reserve x,y,Y for set;
+reserve n,m,p for natural number;
+
+theorem :: ALGSTR_4:20
+  n >= 2 implies
+  ex fs being FinSequence st len fs = n-1 &
+    (for p st p>=1 & p<=n-1 holds
+       fs.p = [: free_magma(X,p), free_magma(X,n-'p) :] ) &
+    free_magma(X,n) = Union disjoin fs;
+
+theorem :: ALGSTR_4:21
+  n >= 2 & x in free_magma(X,n) implies
+  ex p,m st x`2 = p & 1<=p & p<=n-1 &
+    x`1`1 in free_magma(X,p) & x`1`2 in free_magma(X,m) & n = p + m &
+    x in [:[:free_magma(X,p),free_magma(X,m):],{p}:];
+
+theorem :: ALGSTR_4:22
+  x in free_magma(X,n) & y in free_magma(X,m) implies
+  [[x,y],n] in free_magma(X,n+m);
+
+theorem :: ALGSTR_4:23
+  X c= Y implies free_magma(X,n) c= free_magma(Y,n);
+
+definition
+  let X be set;
+  func free_magma_carrier X equals
+:: ALGSTR_4:def 15
+Union disjoin((free_magma_seq X)|NATPLUS);
+end;
+
+theorem :: ALGSTR_4:24
+  X = {} iff free_magma_carrier X = {};
+
+registration
+  let X be empty set;
+  cluster free_magma_carrier X -> empty;
+end;
+
+registration
+  let X be non empty set;
+  cluster free_magma_carrier X -> non empty;
+  let w be Element of free_magma_carrier X;
+  cluster w`2 -> non zero natural number;
+end;
+
+theorem :: ALGSTR_4:25
+  for X being non empty set,
+      w being Element of free_magma_carrier X
+  holds w in [:free_magma(X,w`2),{w`2}:];
+
+theorem :: ALGSTR_4:26
+  for X being non empty set,
+      v,w being Element of free_magma_carrier X
+  holds [[[v`1,w`1],v`2],v`2+w`2] is Element of free_magma_carrier X;
+
+theorem :: ALGSTR_4:27
+  X c= Y implies free_magma_carrier X c= free_magma_carrier Y;
+
+theorem :: ALGSTR_4:28
+  n>0 implies [:free_magma(X,n),{n}:] c= free_magma_carrier X;
+
+definition
+  let X be set;
+  func free_magma_mult X -> BinOp of free_magma_carrier X means
+:: ALGSTR_4:def 16
+  for v,w being Element of free_magma_carrier X, n,m st n = v`2 & m = w`2
+    holds it.(v,w) = [[[v`1,w`1],v`2],n+m]
+    if X is non empty otherwise it = {};
+end;
+
+:: Ch I §7.1 Algebra I Bourbaki
+definition
+  let X be set;
+  func free_magma X -> multMagma equals
+:: ALGSTR_4:def 17
+  multMagma(# free_magma_carrier X, free_magma_mult X #);
+end;
+
+registration
+  let X be set;
+  cluster free_magma X -> strict;
+end;
+
+registration
+  let X be empty set;
+  cluster free_magma X -> empty;
+end;
+
+registration
+  let X be non empty set;
+  cluster free_magma X -> non empty;
+  let w be Element of free_magma X;
+  cluster w`2 -> non zero natural number;
+  cluster w`1 -> Element of free_magma(X,w`2);
+end;
+
+theorem :: ALGSTR_4:29
+  for X being set, S being Subset of X
+  holds free_magma S is multSubmagma of free_magma X;
+
+definition
+  let X be set;
+  let w be Element of free_magma X;
+  func length w -> natural number equals
+:: ALGSTR_4:def 18
+  w`2 if X is non empty otherwise 0;
+end;
+
+theorem :: ALGSTR_4:30
+  X = {w`1 where w is Element of free_magma X: length w = 1};
+
+reserve v,v1,v2,w,w1,w2 for Element of free_magma X;
+
+theorem :: ALGSTR_4:31
+  X is non empty implies v*w = [[[v`1,w`1],v`2],length v + length w];
+
+theorem :: ALGSTR_4:32
+  X is non empty implies v = [v`1,v`2] & length v >= 1;
+
+theorem :: ALGSTR_4:33
+  length(v*w) = length v + length w;
+
+theorem :: ALGSTR_4:34
+  length w >= 2 implies
+  ex w1,w2 st w = w1*w2 & length w1 < length w & length w2 < length w;
+
+theorem :: ALGSTR_4:35
+  v1*v2 = w1*w2 implies v1 = w1 & v2 = w2;
+
+definition
+  let X be set;
+  let n be natural number;
+  func canon_image(X,n) -> Function of free_magma(X,n),free_magma X means
+:: ALGSTR_4:def 19
+
+  for x st x in dom it holds it.x = [x,n] if n > 0
+  otherwise it = {};
+end;
+
+registration
+  let X be set;
+  let n be natural number;
+  cluster canon_image(X,n) -> one-to-one;
+end;
+
+registration
+  let X be non empty set;
+  cluster canon_image(X,1) -> Function of X, free_magma X;
+end;
+
+reserve X,Y,Z for non empty set;
+
+theorem :: ALGSTR_4:36
+  for A being Subset of free_magma X st A = canon_image(X,1) .: X
+    holds free_magma X = the_submagma_generated_by A;
+
+theorem :: ALGSTR_4:37
+  for R being compatible Equivalence_Relation of free_magma(X) holds
+  (free_magma X)./.R =
+  the_submagma_generated_by (nat_hom R).: (canon_image(X,1) .: X);
+
+theorem :: ALGSTR_4:38
+  for f being Function of X,Y
+  holds canon_image(Y,1)*f is Function of X, free_magma Y;
+
+definition
+  let X be non empty set;
+  let M be non empty multMagma;
+  let n,m be non zero natural number;
+  let f be Function of free_magma(X,n),M;
+  let g be Function of free_magma(X,m),M;
+  func [:f,g:] ->
+  Function of [:[:free_magma(X,n),free_magma(X,m):],{n}:], M means
+:: ALGSTR_4:def 20
+  for x being Element of [:[:free_magma(X,n),free_magma(X,m):],{n}:],
+      y being Element of free_magma(X,n), z being Element of free_magma(X,m)
+  st y = x`1`1 & z = x`1`2 holds it.x = f.y * g.z;
+end;
+
+reserve M for non empty multMagma;
+
+:: Ch I §7.1 Pro.1 Algebra I Bourbaki
+theorem :: ALGSTR_4:39
+  for f being Function of X,M holds
+  ex h being Function of free_magma X, M st h is multiplicative &
+     h extends f*(canon_image(X,1)");
+
+theorem :: ALGSTR_4:40
+  for f being Function of X,M,
+      h,g being Function of free_magma X, M
+  st h is multiplicative & h extends f*(canon_image(X,1)") &
+     g is multiplicative & g extends f*(canon_image(X,1)") holds h = g;
+
+reserve M,N for non empty multMagma,
+      f for Function of M, N,
+      H for non empty multSubmagma of N,
+      R for compatible Equivalence_Relation of M;
+
+theorem :: ALGSTR_4:41
+  f is multiplicative & the carrier of H = rng f & R = equ_kernel f implies
+  ex g being Function of M./.R, H st f = g * nat_hom R &
+  g is bijective & g is multiplicative;
+
+theorem :: ALGSTR_4:42
+  for g1,g2 being Function of M./.R, N st g1 * nat_hom R = g2 * nat_hom R
+  holds g1 = g2;
+
+theorem :: ALGSTR_4:43
+  for M being non empty multMagma holds
+    ex X being non empty set,
+       r being Relators of free_magma X,
+       g being Function of (free_magma X) ./. equ_rel r, M
+    st g is bijective & g is multiplicative;
+
+definition
+  let X,Y be non empty set;
+  let f be Function of X,Y;
+  func free_magmaF f -> Function of free_magma X, free_magma Y means
+:: ALGSTR_4:def 21
+  it is multiplicative &
+  it extends (canon_image(Y,1)*f)*(canon_image(X,1)");
+end;
+
+registration
+  let X,Y be non empty set;
+  let f be Function of X,Y;
+  cluster free_magmaF f -> multiplicative;
+end;
+
+reserve f for Function of X,Y;
+reserve g for Function of Y,Z;
+
+theorem :: ALGSTR_4:44
+  free_magmaF(g*f) = free_magmaF(g)*free_magmaF(f);
+
+theorem :: ALGSTR_4:45
+  for g being Function of X,Z st Y c= Z & f=g
+  holds free_magmaF f = free_magmaF g;
+
+theorem :: ALGSTR_4:46
+  free_magmaF id X = id dom free_magmaF f;
+
+:: Ch I §7.1 Pro.2 Algebra I Bourbaki
+theorem :: ALGSTR_4:47
+  f is one-to-one implies free_magmaF f is one-to-one;
+
+:: Ch I §7.1 Pro.2 Algebra I Bourbaki
+theorem :: ALGSTR_4:48
+  f is onto implies free_magmaF f is onto;

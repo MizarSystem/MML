@@ -13,14 +13,14 @@ environ
       FUNCT_1, ORDINAL1, ORDINAL2, ORDINAL4, XCMPLX_0, REAL_1, NAT_1, PARTFUN1,
       FINSET_1, FINSEQ_1, FUNCOP_1, FUNCT_4, FUNCT_7, XXREAL_0, VALUED_0;
  constructors WELLORD2, FUNCT_4, XXREAL_0, NAT_1, ORDINAL4, FUNCT_7, ORDINAL3,
-      VALUED_1;
+      VALUED_1, ENUMSET1;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCOP_1,
       XXREAL_0, XREAL_0, NAT_1, CARD_1, ORDINAL2, NUMBERS;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, FUNCT_1, WELLORD2, ORDINAL1, XBOOLE_0, FUNCOP_1;
  theorems TARSKI, AXIOMS, FUNCT_1, NAT_1, ZFMISC_1, RELAT_1, RELSET_1,
       ORDINAL1, CARD_1, FINSEQ_1, FUNCT_7, ORDINAL4, CARD_2, FUNCT_4, ORDINAL3,
-      XBOOLE_0, XBOOLE_1, FINSET_1, FUNCOP_1, XREAL_1, VALUED_0;
+      XBOOLE_0, XBOOLE_1, FINSET_1, FUNCOP_1, XREAL_1, VALUED_0, ENUMSET1;
  schemes FUNCT_1, SUBSET_1, NAT_1, XBOOLE_0, CLASSES1;
 
 begin
@@ -724,10 +724,10 @@ proof
   hence thesis;
 end;
 
-definition
+registration
   let D be set;
   let p,q be XFinSequence of D;
-  redefine func p^q -> T-Sequence of D;
+  cluster p^q -> D-valued;
   coherence
   proof
 A1: rng q c= D by RELAT_1:def 19;
@@ -885,7 +885,7 @@ proof
   hence thesis by Def5;
 end;
 
-theorem
+theorem Th40:
   (p^<%x%>).(len p)=x
 proof
   dom <%x%> = 1 & 1 = (0+1) by Def5;
@@ -951,7 +951,7 @@ A9: for k st k in dom <%x%> holds p.k=<%x%>.k
   hence thesis by A9,A7,Def4;
 end;
 
-theorem
+theorem Th43:
   p = <%x,y,z%> iff len p = 3 & p.0 = x & p.1 = y & p.2 = z
 proof
   thus p = <%x,y,z%> implies len p = 3 & p.0 = x & p.1 = y & p.2 = z
@@ -1333,5 +1333,152 @@ registration
     rng F c= NAT by RELAT_1:def 19;
     hence thesis by VALUED_0:def 6;
   end;
+end;
+
+:: 2009.0929, A.T.
+
+theorem Th87:
+  for x1, x2, x3, x4 being set, p being XFinSequence
+  st p = <%x1%>^<%x2%>^<%x3%>^<%x4%>
+  holds len p = 4 & p.0 = x1 & p.1 = x2 & p.2 = x3 & p.3 = x4
+proof
+  let x1, x2, x3, x4 be set, p be XFinSequence;
+  assume
+A1: p = <%x1%>^<%x2%>^<%x3%>^<%x4%>;
+  set p13 = <%x1%>^<%x2%>^<%x3%>;
+A2: p13 = <%x1, x2, x3%>;
+  then
+A3: len p13 = 3 by Th43;
+A4: p13.0 = x1 & p13.1 = x2 by A2,Th43;
+A5: p13.2 = x3 by A2,Th43;
+  thus len p = len p13 + len <%x4%> by A1,Def4
+    .= 3 + 1 by A3,Th36
+    .= 4;
+   0 in 3 & 1 in 3 & 2 in 3 by CARD_1:89,ENUMSET1:def 1;
+  hence p.0 = x1 & p.1 = x2 & p.2 = x3 by A1,A4,A5,Def4,A3;
+  thus p.3 = p.len p13 by A2,Th43
+    .= x4 by A1,Th40;
+end;
+
+theorem Th88:
+  for x1, x2, x3, x4, x5 being set, p being XFinSequence
+  st p = <%x1%>^<%x2%>^<%x3%>^<%x4%>^<%x5%>
+  holds len p = 5 & p.0 = x1 & p.1 = x2 & p.2 = x3 & p.3 = x4 & p.4 = x5
+proof
+  let x1, x2, x3, x4, x5 be set, p be XFinSequence;
+  assume
+A1: p = <%x1%>^<%x2%>^<%x3%>^<%x4%>^<%x5%>;
+  set p14 = <%x1%>^<%x2%>^<%x3%>^<%x4%>;
+A2: len p14 = 4 by Th87;
+A3: p14.0 = x1 & p14.1 = x2 by Th87;
+A4: p14.2 = x3 & p14.3 = x4 by Th87;
+  thus len p = len p14 + len <%x5%> by A1,Def4
+    .= 4 + 1 by A2,Th36
+    .= 5;
+   0 in 4 & 1 in 4 & 2 in 4 & 3 in 4 by CARD_1:90,ENUMSET1:def 2;
+  hence p.0 = x1 & p.1 = x2 & p.2 = x3 & p.3 = x4 by A1,A3,A4,Def4,A2;
+  thus p.4 = p.len p14 by Th87
+    .= x5 by A1,Th40;
+end;
+
+theorem Th89:
+  for x1, x2, x3, x4, x5, x6 being set, p being XFinSequence
+  st p = <%x1%>^<%x2%>^<%x3%>^<%x4%>^<%x5%>^<%x6%>
+  holds len p = 6 & p.0 = x1 & p.1 = x2 & p.2 = x3 & p.3 = x4 & p.4 = x5 &
+  p.5 = x6
+proof
+  let x1, x2, x3, x4, x5, x6 be set, p be XFinSequence;
+  assume
+A1: p = <%x1%>^<%x2%>^<%x3%>^<%x4%>^<%x5%>^<%x6%>;
+  set p15 = <%x1%>^<%x2%>^<%x3%>^<%x4%>^<%x5%>;
+A2: len p15 = 5 by Th88;
+A3: p15.0 = x1 & p15.1 = x2 by Th88;
+A4: p15.2 = x3 & p15.3 = x4 by Th88;
+A5: p15.4 = x5 by Th88;
+  thus len p = len p15 + len <%x6%> by A1,Def4
+    .= 5 + 1 by A2,Th36
+    .= 6;
+   0 in 5 & 1 in 5 & 2 in 5 & 3 in 5 & 4 in 5 by CARD_1:91,ENUMSET1:def 3;
+  hence p.0 = x1 & p.1 = x2 & p.2 = x3 & p.3 = x4 & p.4 = x5
+  by A1,A3,A4,A5,Def4,A2;
+  thus p.5 = p.len p15 by Th88
+    .= x6 by A1,Th40;
+end;
+
+theorem Th90:
+  for x1, x2, x3, x4, x5, x6, x7 being set, p being XFinSequence
+  st p = <%x1%>^<%x2%>^<%x3%>^<%x4%>^<%x5%>^<%x6%>^<%x7%>
+  holds len p = 7 & p.0 = x1 & p.1 = x2 & p.2 = x3 & p.3 = x4 & p.4 = x5 &
+  p.5 = x6 & p.6 = x7
+proof
+  let x1, x2, x3, x4, x5, x6, x7 be set, p be XFinSequence;
+  assume
+A1: p = <%x1%>^<%x2%>^<%x3%>^<%x4%>^<%x5%>^<%x6%>^<%x7%>;
+  set p16 = <%x1%>^<%x2%>^<%x3%>^<%x4%>^<%x5%>^<%x6%>;
+A2: len p16 = 6 by Th89;
+A3: p16.0 = x1 & p16.1 = x2 by Th89;
+A4: p16.2 = x3 & p16.3 = x4 by Th89;
+A5: p16.4 = x5 & p16.5 = x6 by Th89;
+  thus len p = len p16 + len <%x7%> by A1,Def4
+    .= 6 + 1 by A2,Th36
+    .= 7;
+   0 in 6 & 1 in 6 & 2 in 6 & 3 in 6 & 4 in 6 & 5 in 6
+    by CARD_1:92,ENUMSET1:def 4;
+  hence p.0 = x1 & p.1 = x2 & p.2 = x3 & p.3 = x4 & p.4 = x5 & p.5 = x6
+  by A1,A3,A4,A5,Def4,A2;
+  thus p.6 = p.len p16 by Th89
+    .= x7 by A1,Th40;
+end;
+
+theorem Th91:
+  for x1,x2,x3,x4, x5, x6, x7, x8 being set, p being XFinSequence
+  st p = <%x1%>^<%x2%>^<%x3%>^<%x4%>^<%x5%>^<%x6%>^<%x7%>^<%x8%>
+  holds len p = 8 & p.0 = x1 & p.1 = x2 & p.2 = x3 & p.3 = x4 & p.4 = x5 &
+  p.5 = x6 & p.6 = x7 & p.7 = x8
+proof
+  let x1, x2, x3, x4, x5, x6, x7, x8 be set, p be XFinSequence;
+  assume
+A1: p = <%x1%>^<%x2%>^<%x3%>^<%x4%>^<%x5%>^<%x6%>^<%x7%>^<%x8%>;
+  set p17 = <%x1%>^<%x2%>^<%x3%>^<%x4%>^<%x5%>^<%x6%>^<%x7%>;
+A2: len p17 = 7 by Th90;
+A3: p17.0 = x1 & p17.1 = x2 by Th90;
+A4: p17.2 = x3 & p17.3 = x4 by Th90;
+A5: p17.4 = x5 & p17.5 = x6 by Th90;
+A6: p17.6 = x7 by Th90;
+  thus len p = len p17 + len <%x8%> by A1,Def4
+    .= 7 + 1 by A2,Th36
+    .= 8;
+   0 in 7 & 1 in 7 & 2 in 7 & 3 in 7 & 4 in 7 & 5 in 7 & 6 in 7
+    by CARD_1:93,ENUMSET1:def 5;
+  hence p.0 = x1 & p.1 = x2 & p.2 = x3 & p.3 = x4 & p.4 = x5 & p.5 = x6 &
+  p.6 = x7 by A1,A3,A4,A5,A6,Def4,A2;
+  thus p.7 = p.len p17 by Th90
+    .= x8 by A1,Th40;
+end;
+
+theorem
+  for x1,x2,x3,x4,x5,x6,x7, x8, x9 being set, p being XFinSequence
+  st p = <%x1%>^<%x2%>^<%x3%>^<%x4%>^<%x5%>^<%x6%>^<%x7%>^<%x8%>^<%x9%>
+  holds len p = 9 & p.0 = x1 & p.1 = x2 & p.2 = x3 & p.3 = x4 & p.4 = x5 &
+  p.5 = x6 & p.6 = x7 & p.7 = x8 & p.8 = x9
+proof
+  let x1, x2, x3, x4, x5, x6, x7, x8, x9 be set, p be XFinSequence;
+  assume
+A1: p = <%x1%>^<%x2%>^<%x3%>^<%x4%>^<%x5%>^<%x6%>^<%x7%>^<%x8%>^<%x9%>;
+  set p17 = <%x1%>^<%x2%>^<%x3%>^<%x4%>^<%x5%>^<%x6%>^<%x7%>^<%x8%>;
+A2: len p17 = 8 by Th91;
+A3: p17.0 = x1 & p17.1 = x2 by Th91;
+A4: p17.2 = x3 & p17.3 = x4 by Th91;
+A5: p17.4 = x5 & p17.5 = x6 by Th91;
+A6: p17.6 = x7 & p17.7 = x8 by Th91;
+  thus len p = len p17 + len <%x9%> by A1,Def4
+    .= 8 + 1 by A2,Th36
+    .= 9;
+   0 in 8 & 1 in 8 & 2 in 8 & 3 in 8 & 4 in 8 & 5 in 8 & 6 in 8 & 7 in 8
+    by CARD_1:94,ENUMSET1:def 6;
+  hence p.0 = x1 & p.1 = x2 & p.2 = x3 & p.3 = x4 & p.4 = x5 & p.5 = x6 &
+  p.6 = x7 & p.7 = x8 by A1,A3,A4,A5,A6,Def4,A2;
+  thus p.8 = p.len p17 by Th91
+    .= x9 by A1,Th40;
 end;
 

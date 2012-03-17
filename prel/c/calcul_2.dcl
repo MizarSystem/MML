@@ -40,7 +40,7 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="24"/>
+<Adjective nr="25"/>
 </Cluster>
 </FCluster>
 <FCluster aid="CALCUL_2" nr="2">
@@ -54,8 +54,8 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="24"/>
-<Adjective nr="28"/>
+<Adjective nr="25"/>
+<Adjective nr="29"/>
 </Cluster>
 </FCluster>
 </Registrations>

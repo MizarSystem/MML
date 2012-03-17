@@ -28,31 +28,31 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="35" value="false"/>
-<Adjective nr="41"/>
-<Adjective nr="51"/>
-<Adjective nr="57"/>
+<Adjective nr="36" value="false"/>
+<Adjective nr="42"/>
+<Adjective nr="52"/>
+<Adjective nr="58"/>
 </Cluster>
 </RCluster>
 <FCluster aid="NECKLA_2" nr="1">
 <ArgTypes/>
 <Func kind="K" nr="133"/>
 <Cluster>
-<Adjective nr="10" value="false"/>
+<Adjective nr="11" value="false"/>
 </Cluster>
 </FCluster>
 <FCluster aid="NECKLA_2" nr="2">
 <ArgTypes/>
 <Func kind="K" nr="134"/>
 <Cluster>
-<Adjective nr="10" value="false"/>
+<Adjective nr="11" value="false"/>
 </Cluster>
 </FCluster>
 <CCluster aid="NECKLA_2" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="19"/>
+<Adjective nr="20"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -64,7 +64,7 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="24"/>
+<Adjective nr="25"/>
 </Cluster>
 </CCluster>
 <CCluster aid="NECKLA_2" nr="2">
@@ -75,7 +75,7 @@
 <Func kind="K" nr="108"/>
 </Typ>
 <Cluster>
-<Adjective nr="24"/>
+<Adjective nr="25"/>
 </Cluster>
 </CCluster>
 </Registrations>

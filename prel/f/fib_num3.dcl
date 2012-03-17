@@ -20,16 +20,16 @@
 <ArgTypes/>
 <Func kind="K" nr="77"/>
 <Cluster>
-<Adjective nr="21"/>
-<Adjective nr="23"/>
+<Adjective nr="22"/>
+<Adjective nr="24"/>
 </Cluster>
 </FCluster>
 <FCluster aid="FIB_NUM3" nr="2">
 <ArgTypes/>
 <Func kind="K" nr="78"/>
 <Cluster>
-<Adjective nr="22"/>
 <Adjective nr="23"/>
+<Adjective nr="24"/>
 </Cluster>
 </FCluster>
 <FCluster aid="FIB_NUM3" nr="3">
@@ -43,7 +43,7 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="21"/>
+<Adjective nr="22"/>
 </Cluster>
 </FCluster>
 </Registrations>

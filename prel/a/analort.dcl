@@ -27,12 +27,12 @@
 <ArgTypes>
 <Typ kind="G" nr="12">
 <Cluster>
-<Adjective nr="36" value="false"/>
-<Adjective nr="59"/>
-<Adjective nr="84"/>
+<Adjective nr="37" value="false"/>
+<Adjective nr="60"/>
 <Adjective nr="85"/>
 <Adjective nr="86"/>
 <Adjective nr="87"/>
+<Adjective nr="88"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
@@ -54,20 +54,20 @@
 <LocusVar nr="3"/>
 </Func>
 <Cluster>
-<Adjective nr="36" value="false"/>
-<Adjective nr="89"/>
+<Adjective nr="37" value="false"/>
+<Adjective nr="90"/>
 </Cluster>
 </FCluster>
 <FCluster aid="ANALORT" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="12">
 <Cluster>
-<Adjective nr="36" value="false"/>
-<Adjective nr="59"/>
-<Adjective nr="84"/>
+<Adjective nr="37" value="false"/>
+<Adjective nr="60"/>
 <Adjective nr="85"/>
 <Adjective nr="86"/>
 <Adjective nr="87"/>
+<Adjective nr="88"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
@@ -89,8 +89,8 @@
 <LocusVar nr="3"/>
 </Func>
 <Cluster>
-<Adjective nr="36" value="false"/>
-<Adjective nr="89"/>
+<Adjective nr="37" value="false"/>
+<Adjective nr="90"/>
 </Cluster>
 </FCluster>
 </Registrations>

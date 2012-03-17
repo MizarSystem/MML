@@ -11,10 +11,11 @@ environ
       SEQ_2, PROB_1, SEQ_1, FUNCT_1, SEQM_3, FRECHET, ARYTM_3, CONNSP_2, ARYTM,
       TOPS_1, ARYTM_1, NEWTON, NORMSP_1, COMPLEX1, INT_1, FINSEQ_1, TOPREAL1,
       TOPREAL2, JORDAN9, JORDAN2C, SQUARE_1, GOBOARD9, ZF_REFLE, FUNCOP_1,
-      MCART_1, WAYBEL_7, RLVECT_3, CARD_4, CANTOR_1;
+      MCART_1, WAYBEL_7, RLVECT_3, CARD_4, CANTOR_1, YELLOW_8;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, ZFMISC_1,
       XXREAL_0, XREAL_0, REAL_1, NAT_1, SETFAM_1, MCART_1, DOMAIN_1, STRUCT_0,
-      PRE_TOPC, TOPS_1, COMPTS_1, RELAT_1, FUNCT_1, INT_1, FINSEQ_1, TBSP_1,
+      PRE_TOPC, TOPS_1, TOPS_2, COMPTS_1, RELAT_1, FUNCT_1, INT_1, FINSEQ_1,
+      TBSP_1,
       RELSET_1, FUNCT_2, METRIC_1, PCOMPS_1, RLVECT_1, EUCLID, FUNCOP_1,
       BORSUK_1, CARD_3, PROB_1, LIMFUNC1, CONNSP_2, TOPREAL1, TOPREAL2,
       JORDAN2C, VALUED_0, GOBOARD9, YELLOW_8, FRECHET, FRECHET2, TOPRNS_1,
@@ -35,7 +36,7 @@ environ
       XBOOLE_0, FUNCT_1, INT_1, XREAL_0, SPPOL_1, TOPS_1, TOPREAL6, JORDAN2C,
       TBSP_1, METRIC_6, ZFMISC_1, RELAT_1, GOBRD14, FUNCT_6, SEQM_3, MCART_1,
       BORSUK_1, PROB_1, FRECHET2, MEASURE2, XREAL_1, XXREAL_0, ORDINAL1,
-      VALUED_0, EUCLID, YELLOW_8;
+      VALUED_0, EUCLID, YELLOW_8, TOPS_2;
  schemes XBOOLE_0, WELLORD2, FUNCT_2, NAT_1, SUBSET_1;
 
 begin
@@ -810,7 +811,7 @@ A2:   S is non-descending;
     assume
     for i being Element of NAT holds S.i c= S.(i+1);
     then for i, j being Element of NAT st i <= j holds S.i c= S.j by
-    MEASURE2:22;
+MEASURE2:22;
     hence thesis by PROB_1:def 7;
   end;
 end;
@@ -1157,12 +1158,9 @@ end;
 
 Lm1: for T being non empty TopSpace, x being Point of T, y being Point of the
 TopStruct of T, A being set st x = y holds A is Basis of x iff A is Basis of y
-
 proof
-
   let T be non empty TopSpace, x be Point of T, y be Point of the TopStruct of
   T, A being set such that
-
 A1: x = y;
   thus A is Basis of x implies A is Basis of y
   proof
@@ -1171,7 +1169,11 @@ A2: A is Basis of x;
     then reconsider A as Subset-Family of the TopStruct of T;
     A is Basis of y
     proof
-      thus A c= the topology of the TopStruct of T by A2,YELLOW_8:def 2;
+      A c= the topology of the TopStruct of T by A2,TOPS_2:78;
+      then
+A10:  A is open by TOPS_2:78;
+      A is y-quasi_basis
+      proof
       thus y in Intersect A by A1,A2,YELLOW_8:def 2;
       let S be Subset of the TopStruct of T;
       reconsider SS=S as Subset of T;
@@ -1185,6 +1187,8 @@ A5:   W in A & W c= SS by A1,A2,A4,YELLOW_8:def 2;
       take V;
       thus V in A & V c= S by A5;
     end;
+    hence thesis by A10;
+    end;
     hence thesis;
   end;
   assume
@@ -1192,7 +1196,11 @@ A6: A is Basis of y;
   then reconsider A as Subset-Family of T;
   A is Basis of x
   proof
-    thus A c= the topology of T by A6,YELLOW_8:def 2;
+    A c= the topology of T by A6,TOPS_2:78,YELLOW_8:def 2;
+    then
+A10: A is open by A6,TOPS_2:78,YELLOW_8:def 2;
+    A is x-quasi_basis
+    proof
     thus x in Intersect A by A1,A6,YELLOW_8:def 2;
     let S be Subset of T;
     reconsider SS=S as Subset of the TopStruct of T;
@@ -1205,6 +1213,8 @@ A9: W in A & W c= SS by A1,A6,A8,YELLOW_8:def 2;
     reconsider V=W as Subset of T;
     take V;
     thus V in A & V c= S by A9;
+  end;
+  hence thesis by A10;
   end;
   hence thesis;
 end;
@@ -1221,7 +1231,7 @@ A1: T is first-countable;
     let x be Point of the TopStruct of T;
     reconsider y = x as Point of T;
     consider C being Basis of y such that
-A2: C is countable by A1,FRECHET:def 1;
+A2: C is countable by A1,FRECHET:def 2;
     reconsider B = C as Basis of x by Lm1;
     take B;
     thus B is countable by A2;
@@ -1231,7 +1241,7 @@ A3: the TopStruct of T is first-countable;
   let x be Point of T;
   reconsider y = x as Point of the TopStruct of T;
   consider C being Basis of y such that
-A4: C is countable by A3,FRECHET:def 1;
+A4: C is countable by A3,FRECHET:def 2;
   reconsider B = C as Basis of x by Lm1;
   take B;
   thus B is countable by A4;
@@ -1272,9 +1282,7 @@ A3: for r being real number st r > 0 holds Ball (p', r) meets A;
   proof
     let G be a_neighborhood of p;
     p in Int G by CONNSP_2:def 1;
-    then ex r being real number st r > 0 & Ball (p', r) c= G by A1,
-    GOBOARD6:
-    8;
+    then ex r being real number st r > 0 & Ball (p', r) c= G by A1,GOBOARD6:8;
     hence thesis by A3,XBOOLE_1:63;
   end;
   hence thesis by CONNSP_2:34;
@@ -1531,8 +1539,7 @@ A3:   z in H by XBOOLE_0:3;
       z in Int H by A3;
       then H is a_neighborhood of z by CONNSP_2:def 1;
       then consider k being Element of NAT such that
-A4:   for m being Element of NAT st m > k holds S.m meets H by A2,
-      Def11;
+A4:   for m being Element of NAT st m > k holds S.m meets H by A2,Def11;
       take k;
       let m be Element of NAT;
       assume
@@ -1636,8 +1643,7 @@ A3: x in Lim_inf A;
     proof
       let H be a_neighborhood of p;
       consider k being Element of NAT such that
-A4:   for m being Element of NAT st m > k holds A.m meets H by A3,
-      Def11;
+A4:   for m being Element of NAT st m > k holds A.m meets H by A3,Def11;
       take k;
       let m be Element of NAT;
       assume
@@ -1656,8 +1662,7 @@ A6: x in Lim_inf B;
     proof
       let H be a_neighborhood of p;
       consider k being Element of NAT such that
-A7:   for m being Element of NAT st m > k holds B.m meets H by A6,
-      Def11;
+A7:   for m being Element of NAT st m > k holds B.m meets H by A6,Def11;
       take k;
       let m be Element of NAT;
       assume
@@ -1742,8 +1747,7 @@ A3:   H1 is a_neighborhood of p and
 A4:   H1 is open and
 A5:   H1 c= H by CONNSP_2:7;
       consider k being Element of NAT such that
-A6:   for m being Element of NAT st m > k holds G.m meets H1 by A2,A3,
-      Def11;
+A6:   for m being Element of NAT st m > k holds G.m meets H1 by A2,A3,Def11;
       take k;
       let m be Element of NAT;
       assume
@@ -1793,8 +1797,8 @@ A3: p = lim s;
     assume
     r > 0;
     then consider l being Element of NAT such that
-A4: for m being Element of NAT st l <= m holds |. s.m - p .| < r' by
-    A1,A3,TOPRNS_1:def 10;
+A4: for m being Element of NAT st l <= m holds |. s.m - p .| < r' by A1,A3,
+TOPRNS_1:def 10;
     take v = max (0, l);
     let m be Element of NAT;
     assume
@@ -1907,11 +1911,11 @@ A5: x in Lim_inf S and
 A6: y in Lim_inf S and
 A7: dist (x, y) > R by A3,Th38;
   consider k1 being Element of NAT such that
-A8: for m being Element of NAT st m > k1 holds S.m meets Ball (x, r) by
-  A5,Th48;
+A8: for m being Element of NAT st m > k1 holds S.m meets Ball (x, r) by A5,Th48
+;
   consider k2 being Element of NAT such that
-A9: for m being Element of NAT st m > k2 holds S.m meets Ball (y, r) by
-  A6,Th48;
+A9: for m being Element of NAT st m > k2 holds S.m meets Ball (y, r) by A6,Th48
+;
   set k = max (k1, k2) + 1;
   S.k c= P' by A2;
   then
@@ -1972,12 +1976,10 @@ A5: x = [x1,x2] by ZFMISC_1:def 2;
       such that
 A6:   [:V,W:] c= G by BORSUK_1:67;
       consider k2 being Element of NAT such that
-A7:   for m being Element of NAT st m > k2 holds B.m meets W by A4,
-      Def11;
+A7:   for m being Element of NAT st m > k2 holds B.m meets W by A4,Def11;
       V is a_neighborhood of x1 by CONNSP_2:10;
       then consider k1 being Element of NAT such that
-A8:   for m being Element of NAT st m > k1 holds A.m meets V by A3,
-      Def11;
+A8:   for m being Element of NAT st m > k1 holds A.m meets V by A3,Def11;
       take k = max (k1, k2);
       let m be Element of NAT;
       assume
@@ -2003,7 +2005,7 @@ A11: x in Lim_inf C;
     then x in the carrier of [: TOP-REAL n, TOP-REAL n :];
     then
 A12: x in [: the carrier of TOP-REAL n, the carrier of TOP-REAL n :] by
-    BORSUK_1:def 5;
+BORSUK_1:def 5;
     then reconsider p1 = x`1, p2 = x`2 as Point of TOP-REAL n by MCART_1:10;
     consider H being a_neighborhood of p2;
     consider F being a_neighborhood of p1;
@@ -2111,9 +2113,7 @@ A4: K = ((UBD R) \/ ((BDD R) \/ R)) \ UBD R by XBOOLE_1:4
     .= R \/ BDD R by A3,XBOOLE_1:88;
   ((BDD R) \/ (UBD R))` = R`` by JORDAN2C:31;
   then (BDD R)` /\ (UBD R)` = R by XBOOLE_1:53;
-  then (BDD R) \/ R = ((BDD R) \/ (BDD R)`) /\ ((BDD R) \/ K) by
-  XBOOLE_1:
-  24
+  then (BDD R) \/ R = ((BDD R) \/ (BDD R)`) /\ ((BDD R) \/ K) by XBOOLE_1:24
     .= (BDD R) \/ K by A1,XBOOLE_1:28
     .= K by A4,XBOOLE_1:7,12;
   then
@@ -2126,7 +2126,7 @@ A7: (BDD L~Cage (C,i)) /\ (UBD L~Cage (C,i)) = {} by XBOOLE_0:def 7;
     .= ((BDD L~Cage (C,i)) \/ L~Cage (C,i)) /\ ((UBD L~Cage (C,i)) \/ L~Cage
   (C,i)) by A5,A6,GOBRD14:32
     .= ((BDD L~Cage (C,i)) /\ (UBD L~Cage (C,i))) \/ L~Cage (C,i) by
-  XBOOLE_1:24
+XBOOLE_1:24
     .= L~Cage (C,i) by A7;
   hence thesis;
 end;
@@ -2461,7 +2461,7 @@ A1: for i being Element of NAT holds C.i = [: A.i, B.i :];
 A2: x in Lim_inf C1 by Def12;
   x in the carrier of [: TOP-REAL 2, TOP-REAL 2 :] by A2;
   then x in [: the carrier of TOP-REAL 2, the carrier of TOP-REAL 2 :] by
-  BORSUK_1:def 5;
+BORSUK_1:def 5;
   then consider x1, x2 being set such that
 A3: x = [x1, x2] by RELAT_1:def 1;
   consider A1, B1 being SetSequence of the carrier of TOP-REAL 2 such that

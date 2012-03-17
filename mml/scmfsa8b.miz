@@ -9,13 +9,14 @@ environ
  vocabularies AMI_1, SCMFSA_2, BOOLE, AMI_3, SCMFSA6A, AMI_5, RELOC, CARD_1,
       FUNCT_4, RELAT_1, UNIALG_2, FUNCT_1, SCMFSA6C, SF_MASTR, FUNCT_7,
       SCMFSA7B, SCMFSA6B, SCMFSA8A, SCM_1, AMI_2, ARYTM_1, NAT_1, ABSVALUE,
-      FINSEQ_1, FINSEQ_2, SCMFSA8B, FINSEQ_4, ARYTM, AMISTD_2;
+      FINSEQ_1, FINSEQ_2, SCMFSA8B, FINSEQ_4, ARYTM, AMISTD_2, SCMNORM;
  notations TARSKI, XBOOLE_0, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0, NAT_1, INT_1,
       RELAT_1, FUNCT_1, PARTFUN1, FUNCT_4, FUNCT_7, FINSEQ_1, FINSEQ_2,
       STRUCT_0, AMI_1, SCMNORM, SCMFSA_2, SCMFSA_4, SCMFSA_5, SCMFSA6A,
       SF_MASTR, SCMFSA6B, SCMFSA6C, SCMFSA7B, SCMFSA8A, INT_2, XXREAL_0;
  constructors DOMAIN_1, XXREAL_0, NAT_1, INT_2, SCMFSA_5, PARTFUN1, SCMFSA6A,
-      SF_MASTR, SCMFSA6B, SCMFSA6C, SCMFSA8A, SCMNORM, SCMFSA_4, RELSET_1;
+      SF_MASTR, SCMFSA6B, SCMFSA6C, SCMFSA8A, SCMNORM, SCMFSA_4, RELSET_1,
+      SCMFSA_1;
  registrations SETFAM_1, RELAT_1, FUNCT_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1,
       INT_1, CARD_3, AMI_1, SCMFSA_2, SF_MASTR, SCMFSA6B, SCMFSA6C, ORDINAL1,
       XBOOLE_0, SCMNORM, FINSEQ_1, FINSET_1;
@@ -36,8 +37,7 @@ I ';' J
 proof
   let I,J be Program of SCM+FSA;
 
-  I ';' J = Directed I +* ProgramPart Relocated(J,card I) by SCMFSA6A:def
-  5;
+  I ';' J = Directed I +* ProgramPart Relocated(J,card I) by SCMFSA6A:def 5;
 
   hence thesis by FUNCT_4:26;
 end;
@@ -156,9 +156,8 @@ A12: for f being FinSeq-Location holds Computation(S1,k).f = Computation(
     ) .a by A11,SCMFSA6A:38;
     then
 A13: Computation(S1,k), Computation(S2,k) equal_outside A by A11,A12,
-    SCMFSA6A:28;
-    I +* Start-At insloc 0 c= s2 +* (I +* Start-At insloc 0) by FUNCT_4:
-    26;
+SCMFSA6A:28;
+    I +* Start-At insloc 0 c= s2 +* (I +* Start-At insloc 0) by FUNCT_4:26;
     then I c= s2 +* (I +* Start-At insloc 0) by A7,XBOOLE_1:1;
     then
 A14: I c= Computation(S2,k+1) by AMI_1:81;
@@ -166,27 +165,26 @@ A15: IC Computation(S1,k+1) in dom I by A5,SCMFSA7B:def 7;
 A16: Computation(S1,k+1) = Following Computation(S1,k) by AMI_1:14
       .= Exec(CurInstr Computation(S1,k), Computation(S1,k));
     then
-A17: IC Computation(S1,k+1) = IC Computation(S2,k+1) by A11,A13,A10,
-    AMI_1:121,SCMFSA6A:32;
-    I +* Start-At insloc 0 c= s1 +* (I +* Start-At insloc 0) by FUNCT_4:
-    26;
+A17: IC Computation(S1,k+1) = IC Computation(S2,k+1) by A11,A13,A10,AMI_1:121
+,SCMFSA6A:32;
+    I +* Start-At insloc 0 c= s1 +* (I +* Start-At insloc 0) by FUNCT_4:26;
     then I c= s1 +* (I +* Start-At insloc 0) by A7,XBOOLE_1:1;
     then I c= Computation(S1,k+1) by AMI_1:81;
     then CurInstr Computation(S1,k+1) = I.IC Computation(S1,k+1) by A15,
-    GRFUNC_1:8
+GRFUNC_1:8
       .= CurInstr Computation(S2,k+1) by A14,A17,A15,GRFUNC_1:8;
     hence P[k+1] by A11,A13,A16,A10,A17,SCMFSA6A:32,39;
   end;
 A18: IC SCM+FSA in dom (I +* Start-At insloc 0) by SF_MASTR:65;
   then
 A19: IC Computation(S2,0) = (I +* Start-At insloc 0).IC SCM+FSA by A2,
-  FUNCT_4:14
+FUNCT_4:14
     .= insloc 0 by SF_MASTR:66;
 A20: IC Computation(S1,0) = (I +* Start-At insloc 0).IC SCM+FSA by A18,A3,
-  FUNCT_4:14
+FUNCT_4:14
     .= insloc 0 by SF_MASTR:66;
-  then CurInstr Computation(S1,0) = (I +* Start-At insloc 0).insloc 0 by A3,
-  A8,A6,FUNCT_4:14
+  then CurInstr Computation(S1,0) = (I +* Start-At insloc 0).insloc 0 by A3,A8
+,A6,FUNCT_4:14
     .= CurInstr Computation(S2,0) by A2,A19,A8,A6,FUNCT_4:14;
   then
 A21: P[0] by A20,A19,A4;
@@ -236,24 +234,22 @@ A4: {IC SCM+FSA} = dom Start-At insloc 0 by FUNCOP_1:19;
 A5: Computation(S1,0) = s1 +* (I +* Start-At insloc 0) by AMI_1:13;
   Start-At insloc 0 c= I +* Start-At insloc 0 by FUNCT_4:26;
   then
-A6: dom Start-At insloc 0 c= dom (I +* Start-At insloc 0) by
-  GRFUNC_1:8;
+A6: dom Start-At insloc 0 c= dom (I +* Start-At insloc 0) by GRFUNC_1:8;
   then
-A7: IC Computation(S1,0) = (I +* Start-At insloc 0).IC SCM+FSA by A1,A4,
-  A5,FUNCT_4:14
+A7: IC Computation(S1,0) = (I +* Start-At insloc 0).IC SCM+FSA by A1,A4,A5,
+FUNCT_4:14
     .= (Start-At insloc 0).IC SCM+FSA by A1,A4,FUNCT_4:14
     .= insloc 0 by FUNCOP_1:87;
 A8: Computation(S2,0) = s2 +* (I +* Start-At insloc 0) by AMI_1:13;
   then
 A9: IC Computation(S2,0) = (I +* Start-At insloc 0).IC SCM+FSA by A1,A4,A6,
-  FUNCT_4:14
+FUNCT_4:14
     .= (Start-At insloc 0).IC SCM+FSA by A1,A4,FUNCT_4:14
     .= insloc 0 by FUNCOP_1:87;
   assume
   DataPart s1 = DataPart s2;
   then
-A10: Computation(S1,0), Computation(S2,0) equal_outside A by
-  A5,A8,Th7;
+A10: Computation(S1,0), Computation(S2,0) equal_outside A by A5,A8,Th7;
   assume
 A11: I is_closed_on s1;
 A12: now
@@ -269,9 +265,8 @@ A15: for f being FinSeq-Location holds Computation(S1,k).f = Computation(
     ) .a by A14,SCMFSA6A:38;
     then
 A16: Computation(S1,k), Computation(S2,k) equal_outside A by A14,A15,
-    SCMFSA6A:28;
-    (I +* Start-At insloc 0) c= s2 +* (I +* Start-At insloc 0) by FUNCT_4
-    :26;
+SCMFSA6A:28;
+    (I +* Start-At insloc 0) c= s2 +* (I +* Start-At insloc 0) by FUNCT_4:26;
     then I c= s2 +* (I +* Start-At insloc 0) by A2,XBOOLE_1:1;
     then
 A17: I c= Computation(S2,k+1) by AMI_1:81;
@@ -279,25 +274,25 @@ A18: IC Computation(S1,k+1) in dom I by A11,SCMFSA7B:def 7;
 A19: Computation(S1,k+1) = Following Computation(S1,k) by AMI_1:14
       .= Exec(CurInstr Computation(S1,k), Computation(S1,k));
     then
-A20: IC Computation(S1,k+1) = IC Computation(S2,k+1) by A14,A16,A13,
-    AMI_1:121,SCMFSA6A:32;
-    (I +* Start-At insloc 0) c= s1 +* (I +* Start-At insloc 0) by FUNCT_4
-    :26;
+A20: IC Computation(S1,k+1) = IC Computation(S2,k+1) by A14,A16,A13,AMI_1:121
+,SCMFSA6A:32;
+    (I +* Start-At insloc 0) c= s1 +* (I +* Start-At insloc 0) by FUNCT_4:26;
     then I c= s1 +* (I +* Start-At insloc 0) by A2,XBOOLE_1:1;
     then I c= Computation(S1,k+1) by AMI_1:81;
     then CurInstr Computation(S1,k+1) = I.IC Computation(S1,k+1) by A18,
-    GRFUNC_1:8
+GRFUNC_1:8
       .= CurInstr Computation(S2,k+1) by A17,A20,A18,GRFUNC_1:8;
     hence P[k+1] by A14,A16,A19,A13,A20,SCMFSA6A:32,39;
   end;
   assume
   I is_halting_on s1;
-  then s1 +* (I +* Start-At insloc 0) is halting by SCMFSA7B:def 8;
+  then ProgramPart(s1 +* (I +* Start-At insloc 0))
+   halts_on s1 +* (I +* Start-At insloc 0) by SCMFSA7B:def 8;
   then consider m being Element of NAT such that
-A21: CurInstr Computation(S1,m) = halt SCM+FSA by AMI_1:def 20;
+A21: CurInstr Computation(S1,m) = halt SCM+FSA by AMI_1:146;
 A22: insloc 0 in dom I by A11,Th3;
-  then CurInstr Computation(S1,0) = (I +* Start-At insloc 0).insloc 0 by A5,
-  A7,A3,FUNCT_4:14
+  then CurInstr Computation(S1,0) = (I +* Start-At insloc 0).insloc 0 by A5,A7
+,A3,FUNCT_4:14
     .= CurInstr Computation(S2,0) by A8,A9,A3,A22,FUNCT_4:14;
   then
 A23: P[0] by A7,A9,A10,SCMFSA6A:39;
@@ -310,7 +305,8 @@ A24: IC Computation(S1,k) in dom I by A11,SCMFSA7B:def 7;
   hence I is_closed_on s2 by SCMFSA7B:def 7;
   for k being Element of NAT holds P[k] from NAT_1:sch 1(A23,A12);
   then CurInstr Computation(S2,m) = halt SCM+FSA by A21;
-  then s2 +* (I +* Start-At insloc 0) is halting by AMI_1:def 20;
+  then ProgramPart(s2 +* (I +* Start-At insloc 0))
+   halts_on s2 +* (I +* Start-At insloc 0) by AMI_1:146;
   hence thesis by SCMFSA7B:def 8;
 end;
 
@@ -376,14 +372,12 @@ A11: IC Computation(s1,k+1) in dom I by A2,SCMFSA7B:def 7;
     assume
 A12: P[k];
     hence
-A13: IC Computation(s1,k+1) + n = IC Computation(s2,k+1) by A8,
-    A9,SCMFSA6A:41;
+A13: IC Computation(s1,k+1) + n = IC Computation(s2,k+1) by A8,A9,SCMFSA6A:41;
     then IC Computation(s2,k+1) in dom Relocated(I,n) by A11,SCMFSA_5:4;
     then IC Computation(s2,k+1) in dom Relocated(I,n) /\ NAT by A10,
-    XBOOLE_0:def 4;
+XBOOLE_0:def 4;
     then
-A14: IC Computation(s2,k+1) in dom ProgramPart Relocated(I,n) by
-    RELAT_1:90;
+A14: IC Computation(s2,k+1) in dom ProgramPart Relocated(I,n) by RELAT_1:90;
     dom ProgramPart I = dom I /\ NAT by RELAT_1:90;
     then
 A15: l in dom ProgramPart I by A11,XBOOLE_0:def 4;
@@ -392,12 +386,12 @@ A16: I c= I +* Start-At insloc 0 by SCMFSA8A:9;
 A17: dom I c= dom (I +* Start-At insloc 0) by GRFUNC_1:8;
     j = s1.IC Computation(s1,k+1) by AMI_1:54
       .= (I +* Start-At insloc 0).IC Computation(s1,k+1) by A1,A17,A11,
-    GRFUNC_1:8
+GRFUNC_1:8
       .= I.l by A16,A11,GRFUNC_1:8;
     hence IncAddr(CurInstr Computation(s1,k+1),n) = Relocated(I,n).(l + n) by
-    A15,SCMFSA_5:7
+A15,SCMFSA_5:7
       .= (ProgramPart Relocated(I,n)).(IC Computation(s2,k+1)) by A13,
-    FUNCT_1:72
+FUNCT_1:72
       .= s2.IC Computation(s2,k+1) by A6,A14,GRFUNC_1:8
       .= CurInstr Computation(s2,k+1) by AMI_1:54;
     thus thesis by A12,A8,A9,SCMFSA6A:41;
@@ -413,9 +407,7 @@ A20: insloc 0 in dom I by A2,Th3;
 A21: insloc (0 + n) in dom ProgramPart Relocated(I,n) by AMI_1:106;
   IC SCM+FSA in dom (I +* Start-At insloc 0) by SF_MASTR:65;
   then
-A22: s1.IC s1 = s1.((I +* Start-At insloc 0).IC SCM+FSA) by A1,
-  GRFUNC_1
-  :8
+A22: s1.IC s1 = s1.((I +* Start-At insloc 0).IC SCM+FSA) by A1,GRFUNC_1:8
     .= s1.insloc 0 by SF_MASTR:66
     .= (I +* Start-At insloc 0).insloc 0 by A1,A5,A20,GRFUNC_1:8
     .= I.insloc 0 by A4,A20,GRFUNC_1:8;
@@ -428,8 +420,7 @@ A23: insloc 0 in dom ProgramPart I by A2,Th3;
 A24: DataPart Computation(s1,0) = DataPart s2 by AMI_1:13
     .= DataPart Computation(s2,0) by AMI_1:13;
   let i be Element of NAT;
-  IncAddr(CurInstr ( Computation(s1,0)),n) = IncAddr(CurInstr s1,n) by
-  AMI_1:13
+  IncAddr(CurInstr ( Computation(s1,0)),n) = IncAddr(CurInstr s1,n) by AMI_1:13
     .= Relocated(I,n).(insloc 0 + n) by A22,A23,SCMFSA_5:7
     .= (ProgramPart Relocated(I,n)).insloc n by FUNCT_1:72
     .= CurInstr s2 by A6,A19,A21,GRFUNC_1:8
@@ -502,10 +493,10 @@ proof
   SCM+FSA) by SCMFSA6A:67
 
     .= i ';' J ';' (Goto insloc (card I + 1) ';' (I ';' Stop SCM+FSA)) by
-  SCMFSA6A:67
+SCMFSA6A:67
 
     .= i ';' (J ';' (Goto insloc (card I + 1) ';' (I ';' Stop SCM+FSA))) by
-  SCMFSA6A:71
+SCMFSA6A:71
 
     .= Macro i ';' (J ';' (Goto insloc (card I + 1) ';' (I ';' Stop SCM+FSA)
   )) by SCMFSA6A:def 6;
@@ -523,10 +514,10 @@ A3: insloc 1 in dom Macro i by TARSKI:def 2;
   SCM+FSA) by SCMFSA6A:67
 
     .= i ';' J ';' (Goto insloc (card I + 1) ';' (I ';' Stop SCM+FSA)) by
-  SCMFSA6A:67
+SCMFSA6A:67
 
     .= i ';' (J ';' (Goto insloc (card I + 1) ';' (I ';' Stop SCM+FSA))) by
-  SCMFSA6A:71
+SCMFSA6A:71
 
     .= Macro i ';' (J ';' (Goto insloc (card I + 1) ';' (I ';' Stop SCM+FSA)
   )) by SCMFSA6A:def 6;
@@ -555,10 +546,10 @@ A2: if=0(a,I,J) = i ';' J ';' Goto insloc (card I + 1) ';' (I ';' Stop
   SCM+FSA) by SCMFSA6A:67
 
     .= i ';' J ';' (Goto insloc (card I + 1) ';' (I ';' Stop SCM+FSA)) by
-  SCMFSA6A:67
+SCMFSA6A:67
 
     .= i ';' (J ';' (Goto insloc (card I + 1) ';' (I ';' Stop SCM+FSA))) by
-  SCMFSA6A:71
+SCMFSA6A:71
 
     .= Macro i ';' (J ';' (Goto insloc (card I + 1) ';' (I ';' Stop SCM+FSA)
   )) by SCMFSA6A:def 6;
@@ -577,10 +568,10 @@ A5: if>0(a,I,J) = i ';' J ';' Goto insloc (card I + 1) ';' (I ';' Stop
   SCM+FSA) by SCMFSA6A:67
 
     .= i ';' J ';' (Goto insloc (card I + 1) ';' (I ';' Stop SCM+FSA)) by
-  SCMFSA6A:67
+SCMFSA6A:67
 
     .= i ';' (J ';' (Goto insloc (card I + 1) ';' (I ';' Stop SCM+FSA))) by
-  SCMFSA6A:71
+SCMFSA6A:71
 
     .= Macro i ';' (J ';' (Goto insloc (card I + 1) ';' (I ';' Stop SCM+FSA)
   )) by SCMFSA6A:def 6;
@@ -591,8 +582,7 @@ A6: dom Macro i = {insloc 0, insloc 1} by SCMFSA7B:4;
     .= i by A4,SCMFSA7B:7;
   insloc 1 in dom Macro i by A6,TARSKI:def 2;
 
-  hence if>0(a,I,J).insloc 1 = (Directed Macro i).insloc 1 by A5, SCMFSA8A:
-  28
+  hence if>0(a,I,J).insloc 1 = (Directed Macro i).insloc 1 by A5,SCMFSA8A:28
 
     .= goto insloc 2 by SCMFSA7B:8;
 end;
@@ -657,24 +647,20 @@ proof
 A1: not a in dom (if=0(a,I,J) +* Start-At insloc 0) by SCMFSA6B:12;
 A2: insloc 0 in dom if=0(a,I,J) by Lm2;
   if=0(a,I,J) c= if=0(a,I,J) +* Start-At insloc 0 by SCMFSA8A:9;
-  then dom if=0(a,I,J) c= dom (if=0(a,I,J) +* Start-At insloc 0) by
-  GRFUNC_1:8;
+  then dom if=0(a,I,J) c= dom (if=0(a,I,J) +* Start-At insloc 0) by GRFUNC_1:8;
   then
-A3: s3.insloc 0 = (if=0(a,I,J) +* Start-At insloc 0).insloc 0 by A2,
-  FUNCT_4:14
+A3: s3.insloc 0 = (if=0(a,I,J) +* Start-At insloc 0).insloc 0 by A2,FUNCT_4:14
     .= if=0(a,I,J).insloc 0 by A2,SCMFSA6B:7
     .= i by Lm3;
   IC SCM+FSA in dom (if=0(a,I,J) +* Start-At insloc 0) by SF_MASTR:65;
   then
-A4: IC s3 = (if=0(a,I,J) +* Start-At insloc 0).IC SCM+FSA by
-  FUNCT_4:14
+A4: IC s3 = (if=0(a,I,J) +* Start-At insloc 0).IC SCM+FSA by FUNCT_4:14
     .= insloc 0 by SF_MASTR:66;
 A5: if=0(a,I,J) c= if=0(a,I,J) +* Start-At insloc 0 by SCMFSA8A:9;
   if=0(a,I,J) +* Start-At insloc 0 c= s3 by FUNCT_4:26;
   then
 A6: if=0(a,I,J) c= s3 by A5,XBOOLE_1:1;
-A7: if=0(a,I,J) = i ';' J ';' Goto insloc (card I + 1) ';' I1 by SCMFSA6A:
-  67;
+A7: if=0(a,I,J) = i ';' J ';' Goto insloc (card I + 1) ';' I1 by SCMFSA6A:67;
   card (i ';' J ';' Goto insloc (card I + 1)) = card (Macro i ';' J ';'
   Goto insloc (card I + 1)) by SCMFSA6A:def 6
     .= card (Macro i ';' J) + card Goto insloc (card I + 1) by SCMFSA6A:61
@@ -684,8 +670,7 @@ A7: if=0(a,I,J) = i ';' J ';' Goto insloc (card I + 1) ';' I1 by SCMFSA6A:
     .= card J + (2 + 1);
   then ProgramPart Relocated(I1,card J + 3) c= if=0(a,I,J) by A7,Lm1;
   then ProgramPart Relocated(I1,card J + 3) c= s3 by A6,XBOOLE_1:1;
-  then ProgramPart [ProgramPart Relocated(I1,card J + 3)] c= s4 by AMI_1:
-  99;
+  then ProgramPart [ProgramPart Relocated(I1,card J + 3)] c= s4 by AMI_1:99;
   then
 A8: ProgramPart Relocated(I1,card J + 3) c= s4 by AMI_1:105;
 A9: Computation( s3,0 + 1) = Following Computation( s3,0) by AMI_1:14
@@ -717,7 +702,7 @@ A15: I is_halting_on s;
 A16: I1 is_closed_on s by A14,SCMFSA8A:46;
   I1 is_halting_on s by A14,A15,SCMFSA8A:46;
   then
-A17: s1 is halting by SCMFSA7B:def 8;
+A17: ProgramPart s1 halts_on s1 by SCMFSA7B:def 8;
   DataPart s = DataPart s1 by SCMFSA8A:11;
   then
 A18: I1 is_closed_on s1 by A16,Th6;
@@ -730,8 +715,8 @@ A19: I1 +* Start-At insloc 0 c= s1 by FUNCT_4:26;
       then consider k1 being Nat such that
 A20:  k1 + 1 = k by NAT_1:6;
       reconsider k1 as Element of NAT by ORDINAL1:def 13;
-      reconsider m = IC Computation( s1,k1) as Element of NAT by ORDINAL1:def
-      13;
+      reconsider m = IC Computation( s1,k1) as Element of NAT by
+ORDINAL1:def 13;
       insloc m in dom I1 by A16,SCMFSA7B:def 7;
       then
 A21:  m < card I1 by SCMFSA6A:15;
@@ -753,11 +738,10 @@ A23:  m + (card J + 3) < card if=0(a,I,J) by A21,XREAL_1:8;
   CurInstr Computation( s3,LifeSpan s1 + 1) = CurInstr Computation( s4,
   LifeSpan s1) by AMI_1:51
     .= IncAddr(CurInstr ( Computation( s1,LifeSpan s1)),(card J + 3)) by A19
-  ,
-  A18,A8,A13,A12,Th11
+,A18,A8,A13,A12,Th11
     .= IncAddr(halt SCM+FSA,(card J + 3)) by A17,AMI_1:def 46
     .= halt SCM+FSA by SCMFSA_4:8;
-  then s3 is halting by AMI_1:def 20;
+  then ProgramPart s3 halts_on s3 by AMI_1:146;
   hence thesis by SCMFSA7B:def 8;
 end;
 
@@ -776,8 +760,7 @@ proof
   set s4 = Computation(s3,1);
   set i = a =0_goto insloc (card J + 3);
 A1: I1 +* Start-At insloc 0 c= s1 by FUNCT_4:26,SCMFSA6B:8;
-A2: if=0(a,I,J) = i ';' J ';' Goto insloc (card I + 1) ';' I1 by SCMFSA6A:
-  67;
+A2: if=0(a,I,J) = i ';' J ';' Goto insloc (card I + 1) ';' I1 by SCMFSA6A:67;
 A3: insloc 0 in dom if=0(a,I,J) by Lm2;
   if=0(a,I,J) c= Initialized if=0(a,I,J) by SCMFSA6A:26;
   then dom if=0(a,I,J) c= dom Initialized if=0(a,I,J) by GRFUNC_1:8;
@@ -825,8 +808,7 @@ A14: DataPart s1 = DataPart s4 by A13,SCMFSA6A:38;
     .= card J + (2 + 1);
   then ProgramPart Relocated(I1,card J + 3) c= if=0(a,I,J) by A2,Lm1;
   then ProgramPart Relocated(I1,card J + 3) c= s3 by A8,XBOOLE_1:1;
-  then ProgramPart [ProgramPart Relocated(I1,card J + 3)] c= s4 by AMI_1:
-  99;
+  then ProgramPart [ProgramPart Relocated(I1,card J + 3)] c= s4 by AMI_1:99;
   then
 A15: ProgramPart Relocated(I1,card J + 3) c= s4 by AMI_1:105;
   assume
@@ -834,18 +816,18 @@ A16: I is_closed_on Initialize s;
   assume
 A17: I is_halting_on Initialize s;
   then
-A18: s1 is halting by A16,SCMFSA8A:55;
+A18: ProgramPart s1 halts_on s1 by A16,SCMFSA8A:55;
   I1 is_closed_on Initialize s by A16,A17,SCMFSA8A:46;
   then
 A19: I1 is_closed_on s1 by Th9;
 A20: CurInstr Computation( s3,LifeSpan s1 + 1) = CurInstr Computation( s4,
   LifeSpan s1) by AMI_1:51
-    .= IncAddr(CurInstr ( Computation( s1,LifeSpan s1)),(card J + 3)) by A1,
-  A19,A15,A11,A14,Th11
+    .= IncAddr(CurInstr ( Computation( s1,LifeSpan s1)),(card J + 3)) by A1,A19
+,A15,A11,A14,Th11
     .= IncAddr(halt SCM+FSA,(card J + 3)) by A18,AMI_1:def 46
     .= halt SCM+FSA by SCMFSA_4:8;
   then
-A21: s3 is halting by AMI_1:def 20;
+A21: ProgramPart s3 halts_on s3 by AMI_1:146;
   now
     let l be Element of NAT;
     assume
@@ -854,8 +836,8 @@ A22: l < LifeSpan s1 + 1;
     suppose
       l = 0;
       then CurInstr Computation( s3,l) = CurInstr s3 by AMI_1:13;
-      hence CurInstr Computation( s3,l) <> halt SCM+FSA by A5,A4,
-      SCMFSA_2:48,124;
+      hence CurInstr Computation( s3,l) <> halt SCM+FSA by A5,A4,SCMFSA_2:48
+,124;
     end;
     suppose
       l <> 0;
@@ -878,8 +860,9 @@ A25:  CurInstr Computation( s1,n) = halt SCM+FSA by SCMFSA_2:122;
   holds LifeSpan s1 + 1 <= l;
   then
 A26: LifeSpan s3 = LifeSpan s1 + 1 by A20,A21,AMI_1:def 46;
-A27: DataPart Result s1 = DataPart Computation( s1,LifeSpan s1) by A16,A17,
-  AMI_1:122,SCMFSA8A:55
+  ProgramPart s1 halts_on s1 by A16,A17,SCMFSA8A:55;
+  then
+A27: DataPart Result s1 = DataPart Computation( s1,LifeSpan s1) by AMI_1:122
     .= DataPart Computation( s4,LifeSpan s1) by A1,A19,A15,A11,A14,Th11
     .= DataPart Computation( s3,LifeSpan s1 + 1) by AMI_1:51
     .= DataPart Result s3 by A21,A26,AMI_1:122;
@@ -892,8 +875,7 @@ A30: now
       then x in A by RELAT_1:86;
       hence x is Instruction-Location of SCM+FSA by AMI_1:def 4;
     end;
-A31: dom Start-At insloc (card I + card J + 3) = {IC SCM+FSA} by FUNCOP_1:
-    19;
+A31: dom Start-At insloc (card I + card J + 3) = {IC SCM+FSA} by FUNCOP_1:19;
 A32: IExec(if=0(a,I,J),s) = (Result s3) +* (s | A) by SCMFSA6B:def 1;
     assume
 A33: x in dom IExec(if=0(a,I,J),s);
@@ -902,65 +884,60 @@ A33: x in dom IExec(if=0(a,I,J),s);
 A34:  x is Int-Location;
       then x <> IC SCM+FSA by SCMFSA_2:81;
       then
-A35:  not x in dom Start-At insloc (card I + card J + 3) by A31,
-      TARSKI:def 1;
-      thus IExec(if=0(a,I,J),s).x = (Result s3).x by A32,A30,A34,FUNCT_4:12,
-      SCMFSA_2:84
+A35:  not x in dom Start-At insloc (card I + card J + 3) by A31,TARSKI:def 1;
+      thus IExec(if=0(a,I,J),s).x = (Result s3).x by A32,A30,A34,FUNCT_4:12
+,SCMFSA_2:84
         .= (Result s1).x by A27,A34,SCMFSA6A:38
         .= IExec(I1,s).x by A29,A30,A34,FUNCT_4:12,SCMFSA_2:84
         .= (IExec(I1,s) +* Start-At insloc (card I + card J + 3)).x by A35,
-      FUNCT_4:12;
+FUNCT_4:12;
     end;
     suppose
 A36:  x is FinSeq-Location;
       then x <> IC SCM+FSA by SCMFSA_2:82;
       then
-A37:  not x in dom Start-At insloc (card I + card J + 3) by A31,
-      TARSKI:def 1;
-      thus IExec(if=0(a,I,J),s).x = (Result s3).x by A32,A30,A36,FUNCT_4:12,
-      SCMFSA_2:85
+A37:  not x in dom Start-At insloc (card I + card J + 3) by A31,TARSKI:def 1;
+      thus IExec(if=0(a,I,J),s).x = (Result s3).x by A32,A30,A36,FUNCT_4:12
+,SCMFSA_2:85
         .= (Result s1).x by A27,A36,SCMFSA6A:38
         .= IExec(I1,s).x by A29,A30,A36,FUNCT_4:12,SCMFSA_2:85
         .= (IExec(I1,s) +* Start-At insloc (card I + card J + 3)).x by A37,
-      FUNCT_4:12;
+FUNCT_4:12;
     end;
     suppose
 A38:  x = IC SCM+FSA;
       then
-A39:  x in dom Start-At insloc (card I + card J + 3) by A31, TARSKI:
-      def 1;
-A40:  IC Result s1 = IExec(I1,s).IC SCM+FSA by A29,A30,A38,AMI_1:48,
-      FUNCT_4:12
+A39:  x in dom Start-At insloc (card I + card J + 3) by A31,TARSKI:def 1;
+A40:  IC Result s1 = IExec(I1,s).IC SCM+FSA by A29,A30,A38,AMI_1:48,FUNCT_4:12
         .= IC (IExec(I,s) +* Start-At insloc card I) by A16,A17,SCMFSA8A:57
         .= insloc card I by AMI_1:111;
-      thus IExec(if=0(a,I,J),s).x = (Result s3).x by A32,A30,A38,AMI_1:48,
-      FUNCT_4:12
+X:    ProgramPart s1 halts_on s1 by A16,A17,SCMFSA8A:55;
+      thus IExec(if=0(a,I,J),s).x = (Result s3).x by A32,A30,A38,AMI_1:48
+,FUNCT_4:12
         .= Computation( s3,LifeSpan s1 + 1).x by A21,A26,AMI_1:122
         .= IC Computation( s4,LifeSpan s1) by A38,AMI_1:51
-        .= IC Computation( s1,LifeSpan s1) + (card J + 3) by A1,A19,A15,A11,
-      A14,Th11
-        .= IC Result s1 + (card J + 3) by A16,A17,AMI_1:122,SCMFSA8A:55
+        .= IC Computation( s1,LifeSpan s1) + (card J + 3) by A1,A19,A15,A11,A14
+,Th11
+        .= IC Result s1 + (card J + 3) by AMI_1:122,X
         .= (Start-At (insloc card I + (card J + 3))).IC SCM+FSA by A40,
-      FUNCOP_1:87
-        .= (IExec(I1,s) +* Start-At insloc (card I + card J + 3)).x by A38,
-      A39,FUNCT_4:14;
+FUNCOP_1:87
+        .= (IExec(I1,s) +* Start-At insloc (card I + card J + 3)).x by A38,A39,
+FUNCT_4:14;
     end;
     suppose
 A41:  x is Instruction-Location of SCM+FSA;
       then x <> IC SCM+FSA by AMI_1:48;
       then
-A42:  not x in dom Start-At insloc (card I + card J + 3) by A31,
-      TARSKI:def 1;
+A42:  not x in dom Start-At insloc (card I + card J + 3) by A31,TARSKI:def 1;
 A43:  x in NAT by A41,AMI_1:def 4;
       hence IExec(if=0(a,I,J),s).x = (s | A).x by A10,A32,FUNCT_4:14
         .= IExec(I1,s).x by A10,A29,A43,FUNCT_4:14
         .= (IExec(I1,s) +* Start-At insloc (card I + card J + 3)).x by A42,
-      FUNCT_4:12;
+FUNCT_4:12;
     end;
   end;
   dom IExec(if=0(a,I,J),s) = the carrier of SCM+FSA by AMI_1:79
-    .= dom (IExec(I1,s) +* Start-At insloc (card I + card J + 3)) by AMI_1:
-  79;
+    .= dom (IExec(I1,s) +* Start-At insloc (card I + card J + 3)) by AMI_1:79;
   hence IExec(if=0(a,I,J),s) = IExec(I1,s) +* Start-At insloc (card I + card J
   + 3) by A28,FUNCT_1:9
     .= IExec(I,s) +* Start-At insloc card I +* Start-At insloc (card I +
@@ -986,15 +963,13 @@ proof
 A1: JI2 +* Start-At insloc 0 c= s2 by FUNCT_4:26;
   IC SCM+FSA in dom (if=0(a,I,J) +* Start-At insloc 0) by SF_MASTR:65;
   then
-A2: IC s3 = (if=0(a,I,J) +* Start-At insloc 0).IC SCM+FSA by
-  FUNCT_4:14
+A2: IC s3 = (if=0(a,I,J) +* Start-At insloc 0).IC SCM+FSA by FUNCT_4:14
     .= insloc 0 by SF_MASTR:66;
 A3: if=0(a,I,J) c= if=0(a,I,J) +* Start-At insloc 0 by SCMFSA8A:9;
   if=0(a,I,J) +* Start-At insloc 0 c= s3 by FUNCT_4:26;
   then
 A4: if=0(a,I,J) c= s3 by A3,XBOOLE_1:1;
-A5: if=0(a,I,J) = i ';' J ';' Goto insloc (card I + 1) ';' I1 by SCMFSA6A:
-  67
+A5: if=0(a,I,J) = i ';' J ';' Goto insloc (card I + 1) ';' I1 by SCMFSA6A:67
     .= i ';' J ';' (Goto insloc (card I + 1) ';' I1) by SCMFSA6A:67
     .= i ';' (J ';' (Goto insloc (card I + 1) ';' I1)) by SCMFSA6A:71
     .= i ';' (J ';' Goto insloc (card I + 1) ';' I1) by SCMFSA6A:67
@@ -1010,11 +985,9 @@ A7: not a in dom (if=0(a,I,J) +* Start-At insloc 0) by SCMFSA6B:12;
 A8: insloc 0 in dom if=0(a,I,J) by Lm2;
   if=0(a,I,J) c= if=0(a,I,J) +* Start-At insloc 0 by SCMFSA8A:9;
   then
-A9: dom if=0(a,I,J) c= dom (if=0(a,I,J) +* Start-At insloc 0) by
-  GRFUNC_1:8;
+A9: dom if=0(a,I,J) c= dom (if=0(a,I,J) +* Start-At insloc 0) by GRFUNC_1:8;
   then
-A10: s3.insloc 0 = (if=0(a,I,J) +* Start-At insloc 0).insloc 0 by A8,
-  FUNCT_4:14
+A10: s3.insloc 0 = (if=0(a,I,J) +* Start-At insloc 0).insloc 0 by A8,FUNCT_4:14
     .= if=0(a,I,J).insloc 0 by A8,SCMFSA6B:7
     .= i by Lm3;
 A11: insloc 1 in dom if=0(a,I,J) by Lm2;
@@ -1056,7 +1029,7 @@ A20: J is_halting_on s;
 A21: JI2 is_closed_on s by A15,SCMFSA8A:58;
   then
 A22: JI2 is_closed_on s2 by Th10;
-A23: s2 is halting by A15,A20,SCMFSA8A:59;
+A23: ProgramPart s2 halts_on s2 by A15,A20,SCMFSA8A:59;
 A24: IC s5 = insloc 2 by A16,SCMFSA_2:95;
   now
     let k be Element of NAT;
@@ -1073,8 +1046,8 @@ A27:  k1 + 1 = k by NAT_1:6;
       then consider k2 being Nat such that
 A28:  k2 + 1 = k1 by NAT_1:6;
       reconsider k2 as Element of NAT by ORDINAL1:def 13;
-      reconsider m = IC Computation( s2,k2) as Element of NAT by ORDINAL1:def
-      13;
+      reconsider m = IC Computation( s2,k2) as Element of NAT by
+ORDINAL1:def 13;
 A29:  card if=0(a,I,J) = card Macro i + card JI2 by A5,SCMFSA6A:61
         .= 2 + card JI2 by SCMFSA7B:6;
       insloc m in dom JI2 by A21,SCMFSA7B:def 7;
@@ -1099,11 +1072,11 @@ A30:  m + 2 < card if=0(a,I,J) by A29,XREAL_1:8;
   hence if=0(a,I,J) is_closed_on s by SCMFSA7B:def 7;
   CurInstr Computation( s3,LifeSpan s2 + 2) = CurInstr Computation( s5,
   LifeSpan s2) by AMI_1:51
-    .= IncAddr(CurInstr ( Computation( s2,LifeSpan s2)),2) by A1,A22,A6,A24,
-  A19,Th11
+    .= IncAddr(CurInstr ( Computation( s2,LifeSpan s2)),2) by A1,A22,A6,A24,A19
+,Th11
     .= IncAddr(halt SCM+FSA,2) by A23,AMI_1:def 46
     .= halt SCM+FSA by SCMFSA_4:8;
-  then s3 is halting by AMI_1:def 20;
+  then ProgramPart s3 halts_on s3 by AMI_1:146;
   hence thesis by SCMFSA7B:def 8;
 end;
 
@@ -1142,8 +1115,7 @@ A7: Computation(s3,1).insloc 1 = s3.insloc 1 by AMI_1:54
   then
 A8: IC s3 = (Initialized if=0(a,I,J)).IC SCM+FSA by FUNCT_4:14
     .= insloc 0 by SCMFSA6A:46;
-  if=0(a,I,J) = i ';' J ';' Goto insloc (card I + 1) ';' I1 by SCMFSA6A:
-  67
+  if=0(a,I,J) = i ';' J ';' Goto insloc (card I + 1) ';' I1 by SCMFSA6A:67
     .= i ';' J ';' (Goto insloc (card I + 1) ';' I1) by SCMFSA6A:67
     .= i ';' (J ';' (Goto insloc (card I + 1) ';' I1)) by SCMFSA6A:71
     .= i ';' (J ';' Goto insloc (card I + 1) ';' I1) by SCMFSA6A:67
@@ -1195,19 +1167,18 @@ A20: DataPart s2 = DataPart s5 by A19,SCMFSA6A:38;
   assume
 A21: J is_halting_on Initialize s;
   then
-A22: s2 is halting by A15,SCMFSA8A:60;
+A22: ProgramPart s2 halts_on s2 by A15,SCMFSA8A:60;
   JI2 is_closed_on Initialize s by A15,A21,SCMFSA8A:58;
   then
 A23: JI2 is_closed_on s2 by Th9;
 A24: CurInstr Computation( s3,LifeSpan s2 + 2) = CurInstr Computation( s5,
   LifeSpan s2) by AMI_1:51
     .= IncAddr(CurInstr ( Computation( s2,LifeSpan s2)),2) by A1,A23,A12,A17
-  ,
-  A20,Th11
+,A20,Th11
     .= IncAddr(halt SCM+FSA,2) by A22,AMI_1:def 46
     .= halt SCM+FSA by SCMFSA_4:8;
   then
-A25: s3 is halting by AMI_1:def 20;
+A25: ProgramPart s3 halts_on s3 by AMI_1:146;
   now
     let l be Element of NAT;
     assume
@@ -1216,13 +1187,13 @@ A26: l < LifeSpan s2 + 2;
     suppose
       l = 0;
       then CurInstr Computation( s3,l) = CurInstr s3 by AMI_1:13;
-      hence CurInstr Computation( s3,l) <> halt SCM+FSA by A8,A4,
-      SCMFSA_2:48,124;
+      hence CurInstr Computation( s3,l) <> halt SCM+FSA by A8,A4,SCMFSA_2:48
+,124;
     end;
     suppose
       l = 1;
-      hence CurInstr Computation( s3,l) <> halt SCM+FSA by A14,A7,
-      SCMFSA_2:47,124;
+      hence CurInstr Computation( s3,l) <> halt SCM+FSA by A14,A7,SCMFSA_2:47
+,124;
     end;
     suppose
 A27:  l <> 0 & l <> 1;
@@ -1251,8 +1222,8 @@ A31:  CurInstr Computation( s2,l2) = halt SCM+FSA by SCMFSA_2:122;
   holds LifeSpan s2 + 2 <= l;
   then
 A32: LifeSpan s3 = LifeSpan s2 + 2 by A24,A25,AMI_1:def 46;
-A33: DataPart Result s2 = DataPart Computation( s2,LifeSpan s2) by A15,A21,
-  AMI_1:122,SCMFSA8A:60
+A33: DataPart Result s2 = DataPart Computation( s2,LifeSpan s2) by
+AMI_1:122,A22
     .= DataPart Computation( s5,LifeSpan s2) by A1,A23,A12,A17,A20,Th11
     .= DataPart Computation( s3,LifeSpan s2 + 2) by AMI_1:51
     .= DataPart Result s3 by A25,A32,AMI_1:122;
@@ -1264,8 +1235,7 @@ A35: now
       then x in A by RELAT_1:86;
       hence x is Instruction-Location of SCM+FSA by AMI_1:def 4;
     end;
-A36: dom Start-At insloc (card I + card J + 3) = {IC SCM+FSA} by FUNCOP_1:
-    19;
+A36: dom Start-At insloc (card I + card J + 3) = {IC SCM+FSA} by FUNCOP_1:19;
 A37: IExec(if=0(a,I,J),s) = (Result s3) +* (s | A) by SCMFSA6B:def 1;
 A38: IExec(JI2,s) = Result s2 +* s | A by SCMFSA6B:def 1;
     assume
@@ -1275,62 +1245,57 @@ A39: x in dom IExec(if=0(a,I,J),s);
 A40:  x is Int-Location;
       then x <> IC SCM+FSA by SCMFSA_2:81;
       then
-A41:  not x in dom Start-At insloc (card I + card J + 3) by A36,
-      TARSKI:def 1;
-      thus IExec(if=0(a,I,J),s).x = (Result s3).x by A35,A37,A40,FUNCT_4:12,
-      SCMFSA_2:84
+A41:  not x in dom Start-At insloc (card I + card J + 3) by A36,TARSKI:def 1;
+      thus IExec(if=0(a,I,J),s).x = (Result s3).x by A35,A37,A40,FUNCT_4:12
+,SCMFSA_2:84
         .= (Result s2).x by A33,A40,SCMFSA6A:38
         .= IExec(JI2,s).x by A35,A38,A40,FUNCT_4:12,SCMFSA_2:84
         .= (IExec(JI2,s) +* Start-At insloc (card I + card J + 3)).x by A41,
-      FUNCT_4:12;
+FUNCT_4:12;
     end;
     suppose
 A42:  x is FinSeq-Location;
       then x <> IC SCM+FSA by SCMFSA_2:82;
       then
-A43:  not x in dom Start-At insloc (card I + card J + 3) by A36,
-      TARSKI:def 1;
-      thus IExec(if=0(a,I,J),s).x = (Result s3).x by A35,A37,A42,FUNCT_4:12,
-      SCMFSA_2:85
+A43:  not x in dom Start-At insloc (card I + card J + 3) by A36,TARSKI:def 1;
+      thus IExec(if=0(a,I,J),s).x = (Result s3).x by A35,A37,A42,FUNCT_4:12
+,SCMFSA_2:85
         .= (Result s2).x by A33,A42,SCMFSA6A:38
         .= IExec(JI2,s).x by A35,A38,A42,FUNCT_4:12,SCMFSA_2:85
         .= (IExec(JI2,s) +* Start-At insloc (card I + card J + 3)).x by A43,
-      FUNCT_4:12;
+FUNCT_4:12;
     end;
     suppose
 A44:  x = IC SCM+FSA;
       then
-A45:  x in dom Start-At insloc (card I + card J + 3) by A36, TARSKI:
-      def 1;
+A45:  x in dom Start-At insloc (card I + card J + 3) by A36,TARSKI:def 1;
 A46:  IC Result s2 = IC IExec(JI2,s) by A35,A38,A44,AMI_1:48,FUNCT_4:12
         .= insloc (card I + card J + 1) by A15,A21,SCMFSA8A:61;
-      thus IExec(if=0(a,I,J),s).x = (Result s3).x by A35,A37,A44,AMI_1:48,
-      FUNCT_4:12
+      thus IExec(if=0(a,I,J),s).x = (Result s3).x by A35,A37,A44,AMI_1:48
+,FUNCT_4:12
         .= Computation( s3,LifeSpan s2 + 2).x by A25,A32,AMI_1:122
         .= IC Computation( s5,LifeSpan s2) by A44,AMI_1:51
         .= IC Computation( s2,LifeSpan s2) + 2 by A1,A23,A12,A17,A20,Th11
-        .= IC Result s2 + 2 by A15,A21,AMI_1:122,SCMFSA8A:60
+        .= IC Result s2 + 2 by AMI_1:122,A22
         .= (Start-At (insloc (card I + card J + 1) + 2)).IC SCM+FSA by A46,
-      FUNCOP_1:87
-        .= (IExec(JI2,s) +* Start-At insloc (card I + card J + 3)).x by A44,
-      A45,FUNCT_4:14;
+FUNCOP_1:87
+        .= (IExec(JI2,s) +* Start-At insloc (card I + card J + 3)).x by A44,A45
+,FUNCT_4:14;
     end;
     suppose
 A47:  x is Instruction-Location of SCM+FSA;
       then x <> IC SCM+FSA by AMI_1:48;
       then
-A48:  not x in dom Start-At insloc (card I + card J + 3) by A36,
-      TARSKI:def 1;
+A48:  not x in dom Start-At insloc (card I + card J + 3) by A36,TARSKI:def 1;
 A49:  x in NAT by A47,AMI_1:def 4;
       hence IExec(if=0(a,I,J),s).x = (s | A).x by A11,A37,FUNCT_4:14
         .= IExec(JI2,s).x by A11,A38,A49,FUNCT_4:14
         .= (IExec(JI2,s) +* Start-At insloc (card I + card J + 3)).x by A48,
-      FUNCT_4:12;
+FUNCT_4:12;
     end;
   end;
   dom IExec(if=0(a,I,J),s) = the carrier of SCM+FSA by AMI_1:79
-    .= dom (IExec(JI2,s) +* Start-At insloc (card I + card J + 3)) by AMI_1:
-  79;
+    .= dom (IExec(JI2,s) +* Start-At insloc (card I + card J + 3)) by AMI_1:79;
   hence
   IExec(if=0(a,I,J),s) = IExec(JI2,s) +* Start-At insloc (card I + card J
   + 3) by A34,FUNCT_1:9
@@ -1364,12 +1329,12 @@ A6: s = s +* (if=0(a,I,J) +* Start-At insloc 0) by FUNCT_4:79;
     suppose
       s.a = 0;
       then if=0(a,I,J) is_halting_on s by A2,A3,Th16;
-      hence s is halting by A6,SCMFSA7B:def 8;
+      hence ProgramPart s halts_on s by A6,SCMFSA7B:def 8;
     end;
     suppose
       s.a <> 0;
       then if=0(a,I,J) is_halting_on s by A5,A4,Th18;
-      hence s is halting by A6,SCMFSA7B:def 8;
+      hence ProgramPart s halts_on s by A6,SCMFSA7B:def 8;
     end;
   end;
   then if=0(a,I,J) +* Start-At insloc 0 is halting by AMI_1:def 26;
@@ -1401,16 +1366,16 @@ proof
       then
       IExec(if=0(a,I,J),s) = IExec(I,s) +* Start-At insloc (card I + card
       J + 3) by Th20;
-      hence IC IExec(if=0(a,I,J),s) = insloc (card I + card J + 3) by AMI_1:
-      111;
+      hence IC IExec(if=0(a,I,J),s) = insloc (card I + card J + 3) by AMI_1:111
+;
     end;
     suppose
       s.a <> 0;
       then
       IExec(if=0(a,I,J),s) = IExec(J,s) +* Start-At insloc (card I + card
       J + 3) by Th20;
-      hence IC IExec(if=0(a,I,J),s) = insloc (card I + card J + 3) by AMI_1:
-      111;
+      hence IC IExec(if=0(a,I,J),s) = insloc (card I + card J + 3) by AMI_1:111
+;
     end;
   end;
   hereby
@@ -1459,24 +1424,20 @@ proof
 A1: not a in dom (if>0(a,I,J) +* Start-At insloc 0) by SCMFSA6B:12;
 A2: insloc 0 in dom if>0(a,I,J) by Lm2;
   if>0(a,I,J) c= if>0(a,I,J) +* Start-At insloc 0 by SCMFSA8A:9;
-  then dom if>0(a,I,J) c= dom (if>0(a,I,J) +* Start-At insloc 0) by
-  GRFUNC_1:8;
+  then dom if>0(a,I,J) c= dom (if>0(a,I,J) +* Start-At insloc 0) by GRFUNC_1:8;
   then
-A3: s3.insloc 0 = (if>0(a,I,J) +* Start-At insloc 0).insloc 0 by A2,
-  FUNCT_4:14
+A3: s3.insloc 0 = (if>0(a,I,J) +* Start-At insloc 0).insloc 0 by A2,FUNCT_4:14
     .= if>0(a,I,J).insloc 0 by A2,SCMFSA6B:7
     .= i by Lm3;
   IC SCM+FSA in dom (if>0(a,I,J) +* Start-At insloc 0) by SF_MASTR:65;
   then
-A4: IC s3 = (if>0(a,I,J) +* Start-At insloc 0).IC SCM+FSA by
-  FUNCT_4:14
+A4: IC s3 = (if>0(a,I,J) +* Start-At insloc 0).IC SCM+FSA by FUNCT_4:14
     .= insloc 0 by SF_MASTR:66;
 A5: if>0(a,I,J) c= if>0(a,I,J) +* Start-At insloc 0 by SCMFSA8A:9;
   if>0(a,I,J) +* Start-At insloc 0 c= s3 by FUNCT_4:26;
   then
 A6: if>0(a,I,J) c= s3 by A5,XBOOLE_1:1;
-A7: if>0(a,I,J) = i ';' J ';' Goto insloc (card I + 1) ';' I1 by SCMFSA6A:
-  67;
+A7: if>0(a,I,J) = i ';' J ';' Goto insloc (card I + 1) ';' I1 by SCMFSA6A:67;
   card (i ';' J ';' Goto insloc (card I + 1)) = card (Macro i ';' J ';'
   Goto insloc (card I + 1)) by SCMFSA6A:def 6
     .= card (Macro i ';' J) + card Goto insloc (card I + 1) by SCMFSA6A:61
@@ -1486,8 +1447,7 @@ A7: if>0(a,I,J) = i ';' J ';' Goto insloc (card I + 1) ';' I1 by SCMFSA6A:
     .= card J + (2 + 1);
   then ProgramPart Relocated(I1,card J + 3) c= if>0(a,I,J) by A7,Lm1;
   then ProgramPart Relocated(I1,card J + 3) c= s3 by A6,XBOOLE_1:1;
-  then ProgramPart [ProgramPart Relocated(I1,card J + 3)] c= s4 by AMI_1:
-  99;
+  then ProgramPart [ProgramPart Relocated(I1,card J + 3)] c= s4 by AMI_1:99;
   then
 A8: ProgramPart Relocated(I1,card J + 3) c= s4 by AMI_1:105;
 A9: Computation( s3,0 + 1) = Following Computation( s3,0) by AMI_1:14
@@ -1519,7 +1479,7 @@ A15: I is_halting_on s;
 A16: I1 is_closed_on s by A14,SCMFSA8A:46;
   I1 is_halting_on s by A14,A15,SCMFSA8A:46;
   then
-A17: s1 is halting by SCMFSA7B:def 8;
+A17: ProgramPart s1 halts_on s1 by SCMFSA7B:def 8;
   DataPart s = DataPart s1 by SCMFSA8A:11;
   then
 A18: I1 is_closed_on s1 by A16,Th6;
@@ -1532,8 +1492,8 @@ A19: I1 +* Start-At insloc 0 c= s1 by FUNCT_4:26;
       then consider k1 being Nat such that
 A20:  k1 + 1 = k by NAT_1:6;
       reconsider k1 as Element of NAT by ORDINAL1:def 13;
-      reconsider m = IC Computation( s1,k1) as Element of NAT by ORDINAL1:def
-      13;
+      reconsider m = IC Computation( s1,k1) as Element of NAT by
+ORDINAL1:def 13;
       insloc m in dom I1 by A16,SCMFSA7B:def 7;
       then
 A21:  m < card I1 by SCMFSA6A:15;
@@ -1555,11 +1515,10 @@ A23:  m + (card J + 3) < card if>0(a,I,J) by A21,XREAL_1:8;
   CurInstr Computation( s3,LifeSpan s1 + 1) = CurInstr Computation( s4,
   LifeSpan s1) by AMI_1:51
     .= IncAddr(CurInstr ( Computation( s1,LifeSpan s1)),(card J + 3)) by A19
-  ,
-  A18,A8,A13,A12,Th11
+,A18,A8,A13,A12,Th11
     .= IncAddr(halt SCM+FSA,(card J + 3)) by A17,AMI_1:def 46
     .= halt SCM+FSA by SCMFSA_4:8;
-  then s3 is halting by AMI_1:def 20;
+  then ProgramPart s3 halts_on s3 by AMI_1:146;
   hence thesis by SCMFSA7B:def 8;
 end;
 
@@ -1578,8 +1537,7 @@ proof
   set s4 = Computation( s3,1);
   set i = a >0_goto insloc (card J + 3);
 A1: I1 +* Start-At insloc 0 c= s1 by FUNCT_4:26,SCMFSA6B:8;
-A2: if>0(a,I,J) = i ';' J ';' Goto insloc (card I + 1) ';' I1 by SCMFSA6A:
-  67;
+A2: if>0(a,I,J) = i ';' J ';' Goto insloc (card I + 1) ';' I1 by SCMFSA6A:67;
 A3: insloc 0 in dom if>0(a,I,J) by Lm2;
   if>0(a,I,J) c= Initialized if>0(a,I,J) by SCMFSA6A:26;
   then dom if>0(a,I,J) c= dom Initialized if>0(a,I,J) by GRFUNC_1:8;
@@ -1627,8 +1585,7 @@ A14: DataPart s1 = DataPart s4 by A13,SCMFSA6A:38;
     .= card J + (2 + 1);
   then ProgramPart Relocated(I1,card J + 3) c= if>0(a,I,J) by A2,Lm1;
   then ProgramPart Relocated(I1,card J + 3) c= s3 by A8,XBOOLE_1:1;
-  then ProgramPart [ProgramPart Relocated(I1,card J + 3)] c= s4 by AMI_1:
-  99;
+  then ProgramPart [ProgramPart Relocated(I1,card J + 3)] c= s4 by AMI_1:99;
   then
 A15: ProgramPart Relocated(I1,card J + 3) c= s4 by AMI_1:105;
   assume
@@ -1636,18 +1593,18 @@ A16: I is_closed_on Initialize s;
   assume
 A17: I is_halting_on Initialize s;
   then
-A18: s1 is halting by A16,SCMFSA8A:55;
+A18: ProgramPart s1 halts_on s1 by A16,SCMFSA8A:55;
   I1 is_closed_on Initialize s by A16,A17,SCMFSA8A:46;
   then
 A19: I1 is_closed_on s1 by Th9;
 A20: CurInstr Computation( s3,LifeSpan s1 + 1) = CurInstr Computation( s4,
   LifeSpan s1) by AMI_1:51
-    .= IncAddr(CurInstr ( Computation( s1,LifeSpan s1)),(card J + 3)) by A1,
-  A19,A15,A11,A14,Th11
+    .= IncAddr(CurInstr ( Computation( s1,LifeSpan s1)),(card J + 3)) by A1,A19
+,A15,A11,A14,Th11
     .= IncAddr(halt SCM+FSA,(card J + 3)) by A18,AMI_1:def 46
     .= halt SCM+FSA by SCMFSA_4:8;
   then
-A21: s3 is halting by AMI_1:def 20;
+A21: ProgramPart s3 halts_on s3 by AMI_1:146;
   now
     let l be Element of NAT;
     assume
@@ -1656,8 +1613,8 @@ A22: l < LifeSpan s1 + 1;
     suppose
       l = 0;
       then CurInstr Computation( s3,l) = CurInstr s3 by AMI_1:13;
-      hence CurInstr Computation( s3,l) <> halt SCM+FSA by A5,A4,
-      SCMFSA_2:49,124;
+      hence CurInstr Computation( s3,l) <> halt SCM+FSA by A5,A4,SCMFSA_2:49
+,124;
     end;
     suppose
       l <> 0;
@@ -1680,8 +1637,10 @@ A25:  CurInstr Computation( s1,n) = halt SCM+FSA by SCMFSA_2:122;
   holds LifeSpan s1 + 1 <= l;
   then
 A26: LifeSpan s3 = LifeSpan s1 + 1 by A20,A21,AMI_1:def 46;
-A27: DataPart Result s1 = DataPart Computation( s1,LifeSpan s1) by A16,A17,
-  AMI_1:122,SCMFSA8A:55
+ ProgramPart s1 halts_on s1 by A16,A17,SCMFSA8A:55;
+  then
+A27: DataPart Result s1 = DataPart Computation( s1,LifeSpan s1) by
+AMI_1:122
     .= DataPart Computation( s4,LifeSpan s1) by A1,A19,A15,A11,A14,Th11
     .= DataPart Computation( s3,LifeSpan s1 + 1) by AMI_1:51
     .= DataPart Result s3 by A21,A26,AMI_1:122;
@@ -1693,8 +1652,7 @@ A29: now
       then x in A by RELAT_1:86;
       hence x is Instruction-Location of SCM+FSA by AMI_1:def 4;
     end;
-A30: dom Start-At insloc (card I + card J + 3) = {IC SCM+FSA} by FUNCOP_1:
-    19;
+A30: dom Start-At insloc (card I + card J + 3) = {IC SCM+FSA} by FUNCOP_1:19;
 A31: IExec(if>0(a,I,J),s) = (Result s3) +* (s | A) by SCMFSA6B:def 1;
 A32: IExec(I1,s) = Result s1 +* s | A by SCMFSA6B:def 1;
     assume
@@ -1704,65 +1662,60 @@ A33: x in dom IExec(if>0(a,I,J),s);
 A34:  x is Int-Location;
       then x <> IC SCM+FSA by SCMFSA_2:81;
       then
-A35:  not x in dom Start-At insloc (card I + card J + 3) by A30,
-      TARSKI:def 1;
-      thus IExec(if>0(a,I,J),s).x = (Result s3).x by A29,A31,A34,FUNCT_4:12,
-      SCMFSA_2:84
+A35:  not x in dom Start-At insloc (card I + card J + 3) by A30,TARSKI:def 1;
+      thus IExec(if>0(a,I,J),s).x = (Result s3).x by A29,A31,A34,FUNCT_4:12
+,SCMFSA_2:84
         .= (Result s1).x by A27,A34,SCMFSA6A:38
         .= IExec(I1,s).x by A29,A32,A34,FUNCT_4:12,SCMFSA_2:84
         .= (IExec(I1,s) +* Start-At insloc (card I + card J + 3)).x by A35,
-      FUNCT_4:12;
+FUNCT_4:12;
     end;
     suppose
 A36:  x is FinSeq-Location;
       then x <> IC SCM+FSA by SCMFSA_2:82;
       then
-A37:  not x in dom Start-At insloc (card I + card J + 3) by A30,
-      TARSKI:def 1;
-      thus IExec(if>0(a,I,J),s).x = (Result s3).x by A29,A31,A36,FUNCT_4:12,
-      SCMFSA_2:85
+A37:  not x in dom Start-At insloc (card I + card J + 3) by A30,TARSKI:def 1;
+      thus IExec(if>0(a,I,J),s).x = (Result s3).x by A29,A31,A36,FUNCT_4:12
+,SCMFSA_2:85
         .= (Result s1).x by A27,A36,SCMFSA6A:38
         .= IExec(I1,s).x by A29,A32,A36,FUNCT_4:12,SCMFSA_2:85
         .= (IExec(I1,s) +* Start-At insloc (card I + card J + 3)).x by A37,
-      FUNCT_4:12;
+FUNCT_4:12;
     end;
     suppose
 A38:  x = IC SCM+FSA;
       then
-A39:  x in dom Start-At insloc (card I + card J + 3) by A30, TARSKI:
-      def 1;
-A40:  IC Result s1 = IExec(I1,s).IC SCM+FSA by A29,A32,A38,AMI_1:48,
-      FUNCT_4:12
+A39:  x in dom Start-At insloc (card I + card J + 3) by A30,TARSKI:def 1;
+A40:  IC Result s1 = IExec(I1,s).IC SCM+FSA by A29,A32,A38,AMI_1:48,FUNCT_4:12
         .= IC (IExec(I,s) +* Start-At insloc card I) by A16,A17,SCMFSA8A:57
         .= insloc card I by AMI_1:111;
-      thus IExec(if>0(a,I,J),s).x = (Result s3).x by A29,A31,A38,AMI_1:48,
-      FUNCT_4:12
+X:    ProgramPart s1 halts_on s1 by A16,A17,SCMFSA8A:55;
+      thus IExec(if>0(a,I,J),s).x = (Result s3).x by A29,A31,A38,AMI_1:48
+,FUNCT_4:12
         .= Computation( s3,LifeSpan s1 + 1).x by A21,A26,AMI_1:122
         .= IC Computation( s4,LifeSpan s1) by A38,AMI_1:51
-        .= IC Computation( s1,LifeSpan s1) + (card J + 3) by A1,A19,A15,A11,
-      A14,Th11
-        .= IC Result s1 + (card J + 3) by A16,A17,AMI_1:122,SCMFSA8A:55
+        .= IC Computation( s1,LifeSpan s1) + (card J + 3) by A1,A19,A15,A11,A14
+,Th11
+        .= IC Result s1 + (card J + 3) by AMI_1:122,X
         .= (Start-At (insloc card I + (card J + 3))).IC SCM+FSA by A40,
-      FUNCOP_1:87
-        .= (IExec(I1,s) +* Start-At insloc (card I + card J + 3)).x by A38,
-      A39,FUNCT_4:14;
+FUNCOP_1:87
+        .= (IExec(I1,s) +* Start-At insloc (card I + card J + 3)).x by A38,A39,
+FUNCT_4:14;
     end;
     suppose
 A41:  x is Instruction-Location of SCM+FSA;
       then x <> IC SCM+FSA by AMI_1:48;
       then
-A42:  not x in dom Start-At insloc (card I + card J + 3) by A30,
-      TARSKI:def 1;
+A42:  not x in dom Start-At insloc (card I + card J + 3) by A30,TARSKI:def 1;
 A43:  x in NAT by A41,AMI_1:def 4;
       hence IExec(if>0(a,I,J),s).x = (s | A).x by A10,A31,FUNCT_4:14
         .= IExec(I1,s).x by A10,A32,A43,FUNCT_4:14
         .= (IExec(I1,s) +* Start-At insloc (card I + card J + 3)).x by A42,
-      FUNCT_4:12;
+FUNCT_4:12;
     end;
   end;
   dom IExec(if>0(a,I,J),s) = the carrier of SCM+FSA by AMI_1:79
-    .= dom (IExec(I1,s) +* Start-At insloc (card I + card J + 3)) by AMI_1:
-  79;
+    .= dom (IExec(I1,s) +* Start-At insloc (card I + card J + 3)) by AMI_1:79;
   hence IExec(if>0(a,I,J),s) = IExec(I1,s) +* Start-At insloc (card I + card J
   + 3) by A28,FUNCT_1:9
     .= IExec(I,s) +* Start-At insloc card I +* Start-At insloc (card I +
@@ -1788,15 +1741,13 @@ proof
 A1: JI2 +* Start-At insloc 0 c= s2 by FUNCT_4:26;
   IC SCM+FSA in dom (if>0(a,I,J) +* Start-At insloc 0) by SF_MASTR:65;
   then
-A2: IC s3 = (if>0(a,I,J) +* Start-At insloc 0).IC SCM+FSA by
-  FUNCT_4:14
+A2: IC s3 = (if>0(a,I,J) +* Start-At insloc 0).IC SCM+FSA by FUNCT_4:14
     .= insloc 0 by SF_MASTR:66;
 A3: if>0(a,I,J) c= if>0(a,I,J) +* Start-At insloc 0 by SCMFSA8A:9;
   if>0(a,I,J) +* Start-At insloc 0 c= s3 by FUNCT_4:26;
   then
 A4: if>0(a,I,J) c= s3 by A3,XBOOLE_1:1;
-A5: if>0(a,I,J) = i ';' J ';' Goto insloc (card I + 1) ';' I1 by SCMFSA6A:
-  67
+A5: if>0(a,I,J) = i ';' J ';' Goto insloc (card I + 1) ';' I1 by SCMFSA6A:67
     .= i ';' J ';' (Goto insloc (card I + 1) ';' I1) by SCMFSA6A:67
     .= i ';' (J ';' (Goto insloc (card I + 1) ';' I1)) by SCMFSA6A:71
     .= i ';' (J ';' Goto insloc (card I + 1) ';' I1) by SCMFSA6A:67
@@ -1812,11 +1763,9 @@ A7: not a in dom (if>0(a,I,J) +* Start-At insloc 0) by SCMFSA6B:12;
 A8: insloc 0 in dom if>0(a,I,J) by Lm2;
   if>0(a,I,J) c= if>0(a,I,J) +* Start-At insloc 0 by SCMFSA8A:9;
   then
-A9: dom if>0(a,I,J) c= dom (if>0(a,I,J) +* Start-At insloc 0) by
-  GRFUNC_1:8;
+A9: dom if>0(a,I,J) c= dom (if>0(a,I,J) +* Start-At insloc 0) by GRFUNC_1:8;
   then
-A10: s3.insloc 0 = (if>0(a,I,J) +* Start-At insloc 0).insloc 0 by A8,
-  FUNCT_4:14
+A10: s3.insloc 0 = (if>0(a,I,J) +* Start-At insloc 0).insloc 0 by A8,FUNCT_4:14
     .= if>0(a,I,J).insloc 0 by A8,SCMFSA6B:7
     .= i by Lm3;
 A11: insloc 1 in dom if>0(a,I,J) by Lm2;
@@ -1858,7 +1807,7 @@ A20: J is_halting_on s;
 A21: JI2 is_closed_on s by A15,SCMFSA8A:58;
   then
 A22: JI2 is_closed_on s2 by Th10;
-A23: s2 is halting by A15,A20,SCMFSA8A:59;
+A23: ProgramPart s2 halts_on s2 by A15,A20,SCMFSA8A:59;
 A24: IC s5 = insloc 2 by A16,SCMFSA_2:95;
   now
     let k be Element of NAT;
@@ -1874,8 +1823,8 @@ A27:  k1 + 1 = k by NAT_1:6;
       then consider k2 being Nat such that
 A28:  k2 + 1 = k1 by NAT_1:6;
       reconsider k1,k2 as Element of NAT by ORDINAL1:def 13;
-      reconsider m = IC Computation( s2,k2) as Element of NAT by ORDINAL1:def
-      13;
+      reconsider m = IC Computation( s2,k2) as Element of NAT by
+ORDINAL1:def 13;
 A29:  card if>0(a,I,J) = card Macro i + card JI2 by A5,SCMFSA6A:61
         .= 2 + card JI2 by SCMFSA7B:6;
       insloc m in dom JI2 by A21,SCMFSA7B:def 7;
@@ -1900,11 +1849,11 @@ A30:  m + 2 < card if>0(a,I,J) by A29,XREAL_1:8;
   hence if>0(a,I,J) is_closed_on s by SCMFSA7B:def 7;
   CurInstr Computation( s3,LifeSpan s2 + 2) = CurInstr Computation( s5,
   LifeSpan s2) by AMI_1:51
-    .= IncAddr(CurInstr ( Computation( s2,LifeSpan s2)),2) by A1,A22,A6,A24,
-  A19,Th11
+    .= IncAddr(CurInstr ( Computation( s2,LifeSpan s2)),2) by A1,A22,A6,A24,A19
+,Th11
     .= IncAddr(halt SCM+FSA,2) by A23,AMI_1:def 46
     .= halt SCM+FSA by SCMFSA_4:8;
-  then s3 is halting by AMI_1:def 20;
+  then ProgramPart s3 halts_on s3 by AMI_1:146;
   hence thesis by SCMFSA7B:def 8;
 end;
 
@@ -1943,8 +1892,7 @@ A7: Computation(s3,1).insloc 1 = s3.insloc 1 by AMI_1:54
   then
 A8: IC s3 = (Initialized if>0(a,I,J)).IC SCM+FSA by FUNCT_4:14
     .= insloc 0 by SCMFSA6A:46;
-  if>0(a,I,J) = i ';' J ';' Goto insloc (card I + 1) ';' I1 by SCMFSA6A:
-  67
+  if>0(a,I,J) = i ';' J ';' Goto insloc (card I + 1) ';' I1 by SCMFSA6A:67
     .= i ';' J ';' (Goto insloc (card I + 1) ';' I1) by SCMFSA6A:67
     .= i ';' (J ';' (Goto insloc (card I + 1) ';' I1)) by SCMFSA6A:71
     .= i ';' (J ';' Goto insloc (card I + 1) ';' I1) by SCMFSA6A:67
@@ -1996,19 +1944,18 @@ A20: DataPart s2 = DataPart s5 by A19,SCMFSA6A:38;
   assume
 A21: J is_halting_on Initialize s;
   then
-A22: s2 is halting by A15,SCMFSA8A:60;
+A22: ProgramPart s2 halts_on s2 by A15,SCMFSA8A:60;
   JI2 is_closed_on Initialize s by A15,A21,SCMFSA8A:58;
   then
 A23: JI2 is_closed_on s2 by Th9;
 A24: CurInstr Computation( s3,LifeSpan s2 + 2) = CurInstr Computation( s5,
   LifeSpan s2) by AMI_1:51
     .= IncAddr(CurInstr ( Computation( s2,LifeSpan s2)),2) by A1,A23,A12,A17
-  ,
-  A20,Th11
+,A20,Th11
     .= IncAddr(halt SCM+FSA,2) by A22,AMI_1:def 46
     .= halt SCM+FSA by SCMFSA_4:8;
   then
-A25: s3 is halting by AMI_1:def 20;
+A25: ProgramPart s3 halts_on s3 by AMI_1:146;
   now
     let l be Element of NAT;
     assume
@@ -2017,13 +1964,13 @@ A26: l < LifeSpan s2 + 2;
     suppose
       l = 0;
       then CurInstr Computation( s3,l) = CurInstr s3 by AMI_1:13;
-      hence CurInstr Computation( s3,l) <> halt SCM+FSA by A8,A4,
-      SCMFSA_2:49,124;
+      hence CurInstr Computation( s3,l) <> halt SCM+FSA by A8,A4,SCMFSA_2:49
+,124;
     end;
     suppose
       l = 1;
-      hence CurInstr Computation( s3,l) <> halt SCM+FSA by A14,A7,
-      SCMFSA_2:47,124;
+      hence CurInstr Computation( s3,l) <> halt SCM+FSA by A14,A7,SCMFSA_2:47
+,124;
     end;
     suppose
 A27:  l <> 0 & l <> 1;
@@ -2052,8 +1999,8 @@ A31:  CurInstr Computation( s2,l2) = halt SCM+FSA by SCMFSA_2:122;
   holds LifeSpan s2 + 2 <= l;
   then
 A32: LifeSpan s3 = LifeSpan s2 + 2 by A24,A25,AMI_1:def 46;
-A33: DataPart Result s2 = DataPart Computation( s2,LifeSpan s2) by A15,A21,
-  AMI_1:122,SCMFSA8A:60
+A33: DataPart Result s2 = DataPart Computation( s2,LifeSpan s2) by
+AMI_1:122,A22
     .= DataPart Computation( s5,LifeSpan s2) by A1,A23,A12,A17,A20,Th11
     .= DataPart Computation( s3,LifeSpan s2 + 2) by AMI_1:51
     .= DataPart Result s3 by A25,A32,AMI_1:122;
@@ -2065,8 +2012,7 @@ A35: now
       then x in A by RELAT_1:86;
       hence x is Instruction-Location of SCM+FSA by AMI_1:def 4;
     end;
-A36: dom Start-At insloc (card I + card J + 3) = {IC SCM+FSA} by FUNCOP_1:
-    19;
+A36: dom Start-At insloc (card I + card J + 3) = {IC SCM+FSA} by FUNCOP_1:19;
 A37: IExec(if>0(a,I,J),s) = (Result s3) +* (s | A) by SCMFSA6B:def 1;
 A38: IExec(JI2,s) = Result s2 +* s | A by SCMFSA6B:def 1;
     assume
@@ -2076,62 +2022,57 @@ A39: x in dom IExec(if>0(a,I,J),s);
 A40:  x is Int-Location;
       then x <> IC SCM+FSA by SCMFSA_2:81;
       then
-A41:  not x in dom Start-At insloc (card I + card J + 3) by A36,
-      TARSKI:def 1;
-      thus IExec(if>0(a,I,J),s).x = (Result s3).x by A35,A37,A40,FUNCT_4:12,
-      SCMFSA_2:84
+A41:  not x in dom Start-At insloc (card I + card J + 3) by A36,TARSKI:def 1;
+      thus IExec(if>0(a,I,J),s).x = (Result s3).x by A35,A37,A40,FUNCT_4:12
+,SCMFSA_2:84
         .= (Result s2).x by A33,A40,SCMFSA6A:38
         .= IExec(JI2,s).x by A35,A38,A40,FUNCT_4:12,SCMFSA_2:84
         .= (IExec(JI2,s) +* Start-At insloc (card I + card J + 3)).x by A41,
-      FUNCT_4:12;
+FUNCT_4:12;
     end;
     suppose
 A42:  x is FinSeq-Location;
       then x <> IC SCM+FSA by SCMFSA_2:82;
       then
-A43:  not x in dom Start-At insloc (card I + card J + 3) by A36,
-      TARSKI:def 1;
-      thus IExec(if>0(a,I,J),s).x = (Result s3).x by A35,A37,A42,FUNCT_4:12,
-      SCMFSA_2:85
+A43:  not x in dom Start-At insloc (card I + card J + 3) by A36,TARSKI:def 1;
+      thus IExec(if>0(a,I,J),s).x = (Result s3).x by A35,A37,A42,FUNCT_4:12
+,SCMFSA_2:85
         .= (Result s2).x by A33,A42,SCMFSA6A:38
         .= IExec(JI2,s).x by A35,A38,A42,FUNCT_4:12,SCMFSA_2:85
         .= (IExec(JI2,s) +* Start-At insloc (card I + card J + 3)).x by A43,
-      FUNCT_4:12;
+FUNCT_4:12;
     end;
     suppose
 A44:  x = IC SCM+FSA;
       then
-A45:  x in dom Start-At insloc (card I + card J + 3) by A36, TARSKI:
-      def 1;
+A45:  x in dom Start-At insloc (card I + card J + 3) by A36,TARSKI:def 1;
 A46:  IC Result s2 = IC IExec(JI2,s) by A35,A38,A44,AMI_1:48,FUNCT_4:12
         .= insloc (card I + card J + 1) by A15,A21,SCMFSA8A:61;
-      thus IExec(if>0(a,I,J),s).x = (Result s3).x by A35,A37,A44,AMI_1:48,
-      FUNCT_4:12
+      thus IExec(if>0(a,I,J),s).x = (Result s3).x by A35,A37,A44,AMI_1:48
+,FUNCT_4:12
         .= Computation( s3,LifeSpan s2 + 2).x by A25,A32,AMI_1:122
         .= IC Computation( s5,LifeSpan s2) by A44,AMI_1:51
         .= IC Computation( s2,LifeSpan s2) + 2 by A1,A23,A12,A17,A20,Th11
-        .= IC Result s2 + 2 by A15,A21,AMI_1:122,SCMFSA8A:60
+        .= IC Result s2 + 2 by AMI_1:122,A22
         .= (Start-At (insloc (card I + card J + 1) + 2)).IC SCM+FSA by A46,
-      FUNCOP_1:87
-        .= (IExec(JI2,s) +* Start-At insloc (card I + card J + 3)).x by A44,
-      A45,FUNCT_4:14;
+FUNCOP_1:87
+        .= (IExec(JI2,s) +* Start-At insloc (card I + card J + 3)).x by A44,A45
+,FUNCT_4:14;
     end;
     suppose
 A47:  x is Instruction-Location of SCM+FSA;
       then x <> IC SCM+FSA by AMI_1:48;
       then
-A48:  not x in dom Start-At insloc (card I + card J + 3) by A36,
-      TARSKI:def 1;
+A48:  not x in dom Start-At insloc (card I + card J + 3) by A36,TARSKI:def 1;
 A49:  x in NAT by A47,AMI_1:def 4;
       hence IExec(if>0(a,I,J),s).x = (s | A).x by A11,A37,FUNCT_4:14
         .= IExec(JI2,s).x by A11,A38,A49,FUNCT_4:14
         .= (IExec(JI2,s) +* Start-At insloc (card I + card J + 3)).x by A48,
-      FUNCT_4:12;
+FUNCT_4:12;
     end;
   end;
   dom IExec(if>0(a,I,J),s) = the carrier of SCM+FSA by AMI_1:79
-    .= dom (IExec(JI2,s) +* Start-At insloc (card I + card J + 3)) by AMI_1:
-  79;
+    .= dom (IExec(JI2,s) +* Start-At insloc (card I + card J + 3)) by AMI_1:79;
   hence
   IExec(if>0(a,I,J),s) = IExec(JI2,s) +* Start-At insloc (card I + card J
   + 3) by A34,FUNCT_1:9
@@ -2165,12 +2106,12 @@ A6: s = s +* (if>0(a,I,J) +* Start-At insloc 0) by FUNCT_4:79;
     suppose
       s.a > 0;
       then if>0(a,I,J) is_halting_on s by A2,A3,Th22;
-      hence s is halting by A6,SCMFSA7B:def 8;
+      hence ProgramPart s halts_on s by A6,SCMFSA7B:def 8;
     end;
     suppose
       s.a <= 0;
       then if>0(a,I,J) is_halting_on s by A5,A4,Th24;
-      hence s is halting by A6,SCMFSA7B:def 8;
+      hence ProgramPart s halts_on s by A6,SCMFSA7B:def 8;
     end;
   end;
   then if>0(a,I,J) +* Start-At insloc 0 is halting by AMI_1:def 26;
@@ -2202,16 +2143,16 @@ proof
       then
       IExec(if>0(a,I,J),s) = IExec(I,s) +* Start-At insloc (card I + card
       J + 3) by Th26;
-      hence IC IExec(if>0(a,I,J),s) = insloc (card I + card J + 3) by AMI_1:
-      111;
+      hence IC IExec(if>0(a,I,J),s) = insloc (card I + card J + 3) by AMI_1:111
+;
     end;
     suppose
       s.a <= 0;
       then
       IExec(if>0(a,I,J),s) = IExec(J,s) +* Start-At insloc (card I + card
       J + 3) by Th26;
-      hence IC IExec(if>0(a,I,J),s) = insloc (card I + card J + 3) by AMI_1:
-      111;
+      hence IC IExec(if>0(a,I,J),s) = insloc (card I + card J + 3) by AMI_1:111
+;
     end;
   end;
   hereby
@@ -2286,8 +2227,8 @@ A5: if>0(a,J,I) is_halting_on Initialize s by A2,A3,Th24;
   + 3) by Th15
     .= IExec(I,s) +* Start-At insloc (card I + card J + 3) +* Start-At
   insloc (card I + card J + 4 + card J + 3) by A1,A2,A3,Th25
-    .= IExec(I,s) +* Start-At insloc (card I + card J + card J + 7) by AMI_1
-  :141;
+    .= IExec(I,s) +* Start-At insloc (card I + card J + card J + 7) by
+AMI_1:141;
 end;
 
 theorem
@@ -2310,9 +2251,8 @@ A1: s.a = 0;
 A2: J is_closed_on Initialize s and
 A3: J is_halting_on Initialize s;
   thus IExec(if<0(a,I,J),s) = IExec(J,s) +* Start-At insloc (card if>0(a,J,I)
-  + card J + 3) by A1,A2,A3, Th17
-    .= IExec(J,s) +* Start-At insloc (card I + card J + 4 + card J + 3) by
-  Th15
+  + card J + 3) by A1,A2,A3,Th17
+    .= IExec(J,s) +* Start-At insloc (card I + card J + 4 + card J + 3) by Th15
     .= IExec(J,s) +* Start-At insloc (card I + card J + card J + 7);
 end;
 
@@ -2358,8 +2298,8 @@ A5: if>0(a,J,I) is_halting_on Initialize s by A2,A3,Th22;
   + 3) by Th15
     .= IExec(J,s) +* Start-At insloc (card I + card J + 3) +* Start-At
   insloc (card I + card J + 4 + card J + 3) by A1,A2,A3,Th23
-    .= IExec(J,s) +* Start-At insloc (card I + card J + card J + 7) by AMI_1
-  :141;
+    .= IExec(J,s) +* Start-At insloc (card I + card J + card J + 7) by
+AMI_1:141;
 end;
 
 theorem
@@ -2381,7 +2321,7 @@ A2: I is_closed_on Initialize s by SCMFSA7B:24;
     s.a < 0;
     hence
     IExec(if<0(a,I,J),s) = IExec(I,s) +* Start-At insloc (card I + card J
-    + card J + 7) by A2,A1, Th29;
+    + card J + 7) by A2,A1,Th29;
   end;
   hereby
     assume
@@ -2393,7 +2333,7 @@ A5: J is_halting_on Initialize s by SCMFSA7B:25;
       s.a = 0;
       hence
       IExec(if<0(a,I,J),s) = IExec(J,s) +* Start-At insloc (card I + card
-      J + card J + 7) by A4,A5, Th31;
+      J + card J + 7) by A4,A5,Th31;
     end;
     suppose
       s.a <> 0;
@@ -2483,9 +2423,9 @@ A1: IC Result s1 = IC IExec(I,s) by SCMFSA8A:7;
 A2: DataPart Result s1 = DataPart IExec(I,s) by Th35;
   then
 A3: for f being FinSeq-Location holds (Result s1).f = IExec(I,s).f by
-  SCMFSA6A:38;
-  for a being Int-Location holds (Result s1).a = IExec(I,s).a by A2,
-  SCMFSA6A:38;
+SCMFSA6A:38;
+  for a being Int-Location holds (Result s1).a = IExec(I,s).a by A2,SCMFSA6A:38
+;
   hence thesis by A3,A1,SCMFSA6A:28;
 end;
 
@@ -2643,7 +2583,7 @@ A30:      b <> da & b <> db;
       InsCode i = 6;
       then
 A31:  ex loc being Instruction-Location of SCM+FSA st i = goto loc by
-      SCMFSA_2:59;
+SCMFSA_2:59;
       hence Exec(i,s1).b = s1.b by SCMFSA_2:95
         .= s2.b by A1,A7
         .= Exec(i,s2).b by A31,SCMFSA_2:95;
@@ -2748,8 +2688,7 @@ A48:  i = halt SCM+FSA by SCMFSA_2:122;
     suppose
       InsCode i = 1;
       then
-A49:  ex da, db being Int-Location st i = da := db by
-      SCMFSA_2:54;
+A49:  ex da, db being Int-Location st i = da := db by SCMFSA_2:54;
       hence Exec(i,s1).f = s1.f by SCMFSA_2:89
         .= s2.f by A1
         .= Exec(i,s2).f by A49,SCMFSA_2:89;
@@ -2757,9 +2696,7 @@ A49:  ex da, db being Int-Location st i = da := db by
     suppose
       InsCode i = 2;
       then
-A50:  ex da, db being Int-Location st i = AddTo(da,db) by
-      SCMFSA_2:
-      55;
+A50:  ex da, db being Int-Location st i = AddTo(da,db) by SCMFSA_2:55;
       hence Exec(i,s1).f = s1.f by SCMFSA_2:90
         .= s2.f by A1
         .= Exec(i,s2).f by A50,SCMFSA_2:90;
@@ -2767,8 +2704,7 @@ A50:  ex da, db being Int-Location st i = AddTo(da,db) by
     suppose
       InsCode i = 3;
       then
-A51:  ex da, db being Int-Location st i = SubFrom(da, db) by
-      SCMFSA_2:56;
+A51:  ex da, db being Int-Location st i = SubFrom(da, db) by SCMFSA_2:56;
       hence Exec(i,s1).f = s1.f by SCMFSA_2:91
         .= s2.f by A1
         .= Exec(i,s2).f by A51,SCMFSA_2:91;
@@ -2776,9 +2712,7 @@ A51:  ex da, db being Int-Location st i = SubFrom(da, db) by
     suppose
       InsCode i = 4;
       then
-A52:  ex da, db being Int-Location st i = MultBy(da,db) by
-      SCMFSA_2
-      :57;
+A52:  ex da, db being Int-Location st i = MultBy(da,db) by SCMFSA_2:57;
       hence Exec(i,s1).f = s1.f by SCMFSA_2:92
         .= s2.f by A1
         .= Exec(i,s2).f by A52,SCMFSA_2:92;
@@ -2786,8 +2720,7 @@ A52:  ex da, db being Int-Location st i = MultBy(da,db) by
     suppose
       InsCode i = 5;
       then
-A53:  ex da, db being Int-Location st i = Divide(da, db) by
-      SCMFSA_2:58;
+A53:  ex da, db being Int-Location st i = Divide(da, db) by SCMFSA_2:58;
       hence Exec(i,s1).f = s1.f by SCMFSA_2:93
         .= s2.f by A1
         .= Exec(i,s2).f by A53,SCMFSA_2:93;
@@ -2796,7 +2729,7 @@ A53:  ex da, db being Int-Location st i = Divide(da, db) by
       InsCode i = 6;
       then
 A54:  ex loc being Instruction-Location of SCM+FSA st i = goto loc by
-      SCMFSA_2:59;
+SCMFSA_2:59;
       hence Exec(i,s1).f = s1.f by SCMFSA_2:95
         .= s2.f by A1
         .= Exec(i,s2).f by A54,SCMFSA_2:95;
@@ -2910,32 +2843,28 @@ A75:  ex da, db being Int-Location st i = da := db by SCMFSA_2:54;
     suppose
       InsCode i = 2;
       then
-A76:  ex da, db being Int-Location st i = AddTo(da,db) by
-      SCMFSA_2:55;
+A76:  ex da, db being Int-Location st i = AddTo(da,db) by SCMFSA_2:55;
       hence Exec(i,s1).IC SCM+FSA = Next IC s1 by SCMFSA_2:90
         .= Exec(i,s2).IC SCM+FSA by A47,A76,SCMFSA_2:90;
     end;
     suppose
       InsCode i = 3;
       then
-A77:  ex da, db being Int-Location st i = SubFrom(da, db) by
-      SCMFSA_2:56;
+A77:  ex da, db being Int-Location st i = SubFrom(da, db) by SCMFSA_2:56;
       hence Exec(i,s1).IC SCM+FSA = Next IC s1 by SCMFSA_2:91
         .= Exec(i,s2).IC SCM+FSA by A47,A77,SCMFSA_2:91;
     end;
     suppose
       InsCode i = 4;
       then
-A78:  ex da, db being Int-Location st i = MultBy(da,db) by
-      SCMFSA_2:57;
+A78:  ex da, db being Int-Location st i = MultBy(da,db) by SCMFSA_2:57;
       hence Exec(i,s1).IC SCM+FSA = Next IC s1 by SCMFSA_2:92
         .= Exec(i,s2).IC SCM+FSA by A47,A78,SCMFSA_2:92;
     end;
     suppose
       InsCode i = 5;
       then
-A79:  ex da, db being Int-Location st i = Divide(da, db) by
-      SCMFSA_2:58;
+A79:  ex da, db being Int-Location st i = Divide(da, db) by SCMFSA_2:58;
       hence Exec(i,s1).IC SCM+FSA = Next IC s1 by SCMFSA_2:93
         .= Exec(i,s2).IC SCM+FSA by A47,A79,SCMFSA_2:93;
     end;
@@ -3099,22 +3028,19 @@ A22: I c= Computation(S2,k+1) by A17,AMI_1:99;
 A23: Computation(S2,k+1) = Following Computation(S2,k) by AMI_1:14
       .= Exec(CurInstr Computation(S2,k), Computation(S2,k));
     I c= Computation(S1,k) by A10,A21,AMI_1:99;
-    then CurInstr Computation(S1,k) = I.IC Computation(S1,k) by A20,
-    GRFUNC_1:8;
+    then CurInstr Computation(S1,k) = I.IC Computation(S1,k) by A20,GRFUNC_1:8;
     then CurInstr Computation(S1,k) in rng I by A20,FUNCT_1:def 5;
     then
-A24: CurInstr Computation(S1,k) does_not_refer a by A1,
-    SCMFSA7B:def 2;
+A24: CurInstr Computation(S1,k) does_not_refer a by A1,SCMFSA7B:def 2;
     assume
 A25: P[k];
     hence S[ Computation(S1,k+1), Computation(S2,k+1)] by A19,A23,A24,Th37;
     thus
-A26: IC Computation(S1,k+1) = IC Computation(S2,k+1) by A25,A19,A23,
-    A24,Th37;
+A26: IC Computation(S1,k+1) = IC Computation(S2,k+1) by A25,A19,A23,A24,Th37;
 A27: IC Computation(S1,k+1) in dom I by A15,SCMFSA7B:def 7;
     I c= Computation(S1,k+1) by A10,A21,AMI_1:99;
     hence CurInstr Computation(S1,k+1) = I.IC Computation(S1,k+1) by A27,
-    GRFUNC_1:8
+GRFUNC_1:8
       .= CurInstr Computation(S2,k+1) by A22,A26,A27,GRFUNC_1:8;
   end;
   CurInstr Computation(S1,0) = S1.IC Computation(S1,0) by AMI_1:13
@@ -3190,12 +3116,11 @@ A15: now
     IC Computation(S1,k) in dom I by A12,SCMFSA7B:def 7;
     hence IC Computation(S2,k) in dom I by A1,A3,A7,A10,A11,A14,Th38;
   end;
-  S1 is halting by A13,SCMFSA7B:def 8;
+  ProgramPart S1 halts_on S1 by A13,SCMFSA7B:def 8;
   then consider n being Element of NAT such that
-A16: CurInstr Computation(S1,n) = halt SCM+FSA by AMI_1:def 20;
-  CurInstr Computation(S2,n) = halt SCM+FSA by A1,A3,A7,A10,A11,A14, A16
-  ,Th38;
-  then S2 is halting by AMI_1:def 20;
+A16: CurInstr Computation(S1,n) = halt SCM+FSA by AMI_1:146;
+  CurInstr Computation(S2,n) = halt SCM+FSA by A1,A3,A7,A10,A11,A14,A16,Th38;
+  then ProgramPart S2 halts_on S2 by AMI_1:146;
   hence thesis by A15,SCMFSA7B:def 7,def 8;
 end;
 
@@ -3249,17 +3174,17 @@ A11: now
   end;
   then I is_halting_on Initialize s2 by A7,A9,A10,A3,Th40;
   then
-A12: S2 is halting by A8,SCMFSA7B:def 8;
+A12: ProgramPart S2 halts_on S2 by A8,SCMFSA7B:def 8;
 A13: S1 = Initialize s1 +* (I +* Start-At insloc 0) by SCMFSA8A:13;
   then
-A14: S1 is halting by A10,SCMFSA7B:def 8;
+A14: ProgramPart S1 halts_on S1 by A10,SCMFSA7B:def 8;
   now
     let l be Element of NAT;
     assume
     l < LifeSpan S1;
     then CurInstr Computation(S1,l) <> halt SCM+FSA by A14,AMI_1:def 46;
-    hence CurInstr Computation(S2,l) <> halt SCM+FSA by A7,A9,A3,A11,A13,A8,
-    Th38;
+    hence CurInstr Computation(S2,l) <> halt SCM+FSA by A7,A9,A3,A11,A13,A8
+,Th38;
   end;
   then
 A15: for l be Element of NAT st CurInstr Computation(S2,l) = halt SCM+FSA
@@ -3326,7 +3251,7 @@ A3: now
     .= IExec(JJ,IExec(II,s)) +* Start-At (IC IExec(JJ,IExec(II,s)) + card II
   ) by SCMFSA6B:44;
   hence IC IExec(if=0(a,b,I,J),s) = IC IExec(JJ,IExec(II,s)) + card II by
-  AMI_1:111
+AMI_1:111
     .= insloc (card I + card J + 3) + card II by Th21
     .= insloc (card I + card J + 3) + 2 by SCMFSA7B:6
     .= insloc (card I + card J + 5);
@@ -3340,8 +3265,7 @@ A4: now
 A5: s.a = s.b;
 A6: I is_closed_on Initialize s1 by SCMFSA7B:24;
 A7: I is_halting_on Initialize s1 by SCMFSA7B:25;
-A8: Exec(i,Initialize s).a = (Initialize s).a - (Initialize s).b by
-    SCMFSA_2:91
+A8: Exec(i,Initialize s).a = (Initialize s).a - (Initialize s).b by SCMFSA_2:91
       .= s.a - (Initialize s).b by SCMFSA6C:3
       .= s.a - s.b by SCMFSA6C:3
       .= 0 by A5;
@@ -3359,7 +3283,7 @@ A9:   a <> d;
       .= IExec(I,s).f by A1,A3,A4,A6,A7,Th41;
   end;
 A10: Exec(i,Initialize s).a = (Initialize s).a - (Initialize s).b by
-  SCMFSA_2:91
+SCMFSA_2:91
     .= s.a - (Initialize s).b by SCMFSA6C:3
     .= s.a - s.b by SCMFSA6C:3;
 A11: J is_halting_on Initialize s1 by SCMFSA7B:25;
@@ -3415,7 +3339,7 @@ A3: now
     .= IExec(JJ,IExec(II,s)) +* Start-At (IC IExec(JJ,IExec(II,s)) + card II
   ) by SCMFSA6B:44;
   hence IC IExec(if>0(a,b,I,J),s) = IC IExec(JJ,IExec(II,s)) + card II by
-  AMI_1:111
+AMI_1:111
     .= insloc (card I + card J + 3) + card II by Th27
     .= insloc (card I + card J + 3) + 2 by SCMFSA7B:6
     .= insloc (card I + card J + 5);
@@ -3425,8 +3349,7 @@ A4: now
       .= s2.f by SCMFSA6C:3;
   end;
   hereby
-A5: Exec(i,Initialize s).a = (Initialize s).a - (Initialize s).b by
-    SCMFSA_2:91
+A5: Exec(i,Initialize s).a = (Initialize s).a - (Initialize s).b by SCMFSA_2:91
       .= s.a - (Initialize s).b by SCMFSA6C:3
       .= s.a - s.b by SCMFSA6C:3;
     assume
@@ -3449,7 +3372,7 @@ A9:   a <> d;
       .= IExec(I,s).f by A1,A3,A4,A8,A7,Th41;
   end;
 A10: Exec(i,Initialize s).a = (Initialize s).a - (Initialize s).b by
-  SCMFSA_2:91
+SCMFSA_2:91
     .= s.a - (Initialize s).b by SCMFSA6C:3
     .= s.a - s.b by SCMFSA6C:3;
 A11: J is_closed_on Initialize s1 by SCMFSA7B:24;

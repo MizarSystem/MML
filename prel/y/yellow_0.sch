@@ -22,7 +22,7 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="10" value="false"/>
+<Adjective nr="11" value="false"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -30,8 +30,8 @@
 <For>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="31" value="false"/>
-<Adjective nr="45"/>
+<Adjective nr="32" value="false"/>
+<Adjective nr="46"/>
 </Cluster>
 </Typ>
 <Not>

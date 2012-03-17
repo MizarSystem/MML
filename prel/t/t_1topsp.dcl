@@ -26,17 +26,17 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="31" value="false"/>
-<Adjective nr="43"/>
-<Adjective nr="48"/>
+<Adjective nr="32" value="false"/>
+<Adjective nr="44"/>
+<Adjective nr="49"/>
 </Cluster>
 </RCluster>
 <FCluster aid="T_1TOPSP" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="31" value="false"/>
-<Adjective nr="43"/>
+<Adjective nr="32" value="false"/>
+<Adjective nr="44"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -44,17 +44,17 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="31" value="false"/>
-<Adjective nr="42"/>
+<Adjective nr="32" value="false"/>
 <Adjective nr="43"/>
+<Adjective nr="44"/>
 </Cluster>
 </FCluster>
 <FCluster aid="T_1TOPSP" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="31" value="false"/>
-<Adjective nr="43"/>
+<Adjective nr="32" value="false"/>
+<Adjective nr="44"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -62,8 +62,8 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="43"/>
-<Adjective nr="48"/>
+<Adjective nr="44"/>
+<Adjective nr="49"/>
 </Cluster>
 </FCluster>
 </Registrations>

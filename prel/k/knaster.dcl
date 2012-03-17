@@ -67,19 +67,19 @@
 <LocusVar nr="2"/>
 </Adjective>
 <Adjective nr="9"/>
-<Adjective nr="21">
+<Adjective nr="22">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>
-<Adjective nr="187"/>
+<Adjective nr="188"/>
 </Cluster>
 </RCluster>
 <RCluster aid="KNASTER" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="8">
 <Cluster>
-<Adjective nr="43" value="false"/>
-<Adjective nr="63"/>
+<Adjective nr="44" value="false"/>
+<Adjective nr="64"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -93,10 +93,10 @@
 </Typ>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="193">
+<Adjective nr="194">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="194">
+<Adjective nr="195">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -104,17 +104,17 @@
 <CCluster aid="KNASTER" nr="1">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="43" value="false"/>
-<Adjective nr="63"/>
-<Adjective nr="132"/>
+<Adjective nr="44" value="false"/>
+<Adjective nr="64"/>
+<Adjective nr="133"/>
 </Cluster>
 <Typ kind="G" nr="8">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="43" value="false"/>
-<Adjective nr="63"/>
-<Adjective nr="68"/>
+<Adjective nr="44" value="false"/>
+<Adjective nr="64"/>
+<Adjective nr="69"/>
 </Cluster>
 </CCluster>
 </Registrations>

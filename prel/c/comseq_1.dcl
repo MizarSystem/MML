@@ -38,15 +38,15 @@
 <Func kind="K" nr="82"/>
 </Adjective>
 <Adjective nr="6"/>
-<Adjective nr="10" value="false"/>
-<Adjective nr="13">
+<Adjective nr="11" value="false"/>
+<Adjective nr="14">
 <Func kind="K" nr="85"/>
 </Adjective>
-<Adjective nr="14">
+<Adjective nr="15">
 <Func kind="K" nr="85"/>
 <Func kind="K" nr="82"/>
 </Adjective>
-<Adjective nr="25"/>
+<Adjective nr="26"/>
 </Cluster>
 </RCluster>
 </Registrations>

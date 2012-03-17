@@ -28,7 +28,7 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="16"/>
+<Adjective nr="17"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -38,8 +38,8 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="6"/>
-<Adjective nr="14"/>
-<Adjective nr="32"/>
+<Adjective nr="15"/>
+<Adjective nr="33"/>
 </Cluster>
 </Typ>
 <Not>
@@ -109,7 +109,7 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="16"/>
+<Adjective nr="17"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -122,8 +122,8 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="6"/>
-<Adjective nr="14"/>
-<Adjective nr="32"/>
+<Adjective nr="15"/>
+<Adjective nr="33"/>
 </Cluster>
 </Typ>
 <Not>
@@ -172,8 +172,8 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="6"/>
-<Adjective nr="14"/>
-<Adjective nr="32"/>
+<Adjective nr="15"/>
+<Adjective nr="33"/>
 </Cluster>
 </Typ>
 <Pred kind="P" nr="1">
@@ -188,8 +188,8 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="6"/>
-<Adjective nr="14"/>
-<Adjective nr="32"/>
+<Adjective nr="15"/>
+<Adjective nr="33"/>
 </Cluster>
 </Typ>
 <For>
@@ -205,7 +205,7 @@
 <Pred kind="P" nr="1">
 <Func kind="K" nr="124">
 <Var nr="1"/>
-<Func kind="K" nr="195">
+<Func kind="K" nr="194">
 <Var nr="2"/>
 </Func>
 </Func>
@@ -220,7 +220,7 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="17" value="false"/>
+<Adjective nr="18" value="false"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -246,15 +246,15 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="6"/>
-<Adjective nr="14"/>
-<Adjective nr="32"/>
+<Adjective nr="15"/>
+<Adjective nr="33"/>
 </Cluster>
 </Typ>
 <Not>
 <And>
 <Pred kind="R" nr="2">
 <Var nr="3"/>
-<Func kind="K" nr="199">
+<Func kind="K" nr="198">
 <Func kind="F" nr="1"/>
 </Func>
 </Pred>
@@ -278,15 +278,15 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="6"/>
-<Adjective nr="14"/>
-<Adjective nr="32"/>
+<Adjective nr="15"/>
+<Adjective nr="33"/>
 </Cluster>
 </Typ>
 <Not>
 <And>
 <Pred kind="R" nr="2">
 <Var nr="3"/>
-<Func kind="K" nr="199">
+<Func kind="K" nr="198">
 <Func kind="F" nr="1"/>
 </Func>
 </Pred>

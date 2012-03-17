@@ -9,7 +9,7 @@ environ
  vocabularies AMI_3, SCMPDS_2, AMI_1, INT_1, SCMPDS_4, AMI_2, RELAT_1, BOOLE,
       SCM_1, FUNCT_1, FUNCT_7, SCMFSA6A, FUNCT_4, SCMPDS_3, CARD_1, SCMFSA_7,
       ABSVALUE, ARYTM_1, RELOC, SCMFSA6B, SCMPDS_5, AMI_5, SCMFSA8A, CAT_1,
-      UNIALG_2, SCMFSA7B, SCMFSA8B, SCMPDS_6, ARYTM, AMISTD_2;
+      UNIALG_2, SCMFSA7B, SCMFSA8B, SCMPDS_6, ARYTM, AMISTD_2, SCMNORM;
  notations TARSKI, XBOOLE_0, SUBSET_1, XCMPLX_0, RELAT_1, FUNCT_1, CARD_1,
       NUMBERS, COMPLEX1, FUNCT_4, INT_1, NAT_1, STRUCT_0, AMI_1, SCMNORM,
       AMI_2, FUNCT_7, SCMPDS_2, SCMPDS_3, SCMPDS_4, SCMPDS_5, XXREAL_0;
@@ -49,12 +49,12 @@ proof
 end;
 
 theorem Th2:
-  for s being State of SCMPDS st s is halting for k being Element
+  for s being State of SCMPDS st ProgramPart s halts_on s for k being Element
   of NAT st LifeSpan s <= k holds CurInstr Computation(s,k) = halt SCMPDS
 proof
   let s be State of SCMPDS;
   assume
-  s is halting;
+  ProgramPart s halts_on s;
   then
 A1: CurInstr Computation(s,LifeSpan s) = halt SCMPDS by AMI_1:def 46;
   let k be Element of NAT;
@@ -64,7 +64,7 @@ A1: CurInstr Computation(s,LifeSpan s) = halt SCMPDS by AMI_1:def 46;
 end;
 
 theorem Th3:
-  for s being State of SCMPDS st s is halting for k being Element
+  for s being State of SCMPDS st ProgramPart s halts_on s for k being Element
 of NAT st LifeSpan s <= k holds IC Computation(s,k) = IC Computation(s,LifeSpan
   s)
 proof
@@ -72,7 +72,7 @@ proof
   defpred P[Element of NAT] means LifeSpan s <= $1 implies IC Computation(s,$1
   ) = IC Computation(s,LifeSpan s);
   assume
-A1: s is halting;
+A1: ProgramPart s halts_on s;
 A2: now
     let k be Element of NAT;
     assume
@@ -125,8 +125,8 @@ proof
   set SA0=Start-At inspos 0;
   let s be State of SCMPDS,I be Program of SCMPDS;
 A1: dom I misses dom SA0 by SCMPDS_4:54;
-  thus Initialized s +* Initialized I = s +* SA0 +* Initialized I by SCMPDS_5:
-  def 4
+  thus Initialized s +* Initialized I = s +* SA0 +* Initialized I by
+SCMPDS_5:def 4
     .= s +* SA0 +* (I +* SA0) by SCMPDS_4:def 2
     .= s +* SA0 +* I +* SA0 by FUNCT_4:15
     .= s +* (SA0 +* I) +* SA0 by FUNCT_4:15
@@ -269,7 +269,7 @@ proof
 A1: dom Start-At l1 = {IC SCMPDS} by FUNCOP_1:19
     .= dom Start-At l2 by FUNCOP_1:19;
   thus s +* Start-At l1 +* Start-At l2 = s +* (Start-At l1 +* Start-At l2) by
-  FUNCT_4:15
+FUNCT_4:15
     .= s +* Start-At l2 by A1,FUNCT_4:20;
 end;
 
@@ -284,8 +284,7 @@ end;
 theorem Th16:
   (i ';' I).inspos 0=i
 proof
-  i ';' I=Load i ';' I & inspos 0 in dom Load i by SCMPDS_4:def 4,SCMPDS_5
-  :2;
+  i ';' I=Load i ';' I & inspos 0 in dom Load i by SCMPDS_4:def 4,SCMPDS_5:2;
   hence (i ';' I).inspos 0 =(Load i).inspos 0 by SCMPDS_4:37
     .=i by SCMPDS_5:4;
 end;
@@ -398,8 +397,8 @@ proof
   then
 A1: not x in dom Start-At l by TARSKI:def 1;
 A2: dom (s | A) = A & x in NAT by Th1,AMI_1:def 4;
-  thus IExec(J,s).x = (Result(s+*Initialized stop J) +* s | A).x by SCMPDS_4:
-  def 8
+  thus IExec(J,s).x = (Result(s+*Initialized stop J) +* s | A).x by
+SCMPDS_4:def 8
     .=(s | A).x by A2,FUNCT_4:14
     .= (Result(s+*Initialized stop I) +* s | A).x by A2,FUNCT_4:14
     .= IExec(I,s).x by SCMPDS_4:def 8
@@ -416,8 +415,8 @@ A1: x in NAT by AMI_1:def 4;
   then
 A2: not x in dom Start-At l by TARSKI:def 1;
 A3: dom (s | A) = A by Th1;
-  thus IExec(I,s).x = (Result(s+*Initialized stop I) +* s | A).x by SCMPDS_4:
-  def 8
+  thus IExec(I,s).x = (Result(s+*Initialized stop I) +* s | A).x by
+SCMPDS_4:def 8
     .=(s | A).x by A3,A1,FUNCT_4:14
     .= s.x by A1,FUNCT_1:72
     .= (s+* Start-At l).x by A2,FUNCT_4:12;
@@ -518,7 +517,7 @@ definition
   Computation(s+*Initialized stop I,k) in dom stop I;
   pred I is_halting_on s means
   :Def3:
-  s +* Initialized stop I is halting;
+  ProgramPart(s+*Initialized stop I) halts_on s+*Initialized stop I;
 end;
 
 theorem Th34:
@@ -533,8 +532,7 @@ A1: I is paraclosed;
     let s be State of SCMPDS;
     IsI c= s +* IsI by FUNCT_4:26;
     then for n holds IC Computation(s+*IsI,n) in dom stop I by A1,
-    SCMPDS_4:
-    def 9;
+SCMPDS_4:def 9;
     hence I is_closed_on s by Def2;
   end;
   assume
@@ -562,7 +560,7 @@ proof
     assume
 A1: I is parahalting;
     let s be State of SCMPDS;
-    s +* IsI is halting by A1,FUNCT_4:26,SCMPDS_4:63;
+    ProgramPart(s+*IsI) halts_on s+*IsI by A1,FUNCT_4:26,SCMPDS_4:63;
     hence I is_halting_on s by Def3;
   end;
   assume
@@ -574,7 +572,7 @@ A2: for s being State of SCMPDS holds I is_halting_on s;
     then
 A3: s = s +* IsI by FUNCT_4:79;
     I is_halting_on s by A2;
-    hence s is halting by A3,Def3;
+    hence ProgramPart s halts_on s by A3,Def3;
   end;
   then IsI is halting by AMI_1:def 26;
   hence thesis by SCMPDS_4:def 10;
@@ -609,8 +607,7 @@ A10: Computation(S2,k+1) = Following Computation(S2,k) by AMI_1:14
     assume
 A11: P[k];
     then
-A12: for a holds Computation(S1,k).a = Computation(S2,k).a by
-    SCMPDS_4:23;
+A12: for a holds Computation(S1,k).a = Computation(S2,k).a by SCMPDS_4:23;
     IsI c= s2 +* IsI by FUNCT_4:26;
     then pI c= s2 +* IsI by A6,XBOOLE_1:1;
     then
@@ -619,18 +616,17 @@ A14: IC Computation(S1,k+1) in dom pI by A8,Def2;
 A15: Computation(S1,k+1) = Following Computation(S1,k) by AMI_1:14
       .= Exec(CurInstr Computation(S1,k),Computation(S1,k));
     then
-A16: Computation(S1,k+1),Computation(S2,k+1) equal_outside NAT by A11,A12,
-    A10,SCMPDS_4:11,15;
-    Computation(S1,k),Computation(S2,k) equal_outside A by A11,A12,
-    SCMPDS_4:11;
+A16: Computation(S1,k+1),Computation(S2,k+1) equal_outside NAT by A11,A12,A10,
+SCMPDS_4:11,15;
+    Computation(S1,k),Computation(S2,k) equal_outside A by A11,A12,SCMPDS_4:11;
     then
-A17: IC Computation(S1,k+1) = IC Computation(S2,k+1) by A11,A15,A10,
-    AMI_1:121,SCMPDS_4:15;
+A17: IC Computation(S1,k+1) = IC Computation(S2,k+1) by A11,A15,A10,AMI_1:121
+,SCMPDS_4:15;
     IsI c= s1 +* IsI by FUNCT_4:26;
     then pI c= s1 +* IsI by A6,XBOOLE_1:1;
     then pI c= Computation(S1,k+1) by AMI_1:81;
     then CurInstr Computation(S1,k+1) = pI.IC Computation(S1,k+1) by A14,
-    GRFUNC_1:8
+GRFUNC_1:8
       .= CurInstr Computation(S2,k+1) by A13,A17,A14,GRFUNC_1:8;
     hence P[k+1] by A16,AMI_1:121,SCMPDS_4:24;
   end;
@@ -681,11 +677,9 @@ A9: Computation(S2,k+1) = Following Computation(S2,k) by AMI_1:14
       .= Exec(CurInstr Computation(S2,k),Computation(S2,k));
     assume
 A10: P[k];
-    then for a holds Computation(S1,k).a = Computation(S2,k).a by
-    SCMPDS_4:23;
+    then for a holds Computation(S1,k).a = Computation(S2,k).a by SCMPDS_4:23;
     then
-A11: Computation(S1,k),Computation(S2,k) equal_outside A by A10,
-    SCMPDS_4:11;
+A11: Computation(S1,k),Computation(S2,k) equal_outside A by A10,SCMPDS_4:11;
     IsI c= s2 +* IsI by FUNCT_4:26;
     then pI c= s2 +* IsI by A5,XBOOLE_1:1;
     then
@@ -694,13 +688,13 @@ A13: IC Computation(S1,k+1) in dom pI by A7,Def2;
 A14: Computation(S1,k+1) = Following Computation(S1,k) by AMI_1:14
       .= Exec(CurInstr Computation(S1,k),Computation(S1,k));
     then
-A15: IC Computation(S1,k+1) = IC Computation(S2,k+1) by A10,A11,A9,
-    AMI_1:121,SCMPDS_4:15;
+A15: IC Computation(S1,k+1) = IC Computation(S2,k+1) by A10,A11,A9,AMI_1:121
+,SCMPDS_4:15;
     IsI c= s1 +* IsI by FUNCT_4:26;
     then pI c= s1 +* IsI by A5,XBOOLE_1:1;
     then pI c= Computation(S1,k+1) by AMI_1:81;
     then CurInstr Computation(S1,k+1) = pI.IC Computation(S1,k+1) by A13,
-    GRFUNC_1:8
+GRFUNC_1:8
       .= CurInstr Computation(S2,k+1) by A12,A15,A13,GRFUNC_1:8;
     hence P[k+1] by A10,A11,A14,A9,A15,SCMPDS_4:15,24;
   end;
@@ -710,9 +704,9 @@ A17: IC Computation(S2,0) = IsI.IC SCMPDS by A2,FUNCT_4:14
     .= inspos 0 by SCMPDS_4:29;
   assume
   I is_halting_on s1;
-  then s1 +* IsI is halting by Def3;
+  then ProgramPart(s1+*IsI) halts_on s1+*IsI by Def3;
   then consider m such that
-A18: CurInstr Computation(S1,m) = halt SCMPDS by AMI_1:def 20;
+A18: CurInstr Computation(S1,m) = halt SCMPDS by AMI_1:146;
 A19: IC Computation(S1,0) = IsI.IC SCMPDS by A16,A1,FUNCT_4:14
     .= inspos 0 by SCMPDS_4:29;
   then CurInstr Computation(S1,0) = IsI.inspos 0 by A1,A6,A4,FUNCT_4:14
@@ -728,7 +722,7 @@ A21: for k being Element of NAT holds P[k] from NAT_1:sch 1(A20,A8);
   hence I is_closed_on s2 by Def2;
   for k being Element of NAT holds P[k] from NAT_1:sch 1(A20,A8);
   then CurInstr Computation(S2,m) = halt SCMPDS by A18;
-  then s2 +* IsI is halting by AMI_1:def 20;
+  then ProgramPart(s2+*IsI) halts_on s2+*IsI by AMI_1:146;
   hence thesis by Def3;
 end;
 
@@ -761,7 +755,7 @@ A2: s1 +* IsJ = s1 +* pIJ by FUNCT_4:26,SCMPDS_4:34;
   assume
   I is_halting_on s;
   then
-A3: s1 is halting by Def3;
+A3: ProgramPart s1 halts_on s1 by Def3;
 A4: IsI=pI +* Start-At inspos 0 & IsI c= s1 by FUNCT_4:26,SCMPDS_4:def 2;
 A5: for m st X[m] holds X[m+1]
   proof
@@ -788,8 +782,7 @@ A12: IC Computation(S1,m) in dom pI by A1,Def2;
     then pI c= s1 by A4,XBOOLE_1:1;
     then pI c= Computation(S1,m) by AMI_1:81;
     then
-A13: CurInstr(Computation(S1,m)) = pI.IC (Computation(S1,m)) by A12,
-    GRFUNC_1:8;
+A13: CurInstr(Computation(S1,m)) = pI.IC (Computation(S1,m)) by A12,GRFUNC_1:8;
     assume
 A14: m+1 <= LifeSpan s1;
     then m < LifeSpan s1 by NAT_1:13;
@@ -800,13 +793,11 @@ A15: IC Computation(S1,m) in dom I by A12,SCMPDS_5:3;
     )) by A13,SCMPDS_4:def 7
       .=I.IC (Computation(S1,m)) by A15,SCMPDS_4:37
       .=pIJ.IC(Computation(S1,m)) by A15,A9,SCMPDS_4:37
-      .=(Computation(S2,m)).IC(Computation(S1,m)) by A7,A15,A9,A10,
-    GRFUNC_1:8
+      .=(Computation(S2,m)).IC(Computation(S1,m)) by A7,A15,A9,A10,GRFUNC_1:8
       .= CurInstr(Computation(S2,m)) by A6,A14,AMI_1:121,NAT_1:13;
     hence thesis by A6,A14,A8,A11,NAT_1:13,SCMPDS_4:15;
   end;
-  Computation( s1,0) = s1 & Computation( (s1+*IsJ),0) = s1+*IsJ by AMI_1:
-  13;
+  Computation( s1,0) = s1 & Computation( (s1+*IsJ),0) = s1+*IsJ by AMI_1:13;
   then
 A16: X[0] by A2,AMI_1:120;
 A17: for m holds X[m] from NAT_1:sch 1(A16,A5);
@@ -837,7 +828,7 @@ A5: stop I = I ';' Sp by SCMPDS_4:def 7;
   IsI c= ss & stop I c= IsI by FUNCT_4:26,SCMPDS_4:9;
   then
 A6: stop I c= ss by XBOOLE_1:1;
-A7: ss is halting by A2,Def3;
+A7: ProgramPart ss halts_on ss by A2,Def3;
 A8: now
     assume
 A9: n = card I;
@@ -872,9 +863,8 @@ A5: stop I = I ';' SS by SCMPDS_4:def 7;
 A6: IC s3 in dom stop(I) by A1,Def2;
   IsJ c= s2 & stop (I ';' J) c= IsJ by FUNCT_4:26,SCMPDS_4:9;
   then
-A7: dom stop I c= dom stop (I ';' J) & stop (I ';' J) c= s2 by
-  SCMPDS_5:
-  16 ,XBOOLE_1:1;
+A7: dom stop I c= dom stop (I ';' J) & stop (I ';' J) c= s2 by SCMPDS_5:16
+,XBOOLE_1:1;
   IsI c= s1 & stop I c= IsI by FUNCT_4:26,SCMPDS_4:9;
   then
 A8: stop I c= s1 by XBOOLE_1:1;
@@ -923,7 +913,7 @@ A2: I is_halting_on s;
   IsI c= s1 & I c= IsI by Th17,FUNCT_4:26;
   then
 A3: I c= s1 by XBOOLE_1:1;
-A4: s1 is halting by A2,Def3;
+A4: ProgramPart s1 halts_on s1 by A2,Def3;
   now
     assume
 A5: IC Css in dom I;
@@ -951,8 +941,10 @@ stop I))) = DataPart Computation( (s +* Initialized stop (I ';' Goto (card J +
 NAT st k <= LifeSpan (s +* Initialized stop I) holds CurInstr Computation( (s
 +*Initialized stop (I ';' Goto (card J + 1) ';' J )),k) <> halt SCMPDS) & IC
 Computation( (s +* Initialized stop (I ';' Goto (card J + 1) ';' J)), (LifeSpan
-(s +* Initialized stop I))) = inspos card I & s +* Initialized stop (I ';' Goto
-(card J + 1) ';' J) is halting & LifeSpan (s +* Initialized stop (I ';' Goto (
+(s +* Initialized stop I))) = inspos card I &
+ ProgramPart(s +* Initialized stop (I ';' Goto (card J + 1) ';' J))
+  halts_on s +* Initialized stop (I ';' Goto (card J + 1) ';' J) &
+ LifeSpan (s +* Initialized stop (I ';' Goto (
 card J + 1) ';' J)) = LifeSpan (s +* Initialized stop I) + 1
 
 proof
@@ -1050,8 +1042,7 @@ A22: k <= LifeSpan s1;
 A23:  k < LifeSpan s1;
       then CurInstr Computation( s1,k) <> halt SCMPDS by A1,A2,Th42;
 
-      hence CurInstr Computation( s2,k) <> halt SCMPDS by A1,A2,A3,A23,
-      Th41;
+      hence CurInstr Computation( s2,k) <> halt SCMPDS by A1,A2,A3,A23,Th41;
 
     end;
     suppose
@@ -1062,7 +1053,7 @@ A23:  k < LifeSpan s1;
   end;
   thus IC Computation( s2,LifeSpan s1) = inspos card I by A1,A2,A4,Th43;
   thus
-A24: s2 is halting by A20,AMI_1:def 20;
+A24: ProgramPart s2 halts_on s2 by A20,AMI_1:146;
   now
     let k be Element of NAT;
     assume
@@ -1114,7 +1105,7 @@ A10: I c= s4 by AMI_1:81;
   assume
 A11: I is_halting_on s;
   then
-A12: s1 is halting by Def3;
+A12: ProgramPart s1 halts_on s1 by Def3;
   per cases;
   suppose
     IC s3 <> inspos card I;
@@ -1126,7 +1117,7 @@ A14: halt SCMPDS=CurInstr s3 by A12,AMI_1:def 46
       .=s4.IC s3 by A10,A13,GRFUNC_1:8
       .=CurInstr s4 by A6,A11,Th39;
     then
-A15: s2 is halting by AMI_1:def 20;
+A15: ProgramPart s2 halts_on s2 by AMI_1:146;
     hence IJ is_halting_on s by A1,Def3;
     now
       let k be Element of NAT;
@@ -1192,11 +1183,11 @@ A31: IC Computation( s2,m + 1) = IC Following s4 by AMI_1:14
       .=inspos (card I + card J + 1);
     then
 A32: CurInstr Computation( s2,m + 1) = s2.inspos (card I + card J + 1) by
-    AMI_1:54
+AMI_1:54
       .= (I ';' JS).inspos(card I+(card J+1)) by A9,A8,A27,GRFUNC_1:8
       .= halt SCMPDS by A25,A30,SCMPDS_4:38;
     then
-A33: s2 is halting by AMI_1:def 20;
+A33: ProgramPart s2 halts_on s2 by AMI_1:146;
     hence IJ is_halting_on s by A1,Def3;
     now
       let k be Element of NAT;
@@ -1238,7 +1229,7 @@ A2: I is_closed_on s1;
   set S1 = s1, S2 = s2;
   let n be Element of NAT;
   II= SI +* Start-At inspos 0 & dom SI misses dom Start-At inspos 0 by
-  SCMPDS_4:54,def 2;
+SCMPDS_4:54,def 2;
   then
 A3: SI c= II by FUNCT_4:33;
   then
@@ -1287,8 +1278,8 @@ A22: i = s1.IC Computation(S1,k) by AMI_1:54
 A23: InsCode i <> 1 & InsCode i <> 3 by A21,A17,SCMPDS_4:def 12;
 A24: i valid_at m by A21,A22,A17,SCMPDS_4:def 12;
     hence
-A25: IC Computation(S1,k+1) + n = IC Computation(S2,k+1) by A15,A16,
-    A20,A17,A23,SCMPDS_4:83;
+A25: IC Computation(S1,k+1) + n = IC Computation(S2,k+1) by A15,A16,A20,A17,A23
+,SCMPDS_4:83;
     CurInstr Computation(S1,k+1) = s1.l by AMI_1:54
       .= II.l by A1,A4,A18,GRFUNC_1:8
       .= SI.l by A3,A18,GRFUNC_1:8;
@@ -1322,7 +1313,7 @@ proof
   Initialized stop (I ';' G ';' J);
   assume
 A1: I is_closed_on s & I is_halting_on s;
-  then s2 is halting & LifeSpan s2 = m by Lm2;
+  then ProgramPart s2 halts_on s2 & LifeSpan s2 = m by Lm2;
   then IC Result s2 = IC Computation( s2,m) by AMI_1:122
     .= inspos (card I + card J + 1) by A1,Lm2;
   hence thesis by SCMPDS_5:22;
@@ -1341,12 +1332,11 @@ proof
   assume that
 A1: I is_closed_on s and
 A2: I is_halting_on s;
-A3: s1 is halting by A2,Def3;
-  s2 is halting & LifeSpan s2 = m by A1,A2,Lm2;
+A3: ProgramPart s1 halts_on s1 by A2,Def3;
+  ProgramPart s2 halts_on s2 & LifeSpan s2 = m by A1,A2,Lm2;
   then
 A4: Result s2 = Computation( s2,m) by AMI_1:122;
-  then DataPart Result s2 = DataPart Computation( s1,LifeSpan s1) by A1,A2,
-  Lm2;
+  then DataPart Result s2 = DataPart Computation( s1,LifeSpan s1) by A1,A2,Lm2;
   then
 A5: DataPart Result s2 = DataPart Result s1 by A3,AMI_1:122
     .= DataPart(Result s1 +* Start-At l) by Th7;
@@ -1356,8 +1346,7 @@ A5: DataPart Result s2 = DataPart Result s1 by A3,AMI_1:122
 A6: Result s2,Result s1 +* Start-At l equal_outside A by A5,Th4;
   dom (s | A) = A by Th1;
   then
-A7: Result s2 +* s | A = Result s1 +* Start-At l +* s | A by A6,
-  FUNCT_7:108;
+A7: Result s2 +* s | A = Result s1 +* Start-At l +* s | A by A6,FUNCT_7:108;
 A8: dom (s | A) misses dom Start-At l by Th10;
   thus IExec(I ';' G ';' J,s) = Result s2 +* s | A by SCMPDS_4:def 8
     .= Result s1 +* (Start-At l +* s | A) by A7,FUNCT_4:15
@@ -1376,7 +1365,7 @@ proof
   assume that
 A1: I is_closed_on s and
 A2: I is_halting_on s;
-A3: s1 is halting by A2,Def3;
+A3: ProgramPart s1 halts_on s1 by A2,Def3;
   thus IC IExec(I,s) = IC Result s1 by SCMPDS_5:22
     .= IC Computation( s1,LifeSpan s1) by A3,AMI_1:122
     .=inspos card I by A1,A2,Th43;
@@ -1431,8 +1420,7 @@ Lm3: card (i ';' I ';' Goto n ';' J) = card I + card J +2
 proof
   set G=Goto n;
 
-  thus card (i ';' I ';' G ';' J) =card (i ';' I ';' G) + card J by SCMPDS_4:
-  45
+  thus card (i ';' I ';' G ';' J) =card (i ';' I ';' G) + card J by SCMPDS_4:45
 
     .=card (i ';' I) + card G + card J by SCMPDS_4:45
     .=card (i ';' I) + 1 + card J by SCMPDS_5:6
@@ -1539,7 +1527,7 @@ A11: I is_closed_on s;
 A12: I is_halting_on s;
   then I2 is_halting_on s by A11,Th44;
   then
-A13: s2 is halting by Def3;
+A13: ProgramPart s2 halts_on s2 by Def3;
 A14: I2 is_closed_on s by A11,A12,Th44;
   then
 A15: II2 c= s2 & I2 is_closed_on s2 by Th38,FUNCT_4:26;
@@ -1553,8 +1541,8 @@ A16: card pIF = card IF +1 by SCMPDS_5:7
       then consider k1 being Nat such that
 A17:  k1 + 1 = k by NAT_1:6;
       reconsider k1 as Element of NAT by ORDINAL1:def 13;
-      reconsider m = IC Computation( s2,k1) as Element of NAT by ORDINAL1:def
-      13;
+      reconsider m = IC Computation( s2,k1) as Element of NAT by
+ORDINAL1:def 13;
 A18:  card pIF = card pI2+1 by A16,SCMPDS_5:7;
       inspos m in dom pI2 by A14,Def2;
       then m < card pI2 by SCMPDS_4:1;
@@ -1574,7 +1562,7 @@ A19:  m+1 < card pIF by A18,XREAL_1:8;
   LifeSpan s2) by AMI_1:51
     .=CurInstr Computation( s2,LifeSpan s2) by A15,A5,A9,A8,Th45
     .= halt SCMPDS by A13,AMI_1:def 46;
-  then s3 is halting by AMI_1:def 20;
+  then ProgramPart s3 halts_on s3 by AMI_1:146;
   hence thesis by Def3;
 end;
 
@@ -1623,7 +1611,7 @@ A11: Shift(pJ,card I+2) c= s4 by AMI_1:81;
   assume
   J is_halting_on s;
   then
-A12: s1 is halting by Def3;
+A12: ProgramPart s1 halts_on s1 by Def3;
 A13: DataPart s1 = DataPart s3 by SCMPDS_4:24,36;
   now
     let a;
@@ -1640,8 +1628,8 @@ A14: DataPart s1 = DataPart s4 by SCMPDS_4:23;
       then consider k1 being Nat such that
 A15:  k1 + 1 = k by NAT_1:6;
       reconsider k1 as Element of NAT by ORDINAL1:def 13;
-      reconsider m = IC Computation( s1,k1) as Element of NAT by ORDINAL1:def
-      13;
+      reconsider m = IC Computation( s1,k1) as Element of NAT by
+ORDINAL1:def 13;
       inspos m in dom pJ by A7,Def2;
       then m < card pJ by SCMPDS_4:1;
       then
@@ -1665,7 +1653,7 @@ A18:  card pIF = card IF+1 by SCMPDS_5:7
   LifeSpan s1) by AMI_1:51
     .=CurInstr Computation( s1,LifeSpan s1) by A8,A14,A11,A6,Th45
     .= halt SCMPDS by A12,AMI_1:def 46;
-  then s3 is halting by AMI_1:def 20;
+  then ProgramPart s3 halts_on s3 by AMI_1:146;
   hence thesis by Def3;
 end;
 
@@ -1717,7 +1705,7 @@ A11: I is_closed_on s;
 A12: I is_halting_on s;
   then I2 is_halting_on s by A11,Th44;
   then
-A13: s2 is halting by Def3;
+A13: ProgramPart s2 halts_on s2 by Def3;
   I2 is_closed_on s by A11,A12,Th44;
   then
 A14: II2 c= s2 & I2 is_closed_on s2 by Th38,FUNCT_4:26;
@@ -1726,7 +1714,7 @@ A15: CurInstr Computation( s3,LifeSpan s2 + 1) =CurInstr Computation( s4,
     .=CurInstr Computation( s2,LifeSpan s2) by A14,A5,A7,A9,Th45
     .= halt SCMPDS by A13,AMI_1:def 46;
   then
-A16: s3 is halting by AMI_1:def 20;
+A16: ProgramPart s3 halts_on s3 by AMI_1:146;
 A17: CurInstr s3 = i by A4,Th22;
   now
     let l be Element of NAT;
@@ -1746,8 +1734,8 @@ A19:  l = n + 1 by NAT_1:6;
 A20:  n < LifeSpan s2 by A18,A19,XREAL_1:8;
       assume
 A21:  CurInstr Computation( s3,l) = halt SCMPDS;
-      CurInstr Computation( s2,n) = CurInstr Computation( s4,n) by A14,A5
-      ,A7,A9,Th45
+      CurInstr Computation( s2,n) = CurInstr Computation( s4,n) by A14,A5,A7,A9
+,Th45
         .= halt SCMPDS by A19,A21,AMI_1:51;
       hence contradiction by A13,A20,AMI_1:def 46;
     end;
@@ -1756,9 +1744,8 @@ A21:  CurInstr Computation( s3,l) = halt SCMPDS;
   holds LifeSpan s2 + 1 <= l;
   then
 A22: LifeSpan s3 = LifeSpan s2 + 1 by A15,A16,AMI_1:def 46;
-A23: DataPart Result s2 = DataPart Computation( s2,LifeSpan s2) by A13
-  ,AMI_1:
-  122
+A23: DataPart Result s2 = DataPart Computation( s2,LifeSpan s2) by A13,
+AMI_1:122
     .= DataPart Computation( s4,LifeSpan s2) by A14,A5,A7,A9,Th45
     .= DataPart Computation( s3,LifeSpan s2 + 1) by AMI_1:51
     .= DataPart Result s3 by A16,A22,AMI_1:122;
@@ -1778,8 +1765,8 @@ A30:  not x in dom SAl by A27,TARSKI:def 1;
 A31:  now
         assume
         x in dom (s | A);
-        then reconsider l=x as Instruction-Location of SCMPDS by A10,AMI_1:def
-        4;
+        then reconsider l=x as Instruction-Location of SCMPDS by A10,
+AMI_1:def 4;
         l=x;
         hence contradiction by A29,SCMPDS_2:53;
       end;
@@ -1793,8 +1780,8 @@ A32:  x = IC SCMPDS;
 A33:  now
         assume
         x in dom (s | A);
-        then reconsider l=x as Instruction-Location of SCMPDS by A10,AMI_1:def
-        4;
+        then reconsider l=x as Instruction-Location of SCMPDS by A10,
+AMI_1:def 4;
         l=x;
         hence contradiction by A32,AMI_1:48;
       end;
@@ -1808,7 +1795,7 @@ A35:  x in dom SAl by A27,A32,TARSKI:def 1;
         .= IC Computation( s2,LifeSpan s2) + 1 by A14,A5,A7,A9,Th45
         .= IC Result s2 + 1 by A13,AMI_1:122
         .= (Start-At (inspos (card I + card J + 1) + 1)).IC SCMPDS by A34,
-      FUNCOP_1:87
+FUNCOP_1:87
         .= (IExec(I2,s) +* SAl).x by A32,A35,FUNCT_4:14;
     end;
     suppose
@@ -1880,13 +1867,13 @@ A13: IsJ c= s1 & J is_closed_on s1 by Th38,FUNCT_4:26;
   assume
 A14: J is_halting_on s;
   then
-A15: s1 is halting by Def3;
+A15: ProgramPart s1 halts_on s1 by Def3;
 A16: CurInstr Computation( s3,LifeSpan s1 + 1) =CurInstr Computation( s4,
   LifeSpan s1) by AMI_1:51
     .=CurInstr Computation( s1,LifeSpan s1) by A13,A11,A7,A9,Th45
     .= halt SCMPDS by A15,AMI_1:def 46;
   then
-A17: s3 is halting by AMI_1:def 20;
+A17: ProgramPart s3 halts_on s3 by AMI_1:146;
 A18: CurInstr s3 = i by A1,Th22;
   now
     let l be Element of NAT;
@@ -1906,8 +1893,8 @@ A20:  l = n + 1 by NAT_1:6;
 A21:  n < LifeSpan s1 by A19,A20,XREAL_1:8;
       assume
 A22:  CurInstr Computation( s3,l) = halt SCMPDS;
-      CurInstr Computation( s1,n) = CurInstr Computation( s4,n) by A13,A11
-      ,A7,A9,Th45
+      CurInstr Computation( s1,n) = CurInstr Computation( s4,n) by A13,A11,A7
+,A9,Th45
         .= halt SCMPDS by A20,A22,AMI_1:51;
       hence contradiction by A15,A21,AMI_1:def 46;
     end;
@@ -1916,9 +1903,8 @@ A22:  CurInstr Computation( s3,l) = halt SCMPDS;
   holds LifeSpan s1 + 1 <= l;
   then
 A23: LifeSpan s3 = LifeSpan s1 + 1 by A16,A17,AMI_1:def 46;
-A24: DataPart Result s1 = DataPart Computation( s1,LifeSpan s1) by A15
-  ,AMI_1:
-  122
+A24: DataPart Result s1 = DataPart Computation( s1,LifeSpan s1) by A15,
+AMI_1:122
     .= DataPart Computation( s4,LifeSpan s1) by A13,A11,A7,A9,Th45
     .= DataPart Computation( s3,LifeSpan s1 + 1) by AMI_1:51
     .= DataPart Result s3 by A17,A23,AMI_1:122;
@@ -1938,8 +1924,8 @@ A31:  not x in dom SAl by A28,TARSKI:def 1;
 A32:  now
         assume
         x in dom (s | A);
-        then reconsider l=x as Instruction-Location of SCMPDS by A6,AMI_1:def
-        4;
+        then reconsider l=x as Instruction-Location of SCMPDS by A6,AMI_1:def 4
+;
         l=x;
         hence contradiction by A30,SCMPDS_2:53;
       end;
@@ -1953,8 +1939,8 @@ A33:  x = IC SCMPDS;
 A34:  now
         assume
         x in dom (s | A);
-        then reconsider l=x as Instruction-Location of SCMPDS by A6,AMI_1:def
-        4;
+        then reconsider l=x as Instruction-Location of SCMPDS by A6,AMI_1:def 4
+;
         l=x;
         hence contradiction by A33,AMI_1:48;
       end;
@@ -1965,11 +1951,10 @@ A36:  x in dom SAl by A28,A33,TARSKI:def 1;
       thus IExec(IF,s).x = (Result s3).x by A27,A34,FUNCT_4:12
         .= Computation( s3,LifeSpan s1 + 1).x by A17,A23,AMI_1:122
         .= IC Computation( s4,LifeSpan s1) by A33,AMI_1:51
-        .= IC Computation( s1,LifeSpan s1) + (card I + 2) by A13,A11,A7,A9,
-      Th45
+        .= IC Computation( s1,LifeSpan s1) + (card I + 2) by A13,A11,A7,A9,Th45
         .= IC Result s1 + (card I + 2) by A15,AMI_1:122
         .= (Start-At (inspos card J + (card I + 2))).IC SCMPDS by A35,
-      FUNCOP_1:87
+FUNCOP_1:87
         .= (IExec(J,s) +* SAl).x by A33,A36,FUNCT_4:14;
     end;
     suppose
@@ -2007,12 +1992,12 @@ A3:   I is_closed_on s & I is_halting_on s by Th34,Th35;
       suppose
         s.DataLoc(s.a,k1)= 0;
         then IF is_halting_on s by A3,Th52;
-        hence s is halting by A1,Def3;
+        hence ProgramPart s halts_on s by A1,Def3;
       end;
       suppose
         s.DataLoc(s.a,k1) <> 0;
         then IF is_halting_on s by A2,Th53;
-        hence s is halting by A1,Def3;
+        hence ProgramPart s halts_on s by A1,Def3;
       end;
     end;
     then IsIF is halting by AMI_1:def 26;
@@ -2041,15 +2026,15 @@ A2: I is_closed_on s & I is_halting_on s by Th34,Th35;
     suppose
       s.DataLoc(s.a,k1) = 0;
       then
-      IExec(IF,s) = IExec(I,s) +* Start-At inspos (card I + card J + 2) by
-      A2,Th54;
+      IExec(IF,s) = IExec(I,s) +* Start-At inspos (card I + card J + 2) by A2
+,Th54;
       hence thesis by AMI_1:111;
     end;
     suppose
       s.DataLoc(s.a,k1) <> 0;
       then
-      IExec(IF,s) = IExec(J,s) +* Start-At inspos (card I + card J + 2) by
-      A1,Th55;
+      IExec(IF,s) = IExec(J,s) +* Start-At inspos (card I + card J + 2) by A1
+,Th55;
       hence thesis by AMI_1:111;
     end;
   end;
@@ -2147,7 +2132,7 @@ A9: I is_closed_on s2 by Th38;
   assume
   I is_halting_on s;
   then
-A10: s2 is halting by Def3;
+A10: ProgramPart s2 halts_on s2 by Def3;
 A11: inspos 0 in dom pIF by SCMPDS_4:75;
 A12: IsI c= s2 & Shift(pI,1) c= s4 by Lm5,FUNCT_4:26;
 A13: card pIF = card IF +1 by SCMPDS_5:7
@@ -2160,8 +2145,8 @@ A13: card pIF = card IF +1 by SCMPDS_5:7
       then consider k1 being Nat such that
 A14:  k1 + 1 = k by NAT_1:6;
       reconsider k1 as Element of NAT by ORDINAL1:def 13;
-      reconsider m = IC Computation( s2,k1) as Element of NAT by ORDINAL1:def
-      13;
+      reconsider m = IC Computation( s2,k1) as Element of NAT by
+ORDINAL1:def 13;
 A15:  card pIF = card pI+1 by A13,SCMPDS_5:7;
       inspos m in dom pI by A8,Def2;
       then m < card pI by SCMPDS_4:1;
@@ -2181,7 +2166,7 @@ A16:  m+1 < card pIF by A15,XREAL_1:8;
   LifeSpan s2) by AMI_1:51
     .=CurInstr Computation( s2,LifeSpan s2) by A9,A12,A7,A6,Th45
     .= halt SCMPDS by A10,AMI_1:def 46;
-  then s3 is halting by AMI_1:def 20;
+  then ProgramPart s3 halts_on s3 by AMI_1:146;
   hence thesis by Def3;
 end;
 
@@ -2234,7 +2219,7 @@ A8: CurInstr s4 = halt SCMPDS by A5;
     end;
   end;
   hence IF is_closed_on s by Def2;
-  s3 is halting by A8,AMI_1:def 20;
+  ProgramPart s3 halts_on s3 by A8,AMI_1:146;
   hence thesis by Def3;
 end;
 
@@ -2281,13 +2266,13 @@ A11: IsI c= s2 & Shift(pI,1) c= s4 by Lm5,FUNCT_4:26;
   assume
 A12: I is_halting_on s;
   then
-A13: s2 is halting by Def3;
+A13: ProgramPart s2 halts_on s2 by Def3;
 A14: CurInstr Computation( s3,LifeSpan s2 + 1) =CurInstr Computation( s4,
   LifeSpan s2) by AMI_1:51
     .=CurInstr Computation( s2,LifeSpan s2) by A9,A11,A5,A7,Th45
     .= halt SCMPDS by A13,AMI_1:def 46;
   then
-A15: s3 is halting by AMI_1:def 20;
+A15: ProgramPart s3 halts_on s3 by AMI_1:146;
 A16: CurInstr s3 = i by Th22;
   now
     let l be Element of NAT;
@@ -2307,8 +2292,8 @@ A18:  l = n + 1 by NAT_1:6;
 A19:  n < LifeSpan s2 by A17,A18,XREAL_1:8;
       assume
 A20:  CurInstr Computation( s3,l) = halt SCMPDS;
-      CurInstr Computation( s2,n) = CurInstr Computation( s4,n) by A9,A11
-      ,A5,A7,Th45
+      CurInstr Computation( s2,n) = CurInstr Computation( s4,n) by A9,A11,A5,A7
+,Th45
         .= halt SCMPDS by A18,A20,AMI_1:51;
       hence contradiction by A13,A19,AMI_1:def 46;
     end;
@@ -2317,9 +2302,8 @@ A20:  CurInstr Computation( s3,l) = halt SCMPDS;
   holds LifeSpan s2 + 1 <= l;
   then
 A21: LifeSpan s3 = LifeSpan s2 + 1 by A14,A15,AMI_1:def 46;
-A22: DataPart Result s2 = DataPart Computation( s2,LifeSpan s2) by A13
-  ,AMI_1:
-  122
+A22: DataPart Result s2 = DataPart Computation( s2,LifeSpan s2) by A13,
+AMI_1:122
     .= DataPart Computation( s4,LifeSpan s2) by A9,A11,A5,A7,Th45
     .= DataPart Computation( s3,LifeSpan s2 + 1) by AMI_1:51
     .= DataPart Result s3 by A15,A21,AMI_1:122;
@@ -2340,7 +2324,7 @@ A30:  now
         assume
         x in dom (s | A);
         then reconsider l=x as Instruction-Location of SCMPDS by A10,
-        AMI_1:def 4;
+AMI_1:def 4;
         l=x;
         hence contradiction by A28,SCMPDS_2:53;
       end;
@@ -2355,7 +2339,7 @@ A32:  now
         assume
         x in dom (s | A);
         then reconsider l=x as Instruction-Location of SCMPDS by A10,
-        AMI_1:def 4;
+AMI_1:def 4;
         l=x;
         hence contradiction by A31,AMI_1:48;
       end;
@@ -2423,7 +2407,7 @@ A7: card IF=card I+1 by Th15;
   then
 A8: CurInstr s4 = halt SCMPDS by A5;
   then
-A9: s3 is halting by AMI_1:def 20;
+A9: ProgramPart s3 halts_on s3 by AMI_1:146;
 A10: CurInstr s3 = i by Th22;
   now
     let l be Element of NAT;
@@ -2456,7 +2440,7 @@ A18:  not x in dom SAl by A14,TARSKI:def 1;
         assume
         x in dom (s | A);
         then reconsider l=x as Instruction-Location of SCMPDS by A12,
-        AMI_1:def 4;
+AMI_1:def 4;
         l=x;
         hence contradiction by A17,SCMPDS_2:53;
       end;
@@ -2471,12 +2455,11 @@ A19:  x = IC SCMPDS;
         assume
         x in dom (s | A);
         then reconsider l=x as Instruction-Location of SCMPDS by A12,
-        AMI_1:def 4;
+AMI_1:def 4;
         l=x;
         hence contradiction by A19,AMI_1:48;
       end;
-      hence IExec(IF,s).x = inspos(card I + 1) by A5,A11,A15,A19, FUNCT_4:
-      12
+      hence IExec(IF,s).x = inspos(card I + 1) by A5,A11,A15,A19,FUNCT_4:12
         .= (s +* SAl).x by A19,Lm7;
     end;
     suppose
@@ -2510,12 +2493,12 @@ A2:   I is_closed_on s & I is_halting_on s by Th34,Th35;
       suppose
         s.DataLoc(s.a,k1)= 0;
         then IF is_halting_on s by A2,Th62;
-        hence s is halting by A1,Def3;
+        hence ProgramPart s halts_on s by A1,Def3;
       end;
       suppose
         s.DataLoc(s.a,k1) <> 0;
         then IF is_halting_on s by Th63;
-        hence s is halting by A1,Def3;
+        hence ProgramPart s halts_on s by A1,Def3;
       end;
     end;
     then IsIF is halting by AMI_1:def 26;
@@ -2562,8 +2545,8 @@ proof
 A1: s.DataLoc(s.a,k1)=0;
 A2: not b in dom Start-At inspos (card I + 1) by SCMPDS_4:59;
   I is_closed_on s & I is_halting_on s by Th34,Th35;
-  then IExec(if=0(a,k1,I),s) = IExec(I,s) +* Start-At inspos (card I + 1) by
-  A1,Th64;
+  then IExec(if=0(a,k1,I),s) = IExec(I,s) +* Start-At inspos (card I + 1) by A1
+,Th64;
   hence thesis by A2,FUNCT_4:12;
 end;
 
@@ -2672,7 +2655,7 @@ A10: I is_closed_on s2 by Th38;
   assume
   I is_halting_on s;
   then
-A11: s2 is halting by Def3;
+A11: ProgramPart s2 halts_on s2 by Def3;
 A12: IsI c= s2 & Shift(pI,2) c= s4 by Lm6,FUNCT_4:26;
 A13: inspos 0 in dom pIF by SCMPDS_4:75;
   now
@@ -2683,8 +2666,8 @@ A13: inspos 0 in dom pIF by SCMPDS_4:75;
       then consider k1 being Nat such that
 A14:  k1 + 1 = k by NAT_1:6;
       reconsider k1 as Element of NAT by ORDINAL1:def 13;
-      reconsider m = IC Computation( s2,k1) as Element of NAT by ORDINAL1:def
-      13;
+      reconsider m = IC Computation( s2,k1) as Element of NAT by
+ORDINAL1:def 13;
 A15:  card pIF = 1+ card IF by SCMPDS_5:7
         .= 1+(card I +2) by Lm8
         .= 1+card I +2
@@ -2707,7 +2690,7 @@ A16:  m+2 < card pIF by A15,XREAL_1:8;
   LifeSpan s2) by AMI_1:51
     .=CurInstr Computation( s2,LifeSpan s2) by A10,A12,A8,A4,Th45
     .= halt SCMPDS by A11,AMI_1:def 46;
-  then s3 is halting by AMI_1:def 20;
+  then ProgramPart s3 halts_on s3 by AMI_1:146;
   hence thesis by Def3;
 end;
 
@@ -2780,7 +2763,7 @@ A15: k = 0 or 0 + 1 <= k by INT_1:20;
     end;
   end;
   hence IF is_closed_on s by Def2;
-  s3 is halting by A14,AMI_1:def 20;
+  ProgramPart s3 halts_on s3 by A14,AMI_1:146;
   hence thesis by Def3;
 end;
 
@@ -2829,13 +2812,13 @@ A12: I is_closed_on s2 by Th38;
   assume
 A13: I is_halting_on s;
   then
-A14: s2 is halting by Def3;
+A14: ProgramPart s2 halts_on s2 by Def3;
 A15: CurInstr Computation( s3,LifeSpan s2 + 1) =CurInstr Computation( s4,
   LifeSpan s2) by AMI_1:51
     .=CurInstr Computation( s2,LifeSpan s2) by A12,A6,A9,A8,Th45
     .= halt SCMPDS by A14,AMI_1:def 46;
   then
-A16: s3 is halting by AMI_1:def 20;
+A16: ProgramPart s3 halts_on s3 by AMI_1:146;
 A17: CurInstr s3 = i by A1,Th22;
   now
     let l be Element of NAT;
@@ -2855,8 +2838,8 @@ A19:  l = n + 1 by NAT_1:6;
 A20:  n < LifeSpan s2 by A18,A19,XREAL_1:8;
       assume
 A21:  CurInstr Computation( s3,l) = halt SCMPDS;
-      CurInstr Computation( s2,n) = CurInstr Computation( s4,n) by A12,A6
-      ,A9,A8,Th45
+      CurInstr Computation( s2,n) = CurInstr Computation( s4,n) by A12,A6,A9,A8
+,Th45
         .= halt SCMPDS by A19,A21,AMI_1:51;
       hence contradiction by A14,A20,AMI_1:def 46;
     end;
@@ -2865,9 +2848,8 @@ A21:  CurInstr Computation( s3,l) = halt SCMPDS;
   holds LifeSpan s2 + 1 <= l;
   then
 A22: LifeSpan s3 = LifeSpan s2 + 1 by A15,A16,AMI_1:def 46;
-A23: DataPart Result s2 = DataPart Computation( s2,LifeSpan s2) by A14
-  ,AMI_1:
-  122
+A23: DataPart Result s2 = DataPart Computation( s2,LifeSpan s2) by A14,
+AMI_1:122
     .= DataPart Computation( s4,LifeSpan s2) by A12,A6,A9,A8,Th45
     .= DataPart Computation( s3,LifeSpan s2 + 1) by AMI_1:51
     .= DataPart Result s3 by A16,A22,AMI_1:122;
@@ -2887,8 +2869,8 @@ A30:  not x in dom SAl by A27,TARSKI:def 1;
 A31:  now
         assume
         x in dom (s | A);
-        then reconsider l=x as Instruction-Location of SCMPDS by A10,AMI_1:def
-        4;
+        then reconsider l=x as Instruction-Location of SCMPDS by A10,
+AMI_1:def 4;
         l=x;
         hence contradiction by A29,SCMPDS_2:53;
       end;
@@ -2902,8 +2884,8 @@ A32:  x = IC SCMPDS;
 A33:  now
         assume
         x in dom (s | A);
-        then reconsider l=x as Instruction-Location of SCMPDS by A10,AMI_1:def
-        4;
+        then reconsider l=x as Instruction-Location of SCMPDS by A10,
+AMI_1:def 4;
         l=x;
         hence contradiction by A32,AMI_1:48;
       end;
@@ -2978,7 +2960,7 @@ A14: card IF=card I+2 by Lm8;
   then
 A15: CurInstr s5 = halt SCMPDS by A13;
   then
-A16: s3 is halting by AMI_1:def 20;
+A16: ProgramPart s3 halts_on s3 by AMI_1:146;
 A17: CurInstr s3 = i by A2,Th22;
   now
     let l be Element of NAT;
@@ -2994,8 +2976,7 @@ A18: l <= 1 by NAT_1:13;
     end;
     suppose
       l=1;
-      hence CurInstr Computation( s3,l) <> halt SCMPDS by A9,A11, SCMPDS_2
-      :85;
+      hence CurInstr Computation( s3,l) <> halt SCMPDS by A9,A11,SCMPDS_2:85;
     end;
   end;
   then for l be Element of NAT st CurInstr Computation( s3,l) = halt SCMPDS
@@ -3019,8 +3000,8 @@ A26:  not x in dom SAl by A22,TARSKI:def 1;
       now
         assume
         x in dom (s | A);
-        then reconsider l=x as Instruction-Location of SCMPDS by A20,AMI_1:def
-        4;
+        then reconsider l=x as Instruction-Location of SCMPDS by A20,
+AMI_1:def 4;
         l=x;
         hence contradiction by A25,SCMPDS_2:53;
       end;
@@ -3035,13 +3016,12 @@ A27:  x = IC SCMPDS;
       now
         assume
         x in dom (s | A);
-        then reconsider l=x as Instruction-Location of SCMPDS by A20,AMI_1:def
-        4;
+        then reconsider l=x as Instruction-Location of SCMPDS by A20,
+AMI_1:def 4;
         l=x;
         hence contradiction by A27,AMI_1:48;
       end;
-      hence IExec(IF,s).x = inspos(card I + 2) by A13,A19,A23,A27, FUNCT_4:
-      12
+      hence IExec(IF,s).x = inspos(card I + 2) by A13,A19,A23,A27,FUNCT_4:12
         .= (s +* Start-At inspos (card I + 2)).x by A27,Lm7;
     end;
     suppose
@@ -3075,12 +3055,12 @@ A2:   I is_closed_on s & I is_halting_on s by Th34,Th35;
       suppose
         s.DataLoc(s.a,k1)<>0;
         then IF is_halting_on s by A2,Th72;
-        hence s is halting by A1,Def3;
+        hence ProgramPart s halts_on s by A1,Def3;
       end;
       suppose
         s.DataLoc(s.a,k1) = 0;
         then IF is_halting_on s by Th73;
-        hence s is halting by A1,Def3;
+        hence ProgramPart s halts_on s by A1,Def3;
       end;
     end;
     then IsIF is halting by AMI_1:def 26;
@@ -3128,7 +3108,7 @@ A1: s.DataLoc(s.a,k1)<>0;
 A2: not b in dom Start-At inspos (card I + 2) by SCMPDS_4:59;
   I is_closed_on s & I is_halting_on s by Th34,Th35;
   then IExec(if<>0(a,k1,I),s) = IExec(I,s) +* Start-At inspos (card I + 2) by
-  A1,Th74;
+A1,Th74;
   hence thesis by A2,FUNCT_4:12;
 end;
 
@@ -3216,7 +3196,7 @@ A13: I2 is_closed_on s by A11,Th44;
 A14: II2 c= s2 & I2 is_closed_on s2 by Th38,FUNCT_4:26;
   I2 is_halting_on s by A11,A12,Th44;
   then
-A15: s2 is halting by Def3;
+A15: ProgramPart s2 halts_on s2 by Def3;
 A16: card pIF = card IF +1 by SCMPDS_5:7
     .= card I2 +1+1 by A5,Th15;
   now
@@ -3227,8 +3207,8 @@ A16: card pIF = card IF +1 by SCMPDS_5:7
       then consider k1 being Nat such that
 A17:  k1 + 1 = k by NAT_1:6;
       reconsider k1 as Element of NAT by ORDINAL1:def 13;
-      reconsider m = IC Computation( s2,k1) as Element of NAT by ORDINAL1:def
-      13;
+      reconsider m = IC Computation( s2,k1) as Element of NAT by
+ORDINAL1:def 13;
 A18:  card pIF = card pI2+1 by A16,SCMPDS_5:7;
       inspos m in dom pI2 by A13,Def2;
       then m < card pI2 by SCMPDS_4:1;
@@ -3248,7 +3228,7 @@ A19:  m+1 < card pIF by A18,XREAL_1:8;
   LifeSpan s2) by AMI_1:51
     .=CurInstr Computation( s2,LifeSpan s2) by A14,A6,A10,A9,Th45
     .= halt SCMPDS by A15,AMI_1:def 46;
-  then s3 is halting by AMI_1:def 20;
+  then ProgramPart s3 halts_on s3 by AMI_1:146;
   hence thesis by Def3;
 end;
 
@@ -3297,7 +3277,7 @@ A11: Shift(pJ,card I+2) c= s4 by AMI_1:81;
   assume
   J is_halting_on s;
   then
-A12: s1 is halting by Def3;
+A12: ProgramPart s1 halts_on s1 by Def3;
 A13: DataPart s1 = DataPart s3 by SCMPDS_4:24,36;
   now
     let a;
@@ -3314,8 +3294,8 @@ A14: DataPart s1 = DataPart s4 by SCMPDS_4:23;
       then consider k1 being Nat such that
 A15:  k1 + 1 = k by NAT_1:6;
       reconsider k1 as Element of NAT by ORDINAL1:def 13;
-      reconsider m = IC Computation( s1,k1) as Element of NAT by ORDINAL1:def
-      13;
+      reconsider m = IC Computation( s1,k1) as Element of NAT by
+ORDINAL1:def 13;
       inspos m in dom pJ by A7,Def2;
       then m < card pJ by SCMPDS_4:1;
       then
@@ -3339,7 +3319,7 @@ A18:  card pIF = card IF+1 by SCMPDS_5:7
   LifeSpan s1) by AMI_1:51
     .=CurInstr Computation( s1,LifeSpan s1) by A8,A14,A11,A6,Th45
     .= halt SCMPDS by A12,AMI_1:def 46;
-  then s3 is halting by AMI_1:def 20;
+  then ProgramPart s3 halts_on s3 by AMI_1:146;
   hence thesis by Def3;
 end;
 
@@ -3392,7 +3372,7 @@ A11: I is_closed_on s;
 A12: I is_halting_on s;
   then I2 is_halting_on s by A11,Th44;
   then
-A13: s2 is halting by Def3;
+A13: ProgramPart s2 halts_on s2 by Def3;
   I2 is_closed_on s by A11,A12,Th44;
   then
 A14: II2 c= s2 & I2 is_closed_on s2 by Th38,FUNCT_4:26;
@@ -3401,7 +3381,7 @@ A15: CurInstr Computation( s3,LifeSpan s2 + 1) =CurInstr Computation( s4,
     .=CurInstr Computation( s2,LifeSpan s2) by A14,A6,A8,A10,Th45
     .= halt SCMPDS by A13,AMI_1:def 46;
   then
-A16: s3 is halting by AMI_1:def 20;
+A16: ProgramPart s3 halts_on s3 by AMI_1:146;
 A17: CurInstr s3 = i by A5,Th22;
   now
     let l be Element of NAT;
@@ -3421,8 +3401,8 @@ A19:  l = n + 1 by NAT_1:6;
 A20:  n < LifeSpan s2 by A18,A19,XREAL_1:8;
       assume
 A21:  CurInstr Computation( s3,l) = halt SCMPDS;
-      CurInstr Computation( s2,n) = CurInstr Computation( s4,n) by A14,A6
-      ,A8,A10,Th45
+      CurInstr Computation( s2,n) = CurInstr Computation( s4,n) by A14,A6,A8
+,A10,Th45
         .= halt SCMPDS by A19,A21,AMI_1:51;
       hence contradiction by A13,A20,AMI_1:def 46;
     end;
@@ -3431,9 +3411,8 @@ A21:  CurInstr Computation( s3,l) = halt SCMPDS;
   holds LifeSpan s2 + 1 <= l;
   then
 A22: LifeSpan s3 = LifeSpan s2 + 1 by A15,A16,AMI_1:def 46;
-A23: DataPart Result s2 = DataPart Computation( s2,LifeSpan s2) by A13
-  ,AMI_1:
-  122
+A23: DataPart Result s2 = DataPart Computation( s2,LifeSpan s2) by A13,
+AMI_1:122
     .= DataPart Computation( s4,LifeSpan s2) by A14,A6,A8,A10,Th45
     .= DataPart Computation( s3,LifeSpan s2 + 1) by AMI_1:51
     .= DataPart Result s3 by A16,A22,AMI_1:122;
@@ -3453,8 +3432,8 @@ A30:  not x in dom SAl by A27,TARSKI:def 1;
 A31:  now
         assume
         x in dom (s | A);
-        then reconsider l=x as Instruction-Location of SCMPDS by A4,AMI_1:def
-        4;
+        then reconsider l=x as Instruction-Location of SCMPDS by A4,AMI_1:def 4
+;
         l=x;
         hence contradiction by A29,SCMPDS_2:53;
       end;
@@ -3468,8 +3447,8 @@ A32:  x = IC SCMPDS;
 A33:  now
         assume
         x in dom (s | A);
-        then reconsider l=x as Instruction-Location of SCMPDS by A4,AMI_1:def
-        4;
+        then reconsider l=x as Instruction-Location of SCMPDS by A4,AMI_1:def 4
+;
         l=x;
         hence contradiction by A32,AMI_1:48;
       end;
@@ -3483,7 +3462,7 @@ A35:  x in dom SAl by A27,A32,TARSKI:def 1;
         .= IC Computation( s2,LifeSpan s2) + 1 by A14,A6,A8,A10,Th45
         .= IC Result s2 + 1 by A13,AMI_1:122
         .= (Start-At (inspos (card I + card J + 1) + 1)).IC SCMPDS by A34,
-      FUNCOP_1:87
+FUNCOP_1:87
         .= (IExec(I2,s) +* SAl).x by A32,A35,FUNCT_4:14;
     end;
     suppose
@@ -3555,13 +3534,13 @@ A13: IsJ c= s1 & J is_closed_on s1 by Th38,FUNCT_4:26;
   assume
 A14: J is_halting_on s;
   then
-A15: s1 is halting by Def3;
+A15: ProgramPart s1 halts_on s1 by Def3;
 A16: CurInstr Computation( s3,LifeSpan s1 + 1) =CurInstr Computation( s4,
   LifeSpan s1) by AMI_1:51
     .=CurInstr Computation( s1,LifeSpan s1) by A13,A11,A7,A9,Th45
     .= halt SCMPDS by A15,AMI_1:def 46;
   then
-A17: s3 is halting by AMI_1:def 20;
+A17: ProgramPart s3 halts_on s3 by AMI_1:146;
 A18: CurInstr s3 = i by A1,Th22;
   now
     let l be Element of NAT;
@@ -3581,8 +3560,8 @@ A20:  l = n + 1 by NAT_1:6;
 A21:  n < LifeSpan s1 by A19,A20,XREAL_1:8;
       assume
 A22:  CurInstr Computation( s3,l) = halt SCMPDS;
-      CurInstr Computation( s1,n) = CurInstr Computation( s4,n) by A13,A11
-      ,A7,A9,Th45
+      CurInstr Computation( s1,n) = CurInstr Computation( s4,n) by A13,A11,A7
+,A9,Th45
         .= halt SCMPDS by A20,A22,AMI_1:51;
       hence contradiction by A15,A21,AMI_1:def 46;
     end;
@@ -3591,9 +3570,8 @@ A22:  CurInstr Computation( s3,l) = halt SCMPDS;
   holds LifeSpan s1 + 1 <= l;
   then
 A23: LifeSpan s3 = LifeSpan s1 + 1 by A16,A17,AMI_1:def 46;
-A24: DataPart Result s1 = DataPart Computation( s1,LifeSpan s1) by A15
-  ,AMI_1:
-  122
+A24: DataPart Result s1 = DataPart Computation( s1,LifeSpan s1) by A15,
+AMI_1:122
     .= DataPart Computation( s4,LifeSpan s1) by A13,A11,A7,A9,Th45
     .= DataPart Computation( s3,LifeSpan s1 + 1) by AMI_1:51
     .= DataPart Result s3 by A17,A23,AMI_1:122;
@@ -3613,8 +3591,8 @@ A31:  not x in dom SAl by A28,TARSKI:def 1;
 A32:  now
         assume
         x in dom (s | A);
-        then reconsider l=x as Instruction-Location of SCMPDS by A6,AMI_1:def
-        4;
+        then reconsider l=x as Instruction-Location of SCMPDS by A6,AMI_1:def 4
+;
         l=x;
         hence contradiction by A30,SCMPDS_2:53;
       end;
@@ -3628,8 +3606,8 @@ A33:  x = IC SCMPDS;
 A34:  now
         assume
         x in dom (s | A);
-        then reconsider l=x as Instruction-Location of SCMPDS by A6,AMI_1:def
-        4;
+        then reconsider l=x as Instruction-Location of SCMPDS by A6,AMI_1:def 4
+;
         l=x;
         hence contradiction by A33,AMI_1:48;
       end;
@@ -3640,11 +3618,10 @@ A36:  x in dom SAl by A28,A33,TARSKI:def 1;
       thus IExec(IF,s).x = (Result s3).x by A27,A34,FUNCT_4:12
         .= Computation( s3,LifeSpan s1 + 1).x by A17,A23,AMI_1:122
         .= IC Computation( s4,LifeSpan s1) by A33,AMI_1:51
-        .= IC Computation( s1,LifeSpan s1) + (card I + 2) by A13,A11,A7,A9,
-      Th45
+        .= IC Computation( s1,LifeSpan s1) + (card I + 2) by A13,A11,A7,A9,Th45
         .= IC Result s1 + (card I + 2) by A15,AMI_1:122
         .= (Start-At (inspos card J + (card I + 2))).IC SCMPDS by A35,
-      FUNCOP_1:87
+FUNCOP_1:87
         .= (IExec(J,s) +* SAl).x by A33,A36,FUNCT_4:14;
     end;
     suppose
@@ -3682,12 +3659,12 @@ A3:   I is_closed_on s & I is_halting_on s by Th34,Th35;
       suppose
         s.DataLoc(s.a,k1) > 0;
         then IF is_halting_on s by A3,Th82;
-        hence s is halting by A1,Def3;
+        hence ProgramPart s halts_on s by A1,Def3;
       end;
       suppose
         s.DataLoc(s.a,k1) <= 0;
         then IF is_halting_on s by A2,Th83;
-        hence s is halting by A1,Def3;
+        hence ProgramPart s halts_on s by A1,Def3;
       end;
     end;
     then IsIF is halting by AMI_1:def 26;
@@ -3715,13 +3692,13 @@ A2: J is_closed_on s & J is_halting_on s by Th34,Th35;
   suppose
     s.DataLoc(s.a,k1) > 0;
     then IExec(IF,s) = IExec(I,s) +* Start-At inspos (card I + card J + 2) by
-    A1,Th84;
+A1,Th84;
     hence thesis by AMI_1:111;
   end;
   suppose
     s.DataLoc(s.a,k1) <= 0;
     then IExec(IF,s) = IExec(J,s) +* Start-At inspos (card I + card J + 2) by
-    A2,Th85;
+A2,Th85;
     hence thesis by AMI_1:111;
   end;
 end;
@@ -3757,8 +3734,8 @@ proof
 A1: s.DataLoc(s.a,k1) <= 0;
 A2: not b in dom Start-At inspos (card I + card J + 2) by SCMPDS_4:59;
   J is_closed_on s & J is_halting_on s by Th34,Th35;
-  then IExec(IF,s) =IExec(J,s) +* Start-At inspos (card I + card J + 2) by
-  A1,Th85;
+  then IExec(IF,s) =IExec(J,s) +* Start-At inspos (card I + card J + 2) by A1
+,Th85;
   hence thesis by A2,FUNCT_4:12;
 end;
 
@@ -3820,7 +3797,7 @@ A10: I is_closed_on s2 by Th38;
   assume
   I is_halting_on s;
   then
-A11: s2 is halting by Def3;
+A11: ProgramPart s2 halts_on s2 by Def3;
 A12: IsI c= s2 & Shift(pI,1) c= s4 by Lm5,FUNCT_4:26;
 A13: card pIF = card IF +1 by SCMPDS_5:7
     .= card I +1+1 by Th15;
@@ -3832,8 +3809,8 @@ A13: card pIF = card IF +1 by SCMPDS_5:7
       then consider k1 being Nat such that
 A14:  k1 + 1 = k by NAT_1:6;
       reconsider k1 as Element of NAT by ORDINAL1:def 13;
-      reconsider m = IC Computation( s2,k1) as Element of NAT by ORDINAL1:def
-      13;
+      reconsider m = IC Computation( s2,k1) as Element of NAT by
+ORDINAL1:def 13;
 A15:  card pIF = card pI+1 by A13,SCMPDS_5:7;
       inspos m in dom pI by A9,Def2;
       then m < card pI by SCMPDS_4:1;
@@ -3853,7 +3830,7 @@ A16:  m+1 < card pIF by A15,XREAL_1:8;
   LifeSpan s2) by AMI_1:51
     .=CurInstr Computation( s2,LifeSpan s2) by A10,A12,A8,A7,Th45
     .= halt SCMPDS by A11,AMI_1:def 46;
-  then s3 is halting by AMI_1:def 20;
+  then ProgramPart s3 halts_on s3 by AMI_1:146;
   hence thesis by Def3;
 end;
 
@@ -3906,7 +3883,7 @@ A8: CurInstr s4 = halt SCMPDS by A5;
     end;
   end;
   hence IF is_closed_on s by Def2;
-  s3 is halting by A8,AMI_1:def 20;
+  ProgramPart s3 halts_on s3 by A8,AMI_1:146;
   hence thesis by Def3;
 end;
 
@@ -3954,13 +3931,13 @@ A11: IsI c= s2 & Shift(pI,1) c= s4 by Lm5,FUNCT_4:26;
   assume
 A12: I is_halting_on s;
   then
-A13: s2 is halting by Def3;
+A13: ProgramPart s2 halts_on s2 by Def3;
 A14: CurInstr Computation( s3,LifeSpan s2 + 1) =CurInstr Computation( s4,
   LifeSpan s2) by AMI_1:51
     .=CurInstr Computation( s2,LifeSpan s2) by A9,A11,A5,A7,Th45
     .= halt SCMPDS by A13,AMI_1:def 46;
   then
-A15: s3 is halting by AMI_1:def 20;
+A15: ProgramPart s3 halts_on s3 by AMI_1:146;
 A16: CurInstr s3 = i by Th22;
   now
     let l be Element of NAT;
@@ -3980,8 +3957,8 @@ A18:  l = n + 1 by NAT_1:6;
 A19:  n < LifeSpan s2 by A17,A18,XREAL_1:8;
       assume
 A20:  CurInstr Computation( s3,l) = halt SCMPDS;
-      CurInstr Computation( s2,n) = CurInstr Computation( s4,n) by A9,A11
-      ,A5,A7,Th45
+      CurInstr Computation( s2,n) = CurInstr Computation( s4,n) by A9,A11,A5,A7
+,Th45
         .= halt SCMPDS by A18,A20,AMI_1:51;
       hence contradiction by A13,A19,AMI_1:def 46;
     end;
@@ -3990,8 +3967,7 @@ A20:  CurInstr Computation( s3,l) = halt SCMPDS;
   holds LifeSpan s2 + 1 <= l;
   then
 A21: LifeSpan s3 = LifeSpan s2 + 1 by A14,A15,AMI_1:def 46;
-A22: DataPart Result s2 = DataPart Computation(s2,LifeSpan s2) by A13,AMI_1:
-  122
+A22: DataPart Result s2 = DataPart Computation(s2,LifeSpan s2) by A13,AMI_1:122
     .= DataPart Computation( s4,LifeSpan s2) by A9,A11,A5,A7,Th45
     .= DataPart Computation( s3,LifeSpan s2 + 1) by AMI_1:51
     .= DataPart Result s3 by A15,A21,AMI_1:122;
@@ -4012,7 +3988,7 @@ A30:  now
         assume
         x in dom (s | A);
         then reconsider l=x as Instruction-Location of SCMPDS by A10,
-        AMI_1:def 4;
+AMI_1:def 4;
         l=x;
         hence contradiction by A28,SCMPDS_2:53;
       end;
@@ -4027,7 +4003,7 @@ A32:  now
         assume
         x in dom (s | A);
         then reconsider l=x as Instruction-Location of SCMPDS by A10,
-        AMI_1:def 4;
+AMI_1:def 4;
         l=x;
         hence contradiction by A31,AMI_1:48;
       end;
@@ -4089,7 +4065,7 @@ A7: card IF=card I+1 by Th15;
   then
 A8: CurInstr s4 = halt SCMPDS by A5;
   then
-A9: s3 is halting by AMI_1:def 20;
+A9: ProgramPart s3 halts_on s3 by AMI_1:146;
 A10: CurInstr s3 = i by Th22;
   now
     let l be Element of NAT;
@@ -4122,7 +4098,7 @@ A18:  not x in dom SAl by A14,TARSKI:def 1;
         assume
         x in dom (s | A);
         then reconsider l=x as Instruction-Location of SCMPDS by A12,
-        AMI_1:def 4;
+AMI_1:def 4;
         l=x;
         hence contradiction by A17,SCMPDS_2:53;
       end;
@@ -4137,12 +4113,11 @@ A19:  x = IC SCMPDS;
         assume
         x in dom (s | A);
         then reconsider l=x as Instruction-Location of SCMPDS by A12,
-        AMI_1:def 4;
+AMI_1:def 4;
         l=x;
         hence contradiction by A19,AMI_1:48;
       end;
-      hence IExec(IF,s).x = inspos(card I + 1) by A5,A11,A15,A19, FUNCT_4:
-      12
+      hence IExec(IF,s).x = inspos(card I + 1) by A5,A11,A15,A19,FUNCT_4:12
         .= (s +* SAl).x by A19,Lm7;
     end;
     suppose
@@ -4176,12 +4151,12 @@ A2:   I is_closed_on s & I is_halting_on s by Th34,Th35;
       suppose
         s.DataLoc(s.a,k1) > 0;
         then IF is_halting_on s by A2,Th92;
-        hence s is halting by A1,Def3;
+        hence ProgramPart s halts_on s by A1,Def3;
       end;
       suppose
         s.DataLoc(s.a,k1) <= 0;
         then IF is_halting_on s by Th93;
-        hence s is halting by A1,Def3;
+        hence ProgramPart s halts_on s by A1,Def3;
       end;
     end;
     then IsIF is halting by AMI_1:def 26;
@@ -4228,8 +4203,8 @@ proof
 A1: s.DataLoc(s.a,k1) > 0;
 A2: not b in dom Start-At inspos (card I + 1) by SCMPDS_4:59;
   I is_closed_on s & I is_halting_on s by Th34,Th35;
-  then IExec(if>0(a,k1,I),s) = IExec(I,s) +* Start-At inspos (card I + 1) by
-  A1,Th94;
+  then IExec(if>0(a,k1,I),s) = IExec(I,s) +* Start-At inspos (card I + 1) by A1
+,Th94;
   hence thesis by A2,FUNCT_4:12;
 end;
 
@@ -4302,7 +4277,7 @@ A10: I is_closed_on s2 by Th38;
   assume
   I is_halting_on s;
   then
-A11: s2 is halting by Def3;
+A11: ProgramPart s2 halts_on s2 by Def3;
 A12: IsI c= s2 & Shift(pI,2) c= s4 by Lm6,FUNCT_4:26;
 A13: inspos 0 in dom pIF by SCMPDS_4:75;
   now
@@ -4313,8 +4288,8 @@ A13: inspos 0 in dom pIF by SCMPDS_4:75;
       then consider k1 being Nat such that
 A14:  k1 + 1 = k by NAT_1:6;
       reconsider k1 as Element of NAT by ORDINAL1:def 13;
-      reconsider m = IC Computation( s2,k1) as Element of NAT by ORDINAL1:def
-      13;
+      reconsider m = IC Computation( s2,k1) as Element of NAT by
+ORDINAL1:def 13;
 A15:  card pIF = 1+ card IF by SCMPDS_5:7
         .= 1+(card I +2) by Lm8
         .= 1+card I +2
@@ -4337,7 +4312,7 @@ A16:  m+2 < card pIF by A15,XREAL_1:8;
   LifeSpan s2) by AMI_1:51
     .=CurInstr Computation( s2,LifeSpan s2) by A10,A12,A8,A4,Th45
     .= halt SCMPDS by A11,AMI_1:def 46;
-  then s3 is halting by AMI_1:def 20;
+  then ProgramPart s3 halts_on s3 by AMI_1:146;
   hence thesis by Def3;
 end;
 
@@ -4410,7 +4385,7 @@ A15: k = 0 or 0 + 1 <= k by INT_1:20;
     end;
   end;
   hence IF is_closed_on s by Def2;
-  s3 is halting by A14,AMI_1:def 20;
+  ProgramPart s3 halts_on s3 by A14,AMI_1:146;
   hence thesis by Def3;
 end;
 
@@ -4459,13 +4434,13 @@ A12: I is_closed_on s2 by Th38;
   assume
 A13: I is_halting_on s;
   then
-A14: s2 is halting by Def3;
+A14: ProgramPart s2 halts_on s2 by Def3;
 A15: CurInstr Computation( s3,LifeSpan s2 + 1) =CurInstr Computation( s4,
   LifeSpan s2) by AMI_1:51
     .=CurInstr Computation( s2,LifeSpan s2) by A12,A6,A9,A8,Th45
     .= halt SCMPDS by A14,AMI_1:def 46;
   then
-A16: s3 is halting by AMI_1:def 20;
+A16: ProgramPart s3 halts_on s3 by AMI_1:146;
 A17: CurInstr s3 = i by A1,Th22;
   now
     let l be Element of NAT;
@@ -4485,8 +4460,8 @@ A19:  l = n + 1 by NAT_1:6;
 A20:  n < LifeSpan s2 by A18,A19,XREAL_1:8;
       assume
 A21:  CurInstr Computation( s3,l) = halt SCMPDS;
-      CurInstr Computation( s2,n) = CurInstr Computation( s4,n) by A12,A6
-      ,A9,A8,Th45
+      CurInstr Computation( s2,n) = CurInstr Computation( s4,n) by A12,A6,A9,A8
+,Th45
         .= halt SCMPDS by A19,A21,AMI_1:51;
       hence contradiction by A14,A20,AMI_1:def 46;
     end;
@@ -4495,8 +4470,7 @@ A21:  CurInstr Computation( s3,l) = halt SCMPDS;
   holds LifeSpan s2 + 1 <= l;
   then
 A22: LifeSpan s3 = LifeSpan s2 + 1 by A15,A16,AMI_1:def 46;
-A23: DataPart Result s2 = DataPart Computation(s2,LifeSpan s2) by A14,AMI_1:
-  122
+A23: DataPart Result s2 = DataPart Computation(s2,LifeSpan s2) by A14,AMI_1:122
     .= DataPart Computation( s4,LifeSpan s2) by A12,A6,A9,A8,Th45
     .= DataPart Computation( s3,LifeSpan s2 + 1) by AMI_1:51
     .= DataPart Result s3 by A16,A22,AMI_1:122;
@@ -4516,8 +4490,8 @@ A30:  not x in dom SAl by A27,TARSKI:def 1;
 A31:  now
         assume
         x in dom (s | A);
-        then reconsider l=x as Instruction-Location of SCMPDS by A10,AMI_1:def
-        4;
+        then reconsider l=x as Instruction-Location of SCMPDS by A10,
+AMI_1:def 4;
         l=x;
         hence contradiction by A29,SCMPDS_2:53;
       end;
@@ -4531,8 +4505,8 @@ A32:  x = IC SCMPDS;
 A33:  now
         assume
         x in dom (s | A);
-        then reconsider l=x as Instruction-Location of SCMPDS by A10,AMI_1:def
-        4;
+        then reconsider l=x as Instruction-Location of SCMPDS by A10,
+AMI_1:def 4;
         l=x;
         hence contradiction by A32,AMI_1:48;
       end;
@@ -4608,7 +4582,7 @@ A14: card IF=card I+2 by Lm8;
   then
 A15: CurInstr s5 = halt SCMPDS by A13;
   then
-A16: s3 is halting by AMI_1:def 20;
+A16: ProgramPart s3 halts_on s3 by AMI_1:146;
 A17: CurInstr s3 = i by A1,Th22;
   now
     let l be Element of NAT;
@@ -4624,8 +4598,7 @@ A18: l <= 1 by NAT_1:13;
     end;
     suppose
       l=1;
-      hence CurInstr Computation( s3,l) <> halt SCMPDS by A9,A11, SCMPDS_2
-      :85;
+      hence CurInstr Computation( s3,l) <> halt SCMPDS by A9,A11,SCMPDS_2:85;
     end;
   end;
   then for l be Element of NAT st CurInstr Computation( s3,l) = halt SCMPDS
@@ -4649,8 +4622,8 @@ A26:  not x in dom SAl by A22,TARSKI:def 1;
       now
         assume
         x in dom (s | A);
-        then reconsider l=x as Instruction-Location of SCMPDS by A20,AMI_1:def
-        4;
+        then reconsider l=x as Instruction-Location of SCMPDS by A20,
+AMI_1:def 4;
         l=x;
         hence contradiction by A25,SCMPDS_2:53;
       end;
@@ -4665,13 +4638,12 @@ A27:  x = IC SCMPDS;
       now
         assume
         x in dom (s | A);
-        then reconsider l=x as Instruction-Location of SCMPDS by A20,AMI_1:def
-        4;
+        then reconsider l=x as Instruction-Location of SCMPDS by A20,
+AMI_1:def 4;
         l=x;
         hence contradiction by A27,AMI_1:48;
       end;
-      hence IExec(IF,s).x = inspos(card I + 2) by A13,A19,A23,A27, FUNCT_4:
-      12
+      hence IExec(IF,s).x = inspos(card I + 2) by A13,A19,A23,A27,FUNCT_4:12
         .= (s +* Start-At inspos (card I + 2)).x by A27,Lm7;
     end;
     suppose
@@ -4705,12 +4677,12 @@ A2:   I is_closed_on s & I is_halting_on s by Th34,Th35;
       suppose
         s.DataLoc(s.a,k1) <= 0;
         then IF is_halting_on s by A2,Th102;
-        hence s is halting by A1,Def3;
+        hence ProgramPart s halts_on s by A1,Def3;
       end;
       suppose
         s.DataLoc(s.a,k1) > 0;
         then IF is_halting_on s by Th103;
-        hence s is halting by A1,Def3;
+        hence ProgramPart s halts_on s by A1,Def3;
       end;
     end;
     then IsIF is halting by AMI_1:def 26;
@@ -4736,8 +4708,7 @@ A1: I is_closed_on s & I is_halting_on s by Th34,Th35;
   per cases;
   suppose
     s.DataLoc(s.a,k1) <= 0;
-    then IExec(IF,s) =IExec(I,s) +* Start-At inspos (card I+2) by A1,
-    Th104;
+    then IExec(IF,s) =IExec(I,s) +* Start-At inspos (card I+2) by A1,Th104;
     hence thesis by AMI_1:111;
   end;
   suppose
@@ -4759,7 +4730,7 @@ A1: s.DataLoc(s.a,k1) <= 0;
 A2: not b in dom Start-At inspos (card I + 2) by SCMPDS_4:59;
   I is_closed_on s & I is_halting_on s by Th34,Th35;
   then IExec(if<=0(a,k1,I),s) = IExec(I,s) +* Start-At inspos (card I + 2) by
-  A1,Th104;
+A1,Th104;
   hence thesis by A2,FUNCT_4:12;
 end;
 
@@ -4773,8 +4744,7 @@ proof
   assume
   s.DataLoc(s.a,k1) > 0;
   then
-A1: IExec(if<=0(a,k1,I),s) = s +* Start-At inspos (card I + 2) by
-  Th105;
+A1: IExec(if<=0(a,k1,I),s) = s +* Start-At inspos (card I + 2) by Th105;
   not b in dom Start-At inspos (card I + 2) by SCMPDS_4:59;
   hence thesis by A1,FUNCT_4:12;
 end;
@@ -4848,7 +4818,7 @@ A13: I2 is_closed_on s by A11,Th44;
 A14: II2 c= s2 & I2 is_closed_on s2 by Th38,FUNCT_4:26;
   I2 is_halting_on s by A11,A12,Th44;
   then
-A15: s2 is halting by Def3;
+A15: ProgramPart s2 halts_on s2 by Def3;
 A16: card pIF = card IF +1 by SCMPDS_5:7
     .= card I2 +1+1 by A5,Th15;
   now
@@ -4859,8 +4829,8 @@ A16: card pIF = card IF +1 by SCMPDS_5:7
       then consider k1 being Nat such that
 A17:  k1 + 1 = k by NAT_1:6;
       reconsider k1 as Element of NAT by ORDINAL1:def 13;
-      reconsider m = IC Computation( s2,k1) as Element of NAT by ORDINAL1:def
-      13;
+      reconsider m = IC Computation( s2,k1) as Element of NAT by
+ORDINAL1:def 13;
 A18:  card pIF = card pI2+1 by A16,SCMPDS_5:7;
       inspos m in dom pI2 by A13,Def2;
       then m < card pI2 by SCMPDS_4:1;
@@ -4880,7 +4850,7 @@ A19:  m+1 < card pIF by A18,XREAL_1:8;
   LifeSpan s2) by AMI_1:51
     .=CurInstr Computation( s2,LifeSpan s2) by A14,A6,A10,A9,Th45
     .= halt SCMPDS by A15,AMI_1:def 46;
-  then s3 is halting by AMI_1:def 20;
+  then ProgramPart s3 halts_on s3 by AMI_1:146;
   hence thesis by Def3;
 end;
 
@@ -4929,7 +4899,7 @@ A11: Shift(pJ,card I+2) c= s4 by AMI_1:81;
   assume
   J is_halting_on s;
   then
-A12: s1 is halting by Def3;
+A12: ProgramPart s1 halts_on s1 by Def3;
 A13: DataPart s1 = DataPart s3 by SCMPDS_4:24,36;
   now
     let a;
@@ -4946,8 +4916,8 @@ A14: DataPart s1 = DataPart s4 by SCMPDS_4:23;
       then consider k1 being Nat such that
 A15:  k1 + 1 = k by NAT_1:6;
       reconsider k1 as Element of NAT by ORDINAL1:def 13;
-      reconsider m = IC Computation( s1,k1) as Element of NAT by ORDINAL1:def
-      13;
+      reconsider m = IC Computation( s1,k1) as Element of NAT by
+ORDINAL1:def 13;
       inspos m in dom pJ by A7,Def2;
       then m < card pJ by SCMPDS_4:1;
       then
@@ -4971,7 +4941,7 @@ A18:  card pIF = card IF+1 by SCMPDS_5:7
   LifeSpan s1) by AMI_1:51
     .=CurInstr Computation( s1,LifeSpan s1) by A8,A14,A11,A6,Th45
     .= halt SCMPDS by A12,AMI_1:def 46;
-  then s3 is halting by AMI_1:def 20;
+  then ProgramPart s3 halts_on s3 by AMI_1:146;
   hence thesis by Def3;
 end;
 
@@ -5024,7 +4994,7 @@ A11: I is_closed_on s;
 A12: I is_halting_on s;
   then I2 is_halting_on s by A11,Th44;
   then
-A13: s2 is halting by Def3;
+A13: ProgramPart s2 halts_on s2 by Def3;
   I2 is_closed_on s by A11,A12,Th44;
   then
 A14: II2 c= s2 & I2 is_closed_on s2 by Th38,FUNCT_4:26;
@@ -5033,7 +5003,7 @@ A15: CurInstr Computation( s3,LifeSpan s2 + 1) =CurInstr Computation( s4,
     .=CurInstr Computation( s2,LifeSpan s2) by A14,A6,A8,A10,Th45
     .= halt SCMPDS by A13,AMI_1:def 46;
   then
-A16: s3 is halting by AMI_1:def 20;
+A16: ProgramPart s3 halts_on s3 by AMI_1:146;
 A17: CurInstr s3 = i by A5,Th22;
   now
     let l be Element of NAT;
@@ -5053,8 +5023,8 @@ A19:  l = n + 1 by NAT_1:6;
 A20:  n < LifeSpan s2 by A18,A19,XREAL_1:8;
       assume
 A21:  CurInstr Computation( s3,l) = halt SCMPDS;
-      CurInstr Computation( s2,n) = CurInstr Computation( s4,n) by A14,A6
-      ,A8,A10,Th45
+      CurInstr Computation( s2,n) = CurInstr Computation( s4,n) by A14,A6,A8
+,A10,Th45
         .= halt SCMPDS by A19,A21,AMI_1:51;
       hence contradiction by A13,A20,AMI_1:def 46;
     end;
@@ -5063,8 +5033,7 @@ A21:  CurInstr Computation( s3,l) = halt SCMPDS;
   holds LifeSpan s2 + 1 <= l;
   then
 A22: LifeSpan s3 = LifeSpan s2 + 1 by A15,A16,AMI_1:def 46;
-A23: DataPart Result s2 = DataPart Computation(s2,LifeSpan s2) by A13,AMI_1:
-  122
+A23: DataPart Result s2 = DataPart Computation(s2,LifeSpan s2) by A13,AMI_1:122
     .= DataPart Computation( s4,LifeSpan s2) by A14,A6,A8,A10,Th45
     .= DataPart Computation( s3,LifeSpan s2 + 1) by AMI_1:51
     .= DataPart Result s3 by A16,A22,AMI_1:122;
@@ -5084,8 +5053,8 @@ A30:  not x in dom SAl by A27,TARSKI:def 1;
 A31:  now
         assume
         x in dom (s | A);
-        then reconsider l=x as Instruction-Location of SCMPDS by A4,AMI_1:def
-        4;
+        then reconsider l=x as Instruction-Location of SCMPDS by A4,AMI_1:def 4
+;
         l=x;
         hence contradiction by A29,SCMPDS_2:53;
       end;
@@ -5099,8 +5068,8 @@ A32:  x = IC SCMPDS;
 A33:  now
         assume
         x in dom (s | A);
-        then reconsider l=x as Instruction-Location of SCMPDS by A4,AMI_1:def
-        4;
+        then reconsider l=x as Instruction-Location of SCMPDS by A4,AMI_1:def 4
+;
         l=x;
         hence contradiction by A32,AMI_1:48;
       end;
@@ -5114,7 +5083,7 @@ A35:  x in dom SAl by A27,A32,TARSKI:def 1;
         .= IC Computation( s2,LifeSpan s2) + 1 by A14,A6,A8,A10,Th45
         .= IC Result s2 + 1 by A13,AMI_1:122
         .= (Start-At (inspos (card I + card J + 1) + 1)).IC SCMPDS by A34,
-      FUNCOP_1:87
+FUNCOP_1:87
         .= (IExec(I2,s) +* SAl).x by A32,A35,FUNCT_4:14;
     end;
     suppose
@@ -5186,13 +5155,13 @@ A13: IsJ c= s1 & J is_closed_on s1 by Th38,FUNCT_4:26;
   assume
 A14: J is_halting_on s;
   then
-A15: s1 is halting by Def3;
+A15: ProgramPart s1 halts_on s1 by Def3;
 A16: CurInstr Computation( s3,LifeSpan s1 + 1) =CurInstr Computation( s4,
   LifeSpan s1) by AMI_1:51
     .=CurInstr Computation( s1,LifeSpan s1) by A13,A11,A7,A9,Th45
     .= halt SCMPDS by A15,AMI_1:def 46;
   then
-A17: s3 is halting by AMI_1:def 20;
+A17: ProgramPart s3 halts_on s3 by AMI_1:146;
 A18: CurInstr s3 = i by A1,Th22;
   now
     let l be Element of NAT;
@@ -5212,8 +5181,8 @@ A20:  l = n + 1 by NAT_1:6;
 A21:  n < LifeSpan s1 by A19,A20,XREAL_1:8;
       assume
 A22:  CurInstr Computation( s3,l) = halt SCMPDS;
-      CurInstr Computation( s1,n) = CurInstr Computation( s4,n) by A13,A11
-      ,A7,A9,Th45
+      CurInstr Computation( s1,n) = CurInstr Computation( s4,n) by A13,A11,A7
+,A9,Th45
         .= halt SCMPDS by A20,A22,AMI_1:51;
       hence contradiction by A15,A21,AMI_1:def 46;
     end;
@@ -5222,9 +5191,8 @@ A22:  CurInstr Computation( s3,l) = halt SCMPDS;
   holds LifeSpan s1 + 1 <= l;
   then
 A23: LifeSpan s3 = LifeSpan s1 + 1 by A16,A17,AMI_1:def 46;
-A24: DataPart Result s1 = DataPart Computation( s1,LifeSpan s1) by A15
-  ,AMI_1:
-  122
+A24: DataPart Result s1 = DataPart Computation( s1,LifeSpan s1) by A15,
+AMI_1:122
     .= DataPart Computation( s4,LifeSpan s1) by A13,A11,A7,A9,Th45
     .= DataPart Computation( s3,LifeSpan s1 + 1) by AMI_1:51
     .= DataPart Result s3 by A17,A23,AMI_1:122;
@@ -5244,8 +5212,8 @@ A31:  not x in dom SAl by A28,TARSKI:def 1;
 A32:  now
         assume
         x in dom (s | A);
-        then reconsider l=x as Instruction-Location of SCMPDS by A6,AMI_1:def
-        4;
+        then reconsider l=x as Instruction-Location of SCMPDS by A6,AMI_1:def 4
+;
         l=x;
         hence contradiction by A30,SCMPDS_2:53;
       end;
@@ -5259,8 +5227,8 @@ A33:  x = IC SCMPDS;
 A34:  now
         assume
         x in dom (s | A);
-        then reconsider l=x as Instruction-Location of SCMPDS by A6,AMI_1:def
-        4;
+        then reconsider l=x as Instruction-Location of SCMPDS by A6,AMI_1:def 4
+;
         l=x;
         hence contradiction by A33,AMI_1:48;
       end;
@@ -5271,11 +5239,10 @@ A36:  x in dom SAl by A28,A33,TARSKI:def 1;
       thus IExec(IF,s).x = (Result s3).x by A27,A34,FUNCT_4:12
         .= Computation( s3,LifeSpan s1 + 1).x by A17,A23,AMI_1:122
         .= IC Computation( s4,LifeSpan s1) by A33,AMI_1:51
-        .= IC Computation( s1,LifeSpan s1) + (card I + 2) by A13,A11,A7,A9,
-      Th45
+        .= IC Computation( s1,LifeSpan s1) + (card I + 2) by A13,A11,A7,A9,Th45
         .= IC Result s1 + (card I + 2) by A15,AMI_1:122
         .= (Start-At (inspos card J + (card I + 2))).IC SCMPDS by A35,
-      FUNCOP_1:87
+FUNCOP_1:87
         .= (IExec(J,s) +* SAl).x by A33,A36,FUNCT_4:14;
     end;
     suppose
@@ -5313,12 +5280,12 @@ A3:   I is_closed_on s & I is_halting_on s by Th34,Th35;
       suppose
         s.DataLoc(s.a,k1) < 0;
         then IF is_halting_on s by A3,Th112;
-        hence s is halting by A1,Def3;
+        hence ProgramPart s halts_on s by A1,Def3;
       end;
       suppose
         s.DataLoc(s.a,k1) >= 0;
         then IF is_halting_on s by A2,Th113;
-        hence s is halting by A1,Def3;
+        hence ProgramPart s halts_on s by A1,Def3;
       end;
     end;
     then IsIF is halting by AMI_1:def 26;
@@ -5346,13 +5313,13 @@ A2: J is_closed_on s & J is_halting_on s by Th34,Th35;
   suppose
     s.DataLoc(s.a,k1) < 0;
     then IExec(IF,s) = IExec(I,s) +* Start-At inspos (card I + card J + 2) by
-    A1,Th114;
+A1,Th114;
     hence thesis by AMI_1:111;
   end;
   suppose
     s.DataLoc(s.a,k1) >= 0;
     then IExec(IF,s) = IExec(J,s) +* Start-At inspos (card I + card J + 2) by
-    A2,Th115;
+A2,Th115;
     hence thesis by AMI_1:111;
   end;
 end;
@@ -5388,8 +5355,8 @@ proof
 A1: s.DataLoc(s.a,k1) >= 0;
 A2: not b in dom Start-At inspos (card I + card J + 2) by SCMPDS_4:59;
   J is_closed_on s & J is_halting_on s by Th34,Th35;
-  then IExec(IF,s) =IExec(J,s) +* Start-At inspos (card I + card J + 2) by
-  A1,Th115;
+  then IExec(IF,s) =IExec(J,s) +* Start-At inspos (card I + card J + 2) by A1
+,Th115;
   hence thesis by A2,FUNCT_4:12;
 end;
 
@@ -5451,7 +5418,7 @@ A10: I is_closed_on s2 by Th38;
   assume
   I is_halting_on s;
   then
-A11: s2 is halting by Def3;
+A11: ProgramPart s2 halts_on s2 by Def3;
 A12: IsI c= s2 & Shift(pI,1) c= s4 by Lm5,FUNCT_4:26;
 A13: card pIF = card IF +1 by SCMPDS_5:7
     .= card I +1+1 by Th15;
@@ -5463,8 +5430,8 @@ A13: card pIF = card IF +1 by SCMPDS_5:7
       then consider k1 being Nat such that
 A14:  k1 + 1 = k by NAT_1:6;
       reconsider k1 as Element of NAT by ORDINAL1:def 13;
-      reconsider m = IC Computation( s2,k1) as Element of NAT by ORDINAL1:def
-      13;
+      reconsider m = IC Computation( s2,k1) as Element of NAT by
+ORDINAL1:def 13;
 A15:  card pIF = card pI+1 by A13,SCMPDS_5:7;
       inspos m in dom pI by A9,Def2;
       then m < card pI by SCMPDS_4:1;
@@ -5484,7 +5451,7 @@ A16:  m+1 < card pIF by A15,XREAL_1:8;
   LifeSpan s2) by AMI_1:51
     .=CurInstr Computation( s2,LifeSpan s2) by A10,A12,A8,A7,Th45
     .= halt SCMPDS by A11,AMI_1:def 46;
-  then s3 is halting by AMI_1:def 20;
+  then ProgramPart s3 halts_on s3 by AMI_1:146;
   hence thesis by Def3;
 end;
 
@@ -5537,7 +5504,7 @@ A8: CurInstr s4 = halt SCMPDS by A5;
     end;
   end;
   hence IF is_closed_on s by Def2;
-  s3 is halting by A8,AMI_1:def 20;
+  ProgramPart s3 halts_on s3 by A8,AMI_1:146;
   hence thesis by Def3;
 end;
 
@@ -5585,13 +5552,13 @@ A11: IsI c= s2 & Shift(pI,1) c= s4 by Lm5,FUNCT_4:26;
   assume
 A12: I is_halting_on s;
   then
-A13: s2 is halting by Def3;
+A13: ProgramPart s2 halts_on s2 by Def3;
 A14: CurInstr Computation( s3,LifeSpan s2 + 1) =CurInstr Computation( s4,
   LifeSpan s2) by AMI_1:51
     .=CurInstr Computation( s2,LifeSpan s2) by A9,A11,A5,A7,Th45
     .= halt SCMPDS by A13,AMI_1:def 46;
   then
-A15: s3 is halting by AMI_1:def 20;
+A15: ProgramPart s3 halts_on s3 by AMI_1:146;
 A16: CurInstr s3 = i by Th22;
   now
     let l be Element of NAT;
@@ -5611,8 +5578,8 @@ A18:  l = n + 1 by NAT_1:6;
 A19:  n < LifeSpan s2 by A17,A18,XREAL_1:8;
       assume
 A20:  CurInstr Computation( s3,l) = halt SCMPDS;
-      CurInstr Computation( s2,n) = CurInstr Computation( s4,n) by A9,A11
-      ,A5,A7,Th45
+      CurInstr Computation( s2,n) = CurInstr Computation( s4,n) by A9,A11,A5,A7
+,Th45
         .= halt SCMPDS by A18,A20,AMI_1:51;
       hence contradiction by A13,A19,AMI_1:def 46;
     end;
@@ -5621,8 +5588,7 @@ A20:  CurInstr Computation( s3,l) = halt SCMPDS;
   holds LifeSpan s2 + 1 <= l;
   then
 A21: LifeSpan s3 = LifeSpan s2 + 1 by A14,A15,AMI_1:def 46;
-A22: DataPart Result s2 = DataPart Computation(s2,LifeSpan s2) by A13,AMI_1:
-  122
+A22: DataPart Result s2 = DataPart Computation(s2,LifeSpan s2) by A13,AMI_1:122
     .= DataPart Computation( s4,LifeSpan s2) by A9,A11,A5,A7,Th45
     .= DataPart Computation( s3,LifeSpan s2 + 1) by AMI_1:51
     .= DataPart Result s3 by A15,A21,AMI_1:122;
@@ -5643,7 +5609,7 @@ A30:  now
         assume
         x in dom (s | A);
         then reconsider l=x as Instruction-Location of SCMPDS by A10,
-        AMI_1:def 4;
+AMI_1:def 4;
         l=x;
         hence contradiction by A28,SCMPDS_2:53;
       end;
@@ -5658,7 +5624,7 @@ A32:  now
         assume
         x in dom (s | A);
         then reconsider l=x as Instruction-Location of SCMPDS by A10,
-        AMI_1:def 4;
+AMI_1:def 4;
         l=x;
         hence contradiction by A31,AMI_1:48;
       end;
@@ -5720,7 +5686,7 @@ A7: card IF=card I+1 by Th15;
   then
 A8: CurInstr s4 = halt SCMPDS by A5;
   then
-A9: s3 is halting by AMI_1:def 20;
+A9: ProgramPart s3 halts_on s3 by AMI_1:146;
 A10: CurInstr s3 = i by Th22;
   now
     let l be Element of NAT;
@@ -5753,7 +5719,7 @@ A18:  not x in dom SAl by A14,TARSKI:def 1;
         assume
         x in dom (s | A);
         then reconsider l=x as Instruction-Location of SCMPDS by A12,
-        AMI_1:def 4;
+AMI_1:def 4;
         l=x;
         hence contradiction by A17,SCMPDS_2:53;
       end;
@@ -5768,12 +5734,11 @@ A19:  x = IC SCMPDS;
         assume
         x in dom (s | A);
         then reconsider l=x as Instruction-Location of SCMPDS by A12,
-        AMI_1:def 4;
+AMI_1:def 4;
         l=x;
         hence contradiction by A19,AMI_1:48;
       end;
-      hence IExec(IF,s).x = inspos(card I + 1) by A5,A11,A15,A19, FUNCT_4:
-      12
+      hence IExec(IF,s).x = inspos(card I + 1) by A5,A11,A15,A19,FUNCT_4:12
         .= (s +* SAl).x by A19,Lm7;
     end;
     suppose
@@ -5807,12 +5772,12 @@ A2:   I is_closed_on s & I is_halting_on s by Th34,Th35;
       suppose
         s.DataLoc(s.a,k1) < 0;
         then IF is_halting_on s by A2,Th122;
-        hence s is halting by A1,Def3;
+        hence ProgramPart s halts_on s by A1,Def3;
       end;
       suppose
         s.DataLoc(s.a,k1) >= 0;
         then IF is_halting_on s by Th123;
-        hence s is halting by A1,Def3;
+        hence ProgramPart s halts_on s by A1,Def3;
       end;
     end;
     then IsIF is halting by AMI_1:def 26;
@@ -5838,8 +5803,7 @@ A1: I is_closed_on s & I is_halting_on s by Th34,Th35;
   per cases;
   suppose
     s.DataLoc(s.a,k1) < 0;
-    then IExec(IF,s) =IExec(I,s) +* Start-At inspos (card I+1) by A1,
-    Th124;
+    then IExec(IF,s) =IExec(I,s) +* Start-At inspos (card I+1) by A1,Th124;
     hence thesis by AMI_1:111;
   end;
   suppose
@@ -5860,8 +5824,8 @@ proof
 A1: s.DataLoc(s.a,k1) < 0;
 A2: not b in dom Start-At inspos (card I + 1) by SCMPDS_4:59;
   I is_closed_on s & I is_halting_on s by Th34,Th35;
-  then IExec(if<0(a,k1,I),s) = IExec(I,s) +* Start-At inspos (card I + 1) by
-  A1,Th124;
+  then IExec(if<0(a,k1,I),s) = IExec(I,s) +* Start-At inspos (card I + 1) by A1
+,Th124;
   hence thesis by A2,FUNCT_4:12;
 end;
 
@@ -5934,7 +5898,7 @@ A10: I is_closed_on s2 by Th38;
   assume
   I is_halting_on s;
   then
-A11: s2 is halting by Def3;
+A11: ProgramPart s2 halts_on s2 by Def3;
 A12: IsI c= s2 & Shift(pI,2) c= s4 by Lm6,FUNCT_4:26;
 A13: inspos 0 in dom pIF by SCMPDS_4:75;
   now
@@ -5945,8 +5909,8 @@ A13: inspos 0 in dom pIF by SCMPDS_4:75;
       then consider k1 being Nat such that
 A14:  k1 + 1 = k by NAT_1:6;
       reconsider k1 as Element of NAT by ORDINAL1:def 13;
-      reconsider m = IC Computation( s2,k1) as Element of NAT by ORDINAL1:def
-      13;
+      reconsider m = IC Computation( s2,k1) as Element of NAT by
+ORDINAL1:def 13;
 A15:  card pIF = 1+ card IF by SCMPDS_5:7
         .= 1+(card I +2) by Lm8
         .= 1+card I +2
@@ -5969,7 +5933,7 @@ A16:  m+2 < card pIF by A15,XREAL_1:8;
   LifeSpan s2) by AMI_1:51
     .=CurInstr Computation( s2,LifeSpan s2) by A10,A12,A8,A4,Th45
     .= halt SCMPDS by A11,AMI_1:def 46;
-  then s3 is halting by AMI_1:def 20;
+  then ProgramPart s3 halts_on s3 by AMI_1:146;
   hence thesis by Def3;
 end;
 
@@ -6042,7 +6006,7 @@ A15: k = 0 or 0 + 1 <= k by INT_1:20;
     end;
   end;
   hence IF is_closed_on s by Def2;
-  s3 is halting by A14,AMI_1:def 20;
+  ProgramPart s3 halts_on s3 by A14,AMI_1:146;
   hence thesis by Def3;
 end;
 
@@ -6091,13 +6055,13 @@ A12: I is_closed_on s2 by Th38;
   assume
 A13: I is_halting_on s;
   then
-A14: s2 is halting by Def3;
+A14: ProgramPart s2 halts_on s2 by Def3;
 A15: CurInstr Computation( s3,LifeSpan s2 + 1) =CurInstr Computation( s4,
   LifeSpan s2) by AMI_1:51
     .=CurInstr Computation( s2,LifeSpan s2) by A12,A6,A9,A8,Th45
     .= halt SCMPDS by A14,AMI_1:def 46;
   then
-A16: s3 is halting by AMI_1:def 20;
+A16: ProgramPart s3 halts_on s3 by AMI_1:146;
 A17: CurInstr s3 = i by A1,Th22;
   now
     let l be Element of NAT;
@@ -6117,8 +6081,8 @@ A19:  l = n + 1 by NAT_1:6;
 A20:  n < LifeSpan s2 by A18,A19,XREAL_1:8;
       assume
 A21:  CurInstr Computation( s3,l) = halt SCMPDS;
-      CurInstr Computation( s2,n) = CurInstr Computation( s4,n) by A12,A6
-      ,A9,A8,Th45
+      CurInstr Computation( s2,n) = CurInstr Computation( s4,n) by A12,A6,A9,A8
+,Th45
         .= halt SCMPDS by A19,A21,AMI_1:51;
       hence contradiction by A14,A20,AMI_1:def 46;
     end;
@@ -6127,8 +6091,7 @@ A21:  CurInstr Computation( s3,l) = halt SCMPDS;
   holds LifeSpan s2 + 1 <= l;
   then
 A22: LifeSpan s3 = LifeSpan s2 + 1 by A15,A16,AMI_1:def 46;
-A23: DataPart Result s2 = DataPart Computation(s2,LifeSpan s2) by A14,AMI_1:
-  122
+A23: DataPart Result s2 = DataPart Computation(s2,LifeSpan s2) by A14,AMI_1:122
     .= DataPart Computation( s4,LifeSpan s2) by A12,A6,A9,A8,Th45
     .= DataPart Computation( s3,LifeSpan s2 + 1) by AMI_1:51
     .= DataPart Result s3 by A16,A22,AMI_1:122;
@@ -6148,8 +6111,8 @@ A30:  not x in dom SAl by A27,TARSKI:def 1;
 A31:  now
         assume
         x in dom (s | A);
-        then reconsider l=x as Instruction-Location of SCMPDS by A10,AMI_1:def
-        4;
+        then reconsider l=x as Instruction-Location of SCMPDS by A10,
+AMI_1:def 4;
         l=x;
         hence contradiction by A29,SCMPDS_2:53;
       end;
@@ -6163,8 +6126,8 @@ A32:  x = IC SCMPDS;
 A33:  now
         assume
         x in dom (s | A);
-        then reconsider l=x as Instruction-Location of SCMPDS by A10,AMI_1:def
-        4;
+        then reconsider l=x as Instruction-Location of SCMPDS by A10,
+AMI_1:def 4;
         l=x;
         hence contradiction by A32,AMI_1:48;
       end;
@@ -6240,7 +6203,7 @@ A14: card IF=card I+2 by Lm8;
   then
 A15: CurInstr s5 = halt SCMPDS by A13;
   then
-A16: s3 is halting by AMI_1:def 20;
+A16: ProgramPart s3 halts_on s3 by AMI_1:146;
 A17: CurInstr s3 = i by A1,Th22;
   now
     let l be Element of NAT;
@@ -6256,8 +6219,7 @@ A18: l <= 1 by NAT_1:13;
     end;
     suppose
       l=1;
-      hence CurInstr Computation( s3,l) <> halt SCMPDS by A9,A11, SCMPDS_2
-      :85;
+      hence CurInstr Computation( s3,l) <> halt SCMPDS by A9,A11,SCMPDS_2:85;
     end;
   end;
   then for l be Element of NAT st CurInstr Computation( s3,l) = halt SCMPDS
@@ -6281,8 +6243,8 @@ A26:  not x in dom SAl by A22,TARSKI:def 1;
       now
         assume
         x in dom (s | A);
-        then reconsider l=x as Instruction-Location of SCMPDS by A20,AMI_1:def
-        4;
+        then reconsider l=x as Instruction-Location of SCMPDS by A20,
+AMI_1:def 4;
         l=x;
         hence contradiction by A25,SCMPDS_2:53;
       end;
@@ -6297,13 +6259,12 @@ A27:  x = IC SCMPDS;
       now
         assume
         x in dom (s | A);
-        then reconsider l=x as Instruction-Location of SCMPDS by A20,AMI_1:def
-        4;
+        then reconsider l=x as Instruction-Location of SCMPDS by A20,
+AMI_1:def 4;
         l=x;
         hence contradiction by A27,AMI_1:48;
       end;
-      hence IExec(IF,s).x = inspos(card I + 2) by A13,A19,A23,A27, FUNCT_4:
-      12
+      hence IExec(IF,s).x = inspos(card I + 2) by A13,A19,A23,A27,FUNCT_4:12
         .= (s +* Start-At inspos (card I + 2)).x by A27,Lm7;
     end;
     suppose
@@ -6337,12 +6298,12 @@ A2:   I is_closed_on s & I is_halting_on s by Th34,Th35;
       suppose
         s.DataLoc(s.a,k1) >= 0;
         then IF is_halting_on s by A2,Th132;
-        hence s is halting by A1,Def3;
+        hence ProgramPart s halts_on s by A1,Def3;
       end;
       suppose
         s.DataLoc(s.a,k1) < 0;
         then IF is_halting_on s by Th133;
-        hence s is halting by A1,Def3;
+        hence ProgramPart s halts_on s by A1,Def3;
       end;
     end;
     then IsIF is halting by AMI_1:def 26;
@@ -6368,8 +6329,7 @@ A1: I is_closed_on s & I is_halting_on s by Th34,Th35;
   per cases;
   suppose
     s.DataLoc(s.a,k1) >= 0;
-    then IExec(IF,s) =IExec(I,s) +* Start-At inspos (card I+2) by A1,
-    Th134;
+    then IExec(IF,s) =IExec(I,s) +* Start-At inspos (card I+2) by A1,Th134;
     hence thesis by AMI_1:111;
   end;
   suppose
@@ -6391,7 +6351,7 @@ A1: s.DataLoc(s.a,k1) >= 0;
 A2: not b in dom Start-At inspos (card I + 2) by SCMPDS_4:59;
   I is_closed_on s & I is_halting_on s by Th34,Th35;
   then IExec(if>=0(a,k1,I),s) = IExec(I,s) +* Start-At inspos (card I + 2) by
-  A1,Th134;
+A1,Th134;
   hence thesis by A2,FUNCT_4:12;
 end;
 
@@ -6405,8 +6365,7 @@ proof
   assume
   s.DataLoc(s.a,k1) < 0;
   then
-A1: IExec(if>=0(a,k1,I),s) = s +* Start-At inspos (card I + 2) by
-  Th135;
+A1: IExec(if>=0(a,k1,I),s) = s +* Start-At inspos (card I + 2) by Th135;
   not b in dom Start-At inspos (card I + 2) by SCMPDS_4:59;
   hence thesis by A1,FUNCT_4:12;
 end;

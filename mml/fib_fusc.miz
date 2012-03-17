@@ -7,15 +7,20 @@
 environ
 
  vocabularies AMI_3, INT_1, POWER, ARYTM_1, FINSEQ_1, AMI_1, SCM_1, FUNCT_1,
-      PRE_FF, GROUP_1, NAT_1, FIB_FUSC, ARYTM;
- notations XCMPLX_0, SUBSET_1, NUMBERS, INT_1, NAT_1, NEWTON, POWER, FINSEQ_1,
+      PRE_FF, GROUP_1, NAT_1, FIB_FUSC, ARYTM, AMI_5, SCMNORM, AFINSQ_1,
+      ALGSEQ_1;
+ notations XCMPLX_0, SUBSET_1, NUMBERS, INT_1, NAT_1, NEWTON, POWER,
+      ORDINAL4, AFINSQ_1,
+       FINSEQ_1,
       AMI_1, SCM_1, AMI_3, PRE_FF, XXREAL_0;
- constructors XXREAL_0, REAL_1, NAT_1, NEWTON, POWER, PRE_FF, SCM_1;
- registrations SETFAM_1, NUMBERS, XREAL_0, INT_1, AMI_3, XBOOLE_0, ORDINAL1;
+ constructors XXREAL_0, REAL_1, NAT_1, NEWTON, POWER, PRE_FF, SCM_1, AFINSQ_1,
+      ORDINAL4;
+ registrations SETFAM_1, NUMBERS, XREAL_0, INT_1, AMI_3, XBOOLE_0, ORDINAL1,
+      AMI_1, AFINSQ_1;
  requirements REAL, NUMERALS, SUBSET, ARITHM, BOOLE;
- definitions AMI_1;
+ definitions AMI_1, AFINSQ_1;
  theorems NAT_1, INT_1, POWER, NEWTON, SCM_1, PRE_FF, AMI_3, AMI_1, XREAL_1,
-      XXREAL_0, ORDINAL1;
+      XXREAL_0, ORDINAL1, AFINSQ_1;
  schemes NAT_1;
 
 begin
@@ -106,17 +111,18 @@ Lm15: dl.2<>dl.4 by AMI_3:52;
 Lm16: dl.3<>dl.4 by AMI_3:52;
 
 definition
-  func Fib_Program -> FinSequence of the Instructions of SCM equals
-  <* dl.1
->0_goto il.2 *>^ <* halt SCM *>^ <* dl.3 := dl.0 *>^ <* SubFrom(dl.1, dl.0) *>^
-<* dl.1 =0_goto il.1 *>^ <* dl.4 := dl.2 *>^ <* dl.2 := dl.3 *>^ <* AddTo(dl.3,
-  dl.4) *>^ <* goto il.3 *>;
+  func Fib_Program -> XFinSequence of the Instructions of SCM equals
+  <% dl.1
+>0_goto il.2 %>^ <% halt SCM %>^ <% dl.3 := dl.0 %>^ <% SubFrom(dl.1, dl.0) %>^
+<% dl.1 =0_goto il.1 %>^ <% dl.4 := dl.2 %>^ <% dl.2 := dl.3 %>^ <% AddTo(dl.3,
+  dl.4) %>^ <% goto il.3 %>;
   coherence;
 end;
 
 theorem
   for N being Element of NAT, s being State-consisting of 0, 0, 0,
-  Fib_Program, <*1*>^<*N*>^<*0*>^<*0*> holds s is halting & (N = 0 implies
+  Fib_Program, <*1*>^<*N*>^<*0*>^<*0*> holds ProgramPart s halts_on s &
+   (N = 0 implies
   LifeSpan s = 1) & (N > 0 implies LifeSpan s = 6 * N - 2) & (Result s).dl.3 =
   Fib N
 proof
@@ -243,7 +249,7 @@ A40: for k being Element of NAT holds P[k] from NAT_1:sch 1(A34, A13);
 A41: N = 0;
     then
 A42: s.(IC s1) = halt SCM by A1,A31,A32,A2,SCM_1:25;
-    hence s is halting by SCM_1:3;
+    hence ProgramPart s halts_on s by SCM_1:3;
     hereby
       assume
       N = 0;
@@ -268,7 +274,7 @@ A46: r.FC = Fib (k+1) by A40,A44;
       .= 0;
     then
 A47: IC t = L1 by A6,A45,SCM_1:24;
-    hence s is halting by A31,SCM_1:3;
+    hence ProgramPart s halts_on s by A31,SCM_1:3;
     thus N = 0 implies LifeSpan s = 1 by A43,NAT_1:5;
     hereby
       assume
@@ -307,17 +313,18 @@ definition
 end;
 
 definition
-  func Fusc_Program -> FinSequence of the Instructions of SCM equals
-  <* dl.1
-=0_goto il.8 *>^ <* dl.4 := dl.0 *>^ <* Divide(dl.1, dl.4) *>^ <* dl.4 =0_goto
-il.6 *>^ <* AddTo(dl.3, dl.2) *>^ <* goto il.0 *>^ <* AddTo(dl.2, dl.3) *>^ <*
-  goto il.0 *>^ <* halt SCM *>;
+  func Fusc_Program -> XFinSequence of the Instructions of SCM equals
+  <% dl.1
+=0_goto il.8 %>^ <% dl.4 := dl.0 %>^ <% Divide(dl.1, dl.4) %>^ <% dl.4 =0_goto
+il.6 %>^ <% AddTo(dl.3, dl.2) %>^ <% goto il.0 %>^ <% AddTo(dl.2, dl.3) %>^ <%
+  goto il.0 %>^ <% halt SCM %>;
   coherence;
 end;
 
 theorem
   for N being Element of NAT st N > 0 for s being State-consisting of 0,
-0, 0, Fusc_Program, <*2*>^<*N*>^<*1*>^<*0*> holds s is halting & (Result s).dl.
+0, 0, Fusc_Program, <*2*>^<*N*>^<*1*>^<*0*> holds ProgramPart s halts_on s &
+ (Result s).dl.
   3 = Fusc N & LifeSpan s = 6 * ([\ log(2, N) /] + 1) + 1
 proof
   set c2 = dl.0, n = dl.1, a = dl.2, b = dl.3, aux = dl.4;
@@ -536,7 +543,7 @@ A69: u.n = 0 by A3,NAT_1:2,PRE_FF:4;
 A70: IC h = L8 by A5,A67,SCM_1:24;
 A71: s.(IC u)<>halt SCM by A5,A67,SCM_1:26;
 A72: s.L8 = halt SCM by A4,SCM_1:14;
-  hence S is halting by A4,A70,SCM_1:3;
+  hence ProgramPart S halts_on S by A4,A70,SCM_1:3;
   u.a*Fusc' u.n + u.b*Fusc' (u.n+1) = u.a * 0 + u.b * Fusc' (u.n+1) by
   A69,Def2,PRE_FF:17
     .= u.b * Fusc (0+1) by A69,Def2
@@ -549,13 +556,15 @@ end;
 theorem
   for N being Element of NAT, k, Fk, Fk1 being Element of NAT, s being
 State-consisting of 3, 0, 0, Fib_Program, <* 1 *>^<* N *>^<* Fk *>^<* Fk1 *> st
-N > 0 & Fk = Fib k & Fk1 = Fib (k+1) holds s is halting & LifeSpan s = 6 * N -
+N > 0 & Fk = Fib k & Fk1 = Fib (k+1) holds ProgramPart s halts_on s &
+ LifeSpan s = 6 * N -
 4 & ex m being Element of NAT st m = k+N-1 & (Result s).dl.2 = Fib m & (Result
   s).dl.3 = Fib (m+1)
 proof
   defpred P[Element of NAT] means for k, Fk, Fk1 be Element of NAT, s be
   State-consisting of 3, 0, 0, Fib_Program, <* 1 *>^<* $1 *>^<* Fk *>^<* Fk1 *>
-st $1 > 0 & Fk = Fib k & Fk1 = Fib (k+1) holds s is halting & LifeSpan s = 6 *
+st $1 > 0 & Fk = Fib k & Fk1 = Fib (k+1) holds ProgramPart s halts_on s &
+ LifeSpan s = 6 *
 $1 - 4 & ex m being Element of NAT st m = k+$1-1 & (Result s).dl.2 = Fib m & (
   Result s).dl.3 = Fib (m+1);
 A1: for N be Element of NAT st P[N] holds P[N+1]
@@ -610,7 +619,7 @@ A22: s.il.8 = goto il.3 by SCM_1:14;
 A23:  N = 0;
       then
 A24:  s.(IC s2) = halt SCM by A8,A12,A19,A10,SCM_1:24;
-      hence s is halting by SCM_1:3;
+      hence ProgramPart s halts_on s by SCM_1:3;
       s.(IC s1) <> halt SCM by A12,A10,SCM_1:26;
       hence LifeSpan s = 6 * (N+1) - 4 by A23,A24,SCM_1:16;
       take m = k;
@@ -670,16 +679,19 @@ A43:  s6 is State-consisting of 3, 0, 0, Fib_Program, <* 1 *>^<* N *>^<*
 A44:  m = (k+1)+N-1 and
       (Result s6).dl.2 = Fib m and
       (Result s6).dl.3 = Fib (m+1) by A2,A5,A25;
-A45:  s6 is halting by A2,A5,A25,A43;
-      hence s is halting by AMI_1:93;
+A45:  ProgramPart s6 halts_on s6 by A2,A5,A25,A43;
+      then
+Y:     ProgramPart s halts_on s6 by AMI_1:144;
+      hence ProgramPart s halts_on s by AMI_1:93;
       LifeSpan s6 = 6 * N - 4 by A2,A5,A25,A43;
       hence LifeSpan s = 6 + (6 * N - 4) by A45,A26,SCM_1:28
         .= 6 * (N+1) - 4;
       take m;
       thus m = k+(N+1)-1 by A44;
+X:    Result s6 = Result s by SCM_1:29,A2,A5,A25,A43,Y;
       ex m being Element of NAT st m = (k+1)+N-1 & (Result s6).dl.2 = Fib
       m & (Result s6).dl.3 = Fib (m+1) by A2,A5,A25,A43;
-      hence thesis by A45,A44,SCM_1:29;
+      hence thesis by A45,A44,SCM_1:29,X;
     end;
   end;
 A46: P[0];
@@ -691,13 +703,15 @@ canceled;
 theorem Th5:
   for n being Element of NAT, N, A, B being Element of NAT, s being
   State-consisting of 0, 0, 0, Fusc_Program, <*2*>^<*n*>^<*A*>^<*B*> st N > 0 &
-  Fusc N = A * Fusc n + B * Fusc (n+1) holds s is halting & (Result s).dl.3 =
+  Fusc N = A * Fusc n + B * Fusc (n+1) holds ProgramPart s halts_on s &
+   (Result s).dl.3 =
   Fusc N & (n = 0 implies LifeSpan s = 1) & (n > 0 implies LifeSpan s = 6 * ([\
   log(2, n) /] + 1) + 1)
 proof
   defpred P[Nat] means for N, A, B being Element of NAT, s being
 State-consisting of 0, 0, 0, Fusc_Program, <*2*>^<*$1*>^<*A*>^<*B*> st N > 0 &
-  Fusc N = A * Fusc $1 + B * Fusc ($1+1) holds s is halting & (Result s).dl.3 =
+  Fusc N = A * Fusc $1 + B * Fusc ($1+1) holds ProgramPart s halts_on s &
+   (Result s).dl.3 =
 Fusc N & ($1 = 0 implies LifeSpan s = 1) & ($1 > 0 implies LifeSpan s = 6 * ([\
   log(2, $1) /] + 1)+1);
 A1: for k being Nat st for n being Nat st n < k holds P[n] holds P[k]
@@ -707,7 +721,8 @@ A1: for k being Nat st for n being Nat st n < k holds P[n] holds P[k]
     assume
 A2: for n' being Nat st n' < nn holds for N, A, B being Element of NAT
 , s being State-consisting of 0, 0, 0, Fusc_Program, <*2*>^<*n'*>^<*A*>^<*B*>
-st N > 0 & Fusc N = A * Fusc n' + B * Fusc (n'+1) holds s is halting & (Result
+st N > 0 & Fusc N = A * Fusc n' + B * Fusc (n'+1)
+ holds ProgramPart s halts_on s & (Result
 s).dl.3 = Fusc N & (n' = 0 implies LifeSpan s = 1) & (n' > 0 implies LifeSpan s
     = 6 * ([\ log(2, n') /] + 1)+1);
     reconsider n2 = nn as Element of NAT by ORDINAL1:def 13;
@@ -738,7 +753,7 @@ A14: now
 A15:  nn = 0;
       then
 A16:  s.(IC s1) = halt SCM by A6,A7,A5,A9,SCM_1:24;
-      hence s is halting by SCM_1:3;
+      hence ProgramPart s halts_on s by SCM_1:3;
       thus (Result s).b = s1.b by A16,SCM_1:4
         .= Fusc N by A4,A13,A15,PRE_FF:20;
       hereby
@@ -825,10 +840,13 @@ A52:    Fusc N = A * Fusc nn' + (B+A)*Fusc (nn'+1) by A4,A33,A34,A41,A50,
         then
 A53:    nn' > 0 implies LifeSpan s6 = 6 * ([\ log(2, nn') /] + 1)+1 by A2
         ,A3,A49,A51;
-A54:    s6 is halting by A2,A3,A49,A51,A52;
-        hence s is halting by AMI_1:93;
+A54:    ProgramPart s6 halts_on s6 by A2,A3,A49,A51,A52;
+        then
+Y:       ProgramPart s halts_on s6 by A2,A3,A49,A51,A52,AMI_1:144;
+        hence ProgramPart s halts_on s by AMI_1:93;
+X:      Result s6 = Result s by A54,SCM_1:29,Y;
         (Result s6).dl.3 = Fusc N by A2,A3,A49,A51,A52;
-        hence (Result s).dl.3 = Fusc N by A54,SCM_1:29;
+        hence (Result s).dl.3 = Fusc N by A54,SCM_1:29,X;
         thus nn = 0 implies LifeSpan s = 1 by A25;
 A55:    nn' = 0 implies LifeSpan s6 = 1 by A2,A3,A33,A34,A24,A41,A49,A52;
         thus nn > 0 implies LifeSpan s = 6 * ([\ log(2, nn) /] + 1)+1
@@ -887,10 +905,13 @@ A71:    s6 is State-consisting of 0, 0, 0, Fusc_Program, <*2*>^<*nn'*>^<*
 A72:    nn' < nn & Fusc N = (A+B)*Fusc nn' + B*Fusc (nn'+1) by A4,A25,A33
         ,A34,A24,A58,PRE_FF:18,22;
         then
-A73:    s6 is halting by A2,A3,A71;
-        hence s is halting by AMI_1:93;
+A73:    ProgramPart s6 halts_on s6 by A2,A3,A71;
+        then
+Y:       ProgramPart s halts_on s6 by AMI_1:144;
+        hence ProgramPart s halts_on s by AMI_1:93;
+X:      Result s6 = Result s by A73,SCM_1:29,Y;
         (Result s6).dl.3 = Fusc N by A2,A3,A71,A72;
-        hence (Result s).dl.3 = Fusc N by A73,SCM_1:29;
+        hence (Result s).dl.3 = Fusc N by A73,SCM_1:29,X;
         thus nn = 0 implies LifeSpan s = 1 by A25;
 A74:    nn' > 0 implies LifeSpan s6 = 6 * ([\ log(2, nn') /] + 1)+1 by
         A2,A3,A71,A72;
@@ -925,7 +946,8 @@ end;
 
 theorem
   for N being Element of NAT st N > 0 for s being State-consisting of 0,
-0, 0, Fusc_Program, <*2*>^<*N*>^<*1*>^<*0*> holds s is halting & (Result s).dl.
+0, 0, Fusc_Program, <*2*>^<*N*>^<*1*>^<*0*> holds ProgramPart s halts_on s &
+ (Result s).dl.
 3 = Fusc N & (N = 0 implies LifeSpan s = 1) & (N > 0 implies LifeSpan s = 6 * (
   [\ log(2, N) /] + 1)+1)
 proof

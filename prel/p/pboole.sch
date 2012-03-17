@@ -27,7 +27,7 @@
 <Func kind="F" nr="1"/>
 </Adjective>
 <Adjective nr="9"/>
-<Adjective nr="13">
+<Adjective nr="14">
 <Func kind="F" nr="1"/>
 </Adjective>
 </Cluster>
@@ -92,7 +92,7 @@
 <Func kind="F" nr="1"/>
 </Adjective>
 <Adjective nr="9"/>
-<Adjective nr="13">
+<Adjective nr="14">
 <Func kind="F" nr="1"/>
 </Adjective>
 </Cluster>
@@ -107,7 +107,7 @@
 <Func kind="F" nr="1"/>
 </Adjective>
 <Adjective nr="9"/>
-<Adjective nr="13">
+<Adjective nr="14">
 <Func kind="F" nr="1"/>
 </Adjective>
 </Cluster>
@@ -204,7 +204,7 @@
 <Func kind="F" nr="1"/>
 </Adjective>
 <Adjective nr="9"/>
-<Adjective nr="13">
+<Adjective nr="14">
 <Func kind="F" nr="1"/>
 </Adjective>
 </Cluster>
@@ -278,7 +278,7 @@
 <Func kind="F" nr="1"/>
 </Adjective>
 <Adjective nr="9"/>
-<Adjective nr="13">
+<Adjective nr="14">
 <Func kind="F" nr="1"/>
 </Adjective>
 </Cluster>
@@ -332,7 +332,7 @@
 <Func kind="F" nr="1"/>
 </Adjective>
 <Adjective nr="9"/>
-<Adjective nr="13">
+<Adjective nr="14">
 <Func kind="F" nr="1"/>
 </Adjective>
 </Cluster>
@@ -374,7 +374,7 @@
 <Func kind="F" nr="1"/>
 </Adjective>
 <Adjective nr="9"/>
-<Adjective nr="13">
+<Adjective nr="14">
 <Func kind="F" nr="1"/>
 </Adjective>
 </Cluster>

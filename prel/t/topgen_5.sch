@@ -41,7 +41,7 @@
 <Typ kind="M" nr="2">
 <Cluster>
 <Adjective nr="9"/>
-<Adjective nr="14">
+<Adjective nr="15">
 <Func kind="F" nr="3"/>
 <Func kind="F" nr="2"/>
 </Adjective>
@@ -200,7 +200,7 @@
 <Typ kind="M" nr="2">
 <Cluster>
 <Adjective nr="9"/>
-<Adjective nr="14">
+<Adjective nr="15">
 <Func kind="F" nr="3"/>
 <Func kind="F" nr="2"/>
 </Adjective>

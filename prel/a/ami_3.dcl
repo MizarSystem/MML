@@ -29,28 +29,24 @@
 <ArticleID name="AMI_1"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="INT_1"/>
-<ArticleID name="AMI_2"/>
 <ArticleID name="AMI_3"/>
 </Signature>
 <FCluster aid="AMI_3" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="277"/>
+<Func kind="K" nr="262"/>
 <Cluster>
-<Adjective nr="35" value="false"/>
-<Adjective nr="73">
-<Func kind="K" nr="264"/>
+<Adjective nr="36" value="false"/>
+<Adjective nr="74">
 <Func kind="K" nr="1">
 <Func kind="K" nr="67"/>
 </Func>
 </Adjective>
-<Adjective nr="74">
-<Func kind="K" nr="264"/>
+<Adjective nr="75">
 <Func kind="K" nr="1">
 <Func kind="K" nr="67"/>
 </Func>
 </Adjective>
 <Adjective nr="86">
-<Func kind="K" nr="264"/>
 <Func kind="K" nr="1">
 <Func kind="K" nr="67"/>
 </Func>
@@ -59,22 +55,19 @@
 </FCluster>
 <FCluster aid="AMI_3" nr="2">
 <ArgTypes/>
-<Func kind="K" nr="277"/>
+<Func kind="K" nr="262"/>
 <Cluster>
-<Adjective nr="73">
-<Func kind="K" nr="264"/>
+<Adjective nr="74">
 <Func kind="K" nr="1">
 <Func kind="K" nr="67"/>
 </Func>
 </Adjective>
-<Adjective nr="77">
-<Func kind="K" nr="264"/>
+<Adjective nr="78">
 <Func kind="K" nr="1">
 <Func kind="K" nr="67"/>
 </Func>
 </Adjective>
-<Adjective nr="79">
-<Func kind="K" nr="264"/>
+<Adjective nr="80">
 <Func kind="K" nr="1">
 <Func kind="K" nr="67"/>
 </Func>
@@ -83,16 +76,14 @@
 </FCluster>
 <FCluster aid="AMI_3" nr="3">
 <ArgTypes/>
-<Func kind="K" nr="277"/>
+<Func kind="K" nr="262"/>
 <Cluster>
-<Adjective nr="73">
-<Func kind="K" nr="264"/>
+<Adjective nr="74">
 <Func kind="K" nr="1">
 <Func kind="K" nr="67"/>
 </Func>
 </Adjective>
-<Adjective nr="76">
-<Func kind="K" nr="264"/>
+<Adjective nr="77">
 <Func kind="K" nr="1">
 <Func kind="K" nr="67"/>
 </Func>
@@ -101,41 +92,23 @@
 </FCluster>
 <FCluster aid="AMI_3" nr="4">
 <ArgTypes/>
-<Func kind="K" nr="277"/>
+<Func kind="K" nr="262"/>
 <Cluster>
-<Adjective nr="73">
-<Func kind="K" nr="264"/>
+<Adjective nr="74">
 <Func kind="K" nr="1">
 <Func kind="K" nr="67"/>
 </Func>
 </Adjective>
-<Adjective nr="78">
-<Func kind="K" nr="264"/>
+<Adjective nr="79">
 <Func kind="K" nr="1">
 <Func kind="K" nr="67"/>
 </Func>
 </Adjective>
 <Adjective nr="81">
-<Func kind="K" nr="264"/>
 <Func kind="K" nr="1">
 <Func kind="K" nr="67"/>
 </Func>
 </Adjective>
 </Cluster>
 </FCluster>
-<CCluster aid="AMI_3" nr="1">
-<ArgTypes/>
-<Cluster/>
-<Typ kind="M" nr="20">
-<Cluster/>
-<Func kind="K" nr="264"/>
-<Func kind="K" nr="1">
-<Func kind="K" nr="67"/>
-</Func>
-<Func kind="K" nr="277"/>
-</Typ>
-<Cluster>
-<Adjective nr="19"/>
-</Cluster>
-</CCluster>
 </Registrations>

@@ -26,7 +26,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="55"/>
+<Adjective nr="56"/>
 </Cluster>
 </RCluster>
 <RCluster aid="CAT_1" nr="2">
@@ -35,8 +35,8 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="35" value="false"/>
-<Adjective nr="44" value="false"/>
+<Adjective nr="36" value="false"/>
+<Adjective nr="45" value="false"/>
 </Cluster>
 </RCluster>
 <RCluster aid="CAT_1" nr="3">
@@ -45,10 +45,10 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="35" value="false"/>
-<Adjective nr="44" value="false"/>
-<Adjective nr="55"/>
+<Adjective nr="36" value="false"/>
+<Adjective nr="45" value="false"/>
 <Adjective nr="56"/>
+<Adjective nr="57"/>
 </Cluster>
 </RCluster>
 </Registrations>

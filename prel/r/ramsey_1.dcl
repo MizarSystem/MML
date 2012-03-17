@@ -33,12 +33,12 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="21"/>
+<Adjective nr="22"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="28" value="false"/>
+<Adjective nr="29" value="false"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -54,7 +54,7 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="28" value="false"/>
+<Adjective nr="29" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -66,19 +66,19 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="28" value="false"/>
+<Adjective nr="29" value="false"/>
 </Cluster>
 </FCluster>
 <FCluster aid="RAMSEY_1" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="28" value="false"/>
+<Adjective nr="29" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="28"/>
+<Adjective nr="29"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -87,7 +87,7 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="28" value="false"/>
+<Adjective nr="29" value="false"/>
 </Cluster>
 </FCluster>
 </Registrations>

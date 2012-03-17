@@ -36,13 +36,13 @@
 <ArgTypes>
 <Typ kind="G" nr="12">
 <Cluster>
-<Adjective nr="43"/>
-<Adjective nr="59"/>
+<Adjective nr="44"/>
 <Adjective nr="60"/>
 <Adjective nr="61"/>
-<Adjective nr="126"/>
+<Adjective nr="62"/>
 <Adjective nr="127"/>
-<Adjective nr="147"/>
+<Adjective nr="128"/>
+<Adjective nr="148"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">

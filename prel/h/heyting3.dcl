@@ -40,8 +40,8 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="23"/>
-<Adjective nr="44" value="false"/>
+<Adjective nr="24"/>
+<Adjective nr="45" value="false"/>
 </Cluster>
 </RCluster>
 <RCluster aid="HEYTING3" nr="2">
@@ -50,8 +50,8 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="23"/>
-<Adjective nr="44"/>
+<Adjective nr="24"/>
+<Adjective nr="45"/>
 </Cluster>
 </RCluster>
 <RCluster aid="HEYTING3" nr="3">
@@ -74,7 +74,7 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="10" value="false"/>
+<Adjective nr="11" value="false"/>
 </Cluster>
 </RCluster>
 <FCluster aid="HEYTING3" nr="1">
@@ -110,8 +110,8 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="89"/>
 <Adjective nr="90"/>
+<Adjective nr="91"/>
 </Cluster>
 </FCluster>
 <FCluster aid="HEYTING3" nr="3">
@@ -128,9 +128,9 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="63"/>
 <Adjective nr="64"/>
 <Adjective nr="65"/>
+<Adjective nr="66"/>
 </Cluster>
 </FCluster>
 <FCluster aid="HEYTING3" nr="4">
@@ -149,7 +149,7 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="33"/>
+<Adjective nr="34"/>
 </Cluster>
 </FCluster>
 <FCluster aid="HEYTING3" nr="5">
@@ -168,7 +168,7 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="33"/>
+<Adjective nr="34"/>
 </Cluster>
 </FCluster>
 <FCluster aid="HEYTING3" nr="6">
@@ -187,7 +187,7 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="10" value="false"/>
+<Adjective nr="11" value="false"/>
 </Cluster>
 </FCluster>
 <FCluster aid="HEYTING3" nr="7">
@@ -202,7 +202,7 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="10" value="false"/>
+<Adjective nr="11" value="false"/>
 </Cluster>
 </FCluster>
 <FCluster aid="HEYTING3" nr="8">
@@ -220,7 +220,7 @@
 </Func>
 </Func>
 <Cluster>
-<Adjective nr="91" value="false"/>
+<Adjective nr="92" value="false"/>
 </Cluster>
 </FCluster>
 <FCluster aid="HEYTING3" nr="9">
@@ -238,8 +238,8 @@
 </Func>
 </Func>
 <Cluster>
-<Adjective nr="69"/>
-<Adjective nr="92" value="false"/>
+<Adjective nr="70"/>
+<Adjective nr="93" value="false"/>
 </Cluster>
 </FCluster>
 </Registrations>

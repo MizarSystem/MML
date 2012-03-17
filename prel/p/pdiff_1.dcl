@@ -49,13 +49,13 @@
 </Func>
 <Cluster>
 <Adjective nr="6"/>
-<Adjective nr="23">
+<Adjective nr="24">
 <Func kind="K" nr="311">
 <Num nr="1"/>
 </Func>
 <Func kind="K" nr="44"/>
 </Adjective>
-<Adjective nr="25">
+<Adjective nr="26">
 <Func kind="K" nr="311">
 <Num nr="1"/>
 </Func>

@@ -63,21 +63,21 @@
 </Adjective>
 <Adjective nr="6"/>
 <Adjective nr="8" value="false"/>
-<Adjective nr="10" value="false"/>
-<Adjective nr="25"/>
-<Adjective nr="31"/>
+<Adjective nr="11" value="false"/>
+<Adjective nr="26"/>
 <Adjective nr="32"/>
-<Adjective nr="37">
+<Adjective nr="33"/>
+<Adjective nr="38">
 <Func kind="U" nr="1">
 <Func kind="K" nr="291">
 <Num nr="2"/>
 </Func>
 </Func>
 </Adjective>
-<Adjective nr="150"/>
 <Adjective nr="151"/>
-<Adjective nr="155"/>
+<Adjective nr="152"/>
 <Adjective nr="156"/>
+<Adjective nr="157"/>
 </Cluster>
 </RCluster>
 </Registrations>

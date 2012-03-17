@@ -653,4 +653,18 @@
 <Adjective nr="4"/>
 </Cluster>
 </CCluster>
+<CCluster aid="RELAT_1" nr="5">
+<ArgTypes/>
+<Cluster>
+<Adjective nr="1"/>
+<Adjective nr="4"/>
+</Cluster>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+<Cluster>
+<Adjective nr="4"/>
+<Adjective nr="5"/>
+</Cluster>
+</CCluster>
 </Registrations>

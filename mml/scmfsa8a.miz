@@ -11,12 +11,13 @@ environ
       AMI_5, RELOC, SCMFSA_7, FINSEQ_1, UNIALG_2, SCMFSA8A, CARD_3, ARYTM,
       AMISTD_2, SCMNORM;
  notations TARSKI, XBOOLE_0, SUBSET_1, CARD_1, NUMBERS, NAT_1, FUNCOP_1,
-      RELAT_1, FUNCT_1, FUNCT_4, FUNCT_7, FINSEQ_1, STRUCT_0, AMI_1, SCMNORM,
+      RELAT_1, FUNCT_1, FUNCT_4, FUNCT_7, FINSEQ_1, VALUED_1,
+      STRUCT_0, AMI_1, SCMNORM,
       SCMFSA_2, SCMFSA_4, SCMFSA_5, SCMFSA_7, SCMFSA6A, SF_MASTR, SCMFSA6B,
       SCMFSA6C, SCMFSA7B, XXREAL_0;
  constructors PARTFUN1, DOMAIN_1, XXREAL_0, NAT_1, SCMFSA_5, SCMFSA_7,
       SCMFSA6A, SF_MASTR, SCMFSA6B, SCMFSA6C, SCMFSA7B, SCMNORM, SCMFSA_4,
-      AFINSQ_1, RELSET_1, PRE_POLY;
+      AFINSQ_1, RELSET_1, PRE_POLY, SCMFSA_1;
  registrations XBOOLE_0, SETFAM_1, FUNCT_1, RELSET_1, FUNCOP_1, NUMBERS,
       XXREAL_0, MEMBERED, CARD_3, AMI_1, SCMFSA_2, SCMFSA6A, SF_MASTR,
       SCMFSA7B, FINSET_1, SCMNORM, ORDINAL1, FINSEQ_1, VALUED_1;
@@ -46,12 +47,12 @@ proof
 end;
 
 theorem Th4:
-  for s being State of SCM+FSA st s is halting for k being Element
+  for s being State of SCM+FSA st ProgramPart s halts_on s for k being Element
   of NAT st LifeSpan s <= k holds CurInstr Computation(s,k) = halt SCM+FSA
 proof
   let s be State of SCM+FSA;
   assume
-  s is halting;
+  ProgramPart s halts_on s;
   then
 A1: CurInstr Computation(s,LifeSpan s) = halt SCM+FSA by AMI_1:def 46;
   let k be Element of NAT;
@@ -61,7 +62,7 @@ A1: CurInstr Computation(s,LifeSpan s) = halt SCM+FSA by AMI_1:def 46;
 end;
 
 theorem Th5:
-  for s being State of SCM+FSA st s is halting for k being Element
+  for s being State of SCM+FSA st ProgramPart s halts_on s for k being Element
 of NAT st LifeSpan s <= k holds IC Computation(s,k) = IC Computation(s,LifeSpan
   s)
 proof
@@ -69,7 +70,7 @@ proof
   defpred P[Element of NAT] means LifeSpan s <= $1 implies IC Computation(s,$1
   ) = IC Computation(s,LifeSpan s);
   assume
-A1: s is halting;
+A1: ProgramPart s halts_on s;
 A2: now
     let k be Element of NAT;
     assume
@@ -989,7 +990,7 @@ A6: CurInstr Computation(s2,k) in rng Directed I by A4,FUNCT_1:def 5;
     hence contradiction by A6,SCMFSA6A:18;
   end;
   now
-A7: s1 is halting by A2,SCMFSA7B:def 8;
+A7: ProgramPart s1 halts_on s1 by A2,SCMFSA7B:def 8;
 A8: dom I c= dom Directed I by FUNCT_4:105;
     let k be Element of NAT;
     assume
@@ -1056,7 +1057,7 @@ proof
   assume that
 A1: I is_closed_on s and
 A2: I is_halting_on s;
-A3: s1 is halting by A2,SCMFSA7B:def 8;
+A3: ProgramPart s1 halts_on s1 by A2,SCMFSA7B:def 8;
   set l1 = IC Computation( s1,m1);
 A4: l1 in dom I by A1,SCMFSA7B:def 7;
   then IC Computation( s2,m1) in dom I by A1,A2,Th35,AMI_1:121;
@@ -1335,7 +1336,7 @@ A6: CurInstr Computation(s2,k) in rng Directed I by A5,FUNCT_1:def 5;
   assume
 A7: I is_halting_on Initialize s;
   now
-A8: s1 is halting by A7,A1,SCMFSA7B:def 8;
+A8: ProgramPart s1 halts_on s1 by A7,A1,SCMFSA7B:def 8;
 A9: dom I c= dom Directed I by FUNCT_4:105;
     let k be Element of NAT;
     assume
@@ -1413,7 +1414,7 @@ A6: I is_halting_on Initialize s;
   then IC Computation( s2,m1) in dom I by A1,A5,Th44,AMI_1:121;
   then
 A7: IC Computation( s2,m1) in dom Directed I by FUNCT_4:105;
-A8: s1 is halting by A6,A4,SCMFSA7B:def 8;
+A8: ProgramPart s1 halts_on s1 by A6,A4,SCMFSA7B:def 8;
   I c= Initialized I by SCMFSA6A:26;
   then dom I c= dom Initialized I by GRFUNC_1:8;
   then s1.l1 = (Initialized I).l1 by A5,FUNCT_4:14;
@@ -1446,7 +1447,9 @@ SCM+FSA) +* Start-At insloc 0)), (LifeSpan (s +* (I +* Start-At insloc 0)) + 1)
 ) = insloc card I & DataPart Computation( (s +* (I +* Start-At insloc 0)), (
 LifeSpan (s +* (I +* Start-At insloc 0)))) = DataPart Computation( (s +* ((I
 ';' Stop SCM+FSA) +* Start-At insloc 0)), (LifeSpan (s +* (I +* Start-At insloc
-0)) + 1)) & s +* ((I ';' Stop SCM+FSA) +* Start-At insloc 0) is halting &
+0)) + 1)) &
+ ProgramPart(s +* ((I ';' Stop SCM+FSA) +* Start-At insloc 0))
+  halts_on s +* ((I ';' Stop SCM+FSA) +* Start-At insloc 0) &
 LifeSpan (s +* ((I ';' Stop SCM+FSA) +* Start-At insloc 0)) = LifeSpan (s +* (I
 +* Start-At insloc 0)) + 1 & I ';' Stop SCM+FSA is_closed_on s & I ';' Stop
 SCM+FSA is_halting_on s
@@ -1515,7 +1518,7 @@ A9: CurInstr Computation( s2,LifeSpan s1 + 1) = Computation( s2,LifeSpan s1
 
     .= halt SCM+FSA by A8,AMI_1:54;
   hence
-A10: s2 is halting by AMI_1:def 20;
+A10: ProgramPart s2 halts_on s2 by AMI_1:146;
 A11: now
     let k be Element of NAT;
     assume
@@ -1610,8 +1613,10 @@ is_closed_on Initialize s & I is_halting_on Initialize s holds IC Computation(
 (s +* Initialized (I ';' Stop SCM+FSA)), (LifeSpan (s +* Initialized I) + 1)) =
 insloc card I & DataPart Computation( (s +* Initialized I),LifeSpan (s +*
 Initialized I)) = DataPart Computation( (s +* Initialized (I ';' Stop SCM+FSA))
-, (LifeSpan (s +* Initialized I) + 1)) & s +* Initialized (I ';' Stop SCM+FSA)
-is halting & LifeSpan (s +* Initialized (I ';' Stop SCM+FSA)) = LifeSpan (s +*
+, (LifeSpan (s +* Initialized I) + 1)) &
+ ProgramPart(s +* Initialized (I ';' Stop SCM+FSA))
+   halts_on s +* Initialized (I ';' Stop SCM+FSA) &
+ LifeSpan (s +* Initialized (I ';' Stop SCM+FSA)) = LifeSpan (s +*
 Initialized I) + 1
 
 proof
@@ -1677,7 +1682,7 @@ A9: CurInstr Computation( s2,LifeSpan s1 + 1) = Computation( s2,LifeSpan s1
 
     .= halt SCM+FSA by A8,AMI_1:54;
   hence
-A10: s2 is halting by AMI_1:def 20;
+A10: ProgramPart s2 halts_on s2 by AMI_1:146;
   now
     let k be Element of NAT;
     assume
@@ -1714,8 +1719,9 @@ theorem
 
 theorem
   for I being Program of SCM+FSA, s being State of SCM+FSA st I
-is_closed_on Initialize s & I is_halting_on Initialize s holds s +* Initialized
-  (I ';' Stop SCM+FSA) is halting by Lm4;
+is_closed_on Initialize s & I is_halting_on Initialize s
+ holds ProgramPart(s +* Initialized(I ';' Stop SCM+FSA))
+  halts_on s +* Initialized(I ';' Stop SCM+FSA) by Lm4;
 
 theorem
   for I being Program of SCM+FSA, s being State of SCM+FSA st I
@@ -1737,8 +1743,8 @@ A1: I is_closed_on Initialize s;
 A2: I is_halting_on Initialize s;
   s1 = Initialize s +* (I +* Start-At insloc 0) by Th13;
   then
-A3: s1 is halting by A2,SCMFSA7B:def 8;
-  s2 is halting & LifeSpan s2 = LifeSpan s1 + 1 by A1,A2,Lm4;
+A3: ProgramPart s1 halts_on s1 by A2,SCMFSA7B:def 8;
+  ProgramPart s2 halts_on s2 & LifeSpan s2 = LifeSpan s1 + 1 by A1,A2,Lm4;
   then
 A4: Result s2 = Computation( s2,LifeSpan s1 + 1) by AMI_1:122;
   then DataPart Result s2 = DataPart Computation( s1,LifeSpan s1) by A1,A2,Lm4;
@@ -1776,8 +1782,13 @@ holds IC Computation( (s +* (I ';' Goto insloc (card J + 1) ';' J ';' Stop
 SCM+FSA +* Start-At insloc 0)),k) = IC Computation( (s +* (I +* Start-At insloc
 0)),k)) & IC Computation( (s +* (I ';' Goto insloc (card J + 1) ';' J ';' Stop
 SCM+FSA +* Start-At insloc 0)), (LifeSpan (s +* (I +* Start-At insloc 0)) + 1))
-= insloc card I & s +* (I ';' Goto insloc (card J + 1) ';' J ';' Stop SCM+FSA
-+* Start-At insloc 0) is halting & LifeSpan (s +* (I ';' Goto insloc (card J +
+= insloc card I &
+ ProgramPart(s +* (I ';' Goto insloc (card J + 1) ';' J ';' Stop SCM+FSA
++* Start-At insloc 0))
+ halts_on s +* (I ';' Goto insloc (card J + 1) ';' J ';' Stop SCM+FSA
++* Start-At insloc 0)
+ &
+ LifeSpan (s +* (I ';' Goto insloc (card J +
 1) ';' J ';' Stop SCM+FSA +* Start-At insloc 0)) = LifeSpan (s +* (I +*
 Start-At insloc 0)) + 2
 
@@ -2010,7 +2021,7 @@ A38: k <= LifeSpan s1;
   end;
   thus IC Computation( s2,LifeSpan s1 + 1) = insloc card I by A1,A7,A28,Th36;
   thus
-A39: s2 is halting by A31,AMI_1:def 20;
+A39: ProgramPart s2 halts_on s2 by A31,AMI_1:146;
 
   for k be Element of NAT st CurInstr Computation( s2,k) = halt SCM+FSA
   holds LifeSpan s1 + 2 <= k by A32;
@@ -2035,7 +2046,7 @@ A1: I is_closed_on s;
   assume
 A2: I is_halting_on s;
   then
-A3: s2 is halting by A1,Lm5;
+A3: ProgramPart s2 halts_on s2 by A1,Lm5;
 A4: LifeSpan s2 = LifeSpan s1 + 2 by A1,A2,Lm5;
   now
     let k be Element of NAT;
@@ -2088,8 +2099,11 @@ end;
 
 theorem
   for I,J being Program of SCM+FSA, s being State of SCM+FSA st I
-  is_closed_on s & I is_halting_on s holds s +* (I ';' Goto insloc (card J + 1)
-  ';' J ';' Stop SCM+FSA +* Start-At insloc 0) is halting by Lm5;
+  is_closed_on s & I is_halting_on s
+   holds ProgramPart(s +* (I ';' Goto insloc (card J + 1)
+  ';' J ';' Stop SCM+FSA +* Start-At insloc 0))
+   halts_on s +* (I ';' Goto insloc (card J + 1)
+  ';' J ';' Stop SCM+FSA +* Start-At insloc 0) by Lm5;
 
 Lm6: for I,J being Program of SCM+FSA, s being State of SCM+FSA st I
 is_closed_on Initialize s & I is_halting_on Initialize s holds IC Computation(
@@ -2104,8 +2118,12 @@ SCM+FSA) & (for k being Element of NAT st k <= LifeSpan (s +* Initialized I)
 holds IC Computation( (s +* Initialized (I ';' Goto insloc (card J + 1) ';' J
 ';' Stop SCM+FSA)),k) = IC Computation( (s +* Initialized I),k)) & IC
 Computation( (s +* Initialized (I ';' Goto insloc (card J + 1) ';' J ';' Stop
-SCM+FSA)),LifeSpan (s +* Initialized I) + 1) = insloc card I & s +* Initialized
-(I ';' Goto insloc (card J + 1) ';' J ';' Stop SCM+FSA) is halting & LifeSpan (
+SCM+FSA)),LifeSpan (s +* Initialized I) + 1) = insloc card I &
+ ProgramPart(s +* Initialized
+(I ';' Goto insloc (card J + 1) ';' J ';' Stop SCM+FSA))
+ halts_on s +* Initialized
+(I ';' Goto insloc (card J + 1) ';' J ';' Stop SCM+FSA)
+ & LifeSpan (
 s +* Initialized (I ';' Goto insloc (card J + 1) ';' J ';' Stop SCM+FSA)) =
 LifeSpan (s +* Initialized I) + 2
 
@@ -2336,7 +2354,7 @@ A38: k <= LifeSpan s1;
   end;
   thus IC Computation( s2,LifeSpan s1 + 1) = insloc card I by A1,A7,A28,Th45;
   thus
-A39: s2 is halting by A31,AMI_1:def 20;
+A39: ProgramPart s2 halts_on s2 by A31,AMI_1:146;
 
   for k be Element of NAT st CurInstr Computation( s2,k) = halt SCM+FSA
   holds LifeSpan s1 + 2 <= k by A32;
@@ -2346,8 +2364,11 @@ end;
 
 theorem
   for I,J being Program of SCM+FSA, s being State of SCM+FSA st I
-is_closed_on Initialize s & I is_halting_on Initialize s holds s +* Initialized
-  (I ';' Goto insloc (card J + 1) ';' J ';' Stop SCM+FSA) is halting by Lm6;
+is_closed_on Initialize s & I is_halting_on Initialize s
+ holds ProgramPart(s +* Initialized
+  (I ';' Goto insloc (card J + 1) ';' J ';' Stop SCM+FSA))
+   halts_on s +* Initialized
+  (I ';' Goto insloc (card J + 1) ';' J ';' Stop SCM+FSA) by Lm6;
 
 theorem
   for I,J being Program of SCM+FSA, s being State of SCM+FSA st I
@@ -2361,7 +2382,8 @@ proof
   SCM+FSA);
   assume
 A1: I is_closed_on Initialize s & I is_halting_on Initialize s;
-  then s2 is halting & LifeSpan s2 = LifeSpan (s +* Initialized I) + 2 by Lm6;
+  then ProgramPart s2 halts_on s2 & LifeSpan s2
+   = LifeSpan (s +* Initialized I) + 2 by Lm6;
   then
   IC Result s2 = IC Computation( s2,LifeSpan (s +* Initialized I) + 2) by
 AMI_1:122
@@ -2385,8 +2407,8 @@ A1: I is_closed_on Initialize s and
 A2: I is_halting_on Initialize s;
   s1 = Initialize s +* (I +* Start-At insloc 0) by Th13;
   then
-A3: s1 is halting by A2,SCMFSA7B:def 8;
-  s2 is halting & LifeSpan s2 = LifeSpan s1 + 2 by A1,A2,Lm6;
+A3: ProgramPart s1 halts_on s1 by A2,SCMFSA7B:def 8;
+  ProgramPart s2 halts_on s2 & LifeSpan s2 = LifeSpan s1 + 2 by A1,A2,Lm6;
   then
 A4: Result s2 = Computation( s2,LifeSpan s1 + 2) by AMI_1:122;
   then DataPart Result s2 = DataPart Computation( s1,LifeSpan s1) by A1,A2,Lm6;

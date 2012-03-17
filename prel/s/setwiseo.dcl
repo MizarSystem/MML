@@ -23,15 +23,15 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="10"/>
-<Adjective nr="13"/>
+<Adjective nr="11"/>
+<Adjective nr="14"/>
 </Cluster>
 </RCluster>
 <RCluster aid="SETWISEO" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="10" value="false"/>
+<Adjective nr="11" value="false"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -42,8 +42,8 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="10" value="false"/>
-<Adjective nr="13"/>
+<Adjective nr="11" value="false"/>
+<Adjective nr="14"/>
 </Cluster>
 </RCluster>
 </Registrations>

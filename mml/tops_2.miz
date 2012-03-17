@@ -201,12 +201,10 @@ definition
   let T be TopStruct, F be Subset-Family of T;
   attr F is open means
   :Def1:
-  for P being Subset of T holds P in F implies P
-  is open;
+  for P being Subset of T holds P in F implies P is open;
   attr F is closed means
   :Def2:
-  for P being Subset of T holds P in F implies P
-  is closed;
+  for P being Subset of T holds P in F implies P is closed;
 end;
 
 canceled 2;
@@ -379,12 +377,8 @@ A9: 1 <= n;
 A10: now
       reconsider G2 = Im(p,k+1) as Subset-Family of GX by A3,Th3,RELAT_1:144;
       reconsider G1 = p.:(Seg k) as Subset-Family of GX by A3,Th3,RELAT_1:144;
-A11:  0+1 = 1;
       assume
-      0 < k;
-      then 1 <= k by A11,NAT_1:13;
-      then
-A12:  Seg k <> {} by FINSEQ_1:3;
+A12:  0 < k;
       k+1 <= n+1 by A8,NAT_1:12;
       then k <= n by XREAL_1:8;
       then Seg k c= dom p by A4,FINSEQ_1:7;
@@ -431,7 +425,7 @@ A21: X[0]
 A22: Z = p.:(Seg 0) and
     0 <= n;
 A23: {} in the topology of GX by PRE_TOPC:5;
-    meet Z = {} by A22,FINSEQ_1:4,RELAT_1:149,SETFAM_1:2;
+    meet Z = {} by A22,RELAT_1:149,SETFAM_1:2;
     hence thesis by A23,PRE_TOPC:def 5;
   end;
 A24: for k be Nat holds X[k] from NAT_1:sch 2(A21,A5);
@@ -445,7 +439,7 @@ A27: now
     assume
     n = 0;
     then Seg n = {};
-    then W = p.:{} by A3,A4,FINSEQ_1:4,RELAT_1:146;
+    then W = p.:{} by A3,A4,RELAT_1:146;
     then
 A28: meet W = {} by RELAT_1:149,SETFAM_1:2;
     {} in the topology of GX by PRE_TOPC:5;
@@ -561,8 +555,7 @@ A1: Q is open;
 end;
 
 theorem Th34:
-  Q is closed implies for P being Subset of A st P=Q holds P is
-  closed
+  Q is closed implies for P being Subset of A st P=Q holds P is closed
 proof
   assume
 A1: Q is closed;
@@ -574,8 +567,7 @@ A1: Q is closed;
 end;
 
 theorem
-  F is open implies for G being Subset-Family of A st G=F holds G is
-  open
+  F is open implies for G being Subset-Family of A st G=F holds G is open
 proof
   assume
 A1: F is open;
@@ -590,8 +582,7 @@ A3: P in G;
 end;
 
 theorem
-  F is closed implies for G being Subset-Family of A st G=F holds G is
-  closed
+  F is closed implies for G being Subset-Family of A st G=F holds G is closed
 proof
   assume
 A1: F is closed;
@@ -1622,3 +1613,65 @@ A13: f"A <> {}(GY) by RELAT_1:173;
   hence thesis by CONNSP_1:12;
 end;
 
+:: Added by AK, 2009.09.20
+
+theorem Th1:
+  for X being TopStruct, F being Subset-Family of X holds
+  F is open iff F c= the topology of X
+  proof
+    let X be TopStruct, F be Subset-Family of X;
+    thus F is open implies F c= the topology of X
+    proof
+      assume
+A1:   F is open;
+      let A be set;
+      assume
+A2:   A in F;
+      then reconsider A as Subset of X;
+      A is open by A1,A2,Def1;
+      hence thesis by PRE_TOPC:def 5;
+    end;
+    assume
+A3: F c= the topology of X;
+    let A be Subset of X;
+    thus thesis by A3,PRE_TOPC:def 5;
+  end;
+
+theorem
+  for X being TopStruct, F being Subset-Family of X holds
+  F is closed iff F c= COMPLEMENT the topology of X
+  proof
+    let X be TopStruct, F be Subset-Family of X;
+    thus F is closed implies F c= COMPLEMENT the topology of X
+    proof
+      assume
+A1:   F is closed;
+      let A be set;
+      assume
+A2:   A in F;
+      then reconsider A as Subset of X;
+      A is closed by A1,A2,Def2;
+      then A` is open by TOPS_1:29;
+      then A` in the topology of X by PRE_TOPC:def 5;
+      hence thesis by SETFAM_1:def 8;
+    end;
+    assume
+A3: F c= COMPLEMENT the topology of X;
+    let A be Subset of X;
+    assume A in F;
+    then A` in the topology of X by A3,SETFAM_1:def 8;
+    then A` is open by PRE_TOPC:def 5;
+    hence thesis by TOPS_1:29;
+  end;
+
+registration
+  let X be TopStruct;
+  cluster the topology of X -> open;
+  coherence by Th1;
+  cluster open Subset-Family of X;
+  existence
+  proof
+    take the topology of X;
+    thus thesis;
+  end;
+end;

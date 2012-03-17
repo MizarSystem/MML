@@ -64,8 +64,8 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="61" value="false"/>
-<Adjective nr="72"/>
+<Adjective nr="62" value="false"/>
+<Adjective nr="73"/>
 </Cluster>
 </FCluster>
 <FCluster aid="COMPLSP1" nr="3">
@@ -79,9 +79,9 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="61" value="false"/>
-<Adjective nr="72"/>
+<Adjective nr="62" value="false"/>
 <Adjective nr="73"/>
+<Adjective nr="74"/>
 </Cluster>
 </FCluster>
 </Registrations>

@@ -40,7 +40,7 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="19"/>
+<Adjective nr="20"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -48,8 +48,8 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="55"/>
-<Adjective nr="142"/>
+<Adjective nr="56"/>
+<Adjective nr="143"/>
 </Cluster>
 </FCluster>
 <FCluster aid="TOPREAL1" nr="2">
@@ -135,7 +135,7 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="19"/>
+<Adjective nr="20"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -156,7 +156,7 @@
 <CCluster aid="TOPREAL1" nr="2">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="151"/>
+<Adjective nr="152"/>
 </Cluster>
 <Typ kind="M" nr="2">
 <Cluster/>

@@ -29,10 +29,10 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="36" value="false"/>
-<Adjective nr="41" value="false"/>
-<Adjective nr="89"/>
-<Adjective nr="92"/>
+<Adjective nr="37" value="false"/>
+<Adjective nr="42" value="false"/>
+<Adjective nr="90"/>
+<Adjective nr="93"/>
 </Cluster>
 </RCluster>
 <FCluster aid="AFVECT01" nr="1">
@@ -63,8 +63,8 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="36" value="false"/>
-<Adjective nr="89"/>
+<Adjective nr="37" value="false"/>
+<Adjective nr="90"/>
 </Cluster>
 </FCluster>
 </Registrations>

@@ -21,10 +21,10 @@
 <Func kind="K" nr="44"/>
 </Typ>
 <Cluster>
-<Adjective nr="20"/>
 <Adjective nr="21"/>
 <Adjective nr="22"/>
-<Adjective nr="24"/>
+<Adjective nr="23"/>
+<Adjective nr="25"/>
 </Cluster>
 </RCluster>
 <CCluster aid="REAL_1" nr="1">
@@ -35,7 +35,7 @@
 <Func kind="K" nr="44"/>
 </Typ>
 <Cluster>
-<Adjective nr="24"/>
+<Adjective nr="25"/>
 </Cluster>
 </CCluster>
 </Registrations>

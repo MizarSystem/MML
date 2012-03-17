@@ -25,10 +25,10 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="23"/>
 <Adjective nr="24"/>
 <Adjective nr="25"/>
-<Adjective nr="35"/>
+<Adjective nr="26"/>
+<Adjective nr="36"/>
 </Cluster>
 </RCluster>
 <RCluster aid="MEASURE5" nr="2">
@@ -40,10 +40,10 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="23"/>
 <Adjective nr="24"/>
 <Adjective nr="25"/>
-<Adjective nr="36"/>
+<Adjective nr="26"/>
+<Adjective nr="37"/>
 </Cluster>
 </RCluster>
 <RCluster aid="MEASURE5" nr="3">
@@ -55,10 +55,10 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="23"/>
 <Adjective nr="24"/>
 <Adjective nr="25"/>
-<Adjective nr="37"/>
+<Adjective nr="26"/>
+<Adjective nr="38"/>
 </Cluster>
 </RCluster>
 <RCluster aid="MEASURE5" nr="4">
@@ -70,28 +70,13 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="23"/>
 <Adjective nr="24"/>
 <Adjective nr="25"/>
-<Adjective nr="38"/>
+<Adjective nr="26"/>
+<Adjective nr="39"/>
 </Cluster>
 </RCluster>
 <CCluster aid="MEASURE5" nr="1">
-<ArgTypes/>
-<Cluster>
-<Adjective nr="35"/>
-</Cluster>
-<Typ kind="M" nr="2">
-<Cluster/>
-<Func kind="K" nr="10">
-<Func kind="K" nr="44"/>
-</Func>
-</Typ>
-<Cluster>
-<Adjective nr="34"/>
-</Cluster>
-</CCluster>
-<CCluster aid="MEASURE5" nr="2">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="36"/>
@@ -103,10 +88,10 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="34"/>
+<Adjective nr="35"/>
 </Cluster>
 </CCluster>
-<CCluster aid="MEASURE5" nr="3">
+<CCluster aid="MEASURE5" nr="2">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="37"/>
@@ -118,10 +103,10 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="34"/>
+<Adjective nr="35"/>
 </Cluster>
 </CCluster>
-<CCluster aid="MEASURE5" nr="4">
+<CCluster aid="MEASURE5" nr="3">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="38"/>
@@ -133,7 +118,22 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="34"/>
+<Adjective nr="35"/>
+</Cluster>
+</CCluster>
+<CCluster aid="MEASURE5" nr="4">
+<ArgTypes/>
+<Cluster>
+<Adjective nr="39"/>
+</Cluster>
+<Typ kind="M" nr="2">
+<Cluster/>
+<Func kind="K" nr="10">
+<Func kind="K" nr="44"/>
+</Func>
+</Typ>
+<Cluster>
+<Adjective nr="35"/>
 </Cluster>
 </CCluster>
 <CCluster aid="MEASURE5" nr="5">
@@ -148,7 +148,7 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="35"/>
+<Adjective nr="36"/>
 </Cluster>
 </CCluster>
 </Registrations>

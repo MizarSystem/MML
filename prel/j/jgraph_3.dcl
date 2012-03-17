@@ -42,7 +42,7 @@
 <Cluster>
 <Adjective nr="6"/>
 <Adjective nr="7"/>
-<Adjective nr="14">
+<Adjective nr="15">
 <Func kind="U" nr="1">
 <Func kind="K" nr="275">
 <Num nr="2"/>

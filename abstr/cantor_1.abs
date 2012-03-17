@@ -13,7 +13,7 @@ environ
       PRE_TOPC, TOPS_2, CARD_3, FUNCOP_1;
  constructors SETFAM_1, FUNCOP_1, SETWISEO, CARD_3, TOPS_2, RELSET_1;
  registrations XBOOLE_0, SUBSET_1, RELSET_1, FUNCOP_1, FINSET_1, CARD_3,
-      PRE_TOPC, COMPLSP1, FUNCT_1;
+      PRE_TOPC, COMPLSP1, FUNCT_1, TOPS_2;
  requirements BOOLE, SUBSET;
 
 
@@ -30,12 +30,26 @@ definition
 end;
 
 definition
-  let X be TopStruct;
-  mode Basis of X -> Subset-Family of X means
+  let X be TopStruct, F be Subset-Family of X;
+  attr F is quasi_basis means
 :: CANTOR_1:def 2
 
-    it c= the topology of X &
-    the topology of X c= UniCl it;
+  the topology of X c= UniCl F;
+end;
+
+registration
+  let X be TopStruct;
+  cluster the topology of X -> quasi_basis;
+end;
+
+registration
+  let X be TopStruct;
+  cluster open quasi_basis Subset-Family of X;
+end;
+
+definition
+  let X be TopStruct;
+  mode Basis of X is open quasi_basis Subset-Family of X;
 end;
 
 theorem :: CANTOR_1:1
@@ -54,14 +68,12 @@ definition
   func FinMeetCl(A) -> Subset-Family of X means
 :: CANTOR_1:def 4
 
-  for x being Subset of X
-  holds x in it iff ex Y being Subset-Family of X st Y c=A & Y is finite & x =
-  Intersect Y;
+  for x being Subset of X holds x in it iff
+  ex Y being Subset-Family of X st Y c= A & Y is finite & x = Intersect Y;
 end;
 
 theorem :: CANTOR_1:4
-  for X being set for A being Subset-Family of X holds A c=
-  FinMeetCl A;
+  for X being set for A being Subset-Family of X holds A c= FinMeetCl A;
 
 theorem :: CANTOR_1:5
   for T being non empty TopSpace holds the topology of T =
@@ -125,17 +137,28 @@ theorem :: CANTOR_1:17
   (#X,UniCl FinMeetCl A#) is TopSpace-like;
 
 definition
-  let X be TopStruct;
-  mode prebasis of X -> Subset-Family of X means
+  let X be TopStruct, F be Subset-Family of X;
+  attr F is quasi_prebasis means
 :: CANTOR_1:def 5
 
-    it c= the topology of
-    X & ex F being Basis of X st F c= FinMeetCl it;
+  ex G being Basis of X st G c= FinMeetCl F;
+end;
+
+registration
+  let X be TopStruct;
+  cluster the topology of X -> quasi_prebasis;
+  cluster -> quasi_prebasis Basis of X;
+  cluster open quasi_prebasis Subset-Family of X;
+end;
+
+definition
+  let X be TopStruct;
+  mode prebasis of X is open quasi_prebasis Subset-Family of X;
 end;
 
 theorem :: CANTOR_1:18
-  for X being non empty set, Y being Subset-Family of X holds Y is
-  Basis of TopStruct (#X, UniCl Y#);
+  for X being non empty set, Y being Subset-Family of X holds
+  Y is Basis of TopStruct (#X, UniCl Y#);
 
 theorem :: CANTOR_1:19
   for T1, T2 being strict non empty TopSpace, P being prebasis of
@@ -143,16 +166,16 @@ T1 st the carrier of T1 = the carrier of T2 & P is prebasis of T2 holds T1 = T2
 ;
 
 theorem :: CANTOR_1:20
-  for X being non empty set, Y being Subset-Family of X holds Y is
-  prebasis of TopStruct (#X, UniCl FinMeetCl Y#);
+  for X being non empty set, Y being Subset-Family of X holds
+  Y is prebasis of TopStruct (#X, UniCl FinMeetCl Y#);
 
 definition
   func the_Cantor_set -> strict non empty TopSpace means
 :: CANTOR_1:def 6
-  the carrier of it =
-  product (NAT-->{0,1}) & ex P being prebasis of it st for X being Subset of
-product (NAT-->{0,1}) holds X in P iff ex N,n being Nat st for F being Element
-  of product (NAT-->{0,1}) holds F in X iff F.N=n;
+  the carrier of it = product (NAT-->{0,1}) &
+  ex P being prebasis of it st for X being Subset of product (NAT-->{0,1})
+  holds X in P iff ex N,n being Nat st
+  for F being Element of product (NAT-->{0,1}) holds F in X iff F.N=n;
 end;
 
 :: the aim is to prove: theorem the_Cantor_set is compact

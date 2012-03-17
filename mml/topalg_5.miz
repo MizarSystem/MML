@@ -14,21 +14,22 @@ environ
       SGRAPH1, PCOMPS_1, FUNCT_4, BOOLE, SEQM_3, SETFAM_1, TARSKI, COMPTS_1,
       TOPREAL2, TAXONOM2, FINSEQ_1, RELAT_2, RCOMP_3, TOPREALB, TOPS_1,
       CONNSP_1, CONNSP_2, CONNSP_3, RLVECT_3, CANTOR_1, CARD_4, PBOOLE, PROB_1,
-      TOPALG_5, ALGSTR_0, RLVECT_1;
+      TOPALG_5, ALGSTR_0, RLVECT_1, FRECHET;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, ORDINAL1, RELAT_1,
       EQREL_1, FUNCT_1, PBOOLE, CARD_3, RELSET_1, PARTFUN1, SEQ_1, FUNCT_2,
       BINOP_1, FINSET_1, NUMBERS, XCMPLX_0, XREAL_0, REAL_1, SQUARE_1, NAT_1,
       INT_1, SEQM_3, FINSEQ_1, FUNCT_4, RCOMP_1, DOMAIN_1, STRUCT_0, ALGSTR_0,
       PRE_TOPC, TOPS_1, GR_CY_1, GROUP_6, METRIC_1, CANTOR_1, YELLOW_8,
       BORSUK_1, TOPS_2, COMPTS_1, CONNSP_1, CONNSP_2, CONNSP_3, TEX_2, TSEP_1,
-      TOPMETR, EUCLID, PCOMPS_1, BORSUK_2, SIN_COS, BORSUK_3, JORDAN16,
+      TOPMETR, EUCLID, PCOMPS_1,
+      FRECHET, BORSUK_2, SIN_COS, BORSUK_3, JORDAN16,
       TAXONOM2, BORSUK_6, TOPALG_1, TOPREAL9, TOPALG_2, TOPREALB, RCOMP_3,
       XXREAL_0;
  constructors SQUARE_1, NAT_1, CARD_3, SEQM_3, PBOOLE, REALSET1, BINARITH,
       SIN_COS, TOPS_1, CONNSP_1, COMPTS_1, GRCAT_1, TSEP_1, TEX_2, CANTOR_1,
       MONOID_0, PSCOMP_1, CONNSP_3, YELLOW_8, TAXONOM2, BORSUK_3, BORSUK_4,
       JORDAN16, TOPALG_1, TOPREAL9, TOPREALB, RCOMP_3, SEQ_1, BINOP_2,
-      BORSUK_6, XXREAL_2, SEQ_4;
+      BORSUK_6, XXREAL_2, SEQ_4, FRECHET;
  registrations XBOOLE_0, SUBSET_1, FUNCT_1, RELSET_1, FUNCT_2, NUMBERS,
       XXREAL_0, XREAL_0, NAT_1, INT_1, MEMBERED, FINSEQ_1, STRUCT_0, PRE_TOPC,
       TOPS_1, COMPTS_1, METRIC_1, BORSUK_1, TSEP_1, GR_CY_1, MONOID_0, EUCLID,
@@ -223,16 +224,15 @@ A2: L = TopSpaceMetr(M) by TOPMETR:def 8;
 A3: for i being set st i in the carrier of L ex j being set st P[i,j]
   proof
     let i be set;
-    assume
-    i in the carrier of L;
+    assume i in the carrier of L;
     then reconsider i as Point of L;
     reconsider m = i as Point of M by A2,TOPMETR:16;
-    consider B being Basis of i such that
-A4: B = {Ball(m,1/n) where n is Element of NAT: n <> 0} and
-    B is countable and
-    ex f being Function of NAT,B st for n being set st n in NAT holds ex
-    n' being Element of NAT st n=n' & f.n = Ball(m,1/(n'+1)) by A2,FRECHET:11;
-    take B, i, m, B;
+    reconsider j = i as Element of TopSpaceMetr(M) by A2,TOPMETR:16;
+    set B = Balls(j);
+A4: ex y being Point of M st y = j &
+    B = { Ball(y,1/n) where n is Element of NAT: n <> 0 } by FRECHET:def 1;
+    reconsider B1 = B as Basis of i by A2,TOPMETR:16;
+    take B, i, m, B1;
     thus thesis by A4;
   end;
   consider f being ManySortedSet of the carrier of L such that
@@ -270,8 +270,7 @@ A9: f.x = Z by A7,FUNCT_1:def 5;
   that
   x = x1 and
   x1 = y and
-A10: f.x = B1 & B1 = {Ball(y,1/n) where n is Element of NAT: n <> 0} by
-  A5,A8;
+A10: f.x = B1 & B1 = {Ball(y,1/n) where n is Element of NAT: n <> 0} by A5,A8;
   consider n being Element of NAT such that
 A11: X = Ball(y,1/n) and
   n <> 0 by A6,A9,A10;
@@ -497,8 +496,7 @@ proof
   let T be non empty TopSpace;
   T is SubSpace of T by TSEP_1:2;
   then
-A1: the TopStruct of T = the TopStruct of (T| [#]T) by PRE_TOPC:29 ,
-  TSEP_1:5;
+A1: the TopStruct of T = the TopStruct of (T| [#]T) by PRE_TOPC:29,TSEP_1:5;
   hereby
     assume
     T is locally_connected;
@@ -527,7 +525,7 @@ A1: A is open by TSEP_1:def 1;
   then [#]the TopStruct of S is locally_connected by Th13;
 
   then (the TopStruct of S)| [#]the TopStruct of S is locally_connected by
-  CONNSP_2:def 6;
+CONNSP_2:def 6;
 
   hence thesis by TSEP_1:3;
 end;
@@ -577,8 +575,8 @@ A1: for X being Subset of T st X in B holds X is connected;
   let x be Point of T;
   let U be Subset of T such that
 A2: x in Int U;
-  Int U in the topology of T & the topology of T c= UniCl B by CANTOR_1:
-  def 2 ,PRE_TOPC:def 5;
+  Int U in the topology of T & the topology of T c= UniCl B by CANTOR_1:def 2
+,PRE_TOPC:def 5;
   then consider Y being Subset-Family of T such that
 A3: Y c= B and
 A4: Int U = union Y by CANTOR_1:def 1;
@@ -587,7 +585,7 @@ A5: x in V and
 A6: V in Y by A2,A4,TARSKI:def 4;
   reconsider V as Subset of T by A6;
   take V;
-  B c= the topology of T & V in B by A3,A6,CANTOR_1:def 2;
+  B c= the topology of T & V in B by A3,A6,CANTOR_1:def 2,TOPS_2:78;
   then V is open by PRE_TOPC:def 5;
   hence x in Int V by A5,TOPS_1:55;
   thus V is connected by A1,A3,A6;
@@ -662,7 +660,7 @@ registration
   coherence
   proof
     reconsider f1 = id I[01] as Function of I[01],R^1 by BORSUK_1:83,FUNCT_2:9
-    ,TOPMETR:24;
+,TOPMETR:24;
     f1 is continuous by PRE_TOPC:56;
     then consider g being Function of I[01],R^1 such that
 A1: for p being Point of I[01], r1 being real number st f1.p=r1 holds
@@ -968,7 +966,7 @@ U st f = CircleMap|d holds f is being_homeomorphism ) & ( U = (CircleMap).:].1/
 
 Subset of R^1 st d in IntIntervals(1/2,3/2) for f being Function of R^1 | d, (
   Tunit_circle(2)) | U st f = CircleMap|d holds f is being_homeomorphism ) by
-  TOPREALB:49;
+TOPREALB:49;
 
   take F;
   thus F is Cover of Tunit_circle(2) & F is open by A2;
@@ -1051,8 +1049,7 @@ A5: F. [y,i] in U & U in UL by A3,TARSKI:def 4;
 A6: for i being Element of I ex z being Element of UL1 st I0[i,z]
   proof
     let i be Element of I;
-    ex U being non empty open Subset of TUC st F. [y,i] in U & U in UL by
-    A4;
+    ex U being non empty open Subset of TUC st F. [y,i] in U & U in UL by A4;
     hence thesis;
   end;
   consider I0 being Function of I, UL1 such that
@@ -1091,8 +1088,8 @@ A21: i in B by A16,A18,ZFMISC_1:106;
 A22: Component_of i1 is open by CONNSP_2:21;
     Component_of(i,B) = Component_of i1 by A21,CONNSP_3:def 7;
     then reconsider
-    D = Component_of(i,B) as open connected Subset of I[01] by A21,
-    A22,CONNSP_3:35,TSEP_1:17;
+    D = Component_of(i,B) as open connected Subset of I[01] by A21,A22,
+CONNSP_3:35,TSEP_1:17;
     reconsider z = [:A,D:] as Subset of [:C,I:] by BORSUK_1:def 5;
     take z, A, D;
     thus y in A by A16,A18,ZFMISC_1:106;
@@ -1137,8 +1134,8 @@ A32: a1 = y by A29,TARSKI:def 1;
 A33: y in M & a2 in O and
     F.:[:M,O:] c= I0.a2 and
 A34: I1.a2 = [:M,O:] by A24;
-    [y,a2] in [:M,O:] & [:M,O:] in C1 by A28,A33,A34,FUNCT_1:def 5,
-    ZFMISC_1:106;
+    [y,a2] in [:M,O:] & [:M,O:] in C1 by A28,A33,A34,FUNCT_1:def 5,ZFMISC_1:106
+;
     hence thesis by A31,A32,TARSKI:def 4;
   end;
   then
@@ -1459,16 +1456,16 @@ A34:    S = {0} by A11,A33,XXREAL_1:17;
         reconsider S as non empty Subset of I[01] by A11,A33,Lm3,XXREAL_1:17;
 A35:    dom Fn = [:N2,S:] by A8,A34,RELAT_1:91,ZFMISC_1:119;
         reconsider K0 = [:N2,S:] as non empty Subset of [:Y,Sspace(0[01]):] by
-        A7,A34,Lm14,ZFMISC_1:119;
+A7,A34,Lm14,ZFMISC_1:119;
 A36:    the carrier of [:Y|N2,I[01]|S:] = [:the carrier of (Y|N2), the
         carrier of ( I[01]|S):] & rng Fn c= R by BORSUK_1:def 5;
         the carrier of (Y|N2) = N2 & the carrier of (I[01]|S) = S by
-        PRE_TOPC:29;
+PRE_TOPC:29;
         then reconsider Fn as Function of [:Y|N2,I[01]|S:], R^1 by A35,A36,
-        FUNCT_2:4;
+FUNCT_2:4;
 A37:    dom (F | [:N2,S:]) = [:N2,S:] by A6,RELAT_1:91,ZFMISC_1:119;
-        reconsider S1 = S as non empty Subset of Sspace(0[01]) by A11,A33,Lm14
-        , XXREAL_1:17;
+        reconsider S1 = S as non empty Subset of Sspace(0[01]) by A11,A33,Lm14,
+XXREAL_1:17;
         take S, Fn;
         thus S = [.0,TT.(i+1).];
         thus y in N2 by A15;
@@ -1508,7 +1505,7 @@ A45:      x in [:N2,{0}:] by A34,A41,A44,XBOOLE_0:def 4;
             .= (Ft | [:N2,I:]).x by A45,A43,FUNCT_1:72;
         end;
         dom (Ft | [:N2,I:]) = [:the carrier of Y,{0}:] /\ [:N2,I:] by A8,
-        RELAT_1:90
+RELAT_1:90
           .= [:N2,S:] by A34,ZFMISC_1:124;
         hence thesis by A34,A41,A42,FUNCT_1:9,ZFMISC_1:124;
       end;
@@ -1544,12 +1541,11 @@ A61:    dom Fn = the carrier of [:Y|N2,I[01]|S:] by FUNCT_2:def 1;
 A62:    0 <= TT.i by A19,A46;
         then
 A63:    TT.i in S by A54,XXREAL_1:1;
-        then reconsider Ti = {TT.i} as non empty Subset of I[01] by
-        ZFMISC_1:37;
+        then reconsider Ti = {TT.i} as non empty Subset of I[01] by ZFMISC_1:37
+;
 A64:    the carrier of I[01]|S = S by PRE_TOPC:29;
-        then reconsider Ti2 = Ti as non empty Subset of I[01]|S by
-        A63,ZFMISC_1
-        :37;
+        then reconsider Ti2 = Ti as non empty Subset of I[01]|S by A63,
+ZFMISC_1:37;
         set FnT = Fn | [:N2,Ti:];
 A65:    the carrier of [:Y|N2,I[01]|Ti:] = [:the carrier of Y|N2, the
         carrier of I[01]|Ti:] & rng FnT c= REAL by BORSUK_1:def 5,TOPMETR:24;
@@ -1557,14 +1553,11 @@ A66:    [:N2,SS:] c= [:N,SS:] by A56,ZFMISC_1:119;
 A67:    the carrier of (Y|N2) = N2 by PRE_TOPC:29;
         {TT.i} c= S by A63,ZFMISC_1:37;
         then
-A68:    dom FnT = [:N2,{TT.i}:] by A64,A60,A67,A61,RELAT_1:91,
-        ZFMISC_1:119;
-A69:    [:Y|N2|N7,I[01]|S|Ti2:] = [:Y|N2,I[01]|S:] | [:N7,Ti2:] by
-        BORSUK_3:26;
+A68:    dom FnT = [:N2,{TT.i}:] by A64,A60,A67,A61,RELAT_1:91,ZFMISC_1:119;
+A69:    [:Y|N2|N7,I[01]|S|Ti2:] = [:Y|N2,I[01]|S:] | [:N7,Ti2:] by BORSUK_3:26;
 A70:    the carrier of I[01]|Ti = Ti by PRE_TOPC:29;
-        then reconsider FnT as Function of [:Y|N2,I[01]|Ti:],R^1 by A67,
-        A68,A65
-        ,FUNCT_2:4;
+        then reconsider FnT as Function of [:Y|N2,I[01]|Ti:],R^1 by A67,A68,A65
+,FUNCT_2:4;
         Y|N2|N7 = Y|N2 & I[01]|S|Ti2 = I[01]|Ti by GOBOARD9:4;
         then
 A71:    FnT is continuous by A57,A69,TOPMETR:10;
@@ -1574,9 +1567,7 @@ A72:    F. [y,TT.i] in F.:[:N,SS:] by A53,FUNCT_2:43;
 A73:    [y,TT.i] in [:N2,S:] by A55,A63,ZFMISC_1:106;
         then F. [y,TT.i] = (CircleMap*Fn). [y,TT.i] by A58,FUNCT_1:72
           .= CircleMap.(Fn. [y,TT.i]) by A64,A60,A67,A73,FUNCT_2:21;
-        then Fn. [y,TT.i] in (CircleMap)"Ui by A48,
-        A72,FUNCT_2:46 ,TOPMETR
-        :24;
+        then Fn. [y,TT.i] in (CircleMap)"Ui by A48,A72,FUNCT_2:46,TOPMETR:24;
         then consider Uit being set such that
 A74:    Fn. [y,TT.i] in Uit and
 A75:    Uit in D by A49,TARSKI:def 4;
@@ -1587,7 +1578,7 @@ A75:    Uit in D by A49,TARSKI:def 4;
 A76:    FnT"Uit = union SF and
 A77:    for e being set st e in SF ex X1 being Subset of Y|N2, Y1
         being Subset of I[01]|Ti st e = [:X1,Y1:] & X1 is open & Y1 is open by
-        BORSUK_1:45;
+BORSUK_1:45;
 A78:    TT.i in {TT.i} by TARSKI:def 1;
         then
 A79:    [y,TT.i] in [:N2,{TT.i}:] by A55,ZFMISC_1:def 2;
@@ -1617,7 +1608,7 @@ A87:    X1 is open and
         Y1 is open by A77,A81;
         the carrier of (R^1 | Uit) = Uit by PRE_TOPC:29;
         then reconsider f as Function of R^1 | Uit, TUC | Ui by A51,A82,A83,
-        FUNCT_2:4;
+FUNCT_2:4;
         consider NY being Subset of Y such that
 A88:    NY is open and
 A89:    NY /\ [#](Y|N2) = X1 by A87,TOPS_2:32;
@@ -1629,8 +1620,8 @@ A92:    [y,TT.i] = [y1,y2] by A80,A86,ZFMISC_1:def 2;
         y = y1 by A92,ZFMISC_1:33;
         then
 A93:    y in NY by A89,A90,XBOOLE_0:def 4;
-        then reconsider N1 as non empty open Subset of Y by A55,A88,XBOOLE_0:
-        def 4;
+        then reconsider N1 as non empty open Subset of Y by A55,A88,
+XBOOLE_0:def 4;
 A94:    N1 c= N2 by XBOOLE_1:17;
         then [:N1,SS:] c= [:N2,SS:] by ZFMISC_1:119;
         then [:N1,SS:] c= [:N,SS:] by A66,XBOOLE_1:1;
@@ -1638,7 +1629,7 @@ A94:    N1 c= N2 by XBOOLE_1:17;
 A95:    F.:[:N1,SS:] c= F.:[:N,SS:] by RELAT_1:156;
         TT.(i+1) <= 1 by A19,A32,A46;
         then reconsider SS as non empty Subset of I[01] by A25,A62,A52,
-        XXREAL_1:1;
+XXREAL_1:1;
 A96:    dom (F| [:N1,SS:]) = [:N1,SS:] by A6,RELAT_1:91,ZFMISC_1:119;
         set Fni1 = f"*(F| [:N1,SS:]);
         f" is being_homeomorphism by A50,A75,TOPS_2:70;
@@ -1663,11 +1654,10 @@ A101:   dom Fni1 = dom (F| [:N1,SS:]) by RELAT_1:46;
         set Fn2 = Fn | [:N1,S:];
 A102:   the carrier of (Y|N1) = N1 by PRE_TOPC:29;
         then
-A103:   [:N1,S:] = the carrier of [:Y|N1,I[01]|S:] by A64,BORSUK_1:
-        def 5;
+A103:   [:N1,S:] = the carrier of [:Y|N1,I[01]|S:] by A64,BORSUK_1:def 5;
         then
-A104:   dom Fn2 = the carrier of [:Y|N1,I[01]|S:] by A64,A60,A67,A61,
-        A94,RELAT_1:91,ZFMISC_1:119;
+A104:   dom Fn2 = the carrier of [:Y|N1,I[01]|S:] by A64,A60,A67,A61,A94,
+RELAT_1:91,ZFMISC_1:119;
         reconsider ff = f as Function;
 A105:   f is being_homeomorphism by A50,A75;
         then
@@ -1678,17 +1668,15 @@ A107:   rng Fn2 c= R;
 A108:   rng Fni1 c= R by XBOOLE_1:1;
 A109:   the carrier of (I[01]|SS) = SS by PRE_TOPC:29;
         then
-A110:   [:N1,SS:] = the carrier of [:Y|N1,I[01]|SS:] by A102,
-        BORSUK_1:def 5;
+A110:   [:N1,SS:] = the carrier of [:Y|N1,I[01]|SS:] by A102,BORSUK_1:def 5;
         then reconsider
-        Fni1 as Function of [:Y|N1,I[01]|SS:], R^1 by A96,A101,
-        A108,FUNCT_2:4;
+        Fni1 as Function of [:Y|N1,I[01]|SS:], R^1 by A96,A101,A108,FUNCT_2:4;
         set Fn1 = Fn2 +* Fni1;
         reconsider Fn2 as Function of [:Y|N1,I[01]|S:],R^1 by A104,A107,
-        FUNCT_2:4;
+FUNCT_2:4;
 A111:   rng Fn1 c= rng (Fn | [:N1,S:]) \/ rng Fni1 by FUNCT_4:18;
-        dom (Fn | [:N1,S:]) = [:N1,S:] by A64,A60,A67,A61,A94,RELAT_1:
-        91 ,ZFMISC_1:119;
+        dom (Fn | [:N1,S:]) = [:N1,S:] by A64,A60,A67,A61,A94,RELAT_1:91
+,ZFMISC_1:119;
         then
 A112:   dom Fn1 = [:N1,S:] \/ [:N1,SS:] by A96,A101,FUNCT_4:def 1;
 A113:   rng f = [#](TUC | Ui) by A105,TOPS_2:def 5;
@@ -1729,8 +1717,7 @@ A123:     p in ([#][:Y|N1,I[01]|SS:]) /\ [#][:Y|N1,I[01]|S:] by A122;
 A124:     Fn.p = Fn2.p by A103,FUNCT_1:72;
           [:N1,S:] /\ [:N1,SS:] = [:N1,S /\ SS:] by ZFMISC_1:122;
           then
-A125:     p in [:N1,{TT.i}:] by A54,A62,A52,A110,A103,A122,XXREAL_1
-          :418;
+A125:     p in [:N1,{TT.i}:] by A54,A62,A52,A110,A103,A122,XXREAL_1:418;
           then consider
           p1 being Element of N1, p2 being Element of {TT.i} such
           that
@@ -1741,14 +1728,14 @@ A127:     p1 in N1;
           then
 A128:     p in [:N2,S:] by A94,A126,A127,ZFMISC_1:def 2;
           then
-A129:     Fn.p in Fn.:[:N1,{TT.i}:] by A64,A60,A67,A125, FUNCT_2:43;
+A129:     Fn.p in Fn.:[:N1,{TT.i}:] by A64,A60,A67,A125,FUNCT_2:43;
           (F| [:N1,SS:]).p = F.p by A110,A122,FUNCT_1:72
             .= (F | [:N2,S:]).p by A128,FUNCT_1:72
             .= CircleMap.(Fn.p) by A58,A64,A60,A61,A121,A128,FUNCT_1:23
             .= (CircleMap|Uit).(Fn.p) by A116,A129,FUNCT_1:72
             .= ff.(Fn2.p) by A103,A123,FUNCT_1:72;
           hence Fn2.p = ff".((F| [:N1,SS:]).p) by A116,A82,A106,A124,A129,
-          FUNCT_1:54
+FUNCT_1:54
             .= Fni1.p by A114,A96,A110,A122,FUNCT_1:23;
         end;
 A130:   [:N1,S:] c= [:N2,S:] by A94,ZFMISC_1:119;
@@ -1756,7 +1743,7 @@ A130:   [:N1,S:] c= [:N2,S:] by A94,ZFMISC_1:119;
         K0 = [:N1,S:] as Subset of [:Y|N2,I[01]|S:] by A64,A60,PRE_TOPC:29;
 A131:   [:N1,SS:] c= dom F by A6,ZFMISC_1:119;
         reconsider gF = F| [:N1,SS:] as Function of [:Y|N1,I[01]|SS:], TUC by
-        A96,A98,A110,FUNCT_2:4;
+A96,A98,A110,FUNCT_2:4;
         reconsider fF = F| [:N1,SS:] as Function of [:Y|N1,I[01]|SS:], TUC |
         Ui by A97,A96,A98,A110,FUNCT_2:4;
         [:Y|N1,I[01]|SS:] = [:Y,I[01]:] | [:N1,SS:] by BORSUK_3:26;
@@ -1780,9 +1767,9 @@ A134:   Fn2 is continuous by A57,TOPMETR:10;
 A135:   [:N1,S:] \/ [:N1,SS:] = [:N1,S1:] by ZFMISC_1:120;
 A136:   the carrier of (I[01]|S1) = S1 by PRE_TOPC:29;
         then [:N1,S1:] = the carrier of [:Y|N1,I[01]|S1:] by A102,
-        BORSUK_1:def 5;
+BORSUK_1:def 5;
         then reconsider Fn1 as Function of [:Y|N1,I[01]|S1:], R^1 by A135,A112
-        ,A111,FUNCT_2:4,XBOOLE_1:1;
+,A111,FUNCT_2:4,XBOOLE_1:1;
         take Fn1;
         thus
 A137:   S1 = [.0,TT.(i+1).] by A54,A62,A52,XXREAL_1:165;
@@ -1843,14 +1830,14 @@ A156:       a = [b1,b2] by ZFMISC_1:def 2;
 A157:       a2 = TT.i by A62,A147,A155,XXREAL_1:1;
             a1 = b1 by A146,A156,ZFMISC_1:33;
             then
-A158:       [a1,TT.i] in [:N1,S:] & [a1,TT.i] in [:N1,{TT.i}:] by A63,
-            A78,A154, ZFMISC_1:106;
+A158:       [a1,TT.i] in [:N1,S:] & [a1,TT.i] in [:N1,{TT.i}:] by A63,A78,A154,
+ZFMISC_1:106;
             e = Ft.a by A149,A150,FUNCT_1:72
               .= (Ft | [:N2,I:]).a by A151,A142,FUNCT_1:72
               .= Fn.a by A59,A144,FUNCT_1:72;
             then
-A159:       e in Fn.:[:N1,{TT.i}:] by A64,A60,A67,A61,A130,A146,
-            A157,A158,FUNCT_1:def 12;
+A159:       e in Fn.:[:N1,{TT.i}:] by A64,A60,A67,A61,A130,A146,A157,A158,
+FUNCT_1:def 12;
             then
 A160:       ff.e = CircleMap.e by A116,FUNCT_1:72
               .= CircleMap.(Ft.a) by A149,A150,FUNCT_1:72
@@ -1880,15 +1867,14 @@ A167:       a in [:N1,SS:] by A6,A101,A165,RELAT_1:91,ZFMISC_1:119;
             then
 A168:       F.a in F.:[:N,SS:] by A95;
             then a in F"(dom (ff")) by A6,A48,A51,A97,A114,A167,A166,
-            FUNCT_1:def 13;
+FUNCT_1:def 13;
             then
 A169:       a in dom (ff"*F) by RELAT_1:182;
             thus (CircleMap*Fn1).a = CircleMap.(Fn1.a) by A164,FUNCT_2:21
               .= CircleMap.(Fni1.a) by A165,FUNCT_4:14
               .= CircleMap.(f".((F| [:N1,SS:]).a)) by A101,A165,FUNCT_1:23
               .= CircleMap.(f".(F.a)) by A96,A101,A165,FUNCT_1:72
-              .= CircleMap.((ff"*F).a) by A131,A114,A96,A101,A165,FUNCT_1:
-            23
+              .= CircleMap.((ff"*F).a) by A131,A114,A96,A101,A165,FUNCT_1:23
               .= (CircleMap*(ff"*F)).a by A169,FUNCT_1:23
               .= (CircleMap*ff"*F).a by RELAT_1:55
               .= (CircleMap*ff").(F.a) by A131,A96,A101,A165,FUNCT_1:23
@@ -1897,8 +1883,7 @@ A169:       a in dom (ff"*F) by RELAT_1:182;
           suppose
 A170:       not a in dom Fni1;
             then
-A171:       a in [:N1,S:] by A96,A101,A112,A162,A164, XBOOLE_0:def
-            3;
+A171:       a in [:N1,S:] by A96,A101,A112,A162,A164,XBOOLE_0:def 3;
             thus (CircleMap*Fn1).a = CircleMap.(Fn1.a) by A164,FUNCT_2:21
               .= CircleMap.(Fn | [:N1,S:].a) by A170,FUNCT_4:12
               .= CircleMap.(Fn.a) by A171,FUNCT_1:72
@@ -1927,10 +1912,8 @@ A176:   F2 is closed by TSEP_1:8;
         then ex h being Function of [:Y|N1,I[01]|S1:],R^1 st h = Fn2+*Fni1 &
 h is continuous by A64,A109,A136,A173,A175,A176,A134,A133,A120,TOPALG_3:20;
         hence Fn1 is continuous;
-        dom Fn1 = dom F /\ [:N1,S1:] by A6,A135,A112,XBOOLE_1:28,
-        ZFMISC_1:119;
-        hence F | [:N1,S1:] = CircleMap*Fn1 by A161,A163,FUNCT_1:68 ,
-        RELAT_1:46;
+        dom Fn1 = dom F /\ [:N1,S1:] by A6,A135,A112,XBOOLE_1:28,ZFMISC_1:119;
+        hence F | [:N1,S1:] = CircleMap*Fn1 by A161,A163,FUNCT_1:68,RELAT_1:46;
         dom (Ft | [:N1,I:]) = dom Ft /\ [:N1,I:] by RELAT_1:90
           .= [:(the carrier of Y) /\ N1,{0} /\ I:] by A8,ZFMISC_1:123
           .= [:N1,{0} /\ I:] by XBOOLE_1:28
@@ -1955,8 +1938,8 @@ A184: I[01]|S = I[01] by A12,A178,Lm6,BORSUK_1:83,TSEP_1:3;
     take z, y, t, N2;
     take Fn1;
     thus x = [y,t] & z = Fn1.x & y in N2 & Fn1 is continuous & F | [:N2,I:] =
-CircleMap*Fn1 & Fn1 | [:the carrier of Y,{0}:] = Ft | [:N2,I:] by A10,A12,A178,
-    A179,A181,A182,A183,A184,BORSUK_1:83;
+CircleMap*Fn1 & Fn1 | [:the carrier of Y,{0}:] = Ft | [:N2,I:] by A10,A12,A178
+,A179,A181,A182,A183,A184,BORSUK_1:83;
     let H be Function of [:Y|N2,I[01]:], R^1 such that
 A185: H is continuous and
 A186: F | [:N2,I:] = CircleMap*H and
@@ -1990,7 +1973,7 @@ A199:     [:N2,Z:] c= [:the carrier of Y,Z:] by ZFMISC_1:118;
 A200:     x in dom (Fn1 | [:N2,Z:]);
           hence (Fn1 | [:N2,Z:]).x = Fn1.x by A197,FUNCT_1:72
             .= (Fn1 | [:the carrier of Y,{0}:]).x by A195,A197,A200,A199,
-          FUNCT_1:72
+FUNCT_1:72
             .= H.x by A183,A187,A195,A197,A200,A199,FUNCT_1:72
             .= (H | [:N2,Z:]).x by A197,A200,FUNCT_1:72;
         end;
@@ -2031,8 +2014,8 @@ A213:     F.:[:N,ZZ:] c= Ui by A16,A193,A201;
           that
 A214:     union D = (CircleMap)"Ui and
 A215:     for d being Subset of R^1 st d in D for f being Function
-of R^1 | d, TUC | Ui st f = CircleMap|d holds f is being_homeomorphism by A2,
-          A212;
+of R^1 | d, TUC | Ui st f = CircleMap|d holds f is being_homeomorphism by A2
+,A212;
           let x be set such that
 A216:     x in dom (Fn1 | [:N2,Z1:]);
           consider x1, x2 being set such that
@@ -2046,9 +2029,9 @@ A221:     F. [x1,TT.i] in F.:[:N,ZZ:] by FUNCT_2:43;
           reconsider xy = {x1} as non empty Subset of Y by A217,ZFMISC_1:37;
 A222:     xy c= N2 by A217,ZFMISC_1:37;
           then reconsider xZZ = [:xy,ZZ:] as Subset of [:Y|N2,I[01]:] by A189,
-          ZFMISC_1:119;
-A223:     dom (H | [:xy,ZZ:]) = [:xy,ZZ:] by A190,A189,A222,RELAT_1:91 ,
-          ZFMISC_1:119;
+ZFMISC_1:119;
+A223:     dom (H | [:xy,ZZ:]) = [:xy,ZZ:] by A190,A189,A222,RELAT_1:91
+,ZFMISC_1:119;
 A224:     D is Cover of Fn1.:xZZ
           proof
             let b be set;
@@ -2066,7 +2049,7 @@ A228:       F.a in F.:[:N,ZZ:] by A6,A225,FUNCT_1:def 12;
             CircleMap.(Fn1.a) = (CircleMap*Fn1).a by FUNCT_2:21
               .= F.a by A12,A178,A182,A189,BORSUK_1:83,FUNCT_1:72;
             hence b in union D by A213,A214,A227,A228,Lm12,FUNCT_1:def 13
-            ,TOPMETR:24;
+,TOPMETR:24;
           end;
 A229:     D is Cover of H.:xZZ
           proof
@@ -2084,29 +2067,27 @@ A233:       CircleMap.(H.a) = (CircleMap*H).a by FUNCT_2:21
             then a in [:N,ZZ:] by A231;
             then F.a in F.:[:N,ZZ:] by A6,A230,FUNCT_1:def 12;
             hence b in union D by A213,A214,A232,A233,Lm12,FUNCT_1:def 13
-            ,TOPMETR:24;
+,TOPMETR:24;
           end;
           TT.i in Z by A204,A202,XXREAL_1:1;
           then
 A234:     [x1,TT.i] in [:N2,Z:] by A217,ZFMISC_1:106;
           then
-A235:     Fn1. [x1,TT.i] = (Fn1 | [:N2,Z:]). [x1,TT.i] by FUNCT_1:
-          72
+A235:     Fn1. [x1,TT.i] = (Fn1 | [:N2,Z:]). [x1,TT.i] by FUNCT_1:72
             .= H. [x1,TT.i] by A205,A234,FUNCT_1:72;
 A236:     [:N2,Z:] c= [:N2,I:] by ZFMISC_1:118;
-          then F. [x1,TT.i] = (CircleMap*H). [x1,TT.i] by A186,A234,
-          FUNCT_1:72
+          then F. [x1,TT.i] = (CircleMap*H). [x1,TT.i] by A186,A234,FUNCT_1:72
             .= CircleMap.(H. [x1,TT.i]) by A190,A189,A234,A236,FUNCT_1:23;
-          then H. [x1,TT.i] in (CircleMap)"Ui by A213,A221,FUNCT_2:46,
-          TOPMETR:24;
+          then H. [x1,TT.i] in (CircleMap)"Ui by A213,A221,FUNCT_2:46
+,TOPMETR:24;
           then consider Uith being set such that
 A237:     H. [x1,TT.i] in Uith and
 A238:     Uith in D by A214,TARSKI:def 4;
-          F. [x1,TT.i] = (CircleMap*Fn1). [x1,TT.i] by A12,A178,A182,
-          A234,A236,BORSUK_1:83,FUNCT_1:72
+          F. [x1,TT.i] = (CircleMap*Fn1). [x1,TT.i] by A12,A178,A182,A234,A236,
+BORSUK_1:83,FUNCT_1:72
             .= CircleMap.(Fn1. [x1,TT.i]) by A189,A188,A234,A236,FUNCT_1:23;
-          then Fn1. [x1,TT.i] in (CircleMap)"Ui by A213,A221,FUNCT_2:46,
-          TOPMETR:24;
+          then Fn1. [x1,TT.i] in (CircleMap)"Ui by A213,A221,FUNCT_2:46
+,TOPMETR:24;
           then consider Uit being set such that
 A239:     Fn1. [x1,TT.i] in Uit and
 A240:     Uit in D by A214,TARSKI:def 4;
@@ -2124,8 +2105,7 @@ A244:     [x1,TT.i] in xZZ by A220,ZFMISC_1:106;
           then H. [x1,TT.i] in H.:xZZ by FUNCT_2:43;
           then Uith meets H.:xZZ by A237,XBOOLE_0:3;
           then
-A245:     H.:xZZ c= Uith by A185,A242,A238,A229,TOPALG_3:13 ,TOPS_2
-          :75;
+A245:     H.:xZZ c= Uith by A185,A242,A238,A229,TOPALG_3:13,TOPS_2:75;
           reconsider Uit as non empty Subset of R^1 by A239,A240;
           set f = CircleMap|Uit;
 A246:     dom f = Uit by Lm12,RELAT_1:91,TOPMETR:24;
@@ -2144,9 +2124,9 @@ A249:       f.a = b by FUNCT_1:def 5;
           the carrier of (TUC | Ui) = Ui & the carrier of (R^1 | Uit) =
           Uit by PRE_TOPC:29;
           then reconsider f as Function of R^1 | Uit, TUC | Ui by A246,A247,
-          FUNCT_2:4;
+FUNCT_2:4;
 A250:     dom (Fn1 | [:xy,ZZ:]) = [:xy,ZZ:] by A189,A188,A222,RELAT_1:91
-          ,ZFMISC_1:119;
+,ZFMISC_1:119;
           H. [x1,TT.i] in H.:xZZ by A190,A244,FUNCT_1:def 12;
           then Uit meets Uith by A239,A245,A235,XBOOLE_0:3;
           then
@@ -2166,8 +2146,7 @@ A254:       (H | [:xy,ZZ:]).a = b by FUNCT_1:def 5;
           Fn1. [x1,TT.i] in Fn1.:xZZ by A244,FUNCT_2:43;
           then Uit meets Fn1.:xZZ by A239,XBOOLE_0:3;
           then
-A255:     Fn1.:xZZ c= Uit by A181,A184,A240,A242,A224, TOPALG_3:13,
-          TOPS_2:75;
+A255:     Fn1.:xZZ c= Uit by A181,A184,A240,A242,A224,TOPALG_3:13,TOPS_2:75;
 A256:     rng (Fn1 | [:xy,ZZ:]) c= dom f
           proof
             let b be set;
@@ -2181,24 +2160,22 @@ A258:       (Fn1 | [:xy,ZZ:]).a = b by FUNCT_1:def 5;
             hence thesis by A255,A246;
           end;
           then
-A259:     dom (f*(Fn1 | [:xy,ZZ:])) = dom (Fn1 | [:xy,ZZ:]) by
-          RELAT_1:46;
+A259:     dom (f*(Fn1 | [:xy,ZZ:])) = dom (Fn1 | [:xy,ZZ:]) by RELAT_1:46;
 A260:     for x being set st x in dom (f*(Fn1 | [:xy,ZZ:])) holds (f*(
           Fn1 | [:xy,ZZ:])).x = (f*(H | [:xy,ZZ:])).x
           proof
             let x be set such that
 A261:       x in dom (f*(Fn1 | [:xy,ZZ:]));
-A262:       Fn1.x in Fn1.:[:xy,ZZ:] by A188,A250,A259,A261,FUNCT_1:def
-            12;
+A262:       Fn1.x in Fn1.:[:xy,ZZ:] by A188,A250,A259,A261,FUNCT_1:def 12;
 A263:       H.x in H.:[:xy,ZZ:] by A190,A250,A259,A261,FUNCT_1:def 12;
-            thus (f*(Fn1 | [:xy,ZZ:])).x = ((f*Fn1) | [:xy,ZZ:]).x by RELAT_1:
-            112
+            thus (f*(Fn1 | [:xy,ZZ:])).x = ((f*Fn1) | [:xy,ZZ:]).x by
+RELAT_1:112
               .= (f*Fn1).x by A250,A259,A261,FUNCT_1:72
               .= f.(Fn1.x) by A188,A261,FUNCT_1:23
               .= CircleMap.(Fn1.x) by A255,A262,FUNCT_1:72
               .= (CircleMap*Fn1).x by A188,A261,FUNCT_1:23
               .= CircleMap.(H.x) by A12,A178,A182,A186,A190,A261,BORSUK_1:83
-            ,FUNCT_1:23
+,FUNCT_1:23
               .= f.(H.x) by A245,A251,A263,FUNCT_1:72
               .= (f*H).x by A190,A261,FUNCT_1:23
               .= ((f*H) | [:xy,ZZ:]).x by A250,A259,A261,FUNCT_1:72
@@ -2207,11 +2184,10 @@ A263:       H.x in H.:[:xy,ZZ:] by A190,A250,A259,A261,FUNCT_1:def 12;
           f is being_homeomorphism by A215,A240;
           then
 A264:     f is one-to-one by TOPS_2:def 5;
-          dom (f*(H | [:xy,ZZ:])) = dom (H | [:xy,ZZ:]) by A252,RELAT_1:
-          46;
+          dom (f*(H | [:xy,ZZ:])) = dom (H | [:xy,ZZ:]) by A252,RELAT_1:46;
           then
-A265:     f*(Fn1 | [:xy,ZZ:]) = f*(H | [:xy,ZZ:]) by A250,A223,A256,
-          A260,FUNCT_1:9,RELAT_1:46;
+A265:     f*(Fn1 | [:xy,ZZ:]) = f*(H | [:xy,ZZ:]) by A250,A223,A256,A260,
+FUNCT_1:9,RELAT_1:46;
           per cases;
           suppose
             x2 in ZZ;
@@ -2219,8 +2195,7 @@ A265:     f*(Fn1 | [:xy,ZZ:]) = f*(H | [:xy,ZZ:]) by A250,A223,A256,
 A266:       x in [:xy,ZZ:] by A219,A243,ZFMISC_1:106;
             thus (Fn1 | [:N2,Z1:]).x = Fn1.x by A208,A216,FUNCT_1:72
               .= (Fn1 | [:xy,ZZ:]).x by A266,FUNCT_1:72
-              .= (H | [:xy,ZZ:]).x by A264,A250,A223,A256,A252,A265,FUNCT_1:
-            49
+              .= (H | [:xy,ZZ:]).x by A264,A250,A223,A256,A252,A265,FUNCT_1:49
               .= H.x by A266,FUNCT_1:72
               .= (H | [:N2,Z1:]).x by A208,A216,FUNCT_1:72;
           end;
@@ -2316,8 +2291,7 @@ A301:   i = 0;
 A302:   Z = {0} by A283,A301,XXREAL_1:17;
         reconsider Z as non empty Subset of I[01] by A283,A301,Lm3,XXREAL_1:17;
 A303:   [:{y},Z:] c= [:N2,I:] by A292,ZFMISC_1:119;
-A304:   dom (Fn1 | [:{y},Z:]) = [:{y},Z:] by A282,A295,RELAT_1:91,
-        ZFMISC_1:119;
+A304:   dom (Fn1 | [:{y},Z:]) = [:{y},Z:] by A282,A295,RELAT_1:91,ZFMISC_1:119;
 A305:   [:{y},Z:] c= [:N1,I:] by A282,ZFMISC_1:119;
 A306:   for x being set st x in dom (Fn1 | [:{y},Z:]) holds (Fn1 | [:{y}
         ,Z:]).x = (Fn2 | [:{y},Z:]).x
@@ -2328,7 +2302,7 @@ A307:     [:{y},Z:] c= [:the carrier of Y,Z:] by ZFMISC_1:118;
 A308:     x in dom (Fn1 | [:{y},Z:]);
           hence (Fn1 | [:{y},Z:]).x = Fn1.x by A304,FUNCT_1:72
             .= (Fn1 | [:the carrier of Y,{0}:]).x by A302,A304,A308,A307,
-          FUNCT_1:72
+FUNCT_1:72
             .= Ft.x by A281,A305,A304,A308,FUNCT_1:72
             .= (Ft | [:N2,I:]).x by A304,A303,A308,FUNCT_1:72
             .= Fn2.x by A279,A302,A304,A308,A307,FUNCT_1:72
@@ -2336,8 +2310,7 @@ A308:     x in dom (Fn1 | [:{y},Z:]);
         end;
         take Z;
         thus Z = [.0,TT.(i+1).];
-        dom (Fn2 | [:{y},Z:]) = [:{y},Z:] by A292,A291,RELAT_1:91,
-        ZFMISC_1:119;
+        dom (Fn2 | [:{y},Z:]) = [:{y},Z:] by A292,A291,RELAT_1:91,ZFMISC_1:119;
         hence thesis by A304,A306,FUNCT_1:9;
       end;
       suppose
@@ -2388,8 +2361,8 @@ A323:       a <= 1 by A321,XXREAL_0:2;
         take Z1 = Z \/ ZZ;
 A324:   TT.i < TT.(i+1) by A300,A309,A310;
         hence Z1 = [.0,TT.(i+1).] by A318,A316,XXREAL_1:165;
-A325:   dom (Fn1 | [:{y},Z1:]) = [:{y},Z1:] by A282,A295,RELAT_1:91 ,
-        ZFMISC_1:119;
+A325:   dom (Fn1 | [:{y},Z1:]) = [:{y},Z1:] by A282,A295,RELAT_1:91
+,ZFMISC_1:119;
 A326:   for x being set st x in dom (Fn1 | [:{y},Z1:]) holds (Fn1 | [:{y
         },Z1:]).x = (Fn2 | [:{y},Z1:]).x
         proof
@@ -2408,8 +2381,8 @@ A331:     F.:[:N,ZZ:] c= Ui by A288,A300,A309;
           that
 A332:     union D = (CircleMap)"Ui and
 A333:     for d being Subset of R^1 st d in D for f being Function
-of R^1 | d, TUC | Ui st f = CircleMap|d holds f is being_homeomorphism by A2,
-          A330;
+of R^1 | d, TUC | Ui st f = CircleMap|d holds f is being_homeomorphism by A2
+,A330;
           let x be set such that
 A334:     x in dom (Fn1 | [:{y},Z1:]);
           consider x1, x2 being set such that
@@ -2426,7 +2399,7 @@ A340:     x1 = y by A335,TARSKI:def 1;
 A341:     F. [x1,TT.i] in F.:[:N,ZZ:] by FUNCT_2:43;
 A342:     xy c= N1 by A282,A335,ZFMISC_1:37;
           then reconsider xZZ = [:xy,ZZ:] as Subset of [:Y|N1,I[01]:] by A293,
-          ZFMISC_1:119;
+ZFMISC_1:119;
           xy is connected by A335,CONNSP_1:29;
           then
 A343:     [:xy,ZZ:] is connected by A328,TOPALG_3:17;
@@ -2446,14 +2419,14 @@ A349:       CircleMap.(Fn1.a) = (CircleMap*Fn1).a by FUNCT_2:21
             then a in [:N,ZZ:] by A347;
             then F.a in F.:[:N,ZZ:] by A6,A346,FUNCT_1:def 12;
             hence b in union D by A331,A332,A348,A349,Lm12,FUNCT_1:def 13
-            ,TOPMETR:24;
+,TOPMETR:24;
           end;
 A350:     I[01] is SubSpace of I[01] by TSEP_1:2;
           then [:Y|N1,I[01]:] is SubSpace of [:Y,I[01]:] by BORSUK_3:25;
           then
 A351:     xZZ is connected by A343,CONNSP_1:24;
           reconsider XZZ = [:xy,ZZ:] as Subset of [:Y|N2,I[01]:] by A294,A338,
-          ZFMISC_1:119;
+ZFMISC_1:119;
           [:Y|N2,I[01]:] is SubSpace of [:Y,I[01]:] by A350,BORSUK_3:25;
           then
 A352:     XZZ is connected by A343,CONNSP_1:24;
@@ -2472,17 +2445,17 @@ A357:       CircleMap.(Fn2.a) = (CircleMap*Fn2).a by FUNCT_2:21
             then a in [:N,ZZ:] by A355;
             then F.a in F.:[:N,ZZ:] by A6,A354,FUNCT_1:def 12;
             hence b in union D by A331,A332,A356,A357,Lm12,FUNCT_1:def 13
-            ,TOPMETR:24;
+,TOPMETR:24;
           end;
 A358:     TT.i in Z by A318,A316,XXREAL_1:1;
           then
 A359:     [x1,TT.i] in [:{y},Z:] by A335,ZFMISC_1:106;
 A360:     [:{y},Z:] c= [:N1,I:] by A282,ZFMISC_1:119;
           then F. [x1,TT.i] = (CircleMap*Fn1). [x1,TT.i] by A280,A359,
-          FUNCT_1:72
+FUNCT_1:72
             .= CircleMap.(Fn1. [x1,TT.i]) by A295,A359,A360,FUNCT_1:23;
-          then Fn1. [x1,TT.i] in (CircleMap)"Ui by A331,A341,FUNCT_2:46,
-          TOPMETR:24;
+          then Fn1. [x1,TT.i] in (CircleMap)"Ui by A331,A341,FUNCT_2:46
+,TOPMETR:24;
           then consider Uit being set such that
 A361:     Fn1. [x1,TT.i] in Uit and
 A362:     Uit in D by A332,TARSKI:def 4;
@@ -2504,28 +2477,27 @@ A366:       f.a = b by FUNCT_1:def 5;
           the carrier of (TUC | Ui) = Ui & the carrier of (R^1 | Uit) =
           Uit by PRE_TOPC:29;
           then reconsider f as Function of R^1 | Uit, TUC | Ui by A363,A364,
-          FUNCT_2:4;
+FUNCT_2:4;
 A367:     [:N2,Z:] c= [:N2,I:] by ZFMISC_1:118;
 A368:     [x1,TT.i] in [:N2,Z:] by A292,A335,A358,ZFMISC_1:106;
           then F. [x1,TT.i] = (CircleMap*Fn2). [x1,TT.i] by A278,A367,
-          FUNCT_1:72
+FUNCT_1:72
             .= CircleMap.(Fn2. [x1,TT.i]) by A290,A294,A368,A367,FUNCT_1:23;
-          then Fn2. [x1,TT.i] in (CircleMap)"Ui by A331,A341,FUNCT_2:46,
-          TOPMETR:24;
+          then Fn2. [x1,TT.i] in (CircleMap)"Ui by A331,A341,FUNCT_2:46
+,TOPMETR:24;
           then consider Uith being set such that
 A369:     Fn2. [x1,TT.i] in Uith and
 A370:     Uith in D by A332,TARSKI:def 4;
           reconsider Uith as non empty Subset of R^1 by A369,A370;
 A371:     dom (Fn1 | [:xy,ZZ:]) = [:xy,ZZ:] by A293,A296,A342,RELAT_1:91
-          ,ZFMISC_1:119;
+,ZFMISC_1:119;
 A372:     x1 in xy by TARSKI:def 1;
           then
 A373:     [x1,TT.i] in xZZ by A329,ZFMISC_1:106;
           then Fn1. [x1,TT.i] in Fn1.:xZZ by FUNCT_2:43;
           then Uit meets Fn1.:xZZ by A361,XBOOLE_0:3;
           then
-A374:     Fn1.:xZZ c= Uit by A277,A362,A351,A345,TOPALG_3:13 ,
-          TOPS_2:75;
+A374:     Fn1.:xZZ c= Uit by A277,A362,A351,A345,TOPALG_3:13,TOPS_2:75;
 A375:     rng (Fn1 | [:xy,ZZ:]) c= dom f
           proof
             let b be set;
@@ -2539,18 +2511,15 @@ A377:       (Fn1 | [:xy,ZZ:]).a = b by FUNCT_1:def 5;
             hence thesis by A374,A363;
           end;
           then
-A378:     dom (f*(Fn1 | [:xy,ZZ:])) = dom (Fn1 | [:xy,ZZ:]) by
-          RELAT_1:46;
+A378:     dom (f*(Fn1 | [:xy,ZZ:])) = dom (Fn1 | [:xy,ZZ:]) by RELAT_1:46;
           [x1,TT.i] in [:xy,ZZ:] by A335,A340,A329,ZFMISC_1:106;
           then [x1,TT.i] in dom Fn2 by A291,A339;
           then
 A379:     Fn2. [x1,TT.i] in Fn2.:xZZ by A373,FUNCT_2:43;
           then Uith meets Fn2.:xZZ by A369,XBOOLE_0:3;
           then
-A380:     Fn2.:xZZ c= Uith by A276,A370,A352,A353,TOPALG_3:13 ,
-          TOPS_2:75;
-          Fn1. [x1,TT.i] = (Fn1 | [:{y},Z:]). [x1,TT.i] by A359, FUNCT_1
-          :72
+A380:     Fn2.:xZZ c= Uith by A276,A370,A352,A353,TOPALG_3:13,TOPS_2:75;
+          Fn1. [x1,TT.i] = (Fn1 | [:{y},Z:]). [x1,TT.i] by A359,FUNCT_1:72
             .= Fn2. [x1,TT.i] by A319,A359,FUNCT_1:72;
           then Uit meets Uith by A361,A379,A380,XBOOLE_0:3;
           then
@@ -2561,15 +2530,13 @@ A382:     for x being set st x in dom (f*(Fn1 | [:xy,ZZ:])) holds (f*(
 A383:       dom (Fn1 | [:xy,ZZ:]) c= dom Fn1 by RELAT_1:89;
             let x be set such that
 A384:       x in dom (f*(Fn1 | [:xy,ZZ:]));
-A385:       Fn1.x in Fn1.:[:xy,ZZ:] by A296,A371,A378,A384,FUNCT_1:def
-            12;
-A386:       Fn2.x in Fn2.:[:xy,ZZ:] by A291,A339,A371,A378,A384,FUNCT_1:
-            def 12;
+A385:       Fn1.x in Fn1.:[:xy,ZZ:] by A296,A371,A378,A384,FUNCT_1:def 12;
+A386:       Fn2.x in Fn2.:[:xy,ZZ:] by A291,A339,A371,A378,A384,FUNCT_1:def 12;
             dom (Fn1 | [:xy,ZZ:]) = dom Fn1 /\ [:xy,ZZ:] by RELAT_1:90;
             then
 A387:       x in [:xy,ZZ:] by A378,A384,XBOOLE_0:def 4;
-            thus (f*(Fn1 | [:xy,ZZ:])).x = ((f*Fn1) | [:xy,ZZ:]).x by RELAT_1:
-            112
+            thus (f*(Fn1 | [:xy,ZZ:])).x = ((f*Fn1) | [:xy,ZZ:]).x by
+RELAT_1:112
               .= (f*Fn1).x by A371,A378,A384,FUNCT_1:72
               .= f.(Fn1.x) by A296,A384,FUNCT_1:23
               .= CircleMap.(Fn1.x) by A374,A385,FUNCT_1:72
@@ -2583,7 +2550,7 @@ A387:       x in [:xy,ZZ:] by A378,A384,XBOOLE_0:def 4;
               .= (f*(Fn2 | [:xy,ZZ:])).x by RELAT_1:112;
           end;
 A388:     dom (Fn2 | [:xy,ZZ:]) = [:xy,ZZ:] by A290,A294,A338,RELAT_1:91
-          ,ZFMISC_1:119;
+,ZFMISC_1:119;
 A389:     rng (Fn2 | [:xy,ZZ:]) c= dom f
           proof
             let b be set;
@@ -2596,11 +2563,10 @@ A391:       (Fn2 | [:xy,ZZ:]).a = b by FUNCT_1:def 5;
             then b in Fn2.:xZZ by A290,A388,A390,FUNCT_1:def 12;
             hence thesis by A380,A381,A363;
           end;
-          then dom (f*(Fn2 | [:xy,ZZ:])) = dom (Fn2 | [:xy,ZZ:]) by
-          RELAT_1:46;
+          then dom (f*(Fn2 | [:xy,ZZ:])) = dom (Fn2 | [:xy,ZZ:]) by RELAT_1:46;
           then
-A392:     f*(Fn1 | [:xy,ZZ:]) = f*(Fn2 | [:xy,ZZ:]) by A371,A388,A375,
-          A382,FUNCT_1:9,RELAT_1:46;
+A392:     f*(Fn1 | [:xy,ZZ:]) = f*(Fn2 | [:xy,ZZ:]) by A371,A388,A375,A382,
+FUNCT_1:9,RELAT_1:46;
           f is being_homeomorphism by A333,A362;
           then
 A393:     f is one-to-one by TOPS_2:def 5;
@@ -2612,7 +2578,7 @@ A394:       x in [:xy,ZZ:] by A337,A372,ZFMISC_1:106;
             thus (Fn1 | [:{y},Z1:]).x = Fn1.x by A325,A334,FUNCT_1:72
               .= (Fn1 | [:xy,ZZ:]).x by A394,FUNCT_1:72
               .= (Fn2 | [:xy,ZZ:]).x by A393,A371,A388,A375,A389,A392,
-            FUNCT_1:49
+FUNCT_1:49
               .= Fn2.x by A394,FUNCT_1:72
               .= (Fn2 | [:{y},Z1:]).x by A325,A334,FUNCT_1:72;
           end;
@@ -2628,7 +2594,7 @@ A395:       x in [:{y},Z:] by A335,A337,ZFMISC_1:106;
           end;
         end;
         dom (Fn2 | [:{y},Z1:]) = [:{y},Z1:] by A292,A290,A294,RELAT_1:91
-        ,ZFMISC_1:119;
+,ZFMISC_1:119;
         hence thesis by A325,A326,FUNCT_1:9;
       end;
     end;
@@ -2656,7 +2622,7 @@ A402: F | [:N,I:] = CircleMap*Fn & Fn | [:the carrier of Y,{0}:] = Ft
 N,I:] = CircleMap*H & H | [:the carrier of Y,{0}:] = Ft | [:N,I:] holds Fn = H
     by A271;
 A403: the carrier of [:Y|N,I[01]:] = [:the carrier of (Y|N),I:] by
-    BORSUK_1:def 5
+BORSUK_1:def 5
       .= [:N,I:] by PRE_TOPC:29;
     then p in the carrier of [:Y|N,I[01]:] by A398,A400,ZFMISC_1:106;
     then consider W being Subset of [:Y|N,I[01]:] such that
@@ -2716,7 +2682,7 @@ A422: F | [:N,I:] = CircleMap*Fn and
 N,I:] = CircleMap*H & H | [:the carrier of Y,{0}:] = Ft | [:N,I:] holds Fn = H
     by A271;
 A423: the carrier of [:Y|N,I[01]:] = [:the carrier of (Y|N),I:] by
-    BORSUK_1:def 5
+BORSUK_1:def 5
       .= [:N,I:] by PRE_TOPC:29;
     then
 A424: x in the carrier of [:Y|N,I[01]:] by A419,A421,ZFMISC_1:106;
@@ -2771,7 +2737,7 @@ A439: for H being Function of [:Y|N,I[01]:], R^1 st H is continuous &
 F | [:N,I:] = CircleMap*H & H | [:the carrier of Y,{0}:] = Ft | [:N,I:] holds
     Fn = H by A271;
 A440: the carrier of [:Y|N,I[01]:] = [:the carrier of (Y|N),I:] by
-    BORSUK_1:def 5
+BORSUK_1:def 5
       .= [:N,I:] by PRE_TOPC:29;
     then
 A441: x in the carrier of [:Y|N,I[01]:] by A436,A438,ZFMISC_1:106;
@@ -2781,13 +2747,12 @@ A441: x in the carrier of [:Y|N,I[01]:] by A436,A438,ZFMISC_1:106;
 A442: dom (H | [:N,I:]) = [:N,I:] by RELAT_1:91;
     rng (H | [:N,I:]) c= R;
     then reconsider
-    H1 = H | [:N,I:] as Function of [:Y|N,I[01]:], R^1 by A440,A442
-    ,FUNCT_2:4;
+    H1 = H | [:N,I:] as Function of [:Y|N,I[01]:], R^1 by A440,A442,FUNCT_2:4;
 A443: H | [:N,I:] | [:the carrier of Y,{0}:] = H | ([:the carrier of Y,{0}
     :] /\ [:N,I:]) by RELAT_1:100
       .= Ft | [:N,I:] by A435,RELAT_1:100;
-    H1 is continuous & F | [:N,I:] = CircleMap*(H| [:N,I:]) by A434,
-    RELAT_1:112 ,TOPALG_3:18;
+    H1 is continuous & F | [:N,I:] = CircleMap*(H| [:N,I:]) by A434,RELAT_1:112
+,TOPALG_3:18;
     hence G.x = (H| [:N,I:]).x by A437,A439,A443
       .= H.x by A440,A441,FUNCT_1:72;
   end;
@@ -2872,7 +2837,7 @@ A22: x2 in {0} and
 A23: x = [x1,x2] by A4,A20,Lm14,ZFMISC_1:def 2;
 A24: x2 = 0 by A22,TARSKI:def 1;
     thus (F | [:the carrier of Y,{0}:]).x = F.(x1,x2) by A4,A20,A23,Lm14,
-    FUNCT_1:72
+FUNCT_1:72
       .= f.x2 by A1,A21,A24,Lm2
       .= x0 by A24,BORSUK_2:def 4
       .= CircleMap.xt by A18,TARSKI:def 1
@@ -2884,14 +2849,14 @@ A26: dom F = the carrier of [:Y,I[01]:] by FUNCT_2:def 1;
   then
 A27: [:the carrier of Y,{0}:] c= dom F by A3,Lm3,ZFMISC_1:118;
   then dom (F | [:the carrier of Y,{0}:]) = [:the carrier of Y,{0}:] by
-  RELAT_1:91;
+RELAT_1:91;
   then consider G being Function of [:Y,I[01]:], R^1 such that
 A28: G is continuous and
 A29: F = CircleMap*G and
 A30: G | [:the carrier of Y,{0}:] = Ft and
 A31: for H being Function of [:Y,I[01]:], R^1 st H is continuous & F =
-  CircleMap*H & H | [:the carrier of Y,{0}:] = Ft holds G = H by A17,A25,A19,
-  Th22, FUNCT_1:9;
+  CircleMap*H & H | [:the carrier of Y,{0}:] = Ft holds G = H by A17,A25,A19
+,Th22,FUNCT_1:9;
   take ft = Prj2(j,G);
   thus ft.0 = G.(j,j0) by Def3
     .= Ft. [j,j0] by A30,A2,FUNCT_1:72
@@ -2970,8 +2935,8 @@ A50: F = CircleMap*H by FUNCT_2:113;
     let i be Point of I[01];
 A51: dom H = the carrier of [:Y,I[01]:] by FUNCT_2:def 1;
     then
-A52: dom (H | [:the carrier of Y,{0}:]) = [:the carrier of Y,{0}:] by A26,
-    A27,RELAT_1:91;
+A52: dom (H | [:the carrier of Y,{0}:]) = [:the carrier of Y,{0}:] by A26,A27,
+RELAT_1:91;
 A53: for x being set st x in dom (H | [:the carrier of Y,{0}:]) holds (H |
     [:the carrier of Y,{0}:]).x = Ft.x
     proof
@@ -2989,8 +2954,7 @@ A58:  x2 = j0 by A56,TARSKI:def 1;
     end;
     dom Ft = [:the carrier of Y,{0}:] by A4,Lm14,FUNCT_2:def 1;
     then
-A59: H | [:the carrier of Y,{0}:] = Ft by A26,A27,A51,A53,FUNCT_1:9 ,
-    RELAT_1:91;
+A59: H | [:the carrier of Y,{0}:] = Ft by A26,A27,A51,A53,FUNCT_1:9,RELAT_1:91;
     thus ft.i = G.(j,i) by Def3
       .= H.(j,i) by A31,A50,A48,A59
       .= f1.i by A33;
@@ -3055,7 +3019,7 @@ A14: dom Ft = [:I,{0}:] by FUNCT_2:def 1;
 A15: the carrier of [:I[01],Sspace(0[01]):] = [:I, the carrier of Sspace(
   0[01]):] by BORSUK_1:def 5;
   then reconsider Ft as Function of [:I[01],Sspace(0[01]):], R^1 by Lm14,
-  TOPMETR:24;
+TOPMETR:24;
 A16: for x being set st x in dom (CircleMap*Ft) holds (F | [:I,{0}:]).x = (
   CircleMap*Ft).x
   proof
@@ -3111,16 +3075,14 @@ A32: dom F = the carrier of [:I[01],I[01]:] by FUNCT_2:def 1;
   then
 A33: [:I,{0}:] c= dom F by Lm3,Lm5,ZFMISC_1:118;
   then dom (F | [:I,{0}:]) = [:I,{0}:] by RELAT_1:91;
-  then F | [:I,{0}:] = CircleMap*Ft by
-  A14,A13,A16,Lm12,FUNCT_1:9 ,RELAT_1
-  :46;
+  then F | [:I,{0}:] = CircleMap*Ft by A14,A13,A16,Lm12,FUNCT_1:9,RELAT_1:46;
   then consider G being Function of [:I[01],I[01]:], R^1 such that
 A34: G is continuous and
 A35: F = CircleMap*G and
 A36: G | [:I,{0}:] = Ft and
 A37: for H being Function of [:I[01],I[01]:], R^1 st H is continuous & F
-  = CircleMap*H & H | [:the carrier of I[01],{0}:] = Ft holds G = H by A2,A29,
-  Th22;
+  = CircleMap*H & H | [:the carrier of I[01],{0}:] = Ft holds G = H by A2,A29
+,Th22;
   set sM0 = Prj2(j0,G);
 A38: for x being Point of I[01] holds cP1.x = (CircleMap*sM0).x
   proof
@@ -3358,8 +3320,8 @@ A9:       2*a is Point of I[01] by BORSUK_6:6;
           a) by FUNCT_2:21
             .= CircleMap.((ExtendInt(x)).(2*a)) by A8,BORSUK_6:def 4
             .= CircleMap.(x*(2*a)) by A9,Def1
-            .= |[ cos(2*PI*(x*(2*a))), sin(2*PI*(x*(2*a))) ]| by TOPREALB:
-          def 11
+            .= |[ cos(2*PI*(x*(2*a))), sin(2*PI*(x*(2*a))) ]| by
+TOPREALB:def 11
             .= |[ cos(2*PI*x*(2*a)), sin(2*PI*x*(2*a)) ]|
             .= (cLoop(x)).(2*a) by A9,Def4
             .= (cLoop(x)+cLoop(y)).a by A8,BORSUK_6:def 4;
@@ -3375,9 +3337,9 @@ A11:      2*a-1 is Point of I[01] by BORSUK_6:7;
             .= CircleMap.(tx.(y*(2*a-1))) by A11,Def1
             .= CircleMap.(1*(y*(2*a-1))+x) by JORDAN16:def 3
             .= |[ cos(2*PI*((y*(2*a-1))+x)), sin(2*PI*((y*(2*a-1))+x)) ]| by
-          TOPREALB:def 11
+TOPREALB:def 11
             .= |[ cos(2*PI*(y*(2*a-1))), sin(2*PI*(y*(2*a-1))+2*PI*x) ]| by
-          COMPLEX2:10
+COMPLEX2:10
             .= |[ cos(2*PI*y*(2*a-1)), sin(2*PI*y*(2*a-1)) ]| by COMPLEX2:9
             .= (cLoop(y)).(2*a-1) by A11,Def4
             .= (cLoop(x)+cLoop(y)).a by A10,BORSUK_6:def 4;
@@ -3387,8 +3349,7 @@ A11:      2*a-1 is Point of I[01] by BORSUK_6:7;
       then fX,cLoop(x) are_homotopic by A1,TOPALG_1:47;
       then
 A12:  fX+fY,cLoop(x)+cLoop(y) are_homotopic by A4,BORSUK_6:84;
-      thus f.(x*y) = Class(EqRel(TUC,c[10]),CircleMap*(ExtendInt(x)+p)) by
-      Th25
+      thus f.(x*y) = Class(EqRel(TUC,c[10]),CircleMap*(ExtendInt(x)+p)) by Th25
         .= Class(EqRel(TUC,c[10]),cLoop(x)+cLoop(y)) by A7,FUNCT_2:113
         .= f.x * f.y by A3,A12,TOPALG_1:47;
     end;
@@ -3431,8 +3392,8 @@ A7:   for f1 being Function of I[01], R^1 st f1 is continuous & cLoop
 A8:   Pt,Qt are_homotopic and
 A9:   F = CircleMap*Ft and
       yt in (CircleMap)"{c[10]} and
-      for F1 being Homotopy of Pt,Qt st F = CircleMap*F1 holds Ft = F1 by
-      A3,A6,Th24;
+      for F1 being Homotopy of Pt,Qt st F = CircleMap*F1 holds Ft = F1 by A3,A6
+,Th24;
 A10:  cLoop(n) = CircleMap*ExtendInt(n) by Th20;
       set ft0 = Prj1(j0,Ft);
 A11:  now
@@ -3520,8 +3481,8 @@ proof
 
   TUC = Tcircle(0.TOP-REAL 2,1) by TOPREALB:def 7;
 
-  then pi_1(TUC,c[10]),pi_1(Tcircle(o,r),x) are_isomorphic by TOPALG_3:35,
-  TOPREALB:20;
+  then pi_1(TUC,c[10]),pi_1(Tcircle(o,r),x) are_isomorphic by TOPALG_3:35
+,TOPREALB:20;
 
   then consider
   h being Homomorphism of pi_1(TUC,c[10]), pi_1(Tcircle(o,r),x) such

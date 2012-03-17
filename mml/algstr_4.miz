@@ -1,0 +1,4218 @@
+:: Free Magmas
+::  by Marco Riccardi
+:: 
+:: Received October 20, 2009
+:: Copyright (c) 2009 Association of Mizar Users
+
+environ
+
+ vocabularies TARSKI, ORDINAL2, FUNCT_1, BOOLE, RELAT_1, ORDINAL1, ARYTM_1,
+      FINSEQ_1, ARYTM, CLASSES1, PROB_1, AFINSQ_1, FUNCT_2, YELLOW_6, BINOP_1,
+      ALGSTR_0, SGRAPH1, REALSET1, COHSP_1, CARD_3, MCART_1, NAT_LAT, XREAL_0,
+      PARTFUN1, SETFAM_1, EQREL_1, GROUP_6, MSUALG_6, CIRCUIT2, ALGSTR_4;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, XCMPLX_0, RELAT_1, FUNCT_1,
+      FUNCOP_1, ORDINAL1, REAL_1, NAT_1, CARD_1, NUMBERS, SETFAM_1, FUNCT_6,
+      FUNCT_2, XXREAL_0, CLASSES1, FINSEQ_1, CARD_3, AFINSQ_1, NAT_D, YELLOW_6,
+      BINOP_1, STRUCT_0, ALGSTR_0, RELSET_1, ENUMSET1, FACIRC_1, GROUP_6,
+      MCART_1, NAT_LAT, PARTFUN1, REALSET1, EQREL_1, ALG_1, GROUP_2;
+ constructors WELLORD2, FUNCOP_1, FUNCT_6, FUNCT_2, XXREAL_0, XREAL_0, NAT_1,
+      CARD_1, CLASSES1, FINSEQ_1, CARD_3, AFINSQ_1, FINSET_1, NAT_D, INT_1,
+      XBOOLE_0, YELLOW_6, BINOP_1, STRUCT_0, ALGSTR_0, RELSET_1, ENUMSET1,
+      FACIRC_1, GROUP_6, MCART_1, NAT_LAT, REALSET1, SETFAM_1, EQREL_1,
+      RELAT_2, GROUP_2;
+ registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCOP_1,
+      FINSET_1, XXREAL_0, XREAL_0, NAT_1, CARD_1, NUMBERS, FUNCT_2, CLASSES1,
+      FINSEQ_1, CARD_3, AFINSQ_1, RFINSEQ, INT_1, YELLOW_6, BINOP_1, STRUCT_0,
+      ALGSTR_0, RELSET_1, FACIRC_1, GROUP_6, NAT_LAT, FUNCT_3, REALSET1,
+      SETFAM_1, EQREL_1, GROUP_2;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+ definitions TARSKI, ORDINAL1, FUNCT_1, ALGSTR_0, MCART_1;
+ theorems TARSKI, XBOOLE_1, ORDINAL1, RELAT_1, FUNCT_1, FUNCT_2, AFINSQ_1,
+      FINSEQ_1, XREAL_1, NAT_1, XXREAL_0, XREAL_0, ZFMISC_1, CLASSES1, CARD_3,
+      YELLOW_6, BINOP_1, RELSET_1, MCART_1, INT_1, SUBSET_1, XBOOLE_0, NAT_LAT,
+      FUNCT_5, GROUP_6, PARTFUN1, REALSET1, SETFAM_1, EQREL_1, OSALG_4,
+      GROUP_2, FUNCT_6;
+ schemes ORDINAL1, NAT_1, CLASSES1, FINSEQ_1, BINOP_1, FUNCT_2, XBOOLE_0,
+      EQREL_1, RELAT_1;
+
+begin :: Preliminaries
+
+registration
+  let X be set;
+  let f be Function of NAT, X;
+  let n be natural number;
+  cluster f|n -> T-Sequence-like;
+  correctness
+  proof
+    per cases;
+    suppose A1: X <> {};
+      n c= NAT; then
+      n c= dom f by A1,FUNCT_2:def 1; then
+      dom(f|n) is ordinal by RELAT_1:91;
+      hence thesis by ORDINAL1:def 7;
+    end;
+    suppose X = {}; then
+      f = {};
+      hence thesis;
+    end;
+  end;
+end;
+
+definition
+  let X,x be set;
+  func IFXFinSequence(x,X) -> XFinSequence of X equals :Def2:
+  x if x is XFinSequence of X
+  otherwise <%>X;
+  correctness;
+end;
+
+definition
+  let X be non empty set;
+  let f be Function of X^omega, X;
+  let c be XFinSequence of X;
+  redefine func f.c -> Element of X;
+  correctness
+  proof
+    c in X^omega by AFINSQ_1:def 8;
+    hence thesis by FUNCT_2:7;
+  end;
+end;
+
+theorem Th1:
+  for X,Y,Z being set st Y c= the_universe_of X & Z c= the_universe_of X
+  holds [:Y,Z:] c= the_universe_of X
+proof
+  let X,Y,Z be set;
+  assume Y c= the_universe_of X; then
+  A1: Y c= Tarski-Class the_transitive-closure_of X by YELLOW_6:def 3;
+  assume Z c= the_universe_of X; then
+  A2: Z c= Tarski-Class the_transitive-closure_of X by YELLOW_6:def 3;
+  [:Y,Z:] c= Tarski-Class the_transitive-closure_of X
+  by A1,A2,CLASSES1:32;
+  hence [:Y,Z:] c= the_universe_of X by YELLOW_6:def 3;
+end;
+
+scheme FuncRecursiveUniq { F(set) -> set, F1,F2() -> Function }:
+  F1() = F2()
+  provided
+A1: dom F1() = NAT & for n being natural number holds F1().n = F(F1()|n)
+  and
+A2: dom F2() = NAT & for n being natural number holds F2().n = F(F2()|n)
+proof
+  reconsider L1=F1() as T-Sequence by A1,ORDINAL1:def 7;
+  reconsider L2=F2() as T-Sequence by A2,ORDINAL1:def 7;
+  A3: dom L1 = NAT &
+  for B being Ordinal,T1 being T-Sequence st B in NAT & T1 = L1|B
+  holds L1.B = F(T1) by A1;
+  A4: dom L2 = NAT &
+  for B being Ordinal,T2 being T-Sequence st B in NAT & T2 = L2|B
+  holds L2.B = F(T2) by A2;
+  L1 = L2 from ORDINAL1:sch 3(A3,A4);
+  hence thesis;
+end;
+
+scheme FuncRecursiveExist { F(set) -> set }:
+  ex f being Function st dom f = NAT &
+  for n being natural number holds f.n = F(f|n)
+proof
+  consider L being T-Sequence such that
+  A1: dom L = NAT and
+  A2: for B being Ordinal,L1 being T-Sequence st B in NAT & L1 = L|B
+  holds L.B = F(L1) from ORDINAL1:sch 4;
+  take L;
+  thus dom L = NAT by A1;
+  let n be natural number;
+  reconsider B=n as Ordinal;
+  B in NAT by ORDINAL1:def 13; then
+  L.B = F(L|B) by A2;
+  hence thesis;
+end;
+
+scheme FuncRecursiveUniqu2
+  { X() -> non empty set, F(XFinSequence of X()) -> Element of X(),
+    F1,F2() -> Function of NAT, X()}:
+  F1() = F2()
+  provided
+A1: for n being natural number holds F1().n = F(F1()|n)
+  and
+A2: for n being natural number holds F2().n = F(F2()|n)
+proof
+  deffunc FX(set) = F(IFXFinSequence($1,X()));
+  reconsider f1=F1() as Function;
+  reconsider f2=F2() as Function;
+A3: dom f1 = NAT & for n being natural number holds f1.n = FX(f1|n)
+  proof
+    thus dom f1 = NAT by FUNCT_2:def 1;
+    let n be natural number;
+    thus f1.n = F(F1()|n) by A1 .= FX(f1|n) by Def2;
+  end;
+A4: dom f2 = NAT & for n being natural number holds f2.n = FX(f2|n)
+  proof
+    thus dom f2 = NAT by FUNCT_2:def 1;
+    let n be natural number;
+    thus f2.n = F(F2()|n) by A2 .= FX(f2|n) by Def2;
+  end;
+  f1 = f2 from FuncRecursiveUniq(A3,A4);
+  hence thesis;
+end;
+
+scheme FuncRecursiveExist2
+  { X() -> non empty set, F(XFinSequence of X()) -> Element of X() }:
+  ex f being Function of NAT, X() st
+  for n being natural number holds f.n = F(f|n)
+proof
+  deffunc FX(set) = F(IFXFinSequence($1,X()));
+  consider f be Function such that
+  A1: dom f = NAT and
+  A2: for n being natural number holds f.n = FX(f|n) from FuncRecursiveExist;
+  for y being set st y in rng f holds y in X()
+  proof
+    let y be set;
+    assume y in rng f; then
+    consider x be set such that
+    A3: x in dom f & y = f.x by FUNCT_1:def 5;
+    reconsider x as natural number by A1,A3;
+    y = F(IFXFinSequence(f|x,X())) by A3,A2;
+    hence y in X();
+  end; then
+  rng f c= X() by TARSKI:def 3; then
+  reconsider f'=f as Function of NAT, X() by A1,FUNCT_2:4;
+  take f';
+  let n be natural number;
+  f.n = F(IFXFinSequence(f'|n,X())) by A2
+  .= F(f'|n) by Def2;
+  hence thesis;
+end;
+
+definition
+  let f,g be Function;
+  pred f extends g means :Def3:
+  dom g c= dom f & f tolerates g;
+end;
+
+registration
+  cluster empty multMagma;
+  existence
+  proof
+    take multMagma(# {}, the BinOp of {} #);
+    thus thesis;
+  end;
+end;
+
+begin :: Equivalence Relations and Relators
+
+:: Ch I §1.6 Def.11 Algebra I Bourbaki
+definition
+  let M be multMagma;
+  let R be Equivalence_Relation of M;
+  attr R is compatible means :Def4:
+  for v,v',w,w' being Element of M st v in Class(R,v') & w in Class(R,w')
+  holds v*w in Class(R,v'*w');
+end;
+
+registration
+  let M be multMagma;
+  cluster nabla the carrier of M -> compatible;
+  correctness
+  proof
+    set R = nabla the carrier of M;
+    let v,v',w,w' be Element of M;
+    assume v in Class(R,v') & w in Class(R,w');
+    then
+A1: M is non empty;
+    then Class(R,v'*w') = the carrier of M by EQREL_1:34;
+    hence thesis by A1,SUBSET_1:def 2;
+  end;
+end;
+
+registration
+  let M be multMagma;
+  cluster compatible Equivalence_Relation of M;
+  correctness
+  proof
+    take nabla the carrier of M;
+    thus thesis;
+  end;
+end;
+
+theorem Th2:
+  for M being multMagma, R being Equivalence_Relation of M holds
+  R is compatible iff for v,v',w,w' being Element of M
+    st Class(R,v) = Class(R,v') & Class(R,w) = Class(R,w')
+    holds Class(R,v*w) = Class(R,v'*w')
+proof
+  let M be multMagma;
+  let R be Equivalence_Relation of M;
+  hereby
+    assume A1: R is compatible;
+    let v,v',w,w' be Element of M;
+    assume A2: Class(R,v) = Class(R,v') & Class(R,w) = Class(R,w');
+    per cases;
+    suppose A3: M is empty;
+      thus Class(R,v*w) = {} by A3 .= Class(R,v'*w') by A3;
+    end;
+    suppose M is not empty; then
+      v in Class(R,v') & w in Class(R,w') by A2,EQREL_1:31; then
+      v*w in Class(R,v'*w') by A1,Def4;
+      hence Class(R,v*w) = Class(R,v'*w') by EQREL_1:31;
+    end;
+  end;
+  assume A4: for v,v',w,w' being Element of M
+  st Class(R,v) = Class(R,v') & Class(R,w) = Class(R,w')
+  holds Class(R,v*w) = Class(R,v'*w');
+  for v,v',w,w' being Element of M st v in Class(R,v') & w in Class(R,w')
+  holds v*w in Class(R,v'*w')
+  proof
+    let v,v',w,w' be Element of M;
+    assume A5: v in Class(R,v') & w in Class(R,w');
+    per cases;
+    suppose M is empty; hence thesis by A5; end;
+    suppose A6: M is not empty;
+      Class(R,v') = Class(R,v) &
+      Class(R,w') = Class(R,w) by A5,EQREL_1:31; then
+      Class(R,v*w) = Class(R,v'*w') by A4;
+      hence v*w in Class(R,v'*w') by A6,EQREL_1:31;
+    end;
+  end;
+  hence R is compatible by Def4;
+end;
+
+definition
+  let M be multMagma;
+  let R be compatible Equivalence_Relation of M;
+  func ClassOp R -> BinOp of Class R means :Def5:
+  for x,y being Element of Class R, v,w being Element of M
+    st x = Class(R,v) & y = Class(R,w) holds it.(x,y) = Class(R,v*w)
+    if M is non empty otherwise it = {};
+  correctness
+  proof
+    A1: M is not empty implies ex b being BinOp of Class R st
+    for x, y being Element of Class R, v,w being Element of M st
+    x = Class(R,v) & y = Class(R,w) holds b.(x,y) = Class(R,v*w)
+    proof
+      assume A2: M is not empty; then
+      reconsider X = Class R as non empty set;
+      defpred P[set,set,set] means for x,y being Element of Class R,
+      v,w being Element of M st x=$1 & y=$2 & x = Class(R,v) & y = Class(R,w)
+      holds $3 = Class(R,v*w);
+      A3: for x,y being Element of X ex z being Element of X st P[x,y,z]
+      proof
+        let x,y be Element of X;
+        x in Class R; then
+        consider v be set such that
+        A4: v in the carrier of M & x = Class(R,v) by EQREL_1:def 5;
+        reconsider v as Element of M by A4;
+        y in Class R; then
+        consider w be set such that
+        A5: w in the carrier of M & y = Class(R,w) by EQREL_1:def 5;
+        reconsider w as Element of M by A5;
+        reconsider z = Class(R,v*w) as Element of X by A2,EQREL_1:def 5;
+        take z;
+        thus thesis by A4,A5,Th2;
+      end;
+      consider b be Function of [:X,X:],X such that
+      A6: for x,y being Element of X holds P[x,y,b.(x,y)]
+      from BINOP_1:sch 3(A3);
+      reconsider b as BinOp of Class R;
+      take b;
+      thus thesis by A6;
+    end;
+    A7: M is empty implies ex b being BinOp of Class R st b = {}
+    proof
+      assume M is empty; then
+      the carrier of M is empty; then
+      A8: Class R is empty by EQREL_1:40;
+      consider b be BinOp of Class R;
+      take b;
+      thus b = {} by A8;
+    end;
+    for b1, b2 being BinOp of Class R holds
+    M is not empty &
+    (for x,y being Element of Class R, v,w being Element of M
+    st x = Class(R,v) & y = Class(R,w) holds b1.(x,y) = Class(R,v*w)) &
+    (for x,y being Element of Class R, v,w being Element of M
+    st x = Class(R,v) & y = Class(R,w) holds b2.(x,y) = Class(R,v*w))
+    implies b1 = b2
+    proof
+      let b1,b2 be BinOp of Class R;
+      assume M is not empty;
+      assume A9: for x,y being Element of Class R, v,w being Element of M
+      st x = Class(R,v) & y = Class(R,w) holds b1.(x,y) = Class(R,v*w);
+      assume A10: for x,y being Element of Class R, v,w being Element of M
+      st x = Class(R,v) & y = Class(R,w) holds b2.(x,y) = Class(R,v*w);
+      for x,y being set st x in Class R & y in Class R
+      holds b1.(x,y) = b2.(x,y)
+      proof
+        let x,y be set;
+        assume A11: x in Class R; then
+        reconsider x'=x as Element of Class R;
+        assume A12: y in Class R; then
+        reconsider y'=y as Element of Class R;
+        consider v be set such that
+        A13: v in the carrier of M & x' = Class(R,v) by A11,EQREL_1:def 5;
+        consider w be set such that
+        A14:w in the carrier of M & y' = Class(R,w) by A12,EQREL_1:def 5;
+        reconsider v,w as Element of M by A13,A14;
+        b1.(x',y') = Class(R,v*w) by A13,A14,A9;
+        hence b1.(x,y) = b2.(x,y) by A13,A14,A10;
+      end;
+      hence thesis by BINOP_1:1;
+    end;
+    hence thesis by A1,A7;
+  end;
+end;
+
+:: Ch I §1.6 Def.11 Algebra I Bourbaki
+definition
+  let M be multMagma;
+  let R be compatible Equivalence_Relation of M;
+  func M ./. R -> multMagma equals
+  multMagma(# Class R, ClassOp R #);
+  correctness;
+end;
+
+registration
+  let M be multMagma;
+  let R be compatible Equivalence_Relation of M;
+  cluster M ./. R -> strict;
+  correctness;
+end;
+
+registration
+  let M be non empty multMagma;
+  let R be compatible Equivalence_Relation of M;
+  cluster M ./. R -> non empty;
+  correctness;
+end;
+
+definition
+  let M be non empty multMagma;
+  let R be compatible Equivalence_Relation of M;
+  func nat_hom R -> Function of M, M ./. R means :Def7:
+  for v being Element of M holds it.v = Class(R,v);
+  existence
+  proof
+    defpred P[set,set] means ex v being Element of M st $1=v & $2=Class(R,v);
+A1: for x being set st x in the carrier of M ex y being set st P[x,y]
+    proof
+      let x be set;
+      assume x in the carrier of M;
+      then reconsider v = x as Element of M;
+      reconsider y = Class(R,v) as set;
+      take y,v;
+      thus thesis;
+    end;
+    consider f being Function such that
+A2: dom f = the carrier of M and
+A3: for x being set st x in the carrier of M
+    holds P[x,f.x] from CLASSES1:sch 1(A1);
+    rng f c= the carrier of M ./. R
+    proof
+      let x be set;
+      assume x in rng f;
+      then consider y be set such that
+A4:   y in dom f and
+A5:   f.y = x by FUNCT_1:def 5;
+      consider v be Element of M such that
+A6:   y = v & f.y = Class(R,v) by A2,A3,A4;
+      thus thesis by A5,A6,EQREL_1:def 5;
+    end;
+    then reconsider f as Function of M, M ./. R
+    by A2,FUNCT_2:def 1,RELSET_1:11;
+    take f;
+    let v be Element of M;
+    ex w being Element of M st v = w & f.v = Class(R,w) by A3;
+    hence thesis;
+  end;
+  uniqueness
+  proof
+    let f1,f2 be Function of M, M ./. R such that
+A7: for v being Element of M holds f1.v = Class(R,v) and
+A8: for v being Element of M holds f2.v = Class(R,v);
+    now
+      let v being Element of M;
+      f1.v = Class(R,v) & f2.v = Class(R,v) by A7,A8;
+      hence f1.v = f2.v;
+    end;
+    hence thesis by FUNCT_2:113;
+  end;
+end;
+
+registration
+  let M be non empty multMagma;
+  let R be compatible Equivalence_Relation of M;
+  cluster nat_hom R -> multiplicative;
+  correctness
+  proof
+    for v,w being Element of M
+    holds (nat_hom R).(v*w) = (nat_hom R).v * (nat_hom R).w
+    proof
+      let v,w be Element of M;
+      (nat_hom R).v = Class(R,v) & (nat_hom R).w = Class(R,w) by Def7; then
+      A1: (ClassOp R).((nat_hom R).v,(nat_hom R).w) = Class(R,v*w) by Def5;
+      thus (nat_hom R).(v*w) = (nat_hom R).v * (nat_hom R).w by A1,Def7;
+    end;
+    hence thesis by GROUP_6:def 7;
+  end;
+end;
+
+registration
+  let M be non empty multMagma;
+  let R be compatible Equivalence_Relation of M;
+  cluster nat_hom R -> onto;
+  correctness
+  proof
+    for y being set st y in the carrier of (M ./. R) holds y in rng nat_hom R
+    proof
+      let y be set;
+      assume y in the carrier of (M ./. R); then
+      consider x be set such that
+      A1: x in the carrier of M & y = Class(R,x) by EQREL_1:def 5;
+      reconsider x as Element of M by A1;
+      the carrier of M = dom(nat_hom R) by FUNCT_2:def 1; then
+      x in dom(nat_hom R) & (nat_hom R).x = Class(R,x) by Def7;
+      hence y in rng nat_hom R by A1,FUNCT_1:def 5;
+    end; then
+    the carrier of (M ./. R) c= rng nat_hom R by TARSKI:def 3; then
+    rng nat_hom R = the carrier of (M ./. R) by XBOOLE_0:def 10;
+    hence thesis by FUNCT_2:def 3;
+  end;
+end;
+
+definition
+  let M be multMagma;
+  mode Relators of M is [:the carrier of M,the carrier of M:]-valued Function;
+end;
+
+:: Ch I §1.6 Algebra I Bourbaki
+definition
+  let M be multMagma;
+  let r be Relators of M;
+  func equ_rel r -> Equivalence_Relation of M equals
+  meet {R where R is compatible Equivalence_Relation of M:
+     for i being set, v,w being Element of M st i in dom r & r.i = [v,w]
+       holds v in Class(R,w)};
+  correctness
+  proof
+    set X = {R where R is compatible Equivalence_Relation of M :
+        for i being set, v,w being Element of M st i in dom r & r.i = [v,w]
+          holds v in Class(R,w)};
+    per cases;
+    suppose M is empty; then
+      A1: the carrier of M = {};
+      for x being set st x in X holds x in {{}}
+      proof
+        let x be set;
+        assume x in X; then
+        consider R be compatible Equivalence_Relation of M such that
+        A2: x=R &
+          for i being set, v,w being Element of M st i in dom r & r.i = [v,w]
+          holds v in Class(R,w);
+        x is Subset of {} by A2,A1,ZFMISC_1:113;
+        hence x in {{}} by TARSKI:def 1;
+      end; then
+      X c= {{}} by TARSKI:def 3; then
+      X = {} or X = {{}} by ZFMISC_1:39;
+      hence thesis by A1,OSALG_4:10,SETFAM_1:11,SETFAM_1:def 1;
+    end;
+    suppose A3: M is not empty;
+    for i being set, v,w being Element of M st i in dom r & r.i = [v,w]
+    holds v in Class(nabla the carrier of M,w)
+    proof
+      let i be set;
+      let v,w be Element of M;
+      assume i in dom r & r.i = [v,w];
+      Class(nabla the carrier of M,w) = the carrier of M
+      by EQREL_1:34,A3;
+      hence v in Class(nabla the carrier of M,w) by A3,SUBSET_1:def 2;
+    end; then
+    A5: nabla the carrier of M in X;
+    for x being set st x in X
+    holds x in bool [:the carrier of M,the carrier of M:]
+    proof
+      let x be set;
+      assume x in X; then
+      consider R be compatible Equivalence_Relation of M such that
+      A6: x=R &
+        for i being set, x,y being Element of M st i in dom r & r.i = [x,y]
+          holds x in Class(R,y);
+      thus thesis by A6;
+    end; then
+    reconsider X as Subset-Family of [:the carrier of M,the carrier of M:]
+    by TARSKI:def 3;
+    for Y being set st Y in X holds Y is Equivalence_Relation of M
+    proof
+      let Y be set;
+      assume Y in X; then
+      consider R be compatible Equivalence_Relation of M such that
+      A7: Y=R &
+        for i being set, v,w being Element of M st i in dom r & r.i = [v,w]
+          holds v in Class(R,w);
+      thus Y is Equivalence_Relation of M by A7;
+    end;
+    hence thesis by A5,EQREL_1:19;
+  end;
+  end;
+end;
+
+theorem Th3:
+  for M being multMagma,
+      r being Relators of M,
+      R being compatible Equivalence_Relation of M
+  st (for i being set, v,w being Element of M st i in dom r & r.i = [v,w]
+       holds v in Class(R,w))
+  holds equ_rel r c= R
+proof
+  let M be multMagma;
+  let r be Relators of M;
+  let R be compatible Equivalence_Relation of M;
+  assume A1: for i being set, v,w being Element of M
+                 st i in dom r & r.i = [v,w] holds v in Class(R,w);
+  per cases;
+  suppose M is empty; hence thesis; end;
+  suppose M is not empty;
+    for X being set st X in equ_rel r holds X in R
+    proof
+      let X be set;
+      assume A2: X in equ_rel r;
+      R in {R' where R' is compatible Equivalence_Relation of M:
+        for i being set, v,w being Element of M st i in dom r & r.i = [v,w]
+          holds v in Class(R',w)} by A1;
+      hence X in R by A2,SETFAM_1:def 1;
+    end;
+    hence equ_rel r c= R by TARSKI:def 3;
+  end;
+end;
+
+registration
+  let M be multMagma;
+  let r be Relators of M;
+  cluster equ_rel r -> compatible;
+  coherence
+  proof
+    set X = {R where R is compatible Equivalence_Relation of M :
+        for i being set, v,w being Element of M st i in dom r & r.i = [v,w]
+          holds v in Class(R,w)};
+    for v,v',w,w' being Element of M
+    st v in Class(equ_rel r,v') & w in Class(equ_rel r,w')
+    holds v*w in Class(equ_rel r,v'*w')
+    proof
+      let v,v',w,w' be Element of M;
+      assume v in Class(equ_rel r,v'); then
+      A1: [v',v] in equ_rel r by EQREL_1:26;
+      assume w in Class(equ_rel r,w'); then
+      A2: [w',w] in equ_rel r by EQREL_1:26;
+      per cases;
+      suppose X = {}; hence thesis by A1,SETFAM_1:def 1; end;
+      suppose A3: X <> {};
+        for Y being set st Y in X holds [v'*w',v*w] in Y
+        proof
+          let Y be set;
+          assume A4: Y in X; then
+          consider R be compatible Equivalence_Relation of M such that
+          A5: Y = R &
+          for i being set, v,w being Element of M st i in dom r & r.i = [v,w]
+          holds v in Class(R,w);
+          [v',v] in Y by A1,A4,SETFAM_1:def 1; then
+          A6: v in Class(R,v') by A5,EQREL_1:26;
+          [w',w] in Y by A2,A4,SETFAM_1:def 1; then
+          A7: w in Class(R,w') by A5,EQREL_1:26;
+          v*w in Class(R,v'*w') by A6,A7,Def4;
+          hence [v'*w',v*w] in Y by A5,EQREL_1:26;
+        end; then
+        [v'*w',v*w] in meet X by A3,SETFAM_1:def 1;
+        hence v*w in Class(equ_rel r,v'*w') by EQREL_1:26;
+      end;
+    end;
+    hence thesis by Def4;
+  end;
+end;
+
+definition
+  let X,Y be set;
+  let f be Function of X,Y;
+  func equ_kernel f -> Equivalence_Relation of X means :Def9:
+  for x,y being set holds [x,y] in it iff x in X & y in X & f.x = f.y;
+  existence
+  proof
+    defpred P[set,set] means f.$1 = f.$2;
+    A1: for x being set st x in X holds P[x,x];
+    A2: for x,y being set st P[x,y] holds P[y,x];
+    A3: for x,y,z being set st P[x,y] & P[y,z] holds P[x,z];
+    ex EqR being Equivalence_Relation of X st
+    for x,y being set holds [x,y] in EqR iff x in X & y in X & P[x,y]
+    from EQREL_1:sch 1(A1,A2,A3);
+    hence thesis;
+  end;
+  uniqueness
+  proof
+    let R1, R2 be Equivalence_Relation of X;
+    defpred P[set,set] means $1 in X & $2 in X & f.$1 = f.$2;
+    assume for x,y being set holds [x,y] in R1
+    iff x in X & y in X & f.x = f.y; then
+    A4: for x,y being set holds [x,y] in R1 iff P[x,y];
+    assume for x,y being set holds [x,y] in R2
+    iff x in X & y in X & f.x = f.y; then
+    A5: for x,y being set holds [x,y] in R2 iff P[x,y];
+    thus R1 = R2 from RELAT_1:sch 2(A4,A5);
+  end;
+end;
+
+reserve M,N for non empty multMagma,
+  f for Function of M, N;
+
+theorem Th4:
+  f is multiplicative implies equ_kernel f is compatible
+proof
+  assume A1: f is multiplicative;
+  set R = equ_kernel f;
+  for v,v',w,w' being Element of M st v in Class(R,v') & w in Class(R,w') holds
+  v*w in Class(R,v'*w')
+  proof
+    let v,v',w,w' be Element of M;
+    assume v in Class(R,v'); then
+    A2: [v',v] in R by EQREL_1:26;
+    assume w in Class(R,w'); then
+    [w',w] in R by EQREL_1:26; then
+    A3: f.w' = f.w by Def9;
+    f.(v'*w') = f.v' * f.w' by A1,GROUP_6:def 7
+    .= f.v * f.w by A2,A3,Def9
+    .= f.(v*w) by A1,GROUP_6:def 7; then
+    [v'*w',v*w] in R by Def9;
+    hence v*w in Class(R,v'*w') by EQREL_1:26;
+  end;
+  hence equ_kernel f is compatible by Def4;
+end;
+
+theorem Th5:
+  f is multiplicative implies
+  ex r being Relators of M st equ_kernel f = equ_rel r
+proof
+  assume A1: f is multiplicative;
+  set I = {[v,w] where v,w is Element of M: f.v = f.w};
+  set r = id I;
+  consider v be Element of M;
+  A2: dom r = I by FUNCT_1:34;
+  for y being set st y in rng r
+  holds y in [: the carrier of M, the carrier of M:]
+  proof
+    let y be set;
+    assume y in rng r; then
+    consider x be set such that
+    A3: x in dom r & y = r.x by FUNCT_1:def 5;
+    y = x by A3,FUNCT_1:34; then
+    y in I by A3; then
+    consider v',w' be Element of M such that
+    A4: y = [v',w'] & f.v' = f.w';
+    thus thesis by A4,ZFMISC_1:def 2;
+  end; then
+  rng r c= [: the carrier of M, the carrier of M:]
+  by TARSKI:def 3; then
+  reconsider r as Relators of M by FUNCT_2:4;
+  take r;
+  reconsider R=equ_kernel f as compatible Equivalence_Relation of M by A1,Th4;
+  A5: for i being set, v,w being Element of M
+  st i in dom r & r.i = [v,w] holds v in Class(R,w)
+  proof
+    let i be set;
+    let v,w be Element of M;
+    assume A6: i in dom r & r.i = [v,w]; then
+    A7: r.i = i by A2,FUNCT_1:34;
+    consider v',w' be Element of M such that
+    A8: i=[v',w'] & f.v' = f.w' by A2,A6;
+    [v,w] in equ_kernel f by A8,Def9,A6,A7;
+    hence v in Class(R,w) by EQREL_1:27;
+  end; then
+  A9: equ_rel r c= R by Th3;
+  for z being set st z in R holds z in equ_rel r
+  proof
+    let z be set;
+    assume A10: z in R;
+    consider x,y be set such that
+    A11: x in the carrier of M & y in the carrier of M &
+    z = [x,y] by A10,ZFMISC_1:def 2;
+    A12: f.x = f.y by A10,A11,Def9;
+    reconsider x,y as Element of M by A11;
+    set X' = {R' where R' is compatible Equivalence_Relation of M:
+    for i being set, v,w being Element of M st i in dom r & r.i = [v,w]
+    holds v in Class(R',w)};
+    A13: R in X' by A5;
+    for Y being set st Y in X' holds z in Y
+    proof
+      let Y be set;
+      assume Y in X'; then
+      consider R' be compatible Equivalence_Relation of M such that
+      A14: R'=Y & for i being set, v,w being Element of M
+      st i in dom r & r.i = [v,w] holds v in Class(R',w);
+      set i = [x,y];
+      A15: i in I by A12; then
+      r.i = [x,y] by FUNCT_1:34; then
+      x in Class(R',y) by A2,A15,A14;
+      hence z in Y by A11,A14,EQREL_1:27;
+    end;
+    hence thesis by A13,SETFAM_1:def 1;
+  end; then
+  R c= equ_rel r by TARSKI:def 3;
+  hence thesis by A9,XBOOLE_0:def 10;
+end;
+
+begin :: Submagmas and Stable Subsets
+
+definition
+  let M be multMagma;
+  mode multSubmagma of M -> multMagma means :Def10:
+    the carrier of it c= the carrier of M &
+    the multF of it = (the multF of M)||the carrier of it;
+  existence
+  proof
+    consider S be empty multMagma;
+    reconsider A = the carrier of S as set;
+    reconsider X = [: A, A :] as set;
+    the multF of S = (the multF of M) | {}
+    .= (the multF of M) | X by ZFMISC_1:113
+    .= (the multF of M)||the carrier of S by REALSET1:def 3;
+    hence thesis by XBOOLE_1:2;
+  end;
+end;
+
+registration
+  let M be multMagma;
+  cluster strict multSubmagma of M;
+  existence
+  proof
+    set N = multMagma(# the carrier of M, the multF of M #);
+    the multF of N
+    = (the multF of N)|[:the carrier of N,the carrier of N:] by RELSET_1:34
+    .= (the multF of M)||the carrier of N by REALSET1:def 3; then
+    reconsider N as multSubmagma of M by Def10;
+    take N;
+    thus thesis;
+  end;
+end;
+
+registration
+  let M be non empty multMagma;
+  cluster non empty multSubmagma of M;
+  existence
+  proof
+    set N = multMagma(# the carrier of M, the multF of M #);
+    the multF of N
+    = (the multF of N)|[:the carrier of N,the carrier of N:] by RELSET_1:34
+    .= (the multF of M)||the carrier of N by REALSET1:def 3; then
+    reconsider N as multSubmagma of M by Def10;
+    take N;
+    thus thesis;
+  end;
+end;
+
+reserve M for multMagma;
+reserve N,K for multSubmagma of M;
+
+:: like GROUP_2:64
+theorem Th6:
+  N is multSubmagma of K & K is multSubmagma of N
+  implies the multMagma of N = the multMagma of K
+proof
+  assume that
+A1: N is multSubmagma of K and
+A2: K is multSubmagma of N;
+  set A = the carrier of N;
+  set B = the carrier of K;
+  set f = the multF of N;
+  set g = the multF of K;
+A3: A c= B & B c= A by A1,A2,Def10;
+  then
+A4: A = B by XBOOLE_0:def 10;
+  f = g||A by A1,Def10
+  .= (f||B)||A by A2,Def10
+  .= (f|[:B,B:])||A by REALSET1:def 3
+  .= (f|[:B,B:])|[:A,A:] by REALSET1:def 3
+  .= f|[:B,B:] by A4,RELAT_1:101
+  .= f||B by REALSET1:def 3
+  .= g by A2,Def10;
+  hence thesis by A3,XBOOLE_0:def 10;
+end;
+
+theorem Th7:
+  the carrier of N = the carrier of M
+  implies the multMagma of N = the multMagma of M
+proof
+  assume A1: the carrier of N = the carrier of M;
+  per cases;
+  suppose the carrier of M = {};
+    hence thesis by A1;
+  end;
+  suppose the carrier of M <> {}; then
+    dom (the multF of M) = [:the carrier of M,the carrier of M:]
+    by FUNCT_2:def 1; then
+    A2: the multF of M
+    = (the multF of M)|[:the carrier of M,the carrier of M:] by RELAT_1:98
+    .= (the multF of M)||(the carrier of M) by REALSET1:def 3; then
+    reconsider M'=M as multSubmagma of M by Def10;
+    the multF of M'
+    = (the multF of N)||the carrier of M' by A1,A2,Def10; then
+    M' is multSubmagma of N by A1,Def10;
+    hence thesis by Th6;
+  end;
+end;
+
+:: Ch I §1.4 Def.6 Algebra I Bourbaki
+definition
+  let M be multMagma;
+  let A be Subset of M;
+  attr A is stable means :Def11:
+  for v,w being Element of M st v in A & w in A holds v*w in A;
+end;
+
+registration
+  let M be multMagma;
+  cluster stable Subset of M;
+  correctness
+  proof
+    reconsider A = the carrier of M as Subset of M by ZFMISC_1:def 1;
+    take A;
+    for v,w being Element of M st v in A & w in A holds v*w in A;
+    hence thesis by Def11;
+  end;
+end;
+
+theorem Th8:
+  the carrier of N is stable Subset of M
+proof
+  for v,w being Element of M st v in the carrier of N & w in the carrier of N
+  holds v*w in the carrier of N
+  proof
+    let v,w be Element of M;
+    assume A1: v in the carrier of N & w in the carrier of N; then
+    reconsider v'=v, w'=w as Element of N;
+    A2: [v,w] in [:the carrier of N,the carrier of N:] by A1,ZFMISC_1:def 2;
+    v'*w' = (the multF of N).[v',w'] by BINOP_1:def 1
+    .= ((the multF of M)||the carrier of N).[v',w'] by Def10
+    .= ((the multF of M)|[:the carrier of N,the carrier of N:]).[v,w]
+    by REALSET1:def 3
+    .= (the multF of M).[v,w] by A2,FUNCT_1:72
+    .= v*w by BINOP_1:def 1;
+    hence v*w in the carrier of N by A1;
+  end;
+  hence the carrier of N is stable Subset of M by Def10,Def11;
+end;
+
+registration
+  let M be multMagma;
+  let N be multSubmagma of M;
+  cluster the carrier of N -> stable Subset of M;
+  correctness by Th8;
+end;
+
+theorem Th9:
+  for F being Function st
+  (for i being set st i in dom F holds F.i is stable Subset of M) holds
+  meet F is stable Subset of M
+proof
+  let F be Function;
+  assume A1: for i being set st i in dom F holds F.i is stable Subset of M;
+  A2: for x being set st x in meet F holds x in the carrier of M
+  proof
+    let x be set;
+    assume x in meet F; then
+    A3: x in meet rng F by FUNCT_6:def 4;
+    per cases;
+    suppose dom F is empty; then
+      F = {};
+      hence thesis by A3,SETFAM_1:2;
+    end;
+    suppose dom F is not empty; then
+      consider i be set such that
+      A4: i in dom F by XBOOLE_0:def 1;
+      meet rng F c= F.i by SETFAM_1:4,A4,FUNCT_1:12; then
+      A5: x in F.i by A3;
+      F.i is stable Subset of M by A1,A4;
+      hence x in the carrier of M by A5;
+    end;
+  end;
+  for v,w being Element of M st v in meet F & w in meet F
+  holds v*w in meet F
+  proof
+    let v,w be Element of M;
+    assume A6: v in meet F & w in meet F;
+    per cases;
+    suppose F = {}; then
+      meet rng F = {} by SETFAM_1:2;
+      hence thesis by A6,FUNCT_6:def 4;
+    end;
+    suppose A7: F <> {};
+      A8: v in meet rng F & w in meet rng F by A6,FUNCT_6:def 4;
+      for Y being set holds Y in rng F implies v*w in Y
+      proof
+        let Y be set;
+        assume A9: Y in rng F; then
+        A10: v in Y & w in Y by A8,SETFAM_1:def 1;
+        consider i be set such that
+        A11: i in dom F & Y = F.i by A9,FUNCT_1:def 5;
+        Y is stable Subset of M by A1,A11;
+        hence v*w in Y by A10,Def11;
+      end; then
+      v*w in meet rng F by A7,SETFAM_1:def 1;
+      hence v*w in meet F by FUNCT_6:def 4;
+    end;
+  end;
+  hence thesis by A2,Def11,TARSKI:def 3;
+end;
+
+reserve M,N for non empty multMagma,
+  A for Subset of M,
+  f,g for Function of M,N,
+  X for stable Subset of M,
+  Y for stable Subset of N;
+
+theorem
+  A is stable iff A * A c= A
+proof
+  hereby
+    assume A1: A is stable;
+    for x being set st x in A * A holds x in A
+    proof
+      let x be set;
+      assume x in A * A; then
+      consider v,w be Element of M such that
+      A2: x = v * w & v in A & w in A by GROUP_2:12;
+      thus x in A by A1,A2,Def11;
+    end;
+    hence A * A c= A by TARSKI:def 3;
+  end;
+  assume A3: A * A c= A;
+  for v,w being Element of M st v in A & w in A holds v*w in A
+  proof
+    let v,w be Element of M;
+    assume v in A & w in A; then
+    v*w in A * A by GROUP_2:12;
+    hence v*w in A by A3;
+  end;
+  hence A is stable by Def11;
+end;
+
+:: Ch I §1.4 Pro.1 Algebra I Bourbaki
+theorem Th11:
+  f is multiplicative implies f.:X is stable Subset of N
+proof
+  assume A1: f is multiplicative;
+  for v,w being Element of N st v in f.:X & w in f.:X holds v*w in f.:X
+  proof
+    let v,w be Element of N;
+    assume v in f.:X; then
+    consider v' be set such that
+    A2: v' in dom f & v' in X & v = f.v' by FUNCT_1:def 12;
+    assume w in f.:X; then
+    consider w' be set such that
+    A3: w' in dom f & w' in X & w = f.w' by FUNCT_1:def 12;
+    reconsider v',w' as Element of M by A2,A3;
+    v'*w' in the carrier of M; then
+    A4: v'*w' in dom f by FUNCT_2:def 1;
+    v'*w' in X by A2,A3,Def11; then
+    f.(v'*w') in f.:X by A4,FUNCT_1:def 12;
+    hence v*w in f.:X by A2,A3,A1,GROUP_6:def 7;
+  end;
+  hence f .: X is stable Subset of N by Def11;
+end;
+
+:: Ch I §1.4 Pro.1 Algebra I Bourbaki
+theorem Th12:
+  f is multiplicative implies f"Y is stable Subset of M
+proof
+  assume A1: f is multiplicative;
+  for v,w being Element of M st v in f"Y & w in f"Y holds v*w in f"Y
+  proof
+    let v,w be Element of M;
+    assume v in f"Y; then
+    A2: v in dom f & f.v in Y by FUNCT_1:def 13;
+    assume w in f"Y; then
+    A3: w in dom f & f.w in Y by FUNCT_1:def 13;
+    v*w in the carrier of M; then
+    A4: v*w in dom f by FUNCT_2:def 1;
+    f.v*f.w in Y by A2,A3,Def11; then
+    f.(v*w) in Y by A1,GROUP_6:def 7;
+    hence v*w in f"Y by A4,FUNCT_1:def 13;
+  end;
+  hence f"Y is stable Subset of M by Def11;
+end;
+
+:: Ch I §1.4 Pro.1 Algebra I Bourbaki
+theorem
+  f is multiplicative & g is multiplicative
+  implies {v where v is Element of M: f.v=g.v} is stable Subset of M
+proof
+  assume A1: f is multiplicative;
+  assume A2: g is multiplicative;
+  set X = {v where v is Element of M: f.v=g.v};
+  for x being set st x in X holds x in the carrier of M
+  proof
+    let x be set;
+    assume x in X; then
+    consider v be Element of M such that
+    A3: x=v & f.v=g.v;
+    thus x in the carrier of M by A3;
+  end; then
+  reconsider X as Subset of M by TARSKI:def 3;
+  for v,w being Element of M st v in X & w in X holds v*w in X
+  proof
+    let v,w be Element of M;
+    assume v in X; then
+    consider v' be Element of M such that
+    A4: v=v' & f.v'=g.v';
+    assume w in X; then
+    consider w' be Element of M such that
+    A5: w=w' & f.w'=g.w';
+    f.(v*w) = g.v*g.w by A4,A5,A1,GROUP_6:def 7
+    .= g.(v*w) by A2,GROUP_6:def 7;
+    hence v*w in X;
+  end;
+  hence thesis by Def11;
+end;
+
+:: Ch I §1.4 Def.6 Algebra I Bourbaki
+definition
+  let M be multMagma;
+  let A be stable Subset of M;
+  func the_mult_induced_by A -> BinOp of A equals
+  (the multF of M) || A;
+  correctness
+  proof
+    for x being set holds x in [:A,A:] implies (the multF of M).x in A
+    proof
+      let x be set;
+      assume x in [:A,A:]; then
+      consider v,w be set such that
+      A1: v in A & w in A & x = [v,w] by ZFMISC_1:def 2;
+      reconsider v,w as Element of M by A1;
+      v*w in A by A1,Def11;
+      hence (the multF of M).x in A by A1,BINOP_1:def 1;
+    end; then
+    A is Preserv of (the multF of M) by REALSET1:def 2;
+    hence thesis by REALSET1:3;
+  end;
+end;
+
+:: like GROUP_4:def 5
+definition
+  let M be multMagma;
+  let A be Subset of M;
+  func the_submagma_generated_by A -> strict multSubmagma of M means :Def13:
+  A c= the carrier of it &
+  for N being strict multSubmagma of M
+  st A c= the carrier of N holds it is multSubmagma of N;
+  existence
+  proof
+    defpred P[set] means ex H being strict multSubmagma of M st
+    $1 = the carrier of H & A c= $1;
+    consider X be set such that
+    A1: for Y being set holds Y in X iff Y in bool the carrier of M & P[Y]
+    from XBOOLE_0:sch 1;
+    set F = id X;
+    set A1 = meet id X;
+    for x being set st x in dom F holds F.x is stable Subset of M
+    proof
+      let x be set;
+      assume A2: x in dom F; then
+      x in bool the carrier of M & P[x] by A1;
+      hence thesis by A2,FUNCT_1:35;
+    end; then
+    reconsider A1 as stable Subset of M by Th9;
+    set N1 = multMagma(# A1, the_mult_induced_by A1 #);
+    take N1;
+    per cases;
+    suppose A3: X = {};
+      A4: the carrier of M in bool the carrier of M by ZFMISC_1:def 1;
+      ex H being strict multSubmagma of M st
+      the carrier of M= the carrier of H & A c= the carrier of M
+      proof
+        dom the multF of M c= [:the carrier of M,the carrier of M:]; then
+        the multF of M =
+        (the multF of M)|[:the carrier of M,the carrier of M:]
+        by RELAT_1:97; then
+        the multF of M = (the multF of M)||the carrier of M
+        by REALSET1:def 3; then
+        reconsider H = the multMagma of M as strict multSubmagma of M by Def10;
+        take H;
+        thus the carrier of M = the carrier of H;
+        thus A c= the carrier of M;
+      end;
+      hence thesis by A3,A4,A1;
+    end;
+    suppose A5: X <> {};
+      A6: for x being set st x in A holds x in A1
+      proof
+        let x be set;
+        assume A7: x in A;
+        for Y being set st Y in X holds x in Y
+        proof
+          let Y be set;
+          assume Y in X; then
+          consider H be strict multSubmagma of M such that
+          A8: Y = the carrier of H & A c= Y by A1;
+          thus x in Y by A8,A7;
+        end; then
+        x in meet X by A5,SETFAM_1:def 1; then
+        x in meet rng id X by RELAT_1:71;
+        hence thesis by FUNCT_6:def 4;
+      end;
+      for N being strict multSubmagma of M
+      st A c= the carrier of N holds N1 is multSubmagma of N
+      proof
+        let N be strict multSubmagma of M;
+        assume A9: A c= the carrier of N;
+        for x being set st x in the carrier of N1 holds x in the carrier of N
+        proof
+          let x be set;
+          assume x in the carrier of N1; then
+          x in meet rng id X by FUNCT_6:def 4; then
+          A10: x in meet X by RELAT_1:71;
+          A11: the carrier of N c= the carrier of M by Def10;
+          the carrier of N in X by A11,A1,A9;
+          hence x in the carrier of N by A10,SETFAM_1:def 1;
+        end; then
+        A12: the carrier of N1 c= the carrier of N by TARSKI:def 3;
+        A13: (the multF of M)|[:the carrier of N,the carrier of N:]
+        = (the multF of M)||the carrier of N by REALSET1:def 3
+        .= the multF of N by Def10;
+        the multF of N1
+        = (the multF of M)|[:the carrier of N1,the carrier of N1:]
+        by REALSET1:def 3
+        .= ((the multF of M)|[:the carrier of N,the carrier of N:])
+        |[:the carrier of N1,the carrier of N1:]
+        by A12,RELAT_1:103,ZFMISC_1:119
+        .= (the multF of N)||the carrier of N1 by A13,REALSET1:def 3;
+        hence N1 is multSubmagma of N by A12,Def10;
+      end;
+      hence thesis by A6,Def10,TARSKI:def 3;
+    end;
+  end;
+  uniqueness
+  proof
+    let H1,H2 be strict multSubmagma of M;
+    assume A c= the carrier of H1 & (for N being strict multSubmagma of M
+    st A c= the carrier of N holds H1 is multSubmagma of N) &
+    A c= the carrier of H2 & (for N being strict multSubmagma of M
+    st A c= the carrier of N holds H2 is multSubmagma of N);
+    then H1 is multSubmagma of H2 & H2 is multSubmagma of H1;
+    hence thesis by Th6;
+  end;
+end;
+
+theorem Th14:
+  for M being multMagma,
+      A being Subset of M
+  holds A is empty iff the_submagma_generated_by A is empty
+proof
+  let M be multMagma;
+  let A be Subset of M;
+  hereby
+    assume A1: A is empty;
+    for v,w being Element of M st v in A & w in A holds v*w in A by A1; then
+    reconsider A'=A as stable Subset of M by Def11;
+    reconsider N=multMagma(# A', the_mult_induced_by A' #)
+    as strict multSubmagma of M by Def10;
+    the_submagma_generated_by A is multSubmagma of N by Def13; then
+    the carrier of the_submagma_generated_by A c= the carrier of N
+    by Def10;
+    hence the_submagma_generated_by A is empty by A1;
+  end;
+  assume the_submagma_generated_by A is empty; then
+  the carrier of the_submagma_generated_by A = {}; then
+  A c= {} by Def13;
+  hence A is empty;
+end;
+
+registration
+  let M be multMagma;
+  let A be empty Subset of M;
+  cluster the_submagma_generated_by A -> empty;
+  correctness by Th14;
+end;
+
+:: Ch I §1.4 Pro.1 Algebra I Bourbaki
+theorem Th15:
+  for M,N being non empty multMagma,
+      f being Function of M,N,
+      X being Subset of M st f is multiplicative holds
+  f.:the carrier of the_submagma_generated_by X =
+  the carrier of the_submagma_generated_by f.:X
+proof
+  let M,N be non empty multMagma;
+  let f be Function of M,N;
+  let X be Subset of M;
+  assume A1: f is multiplicative;
+  set X' = the_submagma_generated_by X;
+  set A = f.:the carrier of X';
+  the carrier of X' is stable Subset of M by Th8; then
+  reconsider A as stable Subset of N by A1,Th11;
+  set Y' = the_submagma_generated_by f.:X;
+  set B = f"the carrier of Y';
+  the carrier of Y' is stable Subset of N by Th8; then
+  reconsider B as stable Subset of M by A1,Th12;
+  A2: f.:X c= the carrier of Y' &
+  for N1 being strict multSubmagma of N
+  st f.:X c= the carrier of N1
+  holds Y' is multSubmagma of N1 by Def13;
+  reconsider N1 = multMagma(# A, the_mult_induced_by A #) as
+  strict multSubmagma of N by Def10;
+  X c= the carrier of X' by Def13; then
+  Y' is multSubmagma of N1 by A2,RELAT_1:156; then
+  A3: the carrier of Y' c= A by Def10;
+  A4: X c= the carrier of X' &
+  for M1 being strict multSubmagma of M
+  st X c= the carrier of M1
+  holds X' is multSubmagma of M1 by Def13;
+  reconsider M1 = multMagma(# B, the_mult_induced_by B #) as
+  strict multSubmagma of M by Def10;
+  A5: f.:(f"the carrier of Y') c= the carrier of Y' by FUNCT_1:145;
+  f.:X c= the carrier of the_submagma_generated_by f.:X by Def13; then
+  A6: f"(f.:X) c= f"the carrier of the_submagma_generated_by f.:X
+  by RELAT_1:178;
+  X c= the carrier of M; then
+  X c= dom f by FUNCT_2:def 1; then
+  X c= f"(f.:X) by FUNCT_1:146; then
+  X' is multSubmagma of M1 by A4,A6,XBOOLE_1:1; then
+  the carrier of X' c= B by Def10; then
+  A c= f.:(f"the carrier of Y') by RELAT_1:156; then
+  A c= the carrier of Y' by A5,XBOOLE_1:1;
+  hence thesis by A3,XBOOLE_0:def 10;
+end;
+
+begin :: Free Magmas
+
+:: Ch I §7.1 Algebra I Bourbaki
+definition
+  let X be set;
+  defpred P[set,set] means
+    for fs being XFinSequence of bool the_universe_of(X \/ NAT)
+    st $1=fs holds
+    (dom fs = 0 implies $2 = {}) &
+    (dom fs = 1 implies $2 = X) &
+    for n being natural number st n>=2 & dom fs = n holds
+      ex fs1 being FinSequence st len fs1 = n-1 &
+      (for p being natural number st p>=1 & p<=n-1 holds
+      fs1.p = [: fs.p, fs.(n-p) :] ) & $2 = Union disjoin fs1;
+  A1: for e being set st e in (bool the_universe_of(X \/ NAT))^omega
+    ex u being set st P[e,u]
+    proof
+      let e be set;
+      assume e in (bool the_universe_of(X \/ NAT))^omega; then
+      reconsider fs = e as
+      XFinSequence of bool the_universe_of(X \/ NAT) by AFINSQ_1:def 8;
+      dom fs = 0 or dom fs + 1 > 0+1 by XREAL_1:8; then
+      dom fs = 0 or dom fs >= 1 by NAT_1:13; then
+      dom fs = 0 or dom fs = 1 or dom fs > 1 by XXREAL_0:1; then
+      A2: dom fs = 0 or dom fs = 1 or dom fs + 1 > 1+1 by XREAL_1:8;
+      per cases by A2,NAT_1:13;
+      suppose A3: dom fs = 0; set u = {};
+        take u; thus P[e,u] by A3; end;
+      suppose A4: dom fs = 1; set u = X;
+        take u; thus P[e,u] by A4; end;
+      suppose A5: dom fs >= 2;
+        reconsider n = dom fs as natural number;
+        reconsider n'= n -' 1 as Nat;
+        n-1 >= 2-1 by A5,XREAL_1:11; then
+        A6: n' = n-1 by XREAL_0:def 2;
+        defpred P2[set,set] means for p being natural number
+        st p>=1 & p<=n-1 & $1=p holds $2 = [: fs.p, fs.(n-p) :];
+        A7: for k being Nat st k in Seg n' ex x being set st P2[k,x]
+        proof
+          let k be Nat;
+          assume k in Seg n';
+          set x = [: fs.k, fs.(n-k) :];
+          take x;
+          thus thesis;
+        end;
+        consider fs1 be FinSequence such that
+        A8: dom fs1 = Seg n' &
+        for k being Nat st k in Seg n' holds P2[k,fs1.k]
+        from FINSEQ_1:sch 1(A7);
+        set u = Union disjoin fs1;
+        take u;
+        A9: len fs1 = n-1 by A6,A8,FINSEQ_1:def 3;
+        for p being natural number st p>=1 & p<=n-1 holds
+        fs1.p = [: fs.p, fs.(n-p) :]
+        proof
+          let p be natural number;
+          assume A10: p>=1 & p<=n-1; then
+          p in Seg n' by A6,FINSEQ_1:3;
+          hence fs1.p = [: fs.p, fs.(n-p) :] by A8,A10;
+        end;
+        hence P[e,u] by A5,A9;
+      end;
+    end;
+  consider F be Function such that
+    A11: dom F = (bool the_universe_of(X \/ NAT))^omega &
+    for e being set st e in (bool the_universe_of(X \/ NAT))^omega
+    holds P[e,F.e] from CLASSES1:sch 1(A1);
+    for e being set st e in (bool the_universe_of(X \/ NAT))^omega
+      holds F.e in bool the_universe_of(X \/ NAT)
+    proof
+      let e be set;
+      assume A12: e in (bool the_universe_of(X \/ NAT))^omega;
+      reconsider fs=e as XFinSequence of bool the_universe_of(X \/ NAT)
+      by A12,AFINSQ_1:def 8;
+      A13: (dom fs = 0 implies F.e = {}) & (dom fs = 1 implies F.e = X) &
+      for n being natural number st n>=2 & dom fs = n holds
+      ex fs1 being FinSequence st len fs1 = n-1 &
+      (for p being natural number st p>=1 & p<=n-1 holds
+      fs1.p = [: fs.p, fs.(n-p) :] ) & F.e = Union disjoin fs1 by A12,A11;
+      dom fs = 0 or dom fs + 1 > 0+1 by XREAL_1:8; then
+      dom fs = 0 or dom fs >= 1 by NAT_1:13; then
+      dom fs = 0 or dom fs = 1 or dom fs > 1 by XXREAL_0:1; then
+      A14: dom fs = 0 or dom fs = 1 or dom fs + 1 > 1+1 by XREAL_1:8;
+      per cases by A14,NAT_1:13;
+      suppose A15: dom fs = 0;
+        {} c= the_universe_of(X \/ NAT) by XBOOLE_1:2;
+        hence F.e in bool the_universe_of(X \/ NAT) by A15,A13;
+      end;
+      suppose dom fs = 1; then
+        A16: F.e = X by A12,A11;
+        for x being set st x in X holds
+        x in Tarski-Class the_transitive-closure_of(X \/ NAT)
+        proof
+          let x be set;
+          assume x in X; then
+          x c= (union X) \/ union NAT by XBOOLE_1:10,ZFMISC_1:92; then
+          A17: x c= union(X \/ NAT) by ZFMISC_1:96;
+          A18: the_transitive-closure_of(X \/ NAT) in
+          Tarski-Class the_transitive-closure_of(X \/ NAT) by CLASSES1:5;
+          A19: union(X \/ NAT) c= union the_transitive-closure_of(X \/ NAT)
+          by ZFMISC_1:95,CLASSES1:59;
+          union the_transitive-closure_of(X \/ NAT)
+          c= the_transitive-closure_of(X \/ NAT)
+          by CLASSES1:54,CLASSES1:58; then
+          union(X \/ NAT) c= the_transitive-closure_of(X \/ NAT)
+          by A19,XBOOLE_1:1;
+          hence thesis by A18,CLASSES1:6,A17,XBOOLE_1:1;
+        end; then
+        X c= Tarski-Class the_transitive-closure_of(X \/ NAT)
+        by TARSKI:def 3; then
+        X c= the_universe_of(X \/ NAT) by YELLOW_6:def 3;
+        hence F.e in bool the_universe_of(X \/ NAT) by A16;
+      end;
+      suppose A20: dom fs >= 2;
+        set n=dom fs;
+        consider fs1 be FinSequence such that
+        A21: len fs1 = n-1 & (for p being natural number st p>=1 & p<=n-1 holds
+        fs1.p = [: fs.p, fs.(n-p) :]) &
+        F.e = Union disjoin fs1 by A20,A12,A11;
+        reconsider n'= n -' 1 as Nat;
+        n-1 >= 2-1 by A20,XREAL_1:11; then
+        A22: n' = n-1 by XREAL_0:def 2;
+        A23: for p being natural number st p>=1 & p<=n-1 holds
+        fs1.p c= the_universe_of(X \/ NAT)
+        proof
+          let p be natural number;
+          assume A24: p>=1 & p<=n-1; then
+          A25: fs1.p = [: fs.p, fs.(n-p) :] by A21;
+          A26: p in Seg n' by A22,A24,FINSEQ_1:3;
+          -p <= -1 & -p >= -(n-1) by A24,XREAL_1:26; then
+          A27: -p +n <= -1+n & -p+n >= -(n-1)+n by XREAL_1:8; then
+          A28: n-p <= n-'1 & n-p >= 1 by XREAL_0:def 2;
+          A29: n-p = n-'p by A27,XREAL_0:def 2; then
+          A30: n-'p in Seg n' by A28,FINSEQ_1:3;
+          A31: rng fs c= bool the_universe_of(X \/ NAT) by RELAT_1:def 19;
+          A32: Seg n' c= n'+1 by AFINSQ_1:5; then
+          A33: fs.p in rng fs by A26,A22,FUNCT_1:12;
+          fs.(n-p) in rng fs by A29,A32,A22,A30,FUNCT_1:12;
+          hence fs1.p c= the_universe_of(X \/ NAT) by A31,A25,A33,Th1;
+        end;
+        for x being set st x in rng disjoin fs1
+          holds x c= the_universe_of(X \/ NAT)
+        proof
+          let x be set;
+          assume x in rng disjoin fs1; then
+          consider p be set such that
+          A34: p in dom disjoin fs1 & x = (disjoin fs1).p by FUNCT_1:def 5;
+          A35: p in dom fs1 by A34,CARD_3:def 3;
+          A36: x = [:fs1.p,{p}:] by A34,A35,CARD_3:def 3;
+          A37: p in Seg n' by A21,A22,A35,FINSEQ_1:def 3;
+          reconsider p as natural number by A35;
+          p>=1 & p<=n-1 by A22,A37,FINSEQ_1:3; then
+          A38: fs1.p c= the_universe_of(X \/ NAT) by A23;
+          A39: for y being set st y in {p} holds y in NAT
+          proof
+            let y be set;
+            assume y in {p}; then
+            y = p by TARSKI:def 1;
+            hence y in NAT by ORDINAL1:def 13;
+          end;
+          for x being set st x in {p} holds
+            x in Tarski-Class the_transitive-closure_of(X \/ NAT)
+          proof
+            let x be set;
+            assume x in {p}; then
+            x in NAT by A39; then
+            x c= (union X) \/ union NAT by XBOOLE_1:10,ZFMISC_1:92; then
+            A40: x c= union(X \/ NAT) by ZFMISC_1:96;
+            A41: the_transitive-closure_of(X \/ NAT) in
+            Tarski-Class the_transitive-closure_of(X \/ NAT) by CLASSES1:5;
+            A42: union(X \/ NAT) c= union the_transitive-closure_of(X \/ NAT)
+            by ZFMISC_1:95,CLASSES1:59;
+            union the_transitive-closure_of(X \/ NAT)
+            c= the_transitive-closure_of(X \/ NAT)
+            by CLASSES1:54,CLASSES1:58; then
+            union(X \/ NAT) c= the_transitive-closure_of(X \/ NAT)
+            by A42,XBOOLE_1:1;
+            hence thesis by A41,CLASSES1:6,A40,XBOOLE_1:1;
+          end; then
+          {p} c= Tarski-Class the_transitive-closure_of(X \/ NAT)
+          by TARSKI:def 3; then
+          {p} c= the_universe_of(X \/ NAT) by YELLOW_6:def 3;
+          hence thesis by A36,A38,Th1;
+        end; then
+        union (rng disjoin fs1) c= the_universe_of(X \/ NAT)
+        by ZFMISC_1:94; then
+        union (rng disjoin fs1) in bool the_universe_of(X \/ NAT);
+        hence thesis by A21,CARD_3:def 4;
+      end;
+    end; then
+  reconsider F as Function of (bool the_universe_of(X \/ NAT))^omega,
+    bool the_universe_of(X \/ NAT) by A11,FUNCT_2:5;
+  deffunc FX(XFinSequence of bool the_universe_of(X \/ NAT)) = F.$1;
+  func free_magma_seq X ->
+    Function of NAT, bool the_universe_of(X \/ NAT) means :Def14:
+    it.0 = {} & it.1 = X &
+    for n being natural number st n>=2 holds
+      ex fs being FinSequence st len fs = n-1 &
+      (for p being natural number st p>=1 & p<=n-1 holds
+      fs.p = [: it.p, it.(n-p) :] ) & it.n = Union disjoin fs;
+  existence
+  proof
+    consider f be Function of NAT, bool the_universe_of(X \/ NAT) such that
+    A43: for n being natural number holds f.n = FX(f|n)
+    from FuncRecursiveExist2;
+    take f;
+    A44: {} in (bool the_universe_of(X \/ NAT))^omega by AFINSQ_1:47;
+    A45: dom {} = {};
+    thus f.0 = F.(f|0) by A43 .= {} by A44,A45,A11;
+    1 c= NAT; then
+    1 c= dom f by FUNCT_2:def 1; then
+    A46: dom(f|1) = 1 by RELAT_1:91;
+    A47: f|1 in (bool the_universe_of(X \/ NAT))^omega by AFINSQ_1:46;
+    thus f.1 = F.(f|1) by A43 .= X by A46,A47,A11;
+    let n be natural number;
+    assume A48: n >= 2;
+    n c= NAT; then
+    n c= dom f by FUNCT_2:def 1; then
+    A49: dom(f|n) = n by RELAT_1:91;
+    A50: f|n in (bool the_universe_of(X \/ NAT))^omega by AFINSQ_1:46;
+    consider fs1 be FinSequence such that
+    A51: len fs1 = n-1 &
+      (for p being natural number st p>=1 & p<=n-1 holds
+      fs1.p = [: (f|n).p, (f|n).(n-p) :] ) &
+      F.(f|n) = Union disjoin fs1 by A48,A49,A50,A11;
+    take fs1;
+    thus len fs1 = n-1 by A51;
+    thus for p being natural number st p>=1 & p<=n-1
+    holds fs1.p = [: f.p, f.(n - p):]
+    proof
+      let p be natural number;
+      assume A52: p >= 1 & p <= n - 1;
+      set n' = n-'1;
+      n-1 >= 2-1 by A48,XREAL_1:11; then
+      A53: n' = n-1 by XREAL_0:def 2; then
+      A54: p in Seg n' by A52,FINSEQ_1:3;
+      Seg n' c= n'+1 by AFINSQ_1:5; then
+      A55: (f|n).p = f.p by A53,A54,FUNCT_1:72;
+      -p <= -1 & -p >= -(n-1) by A52,XREAL_1:26; then
+      A56: -p +n <= -1+n & -p+n >= -(n-1)+n by XREAL_1:8; then
+      A57: n-p <= n-'1 & n-p >= 1 by XREAL_0:def 2;
+      A58: n-p = n-'p by A56,XREAL_0:def 2; then
+      A59: n-'p in Seg n' by A57,FINSEQ_1:3;
+      A60: Seg n' c= n'+1 by AFINSQ_1:5;
+      thus fs1.p = [: (f|n).p, (f|n).(n-p) :] by A52,A51
+      .= [: f.p, f.(n-p):] by A55,A60,A58,A53,A59,FUNCT_1:72;
+    end;
+    thus f.n = Union disjoin fs1 by A51,A43;
+  end;
+  uniqueness
+  proof
+    let f1, f2 be Function of NAT , bool the_universe_of(X \/ NAT);
+    assume A61: f1.0 = {};
+    assume A62: f1.1 = X;
+    assume A63: for n being natural number st n >= 2 holds
+    ex fs being FinSequence st len fs = n - 1 &
+    (for p being natural number st p >= 1 & p <= n - 1 holds
+    fs.p = [: f1.p, f1.(n-p) :] ) & f1.n = Union disjoin fs;
+    assume A64: f2.0 = {};
+    assume A65: f2.1 = X;
+    assume A66: for n being natural number st n >= 2 holds
+    ex fs being FinSequence st len fs = n - 1 &
+    (for p being natural number st p >= 1 & p <= n - 1 holds
+    fs.p = [: f2.p, f2.(n-p):] ) & f2.n = Union disjoin fs;
+    {} in (bool the_universe_of(X \/ NAT))^omega by AFINSQ_1:47; then
+    A67: P[{},F.{}] & {} is XFinSequence of bool the_universe_of(X \/ NAT)
+    by A11,AFINSQ_1:46;
+    A68: dom {} = {};
+    A69: for n being natural number holds f1.n = FX(f1|n)
+    proof
+      let n be natural number;
+      n = 0 or n + 1 > 0+1 by XREAL_1:8; then
+      n = 0 or n >= 1 by NAT_1:13; then
+      n = 0 or n = 1 or n > 1 by XXREAL_0:1; then
+      A70: n = 0 or n = 1 or n + 1 > 1+1 by XREAL_1:8;
+      per cases by A70,NAT_1:13;
+      suppose A71: n=0;
+        hence f1.n = F.{} by A67,A68,A61
+        .= FX(f1|n) by A71;
+      end;
+      suppose A72: n=1;
+        1 c= NAT; then
+        1 c= dom f1 by FUNCT_2:def 1; then
+        A73: dom(f1|1) = 1 by RELAT_1:91;
+        A74: f1|1 in (bool the_universe_of(X \/ NAT))^omega by AFINSQ_1:46;
+        thus f1.n = FX(f1|n) by A72,A74,A73,A11,A62;
+      end;
+      suppose A75: n>=2;
+        n c= NAT; then
+        n c= dom f1 by FUNCT_2:def 1; then
+        A76: dom(f1|n) = n by RELAT_1:91;
+        f1|n in (bool the_universe_of(X \/ NAT))^omega by AFINSQ_1:46; then
+        consider fs1 be FinSequence such that
+        A77: len fs1 = n-1 &
+        (for p being natural number st p>=1 & p<=n-1 holds
+        fs1.p = [: (f1|n).p, (f1|n).(n-p) :] ) &
+        F.(f1|n) = Union disjoin fs1 by A75,A76,A11;
+        consider fs2 be FinSequence such that
+        A78: len fs2 = n - 1 &
+        (for p being natural number st p >= 1 & p <= n - 1 holds
+        fs2.p = [: f1.p, f1.(n - p) :] ) &
+        f1.n = Union disjoin fs2 by A75,A63;
+        A79: for p being Nat st 1 <= p & p <= len fs1 holds fs1.p = fs2.p
+        proof
+          let p be Nat;
+          assume A80: 1 <= p & p <= len fs1;
+          A81: fs1.p = [: (f1|n).p, (f1|n).(n-p) :] by A77,A80;
+          A82: fs2.p = [: f1.p, f1.(n-p):] by A80,A77,A78;
+          set n' = n-'1;
+          n-1 >= 2-1 by A75,XREAL_1:11; then
+          A83: n' = n-1 by XREAL_0:def 2; then
+          A84: p in Seg n' by A80,A77,FINSEQ_1:3;
+          A85: Seg n' c= n'+1 by AFINSQ_1:5;
+          -p <= -1 & -p >= -(n-1) by A80,A77,XREAL_1:26; then
+          A86: -p +n <= -1+n & -p+n >= -(n-1)+n by XREAL_1:8; then
+          A87: n-p <= n-'1 & n-p >= 1 by XREAL_0:def 2;
+          A88: n-p = n-'p by A86,XREAL_0:def 2; then
+          A89: n-'p in Seg n' by A87,FINSEQ_1:3;
+          Seg n' c= n'+1 by AFINSQ_1:5; then
+          A90: (f1|n).(n-p) = f1.(n-p) by A88,A83,A89,FUNCT_1:72;
+          thus fs1.p = fs2.p by A85,A90,A81,A82,A83,A84,FUNCT_1:72;
+        end;
+        thus f1.n = FX(f1|n) by A77,A78,A79,FINSEQ_1:18;
+      end;
+    end;
+    A91: for n being natural number holds f2.n = FX(f2|n)
+    proof
+      let n be natural number;
+      n = 0 or n + 1 > 0+1 by XREAL_1:8; then
+      n = 0 or n >= 1 by NAT_1:13; then
+      n = 0 or n = 1 or n > 1 by XXREAL_0:1; then
+      A92: n = 0 or n = 1 or n + 1 > 1+1 by XREAL_1:8;
+      per cases by A92,NAT_1:13;
+      suppose A93: n=0; hence f2.n = F.{} by A67,A68,A64 .= FX(f2|n) by A93;
+      end;
+      suppose A94: n=1;
+        1 c= NAT; then
+        1 c= dom f2 by FUNCT_2:def 1; then
+        A95: dom(f2|1) = 1 by RELAT_1:91;
+        A96: f2|1 in (bool the_universe_of(X \/ NAT))^omega by AFINSQ_1:46;
+        thus f2.n = FX(f2|n) by A96,A95,A11,A94,A65;
+      end;
+      suppose A97: n>=2;
+        n c= NAT; then
+        n c= dom f2 by FUNCT_2:def 1; then
+        A98: dom(f2|n) = n by RELAT_1:91;
+        f2|n in (bool the_universe_of(X \/ NAT))^omega by AFINSQ_1:46; then
+        consider fs1 be FinSequence such that
+        A99: len fs1 = n-1 &
+        (for p being natural number st p>=1 & p<=n-1 holds
+        fs1.p = [: (f2|n).p, (f2|n).(n-p) :] ) &
+        F.(f2|n) = Union disjoin fs1 by A97,A98,A11;
+        consider fs2 be FinSequence such that
+        A100: len fs2 = n - 1 &
+        (for p being natural number st p >= 1 & p <= n - 1 holds
+        fs2.p = [: f2.p, f2.(n-p):] ) & f2.n = Union disjoin fs2 by A97,A66;
+        A101: for p being Nat st 1 <= p & p <= len fs1 holds fs1.p = fs2.p
+        proof
+          let p be Nat;
+          assume A102: 1 <= p & p <= len fs1; then
+          A103: fs1.p = [: (f2|n).p, (f2|n).(n-p) :] by A99;
+          A104: fs2.p = [: f2.p, f2.(n-p):] by A102,A99,A100;
+          set n' = n-'1;
+          n-1 >= 2-1 by A97,XREAL_1:11; then
+          A105: n' = n-1 by XREAL_0:def 2; then
+          A106: p in Seg n' by A102,A99,FINSEQ_1:3;
+          A107: Seg n' c= n'+1 by AFINSQ_1:5;
+          -p <= -1 & -p >= -(n-1) by A102,A99,XREAL_1:26; then
+          A108: -p +n <= -1+n & -p+n >= -(n-1)+n by XREAL_1:8; then
+          A109: n-p <= n-'1 & n-p >= 1 by XREAL_0:def 2;
+          A110: n-p = n-'p by A108,XREAL_0:def 2; then
+          A111: n-'p in Seg n' by A109,FINSEQ_1:3;
+          Seg n' c= n'+1 by AFINSQ_1:5; then
+          A112: (f2|n).(n-p) = f2.(n-p) by A111,A110,A105,FUNCT_1:72;
+          thus fs1.p = fs2.p by A107,A112,A103,A104,A105,A106,FUNCT_1:72;
+        end;
+        thus f2.n = FX(f2|n) by A101,FINSEQ_1:18,A100,A99;
+      end;
+    end;
+    f1=f2 from FuncRecursiveUniqu2(A69,A91);
+    hence thesis;
+  end;
+end;
+
+definition
+  let X be set;
+  let n be natural number;
+  func free_magma(X,n) equals (free_magma_seq X).n;
+  correctness;
+end;
+
+registration
+  let X be non empty set;
+  let n be non zero natural number;
+  cluster free_magma(X,n) -> non empty;
+  correctness
+  proof
+    defpred P[Nat] means $1 = 0 or (free_magma_seq X).$1 <> {};
+    A1: for k being Nat st for n being Nat st n < k holds P[n] holds P[k]
+    proof
+      let k be Nat;
+      assume A2: for n being Nat st n < k holds P[n];
+      k = 0 or k + 1 > 0+1 by XREAL_1:8; then
+      k = 0 or k >= 1 by NAT_1:13; then
+      k = 0 or k = 1 or k > 1 by XXREAL_0:1; then
+      A3: k = 0 or k = 1 or k + 1 > 1+1 by XREAL_1:8;
+      per cases by A3,NAT_1:13;
+      suppose k=0; hence P[k]; end;
+      suppose k=1; hence P[k] by Def14; end;
+      suppose A4: k>=2; then
+        consider fs be FinSequence such that
+        A5: len fs = k-1 & (for p being natural number st p>=1 & p<=k-1 holds
+        fs.p = [: (free_magma_seq X).p, (free_magma_seq X).(k-p) :] ) &
+        (free_magma_seq X).k = Union disjoin fs by Def14;
+        A6: 2-1<=k-1 by A4,XREAL_1:11; then
+        1 in Seg len fs by A5,FINSEQ_1:3; then
+        A7: 1 in dom fs by FINSEQ_1:def 3; then
+        A8: 1 in dom disjoin fs by CARD_3:def 3;
+        A9: (disjoin fs).1 = [:fs.1,{1}:] by A7,CARD_3:def 3;
+        A10: fs.1=[:(free_magma_seq X).1,(free_magma_seq X).(k-1) :] by A5,A6;
+        1+1 <= k-1+1 by A4; then
+        1 < k by NAT_1:13; then
+        A11: (free_magma_seq X).1 <> {} by A2;
+        A12: -1+k < 0+k by XREAL_1:10;
+        k-1 in NAT by A6,INT_1:16; then
+        reconsider k'=k-1 as Nat;
+        A13: (free_magma_seq X).k' <> {} by A12,A6,A2;
+        consider x be set such that
+        A14: x in [:fs.1,{1}:] by A11,A13,A10,XBOOLE_0:def 1;
+        [:fs.1,{1}:] c= union rng disjoin fs by ZFMISC_1:92,A9,A8,FUNCT_1:12;
+        hence P[k] by A14,A5,CARD_3:def 4;
+      end;
+    end;
+    for n being natural number holds P[n] from NAT_1:sch 4(A1);
+    hence thesis;
+  end;
+end;
+
+reserve X for set;
+
+theorem
+  free_magma(X,0) = {} by Def14;
+
+theorem
+  free_magma(X,1) = X by Def14;
+
+theorem Th18:
+  free_magma(X,2) = [:[:X,X:],{1}:]
+proof
+  consider fs be FinSequence such that
+  A1: len fs = 2-1 & (for p being natural number st p>=1 & p<=2-1 holds
+    fs.p = [: (free_magma_seq X).p, (free_magma_seq X).(2-p) :] ) &
+    (free_magma_seq X).2 = Union disjoin fs by Def14;
+  A2: fs.1 = [: (free_magma_seq X).1, (free_magma_seq X).(2-1) :] by A1
+  .= [: free_magma(X,1), X :] by Def14 .= [: X, X :] by Def14; then
+  A3: fs = <* [:X,X:] *> by A1,FINSEQ_1:57;
+  A4: for y being set holds y in union rng disjoin fs iff y in [:[:X,X:],{1}:]
+  proof
+    let y be set;
+    hereby
+      assume y in union rng disjoin fs; then
+      consider Y be set such that
+      A5: y in Y & Y in rng disjoin fs by TARSKI:def 4;
+      consider x be set such that
+      A6: x in dom disjoin fs & Y = (disjoin fs).x by A5,FUNCT_1:def 5;
+      A7: x in dom fs by A6,CARD_3:def 3; then
+      x in Seg 1 by A3,FINSEQ_1:55; then
+      x = 1 by FINSEQ_1:4,TARSKI:def 1;
+      hence y in [:[:X,X:],{1}:] by A5,A2,A6,CARD_3:def 3,A7;
+    end;
+    assume A8: y in [:[:X,X:],{1}:];
+    1 in Seg 1 by FINSEQ_1:3; then
+    A9: 1 in dom fs by A3,FINSEQ_1:55; then
+    A10: 1 in dom disjoin fs by CARD_3:def 3;
+    [:[:X,X:],{1}:] = (disjoin fs).1 by A2,A9,CARD_3:def 3; then
+    [:[:X,X:],{1}:] in rng disjoin fs by A10,FUNCT_1:def 5;
+    hence y in union rng disjoin fs by A8,TARSKI:def 4;
+  end;
+  thus free_magma(X,2) = union rng disjoin fs by A1,CARD_3:def 4
+  .= [:[:X,X:],{1}:] by A4,TARSKI:2;
+end;
+
+theorem
+  free_magma(X,3) = [:[:X,[:[:X,X:],{1}:]:],{1}:] \/
+    [:[:[:[:X,X:],{1}:],X:],{2}:]
+proof
+  set X1 = [:[:X,[:[:X,X:],{1}:]:],{1}:];
+  set X2 = [:[:[:[:X,X:],{1}:],X:],{2}:];
+  consider fs be FinSequence such that
+  A1: len fs = 3-1 & (for p being natural number st p>=1 & p<=3-1 holds
+    fs.p = [: (free_magma_seq X).p, (free_magma_seq X).(3-p) :] ) &
+    (free_magma_seq X).3 = Union disjoin fs by Def14;
+  A2: fs.1 = [: free_magma(X,1), free_magma(X,2) :] by A1
+  .= [: free_magma(X,1), [:[:X,X:],{1}:] :] by Th18
+  .= [:X,[:[:X,X:],{1}:]:] by Def14;
+  A3: fs.2 = [: (free_magma_seq X).2, (free_magma_seq X).(3-2) :] by A1
+  .= [: free_magma(X,2), X :] by Def14 .= [:[:[:X,X:],{1}:],X:] by Th18;
+  A4: for y being set holds y in union rng disjoin fs iff y in X1 or y in X2
+  proof
+    let y be set;
+    hereby
+      assume y in union rng disjoin fs; then
+      consider Y be set such that
+      A5: y in Y & Y in rng disjoin fs by TARSKI:def 4;
+      consider x be set such that
+      A6: x in dom disjoin fs & Y = (disjoin fs).x by A5,FUNCT_1:def 5;
+      A7: x in dom fs by A6,CARD_3:def 3; then
+      x in {1,2} by FINSEQ_1:4,A1,FINSEQ_1:def 3; then
+      x = 1 or x = 2 by TARSKI:def 2;
+      hence y in X1 or y in X2 by A2,A3,A5,A6,A7,CARD_3:def 3;
+    end;
+    assume A8: y in X1 or y in X2;
+    1 in Seg 2 & 2 in Seg 2 by FINSEQ_1:3; then
+    A9: 1 in dom fs & 2 in dom fs by A1,FINSEQ_1:def 3; then
+    A10: 1 in dom disjoin fs & 2 in dom disjoin fs by CARD_3:def 3;
+    X1 = (disjoin fs).1 & X2 = (disjoin fs).2 by A2,A3,A9,CARD_3:def 3; then
+    X1 in rng disjoin fs & X2 in rng disjoin fs by A10,FUNCT_1:def 5;
+    hence y in union rng disjoin fs by A8,TARSKI:def 4;
+  end;
+  thus free_magma(X,3) = union rng disjoin fs by A1,CARD_3:def 4
+  .= [:[:X,[:[:X,X:],{1}:]:],{1}:] \/ [:[:[:[:X,X:],{1}:],X:],{2}:]
+  by A4,XBOOLE_0:def 3;
+end;
+
+reserve x,y,Y for set;
+reserve n,m,p for natural number;
+
+theorem Th20:
+  n >= 2 implies
+  ex fs being FinSequence st len fs = n-1 &
+    (for p st p>=1 & p<=n-1 holds
+       fs.p = [: free_magma(X,p), free_magma(X,n-'p) :] ) &
+    free_magma(X,n) = Union disjoin fs
+proof
+  assume n >= 2; then
+  consider fs be FinSequence such that
+  A1: len fs = n-1 & (for p st p>=1 & p<=n-1 holds
+      fs.p = [: (free_magma_seq X).p, (free_magma_seq X).(n-p) :] ) &
+      (free_magma_seq X).n = Union disjoin fs by Def14;
+  take fs;
+  thus len fs = n-1 by A1;
+  thus for p st p>=1 & p<=n-1
+       holds fs.p = [: free_magma(X,p), free_magma(X,n-'p) :]
+  proof
+    let p;
+    assume A2: p>=1 & p<=n-1; then
+    -p <= -1 & -p >= -(n-1) by XREAL_1:26; then
+    A3: -p +n <= -1+n & -p+n >= -(n-1)+n by XREAL_1:8;
+    n-p=n-'p by A3,XREAL_0:def 2;
+    hence thesis by A2,A1;
+  end;
+  thus free_magma(X,n) = Union disjoin fs by A1;
+end;
+
+theorem Th21:
+  n >= 2 & x in free_magma(X,n) implies
+  ex p,m st x`2 = p & 1<=p & p<=n-1 &
+    x`1`1 in free_magma(X,p) & x`1`2 in free_magma(X,m) & n = p + m &
+    x in [:[:free_magma(X,p),free_magma(X,m):],{p}:]
+proof
+  assume A1: n>=2;
+  assume A2: x in free_magma(X,n);
+  consider fs be FinSequence such that
+  A3: len fs = n-1 and
+  A4: (for p st p>=1 & p<=n-1 holds
+      fs.p = [:(free_magma_seq X).p,(free_magma_seq X).(n-p) :] ) and
+  A5: (free_magma_seq X).n = Union disjoin fs by A1,Def14;
+  x in union rng disjoin fs by A2,A5,CARD_3:def 4; then
+  consider Y be set such that
+  A6: x in Y & Y in rng disjoin fs by TARSKI:def 4;
+  consider p be set such that
+  A7: p in dom disjoin fs & Y = (disjoin fs).p by A6,FUNCT_1:def 5;
+  A8: p in dom fs by A7,CARD_3:def 3; then
+  reconsider p as natural number;
+  A9: p in Seg len fs by A8,FINSEQ_1:def 3; then
+  A10: 1 <= p & p <= len fs by FINSEQ_1:3; then
+  A11: fs.p = [:(free_magma_seq X).p,(free_magma_seq X).(n-p):] by A3,A4;
+  x in [:[:(free_magma_seq X).p,(free_magma_seq X).(n-p):],{p}:]
+  by A6,A11,A7,A8,CARD_3:def 3; then
+  A12: x`1 in [:(free_magma_seq X).p,(free_magma_seq X).(n-p):] &
+  x`2 in {p} by MCART_1:10;
+  -p >= -(n-1) by A10,A3,XREAL_1:26; then
+  -p+n >= -(n-1)+n by XREAL_1:9; then
+  n-p in NAT by INT_1:16; then
+  reconsider m = n-p as natural number;
+  take p,m;
+  thus thesis by A3,A9,FINSEQ_1:3,A6,A11,A7,A8,CARD_3:def 3,A12,
+  TARSKI:def 1,MCART_1:10;
+end;
+
+theorem Th22:
+  x in free_magma(X,n) & y in free_magma(X,m) implies
+  [[x,y],n] in free_magma(X,n+m)
+proof
+  assume A1: x in free_magma(X,n);
+  assume A2: y in free_magma(X,m);
+  per cases;
+  suppose n=0 or m=0; hence thesis by Def14,A1,A2; end;
+  suppose n<>0 & m<>0; then
+    A3: n>=0+1 & m>=0+1 by NAT_1:13; then
+    n+m>=1+1 by XREAL_1:9; then
+    consider fs be FinSequence such that
+    A4: len fs = (n+m)-1 &
+     (for p st p>=1 & p<=(n+m)-1 holds
+      fs.p = [: (free_magma_seq X).p,(free_magma_seq X).((n+m)-p) :] )
+      & (free_magma_seq X).(n+m) = Union disjoin fs by Def14;
+    1-1 <= m-1 by A3,XREAL_1:11; then
+    A5: 0+n <= (m-1)+n by XREAL_1:9;
+    A6: fs.n = [: (free_magma_seq X).n,(free_magma_seq X).((n+m)-n) :]
+    by A4,A3,A5
+    .= [: (free_magma_seq X).n, (free_magma_seq X).m :];
+    A7: [x,y] in fs.n by A6,A1,A2,ZFMISC_1:def 2;
+    n in {n} by TARSKI:def 1; then
+    A8: [[x,y],n] in [:fs.n, {n}:] by A7,ZFMISC_1:def 2;
+    n in Seg len fs by A4,A3,A5,FINSEQ_1:3; then
+    A9: n in dom fs by FINSEQ_1:def 3; then
+    A10: (disjoin fs).n = [:fs.n,{n}:] by CARD_3:def 3;
+    n in dom disjoin fs by A9,CARD_3:def 3; then
+    [:fs.n,{n}:] in rng disjoin fs by A10,FUNCT_1:12; then
+    [[x,y],n] in union rng disjoin fs by A8,TARSKI:def 4;
+    hence [[x,y],n] in free_magma(X,n+m) by A4,CARD_3:def 4;
+  end;
+end;
+
+theorem Th23:
+  X c= Y implies free_magma(X,n) c= free_magma(Y,n)
+proof
+  defpred P[Nat] means X c= Y implies free_magma(X,$1) c= free_magma(Y,$1);
+  A1: for k being Nat st for n being Nat st n < k holds P[n] holds P[k]
+  proof
+    let k be Nat;
+    assume A2: for n being Nat st n < k holds P[n];
+    thus X c= Y implies free_magma(X,k) c= free_magma(Y,k)
+    proof
+      assume A3: X c= Y;
+      k = 0 or k + 1 > 0+1 by XREAL_1:8; then
+      k = 0 or k >= 1 by NAT_1:13; then
+      k = 0 or k = 1 or k > 1 by XXREAL_0:1; then
+      A4: k = 0 or k = 1 or k + 1 > 1+1 by XREAL_1:8;
+      per cases by A4,NAT_1:13;
+      suppose k=0; then free_magma(X,k) = {} & free_magma(Y,k) = {} by Def14;
+        hence free_magma(X,k) c= free_magma(Y,k);
+      end;
+      suppose k=1; then free_magma(X,k) = X & free_magma(Y,k) = Y by Def14;
+        hence free_magma(X,k) c= free_magma(Y,k) by A3;
+      end;
+      suppose A5: k>=2;
+        for x st x in free_magma(X,k) holds x in free_magma(Y,k)
+        proof
+          let x;
+          assume x in free_magma(X,k); then
+          consider p,m be natural number such that
+          A6: x`2 = p & 1<=p & p<=k-1 &
+          x`1`1 in free_magma(X,p) & x`1`2 in free_magma(X,m) & k = p + m &
+          x in [:[:free_magma(X,p),free_magma(X,m):],{p}:] by A5,Th21;
+          consider fs be FinSequence such that
+          A7: len fs = k-1 &
+          (for p being natural number st p>=1 & p<=k-1 holds
+          fs.p = [: free_magma(Y,p), free_magma(Y,k-'p) :])  &
+          free_magma(Y,k) = Union disjoin fs by A5,Th20;
+          A8: fs.p = [: free_magma(Y,p), free_magma(Y,k-'p) :] by A6,A7;
+          A9: x`1 in [:free_magma(X,p),free_magma(X,m):] & x`2 in {p}
+          by A6,MCART_1:10;
+          A10: x = [x`1,x`2] by A6,MCART_1:23;
+          A11: x`1 = [x`1`1,x`1`2] by A9,MCART_1:23;
+          p+1 <= k-1+1 by A6,XREAL_1:9; then
+          A12: p<k by NAT_1:13; then
+          A13: free_magma(X,p) c= free_magma(Y,p) by A2,A3;
+          p-p<k-p by A12,XREAL_1:16; then
+          A14: k-'p = m by A6,XREAL_0:def 2;
+          p+m>0+m by A6,XREAL_1:10; then
+          free_magma(X,m) c= free_magma(Y,k-'p) by A6,A2,A3,A14; then
+          x`1 in [:free_magma(Y,p),free_magma(Y,k-'p):]
+          by A6,A11,A13,MCART_1:11; then
+          A15: x in [:fs.p,{p}:] by A8,A10,A9,MCART_1:11;
+          p in Seg len fs by A6,A7,FINSEQ_1:3; then
+          A16: p in dom fs by FINSEQ_1:def 3; then
+          A17: (disjoin fs).p = [:fs.p,{p}:] by CARD_3:def 3;
+          p in dom disjoin fs by A16,CARD_3:def 3; then
+          [:fs.p,{p}:] in rng disjoin fs by A17,FUNCT_1:12; then
+          x in union rng disjoin fs by A15,TARSKI:def 4;
+          hence x in free_magma(Y,k) by A7,CARD_3:def 4;
+        end;
+        hence free_magma(X,k) c= free_magma(Y,k) by TARSKI:def 3;
+      end;
+    end;
+  end;
+  for k being Nat holds P[k] from NAT_1:sch 4(A1);
+  hence thesis;
+end;
+
+definition
+  let X be set;
+  func free_magma_carrier X equals Union disjoin((free_magma_seq X)|NATPLUS);
+  correctness;
+end;
+
+Lm1: n>0 implies [:free_magma(X,n),{n}:] c= free_magma_carrier X
+proof
+  assume A1: n > 0;
+  for x being set st x in [:free_magma(X,n),{n}:]
+  holds x in free_magma_carrier X
+  proof
+    let x be set;
+    assume A2: x in [:free_magma(X,n),{n}:];
+    n in NAT by ORDINAL1:def 13; then
+    A3: n in dom free_magma_seq X by FUNCT_2:def 1;
+    n in NATPLUS by A1,NAT_LAT:def 9; then
+    A4: n in dom ((free_magma_seq X)|NATPLUS) by A3,RELAT_1:86; then
+    A5: (disjoin((free_magma_seq X)|NATPLUS)).n
+    = [:((free_magma_seq X)|NATPLUS).n,{n}:] by CARD_3:def 3
+    .= [:(free_magma_seq X).n,{n}:] by A4,FUNCT_1:70;
+    n in dom disjoin((free_magma_seq X)|NATPLUS) by A4,CARD_3:def 3; then
+    A6: [:free_magma(X,n),{n}:] in rng disjoin((free_magma_seq X)|NATPLUS)
+    by A5,FUNCT_1:12;
+    x in union rng disjoin((free_magma_seq X)|NATPLUS)
+    by A6,A2,TARSKI:def 4;
+    hence x in free_magma_carrier X by CARD_3:def 4;
+  end;
+  hence thesis by TARSKI:def 3;
+end;
+
+theorem Th24:
+  X = {} iff free_magma_carrier X = {}
+proof
+  hereby
+    assume A1: X = {};
+    defpred P[Nat] means (free_magma_seq X).$1 = {};
+    A2: for k being Nat st for n being Nat st n < k holds P[n] holds P[k]
+    proof
+      let k be Nat;
+      assume A3: for n being Nat st n < k holds P[n];
+      k = 0 or k + 1 > 0+1 by XREAL_1:8; then
+      k = 0 or k >= 1 by NAT_1:13; then
+      k = 0 or k = 1 or k > 1 by XXREAL_0:1; then
+      A4: k = 0 or k = 1 or k + 1 > 1+1 by XREAL_1:8;
+      per cases by A4,NAT_1:13;
+      suppose k=0; hence P[k] by Def14; end;
+      suppose k=1; hence P[k] by A1,Def14; end;
+      suppose k>=2; then
+        consider fs be FinSequence such that
+        A5: len fs = k-1 & (for p being natural number st p>=1 & p<=k-1 holds
+        fs.p = [: (free_magma_seq X).p, (free_magma_seq X).(k-p) :] ) &
+        (free_magma_seq X).k = Union disjoin fs by Def14;
+        for y being set st y in rng disjoin fs holds y c= {}
+        proof
+          let y be set;
+          assume y in rng disjoin fs; then
+          consider p be set such that
+          A6: p in dom disjoin fs & y = (disjoin fs).p by FUNCT_1:def 5;
+          A7: p in dom fs by A6,CARD_3:def 3; then
+          A8: p in Seg len fs by FINSEQ_1:def 3;
+          reconsider p as Nat by A7;
+          A9: p >= 1 & p <= k-1 by A5,A8,FINSEQ_1:3; then
+          p+1 <= k-1+1 by XREAL_1:9; then
+          p < k by NAT_1:13; then
+          A10: (free_magma_seq X).p = {} by A3;
+          A11: fs.p = [:(free_magma_seq X).p,(free_magma_seq X).(k-p):]
+          by A5,A9
+          .= {} by A10,ZFMISC_1:113;
+          (disjoin fs).p = [:fs.p,{p}:] by A7,CARD_3:def 3
+          .= {} by A11,ZFMISC_1:113;
+          hence y c= {} by A6;
+        end; then
+        union rng disjoin fs c= {} by ZFMISC_1:94;
+        hence P[k] by A5,CARD_3:def 4;
+      end;
+    end;
+    A12: for n being natural number holds P[n] from NAT_1:sch 4(A2);
+    for Y being set st Y in rng disjoin((free_magma_seq X)|NATPLUS)
+    holds Y c= {}
+    proof
+      let Y be set;
+      assume Y in rng disjoin((free_magma_seq X)|NATPLUS); then
+      consider n be set such that
+      A13: n in dom disjoin((free_magma_seq X)|NATPLUS) &
+      Y = (disjoin((free_magma_seq X)|NATPLUS)).n by FUNCT_1:def 5;
+      A14: n in dom((free_magma_seq X)|NATPLUS) by A13,CARD_3:def 3; then
+      reconsider n as natural number;
+      A15: n in dom ((free_magma_seq X)|NATPLUS) by A13,CARD_3:def 3;
+      (disjoin((free_magma_seq X)|NATPLUS)).n
+      = [:((free_magma_seq X)|NATPLUS).n,{n}:] by A14,CARD_3:def 3
+      .= [:(free_magma_seq X).n,{n}:] by A15,FUNCT_1:70
+      .= [:{},{n}:] by A12 .= {} by ZFMISC_1:113;
+      hence Y c= {} by A13;
+    end; then
+    union rng disjoin((free_magma_seq X)|NATPLUS) c= {} by ZFMISC_1:94;
+    hence free_magma_carrier X = {} by CARD_3:def 4;
+  end;
+  assume A16: free_magma_carrier X = {};
+  [:free_magma(X,1),{1}:] c= free_magma_carrier X by Lm1;
+  hence X = {} by A16;
+end;
+
+registration
+  let X be empty set;
+  cluster free_magma_carrier X -> empty;
+  correctness by Th24;
+end;
+
+registration
+  let X be non empty set;
+  cluster free_magma_carrier X -> non empty;
+  correctness by Th24;
+  let w be Element of free_magma_carrier X;
+  cluster w`2 -> non zero natural number;
+  correctness
+  proof
+    w in free_magma_carrier X; then
+    w in union rng disjoin((free_magma_seq X)|NATPLUS) by CARD_3:def 4; then
+    consider Y be set such that
+A1: w in Y & Y in rng disjoin((free_magma_seq X)|NATPLUS)
+    by TARSKI:def 4;
+    consider n be set such that
+A2: n in dom disjoin((free_magma_seq X)|NATPLUS) &
+    Y = disjoin((free_magma_seq X)|NATPLUS).n by A1,FUNCT_1:def 5;
+A3: n in dom((free_magma_seq X)|NATPLUS) by A2,CARD_3:def 3; then
+    n in NATPLUS by RELAT_1:86; then
+    reconsider n as non zero natural number;
+    w in [:((free_magma_seq X)|NATPLUS).n,{n}:]
+    by A2,A1,A3,CARD_3:def 3; then
+    w`2 in {n} by MCART_1:10;
+    hence thesis by TARSKI:def 1;
+  end;
+end;
+
+theorem Th25:
+  for X being non empty set,
+      w being Element of free_magma_carrier X
+  holds w in [:free_magma(X,w`2),{w`2}:]
+proof
+  let X be non empty set;
+  let w be Element of free_magma_carrier X;
+  w in free_magma_carrier X; then
+  w in union rng disjoin((free_magma_seq X)|NATPLUS) by CARD_3:def 4; then
+  consider Y be set such that
+  A1: w in Y & Y in rng disjoin((free_magma_seq X)|NATPLUS) by TARSKI:def 4;
+  consider n be set such that
+  A2: n in dom disjoin((free_magma_seq X)|NATPLUS) &
+  Y = disjoin((free_magma_seq X)|NATPLUS).n by A1,FUNCT_1:def 5;
+  A3: n in dom((free_magma_seq X)|NATPLUS) by A2,CARD_3:def 3; then
+  A4: ((free_magma_seq X)|NATPLUS).n = (free_magma_seq X).n by FUNCT_1:70;
+  reconsider n as natural number by A3;
+  w in [:((free_magma_seq X)|NATPLUS).n,{n}:] by A2,A1,A3,CARD_3:def 3; then
+  w`2 in {n} by MCART_1:10; then
+  w`2 = n by TARSKI:def 1;
+  hence w in [:free_magma(X,w`2),{w`2}:] by A4,A2,A1,A3,CARD_3:def 3;
+end;
+
+theorem Th26:
+  for X being non empty set,
+      v,w being Element of free_magma_carrier X
+  holds [[[v`1,w`1],v`2],v`2+w`2] is Element of free_magma_carrier X
+proof
+  let X be non empty set;
+  let v,w be Element of free_magma_carrier X;
+  v in [:free_magma(X,v`2),{v`2}:] by Th25; then
+  A1: v`1 in free_magma(X,v`2) by MCART_1:10;
+  w in [:free_magma(X,w`2),{w`2}:] by Th25; then
+  w`1 in free_magma(X,w`2) by MCART_1:10; then
+  A2: [[v`1,w`1],v`2] in free_magma(X,v`2+w`2) by A1,Th22;
+  A3: v`2 + w`2 in {v`2 + w`2} by TARSKI:def 1;
+  set z = [[[v`1,w`1],v`2],v`2+w`2];
+  A4: z`1 in free_magma(X,v`2+w`2) by A2,MCART_1:def 1;
+  z`2 in {v`2 + w`2} by A3,MCART_1:def 2; then
+  A5: z in [:free_magma(X,v`2+w`2),{v`2+w`2}:] by A4,MCART_1:11;
+  [:free_magma(X,v`2 + w`2),{v`2 + w`2}:] c= free_magma_carrier X by Lm1;
+  hence thesis by A5;
+end;
+
+theorem Th27:
+  X c= Y implies free_magma_carrier X c= free_magma_carrier Y
+proof
+  assume A1: X c= Y;
+  per cases;
+  suppose X = {}; then
+    free_magma_carrier X = {};
+    hence free_magma_carrier X c= free_magma_carrier Y by XBOOLE_1:2;
+  end;
+  suppose A2: X <> {};
+    for x st x in free_magma_carrier X holds x in free_magma_carrier Y
+    proof
+      let x;
+      assume A3: x in free_magma_carrier X;
+      reconsider X'=X as non empty set by A2;
+      reconsider w=x as Element of free_magma_carrier X' by A3;
+      A4: w in [:free_magma(X',w`2),{w`2}:] by Th25; then
+      A5: w`1 in free_magma(X',w`2) & w`2 in {w`2} by MCART_1:10;
+      reconsider Y'=Y as non empty set by A2,A1;
+      A6: free_magma(X',w`2) c= free_magma(Y',w`2) by A1,Th23;
+      w = [w`1,w`2] by A4,MCART_1:23; then
+      A7: w in [:free_magma(Y',w`2),{w`2}:] by A6,A5,ZFMISC_1:def 2;
+      [:free_magma(Y',w`2),{w`2}:] c= free_magma_carrier Y' by Lm1;
+      hence x in free_magma_carrier Y by A7;
+    end;
+    hence free_magma_carrier X c= free_magma_carrier Y by TARSKI:def 3;
+  end;
+end;
+
+theorem
+  n>0 implies [:free_magma(X,n),{n}:] c= free_magma_carrier X by Lm1;
+
+definition
+  let X be set;
+  func free_magma_mult X -> BinOp of free_magma_carrier X means :Def17:
+  for v,w being Element of free_magma_carrier X, n,m st n = v`2 & m = w`2
+    holds it.(v,w) = [[[v`1,w`1],v`2],n+m]
+    if X is non empty otherwise it = {};
+  correctness
+  proof
+    A1: X is non empty implies ex f being BinOp of free_magma_carrier X st
+    for v,w being Element of free_magma_carrier X, n,m st n = v`2 & m = w`2
+    holds f.(v,w) = [[[v`1,w`1],v`2],n+m]
+    proof
+      assume A2: X is non empty;
+      defpred P[set,set,set] means for n,m st n=$1`2 & m=$2`2
+      holds $3 = [[[$1`1,$2`1],$1`2],n+m];
+      set Y = free_magma_carrier X;
+      reconsider Y = free_magma_carrier X as non empty set by A2;
+      A3: for x being Element of Y for y being Element of Y
+      ex z being Element of Y st P[x,y,z]
+      proof
+        let x be Element of Y;
+        let y be Element of Y;
+        reconsider X'=X as non empty set by A2;
+        reconsider v=x as Element of free_magma_carrier X';
+        reconsider w=y as Element of free_magma_carrier X';
+        reconsider z=[[[v`1,w`1],v`2],v`2+w`2] as Element of Y by Th26;
+        take z;
+        thus thesis;
+      end;
+      consider f be Function of [:Y,Y:],Y such that
+      A4: for x being Element of Y for y being Element of Y
+      holds P[x,y,f.(x,y)] from BINOP_1:sch 3(A3);
+      reconsider f as BinOp of free_magma_carrier X;
+      take f;
+      thus thesis by A4;
+    end;
+    A5: X is empty implies ex f being BinOp of free_magma_carrier X st f = {}
+    proof
+      assume A6: X is empty; then
+      A7: free_magma_carrier X = {};
+      {} c= [:{} qua set,{} qua set:] by ZFMISC_1:113; then
+      reconsider f = {} as Relation of [:{} qua set,{} qua set:],{}
+      by ZFMISC_1:113;
+      ([:{} qua set,{} qua set:] = {} implies {}={}) &
+      dom f = [:{} qua set,{} qua set:] by ZFMISC_1:113; then
+      reconsider f = {} as BinOp of {} by FUNCT_2:def 1;
+      for v,w being Element of free_magma_carrier X,
+          n,m st n = v`2 & m = w`2 &
+      v in free_magma_carrier X & w in free_magma_carrier X holds
+      f.(v,w) = [[[v`1,w`1],v`2],n+m] by A6;
+      hence thesis by A7;
+    end;
+    now
+      let f1, f2 be BinOp of free_magma_carrier X;
+      thus X is non empty & ( for v, w being Element of free_magma_carrier X,
+          n,m st n = v`2 & m = w`2 holds f1.(v,w) = [[[v`1,w`1],v`2],n+m])
+      & (for v, w being Element of free_magma_carrier X,
+          n,m st n = v`2 & m = w`2 holds f2.(v,w) = [[[v`1,w`1],v`2],n+m])
+      implies f1 = f2
+      proof
+        assume A8: X is non empty;
+        assume A9: for v, w being Element of free_magma_carrier X,
+          n,m st n = v`2 & m = w`2 holds f1.(v,w) = [[[v`1,w`1],v`2],n+m];
+        assume A10: for v, w being Element of free_magma_carrier X,
+          n,m st n = v`2 & m = w`2 holds f2.(v,w) = [[[v`1,w`1],v`2],n+m];
+        for v,w being Element of free_magma_carrier X holds f1.(v,w) = f2.(v,w)
+        proof
+          let v,w be Element of free_magma_carrier X;
+          set n = v`2, m = w`2;
+          reconsider n,m as natural number by A8;
+          thus f1.(v,w) = [[[v`1,w`1],v`2],n+m] by A9 .= f2.(v,w) by A10;
+        end;
+        hence f1 = f2 by BINOP_1:2;
+      end;
+      assume X is empty & f1 = {} & f2 = {}; hence thesis;
+    end;
+    hence thesis by A1,A5;
+  end;
+end;
+
+:: Ch I §7.1 Algebra I Bourbaki
+definition
+  let X be set;
+  func free_magma X -> multMagma equals
+  multMagma(# free_magma_carrier X, free_magma_mult X #);
+  correctness;
+end;
+
+registration
+  let X be set;
+  cluster free_magma X -> strict;
+  correctness;
+end;
+
+registration
+  let X be empty set;
+  cluster free_magma X -> empty;
+  correctness;
+end;
+
+registration
+  let X be non empty set;
+  cluster free_magma X -> non empty;
+  correctness;
+  let w be Element of free_magma X;
+  cluster w`2 -> non zero natural number;
+  correctness;
+  cluster w`1 -> Element of free_magma(X,w`2);
+  correctness;
+end;
+
+theorem
+  for X being set, S being Subset of X
+  holds free_magma S is multSubmagma of free_magma X
+proof
+  let X be set;
+  let S be Subset of X;
+  A1: the carrier of free_magma S c= the carrier of free_magma X by Th27;
+  reconsider A = the carrier of free_magma S as set;
+  A2: (the multF of free_magma X) | [: A, A :]
+  = (the multF of free_magma X)||the carrier of free_magma S by REALSET1:def 3;
+  per cases;
+  suppose A3: S is empty;
+    A4: the carrier of free_magma S = {} by A3;
+    the multF of free_magma S = (the multF of free_magma X) | {} by A3
+    .= (the multF of free_magma X) | [: A, A :] by A4,ZFMISC_1:113;
+    hence thesis by A2,A1,Def10;
+  end;
+  suppose A5: S is not empty;
+    A6: dom the multF of free_magma S = [:A,A:] by A5,FUNCT_2:def 1;
+    A7: X is non empty by A5;
+    [:A,A:] c= [: free_magma_carrier X, free_magma_carrier X:]
+    by A1,ZFMISC_1:119; then
+    A8: [:A,A:] c= dom the multF of free_magma X by A7,FUNCT_2:def 1;
+    A9: dom the multF of free_magma S
+    = dom((the multF of free_magma X)||the carrier of free_magma S)
+    by A6,A2,A8,RELAT_1:91;
+    A10: for z being set st z in dom the multF of free_magma S holds
+    (the multF of free_magma S).z
+    =((the multF of free_magma X)||the carrier of free_magma S).z
+    proof
+      let z be set;
+      assume A11: z in dom the multF of free_magma S;
+      consider x,y such that
+      A12: x in A & y in A & z=[x,y] by A11,ZFMISC_1:def 2;
+      reconsider x,y as Element of free_magma_carrier S by A12;
+      reconsider n=x`2,m=y`2 as natural number by A5;
+      reconsider x'=x,y'=y as Element of free_magma_carrier X by A12,A1;
+      (the multF of free_magma S).z
+      = (the multF of free_magma S).(x,y) by A12,BINOP_1:def 1
+      .= [[[x`1,y`1],x`2],n+m] by A5,Def17
+      .= (free_magma_mult X).(x',y') by A7,Def17
+      .= (the multF of free_magma X).z by A12,BINOP_1:def 1
+      .= ((the multF of free_magma X)|[:A,A:]).z by A11,FUNCT_1:72;
+      hence thesis by REALSET1:def 3;
+    end;
+    the multF of free_magma S
+    = (the multF of free_magma X)||the carrier of free_magma S
+    by A9,A10,FUNCT_1:9;
+    hence free_magma S is multSubmagma of free_magma X by A1,Def10;
+  end;
+end;
+
+definition
+  let X be set;
+  let w be Element of free_magma X;
+  func length w -> natural number equals :Def19:
+  w`2 if X is non empty otherwise 0;
+  correctness;
+end;
+
+theorem Th30:
+  X = {w`1 where w is Element of free_magma X: length w = 1}
+proof
+  for x being set holds x in X iff
+  x in {w`1 where w is Element of free_magma X: length w = 1}
+  proof
+    let x be set;
+    hereby
+      assume A1: x in X; then
+      A2: x in free_magma(X,1) by Def14;
+      1 in {1} by TARSKI:def 1; then
+      A3: [x,1] in [:free_magma(X,1),{1}:] by A2,ZFMISC_1:def 2;
+      [:free_magma(X,1),{1}:] c= free_magma_carrier X by Lm1; then
+      reconsider w' = [x,1] as Element of free_magma X by A3;
+      1 = w'`2 by MCART_1:def 2; then
+      A4: length w' = 1 by A1,Def19;
+      x = w'`1 by MCART_1:def 1;
+      hence x in {w`1 where w is Element of free_magma X: length w = 1} by A4;
+    end;
+    assume x in {w`1 where w is Element of free_magma X: length w = 1}; then
+    consider w be Element of free_magma X such that
+    A5: x = w`1 & length w = 1;
+    A6: w`2 = 1 by A5,Def19;
+    per cases;
+    suppose X is non empty; then
+      w in [:free_magma(X,1),{1}:] by A6,Th25; then
+      w in [:X,{1}:] by Def14;
+      hence x in X by A5,MCART_1:10;
+    end;
+    suppose X is empty; hence thesis by A5,Def19; end;
+  end;
+  hence thesis by TARSKI:2;
+end;
+
+reserve v,v1,v2,w,w1,w2 for Element of free_magma X;
+
+theorem Th31:
+  X is non empty implies v*w = [[[v`1,w`1],v`2],length v + length w]
+proof
+  assume A1: X is non empty; then
+  length v = v`2 & length w = w`2 by Def19;
+  hence thesis by A1,Def17;
+end;
+
+theorem Th32:
+  X is non empty implies v = [v`1,v`2] & length v >= 1
+proof
+  assume X is non empty; then
+  reconsider X'=X as non empty set;
+  reconsider v'=v as Element of free_magma X';
+  v' in [:free_magma(X,v'`2),{v'`2}:] by Th25; then
+  ex x,y being set st x in free_magma(X,v'`2) &
+  y in {v'`2} & v'=[x,y] by ZFMISC_1:def 2;
+  hence v = [v`1,v`2] by MCART_1:8;
+  reconsider v''=v' as Element of free_magma_carrier X';
+  v''`2 > 0; then
+  length v' > 0 by Def19; then
+  length v'+1 > 0+1 by XREAL_1:8;
+  hence thesis by NAT_1:13;
+end;
+
+theorem
+  length(v*w) = length v + length w
+proof
+  set vw = v*w;
+  per cases;
+  suppose A1: X is non empty; then
+    A2: v*w = [[[v`1,w`1],v`2],length v + length w] by Th31;
+    thus length(v*w) = vw`2 by A1,Def19
+    .= length v + length w by A2,MCART_1:def 2;
+  end;
+  suppose A3: X is empty;
+    thus length(v*w) = 0 by A3,Def19
+    .= length v + 0 by A3,Def19
+    .= length v + length w by A3,Def19;
+  end;
+end;
+
+theorem Th34:
+  length w >= 2 implies
+  ex w1,w2 st w = w1*w2 & length w1 < length w & length w2 < length w
+proof
+  assume A1: length w >= 2; then
+  reconsider X'=X as non empty set by Def19;
+  reconsider w'=w as Element of free_magma X';
+  A2: w' in [:free_magma(X,w'`2),{w'`2}:] by Th25;
+  set n = length w;
+  A3: n = w'`2 by Def19;
+  consider fs be FinSequence such that
+  A4: len fs = n-1 and
+  A5: (for p being natural number st p>=1 & p<=n-1 holds
+      fs.p = [:(free_magma_seq X).p,(free_magma_seq X).(n-p) :] ) and
+  A6: (free_magma_seq X).n = Union disjoin fs by A1,Def14;
+  w'`1 in (free_magma_seq X).n by A3,A2,MCART_1:10; then
+  w'`1 in union rng disjoin fs by A6,CARD_3:def 4; then
+  consider Y be set such that
+  A7: w'`1 in Y & Y in rng disjoin fs by TARSKI:def 4;
+  consider p be set such that
+  A8: p in dom disjoin fs & Y = (disjoin fs).p by A7,FUNCT_1:def 5;
+  A9: p in dom fs by A8,CARD_3:def 3; then
+  reconsider p as natural number;
+  A10: p in Seg len fs by A9,FINSEQ_1:def 3; then
+  A11: 1 <= p & p <= len fs by FINSEQ_1:3; then
+  A12: fs.p = [:(free_magma_seq X).p,(free_magma_seq X).(n-p):] by A4,A5;
+  A13: w'`1 in [:[:(free_magma_seq X).p,(free_magma_seq X).(n-p):],{p}:]
+  by A7,A12,A8,A9,CARD_3:def 3; then
+  A14: w'`1`1 in [:(free_magma_seq X).p,(free_magma_seq X).(n-p):] &
+  w'`1`2 in {p} by MCART_1:10; then
+  A15: w'`1`1`1 in (free_magma_seq X).p & w'`1`1`2 in (free_magma_seq X).(n-p)
+  by MCART_1:10;
+  -p >= -(n-1) by A11,A4,XREAL_1:26; then
+  A16: -p+n >= -(n-1)+n by XREAL_1:9; then
+  n-p in NAT by INT_1:16; then
+  reconsider m = n-p as natural number;
+  set w1' = [w'`1`1`1,p];
+  set w2' = [w'`1`1`2,m];
+  p in {p} by TARSKI:def 1; then
+  A17: w1' in [: free_magma(X,p),{p}:] by A15,ZFMISC_1:def 2;
+  m in {m} by TARSKI:def 1; then
+  A18: w2' in [: free_magma(X,m),{m}:] by A15,ZFMISC_1:def 2;
+  [: free_magma(X,p),{p}:] c= free_magma_carrier X by A11,Lm1; then
+  reconsider w1' as Element of free_magma_carrier X by A17;
+  [: free_magma(X,m),{m}:] c= free_magma_carrier X by A16,Lm1; then
+  reconsider w2' as Element of free_magma_carrier X by A18;
+  reconsider w1=w1',w2=w2' as Element of free_magma X;
+  A19: length w1 = w1'`2 by Def19 .= p by MCART_1:def 2;
+  A20: length w2 = w2'`2 by Def19 .= m by MCART_1:def 2;
+  ex x,y being set st x in [:(free_magma_seq X).p,(free_magma_seq X).(n-p):] &
+    y in {p} & w'`1=[x,y] by A13,ZFMISC_1:def 2; then
+  A21: w'`1 = [w'`1`1,w'`1`2] by MCART_1:8 .= [w'`1`1,p] by A14,TARSKI:def 1;
+  A22: ex x,y being set st x in (free_magma_seq X).p &
+    y in (free_magma_seq X).(n-p) & w'`1`1=[x,y] by A14,ZFMISC_1:def 2;
+  take w1,w2;
+  A23: ex x,y being set st x in free_magma(X,w'`2) &
+    y in {w'`2} & w'=[x,y] by A2,ZFMISC_1:def 2;
+  thus w = [w'`1, w'`2] by A23,MCART_1:8
+  .= [[w'`1`1,p],n] by A21,Def19
+  .= [[w'`1`1,w1`2],length w1 + length w2] by A19,A20,MCART_1:def 2
+  .= [[[w'`1`1`1,w'`1`1`2],w1`2],length w1 + length w2] by A22,MCART_1:8
+  .= [[[w'`1`1`1,w2`1],w1`2],length w1 + length w2] by MCART_1:def 1
+  .= [[[w1`1,w2`1],w1`2],length w1 + length w2] by MCART_1:def 1
+  .= w1*w2 by Th31;
+  p <= (n-1) by A10,FINSEQ_1:3,A4; then
+  p+1 <= (n-1)+1 by XREAL_1:9;
+  hence length w1 < length w by A19,NAT_1:13;
+  -1 >= -p by A11,XREAL_1:26; then
+  -1+(n+1) >= -p+(n+1) by XREAL_1:9; then
+  n >= m+1;
+  hence length w2 < length w by A20,NAT_1:13;
+end;
+
+theorem
+  v1*v2 = w1*w2 implies v1 = w1 & v2 = w2
+proof
+  assume A1: v1*v2 = w1*w2;
+  per cases;
+  suppose A2: X is non empty; then
+    v1*v2 = [[[v1`1,v2`1],v1`2],length v1 + length v2] &
+    w1*w2 = [[[w1`1,w2`1],w1`2],length w1 + length w2] by Th31; then
+    A3: [[v1`1,v2`1],v1`2] = [[w1`1,w2`1],w1`2] &
+    length v1 + length v2 = length w1 + length w2 by A1,ZFMISC_1:33; then
+    A4: [v1`1,v2`1] = [w1`1,w2`1] & v1`2 = w1`2 by ZFMISC_1:33;
+    length v1 = v1`2 by A2,Def19 .= length w1 by A2,A4,Def19; then
+    v2`2 = length w2 by A2,A3,Def19; then
+    A5: v2`2 = w2`2 by A2,Def19;
+    thus v1 = [v1`1,v1`2] by A2,Th32 .= [w1`1,w1`2] by A4,ZFMISC_1:33
+    .= w1 by A2,Th32;
+    thus v2 = [v2`1,v2`2] by A2,Th32 .= [w2`1,w2`2] by A5,A4,ZFMISC_1:33
+    .= w2 by A2,Th32;
+  end;
+  suppose X is empty; then
+    v1 = {} & w1 = {} & v2 = {} & w2 = {} by SUBSET_1:def 2;
+    hence thesis;
+  end;
+end;
+
+definition
+  let X be set;
+  let n be natural number;
+  func canon_image(X,n) -> Function of free_magma(X,n),free_magma X means
+  :Def20:
+  for x st x in dom it holds it.x = [x,n] if n > 0
+  otherwise it = {};
+  correctness
+  proof
+    A1: n > 0 implies ex f being Function of free_magma(X,n),free_magma X st
+    for x st x in dom f holds f.x = [x,n]
+    proof
+      assume A2: n > 0;
+      deffunc F(set) = [$1,n];
+      A3: for x st x in free_magma(X,n)
+      holds F(x) in the carrier of free_magma X
+      proof
+        let x;
+        assume A4: x in free_magma(X,n);
+        n in {n} by TARSKI:def 1; then
+        A5: F(x) in [:free_magma(X,n),{n}:] by A4,ZFMISC_1:def 2;
+        [:free_magma(X,n),{n}:] c= free_magma_carrier X by A2,Lm1;
+        hence F(x) in the carrier of free_magma X by A5;
+      end;
+      consider f be Function of free_magma(X,n),the carrier of free_magma X
+      such that A6: for x st x in free_magma(X,n) holds f.x = F(x)
+      from FUNCT_2:sch 2(A3);
+      take f;
+      let x;
+      assume x in dom f;
+      hence f.x = [x,n] by A6;
+    end;
+    A7: not n > 0 implies
+    ex f being Function of free_magma(X,n),free_magma X st f = {}
+    proof
+      assume not n > 0; then
+      n = 0; then
+      A8: free_magma(X,n) = {} by Def14;
+      set f = {};
+      A9: dom f = {};
+      rng f c= the carrier of free_magma X by XBOOLE_1:2; then
+      reconsider f as Function of free_magma(X,n),free_magma X
+      by A8,A9,FUNCT_2:4;
+      take f;
+      thus f = {};
+    end;
+    for f1,f2 being Function of free_magma(X,n),free_magma X holds
+    n > 0 &
+      (for x st x in dom f1 holds f1.x = [x,n] ) &
+      (for x st x in dom f2 holds f2.x = [x,n] ) implies f1 = f2
+    proof
+      let f1,f2 be Function of free_magma(X,n),free_magma X;
+      assume n > 0;
+      assume A10: for x st x in dom f1 holds f1.x = [x,n];
+      assume A11: for x st x in dom f2 holds f2.x = [x,n];
+      per cases;
+      suppose X is empty; hence thesis; end;
+      suppose A12: X is non empty; then
+        A13: dom f1 = free_magma(X,n) by FUNCT_2:def 1
+        .= dom f2 by A12,FUNCT_2:def 1;
+        for x st x in dom f1 holds f1.x = f2.x
+        proof
+          let x;
+          assume A14: x in dom f1;
+          thus f1.x = [x,n] by A14,A10 .= f2.x by A11,A13,A14;
+        end;
+        hence thesis by A13,FUNCT_1:9;
+      end;
+    end;
+    hence thesis by A1,A7;
+  end;
+end;
+
+ Th36:
+  canon_image(X,n) is one-to-one
+proof
+  for x1,x2 being set st x1 in dom canon_image(X,n) &
+    x2 in dom canon_image(X,n) & canon_image(X,n).x1 = canon_image(X,n).x2
+    holds x1 = x2
+  proof
+    let x1,x2 be set;
+    assume A1: x1 in dom canon_image(X,n) & x2 in dom canon_image(X,n);
+    assume A2: canon_image(X,n).x1 = canon_image(X,n).x2;
+    per cases;
+    suppose n>0; then
+      canon_image(X,n).x1 = [x1,n] & canon_image(X,n).x2 = [x2,n] by A1,Def20;
+      hence x1 = x2 by A2,ZFMISC_1:33;
+    end;
+    suppose not n>0; then
+      canon_image(X,n) = {} by Def20;
+      hence thesis by A1;
+    end;
+  end;
+  hence canon_image(X,n) is one-to-one by FUNCT_1:def 8;
+end;
+
+registration
+  let X be set;
+  let n be natural number;
+  cluster canon_image(X,n) -> one-to-one;
+  correctness by Th36;
+end;
+
+registration
+  let X be non empty set;
+  cluster canon_image(X,1) -> Function of X, free_magma X;
+  correctness;
+end;
+
+reserve X,Y,Z for non empty set;
+
+Lm2: dom canon_image(X,1) = X &
+  for x being set st x in X holds canon_image(X,1).x = [x,1]
+proof
+  dom canon_image(X,1) = free_magma(X,1) by FUNCT_2:def 1;
+  hence A1: dom canon_image(X,1) = X by Def14;
+  thus for x being set st x in X holds canon_image(X,1).x = [x,1] by A1,Def20;
+end;
+
+theorem Th37:
+  for A being Subset of free_magma X st A = canon_image(X,1) .: X
+    holds free_magma X = the_submagma_generated_by A
+proof
+  let A be Subset of free_magma X;
+  set N = the_submagma_generated_by A;
+  assume A1: A = canon_image(X,1) .: X;
+  per cases;
+  suppose A2: A is empty;
+    X is empty
+    proof
+      assume X is non empty;
+      consider x such that
+      A3: x in X by XBOOLE_0:def 1;
+      x in dom canon_image(X,1) by Lm2,A3; then
+      canon_image(X,1).x in canon_image(X,1) .: X by A3,FUNCT_1:def 12;
+      hence contradiction by A2,A1;
+    end;
+    hence thesis;
+  end;
+  suppose A4: A is not empty;
+    A5: the carrier of N c= the carrier of free_magma X by Def10;
+    for x st x in the carrier of free_magma X holds x in the carrier of N
+    proof
+      let x;
+      assume A6: x in the carrier of free_magma X;
+      defpred P[Nat] means for v being Element of free_magma X st
+      length v = $1 holds v in the carrier of N;
+      A7: for k being Nat st for n being Nat st n < k holds P[n] holds P[k]
+      proof
+        let k be Nat;
+        assume A8: for n being Nat st n < k holds P[n];
+        k = 0 or k + 1 > 0+1 by XREAL_1:8; then
+        k = 0 or k >= 1 by NAT_1:13; then
+        k = 0 or k = 1 or k > 1 by XXREAL_0:1; then
+        A9: k = 0 or k = 1 or k + 1 > 1+1 by XREAL_1:8;
+        per cases by A9,NAT_1:13;
+        suppose k = 0; hence P[k] by Th32; end;
+        suppose A10: k = 1;
+          for v being Element of free_magma X st length v = 1
+          holds v in the carrier of N
+          proof
+            let v be Element of free_magma X;
+            assume A11: length v = 1;
+            A12: v = [v`1,v`2] by Th32
+            .= [v`1,1] by A11,Def19;
+            v`1 in {w`1 where w is Element of free_magma X: length w = 1}
+            by A11; then
+            A13: v`1 in X by Th30;
+            v`1 in dom canon_image(X,1) & v`1 in X &
+            v = canon_image(X,1).(v`1) by A12,A13,Lm2; then
+            A14: v in A by A1,FUNCT_1:def 12;
+            A c= the carrier of N by Def13;
+            hence thesis by A14;
+          end;
+          hence P[k] by A10;
+        end;
+        suppose A15: k >= 2;
+          for v being Element of free_magma X st length v = k
+          holds v in the carrier of N
+          proof
+            let v be Element of free_magma X;
+            assume A16: length v = k; then
+            consider v1,v2 be Element of free_magma X such that
+            A17: v = v1*v2 & length v1 < length v & length v2 < length v
+            by A15,Th34;
+            A18: v1 in the carrier of N by A8,A16,A17;
+            reconsider v1'=v1 as Element of N by A8,A16,A17;
+            A19: v2 in the carrier of N by A8,A16,A17;
+            reconsider v2'=v2 as Element of N by A8,A16,A17;
+            N is non empty by A4,Th14; then
+            A20: the carrier of N <> {};
+            A21: [v1,v2] in [:the carrier of N,the carrier of N:]
+            by A18,A19,ZFMISC_1:106;
+            v1'*v2' = (the multF of N).[v1',v2'] by BINOP_1:def 1
+            .= ((the multF of free_magma X)||the carrier of N).[v1,v2] by Def10
+            .= ((the multF of free_magma X)|
+            [:the carrier of N,the carrier of N:]).[v1,v2] by REALSET1:def 3
+            .= (the multF of free_magma X).[v1,v2] by A21,FUNCT_1:72
+            .= v1*v2 by BINOP_1:def 1;
+            hence v in the carrier of N by A17,A20;
+          end;
+          hence P[k];
+        end;
+      end;
+      A22: for n being natural number holds P[n] from NAT_1:sch 4(A7);
+      reconsider v = x as Element of free_magma X by A6;
+      reconsider k = length v as Nat;
+      P[k] by A22;
+      hence x in the carrier of N;
+    end; then
+    the carrier of free_magma X c= the carrier of N by TARSKI:def 3; then
+    the carrier of free_magma X = the carrier of N by A5,XBOOLE_0:def 10;
+    hence thesis by Th7;
+  end;
+end;
+
+theorem
+  for R being compatible Equivalence_Relation of free_magma(X) holds
+  (free_magma X)./.R =
+  the_submagma_generated_by (nat_hom R).: (canon_image(X,1) .: X)
+proof
+  let R be compatible Equivalence_Relation of free_magma(X);
+  set A = canon_image(X,1) .: X;
+  reconsider A as Subset of free_magma X;
+  A1: the carrier of the_submagma_generated_by A
+  = the carrier of free_magma X by Th37;
+  the carrier of (free_magma X)./.R = rng nat_hom R by FUNCT_2:def 3; then
+  the carrier of (free_magma X)./.R = (nat_hom R) .: dom(nat_hom R)
+  by RELAT_1:146; then
+  the carrier of (free_magma X)./.R =
+  (nat_hom R).: the carrier of the_submagma_generated_by A
+  by A1,FUNCT_2:def 1; then
+  the carrier of (free_magma X)./.R =
+  the carrier of the_submagma_generated_by (nat_hom R).: A by Th15;
+  hence thesis by Th7;
+end;
+
+theorem Th39:
+  for f being Function of X,Y
+  holds canon_image(Y,1)*f is Function of X, free_magma Y
+proof
+  let f be Function of X,Y;
+  A1: dom f = X by FUNCT_2:def 1;
+  dom canon_image(Y,1) = Y by Lm2; then
+  rng f c= dom canon_image(Y,1); then
+  A2: dom(canon_image(Y,1)*f) = X by A1,RELAT_1:46;
+  rng(canon_image(Y,1)*f) c= rng canon_image(Y,1) by RELAT_1:45;
+  hence thesis by A2,FUNCT_2:4;
+end;
+
+definition
+  let X be non empty set;
+  let M be non empty multMagma;
+  let n,m be non zero natural number;
+  let f be Function of free_magma(X,n),M;
+  let g be Function of free_magma(X,m),M;
+  func [:f,g:] ->
+  Function of [:[:free_magma(X,n),free_magma(X,m):],{n}:], M means :Def21:
+  for x being Element of [:[:free_magma(X,n),free_magma(X,m):],{n}:],
+      y being Element of free_magma(X,n), z being Element of free_magma(X,m)
+  st y = x`1`1 & z = x`1`2 holds it.x = f.y * g.z;
+  existence
+  proof
+    set X1 = [:[:free_magma(X,n),free_magma(X,m):],{n}:];
+    defpred P[set,set] means for x being Element of X1,
+    y being Element of free_magma(X,n), z being Element of free_magma(X,m)
+    st $1=x & y = x`1`1 & z = x`1`2 holds $2 = f.y * g.z;
+    A1: for x st x in X1 ex y st y in the carrier of M & P[x,y]
+    proof
+      let x;
+      assume x in X1; then
+      A2: x`1 in [:free_magma(X,n),free_magma(X,m):] by MCART_1:10; then
+      reconsider x1 = x`1`1 as Element of free_magma(X,n) by MCART_1:10;
+      reconsider x2 = x`1`2 as Element of free_magma(X,m) by A2,MCART_1:10;
+      set y = f.x1 * g.x2;
+      take y;
+      thus y in the carrier of M;
+      thus P[x,y];
+    end;
+    consider h be Function of X1, the carrier of M such that
+    A3: for x st x in X1 holds P[x,h.x] from FUNCT_2:sch 1(A1);
+    take h;
+    thus thesis by A3;
+  end;
+  uniqueness
+  proof
+    let f1,f2 be Function of [:[:free_magma(X,n),free_magma(X,m):],{n}:], M;
+    assume A4:
+    for x being Element of [:[:free_magma(X,n),free_magma(X,m):],{n}:],
+    y being Element of free_magma(X,n), z being Element of free_magma(X,m) st
+    y = x`1`1 & z = x`1`2 holds f1.x = f.y * g.z;
+    assume A5:
+    for x being Element of [:[:free_magma(X,n),free_magma(X,m):],{n}:],
+    y being Element of free_magma(X,n), z being Element of free_magma(X,m) st
+    y = x`1`1 & z = x`1`2 holds f2.x = f.y * g.z;
+    for x st x in [:[:free_magma(X,n),free_magma(X,m):],{n}:] holds f1.x = f2.x
+    proof
+      let x;
+      assume x in [:[:free_magma(X,n),free_magma(X,m):],{n}:]; then
+      reconsider x'=x as
+      Element of [:[:free_magma(X,n),free_magma(X,m):],{n}:];
+      A6: x'`1 in [:free_magma(X,n),free_magma(X,m):] by MCART_1:10; then
+      reconsider x1 = x'`1`1 as Element of free_magma(X,n) by MCART_1:10;
+      reconsider x2 = x'`1`2 as Element of free_magma(X,m) by A6,MCART_1:10;
+      thus f1.x = f.x1 * g.x2 by A4 .= f2.x by A5;
+    end;
+    hence thesis by FUNCT_2:18;
+  end;
+end;
+
+reserve M for non empty multMagma;
+
+:: Ch I §7.1 Pro.1 Algebra I Bourbaki
+theorem Th40:
+  for f being Function of X,M holds
+  ex h being Function of free_magma X, M st h is multiplicative &
+     h extends f*(canon_image(X,1)")
+proof
+  let f be Function of X,M;
+  defpred P1[set,set] means ex n st n=$1 &
+  $2 = Funcs(free_magma(X,n),the carrier of M);
+  A1: for x st x in NAT ex y st P1[x,y]
+  proof
+    let x;
+    assume x in NAT; then
+    reconsider n=x as natural number;
+    set y = Funcs(free_magma(X,n),the carrier of M);
+    take y;
+    thus P1[x,y];
+  end;
+  consider F1 be Function such that
+  A2: dom F1 = NAT &
+  for x st x in NAT holds P1[x,F1.x] from CLASSES1:sch 1(A1);
+  A3: f in Funcs(X,the carrier of M) by FUNCT_2:11;
+  P1[1,F1.1] by A2; then
+  F1.1 = Funcs(X,the carrier of M) by Def14; then
+  Funcs(X,the carrier of M) in rng F1 by A2,FUNCT_1:12; then
+  A4: f in union rng F1 by A3,TARSKI:def 4; then
+  A5: f in Union F1 by CARD_3:def 4;
+  reconsider X1 = Union F1 as non empty set by A4,CARD_3:def 4;
+  defpred P2[set,set] means
+    for fs being XFinSequence of X1
+    st $1=fs holds
+    (((for m being non zero natural number st m in dom fs
+      holds fs.m is Function of free_magma(X,m),M) implies (
+    (dom fs = 0 implies $2 = {}) &
+    (dom fs = 1 implies $2 = f) &
+    for n being natural number st n>=2 & dom fs = n holds
+      ex fs1 being FinSequence st len fs1 = n-1 &
+      (for p being natural number st p>=1 & p<=n-1 holds
+         ex m1,m2 being non zero natural number,
+            f1 being Function of free_magma(X,m1),M,
+            f2 being Function of free_magma(X,m2),M
+          st m1=p & m2 = n-p & f1=fs.m1 & f2=fs.m2
+          & fs1.p = [: f1, f2 :]) & $2 = Union fs1)) &
+      (not (for m being non zero natural number st m in dom fs
+      holds fs.m is Function of free_magma(X,m),M) implies $2 = f));
+  A6: for e being set st e in X1^omega ex u being set st P2[e,u]
+  proof
+    let e be set;
+    assume e in X1^omega; then
+    reconsider fs = e as XFinSequence of X1 by AFINSQ_1:def 8;
+    per cases;
+    suppose A7: for m being non zero natural number st m in dom fs
+      holds fs.m is Function of free_magma(X,m),M;
+      dom fs = 0 or dom fs + 1 > 0+1 by XREAL_1:8; then
+      dom fs = 0 or dom fs >= 1 by NAT_1:13; then
+      dom fs = 0 or dom fs = 1 or dom fs > 1 by XXREAL_0:1; then
+      A8: dom fs = 0 or dom fs = 1 or dom fs + 1 > 1+1 by XREAL_1:8;
+      per cases by A8,NAT_1:13;
+      suppose A9: dom fs = 0; set u = {};
+        take u; thus P2[e,u] by A9; end;
+      suppose A10: dom fs = 1; set u = f;
+        take u; thus P2[e,u] by A10; end;
+      suppose A11: dom fs >= 2;
+        reconsider n = dom fs as natural number;
+        reconsider n'= n -' 1 as Nat;
+        n-1 >= 2-1 by A11,XREAL_1:11; then
+        A12: n' = n-1 by XREAL_0:def 2;
+        A13: Seg n' c= n'+1 by AFINSQ_1:5;
+        defpred P3[set,set] means
+        for p being natural number st p>=1 & p<=n-1 & $1=p holds
+         ex m1,m2 being non zero natural number,
+            f1 being Function of free_magma(X,m1),M,
+            f2 being Function of free_magma(X,m2),M
+          st m1=p & m2 = n-p & f1=fs.m1 & f2=fs.m2
+          & $2 = [: f1, f2 :];
+        A14: for k being Nat st k in Seg n' ex x being set st P3[k,x]
+        proof
+          let k be Nat;
+          assume A15: k in Seg n'; then
+          A16: 1<=k & k<=n' by FINSEQ_1:3; then
+          k+1<=n-1+1 by A12,XREAL_1:9; then
+          A17: k+1-k<=n-k by XREAL_1:11;
+          A18: n-'k = n-k by A17,XREAL_0:def 2;
+          reconsider m1=k as non zero natural number by A15,FINSEQ_1:3;
+          reconsider m2=n-k as non zero natural number by A17,A18;
+          reconsider f1=fs.m1 as Function of free_magma(X,m1),M
+          by A7,A15,A13,A12;
+          -1>=-k by A16,XREAL_1:26; then
+          -1+n>=-k+n by XREAL_1:9; then
+          m2 in Seg n' by A12,A17,FINSEQ_1:3; then
+          reconsider f2=fs.m2 as Function of free_magma(X,m2),M by A7,A13,A12;
+          set x = [: f1, f2 :];
+          take x;
+          thus thesis;
+        end;
+        consider fs1 be FinSequence such that
+        A19: dom fs1 = Seg n' &
+        for k being Nat st k in Seg n' holds P3[k,fs1.k]
+        from FINSEQ_1:sch 1(A14);
+        set u = Union fs1;
+        take u;
+        now
+          assume for m being non zero natural number st m in dom fs
+          holds fs.m is Function of free_magma(X,m),M;
+          thus (dom fs = 0 implies u = {}) &
+               (dom fs = 1 implies u = f) by A11;
+          thus for n being natural number st n>=2 & dom fs = n holds
+            ex fs1 being FinSequence st len fs1 = n-1 &
+            (for p being natural number st p>=1 & p<=n-1 holds
+              ex m1,m2 being non zero natural number,
+                 f1 being Function of free_magma(X,m1),M,
+                 f2 being Function of free_magma(X,m2),M
+                 st m1=p & m2 = n-p & f1=fs.m1 & f2=fs.m2
+                 & fs1.p = [: f1, f2 :]) & u = Union fs1
+          proof
+            let n'' be natural number;
+            assume n''>=2;
+            assume A20: dom fs = n'';
+            take fs1;
+            thus len fs1 = n''-1 by A12,A20,A19,FINSEQ_1:def 3;
+            thus for p being natural number st p>=1 & p<=n''-1 holds
+            ex m1,m2 being non zero natural number,
+               f1 being Function of free_magma(X,m1),M,
+               f2 being Function of free_magma(X,m2),M
+            st m1=p & m2 = n''-p & f1=fs.m1 & f2=fs.m2 & fs1.p = [: f1, f2 :]
+            proof
+              let p be natural number;
+              assume A21: p>=1;
+              assume A22: p<=n''-1; then
+              A23: p<=n' by A20,XREAL_0:def 2;
+              p+1<=n-1+1 by A20,A22,XREAL_1:9; then
+              A24: p+1-p<=n-p by XREAL_1:11;
+              A25: n-'p = n-p by A24,XREAL_0:def 2;
+              reconsider m1=p as non zero natural number by A21;
+              reconsider m2=n-p as non zero natural number by A24,A25;
+              p in Seg n' by A21,A23,FINSEQ_1:3; then
+              reconsider f1=fs.m1 as Function of free_magma(X,m1),M
+              by A7,A13,A12;
+              -1>=-p by A21,XREAL_1:26; then
+              -1+n>=-p+n by XREAL_1:9; then
+              m2 in Seg n' by A12,A24,FINSEQ_1:3; then
+              reconsider f2=fs.m2 as Function of free_magma(X,m2),M
+              by A13,A7,A12;
+              take m1,m2,f1,f2;
+              p in Seg n' by A21,A23,FINSEQ_1:3; then
+              A26: ex m1,m2 being non zero natural number,
+                 f1 being Function of free_magma(X,m1),M,
+                 f2 being Function of free_magma(X,m2),M
+              st m1=p & m2 = n-p & f1=fs.m1 & f2=fs.m2
+              & fs1.p = [: f1, f2 :] by A19,A20,A21,A22;
+              thus m1 = p & m2 = n''-p & f1=fs.m1 & f2=fs.m2 by A20;
+              thus fs1.p = [: f1, f2 :] by A26;
+            end;
+            thus u = Union fs1;
+          end;
+        end;
+        hence thesis by A7;
+      end;
+    end;
+    suppose A27: not for m being non zero natural number st m in dom fs
+      holds fs.m is Function of free_magma(X,m),M;
+      take f; thus thesis by A27;
+    end;
+  end;
+  consider F2 be Function such that
+  A28: dom F2 = X1^omega &
+  for e being set st e in X1^omega holds P2[e,F2.e] from CLASSES1:sch 1(A6);
+  A29: for n being natural number,
+      fs being XFinSequence of X1
+    st n>=2 & dom fs = n & (for m being non zero natural number st m in dom fs
+      holds fs.m is Function of free_magma(X,m),M) &
+      (ex fs1 being FinSequence st len fs1 = n-1 &
+        (for p being natural number st p>=1 & p<=n-1 holds
+         ex m1,m2 being non zero natural number,
+            f1 being Function of free_magma(X,m1),M,
+            f2 being Function of free_magma(X,m2),M
+          st m1=p & m2 = n-p & f1=fs.m1 & f2=fs.m2 & fs1.p = [: f1, f2 :]) &
+        F2.fs = Union fs1) holds
+      F2.fs in Funcs(free_magma(X,n),the carrier of M)
+  proof
+    let n be natural number;
+    let fs be XFinSequence of X1;
+    assume A30: n>=2;
+    assume dom fs = n;
+    assume for m being non zero natural number st m in dom fs
+      holds fs.m is Function of free_magma(X,m),M;
+    assume ex fs1 being FinSequence st len fs1 = n-1 &
+        (for p being natural number st p>=1 & p<=n-1 holds
+         ex m1,m2 being non zero natural number,
+            f1 being Function of free_magma(X,m1),M,
+            f2 being Function of free_magma(X,m2),M
+          st m1=p & m2 = n-p & f1=fs.m1 & f2=fs.m2 & fs1.p = [: f1, f2 :]) &
+        F2.fs = Union fs1; then
+    consider fs1 be FinSequence such that
+    A31: len fs1 = n-1 and
+    A32: for p being natural number st p>=1 & p<=n-1 holds
+      ex m1,m2 being non zero natural number,
+         f1 being Function of free_magma(X,m1),M,
+         f2 being Function of free_magma(X,m2),M
+         st m1=p & m2 = n-p & f1=fs.m1 & f2=fs.m2 & fs1.p = [: f1, f2 :] and
+    A33: F2.fs = Union fs1;
+    A34: for x being set st x in F2.fs holds ex y,z being set st x = [y,z]
+    proof
+      let x be set;
+      assume x in F2.fs; then
+      x in union rng fs1 by A33,CARD_3:def 4; then
+      consider Y be set such that
+      A35: x in Y & Y in rng fs1 by TARSKI:def 4;
+      consider p be set such that
+      A36: p in dom fs1 & Y = fs1.p by A35,FUNCT_1:def 5;
+      reconsider p as natural number by A36;
+      p in Seg len fs1 by A36,FINSEQ_1:def 3; then
+      1<=p & p<=n-1 by A31,FINSEQ_1:3; then
+      consider m1,m2 be non zero natural number,
+            f1 be Function of free_magma(X,m1),M,
+            f2 be Function of free_magma(X,m2),M such that
+      A37: m1=p & m2 = n-p & f1=fs.m1 & f2=fs.m2
+      & fs1.p = [: f1, f2 :] by A32;
+      consider y,z be set such that
+      A38: x = [y,z] by A35,A36,A37,RELAT_1:def 1;
+      take y,z;
+      thus x = [y,z] by A38;
+    end;
+    for x,y1,y2 being set st [x,y1] in F2.fs & [x,y2] in F2.fs holds y1=y2
+    proof
+      let x,y1,y2 be set;
+      assume [x,y1] in F2.fs; then
+      [x,y1] in union rng fs1 by A33,CARD_3:def 4; then
+      consider Y1 be set such that
+      A39: [x,y1] in Y1 & Y1 in rng fs1 by TARSKI:def 4;
+      consider p1 be set such that
+      A40: p1 in dom fs1 & Y1 = fs1.p1 by A39,FUNCT_1:def 5;
+      reconsider p1 as natural number by A40;
+      p1 in Seg len fs1 by A40,FINSEQ_1:def 3; then
+      1<=p1 & p1<=n-1 by A31,FINSEQ_1:3; then
+      consider m1',m2' be non zero natural number,
+            f1' be Function of free_magma(X,m1'),M,
+            f2' be Function of free_magma(X,m2'),M such that
+      A41: m1'=p1 & m2' = n-p1 & f1'=fs.m1' & f2'=fs.m2'
+      & fs1.p1 = [: f1', f2' :] by A32;
+      A42: x in dom [: f1', f2' :] by A39,A40,A41,FUNCT_1:8;
+      x`2 in {m1'} by A42,MCART_1:10; then
+      A43: x`2 = m1' by TARSKI:def 1;
+      assume [x,y2] in F2.fs; then
+      [x,y2] in union rng fs1 by A33,CARD_3:def 4; then
+      consider Y2 be set such that
+      A44: [x,y2] in Y2 & Y2 in rng fs1 by TARSKI:def 4;
+      consider p2 be set such that
+      A45: p2 in dom fs1 & Y2 = fs1.p2 by A44,FUNCT_1:def 5;
+      reconsider p2 as natural number by A45;
+      p2 in Seg len fs1 by A45,FINSEQ_1:def 3; then
+      1<=p2 & p2<=n-1 by A31,FINSEQ_1:3; then
+      consider m1'',m2'' be non zero natural number,
+      f1'' be Function of free_magma(X,m1''),M,
+      f2'' be Function of free_magma(X,m2''),M such that
+      A46: m1''=p2 & m2'' = n-p2 & f1''=fs.m1'' & f2''=fs.m2''
+      & fs1.p2 = [: f1'', f2'' :] by A32;
+      A47: x in dom [: f1'', f2'' :] by A44,A45,A46,FUNCT_1:8;
+      A48: x`2 in {m1''} by A47,MCART_1:10;
+      A49: f1' = f1'' & f2' = f2'' by A48,A41,A46,A43,TARSKI:def 1;
+      A50: x`1 in [:free_magma(X,m1'),free_magma(X,m2'):] by A42,MCART_1:10;
+      reconsider x1=x as
+      Element of [:[:free_magma(X,m1'),free_magma(X,m2'):],{m1'}:] by A42;
+      reconsider y1'=x`1`1 as Element of free_magma(X,m1') by A50,MCART_1:10;
+      reconsider z1=x`1`2 as Element of free_magma(X,m2') by A50,MCART_1:10;
+      A51: x`1 in [:free_magma(X,m1''),free_magma(X,m2''):]
+      by A47,MCART_1:10;
+      reconsider x2=x as
+      Element of [:[:free_magma(X,m1''),free_magma(X,m2''):],{m1''}:] by A47;
+      reconsider y2'=x`1`1 as Element of free_magma(X,m1'') by A51,MCART_1:10;
+      reconsider z2=x`1`2 as Element of free_magma(X,m2'') by A51,MCART_1:10;
+      thus y1 = [: f1', f2' :].x1 by A39,A40,A41,FUNCT_1:8
+      .= f1'.y1' * f2'.z1 by Def21
+      .= f1''.y2' * f2''.z2 by A49
+      .= [: f1'', f2'' :].x2 by Def21
+      .= y2 by A44,A45,A46,FUNCT_1:8;
+    end; then
+    reconsider f'=F2.fs as Function by A34,RELAT_1:def 1,FUNCT_1:def 1;
+    for x holds x in free_magma(X,n) iff ex y st [x,y] in f'
+    proof
+      let x;
+      hereby
+        assume x in free_magma(X,n); then
+        consider p,m be natural number such that
+        A52: x`2 = p & 1<=p & p<=n-1 &
+        x`1`1 in free_magma(X,p) & x`1`2 in free_magma(X,m) &
+        n = p + m &
+        x in [:[:free_magma(X,p),free_magma(X,m):],{p}:] by A30,Th21;
+        consider m1,m2 be non zero natural number,
+        f1 be Function of free_magma(X,m1),M,
+        f2 be Function of free_magma(X,m2),M such that
+        A53: m1=p & m2 = n-p & f1=fs.m1 & f2=fs.m2
+        & fs1.p = [: f1, f2 :] by A32,A52;
+        reconsider x' = x as Element of
+        [:[:free_magma(X,m1),free_magma(X,m2):],{m1}:] by A52,A53;
+        reconsider y' = x`1`1 as Element of free_magma(X,m1) by A52,A53;
+        reconsider z' = x`1`2 as Element of free_magma(X,m2) by A52,A53;
+        reconsider y = f1.y' * f2.z' as set;
+        A54: dom [: f1, f2 :] = [:[:free_magma(X,m1),free_magma(X,m2):],{m1}:]
+        by FUNCT_2:def 1;
+        A55: [: f1, f2 :].x' = y by Def21;
+        take y;
+        A56: [x,y] in fs1.p by A53,A54,A55,FUNCT_1:8;
+        p in Seg len fs1 by A52,FINSEQ_1:3,A31; then
+        p in dom fs1 by FINSEQ_1:def 3; then
+        fs1.p in rng fs1 by FUNCT_1:12; then
+        [x,y] in union rng fs1 by A56,TARSKI:def 4;
+        hence [x,y] in f' by A33,CARD_3:def 4;
+      end;
+      given y such that
+      A57: [x,y] in f';
+      [x,y] in union rng fs1 by A33,A57,CARD_3:def 4; then
+      consider Y be set such that
+      A58: [x,y] in Y & Y in rng fs1 by TARSKI:def 4;
+      consider p be set such that
+      A59: p in dom fs1 & Y = fs1.p by A58,FUNCT_1:def 5;
+      A60: p in Seg len fs1 by A59,FINSEQ_1:def 3;
+      reconsider p as natural number by A59;
+      p >= 1 & p <= n-1 by A60,A31,FINSEQ_1:3; then
+      consider m1,m2 be non zero natural number,
+      f1 be Function of free_magma(X,m1),M,
+      f2 be Function of free_magma(X,m2),M such that
+      A61: m1=p & m2 = n-p & f1=fs.m1 & f2=fs.m2
+      & fs1.p = [: f1, f2 :] by A32;
+      A62: x in dom [: f1, f2 :] by A58,A59,A61,FUNCT_1:8;
+      A63: x`1 in [:free_magma(X,m1),free_magma(X,m2):] & x`2 in {m1}
+      by A62,MCART_1:10; then
+      A64: x`1`1 in free_magma(X,m1) & x`1`2 in free_magma(X,m2)
+      by MCART_1:10;
+      x = [x`1,x`2] by A62,MCART_1:23; then
+      A65: x = [[x`1`1,x`1`2],x`2] by A63,MCART_1:23;
+      x`2 = m1 by A63,TARSKI:def 1; then
+      x in free_magma(X,m1+m2) by A65,Th22,A64;
+      hence x in free_magma(X,n) by A61;
+    end; then
+    A66: dom f' = free_magma(X,n) by RELAT_1:def 4;
+    for y st y in rng f' holds y in the carrier of M
+    proof
+      let y;
+      assume y in rng f'; then
+      consider x such that
+      A67: x in dom f' & y = f'.x by FUNCT_1:def 5;
+      [x,y] in Union fs1 by A33,A67,FUNCT_1:8; then
+      [x,y] in union rng fs1 by CARD_3:def 4; then
+      consider Y be set such that
+      A68: [x,y] in Y & Y in rng fs1 by TARSKI:def 4;
+      consider p be set such that
+      A69: p in dom fs1 & Y = fs1.p by A68,FUNCT_1:def 5;
+      A70: p in Seg len fs1 by A69,FINSEQ_1:def 3;
+      reconsider p as natural number by A69;
+      p >= 1 & p <= n-1 by A70,A31,FINSEQ_1:3; then
+      consider m1,m2 be non zero natural number,
+      f1 be Function of free_magma(X,m1),M,
+      f2 be Function of free_magma(X,m2),M such that
+      A71: m1=p & m2 = n-p & f1=fs.m1 & f2=fs.m2
+      & fs1.p = [: f1, f2 :] by A32;
+      y in rng [: f1, f2 :] by A68,A69,A71,RELAT_1:def 5;
+      hence y in the carrier of M;
+    end; then
+    rng f' c= the carrier of M by TARSKI:def 3;
+    hence thesis by A66,FUNCT_2:def 2;
+  end;
+  for e being set st e in X1^omega holds F2.e in X1
+  proof
+    let e be set;
+    assume A72: e in X1^omega;
+    reconsider fs=e as XFinSequence of X1 by A72,AFINSQ_1:def 8;
+    per cases;
+    suppose A73: for m being non zero natural number st m in dom fs
+      holds fs.m is Function of free_magma(X,m),M; then
+      A74: (dom fs = 0 implies F2.e = {}) &
+      (dom fs = 1 implies F2.e = f) &
+      for n being natural number st n>=2 & dom fs = n holds
+      ex fs1 being FinSequence st len fs1 = n-1 &
+      (for p being natural number st p>=1 & p<=n-1 holds
+         ex m1,m2 being non zero natural number,
+            f1 being Function of free_magma(X,m1),M,
+            f2 being Function of free_magma(X,m2),M
+          st m1=p & m2 = n-p & f1=fs.m1 & f2=fs.m2
+          & fs1.p = [: f1, f2 :]) & F2.e = Union fs1 by A72,A28;
+      dom fs = 0 or dom fs + 1 > 0+1 by XREAL_1:8; then
+      dom fs = 0 or dom fs >= 1 by NAT_1:13; then
+      dom fs = 0 or dom fs = 1 or dom fs > 1 by XXREAL_0:1; then
+      A75: dom fs = 0 or dom fs = 1 or dom fs + 1 > 1+1 by XREAL_1:8;
+      per cases by A75,NAT_1:13;
+      suppose A76: dom fs = 0;
+
+        Funcs({},the carrier of M) = {{}} by FUNCT_5:64; then
+        A77: {} in Funcs({},the carrier of M) by TARSKI:def 1;
+        P1[0,F1.0] by A2; then
+        F1.0 = Funcs({},the carrier of M) by Def14; then
+        Funcs({},the carrier of M) in rng F1 by A2,FUNCT_1:12; then
+        {} in union rng F1 by A77,TARSKI:def 4;
+        hence F2.e in X1 by A76,A74,CARD_3:def 4;
+      end;
+      suppose dom fs = 1;
+        hence F2.e in X1 by A5,A73,A72,A28;
+      end;
+      suppose A78: dom fs >= 2;
+        set n=dom fs;
+        ex fs1 being FinSequence st len fs1 = n-1 &
+        (for p being natural number st p>=1 & p<=n-1 holds
+         ex m1,m2 being non zero natural number,
+            f1 being Function of free_magma(X,m1),M,
+            f2 being Function of free_magma(X,m2),M
+          st m1=p & m2 = n-p & f1=fs.m1 & f2=fs.m2
+          & fs1.p = [: f1, f2 :]) & F2.e = Union fs1 by A73,A78,A72,A28; then
+        A79: F2.e in Funcs(free_magma(X,n),the carrier of M) by A29,A78,A73;
+        A80: n in dom F1 by A2,ORDINAL1:def 13; then
+        P1[n,F1.n] by A2; then
+        Funcs(free_magma(X,n),the carrier of M) in rng F1
+        by A80,FUNCT_1:12; then
+        F2.e in union rng F1 by A79,TARSKI:def 4;
+        hence F2.e in X1 by CARD_3:def 4;
+      end;
+    end;
+    suppose not (for m being non zero natural number st m in dom fs
+      holds fs.m is Function of free_magma(X,m),M);
+      hence F2.e in X1 by A5,A72,A28;
+    end;
+  end; then
+  reconsider F2 as Function of X1^omega, X1 by A28,FUNCT_2:5;
+  deffunc FX(XFinSequence of X1) = F2.$1;
+  consider F3 be Function of NAT, X1 such that
+  A81: for n being natural number holds F3.n = FX(F3|n)
+  from FuncRecursiveExist2;
+  A82: for n being natural number st n>0
+  holds F3.n is Function of free_magma(X,n),M
+  proof
+    defpred P4[Nat] means for n being natural number st $1 = n & n > 0
+    holds F3.n is Function of free_magma(X,n),M;
+    A83: for k being Nat st for n being Nat st n < k holds P4[n] holds P4[k]
+    proof
+      let k be Nat;
+      assume A84: for n being Nat st n < k holds P4[n];
+      thus P4[k]
+      proof
+        let n be natural number;
+        assume A85: k = n;
+        assume n > 0;
+        A86: for m being non zero natural number st m in dom(F3|n)
+        holds (F3|n).m is Function of free_magma(X,m),M
+        proof
+          let m be non zero natural number;
+          assume A87: m in dom(F3|n);
+          A88: (F3|n).m = F3.m by A87,FUNCT_1:70;
+          m in k by A85,A87,RELAT_1:86; then
+          m < k by NAT_1:45;
+          hence (F3|n).m is Function of free_magma(X,m),M by A88,A84;
+        end;
+        A89: F3|n in X1^omega by AFINSQ_1:def 8;
+        reconsider fs=F3|n as XFinSequence of X1;
+        A90: (dom fs = 0 implies F2.fs = {}) &
+        (dom fs = 1 implies F2.fs = f) &
+        for n being natural number st n>=2 & dom fs = n holds
+        ex fs1 being FinSequence st len fs1 = n-1 &
+        (for p being natural number st p>=1 & p<=n-1 holds
+           ex m1,m2 being non zero natural number,
+              f1 being Function of free_magma(X,m1),M,
+              f2 being Function of free_magma(X,m2),M
+            st m1=p & m2 = n-p & f1=fs.m1 & f2=fs.m2
+            & fs1.p = [: f1, f2 :]) & F2.fs = Union fs1 by A86,A89,A28;
+        A91: n in NAT by ORDINAL1:def 13;
+        dom F3 = NAT by FUNCT_2:def 1; then
+        A92: n c= dom F3 by A91,ORDINAL1:def 2;
+        A93: dom fs = dom F3 /\ n by RELAT_1:90
+        .= n by A92,XBOOLE_1:28;
+        F2.fs is Function of free_magma(X,n),M
+        proof
+          n = 0 or n + 1 > 0+1 by XREAL_1:8; then
+          n = 0 or n >= 1 by NAT_1:13; then
+          n = 0 or n = 1 or n > 1 by XXREAL_0:1; then
+          A94: n = 0 or n = 1 or n + 1 > 1+1 by XREAL_1:8;
+          per cases by A94,NAT_1:13;
+          suppose A95: n = 0;
+            Funcs({},the carrier of M) = {{}} by FUNCT_5:64; then
+            F2.fs in Funcs({},the carrier of M) by A95,A90,TARSKI:def 1; then
+            F2.fs in Funcs(free_magma(X,n),the carrier of M) by A95,Def14; then
+            ex f being Function st F2.fs = f & dom f = free_magma(X,n)
+            & rng f c= the carrier of M by FUNCT_2:def 2;
+            hence thesis by FUNCT_2:4;
+          end;
+          suppose A96: n = 1;
+            free_magma(X,1) = X by Def14;
+            hence thesis by A86,A89,A28,A96,A93;
+          end;
+          suppose A97: n >= 2; then
+            ex fs1 being FinSequence st len fs1 = n-1 &
+            (for p being natural number st p>=1 & p<=n-1 holds
+            ex m1,m2 being non zero natural number,
+            f1 being Function of free_magma(X,m1),M,
+            f2 being Function of free_magma(X,m2),M
+            st m1=p & m2 = n-p & f1=fs.m1 & f2=fs.m2
+            & fs1.p = [: f1, f2 :]) & F2.fs = Union fs1
+            by A86,A89,A28,A93; then
+            F2.fs in Funcs(free_magma(X,n),the carrier of M)
+            by A29,A97,A93,A86; then
+            ex f being Function st F2.fs = f & dom f = free_magma(X,n)
+            & rng f c= the carrier of M by FUNCT_2:def 2;
+            hence thesis by FUNCT_2:4;
+          end;
+        end;
+        hence F3.n is Function of free_magma(X,n),M by A81;
+      end;
+    end;
+    for k being Nat holds P4[k] from NAT_1:sch 4(A83);
+    hence thesis;
+  end;
+  reconsider X' = the carrier of free_magma X as set;
+  defpred P5[set,set] means for w being Element of free_magma X,
+  f' being Function of free_magma(X,w`2),M st w = $1 & f' = F3.w`2
+  holds $2 = f'.w`1;
+  A98: for x st x in X' ex y st y in the carrier of M & P5[x,y]
+  proof
+    let x;
+    assume x in X'; then
+    reconsider w=x as Element of free_magma X;
+    reconsider f'=F3.w`2 as Function of free_magma(X,w`2),M by A82;
+    set y = f'.w`1;
+    take y;
+    w in [:free_magma(X,w`2),{w`2}:] by Th25; then
+    w`1 in free_magma(X,w`2) by MCART_1:10;
+    hence y in the carrier of M by FUNCT_2:7;
+    thus P5[x,y];
+  end;
+  consider h be Function of X',the carrier of M such that
+  A99: for x st x in X' holds P5[x,h.x] from FUNCT_2:sch 1(A98);
+  reconsider h as Function of free_magma X, M;
+  take h;
+  for a,b being Element of free_magma X holds h.(a * b) = h.a * h.b
+  proof
+    let a,b be Element of free_magma X;
+    reconsider fab=F3.(a*b)`2 as Function of free_magma(X,(a*b)`2),M by A82;
+    a*b = [[[a`1,b`1],a`2],length a + length b] by Th31; then
+    A100: (a*b)`1=[[a`1,b`1],a`2] & (a*b)`2 = length a + length b
+    by MCART_1:7; then
+    A101: fab = F2.(F3|(length a + length b)) by A81;
+    A102: F3|(length a + length b) in X1^omega by AFINSQ_1:def 8;
+    A103: for m being non zero natural number
+    st m in dom(F3|(length a + length b))
+    holds (F3|(length a + length b)).m is Function of free_magma(X,m),M
+    proof
+      let m be non zero natural number;
+      assume A104: m in dom(F3|(length a + length b));
+      F3.m is Function of free_magma(X,m),M by A82;
+      hence thesis by A104,FUNCT_1:70;
+    end;
+    set n = length a + length b;
+    length a >= 1 & length b >= 1 by Th32; then
+    A105: length a + length b >= 1+1 by XREAL_1:9;
+    A106: n in NAT by ORDINAL1:def 13;
+    dom F3 = NAT by FUNCT_2:def 1; then
+    A107: n c= dom F3 by A106,ORDINAL1:def 2;
+    dom(F3|n) = dom F3 /\ n by RELAT_1:90
+    .= n by A107,XBOOLE_1:28; then
+    consider fs1 be FinSequence such that
+    A108: len fs1 = n-1 and
+    A109: for p being natural number st p>=1 & p<=n-1 holds
+          ex m1,m2 being non zero natural number,
+             f1 being Function of free_magma(X,m1),M,
+             f2 being Function of free_magma(X,m2),M
+           st m1=p & m2 = n-p & f1=(F3|n).m1 & f2=(F3|n).m2
+           & fs1.p = [: f1, f2 :] and
+    A110: fab = Union fs1 by A103,A105,A102,A28,A101;
+    a*b in [:free_magma(X,(a*b)`2),{(a*b)`2}:] by Th25; then
+    (a*b)`1 in free_magma(X,(a*b)`2) by MCART_1:10; then
+    (a*b)`1 in dom fab by FUNCT_2:def 1; then
+    [(a*b)`1,fab.(a*b)`1] in Union fs1 by A110,FUNCT_1:8; then
+    [(a*b)`1,fab.(a*b)`1] in union rng fs1 by CARD_3:def 4; then
+    consider Y be set such that
+    A111: [(a*b)`1,fab.(a*b)`1] in Y & Y in rng fs1 by TARSKI:def 4;
+    consider p be set such that
+    A112: p in dom fs1 & Y = fs1.p by A111,FUNCT_1:def 5;
+    A113: p in Seg len fs1 by A112,FINSEQ_1:def 3;
+    reconsider p as natural number by A112;
+    p >= 1 & p <= n-1 by A113,A108,FINSEQ_1:3; then
+    consider m1,m2 be non zero natural number,
+    f1 be Function of free_magma(X,m1),M,
+    f2 be Function of free_magma(X,m2),M such that
+    A114: m1=p & m2 = n-p & f1=(F3|n).m1 & f2=(F3|n).m2
+    & fs1.p = [: f1, f2 :] by A109;
+    A115: (a*b)`1 in dom [: f1, f2 :] by FUNCT_1:8,A114,A111,A112;
+    (a*b)`1`1 in [:free_magma(X,m1),free_magma(X,m2):] & (a*b)`1`2 in {m1}
+    by A115,MCART_1:10; then
+    A116: [a`1,b`1] in [:free_magma(X,m1),free_magma(X,m2):] & a`2 in {m1}
+    by MCART_1:7,A100; then
+    m1 = a`2 by TARSKI:def 1; then
+    A117: m1 = length a by Def19;
+    length b >= 0+1 by Th32; then
+    length b + length a > 0 + length a by XREAL_1:8; then
+    A118: m1 in n by A117,NAT_1:45;
+    length a >= 0+1 by Th32; then
+    length a + length b > 0 + length b by XREAL_1:8; then
+    A119: m2 in n by A117,A114,NAT_1:45;
+    reconsider x=(a*b)`1
+    as Element of [:[:free_magma(X,m1),free_magma(X,m2):],{m1}:] by A115;
+    A120: x`1 in [:free_magma(X,m1),free_magma(X,m2):] by MCART_1:10; then
+    reconsider y = x`1`1 as Element of free_magma(X,m1) by MCART_1:10;
+    reconsider z = x`1`2 as Element of free_magma(X,m2) by A120,MCART_1:10;
+    A121: x`1 = [a`1,b`1] by A100,MCART_1:7;
+    A122: [: f1, f2 :].x = f1.y * f2.z by Def21;
+    A123: h.(a*b) = fab.(a*b)`1 by A99;
+    A124: fab.(a*b)`1 = [: f1, f2 :].x by A114,A111,A112,FUNCT_1:8;
+    reconsider fa=F3.a`2 as Function of free_magma(X,a`2),M by A82;
+    reconsider fb=F3.b`2 as Function of free_magma(X,b`2),M by A82;
+    f1 = F3.m1 by A114,A118,FUNCT_1:72
+    .= fa by A116,TARSKI:def 1; then
+    A125: fa.a`1 = f1.y by A121,MCART_1:7;
+    f2 = F3.m2 by A114,A119,FUNCT_1:72
+    .= fb by Def19,A117,A114; then
+    A126: fb.b`1 = f2.z by A121,MCART_1:7;
+    A127: h.b = fb.b`1 by A99;
+    thus h.(a * b) = h.a * h.b by A122,A123,A125,A126,A127,A99,A124;
+  end;
+  hence h is multiplicative by GROUP_6:def 7;
+  set fX = canon_image(X,1);
+  for x st x in dom(f*(fX")) holds x in dom h
+  proof
+    let x;
+    assume A128: x in dom(f*(fX"));
+    dom(f*(fX")) c= dom(fX") by RELAT_1:44; then
+    x in dom(fX") by A128; then
+    x in rng fX by FUNCT_1:55; then
+    x in the carrier of free_magma X;
+    hence x in dom h by FUNCT_2:def 1;
+  end; then
+  A129: dom(f*(fX")) c= dom h by TARSKI:def 3;
+  for x st x in (dom h) /\ dom(f*(fX")) holds h.x = (f*(fX")).x
+  proof
+    let x;
+    assume x in (dom h) /\ dom(f*(fX")); then
+    A130: x in dom(f*(fX")) by A129,XBOOLE_1:28;
+    A131: dom(f*(fX")) c= dom(fX") by RELAT_1:44; then
+    A132: x in dom(fX") by A130;
+    A133: x in rng fX by A132,FUNCT_1:55;
+    consider x' be set such that
+    A134: x' in dom fX & x = fX.x' by A133,FUNCT_1:def 5;
+    A135: 1 in {1} by TARSKI:def 1;
+    [:free_magma(X,1),{1}:] c= free_magma_carrier X by Lm1; then
+    A136: [:X,{1}:] c= free_magma_carrier X by Def14;
+    A137: x' in X by A134,Lm2;
+    A138: x = [x',1] by A134,Def20; then
+    x in [:X,{1}:] by A135,ZFMISC_1:def 2,A137; then
+    reconsider w=x as Element of free_magma X by A136;
+    A139: (fX").x = x' by A134,FUNCT_1:56;
+    set f' = F3.w`2;
+    reconsider f' as Function of free_magma(X,w`2),M by A82;
+    A140: f' = F3.1 by A138,MCART_1:7 .= FX(F3|1) by A81;
+    A141: for m being non zero natural number st m in dom(F3|1)
+    holds (F3|1).m is Function of free_magma(X,m),M
+    proof
+      let m be non zero natural number;
+      assume A142: m in dom(F3|1);
+      A143: (F3|1).m = F3.m by A142,FUNCT_1:70;
+      thus (F3|1).m is Function of free_magma(X,m),M by A143,A82;
+    end;
+    A144: F3|1 in X1^omega by AFINSQ_1:def 8;
+    reconsider fs=F3|1 as XFinSequence of X1;
+    dom F3 = NAT by FUNCT_2:def 1; then
+    A145: 1 c= dom F3 by ORDINAL1:def 2;
+    A146: dom fs = dom F3 /\ 1 by RELAT_1:90
+    .= 1 by A145,XBOOLE_1:28;
+    thus h.x = f'.w`1 by A99 .= f'.x' by A138,MCART_1:7
+    .= f.((fX").x) by A139,A140,A146,A141,A144,A28
+    .= (f*(fX")).x by A131,A130,FUNCT_1:23;
+  end; then
+  h tolerates f*(fX") by PARTFUN1:def 6;
+  hence h extends f*(canon_image(X,1)") by A129,Def3;
+end;
+
+theorem Th41:
+  for f being Function of X,M,
+      h,g being Function of free_magma X, M
+  st h is multiplicative & h extends f*(canon_image(X,1)") &
+     g is multiplicative & g extends f*(canon_image(X,1)") holds h = g
+proof
+  let f be Function of X,M;
+  let h,g be Function of free_magma X, M;
+  assume A1: h is multiplicative;
+  assume A2: h extends f*(canon_image(X,1)");
+  assume A3: g is multiplicative;
+  assume A4: g extends f*(canon_image(X,1)");
+  defpred P[Nat] means for w being Element of free_magma X st length w = $1
+  holds h.w=g.w;
+  A5: for k being Nat st for n being Nat st n < k holds P[n] holds P[k]
+  proof
+    let k be Nat;
+    assume A6: for n being Nat st n < k holds P[n];
+    thus for w being Element of free_magma X st length w = k holds h.w=g.w
+    proof
+      let w be Element of free_magma X;
+      assume A7: length w = k;
+      A8: w = [w`1,w`2] & length w >= 1 by Th32; then
+      length w = 1 or length w > 1 by XXREAL_0:1; then
+      A9: length w = 1 or length w +1 > 1+1 by XREAL_1:10;
+      per cases by A9,NAT_1:13;
+      suppose A10: length w = 1;
+        set x = w`1;
+        x in {w'`1 where w' is Element of free_magma X: length w' = 1}
+        by A10; then
+        A11: x in X by Th30;
+        A12: dom(f*(canon_image(X,1)")) c= dom h &
+        h tolerates f*(canon_image(X,1)") by Def3,A2;
+        A13: dom(f*(canon_image(X,1)")) c= dom g &
+        g tolerates f*(canon_image(X,1)") by Def3,A4;
+        A14: canon_image(X,1).x = [x,1] by A11,Lm2 .= w by Def19,A8,A10;
+        x in dom canon_image(X,1) by A11,Lm2; then
+        w in rng canon_image(X,1) by A14,FUNCT_1:12; then
+        A15: w in dom(canon_image(X,1)") by FUNCT_1:55;
+        X c= dom f by FUNCT_2:def 1; then
+        dom canon_image(X,1) c= dom f by Lm2; then
+        rng(canon_image(X,1)") c= dom f by FUNCT_1:55; then
+        w in dom(f*(canon_image(X,1)")) by A15,RELAT_1:46; then
+        w in dom h /\ dom(f*(canon_image(X,1)")) &
+        w in dom g /\ dom(f*(canon_image(X,1)")) by A12,A13,XBOOLE_1:28; then
+        h.w = (f*(canon_image(X,1)")).w & g.w = (f*(canon_image(X,1)")).w
+        by A12,A13,PARTFUN1:def 6;
+        hence thesis;
+      end;
+      suppose length w >= 2; then
+        consider w1,w2 be Element of free_magma X such that
+        A16: w = w1*w2 & length w1 < length w & length w2 < length w by Th34;
+        h.w1 = g.w1 & h.w2 = g.w2 by A6,A7,A16; then
+        h.(w1*w2) = g.w1*g.w2 by A1,GROUP_6:def 7;
+        hence h.w=g.w by A16,A3,GROUP_6:def 7;
+      end;
+    end;
+  end;
+  A17: for k being Nat holds P[k] from NAT_1:sch 4(A5);
+  A18: for w being Element of free_magma X holds h.w=g.w
+  proof
+    let w be Element of free_magma X;
+    reconsider k=length w as Nat;
+    P[k] by A17;
+    hence h.w=g.w;
+  end;
+  for x st x in the carrier of free_magma X holds h.x = g.x by A18;
+  hence h = g by FUNCT_2:18;
+end;
+
+reserve M,N for non empty multMagma,
+      f for Function of M, N,
+      H for non empty multSubmagma of N,
+      R for compatible Equivalence_Relation of M;
+
+theorem Th42:
+  f is multiplicative & the carrier of H = rng f & R = equ_kernel f implies
+  ex g being Function of M./.R, H st f = g * nat_hom R &
+  g is bijective & g is multiplicative
+proof
+  assume A1: f is multiplicative;
+  assume A2: the carrier of H = rng f;
+  assume A3: R = equ_kernel f;
+  set g = ((nat_hom R)~) * f;
+  for x,y1,y2 being set st [x,y1] in g & [x,y2] in g holds y1 = y2
+  proof
+    let x,y1,y2 be set;
+    assume [x,y1] in g; then
+    consider z1 be set such that
+    A4: [x,z1] in (nat_hom R)~ & [z1,y1] in f by RELAT_1:def 8;
+    assume [x,y2] in g; then
+    consider z2 be set such that
+    A5: [x,z2] in (nat_hom R)~ & [z2,y2] in f by RELAT_1:def 8;
+    A6: [z1,x] in nat_hom R & [z2,x] in nat_hom R by A4,A5,RELAT_1:def 7; then
+    A7: z1 in dom nat_hom R & z2 in dom nat_hom R by RELAT_1:def 4;
+    reconsider z1,z2 as Element of M by A7;
+    A8: x = (nat_hom R).z1 & x = (nat_hom R).z2 by A6,FUNCT_1:8;
+    A9: f.z1 = y1 & f.z2 = y2 by A4,A5,FUNCT_1:8;
+    (nat_hom R).z1 = Class(R,z1) & (nat_hom R).z2 = Class(R,z2) by Def7; then
+    z2 in Class(R,z1) by A8,EQREL_1:31; then
+    [z1,z2] in equ_kernel f by A3,EQREL_1:26;
+    hence y1 = y2 by A9,Def9;
+  end; then
+  reconsider g as Function by FUNCT_1:def 1;
+  rng nat_hom R = the carrier of M./.R by FUNCT_2:def 3; then
+  A10: dom((nat_hom R)~) = the carrier of M./.R by RELAT_1:37;
+  the carrier of M c= dom f by FUNCT_2:def 1; then
+  dom nat_hom R c= dom f by FUNCT_2:def 1; then
+  rng((nat_hom R)~) c= dom f by RELAT_1:37; then
+  A11: dom g = the carrier of M./.R by A10,RELAT_1:46;
+  dom f c= the carrier of M; then
+  dom f c= dom(nat_hom R) by FUNCT_2:def 1; then
+  dom f c= rng((nat_hom R)~) by RELAT_1:37; then
+  A12: rng g = the carrier of H by A2,RELAT_1:47;
+  reconsider g as Function of M./.R, H by A11,A12,FUNCT_2:3;
+  take g;
+  for x1,x2 being set st x1 in dom g & x2 in dom g & g.x1 = g.x2 holds x1 = x2
+  proof
+    let x1,x2 be set;
+    assume A13: x1 in dom g;
+    assume A14: x2 in dom g;
+    assume A15: g.x1 = g.x2;
+    set y=g.x1;
+    [x1,y] in g by A13,FUNCT_1:8; then
+    consider z1 be set such that
+    A16: [x1,z1] in (nat_hom R)~ & [z1,y] in f by RELAT_1:def 8;
+    [x2,y] in g by A15,A14,FUNCT_1:8; then
+    consider z2 be set such that
+    A17: [x2,z2] in (nat_hom R)~ & [z2,y] in f by RELAT_1:def 8;
+    A18: [z1,x1] in nat_hom R & [z2,x2] in nat_hom R
+    by A16,A17,RELAT_1:def 7; then
+    A19: z1 in dom nat_hom R & z2 in dom nat_hom R by RELAT_1:def 4;
+    reconsider z1,z2 as Element of M by A19;
+    z1 in dom f & z2 in dom f & f.z1=y & f.z2=y by A16,A17,FUNCT_1:8; then
+    [z1,z2] in equ_kernel f by Def9; then
+    A20: z2 in Class(R,z1) by A3,EQREL_1:26;
+    A21: (nat_hom R).z1 = Class(R,z1) & (nat_hom R).z2 = Class(R,z2) by Def7;
+    x1 = (nat_hom R).z1 & x2 = (nat_hom R).z2 by A18,FUNCT_1:8;
+    hence x1 = x2 by A21,A20,EQREL_1:31;
+  end; then
+  A22: g is one-to-one by FUNCT_1:def 8;
+  A23: for x holds x in dom f iff x in dom nat_hom R & (nat_hom R).x in dom g
+  proof
+    let x;
+    hereby
+      assume x in dom f; then
+      x in the carrier of M;
+      hence x in dom nat_hom R by FUNCT_2:def 1; then
+      (nat_hom R).x in rng nat_hom R by FUNCT_1:12; then
+      (nat_hom R).x in the carrier of M./.R;
+      hence (nat_hom R).x in dom g by FUNCT_2:def 1;
+    end;
+    assume x in dom nat_hom R & (nat_hom R).x in dom g; then
+    x in the carrier of M;
+    hence x in dom f by FUNCT_2:def 1;
+  end;
+  A24: for x st x in dom f holds f.x = g.((nat_hom R).x)
+  proof
+    let x;
+    assume A25: x in dom f;
+    set y = (nat_hom R).x;
+    y in dom g by A25,A23; then
+    [y,g.y] in g by FUNCT_1:8; then
+    consider z be set such that
+    A26: [y,z] in (nat_hom R)~ & [z,g.y] in f by RELAT_1:def 8;
+    [z,y] in nat_hom R by A26,RELAT_1:def 7; then
+    A27: z in dom nat_hom R & y = (nat_hom R).z by FUNCT_1:8;
+    A28: z in dom f & g.y = f.z by A26,FUNCT_1:8; then
+    reconsider z'=z,x'=x as Element of M by A25;
+    (nat_hom R).z' = Class(R,z') & (nat_hom R).x' = Class(R,x') by Def7; then
+    z' in Class (R,x') by A27,EQREL_1:31; then
+    [x,z] in R by EQREL_1:26;
+    hence f.x = g.((nat_hom R).x) by A28,A3,Def9;
+  end;
+  thus f = g * nat_hom R by A23,A24,FUNCT_1:20;
+  g is onto by A12,FUNCT_2:def 3;
+  hence g is bijective by A22;
+  for v,w being Element of M./.R holds g.(v*w) = g.v * g.w
+  proof
+    let v,w be Element of M./.R;
+    v*w in the carrier of M./.R; then
+    v*w in dom g by FUNCT_2:def 1; then
+    [v*w,g.(v*w)] in g by FUNCT_1:8; then
+    consider z be set such that
+    A29: [v*w,z] in (nat_hom R)~ & [z,g.(v*w)] in f by RELAT_1:def 8;
+    [z,v*w] in nat_hom R by A29,RELAT_1:def 7; then
+    A30: z in dom nat_hom R & (nat_hom R).z = v*w by FUNCT_1:8;
+    A31: f.z = g.(v*w) by A29,FUNCT_1:8;
+    v in the carrier of M./.R; then
+    v in dom g by FUNCT_2:def 1; then
+    [v,g.v] in g by FUNCT_1:8; then
+    consider z1 be set such that
+    A32: [v,z1] in (nat_hom R)~ & [z1,g.v] in f by RELAT_1:def 8;
+    [z1,v] in nat_hom R by A32,RELAT_1:def 7; then
+    A33: z1 in dom nat_hom R & (nat_hom R).z1 = v by FUNCT_1:8;
+    A34: f.z1 = g.v by A32,FUNCT_1:8;
+    w in the carrier of M./.R; then
+    w in dom g by FUNCT_2:def 1; then
+    [w,g.w] in g by FUNCT_1:8; then
+    consider z2 be set such that
+    A35: [w,z2] in (nat_hom R)~ & [z2,g.w] in f by RELAT_1:def 8;
+    [z2,w] in nat_hom R by A35,RELAT_1:def 7; then
+    A36: z2 in dom nat_hom R & (nat_hom R).z2 = w by FUNCT_1:8;
+    A37: f.z2 = g.w by A35,FUNCT_1:8;
+    reconsider z1,z2,z as Element of M by A33,A36,A30;
+    A38: (nat_hom R).z = (nat_hom R).(z1*z2) by A33,A36,A30,GROUP_6:def 7;
+    (nat_hom R).(z1*z2) = Class(R,z1*z2) & (nat_hom R).z = Class(R,z)
+    by Def7; then
+    z1*z2 in Class(R,z) by A38,EQREL_1:31; then
+    [z,z1*z2] in R by EQREL_1:26; then
+    A39: f.z = f.(z1*z2) by A3,Def9
+    .= f.z1 * f.z2 by A1,GROUP_6:def 7;
+    A40: [g.v,g.w] in [:the carrier of H,the carrier of H:] by ZFMISC_1:def 2;
+    thus g.(v*w) = (the multF of N).[g.v,g.w] by A34,A37,A39,A31,BINOP_1:def 1
+    .= ((the multF of N)|[:the carrier of H,the carrier of H:]).[g.v,g.w]
+    by A40,FUNCT_1:72
+    .= ((the multF of N)|[:the carrier of H,the carrier of H:]).(g.v,g.w)
+    by BINOP_1:def 1
+    .= ((the multF of N)||the carrier of H).(g.v,g.w) by REALSET1:def 3
+    .= g.v * g.w by Def10;
+  end;
+  hence g is multiplicative by GROUP_6:def 7;
+end;
+
+theorem
+  for g1,g2 being Function of M./.R, N st g1 * nat_hom R = g2 * nat_hom R
+  holds g1 = g2
+proof
+  let g1,g2 be Function of M./.R, N;
+  assume A1: g1 * nat_hom R = g2 * nat_hom R;
+  set Y = rng nat_hom R;
+  rng nat_hom R = the carrier of M ./. R by FUNCT_2:def 3; then
+  dom g1 = Y & dom g2 = Y by FUNCT_2:def 1;
+  hence g1 = g2 by A1,FUNCT_1:156;
+end;
+
+theorem
+  for M being non empty multMagma holds
+    ex X being non empty set,
+       r being Relators of free_magma X,
+       g being Function of (free_magma X) ./. equ_rel r, M
+    st g is bijective & g is multiplicative
+proof
+  let M be non empty multMagma;
+  set X = the carrier of M;
+  consider f be Function of free_magma X, M such that
+  A1: f is multiplicative & f extends (id X)*(canon_image(X,1)") by Th40;
+  consider r be Relators of free_magma X such that
+  A2: equ_kernel f = equ_rel r by A1,Th5;
+  reconsider R = equ_kernel f
+  as compatible Equivalence_Relation of free_magma X by A1,Th4;
+  dom the multF of M c= [:the carrier of M,the carrier of M:]; then
+  the multF of M = (the multF of M)|[:the carrier of M,the carrier of M:]
+  by RELAT_1:97; then
+  the multF of M = (the multF of M)||the carrier of M by REALSET1:def 3; then
+  reconsider H = M as non empty multSubmagma of M by Def10;
+  for y st y in the carrier of M ex x st x in dom f & y = f.x
+  proof
+    let y;
+    assume A3: y in the carrier of M;
+    set x = [y,1];
+    take x;
+    [:free_magma(X,1),{1}:] c= the carrier of free_magma X by Lm1; then
+    A4: [:X,{1}:] c= the carrier of free_magma X by Def14;
+    1 in {1} by TARSKI:def 1; then
+    x in [:X,{1}:] by A3,ZFMISC_1:def 2; then
+    x in the carrier of free_magma X by A4;
+    hence x in dom f by FUNCT_2:def 1;
+    A5: dom ((id X)*(canon_image(X,1)")) c= dom f &
+    f tolerates (id X)*(canon_image(X,1)") by A1,Def3;
+    A6: canon_image(X,1).y = x by A3,Lm2;
+    y in dom canon_image(X,1) by A3,Lm2; then
+    x in rng canon_image(X,1) by A6,FUNCT_1:12; then
+    A7: x in dom(canon_image(X,1)") by FUNCT_1:55;
+    X c= dom(id X) by FUNCT_2:def 1; then
+    dom canon_image(X,1) c= dom(id X) by Lm2; then
+    rng(canon_image(X,1)") c= dom(id X) by FUNCT_1:55; then
+    A8: x in dom((id X)*(canon_image(X,1)")) by A7,RELAT_1:46;
+    A9: y in dom canon_image(X,1) by A3,Lm2;
+    thus y = (id X).y by A3,FUNCT_1:35
+    .= (id X).((canon_image(X,1)").x) by A9,FUNCT_1:56,A6
+    .= ((id X)*(canon_image(X,1)")).x by A8,FUNCT_1:22
+    .= f.x by A8,A5,PARTFUN1:132;
+  end; then
+  the carrier of M c= rng f by FUNCT_1:19; then
+  the carrier of H = rng f by XBOOLE_0:def 10; then
+  consider g be Function of (free_magma X) ./. R, H such that
+  A10: f = g * nat_hom R &
+  g is bijective & g is multiplicative by A1,Th42;
+  reconsider g as Function of (free_magma X) ./. equ_rel r, M by A2;
+  take X,r,g;
+  thus thesis by A10,A2;
+end;
+
+definition
+  let X,Y be non empty set;
+  let f be Function of X,Y;
+  func free_magmaF f -> Function of free_magma X, free_magma Y means :Def22:
+  it is multiplicative &
+  it extends (canon_image(Y,1)*f)*(canon_image(X,1)");
+  existence
+  proof
+    reconsider f'=canon_image(Y,1)*f as Function of X, free_magma Y by Th39;
+    ex h being Function of free_magma X, free_magma Y st h is multiplicative &
+    h extends f'*(canon_image(X,1)") by Th40;
+    hence thesis;
+  end;
+  uniqueness
+  proof
+    let f1, f2 be Function of free_magma X,free_magma Y;
+    assume A1: f1 is multiplicative &
+    f1 extends (canon_image(Y,1)*f)*(canon_image(X,1)");
+    assume A2: f2 is multiplicative &
+    f2 extends (canon_image(Y,1)*f)*(canon_image(X,1)");
+    reconsider f'=canon_image(Y,1)*f as Function of X,free_magma Y by Th39;
+    f1 extends f'*(canon_image(X,1)") &
+    f2 extends f'*(canon_image(X,1)") by A1,A2;
+    hence f1 = f2 by A1,A2,Th41;
+  end;
+end;
+
+registration
+  let X,Y be non empty set;
+  let f be Function of X,Y;
+  cluster free_magmaF f -> multiplicative;
+  coherence by Def22;
+end;
+
+reserve f for Function of X,Y;
+reserve g for Function of Y,Z;
+
+theorem Th45:
+  free_magmaF(g*f) = free_magmaF(g)*free_magmaF(f)
+proof
+  set f1=free_magmaF(g*f);
+  set f2=free_magmaF(g)*free_magmaF(f);
+  reconsider f'=canon_image(Z,1)*(g*f) as Function of X,free_magma Z by Th39;
+  for a, b being Element of free_magma X holds f2.(a*b) = f2.a * f2.b
+  proof
+    let a, b be Element of free_magma X;
+    a*b in the carrier of free_magma X; then
+    A2: a*b in dom f2 by FUNCT_2:def 1;
+    a in the carrier of free_magma X & b in the carrier of free_magma X; then
+    A3: a in dom(free_magmaF f) & b in dom(free_magmaF f) by FUNCT_2:def 1;
+    thus f2.(a*b) = (free_magmaF g).((free_magmaF f).(a*b)) by A2,FUNCT_1:22
+    .= (free_magmaF g).((free_magmaF f).a * (free_magmaF f).b)
+    by GROUP_6:def 7
+    .= (free_magmaF g).((free_magmaF f).a)*(free_magmaF g).((free_magmaF f).b)
+    by GROUP_6:def 7
+    .= f2.a * (free_magmaF g).((free_magmaF f).b) by A3,FUNCT_1:23
+    .= f2.a * f2.b by A3,FUNCT_1:23;
+  end; then
+  A4: f2 is multiplicative by GROUP_6:def 7;
+  A5: dom(f'*(canon_image(X,1)")) c= dom(canon_image(X,1)") by RELAT_1:44;
+  rng canon_image(X,1) c= the carrier of free_magma X; then
+  dom(canon_image(X,1)") c= the carrier of free_magma X by FUNCT_1:55; then
+  dom(f'*(canon_image(X,1)")) c= the carrier of free_magma X
+  by A5,XBOOLE_1:1; then
+  A6: dom(f'*(canon_image(X,1)")) c= dom f2 by FUNCT_2:def 1;
+  for x st x in dom(f'*(canon_image(X,1)"))
+  holds f2.x = (f'*(canon_image(X,1)")).x
+  proof
+    let x;
+    assume A7: x in dom(f'*(canon_image(X,1)"));
+    free_magmaF(f) extends (canon_image(Y,1)*f)*(canon_image(X,1)")
+    by Def22; then
+    A8: dom((canon_image(Y,1)*f)*(canon_image(X,1)")) c= dom(free_magmaF f) &
+    (canon_image(Y,1)*f)*(canon_image(X,1)") tolerates free_magmaF f by Def3;
+    A9: x in dom(canon_image(X,1)") by A7,FUNCT_1:21;
+    X c= dom f by FUNCT_2:def 1; then
+    dom canon_image(X,1) c= dom f by Lm2; then
+    rng(canon_image(X,1)") c= dom f by FUNCT_1:55; then
+    A10: x in dom(f*(canon_image(X,1)")) by A9,RELAT_1:46;
+    dom f c= X; then
+    dom f c= dom canon_image(X,1) by Lm2; then
+    A11: dom f c= rng(canon_image(X,1)") by FUNCT_1:55;
+    rng f c= Y; then
+    A12: rng(f*(canon_image(X,1)")) c= Y by A11,RELAT_1:47; then
+    rng(f*(canon_image(X,1)")) c= dom canon_image(Y,1) by Lm2; then
+    x in dom(canon_image(Y,1)*(f*(canon_image(X,1)")))
+    by A10,RELAT_1:46; then
+    A13: x in dom((canon_image(Y,1)*f)*(canon_image(X,1)"))
+    by RELAT_1:55;
+    set y = (f*(canon_image(X,1)")).x;
+    free_magmaF(g) extends (canon_image(Z,1)*g)*(canon_image(Y,1)")
+    by Def22; then
+    A14: dom((canon_image(Z,1)*g)*(canon_image(Y,1)")) c= dom(free_magmaF g) &
+    (canon_image(Z,1)*g)*(canon_image(Y,1)") tolerates free_magmaF g by Def3;
+    y in rng(f*(canon_image(X,1)")) by FUNCT_1:12,A10; then
+    A15: y in Y by A12; then
+    A16: y in dom canon_image(Y,1) by Lm2; then
+    A17: canon_image(Y,1).y in rng canon_image(Y,1) by FUNCT_1:12;
+    Y c= dom g by FUNCT_2:def 1; then
+    A18: dom canon_image(Y,1) c= dom g by Lm2;
+    rng g c= Z; then
+    rng g c= dom canon_image(Z,1) by Lm2; then
+    dom canon_image(Y,1) c= dom(canon_image(Z,1)*g) by A18,RELAT_1:46; then
+    A19: rng(canon_image(Y,1)") c= dom(canon_image(Z,1)*g) by FUNCT_1:55;
+    rng canon_image(Y,1) c= dom(canon_image(Y,1)") by FUNCT_1:55; then
+    A20: rng canon_image(Y,1) c=
+    dom((canon_image(Z,1)*g)*(canon_image(Y,1)")) by A19,RELAT_1:46;
+    A21: rng canon_image(Y,1) c= dom(canon_image(Y,1)") by FUNCT_1:55;
+    dom canon_image(Y,1) = Y by Lm2; then
+    A22: y in dom((canon_image(Y,1)")*canon_image(Y,1))
+    by A15,A21,RELAT_1:46;
+    A23: (canon_image(Z,1)*g)*(f*(canon_image(X,1)"))
+    = canon_image(Z,1)*(g*(f*(canon_image(X,1)"))) by RELAT_1:55
+    .= canon_image(Z,1)*((g*f)*(canon_image(X,1)")) by RELAT_1:55
+    .= (canon_image(Z,1)*(g*f))*(canon_image(X,1)") by RELAT_1:55;
+    thus f2.x = (free_magmaF g).((free_magmaF f).x) by A7,A6,FUNCT_1:22
+    .= (free_magmaF g).(((canon_image(Y,1)*f)*(canon_image(X,1)")).x)
+    by A13,A8,PARTFUN1:132
+    .= (free_magmaF g).((canon_image(Y,1)*(f*(canon_image(X,1)"))).x)
+    by RELAT_1:55
+    .= (free_magmaF g).(canon_image(Y,1).((f*(canon_image(X,1)")).x))
+    by A10,FUNCT_1:23
+    .= ((canon_image(Z,1)*g)*(canon_image(Y,1)")).(canon_image(Y,1).y)
+    by A20,A17,A14,PARTFUN1:132
+    .= (((canon_image(Z,1)*g)*(canon_image(Y,1)"))*canon_image(Y,1)).y
+    by A16,FUNCT_1:23
+    .= ((canon_image(Z,1)*g)*((canon_image(Y,1)")*canon_image(Y,1))).y
+    by RELAT_1:55
+    .= (canon_image(Z,1)*g).(((canon_image(Y,1)")*canon_image(Y,1)).y)
+    by A22,FUNCT_1:23
+    .= (canon_image(Z,1)*g).((f*(canon_image(X,1)")).x) by A16,FUNCT_1:56
+    .= (f'*(canon_image(X,1)")).x by A23,A10,FUNCT_1:23;
+  end; then
+  f2 tolerates f'*(canon_image(X,1)") by A6,PARTFUN1:132; then
+  f2 extends f'*(canon_image(X,1)") by A6,Def3;
+  hence free_magmaF(g*f) = free_magmaF(g)*free_magmaF(f) by Def22,A4;
+end;
+
+theorem Th46:
+  for g being Function of X,Z st Y c= Z & f=g
+  holds free_magmaF f = free_magmaF g
+proof
+  let g be Function of X,Z;
+  assume A1: Y c= Z;
+  assume A2: f = g;
+  A3: the carrier of free_magma Y c= the carrier of free_magma Z
+  by A1,Th27; then
+  reconsider f'=free_magmaF f as Function of free_magma X, free_magma Z
+  by FUNCT_2:9;
+  for a, b being Element of free_magma X
+  holds f'.(a * b) = (f'.a) * (f'.b)
+  proof
+    let a, b be Element of free_magma X;
+    set v = (free_magmaF f).a;
+    set w = (free_magmaF f).b;
+    v in the carrier of free_magma Y &
+    w in the carrier of free_magma Y; then
+    reconsider v'=v, w'=w as Element of free_magma Z by A3;
+    A5: length v = v`2 by Def19 .= length v' by Def19;
+    A6: length w = w`2 by Def19 .= length w' by Def19;
+    thus f'.(a * b)
+    = (free_magmaF f).a * (free_magmaF f).b by GROUP_6:def 7
+    .= [[[v'`1,w'`1],v'`2],(length v') + (length w')] by Th31,A5,A6
+    .= (f'.a) * (f'.b) by Th31;
+  end; then
+  A7: f' is multiplicative by GROUP_6:def 7;
+  rng g c= Z; then
+  rng g c= dom canon_image(Z,1) by Lm2; then
+  A8: dom (canon_image(Z,1)*g) = dom g by RELAT_1:46;
+  X c= dom g by FUNCT_2:def 1; then
+  dom canon_image(X,1) c= dom (canon_image(Z,1)*g) by Lm2,A8; then
+  rng (canon_image(X,1)") c= dom (canon_image(Z,1)*g) by FUNCT_1:55; then
+  A9: dom((canon_image(Z,1)*g)*(canon_image(X,1)")) =
+  dom (canon_image(X,1)") by RELAT_1:46;
+  rng canon_image(X,1) c= the carrier of free_magma X; then
+  dom((canon_image(Z,1)*g)*(canon_image(X,1)")) c=
+  the carrier of free_magma X by A9,FUNCT_1:55; then
+  A10: dom((canon_image(Z,1)*g)*(canon_image(X,1)")) c= dom f'
+  by FUNCT_2:def 1;
+  for x st x in dom((canon_image(Z,1)*g)*(canon_image(X,1)"))
+  holds f'.x = ((canon_image(Z,1)*g)*(canon_image(X,1)")).x
+  proof
+    let x;
+    assume A11: x in dom((canon_image(Z,1)*g)*(canon_image(X,1)"));
+    free_magmaF(f) extends (canon_image(Y,1)*f)*(canon_image(X,1)")
+    by Def22; then
+    A12: dom((canon_image(Y,1)*f)*(canon_image(X,1)")) c= dom(free_magmaF f) &
+    (canon_image(Y,1)*f)*(canon_image(X,1)") tolerates free_magmaF f by Def3;
+    rng f c= Y; then
+    A13: rng f c= dom canon_image(Y,1) by Lm2;
+    rng f c= Z by A1,XBOOLE_1:1; then
+    A14: rng f c= dom canon_image(Z,1) by Lm2;
+    A15: dom(canon_image(Y,1)*f) = dom f by A13,RELAT_1:46
+    .= dom(canon_image(Z,1)*f) by A14,RELAT_1:46;
+    for x st x in dom(canon_image(Y,1)*f)
+    holds (canon_image(Y,1)*f).x = (canon_image(Z,1)*f).x
+    proof
+      let x;
+      assume A16: x in dom(canon_image(Y,1)*f); then
+      A17: f.x in dom canon_image(Y,1) by FUNCT_1:21; then
+      A18: f.x in Y by Lm2;
+      thus (canon_image(Y,1)*f).x = canon_image(Y,1).(f.x) by A16,FUNCT_1:22
+      .= [f.x,1] by A17,Def20
+      .= canon_image(Z,1).(f.x) by A1,A18,Lm2
+      .= (canon_image(Z,1)*f).x by A15,A16,FUNCT_1:22;
+    end; then
+    A19: canon_image(Y,1)*f = canon_image(Z,1)*g by A2,A15,FUNCT_1:9;
+    thus f'.x = ((canon_image(Z,1)*g)*(canon_image(X,1)")).x
+    by A19,A11,A12,PARTFUN1:132;
+  end; then
+  f' tolerates (canon_image(Z,1)*g)*(canon_image(X,1)")
+  by A10,PARTFUN1:132; then
+  f' extends (canon_image(Z,1)*g)*(canon_image(X,1)") by A10,Def3;
+  hence free_magmaF f = free_magmaF g by A7,Def22;
+end;
+
+theorem Th47:
+  free_magmaF id X = id dom free_magmaF f
+proof
+  dom free_magmaF id X = the carrier of free_magma X by FUNCT_2:def 1; then
+  A1: dom free_magmaF id X = dom free_magmaF f by FUNCT_2:def 1;
+  for x st x in dom free_magmaF f holds (free_magmaF id X).x = x
+  proof
+    let x;
+    assume A2: x in dom free_magmaF f;
+    defpred P[Nat] means for w being Element of free_magma X st length w = $1
+    holds (free_magmaF id X).w = w;
+    A3: for k being Nat st for n being Nat st n < k holds P[n] holds P[k]
+    proof
+      let k be Nat;
+      assume A4: for n being Nat st n < k holds P[n];
+      thus for w being Element of free_magma X st length w = k
+      holds (free_magmaF id X).w = w
+      proof
+        let w be Element of free_magma X;
+        assume A5: length w = k;
+        A6: w = [w`1,w`2] & length w >= 1 by Th32; then
+        length w = 1 or length w > 1 by XXREAL_0:1; then
+        A7: length w = 1 or length w +1 > 1+1 by XREAL_1:10;
+        per cases by A7,NAT_1:13;
+        suppose A8: length w = 1;
+          set y = w`1;
+          y in {w'`1 where w' is Element of free_magma X: length w' = 1}
+          by A8; then
+          A9: y in X by Th30; then
+          A10: y in dom id X by FUNCT_2:def 1;
+          (free_magmaF id X) extends
+          (canon_image(X,1)*id X)*(canon_image(X,1)") by Def22; then
+          A11: dom((canon_image(X,1)*id X)*(canon_image(X,1)")) c=
+          dom(free_magmaF id X) &
+          (canon_image(X,1)*id X)*(canon_image(X,1)") tolerates
+          free_magmaF id X by Def3;
+          A12: canon_image(X,1).y = [y,1] by A9,Lm2 .= w by Def19,A6,A8;
+          A13: y in dom canon_image(X,1) by A9,Lm2; then
+          w in rng canon_image(X,1) by A12,FUNCT_1:12; then
+          A14: w in dom(canon_image(X,1)") by FUNCT_1:55;
+          rng id X = X by RELAT_1:71.= dom canon_image(X,1) by Lm2; then
+          dom(canon_image(X,1)*id X) = dom id X by RELAT_1:46; then
+          X = dom(canon_image(X,1)*id X) by RELAT_1:71; then
+          dom canon_image(X,1) c= dom(canon_image(X,1)*id X) by Lm2; then
+          rng(canon_image(X,1)") c= dom(canon_image(X,1)*id X)
+          by FUNCT_1:55; then
+          A15: w in dom((canon_image(X,1)*id X)*(canon_image(X,1)"))
+          by A14,RELAT_1:46;
+          A16: (canon_image(X,1)").w = y by A13,FUNCT_1:56,A12;
+          ((canon_image(X,1)*id X)*(canon_image(X,1)")).w
+          = (canon_image(X,1)*id X).y by A16,A15,FUNCT_1:22
+          .= canon_image(X,1).((id X).y) by A10,FUNCT_1:23
+          .= w by A12,A9,FUNCT_1:35;
+          hence (free_magmaF id X).w = w by A15,A11,PARTFUN1:132;
+        end;
+        suppose length w >= 2; then
+          consider w1,w2 be Element of free_magma X such that
+          A17: w = w1*w2 & length w1 < length w & length w2 < length w by Th34;
+          thus (free_magmaF id X).w
+          = (free_magmaF id X).w1 * (free_magmaF id X).w2
+          by A17,GROUP_6:def 7
+          .= w1 * (free_magmaF id X).w2 by A4,A5,A17
+          .= w by A4,A5,A17;
+        end;
+      end;
+    end;
+    A19: for k being Nat holds P[k] from NAT_1:sch 4(A3);
+    for w being Element of free_magma X holds (free_magmaF id X).w = w
+    proof
+      let w be Element of free_magma X;
+      reconsider k=length w as Nat;
+      P[k] by A19;
+      hence (free_magmaF id X).w = w;
+    end;
+    hence (free_magmaF id X).x = x by A2;
+  end;
+  hence free_magmaF id X = id dom free_magmaF f by A1,FUNCT_1:34;
+end;
+
+:: Ch I §7.1 Pro.2 Algebra I Bourbaki
+theorem
+  f is one-to-one implies free_magmaF f is one-to-one
+proof
+  assume A1: f is one-to-one; then
+  A2: f"*f = id dom f by FUNCT_1:61;
+  set Y' = rng f;
+  dom f = X by FUNCT_2:def 1; then
+  reconsider f1=f as Function of X, Y' by FUNCT_2:3;
+  reconsider f2=f1" as Function of Y', X by A1,FUNCT_2:31;
+  f2*f1 = id X by A2,FUNCT_2:def 1; then
+  (free_magmaF f2)*(free_magmaF f1) = free_magmaF(id X) by Th45; then
+  (free_magmaF f2)*(free_magmaF f) = free_magmaF(id X) by Th46; then
+  (free_magmaF f2)*(free_magmaF f) = id dom(free_magmaF f) by Th47;
+  hence free_magmaF f is one-to-one by FUNCT_1:53;
+end;
+
+:: Ch I §7.1 Pro.2 Algebra I Bourbaki
+theorem
+  f is onto implies free_magmaF f is onto
+proof
+  assume A1: f is onto;
+  for y st y in the carrier of free_magma Y holds y in rng free_magmaF f
+  proof
+    let y;
+    assume A2: y in the carrier of free_magma Y;
+    defpred P[Nat] means for w being Element of free_magma Y st length w = $1
+    holds ex v being Element of free_magma X st w = (free_magmaF f).v;
+    A3: for k being Nat st for n being Nat st n < k holds P[n] holds P[k]
+    proof
+      let k be Nat;
+      assume A4: for n being Nat st n < k holds P[n];
+      thus for w being Element of free_magma Y st length w = k
+      holds ex v being Element of free_magma X st w = (free_magmaF f).v
+      proof
+        let w be Element of free_magma Y;
+        assume A5: length w = k;
+        A6: w = [w`1,w`2] & length w >= 1 by Th32; then
+        length w = 1 or length w > 1 by XXREAL_0:1; then
+        A7: length w = 1 or length w +1 > 1+1 by XREAL_1:10;
+        per cases by A7,NAT_1:13;
+        suppose A8: length w = 1;
+          set y = w`1;
+          y in {w'`1 where w' is Element of free_magma Y: length w' = 1}
+          by A8; then
+          A9: y in Y by Th30;
+          (free_magmaF f) extends
+          (canon_image(Y,1)*f)*(canon_image(X,1)") by Def22; then
+          A10: dom((canon_image(Y,1)*f)*(canon_image(X,1)")) c=
+          dom(free_magmaF f) &
+          (canon_image(Y,1)*f)*(canon_image(X,1)") tolerates
+          free_magmaF f by Def3;
+          A11: canon_image(Y,1).y = [y,1] by A9,Lm2 .= w by Def19,A6,A8;
+          A12: rng f = Y by A1,FUNCT_2:def 3; then
+          consider x such that
+          A13: x in dom f & y = f.x by A9,FUNCT_1:def 5;
+          A14: 1 in {1} by TARSKI:def 1;
+          A15: x in X by A13; then
+          x in free_magma(X,1) by Def14; then
+          A16: [x,1] in [:free_magma(X,1),{1}:] by A14,ZFMISC_1:def 2;
+          [:free_magma(X,1),{1}:] c= free_magma_carrier X by Lm1; then
+          reconsider v = [x,1] as Element of free_magma X by A16;
+          take v;
+          A17: x in dom canon_image(X,1) by Lm2,A15;
+          A18: v = canon_image(X,1).x by Lm2,A13; then
+          v in rng canon_image(X,1) by A17,FUNCT_1:12; then
+          A19: v in dom(canon_image(X,1)") by FUNCT_1:55;
+          rng f = dom canon_image(Y,1) by Lm2,A12; then
+          dom f = dom(canon_image(Y,1)*f) by RELAT_1:46; then
+          X c= dom(canon_image(Y,1)*f) by FUNCT_2:def 1; then
+          dom canon_image(X,1) c= dom(canon_image(Y,1)*f) by Lm2; then
+          rng(canon_image(X,1)") c= dom(canon_image(Y,1)*f)
+          by FUNCT_1:55; then
+          A20: v in dom((canon_image(Y,1)*f)*(canon_image(X,1)"))
+          by A19,RELAT_1:46; then
+          A21: (free_magmaF f).v
+          = ((canon_image(Y,1)*f)*(canon_image(X,1)")).v by A10,PARTFUN1:132
+          .= (canon_image(Y,1)*f).((canon_image(X,1)").v) by A20,FUNCT_1:22;
+          x in dom canon_image(X,1) by A15,Lm2; then
+          (canon_image(X,1)").v = x by A18,FUNCT_1:56;
+          hence thesis by A11,A13,A21,FUNCT_1:23;
+        end;
+        suppose length w >= 2; then
+          consider w1,w2 be Element of free_magma Y such that
+          A22: w = w1*w2 & length w1 < length w & length w2 < length w by Th34;
+          consider v1 be Element of free_magma X such that
+          A23: w1 = (free_magmaF f).v1 by A22,A4,A5;
+          consider v2 be Element of free_magma X such that
+          A24: w2 = (free_magmaF f).v2 by A22,A4,A5;
+          take v1*v2;
+          thus thesis by A23,A24,A22,GROUP_6:def 7;
+        end;
+      end;
+    end;
+    A26: for k being Nat holds P[k] from NAT_1:sch 4(A3);
+    A27: for w being Element of free_magma Y holds
+    ex v being Element of free_magma X st w = (free_magmaF f).v
+    proof
+      let w be Element of free_magma Y;
+      reconsider k=length w as Nat;
+      P[k] by A26;
+      hence thesis;
+    end;
+    ex x st x in dom free_magmaF f & y = (free_magmaF f).x
+    proof
+      consider x be Element of free_magma X such that
+      A28: y = (free_magmaF f).x by A2,A27;
+      take x;
+      x in the carrier of free_magma X;
+      hence x in dom free_magmaF f by FUNCT_2:def 1;
+      thus y = (free_magmaF f).x by A28;
+    end;
+    hence y in rng free_magmaF f by FUNCT_1:def 5;
+  end; then
+  the carrier of free_magma Y c= rng free_magmaF f by TARSKI:def 3; then
+  rng free_magmaF f = the carrier of free_magma Y by XBOOLE_0:def 10;
+  hence free_magmaF f is onto by FUNCT_2:def 3;
+end;

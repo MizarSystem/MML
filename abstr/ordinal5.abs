@@ -1,0 +1,488 @@
+:: Epsilon Numbers and Cantor Normal Form
+::  by Grzegorz Bancerek
+:: 
+:: Received October 20, 2009
+:: Copyright (c) 2009 Association of Mizar Users
+
+environ
+
+ vocabularies BOOLE, RELAT_1, FUNCT_1, SEQM_3, FINSET_1, PROB_1, TARSKI, ARYTM,
+      ORDINAL1, ORDINAL2, ORDINAL3, ORDINAL5, MATROID0, GROUP_1, ALGSEQ_1,
+      FINSEQ_1;
+ notations XBOOLE_0, TARSKI, RELAT_1, FUNCT_1, SUBSET_1, FINSET_1, NUMBERS,
+      MATROID0, ORDINAL1, NAT_1, XCMPLX_0, XXREAL_0, XREAL_0, NEWTON, ORDINAL2,
+      AFINSQ_1, ORDINAL3, ORDINAL4, CARD_3;
+ constructors XBOOLE_0, TARSKI, ZFMISC_1, SUBSET_1, FINSET_1, NUMBERS, NEWTON,
+      XCMPLX_0, ORDINAL1, NAT_1, XXREAL_0, ORDINAL2, AFINSQ_1, ORDINAL3,
+      CARD_3, ORDINAL4;
+ registrations XBOOLE_0, RELAT_1, FUNCT_1, ORDINAL1, NAT_1, XXREAL_0, XREAL_0,
+      ORDINAL2, ORDINAL4, CARD_1, CARD_5, CARD_LAR, NEWTON, XCMPLX_0, AFINSQ_1,
+      FINSET_1;
+ requirements SUBSET, BOOLE, NUMERALS, ARITHM, REAL;
+
+
+begin :: Preliminaries
+
+reserve a,b,c,d,e for ordinal number, m,n for natural number,
+  f for Ordinal-Sequence,
+  x for set;
+
+theorem :: ORDINAL5:1
+  a c= succ b implies a c= b or a = succ b;
+
+registration
+  cluster omega -> limit_ordinal;
+  cluster -> Ordinal-yielding (empty set);
+end;
+
+registration
+  cluster non empty finite T-Sequence;
+end;
+
+registration
+  let f be T-Sequence;
+  let g be non empty T-Sequence;
+  cluster f^g -> non empty;
+  cluster g^f -> non empty;
+end;
+
+reserve S,S1,S2 for T-Sequence;
+
+theorem :: ORDINAL5:2
+  dom S = a+^b implies ex S1,S2 st S = S1^S2 & dom S1 = a & dom S2 = b;
+
+theorem :: ORDINAL5:3
+  rng S1 c= rng(S1^S2) & rng S2 c= rng(S1^S2);
+
+theorem :: ORDINAL5:4
+  S1^S2 is Ordinal-yielding implies
+  S1 is Ordinal-yielding & S2 is Ordinal-yielding;
+
+definition
+  let f be T-Sequence;
+  attr f is decreasing means
+:: ORDINAL5:def 1
+  for a,b st a in b & b in dom f holds f.b in f.a;
+  attr f is non-decreasing means
+:: ORDINAL5:def 2
+
+  for a,b st a in b & b in dom f holds f.a c= f.b;
+  attr f is non-increasing means
+:: ORDINAL5:def 3
+  for a,b st a in b & b in dom f holds f.b c= f.a;
+end;
+
+registration
+  cluster increasing -> non-decreasing Ordinal-Sequence;
+  cluster decreasing -> non-increasing Ordinal-Sequence;
+end;
+
+theorem :: ORDINAL5:5
+  for f being T-Sequence holds f is infinite iff omega c= dom f;
+
+registration
+  cluster decreasing -> finite T-Sequence;
+  cluster -> decreasing increasing (empty set);
+end;
+
+registration
+  let a;
+  cluster <%a%> -> Ordinal-yielding;
+end;
+
+registration
+  let a;
+  cluster <%a%> -> decreasing increasing;
+end;
+
+registration
+  cluster decreasing increasing non-decreasing non-increasing finite
+  non empty Ordinal-Sequence;
+end;
+
+theorem :: ORDINAL5:6
+  for f being non-decreasing Ordinal-Sequence
+  st dom f is non empty holds Union f is_limes_of f;
+
+theorem :: ORDINAL5:7
+  a in b implies n*^exp(omega, a) in exp(omega, b);
+
+theorem :: ORDINAL5:8
+  0 in a & (for b st b in dom f holds f.b = exp(a,b)) implies
+  f is non-decreasing;
+
+theorem :: ORDINAL5:9
+  a is limit_ordinal & 0 in b implies exp(a,b) is limit_ordinal;
+
+theorem :: ORDINAL5:10
+  1 in a & (for b st b in dom f holds f.b = exp(a,b)) implies f is increasing;
+
+theorem :: ORDINAL5:11
+  0 in a & b is non empty limit_ordinal implies
+  (x in exp(a,b) iff ex c st c in b & x in exp(a,c));
+
+theorem :: ORDINAL5:12
+  0 in a & exp(a,b) in exp(a,c) implies b in c;
+
+begin :: Tetration (Knuth's arrow notation) of ordinals
+
+definition
+  let a,b be Ordinal;
+  func a|^|^b -> Ordinal means
+:: ORDINAL5:def 4
+
+  ex phi being Ordinal-Sequence st it = last phi & dom phi = succ b &
+  phi.{} = 1 &
+  (for c being Ordinal st succ c in succ b holds phi.succ c = exp(a,phi.c))&
+  for c being Ordinal st c in succ b & c <> {} & c is limit_ordinal
+    holds phi.c = lim(phi|c);
+end;
+
+theorem :: ORDINAL5:13
+  a |^|^ 0 = 1;
+
+theorem :: ORDINAL5:14
+  a |^|^ succ b = exp(a, a|^|^b);
+
+theorem :: ORDINAL5:15
+  b <> {} & b is limit_ordinal implies
+  for phi being Ordinal-Sequence st dom phi = b &
+     for c st c in b holds phi.c = a |^|^ c
+  holds a |^|^ b = lim phi;
+
+theorem :: ORDINAL5:16
+  a |^|^ 1 = a;
+
+theorem :: ORDINAL5:17
+  1 |^|^ a = 1;
+
+theorem :: ORDINAL5:18
+  a |^|^ 2 = exp(a, a);
+
+theorem :: ORDINAL5:19
+  a |^|^ 3 = exp(a,exp(a, a));
+
+theorem :: ORDINAL5:20
+  for n being natural number holds
+  0 |^|^ (2*n) = 1 & 0 |^|^ (2*n+1) = 0;
+
+theorem :: ORDINAL5:21
+  a c= b & 0 in c implies c |^|^ a c= c |^|^ b;
+
+theorem :: ORDINAL5:22
+  0 in a & (for b st b in dom f holds f.b = a|^|^b)
+  implies f is non-decreasing;
+
+theorem :: ORDINAL5:23
+  0 in a & 0 in b implies a c= a |^|^ b;
+
+theorem :: ORDINAL5:24
+  1 in a & m < n implies a |^|^ m in a |^|^ n;
+
+:: theorem :: false   a |^|^ succ omega = a |^|^ omega for a > 0
+::   1 in c & a in b implies c |^|^ a in c |^|^ b
+
+theorem :: ORDINAL5:25
+  1 in a & dom f c= omega & (for b st b in dom f holds f.b = a|^|^b)
+  implies f is increasing;
+
+theorem :: ORDINAL5:26
+  1 in a & 1 in b implies a in a |^|^ b;
+
+theorem :: ORDINAL5:27
+  for n,k being Nat holds exp(n,k) = n|^k;
+
+registration
+  let n,k be Nat;
+  cluster exp(n,k) -> natural;
+end;
+
+registration
+  let n,k be Nat;
+  cluster n |^|^ k -> natural;
+end;
+
+theorem :: ORDINAL5:28
+  for n,k being Nat st n > 1 holds n |^|^ k > k;
+
+theorem :: ORDINAL5:29
+  for n being Nat st n > 1 holds n |^|^ omega = omega;
+
+theorem :: ORDINAL5:30
+  1 in a implies a |^|^ omega is limit_ordinal;
+
+theorem :: ORDINAL5:31
+  0 in a implies exp(a, a |^|^ omega) = a |^|^ omega;
+
+theorem :: ORDINAL5:32
+  0 in a & omega c= b implies a |^|^ b = a |^|^ omega;
+
+begin
+
+scheme :: ORDINAL5:sch 1
+ CriticalNumber2
+  {a() -> Ordinal, f() -> Ordinal-Sequence, phi(Ordinal) -> Ordinal}:
+   a() c= Union f() & phi(Union f()) = Union f() &
+   for b st a() c= b & phi(b) = b holds Union f() c= b
+  provided
+ for a,b st a in b holds phi(a) in phi(b)
+    and
+ for a st a is non empty limit_ordinal
+    for phi being Ordinal-Sequence
+      st dom phi = a & for b st b in a holds phi.b = phi(b)
+    holds phi(a) is_limes_of phi
+    and
+ dom f() = omega & f().0 = a()
+    and
+ for a st a in omega holds f().(succ a) = phi(f().a);
+
+scheme :: ORDINAL5:sch 2
+ CriticalNumber3{a() -> Ordinal, phi(Ordinal) -> Ordinal}:
+  ex a st a() in a & phi(a) = a
+  provided
+ for a,b st a in b holds phi(a) in phi(b)
+    and
+ for a st a is non empty limit_ordinal
+    for phi being Ordinal-Sequence
+      st dom phi = a & for b st b in a holds phi.b = phi(b)
+    holds phi(a) is_limes_of phi;
+
+begin :: Epsilon numbers
+
+definition
+  let a be ordinal number;
+  attr a is epsilon means
+:: ORDINAL5:def 5
+
+  exp(omega,a) = a;
+end;
+
+theorem :: ORDINAL5:33
+  ex b st a in b & b is epsilon;
+
+registration
+  cluster epsilon (ordinal number);
+end;
+
+definition
+  let a be Ordinal;
+  func first_epsilon_greater_than a -> epsilon Ordinal means
+:: ORDINAL5:def 6
+
+  a in it & for b being epsilon Ordinal st a in b holds it c= b;
+end;
+
+theorem :: ORDINAL5:34
+  a c= b implies first_epsilon_greater_than a c= first_epsilon_greater_than b;
+
+theorem :: ORDINAL5:35
+  a in b & b in first_epsilon_greater_than a implies
+  first_epsilon_greater_than b = first_epsilon_greater_than a;
+
+theorem :: ORDINAL5:36
+  first_epsilon_greater_than 0 = omega |^|^ omega;
+
+theorem :: ORDINAL5:37
+  for e being epsilon Ordinal holds omega in e;
+
+registration
+  cluster epsilon -> non empty limit_ordinal Ordinal;
+end;
+
+theorem :: ORDINAL5:38
+  for e being epsilon Ordinal holds
+  exp(omega, exp(e, omega)) = exp(e, exp(e, omega));
+
+theorem :: ORDINAL5:39
+  for e being epsilon Ordinal st 0 in n holds
+  e |^|^ (n+2) = exp(omega, e |^|^ (n+1));
+
+theorem :: ORDINAL5:40
+  for e being epsilon Ordinal holds
+  first_epsilon_greater_than e = e |^|^ omega;
+
+definition
+  let a be Ordinal;
+  func epsilon_a -> Ordinal means
+:: ORDINAL5:def 7
+:: equals omega |^|^ exp(omega, 1+^a);  :: wg wikipedii, ale to nie prawda
+
+  ex phi being Ordinal-Sequence st it = last phi & dom phi = succ a &
+  phi.{} = omega|^|^omega &
+  (for b being Ordinal st succ b in succ a
+    holds phi.succ b = (phi.b)|^|^omega) &
+  for c being Ordinal st c in succ a & c <> {} & c is limit_ordinal
+    holds phi.c = lim(phi|c);
+end;
+
+theorem :: ORDINAL5:41
+  epsilon_0 = omega |^|^ omega;
+
+theorem :: ORDINAL5:42
+  epsilon_(succ a) = epsilon_a |^|^ omega;
+
+theorem :: ORDINAL5:43
+  b <> {} & b is limit_ordinal implies
+  for phi being Ordinal-Sequence st dom phi = b &
+     for c st c in b holds phi.c = epsilon_c
+  holds epsilon_b = lim phi;
+
+theorem :: ORDINAL5:44
+  a in b implies epsilon_a in epsilon_b;
+
+theorem :: ORDINAL5:45
+  for phi being Ordinal-Sequence st
+     for c st c in dom phi holds phi.c = epsilon_c
+  holds phi is increasing;
+
+theorem :: ORDINAL5:46
+  b <> {} & b is limit_ordinal implies
+  for phi being Ordinal-Sequence st dom phi = b &
+     for c st c in b holds phi.c = epsilon_c
+  holds epsilon_b = Union phi;
+
+theorem :: ORDINAL5:47
+  b is non empty limit_ordinal implies
+  (x in epsilon_b iff ex c st c in b & x in epsilon_c);
+
+theorem :: ORDINAL5:48
+  a c= epsilon_a;
+
+theorem :: ORDINAL5:49
+  for X being non empty set st
+    for x st x in X holds x is epsilon Ordinal &
+    ex e being epsilon Ordinal st x in e & e in X
+  holds union X is epsilon Ordinal;
+
+theorem :: ORDINAL5:50
+  for X being non empty set st
+    (for x st x in X holds x is epsilon Ordinal) &
+    for a st a in X holds first_epsilon_greater_than a in X
+  holds union X is epsilon Ordinal;
+
+registration
+  let a;
+  cluster epsilon_a -> epsilon;
+end;
+
+theorem :: ORDINAL5:51
+  a is epsilon implies ex b st a = epsilon_b;
+
+begin :: Cantor Normal Form
+
+definition
+  let A be finite Ordinal-Sequence; :: why finite?
+  func Sum^ A -> Ordinal means
+:: ORDINAL5:def 8
+
+  ex f being Ordinal-Sequence st it = last f & dom f = succ dom A &
+  f.0 = 0 & for n being Nat st n in dom A holds f.(n+1) = f.n +^ A.n;
+end;
+
+theorem :: ORDINAL5:52
+  Sum^ {} = 0;
+
+theorem :: ORDINAL5:53
+  Sum^ <%a%> = a;
+
+theorem :: ORDINAL5:54
+  for A being finite Ordinal-Sequence holds Sum^ (A^<%a%>) = (Sum^ A) +^ a;
+
+theorem :: ORDINAL5:55
+  for A being finite Ordinal-Sequence holds Sum^ (<%a%>^A) = a +^ Sum^ A;
+
+theorem :: ORDINAL5:56
+  for A being finite Ordinal-Sequence holds A.0 c= Sum^ A;
+
+definition
+  let a;
+  attr a is Cantor-component means
+:: ORDINAL5:def 9
+
+  ex b,n st 0 in n & a = n*^exp(omega,b);
+end;
+
+registration
+  cluster Cantor-component -> non empty Ordinal;
+end;
+
+registration
+  cluster Cantor-component Ordinal;
+end;
+
+definition
+  let a,b;
+  func b-exponent(a) -> Ordinal means
+:: ORDINAL5:def 10
+
+  exp(b,it) c= a & for c st exp(b,c) c= a holds c c= it if 1 in b & 0 in a
+  otherwise it = 0;
+end;
+
+theorem :: ORDINAL5:57
+  a in exp(omega, succ(omega-exponent(a)));
+
+theorem :: ORDINAL5:58
+  0 in n implies omega-exponent(n*^exp(omega,a)) = a;
+
+theorem :: ORDINAL5:59
+  0 in a & c = omega-exponent a implies a div^ exp(omega, c) in omega;
+
+theorem :: ORDINAL5:60
+  0 in a & c = omega-exponent a implies 0 in a div^ exp(omega, c);
+
+theorem :: ORDINAL5:61
+  0 in a & c = omega-exponent a implies a mod^ exp(omega, c) in exp(omega, c);
+
+theorem :: ORDINAL5:62
+  0 in a implies
+  ex n,b st a = n*^exp(omega, omega-exponent(a))+^b & 0 in n &
+  b in exp(omega, omega-exponent(a));
+
+theorem :: ORDINAL5:63
+  omega-exponent b in omega-exponent a implies b in a;
+
+definition
+  let A be Ordinal-Sequence;
+  attr A is Cantor-normal-form means
+:: ORDINAL5:def 11
+
+  (for a st a in dom A holds A.a is Cantor-component) &
+  for a,b st a in b & b in dom A holds
+  omega-exponent(A.b) in omega-exponent(A.a);
+end;
+
+registration
+  cluster empty -> Cantor-normal-form Ordinal-Sequence;
+::  cluster Cantor-normal-form -> non-empty Ordinal-Sequence;
+  cluster Cantor-normal-form -> decreasing Ordinal-Sequence;
+end;
+
+reserve A,B,A1,A2 for Cantor-normal-form Ordinal-Sequence;
+
+theorem :: ORDINAL5:64
+  Sum^ A = 0 implies A = {};
+
+theorem :: ORDINAL5:65
+  0 in n implies <%n*^exp(omega,b)%> is Cantor-normal-form;
+
+registration
+  cluster non empty Cantor-normal-form Ordinal-Sequence;
+end;
+
+theorem :: ORDINAL5:66
+  for A,B being Ordinal-Sequence st A^B is Cantor-normal-form
+  holds A is Cantor-normal-form & B is Cantor-normal-form;
+
+theorem :: ORDINAL5:67
+  A <> {} implies ex c being Cantor-component Ordinal, B st A = <%c%>^B;
+
+theorem :: ORDINAL5:68
+  for A being non empty Cantor-normal-form Ordinal-Sequence
+  for c being Cantor-component Ordinal
+  st omega-exponent(A.0) in omega-exponent(c)
+  holds <%c%>^A is Cantor-normal-form;
+
+theorem :: ORDINAL5:69
+  ex A being Cantor-normal-form Ordinal-Sequence st a = Sum^ A;
+

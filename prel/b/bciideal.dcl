@@ -22,34 +22,10 @@
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
-<Adjective nr="31" value="false"/>
-<Adjective nr="44"/>
+<Adjective nr="32" value="false"/>
 <Adjective nr="45"/>
 <Adjective nr="46"/>
-<Adjective nr="48"/>
-</Cluster>
-</Typ>
-</ArgTypes>
-<Typ kind="M" nr="7">
-<Cluster/>
-<LocusVar nr="1"/>
-</Typ>
-<Cluster>
-<Adjective nr="10" value="false"/>
-<Adjective nr="63">
-<LocusVar nr="1"/>
-</Adjective>
-</Cluster>
-</RCluster>
-<RCluster aid="BCIIDEAL" nr="2">
-<ArgTypes>
-<Typ kind="G" nr="7">
-<Cluster>
-<Adjective nr="31" value="false"/>
-<Adjective nr="44"/>
-<Adjective nr="45"/>
-<Adjective nr="46"/>
-<Adjective nr="48"/>
+<Adjective nr="47"/>
 <Adjective nr="49"/>
 </Cluster>
 </Typ>
@@ -59,8 +35,32 @@
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="10" value="false"/>
+<Adjective nr="11" value="false"/>
 <Adjective nr="64">
+<LocusVar nr="1"/>
+</Adjective>
+</Cluster>
+</RCluster>
+<RCluster aid="BCIIDEAL" nr="2">
+<ArgTypes>
+<Typ kind="G" nr="7">
+<Cluster>
+<Adjective nr="32" value="false"/>
+<Adjective nr="45"/>
+<Adjective nr="46"/>
+<Adjective nr="47"/>
+<Adjective nr="49"/>
+<Adjective nr="50"/>
+</Cluster>
+</Typ>
+</ArgTypes>
+<Typ kind="M" nr="7">
+<Cluster/>
+<LocusVar nr="1"/>
+</Typ>
+<Cluster>
+<Adjective nr="11" value="false"/>
+<Adjective nr="65">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

@@ -35,7 +35,7 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="28"/>
+<Adjective nr="29"/>
 </Cluster>
 </FCluster>
 <CCluster aid="DYNKIN" nr="1">

@@ -41,10 +41,10 @@
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
-<Adjective nr="68"/>
 <Adjective nr="69"/>
 <Adjective nr="70"/>
-<Adjective nr="138"/>
+<Adjective nr="71"/>
+<Adjective nr="139"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
@@ -59,7 +59,7 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="80">
+<Adjective nr="81">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -68,8 +68,8 @@
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="31" value="false"/>
-<Adjective nr="43"/>
+<Adjective nr="32" value="false"/>
+<Adjective nr="44"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -79,20 +79,20 @@
 </Func>
 </Func>
 <Cluster>
-<Adjective nr="66"/>
-<Adjective nr="107"/>
+<Adjective nr="67"/>
+<Adjective nr="108"/>
 </Cluster>
 </FCluster>
 <FCluster aid="WAYBEL14" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
-<Adjective nr="68"/>
 <Adjective nr="69"/>
 <Adjective nr="70"/>
-<Adjective nr="138"/>
+<Adjective nr="71"/>
 <Adjective nr="139"/>
 <Adjective nr="140"/>
+<Adjective nr="141"/>
 </Cluster>
 </Typ>
 </ArgTypes>

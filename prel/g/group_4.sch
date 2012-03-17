@@ -28,9 +28,9 @@
 <ArgTypes>
 <Typ kind="G" nr="8">
 <Cluster>
-<Adjective nr="36" value="false"/>
-<Adjective nr="84"/>
+<Adjective nr="37" value="false"/>
 <Adjective nr="85"/>
+<Adjective nr="86"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -38,7 +38,7 @@
 <For>
 <Typ kind="M" nr="7">
 <Cluster>
-<Adjective nr="61"/>
+<Adjective nr="62"/>
 </Cluster>
 <Func kind="F" nr="1"/>
 </Typ>
@@ -62,7 +62,7 @@
 <For>
 <Typ kind="M" nr="7">
 <Cluster>
-<Adjective nr="61"/>
+<Adjective nr="62"/>
 </Cluster>
 <Func kind="F" nr="1"/>
 </Typ>
@@ -91,7 +91,7 @@
 <For>
 <Typ kind="M" nr="7">
 <Cluster>
-<Adjective nr="61"/>
+<Adjective nr="62"/>
 </Cluster>
 <Func kind="F" nr="1"/>
 </Typ>
@@ -107,9 +107,9 @@
 <ArgTypes>
 <Typ kind="G" nr="8">
 <Cluster>
-<Adjective nr="36" value="false"/>
-<Adjective nr="84"/>
+<Adjective nr="37" value="false"/>
 <Adjective nr="85"/>
+<Adjective nr="86"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -129,7 +129,7 @@
 <For>
 <Typ kind="M" nr="7">
 <Cluster>
-<Adjective nr="61"/>
+<Adjective nr="62"/>
 </Cluster>
 <Func kind="F" nr="1"/>
 </Typ>

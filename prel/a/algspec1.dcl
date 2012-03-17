@@ -39,7 +39,7 @@
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
-<Adjective nr="87"/>
+<Adjective nr="88"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -48,10 +48,10 @@
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="41" value="false"/>
-<Adjective nr="50" value="false"/>
-<Adjective nr="62"/>
-<Adjective nr="87"/>
+<Adjective nr="42" value="false"/>
+<Adjective nr="51" value="false"/>
+<Adjective nr="63"/>
+<Adjective nr="88"/>
 </Cluster>
 </RCluster>
 <FCluster aid="ALGSPEC1" nr="1">
@@ -61,15 +61,15 @@
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="10" value="false"/>
+<Adjective nr="11" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster>
 <Adjective nr="6"/>
-<Adjective nr="14">
+<Adjective nr="15">
 <LocusVar nr="2"/>
-<Func kind="K" nr="144">
+<Func kind="K" nr="145">
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
@@ -77,7 +77,7 @@
 <Func kind="K" nr="21">
 <Func kind="K" nr="22">
 <LocusVar nr="2"/>
-<Func kind="K" nr="144">
+<Func kind="K" nr="145">
 <LocusVar nr="1"/>
 </Func>
 </Func>
@@ -86,7 +86,7 @@
 <Typ kind="M" nr="2">
 <Cluster>
 <Adjective nr="6"/>
-<Adjective nr="14">
+<Adjective nr="15">
 <LocusVar nr="2"/>
 <LocusVar nr="1"/>
 </Adjective>
@@ -106,16 +106,16 @@
 <LocusVar nr="4"/>
 </Func>
 <Cluster>
-<Adjective nr="50" value="false"/>
-<Adjective nr="62"/>
+<Adjective nr="51" value="false"/>
+<Adjective nr="63"/>
 </Cluster>
 </FCluster>
 <CCluster aid="ALGSPEC1" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
-<Adjective nr="41" value="false"/>
-<Adjective nr="87"/>
+<Adjective nr="42" value="false"/>
+<Adjective nr="88"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -125,15 +125,15 @@
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="41" value="false"/>
+<Adjective nr="42" value="false"/>
 </Cluster>
 </CCluster>
 <CCluster aid="ALGSPEC1" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
-<Adjective nr="50" value="false"/>
-<Adjective nr="87"/>
+<Adjective nr="51" value="false"/>
+<Adjective nr="88"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -143,7 +143,7 @@
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="50" value="false"/>
+<Adjective nr="51" value="false"/>
 </Cluster>
 </CCluster>
 </Registrations>

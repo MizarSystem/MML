@@ -10,7 +10,8 @@ environ
       CARD_3, ARYTM_1, NAT_1, CQC_LANG, BOOLE, MCART_1, FUNCT_4, FUNCOP_1,
       ORDINAL2, AMI_3, ARYTM, FUNCT_7, ORDINAL1, SCMNORM, FUNCT_5;
  notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, ORDINAL1, XCMPLX_0, FUNCT_1,
-      XXREAL_0, INT_1, ZFMISC_1, MCART_1, FUNCOP_1, CARD_1, CARD_3, RELAT_1,
+      XXREAL_0, INT_1, NAT_1,
+      ZFMISC_1, MCART_1, FUNCOP_1, CARD_1, CARD_3, RELAT_1,
       FUNCT_4, FUNCT_7, FINSEQ_1, STRUCT_0, AMI_1, SCMNORM, AMI_2;
  constructors DOMAIN_1, XXREAL_0, NAT_1, FINSEQ_4, CAT_2, AMI_1, AMI_2,
       RELSET_1;
@@ -27,7 +28,7 @@ begin :: A small concrete machine
 reserve i,j,k for Element of NAT;
 
 definition
-  func SCM -> strict AMI-Struct over NAT, { INT } equals
+  func SCM -> strict AMI-Struct over { INT } equals
   AMI-Struct(#
     SCM-Memory,In(NAT,SCM-Memory),SCM-Instr,SCM-OK,SCM-Exec#);
   coherence;
@@ -94,9 +95,8 @@ definition
 end;
 
 reserve a,b,c for Data-Location,
-  loc for Instruction-Location of SCM,
-  I for
-  Instruction of SCM;
+  loc for Nat,
+  I for Instruction of SCM;
 
 definition
   let a,b;
@@ -153,7 +153,7 @@ definition
   [ 6, <*loc*>];
   correctness
   proof
-    loc in NAT by AMI_1:def 4;
+    loc in NAT by ORDINAL1:def 13;
     hence thesis by AMI_2:3;
   end;
   let a;
@@ -162,7 +162,7 @@ definition
   correctness
   proof
     reconsider a as Element of SCM-Data-Loc by Def2;
-    reconsider loc as Element of NAT by AMI_1:def 4;
+    reconsider loc as Element of NAT by ORDINAL1:def 13;
     7 in { 7,8 } by TARSKI:def 2;
     then [ 7, <*loc,a*>] in SCM-Instr by AMI_2:4;
     hence thesis;
@@ -172,7 +172,7 @@ definition
   correctness
   proof
     reconsider a as Element of SCM-Data-Loc by Def2;
-    reconsider loc as Element of NAT by AMI_1:def 4;
+    reconsider loc as Element of NAT by ORDINAL1:def 13;
     8 in { 7,8 } by TARSKI:def 2;
     then [ 8, <*loc,a*>] in SCM-Instr by AMI_2:4;
     hence thesis;
@@ -185,16 +185,6 @@ canceled;
 
 theorem Th4:
   IC SCM = NAT by AMI_2:30,FUNCT_7:def 1;
-
-registration
-  cluster -> natural Instruction-Location of SCM;
-  coherence
-  proof
-    let l be Instruction-Location of SCM;
-    l in NAT by AMI_1:def 4;
-    hence thesis;
-  end;
-end;
 
 begin :: Users guide
 
@@ -345,7 +335,7 @@ theorem
   Exec(goto loc, s).IC SCM = loc & Exec(goto loc, s).c = s.c
 proof
   reconsider mn = c as Element of SCM-Data-Loc by Def2;
-  reconsider mj = loc as Element of NAT by AMI_1:def 4;
+  reconsider mj = loc as Element of NAT by ORDINAL1:def 13;
   reconsider I = goto loc as Element of SCM-Instr;
   reconsider S = s as SCM-State;
   reconsider i = 6 as Element of Segm 9 by NAT_1:45;
@@ -368,7 +358,7 @@ proof
   reconsider S = s as SCM-State;
   reconsider i = 7 as Element of Segm 9 by NAT_1:45;
   reconsider a' = a as Element of SCM-Data-Loc by Def2;
-  reconsider mj = loc as Element of NAT by AMI_1:def 4;
+  reconsider mj = loc as Element of NAT by ORDINAL1:def 13;
 A1: I = [ i, <*mj,a'*>];
 A2: Exec(a=0_goto loc, s) = SCM-Exec-Res(I,S) by AMI_2:def 17
     .= SCM-Chg(S,IFEQ(S.(I cond_address),0,I cjump_address,succ IC S)) by A1,
@@ -408,7 +398,7 @@ proof
   reconsider S = s as SCM-State;
   reconsider i = 8 as Element of Segm 9 by NAT_1:45;
   reconsider a' = a as Element of SCM-Data-Loc by Def2;
-  reconsider mj = loc as Element of NAT by AMI_1:def 4;
+  reconsider mj = loc as Element of NAT by ORDINAL1:def 13;
 A1: I = [ i, <*mj,a'*>];
 A2: Exec(a>0_goto loc, s) = SCM-Exec-Res(I,S) by AMI_2:def 17
     .= SCM-Chg(S,IFGT(S.(I cond_address),0,I cjump_address,succ IC S)) by A1,
@@ -533,7 +523,7 @@ proof
   consider s being SCM-State;
   assume
 A1: goto loc is halting;
-  reconsider a3 = loc as Element of NAT by AMI_1:def 4;
+  reconsider a3 = loc as Element of NAT by ORDINAL1:def 13;
   reconsider V = goto loc as Element of SCM-Instr;
   set t = s +* (NAT.--> succ a3);
 A2: dom s = dom SCM-OK by CARD_3:18;
@@ -585,7 +575,7 @@ proof
   set f = the Object-Kind of SCM;
   consider s being SCM-State;
   reconsider V = a=0_goto loc as Element of SCM-Instr;
-  reconsider a3 = loc as Element of NAT by AMI_1:def 4;
+  reconsider a3 = loc as Element of NAT by ORDINAL1:def 13;
   set t = s +* (NAT.--> succ a3);
 A1: {NAT} c= SCM-Memory by AMI_2:30,ZFMISC_1:37;
 A2: dom s = dom SCM-OK by CARD_3:18;
@@ -659,7 +649,7 @@ proof
   set f = the Object-Kind of SCM;
   consider s being SCM-State;
   reconsider V = a>0_goto loc as Element of SCM-Instr;
-  reconsider a3 = loc as Element of NAT by AMI_1:def 4;
+  reconsider a3 = loc as Element of NAT by ORDINAL1:def 13;
   set t = s +* (NAT.--> succ a3);
 A1: {NAT} c= SCM-Memory by AMI_2:30,ZFMISC_1:37;
 A2: dom s = dom SCM-OK by CARD_3:18;
@@ -743,19 +733,14 @@ MultBy(a,b)) or (ex a,b st I = Divide(a,b)) or (ex loc st I = goto loc) or (ex
   a,loc st I = a=0_goto loc) or ex a,loc st I = a>0_goto loc
 
   proof
-    assume
-    I is Instruction of SCM;
-
-    then
+    assume I is Instruction of SCM; then
     I in { [SCM-Halt,{}] } \/ { [Y,<*a3*>] : Y = 6 } \/ { [K,<*a1,b1*>] :
     K in { 7,8 } } or I in { [T,<*c2,c3*>] : T in { 1,2,3,4,5 } } by
 XBOOLE_0:def 3;
-
     then
 A1: I in { [SCM-Halt,{}] } \/ { [Y,<*a3*>] : Y = 6 } or I in { [K,<*a1,b1
     *>] : K in { 7,8 } } or I in { [T,<*c2,c3*>] : T in { 1,2,3,4,5 } } by
 XBOOLE_0:def 3;
-
     per cases by A1,XBOOLE_0:def 3;
     suppose
       I in { [SCM-Halt,{}] };
@@ -765,8 +750,7 @@ XBOOLE_0:def 3;
       I in { [Y,<*a3*>] : Y = 6 };
       then consider Y, a3 such that
 A2:   I = [Y,<*a3*>] & Y = 6;
-      reconsider loc = a3 as Instruction-Location of SCM by AMI_1:def 4;
-      I = goto loc by A2;
+      I = goto a3 by A2;
       hence thesis;
     end;
     suppose
@@ -775,7 +759,7 @@ A2:   I = [Y,<*a3*>] & Y = 6;
 A3:   I = [K,<*a1,b1*>] & K in { 7,8 };
       reconsider a = b1 as Data-Location by Def2;
       reconsider loc = a1 as Instruction-Location of SCM by AMI_1:def 4;
-      I = a=0_goto loc or I = a>0_goto loc by A3,TARSKI:def 2;
+      I = a=0_goto a1 or I = a>0_goto a1 by A3,TARSKI:def 2;
       hence thesis;
     end;
     suppose
@@ -783,10 +767,8 @@ A3:   I = [K,<*a1,b1*>] & K in { 7,8 };
       then consider T, c2, c3 such that
 A4:   I = [T,<*c2,c3*>] & T in { 1,2,3,4,5 };
       reconsider a = c2, b = c3 as Data-Location by Def2;
-
       I = a:=b or I = AddTo(a,b) or I = SubFrom(a,b) or I = MultBy(a,b)
       or I = Divide(a,b) by A4,ENUMSET1:def 3;
-
       hence thesis;
     end;
   end;
@@ -855,12 +837,9 @@ begin :: Small concrete model
 
 Lm14: for s being State of SCM, i being Instruction of SCM, l being
 Instruction-Location of SCM holds Exec(i,s).l = s.l
-
 proof
-
   let s be State of SCM, i be Instruction of SCM, l be Instruction-Location of
   SCM;
-
   reconsider c = i as Element of SCM-Instr;
   reconsider S = s as Element of product SCM-OK;
   reconsider l' = l as Element of NAT by AMI_1:def 4;
@@ -906,9 +885,7 @@ A2,FINSEQ_3:38,MCART_1:7;
     case
       c in { [Y,<*a2*>] : Y = 6 };
       then ex Y,a2 st c = [Y,<*a2*>] & Y = 6;
-
       hence SCM-Exec-Res(c,S).l' = SCM-Chg(S,c jump_address).l' by AMI_2:def 16
-
         .= S.l' by AMI_2:18;
     end;
     case
@@ -928,10 +905,8 @@ A7:   K in { 7,8 };
         end;
         case
           K=8;
-
           hence SCM-Exec-Res(c,S).l' = SCM-Chg(S,IFGT(S.(c cond_address),0,c
           cjump_address,succ IC S)).l' by A6,AMI_2:def 16
-
             .= S.l' by AMI_2:18;
         end;
       end;
@@ -946,62 +921,46 @@ A9:   T in { 1,2,3,4,5};
         per cases by A9,ENUMSET1:def 3;
         case
           T = 1;
-
           hence SCM-Exec-Res(c,S).l' = SCM-Chg(SCM-Chg(S, c address_1,S.(c
           address_2)), succ IC S).l' by A8,AMI_2:def 16
-
             .= SCM-Chg(S, c address_1,S.(c address_2)).l' by AMI_2:18
             .= S.l' by AMI_2:22;
         end;
         case
           T = 2;
-
           hence SCM-Exec-Res(c,S).l' = SCM-Chg(SCM-Chg(S,c address_1, S.(c
           address_1)+S.(c address_2)),succ IC S).l' by A8,AMI_2:def 16
-
             .= SCM-Chg(S,c address_1,S.(c address_1)+S.(c address_2)).l' by
 AMI_2:18
-
             .= S.l' by AMI_2:22;
         end;
         case
           T = 3;
-
           hence SCM-Exec-Res(c,S).l' = SCM-Chg(SCM-Chg(S,c address_1, S.(c
           address_1)-S.(c address_2)),succ IC S).l' by A8,AMI_2:def 16
-
             .= SCM-Chg(S,c address_1,S.(c address_1)-S.(c address_2)).l' by
 AMI_2:18
-
             .= S.l' by AMI_2:22;
         end;
         case
           T = 4;
-
           hence SCM-Exec-Res(c,S).l' = SCM-Chg(SCM-Chg(S,c address_1, S.(c
           address_1)*S.(c address_2)),succ IC S).l' by A8,AMI_2:def 16
-
             .= SCM-Chg(S,c address_1,S.(c address_1)*S.(c address_2)).l' by
 AMI_2:18
-
             .= S.l' by AMI_2:22;
         end;
         case
           T = 5;
-
           hence
           SCM-Exec-Res(c,S).l' = SCM-Chg(SCM-Chg( SCM-Chg(S,c address_1,S
 
 .(c address_1) div S.(c address_2)), c address_2,S.(c address_1) mod S.(c
           address_2)),succ IC S).l' by A8,AMI_2:def 16
-
             .= SCM-Chg( SCM-Chg(S,c address_1,S.(c address_1) div S.(c
-
 address_2)), c address_2,S.(c address_1) mod S.(c address_2)).l' by AMI_2:18
-
             .= SCM-Chg(S,c address_1,S.(c address_1) div S.(c address_2)).l'
           by AMI_2:22
-
             .= S.l' by AMI_2:22;
         end;
       end;
@@ -1016,8 +975,7 @@ canceled 35;
 theorem Th51:
   SCM is realistic
 proof
-  assume
-  the Instruction-Counter of SCM in NAT;
+  assume the Instruction-Counter of SCM in NAT;
   hence contradiction by Th4;
 end;
 
