@@ -1,0 +1,1071 @@
+:: A Theory of Matrices of Complex Elements
+::  by Wenpai Chang , Hiroshi Yamazaki and Yatsuka Nakamura
+:: 
+:: Received December 10, 2004
+:: Copyright (c) 2004 Association of Mizar Users
+
+environ
+
+ vocabulary FINSEQ_1, RELAT_1, FUNCT_1, ARYTM_1, VECTSP_1, RLVECT_1, MATRIX_1,
+      TREES_1, MATRIX_5, COMPLEX1, COMPLFLD, COMPLSP1, XCMPLX_0, ARYTM;
+ notation TARSKI, XBOOLE_0, FINSEQ_2, SUBSET_1, ORDINAL1, XREAL_0, REAL_1,
+      NAT_1, RELAT_1, FUNCT_1, STRUCT_0, FINSEQ_1, BINOP_1, ZFMISC_1, FINSEQOP,
+      MATRIX_3, MATRIX_1, FVSUM_1, NUMBERS, MATRIX_4, COMPLEX1, COMPLSP1,
+      COMPLFLD, XCMPLX_0, ARYTM_0, VECTSP_1, RLVECT_1, GROUP_1, BINOP_2,
+      BINARITH;
+ constructors DOMAIN_1, NAT_1, TOPMETR, INT_1, MATRIX_3, FVSUM_1, FUNCT_3,
+      SETWOP_2, NUMBERS, MATRIX_4, ORDINAL1, REAL_1, COMPLEX1, COMPLSP1,
+      COMPLFLD, ARYTM_0, COMPTRIG, BINOP_2, BINARITH;
+ clusters FUNCT_1, STRUCT_0, INT_1, RELSET_1, XBOOLE_0, VECTSP_1, NUMBERS,
+      REAL_1, ORDINAL1, COMPLFLD, COMPLEX1, PRGCOR_2, XCMPLX_0;
+ requirements NUMERALS, BOOLE, SUBSET, REAL, ARITHM;
+ theorems FINSEQ_1, FUNCT_1, NAT_1, RLVECT_1, MATRIX_3, VECTSP_1, MATRIX_1,
+      FINSEQ_2, MATRIX_4, COMPLFLD, COMPLEX1, GROUP_1, BINOP_2, REAL_1,
+      FINSEQ_3, BINARITH, XCMPLX_0;
+ schemes NAT_1;
+
+begin
+
+theorem AA160:
+  1=1_ F_Complex
+proof thus 1_ F_Complex = the unity of F_Complex by VECTSP_1:def 9
+                .= 1 by COMPLEX1:def 7,COMPLFLD:def 1;
+end;
+
+theorem AA240:
+  0.F_Complex = 0 by COMPLEX1:def 6,COMPLFLD:9;
+
+definition let A be Matrix of COMPLEX;
+  func COMPLEX2Field A -> Matrix of F_Complex equals
+:AA20:  A;
+coherence by COMPLFLD:def 1;
+end;
+
+definition let A be Matrix of F_Complex;
+  func Field2COMPLEX A -> Matrix of COMPLEX equals
+:AA30:  A;
+coherence by COMPLFLD:def 1;
+end;
+
+theorem
+  for A,B being Matrix of COMPLEX st
+  COMPLEX2Field A = COMPLEX2Field B holds A=B
+proof let A,B be Matrix of COMPLEX;
+ assume COMPLEX2Field A = COMPLEX2Field B;then
+  A=COMPLEX2Field B by AA20;
+ hence A=B by AA20;
+end;
+
+theorem
+  for A,B being Matrix of F_Complex st
+    Field2COMPLEX A = Field2COMPLEX B holds A=B
+proof let A,B be Matrix of F_Complex;
+ assume Field2COMPLEX A =Field2COMPLEX B;then
+  A=Field2COMPLEX B by AA30;
+ hence A=B by AA30;
+end;
+
+theorem AA60:
+  for A being Matrix of COMPLEX holds
+    A = Field2COMPLEX(COMPLEX2Field A)
+proof let A be Matrix of COMPLEX;
+  Field2COMPLEX(COMPLEX2Field A)= COMPLEX2Field A by AA30;
+  hence A= Field2COMPLEX(COMPLEX2Field A) by AA20;
+end;
+
+theorem AA70:
+  for A being Matrix of F_Complex holds
+    A = COMPLEX2Field(Field2COMPLEX A)
+proof let A be Matrix of F_Complex;
+  COMPLEX2Field(Field2COMPLEX A)= Field2COMPLEX A by AA20;
+  hence A= COMPLEX2Field(Field2COMPLEX A) by AA30;
+end;
+
+definition let A,B be Matrix of COMPLEX;
+  func A+B -> Matrix of COMPLEX equals
+:AA80:  Field2COMPLEX ((COMPLEX2Field A)+(COMPLEX2Field B));
+coherence;
+end;
+
+definition let A be Matrix of COMPLEX;
+  func -A -> Matrix of COMPLEX equals
+:AA90:  Field2COMPLEX (-(COMPLEX2Field A));
+coherence;
+end;
+
+definition let A,B be Matrix of COMPLEX;
+  func A - B -> Matrix of COMPLEX equals
+:AA100:  Field2COMPLEX ((COMPLEX2Field A)-(COMPLEX2Field B));
+coherence;
+end;
+
+definition let A,B be Matrix of COMPLEX;
+  func A*B -> Matrix of COMPLEX equals
+:AA110:  Field2COMPLEX ((COMPLEX2Field A)*(COMPLEX2Field B));
+coherence;
+end;
+
+definition let x be complex number, A be Matrix of COMPLEX;
+  func x * A -> Matrix of COMPLEX means
+:AA120:  for ea being Element of F_Complex st ea=x holds
+  it=Field2COMPLEX (ea*(COMPLEX2Field A));
+existence
+ proof
+   x in COMPLEX by XCMPLX_0:def 2; then
+   reconsider aa=x as Element of F_Complex by COMPLFLD:def 1;
+   set C=Field2COMPLEX (aa*(COMPLEX2Field A));
+   for ea being Element of F_Complex st ea=x holds
+    C=Field2COMPLEX (ea*(COMPLEX2Field A));
+   hence thesis;
+ end;
+uniqueness
+proof
+ let C1,C2 be Matrix of COMPLEX;
+ assume
+  A2: (for ea being Element of F_Complex st ea=x holds
+   C1=Field2COMPLEX (ea*(COMPLEX2Field A)))&
+  (for ea being Element of F_Complex st ea=x holds
+   C2=Field2COMPLEX (ea*(COMPLEX2Field A)));
+   x in COMPLEX by XCMPLX_0:def 2; then
+   reconsider aa=x as Element of F_Complex by COMPLFLD:def 1;
+  C2=Field2COMPLEX (aa*(COMPLEX2Field A)) by A2;
+ hence C1=C2 by A2;
+end;
+end;
+
+theorem
+  for A being Matrix of COMPLEX holds
+  len A =len (COMPLEX2Field A) & width A=width (COMPLEX2Field A) by AA20;
+
+theorem
+  for A being Matrix of F_Complex holds
+  len A =len (Field2COMPLEX A) & width A=width (Field2COMPLEX A) by AA30;
+
+theorem AA150: :: MATRIX_4:1
+  for M being Matrix of COMPLEX st len M>0 holds --M=M
+proof let M be Matrix of COMPLEX;
+ assume len M>0;then A1: len (COMPLEX2Field M)>0 by AA20;
+  Field2COMPLEX (-(COMPLEX2Field M))=-M by AA90;then
+  -- (COMPLEX2Field M)= -(COMPLEX2Field -M) by AA70;then
+ (COMPLEX2Field M)=-(COMPLEX2Field -M) by MATRIX_4:1,A1;then
+  M=Field2COMPLEX(-(COMPLEX2Field(-M))) by AA60;
+ hence --M=M by AA90;
+end;
+
+theorem AA170:
+  for M being Matrix of F_Complex holds
+  (1_ F_Complex)*M=M
+proof let M be Matrix of F_Complex;
+  A2: len ((1_ F_Complex)*M)=len M & width ((1_ F_Complex)*M)=width M
+                   by MATRIX_3:def 5;
+  reconsider t= 1_ F_Complex as Element of F_Complex;
+  for i,j being Nat st [i,j] in Indices M holds
+     ((1_ F_Complex)*M)*(i,j)=M*(i,j)
+   proof let i,j be Nat;
+    assume A1: [i,j] in Indices M;
+     (1_ F_Complex)*(M*(i,j))=M*(i,j)
+       by VECTSP_1:def 19,AA160,COMPLFLD:10,COMPLEX1:def 7;
+    hence ((1_ F_Complex)*M)*(i,j)=M*(i,j) by A1,MATRIX_3:def 5;
+   end;
+ hence (1_ F_Complex)*M=M by MATRIX_1:21,A2;
+end;
+
+theorem
+  for M being Matrix of COMPLEX holds 1*M=M
+proof let M be Matrix of COMPLEX;
+  set e=1_ F_Complex;
+  1*M=Field2COMPLEX (e*(COMPLEX2Field M)) by AA160,AA120;then
+  1*M=Field2COMPLEX ((COMPLEX2Field M)) by AA170;
+ hence 1*M=M by AA60;
+end;
+
+theorem
+  for K being Field, a,b being Element of K,
+      M being Matrix of K holds a*(b*M)=(a*b)*M
+  proof let K be Field, a,b be Element of K,
+        M being Matrix of K;
+  A1: len (b*M)=len M & width (b*M)=width M by MATRIX_3:def 5;
+  A2: len ((a*b)*M)=len M & width ((a*b)*M)=width M
+      by MATRIX_3:def 5;
+  A3: len (a*(b*M))=len (b*M) by MATRIX_3:def 5;then
+  A4: len (a*(b*M)) =len M by MATRIX_3:def 5;
+  A5: width (a*(b*M))=width (b*M) by MATRIX_3:def 5;then
+  A6: width (a*(b*M)) =width M by MATRIX_3:def 5;
+  for i,j being Nat st [i,j] in Indices (a*(b*M))
+   holds (a*(b*M))*(i,j)=((a*b)*M)*(i,j)
+  proof let i,j be Nat;
+    assume A7: [i,j] in Indices (a*(b*M)); 
+   A8: Indices (a*(b*M))=Indices ((b*M)) by MATRIX_4:55,A3,A5;
+   A9: Indices ((b*M))=Indices (M) by MATRIX_4:55,A1;
+   (a*(b*M))*(i,j) 
+      = (a*((b*M)*(i,j))) by MATRIX_3:def 5,A7,A8
+     .= (a*(b*(M*(i,j)))) by MATRIX_3:def 5,A7,A8,A9
+     .= (a*b)*(M*(i,j)) by GROUP_1:def 4;
+   hence thesis by MATRIX_3:def 5,A7,A8,A9;
+  end;
+ hence a*(b*M)=(a*b)*M by MATRIX_1:21,A2,A4,A6;
+end;
+
+theorem AA200:
+  for K being Field, a,b being Element of K,
+      M being Matrix of K holds (a+b)*M=a*M + b*M
+  proof let K be Field, a,b be Element of K,
+        M be Matrix of K;
+  A1: len ((a+b)*M)=len (M) & 
+      width ((a+b)*M)=width (M) by MATRIX_3:def 5;
+  A2: len (a*M + b*M)=len (a*M) & 
+      width (a*M + b*M)=width (a*M) by MATRIX_3:def 3;
+  A3: len (a*M)=len (M) & 
+      width (a*M)=width (M) by MATRIX_3:def 5;
+  for i,j being Nat st [i,j] in Indices ((a+b)*M)
+   holds ((a+b)*M)*(i,j)=(a*M + b*M)*(i,j)
+  proof let i,j be Nat;
+    assume A4: [i,j] in Indices ((a+b)*M); 
+   A5: Indices ((a+b)*M)=Indices (M) by MATRIX_4:55,A1;
+   A6: Indices (a*M)=Indices (M) by MATRIX_4:55,A3;
+   (a*M + b*M)*(i,j)
+        =(a*M)*(i,j)+(b*M)*(i,j) by MATRIX_3:def 3,A4,A5,A6
+       .=a*(M*(i,j))+(b*M)*(i,j) by MATRIX_3:def 5,A4,A5
+       .=a*(M*(i,j))+b*(M*(i,j)) by MATRIX_3:def 5,A4,A5
+       .=(a+b)*(M*(i,j)) by VECTSP_1:def 18;
+   hence thesis by MATRIX_3:def 5,A4,A5;
+  end;
+  hence (a+b)*M=a*M + b*M by MATRIX_1:21,A1,A2,A3;
+end;
+
+theorem 
+  for M being Matrix of COMPLEX holds M+M = 2*M
+proof let M be Matrix of COMPLEX;
+  reconsider e2=(1_ F_Complex) + (1_ F_Complex) as Element of F_Complex;
+  A1: (1_ F_Complex)*(COMPLEX2Field M)= COMPLEX2Field M by AA170;
+A2: 1 in COMPLEX & 2 in COMPLEX by XCMPLX_0:def 2;
+  (1_ F_Complex) + (1_ F_Complex) = 1 + 1 by A2,COMPLFLD:3,AA160
+  .= 2; then
+  2 * M = Field2COMPLEX (e2*(COMPLEX2Field M)) by AA120
+     .=Field2COMPLEX ((COMPLEX2Field M)+(COMPLEX2Field M)) by A1,AA200;
+ hence M+M=2*M by AA80;
+end;
+
+theorem
+  for M being Matrix of COMPLEX holds M+M+M = 3*M
+proof let M be Matrix of COMPLEX;
+  reconsider e3=(1_ F_Complex) + (1_ F_Complex)+ (1_ F_Complex) 
+    as Element of F_Complex;
+A1: len M =len (COMPLEX2Field M) & width M=width (COMPLEX2Field M) by AA20;
+  A2: (1_ F_Complex) + (1_ F_Complex)
+  =(the add of F_Complex).(1_ F_Complex,1_ F_Complex) by RLVECT_1:5
+  .=addcomplex.(1r,1r) by COMPLFLD:def 1,COMPLEX1:def 7,AA160
+  .=1+1 by BINOP_2:def 3,COMPLEX1:def 7;
+  reconsider rr=1+1 as Element of COMPLEX by XCMPLX_0:def 2;
+  (1_ F_Complex) + (1_ F_Complex) + (1_ F_Complex)
+   = (the add of F_Complex).(((1_ F_Complex) + (1_ F_Complex)),1_ F_Complex)
+     by RLVECT_1:5
+  .= addcomplex.(1+1,1) by COMPLFLD:def 1,A2,AA160
+  .= rr + 1 by BINOP_2:def 3,COMPLEX1:def 7
+  .= 3; then
+  A3: 3*M= Field2COMPLEX (e3*(COMPLEX2Field M)) by AA120
+  .=Field2COMPLEX ((1_ F_Complex)*(COMPLEX2Field M)
+    + ((1_ F_Complex)+ (1_ F_Complex))*(COMPLEX2Field M)) by AA200
+  .=Field2COMPLEX ((COMPLEX2Field M)
+    + ((1_ F_Complex)+ (1_ F_Complex))*(COMPLEX2Field M)) by AA170
+  .=Field2COMPLEX (COMPLEX2Field M
+    + ((1_ F_Complex)*(COMPLEX2Field M)+ (1_ F_Complex)*(COMPLEX2Field M))) 
+    by AA200
+  .=Field2COMPLEX (COMPLEX2Field M
+    + (COMPLEX2Field M + (1_ F_Complex)*(COMPLEX2Field M))) by AA170
+  .=Field2COMPLEX (COMPLEX2Field M+(COMPLEX2Field M+COMPLEX2Field M)) 
+    by AA170
+  .=Field2COMPLEX (COMPLEX2Field M+COMPLEX2Field M+COMPLEX2Field M)
+    by MATRIX_3:5,A1;
+  M+M = Field2COMPLEX ((COMPLEX2Field M)+(COMPLEX2Field M)) by AA80;then
+  COMPLEX2Field(M+M) = (COMPLEX2Field M)+(COMPLEX2Field M) by AA70;
+ hence thesis by A3,AA80;
+end;
+
+definition let n,m be Nat;
+  func 0_Cx(n,m) -> Matrix of COMPLEX equals :AA230:
+  Field2COMPLEX (0.(F_Complex,n,m));
+  coherence;
+end;
+
+theorem AA250:
+  for n,m being Nat holds
+    COMPLEX2Field 0_Cx(n,m)=0.(F_Complex,n,m)
+proof let n,m be Nat;
+   COMPLEX2Field (0_Cx(n,m))
+   =COMPLEX2Field (Field2COMPLEX (0.(F_Complex,n,m))) by AA230;
+ hence COMPLEX2Field 0_Cx(n,m)=0.(F_Complex,n,m) by AA70;
+end;
+
+theorem Th2: :: MATRIX_4:2
+  for M being Matrix of COMPLEX st
+    len M>0 holds M+(-M)=0_Cx(len M,width M)
+proof let M be Matrix of COMPLEX;
+ assume len M>0;then A1: len (COMPLEX2Field M)>0 by AA20;
+     M+(-M) 
+     = Field2COMPLEX ((COMPLEX2Field M)+(COMPLEX2Field (-M))) by AA80
+    .= Field2COMPLEX ((COMPLEX2Field M)+(COMPLEX2Field
+       (Field2COMPLEX (-(COMPLEX2Field M))))) by AA90
+    .= Field2COMPLEX ((COMPLEX2Field M)+(-(COMPLEX2Field M))) by AA70
+    .= Field2COMPLEX (0.(F_Complex,
+       len (COMPLEX2Field M),width (COMPLEX2Field M))) by MATRIX_4:2,A1
+    .= Field2COMPLEX (0.(F_Complex,len M,width (COMPLEX2Field M))) by AA20
+    .= Field2COMPLEX (0.(F_Complex,len M,width M)) by AA20;
+  hence M+(-M)=0_Cx(len M,width M) by AA230;
+end;
+
+theorem Th3: :: MATRIX_4:3
+  for M being Matrix of COMPLEX st
+    len M>0 holds M - M=0_Cx(len M,width M)
+proof let M be Matrix of COMPLEX;
+ assume len M>0;then A1: len (COMPLEX2Field M)>0 by AA20;
+  M - M = Field2COMPLEX ((COMPLEX2Field M)-(COMPLEX2Field M)) by AA100
+    .= Field2COMPLEX (0.(F_Complex,
+       len (COMPLEX2Field M),width (COMPLEX2Field M))) by MATRIX_4:3,A1
+    .= Field2COMPLEX (0.(F_Complex,len M,width (COMPLEX2Field M))) by AA20
+    .= Field2COMPLEX (0.(F_Complex,len M,width M)) by AA20;
+  hence M - M=0_Cx(len M,width M) by AA230;
+end;
+
+theorem :: MATRIX_4:4
+  for M1,M2,M3 being Matrix of COMPLEX st
+  len M1=len M2 & len M2=len M3 &
+  width M1=width M2 & width M2=width M3 &
+  len M1>0 &
+  M1+M3=M2+M3 holds M1=M2
+proof let M1,M2,M3 be Matrix of COMPLEX;
+ assume A1:  len M1=len M2 & len M2=len M3 &
+  width M1=width M2 & width M2 = width M3 & len M1>0 &
+  M1 + M3 = M2 + M3;
+  A2: len M1=len (COMPLEX2Field M1) &
+  width M1=width (COMPLEX2Field M1) by AA20;
+  A3: len M2=len (COMPLEX2Field M2) &
+  width M2=width (COMPLEX2Field M2) by AA20;
+  A4: len M3=len (COMPLEX2Field M3) &
+  width M3=width (COMPLEX2Field M3) by AA20;
+  A5: M2 + M3 
+  = Field2COMPLEX ((COMPLEX2Field M2) + (COMPLEX2Field M3)) by AA80;
+  COMPLEX2Field(Field2COMPLEX ((COMPLEX2Field M1) + (COMPLEX2Field M3)))
+  = COMPLEX2Field(Field2COMPLEX ((COMPLEX2Field M2) + (COMPLEX2Field M3)))
+   by A1,AA80,A5; then
+  ((COMPLEX2Field M1) + (COMPLEX2Field M3))
+  = COMPLEX2Field(Field2COMPLEX ((COMPLEX2Field M2) + (COMPLEX2Field M3)))
+   by AA70
+ .= ((COMPLEX2Field M2) + (COMPLEX2Field M3)) by AA70; then
+  COMPLEX2Field M1 = COMPLEX2Field M2 by MATRIX_4:4,A1,A2,A3,A4;then
+  M1 = COMPLEX2Field M2 by AA20
+    .= M2 by AA20;
+ hence thesis;
+end;
+
+theorem :: MATRIX_4:5
+  for M1,M2 being Matrix of COMPLEX st len M2>0 holds
+    M1--M2=M1+M2
+proof let M1,M2 be Matrix of COMPLEX;
+ assume A1: len M2>0; 
+     M1+M2 = M1+--M2 by AA150,A1
+          .= Field2COMPLEX ((COMPLEX2Field M1)+(COMPLEX2Field --M2)) by AA80;
+     then COMPLEX2Field(M1+M2)
+          = (COMPLEX2Field M1)+(COMPLEX2Field -(-M2)) by AA70
+         .= (COMPLEX2Field M1)+(COMPLEX2Field
+            Field2COMPLEX (-(COMPLEX2Field (-M2)))) by AA90
+         .= (COMPLEX2Field M1)+(-(COMPLEX2Field (-M2))) by AA70
+         .= (COMPLEX2Field M1)-(COMPLEX2Field (-M2)) by MATRIX_4:def 1;
+  then
+  M1+M2 = Field2COMPLEX((COMPLEX2Field M1)-(COMPLEX2Field (-M2))) by AA60;
+  hence M1--M2=M1+M2 by AA100;
+end;
+
+theorem  :: MATRIX_4:6
+  for M1,M2 being Matrix of COMPLEX st
+  len M1=len M2 & width M1=width M2 & len M1>0 &
+  M1 = M1 + M2 holds M2 = 0_Cx(len M1,width M1)
+proof let M1,M2 be Matrix of COMPLEX;
+ assume A0: len M1=len M2 & width M1=width M2 & len M1>0&
+  M1 = M1 + M2;
+  A1: len M1=len (COMPLEX2Field M1) &
+  width M1=width (COMPLEX2Field M1) by AA20;
+  A2: len M2=len (COMPLEX2Field M2) &
+  width M2=width (COMPLEX2Field M2) by AA20;
+  0_Cx(len M1,width M1)=M1+M2+(-M1) by A0,Th2
+  .=Field2COMPLEX ((COMPLEX2Field (M1+M2)+(COMPLEX2Field (-M1)))) by AA80
+  .=Field2COMPLEX ((COMPLEX2Field (M1+M2)+(COMPLEX2Field 
+    (Field2COMPLEX (-(COMPLEX2Field M1)))))) by AA90
+  .=Field2COMPLEX ((COMPLEX2Field (M1+M2)+((-(COMPLEX2Field M1))))) by AA70
+  .=Field2COMPLEX ((COMPLEX2Field 
+   (Field2COMPLEX ((COMPLEX2Field M1)+(COMPLEX2Field M2)))+
+   ((-(COMPLEX2Field M1))))) by AA80
+  .=Field2COMPLEX ((COMPLEX2Field M1)+(COMPLEX2Field M2)+
+   -(COMPLEX2Field M1)) by AA70
+  .=Field2COMPLEX ((COMPLEX2Field M2)+(COMPLEX2Field M1)+
+   -(COMPLEX2Field M1)) by MATRIX_3:4,A1,A2,A0
+  .=Field2COMPLEX ((COMPLEX2Field M2)+(COMPLEX2Field M1)
+   -(COMPLEX2Field M1)) by MATRIX_4:def 1
+  .=Field2COMPLEX ((COMPLEX2Field M2)) by MATRIX_4:21,A1,A2,A0
+  .=M2 by AA60;
+  hence thesis;
+end;
+
+theorem  :: MATRIX_4:7
+  for M1,M2 being Matrix of COMPLEX st
+  len M1=len M2 & width M1=width M2 & len M1>0 &
+  M1 - M2 = 0_Cx(len M1,width M1) holds M1 = M2
+proof let M1,M2 be Matrix of COMPLEX;
+ assume A0: len M1=len M2 & width M1=width M2 & len M1>0&
+  M1 - M2 = 0_Cx(len M1,width M1);
+  A1: len M1=len (COMPLEX2Field M1) &
+  width M1=width (COMPLEX2Field M1) by AA20;
+  A2: len M2=len (COMPLEX2Field M2) &
+  width M2=width (COMPLEX2Field M2) by AA20;
+  0_Cx(len M1,width M1) 
+   =Field2COMPLEX ((COMPLEX2Field M1)-(COMPLEX2Field M2)) by AA100,A0;
+  then COMPLEX2Field(0_Cx(len M1,width M1))
+   =(COMPLEX2Field M1)-(COMPLEX2Field M2) by AA70;then  
+  0.(F_Complex,len M1,width M1) 
+   = (COMPLEX2Field M1)-(COMPLEX2Field M2) by AA250;then
+  COMPLEX2Field M1 = COMPLEX2Field M2 by MATRIX_4:7,A0,A1,A2; then
+  M2 = COMPLEX2Field M1 by AA20
+    .= M1 by AA20;
+  hence thesis;
+end;
+
+theorem  :: MATRIX_4:8
+  for M1,M2 being Matrix of COMPLEX st
+  len M1=len M2 & width M1=width M2 &
+  len M1 >0 & M1+M2= 0_Cx(len M1,width M1) holds M2=-M1
+proof let M1,M2 be Matrix of COMPLEX;
+ assume A1: len M1=len M2 & width M1=width M2 & len M1>0&
+  M1 + M2 = 0_Cx(len M1,width M1);
+  A2: len M1=len (COMPLEX2Field M1) &
+  width M1=width (COMPLEX2Field M1) by AA20;
+  A3: len -COMPLEX2Field M2=len (COMPLEX2Field M2) &
+  width -COMPLEX2Field M2=width (COMPLEX2Field M2) by MATRIX_3:def 2; 
+  A4: COMPLEX2Field -M1 
+    = COMPLEX2Field(Field2COMPLEX (-(COMPLEX2Field M1))) by AA90
+   .= - COMPLEX2Field M1 by AA70;
+  A5: COMPLEX2Field -M2 
+    = COMPLEX2Field(Field2COMPLEX (-(COMPLEX2Field M2))) by AA90
+   .= - COMPLEX2Field M2 by AA70;
+  A6: len -M2=len -COMPLEX2Field M2 &
+  width -M2=width -COMPLEX2Field M2 by A5,AA20; 
+  A7: len -M2=len M2 &  width -M2=width M2 by AA20,A3,A6; 
+  0_Cx(len M1,width M1) 
+   =Field2COMPLEX ((COMPLEX2Field M1)+(COMPLEX2Field M2)) by AA80,A1;then
+  COMPLEX2Field(0_Cx(len M1,width M1)) 
+   =(COMPLEX2Field M1)+(COMPLEX2Field M2) by AA70
+  .= (COMPLEX2Field M1)+--(COMPLEX2Field M2) by MATRIX_4:1,A1,A3,A6,A7
+  .= (COMPLEX2Field M1)-(-(COMPLEX2Field M2)) by MATRIX_4:def 1; then
+  0.(F_Complex,len M1,width M1) 
+   = (COMPLEX2Field M1)-(-(COMPLEX2Field M2)) by AA250;then
+  COMPLEX2Field M1 
+   = -COMPLEX2Field M2 by MATRIX_4:7,A1,A2,A6,A7;then
+  COMPLEX2Field M2 = COMPLEX2Field -M1 by A4,MATRIX_4:1,A1,A3,A6,A7; 
+  then M2 = COMPLEX2Field -M1 by AA20
+    .= -M1 by AA20;
+  hence thesis;
+end;
+
+theorem Th9: :: MATRIX_4:9
+  for n,m being Nat st n > 0 holds -(0_Cx(n,m))=0_Cx(n,m)
+proof let n,m be Nat;
+ assume A1: n>0;
+  thus 0_Cx(n,m)=Field2COMPLEX (0.(F_Complex,n,m)) by AA230
+               .=Field2COMPLEX (- 0.(F_Complex,n,m)) by A1,MATRIX_4:9
+               .=Field2COMPLEX (- (COMPLEX2Field (0_Cx(n,m)))) by AA250
+               .=- (0_Cx(n,m)) by AA90;
+end;
+
+theorem  :: MATRIX_4:10
+  for M1,M2 being Matrix of COMPLEX st
+  len M1=len M2 & width M1=width M2 & len M1>0 &
+  M2 - M1 = M2 holds M1=0_Cx(len M1,width M1)
+proof let M1,M2 be Matrix of COMPLEX;
+ assume A0: len M1=len M2 & width M1=width M2 & len M1>0& M2 - M1 = M2;
+   A1: len M1=len (COMPLEX2Field M1) &
+   width M1=width (COMPLEX2Field M1) by AA20;
+   A2: len M2=len (COMPLEX2Field M2) &
+   width M2=width (COMPLEX2Field M2) by AA20;
+   M2 = Field2COMPLEX ((COMPLEX2Field M2)-(COMPLEX2Field M1)) by AA100,A0;
+   then 
+   COMPLEX2Field M2 +(COMPLEX2Field M1)
+     = (COMPLEX2Field M2)-(COMPLEX2Field M1)+(COMPLEX2Field M1)
+     by AA70; then
+   COMPLEX2Field M2 +(COMPLEX2Field M1)
+     = (COMPLEX2Field M2) by MATRIX_4:22,A0,A1,A2; then
+   (COMPLEX2Field M1)
+     = 0.(F_Complex,len COMPLEX2Field M1,width COMPLEX2Field M1)
+      by MATRIX_4:6,A0,A1,A2;then
+   M1 = Field2COMPLEX 
+     (0.(F_Complex,len COMPLEX2Field M1,width COMPLEX2Field M1)) by AA60;
+  hence thesis by AA230,A1;
+end;
+
+theorem  :: MATRIX_4:11
+  for M1,M2 being Matrix of COMPLEX st
+  len M1=len M2 & width M1=width M2 & len M1>0 holds
+    M1 = M1 -(M2 - M2)
+proof let M1,M2 be Matrix of COMPLEX;
+ assume A0: len M1=len M2 & width M1=width M2 & len M1>0;
+  A1: len M1=len (COMPLEX2Field M1) &
+  width M1=width (COMPLEX2Field M1) by AA20;
+  A2: len M2=len (COMPLEX2Field M2) &
+  width M2=width (COMPLEX2Field M2) by AA20;
+ thus M1 - (M2 - M2) = Field2COMPLEX ((COMPLEX2Field M1)
+                        - (COMPLEX2Field (M2-M2))) by AA100
+                    .= Field2COMPLEX ((COMPLEX2Field M1) - (COMPLEX2Field
+                    (Field2COMPLEX ((COMPLEX2Field M2)
+                    - (COMPLEX2Field M2))))) by AA100
+                    .= Field2COMPLEX ((COMPLEX2Field M1) - (
+                    ((COMPLEX2Field M2) - (COMPLEX2Field M2)))) by AA70
+                    .= Field2COMPLEX (COMPLEX2Field M1)
+                                by MATRIX_4:11,A0,A1,A2
+                     .=M1 by AA60;
+end;
+
+theorem  :: MATRIX_4:12
+  for M1,M2 being Matrix of COMPLEX st
+  len M1=len M2 & width M1=width M2 & len M1>0 holds
+    - (M1 + M2) = -M1+-M2
+proof let M1,M2 being Matrix of COMPLEX;
+ assume A0: len M1=len M2 & width M1=width M2 & len M1>0;
+  A1: len M1=len (COMPLEX2Field M1) &
+  width M1=width (COMPLEX2Field M1) by AA20;
+  A2: len M2=len (COMPLEX2Field M2) &
+  width M2=width (COMPLEX2Field M2) by AA20; 
+ A3: - (M1 + M2)
+   = Field2COMPLEX (-(COMPLEX2Field (M1 + M2))) by AA90
+  .= Field2COMPLEX (-(COMPLEX2Field 
+    (Field2COMPLEX ((COMPLEX2Field M1)+(COMPLEX2Field M2))))) by AA80
+  .= Field2COMPLEX (-((COMPLEX2Field M1)+(COMPLEX2Field M2))) by AA70;
+ -M1+-M2 
+   = Field2COMPLEX ((COMPLEX2Field -M1)+(COMPLEX2Field -M2)) by AA80
+  .= Field2COMPLEX ((COMPLEX2Field 
+    (Field2COMPLEX (-(COMPLEX2Field M1))))+(COMPLEX2Field -M2)) 
+     by AA90
+  .= Field2COMPLEX (-(COMPLEX2Field M1)+(COMPLEX2Field -M2)) by AA70
+  .= Field2COMPLEX (-(COMPLEX2Field M1)+(COMPLEX2Field 
+    (Field2COMPLEX (-(COMPLEX2Field M2))))) by AA90
+  .= Field2COMPLEX (-(COMPLEX2Field M1)+-(COMPLEX2Field M2)) by AA70
+  .= Field2COMPLEX (-((COMPLEX2Field M1)+(COMPLEX2Field M2))) 
+     by MATRIX_4:12,A0,A1,A2;
+ hence thesis by A3;
+end;
+
+theorem  :: MATRIX_4:13
+  for M1,M2 being Matrix of COMPLEX st
+    len M1=len M2 & width M1=width M2 & len M1>0 holds
+      M1 - (M1 - M2) = M2
+proof let M1,M2 be Matrix of COMPLEX;
+ assume A0: len M1=len M2 & width M1=width M2 & len M1>0;
+  A1: len M1=len (COMPLEX2Field M1) &
+  width M1=width (COMPLEX2Field M1) by AA20;
+  A2: len M2=len (COMPLEX2Field M2) &
+  width M2=width (COMPLEX2Field M2) by AA20;
+ thus M1 - (M1 - M2) = Field2COMPLEX ((COMPLEX2Field M1)
+                        - (COMPLEX2Field (M1-M2))) by AA100
+     .= Field2COMPLEX ((COMPLEX2Field M1) - (COMPLEX2Field
+                    (Field2COMPLEX ((COMPLEX2Field M1)
+                    - (COMPLEX2Field M2))))) by AA100
+     .= Field2COMPLEX ((COMPLEX2Field M1) - (
+                    ((COMPLEX2Field M1) - (COMPLEX2Field M2)))) by AA70
+     .= Field2COMPLEX (COMPLEX2Field M2) by MATRIX_4:13,A0,A1,A2
+     .=M2 by AA60;
+end;
+
+theorem  :: MATRIX_4:14
+  for M1,M2,M3 being Matrix of COMPLEX st
+    len M1=len M2 & len M2=len M3 &
+      width M1=width M2 & width M2 = width M3 & len M1>0 &
+        M1 - M3 = M2 - M3 holds M1 = M2
+proof let M1,M2,M3 be Matrix of COMPLEX;
+ assume A0:  len M1=len M2 & len M2=len M3 &
+  width M1=width M2 & width M2 = width M3 & len M1>0 &
+  M1 - M3 = M2 - M3;
+  A1: len M1=len (COMPLEX2Field M1) &
+  width M1=width (COMPLEX2Field M1) by AA20;
+  A2: len M2=len (COMPLEX2Field M2) &
+  width M2=width (COMPLEX2Field M2) by AA20;
+  A3: len M3=len (COMPLEX2Field M3) &
+  width M3=width (COMPLEX2Field M3) by AA20;
+  A4: M2 - M3
+  = Field2COMPLEX ((COMPLEX2Field M2) - (COMPLEX2Field M3)) by AA100;
+  COMPLEX2Field(Field2COMPLEX ((COMPLEX2Field M1) - (COMPLEX2Field M3)))
+  = COMPLEX2Field(Field2COMPLEX ((COMPLEX2Field M2) - (COMPLEX2Field M3)))
+   by A0,AA100,A4;
+  then ((COMPLEX2Field M1) - (COMPLEX2Field M3))
+  = COMPLEX2Field(Field2COMPLEX ((COMPLEX2Field M2) - (COMPLEX2Field M3)))
+   by AA70
+ .= ((COMPLEX2Field M2) - (COMPLEX2Field M3)) by AA70;then
+  COMPLEX2Field M1 = COMPLEX2Field M2 by MATRIX_4:14,A0,A1,A2,A3;then
+  M1 = COMPLEX2Field M2 by AA20
+    .= M2 by AA20;
+ hence thesis;
+end;
+
+theorem :: MATRIX_4:15
+  for M1,M2,M3 being Matrix of COMPLEX st
+  len M1=len M2 & len M2=len M3 &
+  width M1=width M2 & width M2 = width M3 & len M1>0 &
+  M3 - M1 = M3 - M2 holds M1 = M2
+proof let M1,M2,M3 be Matrix of COMPLEX;
+ assume A0:  len M1=len M2 & len M2=len M3 &
+  width M1=width M2 & width M2 = width M3 & len M1>0 &
+  M3 - M1 = M3 - M2;
+  A1: len M1=len (COMPLEX2Field M1) &
+  width M1=width (COMPLEX2Field M1) by AA20;
+  A2: len M2=len (COMPLEX2Field M2) &
+  width M2=width (COMPLEX2Field M2) by AA20;
+  A3: len M3=len (COMPLEX2Field M3) &
+  width M3=width (COMPLEX2Field M3) by AA20;
+  A4: M3 - M2 
+  = Field2COMPLEX ((COMPLEX2Field M3) - (COMPLEX2Field M2)) by AA100;
+  COMPLEX2Field(Field2COMPLEX ((COMPLEX2Field M3) - (COMPLEX2Field M1)))
+  = COMPLEX2Field(Field2COMPLEX ((COMPLEX2Field M3) - (COMPLEX2Field M2)))
+    by A0,AA100,A4;
+  then
+  ((COMPLEX2Field M3) - (COMPLEX2Field M1))
+  = COMPLEX2Field(Field2COMPLEX ((COMPLEX2Field M3) - (COMPLEX2Field M2)))
+   by AA70
+ .= ((COMPLEX2Field M3) - (COMPLEX2Field M2)) by AA70;then
+  COMPLEX2Field M1 = COMPLEX2Field M2 by MATRIX_4:15,A0,A1,A2,A3;
+  then M1 = COMPLEX2Field M2 by AA20
+    .= M2 by AA20;
+ hence thesis;
+end;
+
+theorem  :: MATRIX_4:62
+  for M1,M2,M3 being Matrix of COMPLEX st
+  len M2=len M3 & width M2=width M3 & width M1=len M2
+  & len M1>0 & len M2>0 holds
+  M1*(M2+M3)=M1*M2 + M1*M3
+proof let M1,M2,M3 being Matrix of COMPLEX;
+  assume A0: len M2=len M3 & width M2=width M3 & width M1=len M2
+    & len M1>0 & len M2>0;
+  A1: len M2=len (COMPLEX2Field M2) &
+      width M2=width (COMPLEX2Field M2) by AA20;
+  A2: len M3=len (COMPLEX2Field M3) &
+      width M3=width (COMPLEX2Field M3) by AA20;
+  A3: len M1=len (COMPLEX2Field M1) &
+      width M1=width (COMPLEX2Field M1) by AA20;
+  A5: M1*(M2+M3)
+      = Field2COMPLEX ((COMPLEX2Field M1)*(COMPLEX2Field (M2+M3))) 
+       by AA110
+     .= Field2COMPLEX ((COMPLEX2Field M1)*(COMPLEX2Field
+      (Field2COMPLEX ((COMPLEX2Field M2)+(COMPLEX2Field M3))))) by AA80
+     .= Field2COMPLEX ((COMPLEX2Field M1)*(
+      ((COMPLEX2Field M2)+(COMPLEX2Field M3)))) by AA70
+     .= Field2COMPLEX ((COMPLEX2Field M1)*(COMPLEX2Field M2)+
+      (COMPLEX2Field M1)*(COMPLEX2Field M3)) by A0,A1,A2,A3,MATRIX_4:62; 
+  M1*M2 + M1*M3
+      = Field2COMPLEX ((COMPLEX2Field (M1*M2))+(COMPLEX2Field (M1*M3))) 
+       by AA80
+     .= Field2COMPLEX ((COMPLEX2Field 
+      (Field2COMPLEX ((COMPLEX2Field M1)*(COMPLEX2Field M2))))+
+      (COMPLEX2Field (M1*M3))) by AA110
+     .= Field2COMPLEX ((COMPLEX2Field M1)*(COMPLEX2Field M2)+
+      (COMPLEX2Field (M1*M3))) by AA70
+     .= Field2COMPLEX ((COMPLEX2Field M1)*(COMPLEX2Field M2)+
+      (COMPLEX2Field
+      (Field2COMPLEX ((COMPLEX2Field M1)*(COMPLEX2Field M3)))))
+      by AA110
+     .= Field2COMPLEX ((COMPLEX2Field M1)*(COMPLEX2Field M2)+
+      ((COMPLEX2Field M1)*(COMPLEX2Field M3))) by AA70; 
+ hence thesis by A5;
+end;
+
+theorem  :: MATRIX_4:63
+  for M1,M2,M3 being Matrix of COMPLEX st
+  len M2=len M3 & width M2=width M3 & len M1=width M2
+   & len M2>0 & len M1>0 holds
+  (M2+M3)*M1=M2*M1 + M3*M1
+proof let M1,M2,M3 being Matrix of COMPLEX;
+  assume A0: len M2=len M3 & width M2=width M3 & len M1=width M2 &
+    len M2>0 & len M1>0;
+  A1: len M2=len (COMPLEX2Field M2) &
+      width M2=width (COMPLEX2Field M2) by AA20;
+  A2: len M3=len (COMPLEX2Field M3) &
+      width M3=width (COMPLEX2Field M3) by AA20;
+  A3: len M1=len (COMPLEX2Field M1) &
+      width M1=width (COMPLEX2Field M1) by AA20;
+  A5: (M2+M3)*M1
+      = Field2COMPLEX ((COMPLEX2Field (M2+M3))*(COMPLEX2Field M1)) 
+       by AA110
+     .= Field2COMPLEX ((COMPLEX2Field
+      (Field2COMPLEX ((COMPLEX2Field M2)+(COMPLEX2Field M3))))*
+      (COMPLEX2Field M1)) by AA80
+     .= Field2COMPLEX ((((COMPLEX2Field M2)+(COMPLEX2Field M3)))*
+      (COMPLEX2Field M1)) by AA70
+     .= Field2COMPLEX ((COMPLEX2Field M2)*(COMPLEX2Field M1)+
+      (COMPLEX2Field M3)*(COMPLEX2Field M1)) 
+       by A0,A1,A2,A3,MATRIX_4:63;
+  M2*M1 + M3*M1
+      = Field2COMPLEX ((COMPLEX2Field (M2*M1))+(COMPLEX2Field (M3*M1))) 
+       by AA80
+     .= Field2COMPLEX ((COMPLEX2Field 
+      (Field2COMPLEX ((COMPLEX2Field M2)*(COMPLEX2Field M1))))+
+      (COMPLEX2Field (M3*M1))) by AA110
+     .= Field2COMPLEX ((COMPLEX2Field M2)*(COMPLEX2Field M1)+
+      (COMPLEX2Field (M3*M1))) by AA70
+     .= Field2COMPLEX ((COMPLEX2Field M2)*(COMPLEX2Field M1)+
+      (COMPLEX2Field
+      (Field2COMPLEX ((COMPLEX2Field M3)*(COMPLEX2Field M1))))) by AA110
+     .= Field2COMPLEX ((COMPLEX2Field M2)*(COMPLEX2Field M1)+
+      ((COMPLEX2Field M3)*(COMPLEX2Field M1))) by AA70; 
+ hence thesis by A5;
+end;
+
+theorem 
+  for M1,M2 being Matrix of COMPLEX st len M1= len M2 & width M1=width M2
+    holds M1 + M2 = M2 + M1
+proof let M1,M2 being Matrix of COMPLEX;
+  assume A1:len M1= len M2 & width M1=width M2;
+  A2: len M1=len (COMPLEX2Field M1) &
+  width M1=width (COMPLEX2Field M1) by AA20;
+  A3: len M2=len (COMPLEX2Field M2) &
+  width M2=width (COMPLEX2Field M2) by AA20;
+  M1 + M2 
+   =Field2COMPLEX ((COMPLEX2Field M1)+(COMPLEX2Field M2)) by AA80
+  .=Field2COMPLEX ((COMPLEX2Field M2)+(COMPLEX2Field M1))
+    by MATRIX_3:4,A1,A2,A3
+  .=M2+M1 by AA80;
+  hence thesis;
+end;
+
+theorem 
+  for M1,M2,M3 being Matrix of COMPLEX st len M1=len M2 & len M1=len M3 &
+    width M1=width M2 & width M1=width M3 holds
+      (M1 + M2) + M3= M1 + (M2 + M3)
+proof let M1,M2,M3 being Matrix of COMPLEX;
+  assume A1:len M1=len M2 & len M1=len M3 &
+        width M1=width M2 & width M1=width M3;
+  A2: len M1=len (COMPLEX2Field M1) &
+  width M1=width (COMPLEX2Field M1) by AA20;
+  A3: len M2=len (COMPLEX2Field M2) &
+  width M2=width (COMPLEX2Field M2) by AA20;
+  A4: len M3=len (COMPLEX2Field M3) &
+  width M3=width (COMPLEX2Field M3) by AA20;
+  A5: (M1 + M2) + M3
+  =Field2COMPLEX ((COMPLEX2Field (M1+M2))+(COMPLEX2Field M3)) by AA80
+  .=Field2COMPLEX (COMPLEX2Field
+    (Field2COMPLEX ((COMPLEX2Field M1)+(COMPLEX2Field M2)))+(COMPLEX2Field M3))
+     by AA80
+  .=Field2COMPLEX (((COMPLEX2Field M1)+(COMPLEX2Field M2))+(COMPLEX2Field M3))
+     by AA70
+  .=Field2COMPLEX ((COMPLEX2Field M1)+((COMPLEX2Field M2)+(COMPLEX2Field M3)))
+     by MATRIX_3:5,A1,A2,A3,A4;
+  M1 + (M2 + M3)
+  =Field2COMPLEX ((COMPLEX2Field M1)+(COMPLEX2Field (M2+M3))) by AA80
+  .=Field2COMPLEX ((COMPLEX2Field M1)+COMPLEX2Field
+    (Field2COMPLEX ((COMPLEX2Field M2)+(COMPLEX2Field M3)))) by AA80
+  .=Field2COMPLEX ((COMPLEX2Field M1)+((COMPLEX2Field M2)+(COMPLEX2Field M3)))
+     by AA70;
+  hence thesis by A5;
+end;
+
+theorem  
+  for M being Matrix of COMPLEX st
+    len M>0 holds M + 0_Cx(len M,width M) = M
+proof let M being Matrix of COMPLEX;
+  assume A1:len M > 0;
+  A2: len M=len (COMPLEX2Field M) &
+  width M=width (COMPLEX2Field M) by AA20;
+  M + 0_Cx(len M,width M)
+  = M +(- 0_Cx(len M,width M)) by Th9,A1
+  .= M +(- (M-M)) by Th3,A1
+  .= Field2COMPLEX ((COMPLEX2Field M)+(COMPLEX2Field (- (M-M)))) by AA80
+  .= Field2COMPLEX ((COMPLEX2Field M)+(COMPLEX2Field (
+     Field2COMPLEX (-(COMPLEX2Field (M-M)))))) by AA90
+  .= Field2COMPLEX ((COMPLEX2Field M)+(-(COMPLEX2Field (M-M)))) by AA70
+  .= Field2COMPLEX ((COMPLEX2Field M)+(-(COMPLEX2Field 
+    (Field2COMPLEX ((COMPLEX2Field M)-(COMPLEX2Field M)))))) by AA100
+  .= Field2COMPLEX ((COMPLEX2Field M)+(-(COMPLEX2Field M-COMPLEX2Field M))) 
+     by AA70
+  .= Field2COMPLEX ((COMPLEX2Field M)-(COMPLEX2Field M-COMPLEX2Field M))
+     by MATRIX_4:def 1
+  .= Field2COMPLEX ((COMPLEX2Field M)) by MATRIX_4:11,A1,A2
+  .= M by AA60;
+  hence thesis;
+end;
+
+theorem Th35:
+  for K being Field, b being Element of K,M1,M2 being Matrix of K st
+    len M1 = len M2 & width M1 = width M2 & len M1 > 0 holds
+      b*(M1+M2)=b*M1 + b*M2
+  proof let K be Field, b be Element of K,
+        M1,M2 being Matrix of K;
+  assume A1: len M1= len M2 & width M1=width M2 &len M1>0;
+  A2: len (b*(M1+M2))=len (M1+M2) & width (b*(M1+M2)) = width (M1+M2)
+                   by MATRIX_3:def 5;
+  A3: len (M1+M2)=len M1 & width (M1+M2)=width M1 by MATRIX_3:def 3;
+  A4: len (b*M1)=len (M1) & width (b*M1)=width (M1) by MATRIX_3:def 5;
+  A5: len (b*M1 + b*M2)=len (b*M1) & width (b*M1 + b*M2)=width (b*M1) 
+                   by MATRIX_3:def 3;
+  for i,j being Nat st [i,j] in Indices (b*(M1+M2))
+   holds (b*(M1+M2))*(i,j)=(b*M1 + b*M2)*(i,j)
+  proof let i,j be Nat;
+    assume A6: [i,j] in Indices (b*(M1+M2)); 
+   A7:  Indices (b*(M1+M2))=Indices (M1+M2) by MATRIX_4:55,A2;
+   A8:  Indices (M1+M2)=Indices (M1) by MATRIX_4:55,A3;
+   A9:  Indices (b*M1)=Indices (M1) by MATRIX_4:55,A4;
+   A10:  Indices (M2)=Indices (M1) by MATRIX_4:55,A1;
+   A11: (b*M1 + b*M2)*(i,j)
+        =(b*M1)*(i,j)+(b*M2)*(i,j) by MATRIX_3:def 3,A6,A7,A8,A9
+       .=b*(M1*(i,j))+(b*M2)*(i,j) by MATRIX_3:def 5,A6,A7,A8
+       .=b*(M1*(i,j))+b*(M2*(i,j)) by MATRIX_3:def 5,A6,A7,A8,A10
+       .=(b*(M1*(i,j)+M2*(i,j))) by VECTSP_1:def 18;
+   (b*M1 + b*M2)*(i,j)
+       = (b*((M1 + M2)*(i,j))) by A11,MATRIX_3:def 3,A6,A7,A8
+      .= (b*(M1 + M2)*(i,j)) by MATRIX_3:def 5,A6,A7;
+   hence thesis;
+  end;
+  hence (b*(M1+M2))=b*M1 + b*M2 by MATRIX_1:21,A2,A3,A4,A5;
+end;
+
+theorem  
+  for M1,M2 being Matrix of COMPLEX
+  for a being complex number st
+    len M1=len M2 & width M1=width M2 & len M1>0 holds
+    a*(M1 + M2) = a*M1 + a*M2
+proof let M1,M2 be Matrix of COMPLEX; let a be complex number;
+ assume A0: len M1=len M2 & width M1=width M2 & len M1>0;
+  A1: len M1=len (COMPLEX2Field M1) &
+  width M1=width (COMPLEX2Field M1) by AA20;
+  A2: len M2=len (COMPLEX2Field M2) &
+  width M2=width (COMPLEX2Field M2) by AA20;
+  a in COMPLEX by XCMPLX_0:def 2; then
+  reconsider ea=a as Element of F_Complex by COMPLFLD:def 1;
+  A3: a*(M1 + M2) 
+   = Field2COMPLEX (ea*(COMPLEX2Field (M1+M2))) by AA120
+  .= Field2COMPLEX (ea*(COMPLEX2Field 
+     (Field2COMPLEX ((COMPLEX2Field M1)+(COMPLEX2Field M2))))) by AA80
+  .= Field2COMPLEX (ea*((COMPLEX2Field M1)+(COMPLEX2Field M2))) by AA70
+  .= Field2COMPLEX (ea*(COMPLEX2Field M1)+ea*(COMPLEX2Field M2)) 
+    by Th35,A0,A1,A2;
+  a*M1 + a*M2
+   = Field2COMPLEX ((COMPLEX2Field (a*M1))+(COMPLEX2Field (a*M2))) by AA80
+  .= Field2COMPLEX ((COMPLEX2Field 
+    (Field2COMPLEX (ea*(COMPLEX2Field (M1))))+(COMPLEX2Field (a*M2)))) by AA120
+  .= Field2COMPLEX (((ea*(COMPLEX2Field (M1)))+(COMPLEX2Field (a*M2)))) by AA70
+  .= Field2COMPLEX (((ea*(COMPLEX2Field (M1)))+(COMPLEX2Field 
+    (Field2COMPLEX (ea*(COMPLEX2Field (M2))))))) by AA120
+  .= Field2COMPLEX ((ea*(COMPLEX2Field M1)+(ea*(COMPLEX2Field M2))))  by AA70;
+ hence thesis by A3;
+end;
+
+theorem Th36:
+for K being Field,M1,M2 being Matrix of K
+  st width M1=len M2 & len M1>0& len M2>0
+   holds 0.(K,len M1,width M1)*M2=0.(K,len M1,width M2)
+proof let K be Field,M1,M2 being Matrix of K;
+  assume A1: width M1=len M2 & len M1>0& len M2>0;
+  A2: len (0.(K,len M1,width M1))=len M1 by MATRIX_1:def 3;
+  A3: width (0.(K,len M1,width M1))=width M1 by A1,A2,MATRIX_1:20;
+  A4: len ((0.(K,len M1,width M1))*M2)=len (0.(K,len M1,width M1)) 
+      by MATRIX_3:def 4,A1,A3;
+  A5: width ((0.(K,len M1,width M1))*M2)=width M2 by MATRIX_3:def 4,A1,A3;
+  A6: len -((0.(K,len M1,width M1))*M2)=len ((0.(K,len M1,width M1))*M2) 
+      by MATRIX_3:def 2;
+  A7: width -((0.(K,len M1,width M1))*M2)=width ((0.(K,len M1,width M1))*M2) 
+      by MATRIX_3:def 2;
+  A8:(0.(K,len M1,width M1))*M2
+   =((0.(K,len M1,width M1)+(0.(K,len M1,width M1))))*M2 by MATRIX_3:6
+  .=((0.(K,len M1,width M1)))*M2+((0.(K,len M1,width M1)))*M2 
+   by MATRIX_4:63,A1,A2,A3;
+  set B=(0.(K,len M1,width M1))*M2;
+  0.(K,len M1,width M2)=B+B+(-B) by MATRIX_4:2,A2,A4,A5,A1,A8; then
+  0.(K,len M1,width M2)
+   =B+(B+(-B)) by MATRIX_3:5,A6,A7
+  .=B+(B-B) by MATRIX_4:def 1
+  .=(0.(K,len M1,width M1))*M2 by MATRIX_4:20,A1,A2,A4,A7;
+  hence thesis;
+end;
+
+theorem 
+for M1,M2 being Matrix of COMPLEX
+st width M1=len M2 &len M1>0&len M2>0 holds
+  0_Cx(len M1,width M1)*M2=0_Cx(len M1,width M2)
+proof let M1,M2 be Matrix of COMPLEX;
+ assume A1:width M1=len M2& len M1>0& len M2>0;
+  A2: len M1=len (COMPLEX2Field M1) &
+  width M1=width (COMPLEX2Field M1) by AA20;
+  A3: len M2=len (COMPLEX2Field M2) &
+  width M2=width (COMPLEX2Field M2) by AA20;
+  0_Cx(len M1,width M1)*M2
+  =Field2COMPLEX ((COMPLEX2Field (0_Cx(len M1,width M1)))
+   *(COMPLEX2Field M2)) by AA110
+ .=Field2COMPLEX ((COMPLEX2Field
+  (Field2COMPLEX (0.(F_Complex,len M1,width M1)))*(COMPLEX2Field M2)))
+   by AA230
+ .=Field2COMPLEX ((0.(F_Complex,len M1,width M1))*(COMPLEX2Field M2)) by AA70
+ .=Field2COMPLEX ((0.(F_Complex,len M1,width M2))) by Th36,A2,A3,A1
+ .=0_Cx(len M1,width M2) by AA230;
+  hence thesis;
+end;
+
+theorem Th38:
+  for K being Field,M1 being Matrix of K st len M1>0 holds
+    0.K*M1=0.(K,len M1,width M1)
+proof let K be Field,M1 being Matrix of K;
+  assume A1: len M1>0;
+  A2: len (0.K*M1)=len (M1) & width (0.K*M1)=width (M1) by MATRIX_3:def 5;
+  A3: len (0.(K,len M1,width M1))=len M1 by MATRIX_1:def 3;then
+  A4: width (0.(K,len M1,width M1))=width M1 by A1,MATRIX_1:20;
+  for i,j be Nat st [i,j] in Indices (0.(K,len M1,width M1)) holds
+    ((0.K)*M1)*(i,j)=(0.(K,len M1,width M1))*(i,j)
+  proof let i,j be Nat;
+    assume A5: [i,j] in Indices (0.(K,len M1,width M1)); then
+    A6: (0.(K,len M1,width M1))*(i,j)=0.K by MATRIX_3:3;
+    A7: Indices (0.(K,len M1,width M1))= Indices (M1) 
+    by MATRIX_4:55,A3,A4;
+    ((0.K)*M1)*(i,j)=(0.K)*(M1*(i,j)) by MATRIX_3:def 5,A5,A7;
+    hence (0.(K,len M1,width M1))*(i,j)=((0.K)*M1)*(i,j) 
+    by A6,VECTSP_1:36; 
+   end;
+  hence (0.K)*M1=0.(K,len M1,width M1) by MATRIX_1:21,A2,A3,A4;
+end;
+
+theorem
+  for M1 being Matrix of COMPLEX st len M1>0 holds
+    0*M1 = 0_Cx(len M1,width M1)
+proof let M1 be Matrix of COMPLEX;
+ assume A1: len M1>0; 
+  A2: len M1=len (COMPLEX2Field M1) &
+  width M1=width (COMPLEX2Field M1) by AA20;
+  0 in COMPLEX by XCMPLX_0:def 2; then
+  reconsider ea=0 as Element of F_Complex by COMPLFLD:def 1;
+  0*M1 = Field2COMPLEX (ea*(COMPLEX2Field (M1))) by AA120
+ .=Field2COMPLEX ((0.(F_Complex,len M1,width M1))) by Th38,A1,A2,AA240
+ .=0_Cx(len M1,width M1) by AA230;
+  hence thesis;
+end;
+
+definition let s be FinSequence of COMPLEX, k be Nat;
+ redefine func s.k -> Element of COMPLEX;
+ coherence
+ proof
+  per cases;
+   suppose k in dom s; hence thesis by FINSEQ_2:13;
+  end;
+  suppose not k in dom s;
+  hence s.k is Element of COMPLEX by COMPLEX1:14,FUNCT_1:def 4;
+ end;
+ end;
+end;
+
+theorem
+  for i,j being Nat,M1,M2 being Matrix of COMPLEX st
+  len M1>0 & len M2>0 & width M1=len M2
+   & 1<=i & i<= len M1 & 1<=j & j<=width M2 holds
+(ex s being FinSequence of COMPLEX
+ st len s = len M2
+ & s.1=(M1*(i,1))*(M2*(1,j))  
+ & (for k be Nat st 1<=k & k < len M2
+ holds s.(k+1)=s.k + (M1*(i,k+1))*(M2*(k+1,j))))
+proof let i,j being Nat,M1,M2 being Matrix of COMPLEX;
+ assume A1: len M1>0 & len M2>0 & width M1=len M2 
+   & 1<=i & i<= len M1 & 1<=j & j<=width M2;
+ 0+1<=len M2 by A1,NAT_1:26;then
+ 0+1-1<=len M2-1 by REAL_1:49;then
+ A2: len M2-'1=len M2-1 by BINARITH:def 3;then
+ A3: 0+1<=(len M2)-'1+1 by A1,NAT_1:26;
+ A4: (len M2)-'1+1=(len M2) by A2;
+ defpred P[Nat] means ex q being FinSequence of COMPLEX st
+ 1<=$1+1 & $1+1<=len M2 implies 
+ ( len q=$1 +1 & q.1=(M1*(i,1))*(M2*(1,j))
+ & (for k be Nat st 1<=k & k<$1+1
+ holds q.(k+1)=q.k+(M1*(i,k+1))*(M2*(k+1,j))));
+ reconsider q0=<*(M1*(i,1))*(M2*(1,j))*>  as FinSequence of COMPLEX;
+ A5: len q0 = 1 by FINSEQ_1:56;
+ A6: q0.1=(M1*(i,1))*(M2*(1,j)) by FINSEQ_1:def 8;
+ for k be Nat st 1<=k & k<1 holds q0.(k+1)=q0.k+(M1*(i,k+1))*(M2*(k+1,j));then
+ A7: P[0] by A5,A6;
+ A8: for i2 being Nat st P[i2] holds P[i2+1]
+ proof let i2 be Nat;
+   assume P[i2]; then
+   consider q2 being FinSequence of COMPLEX such that
+   A9: 1<=i2+1 & i2+1<=len M2 implies
+   ( len q2=i2+1 & q2.1=(M1*(i,1))*(M2*(1,j))
+   & (for k2 being Nat st 1<=k2 & k2<i2+1
+   holds q2.(k2+1)=q2.k2+(M1*(i,k2+1))*(M2*(k2+1,j))));
+   set k0=i2;
+   reconsider q3=q2^<* q2.(k0+1)+(M1*(i,k0+1+1))*(M2*(k0+1+1,j)) *>
+               as FinSequence of COMPLEX;
+   1<=i2+1+1 & i2+1+1<=len M2 implies
+   ( len q3 = i2+1+1
+   & q3.1=(M1*(i,1))*(M2*(1,j))
+   & (for k be Nat st 1<=k & k< i2+1+1
+   holds q3.(k+1)=q3.k+(M1*(i,k+1))*(M2*(k+1,j))))
+   proof
+     assume A10: 1<=i2+1+1 & i2+1+1<=len M2;
+     per cases by NAT_1:37;
+     suppose A11: 1 <= i2+1;
+       A12: len q3
+        =len q2+len (<* q2.(k0+1)+(M1*(i,k0+1+1))*(M2*(k0+1+1,j)) *>)
+           by FINSEQ_1:35
+        .=i2+1+1 by A9,A11,NAT_1:38,A10,FINSEQ_1:56;
+        1 < len (q2^<* q2.(k0+1)+(M1*(i,k0+1+1))*(M2*(k0+1+1,j)) *>)
+        by A12,NAT_1:38,A11;then
+        1 < len q2 + len <* q2.(k0+1)+(M1*(i,k0+1+1))*(M2*(k0+1+1,j))*>
+          by FINSEQ_1:35;then
+        1 < len q2 + 1 by FINSEQ_1:56;then
+        1 <= len q2 by NAT_1:38; then
+        1 in dom q2 by FINSEQ_3:27;then
+       A13: q3.1=(M1*(i,1))*(M2*(1,j))
+         by A9,A11,NAT_1:38,A10,FINSEQ_1:def 7;
+        for k2 being Nat st 1<=k2 & k2<i2+1+1
+          holds q3.(k2+1)=q3.k2+(M1*(i,k2+1))*(M2*(k2+1,j))
+        proof let k2 be Nat;
+         assume A14: 1<=k2 & k2<i2+1+1;then
+         A15: k2<=i2+1 by NAT_1:38;
+          per cases by REAL_1:def 5,A15;
+          suppose A16: k2<i2+1;then
+            k2+1 < i2 + 1+1 by REAL_1:53;then
+            k2+1 < len q2 +
+                   len <* q2.(k0+1)+(M1*(i,k0+1+1))*(M2*(k0+1+1,j))*>
+                     by FINSEQ_1:35,A12; then
+            k2+1 < len q2 + 1 by FINSEQ_1:56;then
+            A17: k2+1 <= len q2 by NAT_1:38;
+            1 <= k2+1 by A14, NAT_1:38; then
+            k2+1 in dom q2 by FINSEQ_3:27,A17;then
+            A18: q3.(k2+1)=q2.(k2+1) by FINSEQ_1:def 7;
+            k2 < len q3 by A12,A16,NAT_1:38;then
+            k2 < len q2 + len <* q2.(k0+1)+(M1*(i,k0+1+1))*(M2*(k0+1+1,j))*>
+                   by FINSEQ_1:35; then
+            k2 < len q2 + 1 by FINSEQ_1:56;then
+            k2 <= len q2 by NAT_1:38; then
+            k2 in dom q2 by FINSEQ_3:27,A14;then
+            q3.k2=q2.k2 by FINSEQ_1:def 7;
+           hence q3.(k2+1) = q3.k2+(M1*(i,k2+1))*(M2*(k2+1,j))
+            by A9,NAT_1:38,A10,A11,A14,A16,A18;
+          end;
+          suppose A19: k2=i2+1;
+            k2 < i2 + 1+1 by NAT_1:38,A19;then
+            k2 < len q2 + len <* q2.(k0+1)+(M1*(i,k0+1+1))*(M2*(k0+1+1,j))*>
+             by FINSEQ_1:35,A12; then
+            k2 < len q2 + 1 by FINSEQ_1:56;then
+            k2 <= len q2 by NAT_1:38; then
+            k2 in dom q2 by FINSEQ_3:27,A14;then
+            A20: q3.k2=q2.k2 by FINSEQ_1:def 7;
+            A21: (<* q2.(k0+1)+(M1*(i,k0+1+1))*(M2*(k0+1+1,j)) *>).1
+               = q2.(k0+1)+(M1*(i,k0+1+1))*(M2*(k0+1+1,j)) by FINSEQ_1:def 8;
+            1 in Seg 1 by FINSEQ_1:5;then
+            1 in dom (<* q2.(k0+1)+(M1*(i,k0+1+1))*(M2*(k0+1+1,j)) *>)
+                         by FINSEQ_1:55;
+           hence q3.(k2+1) =q3.k2+(M1*(i,k2+1))*(M2*(k2+1,j))
+            by A19,A20,A9,NAT_1:38,A10,A11,A21,FINSEQ_1:def 7;
+          end;
+          end;
+      hence thesis by A12,A13;
+     end;
+    end;
+    hence thesis;
+ end;
+ for j being Nat holds P[j] from NAT_1:sch 1(A7,A8);then
+ consider q being FinSequence of COMPLEX such that
+ A88: 1<=(len M2)-'1+1 & (len M2)-'1+1<=len M2 implies 
+ ( len q=(len M2)-'1+1
+ & q.1=(M1*(i,1))*(M2*(1,j))
+ & (for k be Nat st 1<=k & k<len M2-'1+1 holds q.(k+1)
+ =q.k+(M1*(i,k+1))*(M2*(k+1,j))));
+ thus thesis by A3,A4,A88;
+end;

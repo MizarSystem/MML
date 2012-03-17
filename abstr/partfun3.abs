@@ -1,0 +1,594 @@
+:: On the Real Valued Functions
+::  by Artur Korni{\l}owicz
+:: 
+:: Received December 10, 2004
+:: Copyright (c) 2004 Association of Mizar Users
+
+environ
+
+ vocabulary FUNCT_1, PRE_TOPC, ORDINAL2, RELAT_1, ARYTM, PARTFUN3, SEQ_1,
+      ARYTM_1, ZF_LANG, PSCOMP_1, ARYTM_3, ZF_REFLE, BOOLE, SUBSET_1, ASYMPT_0,
+      FUNCOP_1, TOPMETR, ABSVALUE, PARTFUN1, SQUARE_1, FUNCT_2, PRALG_1,
+      XREAL_0, FINSEQ_1;
+ notation TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, COMPLEX1, SQUARE_1, RELAT_1,
+      RELSET_1, FUNCT_1, PARTFUN1, FUNCT_2, PSCOMP_1, SEQ_1, RFUNCT_1, NUMBERS,
+      XCMPLX_0, XREAL_0, REAL_1, FUNCOP_1, RCOMP_1, STRUCT_0, PRE_TOPC,
+      BORSUK_1, TOPALG_2;
+ constructors REAL_1, SQUARE_1, PSCOMP_1, RCOMP_1, COMPLEX1, TOPREALA,
+      RFUNCT_1;
+ clusters STRUCT_0, RELSET_1, ARYTM_3, XREAL_0, REAL_1, XCMPLX_0, FUNCT_1,
+      BORSUK_2, TOPS_1, TOPMETR, RELAT_1, PSCOMP_1, FUNCOP_1;
+ requirements NUMERALS, BOOLE, SUBSET, REAL, ARITHM;
+
+
+begin
+
+registration
+  let r be real number;
+  cluster r/r -> non negative;
+end;
+
+registration
+  let r be real number;
+  cluster r*r -> non negative;
+  cluster r*(r") -> non negative;
+end;
+
+registration
+  let r be non negative (real number);
+  cluster sqrt r -> non negative;
+end;
+
+registration
+  let r be positive (real number);
+  cluster sqrt r -> positive;
+end;
+
+theorem :: PARTFUN3:1
+  for f being Function, A being set st f is one-to-one & A c= dom (f")
+   holds f.:(f".:A) = A;
+
+registration
+  let f be non-empty Function;
+  cluster f"{0} -> empty;
+end;
+
+definition
+  let R be Relation;
+  attr R is positive-yielding means
+:: PARTFUN3:def 1
+  for r being real number st r in rng R holds 0 < r;
+  attr R is negative-yielding means
+:: PARTFUN3:def 2
+  for r being real number st r in rng R holds 0 > r;
+  attr R is nonpositive-yielding means
+:: PARTFUN3:def 3
+  for r being real number st r in rng R holds 0 >= r;
+  attr R is nonnegative-yielding means
+:: PARTFUN3:def 4
+  for r being real number st r in rng R holds 0 <= r;
+end;
+
+registration
+  let X be set, r be positive (real number);
+  cluster X --> r -> positive-yielding;
+end;
+
+registration
+  let X be set, r be negative (real number);
+  cluster X --> r -> negative-yielding;
+end;
+
+registration
+  let X be set, r be non positive (real number);
+  cluster X --> r -> nonpositive-yielding;
+end;
+
+registration
+  let X be set, r be non negative (real number);
+  cluster X --> r -> nonnegative-yielding;
+end;
+
+registration
+  let X be non empty set;
+  cluster X --> 0 -> non non-empty;
+end;
+
+registration
+  cluster positive-yielding -> nonnegative-yielding non-empty Relation;
+  cluster negative-yielding -> nonpositive-yielding non-empty Relation;
+end;
+
+registration
+  let X be set;
+  cluster negative-yielding Function of X,REAL;
+  cluster positive-yielding Function of X,REAL;
+end;
+
+theorem :: PARTFUN3:2
+  for X being non empty set, f being non-empty PartFunc of X,REAL holds
+  dom(f^) = dom f;
+
+theorem :: PARTFUN3:3
+  for X being non empty set,
+      f being PartFunc of X,REAL, g being non-empty PartFunc of X,REAL holds
+  dom(f/g) = dom f /\ dom g;
+
+registration
+  let X be set;
+  let f, g be nonpositive-yielding PartFunc of X,REAL;
+  cluster f+g -> nonpositive-yielding;
+end;
+
+registration
+  let X be set;
+  let f, g be nonnegative-yielding PartFunc of X,REAL;
+  cluster f+g -> nonnegative-yielding;
+end;
+
+registration
+  let X be set;
+  let f be positive-yielding PartFunc of X,REAL;
+  let g be nonnegative-yielding PartFunc of X,REAL;
+  cluster f+g -> positive-yielding;
+end;
+
+registration
+  let X be set;
+  let f be nonnegative-yielding PartFunc of X,REAL;
+  let g be positive-yielding PartFunc of X,REAL;
+  cluster f+g -> positive-yielding;
+end;
+
+registration
+  let X be set;
+  let f be nonpositive-yielding PartFunc of X,REAL;
+  let g be negative-yielding PartFunc of X,REAL;
+  cluster f+g -> negative-yielding;
+end;
+
+registration
+  let X be set;
+  let f be negative-yielding PartFunc of X,REAL;
+  let g be nonpositive-yielding PartFunc of X,REAL;
+  cluster f+g -> negative-yielding;
+end;
+
+registration
+  let X be set;
+  let f be nonnegative-yielding PartFunc of X,REAL;
+  let g be nonpositive-yielding PartFunc of X,REAL;
+  cluster f-g -> nonnegative-yielding;
+end;
+
+registration
+  let X be set;
+  let f be nonpositive-yielding PartFunc of X,REAL;
+  let g be nonnegative-yielding PartFunc of X,REAL;
+  cluster f-g -> nonpositive-yielding;
+end;
+
+registration
+  let X be set;
+  let f be positive-yielding PartFunc of X,REAL;
+  let g be nonpositive-yielding PartFunc of X,REAL;
+  cluster f-g -> positive-yielding;
+end;
+
+registration
+  let X be set;
+  let f be nonpositive-yielding PartFunc of X,REAL;
+  let g be positive-yielding PartFunc of X,REAL;
+  cluster f-g -> negative-yielding;
+end;
+
+registration
+  let X be set;
+  let f be negative-yielding PartFunc of X,REAL;
+  let g be nonnegative-yielding PartFunc of X,REAL;
+  cluster f-g -> negative-yielding;
+end;
+
+registration
+  let X be set;
+  let f be nonnegative-yielding PartFunc of X,REAL;
+  let g be negative-yielding PartFunc of X,REAL;
+  cluster f-g -> positive-yielding;
+end;
+
+registration
+  let X be set;
+  let f, g be nonpositive-yielding PartFunc of X,REAL;
+  cluster f(#)g -> nonnegative-yielding;
+end;
+
+registration
+  let X be set;
+  let f, g be nonnegative-yielding PartFunc of X,REAL;
+  cluster f(#)g -> nonnegative-yielding;
+end;
+
+registration
+  let X be set;
+  let f be nonpositive-yielding PartFunc of X,REAL;
+  let g be nonnegative-yielding PartFunc of X,REAL;
+  cluster f(#)g -> nonpositive-yielding;
+end;
+
+registration
+  let X be set;
+  let f be nonnegative-yielding PartFunc of X,REAL;
+  let g be nonpositive-yielding PartFunc of X,REAL;
+  cluster f(#)g -> nonpositive-yielding;
+end;
+
+registration
+  let X be set;
+  let f be positive-yielding PartFunc of X,REAL;
+  let g be negative-yielding PartFunc of X,REAL;
+  cluster f(#)g -> negative-yielding;
+end;
+
+registration
+  let X be set;
+  let f be negative-yielding PartFunc of X,REAL;
+  let g be positive-yielding PartFunc of X,REAL;
+  cluster f(#)g -> negative-yielding;
+end;
+
+registration
+  let X be set;
+  let f, g be positive-yielding PartFunc of X,REAL;
+  cluster f(#)g -> positive-yielding;
+end;
+
+registration
+  let X be set;
+  let f, g be negative-yielding PartFunc of X,REAL;
+  cluster f(#)g -> positive-yielding;
+end;
+
+registration
+  let X be set;
+  let f, g be non-empty PartFunc of X,REAL;
+  cluster f(#)g -> non-empty;
+end;
+
+registration
+  let X be set;
+  let f be PartFunc of X,REAL;
+  cluster f(#)f -> nonnegative-yielding;
+end;
+
+registration
+  let X be set;
+  let r be non positive (real number);
+  let f be nonpositive-yielding PartFunc of X,REAL;
+  cluster r(#)f -> nonnegative-yielding;
+end;
+
+registration
+  let X be set;
+  let r be non negative (real number);
+  let f be nonnegative-yielding PartFunc of X,REAL;
+  cluster r(#)f -> nonnegative-yielding;
+end;
+
+registration
+  let X be set;
+  let r be non positive (real number);
+  let f be nonnegative-yielding PartFunc of X,REAL;
+  cluster r(#)f -> nonpositive-yielding;
+end;
+
+registration
+  let X be set;
+  let r be non negative (real number);
+  let f be nonpositive-yielding PartFunc of X,REAL;
+  cluster r(#)f -> nonpositive-yielding;
+end;
+
+registration
+  let X be set;
+  let r be positive (real number);
+  let f be negative-yielding PartFunc of X,REAL;
+  cluster r(#)f -> negative-yielding;
+end;
+
+registration
+  let X be set;
+  let r be negative (real number);
+  let f be positive-yielding PartFunc of X,REAL;
+  cluster r(#)f -> negative-yielding;
+end;
+
+registration
+  let X be set;
+  let r be positive (real number);
+  let f be positive-yielding PartFunc of X,REAL;
+  cluster r(#)f -> positive-yielding;
+end;
+
+registration
+  let X be set;
+  let r be negative (real number);
+  let f be negative-yielding PartFunc of X,REAL;
+  cluster r(#)f -> positive-yielding;
+end;
+
+registration
+  let X be set;
+  let r be non zero (real number);
+  let f be non-empty PartFunc of X,REAL;
+  cluster r(#)f -> non-empty;
+end;
+
+registration
+  let X be non empty set;
+  let f, g be nonpositive-yielding PartFunc of X,REAL;
+  cluster f/g -> nonnegative-yielding;
+end;
+
+registration
+  let X be non empty set;
+  let f, g be nonnegative-yielding PartFunc of X,REAL;
+  cluster f/g -> nonnegative-yielding;
+end;
+
+registration
+  let X be non empty set;
+  let f be nonpositive-yielding PartFunc of X,REAL;
+  let g be nonnegative-yielding PartFunc of X,REAL;
+  cluster f/g -> nonpositive-yielding;
+end;
+
+registration
+  let X be non empty set;
+  let f be nonnegative-yielding PartFunc of X,REAL;
+  let g be nonpositive-yielding PartFunc of X,REAL;
+  cluster f/g -> nonpositive-yielding;
+end;
+
+registration
+  let X be non empty set;
+  let f be positive-yielding PartFunc of X,REAL;
+  let g be negative-yielding PartFunc of X,REAL;
+  cluster f/g -> negative-yielding;
+end;
+
+registration
+  let X be non empty set;
+  let f be negative-yielding PartFunc of X,REAL;
+  let g be positive-yielding PartFunc of X,REAL;
+  cluster f/g -> negative-yielding;
+end;
+
+registration
+  let X be non empty set;
+  let f, g be positive-yielding PartFunc of X,REAL;
+  cluster f/g -> positive-yielding;
+end;
+
+registration
+  let X be non empty set;
+  let f, g be negative-yielding PartFunc of X,REAL;
+  cluster f/g -> positive-yielding;
+end;
+
+registration
+  let X be non empty set;
+  let f be PartFunc of X,REAL;
+  cluster f/f -> nonnegative-yielding;
+end;
+
+registration
+  let X be non empty set;
+  let f, g be non-empty PartFunc of X,REAL;
+  cluster f/g -> non-empty;
+end;
+
+registration
+  let X be set;
+  let f be nonpositive-yielding Function of X,REAL;
+  cluster Inv f -> nonpositive-yielding;
+end;
+
+registration
+  let X be set;
+  let f be nonnegative-yielding Function of X,REAL;
+  cluster Inv f -> nonnegative-yielding;
+end;
+
+registration
+  let X be set;
+  let f be positive-yielding Function of X,REAL;
+  cluster Inv f -> positive-yielding;
+end;
+
+registration
+  let X be set;
+  let f be negative-yielding Function of X,REAL;
+  cluster Inv f -> negative-yielding;
+end;
+
+registration
+  let X be set;
+  let f be non-empty Function of X,REAL;
+  cluster Inv f -> non-empty;
+end;
+
+registration
+  let X be set;
+  let f be non-empty Function of X,REAL;
+  cluster -f -> non-empty;
+end;
+
+registration
+  let X be set;
+  let f be nonpositive-yielding Function of X,REAL;
+  cluster -f -> nonnegative-yielding;
+end;
+
+registration
+  let X be set;
+  let f be nonnegative-yielding Function of X,REAL;
+  cluster -f -> nonpositive-yielding;
+end;
+
+registration
+  let X be set;
+  let f be positive-yielding Function of X,REAL;
+  cluster -f -> negative-yielding;
+end;
+
+registration
+  let X be set;
+  let f be negative-yielding Function of X,REAL;
+  cluster -f -> positive-yielding;
+end;
+
+registration
+  let X be set;
+  let f be Function of X,REAL;
+  cluster abs f -> nonnegative-yielding;
+end;
+
+registration
+  let X be set;
+  let f be non-empty Function of X,REAL;
+  cluster abs f -> positive-yielding;
+end;
+
+registration
+  let X be non empty set;
+  let f be nonpositive-yielding Function of X,REAL;
+  cluster f^ -> nonpositive-yielding;
+end;
+
+registration
+  let X be non empty set;
+  let f be nonnegative-yielding Function of X,REAL;
+  cluster f^ -> nonnegative-yielding;
+end;
+
+registration
+  let X be non empty set;
+  let f be positive-yielding Function of X,REAL;
+  cluster f^ -> positive-yielding;
+end;
+
+registration
+  let X be non empty set;
+  let f be negative-yielding Function of X,REAL;
+  cluster f^ -> negative-yielding;
+end;
+
+registration
+  let X be non empty set;
+  let f be non-empty Function of X,REAL;
+  cluster f^ -> non-empty;
+end;
+
+definition
+  let C be set, f be PartFunc of C,REAL;
+  func sqrt f -> PartFunc of C,REAL means
+:: PARTFUN3:def 5
+  dom it = dom f &
+  for x being set st x in dom it holds it.x = sqrt(f.x);
+end;
+
+registration
+  let X be set;
+  let f be nonnegative-yielding Function of X,REAL;
+  cluster sqrt f -> nonnegative-yielding;
+end;
+
+registration
+  let X be set;
+  let f be positive-yielding Function of X,REAL;
+  cluster sqrt f -> positive-yielding;
+end;
+
+registration
+  let X be set,
+      f, g be Function of X, REAL;
+  cluster f+g -> quasi_total;
+  cluster f-g -> quasi_total;
+  cluster f(#)g -> quasi_total;
+end;
+
+registration
+  let X be set,
+      f be Function of X, REAL;
+  cluster -f -> quasi_total;
+  cluster abs f -> quasi_total;
+  cluster sqrt f -> quasi_total;
+end;
+
+registration
+  let X be set,
+      f be Function of X, REAL,
+      r be real number;
+  cluster r(#)f -> quasi_total;
+end;
+
+registration
+  let X be non empty set,
+      f be non-empty Function of X, REAL;
+  cluster f^ -> quasi_total;
+end;
+
+registration
+  let X be non empty set,
+      f be Function of X, REAL,
+      g be non-empty Function of X, REAL;
+  cluster f/g -> quasi_total;
+end;
+
+reserve
+  T for non empty TopSpace,
+  f, g for continuous RealMap of T,
+  r for real number;
+
+registration
+  let T, f, g;
+  cluster f+g -> continuous;
+  cluster f-g -> continuous;
+  cluster f(#)g -> continuous;
+end;
+
+registration
+  let T, f;
+  cluster -f -> continuous;
+end;
+
+registration
+  let T, f;
+  cluster abs f -> continuous;
+end;
+
+registration
+  let T;
+  cluster positive-yielding continuous RealMap of T;
+  cluster negative-yielding continuous RealMap of T;
+end;
+
+registration
+  let T; let f be nonnegative-yielding continuous RealMap of T;
+  cluster sqrt f -> continuous;
+end;
+
+registration
+  let T, f, r;
+  cluster r(#)f -> continuous;
+end;
+
+registration
+  let T; let f be non-empty continuous RealMap of T;
+  cluster f^ -> continuous;
+end;
+
+registration
+  let T, f; let g be non-empty continuous RealMap of T;
+  cluster f/g -> continuous;
+end;

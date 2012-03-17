@@ -1,0 +1,3422 @@
+:: Construction of {G}r\"obner Bases: Avoiding S-Polynomials -- Buchberger's 
+:: First Criterium
+::  by Christoph Schwarzweller
+:: 
+:: Received December 10, 2004
+:: Copyright (c) 2004 Association of Mizar Users
+
+environ
+
+ vocabulary POLYNOM1, POLYNOM7, BOOLE, FUNCT_1, RELAT_1, VECTSP_1, RLVECT_1,
+      ORDINAL1, LATTICES, ANPROJ_1, VECTSP_2, ARYTM_1, REALSET1, GROUP_1,
+      CAT_3, BINOP_1, ARYTM_3, TERMORD, RELAT_2, DICKSON, FINSEQ_1, REWRITE1,
+      TARSKI, FINSET_1, POLYRED, BAGORDER, ORDERS_1, WAYBEL_4, CARD_1, FUNCT_4,
+      ALGSEQ_1, ALGSTR_1, GROEB_1, GROEB_2, FUNCOP_1, MCART_1, GROEB_3,
+      CONNSP_3, FUNCT_7, QC_LANG1;
+ notation TARSKI, SUBSET_1, RELAT_1, XBOOLE_0, RELAT_2, CARD_1, ORDINAL1,
+      XCMPLX_0, XREAL_0, REAL_1, NAT_1, FUNCT_1, RELSET_1, FUNCT_2, FUNCT_4,
+      PRE_CIRC, STRUCT_0, GROUP_1, ALGSTR_1, RLVECT_1, FINSET_1, MCART_1,
+      REALSET1, REALSET2, FINSEQ_1, VECTSP_2, VECTSP_1, POLYNOM2, POLYNOM7,
+      ORDERS_1, ORDERS_2, FUNCT_7, REWRITE1, BAGORDER, TERMORD, GROEB_1,
+      POLYRED, GROEB_2, WAYBEL_4, POLYNOM1;
+ constructors PRE_CIRC, REAL_1, CQC_LANG, WAYBEL_4, REWRITE1, TERMORD, POLYRED,
+      GROEB_1, GROEB_2, BAGORDER, STRUCT_0, VECTSP_1, VECTSP_2, GROUP_1,
+      RLVECT_1, POLYNOM1, FUNCT_7, POLYNOM2, ORDINAL1;
+ clusters STRUCT_0, FINSET_1, RELSET_1, VECTSP_1, VECTSP_2, ALGSTR_1, POLYNOM1,
+      POLYNOM2, NAT_1, INT_1, BINOM, POLYNOM7, TERMORD, POLYRED, CARD_1,
+      GROUP_1, RLVECT_1, XREAL_0, XCMPLX_0, MONOID_0;
+ requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
+ definitions TARSKI;
+ theorems TARSKI, VECTSP_1, POLYNOM1, REAL_1, RLVECT_1, NAT_1, INT_1, POLYNOM7,
+      REWRITE1, AXIOMS, XBOOLE_0, TERMORD, CARD_1, FUNCT_1, XBOOLE_1, POLYRED,
+      FUNCT_2, RELAT_1, BAGORDER, ALGSTR_1, CARD_2, GROEB_1, FUNCT_4, FUNCOP_1,
+      FINSET_1, VECTSP_2, RELSET_1, WAYBEL_4, MCART_1, XCMPLX_1, GROEB_2,
+      TRIANG_1, GROUP_1, FUNCT_7, POLYNOM2, FINSEQ_3;
+ schemes FUNCT_2, NAT_1, POLYNOM2;
+
+begin :: Preliminaries
+
+theorem bag1:
+for X being set, b1,b2 being bag of X holds (b1 + b2) / b2 = b1
+proof
+let X be set, b1,b2 be bag of X;
+b2 divides b1 + b2 by POLYNOM1:54;
+then b2 + ((b1 + b2) / b2) = b1 + b2 by GROEB_2:def 1;
+then (b2 + ((b1 + b2) / b2)) -' b2 = b1 by POLYNOM1:52;
+hence thesis by POLYNOM1:52;
+end;
+
+theorem bag2:
+for n being Ordinal,
+    T being admissible TermOrder of n,
+    b1,b2,b3 being bag of n
+holds b1 <= b2,T implies b1 + b3 <= b2 + b3,T
+proof
+let n be Ordinal, T be admissible TermOrder of n, b1,b2,b3 be bag of n;
+assume b1 <= b2,T; 
+then [b1,b2] in T by TERMORD:def 2;
+then [b1+b3,b2+b3] in T by BAGORDER:def 7;
+hence thesis by TERMORD:def 2;
+end;
+
+theorem bag5:
+for n being Ordinal,
+    T being TermOrder of n,
+    b1,b2,b3 being bag of n
+holds b1 <= b2,T & b2 < b3,T implies b1 < b3,T
+proof
+let n be Ordinal, T be TermOrder of n, b1,b2,b3 be bag of n;
+assume AS: b1 <= b2,T & b2 < b3,T;
+then A: b2 <= b3,T & b2 <> b3 by TERMORD:def 3;
+then B: b1 <= b3,T by AS,TERMORD:8;
+b1 <> b3 by AS,A,TERMORD:7;
+hence thesis by B,TERMORD:def 3;
+end;
+
+theorem bag6:
+for n being Ordinal,
+    T being admissible TermOrder of n,
+    b1,b2,b3 being bag of n
+holds b1 < b2,T implies b1 + b3 < b2 + b3,T
+proof
+let n be Ordinal, T be admissible TermOrder of n, b1,b2,b3 be bag of n;
+assume AS: b1 < b2,T;
+then b1 <= b2,T & b1 <> b2 by TERMORD:def 3;
+then [b1,b2] in T by TERMORD:def 2;
+then [b1+b3,b2+b3] in T by BAGORDER:def 7;
+then B: b1+b3 <= b2+b3,T by TERMORD:def 2;
+now assume C: b1+b3 = b2+b3;
+  b1 = (b1 + b3) -' b3 by POLYNOM1:52
+    .= b2 by C,POLYNOM1:52;
+  hence contradiction by AS,TERMORD:def 3;
+  end;
+hence thesis by B,TERMORD:def 3;
+end;
+
+theorem bag4:
+for n being Ordinal, T being admissible TermOrder of n,
+    b1,b2,b3,b4 being bag of n
+holds (b1 < b2,T & b3 <= b4,T) implies b1 + b3 < b2 + b4,T
+proof
+let n be Ordinal, T be admissible TermOrder of n, b1,b2,b3,b4 be bag of n;
+assume AS: b1 < b2,T & b3 <= b4,T;
+then b1 <= b2,T & b1 <> b2 by TERMORD:def 3;
+then [b1,b2] in T & [b3,b4] in T by AS,TERMORD:def 2;
+then [b1+b3,b2+b3] in T & [b2+b3,b2+b4] in T by BAGORDER:def 7;
+then C: b1+b3 <= b2+b3,T & b2+b3 <= b2+b4,T by TERMORD:def 2;
+then B: b1+b3 <= b2+b4,T by TERMORD:8;
+now assume D: b1+b3 = b2+b4;
+  b4 = b4 + b2 -' b2 & b3 = b3 + b2 -' b2 by POLYNOM1:52;
+  then G: b1+b4 = b2+b4 by D,C,TERMORD:7;
+  b1 = b1 + b4 -' b4 & b2 = b2 + b4 -' b4 by POLYNOM1:52;
+  hence contradiction by AS,G,TERMORD:def 3;
+  end;
+hence thesis by B,TERMORD:def 3;
+end;
+ 
+theorem bag10:
+for n being Ordinal,
+    T being admissible TermOrder of n,
+    b1,b2,b3,b4 being bag of n
+holds (b1 <= b2,T & b3 < b4,T) implies b1 + b3 < b2 + b4,T
+proof
+let n be Ordinal, T be admissible TermOrder of n, b1,b2,b3,b4 be bag of n;
+assume AS: b1 <= b2,T & b3 < b4,T;
+then b3 <= b4,T & b3 <> b4 by TERMORD:def 3;
+then [b1,b2] in T & [b3,b4] in T by AS,TERMORD:def 2;
+then [b1+b3,b2+b3] in T & [b2+b3,b2+b4] in T by BAGORDER:def 7;
+then C: b1+b3 <= b2+b3,T & b2+b3 <= b2+b4,T by TERMORD:def 2;
+then B: b1+b3 <= b2+b4,T by TERMORD:8;
+now assume b1+b3 = b2+b4;
+  then F: b2+b4 = b2 +b3 by C,TERMORD:7;
+  b4 = b4 + b2 -' b2 & b3 = b3 + b2 -' b2 by POLYNOM1:52;
+  hence contradiction by AS,F,TERMORD:def 3;
+  end;
+hence thesis by B,TERMORD:def 3;
+end;
+
+begin :: More on Polynomials
+
+theorem FF1:
+for n being Ordinal,
+    T being connected TermOrder of n,
+    L being add-associative right_complementable right_zeroed
+            unital distributive domRing-like (non trivial doubleLoopStr),
+    m1,m2 being non-zero Monomial of n,L
+holds term(m1*'m2) = term(m1) + term(m2)
+proof
+let n be Ordinal, T be connected TermOrder of n,
+    L be add-associative right_complementable right_zeroed
+         unital distributive domRing-like (non trivial doubleLoopStr),
+    m1,m2 be non-zero Monomial of n,L;
+m1 <> 0_(n,L) & m2 <> 0_(n,L) by POLYNOM7:def 2;
+then A: HC(m1,T) <> 0.L & HC(m2,T) <> 0.L by TERMORD:17;
+then reconsider a = coefficient(m1), b = coefficient(m2)
+                   as non-zero Element of L by TERMORD:23;
+coefficient(m1) <> 0.L & coefficient(m2) <> 0.L by A,TERMORD:23;
+then a * b <> 0.L by VECTSP_2:def 5;
+then reconsider c = a * b as non-zero Element of L by RLVECT_1:def 13;
+m1 = Monom(a,term(m1)) & m2 = Monom(b,term(m2)) by POLYNOM7:11;
+then term(m1 *' m2) = term(Monom(c,term(m1)+term(m2)))
+ by TERMORD:3;
+hence thesis by POLYNOM7:10;
+end;
+
+theorem FF2:
+for n being Ordinal,
+    T being connected TermOrder of n,
+    L being add-associative right_complementable right_zeroed
+            unital distributive domRing-like (non trivial doubleLoopStr),
+    p being Polynomial of n,L,
+    m being non-zero Monomial of n,L,
+    b being bag of n 
+holds b in Support(p) iff term(m) + b in Support(m*'p)
+proof
+let n be Ordinal, T be connected TermOrder of n,
+    L be add-associative right_complementable right_zeroed
+         unital distributive domRing-like (non trivial doubleLoopStr),
+    p be Polynomial of n,L, m be non-zero Monomial of n,L, b be bag of n;
+m <> 0_(n,L) by POLYNOM7:def 2;
+then Support m <> {} by POLYNOM7:1;
+then Support m = {term(m)} by POLYNOM7:7;
+then term(m) in Support m by TARSKI:def 1;
+then H1: m.term(m) <> 0.L by POLYNOM1:def 9;
+H2: (m*'p).(term(m) + b) = m.term(m) * p.b by POLYRED:7;
+K: now assume b in Support p;
+   then K1: p.b <> 0.L by POLYNOM1:def 9;
+   K2: term(m) + b is Element of Bags n by POLYNOM1:def 14;
+   (m*'p).(term(m) + b) <> 0.L by H1,H2,K1,VECTSP_2:def 5;
+   hence term(m) + b in Support(m*'p) by K2,POLYNOM1:def 9;
+end;
+now assume term(m) + b in Support(m*'p);
+  then m.term(m) * p.b <> 0.L by H2,POLYNOM1:def 9;
+  then K3: p.b <> 0.L by VECTSP_1:36;
+  b is Element of Bags n by POLYNOM1:def 14;
+  hence b in Support p by K3,POLYNOM1:def 9;
+  end;
+hence thesis by K;
+end;
+
+theorem z100:
+for n being Ordinal, 
+    T being connected TermOrder of n,
+    L being add-associative right_complementable right_zeroed
+            unital distributive domRing-like (non trivial doubleLoopStr),
+    p being Polynomial of n,L, 
+    m being non-zero Monomial of n,L holds 
+Support(m*'p) = { term(m) + b where b is Element of Bags n : b in Support p }
+proof
+let n be Ordinal, T be connected TermOrder of n,
+    L be add-associative right_complementable right_zeroed
+         unital distributive domRing-like (non trivial doubleLoopStr),
+    p be Polynomial of n,L, m be non-zero Monomial of n,L;
+H1: Support(m*'p) c= {s + t where s,t is Element of Bags n :
+                       s in Support m & t in Support p} by TERMORD:30;
+m <> 0_(n,L) by POLYNOM7:def 2; then Support m <> {} by POLYNOM7:1;
+then H2: Support m = {term(m)} by POLYNOM7:7;
+K: now let u be set;
+   assume K1: u in Support(m*'p);
+   then reconsider u' = u as Element of Bags n;
+   u' in {s + t where s,t is Element of Bags n :
+                       s in Support m & t in Support p} by K1,H1;
+   then consider s,t being Element of Bags n such that
+   K2: u' = s + t & s in Support m & t in Support p;
+   u' = term(m) + t by K2,H2,TARSKI:def 1;
+   hence u in {term(m)+b where b is Element of Bags n : b in Support p} by K2;
+   end;
+now let u be set;
+  assume u in {term(m)+b where b is Element of Bags n : b in Support p};
+  then consider t being Element of Bags n such that
+  K2: u = term(m) + t & t in Support p;
+  thus u in Support(m*'p) by FF2,K2;
+  end;
+hence thesis by K,TARSKI:2;
+end;
+
+theorem FF3:
+for n being Ordinal,
+    T being connected admissible TermOrder of n,
+    L being add-associative right_complementable left_zeroed right_zeroed
+            unital distributive domRing-like (non trivial doubleLoopStr),
+    p being Polynomial of n,L,
+    m being non-zero Monomial of n,L
+holds card Support(p) = card Support(m*'p)
+proof
+let n be Ordinal, T be connected admissible TermOrder of n,
+    L be add-associative right_complementable left_zeroed right_zeroed
+            unital distributive domRing-like (non trivial doubleLoopStr),
+    p be Polynomial of n,L, m be non-zero Monomial of n,L;
+H0: Support(m*'p) c= {s + t where s,t is Element of Bags n :
+                       s in Support m & t in Support p} by TERMORD:30;
+m <> 0_(n,L) by POLYNOM7:def 2; then Support m <> {} by POLYNOM7:1;
+then HH: Support m = {term(m)} by POLYNOM7:7;
+  defpred P[set,set] means $2 = term(m) + In($1,Bags n)@;
+A: for x being set st x in Support(p)
+   ex y being set st y in Support(m*'p) & P[x,y]
+   proof
+   let x be set; assume A1:x in Support p; then
+   reconsider x' = x as Element of Bags n;
+B: x' = In(x',Bags n) by FUNCT_7:def 1
+     .= In(x',Bags n)@ by POLYNOM2:def 3;
+   term(m) + x' in Support(m*'p) by A1,FF2;
+   hence ex y being set st y in Support(m*'p) & P[x,y] by B;
+   end;
+consider f being Function of Support(p),Support(m*'p) such that
+H: for x being set st x in Support(p) holds P[x,f.x] from FUNCT_2:sch 1(A);
+B: now assume AS: Support(m*'p) = {};
+    now assume Support p <> {};
+    then p <> 0_(n,L) by POLYNOM7:1;
+    then reconsider p' = p as non-zero Polynomial of n,L by POLYNOM7:def 2;
+    HT(m,T) + HT(p',T) in Support(m*'p') by TERMORD:29;
+    hence contradiction by AS;
+    end;
+  hence Support(p) = {}; 
+  end;
+then H1: Support(p) c= dom f by FUNCT_2:def 1;
+now let x1,x2 be set;
+  assume AS: x1 in Support(p) & x2 in Support(p) & f.x1 = f.x2;
+  then reconsider x1' = x1, x2' = x2 as Element of Bags n;
+J: x2' = In(x2',Bags n) by FUNCT_7:def 1
+     .= In(x2',Bags n)@ by POLYNOM2:def 3;
+  x1' = In(x1',Bags n) by FUNCT_7:def 1
+     .= In(x1',Bags n)@ by POLYNOM2:def 3; then
+  B: term(m) + x1' = f.x2' by AS,H .= term(m) + x2' by J,AS,H;
+  thus x1 = x2' + term(m) -' term(m) by B,POLYNOM1:52
+         .= x2 by POLYNOM1:52;
+  end;
+then f is one-to-one by B,FUNCT_2:25;
+then H2: Support(p),f.:Support(p) are_equipotent by H1,CARD_1:60;
+A: for u being set holds u in f.:Support(p) implies u in Support(m*'p);
+now let u be set; assume AS: u in Support(m*'p);
+  then reconsider u' = u as Element of Bags n;
+  u' in {s + t where s,t is Element of Bags n :
+                       s in Support m & t in Support p} by AS,H0;
+  then consider s,t being Element of Bags n such that
+  A2: u' = s + t & s in Support m & t in Support p;
+J: t = In(t,Bags n) by FUNCT_7:def 1
+     .= In(t,Bags n)@ by POLYNOM2:def 3;
+  u' = term(m) + t by A2,HH,TARSKI:def 1;
+  then A3: u' = f.t by A2,H,J;
+  t in dom f by A2,B,FUNCT_2:def 1;
+  hence u in f.:Support(p) by A3,FUNCT_1:def 12;
+  end;
+then f.:Support(p) = Support(m*'p) by A,TARSKI:2;
+hence thesis by H2,CARD_1:21;
+end;
+
+L1:for n being Ordinal, T being connected TermOrder of n,
+    L being add-associative right_complementable right_zeroed
+            commutative associative left_unital right_unital distributive
+            Field-like (non trivial doubleLoopStr),
+    f be Polynomial of n,L, g be set, P be Subset of Polynom-Ring(n,L)
+holds PolyRedRel(P,T) reduces f,g implies g is Polynomial of n,L
+proof
+let n be Ordinal, T be connected TermOrder of n,
+    L be add-associative right_complementable right_zeroed
+         commutative associative left_unital right_unital distributive
+         Field-like (non trivial doubleLoopStr),
+    f be Polynomial of n,L, g be set, P be Subset of Polynom-Ring(n,L);
+set R = PolyRedRel(P,T); assume R reduces f,g;
+then consider p being RedSequence of R such that
+A1: p.1 = f & p.len p = g by REWRITE1:def 3;
+len p > 0 by REWRITE1:def 2;
+then A2: 1 <= len p by NAT_1:39;
+then reconsider l = len p - 1 as Nat by INT_1:18;
+1 <= l + 1 & l + 1 <= len p by NAT_1:37;
+then A4: l + 1 in dom p by FINSEQ_3:27;
+set h = p.l; per cases;
+suppose len p = 1; hence thesis by A1; end;
+suppose len p <> 1;
+  then 0 + 1 < l + 1 by A2,REAL_1:def 5;
+  then 1 <= l & l <= l + 1 by NAT_1:38;
+  then l in dom p by FINSEQ_3:27;
+  then [h,g] in R by A1,A4,REWRITE1:def 2;
+  then consider h',g' being set such that
+  A5: [h,g] = [h',g'] &
+      h' in (the carrier of Polynom-Ring(n,L)) \ {0_(n,L)} &
+      g' in (the carrier of Polynom-Ring(n,L)) by RELSET_1:6;
+    g = [h',g']`2 by A5,MCART_1:def 2 .= g' by MCART_1:def 2;
+  hence g is Polynomial of n,L by A5,POLYNOM1:def 27;
+end; end;
+
+theorem poly0:
+for n being Ordinal,
+    T being connected TermOrder of n,
+    L being add-associative right_complementable right_zeroed
+            (non trivial LoopStr)
+holds Red(0_(n,L),T) = 0_(n,L)
+proof
+let n be Ordinal, T be connected TermOrder of n,
+    L be add-associative right_complementable right_zeroed
+         (non trivial LoopStr);
+set e = 0_(n,L), h = HM(e,T);
+HC(h,T) = HC(e,T) by TERMORD:27 .= e.(HT(e,T)) by TERMORD:def 7
+    .= 0.L by POLYNOM1:81; then h = 0_(n,L) by TERMORD:17;
+hence Red(e,T) = e - 0_(n,L) by TERMORD:def 9 .= 0_(n,L) by POLYRED:4;
+end;
+
+theorem polyZ:
+for n being Ordinal,
+    T being connected TermOrder of n,
+    L being Abelian add-associative right_zeroed right_complementable
+            commutative unital distributive (non trivial doubleLoopStr),
+    p,q being Polynomial of n,L 
+holds p - q = 0_(n,L) implies p = q
+proof
+let n be Ordinal, T be connected TermOrder of n,
+    L be Abelian add-associative right_zeroed right_complementable
+         commutative unital distributive (non trivial doubleLoopStr),
+    p,q be Polynomial of n,L;
+assume p - q = 0_(n,L);
+hence q = q + (p - q) by POLYNOM1:82 .= q + (p + -q) by POLYNOM1:def 23
+       .= (q + -q) + p by POLYNOM1:80 .= 0_(n,L) + p by POLYRED:3
+       .= p by POLYRED:2;
+end;
+
+theorem poly1:
+for X being set,
+    L being add-associative right_zeroed right_complementable
+            (non empty LoopStr)
+holds -(0_(X,L)) = 0_(X,L)
+proof
+let X be set, L be add-associative right_zeroed right_complementable
+              (non empty LoopStr);
+set o = -(0_(X,L)), e = 0_(X,L);
+A1: dom o = Bags X by FUNCT_2:def 1 .= dom e by FUNCT_2:def 1;
+now let x be set;
+  assume x in dom o; then reconsider b = x as bag of X by POLYNOM1:def 14;
+  o.b = -(e.b) by POLYNOM1:def 22 .= -(0.L) by POLYNOM1:81
+     .= 0.L by RLVECT_1:25 .= e.b by POLYNOM1:81;
+  hence o.x = e.x;
+  end;
+hence thesis by A1,FUNCT_1:9;
+end;
+
+theorem poly2:
+for X being set,
+    L being add-associative right_zeroed right_complementable
+            (non empty LoopStr),
+    f being Series of X,L
+holds 0_(X,L) - f = -f
+proof
+let X be set, L be add-associative right_zeroed right_complementable
+         (non empty LoopStr), f be Series of X,L;
+set p = 0_(X,L) - f;
+A: dom p = Bags X by FUNCT_2:def 1 .= dom(-f) by FUNCT_2:def 1;
+now let x be set; assume x in dom p;
+  then reconsider b = x as Element of Bags X;
+  p.b = (0_(X,L) + -f).b by POLYNOM1:def 23
+     .= 0_(X,L).b + (-f).b by POLYNOM1:def 21
+     .= 0.L + (-f).b by POLYNOM1:81
+     .= (-f).b by ALGSTR_1:def 5;
+  hence p.x = (-f).x;
+end;
+hence thesis by A,FUNCT_1:9;
+end;
+
+theorem poly3:
+for n being Ordinal,
+    T being connected TermOrder of n,
+    L being add-associative right_complementable right_zeroed
+            (non trivial doubleLoopStr),
+    p being Polynomial of n,L
+holds p - Red(p,T) = HM(p,T)
+proof
+let n be Ordinal, T be connected TermOrder of n,
+    L be add-associative right_complementable right_zeroed
+         (non trivial doubleLoopStr),
+    p be Polynomial of n,L;
+thus p - Red(p,T)
+   = (HM(p,T) + Red(p,T)) - Red(p,T) by TERMORD:38
+  .= (HM(p,T) + Red(p,T)) + (-Red(p,T)) by POLYNOM1:def 23
+  .= HM(p,T) + (Red(p,T) + (-Red(p,T))) by POLYNOM1:80
+  .= HM(p,T) + 0_(n,L) by POLYRED:3
+  .= HM(p,T) by POLYNOM1:82;
+end;
+
+registration
+let n be Ordinal, 
+    L be add-associative right_complementable right_zeroed
+         (non empty LoopStr),
+    p be Polynomial of n,L;
+cluster Support p -> finite;
+coherence by POLYNOM1:def 10;
+end;
+
+definition
+let n be Ordinal,
+    L be right_zeroed add-associative right_complementable
+         unital distributive (non trivial doubleLoopStr),
+    p,q be Polynomial of n,L;
+redefine func {p,q} -> non empty finite Subset of Polynom-Ring(n,L);
+coherence
+ proof
+  now let u be set; assume AS: u in {p,q};
+   now per cases by AS,TARSKI:def 2;
+   case u = p;
+     hence u in the carrier of Polynom-Ring(n,L) by POLYNOM1:def 27;
+     end;
+   case u = q;
+     hence u in the carrier of Polynom-Ring(n,L) by POLYNOM1:def 27;
+     end;
+   end;
+   hence u in the carrier of Polynom-Ring(n,L);
+   end;
+ hence thesis by TARSKI:def 3;
+ end;
+end;
+
+begin :: Restriction and Splitting of Polynomials
+ 
+definition
+let X be set,
+    L be non empty ZeroStr,
+    s be Series of X,L,
+    Y be Subset of Bags X;
+func s|Y -> Series of X,L equals :defe:
+  s +* ((Support s \ Y) --> 0.L);
+coherence
+ proof
+ set m = (Support s \ Y) --> 0.L; set r = s +* m;
+ B: dom s = Bags X by FUNCT_2:def 1;
+ C: dom m = Support s \ Y by FUNCOP_1:19;
+ then D: dom r = Bags X \/ (Support s \ Y)  by B,FUNCT_4:def 1;
+ now let u be set; assume u in Support s \ Y;
+   then u in Support s by XBOOLE_0:def 4;
+   hence u in Bags X;
+   end;
+ then Support s \ Y c= Bags X by TARSKI:def 3;
+ then A: dom r = Bags X by D,XBOOLE_1:12;
+ now let x be set; assume x in Bags X;
+   then reconsider x' = x as Element of Bags X;
+   now per cases;
+   case G: x' in dom m;
+     then r.x' = m.x' by FUNCT_4:14
+              .= 0.L by G,C,FUNCOP_1:13;
+     hence r.x in the carrier of L;
+     end;
+   case not(x in dom m);
+     then r.x' = s.x' by FUNCT_4:12;
+     hence r.x in the carrier of L;
+     end;
+   end;
+   hence r.x in the carrier of L;
+ end;
+ hence thesis by A,FUNCT_2:5;
+ end;
+end;
+
+sp0a:for X being set, L being non empty ZeroStr,
+    s being Series of X,L, Y being Subset of Bags X 
+holds Support(s|Y) c= Support s
+proof
+let X be set, L be non empty ZeroStr,
+    s be Series of X,L, Y be Subset of Bags X ;
+set m = (Support s \ Y) --> 0.L; set r = s +* m;
+H: r = s|Y by defe;
+C: dom m = Support s \ Y by FUNCOP_1:19;
+  let u be set; assume AS: u in Support(s|Y);
+  then reconsider u' = u as Element of Bags X;
+  A: r.u' <> 0.L by AS,H,POLYNOM1:def 9;
+  now per cases;
+  case u' in dom m;
+     hence u' in Support s by C,XBOOLE_0:def 4;
+    end;
+  case not u' in dom m;
+     hence s.u' <> 0.L by A,FUNCT_4:12;
+    end;
+  end;
+  hence u in Support s by POLYNOM1:def 9;
+end;
+
+registration
+let n be Ordinal,
+    L be non empty ZeroStr,
+    p be Polynomial of n,L,
+    Y be Subset of Bags n;
+cluster p|Y -> finite-Support;
+coherence
+ proof
+ A: Support(p|Y) c= Support p by sp0a;
+ Support p is finite by POLYNOM1:def 10;
+ then Support(p|Y) is finite by A,FINSET_1:13;
+ hence thesis by POLYNOM1:def 10;
+ end;
+end;
+
+theorem sp0:
+for X being set,
+    L being non empty ZeroStr,
+    s being Series of X,L,
+    Y being Subset of Bags X
+holds Support s|Y = (Support s) /\ Y &
+      for b being bag of X st b in Support s|Y holds (s|Y).b = s.b
+proof
+let X be set, L be non empty ZeroStr,
+    s be Series of X,L, Y be Subset of Bags X;
+set m = (Support s \ Y) --> 0.L; set r = s +* m;
+H: r = s|Y by defe;
+C: dom m = Support s \ Y by FUNCOP_1:19;
+K: now let u be set; assume u in Support s /\ Y;
+   then A: u in Support s & u in Y by XBOOLE_0:def 3;
+   then reconsider u' = u as Element of Bags X;
+   not(u in Support s \ Y) by A,XBOOLE_0:def 4;
+   then r.u' = s.u' by C,FUNCT_4:12;
+   then r.u' <> 0.L by A,POLYNOM1:def 9;
+   hence u in Support s|Y by H,POLYNOM1:def 9;
+   end;
+now let u be set; assume AS: u in Support(s|Y);
+  then reconsider u' = u as Element of Bags X;
+  A: r.u' <> 0.L by AS,H,POLYNOM1:def 9;
+  C: dom m = Support s \ Y by FUNCOP_1:19;
+  G: now assume G2: u' in dom m;
+     then r.u' = m.u' by FUNCT_4:14
+              .= 0.L by G2,C,FUNCOP_1:13;
+     hence contradiction by AS,H,POLYNOM1:def 9;
+     end;
+  then s.u' <> 0.L by A,FUNCT_4:12;
+  then G1: u' in Support s by POLYNOM1:def 9;
+  u' in Y by C,G,G1,XBOOLE_0:def 4;
+  hence u in (Support s) /\ Y by G1,XBOOLE_0:def 3;
+  end;
+hence D1: Support s|Y = Support s /\ Y by K,TARSKI:2;
+now let b be bag of X; assume b in Support s|Y;
+  then b in Support s & b in Y by D1,XBOOLE_0:def 3;
+  then not(b in dom m) by C,XBOOLE_0:def 4;
+  hence (s|Y).b = s.b by H,FUNCT_4:12;
+  end;
+hence thesis;
+end;
+
+theorem
+for X being set,
+    L being non empty ZeroStr,
+    s being Series of X,L,
+    Y being Subset of Bags X 
+holds Support(s|Y) c= Support s by sp0a;
+
+theorem
+for X being set,
+    L being non empty ZeroStr,
+    s being Series of X,L
+holds s|(Support s) = s & s|({} Bags X) = 0_(X,L)
+proof
+let X be set, L be non empty ZeroStr,
+    s be Series of X,L; set r = s|(Support s);
+B: r = s +* ((Support s \ Support s) --> 0.L) by defe
+    .= s +* ({} --> 0.L) by XBOOLE_1:37;
+dom({} --> 0.L) = {} by FUNCOP_1:16;
+hence r = s +* {} by B,RELAT_1:64
+       .= s by FUNCT_4:22;
+set e = s|({} Bags X);
+C: e = s +* ((Support s \ ({} Bags X)) --> 0.L) by defe
+    .= s +* ((Support s) --> 0.L);
+C1: dom((Support s) --> 0.L) = Support s by FUNCOP_1:19;
+D: dom e = Bags X by FUNCT_2:def 1 .= dom(0_(X,L)) by FUNCT_2:def 1;
+now let u be set; assume u in dom e;
+  then reconsider u' = u as Element of Bags X;
+  now per cases;
+  case G: u' in Support s;
+    then e.u' = ((Support s) --> 0.L).u' by C1,C,FUNCT_4:14
+             .= 0.L by G,FUNCOP_1:13;
+    hence e.u' = 0_(X,L).u' by POLYNOM1:81;
+    end;
+  case G: not(u' in Support s);
+    then e.u' = s.u' by C,C1,FUNCT_4:12;
+    then e.u' = 0.L by G,POLYNOM1:def 9;
+    hence e.u' = 0_(X,L).u' by POLYNOM1:81;
+    end;
+  end;
+  hence e.u = 0_(X,L).u;
+  end; 
+hence thesis by D,FUNCT_1:9;
+end;
+
+definition
+let n be Ordinal,
+    T be connected TermOrder of n,
+    L be add-associative right_zeroed right_complementable
+         (non empty LoopStr),
+    p be Polynomial of n,L,
+    i be Nat such that AS:i <= card(Support p);
+func Upper_Support(p,T,i) -> finite Subset of Bags n means :defups:
+  it c= Support p & card it = i & 
+  for b,b' being bag of n 
+  st b in it & b' in Support p & b <= b',T holds b' in it;
+existence
+ proof
+ defpred P[Nat] means $1 > card(Support p) or
+ ex M being finite Subset of Bags n 
+ st M c= Support p & card M = $1 & 
+    for b,b' being bag of n 
+    st b in M & b' in Support p & b <= b',T holds b' in M;
+ IA: P[0]
+     proof
+     ex M being finite Subset of Bags n st M c= Support p & card M = 0 & 
+     for b,b' being bag of n 
+              st b in M & b' in Support p & b <= b',T holds b' in M
+       proof
+       set M = {} Bags n; take M;
+       thus thesis by XBOOLE_1:2,CARD_1:47;
+       end;
+     hence thesis;
+     end;
+ IS: now let k be Nat; assume A: P[k];
+     k + 1 > card(Support p) or
+     ex M being finite Subset of Bags n
+       st M c= Support p & card M = k + 1 & 
+          for b,b' being bag of n 
+          st b in M & b' in Support p & b <= b',T holds b' in M
+       proof
+       assume B: not k + 1 > card(Support p);
+       k <= k + 1 by NAT_1:29;
+       then consider M1 being finite Subset of Bags n such that
+       IV: M1 c= Support p & card M1 = k & 
+           for b,b' being bag of n 
+           st b in M1 & b' in Support p & b <= b',T holds b' in M1 
+         by A,B,AXIOMS:22;
+       IV1: for u being set holds u in M1 implies u in Support p by IV;
+       set G = Support p \ M1;
+       now let u be set; assume u in G;
+          then u in Support p by XBOOLE_0:def 4;
+          hence u in Bags n;
+          end;
+       then reconsider G as Subset of Bags n by TARSKI:def 3;
+       now assume G = {};
+         then Support p c= M1 by XBOOLE_1:37;
+         then for u being set holds u in Support p implies u in M1;
+         then card Support p = k by IV,IV1,TARSKI:2;
+         hence contradiction by B,NAT_1:41;
+         end;
+       then reconsider G as non empty finite Subset of Bags n;
+       set R = RelStr(#Bags n,T#);
+       consider x being Element of R such that 
+       C1: x in G & x is_maximal_wrt G, the InternalRel of R by BAGORDER:7;
+       reconsider b = x as bag of n by POLYNOM1:def 14;
+       C: now let b' be bag of n; assume C3: b' in G;
+         now per cases;
+         case b' = b;
+           hence b' <= b,T by TERMORD:6;
+           end;
+         case b' <> b;
+           then not [b,b'] in T by C3,C1,WAYBEL_4:def 24;
+           then not(b <= b',T) by TERMORD:def 2;
+           then b' < b,T by TERMORD:5;
+           hence b' <= b,T by TERMORD:def 3;
+           end;
+         end;
+         hence b' <= b,T;
+         end;
+       set M = M1 \/ {b};
+       now let u be set; assume u in {b};
+         then u = b by TARSKI:def 1;
+         hence u in Bags n;
+         end;
+       then {b} c= Bags n by TARSKI:def 3;
+       then M c= Bags n \/ Bags n by XBOOLE_1:13;
+       then reconsider M as finite Subset of Bags n;
+       now let u be set; assume A: u in M;
+         now per cases by A,XBOOLE_0:def 2;
+         case u in M1;
+           hence u in Support p by IV;
+           end;
+         case u in {b};
+           then u in G by C1,TARSKI:def 1;
+           hence u in Support p by XBOOLE_0:def 4;
+           end;
+         end;
+         hence u in Support p;
+         end;
+       then E1: M c= Support p by TARSKI:def 3;
+       not(b in M1) by C1,XBOOLE_0:def 4;
+       then E2: card M = k + 1 by IV,CARD_2:54;
+       now let b1,b2 being bag of n; 
+         assume A: b1 in M & b2 in Support p & b1 <= b2,T;
+         now per cases by A,XBOOLE_0:def 2;
+         case b1 in M1;
+           then b2 in M1 by A,IV;
+           hence b2 in M by XBOOLE_0:def 2;
+           end;
+         case b1 in {b};
+           then A1: b1 = b & b1 in G by C1,TARSKI:def 1;
+           now per cases;
+           case b2 = b1;
+             hence b2 in M by A;
+             end;
+           case b2 <> b1;
+             then A2: b1 < b2,T by A,TERMORD:def 3;
+             now assume b2 in G; 
+               then b2 <= b1,T by A1,C;
+               hence contradiction by A2,TERMORD:5;
+               end;
+             then b2 in M1 by A,XBOOLE_0:def 4;
+             hence b2 in M by XBOOLE_0:def 2;
+             end;
+           end;
+           hence b2 in M;
+           end;
+         end;
+         hence b2 in M;
+         end;
+       hence ex M being finite Subset of Bags n 
+       st M c= Support p & card M = k + 1 & 
+          for b,b' being bag of n 
+          st b in M & b' in Support p & b <= b',T holds b' in M by E1,E2;
+       end;
+     hence P[k+1];
+     end;
+ I: for k being Nat holds P[k] from NAT_1:sch 1(IA,IS);
+ thus thesis by I,AS;
+ end;
+uniqueness
+ proof
+ let F1,F2 be finite Subset of Bags n;
+ assume A1: F1 c= Support p & card F1 = i & 
+            for b,b' being bag of n 
+            st b in F1 & b' in Support p & b <= b',T holds b' in F1;
+ assume A2: F2 c= Support p & card F2 = i &
+            for b,b' being bag of n 
+            st b in F2 & b' in Support p & b <= b',T holds b' in F2;
+ now let u be set; assume AS: u in F1;
+   then reconsider u' = u as Element of Bags n;
+   now assume A5: not(u' in F2);
+     now let x be set; assume AS1: x in F2;
+       then reconsider x' = x as Element of Bags n;
+       now per cases;
+       case u' <= x',T;
+         hence x' in F1 by A1,A2,AS1,AS;
+         end;
+       case not(u' <= x',T);
+         then x' < u',T by TERMORD:5;
+         then x' <= u',T by TERMORD:def 3;
+         hence x' in F1 by A5,AS1,A2,A1,AS;
+         end;
+       end;
+       hence x in F1;
+       end;
+     then F2 c= F1 by TARSKI:def 3;
+     then F2 c< F1 by AS,A5,XBOOLE_0:def 8;
+     hence contradiction by A1,A2,CARD_2:67;
+     end;
+   hence u in F2;
+   end;
+ then F1 c= F2 by TARSKI:def 3;
+ hence thesis by A1,A2,TRIANG_1:3;
+ end;
+end;
+
+definition
+let n be Ordinal,
+    T be connected TermOrder of n,
+    L be add-associative right_zeroed right_complementable
+         (non empty LoopStr),
+    p be Polynomial of n,L,
+    i be Nat;
+func Lower_Support(p,T,i) -> finite Subset of Bags n equals :deflows:
+  Support(p) \ Upper_Support(p,T,i);
+coherence
+ proof
+ Support(p) \ Upper_Support(p,T,i) c= Support p by XBOOLE_1:36;
+ hence thesis by XBOOLE_1:1;
+ end;
+end;
+
+z1:for n being Ordinal, T being connected TermOrder of n,
+    L being add-associative right_zeroed right_complementable
+            (non empty LoopStr),
+    p being Polynomial of n,L, i being Nat st i <= card(Support p)
+holds Lower_Support(p,T,i) c= Support p
+proof
+let n be Ordinal, T be connected TermOrder of n,
+    L be add-associative right_zeroed right_complementable
+         (non empty LoopStr), p be Polynomial of n,L, i be Nat;
+assume i <= card(Support p);
+Lower_Support(p,T,i) = Support(p) \ Upper_Support(p,T,i) by deflows;
+hence thesis by XBOOLE_1:36;
+end;
+
+theorem z2:
+for n being Ordinal,
+    T being connected TermOrder of n,
+    L being add-associative right_zeroed right_complementable
+            (non empty LoopStr),
+    p being Polynomial of n,L,
+    i being Nat st i <= card(Support p)
+holds Upper_Support(p,T,i) \/ Lower_Support(p,T,i) = Support p &
+      Upper_Support(p,T,i) /\ Lower_Support(p,T,i) = {}
+proof
+let n be Ordinal, T be connected TermOrder of n,
+    L be add-associative right_zeroed right_complementable
+         (non empty LoopStr), p be Polynomial of n,L, i be Nat;
+assume i <= card(Support p);
+then H1: Upper_Support(p,T,i) c= Support p by defups;
+thus Upper_Support(p,T,i) \/ Lower_Support(p,T,i)
+   = Upper_Support(p,T,i) \/ (Support(p)\Upper_Support(p,T,i)) by deflows
+  .= Upper_Support(p,T,i) \/ Support p by XBOOLE_1:39
+  .= Support p by H1,XBOOLE_1:12;
+set M = Upper_Support(p,T,i) /\ (Support(p)\Upper_Support(p,T,i));
+now assume H2: M <> {};
+  consider x being Element of M;
+  x in Upper_Support(p,T,i) &
+      x in Support(p)\Upper_Support(p,T,i) by H2,XBOOLE_0:def 3;
+  hence contradiction by XBOOLE_0:def 4;
+  end;
+hence thesis by deflows;
+end;
+
+theorem z3:
+for n being Ordinal,
+    T being connected TermOrder of n,
+    L being add-associative right_zeroed right_complementable
+            (non empty LoopStr),
+    p being Polynomial of n,L,
+    i being Nat st i <= card(Support p)
+for b,b' being bag of n
+st b in Upper_Support(p,T,i) & b' in Lower_Support(p,T,i) holds b' < b,T
+proof
+let n be Ordinal, T be connected TermOrder of n,
+    L be add-associative right_zeroed right_complementable
+         (non empty LoopStr), p be Polynomial of n,L, i be Nat;
+assume AS1: i <= card(Support p);
+let b,b' being bag of n;
+assume AS2: b in Upper_Support(p,T,i) & b' in Lower_Support(p,T,i);
+H0: Lower_Support(p,T,i) c= Support p by AS1,z1;
+now assume b <= b',T;
+  then b' in Upper_Support(p,T,i) by AS2,H0,AS1,defups; then
+  b' in Upper_Support(p,T,i) /\ Lower_Support(p,T,i) by AS2,XBOOLE_0:def 3;
+  hence contradiction by AS1,z2;
+  end;
+hence thesis by TERMORD:5;
+end;
+
+theorem
+for n being Ordinal,
+    T being connected TermOrder of n,
+    L being add-associative right_zeroed right_complementable
+            (non empty LoopStr),
+    p being Polynomial of n,L
+holds Upper_Support(p,T,0) = {} & Lower_Support(p,T,0) = Support p
+proof
+let n be Ordinal, T be connected TermOrder of n,
+    L be add-associative right_zeroed right_complementable
+          (non empty LoopStr), p be Polynomial of n,L;
+set u = Upper_Support(p,T,0), l = Lower_Support(p,T,0);
+0 <= card(Support p) by NAT_1:18;
+then card u = 0 by defups;
+then u,0 are_equipotent by CARD_1:def 5;
+hence u = {} by CARD_1:46;
+hence l = Support p \ {} by deflows .= Support p;
+end;
+
+theorem sup2:
+for n being Ordinal,
+    T being connected TermOrder of n,
+    L being add-associative right_zeroed right_complementable
+            (non empty LoopStr),
+    p being Polynomial of n,L
+holds Upper_Support(p,T,card(Support p)) = Support p &
+      Lower_Support(p,T,card(Support p)) = {}
+proof
+let n be Ordinal, T be connected TermOrder of n,
+    L be add-associative right_zeroed right_complementable
+          (non empty LoopStr), p be Polynomial of n,L;
+set u = Upper_Support(p,T,card(Support p)), 
+    l = Lower_Support(p,T,card(Support p));
+u c= Support p & card u = card(Support p) by defups;
+hence u = Support p by TRIANG_1:3;
+hence l = Support p \ Support p by deflows .= {} by XBOOLE_1:37;
+end;
+
+theorem sup4:
+for n being Ordinal,
+    T being connected TermOrder of n,
+    L being add-associative right_zeroed right_complementable
+            (non trivial LoopStr),
+    p being non-zero Polynomial of n,L,
+    i being Nat st 1 <= i & i <= card(Support p)
+holds HT(p,T) in Upper_Support(p,T,i)
+proof
+let n be Ordinal, T be connected TermOrder of n,
+    L be add-associative right_zeroed right_complementable
+     (non trivial LoopStr), p be non-zero Polynomial of n,L, i be Nat;
+assume AS: 1 <= i & i <= card(Support p);
+set u = Upper_Support(p,T,i);
+A: u c= Support p & card u = i & 
+   for b,b' being bag of n 
+   st b in u & b' in Support p & b <= b',T holds b' in u by AS,defups;
+consider x being Element of u;
+B: u <> {} by AS,defups,CARD_1:78;
+then C: x in u;
+then reconsider x' = x as Element of Bags n;
+p <> 0_(n,L) by POLYNOM7:def 2;
+then Support p <> {} by POLYNOM7:1;
+then D: HT(p,T) in Support p by TERMORD:def 6;
+x' <= HT(p,T),T by A,C,TERMORD:def 6;
+hence HT(p,T) in u by AS,B,D,defups;
+end;
+
+theorem ddeflows:
+for n being Ordinal,
+    T being connected TermOrder of n,
+    L being add-associative right_zeroed right_complementable
+            (non empty LoopStr),
+    p being Polynomial of n,L,
+    i being Nat st i <= card(Support p)
+holds Lower_Support(p,T,i) c= Support p &
+      card Lower_Support(p,T,i) = card(Support p) - i &
+      for b,b' being bag of n
+      st b in Lower_Support(p,T,i) & b' in Support p & b' <= b,T 
+      holds b' in Lower_Support(p,T,i)
+proof
+let n be Ordinal, T be connected TermOrder of n,
+    L be add-associative right_zeroed right_complementable
+         (non empty LoopStr), p be Polynomial of n,L, i being Nat;
+assume AS: i <= card Support p;
+set l = Lower_Support(p,T,i);
+thus l c= Support p by AS,z1;
+H: card l = card(Support p \ Upper_Support(p,T,i)) by deflows;
+Upper_Support(p,T,i) c= Support p by AS,defups;
+hence card l = card(Support p)-card(Upper_Support(p,T,i)) by H,CARD_2:63
+            .= card(Support p) - i by AS,defups;
+now let b,b' be bag of n;
+  assume K1: b in Lower_Support(p,T,i) & b' in Support p & b' <= b,T;
+  then K2: b' in Upper_Support(p,T,i) \/ Lower_Support(p,T,i) by AS,z2;
+  now assume not(b' in Lower_Support(p,T,i));
+    then b' in Upper_Support(p,T,i) by K2,XBOOLE_0:def 2;
+    then b < b',T by K1,AS,z3;
+    hence contradiction by K1,TERMORD:5;
+    end;
+  hence b' in Lower_Support(p,T,i);
+  end;
+hence thesis;
+end;
+
+definition
+let n be Ordinal,
+    T be connected TermOrder of n,
+    L be add-associative right_zeroed right_complementable
+         (non empty LoopStr),
+    p be Polynomial of n,L,
+    i be Nat;
+func Up(p,T,i) -> Polynomial of n,L equals :defup:
+  p|(Upper_Support(p,T,i));
+coherence;
+func Low(p,T,i) -> Polynomial of n,L equals :deflow:
+  p|(Lower_Support(p,T,i));
+coherence;
+end;
+
+spl:for n being Ordinal, T being connected TermOrder of n,
+    L being add-associative right_zeroed right_complementable
+            (non empty LoopStr), p being Polynomial of n,L,
+    i being Nat st i <= card(Support p)
+holds Support(p|(Upper_Support(p,T,i))) = Upper_Support(p,T,i) &
+      Support(p|(Lower_Support(p,T,i))) = Lower_Support(p,T,i)
+proof
+let n be Ordinal, T be connected TermOrder of n,
+    L be add-associative right_zeroed right_complementable
+         (non empty LoopStr), p be Polynomial of n,L, i be Nat;
+assume AS: i <= card(Support p);
+set u = Upper_Support(p,T,i),
+    pu = p|(Upper_Support(p,T,i));
+A: Support pu = (Support p) /\ u by sp0;
+u c= Support p by AS,defups;
+hence Support pu = u by A,XBOOLE_1:28;
+set l = Lower_Support(p,T,i),
+    pl = p|(Lower_Support(p,T,i));
+A: Support pl = (Support p) /\ l by sp0;
+l c= Support p by AS,z1;
+hence Support pl = l by A,XBOOLE_1:28;
+end;
+
+theorem XXX:
+for n being Ordinal,
+    T being connected TermOrder of n,
+    L being add-associative right_zeroed right_complementable
+            (non empty LoopStr),
+    p being Polynomial of n,L,
+    i being Nat st i <= card(Support p)
+holds Support Up(p,T,i) = Upper_Support(p,T,i) &
+      Support Low(p,T,i) = Lower_Support(p,T,i)
+proof
+let n be Ordinal, T be connected TermOrder of n,
+    L be add-associative right_zeroed right_complementable
+         (non empty LoopStr), p be Polynomial of n,L, i be Nat;
+assume AS: i <= card(Support p);
+Up(p,T,i) = p|(Upper_Support(p,T,i)) by defup;
+hence Support Up(p,T,i) = Upper_Support(p,T,i) by AS,spl;
+Low(p,T,i) = p|(Lower_Support(p,T,i)) by deflow;
+hence thesis by AS,spl;
+end;
+
+theorem spl10:
+for n being Ordinal,
+    T being connected TermOrder of n,
+    L being add-associative right_zeroed right_complementable
+            (non empty LoopStr),
+    p being Polynomial of n,L,
+    i being Nat st i <= card(Support p) 
+holds Support(Up(p,T,i)) c= Support(p) & Support(Low(p,T,i)) c= Support(p)
+proof
+let n be Ordinal, T be connected TermOrder of n,
+    L be add-associative right_zeroed right_complementable
+         (non empty LoopStr), p be Polynomial of n,L, i be Nat;
+assume AS: i <= card(Support p);
+A: Up(p,T,i) = p|(Upper_Support(p,T,i)) &
+        Low(p,T,i) = p|(Lower_Support(p,T,i)) by defup,deflow;
+Support(p|(Upper_Support(p,T,i))) = Upper_Support(p,T,i) &
+     Support(p|(Lower_Support(p,T,i))) = Lower_Support(p,T,i) by AS,spl;
+hence thesis by A,AS,defups,ddeflows;
+end;
+
+theorem spl7:
+for n being Ordinal,
+    T being connected TermOrder of n,
+    L being add-associative right_complementable right_zeroed
+            (non trivial LoopStr),
+    p being Polynomial of n,L,
+    i being Nat st 1 <= i & i <= card(Support p) 
+holds Support(Low(p,T,i)) c= Support(Red(p,T))
+proof
+let n be Ordinal, T be connected TermOrder of n,
+    L be add-associative right_complementable right_zeroed
+         (non trivial LoopStr), p be Polynomial of n,L, i be Nat;
+assume AS: 1 <= i & i <= card(Support p);
+now assume Support p = {};
+  then card(Support p) = 0 by CARD_1:def 5;
+  hence contradiction by AS;
+  end;
+then p <> 0_(n,L) by POLYNOM7:1;
+then reconsider p as non-zero Polynomial of n,L by POLYNOM7:def 2;
+set l = Low(p,T,i), sl = Lower_Support(p,T,i);
+Support(Low(p,T,i)) c= Support(p) by AS,spl10; then
+Support(Low(p,T,i)) \ {HT(p,T)} c= Support(p) \ {HT(p,T)} 
+       by XBOOLE_1:33; then
+H1: Support(Low(p,T,i)) \ {HT(p,T)} c= Support(Red(p,T))
+       by TERMORD:36;
+H2: now assume A: HT(p,T) in sl;
+    HT(p,T) in Upper_Support(p,T,i) by AS,sup4;
+    then HT(p,T) in Upper_Support(p,T,i) /\ sl by A,XBOOLE_0:def 3;
+    hence contradiction by AS,z2;
+    end;
+now assume G0: {HT(p,T)} /\ sl <> {};
+  consider u being Element of {HT(p,T)} /\ sl;
+  u in {HT(p,T)} & u in sl by G0,XBOOLE_0:def 3;
+  hence contradiction by H2,TARSKI:def 1;
+  end;
+then {HT(p,T)} misses sl by XBOOLE_0:def 7;
+then sl \ {HT(p,T)} = sl by XBOOLE_1:83 .= Support(Low(p,T,i)) by AS,XXX;
+hence thesis by H1,AS,XXX;
+end;
+
+theorem z55:
+for n be Ordinal,
+    T be connected TermOrder of n,
+    L be add-associative right_zeroed right_complementable
+         (non empty LoopStr),
+    p be Polynomial of n,L,
+    i be Nat st i <= card(Support p)
+for b being bag of n st b in Support p
+holds (b in Support Up(p,T,i) or b in Support Low(p,T,i)) &
+      not(b in Support Up(p,T,i) /\ Support Low(p,T,i))
+proof 
+let n be Ordinal, T be connected TermOrder of n,
+    L be add-associative right_zeroed right_complementable
+         (non empty LoopStr), p be Polynomial of n,L, i be Nat;
+assume AS1: i <= card(Support p);
+let b being bag of n;
+assume AS2: b in Support p;
+Support p = Upper_Support(p,T,i) \/ Lower_Support(p,T,i) by AS1,z2
+         .= Support Up(p,T,i) \/ Lower_Support(p,T,i) by AS1,XXX
+         .= Support Up(p,T,i) \/ Support Low(p,T,i) by AS1,XXX;
+hence b in Support Up(p,T,i) or b in Support Low(p,T,i) by AS2,XBOOLE_0:def 2;
+Support Up(p,T,i) = Upper_Support(p,T,i) &
+   Support Low(p,T,i) = Lower_Support(p,T,i) by AS1,XXX;
+hence thesis by AS1,z2;
+end;
+
+theorem z5: 
+for n being Ordinal,
+    T being connected TermOrder of n,
+    L being add-associative right_zeroed right_complementable
+            (non empty LoopStr),
+    p being Polynomial of n,L,
+    i being Nat st i <= card(Support p)
+for b,b' being bag of n 
+st b in Support Low(p,T,i) & b' in Support Up(p,T,i) holds b < b',T
+proof
+let n be Ordinal, T be connected TermOrder of n,
+    L be add-associative right_zeroed right_complementable
+         (non empty LoopStr), p be Polynomial of n,L, i be Nat;
+assume AS1: i <= card(Support p);
+let b,b' be bag of n ;
+assume AS2: b in Support Low(p,T,i) & b' in Support Up(p,T,i);
+Support Up(p,T,i) = Upper_Support(p,T,i) &
+Support Low(p,T,i) = Lower_Support(p,T,i) by AS1,XXX;
+hence thesis by AS2,AS1,z3;
+end;
+
+theorem spl0:
+for n being Ordinal,
+    T being connected TermOrder of n,
+    L being add-associative right_zeroed right_complementable
+            (non empty LoopStr),
+    p being Polynomial of n,L,
+    i being Nat st 1 <= i & i <= card(Support p)
+holds HT(p,T) in Support Up(p,T,i)
+proof
+let n be Ordinal, T be connected TermOrder of n,
+    L be add-associative right_zeroed right_complementable
+         (non empty LoopStr), p be Polynomial of n,L, i be Nat;
+assume AS: 1 <= i & i <= card(Support p);
+set u = Up(p,T,i);
+u = p|(Upper_Support(p,T,i)) by defup;
+then X1: Support u = Upper_Support(p,T,i) by AS,spl;
+then A: card (Support u) <> 0 by AS,defups;
+consider x being Element of Support u;
+C: Support u <> {} by A,CARD_1:def 5;
+then B: x in Support u;
+then reconsider x as Element of Bags n;
+D: Support u c= Support p by AS,X1,defups;
+now assume Support p = {};
+  then card(Support p) = 0 by CARD_1:def 5;
+  hence contradiction by AS;
+  end;
+then E: HT(p,T) in Support p by TERMORD:def 6;
+x <= HT(p,T),T by B,D,TERMORD:def 6;
+hence thesis by C,E,AS,X1,defups;
+end;
+
+theorem XXl:
+for n being Ordinal,
+    T being connected TermOrder of n,
+    L being add-associative right_zeroed right_complementable
+            (non empty LoopStr),
+    p being Polynomial of n,L,
+    i being Nat st i <= card(Support p)
+for b being bag of n st b in Support Low(p,T,i)
+holds Low(p,T,i).b = p.b & Up(p,T,i).b = 0.L 
+proof
+let n be Ordinal, T be connected TermOrder of n,
+    L be add-associative right_zeroed right_complementable
+         (non empty LoopStr), p be Polynomial of n,L, i be Nat;
+assume AS1: i <= card(Support p);
+let b be bag of n;
+assume AS2: b in Support Low(p,T,i);
+set l = Lower_Support(p,T,i);
+A: Low(p,T,i) = p|l by deflow;
+B: b in l by AS2,AS1,XXX;
+Support Low(p,T,i) c= Support p by AS1,spl10;
+then b in Support p /\ l by AS2,B,XBOOLE_0:def 3;
+then b in Support p|l by sp0;
+hence Low(p,T,i).b = p.b by A,sp0;
+l /\ Upper_Support(p,T,i) = {} by AS1,z2;
+then not(b in Upper_Support(p,T,i)) by B,XBOOLE_0:def 3;
+then D: not(b in Support(Up(p,T,i))) by AS1,XXX;
+b is Element of Bags n by POLYNOM1:def 14;
+hence thesis by D,POLYNOM1:def 9;
+end;
+
+theorem XXu:
+for n being Ordinal,
+    T being connected TermOrder of n,
+    L being add-associative right_zeroed right_complementable
+            (non empty LoopStr),
+    p being Polynomial of n,L,
+    i being Nat st i <= card(Support p)
+for b being bag of n st b in Support Up(p,T,i)
+holds Up(p,T,i).b = p.b & Low(p,T,i).b = 0.L
+proof
+let n be Ordinal, T be connected TermOrder of n,
+    L be add-associative right_zeroed right_complementable
+         (non empty LoopStr), p be Polynomial of n,L, i be Nat;
+assume AS1: i <= card(Support p);
+let b be bag of n;
+assume AS2: b in Support Up(p,T,i);
+set u = Upper_Support(p,T,i);
+A: Up(p,T,i) = p|u by defup;
+B: b in u by AS2,AS1,XXX;
+Support Up(p,T,i) c= Support p by AS1,spl10;
+then b in Support p /\ u by AS2,B,XBOOLE_0:def 3;
+then b in Support p|u by sp0;
+hence Up(p,T,i).b = p.b by A,sp0;
+u /\ Lower_Support(p,T,i) = {} by AS1,z2;
+then not(b in Lower_Support(p,T,i)) by B,XBOOLE_0:def 3;
+then D: not(b in Support(Low(p,T,i))) by AS1,XXX;
+b is Element of Bags n by POLYNOM1:def 14;
+hence thesis by D,POLYNOM1:def 9;
+end;
+
+theorem z6: 
+for n being Ordinal,
+    T being connected TermOrder of n,
+    L being add-associative right_zeroed right_complementable
+            (non empty LoopStr),
+    p being Polynomial of n,L,
+    i being Nat st i <= card(Support p)
+holds Up(p,T,i) + Low(p,T,i) = p
+proof
+let n be Ordinal, T be connected TermOrder of n,
+    L be add-associative right_zeroed right_complementable
+         (non empty LoopStr), p be Polynomial of n,L, i be Nat;
+assume AS: i <= card(Support p);
+set u = Up(p,T,i) + Low(p,T,i);
+K1: now let x be set; assume K2: x in Support u;
+    K3: Support u c= Support Up(p,T,i) \/ Support Low(p,T,i) by POLYNOM1:79;
+    Support Up(p,T,i) c= Support p 
+                & Support Low(p,T,i) c= Support p by AS,spl10;
+    then Support Up(p,T,i) \/ Support Low(p,T,i) c= Support p by XBOOLE_1:8;
+    then Support u c= Support p by K3,XBOOLE_1:1;
+    hence x in Support p by K2;
+    end;
+now let x be set; assume BB: x in Support p;
+  then reconsider x' = x as Element of Bags n;
+  B0: u.x' = Up(p,T,i).x' + Low(p,T,i).x' by POLYNOM1:def 21;
+  B2: p.x' <> 0.L by BB,POLYNOM1:def 9;
+  now per cases by z55,BB,AS;
+  case B1: x' in Support Up(p,T,i);
+    hence u.x' = Up(p,T,i).x' + 0.L by B0,AS,XXu
+              .= Up(p,T,i).x' by RLVECT_1:def 7
+              .= p.x' by AS,B1,XXu;
+    end;
+  case B1: x' in Support Low(p,T,i);
+    hence u.x' = 0.L + Low(p,T,i).x' by B0,AS,XXl
+              .= Low(p,T,i).x' by ALGSTR_1:def 5
+              .= p.x' by AS,B1,XXl;
+    end;
+  end;
+  hence x in Support u by B2,POLYNOM1:def 9;
+  end;
+then K3: Support u = Support p by K1,TARSKI:2;
+K4: dom p = Bags n by FUNCT_2:def 1 .= dom u by FUNCT_2:def 1;
+now let x be set; assume x in dom p;
+  then reconsider x' = x as Element of Bags n;
+  B0: u.x' = Up(p,T,i).x' + Low(p,T,i).x' by POLYNOM1:def 21;
+  now per cases;
+  case A: x' in Support p;
+    now per cases by z55,A,AS;
+    case B1: x' in Support Up(p,T,i);
+      hence u.x' = Up(p,T,i).x' + 0.L by B0,AS,XXu
+                .= Up(p,T,i).x' by RLVECT_1:def 7
+                .= p.x' by AS,B1,XXu;
+      end;
+    case B1: x' in Support Low(p,T,i);
+      hence u.x' = 0.L + Low(p,T,i).x' by B0,AS,XXl
+                .= Low(p,T,i).x' by ALGSTR_1:def 5
+                .= p.x' by AS,B1,XXl;
+      end;
+    end;
+    hence p.x' = u.x';
+    end;
+  case B: not x' in Support p;
+    hence p.x' = 0.L by POLYNOM1:def 9
+              .= u.x' by B,K3,POLYNOM1:def 9;
+    end;
+  end;
+  hence p.x = u.x;
+  end;
+hence thesis by K4,FUNCT_1:9;
+end;
+
+theorem spl1:
+for n being Ordinal,
+    T being connected TermOrder of n,
+    L being add-associative right_zeroed right_complementable
+            (non empty LoopStr),
+    p being Polynomial of n,L
+holds Up(p,T,0) = 0_(n,L) & Low(p,T,0) = p
+proof
+let n be Ordinal, T be connected TermOrder of n,
+    L be add-associative right_zeroed right_complementable
+         (non empty LoopStr), p be Polynomial of n,L;
+set u = Up(p,T,0), l = Low(p,T,0);
+A: 0 <= card(Support p) by NAT_1:18;
+u = p|(Upper_Support(p,T,0)) & l = p|(Lower_Support(p,T,0))
+        by defup,deflow;
+then Support u = Upper_Support(p,T,0) by A,spl;
+then card(Support u) = 0 by A,defups;
+then Support u,0 are_equipotent by CARD_1:def 5;
+then Support u = {} by CARD_1:46;
+hence u = 0_(n,L) by POLYNOM7:1;
+then 0_(n,L) + l = p by A,z6;
+hence thesis by POLYRED:2;
+end;
+
+theorem spl2:
+for n being Ordinal,
+    T being connected TermOrder of n,
+    L being add-associative right_zeroed right_complementable
+            Abelian (non empty doubleLoopStr),
+    p being Polynomial of n,L
+holds Up(p,T,card(Support p)) = p & Low(p,T,card(Support p)) = 0_(n,L)
+proof
+let n be Ordinal, T be connected TermOrder of n,
+    L be add-associative right_zeroed right_complementable
+         Abelian (non empty doubleLoopStr), p be Polynomial of n,L;
+set u = Up(p,T,card(Support p)), l = Low(p,T,card(Support p));
+X: u = p|(Upper_Support(p,T,card(Support p))) & 
+   l = p|(Lower_Support(p,T,card(Support p))) by defup,deflow;
+Support u = (Support p) /\ Upper_Support(p,T,card(Support p)) by X,sp0;
+then K0: Support u c= Support p by XBOOLE_1:17;
+then K1: for x being set holds x in Support u implies x in Support p;
+X1: card(Support u) = card(Upper_Support(p,T,card(Support p))) by X,spl
+                   .= card(Support p) by sup2;
+now let x be set; assume K2: x in Support p; 
+   now assume not x in Support u;
+     then Support u c< Support p by K0,K2,XBOOLE_0:def 8;
+     hence contradiction by X1,CARD_2:67;
+     end;
+   hence x in Support u;
+   end;
+then K3: Support u = Support p by K1,TARSKI:2;
+K4: dom p = Bags n by FUNCT_2:def 1 .= dom u by FUNCT_2:def 1;
+now let x be set; assume x in dom p;
+  then reconsider x' = x as Element of Bags n;
+  now per cases;
+  case x in Support p;
+    hence p.x' = u.x' by K3,X,sp0;
+    end;
+  case B: not x in Support p;
+    hence p.x' = 0.L by POLYNOM1:def 9
+              .= u.x' by B,K3,POLYNOM1:def 9;
+    end;
+  end;
+  hence p.x = u.x;
+  end;
+hence C: p = u by K4,FUNCT_1:9;
+thus 0_(n,L) = p + -p by POLYRED:3 
+      .= (l + p) + -p by C,z6
+      .= l + (p + -p) by POLYNOM1:80 
+      .= l + 0_(n,L) by POLYRED:3 
+      .= l by POLYRED:2;
+end;
+
+theorem spl3:
+for n being Ordinal,
+    T being connected TermOrder of n,
+    L being add-associative right_zeroed right_complementable
+            Abelian (non trivial doubleLoopStr),
+    p being non-zero Polynomial of n,L
+holds Up(p,T,1) = HM(p,T) & Low(p,T,1) = Red(p,T)
+proof
+let n be Ordinal, T be connected TermOrder of n,
+    L be add-associative right_zeroed right_complementable
+ Abelian (non trivial doubleLoopStr), p be non-zero Polynomial of n,L;
+set u = Up(p,T,1), l = Low(p,T,1);
+H: now assume card(Support p) < 1;
+   then card(Support p) = 0 by NAT_1:39;
+   then Support p,0 are_equipotent by CARD_1:def 5;
+   then Support p = {} by CARD_1:46;
+   then p = 0_(n,L) by POLYNOM7:1;
+   hence contradiction by POLYNOM7:def 2;
+   end;
+X1: u = p|(Upper_Support(p,T,1)) by defup;
+then Support u = Upper_Support(p,T,1) by H,spl;
+then card(Support u) = 1 by H,defups;
+then consider x being set such that
+H1: Support u = {x} by CARD_2:60;
+HM(p,T) <> 0_(n,L) by POLYNOM7:def 2;
+then H7: Support HM(p,T) <> {} by POLYNOM7:1;
+HT(p,T) in {x} by H,H1,spl0;
+then H2: Support u = {HT(p,T)} by H1,TARSKI:def 1;
+then H5: Support u = Support(HM(p,T)) by H7,TERMORD:21;
+H4: dom HM(p,T) = Bags n by FUNCT_2:def 1 .= dom u by FUNCT_2:def 1;
+now let x be set; assume x in dom HM(p,T);
+  then reconsider x' = x as Element of Bags n;
+  now per cases;
+  case A: x in Support HM(p,T);
+    then x' = HT(p,T) by H2,H5,TARSKI:def 1;
+    hence (HM(p,T)).x'= p.x' by TERMORD:18 .= u.x' by H5,A,X1,sp0;
+    end;
+  case B: not x in Support HM(p,T);
+    hence (HM(p,T)).x' = 0.L by POLYNOM1:def 9
+                      .= u.x' by B,H5,POLYNOM1:def 9;
+    end;
+  end;
+  hence (HM(p,T)).x = u.x;
+  end;
+hence HM(p,T) = u by H4,FUNCT_1:9;
+then C: HM(p,T) + l = p by H,z6;
+thus Red(p,T) = p - HM(p,T) by TERMORD:def 9 
+             .= (l + HM(p,T)) + -HM(p,T) by C,POLYNOM1:def 23
+             .= l + (HM(p,T) + -HM(p,T)) by POLYNOM1:80
+             .= l + 0_(n,L) by POLYRED:3
+             .= l by POLYRED:2;
+end;
+
+registration
+let n be Ordinal,
+    T be connected TermOrder of n,
+    L be add-associative right_zeroed right_complementable
+         (non trivial LoopStr),
+    p be non-zero Polynomial of n,L;
+cluster Up(p,T,0) -> monomial-like;
+coherence
+  proof
+  Up(p,T,0) = 0_(n,L) by spl1;
+  hence thesis;
+  end;
+end;
+
+registration
+let n be Ordinal,
+    T be connected TermOrder of n,
+    L be add-associative right_zeroed right_complementable
+         Abelian (non trivial doubleLoopStr),
+    p be non-zero Polynomial of n,L;
+cluster Up(p,T,1) -> non-zero monomial-like;
+coherence 
+  proof
+  Up(p,T,1) = HM(p,T) by spl3;
+  hence thesis;
+  end;
+cluster Low(p,T,card(Support p)) -> monomial-like;
+coherence
+  proof
+  Low(p,T,card(Support p)) = 0_(n,L) by spl2;
+  hence thesis;
+  end;
+end;
+
+theorem LLL:
+for n being Ordinal,
+    T being connected TermOrder of n,
+    L being add-associative right_zeroed right_complementable
+            (non trivial LoopStr),
+    p being Polynomial of n,L,
+    j being Nat st j = card(Support p) - 1
+holds Low(p,T,j) is non-zero Monomial of n,L
+proof
+let n be Ordinal, T be connected TermOrder of n,
+    L be add-associative right_zeroed right_complementable
+         (non trivial LoopStr), p be Polynomial of n,L, j be Nat;
+assume AS: j = card(Support p) - 1;
+set l = Low(p,T,j);
+H0: now assume j > card(Support p);
+    then card(Support p) - 1 + 1 > card(Support p) + 1 by AS,REAL_1:67;
+    then card(Support p) + -card(Support p) > 
+             (card(Support p) + 1) + -card(Support p) by REAL_1:67;
+    then 0 > (card(Support p) + 1) + -card(Support p);
+    hence contradiction;
+    end;
+then Support l = Lower_Support(p,T,j) by XXX;
+then card(Support l) = card(Support p) - (card(Support p) - 1)
+    by H0,AS,ddeflows;
+then consider x being set such that
+H1: Support l = {x} by CARD_2:60; 
+H2: l <> 0_(n,L) by H1,POLYNOM7:1;
+x in Support l by H1,TARSKI:def 1;
+then x is Element of Bags n;
+hence thesis by H1,H2,POLYNOM7:6,POLYNOM7:def 2;
+end;
+
+theorem spl6a:
+for n being Ordinal,
+    T being connected admissible TermOrder of n,
+    L being add-associative right_zeroed right_complementable
+            (non empty LoopStr),
+    p being Polynomial of n,L,
+    i being Nat st i < card(Support p)
+holds HT(Low(p,T,i+1),T) <= HT(Low(p,T,i),T), T
+proof
+let n be Ordinal, T be connected admissible TermOrder of n,
+    L be add-associative right_zeroed right_complementable
+         (non empty LoopStr), p be Polynomial of n,L, i be Nat;
+assume AS: i < card(Support p);
+then AS1: i + 1 <= card(Support p) by NAT_1:38;
+set li = Low(p,T,i), li1 = Low(p,T,i+1);
+H2: Support li c= Support(p) by AS,spl10;
+H3: Support li = Lower_Support(p,T,i) by AS,XXX;
+H3a: Support li1 = Lower_Support(p,T,i+1) by AS1,XXX;
+H4: card Support li = card(Support p) - i by AS,H3,ddeflows;
+H4a: card Support li1 = card(Support p) - (i+1) by AS1,H3a,ddeflows;
+now per cases;
+case i = card(Support p) - 1;
+  then card Support li1
+     = card(Support p) - card(Support p) by H3a,ddeflows
+    .= 0; 
+  then Support li1,0 are_equipotent by CARD_1:def 5;
+  then Support li1 = {} by CARD_1:46;
+  then HT(li1,T) = EmptyBag n by TERMORD:def 6;
+  hence thesis by TERMORD:9;
+  end;
+case K: i <> card(Support p) - 1;
+  now assume Lower_Support(p,T,i+1) = {};
+    then card(Support p) = i + 1 by H3a,H4a,CARD_2:19,XCMPLX_1:15;
+    hence contradiction by K;
+    end;
+  then K0: HT(Low(p,T,i+1),T) in Lower_Support(p,T,i+1) 
+           by H3a,TERMORD:def 6;
+  now assume HT(Low(p,T,i),T) < HT(Low(p,T,i+1),T), T;
+    then H5: HT(Low(p,T,i),T) <= HT(Low(p,T,i+1),T), T by TERMORD:def 3;
+    now let u' be set; assume K1: u' in Support li;
+      then reconsider u = u' as Element of Bags n;
+      u <= HT(Low(p,T,i),T),T by K1,TERMORD:def 6;
+      then u <= HT(Low(p,T,i+1),T),T by H5,TERMORD:8;
+      hence u' in Support li1 by K0,K1,H2,AS1,ddeflows,H3a;
+      end;
+    then Support li c= Support li1 by TARSKI:def 3;
+    then card(Support p) + -i <= card(Support p) + -(i+1) by H4a,H4,CARD_1:80;
+    then - i <= -(i + 1) by REAL_1:53;
+    then i + 1 <= i by REAL_1:50;
+    then (i + 1) - i <= i - i by REAL_1:49;
+    then 1 <= 0;
+    hence contradiction;
+    end;
+  hence thesis by TERMORD:5;
+  end;
+end;
+hence thesis; 
+end;
+
+theorem spl6:
+for n being Ordinal,
+    T being connected TermOrder of n,
+    L being add-associative right_zeroed right_complementable
+            (non empty LoopStr),
+    p being Polynomial of n,L,
+    i being Nat st 0 < i & i < card(Support p) 
+holds HT(Low(p,T,i),T) < HT(p,T),T
+proof
+let n be Ordinal, T be connected TermOrder of n,
+    L be add-associative right_zeroed right_complementable
+         (non empty LoopStr), p be Polynomial of n,L, i be Nat;
+assume AS: 0 < i & i < card(Support p);
+set l = Low(p,T,i);
+now per cases;
+case l = 0_(n,L);
+then A: card Support l = 0 by CARD_1:78,POLYNOM7:1;
+Support l = Lower_Support(p,T,i) by AS,XXX;
+then 0 + i = card(Support p) - i + i by AS,A,ddeflows;
+hence contradiction by AS;
+end;
+case l <> 0_(n,L);
+then H1: Support l <> {} by POLYNOM7:1;
+H2: Support(Low(p,T,i)) c= Support(p) by AS,spl10;
+H4: Support Low(p,T,i) = Lower_Support(p,T,i) by AS,XXX;
+Y: now assume A: HT(p,T) in Support l;
+     H: for u being set holds u in Support l implies u in Support p by H2;
+     now let u be set; assume B: u in Support p;
+        then reconsider x = u as Element of Bags n;
+        x <= HT(p,T),T by B,TERMORD:def 6;
+        hence u in Support l by H4,AS,A,B,ddeflows;
+        end;
+     then card Support p = card Support l by H,TARSKI:2
+                        .= card(Support p) - i by H4,AS,ddeflows;
+     then card Support p + i = card Support p - i + i;
+     then i + (card Support p + -card Support p)
+                = card Support p - card Support p by XCMPLX_1:1;
+     hence contradiction by AS;
+     end;
+H5: HT(l,T) in Support l by H1,TERMORD:def 6;
+then HT(l,T) <= HT(p,T),T by H2,TERMORD:def 6;
+hence thesis by H5,Y,TERMORD:def 3;
+end;
+end;
+hence thesis;
+end;
+
+theorem F_help:
+for n being Ordinal,
+    T being connected admissible TermOrder of n,
+    L being add-associative right_complementable right_zeroed
+            unital distributive domRing-like (non trivial doubleLoopStr),
+    p being Polynomial of n,L,
+    m being non-zero Monomial of n,L,
+    i being Nat st i <= card(Support p)
+for b being bag of n  
+holds term(m) + b in Support Low(m*'p,T,i) iff b in Support Low(p,T,i) 
+proof
+let n be Ordinal, T be connected admissible TermOrder of n,
+    L be add-associative right_complementable right_zeroed
+         unital distributive domRing-like (non trivial doubleLoopStr),
+    p be Polynomial of n,L, m be non-zero Monomial of n,L, i be Nat;
+assume AS: i <= card(Support p);
+then AS1: i <= card Support(m*'p) by FF3;
+let b be bag of n; set l = Low(p,T,i), lm = Low(m*'p,T,i);
+H3: Support l c= Support p by AS,spl10;
+H4: Support Up(p,T,i) = Upper_Support(p,T,i) &
+    Support Low(p,T,i) = Lower_Support(p,T,i) by AS,XXX;
+H5: Support Up(m*'p,T,i) = Upper_Support(m*'p,T,i) &
+    Support Low(m*'p,T,i) = Lower_Support(m*'p,T,i) by AS1,XXX;
+H6: Support Up(p,T,i) c= Support(p) by AS,spl10;
+H7: card(Support Up(m*'p,T,i)) = i by H5,AS1,defups;
+H8: card(Support Up(p,T,i)) = i by H4,AS,defups;
+H9: Support Low(m*'p,T,i) c= Support(m*'p) &
+    Support Up(m*'p,T,i) c= Support(m*'p) by AS1,spl10;
+H0: Support Up(m*'p,T,i) = {} implies Support Up(p,T,i) = {}
+    proof
+    assume Support Up(m*'p,T,i) = {};
+    then Support Up(p,T,i),{} are_equipotent by H7,H8,CARD_1:21;
+    hence thesis by CARD_1:46;
+    end;
+H0a: Support Up(p,T,i) = {} implies Support Up(m*'p,T,i) = {}
+    proof
+    assume Support Up(p,T,i) = {};
+    then Support Up(m*'p,T,i),{} are_equipotent by H7,H8,CARD_1:21;
+    hence thesis by CARD_1:46;
+    end;
+K: now assume K0: b in Support Low(p,T,i);
+   then K1: term(m) + b in Support(m*'p) by H3,FF2;
+   K1a: now assume b in Support Up(p,T,i);
+        then b in Support(Up(p,T,i)) /\ Support(Low(p,T,i))
+             by K0,XBOOLE_0:def 3;
+        hence contradiction by K0,H3,AS,z55;
+        end;
+   now assume K3: term(m) + b in Support Up(m*'p,T,i);
+     X: now let b' be bag of n; assume K4: b' in Support Up(p,T,i);
+       then K5: term(m) + b' in Support(m*'p) by H6,FF2;
+       b < b',T by AS,z3,K0,H4,K4;
+       then term(m) + b < term(m) + b',T by bag6;
+       then term(m) + b <= term(m) + b',T by TERMORD:def 3;
+       hence term(m) + b' in Support Up(m*'p,T,i) by K5,K3,AS1,H5,defups;
+       end;
+     defpred P[set,set] means $2 = term(m) + In($1,Bags n)@;
+     K10: for x being set st x in Support Up(p,T,i)
+          ex y being set st y in Support Up(m*'p,T,i) & P[x,y]
+          proof
+          let x be set;
+          assume K11: x in Support Up(p,T,i);
+          then reconsider x' = x as Element of Bags n;
+          take term(m) + x';
+          x' = In(x',Bags n) by FUNCT_7:def 1
+            .= In(x',Bags n)@ by POLYNOM2:def 3;
+          hence thesis by K11,X;
+          end;
+     consider f being Function of Support Up(p,T,i),Support Up(m*'p,T,i) 
+          such that
+     K11: for x being set st x in Support Up(p,T,i) holds P[x,f.x] 
+          from FUNCT_2:sch 1(K10);
+     now let x1,x2 be set;
+       assume K12: x1 in dom f & x2 in dom f & f.x1 = f.x2; 
+       then x1 in Support Up(p,T,i) & x2 in Support Up(p,T,i);
+       then reconsider x = x1, y = x2 as Element of Bags n;
+I:     y = In(y,Bags n) by FUNCT_7:def 1
+        .= In(y,Bags n)@ by POLYNOM2:def 3;
+       x = In(x,Bags n) by FUNCT_7:def 1
+        .= In(x,Bags n)@ by POLYNOM2:def 3; then
+       K15: f.x = term(m) + x & f.y = term(m) + y by I,K12,K11;
+       thus x1 =term(m)+x-'term(m) by POLYNOM1:52 .= x2 by K15,K12,POLYNOM1:52;
+       end;
+     then K14: f is one-to-one by FUNCT_1:def 8;
+     Support(Up(p,T,i)) c= dom f by H0,FUNCT_2:def 1; then 
+     Support(Up(p,T,i)),f.:Support(Up(p,T,i)) are_equipotent by K14,CARD_1:60;
+     then card(f.:Support(Up(p,T,i))) 
+             = card Support(Up(p,T,i)) by CARD_1:21 .= i by H4,AS,defups;
+     then term(m) + b in f.:Support(Up(p,T,i)) by K3,H7,TRIANG_1:3;
+     then consider bb being set such that
+     K15: bb in dom f & bb in Support Up(p,T,i) & f.bb = term(m) + b 
+          by FUNCT_1:def 12;
+     reconsider bb as Element of Bags n by K15;
+     bb = In(bb,Bags n) by FUNCT_7:def 1
+       .= In(bb,Bags n)@ by POLYNOM2:def 3; then
+     K16: term(m) + bb = term(m) + b by K15,K11;
+     bb = term(m) + bb -' term(m) by POLYNOM1:52 .= b by K16,POLYNOM1:52;
+     hence contradiction by K1a,K15;
+     end;
+   hence term(m) + b in Support Low(m*'p,T,i) by z55,AS1,K1;
+   end;
+now assume K0: term(m) + b in Support Low(m*'p,T,i);
+   then K0a: term(m) + b in Support(m*'p) by H9;
+   HH: Support(m*'p) = { term(m) + u where u is Element of Bags n :
+                                                   u in Support p } by z100;
+   term(m) + b in { term(m) + u where u is Element of Bags n :
+                                             u in Support p } by K0a,z100;
+   then consider u being Element of Bags n such that
+   K1b: term(m) + b = term(m) + u & u in Support p;
+   K1c: b = term(m) + b -' term(m) by POLYNOM1:52 .= u by K1b,POLYNOM1:52;
+   K1a: now assume term(m) + b in Support Up(m*'p,T,i);
+        then term(m) + b in Support(Up(m*'p,T,i)) /\ Support(Low(m*'p,T,i))
+             by K0,XBOOLE_0:def 3;
+        hence contradiction by K0,H9,AS1,z55;
+        end;
+   now assume K3: b in Support Up(p,T,i);
+     X: now let b' be bag of n; 
+       assume K4: term(m) + b' in Support Up(m*'p,T,i);
+       then K5: b' in Support(p) by H9,FF2;
+       K5a: term(m) + b < term(m) + b',T by AS1,z3,K0,H5,K4;
+       now assume b' <= b,T;
+         then term(m) + b' <= term(m) + b,T by bag2;
+         hence contradiction by K5a,TERMORD:5;
+         end;
+       then b < b',T by TERMORD:5;
+       then b <= b',T by TERMORD:def 3;
+       hence b' in Support Up(p,T,i) by K5,K3,AS,H4,defups;
+       end;
+     defpred P[set,set] means $1 = term(m) + (In($2, Bags n)@);
+     K10: for x being set st x in Support Up(m*'p,T,i)
+          ex y being set st y in Support Up(p,T,i) & P[x,y]
+          proof
+          let x be set;
+          assume K11: x in Support Up(m*'p,T,i);
+          then x in Support(m*'p) by H9;
+          then consider x' being Element of Bags n such that
+          K12: x = term(m) + x' & x' in Support p by HH;
+          take x';
+          x' = In(x',Bags n) by FUNCT_7:def 1
+            .= In (x',Bags n)@ by POLYNOM2:def 3;
+          hence thesis by K12,K11,X;
+          end;
+     consider f being Function of Support Up(m*'p,T,i),Support Up(p,T,i) 
+          such that
+     K11: for x being set st x in Support Up(m*'p,T,i) holds P[x,f.x] 
+          from FUNCT_2:sch 1(K10);
+     now let x1,x2 be set;
+       assume K12: x1 in dom f & x2 in dom f & f.x1 = f.x2; 
+       then f.x1 in rng f & f.x2 in rng f by FUNCT_1:12;
+       then f.x1 in Support Up(p,T,i) & f.x2 in Support Up(p,T,i);
+       then reconsider x1' = f.x1, x2' = f.x2 as Element of Bags n;
+I:     x1' = In(x1',Bags n) by FUNCT_7:def 1
+        .= In(x1',Bags n)@ by POLYNOM2:def 3;
+       x2' = In(x2',Bags n) by FUNCT_7:def 1
+        .= In(x2',Bags n)@ by POLYNOM2:def 3;
+       hence x1 = term(m) + x1' by K12,K11 .= x2 by K11,K12,I;
+       end;
+     then K14: f is one-to-one by FUNCT_1:def 8;
+     Support(Up(m*'p,T,i)) c= dom f by H0a,FUNCT_2:def 1; then 
+     Support(Up(m*'p,T,i)),f.:Support(Up(m*'p,T,i)) are_equipotent 
+         by K14,CARD_1:60;
+     then card(f.:Support(Up(m*'p,T,i))) 
+        = card Support(Up(m*'p,T,i)) by CARD_1:21 .= i by H5,AS1,defups;
+     then b in f.:Support(Up(m*'p,T,i)) by K3,H8,TRIANG_1:3;
+     then consider bb being set such that
+     K20: bb in dom f & bb in Support Up(m*'p,T,i) & f.bb = b 
+          by FUNCT_1:def 12;
+     f.bb in rng f by K20,FUNCT_1:12;
+     then f.bb in Support Up(p,T,i);
+     then reconsider bb' = f.bb as Element of Bags n;
+     bb' = In(bb',Bags n) by FUNCT_7:def 1
+        .= In(bb',Bags n)@ by POLYNOM2:def 3;
+     hence contradiction by K1a,K20,K11;
+     end;
+   hence b in Support Low(p,T,i) by z55,AS,K1c,K1b;
+   end;
+hence term(m) + b in Support Low(m*'p,T,i) iff b in Support Low(p,T,i) by K;
+end;
+
+theorem low_back_1:
+for n being Ordinal,
+    T being connected admissible TermOrder of n,
+    L being add-associative right_zeroed right_complementable
+            (non empty LoopStr),
+    p being Polynomial of n,L,
+    i being Nat st i < card(Support p)
+holds Support Low(p,T,i+1) c= Support Low(p,T,i)
+proof
+let n be Ordinal, T be connected admissible TermOrder of n,
+    L be add-associative right_zeroed right_complementable
+         (non empty LoopStr), p be Polynomial of n,L, i be Nat;
+assume AS: i < card(Support p);
+then AS1: i + 1 <= card(Support p) by NAT_1:38;
+set l = Low(p,T,i), l1 = Low(p,T,i+1);
+H2a: Support(Low(p,T,i+1)) c= Support(p) by AS1,spl10;
+H3: Support Low(p,T,i) = Lower_Support(p,T,i) by AS,XXX;
+H4: card Support l = card(Support p) - i by AS,H3,ddeflows;
+H5: HT(Low(p,T,i+1),T) <= HT(Low(p,T,i),T), T by AS,spl6a;
+Lower_Support(p,T,i) <> {} by AS,H3,H4,CARD_2:19,XCMPLX_1:15;
+then H9: HT(Low(p,T,i),T) in Lower_Support(p,T,i) 
+         by H3,TERMORD:def 6;
+now let u' be set; assume K1: u' in Support l1;
+  then reconsider u = u' as Element of Bags n;
+  u <= HT(Low(p,T,i+1),T),T by K1,TERMORD:def 6;
+  then u <= HT(Low(p,T,i),T),T by H5,TERMORD:8;
+  hence u' in Support l by H3,K1,H2a,AS,H9,ddeflows;
+  end;
+hence thesis by TARSKI:def 3;
+end;
+
+theorem low_back:
+for n being Ordinal,
+    T being connected admissible TermOrder of n,
+    L being add-associative right_zeroed right_complementable
+            (non empty LoopStr),
+    p being Polynomial of n,L,
+    i being Nat st i < card(Support p)
+holds Support Low(p,T,i) \ Support Low(p,T,i+1) = {HT(Low(p,T,i),T)}
+proof
+let n be Ordinal, T be connected admissible TermOrder of n,
+    L be add-associative right_zeroed right_complementable
+         (non empty LoopStr), p be Polynomial of n,L, i be Nat;
+assume AS: i < card(Support p);
+then AS1: i + 1 <= card(Support p) by NAT_1:38;
+set l = Low(p,T,i), l1 = Low(p,T,i+1);
+H2: Support(Low(p,T,i)) c= Support(p) by AS,spl10;
+H3a: Support Low(p,T,i+1) = Lower_Support(p,T,i+1) by AS1,XXX;
+H4: Support Low(p,T,i) = Lower_Support(p,T,i) by AS,XXX;
+H4a: Support Low(p,T,i+1) = Lower_Support(p,T,i+1) by AS1,XXX;
+H6: card Support l = card(Support p) - i by AS,H4,ddeflows;
+H6a: card Support l1 = card(Support p) - (i+1) by AS1,H4a,ddeflows;
+now assume Lower_Support(p,T,i) = {};
+    then card(Support p) - i = 0 by AS,ddeflows,CARD_2:19;
+    hence contradiction by AS,XCMPLX_1:15;
+    end;
+then H9: HT(Low(p,T,i),T) in Support l by H4,TERMORD:def 6;
+Support Low(p,T,i+1) c= Support Low(p,T,i) by AS,low_back_1;
+then card(Support Low(p,T,i) \ Support Low(p,T,i+1)) 
+   = (card(Support p) - i) - (card(Support p) - (i+1)) by H6,H6a,CARD_2:63
+  .= 1;
+then consider x being set such that 
+H7: Support Low(p,T,i) \ Support Low(p,T,i+1) = {x} by CARD_2:60;
+now assume K: x <> HT(Low(p,T,i),T);
+  K2: now assume not HT(Low(p,T,i),T) in Support l1;
+      then HT(Low(p,T,i),T) in Support l \ Support l1 by H9,XBOOLE_0:def 4;
+      hence contradiction by H7,TARSKI:def 1,K;
+      end;
+  HH: now let u be set; assume K3: u in Support l;
+      then reconsider u' = u as Element of Bags n;
+      u' <= HT(Low(p,T,i),T),T by K3,TERMORD:def 6;
+      hence u in Support l1 by H3a,K3,H2,AS1,K2,ddeflows;
+      end;
+  Support Low(p,T,i+1) c= Support Low(p,T,i) by AS,low_back_1;
+  then for u being set holds u in Support l1 implies u in Support l;
+  then card(Support p) + -i <= card(Support p) + -(i+1) by H6,H6a,HH,TARSKI:2;
+  then - i <= -(i + 1) by REAL_1:53;
+  then i + 1 <= i by REAL_1:50;
+  then (i + 1) - i <= i - i by REAL_1:49;
+  then 1 <= 0;
+  hence contradiction;
+  end;
+hence thesis by H7;
+end;
+
+theorem low_red:
+for n being Ordinal,
+    T being connected admissible TermOrder of n,
+    L being add-associative right_zeroed right_complementable
+            (non trivial LoopStr),
+    p being Polynomial of n,L,
+    i being Nat st i < card(Support p)
+holds Low(p,T,i+1) = Red(Low(p,T,i),T)
+proof
+let n be Ordinal, T be connected admissible TermOrder of n,
+    L be add-associative right_zeroed right_complementable
+         (non trivial LoopStr), p be Polynomial of n,L, i be Nat;
+assume AS: i < card(Support p);
+then AS1: i + 1 <= card(Support p) by NAT_1:38;
+set l = Low(p,T,i), l1 = Low(p,T,i+1), r = Red(l,T);
+H0: dom l1 = Bags n by FUNCT_2:def 1 .= dom r by FUNCT_2:def 1;
+H1: Support Low(p,T,i) \ Support Low(p,T,i+1) = {HT(Low(p,T,i),T)} 
+    by AS,low_back;
+H2: Support(Low(p,T,i)) c= Support(p) by AS,spl10;
+H3: Support Low(p,T,i) = Lower_Support(p,T,i) by AS,XXX;
+H3a: Support Low(p,T,i+1) = Lower_Support(p,T,i+1) by AS1,XXX;
+H4a: Support Low(p,T,i+1) = Lower_Support(p,T,i+1) by AS1,XXX;
+H6: card Support l = card(Support p) - i by AS,H3,ddeflows;
+H6a: card Support l1 = card(Support p) - (i+1) by AS1,H4a,ddeflows;
+now assume G0: {HT(l,T)} /\ Support l1 <> {};
+  consider u being Element of {HT(l,T)} /\ Support l1;
+  H5a: u in {HT(l,T)} & u in Support l1 by G0,XBOOLE_0:def 3;
+  then u = HT(l,T) by TARSKI:def 1;
+  then H5: HT(l,T) <= HT(l1,T),T by H5a,TERMORD:def 6;
+  H7: HT(l1,T) in Support l1 by H5a,TERMORD:def 6;
+  now let u' be set; assume K1: u' in Support l;
+    then reconsider u = u' as Element of Bags n;
+    u <= HT(Low(p,T,i),T),T by K1,TERMORD:def 6;
+    then u <= HT(Low(p,T,i+1),T),T by H5,TERMORD:8;
+    hence u' in Support l1 by H3a,AS1,K1,H2,H7,ddeflows;
+    end;
+  then Support l c= Support l1 by TARSKI:def 3;
+  then card(Support p) + -i <= card(Support p) + -(i+1) by H6a,H6,CARD_1:80;
+  then - i <= -(i + 1) by REAL_1:53;
+  then i + 1 <= i by REAL_1:50;
+  then (i + 1) - i <= i - i by REAL_1:49;
+  then 1 <= 0;
+  hence contradiction;
+  end;
+then H4: Support l1 misses {HT(l,T)} by XBOOLE_0:def 7;
+H3: Support(Low(p,T,i+1)) c= Support(Low(p,T,i)) by AS,low_back_1;
+then Support Low(p,T,i) = Support l1 \/ {HT(l,T)} by H1,XBOOLE_1:45;
+then H2: Support r = (Support l1 \/ {HT(l,T)}) \ {HT(l,T)} by TERMORD:36
+                  .= Support l1 \ {HT(l,T)} by XBOOLE_1:40
+                  .= Support l1 by H4,XBOOLE_1:83;
+now let x be set; assume x in dom l1;
+  then reconsider b = x as Element of Bags n;
+  now per cases;
+  case A: b in Support l1;
+    then not b in {HT(Low(p,T,i),T)} by H1,XBOOLE_0:def 4;
+    then E3: b <> HT(l,T) by TARSKI:def 1;
+    thus l1.b = p.b by A,AS1,XXl
+             .= l.b by A,H3,AS,XXl
+             .= r.b by A,H3,E3,TERMORD:40;
+    end;
+  case B: not b in Support l1;
+    hence l1.b = 0.L by POLYNOM1:def 9
+              .= r.b by B,H2,POLYNOM1:def 9;
+    end;
+  end;
+  hence l1.x = r.x;
+  end;
+hence thesis by H0,FUNCT_1:9;
+end;
+
+theorem F:
+for n being Ordinal,
+    T being connected admissible TermOrder of n,
+    L being add-associative right_complementable right_zeroed
+            unital distributive domRing-like (non trivial doubleLoopStr),
+    p being Polynomial of n,L,
+    m being non-zero Monomial of n,L,
+    i being Nat st i <= card(Support p) 
+holds Low(m*'p,T,i) = m *' Low(p,T,i)
+proof
+let n be Ordinal, T be connected admissible TermOrder of n,
+    L be add-associative right_complementable right_zeroed
+         unital distributive domRing-like (non trivial doubleLoopStr),
+    p be Polynomial of n,L, m be non-zero Monomial of n,L, i be Nat;
+assume AS: i <= card(Support p);
+then AS1: i <= card(Support(m*'p)) by FF3;
+set l = Low(p,T,i), lm = Low(m*'p,T,i);
+H0: dom(m*'l) = Bags n by FUNCT_2:def 1 .= dom lm by FUNCT_2:def 1;
+H1: Support(m*'l) c= {s + t where s,t is Element of Bags n :
+                      s in Support m & t in Support l} by TERMORD:30;
+H2: Support(m*'p) c= {s + t where s,t is Element of Bags n :
+                      s in Support m & t in Support p} by TERMORD:30;
+H8a: now let u be set; assume H9: u in Support m*'l;
+     then reconsider u' = u as Element of Bags n; 
+     u in {s + t where s,t is Element of Bags n :
+                         s in Support m & t in Support l} by H1,H9;
+     then consider s,t being Element of Bags n such that
+     H10: u' = s + t & s in Support m & t in Support l;
+     H11: l.t <> 0.L by H10,POLYNOM1:def 9;
+     m <> 0_(n,L) by POLYNOM7:def 2;
+     then Support m <> {} by POLYNOM7:1;
+     then H14: Support m = {term(m)} by POLYNOM7:7;
+     then term(m) in Support m by TARSKI:def 1;
+     then H12: m.term(m) <> 0.L by POLYNOM1:def 9;
+     H21: term(m) = s by H10,H14,TARSKI:def 1;
+     then (m*'p).u' = m.term(m) * p.t by H10,POLYRED:7
+                   .= m.term(m) * l.t by AS,H10,XXl;
+     then (m*'p).u' <> 0.L by H11,H12,VECTSP_2:def 5;
+     then H15: u' in Support(m*'p) by POLYNOM1:def 9; 
+     now assume not(s+t in Support Low(m*'p,T,i));
+        then H16: s+t in Support Up(m*'p,T,i) by H15,H10,AS1,z55;
+        now let t' be bag of n; assume t' in Support Low(p,T,i);
+          then s+t' in Support Low(m*'p,T,i) by H21,AS,F_help;
+          then H22: s+t' < s+t,T by H16,AS1,z5;
+          now assume t <= t',T;
+            then s + t <= s + t',T by bag2;
+            hence contradiction by H22,TERMORD:5;
+            end;
+          hence t' < t,T by TERMORD:5;
+          end;
+        then t < t,T by H10;
+        hence contradiction by TERMORD:def 3;
+        end;
+     hence u in Support lm by H10;
+     end;
+now let u be set; assume H9: u in Support Low(m*'p,T,i);
+  then reconsider u' = u as Element of Bags n;
+  Support Low(m*'p,T,i) c= Support(m*'p) by AS1,spl10;
+  then u' in Support(m*'p) by H9; 
+  then u' in {s + t where s,t is Element of Bags n :
+                      s in Support m & t in Support p} by H2;
+  then consider s,t being Element of Bags n such that
+  H10: u = s + t & s in Support m & t in Support p;
+  m <> 0_(n,L) by POLYNOM7:def 2;
+  then Support m <> {} by POLYNOM7:1;
+  then H14: Support m = {term(m)} by POLYNOM7:7;
+  then term(m) in Support m by TARSKI:def 1;
+  then H12: m.term(m) <> 0.L by POLYNOM1:def 9;
+  H21: term(m) = s by H10,H14,TARSKI:def 1;
+  H22: p.t <> 0.L by H10,POLYNOM1:def 9;
+  H23: t in Support l by H21,H10,H9,AS,F_help;
+  (m*'l).(term(m)+t) = m.term(m) * l.t by POLYRED:7
+                    .= m.term(m) * p.t by H23,AS,XXl;
+  then (m*'l).u' <> 0.L by H10,H22,H21,H12,VECTSP_2:def 5;
+  hence u in Support(m*'Low(p,T,i)) by POLYNOM1:def 9;
+  end;
+then H88: Support(m*'l) = Support lm by H8a,TARSKI:2;
+now let x be set; assume x in dom(m*'l);
+  then reconsider b = x as Element of Bags n;
+  now per cases;
+  case A: b in Support(m*'l);
+    then E5: b in Support lm by H8a;
+    b in {s + t where s,t is Element of Bags n :
+                                  s in Support m & t in Support l}
+      by A,H1;
+    then consider s,t being Element of Bags n such that
+    E3: b = s + t & s in Support m & t in Support l;
+    Support m = {term(m)} by E3,POLYNOM7:7;
+    then E4: term(m) = s by E3,TARSKI:def 1;
+    hence (m*'l).b = m.term(m) * l.t by E3,POLYRED:7
+            .= m.term(m) * p.t by E3,AS,XXl
+            .= (m*'p).b by E4,E3,POLYRED:7
+            .= lm.b by E5,AS1,XXl;
+    end;
+  case B: not b in Support(m*'l);
+    hence (m*'l).b = 0.L by POLYNOM1:def 9
+                  .= lm.b by B,H88,POLYNOM1:def 9;
+    end;
+  end;
+  hence (m*'l).x = lm.x;
+  end;
+hence thesis by H0,FUNCT_1:9;
+end;
+
+begin :: More on Polynomial Reduction
+
+red1:for n being Ordinal, T being connected TermOrder of n,
+    L being add-associative right_complementable right_zeroed
+            commutative associative left_unital right_unital distributive
+            Field-like (non trivial doubleLoopStr),
+    P being Subset of Polynom-Ring(n,L),
+    R being RedSequence of PolyRedRel(P,T),
+    i being Nat st 1 <= i & i <= len R & len R > 1
+holds R.i is Polynomial of n,L
+proof
+let n be Ordinal, T be connected TermOrder of n,
+    L be add-associative right_complementable right_zeroed
+         commutative associative left_unital right_unital distributive
+         Field-like (non trivial doubleLoopStr),
+    P be Subset of Polynom-Ring(n,L),
+    R be RedSequence of PolyRedRel(P,T), i be Nat;
+assume AS1: 1 <= i & i <= len R & 1 < len R;
+then AS2: i in dom R by FINSEQ_3:27;
+now per cases;
+case i <> len R;
+  then i < len R by AS1,REAL_1:def 5;
+  then 1 <= i + 1 & i + 1 <= len R by NAT_1:29,NAT_1:38;
+  then i + 1 in dom R by FINSEQ_3:27;
+  then [R.i,R.(i+1)] in PolyRedRel(P,T) by AS2,REWRITE1:def 2;
+  then R.i in dom PolyRedRel(P,T) by RELAT_1:def 4;
+  then R.i in the carrier of Polynom-Ring(n,L) by XBOOLE_0:def 4;
+  hence R.i is Polynomial of n,L by POLYNOM1:def 27;
+  end;
+case G: i = len R;
+  E: i - 1 is Nat by AS1,INT_1:18;
+  1 + -1 < i + -1 by G,AS1,REAL_1:67; then
+  D: 1 <= i - 1 by E,NAT_1:39;
+  i - 1 <= len R by G,INT_1:26;
+  then C: i - 1 in dom R by E,D,FINSEQ_3:27;
+  i = (i - 1) + 1;
+  then [R.(i-1),R.i] in PolyRedRel(P,T) by AS2,C,REWRITE1:def 2;
+  then R.i in rng PolyRedRel(P,T) by RELAT_1:def 5;
+  hence R.i is Polynomial of n,L by POLYNOM1:def 27;
+  end;
+end;
+hence thesis;
+end;
+
+theorem red2:
+for n being Ordinal,
+    T being connected admissible TermOrder of n,
+    L being add-associative right_complementable right_zeroed
+            commutative associative left_unital right_unital distributive
+            Abelian Field-like (non trivial doubleLoopStr),
+    f,g,p being Polynomial of n,L
+st f reduces_to g,p,T holds -f reduces_to -g,p,T
+proof
+let n be Ordinal, T be connected admissible TermOrder of n,
+    L be add-associative right_complementable right_zeroed
+         commutative associative left_unital right_unital distributive
+         Abelian Field-like (non trivial doubleLoopStr),
+    f,g,p be Polynomial of n,L;
+assume f reduces_to g,p,T;
+then consider b being bag of n such that
+A2: f reduces_to g,p,b,T by POLYRED:def 6;
+A3: f <> 0_(n,L) & p <> 0_(n,L) &
+    b in Support f &
+    ex s being bag of n
+    st s + HT(p,T) = b & g = f - (f.b/HC(p,T)) * (s *' p) by A2,POLYRED:def 5;
+consider s being bag of n such that
+A5: s + HT(p,T) = b & g = f - (f.b/HC(p,T)) * (s *' p) by A2,POLYRED:def 5;
+A6: now assume -f = 0_(n,L);
+    then f = -(0_(n,L)) .= 0_(n,L) by poly1;
+    hence contradiction by A2,POLYRED:def 5;
+    end;
+g = f + (-((f.b/HC(p,T)) * (s *' p))) by A5,POLYNOM1:def 23;
+then -g = -f + -(-((f.b/HC(p,T)) * (s *' p))) by POLYRED:1
+       .= -f - -((f.b/HC(p,T)) * (s *' p)) by POLYNOM1:def 23
+       .= -f - (-(f.b/HC(p,T))) * (s *' p) by POLYRED:9
+       .= -f - (-(f.b*(HC(p,T))")) * (s *' p) by VECTSP_1:def 23
+       .= -f - ((-f.b)*(HC(p,T))") * (s *' p) by VECTSP_1:41
+       .= -f - ((-f.b)/(HC(p,T))) * (s *' p) by VECTSP_1:def 23
+       .= -f - ((-f).b/HC(p,T)) * (s *' p) by POLYNOM1:def 22;
+then -f <> 0_(n,L) & p <> 0_(n,L) &
+     b in Support -f &
+     ex s being bag of n
+     st s+HT(p,T) = b & -g = -f-((-f).b/HC(p,T))*(s*'p) by A3,A5,A6,GROEB_1:5;
+then -f reduces_to -g,p,b,T by POLYRED:def 5;
+hence -f reduces_to -g,p,T by POLYRED:def 6;
+end;
+
+lem1:for n being Ordinal, T being connected admissible TermOrder of n,
+    L being add-associative right_complementable right_zeroed
+            commutative associative left_unital right_unital distributive
+            Field-like (non trivial doubleLoopStr),
+    p1,p2 being Polynomial of n,L st HT(p1,T),HT(p2,T) are_disjoint
+for b1,b2 being bag of n st b1 in Support p1 & b2 in Support p2
+holds not(b1 = HT(p1,T) & b2 = HT(p2,T))
+implies not(HT(p1,T) + b2 = HT(p2,T) + b1)
+proof
+let n be Ordinal, T be connected admissible TermOrder of n,
+    L be add-associative right_complementable right_zeroed
+         commutative associative left_unital right_unital distributive
+         Field-like (non trivial doubleLoopStr),
+    p1,p2 be Polynomial of n,L;
+assume AS1: HT(p1,T),HT(p2,T) are_disjoint;
+let b1,b2 be bag of n;
+assume b1 in Support p1 & b2 in Support p2;
+then b1 <= HT(p1,T),T & b2 <= HT(p2,T),T by TERMORD:def 6;
+then A0: HT(p2,T) + b1 <= HT(p1,T) + HT(p2,T),T &
+         HT(p1,T) + b2 <= HT(p1,T) + HT(p2,T),T by bag2;
+assume AA: not(b1 = HT(p1,T) & b2 = HT(p2,T));
+assume HT(p1,T) + b2 = HT(p2,T) + b1;
+then A1: HT(p2,T) divides HT(p1,T) + b2 &
+         HT(p1,T) divides HT(p2,T) + b1 by POLYNOM1:54;
+now per cases by AA;
+case B1: not(b1 = HT(p1,T));
+  HT(p2,T) divides HT(p2,T) + b1 by POLYNOM1:54;
+  then lcm(HT(p1,T),HT(p2,T)) divides HT(p2,T) + b1 by A1,GROEB_2:8;
+  then HT(p1,T) + HT(p2,T) divides HT(p2,T) + b1 by AS1,GROEB_2:9;
+  then HT(p1,T) + HT(p2,T) <= HT(p2,T) + b1,T by TERMORD:10;
+  then B3: HT(p1,T) + HT(p2,T) = HT(p2,T) + b1 by A0,TERMORD:7;
+  HT(p1,T) = HT(p1,T) + HT(p2,T) -' HT(p2,T) by POLYNOM1:52;
+  hence contradiction by B1,B3,POLYNOM1:52;
+  end;
+case B2: not(b2 = HT(p2,T));
+  HT(p1,T) divides HT(p1,T) + b2 by POLYNOM1:54;
+  then lcm(HT(p1,T),HT(p2,T)) divides HT(p1,T) + b2 by A1,GROEB_2:8;
+  then HT(p1,T) + HT(p2,T) divides HT(p1,T) + b2 by AS1,GROEB_2:9;
+  then HT(p1,T) + HT(p2,T) <= HT(p1,T) + b2,T by TERMORD:10;
+  then B3: HT(p1,T) + HT(p2,T) = HT(p1,T) + b2 by A0,TERMORD:7;
+  HT(p2,T) = HT(p1,T) + HT(p2,T) -' HT(p1,T) by POLYNOM1:52;
+  hence contradiction by B2,B3,POLYNOM1:52;
+  end;
+end;
+hence thesis;
+end;
+
+theorem red3:
+for n being Ordinal,
+    T being connected admissible TermOrder of n,
+    L being add-associative right_complementable right_zeroed
+            commutative associative left_unital right_unital distributive
+            Abelian Field-like (non trivial doubleLoopStr),
+    f,f1,g,p being Polynomial of n,L
+st f reduces_to f1,{p},T &
+   for b1 being bag of n st b1 in Support g holds not(HT(p,T) divides b1)
+holds f + g reduces_to f1 + g,{p},T
+proof
+let n be Ordinal, T be connected admissible TermOrder of n,
+    L be add-associative right_complementable right_zeroed
+         commutative associative left_unital right_unital distributive
+         Abelian Field-like (non trivial doubleLoopStr),
+    f,f1,g,p be Polynomial of n,L;
+assume AS: f reduces_to f1,{p},T &
+   for b1 being bag of n st b1 in Support g holds not(HT(p,T) divides b1);
+then consider q being Polynomial of n,L such that
+A1: q in {p} & f reduces_to f1,q,T by POLYRED:def 7;
+H: p = q & p in {p} by A1,TARSKI:def 1;
+then consider br being bag of n such that
+A2: f reduces_to f1,p,br,T by A1,POLYRED:def 6;
+A3: f <> 0_(n,L) & p <> 0_(n,L) &
+    br in Support f &
+    ex s being bag of n
+    st s + HT(p,T) = br & f1 = f -(f.br/HC(p,T))*(s*'p) by A2,POLYRED:def 5;
+consider s being bag of n such that
+A4: s + HT(p,T) = br & f1 = f -(f.br/HC(p,T))*(s*'p) by A2,POLYRED:def 5;
+B2: now assume B: br in Support g;
+    HT(p,T) divides br by A4,TERMORD:1;
+    hence contradiction by B,AS;
+    end;
+B1: br is Element of Bags n by POLYNOM1:def 14;
+A5: (f+g).br = f.br + g.br by POLYNOM1:def 21
+         .= f.br + 0.L by B1,B2,POLYNOM1:def 9 .= f.br by RLVECT_1:def 7;
+now per cases;
+case f + g = 0_(n,L);
+  then (f + g) - f = -f by poly2;
+  then (f + g) + -f = -f by POLYNOM1:def 23;
+  then (f + -f) + g = -f by POLYNOM1:80;
+  then 0_(n,L) + g = -f by POLYRED:3;
+  then g = -f by POLYRED:2;
+  hence contradiction by B2,A3,GROEB_1:5;
+  end;
+case B: f + g <> 0_(n,L);
+  set g1 = (f+g) - ((f+g).br/HC(p,T))*(s*'p);
+  (f+g).br <> 0.L & br is Element of Bags n by A5,A3,POLYNOM1:def 9;
+  then br in Support(f+g) by POLYNOM1:def 9;
+  then f+g reduces_to g1,p,br,T by B,A3,A4,POLYRED:def 5;
+  then A6: f+g reduces_to g1,p,T by POLYRED:def 6;
+  g1 = (f+g) + (-((f.br/HC(p,T))*(s*'p))) by A5,POLYNOM1:def 23
+    .= (f + -((f.br/HC(p,T))*(s*'p))) + g by POLYNOM1:80
+    .= f1 + g by A4,POLYNOM1:def 23;
+  hence thesis by POLYRED:def 7,H,A6;
+  end;
+end;
+hence thesis;
+end;
+
+theorem red4:
+for n being Ordinal,
+    T being connected admissible TermOrder of n,
+    L being add-associative right_complementable right_zeroed
+            commutative associative left_unital right_unital distributive
+            Abelian Field-like (non trivial doubleLoopStr),
+    f,g being non-zero Polynomial of n,L
+holds f*'g reduces_to Red(f,T)*'g,{g},T
+proof
+let n be Ordinal, T be connected admissible TermOrder of n,
+    L be add-associative right_complementable right_zeroed
+         commutative associative left_unital right_unital distributive
+         Abelian Field-like (non trivial doubleLoopStr),
+    f,g be non-zero Polynomial of n,L;
+set fg = f*'g, rf = Red(f,T);
+set q = fg - (fg.HT(fg,T)/HC(g,T)) * (HT(f,T) *' g);
+A: fg <> 0_(n,L) & g <> 0_(n,L) by POLYNOM7:def 2;
+then Support fg <> {} by POLYNOM7:1;
+then B: HT(fg,T) in Support fg by TERMORD:def 6; 
+E: g in {g} by TARSKI:def 1;
+HT(fg,T) = HT(f,T) + HT(g,T) by TERMORD:31;
+then fg reduces_to q,g,HT(fg,T),T by A,B,POLYRED:def 5;
+then C: fg reduces_to q,g,T by POLYRED:def 6;
+D: HC(g,T) <> 0.L by A,TERMORD:17;
+reconsider r = -HM(f,T) as Polynomial of n,L;
+q = fg - (HC(fg,T)/HC(g,T)) * (HT(f,T) *' g) by TERMORD:def 7
+ .= fg - ((HC(f,T)*HC(g,T))/HC(g,T)) * (HT(f,T) *' g) by TERMORD:32
+ .= fg - ((HC(f,T)*HC(g,T))*HC(g,T)") * (HT(f,T) *' g) by VECTSP_1:def 23
+ .= fg - (HC(f,T)*(HC(g,T)*HC(g,T)")) * (HT(f,T) *' g) by GROUP_1:def 4
+ .= fg - (HC(f,T)*1.L) * (HT(f,T) *' g) by D,VECTSP_1:def 22
+ .= fg - HC(f,T) * (HT(f,T) *' g) by GROUP_1:def 5
+ .= fg - Monom(HC(f,T),HT(f,T)) *' g by POLYRED:22
+ .= fg - HM(f,T) *' g by TERMORD:def 8
+ .= fg + -(HM(f,T) *' g) by POLYNOM1:def 23
+ .= fg + (r *' g) by POLYRED:6
+ .= g *' (f + -HM(f,T)) by POLYNOM1:85
+ .= (f - HM(f,T)) *' g by POLYNOM1:def 23
+ .= Red(f,T) *' g by TERMORD:def 9;
+hence thesis by C,E,POLYRED:def 7;
+end;
+
+theorem
+for n being Ordinal,
+    T being connected admissible TermOrder of n,
+    L being add-associative right_complementable right_zeroed
+            commutative associative left_unital right_unital distributive
+            Abelian Field-like (non trivial doubleLoopStr),
+    f,g being non-zero Polynomial of n,L,
+    p being Polynomial of n,L st p.(HT(f*'g,T)) = 0.L
+holds f*'g+p reduces_to Red(f,T)*'g+p,{g},T
+proof
+let n be Ordinal, T be connected admissible TermOrder of n,
+    L be add-associative right_complementable right_zeroed
+         commutative associative left_unital right_unital distributive
+         Abelian Field-like (non trivial doubleLoopStr),
+    f,g be non-zero Polynomial of n,L, p be Polynomial of n,L;
+assume K: p.(HT(f*'g,T)) = 0.L;
+set fg = f*'g+p, rf = Red(f,T)+p;
+set q = fg - ((fg).HT(f*'g,T)/HC(g,T)) * (HT(f,T) *' g);
+f*'g <> 0_(n,L) by POLYNOM7:def 2;
+then Support(f*'g) <> {} by POLYNOM7:1;
+then HT(f*'g,T) in Support(f*'g) by TERMORD:def 6;
+then K1: (f*'g).HT(f*'g,T) <> 0.L by POLYNOM1:def 9;
+fg.(HT(f*'g,T)) = (f*'g).HT(f*'g,T) + p.HT(f*'g,T) by POLYNOM1:def 21
+               .= (f*'g).HT(f*'g,T) by K,RLVECT_1:def 7;
+then B: HT(f*'g,T) in Support fg by K1,POLYNOM1:def 9;
+then A: fg <> 0_(n,L) & g <> 0_(n,L) by POLYNOM7:def 2,POLYNOM7:1;
+E: g in {g} by TARSKI:def 1;
+HT(f*'g,T) = HT(f,T) + HT(g,T) by TERMORD:31;
+then fg reduces_to q,g,HT(f*'g,T),T by A,B,POLYRED:def 5;
+then C: fg reduces_to q,g,T by POLYRED:def 6;
+D: HC(g,T) <> 0.L by A,TERMORD:17;
+reconsider r =  -HM(f,T) as Polynomial of n,L;
+q = fg - (((f*'g).HT(f*'g,T)+0.L)/HC(g,T)) * (HT(f,T) *' g)
+     by K,POLYNOM1:def 21
+ .= fg - ((f*'g).HT(f*'g,T)/HC(g,T)) * (HT(f,T) *' g) by RLVECT_1:def 7
+ .= fg - (HC(f*'g,T)/HC(g,T)) * (HT(f,T) *' g) by TERMORD:def 7
+ .= fg - ((HC(f,T)*HC(g,T))/HC(g,T)) * (HT(f,T) *' g) by TERMORD:32
+ .= fg - ((HC(f,T)*HC(g,T))*HC(g,T)") * (HT(f,T) *' g) by VECTSP_1:def 23
+ .= fg - (HC(f,T)*(HC(g,T)*HC(g,T)")) * (HT(f,T) *' g) by GROUP_1:def 4
+ .= fg - (HC(f,T)*1.L) * (HT(f,T) *' g) by D,VECTSP_1:def 22
+ .= fg - HC(f,T) * (HT(f,T) *' g) by GROUP_1:def 5
+ .= fg - Monom(HC(f,T),HT(f,T)) *' g by POLYRED:22
+ .= fg - HM(f,T) *' g by TERMORD:def 8
+ .= fg + -(HM(f,T) *' g) by POLYNOM1:def 23
+ .= (f*'g+p) + (r *' g) by POLYRED:6
+ .= (f*'g + r *' g) + p by POLYNOM1:80
+ .= g *' (f + -HM(f,T)) + p by POLYNOM1:85
+ .= (f - HM(f,T)) *' g + p by POLYNOM1:def 23
+ .= Red(f,T) *' g + p by TERMORD:def 9;
+  hence thesis by C,E,POLYRED:def 7;
+end;
+
+theorem red7:
+for n being Ordinal,
+    T being connected admissible TermOrder of n,
+    L being add-associative right_complementable right_zeroed
+            commutative associative left_unital right_unital distributive
+            Abelian Field-like (non trivial doubleLoopStr),
+    P be Subset of Polynom-Ring(n,L),
+    f,g being Polynomial of n,L
+st PolyRedRel(P,T) reduces f,g holds PolyRedRel(P,T) reduces -f,-g
+proof
+let n be Ordinal, T be connected admissible TermOrder of n,
+    L be add-associative right_complementable right_zeroed
+         commutative associative left_unital right_unital distributive
+         Abelian Field-like (non trivial doubleLoopStr),
+    P be Subset of Polynom-Ring(n,L), f,g be Polynomial of n,L;
+assume PolyRedRel(P,T) reduces f,g;
+then consider R being RedSequence of PolyRedRel(P,T) such that
+A: R.1 = f & R.len R = g by REWRITE1:def 3;
+defpred P[Nat] means
+  for q being Polynomial of n,L st q = R.$1
+  holds PolyRedRel(P,T) reduces -f,-q;
+IA: P[1] by A,REWRITE1:13;
+IS: now let k be Nat; assume AS1: 1 <= k & k < len R; 
+    assume AS2: P[k];
+    1 < len R by AS1,AXIOMS:22;
+    then reconsider p = R.k as Polynomial of n,L by AS1,red1;
+    AS3: PolyRedRel(P,T) reduces -f,-p by AS2; 
+    now let q be Polynomial of n,L; assume B0: q = R.(k+1);
+      B1: k in dom R by AS1,FINSEQ_3:27;
+      1 <= k+1 & k+1 <= len R by AS1,NAT_1:38;
+      then k+1 in dom R by FINSEQ_3:27;
+      then [R.k, R.(k+1)] in PolyRedRel(P,T) by B1,REWRITE1:def 2;
+      then p reduces_to q,P,T by B0,POLYRED:def 13;
+      then consider l being Polynomial of n,L such that
+      B2: l in P & p reduces_to q,l,T by POLYRED:def 7;
+      -p reduces_to -q,l,T by B2,red2;
+      then -p reduces_to -q,P,T by B2,POLYRED:def 7;
+      then [-p,-q] in PolyRedRel(P,T) by POLYRED:def 13;
+      then PolyRedRel(P,T) reduces -p,-q by REWRITE1:16;
+      hence PolyRedRel(P,T) reduces -f,-q by AS3,REWRITE1:17;
+      end;
+    hence P[k+1];
+    end;
+I: for i being Nat st 1<=i & i<=len R holds P[i] from POLYNOM2:sch 4(IA,IS);
+0 < len R by REWRITE1:def 2;
+then 1 <= len R by NAT_1:39;
+hence thesis by A,I;
+end;
+
+theorem
+for n being Ordinal,
+    T being connected admissible TermOrder of n,
+    L being add-associative right_complementable right_zeroed
+            commutative associative left_unital right_unital distributive
+            Abelian Field-like (non trivial doubleLoopStr),
+    f,f1,g,p being Polynomial of n,L
+st PolyRedRel({p},T) reduces f,f1 &
+   for b1 being bag of n st b1 in Support g holds not(HT(p,T) divides b1)
+holds PolyRedRel({p},T) reduces f+g,f1+g
+proof
+let n be Ordinal, T be connected admissible TermOrder of n,
+    L be add-associative right_complementable right_zeroed
+         commutative associative left_unital right_unital distributive
+         Abelian Field-like (non trivial doubleLoopStr),
+    f,f1,g,p be Polynomial of n,L;
+assume AS: PolyRedRel({p},T) reduces f,f1 &
+   for b1 being bag of n st b1 in Support g holds not(HT(p,T) divides b1);
+then consider R being RedSequence of PolyRedRel({p},T) such that
+A: R.1 = f & R.len R = f1 by REWRITE1:def 3;
+defpred P[Nat] means
+  for q being Polynomial of n,L st q = R.$1
+  holds PolyRedRel({p},T) reduces f+g,q+g;
+IA: P[1] by A,REWRITE1:13;
+IS: now let k be Nat; assume AS1: 1 <= k & k < len R; 
+    assume AS2: P[k];
+    1 < len R by AS1,AXIOMS:22;
+    then reconsider h = R.k as Polynomial of n,L by AS1,red1;
+    AS3: PolyRedRel({p},T) reduces f+g,h+g by AS2; 
+    now let q be Polynomial of n,L; assume B0: q = R.(k+1);
+      B1: k in dom R by AS1,FINSEQ_3:27;
+      1 <= k+1 & k+1 <= len R by AS1,NAT_1:38;
+      then k+1 in dom R by FINSEQ_3:27;
+      then [R.k, R.(k+1)] in PolyRedRel({p},T) by B1,REWRITE1:def 2;
+      then h reduces_to q,{p},T by B0,POLYRED:def 13;
+      then h+g reduces_to q+g,{p},T by AS,red3;
+      then [h+g,q+g] in PolyRedRel({p},T) by POLYRED:def 13;
+      then PolyRedRel({p},T) reduces h+g,q+g by REWRITE1:16;
+      hence PolyRedRel({p},T) reduces f+g,q+g by AS3,REWRITE1:17;
+      end;
+    hence P[k+1];
+    end;
+I: for i being Nat st 1<=i & i<=len R holds P[i] from POLYNOM2:sch 4(IA,IS);
+0 < len R by REWRITE1:def 2;
+then 1 <= len R by NAT_1:39;
+hence thesis by A,I;
+end;
+
+theorem red6:
+for n being Ordinal,
+    T being connected admissible TermOrder of n,
+    L being add-associative right_complementable right_zeroed
+            commutative associative left_unital right_unital distributive
+            Abelian Field-like (non trivial doubleLoopStr),
+    f,g being non-zero Polynomial of n,L
+holds PolyRedRel({g},T) reduces f*'g,0_(n,L)
+proof
+let n be Ordinal, T be connected admissible TermOrder of n,
+    L be add-associative right_complementable right_zeroed
+         commutative associative left_unital right_unital distributive
+         Abelian Field-like (non trivial doubleLoopStr),
+    f,g be non-zero Polynomial of n,L;
+defpred P[Nat] means
+  for f being Polynomial of n,L st card(Support f) = $1
+  holds PolyRedRel({g},T) reduces f*'g,0_(n,L);
+now let f be Polynomial of n,L; assume card(Support f) = 0;
+  then Support f,0 are_equipotent by CARD_1:def 5;
+  then Support f = {} by CARD_1:46;
+  then f = 0_(n,L) by POLYNOM7:1;
+  then f*'g = 0_(n,L) by POLYRED:5;
+  hence PolyRedRel({g},T) reduces f*'g,0_(n,L) by REWRITE1:13;
+  end;
+then IA: P[0];
+IS: now let k be Nat; assume AS1: P[k];
+    now let f be Polynomial of n,L; assume AS2: card(Support f) = k+1;
+      now assume f = 0_(n,L);
+        then Support f = {} by POLYNOM7:1;
+        then Card(Support f) = 0 by CARD_1:def 5;
+        hence contradiction by AS2;
+        end;
+      then reconsider f1 = f as non-zero Polynomial of n,L by POLYNOM7:def 2;
+      set rf = Red(f,T);
+      f1 <> 0_(n,L) by POLYNOM7:def 2;
+      then Support f <> {} by POLYNOM7:1;
+      then HT(f,T) in Support f by TERMORD:def 6; then
+      for u being set st u in {HT(f,T)} holds u in Support f by TARSKI:def 1;
+      then B1: {HT(f,T)} c= Support f by TARSKI:def 3;
+      Support rf = Support(f) \ {HT(f,T)} by TERMORD:36; then
+      card(Support rf) = card(Support f) - card({HT(f,T)}) by B1,CARD_2:63
+                      .= (k + 1) - 1 by CARD_2:20,CARD_1:50,AS2
+                      .= k + 0;
+      then IV: PolyRedRel({g},T) reduces rf*'g,0_(n,L) by AS1;
+      f1*'g reduces_to rf*'g,{g},T by red4;
+      then [f1*'g,rf*'g] in PolyRedRel({g},T) by POLYRED:def 13;
+      then PolyRedRel({g},T) reduces f*'g,rf*'g by REWRITE1:16;
+      hence PolyRedRel({g},T) reduces f*'g,0_(n,L) by REWRITE1:17,IV;
+      end;
+    hence P[k+1];
+    end;
+I: for k being Nat holds P[k] from NAT_1:sch 1(IA,IS);
+consider n being Nat such that H: card(Support f) = n;
+thus thesis by I,H;
+end;
+
+
+begin :: The Criterium
+
+theorem spoly0:
+for n being Ordinal,
+    T being connected admissible TermOrder of n,
+    L being add-associative right_complementable right_zeroed
+            commutative associative left_unital right_unital distributive
+            Field-like (non trivial doubleLoopStr),
+    p1,p2 being Polynomial of n,L st HT(p1,T),HT(p2,T) are_disjoint
+for b1,b2 being bag of n st b1 in Support Red(p1,T) & b2 in Support Red(p2,T)
+holds not(HT(p1,T) + b2 = HT(p2,T) + b1)
+proof
+let n be Ordinal, T be connected admissible TermOrder of n,
+    L be add-associative right_complementable right_zeroed
+         commutative associative left_unital right_unital distributive
+         Field-like (non trivial doubleLoopStr),
+    p1,p2 be Polynomial of n,L;
+assume AS1: HT(p1,T),HT(p2,T) are_disjoint;
+let b1,b2 be bag of n;
+assume AS2: b1 in Support Red(p1,T) & b2 in Support Red(p2,T);
+A: Support(Red(p1,T)) c= Support(p1) &  Support(Red(p2,T)) c= Support(p2)
+   by TERMORD:35;
+now assume b1 = HT(p1,T);
+  then Red(p1,T).b1 = 0.L by TERMORD:39;
+  hence contradiction by AS2,POLYNOM1:def 9;
+  end;
+hence thesis by A,AS2,AS1,lem1;
+end;
+
+theorem spoly1:
+for n being Ordinal,
+    T being connected TermOrder of n,
+    L being add-associative right_complementable right_zeroed
+            commutative associative left_unital right_unital distributive
+            Abelian Field-like (non trivial doubleLoopStr),
+    p1,p2 being Polynomial of n,L
+st HT(p1,T),HT(p2,T) are_disjoint
+holds S-Poly(p1,p2,T) = HM(p2,T) *' Red(p1,T) - HM(p1,T) *' Red(p2,T)
+proof
+let n be Ordinal, T be connected TermOrder of n,
+    L be add-associative right_complementable right_zeroed
+         commutative associative left_unital right_unital distributive
+         Abelian Field-like (non trivial doubleLoopStr),
+    p1,p2 be Polynomial of n,L;
+assume HT(p1,T),HT(p2,T) are_disjoint;
+then lcm(HT(p1,T),HT(p2,T)) = HT(p1,T) + HT(p2,T) by GROEB_2:9;
+hence S-Poly(p1,p2,T) 
+  = HC(p2,T) * ((HT(p1,T) + HT(p2,T))/HT(p1,T)) *' p1 -
+    HC(p1,T) * ((HT(p1,T) + HT(p2,T))/HT(p2,T)) *' p2 by GROEB_2:def 4
+ .= HC(p2,T) * HT(p2,T) *' p1 -
+    HC(p1,T) * ((HT(p1,T) + HT(p2,T))/HT(p2,T)) *' p2 by bag1
+ .= HC(p2,T) * HT(p2,T) *' p1 - 
+    HC(p1,T) * HT(p1,T) *' p2 by bag1
+ .= HC(p2,T) * HT(p2,T) *' (HM(p1,T) + Red(p1,T)) - 
+    HC(p1,T) * HT(p1,T) *' p2 by TERMORD:38
+ .= HC(p2,T) * HT(p2,T) *' (HM(p1,T) + Red(p1,T)) - 
+    HC(p1,T) * HT(p1,T) *' (HM(p2,T) + Red(p2,T)) by TERMORD:38
+ .= Monom(HC(p2,T),HT(p2,T)) *' (HM(p1,T) + Red(p1,T)) - 
+    HC(p1,T) * HT(p1,T) *' (HM(p2,T) + Red(p2,T)) by POLYRED:22
+ .= Monom(HC(p2,T),HT(p2,T)) *' (HM(p1,T) + Red(p1,T)) - 
+    Monom(HC(p1,T),HT(p1,T)) *' (HM(p2,T) + Red(p2,T)) by POLYRED:22
+ .= HM(p2,T) *' (HM(p1,T) + Red(p1,T)) - 
+    Monom(HC(p1,T),HT(p1,T)) *' (HM(p2,T) + Red(p2,T)) by TERMORD:def 8
+ .= HM(p2,T) *' (HM(p1,T) + Red(p1,T)) - 
+    HM(p1,T) *' (HM(p2,T) + Red(p2,T)) by TERMORD:def 8
+ .= (HM(p2,T) *' HM(p1,T) + HM(p2,T) *' Red(p1,T)) - 
+    HM(p1,T) *' (HM(p2,T) + Red(p2,T)) by POLYNOM1:85
+ .= (HM(p2,T) *' HM(p1,T) + HM(p2,T) *' Red(p1,T)) - 
+    (HM(p1,T) *' HM(p2,T) + HM(p1,T) *' Red(p2,T)) by POLYNOM1:85
+ .= (HM(p2,T) *' HM(p1,T) + HM(p2,T) *' Red(p1,T)) + 
+    -((HM(p1,T) *' HM(p2,T)) + (HM(p1,T) *' Red(p2,T))) by POLYNOM1:def 23
+ .= (HM(p2,T) *' HM(p1,T) + HM(p2,T) *' Red(p1,T)) + 
+    (-(HM(p1,T) *' HM(p2,T)) + -(HM(p1,T) *' Red(p2,T))) by POLYRED:1
+ .= HM(p2,T) *' Red(p1,T) + (HM(p2,T) *' HM(p1,T) + 
+    (-(HM(p1,T) *' HM(p2,T)) + -(HM(p1,T) *' Red(p2,T)))) by POLYNOM1:80
+ .= HM(p2,T) *' Red(p1,T) + ((HM(p2,T) *' HM(p1,T) + 
+    -(HM(p1,T) *' HM(p2,T))) + -(HM(p1,T) *' Red(p2,T))) by POLYNOM1:80
+ .= HM(p2,T) *' Red(p1,T) + (0_(n,L) + -(HM(p1,T) *' Red(p2,T))) by POLYRED:3
+ .= HM(p2,T) *' Red(p1,T) + -(HM(p1,T) *' Red(p2,T)) by POLYRED:2
+ .= HM(p2,T) *' Red(p1,T) - (HM(p1,T) *' Red(p2,T)) by POLYNOM1:def 23;
+end;
+
+theorem A:
+for n being Ordinal,
+    T being connected TermOrder of n,
+    L being add-associative right_complementable right_zeroed
+            commutative associative left_unital right_unital distributive
+            Abelian Field-like (non trivial doubleLoopStr),
+    p1,p2 being Polynomial of n,L
+st HT(p1,T),HT(p2,T) are_disjoint
+holds S-Poly(p1,p2,T) = Red(p1,T) *' p2 - Red(p2,T) *' p1
+proof
+let n be Ordinal, T be connected TermOrder of n,
+    L be add-associative right_complementable right_zeroed
+         commutative associative left_unital right_unital distributive
+         Abelian Field-like (non trivial doubleLoopStr),
+    p1,p2 be Polynomial of n,L;
+assume AS: HT(p1,T),HT(p2,T) are_disjoint;
+reconsider r1 = -Red(p1,T),
+           r2 = -Red(p2,T) as Polynomial of n,L;
+r2 *' Red(p1,T) = -(Red(p2,T) *' Red(p1,T)) by POLYRED:6
+               .= r1 *' Red(p2,T) by POLYRED:6;
+then A: (r2 *' Red(p1,T) + -(r1 *' Red(p2,T))) = 0_(n,L) by POLYRED:3;
+thus S-Poly(p1,p2,T) 
+   = HM(p2,T) *' Red(p1,T) - (HM(p1,T) *' Red(p2,T)) by AS,spoly1
+  .= (p2 - Red(p2,T)) *' Red(p1,T) - (HM(p1,T) *' Red(p2,T)) by poly3
+  .= (p2 - Red(p2,T)) *' Red(p1,T) - ((p1 - Red(p1,T)) *' Red(p2,T)) by poly3
+  .= (p2 + -Red(p2,T)) *' Red(p1,T)
+           - ((p1 - Red(p1,T)) *' Red(p2,T)) by POLYNOM1:def 23
+  .= (p2 + -Red(p2,T)) *' Red(p1,T)
+           - ((p1 + -Red(p1,T)) *' Red(p2,T)) by POLYNOM1:def 23
+  .= (p2 *' Red(p1,T) + r2 *' Red(p1,T))
+           - ((p1 + -Red(p1,T)) *' Red(p2,T)) by POLYNOM1:85
+  .= (p2 *' Red(p1,T) + r2 *' Red(p1,T)) 
+          - (p1 *' Red(p2,T) + r1 *' Red(p2,T)) by POLYNOM1:85
+  .= (p2 *' Red(p1,T) + r2 *' Red(p1,T)) 
+          + -(p1 *' Red(p2,T) + r1 *' Red(p2,T)) by POLYNOM1:def 23
+  .= (p2 *' Red(p1,T) + r2 *' Red(p1,T)) 
+          + (-(p1 *' Red(p2,T)) + -(r1 *' Red(p2,T))) by POLYRED:1
+  .= p2 *' Red(p1,T) + (r2 *' Red(p1,T)
+          + (-(r1 *' Red(p2,T)) + -(p1 *' Red(p2,T)))) by POLYNOM1:80
+  .= p2 *' Red(p1,T) + (0_(n,L) + -(p1 *' Red(p2,T))) by A,POLYNOM1:80
+  .= p2 *' Red(p1,T) + -(p1 *' Red(p2,T)) by POLYRED:2
+  .= Red(p1,T) *' p2 - Red(p2,T) *' p1 by POLYNOM1:def 23;
+end;
+
+theorem lem_cr_1:
+for n being Ordinal,
+    T being connected admissible TermOrder of n,
+    L being add-associative right_complementable right_zeroed
+            commutative associative left_unital right_unital distributive
+            Abelian Field-like (non trivial doubleLoopStr),
+    p1,p2 being non-zero Polynomial of n,L
+st HT(p1,T),HT(p2,T) are_disjoint &
+   Red(p1,T) is non-zero & Red(p2,T) is non-zero
+holds PolyRedRel({p1},T) reduces 
+           HM(p2,T)*'Red(p1,T) - HM(p1,T)*'Red(p2,T), p2 *' Red(p1,T)
+proof
+let n be Ordinal, T be connected admissible TermOrder of n,
+    L be add-associative right_complementable right_zeroed
+         commutative associative left_unital right_unital distributive
+         Abelian Field-like (non trivial doubleLoopStr),
+    p1,p2 be non-zero Polynomial of n,L;
+assume AS: HT(p1,T),HT(p2,T) are_disjoint &
+           Red(p1,T) is non-zero & Red(p2,T) is non-zero;
+then reconsider red1 = Red(p1,T), red2 = Red(p2,T)
+  as non-zero Polynomial of n,L;
+set j = card(Support p2);
+p2 <> 0_(n,L) by POLYNOM7:def 2;
+then Support p2 <> {} by POLYNOM7:1;
+then HT(p2,T) in Support p2 by TERMORD:def 6;
+then for t being set holds
+     t in {HT(p2,T)} implies t in Support p2 by TARSKI:def 1;
+then Z7a: {HT(p2,T)} c= Support p2 by TARSKI:def 3;
+Z7: card(Support red2) 
+  = card(Support(p2) \ {HT(p2,T)}) by TERMORD:36
+ .= card(Support(p2)) - card({HT(p2,T)}) by Z7a,CARD_2:63
+ .= j - 1 by CARD_2:60;
+now assume j = 0;
+  then Support p2,0 are_equipotent by CARD_1:def 5;
+  then Support p2 = {} by CARD_1:46;
+  then p2 = 0_(n,L) by POLYNOM7:1;
+  hence contradiction by POLYNOM7:def 2;
+  end;
+then II: 1 <= j by NAT_1:39;
+then 1 - 1 <= j - 1 by REAL_1:49;
+then reconsider j' = j - 1 as Nat by INT_1:16;
+defpred P[Nat] means
+  for m being Nat st m <= card(Support p2) & card(Support Low(p2,T,m)) = $1
+  holds PolyRedRel({p1},T) reduces 
+      HM(p2,T)*'Red(p1,T) - HM(p1,T)*'Red(p2,T),
+      HM(p2,T)*'Red(p1,T)
+          - HM(p1,T)*'(Red(p2,T)-Low(p2,T,m)) + Red(p1,T)*'Low(p2,T,m); 
+IA: P[0]
+    proof
+    let m be Nat;
+    assume m <= card(Support p2) & card(Support Low(p2,T,m)) = 0;
+    then Support Low(p2,T,m),0 are_equipotent by CARD_1:def 5;
+    then Support Low(p2,T,m) = {} by CARD_1:46;
+    then Low(p2,T,m) = 0_(n,L) by POLYNOM7:1;
+    then HM(p2,T)*'Red(p1,T)
+         - HM(p1,T)*'(Red(p2,T)-Low(p2,T,m)) + Red(p1,T)*'Low(p2,T,m)
+       = HM(p2,T)*'Red(p1,T)
+         - HM(p1,T)*'Red(p2,T) + Red(p1,T)*'0_(n,L) by POLYRED:4
+      .= HM(p2,T)*'Red(p1,T) - HM(p1,T)*'Red(p2,T) + 0_(n,L) by POLYRED:5
+      .= HM(p2,T)*'Red(p1,T) - HM(p1,T)*'Red(p2,T) by POLYRED:2;
+    hence thesis by REWRITE1:13;
+    end;
+IS: for k being Nat st 0 <= k & k < j' holds P[k] implies P[k+1]
+    proof
+    let k be Nat;
+    assume AS1: 0 <= k & k < j';
+    now assume AS2: P[k];
+      now let m be Nat;
+      assume AS6: m <= card(Support p2) & card(Support Low(p2,T,m)) = k+1;
+      set m' = m + 1;
+      now assume m = card(Support p2);
+        then Low(p2,T,m) = 0_(n,L) by spl2;
+        hence contradiction by AS6,CARD_1:47,POLYNOM7:1;
+        end;
+      then AS7a: m < card(Support p2) by AS6,REAL_1:def 5;
+      then AS7b: m' <= card(Support p2) by NAT_1:38;
+      Support Low(p2,T,m') c= Support Low(p2,T,m) by low_back_1,AS7a;
+      then X: card(Support Low(p2,T,m) \ Support Low(p2,T,m')) = 
+           card(Support Low(p2,T,m)) - card(Support Low(p2,T,m')) by CARD_2:63;
+      k + 1 - card(Support Low(p2,T,m')) 
+         = card {HT(Low(p2,T,m),T)} by X,low_back,AS7a,AS6
+        .= 1 by CARD_2:20,CARD_1:50;
+      then KKK: k + 1 = card(Support Low(p2,T,m')) + 1; then
+      AS7: m' <= card(Support p2) & card(Support Low(p2,T,m')) = k 
+           by AS7a,NAT_1:38,XCMPLX_1:2;
+      AS9: 0 < m' by NAT_1:19;
+      AS10: 1 <= m' by NAT_1:39;
+      set f = HM(p2,T)*'Red(p1,T)
+              - HM(p1,T)*'(Red(p2,T)-Low(p2,T,m')) + Red(p1,T)*'Low(p2,T,m');
+      red1 <> 0_(n,L) & HM(p2,T) <> 0_(n,L) by POLYNOM7:def 2;
+      then Support red1 <> {} & Support HM(p2,T) <> {} by POLYNOM7:1;
+      then HT(red1,T) in Support red1 & HT(HM(p2,T),T) in Support HM(p2,T)
+           by TERMORD:def 6;
+      then red1.(HT(red1,T)) <> 0.L &
+           HM(p2,T).(HT(HM(p2,T),T)) <> 0.L by POLYNOM1:def 9;
+      then HC(red1,T) <> 0.L & HC(HM(p2,T),T) <> 0.L by TERMORD:def 7;
+      then R1a: HC(HM(p2,T),T)*HC(red1,T) <> 0.L by VECTSP_2:def 5;
+      R1b: HT(HM(p2,T)*'red1,T) = HT(HM(p2,T),T) + HT(red1,T) by TERMORD:31;
+      HC(HM(p2,T)*'red1,T) <> 0.L by R1a,TERMORD:32;
+      then RR1: (HM(p2,T)*'red1).(HT(HM(p2,T),T) + HT(red1,T)) <> 0.L
+                 by R1b,TERMORD:def 7;
+      H: HT(HM(p2,T),T) + HT(red1,T) is Element of Bags n by POLYNOM1:def 14;
+      now assume A: HT(HM(p2,T),T) + HT(red1,T) in Support(red1*'Low(p2,T,m'));
+        Support(red1*'Low(p2,T,m')) c= 
+                  {s + t where s,t is Element of Bags n :
+                           s in Support red1 & t in Support Low(p2,T,m')}
+           by TERMORD:30;
+        then HT(HM(p2,T),T) + HT(red1,T) in 
+                  {s + t where s,t is Element of Bags n :
+                           s in Support red1 & t in Support Low(p2,T,m')} by A;
+        then consider s,t being Element of Bags n such that
+        C: HT(HM(p2,T),T) + HT(red1,T) = s + t &
+           s in Support red1 & t in Support Low(p2,T,m');
+        D: t < HT(p2,T),T
+           proof
+           now per cases;
+           case m' = card(Support p2);
+             then Low(p2,T,m') = 0_(n,L) by spl2;
+             hence contradiction by C,POLYNOM7:1;
+             end;
+           case m' <> card(Support p2);
+             then m' < card(Support p2) by AS7b,REAL_1:def 5;
+             then E: HT(Low(p2,T,m'),T) < HT(p2,T),T by AS9,spl6;
+             t <= HT(Low(p2,T,m'),T),T by C,TERMORD:def 6;
+             hence t < HT(p2,T),T by E,bag5;
+             end;
+           end;
+           hence thesis;
+           end;
+        s <= HT(red1,T),T by C,TERMORD:def 6;
+        then s + t < HT(p2,T) + HT(red1,T),T by bag4,D;
+        then s + t < HT(HM(p2,T),T) + HT(red1,T),T by TERMORD:26;
+        hence contradiction by C,TERMORD:def 3; 
+        end;
+      then RR2: (red1*'Low(p2,T,m')).(HT(HM(p2,T),T) + HT(red1,T)) = 0.L
+                by H,POLYNOM1:def 9;
+      now assume A: HT(HM(p2,T),T) + HT(red1,T) in 
+                    Support(HM(p1,T)*'(red2-Low(p2,T,m')));
+        Support(HM(p1,T)*'(red2-Low(p2,T,m'))) c= 
+                  {s + t where s,t is Element of Bags n :
+                     s in Support HM(p1,T) & t in Support(red2-Low(p2,T,m'))}
+           by TERMORD:30;
+        then HT(HM(p2,T),T) + HT(red1,T) in 
+              {s + t where s,t is Element of Bags n :
+               s in Support HM(p1,T) & t in Support(red2-Low(p2,T,m'))} by A;
+        then consider s,t being Element of Bags n such that
+        C: HT(HM(p2,T),T) + HT(red1,T) = s + t &
+           s in Support HM(p1,T) & t in Support(red2-Low(p2,T,m'));
+        G1: HT(HM(p2,T),T) = HT(p2,T) by TERMORD:26;
+        red1 <> 0_(n,L) by POLYNOM7:def 2;
+        then Support red1 <> {} by POLYNOM7:1;
+        then G2: HT(red1,T) in Support red1 by TERMORD:def 6;
+        HM(p1,T) <> 0_(n,L) by POLYNOM7:def 2;
+        then Support HM(p1,T) <> {} by POLYNOM7:1;
+        then Support HM(p1,T) = {HT(p1,T)} by TERMORD:21;
+        then G3: s = HT(p1,T) by C,TARSKI:def 1;
+        F1: red2 - Low(p2,T,m') = red2 + -Low(p2,T,m') by POLYNOM1:def 23;
+        Support(-Low(p2,T,m')) = Support Low(p2,T,m') by GROEB_1:5;
+        then F2: Support(red2 - Low(p2,T,m')) c= 
+                 Support red2 \/ Support Low(p2,T,m') by F1,POLYNOM1:79;
+        F3: Support Low(p2,T,m') c= Support red2 by AS7b,AS10,spl7;
+        t in Support red2
+          proof
+          now per cases by F2,C,XBOOLE_0:def 2;
+          case t in Support red2;
+            hence thesis;
+            end;
+          case t in Support Low(p2,T,m');
+            hence thesis by F3;
+            end;
+          end;
+          hence thesis;
+          end;
+        hence contradiction by G1,G2,G3,C,AS,spoly0;
+        end;
+      then (HM(p1,T)*'(red2-Low(p2,T,m'))).(HT(HM(p2,T),T) + HT(red1,T)) 
+                = 0.L by H,POLYNOM1:def 9;
+      then RR3: - (HM(p1,T)*'(red2-Low(p2,T,m'))).(HT(HM(p2,T),T) + HT(red1,T)) 
+               = 0.L by RLVECT_1:25;
+      R1e: HT(HM(p2,T),T) + HT(red1,T) is Element of Bags n by POLYNOM1:def 14;
+      f.(HT(HM(p2,T),T) + HT(red1,T)) 
+        = ((HM(p2,T)*'red1+-HM(p1,T)*'(red2-Low(p2,T,m')))+red1*'Low(p2,T,m')).
+          (HT(HM(p2,T),T) + HT(red1,T)) by POLYNOM1:def 23
+       .= (HM(p2,T)*'red1 + -HM(p1,T)*'(red2-Low(p2,T,m'))).
+                (HT(HM(p2,T),T) + HT(red1,T)) + 0.L by RR2,POLYNOM1:def 21
+       .= (HM(p2,T)*'red1 + -HM(p1,T)*'(red2-Low(p2,T,m'))).
+                (HT(HM(p2,T),T) + HT(red1,T)) by RLVECT_1:def 7
+       .= (HM(p2,T)*'red1).(HT(HM(p2,T),T) + HT(red1,T))
+          + (-HM(p1,T)*'(red2-Low(p2,T,m'))).
+                (HT(HM(p2,T),T) + HT(red1,T)) by POLYNOM1:def 21
+       .= (HM(p2,T)*'red1).(HT(HM(p2,T),T) + HT(red1,T)) 
+          + 0.L by RR3,POLYNOM1:def 22
+       .= (HM(p2,T)*'red1).(HT(HM(p2,T),T) + HT(red1,T)) by RLVECT_1:def 7;
+      then HT(HM(p2,T),T) + HT(red1,T) in Support f by RR1,R1e,POLYNOM1:def 9;
+      then R1: f <> 0_(n,L) by POLYNOM7:1;
+      red2 <> 0_(n,L) by POLYNOM7:def 2;
+      then U3: Support red2 <> {} by POLYNOM7:1;
+      Low(p2,T,m') = p2|(Lower_Support(p2,T,m')) by deflow;
+      then Z2: Support Low(p2,T,m') = Lower_Support(p2,T,m') by spl,AS7b;
+      now assume Z4: HT(red2,T) in Support Low(p2,T,m');
+         Support Low(p2,T,m') c= Support red2 by AS10,AS7b,spl7;
+         then U4: for t being set holds
+         t in Support Low(p2,T,m') implies t in Support red2;
+         now let t be set; assume A: t in Support red2;
+            then reconsider t' = t as bag of n by POLYNOM1:def 14;
+           Z5: Support red2 c= Support p2 by TERMORD:35; 
+           t' <= HT(red2,T),T by A,TERMORD:def 6;
+           hence t in Support Low(p2,T,m') by Z4,Z5,Z2,A,AS7b,ddeflows;
+           end;
+         then j' = card(Support(Low(p2,T,m'))) by Z7,U4,TARSKI:2
+                .= k by XCMPLX_1:2,KKK;
+         hence contradiction by AS1;
+         end;
+      then Low(p2,T,m') <> red2 by U3,TERMORD:def 6;
+      then Red(p2,T) - Low(p2,T,m') <> 0_(n,L) by polyZ;
+      then reconsider z1 = Red(p2,T) - Low(p2,T,m') 
+                           as non-zero Polynomial of n,L by POLYNOM7:def 2;
+      z1 = Red(p2,T) + -Low(p2,T,m') by POLYNOM1:def 23;
+      then Support z1 c= Support Red(p2,T) \/ Support -Low(p2,T,m')
+           by POLYNOM1:79;
+      then Z3: Support z1 c= Support Red(p2,T) \/ Support Low(p2,T,m') 
+               by GROEB_1:5;
+      Support Low(p2,T,m') c= Support Red(p2,T) by AS7b,AS10,spl7;
+      then Support Red(p2,T) \/ Support Low(p2,T,m') c= 
+           Support Red(p2,T) \/ Support Red(p2,T)  by XBOOLE_1:9;
+      then Z1: Support z1 c= Support red2 by Z3,XBOOLE_1:1;
+      reconsider z = HM(p1,T) *' z1 as non-zero Polynomial of n,L;
+      z <> 0_(n,L) by POLYNOM7:def 2;
+      then Support z <> {} by POLYNOM7:1;
+      then card(Support z) <> 0 by CARD_2:59;
+      then 1 <= card(Support z) by NAT_1:39;
+      then reconsider w = card(Support z) - 1 as Nat by INT_1:18;
+      reconsider lowzw = Low(z,T,w) as non-zero Monomial of n,L by LLL;
+      U31: card(Support z) = card(Support z1) by FF3;
+      w = card(Support z1) - 1 by FF3; then
+      reconsider lowz1w = Low(z1,T,w) as non-zero Monomial of n,L by LLL;
+      set b = term(lowzw);
+      Z2: b is Element of Bags n by POLYNOM1:def 14;
+      set s = b / HT(p1,T);
+      Z3: s is Element of Bags n by POLYNOM1:def 14;
+      set g = f - (f.b/HC(p1,T)) * (s *' p1);
+      R2: p1 <> 0_(n,L) by POLYNOM7:def 2;
+      lowzw <> 0_(n,L) by POLYNOM7:def 2;
+      then Support lowzw <> {} by POLYNOM7:1;
+      then Support lowzw = {b} by POLYNOM7:7;
+      then U: b in Support lowzw by TARSKI:def 1;
+      card(Support z) = w + 1; 
+      then U30: w < card(Support z) by NAT_1:41;
+      then U20: Support(lowzw) c= Support(z) by spl10;
+      then U4: b in Support HM(p1,T) *' z1 by U;
+      R7: (HM(p1,T) *' z1).b <> 0.L by U,U20,POLYNOM1:def 9;
+      Support(HM(p1,T) *' z1) c= {t' + t where t',t is Element of Bags n :
+                   t' in Support HM(p1,T) & t in Support z1} by TERMORD:30;
+      then b in {t' + t where t',t is Element of Bags n :
+                   t' in Support HM(p1,T) & t in Support z1} by U4;
+      then consider t',t being Element of Bags n such that
+      U5: b =  t' + t & t' in Support HM(p1,T) & t in Support z1;
+      HM(p1,T) <> 0_(n,L) by POLYNOM7:def 2;
+      then Support HM(p1,T) <> {} by POLYNOM7:1;
+      then Support HM(p1,T) = {term(HM(p1,T))} by POLYNOM7:7
+                               .= {HT(p1,T)} by TERMORD:22;
+      then U8: t' = HT(p1,T) by U5,TARSKI:def 1;
+      then U9: HT(p1,T) divides b by U5,POLYNOM1:54;
+      then R3: s + HT(p1,T) = b by GROEB_2:def 1; 
+      Y: s = s +HT(p1,T)-'HT(p1,T) by POLYNOM1:52 .= t by R3,U5,U8,POLYNOM1:52;
+      then R6: s in Support Red(p2,T) by U5,Z1;
+      W8: Support Red(p2,T) c= Support p2 by TERMORD:35;
+      s in (Support(p2) \ {HT(p2,T)}) by R6,TERMORD:36;
+      then not(s in {HT(p2,T)}) by XBOOLE_0:def 4;
+      then W22: s <> HT(p2,T) by TARSKI:def 1;
+      then W16: Red(p2,T).s = p2.s by R6,W8,TERMORD:40;
+      W10: now assume s in Support Low(p2,T,m');
+           then W13: s in Lower_Support(p2,T,m') by AS7b,XXX;
+           s in Support(p2|Lower_Support(p2,T,m')) by AS7,W13,spl;
+           then W15: p2.s = (p2|Lower_Support(p2,T,m')).s by sp0
+                         .= Low(p2,T,m').s by deflow;
+           (Red(p2,T) - Low(p2,T,m')).s
+              = (Red(p2,T) + -Low(p2,T,m')).s by POLYNOM1:def 23
+             .= Red(p2,T).s + (-Low(p2,T,m')).s by POLYNOM1:def 21
+             .= Red(p2,T).s + -(Low(p2,T,m').s) by POLYNOM1:def 22
+             .= 0.L by W15,W16,RLVECT_1:16;
+           hence contradiction by POLYNOM1:def 9,U5,Y;
+           end;
+      then W23: Low(p2,T,m').s = 0.L by Z3,POLYNOM1:def 9;
+      R8: now assume U: b in Support(HM(p2,T)*'Red(p1,T));
+          Support(HM(p2,T)*'Red(p1,T)) c= {u+v where u,v is Element of Bags n :
+              u in Support HM(p2,T) & v in Support Red(p1,T)} by TERMORD:30;
+          then b in {u + v where u,v is Element of Bags n :
+              u in Support HM(p2,T) & v in Support Red(p1,T)} by U;
+          then consider t',t being Element of Bags n such that
+          W1: b = t' + t & t' in Support HM(p2,T) & t in Support Red(p1,T);
+          HM(p2,T) <> 0_(n,L) by POLYNOM7:def 2;
+          then W0: Support HM(p2,T) <> {} by POLYNOM7:1;
+          then HT(HM(p2,T),T) in Support HM(p2,T) by TERMORD:def 6;
+          then W2: HT(p2,T) in Support HM(p2,T) by TERMORD:26;
+          consider x being bag of n such that
+          W3: Support HM(p2,T) = {x} by W0,POLYNOM7:6;
+          Support HM(p2,T) = {HT(p2,T)} by W3,W2,TARSKI:def 1;
+          then t' = HT(p2,T) by W1,TARSKI:def 1;
+          hence contradiction by W1,R3,Y,U5,Z1,AS,spoly0;
+          end;
+      R9: now assume (Red(p1,T)*'Low(p2,T,m')).b <> 0.L;
+        then W4: b in Support(Red(p1,T)*'Low(p2,T,m')) by Z2,POLYNOM1:def 9;
+        Support(Red(p1,T)*'Low(p2,T,m')) c=
+           {u + v where u,v is Element of Bags n :
+            u in Support Red(p1,T) & v in Support Low(p2,T,m')} by TERMORD:30;
+        then b in {u + v where u,v is Element of Bags n :
+                   u in Support Red(p1,T) & v in Support Low(p2,T,m')} by W4;
+        then consider t',t being Element of Bags n such that
+        W3: b =  t' + t & t' in Support Red(p1,T) & t in Support Low(p2,T,m');
+        W5: s + HT(p1,T) = t' + t by U9,W3,GROEB_2:def 1;
+        Support Red(p1,T) c= Support p1 by TERMORD:35;
+        then W17: t' <= HT(p1,T),T by W3,TERMORD:def 6;
+        Support(Red(p1,T)) = Support(p1) \ {HT(p1,T)} by TERMORD:36;
+        then not(t' in {HT(p1,T)}) by W3,XBOOLE_0:def 4;
+        then t' <> HT(p1,T) by TARSKI:def 1;
+        then W6: t' < HT(p1,T),T by W17,TERMORD:def 3;
+        now assume s < t,T;
+          then W7: s <= t,T by TERMORD:def 3;
+          t in Lower_Support(p2,T,m') by AS7b,XXX,W3;
+          then s in Lower_Support(p2,T,m') by AS7b,W7,R6,W8,ddeflows;
+          hence contradiction by W10,AS7b,XXX;
+          end;
+        then t <= s,T by TERMORD:5;
+        then t + t' < s + HT(p1,T) ,T by W6,bag10;
+        hence contradiction by W5,TERMORD:def 3;
+        end;
+      W: f.b
+        = ((HM(p2,T)*'red1+-HM(p1,T)*'(red2-Low(p2,T,m')))+red1*'Low(p2,T,m')).
+          b by POLYNOM1:def 23
+       .= (HM(p2,T)*'red1 + -HM(p1,T)*'(red2-Low(p2,T,m'))).b
+                + 0.L by R9,POLYNOM1:def 21
+       .= (HM(p2,T)*'red1+-HM(p1,T)*'(red2-Low(p2,T,m'))).b by RLVECT_1:def 7
+       .= (HM(p2,T)*'red1).b
+          + (-HM(p1,T)*'(red2-Low(p2,T,m'))).b by POLYNOM1:def 21
+       .= 0.L + (-HM(p1,T)*'(red2-Low(p2,T,m'))).b by R8,Z2,POLYNOM1:def 9
+       .= (-HM(p1,T)*'(red2-Low(p2,T,m'))).b  by RLVECT_1:def 7
+       .= -(HM(p1,T)*'(red2-Low(p2,T,m')).b) by POLYNOM1:def 22;
+      now assume f.b = 0.L;
+         then (HM(p1,T) *' z1).b = -0.L by W,RLVECT_1:30;
+         hence contradiction by R7,RLVECT_1:25;
+         end;
+      then b in Support f by Z2,POLYNOM1:def 9;
+      then f reduces_to g,p1,b,T by R1,R2,R3,POLYRED:def 5;
+      then R5: f reduces_to g,p1,T by POLYRED:def 6;
+      p1 in {p1} by TARSKI:def 1;
+      then f reduces_to g,{p1},T by R5,POLYRED:def 7;
+      then [f,g] in PolyRedRel({p1},T) by POLYRED:def 13;
+      then RR5: PolyRedRel({p1},T) reduces f,g by REWRITE1:16;
+      p1 <> 0_(n,L) by POLYNOM7:def 2;
+      then FF: HC(p1,T) <> 0.L by TERMORD:17;
+      s + HT(p1,T) = term(HM(p1,T) *' lowz1w) by F,R3,U30,U31
+                  .= term(HM(p1,T)) + term(lowz1w) by FF1
+                  .= HT(p1,T) + term(lowz1w) by TERMORD:22;
+      then F20: s = HT(p1,T) + term(lowz1w) -' HT(p1,T) by POLYNOM1:52
+                 .= term(lowz1w) by POLYNOM1:52;
+      w + 1 = card(Support z1) - 1 + 1 by FF3;
+      then PP1: w <= card(Support z1) by NAT_1:38;
+      lowz1w <> 0_(n,L) by POLYNOM7:def 2;
+      then Support lowz1w <> {} by POLYNOM7:1;
+      then PP2: Support lowz1w = {term(lowz1w)} by POLYNOM7:7;
+      then PP: s in Support lowz1w by F20,TARSKI:def 1;
+      PP0: s in Lower_Support(z1,T,w) by PP,PP1,XXX;
+      F0: Monom(p2.s,s) = HM(Low(p2,T,m),T)
+          proof
+          P0: now let t be bag of n; assume P0: t in Support z1;
+            now assume P2: t < s,T;
+              then t <= s,T by TERMORD:def 3;
+              then t in Lower_Support(z1,T,w) by PP0,P0,PP1,ddeflows;
+              then t in Support lowz1w by PP1,XXX;
+              then t = term lowz1w by PP2,TARSKI:def 1;
+              hence contradiction by F20,P2,TERMORD:def 3;
+              end;
+            hence s <= t,T by TERMORD:5;
+            end;
+          set r = HT(Low(p2,T,m),T);
+          Support Low(p2,T,m)\Support Low(p2,T,m') = {HT(Low(p2,T,m),T)}
+                by AS7a,low_back; then
+          P3: r in Support Low(p2,T,m)\Support Low(p2,T,m') by TARSKI:def 1;
+          then P6: r in Support Low(p2,T,m) by XBOOLE_0:def 4;
+          then P4: r in Lower_Support(p2,T,m) by XXX,AS6;
+          P11: Support Low(p2,T,m) c= Support p2 by spl10,AS6;
+          P9: not(r in Support Low(p2,T,m')) by P3,XBOOLE_0:def 4;
+          now assume T0: r = HT(p2,T);
+             T1: now let u be set; assume T2: u in Support p2;
+                 then reconsider u' = u as Element of Bags n;
+                 u' <= r,T by T0,T2,TERMORD:def 6;
+                 then u' in Lower_Support(p2,T,m) by P4,T2,ddeflows,AS6;
+                 hence u in Support Low(p2,T,m) by XXX,AS6;
+                 end;
+             for u being set holds u in Support Low(p2,T,m) implies
+                u in Support p2 by P11;
+             then T: k + 1 = j by AS6,T1,TARSKI:2;
+             j = j' + 1;
+             hence contradiction by T,AS1;
+             end;
+          then P8: not(r in {HT(p2,T)}) by TARSKI:def 1;
+          Support(Red(p2,T)) = Support(p2) \ {HT(p2,T)} by TERMORD:36;
+          then P10: r in Support red2 by P8,P6,P11,XBOOLE_0:def 4;
+          (Red(p2,T) - Low(p2,T,m')).r 
+            = (Red(p2,T) + -Low(p2,T,m')).r by POLYNOM1:def 23
+           .= Red(p2,T).r + (-Low(p2,T,m')).r by POLYNOM1:def 21
+           .= Red(p2,T).r + -(Low(p2,T,m').r) by POLYNOM1:def 22
+           .= Red(p2,T).r + -0.L by P9,POLYNOM1:def 9
+           .= Red(p2,T).r + 0.L by RLVECT_1:25
+           .= Red(p2,T).r by RLVECT_1:def 7;
+          then z1.r <> 0.L by P10,POLYNOM1:def 9;
+          then r in Support z1 by POLYNOM1:def 9;
+          then P2: s <= r,T by P0;
+          Support red2 c= Support p2 by TERMORD:35;
+          then s in Lower_Support(p2,T,m) by R6,AS6,P4,P2,ddeflows;
+          then J0: s in Support(Low(p2,T,m)) by AS6,XXX;
+          then s in Support(Low(p2,T,m)) \ Support(Low(p2,T,m'))
+             by W10,XBOOLE_0:def 4;
+          then s in {HT(Low(p2,T,m),T)} by AS7a,low_back;
+          then J: s = HT(Low(p2,T,m),T) by TARSKI:def 1;
+          then J1: (HM(Low(p2,T,m),T)).(HT(Low(p2,T,m),T)) 
+                 = Low(p2,T,m).s by TERMORD:18
+                .= p2.s by AS6,J0,XXl;
+          HC(Low(p2,T,m),T)
+             = Low(p2,T,m).(HT(Low(p2,T,m),T)) by TERMORD:def 7
+            .= p2.s by J1,TERMORD:18;
+          hence thesis by J,TERMORD:def 8;
+          end;
+      F1: Low(p2,T,m) = Monom(p2.s,s) + Red(Low(p2,T,m),T) by F0,TERMORD:38
+                     .= Monom(p2.s,s) + Low(p2,T,m') by AS7a,low_red;
+      F2: HT(p1,T) = HT(HM(p1,T),T) by TERMORD:26
+                  .= term(HM(p1,T)) by TERMORD:23;
+      f.b = -HC(p1,T) * p2.s
+        proof
+            (HM(p1,T)*'(red2-Low(p2,T,m'))).b 
+          = (HM(p1,T)*'(red2-Low(p2,T,m'))).(s+HT(p1,T)) by U9,GROEB_2:def 1
+         .= (HM(p1,T)).HT(p1,T) * (red2-Low(p2,T,m')).s by F2,POLYRED:7
+         .= p1.HT(p1,T) * (red2-Low(p2,T,m')).s by TERMORD:18
+         .= HC(p1,T) * (red2-Low(p2,T,m')).s by TERMORD:def 7
+         .= HC(p1,T) * (red2 + -Low(p2,T,m')).s by POLYNOM1:def 23
+         .= HC(p1,T) * (red2.s + (-Low(p2,T,m')).s) by POLYNOM1:def 21
+         .= HC(p1,T) * (p2.s + (-Low(p2,T,m')).s) by W22,R6,W8,TERMORD:40
+         .= HC(p1,T) * (p2.s + -(Low(p2,T,m').s)) by POLYNOM1:def 22
+         .= HC(p1,T) * (p2.s + 0.L) by W23,RLVECT_1:25
+         .= HC(p1,T) * p2.s by RLVECT_1:def 7;
+        hence f.b = -HC(p1,T) * p2.s by W;
+        end;
+      then (f.b/HC(p1,T)) * (s *' p1) 
+         = ((HC(p1,T) * (-p2.s))/HC(p1,T)) * (s *' p1) by VECTSP_1:41
+        .= ((HC(p1,T) * (-p2.s))*HC(p1,T)") * (s *' p1) by VECTSP_1:def 23
+        .= ((-p2.s)*(HC(p1,T)*HC(p1,T)")) * (s *' p1) by GROUP_1:def 4
+        .= ((-p2.s)*1. L) * (s *' p1) by FF,VECTSP_1:def 22
+        .= (-p2.s) * (s *' p1) by GROUP_1:def 5;
+      then WW: g
+         = f + -(-p2.s) * (s *' p1) by POLYNOM1:def 23
+        .= f + (-(-p2.s)) * (s *' p1) by POLYRED:9
+        .= f + p2.s * (s *' p1) by RLVECT_1:30
+        .= f + Monom(p2.s,s) *' p1 by POLYRED:22
+        .= f + Monom(p2.s,s) *' (HM(p1,T) + Red(p1,T)) by TERMORD:38
+        .= f + (Monom(p2.s,s) *' HM(p1,T) + 
+               Monom(p2.s,s) *' Red(p1,T)) by POLYNOM1:85
+        .= (HM(p2,T)*'Red(p1,T)
+             + -HM(p1,T)*'(Red(p2,T)-Low(p2,T,m')) + Red(p1,T)*'Low(p2,T,m'))
+            + (Monom(p2.s,s) *' HM(p1,T) + 
+               Monom(p2.s,s) *' Red(p1,T)) by POLYNOM1:def 23
+        .= (((HM(p2,T)*'Red(p1,T)
+             + -HM(p1,T)*'(Red(p2,T)-Low(p2,T,m'))) + Red(p1,T)*'Low(p2,T,m'))
+            + Monom(p2.s,s) *' HM(p1,T)) + 
+               Monom(p2.s,s) *' Red(p1,T) by POLYNOM1:80
+        .= (((HM(p2,T)*'Red(p1,T)
+             + -HM(p1,T)*'(Red(p2,T)-Low(p2,T,m'))) + Monom(p2.s,s)*'HM(p1,T))
+            + Red(p1,T)*'Low(p2,T,m')) + 
+               Monom(p2.s,s) *' Red(p1,T) by POLYNOM1:80
+        .= (((HM(p2,T)*'Red(p1,T)
+             + HM(p1,T)*'-(Red(p2,T)-Low(p2,T,m')))+Monom(p2.s,s) *' HM(p1,T))
+            + Red(p1,T)*'Low(p2,T,m')) + 
+               Monom(p2.s,s) *' Red(p1,T) by POLYRED:6
+        .= ((HM(p2,T)*'Red(p1,T)
+             + (HM(p1,T)*'-(Red(p2,T)-Low(p2,T,m')) + Monom(p2.s,s)*'HM(p1,T)))
+            + Red(p1,T)*'Low(p2,T,m')) + 
+               Monom(p2.s,s) *' Red(p1,T) by POLYNOM1:80
+        .= ((HM(p2,T)*'Red(p1,T)
+             + (HM(p1,T)*'(-(Red(p2,T)-Low(p2,T,m')) + Monom(p2.s,s))))
+            + Red(p1,T)*'Low(p2,T,m')) + 
+               Monom(p2.s,s) *' Red(p1,T) by POLYNOM1:85
+        .= (HM(p2,T)*'Red(p1,T)
+             + (HM(p1,T)*'(-(Red(p2,T)-Low(p2,T,m')) + Monom(p2.s,s))))
+            + (Red(p1,T)*'Low(p2,T,m') + 
+               Monom(p2.s,s) *' Red(p1,T)) by POLYNOM1:80
+        .= (HM(p2,T)*'Red(p1,T)
+             + (HM(p1,T)*'(-(Red(p2,T)-Low(p2,T,m')) + Monom(p2.s,s))))
+            + Red(p1,T)*'Low(p2,T,m) by F1,POLYNOM1:85
+        .= (HM(p2,T)*'Red(p1,T)
+             + (HM(p1,T)*'(-(Red(p2,T)+ -Low(p2,T,m')) + Monom(p2.s,s))))
+            + Red(p1,T)*'Low(p2,T,m) by POLYNOM1:def 23
+        .= (HM(p2,T)*'Red(p1,T)
+             + (HM(p1,T)*'((-Red(p2,T)+ --Low(p2,T,m')) + Monom(p2.s,s))))
+            + Red(p1,T)*'Low(p2,T,m) by POLYRED:1
+        .= (HM(p2,T)*'Red(p1,T)
+             + (HM(p1,T)*'(-Red(p2,T) + --Low(p2,T,m)) ))
+            + Red(p1,T)*'Low(p2,T,m) by F1,POLYNOM1:80
+        .= (HM(p2,T)*'Red(p1,T)
+             + (HM(p1,T)*'-(Red(p2,T) + -Low(p2,T,m)) ))
+            + Red(p1,T)*'Low(p2,T,m) by POLYRED:1
+        .= (HM(p2,T)*'Red(p1,T)
+             + (HM(p1,T)*'-(Red(p2,T) -Low(p2,T,m)) ))
+            + Red(p1,T)*'Low(p2,T,m) by POLYNOM1:def 23
+        .= (HM(p2,T)*'Red(p1,T)
+             + -(HM(p1,T)*'(Red(p2,T) -Low(p2,T,m)) ))
+            + Red(p1,T)*'Low(p2,T,m) by POLYRED:6
+        .= HM(p2,T)*'Red(p1,T)
+           - HM(p1,T)*'(Red(p2,T)-Low(p2,T,m)) + Red(p1,T)*'Low(p2,T,m) 
+           by POLYNOM1:def 23;
+      PolyRedRel({p1},T) reduces 
+      HM(p2,T)*'Red(p1,T) - HM(p1,T)*'Red(p2,T),f
+        by AS2,AS7; 
+      hence PolyRedRel({p1},T) reduces 
+      HM(p2,T)*'Red(p1,T)-HM(p1,T)*'Red(p2,T),HM(p2,T)*'Red(p1,T)
+           - HM(p1,T)*'(Red(p2,T)-Low(p2,T,m)) + Red(p1,T)*'Low(p2,T,m) 
+           by RR5,REWRITE1:17,WW;
+      end;
+      hence P[k+1];
+      end;
+    hence thesis;
+    end;
+I: for i being Nat st 0 <= i & i <= j' holds P[i] from POLYNOM2:sch 4(IA,IS);
+I0: card(Support Low(p2,T,1)) = j' by Z7,spl3;
+I1: HM(p2,T)*'Red(p1,T)
+          - HM(p1,T)*'(Red(p2,T)-Low(p2,T,1)) + Red(p1,T)*'Low(p2,T,1)
+  = HM(p2,T)*'Red(p1,T)
+         - HM(p1,T)*'(Red(p2,T)-Red(p2,T)) + Red(p1,T)*'Low(p2,T,1) by spl3
+ .= HM(p2,T)*'Red(p1,T)
+         - HM(p1,T)*'0_(n,L) + Red(p1,T)*'Low(p2,T,1) by POLYNOM1:83
+ .= HM(p2,T)*'Red(p1,T)
+         - 0_(n,L) + Red(p1,T)*'Low(p2,T,1) by POLYRED:5
+ .= HM(p2,T)*'Red(p1,T) + Red(p1,T)*'Low(p2,T,1) by POLYRED:4
+ .= HM(p2,T)*'Red(p1,T) + Red(p1,T)*'Red(p2,T) by spl3
+ .= (HM(p2,T) + Red(p2,T)) *' Red(p1,T) by POLYNOM1:85
+ .= p2 *' Red(p1,T) by TERMORD:38;
+  0 <= j' & j' <= j' by NAT_1:18;
+hence thesis by I,I1,I0,II;
+end;
+
+theorem buchb:
+::: theorem 5.66, p. 222 (Buchberger's first criterium)
+for n being Ordinal,
+    T being connected admissible TermOrder of n,
+    L being add-associative right_complementable right_zeroed
+            commutative associative left_unital right_unital distributive
+            Abelian Field-like (non trivial doubleLoopStr),
+    p1,p2 being Polynomial of n,L
+st HT(p1,T),HT(p2,T) are_disjoint
+holds PolyRedRel({p1,p2},T) reduces S-Poly(p1,p2,T),0_(n,L)
+proof
+let n be Ordinal, T be connected admissible TermOrder of n,
+    L be add-associative right_complementable right_zeroed
+         commutative associative left_unital right_unital distributive
+         Abelian Field-like (non trivial doubleLoopStr),
+    p1,p2 be Polynomial of n,L;
+assume AS: HT(p1,T),HT(p2,T) are_disjoint;
+then H: S-Poly(p1,p2,T) = Red(p1,T) *' p2 - Red(p2,T) *' p1 by A;
+now per cases;
+case H0: p1 = 0_(n,L);
+  then H1: Red(p2,T) *' p1 = 0_(n,L) by POLYNOM1:87;
+  Red(p1,T) = 0_(n,L) by H0,poly0;
+  then S-Poly(p1,p2,T) = 0_(n,L) - 0_(n,L) by POLYNOM1:87,H1,H 
+                      .= 0_(n,L) by POLYRED:4;
+  hence thesis by REWRITE1:13;
+  end;
+case p1 <> 0_(n,L);
+  then reconsider p1a = p1 as non-zero Polynomial of n,L by POLYNOM7:def 2;
+  now let u be set; assume u in {p1};
+    then u = p1 by TARSKI:def 1;
+    hence u in {p1,p2} by TARSKI:def 2;
+    end;
+  then {p1} c= {p1,p2} by TARSKI:def 3;
+  then G1: PolyRedRel({p1},T) c= PolyRedRel({p1,p2},T) by GROEB_1:4;
+  now let u be set; assume u in {p2};
+    then u = p2 by TARSKI:def 1;
+    hence u in {p1,p2} by TARSKI:def 2;
+    end;
+  then {p2} c= {p1,p2} by TARSKI:def 3;
+  then G2: PolyRedRel({p2},T) c= PolyRedRel({p1,p2},T) by GROEB_1:4;
+  now per cases;
+  case H0: p2 = 0_(n,L);
+    then H1: Red(p1,T) *' p2 = 0_(n,L) by POLYNOM1:87;
+    Red(p2,T) = 0_(n,L) by H0,poly0;
+    then S-Poly(p1,p2,T) = 0_(n,L) - 0_(n,L) by H1,H,POLYNOM1:87
+                        .= 0_(n,L) by POLYRED:4;
+    hence thesis by REWRITE1:13;
+    end;
+  case p2 <> 0_(n,L);
+    then reconsider p2a = p2 as non-zero Polynomial of n,L 
+      by POLYNOM7:def 2;
+    now per cases;
+    case Red(p1,T) = 0_(n,L);
+      then B1: S-Poly(p1,p2,T) = 0_(n,L) - Red(p2,T) *' p1 
+               by H,POLYNOM1:87;
+      now per cases;
+      case Red(p2,T) = 0_(n,L);
+        then S-Poly(p1,p2,T) = 0_(n,L) - 0_(n,L) by B1,POLYNOM1:87
+                            .= 0_(n,L) by POLYRED:4;
+        hence thesis by REWRITE1:13;
+        end;
+      case Red(p2,T) <> 0_(n,L);
+        then reconsider rp2 = Red(p2,T) as non-zero Polynomial of n,L
+           by POLYNOM7:def 2;
+        PolyRedRel({p1a},T) reduces rp2*'p1a,0_(n,L) by red6;
+        then PolyRedRel({p1a},T) reduces -(rp2*'p1a),-0_(n,L) by red7;
+        then PolyRedRel({p1a},T) reduces -(rp2*'p1a),0_(n,L) by poly1;
+        then PolyRedRel({p1},T) reduces S-Poly(p1,p2,T),0_(n,L) by B1,poly2;
+        hence thesis by G1,REWRITE1:23;
+        end;
+      end;
+      hence thesis;
+      end;
+    case Red(p1,T) <> 0_(n,L);
+      then reconsider rp1 = Red(p1,T) as non-zero Polynomial of n,L
+         by POLYNOM7:def 2;
+      now per cases;
+      case Red(p2,T) = 0_(n,L);
+        then Red(p2,T) *' p1 = 0_(n,L) by POLYNOM1:87;
+        then B1: S-Poly(p1,p2,T) = Red(p1,T) *' p2 - 0_(n,L) by AS,A
+                                .= Red(p1,T) *' p2 by POLYRED:4;
+        PolyRedRel({p2a},T) reduces rp1*'p2a,0_(n,L) by red6;
+        hence thesis by B1,G2,REWRITE1:23;
+        end;
+      case Red(p2,T) <> 0_(n,L);
+        then reconsider rp2 = Red(p2,T) as non-zero Polynomial of n,L
+           by POLYNOM7:def 2;
+         S-Poly(p1,p2,T) = HM(p2a,T)*'rp1 - HM(p1a,T)*'rp2
+            by AS,spoly1;
+         then PolyRedRel({p1},T) reduces
+                    S-Poly(p1,p2,T),p2 *' Red(p1,T) by AS,lem_cr_1;
+         then J1: PolyRedRel({p1,p2},T) reduces
+                    S-Poly(p1,p2,T),p2 *' Red(p1,T) by G1,REWRITE1:23;
+         PolyRedRel({p2},T) reduces rp1*'p2a,0_(n,L) by red6;
+         then PolyRedRel({p1,p2},T) reduces rp1*'p2a,0_(n,L) 
+                by G2,REWRITE1:23;
+         hence thesis by J1,REWRITE1:17;
+         end;
+      end;
+      hence thesis;
+      end;
+    end;
+    hence thesis;
+    end;
+  end;
+  hence thesis;
+  end;
+end;
+hence thesis;
+end;
+
+theorem
+::: theorem 5.68 (i) ==> (ii), p. 223
+for n being Nat,
+    T being connected admissible TermOrder of n,
+    L being add-associative right_complementable right_zeroed
+            commutative associative left_unital right_unital distributive
+            Abelian Field-like non degenerated (non empty doubleLoopStr),
+    G being Subset of Polynom-Ring(n,L)
+holds G is_Groebner_basis_wrt T 
+implies (for g1,g2 being Polynomial of n,L 
+               st g1 in G & g2 in G & not(HT(g1,T),HT(g2,T) are_disjoint)
+         holds PolyRedRel(G,T) reduces S-Poly(g1,g2,T),0_(n,L))
+proof
+let n be Nat, T be connected admissible TermOrder of n,
+    L be add-associative right_complementable right_zeroed
+         commutative associative left_unital right_unital distributive Abelian
+         Field-like non degenerated (non empty doubleLoopStr),
+    G be Subset of Polynom-Ring(n,L);
+assume G is_Groebner_basis_wrt T;
+then for g1,g2,h being Polynomial of n,L
+           st g1 in G & g2 in G &
+              h is_a_normal_form_of S-Poly(g1,g2,T),PolyRedRel(G,T)
+       holds h = 0_(n,L) by GROEB_2:28;
+hence thesis by GROEB_2:29;
+end;
+
+theorem
+::: theorem 5.68 (ii) ==> (iii), p. 223
+for n being Nat,
+    T being connected admissible TermOrder of n,
+    L being add-associative right_complementable right_zeroed
+            commutative associative left_unital right_unital distributive
+            Abelian Field-like non degenerated (non trivial doubleLoopStr),
+    G being Subset of Polynom-Ring(n,L) st not(0_(n,L) in G)
+holds (for g1,g2 being Polynomial of n,L 
+             st g1 in G & g2 in G & not(HT(g1,T),HT(g2,T) are_disjoint)
+       holds PolyRedRel(G,T) reduces S-Poly(g1,g2,T),0_(n,L)) 
+implies (for g1,g2,h being Polynomial of n,L
+               st g1 in G & g2 in G & not(HT(g1,T),HT(g2,T) are_disjoint) &
+                  h is_a_normal_form_of S-Poly(g1,g2,T),PolyRedRel(G,T)
+         holds h = 0_(n,L))
+proof
+let n be Nat, T be connected admissible TermOrder of n,
+    L be add-associative right_complementable right_zeroed
+         commutative associative left_unital right_unital distributive Abelian
+         Field-like non degenerated (non trivial doubleLoopStr),
+    G be Subset of Polynom-Ring(n,L);
+assume A: not(0_(n,L) in G);
+assume B: for g1,g2 being Polynomial of n,L 
+             st g1 in G & g2 in G & not(HT(g1,T),HT(g2,T) are_disjoint)
+          holds PolyRedRel(G,T) reduces S-Poly(g1,g2,T),0_(n,L);
+for g1,g2 being Polynomial of n,L st g1 in G & g2 in G
+    holds PolyRedRel(G,T) reduces S-Poly(g1,g2,T),0_(n,L)
+  proof
+  let g1,g2 being Polynomial of n,L;
+  assume D: g1 in G & g2 in G;
+  now per cases;
+  case HT(g1,T),HT(g2,T) are_disjoint;
+    then E: PolyRedRel({g1,g2},T) reduces S-Poly(g1,g2,T),0_(n,L) by buchb;
+    now let u be set; assume H: u in {g1,g2};
+      now per cases by H,TARSKI:def 2;
+      case u = g1; hence u in G by D; end;
+      case u = g2; hence u in G by D; end;
+      end;
+      hence u in G;
+      end;
+    then {g1,g2} c= G by TARSKI:def 3;
+    then PolyRedRel({g1,g2},T) c= PolyRedRel(G,T) by GROEB_1:4;
+    hence PolyRedRel(G,T) reduces S-Poly(g1,g2,T),0_(n,L) by E,REWRITE1:23;
+    end;
+  case not(HT(g1,T),HT(g2,T) are_disjoint);
+    hence PolyRedRel(G,T) reduces S-Poly(g1,g2,T),0_(n,L) by D,B;
+    end;
+  end;
+  hence thesis;
+  end;
+then G is_Groebner_basis_wrt T by A,GROEB_2:30;
+hence thesis by GROEB_2:28;
+end;
+
+theorem
+::: theorem 5.68 (iii) ==> (i), p. 223
+for n being Nat,
+    T being connected admissible TermOrder of n,
+    L being add-associative right_complementable right_zeroed
+            commutative associative left_unital right_unital distributive
+            Abelian Field-like non degenerated (non empty doubleLoopStr),
+    G being Subset of Polynom-Ring(n,L) st not(0_(n,L) in G)
+holds (for g1,g2,h being Polynomial of n,L
+             st g1 in G & g2 in G & not(HT(g1,T),HT(g2,T) are_disjoint) &
+                h is_a_normal_form_of S-Poly(g1,g2,T),PolyRedRel(G,T)
+       holds h = 0_(n,L))
+implies G is_Groebner_basis_wrt T
+proof
+let n be Nat, T be connected admissible TermOrder of n,
+    L be add-associative right_complementable right_zeroed
+         commutative associative left_unital right_unital distributive
+         Abelian Field-like non degenerated (non empty doubleLoopStr),
+    G be Subset of Polynom-Ring(n,L);
+assume A: not(0_(n,L) in G);
+assume B: for g1,g2,h being Polynomial of n,L
+          st g1 in G & g2 in G & not(HT(g1,T),HT(g2,T) are_disjoint) &
+             h is_a_normal_form_of S-Poly(g1,g2,T),PolyRedRel(G,T)
+          holds h = 0_(n,L);
+for g1,g2 being Polynomial of n,L st g1 in G & g2 in G
+   holds PolyRedRel(G,T) reduces S-Poly(g1,g2,T),0_(n,L)
+  proof
+  let g1,g2 being Polynomial of n,L;
+  assume D: g1 in G & g2 in G;
+  now per cases; 
+  case HT(g1,T),HT(g2,T) are_disjoint;
+    then E: PolyRedRel({g1,g2},T) reduces S-Poly(g1,g2,T),0_(n,L) by buchb;
+    now let u be set; assume H: u in {g1,g2};
+      now per cases by H,TARSKI:def 2;
+      case u = g1; hence u in G by D; end;
+      case u = g2; hence u in G by D; end;
+      end;
+      hence u in G;
+      end;
+    then {g1,g2} c= G by TARSKI:def 3;
+    then PolyRedRel({g1,g2},T) c= PolyRedRel(G,T) by GROEB_1:4;
+    hence PolyRedRel(G,T) reduces S-Poly(g1,g2,T),0_(n,L) by E,REWRITE1:23;
+    end;
+  case E: not(HT(g1,T),HT(g2,T) are_disjoint);
+    S-Poly(g1,g2,T) has_a_normal_form_wrt PolyRedRel(G,T) 
+      proof
+      now per cases;
+      case not(S-Poly(g1,g2,T) in field PolyRedRel(G,T));
+        hence thesis by REWRITE1:47;
+        end;
+      case S-Poly(g1,g2,T) in field PolyRedRel(G,T);
+        hence thesis by REWRITE1:def 14;
+        end;
+      end;
+      hence thesis;
+      end;
+    then consider h being set such that
+    H: h is_a_normal_form_of S-Poly(g1,g2,T),PolyRedRel(G,T) 
+       by REWRITE1:def 11;
+    PolyRedRel(G,T) reduces S-Poly(g1,g2,T),h by H,REWRITE1:def 6;
+    then reconsider h as Polynomial of n,L by L1;
+    h = 0_(n,L) by H,E,D,B;
+    hence PolyRedRel(G,T) reduces S-Poly(g1,g2,T),0_(n,L) by H,REWRITE1:def 6;
+    end;
+  end;
+  hence thesis;
+  end;
+hence thesis by A,GROEB_2:30;
+end;
+

@@ -7,19 +7,20 @@
 environ
 
  vocabulary CAT_1, FUNCOP_1, FUNCT_1, RELAT_1, BOOLE, QC_LANG1, FINSEQ_1,
-      PARTFUN1, QC_LANG3, ZF_MODEL, ZF_LANG, CQC_LANG;
+      PARTFUN1, QC_LANG3, ZF_MODEL, ZF_LANG, CQC_LANG, CAT_4;
  notation TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, NUMBERS, XREAL_0, NAT_1,
-      RELAT_1, FUNCT_1, FUNCT_2, PARTFUN1, FUNCOP_1, FINSEQ_1, QC_LANG1,
+      ZFMISC_1, RELAT_1, FUNCT_1, FUNCT_2, BINOP_1,
+      PARTFUN1, FUNCOP_1, FINSEQ_1, QC_LANG1,
       QC_LANG2, QC_LANG3;
  constructors ENUMSET1, FUNCOP_1, QC_LANG2, QC_LANG3, PARTFUN1, XREAL_0,
-      XCMPLX_0, MEMBERED, XBOOLE_0;
+      XCMPLX_0, MEMBERED, XBOOLE_0, BINOP_1;
  clusters SUBSET_1, RELSET_1, QC_LANG1, FUNCOP_1, ARYTM_3, MEMBERED, ZFMISC_1,
       XBOOLE_0;
  requirements NUMERALS, SUBSET, BOOLE;
  definitions TARSKI;
  theorems TARSKI, ENUMSET1, ZFMISC_1, FUNCT_1, FUNCT_2, FINSEQ_1, PARTFUN1,
       FUNCOP_1, QC_LANG1, QC_LANG2, QC_LANG3, FINSEQ_2, RELSET_1, FINSEQ_3,
-      XBOOLE_1;
+      XBOOLE_1, BINOP_1;
  schemes FINSEQ_1, QC_LANG1, QC_LANG3;
 
 begin
@@ -521,7 +522,8 @@ A1: for r,s,x,k for l being CQC-variable_list of k
       (P[r] & P[s] implies P[r '&' s]) &
       (P[r] implies P[All(x, r)])
 proof
-  defpred Prop[Element of QC-WFF] means $1 is Element of CQC-WFF implies P[$1];
+  defpred Prop[Element of QC-WFF] means
+   $1 is Element of CQC-WFF implies P[ $1];
 A2:  for k being Nat, P being (QC-pred_symbol of k),
          l being QC-variable_list of k holds Prop[P!l]
    proof let k be Nat, P be (QC-pred_symbol of k),l be QC-variable_list of k;
@@ -1392,3 +1394,28 @@ A16:   Fixed(p.x) = Fixed p;
      for p holds P[p] from QC_LANG1:sch 1(A1,A10,A11,A13,A15);
   hence thesis;
  end;
+
+begin :: Addenda
+
+:: from ALTCAT_1
+
+ reserve i,j,k for set;
+
+theorem Th11:
+ (i,j):->k = [i,j].-->k
+ proof
+A1: {[i,j]} = [:{i},{j}:] by ZFMISC_1:35;
+       dom([i,j].-->k) = {[i,j]} & rng([i,j].-->k) = {k} by Th5;
+  then [i,j].-->k is Function of [:{i},{j}:],{k} by A1,FUNCT_2:def 1
+,RELSET_1:11;
+  hence thesis by FUNCT_2:def 5;
+ end;
+
+theorem
+ ((i,j):->k).(i,j) = k
+ proof
+  thus ((i,j):->k).(i,j) = ((i,j):->k).[i,j] by BINOP_1:def 1
+         .= ([i,j].-->k).[i,j] by Th11
+         .= k by Th6;
+ end;
+

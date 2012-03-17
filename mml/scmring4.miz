@@ -355,21 +355,21 @@ A12:   o in D or o in {IC S} by A10,XBOOLE_0:def 2;
     then A13: D \/ {IC S} misses dom p by A1,XBOOLE_1:63;
      s, s+*p equal_outside I
     proof
-      thus s|(dom s \ I) = (s+*p)|(dom(s+*p) \ I) by A2,A3,A8,A13,AMI_5:7;
+      thus s|(dom s \ I) = (s+*p)|(dom(s+*p) \ I) by A2,A3,A8,A13,FUNCT_4:76;
     end;
     then A14: Exec(i,s), Exec(i,s+*p) equal_outside I by AMISTD_2:def 19;
 A15: (Exec(i,s) +* p) | (D \/ {IC S})
-       = Exec(i,s) | (D \/ {IC S}) by A13,AMI_5:7
+       = Exec(i,s) | (D \/ {IC S}) by A13,FUNCT_4:76
       .= Exec(i,s +* p) | (D \/ {IC S}) by A4,A5,A8,A14,FUNCT_7:def 2;
 A16: Exec (i, s +* p)|I = (s +* p)|I by SCMFSA_3:5
-      .= s|I +* p|I by AMI_5:6
+      .= s|I +* p|I by FUNCT_4:75
       .= Exec (i,s)|I +* p|I by SCMFSA_3:5
-      .= (Exec (i, s) +* p)|I by AMI_5:6;
+      .= (Exec (i, s) +* p)|I by FUNCT_4:75;
     thus Exec (i, s +* p)
        = Exec (i, s +* p)| ({IC S} \/ D \/ I) by A5,A9,RELAT_1:98
       .= (Exec (i, s) +* p)| ({IC S} \/ D)
-         +* (Exec (i, s) +* p)|I by A15,A16,AMI_5:14
-      .= (Exec (i,s) +* p)| ({IC S} \/ D \/ I) by AMI_5:14
+         +* (Exec (i, s) +* p)|I by A15,A16,FUNCT_4:83
+      .= (Exec (i,s) +* p)| ({IC S} \/ D \/ I) by FUNCT_4:83
       .= (Exec (i,s) +* p)| dom(Exec (i, s) +* p) by A9,AMI_3:36
       .= Exec (i,s) +* p by RELAT_1:98;
   end;
@@ -2005,10 +2005,10 @@ A6: B misses I by Lm3;
      .=(Start-At ((IC g)+k)+* (IncAddr(Shift(ProgramPart(g),k),k)+*DataPart g))
         | B by FUNCT_4:15
      .= ((Start-At ((IC g)+k)) | B) +*
-      (IncAddr(Shift(ProgramPart(g),k),k)+*DataPart g)| B by AMI_5:6
+      (IncAddr(Shift(ProgramPart(g),k),k)+*DataPart g)| B by FUNCT_4:75
      .= (IncAddr(Shift(ProgramPart(g),k),k)+*DataPart g)
         | B by A3,FUNCT_4:21
-     .= DataPart g by A4,A5,A6,AMI_5:12;
+     .= DataPart g by A4,A5,A6,FUNCT_4:81;
   end;
 
 theorem Th48:
@@ -2041,9 +2041,9 @@ A7: I misses B by Lm3;
      = Relocated(g,k)| I by AMI_5:def 6
     .= (Start-At ((IC g)+k)+* f +*DataPart g) | I by Def2
     .= (Start-At ((IC g)+k)+* (f+*DataPart g)) | I by FUNCT_4:15
-    .= ((Start-At ((IC g)+k)) | I) +* ((f+*DataPart g)| I) by AMI_5:6
+    .= ((Start-At ((IC g)+k)) | I) +* ((f+*DataPart g)| I) by FUNCT_4:75
     .= (f+*DataPart g) | I by A4,FUNCT_4:21
-    .= f by A5,A6,A7,AMI_5:12;
+    .= f by A5,A6,A7,FUNCT_4:81;
   end;
 
 theorem Th49:
@@ -2249,11 +2249,11 @@ A4: dom q c= B by A1,Th8;
     then A7: dom q misses I by A4,XBOOLE_1:63;
 A8: ProgramPart (g +* q)
      = (g +* q) | I by AMI_5:def 6
-    .= g | I by A7,AMI_5:7
+    .= g | I by A7,FUNCT_4:76
     .= ProgramPart g by AMI_5:def 6;
 A9: DataPart (g +* q)
      = (g +* q) | B by AMI_5:def 7
-    .= g | B +* q | B by AMI_5:6
+    .= g | B +* q | B by FUNCT_4:75
     .= DataPart g +* q | B by AMI_5:def 7
     .= DataPart g +* q by A4,RELAT_1:97;
     set P = Start-At((IC(g+*q))+k)+*IncAddr(Shift(ProgramPart(g+*q),k),k);
@@ -3062,7 +3062,7 @@ defpred P[Nat] means
         .= s +* DataPart p +* Start-At ((IC p) + k) +*
            ProgramPart (Relocated (p,k)) by FUNCT_4:15
         .= (Computation s).0 +* Start-At (IC (Computation s).0 + k)
-                +* ProgramPart (Relocated (p,k)) by A8,A9,A10,AMI_5:10;
+                +* ProgramPart (Relocated (p,k)) by A8,A9,A10,FUNCT_4:79;
    then A11: P[0];
 A12: for i being Nat st P[i] holds P[i+1]
   proof
@@ -3185,18 +3185,18 @@ defpred P[Nat] means (Computation s).$1
        +* s|dom ProgramPart p +* ProgramPart (Relocated (p,k));
  (Computation s).0
    = s by AMI_1:def 19
-  .= s +* PR by A6,AMI_5:10
-  .= s +* SD +* PR by A7,AMI_5:10
-  .= s +* PP +* SD +* PR by A8,AMI_5:9
-  .= s +* IS +* PP +* SD +* PR by A10,AMI_5:10
+  .= s +* PR by A6,FUNCT_4:79
+  .= s +* SD +* PR by A7,FUNCT_4:79
+  .= s +* PP +* SD +* PR by A8,FUNCT_4:78
+  .= s +* IS +* PP +* SD +* PR by A10,FUNCT_4:79
   .= s +*(IS +* PP) +* SD +* PR by FUNCT_4:15
   .= s +*(PP +* IS) +* SD +* PR by A4,A11,FUNCT_4:36
   .= s +* PP +* IS +* SD +* PR by FUNCT_4:15
-  .= s +* DP +* PP +* IS +* SD +* PR by A12,AMI_5:10
+  .= s +* DP +* PP +* IS +* SD +* PR by A12,FUNCT_4:79
   .= s +*(DP +* PP) +* IS +* SD +* PR by FUNCT_4:15
   .= s +*(PP +* DP) +* IS +* SD +* PR by A13,FUNCT_4:36
   .= s +* PP +* DP +* IS +* SD +* PR by FUNCT_4:15
-  .= s +* PP +* DP +* IP +* IS +* SD +* PR by A14,AMI_5:9
+  .= s +* PP +* DP +* IP +* IS +* SD +* PR by A14,FUNCT_4:78
   .= s +*(PP +* DP) +* IP +* IS +* SD +* PR by FUNCT_4:15
   .= s +*(PP +* DP +* IP) +* IS +* SD +* PR by FUNCT_4:15
   .= s +*(PP +*(DP +* IP))+* IS +* SD +* PR by FUNCT_4:15
@@ -3371,20 +3371,20 @@ defpred P[Nat] means (Computation s).$1
      +* s|(dom ProgramPart Relocated(p,k)) +* ProgramPart p;
   (Computation s).0
    = s by AMI_1:def 19
-  .= s +* PP by A7,AMI_5:10
-  .= s +* Start-At (IC p) +* PP by A8,AMI_5:10
+  .= s +* PP by A7,FUNCT_4:79
+  .= s +* Start-At (IC p) +* PP by A8,FUNCT_4:79
   .= s +* Start-At (IC p + k -' k) +* PP by Th5
   .= s +* IS +* PP by A11,Th52
-  .= s +* SD +* IS +* PP by AMI_5:11
-  .= s +* PR +* SD +* IS +* PP by A18,AMI_5:9
+  .= s +* SD +* IS +* PP by FUNCT_4:80
+  .= s +* PR +* SD +* IS +* PP by A18,FUNCT_4:78
   .= s +* PR +* (SD +* IS) +* PP by FUNCT_4:15
   .= s +* PR +* (IS +* SD) +* PP by A17,FUNCT_4:36
   .= s +* PR +* IS +* SD +* PP by FUNCT_4:15
-  .= s +* DP +* PR +* IS +* SD +* PP by A12,AMI_5:10
+  .= s +* DP +* PR +* IS +* SD +* PP by A12,FUNCT_4:79
   .= s +*(DP +* PR) +* IS +* SD +* PP by FUNCT_4:15
   .= s +*(PR +* DP) +* IS +* SD +* PP by A13,FUNCT_4:36
   .= s +* PR +* DP +* IS +* SD +* PP by FUNCT_4:15
-  .= s +* PR +* DP +* IP +* IS +* SD +* PP by A14,AMI_5:9
+  .= s +* PR +* DP +* IP +* IS +* SD +* PP by A14,FUNCT_4:78
   .= s +*(PR +* DP) +* IP +* IS +* SD +* PP by FUNCT_4:15
   .= s +*(PR +* DP +* IP) +* IS +* SD +* PP by FUNCT_4:15
   .= s +*(PR +* (DP +* IP))+* IS +* SD +* PP by FUNCT_4:15
@@ -3561,7 +3561,7 @@ A10: dom (Start-At ((IC (Computation(s2 +* p)).i)+k)) = {IC SCM R} by AMI_3:34;
 A11:  {IC SCM R} c= dom p by A2,ZFMISC_1:37;
 A12:  Start-At (IC(Computation(s1 +* p)).i)
      = (Computation(s1 +* p)).i|{IC SCM R} by AMI_5:34
-    .= (Computation(s2 +* p)).i|{IC SCM R} by A7,A11,AMI_5:5
+    .= (Computation(s2 +* p)).i|{IC SCM R} by A7,A11,RELAT_1:188
     .= Start-At (IC(Computation(s2 +* p)).i) by AMI_5:34;
 A13:dom (Start-At ((IC p) + k))
     misses dom ProgramPart (Relocated (p,k)) by A8,AMI_5:68;
@@ -3578,17 +3578,17 @@ then A17:dom (Start-At ((IC p) + k))
 A18: (Computation s1).i|dom (Start-At ((IC p)+k))
     = ((Computation(s1 +* p)).i +* Start-At (IC(Computation(s1 +* p)).i + k)
         +* s1|dom ProgramPart p)
-       |dom (Start-At ((IC p)+k)) by A5,A13,AMI_5:7
+       |dom (Start-At ((IC p)+k)) by A5,A13,FUNCT_4:76
    .= ((Computation(s1 +* p)).i +* Start-At (IC(Computation(s1 +* p)).i + k))
-       |dom (Start-At ((IC p)+k)) by A15,AMI_5:7
+       |dom (Start-At ((IC p)+k)) by A15,FUNCT_4:76
    .= Start-At (IC(Computation(s1 +* p)).i + k) by A8,A9,FUNCT_4:24
    .= Start-At (IC(Computation(s2 +* p)).i + k) by A12,Th9
    .= ((Computation(s2 +* p)).i +* Start-At (IC(Computation(s2 +* p)).i + k))
       |dom (Start-At ((IC p)+k)) by A8,A10,FUNCT_4:24
    .= ((Computation(s2 +* p)).i +* Start-At (IC(Computation(s2 +* p)).i + k)
         +* s2|dom ProgramPart p)
-       |dom (Start-At ((IC p)+k)) by A17,AMI_5:7
-   .= (Computation s2).i|dom (Start-At ((IC p)+k)) by A6,A13,AMI_5:7;
+       |dom (Start-At ((IC p)+k)) by A17,FUNCT_4:76
+   .= (Computation s2).i|dom (Start-At ((IC p)+k)) by A6,A13,FUNCT_4:76;
 A19:  (Computation s1).i|dom (IncAddr(Shift(ProgramPart(p),k),k))
     = (Computation s1).i|dom (ProgramPart (Relocated (p,k)))
  by Th48
@@ -3609,17 +3609,17 @@ A25: dom(DataPart p) misses dom (Start-At (IC(Computation(s2 +* p)).i + k))
 A26:    (Computation s1).i|dom (DataPart p)
     = ((Computation(s1 +* p)).i +* Start-At (IC(Computation(s1 +* p)).i + k)
       +* s1|dom ProgramPart p)
-      | dom(DataPart p) by A5,A21,AMI_5:7
+      | dom(DataPart p) by A5,A21,FUNCT_4:76
    .= ((Computation(s1 +* p)).i +* Start-At (IC(Computation(s1 +* p)).i + k))
-      | dom(DataPart p) by A22,AMI_5:7
-   .= ((Computation(s1 +* p)).i) | dom (DataPart p) by A24,AMI_5:7
-   .= ((Computation(s2 +* p)).i) | dom (DataPart p) by A7,A20,AMI_5:5
+      | dom(DataPart p) by A22,FUNCT_4:76
+   .= ((Computation(s1 +* p)).i) | dom (DataPart p) by A24,FUNCT_4:76
+   .= ((Computation(s2 +* p)).i) | dom (DataPart p) by A7,A20,RELAT_1:188
    .= ((Computation(s2 +* p)).i +* Start-At (IC(Computation(s2 +* p)).i + k))
-      | dom(DataPart p) by A25,AMI_5:7
+      | dom(DataPart p) by A25,FUNCT_4:76
    .= ((Computation(s2 +* p)).i +* Start-At (IC(Computation(s2 +* p)).i + k)
       +* s2|dom ProgramPart p)
-      | dom(DataPart p) by A23,AMI_5:7
-   .= (Computation s2).i|dom (DataPart p) by A6,A21,AMI_5:7;
+      | dom(DataPart p) by A23,FUNCT_4:76
+   .= (Computation s2).i|dom (DataPart p) by A6,A21,FUNCT_4:76;
 A27:    (Computation s1).i|dom (Start-At ((IC p)+k) +*
        IncAddr(Shift(ProgramPart(p),k),k))
      = (Computation s1).i|(dom (Start-At ((IC p)+k)) \/
@@ -3677,7 +3677,8 @@ A35: dom (Start-At ((IC (Computation(s2 +* Relocated (p,k))).i) -' k))
 then A36:  {IC SCM R} c= dom Relocated (p,k) by ZFMISC_1:37;
 A37: Start-At (IC(Computation(s1 +* Relocated (p,k))).i)
       = (Computation(s1 +* Relocated (p,k))).i|{IC SCM R} by AMI_5:34
-     .= (Computation(s2 +* Relocated (p,k))).i|{IC SCM R} by A32,A36,AMI_5:5
+     .= (Computation(s2 +* Relocated (p,k))).i|{IC SCM R}
+          by A32,A36,RELAT_1:188
      .= Start-At (IC(Computation(s2 +* Relocated (p,k))).i) by AMI_5:34;
 A38: dom (Start-At (IC p)) misses dom (ProgramPart p) by A33,AMI_5:68;
       dom ProgramPart Relocated(p,k) c= the carrier of SCM R by AMI_3:37;
@@ -3697,10 +3698,10 @@ A43:  (Computation s1).i|dom (Start-At (IC p))
     = ((Computation(s1 +* Relocated (p,k))).i
       +* Start-At (IC(Computation(s1 +* Relocated (p,k))).i -' k)
       +* s1|dom ProgramPart Relocated(p,k))
-       |dom (Start-At (IC p)) by A30,A38,AMI_5:7
+       |dom (Start-At (IC p)) by A30,A38,FUNCT_4:76
    .= ((Computation(s1 +* Relocated (p,k))).i
       +* Start-At (IC(Computation(s1 +* Relocated (p,k))).i -' k))
-       |dom (Start-At (IC p)) by A40,AMI_5:7
+       |dom (Start-At (IC p)) by A40,FUNCT_4:76
    .= Start-At (IC(Computation(s1 +* Relocated (p,k))).i -' k)
  by A33,A34,FUNCT_4:24
    .= Start-At (IC(Computation(s2 +* Relocated (p,k))).i -' k)
@@ -3711,8 +3712,8 @@ A43:  (Computation s1).i|dom (Start-At (IC p))
    .= ((Computation(s2 +* Relocated (p,k))).i
       +* Start-At (IC(Computation(s2 +* Relocated (p,k))).i -' k)
       +* s2|dom ProgramPart Relocated(p,k))
-       |dom (Start-At (IC p)) by A42,AMI_5:7
-   .= (Computation s2).i|dom (Start-At (IC p)) by A31,A38,AMI_5:7;
+       |dom (Start-At (IC p)) by A42,FUNCT_4:76
+   .= (Computation s2).i|dom (Start-At (IC p)) by A31,A38,FUNCT_4:76;
 A44:  (Computation s1).i|dom (ProgramPart p)
     = ProgramPart (p) by A30,FUNCT_4:24
    .= (Computation s2).i|dom (ProgramPart p) by A31,FUNCT_4:24;
@@ -3734,22 +3735,22 @@ A51: (Computation s1).i|dom (DataPart p)
     = ((Computation(s1 +* Relocated (p,k))).i
       +* Start-At (IC(Computation(s1 +* Relocated (p,k))).i -' k)
       +* s1|dom ProgramPart Relocated(p,k))
-      | dom(DataPart p) by A30,A46,AMI_5:7
+      | dom(DataPart p) by A30,A46,FUNCT_4:76
    .= ((Computation(s1 +* Relocated (p,k))).i +*
        Start-At (IC(Computation(s1 +* Relocated (p,k))).i -' k))
-      | dom(DataPart p) by A47,AMI_5:7
+      | dom(DataPart p) by A47,FUNCT_4:76
    .= ((Computation(s1 +* Relocated (p,k))).i) | dom (DataPart p)
- by A49,AMI_5:7
+ by A49,FUNCT_4:76
    .= ((Computation(s2 +* Relocated (p,k))).i) | dom (DataPart p)
- by A32,A45,AMI_5:5
+ by A32,A45,RELAT_1:188
    .= ((Computation(s2 +* Relocated (p,k))).i +*
       Start-At (IC(Computation(s2 +* Relocated (p,k))).i -' k))
-      | dom(DataPart p) by A50,AMI_5:7
+      | dom(DataPart p) by A50,FUNCT_4:76
    .= ((Computation(s2 +* Relocated (p,k))).i
       +* Start-At (IC(Computation(s2 +* Relocated (p,k))).i -' k)
       +* s2|dom ProgramPart Relocated(p,k))
-      | dom(DataPart p) by A48,AMI_5:7
-   .= (Computation s2).i|dom (DataPart p) by A31,A46,AMI_5:7;
+      | dom(DataPart p) by A48,FUNCT_4:76
+   .= (Computation s2).i|dom (DataPart p) by A31,A46,FUNCT_4:76;
 
 A52:    (Computation s1).i|dom (Start-At (IC p) +* ProgramPart p)
      = (Computation s1).i|(dom (Start-At (IC p)) \/ dom (ProgramPart p))

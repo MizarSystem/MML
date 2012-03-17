@@ -48,169 +48,7 @@ theorem
    hence i -' j + j = i by BINARITH:39;
   end;
 
-theorem
-   for f,g being Function, A,B being set st A c= B & f|B = g|B
-  holds f|A = g|A
-  proof
-   let f,g be Function, A,B be set;
-   assume that A1: A c= B and
-               A2: f|B = g|B;
-A3: A = B /\ A by A1,XBOOLE_1:28;
-   hence f|A = (f|B)|A by RELAT_1:100
-             .= g|A by A2,A3,RELAT_1:100;
-  end;
-
-theorem Th6:
- for p,q being Function , A being set
- holds (p +* q)|A = p|A +* q|A
-  proof
-  let p,q be Function , A be set;
-A1:  dom ((p +* q)|A) = dom (p +* q) /\ A by RELAT_1:90
-                      .= (dom p \/ dom q) /\ A by FUNCT_4:def 1
-                      .= (dom p /\ A) \/ (dom q /\ A) by XBOOLE_1:23
-                      .= dom (p|A) \/ (dom q /\ A) by RELAT_1:90
-                      .= dom (p|A) \/ dom (q|A) by RELAT_1:90;
-     for x being set st x in dom (p|A) \/ dom (q|A)
-   holds (x in dom (q|A) implies ((p +* q)|A).x = (q|A).x) &
-     (not x in dom (q|A) implies ((p +* q)|A).x = (p|A).x)
-    proof
-     let x be set;
-     assume A2:x in dom (p|A) \/ dom (q|A);
- then x in dom (p|A) or x in dom (q|A) by XBOOLE_0:def 2;
- then x in (dom p /\ A) or (x in dom q /\ A) by RELAT_1:90;
- then A3: x in A by XBOOLE_0:def 3;
-     hereby
-      assume A4: x in dom (q|A);
- then x in (dom q /\ A) by RELAT_1:90;
- then A5: x in dom q by XBOOLE_0:def 3;
-      thus ((p +* q)|A).x = (p +* q).x by A1,A2,FUNCT_1:70
-                          .= q.x by A5,FUNCT_4:14
-                          .= (q|A).x by A4,FUNCT_1:70;
-     end; ::hereby
-     assume A6: not x in dom (q|A);
- then not x in (dom q /\ A) by RELAT_1:90;
- then A7: not x in dom q by A3,XBOOLE_0:def 3;
-          A8: x in dom (p|A) by A2,A6,XBOOLE_0:def 2;
- then x in dom p /\ A by RELAT_1:90;
- then x in dom p by XBOOLE_0:def 3;
-          then x in dom (p +* q) by FUNCT_4:13;
- then x in dom (p +* q) /\ A by A3,XBOOLE_0:def 3;
- then x in dom ((p +* q)|A) by RELAT_1:90;
-     hence ((p +* q)|A).x = (p +* q).x by FUNCT_1:70
-                          .= p.x by A7,FUNCT_4:12
-                          .= (p|A).x by A8,FUNCT_1:70;
-    end;
-   hence thesis by A1,FUNCT_4:def 1;
-  end;
-
-theorem Th7:
- for f,g being Function, A being set st A misses dom g
-  holds (f +* g)|A = f|A
-  proof
-   let f,g be Function, A be set;
-   assume A misses dom g;
- then dom g /\ A = {} by XBOOLE_0:def 7;
-    then dom (g|A) = {} by RELAT_1:90;
-    then g|A is Function of {},{} by FUNCT_2:55;
-then g|A = {} by PARTFUN1:57;
-   hence (f +* g)|A = f|A +* {} by Th6
-                  .= f|A by FUNCT_4:22;
-  end;
-
-theorem
-    for f,g being Function , A being set
- holds dom f misses A implies (f +* g)|A = g|A
-  proof
-   let f,g be Function , A be set;
-   assume dom f misses A;
- then dom f /\ A = {} by XBOOLE_0:def 7;
-    then dom (f|A) = {} by RELAT_1:90;
-    then f|A is Function of {},{} by FUNCT_2:55;
-then f|A = {} by PARTFUN1:57;
-   hence (f +* g)|A = {} +* g|A by Th6
-                  .= g|A by FUNCT_4:21;
-  end;
-
-theorem
-    for f,g,h being Function st dom g = dom h
-  holds f +* g +* h = f +* h
-  proof
-   let f,g,h be Function;
-   assume A1:dom g = dom h;
-   thus f +* g +* h = f +* (g +* h) by FUNCT_4:15
-                    .= f +* h by A1,FUNCT_4:20;
-  end;
-
-theorem Th10:
- for f,g being Function holds
-   f c= g implies f +* g = g & g +* f = g
-   proof
-    let f,g be Function;
-    assume A1: f c= g;
-    then dom f c= dom g by GRFUNC_1:8;
-    hence A2: f +* g = g by FUNCT_4:20;
-       f tolerates g by A1,PARTFUN1:135; hence g +* f = g by A2,FUNCT_4:35;
-   end;
-
-theorem
-    for f being Function, A being set
-  holds f +* f|A = f
-   proof
-    let f be Function, A be set;
-       (f|A) c= f by RELAT_1:88;
-    hence f +* f|A = f by Th10;
-  end;
-
-theorem
-    for f,g being Function, B,C being set st
-  dom f c= B & dom g c= C & B misses C
-  holds (f +* g)|B = f & (f +* g)|C = g
-   proof
-    let f,g be Function, B,C be set;
-    assume that A1: dom f c= B and
-                A2: dom g c= C and
-                A3: B misses C;
-    dom f misses C by A1,A3,XBOOLE_1:63;
-then A4: dom f /\ C = {} by XBOOLE_0:def 7;
-       dom g misses B by A2,A3,XBOOLE_1:63;
-    then dom g /\ B = {} by XBOOLE_0:def 7;
-    then dom (g|B) = {} by RELAT_1:90;
-    then g|B is Function of {},{} by FUNCT_2:55;
-then A5: g|B = {} by PARTFUN1:57;
-       dom (f|C) = {} by A4,RELAT_1:90;
-    then f|C is Function of {},{} by FUNCT_2:55;
-then A6: f|C = {} by PARTFUN1:57;
-    thus (f +* g)|B = f|B +* g|B by Th6
-                   .= f|B by A5,FUNCT_4:22
-                   .= f by A1,RELAT_1:97;
-   thus (f +* g)|C = f|C +* g|C by Th6
-                   .= g|C by A6,FUNCT_4:21
-                   .= g by A2,RELAT_1:97;
-  end;
-
-theorem
-    for p,q being Function, A being set
- holds dom p c= A & dom q misses A implies (p +* q)|A = p
-  proof
-   let p,q be Function, A be set;
-   assume that A1: dom p c= A and
-               A2: dom q misses A;
-   thus (p +* q )|A = p|A by A2,Th7
-                    .= p by A1,RELAT_1:97;
-  end;
-
-theorem Th14:
- for f being Function, A,B being set
-  holds f|(A \/ B) = f|A +* f|B
-   proof
-    let f be Function, A,B be set;
-A1: f|(A \/ B)|A = f|((A \/ B) /\ A) by RELAT_1:100
-               .= f|A by XBOOLE_1:21;
-A2: f|(A \/ B)|B = f|((A \/ B) /\ B) by RELAT_1:100
-               .= f|B by XBOOLE_1:21;
-       dom (f|(A \/ B)) c= A \/ B by RELAT_1:87;
-    hence f|(A \/ B) = f|A +* f|B by A1,A2,AMI_1:16;
-   end;
+canceled 10;
 
 begin  :: Total states of SCM
 
@@ -2156,22 +1994,22 @@ A3:    x in SCM-Instr-Loc by XBOOLE_0:3;
 then A4:        SCM-Data-Loc \/ {IC SCM} misses dom p by A1,AMI_3:def 1
 ,XBOOLE_1:63;
 then A5:   s|(SCM-Data-Loc \/ {IC SCM}) = (s +* p) | (SCM-Data-Loc \/ {IC SCM})
-                                                         by Th7;
+                                                         by FUNCT_4:76;
 A6:    (Exec(i,s) +* p)|(SCM-Data-Loc \/ {IC SCM})
-           = Exec(i,s)|(SCM-Data-Loc \/ {IC SCM}) by A4,Th7
+           = Exec(i,s)|(SCM-Data-Loc \/ {IC SCM}) by A4,FUNCT_4:76
           .= Exec(i,s +* p) | (SCM-Data-Loc \/ {IC SCM}) by A5,Th58;
 A7:     Exec (i, s +* p)|SCM-Instr-Loc
             = (s +* p)|SCM-Instr-Loc by Th59
-           .= s |SCM-Instr-Loc +* p|SCM-Instr-Loc by Th6
+           .= s |SCM-Instr-Loc +* p|SCM-Instr-Loc by FUNCT_4:75
            .= Exec (i,s) |SCM-Instr-Loc +* p|SCM-Instr-Loc by Th59
-           .= (Exec (i, s) +* p)|SCM-Instr-Loc by Th6;
+           .= (Exec (i, s) +* p)|SCM-Instr-Loc by FUNCT_4:75;
      thus Exec (i, s +* p)
              = Exec (i, s +* p)| dom(Exec (i, s +* p)) by RELAT_1:97
             .= Exec (i, s +* p)| ({IC SCM} \/ SCM-Data-Loc \/ SCM-Instr-Loc)
                                                             by Th23,AMI_3:36
             .= (Exec (i, s) +* p)| ({IC SCM} \/ SCM-Data-Loc)
-                 +* (Exec (i, s) +* p)|SCM-Instr-Loc by A6,A7,Th14
-            .= (Exec (i,s) +* p)| the carrier of SCM by Th14,Th23
+                 +* (Exec (i, s) +* p)|SCM-Instr-Loc by A6,A7,FUNCT_4:83
+            .= (Exec (i,s) +* p)| the carrier of SCM by FUNCT_4:83,Th23
             .= (Exec (i,s) +* p)| dom(Exec (i, s) +* p) by AMI_3:36
             .= Exec (i,s) +* p by RELAT_1:97;
     end;
@@ -3072,3 +2910,4 @@ theorem
 theorem
     for f being FinPartState of SCM holds
   f is data-only iff dom f c= SCM-Data-Loc by Lm2;
+

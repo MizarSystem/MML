@@ -1,0 +1,2206 @@
+:: On constructing topological spaces and Sorgenfrey line
+::  by Grzegorz Bancerek
+:: 
+:: Received December 10, 2004
+:: Copyright (c) 2004 Association of Mizar Users
+
+environ
+
+ vocabulary ABIAN, SETFAM_1, SUBSET_1, BOOLE, TARSKI, PRE_TOPC, CANTOR_1,
+      RCOMP_1, ARYTM, RAT_1, CARD_1, WAYBEL23, PBOOLE, ZF_REFLE, RELAT_1,
+      FUNCT_1, PROB_1, ARYTM_2, TOPS_1, RLVECT_3, FINSET_1, CQC_LANG, TEX_1,
+      SQUARE_1, ORDINAL2, LIMFUNC1, TAXONOM2, CARD_4, CARD_2, INT_1, ARYTM_1,
+      ARYTM_3, MCART_1, CARD_5, GROUP_1, SERIES_1, SUPINF_2, PREPOWER,
+      ABSVALUE, RLVECT_1, SEQ_1, SEQM_3, FINSUB_1, FINSEQ_1, FUNCT_7, COLLSP,
+      PCOMPS_1, TOPGEN_2, TOPGEN_3;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, FINSET_1, DOMAIN_1,
+      FINSUB_1, RELAT_1, RELSET_1, FUNCT_1, FUNCT_2, FINSEQ_1, ORDINAL1,
+      ORDINAL2, WELLORD2, CARD_1, PROB_1, CQC_LANG, TAXONOM2, CARD_2, CARD_4,
+      CARD_5, ARYTM_3, ARYTM_2, XCMPLX_0, COMPLEX1, XREAL_0, NAT_1, SQUARE_1,
+      ABSVALUE, NEWTON, INT_1, RAT_1, NUMBERS, ABIAN, FUNCT_7, SEQ_1, SEQ_2,
+      SEQM_3, PREPOWER, SERIES_1, RCOMP_1, RCOMP_2, PBOOLE, LIMFUNC1, STRUCT_0,
+      PRE_TOPC, TOPS_1, TOPS_2, TEX_1, TEX_2, CANTOR_1, PCOMPS_1, YELLOW_8,
+      WAYBEL23, YELLOW18, TOPGEN_2;
+ constructors SETFAM_1, FINSUB_1, CARD_1, PROB_1, ARYTM_2, CQC_LANG, MEMBERED,
+      NUMBERS, XCMPLX_0, XREAL_0, SQUARE_1, RAT_1, ABIAN, TAXONOM2, CARD_4,
+      DOMAIN_1, PREPOWER, SERIES_1, ABSVALUE, SEQM_3, TEX_2, FUNCT_1, NAT_1,
+      RELSET_1, FUNCT_2, SEQ_1, PCOMPS_1, RCOMP_1, RCOMP_2, PBOOLE, LIMFUNC1,
+      CARD_2, INT_1, SUBSET_1, REAL_1, SEQ_2, PRE_TOPC, TOPS_1, TOPS_2,
+      CANTOR_1, TEX_1, YELLOW_8, YELLOW_9, WAYBEL23, TOPGEN_2;
+ clusters XBOOLE_0, SUBSET_1, ZFMISC_1, PRE_TOPC, NUMBERS, REAL_1, RAT_1,
+      XREAL_0, STRUCT_0, RELSET_1, TOPS_1, BORSUK_5, PBOOLE, ARYTM_3, CARD_5,
+      INT_1, MEMBERED, ORDINAL2, ORDINAL1, CARD_1, FINSEQ_1, FINSET_1,
+      CARD_FIL, NEWTON, SEQ_1, AFINSQ_1, NAT_1, TEX_2, PCOMPS_1;
+ requirements BOOLE, SUBSET, NUMERALS, ARITHM, REAL;
+ definitions TARSKI, XBOOLE_0, FUNCT_1, CARD_4, REAL_1, STRUCT_0, PRE_TOPC,
+      CANTOR_1, TAXONOM2, ABIAN, YELLOW_8, TOPGEN_2;
+ theorems TARSKI, XBOOLE_0, XBOOLE_1, SETFAM_1, PRE_TOPC, CANTOR_1, ABIAN,
+      YELLOW_9, SUBSET_1, ZFMISC_1, PROB_1, PBOOLE, CARD_5, FUNCT_1, YELLOW_8,
+      TOPS_1, RELSET_1, FUNCT_2, MSSUBFAM, RCOMP_2, SQUARE_1, AXIOMS, RAT_1,
+      REAL_1, XREAL_0, JORDAN6, TOPREALA, BORSUK_5, LIMFUNC1, WAYBEL31, CARD_1,
+      NUMBERS, CARD_4, CARD_2, INT_1, XCMPLX_1, TOPREAL5, ORDINAL2, FINSET_1,
+      STRUCT_0, ORDINAL3, MCART_1, ARYTM_2, ARYTM_3, SERIES_1, SEQM_3,
+      ABSVALUE, PREPOWER, NEWTON, SEQ_1, NAT_1, IRRAT_1, ORDINAL1, FINSUB_1,
+      FUNCT_7, FINSEQ_1, TDLAT_3, CQC_LANG, FIN_TOPO, TEX_2, TEX_1, PCOMPS_1;
+ schemes FUNCT_1, FUNCT_2, NAT_1, WELLORD2, ZFREFLE1;
+
+begin :: Introducing topology
+
+ reserve a,b,c for set;
+
+definition
+  let X be set;
+  let B be Subset-Family of X;
+::<DSCR monograph="topology" name="condition (B1)"/>
+  attr B is point-filtered means: :: (B1)
+Def1:
+   for x,U1,U2 being set st U1 in B & U2 in B & x in U1 /\ U2
+    ex U being Subset of X st U in B & x in U & U c= U1 /\ U2;
+end;
+
+::<DSCR monograph="topology" name="condition (B2)"/>
+theorem Th1:
+  for X being set, B being Subset-Family of X
+  holds B is covering iff :: (B2)
+  for x being set st x in X ex U being Subset of X st U in B & x in U
+  proof
+    let X be set;
+    let B be Subset-Family of X;
+    hereby assume B is covering; then
+A1:  union B = X by ABIAN:4;
+     let x be set; assume x in X; then
+     consider U being set such that
+A2:  x in U & U in B by A1,TARSKI:def 4;
+     reconsider U as Subset of X by A2;
+     take U; thus U in B & x in U by A2;
+    end;
+    assume
+A3: for x being set st x in X ex U being Subset of X st U in B & x in U;
+    union B = X
+    proof
+     thus union B c= X;
+     let a; assume a in X; then
+     ex U being Subset of X st U in B & a in U by A3;
+     hence thesis by TARSKI:def 4;
+    end;
+    hence B is covering by ABIAN:4;
+  end;
+
+::<DSCR monograph="topology" label="1.2.1."/>
+theorem Th1_2_1:
+ for X being set, B being Subset-Family of X
+  st B is point-filtered covering
+ for T being TopStruct
+  st the carrier of T = X & the topology of T = UniCl B
+  holds T is TopSpace & B is Basis of T
+ proof
+   let X be set;
+   let B be Subset-Family of X such that
+A1:B is point-filtered covering;
+   let T be TopStruct such that
+00:the carrier of T = X & the topology of T = UniCl B;
+   T is TopSpace-like
+   proof
+     union B in UniCl B by CANTOR_1:def 1;
+     hence the carrier of T in the topology of T by 00,A1,ABIAN:4;
+     hereby
+       let a be Subset-Family of T;
+       assume a c= the topology of T; then
+       union a in UniCl the topology of T by CANTOR_1:def 1;
+       hence union a in the topology of T by 00,YELLOW_9:15;
+     end;
+     let a,b be Subset of T;
+     assume a in the topology of T; then
+     consider Ba being Subset-Family of T such that
+A2:  Ba c= B & a = union Ba by 00,CANTOR_1:def 1;
+     assume b in the topology of T; then
+     consider Bb being Subset-Family of T such that
+A3:  Bb c= B & b = union Bb by 00,CANTOR_1:def 1;
+     set Bc = {c where c is Subset of T: c in B & c c= a/\b};
+     Bc c= bool X
+     proof let x be set; assume
+       x in Bc; then
+       ex c being Subset of T st x = c & c in B & c c= a/\b;
+       hence thesis;
+     end; then
+     reconsider Bc as Subset-Family of T by 00,SETFAM_1:def 7;
+A4:  Bc c= B
+     proof let x be set; assume
+       x in Bc; then
+       ex c being Subset of T st x = c & c in B & c c= a/\b;
+       hence thesis;
+     end;
+     union Bc = a /\ b
+     proof
+       Bc c= bool (a/\b)
+       proof let x be set; assume
+         x in Bc; then
+         ex c being Subset of T st x = c & c in B & c c= a/\b;
+         hence thesis;
+       end; then
+       union Bc c= union bool (a/\b) by ZFMISC_1:95;
+       hence union Bc c= a /\ b by ZFMISC_1:99;
+       let x be set; assume x in a/\b; then
+A5:    x in a & x in b by XBOOLE_0:def 3; then
+       consider U1 being set such that
+A6:    x in U1 & U1 in Ba by A2,TARSKI:def 4;
+       consider U2 being set such that
+A7:    x in U2 & U2 in Bb by A3,A5,TARSKI:def 4;
+       U1 in B & U2 in B & x in U1/\U2 by A2,A3,A6,A7,XBOOLE_0:def 3; then
+       consider U being Subset of X such that
+A8:    U in B & x in U & U c= U1 /\ U2 by A1,Def1;
+       U1 c= a & U2 c= b by A2,A3,A6,A7,ZFMISC_1:92; then
+       U1/\U2 c= a/\b by XBOOLE_1:27; then
+       U c= a/\b by A8,XBOOLE_1:1; then
+       U in Bc by 00,A8;
+       hence thesis by A8,TARSKI:def 4;
+     end;
+     hence a /\ b in the topology of T by 00,A4,CANTOR_1:def 1;
+   end;
+   hence T is TopSpace;
+   reconsider B' = B as Subset-Family of T by 00;
+   B' is Basis of T
+   proof
+    thus B' c= the topology of T by 00,CANTOR_1:1;
+    thus thesis by 00;
+   end;
+   hence thesis;
+ end;
+
+::<DSCR monograph="topology" label="1.2.3."/>
+theorem
+  for X being set, B being non-empty ManySortedSet of X
+  st rng B c= bool bool X &
+     (for x,U being set st x in X & U in B.x holds x in U) &
+     (for x,y,U being set st x in U & U in B.y & y in X
+       ex V being set st V in B.x & V c= U) &
+     (for x,U1,U2 being set st x in X & U1 in B.x & U2 in B.x
+       ex U being set st U in B.x & U c= U1 /\ U2)
+  ex P being Subset-Family of X st P = Union B &
+  for T being TopStruct
+  st the carrier of T = X & the topology of T = UniCl P
+  holds T is TopSpace &
+      for T' being non empty TopSpace st T' = T
+      holds B is Neighborhood_System of T'
+  proof
+    let X be set;
+    let B be non-empty ManySortedSet of X such that
+00: rng B c= bool bool X;
+04: dom B = X & union rng B = Union B by PROB_1:def 3,PBOOLE:def 3; then
+    Union B c= union bool bool X by 00,ZFMISC_1:95; then
+    Union B c= bool X by ZFMISC_1:99; then
+    reconsider P = Union B as Subset-Family of X by SETFAM_1:def 7;
+    assume
+01: for x,U being set st x in X & U in B.x holds x in U;
+    assume
+02: for x,y,U being set st x in U & U in B.y & y in X
+    ex V being set st V in B.x & V c= U;
+    assume
+03: for x,U1,U2 being set st x in X & U1 in B.x & U2 in B.x
+    ex U being set st U in B.x & U c= U1 /\ U2;
+    take P;
+    thus P = Union B;
+    let T be TopStruct such that
+A0: the carrier of T = X & the topology of T = UniCl P;
+05: P is point-filtered
+    proof
+     let x,U1,U2 be set; assume
+06:  U1 in P & U2 in P & x in U1 /\ U2; then
+     consider y1 being set such that
+07:  y1 in X & U1 in B.y1 by 04,CARD_5:10;
+     consider y2 being set such that
+08:  y2 in X & U2 in B.y2 by 06,04,CARD_5:10;
+     x in U1 by 06,XBOOLE_0:def 3; then
+     consider V1 being set such that
+09:  V1 in B.x & V1 c= U1 by 02,07;
+     x in U2 by 06,XBOOLE_0:def 3; then
+     consider V2 being set such that
+0A:  V2 in B.x & V2 c= U2 by 02,08;
+0C:  x in X by 04,09,FUNCT_1:def 4; then
+     consider U being set such that
+0B:  U in B.x & U c= V1 /\ V2 by 03,09,0A;
+0D:  U in P by 04,0C,0B,CARD_5:10; then
+     reconsider U as Subset of X;
+     take U;
+     thus U in P by 0D;
+     thus x in U by 01,0C,0B;
+     V1/\V2 c= U1/\U2 by 09,0A,XBOOLE_1:27;
+     hence  U c= U1 /\ U2 by 0B,XBOOLE_1:1;
+    end;
+    now let x be set; consider U being Element of B.x;
+     assume
+0E:  x in X; then
+     B.x is non empty by PBOOLE:def 16; then
+     x in U & U in P by 01,0E,04,CARD_5:10;
+     hence ex U being Subset of X st U in P & x in U;
+    end; then
+    P is covering by Th1;
+    hence T is TopSpace by A0,05,Th1_2_1;
+    let T' be non empty TopSpace; assume
+1A: T' = T; then
+    reconsider B' = B as ManySortedSet of T' by A0;
+    B' is Neighborhood_System of T'
+    proof
+      let x be Point of T';
+1B:   B'.x in rng B by A0,04,1A,FUNCT_1:def 5; then
+      reconsider Bx = B'.x as Subset-Family of T' by A0,00,1A,SETFAM_1:def 7;
+      Bx is Basis of x
+      proof
+        Bx c= P & P c= UniCl P by 04,1B,ZFMISC_1:92,CANTOR_1:1;
+        hence Bx c= the topology of T' by A0,1A,XBOOLE_1:1;
+        for a st a in Bx holds x in a by 01,1A,A0;
+        hence x in Intersect Bx by SETFAM_1:58;
+        let A be Subset of T';
+        assume A in the topology of T'; then
+        consider Y being Subset-Family of T' such that
+1C:     Y c= P & A = union Y by A0,1A,CANTOR_1:def 1;
+        assume x in A; then
+        consider a such that
+1D:     x in a & a in Y by 1C,TARSKI:def 4;
+        ex b st b in dom B & a in B.b by 1C,1D,CARD_5:10; then
+        consider V being set such that
+1E:     V in B.x & V c= a  by 1D,02,04;
+        a c= A & P c= UniCl P & V in P
+        by A0,04,1A,1C,1D,1E,ZFMISC_1:92,CANTOR_1:1,CARD_5:10; then
+        V c= A & V in UniCl P by 1E,XBOOLE_1:1;
+        hence ex V being Subset of T' st V in Bx & V c= A by 1E;
+      end;
+      hence thesis;
+    end;
+    hence thesis;
+  end;
+
+::<DSCR monograph="topology" label="1.2.5."/>
+theorem Th1_2_5:
+  for X being set, F being Subset-Family of X
+  st {} in F & X in F &
+     (for A,B being set st A in F & B in F holds A \/ B in F) &
+     (for G being Subset-Family of X st G c= F holds Intersect G in F)
+  for T being TopStruct
+  st the carrier of T = X & the topology of T = COMPLEMENT F
+  holds
+     T is TopSpace &
+     for A being Subset of T holds A is closed iff A in F
+  proof
+    let X be set;
+    let F be Subset-Family of X;
+    assume A0: {} in F;
+    assume X in F;
+    assume A2: for A,B being set st A in F & B in F holds A \/ B in F;
+    assume A3: for G being Subset-Family of X st G c= F holds Intersect G in F;
+    set O = COMPLEMENT F;
+    let T be TopStruct such that
+00: the carrier of T = X & the topology of T = O;
+    T is TopSpace-like
+    proof
+      ({}T)` in O by 00,A0,SETFAM_1:49; then
+      [#]T in O by PRE_TOPC:27;
+      hence the carrier of T in the topology of T by 00,PRE_TOPC:def 3;
+      hereby
+        let a be Subset-Family of T;
+        assume a c= the topology of T; then
+        COMPLEMENT a c= F by 00,SETFAM_1:52; then
+        Intersect COMPLEMENT a in F by 00,A3; then
+        (union a)` in F by YELLOW_8:15;
+        hence union a in the topology of T by 00,SETFAM_1:def 8;
+      end;
+      let a,b be Subset of T;
+      assume a in the topology of T & b in the topology of T; then
+      a` in F & b` in F by 00,SETFAM_1:def 8; then
+      a` \/ b` in F by A2; then
+      (a /\ b)` in F by SUBSET_1:30;
+      hence a /\ b in the topology of T by 00,SETFAM_1:def 8;
+    end;
+    hence T is TopSpace; then
+    reconsider T' = T as TopSpace;
+    let A be Subset of T;
+    A is closed iff A` is open by TOPS_1:29; then
+    A is closed iff A` in O by 00,PRE_TOPC:def 5;
+    hence thesis by 00,SETFAM_1:49;
+  end;
+
+scheme TopDefByClosedPred{X() -> set, C[set]}:
+  ex T being strict TopSpace st the carrier of T = X() &
+   for A being Subset of T holds A is closed iff C[A]
+provided
+P1: C[{}] & C[X()] and
+P2: for A,B being set st C[A] & C[B] holds C[A \/ B] and
+P3: for G being Subset-Family of X() st
+     for A being set st A in G holds C[A]
+    holds C[Intersect G]
+  proof set X = X();
+    set F = {A where A is Subset of X: C[A]};
+    F c= bool X
+    proof
+     let a; assume a in F; then
+     ex B being Subset of X st a = B & C[B];
+     hence thesis;
+    end; then
+    reconsider F as Subset-Family of X by SETFAM_1:def 7;
+    set T = TopStruct(#X, COMPLEMENT F#);
+    {} c= X & X c= X by XBOOLE_1:2; then
+A1: {} in F & X in F by P1;
+A2: for A,B being set st A in F & B in F holds A \/ B in F
+    proof let A,B be set;
+     assume A in F; then
+     consider A' being Subset of X such that
+01:  A = A' & C[A'];
+     assume B in F; then
+     consider B' being Subset of X such that
+02:  B = B' & C[B'];
+     C[A' \/ B'] by P2,01,02;
+     hence A \/ B in F by 01,02;
+    end;
+A3: for G being Subset-Family of X st G c= F holds Intersect G in F
+    proof
+     let G be Subset-Family of X;
+     assume 04: G c= F;
+     now let A be set; assume A in G; then
+      A in F by 04; then
+      ex B being Subset of X st A = B & C[B];
+      hence C[A];
+     end; then
+     C[Intersect G] by P3;
+     hence Intersect G in F;
+    end; then
+    reconsider T as strict TopSpace by A1,A2,Th1_2_5;
+    take T; thus the carrier of T = X();
+    let A be Subset of T;
+    (A in F iff ex B being Subset of X st A = B & C[B]) &
+    (A is closed iff A in F) by A1,A2,A3,Th1_2_5;
+    hence thesis; 
+  end;
+
+LemUn0:
+   for T1,T2 being TopSpace st
+    for A being set holds A is open Subset of T1 iff A is open Subset of T2
+   holds the carrier of T1 = the carrier of T2 &
+    the topology of T1 c= the topology of T2
+  proof
+    let T1,T2 be TopSpace such that
+00: for A being set holds
+      A is open Subset of T1 iff A is open Subset of T2;
+    the carrier of T1 = [#]T1 &
+    the carrier of T2 = [#]T2 by PRE_TOPC:def 3; then
+    the carrier of T1 is Subset of T2 &
+    the carrier of T2 is Subset of T1 by 00;
+    hence
+02: the carrier of T1 = the carrier of T2 by XBOOLE_0:def 10;
+    let a; assume
+01: a in the topology of T1; then
+    reconsider a as Subset of T1;
+    reconsider b = a as Subset of T2 by 02;
+    a is open by 01,PRE_TOPC:def 5; then
+    b is open by 00;
+    hence thesis by PRE_TOPC:def 5;
+  end;
+
+theorem
+  for T1,T2 being TopSpace st
+    for A being set holds A is open Subset of T1 iff A is open Subset of T2
+  holds the TopStruct of T1 = the TopStruct of T2
+  proof
+    let T1,T2 be TopSpace such that
+00: for A being set holds
+      A is open Subset of T1 iff A is open Subset of T2;
+    the topology of T1 = the topology of T2
+    proof
+      thus the topology of T1 c= the topology of T2 by 00,LemUn0;
+      thus thesis by 00,LemUn0;
+    end;
+    hence thesis by 00,LemUn0;
+  end;
+
+LemUn1:
+   for T1,T2 being TopSpace st
+    for A being set holds A is closed Subset of T1 iff A is closed Subset of T2
+   holds  the carrier of T1 = the carrier of T2 &
+    the topology of T1 c= the topology of T2
+  proof
+    let T1,T2 be TopSpace such that
+00: for A being set holds
+      A is closed Subset of T1 iff A is closed Subset of T2;
+    the carrier of T1 = [#]T1 &
+    the carrier of T2 = [#]T2 by PRE_TOPC:def 3; then
+    the carrier of T1 is Subset of T2 &
+    the carrier of T2 is Subset of T1 by 00;
+    hence
+02: the carrier of T1 = the carrier of T2 by XBOOLE_0:def 10;
+    let a; assume
+01: a in the topology of T1; then
+    reconsider a as Subset of T1;
+    reconsider b = a as Subset of T2 by 02;
+    a is open by 01,PRE_TOPC:def 5; then
+    a` is closed by TOPS_1:30; then
+    b` is closed by 02,00; then
+    b is open by TOPS_1:30;
+    hence thesis by PRE_TOPC:def 5;
+  end;
+
+theorem ThUn1:
+  for T1,T2 being TopSpace st
+    for A being set holds A is closed Subset of T1 iff A is closed Subset of T2
+  holds the TopStruct of T1 = the TopStruct of T2
+  proof
+    let T1,T2 be TopSpace such that
+00: for A being set holds
+      A is closed Subset of T1 iff A is closed Subset of T2;
+    the topology of T1 = the topology of T2
+    proof
+      thus the topology of T1 c= the topology of T2 by 00,LemUn1;
+      thus thesis by 00,LemUn1;
+    end;
+    hence thesis by 00,LemUn1;
+  end;
+
+definition
+  let X,Y be set;
+  let r be Subset of [:X, bool Y:];
+  redefine func rng r -> Subset-Family of Y;
+  coherence
+  proof r is Relation of X, bool Y by RELSET_1:def 1; then
+   rng r c= bool Y by RELSET_1:12;
+   hence thesis by SETFAM_1:def 7;
+  end;
+end;
+
+::<DSCR monograph="topology" label="1.2.7."/>
+theorem Th1_2_7:
+  for X being set, c being Function of bool X, bool X
+  st c.{} = {} &
+     (for A being Subset of X holds A c= c.A) &
+     (for A,B being Subset of X holds c.(A \/ B) = (c.A) \/ (c.B)) &
+     (for A being Subset of X holds c.(c.A) = c.A)
+  for T being TopStruct
+  st the carrier of T = X & the topology of T = COMPLEMENT rng c
+  holds
+     T is TopSpace & for A being Subset of T holds Cl A = c.A
+  proof
+    let X be set;
+    let c be Function of bool X, bool X;
+    assume that
+00: c.{} = {} and
+01: for A being Subset of X holds A c= c.A and
+02: for A,B being Subset of X holds c.(A \/ B) = (c.A) \/ (c.B) and
+03: for A being Subset of X holds c.(c.A) = c.A;
+04: dom c = bool X by FUNCT_2:def 1;
+    set F = rng c;
+    let T be TopStruct such that
+A0: the carrier of T = X & the topology of T = COMPLEMENT F;
+05: X = [#]X & {} = {}X by SUBSET_1:def 4; then
+    X c= c.X & c.([#]X) c= X by 01; then
+    c.X = X by 05,XBOOLE_0:def 10; then
+A1: {} in F & X in F by 00,04,05,FUNCT_1:def 5;
+A2: now
+      let A,B be set; assume
+06:   A in F & B in F; then
+      consider a such that
+07:   a in dom c & A = c.a by FUNCT_1:def 5;
+      consider b such that
+08:   b in dom c & B = c.b by 06,FUNCT_1:def 5;
+      reconsider a,b as Subset of X by 07,08;
+      A\/B = (c.A)\/B by 03,07 .= (c.A)\/(c.B) by 03,08
+      .= c.((c.a)\/(c.b)) by 02,07,08;
+      hence A \/ B in F by 04,FUNCT_1:def 5;
+    end;
+09: now let A,B be Subset of X; assume
+      A c= B; then
+      A\/B = B by XBOOLE_1:12; then
+      c.B = (c.A)\/(c.B) by 02;
+      hence c.A c= c.B by XBOOLE_1:11;
+    end;
+A3: now
+      let G be Subset-Family of X such that
+A4:   G c= F;
+A5:   Intersect G c= c.Intersect G by 01;
+      now let a; assume
+A6:     a in G; then reconsider A = a as Subset of X;
+A7:     ex b st b in dom c & A = c.b by A4,A6,FUNCT_1:def 5;
+        Intersect G c= A by A6,MSSUBFAM:2; then
+        c.Intersect G c= c.A by 09;
+        hence c.Intersect G c= a by 03,A7;
+      end; then
+      c.Intersect G c= Intersect G by MSSUBFAM:4; then
+      c.Intersect G = Intersect G by A5,XBOOLE_0:def 10;
+      hence Intersect G in F by 04,FUNCT_1:def 5;
+    end;
+    hence
+A8: T is TopSpace by A0,A1,A2,Th1_2_5;
+    let A be Subset of T;
+    reconsider B = A, ClA = Cl A as Subset of X by A0;
+    reconsider cB = c.B as Subset of T by A0;
+    cB in F by 04,FUNCT_1:def 5; then
+    cB is closed & B c= c.B by A0,A1,A2,A3,Th1_2_5,01;
+    hence Cl A c= c.A by TOPS_1:31;
+    Cl A = Cl Cl A by TOPS_1:26; then
+    Cl A is closed by A8,PRE_TOPC:52; then
+    ClA in F by A0,A1,A2,A3,Th1_2_5; then
+    ex a st a in dom c & ClA = c.a by FUNCT_1:def 5; then
+    c.ClA = ClA & A c= Cl A by 03,PRE_TOPC:48;
+    hence thesis by A0,09;
+  end;
+
+scheme TopDefByClosureOp{X() -> set, ClOp(set) -> set}:
+  ex T being strict TopSpace st the carrier of T = X() &
+   for A being Subset of T holds Cl A = ClOp(A)
+provided
+P1: ClOp({}) = {} and
+P2: for A being Subset of X() holds A c= ClOp(A) & ClOp(A) c= X() and
+P3: for A,B being Subset of X() holds ClOp(A \/ B) = ClOp(A) \/ ClOp(B) and
+P4: for A being Subset of X() holds ClOp(ClOp(A)) = ClOp(A)
+  proof set X = X();
+    consider c being Function such that
+00: dom c = bool X & for a st a in bool X holds c.a = ClOp(a)
+    from FUNCT_1:sch 3;
+    now
+     let a; assume a in bool X; then
+     c.a = ClOp(a) & ClOp(a) c= X by P2,00;
+     hence c.a in bool X;
+    end; then
+    reconsider c as Function of bool X, bool X by 00,FUNCT_2:5;
+    {} c= X by XBOOLE_1:2; then
+01: c.{} = {} by 00,P1;
+02: for A being Subset of X holds A c= c.A
+    proof let A be Subset of X;
+     c.A = ClOp(A) by 00;
+     hence thesis by P2;
+    end;
+03: for A,B being Subset of X holds c.(A \/ B) = (c.A) \/ (c.B)
+    proof let A,B be Subset of X;
+     c.A = ClOp(A) & c.B = ClOp(B) & ClOp(A\/B) = c.(A \/ B) by 00;
+     hence thesis by P3;
+    end;
+04: for A being Subset of X holds c.(c.A) = c.A
+    proof let A be Subset of X;
+     c.A = ClOp(A) & ClOp(c.A) = c.(c.A) by 00;
+     hence thesis by P4;
+    end;
+    reconsider T = TopStruct(#X, COMPLEMENT rng c#) as strict TopSpace
+    by 01,02,03,04,Th1_2_7;
+    take T; thus the carrier of T = X;
+    let A be Subset of T;
+    thus Cl A = c.A by 01,02,03,04,Th1_2_7 .= ClOp(A) by 00;
+  end;
+
+theorem ThUn2:
+  for T1,T2 being TopSpace st the carrier of T1 = the carrier of T2 &
+    for A1 being Subset of T1, A2 being Subset of T2 st A1 = A2
+    holds Cl A1 = Cl A2
+  holds the topology of T1 = the topology of T2
+  proof
+    let T1,T2 be TopSpace such that
+00: the carrier of T1 = the carrier of T2 and
+01: for A1 being Subset of T1, A2 being Subset of T2 st A1 = A2
+    holds Cl A1 = Cl A2;
+    now let A be set;
+      thus A is closed Subset of T1 implies A is closed Subset of T2
+      proof
+        assume A is closed Subset of T1; then
+        reconsider A1 = A as closed Subset of T1;
+        reconsider A2 = A1 as Subset of T2 by 00;
+        Cl A1 = A1 by PRE_TOPC:52; then
+        Cl A2 = A2 by 01;
+        hence thesis;
+      end;
+      assume A is closed Subset of T2; then
+      reconsider A2 = A as closed Subset of T2;
+      reconsider A1 = A2 as Subset of T1 by 00;
+      Cl A2 = A2 by PRE_TOPC:52; then
+      Cl A1 = A1 by 01;
+      hence A is closed Subset of T1;
+    end; then
+    the TopStruct of T1 = the TopStruct of T2 by ThUn1;
+    hence the topology of T1 = the topology of T2;
+  end;
+
+::<DSCR monograph="topology" label="1.2.9."/>
+theorem Th1_2_9:
+  for X being set, i being Function of bool X, bool X
+  st i.X = X &
+     (for A being Subset of X holds i.A c= A) &
+     (for A,B being Subset of X holds i.(A /\ B) = (i.A) /\ (i.B)) &
+     (for A being Subset of X holds i.(i.A) = i.A)
+  for T being TopStruct
+  st the carrier of T = X & the topology of T = rng i
+  holds
+     T is TopSpace & for A being Subset of T holds Int A = i.A
+  proof
+    let X be set;
+    let c be Function of bool X, bool X such that
+00: c.X = X and
+01: for A being Subset of X holds c.A c= A and
+02: for A,B being Subset of X holds c.(A /\ B) = (c.A) /\ (c.B) and
+03: for A being Subset of X holds c.(c.A) = c.A;
+    let T be TopStruct such that
+A0: the carrier of T = X & the topology of T = rng c;
+04: dom c = bool X by FUNCT_2:def 1;
+    set F = rng c;
+    X = [#]X & {} = {}X by SUBSET_1:def 4; then
+A1: X in F by 00,04,FUNCT_1:def 5;
+A3: now
+      let A,B be Subset of T; assume
+06:   A in F & B in F; then
+      consider a such that
+07:   a in dom c & A = c.a by FUNCT_1:def 5;
+      consider b such that
+08:   b in dom c & B = c.b by 06,FUNCT_1:def 5;
+      reconsider a,b as Subset of X by 07,08;
+      A/\B = (c.A)/\B by 03,07 .= (c.A)/\(c.B) by 03,08
+      .= c.((c.a)/\(c.b)) by 02,07,08;
+      hence A /\ B in F by 04,FUNCT_1:def 5;
+    end;
+09: now let A,B be Subset of X; assume
+      A c= B; then
+      A/\B = A by XBOOLE_1:28; then
+      c.A = (c.A)/\(c.B) by 02;
+      hence c.A c= c.B by XBOOLE_1:17;
+    end;
+A2: now
+      let G be Subset-Family of X such that
+A4:   G c= F;
+A5:   c.union G c= union G by 01;
+      now let a; assume
+A6:     a in G; then reconsider A = a as Subset of X;
+A7:     ex b st b in dom c & A = c.b by A4,A6,FUNCT_1:def 5;
+        A c= union G by A6,ZFMISC_1:92; then
+        c.A c= c.union G by 09;
+        hence a c= c.union G by 03,A7;
+      end; then
+      union G c= c.union G by ZFMISC_1:94; then
+      c.union G = union G by A5,XBOOLE_0:def 10;
+      hence union G in F by 04,FUNCT_1:def 5;
+    end;
+    thus
+A8: T is TopSpace by A0,A1,A2,A3,PRE_TOPC:def 1;
+    let A be Subset of T;
+    reconsider B = A, IntA = Int A as Subset of X by A0;
+    reconsider cB = c.B as Subset of T by A0;
+    Int A is open by A8,TOPS_1:51; then
+    IntA in F by A0,PRE_TOPC:def 5; then
+    ex a st a in dom c & IntA = c.a by FUNCT_1:def 5; then
+    c.IntA = IntA & Int A c= A by 03,TOPS_1:44;
+    hence Int A c= c.A by A0,09;
+    cB in F by 04,FUNCT_1:def 5; then
+    cB is open & c.B c= B by A0,01,PRE_TOPC:def 5;
+    hence c.A c= Int A by TOPS_1:56;
+  end;
+
+scheme TopDefByInteriorOp{X() -> set, IntOp(set) -> set}:
+  ex T being strict TopSpace st the carrier of T = X() &
+   for A being Subset of T holds Int A = IntOp(A)
+provided
+P1: IntOp(X()) = X() and
+P2: for A being Subset of X() holds IntOp(A) c= A and
+P3: for A,B being Subset of X() holds IntOp(A /\ B) = IntOp(A) /\ IntOp(B) and
+P4: for A being Subset of X() holds IntOp(IntOp(A)) = IntOp(A)
+  proof set X = X();
+    consider c being Function such that
+00: dom c = bool X & for a st a in bool X holds c.a = IntOp(a)
+    from FUNCT_1:sch 3;
+    now
+     let a; assume a in bool X; then
+     c.a = IntOp(a) & IntOp(a) c= a & a c= X by P2,00; then
+     c.a c= X by XBOOLE_1:1;
+     hence c.a in bool X;
+    end; then
+    reconsider c as Function of bool X, bool X by 00,FUNCT_2:5;
+    X c= X; then
+01: c.X = X by 00,P1;
+02: for A being Subset of X holds c.A c= A
+    proof let A be Subset of X;
+     c.A = IntOp(A) by 00;
+     hence thesis by P2;
+    end;
+03: for A,B being Subset of X holds c.(A /\ B) = (c.A) /\ (c.B)
+    proof let A,B be Subset of X;
+     c.A = IntOp(A) & c.B = IntOp(B) & IntOp(A/\B) = c.(A /\ B) by 00;
+     hence thesis by P3;
+    end;
+04: for A being Subset of X holds c.(c.A) = c.A
+    proof let A be Subset of X;
+     c.A = IntOp(A) & IntOp(c.A) = c.(c.A) by 00;
+     hence thesis by P4;
+    end;
+    reconsider T = TopStruct(#X, rng c#) as strict TopSpace
+    by 01,02,03,04,Th1_2_9;
+    take T; thus the carrier of T = X;
+    let A be Subset of T;
+    thus Int A = c.A by 01,02,03,04,Th1_2_9 .= IntOp(A) by 00;
+  end;
+
+theorem ThUn3:
+  for T1,T2 being TopSpace st the carrier of T1 = the carrier of T2 &
+    for A1 being Subset of T1, A2 being Subset of T2 st A1 = A2
+    holds Int A1 = Int A2
+  holds the topology of T1 = the topology of T2
+  proof
+    let T1,T2 be TopSpace such that
+00: the carrier of T1 = the carrier of T2 and
+01: for A1 being Subset of T1, A2 being Subset of T2 st A1 = A2
+    holds Int A1 = Int A2;
+    now let A1 be Subset of T1, A2 be Subset of T2; assume A1 = A2; then
+     Int A1` = Int A2` by 00,01;
+     hence Cl A1 = (Int A2`)` by 00,TDLAT_3:2 .= Cl A2 by TDLAT_3:2;
+    end;
+    hence thesis by 00,ThUn2;
+  end;
+
+begin :: Sorgenfrey line (1.2.2)
+
+definition
+  func Sorgenfrey-line -> strict non empty TopSpace means:
+Def2:
+  the carrier of it = REAL &
+  ex B being Subset-Family of REAL st
+  the topology of it = UniCl B &
+  B = {[.x,q.[ where x is Element of REAL, q is Element of REAL:
+       x < q & q is rational};
+  uniqueness;
+  existence
+  proof
+    set B = {[.x,q.[ where x is Element of REAL, q is Element of REAL:
+    x < q & q is rational};
+    B c= bool REAL
+    proof let a; assume
+      a in B; then
+      ex x,q being Element of REAL st a = [.x,q.[ & x < q & q is rational;
+      hence thesis;
+    end; then
+    reconsider B as Subset-Family of REAL by SETFAM_1:def 7;
+A1: B is point-filtered
+    proof
+      let x,U1,U2 being set such that
+A2:   U1 in B & U2 in B & x in U1 /\ U2;
+      consider x1,q1 being Element of REAL such that
+A3:   U1 = [.x1,q1.[ & x1 < q1 & q1 is rational by A2;
+      consider x2,q2 being Element of REAL such that
+A4:   U2 = [.x2,q2.[ & x2 < q2 & q2 is rational by A2;
+A5:   x in U1 & x in U2 by A2,XBOOLE_0:def 3; then
+      reconsider x' = x as Element of REAL by A3;
+A6:   x1 <= x' & x2 <= x' & x' < q1 & x' < q2 by A5,A3,A4,RCOMP_2:3;
+      set y = max(x1,x2), q = min(q1,q2);
+      x2 < q1 & x1 < q2 by A6,AXIOMS:22; then
+      y < q1 & y < q2 & x1 <= y & x2 <= y & q <= q1 & q <= q2
+      by A3,A4,SQUARE_1:35,RCOMP_2:2; then
+      y < q & q is rational & [.y,q.[ c= U1 & [.y,q.[ c= U2 &
+      y <= x' & x' < q by A3,A4,A6,TOPREALA:12,SQUARE_1:38,50; then
+      x' in [.y,q.[ & [.y,q.[ in B & [.y,q.[ c= U1 /\ U2
+      by RCOMP_2:3,XBOOLE_1:19;
+      hence ex U being Subset of REAL st U in B & x in U & U c= U1 /\ U2;
+    end;
+    now
+      let x be set; assume x in REAL; then
+      reconsider x' = x as Element of REAL;
+      x'+0 < x'+1 by REAL_1:53; then
+      consider q being rational number such that
+A7:   x' < q & q < x'+1 by RAT_1:22;
+      take U = [.x',q.[;
+      q in REAL by XREAL_0:def 1;
+      hence U in B by A7;
+      thus x in U by A7,RCOMP_2:3;
+    end; then
+    B is covering by Th1; then
+    TopStruct(#REAL, UniCl B#) is non empty TopSpace
+      by A1,Th1_2_1,STRUCT_0:def 1;
+    hence thesis;
+  end;
+end;
+
+Lem2: the carrier of Sorgenfrey-line = REAL by Def2;
+      consider BB being Subset-Family of REAL such that
+Lem3: the topology of Sorgenfrey-line = UniCl BB and
+Lem4: BB = {[.x,q.[ where x is Element of REAL, q is Element of REAL:
+       x < q & q is rational} by Def2;
+       BB c= the topology of Sorgenfrey-line by Lem3,CANTOR_1:1; then
+Lem5: BB is Basis of Sorgenfrey-line by Lem2,Lem3,CANTOR_1:def 2;
+
+theorem Th19:
+  for x,y being real number
+  holds [.x,y.[ is open Subset of Sorgenfrey-line
+  proof
+    let x,y be real number;
+    reconsider V = [.x,y.[ as Subset of Sorgenfrey-line by Lem2;
+    now
+      let p be Point of Sorgenfrey-line;
+      reconsider a = p as Element of REAL by Lem2;
+      assume p in [.x,y.[; then
+A1:   x <= a & a < y by RCOMP_2:3; then
+      consider q being rational number such that
+A2:   a < q & q < y by RAT_1:22;
+      reconsider U = [.x,q.[ as Subset of Sorgenfrey-line by Lem2;
+      take U;
+      x < q & x is Element of REAL & q is Element of REAL
+        by A1,A2,AXIOMS:22,XREAL_0:def 1;
+      hence U in BB by Lem4;
+      thus p in U by A1,A2,RCOMP_2:3;
+      thus U c= V by A2,TOPREALA:12;
+    end;
+    hence [.x,y.[ is open Subset of Sorgenfrey-line by Lem5,YELLOW_9:31;
+  end;
+
+theorem
+  for x,y being real number
+  holds ].x,y.[ is open Subset of Sorgenfrey-line
+  proof
+    let x,y be real number;
+    reconsider V = ].x,y.[ as Subset of Sorgenfrey-line by Lem2;
+    now
+      let p be Point of Sorgenfrey-line;
+      reconsider a = p as Element of REAL by Lem2;
+      assume p in V; then
+A1:   x < a & a < y by JORDAN6:45; then
+      consider q being rational number such that
+A2:   a < q & q < y by RAT_1:22;
+      reconsider U = [.a,q.[ as Subset of Sorgenfrey-line by Lem2;
+      take U;
+      q is Element of REAL by XREAL_0:def 1;
+      hence U in BB by A2,Lem4;
+      thus p in U by A2,RCOMP_2:3;
+      thus U c= V by A1,A2,TOPREALA:14;
+    end;
+    hence ].x,y.[ is open Subset of Sorgenfrey-line by Lem5,YELLOW_9:31;
+  end;
+
+theorem
+  for x being real number
+  holds left_open_halfline x is open Subset of Sorgenfrey-line
+  proof
+    let x be real number;
+    reconsider V = left_open_halfline x as Subset of Sorgenfrey-line by Lem2;
+    now
+      let p be Point of Sorgenfrey-line;
+      reconsider a = p as Element of REAL by Lem2;
+      assume
+A0:   p in V; then
+      a < x by BORSUK_5:17; then
+      consider q being rational number such that
+A2:   a < q & q < x by RAT_1:22;
+      reconsider U = [.a,q.[ as Subset of Sorgenfrey-line by Lem2;
+      take U;
+A3:   q is Element of REAL & x is Element of REAL by XREAL_0:def 1;
+      hence U in BB by A2,Lem4;
+      thus p in U by A2,RCOMP_2:3;
+      U = {a}\/].a,q.[ & {a} c= V & ].a,q.[ c= V
+       by A0,A2,A3,ZFMISC_1:37,RCOMP_2:5,LIMFUNC1:22;
+      hence U c= V by XBOOLE_1:8;
+    end;
+    hence thesis by Lem5,YELLOW_9:31;
+  end;
+
+theorem
+  for x being real number
+  holds right_open_halfline x is open Subset of Sorgenfrey-line
+  proof
+    let x be real number;
+    reconsider V = right_open_halfline x as Subset of Sorgenfrey-line by Lem2;
+    now
+      let p be Point of Sorgenfrey-line;
+      reconsider a = p as Element of REAL by Lem2;
+      assume
+A0:   p in V; then
+A1:   a > x by BORSUK_5:14;
+      a+0 < a+1 by REAL_1:53; then
+      consider q being rational number such that
+A2:   a < q & q < a+1 by RAT_1:22;
+      reconsider U = [.a,q.[ as Subset of Sorgenfrey-line by Lem2;
+      take U;
+A3:   q is Element of REAL & x is Element of REAL by XREAL_0:def 1;
+      hence U in BB by A2,Lem4;
+      thus p in U by A2,RCOMP_2:3;
+      U = {a}\/].a,q.[ & {a} c= V & ].a,q.[ c= V
+       by A0,A1,A2,A3,ZFMISC_1:37,RCOMP_2:5,LIMFUNC1:20;
+      hence U c= V by XBOOLE_1:8;
+    end;
+    hence thesis by Lem5,YELLOW_9:31;
+  end;
+
+theorem
+  for x being real number
+  holds right_closed_halfline x is open Subset of Sorgenfrey-line
+  proof
+    let x be real number;
+    reconsider V = right_closed_halfline x as Subset of Sorgenfrey-line
+    by Lem2;
+    now
+      let p be Point of Sorgenfrey-line;
+      reconsider a = p as Element of REAL by Lem2;
+      assume p in V; then
+A1:   a >= x by BORSUK_5:15;
+      a+0 < a+1 by REAL_1:53; then
+      consider q being rational number such that
+A2:   a < q & q < a+1 by RAT_1:22;
+      reconsider U = [.a,q.[ as Subset of Sorgenfrey-line by Lem2;
+      take U;
+A3:   q is Element of REAL & x is Element of REAL by XREAL_0:def 1;
+      hence U in BB by A2,Lem4;
+      thus p in U by A2,RCOMP_2:3;
+      a in [.a,q.] by A2,TOPREAL5:1; then
+A4:   U = {a}\/].a,q.[ & {a} c= [.a,q.] & [.a,q.] c= V & ].a,q.[ c= [.a,q.]
+        by A1,A2,A3,ZFMISC_1:37,RCOMP_2:5,LIMFUNC1:20,TOPREALA:19; then
+      U c= [.a,q.] by XBOOLE_1:8;
+      hence U c= V by A4,XBOOLE_1:1;
+    end;
+    hence thesis by Lem5,YELLOW_9:31;
+  end;
+
+theorem Th11:
+  Card INT = alef 0
+  proof
+00: alef 0+`alef 0 = alef 0 by CARD_4:33;
+    INT = NAT \/ [:{0},NAT:] \ {[0,0]} by NUMBERS:def 4; then
+    INT c= NAT \/ [:{0},NAT:] & Card [:NAT,{0}:] = Card NAT &
+    Card [:NAT,{0}:] = Card [:{0},NAT:] by XBOOLE_1:36,CARD_2:11,13; then
+    Card INT <=` Card (NAT \/ [:{0},NAT:]) &
+    Card (NAT \/ [:{0},NAT:]) <=` alef 0
+    by 00,CARD_2:47,CARD_1:27,38;
+    hence Card INT <=` alef 0 by XBOOLE_1:1;
+    thus thesis by CARD_1:27,38,NUMBERS:17;
+  end;
+
+theorem Th12:
+  Card RAT = alef 0
+  proof
+    defpred P[set,set] means
+    ex i being integer number, n being natural number st $1 = [i,n] & $2 = i/n;
+A1: a in [:INT,NAT:] implies ex b st P[a,b]
+    proof
+      assume a in [:INT,NAT:]; then
+      consider x,y being set such that
+00:   x in INT & y in NAT & a = [x,y] by ZFMISC_1:def 2;
+      reconsider x as integer number by 00,INT_1:def 2;
+      reconsider y as natural number by 00,ORDINAL2:def 21;
+      x/y = x/y;
+      hence thesis by 00;
+    end;
+    consider f being Function such that
+A2: dom f = [:INT,NAT:] & for a st a in [:INT,NAT:] holds P[a,f.a]
+    from ZFREFLE1:sch 1(A1);
+A3: RAT c= rng f
+    proof let a; assume a in RAT; then
+      consider i,j being Integer such that
+A4:   a = i/j by RAT_1:def 1;
+      consider n being Element of NAT such that
+A5:   j = n or j = -n by INT_1:8;
+      i/-n = -i/n by XCMPLX_1:189; then
+      a = i/n or a = (-i)/n by A4,A5,XCMPLX_1:188; then
+      consider k being Integer such that
+A6:   a = k/n;
+      k in INT & n in NAT by INT_1:def 2; then
+A8:   [k,n] in [:INT,NAT:] by ZFMISC_1:def 2; then
+      consider i1 being integer number, n1 being natural number such that
+A7:   [k,n] = [i1,n1] & f. [k,n] = i1/n1 by A2;
+      i1 = k & n = n1 by A7,ZFMISC_1:33;
+      hence thesis by A2,A8,A6,A7,FUNCT_1:def 5;
+    end;
+    Card [:INT,NAT:] = Card [:alef 0,alef 0:] by Th11,CARD_1:38,CARD_2:14
+    .= alef 0 by CARD_2:def 2,CARD_4:54;
+    hence Card RAT <=` alef 0 by A2,A3,CARD_1:28;
+    thus alef 0 <=` Card RAT by CARD_1:27,38,NUMBERS:18;
+  end;
+
+theorem Th13:
+  for A being set
+   st A is mutually-disjoint &
+      for a st a in A ex x,y being real number st x < y & ].x,y.[ c= a
+  holds A is countable
+  proof
+    let A be set such that
+A0: for a,b st a in A & b in A & a <> b holds a misses b;
+    assume
+A1: a in A implies ex x,y being real number st x < y & ].x,y.[ c= a;
+    defpred P[set,set] means $2 in $1;
+A2: now
+      let a; assume
+      a in A; then
+      consider x,y being real number such that
+A3:   x < y & ].x,y.[ c= a by A1;
+      consider q being rational number such that
+A4:   x < q & q < y by A3,RAT_1:22;
+      q in ].x,y.[ by A4,JORDAN6:45; then
+      q in a & q in RAT by A3,RAT_1:def 2;
+      hence ex q being set st q in RAT & P[a,q];
+    end;
+    consider f being Function such that
+A5: dom f = A & rng f c= RAT and
+A6: a in A implies P[a,f.a] from WELLORD2:sch 1(A2);
+    f is one-to-one
+    proof let a,b;
+      assume a in dom f & b in dom f & f.a = f.b & a <> b; then
+      f.a in a & f.a in b & a misses b by A0,A5,A6;
+      hence thesis by XBOOLE_0:3;
+    end; then
+    Card A <=` Card RAT by A5,CARD_1:26;
+    hence A is countable by Th12,CARD_4:def 1;
+  end;
+
+definition
+  let X be set;
+  let x be real number;
+  pred x is_local_minimum_of X means:
+Def3:
+  x in X & ex y being real number st y < x & ].y,x.[ misses X;
+end;
+
+theorem Th20:
+  for U being Subset of REAL holds
+    {x where x is Element of REAL: x is_local_minimum_of U} is countable
+  proof
+    let U be Subset of REAL;
+    set X = {x where x is Element of REAL: x is_local_minimum_of U};
+    defpred P[set,set] means
+    ex x,y being real number st
+    $1 = x & $2 = ].y,x.[ & y < x & ].y,x.[ misses U;
+A1: now let a; assume a in X; then
+      consider x being Element of REAL such that
+01:   a = x & x is_local_minimum_of U;
+      ex y being real number st y < x & ].y,x.[ misses U by 01,Def3;
+      hence ex b st b in bool REAL & P[a,b] by 01;
+    end;
+    consider f being Function such that
+A2: dom f = X & rng f c= bool REAL and
+A3: a in X implies P[a,f.a] from WELLORD2:sch 1(A1);
+A4: rng f is mutually-disjoint
+    proof let a,b; assume a in rng f; then
+      consider a' being set such that
+02:   a' in dom f & a = f.a' by FUNCT_1:def 5;
+      assume b in rng f; then
+      consider b' being set such that
+03:   b' in dom f & b = f.b' by FUNCT_1:def 5;
+      consider xa,ya being real number such that
+04:   a' = xa & a = ].ya,xa.[ & ya < xa & ].ya,xa.[ misses U by A2,A3,02;
+      consider xb,yb being real number such that
+05:   b' = xb & b = ].yb,xb.[ & yb < xb & ].yb,xb.[ misses U by A2,A3,03;
+      assume
+06:   a <> b & a meets b; then
+      consider c such that
+07:   c in a & c in b by XBOOLE_0:3;
+      reconsider c as Element of REAL by 04,07;
+      (ex x being Element of REAL st xa = x & x is_local_minimum_of U) &
+      ex x being Element of REAL st xb = x & x is_local_minimum_of U
+      by A2,02,03,04,05; then
+08:   xb in U & xa in U by Def3;
+      yb < c & c < xa & ya < c & c < xb by 04,05,07,JORDAN6:45; then
+      yb < xa & xa < xb or xa > xb & xb > ya
+        by 02,03,04,05,06,AXIOMS:21,22; then
+      xa in b or xb in a by 04,05,JORDAN6:45;
+      hence thesis by 08,04,05,XBOOLE_0:3;
+    end;
+    now
+      let a; assume a in rng f; then
+      consider b such that
+09:   b in dom f & a = f.b by FUNCT_1:def 5;
+      consider x,y being real number such that
+0A:   b = x & a = ].y,x.[ & y < x & ].y,x.[ misses U by A2,A3,09;
+      take y,x;
+      thus y < x & ].y,x.[ c= a by 0A;
+    end; then
+    rng f is countable by A4,Th13; then
+A5: Card rng f <=` alef 0 by CARD_4:def 1;
+    f is one-to-one
+    proof let a',b' being set; set a = f.a', b = f.b';
+      assume that
+02:   a' in dom f and
+03:   b' in dom f;
+      consider xa,ya being real number such that
+04:   a' = xa & a = ].ya,xa.[ & ya < xa & ].ya,xa.[ misses U by A2,A3,02;
+      consider xb,yb being real number such that
+05:   b' = xb & b = ].yb,xb.[ & yb < xb & ].yb,xb.[ misses U by A2,A3,03;
+      assume
+06:   a = b & a' <> b';
+      consider c being rational number such that
+08:   ya < c & c < xa by 04,RAT_1:22;
+07:   c in a by 04,08,JORDAN6:45;
+      (ex x being Element of REAL st xa = x & x is_local_minimum_of U) &
+      ex x being Element of REAL st xb = x & x is_local_minimum_of U
+      by A2,02,03,04,05; then
+08:   xb in U & xa in U by Def3;
+      yb < c & c < xa & ya < c & c < xb by 04,05,06,07,JORDAN6:45; then
+      yb < xa & xa < xb or xa > xb & xb > ya
+        by 04,05,06,AXIOMS:21,22; then
+      xa in b or xb in a by 04,05,JORDAN6:45;
+      hence thesis by 08,04,05,XBOOLE_0:3;
+    end; then
+    Card X <=` Card rng f by A2,CARD_1:26;
+    hence Card X <=` alef 0 by A5,XBOOLE_1:1;
+  end;
+
+registration
+  cluster NAT -> infinite;
+  coherence by CARD_4:8;
+  cluster INT -> infinite;
+  coherence by NUMBERS:17,FINSET_1:13;
+  cluster RAT -> infinite;
+  coherence by NUMBERS:18,FINSET_1:13;
+  cluster REAL -> infinite;
+  coherence
+  proof
+    NAT c= REAL & NAT is infinite;
+    hence thesis by FINSET_1:13;
+  end;
+  let X be infinite set;
+  cluster bool X -> infinite;
+  coherence by FINSET_1:24;
+end;
+
+registration
+  let M be Aleph;
+  cluster exp(2,M) -> infinite;
+  coherence
+  proof
+    Card M = M by CARD_1:def 5; then
+    exp(2,M) = Card bool M by CARD_2:44;
+    hence thesis;
+  end;
+end;
+
+definition
+  func continuum -> infinite cardinal number equals:
+Def4:
+  Card REAL;
+  coherence;
+end;
+
+theorem Th21:
+  Card {[.x,q.[ where x is Element of REAL, q is Element of REAL:
+       x < q & q is rational} = continuum
+  proof
+    set X = {[.x,q.[ where x is Element of REAL, q is Element of REAL:
+    x < q & q is rational};
+    deffunc F(Element of [:REAL,RAT:]) = [.$1`1,$1`2.[;
+    consider f being Function such that
+01: dom f = [:REAL,RAT:] and
+02: for z being Element of [:REAL,RAT:] holds f.z = F(z) from FUNCT_1:sch 4;
+03: X c= rng f
+    proof let a; assume a in X; then
+      consider x being Element of REAL, q being Element of REAL such that
+05:   a = [.x,q.[ & x < q & q is rational;
+      q in RAT by 05,RAT_1:def 2; then
+      reconsider b = [x,q] as Element of [:REAL,RAT:] by ZFMISC_1:def 2;
+      b`1 = x & b`2 = q by MCART_1:7; then
+      f.b = [.x,q.[ by 02;
+      hence thesis by 01,05,FUNCT_1:def 5;
+    end;
+04: {} in alef 0 & alef 0 <=` continuum by Def4,CARD_1:83,84,27;
+    Card [:REAL,RAT:] = Card [:Card REAL, Card RAT:] by CARD_2:14
+    .= continuum *` alef 0 by Def4,Th12,CARD_2:def 2
+    .= continuum by 04,CARD_4:78;
+    hence Card X <=` continuum by 01,03,CARD_1:28;
+    defpred P[set,set] means
+    ex x being Element of REAL, q being Element of REAL st
+    $1 = x & $2 = [.x,q.[ & x < q & q is rational;
+06: a in REAL implies ex b st b in X & P[a,b]
+    proof
+      assume a in REAL; then
+      reconsider x = a as Element of REAL;
+      x+0 < x+1 by REAL_1:53; then
+      consider q being rational number such that
+07:   x < q & q < x+1 by RAT_1:22;
+      q in RAT & RAT c= REAL by RAT_1:def 2,NUMBERS:12; then
+      reconsider q as Element of REAL;
+      [.x,q.[ in X by 07;
+      hence thesis by 07;
+    end;
+    consider f being Function such that
+07: dom f = REAL & rng f c= X &
+    for a st a in REAL holds P[a,f.a] from WELLORD2:sch 1(06);
+    f is one-to-one
+    proof let a,b;
+      assume a in dom f; then
+      consider x being Element of REAL, q being Element of REAL such that
+08:   a = x & f.a = [.x,q.[ & x < q & q is rational by 07;
+      assume b in dom f; then
+      consider y being Element of REAL, r being Element of REAL such that
+09:   b = y & f.b = [.y,r.[ & y < r & r is rational by 07;
+      assume f.a = f.b; then
+      x in [.y,r.[ & y in [.x,q.[ by 08,09,RCOMP_2:3; then
+      x <= y & y <= x by RCOMP_2:3;
+      hence thesis by 08,09,AXIOMS:21;
+    end;
+    hence thesis by 07,Def4,CARD_1:26;
+  end;
+
+registration
+  let X be infinite set;
+  cluster infinite Subset of X;
+  existence
+  proof X c= X;
+    hence thesis;
+  end;
+end;
+
+definition
+  let X be set, r being real number;
+  func X-powers r -> Function of NAT, REAL means:
+Def5:
+  for i being natural number holds
+  i in X & it.i = r|^i or not i in X & it.i = 0;
+  existence
+  proof
+    defpred C[set] means $1 in X;
+    deffunc F(set) = r|^In($1,NAT);
+    deffunc G(set) = 0;
+A0: for a st a in NAT holds
+      (C[a] implies F(a) in REAL) & (not C[a] implies G(a) in REAL)
+        by XREAL_0:def 1;
+    consider f being Function of NAT,REAL such that
+A2: for a st a in NAT holds
+    (C[a] implies f.a = F(a)) & (not C[a] implies f.a = G(a))
+    from FUNCT_2:sch 9(A0);
+    take f;
+    let i be natural number;
+    i in NAT by ORDINAL2:def 21; then
+    In(i,NAT) = i by FUNCT_7:def 1; then
+    (C[i] implies f.i = r|^i) & (not C[i] implies f.i = 0) by A2;
+    hence thesis;
+  end;
+  uniqueness
+  proof let f1,f2 be Function of NAT,REAL such that
+A1: for i being natural number holds
+    i in X & f1.i = r|^i or not i in X & f1.i = 0 and
+A2: for i being natural number holds
+    i in X & f2.i = r|^i or not i in X & f2.i = 0;
+    now
+      let i be Element of NAT;
+      i in X & f1.i = r|^i or not i in X & f1.i = 0 by A1;
+      hence f1.i = f2.i by A2;
+    end;
+    hence thesis by FUNCT_2:113;
+  end;
+end;
+
+theorem Th41:
+  for X being set, r being real number st 0 < r & r < 1
+  holds X-powers r is summable
+  proof let X be set, r be real number such that
+A0: 0 < r & r < 1;
+    abs r = r by A0,ABSVALUE:def 1; then
+A1: r GeoSeq is summable by A0,SERIES_1:28;
+A2: now
+      let n be Element of NAT;
+      n in X & (X-powers r).n = r|^n or
+      not n in X & (X-powers r).n = 0 by Def5;
+      hence 0 <= (X-powers r).n by A0,PREPOWER:13;
+    end;
+    now
+      take m = 1;
+      let n be Element of NAT such that m <= n;
+A3:   (r GeoSeq).n = r|^n by PREPOWER:def 1;
+      n in X & (X-powers r).n = r|^n or
+      not n in X & (X-powers r).n = 0 by Def5;
+      hence (X-powers r).n <= (r GeoSeq).n by A0,A3,PREPOWER:13;
+    end;
+    hence X-powers r is summable by A1,A2,SERIES_1:22;
+  end;
+
+reserve r for real number, X for set, n for Element of NAT;
+
+theorem Th42:
+  0 < r & r < 1 implies Sum ((r GeoSeq)^\n) = r|^n / (1-r)
+  proof assume
+A0: 0 < r & r < 1;
+A2: dom ((r|^n)(#)(r GeoSeq)) = NAT by FUNCT_2:def 1;
+    now let i being Element of NAT;
+      thus ((r GeoSeq)^\n).i = (r GeoSeq).(i+n) by SEQM_3:def 9
+      .= r|^(i+n) by PREPOWER:def 1
+      .= (r|^n)*(r|^i) by NEWTON:13
+      .= (r|^n)*((r GeoSeq).i) by PREPOWER:def 1
+      .= ((r|^n)(#)(r GeoSeq)).i by A2,SEQ_1:def 6;
+    end; then
+A3: (r GeoSeq)^\n = (r|^n)(#)(r GeoSeq) by FUNCT_2:113;
+    abs r = r by A0,ABSVALUE:def 1; then
+    Sum (r GeoSeq) = 1/(1-r) & r GeoSeq is summable by A0,SERIES_1:28;
+    hence Sum ((r GeoSeq)^\n) = r|^n *(1/(1-r)) by A3,SERIES_1:13
+    .= (r|^n*1) / (1-r) by XCMPLX_1:75
+    .= (r|^n) / (1-r);
+  end;
+
+theorem Th43:
+  Sum (((1/2) GeoSeq)^\(n+1)) = (1/2)|^n
+  proof
+    set r = 1/2;
+    thus Sum (((1/2) GeoSeq)^\(n+1)) = (r|^(n+1)) / (1-r) by Th42
+    .= (1/2)|^n*r/r by NEWTON:11
+    .= r|^n*(r/r) by XCMPLX_1:75
+    .= r|^n;
+  end;
+
+theorem
+  0 < r & r < 1 implies Sum (X-powers r) <= Sum (r GeoSeq)
+  proof assume
+A0: 0 < r & r < 1;
+    abs r = r by A0,ABSVALUE:def 1; then
+A1: r GeoSeq is summable by A0,SERIES_1:28;
+    now
+      let n be Element of NAT;
+A3:   n in X & (X-powers r).n = r|^n or
+      not n in X & (X-powers r).n = 0 by Def5;
+      hence 0 <= (X-powers r).n by A0,PREPOWER:13;
+      (r GeoSeq).n = r|^n by PREPOWER:def 1;
+      hence (X-powers r).n <= (r GeoSeq).n by A0,A3,PREPOWER:13;
+    end;
+    hence thesis by A1,SERIES_1:24;
+  end;
+
+theorem Th46:
+  Sum ((X-powers (1/2))^\(n+1)) <= (1/2)|^n
+  proof
+    set r = 1/2;
+    abs r = r by ABSVALUE:def 1; then
+    r GeoSeq is summable by SERIES_1:28; then
+A1: (r GeoSeq)^\(n+1) is summable by SERIES_1:15;
+A2: now
+      let m be Element of NAT;
+A4:   ((X-powers r)^\(n+1)).m = (X-powers r).(m+(n+1)) &
+      ((r GeoSeq)^\(n+1)).m = (r GeoSeq).(m+(n+1)) by SEQM_3:def 9;
+A3:   m+(n+1) in X & (X-powers r).(m+(n+1)) = r|^(m+(n+1)) or
+      not m+(n+1) in X & (X-powers r).(m+(n+1)) = 0 by Def5;
+      hence 0 <= ((X-powers r)^\(n+1)).m by A4,PREPOWER:13;
+      (r GeoSeq).(m+(n+1)) = r|^(m+(n+1)) by PREPOWER:def 1;
+      hence ((X-powers r)^\(n+1)).m <= ((r GeoSeq)^\(n+1)).m
+      by A3,A4,PREPOWER:13;
+    end;
+    Sum (((1/2) GeoSeq)^\(n+1)) = (1/2)|^n by Th43;
+    hence thesis by A1,A2,SERIES_1:24;
+  end;
+
+theorem Th45:
+  for X being infinite Subset of NAT, i being natural number
+  holds (Partial_Sums (X-powers (1/2))).i < Sum (X-powers (1/2))
+  proof
+    let X be infinite Subset of NAT;
+    let i be natural number;
+A0: i is Element of NAT by ORDINAL2:def 21;
+    set r = 1/2;
+A1: X-powers r is summable by Th41;
+A2: now
+      let n be Element of NAT;
+      n in X & (X-powers r).n = r|^n or
+      not n in X & (X-powers r).n = 0 by Def5;
+      hence 0 <= (X-powers r).n by PREPOWER:13;
+    end;
+    not X c= i+1 by FINSET_1:13; then
+    consider a such that
+A3: a in X & not a in i+1 by TARSKI:def 3;
+    reconsider a, j = i as Element of NAT by A0,A3;
+A4: (Partial_Sums (X-powers (1/2))).a <= Sum (X-powers (1/2))
+    by A1,A2,IRRAT_1:30;
+    j+1 c= a by A3,ORDINAL1:26; then
+    j+1 <= a by CARD_1:56; then
+    consider k being Element of NAT such that
+A5: a = (j+1)+k by NAT_1:28;
+    defpred P[Element of NAT] means
+    (Partial_Sums (X-powers r)).i <= (Partial_Sums (X-powers r)).(i+$1);
+00: P[0];
+01: now let k be Element of NAT such that
+02:   P[k];
+      thus P[k+1]
+      proof
+        i+(k+1) = i+k+1; then
+03:     (Partial_Sums (X-powers r)).(j+(k+1)) =
+        (Partial_Sums (X-powers r)).(j+k) + (X-powers r).(j+(k+1))
+          by SERIES_1:def 1;
+        (X-powers r).(j+(k+1)) >= 0 by A2; then
+        (Partial_Sums (X-powers r)).(j+k) + 0 <=
+        (Partial_Sums (X-powers r)).(j+(k+1)) by 03,AXIOMS:24;
+        hence thesis by 02,AXIOMS:22;
+      end;
+    end;
+    for k being Element of NAT holds P[k] from NAT_1:sch 1(00,01); then
+A6: (Partial_Sums (X-powers r)).i <= (Partial_Sums (X-powers r)).(i+k);
+    (X-powers r).a = r|^a & j+(k+1) = j+k+1 by A3,Def5; then
+    (Partial_Sums (X-powers r)).a =
+    (Partial_Sums (X-powers r)).(j+k) + r|^a by A5,SERIES_1:def 1; then
+A7: (Partial_Sums (X-powers r)).i + r|^a <=
+    (Partial_Sums (X-powers r)).a by A6,AXIOMS:24;
+    r|^a > 0 by PREPOWER:13; then
+    (Partial_Sums (X-powers r)).i + r|^a > (Partial_Sums (X-powers r)).i + 0
+    by REAL_1:53; then
+    (Partial_Sums (X-powers r)).i < (Partial_Sums (X-powers r)).a
+    by A7,AXIOMS:22;
+    hence thesis by A4,AXIOMS:22;
+  end;
+
+theorem Th47:
+  for X,Y being infinite Subset of NAT
+   st Sum (X-powers (1/2)) = Sum (Y-powers (1/2))
+   holds X = Y
+   proof
+     set r = 1/2;
+     let X,Y be infinite Subset of NAT such that
+A0:  Sum (X-powers (1/2)) = Sum (Y-powers (1/2)) and
+A1:  X <> Y;
+     consider a such that
+A2:  not (a in X iff a in Y) by A1,TARSKI:2;
+     defpred P[Element of NAT] means
+     not ($1 in X iff $1 in Y);
+A3:  ex i being Element of NAT st P[i] by A2;
+     consider i being Element of NAT such that
+A4:  P[i] & for n being Element of NAT st P[n] holds i <= n
+     from NAT_1:sch 5(A3);
+     consider A,B being infinite Subset of NAT such that
+A6:  (A = X & B = Y or A = Y & B = X) & i in A & not i in B by A4;
+     A-powers r is summable & B-powers r is summable by Th41; then
+A5:  Sum (A-powers r) = (Partial_Sums (A-powers r)).i +
+     Sum ((A-powers r)^\(i+1)) &
+     Sum (B-powers r) = (Partial_Sums (B-powers r)).i +
+     Sum ((B-powers r)^\(i+1)) by SERIES_1:18;
+A7:  (Partial_Sums (A-powers r)).i < Sum (A-powers r) by Th45;
+A8:  (A-powers r).i = r|^i & (B-powers r).i = 0 by A6,Def5;
+A9:  Sum ((B-powers r)^\(i+1)) <= r|^i by Th46;
+     defpred P[Element of NAT] means
+     $1 < i implies
+     (Partial_Sums (A-powers r)).$1 = (Partial_Sums (B-powers r)).$1;
+AA:  (Partial_Sums (A-powers r)).0 = (A-powers r).0 &
+     (Partial_Sums (B-powers r)).0 = (B-powers r).0 by SERIES_1:def 1; then
+     (0 in A & (Partial_Sums (A-powers r)).0 = r|^0 or
+     not 0 in A & (Partial_Sums (A-powers r)).0 = 0) &
+     (0 in B & (Partial_Sums (B-powers r)).0 = r|^0 or
+     not 0 in B & (Partial_Sums (B-powers r)).0 = 0) &
+     (0 < i implies (0 in A iff 0 in B)) by A4,A6,Def5; then
+00:  P[0];
+01:  now let j be Element of NAT; assume
+02:    P[j];
+       thus P[j+1]
+       proof assume
+03:      j+1 < i; then
+         (j+1 in A & (A-powers r).(j+1) = r|^(j+1) or
+         not j+1 in A & (A-powers r).(j+1) = 0) &
+         (j+1 in B & (B-powers r).(j+1) = r|^(j+1) or
+         not j+1 in B & (B-powers r).(j+1) = 0) &
+         (j+1 in A iff j+1 in B) by A4,A6,Def5; then
+05:      (A-powers r).(j+1) = (B-powers r).(j+1);
+         j < i by 03,NAT_1:38;
+         hence (Partial_Sums (A-powers r)).(j+1)
+         = (Partial_Sums (B-powers r)).j + (A-powers r).(j+1)
+         by 02,SERIES_1:def 1
+         .= (Partial_Sums (B-powers r)).(j+1) by 05,SERIES_1:def 1;
+       end;
+     end;
+09:  for j being Element of NAT holds P[j] from NAT_1:sch 1(00,01);
+     (Partial_Sums (A-powers r)).i = (Partial_Sums (B-powers r)).i + r|^i
+     proof per cases by NAT_1:22;
+       suppose i = 0;
+         hence thesis by A8,AA;
+       end;
+       suppose ex j being Element of NAT st i = j+1; then
+         consider j being Element of NAT such that
+B1:      i = j+1;
+         j < i by B1,NAT_1:38; then
+         (Partial_Sums (A-powers r)).j = (Partial_Sums (B-powers r)).j by 09;
+         hence (Partial_Sums (A-powers r)).i
+         = (Partial_Sums (B-powers r)).j+0 + r|^i by A8,B1,SERIES_1:def 1
+         .= (Partial_Sums (B-powers r)).i + r|^i by A8,B1,SERIES_1:def 1;
+       end;
+     end; then
+     Sum (B-powers r) <= (Partial_Sums (A-powers r)).i by A5,A9,AXIOMS:24;
+     hence thesis by A0,A6,A7;
+   end;
+
+theorem Th48:
+  X is countable implies Fin X is countable
+  proof assume
+A0: X is countable;
+    X = {} & {{}} is countable or X <> {} by CARD_4:43; then
+    X* is countable by A0,CARD_4:65,FUNCT_7:19; then
+A1: Card (X*) <=` alef 0 by CARD_4:def 1;
+    defpred P[set,set] means
+    ex p being FinSequence st $2 = p & $1 = rng p;
+A2: a in Fin X implies ex b st b in X* & P[a,b]
+    proof assume a in Fin X; then
+01:   a c= X & a is finite by FINSUB_1:def 5; then
+      consider p being FinSequence such that
+02:   a = rng p by FINSEQ_1:73;
+      p is FinSequence of X by 01,02,FINSEQ_1:def 4; then
+      p in X* by FINSEQ_1:def 11;
+      hence thesis by 02;
+    end;
+    consider f being Function such that
+A3: dom f = Fin X & rng f c= X* and
+A4: a in Fin X implies P[a,f.a] from WELLORD2:sch 1(A2);
+    f is one-to-one
+    proof
+      let a,b; assume a in dom f & b in dom f; then
+      P[a,f.a] & P[b,f.b] by A3,A4;
+      hence thesis;
+    end; then
+    Card Fin X <=` Card (X*) by A3,CARD_1:26;
+    hence Card Fin X <=` alef 0 by A1,XBOOLE_1:1;
+  end;
+
+theorem Th49:
+  continuum = exp(2, alef 0)
+  proof
+00: Card (REAL+ \/ [:{0},REAL+:]) <=` Card REAL+ +` Card [:{0},REAL+:]
+    by CARD_2:47;
+01: Card [:{0},REAL+:] = Card [:REAL+,{0}:] by CARD_2:11
+    .= Card REAL+ by CARD_2:13;
+    not [0,0] in RAT+ by ARYTM_3:39; then
+    RAT+ misses {[0,0]} & RAT = RAT+ \/ [:{0},RAT+:] \ {[0,0]}
+    by ZFMISC_1:56,NUMBERS:def 3; then
+    RAT = RAT+ \/ ([:{0},RAT+:] \ {[0,0]}) by XBOOLE_1:87; then
+02: RAT+ c= RAT by XBOOLE_1:7; then
+    bool RAT+ c= bool RAT by ZFMISC_1:79; then
+    DEDEKIND_CUTS c= bool RAT by XBOOLE_1:1; then
+03: RAT+ \/ DEDEKIND_CUTS c= RAT \/ bool RAT by 02,XBOOLE_1:13;
+    REAL+ = RAT+ \/ DEDEKIND_CUTS \ {{ s where s is Element of RAT+: s < t}
+    where t is Element of RAT+: t <> {}} by ARYTM_2:def 2; then
+    REAL+ c= RAT+ \/ DEDEKIND_CUTS by XBOOLE_1:36; then
+    REAL+ c= RAT \/ bool RAT by 03,XBOOLE_1:1; then
+    Card REAL+ <=` Card (RAT \/ bool RAT) &
+    Card (RAT \/ bool RAT) <=` Card RAT +` Card bool RAT
+    by CARD_2:47,CARD_1:27; then
+    Card REAL+ <=` Card RAT +` Card bool RAT & Card RAT <` Card bool RAT
+    by XBOOLE_1:1,CARD_1:30; then
+    Card REAL+ <=` Card bool RAT by CARD_4:34; then
+    Card REAL+ <=` exp(2, alef 0) by Th12,CARD_2:44; then
+    Card REAL+ +` Card REAL+ <=` exp(2, alef 0) +` exp(2, alef 0)
+    by CARD_4:41; then
+04: Card REAL+ +` Card REAL+ <=` exp(2, alef 0) by CARD_4:34;
+    REAL = REAL+ \/ [:{0},REAL+:] \ {[0,0]} by NUMBERS:def 1; then
+    REAL c= REAL+ \/ [:{0},REAL+:] by XBOOLE_1:36; then
+    continuum <=` Card (REAL+ \/ [:{0},REAL+:]) by Def4,CARD_1:27; then
+    continuum <=` Card REAL+ +` Card REAL+ by 00,01,XBOOLE_1:1;
+    hence continuum <=` exp(2, alef 0) by 04,XBOOLE_1:1;
+    deffunc F(set) = Sum ($1-powers (1/2));
+    set INFNAT = (bool NAT) \ Fin NAT;
+    Fin NAT is countable by CARD_4:44,Th48; then
+    Card Fin NAT <=` alef 0 & alef 0 <` Card bool NAT
+    by CARD_1:30,83,84,CARD_4:def 1; then
+05: Card Fin NAT <` Card bool NAT by ORDINAL1:22; then
+    reconsider INFNAT as non empty set by CARD_2:4;
+    consider f being Function of INFNAT, REAL such that
+06: for X being Element of INFNAT holds f.X = F(X) from FUNCT_2:sch 4;
+07: dom f = INFNAT & rng f c= REAL by FUNCT_2:def 1,RELSET_1:12;
+    f is one-to-one
+    proof let a,b; assume
+08:   a in dom f & b in dom f; then
+      a in bool NAT & not a in Fin NAT &
+      b in bool NAT & not b in Fin NAT by XBOOLE_0:def 4; then
+      a is infinite Subset of NAT & b is infinite Subset of NAT &
+      f.a = F(a) & f.b = F(b) by 06,08,FINSUB_1:def 5;
+      hence thesis by Th47;
+    end; then
+    Card bool NAT +` Card Fin NAT = Card bool NAT &
+    Card INFNAT <=` continuum by Def4,05,07,CARD_1:26,CARD_4:34; then
+    Card bool NAT <=` continuum by 05,CARD_4:76;
+    hence thesis by CARD_1:83,84,CARD_2:44;
+  end;
+
+theorem Th50:
+  alef 0 <` continuum
+  proof
+    Card alef 0 <` Card bool alef 0 &
+    alef 0 = Card alef 0 by CARD_1:30,def 5;
+    hence thesis by Th49,CARD_2:44;
+  end;
+
+theorem Th22:
+  for A being Subset-Family of REAL
+    st Card A <` continuum holds
+    Card {x where x is Element of REAL: ex U being set st U in UniCl A &
+    x is_local_minimum_of U} <` continuum
+  proof
+    let A be Subset-Family of REAL such that
+A1: Card A <` continuum;
+    set X = {x where x is Element of REAL: ex U being set st U in UniCl A &
+             x is_local_minimum_of U};
+    set Y = {x where x is Element of REAL: ex U being set st U in A &
+             x is_local_minimum_of U};
+    deffunc F(set) = {x where x is Element of REAL: x is_local_minimum_of $1};
+A2: a in A implies F(a) in bool REAL
+    proof
+      F(a) c= REAL
+      proof let b;
+        assume b in F(a); then
+        ex x being Element of REAL st b = x & x is_local_minimum_of a;
+        hence thesis;
+      end;
+      hence thesis;
+    end;
+    consider f being Function of A, bool REAL such that
+A3: a in A implies f.a = F(a) from FUNCT_2:sch 2(A2);
+A5: Y c= Union f
+    proof let a;
+      assume a in Y; then
+      consider x being Element of REAL such that
+B1:   a = x & ex U being set st U in A & x is_local_minimum_of U;
+      consider U being set such that
+B2:   U in A & x is_local_minimum_of U by B1;
+      a in F(U) & f.U = F(U) & dom f = A by A3,B1,B2,FUNCT_2:def 1;
+      hence thesis by B2,CARD_5:10;
+    end;
+    X c= Y
+    proof let a; assume
+      a in X; then
+      consider x being Element of REAL such that
+02:   a = x & ex U being set st U in UniCl A & x is_local_minimum_of U;
+      consider U being set such that
+03:   U in UniCl A & x is_local_minimum_of U by 02;
+      reconsider U as Subset of REAL by 03;
+04:   x in U by 03,Def3;
+      consider y being real number such that
+05:   y < x & ].y,x.[ misses U by 03,Def3;
+      consider B being Subset-Family of REAL such that
+06:   B c= A & U = union B by 03,CANTOR_1:def 1;
+      consider C being set such that
+07:   x in C & C in B by 04,06,TARSKI:def 4;
+      reconsider C as Subset of REAL by 07;
+      ].y,x.[ misses C
+      proof assume not thesis; then
+        consider b such that
+08:     b in ].y,x.[ & b in C by XBOOLE_0:3;
+        b in U by 06,07,08,TARSKI:def 4;
+        hence thesis by 05,08,XBOOLE_0:3;
+      end; then
+      C in A & x is_local_minimum_of C by 05,06,07,Def3;
+      hence thesis by 02;
+    end; then
+    X c= Union f by A5,XBOOLE_1:1; then
+A6: Card X <=` Card Union f by CARD_1:27;
+A4: a in A implies Card (f.a) <=` alef 0
+    proof assume
+00:   a in A; then
+      reconsider b = a as Subset of REAL;
+      f.a = F(b) by A3,00; then
+      f.a is countable by Th20;
+      hence thesis by CARD_4:def 1;
+    end;
+A7: now per cases;
+      suppose Card A is empty; then
+        (Card A)*`alef 0 = 0 by CARD_2:32;
+        hence (Card A)*`alef 0 <` continuum by ORDINAL3:10;
+      end;
+      suppose Card A is non empty finite; then
+        0 <` Card A & Card Card A <` alef 0 & Card Card A = Card A
+        by CARD_1:def 5,CARD_4:2,ORDINAL3:10;
+        hence (Card A)*`alef 0 <` continuum by Th50,CARD_4:78;
+      end;
+      suppose
+01:     Card A is infinite; then
+        0 <` alef 0 & alef 0 <=` Card A by CARD_4:9,CARD_5:25;
+        hence (Card A)*`alef 0 <` continuum by A1,01,CARD_4:78;
+      end;
+    end;
+    dom f = A by FUNCT_2:def 1; then
+    Card Union f <=` (Card A)*`alef 0 by A4,CARD_4:59; then
+    Card X <=` (Card A)*`alef 0 by A6,XBOOLE_1:1;
+    hence Card X <` continuum by A7,ORDINAL1:22;
+  end;
+
+theorem Th23:
+  for X being Subset-Family of REAL
+  st Card X <` continuum
+  ex x being real number, q being rational number st x < q &
+  not [.x,q.[ in UniCl X
+  proof
+    let X be Subset-Family of REAL such that
+A1: Card X <` continuum;
+    set Z = {x where x is Element of REAL: ex U being set st U in UniCl X &
+             x is_local_minimum_of U};
+    consider z being Element of REAL \ Z;
+    Card Z <` continuum by A1,Th22; then
+    REAL \ Z <> {} by Def4,CARD_2:4; then
+A2: z in REAL & not z in Z by XBOOLE_0:def 4; then
+    reconsider z as Element of REAL;
+    z+0 < z+1 by REAL_1:53; then
+    consider q being rational number such that
+A3: z < q & q < z+1 by RAT_1:22;
+    take z, q;
+    thus z < q by A3;
+    z is_local_minimum_of [.z,q.[
+    proof
+      thus z in [.z,q.[ by A3,RCOMP_2:3;
+      take y = z-1;
+      z-0 = z;
+      hence y < z by REAL_1:92;
+      assume ].y,z.[ meets [.z,q.[; then
+      consider a such that
+A4:   a in ].y,z.[ & a in [.z,q.[ by XBOOLE_0:3;
+      reconsider a as Element of REAL by A4;
+      a < z & z <= a by A4,RCOMP_2:3,JORDAN6:45;
+      hence thesis;
+    end;
+    hence thesis by A2;
+  end;
+
+theorem
+  weight Sorgenfrey-line = continuum
+  proof
+    thus weight Sorgenfrey-line <=` continuum by Lem4,Lem5,Th21,WAYBEL31:1;
+    assume not continuum <=` weight Sorgenfrey-line; then
+A0: weight Sorgenfrey-line <` continuum by CARD_1:14;
+    consider B being Basis of Sorgenfrey-line such that
+A1: weight Sorgenfrey-line = Card B by WAYBEL31:2;
+    the carrier of Sorgenfrey-line = REAL by Def2; then
+    consider x being real number, q being rational number such that
+A2: x < q & not [.x,q.[ in UniCl B by A0,A1,Th23;
+    [.x,q.[ is open Subset of Sorgenfrey-line by Th19; then
+    [.x,q.[ in the topology of Sorgenfrey-line by PRE_TOPC:def 5;
+    hence thesis by A2,YELLOW_9:22;
+  end;
+
+begin :: Example: topological space with finite sets closed
+
+definition :: Example 1.2.6.
+  let X be set;
+  func ClFinTop(X) -> strict TopSpace means:
+Def6:
+   the carrier of it = X &
+   for F being Subset of it holds F is closed iff F is finite or F = X;
+  existence
+  proof
+    defpred C[set] means $1 c= X & $1 is finite or $1 = X;
+P1: C[{}] & C[X] by XBOOLE_1:2;
+00: X c= X;
+P2: for A,B being set st C[A] & C[B] holds C[A \/ B]
+    proof let A,B be set; assume
+01:  C[A] & C[B]; then
+     reconsider A,B as Subset of X by 00;
+     X \/ X = X & A \/ B c= X & A \/ X = X & X \/ B = X by XBOOLE_1:12;
+     hence thesis by 01,FINSET_1:14;
+    end;
+P3: for G being Subset-Family of X st
+     for A being set st A in G holds C[A]
+    holds C[Intersect G]
+    proof let G be Subset-Family of X; assume
+02:  for A being set st A in G holds C[A];
+     now consider a being Element of G; assume G <> {} & G <> {X}; then
+      not G c= {X} by ZFMISC_1:39; then
+      consider a such that
+04:   a in G & not a in {X} by TARSKI:def 3;
+      a <> X & C[a] by 02,04,TARSKI:def 1; then
+      Intersect G c= a & a is finite by 04,MSSUBFAM:2;
+      hence Intersect G is finite & Intersect G c= X by FINSET_1:13;
+     end;     
+     hence C[Intersect G] by 00,SETFAM_1:def 10,MSSUBFAM:9;
+    end;
+    consider T being strict TopSpace such that
+05: the carrier of T = X &
+    for A being Subset of T holds A is closed iff C[A]
+    from TopDefByClosedPred(P1,P2,P3);
+    take T; thus the carrier of T = X by 05;
+    let F be Subset of T;
+    thus thesis by 05;
+  end;
+  correctness
+  proof let T1,T2 be strict TopSpace such that
+A1: the carrier of T1 = X  and
+A2: for F being Subset of T1 holds F is closed iff F is finite or F = X and
+A3: the carrier of T2 = X and
+A4: for F being Subset of T2 holds F is closed iff F is finite or F = X;
+    now let F be set;
+     F is closed Subset of T1 iff F c= X & (F is finite or F = X) by A1,A2;
+     hence F is closed Subset of T1 iff F is closed Subset of T2 by A3,A4;
+    end;
+    hence thesis by ThUn1;
+  end;
+end;
+
+theorem Th61:
+  for X being set, A being Subset of ClFinTop(X) holds
+    A is open iff A = {} or A` is finite
+    proof let X be set, A be Subset of ClFinTop(X);
+     the carrier of ClFinTop X = X by Def6; then
+02:  {}the carrier of ClFinTop(X) = {} & [#]the carrier of ClFinTop(X) = X
+     by SUBSET_1:def 4; then
+03:  ({}the carrier of ClFinTop(X))` = X by SUBSET_1:22;
+     hereby assume
+00:   A is open & A <> {};
+      A`` = A; then
+      A` is closed & A` <> [#]the carrier of ClFinTop(X)
+      by 00,02,SUBSET_1:21,TOPS_1:30;
+      hence A` is finite by 02,Def6;
+     end;
+     assume A = {} or A` is finite; then
+     A` is closed by 03,Def6;
+     hence A is open by TOPS_1:30;
+    end;
+
+theorem Th62:
+  for X being infinite set, A being Subset of X
+   st A is finite holds A` is infinite
+  proof let X be infinite set, A be Subset of X;
+    A \/ A` = [#]X by SUBSET_1:25 .= X by SUBSET_1:def 4;
+    hence thesis by FINSET_1:14;
+  end;
+
+registration
+  let X be non empty set;
+  cluster ClFinTop(X) -> non empty;
+  coherence
+  proof
+    thus the carrier of ClFinTop(X) is non empty by Def6;
+  end;
+end;
+
+theorem
+  for X being infinite set
+  for U,V being non empty open Subset of ClFinTop(X) holds U meets V
+  proof
+    let X be infinite set;
+    let U,V be non empty open Subset of ClFinTop(X);
+    assume U misses V; then
+    U c= V` & V` is finite by Th61,SUBSET_1:43; then
+01: U is finite & the carrier of ClFinTop X = X by Def6,FINSET_1:13; then
+    U` is infinite by Th62; then
+    U` = X by Def6 .= [#]the carrier of ClFinTop X by 01,SUBSET_1:def 4; then
+    U`` = {}the carrier of ClFinTop X by SUBSET_1:21;
+    hence thesis;
+  end;
+
+begin :: Example: toplogical space with one point clusure
+
+definition :: Example 1.2.8
+  let X,x0 be set;
+  func x0-PointClTop(X) -> strict TopSpace means:
+Def7:
+   the carrier of it = X &
+   for A being Subset of it holds Cl A = IFEQ(A,{},A,A \/ {x0} /\ X);
+  existence
+  proof
+    deffunc ClOp(set) = IFEQ($1,{},$1,$1 \/ {x0} /\ X);
+P1: ClOp({}) = {} by CQC_LANG:def 1;
+P2: for A being Subset of X holds A c= ClOp(A) & ClOp(A) c= X
+    proof
+     let A be Subset of X;
+     A = {} or A <> {}; then
+01:  ClOp(A) = A or ClOp(A) = A \/ {x0} /\ X by CQC_LANG:def 1;
+     hence A c= ClOp(A) by XBOOLE_1:7;
+     {x0} /\ X c= X by XBOOLE_1:17;
+     hence ClOp(A) c= X by 01,XBOOLE_1:8;
+    end;
+P3: for A,B being Subset of X holds ClOp(A \/ B) = ClOp(A) \/ ClOp(B)
+    proof let A,B be Subset of X;
+     per cases;
+     suppose A = {} or B = {};
+      hence thesis by P1;
+     end;
+     suppose
+03:   A <> {} & B <> {}; then
+      A \/ B <> {} by XBOOLE_1:15; then
+      ClOp(A) = A \/ {x0} /\ X & ClOp(B) = B \/ {x0} /\ X &
+      ClOp(A \/ B) = A \/ B \/ {x0} /\ X by 03,CQC_LANG:def 1;
+      hence thesis by XBOOLE_1:5;
+     end;
+    end;
+P4: for A being Subset of X holds ClOp(ClOp(A)) = ClOp(A)
+    proof let A be Subset of X;
+     A = {} or A <> {}; then
+     ClOp(A) = {} or A \/ {x0} /\ X <> {} & ClOp(A) = A \/ {x0} /\ X
+     by CQC_LANG:def 1; then
+     ClOp(ClOp(A)) = ClOp(A) or ClOp(A) = A \/ {x0} /\ X &
+     ClOp(ClOp(A)) = A \/ {x0} /\ X \/ {x0} /\ X by CQC_LANG:def 1;
+     hence thesis by XBOOLE_1:6;
+    end;
+    consider T being strict TopSpace such that
+05: the carrier of T = X &
+    for A being Subset of T holds Cl A = ClOp(A)
+    from TopDefByClosureOp(P1,P2,P3,P4);
+    take T; thus the carrier of T = X by 05;
+    let F be Subset of T;
+    thus thesis by 05;
+  end;
+  correctness
+  proof let T1,T2 be strict TopSpace such that
+A1: the carrier of T1 = X  and
+A2: for A being Subset of T1 holds Cl A = IFEQ(A,{},A,A \/ {x0} /\ X) and
+A3: the carrier of T2 = X and
+A4: for A being Subset of T2 holds Cl A = IFEQ(A,{},A,A \/ {x0} /\ X);
+    now let A1 be Subset of T1, A2 being Subset of T2;
+     assume A1 = A2;
+     hence Cl A1 = IFEQ(A2,{},A2,A2 \/ {x0} /\ X) by A2 .= Cl A2 by A4;
+    end;
+    hence thesis by A1,A3,ThUn2;
+  end;
+end;
+
+registration
+  let X be non empty set;
+  let x0 be set;
+  cluster x0-PointClTop X -> non empty;
+  coherence
+  proof
+    thus the carrier of x0-PointClTop(X) is non empty by Def7;
+  end;
+end;
+
+theorem Th71:
+  for X being non empty set, x0 being Element of X
+  for A being non empty Subset of x0-PointClTop(X) holds Cl A = A \/ {x0}
+  proof
+    let X be non empty set;
+    let x0 be Element of X;
+    let A be non empty Subset of x0-PointClTop(X);
+    thus Cl A = IFEQ(A,{},A,A \/ {x0}/\X) by Def7
+    .= A \/ {x0}/\X by CQC_LANG:def 1
+    .= A \/ {x0} by XBOOLE_1:28;
+  end;
+
+theorem Th72:
+  for X being non empty set, x0 being Element of X
+  for A being non empty Subset of x0-PointClTop(X)
+  holds A is closed iff x0 in A
+  proof
+   let X be non empty set;
+   let x0 be Element of X;
+   let A be non empty Subset of x0-PointClTop(X);
+   A is closed iff Cl A = A by PRE_TOPC:52; then
+   A is closed iff A = A \/ {x0} by Th71; then
+   A is closed iff {x0} c= A by XBOOLE_1:7,12;
+   hence A is closed iff x0 in A by ZFMISC_1:37;
+  end;
+
+registration
+  let X be non empty set;
+  let A be proper Subset of X;
+  cluster A` -> non empty;
+  coherence
+  proof
+    assume A` is empty; then
+    A`` = ({}X)` .= [#]X by SUBSET_1:22 .= X by SUBSET_1:def 4;
+    hence thesis by TEX_2:5;
+  end;
+end;
+
+theorem Th73:
+  for X being non empty set, x0 being Element of X
+  for A being proper Subset of x0-PointClTop(X)
+  holds A is open iff not x0 in A
+  proof
+    let X be non empty set;
+    let x0 be Element of X;
+    let A be proper Subset of x0-PointClTop(X);
+    A is open iff A` is closed by TOPS_1:30; then
+    (A is open iff x0 in A`) & x0 is Element of x0-PointClTop X by Def7,Th72;
+    hence thesis by FIN_TOPO:21;
+  end;
+
+theorem
+  for X,x0,x being set st x0 in X holds
+  {x} is closed Subset of x0-PointClTop(X) iff x = x0
+  proof
+   let X,x0,x be set;
+   assume 03: x0 in X;
+   hereby 
+    assume {x} is closed Subset of x0-PointClTop(X); then
+    x0 in {x} by 03,Th72;
+    hence x = x0 by TARSKI:def 1;
+   end;
+   assume x = x0; then
+   x0 in {x} & {x} c= X & the carrier of x0-PointClTop X = X
+   by 03,Def7,ZFMISC_1:37;
+   hence {x} is closed Subset of x0-PointClTop(X) by Th72;
+  end;
+
+theorem
+  for X,x0,x being set st {x0} c< X holds
+  {x} is open Subset of x0-PointClTop(X) iff x in X & x <> x0
+  proof
+    let X,x0,x be set;
+01: the carrier of x0-PointClTop(X) = X by Def7;
+    assume
+02: {x0} c< X; then
+    reconsider Y = X as non empty set by XBOOLE_1:62;
+    X c= X; then
+    reconsider A = {x0}, B = X as Subset of Y by 02,XBOOLE_0:def 8;
+05: x0 in A by TARSKI:def 1;
+    reconsider A as proper Subset of Y by 02,TEX_2:5;
+    hereby 
+     assume 03: {x} is open Subset of x0-PointClTop(X);
+     hence x in X by 01,ZFMISC_1:37;
+     assume x = x0; then
+     not x0 in {x0} or A is non proper Subset of x0-PointClTop(X)
+     by 03,Th73;
+     hence contradiction by 01,TARSKI:def 1;
+   end;
+   assume x in X & x <> x0; then
+06: not x0 in {x} & x0 in Y & {x} c= X by 05,TARSKI:def 1,ZFMISC_1:37; then
+   {x} is proper Subset of x0-PointClTop(Y) by 01,TEX_2:5;
+   hence {x} is open Subset of x0-PointClTop(X) by 06,Th73;
+  end;
+
+begin :: Example: topological space discrete on subset
+
+definition :: Example 1.2.10
+  let X,X0 be set;
+  func X0-DiscreteTop(X) -> strict TopSpace means:
+Def8:
+   the carrier of it = X &
+   for A being Subset of it holds Int A = IFEQ(A,X,A,A /\ X0);
+  existence
+  proof
+    deffunc ClOp(set) = IFEQ($1,X,$1,$1 /\ X0);
+P1: ClOp(X) = X by CQC_LANG:def 1;
+P2: for A being Subset of X holds ClOp(A) c= A
+    proof
+     let A be Subset of X;
+     A = X or A <> X; then
+     ClOp(A) = A or ClOp(A) = A /\ X0 by CQC_LANG:def 1;
+     hence ClOp(A) c= A by XBOOLE_1:17;
+    end;
+P3: for A,B being Subset of X holds ClOp(A /\ B) = ClOp(A) /\ ClOp(B)
+    proof let A,B be Subset of X;
+     per cases;
+     suppose
+02:   A = X or B = X;
+      (A = X or A <> X) & (B = X or B <> X); then
+      (ClOp(A) = A or ClOp(A) = A /\ X0) & A/\X0 c= A & B/\X0 c= B &
+      (ClOp(B) = B or ClOp(B) = B /\ X0) by CQC_LANG:def 1,XBOOLE_1:17; then
+      ClOp(A) c= X & ClOp(B) c= X by XBOOLE_1:1; then
+      A /\ X  = A & B /\ X = B & ClOp(A) /\ X = ClOp(A) &
+      X /\ ClOp(B) = ClOp(B) by XBOOLE_1:28;
+      hence thesis by P1,02;
+     end;
+     suppose
+03:   A <> X & B <> X;
+      A\/ A/\ B = A by XBOOLE_1:22; then
+      A /\ B <> X by 03,XBOOLE_1:12; then
+04:   ClOp(A) = A /\ X0 & ClOp(B) = B /\ X0 & X0 = X0 /\ X0 &
+      ClOp(A /\ B) = (A /\ B) /\ X0 by 03,CQC_LANG:def 1; then
+      ClOp(A /\ B) = (A /\ B) /\ X0 /\ X0 by XBOOLE_1:16; then
+      ClOp(A /\ B) = (B /\ X0) /\ A /\ X0 by XBOOLE_1:16;
+      hence thesis by 04,XBOOLE_1:16;
+     end;
+    end;
+P4: for A being Subset of X holds ClOp(ClOp(A)) = ClOp(A)
+    proof let A be Subset of X;
+     A = X or A <> X; then
+     ClOp(A) = X or A /\ X0 <> X & ClOp(A) = A /\ X0
+     by CQC_LANG:def 1; then
+     ClOp(ClOp(A)) = ClOp(A) or ClOp(A) = A /\ X0 &
+     ClOp(ClOp(A)) = A /\ X0 /\ X0 & X0 /\ X0 = X0 by CQC_LANG:def 1;
+     hence thesis by XBOOLE_1:16;
+    end;
+    consider T being strict TopSpace such that
+05: the carrier of T = X &
+    for A being Subset of T holds Int A = ClOp(A)
+    from TopDefByInteriorOp(P1,P2,P3,P4);
+    take T; thus the carrier of T = X by 05;
+    let F be Subset of T;
+    thus thesis by 05;
+  end;
+  correctness
+  proof let T1,T2 be strict TopSpace such that
+A1: the carrier of T1 = X  and
+A2: for A being Subset of T1 holds Int A = IFEQ(A,X,A,A /\ X0) and
+A3: the carrier of T2 = X and
+A4: for A being Subset of T2 holds Int A = IFEQ(A,X,A,A /\ X0);
+    now let A1 be Subset of T1, A2 being Subset of T2;
+     assume A1 = A2;
+     hence Int A1 = IFEQ(A2,X,A2,A2 /\ X0) by A2 .= Int A2 by A4;
+    end;
+    hence thesis by A1,A3,ThUn3;
+  end;
+end;
+
+registration
+  let X be non empty set;
+  let X0 be set;
+  cluster X0-DiscreteTop X -> non empty;
+  coherence
+  proof
+    thus the carrier of X0-DiscreteTop X is non empty by Def8;
+  end;
+end;
+
+theorem Th81:
+  for X being non empty set, X0 being set
+  for A being proper Subset of X0-DiscreteTop(X) holds Int A = A /\ X0
+  proof
+    let X be non empty set, X0 be set;
+    let A be proper Subset of X0-DiscreteTop(X);
+    the carrier of X0-DiscreteTop X = X by Def8; then
+01: X <> A by TEX_2:5;
+    thus Int A = IFEQ(A,X,A,A /\ X0) by Def8
+    .= A /\ X0 by 01,CQC_LANG:def 1;
+  end;
+
+theorem Th82:
+  for X being non empty set, X0 being set
+  for A being proper Subset of X0-DiscreteTop(X) holds
+  A is open iff A c= X0
+  proof
+    let X be non empty set, X0 be set;
+    let A be proper Subset of X0-DiscreteTop(X);
+    A is open iff Int A = A by TOPS_1:55; then
+    A is open iff A = A /\ X0 by Th81;
+    hence thesis by XBOOLE_1:17,28;
+  end;
+
+Lem: for X being set, A being Subset of X holds
+       A is proper implies X is non empty
+  proof
+    let X be set, A be Subset of X;
+    assume A is proper; then
+    A <> X by TEX_2:5; then
+    {} c= A & A c< X by XBOOLE_0:def 8,XBOOLE_1:2;
+    hence X is non empty by XBOOLE_1:59;
+  end;
+
+theorem Th83:
+  for X be set, X0 being Subset of X
+   holds the topology of X0-DiscreteTop X = {X} \/ bool X0
+  proof
+    let X be set;
+    let X0 be Subset of X;
+00: the carrier of X0-DiscreteTop X = X by Def8;
+    thus the topology of X0-DiscreteTop X c= {X} \/ bool X0
+    proof let a; assume
+01:   a in the topology of X0-DiscreteTop X; then
+      reconsider a as Subset of X0-DiscreteTop X;
+      a is open & (a is proper & X is non empty or a is not proper)
+      by 00,01,Lem,PRE_TOPC:def 5; then
+      a = X or a c= X0 by 00,Th82,TEX_2:5; then
+      a in {X} or a in bool X0 by TARSKI:def 1;
+      hence thesis by XBOOLE_0:def 2;
+    end;
+    let a; assume a in {X} \/ bool X0; then
+    a in {X} or a in bool X0 by XBOOLE_0:def 2; then
+02: a = X or a c= X0 by TARSKI:def 1; then
+    reconsider a as Subset of X0-DiscreteTop X by 00,XBOOLE_1:1;
+    assume not thesis; then
+03: a is not open by PRE_TOPC:def 5; then
+    a <> [#](X0-DiscreteTop X); then
+05: a <> X by 00,PRE_TOPC:def 3; then
+04: a is proper by 00,TEX_2:5; then
+    X is non empty by 00,Lem;
+    hence thesis by 02,03,04,05,Th82;
+  end;
+
+theorem
+  for X being set holds ADTS X = {}-DiscreteTop(X)
+  proof
+    let X be set;
+    set T = {}-DiscreteTop(X);
+00: ADTS X = TopStruct(#X, cobool X#) by TEX_1:def 3;
+01: the carrier of T = X by Def8;
+02: cobool X = {{},X} by TEX_1:def 2;
+03: {}T = {} & [#]T = X by 01,PRE_TOPC:def 3;
+    the topology of T = cobool X
+    proof
+      thus the topology of T c= cobool X
+      proof let a; assume
+04:     a in the topology of T; then
+        reconsider a as Subset of T;
+        a is open by 04,PRE_TOPC:def 5; then
+        a c= X & X is empty or a is non proper or a c= {} by 01,Th82; then
+        a = {} or a = X by 01,TEX_2:5,XBOOLE_1:3;
+        hence thesis by 02,TARSKI:def 2;
+      end;
+      {} in the topology of T & X in the topology of T by 03,PRE_TOPC:def 5;
+      hence thesis by 02,ZFMISC_1:38;
+    end;
+    hence ADTS X = {}-DiscreteTop(X) by 00,01;
+  end;
+
+theorem
+  for X being set holds 1TopSp X = X-DiscreteTop(X)
+  proof
+    let X be set;
+    set T = X-DiscreteTop(X);
+01: 1TopSp X = TopStruct(#X, bool X#) by PCOMPS_1:def 1;
+02: the carrier of T = X by Def8;
+    X c= X; then
+    the topology of T = {X} \/ bool X & X in bool X by Th83;
+    hence thesis by 01,02,ZFMISC_1:46;
+  end;

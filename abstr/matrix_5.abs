@@ -1,0 +1,268 @@
+:: A Theory of Matrices of Complex Elements
+::  by Wenpai Chang , Hiroshi Yamazaki and Yatsuka Nakamura
+:: 
+:: Received December 10, 2004
+:: Copyright (c) 2004 Association of Mizar Users
+
+environ
+
+ vocabulary FINSEQ_1, RELAT_1, FUNCT_1, ARYTM_1, VECTSP_1, RLVECT_1, MATRIX_1,
+      TREES_1, MATRIX_5, COMPLEX1, COMPLFLD, COMPLSP1, XCMPLX_0, ARYTM;
+ notation TARSKI, XBOOLE_0, FINSEQ_2, SUBSET_1, ORDINAL1, XREAL_0, REAL_1,
+      NAT_1, RELAT_1, FUNCT_1, STRUCT_0, FINSEQ_1, BINOP_1, ZFMISC_1, FINSEQOP,
+      MATRIX_3, MATRIX_1, FVSUM_1, NUMBERS, MATRIX_4, COMPLEX1, COMPLSP1,
+      COMPLFLD, XCMPLX_0, ARYTM_0, VECTSP_1, RLVECT_1, GROUP_1, BINOP_2,
+      BINARITH;
+ constructors DOMAIN_1, NAT_1, TOPMETR, INT_1, MATRIX_3, FVSUM_1, FUNCT_3,
+      SETWOP_2, NUMBERS, MATRIX_4, ORDINAL1, REAL_1, COMPLEX1, COMPLSP1,
+      COMPLFLD, ARYTM_0, COMPTRIG, BINOP_2, BINARITH;
+ clusters FUNCT_1, STRUCT_0, INT_1, RELSET_1, XBOOLE_0, VECTSP_1, NUMBERS,
+      REAL_1, ORDINAL1, COMPLFLD, COMPLEX1, PRGCOR_2, XCMPLX_0;
+ requirements NUMERALS, BOOLE, SUBSET, REAL, ARITHM;
+
+
+begin
+
+theorem :: MATRIX_5:1
+  1=1_ F_Complex;
+
+theorem :: MATRIX_5:2
+  0.F_Complex = 0;
+
+definition let A be Matrix of COMPLEX;
+  func COMPLEX2Field A -> Matrix of F_Complex equals
+:: MATRIX_5:def 1
+  A;
+end;
+
+definition let A be Matrix of F_Complex;
+  func Field2COMPLEX A -> Matrix of COMPLEX equals
+:: MATRIX_5:def 2
+  A;
+end;
+
+theorem :: MATRIX_5:3
+  for A,B being Matrix of COMPLEX st
+  COMPLEX2Field A = COMPLEX2Field B holds A=B;
+
+theorem :: MATRIX_5:4
+  for A,B being Matrix of F_Complex st
+    Field2COMPLEX A = Field2COMPLEX B holds A=B;
+
+theorem :: MATRIX_5:5
+  for A being Matrix of COMPLEX holds
+    A = Field2COMPLEX(COMPLEX2Field A);
+
+theorem :: MATRIX_5:6
+  for A being Matrix of F_Complex holds
+    A = COMPLEX2Field(Field2COMPLEX A);
+
+definition let A,B be Matrix of COMPLEX;
+  func A+B -> Matrix of COMPLEX equals
+:: MATRIX_5:def 3
+  Field2COMPLEX ((COMPLEX2Field A)+(COMPLEX2Field B));
+end;
+
+definition let A be Matrix of COMPLEX;
+  func -A -> Matrix of COMPLEX equals
+:: MATRIX_5:def 4
+  Field2COMPLEX (-(COMPLEX2Field A));
+end;
+
+definition let A,B be Matrix of COMPLEX;
+  func A - B -> Matrix of COMPLEX equals
+:: MATRIX_5:def 5
+  Field2COMPLEX ((COMPLEX2Field A)-(COMPLEX2Field B));
+end;
+
+definition let A,B be Matrix of COMPLEX;
+  func A*B -> Matrix of COMPLEX equals
+:: MATRIX_5:def 6
+  Field2COMPLEX ((COMPLEX2Field A)*(COMPLEX2Field B));
+end;
+
+definition let x be complex number, A be Matrix of COMPLEX;
+  func x * A -> Matrix of COMPLEX means
+:: MATRIX_5:def 7
+  for ea being Element of F_Complex st ea=x holds
+  it=Field2COMPLEX (ea*(COMPLEX2Field A));
+end;
+
+theorem :: MATRIX_5:7
+  for A being Matrix of COMPLEX holds
+  len A =len (COMPLEX2Field A) & width A=width (COMPLEX2Field A);
+
+theorem :: MATRIX_5:8
+  for A being Matrix of F_Complex holds
+  len A =len (Field2COMPLEX A) & width A=width (Field2COMPLEX A);
+
+theorem :: MATRIX_5:9  :: MATRIX_4:1
+  for M being Matrix of COMPLEX st len M>0 holds --M=M;
+
+theorem :: MATRIX_5:10
+  for M being Matrix of F_Complex holds
+  (1_ F_Complex)*M=M;
+
+theorem :: MATRIX_5:11
+  for M being Matrix of COMPLEX holds 1*M=M;
+
+theorem :: MATRIX_5:12
+  for K being Field, a,b being Element of K,
+      M being Matrix of K holds a*(b*M)=(a*b)*M;
+
+theorem :: MATRIX_5:13
+  for K being Field, a,b being Element of K,
+      M being Matrix of K holds (a+b)*M=a*M + b*M;
+
+theorem :: MATRIX_5:14
+  for M being Matrix of COMPLEX holds M+M = 2*M;
+
+theorem :: MATRIX_5:15
+  for M being Matrix of COMPLEX holds M+M+M = 3*M;
+
+definition let n,m be Nat;
+  func 0_Cx(n,m) -> Matrix of COMPLEX equals
+:: MATRIX_5:def 8
+  Field2COMPLEX (0.(F_Complex,n,m));
+end;
+
+theorem :: MATRIX_5:16
+  for n,m being Nat holds
+    COMPLEX2Field 0_Cx(n,m)=0.(F_Complex,n,m);
+
+theorem :: MATRIX_5:17  :: MATRIX_4:2
+  for M being Matrix of COMPLEX st
+    len M>0 holds M+(-M)=0_Cx(len M,width M);
+
+theorem :: MATRIX_5:18  :: MATRIX_4:3
+  for M being Matrix of COMPLEX st
+    len M>0 holds M - M=0_Cx(len M,width M);
+
+theorem :: MATRIX_5:19 :: MATRIX_4:4
+  for M1,M2,M3 being Matrix of COMPLEX st
+  len M1=len M2 & len M2=len M3 &
+  width M1=width M2 & width M2=width M3 &
+  len M1>0 &
+  M1+M3=M2+M3 holds M1=M2;
+
+theorem :: MATRIX_5:20 :: MATRIX_4:5
+  for M1,M2 being Matrix of COMPLEX st len M2>0 holds
+    M1--M2=M1+M2;
+
+theorem :: MATRIX_5:21  :: MATRIX_4:6
+  for M1,M2 being Matrix of COMPLEX st
+  len M1=len M2 & width M1=width M2 & len M1>0 &
+  M1 = M1 + M2 holds M2 = 0_Cx(len M1,width M1);
+
+theorem :: MATRIX_5:22  :: MATRIX_4:7
+  for M1,M2 being Matrix of COMPLEX st
+  len M1=len M2 & width M1=width M2 & len M1>0 &
+  M1 - M2 = 0_Cx(len M1,width M1) holds M1 = M2;
+
+theorem :: MATRIX_5:23  :: MATRIX_4:8
+  for M1,M2 being Matrix of COMPLEX st
+  len M1=len M2 & width M1=width M2 &
+  len M1 >0 & M1+M2= 0_Cx(len M1,width M1) holds M2=-M1;
+
+theorem :: MATRIX_5:24  :: MATRIX_4:9
+  for n,m being Nat st n > 0 holds -(0_Cx(n,m))=0_Cx(n,m);
+
+theorem :: MATRIX_5:25  :: MATRIX_4:10
+  for M1,M2 being Matrix of COMPLEX st
+  len M1=len M2 & width M1=width M2 & len M1>0 &
+  M2 - M1 = M2 holds M1=0_Cx(len M1,width M1);
+
+theorem :: MATRIX_5:26  :: MATRIX_4:11
+  for M1,M2 being Matrix of COMPLEX st
+  len M1=len M2 & width M1=width M2 & len M1>0 holds
+    M1 = M1 -(M2 - M2);
+
+theorem :: MATRIX_5:27  :: MATRIX_4:12
+  for M1,M2 being Matrix of COMPLEX st
+  len M1=len M2 & width M1=width M2 & len M1>0 holds
+    - (M1 + M2) = -M1+-M2;
+
+theorem :: MATRIX_5:28  :: MATRIX_4:13
+  for M1,M2 being Matrix of COMPLEX st
+    len M1=len M2 & width M1=width M2 & len M1>0 holds
+      M1 - (M1 - M2) = M2;
+
+theorem :: MATRIX_5:29  :: MATRIX_4:14
+  for M1,M2,M3 being Matrix of COMPLEX st
+    len M1=len M2 & len M2=len M3 &
+      width M1=width M2 & width M2 = width M3 & len M1>0 &
+        M1 - M3 = M2 - M3 holds M1 = M2;
+
+theorem :: MATRIX_5:30 :: MATRIX_4:15
+  for M1,M2,M3 being Matrix of COMPLEX st
+  len M1=len M2 & len M2=len M3 &
+  width M1=width M2 & width M2 = width M3 & len M1>0 &
+  M3 - M1 = M3 - M2 holds M1 = M2;
+
+theorem :: MATRIX_5:31  :: MATRIX_4:62
+  for M1,M2,M3 being Matrix of COMPLEX st
+  len M2=len M3 & width M2=width M3 & width M1=len M2
+  & len M1>0 & len M2>0 holds
+  M1*(M2+M3)=M1*M2 + M1*M3;
+
+theorem :: MATRIX_5:32  :: MATRIX_4:63
+  for M1,M2,M3 being Matrix of COMPLEX st
+  len M2=len M3 & width M2=width M3 & len M1=width M2
+   & len M2>0 & len M1>0 holds
+  (M2+M3)*M1=M2*M1 + M3*M1;
+
+theorem :: MATRIX_5:33
+  for M1,M2 being Matrix of COMPLEX st len M1= len M2 & width M1=width M2
+    holds M1 + M2 = M2 + M1;
+
+theorem :: MATRIX_5:34
+  for M1,M2,M3 being Matrix of COMPLEX st len M1=len M2 & len M1=len M3 &
+    width M1=width M2 & width M1=width M3 holds
+      (M1 + M2) + M3= M1 + (M2 + M3);
+
+theorem :: MATRIX_5:35
+  for M being Matrix of COMPLEX st
+    len M>0 holds M + 0_Cx(len M,width M) = M;
+
+theorem :: MATRIX_5:36
+  for K being Field, b being Element of K,M1,M2 being Matrix of K st
+    len M1 = len M2 & width M1 = width M2 & len M1 > 0 holds
+      b*(M1+M2)=b*M1 + b*M2;
+
+theorem :: MATRIX_5:37
+  for M1,M2 being Matrix of COMPLEX
+  for a being complex number st
+    len M1=len M2 & width M1=width M2 & len M1>0 holds
+    a*(M1 + M2) = a*M1 + a*M2;
+
+theorem :: MATRIX_5:38
+for K being Field,M1,M2 being Matrix of K
+  st width M1=len M2 & len M1>0& len M2>0
+   holds 0.(K,len M1,width M1)*M2=0.(K,len M1,width M2);
+
+theorem :: MATRIX_5:39
+for M1,M2 being Matrix of COMPLEX
+st width M1=len M2 &len M1>0&len M2>0 holds
+  0_Cx(len M1,width M1)*M2=0_Cx(len M1,width M2);
+
+theorem :: MATRIX_5:40
+  for K being Field,M1 being Matrix of K st len M1>0 holds
+    0.K*M1=0.(K,len M1,width M1);
+
+theorem :: MATRIX_5:41
+  for M1 being Matrix of COMPLEX st len M1>0 holds
+    0*M1 = 0_Cx(len M1,width M1);
+
+definition let s be FinSequence of COMPLEX, k be Nat;
+ redefine func s.k -> Element of COMPLEX;
+end;
+
+theorem :: MATRIX_5:42
+  for i,j being Nat,M1,M2 being Matrix of COMPLEX st
+  len M1>0 & len M2>0 & width M1=len M2
+   & 1<=i & i<= len M1 & 1<=j & j<=width M2 holds
+(ex s being FinSequence of COMPLEX
+ st len s = len M2
+ & s.1=(M1*(i,1))*(M2*(1,j))
+ & (for k be Nat st 1<=k & k < len M2
+ holds s.(k+1)=s.k + (M1*(i,k+1))*(M2*(k+1,j))));

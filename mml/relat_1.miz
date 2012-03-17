@@ -1536,14 +1536,14 @@ A1: P c= R;
   hence thesis by Def3;
  end;
 
-theorem
+theorem Th106:
      P c= R & X c= Y implies P|X c= R|Y
  proof assume P c= R & X c= Y;
    then P|X c= R|X & R|X c= R|Y by Th104,Th105;
    hence thesis by XBOOLE_1:1;
  end;
 
-theorem
+theorem Th107:
      R|(X \/ Y) = (R|X) \/ (R|Y)
  proof
       now let x,y;
@@ -1619,7 +1619,7 @@ A1: now
   hence thesis by Def2;
  end;
 
-theorem
+theorem Th110:
      R|{} = {}
  proof
      not [x,y] in R|{} by Def11;
@@ -2585,3 +2585,48 @@ A1: for X st X in rng R holds X = {};
   then Y = {} by A1;
  hence thesis by TARSKI:def 1;
 end;
+
+:: from AMI_3
+
+theorem
+ for f,g being Relation, A,B being set st
+  f|A = g|A & f|B = g|B holds f|(A \/ B) = g|(A \/ B)
+ proof let f,g be Relation, A,B be set;
+  assume f|A = g|A & f|B = g|B;
+  hence f|(A \/ B) = g|A \/ g|B by Th107
+      .= g|(A \/ B) by Th107;
+ end;
+
+theorem
+    for X being set, f,g being Relation st dom g c= X & g c= f
+  holds g c= f|X
+ proof let X be set, f,g be Relation;
+  assume dom g c= X & g c= f;
+   then g|dom g c= f|X by Th106;
+  hence g c= f|X by Th97;
+ end;
+
+theorem
+ for f being Relation, X being set st X misses dom f
+  holds f|X = {}
+ proof let f be Relation, X be set such that
+A1: X /\ dom f = {};
+  thus f|X = (f|dom f)|X by Th97
+          .= f|({} qua set) by A1,Th100
+          .= {} by Th110;
+ end;
+
+:: from AMI_5
+
+theorem
+   for f,g being Relation, A,B being set st A c= B & f|B = g|B
+  holds f|A = g|A
+  proof
+   let f,g be Relation, A,B be set;
+   assume that A1: A c= B and
+               A2: f|B = g|B;
+A3: A = B /\ A by A1,XBOOLE_1:28;
+   hence f|A = (f|B)|A by Th100
+             .= g|A by A2,A3,Th100;
+  end;
+

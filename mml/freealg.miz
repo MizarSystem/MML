@@ -11,14 +11,14 @@ environ
       FINSEQ_4, FINSEQ_2, LANG1, TDGROUP, DTCONSTR, TREES_4, TREES_3, TREES_2,
       QC_LANG1, FREEALG, CARD_3;
  notation TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XCMPLX_0, XREAL_0, NAT_1,
-      RELSET_1, STRUCT_0, FUNCT_1, PARTFUN1, FINSEQ_1, FUNCT_2, FUNCOP_1,
-      FINSEQ_2, TREES_2, TREES_3, TREES_4, FINSEQ_4, UNIALG_1, UNIALG_2, LANG1,
-      DTCONSTR, TOPREAL1, ALG_1;
+      RELAT_1, RELSET_1, STRUCT_0, FUNCT_1, PARTFUN1, FINSEQ_1, FUNCT_2,
+      FUNCOP_1, FINSEQ_2, TREES_2, TREES_3, TREES_4, FINSEQ_4, UNIALG_1,
+      UNIALG_2, LANG1, DTCONSTR, TOPREAL1, ALG_1;
  constructors DOMAIN_1, DTCONSTR, ALG_1, FINSOP_1, FINSEQ_4, FINSEQOP,
-      XCMPLX_0, XREAL_0, MEMBERED, XBOOLE_0;
+      XCMPLX_0, XREAL_0, MEMBERED, XBOOLE_0, RELAT_1;
  clusters SUBSET_1, TREES_3, UNIALG_1, UNIALG_2, DTCONSTR, RELSET_1, XBOOLE_0,
       PRVECT_1, STRUCT_0, FINSEQ_2, PARTFUN1, ARYTM_3, MEMBERED, ZFMISC_1,
-      ORDINAL2;
+      ORDINAL2, FINSEQ_1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, UNIALG_2, DTCONSTR, STRUCT_0, XBOOLE_0;
  theorems FINSEQ_1, FINSEQ_2, PARTFUN1, FUNCT_1, FUNCT_2, NAT_1, ZFMISC_1,
@@ -35,22 +35,21 @@ reserve x,y for set,
         n for Nat;
 
 definition let IT be set;
-attr IT is missing_with_Nat means :Def1:
- IT misses NAT;
+  attr IT is missing_with_Nat means :Def1:
+    IT misses NAT;
 end;
 
 registration
-cluster non empty missing_with_Nat set;
+  cluster non empty missing_with_Nat set;
  existence
   proof
    take X = {-1};
    thus X is non empty;
-       now assume X meets NAT;
+   now assume X meets NAT;
      then consider x such that
-     A1: x in X /\ NAT by XBOOLE_0:4;
-     A2: x in X & x in NAT by A1,XBOOLE_0:def 3;
-     reconsider x as Nat by A1,XBOOLE_0:def 3;
-        x = -1 & 0 <= x by A2,NAT_1:18,TARSKI:def 1;
+     A2: x in X & x in NAT by XBOOLE_0:3;
+     reconsider x as Nat by A2;
+     x = -1 & 0 <= x by A2,NAT_1:18,TARSKI:def 1;
      hence contradiction;
     end;
    hence thesis by Def1;
@@ -58,40 +57,30 @@ cluster non empty missing_with_Nat set;
 end;
 
 Lm1:
-<*1*> is non empty & not 0 in rng <*1*> & <*0*> is non empty & 0 in rng <*0*>
+not 0 in rng <*1*> & 0 in rng <*0*>
  proof
-  set f1 = <*1*>,
-      f2 = <*0*>;
-  A1: len f1 = 1 & Seg 0 = {} & Seg len f1 = dom f1 & f1.1 = 1 & Seg 1 = {1} &
-      len f2 = 1 & Seg len f2 = dom f2 & f2.1 = 0 by FINSEQ_1:4,57,def 3;
-  hence f1 is non empty by RELAT_1:60;
-      now assume 0 in rng f1;
-    then consider n such that
-    A2: n in dom f1 & f1.n = 0 by FINSEQ_2:11;
-    thus contradiction by A1,A2,TARSKI:def 1;
-   end;
-  hence not 0 in rng f1;
-  thus f2 is non empty by A1,RELAT_1:60;
-     1 in dom f2 by A1,TARSKI:def 1;
-  hence thesis by A1,FUNCT_1:def 5;
+   rng <*0*> = {0} & rng <*1*> = {1} by FINSEQ_1:55;
+   hence thesis by TARSKI:def 1;
  end;
 
-definition let IT be FinSequence;
-attr IT is with_zero means :Def2:
- 0 in rng IT;
+notation let IT be Relation;
+  antonym IT is with_zero for IT is non-empty;
+  synonym IT is without_zero for IT is non-empty;
 end;
 
-notation let IT be FinSequence;
-antonym IT is without_zero for IT is with_zero;
+definition let IT be Relation;
+  redefine attr IT is with_zero means :Def2:
+    0 in rng IT;
+  compatibility by RELAT_1:def 9;
 end;
 
 registration
-cluster non empty with_zero FinSequence of NAT;
- existence
+  cluster non empty with_zero FinSequence of NAT;
+  existence
   proof
    reconsider f = <*0*> as FinSequence of NAT;
    take f;
-   thus f is non empty by Lm1;
+   thus f is non empty;
    thus 0 in rng f by Lm1;
   end;
 cluster non empty without_zero FinSequence of NAT;
@@ -99,7 +88,7 @@ cluster non empty without_zero FinSequence of NAT;
   proof
    reconsider f = <*1*> as FinSequence of NAT;
    take f;
-   thus f is non empty by Lm1;
+   thus f is non empty;
    thus not 0 in rng f by Lm1;
   end;
 end;
@@ -110,7 +99,7 @@ begin
 ::
 
 definition let U1 be Universal_Algebra,
-     n be Nat;
+               n be Nat;
 assume A1: n in dom (the charact of U1);
  canceled;
 
@@ -120,39 +109,37 @@ func oper(n,U1) -> operation of U1 equals :Def4:
 end;
 
 definition
- let U0 be Universal_Algebra;
-mode GeneratorSet of U0 -> Subset of U0 means
-:Def5:
-the carrier of GenUnivAlg(it) = the carrier of U0;
+  let U0 be Universal_Algebra;
+  mode GeneratorSet of U0 -> Subset of U0 means :Def5:
+    the carrier of GenUnivAlg(it) = the carrier of U0;
  existence
  proof
-     the carrier of U0 c= the carrier of U0;
+  the carrier of U0 c= the carrier of U0;
   then reconsider GG = the carrier of U0 as non empty Subset of
 U0;
   take GG;
   A1: GG c= the carrier of GenUnivAlg(GG) by UNIALG_2:def 13;
-     the carrier of GenUnivAlg(GG) is Subset of U0
-  by UNIALG_2:def 8;
+  the carrier of GenUnivAlg(GG) is Subset of U0 by UNIALG_2:def 8;
   hence thesis by A1,XBOOLE_0:def 10;
  end;
 end;
 
 definition
- let U0 be Universal_Algebra;
- let IT be GeneratorSet of U0;
-attr IT is free means :Def6:
-for U1 be Universal_Algebra st U0,U1 are_similar holds
-  for f be Function of IT,the carrier of U1
-    ex h be Function of U0,U1 st h is_homomorphism U0,U1 & h|IT = f;
+  let U0 be Universal_Algebra;
+  let IT be GeneratorSet of U0;
+  attr IT is free means :Def6:
+  for U1 be Universal_Algebra st U0,U1 are_similar holds
+   for f be Function of IT,the carrier of U1
+     ex h be Function of U0,U1 st h is_homomorphism U0,U1 & h|IT = f;
 end;
 
 definition let IT be Universal_Algebra;
-attr IT is free means :Def7:
-ex G being GeneratorSet of IT st G is free;
+  attr IT is free means :Def7:
+  ex G being GeneratorSet of IT st G is free;
 end;
 
 registration
-cluster free strict Universal_Algebra;
+  cluster free strict Universal_Algebra;
 existence
  proof
   consider x be set;
@@ -164,20 +151,19 @@ existence
   A1: the charact of(U0) is quasi_total & the charact of(U0) is homogeneous &
      the charact of(U0) is non-empty by UNIALG_1:4;
   A2: len the charact of(U0) = 1 by FINSEQ_1:56;
-  then the charact of U0 <> {} by FINSEQ_1:25;
-  then reconsider U0 as Universal_Algebra by A1,UNIALG_1:def 7,def 8,def 9;
+  reconsider U0 as Universal_Algebra by A1,UNIALG_1:def 7,def 8,def 9;
 A3:  dom the charact of(U0) = {1} & 1 in {1}
    by A2,FINSEQ_1:4,def 3,TARSKI:def 1;
   then reconsider o0 = (the charact of U0).1 as operation of U0 by UNIALG_2:6;
       o0 = w by FINSEQ_1:57;
   then A4: dom o0 = {<*>A} by FUNCOP_1:19;
-      now let x be FinSequence of A; assume x in dom o0;
+   now let x be FinSequence of A; assume x in dom o0;
     then x = <*>A by A4,TARSKI:def 1;
     hence len x = 0 by FINSEQ_1:32;
    end;
   then A5: arity o0 = 0 by UNIALG_1:def 10;
   take U0;
-     GenUnivAlg( {}(the carrier of U0) ) = U0
+   GenUnivAlg( {}(the carrier of U0) ) = U0
    proof
     set P = {}(the carrier of U0);
     reconsider B = the carrier of GenUnivAlg(P)
@@ -198,9 +184,9 @@ UNIALG_2:6;
     hence thesis by A6;
    end;
   then reconsider G = {}(the carrier of U0) as GeneratorSet of U0 by Def5;
-      now
+  now
     take G;
-        now
+    now
       let U1 be Universal_Algebra;assume
       A9: U0,U1 are_similar;
        then len the charact of(U1) = 1 by A2,UNIALG_2:3;
@@ -225,8 +211,7 @@ UNIALG_2:6;
       let f be Function of G,the carrier of U1;
       deffunc F(set) = u1;
       consider h be Function of U0,U1 such that
-A14: for x being Element of U0 holds h.x = F(x) from FUNCT_2:sch 4
-;
+A14: for x being Element of U0 holds h.x = F(x) from FUNCT_2:sch 4;
       take h;
           now
         let n; assume n in dom the charact of(U0);
@@ -255,14 +240,14 @@ A16:        0o=(the charact of U0).n & 1o=(the charact of U1).n;
 end;
 
 registration
- let U0 be free Universal_Algebra;
-cluster free GeneratorSet of U0;
- existence by Def7;
+  let U0 be free Universal_Algebra;
+  cluster free GeneratorSet of U0;
+  existence by Def7;
 end;
 
 theorem
-   for U0 be strict Universal_Algebra,A be Subset of U0 holds
-A is GeneratorSet of U0 iff GenUnivAlg(A) = U0
+  for U0 be strict Universal_Algebra,A be Subset of U0 holds
+    A is GeneratorSet of U0 iff GenUnivAlg(A) = U0
   proof
    let U0 be strict Universal_Algebra,A be Subset of U0;
    thus A is GeneratorSet of U0 implies GenUnivAlg(A) = U0
@@ -314,14 +299,14 @@ for a be Element of (dom f) \/ X, b be Element of ((dom f) \/ X)* holds
        assume A4: [x,y] in R;
        then reconsider x1=x as Element of A by ZFMISC_1:106;
        reconsider y1=y as Element of A* by A4,ZFMISC_1:106;
-          [x1,y1] in R by A4;
+       [x1,y1] in R by A4;
        then x1 in dom f & f.x1 = len y1 by A2;
        hence thesis by A3;
       end;
      assume A5: [x,y] in T;
      then reconsider x1=x as Element of A by ZFMISC_1:106;
      reconsider y1=y as Element of A* by A5,ZFMISC_1:106;
-        [x1,y1] in T by A5;
+     [x1,y1] in T by A5;
      then x1 in dom f & f.x1 = len y1 by A3;
      hence thesis by A2;
     end;
@@ -343,7 +328,7 @@ registration
 cluster DTConUA(f,X) -> non empty;
  coherence
   proof
-       DTConUA(f,X) = DTConstrStr (# (dom f) \/ X, REL(f,X) #) by Def9;
+   DTConUA(f,X) = DTConstrStr (# (dom f) \/ X, REL(f,X) #) by Def9;
    hence the carrier of DTConUA(f,X) is non empty;
   end;
 end;
@@ -422,9 +407,8 @@ A1:   A = DTConstrStr (# (dom f) \/ X, REL(f,X) #) by Def9;
    thus Terminals A c= X by Th2;
    let x; assume A3: x in X;
    then A4: x in (dom f) \/ X by XBOOLE_0:def 2;
-       now assume x in NonTerminals A;
-     then x in X /\ NAT by A2,A3,XBOOLE_0:def 3;
-     then X meets NAT by XBOOLE_0:4;
+   now assume x in NonTerminals A;
+     then X meets NAT by A2,A3,XBOOLE_0:3;
      hence contradiction by Def1;
     end;
    hence thesis by A1,A2,A4,XBOOLE_0:def 2;
@@ -436,7 +420,7 @@ registration
 cluster DTConUA(f,X) -> with_nonterminals;
  coherence
   proof
-      NonTerminals DTConUA(f,X) = dom f by Th2;
+   NonTerminals DTConUA(f,X) = dom f by Th2;
    hence thesis by DTCONSTR:def 7;
   end;
 end;
@@ -444,8 +428,7 @@ end;
 registration
  let f be with_zero non empty FinSequence of NAT,
      X be set;
-cluster DTConUA(f,X) ->
-  with_nonterminals with_useful_nonterminals;
+ cluster DTConUA(f,X) -> with_nonterminals with_useful_nonterminals;
  coherence
   proof
    set A = DTConUA(f,X),
@@ -474,16 +457,16 @@ A1:   A = DTConstrStr (# (dom f) \/ X, REL(f,X) #) by Def9;
      then reconsider fs = f.s as Nat;
      set p = fs |-> (s0-tree e);
      A6: len p = fs by FINSEQ_2:69;
-        dom(roots p) = dom p by TREES_3:def 18
+     dom(roots p) = dom p by TREES_3:def 18
      .= Seg len p by FINSEQ_1:def 3;
      then A7: len(roots p) = fs by A6,FINSEQ_1:def 3;
      reconsider sd = s as Element of D by A2,A4,XBOOLE_0:def 2;
-        rng p c= TS A
+     rng p c= TS A
       proof
        let y; assume y in rng p;
        then consider n such that
        A8: n in dom p & p.n = y by FINSEQ_2:11;
-          dom p = Seg len p by FINSEQ_1:def 3;
+       dom p = Seg len p by FINSEQ_1:def 3;
        hence thesis by A5,A6,A8,FINSEQ_2:70;
       end;
      then reconsider p as FinSequence of TS A by FINSEQ_1:def 4;
@@ -498,10 +481,10 @@ A1:   A = DTConstrStr (# (dom f) \/ X, REL(f,X) #) by Def9;
 end;
 
 registration
- let f be non empty FinSequence of NAT,
-     D be missing_with_Nat non empty set;
-cluster DTConUA(f,D) ->
- with_terminals with_nonterminals with_useful_nonterminals;
+  let f be non empty FinSequence of NAT,
+      D be missing_with_Nat non empty set;
+  cluster DTConUA(f,D) ->
+    with_terminals with_nonterminals with_useful_nonterminals;
  coherence
   proof
    set A = DTConUA(f,D);
@@ -526,7 +509,7 @@ A1:   A = DTConstrStr (#(dom f) \/ D, REL(f,D) #) by Def9;
        let y; assume y in rng p;
        then consider n such that
        A7: n in dom p & p.n = y by FINSEQ_2:11;
-          n in Seg len p by A7,FINSEQ_1:def 3;
+       n in Seg len p by A7,FINSEQ_1:def 3;
        hence thesis by A4,A5,A7,FINSEQ_2:70;
       end;
      then reconsider p as FinSequence of (TS A) by FINSEQ_1:def 4;
@@ -608,8 +591,8 @@ A2:   A = DTConstrStr (# (dom f) \/ D , REL(f,D) #) by Def9;
     proof
      let x,y1,y2 be set; assume
      A10: x in (TS A)* & P[x,y1] & P[x,y2];
-     then x in {s where s is Element of (TS A)*
- : len s = i} by FINSEQ_2:def 4;
+     then x in {s where s is Element of (TS A)* : len s = i}
+       by FINSEQ_2:def 4;
      then consider s be Element of (TS A)* such that
      A11: s = x & len s = i;
         y1 = Sym(n,f,D)-tree(s) & y2 = Sym(n,f,D)-tree(s) by A10,A11;
@@ -684,8 +667,7 @@ A2:   A = DTConstrStr (# (dom f) \/ D , REL(f,D) #) by Def9;
      then consider s be Element of A* such that
      A27: s = x & len s = f/.n;
         f1.s = Sym(n,f,D)-tree(s) & f2.s = Sym(n,f,D)-tree(s) by A24,A25,A26
-,A27
-;
+,A27;
      hence f1.x = f2.x by A27;
     end;
    hence thesis by A24,A25,FUNCT_1:9;
@@ -815,8 +797,7 @@ for f be non empty FinSequence of NAT, D be missing_with_Nat non empty set
 definition
  let f be non empty FinSequence of NAT,
      D be non empty missing_with_Nat set;
-func FreeGenSetNSG(f,D) -> Subset of FreeUnivAlgNSG(f,D) equals
-:Def14:
+func FreeGenSetNSG(f,D) -> Subset of FreeUnivAlgNSG(f,D) equals:Def14:
    {root-tree s where s is Symbol of DTConUA(f,D):
          s in Terminals DTConUA(f,D)};
 coherence
@@ -1070,8 +1051,7 @@ A21:     fx in {v where v is Element of c1*: len v = arity o2} by A19,A20;
       now let x;
     assume A26: x in dom F;
     then x in {root-tree t where t is Symbol of A: t in Terminals A} by A25,
-Def14
-;
+Def14;
     then consider s be Symbol of A such that
     A27: x = root-tree s & s in Terminals A;
     thus (ff|fgs).x = ff.x by A25,A26,FUNCT_1:68
@@ -1087,7 +1067,7 @@ registration
  cluster FreeUnivAlgNSG(f,D) -> free;
  coherence
   proof
-      FreeGenSetNSG(f,D) is free by Th6;
+   FreeGenSetNSG(f,D) is free by Th6;
    hence thesis by Def7;
   end;
 end;
@@ -1226,8 +1206,7 @@ A2:   A = DTConstrStr (# (dom f) \/ D , REL(f,D) #) by Def9;
      then consider s be Element of A* such that
      A27: s = x & len s = f/.n;
         f1.s = Sym(n,f,D)-tree(s) & f2.s = Sym(n,f,D)-tree(s) by A24,A25,A26
-,A27
-;
+,A27;
      hence f1.x = f2.x by A27;
     end;
    hence thesis by A24,A25,FUNCT_1:9;
@@ -1414,8 +1393,7 @@ UNIALG_2:6;
 definition
  let f be with_zero non empty FinSequence of NAT,
      D be missing_with_Nat set;
-func FreeGenSetZAO(f,D) -> Subset of FreeUnivAlgZAO(f,D) equals
-:Def20:
+func FreeGenSetZAO(f,D) -> Subset of FreeUnivAlgZAO(f,D) equals :Def20:
    {root-tree s where s is Symbol of DTConUA(f,D):
          s in Terminals DTConUA(f,D)};
 coherence
@@ -1536,8 +1514,7 @@ func pi(F,s) -> Element of C equals :Def21:
   proof
    set A = DTConUA(f,D);
       root-tree s in {root-tree t where t is Symbol of A: t in Terminals A} by
-A1
-;
+A1;
    then A2: root-tree s in (FreeGenSetZAO(f,D)) &
    dom F=(FreeGenSetZAO(f,D)) & rng F c= C by Def20,FUNCT_2:def 1,RELSET_1:12;
    then F.(root-tree s) in rng F by FUNCT_1:def 5;
@@ -1651,7 +1628,7 @@ registration
 cluster FreeUnivAlgZAO(f,D) -> free;
  coherence
   proof
-      FreeGenSetZAO(f,D) is free by Th10;
+   FreeGenSetZAO(f,D) is free by Th10;
    hence thesis by Def7;
   end;
 end;

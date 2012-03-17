@@ -28,7 +28,7 @@ begin :: Preliminaries
 
 reserve
   n for Nat,
-  a, b, r for real number,
+  a, b, r, w for real number,
   x, y, z for Point of TOP-REAL n,
   e for Point of Euclid n;
 
@@ -248,13 +248,25 @@ theorem :: TOPREAL9:36
   halfline(y,z) /\ Sphere(x,r) = {y,z};
 
 theorem :: TOPREAL9:37
-  y <> z & y in Ball(x,r) implies
-  ex e being Point of TOP-REAL n st {e} = halfline(y,z) /\ Sphere(x,r);
+  for S, T, X being Element of REAL n st S = y & T = z & X = x holds
+  y <> z & y in Ball(x,r) &
+  a = (-(2*|(z-y,y-x)|) + sqrt delta
+  (Sum sqr (T-S), 2 * |(z-y,y-x)|, Sum sqr (S-X) - r^2)) / (2 * Sum sqr (T-S))
+  implies
+  ex e being Point of TOP-REAL n st {e} = halfline(y,z) /\ Sphere(x,r) &
+  e = (1-a)*y + a*z;
 
 theorem :: TOPREAL9:38
-  y <> z & y in Sphere(x,r) & z in cl_Ball(x,r) implies
+  for S, T, Y being Element of REAL n st S = 1/2*y + 1/2*z & T = z & Y = x &
+  y <> z & y in Sphere(x,r) & z in cl_Ball(x,r)
   ex e being Point of TOP-REAL n st e <> y &
-     {y,e} = halfline(y,z) /\ Sphere(x,r);
+     {y,e} = halfline(y,z) /\ Sphere(x,r) &
+     (z in Sphere(x,r) implies e = z) &
+     (not z in Sphere(x,r) &
+      a = (-(2*|(z-(1/2*y + 1/2*z),1/2*y + 1/2*z-x)|) + sqrt delta
+      (Sum sqr (T-S), 2 * |(z-(1/2*y + 1/2*z),1/2*y + 1/2*z-x)|,
+      Sum sqr (S-Y) - r^2)) / (2 * Sum sqr (T-S))
+      implies e = (1-a)*(1/2*y + 1/2*z) + a*z);
 
 registration
   let n, x; let r be negative (real number);
@@ -347,8 +359,13 @@ theorem :: TOPREAL9:57
   implies r > 0;
 
 theorem :: TOPREAL9:58
-  s <> t & s in inside_of_circle(a,b,r) implies
-   ex e being Point of TOP-REAL 2 st {e} = halfline(s,t) /\ circle(a,b,r);
+  for S, T, X being Element of REAL 2 st S = s & T = t & X = |[a,b]| &
+  w = (-(2*|(t-s,s-|[a,b]|)|) + sqrt delta
+     (Sum sqr (T-S), 2 * |(t-s,s-|[a,b]|)|, Sum sqr (S-X) - r^2)) /
+     (2 * Sum sqr (T-S)) &
+  s <> t & s in inside_of_circle(a,b,r)
+   ex e being Point of TOP-REAL 2 st {e} = halfline(s,t) /\ circle(a,b,r) &
+   e = (1-w)*s + w*t;
 
 theorem :: TOPREAL9:59
   s in circle(a,b,r) & t in inside_of_circle(a,b,r) implies
@@ -367,9 +384,17 @@ theorem :: TOPREAL9:62
   halfline(s,t) /\ circle(a,b,r) = {s,t};
 
 theorem :: TOPREAL9:63
-  s <> t & s in circle(a,b,r) & t in closed_inside_of_circle(a,b,r) implies
-   ex e being Point of TOP-REAL 2 st e <> s &
-     {s,e} = halfline(s,t) /\ circle(a,b,r);
+  for S, T, Y being Element of REAL 2 st
+    S = 1/2*s + 1/2*t & T = t & Y = |[a,b]| &
+    s <> t & s in circle(a,b,r) & t in closed_inside_of_circle(a,b,r)
+  ex e being Point of TOP-REAL 2 st e <> s &
+   {s,e} = halfline(s,t) /\ circle(a,b,r) &
+   (t in Sphere(|[a,b]|,r) implies e = t) &
+   (not t in Sphere(|[a,b]|,r) &
+     w = (-(2*|(t-(1/2*s + 1/2*t),1/2*s + 1/2*t-|[a,b]|)|) + sqrt delta
+     (Sum sqr (T-S), 2 * |(t-(1/2*s + 1/2*t),1/2*s + 1/2*t-|[a,b]|)|,
+     Sum sqr (S-Y) - r^2)) / (2 * Sum sqr (T-S))
+     implies e = (1-w)*(1/2*s + 1/2*t) + w*t);
 
 registration
   let a, b, r be real number;

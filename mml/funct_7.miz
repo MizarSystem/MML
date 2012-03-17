@@ -13,21 +13,21 @@ environ
  notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XREAL_0, NAT_1,
       SETFAM_1, PBOOLE, DOMAIN_1, CARD_1, RELAT_1, FUNCT_1, RELSET_1, BINOP_1,
       FINSEQ_1, FINSET_1, CQC_LANG, PARTFUN1, FUNCOP_1, FUNCT_2, FINSEQ_2,
-      FUNCT_4, FUNCT_5, FINSEQ_4, GR_CY_1, REWRITE1;
- constructors GR_CY_1, CQC_LANG, WELLORD2, NAT_1, CAT_4, BINOP_1, DOMAIN_1,
+      FUNCT_4, FUNCT_5, FINSEQ_4, REWRITE1;
+ constructors CQC_LANG, WELLORD2, NAT_1, BINOP_1, DOMAIN_1,
       REWRITE1, FINSEQ_4, FINSUB_1, PROB_1, MEMBERED, FUNCT_4, FUNCT_5, PBOOLE,
-      PARTFUN1, FINSEQ_2, LANG1;
+      PARTFUN1, FINSEQ_2, INT_1;
  clusters NUMBERS, SUBSET_1, RELAT_1, FUNCT_1, FINSEQ_1, RELSET_1, CARD_1,
       FINSEQ_5, FUNCOP_1, FUNCT_4, CQC_LANG, SETFAM_1, NAT_1, PARTFUN1,
       XREAL_0, INT_1, ZFMISC_1, FUNCT_2, ORDINAL2;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, FUNCT_1, XBOOLE_0, FUNCOP_1;
- theorems FINSEQ_1, RELAT_1, CARD_5, TARSKI, AXIOMS, ZFMISC_1, GR_CY_1, INT_1,
+ theorems FINSEQ_1, RELAT_1, CARD_5, TARSKI, AXIOMS, ZFMISC_1, INT_1,
       FUNCT_1, FINSEQ_2, FUNCT_4, SUBSET_1, FINSET_1, CQC_LANG, CARD_1, NAT_1,
-      CIRCCOMB, FUNCT_2, FUNCOP_1, AMI_5, PBOOLE, SETFAM_1, MCART_1, AMI_3,
-      ALTCAT_1, BINOP_1, FINSEQ_3, REAL_1, ENUMSET1, REWRITE1, TREES_1,
-      FUNCT_5, FINSEQ_4, AMI_1, RELSET_1, PROB_1, XBOOLE_0, XBOOLE_1, LANG1,
-      PARTFUN1, XCMPLX_1;
+      FUNCT_2, FUNCOP_1, PBOOLE, SETFAM_1, MCART_1,
+      BINOP_1, FINSEQ_3, REAL_1, ENUMSET1, REWRITE1, TREES_1,
+      FUNCT_5, FINSEQ_4, RELSET_1, PROB_1, XBOOLE_0, XBOOLE_1,
+      PARTFUN1, XCMPLX_1, GRFUNC_1;
  schemes NAT_1, DOMAIN_1, ZFREFLE1, FRAENKEL, FINSEQ_1, RECDEF_1, SUPINF_2;
 
 begin :: Preliminaries
@@ -118,7 +118,7 @@ theorem Th6:
   holds f|{a} = a .--> f.a
 proof let f be Function, a be set;
  assume a in dom f;
- hence f|{a} = {[a,f.a]} by AMI_3:22
+ hence f|{a} = {[a,f.a]} by GRFUNC_1:89
    .= [:{a},{f.a}:] by ZFMISC_1:35
    .= {a} --> (f.a) by FUNCOP_1:def 2
    .= a .--> f.a by CQC_LANG:def 2;
@@ -156,7 +156,7 @@ proof let I,J be set, M be ManySortedSet of [:I,J:];
  let i,j be set;
  assume i in I & j in J;
 then A1: [i,j] in [:I,J:] by ZFMISC_1:106;
- thus (i,j):-> (M.(i,j)) = [i,j].--> (M.(i,j)) by ALTCAT_1:11
+ thus (i,j):-> (M.(i,j)) = [i,j].--> (M.(i,j)) by CQC_LANG:42
        .= [i,j].--> (M.[i,j]) by BINOP_1:def 1
        .= M|{[i,j]} by A1,Th7
        .= M|[:{i},{j}:] by ZFMISC_1:35;
@@ -171,7 +171,7 @@ proof let f,g,h be Function such that
 A1: rng g c= dom f and
 A2: rng h c= dom f;
  thus f*(g +* h) = (f+*f)*(g+*h)
-      .= (f*g)+*(f*h) by A1,A2,CIRCCOMB:1;
+      .= (f*g)+*(f*h) by A1,A2,FUNCT_4:73;
 end;
 
 theorem Th11:
@@ -277,7 +277,7 @@ proof let X be set, a be set, f be Function;
 A1:  dom f = X \/ {a};
        a in {a} by TARSKI:def 1;
 then A2:  a in dom f by A1,XBOOLE_0:def 2;
- thus f = f|X +* f|{a} by A1,AMI_1:16
+ thus f = f|X +* f|{a} by A1,FUNCT_4:74
    .= f|X +* (a .--> f.a) by A2,Th6;
 end;
 
@@ -309,19 +309,7 @@ A4:     not x in X;
    hence thesis by A2,A3,FUNCT_1:9;
   end;
 
-theorem
-      0 < m & m <= n implies Segm m c= Segm n
-proof assume
-A1: 0 < m & m <= n;
-then A2: 0 < n;
- let x;
- assume
-A3: x in Segm m;
-  then reconsider x as Nat;
-      x < m by A1,A3,GR_CY_1:10;
- then x < n by A1,AXIOMS:22;
- hence thesis by A2,GR_CY_1:10;
-end;
+canceled;
 
 theorem
       INT <> INT*
@@ -370,9 +358,8 @@ proof
 end;
 
 theorem
-      A c= B iff A* c= B*
+  A* c= B* implies A c= B
 proof
- thus A c= B implies A* c= B* by LANG1:19;
  assume
 A1: A* c= B*;
  let x;
@@ -887,7 +874,7 @@ A2: dom(f +* g) \ A = (dom f \/ dom g) \ A by FUNCT_4:def 1
          .= dom f \ A;
        dom f \ A misses A by PROB_1:13;
   then dom f \ A misses dom g by A1,XBOOLE_1:63;
- hence f|(dom f \ A) = (f +* g)|(dom(f +* g) \ A) by A2,AMI_5:7;
+ hence f|(dom f \ A) = (f +* g)|(dom(f +* g) \ A) by A2,FUNCT_4:76;
 end;
 
 definition let f be Function, i, x be set;
@@ -1018,7 +1005,7 @@ theorem Th37:
 A1: i in dom f;
 then A2: i.-->f.i = f|{i} by Th6;
   thus f+*(i,f.i) = f +*(i.-->f.i) by A1,Def3
-   .= f by A2,AMI_5:11;
+   .= f by A2,FUNCT_4:80;
   end;
   suppose not i in dom f;
   hence f+*(i,f.i) = f by Def3;
