@@ -234,7 +234,7 @@
 </FCluster>
 <FCluster aid="TOPREAL6" nr="7">
 <ArgTypes/>
-<Func kind="K" nr="405"/>
+<Func kind="K" nr="404"/>
 <Cluster>
 <Adjective nr="54"/>
 <Adjective nr="55"/>

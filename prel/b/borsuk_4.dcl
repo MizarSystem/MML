@@ -95,7 +95,7 @@
 </RCluster>
 <FCluster aid="BORSUK_4" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="347"/>
+<Func kind="K" nr="346"/>
 <Cluster>
 <Adjective nr="167"/>
 </Cluster>
