@@ -45,7 +45,6 @@
 <ArticleID name="FUNCT_4"/>
 <ArticleID name="CAT_1"/>
 <ArticleID name="CAT_2"/>
-<ArticleID name="COMMACAT"/>
 <ArticleID name="CAT_5"/>
 <ArticleID name="ORDERS_3"/>
 <ArticleID name="RLVECT_1"/>
@@ -321,7 +320,7 @@
 <LocusVar nr="1"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="444">
+<Func kind="K" nr="429">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -370,7 +369,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="445">
+<Func kind="K" nr="430">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -401,7 +400,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="446">
+<Func kind="K" nr="431">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -432,7 +431,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="445">
+<Func kind="K" nr="430">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -463,7 +462,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="446">
+<Func kind="K" nr="431">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -531,7 +530,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="445">
+<Func kind="K" nr="430">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -566,7 +565,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="214">
+<Func kind="K" nr="218">
 <Func kind="K" nr="125">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
@@ -618,7 +617,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="446">
+<Func kind="K" nr="431">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>

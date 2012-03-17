@@ -40,7 +40,8 @@ environ
       JORDAN1K, TEX_4, SPRECT_4;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM, REAL;
  definitions TARSKI, XBOOLE_0, BORSUK_2, JORDAN1, SPPOL_1, JORDAN2C, JORDAN21,
-      JORDAN24, TOPREAL2, CONNSP_1, BORSUK_1, PSCOMP_1, ABIAN, XREAL_0;
+      JORDAN24, TOPREAL2, CONNSP_1, BORSUK_1, PSCOMP_1, ABIAN, XREAL_0,
+      SQUARE_1, JGRAPH_6, TOPS_1;
  theorems JORDAN6, PRE_TOPC, XBOOLE_0, EUCLID, TARSKI, SQUARE_1, CONNSP_1,
       JORDAN2C, JGRAPH_6, XREAL_1, JORDAN1K, GOBRD14, BORSUK_2, JORDAN21,
       JORDAN22, TOPREAL1, TOPREAL3, SPPOL_1, SUBSET_1, TOPMETR, TOPREAL9,
@@ -258,23 +259,11 @@ end;
 registration
   let P be Subset of TOP-REAL 2;
   cluster LSeg(SE-corner P,SW-corner P) -> horizontal;
-  coherence
-  proof
-    LSeg(SW-corner P,SE-corner P) = LSeg(SE-corner P,SW-corner P);
-    hence thesis;
-  end;
+  coherence;
   cluster LSeg(SW-corner P,NW-corner P) -> vertical;
-  coherence
-  proof
-    LSeg(SW-corner P,NW-corner P) = LSeg(NW-corner P,SW-corner P);
-    hence thesis;
-  end;
+  coherence;
   cluster LSeg(SE-corner P,NE-corner P) -> vertical;
-  coherence
-  proof
-    LSeg(NE-corner P,SE-corner P) = LSeg(SE-corner P,NE-corner P);
-    hence thesis;
-  end;
+  coherence;
 end;
 
 registration
@@ -287,8 +276,7 @@ a0: A is vertical non empty compact;
     then
 a1: W-bound A = E-bound A by SPRECT_1:17;
 a2: E-min A in A by a0,SPRECT_1:16;
-    E-min A = |[E-bound A, inf (proj2||E-most A)]| by PSCOMP_1:def 47;
-    then (E-min A)`1 = E-bound A by EUCLID:56;
+    (E-min A)`1 = E-bound A by EUCLID:56;
     then E-min A in Vertical_Line((W-bound A+E-bound A)/2) by a1,JORDAN6:34;
     hence A meets Vertical_Line((W-bound A+E-bound A)/2) by a2,XBOOLE_0:3;
   end;
@@ -400,7 +388,7 @@ a4: k in LSeg(p1,p2) by a3,b1,SPPOL_1:22;
     per cases;
     suppose a <> b;
       then
-a6:   b-a <> 0 by XCMPLX_1:15;
+a6:   b-a <> 0;
       k`1 = (1-l)*a+l*b by TOPREAL9:41
       .= a+l*(b-a)
       .= a+(r-a) by a6,XCMPLX_1:88;
@@ -438,7 +426,7 @@ a4: k in LSeg(p1,p2) by a3,b1,SPPOL_1:22;
     per cases;
     suppose a <> b;
       then
-a6:   b-a <> 0 by XCMPLX_1:15;
+a6:   b-a <> 0;
       k`2 = (1-l)*a+l*b by TOPREAL9:42
       .= a+l*(b-a)
       .= a+(r-a) by a6,XCMPLX_1:88;
@@ -923,11 +911,7 @@ end;
 registration
   let n be Nat; let A be Bounded Subset of TOP-REAL n;
   cluster Fr A -> Bounded;
-  coherence
-  proof
-    Fr A = Cl A /\ Cl A` by TOPS_1:def 2;
-    hence thesis by JORDAN1I:1;
-  end;
+  coherence by JORDAN1I:1;
 end;
 
 theorem TexK:
@@ -1482,8 +1466,6 @@ a1:   p1 = p2;
       then reconsider g = I[01] --> p1 as Path of p1,p2 by Tloop;
       take g;
 a6:   LSeg(p1,p2) = {p1} by a1,TOPREAL1:7;
-      g = (the carrier of I[01]) --> p1 by BORSUK_1:def 3;
-      then
 a5:   rng g = {p1} by  FUNCOP_1:14;
       the carrier of (TOP-REAL n)|LSeg(p1,p2) = LSeg(p1,p2)
       by JORDAN1:1;
@@ -1512,8 +1494,6 @@ a3: q1 <> p1 & q1 <> p2 & q2 <> p1 & q2 <> p2;
     suppose q1 = q2;
       then reconsider f = I[01] --> q1 as Path of q1,q2 by Tloop;
       take f;
-      f = (the carrier of I[01]) --> q1 by BORSUK_1:def 3;
-      then
 a5:   rng f = {q1} by  FUNCOP_1:14;
       thus rng f c= P
       proof
@@ -1565,14 +1545,11 @@ a1: a <= b & c <= d;
     p`1 <= b & p`1 >= a & p`2 = d or
     p`1 <= b & p`1 >= a & p`2 = c or
     p`1 = b & p`2 <= d & p`2 >= c} by a1,SPPOL_2:58;
-    then
-a2: ex p st x = p & (p`1 = a & p`2 <= d & p`2 >= c or
+    then ex p st x = p & (p`1 = a & p`2 <= d & p`2 >= c or
     p`1 <= b & p`1 >= a & p`2 = d or
     p`1 <= b & p`1 >= a & p`2 = c or
     p`1 = b & p`2 <= d & p`2 >= c);
-    closed_inside_of_rectangle(a,b,c,d) =
-    {p: a <= p`1 & p`1 <= b & c <= p`2 & p`2 <= d} by JGRAPH_6:def 2;
-    hence thesis by a1,a2;
+   hence thesis by a1;
   end;
 
 theorem ThdRRa:
@@ -1580,12 +1557,8 @@ theorem ThdRRa:
   proof
     let x be set;
     assume x in inside_of_rectangle(a,b,c,d);
-    then x in {p: a < p`1 & p`1 < b & c < p`2 & p`2 < d} by JGRAPH_6:def 1;
-    then
-a2: ex p st x = p & (a < p`1 & p`1 < b & c < p`2 & p`2 < d);
-    closed_inside_of_rectangle(a,b,c,d) =
-    {p: a <= p`1 & p`1 <= b & c <= p`2 & p`2 <= d} by JGRAPH_6:def 2;
-    hence thesis by a2;
+    then ex p st x = p & (a < p`1 & p`1 < b & c < p`2 & p`2 < d);
+    hence thesis;
   end;
 
 theorem Th80:
@@ -1593,19 +1566,17 @@ theorem Th80:
   proof
     set R = closed_inside_of_rectangle(a,b,c,d);
     set O = outside_of_rectangle(a,b,c,d);
-a2: R = {p: a <= p`1 & p`1 <= b & c <= p`2 & p`2 <= d} by JGRAPH_6:def 2;
-a3: O = {p: not(a <= p`1 & p`1 <= b & c <= p`2 & p`2 <= d)} by JGRAPH_6:def 3;
     thus R c= O`
     proof
       let x be set;
       assume x in R;
       then consider p such that
 a6:   x = p and
-a7:   a <= p`1 & p`1 <= b & c <= p`2 & p`2 <= d by a2;
+a7:   a <= p`1 & p`1 <= b & c <= p`2 & p`2 <= d;
       now
         assume p in O;
         then ex p1 st p1 = p &
-        not(a <= p1`1 & p1`1 <= b & c <= p1`2 & p1`2 <= d) by a3;
+        not(a <= p1`1 & p1`1 <= b & c <= p1`2 & p1`2 <= d);
         hence contradiction by a7;
       end;
       hence thesis by a6,SUBSET_1:50;
@@ -1616,8 +1587,8 @@ a5: x in O`;
     then
 a4: not x in O by SUBSET_1:54;
     reconsider x as Point of T2 by a5;
-    a <= x`1 & x`1 <= b & c <= x`2 & x`2 <= d by a3,a4;
-    hence thesis by a2;
+    a <= x`1 & x`1 <= b & c <= x`2 & x`2 <= d by a4;
+    hence thesis;
   end;
 
 registration
@@ -1627,9 +1598,7 @@ registration
   proof
     set P2 = outside_of_rectangle(a,b,c,d);
 a5: a is Real & b is Real & c is Real & d is Real by XREAL_0:def 1;
-    P2 = {pb where pb is Point of T2:
-    not(a <= pb`1 & pb`1 <= b & c <= pb`2 & pb`2 <= d)} by JGRAPH_6:def 3;
-    then reconsider P2 as open Subset of T2 by a5,JORDAN1:39;
+    reconsider P2 as open Subset of T2 by a5,JORDAN1:39;
     P2` is closed;
     hence thesis by Th80;
   end;
@@ -1642,15 +1611,12 @@ theorem TRmissesP2:
     set R = closed_inside_of_rectangle(a,b,c,d);
     set P1 = inside_of_rectangle(a,b,c,d);
     set P2 = outside_of_rectangle(a,b,c,d);
-a2: R = {p: a <= p`1 & p`1 <= b & c <= p`2 & p`2 <= d} by JGRAPH_6:def 2;
-a4: P2 = {p: not (a <= p`1 & p`1 <= b & c <= p`2 & p`2 <= d)}
-    by JGRAPH_6:def 3;
     assume R meets P2;
     then consider x being set such that
 a5: x in R and
 a6: x in P2 by XBOOLE_0:3;
-a7: ex p st x = p & a <= p`1 & p`1 <= b & c <= p`2 & p`2 <= d by a2,a5;
-    ex p st x = p & not (a <= p`1 & p`1 <= b & c <= p`2 & p`2 <= d) by a4,a6;
+a7: ex p st x = p & a <= p`1 & p`1 <= b & c <= p`2 & p`2 <= d by a5;
+    ex p st x = p & not (a <= p`1 & p`1 <= b & c <= p`2 & p`2 <= d) by a6;
     hence thesis by a7;
   end;
 
@@ -1677,20 +1643,16 @@ a0: a < b & c < d;
     set P1 = inside_of_rectangle(a,b,c,d);
     set P2 = outside_of_rectangle(a,b,c,d);
 a1: a is Real & b is Real & c is Real & d is Real by XREAL_0:def 1;
-a3: P1 = {p: a < p`1 & p`1 < b & c < p`2 & p`2 < d} by JGRAPH_6:def 1;
-a4: P2 = {p: not (a <= p`1 & p`1 <= b & c <= p`2 & p`2 <= d)}
-    by JGRAPH_6:def 3;
 a5: P = {p where p is Point of T2: p`1 = a & p`2 <= d & p`2 >= c or
     p`1 <= b & p`1 >= a & p`2 = d or
     p`1 <= b & p`1 >= a & p`2 = c or
     p`1 = b & p`2 <= d & p`2 >= c} by a0,SPPOL_2:58;
 a6: R misses P2 by TRmissesP2;
-    thus Int R = (Cl R`)` by TOPS_1:def 1
-    .= (Cl P2``)` by Th80
-    .= (P2 \/ P)` by a0,a1,a4,a5,JORDAN1:49
+    thus Int R = (Cl P2``)` by Th80
+    .= (P2 \/ P)` by a0,a1,a5,JORDAN1:49
     .= P2` /\ P` by SUBSET_1:29
     .= R /\ P` by Th80
-    .= R /\ (P1 \/ P2) by a0,a1,a3,a4,a5,JORDAN1:41
+    .= R /\ (P1 \/ P2) by a0,a1,a5,JORDAN1:41
     .= R /\ P1 \/ R /\ P2 by XBOOLE_1:23
     .= R /\ P1 \/ {} by a6,XBOOLE_0:def 7
     .= P1 by TRP2;
@@ -1707,8 +1669,6 @@ a0: a <= b & c <= d;
     set P = closed_inside_of_rectangle(a,b,c,d);
     set P1 = inside_of_rectangle(a,b,c,d);
     set P2 = outside_of_rectangle(a,b,c,d);
-a2: P = {p: a <= p`1 & p`1 <= b & c <= p`2 & p`2 <= d} by JGRAPH_6:def 2;
-a3: P1 = {p: a < p`1 & p`1 < b & c < p`2 & p`2 < d} by JGRAPH_6:def 1;
 a5: R = {p where p is Point of T2: p`1 = a & p`2 <= d & p`2 >= c or
     p`1 <= b & p`1 >= a & p`2 = d or
     p`1 <= b & p`1 >= a & p`2 = c or
@@ -1723,8 +1683,8 @@ a9:   not x in P1 by XBOOLE_0:def 4;
       x in P by a8,XBOOLE_0:def 4;
       then consider p such that
 a6:   x = p and
-a7:   a <= p`1 & p`1 <= b & c <= p`2 & p`2 <= d by a2;
-      not (a < p`1 & p`1 < b & c < p`2 & p`2 < d) by a3,a6,a9;
+a7:   a <= p`1 & p`1 <= b & c <= p`2 & p`2 <= d;
+      not (a < p`1 & p`1 < b & c < p`2 & p`2 < d) by a6,a9;
       then p`1 = a & p`2 <= d & p`2 >= c or
       p`1 <= b & p`1 >= a & p`2 = d or
       p`1 <= b & p`1 >= a & p`2 = c or
@@ -1742,7 +1702,7 @@ b3: ex p st p = x & (p`1 = a & p`2 <= d & p`2 >= c or
 b2: R c= P by a0,ThdRR;
     now
       assume x in P1;
-      then ex p st x = p & a < p`1 & p`1 < b & c < p`2 & p`2 < d by a3;
+      then ex p st x = p & a < p`1 & p`1 < b & c < p`2 & p`2 < d;
       hence contradiction by b3;
     end;
     hence thesis by b1,b2,XBOOLE_0:def 4;
@@ -1769,8 +1729,6 @@ A1: a <= b & c <= d;
     reconsider Z = (proj1||X).:the carrier of (T2|X)
     as Subset of REAL;
 A2: X = the carrier of (T2|X) by JORDAN1:1;
-a2: X = {p1: a <= p1`1 & p1`1 <= b & c <= p1`2 & p1`2 <= d}
-    by JGRAPH_6:def 2;
 b1: |[a,c]| in X by A1,TOPREALA:52;
 A3: for p be real number st p in Z holds p >= a
     proof
@@ -1781,7 +1739,7 @@ A4:   p0 in the carrier of T2|X and
       p0 in the carrier of T2|X and
 A5:   p = (proj1||X).p0 by FUNCT_2:115;
       ex p1 st p0 = p1 &
-      a <= p1`1 & p1`1 <= b & c <= p1`2 & p1`2 <= d by a2,A2,A4;
+      a <= p1`1 & p1`1 <= b & c <= p1`2 & p1`2 <= d by A2,A4;
       hence thesis by A2,A4,A5,PSCOMP_1:69;
     end;
 A6: for q being real number st
@@ -1795,11 +1753,8 @@ a3:   |[a,c]|`1 = a & |[a,c]|`2 = c by EUCLID:56;
       hence thesis by A7;
     end;
     dom(proj1||X) = X by A2,FUNCT_2:def 1;
-    then
-a1: Z is non empty by A2,b1,RELAT_1:152;
-    thus W-bound X = inf (proj1||X) by PSCOMP_1:def 30
-    .= inf Z by PSCOMP_1:def 20
-    .= a by A3,A6,a1,SEQ_4:61;
+    then Z is non empty by A2,b1,RELAT_1:152;
+   hence W-bound X = a by A3,A6,SEQ_4:61;
   end;
 
 theorem
@@ -1811,8 +1766,6 @@ A1: a <= b & c <= d;
     reconsider Z = (proj2||X).:the carrier of (T2|X)
     as Subset of REAL;
 A2: X = the carrier of (T2|X) by JORDAN1:1;
-a2: X = {p1: a <= p1`1 & p1`1 <= b & c <= p1`2 & p1`2 <= d}
-    by JGRAPH_6:def 2;
 b1: |[a,c]| in X by A1,TOPREALA:52;
 A3: for p be real number st p in Z holds p >= c
     proof
@@ -1823,7 +1776,7 @@ A4:   p0 in the carrier of T2|X and
       p0 in the carrier of T2|X and
 A5:   p = (proj2||X).p0 by FUNCT_2:115;
       ex p1 st p0 = p1 &
-      a <= p1`1 & p1`1 <= b & c <= p1`2 & p1`2 <= d by a2,A2,A4;
+      a <= p1`1 & p1`1 <= b & c <= p1`2 & p1`2 <= d by A2,A4;
       hence thesis by A2,A4,A5,PSCOMP_1:70;
     end;
 A6: for q being real number st
@@ -1837,11 +1790,8 @@ a3:   |[a,c]|`1 = a & |[a,c]|`2 = c by EUCLID:56;
       hence thesis by A7;
     end;
     dom(proj2||X) = X by A2,FUNCT_2:def 1;
-    then
-a1: Z is non empty by A2,b1,RELAT_1:152;
-    thus S-bound X = inf (proj2||X) by PSCOMP_1:def 33
-    .= inf Z by PSCOMP_1:def 20
-    .= c by A3,A6,a1,SEQ_4:61;
+    then Z is non empty by A2,b1,RELAT_1:152;
+   hence S-bound X = c by A3,A6,SEQ_4:61;
   end;
 
 theorem
@@ -1853,8 +1803,6 @@ A1: a <= b & c <= d;
     reconsider Z = (proj1||X).:the carrier of (T2|X)
     as Subset of REAL;
 A2: X = the carrier of (T2|X) by JORDAN1:1;
-a2: X = {p1: a <= p1`1 & p1`1 <= b & c <= p1`2 & p1`2 <= d}
-    by JGRAPH_6:def 2;
 A3: for p be real number st p in Z holds p <= b
     proof
       let p be real number;
@@ -1864,7 +1812,7 @@ A4:   p0 in the carrier of T2|X and
       p0 in the carrier of T2|X and
 A5:   p = (proj1||X).p0 by FUNCT_2:115;
       ex p1 st p0 = p1 &
-      a <= p1`1 & p1`1 <= b & c <= p1`2 & p1`2 <= d by a2,A2,A4;
+      a <= p1`1 & p1`1 <= b & c <= p1`2 & p1`2 <= d by A2,A4;
       hence thesis by A2,A4,A5,PSCOMP_1:69;
     end;
 A6: for q being real number st
@@ -1874,18 +1822,15 @@ A6: for q being real number st
 A7:   for p being real number st p in Z holds p <= q;
 a3:   |[b,d]|`1 = b & |[b,d]|`2 = d by EUCLID:56;
       then
-A9:   |[b,d]| in X by a2,A1;
+A9:   |[b,d]| in X by A1;
       then (proj1||X). |[b,d]| = |[b,d]|`1 by PSCOMP_1:69;
       then b in Z by A2,A9,a3,FUNCT_2:43;
       hence thesis by A7;
     end;
 b1: |[a,c]| in X by A1,TOPREALA:52;
     dom(proj1||X) = X by A2,FUNCT_2:def 1;
-    then
-a1: Z is non empty by A2,b1,RELAT_1:152;
-    thus E-bound X = sup (proj1||X) by PSCOMP_1:def 32
-    .= sup Z by PSCOMP_1:def 21
-    .= b by A3,A6,a1,SEQ_4:63;
+    then Z is non empty by A2,b1,RELAT_1:152;
+   hence E-bound X = b by A3,A6,SEQ_4:63;
   end;
 
 theorem
@@ -1897,8 +1842,6 @@ A1: a <= b & c <= d;
     reconsider Z = (proj2||X).:the carrier of (T2|X)
     as Subset of REAL;
 A2: X = the carrier of (T2|X) by JORDAN1:1;
-a2: X = {p1: a <= p1`1 & p1`1 <= b & c <= p1`2 & p1`2 <= d}
-    by JGRAPH_6:def 2;
 A3: for p be real number st p in Z holds p <= d
     proof
       let p be real number;
@@ -1908,7 +1851,7 @@ A4:   p0 in the carrier of T2|X and
       p0 in the carrier of T2|X and
 A5:   p = (proj2||X).p0 by FUNCT_2:115;
       ex p1 st p0 = p1 &
-      a <= p1`1 & p1`1 <= b & c <= p1`2 & p1`2 <= d by a2,A2,A4;
+      a <= p1`1 & p1`1 <= b & c <= p1`2 & p1`2 <= d by A2,A4;
       hence thesis by A2,A4,A5,PSCOMP_1:70;
     end;
 A6: for q being real number st
@@ -1918,18 +1861,15 @@ A6: for q being real number st
 A7:   for p being real number st p in Z holds p <= q;
 a3:   |[b,d]|`1 = b & |[b,d]|`2 = d by EUCLID:56;
       then
-A9:   |[b,d]| in X by a2,A1;
+A9:   |[b,d]| in X by A1;
       then (proj2||X). |[b,d]| = |[b,d]|`2 by PSCOMP_1:70;
       then d in Z by A2,A9,a3,FUNCT_2:43;
       hence thesis by A7;
     end;
 b1: |[a,c]| in X by A1,TOPREALA:52;
     dom(proj2||X) = X by A2,FUNCT_2:def 1;
-    then
-a1: Z is non empty by A2,b1,RELAT_1:152;
-    thus N-bound X = sup (proj2||X) by PSCOMP_1:def 31
-    .= sup Z by PSCOMP_1:def 21
-    .= d by A3,A6,a1,SEQ_4:63;
+    then Z is non empty by A2,b1,RELAT_1:152;
+   hence N-bound X = d by A3,A6,SEQ_4:63;
   end;
 
 theorem TSegZaw:
@@ -2768,56 +2708,49 @@ P1:  for y being Point of D1, z being Point of D2 holds Zdx. [y,z] = dx. [y,z]
     let y be Point of D1;
     let z be Point of D2;
 a1: [y,z] in OK by b0,b1,ZFMISC_1:def 2;
-    thus Zdx. [y,z] = (dx | OK). [y,z] by PSCOMP_1:def 26
-    .= dx. [y,z] by a1,FUNCT_1:72;
+    thus Zdx. [y,z] = dx. [y,z] by a1,FUNCT_1:72;
   end;
 P2: for y being Point of D1, z being Point of D2 holds Zdy. [y,z] = dy. [y,z]
   proof
     let y be Point of D1;
     let z be Point of D2;
-a1: [y,z] in OK by b0,b1,ZFMISC_1:def 2;
-    thus Zdy. [y,z] = (dy | OK). [y,z] by PSCOMP_1:def 26
-    .= dy. [y,z] by a1,FUNCT_1:72;
+    [y,z] in OK by b0,b1,ZFMISC_1:def 2;
+   hence Zdy. [y,z] = dy. [y,z] by FUNCT_1:72;
   end;
 P3: for y being Point of D1, z being Point of D2 holds Zfx2. [y,z] = fx2. [y,z]
   proof
     let y be Point of D1;
     let z be Point of D2;
 a1: [y,z] in OK by b0,b1,ZFMISC_1:def 2;
-    thus Zfx2. [y,z] = (fx2 | OK). [y,z] by PSCOMP_1:def 26
-    .= fx2. [y,z] by a1,FUNCT_1:72;
+    thus Zfx2. [y,z] = fx2. [y,z] by a1,FUNCT_1:72;
   end;
 P4: for y being Point of D1, z being Point of D2 holds Zfy2. [y,z] = fy2. [y,z]
   proof
     let y be Point of D1;
     let z be Point of D2;
 a1: [y,z] in OK by b0,b1,ZFMISC_1:def 2;
-    thus Zfy2. [y,z] = (fy2 | OK). [y,z] by PSCOMP_1:def 26
-    .= fy2. [y,z] by a1,FUNCT_1:72;
+    thus Zfy2. [y,z] = fy2. [y,z] by a1,FUNCT_1:72;
   end;
 P5: for y being Point of D1, z being Point of D2 holds Zf1. [y,z] = f1. [y,z]
   proof
     let y be Point of D1;
     let z be Point of D2;
 a1: [y,z] in OK by b0,b1,ZFMISC_1:def 2;
-    thus Zf1. [y,z] = (f1 | OK). [y,z] by PSCOMP_1:def 26
-    .= f1. [y,z] by a1,FUNCT_1:72;
+    thus Zf1. [y,z] = f1. [y,z] by a1,FUNCT_1:72;
   end;
 P6: for y being Point of D1, z being Point of D2 holds Zxo. [y,z] = xo. [y,z]
   proof
     let y be Point of D1;
     let z be Point of D2;
 a1: [y,z] in OK by b0,b1,ZFMISC_1:def 2;
-    thus Zxo. [y,z] = (xo | OK). [y,z] by PSCOMP_1:def 26
-    .= xo. [y,z] by a1,FUNCT_1:72;
+    thus Zxo. [y,z] = xo. [y,z] by a1,FUNCT_1:72;
   end;
 P7: for y being Point of D1, z being Point of D2 holds Zyo. [y,z] = yo. [y,z]
   proof
     let y be Point of D1;
     let z be Point of D2;
 a1: [y,z] in OK by b0,b1,ZFMISC_1:def 2;
-    thus Zyo. [y,z] = (yo | OK). [y,z] by PSCOMP_1:def 26
-    .= yo. [y,z] by a1,FUNCT_1:72;
+    thus Zyo. [y,z] = yo. [y,z] by a1,FUNCT_1:72;
   end;
   now
     let b be real number;
@@ -2842,17 +2775,11 @@ s2: Zdy. [y,z] = dy. [y,z] by e3,b0,b1,P2;
 e4: m. [y,z] = (Zdx(#)Zdx). [y,z] + (Zdy(#)Zdy). [y,z] by e1,e3,SEQ_1:def 3
     .= Zdx. [y,z] * Zdx. [y,z] + (Zdy(#)Zdy). [y,z]
     by e1,e3,z23,SEQ_1:def 5
-    .= Zdx. [y,z] * Zdx. [y,z] + Zdy. [y,z] * Zdy. [y,z]
-       by e1,e3,z24,SEQ_1:def 5
-    .= r1^2+r2*r2 by s2,z26,s1,z19,z20,SQUARE_1:def 3
-    .= r1^2+r2^2 by SQUARE_1:def 3;
-    0 <= r1^2 & 0 <= r2^2 by SQUARE_1:72;
-    then
+    .= r1^2+r2^2 by s2,z26,s1,z19,z20,e1,e3,z24,SEQ_1:def 5;
 e5: 0+0 <= r1^2+r2^2 by XREAL_1:9;
     now
       assume r1^2+r2^2 = 0;
       then r1 = 0 & r2 = 0 by COMPLEX1:2;
-      then y`1 = z`1 & y`2 = z`2 by XCMPLX_1:15;
       hence contradiction by e7,TOPREAL3:11;
     end;
     hence 0 < b by e2,e3,e4,e5;
@@ -2889,10 +2816,7 @@ z40: p2. [y,z] = (Zxo(#)Zxo + Zyo(#)Zyo). [y,z] - Zf1. [y,z]
     by e3,e1,z50,SEQ_1:def 3
     .= Zxo. [y,z] * Zxo. [y,z] + (Zyo(#)Zyo). [y,z] - r^2
     by e3,e1,z51,SEQ_1:def 5
-    .= Zxo. [y,z] * Zxo. [y,z] + Zyo. [y,z] * Zyo. [y,z] - r^2
-    by e3,e1,z52,SEQ_1:def 5
-    .= r3^2 + yo. [y,z] * yo. [y,z] - r^2 by s7,s6,z63,z64,SQUARE_1:def 3
-    .= r3^2+r4^2-r^2 by z66,z64,SQUARE_1:def 3;
+    .= r3^2+r4^2-r^2 by z66,z64,s7,s6,z63,e3,e1,z52,SEQ_1:def 5;
     z = p by e3,TARSKI:def 1;
     then |. z-o .| <= r by no3,A13,TOPREAL9:8;
     then
@@ -2957,16 +2881,12 @@ z22: m. [y,p] = (Zdx(#)Zdx). [y,p] + (Zdy(#)Zdy). [y,p]
     by RR,D0,z53,SEQ_1:def 3
     .= Zdx. [y,p] * Zdx. [y,p] + (Zdy(#)Zdy). [y,p]
     by RR,D0,z23,SEQ_1:def 5
-    .= Zdx. [y,p] * Zdx. [y,p] + Zdy. [y,p] * Zdy. [y,p]
-    by RR,D0,z24,SEQ_1:def 5
-    .= r1^2 + Zdy. [y,p] * Zdy. [y,p] by s1,z19,z16,SQUARE_1:def 3
-    .= r1^2+r2^2 by s2,z26,z16,SQUARE_1:def 3;
+    .= r1^2+r2^2 by s2,z26,z16,s1,z19,RR,D0,z24,SEQ_1:def 5;
 z60: xx. [y,p] = Zxo. [y,p] * Zdx. [y,p] by RR,D0,z31,SEQ_1:def 5;
 z61: yy. [y,p] = Zyo. [y,p] * Zdy. [y,p] by RR,D0,z32,SEQ_1:def 5;
 z42: (xx+yy). [y,p] = xx. [y,p] + yy. [y,p] by RR,D0,z30,SEQ_1:def 3;
-z39: p1. [y,p] = (xx+yy). [y,p] * (xx+yy). [y,p] by RR,D0,z43,SEQ_1:def 5
-    .= (r3*r1+r4*r2)^2
-    by s1,z19,s6,z63,z42,z60,z61,s2,z26,z16,s7,z66,SQUARE_1:def 3;
+z39: p1. [y,p] = (r3*r1+r4*r2)^2
+    by s1,z19,s6,z63,z42,z60,z61,s2,z26,z16,s7,z66,RR,D0,z43,SEQ_1:def 5;
 z40: p2. [y,p] = (Zxo(#)Zxo + Zyo(#)Zyo). [y,p] - Zf1. [y,p]
     by RR,D0,z44,SEQ_1:def 4
     .= (Zxo(#)Zxo + Zyo(#)Zyo). [y,p] - r^2 by s5,FUNCOP_1:13
@@ -2974,10 +2894,7 @@ z40: p2. [y,p] = (Zxo(#)Zxo + Zyo(#)Zyo). [y,p] - Zf1. [y,p]
     by RR,D0,z50,SEQ_1:def 3
     .= Zxo. [y,p] * Zxo. [y,p] + (Zyo(#)Zyo). [y,p] - r^2
     by RR,D0,z51,SEQ_1:def 5
-    .= Zxo. [y,p] * Zxo. [y,p] + Zyo. [y,p] * Zyo. [y,p] - r^2
-    by RR,D0,z52,SEQ_1:def 5
-    .= r3^2 + yo. [y,p] * yo. [y,p] - r^2 by s7,s6,z63,z16,SQUARE_1:def 3
-    .= r3^2+r4^2-r^2 by z66,z16,SQUARE_1:def 3;
+    .= r3^2+r4^2-r^2 by z66,z16,s7,s6,z63,RR,D0,z52,SEQ_1:def 5;
    dom sqrt pp = the carrier of TD by FUNCT_2:def 1;
    then
 z36: sqrt(pp). [y,p] = sqrt(pp. [y,p]) by RR,D0,PARTFUN3:def 5
@@ -3268,56 +3185,49 @@ P1:  for y being Point of D1, z being Point of D2 holds Zdx. [y,z] = dx. [y,z]
     let y be Point of D1;
     let z be Point of D2;
 a1: [y,z] in OK by b0,b1,ZFMISC_1:def 2;
-    thus Zdx. [y,z] = (dx | OK). [y,z] by PSCOMP_1:def 26
-    .= dx. [y,z] by a1,FUNCT_1:72;
+    thus Zdx. [y,z] = dx. [y,z] by a1,FUNCT_1:72;
   end;
 P2: for y being Point of D1, z being Point of D2 holds Zdy. [y,z] = dy. [y,z]
   proof
     let y be Point of D1;
     let z be Point of D2;
 a1: [y,z] in OK by b0,b1,ZFMISC_1:def 2;
-    thus Zdy. [y,z] = (dy | OK). [y,z] by PSCOMP_1:def 26
-    .= dy. [y,z] by a1,FUNCT_1:72;
+    thus Zdy. [y,z] = dy. [y,z] by a1,FUNCT_1:72;
   end;
 P3: for y being Point of D1, z being Point of D2 holds Zfx2. [y,z] = fx2. [y,z]
   proof
     let y be Point of D1;
     let z be Point of D2;
 a1: [y,z] in OK by b0,b1,ZFMISC_1:def 2;
-    thus Zfx2. [y,z] = (fx2 | OK). [y,z] by PSCOMP_1:def 26
-    .= fx2. [y,z] by a1,FUNCT_1:72;
+    thus Zfx2. [y,z] = fx2. [y,z] by a1,FUNCT_1:72;
   end;
 P4: for y being Point of D1, z being Point of D2 holds Zfy2. [y,z] = fy2. [y,z]
   proof
     let y be Point of D1;
     let z be Point of D2;
 a1: [y,z] in OK by b0,b1,ZFMISC_1:def 2;
-    thus Zfy2. [y,z] = (fy2 | OK). [y,z] by PSCOMP_1:def 26
-    .= fy2. [y,z] by a1,FUNCT_1:72;
+    thus Zfy2. [y,z] = fy2. [y,z] by a1,FUNCT_1:72;
   end;
 P5: for y being Point of D1, z being Point of D2 holds Zf1. [y,z] = f1. [y,z]
   proof
     let y be Point of D1;
     let z be Point of D2;
 a1: [y,z] in OK by b0,b1,ZFMISC_1:def 2;
-    thus Zf1. [y,z] = (f1 | OK). [y,z] by PSCOMP_1:def 26
-    .= f1. [y,z] by a1,FUNCT_1:72;
+    thus Zf1. [y,z] = f1. [y,z] by a1,FUNCT_1:72;
   end;
 P6: for y being Point of D1, z being Point of D2 holds Zxo. [y,z] = xo. [y,z]
   proof
     let y be Point of D1;
     let z be Point of D2;
 a1: [y,z] in OK by b0,b1,ZFMISC_1:def 2;
-    thus Zxo. [y,z] = (xo | OK). [y,z] by PSCOMP_1:def 26
-    .= xo. [y,z] by a1,FUNCT_1:72;
+    thus Zxo. [y,z] = xo. [y,z] by a1,FUNCT_1:72;
   end;
 P7: for y being Point of D1, z being Point of D2 holds Zyo. [y,z] = yo. [y,z]
   proof
     let y be Point of D1;
     let z be Point of D2;
 a1: [y,z] in OK by b0,b1,ZFMISC_1:def 2;
-    thus Zyo. [y,z] = (yo | OK). [y,z] by PSCOMP_1:def 26
-    .= yo. [y,z] by a1,FUNCT_1:72;
+    thus Zyo. [y,z] = yo. [y,z] by a1,FUNCT_1:72;
   end;
   now
     let b be real number;
@@ -3342,17 +3252,11 @@ s2: Zdy. [y,z] = dy. [y,z] by e3,b0,b1,P2;
 e4: m. [y,z] = (Zdx(#)Zdx). [y,z] + (Zdy(#)Zdy). [y,z] by e1,e3,SEQ_1:def 3
     .= Zdx. [y,z] * Zdx. [y,z] + (Zdy(#)Zdy). [y,z]
     by e1,e3,z23,SEQ_1:def 5
-    .= Zdx. [y,z] * Zdx. [y,z] + Zdy. [y,z] * Zdy. [y,z]
-       by e1,e3,z24,SEQ_1:def 5
-    .= r1^2+r2*r2 by s2,z26,s1,z19,z20,SQUARE_1:def 3
-    .= r1^2+r2^2 by SQUARE_1:def 3;
-    0 <= r1^2 & 0 <= r2^2 by SQUARE_1:72;
-    then
+    .= r1^2+r2^2 by s2,z26,s1,z19,z20,e1,e3,z24,SEQ_1:def 5;
 e5: 0+0 <= r1^2+r2^2 by XREAL_1:9;
     now
       assume r1^2+r2^2 = 0;
       then r1 = 0 & r2 = 0 by COMPLEX1:2;
-      then y`1 = z`1 & y`2 = z`2 by XCMPLX_1:15;
       hence contradiction by e7,TOPREAL3:11;
     end;
     hence 0 < b by e2,e3,e4,e5;
@@ -3390,10 +3294,7 @@ z40: p2. [y,z] = (Zxo(#)Zxo + Zyo(#)Zyo). [y,z] - Zf1. [y,z]
     by e3,e1,z50,SEQ_1:def 3
     .= Zxo. [y,z] * Zxo. [y,z] + (Zyo(#)Zyo). [y,z] - r^2
     by e3,e1,z51,SEQ_1:def 5
-    .= Zxo. [y,z] * Zxo. [y,z] + Zyo. [y,z] * Zyo. [y,z] - r^2
-    by e3,e1,z52,SEQ_1:def 5
-    .= r3^2 + yo. [y,z] * yo. [y,z] - r^2 by s7,s6,z63,z64,SQUARE_1:def 3
-    .= r3^2+r4^2-r^2 by z66,z64,SQUARE_1:def 3;
+    .= r3^2+r4^2-r^2 by z66,z64,s7,s6,z63,e3,e1,z52,SEQ_1:def 5;
     |. z-o .| <= r by no50,e3,TOPREAL9:8;
     then
 d1: |. z-o .|^2 <= r^2 by SQUARE_1:77;
@@ -3457,16 +3358,12 @@ z22: m. [p,y] = (Zdx(#)Zdx). [p,y] + (Zdy(#)Zdy). [p,y]
     by RR,D0,z53,SEQ_1:def 3
     .= Zdx. [p,y] * Zdx. [p,y] + (Zdy(#)Zdy). [p,y]
     by RR,D0,z23,SEQ_1:def 5
-    .= Zdx. [p,y] * Zdx. [p,y] + Zdy. [p,y] * Zdy. [p,y]
-    by RR,D0,z24,SEQ_1:def 5
-    .= r1^2 + Zdy. [p,y] * Zdy. [p,y] by s1,z19,z16,SQUARE_1:def 3
-    .= r1^2+r2^2 by s2,z26,z16,SQUARE_1:def 3;
+    .= r1^2+r2^2 by s2,z26,z16,s1,z19,RR,D0,z24,SEQ_1:def 5;
 z60: xx. [p,y] = Zxo. [p,y] * Zdx. [p,y] by RR,D0,z31,SEQ_1:def 5;
 z61: yy. [p,y] = Zyo. [p,y] * Zdy. [p,y] by RR,D0,z32,SEQ_1:def 5;
 z42: (xx+yy). [p,y] = xx. [p,y] + yy. [p,y] by RR,D0,z30,SEQ_1:def 3;
-z39: p1. [p,y] = (xx+yy). [p,y] * (xx+yy). [p,y] by RR,D0,z43,SEQ_1:def 5
-    .= (r3*r1+r4*r2)^2
-    by s1,z19,s6,z63,z42,z60,z61,s2,z26,z16,s7,z66,SQUARE_1:def 3;
+z39: p1. [p,y] = (r3*r1+r4*r2)^2
+    by s1,z19,s6,z63,z42,z60,z61,s2,z26,z16,s7,z66,RR,D0,z43,SEQ_1:def 5;
 z40: p2. [p,y] = (Zxo(#)Zxo + Zyo(#)Zyo). [p,y] - Zf1. [p,y]
     by RR,D0,z44,SEQ_1:def 4
     .= (Zxo(#)Zxo + Zyo(#)Zyo). [p,y] - r^2 by s5,FUNCOP_1:13
@@ -3474,10 +3371,7 @@ z40: p2. [p,y] = (Zxo(#)Zxo + Zyo(#)Zyo). [p,y] - Zf1. [p,y]
     by RR,D0,z50,SEQ_1:def 3
     .= Zxo. [p,y] * Zxo. [p,y] + (Zyo(#)Zyo). [p,y] - r^2
     by RR,D0,z51,SEQ_1:def 5
-    .= Zxo. [p,y] * Zxo. [p,y] + Zyo. [p,y] * Zyo. [p,y] - r^2
-    by RR,D0,z52,SEQ_1:def 5
-    .= r3^2 + yo. [p,y] * yo. [p,y] - r^2 by s7,s6,z63,z16,SQUARE_1:def 3
-    .= r3^2+r4^2-r^2 by z66,z16,SQUARE_1:def 3;
+    .= r3^2+r4^2-r^2 by z66,z16,s7,s6,z63,RR,D0,z52,SEQ_1:def 5;
    dom sqrt pp = the carrier of TD by FUNCT_2:def 1;
    then
 z36: sqrt(pp). [p,y] = sqrt(pp. [p,y]) by RR,D0,PARTFUN3:def 5
@@ -4168,8 +4062,7 @@ h1: the carrier of T2|C` = C` by JORDAN1:1;
 l07: T2C is locally_connected by JORDAN2C:89;
     then U is open by Z0,CONNSP_2:21;
     then reconsider P as open Subset of T2 by Z3,TSEP_1:17;
-u2: Fr P = Cl P /\ Cl P` by TOPS_1:def 2
-    .= Cl P /\ P` by PRE_TOPC:52;
+u2: Fr P = Cl P /\ P` by PRE_TOPC:52;
     set Z = {X where X is Subset of T2|C`: X is_a_component_of T2|C` & X <> U};
     set V = union Z;
 c12: V \/ U \/ C = the carrier of T2
@@ -4333,9 +4226,7 @@ a33:          dom h = the carrier of S by FUNCT_2:def 1;
 l13:  not P is Bounded;
       consider p being set such that
 l01:  p in BDD C by XBOOLE_0:def 1;
-      BDD C = union{B where B is Subset of T2: B is_inside_component_of C}
-      by JORDAN2C:def 5;
-      then consider Z being set such that
+      consider Z being set such that
 l02:  p in Z and
 l03:  Z in {B where B is Subset of T2: B is_inside_component_of C}
       by l01,TARSKI:def 4;
@@ -4557,17 +4448,11 @@ Lm32:  dR = {p where p is Point of T2: p`1 = rl & p`2 <= rg & p`2 >= rd or
        then
 Lm30:  c in dR by Lm10,Lm11;
 Lm31:  d in dR by Lm12,Lm13,Lm32;
-Lm9:   (1+1)^2 = 1^2 + 2 * 1 * 1 + 1^2 by SQUARE_1:63
-       .= 4 by SQUARE_1:59;
-Lm14a: (2+1)^2 = 2^2 + 2 * 2 * 1 + 1^2 by SQUARE_1:63
-       .= 4 + 4 + 1 by Lm9,SQUARE_1:59;
+Lm14a: (2+1)^2 = 4 + 4 + 1;
        then
 Lms9:  sqrt(9) = 3 by SQUARE_1:def 4;
 Lm8:   dist(a,b) = sqrt ((a`1-b`1)^2 + (a`2-b`2)^2) by GOBRD14:9
-       .= --2 by Lm4,Lm5,Lm6,Lm7,SQUARE_1:60,90;
-Lm0:
-       R = {p: rl <= p`1 & p`1 <= rp & rd <= p`2 & p`2 <= rg}
-       by JGRAPH_6:def 2;
+       .= --2 by Lm4,Lm5,Lm6,Lm7,SQUARE_1:90;
 
 theorem Tsim:
   for h being Homeomorphism of TOP-REAL 2 holds
@@ -4596,13 +4481,11 @@ Z2: for x, y being Point of TOP-REAL 2 st x in P & y in P holds
 a6: p in P;
     then reconsider p as Point of TOP-REAL 2;
 b4: dist(a,p) = sqrt((rl-p`1)^2 + (0-p`2)^2) by Lm4,Lm6,GOBRD14:9
-    .= sqrt((rl-p`1)^2 + (-p`2)^2)
-    .= sqrt((rl-p`1)^2 + p`2^2) by SQUARE_1:61;
+    .= sqrt((rl-p`1)^2 + p`2^2);
 nn: now
       assume
 q3:   9 < p`2^2;
-      0 <= (rl-p`1)^2 by SQUARE_1:72;
-      then 0+9 < (rl-p`1)^2+p`2^2 by q3,XREAL_1:10;
+      0+9 < (rl-p`1)^2+p`2^2 by q3,XREAL_1:10;
       then 3 < sqrt((rl-p`1)^2+p`2^2) by Lms9,SQUARE_1:95;
       then 2 < sqrt((rl-p`1)^2+p`2^2) by XREAL_1:2;
       hence contradiction by b4,Z0,Z2,a6,Lm8;
@@ -4619,12 +4502,11 @@ b3:   x`1 = rl by a7,JORDAN6:34;
 a4:   dist(p,b) = dist(p,x)+dist(x,b) by a8,JORDAN1K:29;
 b4:   dist(x,b) = sqrt((x`1-b`1)^2 + (x`2-b`2)^2) by GOBRD14:9
       .= sqrt((-2)^2 + (x`2-0)^2) by b3,Lm5,EUCLID:56
-      .= sqrt(4 + x`2^2) by Lm9,SQUARE_1:61;
+      .= sqrt(4 + x`2^2);
 a5:   now
         assume dist(x,b) < dist(a,b);
         then 4 + x`2^2 < 4 + 0 by b4,Lm8,SQUARE_1:85,94;
-        then x`2^2 < 0 by XREAL_1:8;
-        hence contradiction by SQUARE_1:72;
+        hence contradiction by XREAL_1:8;
       end;
       dist(p,x) > 0 by b1,b3,JORDAN1K:22;
       then dist(p,b) + 0 > dist(a,b) + 0 by a4,a5,XREAL_1:10;
@@ -4641,12 +4523,11 @@ a7:   x in Vertical_Line(rp) by XBOOLE_0:3;
 b3:   x`1 = rp by a7,JORDAN6:34;
 a4:   dist(p,a) = dist(p,x)+dist(x,a) by a8,JORDAN1K:29;
 b4:   dist(x,a) = sqrt((x`1-a`1)^2 + (x`2-a`2)^2) by GOBRD14:9
-      .= sqrt(4 + x`2^2) by b3,Lm4,Lm6,Lm9;
+      .= sqrt(4 + x`2^2) by b3,Lm4,Lm6;
 a5:   now
         assume dist(x,a) < dist(a,b);
         then 4 + x`2^2 < 4 + 0 by b4,Lm8,SQUARE_1:85,94;
-        then x`2^2 < 0 by XREAL_1:8;
-        hence contradiction by SQUARE_1:72;
+        hence contradiction by XREAL_1:8;
       end;
       dist(p,x) > 0 by b1,b3,JORDAN1K:22;
       then dist(p,a) + 0 > dist(a,b) + 0 by a4,a5,XREAL_1:10;
@@ -4655,10 +4536,10 @@ a5:   now
 a3: now
       assume rd > p`2;
       then p`2^2 > rd^2 by JGRAPH_5:2;
-      hence contradiction by nn,Lm14a,SQUARE_1:61;
+      hence contradiction by nn;
     end;
     rg >= p`2 by nn,Lm14a,SQUARE_1:78;
-    hence thesis by a1,a2,a3,Lm0;
+    hence thesis by a1,a2,a3;
   end;
 
 Lmw59: dR c= R by ThdRR;
@@ -4764,7 +4645,7 @@ theorem Tmg:
   P misses LSeg(|[-1,3]|,|[1,3]|)
   proof
     assume
-a1: a,b realize-max-dist-in P;
+a1:  a,b realize-max-dist-in P;
     assume P meets LSeg(lg,pg);
     then consider x being set such that
 a2: x in P and
@@ -4775,11 +4656,9 @@ a3: x in LSeg(lg,pg) by XBOOLE_0:3;
 a4: x`2 = rg by a3,Lm71,Lm80a,SPPOL_1:def 2;
 a6: a in P by a1,JORDAN24:def 1;
 a5: dist(a,x) = sqrt ((a`1-x`1)^2 + (a`2-x`2)^2) by GOBRD14:9
-    .= sqrt ((rl-x`1)^2 + (-rg)^2) by a4,Lm6,EUCLID:56
-    .= sqrt ((rl-x`1)^2 + rg^2) by SQUARE_1:61;
-    0 <= (rl-x`1)^2 by SQUARE_1:72;
-    then 0+4 < (rl-x`1)^2+9 by XREAL_1:10;
-    then 2 < dist(a,x) by a5,Lm14a,SQUARE_1:85,95;
+    .= sqrt ((rl-x`1)^2 + rg^2) by a4,Lm6,EUCLID:56;
+    0+4 < (rl-x`1)^2+9 by XREAL_1:10;
+    then 2 < dist(a,x) by a5,SQUARE_1:85,95;
     hence thesis by a1,a2,a6,JORDAN24:def 1,Lm8;
   end;
 
@@ -4788,7 +4667,7 @@ theorem Tmd:
   P misses LSeg(|[-1,-3]|,|[1,-3]|)
   proof
     assume
-a1: a,b realize-max-dist-in P;
+a1:  a,b realize-max-dist-in P;
     assume P meets LSeg(ld,pd);
     then consider x being set such that
 a2: x in P and
@@ -4800,9 +4679,8 @@ a4: x`2 = rd by a3,Lm73,Lm80A,SPPOL_1:def 2;
 a6: a in P by a1,JORDAN24:def 1;
 a5: dist(a,x) = sqrt ((a`1-x`1)^2 + (a`2-x`2)^2) by GOBRD14:9
     .= sqrt ((rl-x`1)^2 + (-rd)^2) by a4,Lm6,EUCLID:56;
-    0 <= (rl-x`1)^2 by SQUARE_1:72;
-    then 0+4 < (rl-x`1)^2+9 by XREAL_1:10;
-    then 2 < dist(a,x) by a5,Lm14a,SQUARE_1:85,95;
+    0+4 < (rl-x`1)^2+9 by XREAL_1:10;
+    then 2 < dist(a,x) by a5,SQUARE_1:85,95;
     hence thesis by a1,a2,a6,JORDAN24:def 1,Lm8;
   end;
 
@@ -4841,8 +4719,7 @@ a8:     x`1 = rl by s1,Lm32f,Lm72,SPPOL_1:def 3;
           then
 w1:       x`2^2 > 0 by SQUARE_1:74;
 a7:       dist(b,x) = sqrt ((rp-rl)^2 + (0-x`2)^2) by a8,Lm5,Lm7,GOBRD14:9
-          .= sqrt (4 + (-x`2)^2) by Lm9
-          .= sqrt (4 + x`2^2) by SQUARE_1:61;
+          .= sqrt (4 + x`2^2);
           0+4 < x`2^2+4 by w1,XREAL_1:8;
           then 2 < sqrt(x`2^2+4) by SQUARE_1:85,95;
           hence thesis by a1,a2,a6,a7,JORDAN24:def 1,Lm8;
@@ -4866,7 +4743,7 @@ a8:     x`1 = rp by s1,Lm32F,Lm76,SPPOL_1:def 3;
           then
 w1:       x`2^2 > 0 by SQUARE_1:74;
 a7:       dist(x,a) = sqrt ((x`1-a`1)^2 + (x`2-a`2)^2) by GOBRD14:9
-          .= sqrt (4 + x`2^2) by a8,Lm4,Lm6,Lm9;
+          .= sqrt (4 + x`2^2) by a8,Lm4,Lm6;
           0+4 < x`2^2+4 by w1,XREAL_1:8;
           then 2 < sqrt(x`2^2+4) by SQUARE_1:85,95;
           hence thesis by a1,a2,a6,a7,JORDAN24:def 1,Lm8;
@@ -5126,10 +5003,8 @@ a1: a,b realize-max-dist-in P;
     then
 gg: P c= R by Lm1;
 A2: P = the carrier of (T2|P) by JORDAN1:1;
-a2: R = {p1: rl <= p1`1 & p1`1 <= rp & rd <= p1`2 & p1`2 <= rg}
-    by JGRAPH_6:def 2;
 A9: a in P by a1,JORDAN24:def 1;
-    then reconsider P as non empty Subset of T2;
+    reconsider P as non empty Subset of T2 by a1,JORDAN24:def 1;
     reconsider Z = (proj1||P).:the carrier of (T2|P)
     as Subset of REAL;
 A3: for p be real number st p in Z holds p >= rl
@@ -5142,10 +5017,10 @@ A4:   p0 in the carrier of T2|P and
 A5:   p = (proj1||P).p0 by FUNCT_2:115;
       p0 in R by A4,gg,A2;
       then ex p1 st p0 = p1 &
-      rl <= p1`1 & p1`1 <= rp & rd <= p1`2 & p1`2 <= rg by a2;
+      rl <= p1`1 & p1`1 <= rp & rd <= p1`2 & p1`2 <= rg;
       hence thesis by A2,A4,A5,PSCOMP_1:69;
     end;
-A6: for q being real number st
+    for q being real number st
     for p being real number st p in Z holds p >= q holds rl >= q
     proof
       let q be real number such that
@@ -5154,10 +5029,7 @@ A7:   for p being real number st p in Z holds p >= q;
       then rl in Z by A2,A9,Lm4,FUNCT_2:43;
       hence thesis by A7;
     end;
-    W-bound P = inf (proj1||P) by PSCOMP_1:def 30
-    .= inf Z by PSCOMP_1:def 20
-    .= rl by A3,A6,SEQ_4:61;
-    hence thesis;
+    hence thesis by A3,SEQ_4:61;
   end;
 
 theorem Lm22:
@@ -5168,12 +5040,10 @@ a1: a,b realize-max-dist-in P;
     then
 gg: P c= R by Lm1;
 A9: b in P by a1,JORDAN24:def 1;
-    then reconsider P as non empty Subset of T2;
+    reconsider P as non empty Subset of T2 by a1,JORDAN24:def 1;
     reconsider Z = (proj1||P).:the carrier of (T2|P)
     as Subset of REAL;
 A2: P = the carrier of (T2|P) by JORDAN1:1;
-a2: R = {p1: rl <= p1`1 & p1`1 <= rp & rd <= p1`2 & p1`2 <= rg}
-    by JGRAPH_6:def 2;
 A3: for p be real number st p in Z holds p <= rp
     proof
       let p be real number;
@@ -5184,10 +5054,10 @@ A4:   p0 in the carrier of T2|P and
 A5:   p = (proj1||P).p0 by FUNCT_2:115;
       p0 in R by A4,gg,A2;
       then ex p1 st p0 = p1 &
-      rl <= p1`1 & p1`1 <= rp & rd <= p1`2 & p1`2 <= rg by a2;
+      rl <= p1`1 & p1`1 <= rp & rd <= p1`2 & p1`2 <= rg;
       hence thesis by A2,A4,A5,PSCOMP_1:69;
     end;
-A6: for q being real number st
+    for q being real number st
     for p being real number st p in Z holds p <= q holds rp <= q
     proof
       let q be real number such that
@@ -5196,46 +5066,7 @@ A7:   for p being real number st p in Z holds p <= q;
       then rp in Z by A2,A9,Lm5,FUNCT_2:43;
       hence thesis by A7;
     end;
-    E-bound P = sup (proj1||P) by PSCOMP_1:def 32
-    .= sup Z by PSCOMP_1:def 21
-    .= rp by A3,A6,SEQ_4:63;
-    hence thesis;
-  end;
-
-theorem ThSW:
-  |[-1,0]|,|[1,0]| realize-max-dist-in P implies SW-corner P = |[-1,S-bound P]|
-  proof
-    assume
-a1: a,b realize-max-dist-in P;
-    thus SW-corner P = |[W-bound P, S-bound P]| by PSCOMP_1:def 34
-    .= |[rl,S-bound P]| by a1,Lm21;
-  end;
-
-theorem ThNW:
-  |[-1,0]|,|[1,0]| realize-max-dist-in P implies NW-corner P = |[-1,N-bound P]|
-  proof
-    assume
-a1: a,b realize-max-dist-in P;
-    thus NW-corner P = |[W-bound P, N-bound P]| by PSCOMP_1:def 35
-    .= |[rl,N-bound P]| by a1,Lm21;
-  end;
-
-theorem ThSE:
-  |[-1,0]|,|[1,0]| realize-max-dist-in P implies SE-corner P = |[1,S-bound P]|
-  proof
-    assume
-a1: a,b realize-max-dist-in P;
-    thus SE-corner P = |[E-bound P, S-bound P]| by PSCOMP_1:def 37
-    .= |[rp,S-bound P]| by a1,Lm22;
-  end;
-
-theorem ThNE:
-  |[-1,0]|,|[1,0]| realize-max-dist-in P implies NE-corner P = |[1,N-bound P]|
-  proof
-    assume
-a1: a,b realize-max-dist-in P;
-    thus NE-corner P = |[E-bound P, N-bound P]| by PSCOMP_1:def 36
-    .= |[rp,N-bound P]| by a1,Lm22;
+    hence thesis by A3,SEQ_4:63;
   end;
 
 theorem Lm520a:
@@ -5248,11 +5079,10 @@ a1: a,b realize-max-dist-in P;
     then
 a0: P c= R by Lm1;
     set L = LSeg(SW-corner P, NW-corner P);
-a2: W-most P = L /\ P by PSCOMP_1:def 38;
 b2: a in P by a1,JORDAN24:def 1;
-a4: (SW-corner P)`1 = |[rl,S-bound P]|`1 by a1,ThSW
+a4: (SW-corner P)`1 = |[rl,S-bound P]|`1 by a1,Lm21
     .= rl by EUCLID:56;
-a6: (NW-corner P)`1 = |[rl,N-bound P]|`1 by a1,ThNW
+a6: (NW-corner P)`1 = |[rl,N-bound P]|`1 by a1,Lm21
     .= rl by EUCLID:56;
     thus W-most P c= {a}
     proof
@@ -5260,15 +5090,14 @@ a6: (NW-corner P)`1 = |[rl,N-bound P]|`1 by a1,ThNW
       assume
 a3:   x in W-most P;
       then
-a8:   x in P by a2,XBOOLE_0:def 3;
+a8:   x in P by XBOOLE_0:def 3;
       reconsider x as Point of T2 by a3;
-a5:   x in L by a2,a3,XBOOLE_0:def 3;
+a5:   x in L by a3,XBOOLE_0:def 3;
       SW-corner P in L by TOPREAL1:6;
       then
 a9:   x`1 = rl by a5,a4,SPPOL_1:def 3;
       x in R by a0,a8;
-      then ex p st x = p & rl <= p`1 & p`1 <= rp & rd <= p`2 & p`2 <= rg
-      by Lm0;
+      then ex p st x = p & rl <= p`1 & p`1 <= rp & rd <= p`2 & p`2 <= rg;
       then x in dR by a9,Lm32;
       then x in P /\ dR by a8,XBOOLE_0:def 3;
       then x in {a,b} by a1,Lm2;
@@ -5283,7 +5112,7 @@ b3: (SW-corner P)`2 = S-bound P by PSCOMP_1:73;
     (NW-corner P)`2 = N-bound P by PSCOMP_1:75;
     then (SW-corner P)`2 <= a`2 & a`2 <= (NW-corner P)`2 by b3,b2,PSCOMP_1:71;
     then a in L by a4,a6,Lm4,GOBOARD7:8;
-    hence thesis by a2,b2,b1,XBOOLE_0:def 3;
+    hence thesis by b2,b1,XBOOLE_0:def 3;
   end;
 
 theorem Lm520b:
@@ -5296,11 +5125,10 @@ a1: a,b realize-max-dist-in P;
     then
 a0: P c= R by Lm1;
     set L = LSeg(SE-corner P, NE-corner P);
-a2: E-most P = L /\ P by PSCOMP_1:def 40;
 b2: b in P by a1,JORDAN24:def 1;
-a4: (SE-corner P)`1 = |[rp,S-bound P]|`1 by a1,ThSE
+a4: (SE-corner P)`1 = |[rp,S-bound P]|`1 by a1,Lm22
     .= rp by EUCLID:56;
-a6: (NE-corner P)`1 = |[rp,N-bound P]|`1 by a1,ThNE
+a6: (NE-corner P)`1 = |[rp,N-bound P]|`1 by a1,Lm22
     .= rp by EUCLID:56;
     thus E-most P c= {b}
     proof
@@ -5308,15 +5136,14 @@ a6: (NE-corner P)`1 = |[rp,N-bound P]|`1 by a1,ThNE
       assume
 a3:   x in E-most P;
       then
-a8:   x in P by a2,XBOOLE_0:def 3;
+a8:   x in P by XBOOLE_0:def 3;
       reconsider x as Point of T2 by a3;
-a5:   x in L by a2,a3,XBOOLE_0:def 3;
+a5:   x in L by a3,XBOOLE_0:def 3;
       SE-corner P in L by TOPREAL1:6;
       then
 a9:   x`1 = rp by a5,a4,SPPOL_1:def 3;
       x in R by a0,a8;
-      then ex p st x = p & rl <= p`1 & p`1 <= rp & rd <= p`2 & p`2 <= rg
-      by Lm0;
+      then ex p st x = p & rl <= p`1 & p`1 <= rp & rd <= p`2 & p`2 <= rg;
       then x in dR by a9,Lm32;
       then x in P /\ dR by a8,XBOOLE_0:def 3;
       then x in {a,b} by a1,Lm2;
@@ -5331,7 +5158,7 @@ b3: (SE-corner P)`2 = S-bound P by PSCOMP_1:79;
     (NE-corner P)`2 = N-bound P by PSCOMP_1:77;
     then (SE-corner P)`2 <= b`2 & b`2 <= (NE-corner P)`2 by b3,b2,PSCOMP_1:71;
     then b in L by a4,a6,Lm5,GOBOARD7:8;
-    hence thesis by a2,b2,b1,XBOOLE_0:def 3;
+    hence thesis by b2,b1,XBOOLE_0:def 3;
   end;
 
 theorem Lm52:
@@ -5346,21 +5173,16 @@ a1: a,b realize-max-dist-in P;
     then
 a0: M = {a} by Lm520a;
     set f = proj2||M;
-a7: f = proj2|M by PSCOMP_1:def 26;
 a4: dom f = the carrier of (T2|M) by FUNCT_2:def 1;
 a5: the carrier of (T2|M) = M by JORDAN1:1;
 a6: a in {a} by TARSKI:def 1;
 A3: f.:the carrier of (T2|M) = {f.a} by a4,a5,a6,a0,FUNCT_1:117
-    .= {proj2.a} by a7,a0,a6,FUNCT_1:72
+    .= {proj2.a} by a0,a6,FUNCT_1:72
     .= {a`2} by PSCOMP_1:def 29;
-a3: inf (proj2||M) = inf (f.:the carrier of (T2|M)) by PSCOMP_1:def 20
-    .= a`2 by A3,SEQ_4:22;
-b3: sup (proj2||M) = sup (f.:the carrier of (T2|M)) by PSCOMP_1:def 21
-    .= a`2 by A3,SEQ_4:22;
-a4: W-min P = |[W-bound P, inf (proj2||M)]| by PSCOMP_1:def 42;
-A4: W-max P = |[W-bound P, sup (proj2||M)]| by PSCOMP_1:def 43;
+a3: inf (proj2||M) = a`2 by A3,SEQ_4:22;
+b3: sup (proj2||M) = a`2 by A3,SEQ_4:22;
     a = |[a`1,a`2]| by EUCLID:57;
-    hence thesis by a3,a4,b3,A4,Lm4,a1,Lm21;
+    hence thesis by a3,b3,Lm4,a1,Lm21;
   end;
 
 theorem Lm52e:
@@ -5375,21 +5197,16 @@ a1: a,b realize-max-dist-in P;
     then
 a0: M = {b} by Lm520b;
     set f = proj2||M;
-a7: f = proj2|M by PSCOMP_1:def 26;
 a4: dom f = the carrier of (T2|M) by FUNCT_2:def 1;
 a5: the carrier of (T2|M) = M by JORDAN1:1;
 a6: b in {b} by TARSKI:def 1;
 A3: f.:the carrier of (T2|M) = {f.b} by a4,a5,a6,a0,FUNCT_1:117
-    .= {proj2.b} by a7,a0,a6,FUNCT_1:72
+    .= {proj2.b} by a0,a6,FUNCT_1:72
     .= {b`2} by PSCOMP_1:def 29;
-a3: inf (proj2||M) = inf (f.:the carrier of (T2|M)) by PSCOMP_1:def 20
-    .= b`2 by A3,SEQ_4:22;
-b3: sup (proj2||M) = sup (f.:the carrier of (T2|M)) by PSCOMP_1:def 21
-    .= b`2 by A3,SEQ_4:22;
-a4: E-min P = |[E-bound P, inf (proj2||M)]| by PSCOMP_1:def 47;
-A4: E-max P = |[E-bound P, sup (proj2||M)]| by PSCOMP_1:def 46;
+a3: inf (proj2||M) = b`2 by A3,SEQ_4:22;
+b3: sup (proj2||M) = b`2 by A3,SEQ_4:22;
     b = |[b`1,b`2]| by EUCLID:57;
-    hence thesis by a3,a4,b3,A4,Lm5,a1,Lm22;
+    hence thesis by a3,b3,Lm5,a1,Lm22;
   end;
 
 Lm23:
@@ -5441,7 +5258,7 @@ a7: P /\ dR = {a,b} by a1,Lm2;
     then
 a4: p in R by a2;
 a5: ex p1 st p1 = p & rl <= p1`1 & p1`1 <= rp & rd <= p1`2 & p1`2 <= rg
-    by a4,Lm0;
+    by a4;
     now
       assume
 a8:   p`2 = c`2;
@@ -5463,7 +5280,7 @@ a7: P /\ dR = {a,b} by a1,Lm2;
     then
 a4: p in R by a2;
 a5: ex p1 st p1 = p & rl <= p1`1 & p1`1 <= rp & rd <= p1`2 & p1`2 <= rg
-    by a4,Lm0;
+    by a4;
     now
       assume
 a8:   p`2 = d`2;
@@ -5712,7 +5529,7 @@ a4: not x in R;
     then
 a5: R` c= P` by SUBSET_1:31;
     reconsider x as Point of T2 by a3;
-c1: not (rl <= x`1 & x`1 <= rp & rd <= x`2 & x`2 <= rg) by a4,Lm0;
+c1: not (rl <= x`1 & x`1 <= rp & rd <= x`2 & x`2 <= rg) by a4;
     per cases;
     suppose
 v2:   0 <= x`1;
@@ -5726,8 +5543,7 @@ a7:     e in E;
 v1:     e`1 >= x`1 & e`2 = x`2 by a7,JORDAN1A:def 3;
         now
           assume e in R;
-          then ex p st e = p & rl <= p`1 & p`1 <= rp & rd <= p`2 & p`2 <= rg
-          by Lm0;
+          then ex p st e = p & rl <= p`1 & p`1 <= rp & rd <= p`2 & p`2 <= rg;
           hence contradiction by v1,v2,c1,XREAL_1:2;
         end;
         hence thesis by SUBSET_1:50;
@@ -5752,8 +5568,7 @@ a7:     e in E;
 v1:     e`1 <= x`1 & e`2 = x`2 by a7,JORDAN1A:def 5;
         now
           assume e in R;
-          then ex p st e = p & rl <= p`1 & p`1 <= rp & rd <= p`2 & p`2 <= rg
-          by Lm0;
+          then ex p st e = p & rl <= p`1 & p`1 <= rp & rd <= p`2 & p`2 <= rg;
           hence contradiction by v1,v2,c1,XREAL_1:2;
         end;
         hence thesis by SUBSET_1:50;
@@ -5774,14 +5589,14 @@ LmBall:
     assume p in R;
     then consider p1 such that
 a1: p1 = p and
-A1: rl <= p1`1 & p1`1 <= rp & rd <= p1`2 & p1`2 <= rg by Lm0;
+A1: rl <= p1`1 & p1`1 <= rp & rd <= p1`2 & p1`2 <= rg;
     let x be set;
     assume
 a2: x in R;
     then reconsider x as Point of T2;
     consider p2 such that
 a3: p2 = x and
-A3: rl <= p2`1 & p2`1 <= rp & rd <= p2`2 & p2`2 <= rg by a2,Lm0;
+A3: rl <= p2`1 & p2`1 <= rp & rd <= p2`2 & p2`2 <= rg by a2;
 a4: ex s, t being Point of Euclid 2 st
     s = p1 & t = p2 & dist(p1,p2) = dist(s,t) by GOBRD14:def 1;
     dist(p1,p2) <= (rp-rl) + (rg-rd) by A1,A3,GOBRD14:12;
@@ -5888,8 +5703,6 @@ UU:  Ux = skl Down (x,C`);
 a72: C c= R by a1,Lm1;
 b72: W-bound C = rl by a1,Lm21;
 b73: E-bound C = rp by a1,Lm22;
-     then
-b79: w = 0 by b72;
 a0:  a in C & b in C by a1,JORDAN24:def 1;
 a9:  m in C by JORDAN21:43;
 a10: l in Jc by JORDAN21:44;
@@ -5898,11 +5711,11 @@ a78: Jc c= C by d03,XBOOLE_1:7;
      then
 a86: l in C by a10;
 e34: m`2 < c`2 by a1,a9,Lm11,Lm50;
-b55: l`1 = (W-bound Jc + E-bound Jc) / 2 by JORDAN21:35
-     .= 0 by b60,b71,b72,b73;
+b55: l`1 = 0 by b60,b71,b72,b73,JORDAN21:35;
 a15: c`1 = w by a1,Lm23;
 a14: m`1 = w by JORDAN21:33;
-z11: m <> a & m <> b & l <> a & l <> b by b79,b55,Lm4,Lm5,JORDAN21:33;
+z11: m <> a & m <> b & l <> a & l <> b
+       by b72,b73,Lm4,Lm5,b60,b71,JORDAN21:35,33;
      then consider Pml being Path of m,l such that
 a7:  rng Pml c= Jc and
 d12: rng Pml misses {a,b} by d01,a10,d05,JORDAN1819;
@@ -5911,7 +5724,7 @@ a81: ml c= C by a7,a78,XBOOLE_1:1;
 b24: j in C by a89,d06;
 c04: LSeg(l,d) is vertical by b55,Lm12,SPPOL_1:37;
 c18: d`2 <= j`2 by a1,a89,d06,Lm13,Lm51;
-d30: j`1 = 0 by b79,JORDAN21:35;
+d30: j`1 = 0 by b72,b73,JORDAN21:35;
      l in Vertical_Line w by b55,b72,b73,JORDAN6:34;
      then
 i83: l in C /\ Vertical_Line w by a78,a10,XBOOLE_0:def 3;
@@ -6140,7 +5953,7 @@ w24:  rng fJd = Jd & PJd = fJd by d02,defa2;
 w28:  rng falpha = alpha & Palpha = falpha by i40,defa2;
       n in R by i51,Lmw59;
       then
-w46:  ex p st p = n & rl <= p`1 & p`1 <= rp & rd <= p`2 & p`2 <= rg by Lm0;
+w46:  ex p st p = n & rl <= p`1 & p`1 <= rp & rd <= p`2 & p`2 <= rg;
       rng PJc c= the carrier of TR by w04,a72,a78,w23,XBOOLE_1:1;
       then reconsider h = PJc as Path of AR,BR by Th1a;
       rng PJd c= the carrier of TR by w04,a72,a89,w24,XBOOLE_1:1;
@@ -6605,13 +6418,12 @@ a19: Ball(b,rb) misses rng beta by a17,TexK;
 a28: a in A by Taa;
 a29: b in B by Taa;
 a25: C = Fr V by a20,a21,LEMAT56;
-a26: Fr V = Cl V /\ Cl V` by TOPS_1:def 2;
-     then a in Cl V by a0,a25,XBOOLE_0:def 3;
+     a in Cl V by a0,a25,XBOOLE_0:def 3;
      then A meets V by a28,PRE_TOPC:def 13;
      then consider u being set such that
 a30: u in A and
 a31: u in V by XBOOLE_0:3;
-     b in Cl V by a0,a25,a26,XBOOLE_0:def 3;
+     b in Cl V by a0,a25,XBOOLE_0:def 3;
      then B meets V by a29,PRE_TOPC:def 13;
      then consider v being set such that
 a32: v in B and
@@ -6678,7 +6490,7 @@ theorem TBDD:
   C = Jc \/ Jd & Jc /\ Jd = {|[-1,0]|,|[1,0]|} & UMP C in Jc & LMP C in Jd &
   W-bound C = W-bound Jc & E-bound C = E-bound Jc holds
   BDD C = skl Down ((1/2) * ((UMP (LSeg(LMP Jc,|[0,-3]|) /\ Jd)) + LMP Jc), C`)
-  proof 
+  proof
     assume
 a1: a,b realize-max-dist-in C;
     let Jc, Jd being compact with_the_max_arc Subset of T2 such that
@@ -6701,7 +6513,6 @@ b71: E-bound C = E-bound Jc;
        set F = {B where B is Subset of T2: B is_inside_component_of C};
        let q be set;
        assume q in BDD C;
-       then q in union F by JORDAN2C:def 5;
        then consider Z being set such that
 z03:   q in Z and
 z04:   Z in F by TARSKI:def 4;
@@ -6713,7 +6524,7 @@ z04:   Z in F by TARSKI:def 4;
    
 LAST:
   |[-1,0]|,|[1,0]| realize-max-dist-in C implies C is Jordan
-  proof 
+  proof
     assume
 a1: a,b realize-max-dist-in C;
     then consider Jc, Jd being compact with_the_max_arc Subset of T2 such that
@@ -6740,11 +6551,11 @@ z02: skl Down(x,C`) = BDD C by a1,d01,d02,d03,d04,d05,d06,b60,b71,TBDD;
 z30: ex B1 being Subset of T2|C` st B1 = A1 & B1 is_a_component_of T2|C`
      by CONNSP_1:def 6;
      then C = Fr A1 by LEMAT56
-     .= Cl A1 /\ Cl A1` by TOPS_1:def 2;
+     .= Cl A1 /\ Cl A1`;
      then
 zw1: C c= Cl A1 by XBOOLE_1:17;
      C = Fr A2 by z02,a99,LEMAT56
-     .= Cl A2 /\ Cl A2` by TOPS_1:def 2;
+     .= Cl A2 /\ Cl A2`;
      then
 zw2: C c= Cl A2 by XBOOLE_1:17;
      A2 c= C` by JORDAN2C:29;
@@ -6799,7 +6610,7 @@ f3:  A1 \/ C misses A2 by f4,XBOOLE_1:70;
   
 LmJor:
   C is Jordan 
-  proof 
+  proof
     consider f being Homeomorphism of T2 such that
 a1: a,b realize-max-dist-in f.:C by JORDAN24:7;
 a2: f" is Homeomorphism of T2 by TOPGRP_1:30;

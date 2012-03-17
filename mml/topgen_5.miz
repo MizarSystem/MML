@@ -1,0 +1,4315 @@
+:: Niemytzki Plane -- an Example of {T}ychonoff Space Which Is Not $T_4$
+::  by Grzegorz Bancerek
+:: 
+:: Received November 7, 2005
+:: Copyright (c) 2005 Association of Mizar Users
+
+environ
+
+ vocabularies FINSEQ_1, PRE_TOPC, ARYTM, FUNCT_1, BOOLE, SETFAM_1, ORDINAL2,
+      EUCLID, METRIC_1, TOPGEN_2, PROB_1, PBOOLE, CANTOR_1, RELAT_1, FINSET_1,
+      ZF_REFLE, TARSKI, MCART_1, ASYMPT_0, COMPLEX1, ARYTM_1, ARYTM_3, RCOMP_1,
+      ABSVALUE, ZF_LANG, SQUARE_1, RLVECT_3, SUBSET_1, TOPS_1, PARTFUN1, RAT_1,
+      TOPGEN_1, TOPGEN_3, CARD_1, CARD_2, CARD_3, URYSOHN1, TOPMETR, MEMBERED,
+      TOPS_2, SEQ_1, PRALG_1, FUNCT_2, CAT_1, LATTICES, SEQ_2, FUNCT_5,
+      LIMFUNC1, COMPTS_1, BORSUK_1, TOPGEN_5, FUNCOP_1, FUNCT_4, PRALG_2;
+ notations MEMBERED, TARSKI, XBOOLE_0, ZFMISC_1, RELAT_1, FINSET_1, SUBSET_1,
+      MCART_1, SETFAM_1, RELSET_1, FUNCT_1, PARTFUN1, FUNCT_2, FINSEQ_1,
+      FUNCT_4, FUNCOP_1, SEQ_1, CQC_LANG, PBOOLE, ORDINAL1, CARD_1, CARD_2,
+      CARD_3, FUNCT_5, FUNCT_6, NAT_1, NUMBERS, XCMPLX_0, SQUARE_1, REAL_1,
+      COMPLEX1, XREAL_0, SEQ_4, RAT_1, RCOMP_1, RCOMP_2, PRE_CIRC, LIMFUNC1,
+      STRUCT_0, PRE_TOPC, TOPS_1, TOPS_2, EUCLID, CANTOR_1, TOPRNS_1, BORSUK_1,
+      TOPMETR, TOPREAL9, URYSOHN1, COMPTS_1, TOPGEN_1, TOPGEN_2, TOPGEN_3;
+ constructors TOPREAL9, TOPGEN_2, FUNCT_4, PROB_1, TOPRNS_1, REAL_1, COMPLEX1,
+      TOPS_1, TOPGEN_1, TOPGEN_3, RAT_1, RCOMP_2, CARD_2, WELLORD2, RCOMP_1,
+      URYSOHN1, COMPTS_1, CONNSP_1, BORSUK_6, TOPS_2, FUNCT_6, CQC_LANG,
+      SETFAM_1, PSCOMP_1, FUNCT_5, LIMFUNC1, REALSET1, TSP_1;
+ registrations XREAL_0, STRUCT_0, PRE_TOPC, EUCLID, ASYMPT_0, RAT_1, SUBSET_1,
+      XCMPLX_0, PBOOLE, COMPLSP1, FINSEQ_1, SQUARE_1, TOPS_1, TOPGRP_1,
+      TOPGEN_1, CARD_1, RELSET_1, BORSUK_1, BORSUK_6, TIETZE, FUNCOP_1,
+      FINSET_1, MEMBERED, RCOMP_3, FUNCT_1, CQC_LANG, FUNCT_2, RELAT_1,
+      SPRECT_1, PSCOMP_1;
+ requirements BOOLE, SUBSET, NUMERALS, ARITHM, REAL;
+ definitions TARSKI, XBOOLE_0, FUNCT_1, PARTFUN1, FUNCOP_1, SEQ_1, WELLORD2,
+      PBOOLE, SEQ_4, PRE_TOPC, TOPS_3, URYSOHN1, COMPTS_1, TOPGEN_1;
+ theorems TARSKI, XBOOLE_0, XBOOLE_1, ZFMISC_1, FUNCT_1, EUCLID, PBOOLE,
+      EUCLID_2, TOPREAL9, TOPGEN_3, SETWISEO, XREAL_1, XREAL_0, XCMPLX_1,
+      TOPRNS_1, TOPREAL6, ABSVALUE, SPPOL_2, FINSEQ_1, COMPLEX1, JGRAPH_1,
+      YELLOW_9, NUMBERS, CARD_5, TOPGEN_2, SUBSET_1, YELLOW_8, TOPS_1,
+      PRE_TOPC, TOPGEN_1, SQUARE_1, RAT_1, RCOMP_2, CARD_1, CARD_2, CARD_3,
+      CARD_4, FINSEQ_3, MCART_1, FUNCT_6, BORSUK_1, RCOMP_1, TOPALG_1,
+      TOPREALA, TOPS_2, FUNCT_2, JCT_MISC, TIETZE, JGRAPH_5, URYSOHN1, TOPMETR,
+      JORDAN1, BOOLMARK, FUNCOP_1, FUNCT_4, RELAT_1, EXTENS_1, RELSET_1,
+      CANTOR_1, PARTFUN1, SETFAM_1, STRUCT_0, JORDAN6, MEMBERED, YELLOW12,
+      WAYBEL34, FUNCT_7, SEQ_4, CQC_LANG, FINSET_1, SPRECT_1, DICKSON, FUNCT_5,
+      JGRAPH_3, BORSUK_5, RCOMP_3, JGRAPH_2, FRECHET, TSP_1, JORDAN18, TREAL_1,
+      BORSUK_4, JORDAN;
+ schemes SUBSET_1, FUNCT_1, FRAENKEL, PRE_CIRC, FUNCT_5, ZFREFLE1, FINSET_1,
+      FUNCT_2;
+
+begin :: Preliminaries
+
+ reserve x,y for Element of REAL, u,v,w for set, r for positive (real number);
+
+theorem Th14:
+  for f,g being Function
+  st f tolerates g
+  for A being set holds (f+*g)"A = (f"A)\/(g"A)
+  proof
+    let f,g be Function;
+    assume
+A1: f tolerates g;
+    let A be set;
+    thus (f+*g)"A c= (f"A)\/(g"A)
+    proof let x be set;
+      assume x in (f+*g)"A; then
+A3:   x in dom (f+*g) & (f+*g).x in A by FUNCT_1:def 13; then
+      x in dom f \/ dom g by FUNCT_4:def 1; then
+      x in dom f or x in dom g by XBOOLE_0:def 2; then
+      x in dom f & (f+*g).x = f.x or x in dom g & (f+*g).x = g.x
+      by A1,FUNCT_4:14,16; then
+      x in f"A or x in g"A by A3,FUNCT_1:def 13;
+      hence thesis by XBOOLE_0:def 2;
+    end;
+    f c= f+*g & g c= f+*g by A1,FUNCT_4:26,29; then
+    f"A c= (f+*g)"A & g"A c= (f+*g)"A by RELAT_1:179;
+    hence thesis by XBOOLE_1:8;
+  end;
+
+theorem
+  for f,g being Function
+  st dom f misses dom g
+  for A being set holds (f+*g)"A = (f"A)\/(g"A)
+  proof
+    let f,g be Function;
+    assume dom f misses dom g; then
+    f tolerates g by PARTFUN1:138;
+    hence thesis by Th14;
+  end;
+
+registration
+  let X be set;
+  let Y be non empty real-membered set;
+  cluster -> real-yielding Relation of X,Y;
+  coherence
+  proof
+    let R be Relation of X,Y;
+    rng R c= Y & Y c= REAL by MEMBERED:2;
+    hence rng R c= REAL by XBOOLE_1:1;
+  end;
+end;
+
+theorem LemF:
+  for x,a being set, f being Function st a in dom f
+  holds (commute (x .--> f)).a = x .--> f.a
+  proof
+    let x,a be set;
+    let f be Function;
+    assume
+A0: a in dom f;
+    set g = x .--> f;
+A1: dom g = {x} & rng g = {f} & g.x = f by CQC_LANG:5,6;
+A2: x in {x} by TARSKI:def 1;
+    f in Funcs(dom f, rng f) by FUNCT_2:def 2; then
+    rng g c= Funcs(dom f, rng f) by A1,ZFMISC_1:37; then
+    g in Funcs({x}, Funcs(dom f, rng f)) by A1,FUNCT_2:def 2; then
+    dom ((commute g).a) = {x} & (commute g).a.x = f.a by A0,A1,A2,FUNCT_6:86;
+    hence (commute (x .--> f)).a = x .--> f.a by DICKSON:1;
+  end;
+
+theorem
+  for b being set, f being Function
+  holds b in dom commute f iff
+  ex a being set, g being Function st a in dom f & g = f.a & b in dom g
+  proof
+    let b be set;
+    let f be Function;
+    commute f = curry' uncurry f by FUNCT_6:def 12; then
+A0: dom commute f = proj2 dom uncurry f by FUNCT_5:30;
+    hereby
+      assume b in dom commute f; then
+      consider a being set such that
+A1:   [a,b] in dom uncurry f by A0,FUNCT_5:def 2;
+      consider a' being set, g being Function, b' being set such that
+A2:   [a,b] = [a',b'] & a' in dom f & g = f.a' & b' in dom g
+      by A1,FUNCT_5:def 4;
+      take a, g;
+      a = a' & b = b' by A2,ZFMISC_1:33;
+      hence a in dom f & g = f.a & b in dom g by A2;
+    end;
+    given a being set, g being Function such that 
+A3: a in dom f & g = f.a & b in dom g;
+    [a,b] in dom uncurry f by A3,FUNCT_5:def 4;
+    hence b in dom commute f by A0,FUNCT_5:def 2;
+  end;
+
+theorem LemC3:
+  for a,b being set, f being Function
+  holds a in dom ((commute f).b) iff
+  ex g being Function st a in dom f & g = f.a & b in dom g
+  proof
+    let a,b be set;
+    let f be Function;
+A0: commute f = curry' uncurry f by FUNCT_6:def 12;
+    dom uncurry f c= [:dom f, proj1 union rng f:]
+    proof
+      let u; assume u in dom uncurry f; then
+      consider a being set, g being Function, b being set such that
+A6:   u = [a,b] & a in dom f & g = f.a & b in dom g by FUNCT_5:def 4;
+      g in rng f by A6,FUNCT_1:def 5; then
+      g c= union rng f by ZFMISC_1:92; then
+      proj1 g = dom g &
+      proj1 g c= proj1 union rng f by FUNCT_5:5,21; then
+      b in proj1 union rng f by A6;
+      hence thesis by A6,ZFMISC_1:def 2;
+    end; then
+A7: uncurry' commute f = uncurry f by A0,FUNCT_5:57;
+    hereby
+      assume
+A1:   a in dom ((commute f).b); then
+      (commute f).b <> {} by RELAT_1:60; then
+      b in dom commute f by FUNCT_1:def 4; then
+      [a,b] in dom uncurry f by A7,A1,FUNCT_5:46; then
+      consider a' being set, g being Function, b' being set such that
+A2:   [a,b] = [a',b'] & a' in dom f & g = f.a' & b' in dom g
+      by FUNCT_5:def 4;
+      take g;
+      a = a' & b = b' by A2,ZFMISC_1:33;
+      hence a in dom f & g = f.a & b in dom g by A2;
+    end;
+    given g being Function such that 
+A3: a in dom f & g = f.a & b in dom g;
+A4: [a,b]`1 = a & [a,b]`2 = b & [a,b] in dom uncurry f
+    by A3,FUNCT_5:def 4,MCART_1:7;
+    thus a in dom ((commute f).b) by A0,A4,FUNCT_5:29;
+  end;
+
+theorem LemC1:
+  for a,b being set, f,g being Function st a in dom f & g = f.a & b in dom g
+  holds (commute f).b.a = g.b
+  proof
+    let a,b be set;
+    let f,g be Function;
+A0: commute f = curry' uncurry f by FUNCT_6:def 12;
+    assume
+A2: a in dom f & g = f.a & b in dom g; then
+A1: [a,b]`1 = a & [a,b]`2 = b & [a,b] in dom uncurry f
+    by MCART_1:7,FUNCT_5:def 4; then
+    (uncurry f). [a,b] = g.b by A2,FUNCT_5:def 4;
+    hence thesis by A0,A1,FUNCT_5:29;
+  end;
+
+theorem LemG:
+  for a being set, f,g,h being Function st h = f \/ g
+  holds (commute h).a = (commute f).a \/ (commute g).a
+  proof
+    let a be set;
+    let f,g,h be Function;
+    assume
+A0: h = f \/ g;
+    now
+      let u,v;
+      hereby 
+        assume [u,v] in (commute h).a; then
+A1:     u in dom ((commute h).a) & (commute h).a.u = v by FUNCT_1:8; then
+        consider k being Function such that
+A4:     u in dom h & k = h.u & a in dom k by LemC3;
+A2:     (commute h).a.u = k.a by A4,LemC1;
+        [u,k] in h by A4,FUNCT_1:def 4; then
+        [u,k] in f or [u,k] in g by A0,XBOOLE_0:def 2; then
+        u in dom f & k = f.u or u in dom g & k = g.u by FUNCT_1:8; then
+        u in dom ((commute f).a) & (commute f).a.u = k.a or
+        u in dom ((commute g).a) & (commute g).a.u = k.a
+        by A4,LemC3,LemC1; then
+        [u,v] in (commute f).a or [u,v] in (commute g).a by A1,A2,FUNCT_1:8;
+        hence [u,v] in (commute f).a \/ (commute g).a by XBOOLE_0:def 2;
+      end;
+      assume
+A3:   [u,v] in (commute f).a \/ (commute g).a;
+      per cases by A3,XBOOLE_0:def 2;
+      suppose [u,v] in (commute f).a; then
+A5:     u in dom ((commute f).a) & (commute f).a.u = v by FUNCT_1:8; then
+        consider k being Function such that
+A6:     u in dom f & k = f.u & a in dom k by LemC3;
+        [u,k] in f by A6,FUNCT_1:8; then
+        [u,k] in h by A0,XBOOLE_0:def 2; then
+        u in dom h & k = h.u by FUNCT_1:8; then
+        u in dom ((commute h).a) & (commute h).a.u = k.a &
+        (commute f).a.u = k.a by A6,LemC1,LemC3;
+        hence [u,v] in (commute h).a by A5,FUNCT_1:8;
+      end;
+      suppose [u,v] in (commute g).a; then
+A5:     u in dom ((commute g).a) & (commute g).a.u = v by FUNCT_1:8; then
+        consider k being Function such that
+A6:     u in dom g & k = g.u & a in dom k by LemC3;
+        [u,k] in g by A6,FUNCT_1:8; then
+        [u,k] in h by A0,XBOOLE_0:def 2; then
+        u in dom h & k = h.u by FUNCT_1:8; then
+        u in dom ((commute h).a) & (commute h).a.u = k.a &
+        (commute g).a.u = k.a by A6,LemC1,LemC3;
+        hence [u,v] in (commute h).a by A5,FUNCT_1:8;
+      end;
+    end;
+    hence (commute h).a = (commute f).a \/ (commute g).a by RELAT_1:def 2;
+  end;
+
+registration
+  cluster -> bounded (finite Subset of REAL);
+  coherence
+  proof
+    let X be finite Subset of REAL;
+    defpred P[set] means $1 is bounded Subset of REAL;
+A1: X is finite;
+    {}REAL is bounded; then
+A2: P[{}];
+A3: now let u,v;
+      assume
+A4:   u in X & v c= X & P[v]; then
+      reconsider a = u as Real;
+      reconsider A = v as bounded Subset of REAL by A4;
+      consider x being real number such that
+A5:   for z being real number st z in A holds x <= z by SEQ_4:def 2;
+      consider y being real number such that
+A6:   for z being real number st z in A holds z <= y by SEQ_4:def 1;
+A7:   A\/{a} is bounded_above
+      proof
+        take max(a,y);
+        let z be real number; assume z in A\/{a}; then
+        z in A or z = a by SETWISEO:6; then
+        z <= y or z <= a by A6;
+        hence thesis by RCOMP_2:2;
+      end;
+      A\/{a} is bounded_below
+      proof
+        take min(a,x);
+        let z be real number; assume z in A\/{a}; then
+        z in A or z = a by SETWISEO:6; then
+        z >= x or z >= a by A5;
+        hence thesis by JGRAPH_3:6;
+      end;
+      hence P[v \/ {u}] by A7,SEQ_4:def 3;
+    end;
+    P[X] from FINSET_1:sch 2(A1,A2,A3);
+    hence thesis;
+  end;
+end;
+
+theorem
+Lem1: for a,b,c,d being real number st a < b & c <= d
+      holds ].a,c.[ /\ [.b,d.] = [.b,c.[
+      proof
+        let a,b,c,d be real number;
+        assume
+A0:     a < b & c <= d;
+A1:     now let x be real number;
+          x in ].a,c.[ /\ [.b,d.] iff x in ].a,c.[ & x in [.b,d.]
+          by XBOOLE_0:def 3; then
+          x in ].a,c.[ /\ [.b,d.] iff a < x & x < c & b <= x & x <= d
+          by RCOMP_1:47,48; then
+          x in ].a,c.[ /\ [.b,d.] iff x < c & b <= x by A0,XREAL_1:2;
+          hence x in ].a,c.[ /\ [.b,d.] iff x in [.b,c.[ by RCOMP_2:3;
+        end;
+        now
+          let x be set;
+          (x in ].a,c.[ /\ [.b,d.] implies x is Real) &
+          (x in [.b,c.[ implies x is Real);
+          hence x in ].a,c.[ /\ [.b,d.] iff x in [.b,c.[ by A1;
+        end;
+        hence ].a,c.[ /\ [.b,d.] = [.b,c.[ by TARSKI:2;
+      end;
+
+theorem
+Lem2: for a,b,c,d being real number st a >= b & c > d
+      holds ].a,c.[ /\ [.b,d.] = ].a,d.]
+      proof
+        let a,b,c,d be real number;
+        assume
+A0:     a >= b & c > d;
+A1:     now let x be real number;
+          x in ].a,c.[ /\ [.b,d.] iff x in ].a,c.[ & x in [.b,d.]
+          by XBOOLE_0:def 3; then
+          x in ].a,c.[ /\ [.b,d.] iff a < x & x < c & b <= x & x <= d
+          by RCOMP_1:47,48; then
+          x in ].a,c.[ /\ [.b,d.] iff a < x & x <= d by A0,XREAL_1:2;
+          hence x in ].a,c.[ /\ [.b,d.] iff x in ].a,d.] by RCOMP_2:4;
+        end;
+        now
+          let x be set;
+          (x in ].a,c.[ /\ [.b,d.] implies x is Real) &
+          (x in ].a,d.] implies x is Real);
+          hence x in ].a,c.[ /\ [.b,d.] iff x in ].a,d.] by A1;
+        end;
+        hence ].a,c.[ /\ [.b,d.] = ].a,d.] by TARSKI:2;
+      end;
+
+theorem
+Lem3: for a,b,c,d being real number st a <= b & b < c & c <= d
+      holds [.a,c.[ \/ ].b,d.] = [.a,d.]
+  proof let a,b,c,d be real number; assume
+A:  a <= b & b < c & c <= d; then
+    c in [.b,d.] & b in [.a,c.[ by RCOMP_1:48,RCOMP_2:3; then
+Z:  {c} c= [.b,d.] & {b} c= [.a,c.[ by ZFMISC_1:37;
+B:  a < c & b < d by A,XREAL_1:2;
+    [.a,d.] = [.a,c.] \/ [.b,d.] by A,TREAL_1:2
+    .= [.a,c.[ \/ {c} \/ [.b,d.] by B,BORSUK_4:34
+    .= [.a,c.[ \/ ({c} \/ [.b,d.]) by XBOOLE_1:4
+    .= [.a,c.[ \/ [.b,d.] by Z,XBOOLE_1:12
+    .= [.a,c.[ \/ ({b} \/ ].b,d.]) by B,BORSUK_4:35
+    .= {b} \/ [.a,c.[ \/ ].b,d.] by XBOOLE_1:4;
+    hence thesis by Z,XBOOLE_1:12;
+  end;
+
+theorem
+Lem4: for a,b,c,d being real number st a <= b & b < c & c <= d
+      holds [.a,c.[ /\ ].b,d.] = ].b,c.[
+  proof let a,b,c,d be real number; assume
+A0:  a <= b & b < c & c <= d;
+A1: now let x be real number;
+      x in [.a,c.[ /\ ].b,d.] iff x in [.a,c.[ & x in ].b,d.]
+      by XBOOLE_0:def 3; then
+      x in [.a,c.[ /\ ].b,d.] iff a <= x & x < c & b < x & x <= d
+      by RCOMP_2:3,4; then
+      x in [.a,c.[ /\ ].b,d.] iff b < x & x < c by A0,XREAL_1:2;
+      hence x in [.a,c.[ /\ ].b,d.] iff x in ].b,c.[ by RCOMP_1:47;
+    end;
+    now
+      let x be set;
+      (x in [.a,c.[ /\ ].b,d.] implies x is Real) &
+      (x in ].b,c.[ implies x is Real);
+      hence x in [.a,c.[ /\ ].b,d.] iff x in ].b,c.[ by A1;
+    end;
+    hence thesis by TARSKI:2;
+  end;
+
+theorem Th10:
+  for X,Y being set holds
+  product <*X,Y*>, [:X,Y:] are_equipotent &
+  Card product <*X,Y*> = (Card X)*`(Card Y)
+  proof
+    let X,Y be set;
+    deffunc F(Function) = [$1.1,$1.2];
+    consider f being Function such that
+A1: dom f = product <*X,Y*> &
+    for g being Function st g in product <*X,Y*> holds f.g = F(g)
+    from FUNCT_5:sch 1;
+A2: dom <*X,Y*> = {1,2} & <*X,Y*>.1 = X & <*X,Y*>.2 = Y
+    by FINSEQ_1:4,61,FINSEQ_3:29;
+    thus product <*X,Y*>, [:X,Y:] are_equipotent
+    proof take f;
+      thus f is one-to-one
+      proof let x1,x2 be set; assume
+A3:     x1 in dom f & x2 in dom f & f.x1 = f.x2; then
+        consider g1 being Function such that
+A4:     x1 = g1 & dom g1 = dom <*X,Y*> &
+        for y being set st y in dom <*X,Y*> holds g1.y in <*X,Y*>.y
+        by A1,CARD_3:def 5;
+        consider g2 being Function such that
+A5:     x2 = g2 & dom g2 = dom <*X,Y*> &
+        for y being set st y in dom <*X,Y*> holds g2.y in <*X,Y*>.y
+        by A1,A3,CARD_3:def 5;
+A6:     [g1.1,g1.2] = f.x1 by A1,A3,A4 .= [g2.1,g2.2] by A1,A3,A5;
+        now let z being set; assume z in {1,2};
+          then z = 1 or z = 2 by TARSKI:def 2;
+          hence g1.z = g2.z by A6,ZFMISC_1:33;
+        end;
+        hence x1 = x2 by A2,A4,A5,FUNCT_1:9;
+      end;
+      thus dom f = product <*X,Y*> by A1;
+      thus rng f c= [:X,Y:]
+      proof let z be set; assume z in rng f; then
+        consider t being set such that
+A7:     t in dom f & z = f.t by FUNCT_1:def 5;
+        consider g being Function such that
+A8:     t = g & dom g = dom <*X,Y*> &
+        for y being set st y in dom <*X,Y*> holds g.y in <*X,Y*>.y
+        by A1,A7,CARD_3:def 5;
+        1 in {1,2} & 2 in {1,2} by TARSKI:def 2; then
+        z = [g.1,g.2] & g.1 in X & g.2 in Y by A1,A2,A7,A8;
+        hence thesis by ZFMISC_1:106;
+      end;
+      let z be set; assume z in [:X,Y:]; then
+A9:   z = [z`1,z`2] & z`1 in X & z`2 in Y by MCART_1:10,23;
+      set g = <*z`1,z`2*>;
+A10:  dom g = {1,2} & g.1 = z`1 & g.2 = z`2 by FINSEQ_1:4,61,FINSEQ_3:29;
+A12:  g in product <*X,Y*> by A9,FUNCT_6:2; then
+      f.g = z by A1,A9,A10;
+      hence thesis by A1,A12,FUNCT_1:def 5;
+    end;
+    hence Card product <*X,Y*> = Card [:X,Y:] by CARD_1:21
+    .= Card [:Card X, Card Y:] by CARD_2:14
+    .= (Card X)*`Card Y by CARD_2:def 2;
+  end;
+
+scheme SCH1{P[set], A,B,C()-> non empty set, F1,F2(set)-> set}:
+  ex f being Function of C(), B() st
+  for a being Element of A() st a in C() holds
+   (P[a] implies f.a = F1(a)) & (not P[a] implies f.a = F2(a))
+provided
+A1: C() c= A() and
+A2: for a being Element of A() st a in C() holds 
+    (P[a] implies F1(a) in B()) & (not P[a] implies F2(a) in B())
+   proof
+A3:  for a being set st a in C() holds 
+     (P[a] implies F1(a) in B()) & (not P[a] implies F2(a) in B()) by A1,A2;
+     consider f being Function of C(),B() such that
+A4:  for x being set st x in C() holds
+     (P[ x] implies f.x = F1(x)) & (not P[ x] implies f.x = F2(x))
+     from FUNCT_2:sch 9(A3);
+     take f; thus thesis by A4;
+   end;
+
+scheme SCH2{P,Q[set], A,B,C()-> non empty set, F1,F2,F3(set)-> set}:
+  ex f being Function of C(), B() st
+  for a being Element of A() st a in C() holds
+   (P[a] implies f.a = F1(a)) &
+   (not P[a] & Q[a] implies f.a = F2(a)) &
+   (not P[a] & not Q[a] implies f.a = F3(a))
+provided
+A1: C() c= A() and
+A2: for a being Element of A() st a in C() holds 
+    (P[a] implies F1(a) in B()) &
+    (not P[a] & Q[a] implies F2(a) in B()) &
+    (not P[a] & not Q[a] implies F3(a) in B())
+   proof
+     set D = {a where a is Element of C(): P[a] or Q[a]};
+     per cases;
+     suppose
+C1:    D = {};
+       consider f being Function such that
+A3:    dom f = C() & for u st u in C() holds f.u = F3(u) from FUNCT_1:sch 3;
+       rng f c= B()
+       proof let v; assume v in rng f; then
+         consider u such that
+B1:      u in dom f & v = f.u by FUNCT_1:def 5;
+         not u in D by C1; then
+         (not P[u] & not Q[u]) & v = F3(u) by A3,B1;
+         hence thesis by A1,A2,A3,B1;
+       end; then
+       reconsider f as Function of C(), B() by A3,FUNCT_2:4;
+       take f; let a be Element of A();
+       assume
+06:    a in C();
+       not a in D by C1; then
+       not P[a] & not Q[a] by 06;
+       hence thesis by A3,06;
+     end;
+     suppose D <> {}; then
+       reconsider D as non empty set;
+A4:    for a being set st a in D holds 
+       (P[a] implies F1(a) in B()) & (not P[a] implies F2(a) in B())
+       proof
+         let a be set; assume a in D; then
+         ex b being Element of C() st a = b & (P[b] or Q[b]); then
+         a in C() & (P[a] or Q[a]);
+         hence thesis by A1,A2;
+       end;
+       consider g being Function of D,B() such that
+A5:    for x being set st x in D holds
+       (P[ x] implies g.x = F1(x)) & (not P[ x] implies g.x = F2(x))
+       from FUNCT_2:sch 9(A4);
+       defpred PQ[set] means P[$1] or Q[$1];
+       deffunc F12(set) = g.$1;
+A6:    for a being set st a in C() holds 
+       (PQ[a] implies F12(a) in B()) & (not PQ[a] implies F3(a) in B())
+       proof
+         let a be set;
+         assume
+08:      a in C();
+         hereby
+           assume PQ[a]; then
+           a in D by 08; then
+           (P[a] implies F1(a) in B()) & (not P[a] implies F2(a) in B()) &
+           (P[a] implies g.a = F1(a)) & (not P[a] implies g.a = F2(a))
+           by A4,A5;
+           hence F12(a) in B();
+         end;
+         thus thesis by A1,08,A2;
+       end;
+       consider f being Function of C(),B() such that
+A7:    for x being set st x in C() holds
+       (PQ[ x] implies f.x = F12(x)) & (not PQ[ x] implies f.x = F3(x))
+       from FUNCT_2:sch 9(A6);
+       take f;
+       let a be Element of A(); assume
+A8:    a in C(); then
+       PQ[a] implies f.a = g.a & a in D by A7;
+       hence (P[a] implies f.a = F1(a)) &
+       (not P[a] & Q[a] implies f.a = F2(a)) by A5;
+       thus thesis by A7,A8;
+     end;
+   end;
+
+theorem LemDist:
+  for a,b being real number holds |.|[a,b]|.|^2 = a^2+b^2
+  proof
+    let a,b be real number;
+    |[a,b]|`1 = a & |[a,b]|`2 = b by EUCLID:56;
+    hence thesis by JGRAPH_1:46;
+  end;
+
+theorem Th15:
+  for X being TopSpace, Y being non empty TopSpace
+  for A,B being closed Subset of X
+  for f being continuous Function of X|A, Y
+  for g being continuous Function of X|B, Y
+  st f tolerates g
+  holds f+*g is continuous Function of X|(A \/ B), Y
+  proof
+    let X be TopSpace, Y be non empty TopSpace;
+    let A,B be closed Subset of X;
+    let f be continuous Function of X|A, Y;
+    let g be continuous Function of X|B, Y such that
+A0: f tolerates g;
+A1: the carrier of X|A = A & the carrier of X|B = B &
+    the carrier of X|(A \/ B) = A \/ B by JORDAN1:1; then
+A2: dom (f+*g) = dom f \/ dom g & dom f = A & dom g = B
+    by FUNCT_2:def 1,FUNCT_4:def 1;
+    rng f c= the carrier of Y & rng g c= the carrier of Y by RELSET_1:12; then
+    rng f \/ rng g c= (the carrier of Y) \/ the carrier of Y &
+    rng (f+*g) c= rng f \/ rng g by XBOOLE_1:13,FUNCT_4:18; then
+    rng (f+*g) c= the carrier of Y by XBOOLE_1:1; then
+    reconsider h = f+*g as Function of X|(A \/ B), Y by A1,A2,FUNCT_2:4;
+    h is continuous
+    proof
+      let C be Subset of Y;
+      assume C is closed; then
+A3:   f"C is closed & g"C is closed by PRE_TOPC:def 12; then
+      consider C1 being Subset of X such that
+A4:   C1 is closed & C1 /\ [#](X|A) = f"C by PRE_TOPC:43;
+      consider C2 being Subset of X such that
+A5:   C2 is closed & C2 /\ [#](X|B) = g"C by A3,PRE_TOPC:43;
+A6:   [#](X|(A \/ B)) = A \/ B & [#](X|A) = A & [#](X|B) = B
+      by A1,PRE_TOPC:def 3; then
+      f"C c= A & g"C c= B by A4,A5,XBOOLE_1:17; then
+A8:   (f"C)\/(g"C) c= A\/B by XBOOLE_1:13;
+A7:   h"C = (f"C)\/(g"C) by A0,Th14
+      .= ((f"C)\/(g"C))/\(A\/B) by A8,XBOOLE_1:28;
+      C1 /\ A is closed & C2 /\ B is closed by A4,A5,TOPS_1:35; then
+      C1/\A\/C2/\B is closed by TOPS_1:36;
+      hence h"C is closed by A4,A5,A6,A7,PRE_TOPC:43;
+    end;
+    hence f+*g is continuous Function of X|(A \/ B), Y;
+  end;
+
+theorem Th17:
+  for X being TopSpace, Y being non empty TopSpace
+  for A,B being closed Subset of X st A misses B
+  for f being continuous Function of X|A, Y
+  for g being continuous Function of X|B, Y
+  holds f+*g is continuous Function of X|(A \/ B), Y
+  proof
+    let X be TopSpace, Y be non empty TopSpace;
+    let A,B be closed Subset of X such that
+A0: A misses B;
+    let f be continuous Function of X|A, Y;
+    let g be continuous Function of X|B, Y;
+    the carrier of X|A = A & the carrier of X|B = B &
+    the carrier of X|(A \/ B) = A \/ B by JORDAN1:1; then
+    dom f = A & dom g = B by FUNCT_2:def 1; then
+    f tolerates g by A0,PARTFUN1:138;
+    hence thesis by Th15;
+  end;
+
+theorem Th18:
+  for X being TopSpace, Y being non empty TopSpace
+  for A being open closed Subset of X
+  for f being continuous Function of X|A, Y
+  for g being continuous Function of X|A`, Y
+  holds f+*g is continuous Function of X, Y
+  proof
+    let X be TopSpace;
+    let Y be non empty TopSpace;
+    let A be open closed Subset of X;
+    let f be continuous Function of X|A, Y;
+    let g be continuous Function of X|A`, Y;
+    A\/A` = [#]X by PRE_TOPC:18; then
+A1: X|(A\/A`) = the TopStruct of X & the TopStruct of Y = the TopStruct of Y
+    by WAYBEL34:31;
+    A misses A` by SUBSET_1:26; then
+    f+*g is continuous Function of X|(A\/A`), Y by Th17;
+    hence f+*g is continuous Function of X, Y by A1,YELLOW12:36;
+  end;
+
+begin :: Niemytzki plane
+  
+theorem LemA:
+  for n being Nat
+  for a being Point of TOP-REAL n
+  for r being positive (real number)
+  holds a in Ball(a,r)
+  proof
+    let n be Nat;
+    let a be Point of TOP-REAL n;
+    let r be positive (real number);
+    a-a = 0.REAL n by EUCLID:46; then
+    |.a-a.| = 0 by EUCLID_2:61;
+    hence a in Ball(a,r) by TOPREAL9:7;
+  end;
+  
+definition
+  func y=0-line -> Subset of TOP-REAL 2 equals :DEF1:
+  {|[x,0]|: not contradiction};
+  coherence
+  proof
+    set A = {|[x,0]|: not contradiction};
+    A c= the carrier of TOP-REAL 2
+    proof
+      let a be set;
+      assume a in A; then
+      ex x st a = |[x,0]|;
+      hence thesis;
+    end;
+    hence thesis;
+  end;
+  func y>=0-plane -> Subset of TOP-REAL 2 equals :DEF2:
+  {|[x,y]|: y >= 0};
+  coherence
+  proof
+    set A = {|[x,y]|: y >= 0};
+    A c= the carrier of TOP-REAL 2
+    proof
+      let a be set;
+      assume a in A; then
+      ex x,y st a = |[x,y]| & y >= 0;
+      hence thesis;
+    end;
+    hence thesis;
+  end;
+end;
+
+theorem
+  for a,b being set holds <*a,b*> in y=0-line iff a in REAL & b = 0
+  proof
+    let a,b be set;
+A1: <*a,b*> in y=0-line iff ex x st <*a,b*> = |[x,0]| by DEF1;
+    hereby 
+      assume <*a,b*> in y=0-line; then
+      consider x,y such that
+01:   <*a,b*> = |[x,0]| by A1;
+      <*a,b*> = <*x,0 *> by 01,EUCLID:def 16; then
+02:   <*a,b*>.1 = a & <*a,b*>.1 = x &
+      <*a,b*>.2 = b & <*a,b*>.2 = 0 by FINSEQ_1:61;
+      hence a in REAL;
+      thus b = 0 by 02;
+    end;
+    assume a in REAL; then
+    reconsider x = a as Real;
+    |[x,0]| = <*a,0 *> by EUCLID:def 16;
+    hence thesis by A1;
+  end;
+
+theorem L2:
+  for a,b being real number holds |[a,b]| in y=0-line iff b = 0
+  proof
+    let a,b be real number;
+    (|[a,b]| in y=0-line iff ex x st |[a,b]| = |[x,0]|) &
+    a is Real & b is Real by DEF1,XREAL_0:def 1;
+    hence thesis by SPPOL_2:1;
+  end;
+  
+theorem L0:
+  Card y=0-line = continuum
+  proof
+    deffunc F(Real) = |[$1,0]|;
+    consider f being Function such that
+A1: dom f = REAL and
+A2: for r being Real holds f.r = F(r) from FUNCT_1:sch 4;
+    REAL, y=0-line are_equipotent
+    proof
+      take f;
+      thus f is one-to-one
+      proof
+        let x,y be set;
+        assume x in dom f & y in dom f; then
+        reconsider x,y as Real by A1;
+        f.x = |[x,0]| & f.y = |[y,0]| by A2;
+        hence thesis by SPPOL_2:1;
+      end;
+      thus dom f = REAL by A1;
+      thus rng f c= y=0-line
+      proof let a be set; assume a in rng f; then
+        consider b being set such that
+A3:     b in dom f & a = f.b by FUNCT_1:def 5;
+        reconsider b as Real by A1,A3;
+        a = |[b,0]| by A2,A3;
+        hence thesis by L2;
+      end;
+      let a be set; assume
+A4:   a in y=0-line; then
+      reconsider a as Point of TOP-REAL 2;
+A5:   a = |[a`1,a`2]| by EUCLID:57; then
+      a`2 = 0 by A4,L2; then
+      a = f.a`1 by A2,A5;
+      hence thesis by A1,FUNCT_1:def 5;
+    end;
+    hence thesis by CARD_1:21,TOPGEN_3:def 4;
+  end;
+
+theorem
+ for a,b being set holds <*a,b*> in y>=0-plane iff
+   a in REAL & ex y st b = y & y >= 0
+  proof
+    let a,b be set;
+    y>=0-plane = {|[x,y]|: y >= 0} by DEF2; then
+A1: <*a,b*> in y>=0-plane iff ex x,y st <*a,b*> = |[x,y]| & y >= 0;
+    hereby 
+      assume <*a,b*> in y>=0-plane; then
+      consider x,y such that
+01:   <*a,b*> = |[x,y]| & y >= 0 by A1;
+      <*a,b*> = <*x,y*> by 01,EUCLID:def 16; then
+02:   <*a,b*>.1 = a & <*a,b*>.1 = x &
+      <*a,b*>.2 = b & <*a,b*>.2 = y by FINSEQ_1:61;
+      hence a in REAL;
+      take y; thus b = y & y >= 0 by 01,02;
+    end;
+    assume a in REAL; then
+    reconsider x = a as Real;
+    given y such that
+03: b = y & y >= 0;
+    |[x,y]| = <*a,b*> by 03,EUCLID:def 16;
+    hence <*a,b*> in y>=0-plane by 03,A1;
+  end;
+
+theorem P2:
+  for a,b being real number holds |[a,b]| in y>=0-plane iff b >= 0
+  proof
+    let a,b be real number;
+    y>=0-plane = {|[x,y]|: y >= 0} by DEF2; then
+    (|[a,b]| in y>=0-plane iff ex x,y st |[a,b]| = |[x,y]| & y >= 0) &
+    a is Real & b is Real by XREAL_0:def 1;
+    hence thesis by SPPOL_2:1;
+  end;
+
+registration
+  cluster y=0-line -> non empty;
+  coherence by L2;
+  cluster y>=0-plane -> non empty;
+  coherence by P2;
+end;
+
+theorem LP:
+  y=0-line c= y>=0-plane
+  proof let x be set;
+    assume x in y=0-line; then
+    reconsider x as Element of y=0-line;
+A0: x = |[x`1,x`2]| by EUCLID:57; then
+    x`2 = 0 by L2;
+    hence thesis by A0,P2;
+  end;
+
+theorem P3:
+  for a,b,r being real number st r > 0 holds
+  Ball(|[a,b]|,r) c= y>=0-plane iff r <= b
+  proof
+    let a,b,r be real number such that
+01: r > 0;
+    hereby assume that
+02:   Ball(|[a,b]|,r) c= y>=0-plane and
+03:   r > b;
+      |[a,b]| in Ball(|[a,b]|,r) by 01,LemA; then
+      b >= 0 by 02,P2; then
+      reconsider b as non negative Real by XREAL_0:def 1;
+      reconsider br=b-r as negative Real by 03,XREAL_1:51,XREAL_0:def 1;
+      reconsider r as positive Real by 01,XREAL_0:def 1;
+      b+r < r+r by 03,XREAL_1:8; then
+04:   (b+r)/2 < (r+r)/2 by XREAL_1:76;
+      set y = br/2;
+      |[a,y]|-|[a,b]| = |[a-a,y-b]| & y-b is Real by EUCLID:66; then
+      |.|[a,y]|-|[a,b]|.| = |.y-b.| by TOPREAL6:31
+      .= |.b-y.| by COMPLEX1:146
+      .= (b+r)/2 by ABSVALUE:def 1; then
+      |[a,y]| in Ball(|[a,b]|,r) by 04,TOPREAL9:7;
+      hence contradiction by 02,P2;
+    end;
+    assume
+05: r <= b;
+    let x be set; assume
+06: x in Ball(|[a,b]|,r); then
+    reconsider z = x as Element of TOP-REAL 2;
+09: z = |[z`1,z`2]| by EUCLID:57; then
+    z-|[a,b]| = |[z`1-a,z`2-b]| & |[z`1-a,z`2-b]|`1 = z`1-a &
+    |[z`1-a,z`2-b]|`2 = z`2-b by EUCLID:56,66; then
+    z`1-a is Real & z`2-b is Real &
+    |.z-|[a,b]|.| = sqrt((z`1-a)^2+(z`2-b)^2) by JGRAPH_1:47; then
+    abs(z`2-b) <= |.z-|[a,b]|.| &
+    |.z-|[a,b]|.| < r by 06,TOPREAL9:7,JGRAPH_1:3; then
+    abs(z`2-b) < r by XREAL_1:2; then
+07: abs(b-z`2) < r by COMPLEX1:146;
+    now assume z`2 < 0; then
+      b-z`2 > b by XREAL_1:48; then
+08:   b-z`2 > r by 05,XREAL_1:2;
+      hence contradiction by 01,07,ABSVALUE:def 1;
+    end;
+    hence x in y>=0-plane by 09,P2;
+  end;
+
+theorem P4:
+  for a,b,r being real number st r > 0 & b >= 0 holds
+  Ball(|[a,b]|,r) misses y=0-line iff r <= b
+  proof
+    let a,b,r be real number;
+    assume
+A0: r > 0 & b >= 0;
+    hereby 
+      assume that
+A1:   Ball(|[a,b]|,r) misses y=0-line and
+A2:   r > b;
+      |[a,0]|-|[a,b]| = |[a-a,0-b]| & 0-b is Real
+      by XREAL_0:def 1,EUCLID:66; then
+      |.|[a,0]|-|[a,b]|.| = |.0-b.| by TOPREAL6:31
+      .= |.b-0.| by COMPLEX1:146; then
+      |.|[a,0]|-|[a,b]|.| < r by A0,A2,ABSVALUE:def 1; then
+      |[a,0]| in Ball(|[a,b]|,r) & |[a,0]| in y=0-line by L2,TOPREAL9:7;
+      hence contradiction by A1,XBOOLE_0:3;
+    end;
+    assume
+A2: r <= b;
+    assume Ball(|[a,b]|,r) meets y=0-line; then
+    consider x being set such that
+A3: x in Ball(|[a,b]|,r) & x in y=0-line by XBOOLE_0:3;
+    reconsider x as Element of TOP-REAL 2 by A3;
+A4: x = |[x`1,x`2]| by EUCLID:57; then
+    x`2 = 0 by A3,L2; then
+    x-|[a,b]| = |[x`1-a,0-b]| by A4,EUCLID:66; then
+    (x-|[a,b]|)`1 = x`1-a & (x-|[a,b]|)`2 = 0-b by EUCLID:56; then
+    x`1-a is Real & 0-b is Real &
+    |.x-|[a,b]|.| = sqrt((x`1-a)^2+(0-b)^2) by JGRAPH_1:47; then
+    |.x-|[a,b]|.| >= abs(0-b) by JGRAPH_1:3; then
+    |.x-|[a,b]|.| >= abs(b-0) & |.x-|[a,b]|.| < r
+    by A3,COMPLEX1:146,TOPREAL9:7; then
+    abs b < r by XREAL_1:2;
+    hence contradiction by A0,A2,ABSVALUE:def 1;
+  end;
+
+theorem P5:
+  for n being Nat,
+      a,b being Element of TOP-REAL n, r1,r2 being positive (real number)
+  st |.a-b.| <= r1-r2
+  holds Ball(b,r2) c= Ball(a,r1)
+  proof
+    let n be Nat, a,b be Element of TOP-REAL n,
+        r1,r2 be positive (real number);
+    assume |.a-b.| <= r1-r2; then
+A1: |.b-a.| <= r1-r2 by TOPRNS_1:28;
+    let x be set; assume
+A2: x in Ball(b,r2); then
+    reconsider x as Element of TOP-REAL n;
+    |.x-b.| < r2 by A2,TOPREAL9:7; then
+    |.x-b.|+|.b-a.| < r2+(r1-r2) &
+    |.x-a.| <= |.x-b.|+|.b-a.| by A1,XREAL_1:10,TOPRNS_1:35; then
+    |.x-a.| < r2+(r1-r2) by XREAL_1:2;
+    hence thesis by TOPREAL9:7;
+  end;
+
+theorem P6:
+  for a being real number, r1,r2 being positive (real number) st r1 <= r2
+  holds Ball(|[a,r1]|,r1) c= Ball(|[a,r2]|,r2)
+  proof
+    let a be real number;
+    let r1,r2 be positive (real number);
+    assume
+A0: r1 <= r2;
+    let x be set; assume
+A1: x in Ball(|[a,r1]|,r1); then
+    reconsider x as Element of TOP-REAL 2;
+    |[a,r1]|-|[a,r2]| = |[a-a,r1-r2]| & r1-r2 is Real
+    by XREAL_0:def 1,EUCLID:66; then
+    |.|[a,r1]|-|[a,r2]|.| = |.r1-r2.| by TOPREAL6:31; then
+    |.|[a,r1]|-|[a,r2]|.| = |.r2-r1.| &
+    r2-r1 >= 0 by A0,XREAL_1:50,COMPLEX1:146; then
+    |.|[a,r1]|-|[a,r2]|.| = r2-r1 &
+    |.x-|[a,r1]|.| < r1 by A1,TOPREAL9:7,ABSVALUE:def 1; then
+    |.x-|[a,r1]|.|+|.|[a,r1]|-|[a,r2]|.| < r1+(r2-r1) &
+    |.x-|[a,r2]|.| <= |.x-|[a,r1]|.|+|.|[a,r1]|-|[a,r2]|.|
+    by TOPRNS_1:35,XREAL_1:10; then
+    |.x-|[a,r2]|.| < r2 by XREAL_1:2;
+    hence thesis by TOPREAL9:7;
+  end;
+
+theorem Eq:
+  for T1,T2 being non empty TopSpace
+  for B1 being Neighborhood_System of T1
+  for B2 being Neighborhood_System of T2 st B1 = B2
+  holds the TopStruct of T1 = the TopStruct of T2
+  proof
+    let T1,T2 be non empty TopSpace;
+    let B1 be Neighborhood_System of T1;
+    let B2 be Neighborhood_System of T2;
+    assume
+A1: B1 = B2;
+A2: dom B1 = the carrier of T1 & dom B2 = the carrier of T2 by PBOOLE:def 3;
+    UniCl Union B1 = the topology of T1 & UniCl Union B2 = the topology of T2
+    by YELLOW_9:22;
+    hence the TopStruct of T1 = the TopStruct of T2 by A1,A2;
+  end;
+
+definition
+  func Niemytzki-plane -> strict non empty TopSpace means :DEF3:
+  the carrier of it = y>=0-plane &
+  ex B being Neighborhood_System of it st
+  (for x holds B.(|[x,0]|) =
+    {Ball(|[x,r]|,r) \/ {|[x,0]|} where r is Element of REAL: r > 0}) &
+  (for x,y st y > 0 holds B.(|[x,y]|) =
+    {Ball(|[x,y]|,r) /\ y>=0-plane where r is Element of REAL: r > 0});
+  existence
+  proof
+    set X = y>=0-plane;
+    deffunc F1(Element of TOP-REAL 2) =
+    {Ball(|[$1`1,r]|,r) \/ {$1} where r is Element of REAL: r > 0};
+    deffunc F2(Element of TOP-REAL 2) =
+    {Ball($1,r) /\ X where r is Element of REAL: r > 0};
+    defpred P[set] means $1 in y=0-line;
+    consider B being ManySortedSet of X such that
+A1: for a being Element of X st a in X holds
+    (P[a] implies B.a = F1(a)) &
+    (not P[a] implies B.a = F2(a)) from PRE_CIRC:sch 2;
+    B is non-empty
+    proof
+      let z be set; assume z in X; then
+      reconsider s = z as Element of X;
+      per cases;
+      suppose P[z]; then
+B2:     B.s = F1(s) by A1;
+        consider r being positive Element of REAL;
+        set a = |[s`1,r]|;
+        Ball(a,r) \/ {s} in B.s by B2;
+        hence thesis;
+      end;
+      suppose not P[z]; then
+B3:     B.s = F2(s) by A1;
+        consider r being positive Element of REAL;
+        Ball(s,r) /\ X in B.s by B3;
+        hence thesis;
+      end;
+    end; then
+    reconsider B as non-empty ManySortedSet of X;
+A2: rng B c= bool bool X
+    proof
+      let w be set;
+      assume w in rng B; then
+      consider a being set such that
+B4:   a in dom B & w = B.a by FUNCT_1:def 5;
+      reconsider a as Element of X by B4,PBOOLE:def 3;
+      P[a] or not P[a]; then
+B5:   w = F1(a) or w = F2(a) by A1,B4;
+      w c= bool X
+      proof
+        let z be set; assume
+C0:     z in w;
+        per cases by B5;
+        suppose w = F1(a); then
+          consider r being Element of REAL such that
+C1:       z = Ball(|[a`1,r]|,r) \/ {a} & r > 0 by C0;
+          Ball(|[a`1,r]|,r) c= X & {a} c= X by C1,P3,ZFMISC_1:37; then
+          z c= X by C1,XBOOLE_1:8;
+          hence thesis;
+        end;
+        suppose w = F2(a); then
+          ex r being Element of REAL st z = Ball(a,r) /\ X & r > 0 by C0; then
+          z c= X by XBOOLE_1:17;
+          hence thesis;
+        end;
+      end;
+      hence thesis;
+    end;
+A3: for x,U being set st x in X & U in B.x holds x in U
+    proof
+      let x,U be set; assume x in X; then
+      reconsider a = x as Element of X;
+      P[a] or not P[a]; then
+D1:   B.x = F1(a) or B.x = F2(a) by A1;
+      assume
+D2:   U in B.x;
+      per cases by D1;
+      suppose B.x = F1(a); then
+        consider r being Element of REAL such that
+D3:     U = Ball(|[a`1,r]|,r) \/ {a} & r > 0 by D2;
+        a in {a} by TARSKI:def 1;
+        hence thesis by D3,XBOOLE_0:def 2;
+      end;
+      suppose B.x = F2(a); then
+        consider r being Element of REAL such that
+D4:     U = Ball(a,r) /\ X & r > 0 by D2;
+        a in Ball(a,r) by D4,LemA;
+        hence thesis by D4,XBOOLE_0:def 3;
+      end;
+    end;
+A4: for x,y,U being set st x in U & U in B.y & y in X
+       ex V being set st V in B.x & V c= U
+     proof
+       let x,y,U be set;
+       assume
+E1:    x in U;
+       assume
+E2:    U in B.y;
+       assume y in X; then reconsider y as Element of X;
+       per cases;
+       suppose P[y]; then
+         B.y = F1(y) by A1; then
+         consider r being Element of REAL such that
+E3:      U = Ball(|[y`1,r]|,r) \/ {y} & r > 0 by E2;
+E4:      x in Ball(|[y`1,r]|,r) or x = y by E1,E3,SETWISEO:6; then
+         reconsider z = x as Element of TOP-REAL 2;
+         now assume
+E5:        x in Ball(|[y`1,r]|,r);
+           Ball(|[y`1,r]|,r) c= X &
+           Ball(|[y`1,r]|,r) misses y=0-line by E3,P3,P4; then
+           x in X & not P[x] by E5,XBOOLE_0:3; then
+E6:        B.z = F2(z) by A1;
+           set r2 = r-|.z-|[y`1,r]|.|;
+           take V = Ball(z,r2) /\ X;
+           |.z-|[y`1,r]|.| < r by E5,TOPREAL9:7; then
+           r2 > 0 by XREAL_1:52; then
+           reconsider r1 = r, r2 as positive Real by E3;
+           r2 > 0;
+           hence V in B.x by E6;
+           r1-r2 = |.|[y`1,r]|-z.| by TOPRNS_1:28; then
+           V c= Ball(z,r2) & Ball(z,r2) c= Ball(|[y`1,r]|,r1)
+           by P5,XBOOLE_1:17; then
+           V c= Ball(|[y`1,r]|,r1) & Ball(|[y`1,r]|,r) c= U
+           by E3,XBOOLE_1:1,7;
+           hence V c= U by XBOOLE_1:1;
+         end;
+         hence thesis by E4,E2;
+       end;
+       suppose not P[y]; then
+         B.y = F2(y) by A1; then
+         consider r being Element of REAL such that
+E7:      U = Ball(y,r) /\ X & r > 0 by E2;
+         reconsider z = x as Element of X by E1,E7,XBOOLE_0:def 3;
+         set r2 = r-|.z-y.|;
+         z in Ball(y,r) by E1,E7,XBOOLE_0:def 3; then
+         |.z-y.| < r by TOPREAL9:7; then
+         r2 > 0 by XREAL_1:52; then
+         reconsider r1 = r, r2 as positive Real by E7;
+E9:      z = |[z`1,z`2]| by EUCLID:57;
+         per cases;
+         suppose P[z]; then
+E8:        B.z = F1(z) & z`2 = 0 by A1,E9,L2;
+           set V = Ball(|[z`1,r2/2]|,r2/2) \/ {z};
+           take V;
+           thus V in B.x by E8;
+           |[z`1,r2/2]|-z = |[z`1-z`1,r2/2-0]| & z`1-z`1 = 0
+           by E8,E9,XCMPLX_1:14,EUCLID:66; then
+           |.|[z`1,r2/2]|-z.| = abs(r2/2) by TOPREAL6:31
+           .= r2/2 by ABSVALUE:def 1; then
+           |.|[z`1,r2/2]|-y.| <= r2/2+|.z-y.| by TOPRNS_1:35; then
+E10:       |.|[z`1,r2/2]|-y.| <= r-r2/2 & r-r2/2 < r by XREAL_1:46; then
+           |.|[z`1,r2/2]|-y.| < r by XREAL_1:2; then
+           |[z`1,r2/2]| in Ball(y,r) & |.y-|[z`1,r2/2]|.| <= r-r2/2
+           by E10,TOPREAL9:7,TOPRNS_1:28; then
+           Ball(|[z`1,r2/2]|,r2/2) c= X &
+           Ball(|[z`1,r2/2]|,r2/2) c= Ball(y,r1) by P3,P5; then
+           Ball(|[z`1,r2/2]|,r2/2) c= U & {z} c= U
+           by E1,E7,XBOOLE_1:19,ZFMISC_1:37;
+           hence V c= U by XBOOLE_1:8;
+         end;
+         suppose not P[z]; then
+F1:        B.z = F2(z) by A1;
+           take V = Ball(z,r2) /\ X;
+           thus V in B.x by F1;
+           |.y-z.| = r1-r2 by TOPRNS_1:28; then
+           Ball(z,r2) c= Ball(y,r1) by P5;
+           hence V c= U by E7,XBOOLE_1:26;
+         end;
+       end;
+     end;
+A5: for x,U1,U2 being set st x in X & U1 in B.x & U2 in B.x
+       ex U being set st U in B.x & U c= U1 /\ U2
+    proof
+      let x,U1,U2 be set;
+      assume x in X; then reconsider z = x as Element of X;
+      assume
+G0:   U1 in B.x & U2 in B.x;
+      per cases;
+      suppose P[z]; then
+G1:     B.x = F1(z) by A1; then
+        consider r1 being Real such that
+H1:     U1 = Ball(|[z`1,r1]|,r1) \/ {z} & r1 > 0 by G0;
+        consider r2 being Real such that
+H2:     U2 = Ball(|[z`1,r2]|,r2) \/ {z} & r2 > 0 by G0,G1;
+        r1 <= r2 or r1 >= r2; then
+        consider U being set such that
+H3:     r1 <= r2 & U = U1 or r1 >= r2 & U = U2;
+        take U;
+        thus U in B.x by G0,H3;
+        (r1 <= r2 & U = U1 & Ball(|[z`1,r1]|,r1) c= Ball(|[z`1,r2]|,r2)) or
+        (r1 >= r2 & U = U2 & Ball(|[z`1,r2]|,r2) c= Ball(|[z`1,r1]|,r1))
+        by P6,H1,H2,H3; then
+        U c= U1 & U c= U2 by H1,H2,XBOOLE_1:9;
+        hence U c= U1 /\ U2 by XBOOLE_1:19;
+      end;
+      suppose not P[z]; then
+G2:     B.x = F2(z) by A1; then
+        consider r1 being Real such that
+H1:     U1 = Ball(z,r1) /\ X & r1 > 0 by G0;
+        consider r2 being Real such that
+H2:     U2 = Ball(z,r2) /\ X & r2 > 0 by G0,G2;
+        r1 <= r2 or r1 >= r2; then
+        consider U being set such that
+H3:     r1 <= r2 & U = U1 or r1 >= r2 & U = U2;
+        take U;
+        thus U in B.x by G0,H3;
+        (r1 <= r2 & U = U1 & Ball(z,r1) c= Ball(z,r2)) or
+        (r1 >= r2 & U = U2 & Ball(z,r2) c= Ball(z,r1))
+        by JORDAN:26,H1,H2,H3; then
+        U c= U1 & U c= U2 by H1,H2,XBOOLE_1:26;
+        hence U c= U1 /\ U2 by XBOOLE_1:19;
+      end;
+    end;
+    consider P being Subset-Family of X such that
+G1: P = Union B &
+    for T being TopStruct
+    st the carrier of T = X & the topology of T = UniCl P
+    holds T is TopSpace &
+      for T' being non empty TopSpace st T' = T
+      holds B is Neighborhood_System of T'
+    by A2,A3,A4,A5,TOPGEN_3:3;
+    set T = TopStruct(#X, UniCl P#);
+    reconsider T as non empty strict TopSpace by G1;
+    reconsider B as Neighborhood_System of T by G1;
+    take T; thus the carrier of T = X;
+    take B;
+    hereby let x;
+      deffunc a1(Real) = Ball(|[x,$1]|,$1) \/ {|[x,0]|};
+      deffunc a2(Real) = Ball(|[|[x,0]|`1,$1]|,$1) \/ {|[x,0]|};
+      defpred R[Real] means $1 > 0;
+FF:   for r being Real holds a1(r) = a2(r) by EUCLID:56;
+GG:   {a1(r) where r is Real: R[r]} = {a2(r) where r is Real: R[r]}
+      from FRAENKEL:sch 5(FF);
+      P[ |[x,0]| ] & |[x,0]| in X by P2,L2;
+      hence B.(|[x,0]|) = {Ball(|[x,r]|,r) \/ {|[x,0]|} where
+      r is Element of REAL: r > 0} by A1,GG;
+    end;
+    let x,y; assume y > 0; then
+    |[x,y]| in X & not |[x,y]| in y=0-line by L2,P2;
+    hence B.(|[x,y]|) = {Ball(|[x,y]|,r) /\ X where r is Element of REAL:
+    r > 0} by A1;
+  end;
+  uniqueness
+  proof
+    let T1,T2 be strict non empty TopSpace such that
+A1: the carrier of T1 = y>=0-plane and
+B1: ex B being Neighborhood_System of T1 st
+    (for x holds B.(|[x,0]|) =
+     {Ball(|[x,r]|,r) \/ {|[x,0]|} where r is Element of REAL: r > 0}) &
+    (for x,y st y > 0 holds B.(|[x,y]|) =
+     {Ball(|[x,y]|,r) /\ y>=0-plane where r is Element of REAL: r > 0}) and
+A2: the carrier of T2 = y>=0-plane and
+B2: ex B being Neighborhood_System of T2 st
+    (for x holds B.(|[x,0]|) =
+     {Ball(|[x,r]|,r) \/ {|[x,0]|} where r is Element of REAL: r > 0}) &
+    (for x,y st y > 0 holds B.(|[x,y]|) =
+     {Ball(|[x,y]|,r) /\ y>=0-plane where r is Element of REAL: r > 0});
+    consider B1 being Neighborhood_System of T1 such that
+C1: for x holds B1.(|[x,0]|) =
+     {Ball(|[x,r]|,r) \/ {|[x,0]|} where r is Element of REAL: r > 0} and
+D1: for x,y st y > 0 holds B1.(|[x,y]|) =
+     {Ball(|[x,y]|,r) /\ y>=0-plane where r is Element of REAL: r > 0} by B1;
+    consider B2 being Neighborhood_System of T2 such that
+C2: for x holds B2.(|[x,0]|) =
+     {Ball(|[x,r]|,r) \/ {|[x,0]|} where r is Element of REAL: r > 0} and
+D2: for x,y st y > 0 holds B2.(|[x,y]|) =
+     {Ball(|[x,y]|,r) /\ y>=0-plane where r is Element of REAL: r > 0} by B2;
+    now
+      let a be set;
+      assume a in y>=0-plane; then
+      reconsider z = a as Element of y>=0-plane;
+A3:   z = |[z`1,z`2]| by EUCLID:57; then
+      z`2 = 0 or z`2 > 0 by P2; then
+      z`2 = 0 & B1.z = {Ball(|[z`1,r]|,r) \/ {|[z`1,0]|} where
+      r is Element of REAL: r > 0} & B2.z = {Ball(|[z`1,r]|,r) \/
+      {|[z`1,0]|} where r is Element of REAL: r > 0}
+      or
+      z`2 > 0 & B1.z = {Ball(|[z`1,z`2]|,r) /\ y>=0-plane where
+      r is Element of REAL:  r > 0} & B2.z = {Ball(|[z`1,z`2]|,r) /\
+      y>=0-plane where r is Element of REAL: r > 0} by A3,C1,C2,D1,D2;
+      hence B1.a = B2.a;
+    end; then
+    B1 = B2 by A1,A2,PBOOLE:3;
+    hence thesis by Eq;
+  end;
+end;
+
+theorem Th1:
+  y>=0-plane \ y=0-line is open Subset of Niemytzki-plane
+  proof
+    consider BB being Neighborhood_System of Niemytzki-plane such that
+    for x holds BB.(|[x,0]|) =
+    {Ball(|[x,r]|,r) \/ {|[x,0]|} where r is Element of REAL: r > 0} and
+A2: for x,y st y > 0 holds BB.(|[x,y]|) =
+    {Ball(|[x,y]|,r) /\ y>=0-plane where r is Element of REAL:  r > 0} by DEF3;
+A3: the carrier of Niemytzki-plane = y>=0-plane by DEF3; then
+    reconsider A = y>=0-plane \ y=0-line as Subset of Niemytzki-plane
+    by XBOOLE_1:36;
+    now
+      let a be Point of Niemytzki-plane;
+      assume a in A; then
+A4:   a in y>=0-plane & not a in y=0-line by XBOOLE_0:def 4; then
+      a in {|[x,y]|: y >= 0} by DEF2; then
+      consider x,y such that
+A5:   a = |[x,y]| & y >= 0;
+      set B = Ball(|[x,y]|,y)/\y>=0-plane;
+      reconsider B as Subset of Niemytzki-plane by A3,XBOOLE_1:17;
+      take B;
+      y <> 0 by A4,A5,L2; then
+A6:   y > 0 by A5; then
+      B in {Ball(|[x,y]|,r) /\ y>=0-plane where
+      r is Element of REAL : r > 0}; then
+A7:   B in BB.a & dom BB = the carrier of Niemytzki-plane
+      by A2,A5,A6,PBOOLE:def 3;
+      hence B in Union BB by CARD_5:10;
+      thus a in B by A7,YELLOW_8:21;
+      Ball(|[x,y]|,y) c= y>=0-plane by A6,P3; then
+      B = Ball(|[x,y]|,y) by XBOOLE_1:28; then
+      B misses y=0-line by A6,P4;
+      hence B c= A by A3,XBOOLE_1:86;
+    end;
+    hence thesis by YELLOW_9:31;
+  end;
+
+LemNp: the carrier of Niemytzki-plane = y>=0-plane by DEF3;
+
+theorem Th39:
+  y=0-line is closed Subset of Niemytzki-plane
+  proof
+A1: the carrier of Niemytzki-plane = y>=0-plane by DEF3;
+    reconsider A = y>=0-plane \ y=0-line as open Subset of Niemytzki-plane
+    by Th1;
+    reconsider B = y=0-line as Subset of Niemytzki-plane by A1,LP;
+    B` = A by A1,SUBSET_1:def 5; then
+    A` = y=0-line;
+    hence thesis;
+  end;
+  
+theorem Th31:
+  for x being real number, r being positive (real number)
+  holds Ball(|[x,r]|,r) \/ {|[x,0]|} is open Subset of Niemytzki-plane
+  proof
+    let x be real number;
+    let r be positive (real number);
+    the carrier of Niemytzki-plane = y>=0-plane by DEF3; then
+    reconsider a = |[x,0]| as Point of Niemytzki-plane by P2;
+    consider BB being Neighborhood_System of Niemytzki-plane such that
+A1: for x holds BB.(|[x,0]|) =
+    {Ball(|[x,q]|,q) \/ {|[x,0]|} where q is Element of REAL: q > 0} and
+    for x,y st y > 0 holds BB.(|[x,y]|) =
+    {Ball(|[x,y]|,q) /\ y>=0-plane where q is Element of REAL:  q > 0} by DEF3;
+A2: x is Real & r is Real by XREAL_0:def 1; then
+    BB.(|[x,0]|) =
+    {Ball(|[x,q]|,q) \/ {|[x,0]|} where q is Element of REAL: q > 0}
+    by A1; then
+    Ball(|[x,r]|,r) \/ {|[x,0]|} in BB.a by A2;
+    hence Ball(|[x,r]|,r) \/ {|[x,0]|} is open Subset of Niemytzki-plane
+    by YELLOW_8:21;
+  end;
+
+theorem Th32:
+  for x being real number
+  for y,r being positive (real number)
+  holds Ball(|[x,y]|,r) /\ y>=0-plane is open Subset of Niemytzki-plane
+  proof
+    let x be real number;
+    let y,r be positive (real number);
+    the carrier of Niemytzki-plane = y>=0-plane by DEF3; then
+    reconsider a = |[x,y]| as Point of Niemytzki-plane by P2;
+    consider BB being Neighborhood_System of Niemytzki-plane such that
+    for x holds BB.(|[x,0]|) =
+    {Ball(|[x,q]|,q) \/ {|[x,0]|} where q is Element of REAL: q > 0} and
+A1: for x,y st y > 0 holds BB.(|[x,y]|) =
+    {Ball(|[x,y]|,q) /\ y>=0-plane where q is Element of REAL:  q > 0} by DEF3;
+A2: x is Real & y is Real & r is Real by XREAL_0:def 1; then
+    BB.(|[x,y]|) =
+    {Ball(|[x,y]|,q) /\ y>=0-plane where q is Element of REAL: q > 0}
+    by A1; then
+    Ball(|[x,y]|,r) /\ y>=0-plane in BB.a by A2;
+    hence Ball(|[x,y]|,r) /\ y>=0-plane is open Subset of Niemytzki-plane
+    by YELLOW_8:21;
+  end;
+
+theorem Th34:
+  for x,y being real number
+  for r being positive (real number) st r <= y
+  holds Ball(|[x,y]|,r) is open Subset of Niemytzki-plane
+  proof
+    let x,y be real number;
+    let r be positive (real number);
+    assume
+00: r <= y; then
+05: y > 0; then
+01: Ball(|[x,y]|,r) /\ y>=0-plane is open Subset of Niemytzki-plane by Th32;
+    Ball(|[x,y]|,r) c= y>=0-plane
+    proof
+      let a be set; assume
+02:   a in Ball(|[x,y]|,r); then
+      reconsider z = a as Element of TOP-REAL 2;
+03:   z = |[z`1,z`2]| by EUCLID:57; then
+      z-|[x,y]| = |[z`1-x,z`2-y]| by EUCLID:66; then
+      (z-|[x,y]|)`1 = z`1-x & (z-|[x,y]|)`2 = z`2-y by EUCLID:56; then
+      z`1-x is Real & z`2-y is Real &
+      |.z-|[x,y]|.| = sqrt((z`1-x)^2+(z`2-y)^2) by JGRAPH_1:47; then
+      |.z-|[x,y]|.| >= abs(z`2-y) by JGRAPH_1:3; then
+      |.z-|[x,y]|.| >= abs(y-z`2) & |.z-|[x,y]|.| < r
+      by 02,COMPLEX1:146,TOPREAL9:7; then
+04:   abs(y-z`2) < r by XREAL_1:2;
+      now assume z`2 < 0;
+        hence y-z`2 > y by XREAL_1:48;
+        hence abs(y-z`2) = y-z`2 by 05,ABSVALUE:def 1;
+      end;
+      hence thesis by 03,P2,00,04,XREAL_1:2;
+    end;
+    hence Ball(|[x,y]|,r) is open Subset of Niemytzki-plane by 01,XBOOLE_1:28;
+  end;
+
+theorem Th33:
+  for p being Point of Niemytzki-plane
+  for r being positive (real number)
+  ex a being Point of TOP-REAL 2, U being open Subset of Niemytzki-plane
+  st p in U & a in U &
+  for b being Point of TOP-REAL 2 st b in U holds |.b-a.| < r
+  proof
+    let p be Point of Niemytzki-plane;
+    let r be positive (real number);
+    consider BB being Neighborhood_System of Niemytzki-plane such that
+A1: for x holds BB.(|[x,0]|) =
+    {Ball(|[x,q]|,q) \/ {|[x,0]|} where q is Element of REAL: q > 0} and
+A2: for x,y st y > 0 holds BB.(|[x,y]|) =
+    {Ball(|[x,y]|,q) /\ y>=0-plane where q is Element of REAL:  q > 0} by DEF3;
+A3: the carrier of Niemytzki-plane = y>=0-plane by DEF3;
+    p in the carrier of Niemytzki-plane; then
+    reconsider p' = p as Point of TOP-REAL 2 by A3;
+A4: p = |[p'`1,p'`2]| by EUCLID:57; then
+A5: p'`2 >= 0 by A3,P2;
+    per cases by A5;
+    suppose
+S1:   p'`2 = 0; then
+      BB.p = {Ball(|[p'`1,q]|,q) \/ {|[p'`1,0]|} where q is Element of REAL:
+      q > 0} & r/2 is Real by A1,A4,XREAL_0:def 1; then
+      Ball(|[p'`1,r/2]|,r/2) \/ {|[p'`1,0]|} in BB.p &
+      BB.p c= the topology of Niemytzki-plane by YELLOW_8:def 2; then
+      reconsider U = Ball(|[p'`1,r/2]|,r/2) \/ {p} as
+      open Subset of Niemytzki-plane by A4,S1,PRE_TOPC:def 5;
+      take a = |[p'`1,r/2]|, U;
+      p'-a = |[p'`1-p'`1,0-r/2]| & 0-r/2 is Real
+      by A4,S1,EUCLID:66,XREAL_0:def 1; then
+A6:   |.p'-a.| = |.0-r/2.| by TOPREAL6:31 .= |.r/2-0.| by COMPLEX1:146
+      .= r/2 by ABSVALUE:def 1;
+      thus p in U by SETWISEO:6;
+      a in Ball(a,r/2) by LemA;
+      hence a in U by XBOOLE_0:def 2;
+      let b be Point of TOP-REAL 2;
+      assume b in U; then
+      b in Ball(a,r/2) or b = p by SETWISEO:6; then
+      |.b-a.| <= r/2 & r/2 < r/2+r/2 by A6,XREAL_1:31,TOPREAL9:7;
+      hence |.b-a.| < r by XREAL_1:2;
+    end;
+    suppose
+S2:   p'`2 > 0; then
+      BB.p = {Ball(|[p'`1,p'`2]|,q) /\ y>=0-plane where q is Element of REAL:
+      q > 0} & r/2 is Real by A2,A4,XREAL_0:def 1; then
+      Ball(p',r/2) /\ y>=0-plane in BB.p &
+      BB.p c= the topology of Niemytzki-plane by A4,YELLOW_8:def 2; then
+      reconsider U = Ball(p',r/2) /\ y>=0-plane as
+      open Subset of Niemytzki-plane by PRE_TOPC:def 5;
+      take a = p', U;
+      p in Ball(a,r/2) & p in y>=0-plane by A4,S2,P2,LemA;
+      hence p in U & a in U by XBOOLE_0:def 3;
+      let b be Point of TOP-REAL 2;
+      assume b in U; then
+      b in Ball(a,r/2) by XBOOLE_0:def 3; then
+      |.b-a.| <= r/2 & r/2 < r/2+r/2 by XREAL_1:31,TOPREAL9:7;
+      hence |.b-a.| < r by XREAL_1:2;
+    end;
+  end;
+
+theorem Th11:
+  for x,y being real number
+  for r being positive (real number)
+  ex w,v being rational number
+  st |[w,v]| in Ball(|[x,y]|,r) & |[w,v]| <> |[x,y]|
+  proof
+    let x,y be real number;
+    let r be positive (real number);
+    x < x+r/2 by XREAL_1:41; then
+    consider w being rational number such that
+A1: x < w & w < x+r/2 by RAT_1:22;
+    y < y+r/2 by XREAL_1:41; then
+    consider v being rational number such that
+A2: y < v & v < y+r/2 by RAT_1:22;
+    take w,v;
+    w-x is Real & v-y is Real &
+    |[w,v]|-|[x,v]| = |[w-x,v-v]| & |[x,v]|-|[x,y]| = |[x-x,v-y]|
+    by EUCLID:66,XREAL_0:def 1; then
+    |.|[w,v]|-|[x,v]|.| = abs(w-x) & |.|[x,v]|-|[x,y]|.| = |.v-y.| &
+    w-x > 0  & v-y > 0 by A1,A2,XREAL_1:52,TOPREAL6:31; then
+    |.|[w,v]|-|[x,v]|.| = w-x & |.|[x,v]|-|[x,y]|.| = v-y
+    by ABSVALUE:def 1; then
+    |.|[w,v]|-|[x,v]|.| < x+r/2-x & |.|[x,v]|-|[x,y]|.| <= y+r/2-y
+    by A1,A2,XREAL_1:11; then
+    |.|[w,v]|-|[x,y]|.| <= |.|[w,v]|-|[x,v]|.|+|.|[x,v]|-|[x,y]|.| &
+    |.|[w,v]|-|[x,v]|.|+|.|[x,v]|-|[x,y]|.| < x+r/2-x+(y+r/2-y)
+    by XREAL_1:10,TOPRNS_1:35; then
+    |.|[w,v]|-|[x,y]|.| < r by XREAL_1:2;
+    hence |[w,v]| in Ball(|[x,y]|,r) by TOPREAL9:7;
+    thus |[w,v]| <> |[x,y]| by A2,SPPOL_2:1;
+  end;
+
+theorem Th44:
+  for A being Subset of Niemytzki-plane
+  st A = (y>=0-plane \ y=0-line) /\ product <*RAT,RAT*>
+  for x being set holds Cl (A \ {x}) = [#] Niemytzki-plane
+  proof
+    let A be Subset of Niemytzki-plane;
+    assume
+01: A = (y>=0-plane \ y=0-line) /\ product <*RAT,RAT*>;
+    let s be set;
+    [#] Niemytzki-plane = the carrier of Niemytzki-plane by PRE_TOPC:def 3;
+    hence Cl (A\{s}) c= [#] Niemytzki-plane;
+03: the carrier of Niemytzki-plane = y>=0-plane by DEF3;
+    let x be set; assume x in [#] Niemytzki-plane; then
+    reconsider a = x as Element of Niemytzki-plane;
+    reconsider b = a as Element of y>=0-plane by 03;
+    consider BB being Neighborhood_System of Niemytzki-plane such that
+A1: for x holds BB.(|[x,0]|) =
+    {Ball(|[x,q]|,q) \/ {|[x,0]|} where q is Element of REAL: q > 0} and
+A2: for x,y st y > 0 holds BB.(|[x,y]|) =
+    {Ball(|[x,y]|,q) /\ y>=0-plane where q is Element of REAL:  q > 0} by DEF3;
+A3: a = |[b`1,b`2]| by EUCLID:57;
+    for U being set st U in BB.a holds U meets A\{s}
+    proof
+      let U be set;
+      assume
+A4:   U in BB.a;
+      per cases by A3,P2;
+      suppose
+A5:     b`2 = 0; then
+        BB.a = {Ball(|[b`1,q]|,q) \/ {|[b`1,0]|}
+        where q is Element of REAL: q > 0} by A1,A3; then
+        consider q being Real such that
+A6:     U = Ball(|[b`1,q]|,q) \/ {a} & q > 0 by A3,A4,A5;
+        reconsider q as positive Real by A6;
+        consider w1,v1 being rational number such that
+A7:     |[w1,v1]| in Ball(|[b`1,q]|,q) & |[w1,v1]| <> |[b`1,q]| by Th11;
+        set q2 = |.|[w1,v1]|-|[b`1,q]|.|;
+        |[w1,v1]|-|[b`1,q]| <> 0.REAL 2 by A7,EUCLID:47; then
+        q2 >= 0 & q2 <> 0 by EUCLID_2:60,64; then
+        reconsider q2 as positive (real number);
+        consider w2,v2 being rational number such that
+A8:     |[w2,v2]| in Ball(|[b`1,q]|,q2) & |[w2,v2]| <> |[b`1,q]| by Th11;
+A9:     |.|[w2,v2]|-|[b`1,q]|.| < q2 & q2 < q by A7,A8,TOPREAL9:7; then
+        |.|[w2,v2]|-|[b`1,q]|.| < q by XREAL_1:2; then
+A10:    |[w2,v2]| <> |[w1,v1]| & |[w2,v2]| in Ball(|[b`1,q]|,q)
+        by A9,TOPREAL9:7;
+        Ball(|[b`1,q]|,q) c= y>=0-plane & Ball(|[b`1,q]|,q) misses
+        y=0-line by P3,P4; then
+        |[w1,v1]| = <*w1,v1*> & |[w2,v2]| = <*w2,v2*> &
+        w1 in RAT & v1 in RAT & w2 in RAT & v2 in RAT &
+        Ball(|[b`1,q]|,q) c= y>=0-plane \ y=0-line
+        by XBOOLE_1:86,RAT_1:def 2,EUCLID:def 16; then
+        |[w1,v1]| in y>=0-plane \ y=0-line & |[w1,v1]| in product <*RAT,RAT*> &
+        |[w2,v2]| in y>=0-plane \ y=0-line & |[w2,v2]| in product <*RAT,RAT*>
+        by A7,A10,FUNCT_6:2; then
+A11:    |[w1,v1]| in U & |[w2,v2]| in U & |[w1,v1]| in A & |[w2,v2]| in A
+        by 01,A6,A7,A10,XBOOLE_0:def 2,def 3;
+        (s = |[w1,v1]| or s <> |[w1,v1]|); then
+        |[w1,v1]| in A\{s} or |[w2,v2]| in A\{s} by A10,A11,ZFMISC_1:64;
+        hence U meets A\{s} by A11,XBOOLE_0:3;
+      end;
+      suppose
+A12:    b`2 > 0; then
+        BB.a = {Ball(|[b`1,b`2]|,q) /\ y>=0-plane
+        where q is Element of REAL: q > 0} by A2,A3; then
+        consider q being Real such that
+A6:     U = Ball(b,q) /\ y>=0-plane & q > 0 by A3,A4;
+        reconsider q, b2 = b`2 as positive Real by A12,A6;
+        q <= b2 or q > b2; then
+        reconsider q1 = min(q,b2) as positive Real by SQUARE_1:def 1;
+        consider w1,v1 being rational number such that
+A7:     |[w1,v1]| in Ball(b,q1) & |[w1,v1]| <> b by A3,Th11;
+        set q2 = |.|[w1,v1]|-b.|;
+        |[w1,v1]|-b <> 0.REAL 2 by A7,EUCLID:47; then
+        q2 >= 0 & q2 <> 0 by EUCLID_2:60,64; then
+        reconsider q2 as positive (real number);
+        consider w2,v2 being rational number such that
+A8:     |[w2,v2]| in Ball(b,q2) & |[w2,v2]| <> b by A3,Th11;
+A9:     |.|[w2,v2]|-b.| < q2 & q2 < q1 by A7,A8,TOPREAL9:7; then
+        |.|[w2,v2]|-b.| < q1 & q1 <= q by XREAL_1:2,SQUARE_1:35; then
+A13:    |[w2,v2]| in Ball(b,q1) & |.|[w2,v2]|-b.| < q & q2 < q
+        by A9,XREAL_1:2,TOPREAL9:7; then
+A10:    |[w2,v2]| <> |[w1,v1]| & |[w1,v1]| in Ball(b,q) &
+        |[w2,v2]| in Ball(b,q) by A9,TOPREAL9:7;
+        q1 <= b`2 by SQUARE_1:35; then
+A14:    Ball(b,q1) c= y>=0-plane & Ball(b,q1) misses y=0-line by A3,P3,P4; then
+        |[w1,v1]| = <*w1,v1*> & |[w2,v2]| = <*w2,v2*> &
+        w1 in RAT & v1 in RAT & w2 in RAT & v2 in RAT &
+        Ball(b,q1) c= y>=0-plane \ y=0-line
+        by XBOOLE_1:86,RAT_1:def 2,EUCLID:def 16; then
+        |[w1,v1]| in y>=0-plane \ y=0-line & |[w1,v1]| in product <*RAT,RAT*> &
+        |[w2,v2]| in y>=0-plane \ y=0-line & |[w2,v2]| in product <*RAT,RAT*>
+        by A7,A13,FUNCT_6:2; then
+A11:    |[w1,v1]| in U & |[w2,v2]| in U & |[w1,v1]| in A & |[w2,v2]| in A
+        by 01,A6,A7,A10,A13,A14,XBOOLE_0:def 3;
+        (s = |[w1,v1]| or s <> |[w1,v1]|); then
+        |[w1,v1]| in A\{s} or |[w2,v2]| in A\{s} by A10,A11,ZFMISC_1:64;
+        hence U meets A\{s} by A11,XBOOLE_0:3;
+      end;
+    end;
+    hence x in Cl (A\{s}) by TOPGEN_2:11;
+  end;
+
+theorem Th40:
+  for A being Subset of Niemytzki-plane
+  st A = y>=0-plane \ y=0-line
+  for x being set holds Cl (A \ {x}) = [#] Niemytzki-plane
+  proof
+    let A be Subset of Niemytzki-plane;
+    assume
+01: A = y>=0-plane \ y=0-line;
+03: A /\ product <*RAT,RAT*> c= A by XBOOLE_1:17; then
+    reconsider B = A /\ product <*RAT,RAT*> as Subset of Niemytzki-plane
+    by XBOOLE_1:1;
+    let s be set;
+    [#] Niemytzki-plane = the carrier of Niemytzki-plane by PRE_TOPC:def 3;
+    hence Cl (A\{s}) c= [#] Niemytzki-plane;
+    B\{s} c= A\{s} by 03,XBOOLE_1:33; then
+    Cl (B\{s}) c= Cl (A\{s}) by PRE_TOPC:49;
+    hence thesis by 01,Th44;
+  end;
+
+theorem Th41:
+  for A being Subset of Niemytzki-plane
+  st A = y>=0-plane \ y=0-line
+  holds Cl A = [#] Niemytzki-plane
+  proof
+    let A be Subset of Niemytzki-plane;
+    A\{A} = A
+    proof
+      thus A\{A} c= A by XBOOLE_1:36;
+      let x be set; not A in A;
+      hence thesis by ZFMISC_1:64;
+    end;
+    hence thesis by Th40;
+  end;
+
+theorem Th42:
+  for A being Subset of Niemytzki-plane st A = y=0-line
+  holds Cl A = A & Int A = {}
+  proof
+    let A be Subset of Niemytzki-plane;
+    assume
+A0: A = y=0-line; then
+A1: A` = (the carrier of Niemytzki-plane) \ y=0-line by SUBSET_1:def 5
+    .= y>=0-plane \ y=0-line by DEF3;
+    A is closed by A0,Th39;
+    hence Cl A = A by PRE_TOPC:52;
+    thus Int A = (Cl A`)` by TOPS_1:def 1 .= ([#] Niemytzki-plane)` by A1,Th41
+    .= {} Niemytzki-plane by TOPS_1:8 .= {};
+  end;
+  
+theorem Th43:
+  (y>=0-plane \ y=0-line) /\ product <*RAT,RAT*>
+  is dense Subset of Niemytzki-plane
+  proof
+    (y>=0-plane \ y=0-line) /\ product <*RAT,RAT*> c= y>=0-plane \ y=0-line &
+    y>=0-plane \ y=0-line is Subset of Niemytzki-plane by Th1,XBOOLE_1:17; then
+    reconsider A = (y>=0-plane \ y=0-line) /\ product <*RAT,RAT*> as
+    Subset of Niemytzki-plane by XBOOLE_1:1;
+    A\{A} = A
+    proof
+      thus A\{A} c= A by XBOOLE_1:36;
+      let x be set; not A in A;
+      hence thesis by ZFMISC_1:64;
+    end; then
+    Cl A = [#] Niemytzki-plane by Th44;
+    hence thesis by TOPS_1:def 3;
+  end;
+
+theorem
+  (y>=0-plane \ y=0-line) /\ product <*RAT,RAT*>
+  is dense-in-itself Subset of Niemytzki-plane
+  proof
+    (y>=0-plane \ y=0-line) /\ product <*RAT,RAT*> c= y>=0-plane \ y=0-line &
+    y>=0-plane \ y=0-line is Subset of Niemytzki-plane by Th1,XBOOLE_1:17; then
+    reconsider A = (y>=0-plane \ y=0-line) /\ product <*RAT,RAT*> as
+    Subset of Niemytzki-plane by XBOOLE_1:1;
+    A is dense-in-itself
+    proof
+      let a be set; assume
+      a in A; then
+      reconsider x = a as Point of Niemytzki-plane;
+      Cl (A\{x}) = [#] Niemytzki-plane by Th44
+      .= the carrier of Niemytzki-plane by PRE_TOPC:def 3; then
+      x is_an_accumulation_point_of A by TOPGEN_1:def 2;
+      hence thesis by TOPGEN_1:def 3;
+    end;
+    hence thesis;
+  end;
+
+theorem
+  y>=0-plane \ y=0-line is dense Subset of Niemytzki-plane
+  proof
+    reconsider A = y>=0-plane \ y=0-line as open Subset of Niemytzki-plane
+    by Th1;
+    Cl A = [#] Niemytzki-plane by Th41;
+    hence thesis by TOPS_1:def 3;
+  end;
+
+theorem
+  y>=0-plane \ y=0-line is dense-in-itself Subset of Niemytzki-plane
+  proof
+    the carrier of Niemytzki-plane = y>=0-plane by DEF3; then
+    reconsider A = y>=0-plane \ y=0-line as Subset of Niemytzki-plane
+    by XBOOLE_1:36;
+    A is dense-in-itself
+    proof
+      let a be set; assume
+      a in A; then
+      reconsider x = a as Point of Niemytzki-plane;
+      Cl (A\{x}) = [#] Niemytzki-plane by Th40
+      .= the carrier of Niemytzki-plane by PRE_TOPC:def 3; then
+      x is_an_accumulation_point_of A by TOPGEN_1:def 2;
+      hence thesis by TOPGEN_1:def 3;
+    end;
+    hence thesis;
+  end;
+
+theorem
+  y=0-line is nowhere_dense Subset of Niemytzki-plane
+  proof
+    the carrier of Niemytzki-plane = y>=0-plane by DEF3; then
+    reconsider A = y=0-line as Subset of Niemytzki-plane by LP;
+    A is nowhere_dense
+    proof
+      A is closed by Th39;
+      hence Int Cl A = Int A by PRE_TOPC:52 .= {} by Th42;
+    end;
+    hence thesis;
+  end;
+
+theorem Th45:
+  for A being Subset of Niemytzki-plane st A = y=0-line
+  holds Der A is empty
+  proof
+    let A be Subset of Niemytzki-plane;
+    assume that
+01: A = y=0-line and
+02: Der A is not empty;
+    consider BB being Neighborhood_System of Niemytzki-plane such that
+A1: for x holds BB.(|[x,0]|) =
+    {Ball(|[x,r]|,r) \/ {|[x,0]|} where r is Element of REAL: r > 0} and
+    for x,y st y > 0 holds BB.(|[x,y]|) =
+    {Ball(|[x,y]|,r) /\ y>=0-plane where r is Element of REAL:  r > 0} by DEF3;
+    consider a being Element of Der A;
+    a in Der A by 02; then
+    reconsider a as Point of Niemytzki-plane;
+    the carrier of Niemytzki-plane = y>=0-plane by DEF3; then
+    a in y>=0-plane; then    
+    reconsider b = a as Point of TOP-REAL 2;
+A4: a = |[b`1,b`2]| by EUCLID:57;
+    a in Der A & Der A c= Cl A & Cl A = A by 01,02,Th42,TOPGEN_1:30; then
+    a is_an_accumulation_point_of A & a in A by TOPGEN_1:def 3; then
+A5: a in Cl (A \ {a}) & b`2 = 0 by 01,A4,L2,TOPGEN_1:def 2;
+    consider q being positive Real;
+    BB.a = {Ball(|[b`1,r]|,r) \/ {|[b`1,0]|} where r is Element of REAL:r > 0}
+    by A1,A4,A5; then
+    Ball(|[b`1,q]|,q) \/ {b} in BB.a by A4,A5; then
+    Ball(|[b`1,q]|,q) \/ {b} meets A \ {a} by A5,TOPGEN_2:10; then
+    consider z being set such that
+A6: z in Ball(|[b`1,q]|,q) \/ {b} & z in A \ {a} by XBOOLE_0:3;
+A7: z in A & z <> a by A6,ZFMISC_1:64; then
+A8: z in Ball(|[b`1,q]|,q) by A6,SETWISEO:6;
+    reconsider z as Point of TOP-REAL 2 by A6;
+A9: z = |[z`1,z`2]| by EUCLID:57; then
+    z`2 = 0 by 01,A7,L2; then
+    z-|[b`1,q]| = |[z`1-b`1,0-q]| & |[z`1-b`1,0-q]|`1 = z`1-b`1 &
+    |[z`1-b`1,0-q]|`2 = 0-q by A9,EUCLID:56,66; then
+    |.z-|[b`1,q]|.| = sqrt((z`1-b`1)^2+(-q)^2) by JGRAPH_1:47
+    .= sqrt((z`1-b`1)^2+q^2) by SQUARE_1:61; then
+    |.z-|[b`1,q]|.| >= abs q & |.z-|[b`1,q]|.| < q
+    by A8,JGRAPH_1:3,TOPREAL9:7; then
+    abs q < q by XREAL_1:2;
+    hence contradiction by ABSVALUE:11;
+  end;
+
+theorem Th38:
+  for A being Subset of y=0-line
+  holds A is closed Subset of Niemytzki-plane
+  proof
+    let A be Subset of y=0-line;
+    reconsider B = y=0-line as closed Subset of Niemytzki-plane by Th39;
+    A c= B; then
+    reconsider A as Subset of Niemytzki-plane by XBOOLE_1:1;
+    Der A c= Der B by TOPGEN_1:32; then
+    Der A c= {} by Th45; then
+    Der A = {} by XBOOLE_1:3; then
+    Cl A = A \/ {} by TOPGEN_1:31;
+    hence thesis;
+  end;
+  
+theorem Th51:
+  RAT is dense Subset of Sorgenfrey-line
+  proof
+A0: the carrier of Sorgenfrey-line = REAL by TOPGEN_3:def 2; then
+    reconsider A = RAT as Subset of Sorgenfrey-line by NUMBERS:12;
+    consider B being Subset-Family of REAL such that
+A1: the topology of Sorgenfrey-line = UniCl B and
+A2: B = {[.x,q.[ where x is Element of REAL, q is Element of REAL:
+       x < q & q is rational} by TOPGEN_3:def 2;
+A3: B is Basis of Sorgenfrey-line by A0,A1,YELLOW_9:22;
+    A is dense
+    proof
+      thus Cl A c= the carrier of Sorgenfrey-line;
+      let x be set; assume x in the carrier of Sorgenfrey-line; then
+      reconsider x as Point of Sorgenfrey-line;
+      now
+        let C be Subset of Sorgenfrey-line;
+        assume C in B; then
+        consider y,q being Real such that
+A4:     C = [.y,q.[ & y < q & q is rational by A2;
+        consider r being rational set such that
+A5:     y < r & r < q by A4,RAT_1:22;
+        assume x in C;
+        r in A & r in C by A4,A5,RAT_1:def 2,RCOMP_2:3;
+        hence A meets C by XBOOLE_0:3;
+      end;
+      hence thesis by A3,YELLOW_9:37;
+    end;
+    hence thesis;
+  end;
+
+theorem
+  Sorgenfrey-line is separable
+  proof
+    reconsider A = RAT as dense Subset of Sorgenfrey-line by Th51;
+    density Sorgenfrey-line <=` Card A by TOPGEN_1:def 12;
+    hence density Sorgenfrey-line <=` alef 0 by TOPGEN_3:17;
+  end;
+
+theorem
+  Niemytzki-plane is separable
+  proof
+    reconsider A = (y>=0-plane \ y=0-line) /\ product <*RAT,RAT*>
+    as dense Subset of Niemytzki-plane by Th43;
+    A c= product <*RAT,RAT*> by XBOOLE_1:17; then
+    density Niemytzki-plane <=` Card A & Card A <=` Card product <*RAT,RAT*>
+    by CARD_1:27,TOPGEN_1:def 12; then
+    density Niemytzki-plane <=` Card product <*RAT,RAT*> by XBOOLE_1:1; then
+    density Niemytzki-plane <=` (Card RAT)*`Card RAT by Th10;
+    hence density Niemytzki-plane <=` alef 0 by CARD_4:54,TOPGEN_3:17;
+  end;
+
+theorem
+  Niemytzki-plane is_T1
+  proof
+    set T = Niemytzki-plane;
+    let p,q be Point of T such that
+01: p <> q;
+    p in the carrier of T & q in the carrier of T &
+    the carrier of T = y>=0-plane by DEF3; then
+    reconsider p' = p, q' = q as Point of TOP-REAL 2;
+    p'-q' <> 0.REAL 2 by 01,EUCLID:47; then
+    |.p'-q'.| <> 0 & |.p'-q'.| >= 0 by EUCLID_2:60,64; then
+    reconsider r = |.p'-q'.| as positive Real;
+    consider ap being Point of TOP-REAL 2, Up being open Subset of T such that
+02: p in Up & ap in Up &
+    for b being Point of TOP-REAL 2 st b in Up holds |.b-ap.| < r/2 by Th33;
+    consider aq being Point of TOP-REAL 2, Uq being open Subset of T such that
+03: q in Uq & aq in Uq &
+    for b being Point of TOP-REAL 2 st b in Uq holds |.b-aq.| < r/2 by Th33;
+    take Up,Uq; thus Up is open & Uq is open & p in Up by 02;
+    thus not q in Up
+    proof
+      assume q in Up; then
+      |.q'-ap.| = |.ap-q'.| & |.q'-ap.| < r/2 & |.p'-ap.| < r/2
+      by 02,TOPRNS_1:28; then
+      |.p'-ap.|+|.ap-q'.| < r/2+r/2 & |.p'-ap.|+|.ap-q'.| >= r
+      by XREAL_1:10,TOPRNS_1:35;
+      hence contradiction;
+    end;
+    thus q in Uq by 03;
+    assume p in Uq; then
+    |.q'-aq.| = |.aq-q'.| & |.q'-aq.| < r/2 & |.p'-aq.| < r/2
+    by 03,TOPRNS_1:28; then
+    |.p'-aq.|+|.aq-q'.| < r/2+r/2 & |.p'-aq.|+|.aq-q'.| >= r
+    by XREAL_1:10,TOPRNS_1:35;
+    hence contradiction;
+  end;
+
+theorem
+  Niemytzki-plane is not being_T4
+  proof set T = Niemytzki-plane;
+    assume
+A0: for W, V being Subset of T st W <> {} & V <> {} &
+    W is closed & V is closed & W misses V
+    ex P, Q being Subset of T st P is open & Q is open &
+    W c= P & V c= Q & P misses Q;
+00: the carrier of T = y>=0-plane by DEF3;
+    reconsider C = (y>=0-plane \ y=0-line) /\ product <*RAT,RAT*>
+    as dense Subset of Niemytzki-plane by Th43;
+    defpred P[set,set] means
+    ex U,V being open Subset of T st
+    $2 = U /\ C & $1 c= U & y=0-line \ $1 c= V & U misses V;
+A1: for a being set st a in bool y=0-line
+    ex b being set st P[a,b]
+    proof
+      let a be set; assume a in bool y=0-line; then
+      reconsider aa = a, a' = y=0-line \ a as Subset of y=0-line
+      by XBOOLE_1:36;
+      reconsider A = aa, B = a' as closed Subset of T by Th38;
+      per cases;
+      suppose
+S1:     a = {};
+        take b = {};
+        take U = {}T, V = [#]T;
+        thus thesis by 00,S1,LP,XBOOLE_1:65,PRE_TOPC:def 3;
+      end;
+      suppose
+S2:     a = y=0-line;
+        take b = ([#]T)/\ C;
+        take U = [#]T, V = {}T;
+        thus thesis by 00,S2,LP,PRE_TOPC:def 3,XBOOLE_1:65,XBOOLE_1:37;
+      end;
+      suppose
+S3:     a <> {} & a <> y=0-line;
+        aa`` = a'` & aa`` = a & ({}y=0-line)` = [#]y=0-line
+        by SUBSET_1:22,def 5; then
+        B <> {}y=0-line & A misses B by S3,XBOOLE_1:79,SUBSET_1:def 4; then
+        consider P, Q being Subset of T such that
+S4:     P is open & Q is open & A c= P & B c= Q & P misses Q by S3,A0;
+        take b = P /\ C;
+        thus thesis by S4;
+      end;
+    end;
+    consider G being Function such that
+A2: dom G = bool y=0-line and
+A3: for a being set st a in bool y=0-line holds P[a,G.a]
+    from ZFREFLE1:sch 1(A1);
+    rng G c= bool C
+    proof
+      let a be set; assume a in rng G; then
+      consider b being set such that
+B1:   b in dom G & a = G.b by FUNCT_1:def 5;
+      P[b,a] by A2,A3,B1; then
+      a c= C by XBOOLE_1:17;
+      hence thesis;
+    end; then
+A6: Card rng G <=` Card bool C by CARD_1:27;
+    C c= product <*RAT,RAT*> by XBOOLE_1:17; then
+    Card C <=` Card product <*RAT,RAT*> by CARD_1:27; then
+    Card C <=` (Card RAT)*`Card RAT by Th10; then
+    Card C <=` alef 0 by CARD_4:54,TOPGEN_3:17; then
+A7: Card bool C = exp(2, Card C) & exp(2, Card C) <=` exp(2, alef 0)
+    by CARD_2:44,CARD_4:71;
+    G is one-to-one
+    proof
+      let x,y be set;
+      assume x in dom G & y in dom G; then
+      reconsider A = x, B = y as Subset of y=0-line by A2;
+      consider UA,VA being open Subset of T such that
+B2:   G.A = UA /\ C & A c= UA & y=0-line \ A c= VA & UA misses VA by A3;
+      consider UB,VB being open Subset of T such that
+B3:   G.B = UB /\ C & B c= UB & y=0-line \ B c= VB & UB misses VB by A3;
+      assume
+B5:   G.x = G.y & x <> y; then
+      consider z being set such that
+B4:   not (z in A iff z in B) by TARSKI:2;
+B6:   z in A\B or z in B\A by B4,XBOOLE_0:def 4;
+      A` = y=0-line \ A & B` = y=0-line \ B & A\B = A/\B` & B\A = B/\A`
+      by SUBSET_1:32,def 5; then
+      A\B c= UA /\ VB & B\A c= UB /\ VA by B2,B3,XBOOLE_1:27; then
+      z in UA /\ VB & UA /\ VB is open or
+      z in UB /\ VA & UB /\ VA is open by B6,TOPS_1:38; then
+      C meets UA /\ VB or C meets UB /\ VA by TOPS_1:80; then
+      (ex z being set st z in C & z in UA /\ VB) or
+      (ex z being set st z in C & z in UB /\ VA) by XBOOLE_0:3; then
+      consider z being set such that
+B7:   z in C & (z in UA /\ VB or z in UB /\ VA);
+      z in UA & z in VB or z in UB & z in VA by B7,XBOOLE_0:def 3; then
+      z in UA & not z in UB or z in UB & not z in UA by B2,B3,XBOOLE_0:3; then
+      z in G.A & not z in G.B or z in G.B & not z in G.A
+      by B2,B3,B7,XBOOLE_0:def 3;
+      hence thesis by B5;
+    end; then
+    Card dom G <=` Card rng G by CARD_1:26; then
+    Card bool y=0-line <=` Card bool C by A2,A6,XBOOLE_1:1; then
+    exp(2, continuum) <=` Card bool C by L0,CARD_2:44; then
+    exp(2, continuum) <=` exp(2, alef 0) &
+    exp(2, alef 0) <` exp(2, exp(2, alef 0)) by A7,XBOOLE_1:1,CARD_5:23; then
+    exp(2, alef 0) <` exp(2, alef 0) by TOPGEN_3:29;
+    hence contradiction;
+  end;
+
+begin :: Tychonoff spaces
+
+definition
+  let T be TopSpace;
+  attr T is Tychonoff means :DEF4:
+  T is_T1 &
+  for A being closed Subset of T, a being Point of T st a in A`
+  ex f being continuous Function of T, I[01] st f.a = 0 & f.:A c= {1};
+end;
+
+registration
+  cluster Tychonoff -> being_T1 being_T3 TopSpace;
+  coherence
+  proof
+    let T be TopSpace;
+    assume that
+A1: T is_T1 and
+A2: for A being closed Subset of T, a being Point of T st a in A`
+    ex f being continuous Function of T, I[01] st f.a = 0 & f.:A c= {1};
+    thus T is_T1 by A1;
+    let p be Point of T, P be Subset of T;
+    assume
+A0: P <> {} & P is closed & p in P`; then
+    consider f being continuous Function of T, I[01] such that
+A3: f.p = 0 & f.:P c= {1} by A2;
+A4: the carrier of I[01] = [.0,1.] by BORSUK_1:83; then
+    reconsider z = 0, j = 1, half = 1/2 as Element of I[01] by RCOMP_1:48;
+    reconsider A = [.z,half.[, B = ].half,j.] as Subset of I[01]
+    by A4,TOPREALA:11,15;
+    reconsider A,B as open Subset of I[01] by TOPALG_1:4,5;
+    take W = f"A, V = f"B;
+    thus W is open & V is open by TOPS_2:55;
+    0 in A by RCOMP_2:3;
+    hence p in W by A0,A3,FUNCT_2:46;
+    1 in B by RCOMP_2:4; then
+    {1} c= B by ZFMISC_1:37; then
+    f.:P c= B & dom f = the carrier of T by A3,XBOOLE_1:1,FUNCT_2:def 1;
+    hence P c= V by JCT_MISC:3;
+    assume W meets V; then
+    consider x being set such that
+A5: x in W & x in V by XBOOLE_0:3;
+A6: f.x in A & f.x in B by A5,FUNCT_1:def 13; then
+    reconsider fx = f.x as Element of I[01];
+    fx < half & fx > half by A6,RCOMP_2:3,4;
+    hence thesis;
+  end;
+  cluster being_T1 being_T4 -> Tychonoff (non empty TopSpace);
+  coherence
+  proof
+    let T be non empty TopSpace;
+    assume
+A1: T is_T1 & T is_T4;
+    hence T is_T1;
+    let A be closed Subset of T, a be Point of T;
+    the carrier of Closed-Interval-TSpace(-1,1) = [.-1,1.] by TOPMETR:25; then
+    reconsider j = 1, k = -1 as Point of Closed-Interval-TSpace(-1,1)
+    by RCOMP_1:48;
+    reconsider z = 0, o = 1 as Point of I[01] by BORSUK_1:83,RCOMP_1:48;
+    per cases;
+    suppose
+A2:   A is empty;
+      set f = T --> z;
+      f = (the carrier of T) --> z & f.:A = {}
+      by A2,RELAT_1:149,BORSUK_1:def 3; then
+      f.a = z & f.:A c= {1} by XBOOLE_1:2,FUNCOP_1:13;
+      hence thesis;
+    end;
+    suppose A is non empty; then
+      reconsider aa = {a}, A' = A as non empty closed Subset of T
+      by A1,URYSOHN1:27;
+      reconsider B = A' \/ aa as closed Subset of T by TOPS_1:36;
+      set h = (T|A' --> j)+*(T|aa --> k);
+      the carrier of T|A' = A & the carrier of T|aa = aa by JORDAN1:1; then
+B2:   T|A' --> j = A' --> 1 & T|aa --> k = aa --> k & (A' --> 1).:A c= {1}
+      by BORSUK_1:6,def 3;
+      assume a in A`; then
+      rng (T|A' --> j) c= {1} & rng (T|aa --> k) c= {k} & {j} misses {k} &
+      not a in A by B2,ZFMISC_1:17,SUBSET_1:54,FUNCOP_1:19; then
+A2:   A' misses aa & rng (T|A' --> j) misses rng (T|aa --> k)
+      by XBOOLE_1:64,ZFMISC_1:56; then
+      reconsider h as continuous Function of T|B, Closed-Interval-TSpace(-1,1)
+      by Th17;
+B3:   h.:A c= {1} by B2,A2,BOOLMARK:3;
+B4:   dom (T|aa --> k) = aa & a in aa by B2,FUNCOP_1:19,TARSKI:def 1; then
+B5:   h.a = (T|aa --> k).a by FUNCT_4:14 .= -1 by B2,B4,FUNCOP_1:13;
+B6:   a in B & A c= B by B4,XBOOLE_0:def 2,XBOOLE_1:7;
+      consider g being continuous Function of T, Closed-Interval-TSpace(-1,1)
+      such that
+A3:   g|B = h by A1,TIETZE:25;
+      consider p being Function of I[01], Closed-Interval-TSpace(-1,1)
+      such that
+A5:   p is_homeomorphism &
+      (for r being Real st r in [.0,1.] holds p.r=2*r-1) &
+      p.0=-1 & p.1=1 by JGRAPH_5:42;
+      p /" is_homeomorphism by A5,TOPS_2:70; then
+      reconsider p' = p/" as continuous Function
+      of Closed-Interval-TSpace(-1,1), I[01] by TOPS_2:def 5;
+      reconsider f = p'*g as continuous Function of T, I[01];
+      take f;
+B7:   rng p = [#]Closed-Interval-TSpace(-1,1) & p is one-to-one
+      by A5,TOPS_2:def 5; then
+B9:   p' = p qua Function" by TOPS_2:def 4; then
+B8:   p'.k = z by A5,B7,FUNCT_2:32;
+      thus f.a = p'.(g.a) by FUNCT_2:21 .= 0 by A3,B5,B6,B8,FUNCT_1:72;
+      f.:A = p'.:(g.:A) by RELAT_1:159 .= p'.:(h.:A) by A3,B6,EXTENS_1:1; then
+      f.:A c= p'.:{1} & p'.j = o by B3,RELAT_1:156,B9,A5,B7,FUNCT_2:32;
+      hence f.:A c= {1} by SETWISEO:13;
+    end;
+  end;
+end;
+
+theorem
+  for X being being_T1 TopSpace st X is Tychonoff
+  for B being prebasis of X
+  for x being Point of X
+  for V being Subset of X st x in V & V in B
+  ex f being continuous Function of X, I[01] st f.x = 0 & f.:V` c= {1}
+  proof
+    let X be being_T1 TopSpace;
+    assume
+A0: X is Tychonoff;
+    let B be prebasis of X;
+    let x be Point of X;
+    let V be Subset of X;
+    assume
+A1: x in V & V in B;
+    B is open by YELLOW_9:28; then
+    V is open by A1,TOPS_2:def 1; then
+    V`` = V  & V` is closed by TOPS_1:30;
+    hence thesis by A0,A1,DEF4;
+  end;
+
+registration
+  let X be set;
+  let Y be non empty real-membered set;
+  cluster -> real-yielding Relation of X,Y;
+  coherence
+  proof
+    let R be Relation of X,Y;
+    rng R c= Y & Y c= REAL by MEMBERED:2;
+    hence rng R c= REAL by XBOOLE_1:1;
+  end;
+end;
+
+theorem Th25:
+  for X being TopSpace, R being non empty SubSpace of R^1
+  for f,g being continuous Function of X,R
+  for A being Subset of X st
+    for x being Point of X holds x in A iff f.x <= g.x
+  holds A is closed
+  proof
+    let X be TopSpace;
+    let R be non empty SubSpace of R^1;
+    let f,g be continuous Function of X,R;
+    let A be Subset of X;
+    assume
+00: for x being Point of X holds x in A iff f.x <= g.x;
+01: the carrier of R^1 = REAL by TOPMETR:24;
+    now
+      thus the topology of X is Basis of X by CANTOR_1:2;
+      let p be Point of X;
+      set r = f.p-g.p;
+      reconsider U1 = ].f.p-r/2,f.p+r/2.[, V1 = ].g.p-r/2,g.p+r/2.[
+      as open Subset of R^1 by 01,JORDAN6:46;
+03:   [#]R= the carrier of R by PRE_TOPC:def 3; then
+      U1/\[#]R c= the carrier of R & V1/\[#]R c= the carrier of R
+      by XBOOLE_1:17; then
+      reconsider U = U1/\[#]R, V = V1/\[#]R as open Subset of R by TOPS_2:32;
+      assume
+02:   p in A`; then
+      not p in A by SUBSET_1:54; then
+      f.p > g.p by 00; then
+      reconsider r as positive (real number) by XREAL_1:52;
+      take B = f"U /\ g"V;
+      f.p-r/2 < f.p & f.p < f.p+r/2 & g.p-r/2 < g.p & g.p < g.p+r/2
+      by XREAL_1:31,46; then
+      f.p in U1 & g.p in V1 & f.p in [#]R & g.p in [#]R
+      by 02,03,FUNCT_2:7,RCOMP_1:47; then
+      f.p in U & g.p in V by XBOOLE_0:def 3; then
+      p in f"U & p in g"V & f"U is open & g"V is open
+      by 02,FUNCT_2:46,TOPS_2:55; then
+      p in B & B is open by XBOOLE_0:def 3,TOPS_1:38;
+      hence B in the topology of X & p in B by PRE_TOPC:def 5;
+      thus B c= A`
+      proof
+        let q be set;
+        assume
+04:     q in B; then
+        q in f"U & q in g"V by XBOOLE_0:def 3; then
+        f.q in U & g.q in V by FUNCT_2:46; then
+        f.q in U1 & g.q in V1 by XBOOLE_0:def 3; then
+        f.q > f.p-r/2 & g.q < g.p+r/2 by RCOMP_1:47; then
+        g.q < f.q by XREAL_1:2; then
+        not q in A by 00;
+        hence thesis by 04,SUBSET_1:50;
+      end;
+    end; then
+    A` is open by YELLOW_9:31;
+    hence A is closed by TOPS_1:29;
+  end;
+
+theorem Th26:
+  for X being TopSpace, R being non empty SubSpace of R^1
+  for f,g being continuous Function of X,R
+  ex h being continuous Function of X,R st
+  for x being Point of X holds h.x = max(f.x,g.x)
+  proof
+    let X be TopSpace;
+    let R be non empty SubSpace of R^1;
+    let f,g be continuous Function of X,R;
+    defpred A[set] means f.$1 >= g.$1;
+    consider A being Subset of X such that
+A1: for a being set holds a in A iff a in the carrier of X & A[a]
+    from SUBSET_1:sch 1;
+    defpred B[set] means f.$1 <= g.$1;
+    consider B being Subset of X such that
+A2: for a being set holds a in B iff a in the carrier of X & B[a]
+    from SUBSET_1:sch 1;
+    per cases;
+    suppose
+A3:   X is empty;
+      consider h being continuous Function of X,R;
+      take h; let x be Point of X;
+      dom f = the carrier of X & dom g = the carrier of X &
+      dom h = the carrier of X &
+      the carrier of X is empty by A3,FUNCT_2:def 1,STRUCT_0:def 1; then
+      h.x = 0 & f.x = 0 & g.x = 0 by FUNCT_1:def 4;
+      hence thesis;
+    end;
+    suppose
+A4:   X is non empty & A is empty;
+      take g; let x be Point of X;
+      not x in A & the carrier of X <> {} by A4,STRUCT_0:def 1; then
+      f.x < g.x by A1;
+      hence g.x = max(f.x,g.x) by SQUARE_1:def 2;
+    end;
+    suppose
+A4:   X is non empty & B is empty;
+      take f; let x be Point of X;
+      not x in B & the carrier of X <> {} by A4,STRUCT_0:def 1; then
+      g.x < f.x by A2;
+      hence f.x = max(f.x,g.x) by SQUARE_1:def 2;
+    end;
+    suppose
+A5:   X is not empty & A is not empty & B is not empty; then
+      reconsider X' = X as non empty TopSpace;
+      for x being Point of X' holds (x in A iff f.x >= g.x) &
+      (x in B iff f.x <= g.x) by A1,A2; then
+      reconsider A' = A, B' = B as non empty closed Subset of X' by A5,Th25;
+      reconsider ff = f, gg = g as continuous Function of X', R;
+A8:   dom ff = the carrier of X' & dom gg = the carrier of X'
+      by FUNCT_2:def 1; then
+A6:   dom (ff|A') = A' & dom (gg|B') = B' by RELAT_1:91;
+      the carrier of X'|A' =  [#](X'|A') by PRE_TOPC:def 3
+      .= A' by PRE_TOPC:def 10; then
+      ff|A' is Function of X'|A', R by A6,FUNCT_2:def 1,RELSET_1:33; then
+      reconsider f' = ff|A' as continuous Function of X'|A', R by TOPMETR:10;
+      the carrier of X'|B' =  [#](X'|B') by PRE_TOPC:def 3
+      .= B' by PRE_TOPC:def 10; then
+      gg|B' is Function of X'|B', R by A6,FUNCT_2:def 1,RELSET_1:33; then
+      reconsider g' = gg|B' as continuous Function of X'|B', R by TOPMETR:10;
+A10:  A' \/ B' = the carrier of X'
+      proof
+        thus A' \/ B' c= the carrier of X';
+        let a be set;
+        f.a >= g.a or f.a <= g.a; then
+        a in the carrier of X implies a in A' or a in B' by A1,A2;
+        hence thesis by XBOOLE_0:def 2;
+      end; then
+A7:   X'|(A' \/ B') = X' | [#]X' by PRE_TOPC:def 3
+      .= the TopStruct of X by WAYBEL34:31;
+A11:  dom f' = A & dom g' = B by A8,RELAT_1:91;
+A12:  f' tolerates g'
+      proof
+        let a be set;
+        assume a in dom f' /\ dom g'; then
+A9:     a in A & a in B by A11,XBOOLE_0:def 3; then
+        f.a <= g.a & f.a >= g.a by A1,A2; then
+        f.a = g.a by XREAL_1:1;
+        hence f'.a = g.a by A9,FUNCT_1:72 .= g'.a by A9,FUNCT_1:72;
+      end; then
+      f'+*g' is continuous Function of X'|(A' \/ B'), R &
+      the TopStruct of R = the TopStruct of R by Th15; then
+      reconsider h = f'+*g' as continuous Function of X,R by A7,YELLOW12:36;
+      take h;
+      let x be Point of X;
+      x in the carrier of X' & (x in A' or x in B') by A10,XBOOLE_0:def 2; then
+      x in A' & f.x >= g.x & h.x = f'.x & f.x = f'.x or
+      x in B' & f.x <= g.x & h.x = g'.x & g.x = g'.x
+      by A11,A12,A1,A2,FUNCT_1:72,FUNCT_4:14,16;
+      hence h.x = max(f.x,g.x) by SQUARE_1:def 2;
+    end;
+  end;
+
+theorem Th27:
+  for X being non empty TopSpace, R being non empty SubSpace of R^1
+  for A being finite non empty set
+  for F being ManySortedFunction of A
+  st for a being set st a in A holds F.a is continuous Function of X,R
+  ex f being continuous Function of X,R st
+  for x being Point of X, S being finite non empty Subset of REAL
+  st S = rng ((commute F).x) holds f.x = max S
+  proof
+    let X be non empty TopSpace;
+    let R be non empty SubSpace of R^1;
+    let A be finite non empty set;
+    let F be ManySortedFunction of A;
+    assume
+00: for a being set st a in A holds F.a is continuous Function of X,R;
+    defpred P[set] means
+    $1 is empty or ex f being continuous Function of X,R st
+    for x being Point of X, S being finite non empty Subset of REAL
+    st S = rng ((commute (F|$1)).x) holds f.x = max S;
+01: A is finite;
+02: P[{}];
+A1: dom F = A by PBOOLE:def 3;
+    rng F c= Funcs(the carrier of X,the carrier of R)
+    proof
+      let a be set; assume a in rng F; then
+      ex b being set st b in dom F & a = F.b by FUNCT_1:def 5; then
+      a is Function of X,R by 00,A1;
+      hence thesis by FUNCT_2:11;
+    end; then
+A2: F in Funcs(A,Funcs(the carrier of X,the carrier of R)) by A1,FUNCT_2:def 2;
+03: now
+      let x,B be set;
+      assume
+010:  x in A; then
+      reconsider fx = F.x as continuous Function of X,R by 00;
+      assume
+011:  B c= A;
+      assume
+012:  P[B];
+      per cases;
+      suppose
+013:    B = {};
+        thus P[B \/ {x}]
+        proof
+          assume B \/ {x} is not empty;
+          take fx; let a be Point of X, S be finite non empty Subset of REAL;
+          assume
+014:      S = rng ((commute (F|(B \/ {x}))).a);
+          F|{x} = x .--> (F.x) & dom fx = the carrier of X
+          by A1,010,FUNCT_7:6,FUNCT_2:def 1; then
+          (commute (F|{x})).a = x .--> (fx.a) by LemF; then
+          rng ((commute (F|{x})).a) = {fx.a} by CQC_LANG:5;
+          hence fx.a = max S by 014,013,SEQ_4:22;
+        end;
+      end;
+      suppose
+017:    B <> {}; then reconsider B' = B as non empty set;
+        consider f being continuous Function of X,R such that
+015:    for x being Point of X, S being finite non empty Subset of REAL
+        st S = rng ((commute (F|B')).x) holds f.x = max S by 012;
+        consider h being continuous Function of X,R such that
+016:    for x being Point of X holds h.x = max(f.x,fx.x) by Th26;
+        thus P[B \/ {x}]
+        proof
+          assume B \/ {x} is not empty;
+          take h; let a be Point of X, S be finite non empty Subset of REAL;
+          assume
+014:      S = rng ((commute (F|(B \/ {x}))).a);
+          F is Function of A, Funcs(the carrier of X,the carrier of R)
+          by A2,FUNCT_2:121; then
+          F|B is Function of B, Funcs(the carrier of X,the carrier of R)
+          by 011,FUNCT_2:38; then
+          F|B in Funcs(B, Funcs(the carrier of X,the carrier of R))
+          by FUNCT_2:11; then
+          commute (F|B) in Funcs(the carrier of X, Funcs(B, the carrier of R))
+          by 017,FUNCT_6:85; then
+          reconsider cFB = commute (F|B) as Function of the carrier of X,
+          Funcs(B, the carrier of R) by FUNCT_2:121;
+          reconsider cFBa = cFB.a as Function of B', the carrier of R
+          by FUNCT_2:121;
+          F|(B \/ {x}) = (F|B) \/ (F|{x}) by RELAT_1:107; then
+          (commute (F|(B\/{x}))).a = cFB.a \/ (commute (F|{x})).a
+          by LemG; then
+018:      S = rng cFBa \/ rng ((commute (F|{x})).a)
+          by 014,RELAT_1:26; then
+          rng cFBa c= S by XBOOLE_1:7; then
+          reconsider S1 = rng cFBa as non empty finite Subset of  REAL
+          by XBOOLE_1:1,FINSET_1:13;
+019:      f.a = max S1 by 015;
+          F|{x} = x .--> (F.x) & dom fx = the carrier of X
+          by A1,010,FUNCT_7:6,FUNCT_2:def 1; then
+          (commute (F|{x})).a = x .--> (fx.a) by LemF; then
+          S = S1 \/ {fx.a} by 018,CQC_LANG:5; then
+          max S = max(f.a, max {fx.a}) by 019,SPRECT_1:53
+          .= max(f.a, fx.a) by SEQ_4:22;
+          hence h.a = max S by 016;
+        end;
+      end;
+    end;
+04: P[A] from FINSET_1:sch 2(01,02,03);
+    F|A = F by A1,RELAT_1:98;
+    hence thesis by 04;
+  end;
+
+theorem Th28:
+  for X being being_T1 non empty TopSpace
+  for B being prebasis of X
+  st for x being Point of X
+     for V being Subset of X st x in V & V in B
+     ex f being continuous Function of X, I[01] st f.x = 0 & f.:V` c= {1}
+  holds X is Tychonoff
+  proof
+    let X be being_T1 non empty TopSpace;
+    let BB be prebasis of X such that
+A3: for x being Point of X
+    for V being Subset of X st x in V & V in BB
+    ex f being continuous Function of X, I[01] st f.x = 0 & f.:V` c= {1};
+    thus X is_T1;
+    let A be closed Subset of X;
+    let a be Point of X;
+    assume
+A4: a in A`;
+    A` is open & FinMeetCl BB is Basis of X by YELLOW_9:23; then
+    consider B being Subset of X such that
+A0: B in FinMeetCl BB & a in B & B c= A` by A4,YELLOW_9:31;
+    consider F being Subset-Family of X such that
+A6: F c= BB & F is finite & B = Intersect F by A0,CANTOR_1:def 4;
+    reconsider z = 0, o = 1 as Point of I[01] by BORSUK_1:83,RCOMP_1:48;
+    per cases;
+    suppose F is empty; then
+      B = the carrier of X by A6,SETFAM_1:def 10; then
+      A` = the carrier of X by A0,XBOOLE_0:def 10
+      .= [#] X by PRE_TOPC:def 3; then
+      A`` = {}X & X-->z = (the carrier of X)-->z & X is non empty
+      by TOPS_1:8,BORSUK_1:def 3; then
+      (X-->z).:A = {} & {} c= {1} & (X-->z).a = z & X-->z is continuous
+      by XBOOLE_1:2,RELAT_1:149,FUNCOP_1:13;
+      hence thesis;
+    end;
+    suppose F is non empty; then
+      reconsider F as finite non empty Subset-Family of X by A6;
+      defpred P[set,set] means
+      ex S being Subset of X, f being continuous Function of X, I[01]
+      st S = $1 & f = $2 & f.a = 0 & f.:S` c= {1};
+A2:   for x being set st x in F ex y being set st P[x,y]
+      proof
+        let x be set;
+        assume
+00:     x in F; then
+        reconsider S = x as Subset of X;
+        a in S & S in BB by A0,A6,00,SETFAM_1:58; then
+        consider f being continuous Function of X, I[01] such that
+01:     f.a = 0 & f.:S` c= {1} by A3;
+        take y = f;
+        thus P[x,y] by 01;
+      end;
+      consider G being Function such that
+A1:   dom G = F & for x being set st x in F holds P[x,G.x]
+      from ZFREFLE1:sch 1(A2);
+      G is Function-yielding
+      proof
+        let x be set;
+        assume x in dom G; then
+        P[x,G.x] by A1;
+        hence G.x is Function;
+      end; then
+      reconsider G as ManySortedFunction of F by A1,PBOOLE:def 3;
+      now
+        let a be set;
+        assume a in F; then
+        P[a,G.a] by A1;
+        hence G.a is continuous Function of X, I[01];
+      end; then
+      consider f being continuous Function of X, I[01] such that
+A3:   for x being Point of X, S being finite non empty Subset of REAL
+      st S = rng ((commute G).x) holds f.x = max S by Th27;
+      take f;
+      reconsider Sa = {0} as finite non empty Subset of REAL;
+      consider z being Element of F;
+      set R = I[01];
+      rng G c= Funcs(the carrier of X,the carrier of R)
+      proof let u; assume u in rng G; then
+        consider v such that
+B1:     v in dom G & u = G.v by FUNCT_1:def 5;
+        P[v,u] by B1,A1;
+        hence thesis by FUNCT_2:11;
+      end; then
+      G is Function of F, Funcs(the carrier of X,the carrier of R)
+      by A1,FUNCT_2:4; then
+A4:   G in Funcs(F, Funcs(the carrier of X,the carrier of R))
+      by FUNCT_2:11; then
+      commute G in Funcs(the carrier of X, Funcs(F, the carrier of R))
+      by FUNCT_6:85; then
+      reconsider cG = commute G as Function of the carrier of X,
+      Funcs(F, the carrier of R) by FUNCT_2:121;
+      reconsider cGa = cG.a as Function of F, the carrier of R by FUNCT_2:121;
+A5:   dom cGa = F by FUNCT_2:def 1;
+      Sa = rng ((commute G).a)
+      proof
+        thus Sa c= rng ((commute G).a)
+        proof
+          let x be set;
+          assume x in Sa; then
+          P[z,G.z] & x = 0 by A1,TARSKI:def 1; then
+          x = (commute G).a.z by A4,FUNCT_6:86;
+          hence thesis by A5,FUNCT_1:def 5;
+        end;
+        let x be set; assume x in rng ((commute G).a); then
+        consider z being set such that
+A6:     z in dom cGa & x = cGa.z by FUNCT_1:def 5;
+        P[z,G.z] by A1,A6; then
+        x = 0 by A4,A6,FUNCT_6:86;
+        hence thesis by TARSKI:def 1;
+      end;
+      hence f.a = max Sa by A3 .= 0 by SEQ_4:22;
+      let z be set; assume z in f.:A; then
+      consider x being set such that
+A7:   x in dom f & x in A & z = f.x by FUNCT_1:def 12;
+      reconsider x as Element of X by A7;
+      reconsider cGx = cG.x as Function of F, the carrier of R by FUNCT_2:121;
+B1:   dom cGx = F & rng cGx c= the carrier of R & the carrier of R = [.0,1.]
+      by FUNCT_2:def 1,RELSET_1:12,BORSUK_1:83; then
+      reconsider S = rng cGx as finite non empty Subset of REAL
+      by XBOOLE_1:1,FINSET_1:26;
+A8:   f.x = max S by A3;
+A9:   for r being real number st r in S holds r <= 1 by B1,RCOMP_1:48;
+      now
+        let s be real number; assume
+B4:     0 < s;
+        reconsider r = 1 as real number;
+        take r;
+        A c= B` by A0,SUBSET_1:35; then
+        not x in B by A7,SUBSET_1:54; then
+        consider w such that
+B3:     w in F & not x in w by A6,SETFAM_1:58;
+        consider T being Subset of X, g being continuous Function of X, R
+        such that
+B5:     T = w & g = G.w & g.a = 0 & g.:T` c= {1} by A1,B3;
+        x in T` by B3,B5,SUBSET_1:50; then
+        g.x in g.:T` by FUNCT_2:43; then
+        g.x = 1 by B5,TARSKI:def 1; then
+        w in dom cGx & cGx.w = r by B3,B5,A4,FUNCT_6:86;
+        hence r in S by FUNCT_1:def 5;
+        thus 1-s < r by B4,XREAL_1:46;
+      end; then
+      z = 1 by A7,A8,A9,SEQ_4:def 4;
+      hence thesis by TARSKI:def 1;
+    end;
+  end;
+
+theorem Th30:
+  Sorgenfrey-line is_T1
+  proof set T = Sorgenfrey-line;
+A0: the carrier of T = REAL by TOPGEN_3:def 2;
+    consider B being Subset-Family of REAL such that
+A1: the topology of Sorgenfrey-line = UniCl B and
+A2: B = {[.x,q.[ where x is Element of REAL, q is Element of REAL:
+       x < q & q is rational} by TOPGEN_3:def 2;
+A4: B c= the topology of T by A1,CANTOR_1:1;
+    let x,y be Point of T;
+    reconsider a = x, b = y as Real by A0;
+    assume
+B1: x <> y;
+    per cases by B1,XREAL_1:1;
+    suppose
+A6:   a < b; then
+      consider w being rational number such that
+A3:   a < w & w < b by RAT_1:22;
+      b < b+1 by XREAL_1:31; then
+      consider q being rational number such that
+A5:   b < q & q < b+1 by RAT_1:22;
+      w is Real & q is Real by XREAL_0:def 1; then
+      [.a,w.[ in B & [.b,q.[ in B by A2,A3,A5; then
+      [.a,w.[ in the topology of T & [.b,q.[ in the topology of T by A4; then
+      reconsider U = [.a,w.[, V = [.b,q.[ as open Subset of T
+      by PRE_TOPC:def 5;
+      take U,V; thus U is open & V is open;
+      thus thesis by A3,A5,A6,RCOMP_2:3;
+    end;
+    suppose
+A6:   a > b; then
+      consider w being rational number such that
+A3:   b < w & w < a by RAT_1:22;
+      a < a+1 by XREAL_1:31; then
+      consider q being rational number such that
+A5:   a < q & q < a+1 by RAT_1:22;
+      w is Real & q is Real by XREAL_0:def 1; then
+      [.b,w.[ in B & [.a,q.[ in B by A2,A3,A5; then
+      [.b,w.[ in the topology of T & [.a,q.[ in the topology of T by A4; then
+      reconsider V = [.b,w.[, U = [.a,q.[ as open Subset of T
+      by PRE_TOPC:def 5;
+      take U,V; thus U is open & V is open;
+      thus thesis by A3,A5,A6,RCOMP_2:3;
+    end;
+  end;
+
+theorem ThSL1:
+  for x being real number
+  holds left_open_halfline x is closed Subset of Sorgenfrey-line
+  proof set T = Sorgenfrey-line;
+A0: the carrier of T = REAL by TOPGEN_3:def 2;
+    let x be real number;
+    reconsider A = right_closed_halfline x as open Subset of T by TOPGEN_3:15;
+    the carrier of R^1 = REAL by TOPMETR:24; then
+    left_open_halfline x = A` by A0,BORSUK_5:99;
+    hence left_open_halfline x is closed Subset of T;
+  end;
+
+theorem
+  for x being real number
+  holds left_closed_halfline x is closed Subset of Sorgenfrey-line
+  proof set T = Sorgenfrey-line;
+A0: the carrier of T = REAL by TOPGEN_3:def 2;
+    let x be real number;
+    reconsider A = right_open_halfline x as open Subset of T by TOPGEN_3:14;
+    the carrier of R^1 = REAL by TOPMETR:24; then
+    (left_closed_halfline x)`` = A` by A0,BORSUK_5:98;
+    hence left_closed_halfline x is closed Subset of T;
+  end;
+
+theorem ThSL3:
+  for x being real number
+  holds right_closed_halfline x is closed Subset of Sorgenfrey-line
+  proof set T = Sorgenfrey-line;
+A0: the carrier of T = REAL by TOPGEN_3:def 2;
+    let x be real number;
+    reconsider A = left_open_halfline x as open Subset of T by TOPGEN_3:13;
+    the carrier of R^1 = REAL by TOPMETR:24; then
+    (right_closed_halfline x)`` = A` by A0,BORSUK_5:99;
+    hence right_closed_halfline x is closed Subset of T;
+  end;
+
+theorem ThSL5:
+  for x,y being real number
+  holds [.x,y.[ is closed Subset of Sorgenfrey-line
+  proof set T = Sorgenfrey-line;
+A0: the carrier of T = REAL by TOPGEN_3:def 2;
+    let x,y be real number;
+    reconsider A = right_closed_halfline x,
+    B = left_open_halfline y as closed Subset of T by ThSL3,ThSL1;
+A1: the carrier of R^1 = REAL by TOPMETR:24;
+    [.x,y.[ = [.x,y.[``
+    .= (left_open_halfline(x) \/ right_closed_halfline(y))` by RCOMP_3:18
+    .= (left_open_halfline x)` /\ (right_closed_halfline y)` by SUBSET_1:29
+    .= A`` /\ (right_closed_halfline y)` by A0,A1,BORSUK_5:99
+    .= A /\ B by A1,BORSUK_5:99;
+    hence [.x,y.[ is closed Subset of Sorgenfrey-line by TOPS_1:35;
+  end;
+
+::<DESC name="1.4.4. Przyk/lad funkcji ci/ag/lej ze strza/lce w [0,1]" monograph="topology"/>
+theorem Ex'1'4'4:
+  for x being real number, w being rational number st x < w
+  ex f being continuous Function of Sorgenfrey-line, I[01] st
+     for a being Point of Sorgenfrey-line holds
+       (a in [.x,w.[ implies f.a = 0) &
+       (not a in [.x,w.[ implies f.a = 1)
+  proof
+    set X = Sorgenfrey-line;
+    let x be real number;
+    let w be rational number;
+    assume x < w;
+    defpred P[set] means $1 in [.x,w.[;
+    deffunc 00(set) = 0;
+    deffunc 01(set) = 1;
+    the carrier of I[01] = [.0,1.] by BORSUK_1:83; then
+03: 0 in the carrier of I[01] & 1 in the carrier of I[01] by RCOMP_1:48; then
+01: for a being set st a in the carrier of X holds
+    (P[a] implies 00(a) in the carrier of I[01]) &
+    (not P[a] implies 01(a) in the carrier of I[01]);
+    consider f being Function of X, I[01] such that
+02: for a being set st a in the carrier of X holds
+    (P[a] implies f.a = 00(a)) & (not P[a] implies f.a = 01(a))
+    from FUNCT_2:sch 9(01);
+    reconsider V = [.x,w.[ as open closed Subset of X by ThSL5,TOPGEN_3:11;
+    reconsider 00 = 0, 01 = 1 as Element of I[01] by 03;
+    X|V is empty or X|V is not empty; then
+    reconsider f1 = (X|V) --> 00 as continuous Function of X|V, I[01]
+    by BORSUK_1:36,TIETZE:6;
+    X|V` is empty or X|V` is not empty; then
+    reconsider f2 = (X|V`) --> 01 as continuous Function of X|V`, I[01]
+    by BORSUK_1:36,TIETZE:6;
+06: [#]X = the carrier of X & the carrier of X|V = V & the carrier of X|V` = V`
+    by PRE_TOPC:def 3,JORDAN1:1; then
+04: dom f = [#]X & dom f1 = V & dom f2 = V` by FUNCT_2:def 1;
+05: V \/ V` = [#]X by PRE_TOPC:18;
+    now
+      let u;
+      assume u in dom f1 \/ dom f2; then
+      reconsider x = u as Point of X by 04,05;
+      hereby assume u in dom f2; then
+        not x in V & (V`-->1).u = 1 & f2 = V`-->1
+        by 06,SUBSET_1:54,FUNCOP_1:13,BORSUK_1:def 3;
+        hence f.u = f2.u by 02;
+      end;
+      assume not u in dom f2; then
+07:   x in V by 04,SUBSET_1:50;
+      hence f.u = 0 by 02 .= (V-->0).x by 07,FUNCOP_1:13
+         .= f1.u by 06,BORSUK_1:def 3;
+    end; then
+    f = f1+*f2 by 04,05,FUNCT_4:def 1; then
+    reconsider f as continuous Function of Sorgenfrey-line, I[01] by Th18;
+    take f;
+    let a be Point of Sorgenfrey-line; thus thesis by 02;
+  end;
+
+theorem
+  Sorgenfrey-line is Tychonoff
+  proof
+    set X = Sorgenfrey-line;
+A1: the carrier of X = REAL by TOPGEN_3:def 2;
+    consider B being Subset-Family of REAL such that
+A2: the topology of X = UniCl B and
+A3: B = {[.x,q.[ where x is Element of REAL, q is Element of REAL:
+    x < q & q is rational} by TOPGEN_3:def 2;
+    B c= UniCl B by CANTOR_1:1; then
+    B is Basis of X by A1,A2,CANTOR_1:def 2; then
+    reconsider B as prebasis of X by YELLOW_9:27;
+A4: X is_T1 by Th30;
+    now
+      let x be Point of X;
+      let V be Subset of X;
+      assume
+A5:   x in V & V in B; then
+      consider a,q being Real such that
+A6:   V = [.a,q.[ & a < q & q is rational by A3;
+      consider f being continuous Function of X, I[01] such that
+A7:   for b being Point of Sorgenfrey-line holds
+      (b in [.a,q.[ implies f.b = 0) &
+      (not b in [.a,q.[ implies f.b = 1) by A6,Ex'1'4'4;
+      take f;
+      thus f.x = 0 by A5,A6,A7;
+      thus f.:V` c= {1}
+      proof
+        let u; assume u in f.:V`; then
+        consider b being Point of X such that
+A8:     b in V` & u = f.b by FUNCT_2:116;
+        not b in [.a,q.[ by A6,A8,SUBSET_1:54; then
+        u = 1 by A7,A8;
+        hence thesis by TARSKI:def 1;
+      end;
+    end;
+    hence thesis by A4,Th28;
+  end;
+
+begin :: Niemytzki plane is Tychonoff space
+
+::<DESC name="1.4.5. Przyk/lad funkcji ci/ag/lej z p/laszczyzny Niemytzkiego w R^1" monograph="topology"/>
+definition
+  let x be real number, r be positive (real number);
+  func +(x,r) -> Function of Niemytzki-plane, I[01] means :Ex'1'4'5A:
+  it.(|[x,0]|) = 0 &
+  for a being real number, b being non negative (real number) holds
+   ((a <> x or b <> 0) & not |[a,b]| in Ball(|[x,r]|,r) implies
+        it.(|[a,b]|) = 1) &
+   (|[a,b]| in Ball(|[x,r]|,r) implies
+        it.(|[a,b]|) = |.|[x,0]|-|[a,b]|.|^2/(2*r*b));
+  existence
+  proof
+    defpred P[set] means $1 = |[x,0]|;
+    defpred Q[set] means not $1 in Ball(|[x,r]|, r);
+    deffunc F1(Point of TOP-REAL 2) = 0;
+    deffunc F2(Point of TOP-REAL 2) = 1;
+    deffunc F3(Point of TOP-REAL 2) = |.|[x,0]|-$1.|^2/(2*r*$1`2);
+    the carrier of Niemytzki-plane = y>=0-plane by DEF3; then
+A1: the carrier of Niemytzki-plane c= the carrier of TOP-REAL 2;
+A2: for a being Point of TOP-REAL 2 st a in the carrier of Niemytzki-plane
+    holds 
+    (P[a] implies F1(a) in the carrier of I[01]) &
+    (not P[a] & Q[a] implies F2(a) in the carrier of I[01]) &
+    (not P[a] & not Q[a] implies F3(a) in the carrier of I[01])
+    proof
+      let a be Point of TOP-REAL 2;
+      assume a in the carrier of Niemytzki-plane;
+      thus P[a] implies F1(a) in the carrier of I[01]
+      by BORSUK_1:83,RCOMP_1:48;
+      thus (not P[a] & Q[a] implies F2(a) in the carrier of I[01])
+      by BORSUK_1:83,RCOMP_1:48;
+      assume not P[a];
+      assume not Q[a]; then
+B1:   a = |[a`1,a`2]| & |.a-|[x,r]|.| < r by TOPREAL9:7,EUCLID:57; then
+      |.|[a`1-x,a`2-r]|.| < r & |.|[a`1-x,a`2-r]|.| >= 0
+      by EUCLID:66,EUCLID_2:60; then
+      |[a`1-x,a`2-r]|`1 = a`1-x & |[a`1-x,a`2-r]|`2 = a`2-r &
+      |.|[a`1-x,a`2-r]|.|^2 < r^2 by SQUARE_1:78,EUCLID:56; then
+      (a`1-x)^2+(a`2-r)^2 < r^2 by JGRAPH_1:46; then
+      (a`1-x)^2+(a`2^2-2*a`2*r+r^2) < 0+r^2 by SQUARE_1:64; then
+      (a`1-x)^2+(a`2^2-2*a`2*r)+r^2 < 0+r^2; then
+      (a`1-x)^2+a`2^2-2*a`2*r < 0 by XREAL_1:8; then
+      |[a`1-x,a`2]|`1 = a`1-x & |[a`1-x,a`2]|`2 = a`2 &
+      (a`1-x)^2+(a`2-0)^2 < 2*r*a`2 by XREAL_1:50,EUCLID:56; then
+      |.|[a`1-x,a`2-0]|.|^2 < 2*r*a`2 by JGRAPH_1:46; then
+      |.a-|[x,0]|.|^2 < 2*r*a`2 by B1,EUCLID:66; then
+      |.|[x,0]|-a.|^2 >= 0 & |.|[x,0]|-a.|^2 < 2*r*a`2
+      by SQUARE_1:72,TOPRNS_1:28; then
+      0 <= F3(a) & F3(a) <= 1 by XREAL_1:185,138;
+      hence F3(a) in the carrier of I[01] by BORSUK_1:83,RCOMP_1:48;
+    end;
+    consider f being Function of Niemytzki-plane, I[01] such that
+A3: for a being Point of TOP-REAL 2 st a in the carrier of Niemytzki-plane
+    holds
+    (P[a] implies f.a = F1(a)) &
+    (not P[a] & Q[a] implies f.a = F2(a)) &
+    (not P[a] & not Q[a] implies f.a = F3(a)) from SCH2(A1,A2);
+    take f;
+A4: the carrier of Niemytzki-plane = y>=0-plane by DEF3; then
+    |[x,0]| in the carrier of Niemytzki-plane by P2;
+    hence f.(|[x,0]|) = 0 by A3;
+    let a be real number, b be non negative (real number);
+A5: |[a,b]| in the carrier of Niemytzki-plane by A4,P2;
+    hereby
+      assume a <> x or b <> 0; then
+      not P[ |[a,b]| ] by SPPOL_2:1;
+      hence not |[a,b]| in Ball(|[x,r]|,r) implies f.(|[a,b]|) = 1 by A3,A5;
+    end;
+    assume
+A6: |[a,b]| in Ball(|[x,r]|,r);
+    Ball(|[x,r]|,r) misses y=0-line & |[x,0]| in y=0-line by L2,P4; then
+    not P[ |[a,b]| ] & |[a,b]|`2 = b by A6,XBOOLE_0:3,EUCLID:56;
+    hence f.(|[a,b]|) = |.|[x,0]|-|[a,b]|.|^2/(2*r*b) by A3,A5,A6;
+  end;
+  uniqueness
+  proof
+    let f,g be Function of Niemytzki-plane, I[01] such that
+A1: f.(|[x,0]|) = 0 &
+    for a being real number, b being non negative (real number) holds
+    ((a <> x or b <> 0) & not |[a,b]| in Ball(|[x,r]|,r) implies
+    f.(|[a,b]|) = 1) &
+    (|[a,b]| in Ball(|[x,r]|,r) implies
+    f.(|[a,b]|) = |.|[x,0]|-|[a,b]|.|^2/(2*r*b)) and
+A2: g.(|[x,0]|) = 0 &
+    for a being real number, b being non negative (real number) holds
+    ((a <> x or b <> 0) & not |[a,b]| in Ball(|[x,r]|,r) implies
+    g.(|[a,b]|) = 1) &
+    (|[a,b]| in Ball(|[x,r]|,r) implies
+    g.(|[a,b]|) = |.|[x,0]|-|[a,b]|.|^2/(2*r*b));
+A3: the carrier of Niemytzki-plane = y>=0-plane by DEF3;
+    now let p be Point of Niemytzki-plane;
+      p in y>=0-plane by A3; then
+      reconsider q = p as Point of TOP-REAL 2;
+A4:   p = |[q`1,q`2]| by EUCLID:57; then
+      q`2 >= 0 by A3,P2; then
+      reconsider q2 = q`2 as non negative (real number);
+      per cases by A4;
+      suppose q`1 = x & q2 = 0;
+        hence f.p = g.p by A1,A2,A4;
+      end;
+      suppose (q`1 <> x or q2 <> 0) & not |[q`1,q2]| in Ball(|[x,r]|,r); then
+        f.p = 1 & g.p = 1 by A1,A2,A4;
+        hence f.p = g.p;
+      end;
+      suppose  p in Ball(|[x,r]|,r); then
+        f.p = |.|[x,0]|-q.|^2/(2*r*q2) &
+        g.p = |.|[x,0]|-q.|^2/(2*r*q2) by A1,A2,A4;
+        hence f.p = g.p;
+      end;
+    end;
+    hence thesis by FUNCT_2:113;
+  end;
+end;
+
+theorem Th90:
+  for p being Point of TOP-REAL 2 st p`2 >= 0
+  for x being real number, r being positive (real number)
+  st +(x,r).p = 0
+  holds p = |[x,0]|
+  proof
+    let p be Point of TOP-REAL 2;
+    assume
+A0: p`2 >= 0;
+    let x be real number;
+    let r be positive (real number);
+    assume
+A1: +(x,r).p = 0;
+    set p1 = p`1, p2 = p`2;
+A2: p = |[p1,p2]| by EUCLID:57;
+    assume
+A4: p <> |[x,0]|; then
+    p1 <> x or p2 <> 0 by A2; then
+A3: |[p1,p2]| in Ball(|[x,r]|,r) by A0,A1,A2,Ex'1'4'5A;
+    Ball(|[x,r]|,r) misses y=0-line by P4; then
+    not |[p1,p2]| in y=0-line by A3,XBOOLE_0:3; then
+    p2 <> 0 by L2; then
+    reconsider p2 as positive (real number) by A0;
+    0/(2*r*p2) = |.|[x,0]|-|[p1,p2]|.|^2/(2*r*p2)
+    by A1,A2,A3,Ex'1'4'5A; then
+    0 = |.|[x,0]|-|[p1,p2]|.|^2 by XCMPLX_1:53; then
+    0 = |.|[x,0]|-p.| by A2,SQUARE_1:73;
+    hence contradiction by A4,TOPRNS_1:29;
+  end;
+
+theorem Th91:
+  for x,y being real number, r being positive (real number) st x <> y
+  holds +(x,r).(|[y,0]|) = 1
+  proof
+    let x,y be real number;
+    let r be positive (real number);
+    assume
+00: x <> y; then
+    x-y <> 0 by XCMPLX_1:15; then
+    |.x-y.| > 0 by COMPLEX1:133; then
+    (|.x-y.| = x-y or |.x-y.| = - (x-y)) &
+    |.x-y.|^2 <> 0 & |.x-y.|^2 >= 0 & |[x-y,r]|`1 = x-y & |[x-y,r]|`2 = r
+    by SQUARE_1:72,73,EUCLID:56,ABSVALUE:1; then
+    (x-y)^2 > 0 & |.|[x-y,r]|.|^2 = r^2+(x-y)^2
+    by JGRAPH_1:46,SQUARE_1:61; then
+    |.|[x-y,r]|.|^2 > r^2 & |.|[x-y,r]|.| >= 0 by XREAL_1:31,TOPRNS_1:26; then
+    |.|[x-y,r-0]|.| > r by SQUARE_1:77; then
+    |.|[x,r]|-|[y,0]|.| > r by EUCLID:66; then
+    |.|[y,0]|-|[x,r]|.| > r by TOPRNS_1:28; then
+    not |[y,0]| in Ball(|[x,r]|,r) by TOPREAL9:7;
+    hence +(x,r).(|[y,0]|) = 1 by 00,Ex'1'4'5A;
+  end;
+
+theorem Th82:
+  for p being Point of TOP-REAL 2
+  for x being real number, a,r being positive (real number)
+  st a <= 1 & |.p-|[x,r*a]|.| = r*a & p`2 <> 0
+  holds +(x,r).p = a
+  proof
+    let p be Point of TOP-REAL 2;
+01: p = |[p`1,p`2]| by EUCLID:57;
+    set p1 = p`1, p2 = p`2;
+    let x be real number;
+    let a,r be positive (real number);
+    assume
+02: a <= 1;
+    assume
+03: |.p-|[x,r*a]|.| = r*a & p`2 <> 0;
+    |.p-|[x,r*a]|.|^2 = (r*a)^2 by 03; then
+    |.|[p1-x,p2-r*a]|.|^2 = (r*a)^2 & |[p1-x,p2-r*a]|`1 = p1-x &
+    |[p1-x,p2-r*a]|`2 = p2-r*a by 01,EUCLID:56,66; then
+    (p1-x)^2+(p2-r*a)^2 = (r*a)^2 by JGRAPH_1:46; then
+    (p1-x)^2+(p2^2-2*p2*(r*a)+(r*a)^2) = (r*a)^2 by SQUARE_1:64; then
+    (p1-x)^2+(p2^2-2*p2*(r*a))+(r*a)^2 = (r*a)^2 by XCMPLX_1:1; then
+    (p1-x)^2+p2^2-2*p2*r*a = 0 by XCMPLX_1:3; then
+04: (p1-x)^2+p2^2 = 2*p2*r*a by XCMPLX_1:15;
+    set r1 = r*a, r2 = r*1;
+    reconsider r1 as positive (real number);
+    p2^2 > 0 & (p1-x)^2 >= 0 by 03,SQUARE_1:72,74; then
+    p2*(2*r*a) > 0+0 by 04,XREAL_1:10; then
+    p2 > 0/(2*r*a) by XREAL_1:85; then
+    reconsider p2 as positive (real number);
+06: |[p1-x,p2-0]|`1 = p1-x & |[p1-x,p2]|`2 = p2 by EUCLID:56;
+    per cases by 02,XREAL_1:1;
+    suppose a < 1; then
+      r*a < r by XREAL_1:159; then
+      reconsider s = r-r*a as positive (real number) by XREAL_1:52;
+      |.p-|[x,r]|.|^2 = |.|[p1-x,p2-r]|.|^2 by 01,EUCLID:66
+      .= (p1-x)^2+(p2-r)^2 by LemDist
+      .= (p1-x)^2+(r-p2)^2 by JORDAN18:1
+      .= (p1-x)^2+((r-a*r)+(a*r-p2))^2
+      .= (p1-x)^2+((r-a*r)^2+2*(r-a*r)*(a*r-p2)+(a*r-p2)^2) by SQUARE_1:63
+      .= (p1-x)^2+(a*r-p2)^2+((r-a*r)^2+2*(r-a*r)*(a*r-p2))
+      .= (p1-x)^2+(p2-a*r)^2+((r-a*r)^2+2*(r-a*r)*(a*r-p2)) by JORDAN18:1
+      .= |.|[p1-x,p2-a*r]|.|^2+((r-a*r)^2+2*(r-a*r)*(a*r-p2)) by LemDist
+      .= (a*r)^2+((r-a*r)^2+2*(r-a*r)*(a*r-p2)) by 01,03,EUCLID:66
+      .= (a*r)^2+((r-a*r)*(r-a*r)+(1+1)*(r-a*r)*(a*r-p2)) by SQUARE_1:def 3
+      .= (a*r)^2+(r*r-r*p2+r*a*r-r*p2-(a*r*r-a*r*p2+(a*r)*(a*r)-a*r*p2))
+      .= (a*r)^2+(r*r-r*p2+r*a*r-r*p2-(a*r*r-a*r*p2+(a*r)^2-a*r*p2))
+      by SQUARE_1:def 3
+      .= r*r-(1+1)*p2*s .= r^2-(1+1)*p2*s by SQUARE_1:def 3; then
+      |.p-|[x,r]|.|^2 < r^2 by XREAL_1:46; then
+      |.p-|[x,r]|.| < r by SQUARE_1:77; then
+      p in Ball(|[x,r]|,r) by TOPREAL9:7; then
+      +(x,r).p = |.|[x,0]|-p.|^2/(2*r*p2) by 01,Ex'1'4'5A
+      .= |.p-|[x,0]|.|^2/(2*r*p2) by TOPRNS_1:28
+      .= |.|[p1-x,p2-0]|.|^2/(2*r*p2) by 01,EUCLID:66
+      .= ((p1-x)^2+p2^2)/(2*r*p2) by 06,JGRAPH_1:46; then
+      +(x,r).p = (2*p2*r*a)/(2*r*p2) & a*((2*p2*r)/(2*r*p2)) = a*1
+      by 04,XCMPLX_1:60;
+      hence +(x,r).p = a by XCMPLX_1:75;
+    end;
+    suppose
+05:   a = 1; then
+      not p in Ball(|[x,r]|,r) & p2 is non negative by 03,TOPREAL9:7;
+      hence +(x,r).p = a by 01,05,Ex'1'4'5A;
+    end;
+  end;
+
+theorem Th92:
+  for p being Point of TOP-REAL 2
+  for x,a being real number, r being positive (real number)
+  st 0 <= a & a <= 1 & |.p-|[x,r*a]|.| < r*a
+  holds +(x,r).p < a
+  proof
+    let p be Point of TOP-REAL 2;
+01: p = |[p`1,p`2]| by EUCLID:57;
+    set p1 = p`1, p2 = p`2;
+    let x,a be real number;
+    let r be positive (real number);
+    assume
+02: 0 <= a & a <= 1;
+    assume
+03: |.p-|[x,r*a]|.| < r*a;
+    |.p-|[x,r*a]|.| >= 0 by TOPRNS_1:26; then
+    |.p-|[x,r*a]|.|^2 < (r*a)^2 by 03,SQUARE_1:78; then
+    |.|[p1-x,p2-r*a]|.|^2 < (r*a)^2 & |[p1-x,p2-r*a]|`1 = p1-x &
+    |[p1-x,p2-r*a]|`2 = p2-r*a by 01,EUCLID:56,66; then
+    (p1-x)^2+(p2-r*a)^2 < (r*a)^2 by JGRAPH_1:46; then
+    (p1-x)^2+(p2^2-2*p2*(r*a)+(r*a)^2) < (r*a)^2 by SQUARE_1:64; then
+    (p1-x)^2+p2^2-2*p2*(r*a)+(r*a)^2 < (r*a)^2; then
+    (p1-x)^2+p2^2-2*p2*r*a < 0 by XREAL_1:33; then
+ 04: (p1-x)^2+p2^2 < 2*p2*r*a by XREAL_1:50;
+    set r1 = r*a, r2 = r*1;
+    |.p-|[x,r*a]|.| >= 0 by TOPRNS_1:26; then
+    reconsider r1 as positive (real number) by 03;
+    r1 <= r2 by 02,XREAL_1:66; then
+05: p in Ball(|[x,r1]|,r1) & Ball(|[x,r1]|,r1) c= Ball(|[x,r2]|,r2)
+    by 03,P6,TOPREAL9:7;
+    Ball(|[x,r1]|,r1) c= y>=0-plane & Ball(|[x,r1]|,r1) misses y=0-line
+    by P3,P4; then
+    p2 >= 0 & not p in y=0-line & (p2 = 0 implies p in y=0-line)
+    by 01,05,P2,L2,XBOOLE_0:3; then
+    reconsider p2 as positive (real number);
+06: |[p1-x,p2-0]|`1 = p1-x & |[p1-x,p2]|`2 = p2 by EUCLID:56; 
+    p in Ball(|[x,r2]|,r2) by 05; then
+    +(x,r).p = |.|[x,0]|-p.|^2/(2*r*p2) by 01,Ex'1'4'5A
+    .= |.p-|[x,0]|.|^2/(2*r*p2) by TOPRNS_1:28
+    .= |.|[p1-x,p2-0]|.|^2/(2*r*p2) by 01,EUCLID:66
+    .= ((p1-x)^2+p2^2)/(2*r*p2) by 06,JGRAPH_1:46; then
+    +(x,r).p < (2*p2*r*a)/(2*r*p2) & a*((2*p2*r)/(2*r*p2)) = a*1
+    by 04,XREAL_1:76,XCMPLX_1:60;
+    hence +(x,r).p < a by XCMPLX_1:75;
+  end;
+
+theorem Th93:
+  for p being Point of TOP-REAL 2 st p`2 >= 0
+  for x,a being real number, r being positive (real number)
+  st 0 <= a & a < 1 & |.p-|[x,r*a]|.| > r*a
+  holds +(x,r).p > a
+  proof
+    let p be Point of TOP-REAL 2 such that
+00: p`2 >= 0;
+01: p = |[p`1,p`2]| by EUCLID:57; then
+    reconsider z = p as Element of Niemytzki-plane by 00,LemNp,P2;
+    set p1 = p`1, p2 = p`2;
+    reconsider p2 as non negative (real number) by 00;
+    let x,a be real number;
+    let r be positive (real number);
+    assume
+02: 0 <= a & a < 1; then
+    reconsider a' = a as non negative (real number);
+    reconsider ra = r*a as Real by XREAL_0:def 1;
+    assume
+03: |.p-|[x,r*a]|.| > r*a;
+    +(x,r).z in the carrier of I[01] by FUNCT_2:7; then
+09: +(x,r).z <= 1 & +(x,r).z >= 0 by BORSUK_1:83,RCOMP_1:48;
+    |.|[x,0]|-|[x,r*a]|.| = |.|[x,r*a]|-|[x,0]|.| by TOPRNS_1:28
+    .= |.|[x-x,ra-0]|.| by EUCLID:66 .= abs(ra) by TOPREAL6:31
+    .= r*a' by ABSVALUE:def 1; then
+A1: p1 <> x or p2 <> 0 by 03,01;
+    per cases by 02;
+    suppose
+04:   a = 0; then
+      p <> |[x,r*0]| by 03,TOPRNS_1:29; then
+      +(x,r).p <> 0 by 00,Th90;
+      hence +(x,r).p > a by 04,09;
+    end;
+    suppose +(x,r).p = 1;
+      hence +(x,r).p > a by 02;
+    end;
+    suppose
+05:   a > 0 & +(x,r).z <> 1; then
+      reconsider a' = a as positive (real number);
+06:   |[p1-x,p2-0]|`1 = p1-x & |[p1-x,p2]|`2 = p2 by EUCLID:56; 
+      p2 is non negative; then
+A2:   p in Ball(|[x,r]|,r) by A1,01,05,Ex'1'4'5A; then
+07:   +(x,r).p = |.|[x,0]|-p.|^2/(2*r*p2) by 01,Ex'1'4'5A
+      .= |.p-|[x,0]|.|^2/(2*r*p2) by TOPRNS_1:28
+      .= |.|[p1-x,p2-0]|.|^2/(2*r*p2) by 01,EUCLID:66
+      .= ((p1-x)^2+p2^2)/(2*r*p2) by 06,JGRAPH_1:46;
+      r*a >= r*0 by 02,XREAL_1:66; then
+      |.p-|[x,r*a]|.|^2 > (r*a)^2 by 03,SQUARE_1:78; then
+      |.|[p1-x,p2-r*a]|.|^2 > (r*a)^2 & |[p1-x,p2-r*a]|`1 = p1-x &
+      |[p1-x,p2-r*a]|`2 = p2-r*a by 01,EUCLID:56,66; then
+      (p1-x)^2+(p2-r*a)^2 > (r*a)^2 by JGRAPH_1:46; then
+      (p1-x)^2+(p2^2-2*p2*(r*a)+(r*a)^2) > (r*a)^2 by SQUARE_1:64; then
+      (p1-x)^2+p2^2-2*p2*(r*a)+(r*a)^2 > (r*a)^2; then
+      (p1-x)^2+p2^2-2*p2*r*a > 0 by XREAL_1:34; then
+04:   (p1-x)^2+p2^2 > 2*p2*r*a by XREAL_1:49;
+      set r1 = r*a', r2 = r*1;
+      reconsider r1 as positive (real number);
+      Ball(|[x,r]|,r) c= y>=0-plane & Ball(|[x,r]|,r) misses y=0-line
+      by P3,P4; then
+      p2 >= 0 & not p in y=0-line & (p2 = 0 implies p in y=0-line)
+      by A2,01,L2,XBOOLE_0:3; then
+      reconsider p2 as positive (real number);
+      +(x,r).p > (2*p2*r*a)/(2*r*p2) & a*((2*p2*r)/(2*r*p2)) = a*1
+      by 04,07,XREAL_1:76,XCMPLX_1:60;
+      hence +(x,r).p > a by XCMPLX_1:75;
+    end;
+  end;
+
+theorem Th94:
+  for p being Point of TOP-REAL 2 st p`2 >= 0
+  for x,a,b being real number, r being positive (real number)
+  st 0 <= a & b <= 1 & +(x,r).p in ].a,b.[
+  ex r1 being positive (real number)
+  st r1 <= p`2 & Ball(p,r1) c= +(x,r)"].a,b.[
+  proof
+    let p be Point of TOP-REAL 2 such that
+A0: p`2 >= 0;
+A1: p = |[p`1,p`2]| by EUCLID:57;
+    let x,a,b be real number, r be positive (real number);
+    set r1 = min(r*b-|.p-|[x,r*b]|.|, |.p-|[x,r*a]|.|-r*a);
+    assume
+A2: 0 <= a & b <= 1 & +(x,r).p in ].a,b.[;
+A3: +(x,r).p > a & +(x,r).p < b by A2,RCOMP_1:47; then
+    +(x,r).p > 0 & +(x,r).p < 1 by A2,XREAL_1:2; then
+    p in Ball(|[x,r]|,r) or p`1 = x & p`2 = 0 & p <> |[x,0]|
+    by A0,A1,Ex'1'4'5A; then
+A4: p in Ball(|[x,r]|,r) by A1;
+C1: a < b by A3,XREAL_1:2; then
+C2: 0 < b & a < 1 by A2,XREAL_1:2;
+    (p`2 = 0 implies p in y=0-line) & Ball(|[x,r]|,r) misses y=0-line
+    by A1,L2,P4; then
+    p`2 <> 0 by A4,XBOOLE_0:3; then
+    reconsider p2 = p`2, b' = b as positive (real number)
+    by A0,C1,A2;
+    |.p-|[x,r]|.| < r & 2*r*p2 > 0 &
+    +(x,r).p = |.|[x,0]|-p.|^2/(2*r*p`2) by A4,A0,A1,Ex'1'4'5A,TOPREAL9:7; then
+    |.|[x,0]|-p.|^2 > (2*r*p`2)*a & |.|[x,0]|-p.|^2 < (2*r*p`2)*b
+    by A3,XREAL_1:79,81; then
+    |.p-|[x,0]|.|^2 < (2*r*p`2)*b & |.p-|[x,0]|.|^2 > (2*r*p`2)*a
+    by TOPRNS_1:28; then
+    |.|[p`1-x,p`2-0]|.|^2 < (2*r*p`2)*b & |[p`1-x,p`2]|`1 = p`1-x &
+    |.|[p`1-x,p`2-0]|.|^2 > (2*r*p`2)*a & |[p`1-x,p2]|`2 = p2
+    by A1,EUCLID:56,66; then
+    (p`1-x)^2+p2^2 < (2*r*p2)*b & (p`1-x)^2+p2^2 > (2*r*p2)*a
+    by JGRAPH_1:46; then
+    (p`1-x)^2+p2^2 - (2*r*p2)*b < 0 & (p`1-x)^2+p2^2 - (2*r*p2)*a > 0
+    by XREAL_1:51,52; then
+    (p`1-x)^2+p2^2 - (2*r*p2)*b + (r*b)^2 < (r*b)^2 &
+    (p`1-x)^2+p2^2 - (2*r*p2)*a + (r*a)^2 > (r*a)^2 by XREAL_1:31,32; then
+    (p`1-x)^2+(p2^2 - 2*p2*(r*b) + (r*b)^2) < (r*b)^2 &
+    (p`1-x)^2+(p2^2 - 2*p2*(r*a) + (r*a)^2) > (r*a)^2; then
+    (p`1-x)^2+(p2 - r*b)^2 < (r*b)^2 & |[p`1-x, p2-r*b]|`1 = p`1-x &
+    (p`1-x)^2+(p2 - r*a)^2 > (r*a)^2 & |[p`1-x, p2-r*b]|`2 = p2-r*b &
+    |[p`1-x, p2-r*a]|`1 = p`1-x & |[p`1-x, p2-r*a]|`2 = p2-r*a
+    by SQUARE_1:64,EUCLID:56; then
+    |.|[p`1-x, p2-r*b]|.|^2 < (r*b)^2 & |.|[p`1-x, p2-r*a]|.|^2 > (r*a)^2
+    by JGRAPH_1:46; then
+    |.p-|[x,r*b]|.|^2 < (r*b)^2 & r*b' >= 0 & |.p-|[x,r*a]|.| >= 0 &
+    |.p-|[x,r*a]|.|^2 > (r*a)^2 by A1,EUCLID:66,TOPRNS_1:26; then
+    |.p-|[x,r*b]|.| < r*b & |.p-|[x,r*a]|.| > r*a by JGRAPH_2:6; then
+    r*b-|.p-|[x,r*b]|.| > 0 & r1 = r*b-|.p-|[x,r*b]|.| or
+    |.p-|[x,r*a]|.|-r*a > 0 & r1 = |.p-|[x,r*a]|.|-r*a
+    by XREAL_1:52,SQUARE_1:38; then
+    reconsider r1 as positive (real number);
+    take r1;
+    |.p-|[p`1,0]|.| = |.|[p`1-p`1,p2-0]|.| by A1,EUCLID:66
+    .= abs p2 by TOPREAL6:31 .= p2 by ABSVALUE:def 1; then
+B1: |.|[x,r*b]|-|[p`1,0]|.| <= |.|[x,r*b]|-p.|+p2 &
+    r1 <= r*b-|.p-|[x,r*b]|.| & |.p-|[x,r*b]|.| = |.|[x,r*b]|-p.| &
+    r*b-|.p-|[x,r*b]|.|+|.p-|[x,r*b]|.| = r*b
+    by TOPRNS_1:28,35,SQUARE_1:35; then
+B2: |.|[x,r*b]|-p.|+r1 <= r*b by XREAL_1:8;
+    hereby assume
+A5:   r1 > p`2;
+      |.|[x,r*b]|-p.|+p2 < |.|[x,r*b]|-p.|+r1 by A5,XREAL_1:10; then
+      |.|[x,r*b]|-|[p`1,0]|.| < |.|[x,r*b]|-p.|+r1 
+      by B1,XREAL_1:2; then
+      |.|[x,r*b]|-|[p`1,0]|.| < r*b by B2,XREAL_1:2; then
+      |.|[p`1,0]|-|[x,r*b]|.| < r*b by TOPRNS_1:28; then
+      |[p`1,0]| in Ball(|[x,r*b]|,r*b) & |[p`1,0]| in y=0-line
+      by L2,TOPREAL9:7; then
+      Ball(|[x,r*b]|,r*b') meets y=0-line by XBOOLE_0:3;
+      hence contradiction by P4;
+    end; then
+B3: Ball(p,r1) c= y>=0-plane & Ball(p,r1) misses y=0-line by A1,P3,P4;
+    let u; assume
+A6: u in Ball(p,r1); then
+    reconsider q = u as Point of TOP-REAL 2;
+    q = |[q`1,q`2]| by EUCLID:57; then
+A8: q`2 >= 0 by B3,A6,P2;
+    |.p-|[x,r*a]|.|-r*a >= r1 &
+    |.q-p.| < r1 by A6,TOPREAL9:7,SQUARE_1:35; then
+    |.q-p.|+|.p-|[x,r*b]|.| < r1+|.p-|[x,r*b]|.| & |.p-q.| = |.q-p.| &
+    |.p-|[x,r*a]|.| <= |.p-q.|+|.q-|[x,r*a]|.| & |.p-|[x,r*a]|.|-r*a > |.q-p.|
+    by XREAL_1:2,10,TOPRNS_1:28,35; then
+    |.q-|[x,r*b]|.| <= |.q-p.|+|.p-|[x,r*b]|.| &
+    |.q-p.|+|.p-|[x,r*b]|.| < r*b &
+    |.p-|[x,r*a]|.|-|.q-p.| > r*a & |.q-|[x,r*a]|.| >= |.p-|[x,r*a]|.|-|.q-p.| 
+    by B1,B2,XREAL_1:2,14,22,TOPRNS_1:35; then
+    |.q-|[x,r*b]|.| < r*b & |.q-|[x,r*a]|.| > r*a by XREAL_1:2; then
+    +(x,r).q < b & +(x,r).q > a by A8,A2,C2,Th92,Th93; then
+A7: +(x,r).q in ].a,b.[ by RCOMP_1:47;
+    q in the carrier of Niemytzki-plane by A6,B3,LemNp;
+    hence u in +(x,r)"].a,b.[ by A7,FUNCT_2:46;
+  end;
+
+theorem Th95':
+  for x being real number, a,r being positive (real number)
+  holds Ball(|[x,r*a]|,r*a) c= +(x,r)"].0,a.[
+  proof
+    let x be real number;
+    let a,r be positive (real number), u;
+    assume
+A1: u in Ball(|[x,r*a]|,r*a); then
+    reconsider p = u as Point of TOP-REAL 2;
+    Ball(|[x,r*a]|,r*a) c= y>=0-plane by P3; then
+    reconsider q = p as Point of Niemytzki-plane by A1,LemNp;
+    q = |[p`1,p`2]| & +(x,r).q in the carrier of I[01]
+    by FUNCT_2:7,EUCLID:57; then
+A2: +(x,r).q <= 1 & +(x,r).q >= 0 & p`2 >= 0
+    by P2,LemNp,RCOMP_1:48,BORSUK_1:83;
+A4: now assume +(x,r).p = 0; then
+      p = |[x,0]| by A2,Th90; then
+      p in y=0-line & Ball(|[x,r*a]|,r*a) misses y=0-line by L2,P4;
+      hence contradiction by A1,XBOOLE_0:3;
+    end;
+    per cases;
+    suppose a > 1; then
+      +(x,r).q < a & +(x,r).q > 0 by A2,A4,XREAL_1:2; then
+      +(x,r).q in ].0,a.[ by RCOMP_1:47;
+      hence thesis by FUNCT_2:46;
+    end;
+    suppose
+A3:   a <= 1;
+      |.p-|[x,r*a]|.| < r*a by A1,TOPREAL9:7; then
+      +(x,r).p < a & +(x,r).q > 0 by A2,A4,A3,Th92; then
+      +(x,r).q in ].0,a.[ by RCOMP_1:47;
+      hence u in +(x,r)"].0,a.[ by FUNCT_2:46;
+    end;
+  end;
+
+theorem Th95:
+  for x being real number, a,r being positive (real number)
+  holds Ball(|[x,r*a]|,r*a) \/ {|[x,0]|} c= +(x,r)"[.0,a.[
+  proof
+    let x be real number;
+    let a,r be positive (real number), u;
+    assume u in Ball(|[x,r*a]|,r*a) \/ {|[x,0]|}; then
+A1: u in Ball(|[x,r*a]|,r*a) or u in {|[x,0]|} by XBOOLE_0:def 2; then
+    reconsider p = u as Point of TOP-REAL 2;
+    Ball(|[x,r*a]|,r*a) c= y>=0-plane & |[x,0]| in y>=0-plane
+    by P2,P3; then
+    reconsider q = p as Point of Niemytzki-plane by A1,LemNp,TARSKI:def 1;
+    +(x,r).q in the carrier of I[01] by FUNCT_2:7; then
+A2: +(x,r).q <= 1 & +(x,r).q >= 0 by RCOMP_1:48,BORSUK_1:83;
+    per cases by A1,TARSKI:def 1;
+    suppose a > 1; then
+      +(x,r).q < a by A2,XREAL_1:2; then
+      +(x,r).q in [.0,a.[ by A2,RCOMP_2:3;
+      hence thesis by FUNCT_2:46;
+    end;
+    suppose
+A3:   a <= 1 & u in Ball(|[x,r*a]|,r*a); then
+      |.p-|[x,r*a]|.| < r*a by TOPREAL9:7; then
+      +(x,r).p < a by A3,Th92; then
+      +(x,r).q in [.0,a.[ by A2,RCOMP_2:3;
+      hence u in +(x,r)"[.0,a.[ by FUNCT_2:46;
+    end;
+    suppose u = |[x,0]|; then
+      +(x,r).u = 0 by Ex'1'4'5A; then
+      +(x,r).q in [.0,a.[ by RCOMP_2:3;
+      hence u in +(x,r)"[.0,a.[ by FUNCT_2:46;
+    end;
+  end;
+
+theorem Th96:
+  for p being Point of TOP-REAL 2 st p`2 >= 0
+  for x,a being real number, r being positive (real number)
+  st 0 < +(x,r).p & +(x,r).p < a & a <= 1
+  holds p in Ball(|[x,r*a]|,r*a)
+  proof
+    let p be Point of TOP-REAL 2;
+    assume
+A0: p`2 >= 0;
+B1: p = |[p`1,p`2]| by EUCLID:57;
+    let x,a be real number;
+    let r be positive (real number);
+    set r1 = r*a;
+    assume
+A1: 0 < +(x,r).p & +(x,r).p < a & a <= 1; then
+    p <> |[x,0]| & (x <> p`1 implies p <> |[p`1,0]|)
+    by Th91,Ex'1'4'5A; then
+A2: 0 < a & p`2 <> 0 by A1,B1;
+    assume not p in Ball(|[x,r1]|,r1); then
+    |.p-|[x,r1]|.| >= r1 by TOPREAL9:7; then
+    |.p-|[x,r1]|.| = r1 or |.p-|[x,r1]|.| > r1 & (a < 1 or a = 1)
+    by A1,XREAL_1:1; then
+    +(x,r).p = a or (a < 1 & +(x,r).p > a) or
+    a = 1 & not p in Ball(|[x,r]|,r) by A0,A1,A2,Th82,Th93,TOPREAL9:7;
+    hence thesis by A0,A1,B1,A2,Ex'1'4'5A;
+  end;
+
+theorem Th97:
+  for p being Point of TOP-REAL 2 st p`2 > 0
+  for x,a being real number, r being positive (real number)
+  st 0 <= a & a < +(x,r).p
+  ex r1 being positive (real number)
+  st r1 <= p`2 & Ball(p,r1) c= +(x,r)"].a,1.]
+  proof
+    let p be Point of TOP-REAL 2;
+    assume
+A0: p`2 > 0;
+    let x,a be real number;
+    let r be positive (real number);
+    set f = +(x,r);
+    assume
+A1: 0 <= a & a < f.p;
+A3: p = |[p`1,p`2]| by EUCLID:57; then
+    p in the carrier of Niemytzki-plane by A0,P2,LemNp; then
+    f.p in the carrier of I[01] by FUNCT_2:7; then
+    f.p <= 1 by RCOMP_1:48,BORSUK_1:83; then
+A': a < 1 by A1,XREAL_1:2;
+    per cases by A1;
+    suppose
+C1:   a = 0;
+      reconsider r1 = p`2 as positive (real number) by A0;
+      take r1; thus r1 <= p`2;
+      reconsider A = Ball(p,r1) as Subset of Niemytzki-plane by A3,P3,LemNp;
+      let u; assume
+C2:   u in Ball(p,r1); then
+      reconsider q = u as Point of TOP-REAL 2;
+      q in A by C2; then
+      reconsider z = q as Element of Niemytzki-plane;
+      y=0-line misses Ball(p,r1) by A3,P4; then
+      not q in y=0-line & q = |[q`1,q`2]| & q in A
+      by C2,XBOOLE_0:3,EUCLID:57; then
+      q`2 <> 0 & |[x,0]|`2 = 0 & q`2 >= 0 & f.z in the carrier of I[01]
+      by P2,LemNp,L2,FUNCT_2:7,EUCLID:56; then
+      f.q <> 0 & f.z >= 0 & f.z <= 1 by Th90,RCOMP_1:48,BORSUK_1:83; then
+      f.z in ].a,1.] by C1,RCOMP_2:4;
+      hence thesis by FUNCT_2:46;
+    end;
+    suppose a > 0; then
+      reconsider b = a as positive (real number);
+      set r1 = min(|.p-|[x,r*a]|.|-r*a, p`2);
+      not a > f.p & b <> f.p by A1; then
+      not |.p-|[x,r*a]|.| < r*a & |.p-|[x,r*a]|.| <> r*a
+      by A0,A',Th92,Th82; then
+B1:   |.p-|[x,r*a]|.| > r*a by XREAL_1:1;
+      |.p-|[x,r*a]|.|-r*a <= p`2 or |.p-|[x,r*a]|.|-r*a >= p`2; then
+      r1 = |.p-|[x,r*a]|.|-r*a or r1 = p`2 by SQUARE_1:def 1; then
+      reconsider r1 as positive (real number) by A0,B1,XREAL_1:52;
+      take r1;
+      thus r1 <= p`2 by SQUARE_1:35; then
+      reconsider A = Ball(p,r1) as Subset of Niemytzki-plane by A3,P3,LemNp;
+      let u; assume
+A2:   u in Ball(p,r1); then
+      reconsider q = u as Point of TOP-REAL 2;
+      u in A by A2; then
+      reconsider z = q as Point of Niemytzki-plane;
+      q = |[q`1,q`2]| & q in A by A2,EUCLID:57; then
+A5:   q`2 >= 0 by P2,LemNp;
+A4:   now assume not f.z > a; then
+        |.q-|[x,r*a]|.| <= r*a by A1,A',A5,Th93; then
+        |.|[x,r*a]|-q.| <= r*a & |.q-p.| < r1
+        by A2,TOPRNS_1:28,TOPREAL9:7; then
+        |.|[x,r*a]|-q.|+|.q-p.| >= |.|[x,r*a]|-p.| &
+        |.p-|[x,r*a]|.|-r*a >= r1 &
+        |.|[x,r*a]|-q.|+|.q-p.| < r*a+r1
+        by SQUARE_1:35,TOPRNS_1:35,XREAL_1:10; then
+        |.|[x,r*a]|-p.| < r*a+r1 & r*a+r1 <= |.p-|[x,r*a]|.|-r*a+r*a &
+        |.|[x,r*a]|-p.| = |.p-|[x,r*a]|.| by XREAL_1:2,8,TOPRNS_1:28;
+        hence contradiction;
+      end;
+      f.z in the carrier of I[01] by FUNCT_2:7; then
+      f.z <= 1 by RCOMP_1:48,BORSUK_1:83; then
+      f.z in ].a,1.] by A4,RCOMP_2:4;
+      hence u in f"].a,1.] by FUNCT_2:46;
+    end;
+  end;
+
+theorem Th97':
+  for p being Point of TOP-REAL 2 st p`2 = 0
+  for x being real number, r being positive (real number)
+  st +(x,r).p = 1
+  ex r1 being positive (real number)
+  st Ball(|[p`1,r1]|,r1) \/ {p} c= +(x,r)"{1}
+  proof
+    let p be Point of TOP-REAL 2;
+    assume
+00: p`2 = 0;
+    let x be real number;
+    let r be positive (real number);
+    set r1 = (|.p-|[x,r]|.|-r)/2;
+    set f = +(x,r);
+    assume
+01: f.p = 1;
+02: p =|[p`1,p`2]| by EUCLID:57;
+    p <> |[x,0]| by 01,Ex'1'4'5A; then
+    p`1 <> x by 00,02; then
+    p`1-x <> 0 by XCMPLX_1:15; then
+    (p`1-x)^2 > 0 by SQUARE_1:74; then
+    (p`1-x)^2+(0-r)^2 > 0+(0-r)^2 & (0-r)^2 = (r-0)^2
+    by XREAL_1:8,JORDAN18:1; then
+    |.|[p`1-x,p`2-r]|.|^2 > r^2 by 00,LemDist; then
+    |.p-|[x,r]|.| >= 0 & |.p-|[x,r]|.|^2 > r^2
+    by 02,EUCLID:66,TOPRNS_1:26; then
+    |.p-|[x,r]|.| > r by SQUARE_1:77; then
+    |.p-|[x,r]|.|-r > 0 by XREAL_1:52; then
+    r1 > 0/2 by XREAL_1:76; then
+    reconsider r1 as positive (real number);
+    take r1;
+    let u; assume u in Ball(|[p`1,r1]|,r1) \/ {p}; then
+03: u in Ball(|[p`1,r1]|,r1) or u = p by SETWISEO:6; then
+    reconsider q = u as Point of TOP-REAL 2;
+    Ball(|[p`1,r1]|,r1) c= y>=0-plane by P3; then
+    reconsider z = q as Point of Niemytzki-plane by 00,02,03,P2,LemNp;
+05: q = |[q`1,q`2]| by EUCLID:57;
+    z in y>=0-plane by LemNp; then
+06: q`2 >= 0 by 05,P2;
+    now assume
+04:   q in Ball(|[p`1,r1]|,r1); then
+      |.q-|[p`1,r1]|.| < r1 & r1 is Real by XREAL_0:def 1,TOPREAL9:7; then
+      |.q-|[p`1,r1]|.|+|.|[p`1,r1]|-p.| < r1+|.|[p`1,r1]|-p.| &
+      |.q-|[p`1,r1]|.|+|.|[p`1,r1]|-p.| >= |.q-p.| & |.r1.| = r1 &
+      |[p`1,r1]|-p = |[p`1-p`1,r1-0]| & |.|[0,r1]|.| = |.r1.|
+      by 00,02,EUCLID:66,XREAL_1:8,TOPRNS_1:35,TOPREAL6:31,ABSVALUE:def 1; then
+      r1+r1 > |.q-p.| by XREAL_1:2; then
+      |.q-p.|+|.|[x,r]|-q.| >= |.|[x,r]|-p.| &
+      |.p-|[x,r]|.|-r+|.|[x,r]|-q.| > |.q-p.|+|.|[x,r]|-q.|
+      by XREAL_1:8,TOPRNS_1:35; then
+      |.|[x,r]|-p.| < |.p-|[x,r]|.|-r+|.|[x,r]|-q.| by XREAL_1:2; then
+      |.p-|[x,r]|.| = |.|[x,r]|-p.| &
+      |.|[x,r]|-p.|-(|.p-|[x,r]|.|-r) < |.|[x,r]|-q.|
+      by XREAL_1:21,TOPRNS_1:28; then
+      |.q-|[x,r]|.| > r by TOPRNS_1:28;
+      hence not q in Ball(|[x,r]|,r) by TOPREAL9:7;
+      q`2 = 0 implies q in y=0-line & Ball(|[p`1,r1]|,r1) misses y=0-line
+      by L2,P4,05;
+      hence q`2 <> 0 by 04,XBOOLE_0:3;
+    end; then
+    f.z = 1 by 03,01,05,06,Ex'1'4'5A; then
+    f.z in {1} by TARSKI:def 1;
+    hence u in +(x,r)"{1} by FUNCT_2:46;
+  end;
+
+theorem Th98:
+  for T being non empty TopSpace, S being SubSpace of T
+  for B being Basis of T holds
+  {A/\[#]S where A is Subset of T: A in B & A meets [#]S} is Basis of S
+  proof
+    let T be non empty TopSpace;
+    let S be SubSpace of T;
+    let B be Basis of T;
+    set X = {A/\[#]S where A is Subset of T: A in B & A meets [#]S};
+A1: [#]S = the carrier of S & the carrier of S c= the carrier of T
+    by PRE_TOPC:def 3,TSP_1:def 1;
+    X c= bool the carrier of S
+    proof
+      let u; assume u in X; then
+      ex A being Subset of T st u = A/\[#]S & A in B & A meets [#]S; then
+      u c= [#]S by XBOOLE_1:17;
+      hence thesis by A1;
+    end; then
+    reconsider X as Subset-Family of S;
+A2: now let U be Subset of S;
+      assume U is open; then
+      consider U0 being Subset of T such that
+A3:   U0 is open & U = U0 /\ the carrier of S by TSP_1:def 1;
+      let x be Point of S; assume x in U; then
+A5:   x in U0 & x in the carrier of S by A3,XBOOLE_0:def 3; then
+      consider V0 being Subset of T such that
+A4:   V0 in B & x in V0 & V0 c= U0 by A3,YELLOW_9:31;
+      reconsider V = V0 /\ [#]S as Subset of S by A1,XBOOLE_1:17;
+      take V;
+      V0 meets [#]S by A1,A4,A5,XBOOLE_0:3;
+      hence V in X by A4;
+      thus x in V by A1,A4,A5,XBOOLE_0:def 3;
+      thus V c= U by A1,A3,A4,XBOOLE_1:26;
+    end;
+    X c= the topology of S
+    proof
+      let u; assume u in X; then
+      consider A being Subset of T such that
+A6:   u = A/\[#]S & A in B & A meets [#]S;
+      B c= the topology of T by CANTOR_1:def 2; then
+      A in the topology of T & u is Subset of S by A6,A1,XBOOLE_1:17;
+      hence thesis by A6,PRE_TOPC:def 9;
+    end;
+    hence thesis by A2,YELLOW_9:32;
+  end;
+
+theorem Th99:
+  {].a,b.[ where a,b is Real: a < b} is Basis of R^1
+  proof
+    set X = {].a,b.[ where a,b is Real: a < b};
+    X c= bool REAL
+    proof
+      let u; assume u in X; then
+      ex a,b being Real st u = ].a,b.[ & a < b;
+      hence thesis;
+    end; then
+    reconsider X as Subset-Family of R^1 by TOPMETR:24;
+A1: now let U be Subset of R^1 such that
+A2:   U is open;
+      let x be Point of R^1 such that
+A3:   x in U;
+      reconsider a = x as Real by TOPMETR:24;
+      consider r being Real such that
+A4:   0 < r & ].a-r,a+r.[ c= U by A2,A3,FRECHET:8;
+      reconsider V = ].a-r,a+r.[ as Subset of R^1 by TOPMETR:24;
+      take V;
+A5:   a-r < a & a < a+r by A4,XREAL_1:31,46; then
+      a-r < a+r by XREAL_1:2;
+      hence V in X;
+      thus x in V by A5,RCOMP_1:47;
+      thus V c= U by A4;
+    end;
+    X c= the topology of R^1
+    proof
+      let u; assume u in X; then
+      ex a, b being Real st u = ].a,b.[ & a < b; then
+      u is open Subset of R^1 by TOPMETR:24,JORDAN6:46;
+      hence thesis by PRE_TOPC:def 5;
+    end;
+    hence thesis by A1,YELLOW_9:32;
+  end;
+
+theorem Th88:
+  for T being TopSpace
+  for U,V being Subset of T
+  for B being set
+  st U in B & V in B & B \/ {U \/ V} is Basis of T
+  holds B is Basis of T
+  proof
+    let T be TopSpace;
+    let U,V be Subset of T;
+    let B be set;
+    assume
+A0: U in B & V in B & B \/ {U \/ V} is Basis of T;
+AB: B c= B \/ {U \/ V} by XBOOLE_1:7; then
+    reconsider B' = B as Subset-Family of T by A0,XBOOLE_1:1;
+    B \/ {U \/ V} c= the topology of T by A0,CANTOR_1:def 2; then
+AV: B c= the topology of T by AB,XBOOLE_1:1;
+    now let A be Subset of T such that
+A2:   A is open;
+      let p be Point of T;
+      assume p in A; then
+      consider A' being Subset of T such that
+A1:   A' in B \/ {U\/V} & p in A' & A' c= A by A0,A2,YELLOW_9:31;
+      assume
+AA:   not ex a being Subset of T st a in B' & p in a & a c= A;
+A3:   U c= U\/V & V c= U\/V by XBOOLE_1:7;
+      A' in B or A' = U \/ V by A1,SETWISEO:6; then
+      p in U & U c= A or p in V & V c= A by A1,AA,A3,XBOOLE_0:def 2,XBOOLE_1:1;
+      hence contradiction by A0,AA;
+    end;
+    hence B is Basis of T by AV,YELLOW_9:32;
+  end;
+
+theorem Th100:
+  {[.0,a.[ where a is Real: 0 < a & a <= 1} \/
+  {].a,1.] where a is Real: 0 <= a & a < 1} \/
+  {].a,b.[ where a,b is Real: 0 <= a & a < b & b <= 1} is Basis of I[01]
+  proof set S = I[01], T = R^1;
+    set A1 = {[.0,a.[ where a is Real: 0 < a & a <= 1};
+    set A2 = {].a,1.] where a is Real: 0 <= a & a < 1};
+    set A3 = {].a,b.[ where a,b is Real: 0 <= a & a < b & b <= 1};
+    reconsider B = {].a,b.[ where a,b is Real: a < b} as Basis of R^1 by Th99;
+    set B' = {A/\[#]S where A is Subset of T: A in B & A meets [#]S};
+A0: the carrier of S = [#]S by PRE_TOPC:def 3;
+A1: B' = A1 \/ A2 \/ A3 \/ {[#]S}
+    proof
+      thus B' c= A1 \/ A2 \/ A3 \/ {[#]S}
+      proof
+        let u; assume u in B'; then
+        consider A being Subset of T such that
+A2:     u = A/\[#]S & A in B & A meets [#]S;
+        consider a,b being Real such that
+A3:     A = ].a,b.[ & a < b by A2;
+        consider x being set such that
+A4:     x in A & x in [#]S by A2,XBOOLE_0:3;
+        reconsider x as Real by A3,A4;
+A5:     0 <= x & x <= 1 & a < x & x < b by A3,A4,RCOMP_1:47,48,BORSUK_1:83;
+        per cases;
+        suppose
+C1:       a < 0 & b <= 1; then
+          u = [.0,b.[ & 0 < b by A0,A2,A3,A5,Lem1,BORSUK_1:83; then
+          u in A1 by C1; then
+          u in A1 \/ A2 by XBOOLE_0:def 2; then
+          u in A1 \/ A2 \/ (A3 \/ {[#]S}) by XBOOLE_0:def 2;
+          hence thesis by XBOOLE_1:4;
+        end;
+        suppose a < 0 & b > 1; then
+          [#]S c= A by A0,A3,TOPREALA:10,BORSUK_1:83; then
+          u = [#]S by A2,XBOOLE_1:28;
+          hence thesis by SETWISEO:6;
+        end;
+        suppose
+C3:       a >= 0 & b <= 1; then
+          A c= [#]S by A0,A3,TOPREALA:19,BORSUK_1:83; then
+          u = A by A2,XBOOLE_1:28; then
+          u in A3 by A3,C3; then
+          u in A1 \/ A2 \/ A3 by XBOOLE_0:def 2;
+          hence thesis by XBOOLE_0:def 2;
+        end;
+        suppose
+C4:       a >= 0 & b > 1; then
+          u = ].a,1.] & a < 1 by A0,A2,A3,A5,Lem2,XREAL_1:2,BORSUK_1:83; then
+          u in A2 by C4; then
+          u in A1 \/ A2 by XBOOLE_0:def 2; then
+          u in A1 \/ A2 \/ (A3 \/ {[#]S}) by XBOOLE_0:def 2;
+          hence thesis by XBOOLE_1:4;
+        end;
+      end;
+      let u; assume u in A1 \/ A2 \/ A3 \/ {[#]S}; then
+      u in A1 \/ A2 \/ A3 or u in {[#]S} by XBOOLE_0:def 2; then
+B1:   u in A1 \/ A2 or u in A3 or u in {[#]S} by XBOOLE_0:def 2;
+      reconsider aa = ].-1,2.[ as Subset of T by TOPMETR:24;
+      per cases by B1,XBOOLE_0:def 2;
+      suppose u in {[#]S}; then
+        u = [#]S & [#]S c= aa by A0,TOPREALA:10,BORSUK_1:83,TARSKI:def 1; then
+        u = aa/\[#]S & aa in B & aa meets [#]S by XBOOLE_1:28,68;
+        hence u in B';
+      end;
+      suppose u in A1; then
+        consider a being Real such that
+B2:     u = [.0,a.[ & 0 < a & a <= 1;
+        reconsider A = ].-1,a.[ as Subset of T by TOPMETR:24;
+        0 in [.0,1.] & 0 in A & -1 < a by B2,RCOMP_1:47,48; then
+        u = A /\ [.0,1.] & A in B & A meets [#]S
+        by A0,B2,Lem1,XBOOLE_0:3,BORSUK_1:83;
+        hence u in B' by A0,BORSUK_1:83;
+      end;
+      suppose u in A2; then
+        consider a being Real such that
+B2:     u = ].a,1.] & 0 <= a & a < 1;
+        reconsider A = ].a,2.[ as Subset of T by TOPMETR:24;
+        1 in [.0,1.] & 1 in A & 2 > a by B2,XREAL_1:2,RCOMP_1:47,48; then
+        u = A /\ [.0,1.] & A in B & A meets [#]S
+        by A0,B2,Lem2,XBOOLE_0:3,BORSUK_1:83;
+        hence u in B' by A0,BORSUK_1:83;
+      end;
+      suppose u in A3; then
+        consider a,b being Real such that
+B2:     u = ].a,b.[ & 0 <= a & a < b & b <= 1;
+        reconsider A = ].a,b.[ as Subset of T by TOPMETR:24;
+        a+a < a+b & a+b < b+b by B2,XREAL_1:10; then
+        (a+a)/2 < (a+b)/2 & (a+b)/2 < (b+b)/2 by XREAL_1:76; then
+B3:     (a+b)/2 in A by RCOMP_1:47;
+        A c= [.0,1.] by B2,TOPREALA:19; then
+        A /\ [.0,1.] = A & (a+b)/2 in [.0,1.] by B3,XBOOLE_1:28; then
+        u = A /\ [.0,1.] & A in B & A meets [#]S
+        by A0,B2,B3,XBOOLE_0:3,BORSUK_1:83;
+        hence u in B' by A0,BORSUK_1:83;
+      end;
+    end;
+X:  B' is Basis of I[01] by Th98;
+    reconsider U = [.0,2/3.[, V = ].1/3,1.] as Subset of I[01]
+    by BORSUK_1:83,TOPREALA:11,15;
+    U in A1 & V in A2; then
+    U in A1 \/ A2 & V in A1 \/ A2 by XBOOLE_0:def 2; then
+Y:  U in A1 \/ A2 \/ A3 & V in A1 \/ A2 \/ A3  by XBOOLE_0:def 2;
+    U \/ V = [#]S by A0,Lem3,BORSUK_1:83;
+    hence thesis by A1,X,Y,Th88;
+  end;
+
+theorem Th101:
+  for T being non empty TopSpace
+  for f being Function of T, I[01] holds f is continuous iff
+  for a,b being real number st 0 <= a & a < 1 & 0 < b & b <= 1
+  holds f"[.0,b.[ is open & f"].a,1.] is open
+  proof
+    let T be non empty TopSpace;
+    set A1 = {[.0,a.[ where a is Real: 0 < a & a <= 1};
+    set A2 = {].a,1.] where a is Real: 0 <= a & a < 1};
+    set A3 = {].a,b.[ where a,b is Real: 0 <= a & a < b & b <= 1};
+    reconsider B = A1 \/ A2 \/ A3 as Basis of I[01] by Th100;
+    let f be Function of T, I[01];
+    hereby 
+      assume
+00:   f is continuous;
+      let a,b be real number;
+      reconsider x = a, y = b as Real by XREAL_0:def 1;
+      assume 0 <= a & a < 1 & 0 < b & b <= 1; then
+      [.0,y.[ in A1 & ].x,1.] in A2; then
+      [.0,y.[ in A1 \/ A2 & ].x,1.] in A1 \/ A2 by XBOOLE_0:def 2; then
+      [.0,y.[ in B & ].x,1.] in B by XBOOLE_0:def 2;
+      hence f"[.0,b.[ is open & f"].a,1.] is open by 00,YELLOW_9:34;
+    end;
+    assume
+05: for a,b being real number st 0 <= a & a < 1 & 0 < b & b <= 1
+    holds f"[.0,b.[ is open & f"].a,1.] is open;
+    now let A be Subset of I[01];
+      assume A in B; then
+01:   A in A1 \/ A2 or A in A3 by XBOOLE_0:def 2;
+      per cases by 01,XBOOLE_0:def 2;
+      suppose A in A1; then
+        ex a being Real st A = [.0,a.[ & 0 < a & a <= 1;
+        hence f"A is open by 05;
+      end;
+      suppose A in A2; then
+        ex a being Real st A = ].a,1.] & 0 <= a & a < 1;
+        hence f"A is open by 05;
+      end;
+      suppose A in A3; then
+        consider a,b being Real such that
+02:     A = ].a,b.[ & 0 <= a & a < b & b <= 1;
+        0 < b & a < 1 by 02,XREAL_1:2; then
+        reconsider U = f"[.0,b.[, V = f"].a,1.] as open Subset of T by 05,02;
+        A = [.0,b.[ /\ ].a,1.] by 02,Lem4; then
+        f"A = U /\ V by FUNCT_1:137;
+        hence f"A is open by TOPS_1:38;
+      end;
+    end;
+    hence f is continuous by YELLOW_9:34;
+  end;
+
+registration
+  let x be real number, r be positive (real number);
+  cluster +(x,r) -> continuous;
+  coherence
+  proof set f = +(x,r);
+    consider BB being Neighborhood_System of Niemytzki-plane such that
+A1: for x holds BB.(|[x,0]|) =
+    {Ball(|[x,q]|,q) \/ {|[x,0]|} where q is Element of REAL: q > 0} and
+B2: for x,y st y > 0 holds BB.(|[x,y]|) =
+    {Ball(|[x,y]|,q) /\ y>=0-plane where q is Element of REAL:  q > 0} by DEF3;
+B1: dom BB = y>=0-plane by LemNp,PBOOLE:def 3;
+    now
+      let a,b be real number;
+      assume
+A0:   0 <= a & a < 1 & 0 < b & b <= 1;
+      now
+        let c be Element of Niemytzki-plane;
+        c in y>=0-plane by LemNp; then
+        reconsider z = c as Point of TOP-REAL 2;
+        z = |[z`1,z`2]| by EUCLID:57; then
+A2:     z`2 >= 0 by P2,LemNp;
+        assume c in f"[.0,b.[; then
+        f.c in [.0,b.[ by FUNCT_1:def 13; then
+        f.c >= 0 & f.c < b by RCOMP_2:3; then
+A3:     (f.c = 0 or 0 < f.c) & f.c < b;
+        per cases by A3;
+        suppose f.c = 0; then
+C1:       z = |[x,0]| & 0 < b by A0,A2,Th90; then
+          r*b > 0 * b by XREAL_1:70; then
+          reconsider r1 = r*b as positive (real number);
+A6:       c in Ball(|[x,r1]|,r1) \/ {|[x,0]|} &
+          Ball(|[x,r1]|,r1) \/ {|[x,0]|} c= f"[.0,b.[ by C1,Th95,SETWISEO:6;
+          reconsider U = Ball(|[x,r1]|,r1) \/ {|[x,0]|} as
+          Subset of Niemytzki-plane by Th31;
+          take U;
+A7:       r1 is Real & x is Real by XREAL_0:def 1; then
+          U in {Ball(|[x,q]|,q) \/ {|[x,0]|} where q is Element of REAL:
+          q > 0}; then
+          U in BB.(|[x,0]|) & |[x,0]| in y>=0-plane by A1,A7,P2;
+          hence U in Union BB & c in U & U c= f"[.0,b.[ by A6,B1,CARD_5:10;
+        end;
+        suppose 0 < f.c & f.c < b; then
+A4:       z in Ball(|[x,r*b]|,r*b) & Ball(|[x,r*b]|,r*b) c= +(x,r)"].0,b.[ &
+          0 < b by A0,A2,Th96,Th95'; then
+          r*b > 0 * b by XREAL_1:70; then
+          reconsider r1 = r*b as positive (real number);
+          reconsider U = Ball(|[x,r1]|,r1) as Subset of Niemytzki-plane
+          by Th34;
+          take U;
+          U c= y>=0-plane by P3; then
+A5:       U /\ y>=0-plane = U & r1 is Real & x is Real
+          by XBOOLE_1:28,XREAL_0:def 1; then
+          U in {Ball(|[x,r1]|,q) /\ y>=0-plane where q is Element of REAL:
+          q > 0}; then
+          U in BB.(|[x,r1]|) & |[x,r1]| in y>=0-plane by B2,A5,P2;
+          hence U in Union BB by B1,CARD_5:10;
+          ].0,b.[ c= [.0,b.[ by TOPREALA:20; then
+          f"].0,b.[ c= f"[.0,b.[ by RELAT_1:178;
+          hence c in U & U c= f"[.0,b.[ by A4,XBOOLE_1:1;
+        end;
+      end;
+      hence f"[.0,b.[ is open by YELLOW_9:31;
+      now
+        let c be Element of Niemytzki-plane;
+        c in y>=0-plane by LemNp; then
+        reconsider z = c as Point of TOP-REAL 2;
+C1:     z = |[z`1,z`2]| by EUCLID:57; then
+A2:     z`2 >= 0 by P2,LemNp;
+        assume c in f"].a,1.]; then
+        f.c in ].a,1.] by FUNCT_1:def 13; then
+        f.c > a & f.c <= 1 by RCOMP_2:4; then
+A3:     (f.c = 1 or 1 > f.c) & f.c > a by XREAL_1:1;
+        per cases by A2,A3;
+        suppose z`2 > 0; then
+          consider r1 being positive (real number) such that
+A4:       r1 <= z`2 & Ball(z,r1) c= +(x,r)"].a,1.] by A0,A3,Th97;
+          reconsider U = Ball(z,r1) as Subset of Niemytzki-plane by A4,C1,Th34;
+          take U;
+          U c= y>=0-plane by A4,C1,P3; then
+          U /\ y>=0-plane = U & r1 is Real & x is Real
+          by XBOOLE_1:28,XREAL_0:def 1; then
+          U in {Ball(|[z`1,z`2]|,q) /\ y>=0-plane where q is Element of REAL:
+          q > 0} & z`2 > 0 by C1,A4; then
+          U in BB.(|[z`1,z`2]|) & |[z`1,z`2]| in y>=0-plane by B2,P2;
+          hence U in Union BB by B1,CARD_5:10;
+          thus c in U & U c= f"].a,1.] by A4,LemA;
+        end;
+        suppose
+C2:       f.c = 1 & z`2 = 0; then
+          consider r1 being positive (real number) such that
+A4:       Ball(|[z`1,r1]|,r1) \/ {z} c= +(x,r)"{1} by Th97';
+          reconsider U = Ball(|[z`1,r1]|,r1) \/ {z} as
+          Subset of Niemytzki-plane by C1,C2,Th31;
+          take U; r1 is Real by XREAL_0:def 1; then
+          U in {Ball(|[z`1,q]|,q) \/ {|[z`1,0]|}
+          where q is Element of REAL: q > 0} by C1,C2; then
+          U in BB.(|[z`1,z`2]|) & |[z`1,z`2]| in y>=0-plane by C2,A1,P2;
+          hence U in Union BB by B1,CARD_5:10;
+          thus c in U by SETWISEO:6;
+          1 in ].a,1.] by A0,RCOMP_2:4; then
+          {1} c= ].a,1.] by ZFMISC_1:37; then
+          f"{1} c= f"].a,1.] by RELAT_1:178;
+          hence U c= f"].a,1.] by A4,XBOOLE_1:1;
+        end;
+        suppose a < f.c & f.c < 1; then
+          f.c in ].a,1.[ by RCOMP_1:47; then
+          consider r1 being positive (real number) such that
+A4:       r1 <= z`2 & Ball(z,r1) c= +(x,r)"].a,1.[ by A0,A2,Th94;
+          reconsider U = Ball(z,r1) as Subset of Niemytzki-plane by A4,C1,Th34;
+          take U;
+          U c= y>=0-plane by A4,C1,P3; then
+          U /\ y>=0-plane = U & r1 is Real & x is Real
+          by XBOOLE_1:28,XREAL_0:def 1; then
+          U in {Ball(|[z`1,z`2]|,q) /\ y>=0-plane where q is Element of REAL:
+          q > 0} & z`2 > 0 by C1,A4; then
+          U in BB.(|[z`1,z`2]|) & |[z`1,z`2]| in y>=0-plane by B2,P2;
+          hence U in Union BB by B1,CARD_5:10;
+          ].a,1.[ c= ].a,1.] by TOPREALA:21; then
+          f"].a,1.[ c= f"].a,1.] by RELAT_1:178;
+          hence c in U & U c= f"].a,1.] by A4,LemA,XBOOLE_1:1;
+        end;
+      end;
+      hence f"].a,1.] is open by YELLOW_9:31;
+    end;
+    hence thesis by Th101;
+  end;
+end;
+
+theorem Ex'1'4'5a:
+  for U being Subset of Niemytzki-plane
+  for x,r st U = Ball(|[x,r]|,r) \/ {|[x,0]|}
+  ex f being continuous Function of Niemytzki-plane, I[01] st
+     f.(|[x,0]|) = 0 &
+     for a,b being real number holds
+       (|[a,b]| in U` implies f.(|[a,b]|) = 1) &
+       (|[a,b]| in U\{|[x,0]|} implies
+        f.(|[a,b]|) = |.|[x,0]|-|[a,b]|.|^2/(2*r*b))
+  proof
+    let U be Subset of Niemytzki-plane;
+    let x,r;
+    assume
+00: U = Ball(|[x,r]|,r) \/ {|[x,0]|};
+    take f = +(x,r);
+    thus f.(|[x,0]|) = 0 by Ex'1'4'5A;
+    let a,b be real number;
+    thus (|[a,b]| in U` implies f.(|[a,b]|) = 1)
+    proof
+      assume
+01:   |[a,b]| in U`; then
+      |[a,b]| in y>=0-plane by LemNp; then
+02:   b >= 0 by P2;
+      not |[a,b]| in U by 01,SUBSET_1:54; then
+      not |[a,b]| in Ball(|[x,r]|,r) & |[a,b]| <> |[x,0]|
+      by 00,SETWISEO:6; then
+      not |[a,b]| in Ball(|[x,r]|,r) & (a <> x or b <> 0);
+      hence f.(|[a,b]|) = 1 by 02,Ex'1'4'5A;
+    end;
+    assume |[a,b]| in U\{|[x,0]|}; then
+    |[a,b]| in U & not |[a,b]| in {|[x,0]|} by XBOOLE_0:def 4; then
+    b >= 0 & |[a,b]| in Ball(|[x,r]|,r) by 00,P2,LemNp,XBOOLE_0:def 2;
+    hence f.(|[a,b]|) = |.|[x,0]|-|[a,b]|.|^2/(2*r*b) by Ex'1'4'5A;
+  end;
+
+::<DESC name="1.4.5. Przyk/lad funkcji ci/ag/lej z p/laszczyzny Niemytzkiego w R^1" monograph="topology"/>
+definition
+  let x,y be real number, r be positive (real number);
+  func +(x,y,r) -> Function of Niemytzki-plane, I[01] means :Ex'1'4'5B:
+  for a being real number, b being non negative (real number) holds
+   (not |[a,b]| in Ball(|[x,y]|,r) implies it.(|[a,b]|) = 1) &
+   (|[a,b]| in Ball(|[x,y]|,r) implies it.(|[a,b]|) = |.|[x,y]|-|[a,b]|.|/r);
+  existence
+  proof
+    defpred P[set] means not $1 in Ball(|[x,y]|, r);
+    deffunc F2(Point of TOP-REAL 2) = |.|[x,y]|-$1.|/r;
+    deffunc F1(Point of TOP-REAL 2) = 1;
+    the carrier of Niemytzki-plane = y>=0-plane by DEF3; then
+A1: the carrier of Niemytzki-plane c= the carrier of TOP-REAL 2;
+A2: for a being Point of TOP-REAL 2 st a in the carrier of Niemytzki-plane
+    holds 
+    (P[a] implies F1(a) in the carrier of I[01]) &
+    (not P[a] implies F2(a) in the carrier of I[01])
+    proof
+      let a be Point of TOP-REAL 2;
+      assume a in the carrier of Niemytzki-plane;
+      thus P[a] implies F1(a) in the carrier of I[01]
+      by BORSUK_1:83,RCOMP_1:48;
+      assume not P[a]; then
+      |.a-|[x,y]|.| < r by TOPREAL9:7; then
+      |.|[x,y]|-a.| < r & |.|[x,y]|-a.| >= 0 by TOPRNS_1:26,28; then
+      0/r <= F2(a) & F2(a) < r/r & r/r = 1 by XREAL_1:74,76,XCMPLX_1:60;
+      hence F2(a) in the carrier of I[01] by BORSUK_1:83,RCOMP_1:48;
+    end;
+    consider f being Function of Niemytzki-plane, I[01] such that
+A3: for a being Point of TOP-REAL 2 st a in the carrier of Niemytzki-plane
+    holds
+    (P[a] implies f.a = F1(a)) &
+    (not P[a] implies f.a = F2(a)) from SCH1(A1,A2);
+    take f;
+    let a be real number, b be non negative (real number);
+    |[a,b]| in the carrier of Niemytzki-plane by P2,LemNp;
+    hence thesis by A3;
+  end;
+  uniqueness
+  proof
+    let f,g be Function of Niemytzki-plane, I[01] such that
+A1: for a being real number, b being non negative (real number) holds
+    (not |[a,b]| in Ball(|[x,y]|,r) implies f.(|[a,b]|) = 1) &
+    (|[a,b]| in Ball(|[x,y]|,r) implies f.(|[a,b]|) = |.|[x,y]|-|[a,b]|.|/r)
+    and
+A2: for a being real number, b being non negative (real number) holds
+    (not |[a,b]| in Ball(|[x,y]|,r) implies g.(|[a,b]|) = 1) &
+    (|[a,b]| in Ball(|[x,y]|,r) implies g.(|[a,b]|) = |.|[x,y]|-|[a,b]|.|/r);
+A3: the carrier of Niemytzki-plane = y>=0-plane by DEF3;
+    now let p be Point of Niemytzki-plane;
+      p in y>=0-plane by A3; then
+      reconsider q = p as Point of TOP-REAL 2;
+A4:   p = |[q`1,q`2]| by EUCLID:57; then
+      q`2 >= 0 by A3,P2; then
+      reconsider q2 = q`2 as non negative (real number);
+      per cases;
+      suppose not |[q`1,q2]| in Ball(|[x,y]|,r); then
+        f.p = 1 & g.p = 1 by A1,A2,A4;
+        hence f.p = g.p;
+      end;
+      suppose |[q`1,q2]| in Ball(|[x,y]|,r); then
+        f.p = |.|[x,y]|-q.|/r & g.p = |.|[x,y]|-q.|/r by A1,A2,A4;
+        hence f.p = g.p;
+      end;
+    end;
+    hence thesis by FUNCT_2:113;
+  end;
+end;
+
+theorem Th70:
+  for p being Point of TOP-REAL 2 st p`2 >= 0
+  for x being real number, y being non negative (real number)
+  for r being positive (real number)
+  holds +(x,y,r).p = 0 iff p = |[x,y]|
+  proof
+    let p be Point of TOP-REAL 2;
+    assume
+00: p`2 >= 0;
+03: p = |[p`1,p`2]| by EUCLID:57;
+    let x be real number;
+    let y be non negative (real number);
+    let r be positive (real number);
+    hereby 
+      assume
+01:   +(x,y,r).p = 0; then
+      p in Ball(|[x,y]|,r) by 00,03,Ex'1'4'5B; then
+      0 = |.|[x,y]|-p.|/r by 03,01,00,Ex'1'4'5B; then
+      0 * r = |.|[x,y]|-p.| by XCMPLX_1:88;
+      hence p = |[x,y]| by TOPRNS_1:29;
+    end;
+    assume
+02: p = |[x,y]|; then
+    p in Ball(|[x,y]|,r) by LemA;
+    hence +(x,y,r).p = |.|[x,y]|-p.|/r by 02,Ex'1'4'5B
+    .= 0/r by 02,TOPRNS_1:29 .= 0;
+  end;
+
+theorem Th71:
+  for x being real number, y being non negative (real number)
+  for r,a being positive (real number) st a <= 1
+  holds +(x,y,r)"[.0,a.[ = Ball(|[x,y]|,r*a) /\ y>=0-plane
+  proof
+    let x be real number;
+    let y be non negative (real number);
+    let r,a be positive (real number);
+    set f = +(x,y,r);
+    assume
+00: a <= 1;
+    thus +(x,y,r)"[.0,a.[ c= Ball(|[x,y]|,r*a) /\ y>=0-plane
+    proof
+      let u; assume
+02:   u in f"[.0,a.[; then
+      reconsider p = u as Point of Niemytzki-plane;
+05:   p in y>=0-plane by LemNp; then
+      reconsider q = p as Element of TOP-REAL 2;
+01:   p = |[q`1,q`2]| by EUCLID:57;
+      f.p in [.0,a.[ by 02,FUNCT_2:46; then
+04:   f.p < a by RCOMP_2:3; then
+03:   f.p < 1 & q`2 >= 0 by P2,01,05,00,XREAL_1:2; then
+      p in Ball(|[x,y]|,r) by 01,Ex'1'4'5B; then
+      f.p = |.|[x,y]|-q.|/r by 03,01,Ex'1'4'5B; then
+      |.|[x,y]|-q.| = |.q-|[x,y]|.| & |.|[x,y]|-q.| < r*a
+      by 04,XREAL_1:79,TOPRNS_1:28; then
+      p in Ball(|[x,y]|,r*a) by TOPREAL9:7;
+      hence thesis by LemNp,XBOOLE_0:def 3;
+    end;
+    let u; assume u in Ball(|[x,y]|,r*a) /\ y>=0-plane; then
+A1: u in Ball(|[x,y]|,r*a) & u in y>=0-plane by XBOOLE_0:def 3; then
+    reconsider p = u as Point of Niemytzki-plane by LemNp;
+    reconsider q = p as Element of TOP-REAL 2 by A1;
+01: p = |[q`1,q`2]| by EUCLID:57; then
+03: q`2 >= 0 by P2,A1;
+    r*a <= r*1 by 00,XREAL_1:66; then
+    Ball(|[x,y]|,r*a) c= Ball(|[x,y]|,r) by JORDAN:26; then
+    p in Ball(|[x,y]|,r) by A1; then
+    f.p = |.|[x,y]|-q.|/r by 01,03,Ex'1'4'5B; then
+    f.p in [.0,1.] & r*(f.p) = |.|[x,y]|-q.| & |.q-|[x,y]|.| < r*a &
+    |.|[x,y]|-q.| = |.q-|[x,y]|.|
+    by A1,TOPREAL9:7,FUNCT_2:7,BORSUK_1:83,XCMPLX_1:88,TOPRNS_1:28; then
+    f.p >= 0 & f.p < a by RCOMP_1:48,XREAL_1:66; then
+    f.p in [.0,a.[ by RCOMP_2:3;
+    hence thesis by FUNCT_2:46;
+  end;
+
+theorem Th72:
+  for p being Point of TOP-REAL 2 st p`2 > 0
+  for x being real number, a being non negative (real number)
+  for y,r being positive (real number) st +(x,y,r).p > a
+  holds |.|[x,y]|-p.| > r*a &
+  Ball(p,|.|[x,y]|-p.|-r*a) /\ y>=0-plane c= +(x,y,r)"].a,1.]
+  proof
+    let p be Point of TOP-REAL 2;
+    assume
+00: p`2 > 0;
+01: p = |[p`1,p`2]| by EUCLID:57;
+    let x be real number;
+    let a be non negative (real number);
+    let y,r be positive (real number);
+    set f = +(x,y,r);
+    assume
+02: f.p > a;
+    p in y>=0-plane by 00,01,P2; then
+    f.p in [.0,1.] by LemNp,FUNCT_2:7,BORSUK_1:83; then
+03: f.p <= 1 by RCOMP_1:48; then
+04: a < 1 by 02,XREAL_1:2;
+05: |.|[x,y]|-p.| = |.p-|[x,y]|.| by TOPRNS_1:28;
+    thus |.|[x,y]|-p.| > r*a
+    proof per cases by 03,XREAL_1:1;
+      suppose f.p < 1; then
+        p in Ball(|[x,y]|,r) by 00,01,Ex'1'4'5B; then
+        f.p = |.|[x,y]|-p.|/r by 00,01,Ex'1'4'5B;
+        hence |.|[x,y]|-p.| > r*a by 02,XREAL_1:81;
+      end;
+      suppose
+C2:     f.p = 1;
+        now assume p in Ball(|[x,y]|,r); then
+          1 = |.|[x,y]|-p.|/r & |.p-|[x,y]|.| < r & r/r = 1
+          by 00,01,C2,Ex'1'4'5B,TOPREAL9:7,XCMPLX_1:60;
+          hence contradiction by 05,XREAL_1:76;
+        end; then
+        |.p-|[x,y]|.| >= r & r*1 > r*a by 04,TOPREAL9:7,XREAL_1:70;
+        hence |.|[x,y]|-p.| > r*a by 05,XREAL_1:2;
+      end;
+    end; then
+    reconsider r1 = |.|[x,y]|-p.|-r*a as positive (real number) by XREAL_1:52;
+    let u; assume u in Ball(p,|.|[x,y]|-p.|-r*a) /\ y>=0-plane; then
+A1: u in Ball(p,|.|[x,y]|-p.|-r*a) & u in y>=0-plane by XBOOLE_0:def 3; then
+    reconsider z = u as Point of Niemytzki-plane by LemNp;
+    reconsider q = z as Element of TOP-REAL 2 by A1;
+A3: q = |[q`1,q`2]| by EUCLID:57; then
+A4: q`2 >= 0 by LemNp,P2;
+A5: not q in Ball(|[x,y]|,r) implies f.q = 1 by A3,A4,Ex'1'4'5B;
+    |.q-p.| < r1 by A1,TOPREAL9:7; then
+    |.|[x,y]|-q.|+|.q-p.| < |.|[x,y]|-q.|+r1 &
+    |.|[x,y]|-p.| <= |.|[x,y]|-q.|+|.q-p.| by XREAL_1:8,TOPRNS_1:35; then
+    |.|[x,y]|-p.| < |.|[x,y]|-q.|+r1 by XREAL_1:2; then
+A7: |.|[x,y]|-p.|-r1 < |.|[x,y]|-q.|+r1-r1 by XREAL_1:11;
+A2: now assume q in Ball(|[x,y]|,r); then
+      f.q = |.|[x,y]|-q.|/r ::& (r*a)/r = a
+      by A3,A4,Ex'1'4'5B;
+      hence f.z > a by A7,XREAL_1:83;
+    end;
+    f.z in [.0,1.] by FUNCT_2:7,BORSUK_1:83; then
+    f.z <= 1 by RCOMP_1:48; then
+    f.z in ].a,1.] by A2,A5,04,RCOMP_2:4;
+    hence u in +(x,y,r)"].a,1.] by FUNCT_2:46;
+  end;
+
+theorem Th73:
+  for p being Point of TOP-REAL 2 st p`2 = 0
+  for x being real number, a being non negative (real number)
+  for y,r being positive (real number) st +(x,y,r).p > a
+  holds |.|[x,y]|-p.| > r*a &
+  ex r1 being positive (real number) st r1 = (|.|[x,y]|-p.|-r*a)/2 &
+  Ball(|[p`1,r1]|,r1) \/ {p} c= +(x,y,r)"].a,1.]
+  proof
+    let p be Point of TOP-REAL 2;
+    assume
+00: p`2 = 0;
+01: p = |[p`1,p`2]| by EUCLID:57; then
+    reconsider p' = p as Point of Niemytzki-plane by 00,P2,LemNp;
+    let x be real number;
+    let a be non negative (real number);
+    let y,r be positive (real number);
+    set f = +(x,y,r);
+    assume
+02: f.p > a;
+    p in y>=0-plane by 00,01,P2; then
+    f.p in [.0,1.] by LemNp,FUNCT_2:7,BORSUK_1:83; then
+03: f.p <= 1 by RCOMP_1:48; then
+04: a < 1 by 02,XREAL_1:2;
+05: |.|[x,y]|-p.| = |.p-|[x,y]|.| by TOPRNS_1:28;
+    thus |.|[x,y]|-p.| > r*a
+    proof per cases by 03,XREAL_1:1;
+      suppose f.p < 1; then
+        p in Ball(|[x,y]|,r) by 00,01,Ex'1'4'5B; then
+        f.p = |.|[x,y]|-p.|/r by 00,01,Ex'1'4'5B;
+        hence |.|[x,y]|-p.| > r*a by 02,XREAL_1:81;
+      end;
+      suppose
+C2:     f.p = 1;
+        now assume p in Ball(|[x,y]|,r); then
+          1 = |.|[x,y]|-p.|/r & |.p-|[x,y]|.| < r & r/r = 1
+          by 00,01,C2,Ex'1'4'5B,TOPREAL9:7,XCMPLX_1:60;
+          hence contradiction by 05,XREAL_1:76;
+        end; then
+        |.p-|[x,y]|.| >= r & r*1 > r*a by 04,TOPREAL9:7,XREAL_1:70;
+        hence |.|[x,y]|-p.| > r*a by 05,XREAL_1:2;
+      end;
+    end; then
+    reconsider r' = |.|[x,y]|-p.|-r*a as positive (real number) by XREAL_1:52;
+    take r1 = r'/2;
+    thus r1 = (|.|[x,y]|-p.|-r*a)/2;
+    let u; assume u in Ball(|[p`1,r1]|,r1) \/ {p}; then
+A1: u in Ball(|[p`1,r1]|,r1) or u = p' by SETWISEO:6;
+    Ball(|[p`1,r1]|,r1) c= y>=0-plane by P3; then
+    reconsider z = u as Point of Niemytzki-plane by A1,LemNp;
+    reconsider q = z as Element of TOP-REAL 2 by A1;
+A3: q = |[q`1,q`2]| by EUCLID:57; then
+A4: q`2 >= 0 by LemNp,P2;
+A5: not q in Ball(|[x,y]|,r) implies f.q = 1 by A3,A4,Ex'1'4'5B;
+    per cases by A1;
+    suppose u = p'; then
+      f.z in ].a,1.] by 02,03,RCOMP_2:4;
+      hence u in +(x,y,r)"].a,1.] by FUNCT_2:46;
+    end;
+    suppose u in Ball(|[p`1,r1]|,r1); then
+      |.q-|[p`1,r1]|.| < r1 by TOPREAL9:7; then
+      |.q-|[p`1,r1]|.|+|.|[p`1,r1]|-p.| < r1+|.|[p`1,r1]|-p.| &
+      |.q-p.| <= |.q-|[p`1,r1]|.|+|.|[p`1,r1]|-p.| & r1 is Real
+      by TOPRNS_1:35,XREAL_1:8,XREAL_0:def 1; then
+      |.q-p.| < r1+|.|[p`1,r1]|-p.| & |.|[p`1,r1]|-p.| = |.|[p`1-p`1,r1-0]|.| &
+      |.|[0,r1]|.| = abs r1 & abs r1 = r1
+      by 00,01,XREAL_1:2,TOPREAL6:31,ABSVALUE:def 1,EUCLID:66; then
+      |.|[x,y]|-q.|+|.q-p.| < |.|[x,y]|-q.|+(r1+r1) &
+      |.|[x,y]|-p.| <= |.|[x,y]|-q.|+|.q-p.| by XREAL_1:8,TOPRNS_1:35; then
+      |.|[x,y]|-p.| < |.|[x,y]|-q.|+(r1+r1) by XREAL_1:2; then
+A7:   |.|[x,y]|-p.|-(r1+r1) < |.|[x,y]|-q.|+(r1+r1)-(r1+r1) by XREAL_1:11;
+A2:   now assume q in Ball(|[x,y]|,r); then
+        f.q = |.|[x,y]|-q.|/r ::& (r*a)/r = a
+        by A3,A4,Ex'1'4'5B;
+        hence f.z > a by A7,XREAL_1:83;
+      end;
+      f.z in [.0,1.] by FUNCT_2:7,BORSUK_1:83; then
+      f.z <= 1 by RCOMP_1:48; then
+      f.z in ].a,1.] by A2,A5,04,RCOMP_2:4;
+      hence u in +(x,y,r)"].a,1.] by FUNCT_2:46;
+    end;
+  end;
+
+registration
+  let x be real number;
+  let y,r be positive (real number);
+  cluster +(x,y,r) -> continuous;
+  coherence
+  proof set f = +(x,y,r);
+    consider BB being Neighborhood_System of Niemytzki-plane such that
+A1: for x holds BB.(|[x,0]|) =
+    {Ball(|[x,q]|,q) \/ {|[x,0]|} where q is Element of REAL: q > 0} and
+B2: for x,y st y > 0 holds BB.(|[x,y]|) =
+    {Ball(|[x,y]|,q) /\ y>=0-plane where q is Element of REAL:  q > 0} by DEF3;
+B1: dom BB = y>=0-plane by LemNp,PBOOLE:def 3;
+    now
+      let a,b be real number;
+      assume
+A0:   0 <= a & a < 1 & 0 < b & b <= 1; then
+      r*b > r*0 & f"[.0,b.[ = Ball(|[x,y]|,r*b) /\ y>=0-plane
+      by Th71,XREAL_1:70;
+      hence f"[.0,b.[ is open by Th32;
+      now
+        let c be Element of Niemytzki-plane;
+        c in y>=0-plane by LemNp; then
+        reconsider z = c as Point of TOP-REAL 2;
+C1:     z = |[z`1,z`2]| by EUCLID:57; then
+A2:     z`2 >= 0 by P2,LemNp;
+        assume c in f"].a,1.]; then
+        f.c in ].a,1.] by FUNCT_1:def 13; then
+        f.c > a & f.c <= 1 by RCOMP_2:4; then
+A3:     (f.c = 1 or 1 > f.c) & f.c > a by XREAL_1:1;
+        per cases by A2;
+        suppose
+A5:       z`2 > 0; then
+A4:       |.|[x,y]|-z.| > r*a &
+          Ball(z,|.|[x,y]|-z.|-r*a) /\ y>=0-plane c= f"].a,1.]
+          by A0,A3,Th72; then
+          reconsider r1 = |.|[x,y]|-z.|-r*a as positive (real number)
+          by XREAL_1:52;
+          reconsider U = Ball(z,r1) /\ y>=0-plane as Subset of Niemytzki-plane
+          by C1,A5,Th32;
+          take U;
+          r1 is Real & x is Real by XREAL_0:def 1; then
+          U in {Ball(|[z`1,z`2]|,q) /\ y>=0-plane where q is Element of REAL:
+          q > 0} by C1; then
+          U in BB.(|[z`1,z`2]|) & |[z`1,z`2]| in y>=0-plane by B2,A5,P2;
+          hence U in Union BB by B1,CARD_5:10;
+          c in Ball(z,r1) by LemA;
+          hence c in U & U c= f"].a,1.] by A4,LemNp,XBOOLE_0:def 3;
+        end;
+        suppose
+C2:       z`2 = 0; then
+          consider r1 being positive (real number) such that
+A4:       r1 = (|.|[x,y]|-z.|-r*a)/2 &
+          Ball(|[z`1,r1]|,r1) \/ {z} c= +(x,y,r)"].a,1.] by A0,A3,Th73;
+          reconsider U = Ball(|[z`1,r1]|,r1) \/ {z} as
+          Subset of Niemytzki-plane by C1,C2,Th31;
+          take U; r1 is Real by XREAL_0:def 1; then
+          U in {Ball(|[z`1,q]|,q) \/ {|[z`1,0]|}
+          where q is Element of REAL: q > 0} by C1,C2; then
+          U in BB.(|[z`1,z`2]|) & |[z`1,z`2]| in y>=0-plane by C2,A1,P2;
+          hence U in Union BB by B1,CARD_5:10;
+          thus c in U by SETWISEO:6;
+          thus U c= f"].a,1.] by A4;
+        end;
+      end;
+      hence f"].a,1.] is open by YELLOW_9:31;
+    end;
+    hence thesis by Th101;
+  end;
+end;
+
+theorem Ex'1'4'5b:
+  for U being Subset of Niemytzki-plane
+  for x,y,r st y > 0 & U = Ball(|[x,y]|,r) /\ y>=0-plane
+  ex f being continuous Function of Niemytzki-plane, I[01] st
+     f.(|[x,y]|) = 0 &
+     for a,b being real number holds
+       (|[a,b]| in U` implies f.(|[a,b]|) = 1) &
+       (|[a,b]| in U implies f.(|[a,b]|) = |.|[x,y]|-|[a,b]|.|/r)
+  proof
+    let U be Subset of Niemytzki-plane;
+    let x,y,r;
+    assume
+00: y > 0 & U = Ball(|[x,y]|,r) /\ y>=0-plane; then
+    reconsider y' = y as positive (real number);
+    take f = +(x,y',r);
+    |[x,y']|`2 = y by EUCLID:56;
+    hence f.(|[x,y]|) = 0 by Th70;
+    let a,b be real number;
+    thus (|[a,b]| in U` implies f.(|[a,b]|) = 1)
+    proof
+      assume
+01:   |[a,b]| in U`; then
+03:   |[a,b]| in y>=0-plane by LemNp; then
+02:   b >= 0 by P2;
+      not |[a,b]| in U by 01,SUBSET_1:54; then
+      not |[a,b]| in Ball(|[x,y]|,r) by 00,03,XBOOLE_0:def 3;
+      hence f.(|[a,b]|) = 1 by 02,Ex'1'4'5B;
+    end;
+    assume |[a,b]| in U; then
+    b >= 0 & |[a,b]| in Ball(|[x,y]|,r) by 00,P2,LemNp,XBOOLE_0:def 3;
+    hence f.(|[a,b]|) = |.|[x,y]|-|[a,b]|.|/r by Ex'1'4'5B;
+  end;
+
+theorem Th40:
+  Niemytzki-plane is_T1
+  proof
+    set X = Niemytzki-plane;
+A0: the carrier of X = y>=0-plane by DEF3;
+    let x,y be Point of X;
+    x in y>=0-plane & y in y>=0-plane by A0; then
+    reconsider a = x, b = y as Point of TOP-REAL 2;
+    assume x <> y; then
+    |.a-b.| <> 0 by TOPRNS_1:29; then
+    |.a-b.| > 0 by EUCLID_2:60; then
+    reconsider r = |.a-b.| as positive (real number);
+    consider q being Point of TOP-REAL 2, U being open Subset of X such that
+A1: x in U & q in U &
+    for c being Point of TOP-REAL 2 st c in U holds |.c-q.| < r/2 by Th33;
+    consider p being Point of TOP-REAL 2, V being open Subset of X such that
+A2: y in V & p in V &
+    for c being Point of TOP-REAL 2 st c in V holds |.c-p.| < r/2 by Th33;
+    take U,V; thus U is open & V is open & x in U by A1;
+    hereby assume y in U; then
+      |.b-q.| < r/2 & |.a-q.| < r/2 by A1; then
+      |.a-b.| <= |.a-q.|+|.q-b.| & |.q-b.| = |.b-q.| &
+      |.a-q.|+|.b-q.| < (r/2)+r/2 by XREAL_1:10,TOPRNS_1:28,35;
+      hence contradiction;
+    end;
+    thus y in V by A2;
+    assume x in V; then
+    |.b-p.| < r/2 & |.a-p.| < r/2 by A2; then
+    |.a-b.| <= |.a-p.|+|.p-b.| & |.p-b.| = |.b-p.| &
+    |.a-p.|+|.b-p.| < (r/2)+r/2 by XREAL_1:10,TOPRNS_1:28,35;
+    hence contradiction;
+  end;
+
+theorem
+  Niemytzki-plane is Tychonoff
+  proof
+    set X = Niemytzki-plane;
+A1: the carrier of X = y>=0-plane by DEF3;
+    consider B being Neighborhood_System of X such that
+A2: for x holds B.(|[x,0]|) =
+    {Ball(|[x,r]|,r) \/ {|[x,0]|} where r is Element of REAL: r > 0} and
+A3: for x,y st y > 0 holds B.(|[x,y]|) =
+    {Ball(|[x,y]|,r) /\ y>=0-plane where r is Element of REAL:  r > 0} by DEF3;
+    reconsider uB = Union B as prebasis of X by YELLOW_9:27;
+A4: X is_T1 by Th40;
+    now
+      let x be Point of X;
+      let V be Subset of X;
+      assume
+A5:   x in V & V in uB;
+      uB is open by YELLOW_9:28; then
+      V is open by A5,TOPS_2:def 1; then
+      consider V' being Subset of X such that
+B0:   V' in B.x & V' c= V by A5,YELLOW_8:def 2;
+      x in y>=0-plane by A1; then
+      reconsider x' = x as Point of TOP-REAL 2;
+B1:   x = |[x'`1,x'`2]| by EUCLID:57; then
+B2:   x'`2 >= 0 by A1,P2;
+      per cases by B2;
+      suppose
+C1:     x'`2 = 0; then
+        B.x =
+        {Ball(|[x'`1,r]|,r) \/ {|[x'`1,0]|} where r is Element of REAL: r > 0}
+        by A2,B1; then
+        consider r being Real such that
+A6:     V' = Ball(|[x'`1,r]|,r)\/{|[x'`1,0]|} & r > 0 by B0;
+        consider f being continuous Function of Niemytzki-plane, I[01]
+        such that
+A7:     f.(|[x'`1,0]|) = 0 &
+        for a,b being real number holds
+        (|[a,b]| in V'` implies f.(|[a,b]|) = 1) &
+        (|[a,b]| in V'\{|[x'`1,0]|} implies
+         f.(|[a,b]|) = |.|[x'`1,0]|-|[a,b]|.|^2/(2*r*b)) by A6,Ex'1'4'5a;
+        take f;
+        thus f.x = 0 by B1,C1,A7;
+        thus f.:V` c= {1}
+        proof
+          let u; assume u in f.:V`; then
+          consider b being Point of X such that
+A8:       b in V` & u = f.b by FUNCT_2:116;
+          b in y>=0-plane by A1; then
+          reconsider c = b as Element of TOP-REAL 2;
+          V` c= V'` by B0,SUBSET_1:31; then
+          b in V'` & b = |[c`1,c`2]| by A8,EUCLID:57; then
+          u = 1 by A7,A8;
+          hence thesis by TARSKI:def 1;
+        end;
+      end;
+      suppose
+C2:     x'`2 > 0; then
+        B.x =
+        {Ball(|[x'`1,x'`2]|,r) /\ y>=0-plane where r is Element of REAL: r > 0}
+        by A3,B1; then
+        consider r being Real such that
+A6:     V' = Ball(|[x'`1,x'`2]|,r)/\y>=0-plane & r > 0 by B0;
+        consider f being continuous Function of Niemytzki-plane, I[01]
+        such that
+A7:     f.(|[x'`1,x'`2]|) = 0 &
+        for a,b being real number holds
+        (|[a,b]| in V'` implies f.(|[a,b]|) = 1) &
+        (|[a,b]| in V' implies f.(|[a,b]|) = |.|[x'`1,x'`2]|-|[a,b]|.|/r)
+        by C2,A6,Ex'1'4'5b;
+        take f;
+        thus f.x = 0 by B1,A7;
+        thus f.:V` c= {1}
+        proof
+          let u; assume u in f.:V`; then
+          consider b being Point of X such that
+A8:       b in V` & u = f.b by FUNCT_2:116;
+          b in y>=0-plane by A1; then
+          reconsider c = b as Element of TOP-REAL 2;
+          V` c= V'` by B0,SUBSET_1:31; then
+          b in V'` & b = |[c`1,c`2]| by A8,EUCLID:57; then
+          u = 1 by A7,A8;
+          hence thesis by TARSKI:def 1;
+        end;
+      end;
+    end;
+    hence thesis by A4,Th28;
+  end;

@@ -497,13 +497,13 @@ definition
  let a be Int-Location;
  let I,J be Macro-Instruction;
  func if=0(a,I,J) -> Macro-Instruction equals
-:Def1: ::Di2
+ ::Di2
  a =0_goto insloc (card J + 3) ';' J ';' Goto insloc (card I + 1) ';'
      I ';' SCM+FSA-Stop;
  coherence;
 
  func if>0(a,I,J) -> Macro-Instruction equals
-:Def2: ::Di3
+ ::Di3
  a >0_goto insloc (card J + 3) ';' J ';' Goto insloc (card I + 1) ';'
      I ';' SCM+FSA-Stop;
  coherence;
@@ -513,7 +513,7 @@ definition
  let a be Int-Location;
  let I,J be Macro-Instruction;
  func if<0(a,I,J) -> Macro-Instruction equals
-:Def3: ::Di4
+ ::Di4
   if=0(a,J,if>0(a,J,I));
  coherence;
 end;
@@ -529,7 +529,7 @@ Lm5:
    let I,J be Macro-Instruction;
    set i = a =0_goto insloc (card J + 3);
       if=0(a,I,J)
-    = i ';' J ';' Goto insloc (card I + 1) ';' I ';' SCM+FSA-Stop by Def1
+    = i ';' J ';' Goto insloc (card I + 1) ';' I ';' SCM+FSA-Stop
    .= i ';' J ';' Goto insloc (card I + 1) ';' (I ';' SCM+FSA-Stop)
        by SCMFSA6A:62
    .= i ';' J ';' (Goto insloc (card I + 1) ';' (I ';' SCM+FSA-Stop))
@@ -544,7 +544,7 @@ then A1: dom Macro i c= dom if=0(a,I,J) by SCMFSA6A:56;
    hence insloc 0 in dom if=0(a,I,J) & insloc 1 in dom if=0(a,I,J) by A1;
    set i = a >0_goto insloc (card J + 3);
       if>0(a,I,J)
-    = i ';' J ';' Goto insloc (card I + 1) ';' I ';' SCM+FSA-Stop by Def2
+    = i ';' J ';' Goto insloc (card I + 1) ';' I ';' SCM+FSA-Stop
    .= i ';' J ';' Goto insloc (card I + 1) ';' (I ';' SCM+FSA-Stop)
        by SCMFSA6A:62
    .= i ';' J ';' (Goto insloc (card I + 1) ';' (I ';' SCM+FSA-Stop))
@@ -571,7 +571,7 @@ Lm6:
    set i = a =0_goto insloc (card J + 3);
 A1: i <> halt SCM+FSA by Lm2;
 A2: if=0(a,I,J)
-    = i ';' J ';' Goto insloc (card I + 1) ';' I ';' SCM+FSA-Stop by Def1
+    = i ';' J ';' Goto insloc (card I + 1) ';' I ';' SCM+FSA-Stop
    .= i ';' J ';' Goto insloc (card I + 1) ';' (I ';' SCM+FSA-Stop)
        by SCMFSA6A:62
    .= i ';' J ';' (Goto insloc (card I + 1) ';' (I ';' SCM+FSA-Stop))
@@ -589,7 +589,7 @@ then A3: insloc 0 in dom Macro i & insloc 1 in dom Macro i by TARSKI:def 2;
    set i = a >0_goto insloc (card J + 3);
 A4: i <> halt SCM+FSA by Lm3;
 A5: if>0(a,I,J)
-    = i ';' J ';' Goto insloc (card I + 1) ';' I ';' SCM+FSA-Stop by Def2
+    = i ';' J ';' Goto insloc (card I + 1) ';' I ';' SCM+FSA-Stop
    .= i ';' J ';' Goto insloc (card I + 1) ';' (I ';' SCM+FSA-Stop)
        by SCMFSA6A:62
    .= i ';' J ';' (Goto insloc (card I + 1) ';' (I ';' SCM+FSA-Stop))
@@ -614,7 +614,7 @@ theorem Th14: ::T17
    let a be Int-Location;
    thus card if=0(a,I,J)
     = card (a =0_goto insloc (card J + 3) ';' J ';'
-       Goto insloc (card I + 1) ';' I ';' SCM+FSA-Stop) by Def1
+       Goto insloc (card I + 1) ';' I ';' SCM+FSA-Stop)
    .= card (Macro (a =0_goto insloc (card J + 3)) ';' J ';'
        Goto insloc (card I + 1) ';' I ';' SCM+FSA-Stop) by SCMFSA6A:def 5
    .= card (Macro (a =0_goto insloc (card J + 3)) ';' J ';'
@@ -639,7 +639,7 @@ theorem Th15: ::T18
    let a be Int-Location;
    thus card if>0(a,I,J)
     = card (a >0_goto insloc (card J + 3) ';' J ';'
-       Goto insloc (card I + 1) ';' I ';' SCM+FSA-Stop) by Def2
+       Goto insloc (card I + 1) ';' I ';' SCM+FSA-Stop)
    .= card (Macro (a >0_goto insloc (card J + 3)) ';' J ';'
        Goto insloc (card I + 1) ';' I ';' SCM+FSA-Stop) by SCMFSA6A:def 5
    .= card (Macro (a >0_goto insloc (card J + 3)) ';' J ';'
@@ -680,8 +680,6 @@ then A5: s1 is halting by SCMFSA7B:def 8;
 A6: I1 is_closed_on s by A2,A3,SCMFSA8A:46;
       s | D = s1 | D by SCMFSA8A:11;
 then A7: I1 is_closed_on s1 by A6,Th6;
-A8: if=0(a,I,J) = i ';' J ';' Goto insloc (card I + 1) ';' I ';' SCM+FSA-Stop
-       by Def1;
 A9: insloc 0 in dom if=0(a,I,J) by Lm5;
       if=0(a,I,J) c= if=0(a,I,J) +* Start-At insloc 0 by SCMFSA8A:9;
    then A10: dom if=0(a,I,J) c= dom (if=0(a,I,J) +* Start-At insloc 0)
@@ -712,7 +710,7 @@ A17: if=0(a,I,J) +* Start-At insloc 0 c= s3 by FUNCT_4:26;
       if=0(a,I,J) c= if=0(a,I,J) +* Start-At insloc 0 by SCMFSA8A:9;
 then A18: if=0(a,I,J) c= s3 by A17,XBOOLE_1:1;
       if=0(a,I,J) = i ';' J ';' Goto insloc (card I + 1) ';' I1
-       by A8,SCMFSA6A:62;
+       by SCMFSA6A:62;
    then ProgramPart Relocated(I1,card J + 3) c= if=0(a,I,J) by A15,Lm4;
    then ProgramPart Relocated(I1,card J + 3) c= s3 by A18,XBOOLE_1:1;
    then ProgramPart ProgramPart Relocated(I1,card J + 3) c= s4 by AMI_5:64;
@@ -785,8 +783,6 @@ then A4: I1 +* Start-At insloc 0 c= s1 by SCMFSA6B:8;
 A5: s1 is halting by A2,A3,SCMFSA8A:55;
    I1 is_closed_on Initialize s by A2,A3,SCMFSA8A:46;
 then A6: I1 is_closed_on s1 by Th9;
-A7: if=0(a,I,J) = i ';' J ';' Goto insloc (card I + 1) ';' I ';' SCM+FSA-Stop
-       by Def1;
 A8: insloc 0 in dom if=0(a,I,J) by Lm5;
       if=0(a,I,J) c= Initialized if=0(a,I,J) by SCMFSA6A:26;
    then A9: dom if=0(a,I,J) c= dom Initialized if=0(a,I,J) by GRFUNC_1:8;
@@ -816,7 +812,7 @@ A17: Initialized if=0(a,I,J) c= s3 by FUNCT_4:26;
       if=0(a,I,J) c= Initialized if=0(a,I,J) by SCMFSA6A:26;
 then A18: if=0(a,I,J) c= s3 by A17,XBOOLE_1:1;
       if=0(a,I,J) = i ';' J ';' Goto insloc (card I + 1) ';' I1
-       by A7,SCMFSA6A:62;
+       by SCMFSA6A:62;
    then ProgramPart Relocated(I1,card J + 3) c= if=0(a,I,J) by A14,Lm4;
    then ProgramPart Relocated(I1,card J + 3) c= s3 by A18,XBOOLE_1:1;
    then ProgramPart ProgramPart Relocated(I1,card J + 3) c= s4 by AMI_5:64;
@@ -971,8 +967,6 @@ A4: JI2 +* Start-At insloc 0 c= s2 by FUNCT_4:26;
 A5: s2 is halting by A2,A3,SCMFSA8A:59;
 A6: JI2 is_closed_on s by A2,A3,SCMFSA8A:58;
 then A7: JI2 is_closed_on s2 by Th10;
-A8: if=0(a,I,J) = i ';' J ';' Goto insloc (card I + 1) ';' I ';' SCM+FSA-Stop
-       by Def1;
 A9: insloc 0 in dom if=0(a,I,J) by Lm5;
       if=0(a,I,J) c= if=0(a,I,J) +* Start-At insloc 0 by SCMFSA8A:9;
 then A10: dom if=0(a,I,J) c= dom (if=0(a,I,J) +* Start-At insloc 0)
@@ -995,7 +989,7 @@ then A15: s3.a <> 0 by A1,FUNCT_4:12;
 A16: if=0(a,I,J) +* Start-At insloc 0 c= s3 by FUNCT_4:26;
       if=0(a,I,J) c= if=0(a,I,J) +* Start-At insloc 0 by SCMFSA8A:9;
 then A17: if=0(a,I,J) c= s3 by A16,XBOOLE_1:1;
-A18: if=0(a,I,J) = i ';' J ';' Goto insloc (card I + 1) ';' I1 by A8,
+A18: if=0(a,I,J) = i ';' J ';' Goto insloc (card I + 1) ';' I1 by
 SCMFSA6A:62
    .= i ';' J ';' (Goto insloc (card I + 1) ';' I1) by SCMFSA6A:62
    .= i ';' (J ';' (Goto insloc (card I + 1) ';' I1)) by SCMFSA6A:66
@@ -1101,8 +1095,6 @@ then A4: JI2 +* Start-At insloc 0 c= s2 by SCMFSA6B:8;
 A5: s2 is halting by A2,A3,SCMFSA8A:60;
       JI2 is_closed_on Initialize s by A2,A3,SCMFSA8A:58;
 then A6: JI2 is_closed_on s2 by Th9;
-A7: if=0(a,I,J) = i ';' J ';' Goto insloc (card I + 1) ';' I ';' SCM+FSA-Stop
-       by Def1;
 A8: insloc 0 in dom if=0(a,I,J) by Lm5;
       if=0(a,I,J) c= Initialized if=0(a,I,J) by SCMFSA6A:26;
 then A9: dom if=0(a,I,J) c= dom Initialized if=0(a,I,J) by GRFUNC_1:8;
@@ -1126,7 +1118,7 @@ then A15: s3.a <> 0 by A1,FUNCT_4:12;
 A16: Initialized if=0(a,I,J) c= s3 by FUNCT_4:26;
       if=0(a,I,J) c= Initialized if=0(a,I,J) by SCMFSA6A:26;
 then A17: if=0(a,I,J) c= s3 by A16,XBOOLE_1:1;
-      if=0(a,I,J) = i ';' J ';' Goto insloc (card I + 1) ';' I1 by A7,
+      if=0(a,I,J) = i ';' J ';' Goto insloc (card I + 1) ';' I1 by
 SCMFSA6A:62
    .= i ';' J ';' (Goto insloc (card I + 1) ';' I1) by SCMFSA6A:62
    .= i ';' (J ';' (Goto insloc (card I + 1) ';' I1)) by SCMFSA6A:66
@@ -1402,8 +1394,6 @@ then A5: s1 is halting by SCMFSA7B:def 8;
 A6: I1 is_closed_on s by A2,A3,SCMFSA8A:46;
       s | D = s1 | D by SCMFSA8A:11;
 then A7: I1 is_closed_on s1 by A6,Th6;
-A8: if>0(a,I,J) = i ';' J ';' Goto insloc (card I + 1) ';' I ';' SCM+FSA-Stop
-       by Def2;
 A9: insloc 0 in dom if>0(a,I,J) by Lm5;
       if>0(a,I,J) c= if>0(a,I,J) +* Start-At insloc 0 by SCMFSA8A:9;
    then A10: dom if>0(a,I,J) c= dom (if>0(a,I,J) +* Start-At insloc 0)
@@ -1434,7 +1424,7 @@ A17: if>0(a,I,J) +* Start-At insloc 0 c= s3 by FUNCT_4:26;
       if>0(a,I,J) c= if>0(a,I,J) +* Start-At insloc 0 by SCMFSA8A:9;
 then A18: if>0(a,I,J) c= s3 by A17,XBOOLE_1:1;
       if>0(a,I,J) = i ';' J ';' Goto insloc (card I + 1) ';' I1
-       by A8,SCMFSA6A:62;
+       by SCMFSA6A:62;
    then ProgramPart Relocated(I1,card J + 3) c= if>0(a,I,J) by A15,Lm4;
    then ProgramPart Relocated(I1,card J + 3) c= s3 by A18,XBOOLE_1:1;
    then ProgramPart ProgramPart Relocated(I1,card J + 3) c= s4 by AMI_5:64;
@@ -1507,8 +1497,6 @@ then A4: I1 +* Start-At insloc 0 c= s1 by SCMFSA6B:8;
 A5: s1 is halting by A2,A3,SCMFSA8A:55;
       I1 is_closed_on Initialize s by A2,A3,SCMFSA8A:46;
 then A6: I1 is_closed_on s1 by Th9;
-A7: if>0(a,I,J) = i ';' J ';' Goto insloc (card I + 1) ';' I ';' SCM+FSA-Stop
-       by Def2;
 A8: insloc 0 in dom if>0(a,I,J) by Lm5;
       if>0(a,I,J) c= Initialized if>0(a,I,J) by SCMFSA6A:26;
    then A9: dom if>0(a,I,J) c= dom Initialized if>0(a,I,J) by GRFUNC_1:8;
@@ -1538,7 +1526,7 @@ A17: Initialized if>0(a,I,J) c= s3 by FUNCT_4:26;
       if>0(a,I,J) c= Initialized if>0(a,I,J) by SCMFSA6A:26;
 then A18: if>0(a,I,J) c= s3 by A17,XBOOLE_1:1;
       if>0(a,I,J) = i ';' J ';' Goto insloc (card I + 1) ';' I1
-       by A7,SCMFSA6A:62;
+       by SCMFSA6A:62;
    then ProgramPart Relocated(I1,card J + 3) c= if>0(a,I,J) by A14,Lm4;
    then ProgramPart Relocated(I1,card J + 3) c= s3 by A18,XBOOLE_1:1;
    then ProgramPart ProgramPart Relocated(I1,card J + 3) c= s4 by AMI_5:64;
@@ -1693,8 +1681,6 @@ A4: JI2 +* Start-At insloc 0 c= s2 by FUNCT_4:26;
 A5: s2 is halting by A2,A3,SCMFSA8A:59;
 A6: JI2 is_closed_on s by A2,A3,SCMFSA8A:58;
 then A7: JI2 is_closed_on s2 by Th10;
-A8: if>0(a,I,J) = i ';' J ';' Goto insloc (card I + 1) ';' I ';' SCM+FSA-Stop
-       by Def2;
 A9: insloc 0 in dom if>0(a,I,J) by Lm5;
       if>0(a,I,J) c= if>0(a,I,J) +* Start-At insloc 0 by SCMFSA8A:9;
 then A10: dom if>0(a,I,J) c= dom (if>0(a,I,J) +* Start-At insloc 0)
@@ -1717,7 +1703,7 @@ then A15: s3.a <= 0 by A1,FUNCT_4:12;
 A16: if>0(a,I,J) +* Start-At insloc 0 c= s3 by FUNCT_4:26;
       if>0(a,I,J) c= if>0(a,I,J) +* Start-At insloc 0 by SCMFSA8A:9;
 then A17: if>0(a,I,J) c= s3 by A16,XBOOLE_1:1;
-A18: if>0(a,I,J) = i ';' J ';' Goto insloc (card I + 1) ';' I1 by A8,
+A18: if>0(a,I,J) = i ';' J ';' Goto insloc (card I + 1) ';' I1 by
 SCMFSA6A:62
    .= i ';' J ';' (Goto insloc (card I + 1) ';' I1) by SCMFSA6A:62
    .= i ';' (J ';' (Goto insloc (card I + 1) ';' I1)) by SCMFSA6A:66
@@ -1823,8 +1809,6 @@ then A4: JI2 +* Start-At insloc 0 c= s2 by SCMFSA6B:8;
 A5: s2 is halting by A2,A3,SCMFSA8A:60;
       JI2 is_closed_on Initialize s by A2,A3,SCMFSA8A:58;
 then A6: JI2 is_closed_on s2 by Th9;
-A7: if>0(a,I,J) = i ';' J ';' Goto insloc (card I + 1) ';' I ';' SCM+FSA-Stop
-       by Def2;
 A8: insloc 0 in dom if>0(a,I,J) by Lm5;
       if>0(a,I,J) c= Initialized if>0(a,I,J) by SCMFSA6A:26;
 then A9: dom if>0(a,I,J) c= dom Initialized if>0(a,I,J) by GRFUNC_1:8;
@@ -1848,7 +1832,7 @@ then A15: s3.a <= 0 by A1,FUNCT_4:12;
 A16: Initialized if>0(a,I,J) c= s3 by FUNCT_4:26;
       if>0(a,I,J) c= Initialized if>0(a,I,J) by SCMFSA6A:26;
 then A17: if>0(a,I,J) c= s3 by A16,XBOOLE_1:1;
-      if>0(a,I,J) = i ';' J ';' Goto insloc (card I + 1) ';' I1 by A7,
+      if>0(a,I,J) = i ';' J ';' Goto insloc (card I + 1) ';' I1 by
 SCMFSA6A:62
    .= i ';' J ';' (Goto insloc (card I + 1) ';' I1) by SCMFSA6A:62
    .= i ';' (J ';' (Goto insloc (card I + 1) ';' I1)) by SCMFSA6A:66
@@ -2111,10 +2095,9 @@ theorem  ::ThIFl0_1' -- ???
    let a be read-write Int-Location;
    assume A1: s.a < 0;
    assume A2: I is_closed_on s & I is_halting_on s;
-A3: if<0(a,I,J) = if=0(a,J,if>0(a,J,I)) by Def3;
       if>0(a,J,I) is_closed_on s & if>0(a,J,I) is_halting_on s by A1,A2,Th24;
    hence if<0(a,I,J) is_closed_on s & if<0(a,I,J) is_halting_on s
-       by A1,A3,Th18;
+       by A1,Th18;
  end;
 
 theorem Th29: ::ThIFl0_1(@BBB8)
@@ -2129,13 +2112,12 @@ theorem Th29: ::ThIFl0_1(@BBB8)
    let a be read-write Int-Location;
    assume A1: s.a < 0;
    assume A2: I is_closed_on Initialize s & I is_halting_on Initialize s;
-A3: if<0(a,I,J) = if=0(a,J,if>0(a,J,I)) by Def3;
       (Initialize s).a <= 0 by A1,SCMFSA6C:3;
    then if>0(a,J,I) is_closed_on Initialize s &
        if>0(a,J,I) is_halting_on Initialize s by A2,Th24;
    hence IExec(if<0(a,I,J),s)
     = IExec(if>0(a,J,I),s) +* Start-At insloc (card if>0(a,J,I) + card J + 3)
-       by A1,A3,Th19
+       by A1,Th19
    .= IExec(if>0(a,J,I),s) +* Start-At insloc (card I + card J + 4 +
        card J + 3) by Th15
    .= IExec(I,s) +* Start-At insloc (card I + card J + 3) +*
@@ -2154,7 +2136,7 @@ theorem  ::ThIFl0_2' --- ??
    let a be read-write Int-Location;
    assume A1: s.a = 0;
    assume A2: J is_closed_on s & J is_halting_on s;
-      if<0(a,I,J) = if=0(a,J,if>0(a,J,I)) by Def3;
+      if<0(a,I,J) = if=0(a,J,if>0(a,J,I));
    hence if<0(a,I,J) is_closed_on s & if<0(a,I,J) is_halting_on s
        by A1,A2,Th16;
  end;
@@ -2171,7 +2153,7 @@ theorem Th31: ::ThIFl0_2(@BBB8)
    let a be read-write Int-Location;
    assume A1: s.a = 0;
    assume A2: J is_closed_on Initialize s & J is_halting_on Initialize s;
-      if<0(a,I,J) = if=0(a,J,if>0(a,J,I)) by Def3;
+      if<0(a,I,J) = if=0(a,J,if>0(a,J,I));
    hence IExec(if<0(a,I,J),s)
     = IExec(J,s) +* Start-At insloc (card if>0(a,J,I) + card J + 3)
        by A1,A2,Th17
@@ -2190,10 +2172,9 @@ theorem  ::ThIFl0_3' --- ???
    let a be read-write Int-Location;
    assume A1: s.a > 0;
    assume A2: J is_closed_on s & J is_halting_on s;
-A3: if<0(a,I,J) = if=0(a,J,if>0(a,J,I)) by Def3;
       if>0(a,J,I) is_closed_on s & if>0(a,J,I) is_halting_on s by A1,A2,Th22;
    hence if<0(a,I,J) is_closed_on s & if<0(a,I,J) is_halting_on s
-       by A1,A3,Th18;
+       by A1,Th18;
  end;
 
 theorem Th33: ::ThIFl0_3(@BBB8)
@@ -2208,13 +2189,12 @@ theorem Th33: ::ThIFl0_3(@BBB8)
    let a be read-write Int-Location;
    assume A1: s.a > 0;
    assume A2: J is_closed_on Initialize s & J is_halting_on Initialize s;
-A3: if<0(a,I,J) = if=0(a,J,if>0(a,J,I)) by Def3;
       (Initialize s).a > 0 by A1,SCMFSA6C:3;
    then if>0(a,J,I) is_closed_on Initialize s &
        if>0(a,J,I) is_halting_on Initialize s by A2,Th22;
    hence IExec(if<0(a,I,J),s)
     = IExec(if>0(a,J,I),s) +* Start-At insloc (card if>0(a,J,I) + card J + 3)
-       by A1,A3,Th19
+       by A1,Th19
    .= IExec(if>0(a,J,I),s) +* Start-At insloc (card I + card J + 4 +
        card J + 3) by Th15
    .= IExec(J,s) +* Start-At insloc (card I + card J + 3) +*
@@ -2234,9 +2214,8 @@ theorem  ::ThIFl0(@BBB8)
    let s be State of SCM+FSA;
    let I,J be parahalting Macro-Instruction;
    let a be read-write Int-Location;
-A1: if<0(a,I,J) = if=0(a,J,if>0(a,J,I)) by Def3;
       if>0(a,J,I) is parahalting by Th26; hence
-      if<0(a,I,J) is parahalting by A1,Th20;
+      if<0(a,I,J) is parahalting by Th20;
    hereby assume A2: s.a < 0;
          I is_closed_on Initialize s & I is_halting_on Initialize s
           by SCMFSA7B:24,25;
@@ -2274,11 +2253,11 @@ definition
  let a,b be Int-Location;
  let I,J be Macro-Instruction;
  func if=0(a,b,I,J) -> Macro-Instruction equals
-:Def4: SubFrom(a,b) ';' if=0(a,I,J);
+ SubFrom(a,b) ';' if=0(a,I,J);
  coherence;
 
  func if>0(a,b,I,J) -> Macro-Instruction equals
-:Def5:  SubFrom(a,b) ';' if>0(a,I,J);
+  SubFrom(a,b) ';' if>0(a,I,J);
  coherence;
  end;
 
@@ -2294,13 +2273,13 @@ registration
  cluster if=0(a,b,I,J) -> parahalting;
  correctness
   proof
-      if=0(a,b,I,J) = SubFrom(a,b) ';' if=0(a,I,J) by Def4;
+      if=0(a,b,I,J) = SubFrom(a,b) ';' if=0(a,I,J);
    hence thesis;
   end;
  cluster if>0(a,b,I,J) -> parahalting;
  correctness
   proof
-      if>0(a,b,I,J) = SubFrom(a,b) ';' if>0(a,I,J) by Def5;
+      if>0(a,b,I,J) = SubFrom(a,b) ';' if>0(a,I,J);
    hence thesis;
   end;
 end;
@@ -3067,7 +3046,7 @@ theorem  ::ThIFab0
    reconsider
        II = Macro SubFrom(a,b) as keeping_0 parahalting Macro-Instruction;
    reconsider JJ = if=0(a,I,J) as parahalting Macro-Instruction;
-A2: if=0(a,b,I,J) = SubFrom(a,b) ';' if=0(a,I,J) by Def4;
+ if=0(a,b,I,J) = SubFrom(a,b) ';' if=0(a,I,J);
    then IExec(if=0(a,b,I,J),s) = IExec(II ';' JJ,s) by SCMFSA6A:def 5
    .= IExec(JJ,IExec(II,s)) +* Start-At (IC IExec(JJ,IExec(II,s)) + card II)
        by SCMFSA6B:44;
@@ -3099,13 +3078,13 @@ A4: now let f be FinSeq-Location;
       hereby let d be Int-Location;
          assume A8: a <> d;
          thus IExec(if=0(a,b,I,J),s).d
-          = IExec(JJ,Exec(i,Initialize s)).d by A2,Th12
+          = IExec(JJ,Exec(i,Initialize s)).d by Th12
          .= IExec(I,Exec(i,Initialize s)).d by A6,Th21
          .= IExec(I,s).d by A1,A3,A4,A7,A8,Th41;
         end;
       let f be FinSeq-Location;
       thus IExec(if=0(a,b,I,J),s).f
-       = IExec(JJ,Exec(i,Initialize s)).f by A2,Th13
+       = IExec(JJ,Exec(i,Initialize s)).f by Th13
       .= IExec(I,Exec(i,Initialize s)).f by A6,Th21
       .= IExec(I,s).f by A1,A3,A4,A7,Th41;
      end;
@@ -3114,19 +3093,19 @@ A10: Exec(i,Initialize s).a
     = (Initialize s).a - (Initialize s).b by SCMFSA_2:91
    .= s.a - (Initialize s).b by SCMFSA6C:3
    .= s.a - s.b by SCMFSA6C:3;
-      A11: s.a + (- s.b) <> s.b + (- s.b) by A9,XCMPLX_1:2;
+      A11: s.a + (- s.b) <> s.b + (- s.b) by A9;
 A12: J is_closed_on Initialize s1 & J is_halting_on Initialize s1
        by SCMFSA7B:24,25;
    hereby let d be Int-Location;
       assume A13: a <> d;
       thus IExec(if=0(a,b,I,J),s).d
-       = IExec(JJ,Exec(i,Initialize s)).d by A2,Th12
+       = IExec(JJ,Exec(i,Initialize s)).d by Th12
       .= IExec(J,Exec(i,Initialize s)).d by A10,A11,Th21
       .= IExec(J,s).d by A1,A3,A4,A12,A13,Th41;
      end;
    let f be FinSeq-Location;
    thus IExec(if=0(a,b,I,J),s).f
-    = IExec(JJ,Exec(i,Initialize s)).f by A2,Th13
+    = IExec(JJ,Exec(i,Initialize s)).f by Th13
    .= IExec(J,Exec(i,Initialize s)).f by A10,A11,Th21
    .= IExec(J,s).f by A1,A3,A4,A12,Th41;
  end;
@@ -3155,7 +3134,7 @@ theorem  ::ThIFabg0
    reconsider
        II = Macro SubFrom(a,b) as keeping_0 parahalting Macro-Instruction;
    reconsider JJ = if>0(a,I,J) as parahalting Macro-Instruction;
-A2: if>0(a,b,I,J) = SubFrom(a,b) ';' if>0(a,I,J) by Def5;
+ if>0(a,b,I,J) = SubFrom(a,b) ';' if>0(a,I,J);
    then IExec(if>0(a,b,I,J),s) = IExec(II ';' JJ,s) by SCMFSA6A:def 5
    .= IExec(JJ,IExec(II,s)) +* Start-At (IC IExec(JJ,IExec(II,s)) + card II)
        by SCMFSA6B:44;
@@ -3187,13 +3166,13 @@ A4: now let f be FinSeq-Location;
       hereby let d be Int-Location;
          assume A8: a <> d;
          thus IExec(if>0(a,b,I,J),s).d
-          = IExec(JJ,Exec(i,Initialize s)).d by A2,Th12
+          = IExec(JJ,Exec(i,Initialize s)).d by Th12
          .= IExec(I,Exec(i,Initialize s)).d by A6,Th27
          .= IExec(I,s).d by A1,A3,A4,A7,A8,Th41;
         end;
       let f be FinSeq-Location;
       thus IExec(if>0(a,b,I,J),s).f
-       = IExec(JJ,Exec(i,Initialize s)).f by A2,Th13
+       = IExec(JJ,Exec(i,Initialize s)).f by Th13
       .= IExec(I,Exec(i,Initialize s)).f by A6,Th27
       .= IExec(I,s).f by A1,A3,A4,A7,Th41;
      end;
@@ -3208,13 +3187,13 @@ A11: J is_closed_on Initialize s1 & J is_halting_on Initialize s1
    hereby let d be Int-Location;
       assume A12: a <> d;
       thus IExec(if>0(a,b,I,J),s).d
-       = IExec(JJ,Exec(i,Initialize s)).d by A2,Th12
+       = IExec(JJ,Exec(i,Initialize s)).d by Th12
       .= IExec(J,Exec(i,Initialize s)).d by A10,Th27
       .= IExec(J,s).d by A1,A3,A4,A11,A12,Th41;
      end;
    let f be FinSeq-Location;
    thus IExec(if>0(a,b,I,J),s).f
-    = IExec(JJ,Exec(i,Initialize s)).f by A2,Th13
+    = IExec(JJ,Exec(i,Initialize s)).f by Th13
    .= IExec(J,Exec(i,Initialize s)).f by A10,Th27
    .= IExec(J,s).f by A1,A3,A4,A11,Th41;
  end;

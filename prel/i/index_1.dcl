@@ -27,7 +27,6 @@
 <ArticleID name="FUNCT_5"/>
 <ArticleID name="FRAENKEL"/>
 <ArticleID name="CAT_2"/>
-<ArticleID name="COMMACAT"/>
 <ArticleID name="CAT_5"/>
 <ArticleID name="INDEX_1"/>
 </Signature>

@@ -321,7 +321,7 @@ begin :: An Example : Summing directly n integers by loop-invariant
 definition
  let n, p0 be Nat;
  func sum(n,p0) -> Program-block equals
-:Def1:
+
   (GBP:=0) ';' (intpos 1:=0) ';'
   (intpos 2:=-n) ';' (intpos 3:=(p0+1)) ';'
   while<0(GBP,2,AddTo(GBP,1,intpos 3,0) ';'
@@ -381,7 +381,7 @@ A5: now
             assume t.da < 0;
           then A7: dt.da < 0 by SCMPDS_8:4;
               then F(dt)=-dt.da by A4;
-            hence contradiction by A6,A7,XREAL_1:60;
+            hence contradiction by A6,A7;
         end;
         assume t.da >= 0;
        then dt.da >= 0 by SCMPDS_8:4;
@@ -395,7 +395,7 @@ A8: P[Dstate s]
      A9: len h=0 & h is_FinSequence_on s,p0 by SCPISORT:3;
          take h;
         thus h is_FinSequence_on s,p0 by A9;
-        thus len h=s.intpos i+n by A2,A9,XCMPLX_0:def 6
+        thus len h=s.intpos i+n by A2,A9
              .=Ds.intpos i+n by SCMPDS_8:4;
           h=<*> REAL by A9,FINSEQ_1:32;
          hence Ds.b=Sum h by A2,RVSUM_1:102,SCMPDS_8:4;
@@ -712,9 +712,9 @@ A17: t1.a3=Exec(i4, t2).a3 by SCMPDS_5:46
       then f is_FinSequence_on t1,p0 by SCPISORT:def 1;
 then A25:  IExec(WH,t1).a1=Sum f & WH is_closed_on t1 & WH is_halting_on t1
         by A1,A12,A14,A16,A17,Lm3;
-A26:  sum(n,p0)=I4 ';' WH by Def1;
+  sum(n,p0)=I4 ';' WH;
      hence IExec(sum(n,p0),s).a1=Sum f by A25,SCPISORT:8;
-      thus thesis by A25,A26,SCPISORT:10;
+      thus thesis by A25,SCPISORT:10;
 end;
 
 theorem
@@ -818,7 +818,7 @@ begin :: An Example : Computing directly Fibonacci sequence by loop-invariant
 definition
  let n be Nat;
  func Fib-macro(n) -> Program-block equals
-:Def2:
+
   (GBP:=0) ';' (intpos 1:=0) ';'
   (intpos 2:=1) ';' (intpos 3:=n) ';'
   while>0(GBP,3,((GBP,4):=(GBP,2)) ';' AddTo(GBP,2,GBP,1) ';'
@@ -1106,10 +1106,10 @@ A15: t1.a2=Exec(i4, t2).a2 by SCMPDS_5:46
      .=n by SCMPDS_2:57;
 then A16:  IExec(WH,t1).a1=Fib n & IExec(WH,t1).a2=Fib (n+1) &
      WH is_closed_on t1 & WH is_halting_on t1 by A11,A13,A15,Lm7;
-A17:  Fib-macro(n)=I4 ';' WH by Def2;
+  Fib-macro(n)=I4 ';' WH;
      hence IExec(Fib-macro(n),s).a1=Fib n by A16,SCPISORT:8;
-     thus IExec(Fib-macro(n),s).a2=Fib (n+1) by A16,A17,SCPISORT:8;
-      thus thesis by A16,A17,SCPISORT:10;
+     thus IExec(Fib-macro(n),s).a2=Fib (n+1) by A16,SCPISORT:8;
+      thus thesis by A16,SCPISORT:10;
 end;
 
 theorem
@@ -1132,7 +1132,7 @@ definition
  let a be Int_position, i be Integer;
  let I be Program-block;
  func while<>0(a,i,I) -> Program-block equals
-:Def3:
+
    (a,i)<>0_goto 2 ';' goto (card I+2) ';' I ';' goto -(card I+2);
  coherence;
 end;
@@ -1148,7 +1148,7 @@ proof
       i2=goto (card I+2),
       i3=goto -(card I+2);
   set I4=i1 ';' i2 ';' I;
-    thus card while<>0(a,i,I)=card (I4 ';' i3) by Def3
+    thus card while<>0(a,i,I)=card (I4 ';' i3)
     .=card I4+1 by SCMP_GCD:8
     .=card (i1 ';' i2)+ card I+1 by SCMPDS_4:45
     .=2+card I +1 by SCMP_GCD:9
@@ -1199,11 +1199,11 @@ proof
 A1: card I4=card (i1 ';' i2)+ card I by SCMPDS_4:45
     .=card I +2 by SCMP_GCD:9;
     set WHL=while<>0(a,i,I);
-A2: WHL=I4 ';' i3 by Def3;
+ WHL=I4 ';' i3;
 then A3: WHL=i1 ';' i2 ';' (I ';' i3) by SCMPDS_4:47;
    hence WHL.inspos 0=i1 by Th5;
    thus WHL.inspos 1=i2 by A3,Th5;
-   thus WHL.inspos(card I+2)=i3 by A1,A2,SCMP_GCD:10;
+   thus WHL.inspos(card I+2)=i3 by A1,SCMP_GCD:10;
 end;
 
 Lm10:
@@ -1216,7 +1216,7 @@ proof
       i2=goto (card I+2),
       i3=goto -(card I+2);
 
-   thus while<>0(a,i,I) = i1 ';' i2 ';' I ';' i3 by Def3
+   thus while<>0(a,i,I) = i1 ';' i2 ';' I ';' i3
        .= i1 ';' (i2 ';' I) ';' i3 by SCMPDS_4:52
        .= i1 ';' (i2 ';' I ';' i3) by SCMPDS_4:51;
 end;
@@ -1421,7 +1421,7 @@ proof
        i2=goto (card I+2),
        i3=goto -(card I+2);
 A1: card (i1 ';' i2)=2 by SCMP_GCD:9;
-         while<>0(a,i,I) = i1 ';' i2 ';' I ';' i3 by Def3
+         while<>0(a,i,I) = i1 ';' i2 ';' I ';' i3
      .= i1 ';' i2 ';' I ';' Load i3 by SCMPDS_4:def 5;
     hence thesis by A1,SCMPDS_7:16;
 end;
@@ -1441,7 +1441,7 @@ registration
          card PF=card (i1 ';' i2)+ card I by SCMPDS_4:45
     .=2+card I by SCMP_GCD:9;
 then A2:  card PF+ -(card I+2) =0;
-          WHL= PF ';' i3 by Def3;
+          WHL= PF ';' i3;
      hence WHL is shiftable by A1,A2,SCMPDS_4:78;
   end;
 end;
@@ -1454,12 +1454,12 @@ registration
    proof
           card I+2 >= 2 by NAT_1:29;
 then A1:  card I +2 >0 by XREAL_1:2;
-     then -(card I+2) <> 0 by XCMPLX_1:135;
+     then -(card I+2) <> 0;
      then reconsider i3=goto -(card I+2) as No-StopCode Instruction of SCMPDS
        by SCMPDS_5:25;
      reconsider i2=goto (card I+2) as No-StopCode Instruction of SCMPDS
        by A1,SCMPDS_5:25;
-          while<>0(a,i,I) =(a,i)<>0_goto 2 ';' i2 ';' I ';' i3 by Def3;
+          while<>0(a,i,I) =(a,i)<>0_goto 2 ';' i2 ';' I ';' i3;
      hence thesis;
    end;
 end;
@@ -2092,7 +2092,7 @@ begin :: An example: computing Greatest Common Divisor(Euclide algorithm)
 
 definition
  func GCD-Algorithm -> Program-block equals
-:Def4:
+
      (GBP:=0) ';' (GBP,3):=(GBP,1) ';'
      SubFrom(GBP,3,GBP,2) ';'
      while<>0(GBP,3,
@@ -2165,7 +2165,7 @@ A5: for t be State of SCMPDS st P[Dstate t] holds F(Dstate t)=0 iff t.ci = 0
       end;
       hereby
           assume t.ci=0;
-          then t.b=t.c by A7,XCMPLX_1:15;
+          then t.b=t.c by A7;
           then (Dstate t).b = t.c by SCMPDS_8:4;
           then (Dstate t).b = (Dstate t).c by SCMPDS_8:4;
         hence F(Dstate t)=0 by A4;
@@ -2293,7 +2293,7 @@ A31:   w=ss & w.b > 0 & w.c > 0 & w.b gcd w.c =s.b gcd s.c &
       w.DataLoc(d,i)=w.b-w.c;
            w.b-w.c =s1.ci by A2,A31,SCMPDS_8:4
       .=0 by A5,A30;
-then A32:   w.b=w.c by XCMPLX_1:15;
+then A32:   w.b=w.c;
 then A33:   abs(w.b)=abs(w.b) hcf abs(w.c)
       .=s.b gcd s.c by A31,INT_2:def 3;
     thus IExec(while<>0(a,i,I),s).b=ss.b by SCMPDS_8:4
@@ -2334,7 +2334,7 @@ end;
 theorem
       card GCD-Algorithm=12
 proof
-   thus card GCD-Algorithm=card (i1 ';' i2 ';' i3) + card WH by Def4,
+   thus card GCD-Algorithm=card (i1 ';' i2 ';' i3) + card WH by
 SCMPDS_4:45
      .=card (i1 ';' i2) +1+ card WH by SCMP_GCD:8
      .=2+1+ 9 by Lm13,SCMP_GCD:9
@@ -2542,4 +2542,4 @@ theorem      :: SCMP_GCD:18
   IExec(GCD-Algorithm,s).intpos 1 = x gcd y &
   IExec(GCD-Algorithm,s).intpos 2 = x gcd y &
   GCD-Algorithm is_closed_on s & GCD-Algorithm is_halting_on s
-  by Def4,Lm16;
+  by Lm16;

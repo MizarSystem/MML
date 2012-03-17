@@ -114,7 +114,7 @@ end;
 definition let S be non empty 1-sorted;
  func SCM-Instr S ->
           Subset of [: Segm 8, (union {the carrier of S} \/ NAT)* :] equals
-:Def1:
+
   { [0,{}] } \/
   { [I,<*a,b*>] where I is Element of Segm 8,
                       a, b is Element of SCM-Data-Loc: I in { 1,2,3,4 } } \/
@@ -216,7 +216,6 @@ A2:SCM-Instr S
    { [6,<*i1*>] : not contradiction } \/
    { [7,<*i2,d3*>] : not contradiction } \/
    { [5,<*d4,r*>] where r is Element of S: not contradiction }
-    by Def1
  .= ({ [0,{}] } \/
    { [I,<*d1,d2*>] : I in { 1,2,3,4 } } \/
    { [6,<*i1*>] : not contradiction }) \/
@@ -416,14 +415,6 @@ theorem Th1:
  SCM-Instr-Loc <> SCM-Instr S
   proof
 A1: 2 = 2*1;
-A2: SCM-Instr S = { [0,{}] } \/
-  { [I,<*a,b*>] where a,b is Element of SCM-Data-Loc: I in { 1,2,3,4 } } \/
-  { [6,<*i*>] where i is Element of SCM-Instr-Loc: not contradiction } \/
-  { [7,<*i,a*>] where i is Element of SCM-Instr-Loc,
-                      a is Element of SCM-Data-Loc: not contradiction } \/
-  { [5,<*i,r*>] where i is Element of SCM-Data-Loc,
-                      r is Element of S: not contradiction }
-   by Def1;
        now
     assume 2 in SCM-Instr S;
     then 2 in { [0,{}] } \/
@@ -433,7 +424,7 @@ A2: SCM-Instr S = { [0,{}] } \/
                       a is Element of SCM-Data-Loc: not contradiction } or
   2 in { [5,<*i,r*>] where i is Element of SCM-Data-Loc,
                       r is Element of S: not contradiction }
-   by A2,XBOOLE_0:def 2;
+   by XBOOLE_0:def 2;
     then 2 in { [0,{}] } \/
   { [I,<*a,b*>] where a,b is Element of SCM-Data-Loc: I in { 1,2,3,4 } } \/
   { [6,<*i*>] where i is Element of SCM-Instr-Loc: not contradiction } or
@@ -598,7 +589,7 @@ end;
 definition let R be good (non empty 1-sorted),
                s be SCM-State of R,
                u be Element of SCM-Instr-Loc;
- func SCM-Chg(s,u) -> SCM-State of R equals :Def5:
+ func SCM-Chg(s,u) -> SCM-State of R equals
   s +* (0 .--> u);
 coherence
   proof
@@ -641,7 +632,7 @@ theorem
    let s be SCM-State of G, u be Element of SCM-Instr-Loc;
       {0} = dom(0 .--> u) by CQC_LANG:5;
 then A1: 0 in dom(0 .--> u) by TARSKI:def 1;
-  thus SCM-Chg(s,u).0 = (s +* (0 .--> u)).0 by Def5
+  thus SCM-Chg(s,u).0 = (s +* (0 .--> u)).0
     .= (0 .--> u).0 by A1,FUNCT_4:14
     .= u by CQC_LANG:6;
  end;
@@ -659,7 +650,7 @@ A1:  (SCM-OK G).0 = SCM-Instr-Loc & (SCM-OK G).mk = the carrier of G
 A2: the carrier of G <> SCM-Instr-Loc by Def2;
       {0} = dom(0 .--> u) by CQC_LANG:5;
 then A3: not mk in dom(0 .--> u) by A1,A2,TARSKI:def 1;
-  thus SCM-Chg(s,u).mk = (s +* (0 .--> u)).mk by Def5
+  thus SCM-Chg(s,u).mk = (s +* (0 .--> u)).mk
   .= s.mk by A3,FUNCT_4:12;
 end;
 
@@ -674,7 +665,7 @@ A1:  (SCM-OK G).0 = SCM-Instr-Loc & (SCM-OK G).v = SCM-Instr G by Th2,Th6;
 A2: SCM-Instr-Loc <> SCM-Instr G by Th1;
       {0} = dom(0 .--> u) by CQC_LANG:5;
 then A3:  not v in dom(0 .--> u) by A1,A2,TARSKI:def 1;
-  thus SCM-Chg(s,u).v = (s +* (0 .--> u)).v by Def5
+  thus SCM-Chg(s,u).v = (s +* (0 .--> u)).v
   .= s.v by A3,FUNCT_4:12;
 end;
 
@@ -682,7 +673,7 @@ definition let R be good (non empty 1-sorted),
                s be SCM-State of R,
                t be Element of SCM-Data-Loc,
                u be Element of R;
- func SCM-Chg(s,t,u) -> SCM-State of R equals :Def6:
+ func SCM-Chg(s,t,u) -> SCM-State of R equals
   s +* (t .--> u);
 coherence
   proof
@@ -730,7 +721,7 @@ A1:  (SCM-OK G).0 = SCM-Instr-Loc & (SCM-OK G).t = the carrier of G
 A2: SCM-Instr-Loc <> the carrier of G by Def2;
       {t} = dom(t .--> u) by CQC_LANG:5;
 then A3:  not 0 in dom(t .--> u) by A1,A2,TARSKI:def 1;
- thus SCM-Chg(s,t,u).0 = (s +* (t .--> u)).0 by Def6
+ thus SCM-Chg(s,t,u).0 = (s +* (t .--> u)).0
          .= s.0 by A3,FUNCT_4:12;
 end;
 
@@ -743,7 +734,7 @@ theorem
      u be Element of G;
      {t} = dom(t .--> u) by CQC_LANG:5;
 then A1: t in dom(t .--> u) by TARSKI:def 1;
- thus SCM-Chg(s,t,u).t = (s +* (t .--> u)).t by Def6
+ thus SCM-Chg(s,t,u).t = (s +* (t .--> u)).t
    .= (t .--> u).t by A1,FUNCT_4:14
    .= u by CQC_LANG:6;
 end;
@@ -760,7 +751,7 @@ theorem
 A1:   mk <> t;
       {t} = dom(t .--> u) by CQC_LANG:5;
 then A2: not mk in dom(t .--> u) by A1,TARSKI:def 1;
- thus SCM-Chg(s,t,u).mk = (s +* (t .--> u)).mk by Def6
+ thus SCM-Chg(s,t,u).mk = (s +* (t .--> u)).mk
          .= s.mk by A2,FUNCT_4:12;
 end;
 
@@ -778,7 +769,7 @@ A1: (SCM-OK G).v = SCM-Instr G & (SCM-OK G).t = the carrier of G
 A2: SCM-Instr G <> the carrier of G by Def2;
       {t} = dom(t .--> u) by CQC_LANG:5;
 then A3:  not v in dom(t .--> u) by A1,A2,TARSKI:def 1;
- thus SCM-Chg(s,t,u).v = (s +* (t .--> u)).v by Def6
+ thus SCM-Chg(s,t,u).v = (s +* (t .--> u)).v
          .= s.v by A3,FUNCT_4:12;
 end;
 

@@ -35,8 +35,8 @@ end;
 theorem Th1: for s being State of SCM
      holds IC s = s.0 & CurInstr s = s.(s.0)
  proof let s be State of SCM;
-  thus IC s = s.0 by AMI_1:def 15,AMI_3:4;
-  hence CurInstr s = s.(s.0) by AMI_1:def 17;
+  thus IC s = s.0 by AMI_3:4;
+  hence CurInstr s = s.(s.0);
  end;
 
 theorem Th2: for s being State of SCM, k being Nat
@@ -46,9 +46,9 @@ theorem Th2: for s being State of SCM, k being Nat
   thus CurInstr (Computation s).k
            = (Computation s).k.((Computation s).k.0) by Th1
           .= (Computation s).k.(IC (Computation s).k)
-            by AMI_1:def 15,AMI_3:4
+            by AMI_3:4
           .= s.(IC (Computation s).k) by AMI_1:54;
-  hence thesis by AMI_1:def 15,AMI_3:4;
+  hence thesis by AMI_3:4;
  end;
 
 theorem Th3:
@@ -219,7 +219,7 @@ A12: dom s3 = NAT &
   then reconsider s3 as State of SCM by A9,A12,CARD_3:18;
 
   take s3;
-  thus IC s3 = s3.0 by AMI_1:def 15,AMI_3:4
+  thus IC s3 = s3.0 by AMI_3:4
             .= s2.0 by A12,Th7,AMI_3:4
             .= s1.0 by A11,Th7,AMI_3:4
             .= il.il by A10;
@@ -230,14 +230,14 @@ A14:    ps+k = ps+k' by A13,AMI_3:53;
        for n being Nat holds il.(ps+k) <> dl.n by AMI_3:56;
    hence s3.il.(ps+k) = s2.il.(ps+k) by A12,AMI_3:def 1
                .= I1.il.(ps+k) by A11,AMI_3:def 1
-               .= I.(k+1) by A13,A14,XCMPLX_1:2;
+               .= I.(k+1) by A13,A14;
    end;
    let k be Nat; assume k < len D; then consider k' being Nat such that
 A15: dl.(ds+k) = dl.(ds+k') & k' < len D & D1.dl.(ds+k) = D.(k'+1)
                 by A8,AMI_3:def 1;
 A16:     ds+k = ds+k' by A15,AMI_3:52;
    thus s3.dl.(ds+k) = D1.dl.(ds+k) by A12,AMI_3:def 1
-              .= D.(k+1) by A15,A16,XCMPLX_1:2;
+              .= D.(k+1) by A15,A16;
  end;
 end;
 
@@ -517,7 +517,7 @@ Lm10:
  let k be Nat, s be State of SCM;
  thus (Computation s).(k+1) = Following (Computation s).k by AMI_1:def 19
                     .= Exec(CurInstr (Computation s).k,
-                                     (Computation s).k) by AMI_1:def 18;
+                                     (Computation s).k);
 end;
 
 Lm11:
@@ -655,10 +655,9 @@ A1: IC (Computation s).k = il.n & s.il.n = goto il;
 A2: (Computation s).k.il.n = s.il.n by AMI_1:54;
    set csk = (Computation s).k;
    set csk1 = (Computation s).(k+1);
-A3: csk.0 = il.n by A1,Th1;
  A4: csk1 = Exec(CurInstr csk, csk) by Lm10
-           .= Exec(goto il, csk) by A1,A2,A3,Th1;
- thus IC csk1 = csk1.IC SCM by AMI_1:def 15 .= il by A4,AMI_3:13;
+           .= Exec(goto il, csk) by A1,A2;
+ thus IC csk1 = csk1.IC SCM .= il by A4,AMI_3:13;
  thus thesis by A4,AMI_3:13;
 end;
 
@@ -677,14 +676,13 @@ A1: IC (Computation s).k = il.n & s.il.n = a =0_goto il;
 A2: (Computation s).k.il.n = s.il.n by AMI_1:54;
    set csk = (Computation s).k;
    set csk1 = (Computation s).(k+1);
-A3: csk.0 = il.n by A1,Th1;
  A4: csk1 = Exec(CurInstr csk, csk) by Lm10
-           .= Exec(a =0_goto il, csk) by A1,A2,A3,Th1;
- A5: IC csk1 = csk1.IC SCM by AMI_1:def 15;
+           .= Exec(a =0_goto il, csk) by A1,A2;
+  IC csk1 = csk1.IC SCM;
  hence csk.a = 0 implies IC csk1 = il by A4,AMI_3:14;
  hereby assume
        csk.a <> 0;
-  hence IC csk1 = Next il.n by A1,A4,A5,AMI_3:14
+  hence IC csk1 = Next il.n by A1,A4,AMI_3:14
                .= il.(n+1) by Lm9;
  end;
  thus thesis by A4,AMI_3:14;
@@ -705,14 +703,13 @@ A1: IC (Computation s).k = il.n & s.il.n = a >0_goto il;
 A2: (Computation s).k.il.n = s.il.n by AMI_1:54;
    set csk = (Computation s).k;
    set csk1 = (Computation s).(k+1);
-A3: csk.0 = il.n by A1,Th1;
  A4: csk1 = Exec(CurInstr csk, csk) by Lm10
-           .= Exec(a >0_goto il, csk) by A1,A2,A3,Th1;
- A5: IC csk1 = csk1.IC SCM by AMI_1:def 15;
+           .= Exec(a >0_goto il, csk) by A1,A2;
+  IC csk1 = csk1.IC SCM;
  hence csk.a > 0 implies IC csk1 = il by A4,AMI_3:15;
  hereby assume
        csk.a <= 0;
-  hence IC csk1 = Next il.n by A1,A4,A5,AMI_3:15
+  hence IC csk1 = Next il.n by A1,A4,AMI_3:15
                .= il.(n+1) by Lm9;
  end;
  thus thesis by A4,AMI_3:15;
@@ -911,7 +908,7 @@ then s.IC s0 = halt SCM by A2,Def1;
 A4: s is halting by Th3;
       CurInstr s0 = halt SCM &
   for k be Nat st CurInstr (Computation s).k = halt SCM holds
-  0 <= k by A1,A2,A3,Th2;
+  0 <= k by A1,A2,A3;
  hence Complexity s = 0 by A4,Def2;
 
  thus Result s = s by A1,A2,A3,Th4;

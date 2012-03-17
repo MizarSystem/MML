@@ -69,7 +69,7 @@ A2:   r <> s;
     hence r = -s by A1;
     end;
     suppose abs(r) = -r & abs(s) = -s;
-    hence r = -s by A1,A2,XCMPLX_1:134;
+    hence r = -s by A1,A2;
   end;
   end;
 
@@ -268,7 +268,7 @@ theorem Th11:
       not contradiction };
     let x be set;
     assume x in JUMP(i);
-    then A1: x in meet X by AMISTD_1:def 6;
+    then A1: x in meet X;
      NIC(i,l) in X;
     hence thesis by A1,SETFAM_1:def 1;
   end;
@@ -283,12 +283,11 @@ theorem Th12:
 A1:   for s being State of SCMPDS st IC s = l & s.l = i
         holds Exec(i, s).IC SCMPDS = Next IC s;
     set X = {IC Following s where s is State of SCMPDS: IC s = l & s.l = i};
-A2: NIC(i,l) = X by AMISTD_1:def 5;
     hereby
       let x be set;
       assume x in NIC(i,l);
       then consider s being State of SCMPDS such that
-A3:     x = IC Following s & IC s = l & s.l = i by A2;
+A3:     x = IC Following s & IC s = l & s.l = i;
        x = Exec(s.IC s, s).IC SCMPDS by A3,Lm1
        .= Next l by A1,A3;
       hence x in {Next l} by TARSKI:def 1;
@@ -304,7 +303,7 @@ A5: IC u = l by AMI_6:6;
 A6: u.l = i by AMI_6:6;
      IC Following u = Exec(u.IC u, u).IC SCMPDS by AMI_6:6
     .= Next l by A1,A5,A6;
-    hence thesis by A2,A4,A5,A6;
+    hence thesis by A4,A5,A6;
   end;
 
 theorem Th13:
@@ -319,7 +318,7 @@ A2:   p <> q by YELLOW_8:def 1;
     set X = { NIC(i,f) where f is Instruction-Location of SCMPDS:
         not contradiction };
     assume not thesis;
-    then meet X is non empty by AMISTD_1:def 6;
+    then meet X is non empty;
     then consider x being set such that
 A3:   x in meet X by XBOOLE_0:def 1;
      NIC(i,p) = {Next p} & NIC(i,q) = {Next q} by A1;
@@ -335,14 +334,13 @@ theorem Th14:
     set i = goto k;
     set X = { IC Following s where s is State of SCMPDS: IC s = l & s.l = i };
     set t = 2*abs(k+locnum l)+2;
-A1: NIC(i,l) = X by AMISTD_1:def 5;
      l in { 2*k1 where k1 is Nat: k1 > 0 } by AMI_2:def 3,SCMPDS_2:def 1;
     then consider k1 being Nat such that
 A2:   l = 2*k1 and
       k1 > 0;
 A3: 2*locnum l + 2 = l by Th8; then
     2*locnum l = 2*k1 - 2 by A2,XCMPLX_1:26; then
-BB: 2*locnum l = 2*(k1-1) by A2;
+BB: 2*locnum l = 2*(k1-1);
 A4: now
       thus 2*abs(locnum l+k) = abs(2)*abs(locnum l + k) by ABSVALUE:def 1
         .= abs(2*(locnum l+k)) by COMPLEX1:151;
@@ -353,14 +351,14 @@ A4: now
       then consider s being State of SCMPDS such that
 A5:     x = IC Following s and
 A6:     IC s = l and
-A7:     s.l = i by A1;
+A7:     s.l = i;
       consider m1 being Nat such that
 A8:     m1 = IC s and
 A9:     ICplusConst(s,k) = abs(m1-2+2*k)+2 by SCMPDS_2:def 20;
        x = Exec(i,s).IC SCMPDS by A5,A6,A7,Lm1
        .= abs(2*k1-2*1+2*k)+2 by A2,A6,A8,A9,SCMPDS_2:66
-       .= abs(2*(k1-1)+2*k)+2 by XCMPLX_1:40
-       .= abs(2*locnum l+2*k)+2 by A2,A3,BB
+       .= abs(2*(k1-1)+2*k)+2
+       .= abs(2*locnum l+2*k)+2 by BB
        .= t by A4;
       hence x in {t} by TARSKI:def 1;
     end;
@@ -377,10 +375,10 @@ A12: IC u = l by AMI_6:6;
 A13:   m1 = IC u and
 A14:   ICplusConst(u,k) = abs(m1-2+2*k)+2 by SCMPDS_2:def 20;
      x = abs(2*locnum l+2*k)+2 by A4,A10,TARSKI:def 1
-     .= abs(m1-2+2*k)+2 by A3,A12,A13,XCMPLX_1:26
+     .= abs(m1-2+2*k)+2 by A3,A12,A13
      .= Exec(i,u).IC SCMPDS by A14,SCMPDS_2:66
      .= IC Following u by A11,A12,Lm1;
-    hence thesis by A1,A11,A12;
+    hence thesis by A11,A12;
   end;
 
 Lm2:
@@ -398,23 +396,21 @@ theorem Th15:
   proof
     set i = return a;
     set X = {2*k where k is Nat: k > 1};
-A1: NIC(i,l) = { IC Following s where s is State of SCMPDS:
-        IC s = l & s.l = i } by AMISTD_1:def 5;
     hereby
       let x be set;
       assume x in NIC(i,l);
       then consider s being State of SCMPDS such that
 A2:     x = IC Following s and
 A3:     IC s = l and
-A4:     s.l = i by A1;
+A4:     s.l = i;
 A5:   x = Exec(i,s).IC SCMPDS by A2,A3,A4,Lm1
        .= 2*(abs(s.DataLoc(s.a,1)) div 2)+2*2 by SCMPDS_1:def 23,SCMPDS_2:70;
        x in { 2*k where k is Nat: k > 0 } by A2,AMI_2:def 3,SCMPDS_2:def 1;
       then consider k being Nat such that
 A6:     x = 2*k and k > 0;
-A7:   2*k = 2*((abs(s.DataLoc(s.a,1)) div 2)+2) by A5,A6,XCMPLX_1:8;
+A7:   2*k = 2*((abs(s.DataLoc(s.a,1)) div 2)+2) by A5,A6;
       (abs(s.DataLoc(s.a,1)) div 2)+2 >= 0+2 by XREAL_1:8;
-      then k >= 1+1 by A7,XCMPLX_1:5;
+      then k >= 1+1 by A7;
       then k > 1 by NAT_1:38;
       hence x in X by A6;
     end;
@@ -462,7 +458,7 @@ A21: DataLoc(j,1) = 2*abs(j+1)+1 by SCMPDS_2:def 4
      .= 2*(abs(v.DataLoc(j,1)) div 2) + 2*2 by A21,XCMPLX_1:8
      .= Exec(i,v).IC SCMPDS by A18,SCMPDS_1:def 23,SCMPDS_2:70
      .= IC Following v by A14,A16,Lm1;
-    hence x in NIC(i,l) by A1,A14,A16;
+    hence x in NIC(i,l) by A14,A16;
   end;
 
 theorem Th16:
@@ -552,7 +548,6 @@ theorem
     set i = (a,k1)<>0_goto k2;
     set X = { IC Following s where s is State of SCMPDS: IC s = l & s.l = i };
     set t = abs(2*(k2+locnum l))+2;
-A1: NIC(i,l) = X by AMISTD_1:def 5;
      l in { 2*w1 where w1 is Nat: w1 > 0 } by AMI_2:def 3,SCMPDS_2:def 1;
     then consider w1 being Nat such that
 A2:   l = 2*w1 and
@@ -564,7 +559,7 @@ A3: 2*locnum l + 2 = l by Th8;
       then consider s being State of SCMPDS such that
 A4:     x = IC Following s and
 A5:     IC s = l and
-A6:     s.l = i by A1;
+A6:     s.l = i;
       consider m1 being Nat such that
 A7:     m1 = IC s and
 A8:     ICplusConst(s,k2) = abs(m1-2+2*k2)+2 by SCMPDS_2:def 20;
@@ -622,7 +617,7 @@ A18: u2.DataLoc(u1.a,k1) = 0 by YELLOW14:3;
     end;
     then x = Exec(i,u2).IC SCMPDS by A12,A17,SCMPDS_2:67
      .= IC Following u2 by A14,A17,Lm1;
-    hence thesis by A1,A14,A17;
+    hence thesis by A14,A17;
     end;
     suppose
 A19:   x = t;
@@ -657,7 +652,7 @@ A27:   m1 = IC u2 and
 A28:   ICplusConst(u2,k2) = abs(m1-2+2*k2)+2 by SCMPDS_2:def 20;
      x = Exec(i,u2).IC SCMPDS by A3,A19,A24,A26,A27,A28,SCMPDS_2:67
      .= IC Following u2 by A21,A24,Lm1;
-    hence thesis by A1,A21,A24;
+    hence thesis by A21,A24;
   end;
   end;
 
@@ -667,7 +662,6 @@ theorem
     set i = (a,k1)<=0_goto k2;
     set X = { IC Following s where s is State of SCMPDS: IC s = l & s.l = i };
     set t = abs(2*(k2+locnum l))+2;
-A1: NIC(i,l) = X by AMISTD_1:def 5;
      l in { 2*w1 where w1 is Nat: w1 > 0 } by AMI_2:def 3,SCMPDS_2:def 1;
     then consider w1 being Nat such that
 A2:   l = 2*w1 and
@@ -679,7 +673,7 @@ A3: 2*locnum l + 2 = l by Th8;
       then consider s being State of SCMPDS such that
 A4:     x = IC Following s and
 A5:     IC s = l and
-A6:     s.l = i by A1;
+A6:     s.l = i;
       consider m1 being Nat such that
 A7:     m1 = IC s and
 A8:     ICplusConst(s,k2) = abs(m1-2+2*k2)+2 by SCMPDS_2:def 20;
@@ -737,7 +731,7 @@ A18: u2.DataLoc(u1.a,k1) = 1 by YELLOW14:3;
     end;
     then x = Exec(i,u2).IC SCMPDS by A12,A17,SCMPDS_2:68
      .= IC Following u2 by A14,A17,Lm1;
-    hence thesis by A1,A14,A17;
+    hence thesis by A14,A17;
     end;
     suppose
 A19:   x = t;
@@ -772,7 +766,7 @@ A27:   m1 = IC u2 and
 A28:   ICplusConst(u2,k2) = abs(m1-2+2*k2)+2 by SCMPDS_2:def 20;
      x = Exec(i,u2).IC SCMPDS by A3,A19,A24,A26,A27,A28,SCMPDS_2:68
      .= IC Following u2 by A21,A24,Lm1;
-    hence thesis by A1,A21,A24;
+    hence thesis by A21,A24;
   end;
   end;
 
@@ -782,7 +776,6 @@ theorem
     set i = (a,k1)>=0_goto k2;
     set X = { IC Following s where s is State of SCMPDS: IC s = l & s.l = i };
     set t = abs(2*(k2+locnum l))+2;
-A1: NIC(i,l) = X by AMISTD_1:def 5;
      l in { 2*w1 where w1 is Nat: w1 > 0 } by AMI_2:def 3,SCMPDS_2:def 1;
     then consider w1 being Nat such that
 A2:   l = 2*w1 and
@@ -794,7 +787,7 @@ A3: 2*locnum l + 2 = l by Th8;
       then consider s being State of SCMPDS such that
 A4:     x = IC Following s and
 A5:     IC s = l and
-A6:     s.l = i by A1;
+A6:     s.l = i;
       consider m1 being Nat such that
 A7:     m1 = IC s and
 A8:     ICplusConst(s,k2) = abs(m1-2+2*k2)+2 by SCMPDS_2:def 20;
@@ -853,7 +846,7 @@ A19: -1 < 0;
     end;
     then x = Exec(i,u2).IC SCMPDS by A12,A17,SCMPDS_2:69
      .= IC Following u2 by A14,A17,Lm1;
-    hence thesis by A1,A14,A17;
+    hence thesis by A14,A17;
     end;
     suppose
 A20:   x = t;
@@ -888,7 +881,7 @@ A28:   m1 = IC u2 and
 A29:   ICplusConst(u2,k2) = abs(m1-2+2*k2)+2 by SCMPDS_2:def 20;
      x = Exec(i,u2).IC SCMPDS by A3,A20,A25,A27,A28,A29,SCMPDS_2:69
      .= IC Following u2 by A22,A25,Lm1;
-    hence thesis by A1,A22,A25;
+    hence thesis by A22,A25;
   end;
   end;
 
@@ -903,10 +896,10 @@ Lm3: JUMP goto k = {}
 A1:     x in JUMP i;
       set l1 = inspos 0;
 A2:   NIC(i,l1) in X;
-A3:   JUMP i = meet X by AMISTD_1:def 6;
+   JUMP i = meet X;
       then x in NIC(i,l1) by A1,A2,SETFAM_1:def 1;
       then x in { IC Following s1 where s1 is State of SCMPDS:
-           IC s1 = l1 & s1.l1 = i } by AMISTD_1:def 5;
+           IC s1 = l1 & s1.l1 = i };
       then consider s1 being State of SCMPDS such that
 A4:     x = IC Following s1 and
 A5:     IC s1 = l1 and
@@ -923,9 +916,9 @@ A10:   x = (Following s1).IC SCMPDS by A4,AMI_1:def 15
 
       set l2 = inspos 1;
        NIC(i,l2) in X;
-      then x in NIC(i,l2) by A1,A3,SETFAM_1:def 1;
+      then x in NIC(i,l2) by A1,SETFAM_1:def 1;
       then x in { IC Following s2 where s2 is State of SCMPDS:
-           IC s2 = l2 & s2.l2 = i } by AMISTD_1:def 5;
+           IC s2 = l2 & s2.l2 = i };
       then consider s2 being State of SCMPDS such that
 A11:     x = IC Following s2 and
 A12:     IC s2 = l2 and
@@ -942,14 +935,14 @@ A16:   m2 = il.1 by A12,A14,SCMPDS_3:def 2
       then A17:   abs(m1-2+2*k) = abs(m2-2+2*k) by A10,XCMPLX_1:2;
       per cases by A9,A16,A17,Th3;
       suppose 0+2*k = 2+2*k;
-      hence x in {} by XCMPLX_1:2;
+      hence x in {};
       end;
       suppose
 A18:     2*k = -(2+2*k);
        0 = -(2*k) + 2*k
-       .= 2 + (2*k + 2*k) by A18,XCMPLX_1:1
+       .= 2 + (2*k + 2*k) by A18
        .= 2 + ((2+2)*k);
-      then -2 = 4*k by XCMPLX_0:def 6;
+      then -2 = 4*k;
       then A19: -2/4 = 4*k/4;
        for i being Integer holds -i is integer;
       then --1/2 is integer by A19;
@@ -984,8 +977,6 @@ A1:   x in A;
       assume y in X;
       then consider l being Instruction-Location of SCMPDS such that
 A2:     y = NIC(i,l);
-A3:   NIC(i,l) = { IC Following s where s is State of SCMPDS:
-        IC s = l & s.l = i } by AMISTD_1:def 5;
        a in SCM-Data-Loc by SCMPDS_2:def 2;
       then consider j being Nat such that
 A4:     a = 2*j+1 by AMI_2:def 2;
@@ -1028,10 +1019,10 @@ A17:  DataLoc(j,1) = 2*abs(j+1)+1 by SCMPDS_2:def 4
        .= 2*(abs(v.DataLoc(j,1)) div 2) + 2*2 by A17,XCMPLX_1:8
        .= Exec(i,v).IC SCMPDS by A14,SCMPDS_1:def 23,SCMPDS_2:70
        .= IC Following v by A10,A12,Lm1;
-      hence x in y by A2,A3,A10,A12;
+      hence x in y by A2,A10,A12;
     end;
     then x in meet X by SETFAM_1:def 1;
-    hence thesis by AMISTD_1:def 6;
+    hence thesis;
   end;
 
 registration
@@ -1128,35 +1119,6 @@ coherence
   end;
 end;
 
-Lm4:
-  for b,c,d being real number st 2*b+2-2+2*d = 2*(b+c)+2-2+2*d
-   holds b = b+c
-  proof
-    let b,c,d be real number;
-    assume 2*b+2-2+2*d = 2*(b+c)+2-2+2*d;
-    then 2*b = 2*(b+c) by XCMPLX_1:2;
-    hence b = b+c by XCMPLX_1:5;
-  end;
-
-Lm5:
-  for a,c,d being real number st
-   2*(a+c)+2-2+2*d = -(2*(a+c+c)+2-2+2*d)
-  holds d + a = (-2)*(c+c+c)/4
-  proof
-    let a,c,d be real number;
-    set b = a+c;
-    set e = b+c;
-    set xx = c+c+c;
-    assume 2*(a+c)+2-2+2*d = -(2*(a+c+c)+2-2+2*d);
-    then 2*b+2*d = -(2*e+2-2+2*d);
-    then 0 = 2*b + 2*d + 2*e + 2*d
-     .= 2*(b+e) + 4*d;
-    then (-2*(b+e))/4 = 4*d/4 by XCMPLX_0:def 6;
-    then d = ((-2)*xx + (-2)*(2*a)) / 4
-           .= (-2)*xx/4 - a;
-    hence d + a = (-2)*xx/4;
-  end;
-
 Lm6:
   5/3 is not integer
   proof
@@ -1184,47 +1146,6 @@ A1:   a > 0;
     hence -(2*a+(1+a)) < -0 by XREAL_1:26;
 end;
 
-Lm8:
-  for a,c,d being real number st 2*(a+c)+2 = -(2*(a+c)+2*c+2*d)
-    holds 2*a+d = -(2*c+(1+c))
-  proof
-    let a,c,d be real number;
-    set b = a+c;
-    assume 2*b+2 = -(2*b+2*c+2*d);
-    then 2*0 = 2*b+2+(2*b+(2*c+2*d))
-          .= 2*(b+b+d+(1+c));
-    then 0 = 2*a+d + (2*c+(1+c)) by XCMPLX_1:5;
-    hence 2*a+d = -(2*c+(1+c)) by XCMPLX_0:def 6;
-  end;
-
-Lm9:
-  for a,c,d being real number st 2*(a+c+c)+2 = -(2*(a+c)+2*d)
-   holds 2*a+d = -(2*c+(c+1))
-  proof
-    let a,c,d be real number;
-    set b = a+c;
-    assume 2*(b+c)+2 = -(2*b+2*d);
-    then 2*0 = 2*(b+c)+2 + (2*b+2*d)
-      .= 2*(b+c+1+(b+d));
-    then 0 = 2*a+d+(2*c+(c+1)) by XCMPLX_1:5;
-    hence 2*a+d = -(2*c+(c+1)) by XCMPLX_0:def 6;
-  end;
-
-Lm10:
-  for a,b,d being real number st 2*(b+(-d+a+4)+1)= 2*(b+d)
-   holds 0 = a - 2*d+(2 + 3)
-  proof
-    let a,b,d be real number;
-    set c = -d+a+4;
-    assume 2*(b+c+1) = 2*(b+d);
-    then b+(c+1) = b+d by XCMPLX_1:5;
-    then c+1 = d by XCMPLX_1:2;
-    then A1: c = -(1-d);
-     c = -d+(a+4);
-    hence 0 = -d+(a+4) + (1-d) by A1
-     .= a - 2*d+(2 + 3);
-  end;
-
 Lm11:
   for d being real number holds
    2*(abs(d)+(-d+abs(d)+4))+2-2+2*d <>
@@ -1234,7 +1155,7 @@ Lm11:
     set c = -d+abs(d)+4;
     set xx = c+c+c;
     assume 2*(abs(d)+c)+2-2+2*d = -(2*(abs(d)+c+(-d+abs(d)+4))+2-2+2*d);
-    then A1: d + abs(d) = (-2)*xx/4 by Lm5;
+    then A1: d + abs(d) = (-2)*xx/4;
      -d+abs(d) >= 0 by Th2;
     then c >= 0+4 by XREAL_1:8;
     then c > 0;
@@ -1251,14 +1172,13 @@ Lm12:
     let b,d be real number;
     set c = -d+abs(d)+4;
     assume 2*b+2 = 2*b + (2*c + 2*d);
-    then 2*(c+d) = 2*1 by XCMPLX_1:2;
-    then c+d-d = 1-d by XCMPLX_1:5;
-    then A1: c = 1-d+0 by XCMPLX_1:26;
-A2: c = 1-d+(abs(d)+3);
+    then 2*(c+d) = 2*1;
+    then c+d-d = 1-d;
+    then A1: c = 1-d+0;
      abs(d) >= 0 by COMPLEX1:132;
     then abs(d)+3 >= 0+3 by XREAL_1:9;
     then abs(d)+3 <> 0;
-    hence thesis by A1,A2,XCMPLX_1:2;
+    hence thesis by A1;
   end;
 
 Lm13:
@@ -1269,7 +1189,7 @@ Lm13:
     assume
 A1:   c > 0;
     assume 2*(abs(d)+c)+2 = -(2*(abs(d)+c)+2*c+2*d);
-    then A2: 2*abs(d)+d = -(2*c+(1+c)) by Lm8;
+    then A2: 2*abs(d)+d = -(2*c+(1+c));
     per cases;
     suppose
 A3:   d >= 0;
@@ -1297,18 +1217,18 @@ Lm14:
     assume
 A1:   d <> 5;
     assume A2: 2*(b+(-d+abs(d)+4)+1) = 2*(b+d);
-    then A3: 0 = abs(d) - 2*d+(2 + 3) by Lm10;
+    then A3: 0 = abs(d) - 2*d+(2 + 3);
     per cases;
     suppose d >= 0;
     then abs(d) = d by ABSVALUE:def 1;
     then -d+5 = 0 by A3;
-    hence thesis by A1,XCMPLX_1:136;
+    hence thesis by A1;
     end;
     suppose d < 0;
     then abs(d) = -d by ABSVALUE:def 1;
-    then 0 = (-1)*d-2*d+(2+3) by A2,Lm10
+    then 0 = (-1)*d-2*d+(2+3) by A2
       .= (-1-2)*d+(2+3);
-    then (-3)*d/-3 = (-5)/-3 by XCMPLX_0:def 6;
+    then (-3)*d/-3 = (-5)/-3;
     hence thesis by Lm6,XCMPLX_1:90;
   end;
   end;
@@ -1321,7 +1241,7 @@ Lm15:
     assume
 A1:   -(2*c+(1+c)) < -0;
     assume 2*(abs(d)+c+c)+2 = -(2*(abs(d)+c)+2*d);
-    then A2: 2*abs(d)+d = -(2*c+(c+1)) by Lm9;
+    then A2: 2*abs(d)+d = -(2*c+(c+1));
 A3: 0 <= abs(d)+d by Th1;
      0 <= abs(d) by COMPLEX1:132;
     then 1*abs(d) <= 2*abs(d) by XREAL_1:66;
@@ -1343,10 +1263,10 @@ A1:     x in JUMP i;
       set nl2 = 8;
       set l1 = inspos nl1;
 A2:   NIC(i,l1) in X;
-A3:   JUMP i = meet X by AMISTD_1:def 6;
+   JUMP i = meet X;
       then x in NIC(i,l1) by A1,A2,SETFAM_1:def 1;
       then x in { IC Following s1 where s1 is State of SCMPDS:
-           IC s1 = l1 & s1.l1 = i } by AMISTD_1:def 5;
+           IC s1 = l1 & s1.l1 = i };
       then consider s1 being State of SCMPDS such that
 A4:     x = IC Following s1 and
 A5:     IC s1 = l1 and
@@ -1359,9 +1279,9 @@ A9:   m1 = il.nl1 by A5,A7,SCMPDS_3:def 2
 
       set l2 = inspos nl2;
        NIC(i,l2) in X;
-      then x in NIC(i,l2) by A1,A3,SETFAM_1:def 1;
+      then x in NIC(i,l2) by A1,SETFAM_1:def 1;
       then x in { IC Following s2 where s2 is State of SCMPDS:
-           IC s2 = l2 & s2.l2 = i } by AMISTD_1:def 5;
+           IC s2 = l2 & s2.l2 = i };
       then consider s2 being State of SCMPDS such that
 A10:     x = IC Following s2 and
 A11:     IC s2 = l2 and
@@ -1454,10 +1374,10 @@ A4:   -(2*x1+(1+x1)) < -0 by A3,Lm7;
       set nl2 = nl1+x1;
       set l1 = inspos nl1;
 A5:   NIC(i,l1) in X;
-A6:   JUMP i = meet X by AMISTD_1:def 6;
+   JUMP i = meet X;
       then x in NIC(i,l1) by A2,A5,SETFAM_1:def 1;
       then x in { IC Following s1 where s1 is State of SCMPDS:
-           IC s1 = l1 & s1.l1 = i } by AMISTD_1:def 5;
+           IC s1 = l1 & s1.l1 = i };
       then consider s1 being State of SCMPDS such that
 A7:     x = IC Following s1 and
 A8:     IC s1 = l1 and
@@ -1470,9 +1390,9 @@ A12:   m1 = il.nl1 by A8,A10,SCMPDS_3:def 2
 
       set l2 = inspos nl2;
        NIC(i,l2) in X;
-      then x in NIC(i,l2) by A2,A6,SETFAM_1:def 1;
+      then x in NIC(i,l2) by A2,SETFAM_1:def 1;
       then x in { IC Following s2 where s2 is State of SCMPDS:
-           IC s2 = l2 & s2.l2 = i } by AMISTD_1:def 5;
+           IC s2 = l2 & s2.l2 = i };
       then consider s2 being State of SCMPDS such that
 A13:     x = IC Following s2 and
 A14:     IC s2 = l2 and
@@ -1483,7 +1403,7 @@ A17:     ICplusConst(s2,k2) = abs(m2-2+2*k2)+2 by SCMPDS_2:def 20;
 A18:   m2 = il.nl2 by A14,A16,SCMPDS_3:def 2
         .= 2*nl2+2 by AMI_3:def 20;
        nl2+0 = nl1+x1;
-      then nl1 <> nl2 by A3,XCMPLX_1:2;
+      then nl1 <> nl2 by A3;
       then A19:   l1 <> l2 by SCMPDS_3:31;
 
       per cases;
@@ -1499,8 +1419,8 @@ A22:   x = Exec(i,s1).IC SCMPDS by A7,A8,A9,Lm1
       proof
         per cases by A12,A18,A23,Th3;
         suppose 2*nl1+2-2+2*k2 = 2*nl2+2-2+2*k2;
-        then nl1+0 = nl2 by Lm4;
-        hence x in {} by A3,XCMPLX_1:2;
+        then nl1+0 = nl2;
+        hence x in {} by A3;
         end;
         suppose 2*nl1+2-2+2*k2 = -(2*nl2+2-2+2*k2);
         hence x in {} by Lm11;
@@ -1593,10 +1513,10 @@ A1:     x in JUMP i;
       set nl2 = 8;
       set l1 = inspos nl1;
 A2:   NIC(i,l1) in X;
-A3:   JUMP i = meet X by AMISTD_1:def 6;
+   JUMP i = meet X;
       then x in NIC(i,l1) by A1,A2,SETFAM_1:def 1;
       then x in { IC Following s1 where s1 is State of SCMPDS:
-           IC s1 = l1 & s1.l1 = i } by AMISTD_1:def 5;
+           IC s1 = l1 & s1.l1 = i };
       then consider s1 being State of SCMPDS such that
 A4:     x = IC Following s1 and
 A5:     IC s1 = l1 and
@@ -1609,9 +1529,9 @@ A9:   m1 = il.nl1 by A5,A7,SCMPDS_3:def 2
 
       set l2 = inspos nl2;
        NIC(i,l2) in X;
-      then x in NIC(i,l2) by A1,A3,SETFAM_1:def 1;
+      then x in NIC(i,l2) by A1,SETFAM_1:def 1;
       then x in { IC Following s2 where s2 is State of SCMPDS:
-           IC s2 = l2 & s2.l2 = i } by AMISTD_1:def 5;
+           IC s2 = l2 & s2.l2 = i };
       then consider s2 being State of SCMPDS such that
 A10:     x = IC Following s2 and
 A11:     IC s2 = l2 and
@@ -1705,10 +1625,10 @@ A4:   -(2*x1+(1+x1)) < -0 by A3,Lm7;
       set nl2 = nl1+x1;
       set l1 = inspos nl1;
 A5:   NIC(i,l1) in X;
-A6:   JUMP i = meet X by AMISTD_1:def 6;
+   JUMP i = meet X;
       then x in NIC(i,l1) by A2,A5,SETFAM_1:def 1;
       then x in { IC Following s1 where s1 is State of SCMPDS:
-           IC s1 = l1 & s1.l1 = i } by AMISTD_1:def 5;
+           IC s1 = l1 & s1.l1 = i };
       then consider s1 being State of SCMPDS such that
 A7:     x = IC Following s1 and
 A8:     IC s1 = l1 and
@@ -1721,9 +1641,9 @@ A12:   m1 = il.nl1 by A8,A10,SCMPDS_3:def 2
 
       set l2 = inspos nl2;
        NIC(i,l2) in X;
-      then x in NIC(i,l2) by A2,A6,SETFAM_1:def 1;
+      then x in NIC(i,l2) by A2,SETFAM_1:def 1;
       then x in { IC Following s2 where s2 is State of SCMPDS:
-           IC s2 = l2 & s2.l2 = i } by AMISTD_1:def 5;
+           IC s2 = l2 & s2.l2 = i };
       then consider s2 being State of SCMPDS such that
 A13:     x = IC Following s2 and
 A14:     IC s2 = l2 and
@@ -1734,7 +1654,7 @@ A17:     ICplusConst(s2,k2) = abs(m2-2+2*k2)+2 by SCMPDS_2:def 20;
 A18:   m2 = il.nl2 by A14,A16,SCMPDS_3:def 2
         .= 2*nl2+2 by AMI_3:def 20;
        nl2+0 = nl1+x1;
-      then nl1 <> nl2 by A3,XCMPLX_1:2;
+      then nl1 <> nl2 by A3;
       then A19:   l1 <> l2 by SCMPDS_3:31;
 
       per cases;
@@ -1750,8 +1670,8 @@ A22:   x = Exec(i,s1).IC SCMPDS by A7,A8,A9,Lm1
       proof
         per cases by A12,A18,A23,Th3;
         suppose 2*nl1+2-2+2*k2 = 2*nl2+2-2+2*k2;
-        then nl1+0 = nl2 by Lm4;
-        hence x in {} by A3,XCMPLX_1:2;
+        then nl1+0 = nl2;
+        hence x in {} by A3;
         end;
         suppose 2*nl1+2-2+2*k2 = -(2*nl2+2-2+2*k2);
         hence x in {} by Lm11;
@@ -1844,10 +1764,10 @@ A1:     x in JUMP i;
       set nl2 = 8;
       set l1 = inspos nl1;
 A2:   NIC(i,l1) in X;
-A3:   JUMP i = meet X by AMISTD_1:def 6;
+   JUMP i = meet X;
       then x in NIC(i,l1) by A1,A2,SETFAM_1:def 1;
       then x in { IC Following s1 where s1 is State of SCMPDS:
-           IC s1 = l1 & s1.l1 = i } by AMISTD_1:def 5;
+           IC s1 = l1 & s1.l1 = i };
       then consider s1 being State of SCMPDS such that
 A4:     x = IC Following s1 and
 A5:     IC s1 = l1 and
@@ -1860,9 +1780,9 @@ A9:   m1 = il.nl1 by A5,A7,SCMPDS_3:def 2
 
       set l2 = inspos nl2;
        NIC(i,l2) in X;
-      then x in NIC(i,l2) by A1,A3,SETFAM_1:def 1;
+      then x in NIC(i,l2) by A1,SETFAM_1:def 1;
       then x in { IC Following s2 where s2 is State of SCMPDS:
-           IC s2 = l2 & s2.l2 = i } by AMISTD_1:def 5;
+           IC s2 = l2 & s2.l2 = i };
       then consider s2 being State of SCMPDS such that
 A10:     x = IC Following s2 and
 A11:     IC s2 = l2 and
@@ -1955,10 +1875,10 @@ A4:   -(2*x1+(1+x1)) < -0 by A3,Lm7;
       set nl2 = nl1+x1;
       set l1 = inspos nl1;
 A5:   NIC(i,l1) in X;
-A6:   JUMP i = meet X by AMISTD_1:def 6;
+   JUMP i = meet X;
       then x in NIC(i,l1) by A2,A5,SETFAM_1:def 1;
       then x in { IC Following s1 where s1 is State of SCMPDS:
-           IC s1 = l1 & s1.l1 = i } by AMISTD_1:def 5;
+           IC s1 = l1 & s1.l1 = i };
       then consider s1 being State of SCMPDS such that
 A7:     x = IC Following s1 and
 A8:     IC s1 = l1 and
@@ -1971,9 +1891,9 @@ A12:   m1 = il.nl1 by A8,A10,SCMPDS_3:def 2
 
       set l2 = inspos nl2;
        NIC(i,l2) in X;
-      then x in NIC(i,l2) by A2,A6,SETFAM_1:def 1;
+      then x in NIC(i,l2) by A2,SETFAM_1:def 1;
       then x in { IC Following s2 where s2 is State of SCMPDS:
-           IC s2 = l2 & s2.l2 = i } by AMISTD_1:def 5;
+           IC s2 = l2 & s2.l2 = i };
       then consider s2 being State of SCMPDS such that
 A13:     x = IC Following s2 and
 A14:     IC s2 = l2 and
@@ -1984,7 +1904,7 @@ A17:     ICplusConst(s2,k2) = abs(m2-2+2*k2)+2 by SCMPDS_2:def 20;
 A18:   m2 = il.nl2 by A14,A16,SCMPDS_3:def 2
         .= 2*nl2+2 by AMI_3:def 20;
        nl2+0 = nl1+x1;
-      then nl1 <> nl2 by A3,XCMPLX_1:2;
+      then nl1 <> nl2 by A3;
       then A19:   l1 <> l2 by SCMPDS_3:31;
 
       per cases;
@@ -2000,8 +1920,8 @@ A22:   x = Exec(i,s1).IC SCMPDS by A7,A8,A9,Lm1
       proof
         per cases by A12,A18,A23,Th3;
         suppose 2*nl1+2-2+2*k2 = 2*nl2+2-2+2*k2;
-        then nl1+0 = nl2 by Lm4;
-        hence x in {} by A3,XCMPLX_1:2;
+        then nl1+0 = nl2;
+        hence x in {} by A3;
         end;
         suppose 2*nl1+2-2+2*k2 = -(2*nl2+2-2+2*k2);
         hence x in {} by Lm11;
@@ -2117,7 +2037,7 @@ theorem Th29:
     then A2: x in NIC(i,l) by TARSKI:def 1;
      NIC(i,l) \ JUMP i in X;
     then x in union X by A2,TARSKI:def 4;
-    hence thesis by AMISTD_1:def 7;
+    hence thesis;
   end;
 
 theorem Th30:

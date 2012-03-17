@@ -125,8 +125,8 @@ A2: 1<=n+1 by NAT_1:29;
        len (p^q) = len p + len q by FINSEQ_1:35;
 then A3:  n<=len (p^q) by A1,NAT_1:37;
     then A4: len cp +1 = n+1 & len cpq +1 = n +1 by A1,A2,GRAPH_2:def 1;
-then A5:    len cp = n & len cpq = n by XCMPLX_1:2;
-   thus len cp = len cpq by A4,XCMPLX_1:2;
+then A5:    len cp = n & len cpq = n;
+   thus len cp = len cpq by A4;
    let k; assume
 A6:  1 <=k & k <= len cp;  0+1 = 1; then consider i being Nat such that
 A7:  0<=i & i<len cp & k=i+1 by A6,GRAPH_2:1;
@@ -430,7 +430,7 @@ A8: m+k = (m+i)+1 by A5;
                                 by A1,A3,A4,A5,XREAL_1:8;
     then m+i+1 < len c + 1 by XREAL_1:2;
     then 1<=m+i & m+i<len c by A1,XREAL_1:8,NAT_1:37;
-   hence (the Source of G).(mnc.(k+1)) = (the Target of G).(mnc.k) by A5,A6,A7
+   hence (the Source of G).(mnc.(k+1)) = (the Target of G).(mnc.k) by A6,A7
 ,A8,GRAPH_1:def 12;
   end;
  hence thesis by GRAPH_1:def 12;
@@ -502,8 +502,8 @@ theorem Th12: for f being non empty FinSequence st 1<=m & m<=n & n<=len f
 A1: 1<=m & m<=n & n<=len f;
 then A2: m<n+1 by NAT_1:38;
  set lmn = len (m,n)-cut f;  lmn+m = n+1 by A1,A2,GRAPH_2:def 1;
-  then m-(lmn+m)<(n+1)-(n+1) by A2,XREAL_1:11
-; then --lmn>0 by XREAL_1:60;
+  then m-(lmn+m)<(n+1)-(n+1) by A2,XREAL_1:11;
+  then --lmn>0 by XREAL_1:60;
  hence thesis by FINSEQ_1:25;
 end;
 
@@ -1234,7 +1234,6 @@ let S be non void non empty ManySortedSign,
     X be non-empty ManySortedSet of the carrier of S,
     v be SortSymbol of S;
  set SF = the Sorts of FreeMSA X;
-A1:FreeMSA X = MSAlgebra (#FreeSort(X), FreeOper(X)#)by MSAFREE:def 16;
  set d0 = {t where t is Element of SF.v: depth t = 0};
 A2: d0 c= FreeGen(v, X) \/ Constants(FreeMSA X, v) proof let x be set; assume
        x in d0; then consider t being Element of SF.v such that
@@ -1242,11 +1241,11 @@ A3: x = t & depth t = 0;
     consider dt being finite DecoratedTree, ft being finite Tree such that
 A4:  dt = t & ft = dom dt & depth t = height ft by MSAFREE2:def 14;
        t in SF.v;
-    then t in FreeSort(X, v) by A1,MSAFREE:def 13;
+    then t in FreeSort(X, v) by MSAFREE:def 13;
     then t in {a where a is Element of TS(DTConMSA(X)):
        (ex x be set st x in X.v & a = root-tree [x,v]) or
        ex o be OperSymbol of S st [o,the carrier of S] = a.{}
-           & the_result_sort_of o = v} by MSAFREE:def 12;
+           & the_result_sort_of o = v};
       then consider a being Element of TS(DTConMSA(X)) such that
 A5: t = a &
     ((ex x be set st x in X.v & a = root-tree [x,v]) or
@@ -1273,13 +1272,13 @@ then A9:    ars = {} by A4,A8,TREES_4:17;
        then the_arity_of o = {} by FINSEQ_1:25;
 then A10:     (the Arity of S).o = {} by MSUALG_1:def 6;
 A11:     (the ResultSort of S).o = v by A7,MSUALG_1:def 7;
-A12:    Den(o, FreeMSA X) = (FreeOper X).o by A1,MSUALG_1:def 11
+A12:    Den(o, FreeMSA X) = (FreeOper X).o by MSUALG_1:def 11
                         .= DenOp(o, X) by MSAFREE:def 15;
 A13:    Sym(o, X) ==> roots ars by MSATERM:21;
        reconsider ars' = ars as FinSequence of TS DTConMSA X by A9,FINSEQ_1:29
 ;
 A14:    DenOp(o, X).ars' = (Sym(o,X))-tree ars' by A13,MSAFREE:def 14
-                       .= t by A8,MSAFREE:def 11;
+                       .= t by A8;
           dom Den(o, FreeMSA X) = {{}} by A10,Th25;
        then {} in dom Den(o, FreeMSA X) by TARSKI:def 1;
 then A15:    t in rng Den(o, FreeMSA X) by A9,A12,A14,FUNCT_1:def 5;
@@ -1298,7 +1297,7 @@ A17: FreeGen(v, X) c= d0 proof let x be set; assume
 A18:    x in FreeGen(v, X);
       then consider a being set such that
 A19:     a in X.v & x = root-tree [a,v] by MSAFREE:def 17;
-      reconsider x' = x as Element of SF.v by A1,A18;
+      reconsider x' = x as Element of SF.v by A18;
       consider dt being finite DecoratedTree, t being finite Tree such that
 A20:     dt = x' & t = dom dt & depth x' = height t by MSAFREE2:def 14;
           height t = 0 by A19,A20,TREES_1:79,TREES_4:3;
@@ -1327,11 +1326,11 @@ A26:     dom Den(o, FreeMSA X) = {{}} by A24,Th25;
 A27:     d in dom Den(o,FreeMSA X) & a = Den(o,FreeMSA X).d by A24,
 FUNCT_1:def 5;
 A28:     d = {} by A26,A27,TARSKI:def 1;
-A29:    Den(o, FreeMSA X) = (FreeOper X).o by A1,MSUALG_1:def 11
+A29:    Den(o, FreeMSA X) = (FreeOper X).o by MSUALG_1:def 11
                         .= DenOp(o, X) by MSAFREE:def 15;
        reconsider p = {} as FinSequence of TS(DTConMSA(X)) by FINSEQ_1:29;
           ((FreeSort X)# * (the Arity of S)).o
-        = Args(o,FreeMSA X) by A1,MSUALG_1:def 9
+        = Args(o,FreeMSA X) by MSUALG_1:def 9
        .= dom Den(o,FreeMSA X) by FUNCT_2:def 1;
        then p in ((FreeSort X)# * (the Arity of S)).o by A26,TARSKI:def 1;
        then Sym(o,X) ==> roots p by MSAFREE:10;

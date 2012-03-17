@@ -766,7 +766,7 @@ end;
 
 definition let G be real-weighted real-elabeled WEGraph, source be Vertex of G;
   func AP:FindAugPath(G,source) -> real-weighted real-elabeled WEVGraph equals
-:dAPFAUGP: ::dAPFAUGP
+ ::dAPFAUGP
     AP:CompSeq(G,source).Result();
   coherence proof
     set CS = AP:CompSeq(G,source);
@@ -891,7 +891,7 @@ A2: P[0];
     end; then
 A3: for k being Nat st P[k] holds P[k+1];
 A4: for k being Nat holds P[k] from NAT_1:sch 1(A2,A3);
-A5: FAP = CS.Result() by dAPFAUGP
+A5: FAP = CS.Result()
        .= CS.L by GLIB_000:def 58
        .= GL by GLIB_000:def 59;
     CS is halting by tAPFAP01; then
@@ -930,7 +930,7 @@ definition let G be finite real-weighted real-elabeled WEGraph,
     it = G.walkOf(source);
   existence proof
     set CS = AP:CompSeq(G,source), FAP = AP:FindAugPath(G,source);
-A1: FAP = CS.Result() by dAPFAUGP
+A1: FAP = CS.Result()
        .= CS.(CS.Lifespan()) by GLIB_000:def 58
        .= CS.->(CS.Lifespan()) by GLIB_000:def 59;
     defpred P[Nat] means
@@ -1403,7 +1403,7 @@ A4: for n being Nat holds P[n] from NAT_1:sch 1(A2,A3);
   uniqueness proof
     let IT1, IT2 be vertex-distinct augmenting Path of G;
     set FAP = AP:FindAugPath(G,source), CS = AP:CompSeq(G,source);
-A1: FAP = CS.Result() by dAPFAUGP
+A1: FAP = CS.Result()
        .= CS.(CS.Lifespan()) by GLIB_000:def 58
        .= CS.->(CS.Lifespan()) by GLIB_000:def 59;
     defpred P[Nat] means
@@ -1985,7 +1985,7 @@ theorem tAPFAP02: ::tAPFAP02
     let G be finite real-weighted real-elabeled WEGraph,
         source be Vertex of G, v be set;
     set CS = AP:CompSeq(G,source), V = AP:FindAugPath(G,source).labeledV();
-A1: AP:FindAugPath(G,source) = CS.Result() by dAPFAUGP
+A1: AP:FindAugPath(G,source) = CS.Result()
                             .= CS.(CS.Lifespan()) by GLIB_000:def 58
                             .= CS.->(CS.Lifespan()) by GLIB_000:def 59;
     hereby assume v in AP:FindAugPath(G,source).labeledV(); then
@@ -2097,7 +2097,7 @@ theorem tAPFAP03: ::tAPFAP03
     the_ELabel_of G = the_ELabel_of AP:FindAugPath(G,source) proof
     let G be finite real-weighted real-elabeled WEGraph, source be Vertex of G;
     set CS = AP:CompSeq(G,source), V = AP:FindAugPath(G,source).labeledV();
-A1: AP:FindAugPath(G,source) = CS.Result() by dAPFAUGP
+A1: AP:FindAugPath(G,source) = CS.Result()
                             .= CS.(CS.Lifespan()) by GLIB_000:def 58
                             .= CS.->(CS.Lifespan()) by GLIB_000:def 59;
     (CS.->0).labeledV() = {source} by tAPCS01; then
@@ -2352,7 +2352,7 @@ A1: for x,y1,y2 being set st x in the_Edges_of G & P[x,y1] & P[x,y2]
                     1 <= m+1 & m+1 <= len P by E1,NAT_1:29,NAT_1:38; then
                     m+1 <= n+1 & n+1 <= m+1 by C1,C2,E1,GLIB_001:139; then
                     m+1 = n+1 by XREAL_1:1; then
-                E2: m = n by XCMPLX_1:2;
+                E2: m = n;
                     thus P.(m+1) DJoins P.m,P.(m+2),G implies y = y;
                     assume not P.(m+1) DJoins P.m,P.(m+2),G;
                     hence y = (the_ELabel_of G).(P.(m+1)) - P.tolerance()
@@ -2371,7 +2371,7 @@ A1: for x,y1,y2 being set st x in the_Edges_of G & P[x,y1] & P[x,y2]
                     1 <= m+1 & m+1 <= len P by E1,NAT_1:29,NAT_1:38; then
                     m+1 <= n+1 & n+1 <= m+1 by C1,C2,E1,GLIB_001:139; then
                     m+1 = n+1 by XREAL_1:1; then
-                    m = n by XCMPLX_1:2;
+                    m = n;
                     hence P.(m+1) DJoins P.m,P.(m+2),G implies
                       y = (the_ELabel_of G).(P.(n+1)) + P.tolerance() by D1;
                     assume not P.(m+1) DJoins P.m,P.(m+2),G;
@@ -2546,7 +2546,7 @@ end;
 definition let G be real-weighted real-elabeled WEGraph,
                P be augmenting Path of G;
   func FF:AugmentPath(G,P) -> real-weighted real-elabeled
-                              complete-elabeled WEGraph equals :dFFAUGP: ::dFFAUGP
+                              complete-elabeled WEGraph equals  ::dFFAUGP
     G.set(ELabelSelector, FF:PushFlow(G,P));
   coherence;
 end;
@@ -2554,29 +2554,19 @@ end;
 registration let G be finite real-weighted real-elabeled WEGraph,
                P be augmenting Path of G;
   cluster FF:AugmentPath(G,P) -> finite;
-  coherence proof
-     FF:AugmentPath(G,P) = G.set(ELabelSelector,FF:PushFlow(G,P))
-       by dFFAUGP;
-     hence thesis;
-  end;
+  coherence;
 end;
 
 registration let G be finite nonnegative-weighted real-elabeled WEGraph,
                  P be augmenting Path of G;
   cluster FF:AugmentPath(G,P) -> nonnegative-weighted;
-  coherence proof
-    FF:AugmentPath(G,P) = G.set(ELabelSelector, FF:PushFlow(G,P)) by dFFAUGP;
-    hence thesis;
-  end;
+  coherence;
 end;
 
 registration let G be finite natural-weighted natural-elabeled WEGraph,
                  P be augmenting Path of G;
   cluster FF:AugmentPath(G,P) -> natural-weighted natural-elabeled;
-  coherence proof
-    FF:AugmentPath(G,P) = G.set(ELabelSelector,FF:PushFlow(G,P)) by dFFAUGP;
-    hence thesis;
-  end;
+  coherence;
 end;
 
 definition let G be finite real-weighted
@@ -2694,7 +2684,7 @@ A5: now let n be Nat; assume P2[n]; then
         now per cases;
            suppose sink in AP:FindAugPath(Gn,source').labeledV(); then
              IT.(n+1) = FF:AugmentPath(Gn,P) by B2,dFFSTEP
-                     .= Gn.set(ELabelSelector,FF:PushFlow(Gn,P)) by dFFAUGP;
+                     .= Gn.set(ELabelSelector,FF:PushFlow(Gn,P));
              hence FF:Step(Gn,source',sink') == Gn by B2,GLIB_003:8;
            end;
            suppose not sink in AP:FindAugPath(Gn,source').labeledV();
@@ -2830,7 +2820,7 @@ end;
 
 definition let G be finite real-weighted WGraph, sink,source be Vertex of G;
   func FF:MaxFlow(G,source, sink) -> finite real-weighted real-elabeled
-                                  complete-elabeled WEGraph equals :dFFMAXFLOW: ::dFFMAXFLOW
+                                  complete-elabeled WEGraph equals  ::dFFMAXFLOW
     FF:CompSeq(G,source,sink).Result();
   coherence proof
     set CS = FF:CompSeq(G,source,sink);
@@ -3614,15 +3604,15 @@ A3: now let n be non empty Nat; assume
             Sum (EL|G.edgesDBetween({x},VG)) =
               Sum (EL|EXXe) + Sum (EL|G.edgesDBetween({x},{x}))
               by Cp,GLIB_004:3; then
-        Cm: Sum (EL|EXXf) = Sum (EL|EXXe) by Cf,Ck,XCMPLX_1:2;
+        Cm: Sum (EL|EXXf) = Sum (EL|EXXe) by Cf,Ck;
             Sum (EL|E1) - Sum(EL|E2)
               = G.flow(source,sink) + Sum (EL|EV2X) + Sum (EL|EV1Xd)
                 - Sum (EL|EXV1c) - Sum (EL|EXV2) by C9,CH,CJ,CO,CQ
              .= G.flow(source,sink) + Sum (EL|G.edgesDBetween(VG \{x},{x}))
-                - Sum (EL|EXV1c) - Sum (EL|EXV2) by CW,XCMPLX_1:1
+                - Sum (EL|EXV1c) - Sum (EL|EXV2) by CW
              .= G.flow(source,sink) + Sum (EL|G.edgesDBetween(VG \{x},{x}))
-                - Sum (EL|G.edgesDBetween({x},VG\{x})) by Cc,XCMPLX_1:36
-             .= G.flow(source,sink) by Cm,XCMPLX_1:26;
+                - Sum (EL|G.edgesDBetween({x},VG\{x})) by Cc
+             .= G.flow(source,sink) by Cm;
             hence G.flow(source,sink) =
               Sum(EL | G.edgesDBetween(V2, VG \ V2)) -
               Sum(EL | G.edgesDBetween(VG \ V2, V2)) by CA,CL;
@@ -3678,11 +3668,8 @@ end;
 theorem tFLOWAUG03: ::tFLOWAUG03
   for G being real-weighted real-elabeled WEGraph, P being augmenting Path of G
    holds G == FF:AugmentPath(G,P) &
-         the_Weight_of G = the_Weight_of FF:AugmentPath(G,P) proof
-    let G be real-weighted real-elabeled WEGraph, P be augmenting Path of G;
-    FF:AugmentPath(G,P) = G.set(ELabelSelector, FF:PushFlow(G,P)) by dFFAUGP;
-    hence thesis by GLIB_003:11, GLIB_003:8;
-end;
+         the_Weight_of G = the_Weight_of FF:AugmentPath(G,P)
+          by GLIB_003:11, GLIB_003:8;
 
 theorem tWTOLERANCE01: ::tWTOLERANCE01
   for G being finite real-weighted real-elabeled WEGraph,
@@ -3729,11 +3716,10 @@ theorem tFLOWAUG02: ::tFLOWAUG02
 A1: source <> sink & G has_valid_flow_from source,sink &
     P is_Walk_from source,sink;
     set G2 = FF:AugmentPath(G,P);
-A2: G2 = G.set(ELabelSelector, FF:PushFlow(G,P)) by dFFAUGP;
 A3: G2 == G & the_Weight_of G = the_Weight_of G2 by tFLOWAUG03;
     set EL1 = the_ELabel_of G, EL2 = the_ELabel_of G2;
 A4: EL2 = G2.ELabelSelector by GLIB_003:def 8
-       .= FF:PushFlow(G,P) by A2,GLIB_000:11;
+       .= FF:PushFlow(G,P) by GLIB_000:11;
     now source is Vertex of G & sink is Vertex of G by A1,dVFLOW;
         hence source is Vertex of G2 & sink is Vertex of G2
           by A3, GLIB_000:def 36;
@@ -4408,10 +4394,9 @@ theorem tFLOWAUG01: ::tFLOWAUG01
 A1: source <> sink & G has_valid_flow_from source,sink &
       P is_Walk_from source,sink;
     set G2 = FF:AugmentPath(G,P), T = P.tolerance();
-A2: G2 = G.set(ELabelSelector, FF:PushFlow(G,P)) by dFFAUGP;
     set EL1 = the_ELabel_of G, EL2 = the_ELabel_of G2;
 A4: EL2 = G2.ELabelSelector by GLIB_003:def 8
-       .= FF:PushFlow(G,P) by A2,GLIB_000:11;
+       .= FF:PushFlow(G,P) by GLIB_000:11;
 A5: G2 has_valid_flow_from source,sink by A1,tFLOWAUG02;
     set EI1 = EL1|G.edgesInto({sink}), EO1 = EL1|G.edgesOutOf({sink});
     P.first() = source & P.last() = sink by A1,GLIB_001:def 23; then
@@ -4487,7 +4472,7 @@ AC: P.(len P) = sink by A1,GLIB_001:18;
                              hence contradiction by HEYTING3:1;
                          end; then
                          m + 2 = len P by E1, XREAL_1:1;
-                         hence contradiction by D1,E1,XCMPLX_1:26;
+                         hence contradiction by D1,E1;
                       end;
                     end;
                     hence contradiction;
@@ -4529,7 +4514,7 @@ AC: P.(len P) = sink by A1,GLIB_001:18;
                         hence contradiction;
                     end; then
                     m + 2 = len P by D1, XREAL_1:1; then
-                    m = lenP2g by XCMPLX_1:26; then
+                    m = lenP2g; then
                 E2: P.lenP2g = sink by D1,B1,C3,GLIB_000:def 16; then
                     lenP2g = 1 by AC,A8,GLIB_001:def 28;
                     hence contradiction by A1,E2,GLIB_001:18;
@@ -4606,7 +4591,7 @@ AC: P.(len P) = sink by A1,GLIB_001:18;
                             hence contradiction;
                         end; then
                         m + 2 = len P by E1, XREAL_1:1;
-                        hence contradiction by D1,E1,XCMPLX_1:26;
+                        hence contradiction by D1,E1;
                       end;
                     end;
                     hence contradiction;
@@ -4648,7 +4633,7 @@ AC: P.(len P) = sink by A1,GLIB_001:18;
                         hence contradiction;
                     end; then
                     m + 2 = len P by D1, XREAL_1:1; then
-                    m = lenP2g by XCMPLX_1:26; then
+                    m = lenP2g; then
                 E2: P.lenP2g = sink by D1,BZ,C3,GLIB_000:def 16; then
                     lenP2g = 1 by AC,A8,GLIB_001:def 28;
                     hence contradiction by A1,E2,GLIB_001:18;
@@ -4916,7 +4901,7 @@ A4: G.flow(source,sink) = Sum((the_ELabel_of G) | E1) -
                           Sum((the_ELabel_of G) | E2) by A1,A2,A3,tFLOW01;
     set A1 = (the_ELabel_of G)|E1, B1 = (the_Weight_of G)|E1;
 A6: AP:CompSeq(G,src) is halting by tAPFAP01;
-A7: Gn = CS.Result() by dAPFAUGP
+A7: Gn = CS.Result()
       .= CS.(CS.Lifespan()) by GLIB_000:def 58
       .= CS.->(CS.Lifespan()) by GLIB_000:def 59; then
 A8: Gn1 = AP:Step(Gn) by dAPCS;
@@ -4995,20 +4980,20 @@ X3: G.flow(source,sink) = Sum ((the_Weight_of G)|E1) by A4,X1,X2,GLIB_004:6;
     B2: the_Vertices_of G = the_Vertices_of X by GLIB_000:def 36;
         reconsider V'=V as Subset of the_Vertices_of X by B1,GLIB_000:def 36;
         set E1' = X.edgesDBetween(V', the_Vertices_of X \ V');
-        E1' = E1 by B2,B1, GLIB_000:93; 
+        E1' = E1 by B2,B1, GLIB_000:93;
         hence X.flow(source,sink) <= G.flow(source,sink)
           by B1,A2,A1,A3,tFLOW02,X3;
     end;
     hence G has_maximum_flow_from source,sink by A1,dGMAXFLOW;
  end;
-  
+
 theorem ::tMAXFLOW03
   for G being finite real-weighted WGraph, source, sink being Vertex of G holds
      G == FF:MaxFlow(G,source,sink) &
      the_Weight_of G = the_Weight_of FF:MaxFlow(G,source,sink)  proof
     let G be finite real-weighted WGraph, source,sink be Vertex of G;
     set CS = FF:CompSeq(G,source,sink);
-    FF:MaxFlow(G,source,sink) = CS.Result() by dFFMAXFLOW
+    FF:MaxFlow(G,source,sink) = CS.Result()
                              .= CS.(CS.Lifespan()) by GLIB_000:def 58
                              .= CS.->(CS.Lifespan()) by GLIB_000:def 59;
     hence thesis by tFLOWCS02;
@@ -5017,11 +5002,11 @@ end;
 theorem ::tMAXFLOW04
   for G being finite natural-weighted WGraph, source,sink being Vertex of G
    st sink <> source holds
-   FF:MaxFlow(G,source,sink) has_maximum_flow_from source,sink  proof 
+   FF:MaxFlow(G,source,sink) has_maximum_flow_from source,sink  proof
     let G be finite natural-weighted WGraph, source, sink be Vertex of G;
     set CS = FF:CompSeq(G,source,sink); assume
 A1: sink <> source;
-A2: FF:MaxFlow(G,source,sink) = CS.Result() by dFFMAXFLOW
+A2: FF:MaxFlow(G,source,sink) = CS.Result()
                              .= CS.(CS.Lifespan()) by GLIB_000:def 58
                              .= CS.->(CS.Lifespan()) by GLIB_000:def 59;
     set n = CS.Lifespan(), Gn = CS.->n, Gn1 = CS.->(n+1);

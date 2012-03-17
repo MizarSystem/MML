@@ -8,69 +8,36 @@ environ
 
  vocabularies CAT_1, MCART_1, FUNCT_1, RELAT_1, PARTFUN1, CAT_2, FUNCOP_1,
       FUNCT_3, COMMACAT;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, MCART_1, RELAT_1, FUNCT_1,
-      PARTFUN1, FUNCT_2, FUNCT_4, PBOOLE, CAT_1, CAT_2, DOMAIN_1;
- constructors CAT_2, DOMAIN_1, PBOOLE;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, PARTFUN1,
+      FUNCT_2, FUNCT_4, PBOOLE, CAT_1, CAT_2, MCART_1, DOMAIN_1;
+ constructors CAT_2, DOMAIN_1, PBOOLE, MCART_1;
  registrations CAT_1, CAT_2, RELSET_1, SUBSET_1, XBOOLE_0;
  requirements SUBSET, BOOLE;
- definitions TARSKI, XBOOLE_0;
- theorems TARSKI, ZFMISC_1, MCART_1, FUNCT_1, FUNCT_2, CAT_1, CAT_2, GRFUNC_1,
-      RELSET_1;
- schemes FUNCT_2, ZFREFLE1;
+
 
 begin
 
-definition let x be set;
- func x`11 -> set equals
-:: COMMACAT:def 1
-  x`1`1;
-
- func x`12 -> set equals
-:: COMMACAT:def 2
-  x`1`2;
-
- func x`21 -> set equals
-:: COMMACAT:def 3
-  x`2`1;
-
- func x`22 -> set equals
-:: COMMACAT:def 4
-  x`2`2;
-
+definition
+  canceled 4;
 end;
 
 reserve x,x1,x2,y,y1,y2,z for set;
 
-theorem :: COMMACAT:1
-  [[x1,x2],y]`11 = x1 & [[x1,x2],y]`12 = x2 &
-   [x,[y1,y2]]`21 = y1 & [x,[y1,y2]]`22 = y2;
-
-definition let D1,D2,D3 be non empty set, x be Element of [:[:D1,D2:],D3:];
-redefine
- func x`11 -> Element of D1;
- func x`12 -> Element of D2;
-end;
-
-definition let D1,D2,D3 be non empty set, x be Element of [:D1,[:D2,D3:]:];
-redefine
- func x`21 -> Element of D2;
- func x`22 -> Element of D3;
-end;
+canceled;
 
  reserve C,D,E for Category, c,c1,c2 for Object of C, d,d1 for Object of D,
    x for set, f,f1 for (Morphism of E),
   g for (Morphism of C), h for (Morphism of D),
   F for Functor of C,E, G for Functor of D,E;
 
- definition let C,D,E;
+definition let C,D,E;
   let F be Functor of C,E, G be Functor of D,E;
- given c1,d1,f1 such that  f1 in Hom(F.c1,G.d1);
+  given c1,d1,f1 such that  f1 in Hom(F.c1,G.d1);
   func commaObjs(F,G) -> non empty Subset of
-      [:[:the Objects of C, the Objects of D:], the Morphisms of E:] equals
+  [:[:the Objects of C, the Objects of D:], the Morphisms of E:] equals
 :: COMMACAT:def 5
-
    {[[c,d],f] : f in Hom(F.c,G.d)};
- end;
+end;
 
  reserve o,o1,o2 for Element of commaObjs(F,G);
 
@@ -79,25 +46,23 @@ theorem :: COMMACAT:2
   o = [[o`11,o`12],o`2] & o`2 in Hom(F.o`11,G.o`12) &
    dom o`2 = F.o`11 & cod o`2 = G.o`12;
 
- definition let C,D,E,F,G;
+definition let C,D,E,F,G;
  given c1,d1,f1 such that  f1 in Hom(F.c1,G.d1);
   func commaMorphs(F,G) -> non empty Subset of
       [:[:commaObjs(F,G), commaObjs(F,G):],
       [:the Morphisms of C, the Morphisms of D:]:]
     equals
 :: COMMACAT:def 6
-
     {[[o1,o2], [g,h]] : dom g = o1`11 & cod g = o2`11 &
               dom h = o1`12 & cod h = o2`12 & (o2`2)*(F.g) = (G.h)*(o1`2)};
  end;
 
  reserve k,k1,k2,k' for Element of commaMorphs(F,G);
 
- definition let C,D,E,F,G,k;
- redefine
-  func k`11 -> Element of commaObjs(F,G);
+definition let C,D,E,F,G,k;
+  redefine func k`11 -> Element of commaObjs(F,G);
   func k`12 -> Element of commaObjs(F,G);
- end;
+end;
 
 theorem :: COMMACAT:3
   (ex c,d,f st f in Hom(F.c,G.d)) implies
@@ -105,38 +70,36 @@ theorem :: COMMACAT:3
    cod k`21 = k`12`11 & dom k`22 = k`11`12 & cod k`22 = k`12`12 &
     (k`12`2)*(F.k`21) = (G.k`22)*(k`11`2);
 
- definition let C,D,E,F,G,k1,k2;
+definition let C,D,E,F,G,k1,k2;
   given c1,d1,f1 such that
  f1 in Hom(F.c1,G.d1);
   assume
  k1`12 = k2`11;
   func k2*k1 -> Element of commaMorphs(F,G) equals
 :: COMMACAT:def 7
-
     [[k1`11,k2`12],[k2`21*k1`21,k2`22*k1`22]];
- end;
+end;
 
- definition let C,D,E,F,G;
+definition let C,D,E,F,G;
   func commaComp(F,G) ->
     PartFunc of [:commaMorphs(F,G),commaMorphs(F,G):],commaMorphs(F,G) means
 :: COMMACAT:def 8
 
    dom it = { [k1,k2]: k1`11 = k2`12 } &
    for k,k' st [k,k'] in dom it holds it.[k,k'] = k*k';
- end;
+end;
 
- definition let C,D,E,F,G;
- given c1,d1,f1 such that
- f1 in Hom(F.c1,G.d1);
+definition let C,D,E,F,G;
+  given c1,d1,f1 such that  f1 in Hom(F.c1,G.d1);
   func F comma G -> strict Category means
 :: COMMACAT:def 9
-       the Objects of it = commaObjs(F,G) &
+    the Objects of it = commaObjs(F,G) &
     the Morphisms of it = commaMorphs(F,G) &
     (for k holds (the Dom of it).k = k`11) &
     (for k holds (the Cod of it).k = k`12) &
     (for o holds (the Id of it).o = [[o,o], [id o`11,id o`12]]) &
     the Comp of it = commaComp(F,G);
- end;
+end;
 
 theorem :: COMMACAT:4
   the Objects of 1Cat(x,y) = {x} & the Morphisms of 1Cat(x,y) = {y};
@@ -144,18 +107,17 @@ theorem :: COMMACAT:4
 theorem :: COMMACAT:5
   for a,b being Object of 1Cat(x,y) holds Hom(a,b) = {y};
 
- definition let C, c;
+definition let C, c;
   func 1Cat c -> strict Subcategory of C equals
 :: COMMACAT:def 10
-       1Cat(c, id c);
- end;
+    1Cat(c, id c);
+end;
 
- definition let C, c;
+definition let C, c;
   func c comma C -> strict Category equals
 :: COMMACAT:def 11
-       (incl 1Cat c) comma (id C);
+    (incl 1Cat c) comma (id C);
   func C comma c -> strict Category equals
 :: COMMACAT:def 12
-       (id C) comma (incl 1Cat c);
- end;
-
+    (id C) comma (incl 1Cat c);
+end;

@@ -1342,7 +1342,7 @@ definition
   let SCS be non-empty Circuit of IIG, v be Vertex of IIG,
     iv be InputValues of SCS;
   func IGValue(v,iv) -> Element of (the Sorts of SCS).v equals
-:Def4:
+
      (Eval SCS).v.(IGTree(v,iv));
   coherence;
 end;
@@ -1390,7 +1390,7 @@ A14:    iv.v in (the Sorts of SCS).v by A2,MSAFREE2:def 5;
       then root-tree[iv.v,v] in (FreeSort(the Sorts of SCS)).v;
       then A15:      root-tree[iv.v,v] in FreeSort(the Sorts of SCS,v)
           by MSAFREE:def 13;
-      thus IGValue(v,iv) = (Eval SCS).v.((Fix_inp_ext iv).v.e) by A3,Def4
+      thus IGValue(v,iv) = (Eval SCS).v.((Fix_inp_ext iv).v.e) by A3
         .= (Eval SCS).v.(root-tree[iv.v,v]) by A10,A11,A13,FUNCOP_1:13
         .= iv.v by A14,A15,MSAFREE2:def 9;
     end;
@@ -1469,7 +1469,7 @@ A20:     A =(the Sorts of SCS).v &
        (the ResultSort of IIG).o = v & a in rng Den(o,SCS)} by MSUALG_2:def 4;
 A21:      e in Constants(SCS,v) by A6,A7,A8,A18,A20;
       thus IGValue(v,iv)
-        = (Eval SCS).v.(IGTree(v,iv)) by Def4
+        = (Eval SCS).v.(IGTree(v,iv))
        .= e by A1,A2,Th5
        .= (Set-Constants SCS).v by A1,A21,CIRCUIT1:1;
     end;
@@ -1601,7 +1601,7 @@ definition
     s be State of SCS,
     iv be InputValues of SCS;
   func Following(s,iv) -> State of SCS equals
-:Def7:
+
      Following(s+*iv);
   coherence;
 end;
@@ -1611,7 +1611,7 @@ definition
   let SCS be non-empty Circuit of IIG, InpFs be InputFuncs of SCS,
     s be State of SCS;
   func InitialComp(s,InpFs) -> State of SCS equals
-:Def8:
+
      s +* (0-th_InputValues InpFs) +* Set-Constants SCS;
   coherence
     proof
@@ -1757,7 +1757,7 @@ A20:     v1 = (the_arity_of o).x' by A19,FINSEQ_4:def 4;
         then A21:       depth(v1,SCS) <= k by NAT_1:38;
         thus Fp.x = (F.v1).(p'.x') by A11,A19,MSUALG_3:def 8
           .= (F.v1).IGTree(v1,iv) by A9,A10,A19
-          .= IGValue(v1,iv) by Def4
+          .= IGValue(v1,iv)
           .= s.v1 by A1,A21
           .= (s * (the_arity_of o)).x by A19,A20,FUNCT_1:23
           .= ods.x by CIRCUIT1:def 3;
@@ -1767,7 +1767,7 @@ A20:     v1 = (the_arity_of o).x' by A19,FINSEQ_4:def 4;
         = Den(o,SCS).(F#p) by A6,Def5
        .= (F.(the_result_sort_of o)).(Den(o,U1).p) by A12,MSUALG_3:def 9
        .= F.v.(IGTree(v,iv)) by A6,A16,MSAFREE2:def 7
-       .= IGValue(v,iv) by Def4;
+       .= IGValue(v,iv);
     end;
     end;
 
@@ -1804,8 +1804,7 @@ A6:   iv c= s +* iv by FUNCT_4:26;
       suppose
 A8:      k = 0;
       then Ck = InitialComp(s,InpFs) by Def9
-        .= s +* (0-th_InputValues InpFs) +* Set-Constants SCS
-             by Def8;
+        .= s +* (0-th_InputValues InpFs) +* Set-Constants SCS;
       hence iv c= (Computation(s,InpFs)).k by A5,A6,A7,A8,PRE_CIRC:4;
       end;
       suppose ex n being Nat st k=n+1;
@@ -1813,7 +1812,7 @@ A8:      k = 0;
 A9:      k=n+1;
       reconsider Cn = (Computation(s,InpFs)).n as State of SCS;
 A10:    Ck = Following(Cn,k-th_InputValues InpFs) by A9,Def9
-        .= Following(Cn+*iv) by A5,Def7;
+        .= Following(Cn+*iv) by A5;
          iv c= Cn +* iv by FUNCT_4:26;
       hence iv c= (Computation(s,InpFs)).k by A10,Th12;
     end;
@@ -1856,7 +1855,7 @@ by A1,Th14;
           = Following Ckm by A1,A4,Def6
          .= Following(Ckm+*((m+1)-th_InputValues InpFs)) by A8,FUNCT_4:79
          .= Following((Computation(s,InpFs)).m, (m+1)-th_InputValues
-              InpFs) by Def7
+              InpFs)
          .= (Computation(s,InpFs)).(m+1) by Def9;
         end;
         suppose n = m+1;
@@ -1888,8 +1887,7 @@ A4:   P[0] proof
            depth(v,SCS) <= 0;
 then A5:      depth(v,SCS) = 0 by NAT_1:19;
 A6:     (Computation(s,InpFs)).0 = InitialComp(s,InpFs) by Def9
-          .= s +* (0-th_InputValues InpFs) +* Set-Constants SCS
-               by Def8;
+          .= s +* (0-th_InputValues InpFs) +* Set-Constants SCS;
 
         per cases by A5,CIRCUIT1:19;
         suppose
@@ -1930,7 +1928,7 @@ A15:     iv c= Ck by A1,A3,Th14;
 A16:        depth(v,SCS) <= k+1;
         thus ((Computation(s,InpFs)).(k+1) qua State of SCS).v
           = (Following(Ck,(k+1)-th_InputValues InpFs)).v by Def9
-         .= (Following(Ck+*iv)).v by A3,A14,Def7
+         .= (Following(Ck+*iv)).v by A3,A14
          .= (Following Ck).v by A15,FUNCT_4:79
          .= IGValue(v,iv) by A12,A16,Th13;
       end;
@@ -1990,7 +1988,7 @@ A7:     depth(x',SCS) <= n by A3,CIRCUIT1:18;
       hence (Computation(s,InpFs)).n
         = (Computation(s,InpFs)).(n+1) by FUNCT_1:9
        .= Following(Cn,(n+1)-th_InputValues InpFs) by Def9
-       .= Following(Cn+*iv) by A5,Def7
+       .= Following(Cn+*iv) by A5
        .= Following((Computation(s,InpFs)).n) by A6,FUNCT_4:79;
     end;
 

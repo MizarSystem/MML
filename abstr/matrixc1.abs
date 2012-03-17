@@ -1,0 +1,400 @@
+:: The Inner Product and Conjugate of Matrix of Complex Numbers
+::  by Wenpai Chang , Hiroshi Yamazaki and Yatsuka Nakamura
+::
+:: Received October 10, 2005
+:: Copyright (c) 2005 Association of Mizar Users
+
+environ
+
+ vocabularies FINSEQ_1, FINSEQ_2, ARYTM_1, FUNCT_1, RELAT_1, FUNCOP_1, RVSUM_1,
+      COMPLSP1, COMPLEX1, EUCLID_2, ARYTM_3, XCMPLX_0, ARYTM, RLVECT_1,
+      MATRIX_1, TREES_1, BOOLE, QC_LANG1, INCSP_1, MATRIXC1, SETWISEO,
+      FINSEQ_4, MATRIX_5, COMPLFLD, VECTSP_1;
+ notations TARSKI, SUBSET_1, NUMBERS, XCMPLX_0, XREAL_0, RELAT_1, FUNCT_1,
+      FUNCT_2, ZFMISC_1, NAT_1, PARTFUN1, BINOP_1, FUNCOP_1, FINSEQ_1,
+      FINSEQOP, COMPLSP1, COMPLEX1, RVSUM_1, FINSEQ_2, BINOP_2, EUCLID_2,
+      ORDINAL1, MATRIX_5, MATRIX_1, MATRIX_3, MATRIX_4, RLVECT_1, COMPLSP2,
+      SETWOP_2, COMPLFLD, BINARITH, FINSEQ_4, STRUCT_0, GROUP_1;
+ constructors NAT_1, SETWISEO, MEMBERED, PARTFUN1, FINSOP_1, EUCLID_2,
+      MATRIX_5, MATRIX_4, MATRIX_3, COMPLSP2, BINARITH, FINSEQ_4;
+ registrations RELSET_1, FINSEQ_2, NAT_1, FUNCT_1, FUNCT_2, BINOP_2, COMPLEX1,
+      XREAL_0, XCMPLX_0, NUMBERS, RELAT_1, ORDINAL2, COMPLFLD;
+ requirements NUMERALS, BOOLE, SUBSET, REAL, ARITHM;
+
+
+begin
+
+ reserve i,j,n,k for Nat,
+         a for Element of COMPLEX,
+         R1,R2 for Element of i-tuples_on COMPLEX;
+
+definition let M be Matrix of COMPLEX;
+  func M*' -> Matrix of COMPLEX means
+:: MATRIXC1:def 1
+   len it=len M & width it=width M & for i,j being Nat st [i,j] in Indices M
+     holds it*(i,j) = (M*(i,j))*';
+end;
+
+theorem :: MATRIXC1:1
+  for M being Matrix of COMPLEX holds
+    [i,j] in Indices M iff 1<= i & i<=len M & 1<=j & j<=width M;
+
+theorem :: MATRIXC1:2
+  for M being Matrix of COMPLEX holds (M*')*' = M;
+
+theorem :: MATRIXC1:3
+  for a being complex number,M being Matrix of COMPLEX holds
+    len (a*M)=len M & width (a*M)=width M;
+
+theorem :: MATRIXC1:4
+  for i,j being Nat,a being complex number,M being Matrix of COMPLEX st
+    len (a*M) =len M & width (a*M)=width M & [i,j] in Indices M holds
+      (a*M)*(i,j) = a*(M*(i,j));
+
+theorem :: MATRIXC1:5
+  for a being complex number,M being Matrix of COMPLEX holds
+    (a*M)*' = a*'*(M*');
+
+theorem :: MATRIXC1:6
+  for M1,M2 being Matrix of COMPLEX holds
+    len (M1+M2)=len M1 & width (M1+M2)=width M1;
+
+theorem :: MATRIXC1:7
+  for i,j being Nat,M1,M2 being Matrix of COMPLEX st
+    len M1 =len M2 & width M1=width M2 & [i,j] in Indices M1 holds
+      (M1+M2)*(i,j) = M1*(i,j) + M2*(i,j);
+
+theorem :: MATRIXC1:8
+  for M1,M2 being Matrix of COMPLEX st len M1=len M2 & width M1=width M2
+    holds (M1 + M2)*' = M1*' + M2*';
+
+theorem :: MATRIXC1:9
+  for M being Matrix of COMPLEX holds
+    len (-M)=len M & width (-M)=width M;
+
+theorem :: MATRIXC1:10
+  for i,j being Nat,M being Matrix of COMPLEX st
+    len (-M)=len M & width (-M)=width M & [i,j] in Indices M holds
+      (-M)*(i,j)= -(M*(i,j));
+
+theorem :: MATRIXC1:11
+  for M being Matrix of COMPLEX holds
+    (-1)*M = -M;
+
+theorem :: MATRIXC1:12
+  for M being Matrix of COMPLEX holds
+    (-M)*' = -(M*');
+
+theorem :: MATRIXC1:13
+  for M1,M2 being Matrix of COMPLEX holds
+    len (M1-M2)=len M1 & width (M1-M2)=width M1;
+
+theorem :: MATRIXC1:14
+  for i,j being Nat,M1,M2 be Matrix of COMPLEX st
+    len M1=len M2 & width M1=width M2 &
+      [i,j] in Indices M1 holds
+        (M1-M2)*(i,j)=(M1*(i,j)) - (M2*(i,j));
+
+theorem :: MATRIXC1:15
+  for M1,M2 being Matrix of COMPLEX st len M1=len M2 & width M1=width M2
+    holds (M1 - M2)*' = M1*' - M2*';
+
+definition let M be Matrix of COMPLEX;
+  func M@" -> Matrix of COMPLEX equals
+:: MATRIXC1:def 2
+    (M@)*';
+end;
+
+definition let x be FinSequence of COMPLEX;
+  assume len x > 0;
+  func FinSeq2Matrix x -> Matrix of COMPLEX means
+:: MATRIXC1:def 3
+    len it = len x & width it = 1 &
+    for j st j in Seg len x holds it.j =<*x.j*>;
+end;
+
+definition let M be Matrix of COMPLEX;
+  func Matrix2FinSeq M -> FinSequence of COMPLEX equals
+:: MATRIXC1:def 4
+    Col(M,1);
+end;
+
+definition let F1,F2 be FinSequence of COMPLEX;
+  func mlt(F1,F2) -> FinSequence of COMPLEX equals
+:: MATRIXC1:def 5
+    multcomplex.:(F1,F2);
+  commutativity;
+end;
+
+definition let F be FinSequence of COMPLEX;
+  func Sum F -> Element of COMPLEX equals
+:: MATRIXC1:def 6
+    addcomplex $$ F;
+end;
+
+definition let M be Matrix of COMPLEX;let F be FinSequence of COMPLEX;
+  func M*F -> FinSequence of COMPLEX means
+:: MATRIXC1:def 7
+    len it = len M &
+    for i st i in Seg len M holds it.i=Sum mlt(Line(M,i),F);
+end;
+
+theorem :: MATRIXC1:16
+  a*mlt(R1,R2) = mlt(a*R1,R2);
+
+definition let M be Matrix of COMPLEX;
+           let a be complex number;
+  func M*a -> Matrix of COMPLEX equals
+:: MATRIXC1:def 8
+    a*M;
+end;
+
+theorem :: MATRIXC1:17
+  for a being Element of COMPLEX,M being Matrix of COMPLEX holds
+    (M*a)*' = a*'*(M*');
+
+theorem :: MATRIXC1:18
+  for x,y being FinSequence of COMPLEX st len x = len y holds
+    len mlt(x,y)=len x & len mlt(x,y)=len y;
+
+theorem :: MATRIXC1:19
+  for F1,F2 being FinSequence of COMPLEX,i being Nat holds
+    i in dom mlt(F1,F2) implies mlt(F1,F2).i = F1.i * F2.i;
+
+definition let i,R1,R2;
+  redefine func mlt(R1,R2) -> Element of i-tuples_on COMPLEX;
+end;
+
+theorem :: MATRIXC1:20
+  mlt(R1,R2).j = R1.j * R2.j;
+
+theorem :: MATRIXC1:21
+  for a,b being Element of COMPLEX holds
+    addcomplex.(a,(b*'))*'=addcomplex.((a*'),b);
+
+theorem :: MATRIXC1:22
+  for F being FinSequence of COMPLEX
+   ex G being Function of NAT,COMPLEX st
+  for n being Nat st 1<= n & n<=len F holds G.n=F.n;
+
+theorem :: MATRIXC1:23
+  for F being FinSequence of COMPLEX st len (F*') >= 1 holds
+    addcomplex $$ (F*') = (addcomplex $$ F)*';
+
+theorem :: MATRIXC1:24
+  for F being FinSequence of COMPLEX st len F >= 1 holds
+    Sum(F*') = (Sum F)*';
+
+theorem :: MATRIXC1:25
+  for x,y being FinSequence of COMPLEX st len x=len y holds
+   (mlt(x,(y*')))*' = mlt(y,(x*'));
+
+theorem :: MATRIXC1:26
+  for x,y being FinSequence of COMPLEX,a being Element of COMPLEX
+   st len x=len y holds (mlt(x,a*y)) = a*mlt(x,y);
+
+theorem :: MATRIXC1:27
+  for x,y being FinSequence of COMPLEX,a being Element of COMPLEX
+   st len x=len y holds mlt(a*x,y) = a*mlt(x,y);
+
+theorem :: MATRIXC1:28
+  for x,y being FinSequence of COMPLEX st len x=len y holds
+   (mlt(x,y))*' = mlt(x*',y*');
+
+theorem :: MATRIXC1:29
+  for F being FinSequence of COMPLEX,a being Element of COMPLEX holds
+   Sum(a*F) = a*(Sum F);
+
+definition let x be FinSequence of REAL;
+  func FR2FC(x) -> FinSequence of COMPLEX equals
+:: MATRIXC1:def 9
+    x;
+end;
+
+theorem :: MATRIXC1:30
+  for R being FinSequence of REAL,
+      F being FinSequence of COMPLEX st R = F & len R >= 1 holds
+    addreal $$ R = addcomplex $$ F;
+
+theorem :: MATRIXC1:31
+  for x being FinSequence of REAL,
+      y being FinSequence of COMPLEX st x=y & len x >=1
+  holds Sum x = Sum y;
+
+theorem :: MATRIXC1:32
+  for F1,F2 being FinSequence of COMPLEX  st len F1=len F2 holds
+    Sum(F1 - F2) = Sum F1 - Sum F2;
+
+theorem :: MATRIXC1:33
+  for F1,F2 being FinSequence of COMPLEX,i being Nat holds
+    i in dom (F1+F2) implies (F1+F2).i = F1.i + F2.i;
+
+theorem :: MATRIXC1:34
+  for F1,F2 being FinSequence of COMPLEX,i being Nat holds
+    i in dom (F1-F2) implies (F1-F2).i = F1.i - F2.i;
+
+theorem :: MATRIXC1:35
+  for x,y,z being FinSequence of COMPLEX st len x=len y & len y=len z holds
+    mlt((x-y),z) = mlt(x,z)-mlt(y,z);
+
+theorem :: MATRIXC1:36
+  for x,y,z being FinSequence of COMPLEX st len x=len y & len y=len z holds
+    mlt(x,y-z) = mlt(x,y)-mlt(x,z);
+
+theorem :: MATRIXC1:37
+  for x,y,z being FinSequence of COMPLEX st len x=len y & len y=len z holds
+   mlt(x,y+z) = mlt(x,y)+mlt(x,z);
+
+theorem :: MATRIXC1:38
+  for x,y,z being FinSequence of COMPLEX st len x=len y & len y=len z holds
+   mlt((x+y),z) = mlt(x,z)+mlt(y,z);
+
+theorem :: MATRIXC1:39
+  for F1,F2 being FinSequence of COMPLEX  st len F1=len F2 holds
+   Sum(F1 + F2) = Sum F1 + Sum F2;
+
+theorem :: MATRIXC1:40
+  for x1,y1 being FinSequence of COMPLEX
+  for x2,y2 being FinSequence of REAL
+  st x1 = x2 & y1 = y2 & len x1=len y2 holds
+    multcomplex.:(x1,y1) = multreal.:(x2,y2);
+
+theorem :: MATRIXC1:41
+  for x,y being FinSequence of REAL st len x=len y holds
+    FR2FC mlt(x,y)=mlt(FR2FC x,FR2FC y);
+
+theorem :: MATRIXC1:42
+  for x,y being FinSequence of COMPLEX st len x=len y & len x > 0 holds
+    |( x,y )| = Sum mlt(x,(y*'));
+
+theorem :: MATRIXC1:43
+  for A,B being Matrix of COMPLEX st
+  len A=len B & width A=width B holds Indices A=Indices B;
+
+theorem :: MATRIXC1:44
+  for i,j being Nat,M1,M2 being Matrix of COMPLEX
+  st len M1=len M2 & width M1=width M2 & j in Seg len M1 holds
+    Line(M1+M2,j)=Line(M1,j)+Line(M2,j);
+
+theorem :: MATRIXC1:45
+  for M being Matrix of COMPLEX st i in Seg len M holds
+    Line(M,i)=(Line(M*',i))*';
+
+theorem :: MATRIXC1:46
+  for F being FinSequence of COMPLEX,M being Matrix of COMPLEX
+  st len F=width M holds
+   mlt(F,(Line((M*'),i))*') = mlt(Line((M*'),i),(F*'))*';
+
+theorem :: MATRIXC1:47
+  for F being FinSequence of COMPLEX,M being Matrix of COMPLEX
+   st len F = width M & len F >= 1 holds
+    (M*F)*'=(M*')*(F*');
+
+theorem :: MATRIXC1:48
+  for F1,F2,F3 being FinSequence of COMPLEX
+  st len F1 = len F2 & len F2 = len F3 holds
+    mlt(F1,mlt(F2,F3)) = mlt(mlt(F1,F2),F3);
+
+theorem :: MATRIXC1:49
+  for F being FinSequence of COMPLEX holds
+   Sum -F = -(Sum F);
+
+theorem :: MATRIXC1:50
+  for z being Element of COMPLEX holds
+    Sum <*z*> = z;
+
+theorem :: MATRIXC1:51
+  for F1,F2 being FinSequence of COMPLEX holds
+    Sum(F1^F2) = Sum F1 + Sum F2;
+
+definition let M be Matrix of COMPLEX;
+  func LineSum M -> FinSequence of COMPLEX means
+:: MATRIXC1:def 10
+   len it=len M &
+  for i being Nat st i in Seg len M holds it.i=Sum Line(M,i);
+end;
+
+definition let M be Matrix of COMPLEX;
+  func ColSum M -> FinSequence of COMPLEX means
+:: MATRIXC1:def 11
+    len it=width M &
+    for j being Nat st j in Seg width M holds it.j=Sum (Col(M,j));
+end;
+
+theorem :: MATRIXC1:52
+  for F being FinSequence of COMPLEX holds
+    len F = 1 implies Sum F = F.1;
+
+theorem :: MATRIXC1:53
+  for f,g being FinSequence of COMPLEX,n being Nat
+  st len f = n + 1 & g = f|n holds
+    Sum f = Sum g + f/.(len f);
+
+theorem :: MATRIXC1:54
+  for M being Matrix of COMPLEX st len M > 0 holds
+    Sum LineSum M = Sum ColSum M;
+
+definition let M be Matrix of COMPLEX;
+  func SumAll M -> Element of COMPLEX equals
+:: MATRIXC1:def 12
+    Sum LineSum M;
+end;
+
+theorem :: MATRIXC1:55
+  for M being Matrix of COMPLEX holds
+    ColSum M = LineSum(M@);
+
+theorem :: MATRIXC1:56
+  for M being Matrix of COMPLEX st len M > 0 holds
+    SumAll M = SumAll (M@);
+
+definition let x,y be FinSequence of COMPLEX,M be Matrix of COMPLEX;
+  assume  len x=len M & len y=width M;
+  func QuadraticForm(x,M,y) -> Matrix of COMPLEX means
+:: MATRIXC1:def 13
+    len it = len x & width it=len y &
+    for i,j being Nat st [i,j] in Indices M holds
+      it*(i,j)=(x.i)*(M*(i,j))*((y.j)*');
+end;
+
+theorem :: MATRIXC1:57
+  for x,y being FinSequence of COMPLEX,M being Matrix of COMPLEX st
+   len x = len M & len y = width M & len x > 0& len y > 0 holds
+    (QuadraticForm(x,M,y))@ = (QuadraticForm(y,M@",x))*';
+
+theorem :: MATRIXC1:58
+  for x,y being FinSequence of COMPLEX,M being Matrix of COMPLEX st
+   len x=len M & len y =width M holds
+    (QuadraticForm(x,M,y))*'=QuadraticForm(x*',M*',y*');
+
+theorem :: MATRIXC1:59
+  for x,y being FinSequence of COMPLEX st len x=len y & 0 < len y holds
+    |(x,y)|=(|(y,x)|)*';
+
+theorem :: MATRIXC1:60
+  for x,y being FinSequence of COMPLEX st len x=len y & 0 < len y holds
+    (|(x,y)|)*'=|(x*',y*')|;
+
+theorem :: MATRIXC1:61
+  for M being Matrix of COMPLEX st width M > 0 holds
+    (M@)*' =(M*')@;
+
+theorem :: MATRIXC1:62
+  for x,y being FinSequence of COMPLEX,M being Matrix of COMPLEX st
+   len x=width M & len y = len M & len x>0 & len y>0 holds
+    |(x,(M@")*y)| = SumAll QuadraticForm(x,M@,y);
+
+theorem :: MATRIXC1:63
+  for x,y being FinSequence of COMPLEX,M being Matrix of COMPLEX st
+   len y=len M & len x =width M & len x>0 & len y>0 & len M > 0 holds
+    |(M*x,y)| = SumAll QuadraticForm(x,M@,y);
+
+theorem :: MATRIXC1:64
+  for x,y being FinSequence of COMPLEX, M being Matrix of COMPLEX st
+    len x=width M & len y =len M & width M>0 & len M>0 holds
+      |(M*x,y)| = |(x,(M@")*y)|;
+
+theorem :: MATRIXC1:65
+  for x,y being FinSequence of COMPLEX,M being Matrix of COMPLEX st
+   len x=len M & len y =width M & width M>0 & len M>0 & len x > 0 holds
+    |(x,M*y)| = |((M@")*x,y)|;

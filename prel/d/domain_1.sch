@@ -64,7 +64,7 @@
 <Cluster/>
 <Var nr="2"/>
 </Typ>
-<Func kind="K" nr="56">
+<Func kind="K" nr="60">
 <Var nr="1"/>
 <Var nr="2"/>
 <Var nr="3"/>
@@ -122,7 +122,7 @@
 <Cluster/>
 <Var nr="3"/>
 </Typ>
-<Func kind="K" nr="59">
+<Func kind="K" nr="63">
 <Var nr="1"/>
 <Var nr="2"/>
 <Var nr="3"/>
@@ -195,7 +195,7 @@
 <Cluster/>
 <Var nr="4"/>
 </Typ>
-<Func kind="K" nr="60">
+<Func kind="K" nr="64">
 <Var nr="1"/>
 <Var nr="2"/>
 <Var nr="3"/>
@@ -468,5 +468,53 @@
 </Func>
 </Typ>
 </Is>
+</Scheme>
+<Scheme>
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="1" value="false"/>
+</Cluster>
+</Typ>
+</ArgTypes>
+<Pred kind="R" nr="1">
+<Fraenkel>
+<Typ kind="M" nr="2">
+<Cluster/>
+<Func kind="F" nr="1"/>
+</Typ>
+<Var nr="1"/>
+<And>
+<Pred kind="P" nr="1">
+<Var nr="1"/>
+</Pred>
+<Pred kind="P" nr="2">
+<Var nr="1"/>
+</Pred>
+</And>
+</Fraenkel>
+<Func kind="K" nr="13">
+<Fraenkel>
+<Typ kind="M" nr="2">
+<Cluster/>
+<Func kind="F" nr="1"/>
+</Typ>
+<Var nr="1"/>
+<Pred kind="P" nr="1">
+<Var nr="1"/>
+</Pred>
+</Fraenkel>
+<Fraenkel>
+<Typ kind="M" nr="2">
+<Cluster/>
+<Func kind="F" nr="1"/>
+</Typ>
+<Var nr="1"/>
+<Pred kind="P" nr="2">
+<Var nr="1"/>
+</Pred>
+</Fraenkel>
+</Func>
+</Pred>
 </Scheme>
 </Schemes>

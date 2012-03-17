@@ -114,7 +114,7 @@
 <FCluster>
 <ArgTypes/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="268"/>
+<Func kind="K" nr="267"/>
 </Func>
 <Cluster>
 <Adjective nr="6" value="false"/>

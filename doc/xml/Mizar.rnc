@@ -4,7 +4,7 @@
 ## article - then the signature has to be specified.
 ## aid optionally specifies its article's name in uppercase.      
 Constructors = 
- element Constructors { 
+ element Constructors {
    attribute aid { xsd:string }?,
    ( element SignatureWithCounts { ConstrCounts* }
    | ( Signature, ConstrCounts ) )?,
@@ -12,7 +12,7 @@ Constructors =
    }
 
 ## Notations, either imported from other articles ( after accommodation)
-## - the signature is implicit in that case, or exported from the current 
+## - the signature is implicit in that case, or exported from the current
 ## article - then the signature and vocabularies have to be specified.
 ## aid optionally specifies article's name in uppercase.   
 Notations = 
@@ -41,12 +41,15 @@ Definientia =
    Signature?, Definiens* }
 
 ## Theorems, either imported from other articles ( after accommodation)
-## - the signature is implicit in that case, or exported from the current 
+## - the signature is implicit in that case, or exported from the current
 ## article - then the signature has to be specified.
 ## They can be either ordinary or definitional.   
 ## The article number and order in article can be given,
 ## otherwise it belongs to the current article and order is implicit.
 ## Optional aid attribute specifies article name.
+## constrkind and constrnr determine for def. theorems
+## the defined constructor. If they do not appear (and kind='D'), 
+## then this is a canceled (verum) deftheorem.    
 Theorems = 
  element Theorems { 
    attribute aid { xsd:string }?,
@@ -54,6 +57,8 @@ Theorems =
    element Theorem {
    ( attribute articlenr { xsd:integer },
      attribute nr { xsd:integer } )?,
+   ( attribute constrkind { 'M' | 'V' | 'R' | 'K' },
+     attribute constrnr { xsd:integer})?, 
     attribute aid { xsd:string }?,
     attribute kind { 'T' | 'D' },
     Formula
@@ -113,6 +118,7 @@ DefMeaning =
  }
 
 ## Definiens of a constructor. This overlaps a bit with Constructor.
+## defnr is the number of the corresponding definitional theorem.   
 ## First come the argument types and possibly also the result type.
 ## The optional formula is conjunction of all assumptions if any given.
 ## If this is a redefinition, essentials are indeces of arguments
@@ -121,29 +127,40 @@ DefMeaning =
 ## superfluous does for Constructor.
 ## Optionally the article id (aid) and order in article (nr)
 ## can be given.   
+## relnr optionally gives its serial number
+## in environment for a particular article (it is not in prels).      
 Definiens =
  element Definiens {
    attribute constrkind { 'M' | 'L' | 'V' | 'R' | 'K' | 'U' | 'G' },
    attribute constrnr { xsd:integer},
-   ( attribute nr { xsd:integer },
-     attribute aid { xsd:string } )?,
+   attribute defnr { xsd:integer},
+   attribute aid { xsd:string },
+   attribute nr { xsd:integer }?,
+   attribute relnr { xsd:integer }?,
    Typ*,
    element Essentials { Int*},
    Formula?,
    DefMeaning
   }
 
+## Requirement is a constructor specially treated by the system.
+## We give its internal number and optionally its name and
+## the article id (aid) and order in article (absnr).
+Requirement =   
+ element Requirement {
+   attribute constrkind { 'M' | 'L' | 'V' | 'R' | 'K' | 'U' | 'G' },
+   attribute constrnr { xsd:integer },
+   attribute nr { xsd:integer },
+   attribute reqname { xsd:string }?, 
+   ( attribute absnr { xsd:integer },
+     attribute aid { xsd:string } )?
+} 
+   
 ## Requirements (now only the exported form).
-## The second number specifies the requirement -
-## this could be changed to enumerated types for better understanding.
 Requirements = 
  element Requirements {
    Signature,
-   element Requirement {
-    attribute constrkind { 'M' | 'L' | 'V' | 'R' | 'K' | 'U' | 'G' },
-    attribute constrnr { xsd:integer },
-    attribute nr { xsd:integer }
-   }*
+   Requirement*
  }
 
 ## Adjective is a possibly negated (and paramaterized) attribute
@@ -360,14 +377,15 @@ CCluster =
    }
 
 ## Functor (term) cluster.
-## This says that exists Term with Cluster.
+## This says that Term with ArgTypes has Cluster,
+## optionally with explicit Typ.
 ## Optionally the article id (aid) and order in article (nr)
 ## can be given.   
 FCluster =   
  element FCluster {
    ( attribute nr { xsd:integer },
      attribute aid { xsd:string } )?,
-   ( ErrorCluster | (ArgTypes, Term, Cluster) )
+   ( ErrorCluster | (ArgTypes, Term, Cluster, Typ?) )
    }
 
 ## Schemes keep types of their second-order variables.
@@ -582,6 +600,24 @@ Symbols =
    }*
  }
 
+## Reports from the Mizar checker, now only arithmetical evaluations.
+## They are now only available when the verifier is compiled with a special
+## directive - this should be changed to a user option eventually.   
+ByExplanations =
+ element ByExplanations {
+   attribute aid { xsd:string },
+   PolyEval*
+   }
+   
+## Reports from the Mizar schematizer - scheme instantioations.
+## They are now only available when the verifier is compiled with a special
+## directive - this should be changed to a user option eventually.   
+FromExplanations =
+ element FromExplanations {
+   attribute aid { xsd:string },
+   SchemeInstantiation*
+   }
+
 ## The complete article after analyzer.
 ## aid specifies its name in uppercase.
 Article = 
@@ -679,15 +715,21 @@ Set =
 
 ## Private functor. First come the types of arguments, then
 ## its definition and the result type.
+## For easier presentation, nr optionally contains number   
+## of the private functor created here.     
 DefFunc =
  element DefFunc { 
+   attribute nr { xsd:integer }?,
    ArgTypes, Term, Typ
  }
 
 ## Private predicate. First come the types of arguments, then
 ## its definition.
+## For easier presentation, nr optionally contains number   
+## of the private predicate created here.        
 DefPred =
  element DefPred { 
+   attribute nr { xsd:integer }?,
    ArgTypes, Formula
  }
 
@@ -826,8 +868,13 @@ JustifiedTheorem =
 
 ## Theorems created from definitions are now printed
 ## as separate top-level items after definitional blocks,
+## constrkind and constrnr determine the defined constructor.
+## If they do not appear, this is a canceled (verum) deftheorem.   
 DefTheorem = 
- element DefTheorem { Proposition }
+ element DefTheorem {
+   ( attribute constrkind { 'M' | 'V' | 'R' | 'K' },
+     attribute constrnr { xsd:integer})?,  
+     Proposition }
 
 ## A property of a constructor, the proposition expreesing it,
 ## and its justification.
@@ -956,4 +1003,68 @@ NotationBlock =
    Position,
    ( Let | AuxiliaryItem )*,
    EndPosition
+ }
+
+## Builtin numerical evaluations of arithmetical functors 
+## and predicates. For predicates, the value can be false.
+## Arguments are generally polynoms with complex coefficients.   
+PolyEval =
+ element PolyEval {
+   Position,
+   attribute value { xsd:boolean }?,
+   Requirement,
+   GeneralPolynomial+
+ }
+
+## Rational numbers
+RationalNr =
+ element RationalNr {
+   attribute numerator { xsd:integer },
+   attribute denominator { xsd:integer }
+ }
+
+Number =
+   ( RationalNr | ComplexNr )
+   
+## Complex rational numbers used in Mizar
+ComplexNr = element ComplexNr {RationalNr, RationalNr}
+
+## Monomial has a coefficient and a series of variables with their exponents. 
+Monomial =
+ element Monomial {
+   Number,
+   element PoweredVar {
+     attribute nr { xsd:integer },
+     attribute exponent { xsd:integer }
+   }*
+}   
+
+GeneralPolynomial =
+   ( Polynomial | Number )
+   
+## Polynomial consists of several monomials.
+Polynomial = element Polynomial { Monomial+}
+
+## Instantions of scheme functors and predicates.
+## and predicates. Scheme functors can be instantiated 
+## to other functors or terms (if zero arity). Scheme predicates   
+## can be instantiated to other predicates   
+SchemeInstantiation =
+ element SchemeInstantiation {
+   Position,
+   element FuncInstance {
+     attribute instnr { xsd:integer },
+     ((attribute kind { "F" | "H" | "G" | "K" | "U" },
+       attribute nr { xsd:integer },
+       ( attribute absnr { xsd:integer },
+         attribute aid { xsd:string } )? )
+       | Term )
+   }*,
+   element PredInstance {
+     attribute instnr { xsd:integer },
+     attribute kind { "P" | "S" | "V" | "R" },
+     attribute nr { xsd:integer },
+     ( attribute absnr { xsd:integer },
+       attribute aid { xsd:string } )?
+   }*
  }

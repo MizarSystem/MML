@@ -60,7 +60,6 @@
 <ArticleID name="FUNCT_4"/>
 <ArticleID name="CAT_1"/>
 <ArticleID name="CAT_2"/>
-<ArticleID name="COMMACAT"/>
 <ArticleID name="CAT_5"/>
 <ArticleID name="ORDERS_3"/>
 <ArticleID name="LATTICES"/>
@@ -317,7 +316,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="250">
+<Func kind="K" nr="249">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -329,8 +328,8 @@
 <LocusVar nr="1"/>
 </Func>
 <Func kind="U" nr="1">
-<Func kind="K" nr="241">
-<Func kind="K" nr="232">
+<Func kind="K" nr="240">
+<Func kind="K" nr="231">
 <LocusVar nr="1"/>
 </Func>
 </Func>
@@ -338,8 +337,8 @@
 </Adjective>
 <Adjective nr="198">
 <LocusVar nr="1"/>
-<Func kind="K" nr="241">
-<Func kind="K" nr="232">
+<Func kind="K" nr="240">
+<Func kind="K" nr="231">
 <LocusVar nr="1"/>
 </Func>
 </Func>
@@ -359,7 +358,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="249">
+<Func kind="K" nr="248">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -368,8 +367,8 @@
 <Adjective nr="6"/>
 <Adjective nr="7">
 <Func kind="U" nr="1">
-<Func kind="K" nr="241">
-<Func kind="K" nr="232">
+<Func kind="K" nr="240">
+<Func kind="K" nr="231">
 <LocusVar nr="1"/>
 </Func>
 </Func>
@@ -379,8 +378,8 @@
 </Func>
 </Adjective>
 <Adjective nr="198">
-<Func kind="K" nr="241">
-<Func kind="K" nr="232">
+<Func kind="K" nr="240">
+<Func kind="K" nr="231">
 <LocusVar nr="1"/>
 </Func>
 </Func>
@@ -406,7 +405,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="258">
+<Func kind="K" nr="257">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -456,7 +455,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="258">
+<Func kind="K" nr="257">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>

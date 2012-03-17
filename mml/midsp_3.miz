@@ -37,7 +37,7 @@ Th1: len p = j+1+k implies ex q,r,c st len q = j & len r = k & p = q^<*c*>^r
    A2: q' = q^<*c*> by A1,FINSEQ_2:22;
 A3:   len q' = len q + 1 by A2,FINSEQ_2:19;
    take q,r,c;
-   thus thesis by A1,A2,A3,XCMPLX_1:2;
+   thus thesis by A1,A2,A3;
  end;
 
 theorem
@@ -188,20 +188,20 @@ A1: now
      let a,b be Element of RA,
          a',b'  be Element of M such that
 A2:   a=a' & b=b';
-     thus a@b = (the MIDPOINT of M).(a,b) by MIDSP_1:def 1
-             .= a'@b' by A2,MIDSP_1:def 1;
+     thus a@b = (the MIDPOINT of M).(a,b)
+             .= a'@b' by A2;
     end;
    hence a@a = a'@a' .= a by MIDSP_1:def 4;
-   thus a@b = b'@a' by A1 .= b@a by A1;
-A3: a@b = a'@b' & c@d = c'@d' & a'@c' = a@c & b'@d' = b@d by A1;
-   hence (a@b)@(c@d) = (a'@b')@(c'@d') by A1
+   thus a@b = b'@a' by A1 .= b@a;
+ a@b = a'@b' & c@d = c'@d' & a'@c' = a@c & b'@d' = b@d by A1;
+   hence (a@b)@(c@d) = (a'@b')@(c'@d')
             .= (a'@c')@(b'@d') by MIDSP_1:def 4
-            .= (a@c)@(b@d) by A1,A3;
+            .= (a@c)@(b@d);
     consider x'  being Element of M such that
 A4:  x'@a' = b' by MIDSP_1:def 4;
     reconsider x = x' as Element of RA;
    take x;
-   thus x@a = b by A1,A4;
+   thus x@a = b by A4;
   end;
 end;
 
@@ -247,7 +247,7 @@ end;
 
 definition let n,RAS,a,p;
  func *'(a,p) -> Point of RAS equals
- :Def2:  (the reper of RAS).(<*a*>^p);
+   (the reper of RAS).(<*a*>^p);
  coherence
   proof
     reconsider p' = <*a*>^p as Tuple of (n+2),RAS;
@@ -645,7 +645,7 @@ theorem
 
 definition let n,RAS,W,a,x;
  func Phi(a,x) -> Vector of W equals
- :Def13:  W.(a,*'(a,(a,x).W));
+   W.(a,*'(a,(a,x).W));
  coherence;
 end;
 
@@ -653,7 +653,7 @@ theorem
 Th20: W.(a,p) = x & W.(a,b) = v implies (*'(a,p) = b iff Phi(a,x) = v)
  proof
    assume A1: W.(a,p) = x & W.(a,b) = v;
-      Phi(a,x) = W.(a,*'(a,(a,x).W)) by Def13
+      Phi(a,x) = W.(a,*'(a,(a,x).W))
              .= W.(a,*'(a,p)) by A1,Th17;
    hence thesis by A1,MIDSP_2:38;
  end;
@@ -667,15 +667,13 @@ Th21: RAS is_invariance iff for a,b,x holds Phi(a,x) = Phi(b,x)
      set p = (a,x).W, q = (b,x).W;
      A3: W.(a,p) = x by Th17
                 .= W.(b,q) by Th17;
-     A4: Phi(a,x) = W.(a,*'(a,p)) & Phi(b,x) = W.(b,*'(b,q))
- by Def13;
         now let m;
           W.(a,p.m) = W.(a,p).m by Def12
                 .= W.(b,q.m) by A3,Def12;
        hence a@(q.m) = b@(p.m) by MIDSP_2:39;
      end;
      then a@*'(b,q) = b@*'(a,p) by A2,Def5;
-     hence Phi(a,x) = Phi(b,x) by A4,MIDSP_2:39;
+     hence Phi(a,x) = Phi(b,x) by MIDSP_2:39;
    end;
       (for a,b,x holds Phi(a,x) = Phi(b,x)) implies RAS is_invariance
      proof
@@ -692,9 +690,9 @@ A7:          now let m;
             thus W.(a,p).m = W.(a,p.m) by Def12
                           .= W.(b,q).m by A8,Def12;
           end;
-          A9: W.(a,*'(a,(a,W.(a,p)).W)) = Phi(a,W.(a,p)) by Def13
+          A9: W.(a,*'(a,(a,W.(a,p)).W)) = Phi(a,W.(a,p))
                                       .= Phi(b,W.(a,p)) by A5
-                                      .= W.(b,*'(b,(b,W.(a,p)).W)) by Def13;
+                                      .= W.(b,*'(b,(b,W.(a,p)).W));
              W.(a,*'(a,p)) = W.(a,*'(a,(a,W.(a,p)).W)) by Th17
                       .= W.(b,*'(b,(b,W.(b,q)).W)) by A7,A9,Th16
                       .= W.(b,*'(b,q)) by Th17;
@@ -748,10 +746,10 @@ A2:    for a,b being Point of RA, p,q being Tuple of (n+1),RA
       proof
         let a,b be Point of RA, p,q be Tuple of (n+1),RA such that
            for m holds a@(q.m) = b@(p.m);
-        A3: *'(b,q) = R.(<*b*>^q) by Def2
+        A3: *'(b,q) = R.(<*b*>^q)
                    .= (<*b*>^q).one by A1
                    .= b by FINSEQ_1:58;
-           *'(a,p) = R.(<*a*>^p) by Def2
+           *'(a,p) = R.(<*a*>^p)
               .= (<*a*>^p).one by A1
               .= a by FINSEQ_1:58;
         hence b@*'(a,p) = a@*'(b,q) by A3;
@@ -800,7 +798,7 @@ Lm2: W.(a,p) = x implies Phi(x) = W.(a,*'(a,p))
    assume W.(a,p) = x;
    then A1: (a,x).W = p by Th17;
    thus Phi(x) = Phi(a,x) by Def15
-            .= W.(a,*'(a,p)) by A1,Def13;
+            .= W.(a,*'(a,p)) by A1;
  end;
 
 Lm3: (a,x).W = p implies Phi(x) = W.(a,*'(a,p))
@@ -823,7 +821,7 @@ Th27: (a,x).W = p & (a,v).W = b & *'(a,p) = b implies Phi(x) = v
  proof
    assume A1: (a,x).W = p & (a,v).W = b & *'(a,p) = b;
    then W.(a,p) = x & W.(a,b) = v by Th17,MIDSP_2:39;
-   then Phi(a,x) = v by A1,Th20;
+   then Phi(a,x) = v by A1;
    hence thesis by Def15;
  end;
 

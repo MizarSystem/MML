@@ -64,10 +64,10 @@
 </Typ>
 </ArgTypes>
 <Func kind="G" nr="10">
-<Func kind="K" nr="414">
+<Func kind="K" nr="413">
 <LocusVar nr="1"/>
 </Func>
-<Func kind="K" nr="434">
+<Func kind="K" nr="433">
 <LocusVar nr="1"/>
 </Func>
 </Func>

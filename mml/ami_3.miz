@@ -31,14 +31,14 @@ begin :: A small concrete machine
 
 definition
  func SCM -> strict AMI-Struct over { INT } equals
-:Def1:
+
    AMI-Struct(#NAT,0,SCM-Instr-Loc,Segm 9,SCM-Instr,SCM-OK,SCM-Exec#);
  coherence;
 end;
 
 registration
  cluster SCM -> non empty non void;
- coherence by Def1,AMI_1:def 3,STRUCT_0:def 1;
+ coherence by AMI_1:def 3,STRUCT_0:def 1;
 end;
 
 theorem Th1:
@@ -47,21 +47,21 @@ theorem Th1:
   set A = SCM;
   let x be set;
   assume A1: x in (the Object-Kind of A)"{ the Instructions of A };
-  then reconsider x as Nat by Def1,FUNCT_2:46;
-     SCM-OK.x in { SCM-Instr } by A1,Def1,FUNCT_2:46;
+  then reconsider x as Nat by FUNCT_2:46;
+     SCM-OK.x in { SCM-Instr } by A1,FUNCT_2:46;
   then SCM-OK.x = SCM-Instr by TARSKI:def 1;
   then consider k such that
 A2:      x = 2*k+2*1 by AMI_2:9;
      x = 2*(k + 1) & k + 1 > 0 by A2,NAT_1:19;
-  hence thesis by Def1,AMI_2:def 3;
+  hence thesis by AMI_2:def 3;
  end;
 
 theorem Th2:
  SCM is definite
 proof let l be Instruction-Location of SCM;
-  reconsider L = l as Element of SCM-Instr-Loc by Def1;
- thus ObjectKind l = SCM-OK.L by Def1,AMI_1:def 6
-  .= the Instructions of SCM by Def1,AMI_2:11;
+  reconsider L = l as Element of SCM-Instr-Loc;
+ thus ObjectKind l = SCM-OK.L
+  .= the Instructions of SCM by AMI_2:11;
 end;
 
 registration
@@ -70,10 +70,9 @@ registration
   proof
     SCM is IC-Ins-separated
  proof
-A1: IC SCM = 0 by Def1,AMI_1:def 5;
        ObjectKind IC SCM
-     = SCM-OK.IC SCM by Def1,AMI_1:def 6
-    .= the Instruction-Locations of SCM by A1,Def1,AMI_2:def 5;
+     = SCM-OK.IC SCM
+    .= the Instruction-Locations of SCM by AMI_2:def 5;
   hence thesis by AMI_1:def 11;
  end;
   hence thesis by Th1,Th2;
@@ -85,7 +84,7 @@ definition
 :Def2: it in SCM-Data-Loc;
  existence
   proof consider x being Element of SCM-Data-Loc;
-    reconsider x as Object of SCM by Def1;
+    reconsider x as Object of SCM;
    take x;
    thus thesis;
   end;
@@ -95,7 +94,7 @@ definition let s be State of SCM, d be Data-Location;
  redefine func s.d -> Integer;
  coherence
   proof
-    reconsider S = s as SCM-State by Def1;
+    reconsider S = s as SCM-State;
     reconsider D = d as Element of SCM-Data-Loc by Def2;
        S.D = s.d;
    hence thesis;
@@ -108,76 +107,76 @@ reserve a,b,c for Data-Location,
 
 definition let a,b;
  func a := b -> Instruction of SCM equals
-:Def3: [ 1, <*a, b*>];
+ [ 1, <*a, b*>];
  correctness
   proof
     reconsider mk = a, ml = b as Element of SCM-Data-Loc by Def2;
         1 in { 1,2,3,4,5} by ENUMSET1:def 3;
      then [ 1, <*mk, ml*>] in SCM-Instr by AMI_2:5;
-   hence thesis by Def1;
+   hence thesis;
   end;
  func AddTo(a,b) -> Instruction of SCM equals
-:Def4: [ 2, <*a, b*>];
+ [ 2, <*a, b*>];
  correctness
   proof
     reconsider mk = a, ml = b as Element of SCM-Data-Loc by Def2;
         2 in { 1,2,3,4,5} by ENUMSET1:def 3;
      then [ 2, <*mk, ml*>] in SCM-Instr by AMI_2:5;
-   hence thesis by Def1;
+   hence thesis;
   end;
  func SubFrom(a,b) -> Instruction of SCM equals
-:Def5: [ 3, <*a, b*>];
+ [ 3, <*a, b*>];
  correctness
   proof
     reconsider mk = a, ml = b as Element of SCM-Data-Loc by Def2;
         3 in { 1,2,3,4,5} by ENUMSET1:def 3;
      then [ 3, <*mk, ml*>] in SCM-Instr by AMI_2:5;
-   hence thesis by Def1;
+   hence thesis;
   end;
  func MultBy(a,b) -> Instruction of SCM equals
-:Def6: [ 4, <*a, b*>];
+ [ 4, <*a, b*>];
  correctness
   proof
     reconsider mk = a, ml = b as Element of SCM-Data-Loc by Def2;
         4 in { 1,2,3,4,5} by ENUMSET1:def 3;
      then [ 4, <*mk, ml*>] in SCM-Instr by AMI_2:5;
-   hence thesis by Def1;
+   hence thesis;
   end;
  func Divide(a,b) -> Instruction of SCM equals
-:Def7: [ 5, <*a, b*>];
+ [ 5, <*a, b*>];
  correctness
   proof
     reconsider mk = a, ml = b as Element of SCM-Data-Loc by Def2;
         5 in { 1,2,3,4,5} by ENUMSET1:def 3;
      then [ 5, <*mk, ml*>] in SCM-Instr by AMI_2:5;
-   hence thesis by Def1;
+   hence thesis;
   end;
 end;
 
 definition let loc;
  func goto loc -> Instruction of SCM equals
-:Def8: [ 6, <*loc*>];
- correctness by Def1,AMI_2:3;
+ [ 6, <*loc*>];
+ correctness by AMI_2:3;
  let a;
  func a=0_goto loc -> Instruction of SCM equals
-:Def9: [ 7, <*loc,a*>];
+ [ 7, <*loc,a*>];
  correctness
   proof
-    reconsider loc as Element of SCM-Instr-Loc by Def1;
+    reconsider loc as Element of SCM-Instr-Loc;
     reconsider a as Element of SCM-Data-Loc by Def2;
         7 in { 7,8 } by TARSKI:def 2;
      then [ 7, <*loc,a*>] in SCM-Instr by AMI_2:4;
-   hence thesis by Def1;
+   hence thesis;
   end;
  func a>0_goto loc -> Instruction of SCM equals
-:Def10: [ 8, <*loc,a*>];
+ [ 8, <*loc,a*>];
  correctness
   proof
-    reconsider loc as Element of SCM-Instr-Loc by Def1;
+    reconsider loc as Element of SCM-Instr-Loc;
     reconsider a as Element of SCM-Data-Loc by Def2;
         8 in { 7,8 } by TARSKI:def 2;
      then [ 8, <*loc,a*>] in SCM-Instr by AMI_2:4;
-   hence thesis by Def1;
+   hence thesis;
   end;
 end;
 
@@ -185,21 +184,21 @@ reserve s for State of SCM;
 
 canceled;
 
-theorem Th4:
- IC SCM = 0 by Def1,AMI_1:def 5;
+theorem
+ IC SCM = 0;
 
 theorem Th5:
  for S being SCM-State st S = s holds IC s = IC S
  proof let S be SCM-State; assume S = s;
-  hence IC s = S.0 by Th4,AMI_1:def 15 .= IC S by AMI_2:def 6;
+  hence IC s = S.0 .= IC S by AMI_2:def 6;
  end;
 
 definition let loc be Instruction-Location of SCM;
  func Next loc -> Instruction-Location of SCM means
 :Def11: ex mj being Element of SCM-Instr-Loc st mj = loc & it = Next mj;
  existence
-  proof reconsider loc as Element of SCM-Instr-Loc by Def1;
-       Next loc is Instruction-Location of SCM by Def1;
+  proof reconsider loc as Element of SCM-Instr-Loc;
+       Next loc is Instruction-Location of SCM;
    hence thesis;
   end;
  correctness;
@@ -226,7 +225,7 @@ A1: i = I;
     S = s;
   hence Exec(I,s) =
 (SCM-Exec.i qua Element of Funcs(product SCM-OK, product SCM-OK)).S
-           by A1,Def1,AMI_1:def 7
+           by A1
         .= SCM-Exec-Res(i,S) by AMI_2:def 17;
  end;
 
@@ -238,16 +237,16 @@ theorem Th8:
  for c st c <> a holds Exec(a:=b, s).c = s.c
  proof
   reconsider mk = a, ml = b as Element of SCM-Data-Loc by Def2;
-  reconsider I = a:=b as Element of SCM-Instr by Def1;
-  reconsider S = s as SCM-State by Def1;
+  reconsider I = a:=b as Element of SCM-Instr;
+  reconsider S = s as SCM-State;
   set S1 = SCM-Chg(S, I address_1,S.(I address_2));
   reconsider i = 1 as Element of Segm 9 by GR_CY_1:10;
-A1:  I = [ i, <*mk, ml*>] by Def3;
+A1:  I = [ i, <*mk, ml*>];
 A2:  IC s = IC S by Th5;
 A3: Exec(a:=b, s) = SCM-Exec-Res(I,S) by Th7 .= (SCM-Chg(S1, Next IC S))
  by A1,AMI_2:def 16;
 A4: I address_1 = mk & I address_2 = ml by A1,AMI_2:23;
-  thus Exec(a:=b, s).IC SCM = Next IC S by A3,Th4,AMI_2:16
+  thus Exec(a:=b, s).IC SCM = Next IC S by A3,AMI_2:16
     .= Next IC s by A2,Th6;
   thus Exec(a:=b, s).a = S1.mk by A3,AMI_2:17
    .= s.b by A4,AMI_2:20;
@@ -265,16 +264,16 @@ theorem Th9:
  for c st c <> a holds Exec(AddTo(a,b), s).c = s.c
  proof
   reconsider mk = a, ml = b as Element of SCM-Data-Loc by Def2;
-  reconsider I = AddTo(a,b) as Element of SCM-Instr by Def1;
-  reconsider S = s as SCM-State by Def1;
+  reconsider I = AddTo(a,b) as Element of SCM-Instr;
+  reconsider S = s as SCM-State;
   set S1 = SCM-Chg(S, I address_1,S.(I address_1)+S.(I address_2));
   reconsider i = 2 as Element of Segm 9 by GR_CY_1:10;
-A1:  I = [ i, <*mk, ml*>] by Def4;
+A1:  I = [ i, <*mk, ml*>];
 A2:  IC s = IC S by Th5;
 A3: Exec(AddTo(a,b), s) = SCM-Exec-Res(I,S) by Th7 .= (SCM-Chg(S1, Next IC S))
  by A1,AMI_2:def 16;
 A4: I address_1 = mk & I address_2 = ml by A1,AMI_2:23;
-  thus Exec(AddTo(a,b), s).IC SCM = Next IC S by A3,Th4,AMI_2:16
+  thus Exec(AddTo(a,b), s).IC SCM = Next IC S by A3,AMI_2:16
     .= Next IC s by A2,Th6;
   thus Exec(AddTo(a,b), s).a = S1.mk by A3,AMI_2:17
    .= s.a + s.b by A4,AMI_2:20;
@@ -292,17 +291,17 @@ theorem Th10:
  for c st c <> a holds Exec(SubFrom(a,b), s).c = s.c
  proof
   reconsider mk = a, ml = b as Element of SCM-Data-Loc by Def2;
-  reconsider I = SubFrom(a,b) as Element of SCM-Instr by Def1;
-  reconsider S = s as SCM-State by Def1;
+  reconsider I = SubFrom(a,b) as Element of SCM-Instr;
+  reconsider S = s as SCM-State;
   set S1 = SCM-Chg(S, I address_1,S.(I address_1)-S.(I address_2));
   reconsider i = 3 as Element of Segm 9 by GR_CY_1:10;
-A1:  I = [ i, <*mk, ml*>] by Def5;
+A1:  I = [ i, <*mk, ml*>];
 A2:  IC s = IC S by Th5;
 A3: Exec(SubFrom(a,b), s) = SCM-Exec-Res(I,S) by Th7
  .= (SCM-Chg(S1, Next IC S))
  by A1,AMI_2:def 16;
 A4: I address_1 = mk & I address_2 = ml by A1,AMI_2:23;
-  thus Exec(SubFrom(a,b), s).IC SCM = Next IC S by A3,Th4,AMI_2:16
+  thus Exec(SubFrom(a,b), s).IC SCM = Next IC S by A3,AMI_2:16
     .= Next IC s by A2,Th6;
   thus Exec(SubFrom(a,b), s).a = S1.mk by A3,AMI_2:17
    .= s.a - s.b by A4,AMI_2:20;
@@ -320,16 +319,16 @@ theorem Th11:
  for c st c <> a holds Exec(MultBy(a,b), s).c = s.c
  proof
   reconsider mk = a, ml = b as Element of SCM-Data-Loc by Def2;
-  reconsider I = MultBy(a,b) as Element of SCM-Instr by Def1;
-  reconsider S = s as SCM-State by Def1;
+  reconsider I = MultBy(a,b) as Element of SCM-Instr;
+  reconsider S = s as SCM-State;
   set S1 = SCM-Chg(S, I address_1,S.(I address_1)*S.(I address_2));
   reconsider i = 4 as Element of Segm 9 by GR_CY_1:10;
-A1:  I = [ i, <*mk, ml*>] by Def6;
+A1:  I = [ i, <*mk, ml*>];
 A2:  IC s = IC S by Th5;
 A3: Exec(MultBy(a,b), s) = SCM-Exec-Res(I,S) by Th7 .= (SCM-Chg(S1, Next IC S))
  by A1,AMI_2:def 16;
 A4: I address_1 = mk & I address_2 = ml by A1,AMI_2:23;
-  thus Exec(MultBy(a,b), s).IC SCM = Next IC S by A3,Th4,AMI_2:16
+  thus Exec(MultBy(a,b), s).IC SCM = Next IC S by A3,AMI_2:16
     .= Next IC s by A2,Th6;
   thus Exec(MultBy(a,b), s).a = S1.mk by A3,AMI_2:17
    .= s.a * s.b by A4,AMI_2:20;
@@ -348,18 +347,18 @@ theorem Th12:
  for c st c <> a & c <> b holds Exec(Divide(a,b), s).c = s.c
  proof
   reconsider mk = a, ml = b as Element of SCM-Data-Loc by Def2;
-  reconsider I = Divide(a,b) as Element of SCM-Instr by Def1;
-  reconsider S = s as SCM-State by Def1;
+  reconsider I = Divide(a,b) as Element of SCM-Instr;
+  reconsider S = s as SCM-State;
   set S1 = SCM-Chg(S, I address_1,S.(I address_1) div S.(I address_2));
   set S1' = SCM-Chg(S1, I address_2,S.(I address_1) mod S.(I address_2));
   reconsider i = 5 as Element of Segm 9 by GR_CY_1:10;
-A1:  I = [ i, <*mk, ml*>] by Def7;
+A1:  I = [ i, <*mk, ml*>];
 A2:  IC s = IC S by Th5;
 A3: Exec(Divide(a,b), s) = SCM-Exec-Res(I,S) by Th7
  .= (SCM-Chg(S1', Next IC S))
  by A1,AMI_2:def 16;
 A4: I address_1 = mk & I address_2 = ml by A1,AMI_2:23;
-  thus Exec(Divide(a,b), s).IC SCM = Next IC S by A3,Th4,AMI_2:16
+  thus Exec(Divide(a,b), s).IC SCM = Next IC S by A3,AMI_2:16
     .= Next IC s by A2,Th6;
   hereby
     assume
@@ -382,15 +381,15 @@ theorem
     Exec(goto loc, s).IC SCM = loc &
  Exec(goto loc, s).c = s.c
  proof
-  reconsider mj = loc as Element of SCM-Instr-Loc by Def1;
-  reconsider I = goto loc as Element of SCM-Instr by Def1;
-  reconsider S = s as SCM-State by Def1;
+  reconsider mj = loc as Element of SCM-Instr-Loc;
+  reconsider I = goto loc as Element of SCM-Instr;
+  reconsider S = s as SCM-State;
   reconsider i = 6 as Element of Segm 9 by GR_CY_1:10;
-A1:  I = [ i, <*mj*>] by Def8;
+A1:  I = [ i, <*mj*>];
 A2: Exec(goto loc, s) = SCM-Exec-Res(I,S) by Th7 .= (SCM-Chg(S,I jump_address))
- by A1,AMI_2:def 16;
+ by AMI_2:def 16;
     I jump_address = mj by A1,AMI_2:24;
-  hence Exec(goto loc, s).IC SCM = loc by A2,Th4,AMI_2:16;
+  hence Exec(goto loc, s).IC SCM = loc by A2,AMI_2:16;
    reconsider mn = c as Element of SCM-Data-Loc by Def2;
   thus Exec(goto loc, s).c = S.mn by A2,AMI_2:17 .= s.c;
  end;
@@ -400,12 +399,12 @@ theorem Th14:
  (s.a <> 0 implies Exec(a=0_goto loc, s).IC SCM = Next IC s) &
  Exec(a=0_goto loc, s).c = s.c
  proof
-  reconsider mj = loc as Element of SCM-Instr-Loc by Def1;
+  reconsider mj = loc as Element of SCM-Instr-Loc;
   reconsider a' = a as Element of SCM-Data-Loc by Def2;
-  reconsider I = a=0_goto loc as Element of SCM-Instr by Def1;
-  reconsider S = s as SCM-State by Def1;
+  reconsider I = a=0_goto loc as Element of SCM-Instr;
+  reconsider S = s as SCM-State;
   reconsider i = 7 as Element of Segm 9 by GR_CY_1:10;
-A1:  I = [ i, <*mj,a'*>] by Def9;
+A1:  I = [ i, <*mj,a'*>];
 A2:  IC s = IC S by Th5;
 A3: Exec(a=0_goto loc, s) = SCM-Exec-Res(I,S) by Th7
   .= SCM-Chg(S,IFEQ(S.(I cond_address),0,I cjump_address,Next IC S))
@@ -414,7 +413,7 @@ A3: Exec(a=0_goto loc, s) = SCM-Exec-Res(I,S) by Th7
    proof assume s.a = 0;
 then A4:   S.(I cond_address)=0 by A1,AMI_2:25;
     thus Exec(a=0_goto loc, s).IC SCM =
-IFEQ(S.(I cond_address),0,I cjump_address,Next IC S) by A3,Th4,AMI_2:16
+IFEQ(S.(I cond_address),0,I cjump_address,Next IC S) by A3,AMI_2:16
       .= I cjump_address by A4,CQC_LANG:def 1
       .= loc by A1,AMI_2:25;
    end;
@@ -422,7 +421,7 @@ IFEQ(S.(I cond_address),0,I cjump_address,Next IC S) by A3,Th4,AMI_2:16
    proof assume s.a <> 0;
 then A5:   S.(I cond_address) <> 0 by A1,AMI_2:25;
     thus Exec(a=0_goto loc, s).IC SCM =
-IFEQ(S.(I cond_address),0,I cjump_address,Next IC S) by A3,Th4,AMI_2:16
+IFEQ(S.(I cond_address),0,I cjump_address,Next IC S) by A3,AMI_2:16
       .= Next IC S by A5,CQC_LANG:def 1
       .= Next IC s by A2,Th6;
    end;
@@ -435,12 +434,12 @@ theorem Th15:
  (s.a <= 0 implies Exec(a>0_goto loc, s).IC SCM = Next IC s) &
  Exec(a>0_goto loc, s).c = s.c
  proof
-  reconsider mj = loc as Element of SCM-Instr-Loc by Def1;
+  reconsider mj = loc as Element of SCM-Instr-Loc;
   reconsider a' = a as Element of SCM-Data-Loc by Def2;
-  reconsider I = a>0_goto loc as Element of SCM-Instr by Def1;
-  reconsider S = s as SCM-State by Def1;
+  reconsider I = a>0_goto loc as Element of SCM-Instr;
+  reconsider S = s as SCM-State;
   reconsider i = 8 as Element of Segm 9 by GR_CY_1:10;
-A1:  I = [ i, <*mj,a'*>] by Def10;
+A1:  I = [ i, <*mj,a'*>];
 A2:  IC s = IC S by Th5;
 A3: Exec(a>0_goto loc, s) = SCM-Exec-Res(I,S) by Th7
    .= SCM-Chg(S,IFGT(S.(I cond_address),0,I cjump_address,Next IC S))
@@ -449,7 +448,7 @@ A3: Exec(a>0_goto loc, s) = SCM-Exec-Res(I,S) by Th7
    proof assume s.a > 0;
 then A4:   S.(I cond_address) > 0 by A1,AMI_2:25;
     thus Exec(a>0_goto loc, s).IC SCM =
-IFGT(S.(I cond_address),0,I cjump_address,Next IC S) by A3,Th4,AMI_2:16
+IFGT(S.(I cond_address),0,I cjump_address,Next IC S) by A3,AMI_2:16
       .= I cjump_address by A4,AMI_2:def 14
       .= loc by A1,AMI_2:25;
    end;
@@ -457,7 +456,7 @@ IFGT(S.(I cond_address),0,I cjump_address,Next IC S) by A3,Th4,AMI_2:16
    proof assume s.a <= 0;
 then A5:   S.(I cond_address) <= 0 by A1,AMI_2:25;
     thus Exec(a>0_goto loc, s).IC SCM =
-IFGT(S.(I cond_address),0,I cjump_address,Next IC S) by A3,Th4,AMI_2:16
+IFGT(S.(I cond_address),0,I cjump_address,Next IC S) by A3,AMI_2:16
       .= Next IC S by A5,AMI_2:def 14
       .= Next IC s by A2,Th6;
    end;
@@ -479,15 +478,14 @@ Lm1:
 A1:   Exec(I, s).IC SCM = Next IC s;
     assume
 A2:   I is halting;
-    reconsider t = s as SCM-State by Def1;
-A3: IC t = IC s by Th5;
+    reconsider t = s as SCM-State;
 A4: IC t = t.0 by AMI_2:def 6;
 A5: Exec(I,s).IC SCM = s.IC SCM by A2,AMI_1:def 8
-       .= t.0 by A3,A4,AMI_1:def 15;
-    reconsider w = t.0 as Instruction-Location of SCM by A4,Def1;
+       .= t.0;
+    reconsider w = t.0 as Instruction-Location of SCM by A4;
     consider mj being Element of SCM-Instr-Loc such that
 A6:   mj = w & Next w = Next mj by Def11;
-A7: Exec(I,s).IC SCM = Next w by A1,A4,Th5;
+A7: Exec(I,s).IC SCM = Next w by A1;
        Next w = mj + 2 by A6,AMI_2:def 15;
     hence contradiction by A5,A6,A7,XCMPLX_1:3;
   end;
@@ -498,7 +496,7 @@ Lm2:
     let I be Instruction of SCM such that
 A1:   I = [0,{}];
     let s be State of SCM;
-    reconsider L = I as Element of SCM-Instr by A1,AMI_2:2;
+    reconsider L = I as Element of SCM-Instr;
 A2: I`2 = {} by A1,MCART_1:7;
 A3: now let i; let mk, ml be Element of SCM-Data-Loc;
     assume I = [ i, <*mk, ml*>];
@@ -527,7 +525,7 @@ then A5:
            ml being Element of SCM-Data-Loc st I = [ 7, <*mk,ml*>]) &
    not (ex mk being Element of SCM-Instr-Loc,
            ml being Element of SCM-Data-Loc st I = [ 8, <*mk,ml*>]) by A3,A4;
-    reconsider t = s as SCM-State by Def1;
+    reconsider t = s as SCM-State;
     thus Exec(I,s) = SCM-Exec-Res(L,t) by Th7
        .= s by A5,AMI_2:def 16;
   end;
@@ -577,9 +575,8 @@ Lm8:
   proof
     assume
 A1:   goto loc is halting;
-    reconsider V = goto loc as Element of SCM-Instr by Def1;
-    reconsider a3 = loc as Element of SCM-Instr-Loc by Def1;
-A2: goto loc = [ 6, <*loc*>] by Def8;
+    reconsider V = goto loc as Element of SCM-Instr;
+    reconsider a3 = loc as Element of SCM-Instr-Loc;
     consider s being SCM-State;
     set t = s +* (0.--> Next a3);
     set f = the Object-Kind of SCM;
@@ -594,7 +591,7 @@ A8: dom t = dom s \/ dom (0.--> Next a3) by FUNCT_4:def 1
          .= NAT \/ dom (0.--> Next a3) by A7,FUNCT_2:def 1
          .= NAT \/ {0} by CQC_LANG:5
          .= NAT by A6,XBOOLE_1:12;
-A9: dom f = NAT by Def1,FUNCT_2:def 1;
+A9: dom f = NAT by FUNCT_2:def 1;
        for x being set st x in dom f holds t.x in f.x
     proof
       let x be set such that
@@ -602,17 +599,17 @@ A10:     x in dom f;
       per cases;
       suppose
 A11:     x = 0;
-      then f.x = SCM-Instr-Loc by Def1,AMI_2:7;
+      then f.x = SCM-Instr-Loc by AMI_2:7;
       hence t.x in f.x by A4,A11;
       end;
       suppose x <> 0;
       then not x in dom (0.--> Next a3) by A3,TARSKI:def 1;
 then t.x = s.x by FUNCT_4:12;
-      hence t.x in f.x by A10,Def1,CARD_3:18;
+      hence t.x in f.x by A10,CARD_3:18;
     end;
     end;
     then reconsider t as State of SCM by A8,A9,CARD_3:18;
-    reconsider w = t as SCM-State by Def1;
+    reconsider w = t as SCM-State;
        dom(0 .--> loc) = {0} by CQC_LANG:5;
     then 0 in dom (0 .--> loc) by TARSKI:def 1;
 then A12: (w +* (0 .--> loc)).0 = (0 .--> loc).0 by FUNCT_4:14
@@ -620,8 +617,8 @@ then A12: (w +* (0 .--> loc)).0 = (0 .--> loc).0 by FUNCT_4:14
 A13: 6 is Element of Segm 9 by GR_CY_1:10;
        w +* (0 .--> loc)
       = SCM-Chg(w,a3) by AMI_2:def 7
-     .= SCM-Chg(w,V jump_address) by A2,A13,AMI_2:24
-     .= SCM-Exec-Res(V,w) by A2,AMI_2:def 16
+     .= SCM-Chg(w,V jump_address) by A13,AMI_2:24
+     .= SCM-Exec-Res(V,w) by AMI_2:def 16
      .= Exec(goto loc,t) by Th7
      .= t by A1,AMI_1:def 8;
     hence contradiction by A5,A12,XCMPLX_1:3;
@@ -630,9 +627,8 @@ A13: 6 is Element of Segm 9 by GR_CY_1:10;
 Lm9:
  a=0_goto loc is non halting
   proof
-    reconsider V = a=0_goto loc as Element of SCM-Instr by Def1;
-    reconsider a3 = loc as Element of SCM-Instr-Loc by Def1;
-A1: a=0_goto loc = [ 7, <*loc,a*>] by Def9;
+    reconsider V = a=0_goto loc as Element of SCM-Instr;
+    reconsider a3 = loc as Element of SCM-Instr-Loc;
     consider s being SCM-State;
     set t = s +* (0.--> Next a3);
     set f = the Object-Kind of SCM;
@@ -647,7 +643,7 @@ A7: dom t = dom s \/ dom (0.--> Next a3) by FUNCT_4:def 1
          .= NAT \/ dom (0.--> Next a3) by A6,FUNCT_2:def 1
          .= NAT \/ {0} by CQC_LANG:5
          .= NAT by A5,XBOOLE_1:12;
-A8: dom f = NAT by Def1,FUNCT_2:def 1;
+A8: dom f = NAT by FUNCT_2:def 1;
        for x being set st x in dom f holds t.x in f.x
     proof
       let x be set such that
@@ -655,17 +651,17 @@ A9:     x in dom f;
       per cases;
       suppose
 A10:     x = 0;
-      then f.x = SCM-Instr-Loc by Def1,AMI_2:7;
+      then f.x = SCM-Instr-Loc by AMI_2:7;
       hence t.x in f.x by A3,A10;
       end;
       suppose x <> 0;
       then not x in dom (0.--> Next a3) by A2,TARSKI:def 1;
 then t.x = s.x by FUNCT_4:12;
-      hence t.x in f.x by A9,Def1,CARD_3:18;
+      hence t.x in f.x by A9,CARD_3:18;
     end;
     end;
     then reconsider t as State of SCM by A7,A8,CARD_3:18;
-    reconsider w = t as SCM-State by Def1;
+    reconsider w = t as SCM-State;
        dom(0 .--> loc) = {0} by CQC_LANG:5;
     then 0 in dom (0 .--> loc) by TARSKI:def 1;
 then A11: (w +* (0 .--> loc)).0 = (0 .--> loc).0 by FUNCT_4:14
@@ -680,10 +676,10 @@ A15:   w.(V cond_address) <> 0;
 A16: IC t = IC w by Th5;
 A17: IC w = w.0 by AMI_2:def 6;
 A18: Exec(a=0_goto loc,t).IC SCM = t.IC SCM by A14,AMI_1:def 8
-       .= w.0 by A16,A17,AMI_1:def 15;
-    reconsider e = w.0 as Instruction-Location of SCM by A17,Def1;
-       t.a <> 0 by A1,A12,A13,A15,AMI_2:25;
-then A19: Exec(a=0_goto loc,t).IC SCM = Next e by A16,A17,Th14;
+       .= w.0;
+    reconsider e = w.0 as Instruction-Location of SCM by A17;
+       t.a <> 0 by A12,A13,A15,AMI_2:25;
+then A19: Exec(a=0_goto loc,t).IC SCM = Next e by A16,Th14;
     consider mj being Element of SCM-Instr-Loc such that
 A20:   mj = e & Next e = Next mj by Def11;
        Next e = mj + 2 by A20,AMI_2:def 15;
@@ -695,9 +691,9 @@ cjump_address
       by CQC_LANG:def 1;
        w +* (0 .--> loc)
       = SCM-Chg(w,a3) by AMI_2:def 7
-     .= SCM-Chg(w,IFEQ(w.(V cond_address),0,V cjump_address,Next IC w)) by A1
-,A12,A13,A21,AMI_2:25
-     .= SCM-Exec-Res(V,w) by A1,A13,AMI_2:def 16
+     .= SCM-Chg(w,IFEQ(w.(V cond_address),0,V cjump_address,Next IC w)) by A12,
+A13,A21,AMI_2:25
+     .= SCM-Exec-Res(V,w) by A13,AMI_2:def 16
      .= Exec(a=0_goto loc,t) by Th7
      .= t by A14,AMI_1:def 8;
     hence contradiction by A4,A11,XCMPLX_1:3;
@@ -707,9 +703,8 @@ cjump_address
 Lm10:
  a>0_goto loc is non halting
   proof
-    reconsider V = a>0_goto loc as Element of SCM-Instr by Def1;
-    reconsider a3 = loc as Element of SCM-Instr-Loc by Def1;
-A1: a>0_goto loc = [ 8, <*loc,a*>] by Def10;
+    reconsider V = a>0_goto loc as Element of SCM-Instr;
+    reconsider a3 = loc as Element of SCM-Instr-Loc;
     consider s being SCM-State;
     set t = s +* (0.--> Next a3);
     set f = the Object-Kind of SCM;
@@ -724,7 +719,7 @@ A7: dom t = dom s \/ dom (0.--> Next a3) by FUNCT_4:def 1
          .= NAT \/ dom (0.--> Next a3) by A6,FUNCT_2:def 1
          .= NAT \/ {0} by CQC_LANG:5
          .= NAT by A5,XBOOLE_1:12;
-A8: dom f = NAT by Def1,FUNCT_2:def 1;
+A8: dom f = NAT by FUNCT_2:def 1;
        for x being set st x in dom f holds t.x in f.x
     proof
       let x be set such that
@@ -732,17 +727,17 @@ A9:     x in dom f;
       per cases;
       suppose
 A10:     x = 0;
-      then f.x = SCM-Instr-Loc by Def1,AMI_2:7;
+      then f.x = SCM-Instr-Loc by AMI_2:7;
       hence t.x in f.x by A3,A10;
       end;
       suppose x <> 0;
       then not x in dom (0.--> Next a3) by A2,TARSKI:def 1;
 then t.x = s.x by FUNCT_4:12;
-      hence t.x in f.x by A9,Def1,CARD_3:18;
+      hence t.x in f.x by A9,CARD_3:18;
     end;
     end;
     then reconsider t as State of SCM by A7,A8,CARD_3:18;
-    reconsider w = t as SCM-State by Def1;
+    reconsider w = t as SCM-State;
        dom(0 .--> loc) = {0} by CQC_LANG:5;
     then 0 in dom (0 .--> loc) by TARSKI:def 1;
 then A11: (w +* (0 .--> loc)).0 = (0 .--> loc).0 by FUNCT_4:14
@@ -757,10 +752,10 @@ A15:   w.(V cond_address) <= 0;
 A16: IC t = IC w by Th5;
 A17: IC w = w.0 by AMI_2:def 6;
 A18: Exec(a>0_goto loc,t).IC SCM = t.IC SCM by A14,AMI_1:def 8
-       .= w.0 by A16,A17,AMI_1:def 15;
-    reconsider e = w.0 as Instruction-Location of SCM by A17,Def1;
-       t.a <= 0 by A1,A12,A13,A15,AMI_2:25;
-then A19: Exec(a>0_goto loc,t).IC SCM = Next e by A16,A17,Th15;
+       .= w.0;
+    reconsider e = w.0 as Instruction-Location of SCM by A17;
+       t.a <= 0 by A12,A13,A15,AMI_2:25;
+then A19: Exec(a>0_goto loc,t).IC SCM = Next e by A16,Th15;
     consider mj being Element of SCM-Instr-Loc such that
 A20:   mj = e & Next e = Next mj by Def11;
        Next e = mj + 2 by A20,AMI_2:def 15;
@@ -772,9 +767,9 @@ cjump_address
       by AMI_2:def 14;
        w +* (0 .--> loc)
       = SCM-Chg(w,a3) by AMI_2:def 7
-     .= SCM-Chg(w,IFGT(w.(V cond_address),0,V cjump_address,Next IC w)) by A1
-,A12,A13,A21,AMI_2:25
-     .= SCM-Exec-Res(V,w) by A1,A13,AMI_2:def 16
+     .= SCM-Chg(w,IFGT(w.(V cond_address),0,V cjump_address,Next IC w)) by A12,
+A13,A21,AMI_2:25
+     .= SCM-Exec-Res(V,w) by A13,AMI_2:def 16
      .= Exec(a>0_goto loc,t) by Th7
      .= t by A14,AMI_1:def 8;
     hence contradiction by A4,A11,XCMPLX_1:3;
@@ -809,7 +804,7 @@ Lm11:
       then I in { [SCM-Halt,{}] } \/
           { [Y,<*a3*>] : Y = 6 } \/
           { [K,<*a1,b1*>] : K in { 7,8 } } or
-           I in { [T,<*c2,c3*>] : T in { 1,2,3,4,5 } } by Def1,AMI_2:def 4
+           I in { [T,<*c2,c3*>] : T in { 1,2,3,4,5 } } by AMI_2:def 4
 ,XBOOLE_0:def 2;
 then A1:   I in { [SCM-Halt,{}] } \/
         { [Y,<*a3*>] : Y = 6 } or
@@ -822,38 +817,38 @@ then A1:   I in { [SCM-Halt,{}] } \/
       suppose I in { [Y,<*a3*>] : Y = 6 };
       then consider Y, a3 such that
 A2:     I = [Y,<*a3*>] & Y = 6;
-      reconsider loc = a3 as Instruction-Location of SCM by Def1;
-         I = goto loc by A2,Def8;
+      reconsider loc = a3 as Instruction-Location of SCM;
+         I = goto loc by A2;
       hence thesis;
       end;
       suppose I in { [K,<*a1,b1*>] : K in { 7,8 } };
       then consider K, a1, b1 such that
 A3:     I = [K,<*a1,b1*>] & K in { 7,8 };
-      reconsider loc = a1 as Instruction-Location of SCM by Def1;
-      reconsider a = b1 as Data-Location by Def1,Def2;
+      reconsider loc = a1 as Instruction-Location of SCM;
+      reconsider a = b1 as Data-Location by Def2;
          K = 7 or K = 8 by A3,TARSKI:def 2;
-      then I = a=0_goto loc or I = a>0_goto loc by A3,Def9,Def10;
+      then I = a=0_goto loc or I = a>0_goto loc by A3;
       hence thesis;
       end;
       suppose I in { [T,<*c2,c3*>] : T in { 1,2,3,4,5 } };
       then consider T, c2, c3 such that
 A4:     I = [T,<*c2,c3*>] & T in { 1,2,3,4,5 };
-      reconsider a = c2, b = c3 as Data-Location by Def1,Def2;
+      reconsider a = c2, b = c3 as Data-Location by Def2;
          T = 1 or T = 2 or T = 3 or T = 4 or T = 5 by A4,ENUMSET1:def 3;
       then I = a:=b or I = AddTo(a,b) or I = SubFrom(a,b) or I = MultBy(a,b)
 or
-       I = Divide(a,b) by A4,Def3,Def4,Def5,Def6,Def7;
+       I = Divide(a,b) by A4;
       hence thesis;
     end;
     end;
-    thus thesis by Def1,AMI_2:2;
+    thus thesis by AMI_2:2;
   end;
 
 registration
  cluster SCM -> halting;
 coherence
   proof
-    reconsider I = [0,{}] as Instruction of SCM by Def1,AMI_2:2;
+    reconsider I = [0,{}] as Instruction of SCM by AMI_2:2;
     take I;
     thus I is halting by Lm2;
     let W be Instruction of SCM such that
@@ -907,7 +902,7 @@ A2:   for J being Instruction of SCM st J is halting holds K = J
 Lm13:
  halt SCM = [0,{}]
   proof
-    reconsider I = [0,{}] as Instruction of SCM by Def1,AMI_2:2;
+    reconsider I = [0,{}] as Instruction of SCM by AMI_2:2;
        I is halting by Lm2;
     hence thesis by Lm12;
   end;
@@ -1090,11 +1085,8 @@ theorem Th31:
   holds p in FinPartSt S
  proof let S be AMI-Struct over N;
   let p be FinPartState of S;
-A1:  FinPartSt S =
-    { q where q is Element of sproduct the Object-Kind of S: q is finite }
-     by AMI_1:def 23;
       p is finite by AMI_1:def 24;
-  hence p in FinPartSt S by A1;
+  hence p in FinPartSt S;
  end;
 
 registration let N be set; let S be AMI-Struct over N;
@@ -1108,12 +1100,9 @@ theorem Th32:
   holds p is FinPartState of S
  proof let S be AMI-Struct over N;
   let p be Element of FinPartSt S;
-A1:  FinPartSt S =
-    { q where q is Element of sproduct the Object-Kind of S: q is finite }
-     by AMI_1:def 23;
       p in FinPartSt S;
    then ex q being Element of sproduct the Object-Kind of S
-     st q = p & q is finite by A1;
+     st q = p & q is finite;
   hence p is FinPartState of S by AMI_1:def 24;
  end;
 
@@ -1154,7 +1143,7 @@ definition let N be with_non-empty_elements set;
    let S be IC-Ins-separated definite (non empty non void AMI-Struct over N);
    let l be Instruction-Location of S;
  func Start-At l -> FinPartState of S equals
-:Def12: IC S .--> l;
+ IC S .--> l;
  correctness
   proof ObjectKind IC S = the Instruction-Locations of S by AMI_1:def 11;
    hence thesis by AMI_1:59;
@@ -1171,7 +1160,7 @@ theorem
 proof
  let S be IC-Ins-separated definite (non empty non void AMI-Struct over N);
  let l be Instruction-Location of S;
-     Start-At l = IC S .--> l by Def12
+     Start-At l = IC S .--> l
     .= {IC S} --> l by CQC_LANG:def 2;
  hence thesis by FUNCOP_1:19;
 end;
@@ -1282,7 +1271,7 @@ A1: IC S in dom p;
     consider s being State of S such that
 A2:   p c= s by Th39;
        IC s is Instruction-Location of S;
-    then s.IC S is Instruction-Location of S by AMI_1:def 15;
+    then s.IC S is Instruction-Location of S;
    hence thesis by A1,A2,GRFUNC_1:8;
   end;
 end;
@@ -1317,14 +1306,14 @@ A1:   CurInstr((Computation s).k) = halt S by AMI_1:def 20;
    take k;
        s.IC (Computation s).k
       = (Computation s).k.IC ((Computation s).k) by AMI_1:54
-     .= halt S by A1,AMI_1:def 17;
+     .= halt S by A1;
    hence s halts_at IC (Computation s).k by Def15;
   end;
   given k such that
 A2: s halts_at IC (Computation s).k;
   take k;
   thus CurInstr((Computation s).k)
-     = (Computation s).k.IC ((Computation s).k) by AMI_1:def 17
+     = (Computation s).k.IC ((Computation s).k)
     .= s.IC (Computation s).k by AMI_1:54
     .= halt S by A2,Def15;
  end;
@@ -1358,13 +1347,13 @@ A1: s is halting;
   hereby assume Result s = (Computation s).k;
    then ex i st (Computation s).k = (Computation s).i &
        CurInstr((Computation s).k) = halt S by A1,AMI_1:def 22;
-    then (Computation s).k.IC (Computation s).k = halt S by AMI_1:def 17;
+    then (Computation s).k.IC (Computation s).k = halt S;
     then s.IC (Computation s).k = halt S by AMI_1:54;
    hence s halts_at IC (Computation s).k by Def15;
   end;
   assume s.IC (Computation s).k = halt S;
    then (Computation s).k.IC (Computation s).k = halt S by AMI_1:54;
-   then CurInstr((Computation s).k) = halt S by AMI_1:def 17;
+   then CurInstr((Computation s).k) = halt S;
   hence Result s = (Computation s).k by A1,AMI_1:def 22;
  end;
 
@@ -1430,7 +1419,6 @@ A1: i <= j;
   assume
 A2: s.IC (Computation s).i = halt S;
        CurInstr((Computation s).i) = (Computation s).i.IC (Computation s).i
-          by AMI_1:def 17
       .= halt S by A2,AMI_1:54;
   hence s.IC (Computation s).j = halt S by A1,A2,AMI_1:52;
  end;
@@ -1499,7 +1487,7 @@ theorem
 A1: IC S in dom p & IC p = l;
   let s be State of S such that
 A2: p c= s;
-  thus IC s = s.IC S by AMI_1:def 15
+  thus IC s = s.IC S
    .= p.IC S by A1,A2,GRFUNC_1:8
    .= l by A1,Def16;
  end;
@@ -1512,7 +1500,7 @@ theorem
  proof
   let S be IC-Ins-separated definite (non empty non void AMI-Struct over N),
       l be Instruction-Location of S;
-  thus (Start-At l).IC S = (IC S .--> l).IC S by Def12
+  thus (Start-At l).IC S = (IC S .--> l).IC S
           .= l by CQC_LANG:6;
  end;
 
@@ -1537,7 +1525,7 @@ Lm14:
    holds Exec(i,s).l = s.l
  proof let s be State of SCM, i be Instruction of SCM,
     l be Instruction-Location of SCM;
-   reconsider c = i as Element of SCM-Instr by Def1;
+   reconsider c = i as Element of SCM-Instr;
        c in { [SCM-Halt,{}] } \/
        { [Y,<*a2*>] : Y = 6 } \/
        { [K,<*a1,b1*>] : K in { 7,8 } } or
@@ -1546,9 +1534,9 @@ Lm14:
        { [Y,<*a2*>] : Y = 6 } or
     c in { [K,<*a1,b1*>] : K in { 7,8 } } or
     c in { [T,<*b2,c1*>] : T in { 1,2,3,4,5} } by XBOOLE_0:def 2;
-   reconsider S = s as Element of product SCM-OK by Def1;
-   reconsider l' = l as Element of SCM-Instr-Loc by Def1;
-A2: Exec(i,s) = SCM-Exec.c.S by Def1,AMI_1:def 7
+   reconsider S = s as Element of product SCM-OK;
+   reconsider l' = l as Element of SCM-Instr-Loc;
+A2: Exec(i,s) = SCM-Exec.c.S
     .= SCM-Exec-Res(c,S) by AMI_2:def 17;
       now per cases by A1,XBOOLE_0:def 2;
     case c in { [SCM-Halt,{}] };
@@ -1665,7 +1653,7 @@ A8:     c = [T,<*b2,c1*>] & T in { 1,2,3,4,5};
  end;
 
 theorem
-   SCM is realistic by Def1,AMI_1:def 21,AMI_2:6;
+   SCM is realistic by AMI_1:def 21,AMI_2:6;
 
 registration
  cluster SCM -> steady-programmed realistic;
@@ -1676,29 +1664,29 @@ registration
       l be Instruction-Location of SCM;
       thus Exec(i,s).l = s.l by Lm14;
      end;
-   hence thesis by Def1,AMI_1:def 21,AMI_2:6;
+   hence thesis by AMI_1:def 21,AMI_2:6;
   end;
 end;
 
 definition let k be natural number;
  func dl.k -> Data-Location equals
-:Def19:  2*k +1;
+  2*k +1;
  coherence
   proof
     reconsider k as Nat by ORDINAL2:def 21;
-    reconsider d = 2*k+1 as Object of SCM by Def1;
+    reconsider d = 2*k+1 as Object of SCM;
        2*k +1 in SCM-Data-Loc by AMI_2:def 2;
     then d is Data-Location by Def2;
    hence thesis;
   end;
  func il.k -> Instruction-Location of SCM equals
-:Def20:  2*k +2;
+  2*k +2;
  coherence
   proof
     reconsider k as Nat by ORDINAL2:def 21;
        SCM-Instr-Loc = { 2*i : i > 0 } & k+1 > 0 by AMI_2:def 3,NAT_1:19;
     then 2*(k +1) in SCM-Instr-Loc;
-   hence thesis by Def1;
+   hence thesis;
   end;
 end;
 
@@ -1707,38 +1695,36 @@ reserve i,j,k for natural number;
 theorem
     i <> j implies dl.i <> dl.j
  proof
-A1: dl.j = 2*j +1 & dl.i = 2*i + 1 by Def19;
   assume i <> j;
-  then 2*i <> 2*j by XCMPLX_1:5;
-  hence dl.i <> dl.j by A1,XCMPLX_1:2;
+  then 2*i <> 2*j;
+  hence dl.i <> dl.j by XCMPLX_1:2;
  end;
 
 theorem
     i <> j implies il.i <> il.j
  proof
-A1: il.j = 2*j +2 & il.i = 2*i + 2 by Def20;
   assume i <> j;
-  then 2*i <> 2*j by XCMPLX_1:5;
-  hence il.i <> il.j by A1,XCMPLX_1:2;
+  then 2*i <> 2*j;
+  hence il.i <> il.j by XCMPLX_1:2;
  end;
 
 theorem
     Next il.k = il.(k+1)
  proof
-   reconsider loc = il.k as Element of SCM-Instr-Loc by Def1;
+   reconsider loc = il.k as Element of SCM-Instr-Loc;
   thus Next il.k = Next loc by Th6
      .= loc +2 by AMI_2:def 15
-     .= 2*k+2*1 +2 by Def20
+     .= 2*k+2*1 +2
      .= 2*(k+1)+2
-     .= il.(k+1) by Def20;
+     .= il.(k+1);
  end;
 
 theorem Th55:
  for l being Data-Location holds ObjectKind l = INT
   proof let l be Data-Location;
 A1:  l in SCM-Data-Loc by Def2;
-   thus ObjectKind l = (the Object-Kind of SCM).l by AMI_1:def 6
-     .= INT by A1,Def1,AMI_2:10;
+   thus ObjectKind l = (the Object-Kind of SCM).l
+     .= INT by A1,AMI_2:10;
   end;
 
 definition
@@ -1767,7 +1753,6 @@ end;
 theorem
     dl.i <> il.j
  proof
-A1: il.j = 2*j +2 & dl.i = 2*i + 1 by Def19,Def20;
       now assume 2*j + 2, 2*i + 1 are_congruent_mod 2;
      then 2*j, 1 + 2*i are_congruent_mod 2 by INT_1:42;
      then 1 + 2*i, 2*j are_congruent_mod 2 by INT_1:35;
@@ -1778,18 +1763,18 @@ A1: il.j = 2*j +2 & dl.i = 2*i + 1 by Def19,Def20;
 A3:    2*k = 1 - 0 by INT_1:def 3;
     thus contradiction by A3,INT_1:22;
    end;
-  hence dl.i <> il.j by A1,INT_1:32;
+  hence dl.i <> il.j by INT_1:32;
  end;
 
 theorem
     IC SCM <> dl.i & IC SCM <> il.i
  proof
   hereby assume IC SCM = dl.i;
-    then 0 = 2*i + 1 by Def19,Th4;
+    then 0 = 2*i + 1;
    hence contradiction;
   end;
   assume IC SCM = il.i;
-    then 0 = 2*i + (1 + 1) by Def20,Th4
+    then 0 = 2*i + (1 + 1)
       .= 2*i + 1 + 1;
   hence contradiction;
  end;
@@ -1829,7 +1814,7 @@ theorem
     a>0_goto loc is non halting by Lm10;
 
 theorem
-    [0,{}] is Instruction of SCM by Def1,AMI_2:2;
+    [0,{}] is Instruction of SCM by AMI_2:2;
 
 theorem
     for I being set holds I is Instruction of SCM iff

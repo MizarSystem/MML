@@ -52,7 +52,7 @@
 </Signature>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="344"/>
+<Func kind="K" nr="347"/>
 <Cluster>
 <Adjective nr="1" value="false"/>
 <Adjective nr="20"/>
@@ -74,7 +74,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="367">
+<Func kind="K" nr="370">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -170,7 +170,7 @@
 <Cluster/>
 <Typ kind="M" nr="8">
 <Cluster/>
-<Func kind="K" nr="344"/>
+<Func kind="K" nr="347"/>
 </Typ>
 <Cluster>
 <Adjective nr="152"/>

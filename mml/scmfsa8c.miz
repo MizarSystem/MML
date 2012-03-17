@@ -4800,7 +4800,7 @@ definition
  let I be Macro-Instruction;
  canceled 3;
 
- func loop I -> halt-free Macro-Instruction equals :Def4:
+ func loop I -> halt-free Macro-Instruction equals
  ((id the Instructions of SCM+FSA) +* (halt SCM+FSA .--> goto insloc 0)) * I;
  coherence
   proof
@@ -4815,7 +4815,7 @@ theorem Th104:
  proof
    let I be Macro-Instruction;
    thus loop I = ((id the Instructions of SCM+FSA) +*
-       (halt SCM+FSA .--> goto insloc 0)) * I by Def4
+       (halt SCM+FSA .--> goto insloc 0)) * I
    .= Directed(I,insloc 0) by SCMFSA8A:def 1;
  end;
 
@@ -4856,7 +4856,7 @@ theorem Th107: ::SCMFSA6A'18
    let I be Macro-Instruction;
    A1: halt SCM+FSA <> goto insloc 0 by SCMFSA_2:47,124;
       loop I = ((id the Instructions of SCM+FSA) +*
-         (halt SCM+FSA .--> goto insloc 0))*I by Def4;
+         (halt SCM+FSA .--> goto insloc 0))*I;
    then rng loop I c= rng((id the Instructions of SCM+FSA) +*
          (halt SCM+FSA .--> goto insloc 0)) by RELAT_1:45;
   hence not halt SCM+FSA in rng loop I by A1,FUNCT_7:14;
@@ -4875,7 +4875,7 @@ then A1: not x in dom ((halt SCM+FSA .--> goto insloc 0) * I) by FUNCT_1:21;
 A2: rng I c= the Instructions of SCM+FSA by SCMFSA_4:1;
    thus (loop I).x
     = (((id the Instructions of SCM+FSA) +*
-       (halt SCM+FSA .--> goto insloc 0)) * I).x by Def4
+       (halt SCM+FSA .--> goto insloc 0)) * I).x
    .= (((id the Instructions of SCM+FSA) * I) +*
        ((halt SCM+FSA .--> goto insloc 0) * I)).x by FUNCT_7:11
    .= (I +* ((halt SCM+FSA .--> goto insloc 0) * I)).x by A2,RELAT_1:79
@@ -5031,7 +5031,7 @@ A12: now thus CurInstr C2.LifeSpan s1 = C2.k.IC C1.k by A4,AMI_1:def 17
    .= (loop I +* Start-At insloc 0).IC C1.k by A9,FUNCT_4:14
    .= (loop I).IC C1.k by A5,FUNCT_4:12
    .= (((id the Instructions of SCM+FSA) +* (halt SCM+FSA .-->
-       goto insloc 0))* I ).IC C1.k by Def4
+       goto insloc 0))* I ).IC C1.k
    .= ((id the Instructions of SCM+FSA) +* (halt SCM+FSA .-->
        goto insloc 0)).halt SCM+FSA by A3,A6,A8,FUNCT_1:23
    .= goto insloc 0 by A10,A11,FUNCT_4:14;
@@ -5153,7 +5153,7 @@ begin :: Times
 definition
  let a be Int-Location;
  let I be Macro-Instruction;
- func Times(a,I) -> Macro-Instruction equals :Def5:
+ func Times(a,I) -> Macro-Instruction equals
   if>0(a,loop if=0(a,Goto insloc 2,I ';' SubFrom(a,intloc 0)),
      SCM+FSA-Stop);
  correctness;
@@ -5543,8 +5543,6 @@ theorem
    let a be read-write Int-Location;
    assume A1: I does_not_destroy a;
    assume A2: s.intloc 0 = 1;
-A3: Times(a,I) = if>0(a,loop if=0(a,Goto insloc 2,I ';' SubFrom(a,intloc 0)),
-       SCM+FSA-Stop) by Def5;
    per cases;
    suppose A4: s.a > 0;
        Directed loop if=0(a,Goto insloc 2,I ';' SubFrom(a,intloc 0)) =
@@ -5553,13 +5551,13 @@ A3: Times(a,I) = if>0(a,loop if=0(a,Goto insloc 2,I ';' SubFrom(a,intloc 0)),
     then Directed loop if=0(a,Goto insloc 2,I ';' SubFrom(a,intloc 0))
         is_pseudo-closed_on s by A1,A2,A4,Th117;
     hence Times(a,I) is_closed_on s & Times(a,I) is_halting_on s
-        by A3,A4,Th68;
+        by A4,Th68;
    end;
    suppose A5: s.a <= 0;
        SCM+FSA-Stop is_closed_on s & SCM+FSA-Stop is_halting_on s
         by SCMFSA7B:24,25;
     hence Times(a,I) is_closed_on s & Times(a,I) is_halting_on s
-        by A3,A5,SCMFSA8B:24;
+        by A5,SCMFSA8B:24;
  end;
  end;
 
@@ -5571,8 +5569,6 @@ theorem
    let I be good parahalting Macro-Instruction;
    let a be read-write Int-Location;
    assume A1: I does_not_destroy a;
-A2: Times(a,I) = if>0(a,loop if=0(a,Goto insloc 2,I ';' SubFrom(a,intloc 0)),
-       SCM+FSA-Stop) by Def5;
       now let s be State of SCM+FSA;
       per cases;
       suppose s.a > 0;
@@ -5582,14 +5578,14 @@ A2: Times(a,I) = if>0(a,loop if=0(a,Goto insloc 2,I ';' SubFrom(a,intloc 0)),
            by SCMFSA8A:40;
        then Directed loop if=0(a,Goto insloc 2,I ';' SubFrom(a,intloc 0))
            is_pseudo-closed_on Initialize s by A1,A3,Th117;
-       then Times(a,I) is_halting_on Initialize s by A2,A3,Th68;
+       then Times(a,I) is_halting_on Initialize s by A3,Th68;
        hence Initialized Times(a,I) is_halting_on s by Th22;
       end;
       suppose s.a <= 0;
     then A4: (Initialize s).a <= 0 by SCMFSA6C:3;
           SCM+FSA-Stop is_closed_on Initialize s &
            SCM+FSA-Stop is_halting_on Initialize s by SCMFSA7B:24,25;
-       then Times(a,I) is_halting_on Initialize s by A2,A4,SCMFSA8B:24;
+       then Times(a,I) is_halting_on Initialize s by A4,SCMFSA8B:24;
        hence Initialized Times(a,I) is_halting_on s by Th22;
     end;
     end;
@@ -5782,11 +5778,10 @@ theorem Th123:
 then A2: (Initialize s).a <= 0 by SCMFSA6C:3;
    set P = if=0(a,Goto insloc 2,I ';' SubFrom(a,intloc 0));
    set s0 = Initialize s;
-A3: Times(a,I) = if>0(a,loop P,SCM+FSA-Stop) by Def5;
 A4: SCM+FSA-Stop is_closed_on Initialize s &
    SCM+FSA-Stop is_halting_on Initialize s by SCMFSA7B:24,25;
 then A5: Times(a,I) is_closed_on Initialize s &
-       Times(a,I) is_halting_on Initialize s by A2,A3,SCMFSA8B:24;
+       Times(a,I) is_halting_on Initialize s by A2,SCMFSA8B:24;
       SCM+FSA-Stop is_closed_on s0 & SCM+FSA-Stop is_halting_on s0
        by SCMFSA7B:24,25;
 then A6: Directed SCM+FSA-Stop is_pseudo-closed_on s0 by SCMFSA8A:37;
@@ -5794,7 +5789,7 @@ A7: s0.intloc 0 = 1 &
    (for a being read-write Int-Location holds s0.a = s.a) &
        for f being FinSeq-Location holds s0.f = s.f by SCMFSA6C:3;
 then A8: IExec(Times(a,I),s) | D = IExec(Times(a,I),s0) | D by A5,Th45
-   .= IExec(SCM+FSA-Stop ';' SCM+FSA-Stop,s0) | D by A2,A3,A6,A7,Th73;
+   .= IExec(SCM+FSA-Stop ';' SCM+FSA-Stop,s0) | D by A2,A6,A7,Th73;
 A9: IExec(SCM+FSA-Stop,s0) | D
     = (Initialize s0 +* Start-At insloc 0) | D by Th38
    .= (Initialize s +* Start-At insloc 0) | D by Th15
@@ -5831,8 +5826,6 @@ theorem Th124:
    set P = if=0(a,Goto insloc 2,I ';' SubFrom(a,intloc 0));
    set s21 = s0 +* (loop P ';' SCM+FSA-Stop +* Start-At insloc 0);
    set s31 = ss0 +* (loop P ';' SCM+FSA-Stop +* Start-At insloc 0);
-A3: Times(a,I) = if>0(a,loop if=0(a,Goto insloc 2,I ';' SubFrom(a,intloc 0)),
-       SCM+FSA-Stop) by Def5;
 A4: s0.intloc 0 = 1 & s0.a > 0 by A2,SCMFSA6C:3;
    then consider s2 be State of SCM+FSA, k be Nat such that
 A5: s2 = s0 +* (loop P +* Start-At insloc 0) and
@@ -5858,7 +5851,7 @@ A13: now thus ss.a = Exec(SubFrom(a,intloc 0),IExec(I,s)).a by SCMFSA6C:7
 A14: Directed loop P = loop P by SCMFSA8A:40;
 then A15: Directed loop P is_pseudo-closed_on s0 by A1,A4,Th117;
 then A16: IExec(Times(a,I),s0) | D = IExec(loop P ';' SCM+FSA-Stop,s0) | D
-       by A3,A4,Th69;
+       by A4,Th69;
       SubFrom(a,intloc 0) does_not_destroy intloc 0 by SCMFSA7B:14;
    then reconsider J3 = Macro SubFrom(a,intloc 0) as good Macro-Instruction
        by Th99;
@@ -6011,7 +6004,7 @@ then A54: Result s21,Result s31 equal_outside A by A53,Th103;
    .= (Result (ss +* Initialized (loop P ';' SCM+FSA-Stop)) +* ss | A) | D
        by SCMFSA8A:13
    .= IExec(loop P ';' SCM+FSA-Stop,IExec(I1,s)) | D by SCMFSA6B:def 1
-   .= IExec(Times(a,I),IExec(I1,s)) | D by A3,A45,A46,Th69;
+   .= IExec(Times(a,I),IExec(I1,s)) | D by A45,A46,Th69;
    hence IExec(Times(a,I),s) | D =
        IExec(Times(a,I),IExec(I ';' SubFrom(a,intloc 0),s)) | D by A16,Th17;
  end;

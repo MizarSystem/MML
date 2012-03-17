@@ -1,6 +1,6 @@
 ;;; mizar.el --- mizar.el -- Mizar Mode for Emacs
 ;;
-;; $Revision: 1.111 $
+;; $Revision: 1.115 $
 ;;
 ;;; License:     GPL (GNU GENERAL PUBLIC LICENSE)
 ;;
@@ -211,6 +211,12 @@ Possible values are none, first, next, previous."
 
 (defcustom mizar-verifier "verifier"
 "*The default Mizar verifier used to check Mizar articles.
+This is used in the `mizar-it' function."
+:type 'string
+:group 'mizar-running)
+
+(defcustom makeenv "makeenv"
+"*Program used for creating the article environment.
 This is used in the `mizar-it' function."
 :type 'string
 :group 'mizar-running)
@@ -763,6 +769,7 @@ Used for exact completion.")
   ;; Remove trailing spaces
   (delete-horizontal-space)
   (newline)
+  (mizar-bubble-ref-incremental)
   ;; Indent both the (now) previous and current line first.
   (when mizar-newline-indents
     (save-excursion
@@ -774,6 +781,7 @@ Used for exact completion.")
   "Indent if `mizar-semicolon-indents' and insert arg semicolons."
   (interactive "*p")
   (self-insert-command (prefix-numeric-value arg))
+  (mizar-bubble-ref-incremental)
   (if mizar-semicolon-indents
     (mizar-indent-line)))
 
@@ -1226,6 +1234,82 @@ skeleton using `mizar-skeleton-items-func', and pretty prints it using
 	(buffer-substring-no-properties (match-beginning 1) (match-end 1))
       (current-word))
     ))
+
+
+
+(defvar mizar-ref-table (make-vector 512 0)
+  "Global hash table containing explanations of references.
+   The explanations is the 'expl property of the symbols.
+   This is used to speed up `mizar-get-ref-str'")
+
+(defun mizar-get-ref-str (win obj pos)
+"Get the string explaining reference REF.
+Can modify `mizar-ref-table'."
+(if (visit-tags-or-die mizreftags)
+(save-excursion
+  (set-buffer obj)
+  (goto-char pos)
+  (let ((ref (mizar-ref-at-point)))
+    (if (string-match ":" ref) ;; library reference, caching
+	(or (get  (intern-soft ref mizar-ref-table) 'expl)
+	    (let ((buf (find-tag-noselect ref))
+		  (symb (intern ref mizar-ref-table))
+		  (res ""))
+	      (set-buffer buf)
+	      (setq res (if (looking-at "[^;]+;") (match-string 0)
+			  ""))
+	      ;; previous line may contain e.g. "let z;"
+	      (if (string-match ":def " ref) 
+		  (progn 
+		    (forward-line -1)
+		    (looking-at ".*[\n]")
+		    (setq res (concat (match-string 0) res))))
+	      (put symb 'expl res)
+	      res))
+      ;; local reference, no caching
+      (if (re-search-backward (concat "\\([ \t\n\r:]" ref 
+				      "[ \t\n\r]*[{:][^;]*;\\)" )
+			      (point-min) t)
+	  (let ((res1 (match-string 0)))
+	    ;; definition
+	    (if (string-match (concat ":" ref ":") res1)
+		  (progn
+		    (forward-line -1)
+		    (looking-at (concat "\\(.*[\n].*\\):" ref ":"))
+		    (concat (match-string 1) res1))
+	      ;; proved or multiple statements
+	      (if (string-match "[ \n\r\t]+\\(proof\\|and\\)[ \n\r\t]" res1)
+		  (substring res1 1 (match-beginning 0))
+		(substring res1 1))))
+	""))))))
+
+
+(defun mizar-bubble-ref-region (beg end)
+"Put bubble help to the references between BEG and END."
+(save-excursion
+  (let ((mod (buffer-modified-p)))
+    (goto-char beg)
+    (while (re-search-forward "\\([ \t\n\r,][A-Z0-9_]+:\\(def \\|sch \\|th \\)?[0-9]+\\)" 
+			      end t)
+      (put-text-property (match-beginning 0) (match-end 0) 
+			 'help-echo 'mizar-get-ref-str))
+    (goto-char beg)
+    (while (re-search-forward "\\([ \n\t]\\(by\\|from\\)[ \n\r\t]\\([^;.]*\\)\\)" end t)
+      (put-text-property (match-beginning 3) (match-end 3) 
+			 'help-echo 'mizar-get-ref-str))
+    (set-buffer-modified-p mod))))
+
+
+(defvar mizar-bubble-ref-increment 10
+"Extent of lines where refs get incrementally bubble-helped")
+
+(defun mizar-bubble-ref-incremental ()
+"Put bubble help to the references in `mizar-bubble-ref-increment' lines."
+(save-excursion
+  (let ((pos (point)))
+    (forward-line (- mizar-bubble-ref-increment))
+    (mizar-bubble-ref-region (point) pos))))
+		  
 
 ;; ref-completion,should be improved for definitions
 (defvar mizar-ref-char-regexp "[A-Za-z0-9:'_]")
@@ -4618,8 +4702,6 @@ If UTIL is given, call it instead of the Mizar verifier."
 	   (mizar-previous-error))
 	  (t pos))))
 
-(defvar makeenv "makeenv" "Program used for creating the article environment.")
-
 (defcustom mizar-forbid-accommodation nil
 "*The Mizar accomodator is not called under any circumstances.
 This is used for teaching purposes, when the article environment
@@ -4810,6 +4892,7 @@ If FORCEACC, run makeenv with the -a option."
 		       (insert (mizar-compile-errors name))
 		       (compilation-mode)
 		       (goto-char (point-min)))
+		   (mizar-bubble-ref-region (point-min) (point-max))
 		   (mizar-do-errors name)
 		   (save-buffer)
 		   (mizar-handle-output)
@@ -5248,11 +5331,26 @@ if that value is non-nil."
   (if (and mizar-abstracts-use-view
 	       (buffer-abstract-p (current-buffer)))
       (view-mode))
+  (mizar-bubble-ref-region (point-min) (point-max))
   (run-hooks  'mizar-mode-hook)
   )
 
 (defvar html-help-url "http://ktilinux.ms.mff.cuni.cz/~urban/MizarModeDoc/html"
 "The html help for Mizar Mode resides here")
+
+(defun mizar-browse-as-html (&optional suffix)
+"Browse in a HTML browser the article or an environment file.
+ A XSLT-capable browser like Mozilla or IE has to be 
+ default in Emacs - you may need to customize the 
+ variable `browse-url-browser-function' for this."
+(interactive)
+(let* ((name (file-name-sans-extension (buffer-file-name))))
+  (if (not suffix)
+      (browse-url (concat name ".xml"))
+    (let* ((oldname (concat name "." suffix))
+	   (newname (concat oldname ".xml")))
+      (copy-file oldname newname t t)
+      (browse-url newname)))))
 
 ;; Menu for the mizar editing buffers
 (defvar mizar-menu
@@ -5271,6 +5369,16 @@ if that value is non-nil."
 	    ["Symbol apropos" symbol-apropos t]
 	    ["Bury all abstracts" mizar-bury-all-abstracts t]
 	    ["Close all abstracts" mizar-close-all-abstracts t]
+	    )
+	  '("Browse as HTML" 
+	    :help "Mizar has to be run first. Mozilla or IE needed."
+	    ["Browse current article" (mizar-browse-as-html) t]
+	    ["Browse environmental clusters" (mizar-browse-as-html "ecl") t]
+	    ["Browse environmental theorems" (mizar-browse-as-html "eth") t]
+	    ["Browse environmental constructors" (mizar-browse-as-html "atr") t]
+	    ["Set Mozilla (Firefox) as the default browser" 
+	    (customize-save-variable 'browse-url-browser-function 
+				     'browse-url-mozilla) t]
 	    )
 	  '("MoMM"
 	    ["Use MoMM (needs to be installed)" mizar-toggle-momm :style toggle

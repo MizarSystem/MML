@@ -576,7 +576,7 @@ registration let G be nonnegative-weighted real-WEV WEVGraph;
 end;
 
 definition let G be real-weighted WGraph, src be Vertex of G;
-  func DIJK:Init(G, src) -> real-WEV WEVGraph equals :dDIJKINIT: ::dDIJKINIT:
+  func DIJK:Init(G, src) -> real-WEV WEVGraph equals  ::dDIJKINIT:
     G.set(ELabelSelector,{}).set(VLabelSelector,src.-->0);
    coherence proof
     set G2 = G.set(ELabelSelector, {});
@@ -677,7 +677,7 @@ registration let G be finite real-weighted WGraph, src be Vertex of G;
     defpred P[Nat] means DCS.->$1 is finite;
     DCS.->0 = DIJK:Init(G,src) by dDIJKCS
            .= G.set(ELabelSelector,{})
-               .set(VLabelSelector,((src.-->0))) by dDIJKINIT;then
+               .set(VLabelSelector,((src.-->0)));then
 A1: P[0];
 A2: now let n be Nat; assume P[n]; then
         reconsider Gn = DCS.->n as finite real-WEV WEVGraph;
@@ -696,7 +696,7 @@ registration let G be nonnegative-weighted WGraph, src be Vertex of G;
     defpred P[Nat] means DCS.->$1 is nonnegative-weighted;
     DCS.->0 = DIJK:Init(G,src) by dDIJKCS
            .= G.set(ELabelSelector,{})
-               .set(VLabelSelector,(src.-->0)) by dDIJKINIT;then
+               .set(VLabelSelector,(src.-->0));then
 A1: P[0];
 A2: now let n be Nat; assume P[n]; then
         reconsider Gn = DCS.->n as nonnegative-weighted real-WEV WEVGraph;
@@ -709,7 +709,7 @@ A2: now let n be Nat; assume P[n]; then
 end;
 
 definition let G be real-weighted WGraph, src be Vertex of G;
-  func DIJK:SSSP(G,src) -> real-WEV WEVGraph equals :dDIJKSSSP: ::dDIJKSSSP
+  func DIJK:SSSP(G,src) -> real-WEV WEVGraph equals  ::dDIJKSSSP
     DIJK:CompSeq(G,src).Result();
   coherence proof
     set DCS = DIJK:CompSeq(G,src);
@@ -723,7 +723,7 @@ registration let G be finite real-weighted WGraph, src be Vertex of G;
   cluster DIJK:SSSP(G,src) -> finite;
   coherence proof
     set DCS = DIJK:CompSeq(G,src);
-    DIJK:SSSP(G,src) = DCS.Result() by dDIJKSSSP
+    DIJK:SSSP(G,src) = DCS.Result()
                     .= DCS.(DCS.Lifespan()) by GLIB_000:def 58
                     .= DCS.->(DCS.Lifespan()) by GLIB_000:def 59;
     hence thesis;
@@ -861,7 +861,7 @@ proof
             the_VLabel_of G = the_VLabel_of nextEG by GLIB_003:43; then
             G.labeledV() = dom the_VLabel_of nextEG by GLIB_003:def 23;then
             0+card G.labeledV() = card G.labeledV() + 1 by CA,GLIB_003:def 23;
-            hence contradiction by XCMPLX_1:2;
+            hence contradiction;
         end;
         hence BestEdges = {};
     end;
@@ -871,7 +871,7 @@ proof
     B1: card nextG.labeledV() = card G.labeledV() + 1;
         now assume BestEdges = {}; then
             0 + card G.labeledV() = card G.labeledV() + 1 by B1, dDIJKSTEP;
-            hence contradiction by XCMPLX_1:2;
+            hence contradiction;
         end;
         hence BestEdges <> {};
     end;
@@ -958,9 +958,8 @@ theorem tDIJKINIT01: ::tDIJKINIT01
 proof
     let G be real-weighted WGraph, src be Vertex of G;
     set G2 = DIJK:Init(G,src);
-A1: G2 = G.set(ELabelSelector,{}).set(VLabelSelector,src.-->0) by dDIJKINIT;
     the_VLabel_of G2 = G2.VLabelSelector by GLIB_003:def 9
-                    .= src .--> 0 by A1, GLIB_000:11; then
+                    .= src .--> 0 by  GLIB_000:11; then
     dom the_VLabel_of G2 = {src} by CQC_LANG:5;
     hence thesis by GLIB_003:def 23;
 end;
@@ -1009,7 +1008,7 @@ proof
       the_Weight_of G  = the_Weight_of (DIJK:CompSeq(G,src).->$1);
     DCS.->0 = DIJK:Init(G,src) by dDIJKCS; then
 A1: DCS.->0=G.set(ELabelSelector,{})
-             .set(VLabelSelector,src.-->0) by dDIJKINIT; then
+             .set(VLabelSelector,src.-->0); then
 A2: DCS.->0 == G.set(ELabelSelector,{}) by GLIB_003:8;
 A3: G == G.set(ELabelSelector, {}) by GLIB_003:8;
     the_Weight_of G = the_Weight_of G.set(ELabelSelector,{}) by GLIB_003:11
@@ -1258,7 +1257,7 @@ A2:  P[0] by A1, SQUARE_1:def 1;
          C7: k+1 <= card RFS & (k+1) <> card RFS
                by B1, C4, SQUARE_1:def 1; then
          C8: k+1+1 <= card RFS + 1 by XREAL_1:8;
-             k+1+1 <> card RFS + 1 by C7, XCMPLX_1:2; then
+             k+1+1 <> card RFS + 1 by C7; then
              k+1+1 < card RFS + 1 by C8, REAL_1:def 5; then
              (k+1+1) <= card RFS by NAT_1:38;
              hence Card Gk1b.labeledV() = min((k+1)+1, card RFS)
@@ -1281,7 +1280,7 @@ proof
     defpred P[Nat] means (DCS.->$1).labeledE() c=
       (DCS.->$1).edgesBetween((DCS.->$1).labeledV());
     D0=DIJK:Init(G, src) by dDIJKCS; then
-    D0=G.set(ELabelSelector,{}).set(VLabelSelector,src.-->0) by dDIJKINIT; then
+    D0=G.set(ELabelSelector,{}).set(VLabelSelector,src.-->0); then
 A1: the_ELabel_of D0 = the_ELabel_of G.set(ELabelSelector,{}) by GLIB_003:14
                     .= G.set(ELabelSelector,{}).ELabelSelector by GLIB_003:4
                     .= {} by GLIB_000:11;
@@ -1378,7 +1377,7 @@ proof
     reconsider EL = {} as PartFunc of the_Edges_of G, REAL by  PARTFUN1:56;
 A1: D0 = DIJK:Init(G,src) by dDIJKCS
       .= G.set(ELabelSelector,EL)
-          .set(VLabelSelector,src.-->0) by dDIJKINIT; then
+          .set(VLabelSelector,src.-->0); then
 AZ: the_VLabel_of D0 = G.set(ELabelSelector,EL)
                         .set(VLabelSelector,src.-->0)
                         .VLabelSelector by GLIB_003:4
@@ -1929,7 +1928,7 @@ A7: DCS.k = DCS.->(k+1) by A6, GLIB_000:def 59
         C3: card Gn1.labeledV() = min(n+1+1, card RFS) by tDCS06;
             n + 1 + 1 <= card RFS by C1, NAT_1:38; then
             0+(n+1) = 1+(n+1) by B2, C2, C3, SQUARE_1:def 1;
-            hence contradiction by XCMPLX_1:2;
+            hence contradiction;
         end;
         hence k <= n;
     end;
@@ -1944,7 +1943,7 @@ proof
     let G be finite real-weighted WGraph, src be Vertex of G;
     set Gn = DIJK:SSSP(G, src), RFS = G.reachableDFrom(src);
     set DCS = DIJK:CompSeq(G,src), n = DCS.Lifespan();
-    Gn = DCS.Result() by dDIJKSSSP; then
+    Gn = DCS.Result(); then
     Gn = DCS.n by GLIB_000:def 58; then
 A1: Gn = DCS.->n by GLIB_000:def 59; then
 A2: card Gn.labeledV() = min(n+1, card RFS) by tDCS06
@@ -1972,7 +1971,7 @@ proof
         G2 be inducedWSubgraph of G, DIJK:SSSP(G,src).labeledV(),
                                      DIJK:SSSP(G,src).labeledE();
     set Res = DIJK:SSSP(G,src), DCS = DIJK:CompSeq(G,src);
-A1: Res = DCS.Result() by dDIJKSSSP
+A1: Res = DCS.Result()
        .= DCS.(DCS.Lifespan()) by GLIB_000:def 58
        .= DCS.->(DCS.Lifespan()) by GLIB_000:def 59;
     hence G2 is_mincost_DTree_rooted_at src by tDCS08;
@@ -1993,7 +1992,7 @@ end;
 begin :: Prim's Algorithm preliminaries
 
 definition
-  func WGraphSelectors -> non empty finite Subset of NAT equals :dWGRAPHSEL: ::dWGRAPHSEL
+  func WGraphSelectors -> non empty finite Subset of NAT equals  ::dWGRAPHSEL
     {VertexSelector, EdgeSelector, SourceSelector, TargetSelector,
      WeightSelector};
   coherence by ENUMSET1:def 3;
@@ -2007,7 +2006,7 @@ proof
     now let x be set; assume x in WGraphSelectors; then
         x = VertexSelector or x = EdgeSelector or
         x = SourceSelector or x = TargetSelector or
-        x = WeightSelector by dWGRAPHSEL, ENUMSET1:def 3;
+        x = WeightSelector by  ENUMSET1:def 3;
         hence x in dom G by GLIB_000:def 11, GLIB_003:def 4;
     end;
     hence thesis by TARSKI:def 3;
@@ -2026,7 +2025,7 @@ A4: VertexSelector in WGraphSelectors &
     EdgeSelector   in WGraphSelectors &
     SourceSelector in WGraphSelectors &
     TargetSelector in WGraphSelectors &
-    WeightSelector in WGraphSelectors by dWGRAPHSEL, ENUMSET1:def 3;
+    WeightSelector in WGraphSelectors by  ENUMSET1:def 3;
 A5: the_Vertices_of G2 = G2.VertexSelector by GLIB_000:4
                       .= G.VertexSelector by A1,A4,FUNCT_1:72
                       .= the_Vertices_of G by GLIB_000:4;
@@ -2061,7 +2060,7 @@ A2: VertexSelector in WGraphSelectors &
     EdgeSelector   in WGraphSelectors &
     SourceSelector in WGraphSelectors &
     TargetSelector in WGraphSelectors &
-    WeightSelector in WGraphSelectors by dWGRAPHSEL, ENUMSET1:def 3;
+    WeightSelector in WGraphSelectors by  ENUMSET1:def 3;
 A3: the_Vertices_of G2 = G2.VertexSelector by GLIB_000:4
                       .= G.VertexSelector by A1,A2,FUNCT_1:72
                       .= the_Vertices_of G by GLIB_000:4;
@@ -2118,7 +2117,7 @@ A4: now let G2 be WSubgraph of G; assume
         now let y be set; assume y in rng G2; then
             consider x being set such that
         C2: x in WGraphSelectors & G2.x = y by B1,FUNCT_1:def 5;
-            now per cases by C2, dWGRAPHSEL, ENUMSET1:def 3;
+            now per cases by C2, ENUMSET1:def 3;
             suppose x = VertexSelector; then
             D2: y = the_Vertices_of G2 by C2,GLIB_000:4;
                 bool the_Vertices_of G in Z by ENUMSET1:def 3;
@@ -2206,7 +2205,7 @@ A1: X is finite by FRAENKEL:16;
         now let y be set; assume y in rng G2; then
             consider x being set such that
         C2: x in WGraphSelectors & G2.x = y by B1,FUNCT_1:def 5;
-            now per cases by C2, dWGRAPHSEL, ENUMSET1:def 3;
+            now per cases by C2, ENUMSET1:def 3;
             suppose x = VertexSelector; then
             D2: y = the_Vertices_of G2 by C2,GLIB_000:4;
                 bool the_Vertices_of G in Z by ENUMSET1:def 3;
@@ -2261,7 +2260,7 @@ A1: G2 = x & dom G2 = WGraphSelectors by dGALLWSUBG;
 end;
 
 definition let G be finite real-weighted WGraph;
-  func G.cost() -> Real equals :dWGCOST: ::dWGCOST
+  func G.cost() -> Real equals  ::dWGCOST
     Sum the_Weight_of G;
   coherence by XREAL_0:def 1;
 end;
@@ -2270,7 +2269,7 @@ theorem ::tWGRAPHSEL01
   for x being set holds x in WGraphSelectors iff
   (x = VertexSelector or x = EdgeSelector or
    x = SourceSelector or x = TargetSelector or
-   x = WeightSelector) by dWGRAPHSEL, ENUMSET1:def 3;
+   x = WeightSelector) by  ENUMSET1:def 3;
 
 theorem ::tWGRAPHSEL02
   for G being WGraph holds
@@ -2295,19 +2294,13 @@ proof
     the_Weight_of G = the_Edges_of G --> 0 by FUNCOP_1:4; then
     the_Weight_of G = EmptyBag the_Edges_of G by POLYNOM1:def 15; then
     Sum the_Weight_of G = 0 by UPROOTS:13;
-    hence thesis by dWGCOST;
+    hence thesis;
 end;
 
-theorem tGCOST02: ::tGCOST02
+theorem  ::tGCOST02
   for G1,G2 being finite real-weighted WGraph
    st the_Edges_of G1 = the_Edges_of G2 & the_Weight_of G1 = the_Weight_of G2
-   holds G1.cost() = G2.cost()
-proof
-    let G1,G2 be finite real-weighted WGraph; assume
-    the_Edges_of G1 = the_Edges_of G2 & the_Weight_of G1 = the_Weight_of G2;
-    hence G1.cost() = Sum the_Weight_of G2 by dWGCOST
-                   .= G2.cost() by dWGCOST;
-end;
+   holds G1.cost() = G2.cost();
 
 theorem tGCOST03: ::tGCOST03
   for G1 being finite real-weighted WGraph, e being set,
@@ -2319,8 +2312,6 @@ proof
         G2 be weight-inheriting ([Weighted] removeEdge of G1,e);
     set EG1 = the_Edges_of G1, EG2 = the_Edges_of G2; assume
 A1: e in EG1;
-A2: G1.cost() = Sum the_Weight_of G1 by dWGCOST;
-A3: G2.cost() = Sum the_Weight_of G2 by dWGCOST;
 A4: EG2 = EG1 \ {e} by GLIB_000:54;
 A5: the_Weight_of G2 = (the_Weight_of G1) | (EG2)
       by GLIB_003:def 10;
@@ -2358,7 +2349,7 @@ A9: dom the_Weight_of G1 = EG1 by PBOOLE:def 3;
         hence (the_Weight_of G1).x = (the_Weight_of G2 +* b2).x;
     end; then
     the_Weight_of G1 = the_Weight_of G2 +* b2 by A8,A9,FUNCT_1:9;
-    hence G1.cost() = G2.cost() + Sum b2 by A2,A3,tRBAGSUM01
+    hence G1.cost() = G2.cost() + Sum b2 by tRBAGSUM01
                    .= G2.cost() + b2.e by A6,tRBAGSUM02
                    .= G2.cost() + (the_Weight_of G1).e by CQC_LANG:6;
 end;
@@ -2382,8 +2373,6 @@ A2: the_Vertices_of G1 = V1 & the_Edges_of G1 = E1 by GLIB_000:def 39;
     {e} c= G.edgesBetween(V1) by A1, ZFMISC_1:37; then
     (E1 \/ {e}) c= G.edgesBetween(V1) by XBOOLE_1:8; then
 A3: the_Vertices_of G2 = V1 & the_Edges_of G2 = E1 \/ {e} by GLIB_000:def 39;
-A4: G1.cost() = Sum the_Weight_of G1 & G2.cost() = Sum the_Weight_of G2
-      by dWGCOST;
     set W2 = (e .--> (the_Weight_of G).e);
 A5: the_Edges_of G2 \ the_Edges_of G1 = {e} \ E1 by A2,A3,XBOOLE_1:40
                                      .= {e} by A1,ZFMISC_1:67;
@@ -2429,7 +2418,7 @@ AA: the_Weight_of G2 = the_Weight_of G1 +* W2 by A7,A8,FUNCT_1:9;
     dom W2 = {e} by CQC_LANG:5; then
     Sum W2 = W2.e by tRBAGSUM02
           .= (the_Weight_of G).e by CQC_LANG:6;
-    hence G1.cost() + (the_Weight_of G).e = G2.cost() by AA,A4,tRBAGSUM01;
+    hence G1.cost() + (the_Weight_of G).e = G2.cost() by AA,tRBAGSUM01;
 end;
 
 begin :: PRIM's Algorithm definitions
@@ -2490,7 +2479,7 @@ A2: for e1 being set holds e1 in IT2 iff
 end;
 
 definition let G be real-weighted WGraph;
-  func PRIM:Init(G) -> real-WEV WEVGraph equals :dPRIMINIT: ::dPRIMINIT
+  func PRIM:Init(G) -> real-WEV WEVGraph equals  ::dPRIMINIT
     G.set(VLabelSelector,(choose the_Vertices_of G).-->1)
      .set(ELabelSelector,{});
   coherence;
@@ -2600,7 +2589,7 @@ registration let G be finite real-weighted WGraph;
     defpred P[Nat] means PCS.->$1 is finite;
     (PCS.->0) = PRIM:Init(G) by dPRIMCS
              .= G.set(VLabelSelector,(choose the_Vertices_of G).-->1)
-                 .set(ELabelSelector,{}) by dPRIMINIT; then
+                 .set(ELabelSelector,{}); then
 A1: P[0];
 A2: now let n be Nat; assume P[n]; then
         reconsider Gn = (PCS.->n) as finite real-WEV WEVGraph;
@@ -2630,7 +2619,7 @@ A2: now let n be Nat; assume P[n]; then
 end;
 
 definition let G be real-weighted WGraph;
-  func PRIM:MST(G) -> real-WEV WEVGraph equals :dPRIMMST: ::dPRIMMST
+  func PRIM:MST(G) -> real-WEV WEVGraph equals  ::dPRIMMST
     PRIM:CompSeq(G).Result();
   coherence
   proof
@@ -2646,7 +2635,7 @@ registration let G be finite real-weighted WGraph;
   coherence
   proof
     set PCS = PRIM:CompSeq(G);
-    PRIM:MST(G) = PCS.Result() by dPRIMMST
+    PRIM:MST(G) = PCS.Result()
                .= PCS.(PCS.Lifespan()) by GLIB_000:def 58
                .= PCS.->(PCS.Lifespan()) by GLIB_000:def 59;
     hence thesis;
@@ -2662,18 +2651,17 @@ lPRIMINIT01:
 proof
     let G be real-weighted WGraph; set G2 = PRIM:Init(G);
     set X = (choose the_Vertices_of G).-->1;
-A1: G2 = G.set(VLabelSelector,X).set(ELabelSelector,{}) by dPRIMINIT;
 A2: G == G.set(VLabelSelector,X) by GLIB_003:8;
-    G.set(VLabelSelector,X) == G2 by A1,GLIB_003:8;
+    G.set(VLabelSelector,X) == G2 by GLIB_003:8;
     hence G == G2 by A2, GLIB_000:88;
     thus the_Weight_of G2 = the_Weight_of G.set(VLabelSelector,X)
-                              by A1,GLIB_003:11
+                              by GLIB_003:11
                          .= the_Weight_of G by GLIB_003:13;
     thus the_ELabel_of G2 = G2.ELabelSelector
                               by GLIB_003:4
-                         .= {} by A1,GLIB_000:11;
+                         .= {} by GLIB_000:11;
     the_VLabel_of G2 = the_VLabel_of G.set(VLabelSelector,X)
-                         by A1,GLIB_003:12
+                         by GLIB_003:12
                     .= G.set(VLabelSelector,X).VLabelSelector by GLIB_003:4
                     .= X by GLIB_000:11;
     hence thesis;
@@ -3491,7 +3479,7 @@ AA: PRIM:CompSeq(G) is halting by A8, GLIB_000:def 56;
             card Gm.labeledV() = min(m+1+1,card RFS) by B2,lPRIMCS06
                               .= m+1+1 by C5, SQUARE_1:def 1; then
             m+1+0 = m+1+1 by C4;
-            hence contradiction by XCMPLX_1:2;
+            hence contradiction;
         end;
         hence n <= m;
     end;
@@ -3596,7 +3584,7 @@ proof
     let G be finite connected real-weighted WGraph;
     set M = PRIM:MST(G), PCS = PRIM:CompSeq(G), V = M.labeledV();
     set src = choose the_Vertices_of G, RFS = G.reachableFrom(src);
-A1: M = PCS.Result() by dPRIMMST
+A1: M = PCS.Result()
      .= PCS.(PCS.Lifespan()) by GLIB_000:def 58
      .= PCS.->(PCS.Lifespan()) by GLIB_000:def 59;
 
@@ -3622,7 +3610,7 @@ registration let G be finite connected real-weighted WGraph;
     (PCS.->n).labeledE() c= G.edgesBetween((PCS.->n).labeledV())
       by lPRIMCS05; then
 A1: the_Vertices_of IT = (PCS.->n).labeledV() by GLIB_000:def 39;
-    PRIM:MST(G) = PCS.Result() by dPRIMMST
+    PRIM:MST(G) = PCS.Result()
                .= PCS.n by GLIB_000:def 58
                .= PCS.->n by GLIB_000:def 59; then
     (PCS.->n).labeledV() = the_Vertices_of G by lPRIMMST02;
@@ -3684,7 +3672,7 @@ A2: x = G2 & G2 is spanning Tree-like WSubgraph of G1;
         G3 in X; then
     B2: x.cost() <= G3.cost() by A1;
         the_Edges_of G3 = the_Edges_of GT by B1, GLIB_000:def 36;
-        hence x.cost() <= GT.cost() by B1,B2,tGCOST02;
+        hence x.cost() <= GT.cost() by B1,B2;
     end;
     hence x is min-cost by dWGMINCOST;
   end;
@@ -3741,7 +3729,7 @@ A1: G1 == G2 & the_Weight_of G1 = the_Weight_of G2; then
     now let G3 be spanning Tree-like WSubgraph of G;
     B1: G1.cost() <= G3.cost() by dWGMINCOST;
         the_Edges_of G1 = the_Edges_of G2 by A1, GLIB_000:def 36;
-        hence G2'.cost() <= G3.cost() by B1,A1,tGCOST02;
+        hence G2'.cost() <= G3.cost() by B1,A1;
     end;
     hence thesis by dWGMINCOST;
 end;
@@ -3837,7 +3825,7 @@ theorem tPRIMMST03: ::tPRIMMST03
 proof
     let G be finite connected real-weighted WGraph, n be Nat;
     set PCS = PRIM:CompSeq(G), PMST = PRIM:MST(G);
-A1: PMST = PCS.Result() by dPRIMMST
+A1: PMST = PCS.Result()
         .= PCS.(PCS.Lifespan()) by GLIB_000:def 58
         .= PCS.->(PCS.Lifespan()) by GLIB_000:def 59;
     defpred P[Nat] means
@@ -3883,7 +3871,7 @@ proof
     let G1 be finite connected real-weighted WGraph; set PMST = PRIM:MST(G1);
     let G2 be inducedWSubgraph of G1, PMST.labeledV(), PMST.labeledE();
     set PCS = PRIM:CompSeq(G1);
-A1: PMST = PCS.Result() by dPRIMMST
+A1: PMST = PCS.Result()
         .= PCS.(PCS.Lifespan()) by GLIB_000:def 58
         .= PCS.->(PCS.Lifespan()) by GLIB_000:def 59; then
     PMST == G1 & the_Weight_of G1 = the_Weight_of PMST by lPRIMCS03; then
@@ -4341,14 +4329,14 @@ A7: G2 is Tree-like & G2 is spanning by A1,lPRIMCS11, GLIB_000:def 35;
         C2: Mep.cost() = M.cost() + (the_Weight_of G1).ep
               by CZ,BF,C0,C1,BH,tGCOST04;
             M2.cost() + (the_Weight_of Mep).em = Mep.cost() by Be,tGCOST03;then
-        C4: M2.cost() = Mep.cost() - (the_Weight_of Mep).em by XCMPLX_1:26;
+        C4: M2.cost() = Mep.cost() - (the_Weight_of Mep).em;
             the_Weight_of Mep = (the_Weight_of G1) | the_Edges_of Mep
               by GLIB_003:def 10; then
         C5: M2.cost() = M.cost()+(the_Weight_of G1).ep
               - (the_Weight_of G1).em by C2,Be,C4,FUNCT_1:72;
             the_Edges_of M2 = the_Edges_of M2' by Bj, GLIB_000:def 36;
             hence M2'.cost() = M.cost()+(the_Weight_of G1).ep
-              - (the_Weight_of G1).em by Bj,C5,tGCOST02;
+              - (the_Weight_of G1).em by Bj,C5;
         end; then
     XA: M2'.cost() + (the_Weight_of G1).em - (the_Weight_of G1).em <=
           M.cost() + (the_Weight_of G1).ep - (the_Weight_of G1).ep

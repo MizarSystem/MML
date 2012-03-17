@@ -39,12 +39,12 @@ theorem Th2:
 proof
   let a,b be Integer;
   let n be Nat;
-  assume A1: n>0;
+  assume  n>0;
   then a mod n + (a div n)*n
     = (a-(a div n)*n) + (a div n)*n by INT_1:def 8
    .= a+0;
   then (a + (b mod n))-((a mod n)+(b mod n))
-    = ((a div n)*n+((a mod n)+(b mod n)))-((a mod n)+(b mod n)) by XCMPLX_1:1
+    = ((a div n)*n+((a mod n)+(b mod n)))-((a mod n)+(b mod n))
    .= (a div n)*n+0;
    then n divides (a + (b mod n))-((a mod n)+(b mod n)) by INT_1:def 9;
    then (a + (b mod n)),((a mod n)+(b mod n)) are_congruent_mod n by INT_2:19;
@@ -57,12 +57,12 @@ theorem Th3:
 proof
   let a,b be Integer;
   let n be Nat;
-  assume A1: n > 0;
+  assume  n > 0;
   then b mod n + (b div n)*n
     = (b-(b div n)*n) + (b div n)*n by INT_1:def 8
    .= b+0;
   then (a*b)-(a*(b mod n))
-    = a*(b mod n)+a*((b div n)*n)-a*(b mod n) by XCMPLX_1:8
+    = a*(b mod n)+a*((b div n)*n)-a*(b mod n)
    .= (a*(b div n))*n;
    then n divides ((a*b)-(a*(b mod n))) by INT_1:def 9;
    then (a*b),(a*(b mod n)) are_congruent_mod n by INT_2:19;
@@ -497,7 +497,7 @@ begin :: Definitions on the relation between a FinSequence of k-SD and
 
 definition let i,k,n be Nat, x be Tuple of n,NAT;
   func SubDigit2(x,i,k) -> Element of NAT equals
-  :Def1:
+
     (Radix(k) |^ (i -'1))*(x.i);
 coherence;
 end;
@@ -541,14 +541,14 @@ end;
 
 definition let n,k be Nat, x be Tuple of n,NAT;
   func SDDec2(x,k) -> Nat equals
-  :Def3:
+
     Sum DigitSD2(x,k);
 coherence;
 end;
 
 definition let i,k,x be Nat;
   func DigitDC2(x,i,k) -> Nat equals
-  :Def4:
+
     (x mod (Radix(k) |^ i)) div (Radix(k) |^ (i -'1));
 coherence;
 end;
@@ -606,7 +606,7 @@ proof
  dom DigitSD(y) by A3,FINSEQ_1:def 3;
       then DigitSD2(x,k).j = (DigitSD2(x,k))/.j by FINSEQ_4:def 4
                .= SubDigit2(x,j,k) by A4,Def2
-               .= (Radix(k) |^ (j -'1))*(x.j) by Def1
+               .= (Radix(k) |^ (j -'1))*(x.j)
                .= (Radix(k) |^ (j -'1))*DigB(y,j) by A2,A4
                .= SubDigit(y,j,k) by RADIX_1:def 5
                .= (DigitSD(y))/.j by A4,RADIX_1:def 6
@@ -624,7 +624,7 @@ proof
   let x be Tuple of n,NAT;
   let y be Tuple of n,k-SD;
   assume A1: x = y;
-     SDDec2(x,k) = Sum DigitSD2(x,k) by Def3
+     SDDec2(x,k) = Sum DigitSD2(x,k)
              .= Sum DigitSD(y) by A1,Th12;
   hence thesis by RADIX_1:def 7;
 end;
@@ -637,7 +637,7 @@ proof
      now let j be Nat;
     assume A2: j in Seg n;
     then DecSD2(x,n,k).j = DigitDC2(x,j,k) by Def5
-               .= (x mod (Radix(k) |^ j)) div (Radix(k) |^ (j -'1)) by Def4
+               .= (x mod (Radix(k) |^ j)) div (Radix(k) |^ (j -'1))
                .= DigitDC(x,j,k) by RADIX_1:def 8
                .= DigA(DecSD(x,n,k),j) by A2,RADIX_1:def 9
                .= DecSD(x,n,k).j by A2,RADIX_1:def 3;
@@ -665,7 +665,7 @@ begin :: Algorithm of calculation of (a*b) mod c based on
 
 definition let q be Integer, f,j,k,n be Nat, c be Tuple of n,k-SD;
   func Table1(q,c,f,j) -> Integer equals
-  :Def6:
+
     (q*DigA(c,j)) mod f;
 correctness;
 end;
@@ -811,7 +811,7 @@ proof
     let c be Tuple of 1,k-SD;
     assume A3: c = DecSD(ic,1,k);
        Mul_mod(q,c,f,k).1 = Table1(q,c,f,1) by Def7
-                .= (q*DigA(c,1)) mod f by Def6
+                .= (q*DigA(c,1)) mod f
                 .= (q*SDDec(DecSD(ic,1,k))) mod f by A3,Th7;
     hence thesis by A2,RADIX_1:25;
   end;
@@ -899,9 +899,9 @@ proof
           case A33: i=0;
             then Mul_mod(q,cn,f,k).(i+1)
               = Table1(q,cn,f,n) by A5,Def7
-             .= (q*DigA(cn,n)) mod f by Def6
+             .= (q*DigA(cn,n)) mod f
              .= (q*DigA(c,n+1)) mod f by A18,A29
-             .= Table1(q,c,f,n+1) by Def6
+             .= Table1(q,c,f,n+1)
              .= Mul_mod(q,c,f,k).1 by A6,Def7;
             hence Mul_mod(q,cn,f,k).(i+1) = Mul_mod(q,c,f,k).(i+1) by A33;
           end;
@@ -923,13 +923,13 @@ proof
                Mul_mod(q,cn,f,k).(i+1)
              = (Radix(k)*Mul_mod(q,c,f,k).i
                                + (q*DigA(cn,(n -' i)) mod f)) mod f by A27,A35
-,A37,Def6,FINSEQ_1:3
+,A37,FINSEQ_1:3
             .= (Radix(k)*Mul_mod(q,c,f,k).i
                                + (q*DigA(c,(n -' i)+1) mod f)) mod f
                                                         by A18,A40
             .= (Radix(k)*Mul_mod(q,c,f,k).i
                     + (q*DigA(c,((n+1) -' i)) mod f)) mod f by A35,JORDAN4:3
-            .= Mul_mod(q,c,f,k).(i+1) by A38,Def6;
+            .= Mul_mod(q,c,f,k).(i+1) by A38;
             hence Mul_mod(q,cn,f,k).(i+1)=Mul_mod(q,c,f,k).(i+1);
         end;
         end;
@@ -1007,13 +1007,13 @@ FINSEQ_1:37
                  .=Radix(k)*((DigitSD2(cn2,k))/.i1)
                           by A46,A62,FINSEQ_4:def 4
                  .=Radix(k)*SubDigit2(cn2,i1,k) by A62,Def2
-                 .=Radix(k)*((Radix(k) |^ (i1-'1))*(cn2.i1)) by Def1
+                 .=Radix(k)*((Radix(k) |^ (i1-'1))*(cn2.i1))
                  .=Radix(k)*(Radix(k) |^ (i1-'1))*(cn2.i1)
                  .=(Radix(k) |^ (i1-'1+1))*(cn2.i1) by NEWTON:11
                  .=(Radix(k) |^ i1)*(cn2.i1) by A61,AMI_5:4
                  .=(Radix(k) |^ i1)*(c2.(i1+1)) by A17,A62
                  .=(Radix(k) |^ (i-'1))*(c2.i) by A55,BINARITH:50
-                 .=SubDigit2(c2,i,k) by Def1
+                 .=SubDigit2(c2,i,k)
                  .=(DigitSD2(c2,k))/.i by A57,Def2;
           hence thesis by A58,FINSEQ_4:def 4;
         end;
@@ -1021,14 +1021,14 @@ FINSEQ_1:37
         hence thesis by A54,FINSEQ_1:18;
       end;
          ic = SDDec2(DecSD2(ic,(n+1),k),k) by A6,A7,Th15
-        .= Sum DigitSD2(c2,k) by Def3
+        .= Sum DigitSD2(c2,k)
         .= SubDigit2(c2,1,k)+ Sum(Radix(k)*DigitSD2(cn2,k)) by A49,RVSUM_1:106
         .= SubDigit2(c2,1,k) + Sum(r2 * rD) by A45,A46,A47,FINSEQ_1:17
         .= SubDigit2(c2,1,k) + r2 * Sum(rD) by RVSUM_1:117
         .= SubDigit2(c2,1,k) + Radix(k) * Sum(DigitSD2(cn2,k))
                                            by A45,A46,A47,FINSEQ_1:17
-        .= SubDigit2(c2,1,k) + Radix(k) * icn2 by Def3
-        .= (Radix(k) |^ (1 -' 1))*(c2.1) + Radix(k) * icn2 by Def1
+        .= SubDigit2(c2,1,k) + Radix(k) * icn2
+        .= (Radix(k) |^ (1 -' 1))*(c2.1) + Radix(k) * icn2
         .= (Radix(k) |^ 0)*(c2.1) + Radix(k) * icn2 by A48,BINARITH:def 3
         .= 1*(c2.1) + Radix(k) * icn2 by NEWTON:9;
       hence thesis;
@@ -1053,7 +1053,7 @@ FINSEQ_1:37
         then 1 <= (i+1) & (i+1) <= (n+1) by A10,A67,XREAL_1:2,XREAL_1:8;
         then A70: (i+1) in Seg (n+1) by FINSEQ_1:3;
            c2.1 = DigitDC2(ic,1,k) by A23,Def5
-           .= (ic mod (Radix(k) |^ 1)) div (Radix(k) |^ (1 -' 1)) by Def4
+           .= (ic mod (Radix(k) |^ 1)) div (Radix(k) |^ (1 -' 1))
            .= (ic mod (Radix(k) |^ 1)) div (Radix(k) |^ 0) by BINARITH:51
            .= (ic mod (Radix(k) |^ 1)) div 1 by NEWTON:9
            .= ic mod (Radix(k) |^ 1) by NAT_2:6
@@ -1075,7 +1075,7 @@ FINSEQ_1:37
            cn.i
          = c2.(i+1) by A17,A20,A68
         .= DigitDC2(ic,(i+1),k) by A70,Def5
-        .= (ic mod (Radix(k) |^ (i+1))) div (Radix(k) |^ ((i+1) -'1)) by Def4
+        .= (ic mod (Radix(k) |^ (i+1))) div (Radix(k) |^ ((i+1) -'1))
         .= ((icn2*Radix(k) + c2.1) div (Radix(k) |^ ((i+1)-'1)))
                                                 mod Radix(k) by A43,A72,Th4
         .= ((icn2*Radix(k) + c2.1) div (Radix(k) |^ i))
@@ -1084,7 +1084,7 @@ FINSEQ_1:37
                                                 mod Radix(k) by A73,PEPIN:27
         .= (icn2 div (Radix(k) |^ (i -'1))) mod Radix(k) by A74,NAT_2:29
         .= (icn2 mod (Radix(k) |^ i)) div (Radix(k) |^ (i -'1)) by A67,A72,Th4
-        .= DigitDC2(icn2,i,k) by Def4;
+        .= DigitDC2(icn2,i,k);
         hence thesis by A68,Def5;
       end;
       hence thesis by A66,FINSEQ_1:18;
@@ -1111,7 +1111,7 @@ INT_3:14
     .= (Radix(k)*((q * icn2) mod f) + Table1(q,c,f,(n+1) -'n)) mod f
                                                          by A20,Th13
     .= (Radix(k)*((q * icn2) mod f) + Table1(q,c,f,1)) mod f by BINARITH:39
-    .= ((Radix(k)*((q * icn2) mod f)) + ((q*DigA(c,1)) mod f)) mod f by Def6
+    .= ((Radix(k)*((q * icn2) mod f)) + ((q*DigA(c,1)) mod f)) mod f
     .= ((Radix(k)*((q * icn2) mod f)) + ((q*c2.1) mod f)) mod f
                                              by A9,A23,RADIX_1:def 3;
     hence thesis by A76;
@@ -1125,7 +1125,7 @@ begin :: Algorithm of calculation of (a^b) mod c based on
 
 definition let n,f,j,m be Nat, e be Tuple of n,NAT;
   func Table2(m,e,f,j) -> Nat equals
-  :Def8:
+
     (m |^ (e/.j)) mod f;
 correctness;
 end;
@@ -1279,13 +1279,13 @@ proof
     then 1 in dom DecSD2(ie,1,k) by A6,FINSEQ_1:def 3;
     then e/.1 = DecSD2(ie,1,k).1 by A3,FINSEQ_4:def 4
           .= DigitDC2(ie,1,k) by A6,Def5
-          .= (ie mod (Radix(k) |^ 1)) div (Radix(k) |^ (1 -'1)) by Def4
+          .= (ie mod (Radix(k) |^ 1)) div (Radix(k) |^ (1 -'1))
           .= (ie mod (Radix(k) |^ 1)) div (Radix(k) |^ 0) by A5,BINARITH:def 3
           .= (ie mod (Radix(k) |^ 1)) div 1 by NEWTON:9
           .= ie mod (Radix(k) |^ 1) by NAT_2:6
           .= ie mod Radix(k) by NEWTON:10
           .= ie by A4,GR_CY_1:4;
-    then (m |^ ie) mod f = Table2(m,e,f,1) by Def8;
+    then (m |^ ie) mod f = Table2(m,e,f,1);
     hence thesis by Def9;
   end;
   A7:for n be Nat st n >= 1 & PP[n] holds PP[n+1]
@@ -1328,11 +1328,11 @@ proof
           case A28: i=0;
             then Pow_mod(m,en,f,k).(i+1)
               = Table2(m,en,f,n) by A8,Def9
-             .= (m |^ (en/.n)) mod f by Def8
+             .= (m |^ (en/.n)) mod f
              .= (m |^ (en.n)) mod f by A15,A25,FINSEQ_4:def 4
              .= (m |^ (e.(n+1))) mod f by A13,A15
              .= (m |^ (e/.(n+1))) mod f by A16,A27,FINSEQ_4:def 4
-             .= Table2(m,e,f,n+1) by Def8
+             .= Table2(m,e,f,n+1)
              .= Pow_mod(m,e,f,k).1 by A9,Def9;
             hence Pow_mod(m,en,f,k).(i+1) = Pow_mod(m,e,f,k).(i+1) by A28;
           end;
@@ -1365,7 +1365,7 @@ proof
             then A40: ((n+1) -' i) in dom e by A26,FINSEQ_2:109;
                Pow_mod(m,en,f,k).(i+1)
              = ((((Pow_mod(m,e,f,k).i) |^ Radix(k)) mod f)
-          * ((m |^ (en/.(n-'i))) mod f)) mod f by A20,A30,A32,Def8,FINSEQ_1:3
+          * ((m |^ (en/.(n-'i))) mod f)) mod f by A20,A30,A32,FINSEQ_1:3
             .= ((((Pow_mod(m,e,f,k).i) |^ Radix(k)) mod f)
                    * ((m |^ (en.(n-'i))) mod f)) mod f by A36,FINSEQ_4:def 4
             .= ((((Pow_mod(m,e,f,k).i) |^ Radix(k)) mod f)
@@ -1375,7 +1375,7 @@ proof
             .= ((((Pow_mod(m,e,f,k).i) |^ Radix(k)) mod f)
                 * ((m |^ (e/.((n+1) -'i))) mod f)) mod f by A40,FINSEQ_4:def 4
             .= ((((Pow_mod(m,e,f,k).i) |^ Radix(k)) mod f)
-                   * Table2(m,e,f,(n+1)-'i)) mod f by Def8;
+                   * Table2(m,e,f,(n+1)-'i)) mod f;
             hence Pow_mod(m,en,f,k).(i+1)=Pow_mod(m,e,f,k).(i+1) by A33;
         end;
         end;
@@ -1451,13 +1451,13 @@ proof
                  .=Radix(k)*((DigitSD2(en,k))/.i1)
                                           by A45,A46,A63,FINSEQ_4:def 4
                  .=Radix(k)*SubDigit2(en,i1,k) by A62,Def2
-                 .=Radix(k)*((Radix(k) |^ (i1-'1))*(en.i1)) by Def1
+                 .=Radix(k)*((Radix(k) |^ (i1-'1))*(en.i1))
                  .=Radix(k)*(Radix(k) |^ (i1-'1))*(en.i1)
                  .=(Radix(k) |^ (i1-'1+1))*(en.i1) by NEWTON:11
                  .=(Radix(k) |^ i1)*(en.i1) by A60,AMI_5:4
                  .=(Radix(k) |^ i1)*(e.(i1+1)) by A13,A62
                  .=(Radix(k) |^ (i-'1))*(e.i) by A54,BINARITH:50
-                 .=SubDigit2(e,i,k) by Def1
+                 .=SubDigit2(e,i,k)
                  .=(DigitSD2(e,k))/.i by A56,Def2;
           hence thesis by A57,FINSEQ_4:def 4;
         end;
@@ -1467,14 +1467,14 @@ proof
          dom e = Seg (len e) by FINSEQ_1:def 3;
       then A64: 1 in dom e by A14,FINSEQ_2:109;
          ie = SDDec2(e,k) by A9,A10,A11,Th15
-        .= Sum DigitSD2(e,k) by Def3
+        .= Sum DigitSD2(e,k)
         .= SubDigit2(e,1,k) + Sum(Radix(k) * DigitSD2(en,k)) by A48,RVSUM_1:106
         .= SubDigit2(e,1,k) + Sum(r2 * rD) by A44,A45,A46,FINSEQ_1:17
         .= SubDigit2(e,1,k) + r2 * Sum(rD) by RVSUM_1:117
         .= SubDigit2(e,1,k) + Radix(k) * Sum(DigitSD2(en,k))
                                          by A44,A45,A46,FINSEQ_1:17
-        .= SubDigit2(e,1,k) + Radix(k) * SDDec2(en,k) by Def3
-        .= (Radix(k) |^ (1 -' 1))*(e.1) + Radix(k) * ien by Def1
+        .= SubDigit2(e,1,k) + Radix(k) * SDDec2(en,k)
+        .= (Radix(k) |^ (1 -' 1))*(e.1) + Radix(k) * ien
         .= (Radix(k) |^ 0)*(e.1) + Radix(k) * ien by A47,BINARITH:def 3
         .= 1*(e.1) + Radix(k) * ien by NEWTON:9;
       hence thesis by A64,FINSEQ_4:def 4;
@@ -1498,7 +1498,7 @@ proof
         then 1 <= (i+1) & (i+1) <= (n+1) by A12,A70,XREAL_1:2,XREAL_1:8;
         then A73: (i+1) in Seg (n+1) by FINSEQ_1:3;
            e.1 = DigitDC2(ie,1,k) by A11,A14,Def5
-           .= (ie mod (Radix(k) |^ 1)) div (Radix(k) |^ (1 -' 1)) by Def4
+           .= (ie mod (Radix(k) |^ 1)) div (Radix(k) |^ (1 -' 1))
            .= (ie mod (Radix(k) |^ 1)) div (Radix(k) |^ 0) by BINARITH:51
            .= (ie mod (Radix(k) |^ 1)) div 1 by NEWTON:9
            .= ie mod (Radix(k) |^ 1) by NAT_2:6
@@ -1522,7 +1522,7 @@ proof
            en.i
          = e.(i+1) by A13,A71
         .= DigitDC2(ie,(i+1),k) by A11,A73,Def5
-        .= (ie mod (Radix(k) |^ (i+1))) div (Radix(k) |^ ((i+1) -'1)) by Def4
+        .= (ie mod (Radix(k) |^ (i+1))) div (Radix(k) |^ ((i+1) -'1))
         .= ((ien*Radix(k) + (e/.1)) div (Radix(k) |^ ((i+1)-'1)))
                                                 mod Radix(k) by A42,A76,Th4
         .= ((ien*Radix(k) + e.1) div (Radix(k) |^ ((i+1)-'1)))
@@ -1536,7 +1536,7 @@ proof
                                                 mod Radix(k) by NAT_2:29
         .= (ien mod (Radix(k) |^ i)) div (Radix(k) |^ (i -'1)) by A70,A76,A78,
 Th4
-        .= DigitDC2(ien,i,k) by Def4;
+        .= DigitDC2(ien,i,k);
         hence thesis by A71,Def5;
       end;
       hence thesis by A69,FINSEQ_1:18;
@@ -1558,7 +1558,7 @@ Th4
                                                            by EULER_2:10
          .= (m |^ (ien*Radix(k))*Table2(m,e,f,(n+1)-'n)) mod f by NEWTON:14
          .= (m |^ (ien*Radix(k))*Table2(m,e,f,1)) mod f by BINARITH:39
-         .= (m |^ (ien*Radix(k))*((m |^ (e/.1)) mod f)) mod f by Def8
+         .= (m |^ (ien*Radix(k))*((m |^ (e/.1)) mod f)) mod f
          .= (m |^ (ien*Radix(k))*(m |^ (e/.1))) mod f by EULER_2:9
          .= (m |^ (ien*Radix(k) + (e/.1))) mod f by NEWTON:13;
     hence thesis by A42;

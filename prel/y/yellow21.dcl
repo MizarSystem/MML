@@ -36,7 +36,6 @@
 <ArticleID name="BINOP_1"/>
 <ArticleID name="MULTOP_1"/>
 <ArticleID name="ALTCAT_1"/>
-<ArticleID name="COMMACAT"/>
 <ArticleID name="CAT_5"/>
 <ArticleID name="ORDERS_3"/>
 <ArticleID name="YELLOW_0"/>
@@ -151,7 +150,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="425">
+<Func kind="K" nr="410">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -166,7 +165,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="425">
+<Func kind="K" nr="410">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -319,7 +318,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="429">
+<Func kind="K" nr="414">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -349,7 +348,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="429">
+<Func kind="K" nr="414">
 <LocusVar nr="1"/>
 </Func>
 </Func>
@@ -357,14 +356,14 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="429">
+<Func kind="K" nr="414">
 <LocusVar nr="1"/>
 </Func>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="235">
-<Func kind="K" nr="429">
+<Func kind="K" nr="239">
+<Func kind="K" nr="414">
 <LocusVar nr="1"/>
 </Func>
 <LocusVar nr="2"/>
@@ -384,7 +383,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="430">
+<Func kind="K" nr="415">
 <LocusVar nr="1"/>
 </Func>
 </Func>
@@ -392,14 +391,14 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="430">
+<Func kind="K" nr="415">
 <LocusVar nr="1"/>
 </Func>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="235">
-<Func kind="K" nr="430">
+<Func kind="K" nr="239">
+<Func kind="K" nr="415">
 <LocusVar nr="1"/>
 </Func>
 <LocusVar nr="2"/>
@@ -419,7 +418,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="431">
+<Func kind="K" nr="416">
 <LocusVar nr="1"/>
 </Func>
 </Func>
@@ -427,14 +426,14 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="431">
+<Func kind="K" nr="416">
 <LocusVar nr="1"/>
 </Func>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="235">
-<Func kind="K" nr="431">
+<Func kind="K" nr="239">
+<Func kind="K" nr="416">
 <LocusVar nr="1"/>
 </Func>
 <LocusVar nr="2"/>

@@ -73,14 +73,14 @@
 <Func kind="F" nr="2"/>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="112">
+<Func kind="K" nr="116">
 <Func kind="K" nr="7">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 </Func>
 <Func kind="F" nr="3"/>
 <Var nr="1"/>
-<Func kind="K" nr="120">
+<Func kind="K" nr="124">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Var nr="2"/>
@@ -379,9 +379,9 @@
 </Cluster>
 </Typ>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="94">
+<Func kind="K" nr="98">
 <Var nr="1"/>
-<Func kind="K" nr="96">
+<Func kind="K" nr="100">
 <Var nr="2"/>
 </Func>
 </Func>

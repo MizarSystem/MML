@@ -50,7 +50,7 @@ reserve
 
 definition
   let S, T be non empty TopSpace;
-  func DiffElems(S,T) -> Subset of [:S,T:] equals :ddiff:
+  func DiffElems(S,T) -> Subset of [:S,T:] equals
   {[s,t] where s is Point of S, t is Point of T: s <> t};
 coherence
 proof
@@ -66,18 +66,11 @@ proof
 end;
 end;
 
-theorem Texd:
+theorem
   for S, T being non empty TopSpace,
       x being set holds
    x in DiffElems(S,T) iff
-   ex s being Point of S, t being Point of T st x = [s,t] & s <> t
-proof
-  let S, T be non empty TopSpace;
-  let x be set;
-  DiffElems(S,T) = {[s,t] where s is Point of S, t is Point of T: s <> t}
-    by ddiff;
-  hence thesis;
-end;
+   ex s being Point of S, t being Point of T st x = [s,t] & s <> t;
 
 registration
   let S be non trivial non empty TopSpace;
@@ -90,11 +83,11 @@ a1: s1 <> s2 by YELLOW_8:def 1;
   consider t1 being Element of T;
   per cases;
   suppose s1 = t1;
-  then [s2,t1] in DiffElems(S,T) by a1,Texd;
+  then [s2,t1] in DiffElems(S,T) by a1;
   hence thesis;
   end;
   suppose s1 <> t1;
-  then [s1,t1] in DiffElems(S,T) by Texd;
+  then [s1,t1] in DiffElems(S,T);
   hence thesis;
   end;
 end;
@@ -111,11 +104,11 @@ proof
 a2: t1 <> t2 by YELLOW_8:def 1;
   per cases;
   suppose s1 = t1;
-  then [s1,t2] in DiffElems(S,T) by a2,Texd;
+  then [s1,t2] in DiffElems(S,T) by a2;
   hence thesis;
   end;
   suppose s1 <> t1;
-  then [s1,t1] in DiffElems(S,T) by Texd;
+  then [s1,t1] in DiffElems(S,T);
   hence thesis;
   end;
 end;
@@ -145,7 +138,7 @@ a3: a = x by TARSKI:def 1;
 
 definition
   let n be Nat, x be Point of TOP-REAL n, r be real number;
-  func Tdisk(x,r) -> SubSpace of TOP-REAL n equals :dd:
+  func Tdisk(x,r) -> SubSpace of TOP-REAL n equals
   (TOP-REAL n) | cl_Ball(x,r);
 coherence;
 end;
@@ -154,17 +147,13 @@ registration
   let n be Nat, x be Point of TOP-REAL n;
   let r be non negative (real number);
   cluster Tdisk(x,r) -> non empty;
-coherence
-proof
-  Tdisk(x,r) = (TOP-REAL n) | cl_Ball(x,r) by dd;
-  hence thesis;
-end;
+coherence;
 end;
 
 theorem Tcard:
   the carrier of Tdisk(x,r) = cl_Ball(x,r)
 proof
-  Tdisk(x,r) = (TOP-REAL n) | cl_Ball(x,r) by dd;
+  Tdisk(x,r) = (TOP-REAL n) | cl_Ball(x,r);
   then [#]Tdisk(x,r) = cl_Ball(x,r) by PRE_TOPC:def 10;
   hence the carrier of Tdisk(x,r) = cl_Ball(x,r)
     by PRE_TOPC:12;
@@ -405,9 +394,17 @@ A32: |. l*(t-s) .|^2 = (abs(l)*|. t-s .|)^2 by TOPRNS_1:8
     .= |. s-o +- l*(s-t) .| by EUCLID:45
     .= |. s-o + l*(-(s-t)) .| by EUCLID:44
     .= |. s-o + l*(t-s) .| by EUCLID:48;
-  then r^2 = |. s-o .|^2 + 2*|(l*(t-s),s-o)| + |. l*(t-s) .|^2 by EUCLID_2:67
+  then
+Z:r^2 = |. s-o .|^2 + 2*|(l*(t-s),s-o)| + |. l*(t-s) .|^2 by EUCLID_2:67
     .= |. s-o .|^2 + 2*(l*|(t-s,s-o)|) + |. l*(t-s) .|^2 by EUCLID_2:41;
-  then A*l^2+B*l+C = 0 by A10,A12,A13,A14,A32;
+  (Sum sqr (T-S))*l^2+(2*M)*l+Sum sqr (S-O) - r^2
+     = (|. T-S .|^2)*l^2+(2*M)*l+Sum sqr (S-O) - r^2 by A12
+    .= (|. T-S .|^2)*l^2+(2*M)*l+(|. S-O .|^2) - r^2 by A13
+    .= (|. t-s .|^2)*l^2+(2*M)*l+(|. S-O .|^2) - r^2 by A10
+    .= |. l*(t-s) .|^2+(2*M)*l+(|. S-O .|^2) - r^2 by A32
+    .= |. l*(t-s) .|^2+(2*M)*l+(|. s-o .|^2) - r^2 by A14
+    .= 0 by Z;
+  then A*l^2+B*l+C = 0;
   then
 d4: Poly2(A,B,C,l) = 0 by POLYEQ_1:def 2;
   A*C <= 0 by A6,A15,XREAL_1:133;
@@ -524,7 +521,7 @@ B4: H`2 = s`2+(l*(t-s))`2 by dd,TOPREAL3:7
      .= s`2+l*(t-s)`2 by TOPREAL3:9
      .= s`2+l*(t`2-s`2) by TOPREAL3:8;
   s`1 <> t`1 or s`2 <> t`2 by a3,TOPREAL3:11;
-  then r1 <> 0 or r2 <> 0 by a6,a4,XCMPLX_1:15;
+  then r1 <> 0 or r2 <> 0 by a6,a4;
   then (0 < r1^2 or 0 < r2^2) & 0 <= r1^2 & 0 <= r2^2 by SQUARE_1:72,74;
   then
 A6: 0+0 < A by XREAL_1:10;
@@ -695,9 +692,9 @@ cz: Sphere(o,r) c= cl_Ball(o,r) by TOPREAL9:17;
   then reconsider x0 = y0 as Point of X by a1,cc,cz,Tcard;
   consider C being constant Loop of x0;
 d2: C = I[01] --> x0 by BORSUK_2:6
-   .= (the carrier of I[01]) --> y0 by BORSUK_1:def 3;
+   .= (the carrier of I[01]) --> y0;
   then reconsider D = C as Function of I[01], Y;
-d1: D = I[01] --> y0 by d2,BORSUK_1:def 3;
+d1: D = I[01] --> y0 by d2;
   reconsider a0 = 0, a1 = 1 as Point of I[01] by BORSUK_1:def 17,def 18;
 ww: y0,y0 are_connected;
   D.a0 = y0 & D.a1 = y0 by d2,FUNCOP_1:13;
@@ -906,7 +903,7 @@ v9: Ball(o,r) misses Sphere(o,r) by TOPREAL9:19;
     o in Ball(o,r) by v0,TOPREAL9:7;
     hence contradiction by v8,v6,v9,XBOOLE_0:3;
   end;
-  then [o,s] in DiffElems(T2,T2) by v5,Texd;
+  then [o,s] in DiffElems(T2,T2) by v5;
   then reconsider OK as non empty Subset of [:T2,T2:] by v1,v4,XBOOLE_0:def 3;
   set TD = [:T2,T2:] | OK;
   let f be continuous Function of D2,D2 such that
@@ -1431,7 +1428,7 @@ P0: for y, z being Point of D2 st y <> z holds [y,z] in OK
     assume
 a1:   y <> z;
     y is Point of T2 & z is Point of T2 by TOPMETR:2;
-    then [y,z] in DiffElems(T2,T2) by a1,Texd;
+    then [y,z] in DiffElems(T2,T2) by a1;
     hence [y,z] in OK by XBOOLE_0:def 3;
   end;
 P1: for y, z being Point of D2 st y <> z holds Zdx. [y,z] = dx. [y,z]
@@ -1440,7 +1437,7 @@ P1: for y, z being Point of D2 st y <> z holds Zdx. [y,z] = dx. [y,z]
     assume y <> z;
     then
 a1: [y,z] in OK by P0;
-    thus Zdx. [y,z] = (dx | OK). [y,z] by PSCOMP_1:def 26
+    thus Zdx. [y,z] = (dx | OK). [y,z]
     .= dx. [y,z] by a1,FUNCT_1:72;
   end;
 P2: for y, z being Point of D2 st y <> z holds Zdy. [y,z] = dy. [y,z]
@@ -1449,7 +1446,7 @@ P2: for y, z being Point of D2 st y <> z holds Zdy. [y,z] = dy. [y,z]
     assume y <> z;
     then
 a1: [y,z] in OK by P0;
-    thus Zdy. [y,z] = (dy | OK). [y,z] by PSCOMP_1:def 26
+    thus Zdy. [y,z] = (dy | OK). [y,z]
     .= dy. [y,z] by a1,FUNCT_1:72;
   end;
 P3: for y, z being Point of D2 st y <> z holds Zfx2. [y,z] = fx2. [y,z]
@@ -1458,7 +1455,7 @@ P3: for y, z being Point of D2 st y <> z holds Zfx2. [y,z] = fx2. [y,z]
     assume y <> z;
     then
 a1: [y,z] in OK by P0;
-    thus Zfx2. [y,z] = (fx2 | OK). [y,z] by PSCOMP_1:def 26
+    thus Zfx2. [y,z] = (fx2 | OK). [y,z]
     .= fx2. [y,z] by a1,FUNCT_1:72;
   end;
 P4: for y, z being Point of D2 st y <> z holds Zfy2. [y,z] = fy2. [y,z]
@@ -1467,7 +1464,7 @@ P4: for y, z being Point of D2 st y <> z holds Zfy2. [y,z] = fy2. [y,z]
     assume y <> z;
     then
 a1: [y,z] in OK by P0;
-    thus Zfy2. [y,z] = (fy2 | OK). [y,z] by PSCOMP_1:def 26
+    thus Zfy2. [y,z] = (fy2 | OK). [y,z]
     .= fy2. [y,z] by a1,FUNCT_1:72;
   end;
 P5: for y, z being Point of D2 st y <> z holds Zf1. [y,z] = f1. [y,z]
@@ -1476,7 +1473,7 @@ P5: for y, z being Point of D2 st y <> z holds Zf1. [y,z] = f1. [y,z]
     assume y <> z;
     then
 a1: [y,z] in OK by P0;
-    thus Zf1. [y,z] = (f1 | OK). [y,z] by PSCOMP_1:def 26
+    thus Zf1. [y,z] = (f1 | OK). [y,z]
     .= f1. [y,z] by a1,FUNCT_1:72;
   end;
 P6: for y, z being Point of D2 st y <> z holds Zxo. [y,z] = xo. [y,z]
@@ -1485,7 +1482,7 @@ P6: for y, z being Point of D2 st y <> z holds Zxo. [y,z] = xo. [y,z]
     assume y <> z;
     then
 a1: [y,z] in OK by P0;
-    thus Zxo. [y,z] = (xo | OK). [y,z] by PSCOMP_1:def 26
+    thus Zxo. [y,z] = (xo | OK). [y,z]
     .= xo. [y,z] by a1,FUNCT_1:72;
   end;
 P7: for y, z being Point of D2 st y <> z holds Zyo. [y,z] = yo. [y,z]
@@ -1494,7 +1491,7 @@ P7: for y, z being Point of D2 st y <> z holds Zyo. [y,z] = yo. [y,z]
     assume y <> z;
     then
 a1: [y,z] in OK by P0;
-    thus Zyo. [y,z] = (yo | OK). [y,z] by PSCOMP_1:def 26
+    thus Zyo. [y,z] = (yo | OK). [y,z]
     .= yo. [y,z] by a1,FUNCT_1:72;
   end;
   now
@@ -1506,7 +1503,7 @@ e2:   m.a = b by FUNCT_1:def 5;
     a in DiffElems(T2,T2) by e1,D0,XBOOLE_0:def 3;
     then consider y, z being Point of T2 such that
 e3:   a = [y,z] and
-e7:   y <> z by Texd;
+e7:   y <> z;
     a in the carrier of [:D2,D2:] by e1,D0,XBOOLE_0:def 3;
     then consider a1, a2 being Point of D2 such that
 qw:   a = [a1,a2] by BORSUK_1:50;
@@ -1535,7 +1532,7 @@ e5: 0+0 <= r1^2+r2^2 by XREAL_1:9;
     now
       assume r1^2+r2^2 = 0;
       then r1 = 0 & r2 = 0 by COMPLEX1:2;
-      then y`1 = z`1 & y`2 = z`2 by XCMPLX_1:15;
+      then y`1 = z`1 & y`2 = z`2;
       hence contradiction by e7,TOPREAL3:11;
     end;
     hence 0 < b by  e2,e3,e4,e5;
@@ -1557,7 +1554,7 @@ e2:   p2.a = b by FUNCT_1:def 5;
     a in DiffElems(T2,T2) by e1,D0,XBOOLE_0:def 3;
     then consider y, z being Point of T2 such that
 e3:   a = [y,z] and
-e7:   y <> z by Texd;
+e7:   y <> z;
     set r3 = z`1-o`1, r4 = z`2-o`2;
     a in the carrier of [:D2,D2:] by e1,D0,XBOOLE_0:def 3;
     then consider a1, a2 being Point of D2 such that
@@ -1615,7 +1612,7 @@ z1:   y = x and
 z2:   z = f.x and
 z5:   HC(x,f) = HC(z,y,o,r) by dhc;
 z6: x <> f.x by z0,ABIAN:def 4;
-    then [x,f.x] in DiffElems (T2,T2) by z1,z2,Texd;
+    then [x,f.x] in DiffElems (T2,T2) by z1,z2;
     then
 RR: [y,z] in OK by z1,z2,XBOOLE_0:def 3;
     set r1 = y`1-z`1, r2 = y`2-z`2,
@@ -1731,7 +1728,7 @@ w2:   V is open;
     reconsider p1 = p, fp = f.p as Point of T2 by TOPMETR:2;
     not p is_a_fixpoint_of f by ff,ABIAN:def 5;
     then p <> f.p by ABIAN:def 4;
-    then [p1,fp] in DiffElems (T2,T2) by Texd;
+    then [p1,fp] in DiffElems (T2,T2);
     then
 RR: [p,f.p] in OK by XBOOLE_0:def 3;
     consider V1 being Subset of T2 such that
@@ -1811,7 +1808,7 @@ w21:  b = g.a by FUNCT_2:116;
 w33: a in X1 by XBOOLE_0:def 3;
     not a is_a_fixpoint_of f by ff,ABIAN:def 5;
     then a <> f.a by ABIAN:def 4;
-    then [a1,fa] in DiffElems (T2,T2) by Texd;
+    then [a1,fa] in DiffElems (T2,T2);
     then
 RR: [a,f.a] in OK by XBOOLE_0:def 3;
     a in M by w20,XBOOLE_0:def 3;

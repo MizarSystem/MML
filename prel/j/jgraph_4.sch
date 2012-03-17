@@ -26,60 +26,6 @@
 <ArticleID name="EUCLID"/>
 </Signature>
 <Scheme>
-<ArgTypes/>
-<Pred kind="R" nr="1">
-<Fraenkel>
-<Typ kind="M" nr="3">
-<Cluster/>
-<Func kind="U" nr="1">
-<Func kind="K" nr="154">
-<Num nr="2"/>
-</Func>
-</Func>
-</Typ>
-<Var nr="1"/>
-<And>
-<Pred kind="P" nr="1">
-<Var nr="1"/>
-</Pred>
-<Pred kind="P" nr="2">
-<Var nr="1"/>
-</Pred>
-</And>
-</Fraenkel>
-<Func kind="K" nr="7">
-<Fraenkel>
-<Typ kind="M" nr="3">
-<Cluster/>
-<Func kind="U" nr="1">
-<Func kind="K" nr="154">
-<Num nr="2"/>
-</Func>
-</Func>
-</Typ>
-<Var nr="1"/>
-<Pred kind="P" nr="1">
-<Var nr="1"/>
-</Pred>
-</Fraenkel>
-<Fraenkel>
-<Typ kind="M" nr="3">
-<Cluster/>
-<Func kind="U" nr="1">
-<Func kind="K" nr="154">
-<Num nr="2"/>
-</Func>
-</Func>
-</Typ>
-<Var nr="1"/>
-<Pred kind="P" nr="2">
-<Var nr="1"/>
-</Pred>
-</Fraenkel>
-</Func>
-</Pred>
-</Scheme>
-<Scheme>
 <ArgTypes>
 <Typ kind="M" nr="3">
 <Cluster>

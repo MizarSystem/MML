@@ -42,7 +42,6 @@
 <ArticleID name="CAT_1"/>
 <ArticleID name="CAT_2"/>
 <ArticleID name="MCART_1"/>
-<ArticleID name="COMMACAT"/>
 <ArticleID name="CAT_5"/>
 <ArticleID name="ORDERS_3"/>
 <ArticleID name="CARD_3"/>
@@ -133,7 +132,7 @@
 <Typ kind="G" nr="10">
 <Cluster>
 <Adjective nr="4" value="false"/>
-<Adjective nr="129"/>
+<Adjective nr="130"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -330,7 +329,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="358">
+<Func kind="K" nr="343">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -357,7 +356,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="359">
+<Func kind="K" nr="344">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -383,8 +382,8 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="94">
-<Func kind="K" nr="91">
+<Func kind="K" nr="93">
+<Func kind="K" nr="90">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>

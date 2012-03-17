@@ -27,7 +27,6 @@
 <ArticleID name="FUNCT_5"/>
 <ArticleID name="FRAENKEL"/>
 <ArticleID name="CAT_2"/>
-<ArticleID name="COMMACAT"/>
 <ArticleID name="CAT_5"/>
 <ArticleID name="INDEX_1"/>
 </Signature>
@@ -92,12 +91,12 @@
 </Func>
 <Typ kind="M" nr="16">
 <Cluster/>
-<Func kind="K" nr="257">
+<Func kind="K" nr="243">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Var nr="1"/>
 </Func>
-<Func kind="K" nr="257">
+<Func kind="K" nr="243">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="3"/>
 <Var nr="1"/>

@@ -254,7 +254,7 @@ theorem Th6:
 proof
   let s be State of SCM+FSA,I be Macro-Instruction;
   assume A1:s.intloc 0=1 & IC s = insloc 0;
-then A2: s.IC SCM+FSA = insloc 0 by AMI_1:def 15;
+then A2: s.IC SCM+FSA = insloc 0;
 A3: IC SCM+FSA in dom s by AMI_5:25;
  thus s +* Initialized I = s +* (I +* Start-At insloc 0) by A1,SCMFSA8C:18
  .= s +* I +* Start-At insloc 0 by FUNCT_4:15
@@ -374,12 +374,12 @@ A5:  I c= s2 by A2,SCM_HALT:13;
   A7: IC (Computation s1).k in dom I by A1,SCM_HALT:def 1;
   A8: IC (Computation s2).k in dom I by A2,SCM_HALT:def 1;
       thus CurInstr (Computation s2).k
-       = ((Computation s2).k).IC (Computation s2).k by AMI_1:def 17
+       = ((Computation s2).k).IC (Computation s2).k
       .= s2.IC (Computation s2).k by AMI_1:54
       .= I.IC (Computation s2).k by A5,A8,GRFUNC_1:8
       .= s1.IC (Computation s1).k by A4,A6,A7,GRFUNC_1:8
       .= ((Computation s1).k).IC (Computation s1).k by AMI_1:54
-      .= CurInstr (Computation s1).k by AMI_1:def 17;
+      .= CurInstr (Computation s1).k;
      end;
 end;
 
@@ -647,21 +647,21 @@ A7:  insloc 0 in dom while>0(a,I) by SCMFSA_9:10;
 then A8: dom while>0(a,I) c= dom (while>0(a,I) +* Start-At insloc 0)
        by GRFUNC_1:8;
 A9:   IC SCM+FSA in dom (while>0(a,I) +* Start-At insloc 0) by SF_MASTR:65;
-A10:  IC s1 = s1.IC SCM+FSA by AMI_1:def 15
+A10:  IC s1 = s1.IC SCM+FSA
      .= (while>0(a,I) +* Start-At insloc 0).IC SCM+FSA by A9,FUNCT_4:14
      .= insloc 0 by SF_MASTR:66;
          s1.insloc 0 = (while>0(a,I) +* Start-At insloc 0).insloc 0
      by A7,A8,FUNCT_4:14
      .= while>0(a,I).insloc 0 by A7,SCMFSA6B:7
      .= i by SCMFSA_9:11;
-then A11:  CurInstr s1 = i by A10,AMI_1:def 17;
+then A11:  CurInstr s1 = i by A10;
 A12:  (Computation s1).(0 + 1) = Following (Computation s1).0 by AMI_1:def 19
      .= Following s1 by AMI_1:def 19
-     .= Exec(i,s1) by A11,AMI_1:def 18;
+     .= Exec(i,s1) by A11;
          not a in dom (while>0(a,I) +* Start-At insloc 0) & a in dom s0
        by SCMFSA6B:12,SCMFSA_2:66;
      then A13: s1.a = s0.a by FUNCT_4:12;
-A14:  IC s2 = s2.IC SCM+FSA by AMI_1:def 15
+A14:  IC s2 = s2.IC SCM+FSA
      .= insloc 4 by A6,A12,A13,SCMFSA_2:97;
          (for c be Int-Location holds s2.c = s1.c) &
      for f be FinSeq-Location holds s2.f = s1.f
@@ -677,7 +677,7 @@ A16: P[0]
      proof assume 0 <= LifeSpan sI;
 A17:    IC SCM+FSA in dom (I +* Start-At insloc 0) by SF_MASTR:65;
            IC (Computation sI).0 = IC sI by AMI_1:def 19
-       .= sI.IC SCM+FSA by AMI_1:def 15
+       .= sI.IC SCM+FSA
        .= (I +* Start-At insloc 0).IC SCM+FSA by A17,FUNCT_4:14
        .= insloc 0 by SF_MASTR:66;
        then IC (Computation sI).0 + 4 = insloc (0+ 4) by SCMFSA_4:def 1;
@@ -704,25 +704,25 @@ then k < LifeSpan sI by A20,XREAL_1:2;
 then A21: P[LifeSpan sI];
 then A22: CurInstr s2 = goto loc4 by A4,A5,SCMFSA_9:45;
 A23: s3 = Following s2 by AMI_1:def 19
-    .= Exec(goto loc4,s2) by A22,AMI_1:def 18;
+    .= Exec(goto loc4,s2) by A22;
      then (for c be Int-Location holds s3.c = s2.c) &
      for f be FinSeq-Location holds s3.f = s2.f by SCMFSA_2:95;
 then A24:  s3 | D = s2 | D by SCMFSA6A:38;
 A25: loc4 in dom while>0(a,I) by SCMFSA_9:38;
-A26: IC s3 = s3.IC SCM+FSA by AMI_1:def 15
+A26: IC s3 = s3.IC SCM+FSA
     .= loc4 by A23,SCMFSA_2:95;
     set s4=(Computation s1).(1+LifeSpan sI+1+1);
         s3.loc4 = s1.loc4 by AMI_1:54
     .= (while>0(a,I) +* Start-At insloc 0).loc4 by A8,A25,FUNCT_4:14
     .= while>0(a,I).loc4 by A25,SCMFSA6B:7
     .= goto insloc 0 by SCMFSA_9:46;
-then A27: CurInstr s3 = goto insloc 0 by A26,AMI_1:def 17;
+then A27: CurInstr s3 = goto insloc 0 by A26;
 A28: s4 = Following s3 by AMI_1:def 19
-    .= Exec(goto insloc 0,s3) by A27,AMI_1:def 18;
+    .= Exec(goto insloc 0,s3) by A27;
      then (for c be Int-Location holds s4.c = s3.c) &
      for f be FinSeq-Location holds s4.f = s3.f by SCMFSA_2:95;
 then A29:  s4 | D =s2 | D by A24,SCMFSA6A:38;
-A30: IC s4 = s4.IC SCM+FSA by AMI_1:def 15
+A30: IC s4 = s4.IC SCM+FSA
     .= insloc 0 by A28,SCMFSA_2:95;
 A31: LifeSpan sI+1+1+1 =LifeSpan sI+(2+1);
 A32: (Computation (s +* Initialized while>0(a,I))).
@@ -868,7 +868,7 @@ proof
     assume A3:sk.intloc 0=1;
 A4: IC SCM+FSA in dom At0 by SF_MASTR:65;
 A5: IC s3 = IC s2 by SCMFSA8A:13
-    .= s2.IC SCM+FSA by AMI_1:def 15
+    .= s2.IC SCM+FSA
     .= At0.IC SCM+FSA by A4,FUNCT_4:14
     .= IC sk by A1,SF_MASTR:66;
 A6:  s3 | D = s2 | D by SCMFSA8A:13
@@ -983,7 +983,7 @@ A26:     I is_closed_onInit si & I is_halting_onInit si by A6,A22;
 then A27:     IC sm =insloc 0 by A25,A26,Th19;
              (StepWhile>0(a,s,I).(i+1)).intloc 0 = 1 by A1;
 then A28:     sm1=sm2 by A21,SCMFSA8C:18;
-then A29:     IC sm2 = sm1.IC SCM+FSA by AMI_1:def 15
+then A29:     IC sm2 = sm1.IC SCM+FSA
          .= Iwhile.IC SCM+FSA by A8,FUNCT_4:14
          .= IC sm by A27,SCMFSA6A:46;
 A30:     sm2 | D = sm | D by SCMFSA8A:11;
@@ -1353,21 +1353,21 @@ A2: insloc 0 in dom while>0(a,I) by SCMFSA_9:10;
 then A3: dom while>0(a,I) c= dom (while>0(a,I) +* Start-At insloc 0)
        by GRFUNC_1:8;
 A4:  IC SCM+FSA in dom (while>0(a,I) +* Start-At insloc 0) by SF_MASTR:65;
-A5: IC s1 = s1.IC SCM+FSA by AMI_1:def 15
+A5: IC s1 = s1.IC SCM+FSA
     .= (while>0(a,I) +* Start-At insloc 0).IC SCM+FSA by A4,FUNCT_4:14
     .= insloc 0 by SF_MASTR:66;
       s1.insloc 0 = (while>0(a,I) +* Start-At insloc 0).insloc 0 by A2,A3,
 FUNCT_4:14
   .= while>0(a,I).insloc 0 by A2,SCMFSA6B:7
   .= i by SCMFSA_9:11;
-then A6: CurInstr s1 = i by A5,AMI_1:def 17;
+then A6: CurInstr s1 = i by A5;
 A7: (Computation s1).(0 + 1) = Following (Computation s1).0 by AMI_1:def 19
     .= Following s1 by AMI_1:def 19
-    .= Exec(i,s1) by A6,AMI_1:def 18;
+    .= Exec(i,s1) by A6;
         not a in dom (while>0(a,I) +* Start-At insloc 0) & a in dom Is
        by SCMFSA6B:12,SCMFSA_2:66;
     then A8: s1.a = Is.a by FUNCT_4:12;
-A9: IC C1.1 = C1.1.IC SCM+FSA by AMI_1:def 15
+A9: IC C1.1 = C1.1.IC SCM+FSA
     .= Next insloc 0 by A1,A5,A7,A8,SCMFSA_2:97
     .= insloc (0 + 1) by SCMFSA_2:32;
 A10: insloc 1 in dom while>0(a,I) by SCMFSA_9:10;
@@ -1375,38 +1375,38 @@ A10: insloc 1 in dom while>0(a,I) by SCMFSA_9:10;
     .= (while>0(a,I) +* Start-At insloc 0).insloc 1 by A3,A10,FUNCT_4:14
     .= while>0(a,I).insloc 1 by A10,SCMFSA6B:7
     .= goto insloc 2 by SCMFSA_9:11;
-then A11: CurInstr C1.1 = goto insloc 2 by A9,AMI_1:def 17;
+then A11: CurInstr C1.1 = goto insloc 2 by A9;
 A12: (Computation s1).(1 + 1) = Following s2 by AMI_1:def 19
-    .= Exec(goto insloc 2,s2) by A11,AMI_1:def 18;
+    .= Exec(goto insloc 2,s2) by A11;
 A13: insloc 2 in dom while>0(a,I) by SCMFSA_9:37;
-A14: IC s3 = s3.IC SCM+FSA by AMI_1:def 15
+A14: IC s3 = s3.IC SCM+FSA
     .= insloc 2 by A12,SCMFSA_2:95;
         s3.insloc 2 = s1.insloc 2 by AMI_1:54
     .= (while>0(a,I) +* Start-At insloc 0).insloc 2 by A3,A13,FUNCT_4:14
     .= while>0(a,I).insloc 2 by A13,SCMFSA6B:7
     .= goto insloc 3 by SCMFSA_9:41;
-then A15:  CurInstr s3 = goto insloc 3 by A14,AMI_1:def 17;
+then A15:  CurInstr s3 = goto insloc 3 by A14;
 A16: (Computation s1).(2 + 1) = Following s3 by AMI_1:def 19
-    .= Exec(goto insloc 3,s3) by A15,AMI_1:def 18;
+    .= Exec(goto insloc 3,s3) by A15;
 A17: insloc 3 in dom while>0(a,I) by SCMFSA_9:37;
      set loc5= insloc (card I +5);
-A18:  IC s4 = s4.IC SCM+FSA by AMI_1:def 15
+A18:  IC s4 = s4.IC SCM+FSA
     .= insloc 3 by A16,SCMFSA_2:95;
         s4.insloc 3 = s1.insloc 3 by AMI_1:54
     .= (while>0(a,I) +* Start-At insloc 0).insloc 3 by A3,A17,FUNCT_4:14
     .= while>0(a,I).insloc 3 by A17,SCMFSA6B:7
     .= goto loc5 by SCMFSA_9:40;
-then A19: CurInstr s4 = goto loc5 by A18,AMI_1:def 17;
+then A19: CurInstr s4 = goto loc5 by A18;
 A20: (Computation s1).(3 + 1) = Following s4 by AMI_1:def 19
-    .= Exec(goto loc5,s4) by A19,AMI_1:def 18;
+    .= Exec(goto loc5,s4) by A19;
 A21: loc5 in dom while>0(a,I) by SCMFSA_9:38;
-A22:  IC s5 = s5.IC SCM+FSA by AMI_1:def 15
+A22:  IC s5 = s5.IC SCM+FSA
      .= loc5 by A20,SCMFSA_2:95;
          s5.loc5 = s1.loc5 by AMI_1:54
      .= (while>0(a,I) +* Start-At insloc 0).loc5 by A3,A21,FUNCT_4:14
      .= while>0(a,I).loc5 by A21,SCMFSA6B:7
      .= halt SCM+FSA by SCMFSA_9:39;
-then A23:  CurInstr s5 = halt SCM+FSA by A22,AMI_1:def 17;
+then A23:  CurInstr s5 = halt SCM+FSA by A22;
 then A24: s1 is halting by AMI_1:def 20;
 A25: Is +* Initialized while>0(a,I) =
    Initialize Is +* (while>0(a,I) +* Start-At insloc 0) by SCMFSA8A:13
@@ -1653,7 +1653,7 @@ set initializeWorkMem =
 
 definition
  let f be FinSeq-Location;
- func insert-sort f -> Macro-Instruction equals :Def2:
+ func insert-sort f -> Macro-Instruction equals
    initializeWorkMem ';'
        (a1:=len f) ';'
        SubFrom(a1,a0) ';'
@@ -1676,7 +1676,7 @@ definition
 end;
 
 definition
-  func Insert-Sort-Algorithm -> Macro-Instruction equals :Def3:
+  func Insert-Sort-Algorithm -> Macro-Instruction equals
     insert-sort fsloc 0;
   coherence;
 end;
@@ -1963,7 +1963,7 @@ XBOOLE_1:4
        j2=SubFrom(a1,a0),
        Uj1= UsedIntLoc (WM ';' j1);
    thus UsedIntLoc (insert-sort f)
-     = UsedIntLoc (WM ';' j1 ';' j2 ';' Times(a1,body1)) by Def2
+     = UsedIntLoc (WM ';' j1 ';' j2 ';' Times(a1,body1))
     .= UsedIntLoc (WM ';' j1 ';' j2) \/ UsedIntLoc Times(a1,body1)
         by SF_MASTR:31
     .= UsedIntLoc (WM ';' j1 ';' j2) \/ (Ub1 \/ {a1,a0}) by SCMBSORT:31
@@ -2098,7 +2098,7 @@ A6: Ub1 ={f}
        j1=a1:=len f,
        j2=SubFrom(a1,a0);
    thus UsedInt*Loc (insert-sort f)
-     = UsedInt*Loc (WM ';' j1 ';' j2 ';' Times(a1,body1)) by Def2
+     = UsedInt*Loc (WM ';' j1 ';' j2 ';' Times(a1,body1))
     .= UsedInt*Loc (WM ';' j1 ';' j2) \/ UsedInt*Loc Times(a1,body1)
         by SF_MASTR:47
     .= UsedInt*Loc (WM ';' j1 ';' j2) \/ {f} by A6,SCMBSORT:37
@@ -2198,7 +2198,7 @@ A4:  card body1 = card (t16 ';' Wg) + card T3 by SCMFSA6A:61
        j1=a1:=len f,
        j2=SubFrom(a1,a0);
   thus card (insert-sort f)
-     = card (WM ';' j1 ';' j2 ';' Times(a1,body1)) by Def2
+     = card (WM ';' j1 ';' j2 ';' Times(a1,body1))
      .= card (WM ';' j1 ';' j2 ) + card Times(a1,body1) by SCMFSA6A:61
      .= card (WM ';' j1 ';' j2 ) + (56+12) by A4,SCMBSORT:44
      .= card (WM ';' j1 ';' Macro j2 ) + (56+12) by SCMFSA6A:def 6
@@ -2256,11 +2256,10 @@ proof
          q0=insert-sort f0;
      let s be State of SCM+FSA such that
 A1:  q c= s;
-     A2: q=q0 by Def3;
 A3:  now let i be Nat;
        assume i< 82;
        then insloc i in dom q0 by Th43;
-       hence q0.insloc i= s.insloc i by A1,A2,GRFUNC_1:8;
+       hence q0.insloc i= s.insloc i by A1,GRFUNC_1:8;
      end;
      set W2=a2:= a0,
          W3=a3:= a0,
@@ -2279,7 +2278,7 @@ A3:  now let i be Nat;
          X4=X3 ';' W4,
          X5=X4 ';' W5,
          X6=X5 ';' W6;
-A4:  q0=X6 ';' W7 ';' W8 ';' TT by Def2
+A4:  q0=X6 ';' W7 ';' W8 ';' TT
      .=X6 ';' W7 ';' T8 by SCMFSA6A:64;
 then A5:  q0=X5 ';' W6 ';' T7 by SCMFSA6A:64;
 then A6:  q0=X4 ';' W5 ';' T6 by SCMFSA6A:64;
@@ -2401,7 +2400,7 @@ then A5:  Cs.(0+1) = Exec(s.insloc 0,Cs.0) by AMI_1:55
 then A6: Cs.1.IC SCM+FSA = Next IC Cs.0 by SCMFSA_2:89
      .= insloc (0+1) by A4,SCMFSA_2:32
      .= insloc 1;
-then A7: IC Cs.1= insloc 1 by AMI_1:def 15;
+then A7: IC Cs.1= insloc 1;
 A8:  Cs.1.a2 =s.a0 by A3,A5,SCMFSA_2:89;
      A9: a2<>a0 by SCMFSA_2:16;
 then A10: Cs.1.a0 =s.a0 by A3,A5,SCMFSA_2:89;
@@ -2410,7 +2409,7 @@ A11: Cs.1.(fsloc 0) =s.(fsloc 0) by A3,A5,SCMFSA_2:89;
 A12:  Cs.(1+1) = Exec(s.insloc 1,Cs.1) by A7,AMI_1:55
     .= Exec(goto insloc 2,Cs.1) by A1,Lm1;
 then Cs.2.IC SCM+FSA = insloc 2 by SCMFSA_2:95;
-then A13:  IC Cs.2= insloc 2 by AMI_1:def 15;
+then A13:  IC Cs.2= insloc 2;
 A14: Cs.2.a0 =s.a0 by A10,A12,SCMFSA_2:95;
 A15: Cs.2.(fsloc 0) =s.(fsloc 0) by A11,A12,SCMFSA_2:95;
 A16: Cs.2.a2 =s.a0 by A8,A12,SCMFSA_2:95;
@@ -2420,7 +2419,7 @@ A17:  Cs.(2+1) = Exec(s.insloc 2,Cs.2) by A13,AMI_1:55
 then A18: Cs.3.IC SCM+FSA = Next IC Cs.2 by SCMFSA_2:89
      .= insloc (2+1) by A13,SCMFSA_2:32
      .= insloc 3;
-then A19: IC Cs.3= insloc 3 by AMI_1:def 15;
+then A19: IC Cs.3= insloc 3;
 A20: Cs.3.a3 =s.a0 by A14,A17,SCMFSA_2:89;
     A21: a3<>a0 by SCMFSA_2:16;
 then A22: Cs.3.a0 =s.a0 by A14,A17,SCMFSA_2:89;
@@ -2431,7 +2430,7 @@ then A24: Cs.3.a2 =s.a0 by A16,A17,SCMFSA_2:89;
 A25:  Cs.(3+1) = Exec(s.insloc 3,Cs.3) by A19,AMI_1:55
     .= Exec(goto insloc 4,Cs.3) by A1,Lm1;
 then Cs.4.IC SCM+FSA = insloc 4 by SCMFSA_2:95;
-then A26: IC Cs.4= insloc 4 by AMI_1:def 15;
+then A26: IC Cs.4= insloc 4;
 A27: Cs.4.a0 =s.a0 by A22,A25,SCMFSA_2:95;
 A28: Cs.4.(fsloc 0) =s.(fsloc 0) by A23,A25,SCMFSA_2:95;
 A29: Cs.4.a2 =s.a0 by A24,A25,SCMFSA_2:95;
@@ -2442,7 +2441,7 @@ A31:  Cs.(4+1) = Exec(s.insloc 4,Cs.4) by A26,AMI_1:55
 then A32: Cs.5.IC SCM+FSA = Next IC Cs.4 by SCMFSA_2:89
      .= insloc (4+1) by A26,SCMFSA_2:32
      .= insloc 5;
-then A33: IC Cs.5= insloc 5 by AMI_1:def 15;
+then A33: IC Cs.5= insloc 5;
 A34: Cs.5.a4 =s.a0 by A27,A31,SCMFSA_2:89;
     A35: a4<>a0 by SCMFSA_2:16;
 then A36: Cs.5.a0 =s.a0 by A27,A31,SCMFSA_2:89;
@@ -2455,7 +2454,7 @@ then A39: Cs.5.a3 =s.a0 by A30,A31,SCMFSA_2:89;
 A40:  Cs.(5+1) = Exec(s.insloc 5,Cs.5) by A33,AMI_1:55
     .= Exec(goto insloc 6,Cs.5) by A1,Lm1;
 then Cs.6.IC SCM+FSA = insloc 6 by SCMFSA_2:95;
-then A41: IC Cs.6= insloc 6 by AMI_1:def 15;
+then A41: IC Cs.6= insloc 6;
 A42:  Cs.6.a0 =s.a0 by A36,A40,SCMFSA_2:95;
 A43:  Cs.6.(fsloc 0) =s.(fsloc 0) by A37,A40,SCMFSA_2:95;
 A44: Cs.6.a2 =s.a0 by A38,A40,SCMFSA_2:95;
@@ -2467,7 +2466,7 @@ A47:  Cs.(6+1) = Exec(s.insloc 6,Cs.6) by A41,AMI_1:55
 then A48: Cs.7.IC SCM+FSA = Next IC Cs.6 by SCMFSA_2:89
      .= insloc (6+1) by A41,SCMFSA_2:32
      .= insloc 7;
-then A49: IC Cs.7= insloc 7 by AMI_1:def 15;
+then A49: IC Cs.7= insloc 7;
 A50: Cs.7.a5 =s.a0 by A42,A47,SCMFSA_2:89;
     A51: a5<>a0 by SCMFSA_2:16;
 then A52: Cs.7.a0 =s.a0 by A42,A47,SCMFSA_2:89;
@@ -2482,7 +2481,7 @@ then A56: Cs.7.a4 =s.a0 by A46,A47,SCMFSA_2:89;
 A57:  Cs.(7+1) = Exec(s.insloc 7,Cs.7) by A49,AMI_1:55
     .= Exec(goto insloc 8,Cs.7) by A1,Lm1;
 then Cs.8.IC SCM+FSA = insloc 8 by SCMFSA_2:95;
-then A58: IC Cs.8= insloc 8 by AMI_1:def 15;
+then A58: IC Cs.8= insloc 8;
 A59: Cs.8.a0 =s.a0 by A52,A57,SCMFSA_2:95;
 A60: Cs.8.(fsloc 0) =s.(fsloc 0) by A53,A57,SCMFSA_2:95;
 A61: Cs.8.a2 =s.a0 by A54,A57,SCMFSA_2:95;
@@ -2495,7 +2494,7 @@ A65:  Cs.(8+1) = Exec(s.insloc 8,Cs.8) by A58,AMI_1:55
 then A66: Cs.9.IC SCM+FSA = Next IC Cs.8 by SCMFSA_2:89
      .= insloc (8+1) by A58,SCMFSA_2:32
      .= insloc 9;
-then A67: IC Cs.9= insloc 9 by AMI_1:def 15;
+then A67: IC Cs.9= insloc 9;
 A68: Cs.9.a6 =s.a0 by A59,A65,SCMFSA_2:89;
     A69: a6<>a0 by SCMFSA_2:16;
 then A70: Cs.9.a0 =s.a0 by A59,A65,SCMFSA_2:89;
@@ -2512,7 +2511,7 @@ then A75: Cs.9.a5 =s.a0 by A64,A65,SCMFSA_2:89;
 A76:  Cs.(9+1) = Exec(s.insloc 9,Cs.9) by A67,AMI_1:55
     .= Exec(goto insloc 10,Cs.9) by A1,Lm1;
 then Cs.10.IC SCM+FSA = insloc 10 by SCMFSA_2:95;
-then A77: IC Cs.10= insloc 10 by AMI_1:def 15;
+then A77: IC Cs.10= insloc 10;
 A78: Cs.10.a0 =s.a0 by A70,A76,SCMFSA_2:95;
 A79: Cs.10.(fsloc 0) =s.(fsloc 0) by A71,A76,SCMFSA_2:95;
 A80: Cs.10.a2 =s.a0 by A72,A76,SCMFSA_2:95;
@@ -2762,7 +2761,7 @@ proof
      as good InitHalting Macro-Instruction by Lm12;
        WM= w2 ';' w3 ';' w4 ';' w5 ';' w6;
    then reconsider WM as keepInt0_1 InitHalting Macro-Instruction;
-       insert-sort f0 = WM ';' j1 ';' j2 ';' T1 by Def2;
+       insert-sort f0 = WM ';' j1 ';' j2 ';' T1;
    hence thesis;
 end;
 
@@ -3257,7 +3256,7 @@ SCM_HALT:82;
         then A37: i1 in dom ff by A36,FINSEQ_3:27;
        thus IExec(T3,s).f0.i=IExec(T3,b3s).f0.i
                by A6,Lm6,SCM_HALT:82
-           .=bds.f0.(i-1) by A4,A7,A9,A10,A11,A20,A24,A26,A27,A32
+           .=bds.f0.(i-1) by A4,A7,A10,A11,A20,A24,A26,A27,A32
            .=s.f0.(i-1) by A5,A18,A19,A20,A21,A27,A31,A33,A37,Th9;
      end;
      end;
@@ -3636,7 +3635,7 @@ A4:  s6.b1=Exec(j1, s5).b1 by SCMFSA6C:7
 A5:  s7.b1=Exec(j2, s6).b1 by SCMFSA6C:7
      .=s6.b1-s6.a0 by SCMFSA_2:91
      .=len (s7.f0) - 1 by A4,SCM_HALT:17;
-A6:  IExec(insert-sort f0,s).f0=IExec(WJ ';' T1,s).f0 by Def2
+A6:  IExec(insert-sort f0,s).f0=IExec(WJ ';' T1,s).f0
      .=IExec(T1,s7).f0 by Lm12,SCM_HALT:31;
      hence s.f0, IExec(insert-sort f0,s).f0 are_fiberwise_equipotent by A3,A5,
 Lm21;
@@ -3658,7 +3657,7 @@ proof
        dom Ii misses dom x by SCMBSORT:46;
    then Ii c= Ii +* x by FUNCT_4:33;
 then A2:Ii c= s by A1,XBOOLE_1:1;
-       IS is InitHalting Macro-Instruction by Def3,Th44;
+       IS is InitHalting Macro-Instruction by Th44;
    hence thesis by A2,SCM_HALT:def 1;
 end;
 
@@ -3705,7 +3704,7 @@ A5:  dom (s.f0) = dom u by A4,RFINSEQ:16;
      then p c= s by A1,XBOOLE_1:1;
   then s=s+*p by FUNCT_4:79;
     hence (Result s ).f0 =IExec(Ia,s).f0 by SCMBSORT:57
-    .=u by Def3;
+    .=u;
 end;
 
 theorem Th48:
@@ -3739,8 +3738,8 @@ A10:  IC s1 = insloc 0 by A5,AMI_3:def 14
      per cases by A2,SCMBSORT:13;
      suppose A11:i = 0;
        hence Cs1.i.intloc 0 = Cs2.i.intloc 0 by A3,A8;
-       thus (Cs1.i).IC SCM+FSA = IC s2 by A3,A10,A11,AMI_1:def 15
-       .= (Cs2.i).IC SCM+FSA by A3,A11,AMI_1:def 15;
+       thus (Cs1.i).IC SCM+FSA = IC s2 by A3,A10,A11
+       .= (Cs2.i).IC SCM+FSA by A3,A11;
        thus Cs1.i.fsloc 0 = Cs2.i.fsloc 0 by A3,A9,A11;
      end;
      suppose A12:i = 1;
@@ -3826,9 +3825,9 @@ A10:  IC s1 = insloc 0 by A5,AMI_3:def 14
    end;
     set UD={fsloc 0,a0,a1,a2,a3,a4,a5,a6},
         Us=UsedInt*Loc q \/ UsedIntLoc q;
-A22: UsedInt*Loc q = UsedInt*Loc insert-sort fsloc 0 by Def3
+A22: UsedInt*Loc q = UsedInt*Loc insert-sort fsloc 0
     .={fsloc 0} by Th39;
-    A23: UsedIntLoc q = UsedIntLoc insert-sort fsloc 0 by Def3
+    A23: UsedIntLoc q = UsedIntLoc insert-sort fsloc 0
     .={a0,a1,a2,a3,a4,a5,a6} by Th38;
 then A24: Us = UD by A22,ENUMSET1:62;
 A25:   for i being Nat,s1,s2 being State of SCM+FSA
@@ -3983,7 +3982,7 @@ A4:  dom p misses dom s by A1,SCMBSORT:46;
         set bf=insert-sort fsloc 0;
             p c=p+*s by A4,FUNCT_4:33;
         then p c= t by A6,XBOOLE_1:1;
-then A7:     Initialized bf c=t by Def3;
+then A7:     Initialized bf c=t;
             Initialized bf is halting by Th44,SCM_HALT:def 2;
        hence t is halting by A7,AMI_1:def 26;
      end;

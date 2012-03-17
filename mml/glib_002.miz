@@ -590,7 +590,7 @@ A1: X = G.reachableFrom(v) by dGCOMPSET;
 end;
 
 definition let G be _Graph;
-  func G.numComponents() -> Cardinal equals :dGNUMCOMP: ::dGNUMPCOMP
+  func G.numComponents() -> Cardinal equals  ::dGNUMPCOMP
     Card G.componentSet();
   coherence;
 end;
@@ -598,7 +598,7 @@ end;
 definition let G be finite _Graph;
   redefine func G.numComponents() -> non empty Nat;
   coherence proof
-    G.numComponents() = card G.componentSet() by dGNUMCOMP;
+    G.numComponents() = card G.componentSet();
     hence thesis by CARD_2:59;
   end;
 end;
@@ -1003,10 +1003,10 @@ for G being _Graph holds
     hereby assume G is connected; then
         G.componentSet() = {the_Vertices_of G} by lGCOMPSET02; then
         Card G.componentSet() = 1 by CARD_1:50, CARD_2:20;
-        hence G.numComponents() = 1 by dGNUMCOMP;
+        hence G.numComponents() = 1;
     end;
     assume G.numComponents() = 1; then
-    Card G.componentSet() = 1 by dGNUMCOMP; then
+    Card G.componentSet() = 1; then
     consider V being set such that
 A1: G.componentSet() = {V} by CARD_2:60;
 A2: V in G.componentSet() by A1, TARSKI:def 1;
@@ -1028,13 +1028,7 @@ end;
 
 lGNUMCOMP02:
 for G1,G2 being _Graph holds
-  G1 == G2 implies G1.numComponents() = G2.numComponents() proof
-    let G1,G2 be _Graph; assume
-    G1 == G2; then
-    G1.componentSet() = G2.componentSet() by lGCOMPSET03;
-    hence G1.numComponents() = Card G2.componentSet() by dGNUMCOMP
-                            .= G2.numComponents() by dGNUMCOMP;
-end;
+  G1 == G2 implies G1.numComponents() = G2.numComponents() by lGCOMPSET03;
 
 lCUTV01:
   for G being connected _Graph, v being Vertex of G holds
@@ -1077,7 +1071,7 @@ A1: not v is cut-vertex;
 A2: G2.numComponents() = {} or G2.numComponents() = {{}} by ZFMISC_1:39;
     consider x being Vertex of G2;
     Card G2.componentSet() <> {} by CARD_2:59; then
-    G2.numComponents() = {} \/ {{}} by A2, dGNUMCOMP
+    G2.numComponents() = {} \/ {{}} by A2
                       .= 1 by ORDINAL2:def 4, CARD_2:20, ORDINAL1:def 1;
     hence G2 is connected by lGNUMCOMP01;
 end;
@@ -1144,7 +1138,7 @@ lCUTV03:
         consider G2 being removeVertex of G,cv;
         1 < G2.numComponents() by D2, E2, dCUTV2; then
         1+1 <= G2.numComponents() by NAT_1:38; then
-        2 <= card G2.componentSet() by dGNUMCOMP; then
+        2 <= card G2.componentSet(); then
         card 2 <= card G2.componentSet() by CARD_1:66; then
         Card 2 c= Card G2.componentSet() by CARD_2:57; then
         2 c= Card G2.componentSet() by CARD_1:66; then
@@ -1667,7 +1661,7 @@ now per cases;
                 now assume W3 is trivial; then
                     len W3 = 1 by GLIB_001:127; then
                     1 + n = len W2 + 1 by D2, GLIB_001:37; then
-                    2 + len W <= len W by A4,C1,XCMPLX_1:2; then
+                    2 + len W <= len W by A4,C1; then
                     2 + len W - len W <= len W - len W by REAL_1:92; then
                     2 <= 0;
                     hence contradiction;
@@ -2339,13 +2333,11 @@ theorem  ::tSUBGRAPH_GA01
     G2 is spanning implies G1 is connected by lSUBGRAPHGA01;
 
 theorem  ::tGCOMPSET01
-  union G.componentSet() = the_Vertices_of G proof
+  union G.componentSet() = the_Vertices_of G
+   proof
     now let x be set;
-        hereby assume x in union G.componentSet(); then
-            consider Y being set such that
-        C1: x in Y & Y in G.componentSet() by TARSKI:def 4;
-            thus x in the_Vertices_of G by C1;
-        end;
+        thus x in union G.componentSet()
+               implies x in the_Vertices_of G by TARSKI:def 4;
         assume x in the_Vertices_of G; then
         reconsider x'=x as Vertex of G; set Y = G.reachableFrom(x');
     B1: x in Y by lGREACH01;
@@ -2480,7 +2472,7 @@ A2: now let k be non empty Nat; assume
         C1: Gk1 is connected;
             now assume Gk1.order() = 1; then
                 k+1 = 0+1 by B2;
-                hence contradiction by XCMPLX_1:2;
+                hence contradiction;
             end; then
             reconsider Gk1' = Gk1 as non trivial finite connected _Graph
               by C1,GLIB_000:29;
@@ -2490,8 +2482,8 @@ A2: now let k be non empty Nat; assume
         C4: Gkb is connected by C3, lCUTV02;
         C5: Gkb.order() + 1 = k + 1 &
               Gkb.size()+card v1.edgesInOut()=Gk1.size() by B2,GLIB_000:51;then
-        C6: Gkb.size() = Gk1.size() - card v1.edgesInOut() by XCMPLX_1:26;
-            Gkb.order() = k by C5, XCMPLX_1:2; then
+        C6: Gkb.size() = Gk1.size() - card v1.edgesInOut();
+            Gkb.order() = k by C5; then
         C7: k <= Gk1.size() - card v1.edgesInOut() + 1 by B1,C4,C6;
             not v1 is isolated by tGCONNECT01; then
             v1.edgesInOut() <> {} by GLIB_000:def 51; then
@@ -2576,7 +2568,7 @@ theorem tGTREE02: ::tGTREE02
             consider v being endvertex Vertex of aT;
             consider T2 being removeVertex of aT,v;
             T2.order() + 1 - 1 = k + 1 - 1 by C2, GLIB_000:51; then
-            T2.order() = k + 1 - 1 by XCMPLX_1:26; then
+            T2.order() = k + 1 - 1; then
         C5: k = T2.size() + 1 by C1;
             card v.edgesInOut() = v.degree() by GLIB_000:22
                                .= 1 by GLIB_000:def 54;
@@ -2609,24 +2601,21 @@ A2: P[1];
     B2: G.order() = k+1 & G.order() = G.size()+1;
         now assume G.order() = 1; then
             0 + 1 = k + 1 by B2;
-            hence contradiction by XCMPLX_1:2;
+            hence contradiction;
         end; then
         reconsider aG = G as non trivial finite acyclic _Graph by GLIB_000:29;
-        now assume the_Edges_of G = {}; then
-            G.size() = 0 by CARD_1:78, GLIB_000:def 27;
-            hence contradiction by B2, XCMPLX_1:2;
-        end; then
-        consider v,v2 being Vertex of aG such that
+        the_Edges_of G <> {} by B2,CARD_1:78, GLIB_000:def 27;
+        then consider v,v2 being Vertex of aG such that
     B3: v <> v2 & v is endvertex & v2 is endvertex &
     v2 in aG.reachableFrom(v) by lGACYCLIC03;
         consider G2 being removeVertex of G,v;
 B4: G2.order() + 1 = aG.order() & G2.size() + card v.edgesInOut() = aG.size()
           by GLIB_000:51;
         G2.order() + 1 = k + 1 by B2, GLIB_000:51; then
-    B5: G2.order() = k by XCMPLX_1:2;
+    B5: G2.order() = k;
         card v.edgesInOut() = v.degree() by GLIB_000:22
                            .= 1 by B3, GLIB_000:def 54; then
-        G2.size() + 1 = k by B2, B4, XCMPLX_1:2; then
+        G2.size() + 1 = k by B2, B4; then
     B6: G2 is connected by B1, B5;
         consider e being set such that
     B7: v.edgesInOut() = {e} & not e Joins v,v,G by B3, GLIB_000:def 53;

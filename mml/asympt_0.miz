@@ -425,7 +425,7 @@ A22: abs((g/"f).m-ls") = abs((g.m/f.m)-ls") by Lm1
      .=abs((s.m)"-ls") by Lm1
      .=abs(s.m-ls)/(asm*als) by A2,A19,SEQ_2:11;
 A23: 0<als/2 by A5,SEQ_2:3;
-A24: 0<>als/2 by A5,SEQ_2:3;
+A24: 0<>als/2 by A5;
          0*0<p*(als/2) by A10,A23,XREAL_1:98;
 then A25: (p*(als/2))/asm < (p*(als/2))/(als/2) by A18,A23,XREAL_1:78;
          (p*(als/2))/(als/2 ) = (p*(als/2))*(als/2 )" by XCMPLX_0:def 9
@@ -456,7 +456,7 @@ A6: n1 >= N & n1 >= N1 by SQUARE_1:46;
    then f.n1-(lim f)<=-(lim f) by ABSVALUE:12;
    then A7: f.n1-(lim f)+(lim f)<=-(lim f)+(lim f) by XREAL_1:8;
         now assume f.n1=0;
-     then abs(f.n1-(lim f)) = abs(-(lim f)) by XCMPLX_1:150
+     then abs(f.n1-(lim f)) = abs(-(lim f))
                      .= -(lim f) by A4,ABSVALUE:def 1;
      hence contradiction by A5,A6;
     end;
@@ -564,7 +564,7 @@ begin :: A Notation for "the order of" (Section 3.2)
 
 definition :: Defining O(f) (page 80)
  let f be eventually-nonnegative Real_Sequence;
- func Big_Oh(f) -> FUNCTION_DOMAIN of NAT, REAL equals :Def12:
+ func Big_Oh(f) -> FUNCTION_DOMAIN of NAT, REAL equals
   { t where t is Element of Funcs(NAT, REAL) :
      ex c,N st c > 0 & for n st n >= N holds t.n <= c*f.n & t.n >= 0 };
  coherence proof
@@ -601,7 +601,7 @@ proof
 A1: t in Big_Oh(f);
      Big_Oh(f) = { s where s is Element of Funcs(NAT, REAL) :
      ex c,N st c > 0 & for n st n >= N holds s.n <= c*f.n & s.n >=
- 0 } by Def12;
+ 0 };
    then consider s being Element of Funcs(NAT, REAL) such that
 A2: s = t and
 A3: ex c,N st c > 0 & for n st n >= N holds s.n <= c*f.n & s.n >= 0 by A1;
@@ -621,13 +621,10 @@ theorem :: Threshold Rule (page 81)
   t in Big_Oh(f) iff ex c st c > 0 & for n holds t.n <= c*f.n
 proof
   let f be positive Real_Sequence, t be eventually-nonnegative Real_Sequence;
- A1: Big_Oh(f) = { s where s is Element of Funcs(NAT, REAL) :
-     ex c,N st c > 0 & for n st n >= N holds s.n <= c*f.n & s.n >=
- 0 } by Def12;
   hereby assume t in Big_Oh(f);
       then consider s being Element of Funcs(NAT, REAL) such that
   A2: t = s and
-  A3: ex c,N st c > 0 & for n st n >= N holds s.n <= c*f.n & s.n >= 0 by A1;
+  A3: ex c,N st c > 0 & for n st n >= N holds s.n <= c*f.n & s.n >= 0;
       consider c,N such that
   A4: c > 0 and
   A5: for n st n >= N holds s.n <= c*f.n & s.n >= 0 by A3;
@@ -700,7 +697,7 @@ proof
      consider N such that
   A17: for n st n >= N holds t.n >= 0 by Def4;
          for n st n >= N holds t.n <= c*f.n & t.n >= 0 by A15,A17;
-   hence t in Big_Oh(f) by A1,A15,A16;
+   hence t in Big_Oh(f) by A15,A16;
 end;
 
 theorem :: Generalized Threshold Rule (page 81)
@@ -717,7 +714,7 @@ A1: t in Big_Oh(f) and
 A2: for n st n >= N holds f.n > 0;
       Big_Oh(f) = { s where s is Element of Funcs(NAT, REAL) :
      ex c,N st c > 0 & for n st n >= N holds s.n <= c*f.n & s.n >=
- 0 } by Def12;
+ 0 };
     then consider s being Element of Funcs(NAT, REAL) such that
 A3: t = s and
 A4: ex c,N st c > 0 & for n st n >= N holds s.n <= c*f.n & s.n >= 0 by A1;
@@ -797,18 +794,11 @@ theorem :: Maximum Rule (page 81)
   Big_Oh( f + g ) = Big_Oh( max( f, g ) )
 proof
  let f,g be eventually-nonnegative Real_Sequence;
-A1: Big_Oh( f + g ) = { t where t is Element of Funcs(NAT, REAL) :
-    ex c,N st c > 0 &
-     for n st n >= N holds t.n <= c*(f+g).n & t.n >= 0} by Def12;
-A2: Big_Oh( max( f, g ) ) = { t where t is Element of Funcs(NAT, REAL) :
-    ex c,N st c > 0 &
-     for n st n >= N holds t.n <= c*max(f,g).n & t.n >= 0 } by Def12;
      now let x;
   hereby assume x in Big_Oh( f + g );
      then consider t being Element of Funcs(NAT, REAL) such that
   A3: t = x and
-  A4: ex c,N st c > 0 & for n st n >= N holds t.n <= c*(f+g).n & t.n >= 0 by A1
-;
+  A4: ex c,N st c > 0 & for n st n >= N holds t.n <= c*(f+g).n & t.n >= 0;
      consider c,N such that
   A5: c > 0 and
   A6: for n st n >= N holds t.n <= c*(f+g).n & t.n >= 0 by A4;
@@ -825,13 +815,13 @@ A2: Big_Oh( max( f, g ) ) = { t where t is Element of Funcs(NAT, REAL) :
     hence t.n <= (2*c)*max(f,g).n by A9,XREAL_1:2;
     thus t.n >= 0 by A6,A8;
    end;
-   hence x in Big_Oh( max( f, g ) ) by A2,A3,A7;
+   hence x in Big_Oh( max( f, g ) ) by A3,A7;
   end;
   assume x in Big_Oh( max( f, g ) );
      then consider t being Element of Funcs(NAT, REAL) such that
   A13: t = x and
   A14: ex c,N st c > 0 & for n st n >= N holds t.n <= c*max(f,g).n & t.n >=
- 0 by A2;
+ 0;
      consider c,N1 such that
   A15: c > 0 and
   A16: for n st n >= N1 holds t.n <= c*max(f,g).n & t.n >= 0 by A14;
@@ -854,7 +844,7 @@ A2: Big_Oh( max( f, g ) ) = { t where t is Element of Funcs(NAT, REAL) :
     hence t.n <= c*(f+g).n by A21,XREAL_1:2;
     thus t.n >= 0 by A16,A20;
    end;
-   hence x in Big_Oh( f + g ) by A1,A13,A15;
+   hence x in Big_Oh( f + g ) by A13,A15;
   end;
   hence Big_Oh( f + g ) = Big_Oh( max( f, g ) ) by TARSKI:2;
 end;
@@ -863,14 +853,11 @@ theorem Th10: :: Reflexivity of Big_Oh (page 83; Problem 3.9)
  for f being eventually-nonnegative Real_Sequence holds f in Big_Oh(f)
 proof
   let f be eventually-nonnegative Real_Sequence;
- A1: Big_Oh(f) = { t where t is Element of Funcs(NAT, REAL) :
-      ex c,N st c > 0 & for n st n >= N holds t.n <= c*f.n & t.n >=
- 0 } by Def12;
  A2: f is Element of Funcs(NAT, REAL) by FUNCT_2:11;
      consider N such that
  A3: for n st n >= N holds f.n >= 0 by Def4;
          for n st n >= N holds f.n <= 1*f.n & f.n >= 0 by A3;
-  hence f in Big_Oh(f) by A1,A2;
+  hence f in Big_Oh(f) by A2;
 end;
 
 theorem Th11:
@@ -881,18 +868,12 @@ proof
 A1: f in Big_Oh(g);
   let x be set such that
 A2: x in Big_Oh(f);
-A3: Big_Oh(f) = { s where s is Element of Funcs(NAT, REAL) :
-    ex c,N st c > 0 & for n st n >= N holds s.n <= c*f.n & s.n >=
- 0 } by Def12;
-A4: Big_Oh(g) = { s where s is Element of Funcs(NAT, REAL) :
-    ex c,N st c > 0 & for n st n >= N holds s.n <= c*g.n & s.n >=
- 0 } by Def12;
    consider s being Element of Funcs(NAT, REAL) such that
 A5: s = x and
-A6: ex c,N st c > 0 & for n st n >= N holds s.n <= c*f.n & s.n >= 0 by A2,A3;
+A6: ex c,N st c > 0 & for n st n >= N holds s.n <= c*f.n & s.n >= 0 by A2;
    consider t being Element of Funcs(NAT, REAL) such that
 A7: t = f and
-A8: ex c,N st c > 0 & for n st n >= N holds t.n <= c*g.n & t.n>=0 by A1,A4;
+A8: ex c,N st c > 0 & for n st n >= N holds t.n <= c*g.n & t.n>=0 by A1;
    consider cs being Real, Ns being Nat such that
 A9: cs > 0 and
 A10: for n st n >= Ns holds s.n <= cs*f.n & s.n >= 0 by A6;
@@ -922,7 +903,7 @@ A12: for n st n >= Ng holds g.n >= 0 by Def4;
     hence s.n <= c*g.n by A7,A18,XREAL_1:2;
     thus s.n >= 0 by A10,A16;
    end;
-  hence x in Big_Oh(g) by A4,A5;
+  hence x in Big_Oh(g) by A5;
 end;
 
 theorem Th12: :: Transitivity of Big_Oh (page 83; Problem 3.10)
@@ -954,17 +935,11 @@ holds
   Big_Oh(f) = Big_Oh(c(#)f)
 proof
  let f be eventually-nonnegative Real_Sequence, c be positive Real;
-A1: Big_Oh(f) = { s where s is Element of Funcs(NAT, REAL) :
-      ex c,N st c > 0 &
-       for n st n >= N holds s.n <= c*f.n & s.n >= 0 } by Def12;
-A2: Big_Oh(c(#)f) = { s where s is Element of Funcs(NAT, REAL) :
-      ex c1,N st c1 > 0 &
-       for n st n >= N holds s.n <= c1*(c(#)f).n & s.n >= 0 } by Def12;
      now let x be set;
   hereby assume x in Big_Oh(f);
       then consider t being Element of Funcs(NAT, REAL) such that
   A3: x = t and
-  A4: ex c,N st c > 0 & for n st n >= N holds t.n <= c*f.n & t.n >= 0 by A1;
+  A4: ex c,N st c > 0 & for n st n >= N holds t.n <= c*f.n & t.n >= 0;
       consider c1,N such that
   A5: c1 > 0 and
   A6: for n st n >= N holds t.n <= c1*f.n & t.n >= 0 by A4;   c" > 0 by
@@ -978,13 +953,13 @@ XREAL_1:124
        then t.n <= c1*c"*(c*f.n);
     hence t.n <= c1*c"*(c(#)f).n & t.n >= 0 by A6,A8,SEQ_1:13;
    end;
-   hence x in Big_Oh(c(#)f) by A2,A3,A7;
+   hence x in Big_Oh(c(#)f) by A3,A7;
   end;
   assume x in Big_Oh(c(#)f);
       then consider t being Element of Funcs(NAT, REAL) such that
   A9: x = t and
   A10: ex c1,N st c1 > 0 & for n st n >= N holds t.n <= c1*(c(#)f).n & t.n>=
-0 by A2;
+0;
       consider c1,N such that
   A11: c1 > 0 and
   A12: for n st n >= N holds t.n <= c1*(c(#)f).n & t.n >= 0 by A10;
@@ -995,7 +970,7 @@ XREAL_1:124
        then t.n <= c1*(c*f.n) by SEQ_1:13;
     hence t.n <= (c1*c)*f.n & t.n >= 0 by A12,A14;
    end;
-   hence x in Big_Oh(f) by A1,A9,A13;
+   hence x in Big_Oh(f) by A9,A13;
   end;
  hence thesis by TARSKI:2;
 end;
@@ -1010,16 +985,10 @@ proof
   let c be non negative Real, x,f be eventually-nonnegative Real_Sequence;
   assume
  A1: x in Big_Oh(f);
- A2: Big_Oh(f) = { s where s is Element of Funcs(NAT, REAL) :
-       ex c1,N st c1 > 0 &
-        for n st n >= N holds s.n <= c1*f.n & s.n >= 0 } by Def12;
- A3: Big_Oh(c+f) = { s where s is Element of Funcs(NAT, REAL) :
-       ex c1,N st c1 > 0 &
-        for n st n >= N holds s.n <= c1*(c+f).n & s.n >= 0 } by Def12;
      consider t being Element of Funcs(NAT, REAL) such that
  A4: x = t and
  A5: ex c1,N st c1 > 0 & for n st n >= N holds t.n <= c1*f.n & t.n >=
- 0 by A1,A2;
+ 0 by A1;
      consider c1,N such that
  A6: c1 > 0 and
  A7: for n st n >= N holds t.n <= c1*f.n & t.n >= 0 by A5;
@@ -1030,7 +999,7 @@ proof
       then c1*f.n <= c1*(c+f).n by A6,XREAL_1:66;
    hence t.n <= c1*(c+f).n & t.n >= 0 by A8,XREAL_1:2;
   end;
-  hence x in Big_Oh(c+f) by A3,A4,A6;
+  hence x in Big_Oh(c+f) by A4,A6;
 end;
 
 Lm3: :: (page 84, used inside proof)
@@ -1039,9 +1008,6 @@ Lm3: :: (page 84, used inside proof)
 proof
  let f,g be eventually-positive Real_Sequence; assume
 A1:  f/"g is convergent & lim( f/"g ) > 0;
-A2: Big_Oh(g) = { t where t is Element of Funcs(NAT, REAL) :
-     ex c,N st c > 0 & for n st n >= N holds t.n <= c*g.n & t.n >=
- 0 } by Def12;
  set l = lim( f/"g ), delta = l, c = 2*l;
 A3: 2*l > 2*0 by A1,XREAL_1:70;
     consider N such that
@@ -1072,7 +1038,7 @@ A7: for n st n >= N2 holds g.n > 0 by Def6;
   hence f.n <= c*g.n;
   thus f.n >= 0 by A6,A11;
  end;
- hence f in Big_Oh(g) by A2,A3,A5;
+ hence f in Big_Oh(g) by A3,A5;
 end;
 
 theorem Th15: :: Limit Rule, Part 1 (page 84)
@@ -1095,9 +1061,6 @@ proof
  let f,g be eventually-positive Real_Sequence; assume that
 A1:  f/"g is convergent and
 A2: lim( f/"g ) = 0;
-A3: Big_Oh(g) = { t where t is Element of Funcs(NAT, REAL) :
-     ex c,N st c > 0 & for n st n >= N holds t.n <= c*g.n & t.n >=
- 0 } by Def12;
 A4: f is Element of Funcs(NAT, REAL) by FUNCT_2:11;
     consider N such that
 A5: for n st N<=n holds abs((f/"g).n-0)<1 by A1,A2,SEQ_2:def 7;
@@ -1126,14 +1089,11 @@ A8: now let n; assume
   hence f.n <= 1*g.n;
   thus f.n >= 0 by A6,A13;
  end;
-A16: Big_Oh(f) = { t where t is Element of Funcs(NAT, REAL) :
-     ex c,N st c > 0 & for n st n >= N holds t.n <= c*f.n & t.n >=
- 0 } by Def12;
     not g in Big_Oh(f) proof
     assume g in Big_Oh(f);
        then consider t being Element of Funcs(NAT, REAL) such that
    A17: t = g and
-   A18: ex c,N st c > 0 & for n st n >= N holds t.n <= c*f.n & t.n >= 0 by A16;
+   A18: ex c,N st c > 0 & for n st n >= N holds t.n <= c*f.n & t.n >= 0;
        consider c,N such that
    A19: c > 0 and
    A20: for n st n >= N holds t.n <= c*f.n & t.n >= 0 by A18;
@@ -1180,7 +1140,7 @@ A16: Big_Oh(f) = { t where t is Element of Funcs(NAT, REAL) :
       then 1 <= 0 by A19,XCMPLX_1:107;
     hence contradiction;
    end;
-  hence thesis by A3,A4,A8;
+  hence thesis by A4,A8;
 end;
 
 theorem Th17: :: Limit Rule, Part 3 (page 84)
@@ -1197,7 +1157,7 @@ begin :: Other Asymptotic Notation (Section 3.3)
 
 definition :: (page 86)
  let f be eventually-nonnegative Real_Sequence;
- func Big_Omega(f) -> FUNCTION_DOMAIN of NAT, REAL equals :Def13:
+ func Big_Omega(f) -> FUNCTION_DOMAIN of NAT, REAL equals
   { t where t is Element of Funcs(NAT, REAL) :
      ex d,N st d > 0 & for n st n >= N holds t.n >= d*f.n & t.n >= 0 };
 coherence proof
@@ -1234,7 +1194,7 @@ proof
 A1: t in Big_Omega(f);
      Big_Omega(f) = { s where s is Element of Funcs(NAT, REAL) :
    ex d,N st d > 0 & for n st n >= N holds s.n >= d*f.n & s.n >=
- 0 } by Def13;
+ 0 };
    then consider s being Element of Funcs(NAT, REAL) such that
 A2: s = t and
 A3: ex d,N st d > 0 & for n st n >= N holds s.n >= d*f.n & s.n >= 0 by A1;
@@ -1253,19 +1213,13 @@ theorem Th19: :: Duality Rule (page 86)
   f in Big_Omega(g) iff g in Big_Oh(f)
 proof
  let f,g be eventually-nonnegative Real_Sequence;
-A1: Big_Oh(f) = { t where t is Element of Funcs(NAT, REAL) :
-     ex c,N st c > 0 & for n st n >= N holds t.n <= c*f.n & t.n >=
- 0 } by Def12;
-A2: Big_Omega(g) = { t where t is Element of Funcs(NAT, REAL) :
-     ex d,N st d > 0 & for n st n >= N holds t.n >= d*g.n & t.n>=
-0 } by Def13;
 A3: g is Element of Funcs(NAT, REAL) by FUNCT_2:11;
 A4: f is Element of Funcs(NAT, REAL) by FUNCT_2:11;
  hereby assume
        f in Big_Omega(g);
    then consider t being Element of Funcs(NAT, REAL) such that
 A5: f = t and
-A6: ex d,N st d > 0 & for n st n >= N holds t.n >= d*g.n & t.n >= 0 by A2;
+A6: ex d,N st d > 0 & for n st n >= N holds t.n >= d*g.n & t.n >= 0;
    consider d,N such that
 A7: d > 0 and
 A8: for n st n >= N holds t.n >= d*g.n & t.n >= 0 by A6;
@@ -1283,13 +1237,13 @@ A11: a >= N & a >= N1 by SQUARE_1:46;
     hence g.n <= d"*f.n by A5;
     thus g.n >= 0 by A10,A12;
   end;
-  hence g in Big_Oh(f) by A1,A3,A9;
+  hence g in Big_Oh(f) by A3,A9;
  end;
  assume
        g in Big_Oh(f);
    then consider t being Element of Funcs(NAT, REAL) such that
 A13: g = t and
-A14: ex c,N st c > 0 & for n st n >= N holds t.n <= c*f.n & t.n >= 0 by A1;
+A14: ex c,N st c > 0 & for n st n >= N holds t.n <= c*f.n & t.n >= 0;
    consider c,N such that
 A15: c > 0 and
 A16: for n st n >= N holds t.n <= c*f.n & t.n >= 0 by A14;
@@ -1307,7 +1261,7 @@ A19: a >= N & a >= N1 by SQUARE_1:46;
     hence f.n >= c"*g.n by A13;
     thus f.n >= 0 by A18,A20;
   end;
-  hence f in Big_Omega(g) by A2,A4,A17;
+  hence f in Big_Omega(g) by A4,A17;
   thus thesis;
 end;
 
@@ -1336,17 +1290,11 @@ theorem :: Limit Rule for Big_Omega, Part 1 (page 86)
 proof
  let f,g be eventually-positive Real_Sequence; assume
 A1: f/"g is convergent & lim( f/"g ) > 0;
-A2: Big_Omega(f) = { t where t is Element of Funcs(NAT, REAL) :
-  ex d,N st d > 0 & for n st n >= N holds d*f.n <= t.n & t.n >=
- 0 } by Def13;
-A3: Big_Omega(g) = { t where t is Element of Funcs(NAT, REAL) :
-  ex d,N st d > 0 & for n st n >= N holds d*g.n <= t.n & t.n >=
- 0 } by Def13;
      now let x be set;
   hereby assume x in Big_Omega(f);
      then consider t being Element of Funcs(NAT, REAL) such that
   A4: x = t and
-  A5: ex d,N st d > 0 & for n st n >= N holds d*f.n <= t.n & t.n >= 0 by A2;
+  A5: ex d,N st d > 0 & for n st n >= N holds d*f.n <= t.n & t.n >= 0;
      consider d,N such that
          d > 0 and
   A6: for n st n >= N holds d*f.n <= t.n & t.n >= 0 by A5;
@@ -1354,7 +1302,7 @@ A3: Big_Omega(g) = { t where t is Element of Funcs(NAT, REAL) :
     hence t.n >= 0 by A6;
    end;
   then A7: t is eventually-nonnegative by Def4;
-  A8: t in Big_Omega(f) by A2,A5;
+  A8: t in Big_Omega(f) by A5;
          g in Big_Oh(g) by Th10;
      then g in Big_Oh(f) by A1,Th15;
      then f in Big_Omega(g) by Th19;
@@ -1363,7 +1311,7 @@ A3: Big_Omega(g) = { t where t is Element of Funcs(NAT, REAL) :
   assume x in Big_Omega(g);
      then consider t being Element of Funcs(NAT, REAL) such that
   A9: x = t and
-  A10: ex d,N st d > 0 & for n st n >= N holds d*g.n <= t.n & t.n >= 0 by A3;
+  A10: ex d,N st d > 0 & for n st n >= N holds d*g.n <= t.n & t.n >= 0;
      consider d,N such that
          d > 0 and
   A11: for n st n >= N holds d*g.n <= t.n & t.n >= 0 by A10;
@@ -1371,7 +1319,7 @@ A3: Big_Omega(g) = { t where t is Element of Funcs(NAT, REAL) :
     hence t.n >= 0 by A11;
    end;
   then A12: t is eventually-nonnegative by Def4;
-  A13: t in Big_Omega(g) by A3,A10;
+  A13: t in Big_Omega(g) by A10;
          f in Big_Oh(f) by Th10;
      then f in Big_Oh(g) by A1,Th15;
      then g in Big_Omega(f) by Th19;
@@ -1407,13 +1355,10 @@ theorem :: Threshold Rule for Big_Omega (page 86)
   t in Big_Omega(f) iff ex d st d > 0 & for n holds d*f.n <= t.n
 proof
  let f,t be positive Real_Sequence;
-A1: Big_Omega(f) = { s where s is Element of Funcs(NAT, REAL) :
-  ex d,N st d > 0 & for n st n >= N holds d*f.n <= s.n & s.n >=
- 0 } by Def13;
  hereby assume t in Big_Omega(f);
     then consider s being Element of Funcs(NAT, REAL) such that
  A2: s = t and
- A3: ex d,N st d > 0 & for n st n >= N holds d*f.n <= s.n & s.n >= 0 by A1;
+ A3: ex d,N st d > 0 & for n st n >= N holds d*f.n <= s.n & s.n >= 0;
     consider d,N such that
  A4: d > 0 and
  A5: for n st n >= N holds d*f.n <= s.n & s.n >= 0 by A3;
@@ -1492,7 +1437,7 @@ A1: Big_Omega(f) = { s where s is Element of Funcs(NAT, REAL) :
  A18: for n holds d*f.n <= t.n;
  A19: t is Element of Funcs(NAT, REAL) by FUNCT_2:11;
        for n st n >= 0 holds d*f.n <= t.n & t.n >= 0 by A18,Def5;
-  hence t in Big_Omega(f) by A1,A17,A19;
+  hence t in Big_Omega(f) by A17,A19;
 end;
 
 theorem :: Maximum Rule for Big_Omega (page 86)
@@ -1500,12 +1445,6 @@ theorem :: Maximum Rule for Big_Omega (page 86)
   Big_Omega(f+g) = Big_Omega(max(f,g))
 proof
  let f,g be eventually-nonnegative Real_Sequence;
-A1: Big_Omega( f + g ) = { t where t is Element of Funcs(NAT, REAL) :
-    ex d,N st d > 0 &
-     for n st n >= N holds d*(f+g).n <= t.n & t.n >= 0} by Def13;
-A2: Big_Omega( max( f, g ) ) = { t where t is Element of Funcs(NAT, REAL) :
-    ex d,N st d > 0 &
-     for n st n >= N holds d*max(f,g).n <= t.n & t.n >= 0 } by Def13;
     consider N1 such that
 A3: for n st n >= N1 holds f.n >= 0 by Def4;
     consider N2 such that
@@ -1514,8 +1453,7 @@ A4: for n st n >= N2 holds g.n >= 0 by Def4;
   hereby assume x in Big_Omega(f+g);
      then consider t being Element of Funcs(NAT, REAL) such that
   A5: t = x and
-  A6: ex d,N st d > 0 & for n st n >= N holds d*(f+g).n <= t.n & t.n >= 0 by A1
-;
+  A6: ex d,N st d > 0 & for n st n >= N holds d*(f+g).n <= t.n & t.n >= 0;
      consider d,N such that
   A7: d > 0 and
   A8: for n st n >= N holds d*(f+g).n <= t.n & t.n >= 0 by A6;
@@ -1544,13 +1482,13 @@ A4: for n st n >= N2 holds g.n >= 0 by Def4;
     hence d*max(f,g).n <= t.n by A16,XREAL_1:2;
     thus t.n >= 0 by A8,A11;
    end;
-   hence x in Big_Omega(max(f,g)) by A2,A5,A7;
+   hence x in Big_Omega(max(f,g)) by A5,A7;
   end;
   assume x in Big_Omega(max(f,g));
      then consider t being Element of Funcs(NAT, REAL) such that
   A17: t = x and
   A18: ex d,N st d > 0 & for n st n >= N holds d*max(f,g).n <= t.n & t.n >=
- 0 by A2;
+ 0;
      consider d,N such that
   A19: d > 0 and
   A20: for n st n >= N holds d*max(f,g).n <= t.n & t.n >= 0 by A18;
@@ -1571,27 +1509,23 @@ A4: for n st n >= N2 holds g.n >= 0 by Def4;
     hence (d*2")*(f+g).n <= t.n by A24,XREAL_1:2;
     thus t.n >= 0 by A20,A23;
    end;
-   hence x in Big_Omega(f+g) by A1,A17,A21;
+   hence x in Big_Omega(f+g) by A17,A21;
  end;
  hence thesis by TARSKI:2;
 end;
 
 definition :: (page 87)
  let f be eventually-nonnegative Real_Sequence;
- func Big_Theta(f) -> FUNCTION_DOMAIN of NAT, REAL equals :
-Def14:
+ func Big_Theta(f) -> FUNCTION_DOMAIN of NAT, REAL equals
   Big_Oh(f) /\ Big_Omega(f);
  coherence proof
-A1: Big_Oh(f) = { s where s is Element of Funcs(NAT, REAL) :
-     ex c,N st c > 0 & for n st n >= N holds s.n <= c*f.n & s.n >=
- 0 } by Def12;
        f in Big_Oh(f) & f in Big_Omega(f) by Th10,Th20;
 then A2: Big_Oh(f) /\ Big_Omega(f) is non empty by XBOOLE_0:def 3;
        now let x be set; assume x in Big_Oh(f) /\ Big_Omega(f);
        then x in Big_Oh(f) by XBOOLE_0:def 3;
        then ex t being Element of Funcs(NAT, REAL) st
        x = t &
-       ex c,N st c > 0 & for n st n >= N holds t.n <= c*f.n & t.n >= 0 by A1;
+       ex c,N st c > 0 & for n st n >= N holds t.n <= c*f.n & t.n >= 0;
     hence x is Function;
    end;
 then A3: Big_Oh(f) /\ Big_Omega(f) is functional by FRAENKEL:def 1;
@@ -1611,25 +1545,19 @@ theorem Th27: :: Alternate Definition for Big_Theta (page 87)
       for n st n >= N holds d*f.n <= t.n & t.n <= c*f.n }
 proof
  let f be eventually-nonnegative Real_Sequence;
-A1: Big_Oh(f) = { t where t is Element of Funcs(NAT, REAL) :
-     ex c,N st c > 0 & for n st n >= N holds t.n <= c*f.n & t.n >=
- 0 } by Def12;
-A2: Big_Omega(f) = { t where t is Element of Funcs(NAT, REAL) :
-     ex d,N st d > 0 & for n st n >= N holds t.n >= d*f.n & t.n>=
-0 } by Def13;
  set BT = { t where t is Element of Funcs(NAT, REAL) :
              ex c,d,N st c > 0 & d > 0 &
               for n st n >= N holds d*f.n <= t.n & t.n <= c*f.n };
      now let x be set;
   hereby assume x in Big_Theta(f);
-     then x in Big_Oh(f) /\ Big_Omega(f) by Def14;
+     then x in Big_Oh(f) /\ Big_Omega(f);
   then A3: x in Big_Oh(f) & x in Big_Omega(f) by XBOOLE_0:def 3;
      then consider t being Element of Funcs(NAT, REAL) such that
   A4: x = t and
-  A5: ex c,N st c > 0 & for n st n >= N holds t.n <= c*f.n & t.n >= 0 by A1;
+  A5: ex c,N st c > 0 & for n st n >= N holds t.n <= c*f.n & t.n >= 0;
      consider s being Element of Funcs(NAT, REAL) such that
   A6: x = s and
-  A7: ex d,N st d > 0 & for n st n >= N holds s.n >= d*f.n & s.n >= 0 by A2,A3
+  A7: ex d,N st d > 0 & for n st n >= N holds s.n >= d*f.n & s.n >= 0 by A3
 ;
      consider c,N such that
   A8: c > 0 and
@@ -1665,7 +1593,7 @@ A2: Big_Omega(f) = { t where t is Element of Funcs(NAT, REAL) :
      then d*f.n >= d*0 by A16,XREAL_1:66;
       hence t.n >= 0 by A17,A20;
      end;
-  then A21: x in Big_Oh(f) by A1,A13,A15;
+  then A21: x in Big_Oh(f) by A13,A15;
          now take a; let n; assume n >= a;
      then A22: n >= N & n >= N1 by A19,XREAL_1:2;
       hence d*f.n <= t.n by A17;
@@ -1673,9 +1601,9 @@ A2: Big_Omega(f) = { t where t is Element of Funcs(NAT, REAL) :
      then d*f.n >= d*0 by A16,XREAL_1:66;
       hence t.n >= 0 by A17,A22;
      end;
-     then x in Big_Omega(f) by A2,A13,A16;
+     then x in Big_Omega(f) by A13,A16;
      then x in Big_Oh(f) /\ Big_Omega(f) by A21,XBOOLE_0:def 3;
-   hence x in Big_Theta(f) by Def14;
+   hence x in Big_Theta(f);
   end;
  hence thesis by TARSKI:2;
 end;
@@ -1687,7 +1615,7 @@ proof
 A1: f in Big_Oh(f) by Th10;
        f in Big_Omega(f) by Th20;
    then f in Big_Oh(f) /\ Big_Omega(f) by A1,XBOOLE_0:def 3;
-  hence thesis by Def14;
+  hence thesis;
 end;
 
 theorem :: Symmetry of Big_Theta (Problem 3.18 Part 2)
@@ -1696,11 +1624,11 @@ theorem :: Symmetry of Big_Theta (Problem 3.18 Part 2)
 proof
  let f,g be eventually-nonnegative Real_Sequence;
   assume f in Big_Theta(g);
-   then f in Big_Oh(g) /\ Big_Omega(g) by Def14;
+   then f in Big_Oh(g) /\ Big_Omega(g);
    then f in Big_Oh(g) & f in Big_Omega(g) by XBOOLE_0:def 3;
    then g in Big_Omega(f) & g in Big_Oh(f) by Th19;
    then g in Big_Oh(f) /\ Big_Omega(f) by XBOOLE_0:def 3;
-  hence thesis by Def14;
+  hence thesis;
 end;
 
 theorem :: Transitivity of Big_Theta (Problem 3.18 Part 3)
@@ -1711,14 +1639,14 @@ proof
   assume that
 A1: f in Big_Theta(g) and
 A2: g in Big_Theta(h);
-       f in Big_Oh(g) /\ Big_Omega(g) by A1,Def14;
+       f in Big_Oh(g) /\ Big_Omega(g) by A1;
 then A3: f in Big_Oh(g) & f in Big_Omega(g) by XBOOLE_0:def 3;
-       g in Big_Oh(h) /\ Big_Omega(h) by A2,Def14;
+       g in Big_Oh(h) /\ Big_Omega(h) by A2;
 then A4: g in Big_Oh(h) & g in Big_Omega(h) by XBOOLE_0:def 3;
 then A5: f in Big_Oh(h) by A3,Th12;
        f in Big_Omega(h) by A3,A4,Th21;
    then f in Big_Oh(h) /\ Big_Omega(h) by A5,XBOOLE_0:def 3;
- hence thesis by Def14;
+ hence thesis;
 end;
 
 theorem :: Threshold Rule for Big_Theta (page 87)
@@ -1938,7 +1866,7 @@ then A2: f in Big_Oh(g) by Th10;
        g in Big_Oh(f) by A1,Th10;
    then f in Big_Omega(g) by Th19;
    then f in Big_Oh(g) /\ Big_Omega(g) by A2,XBOOLE_0:def 3;
- hence thesis by Def14;
+ hence thesis;
 end;
 
 theorem :: Limit Rule for Big_Theta, Part 2 (page 88)
@@ -1950,7 +1878,7 @@ proof
 A1: f/"g is convergent and
 A2: lim( f/"g ) = 0;
       now assume f in Big_Theta(g);
-     then f in Big_Oh(g) /\ Big_Omega(g) by Def14;
+     then f in Big_Oh(g) /\ Big_Omega(g);
      then f in Big_Omega(g) by XBOOLE_0:def 3;
      then g in Big_Oh(f) by Th19;
    hence contradiction by A1,A2,Th16;
@@ -1966,7 +1894,7 @@ proof
       f/"g is divergent_to+infty;
 then A1: not f in Big_Oh(g) & g in Big_Oh(f) by Th17;
       now assume f in Big_Theta(g);
-     then f in Big_Oh(g) /\ Big_Omega(g) by Def14;
+     then f in Big_Oh(g) /\ Big_Omega(g);
    hence contradiction by A1,XBOOLE_0:def 3;
   end;
   hence thesis by A1,Th19;
@@ -1976,7 +1904,7 @@ begin :: Conditional Asymptotic Notation (Section 3.4)
 
 definition :: page 89
  let f be eventually-nonnegative Real_Sequence, X be set;
- func Big_Oh(f,X) -> FUNCTION_DOMAIN of NAT, REAL equals :Def15:
+ func Big_Oh(f,X) -> FUNCTION_DOMAIN of NAT, REAL equals
   { t where t is Element of Funcs(NAT, REAL) :
      ex c,N st c > 0 & for n st n >= N & n in X holds t.n <= c*f.n & t.n >=
  0 };
@@ -2011,7 +1939,7 @@ end;
 
 definition :: page 89
  let f be eventually-nonnegative Real_Sequence, X be set;
- func Big_Omega(f,X) -> FUNCTION_DOMAIN of NAT, REAL equals :Def16:
+ func Big_Omega(f,X) -> FUNCTION_DOMAIN of NAT, REAL equals
   { t where t is Element of Funcs(NAT, REAL) :
      ex d,N st d > 0 & for n st n >= N & n in X holds t.n >= d*f.n & t.n >=
  0 };
@@ -2046,7 +1974,7 @@ end;
 
 definition :: page 89
  let f be eventually-nonnegative Real_Sequence, X be set;
- func Big_Theta(f,X) -> FUNCTION_DOMAIN of NAT, REAL equals :Def17:
+ func Big_Theta(f,X) -> FUNCTION_DOMAIN of NAT, REAL equals
   { t where t is Element of Funcs(NAT, REAL) :
      ex c,d,N st c > 0 & d > 0 &
       for n st n >= N & n in X holds d*f.n <= t.n & t.n <= c*f.n };
@@ -2082,22 +2010,12 @@ theorem Th36: :: Alternate definition for Big_Theta_Cond
   Big_Theta(f,X) = Big_Oh(f,X) /\ Big_Omega(f,X)
 proof
  let f be eventually-nonnegative Real_Sequence, X be set;
-A1: Big_Theta(f,X) = { t where t is Element of Funcs(NAT, REAL) :
-     ex c,d,N st c > 0 & d > 0 &
-      for n st n >= N & n in X holds d*f.n <= t.n & t.n<=
-c*f.n } by Def17;
-A2: Big_Oh(f,X) = { t where t is Element of Funcs(NAT, REAL) :
-     ex c,N st c > 0 &
-      for n st n >= N & n in X holds t.n <= c*f.n & t.n >= 0 } by Def15;
-A3: Big_Omega(f,X) = { t where t is Element of Funcs(NAT, REAL) :
-     ex d,N st d > 0 &
-      for n st n >= N & n in X holds t.n >= d*f.n & t.n >= 0 } by Def16;
      now let x be set;
   hereby assume x in Big_Theta(f,X);
      then consider t being Element of Funcs(NAT, REAL) such that
   A4: x = t and
   A5: ex c,d,N st c > 0 & d > 0 &
-      for n st n >= N & n in X holds d*f.n <= t.n & t.n <= c*f.n by A1;
+      for n st n >= N & n in X holds d*f.n <= t.n & t.n <= c*f.n;
      consider c,d,N such that
   A6: c > 0 and
   A7: d > 0 and
@@ -2115,7 +2033,7 @@ A3: Big_Omega(f,X) = { t where t is Element of Funcs(NAT, REAL) :
      then d*f.n >= d*0 by A7,XREAL_1:66;
       hence t.n >= 0 by A8,A12,A13;
      end;
-  then A14: x in Big_Oh(f,X) by A2,A4,A6;
+  then A14: x in Big_Oh(f,X) by A4,A6;
          now take a; let n; assume that
      A15: n >= a and
      A16: n in X;
@@ -2125,7 +2043,7 @@ A3: Big_Omega(f,X) = { t where t is Element of Funcs(NAT, REAL) :
      then d*f.n >= d*0 by A7,XREAL_1:66;
       hence t.n >= 0 by A8,A16,A17;
      end;
-     then x in Big_Omega(f,X) by A3,A4,A7;
+     then x in Big_Omega(f,X) by A4,A7;
    hence x in Big_Oh(f,X) /\ Big_Omega(f,X) by A14,XBOOLE_0:def 3;
   end;
   assume x in Big_Oh(f,X) /\ Big_Omega(f,X);
@@ -2133,11 +2051,11 @@ A3: Big_Omega(f,X) = { t where t is Element of Funcs(NAT, REAL) :
      then consider t being Element of Funcs(NAT, REAL) such that
   A19: x = t and
   A20: ex c,N st c > 0 & for n st n >= N & n in X holds t.n <= c*f.n & t.n>=
-0 by A2;
+0;
      consider s being Element of Funcs(NAT, REAL) such that
   A21: x = s and
   A22: ex d,N st d > 0 &
-      for n st n >= N & n in X holds s.n >= d*f.n & s.n >= 0 by A3,A18;
+      for n st n >= N & n in X holds s.n >= d*f.n & s.n >= 0 by A18;
      consider c,N such that
   A23: c > 0 and
   A24: for n st n >= N & n in X holds t.n <= c*f.n & t.n >= 0 by A20;
@@ -2152,7 +2070,7 @@ A3: Big_Omega(f,X) = { t where t is Element of Funcs(NAT, REAL) :
            n >= N & n >= N1 by A27,A28,XREAL_1:2;
      hence d*f.n <= t.n & t.n <= c*f.n by A19,A21,A24,A26,A29;
    end;
-  hence x in Big_Theta(f,X) by A1,A19,A23,A25;
+  hence x in Big_Theta(f,X) by A19,A23,A25;
  end;
  hence thesis by TARSKI:2;
 end;
@@ -2195,13 +2113,10 @@ proof
  given b being Nat such that
 A1: b >= 2 and
 A2: f is_smooth_wrt b;
-A3: Big_Oh(f) = { t where t is Element of Funcs(NAT, REAL) :
-     ex c,N st c > 0 & for n st n >= N holds t.n <= c*f.n & t.n >=
- 0 } by Def12;
 A4: f is eventually-nondecreasing & f taken_every b in Big_Oh(f) by A2,Def19;
    then consider t being Element of Funcs(NAT, REAL) such that
 A5: f taken_every b = t and
-A6: ex c,N st c > 0 & for n st n >= N holds t.n <= c*f.n & t.n >= 0 by A3;
+A6: ex c,N st c > 0 & for n st n >= N holds t.n <= c*f.n & t.n >= 0;
    consider c,N2 such that
 A7: c > 0 and
 A8: for n st n >= N2 holds t.n <= c*f.n & t.n >= 0 by A6;
@@ -2300,7 +2215,7 @@ A10: N >= N2 & N >= N3 by SQUARE_1:46;
          f.n <= f.(a*n) by A9,A21,A26,Th1;
    hence (f taken_every a).n >= 0 by A34,Def18;
   end;
-  then f taken_every a in Big_Oh(f) by A3,A12,A19;
+  then f taken_every a in Big_Oh(f) by A12,A19;
   hence f is_smooth_wrt a by A4,Def19;
  end;
  hence f is smooth by Def20;
@@ -2327,9 +2242,9 @@ then A4: f is eventually-nondecreasing & f taken_every b in Big_Oh(f) by Def19;
 A5: for m st m >= N1 holds f.m <= f.(m+1) by Def8;
    consider N2 such that
 A6: for m st m >= N2 holds t.m <= t.(m+1) by Def8;
-A7: Big_Oh(f) = { s where s is Element of Funcs(NAT, REAL) :
+ Big_Oh(f) = { s where s is Element of Funcs(NAT, REAL) :
      ex c,N st c > 0 & for n st n >= N holds s.n <= c*f.n & s.n >=
- 0 } by Def12;
+ 0 };
    then consider s being Element of Funcs(NAT,REAL) such that
 A8: f taken_every b = s and
 A9: ex c,N st c > 0 & for n st n >= N holds s.n <= c*f.n & s.n >= 0 by A4;
@@ -2338,7 +2253,7 @@ A10: c > 0 and
 A11: for n st n >= N3 holds s.n <= c*f.n & s.n >= 0 by A9;
      Big_Oh(f,X) = { r where r is Element of Funcs(NAT, REAL) :
     ex c,N st c > 0 &
-     for n st n >= N & n in X holds r.n <= c*f.n & r.n >= 0 } by Def15;
+     for n st n >= N & n in X holds r.n <= c*f.n & r.n >= 0 };
    then consider r being Element of Funcs(NAT, REAL) such that
 A12: r = t and
 A13: ex c,N st c > 0 & for n st n >= N & n in X holds r.n <= c*f.n & r.n >=
@@ -2422,7 +2337,7 @@ hence contradiction by A27,A29,XREAL_1:8;
          n >= N5 by A18,A25,XREAL_1:2;
   hence t.n >= 0 by A16;
  end;
- hence t in Big_Oh(f) by A7,A23,A24;
+ hence t in Big_Oh(f) by A23,A24;
 end;
 
 theorem Th39: :: Second half of smoothness rule proof (page 90),
@@ -2448,21 +2363,15 @@ Def19;
 A5: for m st m >= N1 holds f.m <= f.(m+1) by Def8;
    consider N2 such that
 A6: for m st m >= N2 holds t.m <= t.(m+1) by Def8;
-A7: Big_Oh(f) = { s where s is Element of Funcs(NAT, REAL) :
-    ex c,N st c > 0 & for n st n >= N holds s.n <= c*f.n & s.n >=
- 0 } by Def12;
-A8: Big_Omega(f) = { s where s is Element of Funcs(NAT, REAL) :
-    ex d,N st d > 0 & for n st n >= N holds d*f.n <= s.n&s.n >=
- 0 } by Def13;
    consider s being Element of Funcs(NAT,REAL) such that
 A9: (f taken_every b) = s and
-A10: ex c,N st c > 0 & for n st n >= N holds s.n <= c*f.n & s.n >= 0 by A4,A7;
+A10: ex c,N st c > 0 & for n st n >= N holds s.n <= c*f.n & s.n >= 0 by A4;
    consider c,N3 such that
 A11: c > 0 and
 A12: for n st n >= N3 holds s.n <= c*f.n & s.n >= 0 by A10;
      Big_Omega(f,X) = { r where r is Element of Funcs(NAT, REAL) :
     ex d,N st d > 0 &
-     for n st n >= N & n in X holds d*f.n <= r.n & r.n >= 0 } by Def16;
+     for n st n >= N & n in X holds d*f.n <= r.n & r.n >= 0 };
    then consider r being Element of Funcs(NAT, REAL) such that
 A13: r = t and
 A14: ex d,N st d > 0 & for n st n >= N & n in X holds d*f.n <= r.n & r.n >=
@@ -2546,7 +2455,7 @@ A26: t is Element of Funcs(NAT, REAL) by FUNCT_2:11;
          n >= N5 by A19,A27,XREAL_1:2;
   hence t.n >= 0 by A17;
  end;
- hence t in Big_Omega(f) by A8,A25,A26;
+ hence t in Big_Omega(f) by A25,A26;
 end;
 
 theorem :: Smoothness Rule (page 90)
@@ -2569,7 +2478,7 @@ then A4: t in Big_Oh(f,X) & t in Big_Omega(f,X) by XBOOLE_0:def 3;
 then A5: t in Big_Oh(f) by A1,A2,Th38;
        t in Big_Omega(f) by A1,A2,A4,Th39;
    then t in Big_Oh(f) /\ Big_Omega(f) by A5,XBOOLE_0:def 3;
- hence thesis by Def14;
+ hence thesis;
 end;
 
 :: Section 3.5 omitted
@@ -2578,7 +2487,7 @@ begin :: Operations on Asymptotic Notation (Section 3.6)
 
 definition :: Definition of operators on sets (page 91)
  let X be non empty set, F,G be FUNCTION_DOMAIN of X,REAL;
-  func F + G -> FUNCTION_DOMAIN of X,REAL equals :Def21:
+  func F + G -> FUNCTION_DOMAIN of X,REAL equals
    { t where t is Element of Funcs(X,REAL) :
       ex f,g being Element of Funcs(X,REAL) st
        f in F & g in G & for n being Element of X holds t.n = f.n + g.n };
@@ -2626,7 +2535,7 @@ end;
 
 definition :: (page 91)
  let X be non empty set, F,G be FUNCTION_DOMAIN of X,REAL;
-  func max(F, G) -> FUNCTION_DOMAIN of X,REAL equals :Def22:
+  func max(F, G) -> FUNCTION_DOMAIN of X,REAL equals
    { t where t is Element of Funcs(X,REAL) :
       ex f,g being Element of Funcs(X,REAL) st
        f in F & g in G & for n being Element of X holds t.n = max(f.n, g.n) };
@@ -2677,36 +2586,23 @@ theorem :: Properties, Part 1 (page 91; Problem 3.33)
   Big_Oh(f) + Big_Oh(g) = Big_Oh(f+g)
 proof
  let f,g be eventually-nonnegative Real_Sequence;
-A1: Big_Oh(f+g) = { t where t is Element of Funcs(NAT, REAL) :
-    ex c,N st c > 0 &
-     for n st n >= N holds t.n <= c*(f+g).n & t.n >= 0} by Def12;
-A2: Big_Oh(f) = { s where s is Element of Funcs(NAT, REAL) :
-     ex c,N st c > 0 & for n st n >= N holds s.n <= c*f.n & s.n >=
- 0 } by Def12;
-A3: Big_Oh(g) = { s where s is Element of Funcs(NAT, REAL) :
-     ex c,N st c > 0 & for n st n >= N holds s.n <= c*g.n & s.n >=
- 0 } by Def12;
-A4: Big_Oh(f) + Big_Oh(g) = { t where t is Element of Funcs(NAT,REAL) :
-     ex f',g' being Element of Funcs(NAT,REAL)
-      st f' in Big_Oh(f) & g' in Big_Oh(g) &
-       for n being Element of NAT holds t.n = f'.n + g'.n } by Def21;
      now let x;
   hereby assume x in Big_Oh(f) + Big_Oh(g);
      then consider t being Element of Funcs(NAT,REAL) such that
   A5: x = t and
   A6: ex f',g' being Element of Funcs(NAT,REAL) st
       f' in Big_Oh(f) & g' in Big_Oh(g) &
-       for n being Element of NAT holds t.n = f'.n + g'.n by A4;
+       for n being Element of NAT holds t.n = f'.n + g'.n;
      consider f',g' being Element of Funcs(NAT,REAL) such that
   A7: f' in Big_Oh(f) & g' in Big_Oh(g) and
   A8: for n being Element of NAT holds t.n = f'.n + g'.n by A6;
      consider r being Element of Funcs(NAT, REAL) such that
   A9: r = f' and
-  A10: ex c,N st c > 0 & for n st n >= N holds r.n <= c*f.n & r.n >= 0 by A2,A7
+  A10: ex c,N st c > 0 & for n st n >= N holds r.n <= c*f.n & r.n >= 0 by A7
 ;
      consider s being Element of Funcs(NAT, REAL) such that
   A11: s = g' and
-  A12: ex c,N st c > 0 & for n st n >= N holds s.n <= c*g.n & s.n >= 0 by A3,A7
+  A12: ex c,N st c > 0 & for n st n >= N holds s.n <= c*g.n & s.n >= 0 by A7
 ;
      consider c,N1 such that
   A13: c > 0 and
@@ -2736,13 +2632,12 @@ A4: Big_Oh(f) + Big_Oh(g) = { t where t is Element of Funcs(NAT,REAL) :
       then f'.n + g'.n >= 0 + g'.n & 0 + g'.n >= 0 by XREAL_1:8;
      hence t.n >= 0 by A8;
    end;
-   hence x in Big_Oh(f+g) by A1,A5,A18;
+   hence x in Big_Oh(f+g) by A5,A18;
   end;
   assume x in Big_Oh(f+g);
     then consider t being Element of Funcs(NAT,REAL) such that
  A21: x = t and
- A22: ex c,N st c > 0 & for n st n >= N holds t.n <= c*(f+g).n & t.n >= 0 by A1
-;
+ A22: ex c,N st c > 0 & for n st n >= N holds t.n <= c*(f+g).n & t.n >= 0;
     consider c,N3 such that
  A23: c > 0 and
  A24: for n st n >= N3 holds t.n <= c*(f+g).n & t.n >= 0 by A22;
@@ -2790,7 +2685,7 @@ A4: Big_Oh(f) + Big_Oh(g) = { t where t is Element of Funcs(NAT,REAL) :
       hence f'.n <= c*f.n & f'.n >= 0 by A29,A34;
     end;
     end;
- then A35:f' in Big_Oh(f) by A2,A23,A32;
+ then A35:f' in Big_Oh(f) by A23,A32;
         now let n; assume n >= N; then n >= N3 & n >= N2 by A27,XREAL_1:2;
     then A36: t.n >= 0 & g.n >= 0 & t.n <= c*(f+g).n by A24,A26;
     then A37: 0*g.n <= c*g.n by A23,XREAL_1:66;
@@ -2807,7 +2702,7 @@ A4: Big_Oh(f) + Big_Oh(g) = { t where t is Element of Funcs(NAT,REAL) :
       hence g'.n <= c*g.n & g'.n >= 0 by A31,A38,A39;
     end;
     end;
- then A40:g' in Big_Oh(g) by A3,A23,A32;
+ then A40:g' in Big_Oh(g) by A23,A32;
         now let n be Element of NAT;
      per cases;
      suppose t.n <= c*f.n;
@@ -2819,7 +2714,7 @@ A4: Big_Oh(f) + Big_Oh(g) = { t where t is Element of Funcs(NAT,REAL) :
       hence f'.n + g'.n = t.n;
     end;
     end;
-  hence x in Big_Oh(f) + Big_Oh(g) by A4,A21,A32,A35,A40;
+  hence x in Big_Oh(f) + Big_Oh(g) by A21,A32,A35,A40;
  end;
  hence thesis by TARSKI:2;
 end;
@@ -2829,36 +2724,23 @@ theorem :: Properties, Part 3 (page 91; Problem 3.33)
   max(Big_Oh(f), Big_Oh(g)) = Big_Oh(max(f,g))
 proof
  let f,g be eventually-nonnegative Real_Sequence;
-A1: Big_Oh(max(f,g)) = { t where t is Element of Funcs(NAT, REAL) :
-    ex c,N st c > 0 &
-     for n st n >= N holds t.n <= c*max(f,g).n & t.n >= 0} by Def12;
-A2: Big_Oh(f) = { s where s is Element of Funcs(NAT, REAL) :
-     ex c,N st c > 0 & for n st n >= N holds s.n <= c*f.n & s.n >=
- 0 } by Def12;
-A3: Big_Oh(g) = { s where s is Element of Funcs(NAT, REAL) :
-     ex c,N st c > 0 & for n st n >= N holds s.n <= c*g.n & s.n >=
- 0 } by Def12;
-A4: max(Big_Oh(f), Big_Oh(g)) = { t where t is Element of Funcs(NAT,REAL) :
-     ex f',g' being Element of Funcs(NAT,REAL)
-      st f' in Big_Oh(f) & g' in Big_Oh(g) &
-       for n being Element of NAT holds t.n = max(f'.n, g'.n) } by Def22;
      now let x;
   hereby assume x in max(Big_Oh(f), Big_Oh(g));
      then consider t being Element of Funcs(NAT,REAL) such that
   A5: x = t and
   A6: ex f',g' being Element of Funcs(NAT,REAL) st
       f' in Big_Oh(f) & g' in Big_Oh(g) &
-       for n being Element of NAT holds t.n = max(f'.n, g'.n) by A4;
+       for n being Element of NAT holds t.n = max(f'.n, g'.n);
      consider f',g' being Element of Funcs(NAT,REAL) such that
   A7: f' in Big_Oh(f) & g' in Big_Oh(g) and
   A8: for n being Element of NAT holds t.n = max(f'.n, g'.n) by A6;
      consider r being Element of Funcs(NAT, REAL) such that
   A9: r = f' and
-  A10: ex c,N st c > 0 & for n st n >= N holds r.n <= c*f.n & r.n >= 0 by A2,A7
+  A10: ex c,N st c > 0 & for n st n >= N holds r.n <= c*f.n & r.n >= 0 by A7
 ;
      consider s being Element of Funcs(NAT, REAL) such that
   A11: s = g' and
-  A12: ex c,N st c > 0 & for n st n >= N holds s.n <= c*g.n & s.n >= 0 by A3,A7
+  A12: ex c,N st c > 0 & for n st n >= N holds s.n <= c*g.n & s.n >= 0 by A7
 ;
      consider c,N1 such that
   A13: c > 0 and
@@ -2890,13 +2772,13 @@ XREAL_1:66
           max(f'.n, g'.n) >= f'.n & f'.n >= 0 by A9,A14,A20,SQUARE_1:46;
      hence t.n >= 0 by A8;
    end;
-   hence x in Big_Oh(max(f,g)) by A1,A5,A18;
+   hence x in Big_Oh(max(f,g)) by A5,A18;
   end;
   assume x in Big_Oh(max(f,g));
     then consider t being Element of Funcs(NAT,REAL) such that
  A22: x = t and
  A23: ex c,N st c > 0 & for n st n >= N holds t.n <= c*max(f,g).n & t.n >=
- 0 by A1;
+ 0;
     consider c,N3 such that
  A24: c > 0 and
  A25: for n st n >= N3 holds t.n <= c*max(f,g).n & t.n >= 0 by A23;
@@ -2960,7 +2842,7 @@ XREAL_1:66
       hence f'.n <= c*f.n & f'.n >= 0 by A32,A37,A39;
     end;
     end;
- then A41:f' in Big_Oh(f) by A2,A24,A36;
+ then A41:f' in Big_Oh(f) by A24,A36;
         now let n; assume
     A42: n >= N;
        then n >= N3 & n >= N2 by A29,XREAL_1:2;
@@ -2977,7 +2859,7 @@ XREAL_1:66
       hence g'.n <= c*g.n & g'.n >= 0 by A35,A43,A45;
     end;
     end;
- then A46:g' in Big_Oh(g) by A3,A24,A36;
+ then A46:g' in Big_Oh(g) by A24,A36;
         now let n be Element of NAT;
      per cases;
      suppose n < N;
@@ -3000,7 +2882,7 @@ XREAL_1:66
       end;
     end;
     end;
-  hence x in max(Big_Oh(f), Big_Oh(g)) by A4,A22,A36,A41,A46;
+  hence x in max(Big_Oh(f), Big_Oh(g)) by A22,A36,A41,A46;
  end;
  hence thesis by TARSKI:2;
 end;

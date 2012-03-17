@@ -72,6 +72,17 @@
       </xs:sequence>
       <xs:attribute name="articlenr" type="xs:integer"/>
       <xs:attribute name="nr" type="xs:integer"/>
+      <xs:attribute name="constrkind">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="M"/>
+            <xs:enumeration value="V"/>
+            <xs:enumeration value="R"/>
+            <xs:enumeration value="K"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="constrnr" type="xs:integer"/>
       <xs:attribute name="aid" type="xs:string"/>
       <xs:attribute name="kind" use="required">
         <xs:simpleType>
@@ -191,22 +202,16 @@
         </xs:simpleType>
       </xs:attribute>
       <xs:attribute name="constrnr" use="required" type="xs:integer"/>
+      <xs:attribute name="defnr" use="required" type="xs:integer"/>
+      <xs:attribute name="aid" use="required" type="xs:string"/>
       <xs:attribute name="nr" type="xs:integer"/>
-      <xs:attribute name="aid" type="xs:string"/>
+      <xs:attribute name="relnr" type="xs:integer"/>
     </xs:complexType>
   </xs:element>
   <xs:element name="Essentials">
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" maxOccurs="unbounded" ref="Int"/>
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="Requirements">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element ref="Signature"/>
-        <xs:element minOccurs="0" maxOccurs="unbounded" ref="Requirement"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -227,6 +232,17 @@
       </xs:attribute>
       <xs:attribute name="constrnr" use="required" type="xs:integer"/>
       <xs:attribute name="nr" use="required" type="xs:integer"/>
+      <xs:attribute name="reqname" type="xs:string"/>
+      <xs:attribute name="absnr" type="xs:integer"/>
+      <xs:attribute name="aid" type="xs:string"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Requirements">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="Signature"/>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="Requirement"/>
+      </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="Adjective">
@@ -487,6 +503,7 @@
           <xs:element ref="ArgTypes"/>
           <xs:element ref="Term"/>
           <xs:element ref="Cluster"/>
+          <xs:element minOccurs="0" ref="Typ"/>
         </xs:sequence>
       </xs:choice>
       <xs:attribute name="nr" type="xs:integer"/>
@@ -799,6 +816,22 @@
   <xs:attributeGroup name="Symbols">
     <xs:attribute name="aid" type="xs:string"/>
   </xs:attributeGroup>
+  <xs:element name="ByExplanations">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="PolyEval"/>
+      </xs:sequence>
+      <xs:attribute name="aid" use="required" type="xs:string"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="FromExplanations">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="SchemeInstantiation"/>
+      </xs:sequence>
+      <xs:attribute name="aid" use="required" type="xs:string"/>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="Article">
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
@@ -907,6 +940,7 @@
         <xs:element ref="Term"/>
         <xs:element ref="Typ"/>
       </xs:sequence>
+      <xs:attribute name="nr" type="xs:integer"/>
     </xs:complexType>
   </xs:element>
   <xs:element name="DefPred">
@@ -915,6 +949,7 @@
         <xs:element ref="ArgTypes"/>
         <xs:element ref="Formula"/>
       </xs:sequence>
+      <xs:attribute name="nr" type="xs:integer"/>
     </xs:complexType>
   </xs:element>
   <xs:element name="Thesis">
@@ -1120,6 +1155,17 @@
       <xs:sequence>
         <xs:element ref="Proposition"/>
       </xs:sequence>
+      <xs:attribute name="constrkind">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="M"/>
+            <xs:enumeration value="V"/>
+            <xs:enumeration value="R"/>
+            <xs:enumeration value="K"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="constrnr" type="xs:integer"/>
     </xs:complexType>
   </xs:element>
   <xs:element name="JustifiedProperty">
@@ -1288,6 +1334,102 @@
         <xs:element ref="EndPosition"/>
       </xs:sequence>
       <xs:attributeGroup ref="Position"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="PolyEval">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="Requirement"/>
+        <xs:element maxOccurs="unbounded" ref="GeneralPolynomial"/>
+      </xs:sequence>
+      <xs:attributeGroup ref="Position"/>
+      <xs:attribute name="value" type="xs:boolean"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RationalNr" substitutionGroup="Number">
+    <xs:complexType>
+      <xs:attribute name="numerator" use="required" type="xs:integer"/>
+      <xs:attribute name="denominator" use="required" type="xs:integer"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Number" abstract="true" substitutionGroup="GeneralPolynomial"/>
+  <xs:element name="ComplexNr" substitutionGroup="Number">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="RationalNr"/>
+        <xs:element ref="RationalNr"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Monomial">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="Number"/>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="PoweredVar"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="PoweredVar">
+    <xs:complexType>
+      <xs:attribute name="nr" use="required" type="xs:integer"/>
+      <xs:attribute name="exponent" use="required" type="xs:integer"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GeneralPolynomial" abstract="true"/>
+  <xs:element name="Polynomial" substitutionGroup="GeneralPolynomial">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" ref="Monomial"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SchemeInstantiation">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="FuncInstance"/>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="PredInstance"/>
+      </xs:sequence>
+      <xs:attributeGroup ref="Position"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="FuncInstance">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="Term"/>
+      </xs:sequence>
+      <xs:attribute name="instnr" use="required" type="xs:integer"/>
+      <xs:attribute name="kind">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="F"/>
+            <xs:enumeration value="H"/>
+            <xs:enumeration value="G"/>
+            <xs:enumeration value="K"/>
+            <xs:enumeration value="U"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="nr" type="xs:integer"/>
+      <xs:attribute name="absnr" type="xs:integer"/>
+      <xs:attribute name="aid" type="xs:string"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="PredInstance">
+    <xs:complexType>
+      <xs:attribute name="instnr" use="required" type="xs:integer"/>
+      <xs:attribute name="kind" use="required">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="P"/>
+            <xs:enumeration value="S"/>
+            <xs:enumeration value="V"/>
+            <xs:enumeration value="R"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="nr" use="required" type="xs:integer"/>
+      <xs:attribute name="absnr" type="xs:integer"/>
+      <xs:attribute name="aid" type="xs:string"/>
     </xs:complexType>
   </xs:element>
 </xs:schema>

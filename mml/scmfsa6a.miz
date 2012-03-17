@@ -371,7 +371,7 @@ reserve l, m, n for Nat,
 
 definition let I be programmed FinPartState of SCM+FSA;
  func Directed I -> programmed FinPartState of SCM+FSA equals
-:Def1: ((id the Instructions of SCM+FSA) +*
+ ((id the Instructions of SCM+FSA) +*
          (halt SCM+FSA .--> goto insloc card I))*I;
  coherence
   proof
@@ -433,8 +433,6 @@ end;
 theorem Th14:
  dom Directed I = dom I
 proof
-A1: Directed I = ((id the Instructions of SCM+FSA) +*
-       (halt SCM+FSA .--> goto insloc card I))*I by Def1;
 A2:  rng I c= the Instructions of SCM+FSA by SCMFSA_4:1;
 A3:  dom(id the Instructions of SCM+FSA) = the Instructions of SCM+FSA
           by RELAT_1:71;
@@ -446,7 +444,7 @@ A3:  dom(id the Instructions of SCM+FSA) = the Instructions of SCM+FSA
        (halt SCM+FSA .--> goto insloc card I)) by A3,XBOOLE_1:7;
   then rng I c= dom((id the Instructions of SCM+FSA) +*
        (halt SCM+FSA .--> goto insloc card I)) by A2,XBOOLE_1:1;
-  hence dom Directed I = dom I by A1,RELAT_1:46;
+  hence dom Directed I = dom I by RELAT_1:46;
 end;
 
 registration let I be Macro-Instruction;
@@ -463,7 +461,7 @@ end;
 
 definition let i;
  func Macro i -> Macro-Instruction equals
-:Def2:  (insloc 0,insloc 1) --> (i,halt SCM+FSA);
+  (insloc 0,insloc 1) --> (i,halt SCM+FSA);
  coherence
   proof set I = (insloc 0,insloc 1) --> (i,halt SCM+FSA);
 A1:  dom I = {insloc 0,insloc 1} by FUNCT_4:65;
@@ -511,7 +509,7 @@ registration let i;
  cluster Macro i -> non empty;
  coherence
   proof
-       Macro i = (insloc 0,insloc 1) --> (i,halt SCM+FSA) by Def2;
+       Macro i = (insloc 0,insloc 1) --> (i,halt SCM+FSA);
    hence Macro i is non empty;
   end;
 end;
@@ -613,7 +611,7 @@ then A4: B c= NAT;
 A5: now let d1,d2 be Nat;
      assume V(d1) = V(d2);
       then d1+m = d2+m by SCMFSA_2:18;
-     hence d1 = d2 by XCMPLX_1:2;
+     hence d1 = d2;
     end;
 A6: B,C are_equipotent from FUNCT_7:sch 4(A4,A5);
    defpred X[set] means not contradiction;
@@ -664,7 +662,7 @@ theorem Th18:
  proof
    A1: halt SCM+FSA <> goto insloc card I by SCMFSA_2:47,124;
       Directed I = ((id the Instructions of SCM+FSA) +*
-         (halt SCM+FSA .--> goto insloc card I))*I by Def1;
+         (halt SCM+FSA .--> goto insloc card I))*I;
    then rng Directed I c= rng((id the Instructions of SCM+FSA) +*
          (halt SCM+FSA .--> goto insloc card I)) by RELAT_1:45;
   hence not halt SCM+FSA in rng Directed I by A1,FUNCT_7:14;
@@ -703,7 +701,7 @@ A7: IncAddr(goto insloc card I,m) = goto((insloc card I)+m)
                         by SCMFSA_4:14
               .= goto insloc(m + card I) by SCMFSA_4:def 1;
 
-     Directed I = f*I by Def1;
+     Directed I = f*I;
   then ProgramPart Directed I
      = (f*I)|the Instruction-Locations of SCM+FSA by AMI_5:def 6
     .= f*(I|the Instruction-Locations of SCM+FSA) by RELAT_1:112
@@ -768,7 +766,7 @@ reserve a,b for Int-Location, f for FinSeq-Location,
 
 definition let I be FinPartState of SCM+FSA;
  func Initialized I -> FinPartState of SCM+FSA equals
-:Def3: I +* ((intloc 0) .--> 1) +* Start-At(insloc 0);
+ I +* ((intloc 0) .--> 1) +* Start-At(insloc 0);
  coherence
   proof
    set J = (intloc 0) .--> 1;
@@ -852,7 +850,7 @@ theorem Th24:
  IC SCM+FSA in dom Initialized I
 proof
 A1: dom Initialized I
-      = dom(I +* ((intloc 0) .--> 1) +* Start-At(insloc 0)) by Def3
+      = dom(I +* ((intloc 0) .--> 1) +* Start-At(insloc 0))
      .= dom(I +* ((intloc 0) .--> 1)) \/ dom Start-At(insloc 0)
             by FUNCT_4:def 1;
      dom Start-At(insloc 0) = { IC SCM+FSA } by AMI_3:34;
@@ -867,7 +865,7 @@ proof
 then A1: IC SCM+FSA in dom Start-At(insloc 0) by TARSKI:def 1;
     IC SCM+FSA in dom Initialized I by Th24;
  hence IC Initialized I = (Initialized I).IC SCM+FSA by AMI_3:def 16
-    .= (I +* ((intloc 0) .--> 1) +* Start-At(insloc 0)).IC SCM+FSA by Def3
+    .= (I +* ((intloc 0) .--> 1) +* Start-At(insloc 0)).IC SCM+FSA
     .= (Start-At insloc 0).IC SCM+FSA by A1,FUNCT_4:14
     .= insloc 0 by AMI_3:50;
 end;
@@ -875,7 +873,7 @@ end;
 theorem Th26:
  I c= Initialized I
 proof set A = the Instruction-Locations of SCM+FSA;
-A1:Initialized I = I +* ((intloc 0) .--> 1) +* Start-At(insloc 0) by Def3
+A1:Initialized I = I +* ((intloc 0) .--> 1) +* Start-At(insloc 0)
       .= I +* (((intloc 0) .--> 1) +* Start-At(insloc 0)) by FUNCT_4:15;
 A2: dom I c= A by AMI_3:def 13;
 then A3: not IC SCM+FSA in dom I by AMI_1:48;
@@ -1413,7 +1411,7 @@ end;
 theorem
     (Initialized I)|the Instruction-Locations of SCM+FSA = I
 proof
-A1: Initialized I = I +* ((intloc 0) .--> 1) +* Start-At(insloc 0) by Def3
+A1: Initialized I = I +* ((intloc 0) .--> 1) +* Start-At(insloc 0)
       .= I +* (((intloc 0) .--> 1) +* Start-At(insloc 0)) by FUNCT_4:15;
 A2: dom I c= the Instruction-Locations of SCM+FSA by AMI_3:def 13;
 A3: not intloc 0 in the Instruction-Locations of SCM+FSA by SCMFSA_2:84;
@@ -2162,7 +2160,7 @@ theorem Th43: ::T3
 A1: dom ((intloc 0) .--> 1) = {intloc 0} by CQC_LANG:5;
 A2: dom Start-At insloc 0 = {IC SCM+FSA} by AMI_3:34;
    thus dom Initialized I
-    = dom(I +* ((intloc 0) .--> 1) +* Start-At(insloc 0)) by Def3
+    = dom(I +* ((intloc 0) .--> 1) +* Start-At(insloc 0))
    .= dom (I +* ((intloc 0) .--> 1)) \/ dom Start-At(insloc 0) by FUNCT_4:def 1
    .= dom I \/ {intloc 0} \/ {IC SCM+FSA} by A1,A2,FUNCT_4:def 1;
  end;
@@ -2176,7 +2174,7 @@ theorem Th44: ::T2
 A1: dom ((intloc 0) .--> 1) = {intloc 0} by CQC_LANG:5;
 A2: dom Start-At insloc 0 = {IC SCM+FSA} by AMI_3:34;
 A3: dom Initialized I
-    = dom(I +* ((intloc 0) .--> 1) +* Start-At(insloc 0)) by Def3
+    = dom(I +* ((intloc 0) .--> 1) +* Start-At(insloc 0))
    .= dom (I +* ((intloc 0) .--> 1)) \/ dom Start-At(insloc 0) by FUNCT_4:def 1
    .= dom I \/ {intloc 0} \/ {IC SCM+FSA} by A1,A2,FUNCT_4:def 1;
    assume x in dom Initialized I;
@@ -2192,7 +2190,7 @@ theorem Th45: ::T3'
 A1: dom ((intloc 0) .--> 1) = {intloc 0} by CQC_LANG:5;
 A2: dom Start-At insloc 0 = {IC SCM+FSA} by AMI_3:34;
 A3: dom Initialized I
-    = dom(I +* ((intloc 0) .--> 1) +* Start-At(insloc 0)) by Def3
+    = dom(I +* ((intloc 0) .--> 1) +* Start-At(insloc 0))
    .= dom (I +* ((intloc 0) .--> 1)) \/ dom Start-At(insloc 0) by FUNCT_4:def 1
    .= dom I \/ {intloc 0} \/ {IC SCM+FSA} by A1,A2,FUNCT_4:def 1;
       intloc 0 in {intloc 0} by TARSKI:def 1;
@@ -2212,7 +2210,6 @@ then A1: not intloc 0 in dom Start-At insloc 0 by AMI_3:34;
 then A2: intloc 0 in dom ((intloc 0) .--> 1) by CQC_LANG:5;
    thus (Initialized I).intloc 0
     = (I +* ((intloc 0) .--> 1) +* (Start-At (insloc 0))).intloc 0
-       by Def3
    .= (I +* ((intloc 0) .--> 1)).intloc 0 by A1,FUNCT_4:12
    .= ((intloc 0) .--> 1).intloc 0 by A2,FUNCT_4:14
    .= 1 by CQC_LANG:6;
@@ -2220,9 +2217,8 @@ then A2: intloc 0 in dom ((intloc 0) .--> 1) by CQC_LANG:5;
 then A3: IC SCM+FSA in dom Start-At insloc 0 by AMI_3:34;
    thus (Initialized I).IC SCM+FSA
     = (I +* ((intloc 0) .--> 1) +* (Start-At (insloc 0))).IC SCM+FSA
-       by Def3
    .= (Start-At (insloc 0)).IC SCM+FSA by A3,FUNCT_4:14
-   .= (IC SCM+FSA .--> insloc 0).IC SCM+FSA by AMI_3:def 12
+   .= (IC SCM+FSA .--> insloc 0).IC SCM+FSA
    .= insloc 0 by CQC_LANG:6;
  end;
 
@@ -2297,7 +2293,7 @@ A4: dom Start-At insloc 0 = {IC SCM+FSA} by AMI_3:34;
       x <> IC SCM+FSA by A1,Th47;
 then A5: not x in dom Start-At insloc 0 by A4,TARSKI:def 1;
    thus (Initialized I).x
-    = (I +* ((intloc 0) .--> 1) +* Start-At(insloc 0)).x by Def3
+    = (I +* ((intloc 0) .--> 1) +* Start-At(insloc 0)).x
    .= (I +* ((intloc 0) .--> 1)).x by A5,FUNCT_4:12
    .= I.x by A3,FUNCT_4:12;
  end;
@@ -2427,7 +2423,7 @@ begin :: The composition of macroinstructions
 
 definition let I,J be Macro-Instruction;
  func I ';' J -> Macro-Instruction equals
-:Def4:  Directed I +* ProgramPart Relocated(J, card I);
+  Directed I +* ProgramPart Relocated(J, card I);
  coherence
   proof set P = Directed I +* ProgramPart Relocated(J, card I);
         P is initial
@@ -2495,10 +2491,10 @@ A6: now assume l in dom((halt SCM+FSA .--> goto insloc card I)*I);
     hence contradiction by A2,TARSKI:def 1;
    end;
 A7: rng I c= the Instructions of SCM+FSA by SCMFSA_4:1;
- thus (I ';' J).l = (Directed I +* ProgramPart Relocated(J, card I)).l by Def4
+ thus (I ';' J).l = (Directed I +* ProgramPart Relocated(J, card I)).l
     .= (Directed I).l by A4,FUNCT_4:12
     .= (((id the Instructions of SCM+FSA) +*
-         (halt SCM+FSA .--> goto insloc card I))*I).l by Def1
+         (halt SCM+FSA .--> goto insloc card I))*I).l
     .= (((id the Instructions of SCM+FSA)*I) +*
          ((halt SCM+FSA .--> goto insloc card I)*I)).l by FUNCT_7:11
     .= (I +* ((halt SCM+FSA .--> goto insloc card I)*I)).l
@@ -2511,8 +2507,7 @@ theorem  ::T16
      Directed I c= I ';' J
  proof
    let I,J be Macro-Instruction;
-A1: I ';' J = Directed I +* ProgramPart Relocated(J,card I)
-       by Def4;
+ I ';' J = Directed I +* ProgramPart Relocated(J,card I);
     then dom (I ';' J) = dom Directed I \/ dom ProgramPart Relocated(J,card I)
        by FUNCT_4:def 1;
 then A2: dom Directed I c= dom (I ';' J) by XBOOLE_1:7;
@@ -2521,7 +2516,7 @@ then A2: dom Directed I c= dom (I ';' J) by XBOOLE_1:7;
   then A3: x in dom I by Th14;
          dom I misses dom ProgramPart Relocated(J,card I) by Th16;
       then not x in dom ProgramPart Relocated(J,card I) by A3,XBOOLE_0:3;
-      hence (Directed I).x = (I ';' J).x by A1,FUNCT_4:12;
+      hence (Directed I).x = (I ';' J).x by FUNCT_4:12;
      end;
    hence Directed I c= I ';' J by A2,GRFUNC_1:8;
  end;
@@ -2532,7 +2527,7 @@ theorem Th56: ::T4
  proof
    let I,J be Macro-Instruction;
       dom (I ';' J)
-    = dom (Directed I +* ProgramPart Relocated(J,card I)) by Def4
+    = dom (Directed I +* ProgramPart Relocated(J,card I))
    .= dom Directed I \/ dom ProgramPart Relocated(J,card I) by FUNCT_4:def 1
    .= dom I \/ dom ProgramPart Relocated(J,card I) by Th14;
    hence dom I c= dom (I ';' J) by XBOOLE_1:7;
@@ -2582,7 +2577,7 @@ A2: dom (Initialized I+*(I ';' J))
        .= ((I ';' J) +* ((intloc 0) .--> 1)).x by A5,FUNCT_4:12
        .= ((I ';' J) +* ((intloc 0) .--> 1) +* Start-At(insloc 0)).x
            by A6,FUNCT_4:12
-       .= (Initialized (I ';' J)).x by Def3;
+       .= (Initialized (I ';' J)).x;
       end;
       suppose A7: x = intloc 0;
        then not x in dom (I ';' J) by Th47;
@@ -2606,34 +2601,34 @@ begin :: The compostion of instruction and macroinstructions
 
 definition let i, J;
  func i ';' J -> Macro-Instruction equals
-:Def5:  Macro i ';' J;
+  Macro i ';' J;
  correctness;
 end;
 
 definition let I, j;
  func I ';' j -> Macro-Instruction equals
-:Def6:  I ';' Macro j;
+  I ';' Macro j;
  correctness;
 end;
 
 definition let i,j;
  func i ';' j -> Macro-Instruction equals
-:Def7:  Macro i ';' Macro j;
+  Macro i ';' Macro j;
  correctness;
 end;
 
-theorem Th59:
+theorem
  i ';' j = Macro i ';' j
 proof
- thus i ';' j = Macro i ';' Macro j by Def7
-   .= Macro i ';' j by Def6;
+ thus i ';' j = Macro i ';' Macro j
+   .= Macro i ';' j;
 end;
 
-theorem Th60:
+theorem
  i ';' j = i ';' Macro j
  proof
-  thus i ';' j = Macro i ';' Macro j by Def7
-      .= i ';' Macro j by Def5;
+  thus i ';' j = Macro i ';' Macro j
+      .= i ';' Macro j;
  end;
 
 theorem Th61:
@@ -2646,7 +2641,7 @@ A2: card dom ProgramPart Relocated(J, card I)
       .= card J by Th17
       .= card dom J by PRE_CIRC:21;
 A3: dom(I ';' J)
-      = dom(Directed I +* ProgramPart Relocated(J, card I)) by Def4
+      = dom(Directed I +* ProgramPart Relocated(J, card I))
      .= dom Directed I \/ dom ProgramPart Relocated(J, card I) by FUNCT_4:def 1
      .= dom I \/ dom ProgramPart Relocated(J, card I) by Th14;
      dom I misses dom ProgramPart Relocated(J, card I) by Th16;
@@ -2685,18 +2680,18 @@ A9: ((id the Instructions of SCM+FSA) +*
           (halt SCM+FSA .--> goto insloc(card I + card J)))*
           ProgramPart Relocated(J, card I)
       = ProgramPart Relocated(Directed J, card I) by Th19;
-A10: I ';' J = Directed I +* ProgramPart Relocated(J, card I) by Def4;
+ I ';' J = Directed I +* ProgramPart Relocated(J, card I);
 then A11: Directed(I ';' J)
         = ((id the Instructions of SCM+FSA) +*
           (halt SCM+FSA .--> goto insloc
              (card(Directed I +* ProgramPart Relocated(J, card I)))))*
-          (Directed I +* ProgramPart Relocated(J, card I)) by Def1
+          (Directed I +* ProgramPart Relocated(J, card I))
        .= Directed I +* ProgramPart Relocated(Directed J, card I) by A1,A2,A5
-,A6,A8,A9,A10,FUNCT_7:10;
+,A6,A8,A9,FUNCT_7:10;
 
 A12: ProgramPart Relocated(J ';' K, card I)
          = ProgramPart Relocated(Directed J +*
-                ProgramPart Relocated(K, card J), card I) by Def4
+                ProgramPart Relocated(K, card J), card I)
         .= ProgramPart Relocated(Directed J,card I) +*
            ProgramPart Relocated(ProgramPart Relocated(K, card J), card I)
                            by Th21
@@ -2704,63 +2699,63 @@ A12: ProgramPart Relocated(J ';' K, card I)
              +* ProgramPart Relocated(K, card I + card J) by Th22;
   thus I ';' J ';' K
        = Directed I +* ProgramPart Relocated(Directed J, card I)
-             +* ProgramPart Relocated(K, card I + card J) by A1,A11,Def4
+             +* ProgramPart Relocated(K, card I + card J) by A1,A11
       .= Directed I +* ProgramPart Relocated(J ';' K, card I) by A12,FUNCT_4:15
-      .= I ';' (J ';' K) by Def4;
+      .= I ';' (J ';' K);
  end;
 
 theorem Th63:
  I ';' J ';' k = I ';' (J ';' k)
 proof
- thus I ';' J ';' k = I ';' J ';' Macro k by Def6
+ thus I ';' J ';' k = I ';' J ';' Macro k
        .= I ';' (J ';' Macro k) by Th62
-       .= I ';' (J ';' k) by Def6;
+       .= I ';' (J ';' k);
 end;
 
 theorem
     I ';' j ';' K = I ';' (j ';' K)
 proof
- thus I ';' j ';' K = I ';' Macro j ';' K by Def6
+ thus I ';' j ';' K = I ';' Macro j ';' K
        .= I ';' (Macro j ';' K) by Th62
-       .= I ';' (j ';' K) by Def5;
+       .= I ';' (j ';' K);
 end;
 
 theorem
     I ';' j ';' k = I ';' (j ';' k)
 proof
- thus I ';' j ';' k = I ';' Macro j ';' k by Def6
+ thus I ';' j ';' k = I ';' Macro j ';' k
          .= I ';' (Macro j ';' k) by Th63
-         .= I ';' (j ';' k) by Th59;
+         .= I ';' (j ';' k);
 end;
 
 theorem Th66:
  i ';' J ';' K = i ';' (J ';' K)
 proof
- thus i ';' J ';' K = Macro i ';' J ';' K by Def5
+ thus i ';' J ';' K = Macro i ';' J ';' K
        .= Macro i ';' (J ';' K) by Th62
-       .= i ';' (J ';' K) by Def5;
+       .= i ';' (J ';' K);
 end;
 
 theorem
     i ';' J ';' k = i ';' (J ';' k)
 proof
- thus i ';' J ';' k = Macro i ';' J ';' k by Def5
+ thus i ';' J ';' k = Macro i ';' J ';' k
        .= Macro i ';' (J ';' k) by Th63
-       .= i ';' (J ';' k) by Def5;
+       .= i ';' (J ';' k);
 end;
 
 theorem Th68:
  i ';' j ';' K = i ';' (j ';' K)
 proof
- thus i ';' j ';' K = i ';' Macro j ';' K by Th60
+ thus i ';' j ';' K = i ';' Macro j ';' K
        .= i ';' (Macro j ';' K) by Th66
-       .= i ';' (j ';' K) by Def5;
+       .= i ';' (j ';' K);
 end;
 
 theorem
     i ';' j ';' k = i ';' (j ';' k)
 proof
- thus i ';' j ';' k = i ';' j ';' Macro k by Def6
+ thus i ';' j ';' k = i ';' j ';' Macro k
        .= i ';' (j ';' Macro k) by Th68
-       .= i ';' (j ';' k) by Th60;
+       .= i ';' (j ';' k);
 end;

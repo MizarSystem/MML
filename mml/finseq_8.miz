@@ -59,7 +59,7 @@ proof let D be non empty set,f,g be FinSequence of D;
 assume A1: len f>=1;
   then len f-1>=0 by XREAL_1:50;
   then len f -1=len f-'1 by BINARITH:def 3;
-  then A2: len f-'1+1=len f by XCMPLX_1:27;
+  then A2: len f-'1+1=len f;
    1-1=0;
   then A3: 1-'1=0 by BINARITH:def 3;
    (f^g)|len f=f by FINSEQ_5:26;
@@ -104,7 +104,7 @@ end;
 
 definition let D be set,f be FinSequence of D,k1,k2 be Nat;
 func smid(f,k1,k2) -> FinSequence of D equals
-:Def1: (f/^(k1-'1))|(k2+1-'k1);
+ (f/^(k1-'1))|(k2+1-'k1);
 correctness;
 end;
 
@@ -114,12 +114,11 @@ theorem Th6: for D being non empty set,
 proof let D be non empty set,
  f be FinSequence of D,k1,k2 be Nat;
  assume A1: k1<=k2;
-  A2: smid(f,k1,k2)= (f/^(k1-'1))|(k2+1-'k1) by Def1;
   A3: k1<=k2+1 by A1,NAT_1:37;
    k2-'k1+1=k2-k1+1 by A1,BINARITH:50
          .=k2+1-k1
          .=k2+1-'k1 by A3,BINARITH:50;
- hence smid(f,k1,k2)=mid(f,k1,k2) by A1,A2,JORDAN3:def 1;
+ hence smid(f,k1,k2)=mid(f,k1,k2) by A1,JORDAN3:def 1;
 end;
 
 theorem Th7: for D being non empty set,
@@ -128,7 +127,7 @@ theorem Th7: for D being non empty set,
 proof let D be non empty set,
  f be FinSequence of D,k2 be Nat;
  thus smid(f,1,k2)
-     = (f/^(1-'1))|(k2+1-'1) by Def1
+     = (f/^(1-'1))|(k2+1-'1)
     .= (f/^0)|(k2+1-'1) by NAT_2:10
     .= f|(k2+1-'1) by Th2
     .=f|k2 by BINARITH:39;
@@ -151,10 +150,9 @@ theorem Th9: for D being set,
 proof let D be set,
  f be FinSequence of D,k1,k2 be Nat;
  assume A1: k1>k2;
-  A2: smid(f,k1,k2)= (f/^(k1-'1))|(k2+1-'k1) by Def1;
   reconsider g=(f/^(k1-'1)) as FinSequence of D;
    k2+1<=k1 by A1,NAT_1:38;
-  then A3: smid(f,k1,k2)=g|0 by A2,NAT_2:10;
+  then A3: smid(f,k1,k2)=g|0 by NAT_2:10;
  hence smid(f,k1,k2)={} by Th1;
  thus thesis by A3,Th1;
 end;
@@ -164,14 +162,14 @@ theorem  for D being set,
  smid(f,0,k2)=smid(f,1,k2+1)
 proof let D be set,
  f be FinSequence of D,k2 be Nat;
- thus smid(f,0,k2)=(f/^(0-'1))|(k2+1-'0) by Def1
+ thus smid(f,0,k2)=(f/^(0-'1))|(k2+1-'0)
                  .=(f/^0)|(k2+1-'0) by NAT_2:10
                  .= f|(k2+1-'0) by Th2
                  .= f|(k2+1) by JORDAN3:2
                  .= f|(k2+1+1-'1) by BINARITH:39
                  .= (f/^0)|(k2+1+1-'1) by Th2
                  .= (f/^(1-'1))|(k2+1+1-'1) by NAT_2:10
-                 .= smid(f,1,k2+1) by Def1;
+                 .= smid(f,1,k2+1);
 end;
 
 theorem Th11: for D being non empty set,
@@ -184,7 +182,7 @@ proof let D be non empty set,f,g be FinSequence of D;
   then g|(len g+len f+1-'(len f+1))=g by FINSEQ_1:79;
   then ((f^g)/^(len f))|(len f+len g+1-'(len f+1))=g by FINSEQ_5:40;
   then ((f^g)/^(len f+1-'1))|(len f+len g+1-'(len f+1))=g by BINARITH:39;
-hence smid(f^g,len f+1,len f+len g)=g by Def1;
+hence smid(f^g,len f+1,len f+len g)=g;
 end;
 
 :: Overlapping Part
@@ -271,7 +269,7 @@ end;
 ::Concatination Reducing Overlapping Part
 definition let D be non empty set,f,g be FinSequence of D;
 func ovlcon(f,g) -> FinSequence of D  equals
-:Def3:
+
  f^(g/^(len ovlpart(f,g)));
 correctness;
 end;
@@ -295,17 +293,17 @@ proof let D be non empty set,f,g be FinSequence of D;
   A4: ovlpart(f,g)=smid(f,len f-'len ovlpart(f,g)+1,len f)
                         by Def2
              .=(f/^(len f-'len ovlpart(f,g)+1-'1))
-               |(len f+1-'(len f-'len ovlpart(f,g)+1)) by Def1
+               |(len f+1-'(len f-'len ovlpart(f,g)+1))
              .=(f/^(len f-'len ovlpart(f,g)))|(len ovlpart(f,g))
                                         by A2,BINARITH:39
              .=(f/^(len f-'len ovlpart(f,g))) by A3,FINSEQ_1:79;
   A5: ovlpart(f,g)=smid(g,1,len ovlpart(f,g)) by Def2
-             .=(g/^(1-'1))|(len ovlpart(f,g)+1-'1) by Def1
+             .=(g/^(1-'1))|(len ovlpart(f,g)+1-'1)
              .=(g/^(0+1-'1))|(len ovlpart(f,g)) by BINARITH:39
              .=(g/^(0))|(len ovlpart(f,g)) by BINARITH:39
              .= g|(len ovlpart(f,g)) by Th2;
 
- thus ovlcon(f,g)=f^(g/^(len ovlpart(f,g))) by Def3
+ thus ovlcon(f,g)=f^(g/^(len ovlpart(f,g)))
                  .= (f|(len f-'len ovlpart(f,g)))^
                    (g|(len ovlpart(f,g)))^(g/^(len ovlpart(f,g))) by A4,A5,
 RFINSEQ:21
@@ -318,14 +316,14 @@ end;
 ::Overlapping Left Difference
 definition let D be non empty set,f,g be FinSequence of D;
 func ovlldiff(f,g) -> FinSequence of D equals
-:Def4: (f|(len f-'len ovlpart(f,g)));
+ (f|(len f-'len ovlpart(f,g)));
 correctness;
 end;
 
 ::Overlapping Right Difference
 definition let D be non empty set,f,g be FinSequence of D;
 func ovlrdiff(f,g) -> FinSequence of D equals
-:Def5: (g/^(len ovlpart(f,g)));
+ (g/^(len ovlpart(f,g)));
 correctness;
 end;
 
@@ -346,8 +344,8 @@ proof let D be non empty set,f,g be FinSequence of D;
                        by Th13
   .=(f|(len f-'len ovlpart(f,g)))^ovlpart(f,g)^(g/^(len ovlpart(f,g)))
                        by FINSEQ_1:45
-  .=ovlldiff(f,g)^ovlpart(f,g)^(g/^(len ovlpart(f,g))) by Def4
-  .=ovlldiff(f,g)^ovlpart(f,g)^ovlrdiff(f,g) by Def5;
+  .=ovlldiff(f,g)^ovlpart(f,g)^(g/^(len ovlpart(f,g)))
+  .=ovlldiff(f,g)^ovlpart(f,g)^ovlrdiff(f,g);
   hence thesis by FINSEQ_1:45;
 end;
 
@@ -361,13 +359,13 @@ proof let D be non empty set,f be FinSequence of D;
   then smid(f,1,len f)=smid(f,len f-'len f+1,len f);
   then A2: len f<=len ovlpart(f,f) by Def2;
   A3: ovlcon(f,f)=
-      f^(f/^(len ovlpart(f,f))) by Def3 .=f^(<*>D) by A2,Th4
+      f^(f/^(len ovlpart(f,f))) .=f^(<*>D) by A2,Th4
       .=f by FINSEQ_1:47;
-  A4: ovlldiff(f,f)= (f|(len f-'len ovlpart(f,f))) by Def4
+  A4: ovlldiff(f,f)= (f|(len f-'len ovlpart(f,f)))
               .= f|(len f-'len f) by A1,A2,Th8
               .= f|(0) by BINARITH:51
               .= {} by Th1;
-   ovlrdiff(f,f)= (f/^(len ovlpart(f,f))) by Def5
+   ovlrdiff(f,f)= (f/^(len ovlpart(f,f)))
               .= <*>D by A2,Th4
               .= {};
  hence ovlcon(f,f)=f & ovlpart(f,f)=f
@@ -392,7 +390,7 @@ proof let D be non empty set,f,g be FinSequence of D;
   A5: len ovlpart(f,f^g)<=len f by Th12;
    len f-'len f+1=0+1 by BINARITH:51 .=1;
   then A6: smid(f,len f-'len f+1,len f)
-   =(f/^(0+1-'1))|(len (f)+1-'1) by Def1
+   =(f/^(0+1-'1))|(len (f)+1-'1)
   .= (f/^(0+1-'1))|(len (f)) by BINARITH:39
   .= (f/^(0))|(len (f)) by BINARITH:39
   .= f|(len (f)) by Th2
@@ -416,7 +414,7 @@ holds len ovlcon(f,g)=len f+len g -len ovlpart(f,g) &
       len ovlcon(f,g)=len f+(len g -'len ovlpart(f,g))
 proof let D be non empty set,f,g be FinSequence of D;
   A1: len ovlpart(f,g) <= len g by Def2;
-   ovlcon(f,g)= f^(g/^(len ovlpart(f,g))) by Def3;
+   ovlcon(f,g)= f^(g/^(len ovlpart(f,g)));
   then A2: len ovlcon(f,g)=len f +len (g/^(len ovlpart(f,g))) by FINSEQ_1:35
   .=len f+(len g-'len ovlpart(f,g)) by JORDAN3:19
   .=len f+(len g -len ovlpart(f,g)) by A1,BINARITH:50;
@@ -459,7 +457,7 @@ proof let D be non empty set,CR be FinSequence of D;
     set f=(CR|1) ^ ovlcon(CR/^1,CR);
     A3: len (CR/^1)-'len ovlpart(CR/^1,CR)<= len (CR/^1) by BINARITH:52;
     A4: len ovlpart(CR/^1,CR)<=len (CR/^1) by Th18;
-    A5: f=(CR|1) ^ ((CR/^1) ^ (CR/^(len ovlpart(CR/^1,CR)))) by Def3
+    A5: f=(CR|1) ^ ((CR/^1) ^ (CR/^(len ovlpart(CR/^1,CR))))
     .=(CR|1) ^ (CR/^1) ^ (CR/^(len ovlpart(CR/^1,CR))) by FINSEQ_1:45
     .= CR ^ (CR/^(len ovlpart(CR/^1,CR))) by RFINSEQ:21;
     A6: f=(CR|1)^(((CR/^1)|(len (CR/^1)-'len ovlpart(CR/^1,CR)))^CR)
@@ -497,7 +495,7 @@ proof let D be non empty set,CR be FinSequence of D;
       .=1+(len CR -'len ovlpart(CR/^1,CR)) by A14,BINARITH:50;
     then A17: 1<=j by NAT_1:37;
     A18: smid(f,1,1+len CR-'1)=smid(f,1,len CR) by BINARITH:39
-                         .=(f/^(0+1-'1))|(len CR+1-'1) by Def1
+                         .=(f/^(0+1-'1))|(len CR+1-'1)
                          .=(f/^0)|len CR by A9,BINARITH:39
                          .=f|len CR by Th2
                          .=CR by A5,FINSEQ_5:26;
@@ -520,7 +518,7 @@ proof let D be non empty set,CR be FinSequence of D;
                   .=len CR +1 -1-len ovlpart(CR/^1,CR)
                   .=len CR -'len ovlpart(CR/^1,CR) by A14,BINARITH:50;
     then A21: smid(f,j,j+len CR-'1)
-       =(f/^(len CR-'len ovlpart(CR/^1,CR)))|len CR by A20,Def1
+       =(f/^(len CR-'len ovlpart(CR/^1,CR)))|len CR by A20
        .=CR|len CR by A6,A7,A8,FINSEQ_5:40
        .=smid(f,1,1+len CR-'1) by A18,FINSEQ_1:79;
      len ovlpart(CR/^1,CR) <= len (CR/^1) by Th12;
@@ -544,7 +542,7 @@ proof let D be non empty set,CR be FinSequence of D;
      len CR -'len ovlpart(CR/^1,CR)=len CR -len ovlpart(CR/^1,CR)
                              by A14,BINARITH:50;
     then len CR -len ovlpart(CR/^1,CR)=len CR by A24,A25,A26,XREAL_1:1;
-   hence len ovlpart(CR/^1,CR) =0 by XCMPLX_1:16;
+   hence len ovlpart(CR/^1,CR) =0;
    end;
    case  len CR<1; then len CR<0+1;
      then A27: len CR<=0 by NAT_1:38;
@@ -603,7 +601,7 @@ BINARITH:def 3
          then k-'1<len CR-1 by A44,BINARITH:50;
        then k-'1<len CR -'1 by A34,BINARITH:50;
        then k-'1+1<=len CR -'1 by NAT_1:38;
-       then A50: k<=len CR -'1 by A40,XCMPLX_1:27;
+       then A50: k<=len CR -'1 by A40;
        A51: k-k<len CR -k by A49,XREAL_1:11;
        then A52: 0<len CR -k;
         0<len CR -'k by A51,BINARITH:def 3;
@@ -781,7 +779,7 @@ assume A1: g is_substring_of f,0;
       .= Seg(len f) /\ Seg(len g+1) by FINSEQ_1:def 3
       .=Seg (len g+1) by A9,FINSEQ_1:9;
       then len g=len g+1 by A10,FINSEQ_1:def 3;
-      hence contradiction by XREAL_1:31;
+      hence contradiction;
      end;
      end;
      hence g is_substring_of f,1;

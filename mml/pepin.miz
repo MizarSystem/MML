@@ -124,15 +124,6 @@ proof
   hence thesis by BINARITH:def 3;
 end;
 
-Lm7:
- for i,j being Nat holds  i,j are_relative_prime implies j,i are_relative_prime
-proof
-  let i,j be Nat;
-  assume i,j are_relative_prime;
-  then i hcf j = 1 by INT_2:def 6;
-  hence thesis by INT_2:def 6;
-end;
-
 theorem
    for i being Nat holds i,i+1 are_relative_prime
 proof
@@ -268,12 +259,12 @@ proof
   suppose A1:p <> 0;
   reconsider p as Integer;
      (a*p + 1) mod p = (a*p + 1) - ((a*p + 1) div p)*p by A1,INT_1:def 8
-                 .= (a*p + 1) - ([\(a*p + 1)/p/])*p by INT_1:def 7
+                 .= (a*p + 1) - ([\(a*p + 1)/p/])*p
                  .= (a*p + 1) - ([\(a*p/p)+(1/p)/])*p by XCMPLX_1:63
                  .= (a*p + 1) - ([\(a)+(1/p)/])*p by A1,XCMPLX_1:90
                  .= (a*p + 1) - (a+[\(1/p)/])*p by INT_1:51
                  .= (0 + 1) - [\(1/p)/]*p
-                 .= 1 - (1 div p)*p by INT_1:def 7;
+                 .= 1 - (1 div p)*p;
   then (a*p + 1) mod p = 1 mod p by A1,INT_1:def 8;
   hence thesis by SCMFSA9A:5;
   end;
@@ -294,14 +285,14 @@ proof
   consider t2 being Nat such that
     A4:k = m*t2 + (k mod m) & (k mod m) < m by A2,NAT_1:def 2;
    n*k - 1*k = m*(t1 - t2) by A1,A3,A4;
-  then k*(n - 1) = m*(t1 - t2) by XCMPLX_1:40;
+  then k*(n - 1) = m*(t1 - t2);
   then A5:m divides k*(n - 1) by INT_1:def 9;
   reconsider n,m,k as Integer;
      k,m are_relative_prime by A1,EULER_2:1;
   then m divides (n - 1) by A5,INT_2:40;
   then consider tt being Integer such that
     A6:n - 1 = m*tt by INT_1:def 9;
-  A7:n = m*tt + 1 by A6,XCMPLX_1:27;
+  A7:n = m*tt + 1 by A6;
   reconsider n,m as Nat;
      n mod m = (n qua Integer) mod m by SCMFSA9A:5
          .= (1 qua Integer) mod m by A7,EULER_1:13
@@ -669,7 +660,7 @@ proof
     let m be Nat;
     assume P[m];
        now per cases;
-      suppose A4:m = 0;
+      suppose A4: m = 0;
            n*(n |^ ((0+1) -' 1)) = n*(n |^ 0) by BINARITH:51
                              .= n*1 by NEWTON:9;
       hence thesis by A4,NEWTON:10;
@@ -1082,7 +1073,7 @@ proof
      m - 1 > 1 - 1 by A1,XREAL_1:11;
   then d > 0 by A1,A2,Lm2;
   then reconsider d as Nat by INT_1:16;
-     m = n*d + 1 by A2,XCMPLX_1:27;
+     m = n*d + 1 by A2;
   then m mod n = 1 mod n by GR_CY_1:1
               .= 1 by A1,NAT_1:64;
   hence thesis;
@@ -1192,7 +1183,7 @@ begin :: Public Key Cryptography
 definition
   let k,m,n;
   func Crypto(m,n,k) -> Nat equals
-  :Def1: (m |^ k) mod n;
+   (m |^ k) mod n;
   coherence;
 end;
 
@@ -1214,12 +1205,10 @@ proof
   A7: p,q are_relative_prime by A1,INT_2:47;
      Euler n <> 0 by A5,Th45;
   then A8:(Euler n) > 0;
-  A9:p1 + 1 = p;
-  A10:q1 + 1 = q;
   A11:Euler(n)= Euler(p)*Euler(q) by A1,A4,A7,EULER_1:22
              .= (p-1)*Euler(q) by A1,EULER_1:21
              .= (p-1)*(q-1) by A1,EULER_1:21;
-     not(p1=1 & q1=1) by A1,A9,A10;
+     not(p1=1 & q1=1) by A1;
   then A12:p1*q1 <> 1 by NAT_1:40;
   A13:k1 <> 0
   proof
@@ -1234,18 +1223,18 @@ proof
     suppose A16:m = 0;
       then m |^ k1 = 0 by A14,NEWTON:16;
       then m |^ k1 mod n = 0 by GR_CY_1:6;
-      then Crypto(m,n,k1) = 0 by Def1;
+      then Crypto(m,n,k1) = 0;
       then Crypto(m,n,k1) |^ k2 = 0 by A14,NEWTON:16;
       then (Crypto(m,n,k1) |^ k2) mod n = 0 by GR_CY_1:6;
-      hence thesis by A16,Def1;
+      hence thesis by A16;
     end;
     suppose A17:m = 1;
       then m |^ k1 = 1 by NEWTON:15;
       then m |^ k1 mod n = 1 by A15,NAT_1:64;
-      then Crypto(m,n,k1) = 1 by Def1;
+      then Crypto(m,n,k1) = 1;
       then Crypto(m,n,k1) |^ k2 = 1 by NEWTON:15;
       then (Crypto(m,n,k1) |^ k2) mod n = 1 by A15,NAT_1:64;
-      hence thesis by A17,Def1;
+      hence thesis by A17;
     end;
     suppose A18: m <> 0 & m <> 1;
       A19:for t being Nat holds m |^ (t*p1*q1 + 1) mod n = m
@@ -1332,8 +1321,8 @@ proof
        then m |^ (k1*k2) mod n = m by A19;
        then ((m |^ k1) |^ k2) mod n = m by NEWTON:14;
        then ((m |^ k1 mod n) |^ k2) mod n = m by Th12;
-       then (Crypto(m,n,k1) |^ k2) mod n = m by Def1;
-    hence thesis by Def1;
+       then (Crypto(m,n,k1) |^ k2) mod n = m;
+    hence thesis;
   end;
   end;
   hence thesis;
@@ -1476,7 +1465,7 @@ begin :: Fermat Number
 
 definition
   let n be Nat;
-  func Fermat(n) -> Nat equals :Def3:
+  func Fermat(n) -> Nat equals
     2 |^ (2 |^ n) + 1;
   correctness;
 end;
@@ -1484,7 +1473,7 @@ end;
 theorem Th55:
   Fermat(0) = 3
 proof
-  Fermat(0) = 2 |^ (2 |^ 0) + 1 by Def3
+  Fermat(0) = 2 |^ (2 |^ 0) + 1
            .= 2 |^ 1 + 1 by NEWTON:9
            .= 2 + 1 by NEWTON:10;
   hence thesis;
@@ -1493,7 +1482,7 @@ end;
 theorem Th56:
   Fermat(1) = 5
 proof
-     Fermat(1) = 2 |^ (2 |^ 1) + 1 by Def3
+     Fermat(1) = 2 |^ (2 |^ 1) + 1
            .= 2 |^ (1 + 1) + 1 by NEWTON:10
            .= 2 |^ 1 * 2 + 1 by NEWTON:11
            .= 2 * 2 + 1 by NEWTON:10;
@@ -1503,7 +1492,7 @@ end;
 theorem Th57:
   Fermat(2) = 17
 proof
-  thus Fermat(2) = 2 |^ (2 |^ (1 + 1)) + 1 by Def3
+  thus Fermat(2) = 2 |^ (2 |^ (1 + 1)) + 1
            .= 2 |^ (2 |^ 1 * 2) + 1 by NEWTON:11
            .= 2 |^ (2 * 2) + 1 by NEWTON:10
            .= 2 |^ (3 + 1) + 1
@@ -1517,7 +1506,7 @@ end;
 theorem Th58:
   Fermat(3) = 257
 proof
-  thus Fermat(3) = 2 |^ (4 + 4) + 1 by Def3,Lm12
+  thus Fermat(3) = 2 |^ (4 + 4) + 1 by Lm12
            .= 2 |^ 4 * 2 |^ 4 + 1 by NEWTON:13
            .= 257 by Lm13;
 end;
@@ -1525,7 +1514,7 @@ end;
 theorem Th59:
   Fermat(4) = 256*256+1
 proof
-  thus Fermat(4) = 2 |^ (8 + 8) + 1 by Def3,Lm13
+  thus Fermat(4) = 2 |^ (8 + 8) + 1 by Lm13
            .= 2 |^ 8 * 2 |^ 8 + 1 by NEWTON:13
            .= (2 |^ 4 * 2 |^ 4)*2 |^ (4 + 4) + 1 by NEWTON:13
            .= 256*256+1 by Lm13,NEWTON:13;
@@ -1537,7 +1526,7 @@ proof
   set 2N = 2 |^ (2 |^ n);
   2N > 1 by Lm4;
   then 2N + 1 > 1 + 1 by XREAL_1:8;
-  hence thesis by Def3;
+  hence thesis;
 end;
 
 Lm20:
@@ -1546,13 +1535,13 @@ proof
   Fermat(n) <> 1 by Th60;
   then Fermat(n) > 1 or Fermat(n) < 1 by XREAL_1:1;
   then Fermat(n) > 1 or Fermat(n) = 0 by NAT_1:39;
-  hence thesis by Th60;
+  hence thesis;
 end;
 
 Lm21:
   (Fermat(n) -'1) mod 2 = 0
 proof
-  A1:Fermat(n) -'1 = 2 |^ (2 |^ n) + 1 -'1 by Def3
+  A1:Fermat(n) -'1 = 2 |^ (2 |^ n) + 1 -'1
                   .= 2 |^ (2 |^ n) by BINARITH:39;
      2 mod 2 = 0 by GR_CY_1:5;
   then A2:2 is even by NAT_2:23;
@@ -1574,7 +1563,7 @@ Lm23:
 proof
   set 2N = 2 |^ (2 |^ n);
   A1:2N > 1 by Lm4;
-     Fermat(n) mod 2N = (2N*1 + 1) mod 2N by Def3
+     Fermat(n) mod 2N = (2N*1 + 1) mod 2N
                   .= 1 mod 2N by GR_CY_1:1
                   .= 1 by A1,NAT_1:64;
   hence thesis;
@@ -1583,13 +1572,12 @@ end;
 Lm24:
   Fermat(n) is odd
 proof
-  A1:Fermat(n) = Fermat(n) - 1 + 1;
      Fermat(n) > 1 by Lm20;
   then Fermat(n) - 1 > 1 - 1 by XREAL_1:11;
   then A2:Fermat(n) - 1 = Fermat(n) -'1 by BINARITH:def 3;
      (Fermat(n) -'1) mod 2 = 0 by Lm21;
   then (Fermat(n) -'1) is even by NAT_2:23;
-  hence thesis by A1,A2,Th16;
+  hence thesis by A2,Th16;
 end;
 
 theorem Th61:
@@ -1600,7 +1588,7 @@ proof
   set 2N = 2 |^ (2 |^ n);
   A2:p > 1 by A1,INT_2:def 5;
   set t = Fermat(n) div p;
-     Fermat(n) = 2N + 1 by Def3;
+     Fermat(n) = 2N + 1;
   then A3:p*t = 2N + 1 by A1,NAT_1:49;
      2 |^ n > 0 by PREPOWER:13;
   then A4:2N > 1 by Th26;
@@ -1641,7 +1629,7 @@ proof
     A13:(p -'1) = (2 |^ (n + 1))*t2 by NAT_1:def 3;
      p - 1 > 1 - 1 by A2,XREAL_1:11;
   then p - 1 = (2 |^ (n + 1))*t2 by A13,BINARITH:def 3;
-  then p = t2*(2 |^ (n + 1)) + 1 by XCMPLX_1:27;
+  then p = t2*(2 |^ (n + 1)) + 1;
   hence thesis;
 end;
 
@@ -1735,10 +1723,10 @@ A2: (3 |^ ((Fermat(n)-'1) div 2)),(-1) are_congruent_mod Fermat(n);
   set 2N = 2 |^ (2 |^ n);
   A22:2N > 1 by Lm4;
   A23:2N <> 0 by Lm4;
-    A24: Fermat(n) = 2N + 1 by Def3;
+     Fermat(n) = 2N + 1;
   then A25:Fermat(n) - 1 >= 0;
-  then A26:d divides 2N by A18,A24,BINARITH:def 3;
-  A27:not d divides (2N div 2) by A21,A24,A25,BINARITH:def 3;
+  then A26:d divides 2N by A18,BINARITH:def 3;
+  A27:not d divides (2N div 2) by A21,A25,BINARITH:def 3;
      d > 1
   proof
     assume A28:d <= 1;
@@ -1753,13 +1741,13 @@ A2: (3 |^ ((Fermat(n)-'1) div 2)),(-1) are_congruent_mod Fermat(n);
     hence thesis;
   end;
   then d = 2N by A26,A27,Th39,INT_2:44
-            .= Fermat(n) -'1 by A24,A25,BINARITH:def 3;
-  then A29:d = 2N by A24,A25,BINARITH:def 3;
+            .= Fermat(n) -'1 by A25,BINARITH:def 3;
+  then A29:d = 2N by A25,BINARITH:def 3;
   consider x being Nat such that
     A30:p -'1 = d*x by A19,NAT_1:def 3;
      p - 1 > 1 - 1 by A12,XREAL_1:11;
   then A31:p - 1 = x*d by A30,BINARITH:def 3;
-  then A32:p = x*2N + 1 by A29,XCMPLX_1:27;
+  then A32:p = x*2N + 1 by A29;
   then A33:p mod 2N = 1 mod 2N by GR_CY_1:1
                    .= 1 by A22,GR_CY_1:4;
   A34:x >= 1
@@ -1772,14 +1760,14 @@ A2: (3 |^ ((Fermat(n)-'1) div 2)),(-1) are_congruent_mod Fermat(n);
   then (1*i) mod 2N = 1 by A33,EULER_2:10;
   then consider y being Nat such that
     A35:i = 2N*y + 1 & 1 < 2N by NAT_1:def 2;
-     Fermat(n) = (x*2N + 1)*(y*2N + 1) by A6,A29,A31,A35,XCMPLX_1:27
+     Fermat(n) = (x*2N + 1)*(y*2N + 1) by A6,A29,A31,A35
            .= 2N*(x*y*2N + x + y) + 1;
-  then 2N + 1 - 1 = 2N*(x*y*2N + x + y) + 1 - 1 by Def3;
-  then 2N + (1 - 1) = 2N*(x*y*2N + x + y) + 1 - 1 by XCMPLX_1:29;
+  then 2N + 1 - 1 = 2N*(x*y*2N + x + y) + 1 - 1;
+  then 2N + (1 - 1) = 2N*(x*y*2N + x + y) + 1 - 1;
   then 1 = 2N*(x*y*2N + x + y) div 2N by A23,Th48
         .= (x*y*2N + x + y) by A23,NAT_1:68;
   then p = 1*2N + 1 by A22,A32,A34,Lm3
-        .= Fermat(n) by Def3;
+        .= Fermat(n);
   hence contradiction by A3,A4;
 end;
 end;
@@ -1836,7 +1824,7 @@ A1: P[0]
     assume Fermat(1) divides (3 |^ (4*n + 2)) + 1;
     then consider m being Nat such that
       A3:(3 |^ (4*n + 2)) + 1 = Fermat(1)*m by NAT_1:def 3;
-    A4:3 |^ (4*n + 2) = Fermat(1)*m - 1 by A3,XCMPLX_1:26;
+    A4:3 |^ (4*n + 2) = Fermat(1)*m - 1 by A3;
     A5:(m*81)-16 > 0
     proof
      3 |^ (4*n) >= 3 |^ 0 by PCOMPS_2:4;
@@ -1847,7 +1835,7 @@ A1: P[0]
      then (3 |^ (4*n + 2)) > 0 by NEWTON:13;
      then (3 |^ (4*n + 2)) + 1 > 0 + 1 by XREAL_1:8;
      then Fermat(1)*m*81 > 1*81 by A3,XREAL_1:70;
-     then Fermat(1)*m*81/Fermat(1) > 1*81/Fermat(1) by Th56,REAL_1:73;
+     then Fermat(1)*m*81/Fermat(1) > 1*81/Fermat(1) by REAL_1:73;
      then m*Fermat(1)*81*Fermat(1)" > 1*81/Fermat(1) by XCMPLX_0:def 9;
      then m*81*Fermat(1)"*Fermat(1) > 1*81/Fermat(1);
      then m*81/Fermat(1)*Fermat(1) > 1*81/Fermat(1) by XCMPLX_0:def 9;
@@ -1909,7 +1897,7 @@ A1: P[0]
     assume Fermat(2) divides (3 |^ (16*n + 8)) + 1;
     then consider m being Nat such that
     A3:(3 |^ (16*n + 8)) + 1 = Fermat(2)*m by NAT_1:def 3;
-    A4:3 |^ (16*n + 8) = Fermat(2)*m - 1 by A3,XCMPLX_1:26;
+    A4:3 |^ (16*n + 8) = Fermat(2)*m - 1 by A3;
     A5:m*6561*6561-386*6560 > 0
     proof
      3 |^ (16*n) >= 3 |^ 0 by PCOMPS_2:4;
@@ -1923,7 +1911,7 @@ A1: P[0]
      then Fermat(2)*m*6561*6561 > 6561*6561 by XREAL_1:70;
      then Fermat(2)*m*6561*6561 > 6562*6560 by XREAL_1:2;
      then Fermat(2)*m*6561*6561/Fermat(2)
-                        > 6560*6562/Fermat(2) by Th57,REAL_1:73;
+                        > 6560*6562/Fermat(2) by REAL_1:73;
      then m*6561*Fermat(2)*6561*Fermat(2)"
                         > 6560*6562/Fermat(2) by XCMPLX_0:def 9;
      then m*6561*6561*Fermat(2)"*Fermat(2)
@@ -1938,7 +1926,7 @@ A1: P[0]
              .= ((Fermat(2)*m -1)*(3 |^ 16)) + 1 by A4,NEWTON:13
              .= Fermat(2)*(m*6561)*6561 - (6561*6561 - 1) by Lm28
              .= Fermat(2)*(m*6561*6561) + -Fermat(2)*386*6560
-                by Th57,XCMPLX_0:def 8
+                by Th57
              .= Fermat(2)*((m*6561*6561)-386*6560)
           .= Fermat(2)*((m*6561*6561)-'386*6560) by A5,BINARITH:def 3;
 
@@ -2259,7 +2247,7 @@ proof
     = (256 + 1) mod Fermat(3) by A1,Lm39,EULER_2:8
    .= 0 by A2;
   then Fermat(3) divides ((3 |^ (32*0 + 128)) + 1) mod Fermat(3) by NAT_1:53;
-  hence thesis by Th7,Th58;
+  hence thesis by Th7;
 end;
 
 Lm57:
@@ -2278,7 +2266,7 @@ proof
   then (3 |^ (64*0 + 256*128) + 1) mod Fermat(4) = 0 by A1,Lm55,EULER_2:8;
   then Fermat(4) divides (3 |^ (64*0 + 256*128) + 1) mod Fermat(4) by NAT_1:53
 ;
-  hence thesis by Th7,Th59;
+  hence thesis by Th7;
 end;
 
 theorem

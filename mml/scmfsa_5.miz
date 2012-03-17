@@ -32,7 +32,7 @@ reserve j, k, m for Nat;
 definition
  let p be FinPartState of SCM+FSA, k be Nat;
  func Relocated( p, k ) -> FinPartState of SCM+FSA equals
-:Def1:
+
   Start-At ((IC p)+k)+* IncAddr(Shift(ProgramPart(p),k),k)+*DataPart p;
  correctness;
 end;
@@ -86,7 +86,7 @@ A5: dom DataPart p c= Int-Locations \/ FinSeq-Locations by SCMFSA_3:8;
    thus DataPart(Relocated(p,k))
      = Relocated(p,k)|(Int-Locations \/ FinSeq-Locations) by SCMFSA_3:6
     .= (Start-At ((IC p)+k)+* IncAddr(Shift(ProgramPart(p),k),k)+*DataPart p)
-       |(Int-Locations \/ FinSeq-Locations) by Def1
+       |(Int-Locations \/ FinSeq-Locations)
     .=(Start-At ((IC p)+k)+* (IncAddr(Shift(ProgramPart(p),k),k)+*DataPart p))
        |(Int-Locations \/ FinSeq-Locations) by FUNCT_4:15
     .= kk +* rr by FUNCT_4:75
@@ -127,7 +127,7 @@ A5: dom DataPart p c= Int-Locations \/ FinSeq-Locations by SCMFSA_3:8;
    thus ProgramPart(Relocated(p,k))
      = Relocated(p,k)| the Instruction-Locations of SCM+FSA by AMI_5:def 6
     .= (Start-At ((IC p)+k)+* IncAddr(Shift(ProgramPart(p),k),k)+*DataPart p)
-       | the Instruction-Locations of SCM+FSA by Def1
+       | the Instruction-Locations of SCM+FSA
     .=(Start-At ((IC p)+k)+* (IncAddr(Shift(ProgramPart(p),k),k)+*DataPart p))
        | the Instruction-Locations of SCM+FSA by FUNCT_4:15
     .= kk +* rr by FUNCT_4:75
@@ -177,7 +177,7 @@ A6:     insloc j in dom ProgramPart p by A3;
        ProgramPart p c= p by AMI_5:63;
 then A7: dom ProgramPart p c= dom p by GRFUNC_1:8;
        m+k = j+k by A2,A5,SCMFSA_2:18;
-    then l in dom ProgramPart p by A1,A6,XCMPLX_1:2;
+    then l in dom ProgramPart p by A1,A6;
    hence l in dom p by A7;
   end;
 
@@ -188,7 +188,6 @@ theorem Th5:
    let p be FinPartState of SCM+FSA, k be Nat;
 A1:Relocated(p,k)
     = Start-At ((IC p)+k) +* IncAddr(Shift(ProgramPart(p),k),k)+*DataPart p
-                                                    by Def1
    .= Start-At ((IC p)+k) +* (IncAddr(Shift(ProgramPart(p),k),k)+*DataPart p)
                                                     by FUNCT_4:15;
        dom(Start-At((IC p)+k)) = {IC SCM+FSA} by AMI_3:34;
@@ -202,7 +201,7 @@ theorem Th6:
    proof
     let p be FinPartState of SCM+FSA, k be Nat;
 A1:  Relocated(p,k) = Start-At ((IC p)+k)
-      +* IncAddr(Shift(ProgramPart(p),k),k)+*DataPart p by Def1
+      +* IncAddr(Shift(ProgramPart(p),k),k)+*DataPart p
     .= Start-At ((IC p)+k)
       +* (IncAddr(Shift(ProgramPart(p),k),k)+*DataPart p) by FUNCT_4:15;
 A2:  Start-At ((IC p)+k) = IC SCM+FSA .--> ((IC p)+k) by AMI_3:def 12;
@@ -320,9 +319,9 @@ A10: DataPart (p +* s)
     .= DataPart p +* s by A5,RELAT_1:97;
     set ICP = Start-At((IC(p+*s))+k)+*IncAddr(Shift(ProgramPart(p+*s),k),k);
    thus Relocated((p +* s), k)
-          = ICP +* (DataPart p +* s) by A10,Def1
+          = ICP +* (DataPart p +* s) by A10
          .= ICP +* DataPart p +* s by FUNCT_4:15
-         .= Relocated(p,k) +*s by A7,A9,Def1;
+         .= Relocated(p,k) +*s by A7,A9;
    end;
 
 theorem Th10:
@@ -446,7 +445,7 @@ then A6:   (Start-At ((IC p) + k) +* ProgramPart (Relocated(p,k)))
            ProgramPart (Relocated(p,k))) by FUNCT_4:36;
 A7:    IC p = p.IC SCM+FSA by A1,AMI_3:def 16
             .= s.IC SCM+FSA by A1,A2,GRFUNC_1:8
-            .= IC s by AMI_1:def 15;
+            .= IC s;
           DataPart p c= p by AMI_5:62;
 then A8:    DataPart p c= s by A2,XBOOLE_1:1;
 A9:    (Computation s).0 = s by AMI_1:def 19;
@@ -457,7 +456,7 @@ A9:    (Computation s).0 = s by AMI_1:def 19;
       (Computation (s +* Relocated(p,k))).0
          = s +* Relocated(p,k) by AMI_1:def 19
         .= s +* (Start-At ((IC p)+k) +*
-           IncAddr(Shift(ProgramPart(p),k),k)+*DataPart p) by Def1
+           IncAddr(Shift(ProgramPart(p),k),k)+*DataPart p)
         .= s +* ((Start-At ((IC p) + k) +*
            ProgramPart (Relocated(p,k))) +* DataPart p) by Th2
         .= s +* DataPart p +* (Start-At ((IC p) + k) +*
@@ -494,7 +493,7 @@ A16: IC ((Computation (s)).i
          +* ProgramPart (Relocated(p,k)))
    = ((Computation (s)).i
          +* Start-At (IC (Computation (s)).i + k)
-         +* ProgramPart (Relocated(p,k))).IC SCM+FSA by AMI_1:def 15
+         +* ProgramPart (Relocated(p,k))).IC SCM+FSA
   .= ((Computation (s)).i
          +* Start-At (IC (Computation (s)).i + k)).IC SCM+FSA
                                                by A15,FUNCT_4:12
@@ -518,7 +517,7 @@ A22: CurInstr ((Computation (s +* Relocated(p,k))).i)
      = ((Computation (s)).i
        +* Start-At (IC (Computation (s)).i + k)
        +* ProgramPart (Relocated(p,k))).(IC (Computation (s)).i + k)
-                                  by A12,A16,AMI_1:def 17
+                                  by A12,A16
     .= (ProgramPart (Relocated(p,k))).(IC (Computation (s)).i + k)
                                   by A21,FUNCT_4:14
 
@@ -530,7 +529,7 @@ A22: CurInstr ((Computation (s +* Relocated(p,k))).i)
     .= IncAddr (((Computation (s)).i).IC ((Computation (s)).i),k) by A17,A20,
 SCMFSA_4:24
 
-    .= IncAddr (CurInstr ( Computation (s)).i,k) by AMI_1:def 17;
+    .= IncAddr (CurInstr ( Computation (s)).i,k);
 A23:  Exec(IncAddr(CurInstr (Computation (s)).i,k),
       (Computation (s)).i
        +* Start-At (IC (Computation (s)).i + k))
@@ -541,7 +540,7 @@ A23:  Exec(IncAddr(CurInstr (Computation (s)).i,k),
          = Following((Computation (s +* Relocated(p,k))).i) by AMI_1:def 19
         .= Exec(IncAddr(CurInstr (Computation (s)).i,k),
                          ((Computation (s +* Relocated(p,k))).i))
-                                          by A22,AMI_1:def 18
+                                          by A22
          .= (Computation (s)).(i+1)
           +* Start-At (IC (Computation (s)).(i+1) + k)
           +* ProgramPart (Relocated(p,k)) by A12,A13,A23,SCMFSA_3:10;
@@ -624,13 +623,13 @@ then A14:    p.IC p = s1.IC s1 by A2,A11,A12,GRFUNC_1:8;
 
 A15: IncAddr(CurInstr((Computation s1).0), k)
     = IncAddr(CurInstr(s1), k) by AMI_1:def 19
-   .= IncAddr(s1.IC s1, k) by AMI_1:def 17;
+   .= IncAddr(s1.IC s1, k);
 A16: IC SCM+FSA in dom Relocated(p, k) by Th5;
 A17: (IC p) + k in dom Relocated(p,k) by A12,A13,Th4;
 
     CurInstr((Computation s2).0)
     = CurInstr(s2) by AMI_1:def 19
-   .= s2.IC s2 by AMI_1:def 17
+   .= s2.IC s2
    .= s2.(IC Relocated(p, k)) by A3,A16,AMI_5:60
    .= s2.((IC p) + k) by Th6
    .= (Relocated(p,k)).((IC p) + k) by A3,A17,GRFUNC_1:8;
@@ -781,12 +780,12 @@ end;
 
 A59: now assume
      IC (Computation s1).(i+1) + k = IC (Computation s2).(i+1);
-then A60: CurInstr(Cs2i1) = Cs2i1.(IC Cs1i1 + k) by AMI_1:def 17;
+then A60: CurInstr(Cs2i1) = Cs2i1.(IC Cs1i1 + k);
      reconsider loc = IC Cs1i1 as Instruction-Location of SCM+FSA;
 A61:  loc in dom ProgramPart p by A2,A9,SCMFSA_3:17;
         ProgramPart p c= p by AMI_5:63;
      then A62: dom ProgramPart p c= dom p by GRFUNC_1:8;
-A63: CurInstr(Cs1i1) = Cs1i1.loc by AMI_1:def 17
+A63: CurInstr(Cs1i1) = Cs1i1.loc
                     .= s1.loc by AMI_1:54
                     .= p.loc by A2,A61,A62,GRFUNC_1:8;
      loc + k in dom Relocated(p, k) by A61,A62,Th4;
@@ -797,12 +796,12 @@ then Relocated(p, k).(loc + k) = s2.(loc+k) by A3,GRFUNC_1:8
 end; :: INNERLEMMA
 
 A64: Cs1i1 = Following Cs1i by AMI_1:def 19
-            .= Exec (CurInstr Cs1i, Cs1i) by AMI_1:def 18;
+            .= Exec (CurInstr Cs1i, Cs1i);
 A65: Cs2i1 = Following Cs2i by AMI_1:def 19
-            .= Exec (CurInstr Cs2i, Cs2i) by AMI_1:def 18;
+            .= Exec (CurInstr Cs2i, Cs2i);
 A66: CurInstr Cs3i = CurInstr Cs1i by A2,A9,A10,SCMFSA_3:18;
 A67: Cs3i1 = Following Cs3i by AMI_1:def 19
-            .= Exec (CurInstr Cs1i, Cs3i) by A66,AMI_1:def 18;
+            .= Exec (CurInstr Cs1i, Cs3i) by A66;
   consider j being Nat such that
 A68: IC Cs1i = insloc j by SCMFSA_2:21;
 A69: Next (IC Cs1i + k) = Next (insloc(j + k)) by A68,SCMFSA_4:def 1
@@ -845,9 +844,9 @@ A80:  Cs3i.db = Cs2i.db by A45;
 
    thus
     IC (Computation s1).(i+1) + k
-    = Next IC Cs2i by A21,A64,A69,A79,AMI_1:def 15
+    = Next IC Cs2i by A21,A64,A69,A79
    .= Exec (CurInstr Cs2i, Cs2i).IC SCM+FSA by A22,A78,SCMFSA_2:89
-   .= IC (Computation s2).(i+1) by A65,AMI_1:def 15;
+   .= IC (Computation s2).(i+1) by A65;
 
      hence IncAddr(CurInstr((Computation s1).(i+1)), k)
         = CurInstr((Computation s2).(i+1)) by A59;
@@ -929,9 +928,9 @@ A95: Cs3i.da = Cs2i.da by A45;
 A96:  Cs3i.db = Cs2i.db by A45;
      thus
     IC (Computation s1).(i+1) + k
-    = Next IC Cs2i by A21,A64,A69,A94,AMI_1:def 15
+    = Next IC Cs2i by A21,A64,A69,A94
    .= Exec (CurInstr Cs2i, Cs2i).IC SCM+FSA by A22,A93,SCMFSA_2:90
-   .= IC (Computation s2).(i+1) by A65,AMI_1:def 15;
+   .= IC (Computation s2).(i+1) by A65;
 
      hence IncAddr(CurInstr((Computation s1).(i+1)), k)
         = CurInstr((Computation s2).(i+1)) by A59;
@@ -1016,9 +1015,9 @@ A112: Cs3i.da = Cs2i.da by A45;
 A113:  Cs3i.db = Cs2i.db by A45;
      thus
     IC (Computation s1).(i+1) + k
-    = Next IC Cs2i by A21,A64,A69,A111,AMI_1:def 15
+    = Next IC Cs2i by A21,A64,A69,A111
    .= Exec (CurInstr Cs2i, Cs2i).IC SCM+FSA by A22,A110,SCMFSA_2:91
-   .= IC (Computation s2).(i+1) by A65,AMI_1:def 15;
+   .= IC (Computation s2).(i+1) by A65;
 
      hence IncAddr(CurInstr((Computation s1).(i+1)), k)
         = CurInstr((Computation s2).(i+1)) by A59;
@@ -1103,9 +1102,9 @@ A130:  Cs3i.db = Cs2i.db by A45;
 
      thus
     IC (Computation s1).(i+1) + k
-    = Next IC Cs2i by A21,A64,A69,A128,AMI_1:def 15
+    = Next IC Cs2i by A21,A64,A69,A128
    .= Exec (CurInstr Cs2i, Cs2i).IC SCM+FSA by A22,A127,SCMFSA_2:92
-   .= IC (Computation s2).(i+1) by A65,AMI_1:def 15;
+   .= IC (Computation s2).(i+1) by A65;
 
      hence IncAddr(CurInstr((Computation s1).(i+1)), k)
         = CurInstr((Computation s2).(i+1)) by A59;
@@ -1195,9 +1194,9 @@ A147: da <> db;
 
      hence
     IC (Computation s1).(i+1) + k
-    = Next IC Cs2i by A21,A64,A69,AMI_1:def 15
+    = Next IC Cs2i by A21,A64,A69
    .= Exec (CurInstr Cs2i, Cs2i).IC SCM+FSA by A22,A144,SCMFSA_2:93
-   .= IC (Computation s2).(i+1) by A65,AMI_1:def 15;
+   .= IC (Computation s2).(i+1) by A65;
 
      hence IncAddr(CurInstr((Computation s1).(i+1)), k)
         = CurInstr((Computation s2).(i+1)) by A59;
@@ -1297,9 +1296,9 @@ A165: da = db;
 then Exec(I, Cs1i).IC SCM+FSA = Next IC Cs1i by A143,SCMFSA_2:94;
   hence
     IC (Computation s1).(i+1) + k
-    = Next IC Cs2i by A21,A64,A69,AMI_1:def 15
+    = Next IC Cs2i by A21,A64,A69
    .= Exec (CurInstr Cs2i, Cs2i).IC SCM+FSA by A22,A144,A165,SCMFSA_2:94
-   .= IC (Computation s2).(i+1) by A65,AMI_1:def 15;
+   .= IC (Computation s2).(i+1) by A65;
 
      hence IncAddr(CurInstr((Computation s1).(i+1)), k)
         = CurInstr((Computation s2).(i+1)) by A59;
@@ -1389,13 +1388,13 @@ A177: Cs3i1.d = Cs3i.d by A67,A143,A165,A176,SCMFSA_2:94;
      then consider loc being Instruction-Location of SCM+FSA such that
 A178:  I = goto loc by SCMFSA_2:59;
 A179:  CurInstr(Cs2i) = goto (loc+k) by A22,A178,SCMFSA_4:14;
-    Exec (I, Cs1i).IC SCM+FSA = IC Exec (I, Cs1i) by AMI_1:def 15;
+    Exec (I, Cs1i).IC SCM+FSA = IC Exec (I, Cs1i);
 
      hence
       IC (Computation s1).(i+1) + k
     = loc + k by A64,A178,SCMFSA_2:95
    .= Exec (CurInstr Cs2i, Cs2i).IC SCM+FSA by A179,SCMFSA_2:95
-   .= IC (Computation s2).(i+1) by A65,AMI_1:def 15;
+   .= IC (Computation s2).(i+1) by A65;
 
      hence IncAddr(CurInstr((Computation s1).(i+1)), k)
         = CurInstr((Computation s2).(i+1)) by A59;
@@ -1437,19 +1436,18 @@ A181: x in dom (Cs3i1|(Int-Locations \/ FinSeq-Locations));
               da being Int-Location such that
 A182:  I = da=0_goto loc by SCMFSA_2:60;
 A183:  CurInstr(Cs2i) = da=0_goto (loc+k) by A22,A182,SCMFSA_4:15;
-A184:  Exec (I, Cs1i).IC SCM+FSA = IC Exec (I, Cs1i) by AMI_1:def 15;
 
 A185: Cs3i.da = Cs2i.da by A45;
 A186: now per cases;
      case
     Cs1i.da = 0;
      hence IC (Computation s1).(i+1) + k
-    = loc + k by A64,A182,A184,SCMFSA_2:96;
+    = loc + k by A64,A182,SCMFSA_2:96;
      end;
      case
     Cs1i.da <> 0;
      hence IC (Computation s1).(i+1) + k
-    = Next (IC Cs2i) by A21,A64,A69,A182,A184,SCMFSA_2:96;
+    = Next (IC Cs2i) by A21,A64,A69,A182,SCMFSA_2:96;
       end;
       end;
 
@@ -1457,13 +1455,13 @@ A187: now per cases;
      case
 A188:  Cs2i.da = 0;
       thus IC (Computation s2).(i+1)
-    = Exec (CurInstr Cs2i, Cs2i).IC SCM+FSA by A65,AMI_1:def 15
+    = Exec (CurInstr Cs2i, Cs2i).IC SCM+FSA by A65
    .= loc + k by A183,A188,SCMFSA_2:96;
      end;
      case
 A189:  Cs2i.da <> 0;
       thus IC (Computation s2).(i+1)
-    = Exec (CurInstr Cs2i, Cs2i).IC SCM+FSA by A65,AMI_1:def 15
+    = Exec (CurInstr Cs2i, Cs2i).IC SCM+FSA by A65
    .= Next IC Cs2i by A183,A189,SCMFSA_2:96;
      end;
      end;
@@ -1523,18 +1521,17 @@ A192: x in dom (Cs3i1|(Int-Locations \/ FinSeq-Locations));
               da being Int-Location such that
 A193:  I = da>0_goto loc by SCMFSA_2:61;
 A194:  CurInstr(Cs2i) = da>0_goto (loc+k) by A22,A193,SCMFSA_4:16;
-A195:  Exec (I, Cs1i).IC SCM+FSA = IC Exec (I, Cs1i) by AMI_1:def 15;
 A196: Cs3i.da = Cs2i.da by A45;
 A197: now per cases;
      case
     Cs1i.da > 0;
      hence IC (Computation s1).(i+1) + k
-    = loc + k by A64,A193,A195,SCMFSA_2:97;
+    = loc + k by A64,A193,SCMFSA_2:97;
      end;
      case
     Cs1i.da <= 0;
      hence IC (Computation s1).(i+1) + k
-    = Next (IC Cs2i) by A21,A64,A69,A193,A195,SCMFSA_2:97;
+    = Next (IC Cs2i) by A21,A64,A69,A193,SCMFSA_2:97;
       end;
       end;
 
@@ -1542,13 +1539,13 @@ A198: now per cases;
      case
 A199:  Cs2i.da > 0;
       thus IC (Computation s2).(i+1)
-    = Exec (CurInstr Cs2i, Cs2i).IC SCM+FSA by A65,AMI_1:def 15
+    = Exec (CurInstr Cs2i, Cs2i).IC SCM+FSA by A65
    .= loc + k by A194,A199,SCMFSA_2:97;
      end;
      case
 A200:  Cs2i.da <= 0;
       thus IC (Computation s2).(i+1)
-    = Exec (CurInstr Cs2i, Cs2i).IC SCM+FSA by A65,AMI_1:def 15
+    = Exec (CurInstr Cs2i, Cs2i).IC SCM+FSA by A65
    .= Next IC Cs2i by A194,A200,SCMFSA_2:97;
      end;
      end;
@@ -1613,9 +1610,9 @@ A208:  Cs3i.f = Cs2i.f by A47;
 
    thus
     IC (Computation s1).(i+1) + k
-    = Next IC Cs2i by A21,A64,A69,A206,AMI_1:def 15
+    = Next IC Cs2i by A21,A64,A69,A206
    .= Exec (CurInstr Cs2i, Cs2i).IC SCM+FSA by A22,A205,SCMFSA_2:98
-   .= IC (Computation s2).(i+1) by A65,AMI_1:def 15;
+   .= IC (Computation s2).(i+1) by A65;
 
      hence IncAddr(CurInstr((Computation s1).(i+1)), k)
         = CurInstr((Computation s2).(i+1)) by A59;
@@ -1709,9 +1706,9 @@ A227:  Cs3i.f = Cs2i.f by A47;
 
    thus
     IC (Computation s1).(i+1) + k
-    = Next IC Cs2i by A21,A64,A69,A224,AMI_1:def 15
+    = Next IC Cs2i by A21,A64,A69,A224
    .= Exec (CurInstr Cs2i, Cs2i).IC SCM+FSA by A22,A223,SCMFSA_2:99
-   .= IC (Computation s2).(i+1) by A65,AMI_1:def 15;
+   .= IC (Computation s2).(i+1) by A65;
 
      hence IncAddr(CurInstr((Computation s1).(i+1)), k)
         = CurInstr((Computation s2).(i+1)) by A59;
@@ -1803,9 +1800,9 @@ A244:  Cs3i.f = Cs2i.f by A47;
 
    thus
     IC (Computation s1).(i+1) + k
-    = Next IC Cs2i by A21,A64,A69,A243,AMI_1:def 15
+    = Next IC Cs2i by A21,A64,A69,A243
    .= Exec (CurInstr Cs2i, Cs2i).IC SCM+FSA by A22,A242,SCMFSA_2:100
-   .= IC (Computation s2).(i+1) by A65,AMI_1:def 15;
+   .= IC (Computation s2).(i+1) by A65;
 
      hence IncAddr(CurInstr((Computation s1).(i+1)), k)
         = CurInstr((Computation s2).(i+1)) by A59;
@@ -1890,9 +1887,9 @@ A260:  Cs3i.da = Cs2i.da by A45;
 
    thus
     IC (Computation s1).(i+1) + k
-    = Next IC Cs2i by A21,A64,A69,A259,AMI_1:def 15
+    = Next IC Cs2i by A21,A64,A69,A259
    .= Exec (CurInstr Cs2i, Cs2i).IC SCM+FSA by A22,A258,SCMFSA_2:101
-   .= IC (Computation s2).(i+1) by A65,AMI_1:def 15;
+   .= IC (Computation s2).(i+1) by A65;
 
      hence IncAddr(CurInstr((Computation s1).(i+1)), k)
         = CurInstr((Computation s2).(i+1)) by A59;
@@ -2061,7 +2058,7 @@ A6: s|dom ProgramPart p c= s by RELAT_1:88;
      then dom ProgramPart p c= dom s by AMI_3:36;
 then A7: dom ProgramPart p = dom (s|dom ProgramPart p) by RELAT_1:91;
 A8:IC(Computation (s +* p)).0 = IC (s +* p) by AMI_1:def 19
-                                .= (s +* p).IC SCM+FSA by AMI_1:def 15
+                                .= (s +* p).IC SCM+FSA
                                 .= p.IC SCM+FSA by A1,FUNCT_4:14
                                 .= IC p by A1,AMI_3:def 16;
         Start-At (IC p + k ) c= Relocated(p,k) by Th8;
@@ -2159,7 +2156,7 @@ A24: now thus IC ((Computation (s +* p)).i
       = ((Computation (s +* p)).i
         +* Start-At (IC (Computation (s +* p)).i + k)
         +* sdom
-        +* ProgramPart (Relocated(p,k))).IC SCM+FSA by AMI_1:def 15
+        +* ProgramPart (Relocated(p,k))).IC SCM+FSA
      .= ((Computation (s +* p)).i
         +* Start-At (IC (Computation (s +* p)).i + k)
         +* sdom).IC SCM+FSA by A21,FUNCT_4:12
@@ -2195,7 +2192,7 @@ A31: CurInstr (Computation (s)).i
        +* sdom +* ProgramPart (Relocated(p,k))) .IC
       ((Computation (s +* p)).i
        +* Start-At (IC (Computation (s +* p)).i + k)
-       +* sdom +* ProgramPart (Relocated(p,k))) by A17,AMI_1:def 17
+       +* sdom +* ProgramPart (Relocated(p,k))) by A17
    .= (ProgramPart (Relocated(p,k))).(IC (Computation (s +* p)).i + k)
                                               by A24,A30,FUNCT_4:14
    .= IncAddr(Shift(ProgramPart(p),k),k).(IC (Computation (s +* p)).i + k)
@@ -2206,14 +2203,14 @@ A31: CurInstr (Computation (s)).i
 SCMFSA_4:30
    .= IncAddr(((Computation (s +* p)).i).IC ((Computation (s +* p)).i),k)
                                               by A26,A29,SCMFSA_4:24
-   .= IncAddr(CurInstr ((Computation (s +* p)).i),k) by AMI_1:def 17;
+   .= IncAddr(CurInstr ((Computation (s +* p)).i),k);
 
  thus (Computation s).(i+1)
    = Following((Computation s ).i) by AMI_1:def 19
   .= Exec(IncAddr(CurInstr ((Computation (s +* p)).i),k),
          ((Computation (s +* p)).i)
           +* Start-At (IC ((Computation (s +* p)).i) + k)
-          +* sdom +* ProgramPart (Relocated(p,k))) by A17,A31,AMI_1:def 18
+          +* sdom +* ProgramPart (Relocated(p,k))) by A17,A31
   .= Exec(IncAddr(CurInstr ((Computation (s +* p)).i),k),
          ((Computation (s +* p)).i)
           +* Start-At (IC ((Computation (s +* p)).i) + k)
@@ -2264,7 +2261,7 @@ then A7: Start-At (IC p) c= s by A2,XBOOLE_1:1;
 A9:  IC SCM+FSA in dom Relocated(p,k) by Th5;
 A10: now thus IC(Computation (s +* Relocated(p,k))).0
         = IC (s +* Relocated(p,k)) by AMI_1:def 19
-       .= (s +* Relocated(p,k)).IC SCM+FSA by AMI_1:def 15
+       .= (s +* Relocated(p,k)).IC SCM+FSA
        .= Relocated(p,k).IC SCM+FSA by A9,FUNCT_4:14
        .= IC Relocated(p,k) by A9,AMI_3:def 16;
       end;
@@ -2323,7 +2320,7 @@ then (Computation s).0
    = s +*(IP +* PR +* DP) +* IS +* SD +* PP by A5,A14,FUNCT_4:36
   .= s +*(IP +* IncAddr(Shift(ProgramPart(p),k),k) +* DP)
      +* IS +* SD +* PP by Th2
-  .= s +* Relocated(p,k) +* IS +* SD +* PP by Def1
+  .= s +* Relocated(p,k) +* IS +* SD +* PP
   .= (Computation (s +* Relocated(p,k))).0
      +* Start-At (IC(Computation (s +* Relocated(p,k))).0 -' k)
      +* s|(dom ProgramPart Relocated(p,k))
@@ -2383,7 +2380,7 @@ A27: IC ((Computation (s +* Relocated(p,k))).i
       = ((Computation (s +* Relocated(p,k))).i
         +* Start-At (IC (Computation (s +* Relocated(p,k))).i -' k)
         +* sdom
-        +* ProgramPart p).IC SCM+FSA by AMI_1:def 15
+        +* ProgramPart p).IC SCM+FSA
      .= ((Computation (s +* Relocated(p,k))).i
         +* Start-At (IC (Computation (s +* Relocated(p,k))).i -' k)
         +* sdom).IC SCM+FSA by A24,FUNCT_4:12
@@ -2425,7 +2422,7 @@ A36: CurInstr (Computation (s)).i
        +* sdom +* ProgramPart p) .IC
       ((Computation (s +* Relocated(p,k))).i
        +* Start-At (IC (Computation (s +* Relocated(p,k))).i -' k)
-       +* sdom +* ProgramPart p) by A20,AMI_1:def 17
+       +* sdom +* ProgramPart p) by A20
    .= (ProgramPart p).
       (IC (Computation (s +* Relocated(p,k))).i -' k) by A27,A31,A32,A34,
 FUNCT_4:14
@@ -2443,7 +2440,7 @@ FUNCT_4:14
    .= ((Computation (s +* Relocated(p,k))).i).
          IC ((Computation (s +* Relocated(p,k))).i) by A29,A30,GRFUNC_1:8
 
-   .= CurInstr ((Computation (s +* Relocated(p,k))).i) by AMI_1:def 17;
+   .= CurInstr ((Computation (s +* Relocated(p,k))).i);
 
 then A37:
    Exec(CurInstr (Computation (s)).i,
@@ -2457,17 +2454,15 @@ then A37:
 .= Exec(CurInstr (Computation (s +* Relocated(p,k))).i,
         (Computation (s +* Relocated(p,k))).i)
   +* Start-At ((IC Following(Computation (s +* Relocated(p,k))).i) -' k)
-                                                          by AMI_1:def 18
 .= Following((Computation (s +* Relocated(p,k))).i)
-  +* Start-At ((IC Following(Computation (s +* Relocated(p,k))).i) -' k)
-                                              by AMI_1:def 18;
+  +* Start-At ((IC Following(Computation (s +* Relocated(p,k))).i) -' k);
 
      (Computation s).(i+1)
    = Following((Computation s ).i) by AMI_1:def 19
   .= Exec(CurInstr (Computation (s)).i,
      (Computation (s +* Relocated(p,k))).i
      +* Start-At (IC (Computation (s +* Relocated(p,k))).i -' k)
-     +* sdom +* ProgramPart p) by A20,AMI_1:def 18
+     +* sdom +* ProgramPart p) by A20
   .= Exec(CurInstr (Computation (s)).i,
      (Computation (s +* Relocated(p,k))).i
      +* Start-At (IC (Computation (s +* Relocated(p,k))).i -' k)
@@ -2605,7 +2600,7 @@ RELAT_1:107
 
     thus (Computation s1).i|dom Relocated(p,k)
      = (Computation s1).i|dom (Start-At ((IC p)+k) +*
-       IncAddr(Shift(ProgramPart(p),k),k) +* DataPart p) by Def1
+       IncAddr(Shift(ProgramPart(p),k),k) +* DataPart p)
     .= (Computation s1).i|(dom (Start-At ((IC p)+k) +*
        IncAddr(Shift(ProgramPart(p),k),k)) \/
  dom (DataPart p)) by FUNCT_4:def 1
@@ -2616,7 +2611,7 @@ RELAT_1:107
        IncAddr(Shift(ProgramPart(p),k),k)) \/ dom (DataPart p)) by RELAT_1:107
     .= (Computation s2).i|dom (Start-At ((IC p)+k) +*
        IncAddr(Shift(ProgramPart(p),k),k) +* DataPart p) by FUNCT_4:def 1
-    .= (Computation s2).i|dom Relocated(p,k) by Def1;
+    .= (Computation s2).i|dom Relocated(p,k);
    end;
   end; :: hereby
 
@@ -2779,7 +2774,7 @@ A5: Relocated(p,k) c= t by AMI_3:39;
 A6:    s3 = s3;
        t.(IC ((Computation t).j1))
      = ((Computation t).j1).(IC ((Computation t).j1)) by AMI_1:54
-    .= CurInstr((Computation t).j1) by AMI_1:def 17
+    .= CurInstr((Computation t).j1)
     .= IncAddr(CurInstr((Computation s).j1), k) by A1,A2,A5,A6,Th12
     .= halt SCM+FSA by A3,A4,SCMFSA_4:8;
 then A7: Result t = (Computation t).j1 by AMI_1:56;

@@ -15,10 +15,7 @@ environ
  registrations SUBSET_1, RELAT_1, FINSEQ_1, FINSET_1, RELSET_1, STRUCT_0,
       XBOOLE_0, XREAL_0, ARYTM_3;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
- definitions XBOOLE_0, TARSKI, RELAT_1, STRUCT_0;
- theorems TARSKI, ZFMISC_1, RELAT_1, FINSEQ_1, NAT_1, REAL_1, RELSET_1,
-      TREES_2, FUNCT_2, FINSEQ_3, XBOOLE_0, XBOOLE_1, XCMPLX_1, XREAL_1;
- schemes NAT_1, FUNCT_2;
+
 
 begin
 :: Grammar structure is introduced as triple (S, I, R) where S is
@@ -33,7 +30,7 @@ definition
 end;
 
 registration
- cluster non empty strict DTConstrStr;
+  cluster non empty strict DTConstrStr;
 end;
 
 definition
@@ -45,120 +42,106 @@ definition
 end;
 
 registration
- cluster non empty GrammarStr;
+  cluster non empty GrammarStr;
 end;
 
-   definition
-    let G be DTConstrStr;
-    mode Symbol of G is Element of G;
-    mode String of G is Element of (the carrier of G)*;
-   end;
+definition let G be DTConstrStr;
+  mode Symbol of G is Element of G;
+  mode String of G is Element of (the carrier of G)*;
+end;
 
-   definition
-    let D be set;
-    let p, q be Element of D*;
-    redefine func p^q -> Element of D*;
-   end;
+definition let D be set;
+           let p, q be Element of D*;
+  redefine func p^q -> Element of D*;
+end;
 
-   registration
-    let D be set;
-    cluster empty Element of D*;
-   end;
+registration let D be set;
+  cluster empty Element of D*;
+end;
 
-   definition
-    let D be set;
-    redefine func <*> D -> empty Element of D*;
-   end;
+definition let D be set;
+  redefine func <*> D -> empty Element of D*;
+end;
 
-   definition
-    let D be non empty set;
-    let d be Element of D;
-    redefine func <*d*> -> Element of D*;
+definition let D be non empty set;
+           let d be Element of D;
+  redefine func <*d*> -> Element of D*;
     let e be Element of D;
-    func <*d,e*> -> Element of D*;
-   end;
+  func <*d,e*> -> Element of D*;
+end;
 
-   reserve
-      G for non empty DTConstrStr, s for Symbol of G, n,m for String of G;
+ reserve G for non empty DTConstrStr, s for Symbol of G, n,m for String of G;
 
-   definition
-      let G,s; let n be FinSequence;
-      pred s ==> n means
+definition let G,s; let n be FinSequence;
+  pred s ==> n means
 :: LANG1:def 1
-      [s,n] in the Rules of G;
-   end;
+    [s,n] in the Rules of G;
+end;
 
-   definition
-      let G;
-      func Terminals(G)->set equals
+definition let G;
+  func Terminals G equals
 :: LANG1:def 2
-       { s : not ex n being FinSequence st s ==> n};
+    { s : not ex n being FinSequence st s ==> n};
 
-      func NonTerminals(G)->set equals
+  func NonTerminals G equals
 :: LANG1:def 3
-       { s : ex n being FinSequence st s ==> n};
-   end;
+    { s : ex n being FinSequence st s ==> n};
+end;
 
-   theorem :: LANG1:1
-        Terminals(G) \/ NonTerminals(G) = the carrier of G;
+theorem :: LANG1:1
+  Terminals(G) \/ NonTerminals(G) = the carrier of G;
 
-   definition
-      let G,n,m;
-      pred n ==> m means
+definition let G,n,m;
+  pred n ==> m means
 :: LANG1:def 4
-           ex n1,n2,n3 being String of G, s st n = n1^<*s*>^n2
-        & m = n1^n3^n2 & s ==> n3;
-   end;
+    ex n1,n2,n3 being String of G, s st n = n1^<*s*>^n2
+      & m = n1^n3^n2 & s ==> n3;
+end;
 
-  reserve
-    n1,n2,n3 for String of G;
+ reserve n1,n2,n3 for String of G;
 
-    theorem :: LANG1:2
-         s ==> n implies n1^<*s*>^n2 ==> n1^n^n2;
+theorem :: LANG1:2
+  s ==> n implies n1^<*s*>^n2 ==> n1^n^n2;
 
-    theorem :: LANG1:3
-      s ==> n implies <*s*> ==> n;
+theorem :: LANG1:3
+  s ==> n implies <*s*> ==> n;
 
-    theorem :: LANG1:4
-      <*s*> ==> n implies s ==> n;
+theorem :: LANG1:4
+  <*s*> ==> n implies s ==> n;
 
-    theorem :: LANG1:5
-      n1 ==> n2 implies n^n1 ==> n^n2 & n1^n ==> n2^n;
+theorem :: LANG1:5
+  n1 ==> n2 implies n^n1 ==> n^n2 & n1^n ==> n2^n;
 
-    definition
-      let G, n, m;
-      pred m is_derivable_from n means
+definition let G, n, m;
+  pred m is_derivable_from n means
 :: LANG1:def 5
+    ex p being FinSequence st
+       len p >= 1 & p.1 = n & p.len p = m &
+       for i being Nat st i >= 1 & i < len p
+       ex a,b being String of G st p.i = a & p.(i+1) = b & a ==> b;
+end;
 
-        ex p being FinSequence st
-          len p >= 1 & p.1 = n & p.(len p) = m &
-          for i being Nat st i >= 1 & i < len p ex a,b being
-            String of G st p.i = a & p.(i+1) = b & a ==> b;
-    end;
+theorem :: LANG1:6
+  n is_derivable_from n;
 
-    theorem :: LANG1:6
-      n is_derivable_from n;
+theorem :: LANG1:7
+  n ==> m implies m is_derivable_from n;
 
-    theorem :: LANG1:7
-      n ==> m implies m is_derivable_from n;
+theorem :: LANG1:8
+  n1 is_derivable_from n2 & n2 is_derivable_from n3 implies
+    n1 is_derivable_from n3;
 
-    theorem :: LANG1:8
-      n1 is_derivable_from n2 &
-      n2 is_derivable_from n3 implies
-      n1 is_derivable_from n3;
+:: Define language
 
-    :: Define language
-
-    definition
-      let G be non empty GrammarStr;
-      func Lang(G)->set equals
+definition let G be non empty GrammarStr;
+  func Lang(G) equals
 :: LANG1:def 6
-  {a where a is Element of (the carrier of G)*:
-        rng a c= Terminals(G) & a is_derivable_from <*the InitialSym of G*>};
-    end;
+    {a where a is Element of (the carrier of G)*:
+     rng a c= Terminals(G) & a is_derivable_from <*the InitialSym of G*>};
+end;
 
-    theorem :: LANG1:9
-        for G being non empty GrammarStr, n being String of G holds
+theorem :: LANG1:9
+  for G being non empty GrammarStr, n being String of G holds
       n in Lang(G) iff
       rng n c= Terminals(G) & n is_derivable_from <*the InitialSym of G*>;
 
@@ -167,39 +150,36 @@ end;
 :: GrammarStr(#{a,b},a,{[a,{}{a}],[a,<*a,b*>]}#) -> Lang = {{}, b, bb, ...}
 :: GrammarStr(#{a,b,c},a,{[a,<*b*>}],[a,<*c*>]}#) -> Lang = {b, c}
 
-definition
- let D,E be non empty set, a be Element of [:D,E:];
- redefine func {a} -> Relation of D,E;
- let b be Element of [:D,E:];
- func {a,b} -> Relation of D,E;
+definition let D,E be non empty set, a be Element of [:D,E:];
+  redefine func {a} -> Relation of D,E;
+  let b be Element of [:D,E:];
+  func {a,b} -> Relation of D,E;
 end;
 
-definition
- let a be set;
- func EmptyGrammar a -> strict GrammarStr means
+definition let a be set;
+  func EmptyGrammar a -> strict GrammarStr means
 :: LANG1:def 7
-   the carrier of it = {a} & the Rules of it = {[a,{}]};
- let b be set;
- func SingleGrammar(a,b) -> strict GrammarStr means
+    the carrier of it = {a} & the Rules of it = {[a,{}]};
+  let b be set;
+  func SingleGrammar(a,b) -> strict GrammarStr means
 :: LANG1:def 8
-   the carrier of it = {a,b} & the InitialSym of it = a &
+    the carrier of it = {a,b} & the InitialSym of it = a &
       the Rules of it = {[a,<*b*>]};
- func IterGrammar(a,b) -> strict GrammarStr means
+  func IterGrammar(a,b) -> strict GrammarStr means
 :: LANG1:def 9
-   the carrier of it = {a,b} & the InitialSym of it = a &
+    the carrier of it = {a,b} & the InitialSym of it = a &
       the Rules of it = {[a,<*b,a*>],[a,{}]};
 end;
 
-registration
- let a be set;
- cluster EmptyGrammar a -> non empty;
- let b be set;
- cluster SingleGrammar(a,b) -> non empty;
- cluster IterGrammar(a,b) -> non empty;
+registration let a be set;
+  cluster EmptyGrammar a -> non empty;
+  let b be set;
+  cluster SingleGrammar(a,b) -> non empty;
+  cluster IterGrammar(a,b) -> non empty;
 end;
 
 definition let D be non empty set;
- func TotalGrammar D -> strict GrammarStr means
+  func TotalGrammar D -> strict GrammarStr means
 :: LANG1:def 10
    the carrier of it = D \/ {D} & the InitialSym of it = D &
        the Rules of it = {[D,<*d,D*>] where d is Element of D: d = d} \/
@@ -207,96 +187,87 @@ definition let D be non empty set;
 end;
 
 registration let D be non empty set;
- cluster TotalGrammar D -> non empty;
+  cluster TotalGrammar D -> non empty;
 end;
 
-reserve a,b,c for set, D for non empty set, d for Element of D;
+ reserve a,b,c for set, D for non empty set, d for Element of D;
 
 theorem :: LANG1:10
- Terminals EmptyGrammar a = {};
+  Terminals EmptyGrammar a = {};
 
 theorem :: LANG1:11
- Lang EmptyGrammar a = {{}};
+  Lang EmptyGrammar a = {{}};
 
 theorem :: LANG1:12
- a <> b implies Terminals SingleGrammar(a,b) = {b};
+  a <> b implies Terminals SingleGrammar(a,b) = {b};
 
 theorem :: LANG1:13
-    a <> b implies Lang SingleGrammar(a,b) = {<*b*>};
+  a <> b implies Lang SingleGrammar(a,b) = {<*b*>};
 
 theorem :: LANG1:14
- a <> b implies Terminals IterGrammar(a,b) = {b};
+  a <> b implies Terminals IterGrammar(a,b) = {b};
 
 theorem :: LANG1:15
-    a <> b implies Lang IterGrammar(a,b) = {b}*;
+  a <> b implies Lang IterGrammar(a,b) = {b}*;
 
 theorem :: LANG1:16
- Terminals TotalGrammar D = D;
+  Terminals TotalGrammar D = D;
 
 theorem :: LANG1:17
-    Lang TotalGrammar D = D*;
+  Lang TotalGrammar D = D*;
 
 definition let IT be non empty GrammarStr;
- attr IT is efective means
+  attr IT is efective means
 :: LANG1:def 11
-
-  Lang(IT) is non empty & the InitialSym of IT in NonTerminals IT &
+  Lang IT is non empty & the InitialSym of IT in NonTerminals IT &
   for s being Symbol of IT st s in Terminals IT
    ex p being String of IT st p in Lang(IT) & s in rng p;
 end;
 
 definition let IT be GrammarStr;
- attr IT is finite means
+  attr IT is finite means
 :: LANG1:def 12
-     the Rules of IT is finite;
+    the Rules of IT is finite;
 end;
 
 registration
- cluster efective finite (non empty GrammarStr);
+  cluster efective finite (non empty GrammarStr);
+end;
+
+definition let G be efective (non empty GrammarStr);
+  redefine func NonTerminals G -> non empty Subset of G;
 end;
 
 definition
- let G be efective (non empty GrammarStr);
- redefine
-  func NonTerminals G -> non empty Subset of G;
+  let X,Y be non empty set, p be FinSequence of X, f be Function of X,Y;
+  redefine func f*p -> Element of Y*;
 end;
 
-registration
- let X be set, Y be non empty set;
- cluster Function-like Relation of X,Y;
-end;
-
-definition
- let X,Y be non empty set, p be FinSequence of X, f be Function of X,Y;
- redefine func f*p -> Element of Y*;
-end;
-
-definition
- let X,Y be non empty set;
- let f be Function of X,Y;
+definition let X,Y be non empty set;
+           let f be Function of X,Y;
  canceled;
 
  func f* -> Function of X*,Y* means
 :: LANG1:def 14
-      for p being Element of X* holds it.p = f*p;
+   for p being Element of X* holds it.p = f*p;
 end;
 
-reserve R for Relation, x,y for set;
+ reserve R for Relation, x,y for set;
 
 theorem :: LANG1:18
-    R c= R[*];
+  R c= R[*];
 
 definition let X be non empty set, R be Relation of X;
- redefine func R[*] -> Relation of X;
+  redefine func R[*] -> Relation of X;
 end;
 
 definition let G be non empty GrammarStr;
- let X be non empty set;
- let f be Function of the carrier of G, X;
- func G.f -> strict GrammarStr equals
+           let X be non empty set;
+           let f be Function of the carrier of G, X;
+  func G.f -> strict GrammarStr equals
 :: LANG1:def 15
-      GrammarStr (#X, f.the InitialSym of G,
-     (f)~*(the Rules of G)*(f*) #);
+    GrammarStr (#X, f.the InitialSym of G,
+    (f)~*(the Rules of G)*(f*) #);
 end;
 
 :: The goal is to show:

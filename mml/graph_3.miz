@@ -173,7 +173,7 @@ proof
    A2: n+1 <= m by A1,NAT_1:38;
    per cases by A2,REAL_1:def 5;
    suppose A3: m = n+1; then len (m,n)-cut p +m = n+1 by A1,GRAPH_2:def 1;
-     then len (m,n)-cut p = 0 by A3,XCMPLX_1:3;
+     then len (m,n)-cut p = 0 by A3;
      then (m,n)-cut p = {} by FINSEQ_1:25;
     hence thesis by GRAPH_1:14;
    end;
@@ -196,7 +196,7 @@ A9: ka in dom p & p.ka = q.a & ka+1 = m+a & m <= ka & ka <= n by Th2;
    consider kb being Nat such that
 A10: kb in dom p & p.kb = q.b & kb+1 = m+b & m <= kb & kb <= n by A8,Th2;
       ka = kb by A7,A9,A10,FUNCT_1:def 8;
- hence contradiction by A6,A9,A10,XCMPLX_1:2;
+ hence contradiction by A6,A9,A10;
 end;
 end;
 
@@ -281,7 +281,7 @@ proof let p be cyclic Path of G;
  then A2: (m+1,len p)-cut p = p by GRAPH_2:7;
        0 <= len p;
     then len (1,m)-cut p +1 = 0+1 by A1,GRAPH_2:def 1;
-    then len (1,m)-cut p = 0 by XCMPLX_1:3;
+    then len (1,m)-cut p = 0;
     then (1,m)-cut p = {} by FINSEQ_1:25;
   hence ((m+1,len p)-cut p)^(1,m)-cut p is cyclic Path of G by A2,FINSEQ_1:47;
  end;
@@ -291,7 +291,7 @@ proof let p be cyclic Path of G;
    suppose A4: len p = m;
         1 <= m+1 by NAT_1:37;
      then len (m+1,len p)-cut p +(m+1) = len p +1 by A4,GRAPH_2:def 1;
-     then len (m+1,len p)-cut p = 0 by A4,XCMPLX_1:3;
+     then len (m+1,len p)-cut p = 0 by A4;
      then (m+1,len p)-cut p = {} by FINSEQ_1:25;
      then ((m+1,len p)-cut p)^(1,m)-cut p = (1,m)-cut p by FINSEQ_1:47
        .= p by A4,GRAPH_2:7;
@@ -337,7 +337,7 @@ A21: vs' is_vertex_seq_of r by A10,A11,A12,A16,A19,GRAPH_2:47;
        n < len vs +1 by A13,NAT_1:38;
     then 1+n <= len vs2 +n by A14,NAT_1:38;
 then A22: 1 <= len vs2 by XREAL_1:8;
-       len vs1 = n by A15,XCMPLX_1:2;
+       len vs1 = n by A15;
 then A23: 1 < len vs1 by A6,NAT_1:38;
       vs'.1 = vs1.len vs1 by A17,A18,A22,GRAPH_2:14
         .= vs'.len vs' by A23,GRAPH_2:16;
@@ -535,11 +535,11 @@ A1: vs is_vertex_seq_of c & e in rng c;
    reconsider t = (the Target of G).e, s = (the Source of G).e
     as Vertex of G by A1,A2,FUNCT_2:7;
 A3: e' in rng c by A1;
-A4: G-VSet rng c = { v where v is Vertex of G:
+ G-VSet rng c = { v where v is Vertex of G:
         ex e being Element of the Edges of G st e in rng c &
-        (v = (the Source of G).e or v = (the Target of G).e)} by GRAPH_2:def 6;
+        (v = (the Source of G).e or v = (the Target of G).e)};
 then A5: t in G-VSet rng c by A3;
-   s in G-VSet rng c by A3,A4;
+   s in G-VSet rng c by A3;
  hence thesis by A1,A5,GRAPH_2:34,RELAT_1:60;
 end;
 
@@ -551,22 +551,18 @@ definition let G be Graph, X be set;
              ($1 = (the Source of G).e or $1 = (the Target of G).e);
      { v where v is Vertex of G : P[v] }
    is Subset of the Vertices of G from DOMAIN_1:sch 7;
-  hence thesis by GRAPH_2:def 6;
+  hence thesis;
  end;
 end;
 
 theorem Th21:
 G-VSet {} = {}
 proof
-A1: G-VSet {} = { v where v is Vertex of G :
-                ex e being Element of the Edges of G st e in {} &
-                (v = (the Source of G).e or v = (the Target of G).e) }
-   by GRAPH_2:def 6;
  assume not thesis; then consider x being set such that
 A2: x in G-VSet {} by XBOOLE_0:def 1;
  consider v being Vertex of G such that
 A3: x = v & ex e being Element of the Edges of G st e in {} &
-           (v = (the Source of G).e or v = (the Target of G).e) by A1,A2;
+           (v = (the Source of G).e or v = (the Target of G).e) by A2;
  consider e being Element of the Edges of G such that
 A4: e in {} & (v = (the Source of G).e or v = (the Target of G).e) by A3;
  thus contradiction by A4;
@@ -576,12 +572,8 @@ theorem Th22:
 e in the Edges of G & e in X implies G-VSet X is non empty
 proof assume
 A1: e in the Edges of G & e in X;
-A2: G-VSet X = { v where v is Vertex of G :
-                ex e being Element of the Edges of G st e in X &
-                (v = (the Source of G).e or v = (the Target of G).e) }
-   by GRAPH_2:def 6;
   reconsider v = (the Source of G).e as Vertex of G by A1,FUNCT_2:7;
-      v in G-VSet X by A1,A2;
+      v in G-VSet X by A1;
  hence thesis;
 end;
 
@@ -936,13 +928,8 @@ then A9: c.k in rng c by FUNCT_1:def 5;
       k+1 <= len vs by A5,A7,XREAL_1:8;
    then k+1 in dom vs by A13,FINSEQ_3:27;
    then reconsider v'' = vs.(k+1) as Vertex of G by FINSEQ_2:13;
- A14: G-VSet X =
-     { V where V is Vertex of G :
-       ex e being Element of the Edges of G st e in X &
-                (V = (the Source of G).e or V = (the Target of G).e) }
-      by GRAPH_2:def 6;
       v'' = (the Target of G).e or v'' = (the Source of G).e by A4,A7,Lm2;
-  hence contradiction by A7,A12,A14;
+  hence contradiction by A7,A12;
  end;
  thus thesis by A4,A7,Lm2;
 end;
@@ -1015,7 +1002,7 @@ end;
 
 definition let G be Graph, v be Vertex of G, X be set;
  func Edges_At(v, X) -> Subset of the Edges of G equals
-:Def3: Edges_In(v, X) \/ Edges_Out(v, X);
+ Edges_In(v, X) \/ Edges_Out(v, X);
  correctness;
 end;
 
@@ -1033,7 +1020,7 @@ registration let G be finite Graph, v be Vertex of G, X be set;
  cluster Edges_At(v, X) -> finite;
  correctness proof
       the Edges of G is finite by GRAPH_1:def 8;
-  hence thesis by FINSET_1:13;
+  hence thesis;
  end;
 end;
 
@@ -1053,8 +1040,8 @@ A2: x in Edges_Out(v, X) by XBOOLE_0:def 1;
  cluster Edges_At(v, X) -> empty;
  correctness proof assume Edges_At(v, X) is non empty;
    then consider x being set such that
-A3: x in Edges_At(v, X) by XBOOLE_0:def 1;
-      x in Edges_In(v, X) \/ Edges_Out(v, X) by A3,Def3;
+A3: x in Edges_At(v, X);
+      x in Edges_In(v, X) \/ Edges_Out(v, X) by A3;
    then x in Edges_In(v, X) or x in Edges_Out(v, X);
   hence contradiction;
  end;
@@ -1062,11 +1049,11 @@ end;
 
 definition let G be Graph, v be Vertex of G;
  func Edges_In v -> Subset of the Edges of G equals
-:Def4: Edges_In(v, the Edges of G);
+ Edges_In(v, the Edges of G);
   correctness;
 
  func Edges_Out v -> Subset of the Edges of G equals
-:Def5: Edges_Out(v, the Edges of G);
+ Edges_Out(v, the Edges of G);
   correctness;
 end;
 
@@ -1075,7 +1062,7 @@ theorem Th25:
 proof let e be set; assume e in Edges_In(v, X);
   then e in the Edges of G & e in X & (the Target of G).e = v by Def1;
   then e in Edges_In(v, the Edges of G) by Def1;
- hence thesis by Def4;
+ hence thesis;
 end;
 
 theorem Th26:
@@ -1083,16 +1070,16 @@ theorem Th26:
 proof let e be set; assume e in Edges_Out(v, X);
   then e in the Edges of G & e in X & (the Source of G).e = v by Def2;
   then e in Edges_Out(v, the Edges of G) by Def2;
- hence thesis by Def5;
+ hence thesis;
 end;
 
 registration let G be finite Graph, v be Vertex of G;
  cluster Edges_In v -> finite;
- correctness proof Edges_In v = Edges_In (v, the Edges of G) by Def4;
+ correctness proof Edges_In v = Edges_In (v, the Edges of G);
   hence thesis;
  end;
  cluster Edges_Out v -> finite;
- correctness proof Edges_Out v = Edges_Out (v, the Edges of G) by Def5;
+ correctness proof Edges_Out v = Edges_Out (v, the Edges of G);
   hence thesis;
  end;
 end;
@@ -1112,7 +1099,7 @@ A2: EdgesIn v = card(X) by GRAPH_1:def 20;
      now let e be set;
         e in Edges_In (v, the Edges of G) iff
                e in the Edges of G & (the Target of G).e = v by Def1;
-   hence e in Edges_In v iff e in X by A1,Def4;
+   hence e in Edges_In v iff e in X by A1;
   end;
  hence thesis by A2,TARSKI:2;
 end;
@@ -1126,38 +1113,35 @@ A2: EdgesOut v = card(X) by GRAPH_1:def 21;
      now let e be set;
         e in Edges_Out (v, the Edges of G) iff
                e in the Edges of G & (the Source of G).e = v by Def2;
-   hence e in Edges_Out v iff e in X by A1,Def5;
+   hence e in Edges_Out v iff e in X by A1;
   end;
  hence thesis by A2,TARSKI:2;
 end;
 
 definition let G be finite Graph, v be Vertex of G, X be set;
  func Degree(v, X) -> Nat equals
-:Def6: card Edges_In(v, X) + card Edges_Out(v, X);
+ card Edges_In(v, X) + card Edges_Out(v, X);
   correctness;
 end;
 
 theorem Th29:
  Degree v = Degree(v, the Edges of G)
 proof
- thus Degree v = EdgesIn v + EdgesOut v by GRAPH_1:def 22
+ thus Degree v = EdgesIn v + EdgesOut v
    .= card Edges_In v + EdgesOut v by Th27
    .= card Edges_In v + card Edges_Out v by Th28
-   .= card Edges_In(v, the Edges of G) + card Edges_Out v by Def4
+   .= card Edges_In(v, the Edges of G) + card Edges_Out v
    .= card Edges_In(v, the Edges of G) + card Edges_Out(v, the Edges of G)
-                  by Def5
-   .= Degree(v, the Edges of G) by Def6;
+   .= Degree(v, the Edges of G);
 end;
 
 theorem Th30:
  Degree(v, X) <> 0 implies Edges_At(v, X) is non empty
 proof assume
 A1: Degree(v, X) <> 0;
-A2: Degree(v, X) = card Edges_In(v, X) + card Edges_Out(v, X) by Def6;
-A3: Edges_At(v, X) = Edges_In(v, X) \/ Edges_Out(v, X) by Def3;
  assume not thesis;
-  then Edges_In(v, X) = {} & Edges_Out(v, X) = {} by A3,XBOOLE_1:15;
- hence contradiction by A1,A2,CARD_1:47;
+  then Edges_In(v, X) = {} & Edges_Out(v, X) = {} by XBOOLE_1:15;
+ hence contradiction by A1,CARD_1:47;
 end;
 
 theorem Th31:
@@ -1169,13 +1153,9 @@ proof
  assume
  A1: e in E & not e in X & (v = T.e or v = S.e);
  A2: Degree v = Degree(v, E) by Th29;
- A3: Degree(v, X) = card Edges_In(v, X) + card Edges_Out(v, X)
-       by Def6;
- A4: Degree(v, E) = card Edges_In(v, E) + card Edges_Out(v, E)
-       by Def6;
-        Edges_In v = Edges_In(v, E) by Def4;
+        Edges_In v = Edges_In(v, E);
  then A5: Edges_In(v, X) c= Edges_In(v, E) by Th25;
-        Edges_Out v = Edges_Out(v, E) by Def5;
+        Edges_Out v = Edges_Out(v, E);
  then A6: Edges_Out(v, X) c= Edges_Out(v, E) by Th26;
  A7: card Edges_In(v, X) <= card Edges_In(v, E) by A5,CARD_1:80;
  A8: card Edges_Out(v, X) <= card Edges_Out(v, E) by A6,CARD_1:80;
@@ -1185,14 +1165,14 @@ proof
          not e in Edges_In(v, X) by A1,Def1;
       then Edges_In(v, X) c< Edges_In(v, E) by A5,A9,XBOOLE_0:def 8;
       then card Edges_In(v, X) < card Edges_In(v, E) by CARD_2:67;
-   hence Degree v <> Degree(v, X) by A2,A3,A4,A8,XREAL_1:10;
+   hence Degree v <> Degree(v, X) by A2,A8,XREAL_1:10;
   end;
   suppose v = S.e;
   then A10: e in Edges_Out(v, E) by A1,Def2;
          not e in Edges_Out(v, X) by A1,Def2;
       then Edges_Out(v, X) c< Edges_Out(v, E) by A6,A10,XBOOLE_0:def 8;
       then card Edges_Out(v, X) < card Edges_Out(v, E) by CARD_2:67;
-   hence thesis by A2,A3,A4,A7,XREAL_1:10;
+   hence thesis by A2,A7,XREAL_1:10;
  end;
  end;
 
@@ -1271,15 +1251,12 @@ A1: X2 c= X1;
    set n2I = card Edges_In(v, X2);
    set n1O = card Edges_Out(v, X1);
    set n2O = card Edges_Out(v, X2);
-A2: Degree(v, X2) = card Edges_In(v, X2) + card Edges_Out(v, X2)
-          by Def6;
-A3: Degree(v, X1) = card Edges_In(v, X1) + card Edges_Out(v, X1) by Def6;
 A4: card Edges_In(v, X1\X2) = card Edges_In(v, X1) - card Edges_In(v, X2)
           by A1,Th32;
     card Edges_Out(v, X1\X2) = card Edges_Out(v, X1) - card Edges_Out(v, X2)
           by A1,Th33;
    then n12I + n12O = (n1I+n1O) - (n2I+n2O) by A4;
- hence thesis by A2,A3,Def6;
+ hence thesis;
 end;
 
 theorem Th35:
@@ -1315,10 +1292,10 @@ end;
 theorem Th36:
  Degree(v, X) = Degree(v, X/\the Edges of G)
 proof set E = the Edges of G;
- thus Degree(v, X) = card Edges_In(v, X) + card Edges_Out(v, X) by Def6
+ thus Degree(v, X) = card Edges_In(v, X) + card Edges_Out(v, X)
    .= card Edges_In(v, X/\E) + card Edges_Out(v, X) by Th35
    .= card Edges_In(v, X/\E) + card Edges_Out(v, X/\E) by Th35
-   .= Degree(v, X/\the Edges of G) by Def6;
+   .= Degree(v, X/\the Edges of G);
 end;
 
 theorem Th37:
@@ -1327,13 +1304,11 @@ theorem Th37:
 proof assume that
 A1: c is non empty and
 A2: vs is_vertex_seq_of c;
-A3: Degree(v, rng c) = card Edges_In(v, rng c) + card Edges_Out(v, rng c)
-       by Def6;
   hereby assume that
 A4: v in rng vs and
 A5: Degree(v, rng c) = 0;
       card Edges_In(v, rng c) = 0 & card Edges_Out(v, rng c) = 0
-            by A3,A5,NAT_1:23;
+            by A5,NAT_1:23;
 then A6: Edges_In(v, rng c) = {} & Edges_Out(v, rng c) = {} by CARD_2:59;
    consider i being Nat such that
 A7: i in dom vs & vs.i = v by A4,FINSEQ_2:11;
@@ -1364,7 +1339,7 @@ then A11: rng c c= the Edges of G by FINSEQ_1:def 4;
  assume that
 A16: Degree(v, rng c) <> 0 and
 A17: not v in rng vs;
- per cases by A3,A16;
+ per cases by A16;
  suppose card Edges_In(v, rng c) <> 0;
     then consider e being set such that
 A18: e in Edges_In(v, rng c) by CARD_1:47,XBOOLE_0:def 1;
@@ -1408,7 +1383,7 @@ A1: Degree v = 0;
   set T = the Target of G;
   set S = the Source of G;
       Degree v = Degree(v, E) by Th29
-           .= card Edges_In(v, E) + card Edges_Out(v, E) by Def6;
+           .= card Edges_In(v, E) + card Edges_Out(v, E);
    then card Edges_In(v, E) = 0 & card Edges_Out(v, E) = 0 by A1,NAT_1:23;
 then A2: Edges_In(v, E) = {} & Edges_Out(v, E) = {} by CARD_2:59;
    consider e being set such that
@@ -1934,23 +1909,23 @@ A3: (the Edges of G) in X;
  then A5: Edges_In(v', X) = Edges_In(v, X) by A1,Th44;
  A6: Edges_Out(v', X) = Edges_Out(v, X) \/ {E} &
      Edges_Out(v, X) misses {E} by A1,A3,A4,Th46;
-  thus Degree(v', X) = card Edges_In(v', X) + card Edges_Out(v', X) by Def6
+  thus Degree(v', X) = card Edges_In(v', X) + card Edges_Out(v', X)
    .= card Edges_In(v, X) + (card Edges_Out(v, X) + card {E})
            by A5,A6,CARD_2:53
    .= card Edges_In(v, X) + card Edges_Out(v, X) + card {E}
    .= card Edges_In(v, X) + card Edges_Out(v, X) + 1 by CARD_1:79
-   .= Degree(v, X) +1 by Def6;
+   .= Degree(v, X) +1;
  end;
  suppose A7: v = v2;
  then A8: Edges_Out(v', X) = Edges_Out(v, X) by A1,Th45;
  A9: Edges_In(v', X) = Edges_In(v, X) \/ {E} &
      Edges_In(v, X) misses {E} by A1,A3,A7,Th47;
-  thus Degree(v', X) = card Edges_In(v', X) + card Edges_Out(v', X) by Def6
+  thus Degree(v', X) = card Edges_In(v', X) + card Edges_Out(v', X)
    .= card Edges_In(v, X) + card {E} + card Edges_Out(v, X)
            by A8,A9,CARD_2:53
    .= card Edges_In(v, X) + card Edges_Out(v, X) + card {E}
    .= card Edges_In(v, X) + card Edges_Out(v, X) + 1 by CARD_1:79
-   .= Degree(v, X) +1 by Def6;
+   .= Degree(v, X) +1;
 end;
 end;
 
@@ -1958,10 +1933,10 @@ theorem Th53:
  v' = v & v <> v1 & v <> v2 implies Degree(v', X) = Degree(v, X)
 proof assume
 A1: v' = v & v <> v1 & v <> v2;
-  thus Degree(v', X) = card Edges_In(v',X) + card Edges_Out(v',X) by Def6
+  thus Degree(v', X) = card Edges_In(v',X) + card Edges_Out(v',X)
     .= card Edges_In(v,X) + card Edges_Out(v',X) by A1,Th48
     .= card Edges_In(v,X) + card Edges_Out(v,X) by A1,Th49
-    .= Degree(v, X) by Def6;
+    .= Degree(v, X);
 end;
 
 begin :: Some properties of and operations on cycles
@@ -1980,7 +1955,7 @@ per cases;
 suppose c is empty;
    then reconsider rc = rng c as empty set by RELAT_1:60;
       card Edges_In(v, rc) = 0 & card Edges_Out(v, rc) = 0 by CARD_1:78;
-   then Degree(v, rc)= 0+0 by Def6
+   then Degree(v, rc)= 0+0
    .= 2 * 0;
  hence Degree(v, rng c) is even;
 end;
@@ -2029,7 +2004,7 @@ A11: card evout = card {1} * card Edges_Out(v, rc) by CARD_2:65
               .= card Edges_Out(v, rc);
        now assume evin \/ evout is empty;
      then evin is empty & evout is empty by XBOOLE_1:15;
-     then Degree(v, rc) = 0 + 0 by A10,A11,Def6,CARD_1:78;
+     then Degree(v, rc) = 0 + 0 by A10,A11,CARD_1:78;
     hence contradiction by A1,A2,Th37;
     end;
    then reconsider evio = evin \/ evout as non empty set;
@@ -2296,7 +2271,7 @@ that
      A92: 1 <= k2 & n2 = k2+1 &
          (vs.n2 = T.(c.k2) & u' = [0, c.k2] or
           vs.n2 = S.(c.k2) & u' = [1, c.k2] & T.(c.k2) <> S.(c.k2)) by A90;
-      thus y = u by A82,A89,A91,A92,XCMPLX_1:2;
+      thus y = u by A82,A89,A91,A92;
      end;
      suppose A93: (ex k being Nat st 1 <= k & n1 = k+1 &
       (vs.n1 = T.(c.k) & y' = [0, c.k] or
@@ -2310,7 +2285,7 @@ that
          (vs.n1 = T.(c.k1) & y' = [0, c.k1] or
           vs.n1 = S.(c.k1) & y' = [1, c.k1] & T.(c.k1) <> S.(c.k1));
           n2 = 0+1 by A93;
-       then k1 = 0 by A89,A94,XCMPLX_1:2;
+       then k1 = 0 by A89,A94;
       hence y = u by A94;
      end;
      suppose A95: n1 = 1 &
@@ -2325,7 +2300,7 @@ that
          (vs.n2 = T.(c.k2) & u' = [0, c.k2] or
           vs.n2 = S.(c.k2) & u' = [1, c.k2] & T.(c.k2) <> S.(c.k2));
           n1 = 0+1 by A95;
-       then k2 = 0 by A89,A96,XCMPLX_1:2;
+       then k2 = 0 by A89,A96;
       hence y = u by A96;
      end;
      suppose n1 = 1 &
@@ -2510,7 +2485,7 @@ ZFMISC_1:def 2;
    end;
    card ev'2 = card (evin \/ evout) by A127,CARD_1:81
              .= card evin + card evout by A128,CARD_2:53;
-  then Degree(v, rc) = card ev'2 by A10,A11,Def6
+  then Degree(v, rc) = card ev'2 by A10,A11
           .= card 2 * card ev by CARD_2:65
           .= 2 * card ev by FINSEQ_1:78;
   hence thesis;
@@ -2524,7 +2499,7 @@ proof let c be cyclic Path of G;
  suppose c is empty;
    then reconsider rc = rng c as empty set by RELAT_1:60;
       card Edges_In(v, rc) = 0 & card Edges_Out(v, rc) = 0 by CARD_1:78;
-   then Degree(v, rc)= 0+0 by Def6 .= 2 * 0;
+   then Degree(v, rc)= 0+0 .= 2 * 0;
   hence Degree(v, rng c) is even;
  end;
  suppose A1: c is non empty;
@@ -2678,8 +2653,8 @@ A1: v in G-VSet rng c;
        G-VSet rng c =
        { vv where vv is Vertex of G:
             ex e being Element of the Edges of G st e in rng c &
-            (vv = (the Source of G).e or vv = (the Target of G).e) }
-         by GRAPH_2:def 6; then consider vv being Vertex of G such that
+            (vv = (the Source of G).e or vv = (the Target of G).e) }; then
+consider vv being Vertex of G such that
     A2: vv = v & ex e being Element of the Edges of G st e in rng c &
             (vv = (the Source of G).e or vv = (the Target of G).e) by A1;
         consider e being Element of the Edges of G such that
@@ -2702,7 +2677,7 @@ A6: len vs = len c +1 by A4,GRAPH_2:def 7;
    per cases by A7,REAL_1:def 5;
    suppose 1 = n & n = len vs;
      then 0+1 = len c +1 by A4,GRAPH_2:def 7;
-     then len c = 0 by XCMPLX_1:2;
+     then len c = 0;
     hence Cset is non empty by A3,FINSEQ_1:25,RELAT_1:60;
    end;
    suppose 1 = n;
@@ -2740,8 +2715,8 @@ A6: len vs = len c +1 by A4,GRAPH_2:def 7;
        consider lv2 being Nat such that
    A22: 0<=lv2 & lv2<len vs2 & len vs2=lv2+1 by A20,GRAPH_2:1;
           lv2 +1 +n = n + lv2 +1;
-   then A23: n+lv2 = len vs by A17,A22,XCMPLX_1:2;
-          len vs1 <> 0 by A14,XCMPLX_1:2;
+   then A23: n+lv2 = len vs by A17,A22;
+          len vs1 <> 0 by A14;
    then 0 < len vs1;
    then A24: vs1.1 = vs.(1+0) by A13,GRAPH_2:def 1;
    A25: vs2.len vs2 = vs.(n+lv2) by A9,A16,A22,GRAPH_2:def 1 .= vs1.1 by A4,A23
@@ -2762,7 +2737,7 @@ A6: len vs = len c +1 by A4,GRAPH_2:def 7;
       then rng c1 misses rng c2 by XBOOLE_0:3;
      then reconsider c21'= c2^c1 as Path of G by A15,A18,A25,Th9;
    A31: vs21 is_vertex_seq_of c21' by A15,A18,A25,GRAPH_2:47;
-          len vs1 = m+1 by A14,XCMPLX_1:2;
+          len vs1 = m+1 by A14;
        then 1 < len vs1 by A10,NAT_1:38;
        then vs21.len vs21 = vs1.len vs1 by GRAPH_2:16
                     .= vs.n by A9,A10,GRAPH_2:12;
@@ -2942,11 +2917,10 @@ set IT = { c where c is Element of X* :
              c is Path of G & c is non empty &
              ex vs being FinSequence of the Vertices of G
               st vs is_vertex_seq_of c & vs.1 = v };
-A2:  Edges_At(v, X) = Edges_In(v, X) \/ Edges_Out(v, X) by Def3;
   set e = choose Edges_At(v, X);
   A3: Edges_At(v, X) is not empty by A1,Th30;
       now
-    per cases by A2,A3,XBOOLE_0:def 2;
+    per cases by A3,XBOOLE_0:def 2;
      suppose e in Edges_In(v, X);
        then e in the Edges of G & e in X & (the Target of G).e = v by Def1;
       hence ex e' being Element of X st
@@ -3084,12 +3058,10 @@ A12: rng c c= X by FINSEQ_1:def 4;
      set S = the Source of G; set T = the Target of G;
    A19: Degree(v1, Xp) = Degree(v1, X) - Degree(v1, rng p) by A17,Th34;
            Degree(v1, X) <> Degree(v1, rng p) by A1,A16;
-   then A20: Degree(v1, Xp) <> 0 by A19,XCMPLX_1:15;
-
-A21:  Edges_At(v1, Xp) = Edges_In(v1, Xp) \/ Edges_Out(v1, Xp) by Def3;
+   then A20: Degree(v1, Xp) <> 0 by A19;
   set e = choose Edges_At(v1, Xp);
   A22: Edges_At(v1, Xp) is not empty by A20,Th30;
-      now per cases by A21,A22,XBOOLE_0:def 2;
+      now per cases by A22,XBOOLE_0:def 2;
      suppose e in Edges_In(v1, Xp);
        then e in the Edges of G & e in Xp & (the Target of G).e = v1 by Def1;
       hence ex e' being Element of Xp st
@@ -3332,7 +3304,7 @@ A9: now let v be Vertex of G;
 A13: v = v' & v' in G-VSet rng c & Degree v' <> Degree(v', rng c);
 A14: Degree(v, Erc) = Degree(v, E') - Degree(v, rng c) by A4,Th34;
       Degree v' = Degree(v, E) by A13,Th29;
- then Degree(v, Erc) <> 0 by A13,A14,XCMPLX_1:15;
+ then Degree(v, Erc) <> 0 by A13,A14;
 then A15: c' is non empty & rng c' c= E \ rng c &
    v in G-VSet rng c' by A7,A9,Th60;
 then A16: G-VSet rng c meets G-VSet rng c' by A13,XBOOLE_0:3;
@@ -3589,7 +3561,7 @@ A28: len vs' = len p' +1 by A27,GRAPH_2:def 7;
             1+1<=len p' +1 by A25,A26,NAT_1:37;
      then A35: 1<=1+1 & 1+1<=len vs' +1 by A28,NAT_1:37;
          then len vs +(1+1) = len p' +(1+1) by A28,GRAPH_2:def 1;
-         then A36: 0 < 1+1 & len vs = len p' by XCMPLX_1:2;
+         then A36: 0 < 1+1 & len vs = len p';
      then 0 < len vs by A17,A26;
      then A37: vs.(0+1) = vs'.(1+1+0) by A35,GRAPH_2:def 1;
             0+1 <= len vs by A17,A26,A36,XREAL_1:2;
@@ -3597,7 +3569,7 @@ A28: len vs' = len p' +1 by A27,GRAPH_2:def 7;
      A38: 0<=i & i<len vs & len vs = i+1 by GRAPH_2:1;
             (len vs +1)+1 = len vs +(1+1)
                       .= len vs' +1 by A35,GRAPH_2:def 1;
-         then A39: len vs' = i+(1+1) by A38,XCMPLX_1:2;
+         then A39: len vs' = i+(1+1) by A38;
      A40: vs'.1 = vs'.len vs' by A27,MSSCYC_1:6;
             vs'.1 = v1 & vs'.(1+1) = v2 or vs'.1 = v2 & vs'.(1+1) = v1
            by A7,A16,A18,A26,A27,Lm2;

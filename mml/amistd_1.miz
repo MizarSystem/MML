@@ -172,7 +172,7 @@ theorem Th8:
    let f be FinSequence;
        len <*x*> = 1 by FINSEQ_1:56;
    then 0 + (1+1) = len (2, len <*x*>)-cut <*x*> + 2 by GRAPH_2:def 1;
-   then 0 = len (2, len <*x*>)-cut <*x*> by XCMPLX_1:2;
+   then 0 = len (2, len <*x*>)-cut <*x*>;
    then (2, len <*x*>)-cut <*x*> = {} by FINSEQ_1:25;
   hence f^'<*x*> = f^{} by GRAPH_2:def 2
         .= f by FINSEQ_1:47;
@@ -264,7 +264,7 @@ then A3: dom Ok = dom s by FUNCT_2:def 1;
 A4:     x in dom f;
 then A5:   f.x = I by A1,FUNCOP_1:13;
       reconsider x as Instruction-Location of S by A4,FUNCOP_1:19;
-          Ok.x = ObjectKind x by AMI_1:def 6
+          Ok.x = ObjectKind x
           .= the Instructions of S by AMI_1:def 14;
       hence thesis by A5;
     end;
@@ -437,7 +437,7 @@ definition
   let N,S,l;
   let i be Element of the Instructions of S;
  func NIC(i,l) -> Subset of the Instruction-Locations of S equals
-:Def5:  { IC Following s : IC s = l & s.l = i };
+  { IC Following s : IC s = l & s.l = i };
  coherence
   proof
       { IC Following s : IC s = l & s.l = i } c= the Instruction-Locations of S
@@ -459,19 +459,17 @@ Lm2: now
       s be State of S,
       f be FinPartState of S such that
 A1: f = (IC S,l) --> (l,i);
-A2: NIC(i,l) = { IC Following w where w is State of S: IC w = l & w.l = i }
-     by Def5;
     set t = s +* f;
 A3: IC S <> l by AMI_1:48;
 A4: dom f = {IC S,l} by A1,FUNCT_4:65;
 then A5: IC S in dom f by TARSKI:def 2;
-A6: IC t = t.IC S by AMI_1:def 15
+A6: IC t = t.IC S
         .= f.IC S by A5,FUNCT_4:14
         .= l by A1,A3,FUNCT_4:66;
         l in dom f by A4,TARSKI:def 2;
     then t.l = f.l by FUNCT_4:14
        .= i by A1,A3,FUNCT_4:66;
-    hence IC Following t in NIC(i,l) by A2,A6;
+    hence IC Following t in NIC(i,l) by A6;
 end;
 
 registration
@@ -494,7 +492,7 @@ end;
 
 definition let N,S,i;
  func JUMP i -> Subset of the Instruction-Locations of S equals
-:Def6: meet { NIC(i,l) : not contradiction };
+ meet { NIC(i,l) : not contradiction };
  coherence
   proof
     set X = { NIC(i,l) : not contradiction };
@@ -512,7 +510,7 @@ end;
 
 definition let N,S,l;
  func SUCC l -> Subset of the Instruction-Locations of S equals
-:Def7: union { NIC(i,l) \ JUMP i : not contradiction };
+ union { NIC(i,l) \ JUMP i : not contradiction };
  coherence
   proof
    set X = { NIC(i,l) \ JUMP i : not contradiction };
@@ -541,7 +539,7 @@ A1:  p <> q;
 A2: for l being Instruction-Location of S holds NIC(i,l)={l};
  set X = { NIC(i, l) where l is Instruction-Location of S: not contradiction };
  assume not thesis;
-   then meet X is non empty by Def6;
+   then meet X is non empty;
    then consider x being set such that
 A3:   x in meet X by XBOOLE_0:def 1;
        NIC(i,p) = {p} & NIC(i,q) = {q} by A2;
@@ -563,15 +561,13 @@ theorem Th15:
        il be Instruction-Location of S,
        i be Instruction of S such that
 A1:   for s being State of S holds Exec(i,s) = s;
-A2:  NIC(i,il) = { IC Following s where s is State of S :
-       IC s = il & s.il = i } by Def5;
     hereby
      let n be set;
      assume n in NIC(i,il);
      then consider s being State of S such that
-A3:    n = IC Following s & IC s = il & s.il = i by A2;
-         n = IC Exec(CurInstr s,s) by A3,AMI_1:def 18
-      .= IC Exec(s.IC s,s) by AMI_1:def 17
+A3:    n = IC Following s & IC s = il & s.il = i;
+         n = IC Exec(CurInstr s,s) by A3
+      .= IC Exec(s.IC s,s)
       .= il by A1,A3;
      hence n in {il} by TARSKI:def 1;
     end;
@@ -589,12 +585,12 @@ A7: il in dom f by A5,TARSKI:def 2;
 A8: IC S <> il by AMI_1:48;
 A9: a.IC S = f.IC S by A6,FUNCT_4:14
           .= il by A8,FUNCT_4:66;
-A10: a.IC a = a.(a.IC S) by AMI_1:def 15
+A10: a.IC a = a.(a.IC S)
           .= f.il by A7,A9,FUNCT_4:14
           .= i by A8,FUNCT_4:66;
-        IC Following a = IC Exec(CurInstr a, a) by AMI_1:def 18
-       .= IC Exec(a.IC a, a) by AMI_1:def 17
-       .= Exec(a.IC a, a).IC S by AMI_1:def 15
+        IC Following a = IC Exec(CurInstr a, a)
+       .= IC Exec(a.IC a, a)
+       .= Exec(a.IC a, a).IC S
        .= a.IC S by A1,A10
        .= n by A4,A9,TARSKI:def 1;
     hence n in NIC(i,il) by Lm2;
@@ -773,7 +769,7 @@ A1: f is bijective;
   A7: dom f = NAT by FUNCT_2:def 1;
   A8: f.k <> f.(k+1) proof assume not thesis;
         then 0+k = k+1 by A6,A7,FUNCT_1:def 8;
-       hence contradiction by XCMPLX_1:2;
+       hence contradiction;
       end;
   A9: f.(k+1) in rng F by A3,REVROT_1:3;
       set x = (f.(k+1))..F;
@@ -1219,8 +1215,8 @@ A1:  the carrier of IT = NAT \/ {NAT} &
 A5:  STC N is IC-Ins-separated
   proof
    thus ObjectKind IC IT
-     = (the Object-Kind of IT).IC IT by AMI_1:def 6
-    .= the Instruction-Locations of IT by A1,A4,AMI_1:def 5;
+     = (the Object-Kind of IT).IC IT
+    .= the Instruction-Locations of IT by A1,A4;
   end;
   thus STC N is definite
   proof
@@ -1228,7 +1224,7 @@ A5:  STC N is IC-Ins-separated
       l in NAT by A1;
       then l <> NAT & dom ({NAT}-->NAT) = {NAT} by FUNCOP_1:19;
   then A6: not l in dom ({NAT}-->NAT) by TARSKI:def 1;
-    thus ObjectKind l = Ok.l by AMI_1:def 6
+    thus ObjectKind l = Ok.l
      .= ((NAT --> III)+*({NAT}-->NAT)).l by Def11
      .= (NAT --> III).l by A6,FUNCT_4:12
      .= the Instructions of IT by A1,FUNCOP_1:13;
@@ -1266,7 +1262,7 @@ then A11:  i in {[1,0]} by TARSKI:def 1;
      end;
 then A12:  (the Execution of IT).i = ({[1,0]} --> f).i by A8,FUNCT_4:12
         .= f by A11,FUNCOP_1:13;
-     thus Exec(i,s).l = (((the Execution of IT).i).s).l by AMI_1:def 7
+     thus Exec(i,s).l = (((the Execution of IT).i).s).l
       .= (s+*({NAT}-->succ(s.NAT))).l by A7,A12
       .= s.l by A9,FUNCT_4:12;
      end;
@@ -1278,7 +1274,7 @@ FUNCOP_1:19;
           ({[0,0]} --> id product the Object-Kind of IT).i
           by A8,FUNCT_4:14
         .= id product the Object-Kind of IT by A13,FUNCOP_1:13;
-     thus Exec(i,s).l = (((the Execution of IT).i).s).l by AMI_1:def 7
+     thus Exec(i,s).l = (((the Execution of IT).i).s).l
       .= s.l by A14,FUNCT_1:35;
    end;
    end;
@@ -1293,8 +1289,8 @@ then A16: Ok.a = the Instructions of IT by TARSKI:def 1;
    end;
    suppose a in {NAT};
     then a = NAT by TARSKI:def 1;
-    then Ok.a = Ok.IC IT by A1,AMI_1:def 5
-        .= ObjectKind IC IT by AMI_1:def 6
+    then Ok.a = Ok.IC IT by A1
+        .= ObjectKind IC IT
         .= the Instruction-Locations of IT by A5,AMI_1:def 11;
     hence a in the Instruction-Locations of IT by A16,Def11;
  end;
@@ -1334,12 +1330,12 @@ FUNCOP_1:19
      .= f by A5,FUNCOP_1:13;
 A8:   NAT in {NAT} by TARSKI:def 1;
 then A9: NAT in dom ({NAT}-->succ(s.NAT)) by FUNCOP_1:19;
-A10: IC M = NAT by A2,AMI_1:def 5;
- hence Exec(i,s).IC STC N = (f.s).NAT by A7,AMI_1:def 7
+A10: IC M = NAT by A2;
+ hence Exec(i,s).IC STC N = (f.s).NAT by A7
    .= (s+*({NAT}-->succ(s.NAT))).NAT by A3
    .= ({NAT}-->succ(s.NAT)).NAT by A9,FUNCT_4:14
    .= succ (s.NAT) by A8,FUNCOP_1:13
-   .= succ (IC s) by A10,AMI_1:def 15;
+   .= succ (IC s) by A10;
 end;
 
 theorem Th20:
@@ -1364,7 +1360,7 @@ then A4:i in {[0,0]} by A1,MCART_1:7,TARSKI:def 1;
  then (the Execution of M).i = ({[0,0]}
    --> id product the Object-Kind of M).i by A3,A4,FUNCT_4:14
      .= id product the Object-Kind of M by A4,FUNCOP_1:13;
- hence Exec(i,s) = (id product the Object-Kind of M).s by AMI_1:def 7
+ hence Exec(i,s) = (id product the Object-Kind of M).s
     .= s by FUNCT_1:35;
 end;
 
@@ -1380,7 +1376,7 @@ A2:   for s being State of M holds Exec(i,s) = s;
    consider s being State of M;
 A3:Exec(i,s).IC M = succ (IC s) by A1,Lm4;
        Exec(i,s).IC M = s.IC M by A2
-      .= IC s by AMI_1:def 15;
+      .= IC s;
    hence thesis by A3,ORDINAL1:14;
 end;
 
@@ -1411,7 +1407,7 @@ A1:
 A2:   o <> IC M;
        o in NAT or o in {NAT} by A1,XBOOLE_0:def 2;
    then o in NAT or o = NAT by TARSKI:def 1;
-   hence Exec(I, s).o = s.o by A1,A2,AMI_1:def 5,def 13;
+   hence Exec(I, s).o = s.o by A1,A2,AMI_1:def 13;
   end;
 
 Lm5:
@@ -1427,13 +1423,12 @@ A2: l = z and
 A3: InsCode i = 1;
    set M = STC N;
    set F = { IC Following s where s is State of M: IC s = l & s.l = i };
-A4: NIC(i,l) = F by Def5;
        now let y be set;
     hereby assume y in F; then consider s being State of M such that
     A5: y = IC Following s & IC s = l & s.l = i;
-A6: InsCode CurInstr s = 1 by A3,A5,AMI_1:def 17;
-            y = IC Exec(CurInstr s, s) by A5,AMI_1:def 18
-         .= Exec(CurInstr s, s). IC STC N by AMI_1:def 15
+A6: InsCode CurInstr s = 1 by A3,A5;
+            y = IC Exec(CurInstr s, s) by A5
+         .= Exec(CurInstr s, s). IC STC N
          .= succ z by A2,A5,A6,Lm4
          .= z+1 by A1,CARD_1:52;
      hence y in {z+1} by TARSKI:def 1;
@@ -1450,7 +1445,7 @@ A8:     dom f = the Instruction-Locations of M by FUNCOP_1:19;
         set t = s+*u;
 A9:     dom u = {IC M} by CQC_LANG:5;
     then A10: IC M in dom u by TARSKI:def 1;
-    A11: IC t = t.IC M by AMI_1:def 15
+    A11: IC t = t.IC M
             .= u.IC M by A10,FUNCT_4:14
             .= z by A2,CQC_LANG:6;
             l <> IC M by AMI_1:48;
@@ -1458,13 +1453,13 @@ A9:     dom u = {IC M} by CQC_LANG:5;
     then A12: t.l = s.l by FUNCT_4:12
            .= f.l by A8,FUNCT_4:14
            .= i by FUNCOP_1:13;
-then A13: InsCode CurInstr t = 1 by A2,A3,A11,AMI_1:def 17;
-            IC Following t = IC Exec(CurInstr t, t) by AMI_1:def 18
-         .= Exec(CurInstr t, t). IC STC N by AMI_1:def 15
+then A13: InsCode CurInstr t = 1 by A2,A3,A11;
+            IC Following t = IC Exec(CurInstr t, t)
+         .= Exec(CurInstr t, t). IC STC N
          .= succ z by A11,A13,Lm4;
     hence y in F by A2,A7,A11,A12;
    end;
- hence NIC(i, l) = {z+1} by A4,TARSKI:2;
+ hence NIC(i, l) = {z+1} by TARSKI:2;
 end;
 
 Lm6:
@@ -1476,9 +1471,8 @@ proof
 A1: InsCode i = 1;
  set X = { NIC(i,l) where l is Instruction-Location of STC N
              : not contradiction };
-A2: JUMP i = meet X by Def6;
    assume not thesis; then consider x being set such that
-A3: x in meet X by A2,XBOOLE_0:def 1;
+A3: x in meet X by XBOOLE_0:def 1;
    reconsider l1 = 0, l2 = 1 as Instruction-Location of STC N by Def11;
        NIC(i, l1) in X & NIC(i, l2) in X;
    then {0+1} in X & {1+1} in X by A1,Lm5;
@@ -1553,7 +1547,7 @@ A9: JUMP i = {} by Lm6;
    end;
    end;
 then A10: K = {{z},{z+1}} by TARSKI:2;
- thus SUCC l = union K by Def7
+ thus SUCC l = union K
     .= {z,z+1} by A10,ZFMISC_1:32;
 end;
 
@@ -1753,7 +1747,7 @@ definition
             (non empty non void AMI-Struct over N)),
        f be Instruction-Location of S,
        k be natural number;
- func f + k -> Instruction-Location of S equals :Def14:
+ func f + k -> Instruction-Location of S equals
   il.(S,locnum f + k);
 coherence;
 end;
@@ -1762,7 +1756,7 @@ theorem
      for f being Instruction-Location of T holds f + 0 = f
   proof
     let f be Instruction-Location of T;
-    thus f + 0 = il.(T,locnum f + 0) by Def14
+    thus f + 0 = il.(T,locnum f + 0)
       .= f by Def13;
   end;
 
@@ -1772,9 +1766,9 @@ theorem
   proof
     let f, g be Instruction-Location of T such that
 A1:   f + z = g + z;
-        f + z = il.(T,locnum f + z) & g + z = il.(T,locnum g + z) by Def14;
+        f + z = il.(T,locnum f + z) & g + z = il.(T,locnum g + z);
     then locnum f + z = locnum g + z by A1,Th25;
-    then locnum f = locnum g by XCMPLX_1:2;
+    then locnum f = locnum g;
     hence f = g by Th27;
   end;
 
@@ -1784,7 +1778,7 @@ theorem
   proof
     let f be Instruction-Location of T;
     thus locnum f + z = locnum il.(T,locnum f+z) by Def13
-       .= locnum (f + z) by Def14;
+       .= locnum (f + z);
   end;
 
 definition
@@ -1792,28 +1786,27 @@ definition
      S be standard (IC-Ins-separated definite
           (non empty non void AMI-Struct over N)),
      f be Instruction-Location of S;
- func NextLoc f -> Instruction-Location of S equals :Def15:
+ func NextLoc f -> Instruction-Location of S equals
   f + 1;
  coherence;
 end;
 
-theorem Th34:
+theorem
  for f being Instruction-Location of T
   holds NextLoc f = il.(T,locnum f + 1)
   proof
     let f be Instruction-Location of T;
-    thus NextLoc f = f + 1 by Def15
-      .= il.(T,locnum f + 1) by Def14;
+    thus NextLoc f = f + 1
+      .= il.(T,locnum f + 1);
   end;
 
 theorem Th35:
  for f being Instruction-Location of T holds f <> NextLoc f
    proof
     let f be Instruction-Location of T;
-A1:  NextLoc f = il.(T,locnum f + 1) by Th34;
      assume f = NextLoc f;
-     then locnum f = locnum f + 1 by A1,Def13;
-     hence thesis by NAT_1:38;
+     then locnum f = locnum f + 1 by Def13;
+     hence thesis;
    end;
 
 theorem
@@ -1823,11 +1816,9 @@ theorem
     let f, g be Instruction-Location of T such that
 A1:   NextLoc f = NextLoc g;
     set k = locnum f;
-A2: NextLoc f = il.(T,k+1) by Th34;
     set m = locnum g;
-A3: NextLoc g = il.(T,m+1) by Th34;
         k+0 = k+1-1
-       .= m+1-1 by A1,A2,A3,Th25
+       .= m+1-1 by A1,Th25
        .= m+0;
     hence f = g by Th27;
   end;
@@ -1868,12 +1859,11 @@ proof
 A1: InsCode i = 1;
    set M = STC N;
    set k = locnum IC s;
-A2: NextLoc IC s = il.(M,k+1) by Th34;
 A3: il.(M,k) = k & il.(M,k+1) = k+1 by Th37;
    reconsider K = IC s as Nat by Def11;
        Exec(i,s).IC STC N = succ IC s by A1,Lm4
                      .= K+1 by CARD_1:52;
- hence Exec(i,s).IC STC N = NextLoc IC s by A2,A3,Def13;
+ hence Exec(i,s).IC STC N = NextLoc IC s by A3,Def13;
 end;
 
 theorem
@@ -1890,7 +1880,7 @@ A1:   InsCode i = 1;
 A2:   l = il.(M,k) by Th26;
 A3: il.(M,k) = k by Th37;
        k = locnum l by A2,Def13;
-   then NextLoc l = il.(M,k+1) by Th34
+   then NextLoc l = il.(M,k+1)
     .= k+1 by Th37;
  hence NIC(i, l) = {NextLoc l} by A1,A2,A3,Lm5;
 end;
@@ -1908,7 +1898,7 @@ A3: k = locnum l by A1,Def13;
  thus SUCC l = {k,k+1} by A2,Th24
    .= {k,il.(M,k+1)} by Th37
    .= {il.(M,k),il.(M,k+1)} by Th37
-   .= {l, NextLoc l} by A1,A3,Th34;
+   .= {l, NextLoc l} by A1,A3;
 end;
 
 definition
@@ -1943,15 +1933,15 @@ A1:  for s being State of S holds Exec(i, s).IC S = NextLoc IC s;
      A4: dom ((IC S, il)-->(il1, I)) = {IC S, il} by FUNCT_4:65;
      then A5: IC S in dom ((IC S, il)-->(il1, I)) by TARSKI:def 2;
      A6: IC S <> il by AMI_1:48;
-     A7: IC u = u.IC S by AMI_1:def 15
+     A7: IC u = u.IC S
              .= ((IC S, il)-->(il1, I)).IC S by A5,FUNCT_4:14
              .= il by A6,FUNCT_4:66;
          il in dom ((IC S, il)-->(il1, I)) by A4,TARSKI:def 2;
      then A8: u.il = ((IC S, il)-->(il1, I)).il by FUNCT_4:14
              .= i by A6,FUNCT_4:66;
-             IC Following u = IC Exec(CurInstr u,u) by AMI_1:def 18
-           .= IC Exec(u.IC u, u) by AMI_1:def 17
-           .= Exec(u.IC u, u).IC S by AMI_1:def 15
+             IC Following u = IC Exec(CurInstr u,u)
+           .= IC Exec(u.IC u, u)
+           .= Exec(u.IC u, u).IC S
            .= NextLoc il by A1,A7,A8;
       hence x in {IC Following s where s is State of S : IC s = il & s.il=i}
         by A3,A7,A8;
@@ -1960,9 +1950,9 @@ A1:  for s being State of S holds Exec(i, s).IC S = NextLoc IC s;
              x in {IC Following s where s is State of S : IC s = il & s.il=i};
          then consider s being State of S such that
      A9: x = IC Following s & IC s = il & s.il = i;
-      thus x = IC Exec(CurInstr s,s) by A9,AMI_1:def 18
-           .= IC Exec(s.IC s, s) by AMI_1:def 17
-           .= Exec(s.IC s, s).IC S by AMI_1:def 15
+      thus x = IC Exec(CurInstr s,s) by A9
+           .= IC Exec(s.IC s, s)
+           .= Exec(s.IC s, s).IC S
            .= NextLoc il by A1,A9;
      end;
     hence x in {NextLoc il} iff
@@ -1971,7 +1961,7 @@ A1:  for s being State of S holds Exec(i, s).IC S = NextLoc IC s;
   end;
   then {NextLoc il} = { IC Following s where s is State of S :
     IC s = il & s.il = i } by TARSKI:2;
- hence thesis by Def5;
+ hence thesis;
   end;
 
 theorem Th42:
@@ -2012,18 +2002,14 @@ A1:   l in JUMP i by XBOOLE_0:def 1;
     reconsider l as Instruction-Location of T by A1;
     set X = { NIC(i,l1) where
         l1 is Instruction-Location of T: not contradiction };
-A2: meet X = JUMP i by Def6;
         NIC(i,l) in X;
-    then l in NIC(i,l) by A1,A2,SETFAM_1:def 1;
-    then l in { IC Following s where s is State of T : IC s = l & s.l = i }
-      by Def5;
+    then l in NIC(i,l) by A1,SETFAM_1:def 1;
+    then l in { IC Following s where s is State of T : IC s = l & s.l = i };
     then consider s being State of T such that
 A3:   l = IC Following s and
 A4:   IC s = l & s.l = i;
-A5: Following s = Exec(CurInstr s,s) by AMI_1:def 18
-      .= Exec(i,s) by A4,AMI_1:def 17;
     take s;
-        Exec(i,s).IC T = IC s by A3,A4,A5,AMI_1:def 15;
+        Exec(i,s).IC T = IC s by A3,A4;
     hence Exec(i,s).IC T <> NextLoc IC s by Th35;
   end;
 
@@ -2087,13 +2073,11 @@ A4: now let k be Nat such that
     A5: P[k];
         set l = IC (Computation s).k;
     A6: NIC(pi(F,l), l) c= dom F by A1,A5,Def17;
-    A7: NIC(pi(F,l),l) = { IC Following t where t is State of S :
-      IC t=l & t.l=pi(F,l) } by Def5;
         set t = (Computation s).k;
     A8: pi(F,l) = F.l by A5,AMI_5:def 5;
             F.l = s.l by A2,A5,GRFUNC_1:8;
     then t.l = pi(F,l) by A8,AMI_1:54;
-    then A9: IC Following t in NIC(pi(F,l),l) by A7;
+    then A9: IC Following t in NIC(pi(F,l),l);
             (Computation s).(k+1) = Following t by AMI_1:def 19;
      hence P[k+1] by A6,A9;
     end;
@@ -2394,7 +2378,7 @@ then A4: k+1 < card F -' 1 + 1 by XREAL_1:8;
 then A5: k+1 <= k by A2,Th28;
         k <= k+1 by NAT_1:29;
     then k+0 = k+1 by A5,XREAL_1:1;
-    hence thesis by XCMPLX_1:2;
+    hence thesis;
     end;
     suppose k = card F -' 1;
     hence thesis by A2;

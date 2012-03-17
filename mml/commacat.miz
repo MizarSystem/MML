@@ -8,9 +8,9 @@ environ
 
  vocabularies CAT_1, MCART_1, FUNCT_1, RELAT_1, PARTFUN1, CAT_2, FUNCOP_1,
       FUNCT_3, COMMACAT;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, MCART_1, RELAT_1, FUNCT_1,
-      PARTFUN1, FUNCT_2, FUNCT_4, PBOOLE, CAT_1, CAT_2, DOMAIN_1;
- constructors CAT_2, DOMAIN_1, PBOOLE;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1,
+      PARTFUN1, FUNCT_2, FUNCT_4, PBOOLE, CAT_1, CAT_2, MCART_1, DOMAIN_1;
+ constructors CAT_2, DOMAIN_1, PBOOLE, MCART_1;
  registrations CAT_1, CAT_2, RELSET_1, SUBSET_1, XBOOLE_0;
  requirements SUBSET, BOOLE;
  definitions TARSKI, XBOOLE_0;
@@ -23,72 +23,26 @@ begin
  deffunc obj(CatStr) = the Objects of $1;
  deffunc morph(CatStr) = the Morphisms of $1;
 
-definition let x be set;
- func x`11 -> set equals:
-Def1:  x`1`1; correctness;
- func x`12 -> set equals:
-Def2:  x`1`2; correctness;
- func x`21 -> set equals:
-Def3:  x`2`1; correctness;
- func x`22 -> set equals:
-Def4:  x`2`2; correctness;
+definition
+  canceled 4;
 end;
 
 reserve x,x1,x2,y,y1,y2,z for set;
 
-theorem
+canceled;
  Th1: [[x1,x2],y]`11 = x1 & [[x1,x2],y]`12 = x2 &
-   [x,[y1,y2]]`21 = y1 & [x,[y1,y2]]`22 = y2
-  proof
-       [[x1,x2],y]`1 = [x1,x2] & [x,[y1,y2]]`2 = [y1,y2] &
-    [x1,x2]`1 = x1 & [y1,y2]`1 = y1 & [x1,x2]`2 = x2 & [y1,y2]`2 = y2
-     by MCART_1:7;
-   hence thesis by Def1,Def2,Def3,Def4;
-  end;
-
-definition let D1,D2,D3 be non empty set, x be Element of [:[:D1,D2:],D3:];
-redefine
- func x`11 -> Element of D1;
-  coherence
-   proof
-       x`11 = x`1`1 by Def1;
-    hence thesis;
-   end;
- func x`12 -> Element of D2;
-  coherence
-   proof
-       x`12 = x`1`2 by Def2;
-    hence thesis;
-   end;
-end;
-
-definition let D1,D2,D3 be non empty set, x be Element of [:D1,[:D2,D3:]:];
-redefine
- func x`21 -> Element of D2;
-  coherence
-   proof
-       x`21 = x`2`1 by Def3;
-    hence thesis;
-   end;
- func x`22 -> Element of D3;
-  coherence
-   proof
-       x`22 = x`2`2 by Def4;
-    hence thesis;
-   end;
-end;
+   [x,[y1,y2]]`21 = y1 & [x,[y1,y2]]`22 = y2 by MCART_1:89;
 
  reserve C,D,E for Category, c,c1,c2 for Object of C, d,d1 for Object of D,
    x for set, f,f1 for (Morphism of E),
   g for (Morphism of C), h for (Morphism of D),
   F for Functor of C,E, G for Functor of D,E;
 
- definition let C,D,E;
+definition let C,D,E;
   let F be Functor of C,E, G be Functor of D,E;
- given c1,d1,f1 such that A1: f1 in Hom(F.c1,G.d1);
+  given c1,d1,f1 such that A1: f1 in Hom(F.c1,G.d1);
   func commaObjs(F,G) -> non empty Subset of
-      [:[:the Objects of C, the Objects of D:], the Morphisms of E:] equals:
-Def5:
+  [:[:the Objects of C, the Objects of D:], the Morphisms of E:] equals:Def5:
    {[[c,d],f] : f in Hom(F.c,G.d)};
   coherence
    proof
@@ -103,7 +57,7 @@ A2:  [[c1,d1],f1] in {[[c,d],f] : f in Hom(F.c,G.d)} by A1;
       end;
     hence thesis by A2;
    end;
- end;
+end;
 
  reserve o,o1,o2 for Element of commaObjs(F,G);
 
@@ -120,13 +74,12 @@ A1:  o = [[c,d],f] & f in Hom(F.c,G.d);
    hence thesis by A1,CAT_1:18;
   end;
 
- definition let C,D,E,F,G;
+definition let C,D,E,F,G;
  given c1,d1,f1 such that A1: f1 in Hom(F.c1,G.d1);
   func commaMorphs(F,G) -> non empty Subset of
       [:[:commaObjs(F,G), commaObjs(F,G):],
       [:the Morphisms of C, the Morphisms of D:]:]
-    equals:
-Def6:
+    equals:Def6:
     {[[o1,o2], [g,h]] : dom g = o1`11 & cod g = o2`11 &
               dom h = o1`12 & cod h = o2`12 & (o2`2)*(F.g) = (G.h)*(o1`2)};
  coherence
@@ -141,7 +94,7 @@ Def6:
      o`1`1 = o`11 & o`1`2 = o`12 & o`1 = [c1,d1] & [c1,d1]`1 = c1 &
      [c1,d1]`2 = d1 & o`2 = f1 & f1*id(F.c1) = f1 & id(G.d1)*f1 = f1 &
      F.id c1 = id(F.c1) & G.id d1 = id(G.d1)
-      by Def1,Def2,CAT_1:44,46,47,108,MCART_1:7;
+      by MCART_1:def 14,def 15,CAT_1:44,46,47,108,MCART_1:7;
 then A2:   [[o,o],[id c1,id d1]] in X;
         X c= [:[:commaObjs(F,G), commaObjs(F,G):],
           [:the Morphisms of C, the Morphisms of D:]:]
@@ -157,9 +110,8 @@ then A2:   [[o,o],[id c1,id d1]] in X;
 
  reserve k,k1,k2,k' for Element of commaMorphs(F,G);
 
- definition let C,D,E,F,G,k;
- redefine
-  func k`11 -> Element of commaObjs(F,G);
+definition let C,D,E,F,G,k;
+  redefine func k`11 -> Element of commaObjs(F,G);
    coherence
     proof
      thus k`11 is Element of commaObjs(F,G);
@@ -169,7 +121,7 @@ then A2:   [[o,o],[id c1,id d1]] in X;
     proof
      thus k`12 is Element of commaObjs(F,G);
     end;
- end;
+end;
 
 theorem
  Th3: (ex c,d,f st f in Hom(F.c,G.d)) implies
@@ -189,13 +141,12 @@ A1:  k = [[o1,o2], [g,h]] & dom g = o1`11 & cod g = o2`11 &
    hence thesis by A1;
   end;
 
- definition let C,D,E,F,G,k1,k2;
+definition let C,D,E,F,G,k1,k2;
   given c1,d1,f1 such that
 A1: f1 in Hom(F.c1,G.d1);
   assume
 A2: k1`12 = k2`11;
-  func k2*k1 -> Element of commaMorphs(F,G) equals:
-Def7:
+  func k2*k1 -> Element of commaMorphs(F,G) equals:Def7:
     [[k1`11,k2`12],[k2`21*k1`21,k2`22*k1`22]];
   coherence
    proof set k21 = k2`21*k1`21;
@@ -229,9 +180,9 @@ A8:   dom k21 = dom k1`21 & cod k21 = cod k2`21 & dom k22 = dom k1`22 &
  in commaMorphs(F,G) by A3,A4,A7,A8;
     hence thesis;
    end;
- end;
+end;
 
- definition let C,D,E,F,G;
+definition let C,D,E,F,G;
   func commaComp(F,G) ->
     PartFunc of [:commaMorphs(F,G),commaMorphs(F,G):],commaMorphs(F,G) means:
 Def8:
@@ -285,13 +236,12 @@ A10:    x = [k1,k2] & k1`11 = k2`12;
      end;
     hence thesis by A7,A8,FUNCT_1:9;
    end;
- end;
+end;
 
- definition let C,D,E,F,G;
- given c1,d1,f1 such that
-A1: f1 in Hom(F.c1,G.d1);
+definition let C,D,E,F,G;
+  given c1,d1,f1 such that A1: f1 in Hom(F.c1,G.d1);
   func F comma G -> strict Category means
-       the Objects of it = commaObjs(F,G) &
+    the Objects of it = commaObjs(F,G) &
     the Morphisms of it = commaMorphs(F,G) &
     (for k holds (the Dom of it).k = k`11) &
     (for k holds (the Cod of it).k = k`12) &
@@ -309,7 +259,7 @@ A4:    commaObjs(F,G) = {[[c,d],f] : f in Hom(F.c,G.d)} &
       commaMorphs(F,G) = {[[o1,o2], [g,h]] : dom g = o1`11 & cod g = o2`11 &
               dom h = o1`12 & cod h = o2`12 & (o2`2)*(F.g) = (G.h)*(o1`2)}
        by A1,Def5,Def6;
-      defpred P[ Element of commaObjs(F,G),set] means
+      defpred P[Element of commaObjs(F,G),set] means
         $2 = [[$1,$1],[id $1`11, id $1`12]];
 A5:   ex k st P[o,k]
        proof
@@ -332,7 +282,7 @@ A7:    P[o,I.o] from FUNCT_2:sch 3(A5);
 A8:    dom the Comp of FG = { [k1,k2]: k1`11 = k2`12} by Def8;
 A9:    for f being Morphism of FG holds dom f = f`11 & cod f = f`12
        proof let f be Morphism of FG;
-            dom f = D'.f & cod f = C'.f by CAT_1:def 2,def 3;
+        dom f = D'.f & cod f = C'.f by CAT_1:def 2,def 3;
         hence thesis by A2,A3;
        end;
 A10:    for f,g being Morphism of FG for k1,k2 st f = k1 & g = k2 &
@@ -461,7 +411,7 @@ then A29:    the Cod of E1 = the Cod of E2 by A26,A27,FUNCT_2:113;
       end;
      hence thesis by A26,A27,A28,A29,FUNCT_2:113;
     end;
- end;
+end;
 
 theorem
  Th4: the Objects of 1Cat(x,y) = {x} & the Morphisms of 1Cat(x,y) = {y}
@@ -490,23 +440,23 @@ theorem
    hence thesis by ZFMISC_1:37;
   end;
 
- definition let C, c;
+definition let C, c;
   func 1Cat c -> strict Subcategory of C equals
-       1Cat(c, id c);
+    1Cat(c, id c);
    coherence
     proof
-      A1: obj(1Cat(c, id c)) = {c} by Th4;
-A2:    now let a,b be Object of 1Cat(c, id c);
-           a = c & b = c & id c in Hom(c,c) & Hom(a,a) = {id c}
+A1:   obj(1Cat(c, id c)) = {c} by Th4;
+A2:   now let a,b be Object of 1Cat(c, id c);
+        a = c & b = c & id c in Hom(c,c) & Hom(a,a) = {id c}
          by Th5,CAT_1:34,55;
-       hence for c1,c2 st a = c1 & b = c2 holds Hom(a,b) c= Hom(c1,c2)
+        hence for c1,c2 st a = c1 & b = c2 holds Hom(a,b) c= Hom(c1,c2)
          by ZFMISC_1:37;
       end;
      set m = id c;
-     reconsider O = {c}, M = {id c} as non empty set;
-     reconsider d = M-->c as Function of M,O;
-     reconsider i = O-->m as Function of O,M;
-     reconsider s = (m,m).--> m as PartFunc of [:M,M:],M;
+     set O = {c}, M = {id c};
+     set d = M-->c;
+     set i = O-->m;
+     set s = (m,m).--> m;
 A3:    1Cat(c,m) = CatStr(#O, M, d, d, s, i#) &
       dom s = {[m,m]} & s.[m,m] = m by CAT_1:7,8,def 9;
 A4:    dom m = c & cod m = c by CAT_1:44;
@@ -519,20 +469,19 @@ then A7:      x = [m,m] by A3,TARSKI:def 1;
                .= (the Comp of C).x by A4,A7,CAT_1:41;
       end;
 then A8:    the Comp of 1Cat(c, id c) <= the Comp of C by A5,GRFUNC_1:8;
-         now let a be Object of 1Cat(c, id c);
-           id a = id c & a = c by CAT_1:34,35;
+     now let a be Object of 1Cat(c, id c);
+       id a = id c & a = c by CAT_1:34,35;
        hence for c1 st a = c1 holds id a = id c1;
-      end; hence thesis by A1,A2,A8,CAT_2:def 4;
+      end;
+      hence thesis by A1,A2,A8,CAT_2:def 4;
     end;
-   correctness;
- end;
+end;
 
- definition let C, c;
+definition let C, c;
   func c comma C -> strict Category equals
-       (incl 1Cat c) comma (id C);
-   correctness;
+    (incl 1Cat c) comma (id C);
+  coherence;
   func C comma c -> strict Category equals
-       (id C) comma (incl 1Cat c);
-   correctness;
- end;
-
+    (id C) comma (incl 1Cat c);
+  coherence;
+end;

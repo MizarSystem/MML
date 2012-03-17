@@ -161,7 +161,7 @@ then A10: {} in x by A9,AXIOMS:30;
           x in [:1, 5:] by A2,A7,A8;
      then consider x1, x2 being set such that
 A11: x1 in 1 & x2 in 5 & x = [x1,x2] by ZFMISC_1:103;
-          x = { {x1, x2}, {x1} } by A11,TARSKI:def 5;
+          x = { {x1, x2}, {x1} } by A11;
     hence contradiction by A10,TARSKI:def 2;
     end;
 A12: NonTerminals G = { t where t is Symbol of G :
@@ -274,7 +274,7 @@ end;
 definition
  let t be Terminal of SCM-AE;
  func @t -> Data-Location equals
-:Def2:  t;
+  t;
  coherence proof
   reconsider t' = t as Element of SCM-Data-Loc by Def1;
   reconsider t' as Object of SCM by AMI_3:def 1;
@@ -312,23 +312,23 @@ then reconsider nt0 = [0,0], nt1 = [0,1], nt2 = [0,2], nt3 = [0,3], nt4 = [0,4]
 definition
  let t1, t2 be bin-term;
  func t1+t2 -> bin-term equals
-:Def3:
+
    [0,0]-tree(t1, t2);
   coherence proof nt0-tree(t1, t2) in TS SCM-AE; hence thesis; end;
  func t1-t2 -> bin-term equals
-:Def4:
+
    [0,1]-tree(t1, t2);
   coherence proof nt1-tree(t1, t2) in TS SCM-AE; hence thesis; end;
  func t1*t2 -> bin-term equals
-:Def5:
+
    [0,2]-tree(t1, t2);
   coherence proof nt2-tree(t1, t2) in TS SCM-AE; hence thesis; end;
  func t1 div t2 -> bin-term equals
-:Def6:
+
    [0,3]-tree(t1, t2);
   coherence proof nt3-tree(t1, t2) in TS SCM-AE; hence thesis; end;
  func t1 mod t2 -> bin-term equals
-:Def7:
+
    [0,4]-tree(t1, t2);
   coherence proof nt4-tree(t1, t2) in TS SCM-AE; hence thesis; end;
 end;
@@ -372,7 +372,7 @@ then A10: term = nt-tree (tl, tr) by A2,TREES_4:def 6;
         nt = [0,0] or nt = [0,1] or nt = [0,2] or nt = [0,3] or nt = [0,4]
                                         by Th3;
    then term = tl+tr or term = tl-tr or term = tl*tr or term = tl div tr or
-   term = tl mod tr by A10,Def3,Def4,Def5,Def6,Def7;
+   term = tl mod tr by A10;
    hence thesis;
 end;
 end;
@@ -399,7 +399,7 @@ definition
  let t be Terminal of SCM-AE;
  redefine func s.t -> Integer;
  coherence proof
-       s.@t = s.t by Def2;
+       s.@t = s.t;
   hence thesis;
  end;
 end;
@@ -558,19 +558,19 @@ theorem :: PRE_COMP_8:
    (tl*tr)@s = (tl@s)*(tr@s) &
    (tl div tr)@s = (tl@s) div (tr@s) & (tl mod tr)@s = (tl@s) mod (tr@s)
  proof let s be State of SCM, tl, tr be bin-term;
-  thus (tl+tr)@s = (nt0-tree(tl, tr))@s by Def3
+  thus (tl+tr)@s = (nt0-tree(tl, tr))@s
            .= nt0-Meaning_on (tl@s, tr@s) by Th7
            .= tl@s + tr@s by Def8;
-  thus (tl-tr)@s = (nt1-tree(tl, tr))@s by Def4
+  thus (tl-tr)@s = (nt1-tree(tl, tr))@s
            .= nt1-Meaning_on (tl@s, tr@s) by Th7
            .= tl@s - tr@s by Def8;
-  thus (tl * tr)@s = (nt2-tree(tl, tr))@s by Def5
+  thus (tl * tr)@s = (nt2-tree(tl, tr))@s
            .= nt2-Meaning_on (tl@s, tr@s) by Th7
            .= tl@s * tr@s by Def8;
-  thus (tl div tr)@s = (nt3-tree(tl, tr))@s by Def6
+  thus (tl div tr)@s = (nt3-tree(tl, tr))@s
            .= nt3-Meaning_on (tl@s, tr@s) by Th7
            .= tl@s div tr@s by Def8;
-  thus (tl mod tr)@s = (nt4-tree(tl, tr))@s by Def7
+  thus (tl mod tr)@s = (nt4-tree(tl, tr))@s
            .= nt4-Meaning_on (tl@s, tr@s) by Th7
            .= tl@s mod tr@s by Def8;
  end;
@@ -914,7 +914,7 @@ then A4: s = (Computation s).0 & IC s = il.n & s.il.n = dl.aux:=@t
    by A2,AMI_1:def 19,SCM_1:def 1;
    hence IC (Computation s).i = il.(n+i);
    thus IC u = il.(n+(i+1)) by A4,SCM_1:18;
-   thus u.dl.aux = s.@t by A3,A4,SCM_1:18 .= s.t by Def2
+   thus u.dl.aux = s.@t by A3,A4,SCM_1:18 .= s.t
                .= (root-tree t)@s by Th6;
    let dn be Nat; assume dn < aux; then dl.dn <> dl.aux by AMI_3:52;
    hence s.dl.dn = u.dl.dn by A3,A4,SCM_1:18;
@@ -1058,7 +1058,7 @@ A35:    len Selfwork(nt, aux) = 1 by A34,FINSEQ_1:57;
     then i < len SCM-Compile(nt-tree(tl, tr), aux) by NAT_1:38;
 then A36: s.il.(n+i) = SCM-Compile(nt-tree(tl, tr), aux).(i+1) by SCM_1:def 1
              .= Divide(dl.aux, dl.(aux+1)) by A8,A18,A34,FINSEQ_1:59;
-         aux <> aux+1 by NAT_1:38;
+         aux <> aux+1;
 then A37: dl.aux <> dl.(aux+1) by AMI_3:52;
    thus i+1 = len SCM-Compile(nt-tree(tl, tr), aux) by A8,A18,A35,FINSEQ_1:35;
    thus IC (Computation s).i = il.(n+i) by A12,A13,AMI_1:51;
@@ -1101,7 +1101,7 @@ then A48: s.il.(n+k) = SCM-Compile(nt-tree(tl, tr), aux).(k+1) by SCM_1:def 1
              .= <*Divide(dl.aux, dl.(aux+1)), dl.aux:=dl.(aux+1)*>.2
         by A8,A18,A42,A45,A46,FINSEQ_1:def 7
              .= dl.aux:=dl.(aux+1) by FINSEQ_1:61;
-         aux <> aux+1 by NAT_1:38;
+         aux <> aux+1;
 then A49: dl.aux <> dl.(aux+1) by AMI_3:52;
    hence
 A50: IC (Computation s).k = il.(n+i+1) by A13,A14,A47,SCM_1:22
@@ -1154,7 +1154,7 @@ then A3: s.il.(n+(i+1))=(SCM-Compile(term, aux)^<*halt SCM*>).(i+1+1)
                .= halt SCM by A2,FINSEQ_1:59;
   hence s is halting by A2,SCM_1:3;
   thus (Result s).dl.aux = term@s by A2,A3,SCM_1:4;
-        i <> i+1 by NAT_1:38; then n+i <> n+(i+1) by XCMPLX_1:2;
+        i <> i+1; then n+i <> n+(i+1);
    then il.(n+i) <> il.(n+(i+1)) & n+i+1 = n+(i+1) by AMI_3:53;
   hence Complexity s = len SCM-Compile(term, aux) by A2,A3,SCM_1:17;
 end;

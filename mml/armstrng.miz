@@ -718,7 +718,7 @@ definition
   let X be set;
  canceled;
 
-  func Dependencies(X) -> Dependency-set of X equals :Def7:
+  func Dependencies(X) -> Dependency-set of X equals
    [: bool X, bool X :];
   coherence by RELSET_1:def 1;
 end;
@@ -730,7 +730,7 @@ end;
 registration
   let X be set;
   cluster Dependencies X -> non empty;
-  coherence proof Dependencies X = [: bool X, bool X :] by Def7; hence thesis
+  coherence proof Dependencies X = [: bool X, bool X :]; hence thesis
 ;
   end;
 
@@ -739,7 +739,7 @@ registration
 definition
   let X be set, F be non empty Dependency-set of X;
   redefine mode Element of F -> Dependency of X;
-  correctness proof let x be Element of F; thus thesis by Def7; end;
+  correctness proof let x be Element of F; thus thesis; end;
 end;
 
 theorem Th9:
@@ -754,7 +754,7 @@ proof let X be set, x be set;
  end;
  given a, b being Subset of X such that
  A3: x = [a,b];  x in [:bool X, bool X:] by A3,ZFMISC_1:106;
- hence x in Dependencies X by Def7;
+ hence x in Dependencies X;
 end;
 
 theorem Th10:
@@ -780,7 +780,7 @@ end;
 
 definition
  let R be DB-Rel;
- func Dependency-str R -> Dependency-set of the Attributes of R equals :Def9:
+ func Dependency-str R -> Dependency-set of the Attributes of R equals
  { [A, B] where A, B is Subset of the Attributes of R: A >|> B, R };
  coherence proof
  set X = {[A,B] where A,B is Subset of the Attributes of R: A >|> B, R};
@@ -801,14 +801,12 @@ for R being DB-Rel, A, B being Subset of the Attributes of R
  holds [A, B] in Dependency-str R iff A >|> B, R
 proof let D be DB-Rel, A, B be Subset of the Attributes of D;
    set S = Dependency-str D;
-A1: S = {[a, b] where a,b is Subset of the Attributes of D:a >|> b,D}
-   by Def9;
  hereby assume [A, B] in S;
     then consider a, b being Subset of the Attributes of D such that
- A2: [A, B] = [a, b] & a >|> b, D by A1;  A = a & B = b by A2,ZFMISC_1:33;
+ A2: [A, B] = [a, b] & a >|> b, D;  A = a & B = b by A2,ZFMISC_1:33;
   hence A >|> B, D by A2;
  end;
- thus thesis by A1;
+ thus thesis;
 end;
 
 begin :: 4. Full families of dependencies
@@ -848,7 +846,7 @@ definition
   let X be set, A, B be Subset of X;
   redefine func [A, B] -> Dependency of X;
   coherence proof [A, B] in [: bool X, bool X:] by ZFMISC_1:def 2;
-   hence thesis by Def7;
+   hence thesis;
   end;
 end;
 
@@ -863,7 +861,7 @@ end;
 
 definition
   let X be set;
-  func Dependencies-Order X -> Relation of Dependencies X equals :Def11:
+  func Dependencies-Order X -> Relation of Dependencies X equals
    { [P, Q] where P, Q is Dependency of X : P <= Q };
   coherence proof
   set Y = { [E, F] where E, F is Dependency of X : E <= F };
@@ -877,37 +875,35 @@ definition
   end;
 end;
 
-theorem Th16:
+theorem
 for X, x being set
  holds x in Dependencies-Order X
    iff ex P, Q being Dependency of X st x = [P, Q] & P <= Q
 proof let X, x be set;
  set Y = { [E, F] where E, F is Dependency of X : E <= F };
- hereby assume x in Dependencies-Order X; then x in Y by Def11;
+ hereby assume x in Dependencies-Order X; then x in Y;
   hence ex E, F being Dependency of X st x = [E, F] & E <= F;
  end;
  assume ex E, F being Dependency of X st x = [E, F] & E <= F;
   then x in Y;
- hence x in Dependencies-Order X by Def11;
+ hence x in Dependencies-Order X;
 end;
 
 theorem Th17:
 for X being set holds dom Dependencies-Order X = [: bool X, bool X :]
 proof let X be set;
-A1: Dependencies-Order X =
-   { [E, F] where E, F is Dependency of X : E <= F } by Def11;
      now let x be set;
    hereby assume x in dom Dependencies-Order X;
       then consider y being set such that
    A2: [x,y] in Dependencies-Order X by RELAT_1:def 4;
       consider E, F being Dependency of X such that
-   A3: [x,y] = [E,F] & E <= F by A1,A2;
+   A3: [x,y] = [E,F] & E <= F by A2;
          x = E & E in Dependencies X by A3,ZFMISC_1:33;
     hence x in [: bool X, bool X :];
    end;
    assume x in [: bool X, bool X :];
-     then reconsider x' = x as Dependency of X by Def7;
-        [x', x'] in Dependencies-Order X by A1;
+     then reconsider x' = x as Dependency of X;
+        [x', x'] in Dependencies-Order X;
    hence x in dom Dependencies-Order X by RELAT_1:def 4;
   end;
   hence dom Dependencies-Order X = [: bool X, bool X :] by TARSKI:2;
@@ -916,20 +912,18 @@ end;
 theorem Th18:
 for X being set holds rng Dependencies-Order X = [: bool X, bool X :]
 proof let X be set;
-A1: Dependencies-Order X =
-   { [E, F] where E, F is Dependency of X : E <= F } by Def11;
      now let x be set;
    hereby assume x in rng Dependencies-Order X;
       then consider y being set such that
    A2: [y,x] in Dependencies-Order X by RELAT_1:def 5;
       consider E, F being Dependency of X such that
-   A3: [y,x] = [E,F] & E <= F by A1,A2;
+   A3: [y,x] = [E,F] & E <= F by A2;
       x = F & F in Dependencies X by A3,ZFMISC_1:33;
     hence x in [: bool X, bool X :];
    end;
    assume x in [: bool X, bool X :];
-     then reconsider x' = x as Dependency of X by Def7;
-        [x', x'] in Dependencies-Order X by A1;
+     then reconsider x' = x as Dependency of X;
+        [x', x'] in Dependencies-Order X;
    hence x in rng Dependencies-Order X by RELAT_1:def 5;
   end;
   hence rng Dependencies-Order X = [: bool X, bool X :] by TARSKI:2;
@@ -955,11 +949,10 @@ registration
   cluster Dependencies-Order X
       -> total reflexive antisymmetric transitive;
   coherence proof set dox = Dependencies-Order X; set dx = Dependencies X;
-A1: dox = { [E, F] where E, F is Element of dx : E <= F } by Def11;
      dx c= dom dox
     proof let x be set; assume x in dx;
       then reconsider x' = x as Element of dx;  x' <= x';
-      then [x,x] in dox by A1;
+      then [x,x] in dox;
      hence thesis by RELAT_1:def 4;
     end;
     then A2: dom dox = dx by XBOOLE_0:def 10;
@@ -969,16 +962,16 @@ A1: dox = { [E, F] where E, F is Element of dx : E <= F } by Def11;
     dox is_reflexive_in dx
     proof let x be set; assume x in dx;
       then reconsider x' = x as Element of dx;  x' <= x';
-     hence [x,x] in dox by A1;
+     hence [x,x] in dox;
     end;
   hence dox is reflexive by A3,RELAT_2:def 9;
     dox is_antisymmetric_in dx proof let x, y be set; assume that
          x in dx & y in dx and
   A4: [x,y] in dox & [y,x] in dox;
       consider x', y' being Element of dx such that
-  A5: [x,y]=[x',y'] & x' <= y' by A1,A4;
+  A5: [x,y]=[x',y'] & x' <= y' by A4;
       consider y'', x'' being Element of dx such that
-  A6: [y,x]=[y'',x''] & y'' <= x'' by A1,A4;
+  A6: [y,x]=[y'',x''] & y'' <= x'' by A4;
          x = x' & x = x'' & y = y' & y = y'' by A5,A6,ZFMISC_1:33;
    hence x = y by A5,A6,Th13;
   end;
@@ -987,12 +980,12 @@ A1: dox = { [E, F] where E, F is Element of dx : E <= F } by Def11;
         x in dx & y in dx & z in dx and
   A7: [x,y] in dox & [y,z] in dox;
       consider x', y' being Element of dx such that
-  A8: [x,y]=[x',y'] & x' <= y' by A1,A7;
+  A8: [x,y]=[x',y'] & x' <= y' by A7;
       consider y'', z' being Element of dx such that
-  A9: [y,z]=[y'',z'] & y'' <= z' by A1,A7;
+  A9: [y,z]=[y'',z'] & y'' <= z' by A7;
   A10: x = x' & y = y' & y = y'' & z = z' by A8,A9,ZFMISC_1:33;
       then x' <= z' by A8,A9,Th14;
-   hence [x,z] in dox by A1,A10;
+   hence [x,z] in dox by A10;
   end;
    hence dox is transitive by A3,RELAT_2:def 16;
   end;
@@ -1055,13 +1048,13 @@ theorem Th21:
 for X being set holds Dependencies X is (F1) (F2) (F3) (F4)
 proof let X be set;
   set D = Dependencies X;
-A1: D = [: bool X, bool X :] by Def7;
+ D = [: bool X, bool X :];
      then D = nabla bool X by EQREL_1:def 1;
   then A2: field D = bool X by ORDERS_1:97;
    thus D is (F1) proof let A be Subset of X; thus [A, A] in D; end;
    thus D is (F2) proof let x, y, z be set; assume
          x in field D & y in field D & z in field D & [x,y] in D & [y,z] in D;
-    hence [x,z] in D by A1,A2,ZFMISC_1:def 2;
+    hence [x,z] in D by A2,ZFMISC_1:def 2;
    end;
    thus D is (F3) proof let A, B, A', B' be Subset of X; thus thesis; end;
    thus D is (F4) proof let A, B, A', B' being Subset of X; thus thesis; end;
@@ -1196,7 +1189,7 @@ A1: S is (DC3) proof let A, B being Subset of T such that
        A3: f|A = g|A;
         thus f|B = (f|A)|B by A2,RELAT_1:103 .= g|B by A2,A3,RELAT_1:103;
        end;
-    hence [A, B] in S by Th12;
+    hence [A, B] in S;
    end;
 A4: now let A, B, C being Subset of T; assume [A, B] in S & [B, C] in S;
    then A5: A >|> B, D & B >|> C, D by Th12;
@@ -1204,7 +1197,7 @@ A4: now let A, B, C being Subset of T; assume [A, B] in S & [B, C] in S;
         then f|B = g|B by A5,Def8;
        hence f|C = g|C by A5,Def8;
       end;
-    hence [A, C] in S by Th12;
+    hence [A, C] in S;
    end;
 then A6: S is (F2) by Th20;
   hence S is (F1) by A1,Th23; thus S is (F2) by A4,Th20;
@@ -1222,7 +1215,7 @@ then A6: S is (F2) by Th20;
      thus f|(B\/B')=f|B\/f|B' by RELAT_1:107.= g|(B\/B') by A10,A11,RELAT_1:107
 ;
     end;
-   hence [A\/A', B\/B'] in S by Th12;
+   hence [A\/A', B\/B'] in S;
   end;
 end;
 
@@ -1273,16 +1266,16 @@ begin :: 5. Maximal elements of full families
 
 definition
   let X be set, F be Dependency-set of X;
-  func Maximal_wrt F -> Dependency-set of X equals :Def17:
+  func Maximal_wrt F -> Dependency-set of X equals
   Dependencies-Order X Maximal_in F;
   coherence by RELSET_1:4;
 end;
 
-theorem Th27:
+theorem
 for X being set, F being Dependency-set of X holds Maximal_wrt F c= F
 proof let X be set, F be Dependency-set of X;
  let x be set; assume x in Maximal_wrt F;
-   then x in ((Dependencies-Order X) Maximal_in F) by Def17;
+   then x in ((Dependencies-Order X) Maximal_in F);
  hence x in F;
 end;
 
@@ -1301,15 +1294,13 @@ A1: x in F;
    then reconsider FF= F as non empty Dependency-set of X;
    reconsider S = { y where y is Element of FF: x <= y } as set;
    set DOX = Dependencies-Order X;
-       bool X is finite by FINSET_1:24;
-then A2: [:bool X, bool X:] is finite by FINSET_1:19;
 A3: field DOX = [:bool X, bool X:] by Th19;
        S c= field DOX proof let a be set; assume a in S;
        then ex b be Element of FF st a = b & x <= b;
      then a in Dependencies X & Dependencies X c= [:bool X, bool X:];
      hence a in field DOX by A3;
     end;
-then A4: S is finite Subset of field DOX by A2,A3,FINSET_1:13;  x in S by A1;
+then A4: S is finite Subset of field DOX by A3,FINSET_1:13;  x in S by A1;
    then consider m being Element of S such that
 A5: m is_maximal_wrt S, DOX by A4,Th2;
       m in S by A5,WAYBEL_4:def 24;
@@ -1325,13 +1316,13 @@ A7: m = [a, b] by A6,Th9;
       A10: [m, y] in DOX;
           consider e, f being Dependency of X such that
       A11: [m, y] = [e, f] and
-      A12: e <= f by A10,Th16;
+      A12: e <= f by A10;
           reconsider y as Element of FF by A8;
          m = e & y = f by A11,ZFMISC_1:33;
           then x <= y by A6,A12,Th14; then y in S;
        hence contradiction by A5,A9,A10,WAYBEL_4:def 24;
       end; then m in (DOX Maximal_in F) by Def1;
-   hence [a,b] in Maximal_wrt F by A7,Def17;
+   hence [a,b] in Maximal_wrt F by A7;
    thus [a, b] >= x by A6,A7;
 end;
 
@@ -1344,13 +1335,13 @@ for X being set, F being Dependency-set of X, A, B being Subset of X
 proof let X be set, F be Dependency-set of X, x, y be Subset of X;
  set DOX = Dependencies-Order X;
  hereby assume x ^|^ y, F; then [x, y] in Maximal_wrt F by Def18;
- then A1: [x, y] in (DOX Maximal_in F) by Def17;
+ then A1: [x, y] in (DOX Maximal_in F);
  then A2: [x, y] is_maximal_wrt F, DOX by Def1;
    thus [x, y] in F by A1;
    given x', y' being Subset of X such that
  A3: [x', y'] in F & (x <> x' or y <> y') & [x, y] <= [x',y'];
  A4: [x,y] <> [x',y'] by A3,ZFMISC_1:33;
-    [[x,y],[x',y']] in DOX by A3,Th16;
+    [[x,y],[x',y']] in DOX by A3;
   hence contradiction by A2,A3,A4,WAYBEL_4:def 24;
  end;
  assume A5: [x, y] in F &
@@ -1364,11 +1355,11 @@ proof let X be set, F be Dependency-set of X, x, y be Subset of X;
         reconsider x', y' as Subset of X by A7;
     A8: x <> x' or y <> y' by A6,A7;
         consider e, f being Dependency of X such that
-    A9: [[x, y],z] = [e, f] & e <= f by A6,Th16;
+    A9: [[x, y],z] = [e, f] & e <= f by A6;
            e = [x,y] & f = z by A9,ZFMISC_1:33;
      hence contradiction by A5,A6,A7,A8,A9;
     end; then [x,y] in (DOX Maximal_in F) by Def1;
- then [x,y] in Maximal_wrt F by Def17;
+ then [x,y] in Maximal_wrt F;
  hence x ^|^ y, F by Def18;
 end;
 
@@ -1416,22 +1407,21 @@ proof let X be finite non empty set, F be full_family Dependency-set of X;
      given z being set such that
     A8: z in F & z <> x & [x, z] in DOX;
        consider e, f being Dependency of X such that
-    A9: [x,z] = [e, f] & e <= f by A8,Th16;
+    A9: [x,z] = [e, f] & e <= f by A8;
     A10: x = e & z = f by A9,ZFMISC_1:33;
        then f >= [A,A] by A7,A9,Th14; then z in MA by A2,A8,A10;
      hence contradiction by A4,A8,WAYBEL_4:def 24;
     end; then [A',B'] in (DOX Maximal_in F) by A6,Def1;
-  hence [A', B'] in Maximal_wrt F by Def17;
+  hence [A', B'] in Maximal_wrt F;
  end;
  thus Maximal_wrt F is (M2) proof
   let A, B, A', B' be Subset of X such that
  A11: [A, B] in MEF & [A', B'] in MEF & [A, B] >= [A', B'];
- A12: Maximal_wrt F = DOX Maximal_in F by Def17;
+  Maximal_wrt F = DOX Maximal_in F;
  then A13: [A', B'] is_maximal_wrt F, DOX by A11,Def1;
   assume not (A = A' & B = B');
- then A14: [A, B] <> [A',B'] by ZFMISC_1:33;  [[A',B'], [A, B]] in DOX by A11,
-Th16;
-  hence contradiction by A11,A12,A13,A14,WAYBEL_4:def 24;
+ then A14: [A, B] <> [A',B'] by ZFMISC_1:33;  [[A',B'], [A, B]] in DOX by A11;
+  hence contradiction by A11,A13,A14,WAYBEL_4:def 24;
  end;
  thus Maximal_wrt F is (M3) proof let A, B, A', B' be Subset of X;assume
  A15: [A, B] in MEF & [A', B'] in MEF & A' c= B;
@@ -1484,7 +1474,7 @@ A7: now let A, B be Subset of X; assume [A,B] in F;
         given y being set such that
       A12: y in F & y <> x & [x, y] in DOX;
           consider e, f being Dependency of X such that
-      A13: [x,y] = [e, f] & e <= f by A12,Th16;
+      A13: [x,y] = [e, f] & e <= f by A12;
       A14: x = e & y = f by A13,ZFMISC_1:33;
           consider c, d, c', d' being Subset of X such that
       A15: y = [c,d] and
@@ -1493,17 +1483,17 @@ A7: now let A, B be Subset of X; assume [A,B] in F;
       then c' = a & d' = b by A1,A10,A11,A16,Def20;
        hence contradiction by A11,A12,A13,A14,A15,A16,Th13;
       end; then x in (DOX Maximal_in F) by Def1;
-   hence x in Maximal_wrt F by Def17;
+   hence x in Maximal_wrt F;
   end;
   assume x in Maximal_wrt F;
-then A17: x in (DOX Maximal_in F) by Def17;
+then A17: x in (DOX Maximal_in F);
 then A18: x in F & x is_maximal_wrt F, DOX by Def1;
    consider a,b,a',b' being Subset of X such that
 A19: x = [a,b] and
 A20: [a', b'] >= [a, b] & [a', b'] in M by A3,A17;
 A21: [a',b'] in F by A2,A20;
    assume
-A22: not x in M;  [[a,b], [a',b']] in DOX by A20,Th16;
+A22: not x in M;  [[a,b], [a',b']] in DOX by A20;
   hence contradiction by A18,A19,A20,A21,A22,WAYBEL_4:def 24;
  end;
  hence M = Maximal_wrt F by TARSKI:2;
@@ -1575,12 +1565,12 @@ A38: M = Maximal_wrt G;
         consider mm being Dependency of X such that
       A47: m = mm & mm >= [a,b] by A42,A45;
         consider e, f being Dependency of X such that
-      A48: [m,y]=[e,f] & e <= f by A46,Th16;
+      A48: [m,y]=[e,f] & e <= f by A46;
       A49: m = e & y = f by A48,ZFMISC_1:33;
           then f >= [a,b] by A47,A48,Th14; then y in MA by A42,A46,A49;
        hence contradiction by A44,A46,WAYBEL_4:def 24;
       end; then m in (DOX Maximal_in G) by Def1;
-   then A50: m in M by A38,Def17; consider y being Dependency of X such that
+   then A50: m in M by A38; consider y being Dependency of X such that
    A51: m = y & y >= [a,b] by A42,A45;
          m in G by A42,A45; then consider a', b' being Subset of X such that
    A52: m = [a',b'] by Th10;
@@ -1589,7 +1579,7 @@ A38: M = Maximal_wrt G;
    assume x in F; then consider a, b, a1, b1 being Subset of X such that
   A53: x = [a,b] and
   A54: [a1, b1] >= [a, b] & [a1, b1] in M by A3;
-        M c= G by A38,Th27;
+        M c= G by A38;
    hence x in G by A53,A54,Def13;
   end;
  hence G = F by TARSKI:2;
@@ -1761,8 +1751,7 @@ begin :: 6. Saturated subsets of Attributes
 
 definition
   let X be set, F be Dependency-set of X;
-  func saturated-subsets F -> Subset-Family of X equals :
-Def22:
+  func saturated-subsets F -> Subset-Family of X equals
   { B where B is Subset of X: ex A being Subset of X st A ^|^ B, F };
  coherence proof
  set SS = {B where B is Subset of X: ex A being Subset of X st A ^|^B,F};
@@ -1786,7 +1775,6 @@ registration
   cluster saturated-subsets F -> finite;
   coherence proof
   set ss = {B where B is Subset of X: ex A being Subset of X st A ^|^ B, F };
-A1: saturated-subsets F = ss by Def22;
   defpred P[set,set] means
   ex a,b being set st $1 = [a,b] & $2 = [a,b]`2;
 A2: for x,y1,y2 being set st x in F & P[x,y1] & P[x,y2] holds y1 = y2;
@@ -1807,14 +1795,13 @@ A7: rng f is finite by A5,FINSET_1:26;
    A9: ex A being Subset of X st A ^|^ B, F;
        consider A being Subset of X such that
    A10: A ^|^ B, F by A9;
-   A11: Maximal_wrt F c= F by Th27;
    A12: [A, B] in Maximal_wrt F by A10,Def18;
        then consider a,b being set such that
-   A13: [A,B] = [a,b] & f.[A,B] = [a,b]`2 by A6,A11;
+   A13: [A,B] = [a,b] & f.[A,B] = [a,b]`2 by A6;
           f.[A,B] = B by A13,MCART_1:def 2;
-     hence x in rng f by A5,A8,A11,A12,FUNCT_1:12;
+     hence x in rng f by A5,A8,A12,FUNCT_1:12;
    end;
-   hence saturated-subsets F is finite by A1,A7,FINSET_1:13;
+   hence saturated-subsets F is finite by A7,FINSET_1:13;
  end;
 end;
 
@@ -1823,18 +1810,16 @@ for X, x being set, F being Dependency-set of X
  holds x in saturated-subsets F
    iff ex B, A being Subset of X st x = B & A ^|^ B, F
 proof let X, x be set, F be Dependency-set of X;
-A1: saturated-subsets F = {B where B is Subset of X:
-                            ex A being Subset of X st A ^|^ B, F } by Def22;
  hereby assume
     x in saturated-subsets F; then consider B being Subset of X such that
  A2: x = B and
- A3: ex A being Subset of X st A^|^B,F by A1;
+ A3: ex A being Subset of X st A^|^B,F;
     consider A being Subset of X such that A4: A^|^B,F by A3;
   take B, A; thus x = B & A^|^B,F by A2,A4;
  end;
  given B, A being Subset of X such that
 A5: x = B & A ^|^ B, F;
- thus x in saturated-subsets F by A1,A5;
+ thus x in saturated-subsets F by A5;
 end;
 
 theorem Th34: ::  WWA3:
@@ -1842,14 +1827,13 @@ for X being finite non empty set, F being Full-family of X
  holds saturated-subsets F is (B1) (B2)
 proof let X be finite non empty set, F be Full-family of X;
  set ss = saturated-subsets F;
-A1: ss={B where B is Subset of X:ex A being Subset of X st A^|^B,F}by Def22;
 A2: [#] X = X by SUBSET_1:def 4;
 A3: Maximal_wrt F is (M1) by Th30;
    then consider A', B' being Subset of X such that
 A4: [A',B'] >= [[#]X,[#]X] and
 A5: [A',B'] in Maximal_wrt F by Def19;
 A6: A' ^|^ B', F by A5,Def18;  [#]X c= B' by A4,Th15;
-   then [#]X = B' by A2,XBOOLE_0:def 10; then X in ss by A1,A2,A6;
+   then [#]X = B' by A2,XBOOLE_0:def 10; then X in ss by A2,A6;
  hence ss is (B1) by Def4;
  thus ss is (B2) proof let a, b be set such that
  A7: a in ss and
@@ -1874,13 +1858,13 @@ A20: Maximal_wrt F is (M3) by Th30;
      then A' c= B2 by A12,A18,XBOOLE_1:1; then B' c= B2 by A14,A16,A20,Def21;
      then B' c= a/\b by A9,A12,A21,XBOOLE_1:19; then B' = a/\b by A18,
 XBOOLE_0:def 10;
-  hence a /\ b in ss by A1,A17;
+  hence a /\ b in ss by A17;
  end;
 end;
 
 definition
  let X be set, B be set;
- func X deps_encl_by B -> Dependency-set of X equals :Def23:
+ func X deps_encl_by B -> Dependency-set of X equals
   { [a, b] where a, b is Subset of X :
                  for c being set st c in B & a c= c holds b c= c};
  coherence proof
@@ -1901,19 +1885,17 @@ for X being set, B being Subset-Family of X, F being Dependency-set of X
   holds X deps_encl_by B is full_family
 proof let X be set, B be Subset-Family of X, F be Dependency-set of X;
    set F = X deps_encl_by B;
-A1: F = {[a, b] where a,b is Subset of X :
-          for c being set st c in B & a c= c holds b c= c} by Def23;
     per cases;
     suppose A2: B is empty;
         now let x be set;
       hereby assume x in F; then ex a, b being Subset of X st
-        x = [a,b] & for g being set st g in B & a c= g holds b c= g by A1;
+        x = [a,b] & for g being set st g in B & a c= g holds b c= g;
        hence x in Dependencies X;
       end;
       assume x in Dependencies X; then consider x1, x2 being set such that
     A3: x1 in bool X & x2 in bool X & x = [x1, x2] by ZFMISC_1:def 2;
            for g being set st g in B & x1 c= g holds x2 c= g by A2;
-      hence x in F by A1,A3;
+      hence x in F by A3;
      end; then F = Dependencies X by TARSKI:2;
      then F is (F1) (F2) (F3) (F4) by Th21;
     hence thesis by Def15;
@@ -1923,13 +1905,13 @@ A4: now let x,y be Subset of X, c be Element of B; assume that
     A5:  [x, y] in F and A6: x c= c;
         consider a, b being Subset of X such that
     A7: [x,y] = [a,b] and
-    A8: for c being set st c in B & a c= c holds b c= c by A1,A5;
+    A8: for c being set st c in B & a c= c holds b c= c by A5;
            x = a & y = b by A7,ZFMISC_1:33;
      hence y c= c by A6,A8;
     end;
   thus F is (F1) proof let A be Subset of X;
         for c being set st c in B & A c= c holds A c= c;
-   hence [A, A] in F by A1;
+   hence [A, A] in F;
   end;
       now let a, b, c be Subset of X such that
    A9: [a, b] in F and
@@ -1937,7 +1919,7 @@ A4: now let x,y be Subset of X, c be Element of B; assume that
          now let x be set; assume A11: x in B & a c= x; then b c= x by A4,A9;
        hence c c= x by A4,A10,A11;
       end;
-    hence [a, c] in F by A1;
+    hence [a, c] in F;
    end;
   hence F is (F2) by Th20;
   thus F is (F3) proof let a, b, a', b' be Subset of X such that
@@ -1949,7 +1931,7 @@ A4: now let x,y be Subset of X, c be Element of B; assume that
         then b c= c by A4,A12,A15;
        hence b' c= c by A14,XBOOLE_1:1;
       end;
-   hence [a',b'] in F by A1;
+   hence [a',b'] in F;
   end;
   thus F is (F4) proof let a, b, a', b' be Subset of X such that
   A16: [a, b] in F and
@@ -1959,7 +1941,7 @@ A4: now let x,y be Subset of X, c be Element of B; assume that
          then b c= c & b' c= c by A4,A16,A17,A18;
        hence b\/b' c= c by XBOOLE_1:8;
       end;
-   hence [a\/a', b\/b'] in F by A1;
+   hence [a\/a', b\/b'] in F;
   end;
 end;
 end;
@@ -1969,13 +1951,10 @@ for X being finite non empty set, B being Subset-Family of X
  holds B c= saturated-subsets (X deps_encl_by B)
 proof let X be finite non empty set, B be Subset-Family of X;
    set F = X deps_encl_by B;
-A1: F = {[a, b] where a,b is Subset of X :
-                for c being set st c in B & a c= c holds b c= c} by Def23;
  set ss = saturated-subsets F;
  reconsider F' = F as Full-family of X by Th35;
  set M = Maximal_wrt F';
 A2: M is (M1) by Th30;
-A3: M c= F by Th27;
   let x be set; assume
  A4: x in B; then reconsider x' = x as Element of B;
      reconsider x'' = x as Subset of X by A4;
@@ -1983,13 +1962,13 @@ A3: M c= F by Th27;
  A5: [a',b'] >= [x'',x''] and
  A6: [a', b'] in M by A2,Def19;
  A7: a' c= x'' & x'' c= b' by A5,Th15;
-        [a',b'] in F by A3,A6; then consider a, b being Subset of X such that
+        [a',b'] in F by A6; then consider a, b being Subset of X such that
  A8: [a',b'] = [a,b] and
- A9: for c being set st c in B & a c= c holds b c= c by A1;
+ A9: for c being set st c in B & a c= c holds b c= c;
  A10: a' = a & b' = b by A8,ZFMISC_1:33;
      then b c= x' by A4,A7,A9;
    then A11: b = x by A7,A10,XBOOLE_0:def 10;  a ^|^ b, F by A6,A8,Def18;
-    hence x in ss by A11,Th33;
+    hence x in ss by A11;
 end;
 
 theorem Th37: ::  WWA3a:
@@ -2001,22 +1980,19 @@ for X being finite non empty set, B being Subset-Family of X
 proof let X be finite non empty set, B be Subset-Family of X;assume
 A1: B is (B1) (B2);
    set F = X deps_encl_by B;
-A2: F = {[a, b] where a,b is Subset of X :
-                for c being set st c in B & a c= c holds b c= c} by Def23;
  set ss = saturated-subsets F;
  reconsider F' = F as Full-family of X by Th35;
  set M = Maximal_wrt F';
-A3: M c= F by Th27;
 A4: X in B by A1,Def4; reconsider B' = B as non empty set by A1,Def4;
     now let x be set;  B c= ss by Th36;
    hence x in B implies x in ss;
    assume x in ss; then consider b, a being Subset of X such that
  A5: x = b and
  A6: a ^|^ b, F by Th33;
-    [a,b] in M by A6,Def18; then [a,b] in F by A3;
+    [a,b] in M by A6,Def18; then [a,b] in F;
      then consider aa, bb being Subset of X such that
  A7: [a, b] = [aa, bb] and
- A8: for c being set st c in B & aa c= c holds bb c= c by A2;
+ A8: for c being set st c in B & aa c= c holds bb c= c;
  A9: a = aa & b = bb by A7,ZFMISC_1:33;
      set S = { b' where b' is Element of B': a c= b' };
  A10: bool X is finite by FINSET_1:24;
@@ -2048,7 +2024,7 @@ A4: X in B by A1,Def4; reconsider B' = B as non empty set by A1,Def4;
           then meet S c= c by SETFAM_1:4;
         hence mS c= c by A14,SETFAM_1:def 10;
        end;
-     then A21: [a,mS] in F by A2;
+     then A21: [a,mS] in F;
         [a,mS] >= [a,b] by A17,Th15;
       hence contradiction by A6,A20,A21,Th29;
      end;
@@ -2058,7 +2034,6 @@ A4: X in B by A1,Def4; reconsider B' = B as non empty set by A1,Def4;
  let G be Full-family of X; assume
 A22: B = saturated-subsets G;
  set MG = Maximal_wrt G;
-A23: MG c= G by Th27;
 A24: MG is (M1)(M3) by Th30;
     now let x be set;
   hereby assume x in G; then reconsider x1 = x as Element of G;
@@ -2079,26 +2054,25 @@ A24: MG is (M1)(M3) by Th30;
     then A33: b'' c= b1' by A24,A28,A30,A31,Def21;  b c= b'' by A25,A32,Th15;
      hence b c= b' by A28,A33,XBOOLE_1:1;
     end;
-   hence x in F by A2,A25;
+   hence x in F by A25;
   end;
   assume x in F; then consider a, b being Subset of X such that
   A34: x = [a,b] and
-  A35: for c being set st c in B & a c= c holds b c= c by A2;
+  A35: for c being set st c in B & a c= c holds b c= c;
       consider a', b' being Subset of X such that
   A36: [a', b'] >= [a,a] and
   A37: [a', b'] in MG by A24,Def19;
   A38: a' c= a & a c= b' by A36,Th15;  a' ^|^ b', G by A37,Def18;
-      then b' in B by A22,Th33; then b c= b' by A35,A38;
+      then b' in B by A22; then b c= b' by A35,A38;
       then [a',b'] >= [a,b] by A38,Th15;
-  hence x in G by A23,A34,A37,Def13;
+  hence x in G by A34,A37,Def13;
  end;
  hence G = F by TARSKI:2;
 end;
 
 definition
   let X be set, F be Dependency-set of X;
-  func enclosure_of F -> Subset-Family of X equals :
-Def24:
+  func enclosure_of F -> Subset-Family of X equals
    { b where b is Subset of X :
            for A, B being Subset of X st [A, B] in F & A c= b holds B c= b };
   coherence proof
@@ -2118,22 +2092,19 @@ for X being finite non empty set, F being Dependency-set of X
   holds enclosure_of F is (B1) (B2)
 proof let X be finite non empty set, F be Dependency-set of X;
    set B = enclosure_of F;
-A1: B = {c where c is Subset of X :
-       for x, y being Subset of X st [x, y] in F & x c= c holds y c= c} by
-Def24;
 A2: X = [#]X by SUBSET_1:def 4;
       for x, y being Subset of X st [x, y] in F & x c= X holds y c= X;
-   then X in B by A1,A2;
+   then X in B by A2;
  hence B is (B1) by Def4;
  let a, b be set such that
 A3: a in B and
 A4: b in B; consider a' being Subset of X such that
 A5: a' = a and
-A6: for x, y being Subset of X st [x, y] in F & x c= a' holds y c= a' by A1,A3
+A6: for x, y being Subset of X st [x, y] in F & x c= a' holds y c= a' by A3
 ;
    consider b' being Subset of X such that
 A7: b' = b and
-A8: for x, y being Subset of X st [x, y] in F & x c= b' holds y c= b' by A1,A4
+A8: for x, y being Subset of X st [x, y] in F & x c= b' holds y c= b' by A4
 ;
    reconsider ab = a' /\ b' as Subset of X;
       now let x, y be Subset of X such that
@@ -2142,7 +2113,7 @@ A8: for x, y being Subset of X st [x, y] in F & x c= b' holds y c= b' by A1,A4
        then y c= a' & y c= b' by A6,A8,A9;
     hence y c= ab by XBOOLE_1:19;
    end;
- hence a /\ b in B by A1,A5,A7;
+ hence a /\ b in B by A5,A7;
 end;
 
 theorem Th39:  :: WWA3b
@@ -2155,12 +2126,7 @@ for X being finite non empty set, F being Dependency-set of X
          holds X deps_encl_by enclosure_of F c= G
 proof let X be finite non empty set, F be Dependency-set of X;
    set B = enclosure_of F;
-A1: B = {c where c is Subset of X :
-           for x, y being Subset of X st [x, y] in F & x c= c holds y c= c}
-       by Def24;
    set H = X deps_encl_by B;
-A2: H = {[a, b] where a,b is Subset of X :
-          for c being set st c in B & a c= c holds b c= c} by Def23;
  thus F c= H proof let x be set; assume
    A3: x in F; then consider a, b being Subset of X such that
    A4: x = [a,b] by Th10;
@@ -2169,24 +2135,24 @@ A2: H = {[a, b] where a,b is Subset of X :
            reconsider c as Subset of X by A5;
           ex c' being Subset of X st c' = c &
            for x, y being Subset of X st [x, y] in F & x c= c' holds y c= c'
-           by A1,A5;
+           by A5;
         hence contradiction by A3,A4,A6,A7;
        end;
-    hence x in H by A2,A4;
+    hence x in H by A4;
    end;
    let G be Dependency-set of X such that
 A8: F c= G and
 A9: G is full_family;
  let z be set; assume z in H; then consider a, b being Subset of X such that
 A10: z = [a,b] and
-A11: for c being set st c in B & a c= c holds b c= c by A2;
+A11: for c being set st c in B & a c= c holds b c= c;
       B is (B1) (B2) by Th38;
 then A12: B = saturated-subsets H by Th37;
    set B' = saturated-subsets G;
 A13: B' is (B1) (B2) by A9,Th34;
    set GG = {[e, f] where e, f is Subset of X :
           for c being set st c in B' & e c= c holds f c= c};
-    GG = X deps_encl_by B' by Def23;
+    GG = X deps_encl_by B';
 then A14: GG = G by A9,A13,Th37;
    B' c= saturated-subsets H proof let d be set such that
    A15: d in B' and
@@ -2195,7 +2161,7 @@ then A14: GG = G by A9,A13,Th37;
        consider x, y being Subset of X such that
    A17: [x, y] in F and
    A18: x c= d and
-   A19: not y c= d by A1,A12,A16;
+   A19: not y c= d by A12,A16;
           [x,y] in G by A8,A17;
        then consider e, f being Subset of X such that
    A20: [x,y] = [e,f] and
@@ -2214,7 +2180,7 @@ definition
  existence proof
  set B = {c where c is Subset of X :
            for x, y being Subset of X st [x, y] in F & x c= c holds y c= c};
-A1: B = enclosure_of F by Def24;
+A1: B = enclosure_of F;
       B c= bool X proof let x be set; assume x in B;
      then ex c being Subset of X st x = c &
      for x, y being Subset of X st [x, y] in F & x c= c holds y c= c;
@@ -2306,7 +2272,7 @@ A4: BB' is (B1) by Th41;
 A5: BB' is (B2) by Th41;
    set G = {[a, b] where a,b is Subset of X :
               for c being set st c in BB' & a c= c holds b c= c};
-A6: G = X deps_encl_by BB' by Def23;
+A6: G = X deps_encl_by BB';
       now let x be set;
     hereby assume x in F; then consider a, b being Subset of X such that
     A7: x = [a,b] and
@@ -2366,7 +2332,7 @@ A3: [#]X = X by SUBSET_1:def 4; set ss = saturated-subsets F;
      suppose x in {X};
      then A5: x = X by TARSKI:def 1;  [K,X] in {[K,X]} by TARSKI:def 1;
        then [K,X] in M by XBOOLE_0:def 2; then K ^|^ X, F by A2,Def18;
-      hence x in ss by A3,A5,Th33;
+      hence x in ss by A3,A5;
       end;
       suppose x in {B where B is Subset of X : not K c= B};
         then consider B being Subset of X such that
@@ -2374,7 +2340,7 @@ A3: [#]X = X by SUBSET_1:def 4; set ss = saturated-subsets F;
       A7: not K c= B;
            [B,B] in {[A, A] where A is Subset of X : not K c= A} by A7;
         then [B,B] in M by XBOOLE_0:def 2; then B ^|^ B, F by A2,Def18;
-       hence x in ss by A6,Th33;
+       hence x in ss by A6;
     end;
     end;
     assume x in ss; then consider b, a being Subset of X such that
@@ -2411,8 +2377,6 @@ proof let X be finite non empty set, G be Subset-Family of X;
  set F = X deps_encl_by G; set ssF = saturated-subsets F;
       F is full_family by Th35;
 then A1: ssF is (B1) (B2) by Th34;
-A2: F = {[a, b] where a,b is Subset of X :
-           for c being set st c in G & a c= c holds b c= c} by Def23;
  thus G is_generator-set_of ssF proof
   thus
  A3: G c= ssF by Th36;
@@ -2423,10 +2387,10 @@ A2: F = {[a, b] where a,b is Subset of X :
    A4: x = b' and
    A5: a' ^|^ b', F by Th33;
    A6: [a', b'] in Maximal_wrt F by A5,Def18;
-          Maximal_wrt F c= F by Th27; then [a',b'] in F by A6;
+          Maximal_wrt F c= F; then [a',b'] in F by A6;
        then consider a, b being Subset of X such that
    A7: [a, b] = [a', b'] and
-   A8: for c being set st c in G & a c= c holds b c= c by A2;
+   A8: for c being set st c in G & a c= c holds b c= c;
    A9: a = a' & b = b' by A7,ZFMISC_1:33;
         set C = {c where c is Subset of X: c in G & a c= c};
            C c= bool X proof let x be set; assume x in C;
@@ -2456,7 +2420,7 @@ A2: F = {[a, b] where a,b is Subset of X :
                  then c in C;
               hence ic c= c by MSSUBFAM:2;
              end;
-         then A14: [a,ic] in F by A2;
+         then A14: [a,ic] in F;
                [a,b] <= [a,ic] by A11,Th15;
           hence thesis by A5,A9,A13,A14,Th29;
         end;
@@ -2576,7 +2540,7 @@ proof let X be non empty finite set, F be Full-family of X;
 A1: G is_generator-set_of saturated-subsets F and
 A2:F = X deps_encl_by G by Th45;
 A3: F = {[A, B] where A, B is Subset of X :
-          for g being set st g in G & A c= g holds B c= g} by A2,Def23;
+          for g being set st g in G & A c= g holds B c= g} by A2;
       G c= saturated-subsets F by A1,Def26;
 then G is finite by FINSET_1:13; then consider H being FinSequence such that
 A4: rng H = G and H is one-to-one by FINSEQ_4:73;
@@ -2610,9 +2574,9 @@ then A8: X --> 0 is Element of product D by CARD_3:def 5;
              f = X --> 0 & g = X --> 0 by TARSKI:def 1;
          hence thesis;
         end; then x in Dsd by A10;
-     hence x in Ds by Def9;
+     hence x in Ds;
     end;
-    assume x in Ds; then x in Dsd by Def9;
+    assume x in Ds; then x in Dsd;
       then consider A, B being Subset of the Attributes of BD such that
    A11: x = [A,B] and A >|> B, BD;
          for g being set st g in G & A c= g holds B c= g by A9;
@@ -2758,9 +2722,9 @@ then A23: X --> 0 in R by A8;
         end;
         hence f|B' = g|B' by FUNCT_1:68;
        end; then x in Dsd by A24;
-    hence x in Ds by Def9;
+    hence x in Ds;
    end;
-   assume x in Ds; then x in Dsd by Def9;
+   assume x in Ds; then x in Dsd;
       then consider A, B being Subset of the Attributes of BD such that
   A51: x = [A, B] and
   A52: A >|> B, BD;
@@ -2896,7 +2860,7 @@ end;
 
 definition
   let X be set, F be Dependency-set of X;
-  func candidate-keys F -> Subset-Family of X equals :Def27:
+  func candidate-keys F -> Subset-Family of X equals
    { A where A is Subset of X : [A, X] in Maximal_wrt F };
   coherence proof
     set B = {A where A is Subset of X : [A, X] in Maximal_wrt F};
@@ -2916,13 +2880,11 @@ proof let X be finite set, F be Dependency-set of X, K be Subset of X such that
 A1: F = { [A, B] where A, B is Subset of X : K c= A or B c= A };
 A2: Maximal_wrt F =
    {[K, X]}\/{[A, A] where A is Subset of X : not K c= A} by A1,Th32;
-A3: candidate-keys F =
-   {A where A is Subset of X : [A, X] in Maximal_wrt F} by Def27;
      now let x be set;
    hereby assume x in candidate-keys F;
        then consider a being Subset of X such that
    A4: x = a and
-   A5: [a,X] in Maximal_wrt F by A3;
+   A5: [a,X] in Maximal_wrt F;
     per cases by A2,A5,XBOOLE_0:def 2;
     suppose [a,X] in {[K, X]}; then [a,X] = [K,X] by TARSKI:def 1;
       then a = K by ZFMISC_1:33;
@@ -2938,7 +2900,7 @@ A3: candidate-keys F =
    assume x in {K};
    then A8: x = K by TARSKI:def 1;  [K,X] in {[K,X]} by TARSKI:def 1;
       then [K,X] in Maximal_wrt F by A2,XBOOLE_0:def 2;
-   hence x in candidate-keys F by A3,A8;
+   hence x in candidate-keys F by A8;
   end;
  hence candidate-keys F = {K} by TARSKI:2;
 end;
@@ -2963,22 +2925,20 @@ theorem  :: WWA6:
    for R being DB-Rel holds candidate-keys Dependency-str R is (C1) (C2)
 proof let D be DB-Rel; set F = Dependency-str D; set X = the Attributes of D;
 A1: F is full_family by Th25;
-A2: candidate-keys F =
-   {A where A is Subset of X : [A, X] in Maximal_wrt F} by Def27;
       saturated-subsets F is (B1) by A1,Th34;
    then X in saturated-subsets F by Def4
 ; then consider B, A be Subset of X such that
 A3: X = B & A ^|^ B, F by Th33;
-      [A,X] in Maximal_wrt F by A3,Def18; then A in candidate-keys F by A2;
+      [A,X] in Maximal_wrt F by A3,Def18; then A in candidate-keys F;
  hence candidate-keys F is non empty; let k1, k2 be set such that
 A4: k1 in candidate-keys F and
 A5: k2 in candidate-keys F and
 A6: k1 c= k2; consider a1 being Subset of X such that
 A7: k1 = a1 and
-A8: [a1, X] in Maximal_wrt F by A2,A4;
+A8: [a1, X] in Maximal_wrt F by A4;
    consider a2 being Subset of X such that
 A9: k2 = a2 and
-A10: [a2, X] in Maximal_wrt F by A2,A5;
+A10: [a2, X] in Maximal_wrt F by A5;
 A11: Maximal_wrt F is (M2) by A1,Th30;
 A12: [#]X = X by SUBSET_1:def 4;  [a1,[#]X] >= [a2,[#]X] by A6,A7,A9,Th15;
  hence k1 = k2 by A7,A8,A9,A10,A11,A12,Def20;
@@ -3000,11 +2960,9 @@ X
    end; then reconsider BB = B as Subset-Family of X;
    set F = {[a, b] where a,b is Subset of X :
              for c being set st c in BB & a c= c holds b c= c};
-      F = X deps_encl_by BB by Def23;
+      F = X deps_encl_by BB;
    then reconsider F as Full-family of X by Th35;
  take F;
-A3: candidate-keys F =
-   {A where A is Subset of X : [A, X] in Maximal_wrt F} by Def27;
 A4: [#]X = X by SUBSET_1:def 4;
 A5: now let x be set; assume
   A6: x in C; then reconsider x' = x as Subset of X;
@@ -3017,8 +2975,7 @@ A5: now let x be set; assume
   then [x',X] in F by A4; then consider a, b being Subset of X such that
   A8: [a,b] in Maximal_wrt F and
   A9: [a, b] >= [x',[#]X] by A4,Th28;
-  A10: a c= x' by A9,Th15;
-  A11: Maximal_wrt F c= F by Th27;  X c= b by A4,A9,Th15;
+  A10: a c= x' by A9,Th15;  X c= b by A4,A9,Th15;
   then A12: b = X by XBOOLE_0:def 10;
    assume A13: not [x,X] in Maximal_wrt F;
          now let K be Subset of X; assume
@@ -3026,25 +2983,24 @@ A5: now let x be set; assume
         assume A15: K c= a; then K c= x' by A10,XBOOLE_1:1;
          then K = x' by A2,A6,A14,Def28;
         hence contradiction by A8,A10,A12,A13,A15,XBOOLE_0:def 10;
-      end; then a in BB; then X c= a by A8,A11,A12,Lm2;
+      end; then a in BB; then X c= a by A8,A12,Lm2;
       then X = a by XBOOLE_0:def 10;
    hence contradiction by A8,A10,A12,A13,XBOOLE_0:def 10;
   end;
     now let x be set;
   hereby assume A16: x in C; then [x,X] in Maximal_wrt F by A5;
-   hence x in candidate-keys F by A3,A16;
+   hence x in candidate-keys F by A16;
   end;
   assume x in candidate-keys F; then consider A being Subset of X such that
  A17: x = A and
- A18: [A, X] in Maximal_wrt F by A3;
- A19:  Maximal_wrt F c= F by Th27;
+ A18: [A, X] in Maximal_wrt F;
  A20: for c being set st c in BB holds c = X or not A c= c proof
       let c be set; assume that
       A21: c in BB and
       A22: not c = X; consider cb being Subset of X such that
       A23: c = cb and for K being Subset of X st K in C holds not K c= cb by
 A21;
-      assume A c= c; then X c= c by A4,A18,A19,A21,Lm2;
+      assume A c= c; then X c= c by A4,A18,A21,Lm2;
       hence contradiction by A22,A23,XBOOLE_0:def 10;
     end;
    assume
@@ -3079,16 +3035,12 @@ A2: C is (C2) and
 A3: B = {b where b is Subset of X :
               for K being Subset of X st K in C holds not K c= b};
      set F = X deps_encl_by B;
-A4: F = {[a, b] where a,b is Subset of X :
-             for c being set st c in B & a c= c holds b c= c} by Def23;
       B c= bool X proof let x be set; assume x in B; then ex b being Subset
 of
 X
          st x = b & for K being Subset of X st K in C holds not K c= b by A3;
      hence x in bool X;
    end; then reconsider BB = B as Subset-Family of X;
-A5: candidate-keys F =
-   {A where A is Subset of X : [A, X] in Maximal_wrt F} by Def27;
 A6: [#]X = X by SUBSET_1:def 4;
 A7: now let x be set; assume
   A8: x in C; then reconsider x' = x as Subset of X;
@@ -3098,12 +3050,11 @@ A7: now let x be set; assume
           for K being Subset of X st K in C holds not K c= b by A3;
        hence X c= c by A8,A9;
     end;
-  then [x',X] in F by A4,A6; then consider a, b being Subset of X such
+  then [x',X] in F by A6; then consider a, b being Subset of X such
 that
   A10: [a,b] in Maximal_wrt F and
   A11: [a, b] >= [x',[#]X] by A6,Th28;
-  A12: a c= x' by A11,Th15;
-  A13: Maximal_wrt F c= F by Th27;  X c= b by A6,A11,Th15;
+  A12: a c= x' by A11,Th15;  X c= b by A6,A11,Th15;
   then A14: b = X by XBOOLE_0:def 10;
    assume A15: not [x,X] in Maximal_wrt F;
          now let K be Subset of X; assume
@@ -3111,25 +3062,24 @@ that
         assume A17: K c= a; then K c= x' by A12,XBOOLE_1:1;
          then K = x' by A2,A8,A16,Def28;
         hence contradiction by A10,A12,A14,A15,A17,XBOOLE_0:def 10;
-      end; then a in BB by A3; then X c= a by A4,A10,A13,A14,Lm2;
+      end; then a in BB by A3; then X c= a by A10,A14,Lm2;
       then X = a by XBOOLE_0:def 10;
    hence contradiction by A10,A12,A14,A15,XBOOLE_0:def 10;
   end;
     now let x be set;
   hereby assume A18: x in C; then [x,X] in Maximal_wrt F by A7;
-   hence x in candidate-keys F by A5,A18;
+   hence x in candidate-keys F by A18;
   end;
   assume x in candidate-keys F; then consider A being Subset of X such that
  A19: x = A and
- A20: [A, X] in Maximal_wrt F by A5;
- A21:  Maximal_wrt F c= F by Th27;
+ A20: [A, X] in Maximal_wrt F;
  A22: for c being set st c in BB holds c = X or not A c= c proof
       let c be set; assume that
       A23: c in BB and
       A24: not c = X; consider cb being Subset of X such that
       A25: c = cb and for K being Subset of X st K in C holds not K c= cb
            by A3,A23;
-      assume A c= c; then X c= c by A4,A6,A20,A21,A23,Lm2;
+      assume A c= c; then X c= c by A6,A20,A23,Lm2;
       hence contradiction by A24,A25,XBOOLE_0:def 10;
     end;
    assume
@@ -3199,8 +3149,6 @@ A4: (X --> 0) +* ({}X --> {}X) in R by A3;
  set ds = Dependency-str DB; set dox = Dependencies-Order X;
  set ck = { A where A is Subset of X : [A, X] in Maximal_wrt ds };
 A12: [#]X = X by SUBSET_1:def 4;
-A13: ds = { [A, B] where A, B is Subset of the Attributes of DB: A >|> B, DB }
-         by Def9;
 :: And here WWA writes that the rest is "easy to show".  Good luck.
 :: Interesting in showing C = ck we show C c= ck and then in order to show
 :: that ck c= C we use the fact that C c= ck.  I do not understand why so.
@@ -3284,17 +3232,17 @@ that
         suppose Lf = 0 & Lg = 0;
          hence f|X = g|X by A18,A20;
        end;
-       end; then AA >|> XA, DB by Def8; then [A,X] in ds by A13;
+       end; then AA >|> XA, DB by Def8; then [A,X] in ds;
        then consider a, b being Subset of X such that
    A49: [a,b] in Maximal_wrt ds and
    A50: [a, b] >= [A,[#]X] by A12,Th28;
-       A51: [a, b] in (dox Maximal_in ds) by A49,Def17;
+       A51: [a, b] in (dox Maximal_in ds) by A49;
    A52: a c= A & X c= b by A12,A50,Th15;
    then A53: b = X by XBOOLE_0:def 10;
           [a,b] in ds by A51;
        then consider aa, XX being Subset of the Attributes of DB such that
    A54: [a,b] = [aa,XX] and
-   A55: aa >|> XX, DB by A13;
+   A55: aa >|> XX, DB;
    A56: a = aa & b = XX by A54,ZFMISC_1:33;
           now assume
        A57: a <> A; set r0 = X --> 0; set r1 = (X --> 0) +* (a` --> a`);
@@ -3346,7 +3294,7 @@ FUNCT_4:22;
     assume x in ck; then consider A being Subset of X such that
    A71: x = A and
    A72: [A, X] in Maximal_wrt ds;
-          [A, X] in (dox Maximal_in ds) by A72,Def17;
+          [A, X] in (dox Maximal_in ds) by A72;
    then A73: [A,X] in ds;
    A74: now let K be set such that
        A75: K in C and
@@ -3356,7 +3304,7 @@ FUNCT_4:22;
        A78: [B, X] in Maximal_wrt ds;
           reconsider AA = A, B, XA = X as Subset of the Attributes of DB by A12
 ;
-           A79: [B, X] in (dox Maximal_in ds) by A78,Def17;
+           A79: [B, X] in (dox Maximal_in ds) by A78;
            assume
        A80: K <> A;
        A81: A ^|^ [#]X, ds by A12,A72,Def18;  [AA,XA] <= [B,XA] by A76,A77,Th15
@@ -3416,14 +3364,14 @@ FUNCT_4:22;
    then A97: r0|A = r1|A by FUNCT_1:68;
        consider aa, XX being Subset of the Attributes of DB such that
    A98: [A,X] = [aa,XX] and
-   A99: aa >|> XX, DB by A13,A73; A100: A = aa & X = XX by A98,ZFMISC_1:33;
+   A99: aa >|> XX, DB by A73; A100: A = aa & X = XX by A98,ZFMISC_1:33;
    A101: m c= X;
    then A102: (r0|X).n = r0.n by A86,FUNCT_1:72 .= 0 by A86,A101,FUNCOP_1:13;
           (r1|X).n = r1.n by A86,FUNCT_1:72
                .= (m --> m).n by A86,A91,FUNCT_4:14 .= m by A86,FUNCOP_1:13;
     hence contradiction by A85,A97,A99,A100,A102,Def8;
    end; then C = ck by TARSKI:2;
- hence C = candidate-keys Dependency-str DB by Def27;
+ hence C = candidate-keys Dependency-str DB;
 end;
 
 begin :: 9. Applications
@@ -3530,8 +3478,7 @@ end;
 
 definition
   let X be set, F be Dependency-set of X;
-  func charact_set F equals :
-Def32:
+  func charact_set F equals
    { A where A is Subset of X :
        ex a, b being Subset of X st [a, b] in F & a c= A & not b c= A };
   correctness;
@@ -3543,14 +3490,13 @@ for X, A being set, F being Dependency-set of X st A in charact_set F
        ex a, b being Subset of X st [a, b] in F & a c= A & not b c= A
 proof let X, A be set, F be Dependency-set of X; assume A in charact_set F;
    then A in { Y where Y is Subset of X :
-       ex a, b being Subset of X st [a, b] in F & a c= Y & not b c= Y } by
-Def32;
+       ex a, b being Subset of X st [a, b] in F & a c= Y & not b c= Y };
    then ex Y being Subset of X st A = Y &
       ex a, b being Subset of X st [a, b] in F & a c= Y & not b c= Y;
  hence thesis;
 end;
 
-theorem Th58:
+theorem
 for X being set, A being Subset of X, F being Dependency-set of X
  st ex a, b being Subset of X st [a, b] in F & a c= A & not b c= A
   holds A in charact_set F
@@ -3558,7 +3504,7 @@ proof let X be set, A be Subset of X, F being Dependency-set of X; assume
       ex a, b being Subset of X st [a, b] in F & a c= A & not b c= A;
    then A in { Y where Y is Subset of X :
        ex a, b being Subset of X st [a, b] in F & a c= Y & not b c= Y };
- hence A in charact_set F by Def32;
+ hence A in charact_set F;
 end;
 
 theorem Th59:   ::  WWA7:
@@ -3576,8 +3522,7 @@ A1: F c= G by Def25;
       now let c be set;
     hereby assume c in B;
     then A2: c in bool A & not c in charact_set F by XBOOLE_0:def 4;
-    then for x, y being Subset of A st [x,y] in F & x c= c holds y c= c by Th58
-;
+    then for x, y being Subset of A st [x,y] in F & x c= c holds y c= c;
      hence c in BB by A2;
     end;
     assume c in BB; then consider b being Subset of A such that
@@ -3594,11 +3539,11 @@ A6: A = [#]A by SUBSET_1:def 4;
     then not [#]A in charact_set F by A6,Th57;
    then A in B by A6,XBOOLE_0:def 4;
 then A7: B is (B1) by Def4;
-A8: BB = enclosure_of F by Def24;
+A8: BB = enclosure_of F;
 then A9: B is (B2) by A5,Th38;
    set FF = {[a, b] where a, b is Subset of A :
                     for c being set st c in B & a c= c holds b c= c};
-A10: FF = A deps_encl_by B by Def23;
+A10: FF = A deps_encl_by B;
    then reconsider FF as Dependency-set of A;
 A11: FF is full_family by A10,Th35;  F c= FF by A5,A8,A10,Th39;
 then A12: G c= FF by A11,Def25;
@@ -3666,7 +3611,7 @@ proof let X be non empty finite set, F be Dependency-set of X;
  A3: x c= A & not y c= A by Th57;
     F c= dcF by Def25;
      then A is Subset of X & [x, y] in dcF by A1,A2,Th57;
-  hence A in charact_set dcF by A3,Th58;
+  hence A in charact_set dcF by A3;
   end; assume
  A4: A in charact_set dcF; then consider x, y being Subset of X such that
  A5: [x, y] in dcF and
@@ -3674,13 +3619,13 @@ proof let X be non empty finite set, F be Dependency-set of X;
  A7: A is Subset of X by A4,Th57;
   assume not A in charact_set F;
  then A8: for x, y being Subset of X st [x, y] in F & x c= A
-      holds y c= A by A7,Th58;
+      holds y c= A by A7;
   set B = {c where c is Subset of X :
            for x, y being Subset of X st [x, y] in F & x c= c holds y c= c};
-       B = enclosure_of F by Def24;
+       B = enclosure_of F;
  then A9: Dependency-closure F = X deps_encl_by B by Th40;
     X deps_encl_by B = {[a, b] where a,b is Subset of X :
-              for c being set st c in B & a c= c holds b c= c} by Def23;
+              for c being set st c in B & a c= c holds b c= c};
     then consider a, b being Subset of X such that
  A10: [x, y] = [a,b] and
  A11: for c being set st c in B & a c= c holds b c= c by A5,A9;
@@ -3713,17 +3658,16 @@ proof let X be finite non empty set,
 :: for a being Subset of X st K c= a & not X c= a holds charact_set F, a;
 
  set dcF = Dependency-closure F; set ck = candidate-keys dcF;
-A1: ck = { A where A is Subset of X : [A, X] in Maximal_wrt dcF } by Def27;
  set B = {c where c is Subset of X :
            for x, y being Subset of X st [x, y] in F & x c= c holds y c= c};
-       B = enclosure_of F by Def24;
+       B = enclosure_of F;
     then dcF = X deps_encl_by B by Th40;
 then A2: dcF = {[a, b] where a,b is Subset of X :
-           for c being set st c in B & a c= c holds b c= c} by Def23;
+           for c being set st c in B & a c= c holds b c= c};
 A3: X = [#]X by SUBSET_1:def 4;
  hereby assume K in ck; then consider A being Subset of X such that
  A4: K = A and
- A5: [A, X] in Maximal_wrt dcF by A1;
+ A5: [A, X] in Maximal_wrt dcF;
  A6: A ^|^ X, dcF by A5,Def18; then [A, [#]X] in dcF by A3,Th29;
      then consider a, b being Subset of X such that
  A7: [A,X] = [a,b] and
@@ -3734,7 +3678,7 @@ A3: X = [#]X by SUBSET_1:def 4;
      A10: K c= z and
      A11: z <> X and
      A12: not z in charact_set F;
-       for x, y being Subset of X st [x,y]in F & x c=z holds y c=z by A12,Th58;
+       for x, y being Subset of X st [x,y]in F & x c=z holds y c=z by A12;
          then z in B; then X c= z by A4,A8,A9,A10;
       hence contradiction by A11,XBOOLE_0:def 10;
      end;
@@ -3831,8 +3775,8 @@ of X such that
    A47: not a in charact_set F by A27,Def33;
    A48: not a in charact_set dcF by A47,Th61;
           not y' c= a by A44,A46,XBOOLE_0:def 10;
-    hence contradiction by A40,A45,A48,Th58;
+    hence contradiction by A40,A45,A48;
    end; then K ^|^ X, dcF by A3,A34,Th29;
    then [K,X] in Maximal_wrt dcF by Def18;
- hence K in candidate-keys Dependency-closure F by A1;
+ hence K in candidate-keys Dependency-closure F;
 end;

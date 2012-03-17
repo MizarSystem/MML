@@ -88,27 +88,6 @@
 <Adjective nr="31"/>
 </Cluster>
 </RCluster>
-<RCluster>
-<ArgTypes>
-<Typ kind="M" nr="1">
-<Cluster/>
-</Typ>
-<Typ kind="M" nr="1">
-<Cluster>
-<Adjective nr="1" value="false"/>
-</Cluster>
-</Typ>
-</ArgTypes>
-<Typ kind="M" nr="6">
-<Cluster/>
-<LocusVar nr="1"/>
-<LocusVar nr="2"/>
-</Typ>
-<Cluster>
-<Adjective nr="5"/>
-<Adjective nr="8"/>
-</Cluster>
-</RCluster>
 <FCluster>
 <ArgTypes>
 <Typ kind="M" nr="1">

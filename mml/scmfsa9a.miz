@@ -77,7 +77,7 @@ proof
         now assume j < 0; then A3: 2*j < 2*0 by XREAL_1:70;
      per cases by A3,INT_1:20;
      suppose 2*j+1 < 0;
-      hence contradiction by A2,NAT_1:18;
+      hence contradiction by A2;
      end;
      suppose 2*j+1 = 0; then n = 2*0;
       hence contradiction by A1;
@@ -107,11 +107,9 @@ theorem Th3: :: Div0:
  for m,n being natural number holds 0 < n implies 0 <= m qua Integer div n
 proof let m,n be natural number;
   assume
-A1: 0 < n;
-      0 <= m by NAT_1:18;
-then A2: 0 <= m/n by A1,REAL_2:125;
+ 0 < n;
       m qua Integer div n = [\ m/n /] by INT_1:def 7;
- hence 0 <= m qua Integer div n by A2,Th2;
+ hence 0 <= m qua Integer div n by Th2;
 end;
 
 theorem Th4: :: Div1:
@@ -142,13 +140,13 @@ theorem Th5: :: Div2:
  m qua Integer mod n = m mod n
 proof
   let m,n be natural number;
-   per cases by NAT_1:18;
+   per cases;
    suppose
 A1: 0 < n;
   reconsider M = m as Integer;
 A2: m = n * (m div n) + (m mod n) by A1,NAT_1:47;
 A3: M = n * (M div n) + (M mod n) by A1,NEWTON:80;
-      0 <= M mod n by A1,NEWTON:78;
+      0 <= M mod n by NEWTON:78;
    then reconsider Mm = M mod n as Nat by INT_1:16;
       0 <= M div n by A1,Th3;
    then reconsider Md = M div n as Nat by INT_1:16;
@@ -2752,7 +2750,7 @@ definition
     :: while and if do not allocate memory, no need to save anything
 
  func Fusc_macro ( N, result ) -> Macro-Instruction equals
-:Def8:
+
    SubFrom(result, result) ';'
    (next := intloc 0) ';'
    (aux := N) ';'
@@ -2791,8 +2789,6 @@ A1: N <> result;
    set I = I3i0 ';' I3i1 ';' I3I2;
    set I3 = while>0 ( aux, I );
    set t = IExec(i0 ';' i1 ';' i2, s);
-
-A2: Fusc_macro(N, result) = i0 ';' i1 ';' i2 ';' I3 by Def8;
 
  let n be Nat such that
 A3: n = s.N;
@@ -3089,10 +3085,10 @@ A69:  IExec(I3, t) | D = SWt.k | D by A61,A62,Th42;
 then A70: I3 is_closed_on t & I3 is_halting_on t by A32,SCMFSA8B:8;
 
  hence IExec(Fusc_macro(N, result), s).result
-    = IExec(I3, t).result by A2,SFMASTR1:8
+    = IExec(I3, t).result by SFMASTR1:8
    .= Fusc n by A65,A67,A68,A69,PRE_FF:17,SCMFSA6A:38;
  thus IExec(Fusc_macro(N, result), s).N
-    = IExec(I3, t).N by A2,A70,SFMASTR1:8
+    = IExec(I3, t).N by A70,SFMASTR1:8
    .= n by A66,A69,SCMFSA6A:38;
 end;
 
