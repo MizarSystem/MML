@@ -7,21 +7,18 @@
 environ
 
  vocabularies XCMPLX_0, ARYTM_0, COMPLEX1, ARYTM, FUNCOP_1, BOOLE, FUNCT_1,
-      FUNCT_2, ORDINAL2, ORDINAL1, RELAT_1, OPPCAT_1, ARYTM_1, ARYTM_2,
-      ARYTM_3, XREAL_0;
+      FUNCT_2, ORDINAL2, RELAT_1, OPPCAT_1, ARYTM_1, ARYTM_2, ARYTM_3, XREAL_0;
  notations TARSKI, XBOOLE_0, SUBSET_1, ZFMISC_1, FUNCT_1, FUNCT_2, FUNCT_4,
-      ORDINAL1, ORDINAL2, ARYTM_2, ARYTM_1, NUMBERS, ARYTM_0;
+      ORDINAL1, ARYTM_2, ARYTM_1, NUMBERS, ARYTM_0;
  constructors FUNCT_4, ARYTM_1, FRAENKEL, ARYTM_0, ORDINAL2, FINSET_1,
-  PARTFUN1, RELAT_2;
+      PARTFUN1, RELAT_2;
  registrations NUMBERS, FRAENKEL, FUNCT_2, ZFMISC_1, XBOOLE_0, ORDINAL1;
  requirements BOOLE, SUBSET, NUMERALS;
  definitions ARYTM_3;
- theorems ARYTM_0, XBOOLE_0, FUNCT_4, FUNCT_2, ZFMISC_1, ARYTM_2,
-      TARSKI, ARYTM_1, XBOOLE_1, NUMBERS, ORDINAL1;
+ theorems ARYTM_0, XBOOLE_0, FUNCT_4, FUNCT_2, ZFMISC_1, ARYTM_2, TARSKI,
+      ARYTM_1, XBOOLE_1, NUMBERS, ORDINAL1;
 
 begin
-
-Lm1: 1 = succ 0;
 
 definition
   func <i> equals
@@ -121,9 +118,9 @@ A14: c2 = [*+(*(x1',y1'),opp*(x2',y2')), +(*(x1',y2'),*(x2',y1'))*];
  commutativity;
 end;
 
-Lm2:  0 = [*0,0*] by ARYTM_0:def 7;
+Lm1:  0 = [*0,0*] by ARYTM_0:def 7;
      reconsider j = 1 as Element of REAL;
-Lm3: for x,y,z being Element of REAL st +(x,y) = 0 & +(x,z) = 0
+Lm2: for x,y,z being Element of REAL st +(x,y) = 0 & +(x,z) = 0
    holds y = z
   proof let x,y,z be Element of REAL such that
 A1: +(x,y) = 0 and
@@ -245,7 +242,7 @@ A1: z = [*x,y*] by ARYTM_0:11;
     reconsider z' = [*opp x, opp y*] as complex number by Def2;
    take z';
         0 = +(x,opp x) & 0 = +(y,opp y) by ARYTM_0:def 4;
-   hence thesis by A1,Def4,Lm2;
+   hence thesis by A1,Def4,Lm1;
   end;
  uniqueness
   proof let c1,c2 be complex number such that
@@ -260,12 +257,12 @@ A7: z = [*x1',x2'*] and
 A8: c2 = [*y1',y2'*] and
 A9: 0 = [*+(x1',y1'),+(x2',y2')*] by A3,Def4;
 A10:  x1 = x1' & x2 = x2' by A4,A7,ARYTM_0:12;
-A11: +(x1,y1) = 0 by A6,Lm2,ARYTM_0:12;
-        +(x1,y1') = 0 by A9,A10,Lm2,ARYTM_0:12;
-    then A12: y1 = y1' by A11,Lm3;
-A13: +(x2,y2) = 0 by A6,Lm2,ARYTM_0:12;
-        +(x2,y2') = 0 by A9,A10,Lm2,ARYTM_0:12;
-   hence c1 = c2 by A5,A8,A12,A13,Lm3;
+A11: +(x1,y1) = 0 by A6,Lm1,ARYTM_0:12;
+        +(x1,y1') = 0 by A9,A10,Lm1,ARYTM_0:12;
+    then A12: y1 = y1' by A11,Lm2;
+A13: +(x2,y2) = 0 by A6,Lm1,ARYTM_0:12;
+        +(x2,y2') = 0 by A9,A10,Lm1,ARYTM_0:12;
+   hence c1 = c2 by A5,A8,A12,A13,Lm2;
   end;
  involutiveness;
  func z" -> complex number means :Def7:
@@ -474,7 +471,7 @@ registration let x,y be complex number;
  coherence;
 end;
 
-Lm4:  for x, y, z being complex number holds
+Lm3:  for x, y, z being complex number holds
   x * (y * z) = (x * y) * z
 proof
    let x, y, z be complex number;
@@ -580,7 +577,7 @@ A1:  REAL c= COMPLEX by NUMBERS:def 2,XBOOLE_1:7;
   end;
 end;
 
-Lm5:  REAL c= COMPLEX by NUMBERS:def 2,XBOOLE_1:7;
+Lm4:  REAL c= COMPLEX by NUMBERS:def 2,XBOOLE_1:7;
 
 registration let x be non zero (complex number);
   cluster -x -> non zero;
@@ -624,43 +621,42 @@ A12:   y2 = 0 by A9,A10,ARYTM_0:26;
   cluster x*y -> non zero;
   coherence
    proof
-A14:   1 = succ 0;
         1 in REAL;
-     then reconsider j =1 as complex number by Def2,Lm5;
+     then reconsider j =1 as complex number by Def2,Lm4;
      consider u1,u2,v1,v2 being Element of REAL such that
-A15:   j = [*u1,u2*] and
-A16:   y = [*v1,v2*] and
-A17:   j*y = [* +(*(u1,v1),opp*(u2,v2)), +(*(u1,v2),*(u2,v1)) *] by Def5;
-A18:   u2 = 0 by A15,ARYTM_0:26;
+A14:   j = [*u1,u2*] and
+A15:   y = [*v1,v2*] and
+A16:   j*y = [* +(*(u1,v1),opp*(u2,v2)), +(*(u1,v2),*(u2,v1)) *] by Def5;
+A17:   u2 = 0 by A14,ARYTM_0:26;
      then *(u2,v1) = 0 by ARYTM_0:14;
-     then A19:    +(*(u1,v2),*(u2,v1)) = *(u1,v2) by ARYTM_0:13;
-A20:   u1 = 1 by A15,A18,ARYTM_0:def 7;
+     then A18:    +(*(u1,v2),*(u2,v1)) = *(u1,v2) by ARYTM_0:13;
+A19:   u1 = 1 by A14,A17,ARYTM_0:def 7;
         +(0,opp 0) = 0 by ARYTM_0:def 4;
-     then A21:   opp 0 = 0 by ARYTM_0:13;
-A22:   +(*(u1,v1),opp*(u2,v2)) = +(v1,opp*(u2,v2)) by A20,ARYTM_0:21
+     then A20:   opp 0 = 0 by ARYTM_0:13;
+A21:   +(*(u1,v1),opp*(u2,v2)) = +(v1,opp*(u2,v2)) by A19,ARYTM_0:21
          .= +(v1,*(opp u2,v2)) by ARYTM_0:17
-         .= +(v1,*(0,v2)) by A15,A21,ARYTM_0:26
+         .= +(v1,*(0,v2)) by A14,A20,ARYTM_0:26
          .= +(v1,0) by ARYTM_0:14
          .= v1 by ARYTM_0:13;
      0 in REAL;
-     then reconsider z =0 as complex number by Def2,Lm5;
+     then reconsider z =0 as complex number by Def2,Lm4;
      consider u1,u2,v1,v2 being Element of REAL such that
          x" = [*u1,u2*] and
-A23:   z = [*v1,v2*] and
-A24:   x"*z = [* +(*(u1,v1),opp*(u2,v2)), +(*(u1,v2),*(u2,v1)) *] by Def5;
-A25:    v2 = 0 by A23,ARYTM_0:26;
-      then A26:    v1 = 0 by A23,ARYTM_0:def 7;
-      then A27:    +(*(u1,v1),opp*(u2,v2)) = +(0,opp*(u2,v2)) by ARYTM_0:14
+A22:   z = [*v1,v2*] and
+A23:   x"*z = [* +(*(u1,v1),opp*(u2,v2)), +(*(u1,v2),*(u2,v1)) *] by Def5;
+A24:    v2 = 0 by A22,ARYTM_0:26;
+      then A25:    v1 = 0 by A22,ARYTM_0:def 7;
+      then A26:    +(*(u1,v1),opp*(u2,v2)) = +(0,opp*(u2,v2)) by ARYTM_0:14
          .= opp*(u2,v2) by ARYTM_0:13
-         .= 0 by A21,A25,ARYTM_0:14;
-A28:  +(*(u1,v2),*(u2,v1)) = +(0,*(u2,v1)) by A25,ARYTM_0:14
+         .= 0 by A20,A24,ARYTM_0:14;
+A27:  +(*(u1,v2),*(u2,v1)) = +(0,*(u2,v1)) by A24,ARYTM_0:14
          .= *(u2,v1) by ARYTM_0:13
-         .= 0 by A26,ARYTM_0:14;
+         .= 0 by A25,ARYTM_0:14;
     assume
-A29: x*y = 0;
-A30: x"*x*y = x"*(x*y) by Lm4 .= 0 by A24,A27,A28,A29,ARYTM_0:def 7;
-     x"*x*y = j * y by Def7 .= y by A16,A17,A19,A20,A22,ARYTM_0:21;
-    hence contradiction by A30;
+A28: x*y = 0;
+A29: x"*x*y = x"*(x*y) by Lm3 .= 0 by A23,A26,A27,A28,ARYTM_0:def 7;
+     x"*x*y = j * y by Def7 .= y by A15,A16,A18,A19,A21,ARYTM_0:21;
+    hence contradiction by A29;
    end;
 end;
 
@@ -675,7 +671,7 @@ registration
   proof
     let n be Element of REAL;
     n in REAL;
-    hence thesis by Def2,Lm5;
+    hence thesis by Def2,Lm4;
   end;
 end;
 
@@ -687,7 +683,7 @@ registration
     assume n is natural;
     then n in NAT by ORDINAL1:def 13;
     then n in REAL;
-    hence thesis by Def2,Lm5;
+    hence thesis by Def2,Lm4;
   end;
 end;
 

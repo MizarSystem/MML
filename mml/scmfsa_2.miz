@@ -10,11 +10,11 @@ environ
       BOOLE, CAT_1, AMI_2, ORDINAL2, AMI_3, ARYTM_1, FINSET_1, TARSKI, AMI_5,
       MCART_1, FINSEQ_1, FUNCT_4, FUNCOP_1, CARD_3, ABSVALUE, FINSEQ_2, NAT_1,
       SCMFSA_2, FINSEQ_4, ARYTM;
- notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, SETFAM_1, ORDINAL1,
-      NUMBERS, XCMPLX_0, NAT_1, INT_1, RELAT_1, MCART_1, CARD_3, INT_2,
-      FINSEQ_1, CQC_LANG, STRUCT_0, GR_CY_1, FUNCT_1, FUNCOP_1, RELSET_1,
-      PARTFUN1, FUNCT_2, FINSET_1, FUNCT_4, FINSEQ_2, FINSEQ_4, FUNCT_7, AMI_1,
-      AMI_2, AMI_3, AMI_5, SCMFSA_1, XXREAL_0;
+ notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, SETFAM_1, ORDINAL1, NUMBERS,
+      XCMPLX_0, NAT_1, INT_1, RELAT_1, MCART_1, CARD_3, INT_2, FINSEQ_1,
+      CQC_LANG, STRUCT_0, GR_CY_1, FUNCT_1, FUNCOP_1, RELSET_1, FUNCT_2,
+      FINSET_1, FUNCT_4, FINSEQ_2, FINSEQ_4, FUNCT_7, AMI_1, AMI_2, AMI_3,
+      AMI_5, SCMFSA_1, XXREAL_0;
  constructors PARTFUN1, WELLORD2, DOMAIN_1, XXREAL_0, REAL_1, NAT_1, MEMBERED,
       FINSEQ_4, FINSOP_1, INT_2, FUNCT_7, CAT_2, AMI_5, SCMFSA_1;
  registrations XBOOLE_0, AMI_1, RELSET_1, SCMFSA_1, INT_1, FUNCT_1, FINSEQ_1,
@@ -25,7 +25,7 @@ environ
  theorems MCART_1, SCMFSA_1, AMI_1, TARSKI, INT_1, RELAT_1, AMI_5, FUNCT_2,
       FUNCT_4, GR_CY_1, CARD_3, FUNCOP_1, FUNCT_1, AMI_3, ENUMSET1, NAT_1,
       CARD_1, CARD_4, AMI_2, FUNCT_7, CQC_LANG, ZFMISC_1, CQC_THE1, ORDINAL1,
-      STRUCT_0, XBOOLE_0, XBOOLE_1, XCMPLX_1, XREAL_1;
+      STRUCT_0, XBOOLE_0, XBOOLE_1, XREAL_1;
  schemes FUNCT_2;
 
 begin
@@ -95,8 +95,7 @@ theorem
 theorem Th7:
  IC SCM+FSA = 0
  proof 0 in INT by INT_1:def 2;
-  hence 0 = the Instruction-Counter of SCM+FSA by FUNCT_7:def 1
-        .= IC SCM+FSA;
+  hence 0 = IC SCM+FSA by FUNCT_7:def 1;
  end;
 
 begin :: The Memory Structure
@@ -294,7 +293,7 @@ A6:    y = f.x by FUNCT_1:def 5;
          then y is FinSeq-Location by Def5;
          then consider i being Element of NAT such that
 A7:       y = fsloc i by Th20;
-         i in NAT by ORDINAL1:def 13;
+         i in NAT;
         then y = f.i & i in dom f by A1,A7,FUNCT_2:def 1;
        hence y in rng f by FUNCT_1:def 5;
       end;
@@ -321,16 +320,14 @@ theorem Th26:
  for l being Int-Location holds ObjectKind l = INT
   proof let l be Int-Location;
 A1:  l in SCM+FSA-Data-Loc by Def4;
-   thus ObjectKind l = (the Object-Kind of SCM+FSA).l
-     .= INT by A1,SCMFSA_1:10;
+   thus ObjectKind l = INT by A1,SCMFSA_1:10;
   end;
 
 theorem Th27:
  for l being FinSeq-Location holds ObjectKind l = INT*
   proof let l be FinSeq-Location;
 A1:  l in SCM+FSA-Data*-Loc by Def5;
-   thus ObjectKind l = (the Object-Kind of SCM+FSA).l
-     .= INT* by A1,SCMFSA_1:12;
+   thus ObjectKind l = INT* by A1,SCMFSA_1:12;
   end;
 
 theorem
@@ -1093,10 +1090,9 @@ A3: I = II and
 A4: S = SS|NAT +* (SCM-Instr-Loc --> I) and
 A5: SCM+FSA-Exec-Res(II,SS) = SS +* SCM-Exec-Res(I,S) +* SS|SCM+FSA-Instr-Loc
           by SCMFSA_1:def 17;
-A6: Exec(i,s) = SCM-Exec.I.S by A1,A2,A3,A4,AMI_3:def 1
-     .= SCM-Exec-Res(I,S) by AMI_2:def 17;
- thus Exec(ii,ss) = SCM+FSA-Exec.II.SS
-   .= ss +* Exec(i,s) +* ss|SCM+FSA-Instr-Loc by A5,A6,SCMFSA_1:def 18;
+A6: Exec(i,s) = SCM-Exec-Res(I,S) by  A1,A2,A3,A4,AMI_3:def 1,AMI_2:def 17;
+ thus Exec(ii,ss) =
+ ss +* Exec(i,s) +* ss|SCM+FSA-Instr-Loc by A5,A6,SCMFSA_1:def 18;
 end;
 
 definition let s be State of SCM+FSA, d be Int-Location;
@@ -1215,8 +1211,7 @@ registration
    thus SCM+FSA is definite
     proof let l be Instruction-Location of SCM+FSA;
       reconsider L = l as Element of SCM+FSA-Instr-Loc;
-     thus ObjectKind l = SCM+FSA-OK.L
-      .= the Instructions of SCM+FSA by SCMFSA_1:11;
+     thus ObjectKind l = the Instructions of SCM+FSA by SCMFSA_1:11;
     end;
    let s be State of SCM+FSA, i be Instruction of SCM+FSA,
       l be Instruction-Location of SCM+FSA;
@@ -1226,8 +1221,7 @@ registration
    reconsider I = i as Element of SCM+FSA-Instr;
    reconsider S = s as Element of product SCM+FSA-OK;
    reconsider l' = l as Element of SCM+FSA-Instr-Loc;
-A3: Exec(i,s) = SCM+FSA-Exec.I.S
-    .= SCM+FSA-Exec-Res(I,S) by SCMFSA_1:def 18;
+A3: Exec(i,s) = SCM+FSA-Exec-Res(I,S) by SCMFSA_1:def 18;
      per cases by A2,XBOOLE_0:def 2;
      suppose i in SCM-Instr;
       then reconsider I = i as Instruction of SCM by AMI_3:def 1;
@@ -1408,8 +1402,7 @@ then A9:  x in {IC SCM+FSA} \/ SCM+FSA-Data-Loc or
 
      suppose x in {IC SCM+FSA};
 then A10:   x = IC SCM+FSA by TARSKI:def 1;
-         s1.IC SCM+FSA = IC(s2) by A1
-               .= s2.IC SCM+FSA;
+         s1.IC SCM+FSA = s2.IC SCM+FSA by A1;
      hence g1.x = g2.x by A5,A6,A10;
 
      end;
@@ -1435,9 +1428,7 @@ theorem Th88:
  S = s|NAT +* (SCM-Instr-Loc --> I) implies IC s = IC S
 proof assume S = s|NAT +* (SCM-Instr-Loc --> I);
   then A1: s = s +* S +* s|SCM+FSA-Instr-Loc by Th76;
- thus IC s = s.IC SCM+FSA
-          .= S.IC SCM by A1,Th78
-          .= IC S;
+ thus IC s = IC S by A1,Th78;
 end;
 
 begin :: Users guide
@@ -1842,7 +1833,7 @@ A1: I = [J,<*ml,p,mk*>];
   I`1 = 9 by MCART_1:7;
 then A2: InsCode I = 9 by SCMFSA_1:def 5;
 A3: I`2 = <*ml,p,mk*> by MCART_1:7;
-A4:  IC s = S.0 by Th7 .= IC S by SCMFSA_1:def 16;
+A4:  IC s = IC S by  Th7,SCMFSA_1:def 16;
   consider i being Integer, k such that
 A5: k = abs(S.(I int_addr2)) and
 A6: i = (S.(I coll_addr1))/.k and
@@ -1888,7 +1879,7 @@ A1: I = [J,<*ml,p,mk*>];
   I`1 = 10 by MCART_1:7;
 then A2: InsCode I = 10 by SCMFSA_1:def 5;
 A3: I`2 = <*ml,p,mk*> by MCART_1:7;
-A4:  IC s = S.0 by Th7 .= IC S by SCMFSA_1:def 16;
+A4:  IC s = IC S by  Th7,SCMFSA_1:def 16;
   consider F being FinSequence of INT,k such that
 A5: k = abs(S.(I int_addr2)) and
 A6: F = S.(I coll_addr1)+*(k,S.(I int_addr1)) and
@@ -1932,7 +1923,7 @@ A1: I = [J,<*ml,p*>];
   I`1 = 11 by MCART_1:7;
 then A2: InsCode I = 11 by SCMFSA_1:def 5;
 A3: I`2 = <*ml,p*> by MCART_1:7;
-A4:  IC s = S.0 by Th7 .= IC S by SCMFSA_1:def 16;
+A4:  IC s = IC S by  Th7,SCMFSA_1:def 16;
   set S1 = SCM+FSA-Chg(S,I int_addr3,len(S.(I coll_addr2)));
 A5: Exec(c:=len g, s) = SCM+FSA-Exec-Res(I,S) by Th77
                     .= (SCM+FSA-Chg(S1, Next IC S)) by A2,SCMFSA_1:def 17;
@@ -1970,7 +1961,7 @@ A1: I = [J,<*ml,p*>];
   I`1 = 12 by MCART_1:7;
 then A2: InsCode I = 12 by SCMFSA_1:def 5;
 A3: I`2 = <*ml,p*> by MCART_1:7;
-A4:  IC s = S.0 by Th7 .= IC S by SCMFSA_1:def 16;
+A4:  IC s = IC S by  Th7,SCMFSA_1:def 16;
   consider F being FinSequence of INT,k such that
 A5: k = abs(S.(I int_addr3)) and
 A6: F = k |-> 0 and
@@ -2033,8 +2024,7 @@ A2:   I is halting;
     reconsider T = s as SCM+FSA-State;
 A3: IC T = IC s by Th102;
 A4: IC T = T.0 by SCMFSA_1:def 16;
-A5: Exec(I,s).IC SCM+FSA = s.IC SCM+FSA by A2,AMI_1:def 8
-       .= T.0 by A3,A4;
+A5: Exec(I,s).IC SCM+FSA = T.0 by  A2,AMI_1:def 8,A3,A4;
     reconsider w = T.0 as Instruction-Location of SCM+FSA by A4;
     consider mj being Element of SCM+FSA-Instr-Loc such that
 A6:   mj = w & Next w = Next mj by Def9;
@@ -2192,8 +2182,7 @@ A12:   a=0_goto la is halting;
 A13:   t.a <> 0;
 A14: IC t = IC w by Th102;
 A15: IC w = w.0 by SCMFSA_1:def 16;
-A16: Exec(a=0_goto la,t).IC SCM+FSA = t.IC SCM+FSA by A12,AMI_1:def 8
-       .= w.0 by A14,A15;
+A16: Exec(a=0_goto la,t).IC SCM+FSA = w.0 by  A12,AMI_1:def 8,A14,A15;
     reconsider e = w.0 as Instruction-Location of SCM+FSA by A15;
 A17: Exec(a=0_goto la,t).IC SCM+FSA = Next e by A13,A14,A15,Th96;
     consider mi being Element of SCM+FSA-Instr-Loc such that
@@ -2266,8 +2255,7 @@ A12:   a>0_goto la is halting;
 A13:   t.a <= 0;
 A14: IC t = IC w by Th102;
 A15: IC w = w.0 by SCMFSA_1:def 16;
-A16: Exec(a>0_goto la,t).IC SCM+FSA = t.IC SCM+FSA by A12,AMI_1:def 8
-       .= w.0 by A14,A15;
+A16: Exec(a>0_goto la,t).IC SCM+FSA = w.0 by  A12,AMI_1:def 8,A14,A15;
     reconsider e = w.0 as Instruction-Location of SCM+FSA by A15;
 A17: Exec(a>0_goto la,t).IC SCM+FSA = Next e by A13,A14,A15,Th97;
     consider mi being Element of SCM+FSA-Instr-Loc such that

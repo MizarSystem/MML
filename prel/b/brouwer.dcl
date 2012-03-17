@@ -45,10 +45,10 @@
 <ArticleID name="TOPMETR"/>
 <ArticleID name="BORSUK_2"/>
 <ArticleID name="BORSUK_6"/>
-<ArticleID name="TOPALG_2"/>
 <ArticleID name="REAL_1"/>
 <ArticleID name="RCOMP_1"/>
 <ArticleID name="TOPS_2"/>
+<ArticleID name="TOPALG_2"/>
 <ArticleID name="TOPREALB"/>
 <ArticleID name="BROUWER"/>
 </Signature>
@@ -158,7 +158,7 @@
 </Func>
 <Cluster>
 <Adjective nr="43"/>
-<Adjective nr="106">
+<Adjective nr="112">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

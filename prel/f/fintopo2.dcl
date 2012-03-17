@@ -15,16 +15,12 @@
 <ArticleID name="FRAENKEL"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
+<ArticleID name="XBOOLEAN"/>
 <ArticleID name="MARGREL1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PRE_TOPC"/>
-<ArticleID name="FINSET_1"/>
-<ArticleID name="CARD_1"/>
-<ArticleID name="FINSEQ_1"/>
-<ArticleID name="QC_LANG1"/>
-<ArticleID name="QC_LANG2"/>
-<ArticleID name="CQC_LANG"/>
-<ArticleID name="FIN_TOPO"/>
+<ArticleID name="ORDERS_1"/>
+<ArticleID name="ORDERS_2"/>
 <ArticleID name="FINTOPO2"/>
 </Signature>
 <RCluster>
@@ -33,7 +29,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="53"/>
+<Adjective nr="38"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -43,7 +39,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="24" value="false"/>
-<Adjective nr="53"/>
+<Adjective nr="38"/>
 </Cluster>
 </RCluster>
 </Registrations>

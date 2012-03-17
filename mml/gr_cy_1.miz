@@ -10,11 +10,10 @@ environ
       FUNCT_1, VECTSP_1, QC_LANG1, SETWISEO, RLVECT_1, FINSEQ_2, GROUP_1,
       GROUP_4, RELAT_1, ARYTM_1, FINSET_1, CARD_1, GROUP_2, TARSKI, ARYTM_3,
       FILTER_0, RLSUB_1, GRAPH_1, GR_CY_1, CARD_3;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, ORDINAL2, NUMBERS,
-      XCMPLX_0, RELAT_1, FUNCT_1, REAL_1, FUNCT_2, CARD_1, FINSET_1, BINOP_1,
-      DOMAIN_1, INT_1, BINOP_2, REALSET1, INT_2, NAT_1, RLVECT_1, GROUP_2,
-      XXREAL_0, STRUCT_0, GROUP_1, GROUP_4, FUNCOP_1, FINSOP_1, SETWOP_2,
-      FINSEQ_1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0,
+      RELAT_1, FUNCT_1, REAL_1, FUNCT_2, CARD_1, FINSET_1, BINOP_1, DOMAIN_1,
+      INT_1, BINOP_2, REALSET1, INT_2, NAT_1, RLVECT_1, GROUP_2, XXREAL_0,
+      STRUCT_0, GROUP_1, GROUP_4, FINSOP_1, SETWOP_2, FINSEQ_1;
  constructors WELLORD2, DOMAIN_1, BINOP_1, SETWISEO, XXREAL_0, REAL_1, NAT_1,
       BINOP_2, MEMBERED, FINSOP_1, REALSET1, INT_2, RLVECT_1, GROUP_4,
       ORDINAL2;
@@ -25,16 +24,15 @@ environ
  definitions GROUP_1, FUNCT_1, TARSKI, BINOP_1, REALSET1, FINSOP_1, FINSEQ_2;
  theorems BINOP_1, INT_1, INT_2, NAT_1, REAL_1, FINSEQ_1, FINSEQ_2, FINSEQ_4,
       ZFMISC_1, FUNCT_2, FUNCOP_1, GROUP_1, GROUP_2, GROUP_4, TARSKI, FUNCT_1,
-      CARD_1, WELLORD2, RLVECT_1, FINSOP_1, RELSET_1, ORDINAL2, XBOOLE_0,
-      XBOOLE_1, RELAT_1, BINOP_2, NUMBERS, SETWISEO, XREAL_1, XXREAL_0,
-      ORDINAL1;
+      CARD_1, WELLORD2, RLVECT_1, FINSOP_1, RELSET_1, XBOOLE_0, XBOOLE_1,
+      RELAT_1, BINOP_2, NUMBERS, SETWISEO, XREAL_1, XXREAL_0, ORDINAL1;
  schemes BINOP_1, NAT_1, FINSEQ_1, FINSEQ_2;
 
 begin
 
- reserve i1,i2,i3 for Element of INT;
+ reserve i1 for Element of INT;
  reserve j1,j2,j3 for Integer;
- reserve p,s,r,g,k,n,m,q,t for Element of NAT;
+ reserve p,s,k,n,m for Element of NAT;
  reserve x,y,xp,yp for set;
  reserve G for Group;
  reserve a,b for Element of G;
@@ -161,9 +159,7 @@ canceled 4;
 theorem Th20:
   Sum(I^<*i1*>) =Sum I +@i1
  proof
-  thus Sum(I^<*i1*>) = addint $$ (I^<*i1*>)
-                 .= addint.(addint $$ I,i1) by FINSOP_1:5
-                 .= addint.(Sum I,i1)
+  thus Sum(I^<*i1*>) = addint.(addint $$ I,i1) by FINSOP_1:5
                  .= addint.(Sum I,@i1) by GROUP_4:def 2
                  .= Sum I + @i1 by Th14;
    end;
@@ -439,10 +435,7 @@ A14: rng F c= the carrier of gr {a}
               then consider p such that A22:  xp = a|^p by A11;
                   yp in car by A18,A19,A21,ZFMISC_1:106;
               then consider s such that A23:  yp = a|^s by A11;
-              A24:  y = (the mult of G).[a|^p,a|^s]
-                        by A19,A20,A21,A22,A23,FUNCT_1:70
-                      .= (the mult of G).(a|^p,a|^s)
-                      .= a|^p*(a|^s)
+              A24:  y = a|^p*(a|^s) by A19,A20,A21,A22,A23,FUNCT_1:70
                       .= a|^(p+s) by GROUP_1:48;
                   a|^(p+s) in car
                proof
@@ -498,8 +491,7 @@ A31: for f,g being Element of H ,
   let f' ,g' be Element of G;
   assume A32: f = f' & g =g';
   set A = [:car,car:];
-  A33:f*g = ((the mult of G)||car).(f,g)
-       .= ((the mult of G)||car).[f,g];
+  A33:f*g = ((the mult of G)||car).[f,g];
   thus thesis by A32,A33,FUNCT_1:72;
   end;
 
@@ -1012,8 +1004,7 @@ theorem Th37:
    hence thesis by GROUP_1:20;
    end;
 
- reserve G1 for Subgroup of INT.Group,
-         h for Element of INT.Group;
+ reserve G1 for Subgroup of INT.Group;
 
 Lm4: for h,g be Element of INT.Group, A,B be Integer
      st h = A & g = B
@@ -1023,30 +1014,30 @@ theorem Th38:
   (@'1) |^ k = k
   proof
   defpred P[Element of NAT] means (@'1)|^$1=$1;
-A2: P[0] by Th35,GROUP_1:43;
- A3: for k st P[k] holds P[k+1]
+A1: P[0] by Th35,GROUP_1:43;
+ A2: for k st P[k] holds P[k+1]
   proof
     let k; assume (@'1)|^k = k;
     then (@'1)|^k * (@'1) = k + 1 by Lm4;
     hence thesis by GROUP_1:49;
   end;
-     for k holds P[k] from NAT_1:sch 1(A2,A3);
+     for k holds P[k] from NAT_1:sch 1(A1,A2);
    hence thesis;
   end;
 
 theorem Th39:
   j1 = (@'1) |^ j1
   proof
-   consider k such that A2:j1 = k or j1 = -k by INT_1:8;
-   per cases by A2;
+   consider k such that A1:j1 = k or j1 = -k by INT_1:8;
+   per cases by A1;
     suppose j1=k;
       hence thesis by Th38;
     end;
-    suppose A3: j1=-k;
+    suppose A2: j1=-k;
       reconsider k'=k as Integer;
       reconsider k' as Element of INT.Group by INT_1:def 2;
-      (@'1)|^j1 = ((@'1)|^k)" by A3,GROUP_1:71
-      .= (k')" by Th38 .= -@'k' by Th37 .= j1 by A3;
+      (@'1)|^j1 = ((@'1)|^k)" by A2,GROUP_1:71
+      .= (k')" by Th38 .= j1 by  Th37,A2;
       hence thesis;
     end;
   end;
@@ -1461,7 +1452,7 @@ registration
   coherence by Th48;
 end;
 
-theorem Th49:
+theorem
   n > 0 implies INT.Group(n) is cyclic
 proof
  assume n > 0;
@@ -1470,9 +1461,9 @@ proof
  hence thesis by Th41;
 end;
 
-theorem 
+theorem
   INT.Group is commutative;
-  
+
 theorem
   0 < m & m <= n implies Segm m c= Segm n
 proof assume

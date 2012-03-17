@@ -23,6 +23,7 @@
 <ArticleID name="XREAL_0"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="FRAENKEL"/>
+<ArticleID name="XBOOLEAN"/>
 <ArticleID name="MARGREL1"/>
 <ArticleID name="PBOOLE"/>
 <ArticleID name="STRUCT_0"/>
@@ -245,7 +246,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="248">
+<Func kind="K" nr="257">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -259,7 +260,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="251">
+<Func kind="K" nr="260">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -273,7 +274,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="251">
+<Func kind="K" nr="260">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -282,10 +283,10 @@
 <Adjective nr="76"/>
 <Adjective nr="80"/>
 <Adjective nr="81">
-<Func kind="K" nr="248">
+<Func kind="K" nr="257">
 <LocusVar nr="1"/>
 </Func>
-<Func kind="K" nr="248">
+<Func kind="K" nr="257">
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
@@ -313,7 +314,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="252">
+<Func kind="K" nr="261">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -340,7 +341,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="253">
+<Func kind="K" nr="262">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>

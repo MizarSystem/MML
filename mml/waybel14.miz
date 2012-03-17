@@ -13,12 +13,11 @@ environ
       FUNCT_1, TMAP_1, CONNSP_2, TOPS_1, YELLOW_8, TSP_1, YELLOW_0, WAYBEL_5,
       OPPCAT_1, WAYBEL14, RLVECT_3;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NAT_1, SETFAM_1, FINSET_1,
-      XCMPLX_0,
-      DOMAIN_1, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, ORDERS_2, LATTICE3,
-      CARD_1, STRUCT_0, PRE_TOPC, TOPS_1, TOPS_2, CONNSP_2, BORSUK_1, TMAP_1,
-      CANTOR_1, TSP_1, COMPTS_1, YELLOW_0, YELLOW_1, YELLOW_3, YELLOW_4,
-      YELLOW_6, YELLOW_7, YELLOW_8, WAYBEL_0, WAYBEL_1, WAYBEL_2, WAYBEL_3,
-      WAYBEL_5, WAYBEL_6, WAYBEL_8, WAYBEL_9, WAYBEL11;
+      XCMPLX_0, DOMAIN_1, FUNCT_1, RELSET_1, BINOP_1, FUNCT_2, ORDERS_2,
+      LATTICE3, CARD_1, STRUCT_0, PRE_TOPC, TOPS_1, TOPS_2, CONNSP_2, BORSUK_1,
+      TMAP_1, CANTOR_1, TSP_1, COMPTS_1, YELLOW_0, YELLOW_1, YELLOW_3,
+      YELLOW_4, YELLOW_6, YELLOW_7, YELLOW_8, WAYBEL_0, WAYBEL_1, WAYBEL_2,
+      WAYBEL_3, WAYBEL_5, WAYBEL_6, WAYBEL_8, WAYBEL_9, WAYBEL11;
  constructors SETFAM_1, FINSUB_1, NAT_1, TOPS_1, TOPS_2, REALSET2, BORSUK_1,
       TMAP_1, T_0TOPSP, CANTOR_1, WAYBEL_1, YELLOW_4, WAYBEL_3, WAYBEL_5,
       WAYBEL_6, WAYBEL_8, YELLOW_8, WAYBEL11, XXREAL_0;
@@ -28,7 +27,7 @@ environ
       NAT_1;
  requirements NUMERALS, BOOLE, SUBSET;
  definitions TARSKI, WAYBEL_0, WAYBEL_6, TMAP_1, YELLOW_8, COMPTS_1, WAYBEL_3,
-      WAYBEL_1, WAYBEL_8, TOPS_2, XBOOLE_0, SUBSET_1, PRE_TOPC;
+      WAYBEL_1, WAYBEL_8, TOPS_2, XBOOLE_0, SUBSET_1, PRE_TOPC, BINOP_1;
  theorems TARSKI, ZFMISC_1, SUBSET_1, RELAT_1, DOMAIN_1, FUNCT_1, FUNCT_2,
       SETFAM_1, LATTICE3, CARD_2, ORDERS_2, PRE_TOPC, TOPS_1, TOPS_2, BORSUK_1,
       TMAP_1, CONNSP_2, COMPTS_1, YELLOW_0, YELLOW_1, YELLOW_2, YELLOW_3,
@@ -126,13 +125,9 @@ theorem Th2:
   holds X` = the carrier of S iff X is empty
 proof let S be 1-sorted, X be Subset of S;
  hereby assume X` = the carrier of S;
-   then X` = [#](the carrier of S);
    then X = ([#](the carrier of S))`;
-   then X = [#]S \ [#](the carrier of S)
-    .= [#]S \ the carrier of S
-    .= {} by XBOOLE_1:37;
- hence X is empty;
- end; assume X is empty; then X = {}S; then X` = [#]S;
+ hence X is empty by XBOOLE_1:37;
+ end; assume X is empty; then X = {}S;
  hence X` = the carrier of S;
 end;
 
@@ -906,7 +901,7 @@ A15: Tsup"X is open by A8,A14,TOPS_2:55;
 A16: the carrier of LxL = [:the carrier of L, the carrier of L:]
         by BORSUK_1:def 5;
 then A17: [a,b] in the carrier of LxL by ZFMISC_1:def 2;
-        Tsup. [a,b] = a"\/"b by A14,WAYBEL_2:def 5;
+        Tsup.(a,b) = a"\/"b by A14,WAYBEL_2:def 5;
 then A18: [a,b] in Tsup"X by A13,A17,FUNCT_2:46;
    consider AA being Subset-Family of LxL such that
 A19:Tsup"X = union AA and
@@ -926,7 +921,8 @@ A22: AAe = [:Va, Vb:] & Va is open & Vb is open by A20,A21;
        consider c, d being Element of L such that
    A25: cd = [c,d] by A16,A23,DOMAIN_1:9;
        reconsider c, d as Element of L;
-   A26: x = c"\/"d by A14,A24,A25,WAYBEL_2:def 5;
+   A26: x = Tsup.(c,d) by A24,A25
+          .= c"\/"d by A14,WAYBEL_2:def 5;
    A27: c <= c"\/"d & d <= c"\/"d by YELLOW_0:22;
    A28: Va' is upper & Vb' is upper by A22,WAYBEL11:def 4;
             c in Va & d in Vb by A22,A24,A25,ZFMISC_1:106;
@@ -939,7 +935,7 @@ A22: AAe = [:Va, Vb:] & Va is open & Vb is open by A20,A21;
     A32: [c,c] in the carrier of LxL by A16,ZFMISC_1:106;
              c <= c;
         then c = c"\/"c by YELLOW_0:24;
-    then c = Tsup. [c,c] by A14,WAYBEL_2:def 5;
+    then c = Tsup.(c,c) by A14,WAYBEL_2:def 5;
     hence x in Tsup.:AAe by A31,A32,FUNCT_2:43;
    end;
 then A33: Tsup.:AAe = Va/\Vb by TARSKI:2;
@@ -972,62 +968,63 @@ A4: the carrier of T = the carrier of L by A2,YELLOW_6:def 27;
  set Tsup = sup_op L;
 A5: the carrier of [:T, T:] = [:the carrier of T, the carrier of T:]
        by BORSUK_1:def 5;
-then A6: the carrier of [:T,T:] = the carrier of [:L,L:] by A4,YELLOW_3:def 2;
+then  the carrier of [:T,T:] = the carrier of [:L,L:] by A4,YELLOW_3:def 2;
  then reconsider Tsup as Function of [:T, T:], T by A4;
  take Tsup;
  thus Tsup = sup_op L;
       for x being Point of [:T, T:] holds Tsup is_continuous_at x
  proof let ab be Point of [:T, T:];
   consider a, b being Point of T such that
-A7: ab = [a,b] by A5,DOMAIN_1:9;
+A6: ab = [a,b] by A5,DOMAIN_1:9;
   let G be a_neighborhood of Tsup.ab;
      reconsider Tsab = Tsup.ab as Point of T;
-A8: Tsab in Int G by CONNSP_2:def 1;
-A9: Int G is open by TOPS_1:51;
+A7: Tsab in Int G by CONNSP_2:def 1;
+A8: Int G is open by TOPS_1:51;
      reconsider Tsab' = Tsab as Element of L by A2,YELLOW_6:def 27;
   reconsider basab = { wayabove q where q is Element of L: q << Tsab' }
     as Basis of Tsab' by A1,WAYBEL11:44;
        basab is Basis of Tsab by A2,A3,Th21;
   then consider V being Subset of T such that
-A10: V in basab & V c= Int G by A8,A9,YELLOW_8:def 2;
+A9: V in basab & V c= Int G by A7,A8,YELLOW_8:def 2;
   consider u being Element of L such that
-A11: V = wayabove u & u << Tsab' by A10;
+A10: V = wayabove u & u << Tsab' by A9;
     reconsider a' = a, b' = b as Element of L by A2,YELLOW_6:def 27;
    reconsider Lc = L as continuous complete Scott TopLattice by A1;
          Lc = L;
-then A12: a' = sup waybelow a' & b' = sup waybelow b' by WAYBEL_3:def 5;
-A13: Tsab' = a'"\/"b' by A7,WAYBEL_2:def 5
-        .= sup ((waybelow a')"\/"(waybelow b')) by A12,WAYBEL_2:4;
+then A11: a' = sup waybelow a' & b' = sup waybelow b' by WAYBEL_3:def 5;
+A12: Tsab' = Tsup.(a,b) by A6
+       .= a'"\/"b' by WAYBEL_2:def 5
+        .= sup ((waybelow a')"\/"(waybelow b')) by A11,WAYBEL_2:4;
    set D1 = waybelow a', D2 = waybelow b';
    set D = D1"\/"D2;
    consider xy being Element of L such that
-A14: xy in D & u << xy by A1,A11,A13,WAYBEL_4:54;
+A13: xy in D & u << xy by A1,A10,A12,WAYBEL_4:54;
         D = { x "\/" y where x, y is Element of L : x in D1 & y in D2 }
       by YELLOW_4:def 3;
    then consider x, y being Element of L such that
-A15: xy = x"\/"y & x in D1 & y in D2 by A14;
-A16: x << a' & y << b' by A15,WAYBEL_3:7;
-A17: wayabove x is open & wayabove y is open by A1,WAYBEL11:36;
-A18: a' in wayabove x & b' in wayabove y by A16;
+A14: xy = x"\/"y & x in D1 & y in D2 by A13;
+A15: x << a' & y << b' by A14,WAYBEL_3:7;
+A16: wayabove x is open & wayabove y is open by A1,WAYBEL11:36;
+A17: a' in wayabove x & b' in wayabove y by A15;
     reconsider wx = wayabove x, wy = wayabove y as Subset of T
            by A2,YELLOW_6:def 27;
          wayabove x in the topology of L & wayabove y in the topology of L
-      by A17,PRE_TOPC:def 5;
-then A19: wx is open & wy is open by A2,A3,PRE_TOPC:def 5;
+      by A16,PRE_TOPC:def 5;
+then A18: wx is open & wy is open by A2,A3,PRE_TOPC:def 5;
     reconsider H = [:wayabove x, wayabove y:]
-    as Subset of [:T, T:] by A6;
-         H is open by A19,BORSUK_1:46;
-then A20: H = Int H by TOPS_1:55;
-         [a',b'] in H by A18,ZFMISC_1:106;
-    then reconsider H as a_neighborhood of ab by A7,A20,CONNSP_2:def 1;
+    as Subset of [:T, T:] by A4,A5,YELLOW_3:def 2;
+         H is open by A18,BORSUK_1:46;
+then A19: H = Int H by TOPS_1:55;
+         [a',b'] in H by A17,ZFMISC_1:106;
+    then reconsider H as a_neighborhood of ab by A6,A19,CONNSP_2:def 1;
   take H;
-A21: Tsup.:H = (wayabove x)"\/"(wayabove y) by WAYBEL_2:35;
-A22: (wayabove x)"\/"(wayabove y) c= uparrow (x"\/"y) by Th12;
-         uparrow (x"\/"y) c= wayabove u by A14,A15,Th7;
-then A23: Tsup.:H c= V by A11,A21,A22,XBOOLE_1:1;
+A20: Tsup.:H = (wayabove x)"\/"(wayabove y) by WAYBEL_2:35;
+A21: (wayabove x)"\/"(wayabove y) c= uparrow (x"\/"y) by Th12;
+         uparrow (x"\/"y) c= wayabove u by A13,A14,Th7;
+then A22: Tsup.:H c= V by A10,A20,A21,XBOOLE_1:1;
          Int G c= G by TOPS_1:44;
-    then V c= G by A10,XBOOLE_1:1;
-  hence Tsup.:H c= G by A23,XBOOLE_1:1;
+    then V c= G by A9,XBOOLE_1:1;
+  hence Tsup.:H c= G by A22,XBOOLE_1:1;
  end;
  hence Tsup is continuous by TMAP_1:49;
 end;
@@ -1106,22 +1103,20 @@ A3: X is open by A2,Th24;
    A4: x in X;
       then reconsider x' = x as Element of L;
       set bas = { wayabove q where q is Element of L: q << x' };
-   A5: bas is Basis of x' by A1,WAYBEL11:44;
       consider q being Element of L such that
-   A6: q << x' & q in X by A1,A3,A4,WAYBEL11:43;
-           wayabove q in bas by A6;
-   then A7: x' in wayabove q by A5,YELLOW_8:21;
-           wayabove q in WAV by A6;
-    hence x in union WAV by A7,TARSKI:def 4;
+   A5: q << x' & q in X by A1,A3,A4,WAYBEL11:43;
+   A6: x' in wayabove q by A5;
+           wayabove q in WAV by A5;
+    hence x in union WAV by A6,TARSKI:def 4;
    end; assume x in union WAV; then consider Y being set such that
-   A8: x in Y & Y in WAV by TARSKI:def 4;
+   A7: x in Y & Y in WAV by TARSKI:def 4;
       consider q being Element of L such that
-   A9: Y = wayabove q & q in X by A8;
+   A8: Y = wayabove q & q in X by A7;
            X is upper by A3,WAYBEL11:def 4;
-   then A10: uparrow q c= X by A9,WAYBEL11:42;
+   then A9: uparrow q c= X by A8,WAYBEL11:42;
            wayabove q c= uparrow q by WAYBEL_3:11;
-      then Y c= X by A9,A10,XBOOLE_1:1;
-   hence x in X by A8;
+      then Y c= X by A8,A9,XBOOLE_1:1;
+   hence x in X by A7;
   end;
  hence X = union {wayabove x where x is Element of L : x in X} by TARSKI:2;
 end;
@@ -1810,8 +1805,7 @@ A9: B c= the topology of L proof let x be set; assume x in B;
               UA in the topology of L by A3,A4;
          then reconsider UA' = UA as Subset of L;
      A20: UA << UA by A16,WAYBEL_3:def 2;
-             F is Subset-Family of L by A4,XBOOLE_1:1;
-         then reconsider F' = F as Subset-Family of L;
+         reconsider F' = F as Subset-Family of L by A4,XBOOLE_1:1;
               F' is open proof let P be Subset of L;
           assume P in F';
           hence P is open by A3,A4,PRE_TOPC:def 5;
@@ -1820,8 +1814,7 @@ A9: B c= the topology of L proof let x be set; assume x in B;
      A21: UA c= union G by A19,A20,WAYBEL_3:34;
               union G c= union F by ZFMISC_1:95;
      then A22: UA = union G by A19,A21,XBOOLE_0:def 10;
-             G is finite Subset-Family of L by XBOOLE_1:1;
-         then reconsider G as finite Subset-Family of L;
+         reconsider G as finite Subset-Family of L by XBOOLE_1:1;
          consider Gg being finite Subset-Family of L such that
      A23: Gg c= G and
      A24: union Gg = union G and

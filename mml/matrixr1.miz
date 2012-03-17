@@ -9,10 +9,10 @@ environ
  vocabularies MATRIXR1, FINSEQ_1, FUNCT_1, ARYTM_1, VECTSP_1, RLVECT_1,
       MATRIX_1, TREES_1, ARYTM, GROUP_1, RELAT_1, FINSEQ_2, INCSP_1, CAT_3,
       RVSUM_1, QC_LANG1, EUCLID;
- notations TARSKI, SUBSET_1, XBOOLE_0, XXREAL_0, XREAL_0, REAL_1, NAT_1,
-      FUNCT_1, BINOP_1, MATRIX_1, RLVECT_1, NUMBERS, ORDINAL1, BINOP_2,
-      VECTSP_1, RELSET_1, FUNCT_2, FINSEQ_1, STRUCT_0, GROUP_1, MATRIX_4,
-      MATRIX_3, RVSUM_1, GOBOARD1, FINSEQ_2, FINSEQOP, FVSUM_1, EUCLID;
+ notations TARSKI, SUBSET_1, XXREAL_0, XREAL_0, REAL_1, NAT_1, FUNCT_1,
+      BINOP_1, MATRIX_1, RLVECT_1, NUMBERS, ORDINAL1, BINOP_2, VECTSP_1,
+      RELSET_1, FINSEQ_1, STRUCT_0, GROUP_1, MATRIX_4, MATRIX_3, RVSUM_1,
+      GOBOARD1, FINSEQ_2, FINSEQOP, FVSUM_1, EUCLID;
  constructors DOMAIN_1, XXREAL_0, BINOP_2, SEQ_1, SETWOP_2, FVSUM_1, GOBOARD1,
       MATRIX_3, MATRIX_4;
  registrations STRUCT_0, INT_1, RELSET_1, VECTSP_1, NUMBERS, REAL_1, XREAL_0,
@@ -319,10 +319,10 @@ A5:     len M=0 by A3,MATRIX_1:26;
 
 theorem Th22:
   for K being Field,a being Element of K,A,B being Matrix of K
-  st width A=len B & len A>0 & len B>0
+  st width A=len B
   holds A*(a*B)=a*(A*B)
 proof let K be Field,a be Element of K,A,B be Matrix of K;
- assume A1: width A=len B & len A>0 & len B>0;
+ assume A1: width A=len B;
  set C=a*B;
  set D=a*(A*B);
  A2: len D=len (A*B) by MATRIX_3:def 5;
@@ -645,9 +645,8 @@ definition let n,m be Nat;
 end;
 
 theorem
-  for A,B being Matrix of REAL st len B>0 holds A--B=A+B
+  for A,B being Matrix of REAL holds A--B=A+B
 proof let A,B be Matrix of REAL;
-  assume len B>0; then
   A+B = MXF2MXR ((MXR2MXF A)+(MXR2MXF --B)) by MATRIX_4:1;
   hence A--B=A+B by MATRIX_4:def 1;
 end;
@@ -692,7 +691,7 @@ A2:len -MXR2MXF B=len MXR2MXF B &
      = (MXR2MXF A)+--(MXR2MXF B) by MATRIX_4:1,A1
     .= (MXR2MXF A)-(-(MXR2MXF B)) by MATRIX_4:def 1; then
    MXR2MXF A = -MXR2MXF B by MATRIX_4:7,A1,A2;
-   hence thesis by MATRIX_4:1,A1;
+   hence thesis by MATRIX_4:1;
 end;
 
 theorem
@@ -745,16 +744,15 @@ A10:width (a*(A*B))=width (A*B) by Th27 .=width B by MATRIX_3:def 4,A1;
 end;
 
 theorem
-  for M being Matrix of REAL st
-    len M>0 holds M + 0_Rmatrix(len M,width M) = M
+  for M being Matrix of REAL holds
+    M + 0_Rmatrix(len M,width M) = M
 proof let M be Matrix of REAL;
-    assume A1:len M > 0;
 A2: len M=len MXR2MXF M & width M=width MXR2MXF M;
     M + 0_Rmatrix(len M,width M)
-      = M +(-0_Rmatrix(len M,width M)) by MATRIX_4:9,A1
-     .= M +(-(M-M)) by MATRIX_4:3,A1
+      = M +(-0_Rmatrix(len M,width M)) by MATRIX_4:9
+     .= M +(-(M-M)) by MATRIX_4:3
      .= MXF2MXR ((MXR2MXF M)-(MXR2MXF M-MXR2MXF M)) by MATRIX_4:def 1
-     .= M by MATRIX_4:11,A1,A2;
+     .= M by MATRIX_4:11,A2;
     hence thesis;
 end;
 
@@ -798,18 +796,18 @@ proof
    consider C being FinSequence such that
 A2:len C=n & for j be Element of NAT st j in Seg n holds C.j = F(j)
    from FINSEQ_1:sch 2;
-AA:for j be Nat st j in Seg n holds C.j = F(j) by A2;
+A3:for j be Nat st j in Seg n holds C.j = F(j) by A2;
    for y being set st y in rng C ex p being FinSequence of REAL
      st y = p & len p = 1
    proof let y be set;
      assume y in rng C;
-     then consider z be set such that A3: z in dom C & y=C.z
+     then consider z be set such that A4: z in dom C & y=C.z
        by FUNCT_1:def 5;
-     reconsider z as Element of NAT by A3;
-     z in Seg len C by A3,FINSEQ_1:def 3;then
-A4:  C.z = <*x.z*> by A2;
+     reconsider z as Element of NAT by A4;
+     z in Seg len C by A4,FINSEQ_1:def 3;then
+A5:  C.z = <*x.z*> by A2;
      len <*x.z*>=1 by FINSEQ_1:56;
-     hence ex p being FinSequence of REAL st y = p & len p = 1 by A3,A4;
+     hence ex p being FinSequence of REAL st y = p & len p = 1 by A4,A5;
    end;then
    reconsider B=C as Matrix of REAL by MATRIX_1:9;
    for p being FinSequence of REAL st p in rng B holds len p = 1
@@ -817,31 +815,31 @@ A4:  C.z = <*x.z*> by A2;
      let p be FinSequence of REAL;
      assume p in rng B;
      then consider i be Element of NAT such that
-A5:  i in dom B and A6:B.i =p by FINSEQ_2:11;
-A7:  i in Seg len B by A5,FINSEQ_1:def 3;
+A6:  i in dom B and A7:B.i =p by FINSEQ_2:11;
+A8:  i in Seg len B by A6,FINSEQ_1:def 3;
      len <*x.i*>=1 by FINSEQ_1:56;
-     hence thesis by A6,A2,A7;
+     hence thesis by A7,A2,A8;
    end;then
    reconsider A=B as Matrix of len B,1,REAL by MATRIX_1:def 3;
-A8: width A = 1 by MATRIX_1:24,A2,A1;
+A9: width A = 1 by MATRIX_1:24,A2,A1;
    Seg len x = dom x by FINSEQ_1:def 3;
-   hence thesis by AA,A2,A8;
+   hence thesis by A3,A2,A9;
  end;
 uniqueness
  proof
  let A,B be Matrix of REAL;
   assume that
-A9: len A = len x & width A = 1 and
-A10: for k being Nat st k in dom x holds A.k =<*x.k*> and
-A11: len B = len x & width B = 1 and
-A12: for k being Nat st k in dom x holds B.k =<*x.k*>;
-A13:dom A = dom x & dom B = dom x by A11,A9,FINSEQ_3:31;
+A10: len A = len x & width A = 1 and
+A11: for k being Nat st k in dom x holds A.k =<*x.k*> and
+A12: len B = len x & width B = 1 and
+A13: for k being Nat st k in dom x holds B.k =<*x.k*>;
+A14:dom A = dom x & dom B = dom x by A12,A10,FINSEQ_3:31;
   now let k be Element of NAT;
-    assume A14:k in dom x;
-    hence A.k=<*x.k*> by A10
-            .=B.k by A12,A14;
+    assume A15:k in dom x;
+    hence A.k=<*x.k*> by A11
+            .=B.k by A13,A15;
   end;
-  hence A=B by FINSEQ_1:17,A13;
+  hence A=B by FINSEQ_1:17,A14;
  end;
 end;
 
@@ -1031,14 +1029,14 @@ A2:len B=1 & B.1=x by FINSEQ_1:57;
     hence
 A3: width C=len x by MATRIX_1:20,A2;
     thus len C=1 by FINSEQ_1:57;
-    let j be Nat; assume A5: j in dom x;
+    let j be Nat; assume A4: j in dom x;
     dom C=Seg 1 by A1,FINSEQ_1:def 3;then
-A6: 1 in dom C by FINSEQ_1:3;
-    j in Seg len x by A5,FINSEQ_1:def 3; then
-A7: [1,j] in Indices C by A6,ZFMISC_1:def 2,A3;
+A5: 1 in dom C by FINSEQ_1:3;
+    j in Seg len x by A4,FINSEQ_1:def 3; then
+A6: [1,j] in Indices C by A5,ZFMISC_1:def 2,A3;
     reconsider j1=j as Element of NAT by ORDINAL1:def 13;
     x.j1 is Element of REAL;
-    hence C*(1,j) =x.j by MATRIX_1:def 6,A2,A7;
+    hence C*(1,j) =x.j by MATRIX_1:def 6,A2,A6;
 end;
 uniqueness
 proof

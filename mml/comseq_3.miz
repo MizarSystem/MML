@@ -10,14 +10,12 @@ environ
       ARYTM_1, SUPINF_2, SEQ_2, ARYTM_3, PROB_1, ORDINAL2, SEQM_3, PREPOWER,
       SQUARE_1, RLVECT_1, RELAT_1, POWER, LATTICES, XCMPLX_0, FUNCOP_1,
       FRECHET2, FUNCT_3, GROUP_1;
- notations TARSKI, SUBSET_1, ORDINAL1, ORDINAL2, NUMBERS, ARYTM_0, XCMPLX_0,
-      XREAL_0, XXREAL_0,
-      COMPLEX1,  REAL_1, FINSEQ_2, RVSUM_1, NEWTON, RELAT_1, FUNCT_1,
-      FUNCT_2, FUNCOP_1, FUNCT_3, SEQ_1, SEQ_2, NAT_1, SEQM_3, SERIES_1,
-      COMSEQ_1, COMSEQ_2, SQUARE_1, POWER;
+ notations TARSKI, SUBSET_1, ORDINAL1, NUMBERS, ARYTM_0, XCMPLX_0, XREAL_0,
+      XXREAL_0, COMPLEX1, REAL_1, NEWTON, RELAT_1, FUNCT_1, FUNCT_2, FUNCOP_1,
+      FUNCT_3, SEQ_1, SEQ_2, NAT_1, SEQM_3, SERIES_1, COMSEQ_1, COMSEQ_2,
+      SQUARE_1, POWER;
  constructors PARTFUN1, FUNCT_3, FUNCOP_1, ARYTM_0, REAL_1, SQUARE_1, NAT_1,
-      SEQ_2, SEQM_3, RVSUM_1, COMSEQ_1, NEWTON, COMSEQ_2, SERIES_1,
-      ORDINAL2;
+      SEQ_2, SEQM_3, RVSUM_1, COMSEQ_1, NEWTON, COMSEQ_2, SERIES_1, ORDINAL2;
  registrations XREAL_0, COMSEQ_2, SEQ_1, COMSEQ_1, RELSET_1, SEQM_3, NAT_1,
       COMPLEX1, MEMBERED, ORDINAL2, XCMPLX_0, FUNCT_1, XXREAL_0, NEWTON,
       ORDINAL1;
@@ -25,8 +23,8 @@ environ
  definitions SEQ_2, COMSEQ_2, SERIES_1, SQUARE_1;
  theorems NAT_1, ABSVALUE, SEQ_1, SEQ_2, SERIES_1, SEQM_3, SEQ_4, POWER,
       COMPLEX1, COMSEQ_1, COMSEQ_2, SQUARE_1, FUNCT_2, XREAL_0, XCMPLX_0,
-      XCMPLX_1, FUNCOP_1, RELSET_1, RELAT_1, XBOOLE_1, XREAL_1, ORDINAL2,
-      NEWTON, XXREAL_0, ORDINAL1;
+      XCMPLX_1, FUNCOP_1, RELSET_1, RELAT_1, XBOOLE_1, XREAL_1, NEWTON,
+      XXREAL_0, ORDINAL1;
  schemes NAT_1, SEQ_1, COMSEQ_1, RECDEF_1;
 
 begin  :: Preliminaries
@@ -39,7 +37,7 @@ begin  :: Preliminaries
 Lm1: 0c = 0+0*<i>;
 
 theorem
-  n+1 <> 0c & (n+1)*<i> <> 0c by Lm1;
+  n+1 <> 0c & (n+1)*<i> <> 0c;
 
 theorem Th2:
   (for n holds rseq.n = 0) implies for m holds (Partial_Sums abs(rseq)).m = 0
@@ -290,7 +288,7 @@ proof
    assume
 A1:seq1 is convergent & seq2 is convergent & lim(seq1-seq2)=0c;
    then lim(seq1-seq2)=lim(seq1)-lim(seq2) by COMSEQ_2:26;
-   hence lim(seq1)=lim(seq2) by A1,XCMPLX_1:15;
+   hence lim(seq1)=lim(seq2) by A1;
 end;
 
 begin :: The Operations on Complex Sequences
@@ -348,16 +346,14 @@ definition let z be complex number, n be natural number;
  compatibility
   proof let w be Element of COMPLEX;
     defpred P[Element of NAT] means z|^$1 = z GeoSeq.$1;
-    z|^0 = 1 by NEWTON:9
-     .= 1r by COMPLEX1:def 7
+    z|^0 = 1r by  NEWTON:9,COMPLEX1:def 7
      .= z GeoSeq.0 by Def1;
     then
 A1:  P[0];
 A2:  for n being Element of NAT st P[n] holds P[n+1]
      proof let n be Element of NAT such that
 A3:     P[n];
-      thus z|^(n+1) = z|^n*z by NEWTON:11
-        .= z GeoSeq.n*z by A3
+      thus z|^(n+1) = z GeoSeq.n*z by  NEWTON:11,A3
         .= z GeoSeq.(n+1) by Def1;
      end;
     reconsider n as Element of NAT by ORDINAL1:def 13;
@@ -755,7 +751,7 @@ A2: P[0] by Def7;
 A3: for k st P[k] holds P[k+1]
     proof let k be Element of NAT such that
 A4:   P[k];
-      thus seq.(k+1) = 0c + seq.(k+1) by COMPLEX1:def 3
+      thus seq.(k+1) = 0c + seq.(k+1)
                     .= (Partial_Sums seq).k + seq.(k+1) by A1,A4
                     .= (Partial_Sums seq).(k+1) by Def7;
     end;
@@ -1155,16 +1151,13 @@ A3:for n st P[n] holds P[n+1]
  assume
 A4:P[n];
  thus Partial_Sums(z GeoSeq).(n+1)
-    =Partial_Sums(z GeoSeq).n + (z GeoSeq).(n+1) by Def7
-   .= (1r - z #N (n+1))/(1r-z)+ z #N (n+1) * 1r by COMPLEX1:def 7,A4
+    = (1r - z #N (n+1))/(1r-z)+ z #N (n+1) * 1r by  Def7,COMPLEX1:def 7,A4
    .= (1r - z #N (n+1))/(1r-z)+ z #N (n+1) * ((1r-z)/(1r-z))
       by A1,COMPLEX1:def 7,XCMPLX_1:60
    .= (1r - z #N (n+1))/(1r-z)+ (z #N (n+1) * (1r-z))/(1r-z)
       by XCMPLX_1:75
-   .= (1r - z #N (n+1) + (z #N (n+1) * 1r -z #N(n+1) * z ))/(1r-z) by
-XCMPLX_1:63
    .= (1r - z #N (n+1) + (z #N (n+1) -z #N(n+1) * z ))/(1r-z)
-      by COMPLEX1:def 7
+      by  XCMPLX_1:63,COMPLEX1:def 7
    .= (1r - z #N(n+1) * z )/(1r-z)
    .= (1r - z #N ((n+1) +1) )/(1r-z) by NEWTON:11;
  end;
@@ -1515,9 +1508,8 @@ end;
     then A6: z =0c by COMPLEX1:131;
 A7: now let n;
     thus seq.n = 0c #N (n+1) by A1,A6
-    .=(0c GeoSeq).(n+1)
     .=(0c GeoSeq).n * 0c by Def1
-    .=0c by COMPLEX1:def 6;
+    .=0c;
     end;
     hence seq is convergent by COMSEQ_2:9;
     thus seq is convergent & lim(seq)=0c by A7,COMSEQ_2:9,10;
@@ -1903,12 +1895,10 @@ then A2:Partial_Sums(seq1)+Partial_Sums(seq2) is
 convergent by COMSEQ_2:13;
 A3:Partial_Sums(seq1)+Partial_Sums(seq2)
    =Partial_Sums(seq1+seq2) by Th27;
-      Sum(seq1+seq2)=lim(Partial_Sums(seq1+seq2))
-              .=lim(Partial_Sums(seq1)+Partial_Sums(seq2)) by Th27
+      Sum(seq1+seq2)=lim(Partial_Sums(seq1)+Partial_Sums(seq2)) by Th27
               .=lim(Partial_Sums(seq1))+lim(Partial_Sums(seq2))
                  by A1,COMSEQ_2:14;
-    then Sum(seq1+seq2)=Sum(seq1)+lim(Partial_Sums(seq2))
-                .= Sum(seq1)+Sum(seq2);
+    then Sum(seq1+seq2)= Sum(seq1)+Sum(seq2);
   hence thesis by A2,A3,Def10;
 end;
 
@@ -1922,12 +1912,10 @@ proof
   then A2:Partial_Sums(seq1)-Partial_Sums(seq2) is convergent by COMSEQ_2:25;
 A3:Partial_Sums(seq1)-Partial_Sums(seq2)
    =Partial_Sums(seq1-seq2) by Th28;
-  Sum(seq1-seq2)=lim(Partial_Sums(seq1-seq2))
-              .=lim(Partial_Sums(seq1)-Partial_Sums(seq2)) by Th28
+  Sum(seq1-seq2)=lim(Partial_Sums(seq1)-Partial_Sums(seq2)) by Th28
               .=lim(Partial_Sums(seq1))-lim(Partial_Sums(seq2))
                  by A1,COMSEQ_2:26;
-  then Sum(seq1-seq2)=Sum(seq1)-lim(Partial_Sums(seq2))
-                .= Sum(seq1)-Sum(seq2);
+  then Sum(seq1-seq2)= Sum(seq1)-Sum(seq2);
   hence thesis by A2,A3,Def10;
 end;
 
@@ -1946,10 +1934,8 @@ proof
   then A1:Partial_Sums(seq) is convergent by Def10;
   then A2:(z (#) Partial_Sums(seq)) is convergent by COMSEQ_2:17;
 A3:Partial_Sums(z (#) seq)=(z (#) Partial_Sums(seq)) by Th29;
-    Sum(z (#) seq)=lim(Partial_Sums(z (#) seq))
-            .=lim((z (#) Partial_Sums(seq))) by Th29
-            .=z * lim(Partial_Sums(seq)) by A1,COMSEQ_2:18
-            .=z * Sum(seq);
+    Sum(z (#) seq)=lim((z (#) Partial_Sums(seq))) by Th29
+            .=z * Sum(seq) by A1,COMSEQ_2:18;
 hence z (#) seq is summable
 & Sum(z (#) seq)= z * Sum(seq) by A2,A3,Def10;
 end;
@@ -2124,7 +2110,7 @@ deffunc f(Element of NAT) = z #N ($1+1);
 A6: seq2 is convergent by A5,COMSEQ_2:9;
 then A7: seq2-seq1 is convergent by A4,COMSEQ_2:25;
 A8: lim(seq2-seq1)=lim(seq2)-lim(seq1) by A4,A6,COMSEQ_2:26
-             .=1r by COMPLEX1:def 6,A4,A5,COMSEQ_2:10;
+             .=1r by A4,A5,COMSEQ_2:10;
 A9:(1r/(1r-z))(#)(seq2-seq1) is convergent by A7,COMSEQ_2:17;
 A10:lim((1r/(1r-z))(#)(seq2-seq1))=1r/(1r-z) * 1r by A7,A8,COMSEQ_2:18
                        .=1r/(1r-z) by COMPLEX1:def 7;
@@ -2164,8 +2150,7 @@ then A3: Partial_Sums(seq)=(seq.0 (#) Partial_Sums(z GeoSeq)) by COMSEQ_1:6;
        & lim(Partial_Sums(seq)) =seq.0 * lim(Partial_Sums(z GeoSeq))
        by A3,COMSEQ_2:17,18;
  hence seq is summable by Def10;
-  Sum seq=lim(Partial_Sums(seq))
-         .=seq.0 * Sum(z GeoSeq) by A3,A4,COMSEQ_2:18
+  Sum seq=seq.0 * Sum(z GeoSeq) by A3,A4,COMSEQ_2:18
          .=seq.0 * (1r/(1r-z)) by A1,Th65
          .=seq.0 * 1r/(1r-z) by XCMPLX_1:75
          .=seq.0/(1r-z) by COMPLEX1:def 7;

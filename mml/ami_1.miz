@@ -9,9 +9,9 @@ environ
  vocabularies BOOLE, FUNCT_2, FUNCT_1, RELAT_1, FUNCOP_1, CAT_1, FUNCT_4,
       CARD_3, TARSKI, FRAENKEL, PARTFUN1, FINSET_1, AMI_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, NUMBERS, CARD_3,
-   XCMPLX_0,
-      RELAT_1, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, FINSET_1, NAT_1, CQC_LANG,
-      FRAENKEL, FUNCOP_1, FUNCT_4, FINSEQ_1, DOMAIN_1, STRUCT_0, XXREAL_0;
+      XCMPLX_0, RELAT_1, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, FINSET_1, NAT_1,
+      CQC_LANG, FRAENKEL, FUNCOP_1, FUNCT_4, FINSEQ_1, DOMAIN_1, STRUCT_0,
+      XXREAL_0;
  constructors SETFAM_1, PARTFUN1, DOMAIN_1, FUNCOP_1, FUNCT_4, FRAENKEL,
       XXREAL_0, NAT_1, INT_1, CARD_3, CQC_LANG, STRUCT_0;
  registrations SUBSET_1, FUNCT_1, INT_1, FRAENKEL, RELAT_1, FINSET_1, RELSET_1,
@@ -26,7 +26,7 @@ environ
 
 begin :: Preliminaries
 
- reserve x for set;
+
 
 canceled;
 
@@ -289,11 +289,9 @@ end;
 theorem Th7:
  Trivial-AMI E is IC-Ins-separated
   proof
-A1:  IC Trivial-AMI E = the Instruction-Counter of Trivial-AMI E
-       .= 0 by Def2;
+A1:  IC Trivial-AMI E = 0 by Def2;
    thus ObjectKind IC Trivial-AMI E
-           = (the Object-Kind of Trivial-AMI E).IC Trivial-AMI E
-          .= (0,1) --> ({1},{[0,{}]}).0 by A1,Def2
+           = (0,1) --> ({1},{[0,{}]}).0 by A1,Def2
           .= {1} by FUNCT_4:66
           .= the Instruction-Locations of Trivial-AMI E by Def2;
   end;
@@ -345,8 +343,7 @@ theorem Th11:
     then l in {1} by Def2;
 then A1:    l = 1 by TARSKI:def 1;
    thus ObjectKind l
-         = (the Object-Kind of Trivial-AMI E).l
-        .= (0,1) --> ({1},{[0,{}]}).1 by A1,Def2
+         = (0,1) --> ({1},{[0,{}]}).1 by A1,Def2
         .= {[0,{}]} by FUNCT_4:66
         .= the Instructions of Trivial-AMI E by Def2;
   end;
@@ -403,9 +400,7 @@ definition let N be with_non-empty_elements set;
  coherence
   proof
        dom the Object-Kind of S = the carrier of S by FUNCT_2:def 1;
-    then pi(product the Object-Kind of S,IC S) = (the Object-Kind of S).IC S
-        by CARD_3:22
-      .= ObjectKind IC S
+    then pi(product the Object-Kind of S,IC S) = ObjectKind IC S by CARD_3:22
       .= the Instruction-Locations of S by Def11;
    hence thesis by CARD_3:def 6;
   end;
@@ -702,8 +697,7 @@ theorem
      case
 A1:    A = {};
        then A --> B = {} --> B;
-      hence sproduct (A --> B) = { {} } by Th33
-       .= PFuncs(A,B) by A1,PARTFUN1:122;
+      hence sproduct (A --> B) = PFuncs(A,B) by  Th33,A1,PARTFUN1:122;
      end;
      case
         A <> {};
@@ -1041,9 +1035,7 @@ definition let N;
  coherence
   proof
      dom the Object-Kind of S = the carrier of S by FUNCT_2:def 1;
-    then pi(product the Object-Kind of S,IC s) = (the Object-Kind of S).IC s
-        by CARD_3:22
-      .= ObjectKind IC s
+    then pi(product the Object-Kind of S,IC s) = ObjectKind IC s by CARD_3:22
       .= the Instructions of S by Def14;
     hence thesis by CARD_3:def 6;
   end;
@@ -1154,27 +1146,26 @@ theorem Th52:
    holds (Computation s).j = (Computation s).i
  proof assume i <= j;
    then consider k being Nat such that
-A1a:   j = i + k by NAT_1:28;
+A1:   j = i + k by NAT_1:28;
       reconsider k as Element of NAT by ORDINAL1:def 13;
-A1:   j = i + k by A1a;
+A2:   j = i + k by A1;
   let N;
   let S be halting IC-Ins-separated definite
       (non empty non void AMI-Struct over N);
   let s be State of S such that
-A2: CurInstr((Computation s).i) = halt S;
+A3: CurInstr((Computation s).i) = halt S;
     defpred P[Element of NAT] means
      (Computation s).(i+$1) = (Computation s).i;
-A3: P[0];
-A4: now let k; assume
-A5:  P[k];
+A4: P[0];
+A5: now let k; assume
+A6:  P[k];
       (Computation s).(i+(k+1)) = (Computation s).(i+k+1)
          .= Following (Computation s).(i+k) by Def19
-         .= Exec(halt S,(Computation s).i) by A2,A5
-         .= (Computation s).i by Def8;
+         .= (Computation s).i by  A3,A6,Def8;
      hence P[k+1];
    end;
-      for k holds P[k] from NAT_1:sch 1(A3,A4);
-  hence (Computation s).j = (Computation s).i by A1;
+      for k holds P[k] from NAT_1:sch 1(A4,A5);
+  hence (Computation s).j = (Computation s).i by A2;
  end;
 
 definition let N;
@@ -1212,9 +1203,7 @@ definition let N; let S be definite (non empty non void AMI-Struct over N);
  coherence
   proof
      dom the Object-Kind of S = the carrier of S by FUNCT_2:def 1;
-    then pi(product the Object-Kind of S,l) = (the Object-Kind of S).l
-        by CARD_3:22
-      .= ObjectKind l
+    then pi(product the Object-Kind of S,l) = ObjectKind l by CARD_3:22
       .= the Instructions of S by Def14;
    hence s.l is Instruction of S by CARD_3:def 6;
   end;
@@ -1233,8 +1222,7 @@ theorem Th54:
 A1: P[0] by Def19;
 A2: now let k;
     assume P[k];
-    then s.i = Exec(CurInstr (Computation s).k,(Computation s).k).i by Def13
-          .= (Following (Computation s).k).i
+    then s.i = (Following (Computation s).k).i by Def13
           .= (Computation s).(k+1).i by Def19;
     hence P[k+1];
    end;
@@ -1253,8 +1241,6 @@ theorem
   let s be State of S;
   thus (Computation s).(k+1)
     = Following (Computation s).k by Def19
-   .= Exec(CurInstr (Computation s).k,(Computation s).k)
-   .= Exec((Computation s).k.(IC (Computation s).k),(Computation s).k)
    .= Exec(s.(IC (Computation s).k),(Computation s).k) by Th54;
  end;
 
@@ -1269,8 +1255,7 @@ proof
  let s be State of S, k such that
 A1:  s.IC (Computation s).k = halt S;
 A2:CurInstr((Computation s).k)
-      = (Computation s).k.IC (Computation s).k
-     .= halt S by A1,Th54;
+      = halt S by A1,Th54;
   then s is halting by Def20;
  hence Result s = (Computation s).k by A2,Def22;
 end;
@@ -1288,8 +1273,7 @@ theorem
   given k such that
 A1:   s.IC (Computation s).k = halt S;
    set s' = (Computation s).k;
-A2: CurInstr s' = s'.IC s'
-      .= halt S by A1,Th54;
+A2: CurInstr s' = halt S by A1,Th54;
   let i;
       now per cases;
     suppose i <= k;
@@ -1471,8 +1455,7 @@ theorem Th61:
  Trivial-AMI N is programmable
 proof
   reconsider la = 0 as Object of Trivial-AMI N by Def2;
-     ObjectKind la = (the Object-Kind of Trivial-AMI N).la
-    .= ((0,1) --> ({1},{[0,{}]})).0 by Def2
+     ObjectKind la = ((0,1) --> ({1},{[0,{}]})).0 by Def2
     .= {1} by FUNCT_4:66;
   then reconsider a = 1 as Element of ObjectKind la by TARSKI:def 1;
  take la .--> a;
@@ -1599,9 +1582,7 @@ then A5: IC S in dom((IC S,loc) --> (l, h)) & loc in dom((IC S,loc) --> (l, h))
      by TARSKI:def 2;
 then A6: ((IC S,loc) --> (l, h)).IC S in dom((IC S,loc) --> (l, h))
         by A1,A4,FUNCT_4:66;
-   thus CurInstr s = s.IC s
-     .= s.(s.IC S)
-     .= s.(((IC S,loc) --> (l, h)).IC S) by A3,A5,GRFUNC_1:8
+   thus CurInstr s = s.(((IC S,loc) --> (l, h)).IC S) by A3,A5,GRFUNC_1:8
      .= ((IC S,loc) --> (l, h)).(((IC S,loc) --> (l, h)).IC S)
            by A3,A6,GRFUNC_1:8
      .= ((IC S,loc) --> (l, h)).loc by A1,A4,FUNCT_4:66
@@ -1657,7 +1638,7 @@ A5: now let i;
     assume
 A6:  P[i];
       (Computation s).(i+1) = Following (Computation s).i by Def19
-     .= Exec(CurInstr s,s) by A6 .= Exec(halt S,s) by A1,A2,A3,Th64
+     .= Exec(halt S,s) by  A6,A1,A2,A3,Th64
      .= s by Def8;
     hence P[i+1];
    end;

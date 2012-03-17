@@ -49,6 +49,7 @@
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="NAT_1"/>
 <ArticleID name="FRAENKEL"/>
+<ArticleID name="XBOOLEAN"/>
 <ArticleID name="MARGREL1"/>
 <ArticleID name="CIRCCOMB"/>
 <ArticleID name="FACIRC_1"/>
@@ -1646,7 +1647,7 @@
 <Num nr="1"/>
 </Func>
 </Func>
-<Func kind="K" nr="403">
+<Func kind="K" nr="412">
 <Var nr="5"/>
 <Func kind="F" nr="2">
 <Var nr="6"/>
@@ -2246,7 +2247,7 @@
 <Num nr="1"/>
 </Func>
 </Func>
-<Func kind="K" nr="403">
+<Func kind="K" nr="412">
 <Var nr="2"/>
 <Func kind="F" nr="4">
 <Var nr="3"/>
@@ -2532,7 +2533,7 @@
 <Num nr="1"/>
 </Func>
 </Func>
-<Func kind="K" nr="403">
+<Func kind="K" nr="412">
 <Var nr="2"/>
 <Func kind="F" nr="3">
 <Var nr="3"/>
@@ -5600,7 +5601,7 @@
 <Num nr="1"/>
 </Func>
 </Func>
-<Func kind="K" nr="403">
+<Func kind="K" nr="412">
 <Var nr="6"/>
 <Func kind="F" nr="4">
 <Var nr="8"/>
@@ -5616,7 +5617,7 @@
 <Num nr="1"/>
 </Func>
 </Func>
-<Func kind="K" nr="404">
+<Func kind="K" nr="413">
 <Var nr="6"/>
 <Func kind="F" nr="4">
 <Var nr="8"/>
@@ -5730,7 +5731,7 @@
 <Num nr="1"/>
 </Func>
 </Func>
-<Func kind="K" nr="403">
+<Func kind="K" nr="412">
 <Var nr="4"/>
 <Func kind="F" nr="4">
 <Var nr="5"/>
@@ -6371,7 +6372,7 @@
 <Pred kind="V" nr="115">
 <Func kind="F" nr="2"/>
 <Func kind="F" nr="4"/>
-<Func kind="K" nr="419">
+<Func kind="K" nr="428">
 <Func kind="F" nr="2"/>
 <Func kind="F" nr="4"/>
 <Var nr="1"/>
@@ -6453,7 +6454,7 @@
 <Pred kind="V" nr="115">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="3"/>
-<Func kind="K" nr="419">
+<Func kind="K" nr="428">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="3"/>
 <Var nr="1"/>
@@ -6529,7 +6530,7 @@
 <Var nr="1"/>
 </Func>
 <Var nr="3"/>
-<Func kind="K" nr="419">
+<Func kind="K" nr="428">
 <Func kind="F" nr="5">
 <Var nr="2"/>
 <Var nr="1"/>
@@ -6679,7 +6680,7 @@
 <Num nr="1"/>
 </Func>
 </Func>
-<Func kind="K" nr="403">
+<Func kind="K" nr="412">
 <Var nr="4"/>
 <Func kind="F" nr="5">
 <Var nr="6"/>
@@ -6695,7 +6696,7 @@
 <Num nr="1"/>
 </Func>
 </Func>
-<Func kind="K" nr="404">
+<Func kind="K" nr="413">
 <Var nr="4"/>
 <Func kind="F" nr="5">
 <Var nr="6"/>

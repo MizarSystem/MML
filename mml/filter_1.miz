@@ -27,7 +27,6 @@ environ
 
 begin
 
- deffunc carr(LattStr) = the carrier of $1;
  deffunc join(LattStr) = the L_join of $1;
  deffunc meet(LattStr) = the L_meet of $1;
 
@@ -645,12 +644,8 @@ A1:  i/\/FI = Class(R,i) & j/\/FI = Class(R,j) &
     (i"\/"j)/\/FI = Class(R,i"\/"j) &
     (i"/\"j)/\/FI = Class(R,i"/\"j) by Def6;
 A2:  I /\/ FI = LattStr (#Class R, jj/\/R, mm/\/R#) by Def5;
-   hence (i/\/FI) "\/" (j/\/FI) =
-         (jj/\/R).(i/\/FI,j/\/FI)
-      .= Class(R,jj.(i,j)) by A1,Th3 .= (i"\/"j)/\/FI by A1;
-   thus (i/\/FI) "/\" (j/\/FI) =
-         (mm/\/R).(i/\/FI,j/\/FI) by A2
-      .= Class(R,mm.(i,j)) by A1,Th3 .= (i"/\"j)/\/FI by A1;
+   hence (i/\/FI) "\/" (j/\/FI) = (i"\/"j)/\/FI by  A1,Th3;
+   thus (i/\/FI) "/\" (j/\/FI) = (i"/\"j)/\/FI by  A1,A2,Th3;
   end;
 
 theorem
@@ -1798,7 +1793,7 @@ A2:  dom f = field R by A1,FUNCT_3:def 8;
       then consider r2,r1 such that
 A3:    x = [r2,r1] by A1,DOMAIN_1:9;
           f.[r1,r2] in rng f & f.[r1,r2] = [p2.[r1,r2],p1.[r1,r2]] &
-       p2.[r1,r2] = r2 & p1.[r1,r2] = r1
+       p2.(r1,r2) = r2 & p1.(r1,r2) = r1
         by A1,A2,FUNCT_1:def 5,FUNCT_3:def 5,def 6,def 8;
       hence thesis by A3;
      end;
@@ -1809,8 +1804,8 @@ A5:    x = [r1,r2] by A1,A2,DOMAIN_1:9;
       assume
 A6:    y in dom f & f.x = f.y; then consider q1,q2 such that
 A7:    y = [q1,q2] by A1,A2,DOMAIN_1:9;
-          p1.[r1,r2] = r1 & p2.[r1,r2] = r2 & p1.[q1,q2] = q1 &
-       p2.[q1,q2] = q2 & f.x = [p2.x,p1.x] & f.y = [p2.y,p1.y]
+          p1.(r1,r2) = r1 & p2.(r1,r2) = r2 & p1.(q1,q2) = q1 &
+       p2.(q1,q2) = q2 & f.x = [p2.x,p1.x] & f.y = [p2.y,p1.y]
         by A4,A6,FUNCT_3:def 5,def 6,def 8;
        then r1 = q1 & r2 = q2 by A5,A6,A7,ZFMISC_1:33;
       hence thesis by A5,A7;
@@ -1828,10 +1823,12 @@ A10:    b = [q1,q2] by DOMAIN_1:9;
 A11:    r1 [= q1 & r2 [= q2 by A8,A9,A10,Th37;
 A12:    x = a & y = b by A8,ZFMISC_1:33;
       hence x in field R & y in field R by A1;
-          [r2,r1] [= [q2,q1] & p1.x = r1 & p2.x = r2 & p1.y = q1 & p2.y = q2 &
-       f.x = [p2.x,p1.x] & f.y = [p2.y,p1.y]
-        by A1,A2,A9,A10,A11,A12,Th37,FUNCT_3:def 5,def 6,def 8;
-      hence thesis;
+          [r2,r1] [= [q2,q1] & p1.(r1,r2) = r1 & p2.(r1,r2) = r2 &
+          p1.(q1,q2) = q1 & p2.(q1,q2) = q2 &
+       f.(r1,r2) = [p2.(r1,r2),p1.(r1,r2)] &
+       f.(q1,q2) = [p2.(q1,q2),p1.(q1,q2)]
+        by A1,A2,A9,A10,A11,Th37,FUNCT_3:def 5,def 6,def 8;
+      hence thesis by A9,A10,A12;
      end;
    assume
 A13: x in field R & y in field R;
@@ -1841,10 +1838,10 @@ A14: x = [r1,r2] by A1,DOMAIN_1:9;
 A15: y = [q1,q2] by A1,A13,DOMAIN_1:9;
    assume
 A16: [f.x,f.y] in S;
-       f.[r1,r2] = [p2.[r1,r2],p1.[r1,r2]] & p1.[r1,r2] = r1 & p2.[r1,r2] = r2
+       f.(r1,r2) = [p2.(r1,r2),p1.(r1,r2)] & p1.(r1,r2) = r1 & p2.(r1,r2) = r2
 &
-    f.[q1,q2] = [p2.[q1,q2],p1.[q1,q2]] & p1.[q1,q2] = q1 & p2.[q1,q2] = q2
-     by A1,A2,FUNCT_3:def 5,def 6,def 8;
+    f.(q1,q2) = [p2.(q1,q2),p1.(q1,q2)] & p1.(q1,q2) = q1 & p2.(q1,q2) = q2
+     by A1,A2,FUNCT_3:def 5,def 6,def 8, A14,A15;
     then [r2,r1] [= [q2,q1] by A14,A15,A16,Th32;
     then r2 [= q2 & r1 [= q1 by Th37;
     then [r1,r2] [= [q1,q2] by Th37;
@@ -1857,8 +1854,7 @@ A16: [f.x,f.y] in S;
 theorem
  Th51: a <=> b = (a"/\"b)"\/"(a`"/\"b`)
   proof
-   thus a <=> b = (a => b)"/\"(b => a)
-       .= (a`"\/"b)"/\"(b => a) by FILTER_0:55
+   thus a <=> b = (a`"\/"b)"/\"(b => a) by FILTER_0:55
        .= (a`"\/"b)"/\"(b`"\/"a) by FILTER_0:55
        .= (a`"/\"(b`"\/"a))"\/"(b"/\"(b`"\/"a)) by LATTICES:def 11
        .= ((a`"/\"b`)"\/"(a`"/\"a))"\/"(b"/\"(b`"\/"a)) by LATTICES:def 11
@@ -1879,8 +1875,7 @@ A1:  now let a,b;
                    .= a "/\" b` by LATTICES:49;
     end;
    hence (a => b)` = a "/\" b`;
-   thus (a <=> b)` = ((a=>b)"/\"(b=>a))`
-          .= (a=>b)`"\/"(b=>a)` by LATTICES:50
+   thus (a <=> b)` = (a=>b)`"\/"(b=>a)` by LATTICES:50
           .= (a"/\"b`)"\/"(b=>a)` by A1 .= (a"/\"b`)"\/"(a`"/\"b) by A1;
    hence (a <=> b)` = (a"/\"b`)"\/"(a`"/\"b``) by LATTICES:49
           .= a <=> b` by Th51;
@@ -1955,8 +1950,8 @@ then A2:  (a<=>b) <=> (a<=>c) = b <=> c & B is I_Lattice by A1,Th51,FILTER_0:40
    assume a<=>b = a<=>c;
     then (a<=>b) => (a<=>c) = Top B & (a<=>c) => (a<=>b) = Top
 B by A2,FILTER_0:38;
-    then b <=> c = Top B"/\"Top B by A2 .= Top
-B by LATTICES:18;
+    then b <=> c = Top
+B by  A2,LATTICES:18;
     then (b => c)"/\"(c => b) = Top B & (b => c)"/\"(c => b) = (c => b)"/\"(b
 => c);
     then Top B [= b => c & Top B [= c => b by LATTICES:23;

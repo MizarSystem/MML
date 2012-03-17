@@ -10,18 +10,17 @@ environ
       FINSEQ_1, ARYTM_1, SQUARE_1, RLVECT_1, PROB_1, ARYTM_3, VECTSP_1,
       RFINSEQ;
  notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, RELAT_1, FUNCT_1, RELSET_1,
-      PARTFUN1, FUNCT_2, FINSEQ_1, CARD_1,
-      XCMPLX_0, NAT_1, REAL_1, SQUARE_1, SEQ_1,
+      PARTFUN1, FUNCT_2, FINSEQ_1, CARD_1, XCMPLX_0, NAT_1, REAL_1, SEQ_1,
       FINSEQ_4, FINSET_1, RVSUM_1, XXREAL_0;
  constructors PARTFUN1, WELLORD2, REAL_1, SQUARE_1, NAT_1, BINOP_2, FINSEQOP,
       SEQ_1, FINSEQ_4, RVSUM_1, ARYTM_3, INT_1;
  registrations FINSET_1, FUNCT_1, RELSET_1, FINSEQ_1, FUNCT_2, NAT_1, MEMBERED,
-  ARYTM_3, XREAL_0;
+      ARYTM_3, XREAL_0;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, XBOOLE_0;
  theorems TARSKI, FINSEQ_1, FINSEQ_2, FINSEQ_3, REAL_1, NAT_1, FUNCT_1,
       FUNCT_2, FINSET_1, CARD_1, CARD_2, RVSUM_1, WELLORD2, ZFMISC_1, RELAT_1,
-      XBOOLE_0, XBOOLE_1, XCMPLX_1, XREAL_1, FINSEQ_4, XXREAL_0;
+      XBOOLE_0, XBOOLE_1, XCMPLX_1, XREAL_1, FINSEQ_4, XXREAL_0, ORDINAL1;
  schemes NAT_1, FINSEQ_1, ZFREFLE1, WELLORD2;
 
 begin
@@ -579,18 +578,20 @@ theorem
 
 definition let D be set,
                f be FinSequence of D,
-               n be Element of NAT;
+               n be Nat;
 func f /^ n -> FinSequence of D means :Def2:
- len it = len f - n & for m be Element of NAT st
+ len it = len f - n & for m be Nat st
  m in dom it holds it.m = f.(m+n) if n<=len f
  otherwise it = <*>D;
  existence
   proof
    thus n<=len f implies ex p1 be FinSequence of D st
-    len p1 = len f - n & for m st m in dom p1 holds p1.m = f.(m+n)
-     proof assume n<=len f;
-      then max(0,len f - n) = len f - n by FINSEQ_2:4;
-      then reconsider k = len f - n as Element of NAT by FINSEQ_2:5;
+    len p1 = len f - n & for m be Nat st m in dom p1 holds p1.m = f.(m+n)
+     proof
+       reconsider n1=n as Element of NAT by ORDINAL1:def 13;
+       assume n<=len f;
+      then max(0,len f - n1) = len f - n1 by FINSEQ_2:4;
+      then reconsider k = len f - n1 as Element of NAT by FINSEQ_2:5;
       deffunc F(Element of NAT)=f.($1+n);
       consider p be FinSequence such that
       A1: len p = k & for m st m in Seg k holds p.m = F(m) from FINSEQ_1:sch 2;
@@ -609,7 +610,7 @@ func f /^ n -> FinSequence of D means :Def2:
       then reconsider p as FinSequence of D by FINSEQ_1:def 4;
       take p;
       thus len p = len f - n by A1;
-      let m be Element of NAT; assume m in dom p;
+      let m be Nat; assume m in dom p;
       then m in Seg k by A1,FINSEQ_1:def 3;
       hence p.m = f.(m+n) by A1;
      end;
@@ -618,13 +619,15 @@ func f /^ n -> FinSequence of D means :Def2:
  uniqueness
   proof let p1,p2 be FinSequence of D;
    thus n<=len f &
-   (len p1 = len f - n & for m st m in dom p1 holds p1.m = f.(m+n)) &
-   (len p2 = len f - n & for m st m in dom p2 holds p2.m = f.(m+n)) implies
-      p1 = p2
+   (len p1 = len f - n & for m be Nat st m in dom p1 holds p1.m = f.(m+n)) &
+   (len p2 = len f - n & for m be Nat st m in dom p2 holds p2.m = f.(m+n))
+   implies p1 = p2
      proof assume that
          n<=len f and
-      A4: len p1 = len f - n & for m st m in dom p1 holds p1.m = f.(m+n) and
-      A5: len p2 = len f - n & for m st m in dom p2 holds p2.m = f.(m+n);
+      A4: len p1 = len f - n & for m be Nat st m in dom p1 holds
+      p1.m = f.(m+n) and
+      A5: len p2 = len f - n & for m be Nat st m in dom p2 holds
+      p2.m = f.(m+n);
       A6: dom p1 = Seg len p1 & Seg len p2 = dom p2 by FINSEQ_1:def 3;
           now let m; assume m in Seg len p1;
         then p1.m = f.(m+n) & p2.m = f.(m+n) by A4,A5,A6;

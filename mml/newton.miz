@@ -10,9 +10,9 @@ environ
       BOOLE, FINSEQ_2, GROUP_1, QC_LANG1, RLVECT_1, NEWTON, FINSEQ_4, CARD_3,
       NAT_1, INT_1, ABSVALUE, FILTER_0, NAT_LAT, FINSET_1, CARD_1, TARSKI,
       SQUARE_1, XCMPLX_0, SEQ_1, COMPLEX1;
- notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, ORDINAL2, NUMBERS, XCMPLX_0,
-      XREAL_0, CARD_1, REAL_1, RELAT_1, FUNCT_1, SEQ_1, FINSET_1, FINSEQ_1,
-      FINSEQ_2, FINSEQ_4, INT_1, INT_2, NAT_1, RVSUM_1, SQUARE_1, XXREAL_0;
+ notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
+      CARD_1, REAL_1, FUNCT_1, SEQ_1, FINSET_1, FINSEQ_1, FINSEQ_2, FINSEQ_4,
+      INT_1, INT_2, NAT_1, RVSUM_1, SQUARE_1, XXREAL_0;
  constructors PARTFUN1, WELLORD2, SQUARE_1, NAT_1, BINOP_2, FINSEQOP, SEQ_1,
       FINSEQ_4, FINSOP_1, SETWOP_2, RVSUM_1, INT_2, ORDINAL2, DOMAIN_1;
  registrations RELSET_1, FINSEQ_2, INT_1, XREAL_0, NAT_1, MEMBERED, ORDINAL2,
@@ -21,16 +21,16 @@ environ
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, XBOOLE_0, FINSEQ_1, SQUARE_1, FINSEQ_2, RVSUM_1;
  theorems TARSKI, REAL_1, NAT_1, RVSUM_1, FINSEQ_1, FINSEQ_2, FINSEQ_3,
-      FINSEQ_4, FUNCT_1, INT_1, XREAL_0, ORDINAL2, XBOOLE_0, XCMPLX_1, REAL_2,
-      ABSVALUE, INT_2, FINSET_1, CQC_THE1, CARD_2, CARD_1, XBOOLE_1, XREAL_1,
-      XCMPLX_0, XXREAL_0, FUNCOP_1, RELAT_1, FINSOP_1, ORDINAL1;
+      FINSEQ_4, FUNCT_1, INT_1, XREAL_0, XBOOLE_0, XCMPLX_1, REAL_2, ABSVALUE,
+      INT_2, FINSET_1, CQC_THE1, CARD_2, CARD_1, XBOOLE_1, XREAL_1, XCMPLX_0,
+      XXREAL_0, FUNCOP_1, RELAT_1, FINSOP_1, ORDINAL1;
  schemes NAT_1, FINSEQ_1, SUBSET_1;
 
 begin
 
  reserve i,k,n,m,l for Element of NAT;
  reserve s,t,r for Nat;
- reserve a,b,x,y for real number;
+ reserve a,b for real number;
  reserve F,G,H for FinSequence of REAL;
 
 canceled 2;
@@ -188,7 +188,7 @@ theorem
 Th10: z|^1 = z
  proof
   reconsider z as Element of COMPLEX by XCMPLX_0:def 2;
-     z|^1 = Product(1 |-> z) .= Product(<*z*>) by FINSEQ_2:73
+     z|^1 = Product(<*z*>) by FINSEQ_2:73
     .= z by RVSUM_1:125;
   hence thesis;
  end;
@@ -199,7 +199,7 @@ Th11: z|^(s+1) = z|^s*z
    defpred P[natural number] means z|^($1+1) = z|^$1*z;
   A1: P[0] proof
      reconsider z as Element of COMPLEX by XCMPLX_0:def 2;
-      z|^(0+1) = Product(1 |-> z) .= Product(<*z*>)
+      z|^(0+1) = Product(<*z*>)
        by FINSEQ_2:73 .= 1*z by RVSUM_1:125;
       hence thesis by Th9;
    end;
@@ -207,8 +207,7 @@ Th11: z|^(s+1) = z|^s*z
     assume z|^(s+1) = z|^s*z;
      reconsider z as Element of COMPLEX by XCMPLX_0:def 2;
      A3: s+1 is Element of NAT by ORDINAL1:def 13;
-          z|^(s+1+1) = Product((s+1+1) |-> z)
-         .= Product(((s+1) |-> z) ^ <*z*>)
+          z|^(s+1+1) = Product(((s+1) |-> z) ^ <*z*>)
         by A3,FINSEQ_2:74 .= Product((s+1) |-> z)*z by RVSUM_1:126;
        hence thesis;
    end;
@@ -243,8 +242,7 @@ theorem
  proof
   reconsider x, y as Element of COMPLEX by XCMPLX_0:def 2;
   reconsider s as Element of NAT by ORDINAL1:def 13;
-     x|^s*y|^s = Product(s |-> x)*y|^s
-    .= (Product(s |-> x))*(Product(s |-> y)) .= Product(s |-> (x*y))
+     x|^s*y|^s = Product(s |-> (x*y))
                by RVSUM_1:143;
   hence thesis;
  end;
@@ -254,8 +252,7 @@ theorem
  proof
   reconsider x as Element of COMPLEX by XCMPLX_0:def 2;
   reconsider s,t as Element of NAT by ORDINAL1:def 13;
-     x|^s*x|^t = (Product(s |->x))*x|^t
-   .= (Product(s |-> x))*(Product(t |-> x)) .= Product((s+t) |-> x)
+     x|^s*x|^t = Product((s+t) |-> x)
         by RVSUM_1:141;
   hence thesis;
  end;
@@ -265,9 +262,7 @@ theorem
  proof
   reconsider x as Element of COMPLEX by XCMPLX_0:def 2;
   reconsider s,t as Element of NAT by ORDINAL1:def 13;
-     x|^(s*t) = Product((s*t) |-> x) .= Product(t |-> Product(s |-> x))
-    by RVSUM_1:142
-  .= Product(t |-> x|^s);
+     x|^(s*t) = Product(t |-> x|^s) by RVSUM_1:142;
  hence thesis;
  end;
 
@@ -346,7 +341,7 @@ theorem Th19:
 theorem
   2! = 2
  proof
-  2! = Product<*1 qua Real,2*> by FINSEQ_2:61 .= 1*2 by RVSUM_1:129;
+  2! = 1*2 by  FINSEQ_2:61,RVSUM_1:129;
   hence thesis;
  end;
 
@@ -359,8 +354,7 @@ proof
   (s+1)! = (s!) * (s+1)
   proof
     idseq (s+1) = idseq s ^ <* r1 *> by FINSEQ_2:60;
-    then Product(idseq (s+1)) = Product(idseq s) * r1 by RVSUM_1:126
-                        .= (s!) * r1;
+    then Product(idseq (s+1)) = (s!) * r1 by RVSUM_1:126;
     hence thesis;
   end;
   hence thesis;
@@ -941,9 +935,6 @@ FINSEQ_1:57
          .=
 a|^(l1+1)*((n choose (m2+1))*b|^(m2+1)) + b|^(m2+1)*((n choose m2)*a|^l2)
            by Th11
-         .= ((a|^(l1+1)*(n choose (m2+1))) + ((n choose m2)*a|^l2))*b|^(m2+1)
-         .= (((n choose (m2+1))*a|^(l1+1)) + ((n choose m2)*a|^(l1+1)))*b|^(m2
-+1)
          .= ((n choose (m2+1)) + (n choose m2))*a|^(l1+1)*b|^(m2+1)
          .= ((n+1) choose (m2+1))*a|^(l1+1)*b|^(m2+1) by Th32
          .= ((a,b) In_Power (n+1)).i by A11,A39,Def4;
@@ -1207,7 +1198,7 @@ A4: l!*(l+1)=(l+1)! by Th21;
    thus for l being Element of NAT holds P[l] from NAT_1:sch 1(A1,A2);
   end;
 
- reserve t,s,j,r for Element of NAT;
+ reserve s,j,r for Element of NAT;
 
 theorem Th51:
   for m,n st m<>1 holds m divides n implies not m divides (n+1)
@@ -1255,9 +1246,9 @@ theorem Th54:
   j<=l & j<>0 implies j divides l!
   proof
     assume that A1: j<=l and A2: j<>0;
-    consider k being Nat such that k: l=j+k by A1,NAT_1:28;
+    consider k being Nat such that A3: l=j+k by A1,NAT_1:28;
     reconsider k as Element of NAT by ORDINAL1:def 13;
-    l=j+k by k;
+    l=j+k by A3;
     hence thesis by A2,Th53;
   end;
 
@@ -1574,7 +1565,7 @@ end;
 
 :: from GR_CY_2
 
- reserve k,l,m,n,p,s,r for Element of NAT;
+ reserve k,m,n,p for Element of NAT;
  reserve i0,i,i1,i2,i3,i4 for Integer;
 
 theorem
@@ -1671,9 +1662,7 @@ A9: for k st ex i1,i2 st i1*m+i2*n=k holds p divides k
         ex i3,i4 st i3*m+i4*n=s
         proof
           s = k - p*l by A11; then
-          s=k-(i*m*l+i0*n*l) by A8
-          .=(i1*m+i2*n)-(i*m*l+i0*n*l) by A10
-          .=(i1-i*l)*m+(i2-i0*l)*n;
+          s=(i1-i*l)*m+(i2-i0*l)*n by A8,A10;
           hence thesis;
         end;
         hence contradiction by A7,A12,A13;
@@ -1701,17 +1690,17 @@ A17: p divides n by A9,A15;
      consider l being Nat such that A20:m = s*l by A18,NAT_1:def 3;
      consider r being Nat such that A21:n = s*r by A19,NAT_1:def 3;
      reconsider p'=p,s'=s as Integer;
-b1:  s in NAT by ORDINAL1:def 13;
+A22:  s in NAT by ORDINAL1:def 13;
      ex i4 st p'=s'*i4
      proof
        take i*l+i0*r;
        thus thesis by A8,A20,A21;
      end;
-      then A22:s' divides p' by INT_1:def 9;
- A23: for z being Element of NAT holds abs z=z by ABSVALUE:def 1;
-      then A24:abs s=s by b1;
-      abs p=p by A23;
-      hence thesis by A22,A24,INT_2:21;
+      then A23:s' divides p' by INT_1:def 9;
+ A24: for z being Element of NAT holds abs z=z by ABSVALUE:def 1;
+      then A25:abs s=s by A22;
+      abs p=p by A24;
+      hence thesis by A23,A25,INT_2:21;
      end;
    hence thesis by A16,A17,NAT_1:def 5;
   end;
@@ -1720,7 +1709,7 @@ b1:  s in NAT by ORDINAL1:def 13;
 
 :: from NAT_LAT
 
- reserve n,j,i,k,k1,k2,k3,k4,m,l,s for Element of NAT;
+ reserve n,j,k,m,l for Element of NAT;
 
 definition
   func SetPrimes -> Subset of NAT means
@@ -1739,23 +1728,23 @@ A2: n in NAT by ORDINAL1:def 13;
   end;
   uniqueness proof
   let A, B be Subset of NAT such that
-A1: for n being Nat holds n in A iff n is prime and
-A2: for n being Nat holds n in B iff n is prime;
+A3: for n being Nat holds n in A iff n is prime and
+A4: for n being Nat holds n in B iff n is prime;
     thus A c= B
     proof
       let x be set;
       assume
-A3:   x in A;
+A5:   x in A;
       then reconsider x as Element of NAT;
-      x is prime by A1,A3;
-      hence thesis by A2;
+      x is prime by A3,A5;
+      hence thesis by A4;
     end;
     let x be set;
     assume
-A3: x in B;
+A6: x in B;
     then reconsider x as Element of NAT;
-    x is prime by A2,A3;
-    hence thesis by A1;
+    x is prime by A4,A6;
+    hence thesis by A3;
   end;
 end;
 
@@ -1770,7 +1759,7 @@ definition
   mode Prime is prime Element of NAT;
 end;
 
- reserve p,f for Prime,
+ reserve
          x for set;
 
 definition let p be Nat;
@@ -1789,23 +1778,23 @@ A2: q in NAT by ORDINAL1:def 13;
   end;
   uniqueness proof
   let A, B be Subset of NAT such that
-A1: for q being Nat holds q in A iff q < p & q is prime and
-A2: for q being Nat holds q in B iff q < p & q is prime;
+A3: for q being Nat holds q in A iff q < p & q is prime and
+A4: for q being Nat holds q in B iff q < p & q is prime;
     thus A c= B
     proof
       let x be set;
       assume
-A3:   x in A;
+A5:   x in A;
       then reconsider x as Element of NAT;
-      x < p & x is prime by A1,A3;
-      hence thesis by A2;
+      x < p & x is prime by A3,A5;
+      hence thesis by A4;
     end;
     let x be set;
     assume
-A3: x in B;
+A6: x in B;
     then reconsider x as Element of NAT;
-    x < p & x is prime by A2,A3;
-    hence thesis by A1;
+    x < p & x is prime by A4,A6;
+    hence thesis by A3;
   end;
 end;
 
@@ -1948,7 +1937,7 @@ theorem Th94:
     assume A2: x in SetPrimenumber f\/{f};
     then x in SetPrimenumber f or x in {f} by XBOOLE_0:def 2;
     then x in SetPrimenumber f or x = f by TARSKI:def 1;
-    then reconsider x as Element of NAT by ORDINAL1:def 13;
+    then reconsider x as Element of NAT;
     per cases by A2,XBOOLE_0:def 2;
     suppose x in SetPrimenumber f;
       then x < f & x is prime by Def7;
@@ -1962,9 +1951,9 @@ theorem Th94:
   end;
 
 theorem
-  k>=m implies not k in SetPrimenumber m by Def7;  
+  k>=m implies not k in SetPrimenumber m by Def7;
 
-Lm3:
+Lm1:
 SetPrimenumber n = {k:k<n & k is prime}
 proof
   thus SetPrimenumber n c= {k:k<n & k is prime}
@@ -1987,79 +1976,79 @@ definition let n be Nat;
   n = card SetPrimenumber it;
 existence
 proof
-A0: n in NAT by ORDINAL1:def 13;
+A1: n in NAT by ORDINAL1:def 13;
   defpred P1[Nat] means
   ex m st $1=card SetPrimenumber m & m is Prime;
-   SetPrimenumber 2 = {k:k<2 & k is prime} by Lm3;
+   SetPrimenumber 2 = {k:k<2 & k is prime} by Lm1;
    then
-A1: P1[0] by CARD_1:78,INT_2:44;
-A2: for n st P1[n] holds P1[n+1]
+A2: P1[0] by CARD_1:78,INT_2:44;
+A3: for n st P1[n] holds P1[n+1]
     proof let n;
      given m such that
-A3:  n=card SetPrimenumber m & m is Prime;
+A4:  n=card SetPrimenumber m & m is Prime;
      defpred P[Nat] means $1 is prime & $1>m;
-     A4: ex k st P[k]
+     A5: ex k st P[k]
      proof
        ex p st p is prime & p>m by Th86;
        then consider k being Nat such that
-B1:    P[k];
+A6:    P[k];
        k in NAT by ORDINAL1:def 13;
-       hence thesis by B1;
+       hence thesis by A6;
      end;
      consider k such that
-A5:  P[k] & for l st P[l] holds k <= l from NAT_1:sch 5(A4);
+A7:  P[k] & for l st P[l] holds k <= l from NAT_1:sch 5(A5);
      take k;
-A6:  SetPrimenumber k=SetPrimenumber m\/{m}
+A8:  SetPrimenumber k=SetPrimenumber m\/{m}
      proof
        thus SetPrimenumber k c= SetPrimenumber m\/{m}
        proof let s be set;
          assume
-A7:      s in SetPrimenumber k;
+A9:      s in SetPrimenumber k;
          then reconsider s as Element of NAT;
-A8:      s<k & s is prime by A7,Def7;
-A9:      s<=m by A5,A8;
-         per cases by A9,REAL_1:def 5;
+A10:      s<k & s is prime by A9,Def7;
+A11:      s<=m by A7,A10;
+         per cases by A11,REAL_1:def 5;
          suppose s=m;
            then s in {m} by TARSKI:def 1;
            hence thesis by XBOOLE_0:def 2;
          end;
          suppose s<m;
-           then A10: s in SetPrimenumber m by A8,Def7;
+           then A12: s in SetPrimenumber m by A10,Def7;
            SetPrimenumber m c= SetPrimenumber m\/{m} by XBOOLE_1:7;
-           hence thesis by A10;
+           hence thesis by A12;
          end;
        end;
-       thus SetPrimenumber m\/{m}c=SetPrimenumber k by A3,A5,Th94;
+       thus SetPrimenumber m\/{m}c=SetPrimenumber k by A4,A7,Th94;
      end;
      not m in SetPrimenumber m by Def7;
-     hence n + 1 = card SetPrimenumber k by A3,A6,CARD_2:54;
-     thus k is Prime by A5;
+     hence n + 1 = card SetPrimenumber k by A4,A8,CARD_2:54;
+     thus k is Prime by A7;
    end;
-   for n holds P1[n] from NAT_1:sch 1(A1,A2);
-   then ex m st n=card SetPrimenumber m & m is Prime by A0;
+   for n holds P1[n] from NAT_1:sch 1(A2,A3);
+   then ex m st n=card SetPrimenumber m & m is Prime by A1;
    hence thesis;
 end;
 uniqueness
  proof let f,g be Prime;
    assume that
-A11: n = card SetPrimenumber f and
-A12: n = card SetPrimenumber g;
+A13: n = card SetPrimenumber f and
+A14: n = card SetPrimenumber g;
   assume
-A13: f<>g;
+A15: f<>g;
   f<g & n+1 <= n or g<f & n+1 <= n
   proof
-   per cases by A13,XXREAL_0:1;
+   per cases by A15,XXREAL_0:1;
     case f<g;
-    then A14: SetPrimenumber f\/{f}c=SetPrimenumber g by Th94;
-A16: not f in SetPrimenumber f by Def7;
-     card (SetPrimenumber f\/{f}) <= card SetPrimenumber g by A14,CARD_1:80;
-     hence thesis by A11,A12,A16,CARD_2:54;
+    then A16: SetPrimenumber f\/{f}c=SetPrimenumber g by Th94;
+A17: not f in SetPrimenumber f by Def7;
+     card (SetPrimenumber f\/{f}) <= card SetPrimenumber g by A16,CARD_1:80;
+     hence thesis by A13,A14,A17,CARD_2:54;
     end;
     case g<f;
-    then A17: SetPrimenumber g\/{g}c=SetPrimenumber f by Th94;
+    then A18: SetPrimenumber g\/{g}c=SetPrimenumber f by Th94;
 A19: not g in SetPrimenumber g by Def7;
-    card (SetPrimenumber g\/{g}) <= card SetPrimenumber f by A17,CARD_1:80;
-    hence thesis by A11,A12,A19,CARD_2:54;
+    card (SetPrimenumber g\/{g}) <= card SetPrimenumber f by A18,CARD_1:80;
+    hence thesis by A13,A14,A19,CARD_2:54;
    end;
    end;
   hence contradiction by NAT_1:38;
@@ -2067,7 +2056,7 @@ A19: not g in SetPrimenumber g by Def7;
 end;
 
 theorem
-  SetPrimenumber n = {k: k<n & k is prime} by Lm3;
+  SetPrimenumber n = {k: k<n & k is prime} by Lm1;
 
 theorem Th97: :: Euclid
   SetPrimes is infinite
@@ -2108,113 +2097,113 @@ A2: not (i divides m * n implies (i divides m or i divides n));
 A3: ex i be Element of NAT st P[i]
     proof
       consider i being Nat such that
-a1:   P[i] by A1,A2;
+A4:   P[i] by A1,A2;
       reconsider i as Element of NAT by ORDINAL1:def 13;
       take i;
-      thus thesis by a1;
+      thus thesis by A4;
     end;
    consider p' being Element of NAT such that
-A4: P[p'] and
-A5: for p1 being Element of NAT st P[p1] holds p' <= p1 from NAT_1:sch 5(A3);
+A5: P[p'] and
+A6: for p1 being Element of NAT st P[p1] holds p' <= p1 from NAT_1:sch 5(A3);
     defpred Q[Nat] means
     ex n being Nat st p' divides $1 * n & not p' divides $1 & not p' divides n;
-A6: ex i be Element of NAT st Q[i]
+A7: ex i be Element of NAT st Q[i]
     proof
       consider i being Nat such that
-a1:   Q[i] by A4;
+A8:   Q[i] by A5;
       reconsider i as Element of NAT by ORDINAL1:def 13;
       take i;
-      thus thesis by a1;
+      thus thesis by A8;
     end;
     consider m be Element of NAT such that
-A7: Q[m] and
-A8: for m1 being Element of NAT st Q[m1] holds m <= m1 from NAT_1:sch 5(A6);
-    m <> 0 by A7;
-    then A9: m > 0;
+A9: Q[m] and
+A10: for m1 being Element of NAT st Q[m1] holds m <= m1 from NAT_1:sch 5(A7);
+    m <> 0 by A9;
+    then A11: m > 0;
     consider n being Nat such that
-A10: p' divides m * n & (not p' divides m) & (not p' divides n) by A7;
-A11: m < p'
+A12: p' divides m * n & (not p' divides m) & (not p' divides n) by A9;
+A13: m < p'
      proof
-       assume A12: m >= p';
+       assume A14: m >= p';
        set m1 = m mod p';
-A13:   p' > 0 by A4,Lm2;
+A15:   p' > 0 by A5,Lm2;
        then m1 < p' by NAT_1:46;
-       then A14: m1 < m by A12,XXREAL_0:2;
-A15:   p' divides p' * (m div p') by NAT_1:def 3;
-A16:   m = p'* (m div p') + m1 by A13,NAT_1:47;
-A17:   p' divides m1 * n
+       then A16: m1 < m by A14,XXREAL_0:2;
+A17:   p' divides p' * (m div p') by NAT_1:def 3;
+A18:   m = p'* (m div p') + m1 by A15,NAT_1:47;
+A19:   p' divides m1 * n
        proof
-A18:     p' divides p' * ((m div p') * n) by NAT_1:def 3;
-         m = p'* (m div p') + m1 by A13,NAT_1:47;
+A20:     p' divides p' * ((m div p') * n) by NAT_1:def 3;
+         m = p'* (m div p') + m1 by A15,NAT_1:47;
          then m * n = p' * (m div p') * n + m1 * n;
-         hence thesis by A10,A18,NAT_1:57;
+         hence thesis by A12,A20,NAT_1:57;
        end;
-       not p' divides m1 by A10,A15,A16,NAT_1:55;
-       hence contradiction by A8,A10,A14,A17;
+       not p' divides m1 by A12,A17,A18,NAT_1:55;
+       hence contradiction by A10,A12,A16,A19;
      end;
-A19: m < 2
+A21: m < 2
      proof
       assume m >= 2;
       then consider p1 being Element of NAT such that
-A20:  p1 is prime & p1 divides m by INT_2:48;
-A21:  p1 > 1 by A20,INT_2:def 5;
-A22:  p1 <> 0 by A20,INT_2:def 5;
-      p1 <= m by A9,A20,NAT_1:54;then
-A23:  not p' <= p1 by A11,XXREAL_0:2;
-A24:  not p1 divides p'
+A22:  p1 is prime & p1 divides m by INT_2:48;
+A23:  p1 > 1 by A22,INT_2:def 5;
+A24:  p1 <> 0 by A22,INT_2:def 5;
+      p1 <= m by A11,A22,NAT_1:54;then
+A25:  not p' <= p1 by A13,XXREAL_0:2;
+A26:  not p1 divides p'
       proof
         assume p1 divides p';
-        then p1 = 1 or p1 = p' by A4,INT_2:def 5;
-        hence contradiction by A9,A11,A20,INT_2:def 5,NAT_1:54;
+        then p1 = 1 or p1 = p' by A5,INT_2:def 5;
+        hence contradiction by A11,A13,A22,INT_2:def 5,NAT_1:54;
       end;
       consider k being Nat such that
-A25:  m * n = p' * k by A10,NAT_1:def 3;
-      p1 divides p' * k by A20,A25,NAT_1:56;
-      then p1 divides k by A5,A20,A23,A24;
+A27:  m * n = p' * k by A12,NAT_1:def 3;
+      p1 divides p' * k by A22,A27,NAT_1:56;
+      then p1 divides k by A6,A22,A25,A26;
       then consider k1 being Nat such that
-      A26: k = p1 * k1 by NAT_1:def 3;
+      A28: k = p1 * k1 by NAT_1:def 3;
       consider m1 being Nat such that
-      A27: m = p1 * m1 by A20,NAT_1:def 3;
-bb:   m1 in NAT by ORDINAL1:def 13;
-A28:  m1 > 0
+      A29: m = p1 * m1 by A22,NAT_1:def 3;
+A30:   m1 in NAT by ORDINAL1:def 13;
+A31:  m1 > 0
       proof
-        m1 <> 0 by A7,A27;
+        m1 <> 0 by A9,A29;
         hence thesis;
       end;
- A29: m1 < m
+ A32: m1 < m
       proof
-        m1 divides m by A27,NAT_1:def 3;
-        then A30: m1 <= m by A9,NAT_1:54;
+        m1 divides m by A29,NAT_1:def 3;
+        then A33: m1 <= m by A11,NAT_1:54;
         m1 <> m
         proof
           assume m1 = m;
           then m = 1 * m1;
-          hence contradiction by A21,A27,A28,XREAL_1:70;
+          hence contradiction by A23,A29,A31,XREAL_1:70;
         end;
-        hence thesis by A30,REAL_1:def 5;
+        hence thesis by A33,REAL_1:def 5;
       end;
- A31: p' divides m1 * n
+ A34: p' divides m1 * n
       proof
-        m * n = p1 *( m1 * n) by A27; then
-        p' * k = p1 *( m1 * n) by A25; then
-        p' * (p1 * k1) = p1 *(m1 * n) by A26; then
+        m * n = p1 *( m1 * n) by A29; then
+        p' * k = p1 *( m1 * n) by A27; then
+        p' * (p1 * k1) = p1 *(m1 * n) by A28; then
         p' * (k1 * p1) = p1 *(m1 * n); then
         (p' * k1) * p1 = p1 *(m1 * n);
-        then m1 * n = p' * k1 by A22,XCMPLX_1:5;
+        then m1 * n = p' * k1 by A24,XCMPLX_1:5;
         hence thesis by NAT_1:def 3;
       end;
-      not p' divides m1 by A10,A27,NAT_1:56;
-      hence contradiction by bb,A8,A10,A29,A31;
+      not p' divides m1 by A12,A29,NAT_1:56;
+      hence contradiction by A30,A10,A12,A32,A34;
    end;
    m >= 2
    proof
      assume m < 2;
-     then A32: m <= 1 + 1 & m <> 2;
-     m >= 0 + 1 by A9,NAT_1:38;
-     then m = 1 by A32,NAT_1:27;
-     hence contradiction by A10;
+     then A35: m <= 1 + 1 & m <> 2;
+     m >= 0 + 1 by A11,NAT_1:38;
+     then m = 1 by A35,NAT_1:27;
+     hence contradiction by A12;
    end;
-   hence thesis by A19;
+   hence thesis by A21;
  end;
 
 :: from URYSOHN1, the proof from CARD_4
@@ -2227,7 +2216,7 @@ theorem
   proof
     let x be real number;
     thus x * x = (x |^ 1) * x by Th10 .= x |^ (1+1) by Th11 .= x |^ 2;
-    hence x|^2 = x * x .= x^2;
+    hence x|^2 = x^2;
   end;
 
 :: from SCMFSA9A, 2005.11.16, A.T

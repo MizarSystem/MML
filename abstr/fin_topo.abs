@@ -8,12 +8,13 @@ environ
 
  vocabularies FINSEQ_1, FINSET_1, BOOLE, FUNCT_1, RELAT_1, ABSVALUE, ARYTM_1,
       CAT_1, FUNCT_2, SUBSET_1, PRE_TOPC, TARSKI, RELAT_2, SETFAM_1, CARD_1,
-      FIN_TOPO, HAHNBAN, FINSEQ_4;
+      FIN_TOPO, HAHNBAN, FINSEQ_4, ORDERS_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0,
-      FINSET_1, NAT_1, SETFAM_1, STRUCT_0, RELSET_1, RELAT_1, FUNCT_1, FUNCT_2,
-      CQC_LANG, DOMAIN_1, GROUP_1, FINSEQ_1, FINSEQ_4, CARD_1, INT_2, XXREAL_0;
+      FINSET_1, NAT_1, SETFAM_1, RELAT_1, FUNCT_1, FUNCT_2, CQC_LANG, DOMAIN_1,
+      RELSET_1, FINSEQ_1, FINSEQ_4, CARD_1, INT_2, XXREAL_0, STRUCT_0,
+      ORDERS_2, GROUP_1;
  constructors SETFAM_1, DOMAIN_1, XXREAL_0, REAL_1, NAT_1, CQC_LANG, FINSEQ_4,
-      INT_2, GROUP_1;
+      INT_2, GROUP_1, ORDERS_2;
  registrations SUBSET_1, INT_1, RELSET_1, STRUCT_0, CQC_LANG, FINSEQ_1,
       XREAL_0, NUMBERS, ORDINAL1, XXREAL_0;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
@@ -52,25 +53,19 @@ scheme :: FIN_TOPO:sch 1
      B() c= A() and
      for A being Subset of X() st A c= A() holds A c= F(A) & F(A) c= A();
 
-definition
-  struct ( 1-sorted ) FT_Space_Str
-     (# carrier -> set,
-            Nbd -> Function of the carrier, bool the carrier #);
-end;
-
 registration
- cluster non empty strict FT_Space_Str;
+ cluster non empty strict RelStr;
 end;
 
- reserve FT for non empty FT_Space_Str;
+ reserve FT for non empty RelStr;
  reserve x, y, z for Element of FT;
 
 definition
-  let FT be non empty FT_Space_Str;
+  let FT be RelStr;
   let x be Element of FT;
   func U_FT x -> Subset of FT equals
 :: FIN_TOPO:def 1
-    ( the Nbd of FT ).x;
+    (the InternalRel of FT).:{x};
 end;
 
 definition
@@ -80,19 +75,30 @@ definition
   redefine func x.-->y -> Function of {x}, bool {x};
 end;
 
-definition
-  func FT{0} -> strict FT_Space_Str equals
+definition let x be set;
+ func SinglRel x -> Relation of {x} equals
 :: FIN_TOPO:def 2
-    FT_Space_Str (#{0},0.-->[#]{0}#);
+  {[x,x]};
+end;
+
+definition
+  func FT{0} -> strict RelStr equals
+:: FIN_TOPO:def 3
+    RelStr (#{0},SinglRel 0#);
 end;
 
 registration
   cluster FT{0} -> non empty;
 end;
 
-definition let IT be non empty FT_Space_Str;
-  attr IT is filled means
-:: FIN_TOPO:def 3
+:::notation let IT be non empty RelStr;
+::: synonym IT is filled for IT is reflexive;
+:::end;
+
+definition let IT be non empty RelStr;
+::: redefine
+ attr IT is filled means
+:: FIN_TOPO:def 4
   for x being Element of IT holds x in U_FT x;
 end;
 
@@ -109,19 +115,19 @@ registration
 end;
 
 registration
-  cluster finite filled strict (non empty FT_Space_Str);
+  cluster finite filled strict (non empty RelStr);
 end;
 
 definition let T be 1-sorted, F be set;
  canceled;
 
   pred F is_a_cover_of T means
-:: FIN_TOPO:def 5
+:: FIN_TOPO:def 6
     the carrier of T c= union F;
 end;
 
 theorem :: FIN_TOPO:9
-  for FT being filled (non empty FT_Space_Str) holds
+  for FT being filled (non empty RelStr) holds
     {U_FT x where x is Element of FT : not contradiction}
      is_a_cover_of FT;
 
@@ -129,7 +135,7 @@ theorem :: FIN_TOPO:9
 
 definition let FT; let A be Subset of FT;
   func A^delta -> Subset of FT equals
-:: FIN_TOPO:def 6
+:: FIN_TOPO:def 7
     {x:U_FT x meets A & U_FT x meets A` };
 end;
 
@@ -138,11 +144,11 @@ theorem :: FIN_TOPO:10
 
 definition let FT; let A be Subset of FT;
   func A^deltai -> Subset of FT equals
-:: FIN_TOPO:def 7
+:: FIN_TOPO:def 8
    A /\ (A^delta);
 
   func A^deltao -> Subset of FT equals
-:: FIN_TOPO:def 8
+:: FIN_TOPO:def 9
    A` /\ (A^delta);
 end;
 
@@ -151,32 +157,32 @@ theorem :: FIN_TOPO:11
 
 definition let FT; let A be Subset of FT;
   func A^i -> Subset of FT equals
-:: FIN_TOPO:def 9
+:: FIN_TOPO:def 10
    {x:U_FT x c= A};
 
   func A^b -> Subset of FT equals
-:: FIN_TOPO:def 10
+:: FIN_TOPO:def 11
    {x:U_FT x meets A};
 
   func A^s -> Subset of FT equals
-:: FIN_TOPO:def 11
+:: FIN_TOPO:def 12
    {x:x in A & U_FT x \ {x} misses A };
 end;
 
 definition let FT; let A be Subset of FT;
   func A^n -> Subset of FT equals
-:: FIN_TOPO:def 12
+:: FIN_TOPO:def 13
    A \ A^s;
 
   func A^f -> Subset of FT equals
-:: FIN_TOPO:def 13
+:: FIN_TOPO:def 14
    {x:ex y st y in A & x in U_FT y};
 end;
 
-definition let IT be non empty FT_Space_Str;
-  attr IT is symmetric means
-:: FIN_TOPO:def 14
-  for x, y being Element of IT holds
+definition let IT be non empty RelStr;
+ attr IT is symmetric means
+:: FIN_TOPO:def 15
+ for x, y being Element of IT holds
     y in U_FT x implies x in U_FT y;
 end;
 
@@ -202,41 +208,41 @@ reserve F for Subset of FT;
 
 definition let FT; let IT be Subset of FT;
   attr IT is open means
-:: FIN_TOPO:def 15
+:: FIN_TOPO:def 16
   IT = IT^i;
 
   attr IT is closed means
-:: FIN_TOPO:def 16
+:: FIN_TOPO:def 17
   IT = IT^b;
 
   attr IT is connected means
-:: FIN_TOPO:def 17
+:: FIN_TOPO:def 18
   for B,C being Subset of FT st
     IT = B \/ C & B <> {} & C <> {} & B misses C holds B^b meets C;
 end;
 
 definition let FT; let A be Subset of FT;
   func A^fb -> Subset of FT equals
-:: FIN_TOPO:def 18
+:: FIN_TOPO:def 19
     meet{F:A c= F & F is closed};
 
   func A^fi -> Subset of FT equals
-:: FIN_TOPO:def 19
+:: FIN_TOPO:def 20
     union{F:A c= F & F is open};
 end;
 
 theorem :: FIN_TOPO:18
-  for FT being filled (non empty FT_Space_Str),
+  for FT being filled (non empty RelStr),
       A being Subset of FT holds
     A c= A^b;
 
 theorem :: FIN_TOPO:19
-  for FT being non empty FT_Space_Str,
+  for FT being non empty RelStr,
       A, B being Subset of FT holds
     A c= B implies A^b c= B^b;
 
 theorem :: FIN_TOPO:20
-  for FT being filled finite (non empty FT_Space_Str),
+  for FT being filled finite (non empty RelStr),
       A being Subset of FT holds
     A is connected iff for x being Element of FT st x in A
     ex S being FinSequence of bool the carrier of FT st
@@ -246,11 +252,7 @@ theorem :: FIN_TOPO:20
        holds S/.(i+1) = (S/.i)^b /\ A) &
       A c= S/.len S;
 
-theorem :: FIN_TOPO:21
-  for E being non empty set,
-      A being Subset of E,
-      x being Element of E holds
-    x in A` iff not x in A;
+canceled;
 
 theorem :: FIN_TOPO:22
   ((A`)^i)` = A^b;
@@ -271,14 +273,11 @@ theorem :: FIN_TOPO:27
   A^s <> {} & Card A <> 1 implies A is not connected;
 
 theorem :: FIN_TOPO:28
-     for FT being filled (non empty FT_Space_Str),
+     for FT being filled (non empty RelStr),
       A being Subset of FT holds
     A^i c= A;
 
-theorem :: FIN_TOPO:29
-  for E being set,
-      A, B being Subset of E holds
-    A = B iff A` = B`;
+canceled;
 
 theorem :: FIN_TOPO:30
   A is open implies A` is closed;

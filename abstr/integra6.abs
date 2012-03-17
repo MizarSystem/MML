@@ -1,0 +1,206 @@
+:: Integrability and the Integral of Partial Functions from $\Bbb R$ into
+:: $\Bbb R$
+::  by Noboru Endou , Yasunari Shidama and Masahiko Yamazaki
+::
+:: Received November 17, 2006
+:: Copyright (c) 2006 Association of Mizar Users
+
+environ
+
+ vocabularies INTEGRA1, FINSEQ_1, RLVECT_1, ARYTM_1, RELAT_1, FUNCT_1,
+      PARTFUN1, REALSET1, SEQ_1, BOOLE, RFUNCT_1, FCONT_1, INT_1, SEQ_2,
+      ABSVALUE, INTEGRA2, FUNCT_3, ORDINAL2, MEASURE5, ARYTM_3, SQUARE_1,
+      FDIFF_1, RCOMP_1, INTEGRA5, ARYTM, RFINSEQ, INTEGRA4, RSSPACE;
+ notations TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, ORDINAL1, NUMBERS, XCMPLX_0,
+      XREAL_0, COMPLEX1, REAL_1, NAT_1, INT_1, FUNCT_1, RELSET_1, PARTFUN1,
+      FUNCT_2, RCOMP_1, PSCOMP_1, FINSEQ_1, SEQ_1, RFUNCT_1, SEQ_2, GOBOARD1,
+      FDIFF_1, RFINSEQ, PRE_CIRC, RVSUM_1, INTEGRA1, INTEGRA2, FCONT_1,
+      RFUNCT_2, RSSPACE, INTEGRA4, INTEGRA5, XXREAL_0;
+ constructors ARYTM_0, REAL_1, PRE_CIRC, FDIFF_1, RFINSEQ, PARTFUN1, RFUNCT_1,
+      COMPLEX1, INTEGRA2, FCONT_1, RFUNCT_2, PSCOMP_1, NAT_1, BINOP_2,
+      INTEGRA4, INTEGRA5, RSSPACE, XXREAL_0;
+ registrations XREAL_0, RELSET_1, INTEGRA1, SEQ_1, RCOMP_1, INT_1, FUNCT_2,
+      ORDINAL1, MEMBERED, FDIFF_1, GOBOARD1, FINSEQ_1, RELAT_1, XXREAL_0;
+ requirements NUMERALS, BOOLE, SUBSET, REAL, ARITHM;
+
+
+begin :: Preliminaries
+
+reserve a,b,c,d,e,x for real number,
+        A for closed-interval Subset of REAL,
+        f,g for PartFunc of REAL,REAL;
+
+theorem :: INTEGRA6:1
+a <= b & c <= d & a+c = b+d implies a = b & c = d;
+
+theorem :: INTEGRA6:2
+a <= b implies ].x-a,x+a.[ c= ].x-b,x+b.[;
+
+theorem :: INTEGRA6:3
+for R be Relation, A,B,C be set st A c= B & A c= C holds (R|B)|A = (R|C)|A;
+
+theorem :: INTEGRA6:4
+for A,B,C be set st A c= B & A c= C holds
+  chi(B,B)|A = chi(C,C)|A;
+
+theorem :: INTEGRA6:5
+a <= b implies vol([' a,b '])=b-a;
+
+theorem :: INTEGRA6:6
+vol([' min(a,b),max(a,b) ']) = abs(b-a);
+
+begin
+
+theorem :: INTEGRA6:7
+ A c= dom f & f is_integrable_on A & f is_bounded_on A implies
+  abs f is_integrable_on A & abs(integral(f,A)) <= integral(abs f,A);
+
+theorem :: INTEGRA6:8
+ a<=b & [' a,b '] c= dom f & f is_integrable_on [' a,b '] &
+ f is_bounded_on [' a,b '] implies
+   abs(integral(f,a,b)) <=integral(abs f,a,b);
+
+theorem :: INTEGRA6:9
+for r be Real st A c= dom f & f is_integrable_on A & f is_bounded_on A
+ holds r(#)f is_integrable_on A & integral(r(#)f,A)=r*integral(f,A);
+
+theorem :: INTEGRA6:10
+ a<=b & [' a,b '] c= dom f & f is_integrable_on [' a,b '] &
+ f is_bounded_on [' a,b '] implies
+   integral(c(#)f,a,b) =c*integral(f,a,b);
+
+theorem :: INTEGRA6:11
+ A c= dom f & A c= dom g & f is_integrable_on A & f is_bounded_on A &
+ g is_integrable_on A & g is_bounded_on A implies
+    f+g is_integrable_on A & f-g is_integrable_on A &
+    integral(f+g,A) = integral(f,A) + integral(g,A) &
+    integral(f-g,A) = integral(f,A) - integral(g,A);
+
+theorem :: INTEGRA6:12
+ a<=b & [' a,b '] c= dom f & [' a,b '] c= dom g &
+ f is_integrable_on [' a,b '] & g is_integrable_on [' a,b '] &
+ f is_bounded_on [' a,b '] & g is_bounded_on [' a,b ']
+implies
+   integral(f+g,a,b) =integral(f,a,b) + integral(g,a,b) &
+   integral(f-g,a,b) =integral(f,a,b) - integral(g,a,b);
+
+theorem :: INTEGRA6:13
+ f is_bounded_on A & g is_bounded_on A implies f(#)g is_bounded_on A;
+
+theorem :: INTEGRA6:14
+ A c= dom f & A c= dom g & f is_integrable_on A & f is_bounded_on A &
+ g is_integrable_on A & g is_bounded_on A implies
+   f(#)g is_integrable_on A;
+
+theorem :: INTEGRA6:15
+for n be Element of NAT st n > 0 & vol A > 0 holds
+ ex D being Element of divs A st
+  len D = n &
+  for i be Element of NAT st i in dom D holds D.i=inf A + vol(A)/n*i;
+
+begin :: Integrability on a Subinterval
+
+theorem :: INTEGRA6:16
+vol A > 0 implies
+  ex T being DivSequence of A st
+   delta T is convergent & lim delta T = 0 &
+   for n be Element of NAT holds
+     ex Tn being Element of divs A st Tn divide_into_equal n+1 & T.n =Tn;
+
+theorem :: INTEGRA6:17
+ a <= b & f is_integrable_on [' a,b '] & f is_bounded_on [' a,b '] &
+ [' a,b '] c= dom f & c in [' a,b ']
+implies
+  f is_integrable_on ['a,c '] & f is_integrable_on ['c,b '] &
+  integral(f,a,b )=integral(f,a,c )+integral(f,c,b);
+
+theorem :: INTEGRA6:18
+ a <= c & c <= d & d <= b & f is_integrable_on [' a,b '] &
+ f is_bounded_on [' a,b '] & [' a,b '] c= dom f
+implies
+  f is_integrable_on ['c,d '] & f is_bounded_on ['c,d '] & ['c,d '] c= dom f;
+
+theorem :: INTEGRA6:19
+ a <= c & c <= d & d <= b &
+ f is_integrable_on [' a,b '] & g is_integrable_on [' a,b '] &
+ f is_bounded_on [' a,b '] & g is_bounded_on [' a,b '] &
+ [' a,b '] c= dom f & [' a,b '] c= dom g
+implies
+  f+g is_integrable_on ['c,d '] & f+g is_bounded_on ['c,d '];
+
+theorem :: INTEGRA6:20
+ a<=b & f is_integrable_on [' a,b '] & f is_bounded_on [' a,b '] &
+ [' a,b '] c= dom f & c in [' a,b '] & d in [' a,b ']
+implies
+  integral(f,a,d)=integral(f,a,c)+integral(f,c,d);
+
+theorem :: INTEGRA6:21
+ a <= b & f is_integrable_on [' a,b '] & f is_bounded_on [' a,b '] &
+ [' a,b '] c= dom f & c in [' a,b '] & d in [' a,b ']
+implies
+  [' min(c,d),max(c,d) '] c= dom (abs f) &
+  abs f is_integrable_on [' min(c,d),max(c,d) '] &
+  abs f is_bounded_on [' min(c,d),max(c,d) '] &
+  abs integral(f,c,d) <= integral(abs f,min(c,d),max(c,d));
+
+theorem :: INTEGRA6:22
+ a <= b & c <= d & f is_integrable_on [' a,b '] & f is_bounded_on [' a,b '] &
+ [' a,b '] c= dom f & c in [' a,b '] & d in [' a,b ']
+implies
+  [' c,d '] c= dom (abs f) & abs f is_integrable_on [' c,d '] &
+  abs f is_bounded_on [' c,d '] &
+  abs integral(f,c,d) <= integral(abs f,c,d) &
+  abs integral(f,d,c) <= integral(abs f,c,d);
+
+theorem :: INTEGRA6:23
+( a<=b & c <= d & f is_integrable_on [' a,b '] & f is_bounded_on [' a,b '] &
+ [' a,b '] c= dom f & c in [' a,b '] & d in [' a,b '] &
+ for x be real number st x in [' c,d '] holds abs(f.x) <= e )
+implies
+  abs integral(f,c,d) <= e * (d-c) & abs integral(f,d,c) <= e * (d-c);
+
+theorem :: INTEGRA6:24
+ a <= b & f is_integrable_on [' a,b '] & g is_integrable_on [' a,b '] &
+ f is_bounded_on [' a,b '] & g is_bounded_on [' a,b '] &
+ [' a,b '] c= dom f & [' a,b '] c= dom g & c in ['a,b '] & d in ['a,b ']
+implies
+  integral(f+g,c,d) = integral(f,c,d) + integral(g,c,d) &
+  integral(f-g,c,d) = integral(f,c,d) - integral(g,c,d);
+
+theorem :: INTEGRA6:25
+ a <= b & f is_integrable_on [' a,b '] & f is_bounded_on [' a,b '] &
+ [' a,b '] c= dom f & c in ['a,b '] & d in ['a,b '] implies
+   integral(e(#)f,c,d)=e*integral(f,c,d);
+
+theorem :: INTEGRA6:26
+( a <= b & [' a,b '] c= dom f &
+ for x be real number st x in [' a,b '] holds f.x=e )
+implies
+  f is_integrable_on [' a,b '] & f is_bounded_on [' a,b '] &
+  integral(f,a,b) = e*(b-a);
+
+theorem :: INTEGRA6:27
+ a <= b & (for x be real number st x in [' a,b '] holds f.x=e) &
+ [' a,b '] c= dom f & c in ['a,b '] & d in ['a,b '] implies
+   integral(f,c,d) = e*(d-c);
+
+begin :: Fundamental Theorem of Calculus
+
+theorem :: INTEGRA6:28
+for x0 be real number, F be PartFunc of REAL,REAL st
+ a <= b & f is_integrable_on [' a,b '] & f is_bounded_on [' a,b '] &
+ [' a,b '] c= dom f & ].a,b.[ c= dom F &
+ (for x be real number st x in ].a,b.[ holds F.x = integral(f,a,x)) &
+ x0 in ].a,b.[ & f is_continuous_in x0
+holds
+    F is_differentiable_in x0 & diff(F,x0)=f.x0;
+
+theorem :: INTEGRA6:29
+for x0 be real number st
+ a <= b & f is_integrable_on [' a,b '] & f is_bounded_on [' a,b '] &
+ [' a,b '] c= dom f & x0 in ].a,b.[ & f is_continuous_in x0
+holds
+ ex F be PartFunc of REAL,REAL st
+  ].a,b.[ c= dom F &
+  (for x be real number st x in ].a,b.[ holds F.x = integral(f,a,x)) &
+  F is_differentiable_in x0 & diff(F,x0)=f.x0;

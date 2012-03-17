@@ -16,11 +16,9 @@
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="QC_LANG1"/>
-<ArticleID name="QC_LANG2"/>
-<ArticleID name="CQC_LANG"/>
 <ArticleID name="STRUCT_0"/>
-<ArticleID name="FIN_TOPO"/>
+<ArticleID name="ORDERS_1"/>
+<ArticleID name="ORDERS_2"/>
 <ArticleID name="FINTOPO5"/>
 </Signature>
 <FCluster>
@@ -38,13 +36,13 @@
 <Func kind="K" nr="45"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="175">
+<Func kind="K" nr="112">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="37" value="false"/>
-<Adjective nr="38"/>
+<Adjective nr="26" value="false"/>
+<Adjective nr="30"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -62,13 +60,13 @@
 <Func kind="K" nr="45"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="177">
+<Func kind="K" nr="114">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="37" value="false"/>
-<Adjective nr="38"/>
+<Adjective nr="26" value="false"/>
+<Adjective nr="30"/>
 </Cluster>
 </FCluster>
 </Registrations>

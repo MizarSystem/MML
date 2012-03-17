@@ -9,11 +9,10 @@ environ
  vocabularies AMI_1, SCMFSA_2, AMI_3, SCMFSA6B, SCMFSA6A, FUNCT_1, FUNCT_4,
       CARD_1, RELAT_1, FUNCOP_1, BOOLE, AMI_2, SF_MASTR, CAT_1, FUNCT_7, AMI_5,
       ARYTM_1, NAT_1, ABSVALUE, FINSEQ_1, FINSEQ_2, SCMFSA6C, FINSEQ_4;
- notations TARSKI, XBOOLE_0, SUBSET_1, ENUMSET1,
-      ORDINAL1, NUMBERS, XCMPLX_0, NAT_1, INT_1,
-      COMPLEX1, RELAT_1, FUNCT_1, FINSEQ_1, FINSEQ_2, FINSEQ_4, CARD_1,
-      CQC_LANG, FUNCT_4, DOMAIN_1, STRUCT_0, AMI_1, AMI_3, AMI_5, FUNCT_7,
-      SCMFSA_2, SCMFSA_4, SCMFSA6A, SF_MASTR, SCMFSA6B, XXREAL_0;
+ notations TARSKI, XBOOLE_0, SUBSET_1, ENUMSET1, NUMBERS, XCMPLX_0, NAT_1,
+      INT_1, COMPLEX1, RELAT_1, FUNCT_1, FINSEQ_1, FINSEQ_2, FINSEQ_4, CARD_1,
+      CQC_LANG, FUNCT_4, STRUCT_0, AMI_1, AMI_3, AMI_5, FUNCT_7, SCMFSA_2,
+      SCMFSA_4, SCMFSA6A, SF_MASTR, SCMFSA6B, XXREAL_0;
  constructors DOMAIN_1, SETWISEO, XXREAL_0, NAT_1, FINSEQ_4, INT_2, AMI_5,
       SCMFSA6A, SF_MASTR, SCMFSA6B, ORDINAL1;
  registrations AMI_1, SCMFSA_2, FUNCT_1, FINSET_1, RELSET_1, SCMFSA6A,
@@ -27,7 +26,7 @@ environ
 
 begin :: Consequences of the main theorem from SCMFSA6B
 
- reserve m, n for Nat,
+ reserve
          x for set,
          i for Instruction of SCM+FSA,
          a,b for Int-Location, f for FinSeq-Location,
@@ -107,7 +106,6 @@ A12: IC m1 = m1.IC SCM+FSA by A4,AMI_3:def 16
         .= insloc 0 by AMI_3:50;
   take 0;
   thus CurInstr((Computation s).0) = CurInstr s by AMI_1:def 19
-     .= s.IC s
      .= s.IC m1 by A1,A4,AMI_5:60
      .= m1.insloc 0 by A1,A11,A12,GRFUNC_1:8
      .= halt SCM+FSA by A6,A9,A10,GRFUNC_1:8;
@@ -121,7 +119,6 @@ A1:  Mi +* Start-At insloc 0 c= s;
 A2:  insloc 0 in dom (Mi +* Start-At insloc 0) by SCMFSA6B:31;
 A3:  CurInstr((Computation s).0)
      = CurInstr s by AMI_1:def 19
-    .= s.IC s
     .= s.insloc 0 by A1,SF_MASTR:67
     .= (Mi +* Start-At insloc 0).insloc 0 by A1,A2,GRFUNC_1:8
     .= halt SCM+FSA by SCMFSA6B:33;
@@ -171,23 +168,19 @@ A1: Macro (a := b) +* Start-At insloc 0 c= s;
 then A2:  SA0 c= s by A1,XBOOLE_1:1;
       dom Start-At insloc 0 = {IC SCM+FSA} by AMI_3:34;
 then A3: IC SCM+FSA in dom SA0 by TARSKI:def 1;
-A4: IC s = s.IC SCM+FSA
-       .= SA0.IC SCM+FSA by A2,A3,GRFUNC_1:8
+A4: IC s = SA0.IC SCM+FSA by A2,A3,GRFUNC_1:8
          .= insloc 0 by AMI_3:50;
 A5: insloc 0 in dom Ma & insloc 1 in dom Ma by SCMFSA6B:32;
       Ma c= s by A1,SCMFSA6B:5;
    then Ma.insloc 0 = s.insloc 0 & Ma.insloc 1 = s.insloc 1 by A5,GRFUNC_1:8;
 then A6: s.insloc 0 = a:=b & s.insloc 1 = halt SCM+FSA by SCMFSA6B:33;
-A7: IC Exec(a:=b, s) = Exec(a:=b, s).IC SCM+FSA
-                   .= Next insloc 0 by A4,SCMFSA_2:89
+A7: IC Exec(a:=b, s) = Next insloc 0 by A4,SCMFSA_2:89
                    .= insloc (0+1) by SCMFSA_2:32;
     (Computation s).(0+1) = Following (Computation s).0 by AMI_1:def 19
       .= Following s by AMI_1:def 19
-      .= Exec(CurInstr s, s)
       .= Exec(a:=b, s) by A4,A6;
   hence CurInstr((Computation s).1)
-      = Exec(a:=b, s).IC Exec(a:=b, s)
-     .= halt SCM+FSA by A6,A7,AMI_1:def 13;
+      = halt SCM+FSA by A6,A7,AMI_1:def 13;
  end;
 
  cluster AddTo(a,b) -> parahalting;
@@ -200,23 +193,19 @@ A8: Macro (AddTo(a,b)) +* Start-At insloc 0 c= s;
 then A9:  SA0 c= s by A8,XBOOLE_1:1;
       dom Start-At insloc 0 = {IC SCM+FSA} by AMI_3:34;
 then A10: IC SCM+FSA in dom SA0 by TARSKI:def 1;
-A11: IC s = s.IC SCM+FSA
-       .= SA0.IC SCM+FSA by A9,A10,GRFUNC_1:8
+A11: IC s = SA0.IC SCM+FSA by A9,A10,GRFUNC_1:8
          .= insloc 0 by AMI_3:50;
 A12: insloc 0 in dom Ma & insloc 1 in dom Ma by SCMFSA6B:32;
       Ma c= s by A8,SCMFSA6B:5;
    then Ma.insloc 0 = s.insloc 0 & Ma.insloc 1 = s.insloc 1 by A12,GRFUNC_1:8;
 then A13: s.insloc 0 = AddTo(a,b) & s.insloc 1 = halt SCM+FSA by SCMFSA6B:33;
-A14: IC Exec(AddTo(a,b), s) = Exec(AddTo(a,b), s).IC SCM+FSA
-                   .= Next insloc 0 by A11,SCMFSA_2:90
+A14: IC Exec(AddTo(a,b), s) = Next insloc 0 by A11,SCMFSA_2:90
                    .= insloc (0+1) by SCMFSA_2:32;
     (Computation s).(0+1) = Following (Computation s).0 by AMI_1:def 19
       .= Following s by AMI_1:def 19
-      .= Exec(CurInstr s, s)
       .= Exec(AddTo(a,b), s) by A11,A13;
   hence CurInstr((Computation s).1)
-      = Exec(AddTo(a,b), s).IC Exec(AddTo(a,b), s)
-     .= halt SCM+FSA by A13,A14,AMI_1:def 13;
+      = halt SCM+FSA by A13,A14,AMI_1:def 13;
  end;
 
  cluster SubFrom(a,b) -> parahalting;
@@ -229,23 +218,19 @@ A15: Macro (SubFrom(a,b)) +* Start-At insloc 0 c= s;
 then A16:  SA0 c= s by A15,XBOOLE_1:1;
       dom Start-At insloc 0 = {IC SCM+FSA} by AMI_3:34;
 then A17: IC SCM+FSA in dom SA0 by TARSKI:def 1;
-A18: IC s = s.IC SCM+FSA
-       .= SA0.IC SCM+FSA by A16,A17,GRFUNC_1:8
+A18: IC s = SA0.IC SCM+FSA by A16,A17,GRFUNC_1:8
          .= insloc 0 by AMI_3:50;
 A19: insloc 0 in dom Ma & insloc 1 in dom Ma by SCMFSA6B:32;
       Ma c= s by A15,SCMFSA6B:5;
    then Ma.insloc 0 = s.insloc 0 & Ma.insloc 1 = s.insloc 1 by A19,GRFUNC_1:8;
 then A20: s.insloc 0 = SubFrom(a,b) & s.insloc 1 = halt SCM+FSA by SCMFSA6B:33;
-A21: IC Exec(SubFrom(a,b), s) = Exec(SubFrom(a,b), s).IC SCM+FSA
-                   .= Next insloc 0 by A18,SCMFSA_2:91
+A21: IC Exec(SubFrom(a,b), s) = Next insloc 0 by A18,SCMFSA_2:91
                    .= insloc (0+1) by SCMFSA_2:32;
     (Computation s).(0+1) = Following (Computation s).0 by AMI_1:def 19
       .= Following s by AMI_1:def 19
-      .= Exec(CurInstr s, s)
       .= Exec(SubFrom(a,b), s) by A18,A20;
   hence CurInstr((Computation s).1)
-      = Exec(SubFrom(a,b), s).IC Exec(SubFrom(a,b), s)
-     .= halt SCM+FSA by A20,A21,AMI_1:def 13;
+      = halt SCM+FSA by A20,A21,AMI_1:def 13;
 end;
 
  cluster MultBy(a,b) -> parahalting;
@@ -258,23 +243,19 @@ A22: Macro (MultBy(a,b)) +* Start-At insloc 0 c= s;
 then A23:  SA0 c= s by A22,XBOOLE_1:1;
       dom Start-At insloc 0 = {IC SCM+FSA} by AMI_3:34;
 then A24: IC SCM+FSA in dom SA0 by TARSKI:def 1;
-A25: IC s = s.IC SCM+FSA
-       .= SA0.IC SCM+FSA by A23,A24,GRFUNC_1:8
+A25: IC s = SA0.IC SCM+FSA by A23,A24,GRFUNC_1:8
          .= insloc 0 by AMI_3:50;
 A26: insloc 0 in dom Ma & insloc 1 in dom Ma by SCMFSA6B:32;
       Ma c= s by A22,SCMFSA6B:5;
    then Ma.insloc 0 = s.insloc 0 & Ma.insloc 1 = s.insloc 1 by A26,GRFUNC_1:8;
 then A27: s.insloc 0 = MultBy(a,b) & s.insloc 1 = halt SCM+FSA by SCMFSA6B:33;
-A28: IC Exec(MultBy(a,b), s) = Exec(MultBy(a,b), s).IC SCM+FSA
-                   .= Next insloc 0 by A25,SCMFSA_2:92
+A28: IC Exec(MultBy(a,b), s) = Next insloc 0 by A25,SCMFSA_2:92
                    .= insloc (0+1) by SCMFSA_2:32;
     (Computation s).(0+1) = Following (Computation s).0 by AMI_1:def 19
       .= Following s by AMI_1:def 19
-      .= Exec(CurInstr s, s)
       .= Exec(MultBy(a,b), s) by A25,A27;
   hence CurInstr((Computation s).1)
-      = Exec(MultBy(a,b), s).IC Exec(MultBy(a,b), s)
-     .= halt SCM+FSA by A27,A28,AMI_1:def 13;
+      = halt SCM+FSA by A27,A28,AMI_1:def 13;
 end;
 
  cluster Divide(a,b) -> parahalting;
@@ -287,23 +268,19 @@ A29: Macro (Divide(a,b)) +* Start-At insloc 0 c= s;
 then A30:  SA0 c= s by A29,XBOOLE_1:1;
       dom Start-At insloc 0 = {IC SCM+FSA} by AMI_3:34;
 then A31: IC SCM+FSA in dom SA0 by TARSKI:def 1;
-A32: IC s = s.IC SCM+FSA
-       .= SA0.IC SCM+FSA by A30,A31,GRFUNC_1:8
+A32: IC s = SA0.IC SCM+FSA by A30,A31,GRFUNC_1:8
          .= insloc 0 by AMI_3:50;
 A33: insloc 0 in dom Ma & insloc 1 in dom Ma by SCMFSA6B:32;
       Ma c= s by A29,SCMFSA6B:5;
    then Ma.insloc 0 = s.insloc 0 & Ma.insloc 1 = s.insloc 1 by A33,GRFUNC_1:8;
 then A34: s.insloc 0 = Divide(a,b) & s.insloc 1 = halt SCM+FSA by SCMFSA6B:33;
-A35: IC Exec(Divide(a,b), s) = Exec(Divide(a,b), s).IC SCM+FSA
-                   .= Next insloc 0 by A32,SCMFSA_2:93
+A35: IC Exec(Divide(a,b), s) = Next insloc 0 by A32,SCMFSA_2:93
                    .= insloc (0+1) by SCMFSA_2:32;
     (Computation s).(0+1) = Following (Computation s).0 by AMI_1:def 19
       .= Following s by AMI_1:def 19
-      .= Exec(CurInstr s, s)
       .= Exec(Divide(a,b), s) by A32,A34;
   hence CurInstr((Computation s).1)
-      = Exec(Divide(a,b), s).IC Exec(Divide(a,b), s)
-     .= halt SCM+FSA by A34,A35,AMI_1:def 13;
+      = halt SCM+FSA by A34,A35,AMI_1:def 13;
 end;
 
  let f be FinSeq-Location;
@@ -317,23 +294,19 @@ A36: Macro (b:=(f,a)) +* Start-At insloc 0 c= s;
 then A37:  SA0 c= s by A36,XBOOLE_1:1;
       dom Start-At insloc 0 = {IC SCM+FSA} by AMI_3:34;
 then A38: IC SCM+FSA in dom SA0 by TARSKI:def 1;
-A39: IC s = s.IC SCM+FSA
-       .= SA0.IC SCM+FSA by A37,A38,GRFUNC_1:8
+A39: IC s = SA0.IC SCM+FSA by A37,A38,GRFUNC_1:8
          .= insloc 0 by AMI_3:50;
 A40: insloc 0 in dom Ma & insloc 1 in dom Ma by SCMFSA6B:32;
       Ma c= s by A36,SCMFSA6B:5;
    then Ma.insloc 0 = s.insloc 0 & Ma.insloc 1 = s.insloc 1 by A40,GRFUNC_1:8;
 then A41: s.insloc 0 = b:=(f,a) & s.insloc 1 = halt SCM+FSA by SCMFSA6B:33;
-A42: IC Exec(b:=(f,a), s) = Exec(b:=(f,a), s).IC SCM+FSA
-                   .= Next insloc 0 by A39,SCMFSA_2:98
+A42: IC Exec(b:=(f,a), s) = Next insloc 0 by A39,SCMFSA_2:98
                    .= insloc (0+1) by SCMFSA_2:32;
     (Computation s).(0+1) = Following (Computation s).0 by AMI_1:def 19
       .= Following s by AMI_1:def 19
-      .= Exec(CurInstr s, s)
       .= Exec(b:=(f,a), s) by A39,A41;
   hence CurInstr((Computation s).1)
-      = Exec(b:=(f,a), s).IC Exec(b:=(f,a), s)
-     .= halt SCM+FSA by A41,A42,AMI_1:def 13;
+      = halt SCM+FSA by A41,A42,AMI_1:def 13;
 end;
 
  cluster (f,a) := b -> parahalting keeping_0;
@@ -347,23 +320,19 @@ A43: Macro ((f,a):=b) +* Start-At insloc 0 c= s;
 then A44:  SA0 c= s by A43,XBOOLE_1:1;
       dom Start-At insloc 0 = {IC SCM+FSA} by AMI_3:34;
 then A45: IC SCM+FSA in dom SA0 by TARSKI:def 1;
-A46: IC s = s.IC SCM+FSA
-       .= SA0.IC SCM+FSA by A44,A45,GRFUNC_1:8
+A46: IC s = SA0.IC SCM+FSA by A44,A45,GRFUNC_1:8
          .= insloc 0 by AMI_3:50;
 A47: insloc 0 in dom Ma & insloc 1 in dom Ma by SCMFSA6B:32;
       Ma c= s by A43,SCMFSA6B:5;
    then Ma.insloc 0 = s.insloc 0 & Ma.insloc 1 = s.insloc 1 by A47,GRFUNC_1:8;
 then A48: s.insloc 0 = (f,a):=b & s.insloc 1 = halt SCM+FSA by SCMFSA6B:33;
-A49: IC Exec((f,a):=b, s) = Exec((f,a):=b, s).IC SCM+FSA
-                   .= Next insloc 0 by A46,SCMFSA_2:99
+A49: IC Exec((f,a):=b, s) = Next insloc 0 by A46,SCMFSA_2:99
                    .= insloc (0+1) by SCMFSA_2:32;
     (Computation s).(0+1) = Following (Computation s).0 by AMI_1:def 19
       .= Following s by AMI_1:def 19
-      .= Exec(CurInstr s, s)
       .= Exec((f,a):=b, s) by A46,A48;
   hence CurInstr((Computation s).1)
-      = Exec((f,a):=b, s).IC Exec((f,a):=b, s)
-     .= halt SCM+FSA by A48,A49,AMI_1:def 13;
+      = halt SCM+FSA by A48,A49,AMI_1:def 13;
  end;
  thus (f,a) := b is keeping_0 proof
   let s; assume
@@ -374,23 +343,19 @@ A50: Macro ((f,a):=b) +* Start-At insloc 0 c= s;
 then A51:  SA0 c= s by A50,XBOOLE_1:1;
       dom Start-At insloc 0 = {IC SCM+FSA} by AMI_3:34;
 then A52: IC SCM+FSA in dom SA0 by TARSKI:def 1;
-A53: IC s = s.IC SCM+FSA
-       .= SA0.IC SCM+FSA by A51,A52,GRFUNC_1:8
+A53: IC s = SA0.IC SCM+FSA by A51,A52,GRFUNC_1:8
          .= insloc 0 by AMI_3:50;
 A54: insloc 0 in dom Ma & insloc 1 in dom Ma by SCMFSA6B:32;
       Ma c= s by A50,SCMFSA6B:5;
    then Ma.insloc 0 = s.insloc 0 & Ma.insloc 1 = s.insloc 1 by A54,GRFUNC_1:8;
 then A55: s.insloc 0 = (f,a):=b & s.insloc 1 = halt SCM+FSA by SCMFSA6B:33;
-A56: IC Exec((f,a):=b, s) = Exec((f,a):=b, s).IC SCM+FSA
-                   .= Next insloc 0 by A53,SCMFSA_2:99
+A56: IC Exec((f,a):=b, s) = Next insloc 0 by A53,SCMFSA_2:99
                    .= insloc (0+1) by SCMFSA_2:32;
 A57: (Computation s).(0+1) = Following (Computation s).0 by AMI_1:def 19
       .= Following s by AMI_1:def 19
-      .= Exec(CurInstr s, s)
       .= Exec((f,a):=b, s) by A53,A55;
 then A58: CurInstr((Computation s).1)
-      = Exec((f,a):=b, s).IC Exec((f,a):=b, s)
-     .= halt SCM+FSA by A55,A56,AMI_1:def 13;
+      = halt SCM+FSA by A55,A56,AMI_1:def 13;
   per cases by NAT_1:39;
   suppose k = 0;
    hence ((Computation s).k).intloc 0 = s.intloc 0 by AMI_1:def 19;
@@ -416,23 +381,19 @@ A1: Macro (a:=len f) +* Start-At insloc 0 c= s;
 then A2:  SA0 c= s by A1,XBOOLE_1:1;
       dom Start-At insloc 0 = {IC SCM+FSA} by AMI_3:34;
 then A3: IC SCM+FSA in dom SA0 by TARSKI:def 1;
-A4: IC s = s.IC SCM+FSA
-       .= SA0.IC SCM+FSA by A2,A3,GRFUNC_1:8
+A4: IC s = SA0.IC SCM+FSA by A2,A3,GRFUNC_1:8
          .= insloc 0 by AMI_3:50;
 A5: insloc 0 in dom Ma & insloc 1 in dom Ma by SCMFSA6B:32;
       Ma c= s by A1,SCMFSA6B:5;
    then Ma.insloc 0 = s.insloc 0 & Ma.insloc 1 = s.insloc 1 by A5,GRFUNC_1:8;
 then A6: s.insloc 0 = a:=len f & s.insloc 1 = halt SCM+FSA by SCMFSA6B:33;
-A7: IC Exec(a:=len f, s) = Exec(a:=len f, s).IC SCM+FSA
-                   .= Next insloc 0 by A4,SCMFSA_2:100
+A7: IC Exec(a:=len f, s) = Next insloc 0 by A4,SCMFSA_2:100
                    .= insloc (0+1) by SCMFSA_2:32;
     (Computation s).(0+1) = Following (Computation s).0 by AMI_1:def 19
       .= Following s by AMI_1:def 19
-      .= Exec(CurInstr s, s)
       .= Exec(a:=len f, s) by A4,A6;
   hence CurInstr((Computation s).1)
-      = Exec(a:=len f, s).IC Exec(a:=len f, s)
-     .= halt SCM+FSA by A6,A7,AMI_1:def 13;
+      = halt SCM+FSA by A6,A7,AMI_1:def 13;
 end;
 
  cluster f :=<0,...,0> a -> parahalting keeping_0;
@@ -446,24 +407,20 @@ A8: Macro (f:=<0,...,0>a) +* Start-At insloc 0 c= s;
 then A9:  SA0 c= s by A8,XBOOLE_1:1;
       dom Start-At insloc 0 = {IC SCM+FSA} by AMI_3:34;
 then A10: IC SCM+FSA in dom SA0 by TARSKI:def 1;
-A11: IC s = s.IC SCM+FSA
-       .= SA0.IC SCM+FSA by A9,A10,GRFUNC_1:8
+A11: IC s = SA0.IC SCM+FSA by A9,A10,GRFUNC_1:8
          .= insloc 0 by AMI_3:50;
 A12: insloc 0 in dom Ma & insloc 1 in dom Ma by SCMFSA6B:32;
       Ma c= s by A8,SCMFSA6B:5;
    then Ma.insloc 0 = s.insloc 0 & Ma.insloc 1 = s.insloc 1 by A12,GRFUNC_1:8;
 then A13: s.insloc 0 = f:=<0,...,0>a & s.insloc 1 = halt SCM+FSA by SCMFSA6B:33
 ;
-A14:IC Exec(f:=<0,...,0>a, s) = Exec(f:=<0,...,0>a, s).IC SCM+FSA
-                   .= Next insloc 0 by A11,SCMFSA_2:101
+A14:IC Exec(f:=<0,...,0>a, s) = Next insloc 0 by A11,SCMFSA_2:101
                    .= insloc (0+1) by SCMFSA_2:32;
     (Computation s).(0+1) = Following (Computation s).0 by AMI_1:def 19
       .= Following s by AMI_1:def 19
-      .= Exec(CurInstr s, s)
       .= Exec(f:=<0,...,0>a, s) by A11,A13;
   hence CurInstr((Computation s).1)
-      = Exec(f:=<0,...,0>a, s).IC Exec(f:=<0,...,0>a, s)
-     .= halt SCM+FSA by A13,A14,AMI_1:def 13;
+      = halt SCM+FSA by A13,A14,AMI_1:def 13;
  end;
 thus (f:=<0,...,0>a) is keeping_0 proof
   let s; assume
@@ -474,24 +431,20 @@ A15: Macro (f:=<0,...,0>a) +* Start-At insloc 0 c= s;
 then A16:  SA0 c= s by A15,XBOOLE_1:1;
       dom Start-At insloc 0 = {IC SCM+FSA} by AMI_3:34;
 then A17: IC SCM+FSA in dom SA0 by TARSKI:def 1;
-A18: IC s = s.IC SCM+FSA
-       .= SA0.IC SCM+FSA by A16,A17,GRFUNC_1:8
+A18: IC s = SA0.IC SCM+FSA by A16,A17,GRFUNC_1:8
          .= insloc 0 by AMI_3:50;
 A19: insloc 0 in dom Ma & insloc 1 in dom Ma by SCMFSA6B:32;
       Ma c= s by A15,SCMFSA6B:5;
    then Ma.insloc 0 = s.insloc 0 & Ma.insloc 1 = s.insloc 1 by A19,GRFUNC_1:8;
 then A20: s.insloc 0 = f:=<0,...,0>a & s.insloc 1 = halt SCM+FSA by SCMFSA6B:33
 ;
-A21:IC Exec(f:=<0,...,0>a, s) = Exec(f:=<0,...,0>a, s).IC SCM+FSA
-                   .= Next insloc 0 by A18,SCMFSA_2:101
+A21:IC Exec(f:=<0,...,0>a, s) = Next insloc 0 by A18,SCMFSA_2:101
                    .= insloc (0+1) by SCMFSA_2:32;
 A22: (Computation s).(0+1) = Following (Computation s).0 by AMI_1:def 19
       .= Following s by AMI_1:def 19
-      .= Exec(CurInstr s, s)
       .= Exec(f:=<0,...,0>a, s) by A18,A20;
 then A23: CurInstr((Computation s).1)
-      = Exec(f:=<0,...,0>a, s).IC Exec(f:=<0,...,0>a, s)
-     .= halt SCM+FSA by A20,A21,AMI_1:def 13;
+      = halt SCM+FSA by A20,A21,AMI_1:def 13;
   per cases by NAT_1:39;
   suppose k = 0;
    hence ((Computation s).k).intloc 0 = s.intloc 0 by AMI_1:def 19;
@@ -517,23 +470,19 @@ A1: Macro (a:=b) +* Start-At insloc 0 c= s;
 then A2:  SA0 c= s by A1,XBOOLE_1:1;
       dom Start-At insloc 0 = {IC SCM+FSA} by AMI_3:34;
 then A3: IC SCM+FSA in dom SA0 by TARSKI:def 1;
-A4: IC s = s.IC SCM+FSA
-       .= SA0.IC SCM+FSA by A2,A3,GRFUNC_1:8
+A4: IC s = SA0.IC SCM+FSA by A2,A3,GRFUNC_1:8
          .= insloc 0 by AMI_3:50;
 A5: insloc 0 in dom Ma & insloc 1 in dom Ma by SCMFSA6B:32;
       Ma c= s by A1,SCMFSA6B:5;
    then Ma.insloc 0 = s.insloc 0 & Ma.insloc 1 = s.insloc 1 by A5,GRFUNC_1:8;
 then A6: s.insloc 0 = a:=b & s.insloc 1 = halt SCM+FSA by SCMFSA6B:33;
-A7: IC Exec(a:=b, s) = Exec(a:=b, s).IC SCM+FSA
-                   .= Next insloc 0 by A4,SCMFSA_2:89
+A7: IC Exec(a:=b, s) = Next insloc 0 by A4,SCMFSA_2:89
                    .= insloc (0+1) by SCMFSA_2:32;
 A8: (Computation s).(0+1) = Following (Computation s).0 by AMI_1:def 19
       .= Following s by AMI_1:def 19
-      .= Exec(CurInstr s, s)
       .= Exec(a:=b, s) by A4,A6;
 then A9: CurInstr((Computation s).1)
-      = Exec(a:=b, s).IC Exec(a:=b, s)
-     .= halt SCM+FSA by A6,A7,AMI_1:def 13;
+      = halt SCM+FSA by A6,A7,AMI_1:def 13;
   per cases by NAT_1:39;
   suppose k = 0;
    hence ((Computation s).k).intloc 0 = s.intloc 0 by AMI_1:def 19;
@@ -555,23 +504,19 @@ A11: Macro (AddTo(a,b)) +* Start-At insloc 0 c= s;
 then A12:  SA0 c= s by A11,XBOOLE_1:1;
       dom Start-At insloc 0 = {IC SCM+FSA} by AMI_3:34;
 then A13: IC SCM+FSA in dom SA0 by TARSKI:def 1;
-A14: IC s = s.IC SCM+FSA
-       .= SA0.IC SCM+FSA by A12,A13,GRFUNC_1:8
+A14: IC s = SA0.IC SCM+FSA by A12,A13,GRFUNC_1:8
          .= insloc 0 by AMI_3:50;
 A15: insloc 0 in dom Ma & insloc 1 in dom Ma by SCMFSA6B:32;
       Ma c= s by A11,SCMFSA6B:5;
    then Ma.insloc 0 = s.insloc 0 & Ma.insloc 1 = s.insloc 1 by A15,GRFUNC_1:8;
 then A16: s.insloc 0 = AddTo(a,b) & s.insloc 1 = halt SCM+FSA by SCMFSA6B:33;
-A17: IC Exec(AddTo(a,b), s) = Exec(AddTo(a,b), s).IC SCM+FSA
-                   .= Next insloc 0 by A14,SCMFSA_2:90
+A17: IC Exec(AddTo(a,b), s) = Next insloc 0 by A14,SCMFSA_2:90
                    .= insloc (0+1) by SCMFSA_2:32;
 A18: (Computation s).(0+1) = Following (Computation s).0 by AMI_1:def 19
       .= Following s by AMI_1:def 19
-      .= Exec(CurInstr s, s)
       .= Exec(AddTo(a,b), s) by A14,A16;
 then A19: CurInstr((Computation s).1)
-      = Exec(AddTo(a,b), s).IC Exec(AddTo(a,b), s)
-     .= halt SCM+FSA by A16,A17,AMI_1:def 13;
+      = halt SCM+FSA by A16,A17,AMI_1:def 13;
   per cases by NAT_1:39;
   suppose k = 0;
    hence ((Computation s).k).intloc 0 = s.intloc 0 by AMI_1:def 19;
@@ -593,23 +538,19 @@ A21: Macro (SubFrom(a,b)) +* Start-At insloc 0 c= s;
 then A22:  SA0 c= s by A21,XBOOLE_1:1;
       dom Start-At insloc 0 = {IC SCM+FSA} by AMI_3:34;
 then A23: IC SCM+FSA in dom SA0 by TARSKI:def 1;
-A24: IC s = s.IC SCM+FSA
-       .= SA0.IC SCM+FSA by A22,A23,GRFUNC_1:8
+A24: IC s = SA0.IC SCM+FSA by A22,A23,GRFUNC_1:8
          .= insloc 0 by AMI_3:50;
 A25: insloc 0 in dom Ma & insloc 1 in dom Ma by SCMFSA6B:32;
       Ma c= s by A21,SCMFSA6B:5;
    then Ma.insloc 0 = s.insloc 0 & Ma.insloc 1 = s.insloc 1 by A25,GRFUNC_1:8;
 then A26: s.insloc 0 = SubFrom(a,b) & s.insloc 1 = halt SCM+FSA by SCMFSA6B:33;
-A27: IC Exec(SubFrom(a,b), s) = Exec(SubFrom(a,b), s).IC SCM+FSA
-                   .= Next insloc 0 by A24,SCMFSA_2:91
+A27: IC Exec(SubFrom(a,b), s) = Next insloc 0 by A24,SCMFSA_2:91
                    .= insloc (0+1) by SCMFSA_2:32;
 A28: (Computation s).(0+1) = Following (Computation s).0 by AMI_1:def 19
       .= Following s by AMI_1:def 19
-      .= Exec(CurInstr s, s)
       .= Exec(SubFrom(a,b), s) by A24,A26;
 then A29: CurInstr((Computation s).1)
-      = Exec(SubFrom(a,b), s).IC Exec(SubFrom(a,b), s)
-     .= halt SCM+FSA by A26,A27,AMI_1:def 13;
+      = halt SCM+FSA by A26,A27,AMI_1:def 13;
   per cases by NAT_1:39;
   suppose k = 0;
    hence ((Computation s).k).intloc 0 = s.intloc 0 by AMI_1:def 19;
@@ -631,23 +572,19 @@ A31: Macro (MultBy(a,b)) +* Start-At insloc 0 c= s;
 then A32:  SA0 c= s by A31,XBOOLE_1:1;
       dom Start-At insloc 0 = {IC SCM+FSA} by AMI_3:34;
 then A33: IC SCM+FSA in dom SA0 by TARSKI:def 1;
-A34: IC s = s.IC SCM+FSA
-       .= SA0.IC SCM+FSA by A32,A33,GRFUNC_1:8
+A34: IC s = SA0.IC SCM+FSA by A32,A33,GRFUNC_1:8
          .= insloc 0 by AMI_3:50;
 A35: insloc 0 in dom Ma & insloc 1 in dom Ma by SCMFSA6B:32;
       Ma c= s by A31,SCMFSA6B:5;
    then Ma.insloc 0 = s.insloc 0 & Ma.insloc 1 = s.insloc 1 by A35,GRFUNC_1:8;
 then A36: s.insloc 0 = MultBy(a,b) & s.insloc 1 = halt SCM+FSA by SCMFSA6B:33;
-A37: IC Exec(MultBy(a,b), s) = Exec(MultBy(a,b), s).IC SCM+FSA
-                   .= Next insloc 0 by A34,SCMFSA_2:92
+A37: IC Exec(MultBy(a,b), s) = Next insloc 0 by A34,SCMFSA_2:92
                    .= insloc (0+1) by SCMFSA_2:32;
 A38: (Computation s).(0+1) = Following (Computation s).0 by AMI_1:def 19
       .= Following s by AMI_1:def 19
-      .= Exec(CurInstr s, s)
       .= Exec(MultBy(a,b), s) by A34,A36;
 then A39: CurInstr((Computation s).1)
-      = Exec(MultBy(a,b), s).IC Exec(MultBy(a,b), s)
-     .= halt SCM+FSA by A36,A37,AMI_1:def 13;
+      = halt SCM+FSA by A36,A37,AMI_1:def 13;
   per cases by NAT_1:39;
   suppose k = 0;
    hence ((Computation s).k).intloc 0 = s.intloc 0 by AMI_1:def 19;
@@ -672,23 +609,19 @@ A1: Macro (Divide(a,b)) +* Start-At insloc 0 c= s;
 then A2:  SA0 c= s by A1,XBOOLE_1:1;
       dom Start-At insloc 0 = {IC SCM+FSA} by AMI_3:34;
 then A3: IC SCM+FSA in dom SA0 by TARSKI:def 1;
-A4: IC s = s.IC SCM+FSA
-       .= SA0.IC SCM+FSA by A2,A3,GRFUNC_1:8
+A4: IC s = SA0.IC SCM+FSA by A2,A3,GRFUNC_1:8
          .= insloc 0 by AMI_3:50;
 A5: insloc 0 in dom Ma & insloc 1 in dom Ma by SCMFSA6B:32;
       Ma c= s by A1,SCMFSA6B:5;
    then Ma.insloc 0 = s.insloc 0 & Ma.insloc 1 = s.insloc 1 by A5,GRFUNC_1:8;
 then A6: s.insloc 0 = Divide(a,b) & s.insloc 1 = halt SCM+FSA by SCMFSA6B:33;
-A7: IC Exec(Divide(a,b), s) = Exec(Divide(a,b), s).IC SCM+FSA
-                   .= Next insloc 0 by A4,SCMFSA_2:93
+A7: IC Exec(Divide(a,b), s) = Next insloc 0 by A4,SCMFSA_2:93
                    .= insloc (0+1) by SCMFSA_2:32;
 A8: (Computation s).(0+1) = Following (Computation s).0 by AMI_1:def 19
       .= Following s by AMI_1:def 19
-      .= Exec(CurInstr s, s)
       .= Exec(Divide(a,b), s) by A4,A6;
 then A9: CurInstr((Computation s).1)
-      = Exec(Divide(a,b), s).IC Exec(Divide(a,b), s)
-     .= halt SCM+FSA by A6,A7,AMI_1:def 13;
+      = halt SCM+FSA by A6,A7,AMI_1:def 13;
   per cases by NAT_1:39;
   suppose k = 0;
    hence ((Computation s).k).intloc 0 = s.intloc 0 by AMI_1:def 19;
@@ -713,23 +646,19 @@ A1: Macro (b:=(f,a)) +* Start-At insloc 0 c= s;
 then A2:  SA0 c= s by A1,XBOOLE_1:1;
       dom Start-At insloc 0 = {IC SCM+FSA} by AMI_3:34;
 then A3: IC SCM+FSA in dom SA0 by TARSKI:def 1;
-A4: IC s = s.IC SCM+FSA
-       .= SA0.IC SCM+FSA by A2,A3,GRFUNC_1:8
+A4: IC s = SA0.IC SCM+FSA by A2,A3,GRFUNC_1:8
          .= insloc 0 by AMI_3:50;
 A5: insloc 0 in dom Ma & insloc 1 in dom Ma by SCMFSA6B:32;
       Ma c= s by A1,SCMFSA6B:5;
    then Ma.insloc 0 = s.insloc 0 & Ma.insloc 1 = s.insloc 1 by A5,GRFUNC_1:8;
 then A6: s.insloc 0 = b:=(f,a) & s.insloc 1 = halt SCM+FSA by SCMFSA6B:33;
-A7: IC Exec(b:=(f,a), s) = Exec(b:=(f,a), s).IC SCM+FSA
-                   .= Next insloc 0 by A4,SCMFSA_2:98
+A7: IC Exec(b:=(f,a), s) = Next insloc 0 by A4,SCMFSA_2:98
                    .= insloc (0+1) by SCMFSA_2:32;
 A8: (Computation s).(0+1) = Following (Computation s).0 by AMI_1:def 19
       .= Following s by AMI_1:def 19
-      .= Exec(CurInstr s, s)
       .= Exec(b:=(f,a), s) by A4,A6;
 then A9: CurInstr((Computation s).1)
-      = Exec(b:=(f,a), s).IC Exec(b:=(f,a), s)
-     .= halt SCM+FSA by A6,A7,AMI_1:def 13;
+      = halt SCM+FSA by A6,A7,AMI_1:def 13;
   per cases by NAT_1:39;
   suppose k = 0;
    hence ((Computation s).k).intloc 0 = s.intloc 0 by AMI_1:def 19;
@@ -754,23 +683,19 @@ A1: Macro (b:=len f) +* Start-At insloc 0 c= s;
 then A2:  SA0 c= s by A1,XBOOLE_1:1;
       dom Start-At insloc 0 = {IC SCM+FSA} by AMI_3:34;
 then A3: IC SCM+FSA in dom SA0 by TARSKI:def 1;
-A4: IC s = s.IC SCM+FSA
-       .= SA0.IC SCM+FSA by A2,A3,GRFUNC_1:8
+A4: IC s = SA0.IC SCM+FSA by A2,A3,GRFUNC_1:8
          .= insloc 0 by AMI_3:50;
 A5: insloc 0 in dom Ma & insloc 1 in dom Ma by SCMFSA6B:32;
       Ma c= s by A1,SCMFSA6B:5;
    then Ma.insloc 0 = s.insloc 0 & Ma.insloc 1 = s.insloc 1 by A5,GRFUNC_1:8;
 then A6: s.insloc 0 = b:=len f & s.insloc 1 = halt SCM+FSA by SCMFSA6B:33;
-A7: IC Exec(b:=len f, s) = Exec(b:=len f, s).IC SCM+FSA
-                   .= Next insloc 0 by A4,SCMFSA_2:100
+A7: IC Exec(b:=len f, s) = Next insloc 0 by A4,SCMFSA_2:100
                    .= insloc (0+1) by SCMFSA_2:32;
 A8: (Computation s).(0+1) = Following (Computation s).0 by AMI_1:def 19
       .= Following s by AMI_1:def 19
-      .= Exec(CurInstr s, s)
       .= Exec(b:=len f, s) by A4,A6;
 then A9: CurInstr((Computation s).1)
-      = Exec(b:=len f, s).IC Exec(b:=len f, s)
-     .= halt SCM+FSA by A6,A7,AMI_1:def 13;
+      = halt SCM+FSA by A6,A7,AMI_1:def 13;
   per cases by NAT_1:39;
   suppose k = 0;
    hence ((Computation s).k).intloc 0 = s.intloc 0 by AMI_1:def 19;
@@ -878,8 +803,7 @@ proof
       dom Start-At insloc 0 = {IC SCM+FSA} by AMI_3:34;
 then A1: (Start-At insloc 0).IC SCM+FSA = insloc 0 &
    IC SCM+FSA in dom Start-At insloc 0 by AMI_3:50,TARSKI:def 1;
- thus IC Initialize s = (Initialize s).IC SCM+FSA
-                     .= insloc 0 by A1,FUNCT_4:14;
+ thus IC Initialize s = insloc 0 by A1,FUNCT_4:14;
 A2: not intloc 0 in dom Start-At insloc 0 by SCMFSA6B:9;
 A3:  dom ((intloc 0) .--> 1) = {intloc 0} by CQC_LANG:5;
 then A4: intloc 0 in dom ((intloc 0) .--> 1) by TARSKI:def 1;
@@ -1933,8 +1857,6 @@ RELAT_1:185;
 end; :: ILem
 A23: (Computation sI).(0+1) = Following (Computation sI).0 by AMI_1:def 19
       .= Following sI by AMI_1:def 19
-      .= Exec(CurInstr sI, sI)
-      .= Exec(sI.IC sI, sI)
       .= Exec(sI.insloc 0, sI) by A4,SCMFSA6B:34
       .= Exec(i, sI) by A2,A4,GRFUNC_1:8;
 
@@ -1943,8 +1865,7 @@ A23: (Computation sI).(0+1) = Following (Computation sI).0 by AMI_1:def 19
    per cases by A24,SCMFSA6B:32;
    suppose A25: IC1 = insloc 0;
 then A26: CurInstr((Computation sI).1)
-      = Exec(i, sI).insloc 0 by A23
-     .= sI.insloc 0 by AMI_1:def 13
+      = sI.insloc 0 by  A23,AMI_1:def 13
      .= i by A2,A4,GRFUNC_1:8;
 A27: Exec(i, sI).IC SCM+FSA = insloc 0 by A23,A25;
 A28: Next IC sI = Next insloc 0 by A4,SCMFSA6B:34
@@ -2010,8 +1931,7 @@ then sI is non halting by AMI_1:def 20;
    suppose
       IC1 = insloc 1;
 then A43: CurInstr((Computation sI).1)
-      = Exec(i, sI).insloc 1 by A23
-     .= sI.insloc 1 by AMI_1:def 13
+      = sI.insloc 1 by  A23,AMI_1:def 13
      .= halt SCM+FSA by A3,A4,GRFUNC_1:8;
    then sI is halting by AMI_1:def 20;
  hence thesis by A5,A23,A43,AMI_1:def 22;
@@ -2176,8 +2096,7 @@ proof
    set i1 = a := b;
    set i2 = b := FirstNotUsed Macro (a := b);
  thus UsedInt*Loc swap(a, b)
-  = UsedInt*Loc (i0 ';' i1 ';' i2)
- .= (UsedInt*Loc (i0 ';' i1)) \/ (UsedInt*Loc i2) by SF_MASTR:50
+  = (UsedInt*Loc (i0 ';' i1)) \/ (UsedInt*Loc i2) by SF_MASTR:50
  .= (UsedInt*Loc (i0 ';' i1)) \/ {} by SF_MASTR:36
  .= (UsedInt*Loc i0) \/ (UsedInt*Loc i1) by SF_MASTR:51
  .= (UsedInt*Loc i0) \/ {} by SF_MASTR:36

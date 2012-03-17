@@ -43,6 +43,7 @@
 <ArticleID name="MSAFREE2"/>
 <ArticleID name="FUNCT_4"/>
 <ArticleID name="FRAENKEL"/>
+<ArticleID name="XBOOLEAN"/>
 <ArticleID name="MARGREL1"/>
 <ArticleID name="CIRCCOMB"/>
 </Signature>
@@ -58,61 +59,61 @@
 <Adjective nr="8">
 <Func kind="K" nr="119">
 <LocusVar nr="1"/>
-<Func kind="K" nr="376"/>
+<Func kind="K" nr="385"/>
 </Func>
-<Func kind="K" nr="376"/>
+<Func kind="K" nr="385"/>
 </Adjective>
 </Cluster>
 <Func kind="K" nr="119">
 <LocusVar nr="1"/>
-<Func kind="K" nr="376"/>
+<Func kind="K" nr="385"/>
 </Func>
-<Func kind="K" nr="376"/>
+<Func kind="K" nr="385"/>
 </Typ>
 <Typ kind="M" nr="45">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="375">
+<Func kind="K" nr="384">
 <LocusVar nr="1"/>
-<Func kind="K" nr="376"/>
+<Func kind="K" nr="385"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
 </Func>
 <Cluster>
 <Adjective nr="77">
-<Func kind="K" nr="373">
+<Func kind="K" nr="382">
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
 </Func>
 </Adjective>
 <Adjective nr="78">
-<Func kind="K" nr="373">
+<Func kind="K" nr="382">
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
 </Func>
 </Adjective>
 <Adjective nr="103">
-<Func kind="K" nr="373">
+<Func kind="K" nr="382">
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
 </Func>
 </Adjective>
 <Adjective nr="104">
-<Func kind="K" nr="373">
+<Func kind="K" nr="382">
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
 </Func>
 </Adjective>
 <Adjective nr="112">
-<Func kind="K" nr="373">
+<Func kind="K" nr="382">
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
 </Func>
 </Adjective>
 <Adjective nr="114">
-<Func kind="K" nr="373">
+<Func kind="K" nr="382">
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
 </Func>

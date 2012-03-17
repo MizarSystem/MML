@@ -9,7 +9,7 @@ environ
  vocabularies PRE_TOPC, SGRAPH1, FUNCT_1, RELAT_1, SUBSET_1, VECTSP_1,
       REALSET1, GROUP_1, ORDINAL2, TOPS_2, CONNSP_2, TOPS_1, BOOLE, FUNCT_2,
       BINOP_1, UNIALG_1, URYSOHN1, COMPTS_1, SETFAM_1, PCOMPS_1, TARSKI,
-      TOPGRP_1, RLVECT_3, SEQ_1;
+      TOPGRP_1, RLVECT_3, SEQ_1, T_0TOPSP;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, TOPS_2, FUNCT_1,
       RELSET_1, PARTFUN1, FUNCT_2, BINOP_1, SETFAM_1, GRCAT_1, REALSET2,
       GROUP_2, DOMAIN_1, STRUCT_0, PRE_TOPC, GROUP_1, CONNSP_2, TOPS_1,
@@ -17,23 +17,23 @@ environ
  constructors MEMBERED, TOPS_1, TOPS_2, COMPTS_1, REALSET2, GROUP_2, BORSUK_1,
       GRCAT_1, URYSOHN1, T_0TOPSP, CANTOR_1, YELLOW_8;
  registrations BORSUK_1, BORSUK_2, STRUCT_0, GROUP_1, TEX_1, GRCAT_1, PCOMPS_1,
-      TOPS_1, RELSET_1, SUBSET_1, FUNCT_2, PARTFUN1, XBOOLE_0, COMPTS_1;
+      TOPS_1, RELSET_1, SUBSET_1, FUNCT_2, PARTFUN1, XBOOLE_0, COMPTS_1,
+      YELLOW12, RELAT_1;
  requirements SUBSET, BOOLE;
  definitions TARSKI, FUNCT_1, PRE_TOPC, GROUP_1, STRUCT_0, TOPS_1, TOPS_2,
       REALSET2, CONNSP_2, FUNCT_2, T_0TOPSP, XBOOLE_0, BINOP_1, SUBSET_1,
-      COMPTS_1;
+      COMPTS_1, GRCAT_1;
  theorems PRE_TOPC, RELAT_1, TOPS_1, TOPS_2, TMAP_1, BINOP_1, FUNCT_2, GROUP_1,
-      GROUP_2, TARSKI, FUNCT_1, GRCAT_1, BORSUK_1, REALSET2, TEX_2, ZFMISC_1,
-      CONNSP_2, URYSOHN1, WAYBEL15, T_0TOPSP, YELLOW_8, YELLOW_9, XBOOLE_0,
-      XBOOLE_1;
+      GROUP_2, TARSKI, FUNCT_1, BORSUK_1, REALSET2, TEX_2, ZFMISC_1, CONNSP_2,
+      URYSOHN1, WAYBEL15, T_0TOPSP, YELLOW_8, YELLOW_9, XBOOLE_0, XBOOLE_1,
+      STRUCT_0;
  schemes BINOP_1, FUNCT_2, XBOOLE_0;
 
 begin  :: Preliminaries
 
-reserve S for 1-sorted,
-        R for non empty 1-sorted,
+reserve S, R for 1-sorted,
         X for Subset of R,
-        T for non empty TopStruct,
+        T for TopStruct,
         x for set;
 
 registration let X be set;
@@ -49,16 +49,15 @@ end;
 theorem Th1:
  rng id S = [#]S
   proof
-    thus rng id S = rng id the carrier of S by GRCAT_1:def 11
-                 .= the carrier of S by RELAT_1:71
-                 .= [#]S;
+    thus rng id S = [#]S by RELAT_1:71;
   end;
 
-registration let R be non empty 1-sorted;
+registration let R be 1-sorted;
  cluster (id R)/" -> one-to-one;
 coherence
   proof
-        dom (id R) = [#]R & rng (id R) = [#]R by Th1,FUNCT_2:def 1;
+    the carrier of R <> {} implies the carrier of R <> {};
+    then dom (id R) = [#]R & rng (id R) = [#]R by Th1,FUNCT_2:def 1;
     hence thesis by TOPS_2:63;
   end;
 end;
@@ -66,18 +65,18 @@ end;
 theorem Th2:
  (id R)/" = id R
   proof
-        dom (id R) = [#]R & rng (id R) = [#]R by Th1,FUNCT_2:def 1;
-    hence (id R)/" = (id R qua Function)" by TOPS_2:def 4
-      .= (id the carrier of R)" by GRCAT_1:def 11
-      .= id the carrier of R by FUNCT_1:67
-      .= id R by GRCAT_1:def 11;
+    the carrier of R <> {} implies the carrier of R <> {};
+    then dom (id R) = [#]R & rng (id R) = [#]R by Th1,FUNCT_2:def 1;
+    hence (id R)/" = (id the carrier of R)" by TOPS_2:def 4
+      .= id R by FUNCT_1:67;
   end;
 
 theorem
-     (id R)"X = X
+  (id R)"X = X
   proof
 A1: (id R)/" = id R by Th2;
-        dom id R = [#]R & rng id R = [#]R by Th1,FUNCT_2:def 1;
+    the carrier of R <> {} implies the carrier of R <> {};
+    then dom id R = [#]R & rng id R = [#]R by Th1,FUNCT_2:def 1;
     then (id R).:X = ((id R)/")"X by TOPS_2:67;
     hence thesis by A1,WAYBEL15:3;
   end;
@@ -88,8 +87,7 @@ existence
   proof
     take id S;
     thus id S is one-to-one;
-    thus rng id S = rng id the carrier of S by GRCAT_1:def 11
-        .= the carrier of S by RELAT_1:71;
+    thus rng id S = the carrier of S by RELAT_1:71;
   end;
 end;
 
@@ -100,7 +98,7 @@ reserve H for non empty HGrStr,
         h for Element of H;
 
 theorem Th4:
- P c= P1 & Q c= Q1 implies P * Q c= P1 * Q1
+  P c= P1 & Q c= Q1 implies P * Q c= P1 * Q1
   proof
     assume
 A1:   P c= P1 & Q c= Q1;
@@ -112,7 +110,7 @@ A2:   x = g * t & g in P & t in Q by GROUP_2:12;
   end;
 
 theorem Th5:
- P c= Q implies P * h c= Q * h
+  P c= Q implies P * h c= Q * h
   proof
     assume
 A1:   P c= Q;
@@ -124,7 +122,7 @@ A2:   x = g * h & g in P by GROUP_2:34;
   end;
 
 theorem
-     P c= Q implies h * P c= h * Q
+  P c= Q implies h * P c= h * Q
   proof
     assume
 A1:   P c= Q;
@@ -156,7 +154,7 @@ A3:   a" in A;
   end;
 
 theorem Th8:
- A"" = A
+  A"" = A
   proof
 A1: A"" = {g" where g is Element of G: g in A"}
       by GROUP_2:def 1;
@@ -179,7 +177,7 @@ A5:   x in A;
   end;
 
 theorem Th9:
- A c= B iff A" c= B"
+  A c= B iff A" c= B"
   proof
 A1: A" = {g" where g is Element of G: g in A} by GROUP_2:def 1;
 A2: B" = {g" where g is Element of G: g in B} by GROUP_2:def 1;
@@ -208,7 +206,7 @@ A9:     a = g" & g in A" by A6,A7;
   end;
 
 theorem Th10:
- (inverse_op G).:A = A"
+  (inverse_op G).:A = A"
   proof
     set f = inverse_op G;
 A1: A" = {g" where g is Element of G: g in A}
@@ -231,7 +229,7 @@ A3:   y = g" & g in A by A1;
   end;
 
 theorem Th11:
- (inverse_op G)"A = A"
+  (inverse_op G)"A = A"
   proof
     set f = inverse_op G;
 A1: dom f = the carrier of G by FUNCT_2:def 1;
@@ -254,7 +252,7 @@ A3:   x = g" & g in A by GROUP_2:5;
   end;
 
 theorem Th12:
- inverse_op G is one-to-one
+  inverse_op G is one-to-one
   proof
     set f = inverse_op G;
     let x1, x2 be set; assume
@@ -265,7 +263,7 @@ A1:   x1 in dom f & x2 in dom f & f.x1 = f.x2;
   end;
 
 theorem Th13:
- rng inverse_op G = the carrier of G
+  rng inverse_op G = the carrier of G
   proof
     set f = inverse_op G;
     thus rng f c= the carrier of G;
@@ -288,7 +286,7 @@ coherence
 end;
 
 theorem Th14:
- (inverse_op G)" = inverse_op G
+  (inverse_op G)" = inverse_op G
   proof
     set f = inverse_op G;
 A1: dom f = the carrier of G & dom (f") = the carrier of G by FUNCT_2:def 1;
@@ -305,7 +303,7 @@ A2:   f.(g") = g"" by GROUP_1:def 7
   end;
 
 theorem Th15:
- (the mult of H).:[:P,Q:] = P*Q
+  (the mult of H).:[:P,Q:] = P*Q
   proof
     set f = the mult of H;
 A1: P*Q = {g * h where g, h is Element of H: g in P & h in Q}
@@ -319,8 +317,7 @@ A2:     x in [:the carrier of H,the carrier of H:] & x in [:P,Q:] & y = f.x
       consider a, b being set such that
 A3:     a in P & b in Q & x = [a,b] by A2,ZFMISC_1:def 2;
       reconsider a, b as Element of H by A3;
-          y = f.(a,b) by A2,A3
-       .= a*b;
+          y = a*b by A2,A3;
       hence y in P*Q by A1,A3;
     end;
     let y be set;
@@ -329,8 +326,7 @@ A3:     a in P & b in Q & x = [a,b] by A2,ZFMISC_1:def 2;
 A4:   y = g*h & g in P & h in Q by A1;
 A5: [g,h] in [:the carrier of H, the carrier of H:] &
      [g,h] in [:P,Q:] by A4,ZFMISC_1:106;
-        y = f.(g,h) by A4
-     .= f. [g,h];
+        y = f. [g,h] by A4;
     hence y in f.:[:P,Q:] by A5,FUNCT_2:43;
   end;
 
@@ -443,7 +439,7 @@ A6:   f.y1 = y1 * a & f.y2 = y2 * a by Def2;
 end;
 
 theorem Th16:
- h*.:P = h * P
+  h*.:P = h * P
   proof
     set f = h*;
 A1: dom f = the carrier of H by FUNCT_2:def 1;
@@ -465,7 +461,7 @@ A3:   y = h * s & s in P by GROUP_2:33;
   end;
 
 theorem Th17:
- (*h).:P = P * h
+  (*h).:P = P * h
   proof
     set f = *h;
 A1: dom f = the carrier of H by FUNCT_2:def 1;
@@ -487,7 +483,7 @@ A3:   y = s * h & s in P by GROUP_2:34;
   end;
 
 theorem Th18:
- a*/" = a"*
+  a*/" = a"*
   proof
     set f = a*,
         g = a"*;
@@ -497,25 +493,25 @@ A1: dom (f/") = the carrier of G & dom g = the carrier of G by FUNCT_2:def 1;
       assume y in the carrier of G;
       then reconsider y1 = y as Element of G;
       reconsider h = f as Function;
-A2:   rng f = the carrier of G by FUNCT_2:def 3;
-then A3:   y1 in rng f;
+      rng f = the carrier of G by FUNCT_2:def 3;
+      then A2:   y1 in rng f;
           dom f = the carrier of G by FUNCT_2:def 1;
-then A4:   g.y1 in dom f & f/".y1 in dom f;
-A5:   rng f = [#]G by A2;
+then A3:   g.y1 in dom f & f/".y1 in dom f;
+A4:   rng f = [#]G by FUNCT_2:def 3;
           f.(g.y) = a*(g.y1) by Def1
              .= a*(a"*y1) by Def1
              .= a*a"*y1 by GROUP_1:def 4
              .= 1.G*y1 by GROUP_1:def 6
              .= y by GROUP_1:def 5
-             .= h.(h".y) by A3,FUNCT_1:57
-             .= f.(f/".y) by A5,TOPS_2:def 4;
-      hence f/".y = g.y by A4,FUNCT_1:def 8;
+             .= h.(h".y) by A2,FUNCT_1:57
+             .= f.(f/".y) by A4,TOPS_2:def 4;
+      hence f/".y = g.y by A3,FUNCT_1:def 8;
     end;
     hence thesis by A1,FUNCT_1:9;
   end;
 
 theorem Th19:
- (*a)/" = *(a")
+  (*a)/" = *(a")
   proof
     set f = *a,
         g = *(a");
@@ -525,34 +521,35 @@ A1: dom (f/") = the carrier of G & dom g = the carrier of G by FUNCT_2:def 1;
       assume y in the carrier of G;
       then reconsider y1 = y as Element of G;
       reconsider h = f as Function;
-A2:   rng f = the carrier of G by FUNCT_2:def 3;
-then A3:   y1 in rng f;
+      rng f = the carrier of G by FUNCT_2:def 3;
+then A2:   y1 in rng f;
           dom f = the carrier of G by FUNCT_2:def 1;
-then A4:   g.y1 in dom f & f/".y1 in dom f;
-A5:   rng f = [#]G by A2;
+then A3:   g.y1 in dom f & f/".y1 in dom f;
+A4:   rng f = [#]G by FUNCT_2:def 3;
           f.(g.y) = (g.y1)*a by Def2
              .= y1*a"*a by Def2
              .= y1*(a"*a) by GROUP_1:def 4
              .= y1*(1.G) by GROUP_1:def 6
              .= y by GROUP_1:def 5
-             .= h.(h".y) by A3,FUNCT_1:57
-             .= f.(f/".y) by A5,TOPS_2:def 4;
-      hence f/".y = g.y by A4,FUNCT_1:def 8;
+             .= h.(h".y) by A2,FUNCT_1:57
+             .= f.(f/".y) by A4,TOPS_2:def 4;
+      hence f/".y = g.y by A3,FUNCT_1:def 8;
     end;
     hence thesis by A1,FUNCT_1:9;
   end;
 
 begin  :: On the topological spaces
 
-registration let T be non empty TopStruct;
+registration let T be TopStruct;
  cluster (id T)/" -> continuous;
 coherence by Th2;
 end;
 
 theorem Th20:
- id T is_homeomorphism
+  id T is_homeomorphism
   proof
-    thus dom id T = [#]T & rng id T = [#]T by Th1,FUNCT_2:def 1;
+    the carrier of T <> {} implies the carrier of T <> {};
+    hence dom id T = [#]T & rng id T = [#]T by Th1,FUNCT_2:def 1;
     thus thesis;
   end;
 
@@ -562,19 +559,18 @@ coherence
   proof
     let N be a_neighborhood of p;
 A1: p in Int N by CONNSP_2:def 1;
-        Int N c= N by TOPS_1:44;
+    Int N c= N by TOPS_1:44;
     hence thesis by A1;
   end;
 end;
 
 theorem Th21:
- for T being non empty TopSpace, p being Point of T holds
+  for T being non empty TopSpace, p being Point of T holds
   [#]T is a_neighborhood of p
   proof
     let T be non empty TopSpace,
         p be Point of T;
-        Int [#]T = [#]T by TOPS_1:43
-          .= the carrier of T;
+        Int [#]T = the carrier of T by TOPS_1:43;
     hence p in Int [#]T;
   end;
 
@@ -589,8 +585,8 @@ existence
 end;
 
 theorem
-     for S, T being non empty TopSpace, f being Function
- of S, T st f is open holds
+  for S, T being non empty TopSpace,
+  f being Function of S, T st f is open holds
   for p being Point of S, P being a_neighborhood of p
    ex R being open a_neighborhood of f.p st R c= f.:P
   proof
@@ -601,15 +597,15 @@ A1:     for A being Subset of S st A is open holds f.:A is open;
 A2: f.:Int P is open by A1;
         p in Int P by CONNSP_2:def 1;
     then f.p in f.:Int P by FUNCT_2:43;
-    then reconsider R = f.:Int P as open a_neighborhood of f.p by A2,CONNSP_2:5
-;
+    then reconsider R = f.:Int P as open a_neighborhood of f.p
+    by A2,CONNSP_2:5;
     take R;
-        Int P c= P by TOPS_1:44;
+    Int P c= P by TOPS_1:44;
     hence R c= f.:P by RELAT_1:156;
   end;
 
 theorem
-     for S, T being non empty TopSpace, f being Function of S, T st
+  for S, T being non empty TopSpace, f being Function of S, T st
    for p being Point of S, P being open a_neighborhood of p
     ex R being a_neighborhood of f.p st R c= f.:P
   holds f is open
@@ -647,7 +643,7 @@ A6:     f.:V c= f.:A by A4,RELAT_1:156;
   end;
 
 theorem
-     for S, T being non empty TopStruct, f being Function of S, T holds
+  for S, T being non empty TopStruct, f being Function of S, T holds
   f is_homeomorphism iff dom f = [#]S & rng f = [#]T & f is one-to-one &
    for P being Subset of T holds P is closed iff f"P is closed
   proof
@@ -688,7 +684,7 @@ A8: (f/")"R = f.:R by A5,TOPS_2:67;
   end;
 
 theorem Th25:
- for S, T being non empty TopStruct, f being Function of S, T holds
+  for S, T being non empty TopStruct, f being Function of S, T holds
   f is_homeomorphism iff dom f = [#]S & rng f = [#]T & f is one-to-one &
    for P being Subset of S holds P is open iff f.:P is open
   proof
@@ -710,8 +706,7 @@ A5:      P is open;
       assume f.:P is open;
 then A6:   f"(f.:P) is open by A2,TOPS_2:55;
 A7:   f"(f.:P) c= P by A4,FUNCT_1:152;
-          P c= dom f by A4;
-      then P c= f"(f.:P) by FUNCT_1:146;
+      P c= f"(f.:P) by A4,FUNCT_1:146;
       hence P is open by A6,A7,XBOOLE_0:def 10;
     end;
     assume that
@@ -721,8 +716,7 @@ A10:  for P being Subset of S holds P is open iff f.:P is open;
         now
       let B be Subset of T such that
 A11:     B is open;
-          B c= rng f by A8;
-      then B = f.:f"B by FUNCT_1:147;
+         B = f.:f"B by A8,FUNCT_1:147;
       hence f"B is open by A10,A11;
     end;
 then A12: f is continuous by TOPS_2:55;
@@ -738,7 +732,7 @@ A13:     B is open;
   end;
 
 theorem
-     for S, T being non empty TopStruct, f being Function of S, T holds
+  for S, T being non empty TopStruct, f being Function of S, T holds
   f is_homeomorphism iff dom f = [#]S & rng f = [#]T & f is one-to-one &
    for P being Subset of T holds P is open iff f"P is open
   proof
@@ -777,8 +771,8 @@ A8:   (f/")"R = f.:R by A5,TOPS_2:67;
   end;
 
 theorem
-     for S being TopSpace, T being non empty TopSpace, f being Function of S, T
-holds
+  for S being TopSpace, T being non empty TopSpace, f being Function of S, T
+  holds
   f is continuous iff
   for P being Subset of T holds f"(Int P) c= Int(f"P)
   proof
@@ -818,7 +812,7 @@ existence
 end;
 
 theorem Th28:
- for S, T being non empty TopSpace, f being Function of S, T,
+  for S, T being non empty TopSpace, f being Function of S, T,
      A being dense Subset of S st f is_homeomorphism
   holds f.:A is dense
   proof
@@ -828,13 +822,12 @@ theorem Th28:
 A1:   f is_homeomorphism;
 A2: Cl A = [#]S by TOPS_1:def 3;
 A3: rng f = [#]T by A1,TOPS_2:def 5;
-    thus Cl (f.:A) = f.:(Cl A) by A1,TOPS_2:74
-                 .= f.:the carrier of S by A2
+    thus Cl (f.:A) = f.:the carrier of S by  A1,TOPS_2:74,A2
                  .= [#]T by A3,FUNCT_2:45;
   end;
 
 theorem Th29:
- for S, T being non empty TopSpace, f being Function of S, T,
+  for S, T being non empty TopSpace, f being Function of S, T,
      A being dense Subset of T st f is_homeomorphism
   holds f"A is dense
   proof
@@ -847,9 +840,8 @@ A2: Cl A = [#]T by TOPS_1:def 3;
                  .= [#]S by A2,TOPS_2:52;
   end;
 
-registration let S, T be non empty TopStruct;
- cluster being_homeomorphism -> onto one-to-one continuous open Function
- of S, T;
+registration let S, T be TopStruct;
+ cluster being_homeomorphism -> onto one-to-one continuous Function of S, T;
 coherence
   proof
     let f be Function of S, T; assume
@@ -857,12 +849,21 @@ A1:   f is_homeomorphism;
     then rng f = [#]T & dom f = [#]S by TOPS_2:def 5;
     hence rng f = the carrier of T;
     thus f is one-to-one continuous by A1,TOPS_2:def 5;
+  end;
+end;
+
+registration let S, T be non empty TopStruct;
+ cluster being_homeomorphism -> open Function of S, T;
+coherence
+  proof
+    let f be Function of S, T; assume
+A1:   f is_homeomorphism;
     let A be Subset of S;
     thus thesis by A1,Th25;
   end;
 end;
 
-registration let T be non empty TopStruct;
+registration let T be TopStruct;
  cluster being_homeomorphism Function of T, T;
 existence
   proof
@@ -871,25 +872,76 @@ existence
   end;
 end;
 
-registration let T be non empty TopStruct,
+registration let T be TopStruct,
                f be being_homeomorphism Function of T, T;
  cluster f/" -> being_homeomorphism;
-coherence by TOPS_2:70;
+coherence
+proof
+  per cases;
+  suppose T is non empty;
+    hence thesis by TOPS_2:70;
+  end;
+  suppose T is empty;
+    then
+A1: the carrier of T is empty by STRUCT_0:def 1;
+    then
+A2: dom f = {} by FUNCT_2:def 1;
+    then dom (f~) = dom {} by RELAT_1:64,66;
+    then
+A3: dom (f") = {} by FUNCT_1:def 9;
+    rng f = [#]T by A2,A1,RELAT_1:60,64;
+    then f/" = f" by TOPS_2:def 4
+    .= id T by A3,A1,RELAT_1:64,81;
+    hence thesis by Th20;
+  end;
+end;
 end;
 
 begin  :: The group of homoemorphisms
 
-definition let T be non empty TopStruct;
- mode Homeomorphism of T -> Function of T, T means :Def3:
+definition let S,T be TopStruct;
+  assume
+A1: S,T are_homeomorphic;
+  mode Homeomorphism of S,T -> Function of S,T means :Def3:
   it is_homeomorphism;
-existence
-  proof
-    take id T;
-    thus thesis by Th20;
+  existence by A1,T_0TOPSP:def 1;
+end;
+
+definition let T be TopStruct;
+ mode Homeomorphism of T -> Function of T,T means :Def4:
+ it is_homeomorphism;
+ existence
+ proof
+A1: id T is_homeomorphism by Th20;
+   then T,T are_homeomorphic by T_0TOPSP:def 1;
+   then reconsider f = id T as Homeomorphism of T,T by A1,Def3;
+   f is_homeomorphism by Th20;
+   hence thesis;
   end;
 end;
 
-definition let T be non empty TopStruct;
+definition let T be TopStruct;
+ redefine mode Homeomorphism of T -> Homeomorphism of T,T;
+ coherence
+ proof
+   let f be Homeomorphism of T;
+A1: f is_homeomorphism by Def4;
+   then T,T are_homeomorphic by T_0TOPSP:def 1;
+   hence thesis by A1,Def3;
+  end;
+end;
+
+definition let T be TopStruct;
+ redefine func id T -> Homeomorphism of T,T;
+coherence
+  proof
+    id T is_homeomorphism by Th20;
+    hence T,T are_homeomorphic by T_0TOPSP:def 1;
+    thus id T is_homeomorphism by Th20;
+  end;
+end;
+
+definition let T be TopStruct;
  redefine func id T -> Homeomorphism of T;
 coherence
   proof
@@ -897,35 +949,50 @@ coherence
   end;
 end;
 
-registration let T be non empty TopStruct;
+registration let T be TopStruct;
  cluster -> being_homeomorphism Homeomorphism of T;
-coherence by Def3;
+coherence by Def4;
 end;
 
 theorem Th30:
- for f being Homeomorphism of T holds f/" is Homeomorphism of T
+  for f being Homeomorphism of T holds f/" is Homeomorphism of T
   proof
     let f be Homeomorphism of T;
     thus f/" is_homeomorphism;
   end;
 
+Lm1:
+     for T being TopStruct, f be Function of T,T st T is empty holds
+     f is_homeomorphism
+     proof
+       let T be TopStruct;
+       let f be Function of T,T;
+       assume
+A1:    T is empty;
+       then the carrier of T is empty by STRUCT_0:def 1;
+       then dom f = {} by FUNCT_2:def 1;
+       then f = {} by RELAT_1:64
+       .= id T by A1,RELAT_1:81,STRUCT_0:def 1;
+       hence f is_homeomorphism;
+     end;
+
 theorem Th31:
- for f, g being Homeomorphism of T holds f * g is Homeomorphism of T
+  for f, g being Homeomorphism of T holds f * g is Homeomorphism of T
   proof
     let f, g be Homeomorphism of T;
-    thus f * g is_homeomorphism by TOPS_2:71;
+    T is non empty or T is empty;
+    hence f*g is_homeomorphism by Lm1,TOPS_2:71;
   end;
 
-definition let T be non empty TopStruct;
- func HomeoGroup T -> strict HGrStr means :Def4:
+definition let T be TopStruct;
+ func HomeoGroup T -> strict HGrStr means :Def5:
   (x in the carrier of it iff x is Homeomorphism of T) &
   for f, g being Homeomorphism of T holds (the mult of it).(f,g) = g * f;
 existence
   proof defpred X[set] means $1 is Homeomorphism of T;
     consider A being set such that
 A1:   for q being set holds q in A iff
-       q in Funcs(the carrier of T,the carrier of T) & X[q] from XBOOLE_0:sch 1
-;
+      q in Funcs(the carrier of T,the carrier of T) & X[q] from XBOOLE_0:sch 1;
 A2: now
       let f be Homeomorphism of T;
           f in Funcs(the carrier of T, the carrier of T) by FUNCT_2:12;
@@ -982,21 +1049,21 @@ A9: the carrier of A = the carrier of B from XBOOLE_0:sch 2(A7,A8);
   end;
 end;
 
-registration let T be non empty TopStruct;
+registration let T be TopStruct;
  cluster HomeoGroup T -> non empty;
 coherence
   proof
-        id T is Homeomorphism of T;
-    hence the carrier of HomeoGroup T is non empty by Def4;
+    id T is Homeomorphism of T;
+    hence the carrier of HomeoGroup T is non empty by Def5;
   end;
 end;
 
 theorem
-     for f, g being Homeomorphism of T
+  for f, g being Homeomorphism of T
   for a, b being Element of HomeoGroup T st f = a & g = b holds
-   a * b = g * f by Def4;
+   a * b = g * f by Def5;
 
-registration let T be non empty TopStruct;
+registration let T be TopStruct;
  cluster HomeoGroup T -> Group-like associative;
 coherence
   proof
@@ -1004,100 +1071,80 @@ coherence
         o = the mult of G;
     thus G is Group-like
     proof
-      reconsider e = id T as Element of G by Def4;
+      reconsider e = id T as Element of G by Def5;
       take e;
       let h be Element of G;
-      reconsider h1 = h, e1 = e as Homeomorphism of T by Def4;
-      thus h * e = o.(h,e)
-                .= e1 * h1 by Def4
+      reconsider h1 = h, e1 = e as Homeomorphism of T by Def5;
+      thus h * e = e1 * h1 by Def5
                 .= h by TMAP_1:93;
-      thus e * h = o.(e,h)
-                .= h1 * e1 by Def4
+      thus e * h = h1 * e1 by Def5
                 .= h by TMAP_1:93;
-      reconsider h1 = h as Homeomorphism of T by Def4;
+      reconsider h1 = h as Homeomorphism of T by Def5;
           h1/" is Homeomorphism of T by Th30;
-      then reconsider g = h1/" as Element of G by Def4;
+      then reconsider g = h1/" as Element of G by Def5;
       take g;
-      reconsider g1 = g as Homeomorphism of T by Def4;
+      reconsider g1 = g as Homeomorphism of T by Def5;
 A1:   dom h1 = [#]T & rng h1 = [#]T by TOPS_2:def 5;
-      thus h * g = o.(h,g)
-                .= g1 * h1 by Def4
-                .= id [#]T by A1,TOPS_2:65
-                .= id the carrier of T
-                .= e by GRCAT_1:def 11;
-      thus g * h = o.(g,h)
-                .= h1 * g1 by Def4
-                .= id [#]T by A1,TOPS_2:65
-                .= id the carrier of T
-                .= e by GRCAT_1:def 11;
+      thus h * g = g1 * h1 by Def5
+                .= e by A1,TOPS_2:65;
+      thus g * h = h1 * g1 by Def5
+                .= e by A1,TOPS_2:65;
     end;
     let x, y, z be Element of G;
-    reconsider f = x, g = y as Homeomorphism of T by Def4;
-    reconsider p = g*f, r = z as Homeomorphism of T by Def4,Th31;
+    reconsider f = x, g = y as Homeomorphism of T by Def5;
+    reconsider p = g*f, r = z as Homeomorphism of T by Def5,Th31;
     reconsider a = r*g as Homeomorphism of T by Th31;
-    thus (x*y)*z = o.(x*y,z)
-                .= o.(o.(x,y),z)
-                .= o.(g*f,z) by Def4
-                .= r * p by Def4
+    thus (x*y)*z = o.(g*f,z) by Def5
+                .= r * p by Def5
                 .= (r * g) * f by RELAT_1:55
-                .= o.(f,a) by Def4
-                .= o.(x,o.(y,z)) by Def4
-                .= o.(x,y*z)
-                .= x*(y*z);
+                .= o.(f,a) by Def5
+                .= x*(y*z) by Def5;
   end;
 end;
 
 theorem Th33:
- id T = 1.HomeoGroup T
+  id T = 1.HomeoGroup T
   proof
     set G = HomeoGroup T;
-    reconsider e = id T as Element of G by Def4;
+    reconsider e = id T as Element of G by Def5;
         now
       let h be Element of G;
-      reconsider h1 = h as Homeomorphism of T by Def4;
-      thus h * e = (the mult of G).(h,e)
-                .= id T * h1 by Def4
+      reconsider h1 = h as Homeomorphism of T by Def5;
+      thus h * e = id T * h1 by Def5
                 .= h by TMAP_1:93;
-      thus e * h = (the mult of G).(e,h)
-                .= h1 * id T by Def4
+      thus e * h = h1 * id T by Def5
                 .= h by TMAP_1:93;
     end;
     hence id T = 1.HomeoGroup T by GROUP_1:10;
   end;
 
 theorem
-     for f being Homeomorphism of T
+  for f being Homeomorphism of T
   for a being Element of HomeoGroup T st f = a holds a" = f/"
   proof
-    let f be Homeomorphism of T,
-        a be Element of HomeoGroup T such that
+    let f be Homeomorphism of T;
+    let a be Element of HomeoGroup T such that
 A1:   f = a;
     set G = HomeoGroup T;
 A2: f/" is Homeomorphism of T
     proof
       thus f/" is_homeomorphism;
     end;
-    then reconsider g = f/" as Element of G by Def4;
+    then reconsider g = f/" as Element of G by Def5;
         now
 A3:   dom f = [#]T & rng f = [#]T by TOPS_2:def 5;
-      thus a * g = (the mult of G).(a,g)
-                .= f/" * f by A1,A2,Def4
-                .= id [#]T by A3,TOPS_2:65
-                .= id the carrier of T
-                .= id T by GRCAT_1:def 11
+      thus a * g = f/" * f by A1,A2,Def5
+                .= id T by A3,TOPS_2:65
                 .= 1.G by Th33;
-      thus g * a = (the mult of G).(g,a)
-                .= f * (f/") by A1,A2,Def4
-                .= id [#]T by A3,TOPS_2:65
-                .= id the carrier of T
-                .= id T by GRCAT_1:def 11
+      thus g * a = f * (f/") by A1,A2,Def5
+                .= id T by A3,TOPS_2:65
                 .= 1.G by Th33;
     end;
     hence a" = f/" by GROUP_1:12;
   end;
 
-definition let T be non empty TopStruct;
- attr T is homogeneous means :Def5:
+definition let T be TopStruct;
+ attr T is homogeneous means :Def6:
   for p, q being Point of T ex f being Homeomorphism of T st f.p = q;
 end;
 
@@ -1124,7 +1171,7 @@ existence
 end;
 
 theorem
-     for T being homogeneous (non empty TopSpace) st
+  for T being homogeneous (non empty TopSpace) st
   ex p being Point of T st {p} is closed holds T is_T1
   proof
     let T be homogeneous (non empty TopSpace);
@@ -1133,7 +1180,7 @@ A1:   {p} is closed;
         now
       let q be Point of T;
       consider f being Homeomorphism of T such that
-A2:     f.p = q by Def5;
+A2:     f.p = q by Def6;
           dom f = the carrier of T by FUNCT_2:def 1;
       then f.:{p} = {f.p} by FUNCT_1:117;
       hence {q} is closed by A1,A2,TOPS_2:72;
@@ -1142,7 +1189,7 @@ A2:     f.p = q by Def5;
   end;
 
 theorem Th36:
- for T being homogeneous (non empty TopSpace) st
+  for T being homogeneous (non empty TopSpace) st
   ex p being Point of T st for A being Subset of T st A is open & p in A holds
    ex B being Subset of T st p in B & B is open & Cl B c= A
   holds T is_T3
@@ -1156,11 +1203,10 @@ A1:   for A being Subset of T st A is open & p in A holds
           q be Point of T such that
 A2:     q in A;
       consider f being Homeomorphism of T such that
-A3:     f.p = q by Def5;
+A3:     f.p = q by Def6;
       reconsider g = f as Function;
 A4:   dom f = the carrier of T by FUNCT_2:def 1;
-        rng f = [#]T by TOPS_2:def 5;
-then A5:   rng f = the carrier of T;
+A5:   rng f = [#]T by TOPS_2:def 5;
 A6:   p = g".q by A3,A4,FUNCT_1:54;
 A7:   g".q = f".q;
           g.(g".q) in A by A2,A5,FUNCT_1:54;
@@ -1267,12 +1313,12 @@ coherence;
 end;
 
 definition let G be Group-like associative (non empty TopGrStr);
- attr G is UnContinuous means :Def6:
+ attr G is UnContinuous means :Def7:
   inverse_op G is continuous;
 end;
 
 definition let G be TopSpace-like TopGrStr;
- attr G is BinContinuous means :Def7:
+ attr G is BinContinuous means :Def8:
   for f being Function
  of [:G,G:], G st f = the mult of G holds f is continuous;
 end;
@@ -1343,7 +1389,7 @@ theorem Th37:
         the carrier of [:T,T:] = [:the carrier of T,the carrier of T:]
       by BORSUK_1:def 5;
     then reconsider f = the mult of T as Function of [:T,T:], T;
-        f is continuous by Def7;
+        f is continuous by Def8;
     then consider H being a_neighborhood of [a,b] such that
 A1:   f.:H c= W by BORSUK_1:def 3;
 A2: [a,b] in Int H by CONNSP_2:def 1;
@@ -1393,8 +1439,7 @@ A2:   f = the mult of T;
           G be a_neighborhood of f.W;
       consider a, b being Point of T such that
 A3:     W = [a,b] by BORSUK_1:50;
-          f.W = f.(a,b) by A3
-         .= a*b by A2;
+          f.W = a*b by  A3,A2;
       then consider A being a_neighborhood of a,
                B being a_neighborhood of b such that
 A4:     A*B c= G by A1;
@@ -1416,7 +1461,7 @@ theorem Th39:
         W be a_neighborhood of a";
     reconsider f = inverse_op T as Function of T, T;
 A1: f.a = a" by GROUP_1:def 7;
-        f is continuous by Def6;
+        f is continuous by Def7;
     then consider H being a_neighborhood of a such that
 A2:   f.:H c= W by A1,BORSUK_1:def 3;
         a in Int H by CONNSP_2:def 1;
@@ -1490,7 +1535,7 @@ A7:   h = k" & k in C by A5,A6;
   end;
 
 theorem
-     for T being TopGroup st
+  for T being TopGroup st
    for a, b being Element of T,
         W being a_neighborhood of a*(b")
     ex A being a_neighborhood of a, B being a_neighborhood of b st
@@ -1609,12 +1654,9 @@ theorem Th43:
     let G be BinContinuous TopGroup,
         a be Element of G;
     set f = a*;
-        dom f = the carrier of G & rng f = the carrier of G by FUNCT_2:def 1
-,def 3
-;
-    hence dom f = [#]G & rng f = [#]G & f is one-to-one;
+    thus dom f = [#]G & rng f = [#]G & f is one-to-one by FUNCT_2:def 1,def 3;
     thus f is continuous;
-        f/" = (a"*) by Th18;
+    f/" = (a"*) by Th18;
     hence f/" is continuous;
   end;
 
@@ -1626,12 +1668,9 @@ theorem Th44:
     let G be BinContinuous TopGroup,
         a be Element of G;
     set f = *a;
-        dom f = the carrier of G & rng f = the carrier of G by FUNCT_2:def 1
-,def 3
-;
-    hence dom f = [#]G & rng f = [#]G & f is one-to-one;
+    thus dom f = [#]G & rng f = [#]G & f is one-to-one by FUNCT_2:def 1,def 3;
     thus f is continuous;
-        f/" = *(a") by Th19;
+    f/" = *(a") by Th19;
     hence f/" is continuous;
   end;
 
@@ -1648,15 +1687,12 @@ theorem Th45:
   proof
     let G be UnContinuous TopGroup;
     set f = inverse_op G;
-        dom f = the carrier of G & rng f = the carrier of G by FUNCT_2:def 1
-,def 3
-;
-    hence
-A1:   dom f = [#]G & rng f = [#]G & f is one-to-one;
-    thus f is continuous by Def6;
+    thus
+A1: dom f = [#]G & rng f = [#]G & f is one-to-one by FUNCT_2:def 1,def 3;
+    thus f is continuous by Def7;
         f = (f qua Function)" by Th14
      .= f/" by A1,TOPS_2:def 4;
-    hence f/" is continuous by Def6;
+    hence f/" is continuous by Def7;
   end;
 
 definition let G be UnContinuous TopGroup;
@@ -1932,12 +1968,9 @@ coherence by Th57;
 end;
 
 theorem
-     for G being TopologicalGroup, B being Basis of 1.G, M being dense Subset
-of
-G
+  for G being TopologicalGroup, B being Basis of 1.G, M being dense Subset of G
   holds
-{ V * x where V is Subset of G, x is Point of G: V in B & x in
- M }
+  { V * x where V is Subset of G, x is Point of G: V in B & x in M }
   is Basis of G
   proof
     let G be TopologicalGroup,
@@ -1945,16 +1978,15 @@ G
         M be dense Subset of G;
     set Z = { V * x where V is Subset of G,
               x is Point of G: V in B & x in M };
-     Z c= bool the carrier of G
+A1: Z c= bool the carrier of G
     proof
       let a be set;
       assume a in Z;
       then consider V being Subset of G,
                x being Point of G such that
-A1:     a = V*x and V in B & x in M;
-      thus thesis by A1;
+A2:     a = V*x and V in B & x in M;
+      thus thesis by A2;
     end;
-    then A2: Z is Subset-Family of G;
 A3: Z c= the topology of G
     proof
       let a be set;
@@ -2024,7 +2056,7 @@ then A16:   E*d"*a c= W*a"*a by Th5;
             .= W by GROUP_2:43;
       hence I c= W by A16,GROUP_2:40;
     end;
-    hence thesis by A2,A3,YELLOW_9:32;
+    hence thesis by A1,A3,YELLOW_9:32;
   end;
 
 theorem Th60:
@@ -2087,3 +2119,6 @@ registration
 coherence by Th60;
 end;
 
+theorem
+  for T being TopStruct, f be Function of T,T st T is empty holds
+  f is_homeomorphism by Lm1;

@@ -22,6 +22,7 @@
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FRAENKEL"/>
+<ArticleID name="XBOOLEAN"/>
 <ArticleID name="MARGREL1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="PBOOLE"/>
@@ -474,21 +475,21 @@
 <Cluster>
 <Adjective nr="7"/>
 <Adjective nr="19">
-<Func kind="K" nr="163">
+<Func kind="K" nr="172">
 <Num nr="2"/>
-<Func kind="K" nr="405"/>
+<Func kind="K" nr="414"/>
 </Func>
-<Func kind="K" nr="405"/>
+<Func kind="K" nr="414"/>
 </Adjective>
 </Cluster>
-<Func kind="K" nr="163">
+<Func kind="K" nr="172">
 <Num nr="2"/>
-<Func kind="K" nr="405"/>
+<Func kind="K" nr="414"/>
 </Func>
-<Func kind="K" nr="405"/>
+<Func kind="K" nr="414"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="418">
+<Func kind="K" nr="427">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>

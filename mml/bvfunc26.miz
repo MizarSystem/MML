@@ -8,10 +8,10 @@ environ
 
  vocabularies MARGREL1, ZF_LANG, BINARITH, FUNCT_2, VALUAT_1, RELAT_1, FUNCT_1,
       BOOLE, BVFUNC_1, BINARI_5;
- notations TARSKI, XBOOLE_0, SUBSET_1, MARGREL1, VALUAT_1, RELAT_1, FUNCT_1,
-      FRAENKEL, BINARITH, BVFUNC_1, BINARI_5;
+ notations TARSKI, XBOOLE_0, SUBSET_1, XBOOLEAN, MARGREL1, VALUAT_1, RELAT_1,
+      FUNCT_1, FRAENKEL, BVFUNC_1;
  constructors BINARITH, BVFUNC_1, BINARI_5;
- registrations MARGREL1, VALUAT_1, BINARITH, FRAENKEL, BVFUNC_1, BINARI_5;
+ registrations MARGREL1, VALUAT_1, BINARITH, FRAENKEL, BVFUNC_1, XBOOLEAN;
  requirements SUBSET, BOOLE;
  definitions TARSKI, VALUAT_1;
  theorems FUNCT_1, FUNCT_2, MARGREL1, VALUAT_1, BVFUNC_1, BVFUNC_4, BVFUNC_8,
@@ -200,7 +200,6 @@ proof
     = 'not' (a '&' b).x by VALUAT_1:def 5
    .= 'not' ((a).x '&' (b).x) by VALUAT_1:def 6
    .= 'not' ('not' ((a).x 'nand' (b).x)) by BINARI_5:4
-   .= (a).x 'nand' (b).x
    .= (a 'nand' b).x by Def3;
   end;
    consider k3 being Function such that
@@ -222,7 +221,6 @@ proof
     = 'not' (a 'or' b).x by VALUAT_1:def 5
    .= 'not' ((a).x 'or' (b).x) by BVFUNC_1:def 7
    .= 'not' 'not' ((a).x 'nor' (b).x) by BINARI_5:13
-   .= (a).x 'nor' (b).x
    .= (a 'nor' b).x by Def4;
   end;
    consider k3 being Function such that
@@ -266,15 +264,15 @@ theorem
 'not' (a 'nand' a) = a
 proof
   a 'nand' a = 'not' (a '&' a) by Th1
-            .= 'not' a by BVFUNC_1:6;
-  hence thesis by BVFUNC_1:4;
+            .= 'not' a;
+  hence thesis;
 end;
 
 theorem
  'not' (a 'nand' b) = a '&' b
 proof
   'not' (a 'nand' b) = 'not' 'not' (a '&' b) by Th1;
-  hence thesis by BVFUNC_1:4;
+  hence thesis;
 end;
 
 theorem
@@ -317,7 +315,7 @@ proof
   = 'not' (a '&' (b 'xor' c)) by Th1
  .= 'not' ((a '&' b) 'xor' (a '&' c)) by BVFUNC25:11
  .= 'not' 'not' ((a '&' b) 'eqv' (a '&' c)) by BVFUNC_8:12
- .= (a '&' b) 'eqv' (a '&' c) by BVFUNC_1:4;
+ .= (a '&' b) 'eqv' (a '&' c);
 end;
 
 theorem
@@ -328,7 +326,7 @@ proof
   = 'not' (a '&' (b 'nand' c)) by Th1
  .= 'not' (a '&' 'not' (b '&' c)) by Th1
  .= 'not' a 'or' 'not' 'not' (b '&' c) by BVFUNC_1:17
- .= 'not' a 'or' (b '&' c) by BVFUNC_1:4;
+ .= 'not' a 'or' (b '&' c);
   hence thesis by BVFUNC_4:8;
 end;
 
@@ -340,7 +338,6 @@ proof
   = 'not' (a '&' (b 'nor' c)) by Th1
  .= 'not' (a '&' 'not' (b 'or' c)) by Th2
  .= 'not' a 'or' 'not' 'not' (b 'or' c) by BVFUNC_1:17
- .= 'not' a 'or' (b 'or' c) by BVFUNC_1:4
  .= 'not' a 'or' b 'or' c by BVFUNC_1:11;
   a 'nand' (b 'nor' c)
   = 'not' a 'or' (b 'or' c) by A1,BVFUNC_1:11;
@@ -354,7 +351,7 @@ proof
   = 'not' (a '&' (b 'eqv' c)) by Th1
  .= ('not' a) 'or' 'not' (b 'eqv' c) by BVFUNC_1:17
  .= ('not' a) 'or' 'not' 'not' (b 'xor' c) by BVFUNC25:12
- .= ('not' a) 'or' (b 'xor' c) by BVFUNC_1:4;
+ .= ('not' a) 'or' (b 'xor' c);
   hence thesis by BVFUNC_4:8;
 end;
 
@@ -362,7 +359,7 @@ theorem
 a 'nand' (a '&' b) = a 'nand' b
 proof
   a 'nand' (a '&' b) = (a '&' a) 'nand' b by Th10;
-  hence thesis by BVFUNC_1:6;
+  hence thesis;
 end;
 
 theorem
@@ -370,7 +367,7 @@ theorem
 proof
   thus a 'nand' (a 'or' b)
  = 'not' (a '&' a) '&' 'not' (a '&' b) by Th11
-.= 'not' a '&' 'not' (a '&' b) by BVFUNC_1:6;
+.= 'not' a '&' 'not' (a '&' b);
 end;
 
 theorem
@@ -380,7 +377,7 @@ proof
  = 'not' (a '&' (a 'eqv' b)) by Th1
 .= 'not' a 'or' 'not' (a 'eqv' b) by BVFUNC_1:17
 .= 'not' a 'or' 'not' 'not' (a 'xor' b) by BVFUNC25:12
-.= 'not' a 'or' (a 'xor' b) by BVFUNC_1:4;
+.= 'not' a 'or' (a 'xor' b);
   hence thesis by BVFUNC_4:8;
 end;
 
@@ -392,7 +389,6 @@ proof
   = 'not' (a '&' (a 'nand' b)) by Th1
  .= 'not' (a '&' 'not' (a '&' b)) by Th1
  .= ('not' a) 'or' ('not' 'not' (a '&' b)) by BVFUNC_1:17
- .= ('not' a) 'or' (a '&' b) by BVFUNC_1:4
  .= ('not' a 'or' a) '&' ('not' a 'or' b) by BVFUNC_1:14
  .= I_el(Y) '&' ('not' a 'or' b) by BVFUNC_4:6
  .= 'not' a 'or' b by BVFUNC_1:9;
@@ -406,7 +402,6 @@ proof
   = 'not' (a '&' (a 'nor' b)) by Th1
  .= 'not' (a '&' 'not' (a 'or' b)) by Th2
  .= ('not' a) 'or' ('not' 'not' (a 'or' b)) by BVFUNC_1:17
- .= ('not' a) 'or' (a 'or' b) by BVFUNC_1:4
  .= ('not' a) 'or' a 'or' b by BVFUNC_1:11
  .= I_el(Y) 'or' b by BVFUNC_4:6
  .= I_el(Y) by BVFUNC_1:13;
@@ -419,7 +414,6 @@ proof
   = 'not' (a '&' (a 'eqv' b)) by Th1
  .= 'not' (a '&' 'not' (a 'xor' b)) by BVFUNC25:12
  .= ('not' a) 'or' ('not' 'not' (a 'xor' b)) by BVFUNC_1:17
- .= ('not' a) 'or' (a 'xor' b) by BVFUNC_1:4
  .= ('not' a) 'or' ((a 'or' b) '&' ('not' a 'or' 'not' b)) by BVFUNC_8:13
  .= (('not' a) 'or' (a 'or' b)) '&' (('not' a) 'or' ('not' a 'or' 'not' b))
    by BVFUNC_1:14
@@ -430,7 +424,7 @@ proof
  .= I_el(Y) '&' (('not' a) 'or' ('not' a 'or' 'not' b)) by BVFUNC_1:13
  .= ('not' a) 'or' ('not' a 'or' 'not' b) by BVFUNC_1:9
  .= ('not' a) 'or' 'not' a 'or' 'not' b by BVFUNC_1:11
- .= 'not' a 'or' 'not' b by BVFUNC_1:10;
+ .= 'not' a 'or' 'not' b;
 end;
 
 theorem
@@ -438,12 +432,8 @@ theorem
 proof
   thus (a 'nand' b) 'nand' (a 'nand' b)
  = 'not' ((a 'nand' b) '&' (a 'nand' b)) by Th1
-.= 'not' ('not' (a '&' b) '&' (a 'nand' b)) by Th1
-.= 'not' ('not' (a '&' b) '&' 'not' (a '&' b)) by Th1
-.= 'not' 'not' (a '&' b) 'or' 'not' 'not' (a '&' b) by BVFUNC_1:17
-.= (a '&' b) 'or' 'not' 'not' (a '&' b) by BVFUNC_1:4
-.= (a '&' b) 'or' (a '&' b) by BVFUNC_1:4
-.= (a '&' b) by BVFUNC_1:10;
+.= (a '&' b) 'or' 'not' 'not' (a '&' b) by Th1
+.= (a '&' b);
 end;
 
 theorem
@@ -454,8 +444,6 @@ proof
 .= 'not' ('not' (a '&' b) '&' (a 'nand' c)) by Th1
 .= 'not' ('not' (a '&' b) '&' 'not' (a '&' c)) by Th1
 .= 'not' 'not' (a '&' b) 'or' 'not' 'not' (a '&' c) by BVFUNC_1:17
-.= (a '&' b) 'or' 'not' 'not' (a '&' c) by BVFUNC_1:4
-.= (a '&' b) 'or' (a '&' c) by BVFUNC_1:4
 .= a '&' (b 'or' c) by BVFUNC_1:15;
 end;
 
@@ -468,7 +456,7 @@ proof
  .= 'not' ((a '&' 'not' b) 'or' (a '&' c)) by BVFUNC_1:15
  .= 'not' (a '&' 'not' b) '&' 'not' (a '&' c) by BVFUNC_1:16
  .= (('not' a) 'or' ('not' 'not' b)) '&' 'not' (a '&' c) by BVFUNC_1:17
- .= ('not' a 'or' b) '&' 'not' (a '&' c) by BVFUNC_1:4;
+ .= ('not' a 'or' b) '&' 'not' (a '&' c);
 end;
 
 theorem
@@ -515,15 +503,15 @@ theorem
 proof
   a 'nor' a
   = 'not' (a 'or' a) by Th2
- .= 'not' a by BVFUNC_1:10;
-  hence thesis by BVFUNC_1:4;
+ .= 'not' a;
+  hence thesis;
 end;
 
 theorem
  'not' (a 'nor' b) = a 'or' b
 proof
   'not' (a 'nor' b) = 'not' 'not' (a 'or' b) by Th2;
-  hence thesis by BVFUNC_1:4;
+  hence thesis;
 end;
 
 theorem
@@ -547,8 +535,6 @@ proof
    (('not' a) '&' (a '&' 'not' b)) by BVFUNC_1:15
 .= ('not' a '&' 'not' a '&' b) 'or'
    (('not' a) '&' (a '&' 'not' b)) by BVFUNC_1:7
-.= ('not' a '&' b) 'or'
-   (('not' a) '&' (a '&' 'not' b)) by BVFUNC_1:6
 .= ('not' a '&' b) 'or'
    ('not' a '&' a '&' 'not' b) by BVFUNC_1:7
 .= ('not' a '&' b) 'or' (O_el(Y) '&' 'not' b) by BVFUNC_4:5
@@ -580,7 +566,7 @@ proof
  = 'not' (a 'or' (b 'eqv' c)) by Th2
 .= ('not' a) '&' ('not' (b 'eqv' c)) by BVFUNC_1:16
 .= ('not' a) '&' ('not' 'not' (b 'xor' c)) by BVFUNC25:12
-.= ('not' a) '&' (b 'xor' c) by BVFUNC_1:4;
+.= ('not' a) '&' (b 'xor' c);
 end;
 
 theorem Th36:
@@ -600,7 +586,6 @@ proof
  = 'not' (a 'or' (b 'nand' c)) by Th2
 .= 'not' (a 'or' 'not' (b '&' c)) by Th1
 .= 'not' a '&' 'not' 'not' (b '&' c) by BVFUNC_1:16
-.= 'not' a '&' (b '&' c) by BVFUNC_1:4
 .= 'not' a '&' b '&' c by BVFUNC_1:7;
 end;
 
@@ -611,7 +596,7 @@ proof
  = 'not' (a 'or' (b 'nor' c)) by Th2
 .= 'not' (a 'or' 'not' (b 'or' c)) by Th2
 .= 'not' a '&' 'not' 'not' (b 'or' c) by BVFUNC_1:16
-.= 'not' a '&' (b 'or' c) by BVFUNC_1:4;
+.= 'not' a '&' (b 'or' c);
 end;
 
 theorem
@@ -619,7 +604,6 @@ theorem
 proof
   thus a 'nor' (a '&' b)
   = 'not' (a 'or' a) 'or' 'not' (a 'or' b) by Th33
- .= 'not' a 'or' 'not' (a 'or' b) by BVFUNC_1:10
  .= 'not' (a '&' (a 'or' b)) by BVFUNC_1:17;
 end;
 
@@ -628,7 +612,7 @@ theorem
 proof
   thus a 'nor' (a 'or' b)
  = 'not' (a 'or' a 'or' b) by Th34
-.= 'not' (a 'or' b) by BVFUNC_1:10;
+.= 'not' (a 'or' b);
 end;
 
 theorem
@@ -647,7 +631,7 @@ proof
 .= ('not' a) '&' ('not' a '&' b) 'or' O_el(Y) by BVFUNC_1:8
 .= ('not' a) '&' ('not' a '&' b) by BVFUNC_1:12
 .= ('not' a) '&' ('not' a) '&' b by BVFUNC_1:7
-.= 'not' a '&' b by BVFUNC_1:6;
+.= 'not' a '&' b;
 end;
 
 theorem
@@ -703,7 +687,7 @@ proof
   thus I_el(Y) 'eqv' I_el(Y)
  = 'not' (I_el(Y) 'xor' I_el(Y)) by BVFUNC25:12
 .= 'not' 'not' I_el(Y) by BVFUNC_8:14
-.= I_el(Y) by BVFUNC_1:4;
+.= I_el(Y);
 end;
 
 theorem
@@ -738,7 +722,7 @@ proof
 .= 'not' (('not' a '&' b) 'or' O_el(Y)) by BVFUNC_1:8
 .= 'not' ('not' a '&' b) by BVFUNC_1:12
 .= 'not' 'not' a 'or' 'not' b by BVFUNC_1:17
-.= a 'or' 'not' b by BVFUNC_1:4;
+.= a 'or' 'not' b;
 end;
 
 theorem Th50:
@@ -766,8 +750,6 @@ proof
  =a 'xor' 'not' (b '&' c) by Th1
 .=('not' a '&' 'not' (b '&' c)) 'or'
   (a '&' 'not' 'not' (b '&' c)) by BVFUNC_4:9
-.=('not' a '&' 'not' (b '&' c)) 'or'
-  (a '&' (b '&' c)) by BVFUNC_1:4
 .=('not' a '&' 'not' (b '&' c)) 'or' (a '&' b '&' c) by BVFUNC_1:7;
 end;
 
@@ -778,7 +760,6 @@ proof
  =a 'eqv' 'not' (b '&' c) by Th1
 .=(a '&' 'not' (b '&' c)) 'or'
   ('not' a '&' 'not' 'not' (b '&' c)) by BVFUNC_8:19
-.=(a '&' 'not' (b '&' c)) 'or' ('not' a '&' (b '&' c)) by BVFUNC_1:4
 .=(a '&' 'not' (b '&' c)) 'or' ('not' a '&' b '&' c) by BVFUNC_1:7;
 end;
 
@@ -825,7 +806,6 @@ theorem
 proof
   thus a 'xor' (a 'nand' b)
  =('not' a '&' 'not' (a '&' b)) 'or' (a '&' a '&' b) by Th52
-.=('not' a '&' 'not' (a '&' b)) 'or' (a '&' b) by BVFUNC_1:6
 .=('not' a 'or' (a '&' b)) '&' ('not' (a '&' b) 'or' (a '&' b))
  by BVFUNC_1:14
 .=('not' a 'or' (a '&' b)) '&' I_el(Y) by BVFUNC_4:6
@@ -854,7 +834,7 @@ theorem
 proof
   thus a 'imp' (a 'nand' b)
  ='not' (a '&' a '&' b) by Th54
-.='not' (a '&' b) by BVFUNC_1:6;
+.='not' (a '&' b);
 end;
 
 theorem
@@ -892,8 +872,6 @@ proof
  =a 'xor' 'not' (b 'or' c) by Th2
 .=(a 'or' 'not' (b 'or' c)) '&' ('not' a 'or' 'not' 'not' (b 'or' c))
  by BVFUNC_8:13
-.=(a 'or' 'not' (b 'or' c)) '&' ('not' a 'or' (b 'or' c))
- by BVFUNC_1:4
 .=(a 'or' 'not' (b 'or' c)) '&' ('not' a 'or' b 'or' c)
  by BVFUNC_1:11;
 end;
@@ -905,8 +883,6 @@ proof
  =a 'eqv' 'not' (b 'or' c) by Th2
 .=(a 'or' 'not' 'not' (b 'or' c)) '&' ('not' a 'or' 'not' (b 'or' c))
  by BVFUNC_8:18
-.=(a 'or' (b 'or' c)) '&' ('not' a 'or' 'not' (b 'or' c))
- by BVFUNC_1:4
 .=(a 'or' b 'or' c) '&' ('not' a 'or' 'not' (b 'or' c))
  by BVFUNC_1:11;
 end;
@@ -927,7 +903,6 @@ proof
  =a 'nand' 'not' (b 'or' c) by Th2
 .='not' (a '&' 'not' (b 'or' c)) by Th1
 .='not' a 'or' 'not' 'not' (b 'or' c) by BVFUNC_1:17
-.='not' a 'or' (b 'or' c) by BVFUNC_1:4
 .='not' a 'or' b 'or' c by BVFUNC_1:11;
 end;
 
@@ -968,7 +943,6 @@ theorem
 proof
   thus a 'eqv' (a 'nor' b)
  =(a 'or' a 'or' b) '&' ('not' a 'or' 'not' (a 'or' b)) by Th65
-.=(a 'or' b) '&' ('not' a 'or' 'not' (a 'or' b)) by BVFUNC_1:10
 .=((a 'or' b) '&' 'not' a) 'or' ((a 'or' b) '&' 'not' (a 'or' b))
  by BVFUNC_1:15
 .=((a 'or' b) '&' 'not' a) 'or' O_el(Y) by BVFUNC_4:5
@@ -984,7 +958,7 @@ proof
   thus a 'imp' (a 'nor' b)
  ='not' (a '&' (a 'or' b)) by Th66
 .='not' (a '&' a 'or' a '&' b) by BVFUNC_1:15
-.='not' (a 'or' a '&' b) by BVFUNC_1:6;
+.='not' (a 'or' a '&' b);
 end;
 
 theorem

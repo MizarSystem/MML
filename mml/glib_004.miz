@@ -15,8 +15,8 @@ environ
  notations TARSKI, XBOOLE_0, ZFMISC_1, ENUMSET1, NUMBERS, SUBSET_1, XCMPLX_0,
       XXREAL_0, XREAL_0, DOMAIN_1, REAL_1, RELAT_1, PARTFUN1, FUNCT_1,
       FINSEQ_1, FINSEQ_2, SEQ_1, CARD_1, PBOOLE, FUNCT_2, RVSUM_1, ABIAN,
-      ORDINAL1, SQUARE_1, POLYNOM1, UPROOTS, FINSET_1, NAT_1, CQC_LANG,
-      FUNCT_4, GLIB_000, GLIB_001, GLIB_002, GLIB_003;
+      ORDINAL1, POLYNOM1, UPROOTS, FINSET_1, NAT_1, CQC_LANG, FUNCT_4,
+      GLIB_000, GLIB_001, GLIB_002, GLIB_003;
  constructors DOMAIN_1, FUNCT_4, REAL_1, SQUARE_1, BINOP_2, CQC_LANG, SETWOP_2,
       RVSUM_1, UPROOTS, GLIB_002, GLIB_003;
  registrations SUBSET_1, RELSET_1, FINSET_1, XREAL_0, CARD_1, INT_1, ABIAN,
@@ -649,7 +649,7 @@ A8: for n be Nat holds IT.n is real-WEV WEVGraph
     proof
       let n be Nat;
       n in NAT by ORDINAL1:def 13;
-      hence thesis by A7; 
+      hence thesis by A7;
     end; then
     for n being Nat holds
       IT.n is [Weighted] & IT.n is [ELabeled] & IT.n is [VLabeled]; then
@@ -660,7 +660,6 @@ A8: for n be Nat holds IT.n is real-WEV WEVGraph
     take IT;
     thus IT.0 = DIJK:Init(G,src) by A3;
     let n be Element of NAT;
-    IT.n is real-WEV WEVGraph by A7; then
     consider Gn,Gn1 being real-WEV WEVGraph such that
 A9: IT.n = Gn & IT.(n+1) = Gn1 & Gn1 = DIJK:Step(Gn) by A3;
     thus IT.(n+1) = DIJK:Step(IT.n) by A9;
@@ -703,12 +702,12 @@ A2: now let n be Element of NAT; assume P[n]; then
         DCS.(n+1) = DIJK:Step(Gn) by Def7;
         hence P[n+1];
     end;
-AA: for n being Element of NAT holds P[n] from NAT_1:sch 1(A1,A2);
+A3: for n being Element of NAT holds P[n] from NAT_1:sch 1(A1,A2);
     for n being Nat holds P[n]
     proof
       let n be Nat;
       n in NAT by ORDINAL1:def 13;
-      hence thesis by AA;
+      hence thesis by A3;
     end;
     hence thesis by GLIB_000:def 60;
   end;
@@ -728,11 +727,11 @@ A2: now let n be Element of NAT; assume P[n]; then
         DCS.(n+1) = DIJK:Step(Gn) by Def7;
         hence P[n+1];
     end;
-AA: for n being Element of NAT holds P[n] from NAT_1:sch 1(A1,A2);
-    for n being Nat holds P[n] 
+A3: for n being Element of NAT holds P[n] from NAT_1:sch 1(A1,A2);
+    for n being Nat holds P[n]
     proof
       let n be Nat; n in NAT by ORDINAL1:def 13;
-      hence thesis by AA;
+      hence thesis by A3;
     end;
     hence thesis by GLIB_003:def 28;
   end;
@@ -743,8 +742,7 @@ definition let G be real-weighted WGraph, src be Vertex of G;
     DIJK:CompSeq(G,src).Result();
   coherence proof
     set DCS = DIJK:CompSeq(G,src);
-    DCS.Result() = DCS.(DCS.Lifespan())
-                .= DCS.(DCS.Lifespan());
+    DCS.Result() = DCS.(DCS.Lifespan());
     hence thesis;
   end;
 end;
@@ -753,11 +751,7 @@ registration let G be finite real-weighted WGraph, src be Vertex of G;
   cluster DIJK:SSSP(G,src) -> finite;
   coherence proof
     set DCS = DIJK:CompSeq(G,src);
-A:  DIJK:SSSP(G,src) = DCS.Result()
-                    .= DCS.(DCS.Lifespan())
-                    .= DCS.(DCS.Lifespan());
-     DCS is finite;
-    hence thesis by A, GLIB_000:def 60;
+    thus thesis by  GLIB_000:def 60;
   end;
 end;
 
@@ -916,11 +910,9 @@ A10: e in BestEdges by A9;
     the_VLabel_of nextG = the_VLabel_of
       nextEG.labelVertex(target,val) by A9, Def5; then
 A11: nextEG.labelVertex(target,val).labeledV()
-      = dom the_VLabel_of nextG
-     .= nextG.labeledV();
+      = nextG.labeledV();
      the_VLabel_of G = the_VLabel_of nextEG by GLIB_003:43; then
-A12: G.labeledV() = dom the_VLabel_of nextEG
-                 .= nextEG.labeledV();
+A12: G.labeledV() = nextEG.labeledV();
     e DSJoins G.labeledV(),the_Vertices_of G \ G.labeledV(), G
       by A9,Def4; then
     target in the_Vertices_of G \ G.labeledV() by GLIB_000:def 18; then
@@ -990,8 +982,7 @@ theorem Th15: ::tDIJKINIT01
 proof
     let G be real-weighted WGraph, src be Vertex of G;
     set G2 = DIJK:Init(G,src);
-    the_VLabel_of G2 = G2.VLabelSelector
-                    .= src .--> 0 by  GLIB_000:11; then
+    the_VLabel_of G2 = src .--> 0 by  GLIB_000:11; then
     dom the_VLabel_of G2 = {src} by CQC_LANG:5;
     hence thesis;
 end;
@@ -1010,25 +1001,25 @@ proof
     set dDCS = (DCS.i).labeledV();
     set eDCS = (DCS.i).labeledE(); assume i <= j; then
     consider x being Nat such that
-aA1: j = i + x by NAT_1:28;
+A1: j = i + x by NAT_1:28;
     reconsider x as Element of NAT by ORDINAL1:def 13;
-A1: j = i + x by aA1;
+A2: j = i + x by A1;
     defpred P[Element of NAT] means dDCS c= (DCS.(i+$1)).labeledV() &
                          eDCS c= (DCS.(i+$1)).labeledE();
-A2: P[0];
+A3: P[0];
     now let k be Element of NAT; assume
-    A3: dDCS c= (DCS.(i+k)).labeledV() &
+    A4: dDCS c= (DCS.(i+k)).labeledV() &
         eDCS c= (DCS.(i+k)).labeledE();
         DCS.(i+k+1) = DIJK:Step(DCS.(i+k)) by Def7; then
         (DCS.(i+k)).labeledV() c= (DCS.(i+k+1)).labeledV() &
         (DCS.(i+k)).labeledE() c= (DCS.(i+k+1)).labeledE()
           by Th14;
         hence dDCS c= (DCS.(i+(k+1))).labeledV() &
-              eDCS c= (DCS.(i+(k+1))).labeledE() by A3, XBOOLE_1:1;
+              eDCS c= (DCS.(i+(k+1))).labeledE() by A4, XBOOLE_1:1;
     end; then
-A4: for k being Element of NAT st P[k] holds P[k+1];
-    for k being Element of NAT holds P[k] from NAT_1:sch 1(A2,A4);
-    hence dDCS c= (DCS.j).labeledV() & eDCS c= (DCS.j).labeledE() by A1;
+A5: for k being Element of NAT st P[k] holds P[k+1];
+    for k being Element of NAT holds P[k] from NAT_1:sch 1(A3,A5);
+    hence dDCS c= (DCS.j).labeledV() & eDCS c= (DCS.j).labeledE() by A2;
 end;
 
 theorem Th17: ::tDCS02
@@ -1165,7 +1156,6 @@ A1: Gn1a = DIJK:Step(Gn) by Def7;
             consider BE1 being Subset of the_Edges_of Gn such that
         A5: for x being set holds x in BE1 iff x in the_Edges_of Gn & P[x]
               from SUBSET_1:sch 1;
-            Gn is finite;
             now assume
             A6: BE1 = {};
                 consider v being set such that
@@ -1211,7 +1201,7 @@ A1: Gn1a = DIJK:Step(Gn) by Def7;
                 end;
                 hence contradiction;
             end; then
-            reconsider BE1 as non empty finite set by GLIB_000:def 60;
+            reconsider BE1 as non empty finite set;
             deffunc F(Element of BE1) =
                (the_VLabel_of Gn).((the_Source_of Gn).$1) +
                (the_Weight_of Gn).($1);
@@ -1329,8 +1319,7 @@ proof
       (DCS.$1).edgesBetween((DCS.$1).labeledV());
     D0=DIJK:Init(G, src) by Def7; then
     D0=G.set(ELabelSelector,{}).set(VLabelSelector,src.-->0); then
-A1: the_ELabel_of D0 = the_ELabel_of G.set(ELabelSelector,{}) by GLIB_000:12
-                    .= G.set(ELabelSelector,{}).ELabelSelector
+A1: the_ELabel_of D0 = G.set(ELabelSelector,{}).ELabelSelector by GLIB_000:12
                     .= {} by GLIB_000:11;
     for x being set st x in D0.labeledE()
       holds x in D0.edgesBetween(D0.labeledV())
@@ -1427,14 +1416,11 @@ proof
 A1: D0 = DIJK:Init(G,src) by Def7
       .= G.set(ELabelSelector,EL)
           .set(VLabelSelector,src.-->0); then
-A2: the_VLabel_of D0 = G.set(ELabelSelector,EL)
-                        .set(VLabelSelector,src.-->0)
-                        .VLabelSelector
-                    .= src .--> 0 by GLIB_000:11; then
+A2: the_VLabel_of D0 = src .--> 0 by GLIB_000:11; then
     dom (the_VLabel_of D0) = {src} by CQC_LANG:5; then
 A3: D0.labeledV() = {src};
-    the_ELabel_of D0 = the_ELabel_of G.set(ELabelSelector,EL) by A1,GLIB_000:12
-                    .= G.set(ELabelSelector,EL).ELabelSelector
+    the_ELabel_of D0 = G.set(ELabelSelector,EL).ELabelSelector by A1,
+GLIB_000:12
                     .= {} by GLIB_000:11; then
 A4: D0.labeledE() = {} by RELAT_1:60;
     now let D0W be inducedWSubgraph of G,D0.labeledV(),D0.labeledE();
@@ -1982,12 +1968,10 @@ A4: card RFS <= card RFS + 1 by NAT_1:29;
     card Gk1.labeledV() = card Gk.labeledV() by A3, A4, XXREAL_0:def 8; then
     DIJK:NextBestEdges(Gk) = {} by A2, Th13; then
 A5: DCS.k = DCS.(k+1) by A2, Def5;
-A6: DCS.k = DCS.(k+1) by A5
-         .= DCS.(k+1);
+A6: DCS.k = DCS.(k+1) by A5;
     now let n be Element of NAT; assume
     A7: DCS.n = DCS.(n+1); set Gn = DCS.n, Gn1 = DCS.(n+1);
-    A8: DCS.n = DCS.(n+1) by A7
-               .= DCS.(n+1);
+    A8: DCS.n = DCS.(n+1) by A7;
         now assume n < k; then
         A9: n + 1 < card RFS by A1, XREAL_1:10;
             card Gn.labeledV() = min(n+1, card RFS) by Th20; then
@@ -2010,15 +1994,14 @@ proof
     let G be finite real-weighted WGraph, src be Vertex of G;
     set Gn = DIJK:SSSP(G, src), RFS = G.reachableDFrom(src);
     set DCS = DIJK:CompSeq(G,src), n = DCS.Lifespan();
-A1: Gn = DCS.n; then
-A2: card Gn.labeledV() = min(n+1, card RFS) by Th20
+A1: card Gn.labeledV() = min(n+1, card RFS) by Th20
                              .= min(card RFS, card RFS) by Th24
                              .= card RFS;
     now assume
-    A3: Gn.labeledV() <> RFS;
-        Gn.labeledV() c= RFS by A1, Th18; then
-        Gn.labeledV() c< RFS by A3, XBOOLE_0:def 8;
-        hence contradiction by A2, TREES_1:24;
+    A2: Gn.labeledV() <> RFS;
+        Gn.labeledV() c= RFS by  Th18; then
+        Gn.labeledV() c< RFS by A2, XBOOLE_0:def 8;
+        hence contradiction by A1, TREES_1:24;
     end;
     hence thesis;
 end;
@@ -2036,22 +2019,19 @@ proof
         G2 be inducedWSubgraph of G, DIJK:SSSP(G,src).labeledV(),
                                      DIJK:SSSP(G,src).labeledE();
     set Res = DIJK:SSSP(G,src), DCS = DIJK:CompSeq(G,src);
-A1: Res = DCS.Result()
-       .= DCS.(DCS.Lifespan())
-       .= DCS.(DCS.Lifespan());
-    hence G2 is_mincost_DTree_rooted_at src by Th22;
+    thus G2 is_mincost_DTree_rooted_at src by Th22;
     let v being Vertex of G; assume
-A2: v in G.reachableDFrom(src); then
-A3: v in Res.labeledV() by Th25;
-A4: G == Res by A1, Th17;
-A5: Res.labeledV() is non empty Subset of the_Vertices_of G
-      by A2,Th25;
+A1: v in G.reachableDFrom(src); then
+A2: v in Res.labeledV() by Th25;
+A3: G == Res by  Th17;
+A4: Res.labeledV() is non empty Subset of the_Vertices_of G
+      by A1,Th25;
     G.edgesBetween(Res.labeledV()) =
-      Res.edgesBetween(Res.labeledV()) by A4,GLIB_000:93; then
+      Res.edgesBetween(Res.labeledV()) by A3,GLIB_000:93; then
     Res.labeledE() c= G.edgesBetween(Res.labeledV())
-      by A1, Th21;
-    hence v in the_Vertices_of G2 by A3,A5,GLIB_000:def 39;
-    thus thesis by A1,A3,Th22;
+      by  Th21;
+    hence v in the_Vertices_of G2 by A2,A4,GLIB_000:def 39;
+    thus thesis by A2,Th22;
 end;
 
 begin :: Prim's Algorithm preliminaries
@@ -2090,18 +2070,10 @@ A3: VertexSelector in WGraphSelectors &
     SourceSelector in WGraphSelectors &
     TargetSelector in WGraphSelectors &
     WeightSelector in WGraphSelectors by  ENUMSET1:def 3;
-A4: the_Vertices_of G2 = G2.VertexSelector
-                      .= G.VertexSelector by A3,FUNCT_1:72
-                      .= the_Vertices_of G;
-A5: the_Edges_of G2 = G2.EdgeSelector
-                   .= G.EdgeSelector by A3,FUNCT_1:72
-                   .= the_Edges_of G;
-A6: the_Source_of G2 = G2.SourceSelector
-                    .= G.SourceSelector by A3,FUNCT_1:72
-                    .= the_Source_of G;
-A7: the_Target_of G2 = G2.TargetSelector
-                    .= G.TargetSelector by A3,FUNCT_1:72
-                    .= the_Target_of G;
+A4: the_Vertices_of G2 = the_Vertices_of G by A3,FUNCT_1:72;
+A5: the_Edges_of G2 = the_Edges_of G by A3,FUNCT_1:72;
+A6: the_Source_of G2 = the_Source_of G by A3,FUNCT_1:72;
+A7: the_Target_of G2 = the_Target_of G by A3,FUNCT_1:72;
     for x being set st x in _GraphSelectors holds x in dom G2
       by ENUMSET1:def 2,A2,A3; then
     _GraphSelectors c= dom G2 by TARSKI:def 3;
@@ -2124,22 +2096,12 @@ A1: VertexSelector in WGraphSelectors &
     SourceSelector in WGraphSelectors &
     TargetSelector in WGraphSelectors &
     WeightSelector in WGraphSelectors by  ENUMSET1:def 3;
-A2: the_Vertices_of G2 = G2.VertexSelector
-                      .= G.VertexSelector by A1,FUNCT_1:72
-                      .= the_Vertices_of G;
-A3: the_Edges_of G2 = G2.EdgeSelector
-                      .= G.EdgeSelector by A1,FUNCT_1:72
-                      .= the_Edges_of G;
-A4: the_Source_of G2 = G2.SourceSelector
-                      .= G.SourceSelector by A1,FUNCT_1:72
-                      .= the_Source_of G;
-    the_Target_of G2 = G2.TargetSelector
-                      .= G.TargetSelector by A1,FUNCT_1:72
-                      .= the_Target_of G;
+A2: the_Vertices_of G2 = the_Vertices_of G by A1,FUNCT_1:72;
+A3: the_Edges_of G2 = the_Edges_of G by A1,FUNCT_1:72;
+A4: the_Source_of G2 = the_Source_of G by A1,FUNCT_1:72;
+    the_Target_of G2 = the_Target_of G by A1,FUNCT_1:72;
     hence G == G2 by A2,A3,A4,GLIB_000:def 36;
-    thus the_Weight_of G2 = G2.WeightSelector
-                          .= G.WeightSelector by A1,FUNCT_1:72
-                          .= the_Weight_of G;
+    thus the_Weight_of G2 = the_Weight_of G by A1,FUNCT_1:72;
 end;
 
 Lm3:
@@ -2486,7 +2448,8 @@ end;
 begin :: PRIM's Algorithm definitions
 
 definition let G be real-weighted WVGraph;
-  func PRIM:NextBestEdges(G) -> Subset of the_Edges_of G means :Def12: ::dPRIMNEXT
+  func PRIM:NextBestEdges(G) -> Subset of the_Edges_of G means :Def12
+: ::dPRIMNEXT
     for e1 being set holds e1 in it iff
       e1 SJoins G.labeledV(), the_Vertices_of G \ G.labeledV(), G &
       for e2 being set
@@ -2613,13 +2576,12 @@ A8: for n be Element of NAT holds
     for n being Nat holds IT.n is real-WEV
     proof
       let n be Nat; n in NAT by ORDINAL1:def 13;
-      hence thesis by A8; 
+      hence thesis by A8;
     end; then
     reconsider IT as real-WEV WEVGraphSeq by GLIB_003:def 31;
     take IT;
     thus IT.0 = PRIM:Init(G) by A3;
     let n be Element of NAT;
-    IT.n is real-WEV WEVGraph by A7; then
     consider Gn,Gn1 being real-WEV WEVGraph such that
 A9: IT.n = Gn & IT.(n+1) = Gn1 & Gn1 = PRIM:Step(Gn) by A3;
     thus IT.(n+1) = PRIM:Step(IT.n) by A9;
@@ -2680,11 +2642,11 @@ A2: now let n be Element of NAT; assume P[n]; then
         end;
         hence P[n+1];
     end;
-AA: for n being Element of NAT holds P[n] from NAT_1:sch 1(A1,A2);
+A4: for n being Element of NAT holds P[n] from NAT_1:sch 1(A1,A2);
     for n being Nat holds P[n]
     proof
       let n be Nat; n in NAT by ORDINAL1:def 13;
-      hence thesis by AA; 
+      hence thesis by A4;
     end;
     hence thesis by GLIB_000:def 60;
   end;
@@ -2696,8 +2658,7 @@ definition let G be real-weighted WGraph;
   coherence
   proof
     set PCS = PRIM:CompSeq(G);
-    PCS.Result() = PCS.(PCS.Lifespan())
-                .= PCS.(PCS.Lifespan());
+    PCS.Result() = PCS.(PCS.Lifespan());
     hence thesis;
   end;
 end;
@@ -2707,9 +2668,7 @@ registration let G be finite real-weighted WGraph;
   coherence
   proof
     set PCS = PRIM:CompSeq(G);
-    PRIM:MST(G) = PCS.Result()
-               .= PCS.(PCS.Lifespan())
-               .= PCS.(PCS.Lifespan());
+    PRIM:MST(G) = PCS.(PCS.Lifespan());
     hence thesis;
   end;
 end;
@@ -2729,11 +2688,8 @@ A1: G == G.set(VLabelSelector,X) by GLIB_003:8;
     thus the_Weight_of G2 = the_Weight_of G.set(VLabelSelector,X)
                               by GLIB_000:12
                          .= the_Weight_of G by GLIB_000:12;
-    thus the_ELabel_of G2 = G2.ELabelSelector
-                         .= {} by GLIB_000:11;
-    the_VLabel_of G2 = the_VLabel_of G.set(VLabelSelector,X)
-                         by GLIB_000:12
-                    .= G.set(VLabelSelector,X).VLabelSelector
+    thus the_ELabel_of G2 = {} by GLIB_000:11;
+    the_VLabel_of G2 = G.set(VLabelSelector,X).VLabelSelector by GLIB_000:12
                     .= X by GLIB_000:11;
     hence thesis;
 end;
@@ -2744,13 +2700,11 @@ Lm5:
     PRIM:Init(G).labeledE() = {}
 proof
     let G be real-weighted WGraph;
-    thus PRIM:Init(G).labeledV() = dom the_VLabel_of PRIM:Init(G)
-                                .= dom ((choose the_Vertices_of G).-->1)
+    thus PRIM:Init(G).labeledV() = dom ((choose the_Vertices_of G).-->1)
                                    by Lm4
                                 .= {choose the_Vertices_of G}
                                    by CQC_LANG:5;
-    thus PRIM:Init(G).labeledE() = dom the_ELabel_of PRIM:Init(G)
-                                .= dom {} by Lm4
+    thus PRIM:Init(G).labeledE() = dom {} by Lm4
                                 .= {};
 end;
 
@@ -3295,25 +3249,25 @@ proof
     set vPCS = (PCS.i).labeledV(), ePCS = (PCS.i).labeledE();
     assume i <= j; then
     consider x being Nat such that
-aA1: j = i + x by NAT_1:28;
+A1: j = i + x by NAT_1:28;
     reconsider x as Element of NAT by ORDINAL1:def 13;
-A1: j = i+x by aA1;
+A2: j = i+x by A1;
     defpred P[Element of NAT] means vPCS c= (PCS.(i+$1)).labeledV() &
                          ePCS c= (PCS.(i+$1)).labeledE();
-A2: P[0];
+A3: P[0];
     now let k be Element of NAT; assume
-    A3: vPCS c= (PCS.(i+k)).labeledV() &
+    A4: vPCS c= (PCS.(i+k)).labeledV() &
         ePCS c= (PCS.(i+k)).labeledE();
         PCS.(i+k+1) = PRIM:Step(PCS.(i+k)) by Def15; then
         (PCS.(i+k)).labeledV() c= (PCS.(i+k+1)).labeledV() &
         (PCS.(i+k)).labeledE() c= (PCS.(i+k+1)).labeledE()
           by Lm7;
         hence vPCS c= (PCS.(i+(k+1))).labeledV() &
-              ePCS c= (PCS.(i+(k+1))).labeledE() by A3, XBOOLE_1:1;
+              ePCS c= (PCS.(i+(k+1))).labeledE() by A4, XBOOLE_1:1;
     end; then
-A4: for k being Element of NAT st P[k] holds P[k+1];
-    for k being Element of NAT holds P[k] from NAT_1:sch 1(A2,A4);
-    hence vPCS c= (PCS.j).labeledV() & ePCS c= (PCS.j).labeledE() by A1;
+A5: for k being Element of NAT st P[k] holds P[k+1];
+    for k being Element of NAT holds P[k] from NAT_1:sch 1(A3,A5);
+    hence vPCS c= (PCS.j).labeledV() & ePCS c= (PCS.j).labeledE() by A2;
 end;
 
 Lm14:
@@ -3446,8 +3400,7 @@ proof
     set G0 = CS.0;
     G0 = PRIM:Init(G) by Def15; then
     the_VLabel_of G0 = src.-->1 by Lm4; then
-    {src} = dom the_VLabel_of G0 by CQC_LANG:5
-         .= G0.labeledV(); then
+    {src} = G0.labeledV() by CQC_LANG:5; then
 A1: card G0.labeledV() = 1 by CARD_1:79;
     src in G.reachableFrom(src) by GLIB_002:9; then
     {src} c= G.reachableFrom(src) by ZFMISC_1:37; then
@@ -3542,8 +3495,7 @@ A11: PRIM:CompSeq(G) is halting by A10, GLIB_000:def 56;
     now let m be Element of NAT; assume
     A12: PCS.m = PCS.(m+1);
         set Gm = PCS.m, Gm1 = PCS.(m+1);
-    A13: Gm = PCS.(m+1) by A12
-          .= Gm1;
+    A13: Gm = Gm1 by A12;
         now assume m < n; then
         A14: m+1 <= n by NAT_1:38;
             n+0 < card RFS by A1, XREAL_1:10; then
@@ -3605,8 +3557,7 @@ A2: P[0];
             the_Edges_of G3 c= the_Edges_of G2 by A4,A7,Lm7; then
             reconsider G3'=G3 as Subgraph of G2 by GLIB_000:47;
             G3.order() = G3.size() + 1 by A5, GLIB_002:46; then
-        A10: card Gn.labeledV() = G3.size() + 1 by A7
-                              .= card Gn.labeledE() + 1 by A7;
+        A10: card Gn.labeledV() = card Gn.labeledE() + 1 by  A7;
             now per cases;
             suppose Next = {}; then
                 Gn = Gn1 by A4, Def14;
@@ -3660,16 +3611,13 @@ proof
     let G be finite connected real-weighted WGraph;
     set M = PRIM:MST(G), PCS = PRIM:CompSeq(G), V = M.labeledV();
     set src = choose the_Vertices_of G, RFS = G.reachableFrom(src);
-A1: M = PCS.Result()
-     .= PCS.(PCS.Lifespan())
-     .= PCS.(PCS.Lifespan());
 
     PCS.Lifespan() + 1 = card RFS by Lm16; then
-A2: card V = min(card RFS,card RFS) by A1,Lm15;
-A3: V c= RFS by A1, Lm12;
+A1: card V = min(card RFS,card RFS) by Lm15;
+A2: V c= RFS by  Lm12;
     now assume V <> RFS; then
-        V c< RFS by A3, XBOOLE_0:def 8;
-        hence contradiction by A2, CARD_2:67;
+        V c< RFS by A2, XBOOLE_0:def 8;
+        hence contradiction by A1, CARD_2:67;
     end;
     hence thesis by GLIB_002:16;
 end;
@@ -3686,9 +3634,7 @@ registration let G be finite connected real-weighted WGraph;
     (PCS.n).labeledE() c= G.edgesBetween((PCS.n).labeledV())
       by Lm9; then
 A1: the_Vertices_of IT = (PCS.n).labeledV() by GLIB_000:def 39;
-    PRIM:MST(G) = PCS.Result()
-               .= PCS.n
-               .= PCS.n; then
+    PRIM:MST(G) = PCS.n; then
     (PCS.n).labeledV() = the_Vertices_of G by Lm18;
     hence IT is spanning by A1, GLIB_000:def 35;
     thus IT is Tree-like by Lm17;
@@ -3903,39 +3849,36 @@ theorem Th52: ::tPRIMMST03
 proof
     let G be finite connected real-weighted WGraph, n be Element of NAT;
     set PCS = PRIM:CompSeq(G), PMST = PRIM:MST(G);
-A1: PMST = PCS.Result()
-        .= PCS.(PCS.Lifespan())
-        .= PCS.(PCS.Lifespan());
     defpred P[Element of NAT] means
       (PCS.(PCS.Lifespan()+$1)) = PRIM:MST(G);
-A2: P[0];
-A3: now let n be Element of NAT; assume
-    A4: P[n];
+A1: P[0];
+A2: now let n be Element of NAT; assume
+    A3: P[n];
         set off = PCS.Lifespan();
         set Gn = PCS.(off+n), Gn1 = PCS.(off+n+1);
         set Next = PRIM:NextBestEdges(Gn), e = choose Next;
-    A5: Gn1 = PRIM:Step(Gn) by Def15;
-    A6: Gn.labeledV() = the_Vertices_of G by A4,Lm18;
+    A4: Gn1 = PRIM:Step(Gn) by Def15;
+    A5: Gn.labeledV() = the_Vertices_of G by A3,Lm18;
         now assume Next <> {}; then
             consider v being Vertex of Gn such that
-        A7: not v in Gn.labeledV() &
-            Gn1 = Gn.labelEdge(e,1).labelVertex(v,1) by A5,Lm6;
+        A6: not v in Gn.labeledV() &
+            Gn1 = Gn.labelEdge(e,1).labelVertex(v,1) by A4,Lm6;
             Gn == G by Lm8; then
             the_Vertices_of G = the_Vertices_of Gn by GLIB_000:def 36;
-            hence contradiction by A7,A6;
+            hence contradiction by A6,A5;
         end;
-        hence P[n+1] by A4,A5,Def14;
+        hence P[n+1] by A3,A4,Def14;
     end;
-A8: for n being Element of NAT holds P[n] from NAT_1:sch 1(A2,A3);
+A7: for n being Element of NAT holds P[n] from NAT_1:sch 1(A1,A2);
     now per cases;
     suppose n <= PCS.Lifespan();
-        hence thesis by A1,Lm13;
+        hence thesis by Lm13;
         end;
     suppose PCS.Lifespan() < n; then
         consider k being Nat such that
-    A9: n = PCS.Lifespan() + k by NAT_1:28;
+    A8: n = PCS.Lifespan() + k by NAT_1:28;
     k in NAT by ORDINAL1:def 13;
-    hence thesis by A9,A8;
+    hence thesis by A8,A7;
         end;
     end;
     hence thesis;
@@ -3950,28 +3893,25 @@ proof
     let G1 be finite connected real-weighted WGraph; set PMST = PRIM:MST(G1);
     let G2 be inducedWSubgraph of G1, PMST.labeledV(), PMST.labeledE();
     set PCS = PRIM:CompSeq(G1);
-A1: PMST = PCS.Result()
-        .= PCS.(PCS.Lifespan())
-        .= PCS.(PCS.Lifespan()); then
     PMST == G1 & the_Weight_of G1 = the_Weight_of PMST by Lm8; then
-A2: the_Edges_of G1 = the_Edges_of PMST by GLIB_000:def 36;
-A3: PMST.labeledV() = the_Vertices_of G1 by Lm18;
-    PMST.labeledE() c= the_Edges_of G1 by A2; then
-A4: PMST.labeledE() c= G1.edgesBetween(PMST.labeledV())
-      by A3, GLIB_000:37;
+A1: the_Edges_of G1 = the_Edges_of PMST by GLIB_000:def 36;
+A2: PMST.labeledV() = the_Vertices_of G1 by Lm18;
+    PMST.labeledE() c= the_Edges_of G1 by A1; then
+A3: PMST.labeledE() c= G1.edgesBetween(PMST.labeledV())
+      by A2, GLIB_000:37;
     PMST.labeledV() c= the_Vertices_of G1 by Lm18; then
-A5: the_Vertices_of G2 = the_Vertices_of G1 &
-      the_Edges_of G2 = PMST.labeledE() by A3,A4,GLIB_000:def 39; then
-A6: G2 is Tree-like & G2 is spanning by A1,Lm17, GLIB_000:def 35;
-    reconsider G2'=G2 as Tree-like _Graph by A1,Lm17;
+A4: the_Vertices_of G2 = the_Vertices_of G1 &
+      the_Edges_of G2 = PMST.labeledE() by A2,A3,GLIB_000:def 39; then
+A5: G2 is Tree-like & G2 is spanning by Lm17, GLIB_000:def 35;
+    reconsider G2'=G2 as Tree-like _Graph by Lm17;
     now assume
-    A7: not G2 is minimumSpanningTree of G1;
+    A6: not G2 is minimumSpanningTree of G1;
         set X = {x where x is Element of G1.allWSubgraphs() :
                  x is minimumSpanningTree of G1};
         now let x be set; assume x in X; then
             consider G2 being Element of G1.allWSubgraphs() such that
-        A8: x = G2 & G2 is minimumSpanningTree of G1;
-            thus x in G1.allWSubgraphs() by A8;
+        A7: x = G2 & G2 is minimumSpanningTree of G1;
+            thus x in G1.allWSubgraphs() by A7;
         end; then
         reconsider X as finite Subset of G1.allWSubgraphs()
           by TARSKI:def 3,FINSET_1:13;
@@ -3996,552 +3936,547 @@ A6: G2 is Tree-like & G2 is spanning by A1,Lm17, GLIB_000:def 35;
            card (the_Edges_of $2 /\ the_Edges_of G2) &
            for k1,k2 being Element of NAT st Z[$1,k1] & Z[$2,k2]
            holds k1 >= k2);
-    A9: now let G be Element of X;
+    A8: now let G be Element of X;
             G in X; then
             consider G' being Element of G1.allWSubgraphs() such that
-        A10: G = G' & G' is minimumSpanningTree of G1;
-            reconsider G' = G as minimumSpanningTree of G1 by A10;
-        A11: the_Vertices_of G2 = the_Vertices_of G' by A5,GLIB_000:def 35;
-        A12: now assume
-            A13: the_Edges_of G2 = the_Edges_of G';
-            A14: G2 == G' by A13, A11,GLIB_000:89;
+        A9: G = G' & G' is minimumSpanningTree of G1;
+            reconsider G' = G as minimumSpanningTree of G1 by A9;
+        A10: the_Vertices_of G2 = the_Vertices_of G' by A4,GLIB_000:def 35;
+        A11: now assume
+            A12: the_Edges_of G2 = the_Edges_of G';
+            A13: G2 == G' by A12, A10,GLIB_000:89;
                 the_Weight_of G2 = (the_Weight_of G1) | the_Edges_of G2
                                    by GLIB_003:def 10
-                                .= the_Weight_of G' by A13,GLIB_003:def 10;
-                hence contradiction by A7,A14,Th36;
+                                .= the_Weight_of G' by A12,GLIB_003:def 10;
+                hence contradiction by A6,A13,Th36;
             end;
             defpred P4[Element of NAT] means
              not (PCS.$1).labeledE()c= the_Edges_of G';
             now assume the_Edges_of G2 c= the_Edges_of G'; then
-                the_Edges_of G2 c< the_Edges_of G' by A12,XBOOLE_0:def 8; then
+                the_Edges_of G2 c< the_Edges_of G' by A11,XBOOLE_0:def 8; then
                 card the_Edges_of G2 < card the_Edges_of G' by CARD_2:67; then
                 G2.size() < card the_Edges_of G'; then
                 G2.size() < G'.size(); then
                 G2.size() + 1 < G'.size() + 1 by XREAL_1:10; then
-            A15: G2.order() < G'.size() + 1 by A6,GLIB_002:46;
-                G2.order() = card the_Vertices_of G' by A11
-                          .= G'.order();
-                hence contradiction by A15,GLIB_002:46;
+            A14: G2.order() < G'.size() + 1 by A5,GLIB_002:46;
+                G2.order() = G'.order() by A10;
+                hence contradiction by A14,GLIB_002:46;
             end; then
-        A16: ex n being Element of NAT st P4[n] by A1,A5;
+        A15: ex n being Element of NAT st P4[n] by A4;
             consider k3 being Element of NAT such that
-        A17: P4[k3] & for n being Element of NAT st P4[n] holds k3 <= n
-              from NAT_1:sch 5(A16);
+        A16: P4[k3] & for n being Element of NAT st P4[n] holds k3 <= n
+              from NAT_1:sch 5(A15);
             now assume k3 = 0; then
-            A18: not PRIM:Init(G1).labeledE() c= the_Edges_of G' by A17,Def15;
+            A17: not PRIM:Init(G1).labeledE() c= the_Edges_of G' by A16,Def15;
                 the_ELabel_of PRIM:Init(G1) = {} by Lm4; then
                 PRIM:Init(G1).labeledE() = {} by RELAT_1:60;
-                hence contradiction by A18, XBOOLE_1:2;
+                hence contradiction by A17, XBOOLE_1:2;
             end; then consider k2 being Nat such that
-        A19: k2 + 1 = k3 by NAT_1:22;
+        A18: k2 + 1 = k3 by NAT_1:22;
         reconsider k2 as Element of NAT by ORDINAL1:def 13;
-            k2 + 1 - 1 < k3 - 0 by A19, REAL_1:92; then
-        A20: (PCS.k2).labeledE() c= the_Edges_of G' by A17;
+            k2 + 1 - 1 < k3 - 0 by A18, REAL_1:92; then
+        A19: (PCS.k2).labeledE() c= the_Edges_of G' by A16;
             now let n be Element of NAT; assume n <= k2; then
              (PCS.n).labeledE() c= (PCS.k2).labeledE() by Lm13;
                 hence (PCS.n).labeledE() c= the_Edges_of G'
-                  by A20, XBOOLE_1:1;
+                  by A19, XBOOLE_1:1;
             end;
-            hence ex k1 being Element of NAT st Z[G,k1] by A17,A19;
+            hence ex k1 being Element of NAT st Z[G,k1] by A16,A18;
         end;
-    A21: now let G be Element of X, k1,k2 be Element of NAT;
+    A20: now let G be Element of X, k1,k2 be Element of NAT;
             G in X; then
            consider G' being Element of G1.allWSubgraphs() such that
-        A22: G = G' & G' is minimumSpanningTree of G1;
-            reconsider G' = G as minimumSpanningTree of G1 by A22; assume
+        A21: G = G' & G' is minimumSpanningTree of G1;
+            reconsider G' = G as minimumSpanningTree of G1 by A21; assume
             Z[G,k1] & Z[G,k2]; then
             k1+1 > k2 & k2+1 > k1; then
             k1 >= k2 & k2 >= k1 by NAT_1:38;
             hence k1 = k2 by XXREAL_0:1;
         end;
-    A23: X is finite & X <> {} & X c= X;
+    A22: X is finite & X <> {} & X c= X;
         now let x,y be Element of X;
             x in X; then
             consider x' being WSubgraph of G1 such that
-        A24: x' = x & dom x' = WGraphSelectors by Def10;
+        A23: x' = x & dom x' = WGraphSelectors by Def10;
             y in X; then
             consider y' being WSubgraph of G1 such that
-        A25: y' = y & dom y' = WGraphSelectors by Def10;
+        A24: y' = y & dom y' = WGraphSelectors by Def10;
             set CX = card (the_Edges_of x' /\ the_Edges_of G2);
             set CY = card (the_Edges_of y' /\ the_Edges_of G2);
             now per cases by REAL_1:def 5;
             suppose CX < CY;
-                hence P[x,y] or P[y,x] by A24,A25; end;
+                hence P[x,y] or P[y,x] by A23,A24; end;
             suppose
-            A26: CY = CX;
+            A25: CY = CX;
                 consider k1 being Element of NAT such that
-            A27: Z[x,k1] by A9;
+            A26: Z[x,k1] by A8;
                 consider k2 being Element of NAT such that
-            A28: Z[y,k2] by A9;
+            A27: Z[y,k2] by A8;
                 now per cases;
                 suppose
-                A29: k1 >= k2;
+                A28: k1 >= k2;
                     now let z1,z2 be Element of NAT; assume Z[x,z1] & Z[y,z2];
                     then
-                        z1 = k1 & z2 = k2 by A27,A28,A21;
-                        hence z1 >= z2 by A29;
+                        z1 = k1 & z2 = k2 by A26,A27,A20;
+                        hence z1 >= z2 by A28;
                     end;
-                    hence P[x,y] or P[y,x] by A26,A24,A25; end;
+                    hence P[x,y] or P[y,x] by A25,A23,A24; end;
                 suppose
-                A30: k1 < k2;
+                A29: k1 < k2;
                     now let z1,z2 be Element of NAT; assume Z[x,z1] & Z[y,z2];
                     then
-                        z1 = k1 & z2 = k2 by A27,A28,A21;
-                        hence z1 <= z2 by A30;
+                        z1 = k1 & z2 = k2 by A26,A27,A20;
+                        hence z1 <= z2 by A29;
                     end;
-                    hence P[x,y] or P[y,x] by A26,A24,A25; end;
+                    hence P[x,y] or P[y,x] by A25,A23,A24; end;
                 end;
                 hence P[x,y] or P[y,x]; end;
             suppose CX > CY;
-                hence P[x,y] or P[y,x] by A24,A25; end;
+                hence P[x,y] or P[y,x] by A23,A24; end;
             end;
             hence P[x,y] or P[y,x];
         end; then
-    A31: for x,y being Element of X holds P[x,y] or P[y,x];
+    A30: for x,y being Element of X holds P[x,y] or P[y,x];
         now let x,y,z be Element of X; assume
-        A32: P[x,y] & P[y,z];
+        A31: P[x,y] & P[y,z];
             x in X; then
             consider x' being WSubgraph of G1 such that
-        A33: x' = x & dom x' = WGraphSelectors by Def10;
+        A32: x' = x & dom x' = WGraphSelectors by Def10;
             y in X; then
             consider y' being WSubgraph of G1 such that
-        A34: y' = y & dom y' = WGraphSelectors by Def10;
+        A33: y' = y & dom y' = WGraphSelectors by Def10;
             z in X; then
             consider z' being WSubgraph of G1 such that
-        A35: z' = z & dom z' = WGraphSelectors by Def10;
+        A34: z' = z & dom z' = WGraphSelectors by Def10;
             set CX = card (the_Edges_of x' /\ the_Edges_of G2);
             set CY = card (the_Edges_of y' /\ the_Edges_of G2);
             set CZ = card (the_Edges_of z' /\ the_Edges_of G2);
-            now per cases by A32, A33, A34;
+            now per cases by A31, A32, A33;
             suppose
-            A36: CX > CY;
-                now per cases by A32, A34, A35;
+            A35: CX > CY;
+                now per cases by A31, A33, A34;
                 suppose CY > CZ;
-                    hence P[x,z] by A33,A35,A36,XXREAL_0:2; end;
+                    hence P[x,z] by A32,A34,A35,XXREAL_0:2; end;
                 suppose CY = CZ &
                     for ky,kz being Element of NAT st Z[y',ky] & Z[z',kz]
                     holds ky >= kz;
-                    hence P[x,z] by A36, A33,A35; end;
+                    hence P[x,z] by A35, A32,A34; end;
                 end;
                 hence P[x,z]; end;
             suppose
-            A37: CX = CY &
+            A36: CX = CY &
                 for kx,ky being Element of NAT st Z[x',kx] & Z[y',ky]
                 holds kx >= ky;
-                now per cases by A32, A34, A35;
+                now per cases by A31, A33, A34;
                 suppose CY > CZ;
-                    hence P[x,z] by A33,A35,A37; end;
+                    hence P[x,z] by A32,A34,A36; end;
                 suppose
-                A38: CY = CZ &
+                A37: CY = CZ &
                     for ky,kz being Element of NAT st Z[y',ky] & Z[z',kz]
                     holds ky >= kz;
                     consider zx being Element of NAT;
                     consider zy being Element of NAT such that
-                A39: Z[y,zy] by A9;
+                A38: Z[y,zy] by A8;
                     consider zz being Element of NAT;
                     now let kx,kz be Element of NAT; assume
                         Z[x',kx] & Z[z',kz]; then
-                        kx >= zy & zy >= kz by A34,A37, A38, A39;
+                        kx >= zy & zy >= kz by A33,A36, A37, A38;
                         hence kx >= kz by XXREAL_0:2;
                     end;
-                    hence P[x,z] by A37,A38,A33,A35; end;
+                    hence P[x,z] by A36,A37,A32,A34; end;
                 end;
                 hence P[x,z]; end;
             end;
             hence P[x,z];
         end; then
-    A40: for x,y,z being Element of X st P[x,y] & P[y,z]
+    A39: for x,y,z being Element of X st P[x,y] & P[y,z]
           holds P[x,z];
         consider M being Element of X such that
-    A41: M in X & for y being Element of X
-          st y in X holds P[M,y] from CQC_SIM1:sch 4(A23,A31,A40);
+    A40: M in X & for y being Element of X
+          st y in X holds P[M,y] from CQC_SIM1:sch 4(A22,A30,A39);
         consider x being Element of G1.allWSubgraphs() such that
-    A42: M = x & x is minimumSpanningTree of G1 by A41;
-        reconsider M as minimumSpanningTree of G1 by A42;
-    A43: the_Vertices_of G2 = the_Vertices_of M by A5,GLIB_000:def 35;
-    A44: now assume
-        A45: the_Edges_of G2 = the_Edges_of M; then
-        A46: G2 == M by A43, GLIB_000:89;
+    A41: M = x & x is minimumSpanningTree of G1 by A40;
+        reconsider M as minimumSpanningTree of G1 by A41;
+    A42: the_Vertices_of G2 = the_Vertices_of M by A4,GLIB_000:def 35;
+    A43: now assume
+        A44: the_Edges_of G2 = the_Edges_of M; then
+        A45: G2 == M by A42, GLIB_000:89;
             the_Weight_of G2 = (the_Weight_of G1) | the_Edges_of G2
                                  by GLIB_003:def 10
-                            .= the_Weight_of M by A45,GLIB_003:def 10;
-            hence contradiction by A7,A46,Th36;
+                            .= the_Weight_of M by A44,GLIB_003:def 10;
+            hence contradiction by A6,A45,Th36;
         end;
         defpred P2[Element of NAT] means
          not (PCS.$1).labeledE() c= the_Edges_of M;
         now assume the_Edges_of G2 c= the_Edges_of M; then
-            the_Edges_of G2 c< the_Edges_of M by A44,XBOOLE_0:def 8; then
+            the_Edges_of G2 c< the_Edges_of M by A43,XBOOLE_0:def 8; then
             card the_Edges_of G2 < card the_Edges_of M by CARD_2:67; then
             G2.size() < card the_Edges_of M; then
             G2.size() < M.size(); then
             G2.size() + 1 < M.size() + 1 by XREAL_1:10; then
-        A47: G2.order() < M.size() + 1 by A6,GLIB_002:46;
-            G2.order() = card the_Vertices_of M by A43
-                      .= M.order();
-            hence contradiction by A47,GLIB_002:46;
+        A46: G2.order() < M.size() + 1 by A5,GLIB_002:46;
+            G2.order() = M.order() by A42;
+            hence contradiction by A46,GLIB_002:46;
         end; then
-    A48: ex k being Element of NAT st P2[k] by A1,A5;
+    A47: ex k being Element of NAT st P2[k] by A4;
         consider k being Element of NAT such that
-    A49: P2[k] & for n being Element of NAT st P2[n] holds k <= n
-    from NAT_1:sch 5(A48);
+    A48: P2[k] & for n being Element of NAT st P2[n] holds k <= n
+    from NAT_1:sch 5(A47);
         now assume k = 0; then
-        A50: not PRIM:Init(G1).labeledE() c= the_Edges_of M by A49,Def15;
+        A49: not PRIM:Init(G1).labeledE() c= the_Edges_of M by A48,Def15;
             the_ELabel_of PRIM:Init(G1) = {} by Lm4; then
             PRIM:Init(G1).labeledE() = {} by RELAT_1:60;
-            hence contradiction by A50, XBOOLE_1:2;
+            hence contradiction by A49, XBOOLE_1:2;
         end; then
         consider k1o being Nat such that
-    A51: k = k1o + 1 by NAT_1:22;
+    A50: k = k1o + 1 by NAT_1:22;
     reconsider k1o as Element of NAT by ORDINAL1:def 13;
         set Gk1b = PCS.k1o, Gk = PCS.k;
-    A52: Gk = PRIM:Step(Gk1b) by A51, Def15;
-        k1o + 1 - 1 < k - 0 by A51, REAL_1:92; then
-    A53: Gk1b.labeledE() c= the_Edges_of M by A49;
+    A51: Gk = PRIM:Step(Gk1b) by A50, Def15;
+        k1o + 1 - 1 < k - 0 by A50, REAL_1:92; then
+    A52: Gk1b.labeledE() c= the_Edges_of M by A48;
         set Next = PRIM:NextBestEdges(Gk1b), ep = choose Next;
-    A54: Next <> {} by A52,Def14,A53,A49; then
-    A55: ep in Next;
+    A53: Next <> {} by A51,Def14,A52,A48; then
+    A54: ep in Next;
         consider v being Vertex of Gk1b such that
-    A56: not v in Gk1b.labeledV() &
-        Gk = Gk1b.labelEdge(ep,1).labelVertex(v,1) by A52,A54,Lm6;
-    A57: Gk.labeledE() = Gk1b.labelEdge(ep,1).labeledE() by A56,GLIB_003:56
-                     .= Gk1b.labeledE() \/ {ep} by A55, GLIB_003:52; then
-    A58: not {ep} c= the_Edges_of M by A49,A53,XBOOLE_1:8; then
-    A59: not ep in the_Edges_of M by ZFMISC_1:37;
+    A55: not v in Gk1b.labeledV() &
+        Gk = Gk1b.labelEdge(ep,1).labelVertex(v,1) by A51,A53,Lm6;
+    A56: Gk.labeledE() = Gk1b.labelEdge(ep,1).labeledE() by A55,GLIB_003:56
+                     .= Gk1b.labeledE() \/ {ep} by A54, GLIB_003:52; then
+    A57: not {ep} c= the_Edges_of M by A48,A52,XBOOLE_1:8; then
+    A58: not ep in the_Edges_of M by ZFMISC_1:37;
         set V = Gk1b.labeledV();
-    A60: Gk1b == G1 by Lm8; then
-    A61: the_Vertices_of Gk1b = the_Vertices_of G1 by GLIB_000:def 36
+    A59: Gk1b == G1 by Lm8; then
+    A60: the_Vertices_of Gk1b = the_Vertices_of G1 by GLIB_000:def 36
                             .= the_Vertices_of M by GLIB_000:def 35; then
         reconsider V as non empty Subset of the_Vertices_of M by Lm9;
         consider Mep being inducedWSubgraph of G1,the_Vertices_of G1,
                                                  the_Edges_of M \/ {ep};
         set v1 = (the_Source_of Mep).ep, v2 = (the_Target_of Mep).ep;
-        ep in the_Edges_of Gk1b by A55; then
-        ep in the_Edges_of G1 by A60, GLIB_000:def 36; then
+        ep in the_Edges_of Gk1b by A54; then
+        ep in the_Edges_of G1 by A59, GLIB_000:def 36; then
         {ep} c= the_Edges_of G1 & the_Edges_of M c= the_Edges_of G1
           by ZFMISC_1:37; then
         the_Edges_of M \/ {ep} c= the_Edges_of G1 by XBOOLE_1:8; then
         the_Vertices_of G1 c= the_Vertices_of G1 &
         the_Edges_of M \/ {ep} c= G1.edgesBetween(the_Vertices_of G1)
           by GLIB_000:37; then
-    A62: the_Vertices_of Mep = the_Vertices_of G1 &
+    A61: the_Vertices_of Mep = the_Vertices_of G1 &
         the_Edges_of Mep = the_Edges_of M \/ {ep} by GLIB_000:def 39;
         the_Vertices_of M c= the_Vertices_of Mep &
-          the_Edges_of M c= the_Edges_of Mep by A62,XBOOLE_1:7; then
+          the_Edges_of M c= the_Edges_of Mep by A61,XBOOLE_1:7; then
         reconsider M'=M as connected Subgraph of Mep by GLIB_000:47;
         ep in {ep} by TARSKI:def 1; then
-    A63: ep in the_Edges_of Mep by A62, XBOOLE_0:def 2;
-        the_Vertices_of Mep = the_Vertices_of M by A62,GLIB_000:def 35; then
-        reconsider v1,v2 as Vertex of M by A63,FUNCT_2:7;
+    A62: ep in the_Edges_of Mep by A61, XBOOLE_0:def 2;
+        the_Vertices_of Mep = the_Vertices_of M by A61,GLIB_000:def 35; then
+        reconsider v1,v2 as Vertex of M by A62,FUNCT_2:7;
         consider W being Walk of M' such that
-    A64: W is_Walk_from v2,v1 by GLIB_002:def 1;
+    A63: W is_Walk_from v2,v1 by GLIB_002:def 1;
         consider PW being Path of W;
-    A65: PW is_Walk_from v2,v1 by A64, GLIB_001:161;
-    A66: PW.edges() c= the_Edges_of M;
+    A64: PW is_Walk_from v2,v1 by A63, GLIB_001:161;
+    A65: PW.edges() c= the_Edges_of M;
         reconsider P=PW as Path of Mep by GLIB_001:176;
-    A67: P.edges() c= the_Edges_of M by A66,GLIB_001:111;
-    A68: P is_Walk_from v2,v1 by A65, GLIB_001:20;
+    A66: P.edges() c= the_Edges_of M by A65,GLIB_001:111;
+    A67: P is_Walk_from v2,v1 by A64, GLIB_001:20;
         ep in {ep} by TARSKI:def 1; then
-    A69: ep in Gk.labeledE() by A57, XBOOLE_0:def 2;
-    A70: Gk.labeledE() c= PMST.labeledE() by Th52; then
-    A71: {ep} /\ the_Edges_of G2 = {ep} by A69,A5,ZFMISC_1:52;
-    A72: ep Joins v1,v2,Mep by A63, GLIB_000:def 15; then
+    A68: ep in Gk.labeledE() by A56, XBOOLE_0:def 2;
+    A69: Gk.labeledE() c= PMST.labeledE() by Th52; then
+    A70: {ep} /\ the_Edges_of G2 = {ep} by A68,A4,ZFMISC_1:52;
+    A71: ep Joins v1,v2,Mep by A62, GLIB_000:def 15; then
         ep Joins v1,v2,G1 by GLIB_000:75; then
-    A73: ep Joins v1,v2,G2' by A69,A70,A5,GLIB_000:76; then
+    A72: ep Joins v1,v2,G2' by A68,A69,A4,GLIB_000:76; then
         ((the_Source_of G2).ep = v1 & (the_Target_of G2).ep = v2) or
         ((the_Target_of G2).ep = v1 & (the_Source_of G2).ep = v2)
           by GLIB_000:def 15; then
-        v1 <> v2 by A5,A69,A70,A73,GLIB_000:def 20; then
-        v1 <> P.first() by A68,GLIB_001:def 23; then
-        P.last() <> P.first() by A68,GLIB_001:def 23; then
-    A74: P is open by GLIB_001:def 24;
-    A75: ep Joins P.last(),v2,Mep by A68,A72,GLIB_001:def 23;
-    A76: not ep in P.edges() by A67,A58,ZFMISC_1:37;
+        v1 <> v2 by A4,A68,A69,A72,GLIB_000:def 20; then
+        v1 <> P.first() by A67,GLIB_001:def 23; then
+        P.last() <> P.first() by A67,GLIB_001:def 23; then
+    A73: P is open by GLIB_001:def 24;
+    A74: ep Joins P.last(),v2,Mep by A67,A71,GLIB_001:def 23;
+    A75: not ep in P.edges() by A66,A57,ZFMISC_1:37;
         now let n be odd Element of NAT; assume
-        A77: 1 < n & n <= len P & P.n = v2;
-            v2 = P.first() by A68,GLIB_001:def 23
+        A76: 1 < n & n <= len P & P.n = v2;
+            v2 = P.first() by A67,GLIB_001:def 23
               .= P.(2*0+1) by GLIB_001:def 6; then
-            n = len P by A77,GLIB_001:def 28; then
-            P.last() = v2 by A77, GLIB_001:def 7
-                    .= P.first() by A68,GLIB_001:def 23; then
-        A78: P is closed by GLIB_001:def 24;
+            n = len P by A76,GLIB_001:def 28; then
+            P.last() = v2 by A76, GLIB_001:def 7
+                    .= P.first() by A67,GLIB_001:def 23; then
+        A77: P is closed by GLIB_001:def 24;
             reconsider PM = P as Walk of M;
             PM is Path-like & PM is closed & PM is non trivial
-              by A78,A77,GLIB_001:127,GLIB_001:177; then
+              by A77,A76,GLIB_001:127,GLIB_001:177; then
             PM is Cycle-like by GLIB_001:def 31;
             hence contradiction by GLIB_002:def 2;
         end; then
-    A79: P.addEdge(ep) is Path-like by A74,A75,A76,GLIB_001:151;
+    A78: P.addEdge(ep) is Path-like by A73,A74,A75,GLIB_001:151;
         set C = P.addEdge(ep);
-    A80: P.addEdge(ep) is non trivial by A75, GLIB_001:133;
-        P.addEdge(ep) is_Walk_from v2,v2 by A68,A72,GLIB_001:67; then
+    A79: P.addEdge(ep) is non trivial by A74, GLIB_001:133;
+        P.addEdge(ep) is_Walk_from v2,v2 by A67,A71,GLIB_001:67; then
         P.addEdge(ep) is closed by GLIB_001:120; then
-    A81: C is Cycle-like by A79,A80,GLIB_001:def 31;
-    A82: ep SJoins Gk1b.labeledV(), the_Vertices_of Gk1b \ Gk1b.labeledV(),Gk1b
-          by A54,Def12;
+    A80: C is Cycle-like by A78,A79,GLIB_001:def 31;
+    A81: ep SJoins Gk1b.labeledV(), the_Vertices_of Gk1b \ Gk1b.labeledV(),Gk1b
+          by A53,Def12;
         Gk1b == G1 by Lm8; then
         (the_Source_of Gk1b).ep=(the_Source_of G1).ep &
         (the_Target_of Gk1b).ep=(the_Target_of G1).ep by GLIB_000:def 36; then
-    A83: (the_Source_of Gk1b).ep = v1 & (the_Target_of Gk1b).ep = v2
-          by A63, GLIB_000:def 34;
-    A84: v1 = P.(len P) & v2 = P.1 by A65,GLIB_001:18;
-        now per cases by A82, A83, GLIB_000:def 17;
+    A82: (the_Source_of Gk1b).ep = v1 & (the_Target_of Gk1b).ep = v2
+          by A62, GLIB_000:def 34;
+    A83: v1 = P.(len P) & v2 = P.1 by A64,GLIB_001:18;
+        now per cases by A81, A82, GLIB_000:def 17;
         suppose
-        A85: v1 in Gk1b.labeledV() & v2 in the_Vertices_of Gk1b\Gk1b.labeledV()
+        A84: v1 in Gk1b.labeledV() & v2 in the_Vertices_of Gk1b\Gk1b.labeledV()
 ;
             defpred P3[Element of NAT] means
               $1 is odd & $1 <= len P & P.$1 in Gk1b.labeledV();
-        A86: ex n being Element of NAT st P3[n] by A84, A85;
+        A85: ex n being Element of NAT st P3[n] by A83, A84;
             consider m being Element of NAT such that
-        A87: P3[m] & for n being Element of NAT st P3[n] holds m <= n
-        from NAT_1:sch 5(A86
+        A86: P3[m] & for n being Element of NAT st P3[n] holds m <= n
+        from NAT_1:sch 5(A85
 );
-            reconsider m as odd Element of NAT by A87;
-        A88: 1 <= m & m <= len P by A87, HEYTING3:1;
-            m <> 1 by A87,XBOOLE_0:def 4,A84,A85; then
-            1 < m by A88, REAL_1:def 5; then
+            reconsider m as odd Element of NAT by A86;
+        A87: 1 <= m & m <= len P by A86, HEYTING3:1;
+            m <> 1 by A86,XBOOLE_0:def 4,A83,A84; then
+            1 < m by A87, REAL_1:def 5; then
             1+1 <= m by NAT_1:38; then
             reconsider m2k = m-2*1 as odd Element of NAT by INT_1:18;
-        A89: m2k < m - 0 by REAL_1:92; then
-        A90: m2k < len P by A87,XXREAL_0:2; then
-        A91: not P.m2k in Gk1b.labeledV() by A87, A89;
-        A92: m2k+2 = m;
+        A88: m2k < m - 0 by REAL_1:92; then
+        A89: m2k < len P by A86,XXREAL_0:2; then
+        A90: not P.m2k in Gk1b.labeledV() by A86, A88;
+        A91: m2k+2 = m;
             set em = P.(m2k+1); take em;
-        A93: em in P.edges() by A90,GLIB_001:101;
-            C.edges() = P.edges() \/ {ep} by A75, GLIB_001:112;
-            hence em in C.edges() by A93, XBOOLE_0:def 2;
+        A92: em in P.edges() by A89,GLIB_001:101;
+            C.edges() = P.edges() \/ {ep} by A74, GLIB_001:112;
+            hence em in C.edges() by A92, XBOOLE_0:def 2;
             consider i being even Element of NAT such that
-        A94: 1 <= i & i <= len P & P.i = em by A93, GLIB_001:100;
-            i in dom P by A94, FINSEQ_3:27; then
-        A95: C.i = em by A75, A94, GLIB_001:66;
-        A96: len C = len P + 2 by A75, GLIB_001:65;
-        A97: C.(len P + 1) = ep by A75, GLIB_001:66;
+        A93: 1 <= i & i <= len P & P.i = em by A92, GLIB_001:100;
+            i in dom P by A93, FINSEQ_3:27; then
+        A94: C.i = em by A74, A93, GLIB_001:66;
+        A95: len C = len P + 2 by A74, GLIB_001:65;
+        A96: C.(len P + 1) = ep by A74, GLIB_001:66;
             len P + 0 < len P + 1 by XREAL_1:10; then
-        A98: i < len P + 1 by A94, XXREAL_0:2;
-        A99: len P + 1 <= len P + 2 by XREAL_1:9;
-            C is Trail-like by A79, GLIB_001:def 28;
-            hence em <> ep by A94, A96, A95, A97, A98, A99, GLIB_001:139;
-        A100: em Joins PW.m2k, PW.m, M by A90,A92,GLIB_001:def 3; then
+        A97: i < len P + 1 by A93, XXREAL_0:2;
+        A98: len P + 1 <= len P + 2 by XREAL_1:9;
+            C is Trail-like by A78, GLIB_001:def 28;
+            hence em <> ep by A93, A95, A94, A96, A97, A98, GLIB_001:139;
+        A99: em Joins PW.m2k, PW.m, M by A89,A91,GLIB_001:def 3; then
             PW.m2k in the_Vertices_of M by GLIB_000:16; then
-            PW.m2k in the_Vertices_of M\Gk1b.labeledV() by A91,XBOOLE_0:def 4;
+            PW.m2k in the_Vertices_of M\Gk1b.labeledV() by A90,XBOOLE_0:def 4;
             hence em SJoins V, the_Vertices_of M \ V, M
-              by A87,A100,GLIB_000:20; end;
+              by A86,A99,GLIB_000:20; end;
         suppose
-        A101: v2 in Gk1b.labeledV() & v1 in the_Vertices_of Gk1b\Gk1b
+        A100: v2 in Gk1b.labeledV() & v1 in the_Vertices_of Gk1b\Gk1b
 .labeledV();
             defpred P3[Element of NAT] means
               $1 is odd & $1 <= len P &
               P.$1 in the_Vertices_of Gk1b\Gk1b.labeledV();
-        A102: ex n being Element of NAT st P3[n] by A84, A101;
+        A101: ex n being Element of NAT st P3[n] by A83, A100;
             consider m being Element of NAT such that
-        A103: P3[m] & for n being Element of NAT st P3[n] holds m <= n
+        A102: P3[m] & for n being Element of NAT st P3[n] holds m <= n
         from NAT_1:sch 5(
-A102);
-            reconsider m as odd Element of NAT by A103;
-        A104: 1 <= m & m <= len P by A103, HEYTING3:1;
-            m <> 1 by A84,A101,A103,XBOOLE_0:def 4; then
-            1 < m by A104, REAL_1:def 5; then
+A101);
+            reconsider m as odd Element of NAT by A102;
+        A103: 1 <= m & m <= len P by A102, HEYTING3:1;
+            m <> 1 by A83,A100,A102,XBOOLE_0:def 4; then
+            1 < m by A103, REAL_1:def 5; then
             1+1 <= m by NAT_1:38; then
             reconsider m2k = m-2*1 as odd Element of NAT by INT_1:18;
-        A105: m2k < m - 0 by REAL_1:92; then
-        A106: m2k < len P by A103,XXREAL_0:2;
-        A107: now assume
-            A108: not P.m2k in Gk1b.labeledV();
-                P.m2k in the_Vertices_of Gk1b by A106, A61, GLIB_001:8; then
+        A104: m2k < m - 0 by REAL_1:92; then
+        A105: m2k < len P by A102,XXREAL_0:2;
+        A106: now assume
+            A107: not P.m2k in Gk1b.labeledV();
+                P.m2k in the_Vertices_of Gk1b by A105, A60, GLIB_001:8; then
                 P.m2k in the_Vertices_of Gk1b\Gk1b.labeledV()
-                  by A108,XBOOLE_0:def 4;
-                hence contradiction by A103,A105,A106;
+                  by A107,XBOOLE_0:def 4;
+                hence contradiction by A102,A104,A105;
             end;
-        A109: m2k+2 = m;
+        A108: m2k+2 = m;
             set em = P.(m2k+1); take em;
-        A110: em in P.edges() by A106,GLIB_001:101;
-            C.edges() = P.edges() \/ {ep} by A75, GLIB_001:112;
-            hence em in C.edges() by A110, XBOOLE_0:def 2;
+        A109: em in P.edges() by A105,GLIB_001:101;
+            C.edges() = P.edges() \/ {ep} by A74, GLIB_001:112;
+            hence em in C.edges() by A109, XBOOLE_0:def 2;
             consider i being even Element of NAT such that
-        A111: 1 <= i & i <= len P & P.i = em by A110, GLIB_001:100;
-            i in dom P by A111, FINSEQ_3:27; then
-        A112: C.i = em by A75, A111, GLIB_001:66;
-        A113: len C = len P + 2 by A75, GLIB_001:65;
-        A114: C.(len P + 1) = ep by A75, GLIB_001:66;
+        A110: 1 <= i & i <= len P & P.i = em by A109, GLIB_001:100;
+            i in dom P by A110, FINSEQ_3:27; then
+        A111: C.i = em by A74, A110, GLIB_001:66;
+        A112: len C = len P + 2 by A74, GLIB_001:65;
+        A113: C.(len P + 1) = ep by A74, GLIB_001:66;
             len P + 0 < len P + 1 by XREAL_1:10; then
-        A115: i < len P + 1 by A111, XXREAL_0:2;
-        A116: len P + 1 <= len P + 2 by XREAL_1:9;
-            C is Trail-like by A79, GLIB_001:def 28;
-            hence em <> ep by A111, A113, A112, A114, A115, A116, GLIB_001:139;
-            em Joins PW.m2k, PW.m, M by A106,A109,GLIB_001:def 3;
+        A114: i < len P + 1 by A110, XXREAL_0:2;
+        A115: len P + 1 <= len P + 2 by XREAL_1:9;
+            C is Trail-like by A78, GLIB_001:def 28;
+            hence em <> ep by A110, A112, A111, A113, A114, A115, GLIB_001:139;
+            em Joins PW.m2k, PW.m, M by A105,A108,GLIB_001:def 3;
             hence em SJoins V, the_Vertices_of M \ V, M
-              by A103,A61,A107,GLIB_000:20; end;
+              by A102,A60,A106,GLIB_000:20; end;
         end; then
         consider em being set such that
-    A117: em in C.edges() & em <> ep & em SJoins V, the_Vertices_of M \ V, M;
-    A118: em SJoins V, the_Vertices_of Gk1b \ V, G1 by GLIB_000:75,A117,A61;
+    A116: em in C.edges() & em <> ep & em SJoins V, the_Vertices_of M \ V, M;
+    A117: em SJoins V, the_Vertices_of Gk1b \ V, G1 by GLIB_000:75,A116,A60;
 then
-        em SJoins V, the_Vertices_of Gk1b \ V, Gk1b by A60, GLIB_000:91; then
-        (the_Weight_of Gk1b).ep <= (the_Weight_of Gk1b).em by A54,Def12;then
+        em SJoins V, the_Vertices_of Gk1b \ V, Gk1b by A59, GLIB_000:91; then
+        (the_Weight_of Gk1b).ep <= (the_Weight_of Gk1b).em by A53,Def12;then
         (the_Weight_of G1).ep <= (the_Weight_of Gk1b).em by Lm8; then
-    A119: (the_Weight_of G1).ep <= (the_Weight_of G1).em by Lm8;
+    A118: (the_Weight_of G1).ep <= (the_Weight_of G1).em by Lm8;
         consider M2 being weight-inheriting ([Weighted] removeEdge of Mep,em);
         reconsider M2 as WSubgraph of G1 by GLIB_003:16;
         the_Vertices_of M c= the_Vertices_of Mep &
-          the_Edges_of M c= the_Edges_of Mep by A62,XBOOLE_1:7; then
+          the_Edges_of M c= the_Edges_of Mep by A61,XBOOLE_1:7; then
         reconsider M'=M as connected Subgraph of Mep by GLIB_000:47;
-        the_Vertices_of M' = the_Vertices_of Mep by A62, GLIB_000:def 35; then
+        the_Vertices_of M' = the_Vertices_of Mep by A61, GLIB_000:def 35; then
         M' is spanning by GLIB_000:def 35; then
         Mep is connected by GLIB_002:23; then
-    A120: M2 is connected by A81, A117, GLIB_002:5;
-    A121: the_Edges_of M2 = the_Edges_of M \/ {ep} \{em} by A62,GLIB_000:54;
+    A119: M2 is connected by A80, A116, GLIB_002:5;
+    A120: the_Edges_of M2 = the_Edges_of M \/ {ep} \{em} by A61,GLIB_000:54;
         now
-        A122: {em} c= the_Edges_of M \/ {ep} by A117,A62,ZFMISC_1:37;
-        A123: M2.size() = card the_Edges_of M2
-                      .= card (the_Edges_of M \/{ep})-card {em}
-                         by A122,A121,CARD_2:63
+        A121: {em} c= the_Edges_of M \/ {ep} by A116,A61,ZFMISC_1:37;
+        A122: M2.size() = card (the_Edges_of M \/{ep})-card {em}
+                         by A121,A120,CARD_2:63
                       .= card (the_Edges_of M \/ {ep}) - 1 by CARD_1:79
-                      .= card the_Edges_of M + 1 - 1 by A59,CARD_2:54
+                      .= card the_Edges_of M + 1 - 1 by A58,CARD_2:54
                       .= M.size();
-            M2.order() = card the_Vertices_of M2
-                       .= card the_Vertices_of G1 by A62, GLIB_000:56
-                       .= card the_Vertices_of M by GLIB_000:def 35
-                       .= M.order();
-            hence M2.order() = M2.size() + 1 by A123,GLIB_002:46;
+            M2.order() = card the_Vertices_of G1 by A61, GLIB_000:56
+                       .= M.order() by GLIB_000:def 35;
+            hence M2.order() = M2.size() + 1 by A122,GLIB_002:46;
         end; then
-    A124: M2 is Tree-like by A120, GLIB_002:47;
+    A123: M2 is Tree-like by A119, GLIB_002:47;
         set M2' = M2.strict(WGraphSelectors);
-    A125: M2' == M2 & the_Weight_of M2' = the_Weight_of M2 by Lm2; then
-    A126: the_Edges_of M2' = the_Edges_of M \/ {ep} \ {em} by A121,GLIB_000:def
+    A124: M2' == M2 & the_Weight_of M2' = the_Weight_of M2 by Lm2; then
+    A125: the_Edges_of M2' = the_Edges_of M \/ {ep} \ {em} by A120,GLIB_000:def
 36;
-        reconsider M2' as WSubgraph of G1 by A125,GLIB_003:15;
-        now thus M2' is Tree-like by A124, A125, GLIB_002:48;
-            the_Vertices_of M2' = the_Vertices_of M2 by A125,GLIB_000:def 36
-                               .= the_Vertices_of G1 by A62, GLIB_000:56;
+        reconsider M2' as WSubgraph of G1 by A124,GLIB_003:15;
+        now thus M2' is Tree-like by A123, A124, GLIB_002:48;
+            the_Vertices_of M2' = the_Vertices_of M2 by A124,GLIB_000:def 36
+                               .= the_Vertices_of G1 by A61, GLIB_000:56;
             hence M2' is spanning by GLIB_000:def 35;
         end; then
         reconsider M2' as spanning Tree-like WSubgraph of G1;
         now
-        A127: G1.edgesBetween(the_Vertices_of G1) = the_Edges_of G1
+        A126: G1.edgesBetween(the_Vertices_of G1) = the_Edges_of G1
               by GLIB_000:37; then
-        A128: the_Edges_of M c= G1.edgesBetween(the_Vertices_of G1) &
+        A127: the_Edges_of M c= G1.edgesBetween(the_Vertices_of G1) &
             the_Vertices_of G1 c= the_Vertices_of G1;
-        A129: the_Edges_of G1 = the_Edges_of Gk1b by A60, GLIB_000:def 36;
+        A128: the_Edges_of G1 = the_Edges_of Gk1b by A59, GLIB_000:def 36;
             the_Vertices_of G1 = the_Vertices_of M by GLIB_000:def 35; then
             M is inducedWSubgraph of G1,the_Vertices_of G1, the_Edges_of M
-              by A127,GLIB_000:def 39; then
-        A130: Mep.cost() = M.cost() + (the_Weight_of G1).ep
-              by A129,A55,A127,A128,A59,Th34;
-            M2.cost() + (the_Weight_of Mep).em = Mep.cost() by A117,Th33;then
-        A131: M2.cost() = Mep.cost() - (the_Weight_of Mep).em;
+              by A126,GLIB_000:def 39; then
+        A129: Mep.cost() = M.cost() + (the_Weight_of G1).ep
+              by A128,A54,A126,A127,A58,Th34;
+            M2.cost() + (the_Weight_of Mep).em = Mep.cost() by A116,Th33;then
+        A130: M2.cost() = Mep.cost() - (the_Weight_of Mep).em;
             the_Weight_of Mep = (the_Weight_of G1) | the_Edges_of Mep
               by GLIB_003:def 10; then
-        A132: M2.cost() = M.cost()+(the_Weight_of G1).ep
-              - (the_Weight_of G1).em by A130,A117,A131,FUNCT_1:72;
-            the_Edges_of M2 = the_Edges_of M2' by A125, GLIB_000:def 36;
+        A131: M2.cost() = M.cost()+(the_Weight_of G1).ep
+              - (the_Weight_of G1).em by A129,A116,A130,FUNCT_1:72;
+            the_Edges_of M2 = the_Edges_of M2' by A124, GLIB_000:def 36;
             hence M2'.cost() = M.cost()+(the_Weight_of G1).ep
-              - (the_Weight_of G1).em by A125,A132;
+              - (the_Weight_of G1).em by A124,A131;
         end; then
-    A133: M2'.cost() + (the_Weight_of G1).em - (the_Weight_of G1).em <=
+    A132: M2'.cost() + (the_Weight_of G1).em - (the_Weight_of G1).em <=
           M.cost() + (the_Weight_of G1).ep - (the_Weight_of G1).ep
-          by A119,REAL_1:92;
+          by A118,REAL_1:92;
         now let G3 being spanning Tree-like WSubgraph of G1;
             M.cost() <= G3.cost() by Def17;
-            hence M2'.cost() <= G3.cost() by A133, XXREAL_0:2;
+            hence M2'.cost() <= G3.cost() by A132, XXREAL_0:2;
         end; then
         reconsider M2' as minimumSpanningTree of G1 by Def17;
         set MG2' = the_Edges_of M2' /\ the_Edges_of G2;
         set MG2 = the_Edges_of M /\ the_Edges_of G2;
-    A134: MG2' = ((the_Edges_of M \/ {ep}) /\ the_Edges_of G2) \
-          {em} /\ the_Edges_of G2 by A126, XBOOLE_1:50;
+    A133: MG2' = ((the_Edges_of M \/ {ep}) /\ the_Edges_of G2) \
+          {em} /\ the_Edges_of G2 by A125, XBOOLE_1:50;
         now assume MG2 /\ {ep} <> {}; then
             consider x being set such that
-        A135: x in MG2 /\ {ep} by XBOOLE_0:def 1;
-            x in MG2 & x in {ep} by A135,XBOOLE_0:def 3; then
+        A134: x in MG2 /\ {ep} by XBOOLE_0:def 1;
+            x in MG2 & x in {ep} by A134,XBOOLE_0:def 3; then
             x in the_Edges_of M & x = ep by XBOOLE_0:def 3, TARSKI:def 1;
-            hence contradiction by A58,ZFMISC_1:37;
+            hence contradiction by A57,ZFMISC_1:37;
         end; then
-    A136: MG2 misses {ep} by XBOOLE_0:def 7;
+    A135: MG2 misses {ep} by XBOOLE_0:def 7;
         dom M2' = WGraphSelectors by Lm3; then
         M2' in G1.allWSubgraphs() by Def10; then
-    A137: M2' in X;
-    A138: now thus not (PCS.(k1o+1)).labeledE() c= the_Edges_of M by A49,A51;
+    A136: M2' in X;
+    A137: now thus not (PCS.(k1o+1)).labeledE() c= the_Edges_of M by A48,A50;
             let n be Element of NAT; assume n <= k1o; then
             (PCS.n).labeledE() c= Gk1b.labeledE() by Lm13;
-            hence (PCS.n).labeledE() c= the_Edges_of M by A53, XBOOLE_1:1;
+            hence (PCS.n).labeledE() c= the_Edges_of M by A52, XBOOLE_1:1;
         end;
-    A139: now assume
-        A140: em in the_Edges_of G2; then
-        A141: MG2'=((the_Edges_of M \/ {ep}) /\ the_Edges_of G2)\{em}
-              by ZFMISC_1:52,A134;
+    A138: now assume
+        A139: em in the_Edges_of G2; then
+        A140: MG2'=((the_Edges_of M \/ {ep}) /\ the_Edges_of G2)\{em}
+              by ZFMISC_1:52,A133;
             now let x be set; assume x in {em}; then
                 x = em by TARSKI:def 1;
                 hence x in (the_Edges_of M \/ {ep}) /\ the_Edges_of G2
-                  by A62,A117,A140,XBOOLE_0:def 3;
+                  by A61,A116,A139,XBOOLE_0:def 3;
             end; then
             {em}c=(the_Edges_of M\/{ep})/\the_Edges_of G2 by TARSKI:def 3; then
-        A142: card MG2' = card (the_Edges_of Mep /\ the_Edges_of G2) -
-                        card {em} by A62, A141,CARD_2:63
+        A141: card MG2' = card (the_Edges_of Mep /\ the_Edges_of G2) -
+                        card {em} by A61, A140,CARD_2:63
                      .= card (the_Edges_of Mep /\ the_Edges_of G2) - 1
                           by CARD_1:79
-                     .= card (MG2 \/ {ep}) - 1 by A71, A62, XBOOLE_1:23
-                     .= card MG2 + card {ep} - 1 by A136, CARD_2:53
+                     .= card (MG2 \/ {ep}) - 1 by A70, A61, XBOOLE_1:23
+                     .= card MG2 + card {ep} - 1 by A135, CARD_2:53
                      .= card MG2 + 1 - 1 by CARD_1:79
                      .= card MG2;
             consider k2 being Element of NAT such that
-        A143: Z[M2',k2] by A137, A9;
-        A144: now set Vr = the_Vertices_of Gk1b \ V; assume
-            A145: em in Gk1b.labeledE();
+        A142: Z[M2',k2] by A136, A8;
+        A143: now set Vr = the_Vertices_of Gk1b \ V; assume
+            A144: em in Gk1b.labeledE();
                 Gk1b.labeledE() c= G1.edgesBetween(Gk1b.labeledV())
                   by Lm9; then
                 (the_Source_of G1).em in Gk1b.labeledV() &
-                (the_Target_of G1).em in Gk1b.labeledV() by A145,GLIB_000:34;
+                (the_Target_of G1).em in Gk1b.labeledV() by A144,GLIB_000:34;
 then
                 not (the_Source_of G1).em in Vr &
                   not (the_Target_of G1).em in Vr by XBOOLE_0:def 4;
-                hence contradiction by A118,GLIB_000:def 17;
+                hence contradiction by A117,GLIB_000:def 17;
             end;
             now let x be set; assume
-            A146: x in Gk.labeledE();
-                now per cases by A146,XBOOLE_0:def 2,A57;
+            A145: x in Gk.labeledE();
+                now per cases by A145,XBOOLE_0:def 2,A56;
                 suppose
-                A147: x in Gk1b.labeledE(); then
-                A148: x in the_Edges_of M \/ {ep} by XBOOLE_0:def 2,A53;
-                    not x in {em} by TARSKI:def 1,A144,A147;
-                    hence x in the_Edges_of M2' by A148,A126, XBOOLE_0:def 4;
+                A146: x in Gk1b.labeledE(); then
+                A147: x in the_Edges_of M \/ {ep} by XBOOLE_0:def 2,A52;
+                    not x in {em} by TARSKI:def 1,A143,A146;
+                    hence x in the_Edges_of M2' by A147,A125, XBOOLE_0:def 4;
 end;
                 suppose
-                A149: x in {ep}; then
-                A150: x in the_Edges_of M \/ {ep} by XBOOLE_0:def 2;
-                    x = ep by A149, TARSKI:def 1; then
-                    not x in {em} by A117, TARSKI:def 1;
-                    hence x in the_Edges_of M2' by A126, A150, XBOOLE_0:def 4;
+                A148: x in {ep}; then
+                A149: x in the_Edges_of M \/ {ep} by XBOOLE_0:def 2;
+                    x = ep by A148, TARSKI:def 1; then
+                    not x in {em} by A116, TARSKI:def 1;
+                    hence x in the_Edges_of M2' by A125, A149, XBOOLE_0:def 4;
 end;
                 end;
                 hence x in the_Edges_of M2';
             end; then
-        A151: Gk.labeledE() c= the_Edges_of M2' by TARSKI:def 3;
-        A152: now assume k2 < k; then
+        A150: Gk.labeledE() c= the_Edges_of M2' by TARSKI:def 3;
+        A151: now assume k2 < k; then
                 k2+1 <= k by NAT_1:38; then
                 (PCS.(k2+1)).labeledE() c= Gk.labeledE() by Lm13;
-                hence contradiction by A143,A151,XBOOLE_1:1;
+                hence contradiction by A142,A150,XBOOLE_1:1;
             end;
-        A153: k1o >= k2 by A142,A137,A138,A41,A143;
-            k1o + 1 - 1 < k - 0 by A51, REAL_1:92;
-            hence contradiction by A153,A152,XXREAL_0:2;
+        A152: k1o >= k2 by A141,A136,A137,A40,A142;
+            k1o + 1 - 1 < k - 0 by A50, REAL_1:92;
+            hence contradiction by A152,A151,XXREAL_0:2;
         end;
         now assume {em} /\ the_Edges_of G2 <> {}; then
             consider x being set such that
-        A154: x in {em} /\ the_Edges_of G2 by XBOOLE_0:def 1;
-            x in {em} & x in the_Edges_of G2 by A154,XBOOLE_0:def 3;
-            hence contradiction by A139,TARSKI:def 1;
+        A153: x in {em} /\ the_Edges_of G2 by XBOOLE_0:def 1;
+            x in {em} & x in the_Edges_of G2 by A153,XBOOLE_0:def 3;
+            hence contradiction by A138,TARSKI:def 1;
         end; then
-    A155: MG2' = MG2 \/ ({ep} /\ the_Edges_of G2) by A134,XBOOLE_1:23;
+    A154: MG2' = MG2 \/ ({ep} /\ the_Edges_of G2) by A133,XBOOLE_1:23;
         now assume MG2 /\ {ep} <> {}; then
             consider x being set such that
-        A156: x in MG2 /\ {ep} by XBOOLE_0:def 1;
-            x in MG2 & x in {ep} by A156,XBOOLE_0:def 3; then
+        A155: x in MG2 /\ {ep} by XBOOLE_0:def 1;
+            x in MG2 & x in {ep} by A155,XBOOLE_0:def 3; then
             x in the_Edges_of M & x = ep by XBOOLE_0:def 3, TARSKI:def 1;
-            hence contradiction by A58,ZFMISC_1:37;
+            hence contradiction by A57,ZFMISC_1:37;
         end; then
         MG2 misses {ep} by XBOOLE_0:def 7; then
-        card MG2' = card MG2 + card {ep} by A155,A71,CARD_2:53
+        card MG2' = card MG2 + card {ep} by A154,A70,CARD_2:53
                  .= card MG2 + 1 by CARD_1:79; then
-        card MG2 + 0 >= card MG2 + 1 by A137,A41;
+        card MG2 + 0 >= card MG2 + 1 by A136,A40;
         hence contradiction by XREAL_1:8;
     end;
     hence thesis;

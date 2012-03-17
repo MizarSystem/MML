@@ -14,11 +14,10 @@ environ
       CARD_3;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, RELAT_1, FINSOP_1,
       RELAT_2, RELSET_1, FUNCT_1, FINSET_1, ORDINAL1, PARTFUN1, FUNCT_2,
-      BINOP_1, FUNCT_4,
-      XCMPLX_0, REAL_1, NAT_1, ALGSTR_1, ORDERS_1, RLVECT_1, FINSEQ_1,
-      POLYNOM1, STRUCT_0, FINSEQ_4, CQC_LANG, VECTSP_1, GROUP_1, GROUP_4,
-      QUOFIELD, FINSEQ_5, CARD_1, GRCAT_1, ENDALG, TRIANG_1, RFINSEQ, YELLOW_1,
-      GROUP_6, XXREAL_0;
+      BINOP_1, FUNCT_4, XCMPLX_0, REAL_1, NAT_1, ALGSTR_1, ORDERS_1, RLVECT_1,
+      FINSEQ_1, POLYNOM1, STRUCT_0, FINSEQ_4, CQC_LANG, VECTSP_1, GROUP_1,
+      GROUP_4, QUOFIELD, FINSEQ_5, CARD_1, GRCAT_1, ENDALG, TRIANG_1, RFINSEQ,
+      YELLOW_1, GROUP_6, XXREAL_0;
  constructors XXREAL_0, REAL_1, BINOP_2, FINSOP_1, RFINSEQ, FINSEQ_5, ALGSTR_1,
       GROUP_4, GRCAT_1, GROUP_6, MONOID_0, ENDALG, TRIANG_1, YELLOW_1,
       QUOFIELD, POLYNOM1, NAT_1;
@@ -193,8 +192,7 @@ FUNCT_1:def 5;
        assume N() <> 0;
        then consider k being Nat such that
        A19: N() = k+1 by NAT_1:22;
-       k in NAT by ORDINAL1:def 13;
-       then 0 + 1 <= k +1 by XREAL_1:9;
+       0 + 1 <= k +1 by XREAL_1:9;
        then A20: 1 in Seg N() by A19,FINSEQ_1:3;
        then p/.1 = p.1 by A10,FINSEQ_4:def 4
                 .= g.1 by A20,FUNCT_1:72
@@ -208,13 +206,13 @@ FUNCT_1:def 5;
  assume A21: 1 <= n & n <= N()-1;
  then 0 <> n;
  then consider k being Nat such that A22: n = k+1 by NAT_1:22;
-a1: k in NAT by ORDINAL1:def 13;
- then 0 <= k & k <= N()-1-1 by A21,A22,XREAL_1:21;
- then P[k+1,f.k,f.(k+1)] by A5,a1;
- then A23: P[k+1,f.k,p/.(k+1+1)] by A14,A21,A22;
+A23: k in NAT by ORDINAL1:def 13;
+ 0 <= k & k <= N()-1-1 by A21,A22,XREAL_1:21;
+ then P[k+1,f.k,f.(k+1)] by A5,A23;
+ then A24: P[k+1,f.k,p/.(k+1+1)] by A14,A21,A22;
      k <= k+1 by NAT_1:29;
  then k <= N()-1 by A21,A22,XXREAL_0:2;
- hence P[n,p/.n,p/.(n+1)] by A14,A22,A23,a1;
+ hence P[n,p/.n,p/.(n+1)] by A14,A22,A24,A23;
 end;
 
 scheme FinRecUnD2{D() -> set, A() -> Element of D(),
@@ -252,16 +250,16 @@ proof
       0 <> n by A9;
   then consider k being Nat such that A11: n = k+1 by NAT_1:22;
   A12: 1 <= k by A10,A11,NAT_1:38;
-a1: k in NAT by ORDINAL1:def 13;
+A13: k in NAT by ORDINAL1:def 13;
       k <= n by A11,NAT_1:29;
-  then A13: k <= N() by A9,XXREAL_0:2;
+  then A14: k <= N() by A9,XXREAL_0:2;
            n > k by A11,NAT_1:38;
-  then A14: F()/.k = G()/.k by a1,A9,A12,A13;
-  A15: k <= N() - 1 by A9,A11,XREAL_1:21;
+  then A15: F()/.k = G()/.k by A13,A9,A12,A14;
+  A16: k <= N() - 1 by A9,A11,XREAL_1:21;
   reconsider Fk = F()/.k, Fk1 = F()/.(k+1),
              Gk1 = G()/.(k+1) as Element of D();
-      P[k,Fk,Fk1] & P[k,Fk,Gk1] by a1,A2,A3,A12,A14,A15;
-  hence contradiction by A1,A9,A11,A12,A15,a1;
+      P[k,Fk,Fk1] & P[k,Fk,Gk1] by A13,A2,A3,A12,A15,A16;
+  hence contradiction by A1,A9,A11,A12,A16,A13;
 end;
 
 scheme FinInd{M, N() -> Element of NAT, P[Nat]} :
@@ -1292,8 +1290,7 @@ A36: for j being Element of NAT st k <= j & j < len sga holds
       case k <= l;
         then sgb/.(l+1) = sga/.l by A38,A54;
         then j + 2 = l + 1 by A3,A42,A47,A49,A51,Th10;
-        then l = (j + 2) - 1
-              .= (j + 1) + 0;
+        then l = (j + 1) + 0;
         hence thesis by A39,A47,FINSEQ_4:def 4;
       end;
       case l < k;
@@ -2728,8 +2725,7 @@ A20: len y = len sg1p &
         y/.i = (1p * sg1p)/.i * eval(((sg1p)/.i)@,x) by Def4;
 A21: y.1 = y/.1 by A18,A20,FINSEQ_4:24
              .= (1p * sg1p)/.1 * eval(((sg1p)/.1)@,x) by A18,A20
-             .= (1p * sg1p)/.1 * eval(EmptyBag n,x) by A19
-             .= (1p * sg1p)/.1 * 1.L by Th16
+             .= (1p * sg1p)/.1 * 1.L by  A19,Th16
              .= (1p * sg1p)/.1 by GROUP_1:def 5;
 A22: sg1p.1 in rng sg1p by A9,FUNCT_1:def 5;
 A23: 1 in dom sg1p by A8,FINSEQ_3:33;
@@ -3221,10 +3217,9 @@ A11: Support(p+q) c= Support p \/ Support q by POLYNOM1:79;
     A47: (q * sq)/.k = (q * sq).k by A43,FINSEQ_4:def 4
                      .= q.b by A31,A43,FUNCT_1:22;
     A48: ypq/.k = ((p+q) * spq)/.k * eval((spq/.k)@,x) by A8,A36,A41
-     .= (p+q).b * eval(b,x) by A29,A35,A46
-     .= (p.b + q.b) * eval(b,x) by POLYNOM1:def 21
-     .= p.b * eval(b,x) + (q * sq)/.k * eval(b,x) by A47,VECTSP_1:def 18
-     .= p.b * eval(b,x) + (q * sq)/.k * eval((sq/.k)@,x) by A35
+     .= (p.b + q.b) * eval(b,x) by  A29,A35,A46,POLYNOM1:def 21
+     .= p.b * eval(b,x) + (q * sq)/.k * eval((sq/.k)@,x) by  A47,
+VECTSP_1:def 18,A35
      .= p.b * eval(b,x) + yq/.k by A9,A36,A39;
         for i' being Element of NAT st i' in dom yq & i' <> k
          holds ypq/.i' = yq/.i'

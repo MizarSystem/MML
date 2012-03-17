@@ -11,7 +11,7 @@ environ
       PRE_TOPC, BOOLE, SETFAM_1, TARSKI, METRIC_1, SEQ_4, ARYTM, SEQ_2,
       ARYTM_3, SUBSET_1, COMPTS_1, COMPLSP1, XCMPLX_0;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0,
-      XXREAL_0, XREAL_0, NAT_1, SETFAM_1, REAL_1, SQUARE_1, COMPLEX1, FUNCT_1,
+      XXREAL_0, XREAL_0, SETFAM_1, REAL_1, SQUARE_1, COMPLEX1, FUNCT_1,
       PARTFUN1, FUNCT_2, BINOP_1, BINOP_2, STRUCT_0, PRE_TOPC, COMPTS_1,
       FINSEQ_1, FUNCOP_1, RVSUM_1, FINSEQ_2, FINSEQOP, SEQ_4;
  constructors SETFAM_1, PARTFUN1, BINOP_1, SETWISEO, REAL_1, SQUARE_1, BINOP_2,
@@ -272,9 +272,7 @@ Lm6: z + -z = 0c n by Lm1,Th7,Th8,FINSEQOP:77;
 
 Lm7: -0c n = 0c n
  proof
-   thus -0c n = -(n|->0c)
-             .= compcomplex*(n|->0c)
-             .= n|->(compcomplex.0c) by FINSEQOP:17
+   thus -0c n = n|->(compcomplex.0c) by FINSEQOP:17
              .= n|->-0c by BINOP_2:def 1
              .= 0c n;
  end;
@@ -463,15 +461,11 @@ theorem
   c1*(c2*z) = (c1*c2)*z
  proof
   thus (c1*c2)*z
-      = (multcomplex[;](c1*c2,id COMPLEX))*z
-     .= multcomplex[;](multcomplex.(c1,c2),id COMPLEX)*z by BINOP_2:def 5
+      = multcomplex[;](multcomplex.(c1,c2),id COMPLEX)*z by BINOP_2:def 5
      .= multcomplex[;](c1,multcomplex[;](c2,id COMPLEX))*z by FUNCOP_1:77
      .= (multcomplex[;](c1,id COMPLEX)*multcomplex[;](c2,id COMPLEX))*z
          by FUNCOP_1:69
-     .= (multcomplex[;](c1,id COMPLEX))*(multcomplex[;](c2,id COMPLEX)*z)
-         by RELAT_1:55
-     .= (multcomplex[;](c1,id COMPLEX))*(c2*z)
-     .= c1*(c2*z);
+     .= c1*(c2*z) by RELAT_1:55;
  end;
 
 theorem
@@ -479,13 +473,9 @@ theorem
  proof
   set c1M = multcomplex[;](c1,id COMPLEX), c2M = multcomplex[;](c2,id COMPLEX);
   thus (c1 + c2)*z
-     = (multcomplex[;](c1 + c2,id COMPLEX))*z
-    .= multcomplex[;](addcomplex.(c1,c2),id COMPLEX)*z by BINOP_2:def 3
+     = multcomplex[;](addcomplex.(c1,c2),id COMPLEX)*z by BINOP_2:def 3
     .= addcomplex.:(c1M,c2M)*z by Th15,FINSEQOP:36
-    .= addcomplex.:(c1M*z,c2M*z) by FUNCOP_1:31
-    .= c1M*z + c2M*z
-    .= c1*z + c2M*z
-    .= c1*z + c2*z;
+    .= c1*z + c2*z by FUNCOP_1:31;
  end;
 
 theorem
@@ -493,20 +483,14 @@ theorem
  proof set cM = c multcomplex;
 A1:  cM is_distributive_wrt addcomplex by Th17;
   thus c*(z1+z2)
-     = cM*(z1 + z2)
-    .= cM*(addcomplex.:(z1,z2))
-    .= addcomplex.:(cM*z1,cM*z2) by A1,FINSEQOP:52
-    .= cM*z1 + cM*z2
-    .= c*z1 + cM*z2
-    .= c*z1 + c*z2;
+     = c*z1 + c*z2 by A1,FINSEQOP:52;
  end;
 
 theorem
   1r*z = z
  proof
 A1:  rng z c= COMPLEX by FINSEQ_1:def 4;
-   thus 1r*z = multcomplex[;](1r,id COMPLEX)*z
-           .= (id COMPLEX)*z by Th13,FINSEQOP:45
+   thus 1r*z = (id COMPLEX)*z by Th13,FINSEQOP:45
            .= z by A1,RELAT_1:79;
  end;
 
@@ -514,11 +498,9 @@ theorem
   0c*z = 0c n
  proof
 A1:  rng z c= COMPLEX by FINSEQ_1:def 4;
-  thus 0c*z = multcomplex[;](0c,id COMPLEX)*z
-           .= multcomplex[;](0c,(id COMPLEX)*z) by FUNCOP_1:44
+  thus 0c*z = multcomplex[;](0c,(id COMPLEX)*z) by FUNCOP_1:44
            .= multcomplex[;](0c,z) by A1,RELAT_1:79
-           .= n|->0c by Lm1,Th7,Th15,FINSEQOP:80
-           .= 0c n;
+           .= 0c n by Lm1,Th7,Th15,FINSEQOP:80;
  end;
 
 theorem
@@ -526,9 +508,7 @@ theorem
  proof
 A1:   compcomplex.1r = -1r by BINOP_2:def 1;
    thus (-1r)*z
-      = multcomplex[;](-1r,id COMPLEX)*z
-     .= compcomplex*z by A1,Th7,Th8,Th13,Th15,FINSEQOP:72
-     .= -z;
+      = -z by A1,Th7,Th8,Th13,Th15,FINSEQOP:72;
  end;
 
 definition let n,z;
@@ -549,9 +529,7 @@ A2:  c = z.k;
 theorem Th60:
   abs 0c n = n |-> 0
  proof
-  thus abs 0c n = abs(n |-> 0c)
-               .= abscomplex*(n |-> 0c)
-               .= n |-> abscomplex.0c by FINSEQOP:17
+  thus abs 0c n = n |-> abscomplex.0c by FINSEQOP:17
                .= n |-> 0 by Def6,COMPLEX1:130;
  end;
 
@@ -596,8 +574,7 @@ end;
 theorem Th63:
   |.0c n.| = 0
  proof
-   thus |.0c n .| = sqrt Sum sqr abs 0c n
-                 .= sqrt Sum sqr (n |-> (0 qua Real)) by Th60
+   thus |.0c n .| = sqrt Sum sqr (n |-> (0 qua Real)) by Th60
                  .= sqrt Sum (n |-> (0 qua Real)) by RVSUM_1:82,SQUARE_1:60
                  .= sqrt (n*0) by RVSUM_1:110
                  .= 0 by SQUARE_1:82;
@@ -636,13 +613,11 @@ theorem
  proof
 A1:   0 <= |.c.|^2 & 0 <= Sum sqr abs z by RVSUM_1:116,XREAL_1:65;
 A2:   0 <= |.c.| by COMPLEX1:132;
-   thus |.c*z.| = sqrt Sum sqr abs(c*z)
-               .= sqrt Sum sqr (|.c.|*abs z) by Th62
+   thus |.c*z.| = sqrt Sum sqr (|.c.|*abs z) by Th62
                .= sqrt Sum (|.c.|^2 * sqr abs z) by RVSUM_1:84
                .= sqrt (|.c.|^2 * Sum sqr abs z) by RVSUM_1:117
                .= sqrt |.c.|^2 * sqrt Sum sqr abs z by A1,SQUARE_1:97
-               .= |.c.| * sqrt Sum sqr abs z by A2,SQUARE_1:89
-               .= |.c.|*|.z.|;
+               .= |.c.|*|.z.| by A2,SQUARE_1:89;
  end;
 
 Lm9: for t being Element of i-tuples_on REAL st j in Seg i holds t.j is Real

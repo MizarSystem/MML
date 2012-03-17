@@ -202,6 +202,7 @@
 <Func kind="K" nr="45"/>
 </Func>
 <Cluster>
+<Adjective nr="1" value="false"/>
 <Adjective nr="2"/>
 <Adjective nr="5"/>
 <Adjective nr="25"/>

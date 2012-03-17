@@ -125,9 +125,7 @@ theorem
   assume
       x in C & y in D;
 then A1: [y,x] in [:D,C:] by ZFMISC_1:106;
-   thus F.(y,x) = F.[y,x]
-        .= (F|([:D,C:] qua set)).[y,x] by A1,FUNCT_1:72
-        .= (F|([:D,C:] qua set)).(y,x);
+   thus F.(y,x) = (F|([:D,C:] qua set)).(y,x) by A1,FUNCT_1:72;
  end;
 
  scheme MSSLambda2{ A,B() -> set, F(set,set) -> set }:
@@ -144,7 +142,7 @@ A2:  for x st x in [:A(),B():] holds f.x = F(x) from FUNCT_1:sch 3;
    assume i in A() & j in B();
     then A3:  [i,j] in [:A(),B():] by ZFMISC_1:106;
 A4:  [i,j]`1 = i & [i,j]`2 = j by MCART_1:7;
-   thus f.(i,j) = f.[i,j] .= F(i,j) by A2,A3,A4;
+   thus f.(i,j) = F(i,j) by A2,A3,A4;
   end;
 
  scheme MSSLambda2D{ A,B() -> non empty set, F(set,set) -> set }:
@@ -255,8 +253,7 @@ A1: {[i,j]} = [:{i},{j}:] by ZFMISC_1:35;
 theorem Th12:
  ((i,j):->k).(i,j) = k
  proof
-  thus ((i,j):->k).(i,j) = ((i,j):->k).[i,j]
-         .= ([i,j].-->k).[i,j] by Th11
+  thus ((i,j):->k).(i,j) = ([i,j].-->k).[i,j] by Th11
          .= k by CQC_LANG:6;
  end;
 
@@ -514,8 +511,7 @@ A3:    M1.[i,j] = g1*f1 by Def11;
 A4:    [i,j] = [g2,f2] and
 A5:    M2.[i,j] = g2*f2 by Def11;
          g1 = g2 & f1 = f2 by A2,A4,ZFMISC_1:33;
-      hence M1.(i,j) = M2.[i,j] by A3,A5
-        .= M2.(i,j);
+      hence M1.(i,j) = M2.(i,j) by A3,A5;
      end;
     hence M1 = M2 by Th8;
    end;
@@ -626,8 +622,7 @@ A3:  {[0,0,0]} = [: 1,1,1 :] by CARD_5:1,MCART_1:39;
        hence c.i is Function by CQC_LANG:6;
      end;
     then reconsider c as ManySortedFunction of [: 1,1,1 :];
-A4:    m.(0,0) = m.[0,0]
-          .= Funcs(0,0) by CQC_LANG:6;
+A4:    m.(0,0) = Funcs(0,0) by CQC_LANG:6;
          now let i;
      assume i in [: 1,1,1 :];
        then A5:      i = [0,0,0] by A3,TARSKI:def 1;
@@ -687,9 +682,7 @@ A7: [g,f] = [g'',f''] and
 A8: FuncComp(Funcs(a1,a2),Funcs(a2,a3)).[g,f] = g''*f'' by A2,A3,A5,Def11;
 A9: g = g'' & f = f'' by A7,ZFMISC_1:33;
  thus g*f = (the Comp of C).(a1,a2,a3).(g,f) by A1,Def10
-       .= FuncComp(Funcs(a1,a2),Funcs(a2,a3))|[:<^a2,a3^>,<^a1,a2^>:].[g,f]
-                  by A2
-       .= g'*f' by A4,A6,A8,A9,FUNCT_1:72;
+       .= g'*f' by  A2,A4,A6,A8,A9,FUNCT_1:72;
 end;
 
 :: Kategorie EnsCat(A), Semadeni Wiweger 1.2.3, str. 15
@@ -755,8 +748,8 @@ A17:      j2 in Funcs(x1,x2) and
     set C = AltCatStr(#A,M,c#);
         C is pseudo-functional
     proof let o1,o2,o3 be object of C;
-A18:  <^o1,o2^> = M.(o1,o2) .= Funcs(o1,o2) by A1;
-         <^o2,o3^> = M.(o2,o3) .= Funcs(o2,o3) by A1;
+A18:  <^o1,o2^> = Funcs(o1,o2) by A1;
+         <^o2,o3^> = Funcs(o2,o3) by A1;
     then A19:  dom FuncComp(Funcs(o1,o2),Funcs(o2,o3)) = [:<^o2,o3^>,<^o1,o2^>
 :]
             by A18,PBOOLE:def 3;
@@ -769,7 +762,7 @@ A18:  <^o1,o2^> = M.(o1,o2) .= Funcs(o1,o2) by A1;
    take C;
    thus the carrier of C = A;
    let a1,a2 be object of C;
-   thus <^a1,a2^> = M.(a1,a2) .= Funcs(a1,a2) by A1;
+   thus <^a1,a2^> = Funcs(a1,a2) by A1;
   end;
  uniqueness
   proof let C1,C2 be strict pseudo-functional (non empty AltCatStr) such that
@@ -794,10 +787,8 @@ A26:     i in A & j in A & k in A;
       then reconsider a1 = i, a2 = j, a3 = k as object of C1
         by A20;
       reconsider b1 = i, b2 = j, b3 = k as object of C2 by A22,A26;
-A27:   <^a2,a3^> = (the Arrows of C1).(a2,a3)
-               .= <^b2,b3^> by A25;
-       <^a1,a2^> = (the Arrows of C1).(a1,a2)
-               .= <^b1,b2^> by A25;
+A27:   <^a2,a3^> = <^b2,b3^> by A25;
+       <^a1,a2^> = <^b1,b2^> by A25;
      hence (the Comp of C1).(i,j,k)
         = FuncComp(Funcs(b1,b2),Funcs(b2,b3))|[:<^b2,b3^>,<^b1,b2^>:]
                    by A27,Def15
@@ -985,7 +976,6 @@ A14:  i = [i1,i2] by A10,ZFMISC_1:103;
       .= a1*a2 by A5,Def10
       .= g*h by A1,A5,A6,Def14
       .= FuncComp(Funcs(o1,o2),Funcs(o2,o3)).(g,h) by A8,A13,Th13
-      .= FuncComp(Funcs(o1,o2),Funcs(o2,o3)).[g,h]
       .= f.i by A11,A12,A14,FUNCT_1:70;
    end;
    hence (the Comp of C).(o1,o2,o3) =
@@ -1316,7 +1306,7 @@ A19:     {|M,M|}.i = {|M,M|}.(i1,i2,i3) by A5,MULTOP_1:def 1
       assume that
 A20:    <^o1,o2^> <> {} and
 A21:    o1 <> o2;
-           <^o1,o2^> = M.(o1,o2) .= IFEQ(o1,o2,{ id o1 },{}) by A1
+           <^o1,o2^> = IFEQ(o1,o2,{ id o1 },{}) by A1
        .= {} by A21,CQC_LANG:def 1;
       hence contradiction by A20;
      end;
@@ -1325,7 +1315,7 @@ A21:    o1 <> o2;
    take C;
    thus the carrier of C = A;
    let i be object of C;
-   thus <^i,i^> = M.(i,i) .= IFEQ(i,i,{ id i },{}) by A1
+   thus <^i,i^> = IFEQ(i,i,{ id i },{}) by A1
       .= { id i } by CQC_LANG:def 1;
   end;
  correctness

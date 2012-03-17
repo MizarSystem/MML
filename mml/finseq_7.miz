@@ -8,12 +8,11 @@ environ
 
  vocabularies FINSEQ_1, ARYTM_1, RELAT_1, FUNCT_1, RFINSEQ, FINSEQ_4, FUNCT_4,
       BOOLE, FINSEQ_7;
- notations TARSKI, XBOOLE_0, SUBSET_1,
- NUMBERS,XCMPLX_0, NAT_1, BINARITH, FUNCT_1,
-      FINSEQ_1, FINSEQ_4, RFINSEQ, FUNCT_7, XXREAL_0;
+ notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XCMPLX_0, NAT_1, BINARITH,
+      FUNCT_1, FINSEQ_1, FINSEQ_4, RFINSEQ, FUNCT_7, XXREAL_0;
  constructors FUNCT_4, XXREAL_0, NAT_1, INT_1, CQC_LANG, FINSEQ_4, REALSET1,
       RFINSEQ, BINARITH, FUNCT_7;
- registrations FINSEQ_1, FINSEQ_5, RELSET_1, INT_1, XXREAL_0;
+ registrations FINSEQ_1, FINSEQ_5, RELSET_1, INT_1, XXREAL_0, NAT_1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  theorems TARSKI, NAT_1, BINARITH, FINSEQ_1, FINSEQ_3, FINSEQ_4, FINSEQ_5,
       FINSEQ_6, RFINSEQ, JORDAN3, JORDAN8, INT_1, GENEALG1, SPRECT_3, POLYNOM4,
@@ -23,9 +22,9 @@ environ
 begin :: Some Basic Theorems
 
 reserve D for non empty set,
-  f, g, h for FinSequence of D,
+  f for FinSequence of D,
   p, p1, p2, p3, q for Element of D,
-  i, j, k, l, n for Element of NAT;
+  i, j, k, l, n for Nat;
 
 theorem Th1:
   1 <= i & j <= len f & i < j implies
@@ -37,6 +36,7 @@ proof
     A3:i < j;
      i -'i < j -'i by A3,SPRECT_3:10;
   then A4:0 < j -'i;
+  reconsider i,j as Element of NAT by ORDINAL1:def 13;
   set I = j-'i-'1;
   A5:j -'i >= 1 by A4,NAT_1:39;
   then A6:I + 1 = j -'i by BINARITH:53;
@@ -93,12 +93,13 @@ proof
 end;
 
 theorem
-     i in dom(f/^n) implies (f/^n).i = f.(n+i)
+  i in dom(f/^n) implies (f/^n).i = f.(n+i)
 proof
   assume A1: i in dom(f/^n);
-  then A2: (f/^n)/.i = f/.(n+i) by FINSEQ_5:30;
+  reconsider i,n as Element of NAT by ORDINAL1:def 13;
+A2: (f/^n)/.i = f/.(n+i) by A1,FINSEQ_5:30;
   A3: (f/^n)/.i = (f/^n).i by A1,FINSEQ_4:def 4;
-     n+i in dom f by A1,FINSEQ_5:29;
+  n+i in dom f by A1,FINSEQ_5:29;
   hence thesis by A2,A3,FINSEQ_4:def 4;
 end;
 
@@ -114,7 +115,7 @@ begin :: Definition of Replace Function and its properties
 notation
   let D be non empty set;
   let f be FinSequence of D;
-  let i be Element of NAT;
+  let i be Nat;
   let p be Element of D;
   synonym Replace(f, i, p) for f +* (i, p);
 end;
@@ -122,7 +123,7 @@ end;
 definition
   let D be non empty set;
   let f be FinSequence of D;
-  let i be Element of NAT;
+  let i be Nat;
   let p be Element of D;
   redefine func Replace(f, i, p) -> FinSequence of D equals :Def1:
     (f|(i-'1))^<*p*>^(f/^i) if 1 <= i & i <= len f
@@ -145,6 +146,7 @@ A1: 1 <= i & i <= len f implies f +* (i, p) = (f|(i-'1))^<*p*>^(f/^i)
   end;
   correctness
   proof
+    reconsider i as Element of NAT by ORDINAL1:def 13;
        f +* (i, p) is FinSequence of D;
     hence thesis;
   end;
@@ -155,15 +157,17 @@ canceled 2;
 theorem Th7:
   len Replace(f, i, p) = len f
 proof
-     Seg len (f+*(i,p)) = dom (f+*(i,p)) by FINSEQ_1:def 3
+  reconsider i as Element of NAT by ORDINAL1:def 13;
+  Seg len (f+*(i,p)) = dom (f+*(i,p)) by FINSEQ_1:def 3
                     .= dom f by FUNCT_7:32
                     .= Seg len f by FINSEQ_1:def 3;
   hence thesis by FINSEQ_1:8;
 end;
 
 theorem
-     rng Replace(f, i, p) c= rng f \/ {p}
+  rng Replace(f, i, p) c= rng f \/ {p}
 proof
+  reconsider i as Element of NAT by ORDINAL1:def 13;
      rng <*p*> = {p} by FINSEQ_1:56;
   then A1:rng f \/ {p}
    = rng (f^<*p*>) by FINSEQ_1:44;
@@ -253,7 +257,7 @@ A3:   len ((f|(i-'1))^<*p*>) = len (f|(i-'1)) + len <*p*> by FINSEQ_1:35
         A4: len f = len Replace(f, i, p) by Th7
         .= len ((f|(i-'1))^<*p*>^(f/^i)) by A1,Def1
         .= i + len (f/^i) by A3,FINSEQ_1:35;
-      let k be Element of NAT;
+      let k;
       assume
 A5:   0 < k & k <= len f - i;
       then 0 + 1 <= k by INT_1:20;
@@ -268,8 +272,10 @@ theorem Th12:
   1 <= k & k <= len f & k <> i implies Replace(f, i, p)/.k = f/.k
 proof
   assume A1: 1 <= k & k <= len f & k <> i;
-  then k in dom f by FINSEQ_3:27;
-  hence thesis by A1,FUNCT_7:39;
+  reconsider i,k as Element of NAT by ORDINAL1:def 13;
+A2: 1 <= k & k <= len f & k <> i by A1;
+  k in dom f by A1,FINSEQ_3:27;
+  hence thesis by A2,FUNCT_7:39;
 end;
 
 theorem Th13:
@@ -426,7 +432,7 @@ begin :: Definition of Swap Function and its properties
 definition
   let D be non empty set;
   let f be FinSequence of D;
-  let i, j be Element of NAT;
+  let i, j be Nat;
   func Swap(f, i, j) -> FinSequence of D equals :Def2:
       Replace(Replace(f, i, f/.j), j, f/.i)
         if 1 <= i & i <= len f & 1 <= j & j <= len f
@@ -482,6 +488,7 @@ A3:     1 <= i & i <= len F & 1 <= j & j <= len F by A1,Th7;
 theorem Th21:
   Swap(f, i, i) = f
   proof
+    reconsider i as Element of NAT by ORDINAL1:def 13;
     per cases;
       suppose
          1 <= i & i <= len f;
@@ -505,7 +512,7 @@ proof
        for k be Element of NAT st 1 <= k & k <= len f
       holds f.k = Swap(Swap(f,i,j),j,i).k
     proof
-      let k;
+      let k be Element of NAT;
       assume A3: 1 <= k & k <= len f;
       then A4:k <= len Swap(f,i,j) by Th20;
       A5:j <= len Swap(f,i,j) by A1,Th20;
@@ -559,10 +566,10 @@ proof
     set FJ = Replace(f,j,f/.i);
     A2:len Swap(f,i,j) = len f by Th20
                      .= len Swap(f,j,i) by Th20;
-       for k st 1 <= k & k <= len Swap(f,i,j)
+       for k be Element of NAT st 1 <= k & k <= len Swap(f,i,j)
       holds Swap(f,i,j).k = Swap(f,j,i).k
     proof
-      let k;
+      let k be Element of NAT;
       assume A3:1 <= k & k <= len Swap(f,i,j);
       then A4:1 <= k & k <= len f by Th20;
 A5:   len Swap(f,i,j) = len f by Th20
@@ -1037,7 +1044,7 @@ proof
     suppose A21:i > j;
       then consider k be Nat such that
         A22:i = j + k by NAT_1:28;
-      reconsider k as Element of NAT by ORDINAL1:def 13;
+      reconsider i,j,k as Element of NAT by ORDINAL1:def 13;
         A23: i - j > j - j by A21,XREAL_1:11;
       then A24:i - j > 0;
       A25:k = i -'j by A22,A23,BINARITH:def 3;

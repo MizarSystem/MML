@@ -11,12 +11,12 @@ environ
       BOOLE, ABSVALUE, SCMFSA6C, SF_MASTR, SCMFSA6B, ORDINAL2, AMI_2, AMI_5,
       ARYTM_1, NAT_1, FINSEQ_1, FINSEQ_2, FINSUB_1, PROB_1, INT_1, RELOC,
       PARTFUN1, SCM_HALT, SCMBSORT, FINSEQ_4, ARYTM;
- notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, SETFAM_1, ORDINAL1,
-      NUMBERS, XCMPLX_0, NAT_1, INT_1, RELAT_1, FINSEQ_1, FUNCT_1, COMPLEX1,
-      FUNCT_2, FUNCT_4, FINSEQ_2, SEQ_1, FINSEQ_4, FUNCT_7, STRUCT_0, AMI_1,
-      AMI_3, AMI_5, SCMFSA_2, CQC_LANG, CARD_1, SCMFSA_4, FINSUB_1, CARD_3,
-      PARTFUN1, SCMFSA6B, SCMFSA6C, SCMFSA6A, SF_MASTR, SCMFSA8A, SCMFSA8B,
-      SCMFSA8C, RFINSEQ, SCMFSA7B, BINARITH, SCM_HALT, XXREAL_0;
+ notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, SETFAM_1, ORDINAL1, NUMBERS,
+      XCMPLX_0, NAT_1, INT_1, RELAT_1, FINSEQ_1, FUNCT_1, COMPLEX1, FUNCT_2,
+      FUNCT_4, FINSEQ_2, SEQ_1, FINSEQ_4, FUNCT_7, STRUCT_0, AMI_1, AMI_3,
+      AMI_5, SCMFSA_2, CQC_LANG, CARD_1, SCMFSA_4, FINSUB_1, CARD_3, PARTFUN1,
+      SCMFSA6B, SCMFSA6C, SCMFSA6A, SF_MASTR, SCMFSA8A, SCMFSA8B, SCMFSA8C,
+      RFINSEQ, SCMFSA7B, BINARITH, SCM_HALT, XXREAL_0;
  constructors PARTFUN1, SETWISEO, XXREAL_0, NAT_1, SEQ_1, FINSEQ_4, INT_2,
       RFINSEQ, BINARITH, AMI_5, SCMFSA6A, SF_MASTR, SCMFSA6B, SCMFSA6C,
       SCMFSA8A, SCMFSA8B, SCMFSA8C, SCM_HALT;
@@ -462,257 +462,253 @@ proof
     then consider m being Nat such that
 A2: i=k+m by NAT_1:28;
     reconsider m as Element of NAT by ORDINAL1:def 13;
-AA: i=k+m by A2;
-A3: UsedIntLoc p c= Dloc by XBOOLE_1:7;
+A3: i=k+m by A2;
+A4: UsedIntLoc p c= Dloc by XBOOLE_1:7;
     Dloc=dom t \/ UsedIntLoc p \/ UsedInt*Loc p by XBOOLE_1:4;
-then A4: UsedInt*Loc p c= Dloc by XBOOLE_1:7;
+then A5: UsedInt*Loc p c= Dloc by XBOOLE_1:7;
    defpred P[Element of NAT] means
   (Computation s1).(k+$1).IC SCM+FSA = (Computation s2).(k+$1).IC SCM+FSA &
   (Computation s1).(k+$1) |Dloc = (Computation s2).(k+$1)|Dloc;
-A5: P[0] by A1;
-A6: now let m be Element of NAT;
-       assume A7: P[m];
+A6: P[0] by A1;
+A7: now let m be Element of NAT;
+       assume A8: P[m];
        set sk1=(Computation s1).(k+m);
        set sk11=(Computation s1).(k+(m+1));
        set i1=CurInstr sk1;
        set sk2=(Computation s2).(k+m);
        set sk12=(Computation s2).(k+(m+1));
        set i2=CurInstr sk2;
-A8:    IC sk1 = sk2.IC SCM+FSA by A7
-       .= IC sk2;
-A9:   IC sk1 in dom p by A1;            :: SCMFSA6B:def 2,C1=paraclosed;
-A10:    i1 =sk1.IC sk1
-         .=(sk1 |dom p).IC sk1 by A9,FUNCT_1:72;
+A9:    IC sk1 = IC sk2 by A8;
+A10:   IC sk1 in dom p by A1;            :: SCMFSA6B:def 2,C1=paraclosed;
+A11:    i1 =(sk1 |dom p).IC sk1 by A10,FUNCT_1:72;
 
-           i1 =sk1.IC sk1
-         .=s1.IC sk1 by AMI_1:54
-         .=p.IC sk1 by A1,A9,GRFUNC_1:8;
-then A11:    i1 in rng p by A9,FUNCT_1:def 5;
+           i1 =s1.IC sk1 by AMI_1:54
+         .=p.IC sk1 by A1,A10,GRFUNC_1:8;
+then A12:    i1 in rng p by A10,FUNCT_1:def 5;
 
-A12:    IC sk2 in dom p by A1;              :: paraclosed
-A13:    i2 =sk2.IC sk2
-         .=(sk2 |dom p).IC sk2 by A12,FUNCT_1:72
-         .=i1 by A1,A8,A10,Th22;
-A14:    sk11=(Computation s1).(k+m+1)
+A13:    IC sk2 in dom p by A1;              :: paraclosed
+A14:    i2 =(sk2 |dom p).IC sk2 by A13,FUNCT_1:72
+         .=i1 by A1,A9,A11,Th22;
+A15:    sk11=(Computation s1).(k+m+1)
        .=Following sk1 by AMI_1:def 19
        .= Exec(i1,sk1);
-A15:    sk12=(Computation s2).(k+m+1)
+A16:    sk12=(Computation s2).(k+m+1)
        .=Following sk2 by AMI_1:def 19
        .= Exec(i2,sk2);
-A16:    dom sk11 = the carrier of SCM+FSA by AMI_3:36
+A17:    dom sk11 = the carrier of SCM+FSA by AMI_3:36
        .= dom sk12 by AMI_3:36;
 
-A17:    InsCode i1 <= 12 by SCMFSA_2:35;
-       per cases by A17,Th14;
+A18:    InsCode i1 <= 12 by SCMFSA_2:35;
+       per cases by A18,Th14;
        suppose InsCode i1 = 0;
-then A18:       i1=halt SCM+FSA by SCMFSA_2:122;
-then sk11=sk1 by A14,AMI_1:def 8;
-           hence P[m+1] by A7,A13,A15,A18,AMI_1:def 8;
+then A19:       i1=halt SCM+FSA by SCMFSA_2:122;
+then sk11=sk1 by A15,AMI_1:def 8;
+           hence P[m+1] by A8,A14,A16,A19,AMI_1:def 8;
        end;
        suppose InsCode i1 = 1;
           then consider da,db such that
-A19:        i1 = da:=db by SCMFSA_2:54;
-A20:        sk11.IC SCM+FSA= Next IC sk1 by A14,A19,SCMFSA_2:89
-           .= sk12.IC SCM+FSA by A8,A13,A15,A19,SCMFSA_2:89;
+A20:        i1 = da:=db by SCMFSA_2:54;
+A21:        sk11.IC SCM+FSA= Next IC sk1 by A15,A20,SCMFSA_2:89
+           .= sk12.IC SCM+FSA by A9,A14,A16,A20,SCMFSA_2:89;
               now let x be set;
-             assume A21:x in Dloc;
-             per cases by A1,A21,Th23;
-             suppose A22: x is Int-Location;
+             assume A22:x in Dloc;
+             per cases by A1,A22,Th23;
+             suppose A23: x is Int-Location;
                   now
                 per cases;
-                case A23:x = da;
-then A24:               sk12.x=sk2.db by A13,A15,A19,SCMFSA_2:89;
-                  A25: db in UsedIntLoc p by A11,A19,Th16;
-                  then sk1.db=(sk2 | Dloc).db by A3,A7,FUNCT_1:72
-                  .=sk2.db by A3,A25,FUNCT_1:72;
-                  hence sk11.x=sk12.x by A14,A19,A23,A24,SCMFSA_2:89;
+                case A24:x = da;
+then A25:               sk12.x=sk2.db by A14,A16,A20,SCMFSA_2:89;
+                  A26: db in UsedIntLoc p by A12,A20,Th16;
+                  then sk1.db=(sk2 | Dloc).db by A4,A8,FUNCT_1:72
+                  .=sk2.db by A4,A26,FUNCT_1:72;
+                  hence sk11.x=sk12.x by A15,A20,A24,A25,SCMFSA_2:89;
                 end;
-                case A26:x<> da;
-then A27:               sk12.x=sk2.x by A13,A15,A19,A22,SCMFSA_2:89;
-                     sk1.x=(sk2 | Dloc).x by A7,A21,FUNCT_1:72
-                  .=sk2.x by A21,FUNCT_1:72;
-                  hence sk11.x=sk12.x by A14,A19,A22,A26,A27,SCMFSA_2:89;
+                case A27:x<> da;
+then A28:               sk12.x=sk2.x by A14,A16,A20,A23,SCMFSA_2:89;
+                     sk1.x=(sk2 | Dloc).x by A8,A22,FUNCT_1:72
+                  .=sk2.x by A22,FUNCT_1:72;
+                  hence sk11.x=sk12.x by A15,A20,A23,A27,A28,SCMFSA_2:89;
                 end;
                 end;
                 hence sk11.x=sk12.x;
              end;
-             suppose A28:x is FinSeq-Location;
-then A29:              sk12.x=sk2.x by A13,A15,A19,SCMFSA_2:89;
-                     sk1.x=(sk2 | Dloc).x by A7,A21,FUNCT_1:72
-                  .=sk2.x by A21,FUNCT_1:72;
-                  hence sk11.x=sk12.x by A14,A19,A28,A29,SCMFSA_2:89;
+             suppose A29:x is FinSeq-Location;
+then A30:              sk12.x=sk2.x by A14,A16,A20,SCMFSA_2:89;
+                     sk1.x=(sk2 | Dloc).x by A8,A22,FUNCT_1:72
+                  .=sk2.x by A22,FUNCT_1:72;
+                  hence sk11.x=sk12.x by A15,A20,A29,A30,SCMFSA_2:89;
             end;
             end;
-            hence P[m+1] by A16,A20,Th15;
+            hence P[m+1] by A17,A21,Th15;
        end;
        suppose InsCode i1 = 2;
           then consider da,db such that
-A30:        i1 = AddTo(da,db) by SCMFSA_2:55;
-A31:        sk11.IC SCM+FSA= Next IC sk1 by A14,A30,SCMFSA_2:90
-           .= sk12.IC SCM+FSA by A8,A13,A15,A30,SCMFSA_2:90;
+A31:        i1 = AddTo(da,db) by SCMFSA_2:55;
+A32:        sk11.IC SCM+FSA= Next IC sk1 by A15,A31,SCMFSA_2:90
+           .= sk12.IC SCM+FSA by A9,A14,A16,A31,SCMFSA_2:90;
               now let x be set;
-             assume A32:x in Dloc;
-             per cases by A1,A32,Th23;
-             suppose A33: x is Int-Location;
+             assume A33:x in Dloc;
+             per cases by A1,A33,Th23;
+             suppose A34: x is Int-Location;
                   now
                 per cases;
-                case A34:x = da;
-then A35:               sk12.x=sk2.da+sk2.db by A13,A15,A30,SCMFSA_2:90;
-                  A36: da in UsedIntLoc p by A11,A30,Th16;
-then A37:              sk1.da=(sk2 | Dloc).da by A3,A7,FUNCT_1:72
-                  .=sk2.da by A3,A36,FUNCT_1:72;
-                  A38: db in UsedIntLoc p by A11,A30,Th16;
-              then sk1.db=(sk2 | Dloc).db by A3,A7,FUNCT_1:72
-                  .=sk2.db by A3,A38,FUNCT_1:72;
-                  hence sk11.x=sk12.x by A14,A30,A34,A35,A37,SCMFSA_2:90;
+                case A35:x = da;
+then A36:               sk12.x=sk2.da+sk2.db by A14,A16,A31,SCMFSA_2:90;
+                  A37: da in UsedIntLoc p by A12,A31,Th16;
+then A38:              sk1.da=(sk2 | Dloc).da by A4,A8,FUNCT_1:72
+                  .=sk2.da by A4,A37,FUNCT_1:72;
+                  A39: db in UsedIntLoc p by A12,A31,Th16;
+              then sk1.db=(sk2 | Dloc).db by A4,A8,FUNCT_1:72
+                  .=sk2.db by A4,A39,FUNCT_1:72;
+                  hence sk11.x=sk12.x by A15,A31,A35,A36,A38,SCMFSA_2:90;
                 end;
-                case A39:x<> da;
-then A40:               sk12.x=sk2.x by A13,A15,A30,A33,SCMFSA_2:90;
-                     sk1.x=(sk2 | Dloc).x by A7,A32,FUNCT_1:72
-                  .=sk2.x by A32,FUNCT_1:72;
-                  hence sk11.x=sk12.x by A14,A30,A33,A39,A40,SCMFSA_2:90;
+                case A40:x<> da;
+then A41:               sk12.x=sk2.x by A14,A16,A31,A34,SCMFSA_2:90;
+                     sk1.x=(sk2 | Dloc).x by A8,A33,FUNCT_1:72
+                  .=sk2.x by A33,FUNCT_1:72;
+                  hence sk11.x=sk12.x by A15,A31,A34,A40,A41,SCMFSA_2:90;
                 end;
                 end;
                 hence sk11.x=sk12.x;
              end;
-             suppose A41:x is FinSeq-Location;
-then A42:              sk12.x=sk2.x by A13,A15,A30,SCMFSA_2:90;
-                     sk1.x=(sk2 | Dloc).x by A7,A32,FUNCT_1:72
-                  .=sk2.x by A32,FUNCT_1:72;
-                  hence sk11.x=sk12.x by A14,A30,A41,A42,SCMFSA_2:90;
+             suppose A42:x is FinSeq-Location;
+then A43:              sk12.x=sk2.x by A14,A16,A31,SCMFSA_2:90;
+                     sk1.x=(sk2 | Dloc).x by A8,A33,FUNCT_1:72
+                  .=sk2.x by A33,FUNCT_1:72;
+                  hence sk11.x=sk12.x by A15,A31,A42,A43,SCMFSA_2:90;
             end;
             end;
-            hence P[m+1] by A16,A31,Th15;
+            hence P[m+1] by A17,A32,Th15;
        end;
        suppose InsCode i1 = 3;
           then consider da,db such that
-A43:        i1 = SubFrom(da,db) by SCMFSA_2:56;
-A44:        sk11.IC SCM+FSA= Next IC sk1 by A14,A43,SCMFSA_2:91
-           .= sk12.IC SCM+FSA by A8,A13,A15,A43,SCMFSA_2:91;
+A44:        i1 = SubFrom(da,db) by SCMFSA_2:56;
+A45:        sk11.IC SCM+FSA= Next IC sk1 by A15,A44,SCMFSA_2:91
+           .= sk12.IC SCM+FSA by A9,A14,A16,A44,SCMFSA_2:91;
               now let x be set;
-             assume A45:x in Dloc;
-             per cases by A1,A45,Th23;
-             suppose A46: x is Int-Location;
+             assume A46:x in Dloc;
+             per cases by A1,A46,Th23;
+             suppose A47: x is Int-Location;
                   now
                 per cases;
-                case A47:x = da;
-then A48:               sk12.x=sk2.da-sk2.db by A13,A15,A43,SCMFSA_2:91;
-                  A49: da in UsedIntLoc p by A11,A43,Th16;
-then A50:              sk1.da=(sk2 | Dloc).da by A3,A7,FUNCT_1:72
-                  .=sk2.da by A3,A49,FUNCT_1:72;
-                  A51: db in UsedIntLoc p by A11,A43,Th16;
-              then sk1.db=(sk2 | Dloc).db by A3,A7,FUNCT_1:72
-                  .=sk2.db by A3,A51,FUNCT_1:72;
-                  hence sk11.x=sk12.x by A14,A43,A47,A48,A50,SCMFSA_2:91;
+                case A48:x = da;
+then A49:               sk12.x=sk2.da-sk2.db by A14,A16,A44,SCMFSA_2:91;
+                  A50: da in UsedIntLoc p by A12,A44,Th16;
+then A51:              sk1.da=(sk2 | Dloc).da by A4,A8,FUNCT_1:72
+                  .=sk2.da by A4,A50,FUNCT_1:72;
+                  A52: db in UsedIntLoc p by A12,A44,Th16;
+              then sk1.db=(sk2 | Dloc).db by A4,A8,FUNCT_1:72
+                  .=sk2.db by A4,A52,FUNCT_1:72;
+                  hence sk11.x=sk12.x by A15,A44,A48,A49,A51,SCMFSA_2:91;
                 end;
-                case A52:x<> da;
-then A53:               sk12.x=sk2.x by A13,A15,A43,A46,SCMFSA_2:91;
-                     sk1.x=(sk2 | Dloc).x by A7,A45,FUNCT_1:72
-                  .=sk2.x by A45,FUNCT_1:72;
-                  hence sk11.x=sk12.x by A14,A43,A46,A52,A53,SCMFSA_2:91;
+                case A53:x<> da;
+then A54:               sk12.x=sk2.x by A14,A16,A44,A47,SCMFSA_2:91;
+                     sk1.x=(sk2 | Dloc).x by A8,A46,FUNCT_1:72
+                  .=sk2.x by A46,FUNCT_1:72;
+                  hence sk11.x=sk12.x by A15,A44,A47,A53,A54,SCMFSA_2:91;
                 end;
                 end;
                 hence sk11.x=sk12.x;
              end;
-             suppose A54:x is FinSeq-Location;
-then A55:              sk12.x=sk2.x by A13,A15,A43,SCMFSA_2:91;
-                     sk1.x=(sk2 | Dloc).x by A7,A45,FUNCT_1:72
-                  .=sk2.x by A45,FUNCT_1:72;
-                  hence sk11.x=sk12.x by A14,A43,A54,A55,SCMFSA_2:91;
+             suppose A55:x is FinSeq-Location;
+then A56:              sk12.x=sk2.x by A14,A16,A44,SCMFSA_2:91;
+                     sk1.x=(sk2 | Dloc).x by A8,A46,FUNCT_1:72
+                  .=sk2.x by A46,FUNCT_1:72;
+                  hence sk11.x=sk12.x by A15,A44,A55,A56,SCMFSA_2:91;
             end;
             end;
-            hence P[m+1] by A16,A44,Th15;
+            hence P[m+1] by A17,A45,Th15;
        end;
        suppose InsCode i1 = 4;
           then consider da,db such that
-A56:        i1 = MultBy(da,db) by SCMFSA_2:57;
-A57:        sk11.IC SCM+FSA= Next IC sk1 by A14,A56,SCMFSA_2:92
-           .= sk12.IC SCM+FSA by A8,A13,A15,A56,SCMFSA_2:92;
+A57:        i1 = MultBy(da,db) by SCMFSA_2:57;
+A58:        sk11.IC SCM+FSA= Next IC sk1 by A15,A57,SCMFSA_2:92
+           .= sk12.IC SCM+FSA by A9,A14,A16,A57,SCMFSA_2:92;
               now let x be set;
-             assume A58:x in Dloc;
-             per cases by A1,A58,Th23;
-             suppose A59: x is Int-Location;
+             assume A59:x in Dloc;
+             per cases by A1,A59,Th23;
+             suppose A60: x is Int-Location;
                   now
                 per cases;
-                case A60:x = da;
-then A61:               sk12.x=sk2.da*sk2.db by A13,A15,A56,SCMFSA_2:92;
-                  A62: da in UsedIntLoc p by A11,A56,Th16;
-then A63:              sk1.da=(sk2 | Dloc).da by A3,A7,FUNCT_1:72
-                  .=sk2.da by A3,A62,FUNCT_1:72;
-                  A64: db in UsedIntLoc p by A11,A56,Th16;
-              then sk1.db=(sk2 | Dloc).db by A3,A7,FUNCT_1:72
-                  .=sk2.db by A3,A64,FUNCT_1:72;
-                  hence sk11.x=sk12.x by A14,A56,A60,A61,A63,SCMFSA_2:92;
+                case A61:x = da;
+then A62:               sk12.x=sk2.da*sk2.db by A14,A16,A57,SCMFSA_2:92;
+                  A63: da in UsedIntLoc p by A12,A57,Th16;
+then A64:              sk1.da=(sk2 | Dloc).da by A4,A8,FUNCT_1:72
+                  .=sk2.da by A4,A63,FUNCT_1:72;
+                  A65: db in UsedIntLoc p by A12,A57,Th16;
+              then sk1.db=(sk2 | Dloc).db by A4,A8,FUNCT_1:72
+                  .=sk2.db by A4,A65,FUNCT_1:72;
+                  hence sk11.x=sk12.x by A15,A57,A61,A62,A64,SCMFSA_2:92;
                 end;
-                case A65:x<> da;
-then A66:               sk12.x=sk2.x by A13,A15,A56,A59,SCMFSA_2:92;
-                     sk1.x=(sk2 | Dloc).x by A7,A58,FUNCT_1:72
-                  .=sk2.x by A58,FUNCT_1:72;
-                  hence sk11.x=sk12.x by A14,A56,A59,A65,A66,SCMFSA_2:92;
+                case A66:x<> da;
+then A67:               sk12.x=sk2.x by A14,A16,A57,A60,SCMFSA_2:92;
+                     sk1.x=(sk2 | Dloc).x by A8,A59,FUNCT_1:72
+                  .=sk2.x by A59,FUNCT_1:72;
+                  hence sk11.x=sk12.x by A15,A57,A60,A66,A67,SCMFSA_2:92;
                 end;
                 end;
                 hence sk11.x=sk12.x;
              end;
-             suppose A67:x is FinSeq-Location;
-then A68:              sk12.x=sk2.x by A13,A15,A56,SCMFSA_2:92;
-                     sk1.x=(sk2 | Dloc).x by A7,A58,FUNCT_1:72
-                  .=sk2.x by A58,FUNCT_1:72;
-                  hence sk11.x=sk12.x by A14,A56,A67,A68,SCMFSA_2:92;
+             suppose A68:x is FinSeq-Location;
+then A69:              sk12.x=sk2.x by A14,A16,A57,SCMFSA_2:92;
+                     sk1.x=(sk2 | Dloc).x by A8,A59,FUNCT_1:72
+                  .=sk2.x by A59,FUNCT_1:72;
+                  hence sk11.x=sk12.x by A15,A57,A68,A69,SCMFSA_2:92;
             end;
             end;
-            hence P[m+1] by A16,A57,Th15;
+            hence P[m+1] by A17,A58,Th15;
        end;
        suppose InsCode i1 = 5;
           then consider da,db such that
-A69:        i1 = Divide(da,db) by SCMFSA_2:58;
-A70:        sk11.IC SCM+FSA= Next IC sk1 by A14,A69,SCMFSA_2:93
-           .= sk12.IC SCM+FSA by A8,A13,A15,A69,SCMFSA_2:93;
+A70:        i1 = Divide(da,db) by SCMFSA_2:58;
+A71:        sk11.IC SCM+FSA= Next IC sk1 by A15,A70,SCMFSA_2:93
+           .= sk12.IC SCM+FSA by A9,A14,A16,A70,SCMFSA_2:93;
               now let x be set;
-             assume A71:x in Dloc;
-             per cases by A1,A71,Th23;
-             suppose A72: x is Int-Location;
-                A73: da in UsedIntLoc p by A11,A69,Th16;
-then A74:            sk1.da=(sk2 | Dloc).da by A3,A7,FUNCT_1:72
-                .=sk2.da by A3,A73,FUNCT_1:72;
-                A75: db in UsedIntLoc p by A11,A69,Th16;
-then A76:            sk1.db=(sk2 | Dloc).db by A3,A7,FUNCT_1:72
-               .=sk2.db by A3,A75,FUNCT_1:72;
-A77:           sk1.x=(sk2 | Dloc).x by A7,A71,FUNCT_1:72
-              .=sk2.x by A71,FUNCT_1:72;
+             assume A72:x in Dloc;
+             per cases by A1,A72,Th23;
+             suppose A73: x is Int-Location;
+                A74: da in UsedIntLoc p by A12,A70,Th16;
+then A75:            sk1.da=(sk2 | Dloc).da by A4,A8,FUNCT_1:72
+                .=sk2.da by A4,A74,FUNCT_1:72;
+                A76: db in UsedIntLoc p by A12,A70,Th16;
+then A77:            sk1.db=(sk2 | Dloc).db by A4,A8,FUNCT_1:72
+               .=sk2.db by A4,A76,FUNCT_1:72;
+A78:           sk1.x=(sk2 | Dloc).x by A8,A72,FUNCT_1:72
+              .=sk2.x by A72,FUNCT_1:72;
                   now
                 per cases;
-                suppose A78: da <> db;
+                suppose A79: da <> db;
                       now
                      per cases;
-                     suppose A79:x = da;
-then sk11.x=sk1.da div sk1.db by A14,A69,A78,SCMFSA_2:93;
-                       hence sk11.x=sk12.x by A13,A15,A69,A74,A76,A78,A79,
+                     suppose A80:x = da;
+then sk11.x=sk1.da div sk1.db by A15,A70,A79,SCMFSA_2:93;
+                       hence sk11.x=sk12.x by A14,A16,A70,A75,A77,A79,A80,
 SCMFSA_2:93;
                      end;
-                     suppose A80:x = db;
-then sk11.x=sk1.da mod sk1.db by A14,A69,SCMFSA_2:93;
-                       hence sk11.x=sk12.x by A13,A15,A69,A74,A76,A80,
+                     suppose A81:x = db;
+then sk11.x=sk1.da mod sk1.db by A15,A70,SCMFSA_2:93;
+                       hence sk11.x=sk12.x by A14,A16,A70,A75,A77,A81,
 SCMFSA_2:93;
                      end;
-                     suppose A81:x <> da & x <> db;
-then sk11.x=sk1.x by A14,A69,A72,SCMFSA_2:93;
-                       hence sk11.x=sk12.x by A13,A15,A69,A72,A77,A81,
+                     suppose A82:x <> da & x <> db;
+then sk11.x=sk1.x by A15,A70,A73,SCMFSA_2:93;
+                       hence sk11.x=sk12.x by A14,A16,A70,A73,A78,A82,
 SCMFSA_2:93;
                   end;
                   end;
                   hence sk11.x=sk12.x;
                 end;
-                suppose A82: da = db;
+                suppose A83: da = db;
                       now
                      per cases;
-                     case A83:x = da;
-then sk11.x=sk1.da mod sk1.da by A14,A69,A82,SCMFSA_2:94;
-                       hence sk11.x=sk12.x by A13,A15,A69,A74,A82,A83,
+                     case A84:x = da;
+then sk11.x=sk1.da mod sk1.da by A15,A70,A83,SCMFSA_2:94;
+                       hence sk11.x=sk12.x by A14,A16,A70,A75,A83,A84,
 SCMFSA_2:94;
                      end;
-                     case A84:x <> da;
-then sk11.x=sk1.x by A14,A69,A72,A82,SCMFSA_2:94;
-                       hence sk11.x=sk12.x by A13,A15,A69,A72,A77,A82,A84,
+                     case A85:x <> da;
+then sk11.x=sk1.x by A15,A70,A73,A83,SCMFSA_2:94;
+                       hence sk11.x=sk12.x by A14,A16,A70,A73,A78,A83,A85,
 SCMFSA_2:94;
                   end;
                   end;
@@ -721,274 +717,274 @@ SCMFSA_2:94;
                end;
                hence sk11.x=sk12.x;
              end;
-             suppose A85:x is FinSeq-Location;
-then A86:              sk12.x=sk2.x by A13,A15,A69,SCMFSA_2:93;
-                     sk1.x=(sk2 | Dloc).x by A7,A71,FUNCT_1:72
-                  .=sk2.x by A71,FUNCT_1:72;
-                  hence sk11.x=sk12.x by A14,A69,A85,A86,SCMFSA_2:93;
+             suppose A86:x is FinSeq-Location;
+then A87:              sk12.x=sk2.x by A14,A16,A70,SCMFSA_2:93;
+                     sk1.x=(sk2 | Dloc).x by A8,A72,FUNCT_1:72
+                  .=sk2.x by A72,FUNCT_1:72;
+                  hence sk11.x=sk12.x by A15,A70,A86,A87,SCMFSA_2:93;
             end;
             end;
-            hence P[m+1] by A16,A70,Th15;
+            hence P[m+1] by A17,A71,Th15;
        end;
        suppose InsCode i1 = 6;
           then consider lb such that
-A87:        i1 = goto lb by SCMFSA_2:59;
-A88:        sk11.IC SCM+FSA=lb by A14,A87,SCMFSA_2:95
-           .= sk12.IC SCM+FSA by A13,A15,A87,SCMFSA_2:95;
+A88:        i1 = goto lb by SCMFSA_2:59;
+A89:        sk11.IC SCM+FSA=lb by A15,A88,SCMFSA_2:95
+           .= sk12.IC SCM+FSA by A14,A16,A88,SCMFSA_2:95;
               now let x be set;
-             assume A89:x in Dloc;
-then A90:         sk1.x=(sk2 | Dloc).x by A7,FUNCT_1:72
-             .=sk2.x by A89,FUNCT_1:72;
-             per cases by A1,A89,Th23;
-             suppose A91: x is Int-Location;
-then sk11.x=sk1.x by A14,A87,SCMFSA_2:95;
-                  hence sk11.x=sk12.x by A13,A15,A87,A90,A91,SCMFSA_2:95;
+             assume A90:x in Dloc;
+then A91:         sk1.x=(sk2 | Dloc).x by A8,FUNCT_1:72
+             .=sk2.x by A90,FUNCT_1:72;
+             per cases by A1,A90,Th23;
+             suppose A92: x is Int-Location;
+then sk11.x=sk1.x by A15,A88,SCMFSA_2:95;
+                  hence sk11.x=sk12.x by A14,A16,A88,A91,A92,SCMFSA_2:95;
              end;
-             suppose A92:x is FinSeq-Location;
-then sk11.x=sk1.x by A14,A87,SCMFSA_2:95;
-                  hence sk11.x=sk12.x by A13,A15,A87,A90,A92,SCMFSA_2:95;
+             suppose A93:x is FinSeq-Location;
+then sk11.x=sk1.x by A15,A88,SCMFSA_2:95;
+                  hence sk11.x=sk12.x by A14,A16,A88,A91,A93,SCMFSA_2:95;
             end;
             end;
-            hence P[m+1] by A16,A88,Th15;
+            hence P[m+1] by A17,A89,Th15;
        end;
        suppose InsCode i1 = 7;
           then consider lb,da such that
-A93:        i1 = da=0_goto lb by SCMFSA_2:60;
-           A94: da in UsedIntLoc p by A11,A93,Th17;
-then A95:       sk1.da=(sk2 | Dloc).da by A3,A7,FUNCT_1:72
-           .=sk2.da by A3,A94,FUNCT_1:72;
-A96:        now
+A94:        i1 = da=0_goto lb by SCMFSA_2:60;
+           A95: da in UsedIntLoc p by A12,A94,Th17;
+then A96:       sk1.da=(sk2 | Dloc).da by A4,A8,FUNCT_1:72
+           .=sk2.da by A4,A95,FUNCT_1:72;
+A97:        now
               per cases;
-              suppose A97:sk1.da=0;hence
-                    sk11.IC SCM+FSA=lb by A14,A93,SCMFSA_2:96
-                .= sk12.IC SCM+FSA by A13,A15,A93,A95,A97,SCMFSA_2:96;
+              suppose A98:sk1.da=0;hence
+                    sk11.IC SCM+FSA=lb by A15,A94,SCMFSA_2:96
+                .= sk12.IC SCM+FSA by A14,A16,A94,A96,A98,SCMFSA_2:96;
               end;
-              suppose A98:sk1.da<>0;hence
-                    sk11.IC SCM+FSA= Next IC sk2 by A8,A14,A93,SCMFSA_2:96
-                .= sk12.IC SCM+FSA by A13,A15,A93,A95,A98,SCMFSA_2:96;
+              suppose A99:sk1.da<>0;hence
+                    sk11.IC SCM+FSA= Next IC sk2 by A9,A15,A94,SCMFSA_2:96
+                .= sk12.IC SCM+FSA by A14,A16,A94,A96,A99,SCMFSA_2:96;
            end;
            end;
               now let x be set;
-             assume A99:x in Dloc;
-then A100:         sk1.x=(sk2 | Dloc).x by A7,FUNCT_1:72
-             .=sk2.x by A99,FUNCT_1:72;
-             per cases by A1,A99,Th23;
-             suppose A101: x is Int-Location;
-then sk11.x=sk1.x by A14,A93,SCMFSA_2:96;
-                  hence sk11.x=sk12.x by A13,A15,A93,A100,A101,SCMFSA_2:96;
+             assume A100:x in Dloc;
+then A101:         sk1.x=(sk2 | Dloc).x by A8,FUNCT_1:72
+             .=sk2.x by A100,FUNCT_1:72;
+             per cases by A1,A100,Th23;
+             suppose A102: x is Int-Location;
+then sk11.x=sk1.x by A15,A94,SCMFSA_2:96;
+                  hence sk11.x=sk12.x by A14,A16,A94,A101,A102,SCMFSA_2:96;
              end;
-             suppose A102:x is FinSeq-Location;
-then sk11.x=sk1.x by A14,A93,SCMFSA_2:96;
-                  hence sk11.x=sk12.x by A13,A15,A93,A100,A102,SCMFSA_2:96;
+             suppose A103:x is FinSeq-Location;
+then sk11.x=sk1.x by A15,A94,SCMFSA_2:96;
+                  hence sk11.x=sk12.x by A14,A16,A94,A101,A103,SCMFSA_2:96;
             end;
             end;
-            hence P[m+1] by A16,A96,Th15;
+            hence P[m+1] by A17,A97,Th15;
        end;
        suppose InsCode i1 = 8;
           then consider lb,da such that
-A103:        i1 = da>0_goto lb by SCMFSA_2:61;
-           A104: da in UsedIntLoc p by A11,A103,Th17;
-then A105:       sk1.da=(sk2 | Dloc).da by A3,A7,FUNCT_1:72
-           .=sk2.da by A3,A104,FUNCT_1:72;
-A106:        now
+A104:        i1 = da>0_goto lb by SCMFSA_2:61;
+           A105: da in UsedIntLoc p by A12,A104,Th17;
+then A106:       sk1.da=(sk2 | Dloc).da by A4,A8,FUNCT_1:72
+           .=sk2.da by A4,A105,FUNCT_1:72;
+A107:        now
               per cases;
-              suppose A107:sk1.da > 0;hence
-                    sk11.IC SCM+FSA=lb by A14,A103,SCMFSA_2:97
-                .= sk12.IC SCM+FSA by A13,A15,A103,A105,A107,SCMFSA_2:97;
+              suppose A108:sk1.da > 0;hence
+                    sk11.IC SCM+FSA=lb by A15,A104,SCMFSA_2:97
+                .= sk12.IC SCM+FSA by A14,A16,A104,A106,A108,SCMFSA_2:97;
               end;
-              suppose A108:sk1.da <= 0;hence
-                    sk11.IC SCM+FSA=Next IC sk2 by A8,A14,A103,SCMFSA_2:97
-                .= sk12.IC SCM+FSA by A13,A15,A103,A105,A108,SCMFSA_2:97;
+              suppose A109:sk1.da <= 0;hence
+                    sk11.IC SCM+FSA=Next IC sk2 by A9,A15,A104,SCMFSA_2:97
+                .= sk12.IC SCM+FSA by A14,A16,A104,A106,A109,SCMFSA_2:97;
            end;
            end;
               now let x be set;
-             assume A109:x in Dloc;
-then A110:         sk1.x=(sk2 | Dloc).x by A7,FUNCT_1:72
-             .=sk2.x by A109,FUNCT_1:72;
-             per cases by A1,A109,Th23;
-             suppose A111: x is Int-Location;
-then sk11.x=sk1.x by A14,A103,SCMFSA_2:97;
-                  hence sk11.x=sk12.x by A13,A15,A103,A110,A111,SCMFSA_2:97;
+             assume A110:x in Dloc;
+then A111:         sk1.x=(sk2 | Dloc).x by A8,FUNCT_1:72
+             .=sk2.x by A110,FUNCT_1:72;
+             per cases by A1,A110,Th23;
+             suppose A112: x is Int-Location;
+then sk11.x=sk1.x by A15,A104,SCMFSA_2:97;
+                  hence sk11.x=sk12.x by A14,A16,A104,A111,A112,SCMFSA_2:97;
              end;
-             suppose A112:x is FinSeq-Location;
-then sk11.x=sk1.x by A14,A103,SCMFSA_2:97;
-                  hence sk11.x=sk12.x by A13,A15,A103,A110,A112,SCMFSA_2:97;
+             suppose A113:x is FinSeq-Location;
+then sk11.x=sk1.x by A15,A104,SCMFSA_2:97;
+                  hence sk11.x=sk12.x by A14,A16,A104,A111,A113,SCMFSA_2:97;
             end;
             end;
-            hence P[m+1] by A16,A106,Th15;
+            hence P[m+1] by A17,A107,Th15;
        end;
        suppose InsCode i1 = 9;
           then consider a,b,fa such that
-A113:        i1 = b:=(fa,a) by SCMFSA_2:62;
-A114:        sk11.IC SCM+FSA= Next IC sk2 by A8,A14,A113,SCMFSA_2:98
-           .= sk12.IC SCM+FSA by A13,A15,A113,SCMFSA_2:98;
+A114:        i1 = b:=(fa,a) by SCMFSA_2:62;
+A115:        sk11.IC SCM+FSA= Next IC sk2 by A9,A15,A114,SCMFSA_2:98
+           .= sk12.IC SCM+FSA by A14,A16,A114,SCMFSA_2:98;
               now let x be set;
-             assume A115:x in Dloc;
-             per cases by A1,A115,Th23;
-             suppose A116: x is Int-Location;
+             assume A116:x in Dloc;
+             per cases by A1,A116,Th23;
+             suppose A117: x is Int-Location;
                   now
                 per cases;
-                case A117:x = b;
+                case A118:x = b;
                   consider k1 being Element of NAT such that
-A118:               k1=abs(sk1.a) & Exec(b:=(fa,a), sk1).b=(sk1.fa)/.k1
+A119:               k1=abs(sk1.a) & Exec(b:=(fa,a), sk1).b=(sk1.fa)/.k1
                   by SCMFSA_2:98;
                   consider k2 being Element of NAT such that
-A119:               k2=abs(sk2.a) & Exec(b:=(fa,a), sk2).b=(sk2.fa)/.k2
+A120:               k2=abs(sk2.a) & Exec(b:=(fa,a), sk2).b=(sk2.fa)/.k2
                   by SCMFSA_2:98;
-                  A120: a in UsedIntLoc p by A11,A113,Th18;
-                  then A121: sk1.a=(sk2 | Dloc).a by A3,A7,FUNCT_1:72
-                  .=sk2.a by A3,A120,FUNCT_1:72;
-                  A122: fa in UsedInt*Loc p by A11,A113,Th19;
-              then sk1.fa=(sk2 | Dloc).fa by A4,A7,FUNCT_1:72
-                  .=sk2.fa by A4,A122,FUNCT_1:72;
-                  hence sk11.x=sk12.x by A13,A14,A15,A113,A117,A118,A119,A121;
+                  A121: a in UsedIntLoc p by A12,A114,Th18;
+                  then A122: sk1.a=(sk2 | Dloc).a by A4,A8,FUNCT_1:72
+                  .=sk2.a by A4,A121,FUNCT_1:72;
+                  A123: fa in UsedInt*Loc p by A12,A114,Th19;
+              then sk1.fa=(sk2 | Dloc).fa by A5,A8,FUNCT_1:72
+                  .=sk2.fa by A5,A123,FUNCT_1:72;
+                  hence sk11.x=sk12.x by A14,A15,A16,A114,A118,A119,A120,A122;
                 end;
-                case A123:x<> b;
-then A124:               sk12.x=sk2.x by A13,A15,A113,A116,SCMFSA_2:98;
-                     sk1.x=(sk2 | Dloc).x by A7,A115,FUNCT_1:72
-                  .=sk2.x by A115,FUNCT_1:72;
-                  hence sk11.x=sk12.x by A14,A113,A116,A123,A124,SCMFSA_2:98;
+                case A124:x<> b;
+then A125:               sk12.x=sk2.x by A14,A16,A114,A117,SCMFSA_2:98;
+                     sk1.x=(sk2 | Dloc).x by A8,A116,FUNCT_1:72
+                  .=sk2.x by A116,FUNCT_1:72;
+                  hence sk11.x=sk12.x by A15,A114,A117,A124,A125,SCMFSA_2:98;
                 end;
                 end;
                 hence sk11.x=sk12.x;
              end;
-             suppose A125:x is FinSeq-Location;
-then A126:              sk12.x=sk2.x by A13,A15,A113,SCMFSA_2:98;
-                     sk1.x=(sk2 | Dloc).x by A7,A115,FUNCT_1:72
-                  .=sk2.x by A115,FUNCT_1:72;
-                  hence sk11.x=sk12.x by A14,A113,A125,A126,SCMFSA_2:98;
+             suppose A126:x is FinSeq-Location;
+then A127:              sk12.x=sk2.x by A14,A16,A114,SCMFSA_2:98;
+                     sk1.x=(sk2 | Dloc).x by A8,A116,FUNCT_1:72
+                  .=sk2.x by A116,FUNCT_1:72;
+                  hence sk11.x=sk12.x by A15,A114,A126,A127,SCMFSA_2:98;
             end;
             end;
-            hence P[m+1] by A16,A114,Th15;
+            hence P[m+1] by A17,A115,Th15;
        end;
        suppose InsCode i1 = 10;
           then consider a,b,fa such that
-A127:        i1 = (fa,a):=b by SCMFSA_2:63;
-A128:        sk11.IC SCM+FSA= Next IC sk2 by A8,A14,A127,SCMFSA_2:99
-           .= sk12.IC SCM+FSA by A13,A15,A127,SCMFSA_2:99;
+A128:        i1 = (fa,a):=b by SCMFSA_2:63;
+A129:        sk11.IC SCM+FSA= Next IC sk2 by A9,A15,A128,SCMFSA_2:99
+           .= sk12.IC SCM+FSA by A14,A16,A128,SCMFSA_2:99;
               now let x be set;
-             assume A129:x in Dloc;
-             per cases by A1,A129,Th23;
-             suppose A130: x is FinSeq-Location;
+             assume A130:x in Dloc;
+             per cases by A1,A130,Th23;
+             suppose A131: x is FinSeq-Location;
                   now
                 per cases;
-                case A131:x = fa;
+                case A132:x = fa;
                   consider k1 being Element of NAT such that
-A132:               k1=abs(sk1.a) & Exec((fa,a):=b,sk1).fa=sk1.fa+*(k1,sk1.b)
+A133:               k1=abs(sk1.a) & Exec((fa,a):=b,sk1).fa=sk1.fa+*(k1,sk1.b)
                   by SCMFSA_2:99;
                   consider k2 being Element of NAT such that
-A133:               k2=abs(sk2.a) & Exec((fa,a):=b,sk2).fa=sk2.fa+*(k2,sk2.b)
+A134:               k2=abs(sk2.a) & Exec((fa,a):=b,sk2).fa=sk2.fa+*(k2,sk2.b)
                   by SCMFSA_2:99;
-                  A134: a in UsedIntLoc p by A11,A127,Th18;
-                  then A135: sk1.a=(sk2 | Dloc).a by A3,A7,FUNCT_1:72
-                  .=sk2.a by A3,A134,FUNCT_1:72;
-                  A136: b in UsedIntLoc p by A11,A127,Th18;
-then A137:              sk1.b=(sk2 | Dloc).b by A3,A7,FUNCT_1:72
-                  .=sk2.b by A3,A136,FUNCT_1:72;
-                  A138: fa in UsedInt*Loc p by A11,A127,Th19;
-              then sk1.fa=(sk2 | Dloc).fa by A4,A7,FUNCT_1:72
-                  .=sk2.fa by A4,A138,FUNCT_1:72;
-                  hence sk11.x=sk12.x by A13,A14,A15,A127,A131,A132,A133,A135
-,A137;
+                  A135: a in UsedIntLoc p by A12,A128,Th18;
+                  then A136: sk1.a=(sk2 | Dloc).a by A4,A8,FUNCT_1:72
+                  .=sk2.a by A4,A135,FUNCT_1:72;
+                  A137: b in UsedIntLoc p by A12,A128,Th18;
+then A138:              sk1.b=(sk2 | Dloc).b by A4,A8,FUNCT_1:72
+                  .=sk2.b by A4,A137,FUNCT_1:72;
+                  A139: fa in UsedInt*Loc p by A12,A128,Th19;
+              then sk1.fa=(sk2 | Dloc).fa by A5,A8,FUNCT_1:72
+                  .=sk2.fa by A5,A139,FUNCT_1:72;
+                  hence sk11.x=sk12.x by A14,A15,A16,A128,A132,A133,A134,A136
+,A138;
                 end;
-                case A139:x<> fa;
-then A140:               sk12.x=sk2.x by A13,A15,A127,A130,SCMFSA_2:99;
-                     sk1.x=(sk2 | Dloc).x by A7,A129,FUNCT_1:72
-                  .=sk2.x by A129,FUNCT_1:72;
-                  hence sk11.x=sk12.x by A14,A127,A130,A139,A140,SCMFSA_2:99;
+                case A140:x<> fa;
+then A141:               sk12.x=sk2.x by A14,A16,A128,A131,SCMFSA_2:99;
+                     sk1.x=(sk2 | Dloc).x by A8,A130,FUNCT_1:72
+                  .=sk2.x by A130,FUNCT_1:72;
+                  hence sk11.x=sk12.x by A15,A128,A131,A140,A141,SCMFSA_2:99;
                 end;
                 end;
                 hence sk11.x=sk12.x;
              end;
-             suppose A141:x is Int-Location;
-then A142:              sk12.x=sk2.x by A13,A15,A127,SCMFSA_2:99;
-                     sk1.x=(sk2 | Dloc).x by A7,A129,FUNCT_1:72
-                  .=sk2.x by A129,FUNCT_1:72;
-                  hence sk11.x=sk12.x by A14,A127,A141,A142,SCMFSA_2:99;
+             suppose A142:x is Int-Location;
+then A143:              sk12.x=sk2.x by A14,A16,A128,SCMFSA_2:99;
+                     sk1.x=(sk2 | Dloc).x by A8,A130,FUNCT_1:72
+                  .=sk2.x by A130,FUNCT_1:72;
+                  hence sk11.x=sk12.x by A15,A128,A142,A143,SCMFSA_2:99;
             end;
             end;
-            hence P[m+1] by A16,A128,Th15;
+            hence P[m+1] by A17,A129,Th15;
        end;
        suppose InsCode i1 = 11;
           then consider a,fa such that
-A143:        i1 = a:=len fa by SCMFSA_2:64;
-A144:        sk11.IC SCM+FSA= Next IC sk2 by A8,A14,A143,SCMFSA_2:100
-           .= sk12.IC SCM+FSA by A13,A15,A143,SCMFSA_2:100;
+A144:        i1 = a:=len fa by SCMFSA_2:64;
+A145:        sk11.IC SCM+FSA= Next IC sk2 by A9,A15,A144,SCMFSA_2:100
+           .= sk12.IC SCM+FSA by A14,A16,A144,SCMFSA_2:100;
               now let x be set;
-             assume A145:x in Dloc;
-             per cases by A1,A145,Th23;
-             suppose A146: x is Int-Location;
+             assume A146:x in Dloc;
+             per cases by A1,A146,Th23;
+             suppose A147: x is Int-Location;
                   now
                 per cases;
-                case A147:x = a;
-then A148:              sk12.x= len(sk2.fa) by A13,A15,A143,SCMFSA_2:100;
-                  A149: fa in UsedInt*Loc p by A11,A143,Th21;
-              then sk1.fa=(sk2 | Dloc).fa by A4,A7,FUNCT_1:72
-                  .=sk2.fa by A4,A149,FUNCT_1:72;
-                  hence sk11.x=sk12.x by A14,A143,A147,A148,SCMFSA_2:100;
+                case A148:x = a;
+then A149:              sk12.x= len(sk2.fa) by A14,A16,A144,SCMFSA_2:100;
+                  A150: fa in UsedInt*Loc p by A12,A144,Th21;
+              then sk1.fa=(sk2 | Dloc).fa by A5,A8,FUNCT_1:72
+                  .=sk2.fa by A5,A150,FUNCT_1:72;
+                  hence sk11.x=sk12.x by A15,A144,A148,A149,SCMFSA_2:100;
                 end;
-                case A150:x<> a;
-then A151:               sk12.x=sk2.x by A13,A15,A143,A146,SCMFSA_2:100;
-                     sk1.x=(sk2 | Dloc).x by A7,A145,FUNCT_1:72
-                  .=sk2.x by A145,FUNCT_1:72;
-                  hence sk11.x=sk12.x by A14,A143,A146,A150,A151,SCMFSA_2:100;
+                case A151:x<> a;
+then A152:               sk12.x=sk2.x by A14,A16,A144,A147,SCMFSA_2:100;
+                     sk1.x=(sk2 | Dloc).x by A8,A146,FUNCT_1:72
+                  .=sk2.x by A146,FUNCT_1:72;
+                  hence sk11.x=sk12.x by A15,A144,A147,A151,A152,SCMFSA_2:100;
                 end;
                 end;
                 hence sk11.x=sk12.x;
              end;
-             suppose A152:x is FinSeq-Location;
-then A153:              sk12.x=sk2.x by A13,A15,A143,SCMFSA_2:100;
-                     sk1.x=(sk2 | Dloc).x by A7,A145,FUNCT_1:72
-                  .=sk2.x by A145,FUNCT_1:72;
-                  hence sk11.x=sk12.x by A14,A143,A152,A153,SCMFSA_2:100;
+             suppose A153:x is FinSeq-Location;
+then A154:              sk12.x=sk2.x by A14,A16,A144,SCMFSA_2:100;
+                     sk1.x=(sk2 | Dloc).x by A8,A146,FUNCT_1:72
+                  .=sk2.x by A146,FUNCT_1:72;
+                  hence sk11.x=sk12.x by A15,A144,A153,A154,SCMFSA_2:100;
             end;
             end;
-          hence P[m+1] by A16,A144,Th15;
+          hence P[m+1] by A17,A145,Th15;
        end;
        suppose InsCode i1 = 12;
           then consider a,fa such that
-A154:        i1 = fa:=<0,...,0>a by SCMFSA_2:65;
-A155:        sk11.IC SCM+FSA=Next IC sk2 by A8,A14,A154,SCMFSA_2:101
-           .= sk12.IC SCM+FSA by A13,A15,A154,SCMFSA_2:101;
+A155:        i1 = fa:=<0,...,0>a by SCMFSA_2:65;
+A156:        sk11.IC SCM+FSA=Next IC sk2 by A9,A15,A155,SCMFSA_2:101
+           .= sk12.IC SCM+FSA by A14,A16,A155,SCMFSA_2:101;
               now let x be set;
-             assume A156:x in Dloc;
-             per cases by A1,A156,Th23;
-             suppose A157: x is FinSeq-Location;
+             assume A157:x in Dloc;
+             per cases by A1,A157,Th23;
+             suppose A158: x is FinSeq-Location;
                   now
                 per cases;
-                case A158:x = fa;
+                case A159:x = fa;
                   consider k1 being Element of NAT such that
-A159:               k1 = abs(sk1.a) & Exec(fa:=<0,...,0>a, sk1).fa = k1 |-> 0
+A160:               k1 = abs(sk1.a) & Exec(fa:=<0,...,0>a, sk1).fa = k1 |-> 0
                   by SCMFSA_2:101;
                   consider k2 being Element of NAT such that
-A160:               k2 = abs(sk2.a) & Exec(fa:=<0,...,0>a, sk2).fa = k2 |-> 0
+A161:               k2 = abs(sk2.a) & Exec(fa:=<0,...,0>a, sk2).fa = k2 |-> 0
                   by SCMFSA_2:101;
-                  A161: a in UsedIntLoc p by A11,A154,Th20;
-                  then sk1.a=(sk2 | Dloc).a by A3,A7,FUNCT_1:72
-                  .=sk2.a by A3,A161,FUNCT_1:72;
-                   hence sk11.x=sk12.x by A13,A14,A15,A154,A158,A159,A160;
+                  A162: a in UsedIntLoc p by A12,A155,Th20;
+                  then sk1.a=(sk2 | Dloc).a by A4,A8,FUNCT_1:72
+                  .=sk2.a by A4,A162,FUNCT_1:72;
+                   hence sk11.x=sk12.x by A14,A15,A16,A155,A159,A160,A161;
                 end;
-                case A162:x<> fa;
-then A163:               sk12.x=sk2.x by A13,A15,A154,A157,SCMFSA_2:101;
-                     sk1.x=(sk2 | Dloc).x by A7,A156,FUNCT_1:72
-                  .=sk2.x by A156,FUNCT_1:72;
-                  hence sk11.x=sk12.x by A14,A154,A157,A162,A163,SCMFSA_2:101;
+                case A163:x<> fa;
+then A164:               sk12.x=sk2.x by A14,A16,A155,A158,SCMFSA_2:101;
+                     sk1.x=(sk2 | Dloc).x by A8,A157,FUNCT_1:72
+                  .=sk2.x by A157,FUNCT_1:72;
+                  hence sk11.x=sk12.x by A15,A155,A158,A163,A164,SCMFSA_2:101;
                 end;
                 end;
                 hence sk11.x=sk12.x;
              end;
-             suppose A164:x is Int-Location;
-then A165:              sk12.x=sk2.x by A13,A15,A154,SCMFSA_2:101;
-                     sk1.x=(sk2 | Dloc).x by A7,A156,FUNCT_1:72
-                  .=sk2.x by A156,FUNCT_1:72;
-                  hence sk11.x=sk12.x by A14,A154,A164,A165,SCMFSA_2:101;
+             suppose A165:x is Int-Location;
+then A166:              sk12.x=sk2.x by A14,A16,A155,SCMFSA_2:101;
+                     sk1.x=(sk2 | Dloc).x by A8,A157,FUNCT_1:72
+                  .=sk2.x by A157,FUNCT_1:72;
+                  hence sk11.x=sk12.x by A15,A155,A165,A166,SCMFSA_2:101;
             end;
             end;
-            hence P[m+1] by A16,A155,Th15;
+            hence P[m+1] by A17,A156,Th15;
     end;
     end;
-    for m being Element of NAT holds P[m] from NAT_1:sch 1(A5,A6);
-    hence thesis by A2,AA;
+    for m being Element of NAT holds P[m] from NAT_1:sch 1(A6,A7);
+    hence thesis by A3;
 end;
 
 theorem Th26:
@@ -3377,8 +3373,7 @@ A10:  IC s1 = insloc 0 by A5,AMI_3:def 14
      per cases by A2,Th13;
      suppose A11:i = 0;
        hence Cs1.i.intloc 0 = Cs2.i.intloc 0 by A3,A8;
-       thus (Cs1.i).IC SCM+FSA = IC s2 by A3,A10,A11
-       .= (Cs2.i).IC SCM+FSA by A3,A11;
+       thus (Cs1.i).IC SCM+FSA = (Cs2.i).IC SCM+FSA by  A3,A10,A11;
        thus Cs1.i.fsloc 0 = Cs2.i.fsloc 0 by A3,A9,A11;
      end;
      suppose A12:i = 1;

@@ -9,9 +9,9 @@ environ
  vocabularies FINSEQ_1, FINSET_1, FUNCT_1, ARYTM_1, RELAT_1, INT_1, CARD_1,
       BOOLE, FINSEQ_2, TARSKI, GRAPH_1, ORDERS_1, GRAPH_2, FINSEQ_4, ORDINAL2,
       ARYTM, REALSET1;
- notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, ORDINAL2, NUMBERS, XCMPLX_0,
-      RELAT_1, FUNCT_1, FUNCT_2, FINSEQ_1, REALSET1, FINSEQ_2, FINSEQ_4,
-      CARD_1, FINSET_1, NAT_1, INT_1, RECDEF_1, GRAPH_1, BINARITH, XXREAL_0;
+ notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, RELAT_1,
+      FUNCT_1, FUNCT_2, FINSEQ_1, REALSET1, FINSEQ_2, FINSEQ_4, CARD_1,
+      FINSET_1, NAT_1, INT_1, RECDEF_1, GRAPH_1, BINARITH, XXREAL_0;
  constructors PARTFUN1, WELLORD2, XXREAL_0, NAT_1, INT_1, RECDEF_1, FINSEQ_4,
       REALSET1, BINARITH, FINSEQ_6, GRAPH_1, ORDINAL2;
  registrations INT_1, FUNCT_1, FINSEQ_1, FINSET_1, CARD_1, GRAPH_1, RELSET_1,
@@ -30,7 +30,7 @@ begin :: Preliminaries
 reserve p, q for FinSequence,
         X, Y, x, y for set,
         D for non empty set,
-        i, j, k, l, m, k1, k2, n, r for Element of NAT;
+        i, j, k, l, m, n, r for Element of NAT;
 
 theorem Th1:
  m+1<=k & k<=n iff ex i being Element of NAT st m<=i & i<n & k=i+1 proof
@@ -443,7 +443,7 @@ A7: 1<=n+1 & n+1<=r+1 by A2,XREAL_1:8,NAT_1:29;
 then A8: len p2 = r-n;  m<=r by A1,A2,XXREAL_0:2;
    then A9: m+1<=r+1 by XREAL_1:8;
    thus len p12 = len p12;
-A10:  len p12=len p1 +len p2 by FINSEQ_1:35 .= n-m+(r+ -n) by A5,A8
+A10:  len p12= n-m+(r+ -n) by  FINSEQ_1:35,A5,A8
           .= r-m;
        m+1<=r+1 by A4,A7,XXREAL_0:2; then len p3 +(m+1)=r+1 by A3,A4,Lm2;
     then len p3 +m+1 = r+1; then A11: len p3 +m-m = r-m;
@@ -535,9 +535,9 @@ end;
 definition let D be set, p be FinSequence of D, m, n be Nat;
  redefine func (m, n)-cut p -> FinSequence of D;
  coherence proof
-    A0: m is Element of NAT & n is Element of NAT by ORDINAL1:def 13;
-A1: rng p c= D by FINSEQ_1:def 4;  rng (m,n)-cut p c= rng p by A0, Th11;
-   then rng (m,n)-cut p c= D by A1,XBOOLE_1:1; hence thesis by FINSEQ_1:def 4
+    A1: m is Element of NAT & n is Element of NAT by ORDINAL1:def 13;
+A2: rng p c= D by FINSEQ_1:def 4;  rng (m,n)-cut p c= rng p by A1, Th11;
+   then rng (m,n)-cut p c= D by A2,XBOOLE_1:1; hence thesis by FINSEQ_1:def 4
 ;
  end;
 end;
@@ -560,7 +560,7 @@ A6: now assume len c = 0;
      0+1<=len c by A6,A7,NAT_1:38;
       then consider i being Element of NAT such that
 A8: 0<=i & i<len c & len c =i+1 by Th1;
-   m+i = m+(len c -1) by A8 .= n+1-1 by A5 .= n;
+   m+i = n by A5,A8;
  hence c.(len c) = p.n by A1,A3,A4,A8,Lm2;
 end;
 
@@ -1885,7 +1885,7 @@ A7: len vs = len c + 1 by A5,Def7;
 then A8: m<=n+1 & n+1<=len vs by A2,A3,XREAL_1:8,NAT_1:37;
 A9: len c1 +m= n+1 by A1,A3,A4,A8,Lm2;
     len vs1 +m = n+1+1 by A1,A6,A8,Def1;
-hence A10: len vs1 = n+1+1-m .= n+1-m+1 .= len c1 + 1 by A9;
+hence A10: len vs1 = len c1 + 1 by A9;
     let k be Element of NAT;
     assume that
 A11: 1<=k and
@@ -2331,7 +2331,7 @@ A21: len p2 = len c2 + 1 by A19,Def7;
      then m-'1 = m-1 by BINARITH:def 3;
      then reconsider m1 = m-1 as Element of NAT;
 A22:  m = m1 +1;  len c2 +m = len c +1 by A15,Def1;
-then A23: len c2 = len c +1-m .=len c - m + 1;
+then A23: len c2 =len c - m + 1;
        A24: m-m<=len c -m by A14,XREAL_1:11;
      then len c2 -'1 = len c2 -1 by A23,BINARITH:def 3;
      then reconsider lc21 = len c2 -1 as Element of NAT;
@@ -2522,9 +2522,8 @@ then A101:   x in dom (fc*SR) by A73,A98,FUNCT_1:21;  0+1<=k by A96,FINSEQ_3:27
 ;
       then consider i being Element of NAT such that
 A102:   0<=i & i<len c2 & k=i+1 by A97,Th1;
-         (fc*SR).x = fc.(m1+k) by A99,A101,FUNCT_1:22 .= c.(m1+k) by A35,A73
-,A99,A100,GRFUNC_1:8
-        .= c.(m+i) by A102
+         (fc*SR).x = fc.(m1+k) by A99,A101,FUNCT_1:22 .= c.(m+i) by  A35,A73
+,A99,A100,GRFUNC_1:8,A102
         .= y by A15,A96,A102,Def1;
       hence p in fc*(Sgm DR) by A95,A101,FUNCT_1:8;
      end; assume
@@ -2539,7 +2538,7 @@ then A109:   m1+k=SR.k by A22,A23,A25,Th5;  0+1<=k by A106,FINSEQ_3:27;
      then consider i being Element of NAT such that
 A110:   0<=i & i<len c2 & k=i+1 by A108,Th1;
         c2.k = c.(m1+1+i) by A15,A110,Def1
-         .= c.(m1+k) by A110 .= fc.(SR.k) by A35,A106,A109,GRFUNC_1:8 .= y by
+         .= fc.(SR.k) by  A110,A35,A106,A109,GRFUNC_1:8 .= y by
 A105,A106,FUNCT_1:23;
      hence p in c2 by A104,A107,FUNCT_1:8;
     end;
@@ -2662,9 +2661,8 @@ then A163:   x in dom (fvs*SR) by A133,A160,FUNCT_1:21;  0+1<=k by A158,
 FINSEQ_3:27;
       then consider i being Element of NAT such that
 A164:   0<=i & i<len p2' & k=i+1 by A159,Th1;
-         (fvs*SR).x = fvs.(m+k) by A161,A163,FUNCT_1:22 .= vs.(m+k) by A44,A133
-,A161,A162,GRFUNC_1:8
-      .= vs.(m+1+i) by A164 .= y by A4,A155,A158,A164,Lm2;
+         (fvs*SR).x = fvs.(m+k) by A161,A163,FUNCT_1:22 .= vs.(m+1+i) by  A44
+,A133,A161,A162,GRFUNC_1:8,A164 .= y by A4,A155,A158,A164,Lm2;
       hence p in fvs*(Sgm DR) by A157,A163,FUNCT_1:8;
      end; assume
 A165:  p in fvs*(Sgm DR); then consider x,y being set such that
@@ -2678,7 +2676,7 @@ then A171:   m+k=SR.k by A4,A124,A127,A154,Th5;  0+1<=k by A168,FINSEQ_3:27;
      then consider i being Element of NAT such that
 A172:   0<=i & i<len p2' & k=i+1 by A170,Th1;
         p2'.k = vs.(m+1+i) by A4,A155,A172,Lm2
-         .= vs.(m+k) by A172 .= fvs.(SR.k) by A44,A168,A171,GRFUNC_1:8 .= y by
+         .= fvs.(SR.k) by  A172,A44,A168,A171,GRFUNC_1:8 .= y by
 A167,A168,FUNCT_1:23;
      hence p in p2' by A166,A169,FUNCT_1:8;
     end;
@@ -2746,7 +2744,7 @@ then A197:  x in dom vs by A196,FINSEQ_3:27;
   then reconsider fvs as FinSubsequence of vs by Def5;
   take fvs; take c1 = c2; take p1 = p2;
         len c2 +m = len c +1 by A3,A4,A174,Lm2;
-then A198: len c2 = len c +1-m .=len c - m + 1;
+then A198: len c2 =len c - m + 1;
        A199: m-m<=len c -m by A176,XREAL_1:11;
         1-1<=m-1 by A177,XREAL_1:11;
      then m-'1 = m-1 by BINARITH:def 3;
@@ -2757,7 +2755,7 @@ A200:  m = m1 +1;
 A201:  m+lc21 = m1+len c2;
 A202: 1<=m & m<=len c +1+1 & len c +1<=len vs by A3,A4,A174,NAT_1:37;
      then len p2 +m = len c +1 +1 by Lm2;
-then A203: len p2 = len c +1 +1 -m .= len c -m +1+1;
+then A203: len p2 = len c -m +1+1;
 then A204: 1<=len p2 by A198,NAT_1:37;
 A205: len c2 = len c +(-m+1) by A198;
         1-1 < m-1 by A177,XREAL_1:11;
@@ -2799,9 +2797,8 @@ then A219:   x in dom (fc*SR) by A211,A216,FUNCT_1:21;  0+1<=k by A214,
 FINSEQ_3:27;
       then consider i being Element of NAT such that
 A220:   0<=i & i<len c2 & k=i+1 by A215,Th1;
-         (fc*SR).x = fc.(m1+k) by A217,A219,FUNCT_1:22 .= c.(m1+k) by A183,A211
-,A217,A218,GRFUNC_1:8
-        .= c.(m+i) by A220
+         (fc*SR).x = fc.(m1+k) by A217,A219,FUNCT_1:22 .= c.(m+i) by  A183,A211
+,A217,A218,GRFUNC_1:8,A220
         .= y by A3,A4,A174,A214,A220,Lm2;
       hence p in fc*(Sgm domfc) by A213,A219,FUNCT_1:8;
      end; assume
@@ -2816,7 +2813,7 @@ then A227:   m1+k=SR.k by A198,A200,A201,Th5;  0+1<=k by A224,FINSEQ_3:27;
      then consider i being Element of NAT such that
 A228:   0<=i & i<len c2 & k=i+1 by A226,Th1;
         c2.k = c.(m1+1+i) by A3,A4,A174,A228,Lm2
-         .= c.(m1+k) by A228 .= fc.(SR.k) by A183,A224,A227,GRFUNC_1:8 .= y by
+         .= fc.(SR.k) by  A228,A183,A224,A227,GRFUNC_1:8 .= y by
 A223,A224,FUNCT_1:23;
      hence p in c2 by A222,A225,FUNCT_1:8;
     end;
@@ -2854,9 +2851,8 @@ then A243:   x in dom (fvs*SR) by A235,A240,FUNCT_1:21;  0+1<=k by A238,
 FINSEQ_3:27;
       then consider i being Element of NAT such that
 A244:   0<=i & i<len p2 & k=i+1 by A239,Th1;
-         (fvs*SR).x = fvs.(m1+k) by A241,A243,FUNCT_1:22 .= vs.(m1+k) by A192
-,A235,A241,A242,GRFUNC_1:8
-        .= vs.(m+i) by A244
+         (fvs*SR).x = fvs.(m1+k) by A241,A243,FUNCT_1:22 .= vs.(m+i) by  A192
+,A235,A241,A242,GRFUNC_1:8,A244
         .= y by A202,A238,A244,Lm2;
       hence p in fvs*(Sgm domfvs) by A237,A243,FUNCT_1:8;
      end; assume
@@ -2871,7 +2867,7 @@ then A251:   m1+k=SR.k by A4,A200,A203,A232,Th5;  0+1<=k by A248,FINSEQ_3:27;
      then consider i being Element of NAT such that
 A252:   0<=i & i<len p2 & k=i+1 by A250,Th1;
         p2.k = vs.(m1+1+i) by A202,A252,Lm2
-        .= vs.(m1+k) by A252 .= fvs.(SR.k) by A192,A248,A251,GRFUNC_1:8 .= y
+        .= fvs.(SR.k) by  A252,A192,A248,A251,GRFUNC_1:8 .= y
 by A247,A248,FUNCT_1:23
 ;
      hence p in p2 by A246,A249,FUNCT_1:8;
@@ -2940,7 +2936,7 @@ hence p in vs by A274,A276,A277,FUNCT_1:8;
   then reconsider fvs as FinSubsequence of vs by Def5;
   take fvs; take c' = c1; take p1 = pp;
         len c1+1=n1+1 by A7,A255,A256,Lm2;
-then A278: len c1 = n1+1-1 .= n - 1 by A6,BINARITH:def 3;
+then A278: len c1 = n - 1 by A6,BINARITH:def 3;
   hence
    len c' < len c by A255;
   thus p1 is_vertex_seq_of c' by A2,A8,A254,A255,Th45;  len p1 = len c1 + 1 by
@@ -3342,8 +3338,7 @@ proof
       f2 be FinSequence of D;
 A1:1 in dom f1 by FINSEQ_5:6;
 A2:1 in dom (f1^(2, len f2)-cut f2) by FINSEQ_5:6;
-  thus (f1^'f2)/.1 = (f1^(2, len f2)-cut f2)/.1
-    .= (f1^(2, len f2)-cut f2).1 by A2,FINSEQ_4:def 4
+  thus (f1^'f2)/.1 = (f1^(2, len f2)-cut f2).1 by A2,FINSEQ_4:def 4
     .= f1.1 by A1,FINSEQ_1:def 7
     .= f1/.1 by A1,FINSEQ_4:def 4;
 end;
@@ -3371,8 +3366,7 @@ theorem Th59:
   let f be FinSequence;
       len {} = 0 by FINSEQ_1:25;
 then A1: 2 > len{};
-  thus f^'{} = f^(2, len {})-cut {}
-        .= f^{} by A1,Def1
+  thus f^'{} = f^{} by A1,Def1
         .= f by FINSEQ_1:47;
  end;
 
@@ -3382,8 +3376,7 @@ theorem
    let f be FinSequence;
        len <*x*> = 1 by FINSEQ_1:56;
    then (2, len <*x*>)-cut <*x*> = {} by Def1;
-  hence f^'<*x*> = f^{}
-        .= f by FINSEQ_1:47;
+  hence f^'<*x*> = f by FINSEQ_1:47;
  end;
 
 theorem  :: GRAPH_2:14

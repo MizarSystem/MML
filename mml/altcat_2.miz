@@ -41,7 +41,7 @@ A3:   x in dom(X1-->a1) & y in dom(X2-->a2);
      then A4:   (X1-->a1).x = a1 & (X2-->a2).y = a2 by A1,FUNCOP_1:13;
          [x,y] in dom([:X1,X2:] --> [a1,a2]) by A2,A3,ZFMISC_1:106;
      then [x,y] in [:X1,X2:] by FUNCOP_1:19;
-    hence ([:X1,X2:] --> [a1,a2]).[x,y] = [(X1-->a1).x,(X2-->a2).y]
+    hence ([:X1,X2:] --> [a1,a2]).(x,y) = [(X1-->a1).x,(X2-->a2).y]
                             by A4,FUNCOP_1:13;
    end;
   hence [:X1 -->a1,X2-->a2:] = [:X1,X2:] --> [a1,a2] by A2,FUNCT_3:def 9;
@@ -108,10 +108,10 @@ A5:    x = [y1,z1] by ZFMISC_1:103;
      thus x = [y1,z1] by A5;
           dom[:g,h:] = [:dom g,dom h:] by FUNCT_3:def 9;
 then A6:    [z1,y1] in dom[:g,h:] by A3,A4,ZFMISC_1:106;
-A7:    [:h,g:].x = [h.y1,g.z1] by A3,A4,A5,FUNCT_3:def 9;
-A8:    [:g,h:].[z1,y1] = [g.z1,h.y1] by A3,A4,FUNCT_3:def 9;
-          [:h,g:].x in dom~f by A2,FUNCT_1:21;
-      then [:g,h:].[z1,y1] in dom f by A7,A8,FUNCT_4:43;
+A7:    [:h,g:].(y1,z1) = [h.y1,g.z1] by A3,A4,FUNCT_3:def 9;
+A8:    [:g,h:].(z1,y1) = [g.z1,h.y1] by A3,A4,FUNCT_3:def 9;
+          [:h,g:].(y1,z1) in dom~f by A2,FUNCT_1:21,A5;
+      then [:g,h:].(z1,y1) in dom f by A7,A8,FUNCT_4:43;
      hence [z1,y1] in dom(f*[:g,h:]) by A6,FUNCT_1:21;
     end;
     given y,z being set such that
@@ -122,10 +122,10 @@ A11:   [y,z] in dom [:g,h:] by A10,FUNCT_1:21;
 then A12:  y in dom g & z in dom h by A11,ZFMISC_1:106;
          dom[:h,g:] = [:dom h, dom g:] by FUNCT_3:def 9;
 then A13:   x in dom[:h,g:] by A9,A12,ZFMISC_1:106;
-A14:   [:g,h:].[y,z] = [g.y,h.z] by A12,FUNCT_3:def 9;
-A15:   [:h,g:].x = [h.z,g.y] by A9,A12,FUNCT_3:def 9;
-         [:g,h:].[y,z] in dom f by A10,FUNCT_1:21;
-     then [:h,g:].x in dom~f by A14,A15,FUNCT_4:43;
+A14:   [:g,h:].(y,z) = [g.y,h.z] by A12,FUNCT_3:def 9;
+A15:   [:h,g:].(z,y) = [h.z,g.y] by A12,FUNCT_3:def 9;
+         [:g,h:].(y,z) in dom f by A10,FUNCT_1:21;
+     then [:h,g:].x in dom~f by A14,A15,FUNCT_4:43,A9;
     hence x in dom(~f*[:h,g:]) by A13,FUNCT_1:21;
    end;
       now let y,z be set; assume
@@ -133,14 +133,14 @@ A16:  [y,z] in dom(f*[:g,h:]);
     then [y,z] in dom[:g,h:] by FUNCT_1:21;
     then [y,z] in [:dom g, dom h:] by FUNCT_3:def 9;
     then A17:   y in dom g & z in dom h by ZFMISC_1:106;
-        [:g,h:].[y,z] in dom f by A16,FUNCT_1:21;
+        [:g,h:].(y,z) in dom f by A16,FUNCT_1:21;
 then A18:  [g.y,h.z] in dom f by A17,FUNCT_3:def 9;
         [z,y] in [:dom h, dom g:] by A17,ZFMISC_1:106;
     then [z,y] in dom[:h,g:] by FUNCT_3:def 9;
-   hence (~f*[:h,g:]).[z,y] = ~f.([:h,g:].[z,y]) by FUNCT_1:23
+   hence (~f*[:h,g:]).[z,y] = ~f.([:h,g:].(z,y)) by FUNCT_1:23
        .= ~f.[h.z,g.y] by A17,FUNCT_3:def 9
        .= f.[g.y,h.z] by A18,FUNCT_4:def 2
-       .= f.([:g,h:].[y,z]) by A17,FUNCT_3:def 9
+       .= f.([:g,h:].(y,z)) by A17,FUNCT_3:def 9
        .= (f*[:g,h:]).[y,z] by A16,FUNCT_1:22;
   end;
  hence ~(f*[:g,h:]) = ~f*[:h,g:] by A1,FUNCT_4:def 2;

@@ -12,10 +12,9 @@ environ
       RCOMP_1, PRE_TOPC, BOOLE, FCONT_1, SUBSET_1, SIN_COS, FINSEQ_4, GROUP_1,
       XCMPLX_0, FUNCOP_1, FRECHET2, SIN_COS4;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, ARYTM_0, XCMPLX_0,
-      XXREAL_0, XREAL_0,
-      COMPLEX1,  REAL_1, RELAT_1, FUNCT_1, RELSET_1, FCONT_1, FUNCT_2,
-      SEQ_1, SEQ_2, FDIFF_1, FUNCOP_1, SERIES_1, NAT_1, FINSEQ_4, NEWTON,
-      SQUARE_1, PARTFUN1, SEQM_3, RCOMP_1, BINARITH, RFUNCT_1,
+      XXREAL_0, XREAL_0, COMPLEX1, REAL_1, RELAT_1, FUNCT_1, RELSET_1, FCONT_1,
+      FUNCT_2, SEQ_1, SEQ_2, FDIFF_1, FUNCOP_1, SERIES_1, NAT_1, FINSEQ_4,
+      NEWTON, SQUARE_1, PARTFUN1, SEQM_3, RCOMP_1, BINARITH, RFUNCT_1,
       RFUNCT_2, COMSEQ_1, COMSEQ_2, COMSEQ_3, PREPOWER;
  constructors PARTFUN1, FUNCT_4, ARYTM_3, ARYTM_0, REAL_1, SQUARE_1, NAT_1,
       SEQ_2, RCOMP_1, FINSEQ_4, RFUNCT_1, RFUNCT_2, FCONT_1, FDIFF_1, COMSEQ_1,
@@ -35,7 +34,7 @@ environ
 
 begin
 
- reserve q,th,th1,th2,th3,r for Real,
+ reserve q,th,r for Real,
          a,b,p for real number,
          w,z,z1,z2 for Element of COMPLEX,
          k,l,m,n,n1,n2 for Element of NAT,
@@ -285,22 +284,17 @@ theorem Th1:
   (n+1)!c = n!c * (n+1)
 proof
   defpred X[Element of NAT] means $1!c <> 0;
-  thus 0!c = Prod_complex_n.0
-     .= 1 by Def4;
+  thus 0!c = 1 by Def4;
 then A1: X[0];
 A2: now let n;
   assume
 A3: X[n];
-A4: (n+1)!c = Prod_complex_n.(n+1)
-           .= Prod_complex_n.n * (n+1+0*<i>) by Def4
-           .= n!c * (n+1+0*<i>);
+A4: (n+1)!c = n!c * (n+1+0*<i>) by Def4;
     thus X[n+1] by A3,A4,XCMPLX_1:6;
   end;
  for n holds X[n] from NAT_1:sch 1(A1,A2);
  hence n!c <> 0;
- thus (n+1)!c = Prod_complex_n.(n+1)
-             .= Prod_complex_n.n * (n+1+0*<i>) by Def4
-             .= n!c * (n+1);
+ thus (n+1)!c = n!c * (n+1) by Def4;
 end;
 
 theorem
@@ -680,8 +674,7 @@ for p1,p2,g1,g2 being Element of REAL holds
 proof
 let p1,p2,g1,g2 be Element of REAL;
  thus (p1+g1*<i>)*(p2+g2*<i>)
-        = p1*p2 + (g1*g2)*(<i>*<i>)+p1*(g2*<i>) +p2*(g1*<i>)
-       .=(p1*p2-g1*g2+(p1*g2+p2*g1)*<i>);
+        =(p1*p2-g1*g2+(p1*g2+p2*g1)*<i>);
  thus (p2+g2*<i>)*' = Re(p2+g2*<i>)-Im(p2+g2*<i>)*<i> by COMPLEX1:def 15
                    .= p2-Im(p2+g2*<i>)*<i> by COMPLEX1:28
                    .= p2-g2*<i> by COMPLEX1:28
@@ -697,21 +690,17 @@ proof
   now
   let n be Element of NAT;
  thus (z ExpSeq).(n+1)=z |^ (n+1) / ((n+1) !c ) by Def8
-               .=(z GeoSeq).(n+1) / ((n+1)!c )
                .=(z GeoSeq).n * z /((n+1)!c ) by COMSEQ_3:def 1
-               .=z |^ n * z / ((n+1)!c )
                .=z |^ n * z /(n!c * (n+1+0*<i>)) by Th1
                .=(z |^ n / (n!c ) )*( z / (n+1+0*<i>)) by XCMPLX_1:77
                .=(z |^ n / (n!c ) * z) / (n+1+0*<i>) by XCMPLX_1:75
                .=z ExpSeq.n * z /(n+1+0*<i>) by Def8;
  end;
  A2:(z ExpSeq).0=z |^ 0 /(0!c ) by Def8
-            .=(z GeoSeq).0 /(0!c )
             .=1 by Th1,COMSEQ_3:def 1,COMPLEX1:def 7;
   defpred X[Element of NAT] means |. ((z ExpSeq)).$1 .| =( |.z.| ExpSeq ).$1;
       ( |.z.| ExpSeq ).0 = ((|.z .|) |^ 0)/ (0!) by Def9
-            .= 1/(0!) by NEWTON:9
-            .= 1/((Prod_real_n).0)
+            .= 1/((Prod_real_n).0) by NEWTON:9
             .= 1/1 by Def5
             .= 1;
  then A3: X[0] by A2,COMPLEX1:134;
@@ -772,25 +761,21 @@ A2: for k st X[k] holds X[k+1]
 theorem Th7:
 (z+w) |^ n = Partial_Sums(Expan(n,z,w)).n
 proof
-  A1:(z+w) |^ 0 =((z+w) GeoSeq).0
-            .=1r by COMSEQ_3:def 1;
+  A1:(z+w) |^ 0 =1r by COMSEQ_3:def 1;
   A2:0-'0=0 by BINARITH:51;
   defpred X[Element of NAT] means (z+w) |^ $1 = Partial_Sums(Expan($1,z,w)).$1;
        Partial_Sums(Expan(0,z,w)).0 = Expan(0,z,w).0 by COMSEQ_3:def 7
                 .= (Coef(0)).0 * (z |^ 0) * (w |^ 0) by A2,Def13
                 .= 1/(1 * 1) * z |^ 0 * w |^ 0 by A2,Def10,Th1
-                .= (z GeoSeq).0 * w |^ 0
-                .= (z GeoSeq).0 * (w GeoSeq).0
                 .= 1r * (w GeoSeq).0 by COMSEQ_3:def 1
                 .= 1r by COMPLEX1:def 7,COMSEQ_3:def 1;
   then A3: X[0] by A1;
   A4: for n st X[n] holds X[n+1]
    proof let n such that
    A5: (z+w) |^ n = Partial_Sums(Expan(n,z,w)).n;
-   A6: (z+w) |^ (n+1) =((z+w) GeoSeq ).(n+1)
-                .=((z+w) GeoSeq ).n * (z+w) by COMSEQ_3:def 1
-                .=(Partial_Sums(Expan(n,z,w)).n) * (z+w) by A5
-           .=((z+w) (#) Partial_Sums(Expan(n,z,w))).n by COMSEQ_1:def 7
+   A6: (z+w) |^ (n+1) =((z+w) GeoSeq ).n * (z+w) by COMSEQ_3:def 1
+                .=((z+w) (#) Partial_Sums(Expan(n,z,w))).n by  A5,
+COMSEQ_1:def 7
              .=(Partial_Sums((z+w) (#) Expan(n,z,w))).n by COMSEQ_3:29;
         (z+w) (#) Expan(n,z,w)=(z (#) Expan(n,z,w))+(w (#) Expan(n,z,w))
      proof
@@ -821,7 +806,7 @@ proof
                n < n+1 & n+1 is Element of NAT by XREAL_1:31;
            then Expan(n,z,w).(n+1)=0c by Def13;
            hence Partial_Sums((z (#) Expan(n,z,w))).(n+1)
-            =Partial_Sums((z (#) Expan(n,z,w))).n by A9,COMPLEX1:def 6;
+            =Partial_Sums((z (#) Expan(n,z,w))).n by A9;
          end;
      A10:Partial_Sums((w (#) Expan(n,z,w))).n
          =Partial_Sums((w (#) Expan(n,z,w))).(n+1)
@@ -834,7 +819,7 @@ proof
                n < n+1 & n+1 is Element of NAT by XREAL_1:31;
             then Expan(n,z,w).(n+1)=0c by Def13;
            hence Partial_Sums((w (#) Expan(n,z,w))).(n+1)
-            =Partial_Sums((w (#) Expan(n,z,w))).n by A11,COMPLEX1:def 6;
+            =Partial_Sums((w (#) Expan(n,z,w))).n by A11;
          end;
      A12:Partial_Sums((z (#) Expan(n,z,w))).(n+1)
          =Partial_Sums(Sift((z (#) Expan(n,z,w)))).(n+1)
@@ -844,11 +829,11 @@ proof
           +(z (#) Expan(n,z,w)).(n+1) by Th6;
                0 +n < n+1 by XREAL_1:31;
             then Expan(n,z,w).(n+1)=0c by Def13;
-            then z * Expan(n,z,w).(n+1)=0c by COMPLEX1:def 6;
+            then z * Expan(n,z,w).(n+1)=0c;
            hence Partial_Sums((z (#) Expan(n,z,w))).(n+1)
              =Partial_Sums(Sift((z (#) Expan(n,z,w)))).(n+1)
              +0c by A13,COMSEQ_1:def 7
-        .= Partial_Sums(Sift((z (#) Expan(n,z,w)))).(n+1) by COMPLEX1:def 6;
+        .= Partial_Sums(Sift((z (#) Expan(n,z,w)))).(n+1);
          end;
     A14:(w (#) Expan(n,z,w))+Sift((z (#) Expan(n,z,w)))
          =Expan(n+1,z,w)
@@ -872,7 +857,7 @@ then A20:          n+0 < k-1+1 by XREAL_1:10;
  by COMSEQ_1:def 7
        .=(w * 0c )+ (z * ((Expan(n,z,w).(k-'1)))) by A17,Def13
        .=0c + (z * 0c) by A17,Def13
-       .=0c by COMPLEX1:def 6;
+       .=0c;
         hence ((w (#) Expan(n,z,w))+Sift((z (#) Expan(n,z,w)))).k
          =Expan(n+1,z,w).k by A16,Def13;
          end;
@@ -903,11 +888,9 @@ k
              .=((z (#) Expan(n,z,w))).n by Def12
              .=z * (Expan(n,z,w)).n by COMSEQ_1:def 7
              .=z * ((Coef(n)).n * (z |^ n) * (w |^ (n-'n))) by Def13
-             .= ((Coef(n)).n * (z * (z |^ n) ) * (w |^ (n-'n)))
-          .= ((Coef(n)).n * ((z GeoSeq).n * z) * (w |^ (n-'n)))
-    .= ((Coef(n)).n * ((z GeoSeq).(n+1)) * (w |^ (n-'n))) by COMSEQ_3:def 1
+             .= ((Coef(n)).n * ((z GeoSeq).n * z) * (w |^ (n-'n)))
     .= ((Coef(n+1)).(n+1) * (z |^ (n+1)) * (w |^ (n-'n)))
-       by A28,A29
+       by  COMSEQ_3:def 1,A28,A29
              .= Expan(n+1,z,w).k by A23,A25,A26,Def13;
               end;
           end;
@@ -933,13 +916,9 @@ A34:            n+1-'0 =n+1-0 by BINARITH:50;
  by COMSEQ_1:def 7
              .=(w * Expan(n,z,w).0) + 0c by Def12
              .=w * ((Coef n).0 * (z |^ 0) * (w |^ (n-'0))) by Def13
-             .= ((Coef n).0 * (z |^ 0) * ((w GeoSeq)).n * w)
- by A33
-             .= (Coef n).0 * (z |^ 0) * (((w GeoSeq)).n * w)
-             .= ((Coef n).0 * (z |^ 0) * (((w GeoSeq)).(n+1-'0)) )
- by A34,COMSEQ_3:def 1
+             .= (Coef n).0 * (z |^ 0) * (((w GeoSeq)).n * w) by A33
              .= (Coef(n+1)).0 * (z |^ 0) * (w |^ (n+1-'0))
-             by A36,A37
+             by  A34,COMSEQ_3:def 1,A36,A37
              .= Expan(n+1,z,w).k by A32,Def13;
               end;
             end;
@@ -981,25 +960,12 @@ A34:            n+1-'0 =n+1-0 by BINARITH:50;
          A45: (k-'1)+1 =k-1+1 by A39,BINARITH:50
                       .=k;
 A46:          (w |^ (n-'k)) * w
-                  =(w GeoSeq).(n-'k) * w
-                 .= (w GeoSeq).(n-'k+1) by COMSEQ_3:def 1
-                 .= w |^ (n-'k+1);
+                  = w |^ (n-'k+1) by COMSEQ_3:def 1;
 A47:          (z |^ (k-'1)) * z
-                  =(z GeoSeq).(k-'1) * z
-                 .= (z GeoSeq).k by A45,COMSEQ_3:def 1
-                 .= z |^ k;
+                  = z |^ k by A45,COMSEQ_3:def 1;
               A48: ((w (#) Expan(n,z,w))+Sift((z (#) Expan(n,z,w)))).k
-             = ((Coef n).k * (w * (z |^ k) * (w |^ (n-'k)) )
-             + ((Coef n).(k-'1) * ((z |^ (k-'1))
-                     * z * (w |^ (n-'(k-'1)))))) by A42
-            .= ((Coef n).k * ((z |^ k) * (w * (w |^ (n-'k))) )
-             + ((Coef n).(k-'1) * ((z |^ k) * (w |^ (n-'(k-'1)))))) by A47
-            .= ((Coef n).k * ((z |^ k) * ((w |^ (n-'k+1))))
-             + ((Coef n).(k-'1) * ((z |^ k) * (w |^ (n+1-'k))))) by A44,A46
-            .= ((Coef n).k * ((z |^ k) * ((w |^ (n+1-'k))))
-             + ((Coef n).(k-'1) * ((z |^ k) * (w |^ (n+1-'k))))) by A43
-            .= ((Coef n).k +(Coef n).(k-'1))
-                 * ((z |^ k) * (w |^ (n+1-'k)));
+             = ((Coef n).k +(Coef n).(k-'1))
+                 * ((z |^ k) * (w |^ (n+1-'k))) by A42,A43,A44,A46,A47;
          A49: (Coef n).k +(Coef n).(k-'1)
               =n!c /((k!c) * ((n-'k)!c))
               +(Coef n).(k-'1) by A40,Def10
@@ -1165,7 +1131,7 @@ registration let z;
               assume
                 A5: (z ExpSeq).(n+1) = 0c;
 A6:             ((z ExpSeq).n * z)/(n+1+0*<i>)=0c by A5,Th4;
-                      0c = 0c/z by COMPLEX1:def 6
+                      0c = 0c/z
                     .=(z ExpSeq).n * z/z by A6,XCMPLX_1:50
                     .=(z ExpSeq).n * (z/z) by XCMPLX_1:75
                     .=(z ExpSeq).n * 1 by A1,XCMPLX_1:60
@@ -1207,13 +1173,10 @@ theorem Th11:
 proof
 thus (z ExpSeq).0
     = (z |^ 0)/(0!c ) by Def8
-   .= (z GeoSeq).0/(0!c )
    .= 1 by Th1,COMSEQ_3:def 1,COMPLEX1:def 7;
   A1: 0-'0=0 by BINARITH:51;
   hence Expan(0,z,w).0 = (Coef(0)).0 * (z |^ 0) * (w |^ 0) by Def13
                      .= 1/(1 * 1) * z |^ 0 * w |^ 0 by A1,Def10,Th1
-                     .= (z GeoSeq).0 * w |^ 0
-                     .= (z GeoSeq).0 * (w GeoSeq).0
                      .= 1r * (w GeoSeq).0 by COMSEQ_3:def 1
                      .= 1 by COMSEQ_3:def 1,COMPLEX1:def 7;
 end;
@@ -1395,7 +1358,6 @@ proof
 A1: |. Partial_Sums(( z ExpSeq)).0 .|
     = |. ((z ExpSeq)).0 .| by COMSEQ_3:def 7
    .= |. (z |^ 0)/ (0 !c).| by Def8
-   .= |. ((z GeoSeq)).0/(0 !c) .|
    .= 1 by COMPLEX1:134,Th1,COMSEQ_3:def 1;
     Partial_Sums((|.z.| ExpSeq)).0
     = ((|.z.| ExpSeq)).0 by SERIES_1:def 1
@@ -1743,11 +1705,7 @@ A3: Partial_Sums(z ExpSeq) (#) Partial_Sums(w ExpSeq) is convergent &
  by COMSEQ_2:29,30;
 A4:   seq is convergent & lim(seq)=0c by A1,Th23;
 thus Sum((z+w) ExpSeq)
-      =lim(Partial_Sums((z+w) ExpSeq))
-     .=lim(Partial_Sums(z ExpSeq)) * lim(Partial_Sums(w ExpSeq))
- by A2,A3,A4,COMSEQ_3:10
-     .=Sum(z ExpSeq) * lim(Partial_Sums(w ExpSeq))
-     .=Sum(z ExpSeq) * Sum(w ExpSeq);
+      =Sum(z ExpSeq) * Sum(w ExpSeq) by A2,A3,A4,COMSEQ_3:10;
 end;
 
 begin :: Definition of Exponential Function on Complex
@@ -1825,8 +1783,7 @@ theorem
   for z1, z2 holds exp(z1+z2)=exp(z1) *exp(z2)
 proof
   let z1,z2;
-  exp(z1+z2)= exp.(z1+z2)
-         .=Sum((z1+z2) ExpSeq) by Def18
+  exp(z1+z2)=Sum((z1+z2) ExpSeq) by Def18
          .=Sum(z1 ExpSeq)*Sum(z2 ExpSeq) by Lm2
          .=exp(z1)*Sum(z2 ExpSeq) by Lm3
          .=exp(z1) *exp(z2) by Lm3;
@@ -1996,9 +1953,7 @@ theorem
     exp([*0,th*])=cos(th)+(sin th)*<i>
 proof
       exp([*0,th*])=Sum([*0,th*] ExpSeq ) by Lm3
-          .=cos.(th)+(sin.th)*<i> by Lm4
-          .=cos(th)+(sin.th)*<i>
-          .=cos(th)+(sin th)*<i>;
+          .=cos(th)+(sin th)*<i> by Lm4;
    hence thesis;
 end;
 
@@ -2064,9 +2019,7 @@ A6:       (n+1+0*<i>) = [*n+1,0*] by COMPLEX1:27;
       hence thesis by COMSEQ_1:6;
   end;
   thus (Sum([*0,th*] ExpSeq))*'
-      =(lim(Partial_Sums([*0,th*] ExpSeq)))*'
-     .= lim(Partial_Sums((-[*0,th*]) ExpSeq)) by A1,COMSEQ_2:12
-     .= Sum((-[*0,th*]) ExpSeq);
+      = Sum((-[*0,th*]) ExpSeq) by A1,COMSEQ_2:12;
  end;
 
 theorem
@@ -2135,8 +2088,7 @@ proof
       .=|.Sum([*0,th1*] ExpSeq ) * Sum([*0,th1*] ExpSeq)*'.| by COMPLEX1:155
       .=1 by A1,Lm5,COMPLEX1:134;
   thus (cos.(th))*(cos.(th))+(sin.(th))*(sin.(th))
-     =(cos.(th))^2 +(sin.(th))*(sin.(th))
-    .=1 by A2;
+     =1 by A2;
   end;
 
 theorem
@@ -2216,18 +2168,13 @@ A2: [*p,q*] = p+q*<i> & [*r,0*] = r+0*<i> & [*0,r*] = 0+r*<i> by COMPLEX1:27;
    then A4: [*p,q*]/[*r,0*]=
        (p* r + q* 0) / ((r)^2+ (0)^2)+((r * q - p* 0)/((r)^2 +0^2))*<i>
         by COMPLEX1:def 14,A2
-       .= [* (p* r + q* 0) / ((r)^2+ (0)^2),(r * q - p* 0)/((r)^2 +(0)^2)*]
-        by COMPLEX1:27
-       .=[* (p* r ) / (r*r),(r * q )/((r)^2)*]
-       .=[* (p* r ) / (r*r),(r * q )/(r*r)*]
+       .=[* (p* r ) / (r*r),(r * q )/((r)^2)*] by COMPLEX1:27
        .=[* p / r,(r * q )/(r*r)*] by A1,XCMPLX_1:92
        .= [* p / r, q /r *] by A1,XCMPLX_1:92;
         [*p,q*]/[*0,r*]
         = (p*0+q*r)/ ((0)^2+ (r)^2)+((0*q - p*r) /((0)^2+ (r)^2))*<i>
          by A3,COMPLEX1:def 14,A2
-       .=[* (q*r)/ ((0)^2+ (r)^2),(- p*r) /((0)^2+ (r)^2) *] by COMPLEX1:27
-       .=[* (q*r)/ (r*r),(- p*r) /((r)^2) *]
-       .=[* (q*r)/ (r*r),(- p*r) /(r*r) *]
+       .=[* (q*r)/ (r*r),(- p*r) /((r)^2) *] by COMPLEX1:27
        .=[* q/ r,((- p)*r) /(r*r) *] by A1,XCMPLX_1:92
        .=[* q/ r,(- p) /r *] by A1,XCMPLX_1:92
        .=[* q/ r,- p/r *] by XCMPLX_1:188;
@@ -2265,33 +2212,24 @@ A1: z|^ (2*0) =1*1 by NEWTON:9
       A4: z|^ (2*k) = (z|^ k)|^ 2 & z|^ (2*k)= (z|^ 2)|^ k;
  A5:  z|^ (2*(k+1))=z GeoSeq.(2*k+1+1)
                   .=z GeoSeq.(2*k+1)*z by COMSEQ_3:def 1
-                  .=z GeoSeq.(2*k)*z*z by COMSEQ_3:def 1
-                  .=z|^ (2*k)*z*z;
+                  .=z|^ (2*k)*z*z by COMSEQ_3:def 1;
  then A6: z|^ (2*(k+1)) =((z|^ k)GeoSeq.(1+1))*z*z by A4
                   .=((z|^ k)GeoSeq.(0+1)*(z|^ k))*z*z by COMSEQ_3:def 1
                   .=((z|^ k)GeoSeq.0*(z|^ k)*(z|^ k))*z*z by COMSEQ_3:def 1
                   .=((1r)*(z|^ k)*(z|^ k))*z*z by COMSEQ_3:def 1
-                  .=(1r)*((z|^ k)*z)*((z|^ k)*z)
                   .=(1r)*(z GeoSeq.k*z)*((z|^ k)*z)
-                  .=(1r)*(z GeoSeq.k*z)*(z GeoSeq.k*z)
                   .=(1r)*(z GeoSeq.(k+1))*(z GeoSeq.k*z) by COMSEQ_3:def 1
-                  .=(1r)*(z GeoSeq.(k+1))*(z GeoSeq.(k+1)) by COMSEQ_3:def 1
-                  .=(1r)*(z|^(k+1))*(z GeoSeq.(k+1))
-                  .=(1r)*(z|^(k+1))*(z|^(k+1))
+                  .=(1r)*(z|^(k+1))*(z GeoSeq.(k+1)) by COMSEQ_3:def 1
                   .=((z|^(k+1))GeoSeq.0)*(z|^(k+1))*(z|^(k+1))
                    by COMSEQ_3:def 1
                   .=((z|^(k+1))GeoSeq.(0+1))*(z|^(k+1)) by COMSEQ_3:def 1
                   .=(z|^(k+1))GeoSeq.(0+1+1) by COMSEQ_3:def 1
                   .=(z|^(k+1))|^ 2;
-       z|^ (2*(k+1))=(z|^ 2)|^ k*(z*z) by A4,A5
-                  .= (z|^ 2)|^ k*(1r*z*z) by COMPLEX1:def 7
+       z|^ (2*(k+1))= (z|^ 2)|^ k*(1r*z*z) by  A4,A5,COMPLEX1:def 7
                   .= (z|^ 2)|^ k*(z GeoSeq.0 *z*z) by COMSEQ_3:def 1
                   .=(z|^ 2)|^ k*(z GeoSeq.(0+1) *z) by COMSEQ_3:def 1
                   .=(z|^ 2)|^ k*z GeoSeq.(0+1+1) by COMSEQ_3:def 1
-                  .=(z|^ 2)|^ k*(z|^ 2)
-                  .=(z|^ 2)GeoSeq.k*(z|^ 2)
-                  .=(z|^ 2)GeoSeq.(k+1) by COMSEQ_3:def 1
-                  .= (z|^ 2)|^ (k+1);
+                  .= (z|^ 2)|^ (k+1) by COMSEQ_3:def 1;
  hence thesis by A6;
     end;
        for k holds X[k] from NAT_1:sch 1(A2,A3);
@@ -2305,15 +2243,13 @@ theorem Th36:
      & [*0, th*] |^ (2*k+1)=[*0,(-1)|^ k* (th |^ (2*k+1))*]
 proof
   let th be Real;
-A1: [*0, th*] |^ (2*0)=[*0, th*] GeoSeq.0
-                       .=[*1,0*] by Lm10,COMSEQ_3:def 1;
+A1: [*0, th*] |^ (2*0)=[*1,0*] by Lm10,COMSEQ_3:def 1;
 A2: [*(-1)|^ 0* (th |^ (2*0)),0*]=[*(-1)|^ 0* th GeoSeq.0,0*] by
 PREPOWER:def 1
                       .=[*(-1)|^ 0*(1),0*] by PREPOWER:4
                       .=[*(-1)GeoSeq.0,0*] by PREPOWER:def 1
                       .=[*1,0*] by PREPOWER:4;
-A3: [*0, th*] |^ (2*0+1)=[*0, th*] GeoSeq.(0+1)
-                         .=[*0, th*] GeoSeq.0*[*0,th*] by COMSEQ_3:def 1
+A3: [*0, th*] |^ (2*0+1)=[*0, th*] GeoSeq.0*[*0,th*] by COMSEQ_3:def 1
                          .=[*1,0*]*[*0,th*] by Lm10,COMSEQ_3:def 1
                          .=[*-0* th,1*th*] by Lm9
                          .=[*0,th*];
@@ -2335,13 +2271,9 @@ A3: [*0, th*] |^ (2*0+1)=[*0, th*] GeoSeq.(0+1)
       A6: [*0, th*] |^ (2*k)=[*(-1)|^ k* (th |^ (2*k)),0*]
        & [*0, th*] |^ (2*k+1)=[*0,(-1)|^ k* (th |^ (2*k+1))*];
    A7:   [*0, th*] |^ (2*(k+1))= ([*0, th*] |^ 2)|^(k+1) by Th35
-                    .=([*0, th*] |^ 2) GeoSeq.(k+1)
-                    .=([*0, th*] |^ 2) GeoSeq.k* ([*0, th*] |^ 2)
- by COMSEQ_3:def 1
-                    .=([*0, th*] |^ 2)|^ k * ([*0, th*] |^ 2)
-                    .= [*(-1)|^ k* (th |^ (2*k)),0*]* ([*0, th*] |^ 2)
- by A6,Th35
+                    .=([*0, th*] |^ 2)|^ k * ([*0, th*] |^ 2) by COMSEQ_3:def 1
                     .= [*(-1)|^ k* (th |^ (2*k)),0*]* ([*0, th*]GeoSeq.(1+1))
+ by A6,Th35
                 .=[*(-1)|^ k* (th |^ (2*k)),0*]*
                    ([*0, th*]GeoSeq.(0+1)*[*0, th*])
  by COMSEQ_3:def 1
@@ -2365,13 +2297,12 @@ A3: [*0, th*] |^ (2*0+1)=[*0, th*] GeoSeq.(0+1)
                 .=[*(-1)|^(k+1)* (th GeoSeq.(2*k+1)*th),0*]
                 .=[*(-1)|^(k+1)* (th GeoSeq.(2*k+1+1)),0*] by PREPOWER:4
                 .=[*(-1)|^(k+1)* (th |^ (2*(k+1))),0*] by PREPOWER:def 1;
-        [*0, th*] |^ (2*(k+1)+1)=[*0, th*]GeoSeq.(2*k+1+1+1)
-         .=[*0, th*]GeoSeq.(2*k+1+1)*[*0, th*] by COMSEQ_3:def 1
+        [*0, th*] |^ (2*(k+1)+1)=
+[*0, th*]GeoSeq.(2*k+1+1)*[*0, th*] by COMSEQ_3:def 1
          .=[*0, th*]GeoSeq.(2*k+1)*[*0, th*]*[*0, th*] by COMSEQ_3:def 1
          .=[*0, th*]GeoSeq.(2*k+1)*([*0, th*]*[*0, th*])
          .=[*0, th*]GeoSeq.(2*k+1)* [*-th*th, 0*th*] by Lm9
-         .=[*0,(-1)|^ k* (th |^ (2*k+1))*]* [*-th*th, 0*] by A6
-         .=[*0* (-th*th),(-1)|^ k* (th |^ (2*k+1))* (-th*th)*] by Lm9
+         .=[*0* (-th*th),(-1)|^ k* (th |^ (2*k+1))* (-th*th)*] by  A6,Lm9
          .=[*0,(-1)|^ k*(-1)* (th |^ (2*k+1))*th*th*]
          .=[*0,(-1)GeoSeq.k*(-1)* (th |^ (2*k+1))*th*th*] by PREPOWER:def 1
          .=[*0,(-1)GeoSeq.(k+1)* (th |^ (2*k+1))*th*th*] by PREPOWER:4
@@ -2736,8 +2667,7 @@ for th,th1,th2,th3 being Real holds
        then [*th,th1*]+[*th2,th3*] = th+th2+(th1+th3)*<i>;
       hence thesis by COMPLEX1:27;
      end;
-     thus (5/6)^2=(5/6)*(5/6)
-          .=25/36;
+     thus (5/6)^2=25/36;
  end;
 
 theorem Th42: for n,k,m st n < k holds m!>0 & n!<=k!
@@ -2835,10 +2765,8 @@ proof
       let k;
       assume
       A3: [*th,0*]|^ k =[* th |^ k,0 *];
-          [*th,0*]|^ (k+1)=[*th,0*] GeoSeq.(k+1)
-              .=[*th,0*] GeoSeq.k * [*th,0*] by COMSEQ_3:def 1
-              .=[* th |^ k,0 *]* [*th,0*] by A3
-              .=[* th |^ k*th,0*th *] by Lm9
+          [*th,0*]|^ (k+1)=[*th,0*] GeoSeq.k * [*th,0*] by COMSEQ_3:def 1
+              .=[* th |^ k*th,0*th *] by  A3,Lm9
               .=[* th |^ (k+1),0 *] by NEWTON:11;
        hence thesis;
    end;
@@ -3122,9 +3050,7 @@ Lm14: for z,n holds z* (z|^ n)=z |^ (n+1) &z ExpSeq.1=z&z ExpSeq.0=1r&z |^1=z
     &|.z |^ n.|=|.z.||^n
 proof
   let z,n;
-  A1: z* (z|^ n)=z*(z GeoSeq.n)
-             .=z GeoSeq.(n+1) by COMSEQ_3:def 1
-             .=z |^ (n+1);
+  A1: z* (z|^ n)=z |^ (n+1) by COMSEQ_3:def 1;
   A2: z |^ 1=z GeoSeq.(0+1)
            .=z GeoSeq.0 * z by COMSEQ_3:def 1
            .=1r* z by COMSEQ_3:def 1
@@ -3137,17 +3063,14 @@ A4: z ExpSeq.0=z|^ 0/ (0!c) by Def8
    |.z |^ n.|=|.z.||^ n
    proof
      defpred X[Element of NAT] means |.z |^ $1.|=|.z.||^ $1;
-     |.z |^ 0 .|=|.z GeoSeq.0 .|
-              .=1 by COMPLEX1:134,COMSEQ_3:def 1;
+     |.z |^ 0 .|=1 by COMPLEX1:134,COMSEQ_3:def 1;
      then A5: X[0] by Lm12;
      A6: for k st X[k] holds X[k+1]
      proof
       let k such that
       A7: |.z |^ k.|=|.z.||^ k;
-          |.z |^ (k+1).|=|.z GeoSeq.(k+1).|
-               .=|.z*(z GeoSeq.k).| by COMSEQ_3:def 1
-               .=|.z*(z|^ k).|
-                  .=|.z.||^ k *|.z.| by A7,COMPLEX1:151
+          |.z |^ (k+1).|=|.z*(z GeoSeq.k).| by COMSEQ_3:def 1
+               .=|.z.||^ k *|.z.| by A7,COMPLEX1:151
                   .=|.z.||^(k+1) by NEWTON:11;
        hence thesis;
      end;
@@ -3193,8 +3116,7 @@ proof
    =Im(Partial_Sums([*th,0*] ExpSeq)).0 by SEQ_4:41
    .=0 by A1;
   A6: Im(Sum([*th,0*] ExpSeq))
-    =Im(lim(Partial_Sums([*th,0*] ExpSeq)))
-    .=0 by A5,COMSEQ_3:41;
+    =0 by A5,COMSEQ_3:41;
       Sum([*th,0*] ExpSeq)
     =Re(Sum([*th,0*] ExpSeq))+Im(Sum([*th,0*] ExpSeq))*<i> by COMPLEX1:29
    .=[*Re(Sum([*th,0*] ExpSeq)),Im(Sum([*th,0*] ExpSeq))*] by COMPLEX1:27
@@ -3320,8 +3242,7 @@ proof
   let th be Real;
   thus exp([*th,0*])=Sum([*th,0*] ExpSeq) by Lm3
             .=[*Sum(th ExpSeq),0*] by Lm15
-            .=[*exp_R.th,0*] by Def26
-            .=[*exp_R th,0*];
+            .=[*exp_R th,0*] by Def26;
 end;
 
 Lm16:for p,q being real number holds exp_R.(p+q) = exp_R.p * exp_R.q
@@ -3481,10 +3402,7 @@ for p being Real st p>0 holds Re(z/[*0,p*])=Im z /p & Im(z/[*0,p*])=-Re z /p
   then A3: z/[*0,p*]
       =(Re z * 0+Im z * p)/((0)+(p)^2)+
        ((0* Im z- Re z * p)/((0)+(p)^2))*<i> by COMPLEX1:def 14,SQUARE_1:60
-    .=[*(Re z * 0+Im z * p)/((0)+(p)^2),
-       (0* Im z- Re z * p)/((0)+(p)^2)*] by COMPLEX1:27
-    .=[*(Im z * p)/((p)^2), (-Re z * p)/(p*p)*]
-    .=[*(Im z * p)/(p*p), ((-Re z) * p)/(p*p)*]
+    .=[*(Im z * p)/(p*p), ((-Re z) * p)/(p*p)*] by COMPLEX1:27
     .=[*(Im z * p)/(p*p),(-Re z) /p *] by A1,XCMPLX_1:92
     .=[*(Im z * p)/(p*p),-Re z/p *] by XCMPLX_1:188
     .=[*Im z /p,-Re z /p *] by A1,XCMPLX_1:92
@@ -4451,7 +4369,6 @@ proof
      .= 1+ (-1)* (th)|^ (2*1)/((2*1)!) by Lm12
      .= 1+ (-1)*(th*th)/((2*1)!) by Lm12
      .= 1+(-(th*th))/2 by NEWTON:20
-     .= 1-(th*th)/2
      .= 1-(th^2)/2;
 A7:        1 - 1/2 = 1/2;
       defpred X[Element of NAT] means ((Partial_Sums(th P_cos))*bq).$1 >= 1/2;
@@ -4589,9 +4506,7 @@ A6: th is Real by XREAL_0:def 1;
  by A6,A7,A8,FDIFF_2:14
             .=(cos.th*cos.th-diff(cos,th)*sin.th)/(cos.th)^2 by Th69
             .=(cos.th*cos.th-(-sin.th)*sin.th)/(cos.th)^2 by Th68
-            .=(cos.th*cos.th+(sin.th)*sin.th)/(cos.th)^2
             .=((cos.th)^2+(sin.th)*sin.th)/(cos.th)^2
-            .=((cos.th)^2+(sin.th)^2)/(cos.th)^2
             .=1/(cos.th)^2 by Th31;
        (cos.th)^2>0 by A9,SQUARE_1:74;
    hence thesis by A10,REAL_2:127;
@@ -4744,7 +4659,7 @@ end;
 begin :: Existence of Circle Ratio
 
 definition
-func PI -> real number means :Def30:
+func PI -> real number means :Def32:
  tan.(it/4) = 1 & it in ]. 0, 4 .[;
 existence
 proof
@@ -4793,11 +4708,11 @@ end;
 theorem Th78:
 sin.(PI/4) = cos.(PI/4)
 proof
-      PI in ].0, 4.[ by Def30;
+      PI in ].0, 4.[ by Def32;
    then 0< PI & PI < 4 by RCOMP_1:47;
   then 0/4 <PI/4 & PI/4 < 4/4 by REAL_1:73;
   then A1: PI/4 in ].0,1 .[ by RCOMP_1:47;
-      tan.(PI/4) =1 by Def30;
+      tan.(PI/4) =1 by Def32;
   then sin.(PI/4) * (cos.(PI/4))"=1 by A1,Th75,RFUNCT_1:def 4;
   hence sin.(PI/4) = cos.(PI/4) by XCMPLX_1:210;
 end;
@@ -4903,12 +4818,10 @@ proof
                   .=cos.(th);
  thus cos.(PI/2+th) =(cos.(PI/2)) *( cos.(th))
                      -( sin.(PI/2) )*( sin.(th)) by Th79
-                  .=0 + - 1 * sin.(th) by Th81
-                  .=-sin.(th);
+                  .=-sin.(th) by Th81;
  thus sin.(PI+th) =(sin.(PI)) * (cos.(th))
                    +( cos.(PI) )*( sin.(th)) by Th79
-                  .=0 + -sin.(th) * 1 by Th81
-                  .=-sin.(th);
+                  .=-sin.(th) by Th81;
  thus cos.(PI+th) =(-1) * cos.(th) - 0 * sin.(th) by Th79,Th81
                   .=-cos.(th);
  end;
@@ -4974,15 +4887,12 @@ A4: th is Real by XREAL_0:def 1;
  A7: 0 <= th2 & th2 <= th & th < PI/2 by A1,A6,RCOMP_1:47,RCOMP_1:48;
  then 0<th2 & th2<PI/2 by A6,Th33,XXREAL_0:1,XXREAL_0:2;
   then A8: 0/2<th2/2 & th2/2 < PI/2/2 by REAL_1:73;
-      PI in ].0, 4.[ by Def30;
+      PI in ].0, 4.[ by Def32;
   then 0< PI & PI < 4 by RCOMP_1:47;
   then PI/4 < 4/4 by REAL_1:73;
   then A9: 0 < th2/2 & th2/2 < 1 by A8,XXREAL_0:2;
       0 = cos.(th2/2 + th2/2) by A6
-    .= (cos.(th2/2)) * (cos.(th2/2))
-       -(sin.(th2/2)) * (sin.(th2/2)) by Th79
-    .= (cos.(th2/2))^2 - (sin.(th2/2)) * (sin.(th2/2))
-    .= (cos.(th2/2))^2 - (sin.(th2/2))^2
+    .= (cos.(th2/2))^2 - (sin.(th2/2)) * (sin.(th2/2)) by Th79
     .= ((cos.(th2/2)) - (sin.(th2/2))) *
             ((cos.(th2/2)) + (sin.(th2/2)));
   then cos.(th2/2) - sin.(th2/2) = 0 or
@@ -5000,9 +4910,8 @@ A4: th is Real by XREAL_0:def 1;
     (sin.(th2/2)) * (cos.(th2/2))"=1 by A10,A13,A14,XREAL_1:26,XCMPLX_0:def 7;
    hence tan.((2*th2)/4) =1 by A11,Th75,RFUNCT_1:def 4;
    end;
-   then A15: 2*th2 =PI by Def30;
-   th2 = th2*(2/2)
-      .= PI/2 by A15;
+   then A15: 2*th2 =PI by Def32;
+   th2 = PI/2 by A15;
    hence contradiction by A7;
    end;
 

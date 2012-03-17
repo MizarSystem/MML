@@ -11,21 +11,21 @@ environ
       COMPLEX1, SQUARE_1, RVSUM_1, ABSVALUE, ARYTM_3, PCOMPS_1, ORDINAL2,
       TOPS_2, SUBSET_1, MCART_1, FUNCT_5, FINSEQ_4, SEQ_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
-      COMPLEX1, REAL_1, NAT_1, FINSEQ_4, RVSUM_1, RELAT_1, FUNCT_1, RELSET_1,
-      FINSEQ_1, FUNCT_2, BINOP_1, STRUCT_0, TOPS_2, SQUARE_1, FUNCT_7, TOPMETR,
-      PRE_TOPC, BORSUK_1, METRIC_1, EUCLID, RFINSEQ, FINSEQ_2, BINARITH,
-      PSCOMP_1, PCOMPS_1, FINSEQOP, XXREAL_0;
+      COMPLEX1, REAL_1, NAT_1, FINSEQ_4, RVSUM_1, FUNCT_1, RELSET_1, FINSEQ_1,
+      FUNCT_2, BINOP_1, STRUCT_0, TOPS_2, SQUARE_1, FUNCT_7, TOPMETR, PRE_TOPC,
+      METRIC_1, EUCLID, RFINSEQ, FINSEQ_2, BINARITH, PSCOMP_1, PCOMPS_1,
+      FINSEQOP, XXREAL_0;
  constructors REAL_1, SQUARE_1, NAT_1, COMPLEX1, FINSEQOP, FINSEQ_4, FINSOP_1,
       SETWOP_2, RFINSEQ, BINARITH, FUNCT_7, TOPS_2, TOPMETR, PSCOMP_1;
  registrations STRUCT_0, RELSET_1, EUCLID, TOPMETR, METRIC_1, PCOMPS_1,
       FINSEQ_2, FUNCT_7, XREAL_0, ARYTM_3, SEQ_1, MEMBERED, XXREAL_0;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
- definitions TARSKI, EUCLID, FINSEQ_2, RVSUM_1, SQUARE_1;
+ definitions TARSKI, PRE_TOPC, EUCLID, FINSEQ_2, RVSUM_1, SQUARE_1;
  theorems TARSKI, EUCLID, TOPMETR, TOPS_1, METRIC_1, FUNCT_1, RFINSEQ,
       BINARITH, FUNCT_2, RELAT_1, TBSP_1, NAT_1, FINSEQ_3, FINSEQ_1, REAL_1,
-      ABSVALUE, REAL_2, SQUARE_1, FINSEQ_2, PRE_TOPC, TOPS_2, RVSUM_1,
-      TOPREAL3, FUNCOP_1, FINSEQ_4, FUNCT_7, SEQ_2, JORDAN3, PSCOMP_1, XREAL_0,
-      XBOOLE_0, COMPLEX1, XREAL_1, XXREAL_0, FINSOP_1;
+      ABSVALUE, REAL_2, SQUARE_1, FINSEQ_2, TOPS_2, RVSUM_1, TOPREAL3,
+      FUNCOP_1, FINSEQ_4, FUNCT_7, SEQ_2, JORDAN3, PSCOMP_1, XREAL_0, XBOOLE_0,
+      COMPLEX1, XREAL_1, XXREAL_0, FINSOP_1;
  schemes FUNCT_2;
 
 begin :: 1. PROJECTIONS
@@ -43,9 +43,7 @@ Lm1:for n,i being Element of NAT,p being Element of TOP-REAL n
 proof
   let n,i be Element of NAT,p be Element of TOP-REAL n;
    A1:p is Element of REAL n by EUCLID:25;
-      REAL n = n-tuples_on REAL
-  .={ s where s is Element of REAL*: len s = n } by FINSEQ_2:def 4;
-  then p in { s where s is Element of REAL*: len s = n } by A1;
+  p in { s where s is Element of REAL*: len s = n } by A1;
   then consider s being Element of REAL* such that
 A2:  p=s & len s=n;  s/.i=s/.i;
  hence thesis by A2;
@@ -56,9 +54,7 @@ Lm2:for n,i being Element of NAT,p being Element of TOP-REAL n
    for g being FinSequence of REAL st g=p holds q=g/.i
  proof let n,i be Element of NAT,p be Element of TOP-REAL n;
    A1:p is Element of REAL n by EUCLID:25;
-      REAL n = n-tuples_on REAL
-  .={ s where s is Element of REAL*: len s = n } by FINSEQ_2:def 4;
-  then p in { s where s is Element of REAL*: len s = n } by A1;
+  p in { s where s is Element of REAL*: len s = n } by A1;
   then consider s being Element of REAL* such that
   A2: p=s & len s=n;
      for g being FinSequence of REAL st g=p holds s/.i=g/.i by A2;
@@ -220,9 +216,8 @@ proof assume A1: i<=n;
      then A5:j in Seg i by FINSEQ_1:3;
         j<=n by A1,A4,XXREAL_0:2;
      then A6:j in Seg n by A4,FINSEQ_1:3;
-     A7:(0*i).j=(i|->0).j .=0 by A5,FUNCOP_1:13;
-        ((0*n)|i).j=(0*n).j by A4,FINSEQ_3:121
-     .=(n|->0).j .=0 by A6,FUNCOP_1:13;
+     A7:(0*i).j=0 by A5,FUNCOP_1:13;
+        ((0*n)|i).j=(n|->0).j by A4,FINSEQ_3:121 .=0 by A6,FUNCOP_1:13;
     hence ((0*n)|i).j=(0*i).j by A7;
    end;
  hence thesis by A2,A3,FINSEQ_1:18;
@@ -247,18 +242,15 @@ proof
      then A8:j+i in Seg n by A7,FINSEQ_1:3;
         now per cases;
      case i<=len (0*n);
-      hence ((0*n)/^i).j=(0*n).(j+i) by A6,RFINSEQ:def 2
-      .=(n |-> (0 qua Real)).(j+i)
+      hence ((0*n)/^i).j=(n |-> (0 qua Real)).(j+i) by A6,RFINSEQ:def 2
       .=0 by A8,FUNCOP_1:13
-      .= ((n-'i) |-> (0 qua Real)).j by A5,FUNCOP_1:13
-      .= (0*(n-'i)).j;
+      .= (0*(n-'i)).j by A5,FUNCOP_1:13;
      end;
      case A9:i>len (0*n);
        then i-i>n-i by A1,XREAL_1:11;
        then A10:n-'i=0 by BINARITH:def 3;
        A11:((0*n)/^i).j = (<*>REAL).j by A9,RFINSEQ:def 2;
-          (0*(n-'i)).j = (0|->0).j by A10
-       .={} .j by FINSEQ_2:72;
+          (0*(n-'i)).j ={} .j by  A10,FINSEQ_2:72;
       hence ((0*n)/^i).j=(0*(n-'i)).j by A11;
      end;
      end;
@@ -269,8 +261,7 @@ end;
 
 theorem Th11: Sum(0*i)=0
 proof
- thus Sum(0*i) = Sum (i |-> (0 qua Real))
-         .= i*0 by RVSUM_1:110
+ thus Sum(0*i) = i*0 by RVSUM_1:110
          .= 0;
 end;
 
@@ -408,8 +399,8 @@ A11:    dom 0*n=Seg len 0*n by FINSEQ_1:def 3 .=Seg n by Th8;
         A14:j in dom w1 by A6,A8,FINSEQ_1:def 3;
         A15: dom 0*n=Seg len 0*n by FINSEQ_1:def 3 .=Seg n by Th8;
         A16: r1=w1/.j by A14,FINSEQ_4:def 4
-        .=(0*n)/.j by A8,A13,A15,FUNCT_7:39.=(0*n).j by A8,A15,FINSEQ_4:def 4
-        .=(n|->0).j.=0 by A8,FUNCOP_1:13;
+        .=(0*n)/.j by A8,A13,A15,FUNCT_7:39.=(n|->0).j by A8,A15,FINSEQ_4:def 4
+.=0 by A8,FUNCOP_1:13;
            dom q=Seg n by A5,FINSEQ_1:def 3;
         then q/.j=q.j by A8,FINSEQ_4:def 4;
         then r2=(q/.j)^2 by RVSUM_1:78;
@@ -757,8 +748,7 @@ end;
 theorem  s*|[ r ]|=|[ s*r ]|
 proof
   reconsider r,s as Real by XREAL_0:def 1;
-  s*|[r]|=s*<*r*> by EUCLID:def 11 .=<*s*r*> by RVSUM_1:69
-  .=|[s*r]|;
+  s*|[r]|=s*<*r*> by EUCLID:def 11 .=|[s*r]| by RVSUM_1:69;
  hence thesis;
 end;
 
@@ -958,7 +948,7 @@ theorem  for f being Function of TOP-REAL 1,R^1 st
     holds f.p=Proj(p,1));
        1 in Seg 1 by FINSEQ_1:3;
     then A2:f is continuous by A1,Th22;
-  A3:[#](TOP-REAL 1) = the carrier of TOP-REAL 1 by PRE_TOPC:12;
+  A3:[#](TOP-REAL 1) = the carrier of TOP-REAL 1;
   A4:dom f=the carrier of TOP-REAL 1 by FUNCT_2:def 1;
      REAL c= rng f
    proof let x;assume x in REAL;
@@ -969,8 +959,7 @@ theorem  for f being Function of TOP-REAL 1,R^1 st
       .=x by FINSEQ_1:57;
     hence x in rng f by A4,FUNCT_1:def 5;
    end;
-  then A6:rng f=the carrier of R^1 by TOPMETR:24,XBOOLE_0:def 10
-   .=[#](R^1) by PRE_TOPC:12;
+  then A6:rng f=[#](R^1) by TOPMETR:24,XBOOLE_0:def 10;
   A7: f is one-to-one
    proof
       for x1,x2 st x1 in dom f & x2 in dom f & f.x1 = f.x2 holds x1 = x2
@@ -1004,7 +993,7 @@ theorem  for f being Function of TOP-REAL 1,R^1 st
       hence z1 in rng f by A4,FUNCT_1:def 5;
      end;
      then rng f= the carrier of R^1 by XBOOLE_0:def 10;
-then A14: rng f=[#](R^1) by PRE_TOPC:12;
+then A14: rng f=[#](R^1);
      reconsider g=f/" as Function of R^1,TopSpaceMetr(Euclid 1);
      reconsider g1=g as Function of the carrier of R^1,
      the carrier of TOP-REAL 1;

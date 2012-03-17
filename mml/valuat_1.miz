@@ -9,18 +9,17 @@ environ
  vocabularies FUNCT_2, QC_LANG1, FRAENKEL, FUNCT_1, RELAT_1, MARGREL1, BOOLE,
       ZF_LANG, CQC_LANG, FINSEQ_1, ARYTM_3, FUNCOP_1, ZF_MODEL, QC_LANG3,
       CAT_1, VALUAT_1;
- notations TARSKI, XBOOLE_0, SUBSET_1,
-      NUMBERS, NAT_1, RELAT_1, FUNCT_1, FUNCT_2,
+ notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, RELAT_1, FUNCT_1, FUNCT_2,
       FINSEQ_1, FRAENKEL, QC_LANG1, QC_LANG3, CQC_LANG, MARGREL1, XXREAL_0;
  constructors XCMPLX_0, XXREAL_0, XREAL_0, MEMBERED, QC_LANG3, CQC_LANG,
       MARGREL1;
  registrations RELSET_1, MARGREL1, CQC_LANG, QC_LANG1, ARYTM_3, FINSEQ_1,
-      FUNCT_1, MEMBERED, ORDINAL1;
+      FUNCT_1, MEMBERED, ORDINAL1, XBOOLEAN;
  requirements NUMERALS, SUBSET, BOOLE;
- definitions TARSKI, MARGREL1;
+ definitions TARSKI, XBOOLEAN, MARGREL1;
  theorems TARSKI, FINSEQ_1, FUNCT_1, FUNCT_2, FUNCOP_1, FRAENKEL, QC_LANG1,
       QC_LANG2, QC_LANG3, CQC_LANG, MARGREL1, RELSET_1, RELAT_1, FINSEQ_3,
-      XBOOLE_0, XBOOLE_1;
+      XBOOLE_0, XBOOLE_1, XBOOLEAN;
  schemes QC_LANG1, CQC_LANG, FUNCT_1, FUNCT_2;
 
 begin
@@ -50,8 +49,6 @@ theorem
        x is Function of bound_QC-variables ,A
      proof let x be set;
        assume x is Element of Valuations_in A;
-       then x in Valuations_in A;
-       then x in Funcs(bound_QC-variables,A);
        then ex f being Function st
  x = f & dom f = bound_QC-variables & rng f c= A by FUNCT_2:def 2;
       hence thesis by FUNCT_2:def 1,RELSET_1:11;
@@ -88,8 +85,8 @@ registration let f be boolean-valued Function, x be set;
   proof
    per cases;
    suppose not x in dom f;
-    then f.x = 0 by FUNCT_1:def 4;
-   hence f.x in BOOLEAN by MARGREL1:def 12,TARSKI:def 2;
+    then f.x = FALSE by FUNCT_1:def 4;
+   hence f.x in BOOLEAN;
    end;
    suppose x in dom f;
     then A1:   f.x in rng f by FUNCT_1:def 5;
@@ -111,94 +108,102 @@ end;
 
 definition
  let p be boolean-valued Function;
-  func 'not' p -> Function means
+  func 'not' p -> boolean-valued Function means
 :Def3: dom it = dom p &
    for x being set st x in dom p holds it.x = 'not'(p.x);
  existence
-     proof
+  proof
        deffunc F(set) = 'not'(p.$1);
        consider q being Function such that
 A1:     dom q = dom p and
   A2:   for x being set st x in dom p holds q.x = F(x) from FUNCT_1:sch 3;
-       take q;
-       thus thesis by A1,A2;
-     end;
+    q is boolean-valued
+   proof let x be set;
+    assume x in rng q;
+     then consider y being set such that
+A3:   y in dom q and
+A4:   x = q.y by FUNCT_1:def 5;
+     x = 'not'(p.y) by A4,A2,A3,A1;
+     then x = FALSE or x = TRUE by XBOOLEAN:def 3;
+    hence x in BOOLEAN;
+   end;
+   hence thesis by A1,A2;
+  end;
  uniqueness
-   proof let q1,q2 be Function such that
-A3: dom q1 = dom p and
-   A4:  for x being set st x in dom p holds q1.x = 'not'(p.x) and
-A5: dom q2 = dom p and
-   A6:  for x being set st x in dom p holds q2.x = 'not'(p.x);
+   proof let q1,q2 be boolean-valued Function such that
+A5: dom q1 = dom p and
+   A6:  for x being set st x in dom p holds q1.x = 'not'(p.x) and
+A7: dom q2 = dom p and
+   A8:  for x being set st x in dom p holds q2.x = 'not'(p.x);
            for x being set st x in dom p holds q1.x = q2.x
         proof let x be set;
          assume x in dom p;
-          then q1.x = 'not'(p.x) & q2.x = 'not'(p.x) by A4,A6;
+          then q1.x = 'not'(p.x) & q2.x = 'not'(p.x) by A6,A8;
          hence thesis;
         end;
-     hence thesis by A3,A5,FUNCT_1:9;
+     hence thesis by A5,A7,FUNCT_1:9;
+   end;
+  involutiveness
+   proof let q,p be boolean-valued Function;
+    assume that
+A9:  dom q = dom p and
+A10: for x being set st x in dom p holds q.x = 'not'(p.x);
+    thus dom p = dom q by A9;
+    let x be set;
+    assume
+A11:  x in dom q;
+    thus p.x = 'not' 'not'(p.x)
+       .= 'not'(q.x) by A9,A10,A11;
    end;
  let q be boolean-valued Function;
-  func p '&' q -> Function means
+  func p '&' q -> boolean-valued Function means
 :Def4: dom it = dom p /\ dom q &
   for x being set st x in dom it holds it.x = (p.x) '&' (q.x);
  existence
    proof
      deffunc F(set) = (p.$1) '&' (q.$1);
-       consider s being Function such that
-A7:     dom s = dom p /\ dom q and
-  A8:   for x being set st x in dom p /\ dom q
+     consider s being Function such that
+A12:   dom s = dom p /\ dom q and
+A13:   for x being set st x in dom p /\ dom q
             holds s.x = F(x) from FUNCT_1:sch 3;
-       take s;
-       thus thesis by A7,A8;
+     s is boolean-valued
+      proof let x be set;
+       assume x in rng s;
+        then consider y being set such that
+A14:      y in dom s and
+A15:      x = s.y by FUNCT_1:def 5;
+        x = (p.y) '&' (q.y) by A14,A15,A13,A12;
+        then x = FALSE or x = TRUE by XBOOLEAN:def 3;
+       hence x in BOOLEAN;
+      end;
+    hence thesis by A12,A13;
    end;
  uniqueness
- proof let s1,s2 be Function such that
-A9: dom s1 = dom p /\ dom q and
-   A10:  for x being set st x in dom s1 holds s1.x = (p.x) '&' (q.x) and
-A11: dom s2 = dom p /\ dom q and
-   A12:  for x being set st x in dom s2 holds s2.x = (p.x) '&' (q.x);
+ proof let s1,s2 be boolean-valued Function such that
+A16: dom s1 = dom p /\ dom q and
+   A17:  for x being set st x in dom s1 holds s1.x = (p.x) '&' (q.x) and
+A18: dom s2 = dom p /\ dom q and
+   A19:  for x being set st x in dom s2 holds s2.x = (p.x) '&' (q.x);
            for x being set st x in dom s1 holds s1.x = s2.x
         proof let x be set;
          assume x in dom s1;
-           then s1.x = (p.x) '&' (q.x) & s2.x = (p.x) '&' (q.x) by A9,A10,A11
-,A12;
+           then s1.x = (p.x) '&' (q.x) & s2.x = (p.x) '&' (q.x) by A16,A17,A18
+,A19;
            hence thesis;
         end;
-        hence thesis by A9,A11,FUNCT_1:9;
+        hence thesis by A16,A18,FUNCT_1:9;
   end;
- commutativity;
-end;
-
-registration
- let p be boolean-valued Function;
- cluster 'not' p -> boolean-valued;
-  coherence
-   proof let x be set;
-    assume x in rng 'not' p;
-     then consider y being set such that
-A1:   y in dom 'not' p and
-A2:   x = ('not' p).y by FUNCT_1:def 5;
-A3:   y in dom p by A1,Def3;
-     then A4:   x = 'not'(p.y) by A2,Def3;
-A5:   rng p c= BOOLEAN by Def2;
-        p.y in rng p by A3,FUNCT_1:def 5;
-     then p.y = FALSE or p.y = TRUE by A5,MARGREL1:37,TARSKI:def 2;
-     then x = FALSE or x = TRUE by A4,MARGREL1:def 16;
-    hence x in BOOLEAN;
-   end;
- let q be boolean-valued Function;
-  cluster p '&' q -> boolean-valued;
-  coherence
-   proof let x be set;
-    assume x in rng(p '&' q);
-     then consider y being set such that
-A6:   y in dom(p '&' q) and
-A7:   x = (p '&' q).y by FUNCT_1:def 5;
-A8:   x = (p.y) '&' (q.y) by A6,A7,Def4;
-        p.y = TRUE & q.y = TRUE or not(p.y = TRUE & q.y = TRUE);
-     then x = FALSE or x = TRUE by A8,MARGREL1:def 17;
-    hence x in BOOLEAN;
-   end;
+ commutativity
+  proof let f,p,q be boolean-valued Function;
+   assume that
+A20: dom f = dom p /\ dom q and
+A21: for x being set st x in dom f holds f.x = (p.x) '&' (q.x);
+   thus dom f = dom q /\ dom p by A20;
+   let x be set;
+   assume x in dom f;
+   hence f.x = (q.x) '&' (p.x) by A21;
+  end;
+ idempotence;
 end;
 
  reserve f1,f2 for Element of Funcs(Valuations_in A,BOOLEAN),
@@ -352,7 +357,6 @@ then A2:       not FALSE in {p.v'' where v'' is Element of Valuations_in A:
     end;
        now assume
     for v1 st for y st x <> y holds v1.y = v.y holds p.v1 = TRUE;
-       then for v1 st for y st x <> y holds v1.y = v.y holds not p.v1 = FALSE;
       then not ex v1 st p.v1 = FALSE & for y st x <> y holds v1.y = v.y;
       then not FALSE in {p.v'' where v'' is Element of Valuations_in A:
                            for y st x <> y holds v''.y = v.y};
@@ -583,6 +587,8 @@ definition let A, J, p;
    end;
 end;
 
+canceled 4;
+
 Lm1:
 for A, J holds
  Valid(VERUM,J) = (Valuations_in A --> TRUE) &
@@ -626,8 +632,6 @@ A1:for p holds for d be Element of D holds (
  let x;
  thus X(All(x,p)) = Q(x,X(p)) from CQC_LANG:sch 9(A1);
 end;
-
-canceled 4;
 
 theorem
      Valid(VERUM,J) = Valuations_in A --> TRUE by Lm1;
@@ -752,7 +756,6 @@ A1: now assume J,v |= 'not' p;
        then ('not' Valid(p,J)).v = TRUE by Lm1;
        then 'not'(Valid(p,J).v) = TRUE by Def5;
        then Valid(p,J).v = FALSE by MARGREL1:41;
-       then not (Valid(p,J).v = TRUE);
       hence not J,v |= p by Def12;
     end;
        now assume not J,v |= p;
@@ -778,7 +781,7 @@ A1: now assume J,v |= (p '&' q);
     end;
        now assume J,v |= p & J,v |= q;
        then Valid(p,J).v = TRUE & Valid(q,J).v = TRUE by Def12;
-       then (Valid(p,J).v) '&' (Valid(q,J).v) = TRUE by MARGREL1:45;
+       then (Valid(p,J).v) '&' (Valid(q,J).v) = TRUE;
        then (Valid(p,J) '&' Valid(q,J)).v = TRUE by Def6;
        then Valid(p '&' q,J).v = TRUE by Lm1;
        hence J,v |= (p '&' q) by Def12;
@@ -804,18 +807,14 @@ theorem
   Th31: J,v |= All(x,p) iff
         for v1 st for y st x <> y holds v1.y = v.y holds Valid(p,J).v1 = TRUE
  proof
-A1:now assume J,v |= All(x,p);
-   then FOR_ALL(x,Valid(p,J)).v = TRUE by Th30;
-     hence
-        for v1 st for y st x <> y holds v1.y = v.y holds Valid(p,J).v1 = TRUE
-by Th8;
-   end;
-      now assume
-        for v1 st for y st x <> y holds v1.y = v.y holds Valid(p,J).v1 = TRUE;
-      then FOR_ALL(x,Valid(p,J)).v = TRUE by Th8;
-      hence J,v |= All(x,p) by Th30;
-   end;
-   hence thesis by A1;
+  hereby assume J,v |= All(x,p);
+    then FOR_ALL(x,Valid(p,J)).v = TRUE by Th30;
+   hence for v1 st for y st x <> y holds v1.y = v.y holds Valid(p,J).v1 = TRUE
+             by Th8;
+  end;
+  assume for v1 st for y st x <> y holds v1.y = v.y holds Valid(p,J).v1 = TRUE;
+   then FOR_ALL(x,Valid(p,J)).v = TRUE by Th8;
+  hence J,v |= All(x,p) by Th30;
  end;
 
  theorem
@@ -832,13 +831,9 @@ by Th8;
 theorem
  Th33: Valid(p '&' p,J) = Valid(p,J)
   proof
-       now let v;
- A1:    Valid(p '&' p,J).v = (Valid(p,J).v) '&' (Valid(p,J).v) by Th22;
-   then A2:  (Valid(p '&' p, J).v) = TRUE implies Valid(p, J).v = TRUE by
-MARGREL1:45;
-           (Valid(p '&' p, J).v) = FALSE implies Valid(p, J).v = FALSE by A1,
-MARGREL1:51;
-     hence Valid(p '&'p, J).v = Valid(p,J).v by A2,MARGREL1:39;
+    now let v;
+     thus Valid(p '&' p,J).v = (Valid(p,J).v) '&' (Valid(p,J).v) by Th22
+      .= Valid(p,J).v;
     end;
     hence Valid(p '&' p,J) = Valid(p,J) by FUNCT_2:113;
   end;
@@ -891,17 +886,14 @@ MARGREL1:45;
 theorem
   Th36: J,v |= p => q iff (J,v |= p implies J,v |= q)
  proof
-  A1: now assume J,v |= p => q;
-    then A2: Valid(p, J).v = FALSE or Valid(q, J).v = TRUE by Th35;
-     J,v |= p implies J,v |= q by A2,Def12;
-        hence J,v |= p implies J,v |= q;
-      end;
-         now assume J,v |= p implies J,v |= q;
-        then Valid(p, J).v = TRUE implies Valid(q, J).v = TRUE by Def12;
-        then Valid(p, J).v = FALSE or Valid(q, J).v = TRUE by MARGREL1:43;
-        hence J,v |= p => q by Th35;
-      end;
-      hence thesis by A1;
+  hereby assume J,v |= p => q;
+    then Valid(p, J).v = FALSE or Valid(q, J).v = TRUE by Th35;
+   hence J,v |= p implies J,v |= q by Def12;
+  end;
+  assume J,v |= p implies J,v |= q;
+   then Valid(p, J).v = TRUE implies Valid(q, J).v = TRUE by Def12;
+   then Valid(p, J).v = FALSE or Valid(q, J).v = TRUE by MARGREL1:43;
+  hence J,v |= p => q by Th35;
  end;
 
 theorem
@@ -926,8 +918,7 @@ Lm2: 'not'('not'(u '&' 'not' w) '&' ('not'(w '&' z) '&' (u '&' z))) = TRUE
      suppose that
 A1:   z = TRUE and
 A2:   w = TRUE;
-          w '&' z = TRUE by A1,A2,MARGREL1:45;
-       then 'not'(w '&' z) = FALSE by MARGREL1:41;
+       'not'(w '&' z) = FALSE by MARGREL1:41,A1,A2;
        then 'not'(w '&' z) '&' (u '&' z) = FALSE by MARGREL1:45;
        then 'not'(u '&' 'not' w) '&' ('not'
 (w '&' z) '&' (u '&' z)) = FALSE by MARGREL1:45;
@@ -937,8 +928,7 @@ A2:   w = TRUE;
 A3:   w = FALSE and
 A4:   u = TRUE;
           'not' w = TRUE by A3,MARGREL1:41;
-       then u '&' 'not' w = TRUE by A4,MARGREL1:45;
-       then 'not'(u '&' 'not' w) = FALSE by MARGREL1:41;
+       then 'not'(u '&' 'not' w) = FALSE by A4,MARGREL1:41;
        then 'not'(u '&' 'not' w) '&' ('not'
 (w '&' z) '&' (u '&' z)) = FALSE by MARGREL1:45;
       hence thesis by MARGREL1:41;
@@ -980,8 +970,7 @@ proof
            (C[x] implies f.x = F(x)) & (not C[x] implies f.x = G(x))
               from FUNCT_2:sch 5(A1);
        dom f = bound_QC-variables & rng f c= A() by FUNCT_2:def 1,RELSET_1:12;
-    then f is Element of Funcs(bound_QC-variables,A()) by FUNCT_2:def 2;
-    then reconsider f as Element of Valuations_in A();
+    then reconsider f as Element of Valuations_in A() by FUNCT_2:def 2;
     take f;
       now let x be bound_QC-variable;
            now assume A3: x <> Y();
@@ -1030,7 +1019,6 @@ A2:   rng ll c= bound_QC-variables by CQC_LANG:def 5;
  A5:        now assume
          A6:  Valid(P!ll,J).v = TRUE;
               then (ll 'in' (J.P)).v = TRUE by Lm1;
-              then not (ll 'in' (J.P)).v = FALSE;
      then A7:      v*'ll in (J.P) by Def9;
 A8:         len (v*'ll) = k & len (w*'ll) = k by Def8;
              now let i; assume
@@ -1066,7 +1054,6 @@ QC_LANG3:def 2;
               now assume
         A14:   Valid(P!ll,J).v = FALSE;
               then (ll 'in' (J.P)).v = FALSE by Lm1;
-              then not (ll 'in' (J.P)).v = TRUE;
      then A15:      not v*'ll in (J.P) by Def9;
      A16:     len (v*'ll) = k & len (w*'ll) = k by Def8;
              now let i; assume
@@ -1161,7 +1148,7 @@ A31:          not (x in (still_not-bound_in s) \/ (still_not-bound_in t))
               then Valid(s,J).v = TRUE & Valid(t,J).v = TRUE by MARGREL1:45;
               then Valid(s,J).w = TRUE & Valid(t,J).w = TRUE by A28,A29,A31,A32
 ,XBOOLE_0:def 2;
-              then (Valid(s,J).w) '&' (Valid(t,J).w) = TRUE by MARGREL1:45;
+              then (Valid(s,J).w) '&' (Valid(t,J).w) = TRUE;
               hence thesis by A34,Th22;
             end;
                now assume
@@ -1482,7 +1469,7 @@ A30:        now assume
 ;
              then Valid(qla,J).v = TRUE & Valid(qra,J).v = TRUE by A25,A26,A28
 ;
-             then (Valid(qla,J).v) '&' (Valid(qra,J).v) = TRUE by MARGREL1:45;
+             then (Valid(qla,J).v) '&' (Valid(qra,J).v) = TRUE;
              hence Valid(q,J).v = TRUE by A27,A29,Th22;
            end;
               now assume
@@ -1797,7 +1784,6 @@ q)), J).v)) by Th22;
          'not'(Valid('not'('not'
 p '&' 'not' q), J).v) by Th20
               .= 'not' 'not'(Valid('not' p '&' 'not' q, J).v) by Th20
-              .= (Valid('not' p '&' 'not' q, J).v)
               .= (Valid('not' p, J).v) '&' (Valid('not' q, J).v) by Th22
               .= 'not'(Valid(p, J).v) '&' (Valid('not' q, J).v) by Th20
               .= 'not'(Valid(p, J).v) '&' 'not'(Valid(q, J).v) by Th20;
@@ -1836,7 +1822,6 @@ theorem
 (p '&' t)), J).v) by Th20
            .= 'not' 'not'(Valid('not'(q '&' t) '&' 'not' 'not'
 (p '&' t), J).v) by Th20
-           .= Valid('not'(q '&' t) '&' 'not' 'not'(p '&' t), J).v
            .= (Valid('not'(q '&' t),J).v) '&' (Valid('not' 'not'
 (p '&' t), J).v) by Th22
            .= 'not'(Valid(q '&' t,J).v) '&' (Valid('not' 'not'
@@ -1845,7 +1830,6 @@ theorem
 (p '&' t), J).v)) by Th20
            .= 'not'(Valid(q '&' t,J).v) '&'('not' 'not'
 (Valid(p '&' t, J).v)) by Th20
-           .= 'not'(Valid(q '&' t,J).v) '&'(Valid(p '&' t, J).v)
            .= 'not'((Valid(q,J).v) '&' (Valid(t,J).v)) '&'
                                      (Valid(p '&' t, J).v) by Th22
            .= 'not'((Valid(q,J).v) '&' (Valid(t,J).v)) '&'

@@ -8,9 +8,9 @@
 environ
 
  vocabularies BOOLE, FUNCT_1, RELAT_1, SUBSET_1, PRE_TOPC, FIN_TOPO, FINTOPO3,
-      ORDINAL2, ARYTM;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, NAT_1,
-      RELAT_1, FUNCT_1, FUNCT_2, FIN_TOPO, PRE_TOPC, STRUCT_0;
+      ORDERS_1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, NAT_1, RELAT_1,
+      FUNCT_1, FUNCT_2, FIN_TOPO, PRE_TOPC, STRUCT_0, ORDERS_2;
  constructors NAT_1, FIN_TOPO;
  registrations SUBSET_1, RELSET_1, STRUCT_0, XBOOLE_0, FIN_TOPO, ORDINAL1,
       ARYTM_3, NUMBERS;
@@ -19,9 +19,9 @@ environ
 
 begin
 
- reserve T for non empty FT_Space_Str,
+ reserve T for non empty RelStr,
          A,B for Subset of T,
-         x,x2,y,y2,z for Element of T;
+         x,x2,y,z for Element of T;
 
 :: The following is definition of "deflation of a set A"
 :: (A^f is an inflation of A).
@@ -70,7 +70,7 @@ theorem :: FINTOPO3:11
 theorem :: FINTOPO3:12
   (A^d) /\ (B^d) = (A /\ B)^d;
 
-definition let T be non empty FT_Space_Str;
+definition let T be non empty RelStr;
            let A be Subset of T;
    func Fcl(A) -> Function of NAT,bool the carrier of T means
 :: FINTOPO3:def 2
@@ -78,14 +78,14 @@ definition let T be non empty FT_Space_Str;
    B=it.n holds it.(n+1)=B^b) & it.0=A;
   end;
 
-definition let T be non empty FT_Space_Str;
+definition let T be non empty RelStr;
            let A be Subset of T, n be Nat;
   func Fcl(A,n) -> Subset of T equals
 :: FINTOPO3:def 3
     (Fcl A).n;
 end;
 
-definition let T be non empty FT_Space_Str;
+definition let T be non empty RelStr;
            let A be Subset of T;
   func Fint(A) -> Function of NAT,bool the carrier of T means
 :: FINTOPO3:def 4
@@ -94,7 +94,7 @@ definition let T be non empty FT_Space_Str;
   it.0=A;
  end;
 
-definition let T be non empty FT_Space_Str;
+definition let T be non empty RelStr;
            let A be Subset of T, n be Nat;
   func Fint(A,n) -> Subset of T equals
 :: FINTOPO3:def 5
@@ -158,7 +158,7 @@ theorem :: FINTOPO3:30
 
 :: Function of Inflation Series
 
-definition let T be non empty FT_Space_Str;
+definition let T be non empty RelStr;
            let A be Subset of T;
   func Finf(A) -> Function of NAT,bool(the carrier of T) means
 :: FINTOPO3:def 6
@@ -167,7 +167,7 @@ definition let T be non empty FT_Space_Str;
   it.0=A;
  end;
 
-definition let T be non empty FT_Space_Str;
+definition let T be non empty RelStr;
            let A be Subset of T, n be Nat;
   func Finf(A,n) -> Subset of T equals
 :: FINTOPO3:def 7
@@ -176,7 +176,7 @@ end;
 
 :: Function of Deflation Series
 
-definition let T be non empty FT_Space_Str;
+definition let T be non empty RelStr;
            let A be Subset of T;
    func Fdfl(A) -> Function of NAT,bool(the carrier of T) means
 :: FINTOPO3:def 8
@@ -185,7 +185,7 @@ definition let T be non empty FT_Space_Str;
    it.0=A;
   end;
 
-definition let T be non empty FT_Space_Str;
+definition let T be non empty RelStr;
            let A be Subset of T, n be Nat;
   func Fdfl(A,n) -> Subset of T equals
 :: FINTOPO3:def 9
@@ -244,7 +244,7 @@ theorem :: FINTOPO3:46
     holds Fdfl(A,n) /\ Fdfl(B,n) = Finf((A /\ B)`,n)`;
 
 definition :: n-th neighbourhood of x
-  let T be non empty FT_Space_Str, n be Nat, x be Element of T;
+  let T be non empty RelStr, n be Nat, x be Element of T;
   func U_FT(x,n) -> Subset of T equals
 :: FINTOPO3:def 10
     Finf((U_FT x),n);
@@ -256,11 +256,11 @@ theorem :: FINTOPO3:47
 theorem :: FINTOPO3:48
   for n being Element of NAT holds U_FT(x,n+1) = (U_FT(x,n))^f;
 
-definition let S, T be non empty FT_Space_Str;
+definition let S, T be non empty RelStr;
   pred S, T are_mutually_symmetric means
 :: FINTOPO3:def 11
     the carrier of S = the carrier of T &
-    for x, y being set st x in the carrier of S & y in the carrier of T
-      holds y in (the Nbd of S).x iff x in (the Nbd of T).y;
+    for x being Element of S, y being Element of T
+      holds y in U_FT x iff x in U_FT y;
   symmetry;
 end;

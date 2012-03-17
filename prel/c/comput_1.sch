@@ -32,6 +32,7 @@
 <ArticleID name="RFUNCT_3"/>
 <ArticleID name="BINOP_2"/>
 <ArticleID name="FRAENKEL"/>
+<ArticleID name="XBOOLEAN"/>
 <ArticleID name="MARGREL1"/>
 <ArticleID name="BINARITH"/>
 <ArticleID name="FUNCT_7"/>
@@ -88,7 +89,7 @@
 <Pred kind="R" nr="1">
 <Func kind="K" nr="34">
 <Func kind="K" nr="28">
-<Func kind="K" nr="311">
+<Func kind="K" nr="318">
 <Func kind="K" nr="107">
 <Func kind="F" nr="2"/>
 </Func>
@@ -119,7 +120,7 @@
 <Pred kind="R" nr="1">
 <Func kind="K" nr="34">
 <Func kind="F" nr="1"/>
-<Func kind="K" nr="296">
+<Func kind="K" nr="303">
 <Func kind="K" nr="82"/>
 <Var nr="1"/>
 </Func>
@@ -224,7 +225,7 @@
 <Pred kind="R" nr="1">
 <Func kind="K" nr="34">
 <Func kind="K" nr="28">
-<Func kind="K" nr="311">
+<Func kind="K" nr="318">
 <Func kind="K" nr="108">
 <Func kind="F" nr="2"/>
 <Func kind="F" nr="3"/>

@@ -10,11 +10,11 @@ environ
       ARYTM_3, RELAT_1, FUNCOP_1, ABSVALUE, LATTICES, SQUARE_1, ORDINAL2,
       SEQ_1, SEQ_2, SEQM_3, RCOMP_1, BOOLE, REALSET1, FINSEQ_4, PARTFUN1,
       PARTFUN2, NORMSP_1, RSSPACE, LOPBAN_1, LOPBAN_2, FDIFF_1, FRECHET2;
- notations TARSKI, XBOOLE_0, SUBSET_1, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2,
-      PRE_TOPC, STRUCT_0, FUNCOP_1, BINOP_1, PARTFUN2, XCMPLX_0, XXREAL_0,
-      XREAL_0, COMPLEX1, ORDINAL1, NUMBERS, REAL_1, NAT_1, FINSEQ_4, RLVECT_1,
-      SEQ_1, SEQ_2, SEQM_3, REALSET2, SQUARE_1, VFUNCT_1, NORMSP_1, RSSPACE,
-      BHSP_3, LOPBAN_1, LOPBAN_2, LOPBAN_3, NFCONT_1, FDIFF_1;
+ notations TARSKI, SUBSET_1, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, PRE_TOPC,
+      STRUCT_0, FUNCOP_1, BINOP_1, PARTFUN2, XCMPLX_0, XXREAL_0, XREAL_0,
+      COMPLEX1, ORDINAL1, NUMBERS, REAL_1, NAT_1, FINSEQ_4, RLVECT_1, SEQ_1,
+      SEQ_2, SEQM_3, REALSET2, SQUARE_1, VFUNCT_1, NORMSP_1, RSSPACE, BHSP_3,
+      LOPBAN_1, LOPBAN_2, LOPBAN_3, NFCONT_1, FDIFF_1;
  constructors PARTFUN1, DOMAIN_1, REAL_1, SQUARE_1, NAT_1, RAT_1, COMPLEX1,
       SEQ_2, FINSEQ_4, PARTFUN2, FDIFF_1, REALSET2, BHSP_3, RSSPACE, VFUNCT_1,
       LOPBAN_3, NFCONT_1;
@@ -34,13 +34,13 @@ environ
 begin :: Differentiable Function on Normed Linear Spaces
 
  reserve n,k for Element of NAT;
- reserve x,y,X,X1,Z,Z1 for set;
- reserve s,g,r,p for Real;
- reserve S,T for RealNormSpace;
- reserve f,f1,f2 for PartFunc of S,T;
- reserve rseq,rseq1,rseq2 for Real_Sequence;
- reserve s1,s2,q1,seq,seq1,seq2 for sequence of S;
- reserve x0,x1,x2 for Point of S;
+ reserve x,y,X for set;
+ reserve g,r,p for Real;
+ reserve S for RealNormSpace;
+
+ reserve rseq for Real_Sequence;
+ reserve seq,seq1 for sequence of S;
+ reserve x0 for Point of S;
  reserve Y for Subset of S;
 
 ::::: Normed Linear Spaces varsions of RCOMP_1:37 -
@@ -860,8 +860,8 @@ end;
 
 reserve S,T for non trivial RealNormSpace;
 reserve f,f1,f2 for PartFunc of S,T;
-reserve s1,s2,q1,seq,seq1,seq2 for sequence of S;
-reserve x0,x1,x2 for Point of S;
+reserve s1,seq for sequence of S;
+reserve x0 for Point of S;
 
 registration
   let S be non trivial RealNormSpace;
@@ -1597,8 +1597,7 @@ A37:        ||.s.n.|| <> 0 by NORMSP_1:def 2;
                       .= ((r.n)/(r.n))* ||.z.|| by XCMPLX_0:def 9
                       .= 1* ||.z.|| by A30,XCMPLX_1:60
                       .= ||.z.||; then
-           ||.z.|| *( ||.s.n.|| )" = (r.n)"* ||.s.n.|| *( ||.s.n.|| )"
-             .= (r.n)"* (||.s.n.|| *( ||.s.n.|| )")
+           ||.z.|| *( ||.s.n.|| )" = (r.n)"* (||.s.n.|| *( ||.s.n.|| )")
              .= (r.n)"*  (||.s.n.|| /( ||.s.n.|| )) by XCMPLX_0:def 9
              .= (r.n)"*1 by A37,XCMPLX_1:60
              .= (r.n)"; then
@@ -2097,13 +2096,11 @@ now let x1,x2 be Point of S
 A37:  K * ||.x1-x2.|| <= (K+1 ) *  ||.x1-x2.|| by A34,XREAL_1:66;
  ||.LP/.x1-LP/.x2 .||
  = ||.LL.x1-LP/.x2 .|| by A31,FINSEQ_4:def 4
- .= ||.LL.x1-LL.x2 .|| by A31,FINSEQ_4:def 4
- .= ||.LL.x1+-LL.x2 .||
+ .= ||.LL.x1+-LL.x2 .|| by A31,FINSEQ_4:def 4
  .= ||.LL.x1+(-1)*LL.x2 .|| by RLVECT_1:29
  .= ||.LL.x1+LL.((-1)*x2) .|| by LOPBAN_1:def 6
  .= ||.LL.(x1+(-1)*x2) .|| by LOPBAN_1:def 5
- .= ||.LL.(x1+-x2) .|| by RLVECT_1:29
- .= ||.LL.(x1-x2) .||;
+ .= ||.LL.(x1-x2) .|| by RLVECT_1:29;
  hence ||.LP/.x1-LP/.x2 .|| <= (K+1)  * ||.x1-x2.|| by A36,A37,XXREAL_0:2;
  end;
  hence thesis by A35;
@@ -2160,10 +2157,8 @@ let f1,f2,x0;
   = (f1/.x+f2/.x) - (f1+f2)/.x0 by A10,A12,VFUNCT_1:def 1
    .=f1/.x+f2/.x - (f1/.x0+f2/.x0) by A10,A13,VFUNCT_1:def 1
    .=f1/.x+f2/.x - f1/.x0 - f2/.x0 by RLVECT_1:41
-   .=f2/.x+f1/.x +-f1/.x0 - f2/.x0
    .=(f1/.x +-f1/.x0) + f2/.x - f2/.x0 by RLVECT_1:def 6
-   .=(f1/.x +-f1/.x0) + (f2/.x - f2/.x0) by RLVECT_1:def 6
-   .=(f1/.x - f1/.x0) + (f2/.x - f2/.x0)
+   .=(f1/.x - f1/.x0) + (f2/.x - f2/.x0) by RLVECT_1:def 6
    .=L1.(x-x0)+R1/.(x-x0) + (f2/.x - f2/.x0) by A4,A7,A12
    .=L1.(x-x0)+R1/.(x-x0) + (L2.(x-x0) + R2/.(x-x0)) by A6,A7,A12
    .=R1/.(x-x0)+L1.(x-x0) + L2.(x-x0) + R2/.(x-x0) by RLVECT_1:def 6
@@ -2217,10 +2212,8 @@ let f1,f2,x0;
    .=L1.(x-x0) + R1/.(x-x0) - (f2/.x - f2/.x0) by A4,A7,A12
    .=L1.(x-x0) + R1/.(x-x0) - (L2.(x-x0) + R2/.(x-x0)) by A6,A7,A12
    .=L1.(x-x0) + R1/.(x-x0) - L2.(x-x0) - R2/.(x-x0) by RLVECT_1:41
-   .=L1.(x-x0) + (R1/.(x-x0) - L2.(x-x0)) - R2/.(x-x0) by RLVECT_1:def 6
-   .=L1.(x-x0) + (R1/.(x-x0) +- L2.(x-x0)) - R2/.(x-x0)
-   .=L1.(x-x0) +- (L2.(x-x0) - R1/.(x-x0)) - R2/.(x-x0) by RLVECT_1:47
-   .=L1.(x-x0) - (L2.(x-x0) - R1/.(x-x0)) - R2/.(x-x0)
+   .=L1.(x-x0) + (R1/.(x-x0) +- L2.(x-x0)) - R2/.(x-x0) by RLVECT_1:def 6
+   .=L1.(x-x0) - (L2.(x-x0) - R1/.(x-x0)) - R2/.(x-x0) by RLVECT_1:47
    .=L1.(x-x0) - L2.(x-x0) + R1/.(x-x0) - R2/.(x-x0) by RLVECT_1:43
    .=L1.(x-x0) - L2.(x-x0) + (R1/.(x-x0) - R2/.(x-x0)) by RLVECT_1:def 6
    .=L.(x-x0) + (R1/.(x-x0) - R2/.(x-x0)) by LOPBAN_1:46
@@ -2561,8 +2554,7 @@ reconsider II=FuncUnit(S) as
  set V = R_NormSpace_of_BoundedLinearOperators(S,S);
  reconsider L as
  Point of R_NormSpace_of_BoundedLinearOperators(S,S);
- A4:  L=(the Mult of V).([r,II])
-         .=Mult_(BoundedLinearOperators(S,S),
+ A4:  L=Mult_(BoundedLinearOperators(S,S),
             R_VectorSpace_of_LinearOperators(S,S)).(r,FuncUnit(S))
           by A3
          .=r*FuncUnit(S) by LOPBAN_2:def 3;
@@ -2607,8 +2599,7 @@ A18: r* (x-x0)=r* ((FuncUnit(S)).(x-x0)) by LOPBAN_2:def 5
    .=r*x+(p+-r*x0-p)
    .=r*x+(-r*x0+(p-p)) by RLVECT_1:def 6
    .=r*x+(-r*x0+0.S) by RLVECT_1:28
-   .=r*x+-r*x0 by RLVECT_1:10
-   .=r*x-r*x0
+   .=r*x-r*x0 by RLVECT_1:10
    .=r*(x-x0) by RLVECT_1:48
    .=L.(x-x0)+R/.(x-x0) by A17,A18,RLVECT_1:10;
   end; hence f is_differentiable_in x0 by A15,Def6;
@@ -2634,8 +2625,7 @@ A18: r* (x-x0)=r* ((FuncUnit(S)).(x-x0)) by LOPBAN_2:def 5
    .=r*x+(p+-r*x0-p)
    .=r*x+(-r*x0+(p-p)) by RLVECT_1:def 6
    .=r*x+(-r*x0+0.S) by RLVECT_1:28
-   .=r*x+-r*x0 by RLVECT_1:10
-   .=r*x-r*x0
+   .=r*x-r*x0 by RLVECT_1:10
    .=r*(x-x0) by RLVECT_1:48
    .=L.(x-x0)+R/.(x-x0) by A26,A27,RLVECT_1:10;
   end;

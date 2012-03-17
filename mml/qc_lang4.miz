@@ -10,14 +10,15 @@ environ
       TREES_4, BOOLE, TREES_9, ORDINAL1, CARD_1, MCART_1, ORDERS_1, TARSKI,
       QC_LANG1, ZF_LANG, QC_LANG4;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0, NAT_1,
-   RELAT_1,
-      FUNCT_1, FUNCT_2, FINSET_1, FINSEQ_1, FINSEQ_4, CARD_1, TREES_1, TREES_2,
-      TREES_4, TREES_9, QC_LANG1, QC_LANG2, MCART_1, XXREAL_0;
- constructors XXREAL_0, XREAL_0, NAT_1, QC_LANG2, FINSEQ_4, TREES_4, TREES_9;
+      RELAT_1, FUNCT_1, FUNCT_2, BINOP_1, FINSET_1, FINSEQ_1, FINSEQ_4, CARD_1,
+      TREES_1, TREES_2, TREES_4, TREES_9, QC_LANG1, QC_LANG2, MCART_1,
+      XXREAL_0;
+ constructors XXREAL_0, XREAL_0, NAT_1, QC_LANG2, FINSEQ_4, TREES_4, TREES_9,
+      BINOP_1;
  registrations SUBSET_1, TREES_1, TREES_2, TREES_9, RELSET_1, TREES_A,
       FINSET_1, FINSEQ_1, NAT_1, ORDINAL2, ORDINAL1;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
- definitions TARSKI, XBOOLE_0, TREES_2, TREES_4;
+ definitions TARSKI, XBOOLE_0, TREES_2, TREES_4, BINOP_1;
  theorems TARSKI, NAT_1, REAL_1, RELAT_1, FUNCT_1, FINSEQ_1, TREES_1, TREES_2,
       TREES_9, GRFUNC_1, QC_LANG1, QC_LANG2, TREES_A, FINSET_1, MCART_1,
       ZFMISC_1, FUNCT_2, CARD_1, CARD_2, XBOOLE_0, XBOOLE_1, FINSEQ_6, XREAL_1,
@@ -334,7 +335,7 @@ A21:      y = G(x).(n+1) by A20;
           Element of [:D(),NAT:] holds P[c,S.c] from FUNCT_2:sch 3(A16);
    then consider S being Function of [: D(), NAT :],D() such that
 A22:  for c being Element of [: D(), NAT :] holds P[c,S.c];
-A23: for n, x st x in D() & n in F(x) holds S.[x,n] = G(x).(n+1)
+A23: for n, x st x in D() & n in F(x) holds S.(x,n) = G(x).(n+1)
      proof let n, x such that A24: x in D() & n in F(x);
 A25:    [x,n]`1 = x by MCART_1:def 1;
           [x,n]`2 = n by MCART_1:def 2;
@@ -344,7 +345,7 @@ A25:    [x,n]`1 = x by MCART_1:def 1;
 A27:      x' in D() & c = [x',n'] & (n' in F(x') & S.c = G(x').(n'+1) or
            not n' in F(x') & S.c = d()) by A22;
           x' = x & n' = n by A26,A27,ZFMISC_1:33;
-       hence S.[x,n] = G(x).(n+1) by A24,A27;
+       hence S.(x,n) = G(x).(n+1) by A24,A27;
      end;
 A28:for n,x,m st m+1 = len G(x) & x in D() holds n in F(x) iff 0 <= n & n <= m
   proof let n,x,m such that A29: m+1 = len G(x) & x in D();
@@ -390,7 +391,7 @@ A36: for d being Element of D(), k1,k2 st k1 <= k2 & k2 in F(d) holds k1 in
    consider T being DecoratedTree of D() such that
 A39:   T.{} = d() &
      for t being Element of dom T holds succ t = { t^<*k*>: k in F(T.t)} &
-       for n st n in F(T.t) holds T.(t^<*n*>) = S.[T.t,n]
+       for n st n in F(T.t) holds T.(t^<*n*>) = S.(T.t,n)
          from TREES_2:sch 8(A36);
       T is finite-branching
      proof
@@ -519,7 +520,7 @@ then A74:       0 <= n & n <= l by XREAL_1:8;
            end;
            end;
             succ(T,t).(n+1) = T.(t^<*n*>) by A72,Th13
-                        .= S.[T.t,n] by A39,A73,A75
+                        .= S.(T.t,n) by A39,A73,A75
                         .= G(w).(n+1) by A23,A53,A73,A75;
          hence succ(T,t).m = G(w).m by A71;
        end;
@@ -1412,36 +1413,36 @@ A2:  1 <= n & len L = n & L.1 = H & L.n = G &
       A4: 0 <> n by A2;
       then consider k being Nat such that A5: k+1 = n by NAT_1:22;
       reconsider k as Element of NAT by ORDINAL1:def 13;
-aA5:  k+1 = n by A5;
-A6:   Seg n = dom L by A2,FINSEQ_1:def 3;
+A6:  k+1 = n by A5;
+A7:   Seg n = dom L by A2,FINSEQ_1:def 3;
          n in Seg n by A4,FINSEQ_1:5;
-      hence thesis by A1,A2,aA5,A6;
+      hence thesis by A1,A2,A6,A7;
     end;
-  A7: for k st k <> 0 & P[k] ex m st m < k & P[m]
+  A8: for k st k <> 0 & P[k] ex m st m < k & P[m]
     proof
-      let k; assume A8: k <> 0 & P[k];
-then A9:    0 < k & ex G' st G' = L.(k+1) & k+1 in dom L &
+      let k; assume A9: k <> 0 & P[k];
+then A10:    0 < k & ex G' st G' = L.(k+1) & k+1 in dom L &
         G' in rng tree_of_subformulae(F) by NAT_1:19;
-      consider G' such that A10: G' = L.(k+1) & k+1 in dom L &
-        G' in rng tree_of_subformulae(F) by A8;
-      consider m being Nat such that A11: m+1 = k by A8,NAT_1:22;
+      consider G' such that A11: G' = L.(k+1) & k+1 in dom L &
+        G' in rng tree_of_subformulae(F) by A9;
+      consider m being Nat such that A12: m+1 = k by A9,NAT_1:22;
       reconsider m as Element of NAT by ORDINAL1:def 13;
-A12:    m < k by A11,NAT_1:38;
-A13:   0+1 <= k by A9,NAT_1:38;
-      A14: Seg len L = dom L by FINSEQ_1:def 3; A15: Seg n = dom L by A2,
+A13:    m < k by A12,NAT_1:38;
+A14:   0+1 <= k by A10,NAT_1:38;
+      A15: Seg len L = dom L by FINSEQ_1:def 3; A16: Seg n = dom L by A2,
 FINSEQ_1:def 3;
-      A16: 1 <= k+1 & k+1 <= n by A2,A8,A14,FINSEQ_1:3;
-then 1 <= k & k < n by A13,NAT_1:38;
+      A17: 1 <= k+1 & k+1 <= n by A2,A9,A15,FINSEQ_1:3;
+then 1 <= k & k < n by A14,NAT_1:38;
       then consider H1,G1 being Element of QC-WFF such that
-A17:      L.k = H1 & L.(k+1) = G1 & H1 is_immediate_constituent_of G1 by A2;
-         1 <= k & k <= n by A13,A16,NAT_1:38;
-then A18:   k in dom L by A15,FINSEQ_1:3;
-         H1 in rng tree_of_subformulae(F) by A10,A17,Th37;
-      hence ex m st m < k & P[m] by A11,A12,A17,A18;
+A18:      L.k = H1 & L.(k+1) = G1 & H1 is_immediate_constituent_of G1 by A2;
+         1 <= k & k <= n by A14,A17,NAT_1:38;
+then A19:   k in dom L by A16,FINSEQ_1:3;
+         H1 in rng tree_of_subformulae(F) by A11,A18,Th37;
+      hence ex m st m < k & P[m] by A12,A13,A18,A19;
     end;
-     P[0] from NAT_1:sch 7(A3,A7);
-  then consider H' such that A19: H' = L.1 & H' in rng tree_of_subformulae(F);
-  thus H in rng tree_of_subformulae(F) by A2,A19;
+     P[0] from NAT_1:sch 7(A3,A8);
+  then consider H' such that A20: H' = L.1 & H' in rng tree_of_subformulae(F);
+  thus H in rng tree_of_subformulae(F) by A2,A20;
 end;
 
 theorem Th39:

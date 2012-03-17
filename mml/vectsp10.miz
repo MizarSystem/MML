@@ -11,9 +11,8 @@ environ
       RLVECT_3, RLVECT_2, FUNCT_2, REALSET1, BOOLE, SEQM_3, GROUP_6, SETFAM_1,
       ARYTM_3, VECTSP10, GROUP_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, DOMAIN_1, STRUCT_0, FUNCT_1,
-      REALSET1, REALSET2, RLVECT_1, BINOP_1, RLVECT_2, GROUP_1, VECTSP_1,
-      RELSET_1, FUNCT_2, FRAENKEL, VECTSP_4, VECTSP_5, VECTSP_6, VECTSP_7,
-      HAHNBAN1;
+      REALSET1, REALSET2, RLVECT_1, BINOP_1, GROUP_1, VECTSP_1, RELSET_1,
+      FUNCT_2, FRAENKEL, VECTSP_4, VECTSP_5, VECTSP_6, VECTSP_7, HAHNBAN1;
  constructors DOMAIN_1, BINOP_1, RLVECT_2, REALSET2, VECTSP_5, VECTSP_6,
       VECTSP_7, HAHNBAN1;
  registrations STRUCT_0, SUBSET_1, FUNCT_1, RELSET_1, VECTSP_1, HAHNBAN1,
@@ -53,7 +52,6 @@ cluster StructVectSp(K) -> Abelian;
      reconsider x'=x,y'=y as Element of K;
      thus x+y = (the add of V).(x,y)
        .= y'+x' by RLVECT_1:5
-       .= (the add of K).(y',x')
        .= y+x;
      end;
     hence thesis by RLVECT_1:def 5;
@@ -69,14 +67,8 @@ cluster StructVectSp(K) -> add-associative;
         now
      let x,y,z be Vector of V;
       reconsider x'=x,y'=y,z'=z as Element of K;
-      thus (x+y)+z = (the add of V).(x+y,z)
-       .= (the add of V).((the add of V).(x,y),z)
-       .= (the add of K).((x'+y'),z')
-       .= (x'+y')+z'
+      thus (x+y)+z = (x'+y')+z'
        .= x'+(y'+z') by RLVECT_1:def 6
-       .= (the add of V).(x',(y'+z'))
-       .= (the add of V).(x',(the add of V).(y',z'))
-       .= (the add of V).(x,y+z)
        .= x+(y+z);
       end;
   hence thesis by RLVECT_1:def 6;
@@ -91,8 +83,7 @@ cluster StructVectSp(K) -> right_zeroed;
     set V = StructVectSp(K);
         now let x be Vector of V;
       reconsider x'=x as Element of K;
-      thus x+0.V = (the add of V).(x,0.V)
-         .= x'+(0.K)
+      thus x+0.V = x'+(0.K)
         .= x by RLVECT_1:def 7;
      end;
     hence thesis by RLVECT_1:def 7;
@@ -111,8 +102,7 @@ cluster StructVectSp(K) -> right_complementable;
    A1: x' + t = 0.K by RLVECT_1:def 8;
       reconsider t' = t as Vector of V;
       take t';
-      thus x + t' = (the add of V).(x,t')
-       .= 0.V by A1;
+      thus x + t' = 0.V by A1;
      end;
     hence thesis by RLVECT_1:def 8;
   end;
@@ -131,26 +121,20 @@ cluster StructVectSp(K) -> VectSp-like;
    A1: (the lmult of V).(x,w) = x*w by VECTSP_1:def 24;
    A2: (the lmult of V).(y,v) = y*v by VECTSP_1:def 24;
      set MLT = the mult of K;
-     thus x*(v+w) = (the lmult of V).(x,(v+w)) by VECTSP_1:def 24
-       .= MLT.(x,(the add of K).(v',w'))
-       .= MLT.(x,v'+w')
+     thus x*(v+w) = MLT.(x,(the add of K).(v',w')) by VECTSP_1:def 24
        .= x*(v'+w') by GROUP_1:def 1
        .= x*v'+x*w' by VECTSP_1:def 18
-       .= (the add of K).(x*v',x*w')
        .= (the add of K).(MLT.(x,v'),x*w') by GROUP_1:def 1
        .= (the add of K).
           ((the lmult of V).(x,v),(the lmult of V).(x,w)) by GROUP_1:def 1
-       .= (the add of K).(x*v,x*w) by A1,VECTSP_1:def 24
-       .= x*v+x*w;
+       .= x*v+x*w by A1,VECTSP_1:def 24;
      thus (x+y)*v = (the lmult of V).((x+y),v) by VECTSP_1:def 24
        .= (x+y)*v' by GROUP_1:def 1
        .= x*v'+y*v' by VECTSP_1:def 18
-       .= (the add of K).(x*v',y*v')
        .= (the add of K).(MLT.(x,v'),y*v') by GROUP_1:def 1
        .= (the add of K).
           ((the lmult of V).(x,v),(the lmult of V).(y,v)) by GROUP_1:def 1
-       .= (the add of K).(x*v,y*v) by A2,VECTSP_1:def 24
-       .= x*v+y*v;
+       .= x*v+y*v by A2,VECTSP_1:def 24;
      thus (x*y)*v = (the lmult of V).((x*y),v) by VECTSP_1:def 24
        .= (x*y)*v' by GROUP_1:def 1
        .= x*(y*v') by GROUP_1:def 4
@@ -941,14 +925,10 @@ func VectQuot(V,W) -> strict Abelian add-associative right_zeroed
    A12: cc = c+W by VECTSP_4:def 6;
    A13: aC.(A1,A2) =a+b+W by A7,A8,A10,A11,Def3;
    A14: aC.(A2,A3) =b+c+W by A8,A9,A11,A12,Def3;
-   then aC.(A2,A3) is Coset of W by VECTSP_4:def 6;
-   then A15: aC.(A2,A3) in C;
-     thus A1+A2 + A3 = (the add of A).(A1+A2,A3)
-     .= (the add of A).((the add of A).(A1,A2),A3)
+     thus A1+A2 + A3 = (the add of A).((the add of A).(A1,A2),A3)
      .= a+b+c +W by A9,A12,A13,Def3
      .= a+(b+c) +W by RLVECT_1:def 6
-     .= aC.(A1,aC.(A2,A3)) by A7,A10,A14,A15,Def3
-     .= (the add of A).(A1,A2+A3)
+     .= (the add of A).(A1,A2+A3) by A7,A10,A14,Def3
      .= A1+(A2+A3);
     end;
 A16: A is right_zeroed
@@ -959,9 +939,7 @@ A16: A is right_zeroed
    A17: A1=aa;
      consider a be Vector of V such that
    A18: aa = a+W by VECTSP_4:def 6;
-   A19: 0.A = the Zero of A
-       .= the carrier of W
-       .= 0.V + W by VECTSP_4:60;
+   A19: 0.A = 0.V + W by VECTSP_4:60;
      thus A1 + 0.A = (the add of A).(A1,0.A)
      .= (a+0.V) +W by A17,A18,A19,Def3
      .= A1 by A17,A18,RLVECT_1:10;
@@ -974,9 +952,7 @@ A16: A is right_zeroed
    A21: A1=aa;
      consider a be Vector of V such that
    A22: aa = a+W by VECTSP_4:def 6;
-   A23: 0.A = the Zero of A
-        .= the carrier of W
-        .= 0.V + W by VECTSP_4:60;
+   A23: 0.A = 0.V + W by VECTSP_4:60;
      set A2 = -a+ W;
         A2 is Coset of W by VECTSP_4:def 6;
      then A2 in C;
@@ -1007,8 +983,7 @@ A16: A is right_zeroed
    A32: lC.(x,A2) =x*b+W by A25,A27,Def5;
       then lC.(x,A2) is Coset of W by VECTSP_4:def 6;
    then A33:  lC.(x,A2) in C;
-    thus x*(A1+A2) = (the lmult of A).(x,A1+A2) by VECTSP_1:def 24
-        .= lC.(x,(the add of A).(A1,A2))
+    thus x*(A1+A2) = lC.(x,(the add of A).(A1,A2)) by VECTSP_1:def 24
         .= x*(a+b) +W by A28,Def5
         .= x*a+x*b +W by VECTSP_1:def 26
         .= aC.(lC.(x,A1), lC.(x,A2)) by A29,A30,A32,A33,Def3
@@ -1052,10 +1027,8 @@ proof
  let W be Subspace of V;
  A1: 0.V = 0.W by VECTSP_4:19;
  A2: 0.W in W by RLVECT_1:def 1;
- thus zeroCoset(V,W) = the carrier of W
- .= 0.V + W by A1,A2,VECTSP_4:64;
- thus 0.(VectQuot(V,W)) = the Zero of VectQuot(V,W)
- .= zeroCoset(V,W) by Def6;
+ thus zeroCoset(V,W) = 0.V + W by A1,A2,VECTSP_4:64;
+ thus 0.(VectQuot(V,W)) = zeroCoset(V,W) by Def6;
 end;
 
 theorem Th23:
@@ -1144,9 +1117,7 @@ st A1 = v1 + W & A2 = v2 + W holds A1 + A2 = v1 + v2 + W
   then A1 in {B where B is Coset of W: not contradiction} &
   A2 in {B where B is Coset of W: not contradiction};
   then reconsider w1=A1,w2=A2 as Element of CosetSet(V,W);
-  thus A1+A2 = ad.[A1,A2]
-   .= ad.(A1,A2)
-   .= (addCoset(V,W)).(w1,w2) by Def6
+  thus A1+A2 = (addCoset(V,W)).(w1,w2) by Def6
    .= (v1 + v2) + W by A1,A2,Def3;
  end;
 
@@ -1436,8 +1407,7 @@ A4:  psi|the carrier of W=0Functional(W) & psi.y = 1.K by Th28;
    proof
     let v1,v2 be Vector of V;
     reconsider w1=v1, w2 =v2 as Vector of W +Lin{v} by A2;
-       v1+v2 = (the add of (W + Lin{v})).[w1,w2] by A2
-     .= w1+w2;
+       v1+v2 = w1+w2 by A2;
     hence thesis by HAHNBAN1:def 11;
    end;
 thus f is homogeneous
@@ -1525,8 +1495,7 @@ A5: f is additive
    proof
     let v1,v2 be Vector of V;
     reconsider w1=v1, w2 =v2 as Vector of W +Lin{v} by A2;
-       v1+v2 = (the add of (W + Lin{v})).[w1,w2] by A2
-     .= w1+w2;
+       v1+v2 = w1+w2 by A2;
     hence thesis by HAHNBAN1:def 11;
    end;
     f is homogeneous
@@ -1677,10 +1646,8 @@ for f,g be Functional of V, v be Vector of V holds (f-g).v = f.v - g.v
   let K be non empty LoopStr;
   let V be non empty VectSpStr over K;
   let f,g be Functional of V, v be Vector of V;
-  thus (f-g).v = (f+-g).v
-   .= f.v + (-g).v by HAHNBAN1:def 6
-   .= f.v +- g.v by HAHNBAN1:def 7
-   .= f.v - g.v;
+  thus (f-g).v = f.v + (-g).v by HAHNBAN1:def 6
+   .= f.v - g.v by HAHNBAN1:def 7;
  end;
 
 registration
@@ -1884,8 +1851,7 @@ func
    A9: B = b+W by Th23;
    A10: the add of vq = addCoset(V,W) by Def6;
    A11: aC.(A,B) =a+b+W by A2,A8,A9,Def3;
-    thus ff.(A+B) = ff.((the add of vq).(A,B))
-    .= f.(a+b) by A7,A10,A11
+    thus ff.(A+B) = f.(a+b) by A7,A10,A11
     .= f.a + f.b by HAHNBAN1:def 11
     .= ff.A + f.b by A7,A8
     .= ff.A + ff.B by A7,A9;
@@ -1976,8 +1942,7 @@ for A be Vector of VectQuot(V,Ker f), v be Vector of V st A = v+Ker f holds
   let A be Vector of VectQuot(V,Ker f), v be Vector of V; assume
  A1: A = v+Ker f;
  A2: the carrier of (Ker f) = ker f by Def11;
-  thus (CQFunctional(f)).A = (QFunctional(f,Ker f)).A
-  .= f.v by A1,A2,Def12;
+  thus (CQFunctional(f)).A = f.v by A1,A2,Def12;
  end;
 
 registration

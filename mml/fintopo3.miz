@@ -7,10 +7,10 @@
 
 environ
 
- vocabularies BOOLE, FUNCT_1, RELAT_1, SUBSET_1, PRE_TOPC, FIN_TOPO,
-      FINTOPO3, ORDINAL2, ARYTM;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, NAT_1,
-      RELAT_1, FUNCT_1, FUNCT_2, FIN_TOPO, PRE_TOPC, STRUCT_0;
+ vocabularies BOOLE, FUNCT_1, RELAT_1, SUBSET_1, PRE_TOPC, FIN_TOPO, FINTOPO3,
+      ORDERS_1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, NAT_1, RELAT_1,
+      FUNCT_1, FUNCT_2, FIN_TOPO, PRE_TOPC, STRUCT_0, ORDERS_2;
  constructors NAT_1, FIN_TOPO;
  registrations SUBSET_1, RELSET_1, STRUCT_0, XBOOLE_0, FIN_TOPO, ORDINAL1,
       ARYTM_3, NUMBERS;
@@ -22,9 +22,9 @@ environ
 
 begin
 
- reserve T for non empty FT_Space_Str,
+ reserve T for non empty RelStr,
          A,B for Subset of T,
-         x,x2,y,y2,z for Element of T;
+         x,x2,y,z for Element of T;
 
 :: The following is definition of "deflation of a set A"
 :: (A^f is an inflation of A).
@@ -49,7 +49,7 @@ theorem Th1:
    let x be set;
     assume A2:x in A;
     then reconsider y=x as Element of T;
-      y in U_FT y by A1,FIN_TOPO:def 3;
+      y in U_FT y by A1,FIN_TOPO:def 4;
   hence thesis by A2,FIN_TOPO:16;
  end;
 
@@ -78,7 +78,7 @@ A2: x in A^d;
     then reconsider z=x as Element of T;
       now assume not x in A;
 then A3:   x in A` by A2,SUBSET_1:50;
-        x in U_FT z by A1,FIN_TOPO:def 3;
+        x in U_FT z by A1,FIN_TOPO:def 4;
      hence contradiction by A2,A3,Th2;
     end;
     hence x in A;
@@ -94,14 +94,14 @@ theorem Th4:
       thus x in A^d implies x in ((A`)^f)`
         proof
           assume A1:x in A^d;
-          A2: (A`)^f={x2:ex y st y in A` & x2 in U_FT y} by FIN_TOPO:def 13;
+          A2: (A`)^f={x2:ex y st y in A` & x2 in U_FT y} by FIN_TOPO:def 14;
             not(ex x2 st x2=x & (ex y st y in A` & x2 in U_FT y)) by A1,Th2;
           then not x in (A`)^f by A2;
          hence thesis by A1,SUBSET_1:50;
         end;
       assume A3:x in ((A`)^f)`;
        then A4: not x in (A`)^f by XBOOLE_0:def 4;
-         ((A`)^f)={x2:ex y st y in A` & x2 in U_FT y} by FIN_TOPO:def 13;
+         ((A`)^f)={x2:ex y st y in A` & x2 in U_FT y} by FIN_TOPO:def 14;
        then for y st y in A` holds not x in U_FT y by A4;
       hence x in A^d by A3;
     end;
@@ -148,18 +148,18 @@ theorem Th8:
     proof
       let x be set;
       assume
-A2:   x in (A \/ B)^b;
+A1:   x in (A \/ B)^b;
       then reconsider px=x as Point of T;
-      U_FT px meets (A \/ B) by A2,FIN_TOPO:13;
+      U_FT px meets (A \/ B) by A1,FIN_TOPO:13;
       then U_FT px meets A or U_FT px meets B by XBOOLE_1:70;
       then x in A^b or x in B^b by FIN_TOPO:13;
       hence x in (A^b) \/ (B^b) by XBOOLE_0:def 2;
     end;
       let x be set;
-      assume A3: x in (A^b) \/ (B^b);
-then A4:   x in A^b or x in B^b by XBOOLE_0:def 2;
-      reconsider px=x as Point of T by A3;
-      U_FT px meets A or U_FT px meets B by A4,FIN_TOPO:13;
+      assume A2: x in (A^b) \/ (B^b);
+then A3:   x in A^b or x in B^b by XBOOLE_0:def 2;
+      reconsider px=x as Point of T by A2;
+      U_FT px meets A or U_FT px meets B by A3,FIN_TOPO:13;
       then U_FT px meets (A \/ B) by XBOOLE_1:70;
       hence x in (A \/ B)^b by FIN_TOPO:13;
   end;
@@ -183,21 +183,21 @@ theorem Th10:
     thus (A^i) /\ (B^i) c= (A /\ B)^i
     proof
       let x be set;
-      assume A2: x in (A^i) /\ (B^i);then
-A3:   x in (A^i) & x in (B^i) by XBOOLE_0:def 3;
-      reconsider px=x as Point of T by A2;
-      U_FT px c= A & U_FT px c= B by A3,FIN_TOPO:12;
+      assume A1: x in (A^i) /\ (B^i);then
+A2:   x in (A^i) & x in (B^i) by XBOOLE_0:def 3;
+      reconsider px=x as Point of T by A1;
+      U_FT px c= A & U_FT px c= B by A2,FIN_TOPO:12;
       then U_FT px c= A /\ B by XBOOLE_1:19;
       hence x in (A /\ B)^i by FIN_TOPO:12;
     end;
       let x be set;
       assume
-A4:   x in (A /\ B)^i;
+A3:   x in (A /\ B)^i;
       then reconsider px=x as Point of T;
-A5:   U_FT px c= (A /\ B) by A4,FIN_TOPO:12;then
-A6:   U_FT px c= A by XBOOLE_1:18;
-      U_FT px c= B by A5,XBOOLE_1:18;
-      then x in A^i & x in B^i by A6,FIN_TOPO:12;
+A4:   U_FT px c= (A /\ B) by A3,FIN_TOPO:12;then
+A5:   U_FT px c= A by XBOOLE_1:18;
+      U_FT px c= B by A4,XBOOLE_1:18;
+      then x in A^i & x in B^i by A5,FIN_TOPO:12;
       hence x in ((A^i) /\ (B^i)) by XBOOLE_0:def 3;
   end;
 
@@ -234,7 +234,7 @@ A1: B^d = ((B`)^f)` by Th4;
                   .= (A /\ B)^d by Th4;
   end;
 
-definition let T be non empty FT_Space_Str;
+definition let T be non empty RelStr;
            let A be Subset of T;
    func Fcl(A) -> Function of NAT,bool the carrier of T means :Def2:
    (for n being Element of NAT,B being Subset of T st
@@ -284,7 +284,7 @@ A8:       P[n];
      end;
   end;
 
-definition let T be non empty FT_Space_Str;
+definition let T be non empty RelStr;
            let A be Subset of T, n be Nat;
   func Fcl(A,n) -> Subset of T equals
     (Fcl A).n;
@@ -296,7 +296,7 @@ definition let T be non empty FT_Space_Str;
   end;
 end;
 
-definition let T be non empty FT_Space_Str;
+definition let T be non empty RelStr;
            let A be Subset of T;
   func Fint(A) -> Function of NAT,bool the carrier of T means :Def4:
   (for n being Element of NAT,B being Subset of T st B=it.n
@@ -346,7 +346,7 @@ A8:       P[n];
      end;
  end;
 
-definition let T be non empty FT_Space_Str;
+definition let T be non empty RelStr;
            let A be Subset of T, n be Nat;
   func Fint(A,n) -> Subset of T equals
     (Fint A).n;
@@ -402,13 +402,9 @@ A3:   for k being Element of NAT st P[k] holds P[k+1]
         assume A4: P[k];
         (Fcl(A \/ B)).(k+1) = Fcl(A \/ B,k+1)
                            .= Fcl(A \/ B,k)^b by Th13
-                           .= ((Fcl(A \/ B)).k)^b
-                           .= (Fcl(A,k) \/ (Fcl(B)).k)^b by A4
-                           .= (Fcl(A,k) \/ Fcl(B,k))^b
-                           .= Fcl(A,k)^b \/ Fcl(B,k)^b by Th8
+                           .= Fcl(A,k)^b \/ Fcl(B,k)^b by  A4,Th8
                            .= Fcl(A,k+1) \/ Fcl(B,k)^b by Th13
-                           .= Fcl(A,k+1) \/ Fcl(B,k+1) by Th13
-                           .= (Fcl(A)).(k+1) \/ Fcl(B,k+1)
+                           .= (Fcl(A)).(k+1) \/ Fcl(B,k+1) by Th13
                            .= (Fcl(A)).(k+1) \/ (Fcl(B)).(k+1);
         hence thesis;
       end;
@@ -416,9 +412,7 @@ A3:   for k being Element of NAT st P[k] holds P[k+1]
       hence thesis;
     end;
     let n be Element of NAT;
-    Fcl(A \/ B,n) = (Fcl A).n \/ (Fcl B).n by A1
-                 .= Fcl(A,n) \/ (Fcl(B)).n
-                 .= Fcl(A,n) \/ Fcl(B,n);
+    Fcl(A \/ B,n) = Fcl(A,n) \/ Fcl(B,n) by A1;
     hence thesis;
  end;
 
@@ -464,13 +458,9 @@ A3:  for k being Element of NAT st P[k] holds P[k+1]
 A4:    P[k];
        (Fint(A /\ B)).(k+1) = Fint(A /\ B,k+1)
                            .= Fint(A /\ B,k)^i by Th18
-                           .= ((Fint(A /\ B)).k)^i
-                           .= (Fint(A,k) /\ (Fint(B)).k)^i by A4
-                           .= (Fint(A,k) /\ Fint(B,k))^i
-                           .= ((Fint(A,k))^i) /\ (Fint(B,k)^i) by Th10
+                           .= ((Fint(A,k))^i) /\ (Fint(B,k)^i) by  A4,Th10
                            .= Fint(A,k+1) /\ ((Fint(B,k))^i) by Th18
-                           .= Fint(A,k+1) /\ Fint(B,k+1) by Th18
-                           .= (Fint A).(k+1) /\ Fint(B,k+1)
+                           .= (Fint A).(k+1) /\ Fint(B,k+1) by Th18
                            .= (Fint A).(k+1) /\ (Fint B).(k+1);
        hence thesis;
      end;
@@ -478,9 +468,7 @@ A4:    P[k];
      hence thesis;
    end;
    let n be Element of NAT;
-   Fint(A /\ B,n) = (Fint A).n /\ (Fint B).n by A1
-                 .= Fint(A,n) /\ (Fint B).n
-                 .= Fint(A,n) /\ Fint(B,n);
+   Fint(A /\ B,n) = Fint(A,n) /\ Fint(B,n) by A1;
    hence thesis;
  end;
 
@@ -561,10 +549,8 @@ theorem Th27:
  defpred P[Element of NAT] means Fint(A`,$1)` = Fcl(A,$1);
 A1: P[0]
     proof
-      Fint(A`,0)` = ((Fint(A`)).0)`
-                 .= A`` by Def4
-                 .= (Fcl(A)).0 by Def2
-                 .= Fcl(A,0);
+      Fint(A`,0)` = A`` by Def4
+                 .= Fcl(A,0) by Def2;
       hence thesis;
     end;
 A2: for k being Element of NAT st P[k] holds P[k+1]
@@ -609,7 +595,7 @@ theorem
 
 :: Function of Inflation Series
 
-definition let T be non empty FT_Space_Str;
+definition let T be non empty RelStr;
            let A be Subset of T;
   func Finf(A) -> Function of NAT,bool(the carrier of T) means :Def6:
   (for n being Element of NAT,B being Subset of T st B=it.n
@@ -659,7 +645,7 @@ A8:       P[k];
      end;
  end;
 
-definition let T be non empty FT_Space_Str;
+definition let T be non empty RelStr;
            let A be Subset of T, n be Nat;
   func Finf(A,n) -> Subset of T equals
     (Finf A).n;
@@ -673,7 +659,7 @@ end;
 
 :: Function of Deflation Series
 
-definition let T be non empty FT_Space_Str;
+definition let T be non empty RelStr;
            let A be Subset of T;
    func Fdfl(A) -> Function of NAT,bool(the carrier of T) means :Def8:
    (for n being Element of NAT,B being Subset of T st B=it.n
@@ -723,7 +709,7 @@ A8:       P[n];
      end;
   end;
 
-definition let T be non empty FT_Space_Str;
+definition let T be non empty RelStr;
            let A be Subset of T, n be Nat;
   func Fdfl(A,n) -> Subset of T equals
    (Fdfl A).n;
@@ -777,13 +763,9 @@ A3:   for k being Element of NAT st P[k] holds P[k+1]
         assume A4: P[k];
           (Finf(A \/ B)).(k+1) = Finf(A \/ B,k+1)
                            .= Finf(A \/ B,k)^f by Th31
-                           .= ((Finf(A \/ B)).k)^f
-                           .= (Finf(A,k) \/ (Finf(B)).k)^f by A4
-                           .= (Finf(A,k) \/ Finf(B,k))^f
-                           .= Finf(A,k)^f \/ Finf(B,k)^f by Th11
+                           .= Finf(A,k)^f \/ Finf(B,k)^f by  A4,Th11
                            .= Finf(A,k+1) \/ Finf(B,k)^f by Th31
-                           .= Finf(A,k+1) \/ Finf(B,k+1) by Th31
-                           .= (Finf(A)).(k+1) \/ Finf(B,k+1)
+                           .= (Finf(A)).(k+1) \/ Finf(B,k+1) by Th31
                            .= (Finf(A)).(k+1) \/ (Finf(B)).(k+1);
         hence thesis;
       end;
@@ -791,9 +773,7 @@ A3:   for k being Element of NAT st P[k] holds P[k+1]
       hence thesis;
     end;
     let n be Element of NAT;
-    Finf(A \/ B,n) = (Finf A).n \/ (Finf B).n by A1
-                 .= Finf(A,n) \/ (Finf B).n
-                 .= Finf(A,n) \/ Finf(B,n);
+    Finf(A \/ B,n) = Finf(A,n) \/ Finf(B,n) by A1;
     hence thesis;
  end;
 
@@ -876,13 +856,9 @@ A3:  for k being Element of NAT st P[k] holds P[k+1]
 A4:    P[k];
          (Fdfl(A /\ B)).(k+1) = Fdfl(A /\ B,k+1)
                            .= Fdfl(A /\ B,k)^d by Th38
-                           .= ((Fdfl(A /\ B)).k)^d
-                           .= (Fdfl(A,k) /\ (Fdfl(B)).k)^d by A4
-                           .= (Fdfl(A,k) /\ Fdfl(B,k))^d
-                           .= ((Fdfl(A,k))^d) /\ ((Fdfl(B,k))^d) by Th12
+                           .= ((Fdfl(A,k))^d) /\ ((Fdfl(B,k))^d) by  A4,Th12
                            .= Fdfl(A,k+1) /\ ((Fdfl(B,k))^d) by Th38
-                           .= Fdfl(A,k+1) /\ Fdfl(B,k+1) by Th38
-                           .= (Fdfl A).(k+1) /\ Fdfl(B,k+1)
+                           .= (Fdfl A).(k+1) /\ Fdfl(B,k+1) by Th38
                            .= (Fdfl A).(k+1) /\ (Fdfl B).(k+1);
        hence thesis;
      end;
@@ -890,9 +866,7 @@ A4:    P[k];
      hence thesis;
    end;
    let n be Element of NAT;
-   Fdfl(A /\ B,n) = (Fdfl A).n /\ (Fdfl B).n by A1
-                 .= Fdfl(A,n) /\ (Fdfl(B)).n
-                 .= Fdfl(A,n) /\ Fdfl(B,n);
+   Fdfl(A /\ B,n) = Fdfl(A,n) /\ Fdfl(B,n) by A1;
    hence thesis;
  end;
 
@@ -950,8 +924,7 @@ A3:   for k being Element of NAT st P[k] holds P[k+1]
 A5:    (Fdfl A).(k+1) = Fdfl(A,k+1)
                      .= Fdfl(A,k)^d by Th38;
         reconsider FB=Fdfl(A,k) as Subset of T;
-        (Fdfl A).(k+1) = ((FB`)^f)` by A5,Th4
-                       .= ((((Fdfl(A)).k)`)^f)`
+        (Fdfl A).(k+1) = ((((Fdfl(A)).k)`)^f)` by A5,Th4
                        .= ((Finf(A`)).(k+1))` by A4,Def6;
         hence thesis;
       end;
@@ -959,8 +932,7 @@ A5:    (Fdfl A).(k+1) = Fdfl(A,k+1)
       hence thesis;
     end;
     let n be Element of NAT;
-    Fdfl(A,n) = ((Finf(A`)).n)` by A1
-             .= (Finf(A`,n))`;
+    Fdfl(A,n) = (Finf(A`,n))` by A1;
     hence thesis;
  end;
 
@@ -975,7 +947,7 @@ theorem
  end;
 
 definition :: n-th neighbourhood of x
-  let T be non empty FT_Space_Str, n be Nat, x be Element of T;
+  let T be non empty RelStr, n be Nat, x be Element of T;
   func U_FT(x,n) -> Subset of T equals
     Finf((U_FT x),n);
   coherence;
@@ -987,10 +959,10 @@ theorem
 theorem
   for n being Element of NAT holds U_FT(x,n+1) = (U_FT(x,n))^f by Th31;
 
-definition let S, T be non empty FT_Space_Str;
+definition let S, T be non empty RelStr;
   pred S, T are_mutually_symmetric means
     the carrier of S = the carrier of T &
-    for x, y being set st x in the carrier of S & y in the carrier of T
-      holds y in (the Nbd of S).x iff x in (the Nbd of T).y;
+    for x being Element of S, y being Element of T
+      holds y in U_FT x iff x in U_FT y;
   symmetry;
 end;

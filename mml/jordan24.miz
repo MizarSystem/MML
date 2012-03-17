@@ -11,12 +11,11 @@ environ
       ARYTM_3, PCOMPS_1, FUNCT_1, JORDAN1, COMPLEX1, ORDINAL2, RELAT_2,
       WEIERSTR, VECTMETR, CONNSP_2, JGRAPH_2, FINSEQ_6, XCMPLX_0, COMPTRIG,
       SIN_COS, SGRAPH1, TOPGRP_1;
- notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, COMPLEX1, SQUARE_1, NAT_1,
-      RELAT_1, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, PSCOMP_1, NUMBERS,
-      XCMPLX_0, XXREAL_0, XREAL_0, REAL_1, STRUCT_0, PRE_TOPC, TOPS_1, TOPS_2,
-      CONNSP_1, METRIC_1, PCOMPS_1, EUCLID, TOPREAL2, JORDAN1, TOPREAL6,
-      WEIERSTR, VECTMETR, CONNSP_2, JGRAPH_2, COMPLEX2, COMPTRIG, SIN_COS,
-      ARYTM_0, TOPGRP_1, TMAP_1;
+ notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, COMPLEX1, SQUARE_1, FUNCT_1,
+      RELSET_1, PARTFUN1, FUNCT_2, NUMBERS, XCMPLX_0, XXREAL_0, XREAL_0,
+      REAL_1, STRUCT_0, PRE_TOPC, TOPS_1, TOPS_2, CONNSP_1, METRIC_1, PCOMPS_1,
+      EUCLID, TOPREAL2, JORDAN1, TOPREAL6, WEIERSTR, VECTMETR, CONNSP_2,
+      JGRAPH_2, COMPLEX2, COMPTRIG, SIN_COS, ARYTM_0, TOPGRP_1, TMAP_1;
  constructors ARYTM_0, REAL_1, SQUARE_1, SEQ_4, SIN_COS, TOPS_1, CONNSP_1,
       TOPS_2, COMPTS_1, TMAP_1, T_0TOPSP, TOPREAL2, JORDAN1, WEIERSTR,
       COMPTRIG, TOPGRP_1, VECTMETR, TOPREAL6, JGRAPH_2, COMPLEX2;
@@ -24,10 +23,10 @@ environ
       TOPREAL2, SQUARE_1, MEMBERED, VECTMETR, PCOMPS_1, XCMPLX_0, INT_1,
       TIETZE, TOPGRP_1, XXREAL_0, FUNCT_2, BORSUK_1, NAT_1;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM, REAL;
- definitions TARSKI, XBOOLE_0, CONNSP_1, BORSUK_1, VECTMETR, TOPS_2, SPRECT_1,
-      TOPGRP_1, SQUARE_1, SUBSET_1, EUCLID, TOPMETR, PCOMPS_1;
+ definitions TARSKI, XBOOLE_0, PRE_TOPC, CONNSP_1, BORSUK_1, VECTMETR, TOPS_2,
+      SPRECT_1, TOPGRP_1, SQUARE_1, SUBSET_1, EUCLID, TOPMETR, PCOMPS_1;
  theorems PRE_TOPC, EUCLID, SQUARE_1, XREAL_1, JORDAN1K, JGRAPH_7, TOPREAL2,
-      SPPOL_1, TOPS_2, FUNCT_2, RELAT_1, FUNCT_1, XBOOLE_1, STRUCT_0, WEIERSTR,
+      TOPS_2, FUNCT_2, RELAT_1, FUNCT_1, XBOOLE_1, STRUCT_0, WEIERSTR,
       CONNSP_2, GOBOARD6, METRIC_1, VECTMETR, JGRAPH_2, COMPLEX2, XCMPLX_0,
       COMPLEX1, COMPTRIG, SIN_COS, XCMPLX_1, TMAP_1, JORDAN16, RFUNCT_2,
       EXTENS_1, TIETZE, XXREAL_0, XBOOLE_0, TOPREAL6;
@@ -35,7 +34,7 @@ environ
 
 begin
 
- reserve p, p1, p2 for Point of TOP-REAL 2,
+ reserve  p1, p2 for Point of TOP-REAL 2,
          C for Simple_closed_curve,
          P for Subset of TOP-REAL 2;
 
@@ -55,20 +54,19 @@ set b = |[rp,0]|;
 theorem Th1:
   ex p1,p2 st p1,p2 realize-max-dist-in C
   proof
-    A1: TOP-REAL 2 = TopSpaceMetr Euclid 2 by EUCLID:def 8; then
     reconsider D=C as Subset of TopSpaceMetr Euclid 2;
     consider x1,x2 being Point of Euclid 2 such that
-    A2: x1 in D & x2 in D &
-    dist(x1,x2) = max_dist_max(D,D) by A1,WEIERSTR:39;
-    reconsider a=x1,b=x2 as Point of TOP-REAL 2 by SPPOL_1:18;
+    A1: x1 in D & x2 in D &
+    dist(x1,x2) = max_dist_max(D,D) by WEIERSTR:39;
+    reconsider a=x1,b=x2 as Point of TOP-REAL 2;
     take a,b;
-    thus a in C & b in C by A2;
+    thus a in C & b in C by A1;
     let x, y be Point of TOP-REAL 2 such that
-    A3: x in C & y in C;
-    reconsider x'=x,y'=y as Point of Euclid 2 by SPPOL_1:17;
-    dist(x',y') <= max_dist_max(D,D) by A1,A3,WEIERSTR:40; then
+    A2: x in C & y in C;
+    reconsider x'=x,y'=y as Point of Euclid 2;
+    dist(x',y') <= max_dist_max(D,D) by A2,WEIERSTR:40; then
     dist(x,y) <= max_dist_max(D,D) by TOPREAL6:def 1;
-    hence dist(a,b) >= dist(x,y) by A2,TOPREAL6:def 1;
+    hence dist(a,b) >= dist(x,y) by A1,TOPREAL6:def 1;
   end;
 
 definition
@@ -133,22 +131,18 @@ registration
     assume A1: f is isometric; then
     consider g being isometric Function of M,M such that
     A2: g=f by Def2;
-    thus dom f = the carrier of TopSpaceMetr M by FUNCT_2:def 1
-    .= [#]TopSpaceMetr M by PRE_TOPC:def 3;
-    A3: the carrier of M = [#]M by PRE_TOPC:def 3;
-    A4: rng g = the carrier of M by VECTMETR:def 3;
-    hence A5: rng f = the carrier of TopSpaceMetr M by A2
-    .= [#]TopSpaceMetr M by PRE_TOPC:def 3;
+    thus dom f = [#]TopSpaceMetr M by FUNCT_2:def 1;
+     rng g = the carrier of M by VECTMETR:def 3;
+    hence  rng f = [#]TopSpaceMetr M by A2;
     thus f is one-to-one by A2;
     reconsider f1=f as isometric Function
  of TopSpaceMetr M,TopSpaceMetr M by A1;
     f1 is continuous;
     hence f is continuous;
-    A6: g" is isometric Function of M,M by VECTMETR:3;
+    A5: g" is isometric Function of M,M by VECTMETR:3;
     reconsider g1=g" as Function of TopSpaceMetr M,TopSpaceMetr M;
-    f"= (g qua Function)" by A2,TOPS_2:def 4,A5
-    .= g" by A3,A4,TOPS_2:def 4; then
-    f" is isometric Function of TopSpaceMetr M,TopSpaceMetr M by Def2,A6;
+    f"= g" by  A2; then
+    f" is isometric Function of TopSpaceMetr M,TopSpaceMetr M by Def2,A5;
     hence f" is continuous;
   end;
 end;
@@ -192,7 +186,6 @@ theorem Th2:
     A1: 0<=a & a< 2*PI;
     let f be Function of TopSpaceMetr Euclid 2, TopSpaceMetr Euclid 2 such that
     A2: f = Rotate a;
-    A3: TOP-REAL 2=TopSpaceMetr Euclid 2 by EUCLID:def 8;
     reconsider g=f as Function of Euclid 2,Euclid 2;
     g is isometric
     proof
@@ -201,29 +194,29 @@ theorem Th2:
         thus rng g c= the carrier of Euclid 2;
         let o be set;
         assume o in the carrier of Euclid 2; then
-        reconsider p=o as Point of TOP-REAL 2 by A3;
+        reconsider p=o as Point of TOP-REAL 2;
         set pz=p`1+(p`2)*<i>;
         reconsider pz as Element of COMPLEX by XCMPLX_0:def 2;
         set arg=Arg pz;
         per cases;
-        suppose A4: pz<>0;
+        suppose A3: pz<>0;
           per cases;
-          suppose A5: a <= arg;
+          suppose A4: a <= arg;
             set qz=Rotate(pz,-a);
-            A6: qz<>0 by A4,COMPLEX2:66;
-            A7: 0<=arg-a by A5,XREAL_1:50;
+            A5: qz<>0 by A3,COMPLEX2:66;
+            A6: 0<=arg-a by A4,XREAL_1:50;
             arg-a <= arg & arg < 2*PI by COMPTRIG:52,A1,XREAL_1:45; then
-            A8: -a+arg < 2*PI by XXREAL_0:2;
-            A9: |.Rotate(pz,-a).| = |.pz.| by COMPLEX2:67; then
+            A7: -a+arg < 2*PI by XXREAL_0:2;
+            A8: |.Rotate(pz,-a).| = |.pz.| by COMPLEX2:67; then
             qz=[* |.qz.|*cos (-a+arg), |.qz.|*sin (-a+arg) *]
             by COMPLEX2:def 4; then
-            Arg qz = -a+arg by A6,A7,A8,COMPLEX2:21; then
+            Arg qz = -a+arg by A5,A6,A7,COMPLEX2:21; then
             Rotate(qz,a) = [*|.qz.|*cos (a+(-a+arg)),|.qz.|*sin (a+(-a+arg))*]
             by COMPLEX2:def 4; then
-            A10: Rotate(qz,a) = pz by COMPLEX2:19,A9;
+            A9: Rotate(qz,a) = pz by COMPLEX2:19,A8;
             set q=|[Re qz,Im qz]|;
             dom g = the carrier of Euclid 2 by FUNCT_2:def 1; then
-            A11: q in dom g by A3;
+            A10: q in dom g;
             g.q = |[Re Rotate(q`1+(q`2)*<i>,a),Im Rotate(q`1+(q`2)*<i>,a)]|
             by Def3,A2
             .= |[Re Rotate(Re qz+(q`2)*<i>,a),Im Rotate(q`1+(q`2)*<i>,a)]|
@@ -236,36 +229,36 @@ theorem Th2:
             by EUCLID:56
             .= |[Re Rotate(qz,a),Im Rotate(Re qz+(Im qz)*<i>,a)]|
             by COMPLEX1:29
-            .= |[Re pz,Im pz]| by A10,COMPLEX1:29
+            .= |[Re pz,Im pz]| by A9,COMPLEX1:29
             .= |[p`1,Im pz]| by COMPLEX1:28
             .= |[p`1,p`2]| by COMPLEX1:28
             .= p by EUCLID:57;
-            hence o in rng g by A11,FUNCT_1:def 5;
+            hence o in rng g by A10,FUNCT_1:def 5;
           end;
-          suppose A12: a > arg;
+          suppose A11: a > arg;
             set qz=Rotate(pz,-a);
-            A13: qz<>0 by A4,COMPLEX2:66;
+            A12: qz<>0 by A3,COMPLEX2:66;
             0<= 2*PI-a & arg >= 0 by A1,XREAL_1:50,COMPTRIG:52; then
-            A14: 0<=2*PI-a+arg by XREAL_1:35;
-            arg-a < 0 by A12,XREAL_1:51; then
-            A15: 2*PI+(arg-a) < 2*PI by XREAL_1:32;
-            A16: |.Rotate(pz,-a).| = |.pz.| by COMPLEX2:67; then
+            A13: 0<=2*PI-a+arg by XREAL_1:35;
+            arg-a < 0 by A11,XREAL_1:51; then
+            A14: 2*PI+(arg-a) < 2*PI by XREAL_1:32;
+            A15: |.Rotate(pz,-a).| = |.pz.| by COMPLEX2:67; then
             qz=[* |.qz.|*cos (-a+arg), |.qz.|*sin (-a+arg) *]
             by COMPLEX2:def 4; then
             qz=[* |.qz.|*cos (2*PI*1+(-a+arg)), |.qz.|*sin (-a+arg) *]
             by COMPLEX2:10; then
             qz=[* |.qz.|*cos (2*PI+(arg-a)), |.qz.|*sin (2*PI*1+(-a+arg)) *]
             by COMPLEX2:9; then
-            Arg qz = 2*PI+(arg-a) by A13,A14,A15,COMPLEX2:21; then
+            Arg qz = 2*PI+(arg-a) by A12,A13,A14,COMPLEX2:21; then
             Rotate(qz,a) = [* |.qz.|*cos (a+(2*PI+(arg-a))),
             |.qz.|*sin (a+(2*PI+(arg-a))) *] by COMPLEX2:def 4; then
             Rotate(qz,a) = [* |.qz.|*cos arg, |.qz.|*sin (2*PI*1+arg) *]
               by COMPLEX2:10; then
             Rotate(qz,a) = [* |.qz.|*cos arg, |.qz.|*sin arg *] by COMPLEX2:9;
-            then A17: Rotate(qz,a) = pz by COMPLEX2:19,A16;
+            then A16: Rotate(qz,a) = pz by COMPLEX2:19,A15;
             set q=|[Re qz,Im qz]|;
             dom g = the carrier of Euclid 2 by FUNCT_2:def 1; then
-            A18: q in dom g by A3;
+            A17: q in dom g;
             g.q = |[Re Rotate(q`1+(q`2)*<i>,a),Im Rotate(q`1+(q`2)*<i>,a)]|
             by Def3,A2
             .= |[Re Rotate(Re qz+(q`2)*<i>,a),Im Rotate(q`1+(q`2)*<i>,a)]|
@@ -277,18 +270,18 @@ theorem Th2:
             .=|[Re Rotate(Re qz+(Im qz)*<i>,a),Im Rotate(Re qz+(Im qz)*<i>,a)]|
             by EUCLID:56
             .=|[Re Rotate(qz,a),Im Rotate(Re qz+(Im qz)*<i>,a)]| by COMPLEX1:29
-            .= |[Re pz,Im pz]| by A17,COMPLEX1:29
+            .= |[Re pz,Im pz]| by A16,COMPLEX1:29
             .= |[p`1,Im pz]| by COMPLEX1:28
             .= |[p`1,p`2]| by COMPLEX1:28
             .= p by EUCLID:57;
-            hence o in rng g by A18,FUNCT_1:def 5;
+            hence o in rng g by A17,FUNCT_1:def 5;
           end;
         end;
         suppose pz=0; then
-          A19: p`1 = 0 & p`2 = 0 by COMPLEX1:28,COMPLEX1:12;
+          A18: p`1 = 0 & p`2 = 0 by COMPLEX1:28,COMPLEX1:12;
           set q=|[0,0]|;
           dom g = the carrier of Euclid 2 by FUNCT_2:def 1; then
-          A20: q in dom g by A3;
+          A19: q in dom g;
           reconsider z=0 as Element of COMPLEX by XCMPLX_0:def 2;
           g.q = |[Re Rotate(q`1+(q`2)*<i>,a),Im Rotate(q`1+(q`2)*<i>,a)]|
           by A2,Def3
@@ -299,342 +292,44 @@ theorem Th2:
           .= |[Re Rotate(z,a),Im Rotate(z,a)]| by EUCLID:56
           .= |[Re z,Im Rotate(z,a)]| by COMPLEX2:66
           .= |[Re z,Im z]| by COMPLEX2:66
-          .= p by A19,EUCLID:57,COMPLEX1:12;
-          hence o in rng g by A20,FUNCT_1:def 5;
+          .= p by A18,EUCLID:57,COMPLEX1:12;
+          hence o in rng g by A19,FUNCT_1:def 5;
         end;
       end;
       let X,Y be Point of Euclid 2;
-      TOP-REAL 2 = TopSpaceMetr Euclid 2 by EUCLID:def 8; then
-      TOP-REAL 2 = TopStruct (#the carrier of Euclid 2,
-      Family_open_set Euclid 2#); then
       reconsider x=X,y=Y,gx=g.X,gy=g.Y as Point of TOP-REAL 2;
-      A21: |[Re Rotate((x`1)+(x`2)*<i>,a),Im Rotate((x`1)+(x`2)*<i>,a)]|`1=
+      A20: |[Re Rotate((x`1)+(x`2)*<i>,a),Im Rotate((x`1)+(x`2)*<i>,a)]|`1=
       Re Rotate((x`1)+(x`2)*<i>,a) &
       |[Re Rotate((x`1)+(x`2)*<i>,a),Im Rotate((x`1)+(x`2)*<i>,a)]|`2=
       Im Rotate((x`1)+(x`2)*<i>,a) by EUCLID:56;
-      A22: |[Re Rotate((y`1)+(y`2)*<i>,a),Im Rotate((y`1)+(y`2)*<i>,a)]|`1=
+      A21: |[Re Rotate((y`1)+(y`2)*<i>,a),Im Rotate((y`1)+(y`2)*<i>,a)]|`1=
       Re Rotate((y`1)+(y`2)*<i>,a) &
       |[Re Rotate((y`1)+(y`2)*<i>,a),Im Rotate((y`1)+(y`2)*<i>,a)]|`2=
       Im Rotate((y`1)+(y`2)*<i>,a) by EUCLID:56;
       reconsider xx=x`1+(x`2)*<i>,yy=y`1+(y`2)*<i> as Element of COMPLEX
       by XCMPLX_0:def 2;
-      A23: Re (x`1+(x`2)*<i>)=x`1 & Im (x`1+(x`2)*<i>)=x`2 by COMPLEX1:28;
-      A24: Re (y`1+(y`2)*<i>)=y`1 & Im (y`1+(y`2)*<i>)=y`2 by COMPLEX1:28;
-      A25: (sin a)^2+(cos a)^2 = 1 by SIN_COS:32;
+      A22: Re (x`1+(x`2)*<i>)=x`1 & Im (x`1+(x`2)*<i>)=x`2 by COMPLEX1:28;
+      A23: Re (y`1+(y`2)*<i>)=y`1 & Im (y`1+(y`2)*<i>)=y`2 by COMPLEX1:28;
+      A24: (sin a)^2+(cos a)^2 = 1 by SIN_COS:32;
       x=|[x`1,x`2]| & y=|[y`1,y`2]| by EUCLID:57;
       hence dist(X,Y) = sqrt ((x`1 - y`1)^2 + (x`2 - y`2)^2) by GOBOARD6:9
-      .= sqrt(((x`1)^2 -2*x`1*y`1 + (y`1)^2)*((sin a)^2+(cos a)^2) +
-      (x`2 - y`2)^2*((sin a)^2+(cos a)^2)) by A25
-      .= sqrt(((x`1)^2 -2*x`1*y`1 + (y`1)^2)*((sin a)^2+(cos a)^2) +
-      ((x`2)^2 -2*x`2*y`2 + (y`2)^2)*((sin a)^2+(cos a)^2))
-      .= sqrt(((x`1)*(x`1) -2*x`1*y`1 + (y`1)^2)*((sin a)^2+(cos a)^2) +
-      ((x`2)^2 -2*x`2*y`2 + (y`2)^2)*((sin a)^2+(cos a)^2))
-      .= sqrt(((x`1)*(x`1) -2*x`1*y`1 + (y`1)*(y`1))*((sin a)^2+(cos a)^2) +
-      ((x`2)^2 -2*x`2*y`2 + (y`2)^2)*((sin a)^2+(cos a)^2))
-      .= sqrt(((x`1)*(x`1) -2*x`1*y`1 + (y`1)*(y`1))*((sin a)*
-      (sin a)+(cos a)^2)
-      + ((x`2)^2 -2*x`2*y`2 + (y`2)^2)*((sin a)^2+(cos a)^2))
       .= sqrt(((x`1)*(x`1) -2*x`1*y`1 +
       (y`1)*(y`1))*((sin a)*(sin a)+(cos a)*(cos a)) +
-      ((x`2)^2 -2*x`2*y`2 + (y`2)^2)*((sin a)^2+(cos a)^2))
-      .= sqrt(((x`1)*(x`1) -2*x`1*y`1 +
-      (y`1)*(y`1))*((sin a)*(sin a)+(cos a)*(cos a)) +
-      ((x`2)*(x`2) -2*x`2*y`2 + (y`2)^2)*((sin a)^2+(cos a)^2))
-      .= sqrt(((x`1)*(x`1) -2*x`1*y`1 +
-      (y`1)*(y`1))*((sin a)*(sin a)+(cos a)*(cos a)) +
-      ((x`2)*(x`2) -2*x`2*y`2 + (y`2)*(y`2))*((sin a)^2+(cos a)^2))
-      .= sqrt(((x`1)*(x`1) -2*x`1*y`1 +
-      (y`1)*(y`1))*((sin a)*(sin a)+(cos a)*(cos a)) +
-      ((x`2)*(x`2) -2*x`2*y`2 + (y`2)*(y`2))*((sin a)*(sin a)+(cos a)^2))
-      .= sqrt(((x`1)*(x`1) -2*x`1*y`1 +
-      (y`1)*(y`1))*((sin a)*(sin a)+(cos a)*(cos a)) +
-      ((x`2)*(x`2) -2*x`2*y`2 + (y`2)*(y`2))*((sin a)*(sin a)+(cos a)*(cos a)))
-      .= sqrt((((x`1)*(x`1)*(cos a)*(cos a)-2*(x`1*cos a)*(x`2*sin a)+
-      (x`2)*(x`2)*(sin a)*(sin a))
-      -2*(x`1*cos a-x`2*sin a)*(y`1*cos a-y`2*sin a)+
-      ((y`1)*(y`1)*(cos a)*(cos a)
-      -2*(y`1*cos a)*(y`2*sin a)+(y`2)*(y`2)*(sin a)*(sin a))) +
-      (((x`1)*(x`1)*(sin a)*(sin a)+
-      2*(x`1*sin a)*(x`2*cos a)+(x`2)*(x`2)*(cos a)*(cos a))
-      -2*(x`1*sin a+x`2*cos a)*(y`1*sin a+y`2*cos a)+
-      ((y`1)*(y`1)*(sin a)*(sin a)+
-      2*(y`1*sin a)*(y`2*cos a)+(y`2)*(y`2)*(cos a)*(cos a))))
-      .= sqrt((((x`1)^2*(cos a)*(cos a)-
-      2*(x`1*cos a)*(x`2*sin a)+(x`2)*(x`2)*(sin a)*(sin a))
-      -2*(x`1*cos a-x`2*sin a)*(y`1*cos a-y`2*sin a)+
-      ((y`1)*(y`1)*(cos a)*(cos a)
-      -2*(y`1*cos a)*(y`2*sin a)+(y`2)*(y`2)*(sin a)*(sin a))) +
-      (((x`1)*(x`1)*(sin a)*(sin a)+
-      2*(x`1*sin a)*(x`2*cos a)+(x`2)*(x`2)*(cos a)*(cos a))
-      -2*(x`1*sin a+x`2*cos a)*(y`1*sin a+y`2*cos a)+
-      ((y`1)*(y`1)*(sin a)*(sin a)+
-      2*(y`1*sin a)*(y`2*cos a)+(y`2)*(y`2)*(cos a)*(cos a))))
-      .= sqrt((((x`1)^2*((cos a)*(cos a))-
-      2*(x`1*cos a)*(x`2*sin a)+(x`2)*(x`2)*(sin a)*(sin a))
-      -2*(x`1*cos a-x`2*sin a)*(y`1*cos a-y`2*sin a)+
-      ((y`1)*(y`1)*(cos a)*(cos a)
-      -2*(y`1*cos a)*(y`2*sin a)+(y`2)*(y`2)*(sin a)*(sin a))) +
-      (((x`1)*(x`1)*(sin a)*(sin a)+
-      2*(x`1*sin a)*(x`2*cos a)+(x`2)*(x`2)*(cos a)*(cos a))
-      -2*(x`1*sin a+x`2*cos a)*(y`1*sin a+y`2*cos a)+
-      ((y`1)*(y`1)*(sin a)*(sin a)+2*(y`1*sin a)*(y`2*cos a)+
-      (y`2)*(y`2)*(cos a)*(cos a))))
-      .= sqrt((((x`1)^2*(cos a)^2-
-      2*(x`1*cos a)*(x`2*sin a)+(x`2)*(x`2)*(sin a)*(sin a))
-      -2*(x`1*cos a-x`2*sin a)*(y`1*cos a-y`2*sin a)+
-      ((y`1)*(y`1)*(cos a)*(cos a)
-      -2*(y`1*cos a)*(y`2*sin a)+(y`2)*(y`2)*(sin a)*(sin a))) +
-      (((x`1)*(x`1)*(sin a)*(sin a)+2*(x`1*sin a)*(x`2*cos a)+
-      (x`2)*(x`2)*(cos a)*(cos a))
-      -2*(x`1*sin a+x`2*cos a)*(y`1*sin a+y`2*cos a)+
-      ((y`1)*(y`1)*(sin a)*(sin a)+2*(y`1*sin a)*(y`2*cos a)+
-      (y`2)*(y`2)*(cos a)*(cos a))))
-      .= sqrt((((x`1)^2*(cos a)^2-2*(x`1*cos a)*(x`2*sin a)+
-      (x`2)^2*(sin a)*(sin a))
-      -2*(x`1*cos a-x`2*sin a)*(y`1*cos a-y`2*sin a)+
-      ((y`1)*(y`1)*(cos a)*(cos a)
-      -2*(y`1*cos a)*(y`2*sin a)+(y`2)*(y`2)*(sin a)*(sin a))) +
-      (((x`1)*(x`1)*(sin a)*(sin a)+2*(x`1*sin a)*(x`2*cos a)+
-      (x`2)*(x`2)*(cos a)*(cos a))
-      -2*(x`1*sin a+x`2*cos a)*(y`1*sin a+y`2*cos a)+
-      ((y`1)*(y`1)*(sin a)*(sin a)+2*(y`1*sin a)*(y`2*cos a)+
-      (y`2)*(y`2)*(cos a)*(cos a))))
-      .= sqrt((((x`1)^2*(cos a)^2-
-      2*(x`1*cos a)*(x`2*sin a)+(x`2)^2*((sin a)*(sin a)))
-      -2*(x`1*cos a-x`2*sin a)*(y`1*cos a-y`2*sin a)+
-      ((y`1)*(y`1)*(cos a)*(cos a)
-      -2*(y`1*cos a)*(y`2*sin a)+(y`2)*(y`2)*(sin a)*(sin a))) +
-      (((x`1)*(x`1)*(sin a)*(sin a)+
-      2*(x`1*sin a)*(x`2*cos a)+(x`2)*(x`2)*(cos a)*(cos a))
-      -2*(x`1*sin a+x`2*cos a)*(y`1*sin a+y`2*cos a)+
-      ((y`1)*(y`1)*(sin a)*(sin a)+2*(y`1*sin a)*(y`2*cos a)+
-      (y`2)*(y`2)*(cos a)*(cos a))))
-      .= sqrt((((x`1)^2*(cos a)^2-2*(x`1*cos a)*(x`2*sin a)+(x`2)^2*(sin a)^2)
-      -2*(x`1*cos a-x`2*sin a)*(y`1*cos a-y`2*sin a)+
-      ((y`1)*(y`1)*(cos a)*(cos a)
-      -2*(y`1*cos a)*(y`2*sin a)+(y`2)*(y`2)*(sin a)*(sin a))) +
-      (((x`1)*(x`1)*(sin a)*(sin a)+2*(x`1*sin a)*(x`2*cos a)+
-      (x`2)*(x`2)*(cos a)*(cos a))
-      -2*(x`1*sin a+x`2*cos a)*(y`1*sin a+y`2*cos a)+
-      ((y`1)*(y`1)*(sin a)*(sin a)+2*(y`1*sin a)*(y`2*cos a)+
-      (y`2)*(y`2)*(cos a)*(cos a))))
-      .= sqrt((((x`1)^2*(cos a)^2-2*(x`1*cos a)*(x`2*sin a)+(x`2)^2*(sin a)^2)
-      -2*(x`1*cos a-x`2*sin a)*(y`1*cos a-y`2*sin a)+((y`1)^2*(cos a)*(cos a)
-      -2*(y`1*cos a)*(y`2*sin a)+(y`2)*(y`2)*(sin a)*(sin a))) +
-      (((x`1)*(x`1)*(sin a)*(sin a)+2*(x`1*sin a)*(x`2*cos a)+
-      (x`2)*(x`2)*(cos a)*(cos a))
-      -2*(x`1*sin a+x`2*cos a)*(y`1*sin a+y`2*cos a)+
-      ((y`1)*(y`1)*(sin a)*(sin a)+2*(y`1*sin a)*(y`2*cos a)+
-      (y`2)*(y`2)*(cos a)*(cos a))))
-      .= sqrt((((x`1)^2*(cos a)^2-2*(x`1*cos a)*(x`2*sin a)+(x`2)^2*(sin a)^2)
-      -2*(x`1*cos a-x`2*sin a)*(y`1*cos a-y`2*sin a)+((y`1)^2*((cos a)*(cos a))
-      -2*(y`1*cos a)*(y`2*sin a)+(y`2)*(y`2)*(sin a)*(sin a))) +
-      (((x`1)*(x`1)*(sin a)*(sin a)+2*(x`1*sin a)*(x`2*cos a)+
-      (x`2)*(x`2)*(cos a)*(cos a))
-      -2*(x`1*sin a+x`2*cos a)*(y`1*sin a+y`2*cos a)+
-      ((y`1)*(y`1)*(sin a)*(sin a)+2*(y`1*sin a)*(y`2*cos a)+
-      (y`2)*(y`2)*(cos a)*(cos a))))
-      .= sqrt((((x`1)^2*(cos a)^2-2*(x`1*cos a)*(x`2*sin a)+(x`2)^2*(sin a)^2)
-      -2*(x`1*cos a-x`2*sin a)*(y`1*cos a-y`2*sin a)+((y`1)^2*((cos a)^2)
-      -2*(y`1*cos a)*(y`2*sin a)+(y`2)*(y`2)*(sin a)*(sin a))) +
-      (((x`1)*(x`1)*(sin a)*(sin a)+2*(x`1*sin a)*(x`2*cos a)+
-      (x`2)*(x`2)*(cos a)*(cos a))
-      -2*(x`1*sin a+x`2*cos a)*(y`1*sin a+y`2*cos a)+
-      ((y`1)*(y`1)*(sin a)*(sin a)+2*(y`1*sin a)*(y`2*cos a)+
-      (y`2)*(y`2)*(cos a)*(cos a))))
-      .= sqrt((((x`1)^2*(cos a)^2-2*(x`1*cos a)*(x`2*sin a)+(x`2)^2*(sin a)^2)
-      -2*(x`1*cos a-x`2*sin a)*(y`1*cos a-y`2*sin a)+((y`1)^2*((cos a)^2)
-      -2*(y`1*cos a)*(y`2*sin a)+(y`2)^2*(sin a)*(sin a))) +
-      (((x`1)*(x`1)*(sin a)*(sin a)+2*(x`1*sin a)*(x`2*cos a)+
-      (x`2)*(x`2)*(cos a)*(cos a))
-      -2*(x`1*sin a+x`2*cos a)*(y`1*sin a+y`2*cos a)+
-      ((y`1)*(y`1)*(sin a)*(sin a)+2*(y`1*sin a)*(y`2*cos a)+
-      (y`2)*(y`2)*(cos a)*(cos a))))
-      .= sqrt((((x`1)^2*(cos a)^2-2*(x`1*cos a)*(x`2*sin a)+(x`2)^2*(sin a)^2)
-      -2*(x`1*cos a-x`2*sin a)*(y`1*cos a-y`2*sin a)+((y`1)^2*((cos a)^2)
-      -2*(y`1*cos a)*(y`2*sin a)+(y`2)^2*((sin a)*(sin a)))) +
-      (((x`1)*(x`1)*(sin a)*(sin a)+2*(x`1*sin a)*(x`2*cos a)+
-      (x`2)*(x`2)*(cos a)*(cos a))
-      -2*(x`1*sin a+x`2*cos a)*(y`1*sin a+y`2*cos a)+
-      ((y`1)*(y`1)*(sin a)*(sin a)+2*(y`1*sin a)*(y`2*cos a)+
-      (y`2)*(y`2)*(cos a)*(cos a))))
-      .= sqrt((((x`1)^2*(cos a)^2-2*(x`1*cos a)*(x`2*sin a)+(x`2)^2*(sin a)^2)
-      -2*(x`1*cos a-x`2*sin a)*(y`1*cos a-y`2*sin a)+((y`1)^2*((cos a)^2)
-      -2*(y`1*cos a)*(y`2*sin a)+(y`2)^2*((sin a)^2))) +
-      (((x`1)*(x`1)*(sin a)*(sin a)+2*(x`1*sin a)*(x`2*cos a)+
-      (x`2)*(x`2)*(cos a)*(cos a))
-      -2*(x`1*sin a+x`2*cos a)*(y`1*sin a+y`2*cos a)+
-      ((y`1)*(y`1)*(sin a)*(sin a)+2*(y`1*sin a)*(y`2*cos a)+
-      (y`2)*(y`2)*(cos a)*(cos a))))
-      .= sqrt((((x`1)^2*(cos a)^2-2*(x`1*cos a)*(x`2*sin a)+(x`2)^2*(sin a)^2)
-      -2*(x`1*cos a-x`2*sin a)*(y`1*cos a-y`2*sin a)+((y`1)^2*((cos a)^2)
-      -2*(y`1*cos a)*(y`2*sin a)+(y`2)^2*((sin a)^2))) +
-      (((x`1)^2*(sin a)*(sin a)+2*(x`1*sin a)*(x`2*cos a)+
-      (x`2)*(x`2)*(cos a)*(cos a))
-      -2*(x`1*sin a+x`2*cos a)*(y`1*sin a+y`2*cos a)+
-      ((y`1)*(y`1)*(sin a)*(sin a)+2*(y`1*sin a)*(y`2*cos a)+
-      (y`2)*(y`2)*(cos a)*(cos a))))
-      .= sqrt((((x`1)^2*(cos a)^2-2*(x`1*cos a)*(x`2*sin a)+(x`2)^2*(sin a)^2)
-      -2*(x`1*cos a-x`2*sin a)*(y`1*cos a-y`2*sin a)+((y`1)^2*((cos a)^2)
-      -2*(y`1*cos a)*(y`2*sin a)+(y`2)^2*((sin a)^2))) +
-      (((x`1)^2*((sin a)*(sin a))+2*(x`1*sin a)*(x`2*cos a)+
-      (x`2)*(x`2)*(cos a)*(cos a))
-      -2*(x`1*sin a+x`2*cos a)*(y`1*sin a+y`2*cos a)+
-      ((y`1)*(y`1)*(sin a)*(sin a)+2*(y`1*sin a)*(y`2*cos a)+
-      (y`2)*(y`2)*(cos a)*(cos a))))
-      .= sqrt((((x`1)^2*(cos a)^2-2*(x`1*cos a)*(x`2*sin a)+(x`2)^2*(sin a)^2)
-      -2*(x`1*cos a-x`2*sin a)*(y`1*cos a-y`2*sin a)+((y`1)^2*((cos a)^2)
-      -2*(y`1*cos a)*(y`2*sin a)+(y`2)^2*((sin a)^2))) +
-      (((x`1)^2*((sin a)^2)+2*(x`1*sin a)*(x`2*cos a)+
-      (x`2)*(x`2)*(cos a)*(cos a))
-      -2*(x`1*sin a+x`2*cos a)*(y`1*sin a+y`2*cos a)+
-      ((y`1)*(y`1)*(sin a)*(sin a)+2*(y`1*sin a)*(y`2*cos a)+
-      (y`2)*(y`2)*(cos a)*(cos a))))
-      .= sqrt((((x`1)^2*(cos a)^2-2*(x`1*cos a)*(x`2*sin a)+(x`2)^2*(sin a)^2)
-      -2*(x`1*cos a-x`2*sin a)*(y`1*cos a-y`2*sin a)+((y`1)^2*((cos a)^2)
-      -2*(y`1*cos a)*(y`2*sin a)+(y`2)^2*((sin a)^2))) +
-      (((x`1)^2*((sin a)^2)+2*(x`1*sin a)*(x`2*cos a)+(x`2)^2*(cos a)*(cos a))
-      -2*(x`1*sin a+x`2*cos a)*(y`1*sin a+y`2*cos a)+
-      ((y`1)*(y`1)*(sin a)*(sin a)+2*(y`1*sin a)*(y`2*cos a)+
-      (y`2)*(y`2)*(cos a)*(cos a))))
-      .= sqrt((((x`1)^2*(cos a)^2-2*(x`1*cos a)*(x`2*sin a)+(x`2)^2*(sin a)^2)
-      -2*(x`1*cos a-x`2*sin a)*(y`1*cos a-y`2*sin a)+((y`1)^2*((cos a)^2)
-      -2*(y`1*cos a)*(y`2*sin a)+(y`2)^2*((sin a)^2))) +
-      (((x`1)^2*((sin a)^2)+2*(x`1*sin a)*(x`2*cos a)+
-      (x`2)^2*((cos a)*(cos a)))
-      -2*(x`1*sin a+x`2*cos a)*(y`1*sin a+y`2*cos a)+
-      ((y`1)*(y`1)*(sin a)*(sin a)+2*(y`1*sin a)*(y`2*cos a)+
-      (y`2)*(y`2)*(cos a)*(cos a))))
-      .= sqrt((((x`1)^2*(cos a)^2-2*(x`1*cos a)*(x`2*sin a)+(x`2)^2*(sin a)^2)
-      -2*(x`1*cos a-x`2*sin a)*(y`1*cos a-y`2*sin a)+((y`1)^2*((cos a)^2)
-      -2*(y`1*cos a)*(y`2*sin a)+(y`2)^2*((sin a)^2))) +
-      (((x`1)^2*((sin a)^2)+2*(x`1*sin a)*(x`2*cos a)+(x`2)^2*((cos a)^2))
-      -2*(x`1*sin a+x`2*cos a)*(y`1*sin a+y`2*cos a)+
-      ((y`1)*(y`1)*(sin a)*(sin a)+2*(y`1*sin a)*(y`2*cos a)+
-      (y`2)*(y`2)*(cos a)*(cos a))))
-      .= sqrt((((x`1)^2*(cos a)^2-2*(x`1*cos a)*(x`2*sin a)+(x`2)^2*(sin a)^2)
-      -2*(x`1*cos a-x`2*sin a)*(y`1*cos a-y`2*sin a)+((y`1)^2*((cos a)^2)
-      -2*(y`1*cos a)*(y`2*sin a)+(y`2)^2*((sin a)^2))) +
-      (((x`1)^2*((sin a)^2)+2*(x`1*sin a)*(x`2*cos a)+(x`2)^2*((cos a)^2))
-      -2*(x`1*sin a+x`2*cos a)*(y`1*sin a+y`2*cos a)+
-      ((y`1)^2*(sin a)*(sin a)+2*(y`1*sin a)*(y`2*cos a)+
-      (y`2)*(y`2)*(cos a)*(cos a))))
-      .= sqrt((((x`1)^2*(cos a)^2-2*(x`1*cos a)*(x`2*sin a)+(x`2)^2*(sin a)^2)
-      -2*(x`1*cos a-x`2*sin a)*(y`1*cos a-y`2*sin a)+((y`1)^2*((cos a)^2)
-      -2*(y`1*cos a)*(y`2*sin a)+(y`2)^2*((sin a)^2))) +
-      (((x`1)^2*((sin a)^2)+2*(x`1*sin a)*(x`2*cos a)+(x`2)^2*((cos a)^2))
-      -2*(x`1*sin a+x`2*cos a)*(y`1*sin a+y`2*cos a)+
-      ((y`1)^2*((sin a)*(sin a))+2*(y`1*sin a)*(y`2*cos a)+
-      (y`2)*(y`2)*(cos a)*(cos a))))
-      .= sqrt((((x`1)^2*(cos a)^2-2*(x`1*cos a)*(x`2*sin a)+(x`2)^2*(sin a)^2)
-      -2*(x`1*cos a-x`2*sin a)*(y`1*cos a-y`2*sin a)+((y`1)^2*((cos a)^2)
-      -2*(y`1*cos a)*(y`2*sin a)+(y`2)^2*((sin a)^2))) +
-      (((x`1)^2*((sin a)^2)+2*(x`1*sin a)*(x`2*cos a)+(x`2)^2*((cos a)^2))
-      -2*(x`1*sin a+x`2*cos a)*(y`1*sin a+y`2*cos a)+
-      ((y`1)^2*((sin a)^2)+2*(y`1*sin a)*(y`2*cos a)+
-      (y`2)*(y`2)*(cos a)*(cos a))))
-      .= sqrt((((x`1)^2*(cos a)^2-2*(x`1*cos a)*(x`2*sin a)+(x`2)^2*(sin a)^2)
-      -2*(x`1*cos a-x`2*sin a)*(y`1*cos a-y`2*sin a)+((y`1)^2*((cos a)^2)
-      -2*(y`1*cos a)*(y`2*sin a)+(y`2)^2*((sin a)^2))) +
-      (((x`1)^2*((sin a)^2)+2*(x`1*sin a)*(x`2*cos a)+(x`2)^2*((cos a)^2))
-      -2*(x`1*sin a+x`2*cos a)*(y`1*sin a+y`2*cos a)+
-      ((y`1)^2*((sin a)^2)+2*(y`1*sin a)*(y`2*cos a)+
-      (y`2)^2*(cos a)*(cos a))))
-      .= sqrt((((x`1)^2*(cos a)^2-2*(x`1*cos a)*(x`2*sin a)+(x`2)^2*(sin a)^2)
-      -2*(x`1*cos a-x`2*sin a)*(y`1*cos a-y`2*sin a)+((y`1)^2*((cos a)^2)
-      -2*(y`1*cos a)*(y`2*sin a)+(y`2)^2*((sin a)^2))) +
-      (((x`1)^2*((sin a)^2)+2*(x`1*sin a)*(x`2*cos a)+(x`2)^2*((cos a)^2))
-      -2*(x`1*sin a+x`2*cos a)*(y`1*sin a+y`2*cos a)+
-      ((y`1)^2*((sin a)^2)+2*(y`1*sin a)*(y`2*cos a)+
-      (y`2)^2*((cos a)*(cos a)))))
-      .= sqrt((((x`1)^2*(cos a)^2-2*(x`1*cos a)*(x`2*sin a)+
-      (x`2)^2*(sin a)^2)-2*(x`1*cos a-x`2*sin a)*(y`1*cos a-y`2*sin a)+
-      ((y`1)^2*(cos a)^2-2*(y`1*cos a)*(y`2*sin a)+(y`2)^2*(sin a)^2)) +
-      (((x`1)^2*(sin a)^2+2*(x`1*sin a)*(x`2*cos a)+(x`2)^2*(cos a)^2)-
-      2*(x`1*sin a+x`2*cos a)*(y`1*sin a+y`2*cos a)+((y`1)^2*(sin a)^2+
-      2*(y`1*sin a)*(y`2*cos a)+(y`2)^2*(cos a)^2)))
-      .= sqrt((((x`1)^2*(cos a)^2-2*(x`1*cos a)*(x`2*sin a)+
-      (x`2)^2*(sin a)^2)-2*(x`1*cos a-x`2*sin a)*(y`1*cos a-y`2*sin a)+
-      ((y`1)^2*(cos a)^2-2*(y`1*cos a)*(y`2*sin a)+(y`2)^2*(sin a)^2)) +
-      (((x`1)^2*(sin a)^2+2*(x`1*sin a)*(x`2*cos a)+(x`2)^2*(cos a)^2)-
-      2*(x`1*sin a+x`2*cos a)*(y`1*sin a+y`2*cos a)+((y`1)^2*(sin a)^2+
-      2*(y`1*sin a)*(y`2*cos a)+(y`2*cos a)^2)))
-      .= sqrt((((x`1)^2*(cos a)^2-2*(x`1*cos a)*(x`2*sin a)+
-      (x`2)^2*(sin a)^2)-2*(x`1*cos a-x`2*sin a)*(y`1*cos a-y`2*sin a)+
-      ((y`1)^2*(cos a)^2-2*(y`1*cos a)*(y`2*sin a)+(y`2)^2*(sin a)^2)) +
-      (((x`1)^2*(sin a)^2+2*(x`1*sin a)*(x`2*cos a)+(x`2)^2*(cos a)^2)-
-      2*(x`1*sin a+x`2*cos a)*(y`1*sin a+y`2*cos a)+((y`1*sin a)^2+
-      2*(y`1*sin a)*(y`2*cos a)+(y`2*cos a)^2)))
-      .= sqrt((((x`1)^2*(cos a)^2-2*(x`1*cos a)*(x`2*sin a)+
-      (x`2)^2*(sin a)^2)-2*(x`1*cos a-x`2*sin a)*(y`1*cos a-y`2*sin a)+
-      ((y`1)^2*(cos a)^2-2*(y`1*cos a)*(y`2*sin a)+(y`2)^2*(sin a)^2)) +
-      (((x`1)^2*(sin a)^2+2*(x`1*sin a)*(x`2*cos a)+(x`2*cos a)^2)-
-      2*(x`1*sin a+x`2*cos a)*(y`1*sin a+y`2*cos a)+((y`1*sin a)^2+
-      2*(y`1*sin a)*(y`2*cos a)+(y`2*cos a)^2)))
-      .= sqrt((((x`1)^2*(cos a)^2-2*(x`1*cos a)*(x`2*sin a)+
-      (x`2)^2*(sin a)^2)-2*(x`1*cos a-x`2*sin a)*(y`1*cos a-y`2*sin a)+
-      ((y`1)^2*(cos a)^2-2*(y`1*cos a)*(y`2*sin a)+(y`2)^2*(sin a)^2)) +
-      (((x`1*sin a)^2+2*(x`1*sin a)*(x`2*cos a)+(x`2*cos a)^2)-
-      2*(x`1*sin a+x`2*cos a)*(y`1*sin a+y`2*cos a)+((y`1*sin a)^2+
-      2*(y`1*sin a)*(y`2*cos a)+(y`2*cos a)^2)))
-      .= sqrt((((x`1)^2*(cos a)^2-2*(x`1*cos a)*(x`2*sin a)+
-      (x`2)^2*(sin a)^2)-2*(x`1*cos a-x`2*sin a)*(y`1*cos a-y`2*sin a)+
-      ((y`1)^2*(cos a)^2-2*(y`1*cos a)*(y`2*sin a)+(y`2*sin a)^2)) +
-      (((x`1*sin a)^2+2*(x`1*sin a)*(x`2*cos a)+(x`2*cos a)^2)-
-      2*(x`1*sin a+x`2*cos a)*(y`1*sin a+y`2*cos a)+((y`1*sin a)^2+
-      2*(y`1*sin a)*(y`2*cos a)+(y`2*cos a)^2)))
-      .= sqrt((((x`1)^2*(cos a)^2-2*(x`1*cos a)*(x`2*sin a)+
-      (x`2)^2*(sin a)^2)-2*(x`1*cos a-x`2*sin a)*(y`1*cos a-y`2*sin a)+
-      ((y`1*cos a)^2-2*(y`1*cos a)*(y`2*sin a)+(y`2*sin a)^2)) +
-      (((x`1*sin a)^2+2*(x`1*sin a)*(x`2*cos a)+(x`2*cos a)^2)-
-      2*(x`1*sin a+x`2*cos a)*(y`1*sin a+y`2*cos a)+
-      ((y`1*sin a)^2+2*(y`1*sin a)*(y`2*cos a)+(y`2*cos a)^2)))
-      .= sqrt((((x`1)^2*(cos a)^2-2*(x`1*cos a)*(x`2*sin a)+
-      (x`2*sin a)^2)-2*(x`1*cos a-x`2*sin a)*(y`1*cos a-y`2*sin a)+
-      ((y`1*cos a)^2-2*(y`1*cos a)*(y`2*sin a)+(y`2*sin a)^2)) +
-      (((x`1*sin a)^2+2*(x`1*sin a)*(x`2*cos a)+(x`2*cos a)^2)-
-      2*(x`1*sin a+x`2*cos a)*(y`1*sin a+y`2*cos a)+((y`1*sin a)^2+
-      2*(y`1*sin a)*(y`2*cos a)+(y`2*cos a)^2)))
-      .= sqrt((((x`1*cos a)^2-2*(x`1*cos a)*(x`2*sin a)+(x`2*sin a)^2)-
-      2*(x`1*cos a-x`2*sin a)*(y`1*cos a-y`2*sin a)+((y`1*cos a)^2-
-      2*(y`1*cos a)*(y`2*sin a)+(y`2*sin a)^2)) +
-      (((x`1*sin a)^2+2*(x`1*sin a)*(x`2*cos a)+(x`2*cos a)^2)-
-      2*(x`1*sin a+x`2*cos a)*(y`1*sin a+y`2*cos a)+((y`1*sin a)^2+
-      2*(y`1*sin a)*(y`2*cos a)+(y`2*cos a)^2)))
-      .= sqrt((((x`1*cos a)^2-2*(x`1*cos a)*(x`2*sin a)+(x`2*sin a)^2)-
-      2*(x`1*cos a-x`2*sin a)*(y`1*cos a-y`2*sin a)+((y`1*cos a)^2-
-      2*(y`1*cos a)*(y`2*sin a)+(y`2*sin a)^2)) +
-      (((x`1*sin a)^2+2*(x`1*sin a)*(x`2*cos a)+(x`2*cos a)^2)-
-      2*(x`1*sin a+x`2*cos a)*(y`1*sin a+y`2*cos a)+(y`1*sin a+y`2*cos a)^2))
-      .= sqrt((((x`1*cos a)^2-2*(x`1*cos a)*(x`2*sin a)+(x`2*sin a)^2)-
-      2*(x`1*cos a-x`2*sin a)*(y`1*cos a-y`2*sin a)+
-      ((y`1*cos a)^2-2*(y`1*cos a)*(y`2*sin a)+(y`2*sin a)^2)) +
-      ((x`1*sin a+x`2*cos a)^2-2*(x`1*sin a+x`2*cos a)*(y`1*sin a+y`2*cos a)+
-      (y`1*sin a+y`2*cos a)^2))
-      .= sqrt((((x`1*cos a)^2-2*(x`1*cos a)*(x`2*sin a)+(x`2*sin a)^2)-
-      2*(x`1*cos a-x`2*sin a)*(y`1*cos a-y`2*sin a)+(y`1*cos a-y`2*sin a)^2) +
-      ((x`1*sin a+x`2*cos a)^2-2*(x`1*sin a+x`2*cos a)*(y`1*sin a+y`2*cos a)+
-      (y`1*sin a+y`2*cos a)^2))
-      .= sqrt(((x`1*cos a-x`2*sin a)^2-
-      2*(x`1*cos a-x`2*sin a)*(y`1*cos a-y`2*sin a)+(y`1*cos a-y`2*sin a)^2) +
-      ((x`1*sin a+x`2*cos a)^2-2*(x`1*sin a+x`2*cos a)*(y`1*sin a+y`2*cos a)+
-      (y`1*sin a+y`2*cos a)^2))
+      ((x`2)*(x`2) -2*x`2*y`2 + (y`2)*(y`2))*((sin a)^2+(cos a)^2)) by A24
       .= sqrt(((x`1*cos a-x`2*sin a)-(y`1*cos a-y`2*sin a))^2 +
       ((x`1*sin a+x`2*cos a)^2-2*(x`1*sin a+x`2*cos a)*(y`1*sin a+y`2*cos a)+
       (y`1*sin a+y`2*cos a)^2))
-      .= sqrt(((x`1*cos a-x`2*sin a)-(y`1*cos a-y`2*sin a))^2 +
-              ((x`1*sin a+x`2*cos a)-(y`1*sin a+y`2*cos a))^2)
       .= sqrt(((Re Rotate(xx,a))-(y`1*cos a-y`2*sin a))^2 +
-         ((x`1*sin a+x`2*cos a)-(y`1*sin a+y`2*cos a))^2) by A23,COMPLEX2:70
+         ((x`1*sin a+x`2*cos a)-(y`1*sin a+y`2*cos a))^2) by A22,COMPLEX2:70
       .= sqrt(((Re Rotate(xx,a))-(y`1*cos a-y`2*sin a))^2 +
+              ((Im Rotate(xx,a))-(y`1*sin a+y`2*cos a))^2) by A22,COMPLEX2:70
+      .= sqrt(((Re Rotate(xx,a))-(Re Rotate(yy,a)))^2 +
               ((Im Rotate(xx,a))-(y`1*sin a+y`2*cos a))^2) by A23,COMPLEX2:70
       .= sqrt(((Re Rotate(xx,a))-(Re Rotate(yy,a)))^2 +
-              ((Im Rotate(xx,a))-(y`1*sin a+y`2*cos a))^2) by A24,COMPLEX2:70
-      .= sqrt(((Re Rotate(xx,a))-(Re Rotate(yy,a)))^2 +
-              ((Im Rotate(xx,a))-(Im Rotate(yy,a)))^2) by A24,COMPLEX2:70
+              ((Im Rotate(xx,a))-(Im Rotate(yy,a)))^2) by A23,COMPLEX2:70
       .= dist(|[Re Rotate((x`1)+(x`2)*<i>,a),Im Rotate((x`1)+(x`2)*<i>,a)]|,
       |[Re Rotate((y`1)+(y`2)*<i>,a),Im Rotate((y`1)+(y`2)*<i>,a)]|)
-      by TOPREAL6:101,A21,A22
+      by TOPREAL6:101,A20,A21
       .= dist(|[Re Rotate((x`1)+(x`2)*<i>,a),Im Rotate((x`1)+(x`2)*<i>,a)]|,gy)
       by Def3,A2
       .= dist(gx,gy) by Def3,A2
@@ -687,9 +382,6 @@ theorem Th3:
      (A*(a`2)+D-|[A*(b`1)+B,A*(b`2)+D]|`2)^2) by EUCLID:56
      .= sqrt((A*(a`1)+B-(A*(b`1)+B))^2 + (A*(a`2)+D-(A*(b`2)+D))^2)
      by EUCLID:56
-     .= sqrt((A*(a`1-b`1))^2 + (A*(a`2-b`2))^2)
-     .= sqrt(A^2*(a`1-b`1)^2 + (A*(a`2-b`2))^2)
-     .= sqrt(A^2*(a`1-b`1)^2 + A^2*(a`2-b`2)^2)
      .= sqrt(A^2*((a`1-b`1)^2 + (a`2-b`2)^2))
      .= sqrt(A^2)*sqrt((a`1-b`1)^2 + (a`2-b`2)^2) by SQUARE_1:97,A6,A7
      .= sqrt(A^2)*dist(a,b) by TOPREAL6:101;
@@ -706,9 +398,6 @@ theorem Th3:
      (A*(X`2)+D-|[A*(Y`1)+B,A*(Y`2)+D]|`2)^2) by EUCLID:56
      .= sqrt((A*(X`1)+B-(A*(Y`1)+B))^2 + (A*(X`2)+D-(A*(Y`2)+D))^2)
      by EUCLID:56
-     .= sqrt((A*(X`1-Y`1))^2 + (A*(X`2-Y`2))^2)
-     .= sqrt(A^2*(X`1-Y`1)^2 + (A*(X`2-Y`2))^2)
-     .= sqrt(A^2*(X`1-Y`1)^2 + A^2*(X`2-Y`2)^2)
      .= sqrt(A^2*((X`1-Y`1)^2 + (X`2-Y`2)^2))
      .= sqrt(A^2)*sqrt((X`1-Y`1)^2 + (X`2-Y`2)^2) by SQUARE_1:97,A6,A7
      .= sqrt(A^2)*dist(X,Y) by TOPREAL6:101;
@@ -740,22 +429,21 @@ theorem Th4:
     consider yy being set such that
     A5: yy in dom Rotate A & yy in C & (Rotate A).yy=y by FUNCT_1:def 12,A3;
     reconsider yy as Point of TOP-REAL 2 by A5;
-    A6: TOP-REAL 2=TopSpaceMetr Euclid 2 by EUCLID:def 8;
     reconsider f=Rotate A as Function of
-    TopSpaceMetr Euclid 2, TopSpaceMetr Euclid 2 by A6;
+    TopSpaceMetr Euclid 2, TopSpaceMetr Euclid 2;
     f is isometric by Th2,A1; then
     consider g being isometric Function of Euclid 2,Euclid 2 such that
-    A7: f=g by Def2;
-    reconsider p1'=p1,p2'=p2,xx'=xx,yy'=yy as Point of Euclid 2 by A6;
+    A6: f=g by Def2;
+    reconsider p1'=p1,p2'=p2,xx'=xx,yy'=yy as Point of Euclid 2;
     dist(p1,p2) >= dist(xx,yy) by A4,A5,A2; then
     dist(p1',p2') >= dist(xx,yy) by TOPREAL6:def 1; then
     dist(p1',p2') >= dist(xx',yy') by TOPREAL6:def 1; then
     dist(g.p1',g.p2') >= dist(xx',yy') by VECTMETR:def 3; then
     dist(g.p1',g.p2') >= dist(g.xx',g.yy') by VECTMETR:def 3; then
     dist((Rotate A).p1,(Rotate A).p2) >= dist(g.xx',g.yy')
-    by A7,TOPREAL6:def 1;
+    by A6,TOPREAL6:def 1;
     hence dist((Rotate A).p1,(Rotate A).p2) >= dist(x,y)
-    by A7,A4,A5,TOPREAL6:def 1;
+    by A6,A4,A5,TOPREAL6:def 1;
   end;
 
 theorem Th5:
@@ -790,72 +478,76 @@ theorem
   ex f being Homeomorphism of TOP-REAL 2 st
   |[-1,0]|,|[1,0]| realize-max-dist-in f.:C
   proof
-    A1: TOP-REAL 2=TopSpaceMetr(Euclid 2) by EUCLID:def 8;
     consider p1,p2 such that
-    A2: p1,p2 realize-max-dist-in C by Th1;
+    A1: p1,p2 realize-max-dist-in C by Th1;
     consider x,y being Point of TOP-REAL 2 such that
-    A3: x<>y & x in C & y in C by TOPREAL2:4;
-    dist(x,y) > 0 & dist(p1,p2)>=dist(x,y) by Def1,A2,JORDAN1K:22,A3; then
-    A4: p1<>p2 by TOPREAL6:102;
+    A2: x<>y & x in C & y in C by TOPREAL2:4;
+    dist(x,y) > 0 & dist(p1,p2)>=dist(x,y) by Def1,A1,JORDAN1K:22,A2; then
+    A3: p1<>p2 by TOPREAL6:102;
     reconsider g=AffineMap(1,-p1`1,1,-p1`2) as
     being_homeomorphism Function of TOP-REAL 2,TOP-REAL 2 by JGRAPH_7:50;
     set D=g.:C,q1=g.p1,q2=g.p2;
-    A5: q1,q2 realize-max-dist-in D by Th3,A2;
-    A6: q1 = |[1 * (p1`1)+-p1`1,1 * (p1`2)+-p1`2]| by JGRAPH_2:def 2
+    A4: q1,q2 realize-max-dist-in D by Th3,A1;
+    A5: q1 = |[1 * (p1`1)+-p1`1,1 * (p1`2)+-p1`2]| by JGRAPH_2:def 2
       .= |[0,0]|;
     set arg=Arg(q2`1+q2`2 * <i>);
     set h=Rotate(-arg);
     per cases;
     suppose arg = 0; then
       Re (q2`1+q2`2 * <i>) >= 0 & Im (q2`1+q2`2 * <i>) = 0 by COMPLEX2:34; then
-      A7: q2`1>=0 & q2`2 = 0 by COMPLEX1:28;
+      A6: q2`1>=0 & q2`2 = 0 by COMPLEX1:28;
       now
-        assume A8: q2`1=0;
+        assume A7: q2`1=0;
         dom g = the carrier of TOP-REAL 2 by FUNCT_2:def 1; then
-        q1<>q2 by FUNCT_1:def 8,A4;
-        hence contradiction by A8,A7,A6,EUCLID:57;
+        q1<>q2 by FUNCT_1:def 8,A3;
+        hence contradiction by A7,A6,A5,EUCLID:57;
       end; then
-      A9: q2`1>0 & q2`2 = 0 by A7; then
+      A8: q2`1>0 & q2`2 = 0 by A6; then
       2/(q2`1) > 0 by XREAL_1:141; then
       reconsider j=AffineMap(2/(q2`1),-1,2/(q2`1),0) as
       being_homeomorphism Function of TOP-REAL 2,TOP-REAL 2 by JGRAPH_7:50;
       set E=j.:D,r1=j.q1,r2=j.q2;
-      A10: r1=|[2/(q2`1)*q1`1+-1,2/(q2`1)*q1`2+0]| by JGRAPH_2:def 2
-      .= |[2/(q2`1)*0+-1,2/(q2`1)*q1`2+0]| by A6,EUCLID:56
-      .= a by A6,EUCLID:56;
-      A11: r2=|[2/(q2`1)*q2`1+-1,2/(q2`1)*q2`2+0]| by JGRAPH_2:def 2
-      .=|[2+-1,2/(q2`1)*q2`2+0]| by XCMPLX_1:88,A9
-      .=b by A9;
-      A12: r1,r2 realize-max-dist-in E by Th3,A5;
-      take f=j*g;
-      thus f is being_homeomorphism by TOPS_2:71;
-      thus a,b realize-max-dist-in (f.:C) by A12,A10,A11,RELAT_1:159;
+      A9: r1=|[2/(q2`1)*q1`1+-1,2/(q2`1)*q1`2+0]| by JGRAPH_2:def 2
+      .= |[2/(q2`1)*0+-1,2/(q2`1)*q1`2+0]| by A5,EUCLID:56
+      .= a by A5,EUCLID:56;
+      A10: r2=|[2/(q2`1)*q2`1+-1,2/(q2`1)*q2`2+0]| by JGRAPH_2:def 2
+      .=|[2+-1,2/(q2`1)*q2`2+0]| by XCMPLX_1:88,A8
+      .=b by A8;
+      A11: r1,r2 realize-max-dist-in E by Th3,A4;
+      set f=j*g;
+      f is Homeomorphism of TOP-REAL 2
+      proof
+        thus f is being_homeomorphism by TOPS_2:71;
+      end;
+      then reconsider f as Homeomorphism of TOP-REAL 2;
+      take f;
+      thus a,b realize-max-dist-in (f.:C) by A11,A9,A10,RELAT_1:159;
     end;
     suppose arg<>0;
       then 0<arg & arg < 2*PI by COMPTRIG:52; then
-      A13: 0<2*PI-arg & 2*PI-arg<2*PI by XREAL_1:52,46;
-      A14: h=Rotate(2*PI-arg) by Th6; then
+      A12: 0<2*PI-arg & 2*PI-arg<2*PI by XREAL_1:52,46;
+      A13: h=Rotate(2*PI-arg) by Th6; then
       reconsider h0=h as isometric Function of
-      TopSpaceMetr Euclid 2, TopSpaceMetr Euclid 2 by Th2,A1,A13;
+      TopSpaceMetr Euclid 2, TopSpaceMetr Euclid 2 by Th2,A12;
       h0 is being_homeomorphism; then
       reconsider h as being_homeomorphism Function
- of TOP-REAL 2,TOP-REAL 2 by A1;
+ of TOP-REAL 2,TOP-REAL 2;
       set F=h.:D,s1=h.q1,s2=h.q2;
       reconsider z=0 as Element of COMPLEX by XCMPLX_0:def 2;
-      A15: Rotate(z,-arg) = 0 by COMPLEX2:66;
-      A16: s1 = |[Re Rotate(|[0,0]|`1+(|[0,0]|`2)*<i>,-arg),
-                 Im Rotate(|[0,0]|`1+(|[0,0]|`2)*<i>,-arg)]| by A6,Def3
+      A14: Rotate(z,-arg) = 0 by COMPLEX2:66;
+      A15: s1 = |[Re Rotate(|[0,0]|`1+(|[0,0]|`2)*<i>,-arg),
+                 Im Rotate(|[0,0]|`1+(|[0,0]|`2)*<i>,-arg)]| by A5,Def3
       .= |[Re Rotate(0+(|[0,0]|`2) * <i>,-arg),
            Im Rotate(|[0,0]|`1+(|[0,0]|`2)*<i>,-arg)]| by EUCLID:56
       .= |[Re Rotate(0+0 * <i>,-arg),
            Im Rotate(|[0,0]|`1+(|[0,0]|`2)*<i>,-arg)]| by EUCLID:56
       .= |[Re Rotate(0+0 * <i>,-arg),
            Im Rotate(0+(|[0,0]|`2)*<i>,-arg)]| by EUCLID:56
-      .= |[0,0]| by COMPLEX1:12,A15,EUCLID:56;
+      .= |[0,0]| by COMPLEX1:12,A14,EUCLID:56;
       reconsider qq=q2`1+(q2`2)*<i> as Element of COMPLEX by XCMPLX_0:def 2;
-      A17: Rotate(qq,-arg) = [*|.(q2`1+(q2`2)*<i>).|,0 *] by COMPLEX2:69;
+      A16: Rotate(qq,-arg) = [*|.(q2`1+(q2`2)*<i>).|,0 *] by COMPLEX2:69;
       s2 = |[Re [*|.(q2`1+(q2`2)*<i>).|,0 *],Im [*|.(q2`1+(q2`2)*<i>).|,0 *]]|
-      by A17,Def3
+      by A16,Def3
       .= |[Re (|.(q2`1+(q2`2)*<i>).|+0 * <i>),Im [*|.(q2`1+(q2`2)*<i>).|,0 *]]|
       by COMPLEX1:27
       .= |[Re (|.(q2`1+(q2`2)*<i>).|+0 * <i>),
@@ -864,34 +556,39 @@ theorem
       by COMPLEX1:28
       .= |[|.(q2`1+(q2`2)*<i>).|,0]| by COMPLEX1:28;
       then s2`1 = |.(q2`1+(q2`2)*<i>).| & s2`2 = 0 by EUCLID:56; then
-      A18: s2`1>=0 & s2`2 = 0 by COMPLEX1:132;
+      A17: s2`1>=0 & s2`2 = 0 by COMPLEX1:132;
       now
-        assume A19: s2`1=0;
+        assume A18: s2`1=0;
         dom g = the carrier of TOP-REAL 2 by FUNCT_2:def 1; then
-        A20: q1<>q2 by FUNCT_1:def 8,A4;
+        A19: q1<>q2 by FUNCT_1:def 8,A3;
         dom h = the carrier of TOP-REAL 2 by FUNCT_2:def 1; then
-        s1<>s2 by FUNCT_1:def 8,A20;
-        hence contradiction by A19,A18,A16,EUCLID:57;
+        s1<>s2 by FUNCT_1:def 8,A19;
+        hence contradiction by A18,A17,A15,EUCLID:57;
       end; then
-      A21: s2`1>0 & s2`2 = 0 by A18; then
+      A20: s2`1>0 & s2`2 = 0 by A17; then
       2/(s2`1) > 0 by XREAL_1:141; then
       reconsider j=AffineMap(2/(s2`1),-1,2/(s2`1),0) as
       being_homeomorphism Function of TOP-REAL 2,TOP-REAL 2 by JGRAPH_7:50;
       set E=j.:F,r1=j.s1,r2=j.s2;
-      take f=j*(h*g);
-      h*g is being_homeomorphism by TOPS_2:71;
-      hence f is being_homeomorphism by TOPS_2:71;
-      A22: r1=|[2/(s2`1)*s1`1+-1,2/(s2`1)*s1`2+0]| by JGRAPH_2:def 2
-      .= |[2/(s2`1)*0+-1,2/(s2`1)*s1`2+0]| by A16,EUCLID:56
-      .= a by A16,EUCLID:56;
-      A23: r2=|[2/(s2`1)*s2`1+-1,2/(s2`1)*s2`2+0]| by JGRAPH_2:def 2
-      .=|[2+-1,2/(s2`1)*s2`2+0]| by XCMPLX_1:88,A21
-      .=b by A21;
+      set f=j*(h*g);
+      f is Homeomorphism of TOP-REAL 2
+      proof
+        h*g is being_homeomorphism by TOPS_2:71;
+        hence f is being_homeomorphism by TOPS_2:71;
+      end;
+      then reconsider f as Homeomorphism of TOP-REAL 2;
+      take f;
+      A21: r1=|[2/(s2`1)*s1`1+-1,2/(s2`1)*s1`2+0]| by JGRAPH_2:def 2
+      .= |[2/(s2`1)*0+-1,2/(s2`1)*s1`2+0]| by A15,EUCLID:56
+      .= a by A15,EUCLID:56;
+      A22: r2=|[2/(s2`1)*s2`1+-1,2/(s2`1)*s2`2+0]| by JGRAPH_2:def 2
+      .=|[2+-1,2/(s2`1)*s2`2+0]| by XCMPLX_1:88,A20
+      .=b by A20;
       (h*g).:C=F by RELAT_1:159; then
-      A24: f.:C=E by RELAT_1:159;
+      A23: f.:C=E by RELAT_1:159;
       (Rotate(2*PI-arg)).q1,(Rotate(2*PI-arg)).q2
-      realize-max-dist-in (Rotate(2*PI-arg)).:D by A5,Th4,A13;
-      hence a,b realize-max-dist-in (f.:C) by A22,A23,A24,Th3,A14;
+      realize-max-dist-in (Rotate(2*PI-arg)).:D by A4,Th4,A12;
+      hence a,b realize-max-dist-in (f.:C) by A21,A22,A23,Th3,A13;
     end;
   end;
 
@@ -925,7 +622,7 @@ A2:   f is_homeomorphism;
 A3: for A being Subset of X st A is closed holds f.:A is closed;
 A4: dom f = the carrier of X & rng f = the carrier of Y
     by A1,FUNCT_2:def 1,def 3;
-A5: [#] X = the carrier of X & [#] Y = the carrier of Y by PRE_TOPC:def 3;
+A5: [#] X = the carrier of X & [#] Y = the carrier of Y;
     now let A be Subset of X;
       assume f.:A is closed; then
       f"(f.:A) is closed by PRE_TOPC:def 12;
@@ -975,7 +672,7 @@ A2: A is connected and
 A3: for B being Subset of T1 st B is connected holds A c= B implies A = B;
     thus f.:A is connected by A1,A2,Th10;
     let B be Subset of T2;
-    [#] T2 = the carrier of T2 by PRE_TOPC:def 3; then
+    [#] T2 = the carrier of T2; then
     f is one-to-one & rng f = the carrier of T2 &
     dom f = the carrier of T1 by A1,FUNCT_2:def 1,TOPS_2:def 5; then
 A4: f.:(f"B) = B & f"(f.:A) = A by FUNCT_1:147,FUNCT_1:164;
@@ -995,7 +692,7 @@ theorem Th12:
         A be Subset of T1;
     [#](T1|A) = A & [#](T2|(f.:A)) = f.:A by PRE_TOPC:def 10; then
 A1: the carrier of T1|A = A &
-    the carrier of T2|(f.:A) = f.:A by PRE_TOPC:def 3;
+    the carrier of T2|(f.:A) = f.:A;
     dom f = the carrier of T1 by FUNCT_2:def 1; then
     dom (f|A) = A & rng (f|A) = f.:A by RELAT_1:91,148;
     hence f|A is Function of T1|A, T2|(f.:A) by A1,FUNCT_2:4;
@@ -1018,7 +715,7 @@ A1: f is continuous;
 A2: g = f|A;
     [#](T1|A) = A & [#](T2|(f.:A)) = f.:A by PRE_TOPC:def 10; then
 A3: the carrier of T1|A = A &
-    the carrier of T2|(f.:A) = f.:A by PRE_TOPC:def 3;
+    the carrier of T2|(f.:A) = f.:A;
 A4: dom f = the carrier of T1 by FUNCT_2:def 1;
     per cases;
     suppose
@@ -1056,17 +753,17 @@ A2: f is continuous & f" is continuous;
     assume
 A3: g = f|A;
 A4: [#](T1|A) = A & [#](T2|(f.:A)) = f.:A by PRE_TOPC:def 10;
-A5: dom f = the carrier of T1 by FUNCT_2:def 1;
+ dom f = the carrier of T1 by FUNCT_2:def 1;
     hence
-A6: dom g = [#](T1|A) & rng g = [#](T2|(f.:A)) by A4,A3,RELAT_1:91,148;
+A5: dom g = [#](T1|A) & rng g = [#](T2|(f.:A)) by A4,A3,RELAT_1:91,148;
     thus
-A7: g is one-to-one by A1,A3,FUNCT_1:84;
+A6: g is one-to-one by A1,A3,FUNCT_1:84;
     thus g is continuous by A2,A3,Th13;
-A8: f qua Function" = f" & g qua Function" = g" by A1,A6,A7,TOPS_2:def 4; then
-A9: g" = f"|(f.:A) by A1,A3,RFUNCT_2:40;
-A10: f".:(f.:A) = f"(f.:A) by A1,A8,FUNCT_1:155 .= A by A1,A5,FUNCT_1:164; then
+A7: f qua Function" = f" & g qua Function" = g" by A1,A5,A6,TOPS_2:def 4; then
+A8: g" = f"|(f.:A) by A1,A3,RFUNCT_2:40;
+A9: f".:(f.:A) = f"(f.:A) by A1,A7,FUNCT_1:155 .= A by A1,FUNCT_1:164; then
     reconsider h = f"|(f.:A) as Function of T2|(f.:A), T1|A by Th12;
-    thus thesis by A9,A2,A10,Th13;
+    thus thesis by A8,A2,A9,Th13;
   end;
 
 theorem Th15:
@@ -1083,7 +780,7 @@ A1: f is_homeomorphism;
 A2: A1 = A & A1 is_a_component_of T1|B;
     [#](T1|B) = B & [#](T2|(f.:B)) = f.:B by PRE_TOPC:def 10; then
 A3: the carrier of T1|B = B &
-    the carrier of T2|(f.:B) = f.:B by PRE_TOPC:def 3; then
+    the carrier of T2|(f.:B) = f.:B; then
     reconsider A2 = f.:A as Subset of T2|(f.:B) by A2,RELAT_1:156;
 A4: dom f = the carrier of T1 by FUNCT_2:def 1;
     per cases;

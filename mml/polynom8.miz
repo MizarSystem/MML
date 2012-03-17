@@ -1,0 +1,3049 @@
+:: Multiplication of Polynomials using {D}iscrete {F}ourier {T}ransformation
+::  by Krzysztof Treyderowski and Christoph Schwarzweller
+::
+:: Received October 12, 2006
+:: Copyright (c) 2006 Association of Mizar Users
+
+environ
+
+ vocabularies RLVECT_1, BINOP_1, VECTSP_1, LATTICES, ALGSTR_2, NORMSP_1, INT_1,
+      ALGSEQ_1, GROUP_1, SQUARE_1, FINSEQ_4, POLYNOM2, VECTSP_2, ALGSTR_1,
+      CAT_3, MATRIX_1, INCSP_1, TREES_1, RVSUM_1, POLYNOM1, FINSEQ_1, ARYTM_1,
+      ARYTM_3, RELAT_1, FUNCT_1, ABSVALUE, MCART_1, FINSEQ_2, POLYNOM3,
+      POLYNOM8;
+ notations TARSKI, SUBSET_1, RELAT_1, FUNCT_1, FUNCT_2, NUMBERS, XCMPLX_0,
+      XXREAL_0, VECTSP_2, BINOP_1, BINOM, ALGSTR_1, RLVECT_1, FINSEQ_1,
+      FINSEQ_2, STRUCT_0, GROUP_1, VECTSP_1, FVSUM_1, FINSEQ_4, ALGSEQ_1,
+      POLYNOM5, POLYNOM3, NORMSP_1, MATRIX_1, MATRIX_3, INT_1, NAT_1, BINARITH,
+      POLYNOM4, MCART_1, PREPOWER;
+ constructors SQUARE_1, FINSOP_1, FINSEQ_4, FUNCT_4, FVSUM_1, BINARITH, BINOM,
+      ALGSTR_2, ALGSEQ_1, POLYNOM4, VECTSP_2, NORMSP_1, MATRIX_3, TOPREAL1,
+      POLYNOM5, POLYNOM1, SETWOP_2, PREPOWER;
+ registrations POLYNOM1, VECTSP_1, RELSET_1, STRUCT_0, INT_1, ALGSTR_1, GCD_1,
+      ORDINAL2, POLYNOM3, POLYNOM5, XXREAL_0, NAT_1, ORDINAL1;
+ requirements NUMERALS, SUBSET, REAL, BOOLE, ARITHM;
+ definitions GROUP_1, VECTSP_1, VECTSP_2, RLVECT_1, ALGSTR_1, MATRIX_3, BINOM,
+      FINSEQ_1, MATRIX_1, ALGSEQ_1;
+ theorems FVSUM_1, GROUP_1, BINOM, VECTSP_1, ALGSEQ_1, NAT_1, FINSEQ_4, INT_1,
+      FUNCT_2, XREAL_1, SQUARE_1, VECTSP_2, ALGSTR_1, MATRIX_1, FUNCT_1,
+      MATRIX_3, FINSEQ_1, ZFMISC_1, COMPLEX1, RLVECT_1, POLYNOM4, BINARITH,
+      TARSKI, REAL_1, MCART_1, FINSEQ_2, POLYNOM1, ABSVALUE, POLYNOM3,
+      POLYNOM5, FINSEQ_3, ORDINAL1;
+ schemes NAT_1, FUNCT_2, MATRIX_1, FINSEQ_1, INT_1;
+
+begin :: Preliminaries
+
+Lm1: for j being Integer holds j >= 0 or j = - 1 or j < - 1
+proof let j be Integer;
+  per cases;
+  suppose j >= 0; hence thesis; end;
+  suppose A1: j < 0;
+    then - j >= -0 by XREAL_1:26;
+    then reconsider n = - j as Element of NAT by INT_1:16;
+    n <> -0 by A1;
+    then n >= 1 by NAT_1:39;
+    then n > 1 or n = 1 by REAL_1:def 5;
+    then - 1 > - (- j) or - 1 = j by XREAL_1:26;
+  hence thesis; end;
+end;
+
+Lm2: for j being Integer holds j >= 1 or j = 0 or j < 0
+proof let j be Integer;
+j < 0 or (j is Element of NAT & (j <> 0 or j = 0)) by INT_1:16;
+hence thesis by NAT_1:39; end;
+
+theorem Th1:
+for n being Element of NAT,
+    L being unital domRing-like non degenerated (non empty doubleLoopStr),
+    x being Element of L st x <> 0.L holds x |^ n <> 0.L
+proof let n be Element of NAT;
+  let L be unital domRing-like non degenerated (non empty doubleLoopStr),
+      x being Element of L;
+assume A1: x <> 0.L;
+defpred P[Element of NAT] means x |^ $1 <> 0.L;
+x |^ 0 = 1.L by BINOM:8;
+then A2: P[0] by VECTSP_1:def 21;
+A3: now let n be Element of NAT;
+  assume P[n];
+  then (x |^ n) * x <> 0.L by A1,VECTSP_2:def 5;
+  hence P[n+1] by BINOM:9;
+end;
+for n being Element of NAT holds P[n] from NAT_1:sch 1(A2,A3);
+hence thesis;
+end;
+
+registration
+cluster Field-like -> domRing-like (associative right_unital
+                      add-associative right_zeroed right_complementable
+                      left-distributive (non empty doubleLoopStr));
+coherence
+proof
+let L be associative right_unital add-associative right_zeroed
+         right_complementable left-distributive (non empty doubleLoopStr);
+assume A1: L is Field-like;
+for x,y being Element of L holds x*y = 0.L implies x = 0.L or y = 0.L
+  proof
+  let x,y be Element of L;
+  assume A2: x*y = 0.L;
+  now assume A3: x <> 0.L & y <> 0.L;
+    then consider yy being Element of L such that
+    A4: y * yy = 1.L by A1,VECTSP_1:def 20;
+    x = x * 1.L by VECTSP_1:def 13
+     .= (x * y) * yy by A4,GROUP_1:def 4
+     .= 0.L by A2,VECTSP_1:39;
+    hence contradiction by A3;
+    end;
+  hence thesis;
+  end;
+hence thesis by VECTSP_2:def 5;
+end;
+end;
+
+theorem Th2:
+for L being add-associative right_zeroed right_complementable associative
+            commutative left_unital Field-like
+            distributive (non empty doubleLoopStr),
+    x,y being Element of L st x <> 0.L & y <> 0.L
+holds (x * y)" = x" * y"
+proof
+  let L be add-associative right_zeroed right_complementable
+           associative commutative left_unital Field-like
+           distributive (non empty doubleLoopStr);
+  let x,y be Element of L;
+  assume A1: x <> 0.L & y <> 0.L; then
+A2: x * y <> 0.L by VECTSP_1:44;
+  (x" * y") * (x * y) = x" * y" * y * x by GROUP_1:def 4
+                     .= x" * (y" * y) * x by GROUP_1:def 4
+                     .= x" * 1.L * x by A1, VECTSP_1:def 22
+                     .= x" * x by VECTSP_1:def 13
+                     .= 1.L by A1, VECTSP_1:def 22;
+hence thesis by A2, VECTSP_1:def 22;
+end;
+
+theorem Th3:
+for L being associative commutative left_unital distributive
+            Field-like (non empty doubleLoopStr),
+    z,z1 being Element of L
+holds z <> 0.L implies z1 = (z1 * z) / z
+proof
+let L be associative commutative left_unital distributive
+         Field-like (non empty doubleLoopStr),
+    z,z1 be Element of L;
+assume A1: z <> 0.L;
+thus (z1 * z) / z = z1 * (z * z") by GROUP_1:def 4
+                 .= z1 * 1.L by A1,VECTSP_1:def 22
+                 .= z1 by VECTSP_1:def 19;
+end;
+
+theorem Th4:
+for L being left_zeroed right_zeroed add-associative
+            right_complementable (non empty doubleLoopStr),
+    m being Element of NAT,
+    s being FinSequence of L
+st len s = m &
+   for k being Element of NAT st 1 <= k & k <= m holds s/.k = 1.L
+holds Sum s = m * 1.L
+proof
+let L be left_zeroed right_zeroed add-associative
+         right_complementable (non empty doubleLoopStr),
+    m be Element of NAT, s be FinSequence of L;
+assume A1: len s = m &
+   for k being Element of NAT st 1 <= k & k <= m holds s/.k = 1.L;
+defpred P[Element of NAT] means
+  for s being FinSequence of L
+  st len s = $1 & for k being Element of NAT st 1 <= k & k <= $1
+  holds s/.k = 1.L holds Sum s = $1 * 1.L;
+A2: P[0]
+  proof
+  for s being FinSequence of L
+  st len s = 0 & for k being Element of NAT st 1 <= k & k <= 0
+  holds s/.k = 1.L holds Sum s = 0 * 1.L
+  proof
+    let s be FinSequence of L;
+    assume A3: len s = 0 & for k being Element of NAT st 1 <= k & k <= 0
+               holds s/.k = 1.L;
+A4: <*>the carrier of L
+        is Element of 0-tuples_on the carrier of L by FINSEQ_2:114;
+    Sum s = Sum (<*>(the carrier of L)) by A3, FINSEQ_1:25
+         .= 0.L by A4, FVSUM_1:93
+         .= 0 * 1.L by BINOM:13;
+    hence thesis;
+  end;
+  hence thesis;
+end;
+A5: for l being Element of NAT st P[l] holds P[l+1]
+   proof
+   let l be Element of NAT;
+   assume
+A6: for g being FinSequence of L
+       st (len g = l & for k being Element of NAT st 1 <= k & k <= l
+          holds g/.k = 1.L) holds Sum g = l * 1.L;
+   for s being FinSequence of L
+      st len s = l+1 & for k being Element of NAT st 1 <= k & k <= l+1
+          holds s/.k = 1.L holds Sum s = (l+1) * 1.L
+  proof
+    let s be FinSequence of L;
+    assume A7: len s = l+1 &
+     for k being Element of NAT st 1 <= k & k <= l+1 holds s/.k = 1.L;
+A8: ex G being FinSequence of L
+            st (dom G = Seg l &
+                for k being Element of NAT st k in Seg l holds G.k = 1.L)
+    proof
+      defpred P[Nat,set] means $2 = 1.L;
+  A9: for n being Element of NAT st n in Seg l holds
+       ex x being Element of L st P[n,x];
+      ex G be FinSequence of L
+        st dom G = Seg l & for nn be Element of NAT st nn in Seg l
+        holds P[nn,G.nn] from FINSEQ_1:sch 5(A9);
+      hence thesis;
+    end;
+    consider g being FinSequence of L such that
+A10:dom g = Seg l &
+     for k being Element of NAT st k in Seg l holds g.k = 1.L by A8;
+A11:for k being Nat st 1 <= k & k <= l holds g/.k = 1.L
+    proof
+      let k be Nat;
+      assume A12: 1 <= k & k <= l; then
+      A13: k in Seg l by FINSEQ_1:3;
+      A14: k in dom g by A10, A12, FINSEQ_1:3;
+      1.L = g.k by A13, A10
+      .= g/.k by A14, FINSEQ_4:def 4;
+      hence thesis;
+    end;
+A15: len g = l & for k being Element of NAT st 1 <= k & k <= l
+                    holds g/.k = 1.L by A10,FINSEQ_1:def 3,A11;
+A16: s = g^<*1.L*>
+    proof
+      dom <*1.L*> = Seg 1 by FINSEQ_1:def 8; then
+  A17: len <*1.L*> = 1 by FINSEQ_1:def 3;
+  A18: dom s = Seg (l + 1) by A7,FINSEQ_1:def 3;
+A19:   dom (g^<*1.L*>) = Seg (len g + len <*1.L*>) by FINSEQ_1:def 7
+                       .= dom s by A10,FINSEQ_1:def 3,A17,A18;
+      for k being Element of NAT st k in dom s holds s.k = (g^<*1.L*>).k
+      proof
+        let k be Element of NAT;
+        assume A20: k in dom s;
+A21:     dom s = Seg(l + 1) by A7,FINSEQ_1:def 3;
+        per cases by A21,A20,FINSEQ_1:3;
+        suppose A22: 1 <= k & k <= l; then
+          A23: k in dom g by A10;
+          A24: 1 <= k & k <= l+1 by A22, NAT_1:37;
+          (g^<*1.L*>).k = g.k by A23, FINSEQ_1:def 7
+          .= g/.k by A23, FINSEQ_4:def 4
+          .= 1.L by A22, A11
+          .= s/.k by A24, A7
+          .= s.k by A20, FINSEQ_4:def 4;
+          hence thesis;
+        end;
+        suppose A25: l < k & k <= l+1; then
+          k - k <= (l+1) - k by XREAL_1:11; then
+          (l+1) - k is Element of NAT by INT_1:16; then
+          0 <= (l+1) - k + 1 by NAT_1:37; then
+          reconsider ii = (l+1) - k + 1 as Element of NAT by INT_1:16;
+      A26: dom <*1.L*> = Seg 1 by FINSEQ_1:def 8;
+          l+1 <= k & k <= l+1 by A25, NAT_1:38; then
+          ii = k - k + 1 by XREAL_1:1; then
+          A27: ii in dom <*1.L*> by A26;
+          l+1 <= k & k <= l+1 by A25, NAT_1:38; then
+A28:       ii = k - k + 1 by XREAL_1:1;
+          l + 0 < k + l by A25, XREAL_1:10; then
+          l+1 <= k+l by NAT_1:38; then
+A29:       (l+1)-l <= (k+l)-l by XREAL_1:11;
+          (g^<*1.L*>).k = (g^<*1.L*>).(len g + ii) by A28,A10,FINSEQ_1:def 3
+          .= <*1.L*>.1 by A28, A27, FINSEQ_1:def 7
+          .= 1.L by FINSEQ_1:def 8
+          .= s/.k by A29,A7,A25
+          .= s.k by A20, FINSEQ_4:def 4;
+          hence thesis;
+        end;
+      end;
+      hence thesis by A19, FINSEQ_1:17;
+    end;
+    Sum s = Sum g + 1.L by A16,FVSUM_1:87
+    .= (l*1.L) + 1.L by A6,A15
+    .= (l*1.L) + (1*1.L) by BINOM:14
+    .= (l+1) * 1.L by BINOM:16;
+    hence thesis;
+  end;
+  hence thesis;
+end;
+for l being Element of NAT holds P[l] from NAT_1:sch 1(A2,A5);
+hence thesis by A1;
+end;
+
+theorem Th5:
+for L being add-associative right_zeroed right_complementable
+            associative commutative left_unital distributive
+            Field-like  (non empty doubleLoopStr),
+    s being FinSequence of L,
+    q being Element of L
+st q <> 1.L &
+   for i being Nat st 1 <= i & i <= len s holds s.i = q |^ (i-'1)
+holds Sum s = (1.L - q |^ (len s)) / (1.L - q)
+proof
+let L be add-associative right_zeroed right_complementable
+         associative commutative left_unital distributive
+         Field-like (non empty doubleLoopStr),
+    s be FinSequence of L, q be Element of L;
+assume A1: q <> 1.L &
+      for i being Nat st 1 <= i & i <= len s holds s.i = q |^ (i-'1);
+defpred P[Nat] means
+  for s being FinSequence of L st len s = $1
+  for q being Element of L
+  st q <> 1.L &
+     for i being Nat st 1 <= i & i <= len s holds s.i = q |^ (i-'1)
+  holds Sum s = (1.L - q |^ (len s)) / (1.L - q);
+now let s be FinSequence of L;
+  assume A2: len s = 0;
+  let q be Element of L;
+  assume q <> 1.L &
+     for i being Nat st 1 <= i & i <= len s holds s.i = q |^ (i-'1);
+  A3: s = <*>(the carrier of L) by A2,FINSEQ_1:32;
+  thus (1.L - q |^ 0) / (1.L - q) = (1.L - 1.L) / (1.L - q) by BINOM:8
+   .= 0.L / (1.L - q) by RLVECT_1:28
+   .= 0.L by VECTSP_1:36
+   .= Sum s by A3,RLVECT_1:60;
+  end;
+then A4: P[0];
+A5: for k being Nat st P[k] holds P[k + 1]
+   proof
+   let k be Nat;
+   assume A6: P[k];
+   now let s be FinSequence of L;
+     assume A7: len s = k+1;
+     let q be Element of L;
+     assume A8: q <> 1.L &
+      for i being Nat st 1 <= i & i <= len s holds s.i = q |^ (i-'1);
+     set f = s|(Seg k);
+     reconsider f as FinSequence by FINSEQ_1:19;
+     A9: k <= len s by A7,NAT_1:38;
+     then A10: len f = k by FINSEQ_1:21;
+     now let u be set;
+       assume u in rng f;
+       then consider x being set such that
+       A11: x in dom f & f.x = u by FUNCT_1:def 5;
+       reconsider x' = x as Element of NAT by A11;
+       A12: 1 <= x' & x' <= len f by A11,FINSEQ_3:27;
+       then x' <= len s by A10,A7,NAT_1:37;
+       then A13: x in dom s by A12,FINSEQ_3:27;
+       f.x = s.x by A11,FUNCT_1:70
+          .= s/.x by A13,FINSEQ_4:def 4;
+       hence u in the carrier of L by A11;
+       end;
+     then rng f c= the carrier of L by TARSKI:def 3;
+     then reconsider f as FinSequence of L by FINSEQ_1:def 4;
+     A14: now let i be Nat;
+        assume A15: 1 <= i & i <= len f;
+        then A16: i <= len s by A10,A7,NAT_1:38;
+        i in dom f by A15,FINSEQ_3:27;
+        hence f.i = s.i by FUNCT_1:70
+                 .= q |^ (i-'1) by A15,A16,A8;
+        end;
+     A17: len s = len f + 1 by A7,A9,FINSEQ_1:21;
+     A18: f = s|(dom f) by A9,FINSEQ_1:21;
+     A19: 1 <= len s by A7,NAT_1:37;
+     then len s - 1 >= 1 - 1 by XREAL_1:11;
+     then A20: len(s) -' 1 = len(s) - 1 by BINARITH:def 3
+                        .= len f + 1 - 1 by A7,A9,FINSEQ_1:21;
+     A21: now assume 1.L - q = 0.L;
+        then (1.L - q) + q = q by ALGSTR_1:def 5;
+        then 1.L + (-q + q) = q by RLVECT_1:def 6;
+        then 1.L + 0.L = q by RLVECT_1:16;
+        hence contradiction by A8,RLVECT_1:def 7;
+        end;
+     len s in dom s by A19,FINSEQ_3:27;
+     then A22: s/.(len s) = s.(len s) by FINSEQ_4:def 4;
+     hence Sum(s) = Sum(f) + s/.(len s) by A18,A17,RLVECT_1:55
+        .= (1.L - q |^ (len f)) / (1.L - q)  + s/.(len s) by A14,A10,A6,A8
+        .= (1.L - q |^ (len f)) / (1.L - q) + q |^ (len f) by A22,A8,A20,A19
+        .= (1.L - q |^ (len f)) / (1.L - q)
+                   + (q |^ (len f) * (1.L - q)) / (1.L - q) by A21,Th3
+        .= ((1.L - q |^ (len f))
+                   + (q |^ (len f) * (1.L - q))) /(1.L - q) by VECTSP_1:def 12
+        .= ((1.L - q |^ (len f))
+           + ((q |^ (len f) * 1.L) + (q |^ (len f) * (-q)))) / (1.L - q)
+                   by VECTSP_1:def 11
+        .= ((1.L - q |^ (len f))
+            + (q |^ (len f) +  (q |^ (len f) * (-q)))) / (1.L - q)
+                   by VECTSP_1:def 13
+        .= (1.L + (-q |^ (len f)
+           + (q |^ (len f) +  (q |^ (len f) * (-q))))) / (1.L - q)
+                   by RLVECT_1:def 6
+         .= (1.L + ((-q |^ (len f)
+            + q |^ (len f)) + (q |^ (len f) * (-q)))) / (1.L - q)
+                   by RLVECT_1:def 6
+         .= (1.L + (0.L + (q |^ (len f) * (-q)))) / (1.L - q) by RLVECT_1:16
+         .= (1.L + (q |^ (len f) * (-q))) / (1.L - q) by ALGSTR_1:def 5
+         .= (1.L + -((q |^ (len f) * q))) / (1.L - q) by VECTSP_1:40
+         .= (1.L - q |^ (len s)) / (1.L - q) by A17,BINOM:9;
+       end;
+   hence thesis;
+   end;
+for k being Nat holds P[k] from NAT_1:sch 2(A4,A5);
+hence thesis by A1;
+end;
+
+definition let L be unital (non empty doubleLoopStr),
+               m be Element of NAT;
+  func emb(m,L) -> Element of L equals
+    m * 1.L;
+  coherence;
+end;
+
+theorem Th6:
+for L being Field,
+    m,n,k being Element of NAT st m > 0 & n > 0
+for M1 being Matrix of m,n,L,
+    M2 being Matrix of n,k,L
+holds (emb(m,L) * M1) * M2 = emb(m,L) * (M1 * M2)
+proof
+let L be Field;let m,n,k be Element of NAT;
+assume A1: m > 0 & n > 0;
+let M1 be Matrix of m,n,L; let M2 be Matrix of n,k,L;
+A2: width (emb(m,L) * M1) = len M2
+    proof
+    width (emb(m,L) * M1) = width M1 by MATRIX_3:def 5
+                         .= n by MATRIX_1:24,A1
+                         .= len M2 by MATRIX_1:24,A1;
+    hence thesis;
+    end;
+A3: width M1 = n by MATRIX_1:24,A1 .= len M2 by MATRIX_1:24,A1;
+A4: len((emb(m,L) * M1) * M2)
+                = len(emb(m,L) * M1) by A2, MATRIX_3:def 4
+               .= len M1 by MATRIX_3:def 5;
+A5: len (emb(m,L) * (M1 * M2)) = len (M1 * M2) by MATRIX_3:def 5
+               .= len M1 by A3, MATRIX_3:def 4;
+    width (emb(m,L) * (M1 * M2)) = width (M1 * M2) by MATRIX_3:def 5
+                                .= width M2 by A3, MATRIX_3:def 4; then
+A6: width ((emb(m,L) * M1) * M2) = width (emb(m,L) * (M1 * M2))
+      by A2, MATRIX_3:def 4;
+A7: for i,j being Nat st [i,j] in Indices ((emb(m,L) * M1) * M2) holds
+    ((emb(m,L) * M1) * M2)*(i,j) = (emb(m,L) * (M1 * M2))*(i,j)
+  proof
+    let i,j be Nat;
+    assume A8: [i,j] in Indices ((emb(m,L) * M1) * M2);
+    A9: len((emb(m,L) * M1) * M2)
+                 = len(emb(m,L) * M1) by A2, MATRIX_3:def 4
+                .= len M1 by MATRIX_3:def 5;
+    A10: len M1 = len (M1 * M2) by A3, MATRIX_3:def 4;
+    A11: [i,j] in Indices (M1 * M2)
+        proof
+A12:       dom((emb(m,L) * M1) * M2) = Seg len M1 by A9,FINSEQ_1:def 3
+                        .= dom (M1 * M2) by A10,FINSEQ_1:def 3;
+          Seg width ((emb(m,L) * M1) * M2)
+                   = Seg width M2 by A2, MATRIX_3:def 4
+                  .= Seg width (M1 * M2) by A3, MATRIX_3:def 4;
+          hence thesis by A12,A8;
+        end;
+    A13: (emb(m,L) * (M1 * M2))*(i,j)
+            = emb(m,L) * ((M1 * M2)*(i,j)) by A11, MATRIX_3:def 5
+           .= emb(m,L) * (Line(M1,i) "*" Col(M2,j)) by A3, A11, MATRIX_3:def 4
+           .= emb(m,L) * Sum(mlt(Line(M1,i),Col(M2,j))) by FVSUM_1:def 10;
+    A14: ((emb(m,L) * M1) * M2)*(i,j)
+            = Line(emb(m,L) * M1,i) "*" Col(M2,j) by A2, A8, MATRIX_3:def 4
+           .= Sum(mlt(Line(emb(m,L) * M1,i),Col(M2,j))) by FVSUM_1:def 10;
+    emb(m,L) * Sum(mlt(Line(M1,i),Col(M2,j)))
+                   = Sum(mlt(Line(emb(m,L) * M1,i),Col(M2,j)))
+      proof
+      emb(m,L)*mlt(Line(M1,i),Col(M2,j)) = mlt(Line(emb(m,L)*M1,i),Col(M2,j))
+        proof
+        A15: Line(emb(m,L) * M1,i) = emb(m,L) * Line(M1,i)
+          proof
+          A16: dom Line(emb(m,L) * M1,i) = dom (emb(m,L) * Line(M1,i))
+            proof
+              len Line(emb(m,L) * M1,i)
+                 = width (emb(m,L) * M1) by MATRIX_1:def 8
+                .= width M1 by MATRIX_3:def 5; then
+           A17: dom Line(emb(m,L)*M1,i) = Seg(width M1) by FINSEQ_1:def 3;
+               Seg (len (emb(m,L) * Line(M1,i)))
+                    = dom (emb(m,L) * Line(M1,i)) by FINSEQ_1:def 3
+                   .= dom (Line(M1,i)) by POLYNOM1:def 2
+                   .= Seg (len Line(M1,i)) by FINSEQ_1:def 3; then
+            len (emb(m,L) * Line(M1,i)) = len Line(M1,i) by FINSEQ_1:8
+               .= width M1 by MATRIX_1:def 8;
+            hence thesis by A17,FINSEQ_1:def 3;
+            end;
+         for k being Element of NAT st k in dom Line(emb(m,L) * M1,i) holds
+            (Line(emb(m,L) * M1,i)).k = (emb(m,L) * Line(M1,i)).k
+            proof
+            let k be Element of NAT;
+            assume A18: k in dom Line(emb(m,L) * M1,i);
+        A19: len Line(emb(m,L) * M1,i)
+                  = width (emb(m,L) * M1) by MATRIX_1:def 8
+                 .= width M1 by MATRIX_3:def 5;
+            dom Line(emb(m,L)*M1,i) = Seg(width M1) by A19,FINSEQ_1:def 3; then
+        A20: k in Seg width (emb(m,L) * M1) by A18,MATRIX_3:def 5;
+        A21: k in Seg width M1 by A19,FINSEQ_1:def 3,A18;
+            len Line(M1,i) = width M1 by MATRIX_1:def 8; then
+            k in dom Line(M1,i) by A21,FINSEQ_1:def 3; then
+            (Line(M1,i)).k  = (Line(M1,i))/.k by FINSEQ_4:def 4; then
+            reconsider a = Line(M1,i).k as Element of L;
+        A22: (emb(m,L) * Line(M1,i)).k = emb(m,L) * a by A18,A16,FVSUM_1:62;
+       A23: [i,k] in Indices M1
+            proof
+          A24: Indices M1 = [:Seg m, Seg n:] by MATRIX_1:24,A1;
+          A25: i in dom (M1 * M2) by A11, ZFMISC_1:106;
+              len (M1 * M2) = len M1 by A3, MATRIX_3:def 4
+                           .= m by MATRIX_1:24,A1; then
+              A26: dom (M1 * M2) = Seg m by FINSEQ_1:def 3;
+              k in Seg n by A21,MATRIX_1:24,A1;
+              hence thesis by A24, A25, A26, ZFMISC_1:106;
+            end;
+            a = M1*(i,k) by A21, MATRIX_1:def 8; then
+            emb(m,L) * a = (emb(m,L) * M1)*(i,k) by A23,MATRIX_3:def 5;
+            hence thesis by A20, MATRIX_1:def 8, A22;
+          end;
+          hence thesis by A16, FINSEQ_1:17;
+        end;
+        emb(m,L)*mlt(Line(M1,i),Col(M2,j))=mlt(emb(m,L)*Line(M1,i),Col(M2,j))
+          proof
+          A27: dom mlt(emb(m,L) * Line(M1,i), Col(M2,j)) =
+          dom (emb(m,L)*mlt(Line(M1,i), Col(M2,j)))
+            proof
+             Seg (len (emb(m,L) * Line(M1,i)))
+                    = dom (emb(m,L) * Line(M1,i)) by FINSEQ_1:def 3
+                   .= dom (Line(M1,i)) by POLYNOM1:def 2
+                   .= Seg (len (Line(M1,i))) by FINSEQ_1:def 3; then
+A28:           len (emb(m,L) * Line(M1,i)) = len (Line(M1,i)) by FINSEQ_1:8
+                 .= len M2 by A3,MATRIX_1:def 8
+                 .= len Col(M2,j) by MATRIX_1:def 9;
+          A29: dom (emb(m,L) * Line(M1,i))
+                  = Seg len (emb(m,L) * Line(M1,i)) by FINSEQ_1:def 3
+                 .= Seg (len (mlt(emb(m,L) * Line(M1,i), Col(M2,j))))
+                      by A28,MATRIX_3:8
+                 .= dom(mlt(emb(m,L)*Line(M1,i),Col(M2,j))) by FINSEQ_1:def 3;
+A30:           len Line(M1,i) = len M2 by A3,MATRIX_1:def 8
+                               .= len Col(M2,j) by MATRIX_1:def 9;
+              dom(emb(m,L) * Line(M1,i)) = dom(Line(M1,i)) by POLYNOM1:def 2
+                   .= Seg(len (Line(M1,i))) by FINSEQ_1:def 3
+                   .= Seg(len (mlt(Line(M1,i), Col(M2,j)))) by A30, MATRIX_3:8
+                   .= dom(mlt(Line(M1,i), Col(M2,j))) by FINSEQ_1:def 3;
+            hence thesis by A29, POLYNOM1:def 2;
+          end;
+          for k being Element of NAT st
+            k in dom mlt(emb(m,L)*Line(M1,i),Col(M2,j))
+          holds (mlt(emb(m,L) * Line(M1,i), Col(M2,j))).k =
+                (emb(m,L)*mlt(Line(M1,i), Col(M2,j))).k
+            proof
+            let k be Element of NAT;
+            assume A31: k in dom mlt(emb(m,L)*Line(M1,i),Col(M2,j));
+       A32: dom (emb(m,L) * mlt(Line(M1,i), Col(M2,j))) =
+               dom (mlt(Line(M1,i), Col(M2,j))) by POLYNOM1:def 2;
+            A33: k in dom(mlt(Line(M1,i),Col(M2,j))) by A27,A31,POLYNOM1:def 2;
+A34:         len Line(M1,i) = len M2 by A3,MATRIX_1:def 8
+                    .= len Col(M2,j) by MATRIX_1:def 9;
+A35:        dom (Line(M1,i)) = Seg len (Line(M1,i)) by FINSEQ_1:def 3
+                 .= Seg(len (mlt(Line(M1,i), Col(M2,j)))) by A34,MATRIX_3:8
+                 .= dom mlt(Line(M1,i), Col(M2,j)) by FINSEQ_1:def 3;
+            len Line(M1,i) = width M1 by MATRIX_1:def 8; then
+            A36: k in Seg width M1 by A33, A35,FINSEQ_1:def 3; then
+            A37: Line(M1, i).k = M1*(i,k) by MATRIX_1:def 8;
+            k in dom M2 by A3, A36, FINSEQ_1:def 3; then
+            A38: Col(M2, j).k = M2*(k,j) by MATRIX_1:def 9;
+            A39: k in dom(emb(m,L) * Line(M1,i)) by A33,A35,POLYNOM1:def 2;
+            reconsider c = (Col(M2,j)).k, d = (Line(M1,i)).k
+              as Element of L by A37, A38;
+            (emb(m,L) * Line(M1,i)).k = emb(m,L) * d
+               by A39, FVSUM_1:62; then
+            reconsider b = (emb(m,L) * Line(M1,i)).k as Element of L;
+            (mlt(Line(M1,i), Col(M2,j))).k = c * d
+                  by A33, FVSUM_1:73; then
+            reconsider a = (mlt(Line(M1,i), Col(M2,j))).k as Element of L;
+            A40: (emb(m,L)*mlt(Line(M1,i), Col(M2,j))).k = emb(m,L) * a
+                by A27, A31, FVSUM_1:62;
+            b * c = (emb(m,L) * d) * c by A39, FVSUM_1:62
+                 .= emb(m,L) * (d * c) by GROUP_1:def 4
+                 .= emb(m,L) * a by A31, A32, A27, FVSUM_1:73;
+            hence thesis by A40, A31, FVSUM_1:73;
+          end;
+          hence thesis by A27, FINSEQ_1:17;
+        end;
+        hence thesis by A15;
+      end;
+      hence thesis by FVSUM_1:92;
+    end;
+    hence thesis by A13, A14;
+  end;
+thus thesis by A5,A4,A6,A7,MATRIX_1:21;
+end;
+
+theorem Th7:
+for L being non empty ZeroStr,
+    p being AlgSequence of L,
+    i being Element of NAT
+holds p.i <> 0.L implies len p >= i + 1
+proof
+let L be non empty ZeroStr,p be AlgSequence of L,
+    i be Element of NAT;
+assume A1: p.i <> 0.L;
+len p is_at_least_length_of p by ALGSEQ_1:def 4;
+then len p > i by A1,ALGSEQ_1:def 3;
+hence len p >= i + 1 by NAT_1:38;
+end;
+
+theorem Th8:
+for L being non empty ZeroStr,
+    s being AlgSequence of L
+holds len s > 0 implies s.(len(s)-1) <> 0.L
+proof
+let L be non empty ZeroStr, s be AlgSequence of L;
+assume len s > 0;
+then len s >= 0 + 1 by NAT_1:38;
+then len s - 1 >= 1 - 1 by XREAL_1:11;
+then reconsider l = len(s) - 1 as Element of NAT by INT_1:16;
+assume A1: s.(len(s)-1) = 0.L;
+now let i be Element of NAT;
+  assume A2: i >= l;
+  per cases by A2,REAL_1:def 5;
+  suppose i = l;
+    hence s.i = 0.L by A1;
+    end;
+  suppose i > l;
+    then i >= l + 1 by NAT_1:38;
+    hence s.i = 0.L by ALGSEQ_1:22;
+    end;
+  end;
+then A3: l is_at_least_length_of s by ALGSEQ_1:def 3;
+len(s) < len(s) + 1 by NAT_1:38;
+then len(s) - 1 < len(s) + 1 - 1 by XREAL_1:11;
+hence contradiction by A3,ALGSEQ_1:def 4;
+end;
+
+theorem Th9:
+for L being add-associative right_zeroed right_complementable distributive
+            commutative associative left_unital domRing-like
+            (non empty doubleLoopStr),
+    p,q being Polynomial of L st len p > 0 & len q > 0
+holds len(p*'q) <= len p + len q
+proof
+let L be add-associative right_zeroed right_complementable distributive
+         commutative associative left_unital domRing-like
+  (non empty doubleLoopStr); let p,q be Polynomial of L;
+assume A1: len p > 0 & len q > 0;
+then A2: p.(len(p)-1) <> 0.L & q.(len(q)-1) <> 0.L by Th8;
+(len p + 1 > 0 + 1) & (len q + 1 > 0 + 1) by A1,XREAL_1:8;
+then len p >= 1 & len q >= 1 by NAT_1:38;
+then len p - 1 >= 1 - 1 & len q - 1 >= 1 - 1 by XREAL_1:15;
+then p.(len(p)-'1) <> 0.L & q.(len(q)-'1) <> 0.L by A2,BINARITH:def 3;
+then A3: p.(len p -'1) * q.(len q -'1) <> 0.L by VECTSP_2:def 5;
+(len p + len q) - 1 <= (len p + len q) - 0 by XREAL_1:15;
+hence thesis by A3,POLYNOM4:13;
+end;
+
+theorem Th10:
+for L being associative (non empty doubleLoopStr),
+    k,l being Element of L,
+    seq being sequence of L
+holds k * (l * seq) = (k * l) * seq
+proof
+let L be associative (non empty doubleLoopStr),
+    k,l be Element of L, seq be sequence of L;
+now let i be Element of NAT;
+  thus (k * (l * seq)).i = k * (l * seq).i by POLYNOM5:def 3
+                        .= k * (l * seq.i) by POLYNOM5:def 3
+                        .= (k * l) * seq.i by GROUP_1:def 4
+                        .= ((k * l) * seq).i by POLYNOM5:def 3;
+  end;
+hence thesis by FUNCT_2:113;
+end;
+
+begin :: Multiplication of AlgSequences
+
+definition
+  let L be non empty doubleLoopStr;
+  let m1,m2 be sequence of L;
+  func m1 * m2 -> sequence of L means :Def2:
+    for i being Element of NAT holds it.i = m1.i * m2.i;
+  existence
+proof
+defpred P[set,set] means $2 = m1/.$1 * m2/.$1;
+A1: for x being set st x in NAT
+   ex y being set st y in the carrier of L & P[x,y];
+consider f being Function of NAT,the carrier of L such that
+A2: for x being set st x in NAT holds P[x,f.x] from FUNCT_2:sch 1(A1);
+reconsider f as sequence of L;
+take f;
+now let i be Element of NAT;
+  dom m1 = NAT & dom m2 = NAT by FUNCT_2:def 1;
+  then m1/.i = m1.i & m2/.i = m2.i by FINSEQ_4:def 4;
+  hence f.i = m1.i * m2.i by A2;
+  end;
+hence thesis;
+end;
+  uniqueness
+ proof
+ let z1,z2 be sequence of L;
+ assume A3: for i being Element of NAT holds z1.i = (m1.i) * (m2.i);
+ assume A4: for i being Element of NAT holds z2.i = (m1.i) * (m2.i);
+ A5: dom z1 = NAT by FUNCT_2:def 1 .= dom z2 by FUNCT_2:def 1;
+ now let x be set;
+   assume x in dom z1;
+   then reconsider x' = x as Element of NAT by FUNCT_2:def 1;
+   thus z1.x = (m1.x') * (m2.x') by A3 .= z2.x by A4;
+   end;
+ hence z1 = z2 by A5,FUNCT_1:9;
+ end;
+end;
+
+registration
+  let L be add-associative right_zeroed right_complementable
+         left-distributive (non empty doubleLoopStr);
+  let m1,m2 be AlgSequence of L;
+  cluster m1 * m2 -> finite-Support;
+coherence
+ proof set f = m1*m2;
+ ex n being Element of NAT st
+ for i being Element of NAT st i >= n holds f.i = 0.L
+    proof
+    take (len m1) + 1;
+    now let i be Element of NAT;
+      assume i >= (len m1) + 1;
+      then i > len m1 by NAT_1:38;
+      then m1.i = 0.L by ALGSEQ_1:22;
+      hence 0.L = m1.i * m2.i by VECTSP_1:39 .= f.i by Def2;
+      end;
+    hence thesis;
+    end;
+ hence thesis by ALGSEQ_1:def 2;
+ end;
+end;
+
+theorem Th11:
+for L being add-associative right_zeroed right_complementable
+            distributive (non empty doubleLoopStr),
+    m1,m2 being AlgSequence of L
+holds len(m1 * m2) <= min(len m1, len m2)
+proof
+let L be add-associative right_zeroed right_complementable
+         distributive (non empty doubleLoopStr),
+    m1,m2 be AlgSequence of L;
+set p = m1 * m2, k = min(len m1, len m2);
+reconsider k as Element of NAT by SQUARE_1:38;
+now let i be Element of NAT;
+  assume A1: i >= k;
+  per cases by SQUARE_1:38;
+  suppose k = len m1;
+    then m1.i = 0.L by A1,ALGSEQ_1:22;
+    hence 0.L = m1.i * m2.i by VECTSP_1:39 .= p.i by Def2;
+    end;
+  suppose k = len m2;
+    then m2.i = 0.L by A1,ALGSEQ_1:22;
+    hence 0.L = m1.i * m2.i by VECTSP_1:36 .= p.i by Def2;
+    end;
+  end;
+then k is_at_least_length_of p by ALGSEQ_1:def 3;
+hence thesis by ALGSEQ_1:def 4;
+end;
+
+theorem
+for L being add-associative right_zeroed right_complementable
+            distributive domRing-like (non empty doubleLoopStr),
+    m1,m2 being AlgSequence of L st len m1 = len m2
+holds len(m1 * m2) = len m1
+proof
+let L be add-associative right_zeroed right_complementable
+         distributive domRing-like (non empty doubleLoopStr),
+    m1,m2 be AlgSequence of L;
+set p = m1 * m2;
+assume A1: len m1 = len m2; then
+min(len m1, len m2) = len m1;
+then A2: len p <= len m1 by Th11;
+now per cases;
+case len m1 = 0;
+  hence len p >= len m1; end;
+case len m1 <> 0;
+  then len m1 > 0;
+  then len m1 >= 0 + 1 by NAT_1:38;
+  then (len m1) - 1 >= 1 - 1 by XREAL_1:11;
+  then reconsider l = (len m1) - 1 as Element of NAT by INT_1:16;
+  A3: l + 1 = len m1 + 0;
+  then m1.l <> 0.L & m2.l <> 0.L by A1,ALGSEQ_1:25;
+  then m1.l * m2.l <> 0.L by VECTSP_2:def 5;
+  then p.l <> 0.L by Def2;
+  hence len p >= len m1 by A3,Th7;
+  end;
+end;
+hence thesis by A2,XREAL_1:1;
+end;
+
+begin :: Powers in doubleLoopStrs
+
+definition
+  let L be associative commutative left_unital distributive
+         Field-like (non empty doubleLoopStr),
+      a be Element of L,
+      i be Integer;
+  func pow(a,i) -> Element of L equals :Def3:
+    power(L).(a,i) if 0 <= i otherwise (power(L).(a,abs i))";
+coherence
+ proof
+ 0 <= i implies power(L).(a,i) is Element of L
+   proof assume 0 <= i;
+ then reconsider i' = i as Element of NAT by INT_1:16;
+ power(L).(a,i') is Element of L;
+ hence power(L).(a,i) is Element of L;
+ end;
+ hence thesis;
+ end;
+consistency;
+end;
+
+theorem Th13:
+for L being associative commutative left_unital distributive
+            Field-like (non empty doubleLoopStr),
+    x being Element of L
+holds pow(x,0) = 1.L
+proof
+let L be associative commutative left_unital distributive
+          Field-like (non empty doubleLoopStr),
+    x be Element of L;
+  pow(x,0) = x |^ 0 by Def3 .= 1.L by BINOM:8;
+  hence thesis;
+end;
+
+Lm3: for L being associative commutative left_unital distributive
+            Field-like (non empty doubleLoopStr),
+    a being Element of L, i being Integer
+holds 0 > i implies pow(a,i) = (pow(a, abs(i)))"
+proof
+let L be associative commutative left_unital distributive
+         Field-like (non empty doubleLoopStr),
+    a be Element of L, i be Integer;
+assume A1: 0 > i;
+pow(a, abs i) = power(L).(a,abs i) by Def3;
+hence thesis by A1,Def3; end;
+
+Lm4:
+for L being associative commutative left_unital distributive
+            Field-like non degenerated (non empty doubleLoopStr),
+    i being Integer,
+    x being Element of L
+holds i <= 0 implies pow(x,i) = (pow(x, abs i))"
+proof
+let  L be associative commutative left_unital distributive
+          Field-like non degenerated (non empty doubleLoopStr);
+let i be Integer; let x be Element of L;
+A1: 1.L <> 0.L by VECTSP_1:def 21;
+assume A2: i <= 0;
+  per cases by A2;
+  suppose i < 0; hence thesis by Lm3; end;
+  suppose A3: i = 0;
+    hence pow(x, i) = 1.L by Th13
+    .= 1.L * (1.L)" by A1,VECTSP_1:def 22
+    .= (1.L)" by VECTSP_1:def 19
+    .= (x |^ 0)" by BINOM:8
+    .= (x |^ abs i)" by A3,ABSVALUE:def 1
+    .= (pow(x, abs i))" by Def3; end;
+end;
+
+theorem Th14:
+for L being associative commutative left_unital distributive
+            Field-like (non empty doubleLoopStr),
+    x being Element of L
+holds pow(x,1) = x
+proof
+let L be associative commutative left_unital distributive
+         Field-like (non empty doubleLoopStr);
+let x be Element of L;
+thus pow(x, 1) = x |^ 1 by Def3  .= x by BINOM:8;
+end;
+
+theorem Th15:
+for L being associative commutative left_unital distributive
+            Field-like (non empty doubleLoopStr),
+    x being Element of L
+holds pow(x,-1) = x"
+proof
+let L be associative commutative left_unital distributive
+         Field-like (non empty doubleLoopStr),
+    x be Element of L;
+abs(-1) = --1 & --1 = 1 by ABSVALUE:def 1;
+hence pow(x, -1) = (pow(x, 1))" by Lm3  .= x" by Th14;
+end;
+
+Lm5:
+for L being associative commutative left_unital distributive
+            Field-like (non empty doubleLoopStr),
+   i being Element of NAT
+holds pow(1.L,i) = 1.L
+proof
+let L be associative commutative left_unital distributive
+         Field-like (non empty doubleLoopStr);
+let i be Element of NAT;
+defpred P[Element of NAT] means pow(1.L,$1) = 1.L;
+pow(1.L,0) = power(L).(1.L,0) by Def3;
+then A1: P[0] by GROUP_1:def 8;
+A2: now let k be Element of NAT;
+   assume A3: P[k];
+   pow(1.L,k+1) = power(L).(1.L,k+1) by Def3
+               .= power(L).(1.L,k) * 1.L by GROUP_1:def 8
+               .= 1.L * 1.L by A3,Def3
+               .= 1.L by VECTSP_1:def 19;
+   hence P[k+1];
+   end;
+for k being Element of NAT holds P[k] from NAT_1:sch 1(A1,A2);
+hence thesis;
+end;
+
+theorem Th16:
+for L being associative commutative left_unital distributive
+            Field-like non degenerated (non empty doubleLoopStr),
+    i being Integer
+holds pow(1.L,i) = 1.L
+proof
+let L be associative commutative left_unital distributive
+         Field-like non degenerated (non empty doubleLoopStr);
+let i be Integer;
+per cases;
+  suppose 0 <= i; then i is Element of NAT by INT_1:16;
+    hence thesis by Lm5; end;
+  suppose A1: 0 > i;
+    A2: pow(1.L,abs i) = 1.L by Lm5;
+    A3: pow(1.L,i) = (power(L).(1.L,abs i))" by A1,Def3
+        .= (1.L)" by A2,Def3;
+    A4: 1.L <> 0.L by VECTSP_1:def 21;
+    1.L * 1.L = 1.L by VECTSP_1:def 13;
+    hence thesis by A3,A4,VECTSP_1:def 22;  end;
+  end;
+
+theorem Th17:
+for L being associative commutative left_unital distributive
+            Field-like (non empty doubleLoopStr),
+    x being Element of L,
+    n being Element of NAT
+holds pow(x,n+1) = pow(x,n) * x & pow(x,n+1) = x * pow(x,n)
+proof
+let L be associative commutative left_unital distributive
+         Field-like (non empty doubleLoopStr);
+let x be Element of L; let n be Element of NAT;
+pow(x,n+1) = x |^ (n+1) by Def3
+  .= (x |^ n) * x by BINOM:9
+  .= pow(x,n) * x by Def3;
+hence thesis;
+end;
+
+Lm6:
+for L being unital (non empty doubleLoopStr),
+    n being Element of NAT
+holds (1.L) |^ n = 1.L
+proof
+let L be unital (non empty doubleLoopStr), n be Element of NAT;
+defpred P[Element of NAT] means (1.L)|^$1 = 1.L;
+A1: P[0] by BINOM:8;
+A2: now let k be Element of NAT;
+   assume A3: P[k];
+   (1.L)|^(k+1) = (1.L)|^k * 1.L by BINOM:9
+               .= 1.L by A3,VECTSP_1:def 19;
+   hence P[k+1];
+   end;
+for k being Element of NAT holds P[k] from NAT_1:sch 1(A1,A2);
+hence thesis;
+end;
+
+Lm7:
+for L being associative commutative left_unital distributive
+            Field-like (non empty doubleLoopStr),
+    m being Element of NAT,
+    x being Element of L st x <> 0.L
+holds (x|^m) * ((x")|^m) = 1.L
+proof
+let L be associative commutative left_unital distributive
+         Field-like (non empty doubleLoopStr),
+    m be Element of NAT, x be Element of L;
+assume A1: x <> 0.L;
+  (x |^ m) * ((x") |^ m) = (x * x") |^ m by BINOM:10
+  .= (1.L) |^ m by A1, VECTSP_1:def 22
+  .= 1.L by Lm6;
+  hence thesis;
+end;
+
+theorem Th18:
+for L being add-associative right_zeroed right_complementable associative
+            commutative left_unital distributive
+            Field-like non degenerated (non empty doubleLoopStr),
+    i being Integer,
+    x being Element of L st x <> 0.L
+holds (pow(x, i))" = pow(x, -i)
+proof
+let L be add-associative right_zeroed right_complementable associative
+            commutative left_unital distributive
+            Field-like non degenerated (non empty doubleLoopStr);
+let i be Integer; let x be Element of L;
+assume A1: x <> 0.L;
+A2: 1.L <> 0.L by VECTSP_1:def 21;
+per cases;
+suppose A3: i >= 0;
+     per cases by A3,XREAL_1:26;
+     suppose A4: - i < -0;
+         hence pow(x, -i) = (pow(x, abs( - i )))" by Lm3
+                      .= (pow(x, (--i)))" by A4,ABSVALUE:def 1
+                      .= (pow(x, i))"; end;
+     suppose A5: i = 0;
+         hence pow(x, (- i)) = 1.L by Th13
+               .= 1.L * (1.L)" by A2,VECTSP_1:def 22
+               .= (1.L)" by VECTSP_1:def 19
+               .= (pow(x, i))" by A5, Th13; end;
+    end;
+suppose A6: i < 0;
+  A7: pow(x, abs i) <> 0.L
+      proof
+        pow(x, abs i) = x |^ (abs i) by Def3;
+        hence thesis by A1, Th1;
+      end;
+      pow(x, i) = (pow(x, abs i))" by A6,Lm3;
+      then (pow(x, i))" = pow(x, abs i) & abs i = - i
+        by A6, A7, VECTSP_1:73, ABSVALUE:def 1;
+     hence thesis;
+  end;
+end;
+
+theorem Th19:
+for L being Field,
+    j being Integer,
+    x being Element of L st x <> 0.L
+holds pow(x,j+1) = pow(x,j) * pow(x,1)
+proof
+let L be Field; let j be Integer; let x be Element of L;
+assume A1: x <> 0.L;
+A2:   now per cases by Lm1;
+  suppose A3: j >= 0;
+    then reconsider n = j as Element of NAT by INT_1:16;
+     A4: n + 1 >= 0;
+     A5: n + 1 = abs(j + 1) by ABSVALUE:def 1;
+     A6: pow(x, abs j) <> 0.L
+     proof
+       pow(x, abs j) = x |^ (abs j) by Def3;
+       hence thesis by A1, Th1;
+     end;
+     A7: pow(x, abs(j+1)) <> 0.L
+     proof
+       pow(x, abs(j+1)) = x |^ (abs(j+1)) by Def3;
+       hence thesis by A1, Th1;
+     end;
+    thus pow(x, j + 1) * (pow(x, -1) * pow(x, -j)) =
+         pow(x, abs(j+1)) * (pow(x, -1) * pow(x, -j)) by A4,ABSVALUE:def 1
+      .= pow(x, abs(j+1)) * (x" * pow(x, -j)) by Th15
+      .= pow(x, abs(j+1)) * (x" * (pow(x, j))") by A1, Th18
+      .= pow(x, abs(j+1)) * (x" * (pow(x, abs j))") by A3,ABSVALUE:def 1
+      .= pow(x, abs(j+1)) * ((x * pow(x, abs j))") by A1, A6, Th2
+      .= pow(x, abs(j+1)) * (pow(x, abs(j) + 1))" by Th17
+      .= pow(x, abs(j+1)) * (pow(x, abs(j+1)))" by A5,ABSVALUE:def 1
+      .= 1.L by A7, VECTSP_1:def 22;
+    end;
+    suppose A8: j < - 1;
+      then A9:j + 1 < - 1 + 1 by XREAL_1:8;
+      A10: pow(x, abs(j+1)) <> 0.L
+      proof
+        pow(x, abs(j+1)) = x |^ (abs(j+1)) by Def3;
+        hence thesis by A1, Th1;
+      end;
+      A11: pow(x, -j) <> 0.L
+      proof
+        -j >= -(-1) by A8, XREAL_1:26;
+        then reconsider k = -j as Element of NAT by INT_1:16;
+        pow(x, -j) = x |^ k by Def3;
+        hence thesis by A1, Th1;
+      end;
+      thus pow(x, j+1) * (pow(x, -1) * pow(x, -j)) =
+         (pow(x, abs(j+1)))" * (pow(x, -1) * pow(x, -j)) by A9, Lm3
+      .= (pow(x, abs(j+1)))" * (x" * pow(x, -j)) by Th15
+      .= (pow(x, abs(j+1)))" * x" * pow(x, -j) by GROUP_1:def 4
+      .= (pow(x, abs(j+1)) * x)" * pow(x, -j) by A1, A10, Th2
+      .= (pow(x, (abs(j + 1) + 1)))" * pow(x, -j) by Th17
+      .= (pow(x, (- (j + 1) + 1)))" * pow(x, -j) by A9, ABSVALUE:def 1
+      .= 1.L by A11, VECTSP_1:def 22;
+    end;
+    suppose A12: j = - 1;
+      A13: x" <> 0.L by A1, VECTSP_1:74;
+      thus pow(x, j+1) * (pow(x, -1) * pow(x, -j)) =
+        1.L * (pow(x, -1) * pow(x, -j)) by A12, Th13
+      .= (pow(x, -1) * pow(x, -j)) by VECTSP_1:def 19
+      .= x" * pow(x, -j) by Th15
+      .= x" * (pow(x, j))" by A1, Th18
+      .= x" * (x")" by A12, Th15
+      .= 1.L by A13, VECTSP_1:def 22;
+    end;
+  end;
+  A14: pow(x, j+1) <> 0.L
+  proof
+    per cases;
+    suppose A15: 0 <= j+1;
+      reconsider k = j+1 as Element of NAT by A15, INT_1:16;
+      pow(x, j+1) = x |^ k by Def3;
+      hence thesis by A1, Th1;
+    end;
+    suppose j+1 < 0; then
+      A16: pow(x, j+1) = (x |^ (abs(j+1)))" by Def3;
+      x |^ (abs(j+1)) <> 0.L by A1, Th1;
+      hence thesis by A16, VECTSP_1:74;
+    end;
+  end;
+  A17: pow(x, -j) <> 0.L
+  proof
+    per cases;
+    suppose 0 <= -j;
+      then reconsider k = -j as Element of NAT by INT_1:16;
+      pow(x, -j) = x |^ k by Def3;
+      hence thesis by A1, Th1;
+    end;
+    suppose A18: -j < 0;
+  A19: pow(x, -j) = (x |^ (abs(-j)))" by A18, Def3;
+      x |^ (abs(-j)) <> 0.L by A1, Th1;
+      hence thesis by A19, VECTSP_1:74;
+    end;
+  end;
+  A20: pow(x, -1) <> 0.L
+  proof
+A21: pow(x, -1) = (x |^ (abs(-1)))" by Def3;
+    x |^ (abs(-1)) <> 0.L by A1, Th1;
+    hence thesis by A21, VECTSP_1:74;
+  end;
+  A22: pow(x, j+1) <> 0.L
+  proof
+    per cases;
+    suppose 0 <= j+1;
+      then reconsider k = j+1 as Element of NAT by INT_1:16;
+      pow(x, j+1) = x |^ k by Def3;
+      hence thesis by A1, Th1;
+    end;
+    suppose A23: j+1 < 0;
+      A24: pow(x, j+1) = (x |^ (abs(j+1)))" by A23, Def3;
+      x |^ (abs(j+1)) <> 0.L by A1, Th1;
+      hence thesis by A24, VECTSP_1:74;
+    end;
+  end;
+  pow(x, j+1) * pow(x, -(j+1)) = pow(x, j+1) * (pow(x, j+1))" by A1, Th18
+  .= 1.L by A14, VECTSP_1:def 22;
+  then A25: pow(x, -(j + 1)) = pow(x, -1) * pow(x, -j)
+    by A2, A22, VECTSP_1:33;
+  thus pow(x, j+1) = pow(x, -(-(j+1)))
+    .= (pow(x, -1) * pow(x, -j))" by A25, A1, Th18
+    .= (pow(x, -j))" * (pow(x, -1))" by A17, A20, Th2
+    .= pow(x, -(-j)) * (pow(x, -1))" by A1, Th18
+    .= pow(x, j) * pow(x, -(- 1)) by A1, Th18
+    .= pow(x, j) * pow(x, 1);
+end;
+
+theorem Th20:
+for L being Field,
+    j being Integer,
+    x being Element of L st x <> 0.L
+holds pow(x,j-1) = pow(x,j) * pow(x,-1)
+proof
+let L be Field; let j be Integer; let x be Element of L;
+assume A1: x <> 0.L;
+A2: now per cases by Lm2;
+  suppose A3: j >= 1;
+    then j >= 1 + 0;
+    then A4: j - 1 >= 0 by XREAL_1:21;
+    A5: pow(x, abs(-j)) <> 0.L
+    proof
+      pow(x, abs(-j)) = x |^ (abs(-j)) by Def3;
+      hence thesis by A1, Th1;
+    end;
+    A6: - 1 >= - j & 0 >= - 1 by A3,XREAL_1:26;
+    A7: abs(j - 1) + 1 = j - 1 + 1 by A4,ABSVALUE:def 1 .= j;
+    A8: abs j = j & abs(j) = abs(- j)
+      by A3,COMPLEX1:138,ABSVALUE:def 1;
+    thus pow(x, j-1) * (x * pow(x, -j)) = pow(x, j-1) * x * pow(x, -j)
+      by GROUP_1:def 4
+    .= pow(x, abs(j-1)) * x * pow(x, -j) by A4,ABSVALUE:def 1
+    .= pow(x, abs(j-1)) * x * ((pow(x, abs(-j)))") by A6,Lm4
+    .= pow(x, abs(j-1) + 1) * ((pow(x, abs(-j)))") by Th17
+    .= 1.L by A7, A8, A5, VECTSP_1:def 22;
+  end;
+  suppose A9: j < 0;
+    A10: - 1 < 0 & 0 + 0 = 0;
+    A11: pow(x, abs(j-1)) <> 0.L
+    proof
+      pow(x, abs(j-1)) = x |^ (abs(j-1)) by Def3;
+      hence thesis by A1, Th1;
+    end;
+    A12: j + (- 1) < 0 by A9,A10, XREAL_1:10;
+    then A13: - (j - 1) > -0 by XREAL_1:26;
+    A14: - j >= -0 by A9,XREAL_1:26;
+       1 - j = - (j - 1);
+    then A15: abs( 1 - j ) = abs( j - 1 ) by COMPLEX1:138;
+    thus pow(x, j-1) * (x * pow(x, -j)) =
+      (pow(x, abs(j-1)))" * (x * pow(x, -j)) by A12,Lm3
+    .= (pow(x, abs(j-1)))" * (x * pow(x, abs(-j))) by A14,ABSVALUE:def 1
+    .= (pow(x, abs(j-1)))" * pow(x, 1 + abs(-j)) by Th17
+    .= (pow(x, abs(j-1)))" * pow(x, 1 + (-j)) by A14,ABSVALUE:def 1
+    .= (pow(x, abs(j-1)))" * pow(x, abs(j-1)) by A13,A15,ABSVALUE:def 1
+    .= 1.L by A11, VECTSP_1:def 22;
+  end;
+  suppose A16: j = 0;
+    hence pow(x, j-1) * (x * pow(x, -j)) = x" * (x * pow(x, -j)) by Th15
+    .= x" * x * pow(x, -j) by GROUP_1:def 4
+    .= 1.L * pow(x, -j) by VECTSP_1:def 22, A1
+    .= pow(x, 0) by A16, VECTSP_1:def 19
+    .= 1.L by Th13;
+  end;
+  end;
+  A17: pow(x, j-1) <> 0.L
+  proof
+    per cases;
+    suppose 0 <= j-1;
+      then reconsider k = j-1 as Element of NAT by INT_1:16;
+      pow(x, j-1) = x |^ k by Def3;
+      hence thesis by A1, Th1;
+    end;
+    suppose j-1 < 0; then
+      A18: pow(x, j-1) = (x |^ (abs(j-1)))" by Def3;
+      x |^ (abs(j-1)) <> 0.L by A1, Th1;
+      hence thesis by A18, VECTSP_1:74;
+    end;
+  end;
+  A19: pow(x, j-1) <> 0.L
+  proof
+    per cases;
+    suppose 0 <= j-1;
+      then reconsider k = j-1 as Element of NAT by INT_1:16;
+      pow(x, j-1) = x |^ k by Def3;
+      hence thesis by A1, Th1;
+    end;
+    suppose j-1 < 0; then
+      A20: pow(x, j-1) = (x |^ (abs(j-1)))" by Def3;
+      x |^ (abs(j-1)) <> 0.L by A1, Th1;
+      hence thesis by A20, VECTSP_1:74;
+    end;
+  end;
+  A21: pow(x, -j) <> 0.L
+  proof
+    per cases;
+    suppose 0 <= -j;
+      then reconsider k = -j as Element of NAT by INT_1:16;
+      pow(x, -j) = x |^ k by Def3;
+      hence thesis by A1, Th1;
+    end;
+    suppose -j < 0; then
+      A22: pow(x, -j) = (x |^ (abs(-j)))" by Def3;
+      x |^ (abs(-j)) <> 0.L by A1, Th1;
+      hence thesis by A22, VECTSP_1:74;
+    end;
+  end;
+  pow(x, j-1) * (pow(x, 1-j)) = pow(x, j-1) * pow(x, -(j-1))
+  .= pow(x, j-1) * (pow(x, j-1))" by A1, Th18
+  .= 1.L by A17, VECTSP_1:def 22;
+  then x * pow(x, -j) = pow(x, 1-j) by A2, A19, VECTSP_1:33;
+  then (pow(x, 1-j))" = (pow(x, -j))" * x" by A1, A21, Th2
+  .= pow(x, -(- j)) * x" by A1, Th18
+  .= pow(x, j) * pow(x, -1) by Th15;
+  then pow(x, j) * pow(x, -1) = pow(x, -(1-j)) by A1, Th18;
+  hence thesis;
+end;
+
+theorem Th21:
+for L being Field,
+    i,j being Integer,
+    x being Element of L st x <> 0.L
+holds pow(x,i) * pow(x,j) = pow(x,i+j)
+proof
+let L be Field; let i,j be Integer; let x be Element of L;
+assume A1: x <> 0.L;
+defpred P[Integer] means for i being Integer
+    holds pow(x, i+$1) = pow(x, i) * pow(x, $1);
+A2: P[0]
+  proof
+    let i be Integer;
+    thus pow(x, i+0) = pow(x, i) * 1.L by VECTSP_1:def 13
+                    .= pow(x, i) * pow(x, 0) by Th13;
+  end;
+  A3: for j being Integer holds P[j] implies P[j - 1] & P[j + 1]
+  proof
+    let j be Integer;
+    assume A4: for i being Integer holds
+                 pow(x, i+j) = pow(x, i) * pow(x, j);
+    thus for i being Integer holds
+      pow(x, i + (j - 1)) = pow(x, i) * pow(x, j - 1)
+    proof
+      let i be Integer;
+      thus pow(x, i + (j - 1)) = pow(x, (i - 1) + j)
+        .= pow(x, i - 1) * pow(x, j) by A4
+        .= (pow(x, i) * pow(x, -1)) * pow(x, j) by A1, Th20
+        .= pow(x, i) * (pow(x, -1) * pow(x, j)) by GROUP_1:def 4
+        .= pow(x, i) * pow(x, j + (-1)) by A4
+        .= pow(x, i) * pow(x, j - 1);
+    end;
+    let i be Integer;
+    thus pow(x, i + (j + 1)) = pow(x, (i + 1) + j)
+      .= pow(x, i + 1) * pow(x, j) by A4
+      .= (pow(x, i) * pow(x, 1)) * pow(x, j) by A1, Th19
+      .= pow(x, i) * (pow(x, 1) * pow(x, j)) by GROUP_1:def 4
+      .= pow(x, i) * pow(x, j + 1) by A4;
+  end;
+  for j being Integer holds P[j] from INT_1:sch 4(A2,A3);
+  hence thesis;
+end;
+
+Lm8:
+for L being Field-like associative unital add-associative right_zeroed
+            right_complementable left-distributive commutative
+            non degenerated (non empty doubleLoopStr),
+    k being Element of NAT,
+    x being Element of L st x <> 0.L
+holds x" |^ k = (x |^ k)"
+proof
+let L be Field-like associative unital add-associative right_zeroed
+            right_complementable left-distributive commutative
+            non degenerated (non empty doubleLoopStr);
+let k be Element of NAT; let x be Element of L;
+assume A1: x <> 0.L;
+A2: 1.L <> 0.L by VECTSP_1:def 21;
+defpred P[Element of NAT] means x" |^ $1 = (x |^ $1)";
+     x" |^ 0 = 1.L by BINOM:8
+            .= 1.L * (1.L)" by A2, VECTSP_1:def 22
+            .= (1.L)" by VECTSP_1:def 19
+            .= (x |^ 0)" by BINOM:8;
+then A3: P[0];
+A4: now let n be Element of NAT;
+  assume A5: P[n];
+  A6: x |^ n <> 0.L by A1, Th1;
+  x" |^ (n + 1) = (x" |^ n) * x" by BINOM:9
+               .= (x * (x |^ n))" by A5, A1, A6, Th2
+               .= ((x |^ 1) * (x |^ n))" by BINOM:8
+               .= (x |^ (n + 1))" by BINOM:11;
+  hence P[n+1];
+end;
+  for n being Element of NAT holds P[n] from NAT_1:sch 1(A3,A4);
+ hence thesis;
+end;
+
+theorem Th22:
+for L being Field-like associative unital add-associative right_zeroed
+            right_complementable left-distributive commutative
+            non degenerated (non empty doubleLoopStr),
+    k being Element of NAT,
+    x being Element of L st x <> 0.L
+holds pow(x", k) = pow(x, -k)
+proof
+let L be Field-like associative unital add-associative right_zeroed
+         right_complementable left-distributive commutative
+         non degenerated (non empty doubleLoopStr);
+let k be Element of NAT;
+let x be Element of L;
+assume A1: x <> 0.L;
+  pow(x", k) = (x") |^ k by Def3
+  .= (x |^ k)" by A1, Lm8
+  .= (pow(x,k))" by Def3
+  .= pow(x,-k) by A1, Th18;
+  hence thesis;
+end;
+
+theorem Th23:
+for L being Field,
+    x being Element of L st x <> 0.L
+for i,j,k being Nat holds
+pow(x,(i-1)*(k-1)) * pow(x,-(j-1)*(k-1)) = pow(x,(i-j)*(k-1))
+proof
+let L be Field; let x be Element of L;
+assume A1:  x <> 0.L;
+let i,j,k be Nat;
+  pow(x, (i-1)*(k-1)) * pow(x, -(j-1)*(k-1)) =
+  pow(x, (i-1)*(k-1) + (-(j-1)*(k-1))) by Th21,A1
+  .= pow(x, (i-j)*(k-1));
+  hence thesis;
+end;
+
+theorem Th24:
+for L being associative commutative left_unital distributive
+            Field-like (non empty doubleLoopStr),
+    x being Element of L,
+    n,m being Element of NAT
+holds pow(x, n * m) = pow(pow(x, n), m)
+proof
+let L be associative commutative left_unital distributive
+         Field-like (non empty doubleLoopStr);
+let x be Element of L;
+let n,m be Element of NAT;
+pow(x, n*m) = x |^ (n*m) by Def3
+  .= (x|^n)|^m by BINOM:12
+  .= pow(x |^ n, m) by Def3
+  .= pow(pow(x, n), m) by Def3;
+ hence thesis;
+end;
+
+Lm9:
+for L being add-associative right_zeroed right_complementable associative
+            commutative left_unital Field-like
+            distributive non degenerated (non empty doubleLoopStr),
+    x being Element of L st x <> 0.L
+for n being Element of NAT
+holds pow(x", n) = (pow(x, n))"
+proof
+let L be add-associative right_zeroed right_complementable associative
+         commutative left_unital Field-like
+         distributive non degenerated (non empty doubleLoopStr);
+let x be Element of L;
+assume A1: x <> 0.L;
+let n be Element of NAT;
+A2: 1.L <> 0.L by VECTSP_1:def 21;
+defpred P[Nat] means pow(x", $1) = (pow(x, $1))";
+pow(x", 0) = 1.L by Th13
+          .= 1.L * (1.L)" by A2,VECTSP_1:def 22
+          .= (1.L)" by VECTSP_1:def 19
+          .= (pow(x, 0))" by Th13;
+then A3: P[0];
+now let n be Element of NAT;
+  assume A4: P[n];
+  A5: x |^ n <> 0.L by A1, Th1;
+  thus pow(x", n+1) = (x") |^ (n+1) by Def3
+                   .= ((x") |^ n) * x" by BINOM:9
+                   .= (pow(x", n)) * x" by Def3
+                   .= ((power(L).(x, n))") * x" by A4,Def3
+                   .= (x * (x |^ n))" by A1, A5, Th2
+                   .= ((x |^ 1) * (x |^ n))" by BINOM:8
+                   .= (x |^ (n + 1))" by BINOM:11
+                   .= (pow(x, n+1))" by Def3;
+  hence P[n+1];
+  end;
+then A6: for n being Element of NAT st P[n] holds P[n+1];
+for n being Element of NAT holds P[n] from NAT_1:sch 1(A3,A6);
+hence thesis;
+end;
+
+theorem Th25:
+for L being Field,
+    x being Element of L st x <> 0.L
+for i being Integer
+holds pow(x", i) = (pow(x, i))"
+proof
+let L be Field; let x be Element of L;
+assume A1: x <> 0.L;
+let i be Integer;
+A2: x" <> 0.L by A1, VECTSP_1:74;
+per cases;
+  suppose i >= 0;
+    then reconsider n = i as Element of NAT by INT_1:16;
+    thus pow(x", i) = (pow(x, n))" by A1, Lm9
+                   .= (pow(x, i))";
+  end;
+  suppose A3: i < 0;
+    A4: pow(x, abs i) <> 0.L
+    proof
+      pow(x, abs i) = x |^ (abs i) by Def3;
+      hence thesis by A1, Th1;
+    end;
+    thus pow(x", i) = (pow(x", abs i))" by A3, Lm3
+                    .= pow((x")", abs i) by A2, Lm9
+                    .= pow(x, abs i) by A1, VECTSP_1:73
+                    .= (pow(x, abs i))"" by A4, VECTSP_1:73
+                    .= (pow(x, i))" by A3, Lm3;
+  end;
+end;
+
+theorem Th26:
+for L being Field,
+    x being Element of L st x <> 0.L
+for i,j being Integer
+holds pow(x,i * j) = pow(pow(x,i), j)
+proof
+let L be Field, x being Element of L;
+assume A1: x <> 0.L;
+let i,j be Integer;
+per cases;
+suppose i >= 0 & j >= 0;
+    then reconsider m = i, n = j as Element of NAT by INT_1:16;
+    thus pow(x, i*j) = pow(pow(x, m), n) by Th24
+                     .= pow(pow(x, i), j);
+  end;
+suppose A2: i >= 0 & j < 0;
+    then i >= 0 & - j >= -0 by XREAL_1:26;
+    then reconsider m = i, n = - j as Element of NAT by INT_1:16;
+    A3: i * j = - (i * n);
+    A4: pow(x, i) <> 0.L
+    proof
+      pow(x, i) = x |^ m by Def3;
+      hence thesis by A1, Th1;
+    end; then
+    A5: (pow(x, i))" <> 0.L by VECTSP_1:74;
+    A6: pow(pow(x, i), j) <> 0.L
+    proof
+      A7: pow(pow(x, i), j) = ((pow(x, i)) |^ abs(j))" by A2, Def3;
+      (pow(x, i)) |^ abs(j) <> 0.L by A4, Th1;
+      hence thesis by A7, VECTSP_1:74;
+    end;
+    thus pow(x, i*j) = (pow(x, i * n))" by A3, A1, Th18
+                     .= pow(x", i*n) by A1, Th25
+                     .= pow(pow(x", m), n) by Th24
+                     .= pow((pow(x, i))", n) by A1, Th25
+                     .= (pow((pow(x, i))", j))" by  A5, Th18
+                     .= ((pow(pow(x, i), j))")" by A4, Th25
+                     .= pow(pow(x, i), j) by A6, VECTSP_1:73;
+  end;
+suppose A8: i < 0 & j >= 0;
+    then - i >= -0 & j >= 0 by XREAL_1:26;
+    then reconsider m = - i, n = j as Element of NAT by INT_1:16;
+    A9: i * j = - (m * j);
+    A10: x" <> 0.L by A1, VECTSP_1:74;
+    A11: pow(x, i) <> 0.L
+    proof
+  A12: pow(x, i) = (x |^ (abs i))" by A8, Def3;
+      x |^ (abs(i)) <> 0.L by A1, Th1;
+      hence thesis by A12,VECTSP_1:74;
+    end;
+    thus pow(x, i*j) = (pow(x, m*j))" by A9, A1, Th18
+                     .= pow(x", m*j) by A1, Th25
+                     .= pow(pow(x", m), n) by Th24
+                     .= pow((pow(x", i))", n) by A10, Th18
+                     .= pow((pow(x, i))"", j) by A1, Th25
+                     .= pow(pow(x, i), j) by A11, VECTSP_1:73;
+  end;
+suppose A13: j < 0 & i < 0;
+    then - j >= -0 & - i >= -0 by XREAL_1:26;
+    then reconsider m = - i, n = - j as Element of NAT by INT_1:16;
+    A14: i * j * ((- 1) * (- 1)) = m * n;
+    A15: pow(x, -i) <> 0.L
+    proof
+      pow(x, -i) = x |^ m by Def3;
+      hence thesis by A1, Th1;
+    end;
+    A16: pow(x", i) <> 0.L
+    proof
+      A17: pow(x", i) = ((x") |^ (abs i))" by A13, Def3;
+      x" <> 0.L by A1, VECTSP_1:74; then
+      (x") |^ (abs(i)) <> 0.L by Th1;
+      hence thesis by A17,VECTSP_1:74;
+    end;
+    A18: x" <> 0.L by A1, VECTSP_1:74;
+    thus pow(x, i*j) = pow(pow(x, m), n) by A14, Th24
+                     .= (pow(pow(x, -i), j))" by A15, Th18
+                     .= (pow((pow(x, i))", j))" by A1, Th18
+                     .= (pow(pow(x", i), j))" by A1, Th25
+                     .= pow((pow(x", i))", j) by A16, Th25
+                     .= pow(pow(x"", i), j) by A18, Th25
+                     .= pow(pow(x, i), j) by A1, VECTSP_1:73;
+  end;
+end;
+
+theorem Th27:
+for L being associative commutative left_unital distributive
+            Field-like (non empty doubleLoopStr),
+    x being Element of L,
+    i,k being Element of NAT st 1 <= k
+holds pow(x, i*(k-1)) = pow(x|^i, k-1)
+proof
+let L be associative commutative left_unital distributive
+         Field-like (non empty doubleLoopStr);
+let x be Element of L; let i,k be Element of NAT;
+assume A1: 1 <= k; A2: 0 < k by A1;
+reconsider m = k-1 as Element of NAT by A2,NAT_1:60;
+pow(x, i*(k-1)) = x|^(i*m) by Def3
+  .= (x|^i)|^m by BINOM:12
+  .= pow(x|^i,m) by Def3;
+hence thesis;
+end;
+
+Lm10:
+for L being associative commutative left_unital distributive
+            Field-like (non empty doubleLoopStr),
+    x being Element of L,
+    m being Element of NAT
+holds (x <> 0.L & x |^ m = 1.L) implies (x") |^ m = 1.L
+proof
+let L be associative commutative left_unital distributive
+         Field-like (non empty doubleLoopStr),
+    x be Element of L, m be Element of NAT;
+assume A1: x <> 0.L & x |^ m = 1.L;
+1.L * ((x") |^ m) = 1.L by A1, Lm7;
+hence (x") |^ m = 1.L by VECTSP_1:def 13;
+end;
+
+Lm11:
+for L being associative commutative left_unital distributive
+            Field-like non degenerated (non empty doubleLoopStr),
+    x being Element of L,
+    i being Element of NAT
+holds (x <> 0.L & (x") |^ i = 1.L) implies x |^ i = 1.L
+proof
+let L be associative commutative left_unital distributive
+         Field-like non degenerated (non empty doubleLoopStr),
+    x be Element of L, i be Element of NAT;
+assume A1: x <> 0.L & (x") |^ i = 1.L;
+A2: 1.L = x |^ 0 by BINOM:8;
+((x") |^ i) * 1.L = 1.L by A1,VECTSP_1:def 13;
+then A3: ((x")|^i)*(x|^0) = ((x")|^i)*(x|^i) by A1,A2,Lm7;
+(x") |^ i <> 0.L by A1, VECTSP_1:def 21;
+hence thesis by A2,A3, VECTSP_1:33;
+end;
+
+begin :: Conversion between AlgSequences and Matrices
+
+definition
+  let m be Nat,
+      L be non empty ZeroStr,
+      p be AlgSequence of L;
+  func mConv(p,m) -> Matrix of m,1,L means :Def4:
+    for i being Nat st 1 <= i & i <= m holds it*(i,1) = p.(i-1);
+existence
+ proof
+ reconsider m'=m as Element of NAT by ORDINAL1:def 13;
+ defpred P[Nat,set,set] means $3 = p.($1-1);
+ A1: for i,j being Nat st [i,j] in [:Seg m', Seg 1:]
+    for x1,x2 being Element of L st P[i,j,x1] & P[i,j,x2]
+      holds x1 = x2;
+ A2: for i,j being Nat st [i,j] in [:Seg m', Seg 1:]
+     ex x being Element of L st P[i,j,x]
+    proof
+    let i,j be Nat;
+    assume A3: [i,j] in [:Seg m', Seg 1:];
+    take x = p/.(i-1);
+    A4: dom p = NAT by FUNCT_2:def 1;
+    [i,j]`1 in Seg m by A3,MCART_1:10;
+    then i in Seg m by MCART_1:def 1;
+    then 1 <= i by FINSEQ_1:3;
+    then 1-1 <= i-1 by XREAL_1:11;
+    then i-1 in dom p by A4,INT_1:16;
+    hence thesis by FINSEQ_4:def 4;
+    end;
+ consider M being Matrix of m',1,L such that
+A5: for i,j being Nat st [i,j] in Indices M holds P[i,j,M*(i,j)]
+    from MATRIX_1:sch 2(A1,A2);
+ reconsider M as Matrix of m,1,L;
+ take M;
+ now let i be Nat;
+   assume A6: 1 <= i & i <= m;
+   then A7: i in Seg m by FINSEQ_1:3;
+   A8: 1 in Seg 1;
+   Indices M = [:Seg m, Seg 1:] by A6,MATRIX_1:24;
+   then [i,1] in Indices M by A7,A8,ZFMISC_1:def 2;
+   hence M*(i,1) = p.(i-1) by A5;
+   end;
+ hence thesis;
+ end;
+uniqueness
+ proof
+ let M1,M2 be Matrix of m,1,L;
+ assume that
+   A9: for i being Nat st 1 <= i & i <= m holds M1*(i,1) = p.(i-1) and
+   A10: for i being Nat st 1 <= i & i <= m holds M2*(i,1) = p.(i-1);
+ per cases;
+ suppose A11: m = 0;
+   then A12: len M1 = 0 by MATRIX_1:23 .= len M2 by A11,MATRIX_1:23;
+   A13: width M1 = 0 by A11,MATRIX_1:23 .= width M2 by A11,MATRIX_1:23;
+   for i,j being Nat st [i,j] in Indices M1 holds M1*(i,j) = M2*(i,j)
+     by A11,MATRIX_1:23;
+   hence thesis by A12,A13,MATRIX_1:21; end;
+ suppose A14: m > 0;
+   then A15: len M1 = m by MATRIX_1:24 .= len M2 by A14,MATRIX_1:24;
+   A16: width M1 = 1 by A14,MATRIX_1:24 .= width M2 by A14,MATRIX_1:24;
+   now let i,j be Nat;
+     assume [i,j] in Indices M1;
+     then A17: [i,j] in [:Seg m, Seg 1:] by A14,MATRIX_1:24;
+     then [i,j]`1 in Seg m by MCART_1:10;
+     then i in Seg m by MCART_1:def 1;
+     then A18: 1 <= i & i <= m by FINSEQ_1:3;
+     [i,j]`2 in Seg 1 by A17,MCART_1:10;
+     then j in Seg 1 by MCART_1:def 2;
+     then 1 <= j & j <= 1 by FINSEQ_1:3;
+     then A19: j = 1 by XREAL_1:1;
+     hence M1*(i,j) = p.(i-1) by A18,A9 .= M2*(i,j) by A18,A19,A10;
+     end;
+   hence thesis by A15,A16,MATRIX_1:21;  end;
+ end;
+end;
+
+theorem Th28:
+for m being Nat st m > 0
+for L being non empty ZeroStr,
+    p being AlgSequence of L
+holds len mConv(p,m) = m & width mConv(p,m) = 1 &
+      for i being Nat st i < m holds mConv(p,m)*(i+1,1) = p.i
+proof
+let m be Nat; assume A1: m > 0;
+let L be non empty ZeroStr, p be AlgSequence of L;
+set q = mConv(p,m);
+thus len q = m by A1,MATRIX_1:24;
+thus width q = 1 by A1,MATRIX_1:24;
+now let i be Nat;
+  assume A2: i < m;
+  A3: 0 + 1 <= i + 1 by XREAL_1:8;
+  i+1 <= m by A2,NAT_1:38;
+  then q*(i+1,1) = p.(i+1-1) by A3,Def4;
+  hence q*(i+1,1) = p.i;
+  end;
+hence thesis;
+end;
+
+theorem Th29:
+for m being Nat st m > 0
+for L being non empty ZeroStr,
+    a being AlgSequence of L,
+    M being Matrix of m,1,L
+holds (for i being Nat st i < m holds M*(i+1,1) = a.i)
+implies mConv(a,m) = M
+proof
+let m be Nat;
+assume A1: m > 0;
+let L be non empty ZeroStr;
+let a be AlgSequence of L;
+let M be Matrix of m,1,L;
+assume A2: for i being Nat st i < m holds M*(i+1,1) = a.i;
+A3: len mConv(a,m) = m by A1,Th28 .= len M by A1,MATRIX_1:24;
+A4: width mConv(a, m) = 1 by A1,Th28 .= width M by A1,MATRIX_1:24;
+    for i,j being Nat st [i,j] in Indices mConv(a,m)
+    holds (mConv(a,m))*(i,j) = M*(i,j)
+    proof
+    let i,j be Nat;
+    assume A5: [i,j] in Indices mConv(a,m);
+    A6: i in dom mConv(a, m) by A5,ZFMISC_1:106;
+    A7: j in Seg width mConv(a, m) by A5,ZFMISC_1:106;
+    len mConv(a, m) = m by A1, Th28; then
+    A8: i in Seg m by A6, FINSEQ_1:def 3; then
+A9: 0 < i by FINSEQ_1:3;
+    j in Seg 1 by A7, A1, Th28; then
+    A10: 1 <= j & j <= 1 by FINSEQ_1:3;
+    reconsider k=i-1 as Nat by A9,NAT_1:60;
+    k+1 <= m by A8, FINSEQ_1:3; then
+    A11: k < m by NAT_1:38; then
+    M*(k+1,1) = a.k by A2
+      .= (mConv(a, m))*(k+1,1) by A11, Th28
+      .= (mConv(a, m))*(i,j) by A10,XREAL_1:1;
+    hence thesis by A10,XREAL_1:1;
+  end;
+  hence thesis by A3, A4, MATRIX_1:21;
+end;
+
+definition
+  let L be non empty ZeroStr,
+      M be Matrix of L;
+  func aConv(M) -> AlgSequence of L means :Def5:
+    (for i being Nat st i < len M holds it.i = M*(i+1,1)) &
+    (for i being Nat st i >= len M holds it.i = 0.L);
+existence
+proof
+defpred P[set,set] means
+    ex k being Element of NAT st k = $1 &
+    ((k < len M & $2 = M*(k+1,1)) or (len M <= k & $2 = 0.L));
+A1: for x being set st x in NAT
+   ex y being set st y in the carrier of L & P[x,y]
+   proof
+   let u be set;
+   assume u in NAT;
+   then reconsider u' = u as Element of NAT;
+   thus ex y being set st y in the carrier of L & P[u,y]
+     proof
+     per cases;
+     suppose A2: u' < len M; take y = M*(u'+1,1);
+       thus thesis by A2; end;
+     suppose A3: u' >= len M; take y = 0.L;
+       thus thesis by A3; end;
+     end;
+   end;
+consider f being Function of NAT,the carrier of L such that
+A4: for x being set st x in NAT holds P[x,f.x] from FUNCT_2:sch 1(A1);
+reconsider f as sequence of L;
+ex n being Element of NAT st for i being Element of NAT st
+  i >= n holds f.i = 0.L
+    proof
+    take len M;
+    now let i be Element of NAT;
+      assume A5: i >= len M;
+      consider k being Element of NAT such that
+A6:    k = i &
+      ((k < len M & f.i = M*(k+1,1)) or (len M <= k & f.i = 0.L)) by A4;
+      thus f.i = 0.L by A6,A5;
+      end;
+    hence thesis;
+    end;
+then reconsider q = f as AlgSequence of L by ALGSEQ_1:def 2;
+take q;
+A7: now let i be Nat;
+A8:i in NAT by ORDINAL1:def 13;
+   assume A9: i < len M;
+   consider k being Element of NAT such that
+   A10: k = i &
+       ((k < len M & q.i = M*(k+1,1)) or (len M <= k & q.i = 0.L)) by A4,A8;
+   thus q.i = M*(i+1,1) by A9,A10;
+   end;
+now let i be Nat;
+A11:i in NAT by ORDINAL1:def 13;
+  assume A12: i >= len M;
+   consider k being Element of NAT such that
+   A13: k = i &
+       ((k < len M & q.i = M*(k+1,1)) or (len M <= k & q.i = 0.L)) by A4,A11;
+   thus q.i = 0.L by A13,A12;
+   end;
+hence thesis by A7;
+end;
+uniqueness
+ proof
+ let z1,z2 be AlgSequence of L;
+ assume A14: (for i being Nat st i < len M holds z1.i = M*(i+1,1)) &
+            (for i being Nat st i >= len M holds z1.i = 0.L);
+ assume A15: (for i being Nat st i < len M holds z2.i = M*(i+1,1)) &
+            (for i being Nat st i >= len M holds z2.i = 0.L);
+ A16: dom z1 = NAT by FUNCT_2:def 1 .= dom z2 by FUNCT_2:def 1;
+ now let u be set;
+   assume u in dom z1;
+   then reconsider u' = u as Element of NAT by FUNCT_2:def 1;
+   per cases;
+   suppose A17: u' < len M;
+     hence z1.u = M*(u'+1,1) by A14 .= z2.u by A15,A17; end;
+   suppose A18: len M <= u';
+     hence z1.u = 0.L by A14 .= z2.u by A18,A15; end;
+   end;
+ hence z1 = z2 by A16,FUNCT_1:9;
+ end;
+end;
+
+begin :: Primitive Roots, DFT and Vandermonde Matrix
+
+definition
+  let L be unital (non empty doubleLoopStr),
+      x be Element of L,
+      n be Element of NAT;
+  pred x is_primitive_root_of_degree n means :Def6:
+    n <> 0 & x|^n = 1.L &
+    for i being Element of NAT st 0 < i & i < n holds x|^i <> 1.L;
+end;
+
+theorem Th30:
+for L being unital add-associative right_zeroed right_complementable
+            right-distributive non degenerated
+(non empty doubleLoopStr),
+    n being Element of NAT
+holds not(0.L is_primitive_root_of_degree n)
+proof
+let L be unital add-associative right_zeroed right_complementable
+         right-distributive non degenerated (non empty doubleLoopStr),
+    n be Element of NAT;
+defpred P[Element of NAT] means (0.L)|^$1 = 0.L;
+A1: P[1] by BINOM:8;
+A2: for j being Element of NAT st 1 <= j holds P[j] implies P[j+1]
+   proof
+   let j be Element of NAT;
+   assume 1 <= j;
+   assume P[j];
+   (0.L)|^(j+1) = ((0.L)|^j) * 0.L by BINOM:9
+               .= 0.L by VECTSP_1:36;
+   hence P[j+1];
+   end;
+A3: for m being Element of NAT st 1 <= m holds P[m] from NAT_1:sch 9(A1,A2);
+assume A4: 0.L is_primitive_root_of_degree n;
+then n <> 0 by Def6;
+then 0 < n;
+then 0 + 1 < n + 1 by XREAL_1:10;
+then 1 <= n by NAT_1:38;
+then (0.L)|^n  = 0.L by A3;
+then (0.L)|^n <> 1.L by VECTSP_1:def 21;
+hence contradiction by A4,Def6;
+end;
+
+theorem Th31:
+for L being add-associative right_zeroed right_complementable associative
+            commutative unital distributive
+            Field-like non degenerated (non empty doubleLoopStr),
+    m being Element of NAT,
+    x being Element of L st x is_primitive_root_of_degree m
+holds x" is_primitive_root_of_degree m
+proof
+let L be add-associative right_zeroed right_complementable associative
+         commutative unital distributive
+         Field-like non degenerated (non empty doubleLoopStr);
+let m be Element of NAT;
+let x be Element of L;
+assume A1: x is_primitive_root_of_degree m;
+then A2: m <> 0 by Def6;
+A3: x <> 0.L by A1,Th30; x |^ m = 1.L by A1, Def6;
+then A4: x" |^ m = 1.L by A3,Lm10;
+for i being Element of NAT st 0 < i & i < m holds x" |^i <> 1.L
+  proof
+  let i be Element of NAT; assume 0 < i & i < m;
+  then x |^ i <> 1.L by A1,Def6; hence thesis by A3,Lm11; end;
+hence thesis by Def6, A4, A2;
+end;
+
+theorem Th32:
+for L being add-associative right_zeroed right_complementable
+            associative commutative left_unital distributive
+            Field-like non degenerated (non empty doubleLoopStr),
+    m being Element of NAT,
+    x being Element of L st x is_primitive_root_of_degree m
+for i,j being Nat
+    st 1 <= i & i <= m & 1 <= j & j <= m & i <> j
+holds pow(x,i-j) <> 1.L
+proof
+let L be add-associative right_zeroed right_complementable
+         associative commutative left_unital distributive
+         Field-like non degenerated (non empty doubleLoopStr);
+let m be Element of NAT;
+let x be Element of L;
+assume A1: x is_primitive_root_of_degree m;
+let i,j be Nat;
+assume A2: 1 <= i & i <= m & 1 <= j & j <= m & i <> j;
+A3: x <> 0.L by A1,Th30;
+per cases;
+suppose A4: i > j;
+  then reconsider k = i - j as Element of NAT by INT_1:18;
+  A5: i - j > j - j by A4,XREAL_1:16;
+  k <= i - 1 by A2,XREAL_1:15;
+  then k + 1 <= (i - 1) + 1 by XREAL_1:8;
+  then k < i by NAT_1:38;
+  then k < m by A2,XREAL_1:2;
+  then x|^k <> 1.L by A5,A1,Def6;
+  hence thesis by Def3; end;
+suppose i <= j;
+  then A6: i < j by A2,REAL_1:def 5;
+  then A7: i - j < j - j by XREAL_1:16;
+  then A8: abs(i-j) = -(i-j) by ABSVALUE:def 1;
+  then reconsider k = -(i-j) as Element of NAT;
+  A9: j - i > i - i by A6,XREAL_1:16;
+  j - i <= j - 1 by A2,XREAL_1:15;
+  then k + 1 <= (j - 1) + 1 by XREAL_1:8;
+  then k < j by NAT_1:38;
+  then A10: k < m by A2,XREAL_1:2; then
+  A11: x|^k <> 1.L & x|^k <> 0.L by A1,Def6,A9,A3,Th1;
+  now assume A12: (x|^k)" = 1.L;
+    1.L = x|^k * 1.L by A12,A11,VECTSP_1:def 22 .= x|^k by VECTSP_1:def 13;
+    hence contradiction by A1,Def6,A10,A9;
+    end;
+  hence thesis by A7,A8,Def3; end;
+end;
+
+definition
+  let m be Nat,
+      L be unital (non empty doubleLoopStr),
+      p be Polynomial of L,
+      x be Element of L;
+  func DFT(p,x,m) -> AlgSequence of L means :Def7:
+    (for i being Element of NAT st i < m holds it.i = eval(p,x |^ i)) &
+    (for i being Element of NAT st i >= m holds it.i = 0.L);
+existence
+proof
+defpred P[set,set] means
+    ex k being Element of NAT st k = $1 &
+    ((k < m & $2 = eval(p,x |^ k)) or (m <= k & $2 = 0.L));
+A1: for x being set st x in NAT
+   ex y being set st y in the carrier of L & P[x,y]
+   proof  let u be set;
+   assume u in NAT; then reconsider u' = u as Element of NAT;
+   thus ex y being set st y in the carrier of L & P[u,y]
+     proof
+     per cases;
+     suppose A2: u' < m;
+       take y = eval(p,x |^ u'); thus thesis by A2; end;
+     suppose A3: u' >= m;
+       take y = 0.L; thus thesis by A3; end;
+     end;
+   end;
+consider f being Function of NAT,the carrier of L such that
+A4: for x being set st x in NAT holds P[x,f.x] from FUNCT_2:sch 1(A1);
+reconsider f as sequence of L;
+ex n being Element of NAT st
+  for i being Element of NAT st i >= n holds f.i = 0.L
+    proof
+    reconsider m as Element of NAT by ORDINAL1:def 13; take m;
+    now let i be Element of NAT;
+      assume A5: i >= m;
+      consider k being Element of NAT such that
+   A6: k = i &
+      ((k < m & f.i = eval(p,x |^ k)) or (m <= k & f.i = 0.L)) by A4;
+      thus f.i = 0.L by A6,A5;
+    end;
+    hence thesis;
+    end;
+then reconsider q = f as AlgSequence of L by ALGSEQ_1:def 2;
+take q;
+A7: now let i be Element of NAT;
+   assume A8: i < m;
+   consider k being Element of NAT such that
+   A9: k = i &
+       ((k < m & q.i = eval(p,x |^ k)) or (m <= k & q.i = 0.L)) by A4;
+   thus q.i = eval(p,x |^ i) by A8,A9;
+   end;
+now let i be Element of NAT;
+  assume A10: i >= m;
+   consider k being Element of NAT such that
+   A11: k = i &
+       ((k < m & q.i = eval(p,x |^ k)) or (m <= k & q.i = 0.L)) by A4;
+   thus q.i = 0.L by A11,A10;
+   end;
+hence thesis by A7;
+end;
+uniqueness
+ proof
+ let z1,z2 be AlgSequence of L;
+ assume A12: (for i being Element of NAT st
+             i < m holds z1.i = eval(p,x |^ i)) &
+            (for i being Element of NAT st i >= m holds z1.i = 0.L);
+ assume A13: (for i being Element of NAT st
+             i < m holds z2.i = eval(p,x |^ i)) &
+            (for i being Element of NAT st i >= m holds z2.i = 0.L);
+ A14: dom z1 = NAT by FUNCT_2:def 1 .= dom z2 by FUNCT_2:def 1;
+ now let u be set;
+   assume u in dom z1;
+   then reconsider u' = u as Element of NAT by FUNCT_2:def 1;
+   per cases;
+   suppose A15: u' < m;
+     hence z1.u = eval(p,x |^ u') by A12 .= z2.u by A13,A15; end;
+   suppose A16: m <= u';
+     hence z1.u = 0.L by A12 .= z2.u by A16,A13; end;
+   end;
+ hence z1 = z2 by A14,FUNCT_1:9;
+ end;
+end;
+
+theorem Th33:
+for m being Nat,
+    L being unital (non empty doubleLoopStr),
+    x being Element of L
+holds DFT(0_.(L),x,m) = 0_.(L)
+proof
+let m be Nat,
+    L be unital (non empty doubleLoopStr),
+    x be Element of L;
+set q = DFT(0_.(L),x,m);
+A1: dom q = NAT by FUNCT_2:def 1 .= dom 0_.(L) by FUNCT_2:def 1;
+now let u be set;
+  assume u in dom q;
+  then reconsider n = u as Element of NAT by FUNCT_2:def 1;
+  per cases;
+  suppose n < m;
+    hence q.u = eval(0_.(L),x |^ n) by Def7
+             .= 0.L by POLYNOM4:20
+             .= (0_.(L)).n by POLYNOM3:28 .= (0_.(L)).u; end;
+  suppose n >= m;
+    hence q.u = 0.L by Def7 .= (0_.(L)).n by POLYNOM3:28 .= (0_.(L)).u; end;
+  end;
+hence thesis by A1,FUNCT_1:9;
+end;
+
+theorem Th34:
+for m being Nat,
+    L being Field,
+    p,q being Polynomial of L,
+    x being Element of L
+holds DFT(p, x, m) * DFT(q, x, m) = DFT(p *' q, x, m)
+proof
+  let m be Nat; let L be Field;
+  let p,q be Polynomial of L; let x be Element of L;
+  set ep = DFT(p, x, m), eq = DFT(q, x, m), epq = DFT(p *' q, x, m);
+  A1: dom(ep*eq) = NAT by FUNCT_2:def 1 .= dom epq by FUNCT_2:def 1;
+  now let u' be set;
+    assume u' in dom(ep*eq);
+    then reconsider u = u' as Element of NAT by FUNCT_2:def 1;
+    per cases;
+    suppose A2: u < m;
+      hence epq.u' = eval(p*'q,x|^u) by Def7
+        .= eval(p,x|^u) * eval(q,x|^u) by POLYNOM4:27
+        .= ep.u * eval(q,x|^u) by A2,Def7
+        .= ep.u * eq.u by A2,Def7
+        .= (ep * eq).u' by Def2; end;
+    suppose A3: m <= u;
+      thus (ep * eq).u' = ep.u * eq.u by Def2
+         .= 0.L * eq.u by A3,Def7
+         .= 0.L by VECTSP_1:36
+         .= epq.u' by A3,Def7; end;
+    end;
+  hence thesis by A1,FUNCT_1:9;
+end;
+
+definition
+  let L be associative commutative left_unital distributive
+           Field-like (non empty doubleLoopStr),
+      m be Nat,
+      x be Element of L;
+  func Vandermonde(x,m) -> Matrix of m,L means :Def8:
+    for i,j being Nat st 1 <= i & i <= m & 1 <= j & j <= m
+    holds it*(i,j) = pow(x,(i-1)*(j-1));
+existence
+ proof
+ reconsider m'=m as Element of NAT by ORDINAL1:def 13;
+ defpred P[Nat,Nat,set] means $3 = pow(x,(($1)-1)*(($2)-1));
+ A1: for i,j being Nat st [i,j] in [:Seg m', Seg m':]
+    for x1,x2 being Element of L st P[i,j,x1] & P[i,j,x2]
+    holds x1 = x2;
+ A2: for i,j being Nat st [i,j] in [:Seg m', Seg m':]
+    ex x being Element of L st P[i,j,x];
+ consider M being Matrix of m',m',L such that
+ A3: for i,j being Nat st [i,j] in Indices M holds P[i,j,M*(i,j)]
+    from MATRIX_1:sch 2(A1,A2);
+ reconsider M as Matrix of m,m,L;
+ take M;
+ now let i be Nat;
+   assume A4: 1 <= i & i <= m;
+   let j be Nat;
+   assume A5: 1 <= j & j <= m;
+   A6: Indices M = [:Seg m, Seg m:] by MATRIX_1:25;
+   i in Seg m & j in Seg m by A4,A5,FINSEQ_1:3;
+   then [i,j] in Indices M by A6,ZFMISC_1:def 2;
+   hence M*(i,j) = pow(x,(i-1)*(j-1)) by A3;
+   end;
+ hence thesis;
+ end;
+uniqueness
+ proof
+ let M1,M2 be Matrix of m,L;
+ assume A7: for i,j being Nat st 1 <= i & i <= m & 1 <= j & j <= m
+            holds M1*(i,j) = pow(x,(i-1)*(j-1));
+ assume A8: for i,j being Nat st 1 <= i & i <= m & 1 <= j & j <= m
+            holds M2*(i,j) = pow(x,(i-1)*(j-1));
+ now let i,j be Nat;
+   assume A9: [i,j] in Indices M1;
+   Indices M1 = [:Seg m, Seg m:] by MATRIX_1:25;
+   then ex x,y being set st x in Seg m & y in Seg m & [x,y] = [i,j]
+         by A9,ZFMISC_1:def 2;
+   then consider z,y being set such that
+   A10: [i,j] = [z,y] & z in Seg m & y in Seg m;
+   A11: i = [z,y]`1 by A10,MCART_1:def 1 .= z by MCART_1:def 1;
+   A12: j = [z,y]`2 by A10,MCART_1:def 2 .= y by MCART_1:def 2;
+   A13: 1 <= i & i <= m & 1 <= j & j <= m by A10,A11,A12,FINSEQ_1:3;
+   hence M1*(i,j) = pow(x,(i-1)*(j-1)) by A7 .= M2*(i,j) by A13,A8;
+   end;
+ hence thesis by MATRIX_1:28;
+ end;
+end;
+
+notation
+  let L be associative commutative left_unital distributive
+           Field-like (non empty doubleLoopStr),
+      m be Nat,
+      x be Element of L;
+  synonym VM(x,m) for Vandermonde(x,m);
+end;
+
+theorem Th35:
+for L being Field,
+    m,n being Nat st m > 0
+for M being Matrix of m,n,L
+holds 1.(L,m) * M = M
+proof
+let L be Field, m,n be Nat;
+assume A1: m > 0;
+let M be Matrix of m,n,L;
+set M2 =  1.(L,m) * M;
+A2: width 1.(L,m) = m by A1,MATRIX_1:24 .= len M by A1,MATRIX_1:24;
+A3: len M = m by A1,MATRIX_1:24;
+len 1.(L,m) = m by A1,MATRIX_1:24;
+then A4: m = len M2 by A2,MATRIX_3:def 4;
+A5: width M = width M2 by A2,MATRIX_3:def 4;
+now let i,j be Nat;
+  assume A6: [i,j] in Indices M;
+  A7: dom M = Seg len M by FINSEQ_1:def 3 .= dom M2 by A3,A4,FINSEQ_1:def 3;
+  A8: Indices M = Indices M2 by A7,A2,MATRIX_3:def 4;
+  A9: M2*(i,j) = Line(1.(L,m),i) "*" Col(M,j) by A2,A6,A8,MATRIX_3:def 4
+                  .= Sum(mlt(Line(1.(L,m),i), Col(M,j))) by FVSUM_1:def 10;
+A10: i in dom M by A6,ZFMISC_1:106;
+  Sum(mlt(Line(1.(L,m),i),Col(M,j))) = M*(i,j)
+  proof
+    Sum(mlt(Line(1.(L,m),i),Col(M,j))) = (Col(M,j)).i
+      proof
+        i in dom Line(1.(L,m),i) & i in dom Col(M,j) &
+        Line(1.(L,m),i).i=1.L &
+        for k being Nat st k in dom Line(1.(L,m),i) & k<>i
+            holds Line(1.(L,m),i).k = 0.L
+          proof
+            A11: len M = m by A1,MATRIX_1:24;
+            len Line(1.(L,m),i) = width 1.(L,m) by MATRIX_1:def 8
+                               .= m by MATRIX_1:25; then
+            A12: dom Line(1.(L,m),i) = Seg(m) by FINSEQ_1:def 3;
+            A13: i in dom Line(1.(L,m),i) by A10,A11,FINSEQ_1:def 3,A12;
+            len Col(M,j) = len M by MATRIX_1:def 9
+                            .= m by A1,MATRIX_1:24; then
+            A14: dom Col(M,j) = Seg(m) by FINSEQ_1:def 3;
+            A15: i in Seg width 1.(L,m) by A12,A13,MATRIX_1:25;
+            A16: Indices 1.(L,m) = [:Seg m,Seg m:] by A1,MATRIX_1:24;
+            then A17: [i,i] in Indices 1.(L,m) by A12,A13,ZFMISC_1:106;
+            A18: Line(1.(L,m),i).i = 1.(L,m)*(i,i) by A15, MATRIX_1:def 8
+                                  .= 1.L by A17,MATRIX_1:def 12;
+            for k being Nat st k in dom Line(1.(L,m),i) & k<>i
+              holds Line(1.(L,m),i).k = 0.L
+            proof
+              let k be Nat;
+              assume A19: k in dom Line(1.(L,m),i) & k<>i;
+              then A20: k in Seg width 1.(L,m) by A12,MATRIX_1:25;
+              A21: [i,k] in Indices 1.(L,m) by A19,A12,A13,A16,ZFMISC_1:106;
+              Line(1.(L,m),i).k = 1.(L,m)*(i,k) by A20,MATRIX_1:def 8
+                               .= 0.L by A21,A19,MATRIX_1:def 12;
+              hence thesis;
+            end;
+            hence thesis by A10,A11,FINSEQ_1:def 3,A12, A14, A18;
+          end;
+          hence thesis by MATRIX_3:19;
+        end;
+     hence thesis by A10,MATRIX_1:def 9;
+     end;
+  hence M*(i,j) = M2*(i,j) by A9;
+  end;
+hence thesis by A3,A4,A5,MATRIX_1:21;
+end;
+
+theorem Th36:
+for L being Field,
+    m being Element of NAT st 0 < m
+for u,v,u1 being Matrix of m,L
+holds (for i,j being Nat st 1 <= i & i <= m & 1 <= j & j <= m
+       holds (u * v)*(i,j) = emb(m,L) * (u1*(i,j)))
+implies u * v = emb(m,L) * u1
+proof
+let L be Field;
+let m be Element of NAT;
+assume A1: m > 0;
+let u,v,u1 be Matrix of m,L;
+assume A2: for i,j being Nat st 1 <= i & i <= m & 1 <= j & j <= m
+      holds (u * v)*(i,j) = emb(m,L) * (u1*(i,j));
+  A3: len (emb(m,L) * u1) = len u1 by MATRIX_3:def 5
+    .= m by MATRIX_1:25;
+A4: len(u*v) = m
+  proof
+    width u = m by MATRIX_1:25
+    .= len v by MATRIX_1:25; then
+    len(u*v) = len u by MATRIX_3:def 4
+    .= m by MATRIX_1:25;
+    hence thesis;
+  end;
+  A5: width(u*v) = width(emb(m,L) * u1)
+  proof
+    A6: width(emb(m,L) * u1) = width(u1) by MATRIX_3:def 5
+    .= m by MATRIX_1:25;
+    width u = m by MATRIX_1:25
+      .= len v by MATRIX_1:25; then
+    width(u*v) = width(v) by MATRIX_3:def 4
+      .= m by MATRIX_1:25;
+    hence thesis by A6;
+  end;
+  for i,j being Nat st [i,j] in Indices (u*v) holds
+    (u*v)*(i,j) = (emb(m,L) * u1)*(i,j)
+  proof
+    let i,j be Nat;
+    assume A7: [i,j] in Indices (u*v);
+A8: [i,j] in Indices (u*v) implies 1 <= i & i <= m & 1 <= j & j <= m
+    proof
+      assume A9: [i,j] in Indices (u*v);
+  A10: width u = m by MATRIX_1:25
+      .= len v by MATRIX_1:25;
+  A11: width(u*v) = width(v) by A10, MATRIX_3:def 4
+      .= m by MATRIX_1:25;
+      width u = m by MATRIX_1:25
+          .= len v by MATRIX_1:25; then
+      len(u*v) = len u by MATRIX_3:def 4
+          .= m by MATRIX_1:25; then
+      (u*v) is Matrix of m,m,L by A1,A11,MATRIX_1:20; then
+      Indices (u*v) = [:Seg m,Seg m:] by A11, MATRIX_1:26; then
+      i in Seg m & j in Seg m by A9,ZFMISC_1:106;
+      hence thesis by FINSEQ_1:3;
+    end;
+    i in Seg m & j in Seg m by A7, A8, FINSEQ_1:3; then
+    [i,j] in [:Seg m, Seg m:] by ZFMISC_1:106; then
+    [i,j] in Indices u1 by MATRIX_1:25; then
+    (emb(m,L) * u1)*(i,j) = emb(m,L) * (u1*(i,j)) by MATRIX_3:def 5;
+    hence thesis by A2, A7, A8;
+  end;
+  hence thesis by A4,A3,A5,MATRIX_1:21;
+end;
+
+Lm12: for L being Field,
+    m being Element of NAT st m > 0
+for p,q being Polynomial of L
+holds emb(2*m,L) * (1.(L,2*m) * mConv(p*'q, 2*m)) =
+      emb(2*m,L) * mConv(p*'q, 2*m)
+proof
+let L be Field, m be Element of NAT;
+assume m > 0;
+then A1: 2 * m > 2 * 0 by XREAL_1:70;
+let p,q be Polynomial of L;
+thus emb(2*m,L) * (1.(L,2*m) * mConv(p*'q, 2*m))
+  = emb(2*m,L) * mConv(p*'q, 2*m) by A1,Th35; end;
+
+theorem Th37:
+for L being Field,
+    x being Element of L,
+    s being FinSequence of L,
+    i,j,m being Element of NAT
+st x is_primitive_root_of_degree m &
+   1 <= i & i <= m & 1 <= j & j <= m & len s = m &
+   for k being Nat st 1 <= k & k <= m holds s/.k = pow(x,(i-j)*(k-1))
+holds (VM(x,m) * VM(x",m))*(i,j) = Sum s
+proof
+let L be Field, x be Element of L,
+    s be FinSequence of L, i,j,m being Element of NAT;
+assume A1: x is_primitive_root_of_degree m &
+     1 <= i & i <= m & 1 <= j & j <= m & len s = m &
+     for k being Nat st 1 <= k & k <= m holds s/.k = pow(x,(i-j)*(k-1));
+A2: x <> 0.L by A1,Th30;
+A3: [i,j] in Indices (VM(x,m) * VM(x",m))
+    proof
+      A4: width VM(x,m) = m & width VM(x",m) = m by MATRIX_1:25;
+      len VM(x,m) = m & len VM(x",m) = m by MATRIX_1:25; then
+      (width (VM(x,m) * VM(x",m)) = m &
+          len(VM(x,m) * VM(x",m)) = m ) by A4, MATRIX_3:def 4; then
+      (VM(x,m) * VM(x",m)) is Matrix of m,L by A1,MATRIX_1:20; then
+      A5: Indices(VM(x,m) * VM(x",m)) = [:Seg m, Seg m:] by MATRIX_1:25;
+      A6: i in Seg m by A1;
+      j in Seg m by A1;
+      hence thesis by A5,A6, ZFMISC_1:def 2;
+    end;
+A7: width VM(x,m) = len VM(x",m)
+    proof
+      width VM(x,m) = m by MATRIX_1:25;
+      hence thesis by MATRIX_1:25;
+    end;
+A8: (VM(x,m) * VM(x",m))*(i,j) = Line(VM(x,m),i) "*" Col(VM(x",m),j)
+       by A3, A7, MATRIX_3:def 4;
+A9: for k being Nat st 1 <= k & k <= m holds
+    Line(VM(x,m),i)/.k * Col(VM(x",m),j)/.k = pow(x, (i-j)*(k-1))
+    proof
+      let k be Nat;
+      assume A10: 1 <= k & k <= m;
+      A11: Line(VM(x,m),i)/.k = Line(VM(x,m),i).k
+      proof
+        len Line(VM(x,m),i) = width VM(x,m) by MATRIX_1:def 8
+            .= m by MATRIX_1:25; then
+    A12: Seg m = dom Line(VM(x,m),i) by FINSEQ_1:def 3;
+        k in Seg m by A10, FINSEQ_1:3;
+        hence thesis by A12,FINSEQ_4:def 4;
+      end;
+      width VM(x,m) = m by MATRIX_1:25; then
+      k in Seg width VM(x,m) by A10, FINSEQ_1:3; then
+      A13: Line(VM(x,m),i).k = VM(x,m)*(i,k) by MATRIX_1:def 8;
+      A14: (j-1)*(k-1) in NAT
+      proof
+        A15: 1 - 1 <= k - 1 by A10, XREAL_1:11;
+        1 - 1 <= j - 1 by A1, XREAL_1:11; then
+        0 <= (j-1)*(k-1) by A15, XREAL_1:129;
+        hence thesis by INT_1:16;
+      end;
+      A16: Col(VM(x",m),j)/.k = Col(VM(x",m),j).k
+      proof
+        len Col(VM(x",m),j) = len VM(x",m) by MATRIX_1:def 9
+            .= m by MATRIX_1:25; then
+        A17: Seg m = dom Col(VM(x",m),j) by FINSEQ_1:def 3;
+        k in Seg m by A10, FINSEQ_1:3;
+        hence thesis by A17,FINSEQ_4:def 4;
+      end;
+      A18: Col(VM(x",m),j).k = VM(x",m)*(k,j)
+      proof
+        A19: len VM(x",m) = m by MATRIX_1:25;
+        k in Seg m by A10, FINSEQ_1:3; then
+        k in dom VM(x",m) by A19, FINSEQ_1:def 3;
+        hence thesis by MATRIX_1:def 9;
+      end;
+      A20: Col(VM(x",m),j).k = pow(x,-(j-1)*(k-1))
+        proof
+        VM(x",m)*(k,j) = pow(x",(j-1)*(k-1)) by A1, A10, Def8
+        .= pow(x, -(j-1)*(k-1)) by A14, A2, Th22;
+        hence thesis by A18;
+      end;
+      Line(VM(x,m),i)/.k * Col(VM(x",m),j)/.k =
+        pow(x,(i-1)*(k-1)) * pow(x,-(j-1)*(k-1))
+        by A16, A20, A11, A13, A1, A10, Def8
+      .= pow(x, (i-j)*(k-1)) by A2,Th23;
+      hence thesis;
+    end;
+A21: len mlt(Line(VM(x,m),i),Col(VM(x",m),j)) = m
+    proof
+      len Line(VM(x,m),i) = width VM(x,m) by MATRIX_1:def 8
+      .= m by MATRIX_1:25
+      .= len VM(x",m) by MATRIX_1:25
+      .= len Col(VM(x",m),j) by MATRIX_1:def 9; then
+      len (mlt(Line(VM(x,m), i),Col(VM(x",m),j))) =
+      len (Line(VM(x,m),i)) by MATRIX_3:8
+      .= width VM(x,m) by MATRIX_1:def 8
+      .= m by MATRIX_1:25;
+      hence thesis;
+    end;
+    Sum(mlt(Line(VM(x,m),i),Col(VM(x",m),j))) = Sum s
+    proof
+      A22: for k being Nat st 1 <= k & k <= m holds
+        mlt(Line(VM(x,m),i),Col(VM(x",m),j))/.k = s/.k
+      proof
+        let k be Nat;
+        assume A23: 1 <= k & k <= m;
+        Seg m = dom mlt(Line(VM(x,m),i),Col(VM(x",m),j))
+          by A21,FINSEQ_1:def 3; then
+        A24: k in dom mlt(Line(VM(x,m),i),Col(VM(x",m),j)) by A23,FINSEQ_1:3;
+        A25: mlt(Line(VM(x,m),i),Col(VM(x",m),j)).k =
+            Line(VM(x,m),i)/.k * Col(VM(x",m),j)/.k
+        proof
+      A26: Line(VM(x,m),i).k = Line(VM(x,m),i)/.k
+          proof
+            len Line(VM(x,m),i) = width VM(x,m) by MATRIX_1:def 8
+              .= m by MATRIX_1:25; then
+            A27: Seg m = dom Line(VM(x,m),i) by FINSEQ_1:def 3;
+            k in Seg m by A23, FINSEQ_1:3;
+            hence thesis by A27, FINSEQ_4:def 4;
+          end;
+          Col(VM(x",m),j).k = Col(VM(x",m),j)/.k
+          proof
+            len Col(VM(x",m),j) = len VM(x",m) by MATRIX_1:def 9
+              .= m by MATRIX_1:25; then
+            A28: Seg m = dom Col(VM(x",m),j) by FINSEQ_1:def 3;
+            k in Seg m by A23, FINSEQ_1:3;
+            hence thesis by A28, FINSEQ_4:def 4;
+          end;
+          hence thesis by A24, A26, FVSUM_1:73;
+        end;
+        Line(VM(x,m),i)/.k * Col(VM(x",m),j)/.k = pow(x,(i-j)*(k-1)) by A23,A9
+        .= s/.k by A23, A1;
+        hence thesis by A24, A25, FINSEQ_4:def 4;
+      end;
+      mlt(Line(VM(x,m),i),Col(VM(x",m),j)) = s
+      proof
+    A29: dom mlt(Line(VM(x,m),i),Col(VM(x",m),j)) = Seg m
+             by A21,FINSEQ_1:def 3
+          .= dom s by A1, FINSEQ_1:def 3;
+        for k being Element of NAT st
+          k in dom mlt(Line(VM(x,m),i),Col(VM(x",m),j)) holds
+          mlt(Line(VM(x,m),i),Col(VM(x",m),j)).k = s.k
+        proof
+          let k be Element of NAT;
+           assume A30: k in dom mlt(Line(VM(x,m),i),Col(VM(x",m),j));
+A31:        Seg m = dom mlt(Line(VM(x,m),i),Col(VM(x",m),j))
+             by A21, FINSEQ_1:def 3; then
+       A32: 1 <= k & k <= m by A30, FINSEQ_1:3;
+       A33: k in dom s by A30,A31,A1,FINSEQ_1:def 3;
+           mlt(Line(VM(x,m),i),Col(VM(x",m),j)).k =
+           mlt(Line(VM(x,m),i),Col(VM(x",m),j))/.k by A30, FINSEQ_4:def 4
+           .= s/.k by A32, A22
+           .= s.k by A33, FINSEQ_4:def 4;
+           hence thesis;
+        end;
+        hence thesis by A29, FINSEQ_1:17;
+      end;
+      hence thesis;
+    end;
+  hence thesis by A8, FVSUM_1:def 10;
+end;
+
+theorem Th38:
+for L being Field,
+    m,i,j being Element of NAT,
+    x being Element of L
+st i <> j & 1 <= i & i <= m & 1 <= j & j <= m &
+   x is_primitive_root_of_degree m
+holds (VM(x,m) * VM(x",m))*(i,j) = 0.L
+proof
+let L be Field, m,i,j be Element of NAT, x be Element of L;
+assume A1: i <> j & 1 <= i & i <= m & 1 <= j & j <= m &
+           x is_primitive_root_of_degree m;
+A2: x <> 0.L by A1,Th30;
+A3: ex G being FinSequence of L
+     st (dom G = Seg m &
+         for k being Element of NAT st
+         k in Seg m holds G.k = pow(x,(i-j)*(k-1)))
+  proof
+    defpred P[Nat,set] means $2 = pow(x, (i-j)*($1-1));
+    A4: for n being Element of NAT st n in Seg m holds
+        ex x being Element of L st P[n,x];
+    ex G be FinSequence of L st dom G = Seg m &
+    for nn be Element of NAT st
+      nn in Seg m holds P[nn,G.nn] from FINSEQ_1:sch 5(A4);
+    hence thesis;
+  end;
+   consider s being FinSequence of L such that
+A5: (dom s = Seg m &
+     for k being Element of NAT st
+       k in Seg m holds s.k = pow(x,(i-j)*(k-1))) by A3;
+A6: for k being Nat st 1 <= k & k <= m holds s/.k = pow(x,(i-j)*(k-1))
+    proof
+      let k be Nat;
+      assume A7: 1 <= k & k <= m;
+      A8: k in Seg m by A7, FINSEQ_1:3;
+      A9: k in dom s by A7, A5,FINSEQ_1:3;
+      pow(x, (i-j)*(k-1)) = s.k by A8, A5
+      .= s/.k by A9, FINSEQ_4:def 4;
+      hence thesis;
+    end;
+A10: len s = m & (for k being Nat st 1 <= k & k <= m
+                 holds s/.k = pow(x,(i-j)*(k-1))) by A5,A6,FINSEQ_1:def 3;
+A11: pow(x, m*(i-j)) = pow(pow(x, m), i-j) by A2,Th26
+    .= pow(x|^m, i-j) by Def3
+    .= pow(1.L, i-j) by A1, Def6
+    .= 1.L by Th16;
+A12: pow(x,i-j) <> 1.L by A1,Th32;
+A13: for k being Nat st 1 <= k & k <= len s holds s.k = (pow(x,i-j)) |^ (k-'1)
+  proof
+    let k be Nat;
+A14: k in NAT by ORDINAL1:def 13;
+    assume A15: 1 <= k & k <= len s;
+A16: 1 - 1 <= k - 1 by A15, XREAL_1:11;
+    s.k = s/.k by A15, A14,FINSEQ_4:24
+    .= pow(x, (i-j)*(k-1)) by A15, A10
+    .= pow(x, (i-j)*(k-'1)) by A16, BINARITH:def 3
+    .= pow(pow(x,i-j),k-'1) by A2,Th26
+    .= (pow(x,i-j)) |^ (k-'1) by Def3;
+    hence thesis;
+  end;
+  consider r being Element of L such that A17: r = pow(x, i-j);
+  Sum s =
+     (1.L-((pow(x, i-j)) |^ (len s)) ) / (1.L-pow(x, i-j)) by A12,A13,Th5
+  .= (1.L-((pow(x, i-j)) |^ m))/(1.L-pow(x, i-j)) by A5,FINSEQ_1:def 3
+  .= (1.L - (pow(pow(x,i-j),m))) / (1.L - pow(x,i-j)) by Def3
+  .= (1.L - (pow(x,(i-j)*m))) / (1.L - pow(x,i-j)) by A2,Th26
+  .= 0.L / (1.L - r) by A11,A17,VECTSP_1:66
+  .= 0.L by VECTSP_1:39;
+hence thesis by A1, A10, Th37;
+end;
+
+theorem Th39:
+for L being Field,
+    m being Element of NAT st m > 0
+for x being Element of L st x is_primitive_root_of_degree m
+holds VM(x,m) * VM(x",m) = emb(m,L) * 1.(L,m)
+proof
+let L be Field, m be Element of NAT;
+assume A1: m > 0;
+let x be Element of L;
+assume A2: x is_primitive_root_of_degree m;
+A3: for i,j being Nat st i >= 1 & i <= m & j >= 1 & j <= m
+   holds (VM(x,m) * VM(x",m))*(i,j) = emb(m,L) * (1.(L,m)*(i,j))
+   proof
+    let i,j be Nat;
+A4: i in NAT & j in NAT by ORDINAL1:def 13;
+    assume A5: 1 <= i & i <= m & 1 <= j & j <= m;
+    A6: ex G being FinSequence of L
+           st (dom G = Seg m &
+             for k being Element of NAT st k in Seg m holds
+               G.k = pow(x, (i-j)*(k-1)))
+    proof
+      defpred P[Element of NAT,set] means $2 = pow(x, (i-j)*($1-1));
+  A7: for n being Element of NAT st n in Seg m holds
+       ex x being Element of L st P[n,x];
+      ex G be FinSequence of L st
+      dom G = Seg m &
+      for nn be Element of NAT st nn in Seg m holds P[nn,G.nn]
+        from FINSEQ_1:sch 5(A7);
+      hence thesis;
+    end;
+    consider s being FinSequence of L such that
+    A8: dom s = Seg m &
+         for k being Element of NAT st
+         k in Seg m holds s.k = pow(x, (i-j)*(k-1)) by A6;
+    A9: len s = m by A8, FINSEQ_1:def 3;
+    A10: for k being Nat st 1 <= k & k <= m holds
+      s/.k = pow(x, (i-j)*(k-1))
+    proof
+      let k be Nat;
+      assume A11: 1 <= k & k <= m; then
+      A12: k in Seg m by FINSEQ_1:3;
+      A13: k in dom s by A11, A8, FINSEQ_1:3;
+      pow(x, (i-j)*(k-1)) = s.k by A12, A8
+      .= s/.k by A13, FINSEQ_4:def 4;
+      hence thesis;
+    end;
+    A14: len 1.(L,m) = m & width 1.(L,m) = m &
+        Indices 1.(L,m) = [:Seg m, Seg m:] by MATRIX_1:25;
+    per cases;
+    suppose A15: i = j;
+      (VM(x,m) * VM(x",m))*(i,j) = emb(m,L) * (1.(L,m)*(i,j))
+      proof
+        A16: for k being Element of NAT st 1 <= k & k <= m holds s/.k = 1.L
+        proof
+          let k be Element of NAT;
+          assume A17: 1 <= k & k <= m;
+          s/.k = pow(x, (i-j)*(k-1)) by A17, A10 .= 1.L by A15,Th13;
+          hence thesis;
+        end;
+        A18: (VM(x,m) * VM(x",m))*(i,j) = Sum s by A2,A5,A9,A10,Th37,A4
+            .= m * 1.L by A9, A16, Th4
+            .= emb(m,L) * 1.L by VECTSP_1:def 19;
+        i in Seg m by A5,FINSEQ_1:3; then
+        [i,i] in Indices 1.(L,m) by A14,ZFMISC_1:106;
+        hence thesis by A18,A15,MATRIX_1:def 12;
+      end;
+      hence thesis;
+    end;
+    suppose A19: i <> j;
+      (VM(x,m) * VM(x",m))*(i,j) = emb(m,L) * (1.(L,m)*(i,j))
+      proof
+        A20: (VM(x,m) * VM(x",m))*(i,j) = 0.L by A2, A5, A19, Th38,A4
+                                      .= emb(m,L) * 0.L by VECTSP_1:36;
+        i in Seg m & j in Seg m by A5,FINSEQ_1:3; then
+        [i,j] in Indices 1.(L,m) by A14,ZFMISC_1:106;
+        hence thesis by A20,MATRIX_1:def 12,A19;
+      end;
+      hence thesis;
+    end;
+  end;
+  thus thesis by A1, A3, Th36;
+end;
+
+theorem Th40:
+for L being Field,
+    m being Element of NAT,
+    x being Element of L
+st m > 0 & x is_primitive_root_of_degree m
+holds VM(x,m) * VM(x",m) = VM(x",m) * VM(x,m)
+proof
+let L be Field;
+let m be Element of NAT;
+let x be Element of L;
+assume A1: 0 < m & x is_primitive_root_of_degree m;
+A2: x <> 0.L by A1,Th30;
+A3: x" is_primitive_root_of_degree m by A1, Th31;
+VM(x",m) * VM(x,m) = VM(x",m) * VM((x")",m) by A2, VECTSP_1:73
+                  .= emb(m,L) * 1.(L,m) by A1, A3, Th39;
+hence thesis by A1, Th39;
+end;
+
+begin :: DFT-Multiplication of Polynomials
+
+theorem Th41:
+for L being Field,
+    p being Polynomial of L,
+    m being Element of NAT st m > 0 & len p <= m
+for x being Element of L,
+    i being Element of NAT st i < m holds
+(DFT(p,x,m)).i = (VM(x,m) * mConv(p,m))*(i+1,1)
+proof
+let L be Field;
+let p be Polynomial of L;
+let m be Element of NAT;
+assume A1: m > 0 & len p <= m;
+let x be Element of L;
+set v = VM(x,m);
+  for i being Element of NAT st i < m holds
+    (DFT(p, x, m)).i = (v * mConv(p, m))*(i+1,1)
+  proof
+    let i be Element of NAT;
+    assume A2: i < m;
+    (v * mConv(p, m))*(i+1,1) = eval(p, x|^i)
+    proof
+      A3: [i+1,1] in Indices (v * mConv(p, m))
+      proof
+A4:     width v = m by MATRIX_1:25
+          .= len (mConv(p, m)) by A1,Th28;
+A5:     v * mConv(p, m) is Matrix of m,1,L
+        proof
+A6:       len (v * mConv(p, m)) = len v by A4, MATRIX_3:def 4
+            .= m by MATRIX_1:25;
+          width (v * mConv(p, m)) = width (mConv(p, m))
+              by A4, MATRIX_3:def 4
+            .= 1 by A1, Th28;
+          hence thesis by A6, A1, MATRIX_1:20;
+        end;
+        A7: Indices (v * mConv(p, m)) =
+          [:Seg m, Seg width(v * mConv(p, m)):] by A5,MATRIX_1:26;
+        A8: 1 <= i+1 by NAT_1:29;
+        i+1 <= m by A2, NAT_1:38; then
+        A9: (i+1) in Seg m by A8;
+        width (v * mConv(p, m)) = width (mConv(p, m))
+          by A4, MATRIX_3:def 4  .= 1 by A1, Th28; then
+        1 in Seg width(v * mConv(p, m));
+        hence thesis by A7,A9,ZFMISC_1:def 2;
+      end;
+A10:   len mConv(p,m) = m by A1,Th28 .= width v by MATRIX_1:25;
+      A11: Line(v, i+1) "*" Col(mConv(p, m), 1) =
+        Sum(mlt(Line(v,i+1),Col(mConv(p, m), 1))) by FVSUM_1:def 10;
+      Sum(mlt(Line(v, i+1),Col(mConv(p, m), 1))) =
+      eval(p, x|^i)
+      proof
+        A12: for k being Nat st k < m holds Line(v,i+1).(k+1) = v*(i+1,k+1)
+        proof
+          let k be Nat;
+          assume A13: k < m;
+          (k+1) in Seg m
+          proof
+        A14: 1 <= k+1 by NAT_1:29;
+            k+1 <= m by A13, NAT_1:38;
+            hence thesis by A14, FINSEQ_1:3;
+          end; then
+          (k+1) in Seg width v by MATRIX_1:25;
+          hence thesis by MATRIX_1:def 8;
+        end;
+    A15: for k being Nat st k < m holds Line(v,i+1).(k+1) = pow(x,i*k)
+        proof
+          let k be Nat;
+          assume A16: k < m;
+          A17: 1 <= i+1 & i+1 <= m by A2,NAT_1:29, NAT_1:38;
+          A18: 1 <= k+1 & k+1 <= m by A16,NAT_1:29, NAT_1:38;
+          Line(v, i+1).(k+1) = v*(i+1,k+1) by A16, A12
+          .= pow(x, ((i+1)-1)*((k+1)-1)) by A17, A18, Def8
+          .= pow(x, i*k);
+          hence thesis;
+        end;
+        A19: for k being Nat st k < m holds Col(mConv(p,m),1).(k+1) = p.k
+        proof
+          let k be Nat;
+          assume A20: k < m;
+          Col(mConv(p, m), 1).(k+1) = (mConv(p, m))*(k+1,1)
+          proof
+            (k+1) in dom (mConv(p, m))
+            proof
+              A21: len (mConv(p, m)) = m by A1, Th28;
+              A22: 1 <= k+1 & k+1 <= m by A20,NAT_1:29, NAT_1:38;
+              (k+1) in Seg m by A22, FINSEQ_1:3;
+              hence thesis by A21, FINSEQ_1:def 3;
+            end;
+            hence thesis by MATRIX_1:def 9;
+          end;
+          hence thesis by A20,Th28;
+        end;
+        A23: for k being Nat, a,b,c being Element of L st
+            (a = Line(v, i+1).(k+1) & b = Col(mConv(p, m), 1).(k+1) &
+             c = p.k) holds (k < m) implies (a*b = pow(x, i*k) * c)
+        proof
+          let k be Nat;
+          let a,b,c be Element of L;
+          assume A24: a = Line(v, i+1).(k+1) &
+                     b = Col(mConv(p,m),1).(k+1) & c = p.k & k < m;
+          a = pow(x, i*k) by A24, A15;
+          hence thesis by A24,A19;
+        end;
+        A25: for k being Element of NAT st 1 <= k & k <= m holds
+          (mlt(Line(v, i+1),Col(mConv(p, m), 1))).k =
+          p.(k-'1) * (power L).(x|^i,k-'1)
+        proof
+          let k be Element of NAT;
+          assume A26: 1 <= k & k <= m;
+          A27: k in Seg width v
+          proof
+           Seg width v = Seg m by MATRIX_1:25;
+           hence thesis by A26;
+          end;
+          A28: Line(v, i+1).k = v*(i+1,k) by A27, MATRIX_1:def 8;
+          A29: len mConv(p, m) = m by A1, Th28;
+          k in Seg m by A26; then
+          k in dom mConv(p, m) by A29, FINSEQ_1:def 3; then
+          A30: Col(mConv(p, m), 1).k = (mConv(p, m))*(k,1)
+              by MATRIX_1:def 9;
+          A31: dom p = NAT by FUNCT_2:def 1;
+          0 < k by A26; then
+          k-1 is Element of NAT by NAT_1:60; then
+          A32: p.(k-1) = p/.(k-1) by A31, FINSEQ_4:def 4;
+          reconsider a = Line(v, i+1).k, b = Col(mConv(p, m), 1).k,
+            c = p.(k-1) as Element of L by A28, A30, A32;
+          A33: a*b = pow(x, i*(k-1)) * c
+          proof
+            A34: 0 < k by A26; then
+            A35: k-1 is Nat by NAT_1:60;
+            reconsider l=k-1 as Nat by A34,NAT_1:60;
+            A36: k-1 <= m-1 by A26, XREAL_1:11;
+            m-1 is Nat by A1, NAT_1:60; then
+A37:         k-1 < (m-1)+1 by A35, A36, NAT_1:38;
+            a = Line(v, i+1).(l+1) & c = p.l;
+            hence thesis by A37,A23;
+          end;
+          A38: (mlt(Line(v, i+1),Col(mConv(p, m), 1))).k = a * b
+          proof
+            k in dom (mlt(Line(v, i+1),Col(mConv(p, m), 1)))
+            proof
+              len Line(v, i+1) = width v by MATRIX_1:def 8
+              .= m by MATRIX_1:25
+              .= len mConv(p, m) by A1, Th28
+              .= len (Col(mConv(p, m), 1)) by MATRIX_1:def 9; then
+              len (mlt(Line(v, i+1),Col(mConv(p, m), 1))) =
+                  len (Line(v, i+1)) by MATRIX_3:8
+              .= width v by MATRIX_1:def 8
+              .= m by MATRIX_1:25; then
+              dom (mlt(Line(v, i+1),Col(mConv(p, m), 1))) = Seg m
+                by FINSEQ_1:def 3;
+              hence thesis by A26;
+            end;
+            hence thesis by FVSUM_1:73;
+          end;
+          A39: k - 1 >= 0 by A26,NAT_1:60;
+          reconsider d = pow(x, i*(k-1)) as Element of L;
+          d = pow(x|^i, k-1) by A26, Th27
+           .= (power L).(x|^i, k-1) by A39,Def3
+           .= (power L).(x|^i,k-'1) by A39, BINARITH:def 3;
+          hence thesis by A38,A33,A39,BINARITH:def 3;
+        end;
+      Sum(mlt(Line(v, i+1),Col(mConv(p, m), 1))) = eval(p, x|^i)
+        proof
+          consider F being FinSequence of L such that
+      A40: (eval(p, x|^i) = Sum F & len F = len p &
+          (for k being Element of NAT st k in dom F holds
+          F.k = p.(k-'1) * (power L).(x|^i,k-'1))) by POLYNOM4:def 2;
+      A41: for k being Element of NAT st 1 <= k & k <= len p holds
+            F.k = (mlt(Line(v, i+1),Col(mConv(p, m), 1))).k
+          proof
+            let k be Element of NAT;
+            assume A42: 1 <= k & k <= len p;
+            dom F = Seg len p by A40, FINSEQ_1:def 3; then
+        A43: k in dom F by A42;
+        A44: 1 <= k & k <= m by A42,A1,XREAL_1:2;
+            F.k = p.(k-'1) * (power L).(x|^i,k-'1) by A43, A40
+            .= (mlt(Line(v, i+1),Col(mConv(p, m), 1))).k by A44, A25;
+            hence thesis;
+          end;
+      A45: for k being Nat st len p < k & k <= m holds
+            (mlt(Line(v, i+1),Col(mConv(p, m), 1))).k = 0.L
+          proof
+            let k be Nat;
+            assume A46: len p < k & k <= m;
+        A47: 1 <= k & k <= m
+            proof
+          A48: len p + 1 <= k by A46, NAT_1:38;
+              1 <= 1 + len p by NAT_1:29;
+              hence thesis by A46,A48,XREAL_1:2;
+            end;
+        A49: k-'1 >= len p
+            proof
+              1 - 1 <= k - 1 by A47, XREAL_1:11; then
+              A50: k-'1 = k - 1 by BINARITH:def 3;
+              len p < (k - 1) + 1 by A46;
+              hence thesis by A50,NAT_1:38;
+            end;
+            k in NAT by ORDINAL1:def 13; then
+            (mlt(Line(v, i+1),Col(mConv(p, m), 1))).k =
+            p.(k-'1) * (power L).(x|^i,k-'1) by A47, A25
+            .= 0.L * ((power L).(x|^i,k-'1)) by A49, ALGSEQ_1:22
+            .= 0.L by VECTSP_1:39;
+            hence thesis;
+          end;
+          len p - len p <= m - len p by A1, XREAL_1:11; then
+          reconsider lengthG = m - len p as Element of NAT by INT_1:16;
+          A51: ex G being FinSequence of L
+            st (dom G = Seg lengthG &
+                for k being Element of NAT st
+                  k in Seg lengthG holds G.k = 0.L)
+            proof
+            defpred P[set,set] means $2 = 0.L;
+        A52: for n being Element of NAT st n in Seg lengthG holds
+             ex x being Element of L st P[n,x];
+            ex G be FinSequence of L st
+             dom G = Seg lengthG &
+             for nn be Element of NAT st nn in Seg lengthG
+             holds P[nn,G.nn] from FINSEQ_1:sch 5(A52);
+            hence thesis;
+            end;
+          consider G being FinSequence of L such that
+          A53: dom G = Seg lengthG &
+               for k being Element of NAT st
+               k in Seg lengthG holds G.k = 0.L by A51;
+          A54: len G = m - len p & for k being Element of NAT st k in dom G
+                                  holds G.k = 0.L by A53,FINSEQ_1:def 3;
+          A55: mlt(Line(v, i+1),Col(mConv(p, m), 1)) = F ^ G
+          proof
+            A56: dom (mlt(Line(v, i+1),Col(mConv(p, m), 1))) =
+            dom (F ^ G)
+            proof
+              len (Line(v, i+1)) = width v by MATRIX_1:def 8
+              .= m by MATRIX_1:25
+              .= len (mConv(p, m)) by A1, Th28
+              .= len (Col(mConv(p, m), 1)) by MATRIX_1:def 9; then
+              A57: len (mlt(Line(v, i+1),Col(mConv(p, m), 1)))
+               = len (Line(v, i+1)) by MATRIX_3:8
+              .= width v by MATRIX_1:def 8
+              .= m by MATRIX_1:25;
+              len F + len G = m by A40, A54; then
+              dom (F ^ G) = Seg m by FINSEQ_1:def 7;
+              hence thesis by A57,FINSEQ_1:def 3;
+            end;
+            for k being Element of NAT st
+             k in dom (mlt(Line(v, i+1),Col(mConv(p, m), 1))) holds
+              (mlt(Line(v, i+1),Col(mConv(p, m), 1))).k = (F ^ G).k
+            proof
+              let k be Element of NAT;
+              assume A58: k in dom mlt(Line(v,i+1),Col(mConv(p,m),1));
+          A59: len F + len G = m by A40, A54;
+A60:           dom (F ^ G) = Seg m by A59,FINSEQ_1:def 7;
+              per cases by A60,A56,A58,FINSEQ_1:3;
+              suppose A61: 1 <= k & k <= len F; then
+                k in dom F by FINSEQ_3:27; then
+                (F ^ G).k = F.k by FINSEQ_1:def 7
+                .= (mlt(Line(v,i+1),Col(mConv(p,m),1))).k by A40,A61,A41;
+                hence thesis;
+              end;
+              suppose A62: len F < k & k <= m;
+                len F + len G = m by A40, A54; then
+                dom (F ^ G) = Seg m by FINSEQ_1:def 7; then
+            A63: len (F ^ G) = m by FINSEQ_1:def 3;
+            A64: len F + 1 <= k by A62, NAT_1:38;
+                (len F + 1) - len F <= k - len F by A64, XREAL_1:11; then
+                reconsider l = k - len F as Element of NAT by INT_1:16;
+                len p - m <= m - m by A1, XREAL_1:11; then
+                len p - m <= -0; then
+                -(len p - m) >= 0 by XREAL_1:27; then
+                reconsider lengthG = m - len p as Element of NAT
+                  by INT_1:16;
+                len F + 1 <= k by A62,NAT_1:38; then
+                (len F + 1) - len F <= k - len F by XREAL_1:11; then
+                1 <= l & l <= lengthG by A40,A62,XREAL_1:11; then
+            A65: l in dom G by A53;
+                (F ^ G).k = G.(k - len F) by A62,A63, FINSEQ_1:37
+                .= 0.L by A65, A53
+                .= (mlt(Line(v, i+1),Col(mConv(p,m), 1))).k by A40,A62,A45;
+                hence thesis;
+              end;
+            end;
+            hence thesis by A56, FINSEQ_1:17;
+          end;
+          Sum(mlt(Line(v, i+1),Col(mConv(p, m), 1)))
+           = Sum(F) + Sum(G) by A55,RLVECT_1:58
+          .= Sum(F) + 0.L by A53, POLYNOM3:1
+          .= eval(p, x|^i) by A40,VECTSP_1:7;
+          hence thesis;
+        end;
+        hence thesis;
+      end;
+      hence thesis by A3, A10, MATRIX_3:def 4, A11;
+    end;
+    hence thesis by A2, Def7;
+  end;
+  hence thesis;
+end;
+
+theorem Th42:
+for L being Field,
+    p being Polynomial of L
+for m being Nat st 0 < m & len p <= m
+for x being Element of L
+holds DFT(p,x,m) = aConv(VM(x,m) * mConv(p, m))
+proof
+let L be Field;
+let p be Polynomial of L;
+let m be Nat;
+A1:m in NAT by ORDINAL1:def 13;
+assume A2: 0 < m & len p <= m;
+let x be Element of L;
+A3: dom DFT(p, x, m) = NAT by FUNCT_2:def 1
+  .= dom (aConv(VM(x,m) * mConv(p,m))) by FUNCT_2:def 1;
+  now let u' be set;
+    assume u' in dom DFT(p, x, m);
+    then reconsider u = u' as Element of NAT by FUNCT_2:def 1;
+    per cases;
+    suppose A4: u < m;
+      width VM(x,m) = m by MATRIX_1:25
+                   .= len mConv(p,m) by A2,Th28; then
+A5:   len (VM(x,m) * mConv(p,m)) = len VM(x,m) by MATRIX_3:def 4
+                                .= m by MATRIX_1:25;
+      thus (DFT(p,x,m)).u' = (VM(x,m)*mConv(p,m))*(u+1,1) by A1,A2,A4,Th41
+                 .= (aConv(VM(x,m)*mConv(p, m))).u' by A5,A4,Def5; end;
+    suppose A6: m <= u;
+      width VM(x,m) = m by MATRIX_1:25
+        .= len (mConv(p, m)) by A2,Th28; then
+A7:    len (VM(x,m) * mConv(p, m)) = len VM(x,m) by MATRIX_3:def 4
+        .= m by MATRIX_1:25;
+      thus (DFT(p, x, m)).u' = 0.L by A6, Def7
+        .= (aConv(VM(x,m) * mConv(p, m))).u' by A7,A6,Def5; end;
+    end;
+  hence thesis by A3,FUNCT_1:9;
+end;
+
+theorem Th43:
+for L being Field,
+    p,q being Polynomial of L,
+    m being Element of NAT st m > 0 & len p <= m & len q <= m
+for x being Element of L st x is_primitive_root_of_degree 2*m
+holds DFT(DFT(p*'q, x, 2*m), x", 2*m) = emb(2*m,L) * (p*'q)
+proof
+let L be Field;
+let p,q be Polynomial of L;
+let m be Element of NAT;
+assume A1: m > 0 & len p <= m & len q <= m;
+let x be Element of L;
+assume A2: x is_primitive_root_of_degree 2*m;
+per cases;
+suppose A3: len p = 0 or len q = 0;
+per cases by A3;
+ suppose len p = 0;
+   then p = 0_.L by POLYNOM4:8;
+   then A4: p *' q = 0_.L by POLYNOM3:35;
+   then A5: emb(2*m,L) * (p*'q) = 0_.L by POLYNOM5:29;
+   DFT(DFT(p*'q, x, 2*m), x", 2*m) = DFT(0_.L, x", 2*m) by A4,Th33;
+   hence thesis by A5,Th33; end;
+ suppose len q = 0;
+   then q = 0_.L by POLYNOM4:8;
+   then A6: p *' q = 0_.L by POLYNOM3:35;
+   then A7: emb(2*m,L) * (p*'q) = 0_.L by POLYNOM5:29;
+   DFT(DFT(p*'q, x, 2*m), x", 2*m) = DFT(0_.L, x", 2*m) by A6,Th33;
+   hence thesis by A7,Th33; end;
+ end;
+suppose len p <> 0 & len q <> 0; then A8: len p > 0 & len q > 0;
+A9: m + m <> 0 by A1; then
+  A10: 0 < 2*m;
+set v1 = VM(x,2*m), v2 = VM(x",2*m), v = 1.(L,2*m);
+A11: width v2 = 2*m by MATRIX_1:25 .= len v1 by MATRIX_1:25;
+A12: len mConv(p*'q,2*m) = 2*m by A10,Th28 .= width v1 by MATRIX_1:25;
+A13: v2 * v1 = v1 * v2 by A2,A10,Th40 .= emb(2*m,L) * 1.(L,2*m) by A2,A10,Th39;
+A14: len DFT(p*'q, x, 2*m) <= 2*m
+    proof
+  A15: for i being Element of NAT st
+      i >= 2*m holds DFT(p*'q,x,2*m).i = 0.L by Def7;
+      2*m is_at_least_length_of DFT(p*'q, x, 2*m) by A15,ALGSEQ_1:def 3;
+      hence thesis by ALGSEQ_1:def 4;
+    end;
+A16: len (v1 * mConv(p*'q, 2*m)) = len v1 by A12,MATRIX_3:def 4
+                                .= 2*m by MATRIX_1:25;
+A17: width(v1 * mConv(p*'q, 2*m)) =
+      width(mConv(p*'q,2*m)) by A12,MATRIX_3:def 4 .= 1 by A10,Th28;
+A18: len (p*'q) <= len p + len q by A8,Th9;
+     len p + len q <= m + m by A1,XREAL_1:9;then
+A19: len (p*'q) <= 2*m by A18,XREAL_1:2;
+A20: for i being Nat st i < 2*m holds
+     (v1 * mConv(p*'q,2*m))*(i+1,1) = (DFT(p*'q,x,2*m)).i
+     proof
+       let i be Nat;
+       i in NAT by ORDINAL1:def 13;
+       hence thesis by A19,Th41;
+     end;
+A21: v1 * mConv(p*'q,2*m) is Matrix of 2*m,1,L by A17,A16,A10,MATRIX_1:20;
+A22: aConv(v2 * mConv(DFT(p*'q,x,2*m), 2*m))
+  = aConv(v2 * (v1 * mConv(p*'q,2*m))) by A10,A20,A21,Th29
+ .= aConv((v2 * v1) * mConv(p*'q,2*m)) by A12,A11,MATRIX_3:35
+ .= aConv(emb(2*m,L)*(1.(L,2*m)*mConv(p*'q,2*m))) by A13,A10,Th6
+ .= aConv(emb(2*m,L) * mConv(p*'q, 2*m)) by A1,Lm12;
+  aConv(emb(2*m,L) * mConv(p*'q, 2*m)) = emb(2*m,L) * (p*'q)
+  proof
+  A23: dom (aConv(emb(2*m,L) * mConv(p*'q, 2*m)))
+      = NAT by FUNCT_2:def 1
+     .= dom (emb(2*m,L) * (p*'q)) by FUNCT_2:def 1;
+  now let u' be set;
+      assume u' in dom(aConv(emb(2*m,L) * mConv(p*'q, 2*m)));
+      then reconsider u = u' as Element of NAT by FUNCT_2:def 1;
+      per cases;
+      suppose A24: u < 2*m;
+A25:     len (emb(2*m,L) * mConv(p*'q, 2*m)) =
+        len (mConv(p*'q, 2*m)) by MATRIX_3:def 5
+            .= 2*m by A10, Th28;
+    A26: [u+1,1] in Indices mConv(p*'q, 2*m)
+        proof
+          len (mConv(p*'q, 2*m)) = 2*m by A10, Th28; then
+          A27: dom (mConv(p*'q, 2*m)) = Seg (2*m) by FINSEQ_1:def 3;
+          A28: 0+1 <= u+1 by XREAL_1:8;
+          u+1 <= 2*m by A24,NAT_1:38; then
+          A29: u+1 in Seg (2*m) by A28;
+          A30: Seg width (mConv(p*'q, 2*m)) = Seg 1 by A10, Th28;
+          1 in Seg 1;
+          hence thesis by A27, A29, A30, ZFMISC_1:106;
+        end;
+        thus (aConv(emb(2*m,L) * mConv(p*'q, 2*m))).u' =
+        (emb(2*m,L) * mConv(p*'q, 2*m))*(u+1, 1) by A25,A24,Def5
+        .= emb(2*m,L) * ((mConv(p*'q, 2*m))*(u+1, 1))
+          by A26, MATRIX_3:def 5
+        .= emb(2*m,L) * (p*'q).u by A24, Th28
+        .= (emb(2*m,L) * (p*'q)).u' by POLYNOM5:def 3;
+        end;
+      suppose A31: 2*m <= u;
+A32:     len (emb(2*m,L) * mConv(p*'q, 2*m)) =
+        len (mConv(p*'q, 2*m)) by MATRIX_3:def 5
+          .= 2*m by A10, Th28;
+        A33: len(p *' q) <= u by A19,A31,XREAL_1:2;
+        thus (aConv(emb(2*m,L) * mConv(p*'q, 2*m))).u' = 0.L by A32,A31,Def5
+        .= emb(2*m,L) * 0.L by VECTSP_1:36
+        .= emb(2*m,L) * (p*'q).u by A33, ALGSEQ_1:22
+        .= (emb(2*m,L) * (p*'q)).u' by POLYNOM5:def 3;
+        end;
+    end;
+    hence thesis by A23,FUNCT_1:9;
+  end;
+  hence thesis by A9,A14,A22,Th42;
+  end;
+end;
+
+theorem
+for L being Field,
+    p,q being Polynomial of L,
+    m being Element of NAT st m > 0 & len p <= m & len q <= m
+for x being Element of L st x is_primitive_root_of_degree 2*m
+holds emb(2*m,L) <> 0.L
+implies (emb(2*m,L))" * DFT(DFT(p,x,2*m) * DFT(q,x,2*m), x", 2*m) = p *' q
+proof
+let L be Field;
+let p,q be Polynomial of L;
+let m be Element of NAT;
+assume A1: m > 0 & len p <= m & len q <= m;
+let x be Element of L;
+assume A2: x is_primitive_root_of_degree 2*m;
+assume A3: emb(2*m,L) <> 0.L;
+(emb(2*m,L))" * DFT(DFT(p,x,2*m) * DFT(q,x,2*m), x", 2*m)
+  = (emb(2*m,L))" * DFT(DFT(p*'q,x,2*m), x", 2*m) by Th34
+ .= (emb(2*m,L))" * (emb(2*m,L) * (p*'q)) by A1,A2,Th43
+ .= ((emb(2*m,L))" * emb(2*m,L)) * (p*'q) by Th10
+ .= 1.L * (p*'q) by A3,VECTSP_1:def 22
+ .= p*'q by POLYNOM5:28;
+hence thesis;
+end;

@@ -204,8 +204,7 @@ theorem Th21:
   proof assume A1: v = w1 & u = w2;
     reconsider ww1 = w1, ww2 = w2 as VECTOR of V by Th18;
      A2: v + u = (the add of V).[ww1,ww2] by A1;
-         w1 + w2 = (the add of W).[w1,w2]
-               .= ((the add of V)||the carrier of W).[w1,w2] by Def2;
+         w1 + w2 = ((the add of V)||the carrier of W).[w1,w2] by Def2;
    hence thesis by A2,FUNCT_1:72;
   end;
 
@@ -214,8 +213,7 @@ theorem Th22:
   proof assume A1: w = v;
     reconsider ww1 = w as VECTOR of V by Th18;
      A2: a * v = (the Mult of V).[a,ww1] by A1;
-         a * w = (the Mult of W).[a,w]
-             .= ((the Mult of V) | [:REAL, the carrier of W:]).[a,w] by Def2;
+         a * w = ((the Mult of V) | [:REAL, the carrier of W:]).[a,w] by Def2;
    hence thesis by A2,FUNCT_1:72;
   end;
 
@@ -335,27 +333,21 @@ theorem Th32:
            reconsider x1 = x, y1 = y as VECTOR of V by A1,TARSKI:def 3;
           thus x + y = AV.[x1,y1] by A6
                 .= y1 + x1 by RLVECT_1:def 3
-                .= AV.[y1,x1]
                 .= y + x by A6;
          end;
         thus for x,y,z being VECTOR of W holds (x + y) + z = x + (y + z)
          proof let x,y,z be VECTOR of W;
            reconsider x1 = x, y1 = y, z1 = z as VECTOR of V by A1,TARSKI:def 3;
           thus (x + y) + z = AV.[x + y,z1] by A6
-                          .= AV.[AV.[x1,y1],z1] by A6
-                          .= AV.[x1 + y1,z1]
-                          .= (x1 + y1) + z1
+                          .= (x1 + y1) + z1 by A6
                           .= x1 + (y1 + z1) by RLVECT_1:def 6
-                          .= AV.[x1,y1 + z1]
-                          .= AV.[x1,AV.[y1,z1]]
                           .= AV.[x1,y + z] by A6
                           .= x + (y + z) by A6;
          end;
         thus for x being VECTOR of W holds x + 0.W = x
          proof let x be VECTOR of W;
            reconsider y = x, z = 0.W as VECTOR of V by A1,TARSKI:def 3;
-          thus x + 0.W = AV.[y,z] by A6
-                      .= y + 0.V by A2
+          thus x + 0.W = y + 0.V by  A6,A2
                       .= x by RLVECT_1:10;
          end;
         thus for x being VECTOR of W
@@ -365,25 +357,18 @@ theorem Th32:
            consider v such that A8: x1 + v = 0.V by RLVECT_1:def 8;
              v = - x1 by A8,RLVECT_1:def 10
              .= (- 1) * x1 by RLVECT_1:29
-             .= MV.[- 1,x1]
              .= (- 1) * x by A7;
            then reconsider y = v as VECTOR of W;
           take y;
-          thus x + y = AV.[x1,v] by A6
-                    .= 0.W by A2,A8;
+          thus x + y = 0.W by  A6,A2,A8;
          end;
         thus for a
               for x,y being VECTOR of W holds a * (x + y) = a * x + a * y
          proof let a; let x,y be VECTOR of W;
            reconsider x1 = x, y1 = y as VECTOR of V by A1,TARSKI:def 3;
           thus a * (x + y) = MV.[a,x + y] by A7
-                          .= MV.[a,AV.[x1,y1]] by A6
-                          .= MV.[a,x1 + y1]
-                          .= a * (x1 + y1)
+                          .= a * (x1 + y1) by A6
                           .= a * x1 + a * y1 by RLVECT_1:def 9
-                          .= AV.[a * x1,a * y1]
-                          .= AV.[MV.[a,x1],a * y1]
-                          .= AV.[MV.[a,x1],MV.[a,y1]]
                           .= AV.[MV.[a,x1],a * y] by A7
                           .= AV.[a * x, a * y] by A7
                           .= a * x + a * y by A6;
@@ -392,12 +377,8 @@ theorem Th32:
               for x being VECTOR of W holds (a + b) * x = a * x + b * x
          proof let a,b; let x be VECTOR of W;
            reconsider y = x as VECTOR of V by A1,TARSKI:def 3;
-          thus (a + b) * x = MV.[a + b,y] by A7
-                          .= (a + b) * y
+          thus (a + b) * x = (a + b) * y by A7
                           .= a * y + b * y by RLVECT_1:def 9
-                          .= AV.[a * y,b * y]
-                          .= AV.[MV.[a,y],b * y]
-                          .= AV.[MV.[a,y],MV.[b,y]]
                           .= AV.[MV.[a,y],b * x] by A7
                           .= AV.[a * x,b * x] by A7
                           .= a * x + b * x by A6;
@@ -406,18 +387,14 @@ theorem Th32:
               for x being VECTOR of W holds (a * b) * x = a * (b * x)
          proof let a,b; let x be VECTOR of W;
            reconsider y = x as VECTOR of V by A1,TARSKI:def 3;
-          thus (a * b) * x = MV.[(a * b),y] by A7
-                          .= (a * b) * y
+          thus (a * b) * x = (a * b) * y by A7
                           .= a * (b * y) by RLVECT_1:def 9
-                          .= MV.[a,b * y]
-                          .= MV.[a,MV.[b,y]]
                           .= MV.[a,b * x] by A7
                           .= a * (b * x) by A7;
          end;
         let x be VECTOR of W;
          reconsider y = x as VECTOR of V by A1,TARSKI:def 3;
-        thus 1 * x = MV.[1,y] by A7
-                  .= 1 * y
+        thus 1 * x = 1 * y by A7
                   .= x by RLVECT_1:def 9;
        end;
    hence thesis by A1,A3,A4,A5,Def2;
@@ -617,8 +594,7 @@ A5:        D = rng A
 
                 A7: [d1,y] in [:D,D:] & [d1,y] in [:VV,VV:]
                                                 by A6,ZFMISC_1:106;
-                then A.[d1,y] = (the add of V).[d1,y] by FUNCT_1:72
-                             .= v0 + v1
+                then A.[d1,y] = v0 + v1 by FUNCT_1:72
                              .= y by RLVECT_1:10;
               hence thesis by A3,A7;
              end;
@@ -630,8 +606,7 @@ A5:        D = rng A
                                                          by A10,ZFMISC_1:106;
              reconsider v1 = x1, v2 = x2 as Element of VV by A10;
 
-                  y = (the add of V).[x1,x2] by A9,A11,A12,FUNCT_1:72
-                   .= v1 + v2;
+                  y = v1 + v2 by A9,A11,A12,FUNCT_1:72;
             hence y in D by A2,A10,Def1;
            end;
           hence thesis by FUNCT_1:def 5;
@@ -646,8 +621,7 @@ A13:        D = rng M
 
                 A15: [1,y] in [:REAL,D:] & [1,y] in [:REAL,VV:]
                                                  by A14,ZFMISC_1:106;
-                then M.[1,y] = (the Mult of V).[1,y] by FUNCT_1:72
-                            .= 1 * v1
+                then M.[1,y] = 1 * v1 by FUNCT_1:72
                             .= y by RLVECT_1:def 9;
               hence thesis by A4,A15;
              end;
@@ -661,8 +635,7 @@ A13:        D = rng M
              reconsider v2 = x2 as Element of VV by A19;
 
              reconsider xx1 = x1 as Real by A18;
-                  y = (the Mult of V).[x1,x2] by A17,A20,A21,FUNCT_1:72
-                   .= xx1 * v2;
+                  y = xx1 * v2 by A17,A20,A21,FUNCT_1:72;
             hence y in D by A2,A19,Def1;
            end;
           hence thesis by FUNCT_1:def 5;
@@ -1115,8 +1088,7 @@ theorem Th70:
              v - z = u + (z - z) by A1,RLVECT_1:def 6
                .= u + 0.V by RLVECT_1:28
                .= u by RLVECT_1:10;
-          then x = (v + (- z)) + v1 by A3
-                .= v + (v1 + (- z)) by RLVECT_1:def 6
+          then x = v + (v1 + (- z)) by  A3,RLVECT_1:def 6
                 .= v + (v1 - z);
           then x in B by A5;
        hence thesis;
@@ -1143,7 +1115,6 @@ theorem Th71:
       then consider u such that A1: v = - v + u and A2: u in W;
           0.V = v - (- v + u) by A1,RLVECT_1:28
           .= (v - (- v)) - u by RLVECT_1:41
-          .= (v + (- (- v))) - u
           .= (v + v) - u by RLVECT_1:30
           .= (1 * v + v) - u by RLVECT_1:def 9
           .= (1 * v + 1 * v) - u by RLVECT_1:def 9
@@ -1294,8 +1265,7 @@ theorem
        then consider v1 such that A1: u = v + v1 and A2: v1 in W;
       take x = - v1;
       thus x in W by A2,Th30;
-         u = v + (- (- v1)) by A1,RLVECT_1:30
-       .= v - (- v1);
+         u = v - (- v1) by A1,RLVECT_1:30;
       hence thesis;
      end;
      given v1 such that A3: v1 in W & u = v - v1;
@@ -1311,8 +1281,7 @@ theorem Th81:
     proof given v such that A1: v1 in v + W and A2: v2 in v + W;
       consider u1 such that A3: u1 in W and A4: v1 = v + u1 by A1,Th79;
       consider u2 such that A5: u2 in W and A6: v2 = v + u2 by A2,Th79;
-          v1 - v2 = (u1 + v) + (- (v + u2)) by A4,A6
-              .= (u1 + v) + ((- v) - u2) by RLVECT_1:44
+          v1 - v2 = (u1 + v) + ((- v) - u2) by  A4,A6,RLVECT_1:44
               .= ((u1 + v) + (- v)) - u2 by RLVECT_1:def 6
               .= (u1 + (v + (- v))) - u2 by RLVECT_1:def 6
               .= (u1 + 0.V) - u2 by RLVECT_1:16
@@ -1340,10 +1309,7 @@ theorem Th82:
        then v in {u + u2 : u2 in W};
       then consider u1 such that A2: v = u + u1 and A3: u1 in W;
           0.V = (u + u1) - v by A2,RLVECT_1:28
-               .= u + (u1 - v) by RLVECT_1:def 6
-               .= u + ((- v) + u1)
-               .= (u + (- v)) + u1 by RLVECT_1:def 6
-               .= u1 + (u - v);
+               .= u1 + (u - v) by  RLVECT_1:def 6;
         then v1 = - u1 by RLVECT_1:def 10;
     hence v1 in W by A3,Th30;
     thus v + v1 = (u + v) - v by RLVECT_1:def 6
@@ -1362,10 +1328,7 @@ theorem Th83:
        then u in {v + u2 : u2 in W};
       then consider u1 such that A2: u = v + u1 and A3: u1 in W;
           0.V = (v + u1) - u by A2,RLVECT_1:28
-               .= v + (u1 - u) by RLVECT_1:def 6
-               .= v + ((- u) + u1)
-               .= (v + (- u)) + u1 by RLVECT_1:def 6
-               .= u1 + (v - u);
+               .= u1 + (v - u) by  RLVECT_1:def 6;
         then v1 = - u1 by RLVECT_1:def 10;
     hence v1 in W by A3,Th30;
     thus v - v1 = (v - v) + u by RLVECT_1:43
@@ -1438,11 +1401,9 @@ theorem Th85:
         then consider u1 such that A7: z = u + u1 and A8: u1 in W2;
              x = 0.V + x by RLVECT_1:10
            .= v - v + x by RLVECT_1:28
-           .= (- v + v) + x
            .= - v + (u + u1) by A7,RLVECT_1:def 6;
           then A9: (v + (- v + (u + u1))) + W1 = v + W1 by A6,Th68;
-             v + (- v + (u + u1)) = (v + (- v)) + (u + u1) by RLVECT_1:def 6
-                              .= (v - v) + (u + u1)
+             v + (- v + (u + u1)) = (v - v) + (u + u1) by RLVECT_1:def 6
                               .= 0.V + (u + u1) by RLVECT_1:28
                               .= u + u1 by RLVECT_1:10;
           then (u + u1) + W2 = (u + u1) + W1 by A1,A8,A9,Th68;
@@ -1462,11 +1423,9 @@ theorem Th85:
         then consider u1 such that A12: z = v + u1 and A13: u1 in W1;
              x = 0.V + x by RLVECT_1:10
            .= u - u + x by RLVECT_1:28
-           .= (- u + u) + x
            .= - u + (v + u1) by A12,RLVECT_1:def 6;
           then A14: (u + (- u + (v + u1))) + W2 = u + W2 by A11,Th68;
-             u + (- u + (v + u1)) = (u + (- u)) + (v + u1) by RLVECT_1:def 6
-                              .= (u - u) + (v + u1)
+             u + (- u + (v + u1)) = (u - u) + (v + u1) by RLVECT_1:def 6
                               .= 0.V + (v + u1) by RLVECT_1:28
                               .= v + u1 by RLVECT_1:10;
           then (v + u1) + W1 = (v + u1) + W2 by A1,A13,A14,Th68;

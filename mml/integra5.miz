@@ -14,8 +14,8 @@ environ
       PRE_TOPC, INTEGRA5, FINSEQ_4, ARYTM;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
       COMPLEX1, REAL_1, NAT_1, REALSET1, RELSET_1, FUNCT_2, RCOMP_1, PARTFUN1,
-      MEMBERED, PSCOMP_1, FINSEQ_1, FUNCOP_1, SEQ_1, RFUNCT_1, FINSEQ_2, SEQ_2,
-      SEQ_4, BINOP_2, PRE_CIRC, FDIFF_1, FINSEQ_4, RVSUM_1, INTEGRA1, INTEGRA2,
+      PSCOMP_1, FINSEQ_1, FUNCOP_1, SEQ_1, RFUNCT_1, FINSEQ_2, SEQ_2, SEQ_4,
+      BINOP_2, PRE_CIRC, FDIFF_1, FINSEQ_4, RVSUM_1, INTEGRA1, INTEGRA2,
       FCONT_1, FCONT_2, RFUNCT_2, XXREAL_0;
  constructors PARTFUN1, XXREAL_0, REAL_1, NAT_1, BINOP_2, COMPLEX1, FINSEQOP,
       FINSEQ_4, SETWOP_2, RFUNCT_1, RFUNCT_2, FCONT_1, FCONT_2, FDIFF_1,
@@ -33,7 +33,7 @@ environ
 begin ::Some useful properties of finite sequence
 
 reserve i,k,n,m for Element of NAT;
-reserve a,b,r,r1,r2,s,x,x1,x2,y for Real;
+reserve a,b,r,r1,r2,s,x,x1,x2 for Real;
 reserve A for closed-interval Subset of REAL;
 reserve X for set;
 
@@ -134,16 +134,13 @@ holds (f||C)(#)(g||C) = (f(#)g)||C
 proof
    let f,g be PartFunc of REAL,REAL;
    let C be non empty Subset of REAL;
-A1:dom (f||C(#)g||C)= dom (f||C) /\ dom (g||C) by SEQ_1:def 5
-   .= dom (f|C) /\ dom(g||C)
-   .= dom (f|C) /\ dom(g|C)
+A1:dom (f||C(#)g||C)= dom (f|C) /\ dom(g||C) by SEQ_1:def 5
    .= (dom f /\ C) /\ dom (g|C) by FUNCT_1:68
    .= (dom f /\ C) /\ (dom g /\ C) by FUNCT_1:68
    .= ((dom f /\ C) /\ C) /\ dom g by XBOOLE_1:16
    .= (dom f /\ (C /\ C)) /\ dom g by XBOOLE_1:16
    .= (dom f /\ C) /\ dom g;
-      dom ((f(#)g)||C)= dom ((f(#)g)|C)
-   .= dom(f(#)g) /\ C by FUNCT_1:68
+      dom ((f(#)g)||C)= dom(f(#)g) /\ C by FUNCT_1:68
    .= (dom f /\ dom g) /\ C by SEQ_1:def 5;
 then A2:dom (f||C(#)g||C) = dom ((f(#)g)||C) by A1,XBOOLE_1:16;
 
@@ -155,12 +152,11 @@ then A2:dom (f||C(#)g||C) = dom ((f(#)g)||C) by A1,XBOOLE_1:16;
     then c in dom (f||C) /\ dom (g||C) by SEQ_1:def 5;
     then c in dom (f||C) & c in dom (g||C) by XBOOLE_0:def 3;
 then A4: c in dom (f|C) & c in dom (g|C);
-A5: (f||C(#)g||C).c = (f||C).c * (g||C).c by A3,SEQ_1:def 5
-    .=(f|C).c * (g||C).c .=(f|C).c * (g|C).c;
+A5: (f||C(#)g||C).c =(f|C).c * (g|C).c by A3,SEQ_1:def 5;
 A6: c in dom ((f(#)g)|C) by A2,A3;
     then c in dom (f(#)g) /\ C by FUNCT_1:68;
 then A7: c in dom (f(#)g) by XBOOLE_0:def 3;
-       ((f(#)g)||C).c = ((f(#)g)|C).c .=(f(#)g).c by A6,FUNCT_1:68
+       ((f(#)g)||C).c =(f(#)g).c by A6,FUNCT_1:68
     .=f.c * g.c by A7,SEQ_1:def 5 .= (f|C).c * g.c by A4,FUNCT_1:68;
     hence thesis by A4,A5,FUNCT_1:68;
    end;
@@ -173,11 +169,10 @@ holds (f+g)||C = f||C + g||C
 proof
    let f,g be PartFunc of REAL,REAL;
    let C be non empty Subset of REAL;
-A1:dom ((f+g)||C) = dom ((f+g)|C) .= dom (f+g) /\ C by FUNCT_1:68
+A1:dom ((f+g)||C) = dom (f+g) /\ C by FUNCT_1:68
    .= dom f /\ dom g /\ C by SEQ_1:def 3;
-      dom (f||C+g||C) = dom (f||C) /\ dom (g||C) by SEQ_1:def 3
-   .=dom (f|C) /\ dom (g||C) .= dom (f|C) /\ dom (g|C)
-   .= (dom f /\ C) /\ dom (g|C) by FUNCT_1:68
+      dom (f||C+g||C) =dom (f|C) /\ dom (g||C) by SEQ_1:def 3 .=
+ (dom f /\ C) /\ dom (g|C) by FUNCT_1:68
    .= (dom f /\ C) /\ (dom g /\ C) by FUNCT_1:68
    .= dom f /\ (C /\ (dom g /\ C)) by XBOOLE_1:16
    .= dom f /\ (dom g /\ (C /\ C)) by XBOOLE_1:16
@@ -193,14 +188,13 @@ then A4: c in dom((f+g)|C);
     then c in dom(f+g) /\ C by FUNCT_1:68;
 then A5: c in dom(f+g) by XBOOLE_0:def 3;
 
-A6: (f+g)||C.c = (f+g)|C.c .= (f+g).c by A4,FUNCT_1:68
+A6: (f+g)||C.c = (f+g).c by A4,FUNCT_1:68
     .= f.c + g.c by A5,SEQ_1:def 3;
        c in dom(f||C) /\ dom(g||C) by A2,A3,SEQ_1:def 3;
     then c in dom(f||C) & c in dom(g||C) by XBOOLE_0:def 3;
 then A7: c in dom(f|C) & c in dom(g|C);
-       (f||C+g||C).c = f||C.c + g||C.c by A2,A3,SEQ_1:def 3
-    .=f|C.c + g||C.c .=f|C.c + g|C.c
-    .= f.c + g|C.c by A7,FUNCT_1:68;
+       (f||C+g||C).c =f|C.c + g||C.c by A2,A3,SEQ_1:def 3 .=
+ f.c + g|C.c by A7,FUNCT_1:68;
     hence thesis by A6,A7,FUNCT_1:68;
    end;
    hence thesis by A2,PARTFUN1:34;
@@ -226,7 +220,7 @@ for f being PartFunc of REAL,REAL st A c= dom f holds f||A is total
 proof
    let f be PartFunc of REAL,REAL;
    assume A1:A c= dom f;
-      dom (f||A) = dom (f|A) .= dom f /\ A by FUNCT_1:68 .= A
+      dom (f||A) = dom f /\ A by FUNCT_1:68 .= A
    by A1,XBOOLE_1:28;
    hence f||A is total by PARTFUN1:def 4;
 end;
@@ -244,11 +238,10 @@ A1:for x being set st x in A /\ dom f holds
    proof
     let x be set; assume A2:x in A /\ dom (f||A);
 A3: dom(f|A) = dom f /\ A by FUNCT_1:68;
-then A4: dom(f|A) c= A by XBOOLE_1:17;
-A5: A /\ dom(f||A)=A /\ dom(f|A) .= dom f /\ A by A3,A4,XBOOLE_1:28
+A5: A /\ dom(f||A)= dom f /\ A by A3,XBOOLE_1:28
 ;
 then A6: x in A /\ dom f & x in dom(f|A) by A2,FUNCT_1:68;
-       (f||A).x = (f|A).x .= f.x by A6,FUNCT_1:68;
+       (f||A).x = f.x by A6,FUNCT_1:68;
     hence thesis by A1,A2,A5;
    end;
    hence thesis by RFUNCT_1:def 9;
@@ -267,11 +260,10 @@ A1:for x being set st x in A /\ dom f holds
    proof
     let x be set; assume A2:x in A /\ dom (f||A);
 A3: dom(f|A) = dom f /\ A by FUNCT_1:68;
-then A4: dom(f|A) c= A by XBOOLE_1:17;
-A5: A /\ dom(f||A)=A /\ dom(f|A) .= dom f /\ A by A3,A4,XBOOLE_1:28
+A5: A /\ dom(f||A)= dom f /\ A by A3,XBOOLE_1:28
 ;
 then A6: x in A /\ dom f & x in dom(f|A) by A2,FUNCT_1:68;
-       (f||A).x = (f|A).x .= f.x by A6,FUNCT_1:68;
+       (f||A).x = f.x by A6,FUNCT_1:68;
     hence thesis by A1,A2,A5;
    end;
    hence thesis by RFUNCT_1:def 10;
@@ -607,8 +599,7 @@ A10:  a<=b & a=inf divset(D,k) & b=sup divset(D,k) by INTEGRA1:4;
       thus thesis by A8,A10,INTEGRA2:1;
      end;
 A11:  diff(f,r)*vol(divset(D,k)) = 0 by A7;
-        f.(sup divset(D,k))-f.(inf divset(D,k)) =
-        f.(sup divset(D,k))-f.(sup divset(D,k)) by A6 .= 0;
+        f.(sup divset(D,k))-f.(inf divset(D,k)) = 0 by A6;
      hence thesis by A9,A11;
      end;
      suppose A12:inf divset(D,k)<>sup divset(D,k);
@@ -652,9 +643,8 @@ A25:divset(D,k) c= A by A23,INTEGRA1:10;
 then A26:(f`|X).r = diff(f,r) by A2,A24,FDIFF_1:def 8;
 A27:dom((f`|X)|A) = dom(f`|X) /\ A by FUNCT_1:68
     .= X /\ A by A2,FDIFF_1:def 8 .= A by A1,XBOOLE_1:28;
-then A28:diff(f,r)=((f`|X)|A).r by A24,A25,A26,FUNCT_1:68 .= ((f`|X)||A).r;
-A29:dom(((f`|X)||A)|divset(D,k))=dom((f`|X)||A) /\ divset(D,k) by FUNCT_1:68
-    .= A /\ divset(D,k) by A27
+then A28:diff(f,r)= ((f`|X)||A).r by A24,A25,A26,FUNCT_1:68;
+A29:dom(((f`|X)||A)|divset(D,k))= A /\ divset(D,k) by  FUNCT_1:68,A27
     .=divset(D,k) by A25,XBOOLE_1:28;
     then ((f`|X)||A)|divset(D,k).r in rng(((f`|X)||A)|divset(D,k))
     by A24,FUNCT_1:def 5;
@@ -1307,7 +1297,7 @@ then A28:   F1.i = f.(sup divset(D,i)) & F.i = f.(sup divset(D,i)) by A21,A24;
        suppose i > len F;
        then i >= len F + 1 by NAT_1:38;
        then A29: i >= len D - (1-1) by A23,A24;
-then A30:   i = len D - (1-1) by A21,A26,XXREAL_0:1 .=len F + 1 by A23,A24;
+then A30:   i =len F + 1 by  A21,A26,XXREAL_0:1,A23,A24;
           i in Seg len F1 by A26,FINSEQ_1:3;
 then A31:   F1.i = f.(sup divset(D,i)) & i in dom D by A21,FINSEQ_1:def 3;
           sup divset(D,i) = D.i
@@ -1435,7 +1425,7 @@ then A58: k in dom D by FINSEQ_1:def 3;
 
 A59:f||A is total & f||A is_bounded_on A
    proof
-A60: dom (f||A) = dom (f|A) .= dom f /\ A by FUNCT_1:68 .= A
+A60: dom (f||A) = dom f /\ A by FUNCT_1:68 .= A
     by A2,XBOOLE_1:28;
     hence f||A is total by PARTFUN1:def 4;
 
@@ -1594,7 +1584,7 @@ then A3: -f is_non_decreasing_on A by RFUNCT_1:38;
 then A4: ((-f)||A) is_integrable_on A by Def2;
 A5:  ((-f)||A) is total & ((-f)||A) is_bounded_on A
     proof
-A6:  dom ((-f)||A) = dom ((-f)|A) .= dom (-f) /\ A by FUNCT_1:68
+A6:  dom ((-f)||A) = dom (-f) /\ A by FUNCT_1:68
      .= dom f /\ A by SEQ_1:def 7 .= A by A2,XBOOLE_1:28;
      hence ((-f)||A) is total by PARTFUN1:def 4;
      consider x such that
@@ -1650,10 +1640,10 @@ then A18: (-1)(#)((-f)||A) is_integrable_on A by A4,A5,INTEGRA2:31;
         A = dom ((-1)(#)((-f)||A)) & A = dom (f||A) &
      for z being Element of A st z in A holds ((-1)(#)((-f)||A)).z = (f||A).z
      proof
-A19:  dom ((-f)||A) = dom ((-f)|A) .= dom (-f) /\ A by FUNCT_1:68
+A19:  dom ((-f)||A) = dom (-f) /\ A by FUNCT_1:68
       .= dom f /\ A by SEQ_1:def 7 .= A by A2,XBOOLE_1:28;
       hence A20:dom ((-1)(#)((-f)||A)) = A by SEQ_1:def 6;
-         dom (f||A) = dom (f|A) .= dom f /\ A by FUNCT_1:68;
+         dom (f||A) = dom f /\ A by FUNCT_1:68;
       hence A21:dom (f||A) = A by A2,XBOOLE_1:28;
 
          for z being Element of A st z in A holds ((-1)(#)((-f)||A)).z = (f||A)
@@ -1665,13 +1655,13 @@ z
           z in dom ((-f)||A) by A19;
 then A23:   z in dom ((-f)|A);
 A24:   A c= dom(-f) by A2,SEQ_1:def 7;
-          ((-f)||A).z = ((-f)|A).z .= (-f).z by A23,FUNCT_1:68
+          ((-f)||A).z = (-f).z by A23,FUNCT_1:68
        .=-(f.z) by A22,A24,SEQ_1:def 7;
 then A25:   ((-1)(#)
 ((-f)||A)).z =(-1)*(-(f.z)) by A20,SEQ_1:def 6 .= f.z;
           z in dom (f||A) by A21;
 then A26:   z in dom (f|A);
-          (f||A).z = (f|A).z .= f.z by A26,FUNCT_1:68;
+          (f||A).z = f.z by A26,FUNCT_1:68;
        hence thesis by A25;
       end;
       hence thesis;
@@ -1745,10 +1735,7 @@ then A17:f`|X is_bounded_on B & f`|X is_bounded_on C by A12,A14,RFUNCT_1:91;
    then A18:integral(f`|X,A) = f.(sup A)-f.(inf A) &
    integral(f`|X,B) = f.(sup B)-f.(inf B) &
    integral(f`|X,C) = f.(sup C)-f.(inf C);
-   then integral(f`|X,B) + integral(f`|X,C) =
-       f.(sup B)-f.(inf B)+(f.(sup C)-f.(inf C))
-    .= f.(sup B)-f.(inf A)+(f.(sup A)-f.(sup B)) by A4,A6,A5
-    .= f.(sup A)-f.(inf A);
+   then integral(f`|X,B) + integral(f`|X,C) = f.(sup A)-f.(inf A) by A4,A5,A6;
    hence thesis by A18;
 end;
 
@@ -1808,7 +1795,7 @@ then A6: integral(f,a,b)=integral(f,[' a,b ']) by Def5;
        A=[.inf A,sup A.] by INTEGRA1:5;
     then inf A = b & sup A = a by A1,INTEGRA1:6;
 then A7: vol(A)=sup A-sup A by A5,INTEGRA1:def 6 .=0;
-       integral(f,A)=integral(f||A) .=0 by A7,INTEGRA4:6;
+       integral(f,A)=0 by A7,INTEGRA4:6;
     hence thesis by A1,A5,A6,Def4;
    end;
    end;
@@ -1896,8 +1883,6 @@ then A30:inf A in A & sup A in A by INTEGRA2:1;
   =integral(((f`|X)(#)g)||A) + integral((f(#)(g`|X))||A)
   by A17,A18,A20,A21,A23,INTEGRA1:59;
   then integral(((f`|X)(#)g+f(#)(g`|X))||A)
-  = integral(((f`|X)(#)g)||A) + integral((f(#)(g`|X))||A) by Th5
-  .=integral((f`|X)(#)g,A) + integral((f(#)(g`|X))||A)
-  .=integral((f`|X)(#)g,A) + integral(f(#)(g`|X),A);
+  =integral((f`|X)(#)g,A) + integral(f(#)(g`|X),A) by Th5;
   hence thesis by A8,A27,A28;
 end;

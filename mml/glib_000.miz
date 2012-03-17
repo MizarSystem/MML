@@ -11,8 +11,7 @@ environ
       ORDINAL2, PBOOLE, REALSET1, RELAT_1, TOPGEN_1;
  notations TARSKI, XBOOLE_0, DOMAIN_1, SUBSET_1, PBOOLE, RELAT_1, CARD_1,
       CARD_2, FUNCT_1, RELSET_1, FINSEQ_1, FINSET_1, NAT_1, FUNCT_2, CQC_LANG,
-      FUNCT_4, ORDINAL1, ORDINAL2,
-      PSCOMP_1, FINSEQ_4, NUMBERS, XXREAL_0;
+      FUNCT_4, ORDINAL2, FINSEQ_4, NUMBERS, XXREAL_0;
  constructors DOMAIN_1, FUNCT_4, XXREAL_0, NAT_1, BINOP_2, CARD_2, CQC_LANG,
       PBOOLE, SEQ_4, FINSEQ_4, ORDINAL2;
  registrations RELSET_1, FINSET_1, NAT_1, CARD_1, CQC_LANG, FINSEQ_1, FUNCT_1,
@@ -167,7 +166,7 @@ definition let G be GraphStruct, n be Nat, x be set;
 A1: dom IT = dom G \/ dom (n .--> x) by FUNCT_4:def 1;
 A2: dom G c= NAT by Def1;
     n in NAT by ORDINAL1:def 13; then
-A3: {n} c= NAT by ZFMISC_1:37;    
+A3: {n} c= NAT by ZFMISC_1:37;
     dom (n .--> x) = {n} by CQC_LANG:5; then
     dom IT c= NAT by A1,A2,A3,XBOOLE_1:8;
     hence G +* (n .--> x) is GraphStruct by Def1;
@@ -232,18 +231,10 @@ A3: VertexSelector in _GraphSelectors &
     EdgeSelector   in _GraphSelectors &
     SourceSelector in _GraphSelectors &
     TargetSelector in _GraphSelectors by ENUMSET1:def 2;
-A4: the_Vertices_of G2 = G2.VertexSelector
-                      .= G.VertexSelector by A3,FUNCT_1:72
-                      .= the_Vertices_of G;
-A5: the_Edges_of G2 = G2.EdgeSelector
-                   .= G.EdgeSelector by A3,FUNCT_1:72
-                   .= the_Edges_of G;
-A6: the_Source_of G2 = G2.SourceSelector
-                      .= G.SourceSelector by A3,FUNCT_1:72
-                      .= the_Source_of G;
-    the_Target_of G2 = G2.TargetSelector
-                      .= G.TargetSelector by A3,FUNCT_1:72
-                      .= the_Target_of G;
+A4: the_Vertices_of G2 = the_Vertices_of G by A3,FUNCT_1:72;
+A5: the_Edges_of G2 = the_Edges_of G by A3,FUNCT_1:72;
+A6: the_Source_of G2 = the_Source_of G by A3,FUNCT_1:72;
+    the_Target_of G2 = the_Target_of G by A3,FUNCT_1:72;
     hence thesis by A2,A4,A5,A6,Lm3;
   end;
 end;
@@ -1155,8 +1146,7 @@ definition let G be finite _Graph, v be Vertex of G;
     v.inDegree() + v.outDegree();
   correctness
   proof
-    v.degree() = v.inDegree() +` v.outDegree()
-              .= Card (v.inDegree() +^ v.outDegree()) by CARD_2:def 1
+    v.degree() = Card (v.inDegree() +^ v.outDegree()) by CARD_2:def 1
               .= Card (v.inDegree() + v.outDegree()) by CARD_2:49
               .= v.inDegree() + v.outDegree() by CARD_1:66;
     hence thesis;
@@ -1202,10 +1192,7 @@ definition let G be finite _Graph, v be Vertex of G;
     v.inDegree() = 0 & v.outDegree() = 0 by NAT_1:23; then
     card v.edgesIn() = 0 & card v.edgesOut() = 0; then
 A1: v.edgesIn() = {} & v.edgesOut() = {} by CARD_2:59;
-    v.edgesInOut() = G.edgesInOut({v})
-                  .= G.edgesInto({v}) \/ G.edgesOutOf({v})
-                  .= v.edgesIn() \/ G.edgesOutOf({v})
-                  .= {} by A1;
+    v.edgesInOut() = {} by A1;
     hence v is isolated by Def51;
   end;
 end;
@@ -1223,10 +1210,7 @@ definition let G be finite _Graph, v be Vertex of G;
     hereby assume v is endvertex; then
         consider e being set such that
     A1: v.edgesInOut() = {e} & not e Joins v,v,G by Def53;
-    A2: {e} = G.edgesInOut({v}) by A1
-           .= G.edgesInto({v}) \/ G.edgesOutOf({v})
-           .= v.edgesIn() \/ G.edgesOutOf({v})
-           .= v.edgesIn() \/ v.edgesOut();
+    A2: {e} = v.edgesIn() \/ v.edgesOut() by A1;
         now per cases by A2, ZFMISC_1:43;
         suppose v.edgesIn() = {e} & v.edgesOut() = {e}; then
         A3: e in v.edgesIn() & e in v.edgesOut() by TARSKI:def 1; then
@@ -1397,15 +1381,13 @@ definition let GSq be GraphSeq;
     hereby assume GSq is halting; then
         consider n being Element of NAT such that
     A1: GSq.n = GSq.(n+1) by Def56;
-        GSq.n = GSq.(n+1) by A1
-               .= GSq.(n+1);
+        GSq.n = GSq.(n+1) by A1;
         hence ex n being Element of NAT st GSq.n = GSq.(n+1);
     end;
     assume ex n being Element of NAT st GSq.n = GSq.(n+1); then
     consider n being Element of NAT such that
 A2: GSq.n = GSq.(n+1);
-    GSq.n = GSq.(n+1) by A2
-         .= GSq.(n+1);
+    GSq.n = GSq.(n+1) by A2;
     hence GSq is halting by Def56;
    end;
 end;
@@ -1478,7 +1460,7 @@ end;
 
 registration let GSq be finite GraphSeq, x be Nat;
   cluster GSq.x -> finite;
-  coherence by Def60;
+  coherence;
 end;
 
 registration let GSq be loopless GraphSeq, x be Nat;
@@ -1602,8 +1584,8 @@ begin :: Theorems
 reserve GS for GraphStruct;
 reserve G,G1,G2,G3 for _Graph;
 reserve e,x,x1,x2,y,y1,y2,E,V,X,Y for set;
-reserve n,n1,n2,m,m1 for Nat;
-reserve v,v1,v2,v3,v4 for Vertex of G;
+reserve n,n1,n2 for Nat;
+reserve v,v1,v2 for Vertex of G;
 
 theorem ::tSELECT01
   VertexSelector = 1 & EdgeSelector = 2 &
@@ -1844,10 +1826,7 @@ proof
     end; then
     In /\ Out = {} by XBOOLE_0:def 1; then
     In misses Out by XBOOLE_0:def 7; then
-    card (In \/ Out) = card In + card Out by CARD_2:53
-                    .= v.inDegree() + card Out
-                    .= v.inDegree() + v.outDegree()
-                    .= v.degree();
+    card (In \/ Out) = v.degree() by CARD_2:53;
     hence thesis;
 end;
 
@@ -2374,8 +2353,7 @@ A2: card (( VG1 \ {v}) \/ {v}) = G2.order() + 1 by A1;
 A3: G1.edgesBetween(VG1 \ {v}) = EG1 \ EV by Th38; then
 A4: EG2 misses EV by A1, XBOOLE_1:79;
     EG1 = EG2 \/ EV by A1, A3, XBOOLE_1:45; then
-    card EG1 = card EG2 + card EV by A4, CARD_2:53
-            .= G2.size() + card EV;
+    card EG1 = G2.size() + card EV by A4,CARD_2:53;
     hence thesis;
 end;
 
@@ -2417,8 +2395,7 @@ A2: card (VG2 \/ V) = card VG2 + card V by CARD_2:53;
 A3: G1.edgesBetween(VG1 \ V) = EG1 \ G1.edgesInOut(V) by Th38; then
 A4: EG2 misses G1.edgesInOut(V) by A1, XBOOLE_1:79;
     EG1 = EG2 \/ G1.edgesInOut(V) by A1,A3,XBOOLE_1:45; then
-    card EG1 = card EG2 + card G1.edgesInOut(V) by A4, CARD_2:53
-            .= G2.size() + card G1.edgesInOut(V);
+    card EG1 = G2.size() + card G1.edgesInOut(V) by A4,CARD_2:53;
     hence thesis;
 end;
 
@@ -2444,8 +2421,7 @@ proof
     let G1 be finite _Graph, e be set, G2 be removeEdge of G1,e;
 A1: the_Vertices_of G1 = the_Vertices_of G2 &
       the_Edges_of G2 = the_Edges_of G1 \ {e} by Th54;
-    thus G1.order() = card the_Vertices_of G1
-                    .= G2.order() by A1;
+    thus G1.order() = G2.order() by A1;
     assume
 A2: e in the_Edges_of G1;
     e in {e} by TARSKI:def 1; then
@@ -2454,9 +2430,7 @@ A3: not e in the_Edges_of G2 by A1,XBOOLE_0:def 4;
       by A2,TARSKI:def 1; then
     {e} c= the_Edges_of G1 by TARSKI:def 3; then
 A4: the_Edges_of G1 = the_Edges_of G2 \/ {e} by A1,XBOOLE_1:45;
-    thus G1.size() = card the_Edges_of G1
-                   .= card the_Edges_of G2 + 1 by A3,A4,CARD_2:54
-                   .= G2.size() + 1;
+    thus G1.size() = G2.size() + 1 by A3,A4,CARD_2:54;
 end;
 
 theorem Th56: ::tGREMOVEES01
@@ -2487,9 +2461,7 @@ proof
 A1: the_Edges_of G2 = the_Edges_of G1 \ E by Th56; then
 A2: E misses the_Edges_of G2 by XBOOLE_1:79;
 A3: the_Edges_of G1 = the_Edges_of G2 \/ E by A1,XBOOLE_1:45;
-    thus G1.size() = card the_Edges_of G1
-                  .= card the_Edges_of G2 + card E by A2,A3,CARD_2:53
-                  .= G2.size() + card E;
+    thus G1.size() = G2.size() + card E by A2,A3,CARD_2:53;
 end;
 
 theorem ::tVEIN01
@@ -3314,12 +3286,8 @@ theorem Th93: ::tGPEQ_GF01
     G1.edgesDBetween(X,Y) = G2.edgesDBetween(X,Y)
 proof assume
 A1: G1 == G2;
-    thus G1.order() = Card the_Vertices_of G1
-                   .= Card the_Vertices_of G2 by A1, Def36
-                   .= G2.order();
-    thus G1.size() = Card the_Edges_of G1
-                  .= Card the_Edges_of G2 by A1, Def36
-                  .= G2.size();
+    thus G1.order() = G2.order() by A1,Def36;
+    thus G1.size() = G2.size() by A1,Def36;
 A2: the_Vertices_of G1 = the_Vertices_of G2 &
     the_Edges_of G1 = the_Edges_of G2 &
     the_Source_of G1 = the_Source_of G2 &
@@ -3336,10 +3304,8 @@ A3: G1.edgesInto(X) = G2.edgesInto(X) by TARSKI:2;
         hence e in G1.edgesOutOf(X) iff e in G2.edgesOutOf(X) by Def29;
     end; hence
 A4: G1.edgesOutOf(X) = G2.edgesOutOf(X) by TARSKI:2;
-    hence G1.edgesInOut(X)=G2.edgesInto(X) \/ G2.edgesOutOf(X) by A3
-                         .= G2.edgesInOut(X);
-    thus G1.edgesBetween(X)=G2.edgesInto(X)/\G2.edgesOutOf(X) by A3,A4
-                          .=G2.edgesBetween(X);
+    hence G1.edgesInOut(X)= G2.edgesInOut(X) by A3;
+    thus G1.edgesBetween(X)=G2.edgesBetween(X) by A3,A4;
     now let e be set;
         e in G1.edgesDBetween(X,Y) iff e DSJoins X,Y,G1 by Def33; then
         e in G1.edgesDBetween(X,Y) iff e DSJoins X,Y,G2 by A1,Th91;
@@ -3463,15 +3429,9 @@ theorem Th99: ::tGPEQ_VF01
 proof
     let v1 be Vertex of G1, v2 be Vertex of G2; assume
 A1: v1 = v2 & G1 == G2; hence
-A2: v1.edgesIn() = G1.edgesInto({v2})
-                .= G2.edgesInto({v2}) by A1, Th93
-                .= v2.edgesIn(); thus
-A3: v1.edgesOut() = G1.edgesOutOf({v2}) by A1
-                 .= G2.edgesOutOf({v2}) by A1,Th93
-                 .= v2.edgesOut();
-    thus v1.edgesInOut() = G1.edgesInOut({v2}) by A1
-                        .= G2.edgesInOut({v2}) by A1,Th93
-                        .= v2.edgesInOut();
+A2: v1.edgesIn() = v2.edgesIn() by Th93; thus
+A3: v1.edgesOut() = v2.edgesOut() by A1,Th93;
+    thus v1.edgesInOut() = v2.edgesInOut() by A1,Th93;
     now per cases;
     suppose
     A4: e in the_Edges_of G1 & (the_Target_of G1).e = v1; then
@@ -3498,20 +3458,12 @@ A3: v1.edgesOut() = G1.edgesOutOf({v2}) by A1
                       .= v2.adj(e) by A9, Def43; end;
     end;
     hence v1.adj(e) = v2.adj(e); thus
-A10: v1.inDegree() = Card v1.edgesIn()
-                 .= v2.inDegree() by A2; thus
-A11: v1.outDegree() = Card v1.edgesOut()
-                  .= v2.outDegree() by A3; thus
-    v1.degree() = v1.inDegree() +` v1.outDegree()
-               .= v2.degree() by A10,A11; thus
-A12: v1.inNeighbors() = (the_Source_of G1).:v1.edgesIn()
-                    .= (the_Source_of G2).:v1.edgesIn() by A1,Def36
-                    .= v2.inNeighbors() by A2; thus
-A13: v1.outNeighbors() = (the_Target_of G1).:v1.edgesOut()
-                     .= (the_Target_of G2).:v1.edgesOut() by A1,Def36
-                     .= v2.outNeighbors() by A3;
-    thus v1.allNeighbors() = v1.inNeighbors() \/ v1.outNeighbors()
-                          .= v2.allNeighbors() by A12,A13;
+A10: v1.inDegree() = v2.inDegree() by A2; thus
+A11: v1.outDegree() = v2.outDegree() by A3; thus
+    v1.degree() = v2.degree() by A10,A11; thus
+A12: v1.inNeighbors() = v2.inNeighbors() by  A1,Def36,A2; thus
+A13: v1.outNeighbors() = v2.outNeighbors() by  A1,Def36,A3;
+    thus v1.allNeighbors() = v2.allNeighbors() by A12,A13;
 end;
 
 theorem ::tGPEQ_VA01

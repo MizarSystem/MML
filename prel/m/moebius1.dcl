@@ -26,6 +26,7 @@
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="FRAENKEL"/>
+<ArticleID name="XBOOLEAN"/>
 <ArticleID name="MARGREL1"/>
 <ArticleID name="PBOOLE"/>
 <ArticleID name="RELAT_2"/>
@@ -133,7 +134,7 @@
 </RCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="639">
+<Func kind="K" nr="648">
 <Func kind="K" nr="5"/>
 </Func>
 <Cluster>
@@ -162,7 +163,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="650">
+<Func kind="K" nr="659">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -181,7 +182,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="651">
+<Func kind="K" nr="660">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -201,7 +202,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="652">
+<Func kind="K" nr="661">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -218,7 +219,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="652">
+<Func kind="K" nr="661">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -237,7 +238,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="653">
+<Func kind="K" nr="662">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -259,7 +260,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="654">
+<Func kind="K" nr="663">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -285,7 +286,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="654">
+<Func kind="K" nr="663">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

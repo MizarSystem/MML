@@ -55,6 +55,7 @@
 <ArticleID name="POLYNOM1"/>
 <ArticleID name="POLYNOM7"/>
 <ArticleID name="BINOP_2"/>
+<ArticleID name="XBOOLEAN"/>
 <ArticleID name="MARGREL1"/>
 <ArticleID name="BINARITH"/>
 <ArticleID name="YELLOW_0"/>
@@ -381,7 +382,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="539">
+<Func kind="K" nr="546">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -478,7 +479,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="538">
+<Func kind="K" nr="545">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>

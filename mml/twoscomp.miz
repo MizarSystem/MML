@@ -14,11 +14,12 @@ environ
       MARGREL1, FINSEQ_2, BINARITH, MSUALG_1, MSAFREE2, CIRCUIT1, CIRCUIT2,
       CIRCCOMB, FACIRC_1;
  constructors XXREAL_0, BINARITH, CIRCUIT1, CIRCUIT2, FACIRC_1;
- registrations CIRCCOMB, FACIRC_1, RELSET_1, MARGREL1, FRAENKEL, CARD_3;
- requirements NUMERALS, SUBSET;
- definitions CIRCUIT2;
- theorems TARSKI, ENUMSET1, MARGREL1, BINARITH, FUNCT_1, FINSEQ_2, CIRCUIT1,
-      CIRCUIT2, CIRCCOMB, FACIRC_1, XBOOLE_0, XBOOLE_1;
+ registrations CIRCCOMB, FACIRC_1, RELSET_1, MARGREL1, FRAENKEL, CARD_3,
+      XBOOLEAN;
+ requirements NUMERALS, SUBSET, BOOLE, ARITHM;
+ definitions CIRCUIT2, MARGREL1, XBOOLEAN;
+ theorems TARSKI, ENUMSET1, BINARITH, FUNCT_1, FINSEQ_2, CIRCUIT1, CIRCUIT2,
+      CIRCCOMB, FACIRC_1, XBOOLE_0, XBOOLE_1;
  schemes FACIRC_1;
 
 begin :: Boolean Operators
@@ -356,17 +357,11 @@ theorem
      for x,y being Element of BOOLEAN holds and2.<*x,y*> = nor2b.<*x,y*> &
    and2a.<*x,y*> = nor2a.<*y,x*> & and2b.<*x,y*> = nor2.<*x,y*>
   proof let x,y be Element of BOOLEAN;
-    thus and2.<*x,y*> = x '&' y by Def1
-                      .= 'not' ('not' x 'or' 'not' y) by BINARITH:12
+    thus and2.<*x,y*> = 'not' ('not' x 'or' 'not' y) by Def1
                       .= nor2b.<*x,y*> by Def12;
-    thus and2a.<*x,y*> = 'not' x '&' y by Def2
-                      .= 'not' ('not' 'not' x 'or' 'not' y) by BINARITH:12
-                      .= 'not' ('not' y 'or' x)
+    thus and2a.<*x,y*> = 'not' ('not' 'not' x 'or' 'not' y) by Def2
                       .= nor2a.<*y,x*> by Def11;
-    thus and2b.<*x,y*> = 'not' x '&' 'not' y by Def3
-                .= 'not' ('not' 'not' x 'or' 'not' 'not' y) by BINARITH:12
-                      .= 'not' (x 'or' 'not' 'not' y)
-                      .= 'not' (x 'or' y)
+    thus and2b.<*x,y*> = 'not' ('not' 'not' x 'or' 'not' 'not' y) by Def3
                       .= nor2.<*x,y*> by Def10;
   end;
 
@@ -375,16 +370,10 @@ theorem
    or2a.<*x,y*> = nand2a.<*y,x*> & or2b.<*x,y*> = nand2.<*x,y*>
   proof let x,y be Element of BOOLEAN;
     thus or2.<*x,y*> = x 'or' y by Def7
-                     .= 'not' ('not' x '&' 'not' y) by BINARITH:def 1
                      .= nand2b.<*x,y*> by Def6;
     thus or2a.<*x,y*> = 'not' x 'or' y by Def8
-                     .= 'not' ('not' 'not' x '&' 'not' y) by BINARITH:def 1
-                     .= 'not' ('not' y '&' x)
                      .= nand2a.<*y,x*> by Def5;
     thus or2b.<*x,y*> = 'not' x 'or' 'not' y by Def9
-             .= 'not' ('not' 'not' x '&' 'not' 'not' y) by BINARITH:def 1
-             .= 'not' (x '&' 'not' 'not' y)
-             .= 'not' (x '&' y)
              .= nand2.<*x,y*> by Def4;
   end;
 
@@ -392,12 +381,7 @@ theorem
      for x,y being Element of BOOLEAN holds xor2b.<*x,y*> = xor2.<*x,y*>
   proof let x,y be Element of BOOLEAN;
     thus xor2b.<*x,y*> = 'not' x 'xor' 'not' y by Def15
-            .= ('not' 'not' x '&' 'not' y) 'or' ('not' x '&' 'not' 'not'
-y) by BINARITH:def 2
-                      .= (x '&' 'not' y) 'or' ('not' x '&' 'not' 'not'
-y)
-                      .= ('not' x '&' y) 'or' (x '&' 'not' y)
-                      .= x 'xor' y by BINARITH:def 2
+            .= x 'xor' y
                       .= xor2.<*x,y*> by Def13;
   end;
 
@@ -406,37 +390,25 @@ theorem
    and2a.<*0,0*>=0 & and2a.<*0,1*>=1 & and2a.<*1,0*>=0 & and2a.<*1,1*>=0 &
    and2b.<*0,0*>=1 & and2b.<*0,1*>=0 & and2b.<*1,0*>=0 & and2b.<*1,1*>=0
   proof
-    thus and2.<*0,0*> = FALSE '&' FALSE by Def1,MARGREL1:36 .= 0 by MARGREL1:36
-,45;
-    thus and2.<*0,1*> = FALSE '&' TRUE by Def1,MARGREL1:36 .= 0 by MARGREL1:36
-,45;
-    thus and2.<*1,0*> = TRUE '&' FALSE by Def1,MARGREL1:36 .= 0 by MARGREL1:36
-,45;
-    thus and2.<*1,1*> = TRUE '&' TRUE by Def1,MARGREL1:36 .= 1 by MARGREL1:36
-,45;
+    thus and2.<*0,0*> = FALSE '&' FALSE by Def1 .= 0;
+    thus and2.<*0,1*> = FALSE '&' TRUE by Def1 .= 0;
+    thus and2.<*1,0*> = TRUE '&' FALSE by Def1 .= 0;
+    thus and2.<*1,1*> = TRUE '&' TRUE by Def1 .= 1;
     thus and2a.<*0,0*> = 'not'
-FALSE '&' FALSE by Def2,MARGREL1:36 .= 0 by MARGREL1:36,45;
-    thus and2a.<*0,1*> = 'not' FALSE '&' TRUE by Def2,MARGREL1:36
-                      .= TRUE '&' TRUE by MARGREL1:41
-                      .= 1 by MARGREL1:36,45;
-    thus and2a.<*1,0*> = 'not'
-TRUE '&' FALSE by Def2,MARGREL1:36 .= 0 by MARGREL1:36,45;
-    thus and2a.<*1,1*> = 'not' TRUE '&' TRUE by Def2,MARGREL1:36
-                      .= FALSE '&' TRUE by MARGREL1:41
-                      .= 0 by MARGREL1:36,45;
-    thus and2b.<*0,0*> = 'not' FALSE '&' 'not' FALSE by Def3,MARGREL1:36
-                      .= TRUE '&' 'not' FALSE by MARGREL1:41
-                      .= TRUE '&' TRUE by MARGREL1:41
-                      .= 1 by MARGREL1:36,45;
-    thus and2b.<*0,1*> = 'not' FALSE '&' 'not' TRUE by Def3,MARGREL1:36
-                      .= 'not' FALSE '&' FALSE by MARGREL1:41
-                      .= 0 by MARGREL1:36,45;
-    thus and2b.<*1,0*> = 'not' TRUE '&' 'not' FALSE by Def3,MARGREL1:36
-                      .= FALSE '&' 'not' FALSE by MARGREL1:41
-                      .= 0 by MARGREL1:36,45;
-    thus and2b.<*1,1*> = 'not' TRUE '&' 'not' TRUE by Def3,MARGREL1:36
-                      .= FALSE '&' 'not' TRUE by MARGREL1:41
-                      .= 0 by MARGREL1:36,45;
+FALSE '&' FALSE by Def2 .= 0;
+    thus and2a.<*0,1*> = 'not' FALSE '&' TRUE by Def2
+                      .= 1;
+    thus and2a.<*1,0*> = 'not' TRUE '&' FALSE by Def2 .= 0;
+    thus and2a.<*1,1*> = 'not' TRUE '&' TRUE by Def2
+                      .= 0;
+    thus and2b.<*0,0*> = TRUE '&' 'not' FALSE by Def3
+                      .= 1;
+    thus and2b.<*0,1*> = 'not' FALSE '&' 'not' TRUE by Def3
+                      .= 0;
+    thus and2b.<*1,0*> = 'not' TRUE '&' 'not' FALSE by Def3
+                      .= 0;
+    thus and2b.<*1,1*> = FALSE '&' 'not' TRUE by Def3
+                      .= 0;
   end;
 
 theorem
@@ -444,62 +416,42 @@ theorem
    or2a.<*0,0*>=1 & or2a.<*0,1*>=1 & or2a.<*1,0*>=0 & or2a.<*1,1*>=1 &
    or2b.<*0,0*>=1 & or2b.<*0,1*>=1 & or2b.<*1,0*>=1 & or2b.<*1,1*>=0
   proof
-    thus or2.<*0,0*> = FALSE 'or' FALSE by Def7,MARGREL1:36 .= 0 by BINARITH:7
-,MARGREL1:36;
-    thus or2.<*0,1*> = FALSE 'or' TRUE by Def7,MARGREL1:36 .= 1 by BINARITH:19
-,MARGREL1:36;
-    thus or2.<*1,0*> = TRUE 'or' FALSE by Def7,MARGREL1:36 .= 1 by BINARITH:19
-,MARGREL1:36;
-    thus or2.<*1,1*> = TRUE 'or' TRUE by Def7,MARGREL1:36 .= 1 by BINARITH:19
-,MARGREL1:36;
-    thus or2a.<*0,0*> = 'not' FALSE 'or' FALSE by Def8,MARGREL1:36
-                     .= TRUE 'or' FALSE by MARGREL1:41
-                     .= 1 by BINARITH:19,MARGREL1:36;
+    thus or2.<*0,0*> = FALSE 'or' FALSE by Def7 .= 0;
+    thus or2.<*0,1*> = FALSE 'or' TRUE by Def7 .= 1;
+    thus or2.<*1,0*> = TRUE 'or' FALSE by Def7 .= 1;
+    thus or2.<*1,1*> = TRUE 'or' TRUE by Def7 .= 1;
+    thus or2a.<*0,0*> = TRUE 'or' FALSE by Def8
+                     .= 1;
     thus or2a.<*0,1*> = 'not'
-FALSE 'or' TRUE by Def8,MARGREL1:36 .= 1 by BINARITH:19,MARGREL1:36;
-    thus or2a.<*1,0*> = 'not' TRUE 'or' FALSE by Def8,MARGREL1:36
-                     .= FALSE 'or' FALSE by MARGREL1:41
-                     .= 0 by BINARITH:7,MARGREL1:36;
-    thus or2a.<*1,1*> = 'not'
-TRUE 'or' TRUE by Def8,MARGREL1:36 .= 1 by BINARITH:19,MARGREL1:36;
-    thus or2b.<*0,0*> = 'not' FALSE 'or' 'not' FALSE by Def9,MARGREL1:36
-                     .= TRUE 'or' 'not' FALSE by MARGREL1:41
-                     .= 1 by BINARITH:19,MARGREL1:36;
-    thus or2b.<*0,1*> = 'not' FALSE 'or' 'not' TRUE by Def9,MARGREL1:36
-                     .= TRUE 'or' 'not' TRUE by MARGREL1:41
-                     .= 1 by BINARITH:19,MARGREL1:36;
-    thus or2b.<*1,0*> = 'not' TRUE 'or' 'not' FALSE by Def9,MARGREL1:36
-                     .= 'not' TRUE 'or' TRUE by MARGREL1:41
-                     .= 1 by BINARITH:19,MARGREL1:36;
-    thus or2b.<*1,1*> = 'not' TRUE 'or' 'not' TRUE by Def9,MARGREL1:36
-                     .= FALSE 'or' 'not' TRUE by MARGREL1:41
-                     .= FALSE 'or' FALSE by MARGREL1:41
-                     .= 0 by BINARITH:7,MARGREL1:36;
+FALSE 'or' TRUE by Def8 .= 1;
+    thus or2a.<*1,0*> = 'not' TRUE 'or' FALSE by Def8
+                     .= 0;
+    thus or2a.<*1,1*> = 'not' TRUE 'or' TRUE by Def8 .= 1;
+    thus or2b.<*0,0*> = TRUE 'or' 'not' FALSE by Def9
+                     .= 1;
+    thus or2b.<*0,1*> = TRUE 'or' 'not' TRUE by Def9
+                     .= 1;
+    thus or2b.<*1,0*> = 'not' TRUE 'or' TRUE by Def9
+                     .= 1;
+    thus or2b.<*1,1*> = FALSE 'or' 'not' TRUE by Def9
+                     .= 0;
   end;
 
 theorem
        xor2.<*0,0*>=0 & xor2.<*0,1*>=1 & xor2.<*1,0*>=1 & xor2.<*1,1*>=0 &
    xor2a.<*0,0*>=1 & xor2a.<*0,1*>=0 & xor2a.<*1,0*>=0 & xor2a.<*1,1*>=1
   proof
-    thus xor2.<*0,0*> = FALSE 'xor' FALSE by Def13,MARGREL1:36 .= 0 by
-BINARITH:15,MARGREL1:36;
-    thus xor2.<*0,1*> = FALSE 'xor' TRUE by Def13,MARGREL1:36 .= 1 by
-BINARITH:14,MARGREL1:36;
-    thus xor2.<*1,0*> = TRUE 'xor' FALSE by Def13,MARGREL1:36 .= 1 by
-BINARITH:14,MARGREL1:36;
-    thus xor2.<*1,1*> = TRUE 'xor' TRUE by Def13,MARGREL1:36 .= 0 by
-BINARITH:15,MARGREL1:36;
-    thus xor2a.<*0,0*> = 'not'
-FALSE 'xor' FALSE by Def14,MARGREL1:36 .= 1 by BINARITH:17,MARGREL1:36;
-    thus xor2a.<*0,1*> = 'not' FALSE 'xor' TRUE by Def14,MARGREL1:36
-                      .= 'not' 'not' FALSE by BINARITH:13
-                      .= 0 by MARGREL1:36;
-    thus xor2a.<*1,0*> = 'not' TRUE 'xor' FALSE by Def14,MARGREL1:36
-                      .= 'not' TRUE by BINARITH:14
-                      .= 0 by MARGREL1:36,41;
-    thus xor2a.<*1,1*> = 'not' TRUE 'xor' TRUE by Def14,MARGREL1:36
-                      .= 'not' 'not' TRUE by BINARITH:13
-                      .= 1 by MARGREL1:36;
+    thus xor2.<*0,0*> = FALSE 'xor' FALSE by Def13 .= 0;
+    thus xor2.<*0,1*> = FALSE 'xor' TRUE by Def13 .= 1;
+    thus xor2.<*1,0*> = TRUE 'xor' FALSE by Def13 .= 1;
+    thus xor2.<*1,1*> = TRUE 'xor' TRUE by Def13 .= 0;
+    thus xor2a.<*0,0*> = 'not' FALSE 'xor' FALSE by Def14 .= 1;
+    thus xor2a.<*0,1*> = 'not' FALSE 'xor' TRUE by Def14
+                      .= 0;
+    thus xor2a.<*1,0*> = 'not' TRUE 'xor' FALSE by Def14
+                      .= 0;
+    thus xor2a.<*1,1*> = 'not' TRUE 'xor' TRUE by Def14
+                      .= 1;
   end;
 
 :: 3-Input Operators
@@ -896,49 +848,23 @@ theorem
     and3.<*x,y,z*> = nor3c.<*x,y,z*> & and3a.<*x,y,z*> = nor3b.<*z,y,x*> &
    and3b.<*x,y,z*> = nor3a.<*z,y,x*> & and3c.<*x,y,z*> = nor3.<*x,y,z*>
   proof let x,y,z be Element of BOOLEAN;
-    thus and3.<*x,y,z*> = x '&' y '&' z by Def16
-                        .= 'not' ('not' x 'or' 'not'
-y) '&' z by BINARITH:12
-                        .= 'not' ('not' 'not' ('not' x 'or' 'not' y) 'or' 'not'
-z) by BINARITH:12
-                        .= 'not' (('not' x 'or' 'not' y) 'or' 'not'
-z)
+    thus and3.<*x,y,z*> = 'not' ('not' 'not' ('not' x 'or' 'not' y) 'or' 'not'
+z) by Def16
                         .= nor3c.<*x,y,z*> by Def31;
-    thus and3a.<*x,y,z*> = 'not' x '&' y '&' z by Def17
-                        .= 'not' ('not' 'not' x 'or' 'not'
-y) '&' z by BINARITH:12
-         .= 'not' ('not' 'not' ('not' 'not' x 'or' 'not' y) 'or' 'not'
-z) by BINARITH:12
-         .= 'not' (('not' 'not' x 'or' 'not' y) 'or' 'not'
-z)
-                        .= 'not' (('not' y 'or' x) 'or' 'not' z)
+    thus and3a.<*x,y,z*> =
+ 'not' ('not' 'not' ('not' 'not' x 'or' 'not' y) 'or' 'not'
+z) by Def17
                         .= 'not' (('not' z 'or' 'not'
-y) 'or' x) by BINARITH:20
+y) 'or' x)
                         .= nor3b.<*z,y,x*> by Def30;
-    thus and3b.<*x,y,z*> = 'not' x '&' 'not' y '&' z by Def18
-                        .= 'not' ('not' 'not' x 'or' 'not' 'not'
-y) '&' z by BINARITH:12
-            .= 'not' ('not' 'not' ('not' 'not' x 'or' 'not' 'not' y) 'or'
-'not' z) by BINARITH:12
-            .= 'not' (('not' 'not' x 'or' 'not' 'not' y) 'or' 'not'
-z)
-            .= 'not' ((x 'or' 'not' 'not' y) 'or' 'not'
-z)
-            .= 'not' ((y 'or' x) 'or' 'not' z)
-            .= 'not' (('not' z 'or' y) 'or' x) by BINARITH:20
+    thus and3b.<*x,y,z*> =
+ 'not' ('not' 'not' ('not' 'not' x 'or' 'not' 'not' y) 'or'
+'not' z) by Def18
+            .= 'not' (('not' z 'or' y) 'or' x)
             .= nor3a.<*z,y,x*> by Def29;
-    thus and3c.<*x,y,z*> = 'not' x '&' 'not' y '&' 'not' z by Def19
-            .= 'not' ('not' 'not' x 'or' 'not' 'not' y) '&' 'not'
-z by BINARITH:12
-            .= 'not' ('not' 'not' ('not' 'not' x 'or' 'not' 'not' y) 'or'
-'not' 'not' z) by BINARITH:12
-            .= 'not' (('not' 'not' x 'or' 'not' 'not' y) 'or' 'not' 'not'
-z)
-            .= 'not' ((x 'or' 'not' 'not' y) 'or' 'not' 'not'
-z)
-            .= 'not' ((x 'or' y) 'or' 'not' 'not'
-z)
-            .= 'not' ((x 'or' y) 'or' z)
+    thus and3c.<*x,y,z*> =
+ 'not' ('not' 'not' ('not' 'not' x 'or' 'not' 'not' y) 'or'
+'not' 'not' z) by Def19
             .= nor3.<*x,y,z*> by Def28;
   end;
 
@@ -948,49 +874,15 @@ theorem
    or3b.<*x,y,z*> = nand3a.<*z,y,x*> & or3c.<*x,y,z*> = nand3.<*x,y,z*>
   proof let x,y,z be Element of BOOLEAN;
     thus or3.<*x,y,z*> = x 'or' y 'or' z by Def24
-                       .= 'not' ('not' x '&' 'not'
-y) 'or' z by BINARITH:def 1
-                       .= 'not' ('not' 'not' ('not' x '&' 'not' y) '&' 'not'
-z) by BINARITH:def 1
-                       .= 'not' (('not' x '&' 'not' y) '&' 'not'
-z)
                        .= nand3c.<*x,y,z*> by Def23;
     thus or3a.<*x,y,z*> = 'not' x 'or' y 'or' z by Def25
-                       .= 'not' ('not' 'not' x '&' 'not'
-y) 'or' z by BINARITH:def 1
-            .= 'not' ('not' 'not' ('not' 'not' x '&' 'not' y) '&' 'not'
-z) by BINARITH:def 1
-                       .= 'not' (('not' 'not' x '&' 'not' y) '&' 'not'
-z)
-                       .= 'not' ((x '&' 'not' y) '&' 'not'
-z)
                        .= 'not' ('not' z '&' 'not'
-y '&' x) by MARGREL1:52
+y '&' x)
                        .= nand3b.<*z,y,x*> by Def22;
     thus or3b.<*x,y,z*> = 'not' x 'or' 'not' y 'or' z by Def26
-                       .= 'not' ('not' 'not' x '&' 'not' 'not'
-y) 'or' z by BINARITH:def 1
-            .= 'not' ('not' 'not' ('not' 'not' x '&' 'not' 'not' y) '&'
-'not' z) by BINARITH:def 1
-                       .= 'not' (('not' 'not' x '&' 'not' 'not' y) '&' 'not'
-z)
-                       .= 'not' ((x '&' 'not' 'not' y) '&' 'not'
-z)
-                       .= 'not' ((x '&' y) '&' 'not' z)
-                       .= 'not' ('not' z '&' y '&' x) by MARGREL1:52
+                       .= 'not' ('not' z '&' y '&' x)
                        .= nand3a.<*z,y,x*> by Def21;
     thus or3c.<*x,y,z*> = 'not' x 'or' 'not' y 'or' 'not' z by Def27
-                       .= 'not' ('not' 'not' x '&' 'not' 'not' y) 'or' 'not'
-z by BINARITH:def 1
-            .= 'not' ('not' 'not' ('not' 'not' x '&' 'not' 'not' y) '&'
-'not' 'not' z) by BINARITH:def 1
-            .= 'not' (('not' 'not' x '&' 'not' 'not' y) '&' 'not' 'not'
-z)
-                       .= 'not' ((x '&' 'not' 'not' y) '&' 'not' 'not'
-z)
-                       .= 'not' ((x '&' y) '&' 'not' 'not'
-z)
-                       .= 'not' ((x '&' y) '&' z)
                        .= nand3.<*x,y,z*> by Def20;
   end;
 
@@ -999,26 +891,22 @@ theorem ::ThCalAnd3:
     and3.<*0,1,1*>=0 & and3.<*1,0,0*>=0 & and3.<*1,0,1*>=0 &
     and3.<*1,1,0*>=0 & and3.<*1,1,1*>=1
   proof
-    thus and3.<*0,0,0*> = FALSE '&' FALSE '&' FALSE by Def16,MARGREL1:36
-                       .= 0 by MARGREL1:36,45;
-    thus and3.<*0,0,1*> = FALSE '&' FALSE '&' TRUE by Def16,MARGREL1:36
-                       .= FALSE '&' TRUE by MARGREL1:45
-                       .= 0 by MARGREL1:36,45;
-    thus and3.<*0,1,0*> = FALSE '&' TRUE '&' FALSE by Def16,MARGREL1:36
-                       .= 0 by MARGREL1:36,45;
-    thus and3.<*0,1,1*> = FALSE '&' TRUE '&' TRUE by Def16,MARGREL1:36
-                       .= FALSE '&' TRUE by MARGREL1:45
-                       .= 0 by MARGREL1:36,45;
-    thus and3.<*1,0,0*> = TRUE '&' FALSE '&' FALSE by Def16,MARGREL1:36
-                       .= 0 by MARGREL1:36,45;
-    thus and3.<*1,0,1*> = TRUE '&' FALSE '&' TRUE by Def16,MARGREL1:36
-                       .= FALSE '&' TRUE by MARGREL1:45
-                       .= 0 by MARGREL1:36,45;
-    thus and3.<*1,1,0*> = TRUE '&' TRUE '&' FALSE by Def16,MARGREL1:36
-                       .= 0 by MARGREL1:36,45;
-    thus and3.<*1,1,1*> = TRUE '&' TRUE '&' TRUE by Def16,MARGREL1:36
-                       .= TRUE '&' TRUE by MARGREL1:45
-                       .= 1 by MARGREL1:36,45;
+    thus and3.<*0,0,0*> = FALSE '&' FALSE '&' FALSE by Def16
+                       .= 0;
+    thus and3.<*0,0,1*> = FALSE '&' FALSE '&' TRUE by Def16
+                       .= 0;
+    thus and3.<*0,1,0*> = FALSE '&' TRUE '&' FALSE by Def16
+                       .= 0;
+    thus and3.<*0,1,1*> = FALSE '&' TRUE by Def16
+                       .= 0;
+    thus and3.<*1,0,0*> = TRUE '&' FALSE '&' FALSE by Def16
+                       .= 0;
+    thus and3.<*1,0,1*> = FALSE '&' TRUE by Def16
+                       .= 0;
+    thus and3.<*1,1,0*> = TRUE '&' TRUE '&' FALSE by Def16
+                       .= 0;
+    thus and3.<*1,1,1*> = TRUE '&' TRUE by Def16
+                       .= 1;
   end;
 
 theorem
@@ -1026,28 +914,22 @@ theorem
     and3a.<*0,1,1*>=1 & and3a.<*1,0,0*>=0 & and3a.<*1,0,1*>=0 &
     and3a.<*1,1,0*>=0 & and3a.<*1,1,1*>=0
   proof
-    thus and3a.<*0,0,0*> = 'not' FALSE '&' FALSE '&' FALSE by Def17,MARGREL1:36
-                        .= 0 by MARGREL1:36,45;
-    thus and3a.<*0,0,1*> = 'not' FALSE '&' FALSE '&' TRUE by Def17,MARGREL1:36
-                        .= FALSE '&' TRUE by MARGREL1:45
-                        .= 0 by MARGREL1:36,45;
-    thus and3a.<*0,1,0*> = 'not' FALSE '&' TRUE '&' FALSE by Def17,MARGREL1:36
-                        .= 0 by MARGREL1:36,45;
-    thus and3a.<*0,1,1*> = (TRUE '&' 'not' FALSE) '&' TRUE by Def17,MARGREL1:36
-                        .= 'not' FALSE '&' TRUE by MARGREL1:50
-                        .= TRUE '&' TRUE by MARGREL1:41
-                        .= 1 by MARGREL1:36,45;
-    thus and3a.<*1,0,0*> = 'not' TRUE '&' FALSE '&' FALSE by Def17,MARGREL1:36
-                        .= 0 by MARGREL1:36,45;
-    thus and3a.<*1,0,1*> = 'not' TRUE '&' FALSE '&' TRUE by Def17,MARGREL1:36
-                        .= FALSE '&' TRUE by MARGREL1:45
-                        .= 0 by MARGREL1:36,45;
-    thus and3a.<*1,1,0*> = 'not' TRUE '&' TRUE '&' FALSE by Def17,MARGREL1:36
-                        .= 0 by MARGREL1:36,45;
-    thus and3a.<*1,1,1*> = (TRUE '&' 'not' TRUE) '&' TRUE by Def17,MARGREL1:36
-                        .= 'not' TRUE '&' TRUE by MARGREL1:50
-                        .= FALSE '&' TRUE by MARGREL1:41
-                        .= 0 by MARGREL1:36,45;
+    thus and3a.<*0,0,0*> = 'not' FALSE '&' FALSE '&' FALSE by Def17
+                        .= 0;
+    thus and3a.<*0,0,1*> = 'not' FALSE '&' FALSE '&' TRUE by Def17
+                        .= 0;
+    thus and3a.<*0,1,0*> = 'not' FALSE '&' TRUE '&' FALSE by Def17
+                        .= 0;
+    thus and3a.<*0,1,1*> = ('not' FALSE '&' TRUE) '&' TRUE by Def17
+                        .= 1;
+    thus and3a.<*1,0,0*> = 'not' TRUE '&' FALSE '&' FALSE by Def17
+                        .= 0;
+    thus and3a.<*1,0,1*> = 'not' TRUE '&' FALSE '&' TRUE by Def17
+                        .= 0;
+    thus and3a.<*1,1,0*> = 'not' TRUE '&' TRUE '&' FALSE by Def17
+                        .= 0;
+    thus and3a.<*1,1,1*> = 'not' TRUE '&' TRUE by Def17
+                        .= 0;
   end;
 
 theorem ::ThCalAnd3_b:
@@ -1055,39 +937,22 @@ theorem ::ThCalAnd3_b:
     and3b.<*0,1,1*>=0 & and3b.<*1,0,0*>=0 & and3b.<*1,0,1*>=0 &
     and3b.<*1,1,0*>=0 & and3b.<*1,1,1*>=0
   proof
-    thus and3b.<*0,0,0*> = 'not' FALSE '&' 'not' FALSE '&' FALSE by Def18,
-MARGREL1:36
-                        .= 0 by MARGREL1:36,45;
-    thus and3b.<*0,0,1*> = 'not' FALSE '&' 'not' FALSE '&' TRUE by Def18,
-MARGREL1:36
-                        .= TRUE '&' 'not' FALSE '&' TRUE by MARGREL1:41
-                        .= TRUE '&' TRUE '&' TRUE by MARGREL1:41
-                        .= TRUE '&' TRUE by MARGREL1:45
-                        .= 1 by MARGREL1:36,45;
-    thus and3b.<*0,1,0*> = 'not' FALSE '&' 'not' TRUE '&' FALSE by Def18,
-MARGREL1:36
-                        .= 0 by MARGREL1:36,45;
-    thus and3b.<*0,1,1*> = 'not' FALSE '&' 'not' TRUE '&' TRUE by Def18,
-MARGREL1:36
-                        .= 'not' FALSE '&' FALSE '&' TRUE by MARGREL1:41
-                        .= FALSE '&' TRUE by MARGREL1:45
-                        .= 0 by MARGREL1:36,45;
-    thus and3b.<*1,0,0*> = 'not' TRUE '&' 'not' FALSE '&' FALSE by Def18,
-MARGREL1:36
-                        .= 0 by MARGREL1:36,45;
-    thus and3b.<*1,0,1*> = 'not' TRUE '&' 'not' FALSE '&' TRUE by Def18,
-MARGREL1:36
-                        .= FALSE '&' 'not' FALSE '&' TRUE by MARGREL1:41
-                        .= FALSE '&' TRUE by MARGREL1:45
-                        .= 0 by MARGREL1:36,45;
-    thus and3b.<*1,1,0*> = 'not' TRUE '&' 'not' TRUE '&' FALSE by Def18,
-MARGREL1:36
-                        .= 0 by MARGREL1:36,45;
-    thus and3b.<*1,1,1*> = 'not' TRUE '&' 'not' TRUE '&' TRUE by Def18,
-MARGREL1:36
-                        .= FALSE '&' 'not' TRUE '&' TRUE by MARGREL1:41
-                        .= FALSE '&' TRUE by MARGREL1:45
-                        .= 0 by MARGREL1:36,45;
+    thus and3b.<*0,0,0*> = 'not' FALSE '&' 'not' FALSE '&' FALSE by Def18
+                        .= 0;
+    thus and3b.<*0,0,1*> = TRUE '&' 'not' FALSE '&' TRUE by Def18
+                        .= 1;
+    thus and3b.<*0,1,0*> = 'not' FALSE '&' 'not' TRUE '&' FALSE by Def18
+                        .= 0;
+    thus and3b.<*0,1,1*> = 'not' FALSE '&' 'not' TRUE '&' TRUE by Def18
+                        .= 0;
+    thus and3b.<*1,0,0*> = 'not' TRUE '&' 'not' FALSE '&' FALSE by Def18
+                        .= 0;
+    thus and3b.<*1,0,1*> = 'not' TRUE '&' 'not' FALSE '&' TRUE by Def18
+                        .= 0;
+    thus and3b.<*1,1,0*> = 'not' TRUE '&' 'not' TRUE '&' FALSE by Def18
+                        .= 0;
+    thus and3b.<*1,1,1*> = FALSE '&' 'not' TRUE '&' TRUE by Def18
+                        .= 0;
   end;
 
 theorem ::ThCalAnd3_c:
@@ -1095,44 +960,22 @@ theorem ::ThCalAnd3_c:
     and3c.<*0,1,1*>=0 & and3c.<*1,0,0*>=0 & and3c.<*1,0,1*>=0 &
     and3c.<*1,1,0*>=0 & and3c.<*1,1,1*>=0
   proof
-    thus and3c.<*0,0,0*> = 'not' FALSE '&' 'not' FALSE '&' 'not' FALSE
-          by Def19,MARGREL1:36
-                        .= TRUE '&' 'not' FALSE '&' 'not' FALSE by MARGREL1:41
-                        .= TRUE '&' TRUE '&' 'not' FALSE by MARGREL1:41
-                        .= TRUE '&' TRUE '&' TRUE by MARGREL1:41
-                        .= TRUE '&' TRUE by MARGREL1:45
-                        .= 1 by MARGREL1:36,45;
-    thus and3c.<*0,0,1*> = 'not' FALSE '&' 'not' FALSE '&' 'not' TRUE
-    by Def19,MARGREL1:36
-                        .= 'not' FALSE '&' 'not' FALSE '&' FALSE by MARGREL1:41
-                        .= 0 by MARGREL1:36,45;
-    thus and3c.<*0,1,0*> = 'not' FALSE '&' 'not' TRUE '&' 'not' FALSE
-    by Def19,MARGREL1:36
-                        .= 'not' FALSE '&' FALSE '&' 'not' FALSE by MARGREL1:41
-                        .= 'not' FALSE '&' 'not' FALSE '&' FALSE by MARGREL1:52
-                        .= 0 by MARGREL1:36,45;
-    thus and3c.<*0,1,1*> = 'not' FALSE '&' 'not' TRUE '&' 'not' TRUE
-    by Def19,MARGREL1:36
-                        .= 'not' FALSE '&' 'not' TRUE '&' FALSE by MARGREL1:41
-                        .= 0 by MARGREL1:36,45;
-    thus and3c.<*1,0,0*> = 'not' TRUE '&' 'not' FALSE '&' 'not' FALSE
-    by Def19,MARGREL1:36
-                 .= FALSE '&' 'not' FALSE '&' 'not' FALSE by MARGREL1:41
-                 .= 'not' FALSE '&' 'not' FALSE '&' FALSE by MARGREL1:52
-                 .= 0 by MARGREL1:36,45;
-    thus and3c.<*1,0,1*> = 'not' TRUE '&' 'not' FALSE '&' 'not' TRUE
-    by Def19,MARGREL1:36
-                 .= 'not' TRUE '&' 'not' FALSE '&' FALSE by MARGREL1:41
-                 .= 0 by MARGREL1:36,45;
-    thus and3c.<*1,1,0*> = 'not' TRUE '&' 'not' TRUE '&' 'not' FALSE
-    by Def19,MARGREL1:36
-                        .= FALSE '&' 'not' TRUE '&' 'not' FALSE by MARGREL1:41
-                        .= 'not' TRUE '&' 'not' FALSE '&' FALSE by MARGREL1:52
-                        .= 0 by MARGREL1:36,45;
-    thus and3c.<*1,1,1*> = 'not' TRUE '&' 'not' TRUE '&' 'not' TRUE
-    by Def19,MARGREL1:36
-                        .= 'not' TRUE '&' 'not' TRUE '&' FALSE by MARGREL1:41
-                        .= 0 by MARGREL1:36,45;
+    thus and3c.<*0,0,0*> = TRUE '&' 'not' FALSE '&' 'not' FALSE by Def19
+                        .= 1;
+    thus and3c.<*0,0,1*> = 'not' FALSE '&' 'not' FALSE '&' 'not' TRUE by Def19
+                        .= 0;
+    thus and3c.<*0,1,0*> = 'not' FALSE '&' 'not' TRUE '&' 'not' FALSE by Def19
+                        .= 0;
+    thus and3c.<*0,1,1*> = 'not' FALSE '&' 'not' TRUE '&' FALSE by Def19
+                        .= 0;
+    thus and3c.<*1,0,0*> = 'not' TRUE '&' 'not' FALSE '&' 'not' FALSE by Def19
+                 .= 0;
+    thus and3c.<*1,0,1*> = 'not' TRUE '&' 'not' FALSE '&' FALSE by Def19
+                 .= 0;
+    thus and3c.<*1,1,0*> = FALSE '&' 'not' TRUE '&' 'not' FALSE by Def19
+                        .= 0;
+    thus and3c.<*1,1,1*> = 'not' TRUE '&' 'not' TRUE '&' FALSE by Def19
+                        .= 0;
   end;
 
 theorem ::ThCalOr3:
@@ -1140,26 +983,22 @@ theorem ::ThCalOr3:
     or3.<*0,1,1*> = 1 & or3.<*1,0,0*> = 1 & or3.<*1,0,1*> = 1 &
     or3.<*1,1,0*> = 1 & or3.<*1,1,1*> = 1
   proof
-    thus or3.<*0,0,0*> = FALSE 'or' FALSE 'or' FALSE by Def24,MARGREL1:36
-                        .= FALSE 'or' FALSE by BINARITH:7
-                        .= 0 by BINARITH:7,MARGREL1:36;
-    thus or3.<*0,0,1*> = FALSE 'or' FALSE 'or' TRUE by Def24,MARGREL1:36
-                        .= 1 by BINARITH:19,MARGREL1:36;
-    thus or3.<*0,1,0*> = FALSE 'or' TRUE 'or' FALSE by Def24,MARGREL1:36
-                        .= TRUE 'or' FALSE by BINARITH:19
-                        .= 1 by BINARITH:19,MARGREL1:36;
-    thus or3.<*0,1,1*> = FALSE 'or' TRUE 'or' TRUE by Def24,MARGREL1:36
-                        .= 1 by BINARITH:19,MARGREL1:36;
-    thus or3.<*1,0,0*> = TRUE 'or' FALSE 'or' FALSE by Def24,MARGREL1:36
-                        .= TRUE 'or' FALSE by BINARITH:7
-                        .= 1 by BINARITH:19,MARGREL1:36;
-    thus or3.<*1,0,1*> = TRUE 'or' FALSE 'or' TRUE by Def24,MARGREL1:36
-                        .= 1 by BINARITH:19,MARGREL1:36;
-    thus or3.<*1,1,0*> = TRUE 'or' TRUE 'or' FALSE by Def24,MARGREL1:36
-                        .= TRUE 'or' FALSE by BINARITH:19
-                        .= 1 by BINARITH:19,MARGREL1:36;
-    thus or3.<*1,1,1*> = TRUE 'or' TRUE 'or' TRUE by Def24,MARGREL1:36
-                        .= 1 by BINARITH:19,MARGREL1:36;
+    thus or3.<*0,0,0*> = FALSE 'or' FALSE by Def24
+                        .= 0;
+    thus or3.<*0,0,1*> = FALSE 'or' FALSE 'or' TRUE by Def24
+                        .= 1;
+    thus or3.<*0,1,0*> = TRUE 'or' FALSE by Def24
+                        .= 1;
+    thus or3.<*0,1,1*> = FALSE 'or' TRUE 'or' TRUE by Def24
+                        .= 1;
+    thus or3.<*1,0,0*> = TRUE 'or' FALSE by Def24
+                        .= 1;
+    thus or3.<*1,0,1*> = TRUE 'or' FALSE 'or' TRUE by Def24
+                        .= 1;
+    thus or3.<*1,1,0*> = TRUE 'or' TRUE 'or' FALSE by Def24
+                        .= 1;
+    thus or3.<*1,1,1*> = TRUE 'or' TRUE 'or' TRUE by Def24
+                        .= 1;
   end;
 
 theorem ::ThCalOr3_a:
@@ -1167,29 +1006,22 @@ theorem ::ThCalOr3_a:
     or3a.<*0,1,1*> = 1 & or3a.<*1,0,0*> = 0 & or3a.<*1,0,1*> = 1 &
     or3a.<*1,1,0*> = 1 & or3a.<*1,1,1*> = 1
   proof
-    thus or3a.<*0,0,0*> = 'not' FALSE 'or' FALSE 'or' FALSE by Def25,
-MARGREL1:36
-                        .= 'not' FALSE 'or' FALSE by BINARITH:7
-                        .= TRUE 'or' FALSE by MARGREL1:41
-                        .= 1 by BINARITH:19,MARGREL1:36;
-    thus or3a.<*0,0,1*> = 'not' FALSE 'or' FALSE 'or' TRUE by Def25,MARGREL1:36
-                        .= 1 by BINARITH:19,MARGREL1:36;
-    thus or3a.<*0,1,0*> = 'not' FALSE 'or' TRUE 'or' FALSE by Def25,MARGREL1:36
-                        .= TRUE 'or' FALSE by BINARITH:19
-                        .= 1 by BINARITH:19,MARGREL1:36;
-    thus or3a.<*0,1,1*> = 'not' FALSE 'or' TRUE 'or' TRUE by Def25,MARGREL1:36
-                        .= 1 by BINARITH:19,MARGREL1:36;
-    thus or3a.<*1,0,0*> = 'not' TRUE 'or' FALSE 'or' FALSE by Def25,MARGREL1:36
-                        .= 'not' TRUE 'or' FALSE by BINARITH:7
-                        .= FALSE 'or' FALSE by MARGREL1:41
-                        .= 0 by BINARITH:7,MARGREL1:36;
-    thus or3a.<*1,0,1*> = 'not' TRUE 'or' FALSE 'or' TRUE by Def25,MARGREL1:36
-                        .= 1 by BINARITH:19,MARGREL1:36;
-    thus or3a.<*1,1,0*> = 'not' TRUE 'or' TRUE 'or' FALSE by Def25,MARGREL1:36
-                        .= TRUE 'or' FALSE by BINARITH:19
-                        .= 1 by BINARITH:19,MARGREL1:36;
-    thus or3a.<*1,1,1*> = 'not' TRUE 'or' TRUE 'or' TRUE by Def25,MARGREL1:36
-                        .= 1 by BINARITH:19,MARGREL1:36;
+    thus or3a.<*0,0,0*> = 'not' FALSE 'or' FALSE by Def25
+                        .= 1;
+    thus or3a.<*0,0,1*> = 'not' FALSE 'or' FALSE 'or' TRUE by Def25
+                        .= 1;
+    thus or3a.<*0,1,0*> = 'not' FALSE 'or' TRUE 'or' FALSE by Def25
+                        .= 1;
+    thus or3a.<*0,1,1*> = 'not' FALSE 'or' TRUE 'or' TRUE by Def25
+                        .= 1;
+    thus or3a.<*1,0,0*> = 'not' TRUE 'or' FALSE by Def25
+                        .= 0;
+    thus or3a.<*1,0,1*> = 'not' TRUE 'or' FALSE 'or' TRUE by Def25
+                        .= 1;
+    thus or3a.<*1,1,0*> = TRUE 'or' FALSE by Def25
+                        .= 1;
+    thus or3a.<*1,1,1*> = 'not' TRUE 'or' TRUE 'or' TRUE by Def25
+                        .= 1;
   end;
 
 theorem ::ThCalOr3_b:
@@ -1197,39 +1029,22 @@ theorem ::ThCalOr3_b:
     or3b.<*0,1,1*> = 1 & or3b.<*1,0,0*> = 1 & or3b.<*1,0,1*> = 1 &
     or3b.<*1,1,0*> = 0 & or3b.<*1,1,1*> = 1
   proof
-    thus or3b.<*0,0,0*> = 'not' FALSE 'or' 'not' FALSE 'or' FALSE by Def26,
-MARGREL1:36
-                        .= TRUE 'or' 'not' FALSE 'or' FALSE by MARGREL1:41
-                        .= TRUE 'or' FALSE by BINARITH:19
-                        .= 1 by BINARITH:19,MARGREL1:36;
-    thus or3b.<*0,0,1*> = 'not' FALSE 'or' 'not' FALSE 'or' TRUE by Def26,
-MARGREL1:36
-                        .= 1 by BINARITH:19,MARGREL1:36;
-    thus or3b.<*0,1,0*> = 'not' FALSE 'or' 'not' TRUE 'or' FALSE by Def26,
-MARGREL1:36
-                        .= 'not' FALSE 'or' 'not' TRUE by BINARITH:7
-                        .= TRUE 'or' 'not' TRUE by MARGREL1:41
-                        .= 1 by BINARITH:19,MARGREL1:36;
-    thus or3b.<*0,1,1*> = 'not' FALSE 'or' 'not' TRUE 'or' TRUE by Def26,
-MARGREL1:36
-                        .= 1 by BINARITH:19,MARGREL1:36;
-    thus or3b.<*1,0,0*> = 'not' TRUE 'or' 'not' FALSE 'or' FALSE by Def26,
-MARGREL1:36
-                        .= 'not' TRUE 'or' 'not' FALSE by BINARITH:7
-                        .= 'not' TRUE 'or' TRUE by MARGREL1:41
-                        .= 1 by BINARITH:19,MARGREL1:36;
-    thus or3b.<*1,0,1*> = 'not' TRUE 'or' 'not' FALSE 'or' TRUE by Def26,
-MARGREL1:36
-                        .= 1 by BINARITH:19,MARGREL1:36;
-    thus or3b.<*1,1,0*> = 'not' TRUE 'or' 'not' TRUE 'or' FALSE by Def26,
-MARGREL1:36
-                        .= 'not' TRUE 'or' 'not' TRUE by BINARITH:7
-                        .= FALSE 'or' 'not' TRUE by MARGREL1:41
-                        .= FALSE 'or' FALSE by MARGREL1:41
-                        .= 0 by BINARITH:7,MARGREL1:36;
-    thus or3b.<*1,1,1*> = 'not' TRUE 'or' 'not' TRUE 'or' TRUE by Def26,
-MARGREL1:36
-                        .= 1 by BINARITH:19,MARGREL1:36;
+    thus or3b.<*0,0,0*> = TRUE 'or' 'not' FALSE 'or' FALSE by Def26
+                        .= 1;
+    thus or3b.<*0,0,1*> = 'not' FALSE 'or' 'not' FALSE 'or' TRUE by Def26
+                        .= 1;
+    thus or3b.<*0,1,0*> = 'not' FALSE 'or' 'not' TRUE by Def26
+                        .= 1;
+    thus or3b.<*0,1,1*> = 'not' FALSE 'or' 'not' TRUE 'or' TRUE by Def26
+                        .= 1;
+    thus or3b.<*1,0,0*> = 'not' TRUE 'or' 'not' FALSE by Def26
+                        .= 1;
+    thus or3b.<*1,0,1*> = 'not' TRUE 'or' 'not' FALSE 'or' TRUE by Def26
+                        .= 1;
+    thus or3b.<*1,1,0*> = 'not' TRUE 'or' 'not' TRUE by Def26
+                        .= 0;
+    thus or3b.<*1,1,1*> = 'not' TRUE 'or' 'not' TRUE 'or' TRUE by Def26
+                        .= 1;
   end;
 
 theorem ::ThCalOr3_c:
@@ -1237,46 +1052,22 @@ theorem ::ThCalOr3_c:
     or3c.<*0,1,1*> = 1 & or3c.<*1,0,0*> = 1 & or3c.<*1,0,1*> = 1 &
     or3c.<*1,1,0*> = 1 & or3c.<*1,1,1*> = 0
   proof
-    thus or3c.<*0,0,0*> = 'not' FALSE 'or' 'not' FALSE 'or' 'not' FALSE
-    by Def27,MARGREL1:36
-            .= 'not' FALSE 'or' 'not' FALSE 'or' TRUE by MARGREL1:41
-            .= 1 by BINARITH:19,MARGREL1:36;
-    thus or3c.<*0,0,1*> = 'not' FALSE 'or' 'not' FALSE 'or' 'not'
-TRUE by Def27,MARGREL1:36
-                        .= 'not' FALSE 'or' 'not' FALSE 'or' FALSE
-                        by MARGREL1:41
-                        .= 'not' FALSE 'or' 'not' FALSE by BINARITH:7
-                        .= TRUE 'or' 'not' FALSE by MARGREL1:41
-                        .= 1 by BINARITH:19,MARGREL1:36;
-    thus or3c.<*0,1,0*> = 'not' FALSE 'or' 'not' TRUE 'or' 'not'
-FALSE by Def27,MARGREL1:36
-                        .= 'not' FALSE 'or' 'not' TRUE 'or' TRUE by MARGREL1:41
-                        .= 1 by BINARITH:19,MARGREL1:36;
-    thus or3c.<*0,1,1*> = 'not' FALSE 'or' 'not' TRUE 'or' 'not' TRUE
-    by Def27,MARGREL1:36
-                        .= TRUE 'or' 'not' TRUE 'or' 'not' TRUE by MARGREL1:41
-                        .= TRUE 'or' 'not' TRUE by BINARITH:19
-                        .= 1 by BINARITH:19,MARGREL1:36;
-    thus or3c.<*1,0,0*> = 'not' TRUE 'or' 'not' FALSE 'or' 'not'
-FALSE by Def27,MARGREL1:36
-                        .= 'not' TRUE 'or' 'not' FALSE 'or' TRUE by MARGREL1:41
-                        .= 1 by BINARITH:19,MARGREL1:36;
-    thus or3c.<*1,0,1*> = 'not' TRUE 'or' 'not' FALSE 'or' 'not' TRUE
-    by Def27,MARGREL1:36
-                        .= 'not' TRUE 'or' TRUE 'or' 'not' TRUE by MARGREL1:41
-                        .= TRUE 'or' 'not' TRUE by BINARITH:19
-                        .= 1 by BINARITH:19,MARGREL1:36;
-    thus or3c.<*1,1,0*> = 'not' TRUE 'or' 'not' TRUE 'or' 'not' FALSE
-    by Def27,MARGREL1:36
-                        .= 'not' TRUE 'or' 'not' TRUE 'or' TRUE by MARGREL1:41
-                        .= 1 by BINARITH:19,MARGREL1:36;
-    thus or3c.<*1,1,1*> = 'not' TRUE 'or' 'not' TRUE 'or' 'not' TRUE
-    by Def27,MARGREL1:36
-                        .= FALSE 'or' 'not' TRUE 'or' 'not' TRUE by MARGREL1:41
-                        .= FALSE 'or' FALSE 'or' 'not' TRUE by MARGREL1:41
-                        .= FALSE 'or' FALSE 'or' FALSE by MARGREL1:41
-                        .= FALSE 'or' FALSE by BINARITH:7
-                        .= 0 by BINARITH:7,MARGREL1:36;
+    thus or3c.<*0,0,0*> = 'not' FALSE 'or' 'not' FALSE 'or' TRUE by Def27
+            .= 1;
+    thus or3c.<*0,0,1*> = 'not' FALSE 'or' 'not' FALSE 'or' FALSE by Def27
+                        .= 1;
+    thus or3c.<*0,1,0*> = 'not' FALSE 'or' 'not' TRUE 'or' TRUE by Def27
+                        .= 1;
+    thus or3c.<*0,1,1*> = TRUE 'or' 'not' TRUE 'or' 'not' TRUE by Def27
+                        .= 1;
+    thus or3c.<*1,0,0*> = 'not' TRUE 'or' 'not' FALSE 'or' TRUE by Def27
+                        .= 1;
+    thus or3c.<*1,0,1*> = 'not' TRUE 'or' TRUE 'or' 'not' TRUE by Def27
+                        .= 1;
+    thus or3c.<*1,1,0*> = 'not' TRUE 'or' 'not' TRUE 'or' TRUE by Def27
+                        .= 1;
+    thus or3c.<*1,1,1*> = FALSE 'or' 'not' TRUE 'or' 'not' TRUE by Def27
+                        .= 0;
   end;
 
 theorem ::ThCalXOr3:
@@ -1284,22 +1075,20 @@ theorem ::ThCalXOr3:
     xor3.<*0,1,1*> = 0 & xor3.<*1,0,0*> = 1 & xor3.<*1,0,1*> = 0 &
     xor3.<*1,1,0*> = 0 & xor3.<*1,1,1*> = 1
   proof
-    thus xor3.<*0,0,0*> = FALSE 'xor' FALSE 'xor' FALSE by Def32,MARGREL1:36
-                        .= FALSE 'xor' FALSE by BINARITH:15
-                        .= 0 by BINARITH:15,MARGREL1:36;
-    thus xor3.<*0,0,1*> = FALSE 'xor' FALSE 'xor' TRUE by Def32,MARGREL1:36
-                        .= 1 by BINARITH:15,33,MARGREL1:36;
-    thus xor3.<*0,1,0*> = 1 by Def32,BINARITH:33,MARGREL1:36;
-    thus xor3.<*0,1,1*> = TRUE 'xor' TRUE by Def32,BINARITH:33,MARGREL1:36
-                        .= 0 by BINARITH:15,MARGREL1:36;
-    thus xor3.<*1,0,0*> = 1 by Def32,BINARITH:33,MARGREL1:36;
-    thus xor3.<*1,0,1*> = TRUE 'xor' TRUE by Def32,BINARITH:33,MARGREL1:36
-                        .= 0 by BINARITH:15,MARGREL1:36;
-    thus xor3.<*1,1,0*> = TRUE 'xor' TRUE 'xor' FALSE by Def32,MARGREL1:36
-                        .= FALSE 'xor' FALSE by BINARITH:15
-                        .= 0 by BINARITH:15,MARGREL1:36;
-    thus xor3.<*1,1,1*> = TRUE 'xor' TRUE 'xor' TRUE by Def32,MARGREL1:36
-                        .= 1 by BINARITH:15,33,MARGREL1:36;
+    thus xor3.<*0,0,0*> = FALSE 'xor' FALSE by Def32
+                        .= 0;
+    thus xor3.<*0,0,1*> = FALSE 'xor' FALSE 'xor' TRUE by Def32
+                        .= 1;
+    thus xor3.<*0,1,0*> = 1 by Def32,BINARITH:33;
+    thus xor3.<*0,1,1*> = TRUE 'xor' TRUE by Def32,BINARITH:33
+                        .= 0;
+    thus xor3.<*1,0,0*> = 1 by Def32,BINARITH:33;
+    thus xor3.<*1,0,1*> = TRUE 'xor' TRUE by Def32,BINARITH:33
+                        .= 0;
+    thus xor3.<*1,1,0*> = TRUE 'xor' TRUE 'xor' FALSE by Def32
+                        .= 0;
+    thus xor3.<*1,1,1*> = TRUE 'xor' TRUE 'xor' TRUE by Def32
+                        .= 1;
   end;
 
 begin :: 2's Complement Circuit Properties
@@ -1399,8 +1188,7 @@ theorem Th32:
    let x,b be non pair set;
    set p = <*x,b*>;
 A1:  rng p = {x,b} by FINSEQ_2:147;
-      the carrier of CompStr(x,b) = the carrier of 1GateCircStr(p,xor2a)
-                    .= {x,b} \/ {[p,xor2a]} by A1,CIRCCOMB:def 6;
+      the carrier of CompStr(x,b) = {x,b} \/ {[p,xor2a]} by A1,CIRCCOMB:def 6;
    hence thesis;
  end;
 
@@ -1408,7 +1196,7 @@ theorem Th33:
  for x,b being non pair set holds
    InnerVertices CompStr(x,b) = {[<*x,b*>,xor2a]} by CIRCCOMB:49;
 
-theorem Th34:
+theorem
  for x,b being non pair set holds
    [<*x,b*>,xor2a] in InnerVertices CompStr(x,b)
   proof
@@ -1459,8 +1247,8 @@ theorem Th40:
    let x,b be non pair set;
    set p = <*x,b*>;
 A1:  rng p = {x,b} by FINSEQ_2:147;
-       the carrier of IncrementStr(x,b) = the carrier of 1GateCircStr(p,and2a)
-                    .= {x,b} \/ {[p,and2a]} by A1,CIRCCOMB:def 6;
+    the carrier of IncrementStr(x,b) = {x,b} \/ {[p,and2a]}
+     by A1,CIRCCOMB:def 6;
    hence thesis;
  end;
 
@@ -1468,7 +1256,7 @@ theorem Th41:
  for x,b being non pair set holds
    InnerVertices IncrementStr(x,b) = {[<*x,b*>,and2a]} by CIRCCOMB:49;
 
-theorem Th42:
+theorem
  for x,b being non pair set holds
    [<*x,b*>,and2a] in InnerVertices IncrementStr(x,b)
   proof
@@ -1542,8 +1330,8 @@ theorem Th48:
    set S2 = IncrementStr(x,b);
 A1: the carrier of S1 = {x,b} \/ {[p,xor2a]} &
     the carrier of S2 = {x,b} \/ {[p,and2a]} by Th32,Th40;
-       the carrier of BitCompStr(x,b) = the carrier of (S1+*S2)
-     .= ({x,b} \/ {[p,xor2a]}) \/ ({x,b} \/ {[p,and2a]}) by A1,CIRCCOMB:def 2
+       the carrier of BitCompStr(x,b)
+     = ({x,b} \/ {[p,xor2a]}) \/ ({x,b} \/ {[p,and2a]}) by A1,CIRCCOMB:def 2
      .= {x,b} \/ ({x,b} \/ {[p,xor2a]}) \/ {[p,and2a]} by XBOOLE_1:4
      .= ({x,b} \/ {x,b}) \/ {[p,xor2a]} \/ {[p,and2a]} by XBOOLE_1:4
      .= {x,b} \/ ({[p,xor2a]} \/ {[p,and2a]}) by XBOOLE_1:4
@@ -1633,10 +1421,7 @@ theorem Th54:
 A2:  InnerVertices S = the OperSymbols of S by FACIRC_1:37;
 A3:  dom s = the carrier of S by CIRCUIT1:4;
 A4:  x in the carrier of S & b in the carrier of S by Th31;
-A5:  [p,xor2a] in InnerVertices S by Th34;
-   thus (Following s).CompOutput(x,b)
-       = (Following s).[p,xor2a]
-      .= xor2a.(s*p) by A2,A5,FACIRC_1:35
+   thus (Following s).CompOutput(x,b) = xor2a.(s*p) by A2,FACIRC_1:35
       .= xor2a.<*s.x,s.b*> by A3,A4,FINSEQ_2:145;
    thus thesis by A1,CIRCUIT2:def 5;
  end;
@@ -1671,9 +1456,7 @@ A2:  InnerVertices S = the OperSymbols of S by FACIRC_1:37;
 A3:  dom s = the carrier of S by CIRCUIT1:4;
 A4:  x in the carrier of S & b in the carrier of S by Th47;
 A5:  [p,xor2a] in InnerVertices S by Th50;
-   thus (Following s).CompOutput(x,b)
-       = (Following s).[p,xor2a]
-      .= xor2a.(s*p) by A2,A5,FACIRC_1:35
+   thus (Following s).CompOutput(x,b) = xor2a.(s*p) by A2,A5,FACIRC_1:35
       .= xor2a.<*s.x,s.b*> by A3,A4,FINSEQ_2:145;
    thus thesis by A1,CIRCUIT2:def 5;
   end;
@@ -1708,10 +1491,7 @@ theorem Th58:
 A2:  InnerVertices S = the OperSymbols of S by FACIRC_1:37;
 A3:  dom s = the carrier of S by CIRCUIT1:4;
 A4:  x in the carrier of S & b in the carrier of S by Th39;
-A5:  [p,and2a] in InnerVertices S by Th42;
-   thus (Following s).IncrementOutput(x,b)
-       = (Following s).[p,and2a]
-      .= and2a.(s*p) by A2,A5,FACIRC_1:35
+   thus (Following s).IncrementOutput(x,b) = and2a.(s*p) by A2,FACIRC_1:35
       .= and2a.<*s.x,s.b*> by A3,A4,FINSEQ_2:145;
    thus thesis by A1,CIRCUIT2:def 5;
  end;
@@ -1747,9 +1527,7 @@ A2:  InnerVertices S = the OperSymbols of S by FACIRC_1:37;
 A3:  dom s = the carrier of S by CIRCUIT1:4;
 A4:  x in the carrier of S & b in the carrier of S by Th47;
 A5:  [p,and2a] in InnerVertices S by Th50;
-   thus (Following s).IncrementOutput(x,b)
-       = (Following s).[p,and2a]
-      .= and2a.(s*p) by A2,A5,FACIRC_1:35
+   thus (Following s).IncrementOutput(x,b) = and2a.(s*p) by A2,A5,FACIRC_1:35
       .= and2a.<*s.x,s.b*> by A3,A4,FINSEQ_2:145;
    thus thesis by A1,CIRCUIT2:def 5;
  end;

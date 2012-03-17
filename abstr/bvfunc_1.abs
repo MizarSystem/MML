@@ -6,52 +6,33 @@
 
 environ
 
- vocabularies MARGREL1, ZF_LANG, BINARITH, ORDINAL2, PARTIT1, FUNCT_2,
-      FRAENKEL, VALUAT_1, RELAT_1, FUNCT_1, BOOLE, SEQM_3, EQREL_1, T_1TOPSP,
-      SETFAM_1, TARSKI, BVFUNC_1, FUNCOP_1;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, MARGREL1, VALUAT_1,
-      RELAT_1, FUNCT_1, FUNCT_2, SETFAM_1, FRAENKEL, BINARITH, EQREL_1,
-      T_1TOPSP, PARTIT1, XXREAL_0;
+ vocabularies MARGREL1, ZF_LANG, BINARITH, PARTIT1, FUNCT_2, FRAENKEL,
+      VALUAT_1, RELAT_1, FUNCT_1, BOOLE, SEQM_3, EQREL_1, T_1TOPSP, SETFAM_1,
+      TARSKI, BVFUNC_1, FUNCOP_1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, XBOOLEAN, MARGREL1, VALUAT_1,
+      RELAT_1, FUNCT_1, FUNCT_2, SETFAM_1, FRAENKEL, EQREL_1, T_1TOPSP,
+      PARTIT1, XXREAL_0;
  constructors SETFAM_1, XXREAL_0, XREAL_0, VALUAT_1, BINARITH, T_1TOPSP,
       PARTIT1;
  registrations SUBSET_1, MARGREL1, XREAL_0, ARYTM_3, VALUAT_1, BINARITH,
-      FRAENKEL, EQREL_1;
- requirements NUMERALS, REAL, SUBSET, BOOLE;
+      FRAENKEL, EQREL_1, XBOOLEAN;
+ requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
 
 
 begin :: Chap. 1  Boolean Operations
 
 reserve Y for set;
 
-definition let k,l be boolean set;
- func k 'imp' l equals
-:: BVFUNC_1:def 1
-  'not' k 'or' l;
-
- func k 'eqv' l equals
-:: BVFUNC_1:def 2
-  'not' (k 'xor' l);
- commutativity;
-end;
-
-registration let k,l be boolean set;
- cluster k 'imp' l -> boolean;
- cluster k 'eqv' l -> boolean;
-end;
-
-registration
- cluster boolean -> natural set;
-end;
-
 notation let k,l be boolean set;
  synonym k '<' l for k <= l;
 end;
 
 definition let k,l be boolean set;
+ canceled 2;
  redefine
  pred k '<' l means
 :: BVFUNC_1:def 3
-  k 'imp' l = TRUE;
+  k => l = TRUE;
  end;
 
 begin :: Chap.2   Boolean Valued Functions
@@ -89,11 +70,12 @@ end;
 
 definition
  let p,q be boolean-valued Function;
-  func p 'or' q -> Function means
+  func p 'or' q -> boolean-valued Function means
 :: BVFUNC_1:def 5
  dom it = dom p /\ dom q &
   for x being set st x in dom it holds it.x = (p.x) 'or' (q.x);
  commutativity;
+ idempotence;
   func p 'xor' q -> Function means
 :: BVFUNC_1:def 6
  dom it = dom p /\ dom q &
@@ -103,7 +85,6 @@ end;
 
 registration
  let p,q be boolean-valued Function;
-  cluster p 'or' q -> boolean-valued;
   cluster p 'xor' q -> boolean-valued;
 end;
 
@@ -129,11 +110,11 @@ definition
   func p 'imp' q -> Function means
 :: BVFUNC_1:def 9
  dom it = dom p /\ dom q &
-  for x being set st x in dom it holds it.x = (p.x) 'imp' (q.x);
+  for x being set st x in dom it holds it.x = (p.x) => (q.x);
   func p 'eqv' q -> Function means
 :: BVFUNC_1:def 10
  dom it = dom p /\ dom q &
-  for x being set st x in dom it holds it.x = (p.x) 'eqv' (q.x);
+  for x being set st x in dom it holds it.x = (p.x) <=> (q.x);
  commutativity;
 end;
 
@@ -178,7 +159,6 @@ theorem :: BVFUNC_1:4
  for a being boolean-valued Function holds 'not' 'not' a=a;
 
 theorem :: BVFUNC_1:5
- for a being Element of Funcs(Y,BOOLEAN) holds
  'not' I_el(Y)=O_el(Y) & 'not' O_el(Y)=I_el(Y);
 
 theorem :: BVFUNC_1:6

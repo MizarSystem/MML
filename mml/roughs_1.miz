@@ -9,13 +9,12 @@ environ
  vocabularies ROUGHS_1, ARYTM_3, RCOMP_1, SQUARE_1, ARYTM_1, FUNCT_1, BOOLE,
       TARSKI, RELAT_1, RELAT_2, SUBSET_1, ORDERS_1, PARTFUN1, EQREL_1, CARD_1,
       FINSET_1, TOLER_1, NATTRA_1, REALSET1, FUNCT_3, PROB_2, FINSEQ_1, PROB_1,
-      RLVECT_1, FINSEQ_2, ARYTM;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS,
-      XCMPLX_0, CARD_1, XXREAL_0, XREAL_0,
-      REAL_1, NAT_1, SQUARE_1, FINSET_1, FUNCOP_1, RELAT_1, RELAT_2, FUNCT_1,
-      FINSEQ_1, RVSUM_1, FINSEQ_2, RELSET_1, PARTFUN1, CARD_3, PROB_2, FUNCT_2,
-      FUNCT_3, REALSET1, DOMAIN_1, STRUCT_0, REALSET2, PRE_TOPC, GROUP_1,
-      ORDERS_2, EQREL_1, RCOMP_1, TOLER_1, ORDERS_3;
+      RLVECT_1, FINSEQ_2;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0, CARD_1,
+      XXREAL_0, FINSET_1, RELAT_1, RELAT_2, FUNCT_1, FINSEQ_1, RVSUM_1,
+      FINSEQ_2, RELSET_1, PARTFUN1, CARD_3, PROB_2, FUNCT_2, FUNCT_3, REALSET1,
+      DOMAIN_1, STRUCT_0, REALSET2, PRE_TOPC, GROUP_1, ORDERS_2, EQREL_1,
+      RCOMP_1, TOLER_1, ORDERS_3;
  constructors DOMAIN_1, REAL_1, SQUARE_1, NAT_1, BINOP_2, MEMBERED, EQREL_1,
       PROB_2, RCOMP_1, RVSUM_1, FUNCT_6, PRE_TOPC, REALSET2, ORDERS_3;
  registrations RELSET_1, STRUCT_0, SUBSET_1, MEMBERED, PARTFUN1, XREAL_0,
@@ -192,9 +191,7 @@ theorem Th5:
     let D be set,
         p, q be FinSequence of D;
      union rng(p^q) = union (rng p \/ rng q) by FINSEQ_1:44
-                  .= union rng p \/ union rng q by ZFMISC_1:96
-                  .= Union p \/ union rng q
-                  .= Union p \/ Union q;
+                  .= Union p \/ Union q by ZFMISC_1:96;
     hence thesis;
   end;
 
@@ -895,7 +892,7 @@ A5:   not x in LAp X by XBOOLE_0:def 4;
   end;
 
  reserve A for Approximation_Space,
-         X, Y for Subset of A;
+         X for Subset of A;
 
 theorem
    LAp LAp X = LAp X
@@ -1083,7 +1080,6 @@ A1: for x being set st x in the carrier of A holds F(x) in REAL
     proof
       let x be set;
       assume x in the carrier of A;
-      F(x) is real; then
       F(x) in REAL by XREAL_0:def 1;
       hence thesis;
     end;
@@ -1112,23 +1108,21 @@ A4: for x being Element of A holds A2.x = F(x);
 end;
 
  reserve A for finite Tolerance_Space,
-         X, Y for Subset of A,
+         X for Subset of A,
          x for Element of A;
 
 theorem Th38:
   0 <= MemberFunc (X, A).x & MemberFunc (X, A).x <= 1
   proof
-A1: card Class (the InternalRel of A, x) > 0 by NAT_1:19;
-     card (X /\ Class (the InternalRel of A, x)) >= 0 by NAT_1:18;
-    then card (X /\ Class (the InternalRel of A, x)) /
-      (card Class (the InternalRel of A, x)) >= 0 by A1,REAL_2:125;
+    card (X /\ Class (the InternalRel of A, x)) /
+      (card Class (the InternalRel of A, x)) >= 0;
     hence 0 <= MemberFunc (X, A).x by Def9;
      X /\ Class (the InternalRel of A, x) c= Class (the InternalRel of A, x)
       by XBOOLE_1:17;
     then card (X /\ Class (the InternalRel of A, x)) <=
       (card Class (the InternalRel of A, x)) by CARD_1:80;
     then card (X /\ Class (the InternalRel of A, x)) /
-      (card Class (the InternalRel of A, x)) <= 1 by A1,REAL_2:117;
+      (card Class (the InternalRel of A, x)) <= 1 by REAL_2:117;
     hence thesis by Def9;
   end;
 
@@ -1303,10 +1297,9 @@ theorem
       Class (the InternalRel of A, x) by XBOOLE_1:28;
 then A1: X /\ Class (the InternalRel of A, x) c=
       [#]A /\ Class (the InternalRel of A, x) by XBOOLE_1:17;
-     MemberFunc (X`,A).x = card (X` /\ Class (the InternalRel of A, x)) /
+     MemberFunc (X`,A).x =
+ card (([#]A \ X) /\ Class (the InternalRel of A, x)) /
              (card Class (the InternalRel of A, x)) by Def9
-      .= card (([#]A \ X) /\ Class (the InternalRel of A, x)) /
-             (card Class (the InternalRel of A, x))
       .= (card (([#]A /\ Class (the InternalRel of A, x)) \
           (X /\ Class (the InternalRel of A, x)))) /
              (card Class (the InternalRel of A, x)) by XBOOLE_1:50
@@ -1333,13 +1326,12 @@ theorem Th47:
     set CI = Class (the InternalRel of A, x);
     assume
 A1: X c= Y;
-A2: card CI > 0 by NAT_1:19;
-A3: MemberFunc (X, A).x = card (X /\ CI) / (card CI) by Def9;
+A2: MemberFunc (X, A).x = card (X /\ CI) / (card CI) by Def9;
      X /\ CI c= Y /\ CI by A1,XBOOLE_1:26;
     then card (Y /\ CI) >= card (X /\ CI) by CARD_1:80;
     then card (Y /\ CI) / (card CI) >= card (X /\ CI) / (card CI)
-      by A2,REAL_1:73;
-    hence thesis by A3,Def9;
+      by REAL_1:73;
+    hence thesis by A2,Def9;
   end;
 
 theorem Th48:

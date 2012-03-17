@@ -133,12 +133,8 @@ A1:(PSseq1 - PSseq2).0 = (PSseq1).0 - (PSseq2).0 by CLVECT_1:def 12
       .= ((PSseq1.n + seq1.(n + 1)) - seq2.(n + 1)) - PSseq2.n by RLVECT_1:41
       .= (PSseq1.n + (seq1.(n + 1) - seq2.(n + 1))) - PSseq2.n
                  by RLVECT_1:def 6
-      .= PSseq1.n + ((seq1.(n + 1) - seq2.(n + 1)) - PSseq2.n)
-                 by RLVECT_1:def 6
-      .= PSseq1.n + (- PSseq2.n + (seq1.(n + 1) - seq2.(n + 1)))
-      .= (PSseq1.n + - PSseq2.n) + (seq1.(n + 1) - seq2.(n + 1))
-          by RLVECT_1:def 6
-      .= (PSseq1.n - PSseq2.n) + (seq1.(n + 1) - seq2.(n + 1))
+      .= (PSseq1.n - PSseq2.n) + (seq1.(n + 1) - seq2.(n + 1)) by
+RLVECT_1:def 6
       .= (PSseq1 - PSseq2).n + (seq1.(n + 1) - seq2.(n + 1)) by CLVECT_1:def 12
       .= (PSseq1 - PSseq2).n + (seq1 - seq2).(n + 1) by CLVECT_1:def 12;
    end;
@@ -203,11 +199,8 @@ A4:Partial_Sums(seq2) is convergent by A2,Def2;
    then Partial_Sums(seq1 + seq2) is convergent by Th1;
    hence seq1 + seq2 is summable by Def2;
    thus Sum(seq1 + seq2)
-     = lim Partial_Sums(seq1 + seq2)
-    .= lim (Partial_Sums(seq1) + Partial_Sums(seq2)) by Th1
-    .= lim Partial_Sums(seq1) + lim Partial_Sums(seq2) by A3,A4,CLVECT_2:13
-    .= Sum(seq1) + lim Partial_Sums(seq2)
-    .= Sum(seq1) + Sum(seq2);
+     = lim (Partial_Sums(seq1) + Partial_Sums(seq2)) by Th1
+    .= Sum(seq1) + Sum(seq2) by A3,A4,CLVECT_2:13;
 end;
 
 theorem
@@ -224,11 +217,8 @@ A4:Partial_Sums(seq2) is convergent by A2,Def2;
    then Partial_Sums(seq1 - seq2) is convergent by Th2;
    hence seq1 - seq2 is summable by Def2;
    thus Sum(seq1 - seq2)
-     = lim Partial_Sums(seq1 - seq2)
-    .= lim (Partial_Sums(seq1) - Partial_Sums(seq2)) by Th2
-    .= lim Partial_Sums(seq1) - lim Partial_Sums(seq2) by A3,A4,CLVECT_2:14
-    .= Sum(seq1) - lim Partial_Sums(seq2)
-    .= Sum(seq1) - Sum(seq2);
+     = lim (Partial_Sums(seq1) - Partial_Sums(seq2)) by Th2
+    .= Sum(seq1) - Sum(seq2) by A3,A4,CLVECT_2:14;
 end;
 
 theorem
@@ -239,10 +229,8 @@ then A1:Partial_Sums(seq) is convergent by Def2;
    then z * Partial_Sums(seq) is convergent by CLVECT_2:5;
    then Partial_Sums(z * seq) is convergent by Th3;
    hence z * seq is summable by Def2;
-   thus Sum(z * seq) = lim Partial_Sums(z * seq)
-                    .= lim (z * Partial_Sums(seq)) by Th3
-                    .= z * (lim Partial_Sums(seq)) by A1,CLVECT_2:15
-                    .= z * Sum(seq);
+   thus Sum(z * seq) = lim (z * Partial_Sums(seq)) by Th3
+                    .= z * Sum(seq) by A1,CLVECT_2:15;
 end;
 
 theorem Th9:
@@ -443,8 +431,7 @@ Sum(seq,1) = Sum(seq,0) + seq.1
 proof
     Partial_Sums(seq).1 = Partial_Sums(seq).0 + seq.(0 + 1) by Def1
                       .= Partial_Sums(seq).0 + seq.1;
-   hence Sum(seq,1) = Partial_Sums(seq).0 + seq.1
-                    .= Sum(seq,0) + seq.1;
+   hence Sum(seq,1) = Sum(seq,0) + seq.1;
 end;
 
 theorem Th17:
@@ -483,8 +470,7 @@ end;
 theorem
  Sum(seq,1,0) = seq.1
 proof
-    Sum(seq,1,0) = Sum(seq,1) - Sum(seq,0)
-               .= (seq.0 + seq.1) - Sum(seq,0) by Th17
+    Sum(seq,1,0) = (seq.0 + seq.1) - Sum(seq,0) by Th17
                .= (seq.1 + seq.0) - seq.0 by Th15
                .= seq.1 + (seq.0 - seq.0) by RLVECT_1:def 6
                .= seq.1 + 0'(X) by RLVECT_1:28;
@@ -796,9 +782,9 @@ then A9:   ||.seq.(m+k).|| <> 0 by CSSPACE:44;
      end;
 A10: for k holds P[k] from NAT_1:sch 1(A5,A6);
       consider k being Nat such that
-a1:   n = m + k by A4,NAT_1:28;
+A11:   n = m + k by A4,NAT_1:28;
       k in NAT by ORDINAL1:def 13;
-      hence ||.seq.n.|| >= ||.seq.m.|| by A10,a1;
+      hence ||.seq.n.|| >= ||.seq.m.|| by A10,A11;
    end;
    then not seq is convergent or lim seq <> 0'(X) by A3,Th29;
    hence thesis by Th9;
@@ -1339,10 +1325,8 @@ then A15: ||.seq.n - g.|| < r/(b + ||.g.||) by A11;
         by RLVECT_1:43
      .= ||.(Cseq.n * seq.n - Cseq.n * g) - (p * g - Cseq.n * g).||
         by RLVECT_1:41
-     .= ||.(Cseq.n * seq.n - Cseq.n * g) + -(p * g - Cseq.n * g).||
-     .= ||.(Cseq.n * seq.n - Cseq.n * g) + (Cseq.n * g + - p * g).||
-        by RLVECT_1:47
-     .= ||.(Cseq.n * seq.n - Cseq.n * g) + (Cseq.n * g - p * g).||;
+     .= ||.(Cseq.n * seq.n - Cseq.n * g) + (Cseq.n * g - p * g).|| by
+RLVECT_1:47;
      then ||.(Cseq * seq).n - p * g.||
       <= ||.Cseq.n * seq.n - Cseq.n * g.|| + ||.Cseq.n * g - p * g.||
         by CSSPACE:48;
@@ -1456,11 +1440,7 @@ then A14:   ||.seq.n - lim seq.|| < r/(b + ||.lim seq.||) by CSSPACE:def 16;
        .= ||.(Cseq.n * seq.n - Cseq.n * lim seq) -
        (lim Cseq * lim seq - Cseq.n * lim seq).|| by RLVECT_1:41
        .= ||.(Cseq.n * seq.n - Cseq.n * lim seq) +
-       -(lim Cseq * lim seq - Cseq.n * lim seq).||
-       .= ||.(Cseq.n * seq.n - Cseq.n * lim seq) +
-       (Cseq.n * lim seq + - lim Cseq * lim seq).|| by RLVECT_1:47
-       .= ||.(Cseq.n * seq.n - Cseq.n * lim seq) +
-       (Cseq.n * lim seq - lim Cseq * lim seq).||;
+       (Cseq.n * lim seq - lim Cseq * lim seq).|| by RLVECT_1:47;
        then ||.(Cseq * seq).n - lim Cseq * lim seq.||
         <= ||.Cseq.n * seq.n - Cseq.n * lim seq.|| +
        ||.Cseq.n * lim seq - lim Cseq * lim seq.|| by CSSPACE:48;
@@ -1576,12 +1556,8 @@ A3:(Cseq * Partial_Sums(seq)).(0+1)
     = (Cseq.0 * seq.0 + 0'(X)) + Cseq.1 * seq.1 by A1,RLVECT_1:10
    .= (Cseq.0 * seq.0 + (Cseq.1 * seq.0 - Cseq.1 * seq.0))
      + Cseq.1 * seq.1 by RLVECT_1:28
-   .= (Cseq.0 * seq.0 + (-(Cseq.1 * seq.0) + Cseq.1 * seq.0))
-     + Cseq.1 * seq.1
    .= ((Cseq.0 * seq.0 + -(Cseq.1 * seq.0)) + Cseq.1 * seq.0)
      + Cseq.1 * seq.1 by RLVECT_1:def 6
-   .= ((Cseq.0 * seq.0 - Cseq.1 * seq.0) + Cseq.1 * seq.0)
-     + Cseq.1 * seq.1
    .= Partial_Sums((Cseq - Cseq^\1) * Partial_Sums(seq)).0 +
       (Cseq * Partial_Sums(seq)).(0+1) by A2,A3,RLVECT_1:def 6;
    then Partial_Sums(Cseq * seq).(0+1) - (Cseq * Partial_Sums(seq)).(0+1)

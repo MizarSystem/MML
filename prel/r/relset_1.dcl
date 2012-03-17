@@ -7,6 +7,22 @@
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="RELAT_1"/>
 </Signature>
+<FCluster>
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="1" value="false"/>
+</Cluster>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="25">
+<LocusVar nr="1"/>
+</Func>
+<Cluster>
+<Adjective nr="1" value="false"/>
+<Adjective nr="2"/>
+</Cluster>
+</FCluster>
 <CCluster>
 <ArgTypes>
 <Typ kind="M" nr="1">

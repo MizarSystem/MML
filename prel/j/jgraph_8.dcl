@@ -37,11 +37,11 @@
 <ArticleID name="BORSUK_1"/>
 <ArticleID name="TOPMETR"/>
 <ArticleID name="JGRAPH_6"/>
+<ArticleID name="TOPREALA"/>
 <ArticleID name="FUNCT_3"/>
 <ArticleID name="BORSUK_2"/>
 <ArticleID name="BORSUK_6"/>
 <ArticleID name="TOPALG_2"/>
-<ArticleID name="TOPREALA"/>
 </Signature>
 <FCluster>
 <ArgTypes>
@@ -101,7 +101,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="302">
+<Func kind="K" nr="270">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>

@@ -8,7 +8,7 @@ environ
 
  vocabularies CAT_1, PARTFUN1, RELAT_1, FUNCT_1, BOOLE, ARYTM_3, OPPCAT_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, FUNCT_2,
-      RELSET_1, PARTFUN1, FUNCT_4, CAT_1;
+      PARTFUN1, FUNCT_4, CAT_1;
  constructors PARTFUN1, FUNCT_4, CAT_1;
  registrations CAT_1, RELSET_1, XBOOLE_0, FUNCT_2;
  requirements SUBSET, BOOLE;
@@ -222,14 +222,7 @@ theorem Th19:
 A1:  dom g = cod f;
 A2:  cod(opp g) = dom g & dom(opp f) = cod f;
 then A3:  [opp f,opp g] in dom( the Comp of C ) by A1,CAT_1:40;
-  thus opp (g*f) = (g*f) opp
-                .= g*f
-                .= ( the Comp of C opp ).[g,f] by A1,CAT_1:41
-                .= ~(the Comp of C).[g,f]
-                .= ~(the Comp of C).[g opp,f]
-                .= ~(the Comp of C).[g opp,f opp]
-                .= ~(the Comp of C).[opp g,f opp]
-                .= ~(the Comp of C).[opp g,opp f]
+  thus opp (g*f) = ~(the Comp of C).[opp g,opp f] by A1,CAT_1:41
                 .= (the Comp of C).[opp f,opp g] by A3,FUNCT_4:def 2
                 .= (opp f)*(opp g) by A1,A2,CAT_1:41;
  end;
@@ -305,13 +298,13 @@ A4:   cod f2 = dom f and
 A5:   f*f1 = f*f2;
     set g1 = f1 opp, g2 = f2 opp;
        now
-     thus dom g1 = dom f by A3 .= cod(f opp);
-     thus dom g2 = dom f by A4 .= cod(f opp);
-     thus cod g1 = dom f2 by A2 .= cod g2;
+     thus dom g1 = cod(f opp) by A3;
+     thus dom g2 = cod(f opp) by A4;
+     thus cod g1 = cod g2 by A2;
      thus g1*(f opp) = (f*f2) opp by A3,A5,Th17 .= g2*(f opp) by A4,Th17;
     end;
     then g1 = g2 by A1;
-    hence f1 = g2 .= f2;
+    hence f1 = f2;
    end;
   assume
 A6: for f1,f2 being Morphism of C
@@ -324,20 +317,19 @@ A9:  cod g1 = cod g2 and
 A10:  g1*(f opp) = g2*(f opp);
   set f1 = opp g1, f2 = opp g2;
      now
-   thus dom f1 = cod g2 by A9 .= dom f2;
+   thus dom f1 = dom f2 by A9;
    thus
-A11:   cod f1 = dom g1 .= dom f by A7;
+A11:   cod f1 = dom f by A7;
    thus
-A12:   cod f2 = dom g2 .= dom f by A8;
+A12:   cod f2 = dom f by A8;
    thus f*f1 = (f*f1) opp
             .= (f1 opp)*(f opp) by A11,Th17
-            .= g2*(f opp) by A10
-            .= (f2 opp)*(f opp)
+            .= (f2 opp)*(f opp) by A10
             .= (f*f2) opp by A12,Th17
             .= f*f2;
   end;
   then f1 = f2 by A6;
-  hence g1 = f2 opp .= g2;
+  hence g1 = g2;
  end;
 
 theorem
@@ -384,7 +376,7 @@ A6:    for g being Morphism of c,opp b holds f=g by A1,CAT_1:def 16;
     take f'; let g be Morphism of b,c opp;
        opp (c opp) = c;
     then opp g is Morphism of c,opp b by A5,Th16;
-    hence f' = (opp g)opp by A6 .= g;
+    hence f' = g by A6;
    end;
   assume
 A7:  c opp is terminal;
@@ -400,7 +392,7 @@ A12:  for g being Morphism of b opp,c opp holds f=g by A7,CAT_1:def 15;
   reconsider f' = opp f as Morphism of c,b by A8,A10,Th16;
   take f'; let g be Morphism of c,b;
      g opp is Morphism of b opp,c opp by A11,Th15;
-  hence f' = opp(g opp) by A12 .= g;
+  hence f' = g by A12;
  end;
 
 theorem
@@ -422,7 +414,7 @@ A6:   for g being Morphism of c opp,b opp holds f = g by A1,CAT_1:def 16;
     reconsider f' = opp f as Morphism of b,c by A2,A4,Th16;
     take f'; let g be Morphism of b,c;
        g opp is Morphism of c opp,b opp by A5,Th15;
-    hence f' = opp(g opp) by A6 .= g;
+    hence f' = g by A6;
    end;
   assume
 A7:  c is terminal;
@@ -439,7 +431,7 @@ A12:  for g being Morphism of opp b, c holds f = g by A7,CAT_1:def 15;
   take f'; let g be Morphism of c opp,b;
      opp g is Morphism of opp b,opp (c opp) by A11,Th16;
   then opp g is Morphism of opp b,c;
-  hence f' = (opp g) opp by A12 .= g;
+  hence f' = g by A12;
  end;
 
 ::  Contravariant Functors
@@ -957,7 +949,6 @@ theorem
    let f be Morphism of C opp opp;
    thus *'*'S.f = *'S.(opp f) by Def8
              .= S.(opp opp f) by Def8
-             .= S.((opp f) opp)
              .= S.f;
   end;
   hence thesis by FUNCT_2:113;
@@ -1301,32 +1292,28 @@ end;
 theorem Th66:
    for f being Morphism of C holds (id* C).f = f opp
  proof let f be Morphism of C;
-  thus (id* C).f = (id C)*'.f
-                .= ((id C).f) opp by Def9
+  thus (id* C).f = ((id C).f) opp by Def9
                 .= f opp by FUNCT_1:35;
  end;
 
 theorem
       for c being Object of C holds (Obj id* C).c = c opp
  proof let c be Object of C;
-  thus (Obj id* C).c = (Obj (id C)*').c
-                 .= ((Obj id C).c) opp by Th43
+  thus (Obj id* C).c = ((Obj id C).c) opp by Th43
                  .= c opp by CAT_1:116;
  end;
 
 theorem Th68:
    for f being Morphism of C opp holds (*id C).f = opp f
  proof let f be Morphism of C opp;
-  thus (*id C).f = *'(id C).f
-                .= ((id C).(opp f)) by Def8
+  thus (*id C).f = ((id C).(opp f)) by Def8
                 .= opp f by FUNCT_1:35;
  end;
 
 theorem
       for c being Object of C opp holds (Obj *id C).c = opp c
  proof let c be Object of C opp;
-  thus (Obj *id C).c = (Obj *'(id C)).c
-                    .= (Obj id C).(opp c) by Th41
+  thus (Obj *id C).c = (Obj id C).(opp c) by Th41
                     .= opp c by CAT_1:116;
  end;
 

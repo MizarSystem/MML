@@ -605,29 +605,19 @@ Th34: RLSStruct(#Funcs(A,REAL),
  proof
   thus u+v = v+u proof
    reconsider v' = v, u' = u as Element of Funcs(A,REAL);
-   thus u+v = (RealFuncAdd(A)).[u',v']
-           .= (RealFuncAdd(A)).(u',v')
+   thus u+v = (RealFuncAdd(A)).(u',v')
            .= (RealFuncAdd(A)).(v',u') by Th16
-           .= (RealFuncAdd(A)).[v',u']
            .= v+u; end;
   thus (u+v)+w = u+(v+w) proof
     reconsider v'=v, u'=u, w'=w as Element of Funcs(A,REAL);
     thus
-        (u+v)+w = (RealFuncAdd(A)).[u+v,w']
-            .= (RealFuncAdd(A)).(u+v,w')
-            .= (RealFuncAdd(A)).((RealFuncAdd(A)).[u',v'],w')
-            .= (RealFuncAdd(A)).((RealFuncAdd(A)).(u',v'),w')
+        (u+v)+w = (RealFuncAdd(A)).((RealFuncAdd(A)).(u',v'),w')
             .= (RealFuncAdd(A)).(u',(RealFuncAdd(A)).(v',w')) by Th17
-            .= (RealFuncAdd(A)).(u',(RealFuncAdd(A)).[v',w'])
-            .= (RealFuncAdd(A)).[u',(RealFuncAdd(A)).[v',w']]
-            .= (RealFuncAdd(A)).[u',v+w]
             .= u+(v+w); end;
 
   thus u+0.IT = u proof
     reconsider u'=u as Element of Funcs(A,REAL);
-   thus u+0.IT = (RealFuncAdd(A)).[u',0.IT]
-              .= (RealFuncAdd(A)).[u',RealFuncZero(A)]
-              .= (RealFuncAdd(A)).(u',RealFuncZero(A))
+   thus u+0.IT = (RealFuncAdd(A)).(u',RealFuncZero(A))
               .= (RealFuncAdd(A)).(RealFuncZero(A),u') by Th16
               .= u by Th21;
   end;
@@ -639,10 +629,8 @@ Th34: RLSStruct(#Funcs(A,REAL),
 
     reconsider w = (RealFuncExtMult(A)).[-1,u'] as VECTOR of IT;
     take w;
-    thus u+w = (RealFuncAdd(A)).[u',(RealFuncExtMult(A)).[-1,u']]
-            .= (RealFuncAdd(A)).(u',(RealFuncExtMult(A)).[-1,u'])
-            .= RealFuncZero(A) by Th22
-            .= 0.IT;
+    thus u+w = (RealFuncAdd(A)).(u',(RealFuncExtMult(A)).[-1,u'])
+            .= 0.IT by Th22;
    end;
 
   thus a*(u+v) = a*u + a *v
@@ -650,13 +638,8 @@ Th34: RLSStruct(#Funcs(A,REAL),
     reconsider v' = v, u' = u as Element of Funcs(A,REAL);
     reconsider w = (RealFuncExtMult(A)).[a,u'],w' = (RealFuncExtMult(A)).[a,v']
  as VECTOR of IT;
-    thus a*(u+v) = (RealFuncExtMult(A)).[a,u+v]
-                .=(RealFuncExtMult(A)).[a,(RealFuncAdd(A)).[u',v']]
-                .= (RealFuncExtMult(A)).[a,(RealFuncAdd(A)).(u',v')]
+    thus a*(u+v) = (RealFuncExtMult(A)).[a,(RealFuncAdd(A)).(u',v')]
                 .=(RealFuncAdd(A)).(w,w') by Lm2
-                .= (RealFuncAdd(A)).[w,w']
-                .= w + w'
-                .= w + (a*v)
                 .= (a*u) + (a*v);
    end;
 
@@ -665,11 +648,7 @@ Th34: RLSStruct(#Funcs(A,REAL),
     reconsider v' = v as Element of Funcs(A,REAL);
     reconsider w = (RealFuncExtMult(A)).[a,v'],w' = (RealFuncExtMult(A)).[b,v']
  as VECTOR of IT;
-    thus (a+b)*v = (RealFuncExtMult(A)).[a+b,v']
-                .= (RealFuncAdd(A)).(w,w') by Th25
-                .= (RealFuncAdd(A)).[w,w']
-                .= w + w'
-                .= w + (b*v)
+    thus (a+b)*v = (RealFuncAdd(A)).(w,w') by Th25
                 .= (a*v) + (b*v);
    end;
 
@@ -715,9 +694,8 @@ canceled 2;
      proof let r,s be Real such that A3: r*u + s*v=0.V;
 
         reconsider u' = r*u,v' = s*v as Element of Funcs(A,REAL);
-           0.V = (RealFuncAdd(A)).[u', v'] by A3
-           .= (RealFuncAdd(A)).((RealFuncExtMult(A)).[r,f],
-               (RealFuncExtMult(A)).[s,g]);
+           0.V = (RealFuncAdd(A)).((RealFuncExtMult(A)).[r,f],
+               (RealFuncExtMult(A)).[s,g]) by A3;
          then (RealFuncAdd(A)).((RealFuncExtMult(A)).[r,f],
             (RealFuncExtMult(A)).[s,g]) = RealFuncZero(A);
         hence r=0 & s=0 by A2; end;
@@ -727,11 +705,7 @@ canceled 2;
          consider a,b such that
          A4: h = (RealFuncAdd(A)).((RealFuncExtMult(A)).[a,f],
                               (RealFuncExtMult(A)).[b,g]) by A2;
-            h = (RealFuncAdd(A)).
-             (a*u,(RealFuncExtMult(A)).[b,g]) by A4
-          .= (RealFuncAdd(A)).(a*u,b*v)
-          .= (RealFuncAdd(A)).[a*u,b*v]
-          .= a*u + b*v;
+            h = a*u + b*v by A4;
         hence thesis; end;
   end;
 
@@ -760,15 +734,9 @@ Lm4: now let A;
   assume
 A1: a = RealFuncUnit(A);
   reconsider g = h as Element of Funcs(A,REAL);
-  thus h * a = (RealFuncMult(A)).(h,a)
-  .= (RealFuncMult(A)).(h,RealFuncUnit(A)) by A1
-  .= (RealFuncMult(A)).(RealFuncUnit(A),g) by Th18
-  .= g by Th20
-  .= h;
-  thus a * h = (RealFuncMult(A)).(a,h)
-  .= (RealFuncMult(A)).(RealFuncUnit(A),h) by A1
-  .= g by Th20
-  .= h;
+  thus h * a = (RealFuncMult(A)).(RealFuncUnit(A),g) by  A1,Th18
+  .= h by Th20;
+  thus a * h = h by  A1,Th20;
 end;
 
 registration
@@ -814,13 +782,10 @@ A1: for x,y be Element of RRing(A)
   thus x+y = (RealFuncAdd(A)).(f,g)
           .= (the add of IT).(g,f) by Th16
           .= y+x;
-  thus (x+y)+z = (the add of IT).(x+y,z)
-              .= (RealFuncAdd(A)).((RealFuncAdd(A)).(f,g),h)
+  thus (x+y)+z = (RealFuncAdd(A)).((RealFuncAdd(A)).(f,g),h)
               .= (RealFuncAdd(A)).(f,(the add of IT).(y,z)) by Th17
-              .= (RealFuncAdd(A)).(f,y+z)
               .= x+(y+z);
-  thus x+(0.RRing(A)) = (RealFuncAdd(A)).(f,0.IT)
-                     .= (RealFuncAdd(A)).(f,RealFuncZero(A))
+  thus x+(0.RRing(A)) = (RealFuncAdd(A)).(f,RealFuncZero(A))
                      .= (RealFuncAdd(A)).(RealFuncZero(A),f) by Th16
                      .= x by Th21;
   thus ex t being Element of RRing(A) st
@@ -830,26 +795,16 @@ A1: for x,y be Element of RRing(A)
     reconsider t=h as Element of IT;
     take t;
     thus x+t = (RealFuncAdd(A)).(f,h)
-            .= RealFuncZero(A) by Th22
-            .= 0.IT;
+            .= 0.IT by Th22;
    end;
   thus x*y = y*x by A1;
-  thus (x*y)*z = (RealFuncMult(A)).(x*y,h)
-              .= (RealFuncMult(A)).((RealFuncMult(A)).(f,g),h)
-              .= (RealFuncMult(A)).(f,(RealFuncMult(A)).(g,h)) by Th19
-              .= (RealFuncMult(A)).(f,y*z)
-              .= x*(y*z);
-  thus x*(1.RRing(A)) = (RealFuncMult(A)).(f,1.IT)
-                     .= (RealFuncMult(A)).(f,RealFuncUnit(A)) by Th41
+  thus (x*y)*z = x*(y*z) by Th19;
+  thus x*(1.RRing(A)) = (RealFuncMult(A)).(f,RealFuncUnit(A)) by Th41
                      .= (RealFuncMult(A)).(RealFuncUnit(A),f) by Th18
                      .= x by Th20;
   hence (1.RRing(A))*x = x by A1;
-  thus x*(y+z) = (RealFuncMult(A)).(f,y+z)
-              .= (RealFuncMult(A)).(f,(RealFuncAdd(A)).(g,h))
-              .= (RealFuncAdd(A)).
-              ((RealFuncMult(A)).(f,g),(RealFuncMult(A)).(f,h)) by Th26
-              .= (RealFuncAdd(A)).(x*y,(RealFuncMult(A)).(f,h))
-              .= (RealFuncAdd(A)).(x*y,x*z)
+  thus x*(y+z) = (RealFuncMult(A)).(f,(RealFuncAdd(A)).(g,h))
+              .= (RealFuncAdd(A)).(x*y,(RealFuncMult(A)).(f,h)) by Th26
               .= x*y + x*z;
   hence (y+z)*x = x*y + x*z by A1
               .= y*x + x*z by A1
@@ -947,13 +902,9 @@ Lm5: now
   assume
 A1: e = RealFuncUnit(A);
   reconsider f = x as Element of Funcs(A,REAL);
-  thus x * e = (the mult of F).(x,e)
-  .= (RealFuncMult(A)).(f,RealFuncUnit(A)) by A1
-  .= (RealFuncMult(A)).(RealFuncUnit(A),f) by Th18
+  thus x * e = (RealFuncMult(A)).(RealFuncUnit(A),f) by  A1,Th18
   .= x by Th20;
-  thus e * x = (the mult of F).(e,x)
-  .= (RealFuncMult(A)).(RealFuncUnit(A),f) by A1
-  .= x by Th20;
+  thus e * x = x by  A1,Th20;
 end;
 
 registration
@@ -1001,13 +952,10 @@ theorem Th49:
   thus x+y = (RealFuncAdd(A)).(f,g)
           .= (the add of IT).(g,f) by Th16
           .= y+x;
-  thus (x+y)+z = (the add of IT).(x+y,z)
-              .= (RealFuncAdd(A)).((RealFuncAdd(A)).(f,g),h)
+  thus (x+y)+z = (RealFuncAdd(A)).((RealFuncAdd(A)).(f,g),h)
               .= (RealFuncAdd(A)).(f,(the add of IT).(y,z)) by Th17
-              .= (RealFuncAdd(A)).(f,y+z)
               .= x+(y+z);
-  thus x+(0.RAlgebra(A)) = (RealFuncAdd(A)).(f,0.IT)
-                     .= (RealFuncAdd(A)).(f,RealFuncZero(A))
+  thus x+(0.RAlgebra(A)) = (RealFuncAdd(A)).(f,RealFuncZero(A))
                      .= (RealFuncAdd(A)).(RealFuncZero(A),f) by Th16
                      .= x by Th21;
   thus ex t being Element of RAlgebra(A) st
@@ -1017,53 +965,23 @@ theorem Th49:
     reconsider t=h as Element of IT;
     take t;
     thus x+t = (RealFuncAdd(A)).(f,h)
-            .= RealFuncZero(A) by Th22
-            .= 0.IT;
+            .= 0.IT by Th22;
    end;
-  thus x*y = (RealFuncMult(A)).(f,g)
-          .= (RealFuncMult(A)).(g,f) by Th18
-          .= y*x;
-  thus (x*y)*z = (RealFuncMult(A)).(x*y,h)
-              .= (RealFuncMult(A)).((RealFuncMult(A)).(f,g),h)
-              .= (RealFuncMult(A)).(f,(RealFuncMult(A)).(g,h)) by Th19
-              .= (RealFuncMult(A)).(f,y*z)
-              .= x*(y*z);
-  thus x*(1.RAlgebra(A)) = (RealFuncMult(A)).(f,1.IT)
-                     .= (RealFuncMult(A)).(f,RealFuncUnit(A)) by Th44
+  thus x*y = y*x by Th18;
+  thus (x*y)*z = x*(y*z) by Th19;
+  thus x*(1.RAlgebra(A)) = (RealFuncMult(A)).(f,RealFuncUnit(A)) by Th44
                      .= (RealFuncMult(A)).(RealFuncUnit(A),f) by Th18
                      .= x by Th20;
-  thus x*(y+z) = (RealFuncMult(A)).(f,y+z)
-              .= (RealFuncMult(A)).(f,(RealFuncAdd(A)).(g,h))
-              .= (RealFuncAdd(A)).
-                 ((RealFuncMult(A)).(f,g),(RealFuncMult(A)).(f,h)) by Th26
-              .= (RealFuncAdd(A)).(x*y,(RealFuncMult(A)).(f,h))
-              .= (RealFuncAdd(A)).(x*y,x*z)
+  thus x*(y+z) = (RealFuncMult(A)).(f,(RealFuncAdd(A)).(g,h))
+              .= (RealFuncAdd(A)).(x*y,(RealFuncMult(A)).(f,h)) by Th26
               .= x*y + x*z;
-   thus a*(x*y) = (RealFuncExtMult(A)).[a,x*y]
-               .= (RealFuncExtMult(A)).[a,(RealFuncMult(A)).(f,g)]
-               .= (RealFuncMult(A)).((RealFuncExtMult(A)).[a,f],g) by Th27
-               .= (RealFuncMult(A)).(a*x,g)
-               .= (a*x)*y;
-   thus a*(x+y) = (RealFuncExtMult(A)).[a,x+y]
-               .= (RealFuncExtMult(A)).[a,(RealFuncAdd(A)).(f,g)]
-               .= (RealFuncAdd(A)).
-               ((RealFuncExtMult(A)).[a,f],(RealFuncExtMult(A)).[a,g])
-                                                                 by Lm2
-               .= (RealFuncAdd(A)).(a*x,(RealFuncExtMult(A)).[a,g])
-               .= (RealFuncAdd(A)).(a*x,a*y)
+   thus a*(x*y) = (a*x)*y by Th27;
+   thus a*(x+y) = (RealFuncExtMult(A)).[a,(RealFuncAdd(A)).(f,g)]
+               .= (RealFuncAdd(A)).(a*x,(RealFuncExtMult(A)).[a,g]) by Lm2
                .= (a*x) + (a*y);
-   thus (a+b)*x = (RealFuncExtMult(A)).[a+b,f]
-               .= (RealFuncAdd(A)).
-                ((RealFuncExtMult(A)).[a,f],(RealFuncExtMult(A)).[b,f])
-                                                                  by Th25
-               .= (RealFuncAdd(A)).(a*x,(RealFuncExtMult(A)).[b,f])
-               .= (RealFuncAdd(A)).(a*x,b*x)
+   thus (a+b)*x = (RealFuncAdd(A)).(a*x,b*x) by Th25
                .= (a*x) + (b*x);
-    thus (a*b)*x = (RealFuncExtMult(A)).[a*b,f]
-                .= (RealFuncExtMult(A)).
-                              [a,(RealFuncExtMult(A)).[b,f]] by Th24
-                .= (RealFuncExtMult(A)).[a,b*x]
-                .= a*(b*x);
+    thus (a*b)*x = a*(b*x) by Th24;
    end;
 
  definition let IT be non empty AlgebraStr;

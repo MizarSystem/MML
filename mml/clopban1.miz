@@ -72,7 +72,6 @@ A2:dom (F.[c,f]) = X by FUNCT_2:169;
      F.(c,f) = @((the Mult of Y)[;](c,f)) by A1
           .= (the Mult of Y) [;](c,f) by FUNCSDOM:def 1;
    hence (F.[c,f]).x = (the Mult of Y).(c,f.x) by A2,FUNCOP_1:42
-                    .= (the Mult of Y).[c,f.x]
                     .= c*(f.x) by CLVECT_1:def 1;
 end;
 
@@ -105,7 +104,7 @@ definition
  end;
 end;
 
-reserve X,A,B for non empty set;
+reserve X for non empty set;
 reserve Y for ComplexLinearSpace;
 reserve f,g,h for Element of Funcs(X,the carrier of Y);
 
@@ -266,31 +265,21 @@ proof
      thus u+v = v+u
      proof
        reconsider v' = v, u' = u as Element of Funcs(X,the carrier of Y);
-       thus u+v = (FuncAdd(X,Y)).[u',v']
-               .= (FuncAdd(X,Y)).(u',v')
+       thus u+v = (FuncAdd(X,Y)).(u',v')
                .= (FuncAdd(X,Y)).(v',u') by Th4
-               .= (FuncAdd(X,Y)).[v',u']
                .= v+u;
      end;
      thus (u+v)+w = u+(v+w)
      proof
        reconsider v'=v, u'=u, w'=w as Element of Funcs(X,the carrier of Y);
-       thus (u+v)+w = (FuncAdd(X,Y)).[u+v,w']
-            .= (FuncAdd(X,Y)).(u+v,w')
-            .= (FuncAdd(X,Y)).((FuncAdd(X,Y)).[u',v'],w')
-            .= (FuncAdd(X,Y)).((FuncAdd(X,Y)).(u',v'),w')
+       thus (u+v)+w = (FuncAdd(X,Y)).((FuncAdd(X,Y)).(u',v'),w')
             .= (FuncAdd(X,Y)).(u',(FuncAdd(X,Y)).(v',w')) by Th5
-            .= (FuncAdd(X,Y)).(u',(FuncAdd(X,Y)).[v',w'])
-            .= (FuncAdd(X,Y)).[u',(FuncAdd(X,Y)).[v',w']]
-            .= (FuncAdd(X,Y)).[u',v+w]
             .= u+(v+w);
      end;
      thus u+0.IT = u
      proof
        reconsider u'=u as Element of Funcs(X,the carrier of Y);
-       thus u+0.IT = (FuncAdd(X,Y)).[u',0.IT]
-              .= (FuncAdd(X,Y)).[u',FuncZero(X,Y)]
-              .= (FuncAdd(X,Y)).(u',FuncZero(X,Y))
+       thus u+0.IT = (FuncAdd(X,Y)).(u',FuncZero(X,Y))
               .= (FuncAdd(X,Y)).(FuncZero(X,Y),u') by Th4
               .= u by Th6;
      end;
@@ -299,10 +288,8 @@ proof
        reconsider u' = u as Element of Funcs(X,the carrier of Y);
        reconsider w = (FuncExtMult(X,Y)).[-1r,u'] as VECTOR of IT;
        take w;
-       thus u+w = (FuncAdd(X,Y)).[u',(FuncExtMult(X,Y)).[-1r,u']]
-           .= (FuncAdd(X,Y)).(u',(FuncExtMult(X,Y)).[-1r,u'])
-           .= FuncZero(X,Y) by Th7
-           .= 0.IT;
+       thus u+w = (FuncAdd(X,Y)).(u',(FuncExtMult(X,Y)).[-1r,u'])
+           .= 0.IT by Th7;
      end;
 
 A1:  for a be Complex, u,v be VECTOR of IT holds
@@ -315,12 +302,9 @@ A1:  for a be Complex, u,v be VECTOR of IT holds
          reconsider v' = v, u' = u as Element of Funcs(X,the carrier of Y);
          reconsider w = (FuncExtMult(X,Y)).[a,u'],
                     w' = (FuncExtMult(X,Y)).[a,v'] as VECTOR of IT;
-          a*(u+v) = (FuncExtMult(X,Y)).[a,u+v] by CLVECT_1:def 1
-           .=(FuncExtMult(X,Y)).[a,(FuncAdd(X,Y)).[u',v']]
-           .= (FuncExtMult(X,Y)).[a,(FuncAdd(X,Y)).(u',v')]
+          a*(u+v) = (FuncExtMult(X,Y)).[a,(FuncAdd(X,Y)).(u',v')] by
+CLVECT_1:def 1
            .=(FuncAdd(X,Y)).(w,w') by Lm1
-           .= (FuncAdd(X,Y)).[w,w']
-           .= w + w'
            .= w + (a*v) by CLVECT_1:def 1
            .= a*u + a*v by CLVECT_1:def 1;
          hence thesis;
@@ -338,8 +322,6 @@ A2:  for a,b be Complex, v be VECTOR of IT holds
          as VECTOR of IT;
        thus (a+b)*v = (FuncExtMult(X,Y)).[a+b,v'] by CLVECT_1:def 1
              .= (FuncAdd(X,Y)).(w,w') by Th10
-             .= (FuncAdd(X,Y)).[w,w']
-             .= w + w'
              .= w + (b*v) by CLVECT_1:def 1
              .= (a*v) + (b*v) by CLVECT_1:def 1;
      end;
@@ -420,15 +402,13 @@ proof
    hereby assume
 A1:  h = f+g;
      let x be Element of X;
-      h = (FuncAdd(X,Y)).[f',g'] by A1
-      .= (FuncAdd(X,Y)).(f',g');
+      h = (FuncAdd(X,Y)).(f',g') by A1;
      hence h.x = f.x+g.x by LOPBAN_1:3;
    end;
    assume
     for x be Element of X holds h.x=f.x+g.x;
 then A2:for x be Element of X holds h'.x=f'.x+g'.x;
-    f+g = (FuncAdd(X,Y)).[f',g']
-      .= (FuncAdd(X,Y)).(f',g');
+    f+g = (FuncAdd(X,Y)).(f',g');
    hence h = f+g by A2,LOPBAN_1:3;
 end;
 
@@ -609,8 +589,7 @@ A3:      f is additive
            let x,y be VECTOR of X;
            reconsider v' = v, u' = u as Element of
                 Funcs(the carrier of X,the carrier of Y);
-A4:        f = (FuncAdd(the carrier of X,Y)).[u',v'] by RLVECT_1:def 3
-            .= (FuncAdd(the carrier of X,Y)).(u',v');
+A4:        f = (FuncAdd(the carrier of X,Y)).(u',v') by RLVECT_1:def 3;
 A5:        u' is LinearOperator of X,Y by A2,Def5;
 A6:        v' is LinearOperator of X,Y by A2,Def5;
            thus
@@ -628,8 +607,7 @@ A6:        v' is LinearOperator of X,Y by A2,Def5;
            let x be VECTOR of X, s be Complex;
            reconsider v' = v, u' = u as Element of
            Funcs(the carrier of X,the carrier of Y);
-A7:        f = (FuncAdd(the carrier of X,Y)).[u',v'] by RLVECT_1:def 3
-            .= (FuncAdd(the carrier of X,Y)).(u',v');
+A7:        f = (FuncAdd(the carrier of X,Y)).(u',v') by RLVECT_1:def 3;
 A8:        u' is LinearOperator of X,Y by A2,Def5;
 A9:       v' is LinearOperator of X,Y by A2,Def5;
            thus f.(s*x) =u'.(s*x)+v'.(s*x) by A7,LOPBAN_1:3
@@ -1309,9 +1287,7 @@ then A9:      g.t = g.(0c*0.X) by CLVECT_1:2
        case t <> 0.X;
 then A10:     ||.t.|| <> 0 by CLVECT_1:def 10;
 then A11:     ||.t.|| > 0 by CLVECT_1:106;
-A12:     |. ||.t.||"+0*<i> .| = abs( Re(||.t.||"+0*<i>)) by
-COMPLEX1:28
-          .=abs( 1*||.t.||" ) by COMPLEX1:28
+A12:     |. ||.t.||"+0*<i> .| =abs( 1*||.t.||" )
           .=abs( 1/||.t.||) by XCMPLX_0:def 9
           .=1/abs( ||.t.||) by ABSVALUE:15
           .=1/||.t.|| by A11,ABSVALUE:def 1
@@ -1431,8 +1407,6 @@ proof
    let X,Y be ComplexNormSpace;
     ((the carrier of X) --> 0.Y)
      =0.C_VectorSpace_of_BoundedLinearOperators(X,Y) by Th29
-    .=Zero_(BoundedLinearOperators(X,Y),
-         C_VectorSpace_of_LinearOperators(X,Y))
     .=0.C_NormSpace_of_BoundedLinearOperators(X,Y);
    hence thesis;
 end;
@@ -1463,8 +1437,7 @@ then A5:      ||.t.|| <> 0 by CLVECT_1:def 10;
 then A6:      ||.t.|| > 0 by CLVECT_1:106;
          reconsider t0 = ||.t.||"+0*<i> as Element of COMPLEX
                   by XCMPLX_0:def 2;
-A7:      |. t0 .| = abs Re t0 by COMPLEX1:28
-          .=abs( 1*||.t.||" ) by COMPLEX1:28
+A7:      |. t0 .| =abs( 1*||.t.||" )
           .=abs( 1/||.t.||) by XCMPLX_0:def 9
           .=1/abs( ||.t.||) by ABSVALUE:15
           .=1/||.t.|| by A6,ABSVALUE:def 1
@@ -1768,8 +1741,6 @@ A38:     c = 0c;
             .=c*fz by CLVECT_1:def 1
             .=0.C_VectorSpace_of_BoundedLinearOperators(X,Y)
                by A38,CLVECT_1:2
-            .=Zero_(BoundedLinearOperators(X,Y),
-               C_VectorSpace_of_LinearOperators(X,Y))
             .=0.C_NormSpace_of_BoundedLinearOperators(X,Y);
          hence |.c.|* ||.f.|| =||.c*f.|| by A38,Th38,COMPLEX1:130;
        end;

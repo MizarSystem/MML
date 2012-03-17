@@ -11,11 +11,11 @@ environ
       ABSVALUE, UNIALG_1, GRCAT_1, JGRAPH_2, MCART_1, POLYEQ_1, FUNCT_3,
       SQUARE_1, ARYTM_3, METRIC_1, RLVECT_1, RVSUM_1, FINSEQ_1, EUCLID_2,
       JORDAN2C, LATTICES, ASYMPT_0, FINSEQ_2;
- notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NAT_1, RELSET_1, PARTFUN1,
-      FUNCT_2, NUMBERS, XCMPLX_0, XXREAL_0, XREAL_0, REAL_1, FINSEQ_1,
-      FINSEQ_2, RVSUM_1, SQUARE_1, QUIN_1, POLYEQ_1, DOMAIN_1, STRUCT_0,
-      PRE_TOPC, BORSUK_1, TOPREAL1, COMPLEX1, METRIC_1, TBSP_1, EUCLID,
-      TOPRNS_1, JORDAN1, JORDAN2C, JGRAPH_2, JGRAPH_6, EUCLID_2;
+ notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, RELSET_1, FUNCT_2, NUMBERS,
+      XCMPLX_0, XXREAL_0, XREAL_0, REAL_1, FINSEQ_1, FINSEQ_2, RVSUM_1,
+      SQUARE_1, QUIN_1, POLYEQ_1, STRUCT_0, PRE_TOPC, BORSUK_1, TOPREAL1,
+      COMPLEX1, METRIC_1, TBSP_1, EUCLID, TOPRNS_1, JORDAN1, JORDAN2C,
+      JGRAPH_2, JGRAPH_6, EUCLID_2;
  constructors REAL_1, SQUARE_1, BINOP_2, COMPLEX1, FINSEQOP, REALSET1, QUIN_1,
       POLYEQ_1, BORSUK_1, TBSP_1, TOPRNS_1, TOPREAL1, JORDAN1, JORDAN2C,
       EUCLID_2, JGRAPH_2, JGRAPH_6;
@@ -135,8 +135,7 @@ theorem Th5:
 proof
   let f be FinSequence of REAL;
 A1: Sum sqr f >= 0 by RVSUM_1:116;
-  thus |.f.|^2 = (sqrt Sum sqr f)^2
-    .= Sum sqr f by A1,SQUARE_1:def 4;
+  thus |.f.|^2 = Sum sqr f by A1,SQUARE_1:def 4;
 end;
 
 theorem Th6:
@@ -1040,8 +1039,7 @@ A19: W1 + W2 = l1*(y-x) + l*(z-x) by EUCLID:def 10
       .= l1*y+l*z-(1 *x-l*x+l*x) by EUCLID:54
       .= l1*y+l*z-1 *x by EUCLID:52
       .= Rf by A8,A10,EUCLID:33;
-  |. R-x .|^2 = (sqrt Sum sqr Rf)^2 by A11
-    .= Sum sqr Rf by A12,SQUARE_1:def 4
+  |. R-x .|^2 = Sum sqr Rf by  A11,A12,SQUARE_1:def 4
     .= Sum (sqr W1 + 2*mlt(W1,W2) + sqr W2) by A19,RVSUM_1:98
     .= Sum (sqr W1 + 2*mlt(W1,W2)) + Sum sqr W2 by RVSUM_1:119
     .= Sum sqr W1 + Sum (2*mlt(W1,W2)) + Sum sqr W2 by RVSUM_1:119
@@ -1066,13 +1064,9 @@ RVSUM_1:94
     .= l1^2*r^2 + 2*l1*l*Sum mlt(yf-xf,zf-xf) + l^2*r^2
     .= l1^2*r^2 + 2*l1*l*|(y1,z1)| + l^2*r^2 by A15,A17,EUCLID_2:def 1
     .= l1^2*r^2 + 2*l1*l*X + l^2*r^2 by EUCLID_2:def 2
-    .= (l1^2+l^2)*r^2 + 2*l*l1*X
-    .= (1^2-2*1 *l+l^2+l^2)*r^2 + 2*l*l1*X
     .= (1-2*l+l^2+l^2)*r^2 + 2*l*l1*X;
   then
-A20: |. R-x .|^2 - r^2 = (-2*l+2*l^2)*r^2+2*l*l1*X
-    .= (-2*1 *l+2*(l*l))*r^2+2*l*l1*X
-    .= 2*l*l1*(-r^2+X);
+A20: |. R-x .|^2 - r^2 = 2*l*l1*(-r^2+X);
   Sphere(x,r) c= cl_Ball(x,r) by Th17;
   then LSeg(y,z) c= cl_Ball(x,r) by A1,A2,JORDAN1:def 1;
   then
@@ -1109,7 +1103,6 @@ A26: y-z = yf-zf by EUCLID:def 13;
       .= |. y-x+x-z .|^2 by JORDAN2C:9
       .= |.y-z.|^2 by EUCLID:52
       .= |.yf-zf.|^2 by A26,TOPRNS_1:def 6
-      .= (sqrt Sum sqr (yf-zf))^2
       .= Sum sqr (yf-zf) by A25,SQUARE_1:def 4;
     then yf-zf = n |-> 0 by RVSUM_1:121;
     hence contradiction by A3,RVSUM_1:59;
@@ -1381,21 +1374,7 @@ A31: |. l*(t-s) .|^2 = (abs(l)*|. t-s .|)^2 by TOPRNS_1:8
 A32:r^2 = |. s-x .|^2 + 2*|(l*(t-s),s-x)| + |. l*(t-s) .|^2 by EUCLID_2:67
      .= |. s-x .|^2 + 2*(l*|(t-s,s-x)|) + |. l*(t-s) .|^2 by EUCLID_2:41;
   set f = 2*(|(t-s,s-x)|*l)+|. S-X .|^2;
-  A*l^2+B*l+C =
-    (Sum sqr (T-S))*l^2+(2*|(t-s,s-x)|)*l+Sum sqr (S-X) - r^2
-    .= (|. T-S .|^2)*l^2+(2*|(t-s,s-x)|)*l+Sum sqr (S-X) -
-      (|. s-x .|^2 + 2*(l*|(t-s,s-x)|) + |. l*(t-s) .|^2) by A32,A12
-    .= (|. T-S .|^2)*l^2+(2*|(t-s,s-x)|)*l+|. S-X .|^2 -
-      (|. S-X .|^2 + 2*(l*|(t-s,s-x)|) + |. l*(t-s) .|^2) by A14,A13
-    .= (|. T-S .|^2)*l^2+(2*|(t-s,s-x)|)*l+|. S-X .|^2 -
-      (|. S-X .|^2 + 2*(l*|(t-s,s-x)|) + |. l*(t-s) .|^2)
-    .= (|. T-S .|^2)*l^2+2*(|(t-s,s-x)|*l)+|. S-X .|^2 -
-      (|. S-X .|^2 + 2*(l*|(t-s,s-x)|) + |. l*(t-s) .|^2)
-    .= ((|. T-S .|^2)*l^2 + f) - (f + |. l*(t-s) .|^2)
-    .= (|. T-S .|^2)*l^2 - |. l*(t-s) .|^2
-    .= (|. T-S .|^2)*l^2 - (l^2)*(|. t-s .|)^2 by A31
-    .= (|. T-S .|^2)*l^2 - (l^2)*(|. T-S .|)^2 by A11
-    .= 0;
+  A*l^2+B*l+C = 0 by  A12,A13,A14,A31,A32,A11;
   then Polynom(A,B,C,l) = 0 by POLYEQ_1:def 2;
   then l = l1 or l = l2 by A8,A17,A19,POLYEQ_1:5;
   hence d in {e1} by A21,A29,A30,TARSKI:def 1,A19,A8,A17,QUIN_1:27;

@@ -12,7 +12,7 @@ environ
       PROB_1, TSP_1, MCART_1, OPENLATT, MEASURE1, CONNSP_2, WAYBEL30, REALSET1,
       NEWTON;
  notations TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, CARD_1, ORDINAL1,
-      NUMBERS, CARD_4, MCART_1, NAT_1, FINSET_1, SETFAM_1, DOMAIN_1, STRUCT_0,
+      NUMBERS, CARD_4, MCART_1, FINSET_1, SETFAM_1, DOMAIN_1, STRUCT_0,
       GROUP_1, CONNSP_2, REALSET1, OPENLATT, MEASURE1, PRE_TOPC, TOPS_1,
       TOPS_2, CONNSP_1, TDLAT_3, WAYBEL23, PROB_1, URYSOHN1, TOPMETR, CANTOR_1,
       ORDERS_4, TSP_1, TOPGEN_1, TOPGEN_3, PCOMPS_1;
@@ -23,7 +23,7 @@ environ
       TOPREAL6, TOPGEN_1, FINSET_1, WAYBEL12, SUBSET_1, BORSUK_3, TOPGEN_2,
       TOPGEN_3, MEASURE1;
  requirements NUMERALS, BOOLE, SUBSET;
- definitions TARSKI, XBOOLE_0, CARD_4, MEASURE1, TOPS_2;
+ definitions TARSKI, XBOOLE_0, CARD_4, MEASURE1, TOPS_2, SUBSET_1, PRE_TOPC;
  theorems TARSKI, SETFAM_1, FUNCT_1, FUNCT_2, ZFMISC_1, PRE_TOPC, TOPS_1,
       XBOOLE_1, SUBSET_1, YELLOW_8, WAYBEL23, TOPMETR, NUMBERS, CONNSP_1,
       CONNSP_2, CARD_4, CARD_1, KURATO_2, PCOMPS_1, XBOOLE_0, TOPGEN_1, TOPS_2,
@@ -1163,8 +1163,7 @@ A2:   (union F)` = meet COMPLEMENT F by TOPS_2:11;
       hence thesis by A2,A1,Def7;
     end;
     suppose F = {}; then
-      A = {}T by A1,ZFMISC_1:2; then
-      A` = [#]T by PRE_TOPC:27;
+      A` = [#]T by A1,ZFMISC_1:2;
       hence thesis;
     end;
   end;
@@ -1183,8 +1182,7 @@ A2:   (meet F)` = union COMPLEMENT F by TOPS_2:12;
       hence thesis by A2,A1,Def6;
     end;
     suppose F = {}; then
-      A = {}T by A1,SETFAM_1:2; then
-      A` = [#]T by PRE_TOPC:27;
+      A` = [#]T by A1,SETFAM_1:2;
       hence thesis;
     end;
   end;
@@ -1476,13 +1474,7 @@ theorem
   for T being non empty TopSpace,
       p being Point of T holds
     p is_isolated_in [#]T or p is_an_accumulation_point_of [#]T
-  proof
-    let T be non empty TopSpace,
-        p be Point of T;
-    p in the carrier of T; then
-    p in [#]T by PRE_TOPC:def 3;
-    hence thesis by TOPGEN_1:def 4;
-  end;
+      by TOPGEN_1:def 4;
 
 registration
   cluster T_1/2 -> T_0 TopSpace;
@@ -1888,7 +1880,7 @@ registration let T be non empty TopSpace;
   coherence;
 end;
 
-theorem Th66:
+theorem
   for T being non empty TopSpace,
       F being Subset-Family of T st
     F is compl-closed closed_for_countable_unions holds
@@ -1943,66 +1935,64 @@ A1: bool the carrier of T in V
       X1 in V;
       hence thesis;
     end;
-    then A2: Y c= bool the carrier of T by SETFAM_1:4;
     now let Z be set; assume Z in V;
       then consider S being Subset-Family of T such that
-A3:   Z = S & X c= S & S is all-open-containing compl-closed
+A2:   Z = S & X c= S & S is all-open-containing compl-closed
           closed_for_countable_unions Subset-Family of T;
-      Z is Field_Subset of the carrier of T by A3,Th66;
+      Z is Field_Subset of the carrier of T by A2,Th13;
       hence {} in Z by PROB_1:10;
     end; then
-A4: {} in Y by A1,SETFAM_1:def 1;
-A5: for BSeq be SetSequence of the carrier of T st
+A3: {} in Y by A1,SETFAM_1:def 1;
+A4: for BSeq be SetSequence of the carrier of T st
     (for n being Element of NAT holds BSeq.n in Y) holds
       Intersection BSeq in Y
     proof let BSeq be SetSequence of the carrier of T such that
-A6:   for n being Element of NAT holds BSeq.n in Y;
-      now let Z be set; assume A7: Z in V;
+A5:   for n being Element of NAT holds BSeq.n in Y;
+      now let Z be set; assume A6: Z in V;
         then consider S be Subset-Family of T such that
-A8:     Z = S & X c= S & S is all-open-containing compl-closed
+A7:     Z = S & X c= S & S is all-open-containing compl-closed
           closed_for_countable_unions  Subset-Family of T;
-A9:     Z = S & X c= S & S is SigmaField of T by A8,Th66;
+A8:     Z = S & X c= S & S is SigmaField of T by A7,Th13;
         now let n be Element of NAT;
-          BSeq.n in Y by A6;
-          hence BSeq.n in Z by A7,SETFAM_1:def 1;
+          BSeq.n in Y by A5;
+          hence BSeq.n in Z by A6,SETFAM_1:def 1;
         end;
-        hence Intersection BSeq in Z by A9,PROB_1:def 8;
+        hence Intersection BSeq in Z by A8,PROB_1:def 8;
       end;
       hence thesis by A1,SETFAM_1:def 1;
     end;
     for E being Subset of T st E in Y holds E` in Y
-    proof let E be Subset of T such that A10: E in Y;
-      now let Z be set; assume A11: Z in V;
-        then A12: E in Z by A10,SETFAM_1:def 1;
-        consider S being Subset-Family of T such that
-A13:     Z = S & X c= S & S is all-open-containing compl-closed
-          closed_for_countable_unions Subset-Family of T by A11;
-        Z = S & X c= S & S is SigmaField of T by A13,Th66;
-        hence E` in Z by A12,PROB_1:def 1;
+    proof let E be Subset of T such that A9: E in Y;
+      now let Z be set; assume A10: Z in V;
+        then A11: E in Z by A9,SETFAM_1:def 1;
+        ex S being Subset-Family of T st
+         Z = S & X c= S & S is all-open-containing compl-closed
+          closed_for_countable_unions Subset-Family of T by A10;
+        hence E` in Z by A11,PROB_1:def 1;
       end;
       hence thesis by A1,SETFAM_1:def 1;
     end;
-    then reconsider Y as SigmaField of T by A2,A4,A5,PROB_1:32;
+    then reconsider Y as SigmaField of T by A1,SETFAM_1:4,A3,A4,PROB_1:32;
     for A being Subset of T st A is open holds A in Y
     proof
       let A be Subset of T;
       assume
-A14:   A is open;
+A12:   A is open;
       for Y being set holds Y in V implies A in Y
       proof
         let Y be set;
         assume Y in V; then
         consider S being Subset-Family of the carrier of T such that
-A15:     Y = S & X c= S & S is all-open-containing compl-closed
+A13:     Y = S & X c= S & S is all-open-containing compl-closed
           closed_for_countable_unions Subset-Family of T;
-        thus thesis by A14,A15,Def2;
+        thus thesis by A12,A13,Def2;
       end;
       hence thesis by A1,SETFAM_1:def 1;
     end; then
     reconsider Y as all-open-containing compl-closed
       closed_for_countable_unions Subset-Family of T by Def2;
     take Y;
-A16:now let Z be set; assume Z in V;
+A14:now let Z be set; assume Z in V;
       then ex S be Subset-Family of T st
         Z = S & X c= S & S is all-open-containing compl-closed
         closed_for_countable_unions Subset-Family of T;
@@ -2011,13 +2001,13 @@ A16:now let Z be set; assume Z in V;
     for Z be set st X c= Z & Z is all-open-containing compl-closed
       closed_for_countable_unions Subset-Family of T holds Y c= Z
     proof let Z be set;
-      assume A17: X c= Z & Z is all-open-containing compl-closed
+      assume A15: X c= Z & Z is all-open-containing compl-closed
         closed_for_countable_unions Subset-Family of T;
       then reconsider Z as Subset-Family of T;
-      Z in V by A17;
+      Z in V by A15;
       hence thesis by SETFAM_1:4;
     end;
-    hence thesis by A1,A16,SETFAM_1:6;
+    hence thesis by A1,A14,SETFAM_1:6;
   end;
 
 definition let T;
@@ -2093,7 +2083,7 @@ theorem
   BorelSets T = sigma Topology_of T
   proof
     set BT = BorelSets T;
-    reconsider BT = BorelSets T as SigmaField of T by Th66;
+    reconsider BT = BorelSets T as SigmaField of T by Th13;
     set X = Topology_of T;
 A1: X c= BT by Th69;
     for Z being set st X c= Z & Z is SigmaField of T holds BT c= Z

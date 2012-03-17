@@ -9,9 +9,8 @@ environ
 
  vocabularies ARYTM_3, QC_LANG1, BINOP_1, FUNCT_1, LATTICES, ARYTM, RELAT_1,
       BOOLE, NAT_LAT, REALSET1, ORDINAL2;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, ORDINAL1,
-      XREAL_0, REALSET1,
-      STRUCT_0, NAT_1, LATTICES, BINOP_1, RELAT_1, FUNCT_1, XXREAL_0;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, ORDINAL1, XREAL_0,
+      REALSET1, STRUCT_0, NAT_1, LATTICES, BINOP_1, RELAT_1, FUNCT_1, XXREAL_0;
  constructors PARTFUN1, BINOP_1, FINSET_1, XXREAL_0, XREAL_0, NAT_1, MEMBERED,
       REALSET1, LATTICES, ORDINAL2;
  registrations FINSET_1, STRUCT_0, RELSET_1, LATTICES, NAT_1, MEMBERED,
@@ -19,12 +18,12 @@ environ
  requirements REAL, NUMERALS, SUBSET, BOOLE;
  definitions TARSKI, XBOOLE_0, LATTICES, BINOP_1, REALSET1;
  theorems NEWTON, ZFMISC_1, LATTICES, FUNCT_1, FUNCT_2, XBOOLE_1, RELAT_1,
-   ORDINAL1, BINOP_1;
+      ORDINAL1, BINOP_1;
  schemes BINOP_1, BINOP_2, SUBSET_1;
 
 begin :: Auxiliary Theorems
 
- reserve n,m,l,k,i,j,s,r,t for Nat;
+ reserve n,m for Nat;
 
 definition
  canceled 2;
@@ -41,12 +40,11 @@ A1: for a,b being Element of NAT holds o.(a,b) = O(a,b) from BINOP_1:sch 4;
    hence thesis by A1;
  end;
  uniqueness proof
-    deffunc O(Nat,Nat)= $1 hcf $2;
     let f1,f2 be BinOp of NAT such that
-A1: f1.(m,n)=m hcf n and
-A2: f2.(m,n)=m hcf n;
+A2: f1.(m,n)=m hcf n and
+A3: f2.(m,n)=m hcf n;
     now let m,n be Element of NAT;
-      thus f1.(m,n) = m hcf n by A1 .= f2.(m,n) by A2;
+      thus f1.(m,n) = m hcf n by A2 .= f2.(m,n) by A3;
     end;
   hence thesis by BINOP_1:2;
  end;
@@ -56,19 +54,18 @@ A2: f2.(m,n)=m hcf n;
  existence proof
    deffunc O(Nat,Nat)= $1 lcm $2;
    consider o being BinOp of NAT such that
-A1: for a,b being Element of NAT holds o.(a,b) = O(a,b) from BINOP_1:sch 4;
+A4: for a,b being Element of NAT holds o.(a,b) = O(a,b) from BINOP_1:sch 4;
     take o;
     let m,n;
     m in NAT & n in NAT by ORDINAL1:def 13;
-   hence thesis by A1;
+   hence thesis by A4;
  end;
  uniqueness proof
- deffunc O(Nat,Nat)= $1 lcm $2;
     let f1,f2 be BinOp of NAT such that
-A1: f1.(m,n)=m lcm n and
-A2: f2.(m,n)=m lcm n;
+A5: f1.(m,n)=m lcm n and
+A6: f2.(m,n)=m lcm n;
     now let m,n be Element of NAT;
-      thus f1.(m,n) = m lcm n by A1 .= f2.(m,n) by A2;
+      thus f1.(m,n) = m lcm n by A5 .= f2.(m,n) by A6;
     end;
   hence thesis by BINOP_1:2;
  end;
@@ -339,21 +336,21 @@ A1: for n being Element of NAT holds n in X iff P[n] from SUBSET_1:sch 3;
   end;
 uniqueness proof
 let X, Y be Subset of NAT such that
-A1: for n being Nat holds n in X iff 0 < n and
-A2: for n being Nat holds n in Y iff 0 < n;
+A2: for n being Nat holds n in X iff 0 < n and
+A3: for n being Nat holds n in Y iff 0 < n;
     thus X c= Y
     proof
       let x be set;assume
-A3:   x in X;
+A4:   x in X;
       then reconsider x as Nat by ORDINAL1:def 13;
-      0 < x by A1,A3;
-      hence thesis by A2;
+      0 < x by A2,A4;
+      hence thesis by A3;
     end;
     let x be set; assume
-A3: x in Y;
+A5: x in Y;
     then reconsider x as Nat by ORDINAL1:def 13;
-    0 < x by A2,A3;
-    hence thesis by A1;
+    0 < x by A3,A5;
+    hence thesis by A2;
   end;
 end;
 
@@ -487,7 +484,7 @@ definition let m be Element of NatPlus_Lattice;
   coherence;
 end;
 
- reserve p,q,r for Element of NatPlus_Lattice;
+ reserve p,q for Element of NatPlus_Lattice;
 
 theorem
 Th69: p"\/"q =@p lcm @q by Def13;
@@ -542,10 +539,10 @@ Lm11:
   let a,b,c be Element of NatPlus_Lattice;
   set l=b"/\"c;
   set k=a"/\"b;
-A2:@a hcf @b=k & @k=k by Th70;
+A1:@a hcf @b=k & @k=k by Th70;
    (@b hcf @c)=l & @l=l by Th70;
   hence a"/\"(b"/\"c) = @a hcf (@b hcf @c) by Th70
-                .= @k hcf @c by A2,NEWTON:61
+                .= @k hcf @c by A1,NEWTON:61
                 .= (a"/\"b)"/\"c by Th70;
  end;
 

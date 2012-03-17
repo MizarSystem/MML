@@ -27,6 +27,7 @@
 <ArticleID name="INT_1"/>
 <ArticleID name="GROUP_1"/>
 <ArticleID name="VECTSP_1"/>
+<ArticleID name="FINSEQ_3"/>
 <ArticleID name="MATRIX_1"/>
 <ArticleID name="MATRIX_2"/>
 </Signature>
@@ -41,7 +42,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="K" nr="83">
-<Func kind="K" nr="182">
+<Func kind="K" nr="184">
 <LocusVar nr="1"/>
 </Func>
 </Func>

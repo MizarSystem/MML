@@ -23,6 +23,8 @@
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="GROUP_1"/>
+<ArticleID name="ORDERS_1"/>
+<ArticleID name="ORDERS_2"/>
 <ArticleID name="FIN_TOPO"/>
 </Signature>
 <RCluster>
@@ -31,17 +33,8 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="47"/>
-</Cluster>
-</RCluster>
-<RCluster>
-<ArgTypes/>
-<Typ kind="G" nr="4">
-<Cluster/>
-</Typ>
-<Cluster>
 <Adjective nr="39" value="false"/>
-<Adjective nr="47"/>
+<Adjective nr="50"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -52,26 +45,26 @@
 <Cluster>
 <Adjective nr="39" value="false"/>
 <Adjective nr="45"/>
-<Adjective nr="47"/>
-<Adjective nr="48"/>
+<Adjective nr="50"/>
+<Adjective nr="55"/>
 </Cluster>
 </RCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="179"/>
+<Func kind="K" nr="185"/>
 <Cluster>
 <Adjective nr="39" value="false"/>
-<Adjective nr="47"/>
+<Adjective nr="50"/>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="179"/>
+<Func kind="K" nr="185"/>
 <Cluster>
 <Adjective nr="39" value="false"/>
 <Adjective nr="45"/>
-<Adjective nr="47"/>
-<Adjective nr="48"/>
+<Adjective nr="50"/>
+<Adjective nr="55"/>
 </Cluster>
 </FCluster>
 </Registrations>

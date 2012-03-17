@@ -15,6 +15,7 @@
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FRAENKEL"/>
+<ArticleID name="XBOOLEAN"/>
 <ArticleID name="MARGREL1"/>
 </Signature>
 <Scheme>
@@ -32,20 +33,20 @@
 <Typ kind="M" nr="8">
 <Cluster/>
 <Func kind="F" nr="1"/>
-<Func kind="K" nr="100"/>
+<Func kind="K" nr="111"/>
 <Func kind="K" nr="94">
 <Func kind="F" nr="1"/>
-<Func kind="K" nr="100"/>
+<Func kind="K" nr="111"/>
 </Func>
 </Typ>
 <For>
 <Typ kind="M" nr="8">
 <Cluster/>
 <Func kind="F" nr="1"/>
-<Func kind="K" nr="100"/>
+<Func kind="K" nr="111"/>
 <Func kind="K" nr="94">
 <Func kind="F" nr="1"/>
-<Func kind="K" nr="100"/>
+<Func kind="K" nr="111"/>
 </Func>
 </Typ>
 <Not>
@@ -58,7 +59,7 @@
 <Pred kind="R" nr="1">
 <Func kind="K" nr="80">
 <Func kind="F" nr="1"/>
-<Func kind="K" nr="100"/>
+<Func kind="K" nr="111"/>
 <Var nr="1"/>
 <Var nr="3"/>
 </Func>
@@ -75,7 +76,7 @@
 <Pred kind="R" nr="1">
 <Func kind="K" nr="80">
 <Func kind="F" nr="1"/>
-<Func kind="K" nr="100"/>
+<Func kind="K" nr="111"/>
 <Var nr="2"/>
 <Var nr="3"/>
 </Func>
@@ -87,7 +88,7 @@
 <Not>
 <Pred kind="R" nr="12">
 <Func kind="F" nr="1"/>
-<Func kind="K" nr="100"/>
+<Func kind="K" nr="111"/>
 <Var nr="1"/>
 <Var nr="2"/>
 </Pred>

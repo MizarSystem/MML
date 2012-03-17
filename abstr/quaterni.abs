@@ -1,0 +1,585 @@
+:: The Quaternion Numbers
+::  by Xiquan Liang and Fuguo Ge
+::
+:: Received November 14, 2006
+:: Copyright (c) 2006 Association of Mizar Users
+
+environ
+
+ vocabularies ARYTM, RELAT_1, COMPLEX1, FUNCT_2, BOOLE, FUNCT_1, FUNCOP_1,
+      ORDINAL2, ORDINAL1, QUATERNI, FUNCT_4, ARYTM_1, ARYTM_2, ARYTM_3,
+      XCMPLX_0, SQUARE_1, INCPROJ;
+ notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, ARYTM_3, NUMBERS, RELAT_1,
+      FUNCT_1, FUNCT_2, FUNCT_4, ENUMSET1, COMPLEX1, ARYTM_0, ZFMISC_1,
+      ARYTM_2, XCMPLX_0, XREAL_0, REAL_1, SQUARE_1, XXREAL_0, FUNCOP_1,
+      RELSET_1, SEQ_1, INCPROJ;
+ constructors ORDINAL2, SQUARE_1, FRAENKEL, FUNCT_4, ARYTM_1, ENUMSET1,
+      RELAT_2, PARTFUN1, MCART_1, COMPLEX1, ARYTM_0, FINSET_1, ARYTM_3, REAL_1,
+      MEMBERED, XCMPLX_0, FUNCOP_1, NUMBERS, SUBSET_1, ORDINAL3, NAT_1, SEQ_1,
+      INCPROJ;
+ registrations FRAENKEL, RELSET_1, FUNCT_2, ORDINAL1, XBOOLE_0, NUMBERS,
+      FUNCT_4, COMPLEX1, ZFMISC_1, XREAL_0, SQUARE_1, XCMPLX_0, MEMBERED,
+      XXREAL_0, FUNCOP_1, SUBSET_1, ORDINAL2, ARYTM_3, RELAT_1, FUNCT_1;
+ requirements NUMERALS, SUBSET, BOOLE, REAL, ARITHM;
+
+
+begin
+
+ reserve a,b,c,d,x,y,X,w,z,x1,x2,x3,x4 for set;
+ reserve A for non empty set;
+
+
+definition
+  func QUATERNION equals
+:: QUATERNI:def 1
+  Funcs(4,REAL) \ { x where x is Element of Funcs(4,REAL):
+    x.2 = 0 & x.3 = 0} \/ COMPLEX;
+end;
+
+definition let x be number;
+  attr x is quaternion means
+:: QUATERNI:def 2
+  x in QUATERNION;
+end;
+
+registration
+  cluster QUATERNION -> non empty;
+end;
+
+definition let x,y,w,z,a,b,c,d;
+  func (x,y,w,z) --> (a,b,c,d) -> set equals
+:: QUATERNI:def 3
+  ((x,y) --> (a,b)) +* ((w,z) --> (c,d));
+end;
+
+registration let x,y,w,z,a,b,c,d;
+  cluster (x,y,w,z) --> (a,b,c,d) -> Function-like Relation-like;
+end;
+
+theorem :: QUATERNI:1
+  dom (x,y,w,z) --> (a,b,c,d) = {x,y,w,z};
+
+theorem :: QUATERNI:2
+  rng ((x,y,w,z) --> (a,b,c,d)) c= {a,b,c,d};
+
+theorem :: QUATERNI:3
+  x,y,w,z are_mutually_different implies
+  ((x,y,w,z) --> (a,b,c,d)).x=a & ((x,y,w,z) --> (a,b,c,d)).y=b &
+  ((x,y,w,z) --> (a,b,c,d)).w=c & ((x,y,w,z) --> (a,b,c,d)).z=d;
+
+theorem :: QUATERNI:4
+  x,y,w,z are_mutually_different implies
+  rng ((x,y,w,z) --> (a,b,c,d)) = {a,b,c,d};
+
+theorem :: QUATERNI:5
+  {x1,x2,x3,x4} c= X iff x1 in X & x2 in X & x3 in X & x4 in X;
+
+definition let A,x,y,w,z; let a,b,c,d be Element of A;
+  redefine func (x,y,w,z) --> (a,b,c,d) -> Function of {x,y,w,z},A;
+end;
+
+definition
+  func <j> equals
+:: QUATERNI:def 4
+  (0,1,2,3) --> (0,0,1,0);
+  func <k> equals
+:: QUATERNI:def 5
+  (0,1,2,3) --> (0,0,0,1);
+end;
+
+registration
+  cluster <i> -> quaternion;
+  cluster <j> -> quaternion;
+  cluster <k> -> quaternion;
+end;
+
+registration
+  cluster quaternion number;
+end;
+
+registration
+  cluster -> quaternion Element of QUATERNION;
+end;
+
+definition let x,y,w,z be Element of REAL;
+  func [*x,y,w,z*] -> Element of QUATERNION equals
+:: QUATERNI:def 6
+    [*x,y*] if w=0 & z=0
+    otherwise (0,1,2,3) --> (x,y,w,z);
+end;
+
+theorem :: QUATERNI:6
+  for a,b,c,d,e,i,j,k being set,
+  g being Function st a<>b & c <>d & dom g = {a,b,c,d} &
+  g.a = e & g.b = i & g.c = j & g.d=k
+  holds g = (a,b,c,d) --> (e,i,j,k);
+
+theorem :: QUATERNI:7
+  for g being Element of QUATERNION
+  ex r,s,t,u being Element of REAL st g = [*r,s,t,u*];
+
+theorem :: QUATERNI:8
+  a,c,x,w are_mutually_different
+  implies (a,c,x,w) --> (b,d,y,z) = { [a,b], [c,d],[x,y],[w,z] };
+
+reserve i,j,k for Element of NAT;
+reserve a,b,c,d for Element of REAL;
+reserve y,r,s,x,t,w for Element of RAT+;
+
+theorem :: QUATERNI:9
+  for A being Subset of RAT+ st
+  (ex t st t in A & t <> {}) &
+  for r,s st r in A & s <=' r holds s in A
+  ex r1,r2,r3,r4,r5 being Element of RAT+ st
+  r1 in A & r2 in A & r3 in A & r4 in A & r5 in A &
+  r1 <> r2 & r1 <> r3 & r1<>r4 & r1 <> r5 & r2<> r3 & r2<> r4 &
+  r2<> r5& r3 <> r4 & r3 <> r5 & r4 <> r5;
+
+theorem :: QUATERNI:10
+  not (0,1,2,3) --> (a,b,c,d) in COMPLEX;
+
+theorem :: QUATERNI:11
+  for a,b,c,d,x,y,z,w,x',y',z',w' being set
+  st a,b,c,d are_mutually_different &
+  (a,b,c,d) --> (x,y,z,w) = (a,b,c,d) --> (x',y',z',w')
+  holds x = x' & y = y' & z=z' & w=w';
+
+theorem :: QUATERNI:12
+  for x1,x2,x3,x4,y1,y2,y3,y4 being Element of REAL st [*x1,x2,x3,x4*]
+  = [*y1,y2,y3,y4*] holds x1 = y1 & x2 = y2 & x3=y3 & x4=y4;
+
+definition let x,y be quaternion number;
+ func x+y means
+:: QUATERNI:def 7
+  ex x1,x2,x3,x4,y1,y2,y3,y4 being Element of REAL st
+  x = [*x1,x2,x3,x4*] & y = [*y1,y2,y3,y4*] &
+  it = [*x1+y1,x2+y2,x3+y3,x4+y4*];
+ commutativity;
+end;
+
+definition let z be quaternion number;
+ func -z -> quaternion number means
+:: QUATERNI:def 8
+   z + it = 0;
+ involutiveness;
+end;
+
+definition let x,y be quaternion number;
+  func x-y equals
+:: QUATERNI:def 9
+    x + -y;
+end;
+
+definition let x,y be quaternion number;
+ func x*y means
+:: QUATERNI:def 10
+  ex x1,x2,x3,x4,y1,y2,y3,y4 being Element of REAL st
+   x = [*x1,x2,x3,x4*] & y = [*y1,y2,y3,y4*] &
+    it = [* x1*y1-x2*y2-x3*y3-x4*y4,
+            x1*y2+x2*y1+x3*y4-x4*y3,
+            x1*y3+y1*x3+y2*x4-y4*x2,
+            x1*y4+x4*y1+x2*y3-x3*y2 *];
+end;
+
+registration let z,z' be quaternion number;
+  cluster z+z' -> quaternion;
+  cluster z*z' -> quaternion;
+  cluster z-z' -> quaternion;
+end;
+
+definition
+  redefine func <j> -> Element of QUATERNION equals
+:: QUATERNI:def 11
+    [*0,0,1,0*];
+  redefine func <k> -> Element of QUATERNION equals
+:: QUATERNI:def 12
+    [*0,0,0,1*];
+end;
+
+theorem :: QUATERNI:13
+  <i> * <i> = -1;
+
+theorem :: QUATERNI:14
+  <j> * <j> = -1;
+
+theorem :: QUATERNI:15
+  <k> * <k> = -1;
+
+theorem :: QUATERNI:16
+  <i> * <j> = <k>;
+
+theorem :: QUATERNI:17
+  <j> * <k> = <i>;
+
+theorem :: QUATERNI:18
+  <k> * <i> = <j>;
+
+theorem :: QUATERNI:19
+  <i> * <j> = - <j> * <i>;
+
+theorem :: QUATERNI:20
+  <j> * <k> = - <k> * <j>;
+
+theorem :: QUATERNI:21
+  <k> * <i> = - <i> * <k>;
+
+definition let z be quaternion number;
+     func Rea z means
+:: QUATERNI:def 13
+     ex z' being complex number st z=z' & it = Re z' if z in COMPLEX
+     otherwise
+     ex f being Function of 4,REAL st z = f & it = f.0;
+     func Im1 z means
+:: QUATERNI:def 14
+     ex z' being complex number st z=z' & it = Im z' if z in COMPLEX
+     otherwise
+     ex f being Function of 4,REAL st z = f & it = f.1;
+     func Im2 z means
+:: QUATERNI:def 15
+     it = 0 if z in COMPLEX
+     otherwise
+     ex f being Function of 4,REAL st z = f & it = f.2;
+     func Im3 z means
+:: QUATERNI:def 16
+     it = 0 if z in COMPLEX
+     otherwise
+     ex f being Function of 4,REAL st z = f & it = f.3;
+end;
+
+registration let z be quaternion number;
+  cluster Rea z -> real;
+  cluster Im1 z -> real;
+  cluster Im2 z -> real;
+  cluster Im3 z -> real;
+end;
+
+definition let z be quaternion number;
+  redefine func Rea z -> Real;
+  redefine func Im1 z -> Real;
+  redefine func Im2 z -> Real;
+  redefine func Im3 z -> Real;
+end;
+
+theorem :: QUATERNI:22
+  for f being Function of 4,REAL
+  ex a,b,c,d st f = (0,1,2,3)-->(a,b,c,d);
+
+theorem :: QUATERNI:23
+  Rea [*a,b,c,d*] = a & Im1 [*a,b,c,d*] = b &
+  Im2 [*a,b,c,d*] = c & Im3 [*a,b,c,d*] = d;
+
+reserve z,z1,z2,z3,z4 for quaternion number;
+
+theorem :: QUATERNI:24
+  z = [*Rea z, Im1 z, Im2 z, Im3 z*];
+
+theorem :: QUATERNI:25
+  Rea z1 = Rea z2 & Im1 z1 = Im1 z2 & Im2 z1 = Im2 z2 &
+  Im3 z1 = Im3 z2 implies z1 = z2;
+
+definition
+  func 0q -> quaternion number equals
+:: QUATERNI:def 17
+  0;
+  func 1q -> quaternion number equals
+:: QUATERNI:def 18
+  1;
+end;
+
+theorem :: QUATERNI:26
+  Rea z = 0 & Im1 z = 0 &
+  Im2 z = 0 & Im3 z = 0 implies z = 0q;
+
+theorem :: QUATERNI:27
+  z = 0 implies (Rea z)^2 + (Im1 z)^2 +(Im2 z)^2 + (Im3 z)^2 = 0;
+
+theorem :: QUATERNI:28
+  (Rea z)^2 + (Im1 z)^2 +(Im2 z)^2 +
+  (Im3 z)^2 = 0 implies z = 0q;
+
+theorem :: QUATERNI:29
+  Rea (1q) = 1 & Im1(1q) = 0 & Im2 (1q) =0 & Im3 (1q) = 0;
+
+theorem :: QUATERNI:30
+  Rea <i> = 0 & Im1 <i> = 1 & Im2 <i> = 0 & Im3 <i> = 0;
+
+theorem :: QUATERNI:31
+  Rea <j> = 0 & Im1 <j> = 0 & Im2 <j> = 1 & Im3 <j> = 0 &
+  Rea <k> = 0 & Im1 <k> = 0 & Im2 <k> = 0 & Im3 <k> = 1;
+
+theorem :: QUATERNI:32
+  Rea (z1 + z2 + z3 + z4) = Rea z1 + Rea z2 + Rea z3 + Rea z4 &
+  Im1 (z1 + z2 + z3 + z4) = Im1 z1 + Im1 z2 + Im1 z3 + Im1 z4 &
+  Im2 (z1 + z2 + z3 + z4) = Im2 z1 + Im2 z2 + Im2 z3 + Im2 z4 &
+  Im3 (z1 + z2 + z3 + z4) = Im3 z1 + Im3 z2 + Im3 z3 + Im3 z4;
+
+reserve x for Real;
+
+theorem :: QUATERNI:33
+  z1 = x implies Rea (z1*<i>) = 0 &
+  Im1 (z1*<i>) = x & Im2 (z1*<i>) = 0 & Im3 (z1*<i>) = 0;
+
+theorem :: QUATERNI:34
+  z1 = x implies Rea (z1*<j>) = 0 &
+  Im1 (z1*<j>) = 0 & Im2 (z1*<j>) = x & Im3 (z1*<j>) = 0;
+
+theorem :: QUATERNI:35
+  z1 = x implies Rea (z1*<k>) = 0 &
+  Im1 (z1*<k>) = 0 & Im2 (z1*<k>) = 0 & Im3 (z1*<k>) = x;
+
+definition let x be Real, y be quaternion number;
+    func x + y means
+:: QUATERNI:def 19
+    ex y1,y2,y3,y4 being Element of REAL st y = [*y1,y2,y3,y4*] &
+    it = [*x+y1,y2,y3,y4*];
+end;
+
+definition let x be Real, y be quaternion number;
+  func x - y equals
+:: QUATERNI:def 20
+  x + -y;
+end;
+
+definition let x be Real, y be quaternion number;
+  func x * y means
+:: QUATERNI:def 21
+  ex y1,y2,y3,y4 being Element of REAL st y = [*y1,y2,y3,y4*] &
+  it = [*x*y1,x*y2,x*y3,x*y4*];
+end;
+
+registration let x be Real,z' be quaternion number;
+  cluster x+z' -> quaternion;
+  cluster x*z' -> quaternion;
+  cluster x-z' -> quaternion;
+end;
+
+definition let z1,z2 be quaternion number;
+  redefine func z1 + z2 -> Element of QUATERNION equals
+:: QUATERNI:def 22
+  Rea z1 + Rea z2 + (Im1 z1 + Im1 z2)*<i> +
+  (Im2 z1 + Im2 z2)*<j> + (Im3 z1 + Im3 z2)*<k>;
+end;
+
+theorem :: QUATERNI:36
+  Rea (z1 + z2) = Rea z1 + Rea z2 & Im1(z1 + z2) = Im1 z1 + Im1 z2 &
+  Im2(z1 + z2) = Im2 z1 + Im2 z2 & Im3(z1 + z2) = Im3 z1 + Im3 z2;
+
+definition let z1,z2 be Element of QUATERNION;
+ redefine func z1 * z2 -> Element of QUATERNION equals
+:: QUATERNI:def 23
+(Rea z1 * Rea z2 - Im1 z1 * Im1 z2 - Im2 z1 * Im2 z2 - Im3 z1 * Im3 z2) +
+(Rea z1 * Im1 z2 + Im1 z1 * Rea z2 + Im2 z1 * Im3 z2 - Im3 z1 * Im2 z2)*<i> +
+(Rea z1 * Im2 z2 + Im2 z1 * Rea z2 + Im3 z1 * Im1 z2 - Im1 z1 * Im3 z2) *<j> +
+(Rea z1 * Im3 z2 + Im3 z1 * Rea z2 + Im1 z1 * Im2 z2 - Im2 z1 * Im1 z2)*<k>;
+end;
+
+theorem :: QUATERNI:37
+  z = Rea z+(Im1 z)*<i> + (Im2 z)*<j> + (Im3 z)*<k>;
+
+theorem :: QUATERNI:38
+  Im1 z1 = 0 & Im1 z2 = 0 & Im2 z1 = 0 & Im2 z2 = 0 &
+  Im3 z1 = 0 & Im3 z2 = 0 implies
+  Rea(z1*z2) = Rea z1 * Rea z2 &
+  Im1(z1*z2) = Im2 z1 * Im3 z2 - Im3 z1 * Im2 z2 &
+  Im2(z1*z2) = Im3 z1 * Im1 z2 - Im1 z1 * Im3 z2 &
+  Im3(z1*z2) = Im1 z1 * Im2 z2 - Im2 z1 * Im1 z2;
+
+theorem :: QUATERNI:39
+  Rea z1 = 0 & Rea z2 = 0 implies
+  Rea(z1*z2) = - Im1 z1 * Im1 z2 - Im2 z1 * Im2 z2 - Im3 z1 * Im3 z2 &
+  Im1(z1*z2) = Im2 z1 * Im3 z2 - Im3 z1 * Im2 z2 &
+  Im2(z1*z2) = Im3 z1 * Im1 z2 - Im1 z1 * Im3 z2 &
+  Im3(z1*z2) = Im1 z1 * Im2 z2 - Im2 z1 * Im1 z2;
+
+theorem :: QUATERNI:40
+  Rea(z*z) = (Rea z)^2 - (Im1 z)^2 - (Im2 z)^2 - (Im3 z)^2 &
+  Im1(z*z) = 2*(Rea z * Im1 z) &
+  Im2(z*z) = 2*( Rea z * Im2 z) &
+  Im3(z*z) = 2*(Rea z * Im3 z);
+
+definition let z be quaternion number;
+  redefine func -z -> Element of QUATERNION equals
+:: QUATERNI:def 24
+  -Rea z + (-Im1 z)*<i> + (-Im2 z)*<j> + (-Im3 z)*<k>;
+end;
+
+theorem :: QUATERNI:41
+  Rea(-z) = -(Rea z) & Im1(-z) = -(Im1 z) & Im2(-z) = -(Im2 z) &
+  Im3(-z) = -(Im3 z);
+
+definition let z1,z2 be quaternion number;
+  redefine func z1 - z2 -> Element of QUATERNION equals
+:: QUATERNI:def 25
+    Rea z1 - Rea z2 + (Im1 z1 - Im1 z2)*<i> +
+    (Im2 z1 - Im2 z2)*<j> + (Im3 z1 - Im3 z2)*<k>;
+end;
+
+theorem :: QUATERNI:42
+  Rea(z1 - z2) = Rea z1 - Rea z2 & Im1(z1 - z2) = Im1 z1 - Im1 z2 &
+  Im2(z1 - z2) = Im2 z1 - Im2 z2 & Im3(z1 - z2) = Im3 z1 - Im3 z2;
+
+definition let z be quaternion number;
+  func z*' -> quaternion number equals
+:: QUATERNI:def 26
+  Rea z + (-Im1 z)*<i> + (-Im2 z)*<j> + (-Im3 z)*<k>;
+end;
+
+definition let z be quaternion number;
+  redefine func z*' -> Element of QUATERNION;
+end;
+
+theorem :: QUATERNI:43
+  z*' = [*Rea z, -Im1 z, -Im2 z, -Im3 z*];
+
+theorem :: QUATERNI:44
+  Rea (z*') = Rea z & Im1 (z*') = -Im1 z &
+  Im2 (z*') = -Im2 z & Im3 (z*') = -Im3 z;
+
+theorem :: QUATERNI:45
+  z = 0 implies z*' = 0;
+
+theorem :: QUATERNI:46
+  z*' = 0 implies z = 0;
+
+theorem :: QUATERNI:47
+  1q*' = 1q;
+
+theorem :: QUATERNI:48
+  Rea (<i>*') = 0 & Im1 (<i>*') = -1 &
+  Im2 (<i>*') = 0 & Im3 (<i>*') = 0;
+
+theorem :: QUATERNI:49
+  Rea (<j>*') = 0 & Im1 (<j>*') = 0 &
+  Im2 (<j>*') = -1 & Im3 (<j>*') = 0;
+
+theorem :: QUATERNI:50
+  Rea (<k>*') = 0 & Im1 (<k>*') = 0 &
+  Im2 (<k>*') = 0 & Im3 (<k>*') = -1;
+
+theorem :: QUATERNI:51
+  <i>*' = -<i>;
+
+theorem :: QUATERNI:52
+  <j>*' = -<j>;
+
+theorem :: QUATERNI:53
+  <k>*' = -<k>;
+
+theorem :: QUATERNI:54
+  (z1 + z2)*' = z1*' + z2*';
+
+theorem :: QUATERNI:55
+  (-z)*' = -(z*');
+
+theorem :: QUATERNI:56
+  (z1 - z2)*' = z1*' - z2*';
+
+theorem :: QUATERNI:57
+  (Im2 z1 * Im3 z2) <> (Im3 z1)*(Im2 z2) implies
+  (z1*z2)*' <> z1*' * z2*';
+
+theorem :: QUATERNI:58
+  Im1 z = 0 & Im2 z = 0 & Im3 z = 0 implies z*' = z;
+
+theorem :: QUATERNI:59
+  Rea z = 0 implies z*' = -z;
+
+theorem :: QUATERNI:60
+  Rea(z*z*') = (Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2 &
+  Im1(z*z*') = 0 & Im2(z*z*') = 0 & Im3(z*z*') = 0;
+
+theorem :: QUATERNI:61
+  Rea(z + z*') = 2*Rea z & Im1(z + z*') = 0 &
+  Im2(z + z*') = 0 & Im3(z + z*') = 0;
+
+theorem :: QUATERNI:62
+  -z = [*-Rea z, -Im1 z, -Im2 z, -Im3 z*];
+
+theorem :: QUATERNI:63
+  z1 - z2 = [*Rea z1 - Rea z2, Im1 z1 - Im1 z2,
+              Im2 z1 - Im2 z2, Im3 z1 - Im3 z2*];
+
+theorem :: QUATERNI:64
+  Rea(z - z*') = 0 & Im1(z - z*') = 2*Im1 z &
+  Im2(z - z*') = 2*Im2 z & Im3(z - z*') = 2*Im3 z;
+
+definition let z;
+  func |.z.| -> real number equals
+:: QUATERNI:def 27
+  sqrt ((Rea z)^2 + (Im1 z)^2 + (Im2 z)^2 + (Im3 z)^2);
+end;
+
+theorem :: QUATERNI:65
+  |.0q.| = 0;
+
+theorem :: QUATERNI:66
+  |.z.| = 0 implies z = 0;
+
+theorem :: QUATERNI:67
+  0 <= |.z.|;
+
+theorem :: QUATERNI:68
+  |.1q.| = 1;
+
+theorem :: QUATERNI:69
+  |.<i>.| = 1;
+
+theorem :: QUATERNI:70
+  |.<j>.| = 1;
+
+theorem :: QUATERNI:71
+  |.<k>.| = 1;
+
+theorem :: QUATERNI:72
+  |.-z.| = |.z.|;
+
+theorem :: QUATERNI:73
+  |.z*'.| = |.z.|;
+
+theorem :: QUATERNI:74
+  0 <= (Rea z)^2 + (Im1 z)^2 + (Im2 z)^2 + (Im3 z)^2;
+
+theorem :: QUATERNI:75
+  Rea z <= |.z.|;
+
+theorem :: QUATERNI:76
+  Im1 z <= |.z.|;
+
+theorem :: QUATERNI:77
+  Im2 z <= |.z.|;
+
+theorem :: QUATERNI:78
+  Im3 z <= |.z.|;
+
+theorem :: QUATERNI:79
+  |.z1 + z2.| <= |.z1.| + |.z2.|;
+
+theorem :: QUATERNI:80
+  |.z1 - z2.| <= |.z1.| + |.z2.|;
+
+theorem :: QUATERNI:81
+  |.z1.| - |.z2.| <= |.z1 + z2.|;
+
+theorem :: QUATERNI:82
+  |.z1.| - |.z2.| <= |.z1 - z2.|;
+
+theorem :: QUATERNI:83
+  |.z1 - z2.| = |.z2 - z1.|;
+
+theorem :: QUATERNI:84
+  |.z1 - z2.| = 0 iff z1 = z2;
+
+theorem :: QUATERNI:85
+  |.z1 - z2.| <= |.z1 - z.| + |.z - z2.|;
+
+theorem :: QUATERNI:86
+  |.|.z1.| - |.z2.|.| <= |.z1 - z2.|;
+
+theorem :: QUATERNI:87
+  |.z1*z2.| = |.z1.|*|.z2.|;
+
+theorem :: QUATERNI:88
+  |.z*z.| = (Rea z)^2 + (Im1 z)^2 + (Im2 z)^2 + (Im3 z)^2;
+
+theorem :: QUATERNI:89
+  |.z*z.| = |.z*z*'.|;

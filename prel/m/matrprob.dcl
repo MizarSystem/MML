@@ -25,8 +25,8 @@
 <ArticleID name="VECTSP_1"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="MATRIX_1"/>
-<ArticleID name="MATRIXR1"/>
 <ArticleID name="FINSEQ_3"/>
+<ArticleID name="MATRIXR1"/>
 <ArticleID name="FINSEQ_4"/>
 <ArticleID name="MATRLIN"/>
 <ArticleID name="MATRPROB"/>
@@ -121,7 +121,7 @@
 <LocusVar nr="2"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="169">
+<Func kind="K" nr="171">
 <LocusVar nr="4"/>
 <LocusVar nr="5"/>
 </Func>

@@ -9,9 +9,8 @@ environ
  vocabularies FUNCT_1, FINSEQ_1, RLVECT_1, RELAT_1, FINSEQ_4, ARYTM_1, FUNCT_2,
       BOOLE, FINSET_1, SEQ_1, RLSUB_1, CARD_1, QC_LANG1, BINOP_1, RLVECT_2,
       FUNCOP_1;
- notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, NUMBERS, FINSET_1,
-      FINSEQ_1, RELAT_1, FUNCT_1, FUNCT_2, FUNCOP_1, DOMAIN_1, STRUCT_0,
-      RLVECT_1,
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, FINSET_1, FINSEQ_1,
+      RELAT_1, FUNCT_1, FUNCT_2, FUNCOP_1, DOMAIN_1, STRUCT_0, RLVECT_1,
       XCMPLX_0, REAL_1, RLSUB_1, FRAENKEL, NAT_1, BINOP_1, FINSEQ_4, CARD_1,
       PRE_TOPC, XXREAL_0;
  constructors DOMAIN_1, BINOP_1, FUNCOP_1, FRAENKEL, XXREAL_0, XREAL_0, REAL_1,
@@ -28,7 +27,7 @@ environ
 
 begin
 
-reserve X,Y,x,y,y1,y2 for set,
+reserve x,y,y1,y2 for set,
         p for FinSequence,
         i,j,k,l,n for Element of NAT,
         V for RealLinearSpace,
@@ -575,8 +574,7 @@ XBOOLE_0:def 4;
                 A100: q.(j - 1) = q2.a & H1.j = (<* v *> ^ q2).b by A95,A96,A97
 ,A98,A99,FINSEQ_1:def 7;
                 A101: len q1 = j1 - a by A96;
-                A102: b = j - len q1 by A99
-                     .= 1 + a by A101;
+                A102: b = 1 + a by  A99,A101;
                     len<* v *> = 1 by FINSEQ_1:56;
                hence p.i = q.(g.i) by A92,A95,A100,A102,FINSEQ_1:def 7;
              end;
@@ -828,8 +826,7 @@ theorem
     let V be Abelian add-associative right_zeroed (non empty LoopStr),
         S,T be finite Subset of V;
   A1: T \ S misses S \ T by XBOOLE_1:82;
-   thus Sum(T \+\ S) = Sum((T \ S) \/ (S \ T))
-                .= Sum(T \ S) + Sum(S \ T) by A1,Th18;
+   thus Sum(T \+\ S) = Sum(T \ S) + Sum(S \ T) by A1,Th18;
   end;
 
 definition let V be non empty ZeroStr;
@@ -1801,8 +1798,7 @@ canceled;
 theorem Th73:
  (- L).v = - L.v
   proof
-   thus (- L).v = ((- 1) * L).v
-               .= (- 1) * L.v by Def13
+   thus (- L).v = (- 1) * L.v by Def13
                .= - L.v;
   end;
 
@@ -1825,9 +1821,7 @@ theorem Th76:
 theorem
      - (- L) = L
   proof let v;
-   thus (- (- L)).v = ((- 1) * (- L)).v
-                   .= ((- 1) * ((- 1) * L)).v
-                   .= ((- 1) * (- 1) * L).v by Th70
+   thus (- (- L)).v = ((- 1) * (- 1) * L).v by Th70
                    .= 1 * L.v by Def13
                    .= L.v;
   end;
@@ -1843,8 +1837,7 @@ canceled;
 theorem Th79:
  (L1 - L2).v = L1.v - L2.v
   proof
-   thus (L1 - L2).v = (L1 + (- L2)).v
-                   .= L1.v + (- L2).v by Def12
+   thus (L1 - L2).v = L1.v + (- L2).v by Def12
                    .= L1.v + (- L2.v) by Th73
                    .= L1.v - L2.v;
   end;
@@ -1998,8 +1991,7 @@ definition let V;
  coherence
   proof set S = RLSStruct (# LinComb(V), @ZeroLC(V), LCAdd(V), LCMult(V) #);
          now let a,b be Real, v,u,w be VECTOR of S;
-        A1: 0.S = @ZeroLC(V) by RLVECT_1:def 2
-              .= ZeroLC(V);
+        A1: 0.S = ZeroLC(V) by RLVECT_1:def 2;
        reconsider x = v, y = u, z = w, yx = u + v, xz = v + w, ax = a * v,
                        az = a * w, bx = b * v as Element of LinComb(V);
             @x = v & @y = u & @z = w & @yx = u + v & @xz = v + w & @ax = a * v
@@ -2010,17 +2002,13 @@ definition let V;
        A2: now let v,u be (VECTOR of S), K,L;
          assume A3: v = K & u = L;
           A4: @@K = K & @@L = L;
-        thus v + u = LCAdd(V).[v,u] by RLVECT_1:def 3
-                  .= LCAdd(V).(K,L) by A3
-                  .= LCAdd(V).(@K,L)
-                  .= LCAdd(V).(@K,@L)
+        thus v + u = LCAdd(V).(@K,@L) by A3,RLVECT_1:def 3
                   .= K + L by A4,Def19;
        end;
        A5: now let v be (VECTOR of S), L,a;
          assume A6: v = L;
           A7: @@L = L;
-        thus a * v = LCMult(V).[a,L] by A6,RLVECT_1:def 4
-                  .= LCMult(V).[a,@L]
+        thus a * v = LCMult(V).[a,@L] by A6,RLVECT_1:def 4
                   .= a * L by A7,Def20;
        end;
       thus v + w = K + M by A2
@@ -2036,8 +2024,7 @@ definition let V;
            - K in the carrier of S by Def16;
        then - K in S by RLVECT_1:def 1;
        then - K = vector(S,- K) by Def1;
-       then v + vector(S,- K) = K + (- K) by A2
-                             .= K - K
+       then v + vector(S,- K) = K - K by A2
                              .= 0.S by A1,Th82;
       hence ex w being VECTOR of S st v + w = 0.S;
       thus a * (v + w) = a * KM by A5
@@ -2098,14 +2085,10 @@ theorem Th96:
          L2 in the carrier of LC_RLSpace(V) by Def16;
     then A1: L1 in LC_RLSpace(V) & L2 in LC_RLSpace(V) by RLVECT_1:def 1;
     A2: L1 = @@L1 & L2 = @@L2;
-   thus vector(LC_RLSpace(V),L1) + vector(LC_RLSpace(V),L2) =
-            (the add of LC_RLSpace(V)).[v1,v2] by RLVECT_1:def 3
-         .= LCAdd(V).[v1,v2]
+   thus vector(LC_RLSpace(V),L1) + vector(LC_RLSpace(V),L2) = LCAdd(V).[v1,v2]
+ by RLVECT_1:def 3
          .= LCAdd(V).[L1,v2] by A1,Def1
-         .= LCAdd(V).[L1,L2] by A1,Def1
-         .= LCAdd(V).[@L1,L2]
-         .= LCAdd(V).[@L1,@L2]
-         .= LCAdd(V).(@L1,@L2)
+         .= LCAdd(V).(@L1,@L2) by A1,Def1
          .= L1 + L2 by A2,Def19;
   end;
 
@@ -2117,8 +2100,7 @@ theorem Th97:
     A2: @@L = L;
    thus a * vector(LC_RLSpace(V),L) = LCMult(V).[a,vector(LC_RLSpace(V),L)
 ] by RLVECT_1:def 4
-                                 .= LCMult(V).[a,L] by A1,Def1
-                                 .= LCMult(V).[a,@L]
+                                 .= LCMult(V).[a,@L] by A1,Def1
                                  .= a * L by A2,Def20;
   end;
 
@@ -2127,8 +2109,7 @@ theorem Th98:
   proof
    thus - vector(LC_RLSpace(V),L) = (- 1) * (vector(LC_RLSpace(V),L))
                                                               by RLVECT_1:29
-                              .= (- 1) * L by Th97
-                              .= - L;
+                              .= - L by Th97;
   end;
 
 theorem
@@ -2142,8 +2123,7 @@ theorem
    hence vector(LC_RLSpace(V),L1) - vector(LC_RLSpace(V),L2) =
         vector(LC_RLSpace(V),L1) + vector(LC_RLSpace(V),- L2) by
 RLVECT_1:def 11
-     .= L1 + (- L2) by Th96
-     .= L1 - L2;
+     .= L1 - L2 by Th96;
   end;
 
 definition let V; let A;

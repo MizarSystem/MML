@@ -7,7 +7,7 @@
 environ
 
  vocabularies RELAT_1, BOOLE, FUNCT_1, PARTFUN1, FUNCT_2, SGRAPH1, RELAT_2,
-      CAT_4, FUNCT_3, MCART_1;
+      CAT_4, FUNCT_3, MCART_1, SUBSET_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, RELAT_2, FUNCT_1,
       RELSET_1, PARTFUN1, MCART_1;
  constructors TARSKI, RELAT_2, PARTFUN1, MCART_1;
@@ -17,11 +17,11 @@ environ
  definitions TARSKI, XBOOLE_0, PARTFUN1, FUNCT_1;
  theorems TARSKI, RELAT_1, FUNCT_1, ZFMISC_1, PARTFUN1, GRFUNC_1, RELSET_1,
       SUBSET_1, WELLORD2, XBOOLE_0, XBOOLE_1, RELAT_2, MCART_1;
- schemes FUNCT_1, PARTFUN1, XBOOLE_0;
+ schemes FUNCT_1, PARTFUN1, XBOOLE_0, RELSET_1;
 
 begin
 
- reserve P,Q,X,Y,Z,p,x,x',x1,x2,y,y1,y2,z for set;
+ reserve P,Q,X,Y,Z,p,x,x',x1,x2,y,z for set;
 
 ::::::::::::::::::::::::::::::::::::
 :: function from a set into a set ::
@@ -1148,7 +1148,7 @@ A1: P c= X;
 :: Function from a set into a nonempty set
 ::::::::::::::::::::::::::::::::::::::::::::
 
- reserve C,D,E for non empty set;
+ reserve D for non empty set;
 
 registration let X,D;
  cluster quasi_total -> total PartFunc of X,D;
@@ -1923,4 +1923,27 @@ definition
  for a being Element of A holds f1.a = f2.a;
  compatibility by Th113;
 end;
+
+:: missing, 2006.11.05, A.T.
+
+theorem
+ for N being set, f being Function of N, bool N
+  ex R being Relation of N st
+   for i being set st i in N holds R.:{i} = f.i
+ proof let N be set, f be Function of N, bool N;
+   deffunc F(set) = f.$1;
+A1: N = [#]N by SUBSET_1:def 4;
+A2: for i being Element of N st i in [#]N holds F(i) c= [#]N
+    proof let i be Element of N;
+     assume i in [#]N;
+      then f.i in bool N by Th7;
+     hence F(i) c= [#]N by A1;
+    end;
+   consider R being Relation of [#]N such that
+A3: for i being Element of N st i in [#]N holds R.:{i} = F(i)
+                from RELSET_1:sch 3(A2);
+   reconsider R as Relation of N by A1;
+  take R;
+  thus thesis by A3,A1;
+ end;
 

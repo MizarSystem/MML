@@ -25,7 +25,7 @@ environ
 
 begin
 
- reserve k,m,n for Element of NAT;
+ reserve n for Element of NAT;
  reserve i,j for Integer;
 
 definition
@@ -460,10 +460,8 @@ theorem Th31:
   proof let G be associative (non empty HGrStr);
    let h,g,f be Element of G;
     set o = the mult of G;
-   thus o.(h,o.(g,f)) = o.(h,g * f)
-                     .= h * (g * f)
+   thus o.(h,o.(g,f)) = h * (g * f)
                      .= h * g * f by Def4
-                     .= o.(h * g,f)
                      .= o.(o.(h,g),f);
   end;
 
@@ -500,14 +498,10 @@ theorem Th34:
 theorem Th35:
  inverse_op(G) is_an_inverseOp_wrt the mult of G
   proof let h be Element of G;
-   thus (the mult of G).(h,inverse_op(G).h) =
-                          h * (inverse_op(G).h)
-                       .= h * h" by Def7
+   thus (the mult of G).(h,inverse_op(G).h) = h * h" by Def7
                        .= 1.G by Def6
                        .= the_unity_wrt the mult of G by Th33;
-   thus (the mult of G).(inverse_op(G).h,h) =
-                          (inverse_op(G).h) * h
-                       .= h" * h by Def7
+   thus (the mult of G).(inverse_op(G).h,h) = h" * h by Def7
                        .= 1.G by Def6
                        .= the_unity_wrt the mult of G by Th33;
   end;
@@ -618,9 +612,7 @@ definition let G be non empty HGrStr;
                   b being Element of G such that
      A22: h = b & g2 = f.h & g2.0 = 1.G and
      A23: for n holds g2.(n + 1) = (g2.n) * b by A15;
-   thus F.(h,n + 1) = F.[h,n + 1]
-                   .= (g2.n) * h by A21,A22,A23
-                   .= (F.(h,n)) * h by A20,A22;
+   thus F.(h,n + 1) = (F.(h,n)) * h by  A21,A22,A23,A20;
   end;
  uniqueness
   proof let f,g be Function of [:the carrier of G,NAT:], the carrier of G;
@@ -670,7 +662,7 @@ definition let G,n,h;
   end;
 end;
 
- reserve k,m,n for Nat;
+ reserve m,n for Nat;
 
 Lm2: h |^ (n + 1) = h |^ n * h
  proof reconsider n as Element of NAT by ORDINAL1:def 13;
@@ -1305,20 +1297,20 @@ definition let G,h;
      end;
      hereby assume not h is_of_order_0;
        then consider n such that
-X:      h |^ n = 1.G & n <> 0 by Def11;
+A1:      h |^ n = 1.G & n <> 0 by Def11;
        n is Element of NAT by ORDINAL1:def 13;
        then
-A1:    ex n being Element of NAT st P[n] by X;
+A2:    ex n being Element of NAT st P[n] by A1;
        consider k being Element of NAT such that
-A2:     P[k] and
-A3:     for n being Element of NAT st P[n] holds k <= n from NAT_1:sch 5(A1);
+A3:     P[k] and
+A4:     for n being Element of NAT st P[n] holds k <= n from NAT_1:sch 5(A2);
       take k;
-      thus h |^ k = 1.G & k <> 0 by A2;
+      thus h |^ k = 1.G & k <> 0 by A3;
       let m;
        reconsider n = m as Element of NAT by ORDINAL1:def 13;
       assume h |^ m = 1.G & m <> 0;
        then h |^ n = 1.G & n <> 0;
-       then k <= n by A3;
+       then k <= n by A4;
       hence k <= m;
   end;
   end;
@@ -1326,11 +1318,11 @@ A3:     for n being Element of NAT st P[n] holds k <= n from NAT_1:sch 5(A1);
   proof let n1,n2 be Element of NAT;
    thus h is_of_order_0 & n1 = 0 & n2 = 0 implies n1 = n2;
     assume that not h is_of_order_0 and
-                A3: h |^ n1 = 1.G & n1 <> 0 &
+                A5: h |^ n1 = 1.G & n1 <> 0 &
                     for m st h |^ m = 1.G & m <> 0 holds n1 <= m and
-                A4: h |^ n2 = 1.G & n2 <> 0 &
+                A6: h |^ n2 = 1.G & n2 <> 0 &
                     for m st h |^ m = 1.G & m <> 0 holds n2 <= m;
-        n1 <= n2 & n2 <= n1 by A3,A4;
+        n1 <= n2 & n2 <= n1 by A5,A6;
    hence n1 = n2 by XXREAL_0:1;
   end;
  correctness;
@@ -1394,24 +1386,24 @@ proof let n be Element of NAT;
            then ord h <= n by A3,A4,Def12;
           then consider m being Nat such that
           A6: n = ord h + m by NAT_1:28;
-a1:       m in NAT by ORDINAL1:def 13;
-           A7: h |^ n = h |^ ord h * (h |^ m) by A6,Th48
+A7:       m in NAT by ORDINAL1:def 13;
+           A8: h |^ n = h |^ ord h * (h |^ m) by A6,Th48
                    .= 1.G * (h |^ m) by Th82
                    .= h |^ m by Def5;
               m < n by A5,A6,NAT_1:41;
-           then ord h divides m by a1,A2,A3,A7;
-          then consider i being Nat such that A8: m = ord h * i
+           then ord h divides m by A7,A2,A3,A8;
+          then consider i being Nat such that A9: m = ord h * i
           by NAT_1:def 3;
-              n = ord h * (1 + i) by A6,A8;
+              n = ord h * (1 + i) by A6,A9;
          hence thesis by NAT_1:def 3;
        end;
        end;
       hence thesis;
 end;
 end;
-X: for n being Element of NAT holds P[n] from NAT_1:sch 4(A1);
+A10: for n being Element of NAT holds P[n] from NAT_1:sch 4(A1);
    reconsider n as Element of NAT by ORDINAL1:def 13;
-   P[n] by X;
+   P[n] by A10;
  hence thesis;
 end;
 
@@ -1485,10 +1477,8 @@ registration
    proof take G0; thus G0 is strict;
     let a,g be Element of G0;
     reconsider A = a, B = g as Real;
-    thus a * g = addreal.(A,B)
-            .= B + A by BINOP_2:def 9
-            .= addreal.(g,a) by BINOP_2:def 9
-            .= g * a;
+    thus a * g = B + A by BINOP_2:def 9
+            .= g * a by BINOP_2:def 9;
    end;
 end;
 
@@ -1508,10 +1498,8 @@ theorem
      proof
       let h,g be Element of G;
        reconsider A = h, B = g as Real;
-      thus h * g = addreal.(A,B)
-                 .= B + A by BINOP_2:def 9
-                 .= addreal.(g,h) by BINOP_2:def 9
-                 .= g * h;
+      thus h * g = B + A by BINOP_2:def 9
+                 .= g * h by BINOP_2:def 9;
      end;
    hence thesis;
   end;
@@ -1577,7 +1565,7 @@ begin :: Addenda
 
 :: from COMPTRIG, 2006.08.12, A.T.
 
-theorem Th12:
+theorem Th98:
   for L be unital (non empty HGrStr)
   for x be Element of L holds
     (power L).(x,1) = x
@@ -1599,10 +1587,10 @@ theorem
     let x be Element of L;
     1+1 = 2;
     hence (power L).(x,2) = (power L).(x,1) * x by Def8
-       .= x * x by Th12;
+       .= x * x by Th98;
    end;
 
-theorem Th15:
+theorem
   for L be associative commutative unital (non empty HGrStr)
   for x,y be Element of L
   for n be Element of NAT holds

@@ -8,17 +8,17 @@ environ
 
  vocabularies MCART_1, FINSEQ_1, RELAT_1, BOOLE, ZF_LANG, FUNCT_1, PRE_TOPC,
       QC_LANG1, FUNCOP_1;
- notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, NUMBERS,
-   XCMPLX_0, XXREAL_0,
-      MCART_1, NAT_1, RELAT_1, FUNCT_1, RELSET_1, FUNCT_2, FUNCOP_1, FINSEQ_1;
+ notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0,
+      XXREAL_0, MCART_1, NAT_1, RELAT_1, FUNCT_1, RELSET_1, FUNCT_2, FUNCOP_1,
+      FINSEQ_1;
  constructors ENUMSET1, FUNCOP_1, XXREAL_0, XREAL_0, NAT_1, FINSEQ_1;
  registrations RELSET_1, FINSEQ_1, SUBSET_1, ARYTM_3, ORDINAL2, XREAL_0, NAT_1,
-  ORDINAL1;
+      ORDINAL1;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, XBOOLE_0;
  theorems ZFMISC_1, SUBSET_1, TARSKI, ENUMSET1, FINSEQ_1, MCART_1, NAT_1,
-      FUNCT_1, FUNCT_2, RELSET_1, XBOOLE_0, XBOOLE_1, XCMPLX_1, FUNCOP_1,
-      XXREAL_0, ORDINAL1;
+      FUNCT_1, FUNCT_2, RELSET_1, XBOOLE_0, XBOOLE_1, FUNCOP_1, XXREAL_0,
+      ORDINAL1;
  schemes NAT_1, FUNCT_2, FUNCT_1, XBOOLE_0;
 
 begin
@@ -137,10 +137,10 @@ existence
 A1: P = [k, l] and
 A2: 7 <= k;
 A3: k = P`1 by A1,MCART_1:7;
-    then consider w being Nat such that
-a1: k=7+w by A2,NAT_1:28;
+    consider w being Nat such that
+A4: k=7+w by A2,NAT_1:28;
     w in NAT by ORDINAL1:def 13;
-    hence thesis by a1,A3;
+    hence thesis by A4,A3;
   end;
 uniqueness;
 end;
@@ -637,8 +637,7 @@ proof let F be Element of QC-WFF;
    then consider k being Element of NAT, p being (QC-pred_symbol of k),
                 ll being QC-variable_list of k such that
   A1: F = p!ll by Def17;
-        @F = p!ll by A1
-       .= <*p*>^ll by Th23;
+        @F = <*p*>^ll by  A1,Th23;
      then len @F = len <*p*> + len ll by FINSEQ_1:35
                 .= 1 + len ll by FINSEQ_1:56;
    hence thesis by NAT_1:29;
@@ -646,8 +645,7 @@ proof let F be Element of QC-WFF;
   suppose F is negative;
    then consider p being Element of QC-WFF such that
   A2: F = 'not' p by Def18;
-       @F = 'not' p by A2
-      .= <*[1, 0]*>^@p;
+       @F = <*[1, 0]*>^@p by A2;
     then len @F = len <*[1, 0]*> + len @p by FINSEQ_1:35
                .= 1 + len @p by FINSEQ_1:56;
    hence thesis by NAT_1:29;
@@ -655,9 +653,7 @@ proof let F be Element of QC-WFF;
   suppose F is conjunctive;
    then consider p, q being Element of QC-WFF such that
   A3: F = p '&' q by Def19;
-       @F = p '&' q by A3
-      .= <*[2, 0]*>^@p^@q
-      .= <*[2, 0]*>^(@p^@q) by FINSEQ_1:45;
+       @F = <*[2, 0]*>^(@p^@q) by  A3,FINSEQ_1:45;
     then len @F = len <*[2, 0]*> + len (@p^@q) by FINSEQ_1:35
                .= 1 + len (@p^@q) by FINSEQ_1:56;
    hence thesis by NAT_1:29;
@@ -665,9 +661,7 @@ proof let F be Element of QC-WFF;
   suppose F is universal;
    then consider x being bound_QC-variable, p being Element of QC-WFF such that
   A4: F = All(x, p) by Def20;
-       @F = All(x, p) by A4
-      .= <*[3, 0]*>^<*x*>^@p
-      .= <*[3, 0]*>^(<*x*>^@p) by FINSEQ_1:45;
+       @F = <*[3, 0]*>^(<*x*>^@p) by  A4,FINSEQ_1:45;
     then len @F = len <*[3, 0]*> + len (<*x*>^@p) by FINSEQ_1:35
                .= 1 + len (<*x*>^@p) by FINSEQ_1:56;
    hence thesis by NAT_1:29;
@@ -708,8 +702,7 @@ theorem Th36:
         then consider k being Element of NAT, P being (QC-pred_symbol of k),
                       ll being QC-variable_list of k such that
         A2: F = P!ll by Def17;
-              @F = F
-             .= <*P*>^ll by A2,Th23;
+              @F = <*P*>^ll by A2,Th23;
            then @F.1 = P by FINSEQ_1:58;
         hence ex k being Element of NAT st @F.1 is QC-pred_symbol of k;
     end;
@@ -719,17 +712,14 @@ theorem Th36:
     end;
     case F is negative; then consider p being Element of QC-WFF such that
         A3: F = 'not' p by Def18;
-              @F = F
-             .= <*[1, 0]*>^@p by A3;
+              @F = <*[1, 0]*>^@p by A3;
            then @F.1 = [1, 0] by FINSEQ_1:58;
       hence (@F.1)`1 = 1 by MCART_1:7;
     end;
     case F is conjunctive;
         then consider p, q being Element of QC-WFF such that
         A4: F = p '&' q by Def19;
-             @F = F
-            .= <*[2, 0]*>^@p^@q by A4
-            .= <*[2, 0]*>^(@p^@q) by FINSEQ_1:45;
+             @F = <*[2, 0]*>^(@p^@q) by  A4,FINSEQ_1:45;
           then @F.1 = [2, 0] by FINSEQ_1:58;
         hence (@F.1)`1 = 2 by MCART_1:7;
     end;
@@ -737,9 +727,7 @@ theorem Th36:
         then consider x being bound_QC-variable, p being Element of QC-WFF
                                                  such that
         A5: F = All(x, p) by Def20;
-             @F = F
-            .= <*[3, 0]*>^<*x*>^@p by A5
-            .= <*[3, 0]*>^(<*x*>^@p) by FINSEQ_1:45;
+             @F = <*[3, 0]*>^(<*x*>^@p) by  A5,FINSEQ_1:45;
           then @F.1 = [3, 0] by FINSEQ_1:58;
         hence (@F.1)`1 = 3 by MCART_1:7;
    end;
@@ -775,15 +763,13 @@ then A8:  len @F = 1 by FINSEQ_1:56;
    then consider k being Element of NAT, P being (QC-pred_symbol of k),
                  ll being QC-variable_list of k such that
   A9: F = P!ll by Def17;
-  A10: @F = F
-        .= <*P*>^ll by A9,Th23;
+  A10: @F = <*P*>^ll by A9,Th23;
  then A11: @G.1 = P by A7,FINSEQ_1:58;
       then G is atomic by Th36;
       then consider k' being Element of NAT, P' being (QC-pred_symbol of k'),
                  ll' being QC-variable_list of k' such that
   A12: G = P'!ll' by Def17;
-  A13:  @G = G
-         .= <*P'*>^ll' by A12,Th23;
+  A13:  @G = <*P'*>^ll' by A12,Th23;
  then A14: @G.1 = P' by FINSEQ_1:58;
   A15: len ll' = k' by Def8
              .= the_arity_of P by A11,A14,Th35
@@ -799,15 +785,13 @@ then A8:  len @F = 1 by FINSEQ_1:56;
   suppose F is negative;
       then consider p being Element of QC-WFF such that
   A16:  F = 'not' p by Def18;
- A17: @F = F
-        .= <*[1, 0]*>^@p by A16;
+ A17: @F = <*[1, 0]*>^@p by A16;
       then @F.1 = [1, 0] by FINSEQ_1:58;
       then (@G.1)`1 = 1 by A7,MCART_1:7;
       then G is negative by Th36;
       then consider p' being Element of QC-WFF such that
   A18:  G = 'not' p' by Def18;
-      @G = G
-        .= <*[1, 0]*>^@p' by A18;
+      @G = <*[1, 0]*>^@p' by A18;
        then <*[1, 0]*>^@p = <*[1, 0]*>^(@p'^s) by A4,A17,FINSEQ_1:45;
   then A19: @p = @p'^s by FINSEQ_1:46;
       len @F = len @p + len <*[1, 0]*> by A17,FINSEQ_1:35
@@ -822,17 +806,13 @@ then A8:  len @F = 1 by FINSEQ_1:56;
   suppose F is conjunctive;
       then consider p, q being Element of QC-WFF such that
   A20:  F = p '&' q by Def19;
- A21: @F = F
-        .= <*[2, 0]*>^@p^@q by A20
-        .= <*[2, 0]*>^(@p^@q) by FINSEQ_1:45;
+ A21: @F = <*[2, 0]*>^(@p^@q) by  A20,FINSEQ_1:45;
       then @F.1 = [2, 0] by FINSEQ_1:58;
       then (@G.1)`1 = 2 by A7,MCART_1:7;
       then G is conjunctive by Th36;
       then consider p', q' being Element of QC-WFF such that
   A22:  G = p' '&' q' by Def19;
-  A23: @G = G
-        .= <*[2, 0]*>^@p'^@q' by A22
-        .= <*[2, 0]*>^(@p'^@q') by FINSEQ_1:45;
+  A23: @G = <*[2, 0]*>^(@p'^@q') by  A22,FINSEQ_1:45;
        then <*[2, 0]*>^(@p^@q) = <*[2, 0]*>^(@p'^@q'^s) by A4,A21,FINSEQ_1:45;
   then A24: @p^@q = @p'^@q'^s by FINSEQ_1:46
            .= @p'^(@q'^s) by FINSEQ_1:45;
@@ -861,8 +841,7 @@ A32:  len @F = len @p' + len (@q'^s) + 1 by A24,A29,FINSEQ_1:35;
       then consider x being bound_QC-variable, p being Element of QC-WFF
                                                  such that
   A35:  F = All(x, p) by Def20;
- A36: @F = F
-        .= <*[3, 0]*>^<*x*>^@p by A35;
+ A36: @F = <*[3, 0]*>^<*x*>^@p by A35;
  then A37: @F = <*[3, 0]*>^(<*x*>^@p) by FINSEQ_1:45;
       then @F.1 = [3, 0] by FINSEQ_1:58;
       then (@G.1)`1 = 3 by A7,MCART_1:7;
@@ -870,8 +849,7 @@ A32:  len @F = len @p' + len (@q'^s) + 1 by A24,A29,FINSEQ_1:35;
       then consider x' being bound_QC-variable, p' being Element of QC-WFF such
 that
   A38:  G = All(x', p') by Def20;
-  A39: @G = G
-        .= <*[3, 0]*>^<*x'*>^@p' by A38;
+  A39: @G = <*[3, 0]*>^<*x'*>^@p' by A38;
        then <*[3, 0]*>^<*x*>^@p = <*[3, 0]*>^(<*x'*>^@p')^s by A4,A36,
 FINSEQ_1:45
                    .= <*[3, 0]*>^(<*x'*>^@p'^s) by FINSEQ_1:45;
@@ -972,9 +950,7 @@ uniqueness
         A2: F = p1 '&' q1;
          given q2 being Element of QC-WFF such that
         A3: F = p2 '&' q2;
-            <*[2, 0]*>^(@p1^@q1) = <*[2, 0]*>^@p1^@q1 by FINSEQ_1:45
-                          .= p2 '&' q2 by A2,A3
-                          .= <*[2, 0]*>^@p2^@q2
+            <*[2, 0]*>^(@p1^@q1) = p2 '&' q2 by  FINSEQ_1:45,A2,A3
                           .= <*[2, 0]*>^(@p2^@q2) by FINSEQ_1:45;
         then A4: @p1^@q1 = @p2^@q2 by FINSEQ_1:46;
               len @p1 <= len @p2 or len @p2 <= len @p1;
@@ -1005,9 +981,7 @@ uniqueness
         A2: F = p1 '&' q1;
          given p2 being Element of QC-WFF such that
         A3: F = p2 '&' q2;
-            <*[2, 0]*>^(@p1^@q1) = <*[2, 0]*>^@p1^@q1 by FINSEQ_1:45
-                          .= p2 '&' q2 by A2,A3
-                          .= <*[2, 0]*>^@p2^@q2
+            <*[2, 0]*>^(@p1^@q1) = p2 '&' q2 by  FINSEQ_1:45,A2,A3
                           .= <*[2, 0]*>^(@p2^@q2) by FINSEQ_1:45;
         then A4: @p1^@q1 = @p2^@q2 by FINSEQ_1:46;
 
@@ -1015,7 +989,7 @@ uniqueness
                                 by A1,A2,Def24
               .= p2 by A1,A3,Def24;
             then @q1 = @q2 by A4,FINSEQ_1:46;
-        hence q1 = @q2 .= q2;
+        hence q1 = q2;
         end;
 end;
 
@@ -1029,9 +1003,7 @@ uniqueness
 A2: F = All(x1, p1);
   given p2 being Element of QC-WFF such that
 A3: F = All(x2, p2);
-    <*[3, 0]*>^(<*x1*>^@p1) = <*[3, 0]*>^<*x1*>^@p1 by FINSEQ_1:45
-                          .= All(x2, p2) by A2,A3
-                          .= <*[3, 0]*>^<*x2*>^@p2
+    <*[3, 0]*>^(<*x1*>^@p1) = All(x2, p2) by  FINSEQ_1:45,A2,A3
                           .= <*[3, 0]*>^(<*x2*>^@p2) by FINSEQ_1:45;
 then A4: <*x1*>^@p1 = <*x2*>^@p2 by FINSEQ_1:46;
   thus x1 = (<*x1*>^@p1).1 by FINSEQ_1:58
@@ -1052,16 +1024,12 @@ uniqueness
 A5: F = All(x1, p1);
   given x2 being bound_QC-variable such that
 A6: F = All(x2, p2);
-    <*[3, 0]*>^(<*x1*>^@p1) = <*[3, 0]*>^<*x1*>^@p1 by FINSEQ_1:45
-                          .= All(x2, p2) by A5,A6
-                          .= <*[3, 0]*>^<*x2*>^@p2
+    <*[3, 0]*>^(<*x1*>^@p1) = All(x2, p2) by  FINSEQ_1:45,A5,A6
                           .= <*[3, 0]*>^(<*x2*>^@p2) by FINSEQ_1:45;
 then A7: <*x1*>^@p1 = <*x2*>^@p2 by FINSEQ_1:46;
 A8: x1 = (<*x1*>^@p1).1 by FINSEQ_1:58
   .= x2 by A7,FINSEQ_1:58;
-  thus p1 = @p1
-         .= @p2 by A7,A8,FINSEQ_1:46
-         .= p2;
+  thus p1 = p2 by A7,A8,FINSEQ_1:46;
  end;
 end;
 
@@ -1086,8 +1054,7 @@ theorem Th46: p is conjunctive implies len @the_left_argument_of p < len @p
 proof assume A1: p is conjunctive;
  then consider l, q being Element of QC-WFF such that
 A2: p = l '&' q by Def19;
-A3:    p = <*[2, 0]*>^@l^@q by A2
-         .= <*[2, 0]*>^(@l^@q) by FINSEQ_1:45;
+A3:    p = <*[2, 0]*>^(@l^@q) by  A2,FINSEQ_1:45;
 A4: len @p = len <*[2, 0]*> + len (@l^@q) by A3,FINSEQ_1:35
           .= len (@l^@q) + 1 by FINSEQ_1:57;
 
@@ -1100,8 +1067,7 @@ theorem Th47: p is universal implies len @the_scope_of p < len @p
 proof assume A1: p is universal;
  then consider x being bound_QC-variable, q being Element of QC-WFF such that
 A2: p = All(x, q) by Def20;
-A3:  p = <*[3, 0]*>^<*x*>^@q by A2
-         .= <*[3, 0]*>^(<*x*>^@q) by FINSEQ_1:45;
+A3:  p = <*[3, 0]*>^(<*x*>^@q) by  A2,FINSEQ_1:45;
 A4: len @p = len <*[3, 0]*> + len (<*x*>^@q) by A3,FINSEQ_1:35
           .= len (<*x*>^@q) + 1 by FINSEQ_1:57;
     len @q + len <*x*> = len (<*x*>^@q) by FINSEQ_1:35;
@@ -1176,8 +1142,7 @@ theorem Th49:
         then consider k being Element of NAT, P being (QC-pred_symbol of k),
                       ll being QC-variable_list of k such that
         A1: F = P!ll by Def17;
-              @F = F
-             .= <*P*>^ll by A1,Th23;
+              @F = <*P*>^ll by A1,Th23;
            then @F.1 = P by FINSEQ_1:58;
         hence ex k being Element of NAT st @F.1 is QC-pred_symbol of k;
         end;
@@ -1185,8 +1150,7 @@ theorem Th49:
         proof assume F is negative;
          then consider p being Element of QC-WFF such that
         A2: F = 'not' p by Def18;
-              @F = F
-             .= <*[1, 0]*>^@p by A2;
+              @F = <*[1, 0]*>^@p by A2;
            then @F.1 = [1, 0] by FINSEQ_1:58;
          hence (@F.1)`1 = 1 by MCART_1:7;
         end;
@@ -1194,9 +1158,7 @@ theorem Th49:
         proof assume F is conjunctive;
         then consider p, q being Element of QC-WFF such that
         A3: F = p '&' q by Def19;
-             @F = F
-            .= <*[2, 0]*>^@p^@q by A3
-            .= <*[2, 0]*>^(@p^@q) by FINSEQ_1:45;
+             @F = <*[2, 0]*>^(@p^@q) by  A3,FINSEQ_1:45;
           then @F.1 = [2, 0] by FINSEQ_1:58;
         hence (@F.1)`1 = 2 by MCART_1:7;
         end;
@@ -1205,9 +1167,7 @@ theorem Th49:
         then consider x being bound_QC-variable, p being Element of QC-WFF
                                                  such that
         A4: F = All(x, p) by Def20;
-             @F = F
-            .= <*[3, 0]*>^<*x*>^@p by A4
-            .= <*[3, 0]*>^(<*x*>^@p) by FINSEQ_1:45;
+             @F = <*[3, 0]*>^(<*x*>^@p) by  A4,FINSEQ_1:45;
           then @F.1 = [3, 0] by FINSEQ_1:58;
         hence (@F.1)`1 = 3 by MCART_1:7;
      end;

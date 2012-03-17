@@ -22,6 +22,7 @@
 <ArticleID name="CQC_LANG"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FRAENKEL"/>
+<ArticleID name="XBOOLEAN"/>
 <ArticleID name="MARGREL1"/>
 <ArticleID name="VALUAT_1"/>
 <ArticleID name="SUBSTUT1"/>
@@ -32,8 +33,8 @@
 <For>
 <Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="218"/>
-<Func kind="K" nr="240"/>
+<Func kind="K" nr="227"/>
+<Func kind="K" nr="249"/>
 </Typ>
 <Pred kind="P" nr="1">
 <Var nr="1"/>
@@ -42,14 +43,14 @@
 <For>
 <Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="218"/>
-<Func kind="K" nr="240"/>
+<Func kind="K" nr="227"/>
+<Func kind="K" nr="249"/>
 </Typ>
 <For>
 <Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="218"/>
-<Func kind="K" nr="240"/>
+<Func kind="K" nr="227"/>
+<Func kind="K" nr="249"/>
 </Typ>
 <For>
 <Typ kind="M" nr="3">
@@ -60,7 +61,7 @@
 <For>
 <Typ kind="M" nr="16">
 <Cluster/>
-<Func kind="K" nr="249">
+<Func kind="K" nr="258">
 <Var nr="1"/>
 <Var nr="3"/>
 </Func>
@@ -90,11 +91,11 @@
 <For>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="203"/>
+<Func kind="K" nr="212"/>
 </Typ>
 <And>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="245">
+<Func kind="K" nr="254">
 <Var nr="5"/>
 <Var nr="7"/>
 <Var nr="6"/>
@@ -120,7 +121,7 @@
 </Pred>
 <Not>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="247">
+<Func kind="K" nr="256">
 <Var nr="1"/>
 </Func>
 </Pred>
@@ -130,10 +131,10 @@
 <Not>
 <And>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="221">
+<Func kind="K" nr="230">
 <Var nr="1"/>
 </Func>
-<Func kind="K" nr="221">
+<Func kind="K" nr="230">
 <Var nr="2"/>
 </Func>
 </Pred>
@@ -145,7 +146,7 @@
 </Pred>
 <Not>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="248">
+<Func kind="K" nr="257">
 <Var nr="1"/>
 <Var nr="2"/>
 </Func>
@@ -156,7 +157,7 @@
 <Not>
 <And>
 <Pred kind="V" nr="42">
-<Func kind="K" nr="249">
+<Func kind="K" nr="258">
 <Var nr="1"/>
 <Var nr="3"/>
 </Func>
@@ -166,8 +167,8 @@
 </Pred>
 <Not>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="251">
-<Func kind="K" nr="249">
+<Func kind="K" nr="260">
+<Func kind="K" nr="258">
 <Var nr="1"/>
 <Var nr="3"/>
 </Func>

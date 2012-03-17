@@ -29,11 +29,11 @@ environ
 begin :: Basic Properties of Exponential Functiion on Banach_Algebra
 
  reserve X for Banach_Algebra,
-         p,p1,q,th,th1,th2,th3,r for Real,
+
          w,z,z1,z2 for Element of X,
          k,l,m,n,n1,n2 for Element of NAT,
-         seq,seq1,seq2,cq1,s,s' for sequence of X,
-         rseq,rseq1,rseq2 for Real_Sequence;
+         seq,seq1,seq2,s,s' for sequence of X,
+         rseq for Real_Sequence;
 
 definition
   let X be non empty Normed_AlgebraStr;
@@ -49,11 +49,9 @@ z* (z #N n) =z #N (n+1) &
 z* (z #N n) =(z #N n) *z
 proof
     defpred P[Element of NAT] means z* (z #N $1)=z #N ($1 +1);
-A1:z * (z #N0 ) =z * (z GeoSeq.0)
-                .=z * 1.X by LOPBAN_3:def 13
+A1:z * (z #N0 ) =z * 1.X by LOPBAN_3:def 13
                 .=z by LOPBAN_3:43;
-z #N (0+1) =z GeoSeq.(0+1)
-              .=z GeoSeq.0 * z by LOPBAN_3:def 13
+z #N (0+1) =z GeoSeq.0 * z by LOPBAN_3:def 13
               .=1.X * z by LOPBAN_3:def 13
               .=z by LOPBAN_3:43;
 then A2: P[0] by A1;
@@ -61,20 +59,14 @@ A3: for k be Element of NAT st P[k] holds P[k+1]
     proof
       let k be Element of NAT such that
 A4:  P[k];
-      thus z* (z #N (k+1)) =z * (z GeoSeq.(k+1))
-           .= z* (z GeoSeq.(k)*z) by LOPBAN_3:def 13
-           .=z* (z #N k *z )
+      thus z* (z #N (k+1)) = z* (z GeoSeq.(k)*z) by LOPBAN_3:def 13
            .=(z * z #N k) *z by LOPBAN_3:43
-           .=z GeoSeq.(k+1) * z by A4
-           .=z GeoSeq.((k+1)+1) by LOPBAN_3:def 13
-           .=z #N ((k+1)+1);
+           .=z #N ((k+1)+1) by A4,LOPBAN_3:def 13;
     end;
 A5: for n be Element of NAT  holds P[n]  from NAT_1:sch 1(A2,A3);
      now let n;
       thus z * z #N n =z #N (n+1) by A5;
-      thus (z #N n) *z =z GeoSeq.n * z
-           .=z GeoSeq.(n+1) by LOPBAN_3:def 13
-           .=z #N (n+1);
+      thus (z #N n) *z =z #N (n+1) by LOPBAN_3:def 13;
       hence z * (z #Nn) =(z #N n) * z by A5;
     end;
     hence thesis;
@@ -91,10 +83,8 @@ A1: z,w are_commutative;
     w* (z #N $1) =(z #N $1)*w &
     z* (w #N $1) = (w #N $1)*z;
         A2:  (z #N0 )
-             = (z GeoSeq.0)
-             .= 1.X by LOPBAN_3:def 13;
-        A3:  (w #N0 ) = (w GeoSeq.0)
-              .= 1.X by LOPBAN_3:def 13;
+             = 1.X by LOPBAN_3:def 13;
+        A3:  (w #N0 ) = 1.X by LOPBAN_3:def 13;
         A4: w*(z #N0 )=w by A2,LOPBAN_3:43
                            .=(z #N0 ) *w by A2,LOPBAN_3:43;
           z*(w #N0 )=z by A3,LOPBAN_3:43
@@ -557,27 +547,27 @@ theorem  Th11:
  defpred P[Element of NAT] means $1 <= m implies
        Partial_Sums(seq1).$1=Partial_Sums(seq2).$1;
  A2:  P[0] proof assume
-      A3: 0 <= m;
+       0 <= m;
       thus Partial_Sums(seq1).0=seq1.0
     by LOPBAN_3:def 1
-                         .=seq2.0 by A1,A3
+                         .=seq2.0 by A1
                          .=Partial_Sums(seq2).0
                        by LOPBAN_3:def 1;
     end;
-    A4: for k be Element of NAT st P[k] holds P[k+1]
+    A3: for k be Element of NAT st P[k] holds P[k+1]
     proof
     let k be Element of NAT such that
-       A5: P[k];
+       A4: P[k];
       assume
-        A6:k+1 <= m;
+        A5:k+1 <= m;
                k < k+1 by XREAL_1:31;
         hence Partial_Sums(seq1).(k+1)
-               =Partial_Sums(seq2).k+seq1.(k+1) by A5,A6,XXREAL_0:2
+               =Partial_Sums(seq2).k+seq1.(k+1) by A4,A5,XXREAL_0:2
 ,LOPBAN_3:def 1
-              .=Partial_Sums(seq2).k+seq2.(k+1) by A1,A6
+              .=Partial_Sums(seq2).k+seq2.(k+1) by A1,A5
               .=Partial_Sums(seq2).(k+1) by LOPBAN_3:def 1;
     end;
-      for k holds P[k] from NAT_1:sch 1(A2,A4);
+      for k holds P[k] from NAT_1:sch 1(A2,A3);
  hence Partial_Sums(seq1).m=Partial_Sums(seq2).m;
  end;
 
@@ -1017,9 +1007,7 @@ proof
   now
   let n be Element of NAT;
  thus (z ExpSeq).(n+1)=1/((n+1) !)*z #N (n+1) by Def2
-               .=1/((n+1)!)*(z GeoSeq).(n+1)
                .=1/((n+1)!)*((z GeoSeq).n * z) by LOPBAN_3:def 13
-               .=1/ ((n+1)!  )* (z #N n * z)
                .=1/(n!  * (n+1))*(z #N n * z) by NEWTON:21
                .=((1*1)/((n!)  * (n+1)))*(z* z #N n ) by Lm1
                .=((1/(n!))  * (1/(n+1))  )*(z* z #N n )
@@ -1028,7 +1016,6 @@ proof
                .=((1 /(n+1)) *z)*(z ExpSeq.n) by Def2;
  end;
  A2:(z ExpSeq).0=1/(0!) * z #N 0 by Def2
-            .=1/(0! )*(z GeoSeq).0
             .=1/1 *1.X by LOPBAN_3:def 13,NEWTON:18
             .=1.X by RLVECT_1:def 9;
   defpred X[Element of NAT] means
@@ -1044,8 +1031,7 @@ proof
    proof
      let n such that
    A5:  X[n];
-    0 <= n+1 by NAT_1:18;
-   then A6:abs(n+1)  =n+1 by ABSVALUE:def 1;
+   A6:abs(n+1)  =n+1 by ABSVALUE:def 1;
    A7:     ||. ((z ExpSeq)).(n+1) .||
       =||. (1/(n+1) *z)*  (z ExpSeq.n ) .|| by A1;
    A8:
@@ -1121,17 +1107,14 @@ proof
 let z,w such that
   A1: z,w are_commutative;
 
-  A2:(z+w) #N 0 =((z+w) GeoSeq).0
-            .=1.X by LOPBAN_3:def 13;
+  A2:(z+w) #N 0 =1.X by LOPBAN_3:def 13;
   A3:0-'0=0-0 by BINARITH:def 3
               .=0;
   defpred X[Element of NAT] means (z+w) #N $1 = Partial_Sums(Expan($1,z,w)).$1;
       Partial_Sums(Expan(0,z,w)).0 = Expan(0,z,w).0 by LOPBAN_3:def 1
                 .= (Coef(0)).0 * (z #N 0) * (w #N 0) by A3,Def6
                 .= 1/(1 * 1) * z #N 0 * w #N 0 by A3,Def3,NEWTON:18
-                .= z #N 0 * w #N 0 by RLVECT_1:def 9
-                .= (z GeoSeq).0 * w #N 0
-                .= (z GeoSeq).0 * (w GeoSeq).0
+                .= (z GeoSeq).0 * w #N 0 by RLVECT_1:def 9
                 .= 1.X * (w GeoSeq).0 by LOPBAN_3:def 13
                 .= 1.X  * 1.X by LOPBAN_3:def 13
                 .= 1.X by LOPBAN_3:43;
@@ -1139,11 +1122,8 @@ let z,w such that
   A5: for n st X[n] holds X[n+1]
    proof let n such that
    A6: (z+w) #N n = Partial_Sums(Expan(n,z,w)).n;
-   A7: (z+w) #N (n+1) =((z+w) GeoSeq ).(n+1)
-                .=((z+w) GeoSeq ).n * (z+w) by LOPBAN_3:def 13
-                .=(Partial_Sums(Expan(n,z,w)).n) * (z+w) by A6
-
-           .=(Partial_Sums(Expan(n,z,w))*(z+w)) .n by LOPBAN_3:def 10
+   A7: (z+w) #N (n+1) =((z+w) GeoSeq ).n * (z+w) by LOPBAN_3:def 13
+                .=(Partial_Sums(Expan(n,z,w))*(z+w)) .n by  A6,LOPBAN_3:def 10
              .=(Partial_Sums(Expan(n,z,w)*(z+w))).n by Th9;
         Expan(n,z,w)*(z+w) =( Expan(n,z,w)*z)+(Expan(n,z,w)*w)
      proof
@@ -1219,8 +1199,7 @@ then A15:        Expan(n,z,w).(n+1)=0.X by Def6;
        A18:  n+1 < k;
       A19:  n < k & 1 <= k & 1 <k & 0 <k & n <k-1 & n < k-'1
              proof
-                 0 <= n by NAT_1:18;
-then A20:       0+1 <= n+1 by XREAL_1:8;
+A20:       0+1 <= n+1 by XREAL_1:8;
 A21:            n+1-1 < k -1 by A18,XREAL_1:11;
 then A22:          n+0 < k-1+1 by XREAL_1:10;
                  1 <= k by A18,A20,XXREAL_0:2;
@@ -1286,16 +1265,14 @@ then A22:          n+0 < k-1+1 by XREAL_1:10;
             thus (( Expan(n,z,w)*w)+Sift(( Expan(n,z,w)*z))).k
               =Expan(n+1,z,w).k
               proof
-              A35: 0 <= n by NAT_1:18;
-              A36: 0 <= n+1 by NAT_1:18;
-   A37:         n-'0 =n-0 by A35,BINARITH:50;
-   A38:         n+1-'0 =n+1-0 by A36,BINARITH:50;
-              A39: n!  <>0 & (n+1)!  <>0 by NEWTON:23;
-               A40: (Coef(n)).0 = n!  /((0!  ) * (n!  )) by A35,A37,Def3
-                              .= 1 by A39,NEWTON:18,XCMPLX_1:60;
-               A41: (Coef(n+1)).0 = (n+1)!  /((0!  ) * ((n+1)!  ))
-              by A36,A38,Def3
-                         .= 1 by A39,NEWTON:18,XCMPLX_1:60;
+   A35:         n-'0 =n-0 by BINARITH:50;
+   A36:         n+1-'0 =n+1-0 by BINARITH:50;
+              A37: n!  <>0 & (n+1)!  <>0 by NEWTON:23;
+               A38: (Coef(n)).0 = n!  /((0!  ) * (n!  )) by A35,Def3
+                              .= 1 by A37,NEWTON:18,XCMPLX_1:60;
+               A39: (Coef(n+1)).0 = (n+1)!  /((0!  ) * ((n+1)!  ))
+              by A36,Def3
+                         .= 1 by A37,NEWTON:18,XCMPLX_1:60;
               thus
                 (( Expan(n,z,w)*w)+Sift(( Expan(n,z,w)*z))).k =
               ( Expan(n,z,w)*w).0+(Sift((Expan(n,z,w)*z))).0
@@ -1305,39 +1282,39 @@ then A22:          n+0 < k-1+1 by XREAL_1:10;
              .=( Expan(n,z,w).0 *w ) + 0.X by Def5
              .=( Expan(n,z,w).0 *w) by LOPBAN_3:43
              .= ((Coef(n)).0 * (z #N 0)   * (w #N (n-' 0)))*w
-           by A35,Def6
+           by Def6
              .= (Coef(n)).0 *(z #N 0)   *((w #N (n-' 0))*w)
                by LOPBAN_3:43
             .= (Coef(n+1)).0  *(z #N 0)* (w #N ((n+1)-'0))
-           by A37,A38,A40,A41,Lm1
-             .= Expan(n+1,z,w).k by A34,A36,Def6;
+           by A35,A36,A38,A39,Lm1
+             .= Expan(n+1,z,w).k by A34,Def6;
               end;
             end;
-              now assume A42: k<>0;
-              then A43: 0<k by NAT_1:19;
-              then A44: 0+1 <= k by INT_1:20;
-              A45:k+1-1 <= n+1-1 by A32,INT_1:20;
+              now assume A40: k<>0;
+              then A41: 0<k;
+              then A42: 0+1 <= k by INT_1:20;
+              A43:k+1-1 <= n+1-1 by A32,INT_1:20;
                  k < k+1 by XREAL_1:31;
               then k-1 <= k+1-1 by XREAL_1:11;
-              then k-1 <= n by A45,XXREAL_0:2;
-              then A46: k-'1 <= n by A44,BINARITH:50;
+              then k-1 <= n by A43,XXREAL_0:2;
+              then A44: k-'1 <= n by A42,BINARITH:50;
               thus (( Expan(n,z,w)*w)+Sift((Expan(n,z,w)*z))).k
               =Expan(n+1,z,w).k
               proof
-              A47:
+              A45:
               (( Expan(n,z,w)*w )+Sift(( Expan(n,z,w)*z))).k
               =( Expan(n,z,w)*w).k+(Sift((Expan(n,z,w)*z))).k
  by NORMSP_1:def 5
             .=(Expan(n,z,w).k)*w + (Sift(( Expan(n,z,w)*z))).k
  by LOPBAN_3:def 10
-             .=(Expan(n,z,w).k)*w + (Expan(n,z,w)*z).( k-'1) by A43,Th15
+             .=(Expan(n,z,w).k)*w + (Expan(n,z,w)*z).( k-'1) by A41,Th15
              .=(Expan(n,z,w).k)*w  + ( Expan(n,z,w).(k-'1))*z
  by LOPBAN_3:def 10
              .=( (Coef(n)).k * (z #N k) * (w #N (n-' k)) ) *w
-               + ( Expan(n,z,w).(k-'1))*z by A45,Def6
+               + ( Expan(n,z,w).(k-'1))*z by A43,Def6
              .=(((Coef(n)).k * (z #N k) * (w #N (n-' k)))) *w
                + ( ((Coef(n)).(k -' 1) * (z #N (k-'1))
-                    * (w #N (n-' (k -' 1)))))*z by A46,Def6
+                    * (w #N (n-' (k -' 1)))))*z by A44,Def6
              .=((Coef(n)).k * ((z #N k)) * ((w #N (n-' k))*w))
                + ( ((Coef(n)).(k -' 1)) * (z #N (k -' 1))
                     * (w #N (n-' (k-'1)))) *z
@@ -1364,76 +1341,76 @@ then A22:          n+0 < k-1+1 by XREAL_1:10;
             .=((Coef(n)).k * ((z #N k)) * ((w #N ((n-' k)+1))))
               +  ((Coef(n)).(k -' 1)) *(z #N ((k -' 1)+1)) *(w #N (n-' (k-'1)))
             by Lm1;
-              A48:
+              A46:
              w #N ((n-' k)+1) = w #N (n+1-'k)
               proof
-               (n-'k)+1=n-k+1 by A45,BINARITH:50
+               (n-'k)+1=n-k+1 by A43,BINARITH:50
                       .=n+1-k
                       .=(n+1-'k) by A32,BINARITH:50;
               hence w #N ((n-' k)+1) = w #N (n+1-'k);
               end;
-              A49: w #N (n-' (k-'1))
+              A47: w #N (n-' (k-'1))
                =w #N  (n+1-'k)
               proof
-                (n-'(k-'1))=n-(k-'1) by A46,BINARITH:50
-                             .=n-(k-1) by A44,BINARITH:50
+                (n-'(k-'1))=n-(k-'1) by A44,BINARITH:50
+                             .=n-(k-1) by A42,BINARITH:50
                              .=n+1-k
                              .=(n+1-'k) by A32,BINARITH:50;
               hence w #N (n-' (k-'1))=w #N (n+1-'k);
               end;
                z #N ((k -' 1)+1)= z #N k
               proof
-               (k-'1)+1 =k-1+1 by A44,BINARITH:50
+               (k-'1)+1 =k-1+1 by A42,BINARITH:50
                              .=k;
               hence z #N ((k -' 1)+1)= z #N k;
               end;
-               then A50:
+               then A48:
               ((Expan(n,z,w)*w)+Sift((Expan(n,z,w)*z))).k
              =(Coef(n)).k * ((z #N k) * (w #N (n+1-'k)))
               +  (Coef(n)).((k -' 1)) *(z #N k) *(w #N (n+1-'k))
-               by A47,A48,A49,LOPBAN_3:43
+               by A45,A46,A47,LOPBAN_3:43
             .=(Coef(n)).k * ((z #N k) * (w #N (n+1-'k)))
               +  (Coef(n)).((k -' 1)) *((z #N k) *(w #N (n+1-'k)))
                               by LOPBAN_3:43
               .= ((Coef(n)).k +(Coef(n)).(k -' 1) )
                  * ((z #N k) * (w #N ((n+1) -' k) ))
                by LOPBAN_3:43;
-              A51: (Coef(n)).k +(Coef(n)).(k -' 1)
+              A49: (Coef(n)).k +(Coef(n)).(k -' 1)
               =n!  /( (k!  ) * ((n -' k)!  ) )
-              +(Coef(n)).(k-'1) by A45,Def3
+              +(Coef(n)).(k-'1) by A43,Def3
               .=n!  /( (k!  ) * ((n -' k)!  ) )
-               +n!  /(((k-'1)!  ) * (((n-'(k-'1)))!  )) by A46,Def3;
-              A52: ( (k!  ) * ((n -' k)!  ) ) * (n+1 - k)
+               +n!  /(((k-'1)!  ) * (((n-'(k-'1)))!  )) by A44,Def3;
+              A50: ( (k!  ) * ((n -' k)!  ) ) * (n+1 - k)
                =(k!  ) * (((n -' k)!  ) * (n+1 - k));
-              A53: (n-'(k-'1)) =n-(k-'1) by A46,BINARITH:50
-                      .=n-(k-1) by A44,BINARITH:50
+              A51: (n-'(k-'1)) =n-(k-'1) by A44,BINARITH:50
+                      .=n-(k-1) by A42,BINARITH:50
                       .=n+1-k
                       .=n+1-'k by A32,BINARITH:50;
-              A54: (((k-'1)! ) * (((n-'(k-'1)))! )) * k
+              A52: (((k-'1)! ) * (((n-'(k-'1)))! )) * k
                =k * ((k-'1)! ) * (((n-'(k-'1)))! )
-                .=(k! ) * ((n+1-'k)! ) by A43,A53,Th13;
+                .=(k! ) * ((n+1-'k)! ) by A41,A51,Th13;
               (k! ) <> 0 & (n-'k)! <>0 & (k-'1)! <>0
                       & ((n-'(k-'1)))! <>0 & ((n+1-'k))! <>0 &
                       (n+1-k) <>0 & k <>0
-                        by A32,A42,NEWTON:23;
-                 then A55:
+                        by A32,A40,NEWTON:23;
+                 then A53:
                  n! /( (k! ) * ((n-'k)!) )
                   =(n! * (n+1-k)) /(( (k! ) * ((n-'k)! ) ) * (n+1-k))
                 by XCMPLX_1:92
                  .=(n! * (n+1-k))/((k! ) * ((n+1-'k)! ))
- by A45,A52,Th13;
+ by A43,A50,Th13;
                     n! /(((k-'1)! ) * (((n-'(k-'1)))! ))
                  =(n! * k)/((k! ) * ((n+1-'k)! ))
-               by A42,A54,XCMPLX_1:92;
+               by A40,A52,XCMPLX_1:92;
                    then (Coef(n)).k +(Coef(n)).(k-'1)
                    =((n! * (n+1-k))+(n! * k))
-                    / ((k! ) * ((n+1-'k)! )) by A51,A55,XCMPLX_1:63
+                    / ((k! ) * ((n+1-'k)! )) by A49,A53,XCMPLX_1:63
                   .=( n! * (n+1-k+k)) / ((k! ) * ((n+1-'k)! ))
                   .=((n+1)! ) / ((k! ) * ((n+1-'k)! )) by NEWTON:21
                   .=(Coef(n+1)).k by A32,Def3;
                hence ((Expan(n,z,w)*w)+Sift((Expan(n,z,w)*z))).k
                   =(Coef(n+1)).k * (z #N k) * (w #N (n+1-'k) )
- by A50,LOPBAN_3:43
+ by A48,LOPBAN_3:43
               .=Expan(n+1,z,w).k by A32,Def6;
               end;
             end;
@@ -1584,16 +1561,13 @@ theorem Th21:
 proof
 thus (z ExpSeq).0
     = 1/(0!)*(z #N 0) by Def2
-   .= 1/(0!  )*(z GeoSeq).0
    .= 1/1 *1.X
  by LOPBAN_3:def 13,NEWTON:18
    .= 1.X by LOPBAN_3:43;
   A1: 0-'0=0 by BINARITH:51;
   hence Expan(0,z,w).0 = (Coef(0)).0 * (z #N 0) * (w #N 0) by Def6
                      .= 1/(1 * 1) * z #N 0 * w #N 0 by A1,Def3,NEWTON:18
-                     .= z #N 0 * w #N 0 by LOPBAN_3:43
-                     .= (z GeoSeq).0 * w #N 0
-                     .= (z GeoSeq).0 * (w GeoSeq).0
+                     .= (z GeoSeq).0 * w #N 0 by LOPBAN_3:43
                      .= 1.X  * (w GeoSeq).0 by LOPBAN_3:def 13
                      .= 1.X * 1.X by LOPBAN_3:def 13
                      .= 1.X by LOPBAN_3:43;
@@ -1801,7 +1775,6 @@ proof
 A1: ||. Partial_Sums(( z ExpSeq)).0 .||
     = ||. ((z ExpSeq)).0 .|| by LOPBAN_3:def 1
    .= ||. 1/ (0! )*(z #N 0).|| by Def2
-   .= ||. 1/(0 !)*((z GeoSeq)).0 .||
    .= ||. 1 /1 *1.X.|| by LOPBAN_3:def 13,NEWTON:18
    .= ||. 1.X.|| by LOPBAN_3:43
 
@@ -1895,8 +1868,7 @@ A1:now let n;
   hence 0 <= ||.Conj(k,z,w).||.n by NORMSP_1:8;
 end;
  then A2: Partial_Sums(||.Conj(k,z,w).||) is non-decreasing by SERIES_1:19;
-     0 <= n by NAT_1:18;
-  then A3:Partial_Sums(||.Conj(k,z,w).||).0
+  A3:Partial_Sums(||.Conj(k,z,w).||).0
   <= Partial_Sums(||.Conj(k,z,w).||).n by A2,SEQM_3:12;
   A4:Partial_Sums(||.Conj(k,z,w).||).0=(||.Conj(k,z,w).||).0 by SERIES_1:def 1;
      0 <= (||.Conj(k,z,w).||).0 by A1;
@@ -2025,24 +1997,20 @@ then consider n1 such that
     end;
      now let k such that
       A22: n4 <= k;
-             0 <= n3 by NAT_1:18;
-          then 0+n3 <= n3+n3 by XREAL_1:8;
+          0+n3 <= n3+n3 by XREAL_1:8;
       then A23:n3 <= k by A22,XXREAL_0:2;
-             0 <= n2 by NAT_1:18;
-then A24:      n1+0 <= n1+n2 by XREAL_1:8;
+A24:      n1+0 <= n1+n2 by XREAL_1:8;
       then A25:n1 <= k by A23,XXREAL_0:2;
         now let l be Element of NAT; assume
           A26:l <= n3;
           then A27:l <= k by A23,XXREAL_0:2;
         then A28:k-'l=k-l by BINARITH:50;
-             0 <= n1 by NAT_1:18;
-then A29:      0+n2 <= n1+n2 by XREAL_1:8;
+A29:      0+n2 <= n1+n2 by XREAL_1:8;
 A30:    n4-l <= k-l by A22,XREAL_1:11;
              n3+n3-n3 <= n3+n3-l by A26,REAL_2:106;
           then n3 <= k-l by A30,XXREAL_0:2;
           then A31:n2 <= k-'l by A28,A29,XXREAL_0:2;
-             0 <= n3 by NAT_1:18;
-          then 0+n3 <= n3+n3 by XREAL_1:8;
+          0+n3 <= n3+n3 by XREAL_1:8;
           then n2 <= n4 by A29,XXREAL_0:2;
        then n2 <= k by A22,XXREAL_0:2;
        then A32:  ||.Partial_Sums(( w ExpSeq )).k
@@ -2201,11 +2169,7 @@ A7: Partial_Sums(z ExpSeq) * Partial_Sums(w ExpSeq) is convergent &
  by A4,A5,Th3,Th8;
 A8:   seq is convergent & lim(seq)=0.X by A2,Th33;
 thus Sum((z+w) ExpSeq)
-      =lim(Partial_Sums((z+w) ExpSeq))
-     .=lim(Partial_Sums(z ExpSeq)) * lim(Partial_Sums(w ExpSeq))
- by A3,A6,A7,A8,Th1
-     .=Sum(z ExpSeq) * lim(Partial_Sums(w ExpSeq))
-     .=Sum(z ExpSeq) * Sum(w ExpSeq);
+      =Sum(z ExpSeq) * Sum(w ExpSeq) by A3,A6,A7,A8,Th1;
 end;
 
 definition
@@ -2214,7 +2178,6 @@ func exp_ X -> Function of the carrier of X, the carrier of X means :Def10:
   for z being Element of X holds it.z=Sum(z ExpSeq);
  existence
  proof
-   defpred X[set] means $1 in the carrier of X;
    deffunc U(Element of X ) = Sum($1 ExpSeq);
   consider f being Function of the carrier of X,
   the carrier of X such that
@@ -2257,13 +2220,11 @@ theorem Th35:
 proof
    let z1,z2 such that
    A1: z1,z2 are_commutative;
-   A2: exp(z1+z2)= (exp_ X).(z1+z2)
-         .=Sum((z1+z2) ExpSeq) by Def10
+   A2: exp(z1+z2)=Sum((z1+z2) ExpSeq) by Def10
          .=Sum(z1 ExpSeq)*Sum(z2 ExpSeq) by A1,Lm3
          .=exp(z1)*Sum(z2 ExpSeq) by Th34
          .=exp(z1) *exp(z2) by Th34;
-    exp(z2+z1)= (exp_ X).(z2+z1)
-         .=Sum((z2+z1) ExpSeq) by Def10
+    exp(z2+z1)=Sum((z2+z1) ExpSeq) by Def10
          .=Sum(z2 ExpSeq)*Sum(z1 ExpSeq) by A1,Lm3
          .=exp(z2)*Sum(z1 ExpSeq) by Th34
          .=exp(z2) *exp(z1) by Th34;
@@ -2295,19 +2256,16 @@ proof
           hence thesis by FUNCT_2:113;
       end;
   thus z1*exp(z2) =z1*Sum(z2 ExpSeq) by Th34
-         .=z1*lim (Partial_Sums(z2 ExpSeq))
          .=lim(z1*Partial_Sums(z2 ExpSeq)) by A2,Th6
          .=lim(Partial_Sums(z1*(z2 ExpSeq))) by Th9
          .=lim(Partial_Sums(z2 ExpSeq)*z1) by A3,Th9
-          .=lim(Partial_Sums(z2 ExpSeq))*z1 by A2,Th7
-         .=Sum(z2 ExpSeq) *z1
+          .=Sum(z2 ExpSeq) *z1 by A2,Th7
          .=exp(z2) *z1 by Th34;
 end;
 
 theorem Th37:  exp(0.X) = 1.X
 proof
-    exp(0.X) =(exp_ X).(0.X)
-            .=Sum( 0.X ExpSeq) by Def10
+    exp(0.X) =Sum( 0.X ExpSeq) by Def10
            .=1.X by Th20;
  hence thesis;
 end;

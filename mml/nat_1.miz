@@ -8,8 +8,8 @@ environ
 
  vocabularies ORDINAL2, ARYTM, ARYTM_1, ARYTM_3, ORDINAL1, NAT_1, XREAL_0,
       ZF_LANG;
- notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, ORDINAL2, NUMBERS, XCMPLX_0,
-      XREAL_0, REAL_1, XXREAL_0;
+ notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
+      REAL_1, XXREAL_0;
  constructors NUMBERS, XCMPLX_0, XXREAL_0, XREAL_0, ORDINAL2;
  registrations REAL_1, NUMBERS, ORDINAL2, XREAL_0, ARYTM_3, ZFMISC_1, XBOOLE_0,
       XXREAL_0, ORDINAL1;
@@ -25,7 +25,7 @@ definition
 end;
 
  reserve x for Real,
-         p,q,k,l,m,n,s,h,i,j,g,k1,t,t1 for Nat,
+         p,k,l,m,n,s,h,i,j,k1,t,t1 for Nat,
          X for Subset of REAL;
 
 :: The results of axioms of natural numbers
@@ -73,7 +73,7 @@ A4:    (n + k) + 1 = n + (k + 1);
      hence thesis;
    end;
  end;
- 
+
 registration let n,k be Nat;
   cluster n + k -> natural;
   coherence
@@ -126,7 +126,7 @@ A5:   for k be Element of NAT holds P[k] from Ind(A3,A4);
 :: Like addition, the result of multiplication of two natural numbers is
 :: a natural number.
 
-definition let n,k be Element of NAT; 
+definition let n,k be Element of NAT;
   redefine func n * k -> Element of NAT;
   coherence
   proof   defpred P[Nat] means n*$1 is Element of NAT;
@@ -601,14 +601,14 @@ definition let k,l be Nat;
     end;
    uniqueness
     proof let t1,t2 be Nat such that
-A3:   (ex t being Nat st k = l * t1 + t & t < l) or t1 = 0 & l = 0 and
-A4:   (ex t being Nat st k = l * t2 + t & t < l) or t2 = 0 & l = 0;
+A1:   (ex t being Nat st k = l * t1 + t & t < l) or t1 = 0 & l = 0 and
+A2:   (ex t being Nat st k = l * t2 + t & t < l) or t2 = 0 & l = 0;
       now let t; assume
-A5:     t < 0;
+A3:     t < 0;
         then ex m st 0 = t + m by Th28;
-       hence contradiction by A5,Th23;
+       hence contradiction by A3,Th23;
       end;
-     hence thesis by A3,A4,Th43;
+     hence thesis by A1,A2,Th43;
     end;
 
   func k mod l -> Nat means         :: the rest of division
@@ -616,26 +616,26 @@ A5:     t < 0;
    existence
     proof
        now assume
-A6:    l <> 0;
+A4:    l <> 0;
        0 <= l by Th18;
-       then ex n,t st k = l * n + t & t < l by A6,Th42;
+       then ex n,t st k = l * n + t & t < l by A4,Th42;
        hence thesis;
       end;
      hence thesis;
     end;
    uniqueness
     proof let t1,t2 be Nat such that
-A7:  (ex t being Nat st k = l * t + t1 & t1 < l) or t1 = 0 & l = 0 and
-A8:  (ex t being Nat st k = l * t + t2 & t2 < l) or t2 = 0 & l = 0;
+A5:  (ex t being Nat st k = l * t + t1 & t1 < l) or t1 = 0 & l = 0 and
+A6:  (ex t being Nat st k = l * t + t2 & t2 < l) or t2 = 0 & l = 0;
       now let t; assume
-A9:     t < 0;
+A7:     t < 0;
         then ex m st 0 = t + m by Th28;
-       hence contradiction by A9,Th23;
+       hence contradiction by A7,Th23;
       end;
-     hence thesis by A7,A8,Th43;
+     hence thesis by A5,A6,Th43;
     end;
  end;
- 
+
 definition let k,l be Nat;
   redefine func k div l -> Element of NAT;
   coherence by ORDINAL1:def 13;
@@ -1149,9 +1149,9 @@ A3:    k = n * t + 0 and A4: 0 < n by A1,Def2;
 theorem
   n <> 0 & k mod n = 0 & l < n implies k + l mod n = l
  proof
-   assume that A2: n <> 0 and A3: k mod n = 0 and A4: l < n;
-   ex t being Nat st k = n * t + 0 & 0 < n by A2,A3,Def2;
-  hence thesis by A4,Def2;
+   assume that A1: n <> 0 and A2: k mod n = 0 and A3: l < n;
+   ex t being Nat st k = n * t + 0 & 0 < n by A1,A2,Def2;
+  hence thesis by A3,Def2;
  end;
 
 theorem
@@ -1176,7 +1176,7 @@ A5:  l = n * t + (l mod n) & l mod n < n by A3,Def2;
 
 theorem
   k <> 0 implies (k * n) div k = n
-  proof 
+  proof
     assume k <> 0;
     then k * n = k * n + 0 & 0 < k by Th18;
     hence thesis by Def1;
@@ -1417,7 +1417,7 @@ A2: P1[a()];
 A3: for k being Element of NAT st k>=a() holds P1[k] implies P1[k+1]
      proof
       let k be Element of NAT;
-      assume k>=a();  
+      assume k>=a();
       assume A4: for n being Element of NAT st n>=a() & n<k holds P[n];
       let n be Element of NAT;
       assume A5: n>=a() & n<k+1;
@@ -1434,7 +1434,7 @@ A6: for k being Element of NAT st k>=a() holds P1[k] from Ind1(A2,A3);
 
 :: Moved from CQC_THE1 on 07.07.2006 by AK
 
-theorem T1:
+theorem Th82:
   n <= 1 implies n = 0 or n = 1
  proof
   assume A1: n <= 1;
@@ -1444,47 +1444,47 @@ theorem T1:
   hence contradiction by A2;
  end;
 
-theorem T2:
+theorem Th83:
   n <= 2 implies n = 0 or n = 1 or n = 2
  proof
   assume A1: n <= 2;
   assume A2: not (n = 0 or n = 1 or n = 2);
   then n < 1+1 by A1,REAL_1:def 5;
   then n <= 1 by Th38;
-  hence thesis by A2,T1;
+  hence thesis by A2,Th82;
  end;
 
-theorem T3:
+theorem Th84:
   n <= 3 implies n = 0 or n = 1 or n = 2 or n = 3
  proof
   assume A1: n <= 3;
   assume A2: not (n = 0 or n = 1 or n = 2 or n = 3);
   then n < 2+1 by A1,REAL_1:def 5;
   then n <= 2 by Th38;
-  hence thesis by A2,T2;
+  hence thesis by A2,Th83;
  end;
 
-theorem T4:
+theorem Th85:
   n <= 4 implies n = 0 or n = 1 or n = 2 or n = 3 or n = 4
  proof
   assume A1: n <= 4;
   assume A2: not (n = 0 or n = 1 or n = 2 or n = 3 or n = 4);
   then n < 3+1 by A1,REAL_1:def 5;
   then n <= 3 by Th38;
-  hence thesis by A2,T3;
+  hence thesis by A2,Th84;
  end;
 
-theorem T5:
+theorem Th86:
   n <= 5 implies n = 0 or n = 1 or n = 2 or n = 3 or n = 4 or n = 5
  proof
   assume A1: n <= 5;
   assume A2: not (n = 0 or n = 1 or n = 2 or n = 3 or n = 4 or n = 5);
   then n < 4+1 by A1,REAL_1:def 5;
   then n <= 4 by Th38;
-  hence thesis by A2,T4;
+  hence thesis by A2,Th85;
  end;
 
-theorem T6:
+theorem Th87:
   n <= 6 implies n = 0 or n = 1 or n = 2 or n = 3 or n = 4 or n = 5 or n = 6
  proof
   assume A1: n <= 6;
@@ -1492,10 +1492,10 @@ theorem T6:
    n = 6);
   then n < 5+1 by A1,REAL_1:def 5;
   then n <= 5 by Th38;
-  hence thesis by A2,T5;
+  hence thesis by A2,Th86;
  end;
 
-theorem T7:
+theorem Th88:
   n <= 7 implies n = 0 or n = 1 or n = 2 or n = 3 or n = 4 or n = 5 or n = 6
   or n = 7
  proof
@@ -1504,10 +1504,10 @@ theorem T7:
    n = 6 or n = 7);
   then n < 6+1 by A1,REAL_1:def 5;
   then n <= 6 by Th38;
-  hence thesis by A2,T6;
+  hence thesis by A2,Th87;
  end;
 
-theorem T8:
+theorem Th89:
   n <= 8 implies n = 0 or n = 1 or n = 2 or n = 3
   or n = 4 or n = 5 or n = 6 or n = 7 or n = 8
  proof
@@ -1516,7 +1516,7 @@ theorem T8:
    n = 6 or n = 7 or n = 8);
   then n < 7+1 by A1,REAL_1:def 5;
   then n <= 7 by Th38;
-  hence thesis by A2,T7;
+  hence thesis by A2,Th88;
  end;
 
 theorem
@@ -1528,7 +1528,7 @@ theorem
    n = 6 or n = 7 or n = 8 or n = 9);
   then n < 8+1 by A1,REAL_1:def 5;
   then n <= 8 by Th38;
-  hence thesis by A2,T8;
+  hence thesis by A2,Th89;
  end;
 
 :: compare BINARITH:sch 1, 2006.07.19, A.T.

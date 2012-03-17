@@ -21,6 +21,7 @@
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FRAENKEL"/>
+<ArticleID name="XBOOLEAN"/>
 <ArticleID name="MARGREL1"/>
 <ArticleID name="VALUAT_1"/>
 <ArticleID name="STRUCT_0"/>
@@ -51,7 +52,7 @@
 </Signature>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="177"/>
+<Func kind="K" nr="188"/>
 <Cluster>
 <Adjective nr="1" value="false"/>
 <Adjective nr="15"/>
@@ -73,7 +74,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="352">
+<Func kind="K" nr="361">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -89,7 +90,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="199">
+<Func kind="K" nr="208">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -169,7 +170,7 @@
 <Cluster/>
 <Typ kind="M" nr="7">
 <Cluster/>
-<Func kind="K" nr="177"/>
+<Func kind="K" nr="188"/>
 </Typ>
 <Cluster>
 <Adjective nr="39"/>

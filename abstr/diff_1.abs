@@ -1,0 +1,273 @@
+:: Difference and Difference Quotient
+::  by Bo Li , Yan Zhang and Xiquan Liang
+::
+:: Received September 29, 2006
+:: Copyright (c) 2006 Association of Mizar Users
+
+environ
+
+ vocabularies DIFF_1, ARYTM, ARYTM_1, SEQM_3, SEQ_1, PARTFUN1, FUNCT_1, INT_1,
+      SEQFUNC, RELAT_1, BOOLE, ORDINAL2, RAT_1, ARYTM_3, SERIES_1, FUNCOP_1,
+      NEWTON, RLVECT_1, RELOC;
+ notations ORDINAL1, XCMPLX_0, XREAL_0, REAL_1, NAT_1, SERIES_1, XXREAL_0,
+      TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, FUNCT_1, PARTFUN1, FUNCT_2, SEQ_1,
+      SEQ_4, SEQFUNC, RELAT_1, PARTFUN3, FUNCOP_1, BINARITH, NEWTON, MEASURE6,
+      RELSET_1;
+ constructors REAL_1, NAT_1, XXREAL_0, SEQM_3, PARTFUN1, NEWTON, SERIES_1,
+      SEQFUNC, BINARITH, PARTFUN3, SETFAM_1, MEASURE6;
+ registrations XREAL_0, RELSET_1, REAL_1, SEQ_1, PARTFUN1, PSCOMP_1, RELAT_1,
+      ARYTM_3, FUNCOP_1;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+
+
+begin
+
+ reserve n,m,k,i for Element of NAT,
+         h,r,r1,r2,x0,x1,x2,x for Real,
+
+         f for PartFunc of REAL,REAL,
+         S for Functional_Sequence of REAL,REAL,
+         y for set;
+
+definition let f be PartFunc of REAL,REAL;let h be real number;
+  func Shift(f,h) -> PartFunc of REAL,REAL means
+:: DIFF_1:def 1
+  dom it = -h + dom f &
+  for x st x in (-h + dom f) holds it.x = f.(x+h);
+end;
+
+definition let f be Function of REAL,REAL;let h be real number;
+  redefine func Shift(f,h) -> Function of REAL,REAL means
+:: DIFF_1:def 2
+    for x holds it.x = f.(x+h);
+end;
+
+definition let f be PartFunc of REAL,REAL,
+               h be real number;
+  func fD(f,h) -> PartFunc of REAL,REAL equals
+:: DIFF_1:def 3
+   Shift(f,h) - f;
+end;
+
+definition let f be Function of REAL,REAL,
+               h be real number;
+ redefine func fD(f,h) -> Function of REAL,REAL;
+end;
+
+definition let f be PartFunc of REAL,REAL,
+               h be real number;
+  func bD(f,h) -> PartFunc of REAL,REAL equals
+:: DIFF_1:def 4
+  f - Shift(f,-h);
+end;
+
+definition let f be Function of REAL,REAL,
+               h be real number;
+ redefine func bD(f,h) -> Function of REAL,REAL;
+end;
+
+theorem :: DIFF_1:1
+  bD(f,h) = -fD(f,-h);
+
+definition let f be PartFunc of REAL,REAL,
+               h be real number;
+  func cD(f,h) -> PartFunc of REAL,REAL equals
+:: DIFF_1:def 5
+   Shift(f,h/2) - Shift(f,-h/2);
+end;
+
+definition let f be Function of REAL,REAL,
+               h be real number;
+ redefine func cD(f,h) -> Function of REAL,REAL;
+end;
+
+definition let f be PartFunc of REAL,REAL;let h be real number;
+func forward_difference(f,h) -> Functional_Sequence of REAL,REAL means
+:: DIFF_1:def 6
+it.0=f & for n holds it.(n+1)=fD(it.n,h);
+end;
+
+notation let f be PartFunc of REAL,REAL; let h be real number;
+  synonym fdif(f,h) for forward_difference(f,h);
+end;
+
+ reserve f,f1,f2 for Function of REAL,REAL;
+
+theorem :: DIFF_1:2
+for n holds fdif(f,h).n is Function of REAL,REAL;
+
+theorem :: DIFF_1:3
+  for x holds fD(f,h).x = f.(x+h) - f.x;
+
+theorem :: DIFF_1:4
+  for x holds bD(f,h).x = f.x - f.(x-h);
+
+theorem :: DIFF_1:5
+  for x holds cD(f,h).x = f.(x+h/2) - f.(x-h/2);
+
+theorem :: DIFF_1:6
+  f is constant implies for x holds fdif(f,h).(n+1).x=0;
+
+theorem :: DIFF_1:7
+  fdif(r(#)f,h).(n+1).x = r* fdif(f,h).(n+1).x;
+
+theorem :: DIFF_1:8
+  fdif(f1+f2,h).(n+1).x = fdif(f1,h).(n+1).x + fdif(f2,h).(n+1).x;
+
+theorem :: DIFF_1:9
+  fdif(f1-f2,h).(n+1).x = fdif(f1,h).(n+1).x - fdif(f2,h).(n+1).x;
+
+theorem :: DIFF_1:10
+  f=r1(#)f1+r2(#)f2 implies for x holds
+  fdif(f,h).(n+1).x = r1* fdif(f1,h).(n+1).x + r2* fdif(f2,h).(n+1).x;
+
+theorem :: DIFF_1:11
+  for x holds (fdif(f,h).1).x = Shift(f,h).x - f.x;
+
+definition let f be PartFunc of REAL,REAL; let h be real number;
+func backward_difference(f,h) -> Functional_Sequence of REAL,REAL means
+:: DIFF_1:def 7
+it.0=f & for n holds it.(n+1)=bD(it.n,h);
+end;
+
+notation let f be PartFunc of REAL,REAL;let h be real number;
+  synonym bdif(f,h) for backward_difference(f,h);
+end;
+
+theorem :: DIFF_1:12
+  for n holds bdif(f,h).n is Function of REAL,REAL;
+
+theorem :: DIFF_1:13
+  f is constant implies for x holds bdif(f,h).(n+1).x=0;
+
+theorem :: DIFF_1:14
+  bdif(r(#)f,h).(n+1).x = r* bdif(f,h).(n+1).x;
+
+theorem :: DIFF_1:15
+  bdif(f1+f2,h).(n+1).x = bdif(f1,h).(n+1).x + bdif(f2,h).(n+1).x;
+
+theorem :: DIFF_1:16
+  bdif(f1-f2,h).(n+1).x = bdif(f1,h).(n+1).x - bdif(f2,h).(n+1).x;
+
+theorem :: DIFF_1:17
+  f=r1(#)f1+r2(#)f2 implies for x holds
+  bdif(f,h).(n+1).x = r1* bdif(f1,h).(n+1).x + r2* bdif(f2,h).(n+1).x;
+
+theorem :: DIFF_1:18
+  (bdif(f,h).1).x = f.x - Shift(f,-h).x;
+
+definition let f be PartFunc of REAL,REAL;let h be real number;
+  func central_difference(f,h) -> Functional_Sequence of REAL,REAL means
+:: DIFF_1:def 8
+    it.0=f & for n holds it.(n+1)=cD(it.n,h);
+end;
+
+notation let f be PartFunc of REAL,REAL;let h be real number;
+  synonym cdif(f,h) for central_difference(f,h);
+end;
+
+theorem :: DIFF_1:19
+for n holds cdif(f,h).n is Function of REAL,REAL;
+
+theorem :: DIFF_1:20
+  f is constant implies for x holds cdif(f,h).(n+1).x=0;
+
+theorem :: DIFF_1:21
+  cdif(r(#)f,h).(n+1).x = r* cdif(f,h).(n+1).x;
+
+theorem :: DIFF_1:22
+  cdif(f1+f2,h).(n+1).x = cdif(f1,h).(n+1).x + cdif(f2,h).(n+1).x;
+
+theorem :: DIFF_1:23
+  cdif(f1-f2,h).(n+1).x = cdif(f1,h).(n+1).x - cdif(f2,h).(n+1).x;
+
+theorem :: DIFF_1:24
+  f=r1(#)f1+r2(#)f2 implies for x holds
+  cdif(f,h).(n+1).x = r1* cdif(f1,h).(n+1).x + r2* cdif(f2,h).(n+1).x;
+
+theorem :: DIFF_1:25
+  (cdif(f,h).1).x = Shift(f,h/2).x - Shift(f,-h/2).x;
+
+theorem :: DIFF_1:26
+  (fdif(f,h).n).x = (bdif(f,h).n).(x+n*h);
+
+theorem :: DIFF_1:27
+  (fdif(f,h).(2*n)).x = (cdif(f,h).(2*n)).(x+n*h);
+
+theorem :: DIFF_1:28
+  (fdif(f,h).(2*n+1)).x = (cdif(f,h).(2*n+1)).(x+n*h+h/2);
+
+definition         :: Forward difference quotient
+  let f be Function of REAL,REAL;let x0,x1;
+  func [!f,x0,x1!] -> Real equals
+:: DIFF_1:def 9
+    (f.x0-f.x1)/(x0-x1) if x0<>x1;
+end;
+
+definition         :: Forward difference quotient of the second order
+  let x0,x1,x2 be Real;
+  let f be Function of REAL,REAL;
+  func [!f,x0,x1,x2!] -> Real equals
+:: DIFF_1:def 10
+    ([!f,x0,x1!] - [!f,x1,x2!])/(x0-x2) if x0<>x2;
+end;
+
+definition         :: Forward difference quotient of the third order
+  let x0,x1,x2,x3 be Real;
+  let f be Function of REAL,REAL;
+  func [!f,x0,x1,x2,x3!] -> Real equals
+:: DIFF_1:def 11
+    ([!f,x0,x1,x2!] - [!f,x1,x2,x3!])/(x0-x3) if x0<>x3;
+end;
+
+theorem :: DIFF_1:29
+  x0<>x1 implies [!f,x0,x1!] = [!f,x1,x0!];
+
+theorem :: DIFF_1:30
+  f is constant & x0<>x1 implies [!f,x0,x1!] = 0;
+
+theorem :: DIFF_1:31
+  x0<>x1 implies [!(r(#)f),x0,x1!] = r*[!f,x0,x1!];
+
+theorem :: DIFF_1:32
+  x0<>x1 implies [!(f1+f2),x0,x1!]=[!f1,x0,x1!]+[!f2,x0,x1!];
+
+theorem :: DIFF_1:33
+  x0<>x1 implies [!(r1(#)f1+r2(#)f2),x0,x1!]=r1*[!f1,x0,x1!]+r2*[!f2,x0,x1!];
+
+theorem :: DIFF_1:34
+  x0<>x1 & x0<>x2 & x1<>x2 implies [!f,x0,x1,x2!] = [!f,x1,x2,x0!]
+                                 & [!f,x0,x1,x2!] = [!f,x2,x1,x0!];
+
+theorem :: DIFF_1:35
+  x0<>x1 & x0<>x2 & x1<>x2 implies [!f,x0,x1,x2!] = [!f,x2,x0,x1!]
+                                 & [!f,x0,x1,x2!] = [!f,x1,x0,x2!];
+
+theorem :: DIFF_1:36
+  (fdif(fdif(f,h).m,h).n).x = fdif(f,h).(m+n).x;
+
+definition let S;
+  attr S is Sequence-yielding means
+:: DIFF_1:def 12
+    for n holds S.n is Real_Sequence;
+end;
+
+registration
+  cluster Sequence-yielding Functional_Sequence of REAL,REAL;
+end;
+
+definition
+  mode Seq_Sequence is Sequence-yielding Functional_Sequence of REAL,REAL;
+end;
+
+definition let S be Seq_Sequence; let n;
+  redefine func S.n -> Real_Sequence;
+end;
+
+ reserve S for Seq_Sequence;
+
+theorem :: DIFF_1:37
+  (for n for i st i<=n holds
+  (S.n).i=(n choose i) * fdif(f1,h).i.x * fdif(f2,h).(n-'i).(x+i*h)) implies
+  fdif(f1(#)f2,h).1.x = Sum(S.1, 1) &
+  fdif(f1(#)f2,h).2.x = Sum(S.2, 2);

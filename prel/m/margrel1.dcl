@@ -15,6 +15,8 @@
 <ArticleID name="FRAENKEL"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
+<ArticleID name="XBOOLEAN"/>
+<ArticleID name="XCMPLX_0"/>
 <ArticleID name="MARGREL1"/>
 </Signature>
 <RCluster>
@@ -23,16 +25,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="20"/>
-</Cluster>
-</RCluster>
-<RCluster>
-<ArgTypes/>
-<Typ kind="M" nr="1">
-<Cluster/>
-</Typ>
-<Cluster>
-<Adjective nr="21"/>
+<Adjective nr="22"/>
 </Cluster>
 </RCluster>
 <FCluster>
@@ -40,7 +33,7 @@
 <Func kind="K" nr="13"/>
 <Cluster>
 <Adjective nr="7"/>
-<Adjective nr="20"/>
+<Adjective nr="22"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -51,7 +44,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="97">
+<Func kind="K" nr="115">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -60,45 +53,9 @@
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="100"/>
+<Func kind="K" nr="118"/>
 <Cluster>
 <Adjective nr="7" value="false"/>
-</Cluster>
-</FCluster>
-<FCluster>
-<ArgTypes>
-<Typ kind="M" nr="1">
-<Cluster>
-<Adjective nr="21"/>
-</Cluster>
-</Typ>
-</ArgTypes>
-<Func kind="K" nr="103">
-<LocusVar nr="1"/>
-</Func>
-<Cluster>
-<Adjective nr="21"/>
-</Cluster>
-</FCluster>
-<FCluster>
-<ArgTypes>
-<Typ kind="M" nr="1">
-<Cluster>
-<Adjective nr="21"/>
-</Cluster>
-</Typ>
-<Typ kind="M" nr="1">
-<Cluster>
-<Adjective nr="21"/>
-</Cluster>
-</Typ>
-</ArgTypes>
-<Func kind="K" nr="104">
-<LocusVar nr="1"/>
-<LocusVar nr="2"/>
-</Func>
-<Cluster>
-<Adjective nr="21"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -107,10 +64,12 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="107">
+<Func kind="K" nr="123">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
+<Adjective nr="19"/>
+<Adjective nr="20"/>
 <Adjective nr="21"/>
 </Cluster>
 </FCluster>
@@ -119,9 +78,11 @@
 <Cluster/>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="100"/>
+<Func kind="K" nr="118"/>
 </Typ>
 <Cluster>
+<Adjective nr="19"/>
+<Adjective nr="20"/>
 <Adjective nr="21"/>
 </Cluster>
 </CCluster>

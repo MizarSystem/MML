@@ -7,15 +7,15 @@
 environ
 
  vocabularies FIN_TOPO, BOOLE, SUBSET_1, PRE_TOPC, MARGREL1, FUNCT_1, FINTOPO2,
-      SETFAM_1;
+      SETFAM_1, ORDERS_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, DOMAIN_1, STRUCT_0, FUNCT_1,
-      FUNCT_2, FIN_TOPO, PRE_TOPC, MARGREL1;
- constructors DOMAIN_1, MARGREL1, PRE_TOPC, FIN_TOPO;
- registrations SUBSET_1, RELSET_1, STRUCT_0, FIN_TOPO, PRE_TOPC, XBOOLE_0;
- requirements SUBSET, BOOLE;
- definitions TARSKI, STRUCT_0, XBOOLE_0, SUBSET_1;
- theorems TARSKI, SUBSET_1, FIN_TOPO, STRUCT_0, FUNCT_2, MARGREL1, XBOOLE_0,
-      XBOOLE_1;
+      FUNCT_2, FIN_TOPO, ORDERS_2, PRE_TOPC, MARGREL1;
+ constructors DOMAIN_1, MARGREL1, PRE_TOPC, FIN_TOPO, XCMPLX_0;
+ registrations SUBSET_1, RELSET_1, STRUCT_0, FIN_TOPO, PRE_TOPC, XBOOLE_0,
+      XBOOLEAN;
+ requirements SUBSET, BOOLE, NUMERALS, ARITHM;
+ definitions TARSKI, STRUCT_0, XBOOLE_0, SUBSET_1, MARGREL1, XBOOLEAN;
+ theorems TARSKI, SUBSET_1, FIN_TOPO, STRUCT_0, FUNCT_2, XBOOLE_0, XBOOLE_1;
  schemes DOMAIN_1, FUNCT_2;
 
 begin
@@ -23,15 +23,15 @@ begin
 ::     SECTION1 : Some Useful Theorems on Finite Topological Spaces
 ::
 
-reserve FT for non empty FT_Space_Str;
+reserve FT for non empty RelStr;
 reserve A for Subset of FT;
 
 theorem
-     for FT being non empty FT_Space_Str,
+     for FT being non empty RelStr,
       A,B being Subset of FT holds
     A c= B implies A^i c= B^i
 proof
-  let FT be non empty FT_Space_Str;
+  let FT be non empty RelStr;
   let A,B be Subset of FT;
   assume A1:A c= B;
   let x be set;
@@ -97,28 +97,28 @@ theorem
      A` is open implies A is closed
 proof
   assume A` is open;
-  then A1:(A`) = (A`)^i by FIN_TOPO:def 15;
+  then A1: A` = (A`)^i by FIN_TOPO:def 16;
      (A`)^i = (((A`)`)^b)` by FIN_TOPO:23
              .= (A^b)`;
   then A = (A^b)`` by A1
         .= A^b;
-  hence thesis by FIN_TOPO:def 16;
+  hence thesis by FIN_TOPO:def 17;
 end;
 
 theorem
      A` is closed implies A is open
 proof
   assume A` is closed;
-  then A1:(A`) = (A`)^b by FIN_TOPO:def 16;
+  then A1:(A`) = (A`)^b by FIN_TOPO:def 17;
      (A`)^b = (((A`)`)^i)` by FIN_TOPO:22
              .= (A^i)`;
   then A = (A^i)`` by A1
         .= A^i;
-  hence thesis by FIN_TOPO:def 15;
+  hence thesis by FIN_TOPO:def 16;
 end;
 
 definition
-  let FT be non empty FT_Space_Str;
+  let FT be non empty RelStr;
   let x be Element of FT;
   let y be Element of FT;
   let A be Subset of FT;
@@ -130,7 +130,7 @@ definition
 end;
 
 definition
-  let FT be non empty FT_Space_Str;
+  let FT be non empty RelStr;
   let x be Element of FT;
   let y be Element of FT;
   let A be Subset of FT;
@@ -143,11 +143,11 @@ end;
 
 theorem
      for x,y be Element of FT, A be Subset of FT
-   holds P_1(x,y,A) = TRUE iff (y in U_FT x) & (y in A) by Def1,MARGREL1:38;
+   holds P_1(x,y,A) = TRUE iff (y in U_FT x) & (y in A) by Def1;
 
 theorem
      for x,y be Element of FT, A be Subset of FT
-   holds P_2(x,y,A) = TRUE iff (y in U_FT x) & (y in A`) by Def2,MARGREL1:38;
+   holds P_2(x,y,A) = TRUE iff (y in U_FT x) & (y in A`) by Def2;
 
 theorem Th8:
   for x be Element of FT, A be Subset of FT
@@ -179,10 +179,10 @@ proof
     given y1,y2 being Element of FT
            such that A6:P_1(x,y1,A)=TRUE and
                      A7:P_2(x,y2,A)=TRUE;
-       (y1 in U_FT x) & (y1 in A) by A6,Def1,MARGREL1:38;
+       (y1 in U_FT x) & (y1 in A) by A6,Def1;
     then U_FT x /\ A <> {} by XBOOLE_0:def 3;
     then A8:U_FT x meets A by XBOOLE_0:def 7;
-       (y2 in U_FT x) & (y2 in A`) by A7,Def2,MARGREL1:38;
+       (y2 in U_FT x) & (y2 in A`) by A7,Def2;
     then U_FT x meets A` by XBOOLE_0:3;
     hence thesis by A8,FIN_TOPO:10;
   end;
@@ -190,7 +190,7 @@ proof
 end;
 
 definition
-  let FT be non empty FT_Space_Str;
+  let FT be non empty RelStr;
   let x be Element of FT;
   let y be Element of FT;
   func P_0(x,y) -> Element of BOOLEAN equals
@@ -202,7 +202,7 @@ end;
 
 theorem
      for x,y be Element of FT holds
-      P_0(x,y)=TRUE iff y in U_FT x by Def3,MARGREL1:38;
+      P_0(x,y)=TRUE iff y in U_FT x by Def3;
 
 theorem
      for x be Element of FT, A be Subset of FT
@@ -219,7 +219,7 @@ proof
     let y be Element of FT;
     assume A3:P_0(x,y)=TRUE;
     A4:U_FT x c= A by A2,FIN_TOPO:12;
-       y in U_FT x by A3,Def3,MARGREL1:38;
+       y in U_FT x by A3,Def3;
     hence thesis by A4,Def1;
   end;
 
@@ -236,7 +236,7 @@ proof
       assume y in (U_FT x);
       then P_0(x,y)=TRUE by Def3;
       then P_1(x,y,A)=TRUE by A5;
-      hence thesis by Def1,MARGREL1:38;
+      hence thesis by Def1;
     end;
     then for y be Element of FT holds
           y in (U_FT x) implies (y in A);
@@ -274,7 +274,7 @@ proof
   proof
     given y be Element of FT
       such that A4:P_1(x,y,A)=TRUE;
-       (y in U_FT x) & (y in A) by A4,Def1,MARGREL1:38;
+       (y in U_FT x) & (y in A) by A4,Def1;
     then y in (U_FT x /\ A) by XBOOLE_0:def 3;
     then U_FT x meets A by XBOOLE_0:def 7;
     hence thesis by FIN_TOPO:13;
@@ -283,7 +283,7 @@ proof
 end;
 
 definition
-  let FT be non empty FT_Space_Str;
+  let FT be non empty RelStr;
   let x be Element of FT;
   let A be Subset of FT;
   func P_A(x,A) -> Element of BOOLEAN equals
@@ -295,7 +295,7 @@ end;
 
 theorem
      for x be Element of FT, A be Subset of FT
-    holds P_A(x,A)=TRUE iff x in A by Def4,MARGREL1:38;
+    holds P_A(x,A)=TRUE iff x in A by Def4;
 
 theorem
      for x be Element of FT, A be Subset of FT
@@ -311,7 +311,7 @@ proof
         st P_1(x,y1,A)=TRUE & P_2(x,y2,A)=TRUE) & P_A(x,A) = TRUE
   proof
     assume x in A^deltai;
-    then x in A /\ (A^delta) by FIN_TOPO:def 7;
+    then x in A /\ (A^delta) by FIN_TOPO:def 8;
     then x in A & x in A^delta by XBOOLE_0:def 3;
     hence thesis by Def4,Th8;
   end;
@@ -322,9 +322,9 @@ proof
   proof
     assume (ex y1,y2 being Element of FT
              st P_1(x,y1,A)=TRUE & P_2(x,y2,A)=TRUE) & P_A(x,A) = TRUE;
-    then x in A^delta & x in A by Def4,Th8,MARGREL1:38;
+    then x in A^delta & x in A by Def4,Th8;
     then x in A /\ (A^delta) by XBOOLE_0:def 3;
-    hence thesis by FIN_TOPO:def 7;
+    hence thesis by FIN_TOPO:def 8;
   end;
   hence thesis by A1;
 end;
@@ -343,7 +343,7 @@ proof
         st P_1(x,y1,A)=TRUE & P_2(x,y2,A)=TRUE) & P_A(x,A) = FALSE
   proof
     assume x in A^deltao;
-    then x in A` /\ (A^delta) by FIN_TOPO:def 8;
+    then x in A` /\ (A^delta) by FIN_TOPO:def 9;
     then x in A` & x in A^delta by XBOOLE_0:def 3;
     then not x in A & x in A^delta by XBOOLE_0:def 4;
     hence thesis by Def4,Th8;
@@ -355,17 +355,17 @@ proof
     assume (ex y1,y2 being Element of FT
         st P_1(x,y1,A)=TRUE & P_2(x,y2,A)=TRUE) & P_A(x,A) = FALSE;
     then x in A^delta & (x in (the carrier of FT) & not(x in A))
-                             by Def4,Th8,MARGREL1:38;
+                             by Def4,Th8;
     then x in A^delta & (x in (the carrier of FT) \ A) by XBOOLE_0:def 4;
     then x in A^delta & x in A`;
     then x in A` /\ (A^delta) by XBOOLE_0:def 3;
-    hence thesis by FIN_TOPO:def 8;
+    hence thesis by FIN_TOPO:def 9;
   end;
   hence thesis by A1;
 end;
 
 definition
-  let FT be non empty FT_Space_Str;
+  let FT be non empty RelStr;
   let x be Element of FT;
   let y be Element of FT;
   func P_e(x,y) -> Element of BOOLEAN equals
@@ -377,7 +377,7 @@ end;
 
 theorem
      for x,y be Element of FT
-    holds P_e(x,y)=TRUE iff x = y by Def5,MARGREL1:38;
+    holds P_e(x,y)=TRUE iff x = y by Def5;
 
 theorem
      for x be Element of FT, A be Subset of FT
@@ -403,8 +403,8 @@ proof
       given y being Element of FT
               such that A4: P_1(x,y,A)=TRUE and
                         A5: P_e(x,y)=FALSE;
-      A6: (y in U_FT x) & (y in A) by A4,Def1,MARGREL1:38;
-         not x = y by A5,Def5,MARGREL1:38;
+      A6: (y in U_FT x) & (y in A) by A4,Def1;
+         not x = y by A5,Def5;
       then not y in {x} by TARSKI:def 1;
       then y in (U_FT x \ {x}) by A6,XBOOLE_0:def 4;
       hence contradiction by A3,A6,XBOOLE_0:def 3;
@@ -420,10 +420,8 @@ proof
     assume A7:P_A(x,A)=TRUE &
                not(ex y being Element of FT
                 st (P_1(x,y,A)=TRUE & P_e(x,y)=FALSE));
-    then A8: x in A by Def4,MARGREL1:38;
-       for y be Element of FT holds not(y in ((U_FT x \ {x}) /\ A
-)
-)
+    then A8: x in A by Def4;
+       for y be Element of FT holds not(y in ((U_FT x \ {x}) /\ A))
     proof
       let y be Element of FT;
          not (P_1(x,y,A)=TRUE & P_e(x,y)=FALSE) by A7;
@@ -476,11 +474,10 @@ proof
     assume A7:P_A(x,A)=TRUE &
                ex y being Element of FT
                 st (P_1(x,y,A)=TRUE & P_e(x,y)=FALSE);
-    then A8: x in A by Def4,MARGREL1:38;
+    then A8: x in A by Def4;
     consider y being Element of FT
                   such that A9:(P_1(x,y,A)=TRUE & P_e(x,y)=FALSE) by A7;
-       (y in U_FT x) & (y in A) & (x <> y)
-                             by A9,Def1,Def5,MARGREL1:38;
+       y in U_FT x & y in A & x <> y by A9,Def1,Def5;
     then (y in U_FT x) & (not y in {x}) & (y in A) by TARSKI:def 1;
     then y in (U_FT x \ {x}) & (y in A) by XBOOLE_0:def 4;
     then (U_FT x \ {x}) meets A by XBOOLE_0:3;
@@ -515,8 +512,8 @@ proof
                                  st P_A(y,A)=TRUE & P_0(y,x)=TRUE;
     then consider y being Element of FT
                   such that A4: P_A(y,A)=TRUE & P_0(y,x)=TRUE;
-    A5: y in A by A4,Def4,MARGREL1:38;
-       x in U_FT y by A4,Def3,MARGREL1:38;
+    A5: y in A by A4,Def4;
+       x in U_FT y by A4,Def3;
     hence thesis by A5,FIN_TOPO:16;
   end;
   hence thesis by A1;
@@ -1415,7 +1412,7 @@ proof
       then V in U_FMT y & V /\ A` = {} by SUBSET_1:32;
       then V in U_FMT y & V misses A` by XBOOLE_0:def 7;
       then not y in (A`)^Fob by Th21;
-      hence x in ((A`)^Fob)`by FIN_TOPO:21;
+      hence x in ((A`)^Fob)`by XBOOLE_0:def 4;
     end;
   hence thesis by TARSKI:2;
 end;
@@ -1439,7 +1436,7 @@ proof
             then not W c= A` by A2;
             then consider z being set such that
               A3:not(z in W implies z in A`) by TARSKI:def 3;
-               z in W & z in A by A3,FIN_TOPO:21;
+               z in W & z in A by A3,XBOOLE_0:def 4;
             hence thesis by XBOOLE_0:3;
           end;
           hence x in A^Fob;
@@ -1454,10 +1451,10 @@ proof
           then W meets A by A4,Th21;
           then consider z being set such that
           A5:z in W & z in A by XBOOLE_0:3;
-          thus thesis by A5,FIN_TOPO:21;
+          thus thesis by A5,XBOOLE_0:def 4;
        end;
       then not y in (A`)^Foi by Th22;
-      hence x in ((A`)^Foi)` by FIN_TOPO:21;
+      hence x in ((A`)^Foi)` by XBOOLE_0:def 4;
     end;
   hence thesis by TARSKI:2;
 end;

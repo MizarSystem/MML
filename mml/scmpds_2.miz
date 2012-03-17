@@ -22,13 +22,12 @@ environ
  theorems NAT_1, FUNCT_1, TARSKI, ZFMISC_1, ENUMSET1, AMI_2, CQC_LANG, FUNCT_4,
       AMI_1, CARD_3, FUNCT_2, MCART_1, INT_1, GR_CY_1, SCMPDS_1, AMI_3, AMI_5,
       ABSVALUE, NAT_2, ORDINAL1, STRUCT_0, XBOOLE_0, XBOOLE_1, RELAT_1,
-      XCMPLX_1, XREAL_1, COMPLEX1;
+      XREAL_1, COMPLEX1;
  schemes FUNCT_2;
 
 begin :: The SCMPDS Computer
 
-reserve x for set,
-        i,j,k for Nat;
+reserve x for set;
 
 definition
  func SCMPDS -> strict AMI-Struct over { INT } equals
@@ -82,8 +81,7 @@ theorem Th3:
  SCMPDS is definite
 proof let l be Instruction-Location of SCMPDS;
   reconsider L = l as Element of SCM-Instr-Loc;
- thus ObjectKind l = SCMPDS-OK.L
-  .= the Instructions of SCMPDS by SCMPDS_1:22;
+ thus ObjectKind l = the Instructions of SCMPDS by SCMPDS_1:22;
 end;
 
 registration
@@ -92,8 +90,8 @@ registration
   proof
    SCMPDS is IC-Ins-separated
    proof
-     ObjectKind IC SCMPDS = SCMPDS-OK.IC SCMPDS
-    .= the Instruction-Locations of SCMPDS by SCMPDS_1:def 4;
+     ObjectKind IC SCMPDS =
+ the Instruction-Locations of SCMPDS by SCMPDS_1:def 4;
   hence thesis by AMI_1:def 11;
  end;
    hence thesis by Th2,Th3;
@@ -180,8 +178,7 @@ theorem Th13:
  for l being Int_position holds ObjectKind l = INT
 proof let l be Int_position;
 A1:  l in SCM-Data-Loc by Def2;
-     thus ObjectKind l = (the Object-Kind of SCMPDS).l
-     .= INT by A1,SCMPDS_1:21;
+     thus ObjectKind l = INT by A1,SCMPDS_1:21;
 end;
 
 theorem
@@ -1070,8 +1067,7 @@ A7:  x in NAT;
      per cases by A8,XBOOLE_0:def 2;
      suppose x in {IC SCMPDS};
 then A9:   x = IC SCMPDS by TARSKI:def 1;
-           s1.IC SCMPDS = IC s2 by A1
-      .= s2.IC SCMPDS;
+           s1.IC SCMPDS = s2.IC SCMPDS by A1;
        hence g1.x = g2.x by A4,A5,A9;
      end;
      suppose x in SCM-Data-Loc;
@@ -1152,8 +1148,7 @@ A3: Exec((a,k1):=k2, s) = SCM-Exec-Res(I,S) by Th56
 A4: I P31address = mk & I P32const = k1 & I P33const = k2 by A1,SCMPDS_1:36;
   thus Exec((a,k1):=k2, s).IC SCMPDS = Next IC S by A3,SCMPDS_1:26
     .= Next IC s by A2,Th55;
-A5: A2=2*abs(s.a+k1)+1 by A4,SCMPDS_1:def 8
-     .=DataLoc(s.a,k1);
+A5: A2=DataLoc(s.a,k1) by A4,SCMPDS_1:def 8;
   hence Exec((a,k1):=k2, s).DataLoc(s.a,k1)
        = S1.A2 by A3,SCMPDS_1:27
        .= k2 by A4,SCMPDS_1:30;
@@ -1184,10 +1179,8 @@ A4: I P41address = da & I P42address = db & I P43const = k1
     & I P44const = k2 by A1,SCMPDS_1:37;
   thus Exec((a,k1):=(b,k2), s).IC SCMPDS = Next IC S by A3,SCMPDS_1:26
     .= Next IC s by A2,Th55;
-A5: A2=2*abs(s.a+k1)+1 by A4,SCMPDS_1:def 8
-     .=DataLoc(s.a,k1);
-A6: A4=2*abs(s.b+k2)+1 by A4,SCMPDS_1:def 8
-     .=DataLoc(s.b,k2);
+A5: A2=DataLoc(s.a,k1) by A4,SCMPDS_1:def 8;
+A6: A4=DataLoc(s.b,k2) by A4,SCMPDS_1:def 8;
   thus Exec((a,k1):=(b,k2), s).DataLoc(s.a,k1)
        = S1.A2 by A3,A5,SCMPDS_1:27
        .= s.DataLoc(s.b,k2) by A6,SCMPDS_1:30;
@@ -1402,8 +1395,7 @@ A1: m1 = 2*k & k > 0;
     consider j being Nat such that
 A2: k = j+1 by A1,NAT_1:22;
      IC s = 2*j + 2*1 by A1,A2;
-then A3: abs(n-2+2*c)+2 =abs(2*j+2*c)+2
-    .=abs(2*(j+c))+2
+then A3: abs(n-2+2*c)+2 =abs(2*(j+c))+2
     .=abs(2)*abs((j+c))+2 by COMPLEX1:151
     .=2*abs((j+c))+2*1 by ABSVALUE:def 1
     .=2*(abs((j+c))+1);
@@ -1459,8 +1451,7 @@ A2: Exec((a,k1)<>0_goto k2, s) = SCM-Exec-Res(I,S) by Th56
 A3: I P31address = da & I P32const = k1 & I P33const = k2 by A1,SCMPDS_1:36;
    consider n be Element of NAT such that
 A4: n=IC s & ICplusConst(s,k2)=abs(n-2+2*k2)+2 by Def20;
-A5: A2=2*abs((s.a+k1))+1 by A3,SCMPDS_1:def 8
-     .=Da;
+A5: A2=Da by A3,SCMPDS_1:def 8;
   thus s.Da <> 0 implies
          Exec((a,k1)<>0_goto k2,s).IC SCMPDS = ICplusConst(s,k2)
   proof assume A6: s.Da <> 0;
@@ -1504,8 +1495,7 @@ A2: Exec((a,k1)<=0_goto k2, s) = SCM-Exec-Res(I,S) by Th56
 A3: I P31address = da & I P32const = k1 & I P33const = k2 by A1,SCMPDS_1:36;
    consider n be Element of NAT such that
 A4: n=IC s & ICplusConst(s,k2)=abs(n-2+2*k2)+2 by Def20;
-A5: A2=2*abs((s.a+k1))+1 by A3,SCMPDS_1:def 8
-     .=Da;
+A5: A2=Da by A3,SCMPDS_1:def 8;
   thus s.Da <= 0 implies
          Exec((a,k1)<=0_goto k2,s).IC SCMPDS = ICplusConst(s,k2)
   proof assume A6: s.Da <= 0;
@@ -1549,8 +1539,7 @@ A2: Exec((a,k1)>=0_goto k2, s) = SCM-Exec-Res(I,S) by Th56
 A3: I P31address = da & I P32const = k1 & I P33const = k2 by A1,SCMPDS_1:36;
    consider n be Element of NAT such that
 A4: n=IC s & ICplusConst(s,k2)=abs(n-2+2*k2)+2 by Def20;
-A5: A2=2*abs((s.a+k1))+1 by A3,SCMPDS_1:def 8
-     .=Da;
+A5: A2=Da by A3,SCMPDS_1:def 8;
   thus s.Da >= 0 implies
          Exec((a,k1)>=0_goto k2,s).IC SCMPDS = ICplusConst(s,k2)
   proof assume A6: s.Da >= 0;
@@ -1590,10 +1579,8 @@ A1:  I = [ i, <*da*>];
 A2: Exec(return a, s) = SCM-Exec-Res(I,S) by Th56
    .= SCM-Chg(S1,lc) by A1,SCMPDS_1:def 24;
 A3: I address_1 = da by A1,SCMPDS_1:33;
-then A4: A2=2*abs((s.a+RetIC))+1 by SCMPDS_1:def 8
-     .=DataLoc(s.a,RetIC);
-A5: A1=2*abs((s.a+RetSP))+1 by A3,SCMPDS_1:def 8
-     .=DataLoc(s.a,RetSP);
+then A4: A2=DataLoc(s.a,RetIC) by SCMPDS_1:def 8;
+A5: A1=DataLoc(s.a,RetSP) by A3,SCMPDS_1:def 8;
     thus Exec(return a, s).IC SCMPDS = lc by A2,SCMPDS_1:26
     .=2*(abs(s.DataLoc(s.a,RetIC)) div 2)+4 by A4,SCMPDS_1:def 21;
    thus Exec(return a, s).a = S1.da by A2,SCMPDS_1:27
@@ -1624,8 +1611,7 @@ A3: Exec(saveIC(a,k1), s) = SCM-Exec-Res(I,S) by Th56
    .= SCM-Chg(S1,Next IC S) by A1,SCMPDS_1:def 24;
 A4: I P21address = da & I P22const = k1 by A1,SCMPDS_1:35;
     set DL=DataLoc(s.a,k1);
-A5: A1=2*abs((s.a+k1))+1 by A4,SCMPDS_1:def 8
-     .=DL;
+A5: A1=DL by A4,SCMPDS_1:def 8;
   thus Exec(saveIC(a,k1), s).IC SCMPDS = Next IC S by A3,SCMPDS_1:26
     .= Next IC s by A2,Th55;
   thus Exec(saveIC(a,k1), s).DL =S1.A1 by A3,A5,SCMPDS_1:27
@@ -1772,8 +1758,7 @@ A2: now let x be set;
      A8: n=2*n0+2*1 by A6,A7;
      A9: 2*n0 >= 0 by NAT_1:18;
        thus Es.x=abs(2*n0)+2 by A4,A5,A6,A7,Th66
-        .=n by A8,A9,ABSVALUE:def 1
-        .=S.x by A4;
+        .=S.x by  A8,A9,ABSVALUE:def 1,A4;
      end;
      suppose ex j being Element of NAT st x = 2*j+1;
          then x in SCM-Data-Loc by AMI_2:def 2;
@@ -1784,8 +1769,7 @@ A2: now let x be set;
      suppose ex j being Element of NAT st x = 2*j+2;
          then consider j being Element of NAT such that
       A10: x=2*j+2;
-      A11: x=2*j+2*1 by A10
-          .=2*(j+1);
+      A11: x=2*(j+1) by A10;
          j+1>0 by NAT_1:19;
          then x in SCM-Instr-Loc by A11,AMI_2:def 3;
          then reconsider v=x as Element of SCM-Instr-Loc;
@@ -1814,8 +1798,7 @@ A1:   Exec(I, s).IC SCMPDS = Next IC s;
 A2:   I is halting;
     reconsider t = s as SCMPDS-State;
 A3: IC t = t.0 by SCMPDS_1:def 5;
-A4: Exec(I,s).IC SCMPDS = s.IC SCMPDS by A2,AMI_1:def 8
-       .= t.0;
+A4: Exec(I,s).IC SCMPDS = t.0 by A2,AMI_1:def 8;
     reconsider w = t.0 as Instruction-Location of SCMPDS by A3;
     consider mj being Element of SCM-Instr-Loc such that
 A5:   mj = w & Next w = Next mj by Def19;
@@ -1902,8 +1885,7 @@ A3: loc=IC s by A2;
 then A4:  n+k1>=0 by XREAL_1:22;
      consider m be Element of NAT such that
 A5:  m=IC s & ICplusConst(s,k1)=abs(m-2+2*k1)+2 by Def20;
-A6: Exec(goto k1, s).IC SCMPDS =abs(2*(n+1)-2+2*k1)+2 by A3,A5,Th66
-    .=abs(2*(n+k1))+2
+A6: Exec(goto k1, s).IC SCMPDS =abs(2*(n+k1))+2 by A3,A5,Th66
     .=abs(2)*abs((n+k1))+2 by COMPLEX1:151
     .=2*abs((n+k1))+2 by ABSVALUE:def 1
     .=2*(n+k1)+2 by A4,ABSVALUE:def 1

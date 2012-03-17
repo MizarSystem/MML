@@ -1,6 +1,6 @@
 :: Connectedness and Continuous Sequences in Finite Topological Spaces
 ::  by Yatsuka Nakamura
-:: 
+::
 :: Received August 18, 2006
 :: Copyright (c) 2006 Association of Mizar Users
 
@@ -8,11 +8,10 @@ environ
 
  vocabularies FINSEQ_1, BOOLE, FUNCT_1, RELAT_1, ARYTM_1, RELAT_2, FIN_TOPO,
       FINTOPO3, INT_1, PRE_TOPC, CONNSP_1, SUBSET_1, ORDINAL2, BORSUK_2,
-      FINTOPO6, RFINSEQ, FINSEQ_4;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, XCMPLX_0, ORDINAL2, NUMBERS,
-      XXREAL_0, NAT_1, RELAT_1, DOMAIN_1, FUNCT_1, FUNCT_2, FINSEQ_1, STRUCT_0,
-      FIN_TOPO, FINTOPO3, BINARITH, ENUMSET1, FINTOPO4, PRE_TOPC, RFINSEQ,
-      FINSEQ_4;
+      FINTOPO6, RFINSEQ, FINSEQ_4, ORDERS_1;
+ notations TARSKI, XBOOLE_0, SUBSET_1, XCMPLX_0, NUMBERS, XXREAL_0, NAT_1,
+      DOMAIN_1, FUNCT_1, RELSET_1, FINSEQ_1, STRUCT_0, ORDERS_2, FIN_TOPO,
+      FINTOPO3, BINARITH, ENUMSET1, FINTOPO4, PRE_TOPC, RFINSEQ, FINSEQ_4;
  constructors FINTOPO3, FINTOPO4, BINARITH, ENUMSET1, LIMFUNC1, RFUNCT_3,
       REAL_1, NAT_1, XXREAL_0, PRE_TOPC, FINTOPO5, FIN_TOPO, DOMAIN_1, GROUP_1,
       FINSEQ_4, SETFAM_1, ORDINAL2;
@@ -23,7 +22,7 @@ environ
 
 begin :: Connectedness and Subspaces
 
- reserve FT for non empty FT_Space_Str,
+ reserve FT for non empty RelStr,
          A,B,C for Subset of FT;
 
 registration let FT;
@@ -48,7 +47,7 @@ theorem :: FINTOPO6:3
      holds B^b meets C & B meets C^b
  holds A is connected;
 
-definition let FT be non empty FT_Space_Str;
+definition let FT be non empty RelStr;
   attr FT is connected means
 :: FINTOPO6:def 1
     [#]FT is connected;
@@ -77,25 +76,24 @@ theorem :: FINTOPO6:7
        holds A2 = {}FT or B2 = {}FT
     holds A is connected;
 
-definition let T be FT_Space_Str;
-  mode SubSpace of T -> FT_Space_Str means
+definition let T be RelStr;
+  mode SubSpace of T -> RelStr means
 :: FINTOPO6:def 2
-           the carrier of it c= the carrier of T &
-           dom (the Nbd of it) = the carrier of it &
-            (for x being Element of it st
+   the carrier of it c= the carrier of T &
+   for x being Element of it st
              x in the carrier of it holds
-            (the Nbd of it).x=((the Nbd of T).x) /\ the carrier of it);
+    U_FT x =((the InternalRel of T).:{x}) /\ the carrier of it;
 end;
 
-registration let T be FT_Space_Str;
+registration let T be RelStr;
   cluster strict SubSpace of T;
 end;
 
-registration let T be non empty FT_Space_Str;
+registration let T be non empty RelStr;
   cluster strict non empty SubSpace of T;
 end;
 
-definition let T be non empty FT_Space_Str, P be non empty Subset of T;
+definition let T be non empty RelStr, P be non empty Subset of T;
   func T|P -> strict non empty SubSpace of T means
 :: FINTOPO6:def 3
     [#]it = P;
@@ -105,7 +103,7 @@ theorem :: FINTOPO6:8
   for X being non empty SubSpace of FT st
     FT is filled holds X is filled;
 
-registration let FT be filled (non empty FT_Space_Str);
+registration let FT be filled (non empty RelStr);
   cluster -> filled (non empty SubSpace of FT);
 end;
 
@@ -145,7 +143,7 @@ theorem :: FINTOPO6:16
     A is connected iff FT|A is connected;
 
 theorem :: FINTOPO6:17
-  for FT being filled (non empty FT_Space_Str),
+  for FT being filled (non empty RelStr),
       A being non empty Subset of FT st FT is symmetric holds
   A is connected
   iff for P,Q being Subset of FT st A = P \/ Q & P misses Q &
@@ -170,7 +168,7 @@ theorem :: FINTOPO6:21
     A^deltai misses A^deltao;
 
 theorem :: FINTOPO6:22
-  for FT being filled (non empty FT_Space_Str), A being Subset of FT holds
+  for FT being filled (non empty RelStr), A being Subset of FT holds
     A^deltao=(A^b) \ A;
 
 theorem :: FINTOPO6:23
@@ -189,7 +187,7 @@ registration let FT; let x be Point of FT;
   cluster {x} -> connected Subset of FT;
 end;
 
-definition let FT be non empty FT_Space_Str, A be Subset of FT;
+definition let FT be non empty RelStr, A be Subset of FT;
   pred A is_a_component_of FT means
 :: FINTOPO6:def 4
     A is connected & for B being Subset of FT st
@@ -280,7 +278,7 @@ theorem :: FINTOPO6:42
   for S being Subset of FT st S is_a_component_of FT holds
                C misses S or C c= S;
 
-definition let FT be non empty FT_Space_Str, A be non empty Subset of FT,
+definition let FT be non empty RelStr, A be non empty Subset of FT,
                B be Subset of FT;
   pred B is_a_component_of A means
 :: FINTOPO6:def 5

@@ -37,7 +37,7 @@ environ
       CARD_1, CARD_2, PRE_CIRC, PRE_TOPC, MATRLIN, ALG_1, GROUP_7, CARD_3,
       ORDINAL1, PBOOLE, WAYBEL_1, TRIANG_1, ORDERS_1, FINSET_1, FINSEQOP,
       CQC_LANG, SEQM_3, POLYNOM2, TOPS_2, FINSEQ_5, GROUP_1, CARD_4, XBOOLE_0,
-      XBOOLE_1, RLVECT_2, VECTSP_1, ORDINAL2, XREAL_1, GROUP_6, XXREAL_0;
+      XBOOLE_1, RLVECT_2, VECTSP_1, XREAL_1, GROUP_6, XXREAL_0;
  schemes NAT_1, RECDEF_1, FUNCT_1, FUNCT_2, FINSEQ_2, FUNCT_7;
 
 begin :: Preliminaries
@@ -305,7 +305,7 @@ POLYNOM1:56;
     then A2: a = x by TARSKI:def 1;   EmptyBag X = X --> 0 by POLYNOM1:def 15
 ;
     then A3: dom (EmptyBag X) = X by FUNCOP_1:19;
-     (UnitBag x).a = ((EmptyBag X)+*(x, 1)).a .= 1 by A2,A3,FUNCT_7:33;
+     (UnitBag x).a = 1 by A2,A3,FUNCT_7:33;
      hence a in support UnitBag x by POLYNOM1:def 7;
    end;
  hence support UnitBag x = {x} by TARSKI:2;
@@ -317,12 +317,11 @@ for X being non empty set, x being Element of X
        for y being Element of X st x <> y holds (UnitBag x).y = 0
 proof let X be non empty set, x be Element of X;
 A1: dom (X -->0) = X by FUNCOP_1:19;
- thus (UnitBag x).x = ((EmptyBag X)+*(x, 1)).x
-  .= ((X --> 0)+*(x, 1)).x by POLYNOM1:def 15 .= 1 by A1,FUNCT_7:33;
+ thus (UnitBag x).x =
+ ((X --> 0)+*(x, 1)).x by POLYNOM1:def 15 .= 1 by A1,FUNCT_7:33;
  let y be Element of X such that
 A2: x <> y;
- thus (UnitBag x).y = ((EmptyBag X)+*(x, 1)).y
-      .= (EmptyBag X).y by A2,FUNCT_7:34 .= 0 by POLYNOM1:56;
+ thus (UnitBag x).y = (EmptyBag X).y by A2,FUNCT_7:34 .= 0 by POLYNOM1:56;
 end;
 
 theorem Th10:
@@ -364,11 +363,9 @@ proof let X be set, L be unital non trivial (non empty doubleLoopStr),
          x be Element of X;
 A1: dom (0_(X,L)) = dom ((Bags X) --> 0.L) by POLYNOM1:def 24
                 .= Bags X by FUNCOP_1:19;
- thus 1_1(x,L).UnitBag x = (0_(X,L)+*(UnitBag x,1.L)).UnitBag x
-   .= 1.L by A1,FUNCT_7:33;
+ thus 1_1(x,L).UnitBag x = 1.L by A1,FUNCT_7:33;
  let b be bag of X; assume A2: b <> UnitBag x;
-  thus 1_1(x,L).b = (0_(X,L)+*(UnitBag x,1.L)).b
-        .= (0_(X,L)).b by A2,FUNCT_7:34 .= 0.L by POLYNOM1:81;
+  thus 1_1(x,L).b = (0_(X,L)).b by A2,FUNCT_7:34 .= 0.L by POLYNOM1:81;
 end;
 
 theorem Th13:
@@ -383,8 +380,7 @@ proof let X be set, x be Element of X,
    hereby assume
    A1: a in Support 1_1(x,L); then reconsider b = a as Element of Bags X;
           now assume A2: a <> UnitBag x;
-              1_1(x,L).b = (0_(X,L)+*(UnitBag x,1.L)).b
-           .= (0_(X,L)).b by A2,FUNCT_7:34 .= 0.L by POLYNOM1:81;
+              1_1(x,L).b = (0_(X,L)).b by A2,FUNCT_7:34 .= 0.L by POLYNOM1:81;
        hence contradiction by A1,POLYNOM1:def 9;
       end;
     hence a in {UnitBag x} by TARSKI:def 1;
@@ -459,9 +455,7 @@ proof let L being add-associative right_zeroed right_complementable
           p,q be sequence of L; assume
 A1: x = p & y = q;
 then A2: -y = -q by Th15;
-   thus x - y = x + (-y) by RLVECT_1:def 11 .= p + (-q) by A1,A2,
-POLYNOM3:def 12
-             .= p - q;
+   thus x - y = x + (-y) by RLVECT_1:def 11 .= p - q by A1,A2,POLYNOM3:def 12;
 end;
 
 definition
@@ -538,8 +532,7 @@ for x being Element of NAT
       reconsider x = 0_.(L)+*(n,a) as sequence of L;
           now let i be Element of NAT; assume i >= n+1;
          then i > n by NAT_1:38;
-         hence x.i = (0_.(L)).i by FUNCT_7:34
-                 .= (NAT --> 0.L).i .= 0.L by FUNCOP_1:13;
+         hence x.i = (NAT --> 0.L).i by FUNCT_7:34 .= 0.L by FUNCOP_1:13;
       end; then reconsider x as Polynomial of L by ALGSEQ_1:def 2;
           now let i be Element of NAT;
          thus i = n implies x.i = a proof assume
@@ -547,8 +540,7 @@ for x being Element of NAT
             hence x.i = a by A1,FUNCT_7:33;
          end;
          thus i <> n implies x.i = 0.L proof assume i <> n;
-            hence x.i = (0_.L).i by FUNCT_7:34
-                    .= (NAT --> 0.L).i .= 0.L by FUNCOP_1:13;
+            hence x.i = (NAT --> 0.L).i by FUNCT_7:34 .= 0.L by FUNCOP_1:13;
          end;
       end;
       hence thesis;
@@ -930,17 +922,17 @@ A4: P1 is RingHomomorphism proof
         A6: y' in the carrier of R & P.(y') = y by A1,FUNCT_2:17;
             reconsider y' as Element of R by A6;
         A7: x' = ((P qua Function)").(P.(x')) by A1,FUNCT_2:32
-              .= P1.x by A1,A3,A5,TOPS_2:def 4;
+              .= P1.x by A1,A5,TOPS_2:def 4;
         A8: y' = ((P qua Function)").(P.(y')) by A1,FUNCT_2:32
-              .= P1.y by A1,A3,A6,TOPS_2:def 4;
+              .= P1.y by A1,A6,TOPS_2:def 4;
         A9: P1.(x+y) = P1.(P.(x'+y')) by A2,A5,A6,GRCAT_1:def 13
-                   .= ((P qua Function)").(P.(x'+y')) by A1,A3,TOPS_2:def 4
+                   .= ((P qua Function)").(P.(x'+y')) by A1,TOPS_2:def 4
                    .= P1.x + P1.y by A1,A7,A8,FUNCT_2:32;
         A10: P1.(x*y) = P1.(P.(x'*y')) by A2,A5,A6,GROUP_6:def 7
-                   .= ((P qua Function)").(P.(x'*y')) by A1,A3,TOPS_2:def 4
+                   .= ((P qua Function)").(P.(x'*y')) by A1,TOPS_2:def 4
                    .= P1.x * P1.y by A1,A7,A8,FUNCT_2:32;
                 P1.(1.S) = P1.(P.(1.R)) by A2,ENDALG:def 8
-                     .= ((P qua Function)").(P.(1.R)) by A1,A3,TOPS_2:def 4
+                     .= ((P qua Function)").(P.(1.R)) by A1,TOPS_2:def 4
                      .= 1.R by A1,FUNCT_2:32;
             hence thesis by A9,A10;
         end;
@@ -987,7 +979,7 @@ F such that
             P is RingMonomorphism & P is RingEpimorphism by A1,QUOFIELD:def 24;
        then A9: P is one-to-one & rng P=the carrier of S
         by QUOFIELD:def 22,def 23;
-    then A10: P is one-to-one & rng P = [#] S by PRE_TOPC:def 3;
+    then A10: P is one-to-one & rng P = the carrier of S;
             (P qua Function)" .: (P.:F) = (P qua Function)"(P.:F)
          by A9,FUNCT_1:155;
     then A11: (P qua Function)" .: (P.:F) c= F by A9,FUNCT_1:152;
@@ -1027,13 +1019,11 @@ A1: P is RingIsomorphism & R is Noetherian;
     A2: PInv is RingIsomorphism & PInv=P" by A1,Th25;
         reconsider PI=PInv.:I as Ideal of R by A2,Th22;
             PI is finitely_generated by A1,IDEAL_1:def 27;
-        then consider F being non empty finite Subset of R such
-that
+        then consider F being non empty finite Subset of R such that
     A3: PInv.:I = F-Ideal by IDEAL_1:def 26;
             P is RingMonomorphism & P is RingEpimorphism by A1,QUOFIELD:def 24;
         then A4: P is one-to-one & rng P = the carrier of S by QUOFIELD:def 22
 ,def 23;
-    then P is one-to-one & rng P = [#] S by PRE_TOPC:def 3;
         then P" = (P qua Function)" by TOPS_2:def 4;
     then A5: P.:(PInv.:I) = P.:(P"I) by A2,A4,FUNCT_1:155;
             P is RingEpimorphism by A1,QUOFIELD:def 24;
@@ -1136,7 +1126,6 @@ A26: dom ({{}} --> 1.R) = {{}} by FUNCT_2:def 1;
  .= 0_ (0,R)+*({},1.R) by A23,POLYNOM1:def 25 .= ({{}} --> 0.R)+*({},1.R)
                                   by POLYNOM1:55,def 24
   .= ({{}} --> 0.R)+*({} .--> 1.R) by A25,FUNCT_7:def 3
-  .= ({{}} --> 0.R)+*({{}} --> 1.R)
   .= ({{}} --> 1.R) by A24,A26,FUNCT_4:20
   .= P.(1.R)by A2,POLYNOM1:55; then P is unity-preserving by ENDALG:def 8;
 then A27: P is RingHomomorphism by A11,A22,QUOFIELD:def 21;
@@ -2173,112 +2162,112 @@ XBOOLE_0:def 4;
            let i,j be Element of NAT; assume i<=j;
             then consider m being Nat such that
         A15: j = i+m by NAT_1:28;
-a1:     m in NAT by ORDINAL1:def 13;
+A16:     m in NAT by ORDINAL1:def 13;
         defpred P[Element of NAT] means F.i c= F.(i+$1);
-        A16: P[0];
-        A17: for m being Element of NAT st P[m] holds P[m+1] proof
+        A17: P[0];
+        A18: for m being Element of NAT st P[m] holds P[m+1] proof
              let m be Element of NAT; assume
-            A18:    F.i c= F.(i+m);
+            A19:    F.i c= F.(i+m);
                     F.(i+m) is non empty finite Subset of I by A13;
                 then consider A,B being non empty Subset of cPR such that
                     A = F.(i+m) & B = I\(A-Ideal) and
-            A19: ex r being Element of cPR st
+            A20: ex r being Element of cPR st
                         r in minlen(B) & F.((i+m)+1) = F.(i+m) \/ {r} by A7;
                 consider r being Element of cPR such that
-            A20: r in minlen(B) & F.((i+m)+1) = F.(i+m) \/ {r} by A19;
-                    F.(i+m) c= F.((i+m)+1) by A20,XBOOLE_1:7;
-             hence F.i c= F.(i+(m+1)) by A18,XBOOLE_1:1;
+            A21: r in minlen(B) & F.((i+m)+1) = F.(i+m) \/ {r} by A20;
+                    F.(i+m) c= F.((i+m)+1) by A21,XBOOLE_1:7;
+             hence F.i c= F.(i+(m+1)) by A19,XBOOLE_1:1;
             end;   for m being Element of NAT holds P[m]
-             from NAT_1:sch 1(A16,A17);
-           hence F.i c= F.j by a1,A15;
+             from NAT_1:sch 1(A17,A18);
+           hence F.i c= F.j by A16,A15;
         end;
        defpred P2[set,set] means
           ex n being Element of NAT, A,B being non empty Subset of cPR
             st A = F.n & B = I\(A-Ideal) & n = $1 & F.(n+1) = F.n \/ {$2} &
                $2 in minlen(B);
-    A21: now let x be Element of NAT;
+    A22: now let x be Element of NAT;
            F.x is non empty finite Subset of I by A13;
            then consider A,B being non empty Subset of cPR such that
-       A22: A = F.x & B = I\(A-Ideal) and
-       A23: ex r being Element of cPR st r in minlen(B)&F.(x+1)=F.x \/ {r}
+       A23: A = F.x & B = I\(A-Ideal) and
+       A24: ex r being Element of cPR st r in minlen(B)&F.(x+1)=F.x \/ {r}
          by A7;
-           thus ex y being Element of cPR st P2[x,y] by A22,A23;
+           thus ex y being Element of cPR st P2[x,y] by A23,A24;
        end; consider f being Function of NAT, cPR such that
-    A24:    for x being Element of NAT holds P2[x,f.x] from FUNCT_2:sch 3(A21);
-    A25: for i being Element of NAT holds f.i <> 0.PR proof
+    A25:    for x being Element of NAT holds P2[x,f.x] from FUNCT_2:sch 3(A22);
+    A26: for i being Element of NAT holds f.i <> 0.PR proof
             let i be Element of NAT;
              consider n being Element of NAT, A,B being non empty Subset of
             cPR such that
-        A26:      A = F.n & B = I\(A-Ideal) & n = i & F.(n+1) = F.n \/ {f.i} &
-                 f.i in minlen(B) by A24;
-                F.n c= A-Ideal by A26,IDEAL_1:def 15;
-        then A27: not f.i in F.n by A26,XBOOLE_0:def 4;
-        A28: F.0 c=F.n by A14;   0.PR in F.0 by A7,TARSKI:def 1;
-            hence thesis by A27,A28;
+        A27:      A = F.n & B = I\(A-Ideal) & n = i & F.(n+1) = F.n \/ {f.i} &
+                 f.i in minlen(B) by A25;
+                F.n c= A-Ideal by A27,IDEAL_1:def 15;
+        then A28: not f.i in F.n by A27,XBOOLE_0:def 4;
+        A29: F.0 c=F.n by A14;   0.PR in F.0 by A7,TARSKI:def 1;
+            hence thesis by A28,A29;
         end;
-    A29: for i,j being Element of NAT, fi, fj being Polynomial of R
+    A30: for i,j being Element of NAT, fi, fj being Polynomial of R
          st i <= j & fi = f.i & fj = f.j holds len fi <= len fj proof
             let i,j be Element of NAT, fi, fj be Polynomial of R; assume
-        A30:     i <= j & fi = f.i & fj = f.j;
+        A31:     i <= j & fi = f.i & fj = f.j;
             then consider k being Nat such that
- A31:     j = i + k by NAT_1:28;
-a1: k in NAT by ORDINAL1:def 13;
+ A32:     j = i + k by NAT_1:28;
+A33: k in NAT by ORDINAL1:def 13;
  defpred P[Element of NAT] means for fk being Polynomial of R st fk=f.(i+$1)
                     holds len fi <= len fk;
-        A32: P[0] by A30;
-        A33: now let k be Element of NAT; assume
-            A34:     P[k];
+        A34: P[0] by A31;
+        A35: now let k be Element of NAT; assume
+            A36:     P[k];
                     now let fk1 be Polynomial of R; assume
-                A35:     fk1=f.(i+(k+1));
+                A37:     fk1=f.(i+(k+1));
                 reconsider fk = f.(i+k) as Polynomial of R by POLYNOM3:def 12;
-                A36: len fi <= len fk by A34;
+                A38: len fi <= len fk by A36;
              consider n being Element of NAT,
              A,B being non empty Subset of cPR such that
-                A37:     A = F.n & B = I\(A-Ideal) & n = i+k &
+                A39:     A = F.n & B = I\(A-Ideal) & n = i+k &
                         F.(n+1) = F.n \/ {f.(i+k)} & f.(i+k) in
- minlen(B) by A24;
+ minlen(B) by A25;
           consider n' being Element of NAT,
           A',B' being non empty Subset of cPR such that
-                A38:     A' = F.n' & B' = I\(A'-Ideal) & n' = i+(k+1) &
+                A40:     A' = F.n' & B' = I\(A'-Ideal) & n' = i+(k+1) &
                F.(n'+1) = F.n' \/ {f.(i+(k+1))} & f.(i+(k+1)) in minlen(B') by
-A24;
+A25;
                         i+(k+1) = (i+k)+1;
                     then i+k < i+(k+1) by NAT_1:38;
                     then F.(i+k) c= F.(i+(k+1)) by A14;
-                    then A-Ideal c= A'-Ideal by A37,A38,IDEAL_1:57;
-                then A39: not f.(i+(k+1)) in A-Ideal by A38,XBOOLE_0:def 4;
-                        f.(i+(k+1)) in I by A38,XBOOLE_0:def 4;
-                    then f.(i+(k+1)) in B by A37,A39,XBOOLE_0:def 4;
-                    then len fk <= len fk1 by A35,A37,Th17;
-                    hence len fi <= len fk1 by A36,XXREAL_0:2;
+                    then A-Ideal c= A'-Ideal by A39,A40,IDEAL_1:57;
+                then A41: not f.(i+(k+1)) in A-Ideal by A40,XBOOLE_0:def 4;
+                        f.(i+(k+1)) in I by A40,XBOOLE_0:def 4;
+                    then f.(i+(k+1)) in B by A39,A41,XBOOLE_0:def 4;
+                    then len fk <= len fk1 by A37,A39,Th17;
+                    hence len fi <= len fk1 by A38,XXREAL_0:2;
                 end;
                 hence P[k+1];
             end;
                 for k being Element of NAT holds P[k]
-                 from NAT_1:sch 1(A32,A33);
-            hence len fi <= len fj by a1,A30,A31;
+                 from NAT_1:sch 1(A34,A35);
+            hence len fi <= len fj by A33,A31,A32;
         end;
        defpred P3[set,set] means
           ex n being Element of NAT, A being Polynomial of R
            st n = $1 & A = f.n &
              $2 = A.(len A -' 1);
-    A40: now let x be Element of NAT;
+    A42: now let x be Element of NAT;
           reconsider fx=f.x as Polynomial of R by POLYNOM3:def 12;
               fx.(len fx -' 1) is Element of cR;
           hence ex y being Element of cR st P3[x,y];
        end; consider a being Function of NAT, cR such that
-    A41:    for x being Element of NAT holds P3[x,a.x] from FUNCT_2:sch 3(A40);
+    A43:    for x being Element of NAT holds P3[x,a.x] from FUNCT_2:sch 3(A42);
        reconsider a as sequence of R;
            for B being non empty Subset of cR
           ex C being non empty finite Subset of cR
             st C c= B & C-Ideal = B-Ideal by IDEAL_1:99;
        then consider m being Element of NAT such that
-    A42:    a.(m+1) in (rng (a|Segm(m+1)))-Ideal by IDEAL_1:100;
+    A44:    a.(m+1) in (rng (a|Segm(m+1)))-Ideal by IDEAL_1:100;
        consider lc being LinearCombination of (rng (a|Segm(m+1))) such that
-    A43:    a.(m+1) = Sum lc by A42,IDEAL_1:60;
+    A45:    a.(m+1) = Sum lc by A44,IDEAL_1:60;
        reconsider fm1 = f.(m+1) as Polynomial of R by POLYNOM3:def 12;
-   A44: now let i be Element of NAT, fi be Polynomial of R; assume fi = f.i;
-           then fi <> 0.PR by A25; then fi <> 0_.R by POLYNOM3:def 12;
+   A46: now let i be Element of NAT, fi be Polynomial of R; assume fi = f.i;
+           then fi <> 0.PR by A26; then fi <> 0_.R by POLYNOM3:def 12;
            then len fi <> 0 by POLYNOM4:8; then len fi > 0;
            then len fi >= 0+1 by NAT_1:38;
            hence len fi-1 >= 0 by XREAL_1:21;
@@ -2289,66 +2278,66 @@ A24;
          ex x,y,z being Element of cPR, p being Polynomial of R
              st $2 = p & p = (x*y)*z & $1 = p.(len fm1 -' 1) &
                 len p <= len fm1 & y in F.(m+1);
-    A45: for e being set st e in cR ex d being set st d in cPR & P4[e,d] proof
+    A47: for e being set st e in cR ex d being set st d in cPR & P4[e,d] proof
          let e be set; assume e in cR;
            per cases; suppose
                ex u,v,w being Element of cR st e= u*v*w & v in rng (a|Segm(m+1)
 )
 ;
            then consider u,b',w being Element of cR such that
-       A46: e = u*b'*w and
-       A47: b' in rng (a|Segm(m+1)); set a' = u; set c' = w;
+       A48: e = u*b'*w and
+       A49: b' in rng (a|Segm(m+1)); set a' = u; set c' = w;
            consider n being set such that
-       A48:     n in
- dom (a|Segm(m+1)) & b' = (a|Segm(m+1)).n by A47,FUNCT_1:def 5;
-       A49: dom (a|Segm(m+1)) = dom a /\ Segm(m+1) by FUNCT_1:68
+       A50:     n in
+ dom (a|Segm(m+1)) & b' = (a|Segm(m+1)).n by A49,FUNCT_1:def 5;
+       A51: dom (a|Segm(m+1)) = dom a /\ Segm(m+1) by FUNCT_1:68
             .= NAT /\ Segm(m+1) by FUNCT_2:def 1 .= Segm(m+1) by XBOOLE_1:28;
-           reconsider n as Element of NAT by A48;
-       A50: n < m+1 by A48,A49,GR_CY_1:10; set y = f.n;
+           reconsider n as Element of NAT by A50;
+       A52: n < m+1 by A50,A51,GR_CY_1:10; set y = f.n;
            reconsider y'=y as Polynomial of R by POLYNOM3:def 12;
            set x' = monomial(a',len fm1 -' len y'); set z' = monomial(c',0);
            reconsider x=x',z=z' as Element of cPR by POLYNOM3:def 12;
-           set p = (x*y)*z; A51: x*y = x'*'y' by POLYNOM3:def 12;
-       then A52: p = (x'*'y')*'z' by POLYNOM3:def 12;
-       A53: b' = a.n by A48,FUNCT_1:70;
+           set p = (x*y)*z; A53: x*y = x'*'y' by POLYNOM3:def 12;
+       then A54: p = (x'*'y')*'z' by POLYNOM3:def 12;
+       A55: b' = a.n by A50,FUNCT_1:70;
            consider n' being Element of NAT, A being Polynomial of R such that
-       A54:     n' = n & A = f.n' & a.n = A.(len A -' 1) by A41;
+       A56:     n' = n & A = f.n' & a.n = A.(len A -' 1) by A43;
            reconsider p as Polynomial of R by POLYNOM3:def 12;
-               len y' <= len fm1 by A29,A50;
+               len y' <= len fm1 by A30,A52;
            then len y' - len y' <= len fm1 - len y' by XREAL_1:11;
-       then A55: len fm1 -' len y' = len fm1 - len y' by BINARITH:def 3;
-       A56: len y' -1 >= 0 by A44;   len fm1 - 1 >= 0 by A44;
+       then A57: len fm1 -' len y' = len fm1 - len y' by BINARITH:def 3;
+       A58: len y' -1 >= 0 by A46;   len fm1 - 1 >= 0 by A46;
            then len fm1 -' 1 = (len fm1 - len y') + (len y' -1) by
 BINARITH:def 3
-        .= (len y' -' 1) + (len fm1 -' len y') by A55,A56,BINARITH:def 3;
-       then A57: (x'*'y').(len fm1 -'1) = a' * b' by A53,A54,Th19;
+        .= (len y' -' 1) + (len fm1 -' len y') by A57,A58,BINARITH:def 3;
+       then A59: (x'*'y').(len fm1 -'1) = a' * b' by A55,A56,Th19;
                len fm1 -' 1 = (len fm1 -' 1) + 0;
-       then A58: (a'*b')*c' = p.(len fm1 -' 1) by A52,A57,Th20;
-               len x' <= len fm1 - len y' +1 by A55,Th18;
-           then A59: len x' + (len y'-1) <= len fm1-(len y'-1)+(len y'-1) by
+       then A60: (a'*b')*c' = p.(len fm1 -' 1) by A54,A59,Th20;
+               len x' <= len fm1 - len y' +1 by A57,Th18;
+           then A61: len x' + (len y'-1) <= len fm1-(len y'-1)+(len y'-1) by
 XREAL_1:8;
-           A60: 0+0 <= (len y' - 1)+len x' by A56,XREAL_1:9;
+           A62: 0+0 <= (len y' - 1)+len x' by A58,XREAL_1:9;
                len (x'*'y') <= len x' + len y' -' 1 by Th21;
-           then len (x'*'y') <= len x' + len y' - 1 by A60,BINARITH:def 3;
-       then A61: len (x'*'y') <= len fm1 by A59,XXREAL_0:2;
+           then len (x'*'y') <= len x' + len y' - 1 by A62,BINARITH:def 3;
+       then A63: len (x'*'y') <= len fm1 by A61,XXREAL_0:2;
                len z' <= 0+1 by Th18;
-           then len (x'*'y') + len z' <= len fm1 + 1 by A61,XREAL_1:9;
-       then A62: len(x'*'y')+len z'-'1 <= len fm1+1-'1 by JORDAN3:5;
+           then len (x'*'y') + len z' <= len fm1 + 1 by A63,XREAL_1:9;
+       then A64: len(x'*'y')+len z'-'1 <= len fm1+1-'1 by JORDAN3:5;
                len ((x'*'y')*'z') <= len (x'*'y') + len z' -' 1 by Th21;
-           then len ((x'*'y')*'z') <= len fm1 +1 -' 1 by A62,XXREAL_0:2;
+           then len ((x'*'y')*'z') <= len fm1 +1 -' 1 by A64,XXREAL_0:2;
            then len ((x'*'y')*'z') <= len fm1 +1 -1 by BINARITH:def 3;
-       then A63: len p <= len fm1+0 by A51,POLYNOM3:def 12;
-               n+1 <= m+1 by A50,NAT_1:38;
-       then A64: F.(n+1) c= F.(m+1) by A14;
+       then A65: len p <= len fm1+0 by A53,POLYNOM3:def 12;
+               n+1 <= m+1 by A52,NAT_1:38;
+       then A66: F.(n+1) c= F.(m+1) by A14;
            consider n' being Element of NAT,
            A,B being non empty Subset of cPR such that
-       A65:     A = F.n' & B = I\(A-Ideal) & n' = n & F.(n'+1) = F.n' \/
+       A67:     A = F.n' & B = I\(A-Ideal) & n' = n & F.(n'+1) = F.n' \/
  {f.n} &
-               f.n in minlen(B) by A24;
-               {y} c= F.(n+1) by A65,XBOOLE_1:7; then y in F.(n+1) by
+               f.n in minlen(B) by A25;
+               {y} c= F.(n+1) by A67,XBOOLE_1:7; then y in F.(n+1) by
 ZFMISC_1:37
 ;
-           hence ex u being set st u in cPR & P4[e,u] by A46,A58,A63,A64;
+           hence ex u being set st u in cPR & P4[e,u] by A48,A60,A65,A66;
            end;
            suppose
               not ex u,v,w being Element of cR st e= u*v*w & v in
@@ -2356,34 +2345,34 @@ ZFMISC_1:37
            hence ex u being set st u in cPR & P4[e,u];
        end;
        end; consider LCT being Function of cR, cPR such that
-    A66:   for e being set st e in cR holds P4[e,LCT.e] from FUNCT_2:sch 1
-(A45);
+    A68:   for e being set st e in cR holds P4[e,LCT.e] from FUNCT_2:sch 1
+(A47);
     reconsider FM1 = F.(m+1) as non empty Subset of cPR by A13;
 set raSm1 = rng(a|Segm(m+1));
-    A67: for lc being LinearCombination of raSm1
+    A69: for lc being LinearCombination of raSm1
         ex LC being LinearCombination of FM1 st LC = LCT * lc & len lc = len LC
          proof let lc be LinearCombination of raSm1;
                dom LCT = cR by FUNCT_2:def 1; then rng lc c= dom LCT;
-       then A68: dom lc = dom (LCT*lc) by RELAT_1:46; set LC = LCT * lc;
-       A69: len lc = len LC by A68,FINSEQ_3:31;
+       then A70: dom lc = dom (LCT*lc) by RELAT_1:46; set LC = LCT * lc;
+       A71: len lc = len LC by A70,FINSEQ_3:31;
             LC is LinearCombination of FM1 proof let i be set such that
-           A70: i in dom LC;
+           A72: i in dom LC;
             consider u,v being Element of R, a being Element of raSm1 such that
-           A71: lc/.i = u*a*v by A68,A70,IDEAL_1:def 9;
-           A72: lc/.i = lc.i by A68,A70,FINSEQ_4:def 4;
+           A73: lc/.i = u*a*v by A70,A72,IDEAL_1:def 9;
+           A74: lc/.i = lc.i by A70,A72,FINSEQ_4:def 4;
          consider x,y,z being Element of cPR, p being Polynomial of R such that
-           A73: LCT.(lc/.i) = p & p = (x*y)*z & (u*a)*v = p.(len fm1 -' 1) &
-                len p <= len fm1 & y in F.(m+1) by A66,A71;
+           A75: LCT.(lc/.i) = p & p = (x*y)*z & (u*a)*v = p.(len fm1 -' 1) &
+                len p <= len fm1 & y in F.(m+1) by A68,A73;
                 reconsider x, z as Element of PR;
-                reconsider y as Element of FM1 by A73;
-                   LC/.i = (LCT*lc).i by A70,FINSEQ_4:def 4
-               .= x*y*z by A68,A70,A72,A73,FUNCT_1:23;
+                reconsider y as Element of FM1 by A75;
+                   LC/.i = (LCT*lc).i by A72,FINSEQ_4:def 4
+               .= x*y*z by A70,A72,A74,A75,FUNCT_1:23;
             hence ex x,z being Element of PR, y being Element of FM1
                   st LC/.i = x*y*z;
            end; then reconsider LC as LinearCombination of FM1;
                LC = LC;
            hence ex LC being LinearCombination of FM1
-                 st LC = LCT * lc & len lc = len LC by A69;
+                 st LC = LCT * lc & len lc = len LC by A71;
        end;
            for lc being LinearCombination of raSm1
          ex LC being LinearCombination of FM1, sLC being Polynomial of R
@@ -2395,155 +2384,155 @@ set raSm1 = rng(a|Segm(m+1));
                       sLC being Polynomial of R
                    st LC = LCT*lc & sLC = Sum LC &
                       sLC.(len fm1 -' 1) = Sum lc & len sLC <= len fm1;
-       A74: P5[0] proof let lc be LinearCombination of (raSm1); assume
+       A76: P5[0] proof let lc be LinearCombination of (raSm1); assume
               len lc <= 0;
-               then A75: len lc = 0;
+               then A77: len lc = 0;
                consider LC being LinearCombination of FM1 such that
-           A76: LC = LCT * lc & len lc = len LC by A67;
-               take LC, p = 0_.(R); thus LC = LCT * lc by A76;
-           A77: lc = <*>cR by A75,FINSEQ_1:25;   LC = <*>cPR by A75,A76,
+           A78: LC = LCT * lc & len lc = len LC by A69;
+               take LC, p = 0_.(R); thus LC = LCT * lc by A78;
+           A79: lc = <*>cR by A77,FINSEQ_1:25;   LC = <*>cPR by A77,A78,
 FINSEQ_1:25;
                then Sum LC = 0.PR by RLVECT_1:60 .= p by POLYNOM3:def 12;
                hence p = Sum LC;
                thus p.(len fm1 -' 1) = 0.R by FUNCOP_1:13
-                     .= Sum lc by A77,RLVECT_1:60;
+                     .= Sum lc by A79,RLVECT_1:60;
                len p = 0 by POLYNOM4:6;
                hence len p <= len fm1;
            end;
-       A78: for k being Element of NAT st P5[k] holds P5[k+1]
+       A80: for k being Element of NAT st P5[k] holds P5[k+1]
         proof let k be Element of NAT; assume
-           A79: P5[k];
+           A81: P5[k];
                thus P5[k+1] proof
                  let lc be LinearCombination of (raSm1); assume
-               A80: len lc <= k+1;
-                   per cases; suppose len lc <= k; hence thesis by A79;
+               A82: len lc <= k+1;
+                   per cases; suppose len lc <= k; hence thesis by A81;
                    end;
                    suppose len lc > k; then len lc >= k+1 by NAT_1:38;
-               then A81: len lc = k+1 by A80,XXREAL_0:1;
+               then A83: len lc = k+1 by A82,XXREAL_0:1;
                    thus thesis proof per cases;
-                        suppose A82: k = 0;
-                        then dom lc = {1} by A81,FINSEQ_1:4,def 3;
-                   then A83: 1 in dom lc by TARSKI:def 1;
-                   A84: lc = <*lc.1*> by A81,A82,FINSEQ_1:57;
+                        suppose A84: k = 0;
+                        then dom lc = {1} by A83,FINSEQ_1:4,def 3;
+                   then A85: 1 in dom lc by TARSKI:def 1;
+                   A86: lc = <*lc.1*> by A83,A84,FINSEQ_1:57;
                         consider u,w being Element of R,
                                v being Element of raSm1 such that
-                   A85:  lc/.1 = u*v*w by A83,IDEAL_1:def 9;
-                   A86: lc.1 = lc/.1 by A83,FINSEQ_4:def 4;
+                   A87:  lc/.1 = u*v*w by A85,IDEAL_1:def 9;
+                   A88: lc.1 = lc/.1 by A85,FINSEQ_4:def 4;
                         then consider x,y,z being Element of cPR,
                             p being Polynomial of R such that
-                   A87: LCT.(lc.1) = p & p = (x*y)*z &
+                   A89: LCT.(lc.1) = p & p = (x*y)*z &
                             (u*v)*w = p.(len fm1 -' 1) &
-                            len p <= len fm1 & y in F.(m+1) by A66,A85;
+                            len p <= len fm1 & y in F.(m+1) by A68,A87;
                         consider LC being LinearCombination of FM1 such that
-                   A88:  LC = LCT*lc & len LC = len lc by A67;
-                   A89:  LC = <* LCT.(u*v*w) *> by A84,A85,A86,A88,FINSEQ_2:39;
-                   A90:  Sum lc = p.(len fm1 -' 1) by A84,A85,A86,A87,
+                   A90:  LC = LCT*lc & len LC = len lc by A69;
+                   A91:  LC = <* LCT.(u*v*w) *> by A86,A87,A88,A90,FINSEQ_2:39;
+                   A92:  Sum lc = p.(len fm1 -' 1) by A86,A87,A88,A89,
 RLVECT_1:61;
-                             Sum LC = p by A85,A86,A87,A89,RLVECT_1:61;
-                        hence thesis by A87,A88,A90;
+                             Sum LC = p by A87,A88,A89,A91,RLVECT_1:61;
+                        hence thesis by A89,A90,A92;
                         end;
                         suppose
-                   A91:  k > 0; then len lc > 0+1 by A81,XREAL_1:8;
+                   A93:  k > 0; then len lc > 0+1 by A83,XREAL_1:8;
                         then len lc <> 0; then lc is non empty by FINSEQ_1:25
 ;
                then consider p being LinearCombination of raSm1,
                         e being Element of cR such that
-                   A92:  lc = p^<*e*> and
-                   A93: <*e*> is LinearCombination of raSm1 by IDEAL_1:32;
-                            len lc = len p + len <* e *> by A92,FINSEQ_1:35
+                   A94:  lc = p^<*e*> and
+                   A95: <*e*> is LinearCombination of raSm1 by IDEAL_1:32;
+                            len lc = len p + len <* e *> by A94,FINSEQ_1:35
                               .= len p + 1 by FINSEQ_1:56;
-                        then len p = k by A81;
+                        then len p = k by A83;
                         then consider LCp being LinearCombination of FM1,
                                  sLCp being Polynomial of R such that
-                   A94:  LCp = LCT*p & sLCp = Sum LCp &
+                   A96:  LCp = LCT*p & sLCp = Sum LCp &
                         sLCp.(len fm1 -' 1) = Sum
- p & len sLCp <= len fm1 by A79;
+ p & len sLCp <= len fm1 by A81;
                             len <* e *> = 0+1 by FINSEQ_1:56;
-                        then len <*e*> <= k by A91,NAT_1:38;
+                        then len <*e*> <= k by A93,NAT_1:38;
                         then consider LCe being LinearCombination of FM1,
                                  sLCe being Polynomial of R such that
-                   A95:  LCe = LCT*<*e*> & sLCe = Sum LCe &
+                   A97:  LCe = LCT*<*e*> & sLCe = Sum LCe &
                         sLCe.(len fm1 -' 1) = Sum <* e *> &
-                        len sLCe <= len fm1 by A79,A93;
+                        len sLCe <= len fm1 by A81,A95;
                         consider LC being LinearCombination of FM1 such that
-                   A96:  LC = LCT*lc & len LC = len lc by A67;
+                   A98:  LC = LCT*lc & len LC = len lc by A69;
                             dom LCT = cR by FUNCT_2:def 1;
                         then rng p \/ rng <* e *> c= dom LCT;
                         then consider LCTp, LCTe being FinSequence such that
-                   A97:  LCTp = LCT*p & LCTe = LCT*<*e*> &
+                   A99:  LCTp = LCT*p & LCTe = LCT*<*e*> &
                         LCT*(p^<*e*>) = LCTp^LCTe by Th1;
                         set sLC = sLCp + sLCe;
-                   A98:  Sum LC = Sum LCp + Sum LCe by A92,A94,A95,A96,A97,
+                   A100:  Sum LC = Sum LCp + Sum LCe by A94,A96,A97,A98,A99,
 RLVECT_1:58
-                            .= sLC by A94,A95,POLYNOM3:def 12;
-                   A99:  Sum lc = Sum p + e by A92,FVSUM_1:87
+                            .= sLC by A96,A97,POLYNOM3:def 12;
+                   A101:  Sum lc = Sum p + e by A94,FVSUM_1:87
                             .= sLCp.(len fm1 -' 1) + sLCe.(len fm1 -' 1)
-                               by A94,A95,RLVECT_1:61
+                               by A96,A97,RLVECT_1:61
                             .= sLC.(len fm1 -' 1) by POLYNOM3:def 6;
                             now
                            per cases;
                            suppose len sLCp < len sLCe;
                                then len sLC <= len sLCe by POLYNOM4:9;
-                           hence len sLC <= len fm1 by A95,XXREAL_0:2;
+                           hence len sLC <= len fm1 by A97,XXREAL_0:2;
                            end;
                            suppose len sLCp >= len sLCe;
                                then len sLC <= len sLCp by POLYNOM4:9;
-                           hence len sLC <= len fm1 by A94,XXREAL_0:2;
+                           hence len sLC <= len fm1 by A96,XXREAL_0:2;
                         end;
                         end;
-                       hence thesis by A96,A98,A99;
+                       hence thesis by A98,A100,A101;
                    end;
                    end;
                end;
                end;
            end;
-       A100: for k being Element of NAT holds P5[k] from NAT_1:sch 1(A74,A78);
+       A102: for k being Element of NAT holds P5[k] from NAT_1:sch 1(A76,A80);
        let lc be LinearCombination of (raSm1);
            consider n being Element of NAT such that
-       A101:  n = len lc;
-           thus thesis by A100,A101;
+       A103:  n = len lc;
+           thus thesis by A102,A103;
        end; then consider LC being LinearCombination of FM1,
                          sLC being Polynomial of R such that
-   A102:   LC = LCT*lc & sLC = Sum LC &
+   A104:   LC = LCT*lc & sLC = Sum LC &
          sLC.(len fm1 -' 1) = Sum
  lc & len sLC <= len fm1; set f'=fm1-sLC;
-    A103: f'+sLC = fm1+(sLC+(-sLC)) by POLYNOM3:26
+    A105: f'+sLC = fm1+(sLC+(-sLC)) by POLYNOM3:26
        .= fm1+(sLC-sLC) .= fm1+0_.R by POLYNOM3:30
-       .= fm1 by POLYNOM3:29;   len (-sLC) <= len fm1 by A102,POLYNOM4:11;
-   then A104: len f' <= len fm1 by POLYNOM4:9;
+       .= fm1 by POLYNOM3:29;   len (-sLC) <= len fm1 by A104,POLYNOM4:11;
+   then A106: len f' <= len fm1 by POLYNOM4:9;
            now assume
-       A105: len f' = len fm1;   len fm1 - 1 >= 0 by A44;
-           then A106: (len fm1 -' 1) + 1 = (len fm1 - 1) + 1 by BINARITH:def 3
+       A107: len f' = len fm1;   len fm1 - 1 >= 0 by A46;
+           then A108: (len fm1 -' 1) + 1 = (len fm1 - 1) + 1 by BINARITH:def 3
               .= len fm1;
            consider n being Element of NAT, A being Polynomial of R such that
-       A107: n = m+1 & A = f.n & a.(m+1) = A.(len A -' 1) by A41;
+       A109: n = m+1 & A = f.n & a.(m+1) = A.(len A -' 1) by A43;
                f'.(len fm1 -' 1)= fm1.(len fm1 -' 1) - fm1.(len fm1 -' 1) by
-A43,A102,A107,POLYNOM3:27
+A45,A104,A109,POLYNOM3:27
               .= 0.R by RLVECT_1:28;
-           hence contradiction by A105,A106,ALGSEQ_1:25;
+           hence contradiction by A107,A108,ALGSEQ_1:25;
        end;
-    then A108: len f' < len fm1 by A104,XXREAL_0:1;
-    A109: sLC in FM1-Ideal by A102,IDEAL_1:60;
+    then A110: len f' < len fm1 by A106,XXREAL_0:1;
+    A111: sLC in FM1-Ideal by A104,IDEAL_1:60;
        consider n being Element of NAT,
        A,B being non empty Subset of cPR such that
-    A110:     A = F.n & B = I\(A-Ideal) & n = m+1 &
-           F.(n+1) = F.n \/ {f.(m+1)} & f.(m+1) in minlen(B) by A24;
-    A111: now assume A112:     f' in FM1-Ideal;
+    A112:     A = F.n & B = I\(A-Ideal) & n = m+1 &
+           F.(n+1) = F.n \/ {f.(m+1)} & f.(m+1) in minlen(B) by A25;
+    A113: now assume A114:     f' in FM1-Ideal;
            reconsider sLC as Element of cPR by POLYNOM3:def 12;
            reconsider f' as Element of cPR by POLYNOM3:def 12;
-               f.(m+1) = f'+sLC by A103,POLYNOM3:def 12;
-       then fm1 in FM1-Ideal by A109,A112,IDEAL_1:def 1;
-           hence contradiction by A110,XBOOLE_0:def 4;
+               f.(m+1) = f'+sLC by A105,POLYNOM3:def 12;
+       then fm1 in FM1-Ideal by A111,A114,IDEAL_1:def 1;
+           hence contradiction by A112,XBOOLE_0:def 4;
        end;
            f' in I proof FM1 is Subset of I by A13;
            then FM1-Ideal c= I-Ideal by IDEAL_1:57;
-           then A113: FM1-Ideal c= I by IDEAL_1:44; reconsider sLC as Element
+           then A115: FM1-Ideal c= I by IDEAL_1:44; reconsider sLC as Element
 of cPR by POLYNOM3:def 12;
            reconsider f' as Element of cPR by POLYNOM3:def 12;
-       A114: f.(m+1) in I by A110,XBOOLE_0:def 4;   f'=f.(m+1)-sLC by Th16;
-           hence thesis by A109,A113,A114,IDEAL_1:15;
-       end; then f' in I\(FM1-Ideal) by A111,XBOOLE_0:def 4;
-       hence contradiction by A108,A110,Th17;
+       A116: f.(m+1) in I by A112,XBOOLE_0:def 4;   f'=f.(m+1)-sLC by Th16;
+           hence thesis by A111,A115,A116,IDEAL_1:15;
+       end; then f' in I\(FM1-Ideal) by A113,XBOOLE_0:def 4;
+       hence contradiction by A110,A112,Th17;
     end;
     hence PR is Noetherian;
   end;

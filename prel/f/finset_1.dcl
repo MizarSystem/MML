@@ -65,25 +65,6 @@
 <Adjective nr="15"/>
 </Cluster>
 </RCluster>
-<RCluster>
-<ArgTypes>
-<Typ kind="M" nr="1">
-<Cluster>
-<Adjective nr="7" value="false"/>
-</Cluster>
-</Typ>
-</ArgTypes>
-<Typ kind="M" nr="2">
-<Cluster/>
-<Func kind="K" nr="22">
-<LocusVar nr="1"/>
-</Func>
-</Typ>
-<Cluster>
-<Adjective nr="7" value="false"/>
-<Adjective nr="15"/>
-</Cluster>
-</RCluster>
 <FCluster>
 <ArgTypes>
 <Typ kind="M" nr="1">

@@ -10,9 +10,9 @@ environ
       BOOLE, FINSEQ_1, FUNCT_2, CARD_3, ARYTM_1, RLVECT_1, CQC_LANG, SCMRING1,
       MCART_1, FUNCT_4, RELAT_1;
  notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, RELAT_1, FUNCT_1, RELSET_1,
-      PARTFUN1, FUNCT_2, GR_CY_1, STRUCT_0, RLVECT_1, GROUP_1, FUNCSDOM,
-      MCART_1, NUMBERS, CARD_3, NAT_1, FINSEQ_1, CQC_LANG, FUNCT_4, AMI_1,
-      AMI_2, AMI_3, SCMRING1, XXREAL_0;
+      FUNCT_2, GR_CY_1, STRUCT_0, RLVECT_1, GROUP_1, FUNCSDOM, MCART_1,
+      NUMBERS, CARD_3, NAT_1, FINSEQ_1, CQC_LANG, FUNCT_4, AMI_1, AMI_2, AMI_3,
+      SCMRING1, XXREAL_0;
  constructors PARTFUN1, DOMAIN_1, XXREAL_0, NAT_1, MEMBERED, FINSEQ_4,
       REALSET2, CAT_2, AMI_3, SCMRING1;
  registrations AMI_1, CQC_LANG, SCMRING1, STRUCT_0, RELSET_1, AMI_5, AMI_3,
@@ -21,12 +21,12 @@ environ
  definitions TARSKI, STRUCT_0, AMI_1;
  theorems AMI_1, AMI_2, AMI_3, AMI_5, CARD_3, CQC_LANG, ENUMSET1, FUNCT_2,
       FUNCT_4, GR_CY_1, MCART_1, NAT_1, SCMRING1, TARSKI, ZFMISC_1, XBOOLE_0,
-      XBOOLE_1, XREAL_1, XXREAL_0, ORDINAL1;
+      XBOOLE_1, XREAL_1, XXREAL_0;
  schemes NAT_1;
 
 begin  :: { \bf SCM } over ring
 
-reserve i for Nat,
+reserve
         I for Element of Segm 8,
         S for non empty 1-sorted,
         t for Element of S,
@@ -472,9 +472,7 @@ registration let R;
 coherence
   proof
   thus ObjectKind IC SCM R
-     = (the Object-Kind of SCM R).IC SCM R
-    .= (SCM-OK R).IC SCM R by Def1
-    .= (SCM-OK R).the Instruction-Counter of SCM R
+     = (SCM-OK R).IC SCM R by Def1
     .= (SCM-OK R).0 by Def1
     .= SCM-Instr-Loc by SCMRING1:def 3
     .= the Instruction-Locations of SCM R by Def1;
@@ -489,8 +487,7 @@ theorem Th10:
  proof
   let S be SCM-State of R such that
 A1: S = s;
-  thus IC s = s.IC SCM R
-    .= S.0 by A1,Th9
+  thus IC s = S.0 by A1,Th9
     .= IC S by SCMRING1:def 4;
  end;
 
@@ -530,11 +527,8 @@ A1: i = I;
   let S be SCM-State of R; assume
 A2:  S = s;
   thus Exec(I,s)
-   = (((the Execution of SCM R) qua
-   Function of the Instructions of SCM R,
-    Funcs(product the Object-Kind of SCM R,
-          product the Object-Kind of SCM R)).I).s
- .= ((SCM-Exec R).i qua Element of Funcs(product SCM-OK R, product SCM-OK R)).S
+   =
+ ((SCM-Exec R).i qua Element of Funcs(product SCM-OK R, product SCM-OK R)).S
        by A1,A2,Def1
  .= SCM-Exec-Res(i,S) by SCMRING1:def 15;
  end;
@@ -758,8 +752,7 @@ A2:   I is halting;
     reconsider t = s as SCM-State of R by Def1;
 A3: IC t = IC s by Th10;
 A4: IC t = t.0 by SCMRING1:def 4;
-A5: Exec(I,s).IC SCM R = s.IC SCM R by A2,AMI_1:def 8
-       .= IC s
+A5: Exec(I,s).IC SCM R = IC s by A2,AMI_1:def 8
        .= t.0 by A3,SCMRING1:def 4;
     reconsider w = t.0 as Instruction-Location of SCM R by A4,Def1;
     consider mj being Element of SCM-Instr-Loc such that
@@ -935,8 +928,7 @@ A15:   a =0_goto i1 is halting;
 A16:   w.(V cond_address) <> 0.R;
 A17: IC t = IC w by Th10;
 A18: IC w = w.0 by SCMRING1:def 4;
-A19: Exec(a =0_goto i1,t).IC SCM R = t.IC SCM R by A15,AMI_1:def 8
-       .= IC t
+A19: Exec(a =0_goto i1,t).IC SCM R = IC t by A15,AMI_1:def 8
        .= w.0 by A17,SCMRING1:def 4;
     reconsider e = w.0 as Instruction-Location of SCM R by A18,Def1;
         a is Element of SCM-Data-Loc by Th1;
@@ -1041,8 +1033,7 @@ A2:     I <> W;
       let l be Instruction-Location of SCM R;
       reconsider L = l as Element of SCM-Instr-Loc by Def1;
       thus ObjectKind l
-        = (the Object-Kind of SCM R).l
-       .= (SCM-OK R).L by Def1
+        = (SCM-OK R).L by Def1
        .= SCM-Instr R by SCMRING1:6
        .= the Instructions of SCM R by Def1;
     end;
@@ -1052,7 +1043,7 @@ A2:     I <> W;
 A3:   x in (the Object-Kind of SCM R)"{ the Instructions of SCM R };
      then x in (the Object-Kind of SCM R)"{ SCM-Instr R } by Def1;
 then A4:  x in (SCM-OK R)"{ SCM-Instr R} by Def1;
-    reconsider x as Element of NAT by A3,Def1,ORDINAL1:def 13;
+    reconsider x as Element of NAT by A3,Def1;
         (SCM-OK R).x in { SCM-Instr R } by A4,FUNCT_2:46;
     then (SCM-OK R).x = SCM-Instr R by TARSKI:def 1;
     then consider i being Element of NAT such that
@@ -1103,11 +1094,7 @@ then A6:  c in { [0,{}] } \/
       by XBOOLE_0:def 2;
      reconsider S = s as SCM-State of R by Def1;
      reconsider l' = l as Element of SCM-Instr-Loc by Def1;
-A7:   Exec(j,s) = (((the Execution of SCM R) qua
-      Function of the Instructions of SCM R,
-     Funcs(product the Object-Kind of SCM R,
-       product the Object-Kind of SCM R)).j).s
-      .= (SCM-Exec R).c.S by Def1
+A7:   Exec(j,s) = (SCM-Exec R).c.S by Def1
       .= SCM-Exec-Res(c,S) by SCMRING1:def 15;
          now per cases by A6,XBOOLE_0:def 2;
      case c in { [0,{}] };

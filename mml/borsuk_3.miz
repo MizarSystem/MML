@@ -10,7 +10,7 @@ environ
       T_0TOPSP, BOOLE, COMPTS_1, FUNCT_3, PARTFUN1, PBOOLE, TARSKI, BORSUK_1,
       TOPS_1, CONNSP_2, SETFAM_1, FINSET_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, SETFAM_1, FUNCT_1,
-      PBOOLE, RELSET_1, PARTFUN1, FUNCT_2, DOMAIN_1, STRUCT_0, PRE_TOPC,
+      PBOOLE, RELSET_1, PARTFUN1, BINOP_1, DOMAIN_1, STRUCT_0, PRE_TOPC,
       TOPS_2, TOPS_1, COMPTS_1, BORSUK_1, T_0TOPSP, FINSET_1, FUNCT_3,
       CONNSP_2, GRCAT_1;
  constructors MEMBERED, TOPS_1, TOPS_2, COMPTS_1, BORSUK_1, GRCAT_1, T_0TOPSP,
@@ -18,7 +18,8 @@ environ
  registrations STRUCT_0, PRE_TOPC, BORSUK_1, BORSUK_2, TOPS_1, WAYBEL_3,
       WAYBEL12, PSCOMP_1, RELSET_1, SUBSET_1, XBOOLE_0, FUNCT_2;
  requirements SUBSET, BOOLE;
- definitions TARSKI, TOPS_2, COMPTS_1, T_0TOPSP, FUNCT_1, XBOOLE_0, GRCAT_1;
+ definitions TARSKI, TOPS_2, COMPTS_1, T_0TOPSP, FUNCT_1, XBOOLE_0, GRCAT_1,
+      BINOP_1;
  theorems BORSUK_1, FUNCOP_1, TOPS_2, FUNCT_2, FUNCT_1, PRE_TOPC, TARSKI,
       TOPS_1, TOPMETR, ZFMISC_1, CONNSP_2, STRUCT_0, FUNCT_3, COMPTS_1,
       FINSET_1, T_0TOPSP, YELLOW12, TSEP_1, TOPGRP_1, XBOOLE_0, XBOOLE_1;
@@ -63,15 +64,15 @@ A2:  x in Z by TARSKI:def 1;
   hence thesis;
 end;
 
-registration let T be non empty TopStruct;
+registration let T be TopStruct;
   cluster id T -> being_homeomorphism;
   coherence by TOPGRP_1:20;
 end;
 
 Lm1:
-  for S being non empty TopStruct holds S, S are_homeomorphic
+  for S being TopStruct holds S, S are_homeomorphic
 proof
-  let S be non empty TopStruct;
+  let S be TopStruct;
   take id S;
   thus thesis;
 end;
@@ -88,6 +89,11 @@ A1:  f is_homeomorphism by T_0TOPSP:def 1;
   hence thesis by T_0TOPSP:def 1;
 end;
 
+definition let S, T be TopStruct;
+  redefine pred S, T are_homeomorphic;
+  reflexivity by Lm1;
+end;
+
 definition let S, T be non empty TopStruct;
   redefine pred S, T are_homeomorphic;
   reflexivity by Lm1;
@@ -95,7 +101,7 @@ definition let S, T be non empty TopStruct;
 end;
 
 theorem
-      for S, T, V being non empty TopSpace st
+  for S, T, V being non empty TopSpace st
    S, T are_homeomorphic & T, V are_homeomorphic holds
     S, V are_homeomorphic
 proof
@@ -185,7 +191,8 @@ A5:   x1 in the carrier of Y & x2 in Z &
 A6:   y1 in the carrier of Y & y2 in Z &
          y = [y1, y2] by A2,A3,ZFMISC_1:def 2;
 A7: x2 = x by A5,TARSKI:def 1 .= y2 by A6,TARSKI:def 1;
-          x1 = f. [y1, y2] by A1,A4,A5,A6,FUNCT_3:def 5
+          x1 = f.(x1, x2) by A1,A5,FUNCT_3:def 5
+        .= f.(y1, y2) by A4,A5,A6
         .= y1 by A1,A6,FUNCT_3:def 5;
      hence thesis by A5,A6,A7;
 end;
@@ -212,7 +219,8 @@ A5:   x1 in Z & x2 in the carrier of Y &
 A6:   y1 in Z & y2 in the carrier of Y &
          y = [y1,y2] by A2,A3,ZFMISC_1:def 2;
 A7: x1 = x by A5,TARSKI:def 1 .= y1 by A6,TARSKI:def 1;
-          x2 = f. [y1, y2] by A1,A4,A5,A6,FUNCT_3:def 6
+          x2= f.(x1, x2) by A1,A5,FUNCT_3:def 6
+        .= f.(y1, y2) by A4,A5,A6
         .= y2 by A1,A6,FUNCT_3:def 6;
       hence thesis by A5,A6,A7;
 end;
@@ -228,8 +236,7 @@ proof
       f be Function of [:Y, X | {x}:], Y;
       set Z = {x};
       assume A1: f = pr1(the carrier of Y, Z);
-    then A2: rng f = the carrier of Y by FUNCT_3:60
-              .= [#]Y by PRE_TOPC:12;
+    then A2: rng f = the carrier of Y by FUNCT_3:60;
 A3: f is one-to-one by A1,Th6;
     reconsider Z as non empty Subset of X;
     reconsider idY = Y --> x as continuous Function of Y, (X|Z) by Th2;
@@ -261,9 +268,7 @@ then A11: rng KA = [:the carrier of Y, Z:] by A6,XBOOLE_0:def 10
 A12: dom idY = the carrier of Y by FUNCT_2:def 1
            .= dom idZ by FUNCT_2:def 1;
         rng idZ c= the carrier of Y;
-    then f*KA = idZ by A1,A5,A12,FUNCT_3:72
-        .= id the carrier of Y
-        .= id rng f by A2,PRE_TOPC:12;
+    then f*KA = id rng f by A2,A1,A5,A12,FUNCT_3:72;
     then KA = (f qua Function)" by A3,A11,FUNCT_1:64;
     hence thesis by A2,A3,TOPS_2:def 4;
   end;
@@ -279,8 +284,7 @@ proof
       f be Function of [:X | {x}, Y:], Y;
       set Z = {x};
       assume A1: f = pr2(Z, the carrier of Y);
-    then A2: rng f = the carrier of Y by FUNCT_3:62
-              .= [#]Y by PRE_TOPC:12;
+    then A2: rng f = the carrier of Y by FUNCT_3:62;
 A3: f is one-to-one by A1,Th7;
     reconsider Z as non empty Subset of X;
     reconsider idZ = Y --> x as continuous Function of Y, (X|Z) by Th2;
@@ -312,9 +316,7 @@ then A11: rng KA = [:Z, the carrier of Y:] by A6,XBOOLE_0:def 10
 A12: dom idZ = the carrier of Y by FUNCT_2:def 1
            .= dom idY by FUNCT_2:def 1;
         rng idY c= the carrier of Y;
-    then f*KA = idY by A1,A5,A12,FUNCT_3:72
-        .= id the carrier of Y
-        .= id rng f by A2,PRE_TOPC:12;
+    then f*KA = id rng f by A2,A1,A5,A12,FUNCT_3:72;
     then KA = (f qua Function)" by A3,A11,FUNCT_1:64;
     hence thesis by A2,A3,TOPS_2:def 4;
   end;

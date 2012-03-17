@@ -8,23 +8,19 @@ environ
 
  vocabularies COMPLEX1, VECTSP_1, RLVECT_1, COMPLSP1, BINOP_1, LATTICES,
       FUNCT_1, ARYTM_1, RELAT_1, ARYTM_3, ABSVALUE, COMPLFLD, XCMPLX_0,
-      GROUP_1, ARYTM, COMPTRIG, POWER, SIN_COS;
- notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, ARYTM_0,
-      XCMPLX_0, XREAL_0,COMPLEX1, REAL_1, NAT_1,
-      FUNCT_1, XXREAL_0,
-      POWER, SIN_COS, COMPTRIG,
-      BINOP_1, BINOP_2,
+      GROUP_1, ARYTM, COMPTRIG;
+ notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, ARYTM_0, XCMPLX_0,
+      XREAL_0, COMPLEX1, NAT_1, FUNCT_1, XXREAL_0, COMPTRIG, BINOP_1, BINOP_2,
       STRUCT_0, RLVECT_1, GROUP_1, NEWTON, VECTSP_1;
  constructors DOMAIN_1, BINOP_1, FUNCT_4, ARYTM_3, ARYTM_0, XXREAL_0, REAL_1,
-      BINOP_2, MEMBERED, COMPLEX1, VECTSP_1, NAT_1, INT_2, COMPTRIG,
-      NEWTON, FUNCOP_1, PBOOLE, PARTFUN1, SIN_COS, POWER;
+      BINOP_2, MEMBERED, COMPLEX1, VECTSP_1, NAT_1, INT_2, COMPTRIG, NEWTON,
+      FUNCOP_1, PBOOLE, PARTFUN1, SIN_COS, POWER;
  registrations VECTSP_1, RELSET_1, XREAL_0, COMPLEX1, MEMBERED, XCMPLX_0,
       NAT_1, NEWTON, STRUCT_0, ORDINAL1;
  requirements NUMERALS, SUBSET, BOOLE, ARITHM, REAL;
  definitions RLVECT_1, GROUP_1, VECTSP_1, BINOP_1, COMPTRIG;
  theorems STRUCT_0, COMPLEX1, RLVECT_1, VECTSP_1, XREAL_0, XCMPLX_0, XCMPLX_1,
-      ARYTM_0, BINOP_2, GROUP_1, COMPTRIG, NEWTON, ORDINAL1, CARD_1, NAT_1,
-      XREAL_1;
+      ARYTM_0, BINOP_2, GROUP_1, COMPTRIG, NEWTON, ORDINAL1, NAT_1, XREAL_1;
  schemes NAT_1;
 
 begin
@@ -76,12 +72,10 @@ now
   assume
 A1: e = 1r;
   reconsider a = x as Element of COMPLEX by Def1;
-  thus x * e = (the mult of F_Complex).(x,e)
-  .= multcomplex.(x,e) by Def1
+  thus x * e = multcomplex.(x,e) by Def1
   .= a*1r by A1,BINOP_2:def 5
   .= x by COMPLEX1:def 7;
-  thus e * x = (the mult of F_Complex).(e,x)
-  .= multcomplex.(e,x) by Def1
+  thus e * x = multcomplex.(e,x) by Def1
   .= a*1r by A1,BINOP_2:def 5
   .= x by COMPLEX1:def 7;
 end;
@@ -114,35 +108,24 @@ Lm2:
      proof
       let x,y,z be Element of F_Complex;
       reconsider x1=x, y1=y, z1=z as Element of COMPLEX by Def1;
-      thus (x + y) + z = (the add of F_Complex).[x + y,z1]
-         .= (the add of F_Complex).[(the add of F_Complex).[x1,y1],z1]
-         .= addcomplex.[(the add of F_Complex).[x1,y1],z1] by Def1
-         .= addcomplex.[addcomplex.[x1,y1],z1] by Def1
-         .= addcomplex.(addcomplex.[x1,y1],z1)
-         .= addcomplex.(addcomplex.(x1,y1),z1)
+      thus (x + y) + z = addcomplex.[(the add of F_Complex).[x1,y1],z1] by Def1
+         .= addcomplex.(addcomplex.(x1,y1),z1) by Def1
          .= addcomplex.(x1 + y1,z1) by BINOP_2:def 3
          .=(x1 + y1) + z1 by BINOP_2:def 3
          .= x1 + (y1 + z1)
          .= addcomplex.(x1,y1 + z1) by BINOP_2:def 3
-         .= addcomplex.(x1,addcomplex.(y1,z1)) by BINOP_2:def 3
-         .= addcomplex.[x1,addcomplex.(y1,z1)]
-         .= addcomplex.[x1,addcomplex.[y1,z1]]
+         .= addcomplex.[x1,addcomplex.(y1,z1)] by BINOP_2:def 3
          .= addcomplex.[x1,(the add of F_Complex).[y1,z1]] by Def1
-         .= (the add of F_Complex).[x1,(the add of F_Complex).[y1,z1]] by Def1
-         .= (the add of F_Complex).[x1,y + z]
-         .= x + (y + z);
+         .= x + (y + z) by Def1;
      end;
     thus F_Complex is right_zeroed
      proof
       let x be Element of F_Complex;
       reconsider x1=x as Element of COMPLEX by Def1;
-      thus x + 0.F_Complex =(the add of F_Complex).[x1,0.F_Complex]
-         .= (the add of F_Complex).(x1,0.F_Complex)
-         .= (the add of F_Complex).(x1,the Zero of F_Complex)
-         .= (the add of F_Complex).(x1,0c) by Def1
+      thus x + 0.F_Complex = (the add of F_Complex).(x1,0c) by Def1
          .= addcomplex.(x1,0c) by Def1
          .= x1 + 0c by BINOP_2:def 3
-         .= x by COMPLEX1:def 6;
+         .= x;
      end;
     thus F_Complex is right_complementable
      proof
@@ -150,44 +133,34 @@ Lm2:
       reconsider x1=x as Element of COMPLEX by Def1;
       reconsider y=-x1 as Element of F_Complex by Def1;
       take y;
-      thus x + y = (the add of F_Complex).[x,y]
-         .= (the add of F_Complex).(x,y)
-         .= addcomplex.(x1,y) by Def1
+      thus x + y = addcomplex.(x1,y) by Def1
          .= x1+ -x1 by BINOP_2:def 3
-         .= the Zero of F_Complex by Def1,XCMPLX_0:def 6
-         .= 0.F_Complex;
+         .= 0.F_Complex by Def1;
      end;
     thus F_Complex is Abelian
      proof
       let x,y be Element of F_Complex;
       reconsider x1=x ,y1=y as Element of COMPLEX by Def1;
-      thus x + y = (the add of F_Complex).[x1,y1]
-         .= (the add of F_Complex).(x1,y1)
-         .= addcomplex.(x1,y1) by Def1
+      thus x + y = addcomplex.(x1,y1) by Def1
          .= y1 + x1 by BINOP_2:def 3
          .= addcomplex.(y1,x1) by BINOP_2:def 3
-         .= (the add of F_Complex).(y1,x1) by Def1
-         .= (the add of F_Complex).[y1,x1]
-         .= y + x;
+         .= y + x by Def1;
      end;
     thus F_Complex is commutative
      proof
       let x,y be Element of F_Complex;
       reconsider x1=x ,y1=y as Element of COMPLEX by Def1;
-      thus x * y = (the mult of F_Complex).(x1,y1)
-         .= multcomplex.(x1,y1) by Def1
+      thus x * y = multcomplex.(x1,y1) by Def1
          .= y1 * x1 by BINOP_2:def 5
          .= multcomplex.(y1,x1) by BINOP_2:def 5
-         .= (the mult of F_Complex).(y1,x1) by Def1
-         .= y * x;
+         .= y * x by Def1;
      end;
     thus F_Complex is associative
      proof
       let x,y,z be Element of F_Complex;
       reconsider x1=x, y1=y, z1=z as Element of COMPLEX by Def1;
-      thus (x * y) * z = (the mult of F_Complex).(x * y,z1)
-         .= (the mult of F_Complex).((the mult of F_Complex).(x1,y1),z1)
-         .= multcomplex.((the mult of F_Complex).(x1,y1),z1) by Def1
+      thus (x * y) * z =
+ multcomplex.((the mult of F_Complex).(x1,y1),z1) by Def1
          .= multcomplex.(multcomplex.(x1,y1),z1) by Def1
          .= multcomplex.(x1 * y1,z1) by BINOP_2:def 5
          .= (x1 * y1) * z1 by BINOP_2:def 5
@@ -195,10 +168,7 @@ Lm2:
          .= multcomplex.(x1,y1 * z1) by BINOP_2:def 5
          .= multcomplex.(x1,multcomplex.(y1,z1)) by BINOP_2:def 5
          .= multcomplex.(x1,(the mult of F_Complex).(y1,z1)) by Def1
-         .= (the mult of F_Complex).(x1,(the mult of F_Complex).(y1,z1))
-                                                                      by Def1
-         .= (the mult of F_Complex).(x1,y * z)
-         .= x * (y * z);
+         .= x * (y * z) by Def1;
      end;
     thus F_Complex is left_unital;
     thus F_Complex is right_unital;
@@ -206,10 +176,7 @@ Lm2:
      proof
       let x,y,z be Element of F_Complex;
        reconsider x1=x, y1=y, z1=z as Element of COMPLEX by Def1;
-       thus x*(y+z)=(the mult of F_Complex).(x1,y+z)
-         .= (the mult of F_Complex).(x1,(the add of F_Complex).[y1,z1])
-         .= (the mult of F_Complex).(x1,(the add of F_Complex).(y1,z1))
-         .= multcomplex.(x1,(the add of F_Complex).(y1,z1)) by Def1
+       thus x*(y+z)= multcomplex.(x1,(the add of F_Complex).(y1,z1)) by Def1
          .= multcomplex.(x1,addcomplex.(y1,z1)) by Def1
          .= multcomplex.(x1,y1 + z1) by BINOP_2:def 3
          .= x1 * (y1 + z1) by BINOP_2:def 5
@@ -222,17 +189,8 @@ Lm2:
                                                                      by Def1
          .= (the add of F_Complex).((the mult of F_Complex).(x1,y1),
                                                multcomplex.(x1,z1)) by Def1
-         .= (the add of F_Complex).((the mult of F_Complex).(x1,y1),
-                                   (the mult of F_Complex).(x1,z1)) by Def1
-         .= (the add of F_Complex).[(the mult of F_Complex).(x1,y1),
-                         (the mult of F_Complex).(x1,z1)]
-         .= (the add of F_Complex).[x * y,(the mult of F_Complex).(x1,z1)]
-         .= (the add of F_Complex).[x * y , x * z ]
-         .= x*y+x*z;
-       thus (y+z)*x = (the mult of F_Complex).(y+z,x1)
-         .= (the mult of F_Complex).((the add of F_Complex).[y1,z1],x1)
-         .= (the mult of F_Complex).((the add of F_Complex).(y1,z1),x1)
-         .= multcomplex.((the add of F_Complex).(y1,z1),x1) by Def1
+         .= x*y+x*z by Def1;
+       thus (y+z)*x = multcomplex.((the add of F_Complex).(y1,z1),x1) by Def1
          .= multcomplex.(addcomplex.(y1,z1),x1) by Def1
          .= multcomplex.(y1 + z1,x1) by BINOP_2:def 3
          .= (y1 + z1) * x1 by BINOP_2:def 5
@@ -245,13 +203,7 @@ Lm2:
                                                                      by Def1
          .= (the add of F_Complex).((the mult of F_Complex).(y1,x1),
                                                multcomplex.(z1,x1)) by Def1
-         .= (the add of F_Complex).((the mult of F_Complex).(y1,x1),
-                                   (the mult of F_Complex).(z1,x1)) by Def1
-         .= (the add of F_Complex).[(the mult of F_Complex).(y1,x1),
-                      (the mult of F_Complex).(z1,x1)]
-         .= (the add of F_Complex).[y * x,(the mult of F_Complex).(z1,x1)]
-         .= (the add of F_Complex).[y * x , z * x ]
-         .= y * x + z * x;
+         .= y * x + z * x by Def1;
      end;
     thus F_Complex is Field-like
      proof
@@ -262,16 +214,13 @@ Lm2:
       take y;
           x1<>the Zero of F_Complex by A1;
       then A2: x1<>0c by Def1;
-      thus x * y = (the mult of F_Complex).(x1,x1")
-         .=multcomplex.(x1,x1") by Def1
+      thus x * y =multcomplex.(x1,x1") by Def1
          .=x1 * x1" by BINOP_2:def 5
-         .=1r by A2,COMPLEX1:def 7,XCMPLX_0:def 7
-         .=1.F_Complex by Lm2;
+         .=1.F_Complex by  A2,COMPLEX1:def 7,XCMPLX_0:def 7,Lm2;
      end;
     thus F_Complex is non degenerated
      proof
-      0.F_Complex = the Zero of F_Complex
-                     .= 0c by Def1;
+      0.F_Complex = 0c by Def1;
       hence 0.F_Complex <> 1.F_Complex by Lm2,COMPLEX1:12,15;
      end;
    end;
@@ -286,9 +235,7 @@ Lm2:
     let x2,y2 be complex number;
      reconsider x3=x2, y3=y2 as Element of COMPLEX by XCMPLX_0:def 2;
     assume x1 = x2 & y1 = y2;
-    hence x1 + y1 = (the add of F_Complex).[x2,y2]
-         .= (the add of F_Complex).(x2,y2)
-         .= addcomplex.(x3,y3) by Def1
+    hence x1 + y1 = addcomplex.(x3,y3) by Def1
          .= x2 + y2 by BINOP_2:def 3;
    end;
 
@@ -304,8 +251,7 @@ Lm2:
     reconsider x2 as Element of COMPLEX by XCMPLX_0:def 2;
     reconsider x'=-x2 as Element of F_Complex by Def1;
         x1 + x' = x3 + -x2 by Th3
-       .= the Zero of F_Complex by A1,Def1,XCMPLX_0:def 6
-       .= 0.F_Complex;
+       .= 0.F_Complex by A1,Def1;
     hence thesis by RLVECT_1:def 10;
     end;
 
@@ -318,8 +264,7 @@ Lm2:
     let x2,y2 be complex number;
     assume A1: x1 = x2 & y1 = y2;
     then A2: - y1 = -y2 by Th4;
-    thus x1 - y1 = x1 + (-y1)
-         .= x2 + (-y2) by A1,A2,Th3
+    thus x1 - y1 = x2 + (-y2) by A1,A2,Th3
          .= x2 - y2;
    end;
 
@@ -332,8 +277,7 @@ Lm2:
     let x2,y2 be complex number;
      reconsider x3=x2, y3=y2 as Element of COMPLEX by XCMPLX_0:def 2;
     assume x1 = x2 & y1 = y2;
-    hence x1 * y1 = (the mult of F_Complex).(x2,y2)
-         .= multcomplex.(x3,y3) by Def1
+    hence x1 * y1 = multcomplex.(x3,y3) by Def1
          .= x2 * y2 by BINOP_2:def 5;
    end;
 
@@ -345,14 +289,12 @@ Lm2:
     let x1 be Element of F_Complex;
     let x2 be complex number;
     assume A1: x1 = x2 & x1 <> 0.F_Complex;
-    A2: 0c = the Zero of F_Complex by Def1
-       .= 0.F_Complex;
+    A2: 0c = 0.F_Complex by Def1;
     reconsider x3 = x1 as Element of COMPLEX by Def1;
     reconsider x4 = x2 as Element of COMPLEX by XCMPLX_0:def 2;
     reconsider x'= x4" as Element of F_Complex by Def1;
         x1 * x' = x3 * x2" by Th6
-       .= 1r by A1,A2,COMPLEX1:def 7,XCMPLX_0:def 7
-       .= 1.F_Complex by Lm2;
+       .= 1.F_Complex by  A1,A2,COMPLEX1:def 7,XCMPLX_0:def 7,Lm2;
     hence x1" = x2" by A1,VECTSP_1:def 22;
    end;
 
@@ -367,8 +309,7 @@ Lm2:
     assume A1: x1 = x2 & y1 = y2;
     assume y1 <> 0.F_Complex;
     then A2: y1" = y2" by A1,Th7;
-    thus x1/y1 = x1 * y1"
-              .= x3 * y3" by A1,A2,Th6
+    thus x1/y1 = x3 * y3" by A1,A2,Th6
               .= x2/y2 by XCMPLX_0:def 9;
    end;
 
@@ -383,16 +324,11 @@ Lm2:
     proof
 A1:   1 = [*1,0*] by ARYTM_0:def 7;
      then 1.F_Complex = [*1,0*] by Lm2,COMPLEX1:def 7;
-     then A2: 1.F_Complex + 1.F_Complex =
-            (the add of F_Complex).[[*1,0*],[*1,0*]]
-         .= (the add of F_Complex).([*1,0*],[*1,0*])
-         .= addcomplex.([*1,0*],[*1,0*]) by Def1
-         .= [*1,0*] + [*1,0*] by BINOP_2:def 3
-         .= 1+1 + 0*<i> by A1
+     then A2: 1.F_Complex + 1.F_Complex = addcomplex.([*1,0*],[*1,0*]) by Def1
+         .= 1+1 + 0*<i> by  BINOP_2:def 3,A1
          .= [*1+1,0+0*] by COMPLEX1:27;
 A3: 0c = [*0,0*] by ARYTM_0:def 7;
-    0.F_Complex = the Zero of F_Complex
-                .= [*0,0*] by A3,Def1;
+    0.F_Complex = [*0,0*] by A3,Def1;
      hence thesis by A2,ARYTM_0:12;
     end;
 
@@ -631,7 +567,7 @@ canceled;
      reconsider z1=z as Element of COMPLEX by Def1;
      assume z <> 0.F_Complex;
      hence (0.F_Complex) / z = 0c / z1 by Th8,Th9
-                            .= 0.F_Complex by Th9,COMPLEX1:def 6;
+                            .= 0.F_Complex by Th9;
     end;
 
   theorem Th62:
@@ -682,7 +618,7 @@ canceled;
      assume A1: z2 <> 0.F_Complex;
      assume z1 / z2 = the unity of F_Complex;
      then z1' / z2' = the unity of F_Complex by A1,Th8;
-     then z1' / z2' = 1r by Def1 .= 1 by COMPLEX1:def 7;
+     then z1' / z2' = 1 by  Def1,COMPLEX1:def 7;
      hence z1 = z2 by XCMPLX_1:58;
     end;
 
@@ -978,8 +914,7 @@ XCMPLX_1:117
     proof
      reconsider z1'=z1,z2'=z2 as Element of COMPLEX by Def1;
          z1' + z2' = z1 + z2 by Th3;
-     hence (z1 + z2)*' = (z1' + z2')*'
-                    .= z1'*' + z2'*' by COMPLEX1:118
+     hence (z1 + z2)*' = z1'*' + z2'*' by COMPLEX1:118
                     .= z1*' + z2*' by Th3;
     end;
 
@@ -988,8 +923,7 @@ XCMPLX_1:117
     proof
      reconsider z'=z as Element of COMPLEX by Def1;
      -z = -z' by Th4;
-     hence (-z)*' = (-z')*'
-                .= -(z'*') by COMPLEX1:119
+     hence (-z)*' = -(z'*') by COMPLEX1:119
                 .= -(z*') by Th4;
     end;
 
@@ -998,8 +932,7 @@ XCMPLX_1:117
     proof
      reconsider z1'=z1,z2'=z2 as Element of COMPLEX by Def1;
          z1' - z2' = z1 - z2 by Th5;
-     hence (z1 - z2)*' = (z1' - z2')*'
-                    .= z1'*' - z2'*' by COMPLEX1:120
+     hence (z1 - z2)*' = z1'*' - z2'*' by COMPLEX1:120
                     .= z1*' - z2*' by Th5;
     end;
 
@@ -1008,8 +941,7 @@ XCMPLX_1:117
     proof
      reconsider z1'=z1,z2'=z2 as Element of COMPLEX by Def1;
      z1' * z2' = z1 * z2 by Th6;
-     hence (z1 * z2)*' = (z1' * z2')*'
-                    .= z1'*' * z2'*' by COMPLEX1:121
+     hence (z1 * z2)*' = z1'*' * z2'*' by COMPLEX1:121
                     .= z1*' * z2*' by Th6;
     end;
 
@@ -1022,8 +954,7 @@ XCMPLX_1:117
          z*' <> the Zero of F_Complex by A1,Th84;
      then A3: z*' <> 0.F_Complex;
          z" = z1" by A2,Th7;
-     hence z"*' = z1"*'
-             .= z1*'" by COMPLEX1:122
+     hence z"*' = z1*'" by COMPLEX1:122
              .= z*'" by A3,Th7;
     end;
 
@@ -1036,8 +967,7 @@ XCMPLX_1:117
          z2*' <> the Zero of F_Complex by A1,Th84;
      then A3: z2*' <> 0.F_Complex;
          z1' / z2' = z1 / z2 by A2,Th8;
-     hence (z1 / z2)*' = (z1' / z2')*'
-                    .= (z1'*') / (z2'*') by COMPLEX1:123
+     hence (z1 / z2)*' = (z1'*') / (z2'*') by COMPLEX1:123
                     .= (z1*') / (z2*') by A3,Th8;
     end;
 
@@ -1060,9 +990,7 @@ canceled;
     proof
      reconsider z1=z as Element of COMPLEX by Def1;
          -z1 = -z by Th4;
-     hence |.-z.| = |.-z1.|
-                 .= |.z1.| by COMPLEX1:138
-                 .= |.z.|;
+     hence |.-z.| = |.z.| by COMPLEX1:138;
     end;
 
 canceled;
@@ -1109,9 +1037,7 @@ canceled;
      reconsider z1'=z1,z2'=z2 as Element of COMPLEX by Def1;
      A1: z2' - z1' = z2 - z1 by Th5;
          z1' - z2' = z1 - z2 by Th5;
-     hence |.z1 - z2.| = |.z1' - z2'.|
-                        .= |.z2' - z1'.| by COMPLEX1:146
-                        .= |.z2 - z1.| by A1;
+     hence |.z1 - z2.| = |.z2 - z1.| by  COMPLEX1:146,A1;
     end;
 
   theorem
@@ -1175,8 +1101,7 @@ canceled;
     proof
      reconsider z1'=z1,z2'=z2 as Element of COMPLEX by Def1;
      z1' * z2' = z1 * z2 by Th6;
-     hence |.z1 * z2.| = |.z1' * z2'.|
-                      .= |.z1.| * |.z2.| by COMPLEX1:151;
+     hence |.z1 * z2.| = |.z1.| * |.z2.| by COMPLEX1:151;
     end;
 
   theorem
@@ -1186,9 +1111,7 @@ canceled;
      assume A1: z <> the Zero of F_Complex;
      z <> 0.F_Complex by A1;
      then z" = z1" by Th7;
-     hence |.z".| = |.z1".|
-                 .= |.z1.|" by COMPLEX1:152
-                 .= |.z.|";
+     hence |.z".| = |.z.|" by COMPLEX1:152;
     end;
 
   theorem
@@ -1198,8 +1121,7 @@ canceled;
      assume A1: z2 <> the Zero of F_Complex;
          z2 <> 0.F_Complex by A1;
      then A2: z1' / z2' = z1 / z2 by Th8;
-     thus |.z1.| / |.z2.| = |.z1' / z2'.| by COMPLEX1:153
-                          .= |.z1 / z2.| by A2;
+     thus |.z1.| / |.z2.| = |.z1 / z2.| by  COMPLEX1:153,A2;
     end;
 
 begin :: Addenda
@@ -1243,25 +1165,25 @@ A11: n = l+1 by NAT_1:22;
    hence thesis;
   end;
 
-theorem Lemat:
+theorem Th112:
  for e being Element of F_Complex, n be non empty Nat
   holds (power F_Complex).(e,n) = e|^n
 proof let e be Element of F_Complex;
   defpred P[Nat] means (power F_Complex).(e,$1) = e|^$1;
   (power F_Complex).(e,1) = e by GROUP_1:98;
   then
-A: P[1] by NEWTON:10;
-B: now let n be non empty Nat;
+A1: P[1] by NEWTON:10;
+A2: now let n be non empty Nat;
      reconsider n' = n as Element of NAT by ORDINAL1:def 13;
      reconsider p = (power F_Complex).(e,n') as Element of F_Complex;
     assume
-Z:   P[n];
+A3:   P[n];
     (power F_Complex).(e,n+1) = p*e by GROUP_1:def 8
-        .= (e|^n)*e by Z,Th6
+        .= (e|^n)*e by A3,Th6
         .= e|^(n+1) by NEWTON:11;
     hence P[n+1];
    end;
- thus for n being non empty Nat holds P[n] from NAT_1:sch 11(A,B);
+ thus for n being non empty Nat holds P[n] from NAT_1:sch 11(A1,A2);
 end;
 
   definition
@@ -1281,10 +1203,10 @@ end;
      proof
       assume e is CRoot of n,x;
        then e|^n = x by COMPTRIG:def 2;
-      hence (power F_Complex).(e,n) = x by Lemat;
+      hence (power F_Complex).(e,n) = x by Th112;
      end;
     assume (power F_Complex).(e,n) = x;
-    hence e|^n = x by Lemat;
+    hence e|^n = x by Th112;
    end;
   end;
 
@@ -1319,14 +1241,14 @@ A4:  P[k];
      consider t be Nat such that
       A5: k = t+1 by NAT_1:22;
       reconsider t as Element of NAT by ORDINAL1:def 13;
-     reconsider t as non empty Element of NAT by A3,A5,CARD_1:51;
+     reconsider t as non empty Element of NAT by A3,A5;
      take t;
      thus t < k by A5,NAT_1:38;
-X:    t > 0 by NAT_1:19;
+A6:    t > 0 by NAT_1:19;
      (power F_Complex).(v,k) = (power F_Complex).(v,t)*v by A5,GROUP_1:def 8;
      then (power F_Complex).(v,t) = 0.F_Complex or v = 0.F_Complex
                                                            by A4,VECTSP_1:44;
-     hence P[t] by X,VECTSP_1:95;
+     hence P[t] by A6,VECTSP_1:95;
     end;
     P[1] from Regrwithout0(A1,A2);
     hence thesis by GROUP_1:98;
@@ -1341,9 +1263,9 @@ X:    t > 0 by NAT_1:19;
     let n be non empty Element of NAT;
     let x be Element of F_Complex;
     let v be CRoot of n,x;
-X:   n > 0 by NAT_1:19;
+A1:   n > 0 by NAT_1:19;
     assume v = 0.F_Complex;
     then (power F_Complex).(0.F_Complex,n) = x by Def2;
-    hence thesis by X,VECTSP_1:95;
+    hence thesis by A1,VECTSP_1:95;
    end;
 

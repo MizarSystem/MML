@@ -11,9 +11,9 @@ environ
       SCMFSA6A, AMI_2, FUNCT_7, SCMPDS_1, ABSVALUE, NAT_1, ARYTM_1, SCMFSA6B,
       FUNCOP_1, SCMPDS_4;
  notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, NUMBERS, XCMPLX_0, RELAT_1,
-      FUNCT_1, FUNCT_4, INT_1, NAT_1, CQC_LANG, FINSET_1, STRUCT_0, AMI_1,
-      AMI_2, AMI_3, AMI_5, FUNCT_7, SCMPDS_1, SCMPDS_2, SCMFSA_4, SCMPDS_3,
-      CARD_1, INT_2, XXREAL_0;
+      FUNCT_1, FUNCT_4, INT_1, NAT_1, FINSET_1, STRUCT_0, AMI_1, AMI_2, AMI_3,
+      AMI_5, FUNCT_7, SCMPDS_1, SCMPDS_2, SCMFSA_4, SCMPDS_3, CARD_1, INT_2,
+      XXREAL_0;
  constructors ENUMSET1, WELLORD2, XXREAL_0, NAT_1, MEMBERED, INT_2, FUNCT_7,
       AMI_5, SCMFSA_4, SCMPDS_1, SCMPDS_3;
  registrations AMI_1, INT_1, FUNCT_1, RELSET_1, XBOOLE_0, SCMPDS_2, FUNCT_7,
@@ -25,7 +25,7 @@ environ
       INT_1, RELAT_1, AMI_5, SCMPDS_2, AMI_2, FUNCT_2, FUNCT_7, SCMPDS_3,
       CARD_1, PRE_CIRC, WELLORD2, ENUMSET1, SCMFSA_2, CARD_3, ABSVALUE,
       SCMFSA6A, GRFUNC_1, CARD_2, SCM_1, SCMFSA6B, FINSEQ_1, XBOOLE_0,
-      XBOOLE_1, XCMPLX_1, XREAL_1, ORDINAL1;
+      XBOOLE_1, XREAL_1, ORDINAL1;
  schemes NAT_1, DOMAIN_1, FUNCT_7, ZFREFLE1;
 
 begin :: Definition of a program block and its basic properties
@@ -290,8 +290,7 @@ theorem Th7:   :: Th24 SF_65
  IC SCMPDS in dom Initialized I
 proof
 A1: dom Initialized I
-      = dom(I +* Start-At(inspos 0))
-     .= dom I \/ dom Start-At(inspos 0)
+      = dom I \/ dom Start-At(inspos 0)
             by FUNCT_4:def 1;
      dom Start-At(inspos 0) = { IC SCMPDS } by AMI_3:34;
   then IC SCMPDS in dom Start-At(inspos 0) by TARSKI:def 1;
@@ -304,8 +303,7 @@ proof
      dom Start-At(inspos 0) = { IC SCMPDS } by AMI_3:34;
 then A1: IC SCMPDS in dom Start-At(inspos 0) by TARSKI:def 1;
     IC SCMPDS in dom Initialized I by Th7;
- hence IC Initialized I = (Initialized I).IC SCMPDS by AMI_3:def 16
-    .= (I +* Start-At(inspos 0)).IC SCMPDS
+ hence IC Initialized I = (I +* Start-At(inspos 0)).IC SCMPDS by AMI_3:def 16
     .= (Start-At inspos 0).IC SCMPDS by A1,FUNCT_4:14
     .= inspos 0 by AMI_3:50;
 end;
@@ -348,10 +346,8 @@ A7:  x in {IC SCMPDS } \/ SCM-Data-Loc;
    per cases by A7,XBOOLE_0:def 2;
    suppose x in {IC SCMPDS};
 then A8:  x = IC SCMPDS by TARSKI:def 1;
-   thus (s1|(dom s1 \ A)).x = s1.x by A5,A7,FUNCT_1:70
-        .= IC s1 by A8
-        .= s2.x by A1,A8
-        .= (s2|(dom s2 \ A)).x by A6,A7,FUNCT_1:70;
+   thus (s1|(dom s1 \ A)).x = IC s1 by  A5,A7,FUNCT_1:70,A8
+        .= (s2|(dom s2 \ A)).x by  A1,A8,A6,A7,FUNCT_1:70;
    end;
    suppose x in SCM-Data-Loc;
 then A9: x is Int_position by SCMPDS_2:9;
@@ -410,11 +406,9 @@ A5:  now let a;
         .=s2.a by A1,Th13
         .=Exec(i, s2).a by A4,SCMPDS_2:66;
      end;
-        IC Exec(i,s1) = Exec(i,s1).IC SCMPDS
-        .= ICplusConst(s1,k1) by A4,SCMPDS_2:66
+        IC Exec(i,s1) = ICplusConst(s1,k1) by A4,SCMPDS_2:66
         .= ICplusConst(s2,k1) by A3,SCMPDS_3:2
-        .= Exec(i,s2).IC SCMPDS by A4,SCMPDS_2:66
-        .= IC Exec(i,s2);
+        .= IC Exec(i,s2) by A4,SCMPDS_2:66;
       hence Exec(i,s1),Exec(i,s2)
       equal_outside the Instruction-Locations of SCMPDS by A5,Th11;
 
@@ -435,12 +429,11 @@ A7: now let b;
           .=Exec(i,s2).b by A6,A9,SCMPDS_2:70;
       end;
       end;
-         IC Exec(i,s1) = Exec(i,s1).IC SCMPDS
-        .= 2*(abs(s1.DataLoc(s1.a,RetIC)) div 2)+4 by A6,SCMPDS_2:70
+         IC Exec(i,s1) =
+ 2*(abs(s1.DataLoc(s1.a,RetIC)) div 2)+4 by A6,SCMPDS_2:70
         .= 2*(abs(s1.DataLoc(s2.a,RetIC)) div 2)+4 by A1,Th13
         .= 2*(abs(s2.DataLoc(s2.a,RetIC)) div 2)+4 by A1,Th13
-        .= Exec(i,s2).IC SCMPDS by A6,SCMPDS_2:70
-        .= IC Exec(i,s2);
+        .= IC Exec(i,s2) by A6,SCMPDS_2:70;
          hence thesis by A7,Th11;
 
     end;
@@ -459,10 +452,8 @@ A11:  now let b;
           .=Exec(i,s2).b by A10,A13,SCMPDS_2:57;
      end;
      end;
-         IC Exec(i,s1) = Exec(i,s1).IC SCMPDS
-        .= Next IC s2 by A3,A10,SCMPDS_2:57
-        .= Exec(i,s2).IC SCMPDS by A10,SCMPDS_2:57
-        .= IC Exec(i,s2);
+         IC Exec(i,s1) = Next IC s2 by A3,A10,SCMPDS_2:57
+        .= IC Exec(i,s2) by A10,SCMPDS_2:57;
       hence thesis by A11,Th11;
 
     end;
@@ -483,10 +474,8 @@ A15:  now let b;
           .=Exec(i,s2).b by A14,A19,SCMPDS_2:71;
        end;
        end;
-         IC Exec(i,s1) = Exec(i,s1).IC SCMPDS
-        .= Next IC s2 by A3,A14,SCMPDS_2:71
-        .= Exec(i,s2).IC SCMPDS by A14,SCMPDS_2:71
-        .= IC Exec(i,s2);
+         IC Exec(i,s1) = Next IC s2 by A3,A14,SCMPDS_2:71
+        .= IC Exec(i,s2) by A14,SCMPDS_2:71;
       hence thesis by A15,Th11;
 
     end;
@@ -502,18 +491,14 @@ A21:  now let a;
         per cases;
         suppose A22: s1.DataLoc(s1.a,k1) <> 0;
          then A23: s2.DataLoc(s2.a,k1) <> 0 by A1,Th14;
-       thus IC Exec(i,s1) = Exec(i,s1).IC SCMPDS
-        .= ICplusConst(s1,k2) by A20,A22,SCMPDS_2:67
+       thus IC Exec(i,s1) = ICplusConst(s1,k2) by A20,A22,SCMPDS_2:67
         .= ICplusConst(s2,k2) by A3,SCMPDS_3:2
-        .= Exec(i,s2).IC SCMPDS by A20,A23,SCMPDS_2:67
-        .= IC Exec(i,s2);
+        .= IC Exec(i,s2) by A20,A23,SCMPDS_2:67;
         end;
         suppose A24: s1.DataLoc(s1.a,k1) = 0;
          then A25: s2.DataLoc(s2.a,k1) = 0 by A1,Th14;
-       thus IC Exec(i,s1) = Exec(i,s1).IC SCMPDS
-        .= Next IC s2 by A3,A20,A24,SCMPDS_2:67
-        .= Exec(i,s2).IC SCMPDS by A20,A25,SCMPDS_2:67
-        .= IC Exec(i,s2);
+       thus IC Exec(i,s1) = Next IC s2 by A3,A20,A24,SCMPDS_2:67
+        .= IC Exec(i,s2) by A20,A25,SCMPDS_2:67;
      end;
      end;
      hence thesis by A21,Th11;
@@ -531,18 +516,14 @@ A27:  now let a;
         per cases;
         suppose A28: s1.DataLoc(s1.a,k1) <= 0;
          then A29: s2.DataLoc(s2.a,k1) <= 0 by A1,Th14;
-       thus IC Exec(i,s1) = Exec(i,s1).IC SCMPDS
-        .= ICplusConst(s1,k2) by A26,A28,SCMPDS_2:68
+       thus IC Exec(i,s1) = ICplusConst(s1,k2) by A26,A28,SCMPDS_2:68
         .= ICplusConst(s2,k2) by A3,SCMPDS_3:2
-        .= Exec(i,s2).IC SCMPDS by A26,A29,SCMPDS_2:68
-        .= IC Exec(i,s2);
+        .= IC Exec(i,s2) by A26,A29,SCMPDS_2:68;
         end;
         suppose A30: s1.DataLoc(s1.a,k1) > 0;
          then A31: s2.DataLoc(s2.a,k1) > 0 by A1,Th14;
-       thus IC Exec(i,s1) = Exec(i,s1).IC SCMPDS
-        .= Next IC s2 by A3,A26,A30,SCMPDS_2:68
-        .= Exec(i,s2).IC SCMPDS by A26,A31,SCMPDS_2:68
-        .= IC Exec(i,s2);
+       thus IC Exec(i,s1) = Next IC s2 by A3,A26,A30,SCMPDS_2:68
+        .= IC Exec(i,s2) by A26,A31,SCMPDS_2:68;
      end;
      end;
      hence thesis by A27,Th11;
@@ -560,18 +541,14 @@ A33:  now let a;
         per cases;
         suppose A34: s1.DataLoc(s1.a,k1) >= 0;
          then A35: s2.DataLoc(s2.a,k1) >= 0 by A1,Th14;
-       thus IC Exec(i,s1) = Exec(i,s1).IC SCMPDS
-        .= ICplusConst(s1,k2) by A32,A34,SCMPDS_2:69
+       thus IC Exec(i,s1) = ICplusConst(s1,k2) by A32,A34,SCMPDS_2:69
         .= ICplusConst(s2,k2) by A3,SCMPDS_3:2
-        .= Exec(i,s2).IC SCMPDS by A32,A35,SCMPDS_2:69
-        .= IC Exec(i,s2);
+        .= IC Exec(i,s2) by A32,A35,SCMPDS_2:69;
         end;
         suppose A36: s1.DataLoc(s1.a,k1) < 0;
          then A37: s2.DataLoc(s2.a,k1) < 0 by A1,Th14;
-       thus IC Exec(i,s1) = Exec(i,s1).IC SCMPDS
-        .= Next IC s2 by A3,A32,A36,SCMPDS_2:69
-        .= Exec(i,s2).IC SCMPDS by A32,A37,SCMPDS_2:69
-        .= IC Exec(i,s2);
+       thus IC Exec(i,s1) = Next IC s2 by A3,A32,A36,SCMPDS_2:69
+        .= IC Exec(i,s2) by A32,A37,SCMPDS_2:69;
      end;
      end;
      hence thesis by A33,Th11;
@@ -594,10 +571,8 @@ A39:  now let b;
           .=Exec(i,s2).b by A38,A43,SCMPDS_2:58;
      end;
      end;
-         IC Exec(i,s1) = Exec(i,s1).IC SCMPDS
-        .= Next IC s2 by A3,A38,SCMPDS_2:58
-        .= Exec(i,s2).IC SCMPDS by A38,SCMPDS_2:58
-        .= IC Exec(i,s2);
+         IC Exec(i,s1) = Next IC s2 by A3,A38,SCMPDS_2:58
+        .= IC Exec(i,s2) by A38,SCMPDS_2:58;
       hence thesis by A39,Th11;
 
     end;
@@ -619,10 +594,8 @@ A45:  now let b;
           .=Exec(i,s2).b by A44,A49,SCMPDS_2:60;
      end;
      end;
-         IC Exec(i,s1) = Exec(i,s1).IC SCMPDS
-        .= Next IC s2 by A3,A44,SCMPDS_2:60
-        .= Exec(i,s2).IC SCMPDS by A44,SCMPDS_2:60
-        .= IC Exec(i,s2);
+         IC Exec(i,s1) = Next IC s2 by A3,A44,SCMPDS_2:60
+        .= IC Exec(i,s2) by A44,SCMPDS_2:60;
       hence thesis by A45,Th11;
 
     end;
@@ -646,10 +619,8 @@ A51:  now let c;
           .=Exec(i,s2).c by A50,A55,SCMPDS_2:61;
      end;
      end;
-         IC Exec(i,s1) = Exec(i,s1).IC SCMPDS
-        .= Next IC s2 by A3,A50,SCMPDS_2:61
-        .= Exec(i,s2).IC SCMPDS by A50,SCMPDS_2:61
-        .= IC Exec(i,s2);
+         IC Exec(i,s1) = Next IC s2 by A3,A50,SCMPDS_2:61
+        .= IC Exec(i,s2) by A50,SCMPDS_2:61;
       hence thesis by A51,Th11;
 
     end;
@@ -673,10 +644,8 @@ A57:  now let c;
           .=Exec(i,s2).c by A56,A61,SCMPDS_2:62;
      end;
      end;
-         IC Exec(i,s1) = Exec(i,s1).IC SCMPDS
-        .= Next IC s2 by A3,A56,SCMPDS_2:62
-        .= Exec(i,s2).IC SCMPDS by A56,SCMPDS_2:62
-        .= IC Exec(i,s2);
+         IC Exec(i,s1) = Next IC s2 by A3,A56,SCMPDS_2:62
+        .= IC Exec(i,s2) by A56,SCMPDS_2:62;
       hence thesis by A57,Th11;
 
     end;
@@ -700,10 +669,8 @@ A63:  now let c;
           .=Exec(i,s2).c by A62,A67,SCMPDS_2:63;
      end;
      end;
-         IC Exec(i,s1) = Exec(i,s1).IC SCMPDS
-        .= Next IC s2 by A3,A62,SCMPDS_2:63
-        .= Exec(i,s2).IC SCMPDS by A62,SCMPDS_2:63
-        .= IC Exec(i,s2);
+         IC Exec(i,s1) = Next IC s2 by A3,A62,SCMPDS_2:63
+        .= IC Exec(i,s2) by A62,SCMPDS_2:63;
       hence thesis by A63,Th11;
 
     end;
@@ -741,10 +708,8 @@ A69:  now let c;
            end;
      end;
      end;
-         IC Exec(i,s1) = Exec(i,s1).IC SCMPDS
-        .= Next IC s2 by A3,A68,SCMPDS_2:64
-        .= Exec(i,s2).IC SCMPDS by A68,SCMPDS_2:64
-        .= IC Exec(i,s2);
+         IC Exec(i,s1) = Next IC s2 by A3,A68,SCMPDS_2:64
+        .= IC Exec(i,s2) by A68,SCMPDS_2:64;
       hence thesis by A69,Th11;
 
     end;
@@ -766,10 +731,8 @@ A79:  now let c;
           .=Exec(i,s2).c by A78,A83,SCMPDS_2:59;
      end;
      end;
-         IC Exec(i,s1) = Exec(i,s1).IC SCMPDS
-        .= Next IC s2 by A3,A78,SCMPDS_2:59
-        .= Exec(i,s2).IC SCMPDS by A78,SCMPDS_2:59
-        .= IC Exec(i,s2);
+         IC Exec(i,s1) = Next IC s2 by A3,A78,SCMPDS_2:59
+        .= IC Exec(i,s2) by A78,SCMPDS_2:59;
       hence thesis by A79,Th11;
 end;
 end;
@@ -1051,8 +1014,7 @@ theorem Th27:   :: Th43
 proof
    let I be Program-block;
    thus dom Initialized I
-    = dom(I +* Start-At(inspos 0))
-   .= dom I \/ dom Start-At(inspos 0) by FUNCT_4:def 1
+    = dom I \/ dom Start-At(inspos 0) by FUNCT_4:def 1
    .= dom I \/ {IC SCMPDS} by AMI_3:34;
 end;
 
@@ -1076,9 +1038,7 @@ proof
        IC SCMPDS in {IC SCMPDS} by TARSKI:def 1;
 then A1: IC SCMPDS in dom Start-At inspos 0 by AMI_3:34;
    thus (Initialized I).IC SCMPDS
-    = (I +* (Start-At (inspos 0))).IC SCMPDS
-   .= (Start-At (inspos 0)).IC SCMPDS by A1,FUNCT_4:14
-   .= (IC SCMPDS .--> inspos 0).IC SCMPDS
+    = (Start-At (inspos 0)).IC SCMPDS by A1,FUNCT_4:14
    .= inspos 0 by CQC_LANG:6;
 end;
 
@@ -1206,12 +1166,10 @@ proof
    let s be State of SCMPDS;
 A1: IC SCMPDS in dom Initialized I & IC SCMPDS in dom Initialized J
         by Th7;
-A2: IC (s +* Initialized J) = (s +* Initialized J).IC SCMPDS
-   .= (Initialized J).IC SCMPDS by A1,FUNCT_4:14
+A2: IC (s +* Initialized J) = (Initialized J).IC SCMPDS by A1,FUNCT_4:14
    .= inspos 0 by Th29
    .= (Initialized I).IC SCMPDS by Th29
-   .= (s +* Initialized I).IC SCMPDS by A1,FUNCT_4:14
-   .= IC (s +* Initialized I);
+   .= IC (s +* Initialized I) by A1,FUNCT_4:14;
     now let a be Int_position;
    A3: not a in dom Initialized I by Th31;
           not a in dom Initialized J by Th31;
@@ -1280,8 +1238,7 @@ A3:   l = inspos(m+card I) and inspos m in dom J;
           m + card I < card I by A1,A3,Th1;
        hence contradiction by NAT_1:29;
    end;
-   thus (I ';' J).l = ( I +* Shift(J, card I)).l
-    .= I.l by A2,FUNCT_4:12;
+   thus (I ';' J).l = I.l by A2,FUNCT_4:12;
 end;
 
 theorem Th38:
@@ -1295,8 +1252,7 @@ A2: l=inspos n by SCMPDS_3:32;
        inspos(n+card I) in { inspos(m+card I):inspos m in dom J } by A1,A2;
     then inspos(n+card I) in dom Shift(J,card I) by SCMPDS_3:def 7;
 then A3: l+card I in dom Shift(J,card I) by A2,SCMPDS_3:def 3;
-    thus (I ';' J).(l+card I) = ( I +* Shift(J, card I)).(l+card I)
-    .= Shift(J, card I).(l+card I) by A3,FUNCT_4:14
+    thus (I ';' J).(l+card I) = Shift(J, card I).(l+card I) by A3,FUNCT_4:14
     .=J.l by A1,SCMPDS_3:37;
 end;
 
@@ -1359,8 +1315,7 @@ A2: dom (Initialized I+*(I ';' J))
   then A5:  not x in dom Start-At inspos 0 by AMI_3:34;
        thus (Initialized I+*(I ';' J)).x
         = (I ';' J).x by A4,FUNCT_4:14
-       .= ((I ';' J) +* Start-At(inspos 0)).x by A5,FUNCT_4:12
-       .= (Initialized (I ';' J)).x;
+       .= (Initialized (I ';' J)).x by A5,FUNCT_4:12;
       end;
       suppose A6: x = IC SCMPDS;
        then not x in dom (I ';' J) by Th30;
@@ -1409,8 +1364,7 @@ A2: card dom Shift(J, card I)
       .= card J by Th3
       .= card dom J by PRE_CIRC:21;
 A3: dom(I ';' J)
-      = dom(I +* Shift(J, card I))
-     .= dom I \/ dom Shift(J, card I) by FUNCT_4:def 1;
+      = dom I \/ dom Shift(J, card I) by FUNCT_4:def 1;
      dom I misses dom Shift(J,card I) by Th2;
   hence card(I ';' J) = card I + card J by A1,A2,A3,CARD_2:53;
 end;
@@ -1419,15 +1373,11 @@ theorem Th46:  :: Th62
  I ';' J ';' K = I ';' (J ';' K)
 proof
 A1: Shift(J ';' K, card I)
-     = Shift(J +* Shift(K, card J), card I)
-    .= Shift(J,card I) +* Shift(Shift(K, card J), card I) by SCMPDS_3:41
+     = Shift(J,card I) +* Shift(Shift(K, card J), card I) by SCMPDS_3:41
     .= Shift(J,card I) +* Shift(K, card J+card I) by SCMPDS_3:39
     .= Shift(J,card I) +* Shift(K, card ( I ';'J)) by Th45;
   thus I ';' J ';' K
-       = (I ';' J) +* Shift(K, card(I ';' J))
-      .= I +* Shift(J, card I) +* Shift(K, card(I ';' J))
-      .= I +* Shift(J ';' K, card I) by A1,FUNCT_4:15
-      .= I ';' (J ';' K);
+       = I ';' (J ';' K) by A1,FUNCT_4:15;
 end;
 
 theorem Th47:  :: Th63
@@ -1439,8 +1389,7 @@ theorem
 theorem
     I ';' j ';' k = I ';' (j ';' k)
 proof
- thus I ';' j ';' k = I ';' Load j ';' k
-         .= I ';' (Load j ';' k) by Th47
+ thus I ';' j ';' k = I ';' (Load j ';' k) by Th47
          .= I ';' (j ';' k);
 end;
 
@@ -1454,15 +1403,13 @@ theorem Th52:   :: Th68
  i ';' j ';' K = i ';' (j ';' K)
 proof
  thus i ';' j ';' K = i ';' Load j ';' K
-       .= i ';' (Load j ';' K) by Th50
-       .= i ';' (j ';' K);
+       .= i ';' (j ';' K) by Th50;
 end;
 
 theorem
     i ';' j ';' k = i ';' (j ';' k)
 proof
- thus i ';' j ';' k = i ';' j ';' Load k
-       .= i ';' (j ';' Load k) by Th52
+ thus i ';' j ';' k = i ';' (j ';' Load k) by Th52
        .= i ';' (j ';' k);
 end;
 
@@ -1630,7 +1577,6 @@ A9: IC m1 = m1.IC SCMPDS by A3,AMI_3:def 16
         .= inspos 0 by AMI_3:50;
   take 0;
   thus CurInstr((Computation s).0) = CurInstr s by AMI_1:def 19
-     .= s.IC s
      .= s.IC m1 by A1,A3,AMI_5:60
      .= m1.inspos 0 by A1,A8,A9,GRFUNC_1:8
      .= m0.inspos 0 by A6,A7,GRFUNC_1:8
@@ -1700,9 +1646,7 @@ then A5: not IC SCMPDS in dom m by A1,A4,TARSKI:def 2;
    defpred X[Element of NAT] means
     IC((Computation s1).$1) = IC s1 or IC((Computation s1).$1) = Next IC s1;
 A6: X[0] by AMI_1:def 19;
-A7: IC s1 = s1.IC SCMPDS
-       .= s2.IC SCMPDS by A5,FUNCT_4:12
-       .= IC s2;
+A7: IC s1 = IC s2 by A5,FUNCT_4:12;
 
     now let n;
     set Cn=(Computation s1).n;
@@ -1711,20 +1655,16 @@ A8:   IC Cn = IC s1 or IC Cn = Next IC s1;
       per cases by A8;
       case A9:IC Cn = IC s1;
 A10:   CurInstr( Cn )
-          = Cn.IC Cn
-         .= s1.IC s1 by A9,AMI_1:54
+          = s1.IC s1 by A9,AMI_1:54
          .= goto 1 by A2,A3,A7,FUNCT_4:14;
     thus IC ((Computation s1).(n+1))
             = IC Following Cn by AMI_1:def 19
-           .= IC Exec(goto 1,Cn) by A10
-           .= Exec(goto 1,Cn).IC SCMPDS
-           .= ICplusConst(Cn,1) by SCMPDS_2:66
+           .= ICplusConst(Cn,1) by  A10,SCMPDS_2:66
            .= Next IC s1 by A9,SCMPDS_3:20;
       end;
       case A11:IC Cn = Next IC s1;
 A12:   CurInstr((Computation s1).n)
-          = Cn.IC Cn
-         .= s1.(Next IC s1) by A11,AMI_1:54
+          = s1.(Next IC s1) by A11,AMI_1:54
          .= goto -1 by A2,A3,A7,FUNCT_4:14;
         consider j be Element of NAT such that
 A13:     j = IC Cn & ICplusConst(Cn,-1)=abs(j-2+2*(-1))+2
@@ -1737,9 +1677,7 @@ A16:     j=2*i+2+2 by A11,A13,A14,A15,AMI_2:def 15
         .=2*i+(2+2);
     thus IC((Computation s1).(n+1))
             = IC Following Cn by AMI_1:def 19
-           .= IC Exec(goto -1,Cn ) by A12
-           .= Exec(goto -1,Cn ).IC SCMPDS
-           .=abs(2*i+4 + -4 )+2 by A13,A16,SCMPDS_2:66
+           .=abs(2*i+4 + -4 )+2 by  A12,A13,A16,SCMPDS_2:66
            .=IC s1 by A15,ABSVALUE:def 1;
    end;
    end;
@@ -1749,15 +1687,13 @@ A18: for n holds X[n] from NAT_1:sch 1(A6,A17);
    per cases by A18;
    suppose IC((Computation s1).n) = IC s1;
        then CurInstr((Computation s1).n)
-          = ((Computation s1).n).IC s1
-         .= s1.IC s1 by AMI_1:54
+          = s1.IC s1 by AMI_1:54
          .= goto 1 by A2,A3,A7,FUNCT_4:14;
        hence CurInstr((Computation s1).n) <> halt SCMPDS by SCMPDS_2:85;
    end;
    suppose IC((Computation s1).n) = Next IC s1;
         then CurInstr((Computation s1).n)
-          = ((Computation s1).n).Next IC s1
-         .= s1.Next IC s1 by AMI_1:54
+          = s1.Next IC s1 by AMI_1:54
          .= goto -1 by A2,A3,A7,FUNCT_4:14;
        hence CurInstr((Computation s1).n) <> halt SCMPDS by SCMPDS_2:85;
 end;
@@ -1796,12 +1732,10 @@ then A11:   IC((Computation s2).m) in dom I by A4;
 A12:   IC ((Computation s1).m) = IC ((Computation s2).m)
      by A7,A10,NAT_1:38,SCMFSA6A:29;
         CurInstr((Computation s1).m)
-          = ((Computation s1).m).IC ((Computation s1).m)
-         .= s1.IC((Computation s1).m) by AMI_1:54
+          = s1.IC((Computation s1).m) by AMI_1:54
          .= I.IC((Computation s1).m) by A2,A11,A12,GRFUNC_1:8
          .= s2.IC((Computation s2).m) by A3,A11,A12,GRFUNC_1:8
-         .= ((Computation s2).m).IC ((Computation s2).m) by AMI_1:54
-         .= CurInstr((Computation s2).m);
+         .= CurInstr((Computation s2).m) by AMI_1:54;
     hence (Computation s1).(m+1), (Computation s2 ).(m+1) equal_outside
      the Instruction-Locations of SCMPDS by A7,A8,A9,A10,Th15,NAT_1:38;
    end;
@@ -1938,8 +1872,7 @@ end;
 theorem Th75: ::Th26 T9
  inspos 0 in dom stop (I)
 proof
-      card stop I =card (I ';' SCMPDS-Stop)
-   .=card I + 1 by Th45,Th74;
+      card stop I =card I + 1 by Th45,Th74;
    then 1 <= card stop I by NAT_1:29;
    then 0 < card stop I;
    hence thesis by Th1;
@@ -2480,21 +2413,14 @@ A4: n1 = IC s1 & ICplusConst(s1,k1) = abs(n1-2+2*k1)+2 by SCMPDS_2:def 20;
 A5: n2 = IC s2 & ICplusConst(s2,k1) = abs(n2-2+2*k1)+2 by SCMPDS_2:def 20;
     reconsider mk=m+k1 as Element of NAT by A2,INT_1:16;
 A6: n2=inspos ( m + n) by A1,A3,A5,SCMPDS_3:def 3
-    .=il.(m+n)
     .=2*(m+n)+2;
     consider nk be Element of NAT such that
 A7: inspos nk=ICplusConst(s1,k1) by SCMPDS_3:32;
-A8: n1=il.m by A1,A4
-    .=2*m+2;
-       2*nk+2=il.nk
-    .=abs(n1-2+2*k1)+2 by A4,A7;
-then A9: 2*nk=abs(2*m+2*k1) by A8
-    .=2*mk by ABSVALUE:def 1;
+A8: n1=2*m+2 by A1,A4;
+       2*nk+2=abs(n1-2+2*k1)+2 by A4,A7;
+then A9: 2*nk=2*mk by  A8,ABSVALUE:def 1;
     thus ICplusConst(s1,k1) +n=inspos(nk +n) by A7,SCMPDS_3:def 3
-    .=il.(nk+n)
-    .=2*(nk+n)+2
-    .=2*mk+2*n+2 by A9
-    .=ICplusConst(s2,k1) by A5,A6,ABSVALUE:def 1;
+    .=ICplusConst(s2,k1) by  A9,A5,A6,ABSVALUE:def 1;
 end;
 
 theorem Th83:  ::S6A_41
@@ -2530,10 +2456,8 @@ A8: Next IC s1 + n = Next IC s2
 A9:now assume
           Ci <> 0 & Ci<>1 & Ci<>4 & Ci<>5 & Ci<> 6;
       then A10: not Ci in {0,1,4,5,6} by ENUMSET1:def 3;
-         IC Exec(i,s1) = Exec(i,s1).IC SCMPDS
-      .= Next IC s1 by A10,Th6;
-      hence IC Exec(i,s1) + n = Exec(i,s2).IC SCMPDS by A8,A10,Th6
-      .= IC Exec(i,s2);
+         IC Exec(i,s1) = Next IC s1 by A10,Th6;
+      hence IC Exec(i,s1) + n = IC Exec(i,s2) by A8,A10,Th6;
     end;
 A11: now let a,k1;
         thus s1.DataLoc(s1.a,k1) =s1.DataLoc(s2.a,k1) by A6,Th23
@@ -2549,11 +2473,9 @@ A14: now let a;
         .=s2.a by A6,Th23
         .=Exec(i, s2).a by A13,SCMPDS_2:66;
      end;
-        IC Exec(i,s1) = (Exec(i,s1).IC SCMPDS)
-        .= ICplusConst(s1,k1) by A13,SCMPDS_2:66;
+        IC Exec(i,s1) = ICplusConst(s1,k1) by A13,SCMPDS_2:66;
      hence IC Exec(i,s1) + n = ICplusConst(s2,k1) by A1,A5,A13,Th82
-        .= Exec(i,s2).IC SCMPDS by A13,SCMPDS_2:66
-        .= IC Exec(i,s2);
+        .= IC Exec(i,s2) by A13,SCMPDS_2:66;
      thus Exec(i,s1) | D = Exec(i,s2) | D by A14,Th23;
 
    end;
@@ -2588,19 +2510,14 @@ A21: now let a;
        per cases;
        suppose A22:s1.DataLoc(s1.a,k1) <> 0;
          then A23:s2.DataLoc(s2.a,k1) <> 0 by A11;
-           IC Exec(i,s1) = (Exec(i,s1).IC SCMPDS)
-        .= ICplusConst(s1,k2) by A20,A22,SCMPDS_2:67;
+           IC Exec(i,s1) = ICplusConst(s1,k2) by A20,A22,SCMPDS_2:67;
         hence IC Exec(i,s1) + n = ICplusConst(s2,k2) by A1,A5,A20,Th82
-        .= Exec(i,s2).IC SCMPDS by A20,A23,SCMPDS_2:67
-        .= IC Exec(i,s2);
+        .= IC Exec(i,s2) by A20,A23,SCMPDS_2:67;
        end;
        suppose A24:s1.DataLoc(s1.a,k1) = 0;
          then A25:s2.DataLoc(s2.a,k1) = 0 by A11;
-           IC Exec(i,s1) = (Exec(i,s1).IC SCMPDS)
-        .= Next IC s1 by A20,A24,SCMPDS_2:67;
-        hence IC Exec(i,s1) + n = Exec(i,s2).IC SCMPDS by A8,A20,A25,
-SCMPDS_2:67
-         .= IC Exec(i,s2);
+           IC Exec(i,s1) = Next IC s1 by A20,A24,SCMPDS_2:67;
+        hence IC Exec(i,s1) + n = IC Exec(i,s2) by A8,A20,A25,SCMPDS_2:67;
      end;
      end;
      thus Exec(i,s1) | D = Exec(i,s2) | D by A21,Th23;
@@ -2618,19 +2535,14 @@ A27: now let a;
        per cases;
        suppose A28:s1.DataLoc(s1.a,k1) <= 0;
          then A29:s2.DataLoc(s2.a,k1) <= 0 by A11;
-           IC Exec(i,s1) = (Exec(i,s1).IC SCMPDS)
-        .= ICplusConst(s1,k2) by A26,A28,SCMPDS_2:68;
+           IC Exec(i,s1) = ICplusConst(s1,k2) by A26,A28,SCMPDS_2:68;
         hence IC Exec(i,s1) + n = ICplusConst(s2,k2) by A1,A5,A26,Th82
-        .= Exec(i,s2).IC SCMPDS by A26,A29,SCMPDS_2:68
-        .= IC Exec(i,s2);
+        .= IC Exec(i,s2) by A26,A29,SCMPDS_2:68;
        end;
        suppose A30:s1.DataLoc(s1.a,k1) > 0;
          then A31:s2.DataLoc(s2.a,k1) > 0 by A11;
-           IC Exec(i,s1) = (Exec(i,s1).IC SCMPDS)
-        .= Next IC s1 by A26,A30,SCMPDS_2:68;
-        hence IC Exec(i,s1) + n = Exec(i,s2).IC SCMPDS by A8,A26,A31,
-SCMPDS_2:68
-         .= IC Exec(i,s2);
+           IC Exec(i,s1) = Next IC s1 by A26,A30,SCMPDS_2:68;
+        hence IC Exec(i,s1) + n = IC Exec(i,s2) by A8,A26,A31,SCMPDS_2:68;
      end;
      end;
      thus Exec(i,s1) | D = Exec(i,s2) | D by A27,Th23;
@@ -2648,19 +2560,14 @@ A33: now let a;
        per cases;
        suppose A34:s1.DataLoc(s1.a,k1) >= 0;
          then A35:s2.DataLoc(s2.a,k1) >= 0 by A11;
-           IC Exec(i,s1) = (Exec(i,s1).IC SCMPDS)
-        .= ICplusConst(s1,k2) by A32,A34,SCMPDS_2:69;
+           IC Exec(i,s1) = ICplusConst(s1,k2) by A32,A34,SCMPDS_2:69;
         hence IC Exec(i,s1) + n = ICplusConst(s2,k2) by A1,A5,A32,Th82
-        .= Exec(i,s2).IC SCMPDS by A32,A35,SCMPDS_2:69
-        .= IC Exec(i,s2);
+        .= IC Exec(i,s2) by A32,A35,SCMPDS_2:69;
        end;
        suppose A36:s1.DataLoc(s1.a,k1) < 0;
          then A37:s2.DataLoc(s2.a,k1) < 0 by A11;
-           IC Exec(i,s1) = (Exec(i,s1).IC SCMPDS)
-        .= Next IC s1 by A32,A36,SCMPDS_2:69;
-        hence IC Exec(i,s1) + n = Exec(i,s2).IC SCMPDS by A8,A32,A37,
-SCMPDS_2:69
-         .= IC Exec(i,s2);
+           IC Exec(i,s1) = Next IC s1 by A32,A36,SCMPDS_2:69;
+        hence IC Exec(i,s1) + n = IC Exec(i,s2) by A8,A32,A37,SCMPDS_2:69;
      end;
      end;
      thus Exec(i,s1) | D = Exec(i,s2) | D by A33,Th23;
@@ -2877,24 +2784,20 @@ A8: P[0]
 A9:  IC SCMPDS in dom II by Th7;
         inspos 0 + n in dom Shift(SI,n) by A7,Th76;
 then A10:  inspos (0 + n) in dom Shift(SI,n) by SCMPDS_3:def 3;
-        IC C1.0 = IC s1 by AMI_1:def 19
-    .= s1.IC SCMPDS
+        IC C1.0 = s1.IC SCMPDS by AMI_1:def 19
     .= II.IC SCMPDS by A1,A9,GRFUNC_1:8
     .= inspos 0 by Th29;
    hence IC C1.0 + n = inspos (0 + n) by SCMPDS_3:def 3
       .= IC C2.0 by A3,AMI_1:def 19;
-A11: s1.IC s1 = s1.(s1.IC SCMPDS)
-      .= s1.((II).IC SCMPDS) by A1,A9,GRFUNC_1:8
+A11: s1.IC s1 = s1.((II).IC SCMPDS) by A1,A9,GRFUNC_1:8
       .= s1.inspos 0 by Th29
       .= II.inspos 0 by A1,A6,A7,GRFUNC_1:8
       .= SI.inspos 0 by A5,A7,GRFUNC_1:8;
     thus CurInstr (C1.0)
        = CurInstr s1 by AMI_1:def 19
-      .= s1.IC s1
       .= Shift(SI,n).(inspos 0 + n) by A7,A11,SCMPDS_3:37
       .= Shift(SI,n).inspos (0 + n) by SCMPDS_3:def 3
-      .= s2.IC s2 by A2,A3,A10,GRFUNC_1:8
-      .= CurInstr s2
+      .= CurInstr s2 by A2,A3,A10,GRFUNC_1:8
       .= CurInstr (C2.0) by AMI_1:def 19;
   thus C1.0 | SCM-Data-Loc
        = s2 | SCM-Data-Loc by A4,AMI_1:def 19
@@ -2911,8 +2814,7 @@ A12: for k being Element of NAT st P[k] holds P[k + 1]
       .= Exec(CurInstr C2.k,C2.k);
 
    A16: IC C1.k in dom SI by A1,Def9;
-   A17: i = C1.k.(IC C1.k)
-      .= s1.IC C1.k by AMI_1:54
+   A17: i = s1.IC C1.k by AMI_1:54
       .= II.IC C1.k by A1,A6,A16,GRFUNC_1:8
       .= SI.IC C1.k by A5,A16,GRFUNC_1:8;
        consider m such that
@@ -2922,16 +2824,14 @@ A12: for k being Element of NAT st P[k] holds P[k + 1]
        = IC C2.(k + 1) by A13,A14,A15,A18,Th83;
       set l = IC C1.(k + 1);
    A21: IC C1.(k + 1) in dom SI by A1,Def9;
-   A22: CurInstr C1.(k + 1) = C1.(k + 1).l
-      .= s1.l by AMI_1:54
+   A22: CurInstr C1.(k + 1) = s1.l by AMI_1:54
       .= II.l by A1,A6,A21,GRFUNC_1:8
       .= SI.l by A5,A21,GRFUNC_1:8;
    A23: IC C2.(k + 1) in dom Shift(SI,n) by A20,A21,Th76;
       thus CurInstr C1.(k + 1)
        = Shift(SI,n).(IC C2.(k + 1)) by A20,A21,A22,SCMPDS_3:37
       .= s2.IC C2.(k + 1) by A2,A23,GRFUNC_1:8
-      .= C2.(k + 1).IC C2.(k + 1) by AMI_1:54
-      .= CurInstr C2.(k + 1);
+      .= CurInstr C2.(k + 1) by AMI_1:54;
       thus C1.(k + 1) | SCM-Data-Loc
        = C2.(k + 1) | SCM-Data-Loc by A13,A14,A15,A18,A19,Th83;
      end;

@@ -7,10 +7,12 @@
 environ
 
  vocabularies FUNCT_2, MARGREL1, BVFUNC_1, ZF_LANG, BINARITH, FUNCT_1;
- notations XBOOLE_0, SUBSET_1, MARGREL1, VALUAT_1, FUNCT_2, FRAENKEL, BINARITH,
+ notations XBOOLE_0, SUBSET_1, XBOOLEAN, MARGREL1, VALUAT_1, FUNCT_2, FRAENKEL,
       BVFUNC_1;
  constructors BINARITH, BVFUNC_1;
- registrations MARGREL1, FRAENKEL;
+ registrations MARGREL1, FRAENKEL, XBOOLEAN;
+ requirements BOOLE, SUBSET, NUMERALS, ARITHM;
+ definitions XBOOLEAN;
  theorems MARGREL1, BINARITH, BVFUNC_1, VALUAT_1;
 
 begin
@@ -36,12 +38,10 @@ proof
 (b).x 'or' (b).x))
      by BINARITH:23
    .='not' (a).x 'or' (TRUE '&' ('not' (b).x 'or' (a).x)) by BINARITH:18
-   .='not' (a).x 'or' ((a).x 'or' 'not' (b).x) by MARGREL1:50
    .=('not' (a).x 'or' (a).x) 'or' 'not' (b).x
-     by BINARITH:20
    .=TRUE 'or' 'not' (b).x
      by BINARITH:18
-   .=TRUE by BINARITH:19;
+   .=TRUE;
     hence thesis;
   end;
   hence thesis by BVFUNC_1:def 14;
@@ -64,28 +64,11 @@ proof
    .='not'( 'not' (a).x 'or' (b).x) 'or' ('not'
 (b 'imp' a).x 'or' (a 'eqv' b).x)
      by BVFUNC_1:def 11
-   .='not'( 'not' (a).x 'or' (b).x) 'or'
-     ('not'( 'not' (b).x 'or' (a).x) 'or' (a 'eqv' b).x)
-     by BVFUNC_1:def 11
    .=('not' 'not' (a).x '&' 'not' (b).x) 'or'
-     ('not'( 'not' (b).x 'or' (a).x) 'or' (a 'eqv' b).x)
-     by BINARITH:10
-   .=('not' 'not' (a).x '&' 'not' (b).x) 'or'
-     (('not' 'not' (b).x '&' 'not' (a).x) 'or' (a 'eqv' b).x)
-     by BINARITH:10
-   .=((a).x '&' 'not' (b).x) 'or'
-     (('not' 'not' (b).x '&' 'not' (a).x) 'or' (a 'eqv' b).x)
-   .=((a).x '&' 'not' (b).x) 'or'
-     (((b).x '&' 'not' (a).x) 'or' (a 'eqv' b).x)
+     ('not'( 'not' (b).x 'or' (a).x) 'or' (a 'eqv' b).x) by BVFUNC_1:def 11
    .=((a).x '&' 'not' (b).x) 'or' (((b).x '&' 'not' (a).x) 'or'
       'not'( (a).x 'xor' (b).x))
      by BVFUNC_1:def 12
-   .=((a).x '&' 'not' (b).x) 'or' (((b).x '&' 'not' (a).x) 'or'
-      'not'( ('not' (a).x '&' (b).x) 'or' ((a).x '&' 'not' (b).x)))
-     by BINARITH:def 2
-   .=((a).x '&' 'not' (b).x) 'or' (('not' (a).x '&' (b).x) 'or'
-      ('not'( 'not' (a).x '&' (b).x) '&' 'not'( (a).x '&' 'not'
-(b).x))) by BINARITH:10
    .=((a).x '&' 'not' (b).x) 'or'
     ((('not' (a).x '&' (b).x) 'or' 'not'( 'not' (a).x '&' (b).x)) '&'
      (('not' (a).x '&' (b).x) 'or' 'not'( (a).x '&' 'not' (b).x)))
@@ -94,15 +77,11 @@ proof
     (TRUE '&'
      (('not' (a).x '&' (b).x) 'or' 'not'( (a).x '&' 'not' (b).x)))
      by BINARITH:18
-   .=((a).x '&' 'not' (b).x) 'or'
-     ('not'( (a).x '&' 'not' (b).x) 'or' ('not'
-(a).x '&' (b).x)) by MARGREL1:50
    .=(((a).x '&' 'not' (b).x) 'or'
      'not'( (a).x '&' 'not' (b).x)) 'or' ('not' (a).x '&' (b).x)
-     by BINARITH:20
    .=TRUE 'or' ('not' (a).x '&' (b).x)
      by BINARITH:18
-   .=TRUE by BINARITH:19;
+   .=TRUE;
     hence thesis;
   end;
   hence thesis by BVFUNC_1:def 14;
@@ -119,25 +98,7 @@ proof
        ((a 'or' b) 'eqv' (b 'or' a)).x
     ='not'( (a 'or' b).x 'xor' (b 'or' a).x)
     by BVFUNC_1:def 12
-   .='not'( ('not' (a 'or' b).x '&' (b 'or' a).x) 'or'
-       ((a 'or' b).x '&' 'not' (b 'or' a).x))
-    by BINARITH:def 2
-   .=('not'( 'not' (a 'or' b).x '&' (b 'or' a).x) '&'
-      'not'( (a 'or' b).x '&' 'not' (b 'or' a).x))
-    by BINARITH:10
-   .=(('not' 'not' (a 'or' b).x 'or' 'not' (b 'or' a).x) '&'
-      'not'( (a 'or' b).x '&' 'not' (b 'or' a).x))
-    by BINARITH:9
-   .=(('not' 'not' (a 'or' b).x 'or' 'not' (b 'or' a).x) '&'
-      ('not' (a 'or' b).x 'or' 'not' 'not' (b 'or' a).x))
-    by BINARITH:9
-   .=(((a 'or' b).x 'or' 'not' (b 'or' a).x) '&'
-      ('not' (a 'or' b).x 'or' 'not' 'not' (b 'or' a).x))
-   .=TRUE '&'
-      ('not' (a 'or' b).x 'or' (a 'or' b).x)
-    by BINARITH:18
-   .=TRUE '&' TRUE by BINARITH:18
-   .=TRUE by MARGREL1:45;
+   .=TRUE by BINARITH:18;
     hence thesis;
   end;
   hence thesis by BVFUNC_1:def 14;
@@ -162,15 +123,8 @@ proof
    .='not'( 'not'( (a).x '&' (b).x) 'or' (c).x) 'or'
      ('not' (a).x 'or' (b 'imp' c).x)
     by BVFUNC_1:def 11
-   .='not'( 'not'( (a).x '&' (b).x) 'or' (c).x) 'or'
-     ('not' (a).x 'or' ('not' (b).x 'or' (c).x))
-    by BVFUNC_1:def 11
    .='not'( ('not' (a).x 'or' 'not' (b).x) 'or' (c).x) 'or'
-     ('not' (a).x 'or' ('not' (b).x 'or' (c).x))
-    by BINARITH:9
-   .='not'( ('not' (a).x 'or' 'not' (b).x) 'or' (c).x) 'or'
-      (('not' (a).x 'or' 'not' (b).x) 'or' (c).x)
-    by BINARITH:20
+     ('not' (a).x 'or' ('not' (b).x 'or' (c).x)) by BVFUNC_1:def 11
    .=TRUE by BINARITH:18;
     hence thesis;
   end;
@@ -198,14 +152,7 @@ proof
      ('not' (a '&' b).x 'or' (c).x)
     by BVFUNC_1:def 11
    .='not'( 'not' (a).x 'or' ('not' (b).x 'or' (c).x)) 'or'
-     ('not'( (a).x '&' (b).x) 'or' (c).x)
-    by VALUAT_1:def 6
-   .='not'( 'not' (a).x 'or' ('not' (b).x 'or' (c).x)) 'or'
-     (('not' (a).x 'or' 'not' (b).x) 'or' (c).x)
-    by BINARITH:9
-   .='not'( ('not' (a).x 'or' 'not' (b).x) 'or' (c).x) 'or'
-      (('not' (a).x 'or' 'not' (b).x) 'or' (c).x)
-    by BINARITH:20
+     (('not' (a).x 'or' 'not' (b).x) 'or' (c).x) by VALUAT_1:def 6
    .=TRUE by BINARITH:18;
     hence thesis;
   end;
@@ -236,60 +183,27 @@ proof
      ('not'( 'not' (c).x 'or' (b).x) 'or' ('not' (c).x 'or'
      (a '&' b).x))
     by BVFUNC_1:def 11
-   .='not'( 'not' (c).x 'or' (a).x) 'or'
-     ('not'( 'not' (c).x 'or' (b).x) 'or' ('not'
-(c).x 'or' ((a).x '&' (b).x)))
-    by VALUAT_1:def 6
-   .=('not' 'not' (c).x '&' 'not' (a).x) 'or'
-     ('not'( 'not' (c).x 'or' (b).x) 'or' ('not'
-(c).x 'or' ((a).x '&' (b).x)))
-    by BINARITH:10
-   .=('not' 'not' (c).x '&' 'not' (a).x) 'or'
-     (('not' 'not' (c).x '&' 'not' (b).x) 'or' ('not'
-(c).x 'or' ((a).x '&' (b).x)))
-    by BINARITH:10
    .=((c).x '&' 'not' (a).x) 'or'
      (('not' 'not' (c).x '&' 'not' (b).x) 'or' ('not'
-(c).x 'or' ((a).x '&' (b).x)))
-   .=((c).x '&' 'not' (a).x) 'or'
-     (((c).x '&' 'not' (b).x) 'or' ('not'
-(c).x 'or' ((a).x '&' (b).x)))
+(c).x 'or' ((a).x '&' (b).x))) by VALUAT_1:def 6
    .=((c).x '&' 'not' (a).x) 'or'
      (((c).x '&' 'not' (b).x) 'or'
       (('not' (c).x 'or' (a).x) '&' ('not' (c).x 'or' (b).x)))
     by BINARITH:23
    .=((c).x '&' 'not' (a).x) 'or'
      ((((c).x '&' 'not' (b).x) 'or' ('not' (c).x 'or' (a).x)) '&'
-      (((c).x '&' 'not' (b).x) 'or' ('not' (c).x 'or' (b).x)))
-    by BINARITH:23
-   .=((c).x '&' 'not' (a).x) 'or'
-     ((((c).x '&' 'not' (b).x) 'or' ('not' (c).x 'or' (a).x)) '&'
       (((c).x '&' 'not' (b).x) 'or' ('not'
-      (c).x 'or' 'not' 'not' (b).x)))
-   .=((c).x '&' 'not' (a).x) 'or'
-     ((((c).x '&' 'not' (b).x) 'or' ('not' (c).x 'or' (a).x)) '&'
-      (((c).x '&' 'not' (b).x) 'or' 'not'( (c).x '&' 'not' (b).x)))
-    by BINARITH:9
+      (c).x 'or' 'not' 'not' (b).x))) by BINARITH:23
    .=((c).x '&' 'not' (a).x) 'or'
      (TRUE '&'
       (((c).x '&' 'not' (b).x) 'or' ('not'
 (c).x 'or' (a).x))) by BINARITH:18
-   .=((c).x '&' 'not' (a).x) 'or'
-     (('not' (c).x 'or' (a).x) 'or' ((c).x '&' 'not'
-(b).x)) by MARGREL1:50
-   .=(((c).x '&' 'not' (a).x) 'or' ('not' (c).x 'or' (a).x)) 'or'
-     ((c).x '&' 'not' (b).x)
-    by BINARITH:20
-   .=(((c).x '&' 'not' (a).x) 'or' ('not' (c).x 'or' 'not' 'not'
-(a).x)) 'or'
-     ((c).x '&' 'not' (b).x)
    .=(((c).x '&' 'not' (a).x) 'or' 'not'( (c).x '&' 'not' (a).x)) 'or'
      ((c).x '&' 'not' (b).x)
-    by BINARITH:9
    .=TRUE 'or'
      ((c).x '&' 'not' (b).x)
     by BINARITH:18
-   .=TRUE by BINARITH:19;
+   .=TRUE;
     hence thesis;
   end;
   hence thesis by BVFUNC_1:def 14;
@@ -318,35 +232,17 @@ proof
    .='not'( 'not'( (a).x 'or' (b).x) 'or' (c).x) 'or'
       (('not' (a).x 'or' (c).x) 'or' (b 'imp' c).x)
     by BVFUNC_1:def 11
-   .='not'( 'not'( (a).x 'or' (b).x) 'or' (c).x) 'or'
-      (('not' (a).x 'or' (c).x) 'or' ('not' (b).x 'or' (c).x))
-    by BVFUNC_1:def 11
    .=('not' 'not'( (a).x 'or' (b).x) '&' 'not' (c).x) 'or'
-      (('not' (a).x 'or' (c).x) 'or' ('not' (b).x 'or' (c).x))
-    by BINARITH:10
-   .=('not' (c).x '&' ((a).x 'or' (b).x)) 'or'
-      (('not' (a).x 'or' (c).x) 'or' ('not'
-(b).x 'or' (c).x))
+      (('not' (a).x 'or' (c).x) 'or' ('not' (b).x 'or' (c).x)) by
+BVFUNC_1:def 11
    .=(((b).x '&' 'not' (c).x) 'or' ((a).x '&' 'not' (c).x)) 'or'
-      (('not' (a).x 'or' (c).x) 'or' ('not'
-(b).x 'or' (c).x)) by BINARITH:22
-   .=(((b).x '&' 'not' (c).x) 'or' ((a).x '&' 'not' (c).x)) 'or'
-      (('not' (a).x 'or' 'not' 'not' (c).x) 'or' ('not'
-      (b).x 'or' (c).x))
-   .=(((b).x '&' 'not' (c).x) 'or' ((a).x '&' 'not' (c).x)) 'or'
-      ('not'( (a).x '&' 'not' (c).x) 'or' ('not' (b).x 'or' (c).x))
-    by BINARITH:9
-   .=((((b).x '&' 'not' (c).x) 'or' ((a).x '&' 'not' (c).x)) 'or'
-      'not'( (a).x '&' 'not' (c).x)) 'or' ('not' (b).x 'or' (c).x)
-    by BINARITH:20
+      ('not'( (a).x '&' 'not' (c).x) 'or' ('not' (b).x 'or' (c).x)) by
+BINARITH:22
    .=(((b).x '&' 'not' (c).x) 'or' (((a).x '&' 'not' (c).x) 'or'
       'not'( (a).x '&' 'not' (c).x))) 'or' ('not' (b).x 'or' (c).x)
-    by BINARITH:20
    .=(((b).x '&' 'not' (c).x) 'or' TRUE) 'or' ('not' (b).x 'or' (c).x)
     by BINARITH:18
-   .=TRUE 'or' ('not' (b).x 'or' (c).x)
-    by BINARITH:19
-   .=TRUE by BINARITH:19;
+   .=TRUE;
     hence thesis;
   end;
   hence thesis by BVFUNC_1:def 14;
@@ -381,9 +277,6 @@ proof
 ((a).x 'or' (b).x) 'or' (c).x))
     by BVFUNC_1:def 7
    .='not'( 'not' (a).x 'or' (c).x) 'or'
-     ('not'( 'not' (b).x 'or' (c).x) 'or' ((c).x 'or' ('not' (a).x '&'
-'not' (b).x))) by BINARITH:10
-   .='not'( 'not' (a).x 'or' (c).x) 'or'
      ('not'( 'not' (b).x 'or' (c).x) 'or'
      (((c).x 'or' 'not' (a).x) '&' ('not'
 (b).x 'or' (c).x))) by BINARITH:23
@@ -399,13 +292,12 @@ proof
 (a).x))) by BINARITH:18
    .='not'( 'not' (a).x 'or' (c).x) 'or'
       ('not'( 'not' (b).x 'or' (c).x) 'or' ('not'
-(a).x 'or' (c).x)) by MARGREL1:50
+(a).x 'or' (c).x))
    .=('not'( 'not' (a).x 'or' (c).x) 'or'
       ('not' (a).x 'or' (c).x)) 'or' 'not'( 'not' (b).x 'or' (c).x)
-    by BINARITH:20
    .=TRUE 'or' 'not'( 'not' (b).x 'or' (c).x)
     by BINARITH:18
-   .=TRUE by BINARITH:19;
+   .=TRUE;
     hence thesis;
   end;
   hence thesis by BVFUNC_1:def 14;
@@ -431,15 +323,9 @@ proof
    .='not'( ('not' (a).x 'or' (c).x) '&' ('not' (b).x 'or' (c).x)) 'or'
      ('not' (a 'or' b).x 'or' (c).x)
     by BVFUNC_1:def 11
-   .='not'( ('not' (a).x 'or' (c).x) '&' ('not' (b).x 'or' (c).x)) 'or'
-     ('not'( (a).x 'or' (b).x) 'or' (c).x)
-    by BVFUNC_1:def 7
    .=('not'( 'not' (a).x 'or' (c).x) 'or' 'not'( 'not'
 (b).x 'or' (c).x)) 'or'
-     ((c).x 'or' 'not'( (a).x 'or' (b).x)) by BINARITH:9
-   .=('not'( 'not' (a).x 'or' (c).x) 'or' 'not'( 'not'
-(b).x 'or' (c).x)) 'or'
-     ((c).x 'or' ('not' (a).x '&' 'not' (b).x)) by BINARITH:10
+     ((c).x 'or' 'not'( (a).x 'or' (b).x)) by BVFUNC_1:def 7
    .=('not'( 'not' (a).x 'or' (c).x) 'or' 'not'( 'not'
 (b).x 'or' (c).x)) 'or'
      (('not' (a).x 'or' (c).x) '&' ((c).x 'or' 'not'
@@ -453,27 +339,16 @@ proof
    .=('not'( 'not' (b).x 'or' (c).x) 'or' ('not'( 'not'
 (a).x 'or' (c).x) 'or'
      ('not' (a).x 'or' (c).x))) '&'
-     (('not'( 'not' (a).x 'or' (c).x) 'or' 'not'( 'not'
-(b).x 'or' (c).x)) 'or'
-     ('not' (b).x 'or' (c).x))
-    by BINARITH:20
-   .=('not'( 'not' (b).x 'or' (c).x) 'or' ('not'( 'not'
-(a).x 'or' (c).x) 'or'
-     ('not' (a).x 'or' (c).x))) '&'
      ('not'( 'not' (a).x 'or' (c).x) 'or' ('not'( 'not'
 (b).x 'or' (c).x) 'or'
      ('not' (b).x 'or' (c).x)))
-    by BINARITH:20
    .=('not'( 'not' (b).x 'or' (c).x) 'or' TRUE) '&'
      ('not'( 'not' (a).x 'or' (c).x) 'or' ('not'( 'not'
 (b).x 'or' (c).x) 'or'
      ('not' (b).x 'or' (c).x)))
     by BINARITH:18
-   .=('not'( 'not' (b).x 'or' (c).x) 'or' TRUE) '&'
-     ('not'( 'not' (a).x 'or' (c).x) 'or' TRUE) by BINARITH:18
-   .=TRUE '&' ('not'( 'not' (a).x 'or' (c).x) 'or' TRUE) by BINARITH:19
-   .=TRUE '&' TRUE by BINARITH:19
-   .=TRUE by MARGREL1:45;
+   .=TRUE '&' ('not'( 'not' (a).x 'or' (c).x) 'or' TRUE) by BINARITH:18
+   .=TRUE;
     hence thesis;
   end;
   hence thesis by BVFUNC_1:def 14;
@@ -491,18 +366,11 @@ proof
     ='not' (a 'imp' (b '&' 'not' b)).x 'or' ('not' a).x by BVFUNC_1:def 11
    .='not'( 'not' (a).x 'or' (b '&' 'not' b).x) 'or' ('not'
 a).x by BVFUNC_1:def 11
-   .='not'( 'not' (a).x 'or' ((b).x '&' ('not' b).x)) 'or' ('not'
-a).x by VALUAT_1:def 6
-   .=('not' 'not' (a).x '&' 'not'( (b).x '&' ('not' b).x)) 'or' ('not'
-a).x by BINARITH:10
-   .=((a).x '&' 'not'( (b).x '&' ('not' b).x)) 'or' ('not'
-a).x
    .=((a).x '&' ('not' (b).x 'or' 'not' ('not' b).x)) 'or' ('not'
-a).x by BINARITH:9
+a).x by VALUAT_1:def 6
    .=((a).x '&' ('not' (b).x 'or' 'not' 'not' (b).x)) 'or' ('not'
 a).x by VALUAT_1:def 5
    .=((a).x '&' TRUE) 'or' ('not' a).x by BINARITH:18
-   .=(a).x 'or' ('not' a).x by MARGREL1:50
    .=(a).x 'or' 'not' (a).x by VALUAT_1:def 5
    .=TRUE by BINARITH:18;
     hence thesis;
@@ -535,35 +403,22 @@ proof
    .='not'( ((a).x 'or' (b).x) '&' ((a).x 'or' (c).x)) 'or'
      ((a).x 'or' ((b).x '&' (c).x))
     by VALUAT_1:def 6
-   .='not'( ((a).x 'or' (b).x) '&' ((a).x 'or' (c).x)) 'or'
-     (((a).x 'or' (b).x) '&' ((a).x 'or' (c).x))
-    by BINARITH:23
    .=('not'( (a).x 'or' (b).x) 'or' 'not'( (a).x 'or' (c).x)) 'or'
-     (((a).x 'or' (b).x) '&' ((a).x 'or' (c).x))
-    by BINARITH:9
+     (((a).x 'or' (b).x) '&' ((a).x 'or' (c).x)) by BINARITH:23
    .=(('not'( (a).x 'or' (c).x) 'or' 'not'( (a).x 'or' (b).x)) 'or'
      ((a).x 'or' (b).x)) '&'
      (('not'( (a).x 'or' (b).x) 'or' 'not'( (a).x 'or' (c).x)) 'or'
      ((a).x 'or' (c).x)) by BINARITH:23
    .=('not'( (a).x 'or' (c).x) 'or' ('not'( (a).x 'or' (b).x) 'or'
      ((a).x 'or' (b).x))) '&'
-     (('not'( (a).x 'or' (b).x) 'or' 'not'( (a).x 'or' (c).x)) 'or'
-     ((a).x 'or' (c).x))
-    by BINARITH:20
-   .=('not'( (a).x 'or' (c).x) 'or' ('not'( (a).x 'or' (b).x) 'or'
-     ((a).x 'or' (b).x))) '&'
      ('not'( (a).x 'or' (b).x) 'or' ('not'( (a).x 'or' (c).x) 'or'
      ((a).x 'or' (c).x)))
-    by BINARITH:20
    .=('not'( (a).x 'or' (c).x) 'or' TRUE) '&'
      ('not'( (a).x 'or' (b).x) 'or' ('not'( (a).x 'or' (c).x) 'or'
      ((a).x 'or' (c).x)))
     by BINARITH:18
-   .=('not'( (a).x 'or' (c).x) 'or' TRUE) '&'
-     ('not'( (a).x 'or' (b).x) 'or' TRUE) by BINARITH:18
-   .=TRUE '&' ('not'( (a).x 'or' (b).x) 'or' TRUE) by BINARITH:19
-   .=TRUE '&' TRUE by BINARITH:19
-   .=TRUE by MARGREL1:45;
+   .=TRUE '&' ('not'( (a).x 'or' (b).x) 'or' TRUE) by BINARITH:18
+   .=TRUE;
     hence thesis;
   end;
   hence thesis by BVFUNC_1:def 14;
@@ -593,34 +448,23 @@ proof
    .='not'( (a).x '&' ((b).x 'or' (c).x)) 'or'
      (((a).x '&' (b).x) 'or' ((a).x '&' (c).x))
     by VALUAT_1:def 6
-   .='not'( ((a).x '&' (b).x) 'or' ((a).x '&' (c).x)) 'or'
-     (((a).x '&' (b).x) 'or' ((a).x '&' (c).x))
-    by BINARITH:22
    .= (((a).x '&' (b).x) 'or' ((a).x '&' (c).x)) 'or'
       ('not'( (a).x '&' (b).x) '&' 'not'
-((a).x '&' (c).x)) by BINARITH:10
+((a).x '&' (c).x)) by BINARITH:22
    .= ((((a).x '&' (c).x) 'or' ((a).x '&' (b).x)) 'or'
       'not'( (a).x '&' (b).x)) '&'
       ((((a).x '&' (b).x) 'or' ((a).x '&' (c).x)) 'or'
       'not'( (a).x '&' (c).x)) by BINARITH:23
    .= (((a).x '&' (c).x) 'or' (((a).x '&' (b).x) 'or'
       'not'( (a).x '&' (b).x))) '&'
-      ((((a).x '&' (b).x) 'or' ((a).x '&' (c).x)) 'or'
-      'not'( (a).x '&' (c).x)) by BINARITH:20
-   .= (((a).x '&' (c).x) 'or' (((a).x '&' (b).x) 'or'
-      'not'( (a).x '&' (b).x))) '&'
       (((a).x '&' (b).x) 'or' (((a).x '&' (c).x) 'or'
-      'not'( (a).x '&' (c).x))) by BINARITH:20
+      'not'( (a).x '&' (c).x)))
    .= (((a).x '&' (c).x) 'or' TRUE) '&'
       (((a).x '&' (b).x) 'or' (((a).x '&' (c).x) 'or'
       'not'( (a).x '&' (c).x)))
     by BINARITH:18
-   .= (((a).x '&' (c).x) 'or' TRUE) '&'
-      (((a).x '&' (b).x) 'or' TRUE)
-    by BINARITH:18
-   .= TRUE '&' (((a).x '&' (b).x) 'or' TRUE) by BINARITH:19
-   .= TRUE '&' TRUE by BINARITH:19
-   .= TRUE by MARGREL1:45;
+   .= TRUE '&' (((a).x '&' (b).x) 'or' TRUE) by BINARITH:18
+   .= TRUE;
     hence thesis;
   end;
   hence thesis by BVFUNC_1:def 14;
@@ -642,10 +486,8 @@ proof
    .='not'
 (((a).x 'or' (c).x) '&' (b 'or' c).x) 'or' ((a '&' b) 'or' c).x
     by BVFUNC_1:def 7
-   .='not'( ((a).x 'or' (c).x) '&' ((b).x 'or' (c).x)) 'or'
-     ((a '&' b) 'or' c).x by BVFUNC_1:def 7
    .=('not'( (a).x 'or' (c).x) 'or' 'not'( (b).x 'or' (c).x)) 'or'
-     ((a '&' b) 'or' c).x by BINARITH:9
+     ((a '&' b) 'or' c).x by BVFUNC_1:def 7
    .=('not'( (a).x 'or' (c).x) 'or' 'not'( (b).x 'or' (c).x)) 'or'
      ((a '&' b).x 'or' (c).x) by BVFUNC_1:def 7
    .=('not'( (a).x 'or' (c).x) 'or' 'not'( (b).x 'or' (c).x)) 'or'
@@ -658,21 +500,13 @@ proof
      ((b).x 'or' (c).x)) by BINARITH:23
    .=('not'( (b).x 'or' (c).x) 'or' ('not'( (a).x 'or' (c).x) 'or'
      ((a).x 'or' (c).x))) '&'
-     (('not'( (a).x 'or' (c).x) 'or' 'not'( (b).x 'or' (c).x)) 'or'
-     ((b).x 'or' (c).x))
-    by BINARITH:20
-   .=('not'( (b).x 'or' (c).x) 'or' ('not'( (a).x 'or' (c).x) 'or'
-     ((a).x 'or' (c).x))) '&'
      ('not'( (a).x 'or' (c).x) 'or' ('not'( (b).x 'or' (c).x) 'or'
-     ((b).x 'or' (c).x))) by BINARITH:20
+     ((b).x 'or' (c).x)))
    .=('not'( (b).x 'or' (c).x) 'or' TRUE) '&'
      ('not'( (a).x 'or' (c).x) 'or' ('not'( (b).x 'or' (c).x) 'or'
      ((b).x 'or' (c).x))) by BINARITH:18
-   .=('not'( (b).x 'or' (c).x) 'or' TRUE) '&'
-     ('not'( (a).x 'or' (c).x) 'or' TRUE) by BINARITH:18
-   .=TRUE '&' ('not'( (a).x 'or' (c).x) 'or' TRUE) by BINARITH:19
-   .=TRUE '&' TRUE by BINARITH:19
-   .=TRUE by MARGREL1:45;
+   .=TRUE '&' ('not'( (a).x 'or' (c).x) 'or' TRUE) by BINARITH:18
+   .=TRUE;
     hence thesis;
   end;
   hence thesis by BVFUNC_1:def 14;
@@ -699,31 +533,21 @@ proof
      (((a).x '&' (c).x) 'or' (b '&' c).x) by VALUAT_1:def 6
    .='not'( (c).x '&' ((a).x 'or' (b).x)) 'or'
      (((a).x '&' (c).x) 'or' ((b).x '&' (c).x)) by VALUAT_1:def 6
-   .='not'( ((c).x '&' (a).x) 'or' ((c).x '&' (b).x)) 'or'
-     (((a).x '&' (c).x) 'or' ((b).x '&' (c).x)) by BINARITH:22
    .=(((a).x '&' (c).x) 'or' ((b).x '&' (c).x)) 'or'
-     ('not'( (a).x '&' (c).x) '&' 'not'( (b).x '&' (c).x))
-     by BINARITH:10
+     ('not'( (a).x '&' (c).x) '&' 'not'( (b).x '&' (c).x)) by BINARITH:22
    .=((((b).x '&' (c).x) 'or' ((a).x '&' (c).x)) 'or'
      'not'( (a).x '&' (c).x)) '&'
      ((((a).x '&' (c).x) 'or' ((b).x '&' (c).x)) 'or'
      'not'( (b).x '&' (c).x)) by BINARITH:23
    .=(((b).x '&' (c).x) 'or' (((a).x '&' (c).x) 'or'
      'not'( (a).x '&' (c).x))) '&'
-     ((((a).x '&' (c).x) 'or' ((b).x '&' (c).x)) 'or'
-     'not'( (b).x '&' (c).x)) by BINARITH:20
-   .=(((b).x '&' (c).x) 'or' (((a).x '&' (c).x) 'or'
-     'not'( (a).x '&' (c).x))) '&'
      (((a).x '&' (c).x) 'or' (((b).x '&' (c).x) 'or'
-     'not'( (b).x '&' (c).x))) by BINARITH:20
+     'not'( (b).x '&' (c).x)))
    .=(((b).x '&' (c).x) 'or' TRUE) '&'
      (((a).x '&' (c).x) 'or' (((b).x '&' (c).x) 'or'
      'not'( (b).x '&' (c).x))) by BINARITH:18
-   .=(((b).x '&' (c).x) 'or' TRUE) '&'
-     (((a).x '&' (c).x) 'or' TRUE) by BINARITH:18
-   .=TRUE '&' (((a).x '&' (c).x) 'or' TRUE) by BINARITH:19
-   .=TRUE '&' TRUE by BINARITH:19
-   .=TRUE by MARGREL1:45;
+   .=TRUE '&' (((a).x '&' (c).x) 'or' TRUE) by BINARITH:18
+   .=TRUE;
     hence thesis;
   end;
   hence thesis by BVFUNC_1:def 14;
@@ -743,7 +567,7 @@ proof
     then (a).x=TRUE & (b).x=TRUE by MARGREL1:45;
     then (a 'or' b).x
     =TRUE 'or' TRUE by BVFUNC_1:def 7
-   .=TRUE by BINARITH:19;
+   .=TRUE;
     hence thesis;
   end;
   hence thesis by BVFUNC_1:def 14;
@@ -764,18 +588,14 @@ proof
        ((a 'or' c) 'imp' (b 'or' c)).x
     ='not' (a 'or' c).x 'or' (b 'or' c).x by BVFUNC_1:def 11
    .='not'( (a).x 'or' (c).x) 'or' (b 'or' c).x by BVFUNC_1:def 7
-   .='not'( (a).x 'or' (c).x) 'or' ((b).x 'or' (c).x) by BVFUNC_1:def 7
-   .=((b).x 'or' (c).x) 'or' ('not' (a).x '&' 'not' (c).x)
-   by BINARITH:10
+   .=((b).x 'or' (c).x) 'or' ('not' (a).x '&' 'not' (c).x) by BVFUNC_1:def 7
    .=(((c).x 'or' (b).x) 'or' 'not' (a).x) '&'
      (((b).x 'or' (c).x) 'or' 'not' (c).x) by BINARITH:23
    .=((c).x 'or' ('not' (a).x 'or' (b).x)) '&'
-     (((b).x 'or' (c).x) 'or' 'not' (c).x) by BINARITH:20
-   .=TRUE '&' (((b).x 'or' (c).x) 'or' 'not' (c).x) by A2,BINARITH:19
-   .=TRUE '&' ((b).x 'or' ((c).x 'or' 'not' (c).x)) by BINARITH:20
+     (((b).x 'or' (c).x) 'or' 'not' (c).x)
+   .=TRUE '&' ((b).x 'or' ((c).x 'or' 'not' (c).x)) by A2
    .=TRUE '&' ((b).x 'or' TRUE) by BINARITH:18
-   .=TRUE '&' TRUE by BINARITH:19
-   .=TRUE by MARGREL1:45;
+   .=TRUE;
     hence thesis;
   end;
   hence thesis by BVFUNC_1:def 14;
@@ -795,20 +615,14 @@ proof
        ((a '&' c) 'imp' (b '&' c)).x
     ='not' (a '&' c).x 'or' (b '&' c).x by BVFUNC_1:def 11
    .='not'( (a).x '&' (c).x) 'or' (b '&' c).x by VALUAT_1:def 6
-   .='not'( (a).x '&' (c).x) 'or' ((b).x '&' (c).x) by VALUAT_1:def 6
-   .=('not' (a).x 'or' 'not' (c).x) 'or' ((b).x '&' (c).x)
-   by BINARITH:9
+   .=('not' (a).x 'or' 'not' (c).x) 'or' ((b).x '&' (c).x) by VALUAT_1:def 6
    .=(('not' (c).x 'or' 'not' (a).x) 'or' (b).x) '&'
      (('not' (a).x 'or' 'not' (c).x) 'or' (c).x) by BINARITH:23
    .=('not' (c).x 'or' ('not' (a).x 'or' (b).x)) '&'
-     (('not' (a).x 'or' 'not' (c).x) 'or' (c).x) by BINARITH:20
-   .=('not' (c).x 'or' ('not' (a).x 'or' (b).x)) '&'
-     ('not' (a).x 'or' ('not' (c).x 'or' (c).x)) by BINARITH:20
+     ('not' (a).x 'or' ('not' (c).x 'or' (c).x))
    .=('not' (c).x 'or' ('not' (a).x 'or' (b).x)) '&'
      ('not' (a).x 'or' TRUE) by BINARITH:18
-   .=('not' (c).x 'or' TRUE) '&' TRUE by A2,BINARITH:19
-   .=TRUE '&' TRUE by BINARITH:19
-   .=TRUE by MARGREL1:45;
+   .=TRUE by A2;
     hence thesis;
   end;
   hence thesis by BVFUNC_1:def 14;
@@ -832,7 +646,7 @@ proof
     ='not' (c).x 'or' (a '&' b).x by BVFUNC_1:def 11
    .='not' (c).x 'or' ((a).x '&' (b).x) by VALUAT_1:def 6
    .=TRUE '&' TRUE by A2,A3,BINARITH:23
-   .=TRUE by MARGREL1:45;
+   .=TRUE;
     hence thesis;
   end;
   hence thesis by BVFUNC_1:def 14;
@@ -855,9 +669,8 @@ proof
        ((a 'or' b) 'imp' c).x
     ='not' (a 'or' b).x 'or' (c).x by BVFUNC_1:def 11
    .='not'( (a).x 'or' (b).x) 'or' (c).x by BVFUNC_1:def 7
-   .=(c).x 'or' ('not' (a).x '&' 'not' (b).x) by BINARITH:10
    .=TRUE '&' TRUE by A2,A3,BINARITH:23
-   .=TRUE by MARGREL1:45;
+   .=TRUE;
     hence thesis;
   end;
   hence thesis by BVFUNC_1:def 14;
@@ -876,8 +689,8 @@ proof
     then A2:(a).x 'or' (b).x = TRUE by BVFUNC_1:def 7;
        ('not' a).x= TRUE by A1,BVFUNC_1:def 14;
     then 'not' (a).x = TRUE by VALUAT_1:def 5;
-    then (a).x = FALSE by MARGREL1:41;
-    hence thesis by A2,BINARITH:7;
+    then (a).x = FALSE;
+    hence thesis by A2;
   end;
   hence thesis by BVFUNC_1:def 14;
 end;
@@ -899,18 +712,13 @@ proof
        ((a '&' c) 'imp' (b '&' d)).x
     ='not' (a '&' c).x 'or' (b '&' d).x by BVFUNC_1:def 11
    .='not'( (a).x '&' (c).x) 'or' (b '&' d).x by VALUAT_1:def 6
-   .='not'( (a).x '&' (c).x) 'or' ((b).x '&' (d).x) by VALUAT_1:def 6
-   .=('not' (a).x 'or' 'not' (c).x) 'or' ((b).x '&' (d).x)
-   by BINARITH:9
+   .=('not' (a).x 'or' 'not' (c).x) 'or' ((b).x '&' (d).x) by VALUAT_1:def 6
    .=(('not' (c).x 'or' 'not' (a).x) 'or' (b).x) '&'
      (('not' (a).x 'or' 'not' (c).x) 'or' (d).x) by BINARITH:23
    .=('not' (c).x 'or' ('not' (a).x 'or' (b).x)) '&'
-     (('not' (a).x 'or' 'not' (c).x) 'or' (d).x) by BINARITH:20
-   .=('not' (c).x 'or' TRUE) '&' ('not' (a).x 'or' TRUE)
-   by A2,A3,BINARITH:20
-   .=TRUE '&' ('not' (a).x 'or' TRUE) by BINARITH:19
-   .=TRUE '&' TRUE by BINARITH:19
-   .=TRUE by MARGREL1:45;
+     (('not' (a).x 'or' 'not' (c).x) 'or' (d).x)
+   .=TRUE '&' ('not' (a).x 'or' TRUE) by A2,A3,BINARITH:20
+   .=TRUE;
     hence thesis;
   end;
   hence thesis by BVFUNC_1:def 14;
@@ -933,17 +741,13 @@ proof
        ((a 'or' c) 'imp' (b 'or' d)).x
     ='not' (a 'or' c).x 'or' (b 'or' d).x by BVFUNC_1:def 11
    .='not'( (a).x 'or' (c).x) 'or' (b 'or' d).x by BVFUNC_1:def 7
-   .='not'( (a).x 'or' (c).x) 'or' ((b).x 'or' (d).x) by BVFUNC_1:def 7
-   .=((b).x 'or' (d).x) 'or' ('not' (a).x '&' 'not' (c).x)
-   by BINARITH:10
+   .=((b).x 'or' (d).x) 'or' ('not' (a).x '&' 'not' (c).x) by BVFUNC_1:def 7
    .=(((d).x 'or' (b).x) 'or' 'not' (a).x) '&'
      (((b).x 'or' (d).x) 'or' 'not' (c).x) by BINARITH:23
    .=((d).x 'or' ((b).x 'or' 'not' (a).x)) '&'
-     (((b).x 'or' (d).x) 'or' 'not' (c).x) by BINARITH:20
-   .=((d).x 'or' TRUE) '&' ((b).x 'or' TRUE) by A2,A3,BINARITH:20
-   .=TRUE '&' ((b).x 'or' TRUE) by BINARITH:19
-   .=TRUE '&' TRUE by BINARITH:19
-   .=TRUE by MARGREL1:45;
+     (((b).x 'or' (d).x) 'or' 'not' (c).x)
+   .=TRUE '&' ((b).x 'or' TRUE) by A2,A3,BINARITH:20
+   .=TRUE;
     hence thesis;
   end;
   hence thesis by BVFUNC_1:def 14;
@@ -964,14 +768,14 @@ proof
     then 'not'( (a).x '&' ('not' b).x) 'or' ('not'
 a).x=TRUE by VALUAT_1:def 6;
     then ('not' (a).x 'or' 'not' ('not' b).x) 'or' ('not'
-a).x=TRUE by BINARITH:9;
+a).x=TRUE;
     then ('not' (a).x 'or' 'not' 'not' (b).x) 'or' ('not'
 a).x=TRUE by VALUAT_1:def 5;
     then ('not' (a).x 'or' 'not' 'not' (b).x) 'or' 'not'
 (a).x=TRUE by VALUAT_1:def 5;
     then ('not' (a).x 'or' (b).x) 'or' 'not' (a).x=TRUE;
-    then (b).x 'or' ('not' (a).x 'or' 'not' (a).x)=TRUE by BINARITH:20;
-    then (b).x 'or' 'not' (a).x=TRUE by BINARITH:21;
+    then (b).x 'or' ('not' (a).x 'or' 'not' (a).x)=TRUE;
+    then (b).x 'or' 'not' (a).x=TRUE;
     hence thesis by BVFUNC_1:def 11;
   end;
   hence thesis by BVFUNC_1:def 14;
@@ -1012,8 +816,7 @@ proof
     then A2:(a).x 'or' (b).x=TRUE;
        ('not' b 'imp' a).x
      =('not' ('not' b).x) 'or' (a).x by BVFUNC_1:def 11
-    .=('not' 'not' (b).x) 'or' (a).x by VALUAT_1:def 5
-    .=TRUE by A2;
+    .=TRUE by  VALUAT_1:def 5,A2;
     hence thesis;
   end;
   hence thesis by BVFUNC_1:def 14;
@@ -1029,9 +832,9 @@ proof
        (a 'imp' (a 'or' b)).x
     ='not' (a).x 'or' (a 'or' b).x by BVFUNC_1:def 11
    .='not' (a).x 'or' ((a).x 'or' (b).x) by BVFUNC_1:def 7
-   .=('not' (a).x 'or' (a).x) 'or' (b).x by BINARITH:20
+   .=('not' (a).x 'or' (a).x) 'or' (b).x
    .=TRUE 'or' (b).x by BINARITH:18
-   .=TRUE by BINARITH:19;
+   .=TRUE;
    hence thesis;
   end;
   hence thesis by BVFUNC_1:def 14;
@@ -1048,25 +851,17 @@ TRUE
        ((a 'or' b) 'imp' ('not' a 'imp' b)).x
     ='not' (a 'or' b).x 'or' ('not' a 'imp' b).x by BVFUNC_1:def 11
    .='not'( (a).x 'or' (b).x) 'or' ('not' a 'imp' b).x by BVFUNC_1:def 7
-   .='not'( (a).x 'or' (b).x) 'or' ('not' ('not'
-a).x 'or' (b).x) by BVFUNC_1:def 11
    .=('not' (a).x '&' 'not' (b).x) 'or' ('not' ('not'
-a).x 'or' (b).x) by BINARITH:10
-   .=('not' (a).x '&' 'not' (b).x) 'or' ('not' 'not'
-(a).x 'or' (b).x) by VALUAT_1:def 5
-   .=((a).x 'or' (b).x) 'or' ('not' (a).x '&' 'not' (b).x)
+a).x 'or' (b).x) by BVFUNC_1:def 11
+   .=((a).x 'or' (b).x) 'or' ('not' (a).x '&' 'not' (b).x) by VALUAT_1:def 5
    .=(((a).x 'or' (b).x) 'or' 'not' (a).x) '&'
      (((a).x 'or' (b).x) 'or' 'not' (b).x) by BINARITH:23
    .=(((a).x 'or' 'not' (a).x) 'or' (b).x) '&'
-     (((a).x 'or' (b).x) 'or' 'not' (b).x) by BINARITH:20
-   .=(((a).x 'or' 'not' (a).x) 'or' (b).x) '&'
-     ((a).x 'or' ((b).x 'or' 'not' (b).x)) by BINARITH:20
+     ((a).x 'or' ((b).x 'or' 'not' (b).x))
    .=(TRUE 'or' (b).x) '&'
      ((a).x 'or' ((b).x 'or' 'not' (b).x)) by BINARITH:18
-   .=(TRUE 'or' (b).x) '&' ((a).x 'or' TRUE) by BINARITH:18
-   .=TRUE '&' ((a).x 'or' TRUE) by BINARITH:19
-   .=TRUE '&' TRUE by BINARITH:19
-   .=TRUE by MARGREL1:45;
+   .=TRUE '&' ((a).x 'or' TRUE) by BINARITH:18
+   .=TRUE;
    hence thesis;
   end;
   hence thesis by BVFUNC_1:def 14;
@@ -1085,9 +880,7 @@ b)).x=TRUE
        ('not'( a 'or' b) 'imp' ('not' a '&' 'not' b)).x
     ='not' ('not'( a 'or' b)).x 'or' ('not' a '&' 'not' b).x
     by BVFUNC_1:def 11
-   .='not' 'not' (a 'or' b).x 'or' ('not' a '&' 'not' b).x
-   by VALUAT_1:def 5
-   .=(a 'or' b).x 'or' ('not' a '&' 'not' b).x
+   .=(a 'or' b).x 'or' ('not' a '&' 'not' b).x by VALUAT_1:def 5
    .=((a).x 'or' (b).x) 'or' ('not' a '&' 'not' b).x by BVFUNC_1:def 7
    .=((a).x 'or' (b).x) 'or' (('not' a).x '&' ('not'
 b).x) by VALUAT_1:def 6
@@ -1098,15 +891,11 @@ b).x) by VALUAT_1:def 5
    .=(((a).x 'or' (b).x) 'or' 'not' (a).x) '&'
      (((a).x 'or' (b).x) 'or' 'not' (b).x) by BINARITH:23
    .=(((a).x 'or' 'not' (a).x) 'or' (b).x) '&'
-     (((a).x 'or' (b).x) 'or' 'not' (b).x) by BINARITH:20
-   .=(((a).x 'or' 'not' (a).x) 'or' (b).x) '&'
-     ((a).x 'or' ((b).x 'or' 'not' (b).x)) by BINARITH:20
+     ((a).x 'or' ((b).x 'or' 'not' (b).x))
    .=(TRUE 'or' (b).x) '&'
      ((a).x 'or' ((b).x 'or' 'not' (b).x)) by BINARITH:18
-   .=(TRUE 'or' (b).x) '&' ((a).x 'or' TRUE) by BINARITH:18
-   .=TRUE '&' ((a).x 'or' TRUE) by BINARITH:19
-   .=TRUE '&' TRUE by BINARITH:19
-   .=TRUE by MARGREL1:45;
+   .=TRUE '&' ((a).x 'or' TRUE) by BINARITH:18
+   .=TRUE;
     hence thesis;
   end;
   hence thesis by BVFUNC_1:def 14;
@@ -1133,12 +922,11 @@ proof
        ('not'( a 'or' b) 'imp' 'not' a).x
     ='not' ('not'( a 'or' b)).x 'or' ('not' a).x by BVFUNC_1:def 11
    .='not' 'not' (a 'or' b).x 'or' ('not' a).x by VALUAT_1:def 5
-   .='not' 'not' (a 'or' b).x 'or' 'not' (a).x by VALUAT_1:def 5
-   .=(a 'or' b).x 'or' 'not' (a).x
+   .=(a 'or' b).x 'or' 'not' (a).x by VALUAT_1:def 5
    .=((a).x 'or' (b).x) 'or' 'not' (a).x by BVFUNC_1:def 7
-   .=((a).x 'or' 'not' (a).x) 'or' (b).x by BINARITH:20
+   .=((a).x 'or' 'not' (a).x) 'or' (b).x
    .=TRUE 'or' (b).x by BINARITH:18
-   .=TRUE by BINARITH:19;
+   .=TRUE;
     hence thesis;
   end;
   hence thesis by BVFUNC_1:def 14;
@@ -1152,10 +940,7 @@ proof
   proof
     let x be Element of Y;
        ((a 'or' a) 'imp' a).x
-    ='not' (a 'or' a).x 'or' (a).x by BVFUNC_1:def 11
-   .='not'( (a).x 'or' (a).x) 'or' (a).x by BVFUNC_1:def 7
-   .=('not' (a).x '&' 'not' (a).x) 'or' (a).x by BINARITH:10
-   .='not' (a).x 'or' (a).x by BINARITH:16
+    ='not' (a).x 'or' (a).x by BVFUNC_1:def 11
    .=TRUE by BINARITH:18;
     hence thesis;
   end;
@@ -1172,10 +957,9 @@ proof
        ((a '&' 'not' a) 'imp' b).x
     ='not' (a '&' 'not' a).x 'or' (b).x by BVFUNC_1:def 11
    .='not'( (a).x '&' ('not' a).x) 'or' (b).x by VALUAT_1:def 6
-   .='not'( (a).x '&' 'not' (a).x) 'or' (b).x by VALUAT_1:def 5
-   .=('not' (a).x 'or' 'not' 'not' (a).x) 'or' (b).x by BINARITH:9
+   .=('not' (a).x 'or' 'not' 'not' (a).x) 'or' (b).x by VALUAT_1:def 5
    .=TRUE 'or' (b).x by BINARITH:18
-   .=TRUE by BINARITH:19;
+   .=TRUE;
     hence thesis;
   end;
   hence thesis by BVFUNC_1:def 14;
@@ -1193,25 +977,18 @@ TRUE
     ='not' (a 'imp' b).x 'or' ('not' a 'or' b).x by BVFUNC_1:def 11
    .='not'( 'not' (a).x 'or' (b).x) 'or' ('not'
 a 'or' b).x by BVFUNC_1:def 11
-   .='not'( 'not' (a).x 'or' (b).x) 'or' (('not'
-a).x 'or' (b).x) by BVFUNC_1:def 7
    .=('not' 'not' (a).x '&' 'not' (b).x) 'or' (('not'
-a).x 'or' (b).x) by BINARITH:10
-   .=((a).x '&' 'not' (b).x) 'or' (('not' a).x 'or' (b).x)
+a).x 'or' (b).x) by BVFUNC_1:def 7
    .=('not' (a).x 'or' (b).x) 'or' ((a).x '&' 'not'
 (b).x) by VALUAT_1:def 5
    .=(('not' (a).x 'or' (b).x) 'or' (a).x) '&'
      (('not' (a).x 'or' (b).x) 'or' 'not' (b).x) by BINARITH:23
    .=(('not' (a).x 'or' (a).x) 'or' (b).x) '&'
-     (('not' (a).x 'or' (b).x) 'or' 'not' (b).x) by BINARITH:20
-   .=(('not' (a).x 'or' (a).x) 'or' (b).x) '&'
-     ('not' (a).x 'or' ((b).x 'or' 'not' (b).x)) by BINARITH:20
+     ('not' (a).x 'or' ((b).x 'or' 'not' (b).x))
    .=(TRUE 'or' (b).x) '&'
      ('not' (a).x 'or' ((b).x 'or' 'not' (b).x)) by BINARITH:18
-   .=(TRUE 'or' (b).x) '&' ('not' (a).x 'or' TRUE) by BINARITH:18
-   .=TRUE '&' ('not' (a).x 'or' TRUE) by BINARITH:19
-   .=TRUE '&' TRUE by BINARITH:19
-   .=TRUE by MARGREL1:45;
+   .=TRUE '&' ('not' (a).x 'or' TRUE) by BINARITH:18
+   .=TRUE;
     hence thesis;
   end;
   hence thesis by BVFUNC_1:def 14;
@@ -1229,33 +1006,19 @@ b)).x=TRUE
     ='not' (a '&' b).x 'or' ('not'( a 'imp' 'not' b)).x by BVFUNC_1:def 11
    .='not'( (a).x '&' (b).x) 'or' ('not'( a 'imp' 'not'
 b)).x by VALUAT_1:def 6
-   .='not'( (a).x '&' (b).x) 'or' 'not' (a 'imp' 'not'
-b).x by VALUAT_1:def 5
    .=('not' (a).x 'or' 'not' (b).x) 'or' 'not' (a 'imp' 'not'
-b).x by BINARITH:9
+b).x by VALUAT_1:def 5
    .=('not' (a).x 'or' 'not' (b).x) 'or' 'not'( 'not' (a).x 'or' ('not'
 b).x) by BVFUNC_1:def 11
-   .=('not' (a).x 'or' 'not' (b).x) 'or' 'not'( 'not' (a).x 'or' 'not'
-(b).x) by VALUAT_1:def 5
-   .=('not' (a).x 'or' 'not' (b).x) 'or' ('not' 'not'
-   (a).x '&' 'not' 'not'
-(b).x) by BINARITH:10
-   .=('not' (a).x 'or' 'not' (b).x) 'or' ((a).x '&' 'not' 'not'
-(b).x)
-   .=('not' (a).x 'or' 'not' (b).x) 'or' ((a).x '&' (b).x)
+   .=('not' (a).x 'or' 'not' (b).x) 'or' ((a).x '&' (b).x) by VALUAT_1:def 5
    .=(('not' (a).x 'or' 'not' (b).x) 'or' (a).x) '&'
      (('not' (a).x 'or' 'not' (b).x) 'or' (b).x) by BINARITH:23
    .=(('not' (a).x 'or' (a).x) 'or' 'not' (b).x) '&'
-     (('not' (a).x 'or' 'not' (b).x) 'or' (b).x) by BINARITH:20
-   .=(('not' (a).x 'or' (a).x) 'or' 'not' (b).x) '&'
-     ('not' (a).x 'or' ('not' (b).x 'or' (b).x)) by BINARITH:20
+     ('not' (a).x 'or' ('not' (b).x 'or' (b).x))
    .=(TRUE 'or' 'not' (b).x) '&'
      ('not' (a).x 'or' ('not' (b).x 'or' (b).x)) by BINARITH:18
-   .=(TRUE 'or' 'not' (b).x) '&'
-     ('not' (a).x 'or' TRUE) by BINARITH:18
-   .=TRUE '&' ('not' (a).x 'or' TRUE) by BINARITH:19
-   .=TRUE '&' TRUE by BINARITH:19
-   .=TRUE by MARGREL1:45;
+   .=TRUE '&' ('not' (a).x 'or' TRUE) by BINARITH:18
+   .=TRUE;
     hence thesis;
   end;
   hence thesis by BVFUNC_1:def 14;
@@ -1274,24 +1037,17 @@ b) 'imp' (a '&' b)).x=TRUE
    .='not' 'not' (a 'imp' 'not' b).x 'or' (a '&' b).x by VALUAT_1:def 5
    .='not' 'not' (a 'imp' 'not'
 b).x 'or' ((a).x '&' (b).x) by VALUAT_1:def 6
-   .='not' 'not'( 'not' (a).x 'or' ('not'
-b).x) 'or' ((a).x '&' (b).x) by BVFUNC_1:def 11
-   .=('not' (a).x 'or' ('not' b).x) 'or' ((a).x '&' (b).x)
+   .=('not' (a).x 'or' ('not' b).x) 'or' ((a).x '&' (b).x) by BVFUNC_1:def 11
    .=('not' (a).x 'or' 'not'
 (b).x) 'or' ((a).x '&' (b).x) by VALUAT_1:def 5
    .=(('not' (a).x 'or' 'not' (b).x) 'or' (a).x) '&'
      (('not' (a).x 'or' 'not' (b).x) 'or' (b).x) by BINARITH:23
    .=(('not' (a).x 'or' (a).x) 'or' 'not' (b).x) '&'
-     (('not' (a).x 'or' 'not' (b).x) 'or' (b).x) by BINARITH:20
-   .=(('not' (a).x 'or' (a).x) 'or' 'not' (b).x) '&'
-     ('not' (a).x 'or' ('not' (b).x 'or' (b).x)) by BINARITH:20
+     ('not' (a).x 'or' ('not' (b).x 'or' (b).x))
    .=(TRUE 'or' 'not' (b).x) '&'
      ('not' (a).x 'or' ('not' (b).x 'or' (b).x)) by BINARITH:18
-   .=(TRUE 'or' 'not' (b).x) '&'
-     ('not' (a).x 'or' TRUE) by BINARITH:18
-   .=TRUE '&' ('not' (a).x 'or' TRUE) by BINARITH:19
-   .=TRUE '&' TRUE by BINARITH:19
-   .=TRUE by MARGREL1:45;
+   .=TRUE '&' ('not' (a).x 'or' TRUE) by BINARITH:18
+   .=TRUE;
     hence thesis;
   end;
   hence thesis by BVFUNC_1:def 14;
@@ -1310,9 +1066,7 @@ b)).x=TRUE
        ('not'( a '&' b) 'imp' ('not' a 'or' 'not' b)).x
     ='not' ('not'( a '&' b)).x 'or' ('not' a 'or' 'not' b).x
     by BVFUNC_1:def 11
-   .='not' 'not' (a '&' b).x 'or' ('not' a 'or' 'not' b).x
-   by VALUAT_1:def 5
-   .=(a '&' b).x 'or' ('not' a 'or' 'not' b).x
+   .=(a '&' b).x 'or' ('not' a 'or' 'not' b).x by VALUAT_1:def 5
    .=((a).x '&' (b).x) 'or' ('not' a 'or' 'not' b).x
    by VALUAT_1:def 6
    .=(('not' a).x 'or' ('not'
@@ -1324,15 +1078,11 @@ b).x) 'or' ((a).x '&' (b).x) by VALUAT_1:def 5
    .=(('not' (a).x 'or' 'not' (b).x) 'or' (a).x) '&'
      (('not' (a).x 'or' 'not' (b).x) 'or' (b).x) by BINARITH:23
    .=(('not' (a).x 'or' (a).x) 'or' 'not' (b).x) '&'
-     (('not' (a).x 'or' 'not' (b).x) 'or' (b).x) by BINARITH:20
-   .=(('not' (a).x 'or' (a).x) 'or' 'not' (b).x) '&'
-     ('not' (a).x 'or' ('not' (b).x 'or' (b).x)) by BINARITH:20
+     ('not' (a).x 'or' ('not' (b).x 'or' (b).x))
    .=(TRUE 'or' 'not' (b).x) '&'
      ('not' (a).x 'or' ('not' (b).x 'or' (b).x)) by BINARITH:18
-   .=(TRUE 'or' 'not' (b).x) '&' ('not' (a).x 'or' TRUE) by BINARITH:18
-   .=TRUE '&' ('not' (a).x 'or' TRUE) by BINARITH:19
-   .=TRUE '&' TRUE by BINARITH:19
-   .=TRUE by MARGREL1:45;
+   .=TRUE '&' ('not' (a).x 'or' TRUE) by BINARITH:18
+   .=TRUE;
     hence thesis;
   end;
   hence thesis by BVFUNC_1:def 14;
@@ -1357,11 +1107,10 @@ proof
     let x be Element of Y;
        ((a '&' b) 'imp' a).x
     ='not' (a '&' b).x 'or' (a).x by BVFUNC_1:def 11
-   .='not'( (a).x '&' (b).x) 'or' (a).x by VALUAT_1:def 6
-   .=('not' (a).x 'or' 'not' (b).x) 'or' (a).x by BINARITH:9
-   .=('not' (a).x 'or' (a).x) 'or' 'not' (b).x by BINARITH:20
+   .=('not' (a).x 'or' 'not' (b).x) 'or' (a).x by VALUAT_1:def 6
+   .=('not' (a).x 'or' (a).x) 'or' 'not' (b).x
    .=TRUE 'or' 'not' (b).x by BINARITH:18
-   .=TRUE by BINARITH:19;
+   .=TRUE;
     hence thesis;
   end;
   hence thesis by BVFUNC_1:def 14;
@@ -1376,17 +1125,13 @@ proof
     let x be Element of Y;
        ((a '&' b) 'imp' (a 'or' b)).x
     ='not' (a '&' b).x 'or' (a 'or' b).x by BVFUNC_1:def 11
-   .='not'( (a).x '&' (b).x) 'or' (a 'or' b).x by VALUAT_1:def 6
-   .=('not' (a).x 'or' 'not' (b).x) 'or' (a 'or' b).x by BINARITH:9
+   .=('not' (a).x 'or' 'not' (b).x) 'or' (a 'or' b).x by VALUAT_1:def 6
    .=('not' (a).x 'or' 'not'
 (b).x) 'or' ((a).x 'or' (b).x) by BVFUNC_1:def 7
-   .=(('not' (b).x 'or' 'not'
-(a).x) 'or' (a).x) 'or' (b).x by BINARITH:20
    .=('not' (b).x 'or' ('not'
-(a).x 'or' (a).x)) 'or' (b).x by BINARITH:20
+(a).x 'or' (a).x)) 'or' (b).x
    .=('not' (b).x 'or' TRUE) 'or' (b).x by BINARITH:18
-   .=TRUE 'or' (b).x by BINARITH:19
-   .=TRUE by BINARITH:19;
+   .=TRUE;
     hence thesis;
   end;
   hence thesis by BVFUNC_1:def 14;
@@ -1401,11 +1146,10 @@ proof
     let x be Element of Y;
        ((a '&' b) 'imp' b).x
     ='not' (a '&' b).x 'or' (b).x by BVFUNC_1:def 11
-   .='not'( (a).x '&' (b).x) 'or' (b).x by VALUAT_1:def 6
-   .=('not' (a).x 'or' 'not' (b).x) 'or' (b).x by BINARITH:9
-   .='not' (a).x 'or' ('not' (b).x 'or' (b).x) by BINARITH:20
+   .=('not' (a).x 'or' 'not' (b).x) 'or' (b).x by VALUAT_1:def 6
+   .='not' (a).x 'or' ('not' (b).x 'or' (b).x)
    .='not' (a).x 'or' TRUE by BINARITH:18
-   .=TRUE by BINARITH:19;
+   .=TRUE;
     hence thesis;
   end;
   hence thesis by BVFUNC_1:def 14;
@@ -1419,15 +1163,9 @@ proof
   proof
     let x be Element of Y;
        (a 'imp' a '&' a).x
-    ='not' (a).x 'or' (a '&' a).x by BVFUNC_1:def 11
-   .='not' (a).x 'or' ((a).x '&' (a).x) by VALUAT_1:def 6
-   .=('not' (a).x 'or' (a).x) '&'
-     ('not' (a).x 'or' (a).x) by BINARITH:23
-   .=TRUE '&'
-     ('not' (a).x 'or' (a).x) by BINARITH:18
-   .=TRUE '&'
-     TRUE by BINARITH:18
-   .=TRUE by MARGREL1:45;
+    =TRUE '&'
+     ('not' (a).x 'or' (a).x) by BVFUNC_1:def 11
+   .=TRUE by BINARITH:18;
     hence thesis;
   end;
   hence thesis by BVFUNC_1:def 14;
@@ -1443,22 +1181,14 @@ proof
     let x be Element of Y;
        ((a 'eqv' b) 'imp' (a 'imp' b)).x
     ='not' (a 'eqv' b).x 'or' (a 'imp' b).x by BVFUNC_1:def 11
-   .='not' 'not'( (a).x 'xor' (b).x) 'or'
-     (a 'imp' b).x by BVFUNC_1:def 12
    .=((a).x 'xor' (b).x) 'or'
-     (a 'imp' b).x
+     (a 'imp' b).x by BVFUNC_1:def 12
    .=(('not' (a).x '&' (b).x) 'or' ((a).x '&' 'not' (b).x)) 'or'
-     (a 'imp' b).x by BINARITH:def 2
-   .=(('not' (a).x '&' (b).x) 'or' ((a).x '&' 'not' (b).x)) 'or'
-     ('not' (a).x 'or' (b).x) by BVFUNC_1:def 11
-   .=(('not' (a).x '&' (b).x) 'or' ((a).x '&' 'not' (b).x)) 'or'
-     ('not' (a).x 'or' 'not' 'not' (b).x)
-   .=(('not' (a).x '&' (b).x) 'or' ((a).x '&' 'not' (b).x)) 'or'
-     'not'( (a).x '&' 'not' (b).x) by BINARITH:9
+     'not'( (a).x '&' 'not' (b).x) by BVFUNC_1:def 11
    .=('not' (a).x '&' (b).x) 'or' (((a).x '&' 'not' (b).x) 'or'
-     'not'( (a).x '&' 'not' (b).x)) by BINARITH:20
+     'not'( (a).x '&' 'not' (b).x))
    .=('not' (a).x '&' (b).x) 'or' TRUE by BINARITH:18
-   .=TRUE by BINARITH:19;
+   .=TRUE;
     hence thesis;
   end;
   hence thesis by BVFUNC_1:def 14;
@@ -1488,9 +1218,6 @@ proof
    .='not'( ((a).x 'or' (b).x) 'or' (c).x) 'or'
      ((a).x 'or' ((b).x 'or' (c).x))
      by BVFUNC_1:def 7
-   .='not'( ((a).x 'or' (b).x) 'or' (c).x) 'or'
-      (((a).x 'or' (b).x) 'or' (c).x)
-     by BINARITH:20
    .=TRUE by BINARITH:18;
     hence thesis;
   end;
@@ -1518,9 +1245,6 @@ proof
    .='not'( ((a).x '&' (b).x) '&' (c).x) 'or'
      ((a).x '&' ((b).x '&' (c).x))
      by VALUAT_1:def 6
-   .='not'( ((a).x '&' (b).x) '&' (c).x) 'or'
-      (((a).x '&' (b).x) '&' (c).x)
-     by MARGREL1:52
    .=TRUE by BINARITH:18;
     hence thesis;
   end;
@@ -1548,8 +1272,6 @@ proof
    .='not'( (a).x 'or' ((b).x 'or' (c).x)) 'or'
       (((a).x 'or' (b).x) 'or' (c).x)
      by BVFUNC_1:def 7
-   .='not'( (a).x 'or' ((b).x 'or' (c).x)) 'or'
-      ((a).x 'or' ((b).x 'or' (c).x)) by BINARITH:20
    .=TRUE by BINARITH:18;
     hence thesis;
   end;

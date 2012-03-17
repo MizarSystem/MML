@@ -8,12 +8,12 @@ environ
 
  vocabularies FUNCT_2, MARGREL1, PARTIT1, BVFUNC_1, ZF_LANG, FUNCT_1, RELAT_1,
       BINARITH, EQREL_1, BVFUNC_2, T_1TOPSP;
- notations TARSKI, XBOOLE_0, SUBSET_1, MARGREL1, VALUAT_1, RELAT_1, FUNCT_1,
-      FRAENKEL, EQREL_1, BINARITH, BVFUNC_1, BVFUNC_2;
+ notations TARSKI, XBOOLE_0, SUBSET_1, XBOOLEAN, MARGREL1, VALUAT_1, RELAT_1,
+      FUNCT_1, FRAENKEL, EQREL_1, BVFUNC_1, BVFUNC_2;
  constructors BINARITH, BVFUNC_1, BVFUNC_2;
- registrations MARGREL1, VALUAT_1, BINARITH, FRAENKEL;
- requirements SUBSET, BOOLE;
- definitions BVFUNC_1;
+ registrations MARGREL1, VALUAT_1, BINARITH, FRAENKEL, XBOOLEAN;
+ requirements SUBSET, BOOLE, NUMERALS, ARITHM;
+ definitions BVFUNC_1, XBOOLEAN;
  theorems FUNCT_1, FUNCT_2, T_1TOPSP, MARGREL1, BINARITH, BVFUNC_1, BVFUNC_2,
       VALUAT_1;
 
@@ -36,11 +36,10 @@ proof
     A3:(a 'imp' (b 'imp' c)).x
     =('not' a.x) 'or' (b 'imp' c).x by BVFUNC_1:def 11
    .=('not' a.x) 'or' (('not' b.x) 'or' c.x) by BVFUNC_1:def 11
-   .=('not' a.x 'or' 'not' b.x) 'or' c.x by BINARITH:20;
+   .=('not' a.x 'or' 'not' b.x) 'or' c.x;
        (a '&' b 'imp' c).x
     =('not' (a '&' b).x) 'or' c.x by BVFUNC_1:def 11
-   .='not' (a.x '&' b.x) 'or' c.x by VALUAT_1:def 6
-   .=('not' a.x 'or' 'not' b.x) 'or' c.x by BINARITH:9;
+   .=('not' a.x 'or' 'not' b.x) 'or' c.x by VALUAT_1:def 6;
     hence thesis by A2,A3,BVFUNC_1:def 14;
   end;
   then (a '&' b) 'imp' c = I_el(Y) by BVFUNC_1:def 14;
@@ -60,11 +59,10 @@ proof
     A3:(a 'imp' (b 'imp' c)).x
     =('not' a.x) 'or' (b 'imp' c).x by BVFUNC_1:def 11
    .=('not' a.x) 'or' (('not' b.x) 'or' c.x) by BVFUNC_1:def 11
-   .=('not' a.x 'or' 'not' b.x) 'or' c.x by BINARITH:20;
+   .=('not' a.x 'or' 'not' b.x) 'or' c.x;
        (a '&' b 'imp' c).x
     =('not' (a '&' b).x) 'or' c.x by BVFUNC_1:def 11
-   .='not' (a.x '&' b.x) 'or' c.x by VALUAT_1:def 6
-   .=('not' a.x 'or' 'not' b.x) 'or' c.x by BINARITH:9;
+   .=('not' a.x 'or' 'not' b.x) 'or' c.x by VALUAT_1:def 6;
     hence thesis by A2,A3,BVFUNC_1:def 14;
   end;
   then a 'imp' (b 'imp' c) = I_el(Y) by BVFUNC_1:def 14;
@@ -84,12 +82,11 @@ proof
    .=a.x 'or' (a.x '&' b.x) by VALUAT_1:def 6;
        now per cases by MARGREL1:39;
      case a.x=TRUE;
-     hence thesis by A2,BINARITH:19;
+     hence thesis by A2;
      end;
      case A3: a.x=FALSE;
       then (a 'or' (a '&' b)).x
-      =FALSE 'or' FALSE by A2,MARGREL1:45
-      .=FALSE by BINARITH:7;
+      =FALSE by A2;
      hence thesis by A3;
     end;
     end;
@@ -119,12 +116,11 @@ proof
        now per cases by MARGREL1:39;
      case A3:a.x=TRUE;
       then (a '&' (a 'or' b)).x
-      =TRUE '&' TRUE by A2,BINARITH:19
-      .=TRUE by MARGREL1:45;
+      =TRUE by A2;
      hence thesis by A3;
      end;
      case a.x=FALSE;
-     hence thesis by A2,MARGREL1:45;
+     hence thesis by A2;
     end;
     end;
     hence thesis;
@@ -150,26 +146,25 @@ proof
     A2:(a '&' 'not' a).x
      =a.x '&' ('not' a).x by VALUAT_1:def 6
     .=a.x '&' 'not' a.x by VALUAT_1:def 5;
-A3:'not' FALSE=TRUE & 'not' TRUE=FALSE by MARGREL1:41;
-    A4:(O_el Y).x=FALSE by BVFUNC_1:def 13;
+    A3:(O_el Y).x=FALSE by BVFUNC_1:def 13;
        now per cases by MARGREL1:39;
       case a.x=TRUE;
-      hence thesis by A2,A3,A4,MARGREL1:45;
+      hence thesis by A2,A3;
       end;
       case a.x=FALSE;
-      hence thesis by A2,A4,MARGREL1:45;
+      hence thesis by A2,A3;
     end;
     end;
     hence thesis;
   end;
   consider k3 being Function such that
-              A5: (a '&' 'not' a)=k3 & dom k3=Y & rng k3 c= BOOLEAN
+              A4: (a '&' 'not' a)=k3 & dom k3=Y & rng k3 c= BOOLEAN
                      by FUNCT_2:def 2;
   consider k4 being Function such that
-    A6: O_el(Y)=k4 & dom k4=Y & rng k4 c= BOOLEAN
+    A5: O_el(Y)=k4 & dom k4=Y & rng k4 c= BOOLEAN
                      by FUNCT_2:def 2;
-     for u being set st u in Y holds k3.u=k4.u by A1,A5,A6;
-  hence (a '&' 'not' a)=O_el(Y) by A5,A6,FUNCT_1:9;
+     for u being set st u in Y holds k3.u=k4.u by A1,A4,A5;
+  hence (a '&' 'not' a)=O_el(Y) by A4,A5,FUNCT_1:9;
 end;
 
 theorem  for a being Element of Funcs(Y,BOOLEAN) holds
@@ -206,18 +201,6 @@ proof
     let x be Element of Y;
        (a 'eqv' b).x
     ='not' (a.x 'xor' b.x) by BVFUNC_1:def 12
-   .='not' (('not' a.x '&' b.x) 'or' (a.x '&' 'not'
-b.x)) by BINARITH:def 2
-   .='not' ('not' a.x '&' b.x) '&' 'not' (a.x '&' 'not'
-b.x) by BINARITH:10
-   .=('not' 'not' a.x 'or' 'not' b.x) '&' 'not' (a.x '&' 'not'
-b.x) by BINARITH:9
-   .=('not' 'not' a.x 'or' 'not' b.x) '&'
-   ('not' a.x 'or' 'not' 'not'
-b.x) by BINARITH:9
-   .=(a.x 'or' 'not' b.x) '&' ('not' a.x 'or' 'not' 'not'
-b.x)
-   .=(a.x 'or' 'not' b.x) '&' ('not' a.x 'or' b.x)
    .=((a.x 'or' 'not' b.x) '&' 'not' a.x) 'or'
      ((a.x 'or' 'not' b.x) '&' b.x) by BINARITH:22
    .=(('not' a.x '&' a.x) 'or' ('not' a.x '&' 'not' b.x)) 'or'
@@ -228,12 +211,8 @@ b.x)
    .=(FALSE 'or' ('not' a.x '&' 'not' b.x)) 'or'
      ((b.x '&' a.x) 'or' (b.x '&' 'not' b.x))
     by MARGREL1:46
-   .=(FALSE 'or' ('not' a.x '&' 'not' b.x)) 'or'
-     ((b.x '&' a.x) 'or' FALSE) by MARGREL1:46
    .=('not' a.x '&' 'not' b.x) 'or'
-     ((b.x '&' a.x) 'or' FALSE) by BINARITH:7
-   .=('not' a.x '&' 'not' b.x) 'or' (b.x '&' a.x)
-    by BINARITH:7
+     ((b.x '&' a.x) 'or' FALSE) by MARGREL1:46
    .=(('not' a.x '&' 'not' b.x) 'or' b.x) '&'
      (('not' a.x '&' 'not' b.x) 'or' a.x) by BINARITH:23
    .=((b.x 'or' 'not' a.x) '&' (b.x 'or' 'not' b.x)) '&'
@@ -244,12 +223,8 @@ b.x)
    .=((b.x 'or' 'not' a.x) '&' TRUE) '&'
      ((a.x 'or' 'not' a.x) '&' (a.x 'or' 'not' b.x))
     by BINARITH:18
-   .=((b.x 'or' 'not' a.x) '&' TRUE) '&'
-     (TRUE '&' (a.x 'or' 'not' b.x)) by BINARITH:18
    .=(b.x 'or' 'not' a.x) '&'
-     (TRUE '&' (a.x 'or' 'not' b.x)) by MARGREL1:50
-   .=(b.x 'or' 'not' a.x) '&' (a.x 'or' 'not' b.x)
-    by MARGREL1:50
+     (TRUE '&' (a.x 'or' 'not' b.x)) by BINARITH:18
    .=(a 'imp' b).x '&' ('not' b.x 'or' a.x) by BVFUNC_1:def 11
    .=(a 'imp' b).x '&' (b 'imp' a).x by BVFUNC_1:def 11
    .=((a 'imp' b) '&' (b 'imp' a)).x by VALUAT_1:def 6;
@@ -299,8 +274,6 @@ proof
     let x be Element of Y;
        (a 'xor' b).x
     =a.x 'xor' b.x by BVFUNC_1:def 8
-   .=('not' a.x '&' b.x) 'or' (a.x '&' 'not' b.x)
-    by BINARITH:def 2
    .=(('not' a).x '&' b.x) 'or' (a.x '&' 'not' b.x)
     by VALUAT_1:def 5
    .=(('not' a).x '&' b.x) 'or' (a.x '&' ('not' b).x)
@@ -335,7 +308,7 @@ proof
   end;
     assume a 'imp' b=I_el(Y) & b 'imp' a=I_el(Y);
      then (a 'eqv' b)=I_el(Y) '&' I_el(Y) by Th7;
-    hence thesis by BVFUNC_1:9;
+    hence thesis;
 end;
 
 theorem  for a,b,c being Element of Funcs(Y,BOOLEAN) holds
@@ -459,23 +432,21 @@ A2:All(a,PA,G) = B_INF(a,CompF(PA,G)) by BVFUNC_2:def 9;
        (a 'imp' u).x = TRUE by A1,BVFUNC_1:def 14;
     then A3:'not' a.x 'or' u.x = TRUE by BVFUNC_1:def 11;
     A4:'not' a.x=TRUE or 'not' a.x=FALSE by MARGREL1:39;
-       now per cases by A3,A4,BINARITH:7;
+       now per cases by A3,A4;
       case 'not' a.x=TRUE;
-      then a.x=FALSE by MARGREL1:41;
-      then A5:a.x<>TRUE by MARGREL1:43;
+      then a.x=FALSE;
+      then A5:a.x<>TRUE;
          x in EqClass(x,CompF(PA,G)) & EqClass(x,CompF(PA,G)) in CompF(PA,G)
       by T_1TOPSP:def 1;
       then B_INF(a,CompF(PA,G)).x = FALSE by A5,BVFUNC_1:def 19;
-      then (All(a,PA,G) 'imp' u).x ='not' FALSE 'or' u.x by A2,
-BVFUNC_1:def 11
-     .=TRUE 'or' u.x by MARGREL1:41
-     .=TRUE by BINARITH:19;
+      then (All(a,PA,G) 'imp' u).x =TRUE 'or' u.x by A2,BVFUNC_1:def 11
+     .=TRUE;
       hence thesis;
       end;
       case u.x=TRUE;
       then (All(a,PA,G) 'imp' u).x
       ='not' All(a,PA,G).x 'or' TRUE by BVFUNC_1:def 11
-     .=TRUE by BINARITH:19;
+     .=TRUE;
       hence thesis;
     end;
     end;
@@ -505,17 +476,16 @@ A3:z in EqClass(z,CompF(PA,G)) & EqClass(z,CompF(PA,G)) in CompF(PA,G)
     ='not' Ex(u,PA,G).z 'or' u.z by BVFUNC_1:def 11;
        now per cases by MARGREL1:39;
     case u.z=TRUE;
-      hence thesis by A4,BINARITH:19;
+      hence thesis by A4;
     end;
     case A5:u.z=FALSE;
          now given x1 being Element of Y such that
           A6:x1 in EqClass(z,CompF(PA,G)) & u.x1=TRUE;
            u.z=u.x1 by A1,A3,A6,BVFUNC_1:def 18;
-        hence contradiction by A5,A6,MARGREL1:43;
+        hence contradiction by A5,A6;
       end;
       then B_SUP(u,CompF(PA,G)).z = FALSE by BVFUNC_1:def 20;
-      then (Ex(u,PA,G) 'imp' u).z =TRUE 'or' u.z by A2,A4,MARGREL1:41
-     .=TRUE by BINARITH:19;
+      then (Ex(u,PA,G) 'imp' u).z =TRUE by A2,A4;
       hence thesis;
     end;
     end;
@@ -547,15 +517,14 @@ A3:z in EqClass(z,CompF(PA,G)) & EqClass(z,CompF(PA,G)) in CompF(PA,G)
        now per cases by MARGREL1:39;
     case u.z=FALSE;
       then (u 'imp' All(u,PA,G)).z
-     =TRUE 'or' All(u,PA,G).z by A4,MARGREL1:41
-     .=TRUE by BINARITH:19;
+     =TRUE by A4;
       hence thesis;
     end;
     case u.z=TRUE;
       then for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
          u.x=TRUE by A1,A3,BVFUNC_1:def 18;
       then All(u,PA,G).z=TRUE by A2,BVFUNC_1:def 19;
-      hence thesis by A4,BINARITH:19;
+      hence thesis by A4;
     end;
     end;
     hence thesis;
@@ -589,8 +558,7 @@ A5:z in EqClass(z,CompF(PB,G)) & EqClass(z,CompF(PB,G)) in CompF(PB,G)
        now per cases by MARGREL1:39;
     case All(u,PA,G).z=FALSE;
       then (All(u,PA,G) 'imp' All(u,PB,G)).z
-      =TRUE 'or' All(u,PB,G).z by A6,MARGREL1:41
-     .=TRUE by BINARITH:19;
+      =TRUE by A6;
       hence thesis;
     end;
     case A7:All(u,PA,G).z=TRUE;
@@ -598,13 +566,13 @@ A5:z in EqClass(z,CompF(PB,G)) & EqClass(z,CompF(PB,G)) in CompF(PB,G)
            not (for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
            u.x=TRUE);
         then All(u,PA,G).z=FALSE by A2,BVFUNC_1:def 19;
-        hence contradiction by A7,MARGREL1:43;
+        hence contradiction by A7;
       end;
       then u.z=TRUE by A4;
       then for x being Element of Y st x in EqClass(z,CompF(PB,G)) holds
          u.x=TRUE by A1,A5,BVFUNC_1:def 18;
       then All(u,PB,G).z=TRUE by A3,BVFUNC_1:def 19;
-      hence thesis by A6,BINARITH:19;
+      hence thesis by A6;
     end;
     end;
     hence thesis;
@@ -637,14 +605,14 @@ A5:z in EqClass(z,CompF(PB,G)) & EqClass(z,CompF(PB,G)) in CompF(PB,G)
     ='not' Ex(u,PA,G).z 'or' Ex(u,PB,G).z by BVFUNC_1:def 11;
        now per cases by MARGREL1:39;
     case Ex(u,PB,G).z=TRUE;
-      hence thesis by A6,BINARITH:19;
+      hence thesis by A6;
     end;
     case A7:Ex(u,PB,G).z=FALSE;
          now assume
            (ex x being Element of Y st
             x in EqClass(z,CompF(PB,G)) & u.x=TRUE);
         then Ex(u,PB,G).z=TRUE by A3,BVFUNC_1:def 20;
-        hence contradiction by A7,MARGREL1:43;
+        hence contradiction by A7;
       end;
       then u.z<>TRUE by A5;
       then not (ex x being Element of Y st
@@ -652,8 +620,7 @@ A5:z in EqClass(z,CompF(PB,G)) & EqClass(z,CompF(PB,G)) in CompF(PB,G)
 BVFUNC_1:def 18;
       then (B_SUP(u,CompF(PA,G))).z = FALSE by BVFUNC_1:def 20;
       then (Ex(u,PA,G) 'imp' Ex(u,PB,G)).z
-      =TRUE 'or' Ex(u,PB,G).z by A2,A6,MARGREL1:41
-     .=TRUE by BINARITH:19;
+      =TRUE by A2,A6;
       hence thesis;
     end;
     end;
@@ -680,23 +647,10 @@ A3:All(b,PA,G) = B_INF(b,CompF(PA,G)) by BVFUNC_2:def 9;
          not (for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
          (a 'eqv' b).x=TRUE);
       then (All(a 'eqv' b,PA,G)).z=FALSE by A1,BVFUNC_1:def 19;
-      hence contradiction by A4,MARGREL1:43;
+      hence contradiction by A4;
     end;
     A6:(All(a,PA,G) 'eqv' All(b,PA,G)).z
      ='not'( All(a,PA,G).z 'xor' All(b,PA,G).z) by BVFUNC_1:def 12
-    .='not' (('not' All(a,PA,G).z '&' All(b,PA,G).z) 'or'
-        (All(a,PA,G).z '&' 'not' All(b,PA,G).z)) by BINARITH:def 2
-    .='not' ('not' All(a,PA,G).z '&' All(b,PA,G).z) '&'
-      'not' (All(a,PA,G).z '&' 'not' All(b,PA,G).z) by BINARITH:10
-    .=('not' 'not' All(a,PA,G).z 'or' 'not' All(b,PA,G).z) '&'
-      'not' (All(a,PA,G).z '&' 'not' All(b,PA,G).z) by BINARITH:9
-    .=('not' 'not' All(a,PA,G).z 'or' 'not' All(b,PA,G).z) '&'
-      ('not' All(a,PA,G).z 'or' 'not' 'not' All(b,PA,G).z)
-      by BINARITH:9
-    .=(All(a,PA,G).z 'or' 'not' All(b,PA,G).z) '&'
-      ('not' All(a,PA,G).z 'or' 'not' 'not' All(b,PA,G).z)
-    .=(All(a,PA,G).z 'or' 'not' All(b,PA,G).z) '&'
-      ('not' All(a,PA,G).z 'or' All(b,PA,G).z)
     .=((All(a,PA,G).z 'or' 'not' All(b,PA,G).z) '&' 'not'
 All(a,PA,G).z) 'or'
       ((All(a,PA,G).z 'or' 'not' All(b,PA,G).z) '&' All(b,PA,G).z)
@@ -713,15 +667,10 @@ All(a,PA,G).z) 'or'
        ('not' All(a,PA,G).z '&' 'not' All(b,PA,G).z)) 'or'
       ((All(b,PA,G).z '&' All(a,PA,G).z) 'or'
        (All(b,PA,G).z '&' 'not' All(b,PA,G).z)) by MARGREL1:46
-    .=(FALSE 'or'
-       ('not' All(a,PA,G).z '&' 'not' All(b,PA,G).z)) 'or'
-      ((All(b,PA,G).z '&' All(a,PA,G).z) 'or' FALSE)
-     by MARGREL1:46
     .=(('not' All(a,PA,G).z '&' 'not' All(b,PA,G).z)) 'or'
-      ((All(b,PA,G).z '&' All(a,PA,G).z) 'or' FALSE)
-     by BINARITH:7
+      ((All(b,PA,G).z '&' All(a,PA,G).z) 'or' FALSE) by MARGREL1:46
     .=('not' All(a,PA,G).z '&' 'not' All(b,PA,G).z) 'or'
-      (All(b,PA,G).z '&' All(a,PA,G).z) by BINARITH:7;
+      (All(b,PA,G).z '&' All(a,PA,G).z);
     per cases;
     suppose A7:
       (for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
@@ -731,8 +680,7 @@ All(a,PA,G).z) 'or'
       then A8:All(a,PA,G).z=TRUE by A2,BVFUNC_1:def 19;
          B_INF(b,CompF(PA,G)).z = TRUE by A7,BVFUNC_1:def 19;
       then (All(a,PA,G) 'eqv' All(b,PA,G)).z
-      =('not' TRUE '&' 'not' TRUE) 'or' TRUE by A3,A6,A8,MARGREL1:45
-     .=TRUE by BINARITH:19;
+      =TRUE by A3,A6,A8;
     hence thesis;
     end;
     suppose A9:
@@ -746,19 +694,9 @@ All(a,PA,G).z) 'or'
       A12:a.x1=TRUE by A9,A10;
       A13: (a 'eqv' b).x1
       ='not' (a.x1 'xor' b.x1) by BVFUNC_1:def 12
-     .='not' (('not' a.x1 '&' b.x1) 'or' (a.x1 '&' 'not' b.x1))
-      by BINARITH:def 2
-     .='not' ('not' TRUE '&' FALSE) '&' 'not' (TRUE '&' 'not'
-FALSE) by A11,A12,BINARITH:10
-     .='not' (FALSE '&' FALSE) '&' 'not' (TRUE '&' 'not' FALSE) by MARGREL1:41
-     .='not' (FALSE '&' FALSE) '&' 'not' (TRUE '&' TRUE) by MARGREL1:41
-     .='not' FALSE '&' 'not' (TRUE '&' TRUE) by MARGREL1:45
-     .='not' FALSE '&' 'not' TRUE by MARGREL1:45
-     .=TRUE '&' 'not' TRUE by MARGREL1:41
-     .=TRUE '&' FALSE by MARGREL1:41
-     .=FALSE by MARGREL1:49;
+     .=FALSE by A11,A12;
          (a 'eqv' b).x1=TRUE by A5,A10;
-    hence thesis by A13,MARGREL1:43;
+    hence thesis by A13;
     end;
     suppose A14:
       not (for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
@@ -771,18 +709,9 @@ FALSE) by A11,A12,BINARITH:10
       A17:b.x1=TRUE by A14,A15;
       A18: (a 'eqv' b).x1
       ='not' (a.x1 'xor' b.x1) by BVFUNC_1:def 12
-     .='not' (('not' a.x1 '&' b.x1) 'or' (a.x1 '&' 'not' b.x1))
-      by BINARITH:def 2
-     .='not' ('not' FALSE '&' TRUE) '&' 'not' (FALSE '&' 'not'
-TRUE) by A16,A17,BINARITH:10
-     .='not' (TRUE '&' TRUE) '&' 'not' (FALSE '&' 'not' TRUE) by MARGREL1:41
-     .='not' (TRUE '&' TRUE) '&' 'not' (FALSE '&' FALSE) by MARGREL1:41
-     .='not' TRUE '&' 'not' (FALSE '&' FALSE) by MARGREL1:45
-     .='not' TRUE '&' 'not' FALSE by MARGREL1:45
-     .=FALSE '&' 'not' FALSE by MARGREL1:41
-     .=FALSE by MARGREL1:49;
+     .=FALSE by A16,A17;
          (a 'eqv' b).x1=TRUE by A5,A15;
-    hence thesis by A18,MARGREL1:43;
+    hence thesis by A18;
     end;
     suppose A19:
       not (for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
@@ -792,10 +721,7 @@ TRUE) by A16,A17,BINARITH:10
       then A20:All(a,PA,G).z=FALSE by A2,BVFUNC_1:def 19;
          B_INF(b,CompF(PA,G)).z = FALSE by A19,BVFUNC_1:def 19;
       then (All(a,PA,G) 'eqv' All(b,PA,G)).z
-      =(TRUE '&' 'not' FALSE) 'or' (FALSE '&' FALSE) by A3,A6,A20,MARGREL1:41
-     .=(TRUE '&' TRUE) 'or' (FALSE '&' FALSE) by MARGREL1:41
-     .=TRUE 'or' (FALSE '&' FALSE) by MARGREL1:45
-     .=TRUE by BINARITH:19;
+      =TRUE by A3,A6,A20;
     hence thesis;
 end;
 end;
@@ -818,7 +744,7 @@ A4:z in EqClass(z,CompF(PA,G)) & EqClass(z,CompF(PA,G)) in CompF(PA,G)
          not (for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
          (a '&' b).x=TRUE);
       then All(a '&' b,PA,G).z=FALSE by A1,BVFUNC_1:def 19;
-      hence contradiction by A3,MARGREL1:43;
+      hence contradiction by A3;
     end;
        now assume
          not (for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
@@ -828,8 +754,8 @@ A4:z in EqClass(z,CompF(PA,G)) & EqClass(z,CompF(PA,G)) in CompF(PA,G)
       A7:b.x1=FALSE by A6,MARGREL1:43;
          (a '&' b).x1=TRUE by A5,A6;
       then A8:a.x1 '&' b.x1=TRUE by VALUAT_1:def 6;
-         a.x1 '&' b.x1 =FALSE by A7,MARGREL1:49;
-      hence contradiction by A8,MARGREL1:43;
+         a.x1 '&' b.x1 =FALSE by A7;
+      hence contradiction by A8;
     end;
     then A9: B_INF(b,CompF(PA,G)).z = TRUE by BVFUNC_1:def 19;
        now assume
@@ -840,12 +766,12 @@ A4:z in EqClass(z,CompF(PA,G)) & EqClass(z,CompF(PA,G)) in CompF(PA,G)
       A11:a.x1=FALSE by A10,MARGREL1:43;
          (a '&' b).x1=TRUE by A5,A10;
       then A12:a.x1 '&' b.x1=TRUE by VALUAT_1:def 6;
-         a.x1 '&' b.x1 =FALSE by A11,MARGREL1:49;
-      hence contradiction by A12,MARGREL1:43;
+         a.x1 '&' b.x1 =FALSE by A11;
+      hence contradiction by A12;
     end;
     then a.z=TRUE by A4;
     then (a '&' All(b,PA,G)).z =TRUE '&' TRUE by A2,A9,VALUAT_1:def 6
-   .=TRUE by MARGREL1:45;
+   .=TRUE;
     hence thesis;
 end;
 
@@ -866,10 +792,10 @@ A2:All(a,PA,G) = B_INF(a,CompF(PA,G)) by BVFUNC_2:def 9;
     ('not' All(a,PA,G).z)=FALSE by MARGREL1:39;
 A5:z in EqClass(z,CompF(PA,G)) & EqClass(z,CompF(PA,G)) in CompF(PA,G)
       by T_1TOPSP:def 1;
-       now per cases by A3,A4,BINARITH:7;
+       now per cases by A3,A4;
       case 'not' All(a,PA,G).z=TRUE;
-      then All(a,PA,G).z=FALSE by MARGREL1:41;
-      then All(a,PA,G).z<>TRUE by MARGREL1:43;
+      then All(a,PA,G).z=FALSE;
+      then All(a,PA,G).z<>TRUE;
       then consider x1 being Element of Y such that
         A6: x1 in EqClass(z,CompF(PA,G)) & a.x1<>TRUE by A2,BVFUNC_1:def 19
 ;
@@ -879,26 +805,24 @@ A5:z in EqClass(z,CompF(PA,G)) & EqClass(z,CompF(PA,G)) in CompF(PA,G)
         then (a 'imp' u).x1<>TRUE by A6;
         then (a 'imp' u).x1=FALSE by MARGREL1:43;
         then A7:('not' a.x1) 'or' u.x1=FALSE by BVFUNC_1:def 11;
-        A8:u.x1=TRUE or u.x1=FALSE by MARGREL1:39;
            'not' a.x1=TRUE or 'not' a.x1=FALSE by MARGREL1:39;
         then 'not' a.x1=FALSE & u.x1=FALSE
-         by A7,A8,BINARITH:19;
-        hence contradiction by A6,MARGREL1:41;
+         by A7;
+        hence contradiction by A6;
       end;
       hence thesis by A1,BVFUNC_1:def 20;
       end;
-      case A9:u.z=TRUE;
+      case A8:u.z=TRUE;
          now assume
            not (ex x being Element of Y st
             x in EqClass(z,CompF(PA,G)) & (a 'imp' u).x=TRUE);
         then (a 'imp' u).z<>TRUE by A5;
         then (a 'imp' u).z=FALSE by MARGREL1:43;
-        then A10:('not' a.z) 'or' u.z=FALSE by BVFUNC_1:def 11;
-        A11:u.z=TRUE or u.z=FALSE by MARGREL1:39;
+        then A9:('not' a.z) 'or' u.z=FALSE by BVFUNC_1:def 11;
            'not' a.z=TRUE or 'not' a.z=FALSE by MARGREL1:39;
         then 'not' a.z=FALSE & u.z=FALSE
-         by A10,A11,BINARITH:19;
-        hence contradiction by A9,MARGREL1:43;
+         by A9;
+        hence contradiction by A8;
       end;
       hence thesis by A1,BVFUNC_1:def 20;
     end;
@@ -968,8 +892,7 @@ then A4:(All(a,PA,G) 'eqv' All(b,PA,G)).z
       then A7:All(a,PA,G).z = TRUE by A2,BVFUNC_1:def 19;
          B_INF(b,CompF(PA,G)).z = TRUE by A6,BVFUNC_1:def 19;
       then (All(a,PA,G) 'eqv' All(b,PA,G)).z
-     =('not' TRUE '&' 'not' TRUE) 'or' TRUE by A3,A4,A7,MARGREL1:45
-    .=TRUE by BINARITH:19;
+     =TRUE by A3,A4,A7;
       hence thesis;
     end;
     A8:now assume A9:
@@ -982,10 +905,9 @@ then A4:(All(a,PA,G) 'eqv' All(b,PA,G)).z
       A11:b.x1=FALSE by A10,MARGREL1:43;
       A12:a.x1=TRUE by A9,A10;
          ('not' a 'or' b).x1 =('not' a).x1 'or' b.x1 by BVFUNC_1:def 7
-    .='not' TRUE 'or' FALSE by A11,A12,VALUAT_1:def 5
-    .=FALSE 'or' FALSE by MARGREL1:41
-    .=FALSE by BINARITH:7;
-      then ('not' a 'or' b).x1<>TRUE by MARGREL1:43;
+    .=FALSE 'or' FALSE by A11,A12,VALUAT_1:def 5
+    .=FALSE;
+      then ('not' a 'or' b).x1<>TRUE;
       hence thesis by A1,BVFUNC_1:def 14;
     end;
     A13:now assume A14:
@@ -999,10 +921,9 @@ then A4:(All(a,PA,G) 'eqv' All(b,PA,G)).z
       A17:b.x1=TRUE by A14,A15;
          ('not' b 'or' a).x1
      =('not' b).x1 'or' a.x1 by BVFUNC_1:def 7
-    .='not' TRUE 'or' FALSE by A16,A17,VALUAT_1:def 5
-    .=FALSE 'or' FALSE by MARGREL1:41
-    .=FALSE by BINARITH:7;
-      then ('not' b 'or' a).x1<>TRUE by MARGREL1:43;
+    .=FALSE 'or' FALSE by A16,A17,VALUAT_1:def 5
+    .=FALSE;
+      then ('not' b 'or' a).x1<>TRUE;
       hence thesis by A1,BVFUNC_1:def 14;
     end;
        now assume A18:
@@ -1013,10 +934,7 @@ then A4:(All(a,PA,G) 'eqv' All(b,PA,G)).z
       then A19:All(a,PA,G).z = FALSE by A2,BVFUNC_1:def 19;
          B_INF(b,CompF(PA,G)).z = FALSE by A18,BVFUNC_1:def 19;
       then (All(a,PA,G) 'eqv' All(b,PA,G)).z
-     =(TRUE '&' 'not' FALSE) 'or' (FALSE '&' FALSE) by A3,A4,A19,MARGREL1:41
-    .=(TRUE '&' TRUE) 'or' (FALSE '&' FALSE) by MARGREL1:41
-    .=TRUE 'or' (FALSE '&' FALSE) by MARGREL1:45
-    .=TRUE by BINARITH:19;
+     =TRUE by A3,A4,A19;
       hence thesis;
     end;
     hence thesis by A5,A8,A13;
@@ -1087,8 +1005,7 @@ then A4:(Ex(a,PA,G) 'eqv' Ex(b,PA,G)).z
     then A6:Ex(a,PA,G).z = TRUE by A2,BVFUNC_1:def 20;
        B_SUP(b,CompF(PA,G)).z = TRUE by A5,BVFUNC_1:def 20;
     then (Ex(a,PA,G) 'eqv' Ex(b,PA,G)).z
-     =('not' TRUE '&' 'not' TRUE) 'or' TRUE by A3,A4,A6,MARGREL1:45
-    .=TRUE by BINARITH:19;
+     =TRUE by A3,A4,A6;
     hence thesis;
     end;
     suppose A7:
@@ -1101,10 +1018,9 @@ then A4:(Ex(a,PA,G) 'eqv' Ex(b,PA,G)).z
        b.x1<>TRUE by A7,A8;
     then A9:b.x1=FALSE by MARGREL1:43;
        ('not' a 'or' b).x1 =('not' a).x1 'or' b.x1 by BVFUNC_1:def 7
-    .='not' TRUE 'or' FALSE by A8,A9,VALUAT_1:def 5
-    .=FALSE 'or' FALSE by MARGREL1:41
-    .=FALSE by BINARITH:7;
-      then ('not' a 'or' b).x1<>TRUE by MARGREL1:43;
+    .=FALSE 'or' FALSE by A8,A9,VALUAT_1:def 5
+    .=FALSE;
+      then ('not' a 'or' b).x1<>TRUE;
     hence thesis by A1,BVFUNC_1:def 14;
     end;
     suppose A10:
@@ -1117,10 +1033,9 @@ then A4:(Ex(a,PA,G) 'eqv' Ex(b,PA,G)).z
        a.x1<>TRUE by A10,A11;
     then A12:a.x1=FALSE by MARGREL1:43;
        ('not' b 'or' a).x1 =('not' b).x1 'or' a.x1 by BVFUNC_1:def 7
-    .='not' TRUE 'or' FALSE by A11,A12,VALUAT_1:def 5
-    .=FALSE 'or' FALSE by MARGREL1:41
-    .=FALSE by BINARITH:7;
-      then ('not' b 'or' a).x1<>TRUE by MARGREL1:43;
+    .=FALSE 'or' FALSE by A11,A12,VALUAT_1:def 5
+    .=FALSE;
+      then ('not' b 'or' a).x1<>TRUE;
     hence thesis by A1,BVFUNC_1:def 14;
     end;
     suppose A13:
@@ -1131,10 +1046,7 @@ then A4:(Ex(a,PA,G) 'eqv' Ex(b,PA,G)).z
     then A14:Ex(a,PA,G).z = FALSE by A2,BVFUNC_1:def 20;
        B_SUP(b,CompF(PA,G)).z = FALSE by A13,BVFUNC_1:def 20;
     then (Ex(a,PA,G) 'eqv' Ex(b,PA,G)).z
-     =(TRUE '&' 'not' FALSE) 'or' (FALSE '&' FALSE) by A3,A4,A14,MARGREL1:41
-    .=(TRUE '&' TRUE) 'or' (FALSE '&' FALSE) by MARGREL1:41
-    .=TRUE 'or' (FALSE '&' FALSE) by MARGREL1:45
-    .=TRUE by BINARITH:19;
+     =TRUE by A3,A4,A14;
     hence thesis;
   end;
   end;

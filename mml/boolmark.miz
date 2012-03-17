@@ -10,18 +10,17 @@ environ
  vocabularies FUNCT_1, FUNCT_4, FUNCOP_1, RELAT_1, BOOLE, SUBSET_1, FINSEQ_1,
       PETRI, FRAENKEL, NET_1, MARGREL1, FUNCT_2, ARYTM_3, ARYTM_1, BOOLMARK,
       FINSEQ_4;
- notations TARSKI, XBOOLE_0, SUBSET_1,
- NUMBERS,XCMPLX_0, NAT_1, RELAT_1, FUNCT_1,
-      FUNCT_2, DOMAIN_1, FRAENKEL, FUNCOP_1, FINSEQ_1, FINSEQ_4, FUNCT_4,
-      MARGREL1, PETRI, XXREAL_0;
+ notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XCMPLX_0, NAT_1, RELAT_1,
+      FUNCT_1, FUNCT_2, DOMAIN_1, FRAENKEL, FUNCOP_1, FINSEQ_1, FINSEQ_4,
+      FUNCT_4, MARGREL1, PETRI, XXREAL_0;
  constructors DOMAIN_1, FUNCT_4, XXREAL_0, XREAL_0, NAT_1, MARGREL1, FINSEQ_4,
       PETRI, COMPLEX1;
  registrations SUBSET_1, FINSEQ_1, RELSET_1, MARGREL1, FUNCOP_1, XREAL_0,
       ARYTM_3, XXREAL_0;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
- definitions PETRI, XBOOLE_0;
- theorems SUBSET_1, TARSKI, ZFMISC_1, MARGREL1, PETRI, FUNCT_1, FUNCOP_1,
-      FUNCT_2, FUNCT_4, FINSEQ_1, FINSEQ_4, NAT_1, FINSEQ_2, FINSEQ_3, RELAT_1,
+ definitions PETRI, XBOOLE_0, MARGREL1, XBOOLEAN;
+ theorems SUBSET_1, TARSKI, ZFMISC_1, PETRI, FUNCT_1, FUNCOP_1, FUNCT_2,
+      FUNCT_4, FINSEQ_1, FINSEQ_4, NAT_1, FINSEQ_2, FINSEQ_3, RELAT_1,
       RELSET_1, GOBOARD2, XBOOLE_0, XBOOLE_1, XREAL_1, XXREAL_0, ORDINAL1;
  schemes FINSEQ_2, NAT_1;
 
@@ -500,7 +499,7 @@ now
   A12: s in {t}*' & s in Sd by A11,XBOOLE_0:def 3;
   then Firing(t,M0).s = TRUE by Th6;
   then TRUE in Firing(t,M0).:Sd by A12,FUNCT_2:43;
-  then Firing(t,M0).:Sd <> {FALSE} by MARGREL1:38,TARSKI:def 1;
+  then Firing(t,M0).:Sd <> {FALSE} by TARSKI:def 1;
   hence contradiction by A1,A7,A10;
 end;
 
@@ -524,7 +523,7 @@ theorem
           let M0 be Boolean_marking of PTN such that A2: M0.:Sd = {FALSE};
           let t be transition of PTN; assume t is_firable_on M0;
           then A3: M0.:*'{t} c= {TRUE} by Def2;
-             {TRUE} misses {FALSE} by MARGREL1:38,ZFMISC_1:17;
+             {TRUE} misses {FALSE} by ZFMISC_1:17;
           then M0.:*'{t} misses {FALSE} by A3,XBOOLE_1:63;
           then A4: *'{t} misses Sd by A2,Th2;
           then not t in *'Sd by A1,PETRI:19;
@@ -807,7 +806,7 @@ GOBOARD2:5;
             reconsider j as Element of NAT by ORDINAL1:def 13;
             len M3 = j + 1 by A41;
             then
-          A42: M/.len M3 = M3/.len M3 by A10,A29,A41;
+          A42: M/.len M3 = M3/.len M3 by A10,A29;
              Q1/.1 = (Q0^Q1)/.(len Q0 + 1) by A30,GOBOARD2:5;
          then A43: Q1/.1 is_firable_on M3/.len M3 by A9,A10,A17,A21,A42;
 
@@ -851,7 +850,7 @@ GOBOARD2:5;
             reconsider j as Element of NAT by ORDINAL1:def 13;
             i = j+1 by A56;
             then
-            A57: M/.i = M3/.i by A29,A53,A56;
+            A57: M/.i = M3/.i by A29,A53;
                i + 1 <= len Q0 by A53,NAT_1:38;
             hence Q0/.(i+1) is_firable_on M3/.i & M3/.(i+1)
               = Firing(Q0/.(i+1),M3/.i) by A29,A54,A55,A57;
@@ -964,12 +963,11 @@ defpred P[FinSequence of the Transitions of PTN] means
                   holds M/.(i+1) = Firing(<*x*>/.(i+1),M/.i)
                     by Def5;
                  <*x*>/.1 = x by FINSEQ_4:25;
-             then A11: Firing(Q^<*x*>, M0) = Firing(x,Firing(Q,M0))
-               by A8,A9,A10,FINSEQ_1:56
-               .= Firing(Q,M0) +* (*'{x}-->FALSE) +* ({x}*'-->TRUE);
+             then A11: Firing(Q^<*x*>, M0) =
+ Firing(Q,M0) +* (*'{x}-->FALSE) +* ({x}*'-->TRUE) by A8,A9,A10,FINSEQ_1:56;
                 x is_firable_on Firing(Q,M0) by A7,Th12;
              then A12: Firing(Q,M0).:*'{x} c= {TRUE} by Def2;
-                {TRUE} misses {FALSE} by MARGREL1:38,ZFMISC_1:17;
+                {TRUE} misses {FALSE} by ZFMISC_1:17;
              then Firing(Q,M0).:*'{x} misses {FALSE} by A12,XBOOLE_1:63;
              then A13: *'{x} misses Sd by A5,A6,Th2,Th11;
              then not x in *'Sd by A1,PETRI:19;
@@ -1027,7 +1025,7 @@ defpred P[FinSequence of the Transitions of PTN] means
       A25: s in {t}*' & s in Sd by A24,XBOOLE_0:def 3;
       then Firing(t,M0).s = TRUE by Th6;
       then TRUE in Firing(t,M0).:Sd by A25,FUNCT_2:43;
-      then Firing(t,M0).:Sd <> {FALSE} by MARGREL1:38,TARSKI:def 1;
+      then Firing(t,M0).:Sd <> {FALSE} by TARSKI:def 1;
       then Firing(Q,M0).:Sd <> {FALSE} by Th13;
       hence contradiction by A14,A20,A23;
     end;

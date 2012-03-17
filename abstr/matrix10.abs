@@ -1,0 +1,450 @@
+:: Some Special Matrices of Real Elements and Their Properties
+::  by Xiquan Liang , Fuguo Ge and Xiaopeng Yue
+::
+:: Received October 19, 2006
+:: Copyright (c) 2006 Association of Mizar Users
+
+environ
+
+ vocabularies FINSEQ_1, TREES_1, QC_LANG1, MATRIX10, ABSVALUE, MATRIX_1,
+      ARYTM_1, VECTSP_1, RLVECT_1, RELAT_1, MATRIXR1, FUNCT_4, LATTICE3,
+      FUNCOP_1;
+ notations COMPLEX1, TARSKI, ZFMISC_1, SUBSET_1, FINSEQ_1, MATRIX_1, NAT_1,
+      NUMBERS, REAL_1, XXREAL_0, MATRIXR1, RLVECT_1, VECTSP_1, STRUCT_0,
+      MATRIX_3, GROUP_1, MATRIX_2;
+ constructors COMPLEX1, MATRIX_3, BINOP_2, MEMBERED, MATRIXR1, XXREAL_0,
+      GOBOARD1, MATRIX_4, REAL_1, NAT_1;
+ registrations VECTSP_1, RELSET_1, XXREAL_0, MEMBERED, INT_1;
+ requirements NUMERALS, SUBSET, BOOLE, ARITHM, REAL;
+
+
+begin
+
+ reserve a,b for Element of REAL,
+         i,j,n for Nat,
+         M,M1,M2,M3,M4 for Matrix of n,REAL;
+
+definition let M be Matrix of REAL;
+  attr M is Positive means
+:: MATRIX10:def 1
+  for i,j st [i,j] in Indices M holds M*(i,j) > 0;
+  attr M is Negative means
+:: MATRIX10:def 2
+  for i,j st [i,j] in Indices M holds M*(i,j) < 0;
+  attr M is Nonpositive means
+:: MATRIX10:def 3
+  for i,j st [i,j] in Indices M holds M*(i,j) <= 0;
+  attr M is Nonnegative means
+:: MATRIX10:def 4
+  for i,j st [i,j] in Indices M holds M*(i,j) >= 0;
+end;
+
+definition let M1,M2 be Matrix of REAL;
+  pred M1 is_less_than M2 means
+:: MATRIX10:def 5
+  for i,j st [i,j] in Indices M1 holds M1*(i,j) < M2*(i,j);
+  pred M1 is_less_or_equal_with M2 means
+:: MATRIX10:def 6
+  for i,j st [i,j] in Indices M1 holds M1*(i,j) <= M2*(i,j);
+end;
+
+definition let M be Matrix of REAL;
+  func |:M:| -> Matrix of REAL means
+:: MATRIX10:def 7
+  len it = len M & width it = width M &
+  for i,j holds [i,j] in Indices M implies it*(i,j) = abs(M*(i,j));
+end;
+
+definition let n; let M;
+  redefine func -M -> Matrix of n,REAL;
+end;
+
+definition let n; let M1,M2;
+  redefine func M1+M2 -> Matrix of n,REAL;
+end;
+
+definition let n; let M1,M2;
+  redefine func M1-M2 -> Matrix of n,REAL;
+end;
+
+definition let n;let a be Element of REAL;let M;
+  redefine func a*M -> Matrix of n,REAL;
+end;
+
+registration
+ cluster ((1,1) --> 1) -> Positive Matrix of REAL;
+ cluster ((1,1) --> 1) -> Nonnegative Matrix of REAL;
+ cluster ((1,1) --> -1) -> Negative Matrix of REAL;
+ cluster ((1,1) --> -1) -> Nonpositive Matrix of REAL;
+end;
+
+registration
+  cluster Positive Nonnegative Matrix of REAL;
+  cluster Negative Nonpositive Matrix of REAL;
+end;
+
+registration let M be Positive Matrix of REAL;
+  cluster M@ -> Positive;
+end;
+
+registration let M be Negative Matrix of REAL;
+  cluster M@ -> Negative;
+end;
+
+registration let M be Nonpositive Matrix of REAL;
+  cluster M@ -> Nonpositive;
+end;
+
+registration let M be Nonnegative Matrix of REAL;
+  cluster M@ -> Nonnegative;
+end;
+
+registration let n;
+  cluster ((n,n) --> 1) -> Positive Matrix of n,REAL;
+  cluster ((n,n) --> -1) -> Negative Matrix of n,REAL;
+  cluster ((n,n) --> -1) -> Nonpositive Matrix of n,REAL;
+  cluster ((n,n) --> 1) -> Nonnegative Matrix of n,REAL;
+end;
+
+registration let n;
+  cluster Positive Nonnegative Matrix of n,REAL;
+  cluster Negative Nonpositive Matrix of n,REAL;
+end;
+
+theorem :: MATRIX10:1
+  for x1 be Element of F_Real
+  for x2 be Real st x1 = x2 holds
+  -x1=-x2;
+
+theorem :: MATRIX10:2
+  for M being Matrix of REAL st [i,j] in Indices M holds
+  (-M)*(i,j)=-(M*(i,j));
+
+theorem :: MATRIX10:3
+  for M1,M2 be Matrix of REAL st
+  len M1=len M2 & width M1=width M2 &
+  [i,j] in Indices M1 holds (M1-M2)*(i,j)=(M1*(i,j)) - (M2*(i,j));
+
+theorem :: MATRIX10:4
+  for M being Matrix of REAL st
+  len (a*M) =len M & width (a*M)=width M & [i,j] in Indices M holds
+  (a*M)*(i,j)=a*(M*(i,j));
+
+theorem :: MATRIX10:5
+  Indices M = Indices |:M:|;
+
+theorem :: MATRIX10:6
+  |:a*M:|=abs(a)*|:M:|;
+
+theorem :: MATRIX10:7
+  M is Negative implies -M is Positive;
+
+theorem :: MATRIX10:8
+  M1 is Positive & M2 is Positive implies
+  M1+M2 is Positive;
+
+theorem :: MATRIX10:9
+  -M2 is_less_than M1 implies M1+M2 is Positive;
+
+theorem :: MATRIX10:10
+  M1 is Nonnegative & M2 is Positive implies
+  M1+M2 is Positive;
+
+theorem :: MATRIX10:11
+  M1 is Positive & M2 is Negative &
+  |:M2:| is_less_than |:M1:|
+  implies M1+M2 is Positive;
+
+theorem :: MATRIX10:12
+  M1 is Positive & M2 is Negative
+  implies M1-M2 is Positive;
+
+theorem :: MATRIX10:13
+  M2 is_less_than M1 implies M1-M2 is Positive;
+
+theorem :: MATRIX10:14
+  a>0 & M is Positive implies a*M is Positive;
+
+theorem :: MATRIX10:15
+  a<0 & M is Negative implies a*M is Positive;
+
+theorem :: MATRIX10:16
+  M is Positive implies (-M) is Negative;
+
+theorem :: MATRIX10:17
+  M1 is Negative & M2 is Negative
+  implies M1+M2 is Negative;
+
+theorem :: MATRIX10:18
+  M1 is_less_than -M2 implies M1+M2 is Negative;
+
+theorem :: MATRIX10:19
+  M1 is Positive & M2 is Negative & |:M1:| is_less_than |:M2:|
+  implies M1+M2 is Negative;
+
+theorem :: MATRIX10:20
+  M1 is_less_than M2 implies M1-M2 is Negative;
+
+theorem :: MATRIX10:21
+  M1 is Positive & M2 is Negative implies M2-M1 is Negative;
+
+theorem :: MATRIX10:22
+  a<0 & M is Positive implies a*M is Negative;
+
+theorem :: MATRIX10:23
+  a>0 & M is Negative implies a*M is Negative;
+
+theorem :: MATRIX10:24
+  M is Nonnegative implies -M is Nonpositive;
+
+theorem :: MATRIX10:25
+  M is Negative implies M is Nonpositive;
+
+theorem :: MATRIX10:26
+  M1 is Nonpositive & M2 is Nonpositive implies M1+M2 is Nonpositive;
+
+theorem :: MATRIX10:27
+  M1 is_less_or_equal_with -M2 implies M1+M2 is Nonpositive;
+
+theorem :: MATRIX10:28
+  M1 is_less_or_equal_with M2 implies M1-M2 is Nonpositive;
+
+theorem :: MATRIX10:29
+  a<=0 & M is Positive implies a*M is Nonpositive;
+
+theorem :: MATRIX10:30
+  a>=0 & M is Negative implies a*M is Nonpositive;
+
+theorem :: MATRIX10:31
+  a>=0 & M is Nonpositive implies a*M is Nonpositive;
+
+theorem :: MATRIX10:32
+  a<=0 & M is Nonnegative implies a*M is Nonpositive;
+
+theorem :: MATRIX10:33
+  |:M:| is Nonnegative;
+
+theorem :: MATRIX10:34
+  M1 is Positive implies M1 is Nonnegative;
+
+theorem :: MATRIX10:35
+  M is Nonpositive implies (-M) is Nonnegative;
+
+theorem :: MATRIX10:36
+  M1 is Nonnegative & M2 is Nonnegative
+  implies M1+M2 is Nonnegative;
+
+theorem :: MATRIX10:37
+  -M1 is_less_or_equal_with M2 implies M1+M2 is Nonnegative;
+
+theorem :: MATRIX10:38
+  M2 is_less_or_equal_with M1 implies M1-M2 is Nonnegative;
+
+theorem :: MATRIX10:39
+  a>=0 & M is Positive implies a*M is Nonnegative;
+
+theorem :: MATRIX10:40
+  a<=0 & M is Negative implies a*M is Nonnegative;
+
+theorem :: MATRIX10:41
+  a<=0 & M is Nonpositive implies a*M is Nonnegative;
+
+theorem :: MATRIX10:42
+  a>=0 & M is Nonnegative implies a*M is Nonnegative;
+
+theorem :: MATRIX10:43
+  a>=0 & b>=0 & M1 is Nonnegative & M2 is Nonnegative
+  implies a*M1+b*M2 is Nonnegative;
+
+begin
+
+theorem :: MATRIX10:44
+  M1 is_less_than M2 implies M1 is_less_or_equal_with M2;
+
+theorem :: MATRIX10:45
+  M1 is_less_than M2 & M2 is_less_than M3 implies M1 is_less_than M3;
+
+theorem :: MATRIX10:46
+  M1 is_less_than M2 & M3 is_less_than M4 implies
+  (M1+M3) is_less_than (M2+M4);
+
+theorem :: MATRIX10:47
+  M1 is_less_than M2 implies M1+M3 is_less_than M2+M3;
+
+theorem :: MATRIX10:48
+  M1 is_less_than M2 implies M3-M2 is_less_than M3-M1;
+
+theorem :: MATRIX10:49
+  |:M1+M2:| is_less_or_equal_with |:M1:|+|:M2:|;
+
+theorem :: MATRIX10:50
+  M1 is_less_or_equal_with M2 implies
+  (M1-M3) is_less_or_equal_with (M2-M3);
+
+theorem :: MATRIX10:51
+  (M1-M3) is_less_or_equal_with (M2-M3) implies
+  M1 is_less_or_equal_with M2;
+
+theorem :: MATRIX10:52
+  M1 is_less_or_equal_with M2-M3 implies M3 is_less_or_equal_with M2-M1;
+
+theorem :: MATRIX10:53
+  M1-M2 is_less_or_equal_with M3 implies
+  M1-M3 is_less_or_equal_with M2;
+
+theorem :: MATRIX10:54
+  M1 is_less_than M2 & M3 is_less_or_equal_with M4 implies
+  M1-M4 is_less_than M2-M3;
+
+theorem :: MATRIX10:55
+  M1 is_less_or_equal_with M2 & M3 is_less_than M4 implies
+  M1-M4 is_less_than M2-M3;
+
+theorem :: MATRIX10:56
+  M1-M2 is_less_or_equal_with M3-M4 implies
+  M1-M3 is_less_or_equal_with M2-M4;
+
+theorem :: MATRIX10:57
+  M1-M2 is_less_or_equal_with M3-M4 implies
+  M4-M2 is_less_or_equal_with M3-M1;
+
+theorem :: MATRIX10:58
+  M1-M2 is_less_or_equal_with M3-M4 implies
+  M4-M3 is_less_or_equal_with M2-M1;
+
+theorem :: MATRIX10:59
+  M1+M2 is_less_or_equal_with M3 implies
+  M1 is_less_or_equal_with M3-M2;
+
+theorem :: MATRIX10:60
+  M1+M2 is_less_or_equal_with M3+M4 implies
+  M1-M3 is_less_or_equal_with M4-M2;
+
+theorem :: MATRIX10:61
+  M1+M2 is_less_or_equal_with M3-M4 implies
+  M1+M4 is_less_or_equal_with M3-M2;
+
+theorem :: MATRIX10:62
+  M1-M2 is_less_or_equal_with M3+M4 implies
+  M1-M4 is_less_or_equal_with M3+M2;
+
+theorem :: MATRIX10:63
+  M1 is_less_or_equal_with M2 implies
+  -M2 is_less_or_equal_with -M1;
+
+theorem :: MATRIX10:64
+  M1 is_less_or_equal_with -M2 implies
+  M2 is_less_or_equal_with -M1;
+
+theorem :: MATRIX10:65
+  -M2 is_less_or_equal_with M1 implies
+  -M1 is_less_or_equal_with M2;
+
+theorem :: MATRIX10:66
+  M1 is Positive implies M2 is_less_than M2+M1;
+
+theorem :: MATRIX10:67
+  M1 is Negative implies M1+M2 is_less_than M2;
+
+theorem :: MATRIX10:68
+  M1 is Nonnegative implies M2 is_less_or_equal_with M1+M2;
+
+theorem :: MATRIX10:69
+  M1 is Nonpositive implies M1+M2 is_less_or_equal_with M2;
+
+theorem :: MATRIX10:70
+  M1 is Nonpositive & M3 is_less_or_equal_with M2 implies
+  M3+M1 is_less_or_equal_with M2;
+
+theorem :: MATRIX10:71
+  M1 is Nonpositive & M3 is_less_than M2 implies
+  M3+M1 is_less_than M2;
+
+theorem :: MATRIX10:72
+  M1 is Negative & M3 is_less_or_equal_with M2 implies
+  M3+M1 is_less_than M2;
+
+theorem :: MATRIX10:73
+  M1 is Nonnegative & M2 is_less_or_equal_with M3 implies
+  M2 is_less_or_equal_with M1+M3;
+
+theorem :: MATRIX10:74
+  M1 is Positive & M2 is_less_or_equal_with M3 implies
+  M2 is_less_than M1+M3;
+
+theorem :: MATRIX10:75
+  M1 is Nonnegative & M2 is_less_than M3 implies
+  M2 is_less_than M1+M3;
+
+theorem :: MATRIX10:76
+  M1 is Nonnegative implies M2-M1 is_less_or_equal_with M2;
+
+theorem :: MATRIX10:77
+  M1 is Positive implies M2-M1 is_less_than M2;
+
+theorem :: MATRIX10:78
+  M1 is Nonpositive implies M2 is_less_or_equal_with M2-M1;
+
+theorem :: MATRIX10:79
+  M1 is Negative implies M2 is_less_than M2-M1;
+
+theorem :: MATRIX10:80
+  M1 is_less_or_equal_with M2 implies M2-M1 is Nonnegative;
+
+theorem :: MATRIX10:81
+  M1 is Nonnegative & M2 is_less_than M3 implies
+  M2-M1 is_less_than M3;
+
+theorem :: MATRIX10:82
+  M1 is Nonpositive & M2 is_less_or_equal_with M3 implies
+  M2 is_less_or_equal_with M3-M1;
+
+theorem :: MATRIX10:83
+  M1 is Nonpositive & M2 is_less_than M3 implies
+  M2 is_less_than M3-M1;
+
+theorem :: MATRIX10:84
+  M1 is Negative & M2 is_less_or_equal_with M3 implies
+  M2 is_less_than M3-M1;
+
+theorem :: MATRIX10:85
+  M1 is_less_than M2 & a>0 implies a*M1 is_less_than a*M2;
+
+theorem :: MATRIX10:86
+  M1 is_less_than M2 & a>=0 implies a*M1 is_less_or_equal_with a*M2;
+
+theorem :: MATRIX10:87
+  M1 is_less_than M2 & a<0 implies a*M2 is_less_than a*M1;
+
+theorem :: MATRIX10:88
+  M1 is_less_than M2 & a<=0 implies a*M2 is_less_or_equal_with a*M1;
+
+theorem :: MATRIX10:89
+  M1 is_less_or_equal_with M2 & a>=0 implies a*M1 is_less_or_equal_with a*M2;
+
+theorem :: MATRIX10:90
+  M1 is_less_or_equal_with M2 & a<=0 implies a*M2 is_less_or_equal_with a*M1;
+
+theorem :: MATRIX10:91
+  a>=0 & a<=b & M1 is Nonnegative & M1 is_less_or_equal_with M2
+  implies a*M1 is_less_or_equal_with b*M2;
+
+theorem :: MATRIX10:92
+  a<=0 & b<=a & M1 is Nonpositive & M2 is_less_or_equal_with M1
+  implies a*M1 is_less_or_equal_with b*M2;
+
+theorem :: MATRIX10:93
+  a<0 & b<=a & M1 is Negative & M2 is_less_than M1
+  implies a*M1 is_less_than b*M2;
+
+theorem :: MATRIX10:94
+  a>=0 & a<b & M1 is Nonnegative & M1 is_less_than M2
+  implies a*M1 is_less_than b*M2;
+
+theorem :: MATRIX10:95
+  a>=0 & a<b & M1 is Positive & M1 is_less_or_equal_with M2
+  implies a*M1 is_less_than b*M2;
+
+theorem :: MATRIX10:96
+  a>0 & a<=b & M1 is Positive & M1 is_less_than M2
+  implies a*M1 is_less_than b*M2;

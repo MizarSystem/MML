@@ -10,9 +10,9 @@ environ
  vocabularies EULER_1, NAT_1, SQUARE_1, ARYTM_3, INT_1, FINSET_1, ARYTM_1,
       ABSVALUE, FILTER_0, MATRIX_2, CARD_1, POWER, FINSEQ_1, PEPIN, RELAT_1,
       GROUP_1, ARYTM, ORDINAL2;
- notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, ORDINAL2, NUMBERS, XCMPLX_0,
-      XREAL_0, INT_1, INT_2, NAT_1, CARD_1, SETWOP_2, SERIES_1, BINARITH,
-      ABIAN, SQUARE_1, NEWTON, EULER_1, FINSET_1, XXREAL_0, WSIERP_1;
+ notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
+      INT_1, INT_2, NAT_1, CARD_1, SETWOP_2, SERIES_1, BINARITH, ABIAN,
+      SQUARE_1, NEWTON, EULER_1, FINSET_1, XXREAL_0, WSIERP_1;
  constructors SQUARE_1, NAT_1, SETWOP_2, SERIES_1, BINARITH, EULER_1, ABIAN,
       WSIERP_1, ORDINAL2;
  registrations INT_1, XREAL_0, ABIAN, FINSET_1, FINSUB_1, SQUARE_1, ORDINAL2,
@@ -21,12 +21,12 @@ environ
  definitions TARSKI, INT_1, SQUARE_1;
  theorems REAL_2, REAL_1, NAT_1, NAT_2, INT_1, INT_2, FINSEQ_1, CARD_2,
       FINSET_1, EULER_1, EULER_2, BINARITH, PREPOWER, PRE_FF, POWER, ABSVALUE,
-      NEWTON, XCMPLX_0, XCMPLX_1, ORDINAL2, XREAL_1, XXREAL_0, ORDINAL1;
+      NEWTON, XCMPLX_0, XCMPLX_1, XREAL_1, XXREAL_0, ORDINAL1;
  schemes NAT_1;
 
 begin :: Some selected Basic Theorems
 
-reserve d,i,j,k,m,n,p,q,x,y,n1,n2,k1,k2 for Element of NAT,
+reserve d,i,j,k,m,n,p,q,x,n1,n2,k1,k2 for Element of NAT,
         a,b,c,i1,i2,i3,i5 for Integer;
 
 Lm1:
@@ -129,10 +129,10 @@ theorem
   for i being Nat holds i,i+1 are_relative_prime
 proof
   let k be Nat;
-a1: k in NAT by ORDINAL1:def 13;
+A1: k in NAT by ORDINAL1:def 13;
      k hcf (k+1) = (1+k*1) hcf k
              .= 1 hcf k by EULER_1:9
-             .= 1 by NEWTON:64,a1;
+             .= 1 by NEWTON:64,A1;
   hence thesis by INT_2:def 6;
 end;
 
@@ -262,11 +262,9 @@ proof
   suppose A1:p <> 0;
   reconsider p as Integer;
      (a*p + 1) mod p = (a*p + 1) - ((a*p + 1) div p)*p by A1,INT_1:def 8
-                 .= (a*p + 1) - ([\(a*p + 1)/p/])*p
                  .= (a*p + 1) - ([\(a*p/p)+(1/p)/])*p by XCMPLX_1:63
                  .= (a*p + 1) - ([\(a)+(1/p)/])*p by A1,XCMPLX_1:90
                  .= (a*p + 1) - (a+[\(1/p)/])*p by INT_1:51
-                 .= (0 + 1) - [\(1/p)/]*p
                  .= 1 - (1 div p)*p;
   then (a*p + 1) mod p = 1 mod p by A1,INT_1:def 8;
   hence thesis by NEWTON:101;
@@ -406,9 +404,7 @@ proof
   suppose j <> 0;
       consider n being Nat such that
         A2:i = j*n + k & k < j by A1,NAT_1:def 2;
-         i^2 = i*i
-         .= j*((n*j*n) + (k*n)) + j*(n*k) + k*k by A2
-         .= j*((n*j*n) + (k*n) + (n*k)) + k^2;
+         i^2 = j*((n*j*n) + (k*n) + (n*k)) + k^2 by A2;
       then i^2 mod j = k^2 mod j by NAT_1:73;
     hence thesis by A1,NAT_1:76;
   end;
@@ -430,9 +426,7 @@ proof
         .= -1 + (i div p)*p by A1,NEWTON:101
         .= (i div p)*p - 1;
   then A4:i^2
-          = ((i div p)*p)^2 - 2*((i div p)*p) + 1
-         .= ((i div p)*p)*((i div p)*p) - 2*((i div p)*p) + 1
-         .= ((((i div p)*p) - 2)*(i div p))*p + 1;
+          = ((((i div p)*p) - 2)*(i div p))*p + 1;
   reconsider ii = (((i div p)*p) - 2)*(i div p) as Integer;
   reconsider i as Element of NAT;
      i^2 mod p = (ii*p + 1) mod p by A4,NEWTON:101
@@ -575,8 +569,7 @@ proof
      n |^ 2 = n |^ (1 + 1)
         .= n |^ 1*n |^ 1 by NEWTON:13
         .= n*n |^ 1 by NEWTON:10
-        .= n*n by NEWTON:10
-        .= n^2;
+        .= n^2 by NEWTON:10;
   hence thesis;
 end;
 
@@ -681,8 +674,7 @@ theorem Th28:
 proof
   let n,m;
   assume A1:m mod 2 = 0;
-     (n |^ (m div 2))^2 = (n |^ (m div 2))*(n |^ (m div 2))
-                   .= n |^ ((m div 2) + (m div 2)) by NEWTON:13
+     (n |^ (m div 2))^2 = n |^ ((m div 2) + (m div 2)) by NEWTON:13
                    .= n |^ ((m + m) div 2) by A1,NAT_1:69
                    .= n |^ ((2*m) div 2)
                    .= n |^ m by NAT_1:68;
@@ -856,15 +848,15 @@ proof
           A5:n = p*i;
         consider u being Nat such that
           A6:p |^ (k+1) = (p*i)*u by A4,A5,NAT_1:def 3;
-a1:    u in NAT by ORDINAL1:def 13;
+A7:    u in NAT by ORDINAL1:def 13;
            p*(p |^ k) = p*(i*u) by A6,NEWTON:11;
-        then A7:p |^ k = p*(i*u) div p by A2,NAT_1:68;
-        then A8:p |^ k = i*u by A2,NAT_1:68;
-        then A9:u divides p |^ k by NAT_1:def 3;
-           u <> 1 by A1,A5,A8,NEWTON:11;
+        then A8:p |^ k = p*(i*u) div p by A2,NAT_1:68;
+        then A9:p |^ k = i*u by A2,NAT_1:68;
+        then A10:u divides p |^ k by NAT_1:def 3;
+           u <> 1 by A1,A5,A9,NEWTON:11;
         then consider j being Element of NAT such that
-          A10:u = p*j by a1,A1,A9,Th33;
-           p |^ k = n*j by A2,A5,A7,A10,NAT_1:68;
+          A11:u = p*j by A7,A1,A10,Th33;
+           p |^ k = n*j by A2,A5,A8,A11,NAT_1:68;
       hence thesis by NAT_1:def 3;
     end;
     end;
@@ -1094,8 +1086,7 @@ proof
     A2:i5*t1 = i2 - i1 by INT_1:def 3;
   consider t2 being Integer such that
     A3:i5*t2 = i3 - i1 by A1,INT_1:def 3;
-   i2 - i3 = i5*t1 - i5*t2 by A2,A3
-         .= i5*(t1 - t2);
+   i2 - i3 = i5*(t1 - t2) by A2,A3;
   hence thesis by INT_1:def 3;
 end;
 
@@ -1473,8 +1464,7 @@ end;
 theorem Th55:
   Fermat(0) = 3
 proof
-  Fermat(0) = 2 |^ (2 |^ 0) + 1
-           .= 2 |^ 1 + 1 by NEWTON:9
+  Fermat(0) = 2 |^ 1 + 1 by NEWTON:9
            .= 2 + 1 by NEWTON:10;
   hence thesis;
 end;
@@ -1482,8 +1472,7 @@ end;
 theorem Th56:
   Fermat(1) = 5
 proof
-     Fermat(1) = 2 |^ (2 |^ 1) + 1
-           .= 2 |^ (1 + 1) + 1 by NEWTON:10
+     Fermat(1) = 2 |^ (1 + 1) + 1 by NEWTON:10
            .= 2 |^ 1 * 2 + 1 by NEWTON:11
            .= 2 * 2 + 1 by NEWTON:10;
   hence thesis;
@@ -1541,8 +1530,7 @@ end;
 Lm19:
   (Fermat(n) -'1) mod 2 = 0
 proof
-  A1:Fermat(n) -'1 = 2 |^ (2 |^ n) + 1 -'1
-                  .= 2 |^ (2 |^ n) by BINARITH:39;
+  A1:Fermat(n) -'1 = 2 |^ (2 |^ n) by BINARITH:39;
      2 mod 2 = 0 by NAT_1:77;
   then A2:2 is even by NAT_2:23;
      2 |^ n > 0 by PREPOWER:13;
@@ -1813,7 +1801,7 @@ proof
   defpred P[Element of NAT] means Fermat(1) divides (3 |^ (4*$1 + 2)) + 1;
 A1: P[0]
   proof
-    3 |^ (4*0+2) + 1 = 3 |^ 2 + 1 .= 9 + 1 by Lm23 .= 5 * 2;
+    3 |^ (4*0+2) + 1 = 5 * 2 by Lm23;
     hence thesis by Th56,NAT_1:def 3;
   end;
   A2:for n holds P[n] implies P[n+1]
@@ -1845,9 +1833,7 @@ A1: P[0]
     (3 |^ (4*(n+1) + 2)) + 1
                     = (3 |^ (4*n + 2 + 4)) + 1
                    .= ((Fermat(1)*m -1)*(3 |^ 4)) + 1 by A4,NEWTON:13
-                   .= (Fermat(1)*m)*81 - (81 - 1) by Lm24
-                   .= Fermat(1)*(m*81) - Fermat(1)*16 by Th56
-                   .= Fermat(1)*((m*81)-16)
+                   .= Fermat(1)*((m*81)-16) by Lm24,Th56
                    .= Fermat(1)*((m*81)-'16) by A5,BINARITH:def 3;
 
     hence thesis by NAT_1:def 3;
@@ -1886,7 +1872,7 @@ proof
   defpred P[Element of NAT] means Fermat(2) divides (3 |^ (16*$1 + 8)) + 1;
 A1: P[0]
   proof
-    3 |^ (16*0 + 8) + 1 = 3 |^ 8 + 1 .= 6562 by Lm25 .= 17 * 386;
+    3 |^ (16*0 + 8) + 1 = 17 * 386 by Lm25;
     hence thesis by Th57,NAT_1:def 3;
   end;
   A2:for n holds P[n] implies P[n+1]
@@ -1922,10 +1908,7 @@ A1: P[0]
     end;
        (3 |^ (16*(n+1) + 8)) + 1 = (3 |^ (16*n + 8 + 16)) + 1
              .= ((Fermat(2)*m -1)*(3 |^ 16)) + 1 by A4,NEWTON:13
-             .= Fermat(2)*(m*6561)*6561 - (6561*6561 - 1) by Lm26
-             .= Fermat(2)*(m*6561*6561) + -Fermat(2)*386*6560
-                by Th57
-             .= Fermat(2)*((m*6561*6561)-386*6560)
+             .= Fermat(2)*((m*6561*6561)-386*6560) by Lm26,Th57
           .= Fermat(2)*((m*6561*6561)-'386*6560) by A5,BINARITH:def 3;
 
     hence thesis by NAT_1:def 3;

@@ -120,16 +120,13 @@
 <FCluster>
 <ArgTypes>
 <Typ kind="G" nr="3">
-<Cluster>
-<Adjective nr="13" value="false"/>
-</Cluster>
+<Cluster/>
 </Typ>
 </ArgTypes>
 <Func kind="K" nr="365">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="1" value="false"/>
 <Adjective nr="2"/>
 <Adjective nr="5"/>
 <Adjective nr="6"/>
@@ -148,14 +145,6 @@
 <Adjective nr="21">
 <LocusVar nr="1"/>
 <LocusVar nr="1"/>
-</Adjective>
-<Adjective nr="37">
-<Func kind="U" nr="1">
-<LocusVar nr="1"/>
-</Func>
-<Func kind="U" nr="1">
-<LocusVar nr="1"/>
-</Func>
 </Adjective>
 <Adjective nr="110">
 <LocusVar nr="1"/>

@@ -22,6 +22,7 @@
 <ArticleID name="CQC_LANG"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FRAENKEL"/>
+<ArticleID name="XBOOLEAN"/>
 <ArticleID name="MARGREL1"/>
 <ArticleID name="VALUAT_1"/>
 <ArticleID name="SUBSTUT1"/>
@@ -32,7 +33,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="K" nr="11">
-<Func kind="K" nr="218"/>
+<Func kind="K" nr="227"/>
 <Func kind="K" nr="112"/>
 </Func>
 </Typ>

@@ -13,11 +13,11 @@ environ
       PSCOMP_1, URYSOHN1, CARD_4, RLVECT_3, BINOP_1, SETWISEO, COH_SP,
       FUNCOP_1;
  notations BINOP_1, SETWISEO, TARSKI, XBOOLE_0, SUBSET_1, SETFAM_1, REALSET1,
-      RELAT_1, FUNCT_1, ORDINAL1, COMPLEX1, RELSET_1, PARTFUN1, FUNCT_2,
-      FINSEQ_1, ZFMISC_1, PCOMPS_1, PRE_TOPC, FINSET_1, NUMBERS, XXREAL_0,
-      XREAL_0, REAL_1, NAT_1, FINSOP_1, SQUARE_1, STRUCT_0, TOPS_2, COMPTS_1,
-      METRIC_1, CARD_3, PROB_1, URYSOHN1, FUNCOP_1, CANTOR_1, CARD_1, CARD_4,
-      DOMAIN_1, TOPMETR, FRAENKEL, URYSOHN3, PSCOMP_1, BORSUK_1, TMAP_1;
+      RELAT_1, FUNCT_1, ORDINAL1, COMPLEX1, RELSET_1, FUNCT_2, FINSEQ_1,
+      ZFMISC_1, PCOMPS_1, PRE_TOPC, FINSET_1, NUMBERS, XXREAL_0, XREAL_0,
+      REAL_1, NAT_1, FINSOP_1, STRUCT_0, TOPS_2, COMPTS_1, METRIC_1, CARD_3,
+      PROB_1, URYSOHN1, FUNCOP_1, CANTOR_1, CARD_1, CARD_4, DOMAIN_1, TOPMETR,
+      FRAENKEL, URYSOHN3, PSCOMP_1, BORSUK_1, TMAP_1;
  constructors SETFAM_1, SETWISEO, FRAENKEL, REAL_1, SQUARE_1, NAT_1, PROB_1,
       FINSOP_1, REALSET1, PREPOWER, CARD_4, CARD_5, TOPS_2, COMPTS_1, TMAP_1,
       CANTOR_1, PSCOMP_1, URYSOHN3;
@@ -518,9 +518,8 @@ definition let T be TopSpace;
 end;
 
  reserve Un for FamilySequence of T,
-         r,s,r1,r2 for Real,
-         n,n1 for Element of NAT,
-         f for Function;
+         r,r1,r2 for Real,
+         n for Element of NAT;
 
 definition let T,Un,n;
   redefine func Un.n -> Subset-Family of T;
@@ -1161,30 +1160,30 @@ proof
   assume A2:A <> {} & B <> {} & A is closed & B is closed & A misses B;
   set U= [#]T\A; set W=[#]T\B;
   A c=B` & B c= A` by A2,SUBSET_1:43;
-  then A4:B c= U & U is open &  A c= W & W is open by A2,PRE_TOPC:12, def 6;
-  A5:U misses A & W misses B by XBOOLE_1:79;
+  then A3:B c= U & U is open &  A c= W & W is open by A2,PRE_TOPC:12, def 6;
+  A4:U misses A & W misses B by XBOOLE_1:79;
   consider Un being Function of NAT, bool(the carrier of T) such that
-    A6:B c= Union Un & Union Un c= U & (for n holds Cl (Un.n) c= U
-      & (Un.n) is open) by A1,A2,A4;
+    A5:B c= Union Un & Union Un c= U & (for n holds Cl (Un.n) c= U
+      & (Un.n) is open) by A1,A2,A3;
   consider Wn being Function of NAT, bool(the carrier of T) such that
-    A7: A c= Union Wn & Union Wn c= W & (for n holds Cl (Wn.n) c= W
-      & (Wn.n) is open) by A1,A2,A4;
-  A8:for n holds A misses Cl (Un.n)
-     proof let n;Cl (Un.n) c= U by A6;
-       hence thesis by A5,XBOOLE_1:63;
+    A6: A c= Union Wn & Union Wn c= W & (for n holds Cl (Wn.n) c= W
+      & (Wn.n) is open) by A1,A2,A3;
+  A7:for n holds A misses Cl (Un.n)
+     proof let n;Cl (Un.n) c= U by A5;
+       hence thesis by A4,XBOOLE_1:63;
      end;
-  A9:for n holds B misses Cl (Wn.n)
-     proof let n; Cl (Wn.n) c= W by A7;
-       hence thesis by A5,XBOOLE_1:63;
+  A8:for n holds B misses Cl (Wn.n)
+     proof let n; Cl (Wn.n) c= W by A6;
+       hence thesis by A4,XBOOLE_1:63;
      end;
   deffunc WU(Element of NAT)
   =Wn.$1\union{Cl (Un.k) where k is Element of NAT: k in Seg $1\/{0}};
   defpred E1[Element of NAT,set] means $2=WU($1);
-  A10:for k being Element of NAT ex y being Subset of T st
+  A9:for k being Element of NAT ex y being Subset of T st
   E1[k,y];
   consider FWU being Function of NAT, bool the carrier of T such that
-  A11:for k being Element of NAT holds E1[k,FWU.k] from FUNCT_2:sch 3(A10);
-  A12:for n holds FWU.n is open
+  A10:for k being Element of NAT holds E1[k,FWU.k] from FUNCT_2:sch 3(A9);
+  A11:for n holds FWU.n is open
     proof
       let n;
       set CLn={Cl (Un.k) where k is Element of NAT: k in Seg n\/{0}};
@@ -1192,36 +1191,36 @@ proof
       proof
         now let C be set;assume C in CLn;
           then consider k being Element of NAT such that
-            A13:C=Cl (Un.k) & k in Seg n\/{0};
-          thus C in bool the carrier of T by A13;
+            A12:C=Cl (Un.k) & k in Seg n\/{0};
+          thus C in bool the carrier of T by A12;
         end;
         hence thesis by TARSKI:def 3;
       end;
       then reconsider CLn as Subset-Family of T;
-      A14:Seg n\/{0} is finite;
+      A13:Seg n\/{0} is finite;
       deffunc CL(Element of NAT)=Cl(Un.$1);
-      A15:{CL(k) where k is Element of NAT : k in Seg n\/{0}} is finite
-        from FRAENKEL:sch 21(A14);
+      A14:{CL(k) where k is Element of NAT : k in Seg n\/{0}} is finite
+        from FRAENKEL:sch 21(A13);
       CLn is closed
         proof
           now let A;assume A in CLn;
             then consider k being Element of NAT such that
-            A16:A=Cl(Un.k) & k in Seg n\/{0};
-            thus A is closed by A16;
+            A15:A=Cl(Un.k) & k in Seg n\/{0};
+            thus A is closed by A15;
           end;
           hence thesis by TOPS_2:def 2;
         end;
-      then union CLn is closed & Wn.n is open by A7,A15,TOPS_2:28;
+      then union CLn is closed & Wn.n is open by A6,A14,TOPS_2:28;
       then Wn.n\union CLn is open by Lm6;
-      hence thesis by A11;
+      hence thesis by A10;
     end;
   deffunc UW(Element of NAT)
   =Un.$1\union{Cl (Wn.k) where k is Element of NAT: k in Seg $1\/{0}};
   defpred E2[Element of NAT,set] means $2 = UW($1);
-  A17:for k being Element of NAT ex y being Subset of T st E2[k,y];
+  A16:for k being Element of NAT ex y being Subset of T st E2[k,y];
   consider FUW being Function of NAT, bool the carrier of T such that
-  A18:for k being Element of NAT holds E2[k,FUW.k] from FUNCT_2:sch 3(A17);
-  A19:for n holds FUW.n is open
+  A17:for k being Element of NAT holds E2[k,FUW.k] from FUNCT_2:sch 3(A16);
+  A18:for n holds FUW.n is open
      proof
        let n;
        set CLn={Cl (Wn.k) where k is Element of NAT: k in Seg n\/{0}};
@@ -1229,132 +1228,132 @@ proof
        proof
          now let C be set;assume C in CLn;
            then consider k being Element of NAT such that
-             A20:C=Cl (Wn.k) & k in Seg n\/{0};
-           thus C in bool the carrier of T by A20;
+             A19:C=Cl (Wn.k) & k in Seg n\/{0};
+           thus C in bool the carrier of T by A19;
          end;
          hence thesis by TARSKI:def 3;
        end;
        then reconsider CLn as Subset-Family of T;
-       A21:Seg n\/{0} is finite;
+       A20:Seg n\/{0} is finite;
        deffunc CL(Element of NAT)=Cl(Wn.$1);
-       A22:{CL(k) where k is Element of NAT: k in Seg n\/{0}} is finite
-         from FRAENKEL:sch 21(A21);
+       A21:{CL(k) where k is Element of NAT: k in Seg n\/{0}} is finite
+         from FRAENKEL:sch 21(A20);
        CLn is closed
          proof
            now let A;assume A in CLn;
              then consider k being Element of NAT such that
-             A23:A=Cl(Wn.k) & k in Seg n\/{0};
-             thus A is closed by A23;
+             A22:A=Cl(Wn.k) & k in Seg n\/{0};
+             thus A is closed by A22;
            end;
            hence thesis by TOPS_2:def 2;
          end;
-      then union CLn is closed & Un.n is open by A6,A22,TOPS_2:28;
+      then union CLn is closed & Un.n is open by A5,A21,TOPS_2:28;
       then Un.n\union CLn is open by Lm6;
-      hence thesis by A18;
+      hence thesis by A17;
      end;
-  A24:A c= Union FWU
+  A23:A c= Union FWU
     proof
-      now let a be set;assume A25:a in A & not a in Union FWU;
+      now let a be set;assume A24:a in A & not a in Union FWU;
         then consider k being Element of NAT such that
-          A26:a in Wn.k by A7,PROB_1:25;
+          A25:a in Wn.k by A6,PROB_1:25;
         not a in union{Cl (Un.m) where m is Element of NAT: m in Seg k\/{0}}
         proof
           assume a in
            union{Cl (Un.m) where m is Element of NAT: m in Seg k\/{0}};
           then consider CL being set such that
-            A27:a in CL &
+            A26:a in CL &
             CL in {Cl (Un.m) where m is Element of NAT: m in Seg k\/{0}}
             by TARSKI:def 4;
           consider m being Element of NAT such that
-            A28:CL=Cl(Un.m)& m in Seg k\/{0} by A27;
-          A meets Cl(Un.m) by A25,A27,A28,XBOOLE_0:3;
-          hence contradiction by A8;
+            A27:CL=Cl(Un.m)& m in Seg k\/{0} by A26;
+          A meets Cl(Un.m) by A24,A26,A27,XBOOLE_0:3;
+          hence contradiction by A7;
         end;
-        then a in WU(k) by A26,XBOOLE_0:def 4;
-        then a in FWU.k by A11;
-        hence contradiction by A25,PROB_1:25;
+        then a in WU(k) by A25,XBOOLE_0:def 4;
+        then a in FWU.k by A10;
+        hence contradiction by A24,PROB_1:25;
       end;
       hence thesis by TARSKI:def 3;
     end;
-  A29:B c= Union FUW
+  A28:B c= Union FUW
     proof
-      now let b be set;assume A30:b in B & not b in Union FUW;
+      now let b be set;assume A29:b in B & not b in Union FUW;
         then consider k being Element of NAT such that
-          A31:b in Un.k by A6,PROB_1:25;
+          A30:b in Un.k by A5,PROB_1:25;
         not b in union{Cl (Wn.m) where m is Element of NAT: m in Seg k\/{0}}
         proof
           assume b in
           union{Cl (Wn.m) where m is Element of NAT: m in Seg k\/{0}};
           then consider CL being set such that
-            A32:b in CL &
+            A31:b in CL &
             CL in {Cl (Wn.m) where m is Element of NAT: m in Seg k\/{0}}
             by TARSKI:def 4;
           consider m being Element of NAT such that
-            A33:CL=Cl(Wn.m)& m in Seg k\/{0} by A32;
-          B meets Cl(Wn.m) by A30,A32,A33,XBOOLE_0:3;
-          hence contradiction by A9;
+            A32:CL=Cl(Wn.m)& m in Seg k\/{0} by A31;
+          B meets Cl(Wn.m) by A29,A31,A32,XBOOLE_0:3;
+          hence contradiction by A8;
         end;
-        then b in UW(k) by A31,XBOOLE_0:def 4;
-        then b in FUW.k by A18;
-        hence contradiction by A30,PROB_1:25;
+        then b in UW(k) by A30,XBOOLE_0:def 4;
+        then b in FUW.k by A17;
+        hence contradiction by A29,PROB_1:25;
       end;
       hence thesis by TARSKI:def 3;
     end;
-  A34:Union FUW misses Union FWU
+  A33:Union FUW misses Union FWU
     proof
       assume Union FUW meets Union FWU;
       then consider f being set such that
-        A35:f in Union FUW & f in Union FWU by XBOOLE_0:3;
+        A34:f in Union FUW & f in Union FWU by XBOOLE_0:3;
       consider n being Element of NAT such that
-        A36:f in FUW.n  by A35,PROB_1:25;
+        A35:f in FUW.n  by A34,PROB_1:25;
       consider k being Element of NAT such that
-        A37:f in FWU.k by A35,PROB_1:25;
-      A38:n<=k implies FUW.n misses FWU.k
+        A36:f in FWU.k by A34,PROB_1:25;
+      A37:n<=k implies FUW.n misses FWU.k
         proof
-          assume A39:n<=k & FUW.n meets FWU.k;
+          assume A38:n<=k & FUW.n meets FWU.k;
           then consider u being set such that
-            A40:u in FUW.n & u in FWU.k by XBOOLE_0:3;
+            A39:u in FUW.n & u in FWU.k by XBOOLE_0:3;
           u in Wn.k\union{Cl(Un.l) where l is Element of NAT: l in Seg k\/{0}}
-          by A11,A40;
+          by A10,A39;
           then
-A41:not u in union{Cl(Un.l) where l is Element of NAT: l in Seg k\/{0}}
+A40:not u in union{Cl(Un.l) where l is Element of NAT: l in Seg k\/{0}}
             by XBOOLE_0:def 4;
           u in Un.n\union{Cl(Wn.l) where l is Element of NAT: l in Seg n\/{0}}
-          by A18,A40;
-          then A42:u in Un.n & Un.n c= Cl(Un.n) by PRE_TOPC:48,XBOOLE_0:def 4;
+          by A17,A39;
+          then A41:u in Un.n & Un.n c= Cl(Un.n) by PRE_TOPC:48,XBOOLE_0:def 4;
           n = 0 or n in Seg n by FINSEQ_1:5;
           then n in {0} or n in Seg n & Seg n c= Seg k
-            by A39,FINSEQ_1:7,TARSKI:def 1;
+            by A38,FINSEQ_1:7,TARSKI:def 1;
           then n in Seg k\/{0} by XBOOLE_0:def 2;
           then Cl(Un.n) in
           {Cl (Un.l) where l is Element of NAT: l in Seg k\/{0}};
-          hence contradiction by A41,A42,TARSKI:def 4;
+          hence contradiction by A40,A41,TARSKI:def 4;
         end;
       n>=k implies FUW.n misses FWU.k
         proof
-          assume A43:n>=k & FUW.n meets FWU.k;
+          assume A42:n>=k & FUW.n meets FWU.k;
           then consider w being set such that
-            A44:w in FUW.n & w in FWU.k by XBOOLE_0:3;
+            A43:w in FUW.n & w in FWU.k by XBOOLE_0:3;
           w in Un.n\union{Cl(Wn.l) where l is Element of NAT: l in Seg n\/{0}}
-          by A18,A44;
-          then A45:not w in
+          by A17,A43;
+          then A44:not w in
           union{Cl(Wn.l) where l is Element of NAT: l in Seg n\/{0}}
             by XBOOLE_0:def 4;
           w in Wn.k\union{Cl(Un.l) where l is Element of NAT: l in Seg k\/{0}}
-          by A11,A44;
-          then A46:w in Wn.k & Wn.k c= Cl(Wn.k) by PRE_TOPC:48,XBOOLE_0:def 4;
+          by A10,A43;
+          then A45:w in Wn.k & Wn.k c= Cl(Wn.k) by PRE_TOPC:48,XBOOLE_0:def 4;
           k = 0 or k in Seg k by FINSEQ_1:5;
           then k in {0} or k in Seg k & Seg k c= Seg n
-            by A43,FINSEQ_1:7,TARSKI:def 1;
+            by A42,FINSEQ_1:7,TARSKI:def 1;
           then k in Seg n\/{0} by XBOOLE_0:def 2;
           then Cl(Wn.k) in
           {Cl (Wn.l) where l is Element of NAT: l in Seg n\/{0}};
-          hence contradiction by A45,A46,TARSKI:def 4;
+          hence contradiction by A44,A45,TARSKI:def 4;
         end;
-      hence contradiction by A36,A37,A38,XBOOLE_0:3;
+      hence contradiction by A35,A36,A37,XBOOLE_0:3;
    end;
-  Union FUW is open & Union FWU is open by A12,A19,Th17;
-  hence thesis by A24,A29,A34;
+  Union FUW is open & Union FWU is open by A11,A18,Th17;
+  hence thesis by A23,A28,A33;
 end;
 hence thesis by COMPTS_1:def 6;
 end;
@@ -1723,7 +1722,7 @@ A1: for f1,f2 being RealMap of T holds ADD.(f1,f2)=f1+f2;
         reconsider map0'=map0 as Element of F by FUNCT_2:11;
         take map0';
         now let f be Element of F;
-          A3:ADD.(map0',f)=f
+          A2:ADD.(map0',f)=f
             proof
               now let x be Element of T;
                 (map0'+f).x=map0'.x+f.x by Def7;
@@ -1743,7 +1742,7 @@ A1: for f1,f2 being RealMap of T holds ADD.(f1,f2)=f1+f2;
               then f+map0'=f by FUNCT_2:113;
               hence thesis by A1;
             end;
-          hence ADD.(map0,f)=f & ADD.(f,map0)=f by A3;
+          hence ADD.(map0,f)=f & ADD.(f,map0)=f by A2;
         end;
         hence thesis by BINOP_1:11;
       end;
@@ -1764,7 +1763,7 @@ A1: for f1,f2 being RealMap of T holds ADD.(f1,f2)=f1+f2;
     let f1,f2,f3 be Element of F;
     reconsider ADD12=ADD.(f1,f2),ADD23=ADD.(f2,f3) as RealMap of T
       by FUNCT_2:121;
-    A4:f1+(f2+f3)=(f1+f2)+f3
+    A3:f1+(f2+f3)=(f1+f2)+f3
     proof
       now let t be Element of T;
         (f1+(f2+f3)).t=f1.t+(f2+f3).t & (f2+f3).t =f2.t+f3.t by Def7;
@@ -1775,7 +1774,7 @@ A1: for f1,f2 being RealMap of T holds ADD.(f1,f2)=f1+f2;
       hence thesis by FUNCT_2:113;
     end;
     f1+(f2+f3)=f1+ADD23 & (f1+f2)+f3=ADD12+f3 by A1;
-    then f1+ADD23=ADD12+f3 & ADD12+f3=ADD.(ADD12,f3) by A1,A4;
+    then f1+ADD23=ADD12+f3 & ADD12+f3=ADD.(ADD12,f3) by A1,A3;
     hence thesis by A1;
   end;
 end;

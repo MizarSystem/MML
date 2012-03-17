@@ -27,15 +27,15 @@ environ
       CQC_LANG;
  theorems TARSKI, FINSEQ_4, FINSEQ_1, GRAPH_2, REAL_1, NAT_1, AMI_1, AMI_3,
       FUNCT_4, AMI_5, CARD_2, FUNCT_1, FUNCT_2, RELAT_1, ENUMSET1, ZFMISC_1,
-      CARD_1, FUNCOP_1, JORDAN3, CARD_3, ORDINAL1, ORDINAL2, CQC_LANG, MCART_1,
-      GRFUNC_1, FINSEQ_3, BINARITH, INT_1, SETFAM_1, REVROT_1, CQC_THE1,
-      REALSET1, FINSEQ_5, PRE_CIRC, INTEGRA2, CARD_4, FUNCT_7, RELSET_1,
-      XBOOLE_0, XBOOLE_1, MEMBERED, FINSET_1, XREAL_1, XXREAL_0;
+      CARD_1, FUNCOP_1, JORDAN3, CARD_3, ORDINAL1, CQC_LANG, MCART_1, GRFUNC_1,
+      FINSEQ_3, BINARITH, INT_1, SETFAM_1, REVROT_1, CQC_THE1, REALSET1,
+      FINSEQ_5, PRE_CIRC, INTEGRA2, CARD_4, FUNCT_7, RELSET_1, XBOOLE_0,
+      XBOOLE_1, MEMBERED, FINSET_1, XREAL_1, XXREAL_0;
  schemes NAT_1, FUNCT_7, FINSEQ_2, FRAENKEL, DOMAIN_1, FUNCT_2;
 
 begin :: Preliminaries
 
-reserve x, X for set,
+reserve x for set,
         D for non empty set,
         k, n for Element of NAT,
         z for natural number;
@@ -334,8 +334,7 @@ A1: f = (IC S,l) --> (l,i);
 A2: IC S <> l by AMI_1:48;
 A3: dom f = {IC S,l} by A1,FUNCT_4:65;
 then A4: IC S in dom f by TARSKI:def 2;
-A5: IC t = t.IC S
-        .= f.IC S by A4,FUNCT_4:14
+A5: IC t = f.IC S by A4,FUNCT_4:14
         .= l by A1,A2,FUNCT_4:66;
         l in dom f by A3,TARSKI:def 2;
     then t.l = f.l by FUNCT_4:14
@@ -437,9 +436,7 @@ A1:   for s being State of S holds Exec(i,s) = s;
      assume n in NIC(i,il);
      then consider s being State of S such that
 A2:    n = IC Following s & IC s = il & s.il = i;
-         n = IC Exec(CurInstr s,s) by A2
-      .= IC Exec(s.IC s,s)
-      .= il by A1,A2;
+         n = il by  A2,A1;
      hence n in {il} by TARSKI:def 1;
     end;
     let n be set;
@@ -456,13 +453,9 @@ A6: il in dom f by A4,TARSKI:def 2;
 A7: IC S <> il by AMI_1:48;
 A8: a.IC S = f.IC S by A5,FUNCT_4:14
           .= il by A7,FUNCT_4:66;
-A9: a.IC a = a.(a.IC S)
-          .= f.il by A6,A8,FUNCT_4:14
+A9: a.IC a = f.il by A6,A8,FUNCT_4:14
           .= i by A7,FUNCT_4:66;
-        IC Following a = IC Exec(CurInstr a, a)
-       .= IC Exec(a.IC a, a)
-       .= Exec(a.IC a, a).IC S
-       .= a.IC S by A1,A9
+        IC Following a = a.IC S by A1,A9
        .= n by A3,A8,TARSKI:def 1;
     hence n in NIC(i,il) by Lm2;
   end;
@@ -1091,8 +1084,7 @@ A1:  the carrier of IT = NAT \/ {NAT} &
 A5:  STC N is IC-Ins-separated
   proof
    thus ObjectKind IC IT
-     = (the Object-Kind of IT).IC IT
-    .= the Instruction-Locations of IT by A1,A4;
+     = the Instruction-Locations of IT by A1,A4;
   end;
   thus STC N is definite
   proof
@@ -1100,8 +1092,7 @@ A5:  STC N is IC-Ins-separated
       l in NAT by A1;
       then l <> NAT & dom (NAT .-->NAT) = {NAT} by FUNCOP_1:19;
   then A6: not l in dom (NAT .-->NAT) by TARSKI:def 1;
-    thus ObjectKind l = Ok.l
-     .= ((NAT --> III)+*(NAT .-->NAT)).l by Def11
+    thus ObjectKind l = ((NAT --> III)+*(NAT .-->NAT)).l by Def11
      .= (NAT --> III).l by A6,FUNCT_4:12
      .= the Instructions of IT by A1,FUNCOP_1:13;
   end;
@@ -1138,8 +1129,7 @@ then A11:  i in {[1,0]} by TARSKI:def 1;
      end;
 then A12:  (the Execution of IT).i = ([1,0] .--> f).i by A8,FUNCT_4:12
         .= f by A11,FUNCOP_1:13;
-     thus Exec(i,s).l = (((the Execution of IT).i).s).l
-      .= (s+*(NAT .-->succ(s.NAT))).l by A7,A12
+     thus Exec(i,s).l = (s+*(NAT .-->succ(s.NAT))).l by A7,A12
       .= s.l by A9,FUNCT_4:12;
      end;
      suppose i = [0,0];
@@ -1150,8 +1140,7 @@ FUNCOP_1:19;
           ([0,0] .--> id product the Object-Kind of IT).i
           by A8,FUNCT_4:14
         .= id product the Object-Kind of IT by A13,FUNCOP_1:13;
-     thus Exec(i,s).l = (((the Execution of IT).i).s).l
-      .= s.l by A14,FUNCT_1:35;
+     thus Exec(i,s).l = s.l by A14,FUNCT_1:35;
    end;
    end;
    let a be set;
@@ -1165,8 +1154,7 @@ then A16: Ok.a = the Instructions of IT by TARSKI:def 1;
    end;
    suppose a in {NAT};
     then a = NAT by TARSKI:def 1;
-    then Ok.a = Ok.IC IT by A1
-        .= ObjectKind IC IT
+    then Ok.a = ObjectKind IC IT by A1
         .= the Instruction-Locations of IT by A5,AMI_1:def 11;
     hence a in the Instruction-Locations of IT by A16,Def11;
  end;
@@ -1207,11 +1195,9 @@ FUNCOP_1:19
 A8:   NAT in {NAT} by TARSKI:def 1;
 then A9: NAT in dom (NAT .-->succ(s.NAT)) by FUNCOP_1:19;
 A10: IC M = NAT by A2;
- hence Exec(i,s).IC STC N = (f.s).NAT by A7
-   .= (s+*(NAT .-->succ(s.NAT))).NAT by A3
+ hence Exec(i,s).IC STC N = (s+*(NAT .-->succ(s.NAT))).NAT by  A7,A3
    .= (NAT .-->succ(s.NAT)).NAT by A9,FUNCT_4:14
-   .= succ (s.NAT) by A8,FUNCOP_1:13
-   .= succ (IC s) by A10;
+   .= succ (IC s) by  A8,FUNCOP_1:13,A10;
 end;
 
 theorem Th20:
@@ -1236,8 +1222,7 @@ then A4:i in {[0,0]} by A1,MCART_1:7,TARSKI:def 1;
  then (the Execution of M).i = ({[0,0]}
    --> id product the Object-Kind of M).i by A3,A4,FUNCT_4:14
      .= id product the Object-Kind of M by A4,FUNCOP_1:13;
- hence Exec(i,s) = (id product the Object-Kind of M).s
-    .= s by FUNCT_1:35;
+ hence Exec(i,s) = s by FUNCT_1:35;
 end;
 
 theorem Th21:
@@ -1251,8 +1236,7 @@ A1: InsCode i = 1;
 A2:   for s being State of M holds Exec(i,s) = s;
    consider s being State of M;
 A3:Exec(i,s).IC M = succ (IC s) by A1,Lm4;
-       Exec(i,s).IC M = s.IC M by A2
-      .= IC s;
+       Exec(i,s).IC M = IC s by A2;
    hence thesis by A3,ORDINAL1:14;
 end;
 
@@ -1303,9 +1287,7 @@ A3: InsCode i = 1;
     hereby assume y in F; then consider s being State of M such that
     A4: y = IC Following s & IC s = l & s.l = i;
 A5: InsCode CurInstr s = 1 by A3,A4;
-            y = IC Exec(CurInstr s, s) by A4
-         .= Exec(CurInstr s, s). IC STC N
-         .= succ z by A2,A4,A5,Lm4
+            y = succ z by  A4,A2,A5,Lm4
          .= z+1 by A1,CARD_1:52;
      hence y in {z+1} by TARSKI:def 1;
     end;
@@ -1321,8 +1303,7 @@ A7:     dom f = the Instruction-Locations of M by FUNCOP_1:19;
         set t = s+*u;
 A8:     dom u = {IC M} by CQC_LANG:5;
     then A9: IC M in dom u by TARSKI:def 1;
-    A10: IC t = t.IC M
-            .= u.IC M by A9,FUNCT_4:14
+    A10: IC t = u.IC M by A9,FUNCT_4:14
             .= z by A2,CQC_LANG:6;
             l <> IC M by AMI_1:48;
         then not l in dom u by A8,TARSKI:def 1;
@@ -1330,9 +1311,7 @@ A8:     dom u = {IC M} by CQC_LANG:5;
            .= f.l by A7,FUNCT_4:14
            .= i by FUNCOP_1:13;
 then A12: InsCode CurInstr t = 1 by A2,A3,A10;
-            IC Following t = IC Exec(CurInstr t, t)
-         .= Exec(CurInstr t, t). IC STC N
-         .= succ z by A10,A12,Lm4;
+            IC Following t = succ z by A10,A12,Lm4;
     hence y in F by A2,A6,A10,A11;
    end;
  hence NIC(i, l) = {z+1} by TARSKI:2;
@@ -1423,8 +1402,7 @@ A9: JUMP i = {} by Lm6;
    end;
    end;
 then A10: K = {{z},{z+1}} by TARSKI:2;
- thus SUCC l = union K
-    .= {z,z+1} by A10,ZFMISC_1:32;
+ thus SUCC l = {z,z+1} by A10,ZFMISC_1:32;
 end;
 
 registration
@@ -1747,8 +1725,7 @@ A1:   InsCode i = 1;
 A2:   l = il.(M,k) by Th26;
 A3: il.(M,k) = k by Th37;
        k = locnum l by A2,Def13;
-   then NextLoc l = il.(M,k+1)
-    .= k+1 by Th37;
+   then NextLoc l = k+1 by Th37;
  hence NIC(i, l) = {NextLoc l} by A1,A2,A3,Lm5;
 end;
 
@@ -1764,8 +1741,7 @@ A2: l = k by A1,Th37;
 A3: k = locnum l by A1,Def13;
  thus SUCC l = {k,k+1} by A2,Th24
    .= {k,il.(M,k+1)} by Th37
-   .= {il.(M,k),il.(M,k+1)} by Th37
-   .= {l, NextLoc l} by A1,A3;
+   .= {l, NextLoc l} by  Th37,A1,A3;
 end;
 
 definition
@@ -1800,16 +1776,12 @@ A1:  for s being State of S holds Exec(i, s).IC S = NextLoc IC s;
      A4: dom ((IC S, il)-->(il1, I)) = {IC S, il} by FUNCT_4:65;
      then A5: IC S in dom ((IC S, il)-->(il1, I)) by TARSKI:def 2;
      A6: IC S <> il by AMI_1:48;
-     A7: IC u = u.IC S
-             .= ((IC S, il)-->(il1, I)).IC S by A5,FUNCT_4:14
+     A7: IC u = ((IC S, il)-->(il1, I)).IC S by A5,FUNCT_4:14
              .= il by A6,FUNCT_4:66;
          il in dom ((IC S, il)-->(il1, I)) by A4,TARSKI:def 2;
      then A8: u.il = ((IC S, il)-->(il1, I)).il by FUNCT_4:14
              .= i by A6,FUNCT_4:66;
-             IC Following u = IC Exec(CurInstr u,u)
-           .= IC Exec(u.IC u, u)
-           .= Exec(u.IC u, u).IC S
-           .= NextLoc il by A1,A7,A8;
+             IC Following u = NextLoc il by A1,A7,A8;
       hence x in {IC Following s where s is State of S : IC s = il & s.il=i}
         by A3,A7,A8;
      end;
@@ -1817,10 +1789,7 @@ A1:  for s being State of S holds Exec(i, s).IC S = NextLoc IC s;
              x in {IC Following s where s is State of S : IC s = il & s.il=i};
          then consider s being State of S such that
      A9: x = IC Following s & IC s = il & s.il = i;
-      thus x = IC Exec(CurInstr s,s) by A9
-           .= IC Exec(s.IC s, s)
-           .= Exec(s.IC s, s).IC S
-           .= NextLoc il by A1,A9;
+      thus x = NextLoc il by  A9,A1;
      end;
     hence x in {NextLoc il} iff
       x in {IC Following s where s is State of S : IC s = il & s.il=i}

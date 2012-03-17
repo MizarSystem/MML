@@ -24,7 +24,7 @@ begin
 
 reserve V for RealLinearSpace;
 reserve u,u1,u2,v,v1,v2,w,w1,y for VECTOR of V;
-reserve a,a1,a2,b,b1,b2,c,c1,c2 for Real;
+reserve a,a1,a2,b,b1,b2,c1,c2 for Real;
 reserve x,z for set;
 
 definition let V; let u,v,u1,v1;
@@ -137,7 +137,7 @@ RLVECT_1:def 9
  .= (r+1*r)-(1*p+1*p) by RLVECT_1:def 9 .= (r+r)-(1*p+1*p) by RLVECT_1:def 9
  .= (r+r)-(p+1*p) by RLVECT_1:def 9 .= (y+v)-(y+u) by A1,RLVECT_1:def 9
  .= v+(y-(y+u)) by RLVECT_1:def 6 .= v+((y-y)-u) by RLVECT_1:41 .= v+(0.V-u)
- by RLVECT_1:28 .= v+(-u) by RLVECT_1:27 .= v-u .= 1*(v-u)
+ by RLVECT_1:28 .= v-u by RLVECT_1:27 .= 1*(v-u)
  by RLVECT_1:def 9; hence u,v // p,r by ANALOAF:def 1; end;
 
 theorem  u,v '||' w#u,w#v
@@ -154,7 +154,7 @@ A3: 2*(p-u) = (1+1)*p - 2*u by RLVECT_1:48 .= (1*p+1*p) - 2*u
  .= (u+v) - 2*u by Def2
  .=v+(u-2*u) by RLVECT_1:def 6
  .= v+(1*u-2*u) by RLVECT_1:def 9 .= v+(-1)*u by A2,RLVECT_1:49
- .= v+(-u) by RLVECT_1:29 .= v-u;
+ .= v-u by RLVECT_1:29;
     2*(v-p) = 2*v-(1+1)*p by RLVECT_1:48 .= 2*v-(1*p+1*p) by RLVECT_1:def 9
  .= 2*v - (1*p+p) by RLVECT_1:def 9 .= 2*v - (p+p) by RLVECT_1:def 9
  .= 2*v - (u+v) by Def2
@@ -253,8 +253,7 @@ proof assume that Gen w,y and A1: u,v,u1,v1 are_Ort_wrt w,y;
 A2: v-u,v1-u1 are_Ort_wrt w,y by A1,ANALMETR:def 3;
 then v1-u1,v-u are_Ort_wrt w,y by ANALMETR:8; hence u1,v1,u,v are_Ort_wrt w,y
 by ANALMETR:def 3; A3: v-u,(-1)*(v1-u1) are_Ort_wrt w,y by A2,ANALMETR:11;
-   (-1)*(v1-u1) = -(v1-u1) by RLVECT_1:29 .= (-v1)+u1 by RLVECT_1:47
- .= u1-v1;
+   (-1)*(v1-u1) = -(v1-u1) by RLVECT_1:29 .= u1-v1 by RLVECT_1:47;
 hence u,v,v1,u1 are_Ort_wrt w,y by A3,ANALMETR:def 3; end;
 
 Lm5: Gen w,y implies u,v,u1,u1 are_Ort_wrt w,y
@@ -578,8 +577,7 @@ Lm11: v1 = b1*w + b2*y & v2 = c1*w + c2*y implies
   .= ((b1 + c1)*w + b2*y) + c2*y by RLVECT_1:def 9
   .= (b1 + c1)*w + (b2*y + c2*y) by RLVECT_1:def 6
   .= (b1 + c1)*w + (b2 + c2)*y by RLVECT_1:def 9;
- thus v1 - v2 = (b1*w + b2*y)+(-(c1*w + c2*y)) by A1,A2
-  .= (b1*w + b2*y)+(-(c1*w) + -(c2*y)) by RLVECT_1:45
+ thus v1 - v2 = (b1*w + b2*y)+(-(c1*w) + -(c2*y)) by  A1,A2,RLVECT_1:45
   .= (b1*w + b2*y)+(c1*(-w) + -(c2*y)) by RLVECT_1:39
   .= (b1*w + b2*y)+(c1*(-w) + c2*(-y)) by RLVECT_1:39
   .= (b1*w + b2*y)+((-c1)*w + c2*(-y)) by RLVECT_1:38
@@ -680,31 +678,24 @@ theorem Th32: Gen w,y implies for u,v,v1 holds
   PProJ(w,y,v+v1,u)=PProJ(w,y,v,u)+PProJ(w,y,v1,u)
  proof assume A1: Gen w,y; let u,v,v1 be VECTOR of V;
  A2: now let u,v,v1 be VECTOR of V;
- A3: PProJ(w,y,u,v+v1) = pr1(w,y,u)*pr1(w,y,v+v1)+pr2(w,y,u)*pr2(w,y,v+v1)
-  .= pr1(w,y,u)*(pr1(w,y,v)+pr1(w,y,v1))+pr2(w,y,u)*pr2(w,y,v+v1) by A1,Lm16
+ A3: PProJ(w,y,u,v+v1) =
+ pr1(w,y,u)*(pr1(w,y,v)+pr1(w,y,v1))+pr2(w,y,u)*pr2(w,y,v+v1) by A1,Lm16
   .= pr1(w,y,u)*(pr1(w,y,v)+pr1(w,y,v1))+pr2(w,y,u)*(pr2(w,y,v)+pr2(w,y,v1))
-  by A1,Lm16 .= (pr1(w,y,u)*pr1(w,y,v)+pr2(w,y,u)*pr2(w,y,v))+
-  (pr1(w,y,u)*pr1(w,y,v1)+pr2(w,y,u)*pr2(w,y,v1)) .=
-  (pr1(w,y,u)*pr1(w,y,v)+pr2(w,y,u)*pr2(w,y,v)) + PProJ(w,y,u,v1)
-  .= PProJ(w,y,u,v)+PProJ(w,y,u,v1);
-     PProJ(w,y,u,v-v1) = pr1(w,y,u)*pr1(w,y,v-v1)+pr2(w,y,u)*pr2(w,y,v-v1)
-  .= pr1(w,y,u)*(pr1(w,y,v)-pr1(w,y,v1))+pr2(w,y,u)*pr2(w,y,v-v1) by A1,Lm16
+  by A1,Lm16 .= PProJ(w,y,u,v)+PProJ(w,y,u,v1);
+     PProJ(w,y,u,v-v1) =
+ pr1(w,y,u)*(pr1(w,y,v)-pr1(w,y,v1))+pr2(w,y,u)*pr2(w,y,v-v1) by A1,Lm16
   .= pr1(w,y,u)*(pr1(w,y,v)-pr1(w,y,v1))+pr2(w,y,u)*(pr2(w,y,v)-pr2(w,y,v1))
-  by A1,Lm16 .= (pr1(w,y,u)*pr1(w,y,v)+pr2(w,y,u)*pr2(w,y,v))-
-  (pr1(w,y,u)*pr1(w,y,v1)+pr2(w,y,u)*pr2(w,y,v1)) .=
-  (pr1(w,y,u)*pr1(w,y,v)+pr2(w,y,u)*pr2(w,y,v)) - PProJ(w,y,u,v1)
-  .= PProJ(w,y,u,v)-PProJ(w,y,u,v1);
+  by A1,Lm16 .= PProJ(w,y,u,v)-PProJ(w,y,u,v1);
  hence PProJ(w,y,u,v+v1)=PProJ(w,y,u,v)+PProJ(w,y,u,v1) &
    PProJ(w,y,u,v-v1)=PProJ(w,y,u,v)-PProJ(w,y,u,v1) by A3; end;
  hence PProJ(w,y,u,v+v1) = PProJ(w,y,u,v)+PProJ(w,y,u,v1) &
    PProJ(w,y,u,v-v1) = PProJ(w,y,u,v)-PProJ(w,y,u,v1);
  thus PProJ(w,y,v-v1,u) = PProJ(w,y,u,v-v1) .= PProJ(w,y,u,v)-PProJ
 (w,y,u,v1)
-  by A2 .= PProJ(w,y,v,u) - PProJ(w,y,u,v1) .= PProJ(w,y,v,u)-PProJ
+  by A2 .= PProJ(w,y,v,u)-PProJ
 (w,y,v1,u);
  thus PProJ(w,y,v+v1,u)= PProJ(w,y,u,v+v1) .= PProJ(w,y,u,v)+PProJ
-(w,y,u,v1) by A2 .= PProJ(w,y,v,u) + PProJ(w,y,u,v1)
- .= PProJ(w,y,v,u)+PProJ
+(w,y,u,v1) by A2 .= PProJ(w,y,v,u)+PProJ
 (w,y,v1,u); end;
 
 theorem Th33: Gen w,y implies for u,v being VECTOR of V, a being Real holds
@@ -712,10 +703,9 @@ theorem Th33: Gen w,y implies for u,v being VECTOR of V, a being Real holds
  PProJ(w,y,a*u,v)=PProJ(w,y,u,v)*a & PProJ(w,y,u,a*v)=PProJ(w,y,u,v)*a
  proof assume A1: Gen w,y; let u,v be VECTOR of V,a be Real;
  A2: now let u,v be VECTOR of V,a be Real;
-    PProJ(w,y,a*u,v) = pr1(w,y,a*u)*pr1(w,y,v)+pr2(w,y,a*u)*pr2(w,y,v)
- .= (a*pr1(w,y,u))*pr1(w,y,v)+pr2(w,y,a*u)*pr2(w,y,v) by A1,Lm16
+    PProJ(w,y,a*u,v) =
+ (a*pr1(w,y,u))*pr1(w,y,v)+pr2(w,y,a*u)*pr2(w,y,v) by A1,Lm16
  .= (a*pr1(w,y,u))*pr1(w,y,v)+(a*pr2(w,y,u))*pr2(w,y,v) by A1,Lm16
- .= a*(pr1(w,y,u)*pr1(w,y,v)+pr2(w,y,u)*pr2(w,y,v))
  .= a*PProJ(w,y,u,v); hence PProJ(w,y,a*u,v) = a*PProJ(w,y,u,v); end;
  hence PProJ(w,y,a*u,v) = a*PProJ(w,y,u,v);
  thus PProJ(w,y,u,a*v) = PProJ(w,y,a*v,u) .= a*PProJ(w,y,v,u) by A2
@@ -745,13 +735,10 @@ theorem Th36: Gen w,y implies for u,v,v1 being VECTOR of V holds
  proof assume A1: Gen w,y; let u,v,v1 be VECTOR of V;
  set a1=pr1(w,y,u),a2=pr2(w,y,u),b1=pr1(w,y,v),b2=pr2(w,y,v),
   c1=pr1(w,y,v1),c2=pr2(w,y,v1);
- thus 2*PProJ(w,y,u,v#v1) = 2*(pr1(w,y,u)*pr1(w,y,v#v1)+
- pr2(w,y,u)*pr2(w,y,v#v1)) .=
+ thus 2*PProJ(w,y,u,v#v1) =
  a1*(2*pr1(w,y,v#v1))+ 2*(a2*pr2(w,y,v#v1)) .=
  a1*(b1+c1)+ a2*(2*pr2(w,y,v#v1)) by A1,Lm17 .=
- a1*(b1+c1)+ a2*(b2+c2) by A1,Lm17 .= (a1*b1+a2*b2)+(a1*c1+a2*c2) .= PProJ(w,y,
-u,v)+ (a1*c1+a2*c2)
- .= PProJ(w,y,u,v)+PProJ(w,y,u,v1); end;
+ a1*(b1+c1)+ a2*(b2+c2) by A1,Lm17 .= PProJ(w,y,u,v)+PProJ(w,y,u,v1); end;
 
 theorem Th37: Gen w,y implies for u,v being VECTOR of V st u<>v holds
      PProJ(w,y,u-v,u-v) <> 0
@@ -857,8 +844,7 @@ thus t2-t1 = (u2 - u1)+(A2-A1)*(u-u') &
    (PProJ(w,y,u-u',u+u') - PProJ(w,y,u-u',2*u1)) by A1,Th33 .=
   PProJ(w,y,u-u',2*u1) - PProJ(w,y,u-u',2*u2)
   .= PProJ(w,y,u-u',2*u1 - 2*u2) by A1,Th32;
-  2*u1 - 2*u2 = 2*u1 + -2*u2
-  .= -(2*u2 - 2*u1) by RLVECT_1:47 .= -(2*(u2 - u1)) by RLVECT_1:48
+  2*u1 - 2*u2 = -(2*u2 - 2*u1) by RLVECT_1:47 .= -(2*(u2 - u1)) by RLVECT_1:48
   .= 2*(-(u2 - u1)) by RLVECT_1:39 .= (-2)*(u2 - u1) by RLVECT_1:38;
   hence uu = (-2)*PProJ(w,y,u-u',u2 - u1) by A1,A5,Th33; end;
  hence thesis by A2,A3,A4,Lm19,XCMPLX_1:40; end; end;
@@ -930,16 +916,11 @@ A7: w1+w1 = A3*(u-u')+(v1 + (v1+A3*(u-u'))) by A5,RLVECT_1:def 6
    .= (v1 + v1)+(A3*(u-u')+A3*(u-u')) by RLVECT_1:def 6
    .= (v1 + v1)+(A3+A3)*(u-u') by RLVECT_1:def 9;
    set uu = (G - 2*H) + (G - 2*W), vv = (G - 2*I) + (G - 2*I);
-A8: H+W = PProJ(w,y,u-u',u1)+PProJ(w,y,u-u',u2)
-  .= PProJ(w,y,u-u',u1+u2) by A1,Th32
+A8: H+W = PProJ(w,y,u-u',u1+u2) by A1,Th32
   .= PProJ(w,y,u-u',v1+v1) by A4,Def2
-  .= PProJ(w,y,u-u',v1)+ PProJ(w,y,u-u',v1) by Th32,A1
-  .= I+I;
-A9: A1+A2 = (G - 2*H)*N" + (G - 2*W)*N" .= ((G - 2*H) + (G - 2*W))*N"
-     .= ((G + G) - 2*(H + W))*N"
-     .= ((G + G) - 2*(I + I))*N" by A8
-     .= ((G - 2*I) + (G - 2*I))*N"
-     .= vv*N" .=A3+A3;
+  .= I+I by A1,Th32;
+A9: A1+A2 = ((G - 2*H) + (G - 2*W))*N"
+     .= vv*N" by A8 .=A3+A3;
   w1+w1 = t1 + t2 by A6,A7,A9;
   hence w1=t1#t2 by Def2;
 end;
@@ -975,12 +956,10 @@ Def3
      .= -uu' + -uu' by Lm18;
        u1#u2-uu' = (2"*2)*(u1#u2-uu') by RLVECT_1:def 9
  .= 2"*(2*(u1#u2-uu')) by RLVECT_1:def 9 .=
-2"*((u1+u2)-(2*uu')) by A14,RLVECT_1:48 .=2"*((u1+u2)+(-uu'+ -uu')) by A15
-    .= 2"*(((u1+u2)+ -uu') + -uu') by RLVECT_1:def 6 .=
-    2"*(((-uu' + u1)+u2) + -uu') by RLVECT_1:def 6 .=
-    2"*(((u1-uu')+u2) + -uu') .=
-    2"*((u1-uu')+(u2 + -uu')) by RLVECT_1:def 6 .=
-    2"*((u1-uu')+(u2-uu')) .=
+2"*((u1+u2)-(2*uu')) by A14,RLVECT_1:48 .= 2"*(((u1+u2)+ -uu') + -uu') by  A15,
+RLVECT_1:def 6 .=
+    2"*(((u1-uu')+u2) + -uu') by RLVECT_1:def 6 .=
+    2"*((u1-uu')+(u2-uu')) by RLVECT_1:def 6 .=
     2"*(u1-uu')+2"*(u2-uu') by RLVECT_1:def 9; hence thesis; end;
       u'-u,(2")*(u1-uu') are_Ort_wrt w,y & u'-u,(2")*(u2-uu') are_Ort_wrt w,y
    by A12,ANALMETR:11; then u'-u,u1#u2-uu' are_Ort_wrt w,y
@@ -1034,18 +1013,14 @@ V
  A11:  PProJ(w,y,u2-u1,(A4-A3)*(u-u')) = PProJ
 (w,y,u2-u1,u-u')*(A4-A3) by A1,Th33 .=
   PProJ(w,y,u2-u1,u-u')*( ((-2)*PProJ(w,y,u-u',v2-v1))*
-   ((PProJ(w,y,u-u',u-u'))") ) by A1,A2,A5,Lm20 .=
-  (-2)*( (PProJ(w,y,u-u',u-u'))"*((PProJ(w,y,u2-u1,u-u')*
-   PProJ(w,y,u-u',v2-v1))) ) .=(-2)*aa;
+   ((PProJ(w,y,u-u',u-u'))") ) by A1,A2,A5,Lm20 .=(-2)*aa;
       PProJ(w,y,(A2-A1)*(u-u'),(v2 - v1)) =
   PProJ(w,y,v2-v1,(A2-A1)*(u-u')) .=
   PProJ(w,y,v2-v1,u-u')*(A2-A1) by A1,Th33 .=
   PProJ(w,y,v2-v1,u-u')*( ((-2)*PProJ(w,y,u-u',u2-u1))*
-   ((PProJ(w,y,u-u',u-u'))") ) by A1,A2,A6,Lm20 .=
-  (-2)*( (PProJ(w,y,u-u',u-u'))"*((PProJ(w,y,v2-v1,u-u')*
-   PProJ(w,y,u-u',u2-u1))) ) .=(-2)*aa;
- then PProJ(w,y,t2-t1,w2-w1) = (-2)*aa + (((-2)+4)*aa) by A9,A10,A11
-  .= 0; hence t1,t2,w1,w2 are_Ort_wrt w,y by A1,Th35; end;
+   ((PProJ(w,y,u-u',u-u'))") ) by A1,A2,A6,Lm20 .=(-2)*aa;
+ then PProJ(w,y,t2-t1,w2-w1) = 0 by A9,A10,A11
+; hence t1,t2,w1,w2 are_Ort_wrt w,y by A1,Th35; end;
 
 theorem Th43: for u,u',u1,u2,v1,v2,t1,t2,w1,w2 being VECTOR of V holds
  (Gen w,y & u<>u' & u,u',u1,t1 are_DTr_wrt w,y & u,u',u2,t2 are_DTr_wrt w,y &

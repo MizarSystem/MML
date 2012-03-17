@@ -10,11 +10,11 @@ environ
       FINSEQ_2, FUNCT_4, FUNCT_5, FUNCOP_1, PBOOLE, MARGREL1, BINARITH,
       CLASSES1, PARTFUN1, MSUALG_1, MSAFREE2, CIRCUIT1, CIRCUIT2, LATTICES,
       CIRCCOMB, FACIRC_1, ZF_REFLE, ZF_LANG, TWOSCOMP, FSCIRC_1, FSCIRC_2;
- notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, NUMBERS,
-      XCMPLX_0, NAT_1, MCART_1,
-      RELAT_1, CARD_1, STRUCT_0, FUNCT_1, FUNCT_2, FINSEQ_1, FINSEQ_2, FUNCT_5,
-      PBOOLE, MARGREL1, BINARITH, CLASSES1, MSUALG_1, MSAFREE2, CIRCUIT1,
-      CIRCUIT2, CIRCCOMB, TWOSCOMP, FACIRC_1, FACIRC_2, FSCIRC_1, XXREAL_0;
+ notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, NUMBERS, XCMPLX_0, NAT_1,
+      MCART_1, RELAT_1, CARD_1, STRUCT_0, FUNCT_1, FUNCT_2, FINSEQ_1, FINSEQ_2,
+      FUNCT_5, PBOOLE, MARGREL1, BINARITH, CLASSES1, MSUALG_1, MSAFREE2,
+      CIRCUIT1, CIRCUIT2, CIRCCOMB, TWOSCOMP, FACIRC_1, FACIRC_2, FSCIRC_1,
+      XXREAL_0;
  constructors ENUMSET1, XXREAL_0, FUNCT_5, CLASSES1, BINARITH, CIRCUIT1,
       CIRCUIT2, TWOSCOMP, FSCIRC_1, FACIRC_2;
  registrations RELSET_1, FINSEQ_2, MARGREL1, CIRCCOMB, FACIRC_1, STRUCT_0,
@@ -434,8 +434,6 @@ theorem Th5:
    let p1,p2, q1,q2 be FinSequence;
    deffunc o(set,Element of NAT)
     = BorrowOutput((p^p1) .($2+1), (q^q1).($2+1), $1);
-   deffunc F(Element of NAT,set)
-    = BorrowOutput((p^p1) .($1+1), (q^q1).($1+1), $2);
    deffunc S(non empty ManySortedSign,set,Element of NAT) =
      $1 +* BitSubtracterWithBorrowStr((p^p1) .($3+1), (q^q1).($3+1), $2);
    deffunc A(non empty ManySortedSign,non-empty MSAlgebra over $1,
@@ -476,8 +474,7 @@ A9:   i <= n implies h1.i = h2.i & f1.i = f2.i & g1.i = g2.i and
 A10:   i+1 <= n;
          len p = n & len q = n by CIRCCOMB:def 12;
 then A11:   dom p = Seg n & dom q = Seg n by FINSEQ_1:def 3;
-         0 <= i by NAT_1:18;
-      then 0+1 <= i+1 by XREAL_1:8;
+      0+1 <= i+1 by XREAL_1:8;
       then i+1 in Seg n by A10,FINSEQ_1:3;
 then A12:   (p^p1).(i+1) = p.(i+1) & (p^p2).(i+1) = p.(i+1) &
       (q^q1).(i+1) = q.(i+1) & (q^q2).(i+1) = q.(i+1) by A11,FINSEQ_1:def 7;
@@ -631,9 +628,9 @@ A6:      InnerVertices (n-BitSubtracterStr(x,y)) c=
             (n+j)-BitBorrowOutput(x, y)))) by FACIRC_1:27;
          hence thesis by Th7;
      end;
-AA: for j being Element of NAT holds L[j] from NAT_1:sch 1(A3,A4);
+A7: for j being Element of NAT holds L[j] from NAT_1:sch 1(A3,A4);
     m = n+i by A2;
-   hence thesis by A2,AA;
+   hence thesis by A7;
   end;
 
 theorem
@@ -976,9 +973,7 @@ A5:  InnerVertices (Cxc +* Cxyc) =
        InnerVertices Cxc \/ InnerVertices Cxyc by A3,CIRCCOMB:15;
    thus
        InnerVertices BorrowStr(x,y,c) =
-      InnerVertices (BorrowIStr(x,y,c) +* Cxyc)
-     .= InnerVertices (Cxy +* Cyc +* Cxc +* Cxyc)
-     .= InnerVertices (Cxy +* (Cyc +* Cxc) +* Cxyc) by CIRCCOMB:10
+ InnerVertices (Cxy +* (Cyc +* Cxc) +* Cxyc) by CIRCCOMB:10
      .= InnerVertices (Cxy +* (Cyc +* Cxc +* Cxyc)) by CIRCCOMB:10
      .= InnerVertices Cxy \/ InnerVertices (Cyc +* Cxc +* Cxyc)
           by A1,CIRCCOMB:15
@@ -995,10 +990,7 @@ A5:  InnerVertices (Cxc +* Cxyc) =
      .= {xy} \/ {yc} \/ {xc} \/ InnerVertices Cxyc by CIRCCOMB:49
      .= {xy, yc} \/ {xc} \/ InnerVertices Cxyc by ENUMSET1:41
      .= {xy, yc, xc} \/ InnerVertices Cxyc by ENUMSET1:43
-     .= {xy, yc, xc} \/
-        {[<*[<*x,y*>, and2a], [<*y,c*>, and2], [<*x,c*>, and2a]*>, or3]}
-        by CIRCCOMB:49
-     .= {xy, yc, xc} \/ {BorrowOutput(x,y,c)};
+     .= {xy, yc, xc} \/ {BorrowOutput(x,y,c)} by CIRCCOMB:49;
   end;
 
 theorem Th15:
@@ -1086,8 +1078,7 @@ theorem Th17:
      let x,y,c be set;
 A1:   2GatesCircStr(x,y,c, 'xor') tolerates BorrowStr(x,y,c) by CIRCCOMB:55;
         InnerVertices BitSubtracterWithBorrowStr(x,y,c) =
-     InnerVertices (2GatesCircStr(x,y,c, 'xor') +* BorrowStr(x,y,c))
-  .= InnerVertices 2GatesCircStr(x,y,c, 'xor') \/
+ InnerVertices 2GatesCircStr(x,y,c, 'xor') \/
        InnerVertices BorrowStr(x,y,c) by A1,CIRCCOMB:15
   .= {[<*x,y*>, 'xor'], 2GatesCircOutput(x,y,c,'xor')} \/
        InnerVertices BorrowStr(x,y,c) by FACIRC_1:56

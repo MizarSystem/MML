@@ -10,12 +10,11 @@ environ
       FINSEQ_4, PRALG_1, PBOOLE, MSUALG_2, RLVECT_2, FUNCT_4, PENCIL_1, CARD_3,
       INTEGRA1, SUBSET_1, PRE_TOPC, REALSET1, CARD_1, SGRAPH1, CAT_1, AMI_1,
       RELAT_2, TARSKI, PENCIL_2;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1,
- NUMBERS,XCMPLX_0, NAT_1, RELAT_1,
-      BINARITH, REALSET1, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, POLYNOM1,
-      STRUCT_0, XXREAL_0, REALSET2, RFINSEQ, CARD_1, FINSEQ_1, CARD_3,
-      PRE_TOPC, PBOOLE, PZFMISC1, TOPS_2, T_0TOPSP, GRCAT_1, PRALG_1, FINSEQ_4,
-      PENCIL_1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0, NAT_1,
+      RELAT_1, BINARITH, REALSET1, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2,
+      POLYNOM1, STRUCT_0, XXREAL_0, REALSET2, RFINSEQ, CARD_1, FINSEQ_1,
+      CARD_3, PRE_TOPC, PBOOLE, PZFMISC1, TOPS_2, T_0TOPSP, GRCAT_1, PRALG_1,
+      FINSEQ_4, PENCIL_1;
  constructors XXREAL_0, REAL_1, RFINSEQ, BINARITH, PZFMISC1, TOPS_2, GRCAT_1,
       T_0TOPSP, POLYNOM1, PENCIL_1, NAT_1;
  registrations STRUCT_0, RELSET_1, SUBSET_1, FINSEQ_5, BORSUK_2, PENCIL_1,
@@ -26,7 +25,7 @@ environ
       REAL_1, REAL_2, FUNCT_7, YELLOW_6, REALSET2, PZFMISC1, PUA2MSS1,
       PRE_TOPC, FINSEQ_3, FUNCT_2, GRCAT_1, TOPGRP_1, TOPS_2, T_0TOPSP,
       RELAT_1, PENCIL_1, RFINSEQ, BINARITH, FINSEQ_4, FINSEQ_5, XBOOLE_0,
-      XBOOLE_1, XREAL_1, XXREAL_0;
+      XBOOLE_1, XREAL_1, XXREAL_0, ORDINAL1;
  schemes FINSEQ_1, POLYNOM2, NAT_1;
 
 begin :: Preliminaries on finite sequences
@@ -34,7 +33,7 @@ begin :: Preliminaries on finite sequences
 definition
  let D be set;
  let p be FinSequence of D;
- let i,j be Element of NAT;
+ let i,j be Nat;
 func Del(p,i,j) -> FinSequence of D equals
  (p|(i -' 1))^(p/^j);
 coherence;
@@ -75,8 +74,7 @@ then j <= 0 by A4,FINSEQ_1:25;
    end;
    end;
       rng ((p|(i -' 1))^(p/^j)) = (rng (p|(i -' 1))) \/ rng (p/^j) by
-FINSEQ_1:44
-;
+FINSEQ_1:44;
   then rng Del(p,i,j) = (rng (p|(i -' 1))) \/ rng (p/^j);
   hence rng Del(p,i,j) c= rng p by A1,A2,XBOOLE_1:8;
  end;
@@ -140,8 +138,7 @@ then A4: k <= i -' 1 by A1,XXREAL_0:2;
 then A5: k in dom (p|(i -' 1)) by A1,A4,FINSEQ_3:27;
        k <= len p by A3,A4,XXREAL_0:2;
 then A6: k in dom p by A1,FINSEQ_3:27;
-  thus Del(p,i,j).k = ((p|(i -' 1))^(p/^j)).k
-  .= (p|(i -' 1)).k by A5,FINSEQ_1:def 7
+  thus Del(p,i,j).k = (p|(i -' 1)).k by A5,FINSEQ_1:def 7
   .= (p|(i -' 1))/.k by A5,FINSEQ_4:def 4
   .= p/.k by A5,FINSEQ_4:85
   .= p.k by A6,FINSEQ_4:def 4;
@@ -197,12 +194,12 @@ then A9: i -' 1 = i-1 by BINARITH:def 3;
     k <= len p - j + (i - 1) by A1;
 then k - (i -' 1) <= len p - j by A9,XREAL_1:22;
 then A10: k - (i -' 1) in dom (p/^j) by A5,A6,A8,FINSEQ_3:27;
+then A11: k - (i -' 1) is Nat by ORDINAL1:def 13;
     j-i >= i-i by A1,XREAL_1:11;
-then A11: j -' i = j-i by BINARITH:def 3;
-  thus Del(p,i,j).k = ((p|(i -' 1))^(p/^j)).k
-  .= (p/^j).(k - (i -' 1)) by A3,A4,Th5
-  .= p.(j + (k + (1 - i))) by A7,A9,A10,RFINSEQ:def 2
-  .= p.(j -'i + k + 1) by A11;
+then A12: j -' i = j-i by BINARITH:def 3;
+  thus Del(p,i,j).k = (p/^j).(k - (i -' 1)) by A3,A4,Th5
+  .= p.(j + (k + (1 - i))) by A7,A9,A10,A11,RFINSEQ:def 2
+  .= p.(j -'i + k + 1) by A12;
  end;
 
 scheme FinSeqOneToOne{X,Y,D()->set,f()-> FinSequence of D(),P[set,set]}:
@@ -795,7 +792,6 @@ then A2: f is one-to-one onto by FUNCT_2:def 4;
       l in the topology of S;
   then reconsider L=l as Subset of S;
       rng f = the carrier of S by A2,FUNCT_2:def 3;
-  then rng f = [#]S by PRE_TOPC:12;
   then f" = (f qua Function)" by A2,TOPS_2:def 4;
 then A3: (f").:L = f"L by A2,FUNCT_1:155;
       L is open by PRE_TOPC:def 5;
@@ -1577,8 +1573,7 @@ A7: f.:W is non trivial strong closed_under_lines by A6,Th14,Th16,Th18;
       f.:B = union {Y where Y is Subset of Segre_Product A :
   Y is non trivial strong closed_under_lines & f.:W,Y are_joinable}
    proof
-    thus f.:B c= union {Y where Y is Subset of Segre_Product A
-:
+    thus f.:B c= union {Y where Y is Subset of Segre_Product A:
     Y is non trivial strong closed_under_lines & f.:W,Y are_joinable}
      proof
       let o be set; assume o in f.:B; then consider u being set such that
@@ -1614,14 +1609,13 @@ A16: f"(f.:W) c= W by A2,FUNCT_1:152;
         W c= f"(f.:W) by A5,FUNCT_1:146;
     then f"(f.:W) = W by A16,XBOOLE_0:def 10;
 then A17: W,g.:Y are_joinable by A2,A4,A15,TOPS_2:68;
-        g.:
-Y is non trivial strong closed_under_lines by A14,Th14,Th16,Th18;
+g.:Y is non trivial strong closed_under_lines by A14,Th14,Th16,Th18;
 then A18: g.:Y in {Z where Z is Subset of Segre_Product A :
     Z is non trivial strong closed_under_lines & W,Z are_joinable} by A17;
         g.o in g.:Y by A5,A13,A14,FUNCT_1:def 12;
     then A19: g.o in B by A6,A18,TARSKI:def 4;
         o = f.((f qua Function)".o) by A2,A3,A13,A14,FUNCT_1:57;
-    then o = f.(g.o) by A2,A4,TOPS_2:def 4;
+    then o = f.(g.o) by A2,A3,TOPS_2:def 4;
     hence o in f.:B by A5,A19,FUNCT_1:def 12;
    end;
   hence f.:B is Segre-Coset of A by A1,A7,Th23;

@@ -11,12 +11,11 @@ environ
       FCONT_1, INT_1, RAT_1, SEQ_1, SEQ_2, SEQM_3, RCOMP_1, SEQFUNC, SIN_COS,
       FDIFF_1, PREPOWER, POWER, SERIES_1, GROUP_1, FINSEQ_4, SUPINF_2,
       TAYLOR_1;
- notations TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, RELSET_1, PARTFUN1,
-      PARTFUN2, FUNCT_2, RFUNCT_2, LIMFUNC1, RCOMP_1, FCONT_1, ORDINAL2,
-      XCMPLX_0, XXREAL_0, XREAL_0, COMPLEX1,
-      RAT_1, ORDINAL1, NUMBERS, REAL_1, NAT_1,
-      INT_1, FINSEQ_4, NEWTON, SEQ_1, SEQ_2, SEQM_3, SERIES_1,
-      FDIFF_1, SEQFUNC, PREPOWER, POWER, SIN_COS;
+ notations TARSKI, XBOOLE_0, SUBSET_1, FUNCT_1, RELSET_1, PARTFUN1, PARTFUN2,
+      FUNCT_2, RFUNCT_2, LIMFUNC1, RCOMP_1, FCONT_1, XCMPLX_0, XXREAL_0,
+      XREAL_0, COMPLEX1, RAT_1, ORDINAL1, NUMBERS, REAL_1, NAT_1, INT_1,
+      FINSEQ_4, NEWTON, SEQ_1, SEQ_2, SEQM_3, SERIES_1, FDIFF_1, SEQFUNC,
+      PREPOWER, POWER, SIN_COS;
  constructors PARTFUN1, ARYTM_0, REAL_1, NAT_1, SEQ_2, RCOMP_1, FINSEQ_4,
       PARTFUN2, RFUNCT_2, FCONT_1, FDIFF_1, LIMFUNC1, SEQFUNC, PREPOWER,
       SERIES_1, COMSEQ_3, SIN_COS, ORDINAL2;
@@ -27,8 +26,8 @@ environ
       PARTFUN2, SUBSET_1, XCMPLX_1, RELAT_1, CARD_4, RCOMP_1, SEQ_1, SEQ_2,
       SEQM_3, SIN_COS, SERIES_1, FUNCT_1, RFUNCT_2, NAT_1, INT_1, NEWTON,
       FINSEQ_4, RAT_1, IRRAT_1, POWER, LIMFUNC1, FCONT_1, FCONT_3, FDIFF_1,
-      FDIFF_2, ROLLE, SEQ_4, SEQFUNC, PREPOWER, FUNCT_2, XREAL_0, ORDINAL2,
-      XREAL_1, XXREAL_0, ORDINAL1;
+      FDIFF_2, ROLLE, SEQ_4, SEQFUNC, PREPOWER, FUNCT_2, XREAL_0, XREAL_1,
+      XXREAL_0, ORDINAL1;
  schemes SEQ_1, RECDEF_1, NAT_1, INT_1, PARTFUN2, FUNCT_2;
 
 begin :: The Logarithmic differentiation method
@@ -44,7 +43,6 @@ definition let q be Integer;
   for x be real number holds it.x = x #Z q;
 existence
 proof
-  defpred X[set] means $1 in REAL;
   deffunc U(Real) = $1 #Z q;
   consider f being Function of REAL,REAL such that
 A1:   for d be Element of REAL holds f.d = U(d) from FUNCT_2:sch 4;
@@ -226,8 +224,6 @@ A21: for x be set st x in dom( #Z (k+1))
              .= (x #Z k)+k*(x #Z k1)*(x #Z 1) by A13
              .= (x #Z k)+k*((x #Z k1)*(x #Z 1))
              .= (x #Z k)+k*(x #Z (k1+1)) by Th1
-             .= (x #Z k)+k*(x #Z k)
-             .= (k+1) * (x #Z k)
              .= (k+1) * x #Z ((k+1)-1);
  end;
 end;
@@ -765,7 +761,7 @@ thus diff(ln *f,x0)
 end;
 
 definition let p be real number;
-  func #R p -> PartFunc of REAL,REAL means :Def3:
+  func #R p -> PartFunc of REAL,REAL means :Def4:
     dom it = right_open_halfline(0) & for d be Element of
     right_open_halfline(0) holds it.d= d #R p;
  existence
@@ -813,7 +809,7 @@ theorem Th21:
 proof
 A1:  x is Real & p is Real by XREAL_0:def 1;
 set f= #R p;
-A2: dom(f)=right_open_halfline(0) by Def3;
+A2: dom(f)=right_open_halfline(0) by Def4;
 A3: for x be Real st 0 < x holds
      exp_R*(p(#)ln) is_differentiable_in x &
      diff(exp_R*(p(#)ln),x) =p*(x #R (p-1))
@@ -879,7 +875,7 @@ A15: g=d & g > 0;
       .=exp_R.(log(number_e,d to_power p)) by A15,Lm4,POWER:63
       .=d to_power p by A16,Th15
        .=(d #R p) by A15,POWER:def 2
-       .=f.d by A13,Def3;
+       .=f.d by A13,Def4;
      end;
   hence exp_R*(p(#)ln) = f by A2,A12,PARTFUN1:34;
  end;
@@ -906,11 +902,10 @@ begin :: The Taylor expansions
 
 definition let f be PartFunc of REAL,REAL;
            let Z be Subset of REAL;
-  func diff(f,Z) -> Functional_Sequence of REAL,REAL means :Def4:
+  func diff(f,Z) -> Functional_Sequence of REAL,REAL means :Def5:
     it.0 = f|Z & for i be natural number holds it.(i+1) = (it.i) `| Z;
 existence
 proof
-      deffunc G(set,PartFunc of REAL,REAL)= ( $2 )`|Z;
       defpred R[set,set,set] means
       ex h being PartFunc of REAL, REAL st $2 = h & $3 = h `| Z;
 A1:   for n being Element of NAT for x being Element of PFuncs(REAL,REAL)
@@ -974,7 +969,7 @@ end;
 definition let f be PartFunc of REAL,REAL;
            let n be natural number;
            let Z be Subset of REAL;
-  pred f is_differentiable_on n, Z means :Def5:
+  pred f is_differentiable_on n, Z means :Def6:
     for i be Element of NAT st i <= n-1 holds
       diff(f,Z).i is_differentiable_on Z;
 end;
@@ -994,16 +989,16 @@ let m be natural number such that
    A3: i <=m-1;
     m-1 <=n-1 by A2,REAL_1:92;
    then i <=n-1 by A3,XXREAL_0:2;
-   hence diff(f,Z).i is_differentiable_on Z by A1,Def5;
+   hence diff(f,Z).i is_differentiable_on Z by A1,Def6;
 end;
-hence thesis by Def5;
+hence thesis by Def6;
 end;
 
 definition
   let f be PartFunc of REAL,REAL;
   let Z be Subset of REAL;
   let a,b be real number;
-  func Taylor(f,Z,a,b) -> Real_Sequence means :Def6:
+  func Taylor(f,Z,a,b) -> Real_Sequence means :Def7:
   for n be natural number holds it.n = (diff(f,Z).n).a * (b-a) |^ n / (n!);
 existence
 proof
@@ -1128,7 +1123,6 @@ consider g being PartFunc of REAL, REAL such that
             by A9,A10,FDIFF_2:13
              .= (n+1) *(f.x) #Z ((n+1)-1) *(-1) by A7
              .= (n+1) *(b-x) #Z ((n+1)-1) *(-1) by A6
-             .= -(n+1) *(b-x) #Z ((n+1)-1)
              .=-(n+1)*(b-x) #Z n;
       end;
       A11:( l/((n+1)!)) (#) ( #Z (n+1) *f) =g
@@ -1234,9 +1228,9 @@ defpred P[Element of NAT] means f is_differentiable_on $1, Z implies
    assume f is_differentiable_on 0, Z;
    let a,b be Real such that
    A2: a < b & ].a,b.[ c=Z;
-     thus (diff(f,Z).0) |].a,b.[ = (f|Z)|].a,b.[ by Def4
+     thus (diff(f,Z).0) |].a,b.[ = (f|Z)|].a,b.[ by Def5
      .=f|].a,b.[ by A2,FUNCT_1:82
-     .=diff(f,].a,b.[).0 by Def4;
+     .=diff(f,].a,b.[).0 by Def5;
     end;
 A3: for k be Element of NAT st P[k] holds P[k+1]
    proof
@@ -1248,7 +1242,7 @@ A3: for k be Element of NAT st P[k] holds P[k+1]
      A6: a < b & ].a,b.[ c= Z;
     A7: k <= k+1 by NAT_1:29;
     k <= (k+1)-1;
-    then A8:(diff(f,Z).k) is_differentiable_on Z by A5,Def5;
+    then A8:(diff(f,Z).k) is_differentiable_on Z by A5,Def6;
     then A9: (diff(f,Z).k) is_differentiable_on ].a,b.[ by A6,FDIFF_1:34;
      A10: dom(((diff(f,Z).k)`|Z)| ].a,b.[)
      =dom((diff(f,Z).k)`|Z) /\ ].a,b.[ by FUNCT_1:68
@@ -1264,11 +1258,11 @@ A3: for k be Element of NAT st P[k] holds P[k+1]
       .=((diff(f,Z).k)`|].a,b.[).x by A9,A10,A13,FDIFF_1:def 8;
      end;
      thus diff(f,Z).(k+1) | ].a,b.[
-       =((diff(f,Z).k)`|Z)| ].a,b.[ by Def4
+       =((diff(f,Z).k)`|Z)| ].a,b.[ by Def5
       .=(diff(f,Z).k)`| ].a,b.[ by A10,A11,A12,PARTFUN1:34
       .= ((diff(f,Z).k)|].a,b.[) `| ].a,b.[ by A9,FDIFF_2:16
       .=(diff(f,].a,b.[).k)`| ].a,b.[ by A4,A5,A6,A7,Th23
-      .=diff(f,].a,b.[).(k+1) by Def4;
+      .=diff(f,].a,b.[).(k+1) by Def5;
    end;
   thus for k be Element of NAT holds P[k] from NAT_1: sch 1(A1,A3);
  end;
@@ -1324,8 +1318,8 @@ let a,b be Real such that
   A10: b in [.a,b.] by A2,RCOMP_1:15;
   hence g.b=f.b-Partial_Sums(Taylor(f,Z,b,b)).(0) by A3,A7
       .=f.b-Taylor(f,Z,b,b).0 by SERIES_1:def 1
-      .=f.b - (diff(f,Z).(0)).b * (b-b) |^ (0) /((0)!) by Def6
-      .=f.b - (f|Z).b * (b-b) |^ (0) /((0)!) by Def4
+      .=f.b - (diff(f,Z).(0)).b * (b-b) |^ (0) /((0)!) by Def7
+      .=f.b - (f|Z).b * (b-b) |^ (0) /((0)!) by Def5
       .=f.b - f.b * (b-b) |^ (0) /((0)!) by A3,A10,FUNCT_1:72
       .=f.b - f.b * 1 by NEWTON:9,18
       .=0;
@@ -1334,7 +1328,7 @@ let a,b be Real such that
       A12: for x be Real holds y.x=(f.b-x) and
       A13:  for x be Real holds y is_differentiable_in x
                & diff(y,x)=-1 by Lm5;
- f|Z is_continuous_on [.a,b.] by A4,Def4;
+ f|Z is_continuous_on [.a,b.] by A4,Def5;
 then (f|Z)| [.a,b.] is_continuous_on [.a,b.] by FCONT_1:16;
 then (f|[.a,b.]) is_continuous_on [.a,b.] by A3,FUNCT_1:82;
 then A14:f is_continuous_on [.a,b.] by FCONT_1:16;
@@ -1357,8 +1351,8 @@ proof
      thus (g|[.a,b.]).xx =g.x by A19,FUNCT_1:70
       .=f.b-Partial_Sums(Taylor(f,Z,x,b)).(0) by A3,A7,A22
       .=f.b-Taylor(f,Z,x,b).0 by SERIES_1:def 1
-      .=f.b - (diff(f,Z).(0)).x * (b-x) |^ (0) /((0)!) by Def6
-      .=f.b - (f|Z).x * (b-x) |^ 0 /((0)!) by Def4
+      .=f.b - (diff(f,Z).(0)).x * (b-x) |^ (0) /((0)!) by Def7
+      .=f.b - (f|Z).x * (b-x) |^ 0 /((0)!) by Def5
       .=f.b - f.x * (b-x) |^ 0 /((0)!) by A3,A22,FUNCT_1:72
       .=f.b - f.x * ((b-x) |^ 0 /((0)!)) by XCMPLX_1:75
       .=y.(f.x) by A12,A21
@@ -1376,8 +1370,8 @@ then (y*f) is_continuous_on [.a,b.] by A14,FCONT_1:26;
 then (y*f)|[.a,b.] is_continuous_on [.a,b.] by FCONT_1:16;
 hence g is_continuous_on [.a,b.] by A18,FCONT_1:16;
  0 <= (0+1)-1;
-then diff(f,].a,b.[).0 is_differentiable_on ].a,b.[ by A5,Def5;
- then f|].a,b.[ is_differentiable_on ].a,b.[ by Def4;
+then diff(f,].a,b.[).0 is_differentiable_on ].a,b.[ by A5,Def6;
+ then f|].a,b.[ is_differentiable_on ].a,b.[ by Def5;
 then A24: ].a,b.[ c= dom(f)&
    for x be Real st x in ].a,b.[ holds
     f|].a,b.[ is_differentiable_in x by A8,A15,FDIFF_1:16,XBOOLE_1:1;
@@ -1390,8 +1384,8 @@ then A25: f is_differentiable_on ].a,b.[ by FDIFF_1:def 7;
        A27: x in ].a,b.[;
        A28:  (b-x) |^ (0) /((0)!)=1 by NEWTON:9,18;
        A29: y is_differentiable_in f.x by A13;
-       A30:  diff(f,].a,b.[).(0+1)=( diff(f,].a,b.[).0)`|].a,b.[ by Def4
-                                  .= (f|].a,b.[)`|].a,b.[ by Def4
+       A30:  diff(f,].a,b.[).(0+1)=( diff(f,].a,b.[).0)`|].a,b.[ by Def5
+                                  .= (f|].a,b.[)`|].a,b.[ by Def5
                                   .= f`|].a,b.[ by A25,FDIFF_2:16;
        A31: f is_differentiable_in x by A25,A27,FDIFF_1:16;
        hence y*f is_differentiable_in x by A29,FDIFF_2:13;
@@ -1421,8 +1415,8 @@ proof
        (g|].a,b.[).xx =g.x by A35,FUNCT_1:70
       .=f.b-Partial_Sums(Taylor(f,Z,x,b)).(0) by A7,A9,A38
       .=f.b-Taylor(f,Z,x,b).0 by SERIES_1:def 1
-      .=f.b - (diff(f,Z).(0)).x * (b-x) |^ (0) /((0)!) by Def6
-      .=f.b - (f|Z).x * (b-x) |^ (0) /((0)!) by Def4
+      .=f.b - (diff(f,Z).(0)).x * (b-x) |^ (0) /((0)!) by Def7
+      .=f.b - (f|Z).x * (b-x) |^ (0) /((0)!) by Def5
       .=f.b - f.x * (b-x) |^ (0) /((0)!) by A9,A38,FUNCT_1:72
       .=f.b - f.x * ((b-x) |^ (0) /((0)!)) by XCMPLX_1:75
       .=y.(f.x) by A12,A37
@@ -1465,7 +1459,7 @@ let a,b be Real such that
  then A49: ].a,b.[ c= Z by A46,XBOOLE_1:1;
 A50: k <=k+1 by NAT_1:29;
  k <=(k+1)-1;
-then diff(f,Z).k is_differentiable_on Z by A44,Def5;
+then diff(f,Z).k is_differentiable_on Z by A44,Def6;
 then diff(f,Z).k is_continuous_on Z by FDIFF_1:33;
 then A51:  diff(f,Z).k is_continuous_on [.a,b.] by A46,FCONT_1:17;
  (k+1) <= (k+1)+1 by NAT_1:29;
@@ -1499,13 +1493,13 @@ proof
      .=gk.b -Taylor(f,Z,b,b).(k+1) by A46,A54,A61
      .=0 -Taylor(f,Z,b,b).(k+1)
        by A43,A44,A45,A46,A50,A51,A52,A53,A54,Th23
-     .=0 - (diff(f,Z).(k+1)).b * (b-b) |^ (k+1) /((k+1)!) by Def6
+     .=0 - (diff(f,Z).(k+1)).b * (b-b) |^ (k+1) /((k+1)!) by Def7
      .=0 - (diff(f,Z).(k+1)).b * (0|^k*0) /((k+1)!) by NEWTON:11
      .=0;
   end;
-A62: diff(f,Z).(k+1)=( diff(f,Z).k)`|Z by Def4;
+A62: diff(f,Z).(k+1)=( diff(f,Z).k)`|Z by Def5;
  k <=(k+1)-1;
-then A63:diff(f,Z).k is_differentiable_on Z by A44,Def5;
+then A63:diff(f,Z).k is_differentiable_on Z by A44,Def6;
 A64: dom(diff(f,Z).(k+1) (#)h)
             = dom (diff(f,Z).(k+1)) /\ dom(h) by SEQ_1:def 5
                             .= Z /\ REAL by A58,A62,A63,FDIFF_1:def 8
@@ -1523,7 +1517,7 @@ set  ghk=gk-((diff(f,Z).(k+1)) (#) h);
            by SERIES_1:def 1
      .=f.b-Partial_Sums(Taylor(f,Z,x,b)).k-Taylor(f,Z,x,b).(k+1)
      .=gk.x -Taylor(f,Z,x,b).(k+1) by A54,A66
-     .=gk.x - (diff(f,Z).(k+1)).x * (b-x) |^ (k+1) /((k+1)!) by Def6
+     .=gk.x - (diff(f,Z).(k+1)).x * (b-x) |^ (k+1) /((k+1)!) by Def7
      .=gk.x - (diff(f,Z).(k+1)).x * (1*(b-x) |^ (k+1) /((k+1)!))
     by XCMPLX_1:75
      .=gk.x - (diff(f,Z).(k+1)).x * h.x by A59
@@ -1541,9 +1535,9 @@ then h is_continuous_on [.a,b.] by FCONT_1:17;
   by A47,FCONT_1:20;
  hence thesis by A55,A67,FCONT_1:20;
 end;
-A69: diff(f,].a,b.[).(k+1)=( diff(f,].a,b.[).k)`|].a,b.[ by Def4;
+A69: diff(f,].a,b.[).(k+1)=( diff(f,].a,b.[).k)`|].a,b.[ by Def5;
  k <=(k+1)+1-1 by NAT_1:29;
-then A70:diff(f,].a,b.[).k is_differentiable_on ].a,b.[ by A48,Def5;
+then A70:diff(f,].a,b.[).k is_differentiable_on ].a,b.[ by A48,Def6;
 A71: dom(diff(f,].a,b.[).(k+1) (#)h)
             = dom (diff(f,].a,b.[).(k+1)) /\ dom(h) by SEQ_1:def 5
                             .= ].a,b.[ /\ REAL by A58,A69,A70,FDIFF_1:def 8
@@ -1552,7 +1546,7 @@ A71: dom(diff(f,].a,b.[).(k+1) (#)h)
 then A72:dom(gk-diff(f, ].a,b.[).(k+1) (#)h)=Z /\ ].a,b.[ by A53,SEQ_1:def 4
     .= ].a,b.[ by A49,XBOOLE_1:28;
  k+1 <=(k+1)+1-1;
-then A73: diff(f,].a,b.[).(k+1) is_differentiable_on ].a,b.[ by A48,Def5;
+then A73: diff(f,].a,b.[).(k+1) is_differentiable_on ].a,b.[ by A48,Def6;
 set gfh=gk-diff(f,].a,b.[).(k+1) (#)h;
 A74: dom(gfh)=dom(gk1)/\ ].a,b.[ by A49,A56,A72,XBOOLE_1:28;
 A75:for x be Real st x in ].a,b.[ holds
@@ -1577,7 +1571,7 @@ A75:for x be Real st x in ].a,b.[ holds
            by SERIES_1:def 1
      .=f.b-Partial_Sums(Taylor(f,Z,x,b)).k -Taylor(f,Z,x,b).(k+1)
       .=gk.x - Taylor(f,Z,x,b).(k+1) by A49,A54,A72,A77
-      .=gk.x - (diff(f,Z).(k+1)).x * (b-x) |^ (k+1) /((k+1)!) by Def6
+      .=gk.x - (diff(f,Z).(k+1)).x * (b-x) |^ (k+1) /((k+1)!) by Def7
       .=gk.x - (diff(f,Z).(k+1)).x * (1*(b-x) |^ (k+1) /((k+1)!))
    by XCMPLX_1:75
       .=gk.x - (diff(f,Z).(k+1)).x * h.x by A59
@@ -1648,7 +1642,7 @@ A83: gk1 is_differentiable_on ].a,b.[ by A49,A56,FDIFF_1:def 7;
                      *(diff(f,].a,b.[).(k+1)`|].a,b.[).x
                        by A73,A84,FDIFF_1:def 8
                     .= - (b-x) |^ (k+1) /((k+1)!)
-                                 * (diff(f,].a,b.[).((k+1)+1)).x by Def4
+                                 * (diff(f,].a,b.[).((k+1)+1)).x by Def5
                     .= - (diff(f,].a,b.[).((k+1)+1)).x
                     * (b-x) |^ (k+1) /((k+1)!) by XCMPLX_1:75;
 end;
@@ -1843,7 +1837,6 @@ let n be Element of NAT;
 let f be PartFunc of REAL,REAL;
 let Z be Subset of REAL;
 let b,l be Real;
-defpred X[set] means $1 in REAL;
 deffunc U(Real) = f.b-Partial_Sums(Taylor(f,Z,$1,b)).n
 -l*(b-$1) |^ (n+1) /((n+1)!);
 consider g being Function of REAL, REAL such that
@@ -1988,8 +1981,8 @@ let a,b be Real such that
   A10: a in [.a,b.] by A2,RCOMP_1:15;
   hence g.a=f.a-Partial_Sums(Taylor(f,Z,a,a)).(0) by A3,A7
       .=f.a-Taylor(f,Z,a,a).0 by SERIES_1:def 1
-      .=f.a - (diff(f,Z).(0)).a * (a-a) |^ (0) /((0)!) by Def6
-      .=f.a - (f|Z).a * (a-a) |^ (0) /((0)!) by Def4
+      .=f.a - (diff(f,Z).(0)).a * (a-a) |^ (0) /((0)!) by Def7
+      .=f.a - (f|Z).a * (a-a) |^ (0) /((0)!) by Def5
       .=f.a - f.a * (a-a) |^ (0) /((0)!) by A3,A10,FUNCT_1:72
       .=f.a - f.a * 1 by NEWTON:9,18
       .=0;
@@ -1998,7 +1991,7 @@ let a,b be Real such that
       A12: for x be Real holds y.x=(f.a-x) and
       A13: for x be Real holds y is_differentiable_in x &
            diff(y,x)=-1 by Lm5;
- f|Z is_continuous_on [.a,b.] by A4,Def4;
+ f|Z is_continuous_on [.a,b.] by A4,Def5;
 then (f|Z)| [.a,b.] is_continuous_on [.a,b.] by FCONT_1:16;
 then (f|[.a,b.]) is_continuous_on [.a,b.] by A3,FUNCT_1:82;
 then A14:f is_continuous_on [.a,b.] by FCONT_1:16;
@@ -2021,8 +2014,8 @@ proof
            =g.x by A19,FUNCT_1:70
           .=f.a-Partial_Sums(Taylor(f,Z,x,a)).(0) by A3,A7,A21
           .=f.a-Taylor(f,Z,x,a).0 by SERIES_1:def 1
-          .=f.a - (diff(f,Z).(0)).x * (a-x) |^ (0) /((0)!) by Def6
-          .=f.a - (f|Z).x * (a-x) |^ (0) /((0)!) by Def4
+          .=f.a - (diff(f,Z).(0)).x * (a-x) |^ (0) /((0)!) by Def7
+          .=f.a - (f|Z).x * (a-x) |^ (0) /((0)!) by Def5
           .=f.a - f.x * (a-x) |^ (0) /((0)!) by A3,A21,FUNCT_1:72
           .=f.a  - f.x * 1 by NEWTON:9,18
           .=y.(f.x) by A12
@@ -2041,8 +2034,8 @@ then (y*f) is_continuous_on [.a,b.] by A14,FCONT_1:26;
 then (y*f)|[.a,b.] is_continuous_on [.a,b.] by FCONT_1:16;
 hence g is_continuous_on [.a,b.] by A18,FCONT_1:16;
  0 <= (0+1)-1;
-then diff(f,].a,b.[).0 is_differentiable_on ].a,b.[ by A5,Def5;
- then f|].a,b.[ is_differentiable_on ].a,b.[ by Def4;
+then diff(f,].a,b.[).0 is_differentiable_on ].a,b.[ by A5,Def6;
+ then f|].a,b.[ is_differentiable_on ].a,b.[ by Def5;
 then A23: ].a,b.[ c= dom(f)&
 for x be Real st x in ].a,b.[ holds
  f|].a,b.[ is_differentiable_in x by A8,A15,FDIFF_1:16,XBOOLE_1:1;
@@ -2055,8 +2048,8 @@ then A24: f is_differentiable_on ].a,b.[ by FDIFF_1:def 7;
       A26: x in ].a,b.[;
       A27: (a-x) |^ (0) /((0)!) = 1 by NEWTON:9,18;
       A28: y is_differentiable_in f.x by A13;
-      A29: diff(f,].a,b.[).(0+1) = ( diff(f,].a,b.[).0)`|].a,b.[ by Def4
-                                  .= (f|].a,b.[)`|].a,b.[ by Def4
+      A29: diff(f,].a,b.[).(0+1) = ( diff(f,].a,b.[).0)`|].a,b.[ by Def5
+                                  .= (f|].a,b.[)`|].a,b.[ by Def5
                                   .= f`|].a,b.[ by A24,FDIFF_2:16;
       A30: f is_differentiable_in x by A24,A26,FDIFF_1:16;
       hence y*f is_differentiable_in x by A28,FDIFF_2:13;
@@ -2086,8 +2079,8 @@ proof
   thus (g|].a,b.[).xx = g.x by A34,FUNCT_1:70
        .=f.a-Partial_Sums(Taylor(f,Z,x,a)).0 by A7,A9,A37
        .=f.a- Taylor(f,Z,x,a).0 by SERIES_1:def 1
-       .=f.a - (diff(f,Z).(0)).x * (a-x) |^ 0 /(0!) by Def6
-       .=f.a - (f|Z).x * (a-x) |^ 0 /((0)!) by Def4
+       .=f.a - (diff(f,Z).(0)).x * (a-x) |^ 0 /(0!) by Def7
+       .=f.a - (f|Z).x * (a-x) |^ 0 /((0)!) by Def5
        .=f.a - f.x * (a-x) |^ 0 /(0!) by A9,A37,FUNCT_1:72
        .=f.a - f.x * ((a-x) |^ 0 /(0!)) by XCMPLX_1:75
        .=y.(f.x) by A12,A36
@@ -2131,7 +2124,7 @@ let a,b be Real such that
 then A48: ].a,b.[ c= Z by A45,XBOOLE_1:1;
 A49:  k <=k+1 by NAT_1:29;
       k <=(k+1)-1;
-     then diff(f,Z).k is_differentiable_on Z by A43,Def5;
+     then diff(f,Z).k is_differentiable_on Z by A43,Def6;
      then diff(f,Z).k is_continuous_on Z by FDIFF_1:33;
 then A50:  diff(f,Z).k is_continuous_on [.a,b.] by A45,FCONT_1:17;
       (k+1) <= (k+1)+1 by NAT_1:29;
@@ -2166,13 +2159,13 @@ A59:for x be Real holds h is_differentiable_in x &
      .=gk.a -Taylor(f,Z,a,a).(k+1) by A45,A53,A60
      .=0 -Taylor(f,Z,a,a).(k+1)
        by A42,A43,A44,A45,A49,A50,A51,A52,A53,Th23
-     .=0  - (diff(f,Z).(k+1)).a * (a-a) |^ (k+1) /((k+1)!) by Def6
+     .=0  - (diff(f,Z).(k+1)).a * (a-a) |^ (k+1) /((k+1)!) by Def7
      .=0  - (diff(f,Z).(k+1)).a * (0|^k*0) /((k+1)!) by NEWTON:11
      .=0;
   end;
-A61: diff(f,Z).(k+1)=( diff(f,Z).k)`|Z by Def4;
+A61: diff(f,Z).(k+1)=( diff(f,Z).k)`|Z by Def5;
  k <=(k+1)-1;
-then A62:diff(f,Z).k is_differentiable_on Z by A43,Def5;
+then A62:diff(f,Z).k is_differentiable_on Z by A43,Def6;
 A63: dom(diff(f,Z).(k+1) (#)h)
             = dom (diff(f,Z).(k+1)) /\ dom(h) by SEQ_1:def 5
                             .= Z /\ REAL by A57,A61,A62,FDIFF_1:def 8
@@ -2191,7 +2184,7 @@ set  ghk=gk-((diff(f,Z).(k+1)) (#) h);
            by SERIES_1:def 1
      .=f.a-Partial_Sums(Taylor(f,Z,x,a)).k-Taylor(f,Z,x,a).(k+1)
      .=gk.x -Taylor(f,Z,x,a).(k+1) by A53,A65
-     .=gk.x - (diff(f,Z).(k+1)).x * (a-x) |^ (k+1) /((k+1)!) by Def6
+     .=gk.x - (diff(f,Z).(k+1)).x * (a-x) |^ (k+1) /((k+1)!) by Def7
      .=gk.x - (diff(f,Z).(k+1)).x * (1*(a-x) |^ (k+1) /((k+1)!))
      by XCMPLX_1:75
      .=gk.x - (diff(f,Z).(k+1)).x * h.x by A58
@@ -2209,9 +2202,9 @@ then h is_continuous_on [.a,b.] by FCONT_1:17;
    [.a,b.] /\ [.a,b.] by A46,FCONT_1:20;
  hence thesis by A54,A66,FCONT_1:20;
 end;
-A68: diff(f,].a,b.[).(k+1)=( diff(f,].a,b.[).k)`|].a,b.[ by Def4;
+A68: diff(f,].a,b.[).(k+1)=( diff(f,].a,b.[).k)`|].a,b.[ by Def5;
      k <=(k+1)+1-1 by NAT_1:29;
-then A69:diff(f,].a,b.[).k is_differentiable_on ].a,b.[ by A47,Def5;
+then A69:diff(f,].a,b.[).k is_differentiable_on ].a,b.[ by A47,Def6;
 A70: dom(diff(f,].a,b.[).(k+1) (#)h)
             = dom (diff(f,].a,b.[).(k+1)) /\ dom(h) by SEQ_1:def 5
                             .= ].a,b.[ /\ REAL by A57,A68,A69,FDIFF_1:def 8
@@ -2221,7 +2214,7 @@ A71:dom(gk-diff(f, ].a,b.[).(k+1) (#)h)=
       Z /\ dom(diff(f, ].a,b.[).(k+1) (#)h) by A52,SEQ_1:def 4
     .= ].a,b.[ by A48,A70,XBOOLE_1:28;
  k+1 <=(k+1)+1-1;
-then A72: diff(f,].a,b.[).(k+1) is_differentiable_on ].a,b.[ by A47,Def5;
+then A72: diff(f,].a,b.[).(k+1) is_differentiable_on ].a,b.[ by A47,Def6;
 set gfh=gk-diff(f,].a,b.[).(k+1) (#)h;
 A73: dom(gfh)=dom(gk1)/\ ].a,b.[ by A48,A55,A71,XBOOLE_1:28;
 A74:for x be Real st x in ].a,b.[  holds
@@ -2247,7 +2240,7 @@ A74:for x be Real st x in ].a,b.[  holds
            by SERIES_1:def 1
       .=f.a-Partial_Sums(Taylor(f,Z,x,a)).k -Taylor(f,Z,x,a).(k+1)
       .=gk.x - Taylor(f,Z,x,a).(k+1) by A48,A53,A71,A76
-      .=gk.x - (diff(f,Z).(k+1)).x * (a-x) |^ (k+1) /((k+1)!) by Def6
+      .=gk.x - (diff(f,Z).(k+1)).x * (a-x) |^ (k+1) /((k+1)!) by Def7
       .=gk.x - (diff(f,Z).(k+1)).x * (1*(a-x) |^ (k+1) /((k+1)!))
    by XCMPLX_1:75
       .=gk.x - (diff(f,Z).(k+1)).x * h.x by A58
@@ -2317,7 +2310,7 @@ A82: gk1 is_differentiable_on ].a,b.[ by A48,A55,FDIFF_1:def 7;
                      *(diff(f,].a,b.[).(k+1)`|].a,b.[).x
                        by A72,A83,FDIFF_1:def 8
                      .= - (a-x) |^ (k+1) /((k+1)!)
-                                 * (diff(f,].a,b.[).((k+1)+1)).x by Def4
+                                 * (diff(f,].a,b.[).((k+1)+1)).x by Def5
                     .= - (diff(f,].a,b.[).((k+1)+1)).x
                     * (a-x) |^ (k+1) /((k+1)!) by XCMPLX_1:75;
 end;
@@ -2605,9 +2598,9 @@ defpred P[Element of NAT] means f is_differentiable_on $1,Z implies
     proof
    assume f is_differentiable_on 0,  Z;
    thus (diff(f,Z).0) |Z1
-     =(f|Z)|Z1 by Def4
+     =(f|Z)|Z1 by Def5
      .=f|Z1 by A1,FUNCT_1:82
-     .=diff(f,Z1).0 by Def4;
+     .=diff(f,Z1).0 by Def5;
     end;
 A3: for k be Element of NAT st P[k] holds P[k+1]
    proof
@@ -2618,7 +2611,7 @@ A3: for k be Element of NAT st P[k] holds P[k+1]
     A6: k <= k+1 by NAT_1:29;
      k <= (k+1)-1;
     then A7:(diff(f,Z).k) is_differentiable_on Z
-     by A5,Def5;
+     by A5,Def6;
     then A8: (diff(f,Z).k) is_differentiable_on Z1
      by A1,FDIFF_1:34;
      A9: dom(((diff(f,Z).k)`|Z)| Z1)
@@ -2635,10 +2628,10 @@ A3: for k be Element of NAT st P[k] holds P[k+1]
      by A8,A9,A12,FDIFF_1:def 8;
      end;
      thus diff(f,Z).(k+1) | Z1
-       =((diff(f,Z).k)`|Z)| Z1 by Def4
+       =((diff(f,Z).k)`|Z)| Z1 by Def5
       .=(diff(f,Z).k)`| Z1 by A9,A10,A11,PARTFUN1:34
       .=(diff(f,Z1).k)`| Z1 by A4,A5,A6,A8,Th23,FDIFF_2:16
-      .=diff(f,Z1).(k+1) by Def4;
+      .=diff(f,Z1).(k+1) by Def5;
    end;
  thus for k be Element of NAT holds P[k] from NAT_1: sch 1(A2,A3);
  end;
@@ -2660,13 +2653,13 @@ let n be natural number such that
    n <= n+1 by NAT_1:29;
     then k <= n+1 by A3,XXREAL_0:2;
     then A4: f is_differentiable_on k, Z by A2,Th23;
-   (diff(f,Z).k) is_differentiable_on Z by A2,A3,Def5;
+   (diff(f,Z).k) is_differentiable_on Z by A2,A3,Def6;
     then (diff(f,Z).k) is_differentiable_on Z1
      by A1,FDIFF_1:34;
     then (diff(f,Z).k)|Z1 is_differentiable_on Z1 by FDIFF_2:16;
      hence (diff(f,Z1).k) is_differentiable_on Z1 by A1,A4,Th30;
  end;
-  hence f is_differentiable_on n+1,Z1 by Def5;
+  hence f is_differentiable_on n+1,Z1 by Def6;
 end;
 
 theorem Th32:
@@ -2685,8 +2678,8 @@ A2:P[0]
   proof
     thus Partial_Sums(Taylor(f, Z,x,x)).0
      =Taylor(f, Z,x,x).0 by SERIES_1:def 1
-    .=(diff(f,Z).0).x * (x-x) |^ 0 /(0!) by Def6
-    .=(f|Z).x * (x-x) |^ 0 /(0!) by Def4
+    .=(diff(f,Z).0).x * (x-x) |^ 0 /(0!) by Def7
+    .=(f|Z).x * (x-x) |^ 0 /(0!) by Def5
     .=(f|Z).x * 1/1 by NEWTON:9,18
     .=f.x by A1,FUNCT_1:72;
   end;
@@ -2698,7 +2691,7 @@ A3:for k be Element of NAT st P[k] holds P[k+1]
      =Partial_Sums(Taylor(f, Z,x,x)).k
     +Taylor(f, Z,x,x).(k+1)
    by SERIES_1:def 1
-   .=f.x +(diff(f,Z).(k+1)).x * (x-x) |^ (k+1) /((k+1)!) by A4,Def6
+   .=f.x +(diff(f,Z).(k+1)).x * (x-x) |^ (k+1) /((k+1)!) by A4,Def7
   .=f.x + (diff(f,Z).(k+1)).x * (0|^k*0) /((k+1)!) by NEWTON:11
   .=f.x;
   end;
@@ -2733,7 +2726,7 @@ let x be Real such that
    then A7:  f is_differentiable_on n, ].x0-r,x0+r.[ by A2,Th23;
     n <=(n+1)-1;
    then diff(f,].x0-r,x0+r.[).n is_differentiable_on ].x0-r,x0+r.[
-    by A2,Def5;
+    by A2,Def6;
    then diff(f,].x0-r,x0+r.[).n is_continuous_on ].x0-r,x0+r.[
     by FDIFF_1:33;
    then A8:  diff(f,].x0-r,x0+r.[).n is_continuous_on [.x,x0.]
@@ -2791,7 +2784,7 @@ let x be Real such that
     then A18:  f is_differentiable_on n, ].x0-r,x0+r.[ by A2,Th23;
      n <=(n+1)-1;
     then diff(f,].x0-r,x0+r.[).n is_differentiable_on ].x0-r,x0+r.[
-    by A2,Def5;
+    by A2,Def6;
     then diff(f,].x0-r,x0+r.[).n is_continuous_on ].x0-r,x0+r.[
     by FDIFF_1:33;
     then A19:  diff(f,].x0-r,x0+r.[).n is_continuous_on [.x0,x.]

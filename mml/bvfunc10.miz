@@ -7,13 +7,14 @@
 environ
 
  vocabularies FUNCT_2, MARGREL1, ZF_LANG, BVFUNC_1, PARTIT1, FUNCT_1;
- notations XBOOLE_0, SUBSET_1, MARGREL1, VALUAT_1, FUNCT_2, FRAENKEL, BINARITH,
+ notations XBOOLE_0, SUBSET_1, XBOOLEAN, MARGREL1, VALUAT_1, FUNCT_2, FRAENKEL,
       BVFUNC_1;
  constructors BINARITH, BVFUNC_1;
- registrations MARGREL1, VALUAT_1, FRAENKEL;
- definitions BVFUNC_1;
+ registrations MARGREL1, VALUAT_1, FRAENKEL, XBOOLEAN;
+ requirements BOOLE, SUBSET, NUMERALS, ARITHM;
+ definitions BVFUNC_1, XBOOLEAN;
  theorems MARGREL1, BINARITH, BVFUNC_1, BVFUNC_4, BVFUNC_5, BVFUNC_6, BVFUNC_7,
-      VALUAT_1;
+      VALUAT_1, XBOOLEAN;
 
 begin
 
@@ -59,57 +60,38 @@ A2:((a '&' b) 'or' (b '&' c) 'or' (c '&' a)).z
         case A5: ((a).z 'or' (b).z) '&' ((b).z 'or' (c).z)=FALSE;
            now per cases by A5,MARGREL1:45;
           case A6:((a).z 'or' (b).z)=FALSE;
-          A7:(a).z=TRUE or (a).z=FALSE by MARGREL1:39;
              (b).z=TRUE or (b).z=FALSE by MARGREL1:39;
-          then (a).z=FALSE & (b).z=FALSE by A6,A7,BINARITH:19;
+          then (a).z=FALSE & (b).z=FALSE by A6;
           then ((a).z '&' (b).z) 'or' ((b).z '&' (c).z) 'or'
           ((c).z '&' (a).z)
-         =FALSE 'or' (FALSE '&' (c).z) 'or'
-          ((c).z '&' FALSE) by MARGREL1:49
-        .=FALSE 'or' FALSE 'or' (FALSE '&' (c).z) by MARGREL1:49
-        .=FALSE 'or' (FALSE '&' (c).z) by BINARITH:7
-        .=FALSE '&' (c).z by BINARITH:7
-        .=FALSE by MARGREL1:49;
-          hence thesis by A1,A2,MARGREL1:43;
+         =FALSE;
+          hence thesis by A1,A2;
           end;
-          case A8:((b).z 'or' (c).z)=FALSE;
-          A9:(b).z=TRUE or (b).z=FALSE by MARGREL1:39;
+          case A7:((b).z 'or' (c).z)=FALSE;
              (c).z=TRUE or (c).z=FALSE by MARGREL1:39;
-          then (b).z=FALSE & (c).z=FALSE by A8,A9,BINARITH:19;
+          then (b).z=FALSE & (c).z=FALSE by A7;
           then ((a).z '&' (b).z) 'or' ((b).z '&' (c).z) 'or'
           ((c).z '&' (a).z)
-         =FALSE 'or' (FALSE '&' FALSE) 'or'
-          (FALSE '&' (a).z) by MARGREL1:49
-        .=FALSE 'or' FALSE 'or' (FALSE '&' (a).z) by MARGREL1:49
-        .=FALSE 'or' FALSE 'or' FALSE by MARGREL1:49
-        .=FALSE 'or' FALSE by BINARITH:7
-        .=FALSE by BINARITH:7;
-          hence thesis by A1,A2,MARGREL1:43;
+         =FALSE;
+          hence thesis by A1,A2;
         end;
         end;
         hence thesis;
         end;
-        case A10:((c).z 'or' (a).z)=FALSE;
-        A11:(c).z=TRUE or (c).z=FALSE by MARGREL1:39;
+        case A8:((c).z 'or' (a).z)=FALSE;
            (a).z=TRUE or (a).z=FALSE by MARGREL1:39;
-        then (c).z=FALSE & (a).z=FALSE by A10,A11,BINARITH:19;
+        then (c).z=FALSE & (a).z=FALSE by A8;
         then ((a).z '&' (b).z) 'or' ((b).z '&' (c).z) 'or'
         ((c).z '&' (a).z)
-       =FALSE 'or' (FALSE '&' (b).z) 'or'
-        (FALSE '&' FALSE) by MARGREL1:49
-      .=FALSE 'or' FALSE 'or'
-        (FALSE '&' FALSE) by MARGREL1:49
-      .=FALSE 'or' FALSE 'or' FALSE by MARGREL1:49
-      .=FALSE 'or' FALSE by BINARITH:7
-      .=FALSE by BINARITH:7;
-        hence thesis by A1,A2,MARGREL1:43;
+       =FALSE;
+        hence thesis by A1,A2;
       end;
       end;
       hence thesis;
     end;
     hence thesis;
   end;
-  then A12:(a '&' b) 'or' (b '&' c) 'or' (c '&' a) '<'
+  then A9:(a '&' b) 'or' (b '&' c) 'or' (c '&' a) '<'
   (a 'or' b) '&' (b 'or' c) '&' (c 'or' a) by BVFUNC_1:def 15;
      for z being Element of Y st
     ((a 'or' b) '&' (b 'or' c) '&' (c 'or' a)).z=TRUE
@@ -117,8 +99,8 @@ A2:((a '&' b) 'or' (b '&' c) 'or' (c '&' a)).z
     ((a '&' b) 'or' (b '&' c) 'or' (c '&' a)).z=TRUE
   proof
     let z be Element of Y;
-    assume A13:((a 'or' b) '&' (b 'or' c) '&' (c 'or' a)).z=TRUE;
-A14:((a 'or' b) '&' (b 'or' c) '&' (c 'or' a)).z
+    assume A10:((a 'or' b) '&' (b 'or' c) '&' (c 'or' a)).z=TRUE;
+A11:((a 'or' b) '&' (b 'or' c) '&' (c 'or' a)).z
    =((a 'or' b) '&' (b 'or' c)).z '&' (c 'or' a).z by VALUAT_1:def 6
   .=(a 'or' b).z '&' (b 'or' c).z '&' (c 'or' a).z by VALUAT_1:def 6
   .=((a).z 'or' (b).z) '&' (b 'or' c).z '&' (c 'or' a).z
@@ -128,8 +110,8 @@ A14:((a 'or' b) '&' (b 'or' c) '&' (c 'or' a)).z
   .=((a).z 'or' (b).z) '&' ((b).z 'or' (c).z) '&'
     ((c).z 'or' (a).z)
    by BVFUNC_1:def 7;
-       now assume A15: ((a '&' b) 'or' (b '&' c) 'or' (c '&' a)).z<>TRUE;
-      A16: ((a '&' b) 'or' (b '&' c) 'or' (c '&' a)).z
+       now assume A12: ((a '&' b) 'or' (b '&' c) 'or' (c '&' a)).z<>TRUE;
+      A13: ((a '&' b) 'or' (b '&' c) 'or' (c '&' a)).z
      =((a '&' b) 'or' (b '&' c)).z 'or' (c '&' a).z by BVFUNC_1:def 7
     .=(a '&' b).z 'or' (b '&' c).z 'or' (c '&' a).z by BVFUNC_1:def 7
     .=((a).z '&' (b).z) 'or' (b '&' c).z 'or' (c '&' a).z
@@ -139,50 +121,32 @@ A14:((a 'or' b) '&' (b 'or' c) '&' (c 'or' a)).z
     .=((a).z '&' (b).z) 'or' ((b).z '&' (c).z) 'or'
       ((c).z '&' (a).z)
      by VALUAT_1:def 6;
-     A17:(((a).z '&' (b).z) 'or' ((b).z '&' (c).z))=TRUE or
+     A14:(((a).z '&' (b).z) 'or' ((b).z '&' (c).z))=TRUE or
      (((a).z '&' (b).z) 'or' ((b).z '&' (c).z))=FALSE by MARGREL1:39;
-     A18: ((c).z '&' (a).z)=TRUE or ((c).z '&' (a).z)=FALSE
-       by MARGREL1:39;
-     A19:((a).z '&' (b).z)=TRUE or ((a).z '&' (b).z)=FALSE
+     A15: ((c).z '&' (a).z)=TRUE or ((c).z '&' (a).z)=FALSE
        by MARGREL1:39;
         ((b).z '&' (c).z)=TRUE or ((b).z '&' (c).z)=FALSE
        by MARGREL1:39;
-then A20: ((a).z '&' (b).z)=FALSE & ((b).z '&' (c).z)=FALSE
-       by A15,A16,A17,A19,BINARITH:19;
-         now per cases by A15,A16,A18,A20,BINARITH:19,MARGREL1:45;
+then A16: ((a).z '&' (b).z)=FALSE & ((b).z '&' (c).z)=FALSE
+       by A12,A13,A14;
+         now per cases by A12,A13,A15,A16,MARGREL1:45;
       case (a).z=FALSE & (b).z=FALSE;
       then ((a).z 'or' (b).z) '&' ((b).z 'or' (c).z) '&'
       ((c).z 'or' (a).z)
-     =FALSE '&' (FALSE 'or' (c).z) '&'
-      ((c).z 'or' FALSE) by BINARITH:7
-    .=FALSE '&' (c).z '&'
-      ((c).z 'or' FALSE) by BINARITH:7
-    .=FALSE '&' (c).z '&' (c).z by BINARITH:7
-    .=FALSE '&' ((c).z '&' (c).z) by MARGREL1:52
-    .=FALSE by MARGREL1:49;
-      hence thesis by A13,A14,MARGREL1:43;
+     =FALSE;
+      hence thesis by A10,A11;
       end;
       case (b).z=FALSE & (c).z=FALSE;
       then ((a).z 'or' (b).z) '&' ((b).z 'or' (c).z) '&'
       ((c).z 'or' (a).z)
-     =(a).z '&' (FALSE 'or' FALSE) '&'
-      (FALSE 'or' (a).z) by BINARITH:7
-    .=(a).z '&' FALSE '&' (FALSE 'or' (a).z) by BINARITH:7
-    .=FALSE '&' (a).z '&' (a).z by BINARITH:7
-    .=FALSE '&' ((a).z '&' (a).z) by MARGREL1:52
-    .=FALSE by MARGREL1:49;
-      hence thesis by A13,A14,MARGREL1:43;
+     =FALSE;
+      hence thesis by A10,A11;
       end;
       case (c).z=FALSE & (a).z=FALSE;
       then ((a).z 'or' (b).z) '&' ((b).z 'or' (c).z) '&'
       ((c).z 'or' (a).z)
-     =(b).z '&' ((b).z 'or' FALSE) '&'
-      (FALSE 'or' FALSE) by BINARITH:7
-    .=(b).z '&' (b).z '&'
-      (FALSE 'or' FALSE) by BINARITH:7
-    .=FALSE '&' ((b).z '&' (b).z) by BINARITH:7
-    .=FALSE by MARGREL1:49;
-      hence thesis by A13,A14,MARGREL1:43;
+     =FALSE;
+      hence thesis by A10,A11;
       end;
       end;
       hence thesis;
@@ -191,7 +155,7 @@ then A20: ((a).z '&' (b).z)=FALSE & ((b).z '&' (c).z)=FALSE
   end;
   then (a 'or' b) '&' (b 'or' c) '&' (c 'or' a) '<'
   (a '&' b) 'or' (b '&' c) 'or' (c '&' a) by BVFUNC_1:def 15;
-  hence thesis by A12,BVFUNC_1:18;
+  hence thesis by A9,BVFUNC_1:18;
 end;
 
 Lm1: for a,b,c being Element of Funcs(Y,BOOLEAN) holds
@@ -238,49 +202,35 @@ c).z by BVFUNC_1:def 7
         by MARGREL1:39;
       A6: ((a).z '&' ('not' c).z)=TRUE or ((a).z '&' ('not' c).z)=FALSE
         by MARGREL1:39;
-      A7:((b).z '&' ('not' a).z)=TRUE or ((b).z '&' ('not' a).z)=FALSE
-       by MARGREL1:39;
          ((c).z '&' ('not' b).z)=TRUE or ((c).z '&' ('not' b).z)=FALSE
        by MARGREL1:39;
-then A8:  ((b).z '&' ('not' a).z)=FALSE & ((c).z '&' ('not' b).z)=FALSE
-       by A3,A4,A5,A7,BINARITH:19;
-then A9:  (b).z=FALSE or ('not' a).z=FALSE by MARGREL1:45;
-A10:  (c).z=FALSE or ('not' b).z=FALSE by A8,MARGREL1:45;
-         now per cases by A3,A4,A6,BINARITH:19,MARGREL1:45;
-      case A11:(a).z=FALSE;
-      then 'not' (a).z=TRUE by MARGREL1:41;
-      then A12: 'not' (a).z<>FALSE by MARGREL1:43;
-      then 'not' (b).z=TRUE by A9,MARGREL1:41,VALUAT_1:def 5;
-      then 'not' (b).z<>FALSE by MARGREL1:43;
-      then 'not' (c).z=TRUE by A10,MARGREL1:41,VALUAT_1:def 5;
+then A7:  ((b).z '&' ('not' a).z)=FALSE & ((c).z '&' ('not' b).z)=FALSE
+       by A3,A4,A5;
+then A8:  (b).z=FALSE or ('not' a).z=FALSE by MARGREL1:45;
+A9:  (c).z=FALSE or ('not' b).z=FALSE by A7,MARGREL1:45;
+         now per cases by A3,A4,A6,MARGREL1:45;
+      case A10:(a).z=FALSE;
+      then 'not' (a).z=TRUE;
+      then  'not' (a).z<>FALSE;
+      then 'not' (b).z=TRUE by A8,VALUAT_1:def 5;
+      then 'not' (b).z<>FALSE;
+      then 'not' (c).z=TRUE by A9,VALUAT_1:def 5;
       then ((a).z '&' 'not' (b).z) 'or' ((b).z '&' 'not' (c).z) 'or'
       ((c).z '&' 'not' (a).z)
-     =FALSE 'or' (FALSE '&' TRUE) 'or'
-      (FALSE '&' TRUE) by A9,A10,A11,A12,MARGREL1:49,VALUAT_1:def 5
-    .=FALSE 'or' FALSE 'or'
-      (FALSE '&' TRUE) by MARGREL1:49
-    .=FALSE 'or' FALSE 'or' FALSE by MARGREL1:49
-    .=FALSE 'or' FALSE by BINARITH:7
-    .=FALSE by BINARITH:7;
-      hence thesis by A1,A2,MARGREL1:43;
+     =FALSE by A8,A10,VALUAT_1:def 5;
+      hence thesis by A1,A2;
       end;
       case ('not' c).z=FALSE;
-then A13:  'not' (c).z=FALSE by VALUAT_1:def 5;
-then A14:  (c).z=TRUE by MARGREL1:41;
-      then 'not' (b).z=FALSE by A10,MARGREL1:43,VALUAT_1:def 5;
-then A15:  (b).z=TRUE by MARGREL1:41;
-      then 'not' (a).z=FALSE by A9,MARGREL1:43,VALUAT_1:def 5;
-      then (a).z=TRUE by MARGREL1:41;
+then A11:  'not' (c).z=FALSE by VALUAT_1:def 5;
+then   (c).z=TRUE;
+      then 'not' (b).z=FALSE by A9,VALUAT_1:def 5;
+then A12:  (b).z=TRUE;
+      then 'not' (a).z=FALSE by A8,VALUAT_1:def 5;
+      then (a).z=TRUE;
       then ((a).z '&' 'not' (b).z) 'or' ((b).z '&' 'not' (c).z) 'or'
       ((c).z '&' 'not' (a).z)
-     =FALSE 'or' (TRUE '&' FALSE) 'or'
-      (TRUE '&' FALSE) by A13,A14,A15,MARGREL1:50
-    .=FALSE 'or' FALSE 'or'
-      (TRUE '&' FALSE) by MARGREL1:50
-    .=FALSE 'or' FALSE 'or' FALSE by MARGREL1:50
-    .=FALSE 'or' FALSE by BINARITH:7
-    .=FALSE by BINARITH:7;
-      hence thesis by A1,A2,MARGREL1:43;
+     =FALSE by A11,A12;
+      hence thesis by A1,A2;
       end;
       end;
       hence thesis;
@@ -346,66 +296,37 @@ c).z by VALUAT_1:def 6
       ((c).z 'or' ('not' b).z))=FALSE;
          now per cases by A5,MARGREL1:45;
         case A6:((b).z 'or' ('not' a).z)=FALSE;
-        A7:(b).z=TRUE or (b).z=FALSE by MARGREL1:39;
+        reconsider cz = c.z as boolean set;
            ('not' a).z=TRUE or ('not' a).z=FALSE by MARGREL1:39;
-then A8:    (b).z=FALSE & ('not' a).z=FALSE by A6,A7,BINARITH:19;
+then A7:    (b).z=FALSE & ('not' a).z=FALSE by A6;
         then 'not' (a).z=FALSE by VALUAT_1:def 5;
-        then (a).z=TRUE by MARGREL1:41;
+        then (a).z=TRUE;
         then ((a).z 'or' 'not' (b).z) '&' ((b).z 'or' 'not' (c).z) '&'
         ((c).z 'or' 'not' (a).z)
-      =(TRUE 'or' TRUE) '&' (FALSE 'or' 'not' (c).z) '&'
-        ((c).z 'or' 'not' TRUE) by A8,MARGREL1:41
-      .=(TRUE 'or' TRUE) '&' (FALSE 'or' 'not' (c).z) '&'
-        ((c).z 'or' FALSE) by MARGREL1:41
-      .=TRUE '&' (FALSE 'or' 'not' (c).z) '&'
-        ((c).z 'or' FALSE) by BINARITH:19
-      .=TRUE '&' 'not' (c).z '&'
-        ((c).z 'or' FALSE) by BINARITH:7
-      .=TRUE '&' 'not' (c).z '&' (c).z by BINARITH:7
-      .=TRUE '&' ('not' (c).z '&' (c).z) by MARGREL1:52
-      .=TRUE '&' FALSE by MARGREL1:46
-      .=FALSE by MARGREL1:50;
-        hence thesis by A1,A2,MARGREL1:43;
+      =FALSE by  A7,XBOOLEAN:138;
+        hence thesis by A1,A2;
         end;
-        case A9:((c).z 'or' ('not' b).z)=FALSE;
-        A10:(c).z=TRUE or (c).z=FALSE by MARGREL1:39;
+        case A8:((c).z 'or' ('not' b).z)=FALSE;
            ('not' b).z=TRUE or ('not' b).z=FALSE by MARGREL1:39;
-then A11:    (c).z=FALSE & ('not' b).z=FALSE by A9,A10,BINARITH:19;
+then A9:    (c).z=FALSE & ('not' b).z=FALSE by A8;
         then 'not' (b).z=FALSE by VALUAT_1:def 5;
         then ((a).z 'or' 'not' (b).z) '&' ((b).z 'or' 'not' (c).z) '&'
         ((c).z 'or' 'not' (a).z)
-       =((a).z 'or' FALSE) '&' (TRUE 'or' 'not' FALSE) '&'
-        (FALSE 'or' 'not' (a).z) by A11,MARGREL1:41
-      .=((a).z 'or' FALSE) '&' TRUE '&'
-        (FALSE 'or' 'not' (a).z) by BINARITH:19
-      .=(a).z '&' TRUE '&'
-        (FALSE 'or' 'not' (a).z) by BINARITH:7
-      .=TRUE '&' (a).z '&' 'not' (a).z by BINARITH:7
-      .=TRUE '&' ((a).z '&' 'not' (a).z) by MARGREL1:52
-      .=TRUE '&' FALSE by MARGREL1:46
-      .=FALSE by MARGREL1:50;
-        hence thesis by A1,A2,MARGREL1:43;
+       =FALSE by  A9,XBOOLEAN:138;
+        hence thesis by A1,A2;
       end;
       end;
       hence thesis;
       end;
-      case A12:((a).z 'or' ('not' c).z)=FALSE;
-        A13:(a).z=TRUE or (a).z=FALSE by MARGREL1:39;
+      case A10:((a).z 'or' ('not' c).z)=FALSE;
+        reconsider bz = b.z as boolean set;
            ('not' c).z=TRUE or ('not' c).z=FALSE by MARGREL1:39;
-then A14:    (a).z=FALSE & ('not' c).z=FALSE by A12,A13,BINARITH:19;
+then A11:    (a).z=FALSE & ('not' c).z=FALSE by A10;
         then 'not' (c).z=FALSE by VALUAT_1:def 5;
         then ((a).z 'or' 'not' (b).z) '&' ((b).z 'or' 'not' (c).z) '&'
         ((c).z 'or' 'not' (a).z)
-       =(FALSE 'or' 'not' (b).z) '&' ((b).z 'or' FALSE) '&'
-        (TRUE 'or' 'not' FALSE) by A14,MARGREL1:41
-      .=(FALSE 'or' 'not' (b).z) '&' ((b).z 'or' FALSE) '&'
-        TRUE by BINARITH:19
-      .='not' (b).z '&' ((b).z 'or' FALSE) '&'
-        TRUE by BINARITH:7
-      .='not' (b).z '&' (b).z '&' TRUE by BINARITH:7
-      .=FALSE '&' TRUE by MARGREL1:46
-      .=FALSE by MARGREL1:49;
-      hence thesis by A1,A2,MARGREL1:43;
+       =FALSE by  A11,XBOOLEAN:138;
+      hence thesis by A1,A2;
       end;
       end;
       hence thesis;
@@ -434,7 +355,7 @@ proof
   assume A1:(c 'imp' a)=I_el(Y) & (c 'imp' b)=I_el(Y);
      c 'imp' (a 'or' b)
  =(c 'imp' a) 'or' (c 'imp' b) by BVFUNC_7:3
-.=I_el(Y) by A1,BVFUNC_1:13;
+.=I_el(Y) by A1;
   hence thesis;
 end;
 
@@ -445,7 +366,7 @@ proof
   let a,b,c be Element of Funcs(Y,BOOLEAN);
      (a 'imp' c)=I_el(Y) & (b 'imp' c)=I_el(Y) implies
   (a '&' b) 'imp' (c '&' c)=I_el(Y) by BVFUNC_6:21;
-  hence thesis by BVFUNC_1:6;
+  hence thesis;
 end;
 
 theorem  for a1,a2,b1,b2,c1,c2 being Element of Funcs(Y,BOOLEAN) holds
@@ -504,23 +425,13 @@ c1).z 'or' (c2).z) '&' (a1 'or' b1 'or' c1).z by BVFUNC_1:def 7
       A5:((a2).z 'or' (b2).z)=TRUE or
           ((a2).z 'or' (b2).z)=FALSE by MARGREL1:39;
       A6: (c2).z=TRUE or (c2).z=FALSE by MARGREL1:39;
-      A7:(a2).z=TRUE or (a2).z=FALSE by MARGREL1:39;
          (b2).z=TRUE or (b2).z=FALSE by MARGREL1:39;
-      then (a2).z=FALSE & (b2).z=FALSE by A3,A4,A5,A7,BINARITH:19;
-then A8:  ('not' (a1).z 'or' (a2).z) '&' ('not' (b1).z 'or' (b2).z) '&'
+      then (a2).z=FALSE & (b2).z=FALSE by A3,A4,A5;
+then A7:  ('not' (a1).z 'or' (a2).z) '&' ('not' (b1).z 'or' (b2).z) '&'
       ('not' (c1).z 'or' (c2).z) '&' ((a1).z 'or' (b1).z 'or' (c1).z)
-     ='not' (a1).z '&' ('not' (b1).z 'or' FALSE) '&'
-      ('not' (c1).z 'or' FALSE) '&' ((a1).z 'or' (b1).z 'or' (c1).z)
-     by A3,A4,A6,BINARITH:7,19
-    .='not' (a1).z '&' 'not' (b1).z '&'
-      ('not' (c1).z 'or' FALSE) '&' ((a1).z 'or' (b1).z 'or' (c1).z)
-     by BINARITH:7
-    .=('not' (a1).z '&' 'not' (b1).z '&' 'not' (c1).z) '&'
+     =(('not' a1).z '&' 'not' (b1).z '&' 'not' (c1).z) '&'
       ((a1).z 'or' (b1).z 'or' (c1).z)
-     by BINARITH:7
-    .=(('not' a1).z '&' 'not' (b1).z '&' 'not' (c1).z) '&'
-      ((a1).z 'or' (b1).z 'or' (c1).z)
-     by VALUAT_1:def 5
+     by  A3,A4,A6,VALUAT_1:def 5
     .=(('not' a1).z '&' ('not' b1).z '&' 'not' (c1).z) '&'
       ((a1).z 'or' (b1).z 'or' (c1).z)
      by VALUAT_1:def 5
@@ -577,8 +488,8 @@ then A8:  ('not' (a1).z 'or' (a2).z) '&' ('not' (b1).z 'or' (b2).z) '&'
     .=O_el(Y) by BVFUNC_1:8;
       then ((a1 'imp' a2) '&' (b1 'imp' b2) '&' (c1 'imp' c2) '&'
        (a1 'or' b1 'or' c1)).z
-     =FALSE by A2,A8,BVFUNC_1:def 13;
-      hence contradiction by A1,MARGREL1:43;
+     =FALSE by A2,A7,BVFUNC_1:def 13;
+      hence contradiction by A1;
     end;
     hence thesis;
 end;
@@ -680,147 +591,92 @@ a2).z)=FALSE by A3,MARGREL1:43;
 b2).z 'or' (a2).z)=FALSE;
            now per cases by A6,MARGREL1:45;
         case A7:(('not' b1).z 'or' (a1).z)=FALSE;
-        A8:('not' b1).z=TRUE or ('not' b1).z=FALSE by MARGREL1:39;
            (a1).z=TRUE or (a1).z=FALSE by MARGREL1:39;
-then A9:    ('not' b1).z=FALSE & (a1).z=FALSE by A7,A8,BINARITH:19;
+then A8:    ('not' b1).z=FALSE & (a1).z=FALSE by A7;
         then 'not' (b1).z=FALSE by VALUAT_1:def 5;
-        then (b1).z=TRUE by MARGREL1:41;
+        then (b1).z=TRUE;
         then ('not' (a1).z 'or' (b1).z) '&' ('not' (a2).z 'or' (b2).z)
 '&'
         ((a1).z 'or' (a2).z) '&' ('not' (b1).z 'or' 'not' (b2).z)
-       =(TRUE 'or' TRUE) '&' ('not' (a2).z 'or' (b2).z) '&'
-        (FALSE 'or' (a2).z) '&' ('not' TRUE 'or' 'not'
-(b2).z) by A9,MARGREL1:41
-      .=(TRUE 'or' TRUE) '&' ('not' (a2).z 'or' (b2).z) '&'
-        (FALSE 'or' (a2).z) '&' (FALSE 'or' 'not' (b2).z) by MARGREL1:41
-      .=TRUE '&' ('not' (a2).z 'or' (b2).z) '&'
-        (FALSE 'or' (a2).z) '&' (FALSE 'or' 'not' (b2).z) by BINARITH:19
-      .=TRUE '&' ('not' (a2).z 'or' (b2).z) '&'
-        (a2).z '&' (FALSE 'or' 'not' (b2).z) by BINARITH:7
-      .=TRUE '&' ('not' (a2).z 'or' (b2).z) '&'
-        (a2).z '&' 'not' (b2).z by BINARITH:7
-      .=(a2).z '&' ('not' (a2).z 'or' (b2).z)
-        '&' 'not' (b2).z by MARGREL1:50
-      .=((a2).z '&' 'not' (a2).z 'or' (a2).z '&' (b2).z)
-        '&' 'not' (b2).z by BINARITH:22
+       =((a2).z '&' 'not' (a2).z 'or' (a2).z '&' (b2).z)
+        '&' 'not' (b2).z by  A8,BINARITH:22
       .=(FALSE 'or' (a2).z '&' (b2).z)
-        '&' 'not' (b2).z by MARGREL1:46
-      .=((a2).z '&' (b2).z) '&' 'not' (b2).z by BINARITH:7
-      .=(a2).z '&' ((b2).z '&' 'not' (b2).z) by MARGREL1:52
-      .=FALSE '&' (a2).z by MARGREL1:46
-      .=FALSE by MARGREL1:49;
-        hence thesis by A1,A2,MARGREL1:43;
+        '&' 'not' (b2).z by XBOOLEAN:138
+      .=((a2).z '&' (b2).z) '&' 'not' (b2).z
+      .=(a2).z '&' ((b2).z '&' 'not' (b2).z)
+      .=FALSE '&' (a2).z by XBOOLEAN:138
+      .=FALSE;
+        hence thesis by A1,A2;
         end;
-        case A10:(('not' b2).z 'or' (a2).z)=FALSE;
-        A11:('not' b2).z=TRUE or ('not' b2).z=FALSE by MARGREL1:39;
+        case A9:(('not' b2).z 'or' (a2).z)=FALSE;
            (a2).z=TRUE or (a2).z=FALSE by MARGREL1:39;
-then A12:    ('not' b2).z=FALSE & (a2).z=FALSE by A10,A11,BINARITH:19;
+then A10:    ('not' b2).z=FALSE & (a2).z=FALSE by A9;
         then 'not' (b2).z=FALSE by VALUAT_1:def 5;
-        then (b2).z=TRUE by MARGREL1:41;
+        then (b2).z=TRUE;
         then ('not' (a1).z 'or' (b1).z) '&' ('not' (a2).z 'or' (b2).z)
 '&'
         ((a1).z 'or' (a2).z) '&' ('not' (b1).z 'or' 'not' (b2).z)
-       =('not' (a1).z 'or' (b1).z) '&' (TRUE 'or' TRUE) '&'
-        ((a1).z 'or' FALSE) '&' ('not' (b1).z 'or' 'not'
-TRUE) by A12,MARGREL1:41
-      .=('not' (a1).z 'or' (b1).z) '&' (TRUE 'or' TRUE) '&'
-        ((a1).z 'or' FALSE) '&' ('not' (b1).z 'or' FALSE) by MARGREL1:41
-      .=('not' (a1).z 'or' (b1).z) '&' TRUE '&'
-        ((a1).z 'or' FALSE) '&' ('not' (b1).z 'or' FALSE) by BINARITH:19
-      .=('not' (a1).z 'or' (b1).z) '&' TRUE '&'
-        (a1).z '&' ('not' (b1).z 'or' FALSE) by BINARITH:7
-      .=TRUE '&' ('not' (a1).z 'or' (b1).z) '&'
-        (a1).z '&' 'not' (b1).z by BINARITH:7
-      .=(a1).z '&' ('not' (a1).z 'or' (b1).z) '&'
-        'not' (b1).z by MARGREL1:50
-      .=((a1).z '&' 'not' (a1).z 'or' (a1).z '&' (b1).z) '&'
-        'not' (b1).z by BINARITH:22
+       =((a1).z '&' 'not' (a1).z 'or' (a1).z '&' (b1).z) '&'
+        'not' (b1).z by  A10,BINARITH:22
       .=(FALSE 'or' (a1).z '&' (b1).z) '&'
-        'not' (b1).z by MARGREL1:46
+        'not' (b1).z by XBOOLEAN:138
       .=((a1).z '&' (b1).z) '&'
-        'not' (b1).z by BINARITH:7
-      .=(a1).z '&' ((b1).z '&' 'not' (b1).z) by MARGREL1:52
-      .=FALSE '&' (a1).z by MARGREL1:46
-      .=FALSE by MARGREL1:49;
-        hence thesis by A1,A2,MARGREL1:43;
+        'not' (b1).z
+      .=(a1).z '&' ((b1).z '&' 'not' (b1).z)
+      .=FALSE '&' (a1).z by XBOOLEAN:138
+      .=FALSE;
+        hence thesis by A1,A2;
         end;
         end;
       hence thesis;
       end;
-      case A13:((b1).z 'or' (b2).z)=FALSE;
-        A14:(b2).z=TRUE or (b2).z=FALSE by MARGREL1:39;
+      case A11:((b1).z 'or' (b2).z)=FALSE;
+        reconsider a1z = a1.z as boolean set;
+        reconsider a2z = a2.z as boolean set;
            (b1).z=TRUE or (b1).z=FALSE by MARGREL1:39;
-        then (b1).z=FALSE & (b2).z=FALSE by A13,A14,BINARITH:19;
+        then (b1).z=FALSE & (b2).z=FALSE by A11;
         then ('not' (a1).z 'or' (b1).z) '&' ('not' (a2).z 'or' (b2).z)
 '&'
         ((a1).z 'or' (a2).z) '&' ('not' (b1).z 'or' 'not' (b2).z)
-       =('not' (a1).z 'or' FALSE) '&' ('not' (a2).z 'or' FALSE) '&'
-        ((a1).z 'or' (a2).z) '&' (TRUE 'or' 'not' FALSE) by MARGREL1:41
-      .=('not' (a1).z 'or' FALSE) '&' ('not' (a2).z 'or' FALSE) '&'
-        ((a1).z 'or' (a2).z) '&' TRUE by BINARITH:19
-      .='not' (a1).z '&' ('not' (a2).z 'or' FALSE) '&'
-        ((a1).z 'or' (a2).z) '&' TRUE by BINARITH:7
-      .=TRUE '&' ('not' (a1).z '&' 'not' (a2).z '&'
-        ((a1).z 'or' (a2).z)) by BINARITH:7
-      .='not' (a1).z '&' 'not' (a2).z '&'
-        ((a1).z 'or' (a2).z) by MARGREL1:50
-      .='not' (a1).z '&'
+       ='not' (a1).z '&'
         ('not' (a2).z '&' ((a1).z 'or' (a2).z))
-       by MARGREL1:52
       .='not' (a1).z '&'
-        ('not' (a2).z '&' (a1).z 'or' 'not' (a2).z '&' (a2).z)
+        ('not' (a2).z '&' (a1).z 'or' 'not' a2z '&' a2z)
        by BINARITH:22
       .='not' (a1).z '&'
         ('not' (a2).z '&' (a1).z 'or' FALSE)
-       by MARGREL1:46
-      .='not' (a1).z '&' ((a1).z '&' 'not' (a2).z) by BINARITH:7
-      .='not' (a1).z '&' (a1).z '&' 'not' (a2).z
-       by MARGREL1:52
+       by XBOOLEAN:138
+      .='not' (a1).z '&' ((a1).z '&' 'not' (a2).z)
+      .='not' a1z '&' a1z '&' 'not' (a2).z
       .=FALSE '&' 'not' (a2).z
-       by MARGREL1:46
-      .=FALSE by MARGREL1:49;
-      hence thesis by A1,A2,MARGREL1:43;
+       by XBOOLEAN:138
+      .=FALSE;
+      hence thesis by A1,A2;
       end;
       end;
     hence thesis;
     end;
-    case A15:(('not' a1).z 'or' ('not' a2).z)=FALSE;
-        A16:('not' a1).z=TRUE or ('not' a1).z=FALSE by MARGREL1:39;
+    case A12:(('not' a1).z 'or' ('not' a2).z)=FALSE;
            ('not' a2).z=TRUE or ('not' a2).z=FALSE by MARGREL1:39;
-then A17:    ('not' a1).z=FALSE & ('not' a2).z=FALSE by A15,A16,BINARITH:19
-;
-        then A18: 'not' (a1).z=FALSE by VALUAT_1:def 5;
-           'not' (a2).z=FALSE by A17,VALUAT_1:def 5;
-        then (a2).z=TRUE by MARGREL1:41;
+then A13:    ('not' a1).z=FALSE & ('not' a2).z=FALSE by A12;
+        then A14: 'not' (a1).z=FALSE by VALUAT_1:def 5;
+           'not' (a2).z=FALSE by A13,VALUAT_1:def 5;
+        then (a2).z=TRUE;
         then ('not' (a1).z 'or' (b1).z) '&' ('not' (a2).z 'or' (b2).z)
 '&'
         ((a1).z 'or' (a2).z) '&' ('not' (b1).z 'or' 'not' (b2).z)
-       =(FALSE 'or' (b1).z) '&' ('not' TRUE 'or' (b2).z) '&'
-        (TRUE 'or' TRUE) '&' ('not' (b1).z 'or' 'not'
-(b2).z) by A18,MARGREL1:41
-      .=(FALSE 'or' (b1).z) '&' (FALSE 'or' (b2).z) '&'
-        (TRUE 'or' TRUE) '&' ('not' (b1).z 'or' 'not' (b2).z)
-        by MARGREL1:41
-      .=(FALSE 'or' (b1).z) '&' (FALSE 'or' (b2).z) '&'
-        TRUE '&' ('not' (b1).z 'or' 'not' (b2).z) by BINARITH:19
-      .=(b1).z '&' (FALSE 'or' (b2).z) '&'
-        TRUE '&' ('not' (b1).z 'or' 'not' (b2).z) by BINARITH:7
-      .=TRUE '&' ((b1).z '&' (b2).z) '&'
-        ('not' (b1).z 'or' 'not' (b2).z) by BINARITH:7
-      .=(b1).z '&' (b2).z '&'
-        ('not' (b1).z 'or' 'not' (b2).z) by MARGREL1:50
-      .=(b1).z '&' ((b2).z '&'
-        ('not' (b1).z 'or' 'not' (b2).z)) by MARGREL1:52
+       =(b1).z '&' ((b2).z '&'
+        ('not' (b1).z 'or' 'not' (b2).z)) by A14
       .=(b1).z '&'
         ((b2).z '&' 'not' (b1).z 'or' (b2).z '&' 'not'
 (b2).z) by BINARITH:22
       .=(b1).z '&'
-        ((b2).z '&' 'not' (b1).z 'or' FALSE) by MARGREL1:46
-      .=(b1).z '&' ('not' (b1).z '&' (b2).z) by BINARITH:7
-      .=(b1).z '&' 'not' (b1).z '&' (b2).z by MARGREL1:52
-      .=FALSE '&' (b2).z by MARGREL1:46
-      .=FALSE by MARGREL1:49;
-    hence thesis by A1,A2,MARGREL1:43;
+        ((b2).z '&' 'not' (b1).z 'or' FALSE) by XBOOLEAN:138
+      .=(b1).z '&' ('not' (b1).z '&' (b2).z)
+      .=(b1).z '&' 'not' (b1).z '&' (b2).z
+      .=FALSE '&' (b2).z by XBOOLEAN:138
+      .=FALSE;
+    hence thesis by A1,A2;
     end;
     end;
     hence thesis;
@@ -979,31 +835,28 @@ b 'or' d).z '&' (a 'or' b).z by BVFUNC_4:8
     ((a).z 'or' (b).z) by VALUAT_1:def 5
   .=('not' (a).z 'or' (c).z) '&' ('not' (b).z 'or' (d).z) '&'
     ((a).z 'or' (b).z) by VALUAT_1:def 5;
+        reconsider az = a.z as boolean set;
+        reconsider bz = b.z as boolean set;
        now assume
          (c 'or' d).z<>TRUE;
       then (c 'or' d).z=FALSE by MARGREL1:43;
 then A3:  (c).z 'or' (d).z=FALSE by BVFUNC_1:def 7;
-      A4:(c).z=TRUE or (c).z=FALSE by MARGREL1:39;
          (d).z=TRUE or (d).z=FALSE by MARGREL1:39;
-      then (c).z=FALSE & (d).z=FALSE by A3,A4,BINARITH:19;
+      then (c).z=FALSE & (d).z=FALSE by A3;
       then ('not' (a).z 'or' (c).z) '&' ('not' (b).z 'or' (d).z) '&'
       ((a).z 'or' (b).z)
-     ='not' (a).z '&' ('not' (b).z 'or' FALSE) '&'
-      ((a).z 'or' (b).z) by BINARITH:7
-    .='not' (a).z '&' 'not' (b).z '&'
-      ((b).z 'or' (a).z) by BINARITH:7
-    .='not' (a).z '&' ('not' (b).z '&'
-      ((b).z 'or' (a).z)) by MARGREL1:52
+     ='not' (a).z '&' ('not' (b).z '&'
+      ((b).z 'or' (a).z))
     .='not' (a).z '&' (
-      ('not' (b).z '&' (b).z 'or' 'not' (b).z '&' (a).z))
+      ('not' bz '&' bz 'or' 'not' (b).z '&' (a).z))
       by BINARITH:22
     .='not' (a).z '&' (
-      (FALSE 'or' 'not' (b).z '&' (a).z)) by MARGREL1:46
-    .='not' (a).z '&' ((a).z '&' 'not' (b).z) by BINARITH:7
-    .='not' (a).z '&' (a).z '&' 'not' (b).z by MARGREL1:52
-    .=FALSE '&' 'not' (b).z by MARGREL1:46
-    .=FALSE by MARGREL1:49;
-      hence thesis by A1,A2,MARGREL1:43;
+      (FALSE 'or' 'not' (b).z '&' (a).z)) by XBOOLEAN:138
+    .='not' (a).z '&' ((a).z '&' 'not' (b).z)
+    .='not' az '&' az '&' 'not' (b).z
+    .=FALSE '&' 'not' (b).z by XBOOLEAN:138
+    .=FALSE;
+      hence thesis by A1,A2;
     end;
     hence thesis;
 end;
@@ -1025,26 +878,25 @@ c).z '&' (a).z '&' (c).z by BVFUNC_1:17
 c).z) '&' (a).z '&' (c).z by BVFUNC_1:def 7
   .=((('not' a).z 'or' ('not' b).z) 'or' ('not' c).z) '&'
     (a).z '&' (c).z by BVFUNC_1:def 7;
+        reconsider cz = c.z as boolean set;
        now assume ('not' b).z<>TRUE;
       then ('not' b).z=FALSE by MARGREL1:43;
       then ((('not' a).z 'or' ('not' b).z) 'or' ('not' c).z) '&'
       (a).z '&' (c).z
-     =(('not' a).z 'or' ('not' c).z) '&'
-      (a).z '&' (c).z by BINARITH:7
-    .=('not' (a).z 'or' ('not' c).z) '&'
+     =('not' (a).z 'or' ('not' c).z) '&'
       (a).z '&' (c).z by VALUAT_1:def 5
     .=(a).z '&' ('not' (a).z 'or' 'not' (c).z) '&'
       (c).z by VALUAT_1:def 5
     .=((a).z '&' 'not' (a).z 'or' (a).z '&' 'not' (c).z) '&'
       (c).z by BINARITH:22
     .=(FALSE 'or' (a).z '&' 'not' (c).z) '&'
-      (c).z by MARGREL1:46
+      (c).z by XBOOLEAN:138
     .=((a).z '&' 'not' (c).z) '&'
-      (c).z by BINARITH:7
-    .=(a).z '&' ('not' (c).z '&' (c).z) by MARGREL1:52
-    .=FALSE '&' (a).z by MARGREL1:46
-    .=FALSE by MARGREL1:49;
-      hence thesis by A1,A2,MARGREL1:43;
+      (c).z
+    .=(a).z '&' ('not' cz '&' cz)
+    .=FALSE '&' (a).z by XBOOLEAN:138
+    .=FALSE;
+      hence thesis by A1,A2;
     end;
     hence thesis;
 end;
@@ -1059,10 +911,6 @@ proof
 a2 'or' b3) by BVFUNC_4:8
 .=('not' 'not' b1 'or' 'not' 'not' b2 'or' 'not' a3) 'or' ('not' a1 'or' 'not'
 a2 'or' b3) by BVFUNC_5:38
-.=(b1 'or' 'not' 'not' b2 'or' 'not' a3) 'or' ('not' a1 'or' 'not'
-a2 'or' b3) by BVFUNC_1:4
-.=(b1 'or' b2 'or' 'not' a3) 'or' ('not' a1 'or' 'not' a2 'or' b3)
-by BVFUNC_1:4
 .=b1 'or' b2 'or' 'not' a3 'or' ('not' a1 'or' 'not' a2) 'or' b3 by BVFUNC_1:11
 .=b1 'or' b2 'or' (('not' a1 'or' 'not' a2) 'or' 'not' a3) 'or' b3
 by BVFUNC_1:11
@@ -1131,87 +979,47 @@ c).z by BVFUNC_1:def 7
       A6: ('not' (a).z '&' 'not' (b).z '&' 'not' (c).z)=TRUE or
       ('not' (a).z '&' 'not' (b).z '&' 'not'
 (c).z)=FALSE by MARGREL1:39;
-         now per cases by A3,A4,A5,BINARITH:19,MARGREL1:45;
+        reconsider az = a.z as boolean set;
+         now per cases by A3,A4,A5,MARGREL1:45;
       case A7: ((a).z '&' (b).z)=FALSE;
          now per cases by A7,MARGREL1:45;
       case A8:(a).z=FALSE;
       then A9: 'not' (a).z '&' 'not' (b).z '&' 'not' (c).z
-     =TRUE '&' 'not' (b).z '&' 'not' (c).z by MARGREL1:41
-    .='not' (b).z '&' 'not' (c).z by MARGREL1:50;
-         now per cases by A3,A4,A6,A9,BINARITH:19,MARGREL1:45;
+     ='not' (b).z '&' 'not' (c).z;
+         now per cases by A3,A4,A6,A9,MARGREL1:45;
         case 'not' (b).z=FALSE;
-        then (b).z=TRUE by MARGREL1:41;
+        then (b).z=TRUE;
         then ('not' (a).z 'or' (b).z) '&' ('not' (b).z 'or' (c).z) '&'
         ('not' (c).z 'or' (a).z)
-       =(TRUE 'or' TRUE) '&' ('not' TRUE 'or' (c).z) '&'
-        ('not' (c).z 'or' FALSE) by A8,MARGREL1:41
-      .=(TRUE 'or' TRUE) '&' (FALSE 'or' (c).z) '&'
-        ('not' (c).z 'or' FALSE) by MARGREL1:41
-      .=TRUE '&' (FALSE 'or' (c).z) '&'
-        ('not' (c).z 'or' FALSE) by BINARITH:19
-      .=TRUE '&' (c).z '&'
-        ('not' (c).z 'or' FALSE) by BINARITH:7
-      .=TRUE '&' (c).z '&' 'not' (c).z by BINARITH:7
-      .=TRUE '&' ((c).z '&' 'not' (c).z) by MARGREL1:52
-      .=TRUE '&' FALSE by MARGREL1:46
-      .=FALSE by MARGREL1:50;
-        hence thesis by A1,A2,MARGREL1:43;
+       =FALSE by  A8,XBOOLEAN:138;
+        hence thesis by A1,A2;
         end;
         case 'not' (c).z=FALSE;
-        then (c).z=TRUE by MARGREL1:41;
+        then (c).z=TRUE;
         then ('not' (a).z 'or' (b).z) '&' ('not' (b).z 'or' (c).z) '&'
         ('not' (c).z 'or' (a).z)
-       =(TRUE 'or' (b).z) '&' ('not' (b).z 'or' TRUE) '&'
-        ('not' TRUE 'or' FALSE) by A8,MARGREL1:41
-      .=(TRUE 'or' (b).z) '&' ('not' (b).z 'or' TRUE) '&'
-        (FALSE 'or' FALSE) by MARGREL1:41
-      .=TRUE '&' ('not' (b).z 'or' TRUE) '&'
-        (FALSE 'or' FALSE) by BINARITH:19
-      .=TRUE '&' TRUE '&'
-        (FALSE 'or' FALSE) by BINARITH:19
-      .=FALSE '&' (TRUE '&' TRUE) by BINARITH:7
-      .=FALSE by MARGREL1:49;
-        hence thesis by A1,A2,MARGREL1:43;
+       =FALSE by A8;
+        hence thesis by A1,A2;
       end;
       end;
       hence thesis;
       end;
       case A10:(b).z=FALSE;
       then A11: 'not' (a).z '&' 'not' (b).z '&' 'not' (c).z
-     =TRUE '&' 'not' (a).z '&' 'not' (c).z by MARGREL1:41
-    .='not' (a).z '&' 'not' (c).z by MARGREL1:50;
-         now per cases by A3,A4,A6,A11,BINARITH:19,MARGREL1:45;
+     ='not' (a).z '&' 'not' (c).z;
+         now per cases by A3,A4,A6,A11,MARGREL1:45;
         case 'not' (a).z=FALSE;
         then ('not' (a).z 'or' (b).z) '&' ('not' (b).z 'or' (c).z) '&'
         ('not' (c).z 'or' (a).z)
-       =(FALSE 'or' FALSE) '&' ('not' FALSE 'or' (c).z) '&'
-        ('not' (c).z 'or' TRUE) by A10,MARGREL1:41
-      .=(FALSE 'or' FALSE) '&' (TRUE 'or' (c).z) '&'
-        ('not' (c).z 'or' TRUE) by MARGREL1:41
-      .=FALSE '&' (TRUE 'or' (c).z) '&'
-        ('not' (c).z 'or' TRUE) by BINARITH:7
-      .=FALSE '&' ((TRUE 'or' (c).z) '&'
-        ('not' (c).z 'or' TRUE)) by MARGREL1:52
-      .=FALSE by MARGREL1:49;
-        hence thesis by A1,A2,MARGREL1:43;
+       =FALSE by A10;
+        hence thesis by A1,A2;
         end;
         case 'not' (c).z=FALSE;
-        then (c).z=TRUE by MARGREL1:41;
+        then (c).z=TRUE;
         then ('not' (a).z 'or' (b).z) '&' ('not' (b).z 'or' (c).z) '&'
         ('not' (c).z 'or' (a).z)
-       =('not' (a).z 'or' FALSE) '&' (TRUE 'or' TRUE) '&'
-        ('not' TRUE 'or' (a).z) by A10,MARGREL1:41
-      .=('not' (a).z 'or' FALSE) '&' (TRUE 'or' TRUE) '&'
-        (FALSE 'or' (a).z) by MARGREL1:41
-      .='not' (a).z '&' (TRUE 'or' TRUE) '&'
-        (FALSE 'or' (a).z) by BINARITH:7
-      .=(TRUE 'or' TRUE) '&' 'not' (a).z '&'
-        (a).z by BINARITH:7
-      .=(TRUE 'or' TRUE) '&' ('not' (a).z '&'
-        (a).z) by MARGREL1:52
-      .=FALSE '&' (TRUE 'or' TRUE) by MARGREL1:46
-      .=FALSE by MARGREL1:49;
-        hence thesis by A1,A2,MARGREL1:43;
+       =FALSE by  A10,XBOOLEAN:138;
+        hence thesis by A1,A2;
       end;
       end;
       hence thesis;
@@ -1221,34 +1029,19 @@ c).z by BVFUNC_1:def 7
       end;
       case A12:(c).z=FALSE;
       then A13: 'not' (a).z '&' 'not' (b).z '&' 'not' (c).z
-     =TRUE '&' ('not' (a).z '&' 'not' (b).z) by MARGREL1:41
-    .='not' (a).z '&' 'not' (b).z by MARGREL1:50;
-         now per cases by A3,A4,A6,A13,BINARITH:19,MARGREL1:45;
+     ='not' (a).z '&' 'not' (b).z;
+         now per cases by A3,A4,A6,A13,MARGREL1:45;
         case 'not' (a).z=FALSE;
         then ('not' (a).z 'or' (b).z) '&' ('not' (b).z 'or' (c).z) '&'
         ('not' (c).z 'or' (a).z)
-       =(FALSE 'or' (b).z) '&' ('not' (b).z 'or' FALSE) '&'
-        ('not' FALSE 'or' TRUE) by A12,MARGREL1:41
-      .=(FALSE 'or' (b).z) '&' ('not' (b).z 'or' FALSE) '&'
-        (TRUE 'or' TRUE) by MARGREL1:41
-      .=(b).z '&' ('not' (b).z 'or' FALSE) '&'
-        (TRUE 'or' TRUE) by BINARITH:7
-      .=(b).z '&' 'not' (b).z '&' (TRUE 'or' TRUE) by BINARITH:7
-      .=FALSE '&' (TRUE 'or' TRUE) by MARGREL1:46
-      .=FALSE by MARGREL1:49;
-        hence thesis by A1,A2,MARGREL1:43;
+       =FALSE by  A12,XBOOLEAN:138;
+        hence thesis by A1,A2;
         end;
         case 'not' (b).z=FALSE;
         then ('not' (a).z 'or' (b).z) '&' ('not' (b).z 'or' (c).z) '&'
         ('not' (c).z 'or' (a).z)
-       =('not' (a).z 'or' TRUE) '&' (FALSE 'or' FALSE) '&'
-        ('not' FALSE 'or' (a).z) by A12,MARGREL1:41
-      .=FALSE '&' ('not' (a).z 'or' TRUE) '&'
-        ('not' FALSE 'or' (a).z) by BINARITH:7
-      .=FALSE '&' (('not' (a).z 'or' TRUE) '&'
-        ('not' FALSE 'or' (a).z)) by MARGREL1:52
-      .=FALSE by MARGREL1:49;
-        hence thesis by A1,A2,MARGREL1:43;
+       =FALSE by A12;
+        hence thesis by A1,A2;
       end;
       end;
       hence thesis;
@@ -1315,51 +1108,31 @@ c 'or' a).z by BVFUNC_4:8
 FALSE;
          now per cases by A19,MARGREL1:45;
         case A20:('not' (a).z 'or' (b).z)=FALSE;
-        A21:'not' (a).z=TRUE or 'not' (a).z=FALSE by MARGREL1:39;
            (b).z=TRUE or (b).z=FALSE by MARGREL1:39;
-then A22:    'not' (a).z=FALSE & (b).z=FALSE by A20,A21,BINARITH:19;
-        then (a).z=TRUE by MARGREL1:41;
-        then ((a).z '&' (b).z '&' (c).z) 'or'
+then A21:    'not' (a).z=FALSE & (b).z=FALSE by A20;
+        ((a).z '&' (b).z '&' (c).z) 'or'
         ('not' (a).z '&' 'not' (b).z '&' 'not' (c).z)
-       =(FALSE '&' (TRUE '&' (c).z)) 'or'
-        (FALSE '&' 'not' FALSE '&' 'not' (c).z) by A22,MARGREL1:52
-      .=(FALSE '&' (TRUE '&' (c).z)) 'or'
-        (FALSE '&' ('not' FALSE '&' 'not' (c).z)) by MARGREL1:52
-      .=FALSE 'or' (FALSE '&' ('not' FALSE '&' 'not' (c).z)) by MARGREL1:49
-      .=FALSE 'or' FALSE by MARGREL1:49
-      .=FALSE by BINARITH:7;
-        hence thesis by A15,A16,MARGREL1:43;
+       =FALSE by A21;
+        hence thesis by A15,A16;
         end;
-        case A23:('not' (b).z 'or' (c).z)=FALSE;
-        A24:'not' (b).z=TRUE or 'not' (b).z=FALSE by MARGREL1:39;
+        case A22:('not' (b).z 'or' (c).z)=FALSE;
            (c).z=TRUE or (c).z=FALSE by MARGREL1:39;
-then A25:    'not' (b).z=FALSE & (c).z=FALSE by A23,A24,BINARITH:19;
-        then (b).z=TRUE by MARGREL1:41;
-        then ((a).z '&' (b).z '&' (c).z) 'or'
+then A23:    'not' (b).z=FALSE & (c).z=FALSE by A22;
+        ((a).z '&' (b).z '&' (c).z) 'or'
         ('not' (a).z '&' 'not' (b).z '&' 'not' (c).z)
-       =(FALSE '&' ((a).z '&' TRUE)) 'or'
-        (FALSE '&' ('not' (a).z '&' 'not' FALSE)) by A25,MARGREL1:52
-      .=FALSE 'or' (FALSE '&' ('not' (a).z '&' 'not' FALSE)) by MARGREL1:49
-      .=FALSE 'or' FALSE by MARGREL1:49
-      .=FALSE by BINARITH:7;
-        hence thesis by A15,A16,MARGREL1:43;
+       =FALSE by A23;
+        hence thesis by A15,A16;
       end;
       end;
       hence thesis;
       end;
-      case A26:('not' (c).z 'or' (a).z)=FALSE;
-        A27:'not' (c).z=TRUE or 'not' (c).z=FALSE by MARGREL1:39;
+      case A24:('not' (c).z 'or' (a).z)=FALSE;
            (a).z=TRUE or (a).z=FALSE by MARGREL1:39;
-then A28:    'not' (c).z=FALSE & (a).z=FALSE by A26,A27,BINARITH:19;
-        then (c).z=TRUE by MARGREL1:41;
-        then ((a).z '&' (b).z '&' (c).z) 'or'
+then A25:    'not' (c).z=FALSE & (a).z=FALSE by A24;
+        ((a).z '&' (b).z '&' (c).z) 'or'
         ('not' (a).z '&' 'not' (b).z '&' 'not' (c).z)
-       =(FALSE '&' ((b).z '&' TRUE)) 'or'
-        (FALSE '&' ('not' FALSE '&' 'not' (b).z)) by A28,MARGREL1:52
-      .=FALSE 'or' (FALSE '&' ('not' FALSE '&' 'not' (b).z)) by MARGREL1:49
-      .=FALSE 'or' FALSE by MARGREL1:49
-      .=FALSE by BINARITH:7;
-      hence thesis by A15,A16,MARGREL1:43;
+       =FALSE by A25;
+      hence thesis by A15,A16;
       end;
       end;
       hence thesis;
@@ -1529,60 +1302,28 @@ c).z by BVFUNC_1:def 7
 MARGREL1:43;
          now per cases by A4,MARGREL1:45;
       case A5:((a).z 'or' (b).z)=FALSE;
-      A6:(a).z=TRUE or (a).z=FALSE by MARGREL1:39;
          (b).z=TRUE or (b).z=FALSE by MARGREL1:39;
-      then (a).z=FALSE & (b).z=FALSE by A5,A6,BINARITH:19;
+      then (a).z=FALSE & (b).z=FALSE by A5;
       then ('not' (a).z '&' (b).z '&' (c).z) 'or'
       ((a).z '&' 'not' (b).z '&' (c).z) 'or'
       ((a).z '&' (b).z '&' 'not' (c).z)
-     =(FALSE '&' (c).z) 'or'
-      (FALSE '&' 'not' FALSE '&' (c).z) 'or'
-      (FALSE '&' FALSE '&' 'not' (c).z) by MARGREL1:49
-    .=FALSE 'or' (FALSE '&' 'not' FALSE '&' (c).z) 'or'
-      (FALSE '&' FALSE '&' 'not' (c).z) by MARGREL1:49
-    .=FALSE 'or' (FALSE '&' (c).z) 'or'
-      (FALSE '&' FALSE '&' 'not' (c).z) by MARGREL1:49
-    .=FALSE 'or' FALSE 'or'
-      (FALSE '&' FALSE '&' 'not' (c).z) by MARGREL1:49
-    .=FALSE 'or' FALSE 'or' (FALSE '&' 'not' (c).z) by MARGREL1:49
-    .=FALSE 'or' FALSE 'or' FALSE by MARGREL1:49
-    .=FALSE 'or' FALSE by BINARITH:7
-    .=FALSE by BINARITH:7;
-      hence thesis by A1,A2,MARGREL1:43;
+     =FALSE;
+      hence thesis by A1,A2;
       end;
-      case A7:('not' (a).z 'or' 'not' (b).z 'or' 'not' (c).z)=FALSE;
-      A8:'not' (a).z 'or' 'not' (b).z=TRUE or
+      case A6:('not' (a).z 'or' 'not' (b).z 'or' 'not' (c).z)=FALSE;
+      A7:'not' (a).z 'or' 'not' (b).z=TRUE or
       'not' (a).z 'or' 'not' (b).z=FALSE by MARGREL1:39;
          'not' (c).z=TRUE or 'not' (c).z=FALSE by MARGREL1:39;
-then A9:  'not' (a).z 'or' 'not' (b).z=FALSE & 'not'
-(c).z=FALSE by A7,A8,BINARITH:19;
-      A10:'not' (a).z=TRUE or 'not' (a).z=FALSE by MARGREL1:39;
+then A8:  'not' (a).z 'or' 'not' (b).z=FALSE & 'not'
+(c).z=FALSE by A6;
          'not' (b).z=TRUE or 'not' (b).z=FALSE by MARGREL1:39;
-      then 'not' (a).z=FALSE & 'not' (b).z=FALSE by A7,A8,A10,BINARITH:19;
-      then (a).z=TRUE & (b).z=TRUE & (c).z=TRUE by A9,MARGREL1:41;
+      then 'not' (a).z=FALSE & 'not' (b).z=FALSE by A6,A7;
+      then (a).z=TRUE & (b).z=TRUE & (c).z=TRUE by A8;
       then ('not' (a).z '&' (b).z '&' (c).z) 'or'
       ((a).z '&' 'not' (b).z '&' (c).z) 'or'
       ((a).z '&' (b).z '&' 'not' (c).z)
-     =(FALSE '&' (b).z '&' (c).z) 'or'
-      ((a).z '&' 'not' TRUE '&' (c).z) 'or'
-      ((a).z '&' (b).z '&' 'not' TRUE) by MARGREL1:41
-    .=(FALSE '&' (b).z '&' (c).z) 'or'
-      ((a).z '&' FALSE '&' (c).z) 'or'
-      ((a).z '&' (b).z '&' 'not' TRUE) by MARGREL1:41
-    .=(FALSE '&' (b).z '&' (c).z) 'or'
-      (FALSE '&' (a).z '&' (c).z) 'or'
-      ((a).z '&' (b).z '&' FALSE) by MARGREL1:41
-    .=(FALSE '&' (c).z) 'or' (FALSE '&' (a).z '&' (c).z) 'or'
-      (FALSE '&' ((a).z '&' (b).z)) by MARGREL1:49
-    .=FALSE 'or' (FALSE '&' (a).z '&' (c).z) 'or'
-      (FALSE '&' ((a).z '&' (b).z)) by MARGREL1:49
-    .=FALSE 'or' (FALSE '&' (c).z) 'or'
-      (FALSE '&' ((a).z '&' (b).z)) by MARGREL1:49
-    .=FALSE 'or' FALSE 'or' (FALSE '&' ((a).z '&' (b).z)) by MARGREL1:49
-    .=FALSE 'or' FALSE 'or' FALSE by MARGREL1:49
-    .=FALSE 'or' FALSE by BINARITH:7
-    .=FALSE by BINARITH:7;
-      hence thesis by A1,A2,MARGREL1:43;
+     =FALSE;
+      hence thesis by A1,A2;
       end;
       end;
       hence thesis;
@@ -1704,101 +1445,62 @@ then A5:  ('not' (a).z '&' (b).z '&' (c).z) 'or'
       ((a).z '&' 'not' (b).z '&' (c).z)=FALSE by MARGREL1:39;
       A7: ((a).z '&' (b).z '&' 'not' (c).z)=TRUE or
       ((a).z '&' (b).z '&' 'not' (c).z)=FALSE by MARGREL1:39;
-      A8:('not' (a).z '&' (b).z '&' (c).z)=TRUE or
-      ('not' (a).z '&' (b).z '&' (c).z)=FALSE by MARGREL1:39;
-      A9: ((a).z '&' 'not' (b).z '&' (c).z)=TRUE or
+      A8: ((a).z '&' 'not' (b).z '&' (c).z)=TRUE or
       ((a).z '&' 'not' (b).z '&' (c).z)=FALSE by MARGREL1:39;
-then A10:  ('not' (a).z '&' (b).z '&' (c).z)=FALSE &
+then A9:  ('not' (a).z '&' (b).z '&' (c).z)=FALSE &
       ((a).z '&' 'not' (b).z '&' (c).z)=FALSE &
       ((a).z '&' (b).z '&' 'not' (c).z)=FALSE
-      by A3,A4,A6,A7,A8,BINARITH:19;
+      by A3,A4,A6,A7;
+         now per cases by A9,MARGREL1:45;
+      case A10: 'not' (a).z '&' (b).z=FALSE;
          now per cases by A10,MARGREL1:45;
-      case A11: 'not' (a).z '&' (b).z=FALSE;
-         now per cases by A11,MARGREL1:45;
-        case A12:'not' (a).z=FALSE;
-        then A13:(a).z=TRUE by MARGREL1:41;
-        then A14: 'not' (b).z '&' (c).z=FALSE by A10,MARGREL1:50;
-           now per cases by A14,MARGREL1:45;
+        case A11:'not' (a).z=FALSE;
+        then A12:(a).z=TRUE;
+        then A13: 'not' (b).z '&' (c).z=FALSE by A9;
+           now per cases by A13,MARGREL1:45;
         case 'not' (b).z=FALSE;
-then A15:    (b).z=TRUE by MARGREL1:41;
+then A14:    (b).z=TRUE;
         then (a).z '&' (b).z '&' 'not' (c).z
-       =TRUE '&' 'not' (c).z by A13,MARGREL1:50
-      .='not' (c).z by MARGREL1:50;
-        then (c).z=TRUE by A3,A4,A7,BINARITH:19,MARGREL1:41;
+       ='not' (c).z by A12;
+        then (c).z=TRUE by A3,A4,A7;
         then ((a).z 'or' (b).z) '&' ((b).z 'or' (c).z) '&'
         ((c).z 'or' (a).z) '&' ('not' (a).z 'or' 'not' (b).z 'or' 'not'
 (c).z)
-       =(TRUE 'or' TRUE) '&' (TRUE 'or' TRUE) '&'
-        (TRUE 'or' TRUE) '&' (FALSE 'or' FALSE)
-        by A12,A13,A15,BINARITH:7
-      .=FALSE '&' ((TRUE 'or' TRUE) '&' (TRUE 'or' TRUE) '&'
-        (TRUE 'or' TRUE)) by BINARITH:7
-      .=FALSE by MARGREL1:49;
-        hence thesis by A1,A2,MARGREL1:43;
+       =FALSE by A11,A14;
+        hence thesis by A1,A2;
         end;
-        case A16:(c).z=FALSE;
+        case (c).z=FALSE;
         then (a).z '&' (b).z '&' 'not' (c).z
-       =TRUE '&' (b).z '&' TRUE by A13,MARGREL1:41
-      .=TRUE '&' (b).z by MARGREL1:50
-      .=(b).z by MARGREL1:50;
+       =(b).z by A12;
         then ((a).z 'or' (b).z) '&' ((b).z 'or' (c).z) '&'
         ((c).z 'or' (a).z) '&' ('not' (a).z 'or' 'not' (b).z 'or' 'not'
 (c).z)
-       =FALSE '&'
-        ((c).z 'or' (a).z) '&' ('not' (a).z 'or' 'not' (b).z 'or' 'not'
-(c).z)
-        by A5,A6,A13,A16,MARGREL1:49
-      .=FALSE '&'
-        ('not' (a).z 'or' 'not' (b).z 'or' 'not' (c).z)
-        by MARGREL1:49
-      .=FALSE by MARGREL1:49;
-        hence thesis by A1,A2,MARGREL1:43;
+       =FALSE by A5,A6;
+        hence thesis by A1,A2;
         end;
         end;
         hence thesis;
         end;
-        case A17:(b).z=FALSE;
+        case A15:(b).z=FALSE;
         then (a).z '&' 'not' (b).z '&' (c).z
-       =TRUE '&' (a).z '&' (c).z by MARGREL1:41
-      .=((a).z '&' (c).z) by MARGREL1:50;
-        then A18: (a).z '&' (c).z=FALSE by A3,A4,A6,A9,BINARITH:19;
-           now per cases by A18,MARGREL1:45;
+       =((a).z '&' (c).z);
+        then A16: (a).z '&' (c).z=FALSE by A3,A4,A8;
+           now per cases by A16,MARGREL1:45;
           case (a).z=FALSE;
           then ((a).z 'or' (b).z) '&' ((b).z 'or' (c).z) '&'
           ((c).z 'or' (a).z) '&' ('not' (a).z 'or' 'not'
           (b).z 'or' 'not'
 (c).z)
-         =FALSE '&' ((b).z 'or' (c).z) '&'
-          ((c).z 'or' (a).z) '&' ('not' (a).z 'or' 'not'
-          (b).z 'or' 'not'
-(c).z)
-         by A17,BINARITH:7
-        .=FALSE '&'
-          ((c).z 'or' (a).z) '&' ('not' (a).z 'or' 'not'
-          (b).z 'or' 'not'
-(c).z)
-         by MARGREL1:49
-        .=FALSE '&' ('not' (a).z 'or' 'not' (b).z 'or' 'not' (c).z)
-         by MARGREL1:49
-        .=FALSE by MARGREL1:49;
-          hence thesis by A1,A2,MARGREL1:43;
+         =FALSE by A15;
+          hence thesis by A1,A2;
           end;
           case (c).z=FALSE;
           then ((a).z 'or' (b).z) '&' ((b).z 'or' (c).z) '&'
           ((c).z 'or' (a).z) '&' ('not' (a).z 'or' 'not'
           (b).z 'or' 'not'
 (c).z)
-         =FALSE '&' ((a).z 'or' (b).z) '&'
-          ((c).z 'or' (a).z) '&' ('not' (a).z 'or' 'not'
-          (b).z 'or' 'not' (c).z) by A17,BINARITH:7
-        .=FALSE '&'
-          ((c).z 'or' (a).z) '&' ('not' (a).z 'or' 'not'
-          (b).z 'or' 'not' (c).z) by MARGREL1:49
-        .=FALSE '&'
-          ('not' (a).z 'or' 'not' (b).z 'or' 'not' (c).z)
-         by MARGREL1:49
-        .=FALSE by MARGREL1:49;
-          hence thesis by A1,A2,MARGREL1:43;
+         =FALSE by A15;
+          hence thesis by A1,A2;
         end;
         end;
         hence thesis;
@@ -1806,37 +1508,23 @@ then A15:    (b).z=TRUE by MARGREL1:41;
       end;
       hence thesis;
       end;
-      case A19:(c).z=FALSE;
-      then A20: (a).z '&' (b).z '&' 'not' (c).z
-     =TRUE '&' ((a).z '&' (b).z) by MARGREL1:41
-    .=((a).z '&' (b).z) by MARGREL1:50;
-         now per cases by A3,A4,A7,A20,BINARITH:19,MARGREL1:45;
+      case A17:(c).z=FALSE;
+      then A18: (a).z '&' (b).z '&' 'not' (c).z
+     =((a).z '&' (b).z);
+         now per cases by A3,A4,A7,A18,MARGREL1:45;
         case (a).z=FALSE;
         then ((a).z 'or' (b).z) '&' ((b).z 'or' (c).z) '&'
         ((c).z 'or' (a).z) '&' ('not' (a).z 'or' 'not' (b).z 'or' 'not'
 (c).z)
-       =FALSE '&' (((a).z 'or' (b).z) '&' ((b).z 'or' (c).z)) '&'
-        ('not' (a).z 'or' 'not' (b).z 'or' 'not' (c).z) by A19,BINARITH:7
-      .=FALSE '&' ('not' (a).z 'or' 'not' (b).z 'or' 'not' (c).z)
-       by MARGREL1:49
-      .=FALSE by MARGREL1:49;
-        hence thesis by A1,A2,MARGREL1:43;
+       =FALSE by A17;
+        hence thesis by A1,A2;
         end;
         case (b).z=FALSE;
         then ((a).z 'or' (b).z) '&' ((b).z 'or' (c).z) '&'
         ((c).z 'or' (a).z) '&' ('not' (a).z 'or' 'not' (b).z 'or' 'not'
 (c).z)
-       = FALSE '&' ((a).z 'or' (b).z) '&'
-        ((c).z 'or' (a).z) '&' ('not' (a).z 'or' 'not' (b).z 'or' 'not'
-(c).z) by A19,BINARITH:7
-      .= FALSE '&'
-        ((c).z 'or' (a).z) '&' ('not' (a).z 'or' 'not' (b).z 'or' 'not'
-(c).z)
-       by MARGREL1:49
-      .=FALSE '&' ('not' (a).z 'or' 'not' (b).z 'or' 'not' (c).z)
-       by MARGREL1:49
-      .=FALSE by MARGREL1:49;
-        hence thesis by A1,A2,MARGREL1:43;
+       =FALSE by A17;
+        hence thesis by A1,A2;
       end;
       end;
       hence thesis;
@@ -1846,10 +1534,10 @@ then A15:    (b).z=TRUE by MARGREL1:41;
     end;
     hence thesis;
   end;
-then A21:(a 'or' b) '&' (b 'or' c) '&' (c 'or' a) '&' 'not'( a '&' b '&' c) '<'
+then A19:(a 'or' b) '&' (b 'or' c) '&' (c 'or' a) '&' 'not'( a '&' b '&' c) '<'
   ('not' a '&' b '&' c) 'or' (a '&' 'not' b '&' c) 'or' (a '&' b '&' 'not' c)
   by BVFUNC_1:def 15;
-A22:('not' a '&' b '&' c) 'or' (a '&' 'not' b '&' c) 'or' (a '&' b '&' 'not'
+A20:('not' a '&' b '&' c) 'or' (a '&' 'not' b '&' c) 'or' (a '&' b '&' 'not'
 c) '<'
   (a 'or' b) '&' 'not'( a '&' b '&' c) by Lm4;
      ('not' b '&' c '&' a) 'or' (b '&' 'not' c '&' a) 'or'
@@ -1867,7 +1555,7 @@ c) '<'
   then (a '&' 'not' b '&' c) 'or' (a '&' b '&' 'not' c) 'or'
   ('not' a '&' b '&' c) '<'
   (b 'or' c) '&' 'not'( a '&' b '&' c) by BVFUNC_1:7;
-then A23:('not' a '&' b '&' c) 'or' (a '&' 'not' b '&' c) 'or'
+then A21:('not' a '&' b '&' c) 'or' (a '&' 'not' b '&' c) 'or'
 (a '&' b '&' 'not' c) '<'
   (b 'or' c) '&' 'not'( a '&' b '&' c) by BVFUNC_1:11;
      ('not' c '&' a '&' b) 'or' (c '&' 'not' a '&' b) 'or'
@@ -1885,25 +1573,25 @@ then A23:('not' a '&' b '&' c) 'or' (a '&' 'not' b '&' c) 'or'
   then (a '&' b '&' 'not' c) 'or' ('not' a '&' b '&' c) 'or'
   (a '&' 'not' b '&' c) '<'
   (c 'or' a) '&' 'not'( a '&' b '&' c) by BVFUNC_1:7;
-then A24:('not' a '&' b '&' c) 'or' (a '&' 'not' b '&' c) 'or'
+then A22:('not' a '&' b '&' c) 'or' (a '&' 'not' b '&' c) 'or'
 (a '&' b '&' 'not'
 c) '<'
   (c 'or' a) '&' 'not'( a '&' b '&' c) by BVFUNC_1:11;
-A25:('not' a '&' b '&' c) 'or' (a '&' 'not' b '&' c) 'or'
+A23:('not' a '&' b '&' c) 'or' (a '&' 'not' b '&' c) 'or'
 (a '&' b '&' 'not'
 c) 'imp'
-  (a 'or' b) '&' 'not'( a '&' b '&' c) = I_el(Y) by A22,BVFUNC_1:19;
-A26:('not' a '&' b '&' c) 'or' (a '&' 'not' b '&' c) 'or'
+  (a 'or' b) '&' 'not'( a '&' b '&' c) = I_el(Y) by A20,BVFUNC_1:19;
+A24:('not' a '&' b '&' c) 'or' (a '&' 'not' b '&' c) 'or'
 (a '&' b '&' 'not' c) 'imp'
-  (b 'or' c) '&' 'not'( a '&' b '&' c) = I_el(Y) by A23,BVFUNC_1:19;
-A27:('not' a '&' b '&' c) 'or' (a '&' 'not' b '&' c) 'or' (a '&' b '&' 'not'
+  (b 'or' c) '&' 'not'( a '&' b '&' c) = I_el(Y) by A21,BVFUNC_1:19;
+A25:('not' a '&' b '&' c) 'or' (a '&' 'not' b '&' c) 'or' (a '&' b '&' 'not'
 c) 'imp'
-  (c 'or' a) '&' 'not'( a '&' b '&' c) = I_el(Y) by A24,BVFUNC_1:19;
+  (c 'or' a) '&' 'not'( a '&' b '&' c) = I_el(Y) by A22,BVFUNC_1:19;
      ('not' a '&' b '&' c) 'or' (a '&' 'not' b '&' c) 'or' (a '&' b '&' 'not'
 c) 'imp'
   (a 'or' b) '&' 'not'( a '&' b '&' c) '&' ((b 'or' c) '&'
   'not'( a '&' b '&' c))
-  = I_el(Y) by A25,A26,BVFUNC_6:18;
+  = I_el(Y) by A23,A24,BVFUNC_6:18;
   then ('not' a '&' b '&' c) 'or' (a '&' 'not' b '&' c) 'or' (a '&' b '&'
 'not'
 c) 'imp'
@@ -1924,13 +1612,13 @@ c) 'imp'
 'not'
 c) 'imp'
   (a 'or' b) '&' (b 'or' c) '&' 'not'( a '&' b '&' c)
-  = I_el(Y) by BVFUNC_1:6;
-then A28:('not' a '&' b '&' c) 'or' (a '&' 'not' b '&' c) 'or' (a '&' b '&'
+  = I_el(Y);
+then A26:('not' a '&' b '&' c) 'or' (a '&' 'not' b '&' c) 'or' (a '&' b '&'
 'not'
 c) 'imp'
   (a 'or' b) '&' (b 'or' c) '&' 'not'( a '&' b '&' c) '&'
   ((c 'or' a) '&' 'not'( a '&' b '&' c))
-  = I_el(Y) by A27,BVFUNC_6:18;
+  = I_el(Y) by A25,BVFUNC_6:18;
      (a 'or' b) '&' (b 'or' c) '&' 'not'( a '&' b '&' c) '&'
   ((c 'or' a) '&' 'not'( a '&' b '&' c))
  =(a 'or' b) '&' (b 'or' c) '&' 'not'( a '&' b '&' c) '&'
@@ -1939,13 +1627,12 @@ c) 'imp'
   'not'( a '&' b '&' c) by BVFUNC_1:7
 .=(a 'or' b) '&' (b 'or' c) '&' (c 'or' a) '&' ('not'( a '&' b '&' c) '&'
   'not'( a '&' b '&' c)) by BVFUNC_1:7
-.=(a 'or' b) '&' (b 'or' c) '&' (c 'or' a) '&' 'not'( a '&' b '&' c)
- by BVFUNC_1:6;
+.=(a 'or' b) '&' (b 'or' c) '&' (c 'or' a) '&' 'not'( a '&' b '&' c);
   then ('not' a '&' b '&' c) 'or' (a '&' 'not' b '&' c) 'or'
   (a '&' b '&' 'not' c) '<'
   (a 'or' b) '&' (b 'or' c) '&' (c 'or' a) '&' 'not'( a '&' b '&' c)
-  by A28,BVFUNC_1:19;
-  hence thesis by A21,BVFUNC_1:18;
+  by A26,BVFUNC_1:19;
+  hence thesis by A19,BVFUNC_1:18;
 end;
 
 theorem  for a,b,c being Element of Funcs(Y,BOOLEAN) holds
@@ -1972,21 +1659,18 @@ b).z 'or' (c).z) by BVFUNC_1:def 7;
       A5:'not' (a).z=TRUE or 'not' (a).z=FALSE by MARGREL1:39;
       A6: ((b).z '&' (c).z)=TRUE or ((b).z '&' (c).z)=FALSE
         by MARGREL1:39;
-A7:  ('not' a).z=FALSE by A3,A4,A5,BINARITH:19,VALUAT_1:def 5;
-         now per cases by A3,A4,A6,BINARITH:19,MARGREL1:45;
+A7:  ('not' a).z=FALSE by A3,A4,A5,VALUAT_1:def 5;
+         now per cases by A3,A4,A6,MARGREL1:45;
       case (b).z=FALSE;
       then (('not' a).z 'or' (b).z) '&' (('not' b).z 'or' (c).z)
-     =FALSE '&' (('not' b).z 'or' (c).z) by A7,BINARITH:7
-    .=FALSE by MARGREL1:49;
-      hence thesis by A1,A2,MARGREL1:43;
+     =FALSE by A7;
+      hence thesis by A1,A2;
       end;
       case (c).z=FALSE;
       then (('not' a).z 'or' (b).z) '&' (('not' b).z 'or' (c).z)
-     =(b).z '&' (('not' b).z 'or' FALSE) by A7,BINARITH:7
-    .=(b).z '&' ('not' b).z by BINARITH:7
-    .=(b).z '&' 'not' (b).z by VALUAT_1:def 5
-    .=FALSE by MARGREL1:46;
-      hence thesis by A1,A2,MARGREL1:43;
+     =(b).z '&' 'not' (b).z by  A7,VALUAT_1:def 5
+    .=FALSE by XBOOLEAN:138;
+      hence thesis by A1,A2;
       end;
       end;
       hence thesis;
@@ -2020,21 +1704,18 @@ b).z)=FALSE
        by MARGREL1:39;
       A6: (c).z=TRUE or (c).z=FALSE
         by MARGREL1:39;
-         now per cases by A3,A4,A5,BINARITH:19,MARGREL1:45;
+         now per cases by A3,A4,A5,MARGREL1:45;
       case ('not' a).z=FALSE;
       then (('not' a).z 'or' (b).z) '&' (('not' b).z 'or' (c).z)
-     =(b).z '&' (('not' b).z 'or' FALSE) by A3,A4,A6,BINARITH:7,19
-    .=(b).z '&' ('not' b).z by BINARITH:7
-    .=(b).z '&' 'not' (b).z by VALUAT_1:def 5
-    .=FALSE by MARGREL1:46;
-      hence thesis by A1,A2,MARGREL1:43;
+     =(b).z '&' 'not' (b).z by  A3,A4,A6,VALUAT_1:def 5
+    .=FALSE by XBOOLEAN:138;
+      hence thesis by A1,A2;
       end;
       case ('not' b).z=FALSE;
       then (('not' a).z 'or' (b).z) '&' (('not' b).z 'or' (c).z)
-     =(('not' a).z 'or' (b).z) '&' FALSE by A3,A4,A5,BINARITH:19
-,MARGREL1:43
-    .=FALSE by MARGREL1:49;
-      hence thesis by A1,A2,MARGREL1:43;
+     =(('not' a).z 'or' (b).z) '&' FALSE by A3,A4,MARGREL1:43
+    .=FALSE;
+      hence thesis by A1,A2;
       end;
       end;
       hence thesis;
@@ -2066,10 +1747,9 @@ b).z 'or' (c).z) by BVFUNC_1:def 7;
        by MARGREL1:39;
       A6: ((b).z 'or' (c).z)=TRUE or ((b).z 'or' (c).z)=FALSE
         by MARGREL1:39;
-      A7:(b).z=TRUE or (b).z=FALSE by MARGREL1:39;
          (c).z=TRUE or (c).z=FALSE by MARGREL1:39;
-      then (b).z=FALSE & (c).z=FALSE by A3,A4,A6,A7,BINARITH:19;
-      hence thesis by A1,A2,A4,A5,A6,BINARITH:19,MARGREL1:49;
+      then (b).z=FALSE & (c).z=FALSE by A3,A4,A6;
+      hence thesis by A1,A2,A4,A5;
     end;
     hence thesis;
 end;
@@ -2099,10 +1779,9 @@ b).z 'or' (c).z) by BVFUNC_1:def 7;
       A6: ((b).z 'or' ('not' c).z)=TRUE or ((b).z 'or' ('not' c).z)=
 FALSE
         by MARGREL1:39;
-      A7:(b).z=TRUE or (b).z=FALSE by MARGREL1:39;
          ('not' c).z=TRUE or ('not' c).z=FALSE by MARGREL1:39;
-      then (b).z=FALSE & ('not' c).z=FALSE by A3,A4,A6,A7,BINARITH:19;
-      hence thesis by A1,A2,A4,A5,A6,BINARITH:19,MARGREL1:49;
+      then (b).z=FALSE & ('not' c).z=FALSE by A3,A4,A6;
+      hence thesis by A1,A2,A4,A5;
     end;
     hence thesis;
 end;
@@ -2131,10 +1810,9 @@ b).z 'or' (c).z) by BVFUNC_1:def 7;
        by MARGREL1:39;
       A6: ((c).z 'or' (a).z)=TRUE or ((c).z 'or' (a).z)=FALSE
         by MARGREL1:39;
-      A7:(c).z=TRUE or (c).z=FALSE by MARGREL1:39;
          (a).z=TRUE or (a).z=FALSE by MARGREL1:39;
-      then (c).z=FALSE & (a).z=FALSE by A3,A4,A6,A7,BINARITH:19;
-      hence thesis by A1,A2,A4,A5,A6,BINARITH:19,MARGREL1:49;
+      then (c).z=FALSE & (a).z=FALSE by A3,A4,A6;
+      hence thesis by A1,A2,A4,A5;
     end;
     hence thesis;
 end;
@@ -2164,10 +1842,9 @@ b).z 'or' (c).z) by BVFUNC_1:def 7;
       A6: ((c).z 'or' ('not' a).z)=TRUE or ((c).z 'or' ('not' a).z)=
 FALSE
         by MARGREL1:39;
-      A7:(c).z=TRUE or (c).z=FALSE by MARGREL1:39;
          ('not' a).z=TRUE or ('not' a).z=FALSE by MARGREL1:39;
-      then (c).z=FALSE & ('not' a).z=FALSE by A3,A4,A6,A7,BINARITH:19;
-      hence thesis by A1,A2,A4,A5,A6,BINARITH:19,MARGREL1:49;
+      then (c).z=FALSE & ('not' a).z=FALSE by A3,A4,A6;
+      hence thesis by A1,A2,A4,A5;
     end;
     hence thesis;
 end;

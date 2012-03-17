@@ -9,10 +9,9 @@ environ
  vocabularies ARYTM, ARYTM_1, ARYTM_3, SQUARE_1, FUNCT_1, PRE_FF, FILTER_0,
       FUNCT_3, RELAT_1, ORDINAL2, FIB_NUM, ABSVALUE, POWER, SEQ_1, SEQ_2,
       SEQM_3, LATTICES, GROUP_1;
- notations SUBSET_1,
-  ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0, SQUARE_1, SEQ_1, XXREAL_0, COMPLEX1,
-      NAT_1, INT_2, PRE_FF, SEQ_2, SEQM_3, LIMFUNC1, QUIN_1, NEWTON,
-      POWER;
+ notations SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0, SQUARE_1, SEQ_1,
+      XXREAL_0, COMPLEX1, NAT_1, INT_2, PRE_FF, SEQ_2, SEQM_3, LIMFUNC1,
+      QUIN_1, NEWTON, POWER;
  constructors REAL_1, SQUARE_1, NAT_1, RAT_1, SEQ_2, SEQM_3, LIMFUNC1, QUIN_1,
       NEWTON, POWER, PRE_FF;
  registrations XREAL_0, SQUARE_1, QUIN_1, NEWTON, SEQ_1, RELSET_1, MEMBERED,
@@ -32,7 +31,7 @@ begin
 :: The proof we present is a slight adaptation of the one found in
 :: ``The Fibonacci Numbers'' by N. N. Vorobyov
 
-reserve a,k,m, n, p,r,s for Element of NAT;
+reserve a,k,m, n, p,r for Element of NAT;
 
 :: Preliminary lemmas
 
@@ -313,27 +312,27 @@ let m, n be Element of NAT;
 assume m >= n;
 then consider k be Nat such that A1:m = n+k by NAT_1:28;
   reconsider k as Element of NAT by ORDINAL1:def 13;
-AA: m = n+k by A1;
+A2: m = n+k by A1;
   for k, n being Element of NAT holds Fib(n+k) >= Fib(n)
 proof
 defpred P[Element of NAT] means
 for n being Element of NAT holds Fib(n+$1) >= Fib(n);
-   A2:P[0];
-   A3: for k being Element of NAT st P[k] holds P[k+1]
+   A3:P[0];
+   A4: for k being Element of NAT st P[k] holds P[k+1]
    proof
       let k;
-      assume A4:P[k];
+      assume A5:P[k];
       let n;
       n + (k+1) = (n+k) + 1;
-      then A5: Fib(n + (k+1)) >= Fib(n+k) by Lm4;
-      Fib(n+k) >= Fib(n) by A4;
-      hence thesis by A5,XXREAL_0:2;
+      then A6: Fib(n + (k+1)) >= Fib(n+k) by Lm4;
+      Fib(n+k) >= Fib(n) by A5;
+      hence thesis by A6,XXREAL_0:2;
    end;
-A6: for k holds P[k] from NAT_1:sch 1(A2, A3);
+A7: for k holds P[k] from NAT_1:sch 1(A3, A4);
    let k, n be Element of NAT;
-   thus thesis by A6;
+   thus thesis by A7;
 end;
-hence thesis by A1,AA;
+hence thesis by A2;
 end;
 
 Lm6: for m being Element of NAT holds Fib(m+1) <> 0
@@ -524,7 +523,6 @@ end;
 Lm8: (tau ^2 = tau + 1) & (tau_bar ^2 = tau_bar + 1)
 proof
    A1: delta(1, -1, -1) = (-1) ^2 - (4 * 1 * (-1)) by QUIN_1:def 1
-       .= 1 - (-4)
        .= 5;
    then A2: (- (-1) - sqrt delta(1, -1, -1)) / (2 * 1)
         = tau_bar;
@@ -545,8 +543,7 @@ Lm10: sqrt 5 <> 0 by SQUARE_1:85,95;
 
 Lm11: sqrt 5 < 3
 proof
-     3 ^2 = 3 * 3
-          .= 9;
+     3 ^2 = 9;
      then sqrt 9 = 3 by SQUARE_1:89;
      hence thesis by SQUARE_1:95;
 end;
@@ -627,9 +624,7 @@ theorem
               .= (tau_bar |^ k) * (tau_bar |^ (1 + 1)) by NEWTON:13
               .= (tau_bar |^ k) *
                  (tau_bar * (tau_bar |^ 1)) by NEWTON:11
-              .= (tau_bar |^ k) *
-                 (tau_bar * tau_bar) by NEWTON:10
-              .= (tau_bar |^ k) * (tau_bar + 1) by Lm8
+              .= (tau_bar |^ k) * (tau_bar + 1) by  NEWTON:10,Lm8
               .= (tau_bar |^ k * tau_bar) +
                   (tau_bar |^ k) * 1
               .= (tau_bar |^ (k+1)) + (tau_bar |^ k) * 1 by NEWTON:11
@@ -716,7 +711,7 @@ set k = Fib(n),
     hence thesis by COMPLEX1:138;
 end;
 
-reserve F, G, f, g, h for Real_Sequence;
+reserve F, f, g, h for Real_Sequence;
 
 :: Preliminary facts on real sequences
 

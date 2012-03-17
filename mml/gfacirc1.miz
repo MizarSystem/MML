@@ -18,11 +18,12 @@ environ
  registrations STRUCT_0, RELAT_1, RELSET_1, FINSEQ_2, FRAENKEL, MARGREL1,
       CARD_3, CIRCCOMB, FACIRC_1;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
- definitions TARSKI, XBOOLE_0, CIRCUIT2, FACIRC_1, MSAFREE2;
+ definitions TARSKI, XBOOLE_0, CIRCUIT2, FACIRC_1, MSAFREE2, MARGREL1,
+      XBOOLEAN;
  theorems TARSKI, XBOOLE_0, XBOOLE_1, ZFMISC_1, ENUMSET1, RELAT_1, ORDINAL1,
-      FUNCT_1, FUNCT_2, FINSEQ_1, FINSEQ_2, FINSEQ_3, FINSEQ_6, MARGREL1,
-      BINARITH, CIRCUIT1, CIRCUIT2, CIRCCOMB, FACIRC_1, TWOSCOMP, CIRCCMB2,
-      FACIRC_2;
+      FUNCT_1, FUNCT_2, FINSEQ_1, FINSEQ_2, FINSEQ_3, FINSEQ_6, BINARITH,
+      CIRCUIT1, CIRCUIT2, CIRCCOMB, FACIRC_1, TWOSCOMP, CIRCCMB2, FACIRC_2,
+      XBOOLEAN;
  schemes FUNCT_2, FACIRC_1;
 
 begin :: Preliminaries
@@ -52,7 +53,6 @@ scheme 1AryBooleUniq {F(set) -> Element of BOOLEAN}:
   (for x being Element of BOOLEAN holds f2.<*x*> = F(x))
  holds f1 = f2
 proof
-   deffunc G(Tuple of 1, BOOLEAN) = F($1.1);
    let f1,f2 be Function of 1-tuples_on BOOLEAN, BOOLEAN such that
 A1:  for x being Element of BOOLEAN holds f1.<*x*> = F(x) and
 A2:  for x being Element of BOOLEAN holds f2.<*x*> = F(x);
@@ -121,13 +121,12 @@ theorem Th1:
   proof
     let x be Element of BOOLEAN;
     thus inv1.<*x*> = 'not' x by Def1;
-    thus inv1.<*x*> = 'not' x by Def1
-         .= 'not' ( x '&' x ) by BINARITH:16
+    thus inv1.<*x*> = 'not' ( x '&' x ) by Def1
          .= nand2.<*x,x*> by TWOSCOMP:def 4;
-    thus inv1.<*0*> = 'not' FALSE by Def1,MARGREL1:36
-         .= 1 by MARGREL1:36,41;
-    thus inv1.<*1*> = 'not' TRUE by Def1,MARGREL1:36
-         .= 0 by MARGREL1:36,41;
+    thus inv1.<*0*> = 'not' FALSE by Def1
+         .= 1;
+    thus inv1.<*1*> = 'not' TRUE by Def1
+         .= 0;
   end;
 
 definition
@@ -157,11 +156,10 @@ theorem
   proof
     let x be Element of BOOLEAN;
     thus buf1.<*x*> = x by Def2;
-    thus buf1.<*x*> = x by Def2
-         .= x '&' x by BINARITH:16
+    thus buf1.<*x*> = x '&' x by Def2
          .= and2.<*x,x*> by TWOSCOMP:def 1;
-    thus buf1.<*0*> = 0 by Def2,MARGREL1:36;
-    thus buf1.<*1*> = 1 by Def2,MARGREL1:36;
+    thus buf1.<*0*> = FALSE by Def2 .= 0;
+    thus buf1.<*1*> = TRUE by Def2 .= 1;
   end;
 
 ::-------------------------------------
@@ -200,23 +198,20 @@ theorem
           = x '&' 'not' y by Def3
          .=and2a.<*y,x*> by TWOSCOMP:def 2;
     thus and2c.<*x,y*>
-          = x '&' 'not' y by Def3
-         .= 'not' ('not' x 'or' 'not' 'not' y) by BINARITH:12
+          = 'not' ('not' x 'or' 'not' 'not' y) by Def3
          .= nor2a.<*x,y*> by TWOSCOMP:def 11;
     thus and2c.<*0,0*>
-          = FALSE '&' 'not' FALSE by Def3,MARGREL1:36
-         .= 0 by MARGREL1:36,45;
+          = FALSE '&' 'not' FALSE by Def3
+         .= 0;
     thus and2c.<*0,1*>
-          = FALSE '&' 'not' TRUE by Def3,MARGREL1:36
-         .= 0 by MARGREL1:36,45;
+          = FALSE '&' 'not' TRUE by Def3
+         .= 0;
     thus and2c.<*1,0*>
-          = TRUE '&' 'not' FALSE by Def3,MARGREL1:36
-         .= TRUE '&' TRUE by MARGREL1:41
-         .= 1 by MARGREL1:36,45;
+          = TRUE '&' 'not' FALSE by Def3
+         .= 1;
     thus and2c.<*1,1*>
-          = TRUE '&' 'not' TRUE by Def3,MARGREL1:36
-         .= TRUE '&' FALSE by MARGREL1:41
-         .= 0 by MARGREL1:36,45;
+          = TRUE '&' 'not' TRUE by Def3
+         .= 0;
   end;
 
 definition
@@ -249,64 +244,33 @@ theorem Th4:
   proof
     let x,y be Element of BOOLEAN;
     thus xor2c.<*x,y*> = x 'xor' 'not' y by Def4;
-    thus xor2c.<*x,y*>
-      = x 'xor' 'not' y by Def4
-     .= ('not' x '&' 'not' y) 'or' (x '&' 'not' 'not' y) by BINARITH:def 2
-     .= ('not' 'not' x '&' y) 'or' ('not' x '&' 'not' y)
-     .= 'not' x 'xor' y by BINARITH:def 2
+    thus xor2c.<*x,y*> = x 'xor' 'not' y by Def4
+     .= 'not' x 'xor' y
      .= xor2a.<*x,y*> by TWOSCOMP:def 14;
     thus xor2c.<*x,y*>
       = x 'xor' 'not' y by Def4
-     .= ('not' x '&' 'not' y) 'or' (x '&' 'not' 'not' y) by BINARITH:def 2
+     .= ('not' x '&' 'not' y) 'or' (x '&' 'not' 'not' y)
      .= or2.<*('not' x '&' 'not' y), (x '&' y) *> by TWOSCOMP:def 7
      .= or2.<*and2b.<*x,y*>, (x '&' y) *> by TWOSCOMP:def 3
      .= or2.<*and2b.<*x,y*>,and2.<*x,y*> *> by TWOSCOMP:def 1;
     thus xor2c.<*0,0*>
-      = FALSE 'xor' 'not' FALSE by Def4,MARGREL1:36
-     .= 1 by BINARITH:17,MARGREL1:36;
+      = FALSE 'xor' 'not' FALSE by Def4
+     .= 1 by BINARITH:17;
     thus xor2c.<*0,1*>
-      = FALSE 'xor' 'not' TRUE by Def4,MARGREL1:36
-     .= 'not' TRUE by BINARITH:14
-     .= 0 by MARGREL1:36,41;
+      = FALSE 'xor' 'not' TRUE by Def4
+     .= 0;
     thus xor2c.<*1,0*>
-      = TRUE 'xor' 'not' FALSE by Def4,MARGREL1:36
-     .= 'not' 'not' FALSE by BINARITH:13
-     .= 0 by MARGREL1:36;
+      = TRUE 'xor' 'not' FALSE by Def4
+     .= 0;
     thus xor2c.<*1,1*>
-      = TRUE 'xor' 'not' TRUE by Def4,MARGREL1:36
-     .= 'not' 'not' TRUE by BINARITH:13
-     .= 1 by MARGREL1:36;
+      = TRUE 'xor' 'not' TRUE by Def4
+     .= 1 by BINARITH:13;
   end;
 
-theorem Th5:
+theorem
   for x,y being Element of BOOLEAN holds
     'not' (x 'xor' y) = 'not' x 'xor' y &
-    'not' (x 'xor' y) = x 'xor' 'not' y &
-    'not' x 'xor' 'not' y = x 'xor' y
-  proof
-    let x,y be Element of BOOLEAN;
-    thus 'not' (x 'xor' y)
-       = 'not' (('not' x '&' y) 'or' (x '&' 'not' y)) by BINARITH:def 2
-      .= 'not' ('not' x '&' y) '&' 'not' (x '&' 'not' y) by BINARITH:10
-      .= ('not' 'not' x 'or' 'not' y) '&' 'not' (x '&' 'not' y) by BINARITH:9
-      .= (x 'or' 'not' y) '&' ('not' x 'or' 'not' 'not' y) by BINARITH:9
-      .= (x 'or' 'not' y) '&' 'not' x 'or' (x 'or' 'not' y) '&' y
-           by BINARITH:22
-      .= (x 'or' 'not' y) '&' 'not' x 'or' (x '&' y 'or' 'not' y '&' y)
-           by BINARITH:22
-      .= (x 'or' 'not' y) '&' 'not' x 'or' (x '&' y 'or' FALSE) by MARGREL1:46
-      .= (x 'or' 'not' y) '&' 'not' x 'or' (x '&' y) by BINARITH:7
-      .= (x '&' y) 'or' (x '&' 'not' x 'or' 'not' y '&' 'not' x) by BINARITH:22
-      .= (x '&' y) 'or' (FALSE 'or' 'not' y '&' 'not' x) by MARGREL1:46
-      .= ('not' 'not' x '&' y) 'or' ('not' x '&' 'not' y) by BINARITH:7
-      .= 'not' x 'xor' y by BINARITH:def 2;
-    hence 'not' (x 'xor' y) = xor2a.<*x,y*> by TWOSCOMP:def 14
-      .= xor2c.<*x,y*> by Th4
-      .= x 'xor' 'not' y by Def4;
-    thus 'not' x 'xor' 'not' y = xor2b.<*x,y*> by TWOSCOMP:def 15
-      .= xor2.<*x,y*> by TWOSCOMP:10
-      .= x 'xor' y by TWOSCOMP:def 13;
-  end;
+    'not' (x 'xor' y) = x 'xor' 'not' y by XBOOLEAN:74;
 
 theorem
   for x,y being Element of BOOLEAN holds
@@ -318,21 +282,21 @@ theorem
     thus inv1.<* xor2.<*x,y*> *>
        = inv1.<* x 'xor' y *> by TWOSCOMP:def 13
       .= 'not' (x 'xor' y) by Def1
-      .= 'not' x 'xor' y by Th5
+      .= 'not' x 'xor' y by XBOOLEAN:74
       .= xor2a.<*x,y*> by TWOSCOMP:def 14;
     hence inv1.<* xor2.<*x,y*> *> = xor2c.<*x,y*> by Th4;
     thus xor2.<* inv1.<*x*>, inv1.<*y*> *>
        = xor2.<* 'not' x, inv1.<*y*> *> by Th1
       .= xor2.<* 'not' x, 'not' y *> by Th1
       .= 'not' x 'xor' 'not' y by TWOSCOMP:def 13
-      .= x 'xor' y by Th5
+      .= x 'xor' y
       .= xor2.<*x,y*> by TWOSCOMP:def 13;
   end;
 
 theorem
   for x,y,z being Element of BOOLEAN holds
     'not' ( ( x 'xor' 'not' y ) 'xor'       z )
-        =   ( x 'xor' 'not' y ) 'xor' 'not' z by Th5;
+        =   ( x 'xor' 'not' y ) 'xor' 'not' z by XBOOLEAN:74;
 
 theorem
   for x,y,z being Element of BOOLEAN holds
@@ -344,21 +308,15 @@ theorem
       = inv1.<* xor2.<* x 'xor' 'not' y, z *> *> by Def4
      .= inv1.<* ( x 'xor' 'not' y ) 'xor' z *> by TWOSCOMP:def 13
      .= 'not' ( ( x 'xor' 'not' y ) 'xor' z ) by Def1
-     .=  ( x 'xor' 'not' y ) 'xor' 'not' z by Th5
+     .=  ( x 'xor' 'not' y ) 'xor' 'not' z by XBOOLEAN:74
      .=  xor2c.<* x 'xor' 'not' y, z *>  by Def4
      .=  xor2c.<* xor2c.<*x,y*>, z *>  by Def4;
   end;
 
-theorem Th9:
+theorem
   for x,y,z being Element of BOOLEAN holds
        ( 'not' x 'xor'       y ) 'xor' 'not' z
-     = (       x 'xor' 'not' y ) 'xor' 'not' z
-  proof
-    let x,y,z be Element of BOOLEAN;
-    thus ( 'not' x 'xor' y ) 'xor' 'not' z
-     = 'not' ( x 'xor' y ) 'xor' 'not' z by Th5
-    .= ( x 'xor' 'not' y ) 'xor' 'not' z by Th5;
-  end;
+     = (       x 'xor' 'not' y ) 'xor' 'not' z;
 
 theorem
   for x,y,z being Element of BOOLEAN holds
@@ -368,13 +326,7 @@ theorem
 theorem Th11:
   for x,y,z being Element of BOOLEAN holds
     'not' ( ( 'not' x 'xor' 'not' y ) 'xor' 'not' z )
-     = ( x 'xor' y ) 'xor' z
-  proof
-    let x,y,z be Element of BOOLEAN;
-    thus 'not' ( ( 'not' x 'xor' 'not' y ) 'xor' 'not' z )
-      = ( 'not' x 'xor' 'not' y ) 'xor' 'not' 'not' z by Th5
-     .= ( x 'xor' y ) 'xor' z by Th5;
-  end;
+     = ( x 'xor' y ) 'xor' z by XBOOLEAN:74;
 
 theorem
   for x,y,z being Element of BOOLEAN holds
@@ -2447,7 +2399,7 @@ A1:  z <> [<*x,y*>,f];
 A2:  a1 = s.x & a2 = s.y & a3 = s.z;
      thus (Following(s,2)).GFA1AdderOutput(x,y,z)
          = a1 'xor' 'not' a2 'xor' 'not' a3 by A1,A2,Th73
-        .= 'not' (a1 'xor' 'not' a2 'xor' a3) by Th5;
+        .= 'not' (a1 'xor' 'not' a2 'xor' a3) by XBOOLEAN:74;
    end;
 
 theorem
@@ -3567,7 +3519,7 @@ A1:  z <> [<*x,y*>,f];
 A2:  a1 = s.x & a2 = s.y & a3 = s.z;
      thus (Following(s,2)).GFA2AdderOutput(x,y,z)
          = a1 'xor' 'not' a2 'xor' 'not' a3 by A1,A2,Th110
-        .= 'not' a1 'xor' a2 'xor' 'not' a3 by Th9;
+        .= 'not' a1 'xor' a2 'xor' 'not' a3;
    end;
 
 theorem

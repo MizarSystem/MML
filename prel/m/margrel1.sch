@@ -18,6 +18,7 @@
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
+<ArticleID name="XBOOLEAN"/>
 <ArticleID name="MARGREL1"/>
 </Signature>
 <Scheme>
@@ -30,7 +31,7 @@
 <For>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="26"/>
+<Adjective nr="27"/>
 </Cluster>
 </Typ>
 <Not>
@@ -135,7 +136,7 @@
 <For>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="119">
+<Func kind="K" nr="130">
 <Func kind="F" nr="1"/>
 </Func>
 </Typ>
@@ -226,7 +227,7 @@
 <For>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="119">
+<Func kind="K" nr="130">
 <Func kind="F" nr="1"/>
 </Func>
 </Typ>

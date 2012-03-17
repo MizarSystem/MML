@@ -555,12 +555,10 @@ then A14:   I ';' J c= CsIJ.m by AMI_3:38;
      .= dom Directed I \/ dom ProgramPart Relocated(J, card I) by FUNCT_4:def 1
      .= dom I \/ dom ProgramPart Relocated(J, card I) by SCMFSA6A:14;
      then A15: dom I c= dom(I ';' J) by XBOOLE_1:7;
-A16:   CurInstr(Cs.m) = (Cs.m).IC(Cs.m)
-        .= I.IC(Cs.m) by A12,A13,GRFUNC_1:8;
+A16:   CurInstr(Cs.m) = I.IC(Cs.m) by A12,A13,GRFUNC_1:8;
      then I.IC(Cs.m) <> halt SCM+FSA by A3,A8,SCM_1:def 2;
      then CurInstr(Cs.m) = (I ';' J).IC(Cs.m) by A12,A16,SCMFSA6A:54
-        .= (CsIJ.m).IC(Cs.m) by A12,A14,A15,GRFUNC_1:8
-        .= CurInstr(CsIJ.m) by A11;
+        .= CurInstr(CsIJ.m) by  A12,A14,A15,GRFUNC_1:8,A11;
     hence (Computation s).(m+1),(Computation(s+*(I ';' J))).(m+1)
      equal_outside the Instruction-Locations of SCM+FSA by A6,A7,A9,A10,
 NAT_1:38,SCMFSA6A:32;
@@ -713,7 +711,7 @@ then A35: CurInstr((Computation s).m)
        by NAT_1:28;
        reconsider kk as Element of NAT by ORDINAL1:def 13;
        m1 + 1 + kk = k by A37;
-       hence CurInstr (Computation s).k <> halt SCM+FSA by A32,A36,A37;
+       hence CurInstr (Computation s).k <> halt SCM+FSA by A32,A36;
      end;
      end;
 then A38:
@@ -1003,8 +1001,7 @@ A45:   dom Start-At l = {IC SCM+FSA} by AMI_3:34;
       suppose A51: x = IC SCM+FSA;
        then x in {IC SCM+FSA} by TARSKI:def 1;
     then A52: x in dom Start-At l by AMI_3:34;
-       thus IExec(I ';' J,s).x = l by A43,A51
-       .= (Start-At l).IC SCM+FSA by AMI_3:50
+       thus IExec(I ';' J,s).x = (Start-At l).IC SCM+FSA by  A43,A51,AMI_3:50
        .= (IEJIs +* Start-At (IC IEJIs + card I)).x by A51,A52,FUNCT_4:14;
       end;
       suppose A53: x is Instruction-Location of SCM+FSA;
@@ -1308,9 +1305,8 @@ definition
     reconsider x as Int-Location by A2,SCMFSA_2:11;
     consider k being Element of NAT such that
  A3: x = intloc k by SCMFSA_2:19;
- AA: k in NAT by ORDINAL1:def 13;
  A4: not intloc k in L & not intloc k in {intloc 0} by A2,A3,XBOOLE_0:def 2;
-    then k <> 0 by TARSKI:def 1; then k in sn by AA,A4;
+    then k <> 0 by TARSKI:def 1; then k in sn by A4;
     then reconsider sn as non empty Subset of NAT by A1;
 
  defpred P[Element of NAT, Subset of NAT, Subset of NAT] means
@@ -1370,11 +1366,10 @@ A8: X[0]
           then reconsider x' = x as Int-Location by SCMFSA_2:11;
           consider i being Element of NAT such that
         A12: x' = intloc i by SCMFSA_2:19;
-        AA: i in NAT by ORDINAL1:def 13;
             now assume not x in M;
              then not x' in L & not x' in {intloc 0} by XBOOLE_0:def 2;
              then not intloc i in L & i <> 0 by A12,TARSKI:def 1;
-             then i in sn by AA;
+             then i in sn;
           hence x in Isn by A12;
          end;
         hence x in M \/ Isn by XBOOLE_0:def 2;

@@ -14,12 +14,11 @@ environ
       ALGSEQ_1, ALGSTR_1, GROEB_1, GROEB_2, FUNCOP_1, MCART_1, GROEB_3,
       CONNSP_3, FUNCT_7, QC_LANG1;
  notations TARSKI, SUBSET_1, RELAT_1, XBOOLE_0, RELAT_2, CARD_1, ORDINAL1,
-      NUMBERS, XCMPLX_0,
-      XXREAL_0, REAL_1, NAT_1, FUNCT_1, RELSET_1, FUNCT_2, FUNCT_4, PRE_CIRC,
-      STRUCT_0, GROUP_1, ALGSTR_1, RLVECT_1, FINSET_1, MCART_1, REALSET2,
-      FINSEQ_1, VECTSP_2, VECTSP_1, POLYNOM2, POLYNOM7, ORDERS_2, FUNCT_7,
-      REWRITE1, BAGORDER, TERMORD, GROEB_1, POLYRED, GROEB_2, WAYBEL_4,
-      POLYNOM1;
+      NUMBERS, XCMPLX_0, XXREAL_0, NAT_1, FUNCT_1, RELSET_1, FUNCT_2, FUNCT_4,
+      PRE_CIRC, STRUCT_0, GROUP_1, ALGSTR_1, RLVECT_1, FINSET_1, MCART_1,
+      REALSET2, FINSEQ_1, VECTSP_2, VECTSP_1, POLYNOM2, POLYNOM7, ORDERS_2,
+      FUNCT_7, REWRITE1, BAGORDER, TERMORD, GROEB_1, POLYRED, GROEB_2,
+      WAYBEL_4, POLYNOM1;
  constructors XXREAL_0, REAL_1, PRE_CIRC, REWRITE1, VECTSP_2, WAYBEL_4,
       POLYNOM2, BAGORDER, TERMORD, POLYRED, GROEB_1, GROEB_2;
  registrations STRUCT_0, FINSET_1, RELSET_1, VECTSP_1, ALGSTR_1, POLYNOM1,
@@ -597,8 +596,7 @@ holds s|(Support s) = s & s|({} Bags X) = 0_(X,L)
 proof
 let X be set, L be non empty ZeroStr,
     s be Series of X,L; set r = s|(Support s);
-A1: r = s +* ((Support s \ Support s) --> 0.L)
-    .= s +* ({} --> 0.L) by XBOOLE_1:37;
+A1: r = s +* ({} --> 0.L) by XBOOLE_1:37;
 dom({} --> 0.L) = {} by FUNCOP_1:16;
 hence r = s +* {} by A1,RELAT_1:64
        .= s by FUNCT_4:22;
@@ -835,8 +833,7 @@ let n be Ordinal, T be connected TermOrder of n,
 assume i <= card(Support p);
 then A1: Upper_Support(p,T,i) c= Support p by Def2;
 thus Upper_Support(p,T,i) \/ Lower_Support(p,T,i)
-   = Upper_Support(p,T,i) \/ (Support(p)\Upper_Support(p,T,i))
-  .= Upper_Support(p,T,i) \/ Support p by XBOOLE_1:39
+   = Upper_Support(p,T,i) \/ Support p by XBOOLE_1:39
   .= Support p by A1,XBOOLE_1:12;
 set M = Upper_Support(p,T,i) /\ (Support(p)\Upper_Support(p,T,i));
 now assume A2: M <> {};
@@ -889,7 +886,7 @@ set u = Upper_Support(p,T,0), l = Lower_Support(p,T,0);
 then card u = 0 by Def2;
 then u,0 are_equipotent by CARD_1:def 5;
 hence u = {} by CARD_1:46;
-hence l = Support p \ {} .= Support p;
+hence l = Support p;
 end;
 
 theorem Th22:
@@ -908,7 +905,7 @@ set u = Upper_Support(p,T,card(Support p)),
     l = Lower_Support(p,T,card(Support p));
 u c= Support p & card u = card(Support p) by Def2;
 hence u = Support p by TRIANG_1:3;
-hence l = Support p \ Support p .= {} by XBOOLE_1:37;
+hence l = {} by XBOOLE_1:37;
 end;
 
 theorem Th23:
@@ -1504,17 +1501,20 @@ case i = card(Support p) - 1;
   then HT(li1,T) = EmptyBag n by TERMORD:def 6;
   hence thesis by TERMORD:9;
   end;
-case i <> card(Support p) - 1;
-  then Lower_Support(p,T,i+1) <> {} by A5,A7,CARD_2:19;
-  then A8: HT(Low(p,T,i+1),T) in Lower_Support(p,T,i+1)
-           by A5,TERMORD:def 6;
+case A8:i <> card(Support p) - 1;
+  card Support li1 = card(Support p) - (i+1) by A7; then
+  card Support li1 = (card(Support p) - 1) - i; then
+  card Support li1 <> i - i by A8; then
+  card Lower_Support(p,T,i+1) <> 0 by A5; then
+  Lower_Support(p,T,i+1) <> {} by CARD_2:19;
+  then A9: HT(Low(p,T,i+1),T) in Lower_Support(p,T,i+1) by A5,TERMORD:def 6;
   now assume HT(Low(p,T,i),T) < HT(Low(p,T,i+1),T), T;
-    then A9: HT(Low(p,T,i),T) <= HT(Low(p,T,i+1),T), T by TERMORD:def 3;
-    now let u' be set; assume A10: u' in Support li;
+    then A10: HT(Low(p,T,i),T) <= HT(Low(p,T,i+1),T), T by TERMORD:def 3;
+    now let u' be set; assume A11: u' in Support li;
       then reconsider u = u' as Element of Bags n;
-      u <= HT(Low(p,T,i),T),T by A10,TERMORD:def 6;
-      then u <= HT(Low(p,T,i+1),T),T by A9,TERMORD:8;
-      hence u' in Support li1 by A8,A10,A3,A2,Th24,A5;
+      u <= HT(Low(p,T,i),T),T by A11,TERMORD:def 6;
+      then u <= HT(Low(p,T,i+1),T),T by A10,TERMORD:8;
+      hence u' in Support li1 by A9,A11,A3,A2,Th24,A5;
       end;
     then Support li c= Support li1 by TARSKI:def 3;
     then card(Support p) + -i <= card(Support p) + -(i+1) by A7,A6,CARD_1:80;
@@ -1768,20 +1768,22 @@ let n be Ordinal, T be connected admissible TermOrder of n,
     L be add-associative right_zeroed right_complementable
          (non empty LoopStr), p be Polynomial of n,L, i be Element of NAT;
 assume A1: i < card(Support p);
-then A2: i + 1 <= card(Support p) by NAT_1:38;
+then A2: i + 1 <= card(Support p) by NAT_1:38; then
+A3: card Support p - i >= 1 by XREAL_1:21;
 set l = Low(p,T,i), l1 = Low(p,T,i+1);
-A3: Support(Low(p,T,i+1)) c= Support(p) by A2,Th26;
-A4: Support Low(p,T,i) = Lower_Support(p,T,i) by A1,Th25;
-A5: card Support l = card(Support p) - i by A1,A4,Th24;
-A6: HT(Low(p,T,i+1),T) <= HT(Low(p,T,i),T), T by A1,Th38;
-Lower_Support(p,T,i) <> {} by A1,A4,A5,CARD_2:19;
-then A7: HT(Low(p,T,i),T) in Lower_Support(p,T,i)
-         by A4,TERMORD:def 6;
-now let u' be set; assume A8: u' in Support l1;
+A4: Support(Low(p,T,i+1)) c= Support(p) by A2,Th26;
+A5: Support Low(p,T,i) = Lower_Support(p,T,i) by A1,Th25;
+A6: card Support l = card(Support p) - i by A1,A5,Th24;
+A7: HT(Low(p,T,i+1),T) <= HT(Low(p,T,i),T), T by A1,Th38;
+card Lower_Support(p,T,i) = card Support p - i by A5,A6; then
+Lower_Support(p,T,i) <> {} by CARD_2:19,A3;
+then A8: HT(Low(p,T,i),T) in Lower_Support(p,T,i)
+         by A5,TERMORD:def 6;
+now let u' be set; assume A9: u' in Support l1;
   then reconsider u = u' as Element of Bags n;
-  u <= HT(Low(p,T,i+1),T),T by A8,TERMORD:def 6;
-  then u <= HT(Low(p,T,i),T),T by A6,TERMORD:8;
-  hence u' in Support l by A4,A8,A3,A1,A7,Th24;
+  u <= HT(Low(p,T,i+1),T),T by A9,TERMORD:def 6;
+  then u <= HT(Low(p,T,i),T),T by A7,TERMORD:8;
+  hence u' in Support l by A5,A9,A4,A1,A8,Th24;
   end;
 hence thesis by TARSKI:def 3;
 end;
@@ -2793,8 +2795,7 @@ A20;
            t' <= HT(red2,T),T by A40,TERMORD:def 6;
            hence t in Support Low(p2,T,m') by A38,A41,A37,A40,A11,Th24;
            end;
-         then j' = card(Support(Low(p2,T,m'))) by A3,A39,TARSKI:2
-                .= k by A13;
+         then j' = k by  A3,A39,TARSKI:2,A13;
          hence contradiction by A7;
          end;
       then Low(p2,T,m') <> red2 by A36,TERMORD:def 6;
@@ -2859,8 +2860,7 @@ POLYNOM1:52;
       A62: now assume s in Support Low(p2,T,m');
            then A63: s in Lower_Support(p2,T,m') by A11,Th25;
            s in Support(p2|Lower_Support(p2,T,m')) by A14,A63,Lm4;
-           then A64: p2.s = (p2|Lower_Support(p2,T,m')).s by Th16
-                         .= Low(p2,T,m').s;
+           then A64: p2.s = Low(p2,T,m').s by Th16;
            (Red(p2,T) - Low(p2,T,m')).s
               = (Red(p2,T) + -Low(p2,T,m')).s by POLYNOM1:def 23
              .= Red(p2,T).s + (-Low(p2,T,m')).s by POLYNOM1:def 21

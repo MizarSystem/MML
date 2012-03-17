@@ -15,6 +15,7 @@
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FRAENKEL"/>
 <ArticleID name="NUMBERS"/>
+<ArticleID name="XBOOLEAN"/>
 <ArticleID name="MARGREL1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
@@ -139,11 +140,11 @@
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 </Func>
-<Func kind="K" nr="154">
+<Func kind="K" nr="163">
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>
-<Func kind="K" nr="100"/>
+<Func kind="K" nr="111"/>
 </Func>
 </Pred>
 <For>
@@ -156,7 +157,7 @@
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>
-<Func kind="K" nr="133">
+<Func kind="K" nr="142">
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>
@@ -212,7 +213,7 @@
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>
-<Func kind="K" nr="133">
+<Func kind="K" nr="142">
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>
@@ -245,22 +246,22 @@
 <Cluster>
 <Adjective nr="5"/>
 <Adjective nr="15">
-<Func kind="K" nr="134">
-<Func kind="K" nr="115">
+<Func kind="K" nr="143">
+<Func kind="K" nr="124">
 <Var nr="2"/>
 </Func>
-<Func kind="K" nr="100"/>
+<Func kind="K" nr="111"/>
 </Func>
-<Func kind="K" nr="100"/>
+<Func kind="K" nr="111"/>
 </Adjective>
 </Cluster>
-<Func kind="K" nr="134">
-<Func kind="K" nr="115">
+<Func kind="K" nr="143">
+<Func kind="K" nr="124">
 <Var nr="2"/>
 </Func>
-<Func kind="K" nr="100"/>
+<Func kind="K" nr="111"/>
 </Func>
-<Func kind="K" nr="100"/>
+<Func kind="K" nr="111"/>
 </Typ>
 </Is>
 </Not>

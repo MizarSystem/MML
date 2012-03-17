@@ -27,11 +27,11 @@
 <ArticleID name="VECTSP_1"/>
 <ArticleID name="VECTSP_2"/>
 <ArticleID name="ALGSTR_1"/>
+<ArticleID name="FINSEQ_3"/>
 <ArticleID name="MATRIX_1"/>
 <ArticleID name="COMPTRIG"/>
 <ArticleID name="COMPLFLD"/>
 <ArticleID name="PARTFUN1"/>
-<ArticleID name="FINSEQ_3"/>
 <ArticleID name="REALSET1"/>
 <ArticleID name="REALSET2"/>
 <ArticleID name="FINSEQ_4"/>
@@ -382,7 +382,7 @@
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="200"/>
+<Func kind="K" nr="202"/>
 <Cluster>
 <Adjective nr="29" value="false"/>
 <Adjective nr="32"/>

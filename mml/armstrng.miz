@@ -12,27 +12,25 @@ environ
       MARGREL1, MATRLIN, BINARITH, BINARI_3, ZF_LANG, MIDSP_3, POWER, EUCLID,
       FINSEQ_4, CONLAT_1, FINSUB_1, PARTFUN1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, FINSET_1, FINSUB_1, RELAT_1,
-      RELAT_2, RELSET_1, SETFAM_1, PARTFUN1, NUMBERS,
-      XCMPLX_0, NAT_1, FUNCT_4, FUNCT_1,
-      ORDERS_2, MCART_1, EQREL_1, CARD_3, PBOOLE, STRUCT_0, WAYBEL_4, CARD_1,
-      FINSEQ_1, PRE_CIRC, MARGREL1, FUNCT_2, FINSEQ_2, MATRLIN, BINARITH,
-      BINARI_3, FINSEQ_4, SERIES_1, EUCLID, XXREAL_0;
+      RELAT_2, RELSET_1, SETFAM_1, PARTFUN1, NUMBERS, XCMPLX_0, NAT_1, FUNCT_4,
+      FUNCT_1, ORDERS_2, MCART_1, EQREL_1, CARD_3, PBOOLE, STRUCT_0, WAYBEL_4,
+      CARD_1, FINSEQ_1, PRE_CIRC, MARGREL1, FUNCT_2, FINSEQ_2, MATRLIN,
+      BINARITH, BINARI_3, FINSEQ_4, SERIES_1, EUCLID, XXREAL_0;
  constructors SETFAM_1, FINSUB_1, XXREAL_0, CARD_3, FINSEQOP, SERIES_1,
       BINARITH, PRE_CIRC, EUCLID, MATRLIN, WAYBEL_4, BINARI_3, NAT_1;
  registrations FINSET_1, SUBSET_1, ALTCAT_1, PBOOLE, FINSEQ_1, FINSEQ_2,
       GOBRD13, FUNCT_1, ORDERS_2, RELSET_1, EQREL_1, MARGREL1, XBOOLE_0,
       MATRLIN, PRALG_1, FRAENKEL, XREAL_0, NUMBERS, ORDINAL1, FUNCOP_1, NAT_1,
-      XXREAL_0;
+      XXREAL_0, XBOOLEAN;
  requirements BOOLE, SUBSET, NUMERALS, REAL, ARITHM;
  definitions TARSKI, RELAT_2, YELLOW_0, MATRLIN, WAYBEL_4, FINSUB_1, FINSEQ_2,
-      SUBSET_1;
+      SUBSET_1, XBOOLEAN;
  theorems TARSKI, RELSET_1, ZFMISC_1, EQREL_1, MCART_1, RELAT_1, RELAT_2,
       XBOOLE_0, XBOOLE_1, ORDERS_2, STRUCT_0, ENUMSET1, BAGORDER, WAYBEL_4,
       POLYNOM1, FINSET_1, SUBSET_1, SETFAM_1, MSSUBFAM, TREES_1, FUNCT_1,
-      FINSEQ_4, FINSEQ_1, FINSEQ_2, FUNCOP_1, MARGREL1, CARD_3, BINARI_3,
-      NAT_1, EUCLID, PBOOLE, FUNCT_2, MATRLIN, BINARITH, POWER, REAL_1,
-      FUNCT_4, FINSUB_1, PARTFUN1, NUMBERS, XREAL_1, ORDERS_1, XXREAL_0,
-      ORDINAL1;
+      FINSEQ_4, FINSEQ_1, FINSEQ_2, FUNCOP_1, CARD_3, BINARI_3, NAT_1, EUCLID,
+      PBOOLE, FUNCT_2, MATRLIN, BINARITH, POWER, REAL_1, FUNCT_4, FINSUB_1,
+      PARTFUN1, NUMBERS, XREAL_1, ORDERS_1, XXREAL_0, ORDINAL1;
  schemes FINSET_1, NAT_1, FUNCT_2, FINSEQ_1, FINSEQ_2, XBOOLE_0, FUNCT_1;
 
 begin
@@ -482,7 +480,14 @@ A4: for i being set st i in Seg n holds it2.i = (p/.i) '&' (q/.i);
   end;
   hence it1 = it2 by FUNCT_1:9;
  end;
- commutativity;
+ commutativity
+  proof let r,p,q be Tuple of n, BOOLEAN;
+   assume
+A7:   for i being set st i in Seg n holds r.i = (p/.i) '&' (q/.i);
+   let i be set;
+   assume i in Seg n;
+   hence r.i = (q/.i) '&' (p/.i) by A7;
+  end;
 end;
 
 theorem Th5:
@@ -498,9 +503,9 @@ set B = n-BinarySequence 0;
   A3: dom B = Seg n by Lm1;
   A4: B = 0*n by BINARI_3:26 .= n |-> 0 by EUCLID:def 4;
    then B.x = 0 by A1,A2,FUNCOP_1:13;
-   then B/.x = FALSE by A1,A2,A3,FINSEQ_4:def 4,MARGREL1:def 13;
+   then B/.x = FALSE by A1,A2,A3,FINSEQ_4:def 4;
   hence (B '&' p).x = FALSE '&' (p/.x) by A1,A2,Def5
-   .= FALSE by MARGREL1:49 .= B.x by A1,A2,A4,FUNCOP_1:13,MARGREL1:def 13;
+   .= B.x by A1,A2,A4,FUNCOP_1:13;
   end;
  hence (n-BinarySequence 0) '&' p = (n-BinarySequence 0) by FUNCT_1:9;
 end;
@@ -519,11 +524,11 @@ set B = n-BinarySequence 0; set nB = 'not' B;
   A4: B = 0*n by BINARI_3:26 .= n |-> 0 by EUCLID:def 4;
   A5: dom B = Seg n by Lm1;
       B.x = 0 by A1,A3,A4,FUNCOP_1:13;
-  then A6: B/.x = FALSE by A1,A3,A5,FINSEQ_4:def 4,MARGREL1:def 13;
+  then A6: B/.x = FALSE by A1,A3,A5,FINSEQ_4:def 4;
          nB/.x = 'not' (B/.x) by A1,A3,BINARITH:def 4
-              .= TRUE by A6,MARGREL1:def 16;
+              .= TRUE by A6;
   hence (nB '&' p).x = TRUE '&' (p/.x) by A1,A3,Def5
-        .= p/.x by MARGREL1:50 .= p.x by A2,A3,FINSEQ_4:def 4;
+        .= p.x by A2,A3,FINSEQ_4:def 4;
   end;
  hence 'not' (n-BinarySequence 0) '&' p = p by FUNCT_1:9;
 end;
@@ -554,7 +559,7 @@ A3: now let n be Element of NAT such that
 ;
     then A9: 1 in dom <*TRUE*> by FINSEQ_1:3;
      thus B(n+1).(i+1) = (0*n^<*TRUE*>).(i+1)
-          by A6,A7,BINARI_3:29,MARGREL1:def 14
+          by A6,A7,BINARI_3:29
         .= <*TRUE*>.1 by A6,A7,A8,A9,FINSEQ_1:def 7 .= TRUE by FINSEQ_1:57;
     end;
     suppose A10: n > 0 & n = i;
@@ -563,7 +568,7 @@ A3: now let n be Element of NAT such that
 FINSEQ_1:55;
     then A12: 1 in dom <*TRUE*> by FINSEQ_1:3;
      thus B(n+1).(i+1)
-         = (0*n^<*TRUE*>).(i+1) by A10,BINARI_3:29,MARGREL1:def 14
+         = (0*n^<*TRUE*>).(i+1) by A10,BINARI_3:29
         .= <*TRUE*>.1 by A10,A11,A12,FINSEQ_1:def 7 .= TRUE by FINSEQ_1:57;
     end;
     suppose A13: n > 0 & n > i;
@@ -595,12 +600,12 @@ A19: now let n be Element of NAT such that
     A26: dom B(n+1) = Seg (n+1) by Lm1;  1 <= j by A22,A24,XXREAL_0:2;
         then j = 1 by A22,A25,XXREAL_0:1;
         then not j+1 in dom B(n+1) by A25,A26,FINSEQ_1:3;
-     hence B(n+1).(j+1) = FALSE by FUNCT_1:def 4,MARGREL1:def 13;
+     hence B(n+1).(j+1) = FALSE by FUNCT_1:def 4;
     end;
     suppose A27: n > 0 & n = i;
     A28: dom B(n+1) = Seg (n+1) by Lm1;  j+1 > n+1 by A22,A27,NAT_1:38;
        then not j+1 in dom B(n+1) by A28,FINSEQ_1:3;
-     hence B(n+1).(j+1) = FALSE by FUNCT_1:def 4,MARGREL1:def 13;
+     hence B(n+1).(j+1) = FALSE by FUNCT_1:def 4;
     end;
     suppose A29: n > 0 & n > i;
       then reconsider n' = n as non empty Element of NAT;
@@ -611,7 +616,7 @@ A19: now let n be Element of NAT such that
       suppose A32: j = n+1;
       A33: dom B(n+1) = Seg (n+1) by Lm1;  j+1 > n+1 by A32,NAT_1:38;
           then not j+1 in dom B(n+1) by A33,FINSEQ_1:3;
-        hence B(n+1).(j+1) = FALSE by FUNCT_1:def 4,MARGREL1:def 13;
+        hence B(n+1).(j+1) = FALSE by FUNCT_1:def 4;
       end;
       suppose A34: j = n;  dom B(n) = Seg n by Lm1;
       then A35: j = len B(n) by A34,FINSEQ_1:def 3;
@@ -662,27 +667,27 @@ A42: now let n be Element of NAT such that
    then A51: j in Seg n by A45,FINSEQ_1:3;
    A52: 0*n = n |-> 0 by EUCLID:def 4;
    then A53: j in dom 0*n by A51,FUNCOP_1:19;
-    thus B(n+1).j = (0*n^<*TRUE*>).j by A50,BINARI_3:29,MARGREL1:def 14
+    thus B(n+1).j = (0*n^<*TRUE*>).j by A50,BINARI_3:29
       .= (0*n).j by A53,FINSEQ_1:def 7
-      .= FALSE by A51,A52,FUNCOP_1:13,MARGREL1:def 13;
+      .= FALSE by A51,A52,FUNCOP_1:13;
      end;
      end; hence P[n+1];
    end;
 A54: for n being Element of NAT holds P[n] from NAT_1:sch 1(A41,A42);
- thus B.(i+1) = 1 by A1,A17,MARGREL1:def 14; let j be Element of NAT such that
+ thus B.(i+1) = 1 by A1,A17; let j be Element of NAT such that
 A55: j in Seg n and
 A56: j<>i+1;
 A57: 1 <= j & j <= n by A55,FINSEQ_1:3;
  per cases by A56,A57,REAL_1:def 5;
  suppose j < i+1;
-  hence B.j = 0 by A1,A54,A57,MARGREL1:def 13;
+  hence B.j = 0 by A1,A54,A57;
  end;
  suppose A58: j > i+1 & j < n;
    then j <> 0; then consider k being Nat such that
  A59: j = k+1 by NAT_1:22;
   reconsider k as Element of NAT by ORDINAL1:def 13;
  A60: i+1 <= k by A58,A59,NAT_1:38;  k <= n by A58,A59,NAT_1:38;
-  hence B.j = 0 by A1,A40,A59,A60,MARGREL1:def 13;
+  hence B.j = 0 by A1,A40,A59,A60;
  end;
  suppose A61: j > i+1 & j = n;
   then consider m being Nat such that
@@ -690,7 +695,7 @@ A57: 1 <= j & j <= n by A55,FINSEQ_1:3;
   reconsider m as Element of NAT by ORDINAL1:def 13;
   i < m by A61,A62,XREAL_1:8;
      then 2 to_power i < 2 to_power m by POWER:44;
-  hence B.j = 0 by A61,A62,BINARI_3:27,MARGREL1:def 13;
+  hence B.j = 0 by A61,A62,BINARI_3:27;
 end;
 end;
 
@@ -2565,12 +2570,12 @@ A14: now let x be Element of X;
        suppose A16: x in H.i;
         reconsider b = FALSE as Element of BOOLEAN;
         take b;
-        thus P[i,b] by A16,MARGREL1:def 13;
+        thus P[i,b] by A16;
        end;
        suppose A17: not x in H.i;
         reconsider b = TRUE as Element of BOOLEAN;
         take b;
-        thus P[i,b] by A17,MARGREL1:def 14;
+        thus P[i,b] by A17;
        end;
        end; consider y being FinSequence of BOOLEAN such that
    A18: dom y = Seg n and
@@ -2653,8 +2658,7 @@ then A23: X --> 0 in R by A8;
             A42: Mx/.i = Mx.i by A37,A38,A39,FINSEQ_4:def 4
                       .= 0 by A21,A36,A38,A39,A41;
               thus nf.i = (nbf/.i) '&' (Mx/.i) by A38,A39,Def5
-               .= 0 by A42,MARGREL1:49,def 13
-               .= (nbg/.i) '&' (Mx/.i) by A42,MARGREL1:49,def 13
+               .= (nbg/.i) '&' (Mx/.i) by  A42
                .= ng.i by A38,A39,Def5;
              end;
              suppose A43: not A c= H.i;
@@ -2671,11 +2675,11 @@ then A23: X --> 0 in R by A8;
                       .= g.xx by A44,FUNCT_1:72;
               A48: f.xx = Absval (nbf '&' (M.xx)) by A27,A31;
               A49: g.xx = Absval ((nbg) '&' (M.xx)) by A29,A32;
-              A50: nbf/.i = (nbf/.i) '&' (Mxx/.i) by A46,MARGREL1:50,def 14
+              A50: nbf/.i = (nbf/.i) '&' (Mxx/.i) by A46
                         .= (nbf '&' (M.xx)).i by A38,A39,Def5
                         .= (nbg '&' (M.xx)).i by A47,A48,A49,BINARI_3:2
                         .= (nbg/.i) '&' (Mxx/.i) by A38,A39,Def5
-                        .= nbg/.i by A46,MARGREL1:50,def 14;
+                        .= nbg/.i by A46;
                thus nf.i = (nbf/.i) '&' (Mx/.i) by A38,A39,Def5
                         .= ng.i by A38,A39,A50,Def5;
               end;
@@ -2758,19 +2762,19 @@ A63
              then A75:  bs0/.nj = bs0.nj by A73,FINSEQ_4:def 4
                             .= 0 by A73,A74,FUNCOP_1:13;
              A76:  L.j = (bs0/.nj) '&' (Ma/.nj) by A73,Def5
-                     .= 0 by A75,MARGREL1:49,def 13;
+                     .= 0 by A75;
               per cases;
               suppose A77:  i <> nj;  dom bsi = Seg n by Lm1;
              then A78:  bsi/.nj = bsi.nj by A73,FINSEQ_4:def 4
-                            .= FALSE by A60,A61,A73,A77,Th8,MARGREL1:def 13;
+                            .= FALSE by A60,A61,A73,A77,Th8;
                      R.j = (bsi/.nj) '&' (Ma/.nj) by A73,Def5;
-                hence L.j = R.j by A76,A78,MARGREL1:49,def 13;
+                hence L.j = R.j by A76,A78;
               end;
               suppose A79: i = nj;  dom Ma = Seg n by Lm1;
               then A80: Ma/.nj = Ma.i by A73,A79,FINSEQ_4:def 4
                         .= 0 by A21,A54,A58,A69,A73,A79;
                      R.j = (bsi/.nj) '&' (Ma/.nj) by A73,Def5
-                     .= 0 by A80,MARGREL1:49,def 13;
+                     .= 0 by A80;
                hence L.j = R.j by A76;
              end;
              end;
@@ -2791,9 +2795,9 @@ A63
     then A85:  bs0/.i = bs0.i by A13,A57,FINSEQ_4:def 4
                   .= 0 by A13,A57,A84,FUNCOP_1:13;
     A86:  (bs0 '&' (Mbx)).i = (bs0/.i) '&' (Mbx/.i) by A13,A57,Def5
-                          .= bs0/.i by A83,MARGREL1:50,def 14;
+                          .= bs0/.i by A83;
     A87:  (bsi '&' (Mbx)).i = (bsi/.i) '&' (Mbx/.i) by A13,A57,Def5
-                          .= bsi/.i by A83,MARGREL1:50,def 14;
+                          .= bsi/.i by A83;
              dom bsi = Seg n by Lm1;
           then bsi/.i = bsi.i by A13,A57,FINSEQ_4:def 4 .= 1 by A60,A61,Th8;
      hence contradiction by A82,A85,A86,A87,BINARI_3:2;

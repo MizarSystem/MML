@@ -13,14 +13,13 @@ environ
       SUPINF_2, RLVECT_1, SERIES_1, SEQ_1, SEQM_3, ARYTM_3, PREPOWER, FINSEQ_1,
       TDGROUP, SEQFUNC, CARD_1, FUNCT_2, FINSOP_1, BINOP_1, SETWISEO, COMPTS_1,
       RLVECT_3, COH_SP, PARTFUN1, WELLORD1, NATTRA_1, FUNCT_7;
- notations SQUARE_1, TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, SETWISEO,
-      BORSUK_1, RELAT_1, RELAT_2, ORDINAL1, XCMPLX_0, XXREAL_0, XREAL_0,
-      FUNCT_1, REAL_1, SEQ_1, FUNCT_2, FUNCT_3, DOMAIN_1, BINOP_1, PRE_TOPC,
-      NAT_1, NUMBERS, FINSET_1, COMPLEX1, STRUCT_0, FINSEQ_1, PCOMPS_1,
-      PCOMPS_2, TOPS_2, METRIC_1, PROB_1, URYSOHN1, SEQFUNC, PREPOWER, TOPMETR,
-      PSCOMP_1, TMAP_1, RELSET_1, NAGATA_1, SEQ_2, SEQM_3, SEQ_4, SERIES_1,
-      CARD_1, FINSOP_1, PARTFUN1, COMPTS_1, CANTOR_1, FRAENKEL, WELLORD1,
-      FUNCT_7;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, SETWISEO, BORSUK_1,
+      RELAT_1, RELAT_2, ORDINAL1, XCMPLX_0, XXREAL_0, XREAL_0, FUNCT_1, REAL_1,
+      SEQ_1, FUNCT_2, FUNCT_3, DOMAIN_1, BINOP_1, PRE_TOPC, NAT_1, NUMBERS,
+      FINSET_1, COMPLEX1, STRUCT_0, FINSEQ_1, PCOMPS_1, PCOMPS_2, TOPS_2,
+      METRIC_1, PROB_1, URYSOHN1, SEQFUNC, PREPOWER, TOPMETR, PSCOMP_1, TMAP_1,
+      RELSET_1, NAGATA_1, SEQ_2, SEQM_3, SEQ_4, SERIES_1, CARD_1, FINSOP_1,
+      PARTFUN1, COMPTS_1, CANTOR_1, FRAENKEL, WELLORD1, FUNCT_7;
  constructors SETFAM_1, WELLORD1, FUNCT_3, SETWISEO, REAL_1, SQUARE_1, NAT_1,
       PROB_1, SEQM_3, FINSOP_1, PREPOWER, SERIES_1, CARD_4, FUNCT_7, TOPS_2,
       COMPTS_1, TMAP_1, CANTOR_1, PCOMPS_2, PSCOMP_1, URYSOHN3, NAGATA_1;
@@ -50,10 +49,10 @@ definition
 coherence by FUNCT_2:7,TOPMETR:24;
 end;
 
- reserve i, j, k, m, n for Element of NAT,
-   r, s, t for Real,
+ reserve i, k, m, n for Element of NAT,
+   r, s for Real,
    rn for real number,
-   x, y, z, xy, X for set,
+   x, y, z, X for set,
    T, T1, T2 for non empty TopSpace,
    p, q for Point of T,
    A, B, C for Subset of T,
@@ -276,9 +275,11 @@ A5:       tx1 in cT1 & tx2 in cT2 & tx=[tx1,tx2] by A4,ZFMISC_1:def 2;
        A6:tx in tX & tX in FA by A2,TARSKI:def 4;
           consider tX1 be Subset of T1,tX2 be Subset of T2 such that
        A7:tX=[:tX1,tX2:] & tX1 is open & tX2 is open by A2,A6;
-       A8:tx1 in tX1& pr1(cT1,cT2).tx=tx1
+       take tX1;
+       thus tX1 is open by A7;
+       A8:tx1 in tX1& pr1(cT1,cT2).(tx1,tx2)=tx1
             by A5,A6,A7,FUNCT_3:def 5,ZFMISC_1:106;
-          tX1 c=X1
+       thus tX1 c=X1
           proof
             let a be set such that A9:a in tX1;
             tx in [:cT1,{x2}:] by A4,XBOOLE_0:def 3;
@@ -288,11 +289,12 @@ A5:       tx1 in cT1 & tx2 in cT2 & tx=[tx1,tx2] by A4,ZFMISC_1:def 2;
             then A10:[a,x2] in union FA& [a,x2] in [:cT1,{x2}:]& [a,x2] in dom
              pr1(cT1,cT2) by A6,A7,A9,FUNCT_3:def 5,TARSKI:def 4,ZFMISC_1:129;
             then [a,x2] in D/\[:cT1,{x2}:] by A2,XBOOLE_0:def 3;
-            then pr1(cT1,cT2).[a,x2] in pr1(cT1,cT2).:(D/\[:cT1,{x2}:])
-              & pr1(cT1,cT2).[a,x2]=a by A9,A10,FUNCT_1:def 12,FUNCT_3:def 5;
+            then pr1(cT1,cT2).(a,x2) in pr1(cT1,cT2).:(D/\[:cT1,{x2}:])
+              & pr1(cT1,cT2).(a,x2)=a by A9,A10,FUNCT_1:def 12,FUNCT_3:def 5;
             hence thesis by A3;
           end;
-          hence thesis by A4,A7,A8;
+           t=pr1(cT1,cT2).(tx1,tx2) by A4,A5;
+          hence t in tX1 by A8;
         end;
         hence thesis;
       end;
@@ -318,24 +320,25 @@ A12:       tx in dom pr2(cT1,cT2) & tx in (D/\[:{x1},cT2:])
        A14:tx in tX & tX in FA by A2,TARSKI:def 4;
           consider tX1 be Subset of T1,tX2 be Subset of T2 such that
        A15:tX=[:tX1,tX2:] & tX1 is open & tX2 is open by A2,A14;
-       A16:tx2 in tX2& pr2(cT1,cT2).tx=tx2
+       A16:tx2 in tX2& pr2(cT1,cT2).(tx1,tx2)=tx2
             by A13,A14,A15,FUNCT_3:def 6,ZFMISC_1:106;
+A17:        t=pr2(cT1,cT2).(tx1,tx2) by A12,A13;
           tX2 c=X2
           proof
-            let a be set such that A17:a in tX2;
+            let a be set such that A18:a in tX2;
             tx in [:{x1},cT2:] by A12,XBOOLE_0:def 3;
             then tx1=x1 & tx1 in tX1 by A13,A14,A15,ZFMISC_1:106,128;
             then [x1,a] in [:tX1,tX2:] & [x1,a] in [:cT1,cT2:]
-              by A17,ZFMISC_1:106;
-            then A18:[x1,a] in union FA& [x1,a] in [:{x1},cT2:]& [x1,a] in dom
-            pr2(cT1,cT2) by A14,A15,A17,FUNCT_3:def 6,TARSKI:def 4,ZFMISC_1:128
+              by A18,ZFMISC_1:106;
+            then A19:[x1,a] in union FA& [x1,a] in [:{x1},cT2:]& [x1,a] in dom
+            pr2(cT1,cT2) by A14,A15,A18,FUNCT_3:def 6,TARSKI:def 4,ZFMISC_1:128
 ;
             then [x1,a] in D/\[:{x1},cT2:] by A2,XBOOLE_0:def 3;
-            then pr2(cT1,cT2).[x1,a] in pr2(cT1,cT2).:(D/\[:{x1},cT2:])
-              & pr2(cT1,cT2).[x1,a]=a by A17,A18,FUNCT_1:def 12,FUNCT_3:def 6;
+            then pr2(cT1,cT2).(x1,a) in pr2(cT1,cT2).:(D/\[:{x1},cT2:])
+              & pr2(cT1,cT2).(x1,a)=a by A18,A19,FUNCT_1:def 12,FUNCT_3:def 6;
             hence thesis by A11;
           end;
-          hence thesis by A12,A15,A16;
+          hence thesis by A15,A16,A17;
         end;
         hence thesis;
       end;
@@ -370,7 +373,7 @@ A4:   XU is open & xt in XU & pmetR.:XU c= R by A3,TMAP_1:48;
       [x,t] in XU & [x,t] in [:{x},cT:] by A4,ZFMISC_1:128;
       then [x,t] in XU/\[:{x},cT:] & dom pr2(cT,cT)=[:cT,cT:] & [x,t] in
         [:cT,cT:] by FUNCT_3:def 6,XBOOLE_0:def 3;
-      then pr2(cT,cT).[x,t] in pr2(cT,cT).:(XU/\[:{x},cT:]) by FUNCT_1:def 12;
+      then pr2(cT,cT).(x,t) in pr2(cT,cT).:(XU/\[:{x},cT:]) by FUNCT_1:def 12;
       then A5:t in U & U is open by A4,Th3,FUNCT_3:def 6;
       distx.:U c= R
       proof
@@ -384,9 +387,9 @@ FUNCT_1:def 12;
         consider x',u' be set such that
 A9:    x' in cT & u' in cT & xu=[x',u'] by A8,ZFMISC_1:def 2;
         reconsider x',u' as Point of T by A9;
-        [x',u'] in [:{x},cT:] & pr2(cT,cT).xu = u' by A8,A9,FUNCT_3:def 6
+        [x',u'] in [:{x},cT:] & pr2(cT,cT).(x',u') = u' by A8,A9,FUNCT_3:def 6
 ,XBOOLE_0:def 3;
-        then x'=x & u'=u by A8,ZFMISC_1:128;
+        then x'=x & u'=u by A8,ZFMISC_1:128,A9;
         then pmet.(x',u')=du & [x',u'] in XU & pmet'.[x',u']=pmet.(x',u')
           & dom pmetR=the carrier of [:T,T:] by A7,A8,A9,Def2,FUNCT_2:def 1,
 XBOOLE_0:def 3;
@@ -1367,12 +1370,7 @@ A14:  FS2.n=pmet1 & pmet1 is_a_pseudometric_of cT &
         & dist(pmet1,p).:Q is non empty bounded_below
         by A14,Def3,Lm1,FUNCT_1:def 12;
       then A15:dist(pmet1,p).q>0 by SEQ_4:def 5;
-      now
-        let n be Nat;
-        n in NAT by ORDINAL1:def 13;
-        hence 0<=(Geo(#)(FS2#pq)).n by A12;
-      end;
-      then (Geo(#)(FS2#pq)).n=0 & (1/2)|^n>0 by A12,NEWTON:102,RSSPACE:21;
+      (Geo(#)(FS2#pq)).n=0 & (1/2)|^n>0 by A12,NEWTON:102,RSSPACE:21;
       then Geo.n *(FS2#pq).n=0 & Geo.n<>0 by PREPOWER:def 1,SEQ_1:12;
       then (FS2#pq).n=0 & FS2.n.pq=pmet1.(p,q) & pmet1.(p,q)=dist(pmet1,p).q
         by A14,Def2,XCMPLX_1:6;
@@ -1430,16 +1428,12 @@ FUNCT_1:def 12;
         then s(#)Geo is summable & for k holds 0<=(Geo(#)(FS2#pa)).k &
           (Geo(#)(FS2#pa)).k<=(s(#)Geo).k by A7,SERIES_1:13;
         then
-XX:     Geo(#)(FS2#pa) is summable & pmet.pa=pmet.(p,a)
+A29:     Geo(#)(FS2#pa) is summable & pmet.pa=pmet.(p,a)
           & for k holds 0<=(Geo(#)(FS2#pa)).k by SERIES_1:24;
-          now let k be Nat;
-            k in NAT by ORDINAL1:def 13;
-            hence 0<=(Geo(#)(FS2#pa)).k by XX;
-          end;
-        then (Geo(#)(FS2#pa)).n <=Sum(Geo(#)(FS2#pa)) & rn=pmet.pa &
-          pmet is bounded_below by A26,A28,Def2,Lm1,RSSPACE2:4,XX;
+        (Geo(#)(FS2#pa)).n <=Sum(Geo(#)(FS2#pa)) & rn=pmet.pa &
+          pmet is bounded_below by A26,A28,Def2,Lm1,RSSPACE2:4,A29;
         then rn>=(Geo(#)(FS2#pa)).n & inf(dist(pmet,p).:A)=0 by A5,A21,Def3;
-        then A29:(Geo(#)(FS2#pa)).n <r/2 by A27,XXREAL_0:2;
+        then A30:(Geo(#)(FS2#pa)).n <r/2 by A27,XXREAL_0:2;
         A c= Cl A by PRE_TOPC:48;
         then dom dist(pmet1,p)=cT & a in Cl A & pmet1 is bounded_below
           by A23,A28,Lm1,FUNCT_2:def 1;
@@ -1452,7 +1446,7 @@ XX:     Geo(#)(FS2#pa) is summable & pmet.pa=pmet.(p,a)
         then inf(pmet1,Cl A).p<=(FS2#pa).n & Geo.n>0 by PREPOWER:def 1;
         then r<=Geo.n *(FS2#pa).n by XREAL_1:66;
         then r<=(Geo(#)(FS2#pa)).n by SEQ_1:12;
-        then r<r/2 by A29,XXREAL_0:2;
+        then r<r/2 by A30,XXREAL_0:2;
         hence thesis by A24,XREAL_1:218;
       end;
       hence thesis by A17,XBOOLE_0:def 10;
@@ -1496,6 +1490,12 @@ registration let T1,T2 be TopSpace; let f be RealMap of [:T1,T2:];
 end;
 
 :: NAGATA SMIRNOV THEOREM
+
+Lm2:  PairFunc is onto one-to-one by Th2,FUNCT_2:def 4;
+then NAT = rng PairFunc by FUNCT_2:def 3;
+then
+Lm3:
+    PairFunc" = PairFunc qua Function" by Lm2,TOPS_2:def 4;
 
 theorem Th19:
   for T holds (T is_T3 & T is_T1 &
@@ -2385,7 +2385,7 @@ A173:  NN[n,m,pmet'] by A6,A172;
       take pm = pmet';
       thus pm = pmet';
       let n1,m1 be Element of NAT; assume PairFunc".k=[n1,m1];then
-      [n1,m1]=[n,m] by A170,A171,A172,FUNCT_1:54;
+      [n1,m1]=[n,m] by A170,A171,A172,Lm3,FUNCT_1:54;
       then n1=n & m1=m by ZFMISC_1:33;
       hence thesis by A173;
     end;
@@ -2409,7 +2409,7 @@ A177:  PairFunc is onto one-to-one by Th2,FUNCT_2:def 4;
 A178:  nm in dom PairFunc & k=PairFunc.nm by FUNCT_1:def 5;
       consider n,m be set such that
 A179:  n in NAT & m in NAT & nm=[n,m] by A178,ZFMISC_1:def 2;
-A180:   [n,m]=PairFunc".k by A177,A178,A179,FUNCT_1:54;
+A180:   [n,m]=PairFunc".k by A177,A178,A179,Lm3,FUNCT_1:54;
       consider Fk be RealMap of [:T,T:] such that
 A181:   Fk = F.k & for n,m st PairFunc".k=[n,m] holds NN[n,m,Fk] by A174;
       consider pmet such that
@@ -2452,7 +2452,7 @@ A188:  W in Bn.m by A186,PROB_1:25;
       reconsider Fk=F.k as RealMap of [:T,T:] by FUNCT_2:121;
       dom PairFunc = [:NAT,NAT:] by FUNCT_2:def 1;
       then PairFunc is one-to-one & [n,m] in dom PairFunc by Th2,FUNCT_2:def 4;
-      then A189:[n,m]=PairFunc".k by FUNCT_1:54;
+      then A189:[n,m]=PairFunc".k by Lm3,FUNCT_1:54;
       consider G be RealMap of [:T,T:] such that
 A190:   G = F.k & for n,m st PairFunc".k=[n,m] holds NN[n,m,G] by A174;
       consider pmet such that

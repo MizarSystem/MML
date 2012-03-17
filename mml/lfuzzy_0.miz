@@ -11,20 +11,20 @@ environ
       LATTICE3, WAYBEL_0, MEASURE5, SQUARE_1, BOOLE, YELLOW_0, SEQ_2, INTEGRA1,
       SEQ_4, BHSP_3, ORDINAL2, YELLOW_1, PBOOLE, FUNCT_2, PARTFUN1, MONOID_0,
       CARD_3, WAYBEL_3, WAYBEL_1, FUNCOP_1;
- notations TARSKI, XBOOLE_0, ZFMISC_1, RELAT_1, FUNCT_1, FUNCT_2, DOMAIN_1,
-      ORDINAL1, PARTFUN1, SUBSET_1, NUMBERS, XREAL_0, REAL_1, SQUARE_1, SEQ_1,
+ notations TARSKI, XBOOLE_0, ZFMISC_1, RELAT_1, FUNCT_1, FUNCT_2, BINOP_1,
+      DOMAIN_1, ORDINAL1, PARTFUN1, SUBSET_1, NUMBERS, XREAL_0, REAL_1, SEQ_1,
       SEQ_4, RCOMP_1, RELSET_1, STRUCT_0, ORDERS_2, PBOOLE, MONOID_0, LATTICE3,
       YELLOW_0, WAYBEL_0, YELLOW_1, WAYBEL_1, WAYBEL_3, FUZZY_1, FUZZY_3,
       FUZZY_4, INTEGRA1, PRE_CIRC, XXREAL_0;
  constructors DOMAIN_1, SQUARE_1, PRE_CIRC, REALSET2, LATTICE3, MONOID_0,
       PRALG_1, PSCOMP_1, ORDERS_3, WAYBEL_1, YELLOW_3, WAYBEL_3, INTEGRA1,
-      FUZZY_4;
+      FUZZY_4, YELLOW12;
  registrations SUBSET_1, LATTICE3, XREAL_0, YELLOW14, RELSET_1, ORDERS_4,
       STRUCT_0, MONOID_0, WAYBEL_2, WAYBEL10, WAYBEL17, WAYBEL_3, MEMBERED,
       YELLOW_1;
  requirements BOOLE, SUBSET, NUMERALS, REAL;
  definitions TARSKI, XBOOLE_0, RELAT_1, STRUCT_0, LATTICE3, YELLOW_0, WAYBEL_0,
-      WAYBEL_1;
+      WAYBEL_1, BINOP_1;
  theorems ZFMISC_1, ORDERS_2, STRUCT_0, WAYBEL_1, RCOMP_1, FUNCT_1, XBOOLE_1,
       LATTICE3, SQUARE_1, YELLOW_0, INTEGRA1, XREAL_0, XBOOLE_0, TARSKI, SEQ_4,
       TOPMETR3, JORDAN5A, FUNCT_2, YELLOW_2, WAYBEL_3, YELLOW_3, PBOOLE,
@@ -281,10 +281,10 @@ registration
   coherence;
 end;
 
-reserve X for non empty Subset of REAL,
-   x,y,z,w for real number,
+reserve
+   x,y,z for real number,
    R for real non empty RelStr,
-   a,b,c for Element of R;
+   a,b for Element of R;
 
 theorem Th4:
   a"\/"b = max(a,b)
@@ -968,8 +968,7 @@ theorem Th14:
    proof
     let A be non empty set;
     thus the carrier of FuzzyLattice A
-    = the carrier of (RealPoset [. 0,1 .]) |^ A
-    .= Funcs (A, the carrier of RealPoset [. 0,1 .]) by YELLOW_1:28
+    = Funcs (A, the carrier of RealPoset [. 0,1 .]) by YELLOW_1:28
     .= Funcs (A, [. 0,1 .]) by Def3;
    end;
 
@@ -1090,6 +1089,18 @@ then f.x in [. 0,1 .] by RCOMP_1:48;
 end;
 
 definition
+  let X,Y be non empty set;
+  let f be RMembership_Func of X,Y;
+  let x be Element of X, y be Element of Y;
+  redefine func f.(x,y) -> Element of RealPoset [. 0,1 .];
+  coherence
+   proof
+     f. [x,y] is Element of RealPoset [. 0,1 .];
+    hence thesis;
+   end;
+end;
+
+definition
   let X be non empty set;
   let f be Element of FuzzyLattice X;
   let x be Element of X;
@@ -1159,11 +1170,8 @@ A2:   for c being Element of C holds J.c is sup-Semilattice by FUNCOP_1:13;
       reconsider f' = (C,f)@ , g' = (C,g)@ as Element of product J
         by A1;
 A3:   J.c = RealPoset [. 0,1 .] by FUNCOP_1:13;
-      thus (@fg).c = (f' "\/" g').c by A1
-      .= ((C,f)@.c) "\/" ((C,g)@.c) by A2,A3,Th12
-      .= max((C,f)@.c, (C,g)@.c) by Th4
-      .= max (f.c, (C,g)@.c)
-      .= max(f.c, g.c);
+      thus (@fg).c = ((C,f)@.c) "\/" ((C,g)@.c) by  A1,A2,A3,Th12
+      .= max(f.c, g.c) by Th4;
     end;
     then @fg = max(f,g) by FUZZY_1:def 5;
     hence thesis;
@@ -1185,10 +1193,8 @@ A1: (RealPoset [. 0,1 .]) |^ C = product (C --> RealPoset [. 0,1 .])
       now let c;
 A2:   for c being Element of C holds J.c is Semilattice by FUNCOP_1:13;
 A3:   J.c = RealPoset [. 0,1 .] by FUNCOP_1:13;
-      thus (@fg).c = fg.c
-      .= ((C,f)@.c) "/\" ((C,g)@.c) by A1,A2,A3,Th11
-      .= min((C,f)@ .c, (C,g)@.c) by Th5
-      .= min (f.c, (C,g)@.c)  .= min(f.c, g.c);
+      thus (@fg).c = ((C,f)@.c) "/\" ((C,g)@.c) by A1,A2,A3,Th11
+      .= min(f.c, g.c) by Th5;
     end;
     then @fg = min(f,g) by FUZZY_1:def 4;
     hence thesis;
@@ -1556,7 +1562,7 @@ Lm5:
   for x being Element of X, z being Element of Z
    holds
    rng min(R,S,x,z) =
-         {R. [x,y] "/\" S. [y,z] where y is Element of Y: not contradiction} &
+         {R.(x,y) "/\" S.(y,z) where y is Element of Y: not contradiction} &
    rng min(R,S,x,z) <> {}
     proof
      let X,Y,Z being non empty set;
@@ -1567,13 +1573,13 @@ A1:  Y = dom min(R,S,x,z)
      & min(R,S,x,z) is PartFunc of dom min(R,S,x,z), rng min(R,S,x,z)
           by FUZZY_1:def 1,PARTFUN1:24;
      set L
-     = {R. [x,y] "/\" S. [y,z] where y is Element of Y: not contradiction};
+     = {R.(x,y) "/\" S.(y,z) where y is Element of Y: not contradiction};
        for c be set holds c in L iff c in rng min(R,S,x,z)
       proof
        let c be set;
        hereby assume c in L;
        then consider y being Element of Y such that
-A2:    c = R. [x,y] "/\" S. [y,z];
+A2:    c = R.(x,y) "/\" S.(y,z);
          c = min(R. [x,y], S. [y,z] qua real number) by A2,Th5
         .= min(R,S,x,z).y by FUZZY_4:def 2;
        hence c in rng min(R,S,x,z) by A1,PARTFUN1:27;
@@ -1582,7 +1588,7 @@ A2:    c = R. [x,y] "/\" S. [y,z];
        then consider y being Element of Y such that
 A3:    y in dom min(R,S,x,z) & c = min(R,S,x,z).y by PARTFUN1:26;
          c = min(R. [x,y], S. [y,z] qua real number) by A3,FUZZY_4:def 2
-        .= R. [x,y] "/\" S. [y,z] by Th5;
+        .= R.(x,y) "/\" S.(y,z) by Th5;
        hence c in L;
       end;
      hence rng min(R,S,x,z) = L by TARSKI:2;
@@ -1603,7 +1609,7 @@ theorem Th22:
   for R being RMembership_Func of X,Y
   for S being RMembership_Func of Y,Z
   for x being Element of X, z being Element of Z
-   holds  (R (#) S). [x,z] = "\/"({R. [x,y] "/\" S. [y,z]
+   holds  (R (#) S).(x,z) = "\/"({R.(x,y) "/\" S.(y,z)
       where y is Element of Y: not contradiction}, RealPoset [. 0,1 .])
    proof
     let X,Y,Z being non empty set;
@@ -1612,7 +1618,7 @@ theorem Th22:
     let x being Element of X, z being Element of Z;
 A1: (R (#) S). [x,z] = upper_bound(rng(min(R,S,x,z))) by FUZZY_4:def 3;
     set
-    L = {R. [x,y] "/\" S. [y,z] where y is Element of Y: not contradiction};
+    L = {R.(x,y) "/\" S.(y,z) where y is Element of Y: not contradiction};
 A2: (R (#) S). [x,z] is_>=_than L
      proof
         for b being Element of RealPoset [. 0,1 .] st b in L holds
@@ -1621,7 +1627,7 @@ A2: (R (#) S). [x,z] is_>=_than L
         let b be Element of RealPoset [. 0,1 .];
         assume b in L;
         then consider y being Element of Y such that
-A3:     b = R. [x,y] "/\" S. [y,z] & not contradiction;
+A3:     b = R.(x,y) "/\" S.(y,z) & not contradiction;
         reconsider b as Real by Lm4;
 A4:     dom min(R,S,x,z) = Y by FUZZY_1:def 1;
           b = min(R. [x,y], S. [y,z] qua real number) by A3,Th5
@@ -1632,12 +1638,12 @@ A4:     dom min(R,S,x,z) = Y by FUZZY_1:def 1;
        hence thesis by LATTICE3:def 9;
      end;
       for b being Element of RealPoset [. 0,1 .] st
-     b is_>=_than L holds (R (#) S). [x,z] <<= b
+     b is_>=_than L holds (R (#) S).(x,z) <<= b
      proof
       let b be Element of RealPoset [. 0,1 .];
       assume
 A5:   b is_>=_than
-      {R. [x,y] "/\" S. [y,z] where y is Element of Y: not contradiction};
+      {R.(x,y) "/\" S.(y,z) where y is Element of Y: not contradiction};
 A6:   Y = dom min(R,S,x,z) & rng min(R,S,x,z) c= [. 0,1 .]
       & min(R,S,x,z) is PartFunc of dom min(R,S,x,z), rng min(R,S,x,z)
           by FUZZY_1:def 1,PARTFUN1:24;
@@ -1665,7 +1671,7 @@ Lm6:
   for x being Element of X, z being Element of Z
   for a being Element of RealPoset [. 0,1 .]
    holds
-  (R (#) S). [x,z] "/\" a = "\/"({R. [x,y] "/\" S. [y,z] "/\" a
+  (R (#) S).(x,z) "/\" a = "\/"({R.(x,y) "/\" S.(y,z) "/\" a
       where y is Element of Y: not contradiction}, RealPoset [. 0,1 .])
    proof
     let X,Y,Z being non empty set;
@@ -1673,28 +1679,28 @@ Lm6:
     let S being RMembership_Func of Y,Z;
     let x being Element of X, z being Element of Z;
     let a being Element of RealPoset [. 0,1 .];
-    A1: {R. [x,y] "/\" S. [y,z] where y is Element of Y: not contradiction}
+    A1: {R.(x,y) "/\" S.(y,z) where y is Element of Y: not contradiction}
     c= the carrier of RealPoset [. 0,1 .]
      proof
       let d be set;assume
-        d in {R. [x,y] "/\" S. [y,z] where y is Element of Y: not contradiction
+        d in {R.(x,y) "/\" S.(y,z) where y is Element of Y: not contradiction
 }
 ;
       then consider t being Element of Y such that
-A2:   d = R. [x,t] "/\" S. [t,z] & not contradiction;
+A2:   d = R.(x,t) "/\" S.(t,z) & not contradiction;
       thus thesis by A2;
      end;
-A3: (R (#) S). [x,z] "/\" a
-      = "\/"({R. [x,y] "/\" S. [y,z]
+A3: (R (#) S).(x,z) "/\" a
+      = "\/"({R.(x,y) "/\" S.(y,z)
         where y is Element of Y: not contradiction}, RealPoset [. 0,1 .])
       "/\" a by Th22
      .= "\/"({b "/\" a where b is Element of RealPoset [. 0,1 .]:
-     b in {R. [x,y] "/\" S. [y,z] where y is Element of Y: not contradiction}},
+     b in {R.(x,y) "/\" S.(y,z) where y is Element of Y: not contradiction}},
      RealPoset [. 0,1 .]) by A1,Th15;
      set  A = {b "/\" a where b is Element of RealPoset [. 0,1 .]:
-                b in {R. [x,y] "/\" S. [y,z] where y is Element of Y:
+                b in {R.(x,y) "/\" S.(y,z) where y is Element of Y:
                not contradiction}},
-          B = {R. [x,y] "/\" S. [y,z] "/\" a where y is Element of Y:
+          B = {R.(x,y) "/\" S.(y,z) "/\" a where y is Element of Y:
                not contradiction};
        for c be set holds c in A iff c in B
       proof
@@ -1702,16 +1708,16 @@ A3: (R (#) S). [x,z] "/\" a
         hereby assume c in A;
          then consider b being Element of RealPoset [. 0,1 .] such that
 A4:      c = b "/\" a &
-         b in {R. [x,y] "/\" S. [y,z]
+         b in {R.(x,y) "/\" S.(y,z)
                 where y is Element of Y:not contradiction};
          consider y being Element of Y such that
-A5:      b = R. [x,y] "/\" S. [y,z]  & not contradiction by A4;
+A5:      b = R.(x,y) "/\" S.(y,z)  & not contradiction by A4;
          thus c in B by A4,A5;
         end;
          assume c in B;
          then consider y being Element of Y such that
-A6:      c = R. [x,y] "/\" S. [y,z] "/\" a & not contradiction;
-           R. [x,y] "/\" S. [y,z] in {R. [x,y1] "/\" S. [y1,z]
+A6:      c = R.(x,y) "/\" S.(y,z) "/\" a;
+           R.(x,y) "/\" S.(y,z) in {R.(x,y1) "/\" S.(y1,z)
          where y1 is Element of Y: not contradiction};
          hence c in A by A6;
       end;
@@ -1725,7 +1731,7 @@ Lm7:
   for x being Element of X, z being Element of Z
   for a being Element of RealPoset [. 0,1 .]
    holds
-   a "/\" (R (#) S). [x,z]  = "\/"({a "/\" R. [x,y] "/\" S. [y,z]
+   a "/\" (R (#) S).(x,z)  = "\/"({a "/\" R.(x,y) "/\" S.(y,z)
       where y is Element of Y: not contradiction}, RealPoset [. 0,1 .])
    proof
     let X,Y,Z being non empty set;
@@ -1733,23 +1739,23 @@ Lm7:
     let S being RMembership_Func of Y,Z;
     let x being Element of X, z being Element of Z;
     let a being Element of RealPoset [. 0,1 .];
-    set A = {a "/\" R. [x,y] "/\" S. [y,z] where y is Element of Y:
+    set A = {a "/\" R.(x,y) "/\" S.(y,z) where y is Element of Y:
              not contradiction},
-        B = {R. [x,y] "/\" S. [y,z] "/\" a where y is Element of Y:
+        B = {R.(x,y) "/\" S.(y,z) "/\" a where y is Element of Y:
              not contradiction};
        for b be set holds b in A iff b in B
       proof
        let b be set;
        hereby assume b in A;
          then consider y being Element of Y such that
- A1:     b = a "/\" R. [x,y] "/\" S. [y,z];
-           b = R. [x,y] "/\" S. [y,z] "/\" a by A1,LATTICE3:16;
+ A1:     b = a "/\" R.(x,y) "/\" S.(y,z);
+           b = R.(x,y) "/\" S.(y,z) "/\" a by A1,LATTICE3:16;
          hence b in B;
        end;
         assume b in B;
           then consider y being Element of Y such that
-A2:       b = R. [x,y] "/\" S. [y,z] "/\" a;
-            b = a "/\" R. [x,y] "/\" S. [y,z] by A2,LATTICE3:16;
+A2:       b = R.(x,y) "/\" S.(y,z) "/\" a;
+            b = a "/\" R.(x,y) "/\" S.(y,z) by A2,LATTICE3:16;
           hence b in A;
       end;
     then A = B by TARSKI:2;
@@ -1770,60 +1776,61 @@ theorem
 A1: dom ((R (#) S) (#) T) = [:X,W:] &
     dom (R (#) (S (#) T))= [:X,W:] by FUZZY_1:def 1;
       for x being set, w being set st x in X & w in W holds
-    ((R (#) S) (#) T). [x,w] = (R (#) (S (#) T)). [x,w]
+    ((R (#) S) (#) T).(x,w) = (R (#) (S (#) T)).(x,w)
      proof
       let x being set, w being set; assume
 A2:   x in X & w in W;
       then reconsider x as Element of X;
       reconsider w as Element of W by A2;
-A3:   ((R (#) S) (#) T). [x,w]  = "\/"({((R (#) S). [x,z]) "/\" T. [z,w]
+A3:   ((R (#) S) (#) T).(x,w)  = "\/"({((R (#) S).(x,z)) "/\" T.(z,w)
       where z is Element of Z: not contradiction}, RealPoset [. 0,1 .]) &
-      (R (#) (S (#) T)). [x,w] = "\/"({R. [x,y] "/\" ((S (#) T). [y,w])
+      (R (#) (S (#) T)).(x,w) = "\/"({R.(x,y) "/\" ((S (#) T).(y,w))
       where y is Element of Y: not contradiction}, RealPoset [. 0,1 .])
       by Th22;
-      set A = {"\/"({R. [x,y] "/\" S. [y,z] "/\" T. [z,w]
+
+      set A = {"\/"({R.(x,y) "/\" S.(y,z) "/\" T.(z,w)
            where y is Element of Y: not contradiction}, RealPoset [. 0,1 .])
            where z is Element of Z :not contradiction} ,
-       B = {(R (#) S). [x,z] "/\" T. [z,w] where z is Element of Z
+       B = {(R (#) S).(x,z) "/\" T.(z,w) where z is Element of Z
          :not contradiction};
 A4:   for a be set holds a in A iff a in B
        proof
         let a be set;
           hereby assume a in A;
            then consider z being Element of Z such that
-A5:        a = "\/"({R. [x,y] "/\" S. [y,z] "/\" T. [z,w]
+A5:        a = "\/"({R.(x,y) "/\" S.(y,z) "/\" T.(z,w)
             where y is Element of Y: not contradiction}, RealPoset [. 0,1 .]);
-             a = (R (#) S). [x,z] "/\" T. [z,w] by A5,Lm6;
+             a = (R (#) S).(x,z) "/\" T.(z,w) by A5,Lm6;
            hence a in B;
           end;
           assume a in B;
           then consider z being Element of Z such that
-A6:       a = (R (#) S). [x,z] "/\" T. [z,w];
-            a = "\/"({R. [x,y] "/\" S. [y,z] "/\" T. [z,w]
+A6:       a = (R (#) S).(x,z) "/\" T.(z,w);
+            a = "\/"({R.(x,y) "/\" S.(y,z) "/\" T.(z,w)
              where y is Element of Y: not contradiction}, RealPoset [. 0,1 .])
                by A6,Lm6;
           hence a in A;
        end;
       set C =
-      {"\/"({R. [x,y] "/\" S. [y,z] "/\" T. [z,w]
+      {"\/"({R.(x,y) "/\" S.(y,z) "/\" T.(z,w)
         where z is Element of Z: not contradiction}, RealPoset [. 0,1 .])
         where y is Element of Y :not contradiction} ,
-      D = {R. [x,y] "/\" ((S (#) T). [y,w]) where y is Element of Y
+      D = {R.(x,y) "/\" ((S (#) T).(y,w)) where y is Element of Y
            : not contradiction};
         for c be set holds c in C iff c in D
        proof
        let c be set;
         hereby assume c in C;
          then consider y being Element of Y such that
-A7:       c = "\/"({R. [x,y] "/\" S. [y,z] "/\" T. [z,w]
+A7:       c = "\/"({R.(x,y) "/\" S.(y,z) "/\" T.(z,w)
            where z is Element of Z: not contradiction}, RealPoset [. 0,1 .]);
-            c = R. [x,y] "/\" (S (#) T). [y,w] by A7,Lm7;
+            c = R.(x,y) "/\" (S (#) T).(y,w) by A7,Lm7;
           hence c in D;
         end;
         assume c in D;
           then consider y being Element of Y such that
-A8:       c = R. [x,y] "/\" ((S (#) T). [y,w]);
-            c = "\/"({R. [x,y] "/\" S. [y,z] "/\" T. [z,w]
+A8:       c = R.(x,y) "/\" ((S (#) T).(y,w));
+            c = "\/"({R.(x,y) "/\" S.(y,z) "/\" T.(z,w)
             where z is Element of Z: not contradiction}, RealPoset [. 0,1 .])
             by A8,Lm7;
         hence c in C;
@@ -1831,9 +1838,7 @@ A8:       c = R. [x,y] "/\" ((S (#) T). [y,w]);
       then A9:   C = D by TARSKI:2;
       defpred X[set] means not contradiction;
       deffunc U(Element of Y,Element of Z)
-        = R. [x,$1] "/\" S. [$1,$2] "/\" T. [$2,w];
-      deffunc V(Element of Z,Element of Y)
-        = R. [x,$2] "/\" S. [$2,$1] "/\" T. [$1,w];
+        = R.(x,$1) "/\" S.($1,$2) "/\" T.($2,w);
 A10:   for y being Element of Y, z being Element of Z st X[y] & X[z]
       holds U(y,z) = U(y,z);
         "\/"({"\/"({U(y,z)

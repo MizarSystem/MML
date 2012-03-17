@@ -10,13 +10,13 @@ environ
       FINSEQ_2, TREES_1, RLVECT_1, BOOLE, INCSP_1, QC_LANG1, FUNCT_2, BINOP_1,
       GROUP_1, NAT_1, ARYTM_1, FINSET_1, FINSUB_1, MATRIX_2, CARD_3;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, PARTFUN1,
-      FUNCT_2, STRUCT_0, NAT_1, GROUP_1, GROUP_4, BINOP_1, RLVECT_1, VECTSP_1,
-      FINSEQ_1, MATRIX_1, FINSET_1, FINSUB_1, FINSEQ_2, FINSEQ_3, FINSEQ_4,
+      FINSEQ_1, FUNCT_2, STRUCT_0, NAT_1, GROUP_1, GROUP_4, BINOP_1, RLVECT_1,
+      VECTSP_1, MATRIX_1, FINSET_1, FINSUB_1, FINSEQ_2, FINSEQ_3, FINSEQ_4,
       FINSEQOP, NUMBERS, XCMPLX_0, XXREAL_0;
  constructors RELAT_2, PARTFUN1, BINOP_1, FINSUB_1, XXREAL_0, NAT_1, FINSEQOP,
-      FINSEQ_4, GROUP_4, MATRIX_1;
+      FINSEQ_4, GROUP_4, MATRIX_1, BINARITH;
  registrations GROUP_1, MATRIX_1, FINSET_1, RELSET_1, STRUCT_0, FINSEQ_1,
-      FINSEQ_2, XREAL_0, ARYTM_3, FUNCT_2, PARTFUN1, XXREAL_0;
+      FINSEQ_2, XREAL_0, ARYTM_3, FUNCT_2, PARTFUN1, XXREAL_0, NAT_1;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
 
 
@@ -37,13 +37,12 @@ definition let n,m; let a be set;
     n |-> (m |-> a);
 end;
 
-definition
-  let D,n,m;let d;
-  redefine func (n,m) --> d ->Matrix of n,m,D;
+definition let D,n,m;let d;
+  redefine func (n,m) --> d -> Matrix of n,m,D;
 end;
 
 theorem :: MATRIX_2:1
-  [i,j] in Indices ((n,m)-->a) implies ((n,m)-->a) *(i,j)=a;
+  [i,j] in Indices ((n,m)-->a) implies ((n,m)-->a) * (i,j)=a;
 
 theorem :: MATRIX_2:2
   ((n,n)-->a') + ((n,n)-->b')= (n,n)-->(a'+b');
@@ -83,14 +82,14 @@ theorem :: MATRIX_2:6
   (a,b)][(c,d)*(1,1)=a & (a,b)][(c,d)*(1,2)=b &
   (a,b)][(c,d)*(2,1)=c & (a,b)][(c,d)*(2,2)=d;
 
-definition let n;let K be Field;
+definition let n; let K be Field;
   mode Upper_Triangular_Matrix of n,K -> Matrix of n,K means
 :: MATRIX_2:def 3
     for i,j st [i,j] in Indices it holds
           (i>j implies it*(i,j) = 0.K );
 end;
 
-definition let n;let K;
+definition let n, K;
   mode Lower_Triangular_Matrix of n,K -> Matrix of n,K means
 :: MATRIX_2:def 4
     for i,j st [i,j] in Indices it &
@@ -105,13 +104,12 @@ begin :: Deleting of Rows and Columns in a Matrix
 canceled 2;
 
 theorem :: MATRIX_2:10
-  for M be Matrix of n,m,K holds
+  for M be Matrix of n,m,D holds
   for k st k in Seg n holds M.k=Line(M,k);
 
-definition let i; let K;
+definition let i, K;
            let M be Matrix of K;
  canceled;
-  assume i in Seg width M;
   func DelCol(M,i) -> Matrix of K means
 :: MATRIX_2:def 6
     len it=len M & for k st k in dom M holds it.k=Del(Line(M,k),i);
@@ -145,22 +143,25 @@ theorem :: MATRIX_2:17
     for j st j in Seg width M holds Line(M@,j)=Col(M,j);
 
 theorem :: MATRIX_2:18
-for M being Matrix of D holds for i st i in dom M holds M.i=Line(M,i);
+ for M being Matrix of D holds for i st i in dom M holds M.i=Line(M,i);
 
-definition let i; let K;let M be Matrix of K;
-  assume i in dom M & width M>0;
-  func DelLine(M,i) -> Matrix of K means
-:: MATRIX_2:def 7
-    it={} if len M=1 otherwise
-    width it=width M &
-      for k st k in Seg width M holds Col(it,k)=Del(Col(M,k),i);
+notation let K, i; let M be Matrix of K;
+  synonym DelLine(M,i) for Del(M,i);
 end;
 
-definition let i,j; let n;let K;let M be Matrix of n,K;
+registration let K, i; let M be Matrix of K;
+  cluster DelLine(M,i) -> tabular;
+end;
+
+definition let K, i; let M be Matrix of K;
+  redefine func DelLine(M,i) -> Matrix of K;
+end;
+
+definition let i,j,n,K; let M be Matrix of n,K;
+  canceled;
   func Deleting(M,i,j) -> Matrix of K equals
 :: MATRIX_2:def 8
-     {} if n=1 otherwise
-     DelCol((DelLine(M,i)),j);
+     DelCol(DelLine(M,i),j);
 end;
 
 begin :: Sets of Permutations
@@ -193,7 +194,7 @@ theorem :: MATRIX_2:19
   ex P being permutational non empty set st len P =n;
 
 definition let n;
-  func Permutations(n) -> set means
+  func Permutations n -> set means
 :: MATRIX_2:def 11
     x in it iff x is Permutation of Seg n;
 end;
@@ -206,11 +207,7 @@ theorem :: MATRIX_2:20
   len Permutations(n)=n;
 
 theorem :: MATRIX_2:21
-  Permutations(1)={idseq 1};
-
-definition
-  canceled;
-end;
+  Permutations 1 = {idseq 1};
 
 canceled;
 
@@ -219,6 +216,7 @@ begin :: Group of Permutations
  reserve p,q for Element of Permutations(n);
 
 definition let n;
+  canceled;
   func Group_of_Perm(n) -> strict HGrStr means
 :: MATRIX_2:def 13
     the carrier of it = Permutations(n) &
@@ -269,7 +267,7 @@ definition let n;
   let IT be Permutation of Seg n;
   attr IT is even means
 :: MATRIX_2:def 15
-ex l be FinSequence of the carrier of Group_of_Perm(n)
+ex l be FinSequence of Group_of_Perm(n)
    st (len l) mod 2=0 & IT=Product l &
   for i st i in dom l ex q st l.i=q & q is_transposition;
 end;
@@ -284,17 +282,17 @@ theorem :: MATRIX_2:29
 
 definition let K,n;let x be Element of K;
   let p be Element of Permutations(n);
-  func -(x,p)-> Element of K equals
+  func -(x,p) -> Element of K equals
 :: MATRIX_2:def 16
     x if p is even otherwise -x;
 end;
 
 definition let X be set;
   assume X is finite;
-  func FinOmega(X) -> Element of Fin X equals
+  func FinOmega X -> Element of Fin X equals
 :: MATRIX_2:def 17
     X;
 end;
 
 theorem :: MATRIX_2:30
-  Permutations(n) is finite;
+  Permutations n is finite;

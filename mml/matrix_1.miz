@@ -9,9 +9,8 @@ environ
  vocabularies VECTSP_1, FINSEQ_1, RLVECT_1, RELAT_1, BOOLE, FINSEQ_2, TREES_1,
       FUNCT_1, QC_LANG1, INCSP_1, GROUP_1, ARYTM_1, BINOP_1, MATRIX_1,
       ROUGHS_1;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS,
-   NAT_1, FUNCT_1, FUNCT_2,
-      FINSEQ_1, FUNCOP_1, FINSEQ_2, STRUCT_0, BINOP_1, FINSEQOP, RLVECT_1,
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, NAT_1, FUNCT_1,
+      FUNCT_2, FINSEQ_1, FINSEQ_2, STRUCT_0, BINOP_1, FINSEQOP, RLVECT_1,
       GROUP_1, VECTSP_1, XXREAL_0;
  constructors BINOP_1, XXREAL_0, FINSEQOP, VECTSP_1;
  registrations FINSEQ_1, VECTSP_1, STRUCT_0, FINSEQ_2, RELSET_1, GROUP_1,
@@ -25,7 +24,7 @@ environ
 begin
 
  reserve x,y,z,y1,y2 for set,
-         i,j,k,l,n,m for Nat,
+         i,j,n,m for Nat,
          D for non empty set,
          K for non empty doubleLoopStr,
          s,t for FinSequence,
@@ -262,20 +261,20 @@ theorem Th10:
   m |-> (n |-> a) is Matrix of m,n,D
   proof
     reconsider n1=n,m1=m as Element of NAT by ORDINAL1:def 13;
-     reconsider d= n1 |-> a as Element of D* by FINSEQ_1:def 11;
-     reconsider M= m1 |-> d as FinSequence of D*;
-      reconsider M as Matrix of D by Th2;
-      M is Matrix of m,n,D
-      proof
-       thus len M = m by FINSEQ_2:69;
-       let p;
-        assume A1:p in rng M;
-        rng M c= {n |-> a} by FUNCOP_1:19;
-        then p = n |-> a by A1,TARSKI:def 1;
-        hence len p =n by FINSEQ_2:69;
-       end;
-       hence thesis;
-     end;
+    reconsider d= n1 |-> a as Element of D* by FINSEQ_1:def 11;
+    reconsider M= m1 |-> d as FinSequence of D*;
+    reconsider M as Matrix of D by Th2;
+    M is Matrix of m,n,D
+    proof
+     thus len M = m by FINSEQ_2:69;
+     let p;
+     assume A1:p in rng M;
+     rng M c= {n |-> a} by FUNCOP_1:19;
+     then p = n |-> a by A1,TARSKI:def 1;
+     hence len p =n by FINSEQ_2:69;
+    end;
+    hence thesis;
+   end;
 
 theorem Th11:
   for p being FinSequence of D holds
@@ -510,11 +509,11 @@ A7:   rng M1 c= D* & rng M2 c= D* by FINSEQ_1:def 4;
          by FINSEQ_1:def 4,FUNCT_1:def 5;
         then reconsider a = p.l as Element of D;
         reconsider b = q.l as Element of D by A12;
-a13:    [k,l] in [:dom M1,Seg width M1:] &
+A13:    [k,l] in [:dom M1,Seg width M1:] &
         [k,l] in [:dom M2,Seg width M2:] by A2,A4,A5,A11,ZFMISC_1:106;then
         [k,l] in Indices M1 & [k,l] in Indices M2;
         then M1*(k,l)=a & M2*(k,l)= b by Def6;
-        hence thesis by A3,a13;
+        hence thesis by A3,A13;
        end;
       hence M1.k =M2.k by A9,A10,FINSEQ_1:18;
      end;
@@ -625,7 +624,7 @@ A23:  i in dom M and A24:M.i =p by FINSEQ_2:11;
 A27:i in Seg n() & j in Seg width M by A11,A25,ZFMISC_1:106;
  then A28:      ex q being FinSequence st
  M.i=q & len q = m() & for j st j in Seg m() holds q.j = f(i,j) by A12;
-        n() <> 0 & n() >= 0 by A11,A25,FINSEQ_1:4,NAT_1:18,ZFMISC_1:106;
+      n() <> 0 & n() >= 0 by A11,A25,FINSEQ_1:4,NAT_1:18,ZFMISC_1:106;
       then n() > 0 by REAL_1:def 5;
       then j in Seg m() by A13,A27,Th20;
       hence thesis by A26,A28;
@@ -826,7 +825,7 @@ A1:len M1 = n & len M2 = n by Def3;then
 A2:dom M1 = Seg n & dom M2 = Seg n by FINSEQ_1:def 3;
 A3:0 <= n by NAT_1:18;
     now per cases by A3,REAL_1:def 5;
-     suppose n =0;
+     suppose n = 0;
       then width M1 = 0 & width M2 =0 by A1,Def4;
       hence width M1= width M2;
      end;
@@ -899,14 +898,14 @@ A2:     Seg len M = dom M by FINSEQ_1:def 3;
            hence thesis by A3;
           end;
        end;
-       suppose A6: width M =0;
+       suppose A5: width M =0;
         reconsider M1 = {} as Matrix of D by Th13;
         thus thesis
          proof
           take M1;
           len M1 = 0 by FINSEQ_1:25;
           then Indices M1=[:{},Seg width M1:] by FINSEQ_1:4,def 3;
-          hence thesis by A6,FINSEQ_1:25,FINSEQ_1:4,ZFMISC_1:113;
+          hence thesis by A5,FINSEQ_1:25,FINSEQ_1:4,ZFMISC_1:113;
          end;
        end;
        end;
@@ -915,89 +914,89 @@ A2:     Seg len M = dom M by FINSEQ_1:def 3;
     uniqueness
      proof
       let M1,M2 be Matrix of D;
-      assume that A8:len M1 = width M and
-   A9:for i,j holds [i,j] in Indices M1 iff [j,i] in Indices M and
-  A10:for i,j st [j,i] in Indices M holds M1*(i,j)=M*(j,i) and
-  A11:len M2 = width M and
-  A12:for i,j holds [i,j] in Indices M2 iff [j,i] in Indices M and
-  A13:for i,j st [j,i] in Indices M holds M2*(i,j)=M*(j,i);
+      assume that A6:len M1 = width M and
+   A7:for i,j holds [i,j] in Indices M1 iff [j,i] in Indices M and
+  A8:for i,j st [j,i] in Indices M holds M1*(i,j)=M*(j,i) and
+  A9:len M2 = width M and
+  A10:for i,j holds [i,j] in Indices M2 iff [j,i] in Indices M and
+  A11:for i,j st [j,i] in Indices M holds M2*(i,j)=M*(j,i);
       now let x,y;
        thus [x,y] in [:dom M1,Seg width M1:] implies
             [x,y] in [:dom M2,Seg width M2:]
         proof
-         assume A14:[x,y] in [:dom M1,Seg width M1:];
-         then A15:x in dom M1 & y in Seg width M1 by ZFMISC_1:106;
+         assume A12:[x,y] in [:dom M1,Seg width M1:];
+         then A13:x in dom M1 & y in Seg width M1 by ZFMISC_1:106;
          then reconsider i=x as Element of NAT;
-         reconsider j=y as Element of NAT by A15;
-         [j,i] in Indices M by A9,A14;
-         hence thesis by A12;
+         reconsider j=y as Element of NAT by A13;
+         [j,i] in Indices M by A7,A12;
+         hence thesis by A10;
         end;
        thus [x,y] in [:dom M2,Seg width M2:] implies
             [x,y] in [:dom M1,Seg width M1:]
        proof
-        assume A16:[x,y] in [:dom M2,Seg width M2:];
-        then A17:x in dom M2 & y in Seg width M2 by ZFMISC_1:106;
+        assume A14:[x,y] in [:dom M2,Seg width M2:];
+        then A15:x in dom M2 & y in Seg width M2 by ZFMISC_1:106;
         then reconsider i=x as Element of NAT;
-        reconsider j=y as Element of NAT by A17;
-        [j,i] in Indices M by A12,A16;
-        hence thesis by A9;
+        reconsider j=y as Element of NAT by A15;
+        [j,i] in Indices M by A10,A14;
+        hence thesis by A7;
        end;
       end;then
-A18: [:dom M1,Seg width M1:] = [:dom M2,Seg width M2:] by ZFMISC_1:108;
-A19: len M1 = 0 implies len M2= 0 & width M1 = 0 & width M2 = 0
-       by A8,A11,Def4;
-A20: now assume A21:len M1 <> 0;
-       then Seg len M2 <> {} by A8,A11,FINSEQ_1:5;then
-A22:   dom M2 <> {} by FINSEQ_1:def 3;
+A16: [:dom M1,Seg width M1:] = [:dom M2,Seg width M2:] by ZFMISC_1:108;
+A17: len M1 = 0 implies len M2= 0 & width M1 = 0 & width M2 = 0
+       by A6,A9,Def4;
+A18: now assume A19:len M1 <> 0;
+       then Seg len M2 <> {} by A6,A9,FINSEQ_1:5;then
+A20:   dom M2 <> {} by FINSEQ_1:def 3;
        now per cases;
-         suppose A23:Seg width M1 <> {};
-          Seg len M1 <> {} by A21,FINSEQ_1:5;
+         suppose A21:Seg width M1 <> {};
+          Seg len M1 <> {} by A19,FINSEQ_1:5;
           then dom M1 <> {} by FINSEQ_1:def 3;
-          then Seg width M1 = Seg width M2 by A18,A23,ZFMISC_1:134;
+          then Seg width M1 = Seg width M2 by A16,A21,ZFMISC_1:134;
           hence width M1 = width M2 by FINSEQ_1:8;
          end;
-         suppose A24: Seg width M1 = {};
-          then [:dom M2,Seg width M2:]= {} by A18,ZFMISC_1:113;
-          then Seg width M2 = {} by A22,ZFMISC_1:113;
-          hence width M1=width M2 by A24,FINSEQ_1:8;
+         suppose A22: Seg width M1 = {};
+          then [:dom M2,Seg width M2:]= {} by A16,ZFMISC_1:113;
+          then Seg width M2 = {} by A20,ZFMISC_1:113;
+          hence width M1=width M2 by A22,FINSEQ_1:8;
         end;
         end;
-       hence len M1=len M2 & width M1 =width M2 by A8,A11;
+       hence len M1=len M2 & width M1 =width M2 by A6,A9;
       end;
       now let i,j;
        assume [i,j] in Indices M1;
-       then A25:[j,i] in Indices M by A9;
-       then M1*(i,j)=M*(j,i) by A10;
-       hence M1*(i,j)=M2*(i,j) by A13,A25;
+       then A23:[j,i] in Indices M by A7;
+       then M1*(i,j)=M*(j,i) by A8;
+       hence M1*(i,j)=M2*(i,j) by A11,A23;
       end;
-      hence thesis by A19,A20,Th21;
+      hence thesis by A17,A18,Th21;
      end;
 end;
 
-Th12: for M being Matrix of D st width M > 0 holds
+Lm1: for M being Matrix of D st width M > 0 holds
     len (M@)=width M & width (M@)=len M
 proof
   let M be Matrix of D;
   assume A1:width M>0;
   thus len (M@)=width M by Def7;
-AA: len M >= 0 by NAT_1:18;
-  per cases by AA,REAL_1:def 5;
+A2: len M >= 0 by NAT_1:18;
+  per cases by A2,REAL_1:def 5;
     suppose len M=0;
       hence width (M@)=len M by A1,Def4;
     end;
-    suppose A2: len M>0;
+    suppose A3: len M>0;
       dom M = Seg len M by FINSEQ_1:def 3;then
-A3:   Seg width M<>{} & dom M<>{} by A1,A2,FINSEQ_1:5;
+A4:   Seg width M<>{} & dom M<>{} by A1,A3,FINSEQ_1:5;
       for i,j being set holds [i,j]in [:dom (M@),Seg width (M@):] iff
         [i,j] in [:Seg width M,dom M:]
       proof let i,j be set;
         thus [i,j] in [:dom (M@),Seg width (M@):] implies
         [i,j] in [:Seg width M,dom M:]
         proof
-          assume A4:[i,j]in [:dom (M@),Seg width (M@):];
+          assume A5:[i,j]in [:dom (M@),Seg width (M@):];
           then i in dom (M@)& j in Seg width (M@) by ZFMISC_1:106;
           then reconsider i,j as Element of NAT;
-          [i,j] in Indices (M@) by A4;then
+          [i,j] in Indices (M@) by A5;then
           [j,i] in Indices M by Def7;
           hence thesis by ZFMISC_1:107;
         end;
@@ -1009,20 +1008,20 @@ A3:   Seg width M<>{} & dom M<>{} by A1,A2,FINSEQ_1:5;
         hence thesis;
       end;
       then [:Seg width M,dom M:]=[:dom (M@),Seg width (M@):] by ZFMISC_1:108;
-      then Seg width M= dom (M@) & dom M=Seg width (M@) by A3,ZFMISC_1:134;
+      then Seg width M= dom (M@) & dom M=Seg width (M@) by A4,ZFMISC_1:134;
       hence len M=width (M@) by FINSEQ_1:def 3;
     end;
   end;
 
-Th19: for n be Element of NAT, K being non empty set,
+Lm2: for n be Element of NAT, K being non empty set,
   A being Matrix of n,K holds A@ is Matrix of n,K
 proof
   let n be Element of NAT,K be non empty set, A be Matrix of n,K;
 A1: len (A@)=width A by Def7;
 A2: len A = n & for p being FinSequence of K
    st p in rng A holds len p = n by Def3;
-A3: now AA: n >= 0 by NAT_1:18;
-  per cases by AA,REAL_1:def 5;
+A3: now A4: n >= 0 by NAT_1:18;
+  per cases by A4,REAL_1:def 5;
   case n>0;
    hence len (A@)=n by A1,Th20,A2;
   end;
@@ -1047,20 +1046,19 @@ A8:  s=p2 & len s = n2 by A6;
     consider s being FinSequence such that
 A9: s=p & len s = n2 by A5,A6;
     now per cases;
-    case A11: n>0;then
-A12:  width A=n by Th20,A2;then
-A13: len (A@)=width A & width (A@)=len A by A11,Th12;
-     len (A@)=n & width (A@)=n by A2,A13,A12;then
-     A@ is Matrix of n,n2,K by A7,Def3;
-     hence len p = n by A9,A2,A13,A12,A11,Th20;
+    case A10: n>0;then
+A11:  width A=n by Th20,A2;then
+A12: len (A@)=width A & width (A@)=len A by A10,Lm1; then
+     A@ is Matrix of n,n2,K by A7,Def3,A11;
+     hence len p = n by A9,A2,A12,A11,A10,Th20;
    end;
    case n<=0;then
-A15: width A=0 by Def4,A2;
+A13: width A=0 by Def4,A2;
      len (A@) = width A by Def7;then
-A16: dom (A@)={} by A15,FINSEQ_1:4,def 3;
+A14: dom (A@)={} by A13,FINSEQ_1:4,def 3;
      consider x0 being set such that
-A17: x0 in dom (A@) & p=(A@).x0 by A5,FUNCT_1:def 5;
-     thus len p = n by A16,A17;
+A15: x0 in dom (A@) & p=(A@).x0 by A5,FUNCT_1:def 5;
+     thus len p = n by A14,A15;
     end;
     end;
    hence len p = n;
@@ -1073,7 +1071,7 @@ definition let n,D; let M be Matrix of n,D;
   coherence
   proof
     n in NAT by ORDINAL1:def 13;
-    hence thesis by Th19;
+    hence thesis by Lm2;
   end;
 end;
 
@@ -1090,24 +1088,23 @@ A2:   for j be Element of NAT st j in Seg width M holds f.j = F(j)
       take f;
       thus len f = width M by A1;
       let j;
-      j in NAT by ORDINAL1:def 13;
-      hence thesis by A2;
+      thus thesis by A2;
      end;
     uniqueness
     proof
      let p1,p2 be FinSequence of D;
-     assume that A1:len p1=width M and
-                 A2:for j st j in Seg width M holds p1.j = M*(i,j) and
-                 A3:len p2=width M and
-                 A4:for j st j in Seg width M holds p2.j = M*(i,j);
+     assume that A3:len p1=width M and
+                 A4:for j st j in Seg width M holds p1.j = M*(i,j) and
+                 A5:len p2=width M and
+                 A6:for j st j in Seg width M holds p2.j = M*(i,j);
      for j be Element of NAT st j in Seg width M holds p1.j=p2.j
      proof
       let j be Element of NAT;
       assume j in Seg width M;
-      then p1.j = M*(i,j) & p2.j = M*(i,j) by A2,A4;
+      then p1.j = M*(i,j) & p2.j = M*(i,j) by A4,A6;
       hence thesis;
      end;
-     hence thesis by A1,A3,FINSEQ_2:10;
+     hence thesis by A3,A5,FINSEQ_2:10;
     end;
 
   func Col(M,i) -> FinSequence of D means:Def9:
@@ -1116,32 +1113,31 @@ A2:   for j be Element of NAT st j in Seg width M holds f.j = F(j)
   proof
     deffunc F(Nat) = M*($1,i);
     consider z being FinSequence of D such that
-A1: len z = len M and
-A2: for j be Element of NAT st j in Seg len M holds z.j = F(j)
+A7: len z = len M and
+A8: for j be Element of NAT st j in Seg len M holds z.j = F(j)
       from FINSEQ_2:sch 1;
-      take z;
-      thus len z = len M by A1;
-      let j;
-A3:   Seg len M = dom M by FINSEQ_1:def 3;
-    j in NAT by ORDINAL1:def 13;
-    hence thesis by A1,A2,A3;
+    take z;
+    thus len z = len M by A7;
+    let j;
+    Seg len M = dom M by FINSEQ_1:def 3;
+    hence thesis by A8;
   end;
   uniqueness
   proof
     let p1,p2 be FinSequence of D;
-    assume that A6:len p1 = len M and
-A7: for j st j in dom M holds p1.j = M*(j,i) and
-A8: len p2= len M and
-A9: for j st j in dom M holds p2.j = M*(j,i);
+    assume that A9:len p1 = len M and
+A10: for j st j in dom M holds p1.j = M*(j,i) and
+A11: len p2= len M and
+A12: for j st j in dom M holds p2.j = M*(j,i);
     for j be Element of NAT st j in Seg len M holds p1.j=p2.j
     proof
       let j be Element of NAT;
       assume j in Seg len M;
       then j in dom M by FINSEQ_1:def 3;
-      then p1.j = M*(j,i) & p2.j = M*(j,i) by A7,A9;
+      then p1.j = M*(j,i) & p2.j = M*(j,i) by A10,A12;
       hence thesis;
     end;
-    hence thesis by A6,A8,FINSEQ_2:10;
+    hence thesis by A9,A11,FINSEQ_2:10;
   end;
 end;
 
@@ -1360,7 +1356,7 @@ A4: len x = n & for p be FinSequence of K st
     hence thesis by A4,FINSEQ_2:110;
   end;
 
-definition let K; let M be Matrix of K;
+definition let K be non empty ZeroStr; let M be Matrix of K;
   attr M is diagonal means
     for i,j st [i,j] in Indices M & M*(i,j) <> 0.K holds i=j;
 end;
@@ -1495,7 +1491,7 @@ A4:  for a being Element of n-Matrices_over F
      end;
      hereby let a be Element of G;
      reconsider A=a as Matrix of n,F by Th31;
-     thus a+0.G=h.(a,0.G) by RLVECT_1:5 .=h.(A,A0)
+     thus a+0.G=h.(a,0.G) by RLVECT_1:5
               .=A + 0.(F,n) by A3 .=a by Th34;
      end;
      let a be Element of G;
@@ -1505,7 +1501,7 @@ A5:  ex A st a=A & b= -A by A4;
      reconsider b = -A as Element of G by A6;
      take b;
      thus a+b=h.(A,-A) by A6,RLVECT_1:5
-             .=A+-A by A3 .=A0 by Th35 .=0.G;
+             .=A+-A by A3 .=0.G by Th35;
     end;
     then reconsider G as strict AbGroup;
     take G;
@@ -1537,16 +1533,29 @@ A12: the Zero of G2 = 0.(F,n);
 end;
 
 theorem
-  for M1, M2 being Matrix of 0, n, K holds M1 = M2
+  for M1 being Matrix of 0, n, K, M2 being Matrix of 0, m, K holds M1 = M2
   proof
-    let M1, M2 be Matrix of 0, n, K;
+    let M1 be Matrix of 0, n, K, M2 be Matrix of 0, m, K;
+A1:  len M1 = 0 & len M2 = 0 by Def3; then
+A2:  width M1 = 0 & width M2 = 0 by Def4;
+    for i,j st [i,j] in Indices M1 holds M1*(i,j) = M2*(i,j) by Th23;
+    hence thesis by A2,A1,Th21;
+  end;
+
+theorem
+  for M1, M2 being Matrix of K st len M1 = 0 & len M2 = 0 holds
+    M1 = M2
+  proof
+    let M1, M2 be Matrix of K;
+    assume
+A1:  len M1 = 0 & len M2 = 0; then
+A2:  width M1 = 0 & width M2 = 0 by Def4;
     for i,j st [i,j] in Indices M1 holds M1*(i,j) = M2*(i,j)
     proof
       let i,j; assume [i,j] in Indices M1;
-      Indices M1 = {} & len M1 = 0 & len M2 = 0 by Th23; then
-      dom M1 = {} & dom M2 = {} by FINSEQ_1:def 3,FINSEQ_1:4; then
+      dom M1 = {} & dom M2 = {} by A1,FINSEQ_1:def 3,4; then
       M1 = {} & M2 = {} by RELAT_1:64;
       hence thesis;
     end;
-    hence thesis by Th28;
+    hence thesis by A1,A2,Th21;
   end;

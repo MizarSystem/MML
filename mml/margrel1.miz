@@ -8,14 +8,14 @@ environ
 
  vocabularies FUNCOP_1, FUNCT_2, RELAT_1, FINSEQ_1, BOOLE, QC_LANG1, ZF_LANG,
       MARGREL1;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1,
-  NUMBERS, NAT_1, FINSEQ_1, RELAT_1,
-      FUNCOP_1, FRAENKEL;
- constructors FUNCOP_1, FRAENKEL, FINSEQ_1;
- registrations RELSET_1, FUNCOP_1, SUBSET_1, XBOOLE_0;
- requirements SUBSET, BOOLE;
- definitions TARSKI;
- theorems TARSKI, ZFMISC_1, FINSEQ_1, FUNCT_2, FUNCOP_1, XBOOLE_0, XBOOLE_1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, FINSEQ_1, RELAT_1,
+      FUNCOP_1, FRAENKEL, XBOOLEAN;
+ constructors FUNCOP_1, FRAENKEL, FINSEQ_1, XBOOLEAN, XCMPLX_0, XXREAL_0;
+ registrations RELSET_1, FUNCOP_1, SUBSET_1, XBOOLE_0, XBOOLEAN;
+ requirements SUBSET, BOOLE, NUMERALS, ARITHM, REAL;
+ definitions TARSKI, XBOOLEAN;
+ theorems TARSKI, ZFMISC_1, FINSEQ_1, FUNCT_2, FUNCOP_1, XBOOLE_0, XBOOLE_1,
+      XBOOLEAN;
  schemes XBOOLE_0;
 
 begin
@@ -556,193 +556,117 @@ A5:       ex c being FinSequence of D() st
  end;
 
  definition
-  func FALSE -> Element of BOOLEAN equals   0;
+  redefine
+  func FALSE -> Element of BOOLEAN;
    coherence by TARSKI:def 2;
-  func TRUE -> Element of BOOLEAN equals   1;
+  func TRUE -> Element of BOOLEAN;
    coherence by TARSKI:def 2;
  end;
 
-canceled 3;
-
-theorem
-     FALSE = 0 & TRUE = 1;
-
-theorem
-     BOOLEAN = {FALSE,TRUE};
-
-theorem
-     FALSE <> TRUE;
+canceled 6;
 
 definition
  let x be set;
- attr x is boolean means
-:Def15: x in BOOLEAN;
+ redefine attr x is boolean means
+:Def13: x in BOOLEAN;
+ compatibility
+  proof
+   hereby assume x is boolean;
+     then x = FALSE or x = TRUE by XBOOLEAN:def 3;
+    hence x in BOOLEAN;
+   end;
+   assume x in BOOLEAN;
+   hence x = FALSE or x = TRUE by TARSKI:def 2;
+  end;
 end;
 
 registration
- cluster boolean set;
- existence
-  proof
-   take FALSE;
-   thus thesis by Def15;
-  end;
  cluster -> boolean Element of BOOLEAN;
- coherence by Def15;
+ coherence by Def13;
 end;
 
 reserve u,v,w for boolean set;
 
-theorem Th39:
- v = FALSE or v = TRUE
- proof v in BOOLEAN by Def15;
-  hence thesis by TARSKI:def 2;
- end;
+theorem
+ v = FALSE or v = TRUE by XBOOLEAN:def 3;
 
   definition
+   redefine
     let v be boolean set;
-  func 'not' v -> boolean set equals
-   :Def16:  TRUE if v = FALSE
+  func 'not' v equals
+    TRUE if v = FALSE
                otherwise FALSE;
-  correctness;
-  involutiveness by Th39;
-
+  compatibility
+   proof let w;
+    thus v = FALSE implies (w = 'not' v iff w = TRUE);
+    assume v <> FALSE;
+     then v = TRUE by XBOOLEAN:def 3;
+    hence w = 'not' v iff w = FALSE;
+   end;
+  consistency;
     let w be boolean set;
   func v '&' w equals
-   :Def17: TRUE if v = TRUE & w =TRUE
+    TRUE if v = TRUE & w =TRUE
       otherwise FALSE;
-  correctness;
-  commutativity;
- end;
-
-  registration let v be boolean set;
-  cluster 'not' v -> boolean;
-  coherence;
-  let w be boolean set;
-  cluster v '&' w -> boolean;
-  correctness
-   proof
-       v = TRUE & w = TRUE or not(v = TRUE & w = TRUE);
-    hence thesis by Def17;
+  compatibility
+   proof let u be set;
+    thus v = TRUE & w =TRUE implies (u = v '&' w iff u = TRUE);
+    assume v <> TRUE or w <>TRUE;
+     then v = FALSE or w = FALSE by XBOOLEAN:def 3;
+    hence u = v '&' w iff u = FALSE;
    end;
+  consistency;
  end;
 
 definition let v be Element of BOOLEAN;
   redefine func 'not' v -> Element of BOOLEAN;
-  correctness by Def15;
+  correctness by Def13;
   let w be Element of BOOLEAN;
   func v '&' w -> Element of BOOLEAN;
-  correctness by Def15;
+  correctness by Def13;
 end;
 
 theorem
   'not' 'not' v = v;
 
 theorem
- Th41: (v = FALSE iff 'not' v = TRUE) &
-      (v = TRUE iff 'not' v = FALSE)
-  proof
-    thus v = FALSE implies 'not' v = TRUE by Def16;
-    thus 'not' v = TRUE implies v = FALSE by Def16;
-    thus v = TRUE implies 'not' v = FALSE by Def16;
-    thus 'not' v = FALSE implies v = TRUE
-      proof assume 'not' v = FALSE; then 'not' 'not' v = TRUE by Def16;
-        hence thesis;
-      end;
-  end;
+ (v = FALSE iff 'not' v = TRUE) &
+      (v = TRUE iff 'not' v = FALSE);
 
 canceled;
 
 theorem
-     v <> TRUE iff v = FALSE by Th39;
+     v <> TRUE iff v = FALSE by XBOOLEAN:def 3;
 
 canceled;
 
 theorem
-  Th45: (v '&' w = TRUE iff v = TRUE & w = TRUE) &
-        (v '&' w = FALSE iff v = FALSE or w = FALSE)
-  proof
-    thus v '&' w = TRUE implies v = TRUE & w = TRUE by Def17;
-    thus v = TRUE & w = TRUE implies v '&' w = TRUE by Def17;
-    thus v '&' w = FALSE implies v = FALSE or w = FALSE
-      proof assume v '&' w = FALSE;
-        then not (v = TRUE & w = TRUE) by Def17;
-        hence thesis by Th39;
-      end;
-        assume v = FALSE or w = FALSE;
-          hence thesis by Def17;
-  end;
+   (v '&' w = TRUE iff v = TRUE & w = TRUE) &
+        (v '&' w = FALSE iff v = FALSE or w = FALSE) by XBOOLEAN:101,140;
 
 theorem
-  Th46: v '&' 'not' v = FALSE
-    proof
- A1: now assume v = TRUE;
-         then 'not' v = FALSE by Th41;
-         hence v '&''not' v = FALSE by Th45;
-     end;
-         v = FALSE implies v '&''not' v = FALSE by Th45;
-     hence thesis by A1,Th39;
-   end;
+  v '&' 'not' v = FALSE by XBOOLEAN:138;
 
 theorem
-     'not'(v '&''not' v) = TRUE
-    proof v '&''not' v = FALSE by Th46; hence thesis by Th41; end;
+     'not'(v '&''not' v) = TRUE by XBOOLEAN:102;
 
 canceled;
 
 theorem
-     FALSE '&' v = FALSE by Th45;
+     FALSE '&' v = FALSE;
 
 theorem
-     TRUE '&' v = v
-   proof
- A1:   v = TRUE implies thesis by Th45;
-          v = FALSE implies thesis by Th45;
-      hence thesis by A1,Th39;
-   end;
+     TRUE '&' v = v;
 
 theorem
-     v '&' v = FALSE implies v = FALSE by Th45;
+     v '&' v = FALSE implies v = FALSE;
 
 theorem
-     v '&' (w '&' u) = (v '&' w) '&' u
-    proof
-A1:   now assume A2: v = TRUE;
-  A3:  now assume w = TRUE;
-    A4:  u = TRUE implies thesis by A2;
-             now assume A5: u = FALSE;
-              then w '&' u = FALSE by Th45;
-           then v '&' (w '&' u) = FALSE by Th45;
-             hence thesis by A5,Th45;
-           end;
-          hence thesis by A4,Th39;
-        end;
-           now assume A6: w = FALSE;
-    A7: now assume u = TRUE;
-                 w '&' u = FALSE by A6,Th45;
-        then A8:   v '&' (w '&' u) = FALSE by Th45;
-                 v '&' w = FALSE by A6,Th45;
-             hence thesis by A8,Th45;
-          end;
-             now assume A9: u = FALSE;
-              then w '&' u = FALSE by Th45;
-           then v '&' (w '&' u) = FALSE by Th45;
-             hence thesis by A9,Th45;
-           end;
-          hence thesis by A7,Th39;
-        end;
-        hence thesis by A3,Th39;
-      end;
-         now assume A10: v = FALSE;
-   then A11:   v '&' (w '&' u) = FALSE by Th45;
-            v '&' w = FALSE by A10,Th45;
-         hence thesis by A11,Th45;
-      end;
-      hence thesis by A1,Th39;
-    end;
+     v '&' (w '&' u) = (v '&' w) '&' u;
 
  definition let X;
     func ALL(X) equals
-    :Def18: TRUE if not FALSE in X
+    :Def16: TRUE if not FALSE in X
       otherwise FALSE;
    correctness;
  end;
@@ -752,15 +676,15 @@ A1:   now assume A2: v = TRUE;
   cluster ALL X -> boolean;
    correctness
     proof FALSE in X or not FALSE in X;
-     hence thesis by Def18;
+     hence thesis by Def16;
     end;
  end;
 
 definition let X;
   redefine func ALL X -> Element of BOOLEAN;
-  correctness by Def15;
+  correctness by Def13;
 end;
 
 theorem
      (not FALSE in X iff ALL(X) = TRUE) &
-      (FALSE in X iff ALL(X) = FALSE) by Def18;
+      (FALSE in X iff ALL(X) = FALSE) by Def16;

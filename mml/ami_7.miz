@@ -129,11 +129,9 @@ theorem Th6:
         w be Element of ObjectKind o such that
 A1:  for s being State of A holds Exec(I,s).IC A = NextLoc IC s and
 A2:  o <> IC A;
-    thus IC Exec(I,s) = Exec(I,s).IC A
-      .= NextLoc IC s by A1
+    thus IC Exec(I,s) = NextLoc IC s by A1
       .= NextLoc IC (s+*(o,w)) by A2,Th5
-      .= Exec(I,s+*(o,w)).IC A by A1
-      .= IC Exec(I,s+*(o,w));
+      .= IC Exec(I,s+*(o,w)) by A1;
   end;
 
 theorem Th7:
@@ -155,9 +153,7 @@ theorem Th7:
 A1:  I is sequential and
 A2:  o <> IC A;
     thus IC Exec(I,s+*(o,w)) = IC Exec(I,s) by A1,A2,Th6
-      .= Exec(I,s).IC A
-      .= (Exec(I,s) +* (o,w)).IC A by A2,FUNCT_7:34
-      .= IC (Exec(I,s) +* (o,w));
+      .= IC (Exec(I,s) +* (o,w)) by A2,FUNCT_7:34;
   end;
 
 theorem Th8:
@@ -706,8 +702,7 @@ theorem Th21:
     let A be IC-Ins-separated definite (non empty non void AMI-Struct over N),
         I be Instruction of A such that
 A1:   I is halting;
-       Input I = Out_U_Inp I \ Out_\_Inp I
-      .= {} \ Out_\_Inp I by A1,Th20
+       Input I = {} \ Out_\_Inp I by A1,Th20
       .= {};
     hence thesis;
   end;
@@ -774,8 +769,7 @@ A1:   for s being State of A holds Exec(I,s).IC A = NextLoc IC s;
     set s = t +* (l,w);
 A2: Exec(I,t).l = NextLoc IC t & Exec(I,s).l = NextLoc IC s by A1;
 A3: dom t = the carrier of A by AMI_3:36;
-       IC s = s.l
-        .= w by A3,FUNCT_7:33;
+       IC s = w by A3,FUNCT_7:33;
     then Exec(I,t) <> Exec(I,s) by A2,AMISTD_1:35;
     hence thesis by Def4;
   end;
@@ -1265,13 +1259,11 @@ A7:     Exec(I,s).o = w1 * w1 by A2,A4,A5,Lm1,FUNCT_7:33;
            now
           assume Exec(I,t).o = Exec(I,s).o;
           then (t.a)^2 + 0 = (t.a + 1)^2 by A6,A7
-           .= (t.a)^2 + 2 * t.a * 1 + 1^2
            .= (t.a)^2 + (2 * t.a * 1 + 1^2);
           then 0 = 2 * t.a + 1;
           then 2 * t.a = 0 - 1;
 then A8:       t.a * 2 / 2 = -1 / 2;
-A9:      t.a * 1 = t.a * (2 / 2)
-           .= -1 / 2 by A8;
+A9:      t.a * 1 = -1 / 2 by A8;
              -1 <= -1 / 2 & -1 / 2 - 1 < -1;
           then [\ -1 / 2 /] = -1 by INT_1:def 4;
           hence contradiction by A9,INT_1:47;
@@ -1487,10 +1479,8 @@ then A3: o = IC SCM by TARSKI:def 1;
     proof
       let s be State of SCM,
           w be Element of ObjectKind IC SCM;
-A4:   IC Exec(I,s) = Exec(I,s).IC SCM
-        .= f by AMI_3:13
-        .= Exec(I,s+*(IC SCM,w)).IC SCM by AMI_3:13
-        .= IC Exec(I,s+*(IC SCM,w));
+A4:   IC Exec(I,s) = f by AMI_3:13
+        .= IC Exec(I,s+*(IC SCM,w)) by AMI_3:13;
 A5:   for d being Data-Location holds Exec(I,s).d = Exec(I,s+*(IC SCM,w)).d
       proof
         let d be Data-Location;
@@ -1530,10 +1520,8 @@ A3:   o = IC SCM;
 A4: Exec(I,s).IC SCM = Next IC s by A1,AMI_3:14;
 A5: s+*(IC SCM,w).a = s.a by Th30;
 A6: dom s = the carrier of SCM by AMI_3:36;
-A7: IC (s+*(IC SCM,w)) = (s+*(IC SCM,w)).IC SCM
-       .= w by A6,FUNCT_7:33;
-       IC Exec(I,r) = Exec(I,r).IC SCM
-      .= Next Next IC s by A1,A5,A7,AMI_3:14;
+A7: IC (s+*(IC SCM,w)) = w by A6,FUNCT_7:33;
+       IC Exec(I,r) = Next Next IC s by A1,A5,A7,AMI_3:14;
     then Exec(I,s).o <> Exec(I,r).o by A3,A4,Th31;
     hence thesis by A2,A3,Def4;
     end;
@@ -1569,10 +1557,8 @@ A3:   o = IC SCM;
 A4: Exec(I,s).IC SCM = Next IC s by A1,AMI_3:15;
 A5: s+*(IC SCM,w).a = s.a by Th30;
 A6: dom s = the carrier of SCM by AMI_3:36;
-A7: IC (s+*(IC SCM,w)) = (s+*(IC SCM,w)).IC SCM
-       .= w by A6,FUNCT_7:33;
-       IC Exec(I,r) = Exec(I,r).IC SCM
-      .= Next Next IC s by A1,A5,A7,AMI_3:15;
+A7: IC (s+*(IC SCM,w)) = w by A6,FUNCT_7:33;
+       IC Exec(I,r) = Next Next IC s by A1,A5,A7,AMI_3:15;
     then Exec(I,s).o <> Exec(I,r).o by A3,A4,Th31;
     hence thesis by A2,A3,Def4;
     end;
@@ -1689,7 +1675,7 @@ then A3: x = a or x = IC SCM by TARSKI:def 2;
        now
       assume t.a = Exec(I,t).a;
       then t.a = t.a + t.b by AMI_3:9;
-      then t.b = t.a - t.a .= 0;
+      then t.b = 0;
       hence contradiction by YELLOW14:3;
     end;
     hence thesis by A3,Def3,Th25;
@@ -1724,7 +1710,7 @@ then A3: x = a or x = IC SCM by TARSKI:def 2;
        now
       assume t.a = Exec(I,t).a;
       then t.a = t.a - t.b by AMI_3:10;
-      then t.b = t.a - t.a .= 0;
+      then t.b = 0;
       hence contradiction by YELLOW14:3;
     end;
     hence thesis by A3,Def3,Th25;
@@ -2599,11 +2585,9 @@ A4:   dom Exec(I,s) = the carrier of SCM by AMI_3:36;
       end;
       suppose
 A5:     o <> IC SCM;
-A6:   IC Exec(I,s+*(o,w)) = Exec(I,s+*(o,w)).IC SCM
-      .= f by AMI_3:13
+A6:   IC Exec(I,s+*(o,w)) = f by AMI_3:13
       .= Exec(I,s).IC SCM by AMI_3:13
-      .= (Exec(I,s) +* (o,w)).IC SCM by A5,FUNCT_7:34
-      .= IC (Exec(I,s) +* (o,w));
+      .= IC (Exec(I,s) +* (o,w)) by A5,FUNCT_7:34;
 A7:   for d being Data-Location holds
         Exec(I,s+*(o,w)).d = (Exec(I,s) +* (o,w)).d
       proof
@@ -2717,8 +2701,7 @@ A19: a <> IC SCM by AMI_5:20;
     reconsider nf = f as Element of ObjectKind IC SCM by AMI_1:def 11;
     set q = t +* (IC SCM,nf);
     set s = q +* (a,1);
-A20: IC s = s.IC SCM
-        .= q.IC SCM by A19,FUNCT_7:34
+A20: IC s = q.IC SCM by A19,FUNCT_7:34
         .= nf by Lm1,FUNCT_7:33;
        dom q = the carrier of SCM by AMI_3:36;
 then A21: s.a = 1 by FUNCT_7:33;
@@ -2728,7 +2711,6 @@ then A21: s.a = 1 by FUNCT_7:33;
 then A22: Exec(I,s+*(a,w)).IC SCM = f by AMI_3:14;
        (Exec(I,s) +* (a,w)).IC SCM = IC (Exec(I,s) +* (a,w))
       .= IC Exec(I,s) by A19,Th5
-      .= Exec(I,s).IC SCM
       .= Next f by A20,A21,AMI_3:14;
     then Exec(I,s+*(a,w)) <> Exec(I,s) +* (a,w) by A22,Th31;
     hence thesis by A18,Def5;
@@ -2821,8 +2803,7 @@ A19: a <> IC SCM by AMI_5:20;
     reconsider nf = f as Element of ObjectKind IC SCM by AMI_1:def 11;
     set q = t +* (IC SCM,nf);
     set s = q +* (a,0);
-A20: IC s = s.IC SCM
-        .= q.IC SCM by A19,FUNCT_7:34
+A20: IC s = q.IC SCM by A19,FUNCT_7:34
         .= nf by Lm1,FUNCT_7:33;
        dom q = the carrier of SCM by AMI_3:36;
 then A21: s.a = 0 by FUNCT_7:33;
@@ -2832,7 +2813,6 @@ then A21: s.a = 0 by FUNCT_7:33;
 then A22: Exec(I,s+*(a,w)).IC SCM = f by AMI_3:15;
        (Exec(I,s) +* (a,w)).IC SCM = IC (Exec(I,s) +* (a,w))
       .= IC Exec(I,s) by A19,Th5
-      .= Exec(I,s).IC SCM
       .= Next f by A20,A21,AMI_3:15;
     then Exec(I,s+*(a,w)) <> Exec(I,s) +* (a,w) by A22,Th31;
     hence thesis by A18,Def5;
@@ -2850,8 +2830,7 @@ theorem
     Input (a:=a) = { IC SCM }
   proof
     set I = a:=a;
-    thus Input I = Out_U_Inp I \ Out_\_Inp I
-      .= { IC SCM } \ Out_\_Inp I by Th53
+    thus Input I = { IC SCM } \ Out_\_Inp I by Th53
       .= { IC SCM } \ {} by Th32
       .= { IC SCM };
   end;
@@ -2871,8 +2850,7 @@ theorem
     Input AddTo(a,b) = { a, b, IC SCM }
   proof
     set I = AddTo(a,b);
-    thus Input I = Out_U_Inp I \ Out_\_Inp I
-      .= { a, b, IC SCM } \ Out_\_Inp I by Th55
+    thus Input I = { a, b, IC SCM } \ Out_\_Inp I by Th55
       .= { a, b, IC SCM } \ {} by Th34
       .= { a, b, IC SCM };
   end;
@@ -2882,8 +2860,7 @@ theorem
   proof
     set I = SubFrom(a,a);
 A1: a <> IC SCM by AMI_5:20;
-    thus Input I = Out_U_Inp I \ Out_\_Inp I
-      .= { a, a, IC SCM } \ Out_\_Inp I by Th56
+    thus Input I = { a, a, IC SCM } \ Out_\_Inp I by Th56
       .= { a, a, IC SCM } \ {a} by Th35
       .= { a, IC SCM } \ {a} by ENUMSET1:70
       .= { IC SCM } by A1,ZFMISC_1:23;
@@ -2895,8 +2872,7 @@ theorem
     set I = SubFrom(a,b);
     assume
 A1:   a <> b;
-    thus Input I = Out_U_Inp I \ Out_\_Inp I
-      .= { a, b, IC SCM } \ Out_\_Inp I by Th56
+    thus Input I = { a, b, IC SCM } \ Out_\_Inp I by Th56
       .= { a, b, IC SCM } \ {} by A1,Th36
       .= { a, b, IC SCM };
   end;
@@ -2905,8 +2881,7 @@ theorem
     Input MultBy(a,b) = { a, b, IC SCM }
   proof
     set I = MultBy(a,b);
-    thus Input I = Out_U_Inp I \ Out_\_Inp I
-      .= { a, b, IC SCM } \ Out_\_Inp I by Th57
+    thus Input I = { a, b, IC SCM } \ Out_\_Inp I by Th57
       .= { a, b, IC SCM } \ {} by Th37
       .= { a, b, IC SCM };
   end;
@@ -2916,8 +2891,7 @@ theorem
   proof
     set I = Divide(a,a);
 A1: a <> IC SCM by AMI_5:20;
-    thus Input I = Out_U_Inp I \ Out_\_Inp I
-      .= { a, a, IC SCM } \ Out_\_Inp I by Th58
+    thus Input I = { a, a, IC SCM } \ Out_\_Inp I by Th58
       .= { a, a, IC SCM } \ {a} by Th38
       .= { a, IC SCM } \ {a} by ENUMSET1:70
       .= { IC SCM } by A1,ZFMISC_1:23;
@@ -2929,8 +2903,7 @@ theorem
     set I = Divide(a,b);
     assume
 A1:   a <> b;
-    thus Input I = Out_U_Inp I \ Out_\_Inp I
-      .= { a, b, IC SCM } \ Out_\_Inp I by Th58
+    thus Input I = { a, b, IC SCM } \ Out_\_Inp I by Th58
       .= { a, b, IC SCM } \ {} by A1,Th39
       .= { a, b, IC SCM };
   end;
@@ -2939,8 +2912,7 @@ theorem
     Input goto f = {}
   proof
     set I = goto f;
-    thus Input I = Out_U_Inp I \ Out_\_Inp I
-      .= {IC SCM} \ Out_\_Inp I by Th59
+    thus Input I = {IC SCM} \ Out_\_Inp I by Th59
       .= {IC SCM} \ {IC SCM} by Th40
       .= {} by XBOOLE_1:37;
   end;
@@ -2949,8 +2921,7 @@ theorem
     Input (a =0_goto f) = { a, IC SCM }
   proof
     set I = a =0_goto f;
-    thus Input I = Out_U_Inp I \ Out_\_Inp I
-      .= {a, IC SCM} \ Out_\_Inp I by Th60
+    thus Input I = {a, IC SCM} \ Out_\_Inp I by Th60
       .= {a, IC SCM} \ {} by Th41
       .= {a, IC SCM};
   end;
@@ -2959,8 +2930,7 @@ theorem
     Input (a >0_goto f) = { a, IC SCM }
   proof
     set I = a >0_goto f;
-    thus Input I = Out_U_Inp I \ Out_\_Inp I
-      .= {a, IC SCM} \ Out_\_Inp I by Th61
+    thus Input I = {a, IC SCM} \ Out_\_Inp I by Th61
       .= {a, IC SCM} \ {} by Th42
       .= {a, IC SCM};
   end;

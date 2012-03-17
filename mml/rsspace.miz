@@ -213,24 +213,23 @@ A3: seq_id zeroseq = zeroseq by Def2;
     reconsider zeroseq as Element of the_set_of_RealSequences by A2;
     take zeroseq;
   let n be Nat;
-  n in NAT by ORDINAL1:def 13;
- hence thesis by A1,A2,A3;
+ thus thesis by A1,A3;
 end;
 uniqueness
 proof
    let x,y be Element of the_set_of_RealSequences such that
-A3:for n be Element of NAT holds (seq_id x).n=0 and
-A4:for n be Element of NAT holds (seq_id y).n=0;
-A5:for s be set st s in NAT holds (seq_id x).s = (seq_id y).s
+A4:for n be Element of NAT holds (seq_id x).n=0 and
+A5:for n be Element of NAT holds (seq_id y).n=0;
+A6:for s be set st s in NAT holds (seq_id x).s = (seq_id y).s
    proof
      let s be set;
      assume
-A6:  s in NAT;
-     then (seq_id y).s = 0 by A4;
-     hence thesis by A3,A6;
+A7:  s in NAT;
+     then (seq_id y).s = 0 by A5;
+     hence thesis by A4,A7;
    end;
    x=seq_id x by Def2
-   .=seq_id y by A5,SEQ_1:8;
+   .=seq_id y by A6,SEQ_1:8;
    hence thesis by Def2;
 end;
 end;
@@ -251,8 +250,7 @@ for v,w being VECTOR of
 proof
    let v,w being VECTOR of
      RLSStruct (# the_set_of_RealSequences,Zeroseq, l_add,l_mult #);
-   thus v + w = l_add.[v,w]
-      .=l_add.(v,w)
+   thus v + w =l_add.(v,w)
       .=seq_id(v)+seq_id(w) by Def4;
 end;
 
@@ -310,8 +308,7 @@ proof
    let v being VECTOR of
      RLSStruct(# the_set_of_RealSequences,Zeroseq,l_add,l_mult #);
    set V=RLSStruct(# the_set_of_RealSequences,Zeroseq,l_add,l_mult #);
-A1:v + 0.V = seq_id(v)+seq_id(0.V) by Th4
-          .= seq_id(v)+seq_id(Zeroseq);
+A1:v + 0.V = seq_id(v)+seq_id(Zeroseq) by Th4;
    for s be set st s in NAT holds
     (seq_id(v)+seq_id(Zeroseq)).s=(seq_id v).s
    proof
@@ -462,8 +459,7 @@ A6:  r in X1 & x in X1 & z=[r,x] by A5,ZFMISC_1:def 2;
      reconsider y=x,r1=r as VECTOR of X by A6;
     [r,x] in dom ((the add of X)||X1) by A2,A3,A5,A6,RELAT_1:91;
      then ((the add of X)||X1).z
-        = (the add of X).[r,x] by A6,FUNCT_1:70
-       .= r1+y;
+        = r1+y by A6,FUNCT_1:70;
      hence thesis by A1,A6,RLSUB_1:def 1;
    end;
    hence thesis by A4,FUNCT_2:5;
@@ -492,8 +488,7 @@ A6:  r in REAL & x in X1 & z=[r,x] by A5,ZFMISC_1:def 2;
      reconsider r as Real by A6;
     [r,x] in dom ((the Mult of X) | [:REAL,X1:]) by A2,A3,A5,A6,RELAT_1:91;
      then ((the Mult of X) | [:REAL,X1:]).z
-       = (the Mult of X).[r,x] by A6,FUNCT_1:70
-      .= r*y;
+       = r*y by A6,FUNCT_1:70;
      hence thesis by A1,A6,RLSUB_1:def 1;
    end;
    hence thesis by A4,FUNCT_2:5;
@@ -607,19 +602,15 @@ A8:     seq_id(v+u)=seq_id(seq_id(v)+seq_id(u)) by Th4
                     .=seq_id(v)+seq_id(u) by Th3;
 A9:     r.n=(seq_id(v+u)).n * (seq_id(v+u)).n by SEQ_1:12
          .=(s.n+t.n) * (seq_id(v)+seq_id(u)).n by A8,SEQ_1:11
-         .=(s.n+t.n) * (s.n+t.n) by SEQ_1:11
-         .=((s.n)+(t.n))^2
+         .=((s.n)+(t.n))^2 by SEQ_1:11
          .= sn^2 + 2*sn*tn + tn^2;
         (2(#)p+2(#)q).n=(2(#)p).n +(2(#)q).n by SEQ_1:11
                     .= 2*p.n + (2(#)q).n by SEQ_1:13
                     .= 2*p.n + 2*q.n by SEQ_1:13
                     .= 2*(s.n*s.n) + 2*q.n by SEQ_1:12
-                    .= 2*(s.n*s.n) + 2*(t.n*t.n) by SEQ_1:12
-                    .= 2*sn^2 + 2*(t.n*t.n)
-                    .= 2*sn^2 + 2*tn^2;
+                    .= 2*sn^2 + 2*tn^2 by SEQ_1:12;
 then A10:     (2(#)p+2(#)q).n - r.n
-          = sn^2 - 2*sn*tn + (tn^2 + tn^2 - tn^2) by A9
-         .= (sn-tn)^2;
+          = (sn-tn)^2 by A9;
          0 <= (sn-tn)^2 by XREAL_1:65;
        then 0 + r.n <= (2(#)p+2(#)q).n - r.n + r.n by A10,XREAL_1:9;
       hence thesis;
@@ -772,32 +763,23 @@ A2: for v,w being VECTOR of l holds v + w = w + v
     let v,w be VECTOR of l;
     reconsider v1=v as VECTOR of l0;
     reconsider w1=w as VECTOR of l0;
-    thus v+w = (the add of l).[v1,w1]
-       .=v1+w1
-       .= (the add of l).[w1,v1] by RLVECT_1:def 3
-       .= w +v;
+    thus v+w =v1+w1
+       .= w +v by RLVECT_1:def 3;
   end;
 A3:for u,v,w being VECTOR of l holds (u + v) + w = u + (v + w)
   proof
     let u,v,w be VECTOR of l;
     reconsider u1=u, v1=v, w1=w as VECTOR of l0;
     thus (u + v) + w
-        = (the add of l).[(u+v),w]
-       .= (the add of l).[(the add of l).[u,v],w]
-       .= (the add of l).[(u1+v1),w]
-       .= (u1+v1)+w1
+        = (u1+v1)+w1
        .= u1+(v1+w1) by RLVECT_1:def 6
-       .= (the add of l).[u1,v1+w1]
-       .= (the add of l).[u1,(the add of l).[v1,w1]]
-       .= (the add of l).[u,v+w]
        .= u+(v+w);
   end;
 A4: for v being VECTOR of l holds v + 0.l = v
 proof
 let v be VECTOR of l;
     reconsider v1=v as VECTOR of l0;
-    thus v+0.l=(the add of l).[v,0.l]
-        .= v1 + 0.l0
+    thus v+0.l= v1 + 0.l0
         .= v by RLVECT_1:def 7;
 end;
 
@@ -808,8 +790,7 @@ proof
     consider w1 being VECTOR of l0 such that
     A6: v1 + w1 = 0.l0 by RLVECT_1:def 8;
     reconsider w = w1 as VECTOR of l;
-    A7:v+w = (the add of l).[v,w]
-       .=0.l by A6;
+    A7:v+w =0.l by A6;
     take w;
     thus thesis by A7;
 end;
@@ -820,16 +801,8 @@ A8:for a be Real for v,w being VECTOR of l holds
     let a be Real;
     let v,w be VECTOR of l;
     reconsider v1=v, w1=w as VECTOR of l0;
-    thus a*(v+w) = (the Mult of l).[a,(v+w)]
-       .= (the Mult of l).[a,(the add of l).[v1,w1]]
-       .= (the Mult of l).[a,v1+w1]
-       .=a*(v1+w1)
+    thus a*(v+w) =a*(v1+w1)
        .=a*v1+a*w1 by RLVECT_1:def 9
-       .=(the add of l).[a*v1,a*w1]
-       .=(the add of l).[(the Mult of l).[a,v1],a*w1]
-       .=(the add of l).[(the Mult of l).[a,v1],(the Mult of l).[a,w1]]
-       .=(the add of l).[a*v, (the Mult of l).[a,w]]
-       .=(the add of l).[a*v, a*w]
        .= a*v +a*w;
   end;
 
@@ -839,14 +812,8 @@ A9:for a,b be Real for v being VECTOR of l
     let a,b be Real;
     let v be VECTOR of l;
     reconsider v1=v as VECTOR of l0;
-    thus (a+b)*v = (the Mult of l).[(a+b),v]
-       .=(a+b)*v1
+    thus (a+b)*v =(a+b)*v1
        .=a*v1+b*v1 by RLVECT_1:def 9
-       .=(the add of l).[a*v1,b*v1]
-       .=(the add of l).[(the Mult of l).[a,v1],b*v1]
-       .=(the add of l).[(the Mult of l).[a,v1],(the Mult of l).[b,v1]]
-       .=(the add of l).[a*v, (the Mult of l).[b,v]]
-       .=(the add of l).[a*v, b*v]
        .= a*v +b*v;
   end;
 
@@ -855,20 +822,15 @@ A10:for a,b be Real for v being VECTOR of l holds (a * b) * v = a * (b * v)
     let a,b be Real;
     let v be VECTOR of l;
     reconsider v1=v as VECTOR of l0;
-    thus (a*b)*v = (the Mult of l).[a*b,v]
-       .=(a*b)*v1
+    thus (a*b)*v =(a*b)*v1
        .=a*(b*v1) by RLVECT_1:def 9
-       .=(the Mult of l).[a,b*v1]
-       .=(the Mult of l).[a,(the Mult of l).[b,v1]]
-       .=(the Mult of l).[a,b*v]
        .= a*(b*v);
   end;
    for v being VECTOR of l holds 1 * v = v
    proof
      let v be VECTOR of l;
      reconsider v1=v as VECTOR of l0;
-     thus 1*v= (the Mult of l).[1,v]
-            .= 1*v1
+     thus 1*v= 1*v1
             .= v by RLVECT_1:def 9;
    end;
    hence thesis by A2,A3,A4,A5,A8,A9,A10,RLVECT_1:7;
@@ -893,9 +855,8 @@ theorem
                     .= rseq.k + rseq.(k+1) by A1
                     .= (Partial_Sums rseq).(k+1) by A5,SERIES_1:def 1;
             end;
-AA:         m in NAT by ORDINAL1:def 13;
             for n be Element of NAT holds P[n] from NAT_1:sch 1(A3,A4);
-            hence (Partial_Sums rseq).m = rseq.m by AA
+            hence (Partial_Sums rseq).m = rseq.m
                    .= 0 by A1;
           end;
           Sum rseq = 0 & rseq is summable
