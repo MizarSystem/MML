@@ -8,7 +8,7 @@ environ
 
  vocabularies RLVECT_1, BINOP_1, FUNCT_1, PRE_TOPC, RLSUB_1, ABSVALUE, ARYTM_1,
       ARYTM_3, RELAT_1, SEQM_3, SEQ_2, SEQ_1, ORDINAL2, NORMSP_1, ARYTM,
-      FUNCOP_1, NAT_1;
+      FUNCOP_1, XREAL_0;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0,
       XREAL_0, COMPLEX1, REAL_1, NAT_1, NAT_D, FUNCT_1, FUNCOP_1, FUNCT_2,
       BINOP_1, RELAT_1, SEQ_1, SEQ_2, DOMAIN_1, STRUCT_0, PRE_TOPC, RLVECT_1,
@@ -16,7 +16,7 @@ environ
  constructors DOMAIN_1, FUNCOP_1, XXREAL_0, REAL_1, NAT_1, COMPLEX1, SEQ_2,
       RLSUB_1, BINOP_1, NAT_D;
  registrations STRUCT_0, XREAL_0, RELSET_1, ARYTM_3, MEMBERED, ORDINAL1,
-      XXREAL_0, NAT_1;
+      XXREAL_0, NAT_1, RLVECT_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions RLVECT_1, STRUCT_0, FUNCT_1, BINOP_1;
  theorems TARSKI, REAL_1, NAT_1, FUNCT_1, SEQ_2, ABSVALUE, RLVECT_1, RLSUB_1,
@@ -35,7 +35,7 @@ definition
 end;
 
 registration
-  cluster non empty NORMSTR;
+  cluster non empty strict NORMSTR;
   existence
   proof
     consider A being non empty set, Z being Element of A,
@@ -43,6 +43,7 @@ registration
              n being Function of A,REAL;
    take NORMSTR(#A,Z,a,M,n#);
    thus the carrier of NORMSTR(#A,Z,a,M,n#) is non empty;
+   thus thesis;
   end;
 end;
 
@@ -84,7 +85,7 @@ proof
   hence thesis by Lm1,Lm3,TARSKI:def 1;
 end;
 reconsider X =
- NORMSTR (# the carrier of (0).V, the Zero of (0).V, the add of (0).V,
+ NORMSTR (# the carrier of (0).V, 0.(0).V, the add of (0).V,
            the Mult of (0).V, niltonil #)
             as non empty NORMSTR by STRUCT_0:def 1;
 
@@ -201,8 +202,13 @@ end;
 
 canceled 4;
 
+registration let RNS;
+  cluster ||.0.RNS.|| -> zero;
+  coherence by Def2;
+end;
+
 theorem
-  ||.0.RNS.|| = 0 by Def2;
+  ||.0.RNS.|| = 0;
 
 theorem Th6:
   ||.-x.|| = ||.x.||
@@ -290,10 +296,6 @@ end;
 
 theorem
   x <> y implies ||.x - y.|| <> 0 by Th10;
-
-definition let RNS be 1-sorted;
-  mode sequence of RNS is Function of NAT, the carrier of RNS;
-end;
 
  reserve S, S1, S2 for sequence of RNS;
  reserve k, n, m, m1, m2 for Element of NAT;
@@ -542,7 +544,7 @@ definition let RNS be non empty 1-sorted;
   coherence by Lm7;
 end;
 
-definition let RNS be RealLinearSpace;
+definition let RNS be non empty LoopStr;
            let S1, S2 be sequence of RNS;
            func S1 + S2 -> sequence of RNS means :Def5:
   for n holds it.n = S1.n + S2.n;
@@ -567,7 +569,7 @@ A2:  for n holds T.n = S1.n + S2.n;
   end;
 end;
 
-definition let RNS be RealLinearSpace;
+definition let RNS be non empty LoopStr;
            let S1, S2 be sequence of RNS;
            func S1 - S2 -> sequence of RNS means
 :Def6:    for n holds it.n = S1.n - S2.n;
@@ -592,7 +594,7 @@ A2:  for n holds T.n = S1.n - S2.n;
 end;
 end;
 
-definition let RNS be RealLinearSpace;
+definition let RNS be non empty LoopStr;
            let S be sequence of RNS;
            let x be Element of RNS;
            func S - x -> sequence of RNS means
@@ -618,7 +620,7 @@ A2:  for n holds S2.n = S.n - x;
 end;
 end;
 
-definition let RNS be RealLinearSpace;
+definition let RNS be non empty RLSStruct;
            let S be sequence of RNS;
            let a;
   func a * S -> sequence of RNS means
@@ -804,9 +806,9 @@ A12:   ||.(a * (S.n)) - (a * g).|| = ||.a * ((S.n) - g).|| by RLVECT_1:48
   hence thesis by A2;
 end;
 
-definition let RNS, S;
+definition let RNS be non empty NORMSTR, S be sequence of RNS;
   func ||.S.|| -> Real_Sequence means :Def10:
-    for n holds it.n =||.(S.n).||;
+    for n holds it.n = ||. S.n .||;
   existence
   proof
     deffunc F(Element of NAT) = ||.(S.$1).||;

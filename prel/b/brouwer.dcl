@@ -48,6 +48,7 @@
 <ArticleID name="BORSUK_2"/>
 <ArticleID name="BORSUK_6"/>
 <ArticleID name="REAL_1"/>
+<ArticleID name="XXREAL_1"/>
 <ArticleID name="RCOMP_1"/>
 <ArticleID name="TOPS_2"/>
 <ArticleID name="TOPALG_2"/>
@@ -60,7 +61,7 @@
 <Cluster>
 <Adjective nr="41" value="false"/>
 <Adjective nr="43"/>
-<Adjective nr="79" value="false"/>
+<Adjective nr="80" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="3">
@@ -70,7 +71,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="395">
+<Func kind="K" nr="403">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -90,11 +91,11 @@
 <Cluster>
 <Adjective nr="41" value="false"/>
 <Adjective nr="43"/>
-<Adjective nr="79" value="false"/>
+<Adjective nr="80" value="false"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="395">
+<Func kind="K" nr="403">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -106,12 +107,12 @@
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="45"/>
+<Func kind="K" nr="46"/>
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="274">
+<Func kind="K" nr="279">
 <LocusVar nr="1"/>
 </Func>
 </Func>
@@ -123,7 +124,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="396">
+<Func kind="K" nr="404">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -137,12 +138,12 @@
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="45"/>
+<Func kind="K" nr="46"/>
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="274">
+<Func kind="K" nr="279">
 <LocusVar nr="1"/>
 </Func>
 </Func>
@@ -153,14 +154,14 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="396">
+<Func kind="K" nr="404">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
 </Func>
 <Cluster>
 <Adjective nr="43"/>
-<Adjective nr="119">
+<Adjective nr="121">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

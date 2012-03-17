@@ -26,7 +26,6 @@
 <ArticleID name="FINSEQ_3"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="SEQ_1"/>
-<ArticleID name="INT_1"/>
 <ArticleID name="FUNCT_6"/>
 <ArticleID name="FUNCT_3"/>
 <ArticleID name="TREES_1"/>
@@ -35,17 +34,18 @@
 <ArticleID name="TREES_4"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="RLVECT_1"/>
+<ArticleID name="INT_1"/>
 <ArticleID name="GROUP_1"/>
 <ArticleID name="VECTSP_1"/>
 <ArticleID name="ALGSTR_1"/>
 <ArticleID name="PBOOLE"/>
-<ArticleID name="PARTFUN1"/>
-<ArticleID name="REALSET1"/>
-<ArticleID name="REALSET2"/>
 <ArticleID name="RELAT_2"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="CARD_3"/>
 <ArticleID name="SEQM_3"/>
 <ArticleID name="FUNCT_7"/>
+<ArticleID name="REALSET1"/>
+<ArticleID name="REALSET2"/>
 <ArticleID name="FVSUM_1"/>
 <ArticleID name="FINSEQ_4"/>
 <ArticleID name="MATRIX_1"/>
@@ -66,7 +66,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="31">
+<Func kind="K" nr="32">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -91,7 +91,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="31">
+<Func kind="K" nr="32">
 <LocusVar nr="2"/>
 <LocusVar nr="1"/>
 </Func>
@@ -116,14 +116,14 @@
 <Adjective nr="59"/>
 <Adjective nr="60"/>
 <Adjective nr="61"/>
-<Adjective nr="65"/>
-<Adjective nr="67"/>
-<Adjective nr="77"/>
-<Adjective nr="101" value="false"/>
+<Adjective nr="66"/>
+<Adjective nr="68"/>
+<Adjective nr="79"/>
+<Adjective nr="119" value="false"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="416">
+<Func kind="K" nr="421">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -133,21 +133,21 @@
 <Adjective nr="59"/>
 <Adjective nr="60"/>
 <Adjective nr="61"/>
-<Adjective nr="65"/>
-<Adjective nr="67"/>
-<Adjective nr="73"/>
-<Adjective nr="74"/>
+<Adjective nr="66"/>
+<Adjective nr="68"/>
 <Adjective nr="75"/>
 <Adjective nr="76"/>
 <Adjective nr="77"/>
 <Adjective nr="78"/>
-<Adjective nr="84"/>
-<Adjective nr="85"/>
+<Adjective nr="79"/>
+<Adjective nr="80"/>
 <Adjective nr="86"/>
 <Adjective nr="87"/>
 <Adjective nr="88"/>
 <Adjective nr="89"/>
-<Adjective nr="101" value="false"/>
+<Adjective nr="90"/>
+<Adjective nr="91"/>
+<Adjective nr="119" value="false"/>
 </Cluster>
 </FCluster>
 </Registrations>

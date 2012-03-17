@@ -46,8 +46,8 @@
 <ArticleID name="TREES_3"/>
 <ArticleID name="TREES_4"/>
 <ArticleID name="SEQM_3"/>
-<ArticleID name="REALSET2"/>
 <ArticleID name="FUNCT_7"/>
+<ArticleID name="REALSET2"/>
 <ArticleID name="FVSUM_1"/>
 <ArticleID name="FINSEQ_4"/>
 <ArticleID name="MATRIX_1"/>
@@ -59,24 +59,24 @@
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="65"/>
+<Func kind="K" nr="66"/>
 </Typ>
 </ArgTypes>
 <Func kind="G" nr="10">
-<Func kind="K" nr="409">
+<Func kind="K" nr="413">
 <LocusVar nr="1"/>
 </Func>
-<Func kind="K" nr="429">
+<Func kind="K" nr="433">
 <LocusVar nr="1"/>
 </Func>
 </Func>
 <Cluster>
-<Adjective nr="36" value="false"/>
-<Adjective nr="79"/>
-<Adjective nr="80"/>
+<Adjective nr="37" value="false"/>
 <Adjective nr="81"/>
 <Adjective nr="82"/>
-<Adjective nr="89"/>
+<Adjective nr="83"/>
+<Adjective nr="84"/>
+<Adjective nr="91"/>
 </Cluster>
 </FCluster>
 </Registrations>

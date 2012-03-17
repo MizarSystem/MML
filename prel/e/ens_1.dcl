@@ -11,6 +11,7 @@
 <ArticleID name="TARSKI"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="FUNCOP_1"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="FUNCT_3"/>
 <ArticleID name="BINOP_1"/>
@@ -37,12 +38,12 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="239">
+<Func kind="K" nr="251">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="7" value="false"/>
-<Adjective nr="21"/>
+<Adjective nr="22"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -53,7 +54,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="240">
+<Func kind="K" nr="252">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -69,12 +70,12 @@
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="240">
+<Func kind="K" nr="252">
 <LocusVar nr="1"/>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="48">
+<Func kind="K" nr="49">
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
@@ -90,23 +91,23 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="250">
+<Func kind="K" nr="262">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="39"/>
 <Adjective nr="40"/>
+<Adjective nr="41"/>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster>
-<Adjective nr="40"/>
+<Adjective nr="41"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="255">
+<Func kind="K" nr="267">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

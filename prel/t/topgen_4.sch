@@ -13,29 +13,19 @@
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
-<ArticleID name="XCMPLX_0"/>
-<ArticleID name="XREAL_0"/>
-<ArticleID name="FINSET_1"/>
-<ArticleID name="CARD_1"/>
-<ArticleID name="FINSEQ_1"/>
-<ArticleID name="FINSEQ_2"/>
-<ArticleID name="INT_1"/>
-<ArticleID name="COMPLEX1"/>
-<ArticleID name="INT_2"/>
-<ArticleID name="NEWTON"/>
 <ArticleID name="CARD_4"/>
 <ArticleID name="REALSET1"/>
 </Signature>
 <Scheme>
 <ArgTypes/>
-<Pred kind="V" nr="28">
+<Pred kind="V" nr="18">
 <Fraenkel>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="80"/>
+<Func kind="K" nr="81"/>
 </Typ>
-<Func kind="K" nr="164">
-<Func kind="K" nr="80"/>
+<Func kind="K" nr="89">
+<Func kind="K" nr="81"/>
 <Var nr="1"/>
 </Func>
 <Pred kind="P" nr="1">

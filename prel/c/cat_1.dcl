@@ -19,6 +19,7 @@
 <ArticleID name="QC_LANG2"/>
 <ArticleID name="CQC_LANG"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="FUNCOP_1"/>
 <ArticleID name="CAT_1"/>
 </Signature>
 <RCluster>
@@ -27,15 +28,6 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="35"/>
-</Cluster>
-</RCluster>
-<RCluster>
-<ArgTypes/>
-<Typ kind="G" nr="1">
-<Cluster/>
-</Typ>
-<Cluster>
 <Adjective nr="36"/>
 </Cluster>
 </RCluster>
@@ -45,8 +37,17 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="35"/>
+<Adjective nr="37"/>
+</Cluster>
+</RCluster>
+<RCluster>
+<ArgTypes/>
+<Typ kind="G" nr="1">
+<Cluster/>
+</Typ>
+<Cluster>
 <Adjective nr="36"/>
+<Adjective nr="37"/>
 </Cluster>
 </RCluster>
 </Registrations>

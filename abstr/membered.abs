@@ -7,10 +7,10 @@
 environ
 
  vocabularies MEMBERED, XCMPLX_0, ARYTM, INT_1, ORDINAL2, BOOLE, COMPLEX1,
-      RAT_1, ORDINAL1, TARSKI, SETFAM_1, NAT_1;
+      RAT_1, TARSKI, SETFAM_1, SUPINF_1;
  notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, SETFAM_1, NUMBERS, XCMPLX_0,
-      XREAL_0, RAT_1, INT_1, ORDINAL1;
- constructors ENUMSET1, SETFAM_1, XCMPLX_0, XXREAL_0, RAT_1, NAT_D;
+      XXREAL_0, XREAL_0, RAT_1, INT_1, ORDINAL1;
+ constructors ENUMSET1, SETFAM_1, XCMPLX_0, XXREAL_0, RAT_1;
  registrations INT_1, NUMBERS, ARYTM_3, XREAL_0, RAT_1, XBOOLE_0;
  requirements NUMERALS, BOOLE, SUBSET;
 
@@ -23,17 +23,20 @@ definition let X be set;
  attr X is complex-membered means
 :: MEMBERED:def 1
  x in X implies x is complex;
- attr X is real-membered means
+ attr X is ext-real-membered means
 :: MEMBERED:def 2
+ x in X implies x is ext-real;
+ attr X is real-membered means
+:: MEMBERED:def 3
  x in X implies x is real;
  attr X is rational-membered means
-:: MEMBERED:def 3
+:: MEMBERED:def 4
  x in X implies x is rational;
  attr X is integer-membered means
-:: MEMBERED:def 4
+:: MEMBERED:def 5
  x in X implies x is integer;
  attr X is natural-membered means
-:: MEMBERED:def 5
+:: MEMBERED:def 6
  x in X implies x is natural;
 end;
 
@@ -41,6 +44,7 @@ registration
  cluster natural-membered -> integer-membered set;
  cluster integer-membered -> rational-membered set;
  cluster rational-membered -> real-membered set;
+ cluster real-membered -> ext-real-membered set;
  cluster real-membered -> complex-membered set;
 end;
 
@@ -50,6 +54,7 @@ end;
 
 registration
  cluster -> complex-membered Subset of COMPLEX;
+ cluster -> ext-real-membered Subset of ExtREAL;
  cluster -> real-membered Subset of REAL;
  cluster -> rational-membered Subset of RAT;
  cluster -> integer-membered Subset of INT;
@@ -58,6 +63,7 @@ end;
 
 registration
  cluster COMPLEX -> complex-membered;
+ cluster ExtREAL -> ext-real-membered;
  cluster REAL -> real-membered;
  cluster RAT -> rational-membered;
  cluster INT -> integer-membered;
@@ -68,19 +74,26 @@ theorem :: MEMBERED:1
  X is complex-membered implies X c= COMPLEX;
 
 theorem :: MEMBERED:2
- X is real-membered implies X c= REAL;
+ X is ext-real-membered implies X c= ExtREAL;
 
 theorem :: MEMBERED:3
- X is rational-membered implies X c= RAT;
+ X is real-membered implies X c= REAL;
 
 theorem :: MEMBERED:4
- X is integer-membered implies X c= INT;
+ X is rational-membered implies X c= RAT;
 
 theorem :: MEMBERED:5
+ X is integer-membered implies X c= INT;
+
+theorem :: MEMBERED:6
  X is natural-membered implies X c= NAT;
 
 registration let X be complex-membered set;
  cluster -> complex Element of X;
+end;
+
+registration let X be ext-real-membered set;
+ cluster -> ext-real Element of X;
 end;
 
 registration let X be real-membered set;
@@ -100,73 +113,87 @@ registration let X be natural-membered set;
 end;
 
 reserve c, c1, c2, c3 for complex number,
+        e, e1, e2, e3 for ext-real number,
         r, r1, r2, r3 for real number,
         w, w1, w2, w3 for rational number,
         i, i1, i2, i3 for integer number,
         n, n1, n2, n3 for natural number;
 
-theorem :: MEMBERED:6
-   for X being non empty complex-membered set
+theorem :: MEMBERED:7
+  for X being non empty complex-membered set
   ex c st c in X;
 
-theorem :: MEMBERED:7
-   for X being non empty real-membered set
-  ex r st r in X;
-
 theorem :: MEMBERED:8
-   for X being non empty rational-membered set
-  ex w st w in X;
+  for X being non empty ext-real-membered set
+  ex e st e in X;
 
 theorem :: MEMBERED:9
-   for X being non empty integer-membered set
-  ex i st i in X;
+  for X being non empty real-membered set
+  ex r st r in X;
 
 theorem :: MEMBERED:10
-   for X being non empty natural-membered set
-  ex n st n in X;
+  for X being non empty rational-membered set
+  ex w st w in X;
 
 theorem :: MEMBERED:11
-   for X being complex-membered set
-  st for c holds c in X
- holds X = COMPLEX;
+  for X being non empty integer-membered set
+  ex i st i in X;
 
 theorem :: MEMBERED:12
-   for X being real-membered set
-  st for r holds r in X
- holds X = REAL;
+  for X being non empty natural-membered set
+  ex n st n in X;
 
 theorem :: MEMBERED:13
-   for X being rational-membered set
-  st for w holds w in X
- holds X = RAT;
+  for X being complex-membered set
+  st for c holds c in X
+  holds X = COMPLEX;
 
 theorem :: MEMBERED:14
-   for X being integer-membered set
-  st for i holds i in X
- holds X = INT;
+  for X being ext-real-membered set
+  st for e holds e in X
+  holds X = ExtREAL;
 
 theorem :: MEMBERED:15
-   for X being natural-membered set
-  st for n holds n in X
- holds X = NAT;
+  for X being real-membered set
+  st for r holds r in X
+  holds X = REAL;
 
 theorem :: MEMBERED:16
+  for X being rational-membered set
+  st for w holds w in X
+  holds X = RAT;
+
+theorem :: MEMBERED:17
+  for X being integer-membered set
+  st for i holds i in X
+  holds X = INT;
+
+theorem :: MEMBERED:18
+  for X being natural-membered set
+  st for n holds n in X
+  holds X = NAT;
+
+theorem :: MEMBERED:19
  for Y being complex-membered set st X c= Y
   holds X is complex-membered;
 
-theorem :: MEMBERED:17
+theorem :: MEMBERED:20
+ for Y being ext-real-membered set st X c= Y
+  holds X is ext-real-membered;
+
+theorem :: MEMBERED:21
  for Y being real-membered set st X c= Y
   holds X is real-membered;
 
-theorem :: MEMBERED:18
+theorem :: MEMBERED:22
  for Y being rational-membered set st X c= Y
   holds X is rational-membered;
 
-theorem :: MEMBERED:19
+theorem :: MEMBERED:23
  for Y being integer-membered set st X c= Y
   holds X is integer-membered;
 
-theorem :: MEMBERED:20
+theorem :: MEMBERED:24
  for Y being natural-membered set st X c= Y
   holds X is natural-membered;
 
@@ -180,6 +207,10 @@ end;
 
 registration let c;
  cluster {c} -> complex-membered;
+end;
+
+registration let e;
+ cluster {e} -> ext-real-membered;
 end;
 
 registration let r;
@@ -202,6 +233,10 @@ registration let c1,c2;
  cluster {c1,c2} -> complex-membered;
 end;
 
+registration let e1,e2;
+ cluster {e1,e2} -> ext-real-membered;
+end;
+
 registration let r1,r2;
  cluster {r1,r2} -> real-membered;
 end;
@@ -220,6 +255,10 @@ end;
 
 registration let c1,c2,c3;
  cluster {c1,c2,c3} -> complex-membered;
+end;
+
+registration let e1,e2,e3;
+ cluster {e1,e2,e3} -> ext-real-membered;
 end;
 
 registration let r1,r2,r3;
@@ -242,6 +281,10 @@ registration let X be complex-membered set;
  cluster -> complex-membered Subset of X;
 end;
 
+registration let X be ext-real-membered set;
+ cluster -> ext-real-membered Subset of X;
+end;
+
 registration let X be real-membered set;
  cluster -> real-membered Subset of X;
 end;
@@ -260,6 +303,10 @@ end;
 
 registration let X,Y be complex-membered set;
  cluster X \/ Y -> complex-membered;
+end;
+
+registration let X,Y be ext-real-membered set;
+ cluster X \/ Y -> ext-real-membered;
 end;
 
 registration let X,Y be real-membered set;
@@ -281,6 +328,11 @@ end;
 registration let X be complex-membered set, Y be set;
  cluster X /\ Y -> complex-membered;
  cluster Y /\ X -> complex-membered;
+end;
+
+registration let X be ext-real-membered set, Y be set;
+ cluster X /\ Y -> ext-real-membered;
+ cluster Y /\ X -> ext-real-membered;
 end;
 
 registration let X be real-membered set, Y be set;
@@ -307,6 +359,10 @@ registration let X be complex-membered set, Y be set;
  cluster X \ Y -> complex-membered;
 end;
 
+registration let X be ext-real-membered set, Y be set;
+ cluster X \ Y -> ext-real-membered;
+end;
+
 registration let X be real-membered set, Y be set;
  cluster X \ Y -> real-membered;
 end;
@@ -327,6 +383,10 @@ registration let X,Y be complex-membered set;
  cluster X \+\ Y -> complex-membered;
 end;
 
+registration let X,Y be ext-real-membered set;
+ cluster X \+\ Y -> ext-real-membered;
+end;
+
 registration let X,Y be real-membered set;
  cluster X \+\ Y -> real-membered;
 end;
@@ -345,132 +405,158 @@ end;
 
 definition let X,Y be complex-membered set;
  redefine pred X c= Y means
-:: MEMBERED:def 6
+:: MEMBERED:def 7
  c in X implies c in Y;
+end;
+
+definition let X,Y be ext-real-membered set;
+ redefine pred X c= Y means
+:: MEMBERED:def 8
+ e in X implies e in Y;
 end;
 
 definition let X,Y be real-membered set;
  redefine pred X c= Y means
-:: MEMBERED:def 7
+:: MEMBERED:def 9
  r in X implies r in Y;
 end;
 
 definition let X,Y be rational-membered set;
  redefine pred X c= Y means
-:: MEMBERED:def 8
+:: MEMBERED:def 10
  w in X implies w in Y;
 end;
 
 definition let X,Y be integer-membered set;
  redefine pred X c= Y means
-:: MEMBERED:def 9
+:: MEMBERED:def 11
  i in X implies i in Y;
 end;
 
 definition let X,Y be natural-membered set;
  redefine pred X c= Y means
-:: MEMBERED:def 10
+:: MEMBERED:def 12
  n in X implies n in Y;
 end;
 
 definition let X,Y be complex-membered set;
  redefine pred X = Y means
-:: MEMBERED:def 11
-     c in X iff c in Y;
+:: MEMBERED:def 13
+  c in X iff c in Y;
+end;
+
+definition let X,Y be ext-real-membered set;
+ redefine pred X = Y means
+:: MEMBERED:def 14
+  e in X iff e in Y;
 end;
 
 definition let X,Y be real-membered set;
  redefine pred X = Y means
-:: MEMBERED:def 12
-     r in X iff r in Y;
+:: MEMBERED:def 15
+  r in X iff r in Y;
 end;
 
 definition let X,Y be rational-membered set;
  redefine pred X = Y means
-:: MEMBERED:def 13
-     w in X iff w in Y;
+:: MEMBERED:def 16
+  w in X iff w in Y;
 end;
 
 definition let X,Y be integer-membered set;
  redefine pred X = Y means
-:: MEMBERED:def 14
-     i in X iff i in Y;
+:: MEMBERED:def 17
+  i in X iff i in Y;
 end;
 
 definition let X,Y be natural-membered set;
  redefine pred X = Y means
-:: MEMBERED:def 15
-     n in X iff n in Y;
+:: MEMBERED:def 18
+  n in X iff n in Y;
 end;
 
 definition let X,Y be complex-membered set;
  redefine pred X meets Y means
-:: MEMBERED:def 16
-     ex c st c in X & c in Y;
+:: MEMBERED:def 19
+  ex c st c in X & c in Y;
+end;
+
+definition let X,Y be ext-real-membered set;
+ redefine pred X meets Y means
+:: MEMBERED:def 20
+  ex e st e in X & e in Y;
 end;
 
 definition let X,Y be real-membered set;
  redefine pred X meets Y means
-:: MEMBERED:def 17
-     ex r st r in X & r in Y;
+:: MEMBERED:def 21
+  ex r st r in X & r in Y;
 end;
 
 definition let X,Y be rational-membered set;
  redefine pred X meets Y means
-:: MEMBERED:def 18
-     ex w st w in X & w in Y;
+:: MEMBERED:def 22
+  ex w st w in X & w in Y;
 end;
 
 definition let X,Y be integer-membered set;
  redefine pred X meets Y means
-:: MEMBERED:def 19
-     ex i st i in X & i in Y;
+:: MEMBERED:def 23
+  ex i st i in X & i in Y;
 end;
 
 definition let X,Y be natural-membered set;
  redefine pred X meets Y means
-:: MEMBERED:def 20
-     ex n st n in X & n in Y;
+:: MEMBERED:def 24
+  ex n st n in X & n in Y;
 end;
 
-theorem :: MEMBERED:21
+theorem :: MEMBERED:25
    (for X st X in F holds X is complex-membered)
    implies union F is complex-membered;
 
-theorem :: MEMBERED:22
+theorem :: MEMBERED:26
+   (for X st X in F holds X is ext-real-membered)
+   implies union F is ext-real-membered;
+
+theorem :: MEMBERED:27
    (for X st X in F holds X is real-membered)
    implies union F is real-membered;
 
-theorem :: MEMBERED:23
+theorem :: MEMBERED:28
    (for X st X in F holds X is rational-membered)
    implies union F is rational-membered;
 
-theorem :: MEMBERED:24
+theorem :: MEMBERED:29
    (for X st X in F holds X is integer-membered)
    implies union F is integer-membered;
 
-theorem :: MEMBERED:25
+theorem :: MEMBERED:30
    (for X st X in F holds X is natural-membered)
    implies union F is natural-membered;
 
-theorem :: MEMBERED:26
-   for X st X in F & X is complex-membered
+theorem :: MEMBERED:31
+  for X st X in F & X is complex-membered
   holds meet F is complex-membered;
 
-theorem :: MEMBERED:27
-   for X st X in F & X is real-membered
+theorem :: MEMBERED:32
+  for X st X in F & X is ext-real-membered
+  holds meet F is ext-real-membered;
+
+theorem :: MEMBERED:33
+  for X st X in F & X is real-membered
   holds meet F is real-membered;
 
-theorem :: MEMBERED:28
-   for X st X in F & X is rational-membered
+theorem :: MEMBERED:34
+  for X st X in F & X is rational-membered
   holds meet F is rational-membered;
 
-theorem :: MEMBERED:29
-   for X st X in F & X is integer-membered
+theorem :: MEMBERED:35
+  for X st X in F & X is integer-membered
   holds meet F is integer-membered;
 
-theorem :: MEMBERED:30
-   for X st X in F & X is natural-membered
+theorem :: MEMBERED:36
+  for X st X in F & X is natural-membered
   holds meet F is natural-membered;
 
 scheme :: MEMBERED:sch 1
@@ -479,21 +565,30 @@ scheme :: MEMBERED:sch 1
   for c holds c in X iff P[c];
 
 scheme :: MEMBERED:sch 2
+ EMSeparation {P[set]}:
+ ex X being ext-real-membered set st
+  for e holds e in X iff P[e];
+
+scheme :: MEMBERED:sch 3
  RMSeparation {P[set]}:
  ex X being real-membered set st
   for r holds r in X iff P[r];
 
-scheme :: MEMBERED:sch 3
+scheme :: MEMBERED:sch 4
  WMSeparation {P[set]}:
  ex X being rational-membered set st
   for w holds w in X iff P[w];
 
-scheme :: MEMBERED:sch 4
+scheme :: MEMBERED:sch 5
  IMSeparation {P[set]}:
  ex X being integer-membered set st
   for i holds i in X iff P[i];
 
-scheme :: MEMBERED:sch 5
+scheme :: MEMBERED:sch 6
  NMSeparation {P[set]}:
  ex X being natural-membered set st
   for n holds n in X iff P[n];
+
+registration
+ cluster non empty natural-membered set;
+end;

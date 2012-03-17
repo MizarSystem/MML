@@ -7,26 +7,27 @@
 environ
 
  vocabularies MEMBERED, XCMPLX_0, ARYTM, INT_1, ORDINAL2, BOOLE, COMPLEX1,
-      RAT_1, ORDINAL1, TARSKI, SETFAM_1, NAT_1;
+      RAT_1, TARSKI, SETFAM_1, SUPINF_1;
  notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, SETFAM_1, NUMBERS, XCMPLX_0,
-      XREAL_0, RAT_1, INT_1, ORDINAL1;
- constructors ENUMSET1, SETFAM_1, XCMPLX_0, XXREAL_0, RAT_1, NAT_D;
+      XXREAL_0, XREAL_0, RAT_1, INT_1, ORDINAL1;
+ constructors ENUMSET1, SETFAM_1, XCMPLX_0, XXREAL_0, RAT_1;
  registrations INT_1, NUMBERS, ARYTM_3, XREAL_0, RAT_1, XBOOLE_0;
  requirements NUMERALS, BOOLE, SUBSET;
- definitions XCMPLX_0, XREAL_0, INT_1, TARSKI, RAT_1, XBOOLE_0;
+ definitions XCMPLX_0, XREAL_0, INT_1, TARSKI, RAT_1, XBOOLE_0, XXREAL_0,
+      NUMBERS;
  theorems INT_1, XBOOLE_0, XREAL_0, XCMPLX_0, RAT_1, SUBSET_1, ORDINAL1,
-      TARSKI, ENUMSET1, XBOOLE_1, SETFAM_1, NUMBERS;
+      TARSKI, ENUMSET1, XBOOLE_1, SETFAM_1, NUMBERS, CARD_1, XXREAL_0;
  schemes XBOOLE_0;
 
 begin
-
-Lm1: 1 = succ 0 .= 0 \/ {0} by ORDINAL1:def 1 .= {0};
 
 reserve x, X, F for set;
 
 definition let X be set;
  attr X is complex-membered means
 :Def1: x in X implies x is complex;
+ attr X is ext-real-membered means
+:DefA: x in X implies x is ext-real;
  attr X is real-membered means
 :Def2: x in X implies x is real;
  attr X is rational-membered means
@@ -57,8 +58,7 @@ A2:  X is integer-membered;
    let x;
    assume x in X;
     then x is integer by A2,Def4;
-    then x is Element of INT by INT_1:def 2;
-    then x in INT;
+    then x in INT by INT_1:def 2;
    hence x in RAT by NUMBERS:14;
   end;
  cluster rational-membered -> real-membered set;
@@ -71,6 +71,17 @@ A3:  X is rational-membered;
     then x is rational by A3,Def3;
     then x in RAT by RAT_1:def 2;
    hence x in REAL by NUMBERS:12;
+  end;
+ cluster real-membered -> ext-real-membered set;
+ coherence
+  proof let X;
+   assume
+A4:  X is real-membered;
+   let x;
+   assume x in X;
+    then x is real by A4,Def2;
+    then x in REAL by XREAL_0:def 1;
+   hence x in ExtREAL by NUMBERS:31;
   end;
  cluster real-membered -> complex-membered set;
  coherence
@@ -92,7 +103,7 @@ registration
     thus 1 is non empty;
    let x;
    assume x in 1;
-   hence thesis by Lm1,TARSKI:def 1;
+   hence thesis by CARD_1:87,TARSKI:def 1;
   end;
 end;
 
@@ -101,8 +112,13 @@ registration
  coherence
   proof let S be Subset of COMPLEX;
    let x;
-   assume x in S;
-   hence x is complex by XCMPLX_0:def 2;
+   thus thesis by XCMPLX_0:def 2;
+  end;
+ cluster -> ext-real-membered Subset of ExtREAL;
+ coherence
+  proof let S be Subset of ExtREAL;
+   let x;
+   thus thesis by XXREAL_0:def 1;
   end;
  cluster -> real-membered Subset of REAL;
  coherence
@@ -136,6 +152,11 @@ registration
   proof let x;
    thus thesis by XCMPLX_0:def 2;
   end;
+ cluster ExtREAL -> ext-real-membered;
+ coherence
+  proof let x;
+   thus thesis by XXREAL_0:def 1;
+  end;
  cluster REAL -> real-membered;
  coherence
   proof let x;
@@ -168,6 +189,16 @@ A1:   X is complex-membered;
     hence x in COMPLEX by XCMPLX_0:def 2;
  end;
 
+theorem Th2a:
+ X is ext-real-membered implies X c= ExtREAL
+ proof assume
+A1:   X is ext-real-membered;
+   let x;
+    assume x in X;
+     then x is ext-real by A1,DefA;
+    hence x in ExtREAL by XXREAL_0:def 1;
+ end;
+
 theorem Th2:
  X is real-membered implies X c= REAL
  proof assume
@@ -195,8 +226,7 @@ A1: X is integer-membered;
   let x;
   assume x in X;
    then x is integer by A1,Def4;
-   then x is Element of INT by INT_1:def 2;
-  hence x in INT;
+  hence x in INT by INT_1:def 2;
  end;
 
 theorem Th5:
@@ -220,6 +250,21 @@ registration let X be complex-membered set;
    end;
    suppose X is non empty;
    hence e is complex by Def1;
+  end;
+  end;
+end;
+
+registration let X be ext-real-membered set;
+ cluster -> ext-real Element of X;
+ coherence
+  proof let e be Element of X;
+   per cases;
+   suppose X is empty;
+    then e = 0 by SUBSET_1:def 2;
+   hence e is ext-real;
+   end;
+   suppose X is non empty;
+   hence e is ext-real by DefA;
   end;
   end;
 end;
@@ -285,13 +330,14 @@ registration let X be natural-membered set;
 end;
 
 reserve c, c1, c2, c3 for complex number,
+        e, e1, e2, e3 for ext-real number,
         r, r1, r2, r3 for real number,
         w, w1, w2, w3 for rational number,
         i, i1, i2, i3 for integer number,
         n, n1, n2, n3 for natural number;
 
 theorem
-   for X being non empty complex-membered set
+  for X being non empty complex-membered set
   ex c st c in X
  proof let X be non empty complex-membered set;
    consider x being set such that
@@ -301,7 +347,17 @@ A1:  x in X by XBOOLE_0:def 1;
  end;
 
 theorem
-   for X being non empty real-membered set
+  for X being non empty ext-real-membered set
+  ex e st e in X
+ proof let X be non empty ext-real-membered set;
+   consider x being set such that
+A1:  x in X by XBOOLE_0:def 1;
+     x is ext-real number by A1,DefA;
+  hence thesis by A1;
+ end;
+
+theorem
+  for X being non empty real-membered set
   ex r st r in X
  proof let X be non empty real-membered set;
    consider x being set such that
@@ -311,7 +367,7 @@ A1:  x in X by XBOOLE_0:def 1;
  end;
 
 theorem
-   for X being non empty rational-membered set
+  for X being non empty rational-membered set
   ex w st w in X
  proof let X be non empty rational-membered set;
    consider x being set such that
@@ -321,7 +377,7 @@ A1:  x in X by XBOOLE_0:def 1;
  end;
 
 theorem
-   for X being non empty integer-membered set
+  for X being non empty integer-membered set
   ex i st i in X
  proof let X be non empty integer-membered set;
    consider x being set such that
@@ -331,7 +387,7 @@ A1:  x in X by XBOOLE_0:def 1;
  end;
 
 theorem
-   for X being non empty natural-membered set
+  for X being non empty natural-membered set
   ex n st n in X
  proof let X be non empty natural-membered set;
    consider x being set such that
@@ -341,9 +397,9 @@ A1:  x in X by XBOOLE_0:def 1;
  end;
 
 theorem
-   for X being complex-membered set
+  for X being complex-membered set
   st for c holds c in X
- holds X = COMPLEX
+  holds X = COMPLEX
 proof let X be complex-membered set such that
 A1: for c holds c in X;
  thus X c= COMPLEX by Th1;
@@ -354,9 +410,22 @@ A1: for c holds c in X;
 end;
 
 theorem
-   for X being real-membered set
+  for X being ext-real-membered set
+  st for e holds e in X
+  holds X = ExtREAL
+proof let X be ext-real-membered set such that
+A1: for e holds e in X;
+ thus X c= ExtREAL by Th2a;
+ let e be set;
+ assume e in ExtREAL;
+  then e is ext-real by XXREAL_0:def 1;
+ hence e in X by A1;
+end;
+
+theorem
+  for X being real-membered set
   st for r holds r in X
- holds X = REAL
+  holds X = REAL
 proof let X be real-membered set such that
 A1: for r holds r in X;
  thus X c= REAL by Th2;
@@ -367,9 +436,9 @@ A1: for r holds r in X;
 end;
 
 theorem
-   for X being rational-membered set
+  for X being rational-membered set
   st for w holds w in X
- holds X = RAT
+  holds X = RAT
 proof let X be rational-membered set such that
 A1: for w holds w in X;
  thus X c= RAT by Th3;
@@ -380,9 +449,9 @@ A1: for w holds w in X;
 end;
 
 theorem
-   for X being integer-membered set
+  for X being integer-membered set
   st for i holds i in X
- holds X = INT
+  holds X = INT
 proof let X be integer-membered set such that
 A1: for i holds i in X;
  thus X c= INT by Th4;
@@ -393,9 +462,9 @@ A1: for i holds i in X;
 end;
 
 theorem
-   for X being natural-membered set
+  for X being natural-membered set
   st for n holds n in X
- holds X = NAT
+  holds X = NAT
 proof let X be natural-membered set such that
 A1: for n holds n in X;
  thus X c= NAT by Th5;
@@ -412,6 +481,15 @@ proof let Y be complex-membered set such that
 A1: X c= Y;
  let x;
  thus thesis by A1,Def1;
+end;
+
+theorem Th17a:
+ for Y being ext-real-membered set st X c= Y
+  holds X is ext-real-membered
+proof let Y be ext-real-membered set such that
+A1: X c= Y;
+ let x;
+ thus thesis by A1,DefA;
 end;
 
 theorem Th17:
@@ -468,6 +546,14 @@ registration let c;
   end;
 end;
 
+registration let e;
+ cluster {e} -> ext-real-membered;
+ coherence
+  proof let e be set;
+   thus thesis by TARSKI:def 1;
+  end;
+end;
+
 registration let r;
  cluster {r} -> real-membered;
  coherence
@@ -502,6 +588,14 @@ end;
 
 registration let c1,c2;
  cluster {c1,c2} -> complex-membered;
+ coherence
+  proof let e be set;
+   thus thesis by TARSKI:def 2;
+  end;
+end;
+
+registration let e1,e2;
+ cluster {e1,e2} -> ext-real-membered;
  coherence
   proof let e be set;
    thus thesis by TARSKI:def 2;
@@ -548,6 +642,14 @@ registration let c1,c2,c3;
   end;
 end;
 
+registration let e1,e2,e3;
+ cluster {e1,e2,e3} -> ext-real-membered;
+ coherence
+  proof let e be set;
+   thus thesis by ENUMSET1:def 1;
+  end;
+end;
+
 registration let r1,r2,r3;
  cluster {r1,r2,r3} -> real-membered;
  coherence
@@ -585,6 +687,14 @@ registration let X be complex-membered set;
  coherence
   proof let S be Subset of X, x;
    thus thesis by Def1;
+  end;
+end;
+
+registration let X be ext-real-membered set;
+ cluster -> ext-real-membered Subset of X;
+ coherence
+  proof let S be Subset of X, x;
+   thus thesis by DefA;
   end;
 end;
 
@@ -627,6 +737,16 @@ registration let X,Y be complex-membered set;
    assume x in X \/ Y;
     then x in X or x in Y by XBOOLE_0:def 2;
    hence thesis by Def1;
+  end;
+end;
+
+registration let X,Y be ext-real-membered set;
+ cluster X \/ Y -> ext-real-membered;
+ coherence
+  proof let x;
+   assume x in X \/ Y;
+    then x in X or x in Y by XBOOLE_0:def 2;
+   hence thesis by DefA;
   end;
 end;
 
@@ -680,6 +800,16 @@ registration let X be complex-membered set, Y be set;
  coherence;
 end;
 
+registration let X be ext-real-membered set, Y be set;
+ cluster X /\ Y -> ext-real-membered;
+ coherence
+  proof X /\ Y c= X by XBOOLE_1:17;
+   hence thesis by Th17a;
+  end;
+ cluster Y /\ X -> ext-real-membered;
+ coherence;
+end;
+
 registration let X be real-membered set, Y be set;
  cluster X /\ Y -> real-membered;
  coherence
@@ -725,6 +855,11 @@ registration let X be complex-membered set, Y be set;
  coherence;
 end;
 
+registration let X be ext-real-membered set, Y be set;
+ cluster X \ Y -> ext-real-membered;
+ coherence;
+end;
+
 registration let X be real-membered set, Y be set;
  cluster X \ Y -> real-membered;
  coherence;
@@ -747,6 +882,11 @@ end;
 
 registration let X,Y be complex-membered set;
  cluster X \+\ Y -> complex-membered;
+ coherence;
+end;
+
+registration let X,Y be ext-real-membered set;
+ cluster X \+\ Y -> ext-real-membered;
  coherence;
 end;
 
@@ -786,6 +926,22 @@ A2:  x in X;
   end;
 end;
 
+definition let X,Y be ext-real-membered set;
+ redefine pred X c= Y means
+:Def12: e in X implies e in Y;
+ compatibility
+  proof
+   thus X c= Y implies for e st e in X holds e in Y;
+   assume
+A1: e in X implies e in Y;
+   let x;
+    assume
+A2:  x in X;
+     then x is ext-real by DefA;
+    hence thesis by A1,A2;
+  end;
+end;
+
 definition let X,Y be real-membered set;
  redefine pred X c= Y means
 :Def7: r in X implies r in Y;
@@ -794,10 +950,10 @@ definition let X,Y be real-membered set;
    thus X c= Y implies for r st r in X holds r in Y;
    assume
 A1: r in X implies r in Y;
-   let c;
+   let e;
     assume
-A2:  c in X;
-     then c is real by Def2;
+A2:  e in X;
+     then e is real by Def2;
     hence thesis by A1,A2;
   end;
 end;
@@ -852,7 +1008,7 @@ end;
 
 definition let X,Y be complex-membered set;
  redefine pred X = Y means
-     c in X iff c in Y;
+  c in X iff c in Y;
  compatibility
   proof
    thus X = Y implies for c holds c in X iff c in Y;
@@ -861,9 +1017,21 @@ definition let X,Y be complex-membered set;
   end;
 end;
 
+definition let X,Y be ext-real-membered set;
+ redefine pred X = Y means
+  e in X iff e in Y;
+ compatibility
+  proof
+   thus X = Y implies for e holds e in X iff e in Y;
+   assume e in X iff e in Y;
+    then X c= Y & Y c= X by Def12;
+   hence thesis by XBOOLE_0:def 10;
+  end;
+end;
+
 definition let X,Y be real-membered set;
  redefine pred X = Y means
-     r in X iff r in Y;
+  r in X iff r in Y;
  compatibility
   proof
    thus X = Y implies for r holds r in X iff r in Y;
@@ -875,7 +1043,7 @@ end;
 
 definition let X,Y be rational-membered set;
  redefine pred X = Y means
-     w in X iff w in Y;
+  w in X iff w in Y;
  compatibility
   proof
    thus X = Y implies for w holds w in X iff w in Y;
@@ -887,7 +1055,7 @@ end;
 
 definition let X,Y be integer-membered set;
  redefine pred X = Y means
-     i in X iff i in Y;
+  i in X iff i in Y;
  compatibility
   proof
    thus X = Y implies for i holds i in X iff i in Y;
@@ -899,7 +1067,7 @@ end;
 
 definition let X,Y be natural-membered set;
  redefine pred X = Y means
-     n in X iff n in Y;
+  n in X iff n in Y;
  compatibility
   proof
    thus X = Y implies for n holds n in X iff n in Y;
@@ -911,7 +1079,7 @@ end;
 
 definition let X,Y be complex-membered set;
  redefine pred X meets Y means
-     ex c st c in X & c in Y;
+  ex c st c in X & c in Y;
  compatibility
   proof
    thus X misses Y implies not ex c st c in X & c in Y by XBOOLE_0:3;
@@ -925,9 +1093,25 @@ A2:    x in X & x in Y by XBOOLE_0:3;
   end;
 end;
 
+definition let X,Y be ext-real-membered set;
+ redefine pred X meets Y means
+  ex e st e in X & e in Y;
+ compatibility
+  proof
+   thus X misses Y implies not ex e st e in X & e in Y by XBOOLE_0:3;
+   assume
+A1: not ex e st e in X & e in Y;
+   assume X meets Y;
+    then consider x such that
+A2: x in X & x in Y by XBOOLE_0:3;
+    x is ext-real by A2,DefA;
+   hence thesis by A1,A2;
+  end;
+end;
+
 definition let X,Y be real-membered set;
  redefine pred X meets Y means
-     ex r st r in X & r in Y;
+  ex r st r in X & r in Y;
  compatibility
   proof
    thus X misses Y implies not ex r st r in X & r in Y by XBOOLE_0:3;
@@ -943,7 +1127,7 @@ end;
 
 definition let X,Y be rational-membered set;
  redefine pred X meets Y means
-     ex w st w in X & w in Y;
+  ex w st w in X & w in Y;
  compatibility
   proof
    thus X misses Y implies not ex w st w in X & w in Y by XBOOLE_0:3;
@@ -959,7 +1143,7 @@ end;
 
 definition let X,Y be integer-membered set;
  redefine pred X meets Y means
-     ex i st i in X & i in Y;
+  ex i st i in X & i in Y;
  compatibility
   proof
    thus X misses Y implies not ex i st i in X & i in Y by XBOOLE_0:3;
@@ -975,7 +1159,7 @@ end;
 
 definition let X,Y be natural-membered set;
  redefine pred X meets Y means
-     ex n st n in X & n in Y;
+  ex n st n in X & n in Y;
  compatibility
   proof
    thus X misses Y implies not ex n st n in X & n in Y by XBOOLE_0:3;
@@ -1001,6 +1185,20 @@ A2: x in X and
 A3: X in F by TARSKI:def 4;
      X is complex-membered by A1,A3;
   hence x is complex by A2,Def1;
+ end;
+
+theorem
+   (for X st X in F holds X is ext-real-membered)
+   implies union F is ext-real-membered
+ proof assume
+A1: for X st X in F holds X is ext-real-membered;
+  let x;
+  assume x in union F;
+   then consider X such that
+A2: x in X and
+A3: X in F by TARSKI:def 4;
+    X is ext-real-membered by A1,A3;
+  hence x is ext-real by A2,DefA;
  end;
 
 theorem
@@ -1060,7 +1258,7 @@ A3: X in F by TARSKI:def 4;
  end;
 
 theorem
-   for X st X in F & X is complex-membered
+  for X st X in F & X is complex-membered
   holds meet F is complex-membered
  proof let X;
   assume X in F;
@@ -1069,7 +1267,16 @@ theorem
  end;
 
 theorem
-   for X st X in F & X is real-membered
+  for X st X in F & X is ext-real-membered
+  holds meet F is ext-real-membered
+ proof let X;
+  assume X in F;
+   then meet F c= X by SETFAM_1:4;
+  hence thesis by Th17a;
+ end;
+
+theorem
+  for X st X in F & X is real-membered
   holds meet F is real-membered
  proof let X;
   assume X in F;
@@ -1078,7 +1285,7 @@ theorem
  end;
 
 theorem
-   for X st X in F & X is rational-membered
+  for X st X in F & X is rational-membered
   holds meet F is rational-membered
  proof let X;
   assume X in F;
@@ -1087,7 +1294,7 @@ theorem
  end;
 
 theorem
-   for X st X in F & X is integer-membered
+  for X st X in F & X is integer-membered
   holds meet F is integer-membered
  proof let X;
   assume X in F;
@@ -1096,7 +1303,7 @@ theorem
  end;
 
 theorem
-   for X st X in F & X is natural-membered
+  for X st X in F & X is natural-membered
   holds meet F is natural-membered
  proof let X;
   assume X in F;
@@ -1119,6 +1326,24 @@ A1:  x in X iff x in COMPLEX & P[x] from XBOOLE_0:sch 1;
    then reconsider X as complex-membered set;
   take X; let c;
      c in COMPLEX by XCMPLX_0:def 2;
+  hence thesis by A1;
+end;
+
+scheme EMSeparation {P[set]}:
+ ex X being ext-real-membered set st
+  for e holds e in X iff P[e]
+proof
+   consider X being set such that
+A1:  x in X iff x in ExtREAL & P[x] from XBOOLE_0:sch 1;
+     X is ext-real-membered
+    proof let x;
+     assume x in X;
+      then x in ExtREAL by A1;
+     hence thesis by XXREAL_0:def 1;
+    end;
+   then reconsider X as ext-real-membered set;
+  take X; let e;
+   e in ExtREAL by XXREAL_0:def 1;
   hence thesis by A1;
 end;
 
@@ -1192,4 +1417,13 @@ A1:  x in X iff x in NAT & P[x] from XBOOLE_0:sch 1;
   take X; let n;
      n in NAT by ORDINAL1:def 13;
   hence thesis by A1;
+end;
+
+registration
+ cluster non empty natural-membered set; :: round-up
+ existence
+  proof consider X being non empty natural-membered set;
+   take X;
+   thus thesis;
+  end;
 end;

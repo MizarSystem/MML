@@ -32,9 +32,10 @@ environ
       FINSET_1, MEMBERED, RCOMP_3, FUNCT_1, CQC_LANG, FUNCT_2, RELAT_1,
       SPRECT_1, PSCOMP_1, XXREAL_0;
  requirements BOOLE, SUBSET, NUMERALS, ARITHM, REAL;
- definitions TARSKI, XBOOLE_0, FUNCT_1, PARTFUN1, FUNCOP_1, SEQ_1, WELLORD2,
+ definitions RELAT_1,
+ TARSKI, XBOOLE_0, FUNCT_1, PARTFUN1, FUNCOP_1, SEQ_1, WELLORD2,
       PBOOLE, SEQ_4, PRE_TOPC, TOPS_3, URYSOHN1, COMPTS_1, TOPGEN_1, BORSUK_1,
-      EUCLID, FUNCT_6, BINOP_1, SQUARE_1, SUBSET_1, STRUCT_0;
+      EUCLID, FUNCT_6, BINOP_1, SQUARE_1, SUBSET_1, STRUCT_0, LIMFUNC1, PROB_1;
  theorems TARSKI, XBOOLE_0, XBOOLE_1, ZFMISC_1, FUNCT_1, EUCLID, PBOOLE,
       EUCLID_2, TOPREAL9, TOPGEN_3, SETWISEO, XREAL_1, XREAL_0, XCMPLX_1,
       TOPRNS_1, TOPREAL6, ABSVALUE, SPPOL_2, FINSEQ_1, COMPLEX1, JGRAPH_1,
@@ -45,7 +46,7 @@ environ
       FUNCOP_1, FUNCT_4, RELAT_1, RELSET_1, CANTOR_1, PARTFUN1, SETFAM_1,
       STRUCT_0, JORDAN6, MEMBERED, YELLOW12, FUNCT_7, SEQ_4, CQC_LANG,
       FINSET_1, SPRECT_1, DICKSON, FUNCT_5, BORSUK_5, RCOMP_3, FRECHET, TSP_1,
-      BORSUK_4, JORDAN, XXREAL_0, TSEP_1;
+      BORSUK_4, JORDAN, XXREAL_0, TSEP_1, XXREAL_1;
  schemes SUBSET_1, FUNCT_1, FRAENKEL, PRE_CIRC, FUNCT_5, ZFREFLE1, FINSET_1,
       FUNCT_2;
 
@@ -96,7 +97,7 @@ registration
   coherence
   proof
     let R be Relation of X,Y;
-    thus rng R c= REAL by MEMBERED:2;
+    thus rng R c= REAL by MEMBERED:3;
   end;
 end;
 
@@ -290,90 +291,19 @@ end;
 
 theorem
 Th8: for a,b,c,d being real number st a < b & c <= d
-      holds ].a,c.[ /\ [.b,d.] = [.b,c.[
-      proof
-        let a,b,c,d be real number;
-        assume
-A1:     a < b & c <= d;
-A2:     now let x be real number;
-          x in ].a,c.[ /\ [.b,d.] iff x in ].a,c.[ & x in [.b,d.]
-          by XBOOLE_0:def 3; then
-          x in ].a,c.[ /\ [.b,d.] iff a < x & x < c & b <= x & x <= d
-          by RCOMP_1:47,48; then
-          x in ].a,c.[ /\ [.b,d.] iff x < c & b <= x by A1,XXREAL_0:2;
-          hence x in ].a,c.[ /\ [.b,d.] iff x in [.b,c.[ by RCOMP_2:3;
-        end;
-        now
-          let x be set;
-          (x in ].a,c.[ /\ [.b,d.] implies x is Real) &
-          (x in [.b,c.[ implies x is Real);
-          hence x in ].a,c.[ /\ [.b,d.] iff x in [.b,c.[ by A2;
-        end;
-        hence ].a,c.[ /\ [.b,d.] = [.b,c.[ by TARSKI:2;
-      end;
+      holds ].a,c.[ /\ [.b,d.] = [.b,c.[ by XXREAL_1:148;
 
 theorem
 Th9: for a,b,c,d being real number st a >= b & c > d
-      holds ].a,c.[ /\ [.b,d.] = ].a,d.]
-      proof
-        let a,b,c,d be real number;
-        assume
-A1:     a >= b & c > d;
-A2:     now let x be real number;
-          x in ].a,c.[ /\ [.b,d.] iff x in ].a,c.[ & x in [.b,d.]
-          by XBOOLE_0:def 3; then
-          x in ].a,c.[ /\ [.b,d.] iff a < x & x < c & b <= x & x <= d
-          by RCOMP_1:47,48; then
-          x in ].a,c.[ /\ [.b,d.] iff a < x & x <= d by A1,XXREAL_0:2;
-          hence x in ].a,c.[ /\ [.b,d.] iff x in ].a,d.] by RCOMP_2:4;
-        end;
-        now
-          let x be set;
-          (x in ].a,c.[ /\ [.b,d.] implies x is Real) &
-          (x in ].a,d.] implies x is Real);
-          hence x in ].a,c.[ /\ [.b,d.] iff x in ].a,d.] by A2;
-        end;
-        hence ].a,c.[ /\ [.b,d.] = ].a,d.] by TARSKI:2;
-      end;
+      holds ].a,c.[ /\ [.b,d.] = ].a,d.] by XXREAL_1:149;
 
 theorem
 Th10: for a,b,c,d being real number st a <= b & b < c & c <= d
-      holds [.a,c.[ \/ ].b,d.] = [.a,d.]
-  proof let a,b,c,d be real number; assume
-A1:  a <= b & b < c & c <= d; then
-    c in [.b,d.] & b in [.a,c.[ by RCOMP_1:48,RCOMP_2:3; then
-A2:  {c} c= [.b,d.] & {b} c= [.a,c.[ by ZFMISC_1:37;
-A3:  a < c & b < d by A1,XXREAL_0:2;
-    [.a,d.] = [.a,c.] \/ [.b,d.] by A1,RCOMP_1:50
-    .= [.a,c.[ \/ {c} \/ [.b,d.] by A3,BORSUK_4:34
-    .= [.a,c.[ \/ ({c} \/ [.b,d.]) by XBOOLE_1:4
-    .= [.a,c.[ \/ [.b,d.] by A2,XBOOLE_1:12
-    .= [.a,c.[ \/ ({b} \/ ].b,d.]) by A3,BORSUK_4:35
-    .= {b} \/ [.a,c.[ \/ ].b,d.] by XBOOLE_1:4;
-    hence thesis by A2,XBOOLE_1:12;
-  end;
+      holds [.a,c.[ \/ ].b,d.] = [.a,d.] by XXREAL_1:175;
 
 theorem
 Th11: for a,b,c,d being real number st a <= b & b < c & c <= d
-      holds [.a,c.[ /\ ].b,d.] = ].b,c.[
-  proof let a,b,c,d be real number; assume
-A1:  a <= b & b < c & c <= d;
-A2: now let x be real number;
-      x in [.a,c.[ /\ ].b,d.] iff x in [.a,c.[ & x in ].b,d.]
-      by XBOOLE_0:def 3; then
-      x in [.a,c.[ /\ ].b,d.] iff a <= x & x < c & b < x & x <= d
-      by RCOMP_2:3,4; then
-      x in [.a,c.[ /\ ].b,d.] iff b < x & x < c by A1,XXREAL_0:2;
-      hence x in [.a,c.[ /\ ].b,d.] iff x in ].b,c.[ by RCOMP_1:47;
-    end;
-    now
-      let x be set;
-      (x in [.a,c.[ /\ ].b,d.] implies x is Real) &
-      (x in ].b,c.[ implies x is Real);
-      hence x in [.a,c.[ /\ ].b,d.] iff x in ].b,c.[ by A2;
-    end;
-    hence thesis by TARSKI:2;
-  end;
+      holds [.a,c.[ /\ ].b,d.] = ].b,c.[ by XXREAL_1:153;
 
 theorem Th12:
   for X,Y being set holds
@@ -2014,10 +1944,11 @@ A17:   rng p = [#]Closed-Interval-TSpace(-1,1) & p is one-to-one
 A18:   p' = p qua Function" by TOPS_2:def 4; then
 A19:   p'.k = z by A16,A17,FUNCT_2:32;
       thus f.a = p'.(g.a) by FUNCT_2:21 .= 0 by A15,A13,A14,A19,FUNCT_1:72;
-      f.:A = p'.:(g.:A) by RELAT_1:159 .= p'.:(h.:A) by A15,A14,RELAT_1:162;
-then
-      f.:A c= p'.:{1} & p'.j = o by A11,RELAT_1:156,A18,A16,A17,FUNCT_2:32;
-      hence f.:A c= {1} by SETWISEO:13;
+X:    f.:A = p'.:(g.:A) by RELAT_1:159 .= p'.:(h.:A) by A15,A14,RELAT_1:162;
+      then
+Y:     f.:A c= Im(p',1) by A11,RELAT_1:156,A18,A16,A17,FUNCT_2:32;
+      p'.j = o by A11,RELAT_1:156,A18,A16,A17,FUNCT_2:32,X;
+      hence f.:A c= {1} by SETWISEO:13,Y;
     end;
   end;
 end;

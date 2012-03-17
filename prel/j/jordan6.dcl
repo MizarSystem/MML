@@ -30,9 +30,9 @@
 <ArticleID name="METRIC_1"/>
 <ArticleID name="EUCLID"/>
 <ArticleID name="TOPREAL2"/>
+<ArticleID name="FUNCOP_1"/>
 <ArticleID name="ENUMSET1"/>
 <ArticleID name="DOMAIN_1"/>
-<ArticleID name="FUNCOP_1"/>
 <ArticleID name="RELAT_2"/>
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="EQREL_1"/>
@@ -47,29 +47,29 @@
 <Typ kind="M" nr="2">
 <Cluster>
 <Adjective nr="7" value="false"/>
-<Adjective nr="62"/>
+<Adjective nr="63"/>
 </Cluster>
-<Func kind="K" nr="18">
+<Func kind="K" nr="19">
 <Func kind="U" nr="1">
-<Func kind="K" nr="198">
+<Func kind="K" nr="200">
 <Num nr="2"/>
 </Func>
 </Func>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="302">
+<Func kind="K" nr="304">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="7" value="false"/>
 <Adjective nr="35">
-<Func kind="K" nr="198">
+<Func kind="K" nr="200">
 <Num nr="2"/>
 </Func>
 </Adjective>
 <Adjective nr="42">
-<Func kind="K" nr="198">
+<Func kind="K" nr="200">
 <Num nr="2"/>
 </Func>
 </Adjective>
@@ -80,29 +80,29 @@
 <Typ kind="M" nr="2">
 <Cluster>
 <Adjective nr="7" value="false"/>
-<Adjective nr="62"/>
+<Adjective nr="63"/>
 </Cluster>
-<Func kind="K" nr="18">
+<Func kind="K" nr="19">
 <Func kind="U" nr="1">
-<Func kind="K" nr="198">
+<Func kind="K" nr="200">
 <Num nr="2"/>
 </Func>
 </Func>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="301">
+<Func kind="K" nr="303">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="7" value="false"/>
 <Adjective nr="35">
-<Func kind="K" nr="198">
+<Func kind="K" nr="200">
 <Num nr="2"/>
 </Func>
 </Adjective>
 <Adjective nr="42">
-<Func kind="K" nr="198">
+<Func kind="K" nr="200">
 <Num nr="2"/>
 </Func>
 </Adjective>
@@ -114,7 +114,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="291"/>
+<Func kind="K" nr="293"/>
 </Func>
 </Typ>
 <Cluster>

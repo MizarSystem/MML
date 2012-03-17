@@ -1,5 +1,5 @@
 :: Cross Products and Tripple Vector Products in 3-dimensional Euclidian Space
-::  by Kanchun, Hiroshi Yamazakiand Yatsuka Nakamura
+::  by Kanchun, Hiroshi Yamazaki and Yatsuka Nakamura
 ::
 :: Received August 8, 2003
 :: Copyright (c) 2003 Association of Mizar Users
@@ -15,7 +15,8 @@ environ
       EUCLID_2, NAT_D;
  registrations XREAL_0, RELSET_1, ARYTM_3, MEMBERED, SEQ_1, EUCLID;
  requirements REAL, SUBSET, NUMERALS, ARITHM;
- theorems EUCLID, RVSUM_1, FINSEQ_2, FINSEQ_1, EUCLID_2, BINOP_2, SEQ_1;
+ theorems EUCLID, RVSUM_1, FINSEQ_2, FINSEQ_1, EUCLID_2, BINOP_2, SEQ_1,
+     XREAL_0;
 
 begin
 
@@ -35,90 +36,40 @@ theorem Th1: ex x, y, z st p= <* x, y, z *>
   end;
 
 definition let p;
-  func p`1 -> Real means
-    :Def1: for f being FinSequence st p=f holds it = f.1;
-    existence
-    proof
-      reconsider f=p as FinSequence of REAL by EUCLID:27;
-      reconsider x=f.1 as Real;
-      take x;
-      thus thesis;
-    end;
-    uniqueness
-    proof
-      let y,z;
-      assume that
-        A1: for f being FinSequence st p = f holds y = f.1 and
-        A2: for f being FinSequence st p = f holds z = f.1;
-        reconsider f = p as FinSequence by EUCLID:27;
-        thus y = f.1 by A1 .= z by A2;
-    end;
-  func p`2 -> Real means
-    :Def2: for f being FinSequence st p=f holds it = f.2;
-    existence
-    proof
-      reconsider f=p as FinSequence of REAL by EUCLID:27;
-      reconsider x=f.2 as Real;
-      take x;
-      thus thesis;
-    end;
-    uniqueness
-    proof
-      let y,z;
-      assume that
-        A3: for f being FinSequence st p = f holds y = f.2 and
-        A4: for f being FinSequence st p = f holds z = f.2;
-        reconsider f = p as FinSequence by EUCLID:27;
-        thus y = f.2 by A3 .= z by A4;
-    end;
-
-  func p`3 -> Real means
-    :Def3: for f being FinSequence st p=f holds it = f.3;
-    existence
-    proof
-      reconsider f=p as FinSequence of REAL by EUCLID:27;
-      reconsider x=f.3 as Real;
-      take x;
-      thus thesis;
-    end;
-    uniqueness
-    proof
-      let y,z;
-      assume that
-        A5: for f being FinSequence st p = f holds y = f.3 and
-        A6: for f being FinSequence st p = f holds z = f.3;
-        reconsider f = p as FinSequence by EUCLID:27;
-        thus y = f.3 by A5 .= z by A6;
-    end;
+  func p`1 -> Real equals
+    :Def1: p.1;
+   coherence;
+  func p`2 -> Real equals
+    :Def2: p.2;
+   coherence;
+  func p`3 -> Real equals
+    :Def3: p.3;
+   coherence;
 end;
 
-definition let x, y, z;
-  func |[ x,y,z ]| -> Point of TOP-REAL 3 equals  <*x,y,z*>;
+notation let x, y, z be real number;
+  synonym |[ x,y,z ]| for <*x,y,z*>;
+end;
+
+definition let x, y, z be real number;
+  redefine func |[ x,y,z ]| -> Point of TOP-REAL 3;
     coherence
     proof
+      reconsider x,y,z as Real by XREAL_0:def 1;
        <*x,y,z*> is Element of 3-tuples_on REAL by FINSEQ_2:124;
       then <*x,y,z*> is Element of REAL 3 by EUCLID:def 1;
-      hence <*x,y,z*> is Point of TOP-REAL 3 by EUCLID:25;
+      hence thesis by EUCLID:25;
     end;
   end;
 
-theorem Th2: |[ x,y,z ]|`1 = x & |[x,y,z]|`2 = y & |[x,y,z]|`3 = z
-  proof
-
-A1:   |[x,y,z]|`1 = <*x,y,z*>.1 by Def1
-                     .= x by FINSEQ_1:62;
-A2:   |[x,y,z]|`2 = <*x,y,z*>.2 by Def2
-                     .= y by FINSEQ_1:62;
-       |[x,y,z]|`3 = <*x,y,z*>.3 by Def3
-                     .= z by FINSEQ_1:62;
-    hence thesis by A1,A2;
- end;
+theorem Th2:
+  |[ x,y,z ]|`1 = x & |[x,y,z]|`2 = y & |[x,y,z]|`3 = z by FINSEQ_1:62;
 
 theorem Th3: p = |[ p`1, p`2, p`3 ]|
   proof
     consider x,y,z such that
 A1:   p = <*x,y,z*> by Th1;
-    reconsider f = p as FinSequence by EUCLID:27;
+    reconsider f = p as FinSequence;
 A2: p`1 = f.1 by Def1
        .= x by A1,FINSEQ_1:62;
 A3: p`2 = f.2 by Def2
@@ -240,6 +191,7 @@ proof
 end;
 
 definition let p1, p2;
+  canceled;
   func p1 <X> p2 -> Point of TOP-REAL 3 equals
         |[ (p1`2 * p2`3) - (p1`3 * p2`2) ,
            (p1`3 * p2`1) - (p1`1 * p2`3) ,

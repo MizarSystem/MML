@@ -33,28 +33,7 @@
 </RCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="47"/>
-<Cluster>
-<Adjective nr="15"/>
-</Cluster>
-</FCluster>
-<FCluster>
-<ArgTypes>
-<Typ kind="M" nr="1">
-<Cluster>
-<Adjective nr="15"/>
-</Cluster>
-</Typ>
-<Typ kind="M" nr="1">
-<Cluster>
-<Adjective nr="15"/>
-</Cluster>
-</Typ>
-</ArgTypes>
-<Func kind="K" nr="48">
-<LocusVar nr="1"/>
-<LocusVar nr="2"/>
-</Func>
+<Func kind="K" nr="48"/>
 <Cluster>
 <Adjective nr="15"/>
 </Cluster>
@@ -93,7 +72,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="52">
+<Func kind="K" nr="50">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -126,16 +105,20 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="7" value="false"/>
+<Adjective nr="15"/>
+</Cluster>
+</Typ>
+<Typ kind="M" nr="1">
+<Cluster>
 <Adjective nr="15"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="50">
+<Func kind="K" nr="54">
 <LocusVar nr="1"/>
+<LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="7" value="false"/>
 <Adjective nr="15"/>
 </Cluster>
 </FCluster>
@@ -164,6 +147,23 @@
 <Adjective nr="15"/>
 </Cluster>
 </Typ>
+</ArgTypes>
+<Func kind="K" nr="52">
+<LocusVar nr="1"/>
+</Func>
+<Cluster>
+<Adjective nr="7" value="false"/>
+<Adjective nr="15"/>
+</Cluster>
+</FCluster>
+<FCluster>
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="7" value="false"/>
+<Adjective nr="15"/>
+</Cluster>
+</Typ>
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="7" value="false"/>
@@ -171,7 +171,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="49">
+<Func kind="K" nr="50">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -195,7 +195,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="53">
+<Func kind="K" nr="54">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -209,7 +209,7 @@
 <Cluster/>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="41"/>
+<Func kind="K" nr="42"/>
 </Typ>
 <Cluster>
 <Adjective nr="15"/>
@@ -232,7 +232,7 @@
 <Cluster/>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="42"/>
+<Func kind="K" nr="43"/>
 </Typ>
 <Cluster>
 <Adjective nr="15"/>

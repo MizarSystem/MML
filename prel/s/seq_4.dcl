@@ -17,6 +17,7 @@
 <ArticleID name="MEMBERED"/>
 <ArticleID name="SEQ_1"/>
 <ArticleID name="SEQ_2"/>
+<ArticleID name="SEQ_4"/>
 </Signature>
 <CCluster>
 <ArgTypes/>
@@ -24,23 +25,41 @@
 <Adjective nr="4"/>
 <Adjective nr="6"/>
 <Adjective nr="8">
-<Func kind="K" nr="82"/>
-<Func kind="K" nr="78"/>
+<Func kind="K" nr="83"/>
+<Func kind="K" nr="79"/>
 </Adjective>
 </Cluster>
 <Typ kind="M" nr="4">
 <Cluster/>
-<Func kind="K" nr="82"/>
-<Func kind="K" nr="78"/>
+<Func kind="K" nr="83"/>
+<Func kind="K" nr="79"/>
 </Typ>
 <Cluster>
 <Adjective nr="4"/>
 <Adjective nr="8">
-<Func kind="K" nr="82"/>
-<Func kind="K" nr="78"/>
+<Func kind="K" nr="83"/>
+<Func kind="K" nr="79"/>
 </Adjective>
+<Adjective nr="25"/>
+<Adjective nr="29"/>
+</Cluster>
+</CCluster>
+<CCluster>
+<ArgTypes/>
+<Cluster>
 <Adjective nr="24"/>
-<Adjective nr="28"/>
+</Cluster>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+<Cluster>
+<Adjective nr="19"/>
+<Adjective nr="20"/>
+<Adjective nr="21"/>
+<Adjective nr="22"/>
+<Adjective nr="23"/>
+<Adjective nr="24"/>
+<Adjective nr="31"/>
 </Cluster>
 </CCluster>
 </Registrations>

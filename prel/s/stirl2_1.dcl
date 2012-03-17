@@ -26,8 +26,8 @@
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="18">
-<Func kind="K" nr="82"/>
+<Func kind="K" nr="19">
+<Func kind="K" nr="83"/>
 </Func>
 </Typ>
 <Typ kind="M" nr="4">
@@ -45,7 +45,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="11">
+<Func kind="K" nr="12">
 <LocusVar nr="3"/>
 <LocusVar nr="4"/>
 </Func>
@@ -66,7 +66,7 @@
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="82"/>
+<Func kind="K" nr="83"/>
 </Typ>
 </ArgTypes>
 <Cluster/>

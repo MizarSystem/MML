@@ -15,7 +15,7 @@
 </Signature>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="40"/>
+<Func kind="K" nr="41"/>
 <Cluster>
 <Adjective nr="7" value="false"/>
 <Adjective nr="8"/>
@@ -26,19 +26,21 @@
 <Adjective nr="17"/>
 <Adjective nr="18"/>
 <Adjective nr="19"/>
-<Adjective nr="20" value="false"/>
+<Adjective nr="20"/>
+<Adjective nr="21" value="false"/>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="44"/>
+<Func kind="K" nr="45"/>
 <Cluster>
 <Adjective nr="7" value="false"/>
 <Adjective nr="15"/>
 <Adjective nr="16"/>
 <Adjective nr="17"/>
 <Adjective nr="18"/>
-<Adjective nr="20" value="false"/>
+<Adjective nr="19"/>
+<Adjective nr="21" value="false"/>
 </Cluster>
 </FCluster>
 </Registrations>

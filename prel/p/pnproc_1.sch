@@ -25,7 +25,7 @@
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="76"/>
+<Func kind="K" nr="77"/>
 </Typ>
 </ArgTypes>
 <Not>
@@ -47,7 +47,7 @@
 </Pred>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="104">
+<Func kind="K" nr="105">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 <Var nr="2"/>

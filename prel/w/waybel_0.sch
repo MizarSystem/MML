@@ -34,7 +34,7 @@
 <And>
 <Not>
 <And>
-<Pred kind="R" nr="26">
+<Pred kind="R" nr="31">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Fraenkel>
@@ -44,13 +44,13 @@
 <Func kind="F" nr="2"/>
 </Func>
 </Typ>
-<Func kind="K" nr="86">
+<Func kind="K" nr="88">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Var nr="1"/>
 </Func>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="86">
+<Func kind="K" nr="88">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Var nr="1"/>
@@ -75,69 +75,69 @@
 </Typ>
 <Not>
 <And>
-<Pred kind="R" nr="21">
-<Func kind="F" nr="2"/>
-<Var nr="1"/>
-<Var nr="2"/>
-</Pred>
-<Not>
-<Pred kind="P" nr="1">
-<Func kind="K" nr="86">
-<Func kind="F" nr="1"/>
-<Func kind="F" nr="2"/>
-<Var nr="2"/>
-</Func>
-</Pred>
-</Not>
-</And>
-</Not>
-</For>
-</Not>
-</For>
-</And>
-</Not>
-<Not>
-<And>
-<Not>
-<For>
-<Typ kind="M" nr="2">
-<Cluster/>
-<Func kind="U" nr="1">
-<Func kind="F" nr="2"/>
-</Func>
-</Typ>
-<Not>
-<For>
-<Typ kind="M" nr="2">
-<Cluster/>
-<Func kind="U" nr="1">
-<Func kind="F" nr="2"/>
-</Func>
-</Typ>
-<Not>
-<And>
-<Pred kind="R" nr="21">
-<Func kind="F" nr="2"/>
-<Var nr="1"/>
-<Var nr="2"/>
-</Pred>
-<Not>
-<Pred kind="P" nr="1">
-<Func kind="K" nr="86">
-<Func kind="F" nr="1"/>
-<Func kind="F" nr="2"/>
-<Var nr="2"/>
-</Func>
-</Pred>
-</Not>
-</And>
-</Not>
-</For>
-</Not>
-</For>
-</Not>
-<Not>
 <Pred kind="R" nr="26">
+<Func kind="F" nr="2"/>
+<Var nr="1"/>
+<Var nr="2"/>
+</Pred>
+<Not>
+<Pred kind="P" nr="1">
+<Func kind="K" nr="88">
+<Func kind="F" nr="1"/>
+<Func kind="F" nr="2"/>
+<Var nr="2"/>
+</Func>
+</Pred>
+</Not>
+</And>
+</Not>
+</For>
+</Not>
+</For>
+</And>
+</Not>
+<Not>
+<And>
+<Not>
+<For>
+<Typ kind="M" nr="2">
+<Cluster/>
+<Func kind="U" nr="1">
+<Func kind="F" nr="2"/>
+</Func>
+</Typ>
+<Not>
+<For>
+<Typ kind="M" nr="2">
+<Cluster/>
+<Func kind="U" nr="1">
+<Func kind="F" nr="2"/>
+</Func>
+</Typ>
+<Not>
+<And>
+<Pred kind="R" nr="26">
+<Func kind="F" nr="2"/>
+<Var nr="1"/>
+<Var nr="2"/>
+</Pred>
+<Not>
+<Pred kind="P" nr="1">
+<Func kind="K" nr="88">
+<Func kind="F" nr="1"/>
+<Func kind="F" nr="2"/>
+<Var nr="2"/>
+</Func>
+</Pred>
+</Not>
+</And>
+</Not>
+</For>
+</Not>
+</For>
+</Not>
+<Not>
+<Pred kind="R" nr="31">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Fraenkel>
@@ -147,13 +147,13 @@
 <Func kind="F" nr="2"/>
 </Func>
 </Typ>
-<Func kind="K" nr="86">
+<Func kind="K" nr="88">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Var nr="1"/>
 </Func>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="86">
+<Func kind="K" nr="88">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Var nr="1"/>

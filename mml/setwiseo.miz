@@ -7,13 +7,13 @@
 environ
 
  vocabularies BOOLE, FUNCT_1, RELAT_1, FINSUB_1, FINSET_1, BINOP_1, FUNCOP_1,
-      TARSKI, SETWISEO;
+      TARSKI, SETWISEO, COMPLEX1;
  notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, RELAT_1, FUNCT_1, FINSUB_1,
       RELSET_1, FINSET_1, PARTFUN1, FUNCT_2, BINOP_1, FUNCOP_1;
  constructors ENUMSET1, PARTFUN1, BINOP_1, FUNCOP_1, FINSET_1, FINSUB_1;
  registrations FINSET_1, FINSUB_1, RELSET_1, XBOOLE_0, ZFMISC_1, FUNCT_2;
  requirements BOOLE, SUBSET;
- definitions BINOP_1, TARSKI;
+ definitions BINOP_1, TARSKI, RELAT_1;
  theorems FINSUB_1, ZFMISC_1, SUBSET_1, BINOP_1, TARSKI, FUNCT_1, FUNCT_2,
       FUNCOP_1, FINSET_1, ENUMSET1, RELAT_1, XBOOLE_0, XBOOLE_1;
  schemes FINSET_1, FUNCT_2, BINOP_1, SUBSET_1;
@@ -105,7 +105,7 @@ theorem Th12:
  end;
 
 theorem Th13:
-  for x being Element of X holds f.:{x} = {f.x}
+  for x being Element of X holds Im(f,x) = {f.x}
   proof let x be Element of X;
      for y holds y in f.:{x} iff y = f.x
      proof let y;
@@ -117,7 +117,7 @@ theorem Th13:
        x in {x} by TARSKI:def 1;
       hence thesis by FUNCT_2:43;
      end;
-   hence f.:{x} = {f.x} by TARSKI:def 1;
+   hence Im(f,x) = {f.x} by TARSKI:def 1;
   end;
 
 :: Theorems related to Fin ...
@@ -1040,7 +1040,7 @@ A7:  f.:(A \/ {x}) = g.:B;
 A8:     x' in A and
 A9:     f.x' = f.x by FUNCT_2:116;
 A10:     f.x in f.:A by A8,A9,FUNCT_2:43;
-A11:     g.:B = f.:A \/ f.:{x} by A7,RELAT_1:153
+A11:     g.:B = f.:A \/ Im(f,x) by A7,RELAT_1:153
            .= f.:A \/ {f.x} by Th13
            .= f.:A by A10,ZFMISC_1:46;
        thus F$$(A \/ {.x.},f) = F.(F$$(A,f), f.x) by A1,A8,Th29
@@ -1054,9 +1054,10 @@ A11:     g.:B = f.:A \/ f.:{x} by A7,RELAT_1:153
       end;
       suppose
 A12:     not f.x in f.:A;
-        per cases;
-        suppose A13: A = {};
-then A14:      g.:B = {f.x} by A7,Th13;
+       per cases;
+       suppose A13: A = {};
+         then
+A14:      g.:B = Im(f,x) by A7 .= {f.x} by Th13;
          thus F$$(A \/ {.x.},f) = f.x by A1,A13,Th26
                       .= F$$(B,g) by A1,A14,Th34;
         end;
@@ -1086,9 +1087,9 @@ A21:        g.x' = f.x by FUNCT_2:116;
              x' in g"{f.x} by A21,Th12;
 then A22:       B2 <> {} by A20,XBOOLE_0:def 3;
 A23:       f.:A = f.:A \ {f.x} by A12,ZFMISC_1:65
-             .= f.:A \ f.:{x} by Th13
+             .= f.:A \ Im(f,x) by Th13
              .= (f.:A \/ f.:{x}) \ f.:{x} by XBOOLE_1:40
-             .= f.:(A \/ {x}) \ f.:{x} by RELAT_1:153
+             .= f.:(A \/ {x}) \ Im(f,x) by RELAT_1:153
              .= g.:B \ {f.x} by A7,Th13
              .= g.:B1 by Th11;
 A24:       for b being Element of X st b in B2 holds g.b = f.x
@@ -1204,7 +1205,8 @@ A3: dom f = X by FUNCT_2:def 1;
     defpred X[Element of Fin X] means F$$(f.:$1,g) = F$$($1,g*f);
 A4: for x being Element of X holds X[{.x.}]
    proof let x be Element of X;
-    thus F$$(f.:{.x.},g) = F$$({.f.x.},g) by A3,FUNCT_1:117
+     f.:{.x.} = Im(f,x);
+    hence F$$(f.:{.x.},g) = F$$({.f.x.},g) by A3,FUNCT_1:117
                   .= g.(f.x) by A1,Th26
                   .= (g*f).x by FUNCT_2:21
                   .= F$$({.x.},g*f) by A1,Th26;
@@ -1567,7 +1569,7 @@ A2: for B being (Element of Fin X), i st X[B] holds X[B \/ {.i.}]
      hence FinUnion(B \/ {.i.}, f) = union(f.:B) \/ f.i by Th60
                     .= union (f.:B) \/ union {f.i} by ZFMISC_1:31
                     .= union (f.:B \/ {f.i}) by ZFMISC_1:96
-                    .= union (f.:B \/ f.:{i}) by Th13
+                    .= union (f.:B \/ Im(f,i)) by Th13
                     .= union (f.:(B \/ {i})) by RELAT_1:153;
     end;
    thus for B being Element of Fin X holds X[B] from FinSubInd3(A1,A2);

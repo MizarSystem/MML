@@ -20,11 +20,11 @@
 <ArticleID name="XREAL_0"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="GROUP_1"/>
+<ArticleID name="FUNCOP_1"/>
 <ArticleID name="RELAT_2"/>
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="ORDERS_1"/>
 <ArticleID name="ORDERS_2"/>
-<ArticleID name="FUNCOP_1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="PBOOLE"/>
 <ArticleID name="YELLOW_0"/>
@@ -45,11 +45,11 @@
 <ArgTypes>
 <Typ kind="G" nr="4">
 <Cluster>
-<Adjective nr="49"/>
-<Adjective nr="50"/>
 <Adjective nr="51"/>
-<Adjective nr="122"/>
+<Adjective nr="52"/>
+<Adjective nr="53"/>
 <Adjective nr="123"/>
+<Adjective nr="124"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -63,7 +63,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="52">
+<Adjective nr="54">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -76,16 +76,16 @@
 <Cluster>
 <Adjective nr="20" value="false"/>
 <Adjective nr="34"/>
-<Adjective nr="49"/>
-<Adjective nr="50"/>
 <Adjective nr="51"/>
-<Adjective nr="56"/>
+<Adjective nr="52"/>
+<Adjective nr="53"/>
 <Adjective nr="57"/>
 <Adjective nr="58"/>
-<Adjective nr="91"/>
-<Adjective nr="122"/>
+<Adjective nr="59"/>
+<Adjective nr="92"/>
 <Adjective nr="123"/>
 <Adjective nr="124"/>
+<Adjective nr="125"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -105,18 +105,18 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="182">
+<Func kind="K" nr="185">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="20" value="false"/>
-<Adjective nr="48"/>
-<Adjective nr="49"/>
 <Adjective nr="50"/>
 <Adjective nr="51"/>
-<Adjective nr="91"/>
-<Adjective nr="122"/>
+<Adjective nr="52"/>
+<Adjective nr="53"/>
+<Adjective nr="92"/>
 <Adjective nr="123"/>
+<Adjective nr="124"/>
 </Cluster>
 </FCluster>
 </Registrations>

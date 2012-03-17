@@ -22,7 +22,8 @@ environ
       FRAENKEL, DTCONSTR, BINARITH, MATRLIN, RFUNCT_3, RFINSEQ, FVSUM_1, SEQ_1;
  constructors WELLORD2, DOMAIN_1, BINOP_1, FUNCT_4, SETWISEO, CARD_3, FINSEQOP,
       CQC_LANG, SEQM_3, SETWOP_2, RFUNCT_3, BINARITH, FUNCT_7, WSIERP_1, NAT_1,
-      REALSET2, ALGSTR_1, FVSUM_1, DTCONSTR, MATRLIN, TRIANG_1, RFINSEQ, NAT_D;
+      REALSET2, ALGSTR_1, FVSUM_1, DTCONSTR, MATRLIN, TRIANG_1, RFINSEQ, NAT_D,
+      FINSOP_1;
  registrations XREAL_0, STRUCT_0, RELAT_1, FUNCT_1, FINSET_1, RELSET_1, CARD_3,
       CARD_1, ALGSTR_1, FUNCOP_1, FINSEQ_1, FINSEQ_2, CIRCCOMB, CQC_LANG,
       NAT_1, ORDINAL3, HEYTING2, GOBRD13, VECTSP_1, FRAENKEL, MEMBERED,
@@ -193,12 +194,6 @@ definition
  redefine func p/.i -> Element of D;
  coherence;
 end;
-
-:: Moved to STRUCT_0 on 2005.09.22
-:: definition
-::   let X be set, S be 1-sorted;
-::   mode Function of X, S is Function of X, the carrier of S;
-:: end;
 
 registration
  let X be set;
@@ -819,7 +814,7 @@ registration
  cluster non degenerated -> non trivial (non empty multLoopStr_0);
  coherence
   proof let K be non empty multLoopStr_0;
-   assume 0.K <> 1.K;
+   assume 0.K <> 1_K;
    hence thesis by ANPROJ_1:def 8;
   end;
 end;
@@ -843,11 +838,11 @@ canceled 2;
 
 theorem Th27:
   for L being add-associative right_zeroed right_complementable
-              unital right-distributive (non empty doubleLoopStr) st 0.L = 1.L
+              unital right-distributive (non empty doubleLoopStr) st 0.L = 1_L
  holds L is trivial
 proof let L be add-associative right_zeroed right_complementable
                unital right-distributive (non empty doubleLoopStr) such that
-A1: 0.L = 1.L;
+A1: 0.L = 1_L;
  let u be Element of L;
  thus u = u*0.L by A1,GROUP_1:def 5 .= 0.L by VECTSP_1:36;
 end;
@@ -3479,7 +3474,7 @@ end;
 definition
  let n be set, L be unital (non empty multLoopStr_0);
  func 1_(n,L) -> Series of n, L equals
- 0_(n,L)+*(EmptyBag n,1.L);
+ 0_(n,L)+*(EmptyBag n,1_L);
  coherence;
 end;
 
@@ -3502,12 +3497,12 @@ end;
 
 theorem Th84:
  for n being set, L being unital (non empty multLoopStr_0)
-  holds (1_(n,L)).EmptyBag n = 1.L &
+  holds (1_(n,L)).EmptyBag n = 1_L &
    for b being bag of n st b <> EmptyBag n holds (1_(n,L)).b = 0.L
 proof let n be set, L be unital (non empty multLoopStr_0);
        set Z = 0_(n,L);
 A1: dom Z = Bags n by FUNCOP_1:19;
- thus (1_(n,L)).EmptyBag n = 1.L by A1,FUNCT_7:33;
+ thus (1_(n,L)).EmptyBag n = 1_L by A1,FUNCT_7:33;
  let b be bag of n; assume
 A2: b <> EmptyBag n;
 A3: b in Bags n by Def14;
@@ -4165,7 +4160,7 @@ A11: s.len s = (t^<*s1*>).(len t +1) by A5,FINSEQ_2:19
             .= s1 by FINSEQ_1:59;
 A12: s/.len s = s.len s by A7,FINSEQ_4:def 4;
 A13: Sum <*s1*> = s1 by RLVECT_1:61
-     .= p.b*1.L by A9,A10,A11,A12,Th84
+     .= p.b*1_L by A9,A10,A11,A12,Th84
      .= p.b by GROUP_1:def 5;
       now
    per cases;
@@ -4253,7 +4248,7 @@ then A8: 1 in dom s by FINSEQ_5:6;
  then A11: b2 = b & b1 = EmptyBag n by A9,GROUP_7:2;
 A12: s/.1 = s.1 by A8,FINSEQ_4:def 4;
  A13: Sum <*s1*> = s1 by RLVECT_1:61
-     .= 1.L*p.b by A5,A10,A11,A12,Th84
+     .= 1_L*p.b by A5,A10,A11,A12,Th84
      .= p.b by GROUP_1:def 5;
       now
    per cases;
@@ -4401,7 +4396,7 @@ registration
  cluster 1_(n,L) -> finite-Support;
  coherence
   proof
-    reconsider O = 0_(n,L)+*(EmptyBag n,1.L)
+    reconsider O = 0_(n,L)+*(EmptyBag n,1_L)
       as Function of Bags n, the carrier of L;
     reconsider O' = O as Function of Bags n, L;
     reconsider O' as Series of n, L;
@@ -4414,7 +4409,7 @@ registration
      end; assume
      A2: x = EmptyBag n;
              dom 0_(n,L) = Bags n by FUNCOP_1:19;
-         then O'.x = 1.L by A2,FUNCT_7:33;
+         then O'.x = 1_L by A2,FUNCT_7:33;
          then O'.x <> 0.L by Th27;
       hence x in Support O' by A2,Def9;
     end;
@@ -4480,7 +4475,7 @@ definition
  (for x, y being Element of it, p, q being Polynomial of n, L
    st x = p & y = q holds x*y = p*'q) &
  0.it = 0_(n,L) &
- 1_ it = 1_(n,L);
+ 1.it = 1_(n,L);
  existence proof
    defpred Q[set] means
     ex x' being Series of n, L st x' = $1 & x' is finite-Support;
@@ -4543,7 +4538,7 @@ A6: now let x be Element of P, y be Element of P;
     then Z' is finite-Support by Def10;
     then ZZ in P by A1;
     then reconsider Ze = Z as Element of P;
-    reconsider O = Z+*(EmptyBag n,1.L)
+    reconsider O = Z+*(EmptyBag n,1_L)
       as Function of Bags n, the carrier of L;
     reconsider O' = O as Function of Bags n, L;
     reconsider O' as Series of n, L;
@@ -4557,7 +4552,7 @@ A6: now let x be Element of P, y be Element of P;
      end; assume
      A12: x = EmptyBag n;
              dom Z = Bags n by FUNCOP_1:19;
-         then O'.x = 1.L by A12,FUNCT_7:33;
+         then O'.x = 1_L by A12,FUNCT_7:33;
          then O'.x <> 0.L by Th27;
       hence x in Support O' by A12,Def9;
     end;
@@ -4596,7 +4591,7 @@ A13:    x in the carrier of R;
   thus x*y = p*'q by A19,A20,A21;
   end;
   thus 0.R = 0_(n,L);
-  thus 1_ R = 1_(n,L);
+  thus 1.R = 1_(n,L);
  end;
  uniqueness proof let it1, it2 be strict non empty doubleLoopStr such that
 A22: (for x being set holds x in the carrier of it1
@@ -4606,7 +4601,7 @@ A23: (for x, y being Element of it1, p, q being Polynomial of n, L
 A24: (for x, y being Element of it1, p, q being Polynomial of n, L
    st x = p & y = q holds x*y = p*'q) and
 A25: 0.it1 = 0_(n,L) and
-A26: 1_ it1 = 1_(n,L) and
+A26: 1.it1 = 1_(n,L) and
 A27: (for x being set holds x in the carrier of it2
                             iff x is Polynomial of n, L) and
 A28: (for x, y being Element of it2, p, q being Polynomial of n, L
@@ -4614,7 +4609,7 @@ A28: (for x, y being Element of it2, p, q being Polynomial of n, L
 A29: (for x, y being Element of it2, p, q being Polynomial of n, L
    st x = p & y = q holds x*y = p*'q) and
 A30: 0.it2 = 0_(n,L) and
-A31: 1_ it2 = 1_(n,L);
+A31: 1.it2 = 1_(n,L);
 
     A32: now let x be set;
      hereby assume x in the carrier of it1;
@@ -4649,8 +4644,8 @@ A35: now let a, b be Element of it1;
        .= a1'*b1' by A29
        .= (the mult of it2).(a, b);
     end;
-A36: the Zero of it1 = the Zero of it2 by A25,A30;
-the unity of it1 = the unity of it2 by A26,A31;
+A36: 0.it1 = 0.it2 by A25,A30;
+   1.it1 = 1.it2 by A26,A31;
   hence thesis by A33,A34,A35,A36,BINOP_1:2;
  end;
 end;
@@ -4749,9 +4744,9 @@ Lm6: now
    set Pm = Polynom-Ring (n, L);
  let x, e be Element of Pm;
  assume
-A1: e = 1_ Pm;
+A1: e = 1.Pm;
  reconsider p = x as Polynomial of n, L by Def27;
-A2:  1_ Pm = 1_(n,L) by Def27;
+A2:  1.Pm = 1_(n,L) by Def27;
  hence x*e = p*'1_(n,L) by A1,Def27
           .= x by Th88;
  thus e*x = 1_(n,L)*'p by A2,A1,Def27
@@ -4768,7 +4763,7 @@ registration
   proof set Pm = Polynom-Ring (n, L);
    thus Pm is unital
    proof
-    take e = 1_ Pm;
+    take e = 1.Pm;
     thus thesis by Lm6;
    end;
   let x, y, z be Element of Pm;
@@ -4786,17 +4781,17 @@ theorem
      L being right_zeroed Abelian add-associative right_complementable
           unital distributive associative
           non trivial (non empty doubleLoopStr) holds
-  1.Polynom-Ring (n, L) = 1_(n,L)
+  1_Polynom-Ring (n, L) = 1_(n,L)
 proof
  let n be Ordinal,
      L be right_zeroed Abelian add-associative right_complementable
           unital distributive associative
           non trivial (non empty doubleLoopStr);
   set Pm = Polynom-Ring (n, L);
-A1: 1_ Pm = 1_(n,L) by Def27;
+A1: 1.Pm = 1_(n,L) by Def27;
   then reconsider e = 1_(n,L) as Element of Pm;
   for x be Element of Pm holds x*e = x & e*x = x by A1,Lm6;
-  hence 1.Polynom-Ring (n, L) = 1_(n,L) by GROUP_1:def 5;
+  hence 1_Polynom-Ring (n, L) = 1_(n,L) by GROUP_1:def 5;
 end;
 
 theorem

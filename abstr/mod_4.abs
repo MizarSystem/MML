@@ -8,11 +8,12 @@ environ
 
  vocabularies FUNCT_1, RELAT_1, VECTSP_1, OPPCAT_1, RLVECT_1, ARYTM_1,
       FUNCSDOM, VECTSP_2, LATTICES, BINOP_1, INCSP_1, MOD_1, ORDINAL4, GROUP_6,
-      MOD_4, GROUP_1, NAT_1;
+      MOD_4, GROUP_1, NAT_1, GRCAT_1, ENDALG, COHSP_1;
  notations XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, FUNCT_2, DOMAIN_1,
       STRUCT_0, MOD_1, BINOP_1, RLVECT_1, GROUP_1, VECTSP_1, FUNCSDOM,
-      VECTSP_2, GRCAT_1, FUNCT_4, RINGCAT1;
- constructors PARTFUN1, DOMAIN_1, FUNCOP_1, VECTSP_2, GRCAT_1, RINGCAT1, NAT_D;
+      VECTSP_2, GRCAT_1, FUNCT_4, GROUP_6, RINGCAT1;
+ constructors PARTFUN1, DOMAIN_1, FUNCOP_1, VECTSP_2, GRCAT_1, RINGCAT1, NAT_D,
+      GROUP_6;
  registrations VECTSP_1, VECTSP_2, STRUCT_0, RELSET_1, SUBSET_1, XBOOLE_0;
  requirements SUBSET, BOOLE;
 
@@ -40,8 +41,8 @@ definition let K;
    doubleLoopStr (# the carrier of K,
                                the add of K,
                                ~(the mult of K),
-                               the unity of K,
-                               the Zero of K #);
+                               1.K,
+                               0.K #);
 end;
 
 registration let K;
@@ -68,7 +69,7 @@ canceled;
 
 theorem :: MOD_4:4
    (for K being unital (non empty doubleLoopStr) holds
-    1.K = 1.opp(K)) &
+    1_K = 1_opp(K)) &
    for K being add-associative right_zeroed
       right_complementable (non empty doubleLoopStr) holds
   0.K = 0.opp(K)
@@ -123,7 +124,7 @@ definition let K,V;
    the carrier of opp(K):], the carrier of V
     st o = ~(the lmult of V)
    holds it = RightModStr
-    (# the carrier of V, the add of V, the Zero of V, o #);
+    (# the carrier of V, the add of V, 0.V, o #);
 end;
 
 registration let K,V;
@@ -155,7 +156,7 @@ definition let K,W;
    the carrier of W:], the carrier of W
     st o = ~(the rmult of W)
    holds it = VectSpStr
-    (# the carrier of W, the add of W, the Zero of W, o #);
+    (# the carrier of W, the add of W, 0.W, o #);
 end;
 
 registration let K,W;
@@ -258,42 +259,54 @@ end;
 
 begin :: Morfizmy pierscieni
 
+definition let K,L be non empty HGrStr;
+           let IT be Function of K,L;
+ attr IT is antimultiplicative means
+:: MOD_4:def 6
+  for x,y being Scalar of K holds IT.(x*y) = IT.y*IT.x;
+end;
+
 definition let K,L be non empty doubleLoopStr;
            let IT be Function of K,L;
  attr IT is antilinear means
-:: MOD_4:def 6
-    (for x,y being Scalar of K holds IT.(x+y) = IT.x+IT.y)
-  & (for x,y being Scalar of K holds IT.(x*y) = IT.y*IT.x)
-  & IT.(1.K) = 1.L;
+:: MOD_4:def 7
+ IT is additive antimultiplicative unity-preserving;
+end;
+
+registration let K,L be non empty doubleLoopStr;
+ cluster antilinear -> additive antimultiplicative unity-preserving
+ Function of K,L;
+ cluster additive antimultiplicative unity-preserving -> antilinear
+ Function of K,L;
 end;
 
 definition let K,L be non empty doubleLoopStr;
   let IT be Function of K,L;
  attr IT is monomorphism means
-:: MOD_4:def 7
+:: MOD_4:def 8
     IT is linear & IT is one-to-one;
  attr IT is antimonomorphism means
-:: MOD_4:def 8
+:: MOD_4:def 9
     IT is antilinear & IT is one-to-one;
 end;
 
 definition let K,L be non empty doubleLoopStr;
   let IT be Function of K,L;
  attr IT is epimorphism means
-:: MOD_4:def 9
+:: MOD_4:def 10
     IT is linear & rng IT = the carrier of L;
  attr IT is antiepimorphism means
-:: MOD_4:def 10
+:: MOD_4:def 11
     IT is antilinear & rng IT = the carrier of L;
 end;
 
 definition let K,L be non empty doubleLoopStr;
   let IT be Function of K,L;
  attr IT is isomorphism means
-:: MOD_4:def 11
+:: MOD_4:def 12
     IT is monomorphism & rng IT = the carrier of L;
  attr IT is antiisomorphism means
-:: MOD_4:def 12
+:: MOD_4:def 13
     IT is antimonomorphism & rng IT = the carrier of L;
 end;
 
@@ -302,16 +315,16 @@ reserve J for Function of K,K;
 definition let K be non empty doubleLoopStr;
   let IT be Function of K,K;
  attr IT is endomorphism means
-:: MOD_4:def 13
+:: MOD_4:def 14
   IT is linear;
  attr IT is antiendomorphism means
-:: MOD_4:def 14
+:: MOD_4:def 15
   IT is antilinear;
  attr IT is automorphism means
-:: MOD_4:def 15
+:: MOD_4:def 16
   IT is isomorphism;
  attr IT is antiautomorphism means
-:: MOD_4:def 16
+:: MOD_4:def 17
   IT is antiisomorphism;
 end;
 
@@ -319,7 +332,7 @@ theorem :: MOD_4:27
    J is automorphism
 iff (for x,y being Scalar of K holds J.(x+y) = J.x+J.y)
     & (for x,y being Scalar of K holds J.(x*y) = J.x*J.y)
-    & J.(1.K) = 1.K
+    & J.(1_K) = 1_K
     & J is one-to-one
     & rng J = the carrier of K;
 
@@ -327,7 +340,7 @@ theorem :: MOD_4:28
   J is antiautomorphism iff
        (for x,y being Scalar of K holds J.(x+y) = J.x+J.y)
      & (for x,y being Scalar of K holds J.(x*y) = J.y*J.x)
-     & J.(1.K) = 1.K
+     & J.(1_K) = 1_K
      & J is one-to-one
      & rng J = the carrier of K;
 
@@ -361,7 +374,7 @@ begin :: Morfizmy przeciwne do morfizmow pierscieni
 definition let K,L be non empty doubleLoopStr,
                J be Function of K,L;
  func opp(J) -> Function of K,opp(L) equals
-:: MOD_4:def 17
+:: MOD_4:def 18
    J;
 end;
 
@@ -424,7 +437,7 @@ reserve G,H for AddGroup;
 
 definition let G,H;
  mode Homomorphism of G,H -> Function of G,H means
-:: MOD_4:def 18
+:: MOD_4:def 19
   for x,y being Element of G holds it.(x+y) = it.x+it.y;
 end;
 
@@ -437,21 +450,21 @@ reserve f for Homomorphism of G,H;
 definition let G,H;
   let IT be Homomorphism of G,H;
  attr IT is monomorphism means
-:: MOD_4:def 19
+:: MOD_4:def 20
    IT is one-to-one;
 end;
 
 definition let G,H;
   let IT be Homomorphism of G,H;
  attr IT is epimorphism means
-:: MOD_4:def 20
+:: MOD_4:def 21
    rng IT = the carrier of H;
 end;
 
 definition let G,H;
   let IT be Homomorphism of G,H;
  attr IT is isomorphism means
-:: MOD_4:def 21
+:: MOD_4:def 22
   IT is one-to-one & rng IT = the carrier of H;
 end;
 
@@ -498,7 +511,7 @@ definition let K,L,J,V,W;
  canceled;
 
  mode Homomorphism of J,V,W -> Function of V,W means
-:: MOD_4:def 23
+:: MOD_4:def 24
 
     (for x,y being Vector of V holds it.(x+y) = it.x+it.y)
   & for a being Scalar of K, x being Vector of V holds it.(a*x) = J.a*it.x;
@@ -511,15 +524,15 @@ reserve f for Homomorphism of J,V,W;
 
 definition let K,L,J,V,W,f;
  pred f is_monomorphism_wrp J means
-:: MOD_4:def 24
+:: MOD_4:def 25
      f is one-to-one;
 
  pred f is_epimorphism_wrp J means
-:: MOD_4:def 25
+:: MOD_4:def 26
      rng f = the carrier of W;
 
  pred f is_isomorphism_wrp J means
-:: MOD_4:def 26
+:: MOD_4:def 27
        f is one-to-one & rng f = the carrier of W;
 end;
 
@@ -532,7 +545,7 @@ end;
 
 definition let K,J,V,f;
  pred f is_automorphism_wrp J means
-:: MOD_4:def 27
+:: MOD_4:def 28
        f is one-to-one
   & rng f = the carrier of V;
 end;
@@ -553,13 +566,13 @@ theorem :: MOD_4:51
 definition let K,V,W;
   let IT be Homomorphism of V,W;
  attr IT is monomorphism means
-:: MOD_4:def 28
+:: MOD_4:def 29
      IT is one-to-one;
  attr IT is epimorphism means
-:: MOD_4:def 29
+:: MOD_4:def 30
      rng IT = the carrier of W;
  attr IT is isomorphism means
-:: MOD_4:def 30
+:: MOD_4:def 31
        IT is one-to-one & rng IT = the carrier of W;
 end;
 
@@ -570,7 +583,7 @@ end;
 definition let K,V;
   let IT be Endomorphism of V;
  attr IT is automorphism means
-:: MOD_4:def 31
+:: MOD_4:def 32
        IT is one-to-one & rng IT = the carrier of V;
 end;
 

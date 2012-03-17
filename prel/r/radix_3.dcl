@@ -13,6 +13,7 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="NAT_1"/>
+<ArticleID name="MEMBERED"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
@@ -21,11 +22,11 @@
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSEQ_2"/>
-<ArticleID name="INT_1"/>
 <ArticleID name="CARD_3"/>
 <ArticleID name="PROB_1"/>
 <ArticleID name="SUPINF_1"/>
 <ArticleID name="MESFUNC1"/>
+<ArticleID name="INT_1"/>
 <ArticleID name="RADIX_1"/>
 <ArticleID name="RADIX_3"/>
 </Signature>
@@ -33,10 +34,10 @@
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="49"/>
+<Func kind="K" nr="50"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="192">
+<Func kind="K" nr="193">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -47,10 +48,10 @@
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="49"/>
+<Func kind="K" nr="50"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="193">
+<Func kind="K" nr="194">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

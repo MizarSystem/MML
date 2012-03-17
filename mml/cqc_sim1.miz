@@ -9,30 +9,31 @@ environ
  vocabularies FUNCT_1, FUNCT_4, FUNCOP_1, RELAT_1, BOOLE, CQC_LANG, QC_LANG1,
       ZF_LANG, FINSEQ_1, FUNCT_2, FINSUB_1, SQUARE_1, FINSET_1, QC_LANG3,
       GROUP_2, PRE_TOPC, PARTFUN1, SETWISEO, SETFAM_1, SUBSET_1, CQC_SIM1,
-      NAT_1;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, DOMAIN_1, MCART_1,
-      SETFAM_1, RELAT_1, RELSET_1, FUNCT_1, FUNCT_2, BINOP_1, PARTFUN1,
-      XXREAL_0, FUNCOP_1, FINSEQ_1, FINSET_1, FINSUB_1, FRAENKEL, NAT_1, NAT_D,
-      SETWISEO, QC_LANG1, QC_LANG2, QC_LANG3, CQC_LANG, FUNCT_4, RECDEF_1;
+      NAT_1, SEQ_4, ORDINAL2, ARYTM, MEMBERED, COMPLEX1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, DOMAIN_1,
+      MCART_1, SETFAM_1, RELAT_1, RELSET_1, FUNCT_1, FUNCT_2, BINOP_1,
+      PARTFUN1, XREAL_0, XXREAL_0, FUNCOP_1, FINSEQ_1, FINSET_1, FINSUB_1,
+      FRAENKEL, NAT_1, NAT_D, MEMBERED, SEQ_4, SETWISEO, QC_LANG1, QC_LANG2,
+      QC_LANG3, CQC_LANG, FUNCT_4, RECDEF_1;
  constructors SETFAM_1, RELAT_2, PARTFUN1, DOMAIN_1, BINOP_1, FUNCOP_1,
       FUNCT_4, SETWISEO, FRAENKEL, XXREAL_0, NAT_1, MEMBERED, RECDEF_1,
-      QC_LANG3, CQC_LANG, NAT_D;
+      QC_LANG3, CQC_LANG, NAT_D, SEQ_4;
  registrations SUBSET_1, RELSET_1, CQC_LANG, QC_LANG1, FINSUB_1, FUNCOP_1,
       FINSEQ_1, ARYTM_3, MEMBERED, FUNCT_2, PARTFUN1, ORDINAL2, XREAL_0,
-      XXREAL_0, ORDINAL1, NAT_1;
+      XXREAL_0, ORDINAL1, NAT_1, FRAENKEL, SEQ_4;
  requirements NUMERALS, REAL, BOOLE, SUBSET;
- definitions TARSKI, XBOOLE_0, BINOP_1, FUNCOP_1, QC_LANG3, SUBSET_1;
+ definitions TARSKI, XBOOLE_0, BINOP_1, FUNCOP_1, QC_LANG3, SUBSET_1, RELAT_1;
  theorems ZFMISC_1, DOMAIN_1, FINSEQ_1, CQC_LANG, QC_LANG1, PARTFUN1, QC_LANG3,
       MCART_1, FUNCT_1, FUNCT_2, NAT_1, TARSKI, FUNCOP_1, FUNCT_4, FINSEQ_2,
       FINSET_1, SETFAM_1, QC_LANG2, RELAT_1, RELSET_1, FINSEQ_3, XBOOLE_0,
-      XBOOLE_1, XXREAL_0;
+      XBOOLE_1, XXREAL_0, SEQ_4, MEMBERED, ORDINAL1;
  schemes CQC_LANG, FUNCT_2, ZFREFLE1, NAT_1, FRAENKEL, CARD_3, QC_LANG1,
       WELLORD2, BINOP_1;
 
 begin
 
 theorem Th1:
- for x,y being set, f being Function holds (f+*({x} --> y)).:{x} = {y}
+ for x,y being set, f being Function holds Im(f+*({x} --> y),x) = {y}
 proof let x,y be set, f be Function;
     now let u be set;
   thus u in (f+*({x} --> y)).:{x} implies u = y
@@ -50,7 +51,7 @@ A2: x in {x} by TARSKI:def 1;
 14;
   hence u = y implies u in (f+*({x} --> y)).:{x} by A2,FUNCT_1:def 12;
  end;
- hence (f+*({x} --> y)).:{x} = {y} by TARSKI:def 1;
+ hence Im(f+*({x} --> y),x) = {y} by TARSKI:def 1;
 end;
 
 theorem Th2:
@@ -1155,35 +1156,89 @@ A1: for p being Element of CQC-WFF, d being Element of NAT holds
   thus F(All(x,p)) = Q(x,F(p)) from CQC_LANG:sch 9(A1);
  end;
 
-definition let A be non empty Subset of NAT;
- func min A -> Element of NAT means  :Def8:
-   it in A & for k st k in A holds it <= k;
- existence
+notation let A be non empty natural-membered set;
+  synonym min A for lower_bound A;
+end;
+
+Lm11:
+for A being non empty natural-membered set, k be natural number st k in A &
+ for n being Element of NAT st n in A holds k <= n
+ holds k = min A
+proof
+  let A be non empty natural-membered set, k be natural number such that
+A2: k in A and
+A3: for n being Element of NAT st n in A holds k <= n;
+  defpred P[Element of NAT] means $1 in A;
+  consider a being Element of A;
+A4: now
+      let r be real number;
+      assume
+B1:   r in A;
+      then r is natural by MEMBERED:def 6;
+      then r in NAT by ORDINAL1:def 13;
+      hence k <= r by A3,B1;
+    end;
+    now
+      let t be real number;
+      assume for s being real number st s in A holds t <= s;
+      then
+B2:   t <= min A by SEQ_4:60;
+      min A <= k by A2,SEQ_4:def 5;
+      hence t <= k by B2,XXREAL_0:2;
+    end;
+    then k = min A by A4,SEQ_4:61;
+    hence thesis;
+end;
+
+Lm10:
+for A being non empty natural-membered set holds min A in A
+proof
+  let A be non empty natural-membered set;
+  defpred P[Element of NAT] means $1 in A;
+  consider a being Element of A;
+  a in A;
+  then a is natural by MEMBERED:def 6;
+  then a in NAT by ORDINAL1:def 13;
+  then
+A1: ex k being Element of NAT st P[k];
+    consider k being Element of NAT such that
+A2: P[k] and
+A3: for n being Element of NAT st P[n] holds k <= n from NAT_1:sch 5(A1);
+    k = min A by A2,A3,Lm11;
+    hence thesis by A2;
+end;
+
+definition
+  let A be non empty natural-membered set;
+  redefine func min A -> Element of NAT means :Def8:
+  it in A & for k being natural number st k in A holds it <= k;
+  coherence
   proof
-   consider x being Element of A;
-   defpred P[Element of NAT] means $1 in A;
-    x is Element of NAT;
-   then A1: ex x be Element of NAT st P[x];
-   thus ex n be Element of NAT st P[n] & for k st P[k] holds n <= k
-    from NAT_1:sch 5(A1);
+    min A in A by Lm10;
+    then min A is natural by MEMBERED:def 6;
+    hence thesis by ORDINAL1:def 13;
   end;
- uniqueness
+  compatibility
   proof
-   let i,n; assume A2: i in A & for k st k in A holds i <= k;
-   assume n in A & for k st k in A holds n <= k;
-   then i <= n & n <= i by A2;
-   hence thesis by XXREAL_0:1;
+    let m be Element of NAT;
+    hereby
+      assume
+A1:   m = min A;
+      hence m in A by Lm10;
+      thus for k being natural number holds
+      k in A implies m <= k by A1,SEQ_4:def 5;
+    end;
+    assume
+A2: m in A;
+    assume for k being natural number st k in A holds m <= k;
+    then for k being Element of NAT st k in A holds m <= k;
+    hence thesis by A2,Lm11;
   end;
 end;
 
 theorem Th19:
- for A,B being non empty Subset of NAT st A c= B
-   holds min B <= min A
- proof let A,B be non empty Subset of NAT such that
-A1: A c= B;
-      min A in A by Def8;
-   hence min B <= min A by A1,Def8;
- end;
+ for A,B being non empty natural-membered set st A c= B
+ holds min B <= min A by SEQ_4:64;
 
 theorem
  Th20: for p being Element of QC-WFF holds still_not-bound_in p is finite
@@ -1455,8 +1510,7 @@ A5:     k = e & for i st k<=i holds not x.i in
  still_not-bound_in p '&' q;
          now let i;
        assume A6: k<=i;
-            still_not-bound_in q c= still_not-bound_in p '&' q by A1,XBOOLE_1:7
-;
+       still_not-bound_in q c= still_not-bound_in p '&' q by A1,XBOOLE_1:7;
        hence not x.i in still_not-bound_in q by A5,A6;
       end;
      hence e in NBI q by A5;
@@ -1466,7 +1520,7 @@ A2,Th19;
   thus thesis by A7;
  end;
 
-definition let X be non empty set;
+definition let X be set;
  redefine func id X -> Element of Funcs(X,X);
   coherence
    proof
@@ -2075,8 +2129,8 @@ A6:  P[All(x,q),k,K,f];
     assume x.i in (f+*({x} --> x.k)).:(K \/ {x});
     then x.i in (f+*({x} --> x.k)).:K \/ (f+*({x} --> x.k)).:
 {x} by RELAT_1:153;
-    then A7:   x.i in (f+*({x} --> x.k)).:K or x.i in (f+*({x} --> x.k)).:{x}
-      by XBOOLE_0:def 2;
+    then A7:   x.i in (f+*({x} --> x.k)).:K or x.i in Im(f+*({x} --> x.k),x)
+       by XBOOLE_0:def 2;
        (f+*({x} --> x.k)).:K c= f.:K \/ {x.k} by Th2;
     then x.i in f.:K or x.i in {x.k} by A7,Th1,XBOOLE_0:def 2;
     then i < k or x.i = x.k by A6,TARSKI:def 1;

@@ -37,11 +37,11 @@
 <CCluster>
 <ArgTypes/>
 <Cluster>
-<Adjective nr="84"/>
+<Adjective nr="86"/>
 </Cluster>
 <Typ kind="M" nr="7">
 <Cluster/>
-<Func kind="K" nr="41"/>
+<Func kind="K" nr="42"/>
 </Typ>
 <Cluster>
 <Adjective nr="5"/>

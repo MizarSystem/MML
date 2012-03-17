@@ -8,19 +8,20 @@ environ
 
  vocabularies FINSEQ_1, BOOLE, FUNCT_1, RELAT_1, ARYTM_1, RELAT_2, FIN_TOPO,
       FINTOPO3, INT_1, PRE_TOPC, CONNSP_1, SUBSET_1, ORDINAL2, BORSUK_2,
-      FINTOPO6, RFINSEQ, FINSEQ_4, ORDERS_1, NAT_1;
+      FINTOPO6, RFINSEQ, FINSEQ_4, ORDERS_1, NAT_1, EQREL_1, COMPLEX1;
  notations TARSKI, XBOOLE_0, SUBSET_1, XCMPLX_0, NUMBERS, XXREAL_0, NAT_1,
-      NAT_D, DOMAIN_1, FUNCT_1, RELSET_1, FINSEQ_1, STRUCT_0, ORDERS_2,
+      NAT_D, DOMAIN_1, RELAT_1, FUNCT_1, RELSET_1, EQREL_1,
+      FINSEQ_1, STRUCT_0, ORDERS_2,
       FIN_TOPO, FINTOPO3, BINARITH, ENUMSET1, FINTOPO4, PRE_TOPC, RFINSEQ,
       FINSEQ_4;
  constructors FINTOPO3, FINTOPO4, BINARITH, ENUMSET1, LIMFUNC1, RFUNCT_3,
       REAL_1, NAT_1, XXREAL_0, PRE_TOPC, FINTOPO5, FIN_TOPO, DOMAIN_1, GROUP_1,
-      FINSEQ_4, SETFAM_1, ORDINAL2, RFINSEQ, NAT_D;
+      FINSEQ_4, SETFAM_1, ORDINAL2, RFINSEQ, NAT_D, EQREL_1;
  registrations SUBSET_1, INT_1, RELSET_1, STRUCT_0, NAT_1, XREAL_0, MEMBERED,
       FIN_TOPO, XXREAL_0, FINSEQ_1, NUMBERS, ORDINAL2;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, XBOOLE_0, PRE_TOPC, STRUCT_0, SUBSET_1, FIN_TOPO,
-      FINSEQ_1;
+      FINSEQ_1, EQREL_1, RELAT_1;
  theorems NAT_1, ZFMISC_1, REAL_1, FUNCT_1, FINSEQ_1, RELSET_1, XBOOLE_0,
       XBOOLE_1, FIN_TOPO, FINTOPO3, BINARITH, ENUMSET1, STRUCT_0, FINTOPO4,
       JORDAN3, JORDAN4, TARSKI, XREAL_1, SUBSET_1, PRE_TOPC, RFINSEQ, FINSEQ_3,
@@ -172,12 +173,12 @@ definition let T be RelStr;
    the carrier of it c= the carrier of T &
    for x being Element of it st
              x in the carrier of it holds
-    U_FT x =((the InternalRel of T).:{x}) /\ the carrier of it;
+    U_FT x =Im(the InternalRel of T,x) /\ the carrier of it;
   existence
    proof
     for x being Element of T st
              x in the carrier of T holds
-     U_FT x =((the InternalRel of T).:{x})/\ the carrier of T by XBOOLE_1:28;
+     U_FT x =Im(the InternalRel of T,x)/\ the carrier of T by XBOOLE_1:28;
     hence thesis ;
    end;
 end;
@@ -190,7 +191,7 @@ for T being RelStr holds
     set S = the RelStr of T;
     for x being Element of S st
              x in the carrier of S holds
-     U_FT x =((the InternalRel of T).:{x})/\ (the carrier of T) by XBOOLE_1:28;
+     U_FT x =Im(the InternalRel of T,x)/\ (the carrier of T) by XBOOLE_1:28;
     hence thesis by Def2;
   end;
 
@@ -218,15 +219,15 @@ definition let T be non empty RelStr, P be non empty Subset of T;
     [#]it = P;
   existence
   proof
-    deffunc F(set) = ((the InternalRel of T).:{$1}) /\ P;
+    deffunc F(set) = Im(the InternalRel of T,$1) /\ P;
 A1: for x being Element of T st x in P holds F(x) c= P by XBOOLE_1:17;
     consider G being Relation of P such that
-A2: for y being Element of T st y in P holds G.:{y}=F(y)
+A2: for y being Element of T st y in P holds Im(G,y)=F(y)
             from RELSET_1:sch 3(A1);
     set FS=RelStr(# P,G #);
     A3: for x being Element of FS st
        x in the carrier of FS holds
-       U_FT x =((the InternalRel of T).:{x})/\ (the carrier of FS) by A2;
+       U_FT x =Im(the InternalRel of T,x)/\ (the carrier of FS) by A2;
     A4: [#]FS = the carrier of FS;
     FS is strict non empty SubSpace of T by Def2,A3,STRUCT_0:def 1;
    hence thesis by A4;
@@ -237,15 +238,15 @@ A2: for y being Element of T st y in P holds G.:{y}=F(y)
     assume that A5:[#] Z1 = P and A6:[#] Z2 = P;
      reconsider R1 = the InternalRel of Z1,
                 R2 = the InternalRel of Z2 as Relation of P by A5,A6;
-    for z being set st z in P holds R1.:{z} = R2.:{z}
+    for z being set st z in P holds Im(R1,z) = Im(R2,z)
     proof let z be set;
       assume A7: z in P;then
       reconsider z1=z as Element of Z1 by A5;
       reconsider z2=z as Element of Z2 by A7,A6;
-     thus R1.:{z} = U_FT z1
-         .= ((the InternalRel of T).:{z1})/\ (the carrier of Z1) by Def2
+     thus Im(R1,z) = U_FT z1
+         .= Im(the InternalRel of T,z1)/\ (the carrier of Z1) by Def2
          .= U_FT z2 by Def2,A5,A6
-         .= R2.:{z};
+         .= Im(R2,z);
     end;
      hence Z1 = Z2 by A5,A6,RELSET_1:54;
   end;
@@ -356,7 +357,7 @@ proof
       A5: y in the carrier of X';
       the carrier of Y c= the carrier of FT by Def2;then
       reconsider z=y as Element of FT by A5;
-      U_FT y =((the InternalRel of FT).:{y})/\ (the carrier of X')
+      U_FT y =Im(the InternalRel of FT,y)/\ (the carrier of X')
        by Def2;
      then
       U_FT z meets A by XBOOLE_1:74,A1,A4;then

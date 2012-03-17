@@ -34,7 +34,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="27" value="false"/>
-<Adjective nr="65"/>
+<Adjective nr="66"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -44,11 +44,11 @@
 </Typ>
 <Cluster>
 <Adjective nr="27" value="false"/>
-<Adjective nr="65"/>
 <Adjective nr="66"/>
 <Adjective nr="67"/>
 <Adjective nr="68"/>
 <Adjective nr="69"/>
+<Adjective nr="70"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -58,11 +58,11 @@
 </Typ>
 <Cluster>
 <Adjective nr="27" value="false"/>
-<Adjective nr="65"/>
 <Adjective nr="66"/>
 <Adjective nr="67"/>
 <Adjective nr="68"/>
-<Adjective nr="70"/>
+<Adjective nr="69"/>
+<Adjective nr="71"/>
 </Cluster>
 </RCluster>
 </Registrations>

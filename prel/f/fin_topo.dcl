@@ -34,7 +34,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="39" value="false"/>
-<Adjective nr="50"/>
+<Adjective nr="51"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -45,26 +45,26 @@
 <Cluster>
 <Adjective nr="39" value="false"/>
 <Adjective nr="45"/>
-<Adjective nr="50"/>
-<Adjective nr="55"/>
+<Adjective nr="51"/>
+<Adjective nr="52"/>
 </Cluster>
 </RCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="187"/>
+<Func kind="K" nr="189"/>
 <Cluster>
 <Adjective nr="39" value="false"/>
-<Adjective nr="50"/>
+<Adjective nr="51"/>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="187"/>
+<Func kind="K" nr="189"/>
 <Cluster>
 <Adjective nr="39" value="false"/>
 <Adjective nr="45"/>
-<Adjective nr="50"/>
-<Adjective nr="55"/>
+<Adjective nr="51"/>
+<Adjective nr="52"/>
 </Cluster>
 </FCluster>
 </Registrations>

@@ -21,12 +21,12 @@
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="INT_1"/>
+<ArticleID name="COMSEQ_2"/>
+<ArticleID name="SEQM_3"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="COMPLEX1"/>
 <ArticleID name="INT_2"/>
 <ArticleID name="NEWTON"/>
-<ArticleID name="COMSEQ_2"/>
-<ArticleID name="SEQM_3"/>
 <ArticleID name="COMSEQ_3"/>
 <ArticleID name="SIN_COS"/>
 </Signature>
@@ -34,14 +34,14 @@
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="88"/>
+<Func kind="K" nr="89"/>
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="88"/>
+<Func kind="K" nr="89"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="183">
+<Func kind="K" nr="185">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -55,10 +55,10 @@
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="85"/>
+<Func kind="K" nr="86"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="188">
+<Func kind="K" nr="190">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -66,15 +66,15 @@
 <Adjective nr="4"/>
 <Adjective nr="7" value="false"/>
 <Adjective nr="8">
-<Func kind="K" nr="88"/>
-<Func kind="K" nr="85"/>
+<Func kind="K" nr="89"/>
+<Func kind="K" nr="86"/>
 </Adjective>
 <Adjective nr="9">
-<Func kind="K" nr="88"/>
-<Func kind="K" nr="85"/>
+<Func kind="K" nr="89"/>
+<Func kind="K" nr="86"/>
 </Adjective>
+<Adjective nr="31"/>
 <Adjective nr="32"/>
-<Adjective nr="33"/>
 <Adjective nr="40"/>
 <Adjective nr="41"/>
 </Cluster>
@@ -87,7 +87,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="202">
+<Func kind="K" nr="204">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -104,7 +104,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="205">
+<Func kind="K" nr="207">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -121,7 +121,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="210">
+<Func kind="K" nr="212">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

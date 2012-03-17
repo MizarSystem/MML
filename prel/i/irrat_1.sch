@@ -32,24 +32,24 @@
 <Cluster>
 <Adjective nr="4"/>
 <Adjective nr="8">
-<Func kind="K" nr="82"/>
-<Func kind="K" nr="78"/>
+<Func kind="K" nr="83"/>
+<Func kind="K" nr="79"/>
 </Adjective>
 </Cluster>
-<Func kind="K" nr="82"/>
-<Func kind="K" nr="78"/>
+<Func kind="K" nr="83"/>
+<Func kind="K" nr="79"/>
 </Typ>
 <Not>
 <For>
 <Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="78"/>
-<Func kind="K" nr="82"/>
+<Func kind="K" nr="79"/>
+<Func kind="K" nr="83"/>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="85">
-<Func kind="K" nr="82"/>
-<Func kind="K" nr="78"/>
+<Func kind="K" nr="86">
+<Func kind="K" nr="83"/>
+<Func kind="K" nr="79"/>
 <Var nr="1"/>
 <Var nr="2"/>
 </Func>
@@ -66,37 +66,37 @@
 <Cluster>
 <Adjective nr="4"/>
 <Adjective nr="8">
-<Func kind="K" nr="82"/>
-<Func kind="K" nr="78"/>
+<Func kind="K" nr="83"/>
+<Func kind="K" nr="79"/>
 </Adjective>
 </Cluster>
-<Func kind="K" nr="82"/>
-<Func kind="K" nr="78"/>
+<Func kind="K" nr="83"/>
+<Func kind="K" nr="79"/>
 </Typ>
 <For>
 <Typ kind="M" nr="5">
 <Cluster>
 <Adjective nr="4"/>
 <Adjective nr="8">
-<Func kind="K" nr="82"/>
-<Func kind="K" nr="78"/>
+<Func kind="K" nr="83"/>
+<Func kind="K" nr="79"/>
 </Adjective>
 </Cluster>
-<Func kind="K" nr="82"/>
-<Func kind="K" nr="78"/>
+<Func kind="K" nr="83"/>
+<Func kind="K" nr="79"/>
 </Typ>
 <Not>
 <And>
 <For>
 <Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="78"/>
-<Func kind="K" nr="82"/>
+<Func kind="K" nr="79"/>
+<Func kind="K" nr="83"/>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="85">
-<Func kind="K" nr="82"/>
-<Func kind="K" nr="78"/>
+<Func kind="K" nr="86">
+<Func kind="K" nr="83"/>
+<Func kind="K" nr="79"/>
 <Var nr="1"/>
 <Var nr="3"/>
 </Func>
@@ -108,13 +108,13 @@
 <For>
 <Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="78"/>
-<Func kind="K" nr="82"/>
+<Func kind="K" nr="79"/>
+<Func kind="K" nr="83"/>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="85">
-<Func kind="K" nr="82"/>
-<Func kind="K" nr="78"/>
+<Func kind="K" nr="86">
+<Func kind="K" nr="83"/>
+<Func kind="K" nr="79"/>
 <Var nr="2"/>
 <Var nr="3"/>
 </Func>

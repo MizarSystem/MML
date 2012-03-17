@@ -10,43 +10,44 @@ environ
  vocabularies ARYTM, SEQ_1, PARTFUN1, ARYTM_1, RELAT_1, BOOLE, SQUARE_1,
       ARYTM_3, PROB_1, RCOMP_1, SEQ_2, FUNCT_1, ORDINAL2, ABSVALUE, SEQM_3,
       LATTICES, RFUNCT_1, RFUNCT_2, FINSEQ_1, LIMFUNC1, FUNCT_3, FUNCOP_1,
-      FRECHET2, NAT_1;
+      FRECHET2, NAT_1, SUPINF_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
       COMPLEX1, REAL_1, NAT_1, NAT_D, FUNCOP_1, SEQ_1, SEQ_2, SEQM_3, PROB_1,
       RELSET_1, SQUARE_1, PARTFUN1, FUNCT_3, RFUNCT_1, RCOMP_1, RFUNCT_2,
-      XXREAL_0;
+      XXREAL_0, XXREAL_1;
  constructors PARTFUN1, FUNCOP_1, REAL_1, SQUARE_1, NAT_1, COMPLEX1, SEQ_2,
       PROB_1, SEQM_3, RCOMP_1, RFUNCT_1, RFUNCT_2, NAT_D;
  registrations RELSET_1, XREAL_0, SEQ_1, SEQM_3, ARYTM_3, MEMBERED, ORDINAL1,
-      XXREAL_0;
+      XXREAL_0, XXREAL_1, XREAL_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
 
 
 begin
 
- reserve r,r1,r2,g,g1,g2 for real number,
+ reserve s,r,r1,r2,g,g1,g2 for real number,
          n,m,k for Element of NAT,
          seq,seq1,seq2 for Real_Sequence,
-         f,f1,f2 for PartFunc of REAL,REAL;
+         f,f1,f2 for PartFunc of REAL,REAL,
+         x for set;
 
 definition let n,m;
   redefine func max(n,m) -> Element of NAT;
 end;
 
 notation let r be real number;
-  synonym left_open_halfline(r) for halfline(r);
+  synonym left_open_halfline r for halfline r;
 end;
 
 definition let r be real number;
-  func left_closed_halfline(r) -> Subset of REAL equals
+  func left_closed_halfline r -> Subset of REAL equals
 :: LIMFUNC1:def 1
-    {g where g is Real : g<=r};
-  func right_closed_halfline(r) -> Subset of REAL equals
+].-infty,r.];
+  func right_closed_halfline r -> Subset of REAL equals
 :: LIMFUNC1:def 2
-    {g where g is Real: r<=g};
-  func right_open_halfline(r) -> Subset of REAL equals
+[.r,+infty.[;
+  func right_open_halfline r -> Subset of REAL equals
 :: LIMFUNC1:def 3
-    {g where g is Real : r<g};
+].r,+infty.[;
 end;
 
 canceled 7;
@@ -758,3 +759,18 @@ theorem :: LIMFUNC1:150
     f is convergent_in-infty & lim_in-infty f=0 &
 (ex r st for g st g in dom f /\ left_open_halfline(r) holds f.g<0) implies
 f^ is divergent_in-infty_to-infty;
+
+theorem :: LIMFUNC1:151
+ ].-infty,s.[ = {g where g is Real : g<s};
+
+theorem :: LIMFUNC1:152
+ ].s,+infty.[ = {g where g is Real : s<g};
+
+theorem :: LIMFUNC1:153
+].-infty,s.] = {g where g is Real : g<=s};
+
+theorem :: LIMFUNC1:154
+[.s,+infty.[ = {g where g is Real : s<=g};
+
+theorem :: LIMFUNC1:155
+ REAL = ].-infty,+infty.[;

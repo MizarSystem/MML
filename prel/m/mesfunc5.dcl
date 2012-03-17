@@ -10,7 +10,6 @@
 <ArticleID name="TARSKI"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
-<ArticleID name="XCMPLX_0"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
@@ -18,21 +17,16 @@
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FUNCOP_1"/>
-<ArticleID name="FINSEQ_2"/>
 <ArticleID name="FINSUB_1"/>
-<ArticleID name="XREAL_0"/>
-<ArticleID name="INT_1"/>
-<ArticleID name="COMPLEX1"/>
-<ArticleID name="INT_2"/>
-<ArticleID name="NEWTON"/>
+<ArticleID name="XXREAL_0"/>
+<ArticleID name="MEMBERED"/>
+<ArticleID name="SUPINF_1"/>
 <ArticleID name="CARD_4"/>
 <ArticleID name="SUPINF_2"/>
-<ArticleID name="MEMBERED"/>
+<ArticleID name="XREAL_0"/>
 <ArticleID name="SEQ_1"/>
 <ArticleID name="CARD_3"/>
 <ArticleID name="PROB_1"/>
-<ArticleID name="XXREAL_0"/>
-<ArticleID name="SUPINF_1"/>
 <ArticleID name="MEASURE1"/>
 <ArticleID name="FUNCT_3"/>
 <ArticleID name="SEQFUNC"/>
@@ -52,16 +46,16 @@
 </ArgTypes>
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="39"/>
+<Adjective nr="49"/>
 </Cluster>
 <Typ kind="M" nr="5">
 <Cluster/>
 <LocusVar nr="1"/>
-<Func kind="K" nr="46"/>
+<Func kind="K" nr="47"/>
 </Typ>
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="71"/>
+<Adjective nr="69"/>
 </Cluster>
 </CCluster>
 <CCluster>
@@ -74,16 +68,16 @@
 </ArgTypes>
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="70"/>
+<Adjective nr="68"/>
 </Cluster>
 <Typ kind="M" nr="5">
 <Cluster/>
 <LocusVar nr="1"/>
-<Func kind="K" nr="46"/>
+<Func kind="K" nr="47"/>
 </Typ>
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="72"/>
+<Adjective nr="70"/>
 </Cluster>
 </CCluster>
 </Registrations>

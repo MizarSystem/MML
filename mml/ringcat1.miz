@@ -8,17 +8,18 @@ environ
 
  vocabularies CLASSES2, VECTSP_1, INCSP_1, FUNCT_1, CAT_1, FUNCSDOM, GRCAT_1,
       RELAT_1, MIDSP_1, ARYTM_3, ENS_1, FUNCT_2, RLVECT_1, MOD_2, TARSKI,
-      PARTFUN1, RINGCAT1, GROUP_1, NAT_1;
+      PARTFUN1, RINGCAT1, GROUP_1, NAT_1, COHSP_1, ENDALG;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, FUNCT_1, MCART_1, RELSET_1,
       PARTFUN1, FUNCT_2, BINOP_1, STRUCT_0, RLVECT_1, GROUP_1, VECTSP_1,
-      GRCAT_1, FUNCSDOM, CAT_1, CLASSES2, MOD_2;
- constructors PARTFUN1, DOMAIN_1, ALGSTR_1, GRCAT_1, MOD_2, NAT_D;
+      GRCAT_1, FUNCSDOM, CAT_1, CLASSES2, MOD_2, GROUP_6;
+ constructors PARTFUN1, DOMAIN_1, ALGSTR_1, GRCAT_1, MOD_2, NAT_D, GROUP_6;
  registrations VECTSP_2, MOD_2, RELSET_1, STRUCT_0, GRCAT_1, SUBSET_1,
       XBOOLE_0, FUNCT_2;
  requirements SUBSET, BOOLE;
- definitions GRCAT_1, BINOP_1;
+ definitions GRCAT_1, BINOP_1, STRUCT_0, GROUP_1, GROUP_6, RLVECT_1,
+   VECTSP_1;
  theorems CAT_1, FUNCT_2, GRCAT_1, MCART_1, MOD_2, TARSKI, RELAT_1, ZFMISC_1,
-      XBOOLE_0, FUNCT_1, BINOP_1;
+      XBOOLE_0, FUNCT_1, BINOP_1, GROUP_6, GROUP_1;
  schemes FUNCT_2, BINOP_1, TARSKI;
 
 begin
@@ -36,9 +37,14 @@ definition let G,H be non empty doubleLoopStr;
  canceled;
 
  attr IT is linear means
- :Def2: (for x,y being Scalar of G holds IT.(x+y) = IT.x+IT.y)
-        & (for x,y being Scalar of G holds IT.(x*y) = IT.x*IT.y)
-        & IT.(1.G) = 1.H;
+ :Def2: IT is additive multiplicative unity-preserving;
+end;
+
+registration let G,H be non empty doubleLoopStr;
+  cluster linear -> additive multiplicative unity-preserving Function of G,H;
+  coherence by Def2;
+  cluster additive multiplicative unity-preserving -> linear Function of G,H;
+  coherence by Def2;
 end;
 
 canceled 2;
@@ -50,23 +56,28 @@ Th3:for G1,G2,G3 being non empty doubleLoopStr,
  proof
    let G1,G2,G3 be non empty doubleLoopStr,
        f be Function of G1,G2, g be Function of G2,G3 such that
-   A1: f is linear and
-   A2: g is linear;
+   A1: f is additive multiplicative unity-preserving and
+   A2: g is additive multiplicative unity-preserving;
    set h = g*f;
-   A3: now let x,y be Scalar of G1;
+   thus h is additive
+   proof
+   let x,y be Scalar of G1;
      A4: g.(f.x) = h.x & g.(f.y) = h.y by FUNCT_2:21;
      thus h.(x+y) = g.(f.(x+y)) by FUNCT_2:21
-                 .= g.(f.x+f.y) by A1,Def2
-                 .= h.x+h.y by A2,A4,Def2;end;
-   A5: now let x,y be Scalar of G1;
+                 .= g.(f.x+f.y) by A1,GRCAT_1:def 13
+                 .= h.x+h.y by A2,A4,GRCAT_1:def 13;
+               end;
+    thus h is multiplicative
+    proof
+    let x,y be Scalar of G1;
      A6: g.(f.x) = h.x & g.(f.y) = h.y by FUNCT_2:21;
      thus h.(x*y) = g.(f.(x*y)) by FUNCT_2:21
-                 .= g.(f.x*f.y) by A1,Def2
-                 .= h.x*h.y by A2,A6,Def2;end;
-      h.(1.G1) = g.(f.(1.G1)) by FUNCT_2:21
-           .= g.(1.G2) by A1,Def2
-           .= 1.G3 by A2,Def2;
-   hence thesis by A3,A5,Def2;
+                 .= g.(f.x*f.y) by A1,GROUP_6:def 7
+                 .= h.x*h.y by A2,A6,GROUP_6:def 7;
+              end;
+    thus h.(1_G1) = g.(f.(1_G1)) by FUNCT_2:21
+           .= g.(1_G2) by A1,GROUP_1:def 17
+           .= 1_G3 by A2,GROUP_1:def 17;
  end;
 
                       ::
@@ -98,17 +109,18 @@ Lm1: for G being non empty doubleLoopStr holds id G is linear
 proof
   let G be non empty doubleLoopStr;
   set f = id G;
-  A1: now
+  thus f is additive
+  proof
     let x,y be Scalar of G;
         f.(x+y) = x+y & f.x = x & f.y = y by FUNCT_1:35;
     hence f.(x+y) = f.x+f.y;end;
-  A2: now
+  thus f is multiplicative
+  proof
     let x,y be Scalar of G;
         f.(x*y) = x*y
        & f.x = x & f.y = y by FUNCT_1:35;
     hence f.(x*y) = f.x*f.y;end;
-     f.(1.G) = 1.G by FUNCT_1:35;
-  hence thesis by A1,A2,Def2;
+   thus  f.(1_G) = 1_G by FUNCT_1:35;
 end;
 
 registration let G be non empty doubleLoopStr;
@@ -169,12 +181,13 @@ end;
 Lm2: the RingMorphismStr of F is RingMorphism-like
  proof set S = the RingMorphismStr of F;
 A1: fun F is linear by Def6;
+    then fun F is additive by Def2;
   hence for x,y being Scalar of the Dom of S holds
-    (fun S).(x+y) = (fun S).x+(fun S).y by Def2;
-  thus for x,y being Scalar of the Dom of S holds
-    (fun S).(x*y) = (fun S).x*(fun S).y by A1,Def2;
-  thus (fun S).(1.the Dom of S)
-         = 1.the Cod of S by A1,Def2;
+    (fun S).(x+y) = (fun S).x+(fun S).y by GRCAT_1:def 13;
+    fun F is multiplicative by A1,Def2;
+    hence for x,y being Scalar of the Dom of S holds
+    (fun S).(x*y) = (fun S).x*(fun S).y by GROUP_6:def 7;
+    thus thesis by A1,Def2;
  end;
 
 definition let G,H;
@@ -461,8 +474,7 @@ Th10:for f,g being strict RingMorphism st dom g = cod f holds
 
  theorem
  Th11:for f,g being strict RingMorphism st dom g = cod f holds
-     dom(g*f) = dom f
-   & cod (g*f) = cod g
+     dom(g*f) = dom f & cod (g*f) = cod g
  proof
    let f,g be strict RingMorphism; assume
        dom g = cod f;
@@ -531,7 +543,7 @@ Th10:for f,g being strict RingMorphism st dom g = cod f holds
       reconsider f' = f as Morphism of H,G by A2,Th6;
       consider m being Function of H,G such that
       A4: f' = RingMorphismStr(#H,G,m#) by A3,Lm8;
-          (id G)*m = m by GRCAT_1:12;
+          (id G)*m = m by FUNCT_2:23;
       hence i*f = f by A1,A2,A4,Def10;
     end;
    thus for g being strict RingMorphism st dom g = G holds g*(ID G) = g
@@ -543,7 +555,7 @@ Th10:for f,g being strict RingMorphism st dom g = cod f holds
       reconsider f' = f as Morphism of G,H by A5,Th6;
       consider m being Function of G,H such that
       A7: f' = RingMorphismStr(#G,H,m#) by A6,Lm8;
-          m*(id G) = m by GRCAT_1:12;
+          m*(id G) = m by FUNCT_2:23;
       hence f*i = f by A1,A5,A7,Def10;
     end;
  end;
@@ -767,9 +779,9 @@ definition let x,y;
     & x1 = the carrier of G
     & x2 = the add of G
     & x3 = comp G
-    & x4 = the Zero of G
+    & x4 = 0.G
     & x5 = the mult of G
-    & x6 = the unity of G;
+    & x6 = 1.G;
 end;
 
 theorem
@@ -784,42 +796,42 @@ Th20:for x,y1,y2 being set st GO x,y1 & GO x,y2 holds y1 = y2
                  & a1 = the carrier of G
                  & a2 = the add of G
                  & a3 = comp G
-                 & a4 = the Zero of G
+                 & a4 = 0.G
                  & a5 = the mult of G
-                 & a6 = the unity of G by A1,Def16;
+                 & a6 = 1.G by A1,Def16;
    consider b1,b2,b3,b4,b5,b6 being set such that
    A5: x = [[b1,b2,b3,b4],b5,b6] and
    A6: ex G being strict Ring st y2 = G
                & b1 = the carrier of G
                & b2 = the add of G
                & b3 = comp G
-               & b4 = the Zero of G
+               & b4 = 0.G
                & b5 = the mult of G
-               & b6 = the unity of G by A2,Def16;
+               & b6 = 1.G by A2,Def16;
    consider G1 being strict Ring such that
    A7: y1 = G1
        & a1 = the carrier of G1
        & a2 = the add of G1
        & a3 = comp G1
-       & a4 = the Zero of G1
+       & a4 = 0.G1
        & a5 = the mult of G1
-       & a6 = the unity of G1 by A4;
+       & a6 = 1.G1 by A4;
    consider G2 being strict Ring such that
    A8: y2 = G2
        & b1 = the carrier of G2
        & b2 = the add of G2
        & b3 = comp G2
-       & b4 = the Zero of G2
+       & b4 = 0.G2
        & b5 = the mult of G2
-       & b6 = the unity of G2 by A6;
+       & b6 = 1.G2 by A6;
       [a1,a2,a3,a4] = [b1,b2,b3,b4] & a5 = b5 & a6 = b6
  by A3,A5,MCART_1:28;
      then the carrier of G1 = the carrier of G2
    & the add of G1 = the add of G2
    & comp G1 = comp G2
-   & the Zero of G1 = the Zero of G2
+   & 0.G1 = 0.G2
    & the mult of G1 = the mult of G2
-   & the unity of G1 = the unity of G2 by A7,A8,MCART_1:33;
+   & 1.G1 = 1.G2 by A7,A8,MCART_1:33;
    hence thesis by A7,A8;
  end;
 
@@ -831,9 +843,9 @@ Th21: ex x st x in UN & GO x,Z3
         x1 = the carrier of G,
         x2 = the add of G,
         x3 = comp G,
-        x4 = the Zero of G,
+        x4 = 0.G,
         x5 = the mult of G,
-        x6 = the unity of G as Element of UN by MOD_2:40;
+        x6 = 1.G as Element of UN by MOD_2:40;
     set x' = [x1,x2,x3,x4]; set x = [x',x5,x6];
        x' is Element of UN by GRCAT_1:3;
     then A1: x is Element of UN by GRCAT_1:3;
@@ -895,9 +907,9 @@ Th23:for x being Element of RingObjects(UN) holds x is strict Ring
     & x1 = the carrier of G
     & x2 = the add of G
     & x3 = comp G
-    & x4 = the Zero of G
+    & x4 = 0.G
     & x5 = the mult of G
-    & x6 = the unity of G by A1,Def16;
+    & x6 = 1.G by A1,Def16;
    hence thesis;
  end;
 
@@ -1242,9 +1254,9 @@ A1:    x in UN & GO x,b by Def17;
     & x1 = the carrier of G
     & x2 = the add of G
     & x3 = comp G
-    & x4 = the Zero of G
+    & x4 = 0.G
     & x5 = the mult of G
-    & x6 = the unity of G by A1,Def16;
+    & x6 = 1.G by A1,Def16;
   hence b is strict Element of V;
   thus b' is Object of C;
  end;

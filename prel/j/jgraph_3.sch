@@ -32,12 +32,12 @@
 </Signature>
 <Scheme>
 <ArgTypes/>
-<Pred kind="R" nr="8">
+<Pred kind="R" nr="13">
 <Fraenkel>
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="193">
+<Func kind="K" nr="195">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -50,26 +50,26 @@
 <Not>
 <Pred kind="R" nr="1">
 <Var nr="1"/>
-<Func kind="K" nr="194">
+<Func kind="K" nr="196">
 <Num nr="2"/>
 </Func>
 </Pred>
 </Not>
 </And>
 </Fraenkel>
-<Func kind="K" nr="27">
+<Func kind="K" nr="28">
 <Func kind="U" nr="1">
-<Func kind="K" nr="193">
+<Func kind="K" nr="195">
 <Num nr="2"/>
 </Func>
 </Func>
-<Func kind="K" nr="215">
+<Func kind="K" nr="217">
 <Func kind="U" nr="1">
-<Func kind="K" nr="193">
+<Func kind="K" nr="195">
 <Num nr="2"/>
 </Func>
 </Func>
-<Func kind="K" nr="194">
+<Func kind="K" nr="196">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -83,7 +83,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="193">
+<Func kind="K" nr="195">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -96,16 +96,16 @@
 <Not>
 <Pred kind="R" nr="1">
 <Var nr="1"/>
-<Func kind="K" nr="194">
+<Func kind="K" nr="196">
 <Num nr="2"/>
 </Func>
 </Pred>
 </Not>
 </And>
 </Fraenkel>
-<Func kind="K" nr="30">
+<Func kind="K" nr="31">
 <Func kind="U" nr="1">
-<Func kind="K" nr="193">
+<Func kind="K" nr="195">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -113,7 +113,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="193">
+<Func kind="K" nr="195">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -123,19 +123,19 @@
 <Var nr="1"/>
 </Pred>
 </Fraenkel>
-<Func kind="K" nr="27">
+<Func kind="K" nr="28">
 <Func kind="U" nr="1">
-<Func kind="K" nr="193">
+<Func kind="K" nr="195">
 <Num nr="2"/>
 </Func>
 </Func>
-<Func kind="K" nr="215">
+<Func kind="K" nr="217">
 <Func kind="U" nr="1">
-<Func kind="K" nr="193">
+<Func kind="K" nr="195">
 <Num nr="2"/>
 </Func>
 </Func>
-<Func kind="K" nr="194">
+<Func kind="K" nr="196">
 <Num nr="2"/>
 </Func>
 </Func>

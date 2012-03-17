@@ -19,10 +19,10 @@
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="STRUCT_0"/>
-<ArticleID name="FUNCT_4"/>
 <ArticleID name="ORDERS_1"/>
 <ArticleID name="ORDERS_2"/>
 <ArticleID name="LATTICES"/>
+<ArticleID name="FUNCT_4"/>
 <ArticleID name="EQREL_1"/>
 <ArticleID name="FILTER_0"/>
 <ArticleID name="FILTER_1"/>
@@ -50,7 +50,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="229">
+<Func kind="K" nr="231">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

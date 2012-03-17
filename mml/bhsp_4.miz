@@ -12,12 +12,12 @@ environ
       FRECHET2, NAT_1;
  notations SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0, COMPLEX1, STRUCT_0,
       REAL_1, NAT_1, NAT_D, FUNCT_2, FUNCOP_1, SEQ_1, SEQ_2, SEQM_3, SERIES_1,
-      PRE_TOPC, RLVECT_1, NORMSP_1, BHSP_1, BHSP_2, BHSP_3, PREPOWER, POWER,
-      INT_1, XXREAL_0;
+      PRE_TOPC, RLVECT_1, NORMSP_1, BHSP_1, BHSP_2, BHSP_3, NEWTON,
+      PREPOWER, POWER, INT_1, XXREAL_0;
  constructors FUNCOP_1, XXREAL_0, REAL_1, NAT_1, SEQ_2, PREPOWER, SERIES_1,
-      BHSP_2, BHSP_3, NAT_D;
+      BHSP_2, BHSP_3, NAT_D, NEWTON;
  registrations INT_1, STRUCT_0, XREAL_0, SEQ_1, RELSET_1, MEMBERED, ORDINAL2,
-      SEQM_3, RLVECT_1, XXREAL_0, ORDINAL1;
+      SEQM_3, RLVECT_1, XXREAL_0, ORDINAL1, BHSP_1;
  requirements NUMERALS, REAL, SUBSET, ARITHM, BOOLE;
  definitions RLVECT_1, SERIES_1;
  theorems NAT_1, FUNCT_2, SEQ_1, SEQ_2, SEQM_3, SEQ_4, SERIES_1, ABSVALUE,
@@ -28,16 +28,13 @@ environ
 
 begin
 
- reserve X for RealUnitarySpace;
- reserve g for Point of X;
  reserve a, b, r, M2 for Real;
- reserve seq, seq1, seq2 for sequence of X;
  reserve Rseq,Rseq1,Rseq2 for Real_Sequence;
  reserve k, n, m, m1, m2 for Element of NAT;
 
 deffunc 0'(RealUnitarySpace) = 0.$1;
 
-scheme RecFuncExRUS{ X() -> non empty RLSStruct,
+scheme RecFuncExRUS{ X() -> non empty LoopStr,
                      z() -> Point of X(),
                      G(Element of NAT, Point of X()) -> Point of X()}:
 ex f being Function of NAT, the carrier of X() st
@@ -53,7 +50,7 @@ proof
   holds f.(n+1) = G(n,x) by A1;
 end;
 
-definition let X be non empty RLSStruct;
+definition let X be non empty LoopStr;
            let seq be sequence of X;
   func Partial_Sums(seq) -> sequence of X means :Def1:
     it.0 = seq.0 &
@@ -87,8 +84,12 @@ A5: for k st P[k] holds P[k+1]
 end;
 
 theorem Th1:
+for X being Abelian add-associative (non empty LoopStr),
+ seq1, seq2 being sequence of X holds
   Partial_Sums(seq1) + Partial_Sums(seq2) = Partial_Sums(seq1 + seq2)
 proof
+let X be Abelian add-associative (non empty LoopStr),
+ seq1, seq2 be sequence of X;
    set PSseq1 = Partial_Sums(seq1);
    set PSseq2 = Partial_Sums(seq2);
 A1:(PSseq1 + PSseq2).0 = PSseq1.0 + PSseq2.0 by NORMSP_1:def 5
@@ -110,8 +111,14 @@ A1:(PSseq1 + PSseq2).0 = PSseq1.0 + PSseq2.0 by NORMSP_1:def 5
  end;
 
 theorem Th2:
+for X being Abelian add-associative right_zeroed right_complementable
+(non empty LoopStr),
+ seq1, seq2 being sequence of X holds
   Partial_Sums(seq1) - Partial_Sums(seq2) = Partial_Sums(seq1 - seq2)
 proof
+let X be Abelian add-associative right_zeroed right_complementable
+(non empty LoopStr),
+ seq1, seq2 be sequence of X;
    set PSseq1 = Partial_Sums(seq1);
    set PSseq2 = Partial_Sums(seq2);
 A1:(PSseq1 - PSseq2).0 = (PSseq1).0 - (PSseq2).0 by NORMSP_1:def 6
@@ -133,8 +140,12 @@ A1:(PSseq1 - PSseq2).0 = (PSseq1).0 - (PSseq2).0 by NORMSP_1:def 6
 end;
 
 theorem Th3:
+for X being RealLinearSpace-like (non empty RLSStruct),
+ seq being sequence of X holds
   Partial_Sums(a * seq) = a * Partial_Sums(seq)
 proof
+let X be RealLinearSpace-like (non empty RLSStruct),
+   seq be sequence of X;
    set PSseq = Partial_Sums(seq);
 A1:(a * PSseq).0 = a * PSseq.0 by NORMSP_1:def 8
                 .= a * seq.0 by Def1
@@ -148,6 +159,10 @@ A1:(a * PSseq).0 = a * PSseq.0 by NORMSP_1:def 8
   end;
   hence thesis by A1,Def1;
 end;
+
+ reserve X for RealUnitarySpace;
+ reserve g for Point of X;
+ reserve seq, seq1, seq2 for sequence of X;
 
 theorem
   Partial_Sums(- seq) = - Partial_Sums(seq)

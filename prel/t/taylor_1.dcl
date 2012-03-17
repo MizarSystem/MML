@@ -17,10 +17,10 @@
 <ArticleID name="XREAL_0"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="SEQ_1"/>
+<ArticleID name="XXREAL_0"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="XXREAL_0"/>
 <ArticleID name="LIMFUNC1"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="FINSEQ_2"/>
@@ -31,23 +31,24 @@
 </Signature>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="217"/>
+<Func kind="K" nr="219"/>
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="5"/>
-<Adjective nr="25"/>
+<Adjective nr="26"/>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="142">
+<Func kind="K" nr="143">
 <Num nr="0"/>
 </Func>
 <Cluster>
 <Adjective nr="7" value="false"/>
 <Adjective nr="20"/>
 <Adjective nr="21"/>
+<Adjective nr="22"/>
 </Cluster>
 </FCluster>
 </Registrations>

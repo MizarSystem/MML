@@ -6,7 +6,7 @@
 
 environ
 
- vocabularies BOOLE, TARSKI, ZFMISC_1;
+ vocabularies BOOLE, TARSKI, ZFMISC_1, INCPROJ;
  notations TARSKI, XBOOLE_0, ENUMSET1;
  constructors TARSKI, XBOOLE_0, ENUMSET1;
  registrations XBOOLE_0;
@@ -608,7 +608,7 @@ A2:      z=[x1,y1] by Def2;
   hence thesis by TARSKI:2;
  end;
 
-theorem
+theorem Th36:
    [:{x},{y,z}:] = {[x,y],[x,z]} & [:{x,y},{z}:] = {[x,z],[y,z]}
  proof
   thus [:{x},{y,z}:] = {[x,y],[x,z]}
@@ -1976,3 +1976,96 @@ A1:  [:X1,Y1:] \/ [:X2,Y2:] c= [:X1 \/ X2,Y1 \/ Y2:] by XBOOLE_1:8;
  end;
 
 
+:: missing, 2007.01.16, A.T.
+
+Lm7':
+  {x,y} misses X implies not x in X & not y in X
+ proof assume that
+A1:    {x,y} /\ X = {} and
+A2:    x in X or y in X;
+     x in {x,y} & y in {x,y} by TARSKI:def 2;
+   then x in {x,y} /\ X or y in {x,y} /\ X by A2,XBOOLE_0:def 3;
+   hence contradiction by A1,XBOOLE_0:def 1;
+ end;
+
+Lm8':
+  not x in X & not y in X implies {x,y} misses X
+ proof assume
+A1:  not x in X &  not y in X;
+   thus {x,y} /\ X c= {}
+   proof let z;
+    assume z in {x,y} /\ X;
+     then z in {x,y} & z in X by XBOOLE_0:def 3;
+     hence thesis by A1,TARSKI:def 2;
+   end;
+  thus {} c= {x,y} /\ X by XBOOLE_1:2;
+ end;
+
+theorem Tx:
+ not x in X & not y in X implies X = X \ {x,y}
+ proof X \ {x,y} = X iff X misses {x,y} by XBOOLE_1:83;
+  hence thesis by Lm8',Lm7';
+ end;
+
+theorem
+ not x in X & not y in X implies X = X \/ {x,y} \ {x,y}
+proof
+  assume not x in X & not y in X;
+  then (X \/ {x,y}) \ {x,y} = X \ {x,y} & X \ {x,y} = X by XBOOLE_1:40,Tx;
+  hence thesis;
+end;
+
+:: from INCPROJ, 2007.01.18. AK
+
+definition let x1, x2, x3 be set;
+  pred x1, x2, x3 are_mutually_different means
+  x1 <> x2 & x1 <> x3 & x2 <> x3;
+end;
+
+definition let x1, x2, x3, x4 be set;
+  pred x1, x2, x3, x4 are_mutually_different means
+  x1 <> x2 & x1 <> x3 & x1 <> x4 & x2 <> x3 & x2 <> x4 & x3 <> x4;
+end;
+
+:: from CARD_2, 2007.01.18. AK
+
+definition let x1, x2, x3, x4, x5 be set;
+  pred x1, x2, x3, x4, x5 are_mutually_different means
+  x1 <> x2 & x1 <> x3 & x1 <> x4 & x1 <> x5 &
+  x2 <> x3 & x2 <> x4 & x2 <> x5 &
+  x3 <> x4 & x3 <> x5 &
+  x4 <> x5;
+end;
+
+:: from BORSUK_5, 2007.01.18. AK
+
+definition let x1, x2, x3, x4, x5, x6 be set;
+  pred x1, x2, x3, x4, x5, x6 are_mutually_different means
+  x1 <> x2 & x1 <> x3 & x1 <> x4 & x1 <> x5 & x1 <> x6 &
+  x2 <> x3 & x2 <> x4 & x2 <> x5 & x2 <> x6 &
+  x3 <> x4 & x3 <> x5 & x3 <> x6 &
+  x4 <> x5 & x4 <> x6 &
+  x5 <> x6;
+end;
+
+definition let x1, x2, x3, x4, x5, x6, x7 be set;
+  pred x1, x2, x3, x4, x5, x6, x7 are_mutually_different means
+  x1 <> x2 & x1 <> x3 & x1 <> x4 & x1 <> x5 & x1 <> x6 & x1 <> x7 &
+  x2 <> x3 & x2 <> x4 & x2 <> x5 & x2 <> x6 & x2 <> x7 &
+  x3 <> x4 & x3 <> x5 & x3 <> x6 & x3 <> x7 &
+  x4 <> x5 & x4 <> x6 & x4 <> x7 &
+  x5 <> x6 & x5 <> x7 &
+  x6 <> x7;
+end;
+
+:: missing, 2007.02.11, A.T.
+
+theorem
+ [:{x1,x2},{y1,y2}:] = {[x1,y1],[x1,y2],[x2,y1],[x2,y2]}
+ proof
+  thus [:{x1,x2},{y1,y2}:] = [:{x1}\/{x2},{y1,y2}:] by  ENUMSET1:41
+       .= [:{x1},{y1,y2}:] \/ [:{x2},{y1,y2}:] by Th120
+       .= {[x1,y1],[x1,y2]} \/ [:{x2},{y1,y2}:] by Th36
+       .= {[x1,y1],[x1,y2]} \/ {[x2,y1],[x2,y2]} by Th36
+       .= {[x1,y1],[x1,y2],[x2,y1],[x2,y2]} by ENUMSET1:45;
+ end;

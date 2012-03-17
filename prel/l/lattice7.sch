@@ -35,11 +35,11 @@
 <Typ kind="G" nr="4">
 <Cluster>
 <Adjective nr="32"/>
-<Adjective nr="47"/>
 <Adjective nr="48"/>
 <Adjective nr="49"/>
-<Adjective nr="72"/>
+<Adjective nr="50"/>
 <Adjective nr="73"/>
+<Adjective nr="74"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -72,7 +72,7 @@
 </Typ>
 <Not>
 <And>
-<Pred kind="R" nr="34">
+<Pred kind="R" nr="39">
 <Func kind="F" nr="1"/>
 <Var nr="2"/>
 <Var nr="1"/>

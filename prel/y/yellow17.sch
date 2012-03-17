@@ -25,10 +25,10 @@
 <ArticleID name="CARD_3"/>
 <ArticleID name="PBOOLE"/>
 <ArticleID name="UNIALG_1"/>
-<ArticleID name="FUNCT_4"/>
-<ArticleID name="FUNCT_5"/>
 <ArticleID name="ORDERS_1"/>
 <ArticleID name="ORDERS_2"/>
+<ArticleID name="FUNCT_4"/>
+<ArticleID name="FUNCT_5"/>
 <ArticleID name="PRALG_1"/>
 <ArticleID name="YELLOW_0"/>
 <ArticleID name="WELLORD2"/>
@@ -56,7 +56,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="218">
+<Func kind="K" nr="221">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 </Func>
@@ -69,7 +69,7 @@
 <Func kind="F" nr="1"/>
 </Typ>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="220">
+<Func kind="K" nr="223">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Var nr="1"/>
@@ -91,7 +91,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="219">
+<Func kind="K" nr="222">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Var nr="1"/>

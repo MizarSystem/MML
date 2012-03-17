@@ -8,16 +8,17 @@
 environ
 
  vocabularies FINSEQ_1, BOOLE, FUNCT_1, RELAT_1, ARYTM_1, RELAT_2, FIN_TOPO,
-      CONNSP_1, SQUARE_1, FINTOPO3, FINTOPO4, ORDERS_1, NAT_1;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0, XXREAL_0,
+      CONNSP_1, SQUARE_1, FINTOPO3, FINTOPO4, ORDERS_1, NAT_1, COMPLEX1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1,
+      RELAT_1, NUMBERS, XCMPLX_0, XXREAL_0,
       NAT_1, NAT_D, FUNCT_1, RELSET_1, FUNCT_2, FINSEQ_1, STRUCT_0, ORDERS_2,
       FIN_TOPO, FINTOPO3, BINARITH, ENUMSET1, LIMFUNC1;
  constructors ENUMSET1, NAT_1, LIMFUNC1, RFUNCT_3, BINARITH, GROUP_1, FINTOPO3,
-      FIN_TOPO, DOMAIN_1, NAT_D;
+      FIN_TOPO, DOMAIN_1, NAT_D, EQREL_1;
  registrations SUBSET_1, RELSET_1, STRUCT_0, NAT_1, XREAL_0, XBOOLE_0,
       FIN_TOPO, XXREAL_0, ARYTM_3;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions TARSKI, FIN_TOPO, FINSEQ_1;
+ definitions TARSKI, FIN_TOPO, FINSEQ_1, EQREL_1;
  theorems TARSKI, FINSEQ_1, NAT_1, REAL_1, FUNCT_1, FUNCT_2, XBOOLE_0,
       XBOOLE_1, FIN_TOPO, FINTOPO3, RELAT_1, SQUARE_1, BINARITH, ENUMSET1,
       STRUCT_0, XREAL_1, XXREAL_0, ORDINAL1, RELSET_1;
@@ -540,7 +541,7 @@ end;
 definition let n be Nat;
   func Nbdl1 n -> Relation of Seg n means
 :Def3: for i being Element of NAT st i in Seg n
-   holds it.:{i}={i,max(i-'1,1),min(i+1,n)};
+   holds Im(it,i)={i,max(i-'1,1),min(i+1,n)};
 existence
   proof
     deffunc F(Nat) = {$1,max($1-'1,1),min($1+1,n)};
@@ -577,34 +578,34 @@ A9:      1<=min(i+1,n) by A3,SQUARE_1:39;
     end;
     consider f being Relation of Seg n such that
 A10: for x3 being Element of NAT st x3 in Seg n
-       holds f.:{x3} = F(x3) from RELSET_1:sch 3(A1);
+       holds Im(f,x3) = F(x3) from RELSET_1:sch 3(A1);
     take f;
     thus
       for i being Element of NAT st i in Seg n holds
-      f.:{i}={i,max(i-'1,1),min(i+1,n)} by A10;
+      Im(f,i)={i,max(i-'1,1),min(i+1,n)} by A10;
   end;
 uniqueness
   proof
     thus for f1,f2 being Relation of Seg n st
      (for i being Element of NAT st i in Seg n holds
-      f1.:{i}={i,max(i-'1,1),min(i+1,n)})&
+      Im(f1,i)={i,max(i-'1,1),min(i+1,n)})&
      (for i being Element of NAT st i in Seg n holds
-      f2.:{i}={i,max(i-'1,1),min(i+1,n)})
+      Im(f2,i)={i,max(i-'1,1),min(i+1,n)})
      holds f1=f2
     proof
       let f1,f2 be Relation of Seg n;
       assume A11: (for i being Element of NAT st i in Seg n
       holds
-      f1.:{i}={i,max(i-'1,1),min(i+1,n)})&
+      Im(f1,i)={i,max(i-'1,1),min(i+1,n)})&
       (for i being Element of NAT st i in Seg n holds
-      f2.:{i}={i,max(i-'1,1),min(i+1,n)});
-      for x being set st x in Seg n holds f1.:{x}=f2.:{x}
+      Im(f2,i)={i,max(i-'1,1),min(i+1,n)});
+      for x being set st x in Seg n holds Im(f1,x)=Im(f2,x)
       proof
        let x be set;
        assume A12: x in Seg n;
         then reconsider i2=x as Element of NAT;
-        f1.:{i2}={i2,max(i2-'1,1),min(i2+1,n)} by A11,A12;
-        hence f1.:{x}=f2.:{x} by A11,A12;
+        Im(f1,i2)={i2,max(i2-'1,1),min(i2+1,n)} by A11,A12;
+        hence Im(f1,x)=Im(f2,x) by A11,A12;
       end;
       hence f1=f2 by RELSET_1:54;
     end;
@@ -755,10 +756,10 @@ end;
 definition let n be Nat;
   func Nbdc1 n -> Relation of Seg n means
 :Def5: for i being Element of NAT st i in Seg n holds
-   (1<i & i<n implies it.:{i}={i,i-'1,i+1})&
-   (i=1 & i<n implies it.:{i}={i,n,i+1}) &
-   (1<i & i=n implies it.:{i}={i,i-'1,1}) &
-   (i=1 & i=n implies it.:{i}={i});
+   (1<i & i<n implies Im(it,i)={i,i-'1,i+1})&
+   (i=1 & i<n implies Im(it,i)={i,n,i+1}) &
+   (1<i & i=n implies Im(it,i)={i,i-'1,1}) &
+   (i=1 & i=n implies Im(it,i)={i});
 existence
   proof
     defpred P[set,set] means for i being Element of NAT st i=$1 holds
@@ -852,32 +853,32 @@ A25: for i being Element of NAT st i in Seg n holds
    (1<i & i=n implies f2.i={i,i-'1,1}) &
    (i=1 & i=n implies f2.i={i}) by A24;
    consider R being Relation of Seg n such that
-A26:  for i being set st i in Seg n holds R.:{i} = f2.i by FUNCT_2:170;
+A26:  for i being set st i in Seg n holds Im(R,i) = f2.i by FUNCT_2:170;
   take R;
    let i being Element of NAT;
     assume
 A27:   i in Seg n;
-     then R.:{i} = f2.i by A26;
-   hence (1<i & i<n implies R.:{i}={i,i-'1,i+1})&
-   (i=1 & i<n implies R.:{i}={i,n,i+1}) &
-   (1<i & i=n implies R.:{i}={i,i-'1,1}) &
-   (i=1 & i=n implies R.:{i}={i}) by A27,A25;
+     then Im(R,i) = f2.i by A26;
+   hence (1<i & i<n implies Im(R,i)={i,i-'1,i+1})&
+   (i=1 & i<n implies Im(R,i)={i,n,i+1}) &
+   (1<i & i=n implies Im(R,i)={i,i-'1,1}) &
+   (i=1 & i=n implies Im(R,i)={i}) by A27,A25;
   end;
 uniqueness
   proof
     let f1,f2 be Relation of Seg n;
     assume A28:
     (for i being Element of NAT st i in Seg n holds
-     (1<i & i<n implies f1.:{i}={i,i-'1,i+1})&
-     (i=1 & i<n implies f1.:{i}={i,n,i+1}) &
-     (1<i & i=n implies f1.:{i}={i,i-'1,1}) &
-     (i=1 & i=n implies f1.:{i}={i}))&
+     (1<i & i<n implies Im(f1,i)={i,i-'1,i+1})&
+     (i=1 & i<n implies Im(f1,i)={i,n,i+1}) &
+     (1<i & i=n implies Im(f1,i)={i,i-'1,1}) &
+     (i=1 & i=n implies Im(f1,i)={i}))&
     (for i being Element of NAT st i in Seg n holds
-     (1<i & i<n implies f2.:{i}={i,i-'1,i+1})&
-     (i=1 & i<n implies f2.:{i}={i,n,i+1}) &
-     (1<i & i=n implies f2.:{i}={i,i-'1,1}) &
-     (i=1 & i=n implies f2.:{i}={i}));
-    for x being set st x in Seg n holds f1.:{x}=f2.:{x}
+     (1<i & i<n implies Im(f2,i)={i,i-'1,i+1})&
+     (i=1 & i<n implies Im(f2,i)={i,n,i+1}) &
+     (1<i & i=n implies Im(f2,i)={i,i-'1,1}) &
+     (i=1 & i=n implies Im(f2,i)={i}));
+    for x being set st x in Seg n holds Im(f1,x)=Im(f2,x)
     proof
      let x be set;
      assume A29: x in Seg n;
@@ -888,23 +889,23 @@ A32:  i2<n or i2=n by A30,REAL_1:def 5;
       per cases by A31,A32;
         suppose A33: 1<i2 & i2<n;
           set y0={i2,i2-'1,i2+1};
-          f1.:{x}=y0 by A28,A29,A33;
-          hence f1.:{x}=f2.:{x} by A28,A29,A33;
+          Im(f1,x)=y0 by A28,A29,A33;
+          hence Im(f1,x)=Im(f2,x) by A28,A29,A33;
         end;
         suppose A34: i2=1 & i2<n;
           set y0={i2,n,i2+1};
-          f1.:{x}=y0 by A28,A29,A34;
-          hence f1.:{x}=f2.:{x} by A28,A29,A34;
+          Im(f1,x)=y0 by A28,A29,A34;
+          hence Im(f1,x)=Im(f2,x) by A28,A29,A34;
         end;
         suppose A35: 1<i2 & i2=n;
           set y0={i2,i2-'1,1};
-          f1.:{x}=y0 by A28,A29,A35;
-          hence f1.:{x}=f2.:{x} by A28,A29,A35;
+          Im(f1,x)=y0 by A28,A29,A35;
+          hence Im(f1,x)=Im(f2,x) by A28,A29,A35;
         end;
         suppose A36: i2=1 & i2=n;
           set y0={i2};
-          f1.:{x}=y0 by A28,A29,A36;
-          hence f1.:{x}=f2.:{x} by A28,A29,A36;
+          Im(f1,x)=y0 by A28,A29,A36;
+          hence Im(f1,x)=Im(f2,x) by A28,A29,A36;
         end;
     end;
     hence f1=f2 by RELSET_1:54;
@@ -937,10 +938,10 @@ A3: the InternalRel of FTSC1 n=Nbdc1 n by A1;
 A4: 1<=i & i<=n by A2,FINSEQ_1:3;then
 A5: 1<i or i=1 by REAL_1:def 5;
 A6: i<n or i=n by A4,REAL_1:def 5;
-A7: (1<i & i<n implies f.:{i}={i,i-'1,i+1})&
-    (i=1 & i<n implies f.:{i}={i,n,i+1}) &
-    (1<i & i=n implies f.:{i}={i,i-'1,1}) &
-    (i=1 & i=n implies f.:{i}={i}) by A2,Def5;
+A7: (1<i & i<n implies Im(f,i)={i,i-'1,i+1})&
+    (i=1 & i<n implies Im(f,i)={i,n,i+1}) &
+    (1<i & i=n implies Im(f,i)={i,i-'1,1}) &
+    (i=1 & i=n implies Im(f,i)={i}) by A2,Def5;
     per cases by A5,A6;
       suppose 1<i & i<n;
         hence x in U_FT x by A3,A7,ENUMSET1:def 1;
@@ -973,10 +974,10 @@ A5: the InternalRel of FTSC1 n=Nbdc1 n by A1;
 A6: 1<=i & i<=n by A2,FINSEQ_1:3;then
 A7: 1<i or i=1 by REAL_1:def 5;
 A8: i<n or i=n by A6,REAL_1:def 5;
-A9: (1<i & i<n implies f.:{i}={i,i-'1,i+1})&
-    (i=1 & i<n implies f.:{i}={i,n,i+1}) &
-    (1<i & i=n implies f.:{i}={i,i-'1,1}) &
-    (i=1 & i=n implies f.:{i}={i}) by A2,Def5;
+A9: (1<i & i<n implies Im(f,i)={i,i-'1,i+1})&
+    (i=1 & i<n implies Im(f,i)={i,n,i+1}) &
+    (1<i & i=n implies Im(f,i)={i,i-'1,1}) &
+    (i=1 & i=n implies Im(f,i)={i}) by A2,Def5;
     assume A10: y in U_FT x;
       per cases by A7,A8;
         suppose A11: 1<i & i<n;
@@ -988,7 +989,7 @@ A15:        j+1=i by A14;
 A16:        x=j or x=j-'1 or x=j+1 by A15;
             per cases by A16;
               suppose A17: x=j;then
-                (the InternalRel of FTSC1 n).:{y}={j,j-'1,j+1}
+                Im(the InternalRel of FTSC1 n,y)={j,j-'1,j+1}
                  by A3,A5,A11,Def5;
                 hence x in U_FT y by A17,ENUMSET1:def 1;
               end;
@@ -1017,13 +1018,13 @@ A23:              i+1+1=i by A18,A20;
 A24:            j+1=x;then
 A25:            j<n by A6,NAT_1:13;
 A26:            now assume j=1;then
-                  (the InternalRel of FTSC1 n).:{y}={j,n,j+1}
+                  Im(the InternalRel of FTSC1 n,y)={j,n,j+1}
                        by A3,A5,A25,Def5;
                   hence x in U_FT y by A24,ENUMSET1:def 1;
                 end;
                now assume j<>1;then
                  j>1 by A4,REAL_1:def 5;then
-                 (the InternalRel of FTSC1 n).:{y}={j,j-'1,j+1}
+                 Im(the InternalRel of FTSC1 n,y)={j,j-'1,j+1}
                       by A3,A5,A25,Def5;
                  hence x in U_FT y by A24,ENUMSET1:def 1;
                end;
@@ -1036,7 +1037,7 @@ A27:        y=i+1;then
 A28:        x=j or x=j-'1 or x=j+1 by A11,BINARITH:def 3;
             now per cases by A28;
               case A29: x=j;then
-                (the InternalRel of FTSC1 n).:{y}={j,j-'1,j+1}
+                Im(the InternalRel of FTSC1 n,y)={j,j-'1,j+1}
                     by A3,A5,A11,Def5;
                 hence x in U_FT y by A29,ENUMSET1:def 1;
               end;
@@ -1047,13 +1048,13 @@ A28:        x=j or x=j-'1 or x=j+1 by A11,BINARITH:def 3;
                 end;then
 A31:            j>1 by A4,REAL_1:def 5;
 A32:            now assume j=n;then
-                  (the InternalRel of FTSC1 n).:{y}={j,j-'1,1}
+                  Im(the InternalRel of FTSC1 n,y)={j,j-'1,1}
                    by A3,A5,A31,Def5;
                   hence x in U_FT y by A30,ENUMSET1:def 1;
                 end;
                 now assume j<>n;then
                   j<n by A4,REAL_1:def 5;then
-                  (the InternalRel of FTSC1 n).:{y}={j,j-'1,j+1}
+                  Im(the InternalRel of FTSC1 n,y)={j,j-'1,j+1}
                    by A3,A5,A31,Def5;
                   hence x in U_FT y by A30,ENUMSET1:def 1;
                 end;
@@ -1075,14 +1076,14 @@ A35:      y=i & y<>n or y=n or y=i+1& y<>n by A5,A9,A10,ENUMSET1:def 1;
               hence x in U_FT y by ENUMSET1:def 1,A5,A9,A34;
             end;
             suppose y=n;then
-             (the InternalRel of FTSC1 n).:{y}={j,j-'1,1} by A3,A5,A34,Def5;
+             Im(the InternalRel of FTSC1 n,y)={j,j-'1,1} by A3,A5,A34,Def5;
               hence x in U_FT y by A34,ENUMSET1:def 1;
             end;
             suppose A36: y=i+1 & y<>n;then
 A37:          j<n by A4,REAL_1:def 5;
               j-1=i by A36;then
 A38:          j-'1=i by BINARITH:def 3;
-              (the InternalRel of FTSC1 n).:{y}={j,j-'1,j+1}
+              Im(the InternalRel of FTSC1 n,y)={j,j-'1,j+1}
                by A3,A5,A34,A36,A37,Def5;
               hence x in U_FT y by A38,ENUMSET1:def 1;
             end;
@@ -1094,7 +1095,7 @@ A40:      y=i or y=i-'1 or y=1 by A5,A9,A10,ENUMSET1:def 1;
               hence x in U_FT y by A5,A9,A39,ENUMSET1:def 1;
             end;
             suppose A41: y=1;
-              (the InternalRel of FTSC1 n).:{y}={j,n,j+1}
+              Im(the InternalRel of FTSC1 n,y)={j,n,j+1}
                by A3,A5,A39,A41,Def5;
               hence x in U_FT y by A39,ENUMSET1:def 1;
             end;
@@ -1106,7 +1107,7 @@ A45:          n-1=n-'1 by BINARITH:def 3;
 A46:          n-1+1=n;
 A47:          j+1=i by A39,A44,A45;
               j<n by A44,A45,A46,NAT_1:13;then
-              (the InternalRel of FTSC1 n).:{y}={j,j-'1,j+1} by A3,A5,A43,Def5;
+              Im(the InternalRel of FTSC1 n,y)={j,j-'1,j+1} by A3,A5,A43,Def5;
               hence x in U_FT y by A47,ENUMSET1:def 1;
             end;
         end;

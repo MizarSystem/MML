@@ -22,9 +22,9 @@
 <ArticleID name="XBOOLEAN"/>
 <ArticleID name="MARGREL1"/>
 <ArticleID name="FINSEQ_2"/>
-<ArticleID name="INT_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="RLVECT_1"/>
+<ArticleID name="INT_1"/>
 <ArticleID name="GROUP_1"/>
 <ArticleID name="VECTSP_1"/>
 <ArticleID name="MATRIX_1"/>
@@ -32,14 +32,14 @@
 </Signature>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="206"/>
+<Func kind="K" nr="209"/>
 <Cluster>
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="206"/>
+<Func kind="K" nr="209"/>
 <Cluster>
 <Adjective nr="7" value="false"/>
 <Adjective nr="26"/>
@@ -49,26 +49,26 @@
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="56"/>
+<Func kind="K" nr="57"/>
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="56"/>
+<Func kind="K" nr="57"/>
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster>
 <Adjective nr="7" value="false"/>
 </Cluster>
-<Func kind="K" nr="56"/>
+<Func kind="K" nr="57"/>
 </Typ>
 <Typ kind="M" nr="16">
 <Cluster/>
-<Func kind="K" nr="56"/>
+<Func kind="K" nr="57"/>
 <LocusVar nr="2"/>
 <Num nr="6"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="209">
+<Func kind="K" nr="212">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -86,26 +86,26 @@
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="56"/>
+<Func kind="K" nr="57"/>
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="56"/>
+<Func kind="K" nr="57"/>
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster>
 <Adjective nr="7" value="false"/>
 </Cluster>
-<Func kind="K" nr="56"/>
+<Func kind="K" nr="57"/>
 </Typ>
 <Typ kind="M" nr="16">
 <Cluster/>
-<Func kind="K" nr="56"/>
+<Func kind="K" nr="57"/>
 <LocusVar nr="2"/>
 <Num nr="6"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="210">
+<Func kind="K" nr="213">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -124,7 +124,7 @@
 <Cluster/>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="206"/>
+<Func kind="K" nr="209"/>
 </Typ>
 <Cluster>
 <Adjective nr="1"/>

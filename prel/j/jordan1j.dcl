@@ -17,13 +17,13 @@
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="FINSEQ_2"/>
-<ArticleID name="INT_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="FINSEQ_2"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="REALSET1"/>
 <ArticleID name="RLVECT_1"/>
+<ArticleID name="INT_1"/>
 <ArticleID name="GROUP_1"/>
 <ArticleID name="VECTSP_1"/>
 <ArticleID name="MATRIX_1"/>
@@ -44,7 +44,7 @@
 <Typ kind="M" nr="7">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="245">
+<Func kind="K" nr="247">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -57,13 +57,13 @@
 <Adjective nr="7" value="false"/>
 <Adjective nr="17"/>
 <Adjective nr="21"/>
-<Adjective nr="35" value="false"/>
-<Adjective nr="99"/>
-<Adjective nr="100"/>
+<Adjective nr="34" value="false"/>
 <Adjective nr="101"/>
 <Adjective nr="102"/>
+<Adjective nr="103"/>
 <Adjective nr="104"/>
-<Adjective nr="105"/>
+<Adjective nr="106"/>
+<Adjective nr="107"/>
 </Cluster>
 </RCluster>
 <FCluster>
@@ -84,7 +84,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="263">
+<Func kind="K" nr="265">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>

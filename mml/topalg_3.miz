@@ -27,7 +27,7 @@ environ
       CQC_LANG, COMPTS_1, FUNCT_2, RELAT_1;
  requirements NUMERALS, BOOLE, SUBSET;
  definitions TARSKI, XBOOLE_0, FUNCT_1, FUNCT_2, GROUP_6, PRE_TOPC, TOPS_2,
-      T_0TOPSP, BORSUK_2, BORSUK_6, CONNSP_1, GRCAT_1, STRUCT_0;
+      T_0TOPSP, BORSUK_2, BORSUK_6, CONNSP_1, GRCAT_1, STRUCT_0, BORSUK_1;
  theorems GROUP_6, PRE_TOPC, FUNCT_2, BORSUK_1, TOPALG_1, TOPS_2, BORSUK_3,
       FUNCT_1, TOPMETR, RELAT_1, FUNCOP_1, TOPREAL6, BORSUK_6, BORSUK_2,
       BINOP_1, TARSKI, PCOMPS_1, ZFMISC_1, FUNCT_4, TSEP_1, XBOOLE_1, COMPTS_1,
@@ -46,7 +46,7 @@ reconsider j0 = 0, j1 = 1 as Point of I[01] by BORSUK_1:def 17,def 18;
 theorem
   for A, B, a, b being set, f being Function of A,B st a in A & b in B holds
   f +* (a .--> b) is Function of A,B
-proof ::ok
+proof 
   let A, B, a, b be set, f be Function of A,B such that
 A1: a in A and
 A2: b in B;
@@ -68,7 +68,7 @@ end;
 theorem
   for f being Function, X, x being set st f|X is one-to-one & x in rng (f|X)
   holds (f*(f|X)").x = x
-proof ::ok
+proof 
   let f be Function,
       X, x be set;
   set g = f|X;
@@ -106,7 +106,7 @@ theorem Th5:
 proof
   let S, T be non empty 1-sorted,
       s be Point of S, t be Point of T;
-  thus (S --> t).s = ((the carrier of S) --> t).s by BORSUK_1:def 2
+  thus (S --> t).s = ((the carrier of S) --> t).s
      .= t by FUNCOP_1:13;
 end;
 
@@ -398,9 +398,8 @@ A8: p1 = p2;
   reconsider f = I[01] --> a1 as Function of I[01],T;
   take f;
   thus f is continuous;
-A9: f = I --> a by BORSUK_1:def 2;
-  thus f.0 = f.j0 .= a by A9,FUNCOP_1:13;
-  thus f.1 = f.j1 .= b by A8,A9,FUNCOP_1:13;
+  thus f.0 = f.j0 .= a by FUNCOP_1:13;
+  thus f.1 = f.j1 .= b by A8,FUNCOP_1:13;
   end;
 end;
 
@@ -1379,7 +1378,7 @@ A4:(f*P).1 = f.(P.j1) by FUNCT_2:21
   hence thesis by A2,A3,A4,BORSUK_2:def 2;
 end;
 
-theorem
+theorem Th26:
   for S being non empty arcwise_connected TopSpace,
       T being non empty TopSpace,
       f being continuous Function of S,T,
@@ -1402,6 +1401,17 @@ A4: f*P is continuous by TOPS_2:58;
   hence thesis by A2,A3,BORSUK_2:def 2,A4;
 end;
 
+
+definition
+  let S be non empty arcwise_connected TopSpace,
+      T be non empty TopSpace,
+      a, b be Point of S,
+      P be Path of a,b,
+      f be continuous Function of S,T;
+  redefine func f*P -> Path of f.a,f.b;
+  coherence by Th26;
+end;
+
 theorem Th27:
   for S, T being non empty TopSpace,
       f being continuous Function of S,T,
@@ -1420,6 +1430,15 @@ A2: (f*P).1 = f.(P.j1) by FUNCT_2:21
 A3: f*P is continuous by TOPS_2:58;
   f.a,f.a are_connected;
   hence thesis by A1,A2,BORSUK_2:def 2,A3;
+end;
+
+definition
+  let S, T be non empty TopSpace,
+      a be Point of S,
+      P be Loop of a,
+      f be continuous Function of S,T;
+  redefine func  f*P -> Loop of f.a;
+  coherence by Th27;
 end;
 
 theorem Th28:
@@ -1450,10 +1469,9 @@ A3: Q1 = f*Q;
   thus G.(s,1) = f.(F.(s,j1)) by Lm1,BINOP_1:30
     .= f.(Q.s) by A1,BORSUK_6:def 13
     .= Q1.s by A3,FUNCT_2:21;
-  let t be Point of I[01];
-  thus G.(0,t) = f.(F.(j0,t)) by Lm1,BINOP_1:30
+  thus G.(0,s) = f.(F.(j0,s)) by Lm1,BINOP_1:30
     .= f.a by A1,BORSUK_6:def 13;
-  thus G.(1,t) = f.(F.(j1,t)) by Lm1,BINOP_1:30
+  thus G.(1,s) = f.(F.(j1,s)) by Lm1,BINOP_1:30
     .= f.b by A1,BORSUK_6:def 13;
 end;
 
@@ -1487,10 +1505,9 @@ A3: Q1 = f*Q;
   thus G.(s,1) = f.(F.(s,j1)) by Lm1,BINOP_1:30
     .= f.(Q.s) by A1,BORSUK_6:def 13
     .= Q1.s by A3,FUNCT_2:21;
-  let t be Point of I[01];
-  thus G.(0,t) = f.(F.(j0,t)) by Lm1,BINOP_1:30
+  thus G.(0,s) = f.(F.(j0,s)) by Lm1,BINOP_1:30
     .= f.a by A1,BORSUK_6:def 13;
-  thus G.(1,t) = f.(F.(j1,t)) by Lm1,BINOP_1:30
+  thus G.(1,s) = f.(F.(j1,s)) by Lm1,BINOP_1:30
     .= f.b by A1,BORSUK_6:def 13;
 end;
 
@@ -1545,12 +1562,6 @@ A10: 2*x-1 is Point of I[01] by BORSUK_6:7;
   hence thesis by FUNCT_2:113;
 end;
 
- Lm2:
-  for S being non empty TopSpace, s being Point of S
-  for x, y being Element of pi_1(S,s)
-  for P, Q being Loop of s st x = Class(EqRel(S,s),P) & y = Class(EqRel(S,s),Q)
-    holds x*y = Class(EqRel(S,s),P+Q) by TOPALG_1:62;
-
 definition
   let S, T be non empty TopSpace,
       s be Point of S,
@@ -1560,13 +1571,13 @@ A1: f is continuous;
   set pT = pi_1(T,f.s);
   func FundGrIso(f,s) -> Function of pi_1(S,s),pi_1(T,f.s) means :Def1:
   for x being Element of pi_1(S,s)
-   ex ls being Loop of s, lt being Loop of f.s st
-     x = Class(EqRel(S,s),ls) & lt = f*ls & it.x = Class(EqRel(T,f.s),lt);
+   ex ls being Loop of s st x = Class(EqRel(S,s),ls) &
+    it.x = Class(EqRel(T,f.s),f*ls);
 existence
 proof
   defpred P[set,set] means
-  ex ls being Loop of s, lt being Loop of f.s st
-    $1 = Class(EqRel(S,s),ls) & lt = f*ls & $2 = Class(EqRel(T,f.s),lt);
+  ex ls being Loop of s st
+    $1 = Class(EqRel(S,s),ls) & $2 = Class(EqRel(T,f.s),f*ls);
 A2: for x being Element of pS ex y being Element of pT st P[x,y]
     proof
       let x be Element of pS;
@@ -1574,7 +1585,7 @@ A2: for x being Element of pS ex y being Element of pT st P[x,y]
 A3:     x = Class(EqRel(S,s),ls) by TOPALG_1:48;
       reconsider lt = f*ls as Loop of f.s by A1,Th27;
       reconsider y = Class(EqRel(T,f.s),lt) as Element of pT by TOPALG_1:48;
-      take y, ls, lt;
+      take y, ls;
       thus thesis by A3;
     end;
   ex h being Function of pS,pT st for x being Element of pS holds P[x,h.x]
@@ -1585,23 +1596,22 @@ uniqueness
 proof
   let g, h be Function of pS,pT such that
 A4: for x being Element of pS
-     ex ls being Loop of s, lt being Loop of f.s st
-      x = Class(EqRel(S,s),ls) & lt = f*ls & g.x = Class(EqRel(T,f.s),lt) and
+     ex ls being Loop of s st
+      x = Class(EqRel(S,s),ls) & g.x = Class(EqRel(T,f.s),f*ls) and
 A5: for x being Element of pS
-     ex ls being Loop of s, lt being Loop of f.s st
-      x = Class(EqRel(S,s),ls) & lt = f*ls & h.x = Class(EqRel(T,f.s),lt);
+     ex ls being Loop of s st
+      x = Class(EqRel(S,s),ls) & h.x = Class(EqRel(T,f.s),f*ls);
   now
     let x be Element of pS;
-    consider lsg being Loop of s, ltg being Loop of f.s such that
+    consider lsg being Loop of s such that
 A6:   x = Class(EqRel(S,s),lsg) and
-A7:   ltg = f*lsg and
-A8:   g.x = Class(EqRel(T,f.s),ltg) by A4;
-    consider lsh being Loop of s, lth being Loop of f.s such that
+A8:   g.x = Class(EqRel(T,f.s),f*lsg) by A4;
+    consider lsh being Loop of s such that
 A9:   x = Class(EqRel(S,s),lsh) and
-A10:   lth = f*lsh and
-A11:   h.x = Class(EqRel(T,f.s),lth) by A5;
+A11:  h.x = Class(EqRel(T,f.s),f*lsh) by A5;
+    reconsider ltg = f*lsg, lth = f*lsh as Loop of f.s by A1,Th27;
     lsg,lsh are_homotopic by A6,A9,TOPALG_1:47;
-    then ltg,lth are_homotopic by A1,A7,A10,Th28;
+    then ltg,lth are_homotopic by A1,Th28;
     hence g.x = h.x by A8,A11,TOPALG_1:47;
   end;
   hence thesis by FUNCT_2:113;
@@ -1613,27 +1623,20 @@ canceled;
 theorem
   for S, T being non empty TopSpace, s being Point of S,
       f being continuous Function of S,T,
-      x being Element of pi_1(S,s),
-      ls being Loop of s, lt being Loop of f.s
-  st x = Class(EqRel(S,s),ls) & lt = f*ls
-  holds FundGrIso(f,s).x = Class(EqRel(T,f.s),lt)
+      ls being Loop of s
+  holds FundGrIso(f,s).Class(EqRel(S,s),ls) = Class(EqRel(T,f.s),f*ls)
 proof
   let S, T be non empty TopSpace;
   let s be Point of S;
   let f be continuous Function of S,T;
-  let x be Element of pi_1(S,s);
   let ls be Loop of s;
-  let lt be Loop of f.s;
-  assume that
-A1: x = Class(EqRel(S,s),ls) and
-A2: lt = f*ls;
-  consider ls1 being Loop of s, lt1 being Loop of f.s such that
+  reconsider x = Class(EqRel(S,s),ls) as Element of pi_1(S,s) by TOPALG_1:48;
+  consider ls1 being Loop of s such that
 A3:  x = Class(EqRel(S,s),ls1) and
-A4:  lt1 = f*ls1 and
-A5:  FundGrIso(f,s).x = Class(EqRel(T,f.s),lt1) by Def1;
-  ls,ls1 are_homotopic by A1,A3,TOPALG_1:47;
-  then lt,lt1 are_homotopic by A2,A4,Th28;
-  hence FundGrIso(f,s).x = Class(EqRel(T,f.s),lt) by A5,TOPALG_1:47;
+A5:  FundGrIso(f,s).x = Class(EqRel(T,f.s),f*ls1) by Def1;
+  ls,ls1 are_homotopic by A3,TOPALG_1:47;
+  then f*ls,f*ls1 are_homotopic by Th28;
+  hence thesis by A5,TOPALG_1:47;
 end;
 
 definition
@@ -1647,24 +1650,21 @@ proof
   set pT = pi_1(T,f.s);
   set h = FundGrIso(f,s);
   now let a, b be Element of pS;
-  consider lsa being Loop of s, lta being Loop of f.s such that
+  consider lsa being Loop of s such that
 A1: a = Class(EqRel(S,s),lsa) and
-A2: lta = f*lsa and
-A3: h.a = Class(EqRel(T,f.s),lta) by Def1;
-  consider lsb being Loop of s, ltb being Loop of f.s such that
+A3: h.a = Class(EqRel(T,f.s),f*lsa) by Def1;
+  consider lsb being Loop of s such that
 A4: b = Class(EqRel(S,s),lsb) and
-A5: ltb = f*lsb and
-A6: h.b = Class(EqRel(T,f.s),ltb) by Def1;
-  consider lsab being Loop of s, ltab being Loop of f.s such that
+A6: h.b = Class(EqRel(T,f.s),f*lsb) by Def1;
+  consider lsab being Loop of s such that
 A7: a*b = Class(EqRel(S,s),lsab) and
-A8: ltab = f*lsab and
-A9: h.(a*b) = Class(EqRel(T,f.s),ltab) by Def1;
-A10: lta+ltb = f*(lsa+lsb) by A2,A5,Th30;
-  a*b = Class(EqRel(S,s),lsa+lsb) by A1,A4,Lm2;
+A9: h.(a*b) = Class(EqRel(T,f.s),f*lsab) by Def1;
+A10: f*lsa+f*lsb = f*(lsa+lsb) by Th30;
+  a*b = Class(EqRel(S,s),lsa+lsb) by A1,A4,TOPALG_1:62;
   then lsab,lsa+lsb are_homotopic by A7,TOPALG_1:47;
-  then ltab,lta+ltb are_homotopic by A8,A10,Th28;
-  hence h.(a * b) = Class(EqRel(T,f.s),lta+ltb) by A9,TOPALG_1:47
-     .= h.a * h.b by A3,A6,Lm2;
+  then f*lsab,f*lsa+f*lsb are_homotopic by A10,Th28;
+  hence h.(a * b) = Class(EqRel(T,f.s),f*lsa+f*lsb) by A9,TOPALG_1:47
+     .= h.a * h.b by A3,A6,TOPALG_1:62;
   end;
   hence thesis by GROUP_6:def 7;
 end;
@@ -1700,15 +1700,14 @@ A10:   y = Class(EqRel(T,f.s),lt) by TOPALG_1:48;
     reconsider ls = f"*lt as Loop of s by A2,A7,A8,Th27;
     set x = Class(EqRel(S,s),ls);
 A11: x in the carrier of pS by TOPALG_1:48;
-    then consider ls1 being Loop of s, lt1 being Loop of f.s such that
+    then consider ls1 being Loop of s such that
 A12:   x = Class(EqRel(S,s),ls1) and
-A13:   lt1 = f*ls1 and
-A14:   h.x = Class(EqRel(T,f.s),lt1) by Def1;
+A14:   h.x = Class(EqRel(T,f.s),f*ls1) by Def1;
 A15: f*ls = (f*f")*lt by RELAT_1:55
         .= id rng f * lt by A5,A6,TOPS_2:65
         .= lt by A5,FUNCT_2:23;
     ls,ls1 are_homotopic by A12,TOPALG_1:47;
-    then lt,lt1 are_homotopic by A13,A15,Th28;
+    then lt,f*ls1 are_homotopic by A15,Th28;
     then h.x = y by A10,A14,TOPALG_1:47;
     hence thesis by A3,A11,FUNCT_1:def 5;
   end;
@@ -1716,23 +1715,21 @@ A15: f*ls = (f*f")*lt by RELAT_1:55
   proof
     let x1, x2 be set;
     assume x1 in dom h;
-    then consider ls1 being Loop of s, lt1 being Loop of f.s such that
+    then consider ls1 being Loop of s such that
 A16:   x1 = Class(EqRel(S,s),ls1) and
-A17:   lt1 = f*ls1 and
-A18:   h.x1 = Class(EqRel(T,f.s),lt1) by Def1;
+A18:   h.x1 = Class(EqRel(T,f.s),f*ls1) by Def1;
     assume x2 in dom h;
-    then consider ls2 being Loop of s, lt2 being Loop of f.s such that
+    then consider ls2 being Loop of s such that
 A19:   x2 = Class(EqRel(S,s),ls2) and
-A20:   lt2 = f*ls2 and
-A21:   h.x2 = Class(EqRel(T,f.s),lt2) by Def1;
-    reconsider a1 = f"*lt1, a2 = f"*lt2 as Loop of s by A2,A7,A8,Th27;
+A21:   h.x2 = Class(EqRel(T,f.s),f*ls2) by Def1;
+    reconsider a1 = f"*(f*ls1), a2 = f"*(f*ls2) as Loop of s by A2,A7,A8,Th27;
 A22: f"*f = id dom f by A5,A6,TOPS_2:65;
-A23: f"*lt1 = (f"*f)*ls1 by A17,RELAT_1:55
+A23: f"*(f*ls1) = (f"*f)*ls1 by RELAT_1:55
         .= ls1 by A4,A22,FUNCT_2:23;
-A24: f"*lt2 = (f"*f)*ls2 by A20,RELAT_1:55
+A24: f"*(f*ls2) = (f"*f)*ls2 by RELAT_1:55
           .= ls2 by A4,A22,FUNCT_2:23;
     assume h.x1 = h.x2;
-    then lt1,lt2 are_homotopic by A18,A21,TOPALG_1:47;
+    then f*ls1,f*ls2 are_homotopic by A18,A21,TOPALG_1:47;
     then a1,a2 are_homotopic by A2,A7,A8,Th28;
     hence x1 = x2 by A16,A19,A23,A24,TOPALG_1:47;
   end;

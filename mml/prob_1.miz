@@ -8,19 +8,19 @@ environ
 
  vocabularies FUNCT_1, ARYTM, SEQ_1, ARYTM_1, SEQ_2, ORDINAL2, ABSVALUE,
       SETFAM_1, SUBSET_1, FINSUB_1, BOOLE, RELAT_1, FUNCOP_1, TARSKI, PROB_1,
-      NAT_1;
+      NAT_1, RCOMP_1, SUPINF_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, FINSUB_1, RELAT_1, FUNCT_1,
       REAL_1, FUNCT_2, FUNCOP_1, ORDINAL1, CARD_3, NUMBERS, XCMPLX_0, XREAL_0,
-      COMPLEX1, SEQ_1, SEQ_2, SETFAM_1, XXREAL_0;
+      COMPLEX1, SEQ_1, SEQ_2, SETFAM_1, XXREAL_0, XXREAL_1;
  constructors SETFAM_1, FUNCOP_1, FINSUB_1, XXREAL_0, COMPLEX1, CARD_3, SEQ_2,
-      NAT_D;
+      NAT_D, XXREAL_1;
  registrations FUNCT_1, XREAL_0, RELSET_1, SUBSET_1, FUNCOP_1, MEMBERED,
-      ORDINAL1;
+      ORDINAL1, XXREAL_1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions FINSUB_1, TARSKI, SUBSET_1;
  theorems TARSKI, ZFMISC_1, FUNCT_1, FUNCT_2, ABSVALUE, SEQ_2, SETFAM_1,
       SUBSET_1, RELAT_1, RELSET_1, FINSUB_1, FUNCOP_1, XBOOLE_0, XBOOLE_1,
-      XREAL_1, CARD_3;
+      XREAL_1, CARD_3, XXREAL_0, XXREAL_1, MEMBERED, XREAL_0;
  schemes FUNCT_2, PARTFUN1;
 
 begin
@@ -968,8 +968,7 @@ A2: {} \/ ([#] Sigma) = [#] Sigma;
   reconsider E = {} as Event of Sigma by Th52;
      1 = P.([#] Sigma) by Def13;
   then 1 = P.E + 1 by A1,A2,Def13;
-   then P.({} Sigma) = 0;
-   hence thesis;
+  hence thesis;
   end;
 
 canceled;
@@ -1138,18 +1137,21 @@ definition let Omega; let X be Subset-Family of Omega;
 end;
 
 definition let r;
- func halfline(r) -> Subset of REAL equals
-      {r1 where r1 is Element of REAL: r1 < r};
+ func halfline r -> Subset of REAL equals ].-infty,r.[;
+:::      {r1 where r1 is Element of REAL: r1 < r};
   coherence
-  proof {r1 where r1 is Element of REAL: r1 < r} is Subset of REAL
-     proof now let p;
-         assume p in {r1 where r1 is Element of REAL: r1 < r};
-            then ex r1 being Element of REAL st p = r1 & r1 < r;
-            hence p in REAL;
-           end;
-      hence thesis by TARSKI:def 3;
-     end; hence thesis;
+  proof
+   now let x;
+    assume
+Z:   x in ].-infty,r.[;
+     then reconsider s = x as ext-real number by MEMBERED:def 2;
+B:   r in REAL by XREAL_0:def 1;
+A:   -infty < s by Z,XXREAL_1:4;
+     s < r by Z,XXREAL_1:4;
+    hence x in REAL by A,XXREAL_0:13,B;
    end;
+   hence thesis by TARSKI:def 3;
+  end;
 end;
 
 definition

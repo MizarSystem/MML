@@ -34,7 +34,7 @@
 <Cluster>
 <Adjective nr="16">
 <LocusVar nr="1"/>
-<Func kind="K" nr="41"/>
+<Func kind="K" nr="42"/>
 </Adjective>
 </Cluster>
 </CCluster>

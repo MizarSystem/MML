@@ -8,21 +8,23 @@ environ
 
  vocabularies FINSEQ_1, FINSET_1, BOOLE, FUNCT_1, RELAT_1, ABSVALUE, ARYTM_1,
       CAT_1, FUNCT_2, SUBSET_1, PRE_TOPC, TARSKI, RELAT_2, SETFAM_1, CARD_1,
-      FIN_TOPO, HAHNBAN, FINSEQ_4, ORDERS_1, NAT_1;
+      FIN_TOPO, HAHNBAN, FINSEQ_4, ORDERS_1, NAT_1, EQREL_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0,
-      FINSET_1, NAT_1, NAT_D, SETFAM_1, RELAT_1, FUNCT_1, FUNCT_2, CQC_LANG,
+      FINSET_1, NAT_1, NAT_D, SETFAM_1, RELAT_1, RELAT_2, EQREL_1,
+      FUNCT_1, FUNCT_2, CQC_LANG,
       DOMAIN_1, RELSET_1, FINSEQ_1, FINSEQ_4, CARD_1, INT_2, XXREAL_0,
       STRUCT_0, ORDERS_2, GROUP_1;
  constructors SETFAM_1, DOMAIN_1, XXREAL_0, REAL_1, NAT_1, CQC_LANG, FINSEQ_4,
-      INT_2, GROUP_1, ORDERS_2, NAT_D;
+      INT_2, GROUP_1, ORDERS_2, NAT_D, EQREL_1, WELLORD1;
  registrations SUBSET_1, INT_1, RELSET_1, STRUCT_0, CQC_LANG, FINSEQ_1,
       XREAL_0, NUMBERS, ORDINAL1, XXREAL_0;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions TARSKI, GROUP_1, STRUCT_0, ORDINAL1, XBOOLE_0, SUBSET_1, ORDERS_2,
-      YELLOW_0;
+ definitions TARSKI, GROUP_1, STRUCT_0, ORDINAL1, XBOOLE_0, SUBSET_1,
+      YELLOW_0, EQREL_1, RELAT_2, ORDERS_2, RELAT_1;
  theorems NAT_1, TARSKI, CQC_LANG, SUBSET_1, ZFMISC_1, FINSET_1, INT_1, CARD_1,
       FINSEQ_4, FUNCT_1, FUNCT_2, FINSEQ_1, ABSVALUE, GROUP_1, RELSET_1,
-      XBOOLE_0, XBOOLE_1, MEASURE2, XREAL_1, XXREAL_0, ORDINAL1, RELAT_1;
+      XBOOLE_0, XBOOLE_1, MEASURE2, XREAL_1, XXREAL_0, ORDINAL1, RELAT_1,
+      EQREL_1, ORDERS_2;
  schemes RECDEF_1, NAT_1, FINSEQ_2, DOMAIN_1;
 
 begin
@@ -179,7 +181,7 @@ A25:  for j being Element of NAT st j in Seg(k+1) holds
         z.j = G(j) from FINSEQ_2:sch 1;
   take z;
   thus 0 < len z by A24;
-  then A26: 0+1 <= len z by NAT_1:13;
+  A26: 0+1 <= len z by NAT_1:13,A24;
   then A27:1 in Seg(k+1) by A24,FINSEQ_1:3;
   thus z/.1 = z.1 by A26,FINSEQ_4:24
                .= f.(abs(1-1)) by A25,A27
@@ -299,7 +301,7 @@ definition
   let FT be RelStr;
   let x be Element of FT;
   func U_FT x -> Subset of FT equals
-    (the InternalRel of FT).:{x};
+    Class(the InternalRel of FT,x);
   coherence;
 end;
 
@@ -343,14 +345,32 @@ registration
   end;
 end;
 
-:::notation let IT be non empty RelStr;
-::: synonym IT is filled for IT is reflexive;
-:::end;
+notation let IT be non empty RelStr;
+ synonym IT is filled for IT is reflexive;
+end;
 
 definition let IT be non empty RelStr;
-::: redefine
+ redefine
  attr IT is filled means :Def4:
   for x being Element of IT holds x in U_FT x;
+ compatibility
+  proof
+   thus IT is filled implies for x being Element of IT holds x in U_FT x
+    proof assume
+Z:    IT is filled;
+     let x be Element of IT;
+      x <= x by Z,ORDERS_2:24;
+      then [x,x] in the InternalRel of IT by ORDERS_2:def 9;
+     hence x in U_FT x by EQREL_1:26;
+    end;
+   assume
+Z:  for x being Element of IT holds x in U_FT x;
+   let x be set;
+   assume x in the carrier of IT;
+    then reconsider x as Element of IT;
+    x in U_FT x by Z;
+   hence thesis by EQREL_1:26;
+  end;
 end;
 
 canceled 4;

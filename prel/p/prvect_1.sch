@@ -42,23 +42,23 @@
 <Not>
 <And>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="64">
+<Func kind="K" nr="65">
 <Var nr="1"/>
 </Func>
-<Func kind="K" nr="64">
+<Func kind="K" nr="65">
 <Func kind="F" nr="1"/>
 </Func>
 </Pred>
 <For>
 <Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="56"/>
-<Func kind="K" nr="65">
+<Func kind="K" nr="57"/>
+<Func kind="K" nr="66">
 <Func kind="F" nr="1"/>
 </Func>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="11">
+<Func kind="K" nr="12">
 <Var nr="1"/>
 <Var nr="2"/>
 </Func>

@@ -79,16 +79,16 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="215">
+<Func kind="K" nr="220">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="28" value="false"/>
-<Adjective nr="91"/>
-<Adjective nr="93"/>
-<Adjective nr="94" value="false"/>
-<Adjective nr="98"/>
-<Adjective nr="100"/>
+<Adjective nr="92"/>
+<Adjective nr="94"/>
+<Adjective nr="95" value="false"/>
+<Adjective nr="99"/>
+<Adjective nr="101"/>
 </Cluster>
 </FCluster>
 <FCluster>

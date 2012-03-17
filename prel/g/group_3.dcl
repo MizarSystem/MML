@@ -42,7 +42,7 @@
 <Adjective nr="28"/>
 <Adjective nr="29"/>
 <Adjective nr="30"/>
-<Adjective nr="34">
+<Adjective nr="35">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -57,7 +57,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="123">
+<Func kind="K" nr="125">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

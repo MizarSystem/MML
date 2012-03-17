@@ -21,7 +21,7 @@ environ
       RELSET_1, FINSEQ_1, FUNCOP_1, NAT_1, ORDINAL2, FUNCT_2, ORDINAL1;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, BINOP_1, LATTICE2, SETWISEO, MONOID_0, STRUCT_0, XBOOLE_0,
-      FUNCT_5, FUNCT_6;
+      FUNCT_5, FUNCT_6, VECTSP_1;
  theorems TARSKI, NAT_1, FINSET_1, FINSEQ_1, BINOP_1, SETWISEO, MCART_1,
       FUNCOP_1, ZFMISC_1, FUNCT_1, FUNCT_2, FUNCT_3, CARD_1, CARD_2, FINSEQ_2,
       FINSEQ_3, FUNCT_5, MONOID_0, GRFUNC_1, RELAT_1, RELSET_1, XBOOLE_0,
@@ -33,7 +33,7 @@ begin :: Updating
  reserve x,y,z, X,Y,Z for set, n for Element of NAT;
 
  deffunc op(HGrStr) = the mult of $1;
- deffunc un(multLoopStr) = the unity of $1;
+ deffunc un(multLoopStr) = 1.$1;
 
 definition let D1,D2,D be non empty set;
  mode Function of D1,D2,D is Function of [:D1,D2:],D;
@@ -525,7 +525,7 @@ definition let G be non empty HGrStr; let A be set;
 Def3:
    multLoopStr (# Funcs(A, the carrier of G),
    (the mult of G,the carrier of G).:A,
-   (A --> the_unity_wrt the mult of G)#) if G is unital otherwise
+   A --> the_unity_wrt the mult of G#) if G is unital otherwise
    HGrStr (# Funcs(A, the carrier of G),
    (the mult of G,the carrier of G).:A #);
   correctness;
@@ -653,18 +653,19 @@ definition let G be unital (non empty HGrStr); let A be set;
    proof op(G) has_a_unity by MONOID_0:def 10;
     then consider a being Element of G such that
 A1:   a is_a_unity_wrt op(G) by SETWISEO:def 2;
+    set M = multLoopStr(#Funcs(A, carr(G)), (op(G),carr(G)).:A,
+                   (A --> the_unity_wrt op(G))#);
+X:    1.M = A --> the_unity_wrt the mult of G;
 A2:   a = the_unity_wrt op(G) &
-     .:(G,A) = multLoopStr(#Funcs(A, carr(G)),
-     (op(G),carr(G)).:A,
-     (A --> the_unity_wrt op(G))#) by A1,Def3,BINOP_1:def 8;
+     .:(G,A) = M by A1,Def3,BINOP_1:def 8;
         A --> a is_a_unity_wrt (op(G),carr(G)).:A by A1,Th10;
-    hence thesis by A2,MONOID_0:def 21;
+    hence thesis by A2,MONOID_0:def 21,X;
    end;
 end;
 
 theorem Th23:
  for G being unital (non empty HGrStr) holds
-   the unity of .:(G,X) = X --> the_unity_wrt the mult of G
+   1..:(G,X) = X --> the_unity_wrt the mult of G
   proof let G be unital (non empty HGrStr);
        .:(G,X) = multLoopStr(#Funcs(X, carr(G)), (op(G), carr(G)).:X,
     (X --> the_unity_wrt op(G))#) by Def3;
@@ -722,8 +723,8 @@ theorem
 A1:  the_unity_wrt the mult of G in carr(H);
    then reconsider G' = G, H' = H as unital (non empty HGrStr) by MONOID_0:32;
 A2:  op(H) <= op(G) & op(.:(G,X)) = (op(G), carr(G)).:X &
-    the unity of .:(G',X) = X --> the_unity_wrt op(G) &
-    the unity of .:(H',X) = X --> the_unity_wrt op(H) &
+    1..:(G',X) = X --> the_unity_wrt op(G) &
+    1..:(H',X) = X --> the_unity_wrt op(H) &
     the_unity_wrt op(H') = the_unity_wrt op(G') &
     op(.:(H,X)) = (op(H), carr(H)).:X
      by A1,Th18,Th23,MONOID_0:32,def 23;
@@ -756,7 +757,7 @@ end;
 theorem Th27:
  the carrier of MultiSet_over X = Funcs(X,NAT) &
  the mult of MultiSet_over X = (addnat,NAT).:X &
- the unity of MultiSet_over X = X --> 0
+ 1.MultiSet_over X = X --> 0
   proof
        the HGrStr of <NAT,+,0> = <NAT,+> & MultiSet_over X = .:(<NAT,+,0>, X) &
     the_unity_wrt op(<NAT,+>) = 0 by MONOID_0:44,def 22;
@@ -901,7 +902,7 @@ A9:  now consider x being Element of e"(NAT\{0});
       hence contradiction by TARSKI:def 1;
      end;
         e = un(MultiSet_over A) by Th27;
-then A10: P[the unity of MultiSet_over A] by A9;
+then A10: P[1.MultiSet_over A] by A9;
     consider M being strict non empty MonoidalSubStr of MultiSet_over A
     such that
 A11:   for a being Multiset of A holds a in the carrier of M iff P[a]
@@ -1663,11 +1664,13 @@ end;
 definition let G be unital (non empty HGrStr);
  redefine func bool G -> well-unital strict (non empty multLoopStr);
   coherence
-   proof op(G) has_a_unity by MONOID_0:def 10;
-     then bool G = multLoopStr(#bool carr(G), op(G).:^2,{the_unity_wrt op(G)}
-#) &
+   proof
+    set M = multLoopStr(#bool carr(G), op(G).:^2,{the_unity_wrt op(G)}#);
+X:  1.M = {the_unity_wrt op(G)};
+    op(G) has_a_unity by MONOID_0:def 10;
+    then bool G = M &
      {the_unity_wrt op(G)} is_a_unity_wrt op(G).:^2 by Def9,Th54;
-    hence thesis by MONOID_0:def 21;
+    hence thesis by MONOID_0:def 21,X;
    end;
 end;
 
@@ -1683,7 +1686,7 @@ or
 
 theorem
     for G being unital (non empty HGrStr) holds
-   the unity of bool G = {the_unity_wrt the mult of G}
+   1.bool G = {the_unity_wrt the mult of G}
   proof let G be unital (non empty HGrStr);
        bool G = multLoopStr(#bool carr(G), op(G).:^2,{the_unity_wrt op(G)}#)
      by Def9;

@@ -9,11 +9,11 @@ environ
  vocabularies FUNCT_1, RELAT_1, BOOLE, FUNCOP_1, PARTFUN1, TARSKI, WELLORD1,
       CAT_1, NAT_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, CQC_LANG, RELAT_1, FUNCT_1,
-      PARTFUN1, FUNCT_2, PBOOLE;
- constructors PARTFUN1, WELLORD2, CQC_LANG, PBOOLE, NAT_D;
+      PARTFUN1, FUNCT_2, BINOP_1, FUNCOP_1, PBOOLE;
+ constructors PARTFUN1, WELLORD2, CQC_LANG, PBOOLE, NAT_D, BINOP_1;
  registrations FUNCT_1, RELSET_1, SUBSET_1, FUNCT_2, XBOOLE_0;
  requirements SUBSET, BOOLE;
- definitions TARSKI, CQC_LANG;
+ definitions TARSKI, CQC_LANG, FUNCOP_1, BINOP_1;
  theorems TARSKI, ZFMISC_1, FUNCT_1, FUNCT_2, PARTFUN1, FUNCOP_1, SUBSET_1,
       WELLORD2, RELAT_1, RELSET_1, XBOOLE_1;
  schemes FUNCT_2;
@@ -41,10 +41,9 @@ A4:  rng(f|Y) c= Z by A2,RELAT_1:148;
  end;
 
 definition let a,b,c;
- func (a,b).-->c -> PartFunc of [:{a},{b}:],{c} equals
- [a,b] .--> c;
- correctness
-  proof [a,b] .--> c = {[a,b]} --> c;
+ redefine func (a,b).-->c -> PartFunc of [:{a},{b}:],{c};
+ coherence
+  proof (a,b) .--> c = {[a,b]} --> c;
    hence thesis by ZFMISC_1:35;
   end;
 end;
@@ -52,24 +51,18 @@ end;
 canceled 2;
 
 theorem Th7:
-   dom (a,b).-->c = {[a,b]} & dom (a,b).-->c = [:{a},{b}:]
- proof (a,b).-->c = {[a,b]}-->c;
-  hence dom (a,b).-->c = {[a,b]} by FUNCT_2:def 1;
+  dom (a,b).-->c = [:{a},{b}:]
+ proof
+   dom (a,b).-->c = {[a,b]} by FUNCOP_1:19;
   hence dom (a,b).-->c = [:{a},{b}:] by ZFMISC_1:35;
  end;
 
 theorem Th8:
-   ((a,b).-->c).[a,b] = c
- proof
-A1: (a,b).-->c = {[a,b]}-->c;
-  [:{a},{b}:] = {[a,b]} & [a,b] in {[a,b]} & (a,b).-->c = [a,b] .--> c
-     by TARSKI:def 1,ZFMISC_1:35;
-   hence thesis by FUNCT_2:65,A1;
- end;
+   ((a,b).-->c).(a,b) = c by FUNCOP_1:86;
 
 theorem Th9:
    for x being Element of {a} for y being Element of {b}
-     holds ((a,b).-->c).[x,y] = c
+     holds ((a,b).-->c).(x,y) = c
  proof let x be Element of {a}; let y be Element of {b};
      x = a & y = b by TARSKI:def 1; hence thesis by Th8;
  end;
@@ -77,6 +70,7 @@ theorem Th9:
 :: Structure of a Category
 
 definition
+ canceled;
   struct CatStr
    (# Objects,Morphisms -> non empty set,
      Dom,Cod -> Function of the Morphisms, the Objects,
@@ -247,13 +241,13 @@ A1:  C = CatStr(# {o},{m},m.-->o,m.-->o,(m,m).-->m,o.-->m #);
   thus for f,g being Element of the Morphisms of C holds
       [g,f] in dom CP iff CD.g=CC.f
     proof let f,g be Element of the Morphisms of C;
-        f = m & g = m & dom CP = {[m,m]} by A1,Th7,TARSKI:def 1;
+        f = m & g = m & dom CP = {[m,m]} by A1,FUNCOP_1:19,TARSKI:def 1;
      hence thesis by A1,TARSKI:def 1;
     end;
   thus for f,g being Element of the Morphisms of C
     st CD.g=CC.f holds CD.(CP.[g,f]) = CD.f & CC.(CP.[g,f]) = CC.g
     proof let f,g be Element of the Morphisms of C;
-        CP.[g,f] = m by A1,Th9;
+        CP.(g,f) = m by A1,Th9;
      then reconsider gf = CP.[g,f] as Element of the Morphisms of C by A1,
 TARSKI:def 1;
         CD.f = o & CC.g = o & CD.gf = o & CC.gf = o by A1,FUNCT_2:65;
@@ -263,22 +257,22 @@ TARSKI:def 1;
       st CD.h = CC.g & CD.g = CC.f
      holds CP.[h,CP.[g,f]] = CP.[CP.[h,g],f]
    proof let f,g,h be Element of the Morphisms of C;
-        CP.[g,f] = m & CP.[h,g] = m by A1,Th9;
-     then reconsider gf = CP.[g,f],hg = CP.[h,g] as Element of the Morphisms of
+        CP.(g,f) = m & CP.(h,g) = m by A1,Th9;
+     then reconsider gf = CP.(g,f),hg = CP.(h,g) as Element of the Morphisms of
 C
-      by A1,TARSKI:def 1;  CP.[h,gf] = m & CP.[hg,f] = m by A1,Th9;
+      by A1,TARSKI:def 1;  CP.(h,gf) = m & CP.(hg,f) = m by A1,Th9;
     hence thesis;
    end;
   let b be Element of the Objects of C;
      b = o by A1,TARSKI:def 1;
   hence CD.(CI.b) = b & CC.(CI.b) = b by A1,FUNCT_2:65;
   thus for f being Element of the Morphisms of C st CC.f = b
-        holds CP.[CI.b,f] = f
+        holds CP.(CI.b,f) = f
     proof let f be Element of the Morphisms of C;  f = m by A1,TARSKI:def 1;
      hence thesis by A1,Th9;
     end;
   let g be Element of the Morphisms of C;
-     g = m by A1,TARSKI:def 1; hence CP.[g,CI.b] = g by A1,Th9;
+     g = m by A1,TARSKI:def 1; hence CP.(g,CI.b) = g by A1,Th9;
  end;
 
 :: Category
@@ -290,20 +284,20 @@ definition let C be CatStr;
          [g,f] in dom(the Comp of C) iff (the Dom of C).g=(the Cod of C).f)
    & (for f,g being Element of the Morphisms of C
          st (the Dom of C).g=(the Cod of C).f holds
-         (the Dom of C).((the Comp of C).[g,f]) = (the Dom of C).f &
-         (the Cod of C).((the Comp of C).[g,f]) = (the Cod of C).g)
+         (the Dom of C).((the Comp of C).(g,f)) = (the Dom of C).f &
+         (the Cod of C).((the Comp of C).(g,f)) = (the Cod of C).g)
     & (for f,g,h being Element of the Morphisms of C
          st (the Dom of C).h = (the Cod of C).g &
             (the Dom of C).g = (the Cod of C).f
-        holds (the Comp of C).[h,(the Comp of C).[g,f]]
-            = (the Comp of C).[(the Comp of C).[h,g],f] )
+        holds (the Comp of C).(h,(the Comp of C).(g,f))
+            = (the Comp of C).((the Comp of C).(h,g),f) )
     & (for b being Element of the Objects of C holds
          (the Dom of C).((the Id of C).b) = b &
          (the Cod of C).((the Id of C).b) = b &
          (for f being Element of the Morphisms of C st (the Cod of C).f = b
-           holds (the Comp of C).[(the Id of C).b,f] = f ) &
+           holds (the Comp of C).((the Id of C).b,f) = f ) &
          (for g being Element of the Morphisms of C st (the Dom of C).g = b
-           holds (the Comp of C).[g,(the Id of C).b] = g ) );
+           holds (the Comp of C).(g,(the Id of C).b) = g ) );
 end;
 
 registration
@@ -314,20 +308,20 @@ registration
          [g,f] in dom(the Comp of C) iff (the Dom of C).g=(the Cod of C).f)
    & (for f,g being Element of the Morphisms of C
          st (the Dom of C).g=(the Cod of C).f holds
-         (the Dom of C).((the Comp of C).[g,f]) = (the Dom of C).f &
-         (the Cod of C).((the Comp of C).[g,f]) = (the Cod of C).g)
+         (the Dom of C).((the Comp of C).(g,f)) = (the Dom of C).f &
+         (the Cod of C).((the Comp of C).(g,f)) = (the Cod of C).g)
     & (for f,g,h being Element of the Morphisms of C
          st (the Dom of C).h = (the Cod of C).g &
             (the Dom of C).g = (the Cod of C).f
-        holds (the Comp of C).[h,(the Comp of C).[g,f]]
-            = (the Comp of C).[(the Comp of C).[h,g],f] )
+        holds (the Comp of C).(h,(the Comp of C).(g,f))
+            = (the Comp of C).((the Comp of C).(h,g),f) )
     & (for b being Element of the Objects of C holds
          (the Dom of C).((the Id of C).b) = b &
          (the Cod of C).((the Id of C).b) = b &
          (for f being Element of the Morphisms of C st (the Cod of C).f = b
-           holds (the Comp of C).[(the Id of C).b,f] = f ) &
+           holds (the Comp of C).((the Id of C).b,f) = f ) &
          (for g being Element of the Morphisms of C st (the Dom of C).g = b
-           holds (the Comp of C).[g,(the Id of C).b] = g ) ) by Lm1;
+           holds (the Comp of C).(g,(the Id of C).b) = g ) ) by Lm1;
     end;
 end;
 
@@ -344,20 +338,20 @@ registration
          [g,f] in dom(the Comp of C) iff (the Dom of C).g=(the Cod of C).f)
    & (for f,g being Element of the Morphisms of C
          st (the Dom of C).g=(the Cod of C).f holds
-         (the Dom of C).((the Comp of C).[g,f]) = (the Dom of C).f &
-         (the Cod of C).((the Comp of C).[g,f]) = (the Cod of C).g)
+         (the Dom of C).((the Comp of C).(g,f)) = (the Dom of C).f &
+         (the Cod of C).((the Comp of C).(g,f)) = (the Cod of C).g)
     & (for f,g,h being Element of the Morphisms of C
          st (the Dom of C).h = (the Cod of C).g &
             (the Dom of C).g = (the Cod of C).f
-        holds (the Comp of C).[h,(the Comp of C).[g,f]]
-            = (the Comp of C).[(the Comp of C).[h,g],f] )
+        holds (the Comp of C).(h,(the Comp of C).(g,f))
+            = (the Comp of C).((the Comp of C).(h,g),f) )
     & (for b being Element of the Objects of C holds
          (the Dom of C).((the Id of C).b) = b &
          (the Cod of C).((the Id of C).b) = b &
          (for f being Element of the Morphisms of C st (the Cod of C).f = b
-           holds (the Comp of C).[(the Id of C).b,f] = f ) &
+           holds (the Comp of C).((the Id of C).b,f) = f ) &
          (for g being Element of the Morphisms of C st (the Dom of C).g = b
-           holds (the Comp of C).[g,(the Id of C).b] = g ) ) by Lm1;
+           holds (the Comp of C).(g,(the Id of C).b) = g ) ) by Lm1;
      then C is Category by Def8;
     hence thesis;
    end;
@@ -401,7 +395,7 @@ A5:  for f,g being Element of the Morphisms of C
    end;
   thus
 A6: for f,g being Element of the Morphisms of C st CD.g=CC.f
-    holds CD.(CP.[g,f]) = CD.f & CC.(CP.[g,f]) = CC.g
+    holds CD.(CP.(g,f)) = CD.f & CC.(CP.(g,f)) = CC.g
    proof let f,g be Element of the Morphisms of C such that
 A7:  CD.g=CC.f;
        CD.g = dom g & CC.f = cod f;
@@ -413,13 +407,13 @@ A7:  CD.g=CC.f;
    end;
   thus for f,g,h being Element of the Morphisms of C
      st CD.h = CC.g & CD.g = CC.f
-    holds CP.[h,CP.[g,f]] = CP.[CP.[h,g],f]
+    holds CP.(h,CP.(g,f)) = CP.(CP.(h,g),f)
    proof let f,g,h be Element of the Morphisms of C such that
 A8:  CD.h = CC.g & CD.g = CC.f;
 A9:    CD.h = dom h & CC.g = cod g & CD.g = dom g & CC.f = cod f;
        [g,f] in dom CP & [h,g] in dom CP by A5,A8;
 then A10:    g*f = CP.[g,f] & h*g = CP.[h,g] by Def4;
-       CD.(CP.[h,g]) = CD.g & CC.(CP.[g,f]) = CC.g by A6,A8;
+       CD.(CP.(h,g)) = CD.g & CC.(CP.(g,f)) = CC.g by A6,A8;
     then [h,g*f] in dom CP & [h*g,f] in dom CP by A5,A8,A10;
     then CP.[h,g*f] = h*(g*f) & CP.[h*g,f] = (h*g)*f by Def4;
     hence thesis by A3,A8,A9,A10;
@@ -428,7 +422,7 @@ then A10:    g*f = CP.[g,f] & h*g = CP.[h,g] by Def4;
      dom id b = b & cod id b = b & id b = CI.b by A4;
   hence CD.(CI.b) = b & CC.(CI.b) = b;
   thus for f being Element of the Morphisms of C st CC.f = b
-    holds CP.[CI.b,f] = f
+    holds CP.(CI.b,f) = f
    proof let f be Element of the Morphisms of C such that
 A11:   CC.f = b;
    dom id b = b & id b = CI.b by A4;
@@ -460,22 +454,22 @@ A1:  O = {o} & M = {m} & d = m.-->o & c = m.-->o & p = (m,m).-->m
     & (for f,g being Element of the Morphisms of C
          st (the Dom of C).g=(the Cod of C).f
         holds
-         (the Dom of C).((the Comp of C).[g,f]) = (the Dom of C).f &
-         (the Cod of C).((the Comp of C).[g,f]) = (the Cod of C).g)
+         (the Dom of C).((the Comp of C).(g,f)) = (the Dom of C).f &
+         (the Cod of C).((the Comp of C).(g,f)) = (the Cod of C).g)
     & (for f,g,h being Element of the Morphisms of C
          st (the Dom of C).h = (the Cod of C).g &
             (the Dom of C).g = (the Cod of C).f
         holds
-             (the Comp of C).[h,(the Comp of C).[g,f]]
-           = (the Comp of C).[(the Comp of C).[h,g],f] )
+             (the Comp of C).(h,(the Comp of C).(g,f))
+           = (the Comp of C).((the Comp of C).(h,g),f) )
     & (for b being Element of the Objects of C
         holds
          (the Dom of C).((the Id of C).b) = b &
          (the Cod of C).((the Id of C).b) = b &
          (for f being Element of the Morphisms of C st (the Cod of C).f = b
-           holds (the Comp of C).[(the Id of C).b,f] = f ) &
+           holds (the Comp of C).((the Id of C).b,f) = f ) &
          (for g being Element of the Morphisms of C st (the Dom of C).g = b
-           holds (the Comp of C).[g,(the Id of C).b] = g ) ) by A1,Lm1;
+           holds (the Comp of C).(g,(the Id of C).b) = g ) ) by A1,Lm1;
    hence thesis by A1,Def8;
   end;
 end;
@@ -536,7 +530,7 @@ A1:  dom(g) = cod(f);
   then dom(g) = (the Dom of C).g & cod(g) = (the Cod of C).g &
    dom(f) = (the Dom of C).f & cod(f) = (the Cod of C).f &
    (the Dom of C).(g*f) = dom(g*f) & (the Cod of C).(g*f) = cod(g*f) &
-   (the Comp of C).[g,f] = g*f by Th41;
+   (the Comp of C).(g,f) = g*f by Th41;
   hence thesis by A1,Def8;
  end;
 
@@ -549,8 +543,8 @@ A1:  dom(h) = cod(g) & dom(g) = cod(f);
    then dom(g) = (the Dom of C).g & cod(g) = (the Cod of C).g &
     dom(h) = (the Dom of C).h & cod(f) = (the Cod of C).f &
     (the Dom of C).(g*f) = dom(g*f) & (the Cod of C).(g*f) = cod(g*f) &
-    (the Comp of C).[h,g*f] = h*(g*f) & (the Comp of C).[h*g,f] = (h*g)*f &
-    (the Comp of C).[h,g] = h*g & (the Comp of C).[g,f] = g*f
+    (the Comp of C).(h,g*f) = h*(g*f) & (the Comp of C).(h*g,f) = (h*g)*f &
+    (the Comp of C).(h,g) = h*g & (the Comp of C).(g,f) = g*f
      by A1,Th41;
   hence thesis by A1,Def8;
  end;
@@ -569,7 +563,7 @@ theorem Th46:
 A1:  cod(f) = b;
    then dom(id b) = cod(f) by Th44;
    then cod(f) = (the Cod of C).f & id b = (the Id of C).b &
-    (the Comp of C).[id b,f] = (id b)*f by Th41;
+    (the Comp of C).(id b,f) = (id b)*f by Th41;
    hence thesis by A1,Def8;
  end;
 
@@ -580,7 +574,7 @@ theorem Th47:
 A1:  dom(g) = b;
    then cod(id b) = dom(g) by Th44;
    then dom(g) = (the Dom of C).g & id b = (the Id of C).b &
-    (the Comp of C).[g,id b] = g*(id b) by Th41;
+    (the Comp of C).(g,id b) = g*(id b) by Th41;
    hence thesis by A1,Def8;
  end;
 

@@ -6,7 +6,8 @@
 
 environ
 
- vocabularies RELAT_1, BOOLE, FUNCT_1, MATRIX_1, ZF_REFLE, AMI_1, SEQM_3;
+ vocabularies RELAT_1, BOOLE, FUNCT_1, MATRIX_1, ZF_REFLE, AMI_1, SEQM_3,
+        COMPLEX1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, SETFAM_1;
  constructors SETFAM_1, RELAT_1;
  registrations SUBSET_1, RELAT_1, ZFMISC_1, XBOOLE_0;
@@ -850,12 +851,18 @@ theorem Th52:
    hence thesis;
  end;
 
+registration
+  let X be set;
+  cluster id X -> one-to-one;
+  coherence by Th52;
+end;
+
 theorem
   (ex g st g*f = id dom f) implies f is one-to-one
  proof given g such that
 A1:   g*f = id dom f;
       dom(g*f) = dom f by A1,RELAT_1:71;
-   then g*f is one-to-one & rng f c= dom g by A1,Th27,Th52;
+   then g*f is one-to-one & rng f c= dom g by A1,Th27;
    hence f is one-to-one by Th47;
  end;
 
@@ -1068,6 +1075,15 @@ theorem Th62:
    hence thesis;
  end;
 
+registration
+ let f be one-to-one Function;
+ cluster f" -> one-to-one;
+ coherence by Th62;
+ let g be one-to-one Function;
+ cluster g*f -> one-to-one;
+ coherence by Th46;
+end;
+
 Lm1:
   rng(g2) = X & f*g2 = id dom g1 & g1*f = id X implies g1 = g2
  proof assume that
@@ -1110,7 +1126,7 @@ then A2:  dom f = rng(f") & rng f = dom(f") by Th55;
  end;
 
 theorem
-      f is one-to-one & g is one-to-one implies (g*f)" = f"*g"
+  f is one-to-one & g is one-to-one implies (g*f)" = f"*g"
  proof assume that
 A1:   f is one-to-one and
 A2:   g is one-to-one;
@@ -1178,12 +1194,11 @@ then A19:    g.(f.x) in dom(f"*g") by A13,A16,Th22;
  end;
 
 theorem
-  (id X)" = (id X)
+  (id X)" = id X
  proof
-A1:    id X is one-to-one by Th52;
-       dom id X = X by RELAT_1:71;
+   dom id X = X by RELAT_1:71;
   then (id X)"*(id X) = id X & dom((id X)") = rng id X & rng id X = X
-   by A1,Th55,Th61,RELAT_1:71;
+   by Th55,Th61,RELAT_1:71;
   hence thesis by Th44;
  end;
 
@@ -1443,7 +1458,7 @@ end;
 canceled 17;
 
 theorem Th117:
-  x in dom f implies f.:{x} = {f.x}
+  x in dom f implies Im(f,x) = {f.x}
   proof assume
 A1:   x in dom f;
       y in f.:{x} iff y in {f.x}
@@ -1529,7 +1544,7 @@ A1:   for X1,X2 holds f.:(X1 /\ X2) = f.:X1 /\ f.:X2;
 A2:   x1 in dom f & x2 in dom f and
 A3:   f.x1 = f.x2 and
 A4:   x1 <> x2;
-A5:  f.:{x1} = {f.x1} & f.:{x2} = {f.x2} & {x1} misses {x2}
+A5:  Im(f,x1) = {f.x1} & Im(f,x2) = {f.x2} & {x1} misses {x2}
      by A2,A4,Th117,ZFMISC_1:17;
   then {x1} /\ {x2} = {} by XBOOLE_0:def 7;
   then f.:({x1}/\{x2}) = {} & f.x1 in f.:{x1} &
@@ -1569,7 +1584,7 @@ A1:   for X1,X2 holds f.:(X1 \ X2) = f.:X1 \ f.:X2;
 A2:   x1 in dom f & x2 in dom f and
 A3:   f.x1 = f.x2 and
 A4:   x1 <> x2;
-     f.:{x1} = {f.x1} & f.:{x2} = {f.x2} & {x1} \ {x2} = {x1}
+     Im(f,x1) = {f.x1} & Im(f,x2) = {f.x2} & {x1} \ {x2} = {x1}
      by A2,A4,Th117,ZFMISC_1:20;
   then f.:({x1}\{x2}) = f.:{x1} & f.x1 in
  f.:{x1} & f.:({x1}\{x2}) = f.:{x1}\f.:{x2} &
@@ -1911,7 +1926,7 @@ A1: for X holds f"(f.:X) c= X;
 A2:   x1 in dom f & x2 in dom f and
 A3:   f.x1 = f.x2 and
 A4:   x1 <> x2;
-A5:   f.:{x1} = {f.x1} & f.:{x2} = {f.x2} by A2,Th117;
+A5:   Im(f,x1) = {f.x1} & Im(f,x2) = {f.x2} by A2,Th117;
    then f.:{x1} <> {} & f.:{x2} <> {} & f.x1 in rng f & f.x2 in rng f
      by A2,Def5;
    then f"(f.:{x1}) <> {} & f"(f.:{x2}) <> {} &
@@ -2240,3 +2255,11 @@ A3: x in X;
     then f.x in f.:X by A1,Def12;
     hence thesis by A1,A3,Def13;
    end; 
+
+:: added, AK 5.02.2007
+
+definition let f,g;
+  redefine pred f = g means
+  dom f = dom g & for x st x in dom f holds f.x = g.x;
+  compatibility by Th9;
+end;

@@ -27,22 +27,23 @@
 </Signature>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="131"/>
+<Func kind="K" nr="132"/>
 <Cluster>
 <Adjective nr="14" value="false"/>
 <Adjective nr="17"/>
 <Adjective nr="18"/>
+<Adjective nr="19"/>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes>
 <Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="45"/>
+<Func kind="K" nr="46"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="133">
-<Func kind="K" nr="54">
+<Func kind="K" nr="134">
+<Func kind="K" nr="55">
 <LocusVar nr="1"/>
 <Num nr="1"/>
 </Func>
@@ -52,6 +53,7 @@
 <Adjective nr="17"/>
 <Adjective nr="18"/>
 <Adjective nr="19"/>
+<Adjective nr="20"/>
 </Cluster>
 </FCluster>
 </Registrations>

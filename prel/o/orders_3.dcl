@@ -15,6 +15,7 @@
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="ORDERS_1"/>
 <ArticleID name="ORDERS_2"/>
+<ArticleID name="FUNCOP_1"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="FUNCT_3"/>
 <ArticleID name="BINOP_1"/>
@@ -31,7 +32,6 @@
 <ArticleID name="CAT_1"/>
 <ArticleID name="CAT_2"/>
 <ArticleID name="CAT_5"/>
-<ArticleID name="FUNCOP_1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="PBOOLE"/>
 <ArticleID name="MULTOP_1"/>
@@ -108,9 +108,9 @@
 <FCluster>
 <ArgTypes/>
 <Func kind="G" nr="3">
-<Func kind="K" nr="13"/>
-<Func kind="K" nr="48">
-<Func kind="K" nr="13"/>
+<Func kind="K" nr="14"/>
+<Func kind="K" nr="49">
+<Func kind="K" nr="14"/>
 </Func>
 </Func>
 <Cluster>
@@ -147,7 +147,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="304">
+<Func kind="K" nr="307">
 <LocusVar nr="1"/>
 <LocusVar nr="1"/>
 </Func>
@@ -164,7 +164,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="305">
+<Func kind="K" nr="308">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -187,27 +187,27 @@
 <Adjective nr="19"/>
 <Adjective nr="20"/>
 <Adjective nr="21"/>
-</Cluster>
-</Typ>
-</ArgTypes>
-<Func kind="K" nr="304">
-<LocusVar nr="1"/>
-<LocusVar nr="2"/>
-</Func>
-<Cluster>
-<Adjective nr="33"/>
-</Cluster>
-</FCluster>
-<FCluster>
-<ArgTypes>
-<Typ kind="M" nr="1">
-<Cluster>
-<Adjective nr="7" value="false"/>
-<Adjective nr="85"/>
 </Cluster>
 </Typ>
 </ArgTypes>
 <Func kind="K" nr="307">
+<LocusVar nr="1"/>
+<LocusVar nr="2"/>
+</Func>
+<Cluster>
+<Adjective nr="34"/>
+</Cluster>
+</FCluster>
+<FCluster>
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="7" value="false"/>
+<Adjective nr="85"/>
+</Cluster>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="310">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -225,7 +225,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="307">
+<Func kind="K" nr="310">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

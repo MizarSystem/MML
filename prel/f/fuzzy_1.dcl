@@ -33,7 +33,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="1"/>
-<Adjective nr="24"/>
+<Adjective nr="25"/>
 </Cluster>
 </CCluster>
 </Registrations>

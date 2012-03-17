@@ -35,7 +35,7 @@
 <Adjective nr="28"/>
 <Adjective nr="29"/>
 <Adjective nr="30"/>
-<Adjective nr="39"/>
+<Adjective nr="40"/>
 </Cluster>
 </RCluster>
 </Registrations>

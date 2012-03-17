@@ -20,8 +20,8 @@
 <ArticleID name="QC_LANG2"/>
 <ArticleID name="CQC_LANG"/>
 <ArticleID name="FUNCT_2"/>
-<ArticleID name="CAT_1"/>
 <ArticleID name="FUNCOP_1"/>
+<ArticleID name="CAT_1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="PBOOLE"/>
 <ArticleID name="STRUCT_0"/>
@@ -74,13 +74,13 @@
 <For>
 <Typ kind="G" nr="14">
 <Cluster>
-<Adjective nr="98">
-<Func kind="K" nr="427">
+<Adjective nr="99">
+<Func kind="K" nr="432">
 <Func kind="F" nr="1"/>
 </Func>
 </Adjective>
 </Cluster>
-<Func kind="K" nr="427">
+<Func kind="K" nr="432">
 <Func kind="F" nr="1"/>
 </Func>
 </Typ>
@@ -97,14 +97,14 @@
 <Func kind="F" nr="1"/>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="11">
+<Func kind="K" nr="12">
 <Func kind="U" nr="18">
-<Func kind="K" nr="427">
+<Func kind="K" nr="432">
 <Func kind="F" nr="1"/>
 </Func>
 <Var nr="1"/>
 </Func>
-<Func kind="K" nr="433">
+<Func kind="K" nr="438">
 <Func kind="F" nr="1"/>
 <Var nr="2"/>
 <Var nr="3"/>
@@ -123,18 +123,18 @@
 <Func kind="F" nr="1"/>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="11">
-<Func kind="K" nr="276">
-<Func kind="K" nr="427">
+<Func kind="K" nr="12">
+<Func kind="K" nr="281">
+<Func kind="K" nr="432">
 <Func kind="F" nr="1"/>
 </Func>
-<Func kind="K" nr="432">
+<Func kind="K" nr="437">
 <Func kind="F" nr="1"/>
 <Var nr="2"/>
 </Func>
 <Var nr="1"/>
 </Func>
-<Func kind="K" nr="13"/>
+<Func kind="K" nr="14"/>
 </Func>
 <Func kind="F" nr="5">
 <Var nr="2"/>
@@ -184,12 +184,12 @@
 </Pred>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="11">
-<Func kind="K" nr="276">
-<Func kind="K" nr="427">
+<Func kind="K" nr="12">
+<Func kind="K" nr="281">
+<Func kind="K" nr="432">
 <Func kind="F" nr="1"/>
 </Func>
-<Func kind="K" nr="434">
+<Func kind="K" nr="439">
 <Func kind="F" nr="1"/>
 <Var nr="2"/>
 <Var nr="3"/>
@@ -197,7 +197,7 @@
 </Func>
 <Var nr="1"/>
 </Func>
-<Func kind="K" nr="81">
+<Func kind="K" nr="82">
 <Func kind="F" nr="2"/>
 <Var nr="6"/>
 <Var nr="5"/>
@@ -233,7 +233,7 @@
 <Cluster/>
 <Func kind="F" nr="1"/>
 </Typ>
-<Pred kind="R" nr="8">
+<Pred kind="R" nr="13">
 <Func kind="F" nr="3">
 <Var nr="1"/>
 <Var nr="2"/>

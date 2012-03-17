@@ -29,22 +29,6 @@
 <ArticleID name="METRIC_1"/>
 <ArticleID name="PCOMPS_1"/>
 <ArticleID name="BORSUK_1"/>
-<ArticleID name="SETFAM_1"/>
-<ArticleID name="CLASSES2"/>
-<ArticleID name="FUNCT_3"/>
-<ArticleID name="FUNCT_4"/>
-<ArticleID name="FRAENKEL"/>
-<ArticleID name="FUNCT_5"/>
-<ArticleID name="FINSET_1"/>
-<ArticleID name="CARD_1"/>
-<ArticleID name="FINSEQ_1"/>
-<ArticleID name="QC_LANG1"/>
-<ArticleID name="QC_LANG2"/>
-<ArticleID name="CQC_LANG"/>
-<ArticleID name="CAT_1"/>
-<ArticleID name="CAT_2"/>
-<ArticleID name="RLVECT_1"/>
-<ArticleID name="GRCAT_1"/>
 <ArticleID name="T_0TOPSP"/>
 </Signature>
 <RCluster>
@@ -56,7 +40,7 @@
 <Adjective nr="13"/>
 <Adjective nr="14"/>
 <Adjective nr="15"/>
-<Adjective nr="112"/>
+<Adjective nr="68"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -123,13 +107,12 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="367">
+<Func kind="K" nr="76">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="2"/>
 <Adjective nr="5"/>
-<Adjective nr="6"/>
 <Adjective nr="8">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
@@ -146,7 +129,7 @@
 <LocusVar nr="1"/>
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="111">
+<Adjective nr="67">
 <LocusVar nr="1"/>
 <LocusVar nr="1"/>
 </Adjective>
@@ -168,14 +151,14 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="75">
+<Func kind="K" nr="77">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
 <Adjective nr="13"/>
 <Adjective nr="14"/>
-<Adjective nr="112"/>
+<Adjective nr="68"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -192,7 +175,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="169">
+<Func kind="K" nr="171">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -201,7 +184,7 @@
 <Adjective nr="14"/>
 <Adjective nr="15"/>
 <Adjective nr="23"/>
-<Adjective nr="112"/>
+<Adjective nr="68"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -219,7 +202,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="169">
+<Func kind="K" nr="171">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -249,7 +232,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="75">
+<Func kind="K" nr="77">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>

@@ -10,6 +10,8 @@
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="RELSET_1"/>
+<ArticleID name="MCART_1"/>
+<ArticleID name="FUNCT_2"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
@@ -32,7 +34,7 @@
 <And>
 <Pred kind="R" nr="2">
 <Var nr="1"/>
-<Func kind="K" nr="88">
+<Func kind="K" nr="116">
 <Func kind="F" nr="1"/>
 </Func>
 </Pred>
@@ -46,10 +48,10 @@
 </For>
 <Pred kind="P" nr="1">
 <Func kind="G" nr="3">
-<Func kind="K" nr="22"/>
-<Func kind="K" nr="31">
-<Func kind="K" nr="87">
-<Func kind="K" nr="22"/>
+<Func kind="K" nr="23"/>
+<Func kind="K" nr="32">
+<Func kind="K" nr="115">
+<Func kind="K" nr="23"/>
 </Func>
 </Func>
 </Func>
@@ -67,7 +69,7 @@
 <And>
 <Pred kind="R" nr="2">
 <Var nr="1"/>
-<Func kind="K" nr="88">
+<Func kind="K" nr="116">
 <Func kind="F" nr="1"/>
 </Func>
 </Pred>
@@ -89,21 +91,21 @@
 <Not>
 <Pred kind="P" nr="1">
 <Func kind="G" nr="3">
-<Func kind="K" nr="23">
+<Func kind="K" nr="24">
 <Func kind="U" nr="1">
 <Var nr="1"/>
 </Func>
-<Func kind="K" nr="11">
+<Func kind="K" nr="12">
 <Var nr="2"/>
 </Func>
 </Func>
-<Func kind="K" nr="31">
-<Func kind="K" nr="87">
-<Func kind="K" nr="23">
+<Func kind="K" nr="32">
+<Func kind="K" nr="115">
+<Func kind="K" nr="24">
 <Func kind="U" nr="1">
 <Var nr="1"/>
 </Func>
-<Func kind="K" nr="11">
+<Func kind="K" nr="12">
 <Var nr="2"/>
 </Func>
 </Func>
@@ -132,7 +134,7 @@
 </Pred>
 <Pred kind="R" nr="2">
 <Var nr="2"/>
-<Func kind="K" nr="87">
+<Func kind="K" nr="115">
 <Func kind="U" nr="1">
 <Var nr="1"/>
 </Func>
@@ -149,8 +151,8 @@
 <For>
 <Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="27">
-<Func kind="K" nr="87">
+<Func kind="K" nr="28">
+<Func kind="K" nr="115">
 <Func kind="U" nr="1">
 <Var nr="1"/>
 </Func>
@@ -161,11 +163,11 @@
 <And>
 <Pred kind="R" nr="1">
 <Var nr="3"/>
-<Func kind="K" nr="23">
+<Func kind="K" nr="24">
 <Func kind="U" nr="3">
 <Var nr="1"/>
 </Func>
-<Func kind="K" nr="11">
+<Func kind="K" nr="12">
 <Var nr="2"/>
 </Func>
 </Func>

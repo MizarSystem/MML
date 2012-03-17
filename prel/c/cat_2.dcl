@@ -16,6 +16,7 @@
 <ArticleID name="FUNCT_4"/>
 <ArticleID name="FRAENKEL"/>
 <ArticleID name="FUNCT_5"/>
+<ArticleID name="FUNCOP_1"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="FINSET_1"/>
@@ -31,7 +32,7 @@
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster>
-<Adjective nr="40"/>
+<Adjective nr="41"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -40,24 +41,24 @@
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="39"/>
 <Adjective nr="40"/>
+<Adjective nr="41"/>
 </Cluster>
 </RCluster>
 <FCluster>
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster>
-<Adjective nr="40"/>
+<Adjective nr="41"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="1">
 <Cluster>
-<Adjective nr="40"/>
+<Adjective nr="41"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="212">
+<Func kind="K" nr="224">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -69,22 +70,22 @@
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster>
-<Adjective nr="40"/>
+<Adjective nr="41"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="1">
 <Cluster>
-<Adjective nr="40"/>
+<Adjective nr="41"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="218">
+<Func kind="K" nr="230">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="39"/>
 <Adjective nr="40"/>
+<Adjective nr="41"/>
 </Cluster>
 </FCluster>
 </Registrations>

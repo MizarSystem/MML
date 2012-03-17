@@ -28,7 +28,7 @@ environ
  requirements NUMERALS, BOOLE, SUBSET, ARITHM, REAL;
  definitions FUNCT_1, TOPS_2, BORSUK_6, COMPTS_1, PRE_TOPC, RELAT_2, ORDERS_1,
       SEQ_4, TARSKI, XBOOLE_0, JCT_MISC, SEQM_3, CONNSP_1, TOPALG_2, SUBSET_1,
-      WELLORD1, STRUCT_0;
+      WELLORD1, STRUCT_0, LIMFUNC1, PROB_1;
  theorems PRE_TOPC, XREAL_0, FUNCT_2, INT_1, TOPS_2, FUNCT_1, TOPMETR,
       BORSUK_4, RELAT_1, BORSUK_6, TOPALG_2, TARSKI, ZFMISC_1, JORDAN5A,
       FINSEQ_1, XBOOLE_1, COMPTS_1, SETFAM_1, XBOOLE_0, REAL_1, FINSEQ_3,
@@ -36,7 +36,7 @@ environ
       TOPREALB, ORDINAL1, FINSET_1, ORDERS_1, RELAT_2, SUBSET_1, CARD_2,
       MEMBERED, SEQ_4, PRE_CIRC, BINARITH, FINSEQ_4, PSCOMP_1, TOPREAL6,
       JCT_MISC, RCOMP_2, LIMFUNC1, TREAL_1, REALSET1, BORSUK_5, TOPS_3, TEX_1,
-      REALSET2, XREAL_1, METRIC_1, WELLORD2, XXREAL_0;
+      REALSET2, XREAL_1, METRIC_1, WELLORD2, XXREAL_0, XXREAL_1;
  schemes NAT_1, RELSET_1, FINSET_1, FRAENKEL, FINSEQ_1, RECDEF_1;
 
 begin :: Preliminaries
@@ -55,7 +55,7 @@ registration
   proof
     let T be SubSpace of RealSpace;
     the carrier of T is Subset of RealSpace by TOPMETR:def 1;
-    hence the carrier of T is real-membered by MEMBERED:17,METRIC_1:def 14;
+    hence the carrier of T is real-membered by MEMBERED:21,METRIC_1:def 14;
   end;
 end;
 
@@ -83,7 +83,7 @@ proof
   let Y be closed Subset of REAL;
   assume that
 A1: X c= Y;
-  reconsider X as non empty bounded_below Subset of REAL by MEMBERED:2;
+  reconsider X as non empty bounded_below Subset of REAL by MEMBERED:3;
 A2: Cl X c= Y by A1,PSCOMP_1:32;
 A3: inf X = inf Cl X by TOPREAL6:77;
   inf Cl X in Cl X by RCOMP_1:31;
@@ -98,7 +98,7 @@ proof
   let Y be closed Subset of REAL;
   assume that
 A1: X c= Y;
-  reconsider X as non empty bounded_above Subset of REAL by MEMBERED:2;
+  reconsider X as non empty bounded_above Subset of REAL by MEMBERED:3;
 A2: Cl X c= Y by A1,PSCOMP_1:32;
 A3: sup X = sup Cl X by TOPREAL6:78;
   sup Cl X in Cl X by RCOMP_1:30;
@@ -122,114 +122,142 @@ reserve a, b, r, s for real number;
 
 registration
   let r, s;
-  cluster [.r,s.[ -> bounded;
-coherence
-proof
-  thus [.r,s.[ is bounded_below
+  cluster [.r,s.[ -> bounded Subset of REAL;
+ coherence
   proof
-    take r;
-    thus thesis by RCOMP_2:3;
+A: [.r,s.[ is bounded_below
+    proof
+     take r;
+     thus thesis by RCOMP_2:3;
+    end;
+   [.r,s.[ is bounded_above
+    proof
+     take s;
+     thus thesis by RCOMP_2:3;
+    end;
+   hence [.r,s.[ is bounded Subset of REAL by A,SEQ_4:def 3;
   end;
-  take s;
-  thus thesis by RCOMP_2:3;
-end;
-  cluster ].r,s.] -> bounded;
-coherence
-proof
-  thus ].r,s.] is bounded_below
+  cluster ].r,s.] -> bounded Subset of REAL;
+ coherence
   proof
-    take r;
-    thus thesis by RCOMP_2:4;
+A: ].r,s.] is bounded_below
+    proof
+     take r;
+     thus thesis by RCOMP_2:4;
+    end;
+   ].r,s.] is bounded_above
+    proof
+     take s;
+     thus thesis by RCOMP_2:4;
+    end;
+   hence ].r,s.] is bounded Subset of REAL by A,SEQ_4:def 3;
   end;
-  take s;
-  thus thesis by RCOMP_2:4;
-end;
-  cluster ].r,s.[ -> bounded;
-coherence
-proof
-  thus ].r,s.[ is bounded_below
+  cluster ].r,s.[ -> bounded Subset of REAL;
+ coherence
   proof
-    take r;
-    thus thesis by RCOMP_1:47;
+A: ].r,s.[ is bounded_below
+    proof
+     take r;
+     thus thesis by RCOMP_1:47;
+    end;
+   ].r,s.[ is bounded_above
+    proof
+     take s;
+     thus thesis by RCOMP_1:47;
+    end;
+   hence ].r,s.[ is bounded Subset of REAL by A,SEQ_4:def 3;
   end;
-  take s;
-  thus thesis by RCOMP_1:47;
-end;
 end;
 
 registration
   let r, s;
-  cluster [.r,s.] -> connected;
+  cluster [.r,s.] -> connected Subset of REAL;
 coherence
 proof
-  let a, b;
+  now let a, b;
   assume a in [.r,s.];
   then
 A1: r <= a by RCOMP_1:48;
   assume b in [.r,s.];
   then
 A2: b <= s by RCOMP_1:48;
-  let x be set;
+  thus [.a,b.] c= [.r,s.]
+  proof let x be set;
   assume
 A3: x in [.a,b.];
-  then reconsider x as Real;
-  a <= x & x <= b by A3,RCOMP_1:48;
-  then r <= x & x <= s by A1,A2,XXREAL_0:2;
-  hence thesis by RCOMP_1:48;
+  then reconsider x'=x as Real;
+  a <= x' & x' <= b by A3,RCOMP_1:48;
+  then r <= x' & x' <= s by A1,A2,XXREAL_0:2;
+  hence x in [.r,s.] by RCOMP_1:48;
+  end;
+  end;
+  hence thesis by JCT_MISC:def 1;
 end;
-  cluster [.r,s.[ -> connected;
+  cluster [.r,s.[ -> connected Subset of REAL;
 coherence
 proof
-  let a, b;
+  now let a, b;
   assume a in [.r,s.[;
   then
 A4: r <= a by RCOMP_2:3;
   assume b in [.r,s.[;
   then
 A5: b < s by RCOMP_2:3;
-  let x be set;
+  thus [.a,b.] c= [.r,s.[
+  proof let x be set;
   assume
 A6: x in [.a,b.];
-  then reconsider x as Real;
-  a <= x & x <= b by A6,RCOMP_1:48;
-  then r <= x & x < s by A4,A5,XXREAL_0:2;
-  hence thesis by RCOMP_2:3;
+  then reconsider x'=x as Real;
+  a <= x' & x' <= b by A6,RCOMP_1:48;
+  then r <= x' & x' < s by A4,A5,XXREAL_0:2;
+  hence x in [.r,s.[ by RCOMP_2:3;
+  end;
+ end;
+  hence thesis by JCT_MISC:def 1;
 end;
-  cluster ].r,s.] -> connected;
+  cluster ].r,s.] -> connected Subset of REAL;
 coherence
 proof
-  let a, b;
+  now let a, b;
   assume a in ].r,s.];
   then
 A7: r < a by RCOMP_2:4;
   assume b in ].r,s.];
   then
 A8: b <= s by RCOMP_2:4;
-  let x be set;
+  thus [.a,b.] c= ].r,s.]
+  proof let x be set;
   assume
 A9: x in [.a,b.];
-  then reconsider x as Real;
-  a <= x & x <= b by A9,RCOMP_1:48;
-  then r < x & x <= s by A7,A8,XXREAL_0:2;
-  hence thesis by RCOMP_2:4;
+  then reconsider x'=x as Real;
+  a <= x' & x' <= b by A9,RCOMP_1:48;
+  then r < x' & x' <= s by A7,A8,XXREAL_0:2;
+  hence x in ].r,s.] by RCOMP_2:4;
+  end;
+ end;
+  hence thesis by JCT_MISC:def 1;
 end;
-  cluster ].r,s.[ -> connected;
+  cluster ].r,s.[ -> connected Subset of REAL;
 coherence
 proof
-  let a, b;
+  now let a, b;
   assume a in ].r,s.[;
   then
 A10: r < a by RCOMP_1:47;
   assume b in ].r,s.[;
   then
 A11: b < s by RCOMP_1:47;
-  let x be set;
+  thus [.a,b.] c= ].r,s.[
+  proof let x be set;
   assume
 A12: x in [.a,b.];
-  then reconsider x as Real;
-  a <= x & x <= b by A12,RCOMP_1:48;
-  then r < x & x < s by A10,A11,XXREAL_0:2;
-  hence thesis by RCOMP_1:47;
+  then reconsider x'=x as Real;
+  a <= x' & x' <= b by A12,RCOMP_1:48;
+  then r < x' & x' < s by A10,A11,XXREAL_0:2;
+  hence x in ].r,s.[ by RCOMP_1:47;
+  end;
+ end;
+  hence thesis by JCT_MISC:def 1;
 end;
 end;
 
@@ -389,104 +417,28 @@ A10:  (s+(s-b))/2 > s-b by A8,XREAL_1:228;
 end;
 
 theorem
-  a <= b & [.a,b.] = [.r,s.] implies a = r & b = s
-proof
-  assume that
-A1: a <= b and
-A2: [.a,b.] = [.r,s.];
-  [.a,b.] is non empty or [.r,s.] is non empty by A1,RCOMP_1:48;
-  then a <= b & r <= s by A2,RCOMP_1:13;
-  then inf [.a,b.] = a & inf [.r,s.] = r &
-  sup [.a,b.] = b & sup [.r,s.] = s by JORDAN5A:20;
-  hence thesis by A2;
-end;
+  a <= b & [.a,b.] = [.r,s.] implies a = r & b = s by XXREAL_1:66;
 
 theorem
-  a < b & ].a,b.[ = ].r,s.[ implies a = r & b = s
-proof
-  assume that
-A1: a < b and
-A2: ].a,b.[ = ].r,s.[;
-  ].a,b.[ is non empty or ].r,s.[ is non empty by A1,RCOMP_1:15;
-  then a < b & r < s by A2,RCOMP_1:12;
-  then inf ].a,b.[ = a & inf ].r,s.[ = r &
-  sup ].a,b.[ = b & sup ].r,s.[ = s by TOPREAL6:22;
-  hence thesis by A2;
-end;
+  a < b & ].a,b.[ = ].r,s.[ implies a = r & b = s by XXREAL_1:67;
 
 theorem
-  a < b & ].a,b.] = ].r,s.] implies a = r & b = s
-proof
-  assume that
-A1: a < b and
-A2: ].a,b.] = ].r,s.];
-  ].a,b.] is non empty or ].r,s.] is non empty by A1,RCOMP_2:4;
-  then a < b & r < s by A2,RCOMP_2:10;
-  then inf ].a,b.] = a & inf ].r,s.] = r &
-  sup ].a,b.] = b & sup ].r,s.] = s by Th6,Th7;
-  hence thesis by A2;
-end;
+  a < b & ].a,b.] = ].r,s.] implies a = r & b = s by XXREAL_1:68;
 
 theorem
-  a < b & [.a,b.[ = [.r,s.[ implies a = r & b = s
-proof
-  assume that
-A1: a < b and
-A2: [.a,b.[ = [.r,s.[;
-  [.a,b.[ is non empty or [.r,s.[ is non empty by A1,RCOMP_2:3;
-  then a < b & r < s by A2,RCOMP_2:9;
-  then inf [.a,b.[ = a & inf [.r,s.[ = r &
-  sup [.a,b.[ = b & sup [.r,s.[ = s by Th4,Th5;
-  hence thesis by A2;
-end;
+  a < b & [.a,b.[ = [.r,s.[ implies a = r & b = s by XXREAL_1:69;
 
 theorem Th12:
-  a < b & [.a,b.[ c= [.r,s.] implies r <= a & b <= s
-proof
-  assume that
-A1: a < b and
-A2: [.a,b.[ c= [.r,s.];
-A3: a in [.a,b.[ by A1,RCOMP_2:3;
-  hence r <= a by A2,RCOMP_1:48;
-  sup [.a,b.[ in [.r,s.] by A2,A3,Th2;
-  then b in [.r,s.] by A1,Th5;
-  hence b <= s by RCOMP_1:48;
-end;
+  a < b & [.a,b.[ c= [.r,s.] implies r <= a & b <= s by XXREAL_1:52;
 
 theorem
-  a < b & [.a,b.[ c= [.r,s.[ implies r <= a & b <= s
-proof
-  assume that
-A1: a < b and
-A2: [.a,b.[ c= [.r,s.[;
-  [.r,s.[ c= [.r,s.] by TOPREALA:11;
-  then [.a,b.[ c= [.r,s.] by A2,XBOOLE_1:1;
-  hence thesis by A1,Th12;
-end;
+  a < b & [.a,b.[ c= [.r,s.[ implies r <= a & b <= s by XXREAL_1:55;
 
 theorem Th14:
-  a < b & ].a,b.] c= [.r,s.] implies r <= a & b <= s
-proof
-  assume that
-A1: a < b and
-A2: ].a,b.] c= [.r,s.];
-A3: b in ].a,b.] by A1,RCOMP_2:4;
-  inf ].a,b.] in [.r,s.] by A2,A3,Th1;
-  then a in [.r,s.] by A1,Th6;
-  hence r <= a by RCOMP_1:48;
-  thus b <= s by A2,A3,RCOMP_1:48;
-end;
+  a < b & ].a,b.] c= [.r,s.] implies r <= a & b <= s by XXREAL_1:53;
 
 theorem
-  a < b & ].a,b.] c= ].r,s.] implies r <= a & b <= s
-proof
-  assume that
-A1: a < b and
-A2: ].a,b.] c= ].r,s.];
-  ].r,s.] c= [.r,s.] by TOPREALA:15;
-  then ].a,b.] c= [.r,s.] by A2,XBOOLE_1:1;
-  hence thesis by A1,Th14;
-end;
+  a < b & ].a,b.] c= ].r,s.] implies r <= a & b <= s by XXREAL_1:61;
 
 begin :: Halflines
 

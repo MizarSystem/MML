@@ -21,11 +21,11 @@
 <ArticleID name="PBOOLE"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PRE_TOPC"/>
-<ArticleID name="FUNCT_4"/>
-<ArticleID name="FUNCT_5"/>
 <ArticleID name="RELAT_2"/>
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="CARD_3"/>
+<ArticleID name="FUNCT_4"/>
+<ArticleID name="FUNCT_5"/>
 <ArticleID name="UNIALG_1"/>
 <ArticleID name="PRALG_1"/>
 <ArticleID name="WELLORD2"/>

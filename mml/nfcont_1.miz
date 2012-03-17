@@ -9,20 +9,21 @@ environ
  vocabularies PRE_TOPC, FCONT_1, SUBSET_1, RLVECT_1, FUNCT_1, ARYTM, ARYTM_1,
       ARYTM_3, RELAT_1, ABSVALUE, ORDINAL2, SEQ_1, SEQ_2, SEQM_3, COMPTS_1,
       RCOMP_1, BOOLE, FINSEQ_4, SEQ_4, PARTFUN1, PARTFUN2, NORMSP_1, FRECHET2,
-      NAT_1;
+      NAT_1, COMPLEX1;
  notations TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, RELSET_1, PARTFUN1,
       PARTFUN2, FUNCT_2, PRE_TOPC, STRUCT_0, XREAL_0, ORDINAL1, NUMBERS,
       REAL_1, FINSEQ_4, RLVECT_1, SEQ_1, SEQ_2, SEQM_3, SEQ_4, COMPLEX1,
-      RCOMP_1, VFUNCT_1, NORMSP_1, BHSP_3, LOPBAN_3, XXREAL_0;
+      RCOMP_1, VFUNCT_1, NORMSP_1, BHSP_1, BHSP_3, LOPBAN_3, XXREAL_0;
  constructors PARTFUN1, XXREAL_0, REAL_1, COMPLEX1, SEQ_2, SEQ_4, RCOMP_1,
       FINSEQ_4, PARTFUN2, BHSP_3, VFUNCT_1, LOPBAN_3, NAT_D;
- registrations RELSET_1, STRUCT_0, ORDINAL1, MEMBERED, FUNCT_1, SEQM_3, NAT_1;
+ registrations RELSET_1, STRUCT_0, ORDINAL1, MEMBERED, FUNCT_1, SEQM_3, NAT_1,
+      RLVECT_1;
  requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
- definitions TARSKI, SEQM_3, BHSP_3, RLVECT_1;
+ definitions TARSKI, SEQM_3, BHSP_3, RLVECT_1, RELAT_1;
  theorems TARSKI, XBOOLE_0, XBOOLE_1, SUBSET_1, RLVECT_1, XCMPLX_0, XCMPLX_1,
       ZFMISC_1, RCOMP_1, XREAL_0, SEQ_2, NAT_1, RELAT_1, FUNCT_1, FINSEQ_4,
       VFUNCT_1, LOPBAN_1, FUNCT_2, SEQ_4, NORMSP_1, LOPBAN_3, PARTFUN1,
-      PARTFUN2, BHSP_3, XREAL_1, COMPLEX1, XXREAL_0;
+      PARTFUN2, BHSP_3, XREAL_1, COMPLEX1, XXREAL_0, BHSP_1;
  schemes SEQ_1, FUNCT_2;
 
 begin :: Continuous Functions on Normed Linear Spaces
@@ -30,11 +31,6 @@ begin :: Continuous Functions on Normed Linear Spaces
  reserve n,m for Element of NAT;
  reserve x,X,X1 for set;
  reserve s,g,r,p for Real;
-
-definition let S,T be 1-sorted;
-  mode PartFunc of S,T is PartFunc of the carrier of S,the carrier of T;
-end;
-
  reserve S,T for RealNormSpace;
  reserve f,f1,f2 for PartFunc of S,T;
  reserve s1,s2 for sequence of S;
@@ -42,41 +38,20 @@ end;
  reserve Y for Subset of  S;
 
 definition
-  let RNS be RealLinearSpace;
-  let S1 be sequence of RNS;
-  func - S1 -> sequence of RNS means :Def1:
-  for n holds it.n = - S1.n;
-existence
-proof
-   deffunc F(Element of NAT) = - S1.$1;
-   thus ex S being sequence of RNS st for n holds S.n = F(n)
-     from FUNCT_2:sch 4;
-end;
-uniqueness
-proof
-   let S,T be sequence of RNS;
-   assume that
-A1: ( for n holds S.n =  - S1.n ) and
-A2: ( for n holds T.n =  - S1.n );
-   for n holds S.n = T.n
-   proof
-     let n;
-     S.n =  - S1.n by A1;
-     hence thesis by A2;
-   end;
-   hence thesis by FUNCT_2:113;
-end;
+  canceled;
 end;
 
 theorem
+for S being non empty LoopStr
 for seq1,seq2 be sequence of S holds seq1 - seq2 = seq1 +- seq2
 proof
+  let S be non empty LoopStr;
    let seq1, seq2 be sequence of S;
    for n holds (seq1 - seq2).n =   (seq1 +- seq2).n
    proof
      let n;
      thus (seq1 - seq2).n  =  seq1.n - seq2.n by NORMSP_1:def 6
-                    .= seq1.n + (-seq2).n by Def1
+                    .= seq1.n + (-seq2).n by BHSP_1:def 10
                     .=  (seq1+-seq2).n by NORMSP_1:def 5;
    end;
    hence thesis by FUNCT_2:113;
@@ -89,7 +64,7 @@ proof
    now let n;
      thus ((-1)*seq).n =(-1)*seq.n by NORMSP_1:def 8
                       .=-seq.n by RLVECT_1:29
-                      .=(-seq).n by Def1;
+                      .=(-seq).n by BHSP_1:def 10;
    end;
    hence thesis by FUNCT_2:113;
 end;
@@ -702,7 +677,7 @@ A1:x0 in dom f;
 A2: dom f /\ N = {x0};
    now let N1 be Neighbourhood of f/.x0;
      take N;
-A3:  f.:N = f.:{x0} by A2,RELAT_1:145
+A3:  f.:N = Im(f,x0) by A2,RELAT_1:145
          .= {f.x0} by A1,FUNCT_1:117
          .= {f/.x0} by A1,FINSEQ_4:def 4;
      f/.x0 in N1 by Th4;

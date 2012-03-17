@@ -35,9 +35,9 @@
 <Adjective nr="31"/>
 <Adjective nr="32"/>
 <Adjective nr="40"/>
-<Adjective nr="49"/>
 <Adjective nr="50"/>
 <Adjective nr="51"/>
+<Adjective nr="52"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -51,13 +51,13 @@
 <Adjective nr="30"/>
 <Adjective nr="31"/>
 <Adjective nr="32"/>
-<Adjective nr="54">
-<LocusVar nr="1"/>
-</Adjective>
 <Adjective nr="55">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="59">
+<Adjective nr="56">
+<LocusVar nr="1"/>
+</Adjective>
+<Adjective nr="60">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

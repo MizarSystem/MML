@@ -27,6 +27,7 @@
 <ArticleID name="GROUP_1"/>
 <ArticleID name="VECTSP_1"/>
 <ArticleID name="REALSET2"/>
+<ArticleID name="FUNCOP_1"/>
 <ArticleID name="FUNCT_3"/>
 <ArticleID name="BINOP_1"/>
 <ArticleID name="METRIC_1"/>
@@ -36,7 +37,6 @@
 <ArticleID name="RELAT_2"/>
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="EQREL_1"/>
-<ArticleID name="FUNCOP_1"/>
 <ArticleID name="ENUMSET1"/>
 <ArticleID name="DOMAIN_1"/>
 <ArticleID name="CONNSP_2"/>
@@ -55,8 +55,8 @@
 </ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="18">
-<Func kind="K" nr="18">
+<Func kind="K" nr="19">
+<Func kind="K" nr="19">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
@@ -71,7 +71,7 @@
 <Adjective nr="29">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="95"/>
+<Adjective nr="97"/>
 </Cluster>
 </RCluster>
 <FCluster>
@@ -112,7 +112,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="257">
+<Func kind="K" nr="261">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -139,7 +139,7 @@
 <Cluster>
 <Adjective nr="20" value="false"/>
 <Adjective nr="22"/>
-<Adjective nr="70"/>
+<Adjective nr="71"/>
 </Cluster>
 <Typ kind="G" nr="3">
 <Cluster/>
@@ -148,7 +148,7 @@
 <Adjective nr="20" value="false"/>
 <Adjective nr="22"/>
 <Adjective nr="26"/>
-<Adjective nr="120"/>
+<Adjective nr="121"/>
 </Cluster>
 </CCluster>
 <CCluster>
@@ -176,7 +176,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="25">
-<Func kind="K" nr="279"/>
+<Func kind="K" nr="283"/>
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

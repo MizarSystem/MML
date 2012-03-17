@@ -34,9 +34,9 @@
 </Typ>
 <Cluster>
 <Adjective nr="27" value="false"/>
-<Adjective nr="60" value="false"/>
-<Adjective nr="62"/>
-<Adjective nr="65"/>
+<Adjective nr="61" value="false"/>
+<Adjective nr="63"/>
+<Adjective nr="66"/>
 </Cluster>
 </RCluster>
 <FCluster>
@@ -64,7 +64,7 @@
 </Func>
 <Cluster>
 <Adjective nr="27" value="false"/>
-<Adjective nr="62"/>
+<Adjective nr="63"/>
 </Cluster>
 </FCluster>
 </Registrations>

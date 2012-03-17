@@ -52,14 +52,14 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="160">
+<Func kind="K" nr="164">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
 </Func>
 <Cluster>
 <Adjective nr="27" value="false"/>
-<Adjective nr="62"/>
+<Adjective nr="63"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -87,14 +87,14 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="161">
+<Func kind="K" nr="165">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
 </Func>
 <Cluster>
 <Adjective nr="27" value="false"/>
-<Adjective nr="62"/>
+<Adjective nr="63"/>
 </Cluster>
 </FCluster>
 </Registrations>

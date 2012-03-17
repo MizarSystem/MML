@@ -12,20 +12,16 @@
 <ArticleID name="MCART_1"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
-<ArticleID name="XCMPLX_0"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="XREAL_0"/>
+<ArticleID name="MEMBERED"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="CARD_3"/>
 <ArticleID name="PROB_1"/>
+<ArticleID name="XXREAL_0"/>
+<ArticleID name="SUPINF_1"/>
 <ArticleID name="FINSUB_1"/>
-<ArticleID name="FINSEQ_1"/>
-<ArticleID name="FINSEQ_2"/>
-<ArticleID name="INT_1"/>
-<ArticleID name="COMPLEX1"/>
-<ArticleID name="INT_2"/>
-<ArticleID name="NEWTON"/>
 <ArticleID name="CARD_4"/>
 <ArticleID name="SUPINF_2"/>
 <ArticleID name="MEASURE1"/>
@@ -42,22 +38,22 @@
 <Typ kind="M" nr="2">
 <Cluster>
 <Adjective nr="7" value="false"/>
-<Adjective nr="25">
+<Adjective nr="30">
 <Func kind="F" nr="1"/>
 </Adjective>
-<Adjective nr="28">
+<Adjective nr="33">
 <Func kind="F" nr="1"/>
 </Adjective>
 </Cluster>
-<Func kind="K" nr="18">
-<Func kind="K" nr="18">
+<Func kind="K" nr="19">
+<Func kind="K" nr="19">
 <Func kind="F" nr="1"/>
 </Func>
 </Func>
 </Typ>
 <Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="18">
+<Func kind="K" nr="19">
 <Func kind="F" nr="1"/>
 </Func>
 <Func kind="F" nr="2"/>
@@ -74,11 +70,11 @@
 <For>
 <Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="72"/>
-<Func kind="K" nr="76"/>
+<Func kind="K" nr="73"/>
+<Func kind="K" nr="77"/>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="224">
+<Func kind="K" nr="168">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Var nr="1"/>

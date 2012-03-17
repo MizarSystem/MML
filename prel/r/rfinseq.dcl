@@ -28,16 +28,16 @@
 <ArgTypes/>
 <Typ kind="M" nr="7">
 <Cluster/>
-<Func kind="K" nr="52"/>
+<Func kind="K" nr="53"/>
 </Typ>
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="20"/>
 <Adjective nr="24"/>
-<Adjective nr="31"/>
 <Adjective nr="32"/>
-<Adjective nr="36"/>
+<Adjective nr="33"/>
+<Adjective nr="37"/>
 </Cluster>
 </RCluster>
 <FCluster>

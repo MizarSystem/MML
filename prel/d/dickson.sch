@@ -17,13 +17,13 @@
 <ArgTypes>
 <Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="41"/>
-<Func kind="K" nr="45"/>
+<Func kind="K" nr="42"/>
+<Func kind="K" nr="46"/>
 </Typ>
 <Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="41"/>
-<Func kind="K" nr="45"/>
+<Func kind="K" nr="42"/>
+<Func kind="K" nr="46"/>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -33,20 +33,20 @@
 <Fraenkel>
 <Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="41"/>
-<Func kind="K" nr="45"/>
+<Func kind="K" nr="42"/>
+<Func kind="K" nr="46"/>
 </Typ>
 <Func kind="F" nr="3">
 <Var nr="1"/>
 </Func>
 <And>
 <Not>
-<Pred kind="R" nr="11">
+<Pred kind="R" nr="16">
 <Var nr="1"/>
 <Func kind="F" nr="1"/>
 </Pred>
 </Not>
-<Pred kind="R" nr="11">
+<Pred kind="R" nr="16">
 <Var nr="1"/>
 <Func kind="F" nr="2"/>
 </Pred>

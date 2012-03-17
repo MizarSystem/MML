@@ -111,10 +111,10 @@
 </Pred>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="101">
+<Func kind="K" nr="103">
 <Var nr="1"/>
 </Func>
-<Func kind="K" nr="101">
+<Func kind="K" nr="103">
 <Var nr="2"/>
 </Func>
 </Pred>
@@ -136,7 +136,7 @@
 <For>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="130">
+<Func kind="K" nr="132">
 <Func kind="F" nr="1"/>
 </Func>
 </Typ>
@@ -198,10 +198,10 @@
 </Pred>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="101">
+<Func kind="K" nr="103">
 <Var nr="1"/>
 </Func>
-<Func kind="K" nr="101">
+<Func kind="K" nr="103">
 <Var nr="2"/>
 </Func>
 </Pred>
@@ -220,14 +220,14 @@
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="93"/>
+<Func kind="K" nr="95"/>
 </Typ>
 </ArgTypes>
 <Not>
 <For>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="130">
+<Func kind="K" nr="132">
 <Func kind="F" nr="1"/>
 </Func>
 </Typ>
@@ -240,7 +240,7 @@
 <Not>
 <And>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="101">
+<Func kind="K" nr="103">
 <Var nr="2"/>
 </Func>
 <Func kind="F" nr="2"/>

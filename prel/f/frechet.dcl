@@ -33,7 +33,7 @@
 </Signature>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="186"/>
+<Func kind="K" nr="188"/>
 <Cluster>
 <Adjective nr="21" value="false"/>
 <Adjective nr="22"/>

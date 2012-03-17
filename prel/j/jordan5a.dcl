@@ -45,39 +45,39 @@
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="45"/>
+<Func kind="K" nr="46"/>
 </Typ>
 </ArgTypes>
 <Typ kind="M" nr="9">
 <Cluster/>
-<Func kind="K" nr="194">
+<Func kind="K" nr="196">
 <LocusVar nr="1"/>
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="34" value="false"/>
-<Adjective nr="35"/>
+<Adjective nr="35" value="false"/>
 <Adjective nr="36"/>
-<Adjective nr="41"/>
+<Adjective nr="37"/>
 <Adjective nr="42"/>
+<Adjective nr="43"/>
 </Cluster>
 </RCluster>
 <FCluster>
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="45"/>
+<Func kind="K" nr="46"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="194">
+<Func kind="K" nr="196">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="34" value="false"/>
-<Adjective nr="35"/>
+<Adjective nr="35" value="false"/>
 <Adjective nr="36"/>
-<Adjective nr="42"/>
-<Adjective nr="80"/>
+<Adjective nr="37"/>
+<Adjective nr="43"/>
+<Adjective nr="81"/>
 </Cluster>
 </FCluster>
 </Registrations>

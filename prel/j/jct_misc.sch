@@ -89,13 +89,13 @@
 </Typ>
 <Pred kind="P" nr="1">
 <Var nr="3"/>
-<Func kind="K" nr="69">
+<Func kind="K" nr="70">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Var nr="1"/>
 <Var nr="3"/>
 </Func>
-<Func kind="K" nr="69">
+<Func kind="K" nr="70">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="3"/>
 <Var nr="2"/>

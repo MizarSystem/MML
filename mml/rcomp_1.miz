@@ -8,19 +8,19 @@ environ
 
  vocabularies ARYTM, SEQ_1, ORDINAL2, SEQM_3, FUNCT_1, SEQ_2, LATTICES,
       ARYTM_1, ABSVALUE, ARYTM_3, BOOLE, COMPTS_1, RELAT_1, PRE_TOPC, SUBSET_1,
-      SQUARE_1, SEQ_4, RCOMP_1, FUNCOP_1, FRECHET2, NAT_1;
+      SQUARE_1, SEQ_4, RCOMP_1, FUNCOP_1, FRECHET2, NAT_1, SUPINF_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
       COMPLEX1, REAL_1, NAT_1, NAT_D, RELAT_1, FUNCT_2, FUNCOP_1, SEQ_1, SEQ_2,
-      SEQM_3, SEQ_4, XXREAL_0;
+      SEQM_3, SEQ_4, XXREAL_0, XXREAL_1;
  constructors FUNCOP_1, REAL_1, SQUARE_1, NAT_1, COMPLEX1, SEQ_2, SEQM_3,
-      SEQ_4, NAT_D;
+      SEQ_4, NAT_D, XXREAL_1;
  registrations XREAL_0, RELSET_1, SEQM_3, SEQ_1, NAT_1, MEMBERED, ORDINAL1,
       XXREAL_0;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions TARSKI, SEQ_2, XBOOLE_0, SUBSET_1;
+ definitions TARSKI, SEQ_2, XBOOLE_0, SUBSET_1, XXREAL_1;
  theorems TARSKI, SUBSET_1, REAL_1, NAT_1, FUNCT_1, FUNCT_2, SEQ_2, SEQM_3,
       SEQ_4, ABSVALUE, RELAT_1, XREAL_0, XBOOLE_0, XBOOLE_1, XCMPLX_0,
-      XCMPLX_1, FUNCOP_1, XREAL_1, COMPLEX1, XXREAL_0;
+      XCMPLX_1, FUNCOP_1, XREAL_1, COMPLEX1, XXREAL_0, NUMBERS, XXREAL_1;
  schemes REAL_1, FUNCT_2, SEQ_1;
 
 begin
@@ -98,32 +98,79 @@ proof
  hence thesis by A3,SEQ_4:def 3;
 end;
 
+reserve a for Element of ExtREAL;
+
 definition let g,s be real number;
-func [. g,s .] -> Subset of REAL equals
+ redefine func [. g,s .] -> Subset of REAL equals
  {r where r is Real: g<=r & r<=s };
 coherence
  proof
-     now let x;
-   assume x in {r where r is Real: g <= r & r<=s};
-   then ex r be Real st x = r & g <= r & r<=s;
-   hence x in REAL;
+  now let x;
+   assume x in [. g,s .];
+   then
+W:  ex r being Element of ExtREAL st x = r & g <= r & r<=s;
+    g in REAL & s in REAL by XREAL_0:def 1;
+   hence x in REAL by W,XXREAL_0:45;
   end;
   hence thesis by TARSKI:def 3;
  end;
+ compatibility
+  proof let X be Subset of REAL;
+    set Y = {r where r is Real: g<=r & r<=s };
+A:  [. g,s .] c= Y
+     proof let x;
+      assume x in [. g,s .];
+       then consider r being Element of ExtREAL such that
+W:      x = r & g <= r & r<=s;
+       g in REAL & s in REAL by XREAL_0:def 1;
+       then r in REAL by W,XXREAL_0:45;
+      hence x in Y by W;
+     end;
+    Y c= [. g,s .]
+     proof let x;
+      assume x in Y;
+       then consider r being Element of REAL such that
+W:      x = r & g <= r & r<=s;
+       r in REAL;
+      hence x in [. g,s .] by W,NUMBERS:31;
+     end;
+   hence X = [. g,s .] iff X = Y by A,XBOOLE_0:def 10;
+  end;
 end;
 
-definition let g,s be real number;
-func ]. g,s .[ -> Subset of REAL equals
+definition let g,s be ext-real number;
+ redefine func ]. g,s .[ -> Subset of REAL equals
  {r where r is Real : g<r & r<s };
 coherence
  proof
-     now let x;
-   assume x in {r where r is Real: g<r & r<s};
-   then ex r be Real st x = r & g<r & r<s;
-   hence x in REAL;
+  now let x;
+   assume x in ]. g,s .[;
+   then ex r being Element of ExtREAL st x = r & g < r & r<s;
+   hence x in REAL by XXREAL_0:48;
   end;
   hence thesis by TARSKI:def 3;
  end;
+ compatibility
+  proof let X be Subset of REAL;
+    set Y = {r where r is Real: g<r & r<s };
+A:  ]. g,s .[ c= Y
+     proof let x;
+      assume x in ]. g,s .[;
+       then consider r being Element of ExtREAL such that
+W:      x = r & g < r & r<s;
+       r in REAL by W,XXREAL_0:48;
+      hence x in Y by W;
+     end;
+    Y c= ]. g,s .[
+     proof let x;
+      assume x in Y;
+       then consider r being Element of REAL such that
+W:      x = r & g < r & r<s;
+       r in REAL;
+      hence x in ]. g,s .[ by W,NUMBERS:31;
+     end;
+   hence X = ]. g,s .[ iff X = Y by A,XBOOLE_0:def 10;
+  end;
 end;
 
 canceled 2;
@@ -197,102 +244,21 @@ A3: r is Real by XREAL_0:def 1;  p+g>p-g+2*r by A1,XREAL_1:22;
 end;
 
 theorem
-   for g,s st g<=s holds [.g,s.] = ].g,s.[ \/ {g,s}
-proof let g,s such that A1: g<=s;
- thus [.g,s.] c= ].g,s.[ \/ {g,s}
- proof let x; assume that A2: x in [.g,s.] and
-                          A3: not x in ].g,s.[ \/ {g,s};
-     x in {r where r is Real: g<=r & r<=s} by A2;
- then A4:  ex r be Real st r=x & g<=r & r<=s;
-  then reconsider x as Real;
-A5:  not x in ].g,s.[ & not x in {g,s} by A3,XBOOLE_0:def 2;
-then A6:  (not x in ].g,s.[) & x<> g & x <> s by TARSKI:def 2;
-     not (x in {q where q is Real: g<q & q<s}) by A5;
-     then not g<x or not x<s;
-   hence contradiction by A4,A6,REAL_1:def 5;
- end;
- thus ].g,s.[ \/ {g,s} c= [.g,s.]
- proof let x; assume x in ].g,s.[ \/ {g,s};
-then A7:  x in ].g,s.[ or x in {g,s} by XBOOLE_0:def 2;
-A8: g is Real by XREAL_0:def 1;
-     now per cases by A7,TARSKI:def 2;
-  suppose x in ].g,s.[;
-   then x in {r where r is Real: g<r & r<s};
-    then ex r be Real st x = r & g<r & r<s;
-   then x in {r where r is Real: g<=r & r<=s};
-   hence x in [.g,s.];
-  end;
-  suppose A9: x=g;
-      g in {r where r is Real: g<=r & r<=s} by A1,A8;
-   hence x in [.g,s.] by A9;
-  end;
-  suppose A10: x=s;
-       s is Real by XREAL_0:def 1;
-   then s in {r where r is Real: g<=r & r<=s} by A1;
-   hence x in [.g,s.] by A10;
-  end;
-  end; hence thesis;
- end;
-end;
+   for g,s st g<=s holds [.g,s.] = ].g,s.[ \/ {g,s} by XXREAL_1:128;
 
 theorem Th12:
-p <= g implies ].g,p.[ = {}
-proof assume that A1: p <= g and A2: ].g,p.[ <> {};
- consider t be Real such that A3: t in ].g,p.[ by A2,SUBSET_1:10;
-    t in {r where r is Real: g<r & r<p} by A3;
- then ex r be Real st r=t & g<r & r<p;
-hence contradiction by A1,XXREAL_0:2;
-end;
+p <= g implies ].g,p.[ = {} by XXREAL_1:28;
 
 theorem Th13:
-p < g implies [.g,p.] = {}
-proof assume that A1: p < g and A2: [.g,p.] <> {};
- consider t be Real such that A3: t in [.g,p.] by A2,SUBSET_1:10;
-    t in {r where r is Real: g<=r & r<=p} by A3;
- then ex r be Real st r=t & g<=r & r<=p;
-hence contradiction by A1,XXREAL_0:2;
-end;
+p < g implies [.g,p.] = {} by XXREAL_1:29;
 
 theorem
-   [.p,p.] = {p}
-proof
-A1:p is Real by XREAL_0:def 1;
-    now let x;
- thus x in [.p,p.] implies x in {p}
-  proof assume x in [.p,p.];
-  then x in {t where t is Real: p<=t & t<=p};
-    then ex t be Real st t=x & p<=t & t<=p; then x = p by XXREAL_0:1;
-   hence thesis by TARSKI:def 1;
-  end;
-  assume x in {p}; then x=p by TARSKI:def 1;
-  then x in {t where t is Real: p <=t & t<=p} by A1;
-  hence x in [.p,p.];
- end; hence [.p,p.] = {p} by TARSKI:2;
-end;
+   [.p,p.] = {p} by XXREAL_1:17;
 
 theorem Th15:
      (p<g implies ].p,g.[ <> {}) &
   (p<=g implies p in [.p,g.] & g in [.p,g.]) &
-  ].p,g.[ c= [.p,g.]
-proof
-A1: p/2+g/2 is Real by XREAL_0:def 1;
-A2: p is Real by XREAL_0:def 1;
-A3: g is Real by XREAL_0:def 1;
- thus p<g implies ].p,g.[<>{}
- proof assume p<g;
-  then A4: p/2<g/2 by REAL_1:73; then A5: p/2+g/2<g/2+g/2 by XREAL_1:10
-;  p/2+p/
-2<p/2+g/2 by A4,XREAL_1:10;
-  then p/2+g/2 in {r where r is Real: p<r & r<g} by A1,A5;
-  hence thesis;
- end;
- thus p<=g implies p in [.p,g.] & g in [.p,g.] by A2,A3;
- let y; assume y in ].p,g.[;
- then y in {r where r is Real:p<r & r<g};
- then consider r be Real such that A6: r=y & p<r & r<g;
-    y in {s where s is Real:p<=s & s<=g} by A6;
- hence thesis;
-end;
+  ].p,g.[ c= [.p,g.] by XXREAL_1:1,33,25;
 
 theorem Th16:
    r in [.p,g.] & s in [.p,g.] implies [.r,s.] c= [.p,g.]
@@ -325,19 +291,7 @@ then A3: ex q be Real st q=s & p<q & q<g;
 end;
 
 theorem
-   p<=g implies [.p,g.] = [.p,g.] \/ [.g,p.]
-proof assume A1: p<=g;
-    now per cases;
- suppose p=g;
-  hence [.p,g.] \/ [.g,p.] = [.p,g.];
- end;
- suppose p<>g; then p<g by A1,REAL_1:def 5;
-  hence [.p,g.] \/ [.g,p.] = [.p,g.] \/ {} by Th13
-   .= [.p,g.];
- end;
- end;
- hence thesis;
-end;
+   p<=g implies [.p,g.] = [.p,g.] \/ [.g,p.] by XXREAL_1:222;
 
 definition let X;
 attr X is compact means :Def3:
@@ -527,9 +481,9 @@ A6: r is Real by XREAL_0:def 1;
 end;
 
 registration let p, q be real number;
-  cluster ].p,q.[ -> open;
+  cluster ].p,q.[ -> open Subset of REAL;
   coherence by Th25;
-  cluster [.p,q.] -> closed;
+  cluster [.p,q.] -> closed Subset of REAL;
   coherence by Th23;
 end;
 
@@ -543,6 +497,11 @@ proof
      ex s2 st
  s2 is subsequence of s1 & s2 is convergent & (lim s2) in X by A1,A2,Def3;
  hence contradiction by A2,SEQ_4:30;
+end;
+
+registration
+ cluster compact -> closed Subset of REAL;
+ coherence by Th26;
 end;
 
 theorem Th27:
@@ -1171,180 +1130,37 @@ begin :: Addenda
 :: from JORDAN6, 2005.02.05, A.T.
 
 theorem
- for r,s being real number holds ].r,s.[ misses {r,s}
-proof let r,s be real number;
-     assume A1: ].r,s.[ /\{r,s}<>{};
-       consider x being Element of ].r,s.[ /\ {r,s};
-       A2:x in ].r,s.[ & x in {r,s} by A1,XBOOLE_0:def 3;
-       then reconsider r1=x as Real;
-           r1 in {s1 where s1 is Real :r<s1 & s1<s} by A2;
-       then consider s1 being Real such that A3:s1=r1 & (r<s1 & s1<s);
-      thus contradiction by A2,A3,TARSKI:def 2;
-end;
+ for r,s being real number holds ].r,s.[ misses {r,s} by XXREAL_1:86;
 
 theorem
  for a,b,c being real number holds c in ].a,b.[ iff a < c & c < b
-proof
- let a,b,c be real number;
-A1: c is Real by XREAL_0:def 1;
- hereby assume c in ].a,b.[;
-     then c in {r where r is Real:a<r & r<b};
-     then consider r being Real such that A2: r=c & (a<r & r<b);
-    thus a<c & c <b by A2;
- end;
- assume a < c & c < b;
-   then c in {r where r is Real:a<r & r<b} by A1;
- hence c in ].a,b.[;
-end;
+  by XXREAL_1:4;
 
 :: from TOPREAL5, 2005.02.05, A.T.
 
 theorem
- for a,b,c being real number holds c in [.a,b.] iff a<=c & c <=b
-proof
-   let a,b,c be real number;
-A1: c is Real by XREAL_0:def 1;
- hereby assume c in [.a,b.];
-     then c in {r where r is Real:a<=r & r<=b};
-     then consider r being Real such that A2: r=c & (a<=r & r<=b);
-    thus a<=c & c <=b by A2;
- end;
- assume a<=c & c <=b;
-  then c in {r where r is Real:a<=r & r<=b} by A1;
- hence c in [.a,b.];
-end;
+ for a,b,c being real number holds c in [.a,b.] iff a<=c & c <=b by XXREAL_1:1;
 
 :: from TREAL_1, 2006.07.19, A.T.
 
 reserve a,b,c,d for real number;
 
 theorem
- a <= c & d <= b implies [.c,d.] c= [.a,b.]
- proof
-A1: c is Real by XREAL_0:def 1;
-A2: d is Real by XREAL_0:def 1;
-  assume A3: a <= c & d <= b;
-  per cases;
-  suppose c > d;
-   then [.c,d.] = {} by Th13;
-   hence thesis by XBOOLE_1:2;
-  end;
-  suppose c <= d;
-   then A4: a <= d & c <= b by A3,XXREAL_0:2;
-   then A5: c in {r where r is Real : a <= r & r <= b} by A1,A3;
-        d in {r where r is Real : a <= r & r <= b} by A2,A3,A4;
-    then c in [.a,b.] & d in [.a,b.] by A5;
-   hence thesis by Th16;
- end;
- end;
+ a <= c & d <= b implies [.c,d.] c= [.a,b.] by XXREAL_1:34;
 
 theorem
- a <= c & b <= d & c <= b implies [.a,b.] \/ [.c,d.] = [.a,d.]
- proof
-  assume A1: a <= c & b <= d & c <= b;
-  then A2: a <= b & c <= d by XXREAL_0:2;
- A3: [.a,d.] c= [.a,b.] \/ [.c,d.]
-  proof
-       for r being set st r in [.a,d.] holds r in [. a,b .] \/ [. c,d .]
-    proof
-     let r be set;
-     assume A4: r in [.a,d.];
-     then reconsider s = r as Real;
-     A5: ex p being Real st p = s & a<=p & p<=d by A4;
-         now per cases;
-      suppose s<=b;
-       then s in [.a,b.] & [.a,b.] c= [.a,b.] \/ [.c,d.]
-            by A5,XBOOLE_1:7;
-      hence s in [.a,b.] \/ [.c,d.];
-      end;
-      suppose not s<=b;
-        then c <=s by A1,XXREAL_0:2;
-       then s in [.c,d.] & [.c,d.] c= [.a,b.] \/ [.c,d.]
-            by A5,XBOOLE_1:7;
-       hence s in [.a,b.] \/ [.c,d.];
-     end;
-     end;
-     hence thesis;
-    end;
-    hence thesis by TARSKI:def 3;
-  end;
-A6: b is Real by XREAL_0:def 1;
-A7: c is Real by XREAL_0:def 1;
-     [.a,b.] \/ [.c,d.] c= [.a,d.]
-   proof
-    A8: [.a,b.] c= [.a,d.]
-     proof
-          a<=d & b in {q where q is Real : a<=q & q<=d } by A1,A2,A6,XXREAL_0:2
-;
-      then a in [.a,d.] & b in [.a,d.] by Th15;
-      hence thesis by Th16;
-     end;
-        [.c,d.] c= [.a,d.]
-     proof
-          a<=d & c in {q where q is Real : a<=q & q<=d } by A1,A2,A7,XXREAL_0:2
-;
-      then d in [.a,d.] & c in [.a,d.] by Th15;
-      hence thesis by Th16;
-     end;
-    hence thesis by A8,XBOOLE_1:8;
-   end;
-  hence thesis by A3,XBOOLE_0:def 10;
-end;
+ a <= c & b <= d & c <= b implies [.a,b.] \/ [.c,d.] = [.a,d.] by XXREAL_1:174;
 
 theorem
  a <= c & b <= d & c <= b implies [.a,b.] /\ [.c,d.] = [.c,b.]
- proof
-  assume A1: a <= c & b <= d & c <= b;
-   then A2: a <= b & c <= d by XXREAL_0:2;
- A3: [.c,b.] c= [.a,b.] /\ [.c,d.]
-  proof
-    A4: [.c,b.] c= [.a,b.]
-     proof
-           c is Real by XREAL_0:def 1;
-       then c in {q where q is Real : a<=q & q<=b } by A1;
-      then c in [.a,b.] & b in [.a,b.] by A2,Th15;
-      hence thesis by Th16;
-     end;
-        [.c,b.] c= [.c,d.]
-     proof
-           b is Real by XREAL_0:def 1;
-       then b in {q where q is Real : c <=q & q<=d } by A1;
-      then c in [.c,d.] & b in [.c,d.] by A2,Th15;
-      hence thesis by Th16;
-     end;
-    hence thesis by A4,XBOOLE_1:19;
-  end;
-     [.a,b.] /\ [.c,d.] c= [.c,b.]
-   proof
-       for r being set st r in [.a,b.] /\ [.c,d.] holds r in [.c,b.]
-    proof
-     let r be set;
-     assume A5: r in [.a,b.] /\ [.c,d.];
-     then A6: r in [.a,b.] & r in [.c,d.] by XBOOLE_0:def 3;
-     reconsider s = r as Real by A5;
-     (ex p being Real st p = s & a<=p & p<=b) &
-          (ex q being Real st q = s & c <=q & q<=d) by A6;
-     then s in {w where w is Real : c <=w & w<=b};
-     hence thesis;
-    end;
-    hence thesis by TARSKI:def 3;
-   end;
-  hence thesis by A3,XBOOLE_0:def 10;
- end;
+                   by XXREAL_1:143;
 
 :: from JGRAPH_3, 2006.07.25, A.T.
 
 reserve x,y,z,u for real number;
 
 theorem
- x<=y & z<=u implies ].y,z.[ c= ].x,u.[
-proof assume A1:x<=y & z<=u;
-  let a be set;assume a in ].y,z.[;
-  then a in {b where b is Real: y<b & b<z};
-  then consider b being Real such that A2:b=a & y<b & b<z;
-  x<b & b<u by A1,A2,XXREAL_0:2;
-  hence a in ].x,u.[ by A2;
-end;
+ x<=y & z<=u implies ].y,z.[ c= ].x,u.[ by XXREAL_1:46;
 
 
 

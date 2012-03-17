@@ -43,11 +43,11 @@
 <For>
 <Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="78"/>
-<Func kind="K" nr="82"/>
+<Func kind="K" nr="79"/>
+<Func kind="K" nr="83"/>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="84">
+<Func kind="K" nr="85">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Var nr="1"/>

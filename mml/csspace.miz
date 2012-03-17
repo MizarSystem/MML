@@ -14,10 +14,11 @@ environ
  notations TARSKI, XBOOLE_0, SUBSET_1, PRE_TOPC, RELAT_1, DOMAIN_1, FUNCT_1,
       FUNCT_2, FUNCOP_1, SEQ_1, BINOP_1, REALSET1, STRUCT_0, ZFMISC_1, NUMBERS,
       XCMPLX_0, XXREAL_0, REAL_1, SQUARE_1, COMPLEX1, COMSEQ_1, CFUNCT_1,
-      COMSEQ_2, COMSEQ_3, SERIES_1, NAT_1, NAT_D, RLVECT_1, NORMSP_1, CLVECT_1;
+      COMSEQ_2, COMSEQ_3, SERIES_1, NAT_1, NAT_D, RLVECT_1, NORMSP_1, BHSP_1,
+      CLVECT_1;
  constructors PARTFUN1, DOMAIN_1, BINOP_1, FUNCOP_1, REAL_1, SQUARE_1, NAT_1,
       SEQ_1, REALSET1, COMSEQ_1, COMSEQ_2, SERIES_1, COMSEQ_3, NORMSP_1,
-      CLVECT_1, NAT_D;
+      CLVECT_1, NAT_D, BHSP_1;
  registrations RELSET_1, STRUCT_0, XREAL_0, MEMBERED, CLVECT_1, FUNCT_1,
       COMPLEX1, ORDINAL1, COMSEQ_1, COMSEQ_2, SUBSET_1, XCMPLX_0, REALSET1,
       XXREAL_0;
@@ -27,7 +28,7 @@ environ
  theorems XBOOLE_0, STRUCT_0, RELAT_1, SQUARE_1, TARSKI, ABSVALUE, ZFMISC_1,
       SEQ_1, SERIES_1, COMSEQ_3, FUNCT_1, FUNCT_2, RLVECT_1, BINOP_1, XCMPLX_0,
       COMSEQ_1, CLVECT_1, COMPLEX1, COMSEQ_2, NORMSP_1, FUNCOP_1, XREAL_1,
-      XXREAL_0;
+      XXREAL_0, BHSP_1;
  schemes NAT_1, BINOP_1, XBOOLE_0, BINOP_2, FUNCT_2;
 
 begin
@@ -803,7 +804,7 @@ A1:u = 0.V0 & v = 0.V0 by Lm2,TARSKI:def 1;
      a*u = 0.V0 by Lm2,TARSKI:def 1;
    hence thesis by A1,Lm4;
 end;
-set X0 = CUNITSTR(# the carrier of (0).V0,the Zero of (0).V0,the add of (0).V0,
+set X0 = CUNITSTR(# the carrier of (0).V0,0.((0).V0),the add of (0).V0,
                   the Mult of (0).V0, nilfunc #);
 
 Lm9:now
@@ -1151,7 +1152,8 @@ then A7: Re( c1*(c1*(x.|.x) + c2*(y.|.x)) ) >= 0 &
 then A8: Re c1 >= 0 & Re (c1*(x.|.x) + c2*(y.|.x)) >= 0 or
      Re c1 <= 0 & Re (c1*(x.|.x) + c2*(y.|.x)) <= 0 by A7,SQUARE_1:25;
        |.(y.|.y).| <> 0 by A3,COMPLEX1:131;
-then A9: Re (c1*(x.|.x)) + Re (c2*(y.|.x)) >= 0 by A4,A5,A8,COMPLEX1:29,19;
+then A9: Re (c1*(x.|.x)) + Re (c2*(y.|.x)) >= 0 by A4,A5,A8,COMPLEX1:29,
+19;
       Re (c2*(y.|.x)) = Re (-(x.|.y)*(y.|.x))
                     .= - Re(x.|.y * y.|.x) by COMPLEX1:34
                     .= - Re((x.|.y) * (x.|.y)*') by Def13;
@@ -1514,61 +1516,16 @@ end;
 reserve seq, seq1, seq2, seq3 for sequence of X;
 reserve k, n, m for Element of NAT;
 
-
-
-definition let X; let seq;
- func - seq -> sequence of X means
-:Def17: for n holds it.n = - seq.n;
-existence
-proof
-  deffunc F(Element of NAT) = -seq.$1;
-    ex seq be sequence of X st for n holds seq.n = F(n) from FUNCT_2:sch 4;
-  hence thesis;
-end;
-uniqueness
-  proof
-    let seq1, seq2 such that
-    A1:  for n holds seq1.n = - seq.n and
-    A2:  for n holds seq2.n = - seq.n;
-        now let n;
-          seq1.n = - seq.n by A1;
-      hence seq1.n = seq2.n by A2;
-    end;
-    hence seq1 = seq2 by FUNCT_2:113;
-  end;
-end;
-
-definition let X; let seq; let x;
- func seq + x -> sequence of X means :Def18:
-  for n holds it.n = seq.n + x;
-existence
-proof
-  deffunc F(Element of NAT) = seq.$1 + x;
-    ex seq be sequence of X st for n holds seq.n = F(n) from FUNCT_2:sch 4;
-  hence thesis;
-end;
-uniqueness
-proof
-     let seq1, seq2;
-     assume that
-A1:  ( for n holds seq1.n = seq.n + x ) and
-A2:  ( for n holds seq2.n = seq.n + x );
-         for n holds seq1.n = seq2.n
-     proof
-          let n;
-            seq1.n = seq.n + x by A1;
-          hence thesis by A2;
-     end;
-    hence thesis by FUNCT_2:113;
-end;
+definition
+  canceled 2;
 end;
 
 theorem Th63:
 seq1 + seq2 = seq2 + seq1
 proof
      now let n;
-     thus (seq1 + seq2).n = seq2.n + seq1.n by CLVECT_1:def 11
-                    .= (seq2 + seq1).n by CLVECT_1:def 11;
+     thus (seq1 + seq2).n = seq2.n + seq1.n by NORMSP_1:def 5
+                    .= (seq2 + seq1).n by NORMSP_1:def 5;
    end;
    hence thesis by FUNCT_2:113;
 end;
@@ -1583,11 +1540,11 @@ theorem
 proof
          now let n;
      thus
-         (seq1 + (seq2 + seq3)).n = seq1.n + (seq2 + seq3).n by CLVECT_1:def 11
-  .= seq1.n + (seq2.n + seq3.n) by CLVECT_1:def 11
+         (seq1 + (seq2 + seq3)).n = seq1.n + (seq2 + seq3).n by NORMSP_1:def 5
+  .= seq1.n + (seq2.n + seq3.n) by NORMSP_1:def 5
   .= (seq1.n + seq2.n) + seq3.n by RLVECT_1:def 6
-  .= (seq1 + seq2).n + seq3.n by CLVECT_1:def 11
-  .= ((seq1 + seq2) + seq3).n by CLVECT_1:def 11;
+  .= (seq1 + seq2).n + seq3.n by NORMSP_1:def 5
+  .= ((seq1 + seq2) + seq3).n by NORMSP_1:def 5;
      end;
      hence thesis by FUNCT_2:113;
 end;
@@ -1606,7 +1563,7 @@ A4:   for n holds seq1.n = x by A1,NORMSP_1:def 4;
 A5:   for n holds seq2.n = y by A2,NORMSP_1:def 4;
      take z = x + y;
          now let n;
-     thus seq.n = seq1.n + seq2.n by A3,CLVECT_1:def 11
+     thus seq.n = seq1.n + seq2.n by A3,NORMSP_1:def 5
           .= x + seq2.n by A4
           .= z by A5;
      end;
@@ -1627,7 +1584,7 @@ A4:   for n holds seq1.n = x by A1,NORMSP_1:def 4;
 A5:   for n holds seq2.n = y by A2,NORMSP_1:def 4;
      take z = x - y;
          now let n;
-     thus seq.n = seq1.n - seq2.n by A3,CLVECT_1:def 12
+     thus seq.n = seq1.n - seq2.n by A3,NORMSP_1:def 6
           .= x - seq2.n by A4
           .= z by A5;
      end;
@@ -1696,9 +1653,9 @@ theorem
   seq1 - seq2 = seq1 + -seq2
 proof
     now let n;
-     thus (seq1 - seq2).n = seq1.n - seq2.n by CLVECT_1:def 12
-                    .= seq1.n + (-seq2).n by Def17
-                    .= (seq1 + -seq2).n by CLVECT_1:def 11;
+     thus (seq1 - seq2).n = seq1.n - seq2.n by NORMSP_1:def 6
+                    .= seq1.n + (-seq2).n by BHSP_1:def 10
+                    .= (seq1 + -seq2).n by NORMSP_1:def 5;
   end;
   hence thesis by FUNCT_2:113;
 end;
@@ -1707,7 +1664,7 @@ theorem
   seq = seq + 0.X
 proof
          now let n;
-     thus (seq + 0'(X)).n = seq.n + 0'(X) by Def18
+     thus (seq + 0'(X)).n = seq.n + 0'(X) by BHSP_1:def 12
                     .= seq.n by RLVECT_1:10;
      end;
      hence thesis by FUNCT_2:113;
@@ -1718,11 +1675,11 @@ theorem
 proof
          now let n;
      thus (a * (seq1 + seq2)).n = a * (seq1 + seq2).n by CLVECT_1:def 14
-                          .= a * (seq1.n + seq2.n) by CLVECT_1:def 11
+                          .= a * (seq1.n + seq2.n) by NORMSP_1:def 5
                           .= a * seq1.n + a * seq2.n by CLVECT_1:def 2
                           .= (a * seq1).n + a * seq2.n by CLVECT_1:def 14
                           .= (a * seq1).n + (a * seq2).n by CLVECT_1:def 14
-                          .= (a * seq1 + a * seq2).n by CLVECT_1:def 11;
+                          .= (a * seq1 + a * seq2).n by NORMSP_1:def 5;
      end;
      hence thesis by FUNCT_2:113;
 end;
@@ -1735,7 +1692,7 @@ proof
                       .= a * seq.n + b * seq.n by CLVECT_1:def 2
                       .= (a * seq).n + b * seq.n by CLVECT_1:def 14
                       .= (a * seq).n + (b * seq).n by CLVECT_1:def 14
-                      .= (a * seq + b * seq).n by CLVECT_1:def 11;
+                      .= (a * seq + b * seq).n by NORMSP_1:def 5;
      end;
      hence thesis by FUNCT_2:113;
 end;
@@ -1768,7 +1725,7 @@ proof
          now let n;
      thus ((-1r) * seq).n = (-1r) * seq.n by CLVECT_1:def 14
                    .= - seq.n by CLVECT_1:4
-                   .= (-seq).n by Def17;
+                   .= (-seq).n by BHSP_1:def 10;
      end;
      hence thesis by FUNCT_2:113;
 end;
@@ -1777,8 +1734,8 @@ theorem
   seq - x = seq + -x
 proof
          now let n;
-     thus (seq - x).n = seq.n - x by CLVECT_1:def 13
-                .= (seq + -x).n by Def18;
+     thus (seq - x).n = seq.n - x by NORMSP_1:def 7
+                .= (seq + -x).n by BHSP_1:def 12;
      end;
      hence thesis by FUNCT_2:113;
 end;
@@ -1787,10 +1744,10 @@ theorem
   seq1 - seq2 = - (seq2 - seq1)
 proof
          now let n;
-     thus (seq1 - seq2).n = seq1.n - seq2.n by CLVECT_1:def 12
+     thus (seq1 - seq2).n = seq1.n - seq2.n by NORMSP_1:def 6
                     .= - (seq2.n - seq1.n) by RLVECT_1:47
-                    .= - (seq2 - seq1).n by CLVECT_1:def 12
-                    .= (- (seq2 - seq1)).n by Def17;
+                    .= - (seq2 - seq1).n by NORMSP_1:def 6
+                    .= (- (seq2 - seq1)).n by BHSP_1:def 10;
      end;
      hence thesis by FUNCT_2:113;
 end;
@@ -1799,7 +1756,7 @@ theorem
   seq = seq - 0.X
 proof
          now let n;
-     thus (seq - 0'(X)).n = seq.n - 0'(X) by CLVECT_1:def 13
+     thus (seq - 0'(X)).n = seq.n - 0'(X) by NORMSP_1:def 7
                     .= seq.n by RLVECT_1:26;
      end;
      hence thesis by FUNCT_2:113;
@@ -1809,8 +1766,8 @@ theorem
   seq = - ( - seq )
 proof
     now let n;
-     thus (- ( - seq )).n = - (- seq).n by Def17
-                    .= - ( - seq.n) by Def17
+     thus (- ( - seq )).n = - (- seq).n by BHSP_1:def 10
+                    .= - ( - seq.n) by BHSP_1:def 10
                     .= seq.n by RLVECT_1:30;
   end;
   hence thesis by FUNCT_2:113;
@@ -1821,11 +1778,11 @@ theorem
 proof
     now let n;
      thus
-         (seq1 - (seq2 + seq3)).n = seq1.n - (seq2 + seq3).n by CLVECT_1:def 12
-                             .= seq1.n - (seq2.n + seq3.n) by CLVECT_1:def 11
+         (seq1 - (seq2 + seq3)).n = seq1.n - (seq2 + seq3).n by NORMSP_1:def 6
+                             .= seq1.n - (seq2.n + seq3.n) by NORMSP_1:def 5
                              .= (seq1.n - seq2.n) - seq3.n by RLVECT_1:41
-                             .= (seq1 - seq2).n - seq3.n by CLVECT_1:def 12
-                             .= ((seq1 - seq2) - seq3).n by CLVECT_1:def 12;
+                             .= (seq1 - seq2).n - seq3.n by NORMSP_1:def 6
+                             .= ((seq1 - seq2) - seq3).n by NORMSP_1:def 6;
   end;
   hence thesis by FUNCT_2:113;
 end;
@@ -1835,11 +1792,11 @@ theorem
 proof
          now let n;
      thus
-         ((seq1 + seq2) - seq3).n = (seq1 + seq2).n - seq3.n by CLVECT_1:def 12
-                             .= (seq1.n + seq2.n) - seq3.n by CLVECT_1:def 11
+         ((seq1 + seq2) - seq3).n = (seq1 + seq2).n - seq3.n by NORMSP_1:def 6
+                             .= (seq1.n + seq2.n) - seq3.n by NORMSP_1:def 5
                              .= seq1.n + (seq2.n - seq3.n) by RLVECT_1:def 6
-                             .= seq1.n + (seq2 - seq3).n by CLVECT_1:def 12
-                             .= (seq1 + (seq2 - seq3)).n by CLVECT_1:def 11;
+                             .= seq1.n + (seq2 - seq3).n by NORMSP_1:def 6
+                             .= (seq1 + (seq2 - seq3)).n by NORMSP_1:def 5;
      end;
      hence thesis by FUNCT_2:113;
 end;
@@ -1849,11 +1806,11 @@ theorem
 proof
    now let n;
   thus
-      (seq1 - (seq2 - seq3)).n = seq1.n - (seq2 - seq3).n by CLVECT_1:def 12
-                          .= seq1.n - (seq2.n - seq3.n) by CLVECT_1:def 12
+      (seq1 - (seq2 - seq3)).n = seq1.n - (seq2 - seq3).n by NORMSP_1:def 6
+                          .= seq1.n - (seq2.n - seq3.n) by NORMSP_1:def 6
                           .= (seq1.n - seq2.n) + seq3.n by RLVECT_1:43
-                          .= (seq1 - seq2).n + seq3.n by CLVECT_1:def 12
-                          .= ((seq1 - seq2) + seq3).n by CLVECT_1:def 11;
+                          .= (seq1 - seq2).n + seq3.n by NORMSP_1:def 6
+                          .= ((seq1 - seq2) + seq3).n by NORMSP_1:def 5;
   end;
   hence thesis by FUNCT_2:113;
 end;
@@ -1864,11 +1821,11 @@ proof
     now let n;
     thus
         (a * (seq1 - seq2)).n = a * (seq1 - seq2).n by CLVECT_1:def 14
-                          .= a * (seq1.n - seq2.n) by CLVECT_1:def 12
+                          .= a * (seq1.n - seq2.n) by NORMSP_1:def 6
                           .= a * seq1.n - a * seq2.n by CLVECT_1:10
                           .= (a * seq1).n - a * seq2.n by CLVECT_1:def 14
                           .= (a * seq1).n - (a * seq2).n by CLVECT_1:def 14
-                          .= (a * seq1 - a * seq2).n by CLVECT_1:def 12;
+                          .= (a * seq1 - a * seq2).n by NORMSP_1:def 6;
   end;
   hence thesis by FUNCT_2:113;
 end;
@@ -1943,15 +1900,13 @@ end;
 
 theorem Th87:
 for l be CUNITSTR st
-CLSStruct (# the carrier of l, the Zero of l, the add of l,
- the Mult of l #) is ComplexLinearSpace holds l is ComplexLinearSpace
+ the CLSStruct of l is ComplexLinearSpace holds l is ComplexLinearSpace
 proof
    let l be CUNITSTR such that
-A1:CLSStruct (# the carrier of l, the Zero of l, the add of l,
-     the Mult of l #) is ComplexLinearSpace;
+A1: the CLSStruct of l is ComplexLinearSpace;
      the carrier of l is non empty by A1,STRUCT_0:def 1;
    then reconsider l as non empty CLSStruct by STRUCT_0:def 1;
-   reconsider l0=CLSStruct (# the carrier of l, the Zero of l, the add of l,
+   reconsider l0=CLSStruct (# the carrier of l, 0.l, the add of l,
         the Mult of l #) as ComplexLinearSpace by A1;
 A2:for v,w being VECTOR of l holds v + w = w + v
    proof

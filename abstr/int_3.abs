@@ -9,12 +9,12 @@ environ
  vocabularies BINOP_1, INT_1, FUNCT_1, VECTSP_1, RELAT_1, ARYTM_1, GR_CY_1,
       FUNCT_7, RLVECT_1, VECTSP_2, LATTICES, ABSVALUE, EUCLID, NAT_1, FUNCSDOM,
       GCD_1, ARYTM_3, INT_2, MCART_1, ORDINAL2, NAT_LAT, INT_3, ARYTM, GROUP_1;
- notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, RLVECT_1,
-      MCART_1, RELAT_1, FUNCT_1, BINOP_2, STRUCT_0, FUNCT_2, GCD_1, GROUP_1,
-      VECTSP_1, VECTSP_2, FUNCSDOM, BINOP_1, EUCLID, GR_CY_1, INT_1, FUNCT_7,
-      NEWTON, INT_2, NAT_1, NAT_D, XXREAL_0;
+ notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, COMPLEX1,
+      RLVECT_1, MCART_1, RELAT_1, FUNCT_1, BINOP_2, STRUCT_0, FUNCT_2, GCD_1,
+      GROUP_1, VECTSP_1, VECTSP_2, FUNCSDOM, BINOP_1, EUCLID, GR_CY_1, INT_1,
+      FUNCT_7, NEWTON, INT_2, NAT_1, NAT_D, XXREAL_0;
  constructors DOMAIN_1, XXREAL_0, REAL_1, NAT_1, BINOP_2, SEQ_1, INT_2,
-      FUNCT_7, EUCLID, GR_CY_1, GCD_1, NAT_D;
+      FUNCT_7, EUCLID, GR_CY_1, GCD_1, NAT_D, COMPLEX1;
  registrations STRUCT_0, FUNCT_1, XREAL_0, INT_1, RELSET_1, GCD_1, SEQ_1,
       MEMBERED, ORDINAL1, NAT_1, VECTSP_1, XXREAL_0;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
@@ -23,9 +23,9 @@ environ
 begin
 
 definition
-redefine func multint means
+  redefine func multint means
 :: INT_3:def 1
- for a,b being Element of INT holds it.(a,b) = multreal.(a,b);
+  for a,b being Element of INT holds it.(a,b) = multreal.(a,b);
 end;
 
 definition
@@ -45,6 +45,15 @@ registration
 end;
 
 registration
+  cluster -> integer Element of INT.Ring;
+end;
+
+registration let a,b be Element of INT.Ring, c,d be Integer;
+  identify a * b with c * d when a = c, b = d;
+  identify a + b with c + d when a = c, b = d;
+end;
+
+registration
  cluster INT.Ring -> unital;
 end;
 
@@ -54,26 +63,17 @@ registration
                      domRing-like non degenerated;
 end;
 
-definition
-let a,b be Element of INT.Ring;
-pred a <= b means
-:: INT_3:def 4
- ex a',b' being Integer st a' = a & b' = b & a' <= b';
-reflexivity;
-connectedness;
+registration let a be Element of INT.Ring, b be Integer;
+  identify -a with -b when a = b;
 end;
 
-notation
-let a,b be Element of INT.Ring;
-synonym b >= a for a <= b; antonym b < a for a <= b; antonym a > b for
- a <= b; end;
-
 definition
-let a be Element of INT.Ring;
-func abs(a) -> Element of INT.Ring equals
+  canceled;
+  let a be Element of INT.Ring;
+  redefine func abs(a) -> Element of INT.Ring equals
 :: INT_3:def 5
- a if a >= 0.INT.Ring
- otherwise - a;
+  a if a >= 0.INT.Ring
+  otherwise - a;
 end;
 
 definition
@@ -112,7 +112,7 @@ func a mod b -> Element of INT.Ring means
 end;
 
 theorem :: INT_3:3
-   for a,b being Element of INT.Ring
+  for a,b being Element of INT.Ring
 st b <> 0.INT.Ring holds a = (a div b) * b + (a mod b);
 
 ::: Euclidian Domains
@@ -125,9 +125,9 @@ let I be non empty doubleLoopStr;
 attr I is Euclidian means
 :: INT_3:def 9
  ex f being Function of the carrier of I,NAT st
- (for a,b being Element of I st b <> 0.I holds
-  (ex q,r being Element of I st
-  (a = q * b + r & (r = 0.I or f.r < f.b))));
+ for a,b being Element of I st b <> 0.I holds
+ ex q,r being Element of I st
+  a = q * b + r & (r = 0.I or f.r < f.b);
 end;
 
 registration
@@ -311,8 +311,8 @@ let p be Prime;
 end;
 
 theorem :: INT_3:23
-  1.INT.Ring = 1;
+  1_INT.Ring = 1;
 
 theorem :: INT_3:24
-  for n being natural number st 1 < n holds 1.INT.Ring(n) = 1;
+  for n being natural number st 1 < n holds 1_INT.Ring(n) = 1;
 

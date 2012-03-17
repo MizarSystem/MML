@@ -19,7 +19,7 @@ environ
  registrations RELSET_1, GROUP_1, STRUCT_0, SUBSET_1, CLASSES2, ALGSTR_1,
       MIDSP_2, FUNCT_2, PARTFUN1, XBOOLE_0, FUNCOP_1;
  requirements SUBSET, BOOLE;
- definitions BINOP_1, PRE_TOPC, STRUCT_0;
+ definitions BINOP_1, PRE_TOPC, STRUCT_0, RLVECT_1, ALGSTR_1;
  theorems CAT_1, CAT_2, CLASSES2, FUNCOP_1, FUNCT_1, FUNCT_2, MIDSP_2, MCART_1,
       VECTSP_1, TARSKI, ZFMISC_1, RLVECT_1, RELAT_1, RELSET_1, ORDINAL1,
       XBOOLE_0, ALGSTR_1, TOPS_2, BINOP_1;
@@ -49,7 +49,7 @@ Th2: for X,Y,A being set, z being set st z in A & A c= [:X,Y:]
 
 theorem
 Th3: for u1,u2,u3,u4 being Element of UN holds
- [u1,u2,u3] is Element of UN & [u1,u2,u3,u4] is Element of UN
+ [u1,u2,u3] in UN & [u1,u2,u3,u4] in UN
  proof
    let u1,u2,u3,u4 be Element of UN;
    A1: [u1,u2,u3] = [[u1,u2],u3] by MCART_1:def 3;
@@ -73,8 +73,7 @@ Th5: op2.({},{}) = {} & op1.{} = {} & op0 = {}
  proof
    A1: {} in {{}} by TARSKI:def 1;
         [{},{}] in [:{{}},{{}}:] by ZFMISC_1:34;
-   then op2.[{},{}] = {} by FUNCT_2:65;
-   hence op2.({},{}) = {};
+   hence op2.({},{}) = {} by FUNCT_2:65;
    thus op1.{} = {} by A1,FUNCT_2:65;
    thus op0 = {} by TARSKI:def 1;
  end;
@@ -113,20 +112,20 @@ Th7: LoopStr (# {{}},op2,Extract {} #) is midpoint_operator
      let a be Element of G;
      assume Double a = 0.G;
      thus a = {} by TARSKI:def 1
-           .= 0.G by TARSKI:def 1;end;
+           .= 0.G;end;
    hence thesis by A1,MIDSP_2:def 5;
  end;
 
 registration
  cluster L_Trivial -> midpoint_operator;
- coherence by Th7,ALGSTR_1:def 4;
+ coherence by Th7;
 end;
 
 theorem
        (for x being Element of L_Trivial holds x = {})
   & (for x,y being Element of L_Trivial holds x+y = {})
   & (for x being Element of L_Trivial holds -x = {})
-  & 0.L_Trivial = {} by ALGSTR_1:def 4,TARSKI:def 1;
+  & 0.L_Trivial = {} by TARSKI:def 1;
 
 ::  0d. Auxiliary theorems: subcategories
 
@@ -161,16 +160,13 @@ definition let C,O;
  coherence by CAT_2:29;
 end;
 
-Lm1: CatStr (# O,Morphs(O),dom(O),cod(O),comp(O),ID(O)#)
-  is_full_subcategory_of C by CAT_2:30;
-
 definition let C,O;
  func cat(O) -> Subcategory of C equals
    CatStr (# O,Morphs(O),dom(O),cod(O),comp(O),ID(O)#);
  coherence
   proof
         CatStr (# O,Morphs(O),dom(O),cod(O),comp(O),ID(O)#)
- is_full_subcategory_of C by Lm1;
+ is_full_subcategory_of C by CAT_2:30;
     hence thesis by CAT_2:def 6;
   end;
 end;
@@ -187,42 +183,23 @@ theorem
 
 ::  1a. Maps of the carriers of groups
 
-definition let G be 1-sorted;
- func id G -> Function of G,G equals
-   id the carrier of G;
-  coherence;
+definition 
+  canceled;
 end;
-
-registration let G be 1-sorted;
-  cluster id G -> one-to-one;
-  coherence;
-end;
-
- Lm2:
- for G being non empty 1-sorted,
-     x being Element of G holds (id G).x = x by FUNCT_1:35;
 
 canceled;
 
-theorem Th12:
- for G being 1-sorted, H being non empty 1-sorted,
-     f being Function of G, H holds f*(id G) = f & (id H)*f = f
- proof
-   let G be 1-sorted, H be non empty 1-sorted;
-   let f be Function of G,H;
-   set u = id G, v = id H, X = the carrier of G, Y = the carrier of H;
-   A1: dom f = X by FUNCT_2:def 1;
-       rng f c= Y by RELSET_1:12;
-   hence f*u = f & v*f = f by A1,RELAT_1:77,79;
- end;
+theorem
+  for G,H being 1-sorted, f being Function of G, H holds
+  f*(id G) = f & (id H)*f = f by FUNCT_2:23;
 
-definition let G,H be non empty ZeroStr;
+definition let G be non empty 1-sorted, H be non empty ZeroStr;
  func ZeroMap(G,H) -> Function of G,H equals
    (the carrier of G) --> 0.H;
  coherence
   proof
    set i = (the carrier of G) --> 0.H;
-        dom i = the carrier of G & rng i = {0.H} by FUNCOP_1:14,19;
+   dom i = the carrier of G & rng i = {0.H} by FUNCOP_1:14,19;
    hence i is Function of G,H by FUNCT_2:4;
   end;
 end;
@@ -235,13 +212,13 @@ end;
 theorem Th13:
   comp L_Trivial = op1
   proof
-    reconsider f = comp L_Trivial as Function of {{}}, {{}} by ALGSTR_1:def 4;
+    reconsider f = comp L_Trivial as Function of {{}}, {{}};
         for x being set st x in {{}} holds op1.x = f.x
     proof
       let x be set; assume A1: x in {{}};
-      then reconsider x as Element of L_Trivial by ALGSTR_1:def 4;
-          x = {} by A1,TARSKI:def 1;
-      then op1.x = -x by Th5,ALGSTR_1:def 4,TARSKI:def 1 .= f.x by
+      then reconsider x as Element of L_Trivial;
+          x = {} by TARSKI:def 1;
+      then op1.x = -x by Th5,TARSKI:def 1 .= f.x by
 VECTSP_1:def 25;
       hence thesis;
     end;
@@ -266,11 +243,6 @@ Th14: for G1,G2,G3 being non empty LoopStr,
    hence thesis by Def13;
  end;
 
- Lm3:
-  for G being non empty ZeroStr,
-      H being non empty LoopStr,
-      x being Element of G holds ZeroMap(G,H).x = 0.H by FUNCOP_1:13;
-
 canceled;
 
 theorem Th16:
@@ -282,7 +254,7 @@ theorem Th16:
        for x,y being Element of G holds f.(x+y) = f.x+f.y
     proof
       let x,y be Element of G;
-          f.(x+y) = 0.H & f.x = 0.H & f.y = 0.H by Lm3;
+          f.(x+y) = 0.H & f.x = 0.H & f.y = 0.H by FUNCOP_1:13;
       hence f.(x+y) = f.x+f.y by RLVECT_1:def 7;
     end;
    hence thesis by Def13;
@@ -419,7 +391,7 @@ proof
       for x,y being Element of G holds f.(x+y) = f.x+f.y
    proof
      let x,y be Element of G;
-          f.(x+y) = x+y & f.x = x & f.y = y by Lm2;
+          f.(x+y) = x+y & f.x = x & f.y = y by FUNCT_1:35;
      hence f.(x+y) = f.x+f.y;
    end;
   hence thesis by Def13;
@@ -716,7 +688,7 @@ end;
       A2: dom(i) = G;
       consider m being Function of H,G such that
       A3: f' = GroupMorphismStr(# H,G,m#) by Th23;
-           (id G)*m = m by Th12;
+           (id G)*m = m by FUNCT_2:23;
       hence i*f = f by A1,A2,A3,Def21;
     end;
    thus for g being strict GroupMorphism st dom g = G holds g*(ID G) = g
@@ -728,7 +700,7 @@ end;
       A5: cod(i) = G;
       consider m being Function of G,H such that
       A6: f' = GroupMorphismStr(# G,H,m#) by Th23;
-           m*(id G) = m by Th12;
+           m*(id G) = m by FUNCT_2:23;
       hence f*i = f by A4,A5,A6,Def21;
     end;
  end;
@@ -903,9 +875,7 @@ definition let G,H;
    proof
      set D = { GroupMorphismStr(# G,H,f#) where f is Element of
                      Maps(G,H) : f is additive };
-         ZeroMap(G,H) is Element of
-        Funcs(the carrier of G, the carrier of H) by FUNCT_2:11;
-     then reconsider f0 = ZeroMap(G,H) as Element of Maps(G,H);
+     reconsider f0 = ZeroMap(G,H) as Element of Maps(G,H) by FUNCT_2:11;
          f0 is additive by Th16;
      then GroupMorphismStr(# G,H,f0#) in D;
      then reconsider D as non empty set;
@@ -921,14 +891,11 @@ A3:      x is strict Morphism of G,H implies x in D
       proof
         assume x is strict Morphism of G,H;
         then reconsider x as strict Morphism of G,H;
-            dom(x) = G & cod(x) = H by Def19;
-        then A4: the Dom of x = G & the Cod of x = H;
+A4:     dom(x) = G & cod(x) = H by Def19;
         A5: (the Fun of x) is additive by Th18;
         reconsider f = the Fun of x as Function of G,H by A4;
-            f is Element of Funcs(the carrier of G, the carrier of H)
- by FUNCT_2:11;
-        then reconsider g = f as Element of Maps(G,H);
-            x = GroupMorphismStr(# G,H,g #) by A4;
+        reconsider g = f as Element of Maps(G,H) by FUNCT_2:11;
+        x = GroupMorphismStr(# G,H,g #) by A4;
         hence thesis by A5;
       end;
      reconsider D as GroupMorphism_DOMAIN of G,H by A2,Th38;
@@ -983,7 +950,7 @@ definition let x,y;
     & x1 = the carrier of G
     & x2 = the add of G
     & x3 = comp G
-    & x4 = the Zero of G;
+    & x4 = 0.G;
 end;
 
 theorem
@@ -998,30 +965,30 @@ Th40: for x,y1,y2 being set st GO x,y1 & GO x,y2 holds y1 = y2
                  & a1 = the carrier of G
                  & a2 = the add of G
                  & a3 = comp G
-                 & a4 = the Zero of G by A1,Def28;
+                 & a4 = 0.G by A1,Def28;
    consider b1,b2,b3,b4 being set such that
    A5: x = [b1,b2,b3,b4]and
    A6: ex G being strict AddGroup st y2 = G
                & b1 = the carrier of G
                & b2 = the add of G
                & b3 = comp G
-               & b4 = the Zero of G by A2,Def28;
+               & b4 = 0.G by A2,Def28;
    consider G1 being strict AddGroup such that
    A7: y1 = G1
        & a1 = the carrier of G1
        & a2 = the add of G1
        & a3 = comp G1
-       & a4 = the Zero of G1 by A4;
+       & a4 = 0.G1 by A4;
    consider G2 being strict AddGroup such that
    A8: y2 = G2
        & b1 = the carrier of G2
        & b2 = the add of G2
        & b3 = comp G2
-       & b4 = the Zero of G2 by A6;
+       & b4 = 0.G2 by A6;
          the carrier of G1 = the carrier of G2
    & the add of G1 = the add of G2
    & comp G1 = comp G2
-   & the Zero of G1 = the Zero of G2 by A3,A5,A7,A8,MCART_1:33;
+   & 0.G1 = 0.G2 by A3,A5,A7,A8,MCART_1:33;
    hence thesis by A7,A8;
  end;
 
@@ -1030,14 +997,16 @@ Th41: ex x st x in UN & GO x,L_Trivial
  proof
     reconsider u = {} as Element of UN by CLASSES2:62;
     set x1 = {u};
-        Extract {} = u by ALGSTR_1:def 3;
+        Extract {} = u;
     then reconsider x4 = Extract {} as Element of UN;
     reconsider x3 = comp L_Trivial as Element of UN by Th6,Th13;
     reconsider x2 = op2 as Element of UN by Th6;
-    set x = [x1,x2,x3,x4];
-    A1: x is Element of UN by Th3;
-    take x;
-    thus thesis by A1,Def28,ALGSTR_1:def 4;
+    take x = [x1,x2,x3,x4];
+    thus x in UN by Th3;
+    take x1,x2,x3,x4;
+    thus x = [x1,x2,x3,x4];
+    take L_Trivial;
+    thus thesis;
  end;
 
 definition let UN;
@@ -1086,7 +1055,7 @@ Th43: for x being Element of GroupObjects(UN) holds x is strict AddGroup
     & x1 = the carrier of G
     & x2 = the add of G
     & x3 = comp G
-    & x4 = the Zero of G by A1,Def28;
+    & x4 = 0.G by A1,Def28;
    hence thesis;
  end;
 
@@ -1426,7 +1395,7 @@ A1: x in UN & GO x,b by Def29;
     & x1 = the carrier of G
     & x2 = the add of G
     & x3 = comp G
-    & x4 = the Zero of G by A1,Def28;
+    & x4 = 0.G by A1,Def28;
   hence b is strict Element of V;
   thus b' is Object of C;
  end;
@@ -1602,10 +1571,7 @@ end;
 theorem
 Th51: L_Trivial in AbGroupObjects(UN)
  proof
-    set D2 = the Objects of GroupCat(UN);
-    set T = L_Trivial;
-    T in D2 by Th42;
-    then T in {G where G is Element of D2 : ex H being AbGroup st G = H};
+    L_Trivial in the Objects of GroupCat(UN) by Th42;
     hence thesis;
  end;
 
@@ -1686,11 +1652,7 @@ theorem
 theorem
     L_Trivial in MidOpGroupObjects(UN)
  proof
-    set D2 = the Objects of AbGroupCat(UN);
-    set T = L_Trivial;
-    T in D2 by Th51;
-    then T in {G where G is Element of D2
-               : ex H being midpoint_operator AbGroup st G = H};
+    L_Trivial in the Objects of AbGroupCat(UN) by Th51;
     hence thesis;
  end;
 

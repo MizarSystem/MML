@@ -117,7 +117,7 @@
 </Typ>
 </ArgTypes>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="15">
+<Func kind="K" nr="16">
 <Func kind="F" nr="2"/>
 <Func kind="F" nr="3"/>
 </Func>

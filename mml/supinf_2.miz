@@ -8,20 +8,21 @@ environ
 
  vocabularies SUPINF_1, ARYTM_1, RLVECT_1, BOOLE, ORDINAL2, SEQ_2, FUNCT_1,
       RELAT_1, LATTICES, CARD_4, FUNCT_4, FUNCOP_1, SUPINF_2, FUNCT_3,
-      PARTFUN1, NAT_1;
- notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XXREAL_0, XCMPLX_0, REAL_1,
-      SUPINF_1, RELAT_1, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, FUNCT_3,
-      FUNCOP_1, FUNCT_4, NAT_1, NAT_D, CARD_4;
+      PARTFUN1, NAT_1, ARYTM;
+ notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1,
+ NUMBERS, XXREAL_0, XCMPLX_0, REAL_1,
+      RELAT_1, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, FUNCT_3,
+      FUNCOP_1, FUNCT_4, NAT_1, NAT_D, CARD_4, SUPINF_1;
  constructors FUNCT_3, FUNCOP_1, FUNCT_4, REAL_1, NAT_1, SUPINF_1, CARD_4,
-      NAT_D;
+   NAT_D, FINSET_1;
  registrations SUPINF_1, RELSET_1, FUNCOP_1, FUNCT_1, ARYTM_3, FINSET_1,
       MEMBERED, ORDINAL1, NUMBERS, XREAL_0, XXREAL_0, FUNCT_2, RELAT_1, NAT_1;
  requirements NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, SUPINF_1, XBOOLE_0, XCMPLX_0, XREAL_0, XXREAL_0;
  theorems TARSKI, SUPINF_1, FUNCT_1, FUNCT_2, NAT_1, RELSET_1, CARD_4,
       SUBSET_1, FUNCT_4, FUNCOP_1, RELAT_1, ZFMISC_1, XBOOLE_0, XBOOLE_1,
-      XREAL_1, XXREAL_0, XREAL_0, PARTFUN1, ORDINAL1;
- schemes SUPINF_1, FUNCT_2, RECDEF_1, NAT_1;
+      XREAL_1, XXREAL_0, XREAL_0, PARTFUN1, ORDINAL1, NUMBERS;
+ schemes SUPINF_1, FUNCT_2, RECDEF_1, NAT_1, SUBSET_1;
 
 begin :: operations " + "," - " in R_eal numbers
 
@@ -784,6 +785,14 @@ A1:for z being R_eal holds z in REAL implies - z in REAL
    hence thesis by A1;
 end;
 
+definition let X be non empty Subset of ExtREAL;
+ redefine
+  func inf X -> R_eal;
+  coherence by XXREAL_0:def 1;
+  func sup X -> R_eal;
+  coherence by XXREAL_0:def 1;
+end;
+
 theorem Th26:
    for X,Y being non empty Subset of ExtREAL holds
    (not(-infty in X & +infty in Y or +infty in X & -infty in Y) &
@@ -795,10 +804,10 @@ proof
    assume
 A1:not(-infty in X & +infty in Y or +infty in X & -infty in Y) &
    not(sup X = +infty & sup Y = -infty or sup X = -infty & sup Y = +infty);
-   for z being R_eal holds
+   for z being ext-real number holds
    z in X + Y implies z <= sup X + sup Y
    proof
-     let z be R_eal;
+     let z be ext-real number;
      assume z in X + Y;
      then consider x,y being R_eal such that
   A2:x in X & y in Y & z = x + y by Def5;
@@ -820,10 +829,10 @@ proof
    assume
 A1:not(-infty in X & +infty in Y or +infty in X & -infty in Y) &
    not(inf X = +infty & inf Y = -infty or inf X = -infty & inf Y = +infty);
-   for z being R_eal holds
+   for z being ext-real number holds
    z in X + Y implies inf X + inf Y <= z
    proof
-     let z be R_eal;
+     let z be ext-real number;
      assume z in X + Y;
      then consider x,y being R_eal such that
   A2:x in X & y in Y & z = x + y by Def5;
@@ -933,11 +942,13 @@ proof
 A1:  a is majorant of X;
      - a is minorant of - X
       proof
-        for x being R_eal st x in - X holds -a <= x
+        for x being ext-real number st x in - X holds -a <= x
         proof
-          let x be R_eal;
-          assume x in - X;
-          then - x in --X by Th23;
+          let x be ext-real number;
+          assume
+Z:         x in - X;
+           reconsider x as Element of ExtREAL by XXREAL_0:def 1;
+          - x in --X by Th23,Z;
           then - x in X by Th22;
           then - x <= a by A1,SUPINF_1:def 9;
           then - a <= --x by Th16;
@@ -949,11 +960,13 @@ A1:  a is majorant of X;
    end;
    assume
 A2:- a is minorant of - X;
-   for x being R_eal st x in X holds x <=a
+   for x being ext-real number st x in X holds x <=a
    proof
-     let x be R_eal;
-     assume x in X;
-     then - x in - X by Th23;
+     let x be ext-real number;
+     assume
+Z:    x in X;
+           reconsider x as Element of ExtREAL by XXREAL_0:def 1;
+     - x in - X by Th23,Z;
      then - a <= - x by A2,SUPINF_1:def 10;
      hence thesis by Th16;
    end;
@@ -971,11 +984,13 @@ proof
    A1:a is minorant of X;
       - a is majorant of - X
       proof
-        for x being R_eal st x in - X holds x <= - a
+        for x being ext-real number st x in - X holds x <= - a
         proof
-          let x be R_eal;
-          assume x in - X;
-          then - x in - (- X) by Th23;
+          let x be ext-real number;
+          assume
+Z:         x in - X;
+           reconsider x as Element of ExtREAL by XXREAL_0:def 1;
+          - x in - (- X) by Th23,Z;
           then - x in X by Th22;
           then a <= - x by A1,SUPINF_1:def 10;
           then - (- x) <= - a by Th16;
@@ -987,11 +1002,13 @@ proof
    end;
    assume
 A2:- a is majorant of - X;
-   for x being R_eal st x in X holds a <= x
+   for x being ext-real number st x in X holds a <= x
    proof
-     let x be R_eal;
-     assume x in X;
-     then - x in - X by Th23;
+     let x be ext-real number;
+     assume
+Z:    x in X;
+      reconsider x as Element of ExtREAL by XXREAL_0:def 1;
+     - x in - X by Th23,Z;
      then - x <= - a by A2,SUPINF_1:def 9;
      hence thesis by Th16;
    end;
@@ -1527,7 +1544,7 @@ XBOOLE_0:def 2;
       hence sup F in REAL by A2,A5,TARSKI:def 2;
    end;
    assume sup F in REAL;
-   then sup F <+infty by SUPINF_1:31;
+   then sup F <+infty by XXREAL_0:9,12;
    hence thesis by Def11;
 end;
 
@@ -1557,7 +1574,7 @@ XBOOLE_0:def 2;
       hence thesis by A2,A5,TARSKI:def 2;
    end;
    assume inf F in REAL;
-   then -infty <inf F by SUPINF_1:31;
+   then -infty <inf F by XXREAL_0:9,12;
    hence thesis by Def12;
 end;
 
@@ -1608,7 +1625,7 @@ A5:sup F1 in REAL & sup F2 in REAL implies sup F1 + sup F2 <+infty
      reconsider a = sup F1, b = sup F2 as R_eal;
      reconsider a,b as Real by A6;
      sup F1 + sup F2 = a + b by Th1;
-     hence thesis by SUPINF_1:31;
+     hence thesis by XXREAL_0:9,12;
    end;
 A7:sup F1 in REAL & sup F2 = -infty implies sup F1 + sup F2 <+infty
      by Def2,SUPINF_1:1,XXREAL_0:7;
@@ -1651,7 +1668,7 @@ A5:inf F1 in REAL & inf F2 in REAL implies -infty <inf F1 + inf F2
      reconsider a = inf F1, b = inf F2 as R_eal;
      reconsider a,b as Real by A6;
      inf F1 + inf F2 = a + b by Th1;
-     hence thesis by SUPINF_1:31;
+     hence thesis by XXREAL_0:9,12;
    end;
 A7:inf F1 in REAL & inf F2 = +infty implies -infty <inf F1 + inf F2
      by Lm1,Def2,XXREAL_0:7;
@@ -1692,7 +1709,7 @@ theorem Th52:
    ex F being Function of NAT,ExtREAL st
    F is one-to-one & NAT = rng F & rng F is non empty Subset of ExtREAL
 proof
-   REAL c= ExtREAL;
+   REAL c= ExtREAL by NUMBERS:31;
    then reconsider F = incl NAT as Function of NAT,ExtREAL by FUNCT_2:9;
 A1:rng F is non empty Subset of ExtREAL & dom F = NAT &
      F is one-to-one & rng F = NAT
@@ -2220,10 +2237,10 @@ proof
 A1:F1 is nonnegative;
    assume
 A2:for n being Element of NAT holds F1.n <= F2.n;
-   for x being R_eal st x in rng Ser(F1) holds
-   ex y being R_eal st y in rng Ser(F2) & x <= y
+   for x being ext-real number st x in rng Ser(F1) holds
+   ex y being ext-real number st y in rng Ser(F2) & x <= y
    proof
-     let x be R_eal;
+     let x be ext-real number;
      assume
   A3:x in rng Ser(F1);
   A4:dom Ser(F1) = NAT & dom Ser(F2) = NAT & rng Ser(F2) c= ExtREAL
@@ -2382,9 +2399,9 @@ A11:  n = r + m by NAT_1:10;
      n = r + m by A11;
      hence thesis by A1,Th60;
    end;
-   for y being R_eal st y in rng Ser(F) holds y <= Ser(F).n
+   for y being ext-real number st y in rng Ser(F) holds y <= Ser(F).n
    proof
-      let y be R_eal;
+      let y be ext-real number;
       assume
   A12:y in rng Ser(F);
       dom Ser(F) = NAT & rng Ser(F) c= ExtREAL by FUNCT_2:def 1;

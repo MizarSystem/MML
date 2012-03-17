@@ -14,11 +14,12 @@ environ
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, NUMBERS, XCMPLX_0,
       REALSET1, STRUCT_0, NAT_1, NAT_D, RELAT_1, FUNCT_1, FUNCT_2, FINSEQ_1,
       FINSEQ_4, FINSOP_1, RFINSEQ, BINOP_1, BINARITH, GROUP_1, RLVECT_1,
-      VECTSP_1, NORMSP_1, POLYNOM1, ALGSTR_1, ALGSEQ_1, POLYNOM3, POLYNOM5,
+      VECTSP_1, NORMSP_1, BHSP_1, POLYNOM1, ALGSTR_1, ALGSEQ_1, POLYNOM3,
+      POLYNOM5,
       VECTSP_4, XXREAL_0;
  constructors SETFAM_1, DOMAIN_1, BINOP_1, XXREAL_0, REAL_1, FINSOP_1, RFINSEQ,
       BINARITH, ALGSTR_1, VECTSP_4, NORMSP_1, POLYNOM1, POLYNOM3, POLYNOM5,
-      NAT_D;
+      NAT_D, BHSP_1;
  registrations SUBSET_1, FUNCT_1, STRUCT_0, RELSET_1, VECTSP_1, ALGSTR_2,
       FINSEQ_5, ARYTM_3, BINOM, POLYNOM3, POLYNOM5, MEMBERED, REALSET1,
       XXREAL_0, NAT_1;
@@ -28,7 +29,7 @@ environ
       FUNCOP_1, FINSEQ_1, FINSEQ_3, FINSEQ_4, FINSEQ_5, RFINSEQ, BINOP_1,
       POLYNOM1, POLYNOM3, STRUCT_0, ZFMISC_1, POLYNOM5, BINOM, RELAT_1,
       VECTSP_4, SETFAM_1, ALGSTR_1, XBOOLE_0, XBOOLE_1, GROUP_1, XREAL_1,
-      ORDINAL1;
+      ORDINAL1, NORMSP_1;
  schemes SUBSET_1, BINOP_1;
 
 begin :: Preliminaries
@@ -98,7 +99,7 @@ proof
   thus x*(v+w) = x*v+x*w &
       (x+y)*v = x*v+y*v &
       (x*y)*v = x*(y*v) &
-      (1.L)*v = v by A1;
+      (1_L)*v = v by A1;
 end;
 thus A is mix-associative
 proof
@@ -146,7 +147,7 @@ definition
     (for a be Element of L, x be Element of it,
     p be sequence of L st x = p holds a*x = a*p) &
     0.it = 0_.L &
-    1_ it = 1_.L;
+    1.it = 1_.L;
   existence
    proof
     A1: 0_.(L) in {x where x is sequence of L : not contradiction};
@@ -261,7 +262,7 @@ definition
     thus a*x = a*p by A24,A25,A26;
     end;
     thus 0.P = 0_.(L);
-    thus 1_(P) = 1_.(L);
+    thus 1.P = 1_.(L);
    end;
 
    uniqueness
@@ -275,7 +276,7 @@ definition
      A30: for a be Element of L, x be Element of P1,
     p be sequence of L st x = p holds a*x = a*p and
      A31: 0.P1 = 0_.(L) and
-     A32: 1_(P1) = 1_.(L) and
+     A32: 1.P1 = 1_.(L) and
      A33: for x be set holds x in the carrier of P2 iff x is sequence of L and
      A34: for x,y be Element of P2, p,q be sequence of L st
       x = p & y = q holds x+y = p+q and
@@ -284,7 +285,7 @@ definition
      A36: for a be Element of L, x be Element of P2,
     p be sequence of L st x = p holds a*x = a*p and
      A37: 0.P2 = 0_.(L) and
-     A38: 1_(P2) = 1_.(L);
+     A38: 1.P2 = 1_.(L);
     A39: now let x be set;
          x in the carrier of P1 iff x is sequence of L by A27;
      hence x in the carrier of P1 iff x in the carrier of P2 by A33;
@@ -324,8 +325,8 @@ definition
         .= (the lmult of P2).(a,x);
     end;
     then A43: the lmult of P1=the lmult of P2 by A40,BINOP_1:2;
-    A44: the unity of P1 = the unity of P2 by  A32,A38;
-        the Zero of P1 = the Zero of P2 by  A31,A37;
+    A44: 1.P1 = 1.P2 by  A32,A38;
+        0.P1 = 0.P2 by  A31,A37;
     hence P1 = P2 by A40,A41,A42,A43,A44,BINOP_1:2;
    end;
   end;
@@ -508,7 +509,7 @@ A6:    1 in dom f & 1<=k & k<=i by A4,A5,FINSEQ_5:6;
         .= (1_.(L)).(1-'1)*p.(i+1-'1) by A3,A5
         .= (1_.(L)).(1-'1)*p.i by BINARITH:39
         .= (1_.(L)).(0)*p.i by BINARITH:51
-        .= 1.(L)*p.i by POLYNOM3:31
+        .= 1_(L)*p.i by POLYNOM3:31
         .= p.i by VECTSP_1:def 19;
      hence ((1_.(L))*'p).i = p.i by A2,A6,A12,RLVECT_1:10;
     end;
@@ -547,7 +548,7 @@ Lm2: now
    set F = Formal-Series L;
    reconsider e = 1_.L as Element of F by Def2;
    for x being Element of F holds x*e = x & e*x = x by Lm1;
-   hence 1.F = 1_.L by GROUP_1:def 5;
+   hence 1_F = 1_.L by GROUP_1:def 5;
 end;
 
 registration
@@ -590,11 +591,11 @@ theorem Th6:
         for i be Element of NAT holds (a*(p+q)).i = (a*p + a*q).i
      proof
       let i be Element of NAT;
-           a*((p+q).i) = a*(p.i + q.i) by POLYNOM3:def 6
+           a*((p+q).i) = a*(p.i + q.i) by NORMSP_1:def 5
                   .= a*(p.i) + a*(q.i) by VECTSP_1:def 18
                   .= (a*p).i + a*(q.i) by POLYNOM5:def 3
                   .= (a*p).i + (a*q).i by POLYNOM5:def 3
-                  .= (a*p + a*q).i by POLYNOM3:def 6;
+                  .= (a*p + a*q).i by NORMSP_1:def 5;
       hence (a*(p+q)).i = (a*p + a*q).i by POLYNOM5:def 3;
      end;
     hence thesis by FUNCT_2:113;
@@ -616,7 +617,7 @@ theorem Th7:
         .= a*p.i + b*p.i by VECTSP_1:def 18
         .= (a*p).i + b*p.i by POLYNOM5:def 3
         .= (a*p).i + (b*p).i by POLYNOM5:def 3
-        .= (a*p + b*p).i by POLYNOM3:def 6;
+        .= (a*p + b*p).i by NORMSP_1:def 5;
      end;
     hence thesis by FUNCT_2:113;
    end;
@@ -641,14 +642,14 @@ theorem Th8:
 
 theorem Th9:
    for L be associative left_unital (non empty doubleLoopStr)
-   for p being sequence of L holds 1.L*p = p
+   for p being sequence of L holds 1_L*p = p
     proof
      let L be associative left_unital (non empty doubleLoopStr);
      let p be sequence of L;
-     for i being Element of NAT holds ((1.L)*p).i = p.i
+     for i being Element of NAT holds ((1_L)*p).i = p.i
       proof
        let i be Element of NAT;
-       thus ((1.L)*p).i = (1.L)*p.i by POLYNOM5:def 3
+       thus ((1_L)*p).i = (1_L)*p.i by POLYNOM5:def 3
         .= p.i by VECTSP_1:def 19;
       end;
      hence thesis by FUNCT_2:113;
@@ -679,7 +680,7 @@ thus (x+y)*v = (x'+y')*p by Def2
 thus (x*y)*v = (x'*y')*p by Def2
        .= x'*(y'*p) by Th8
        .= x*(y*v) by A3,Def2;
-thus (1.L)*v = 1.L*p by Def2
+thus (1_L)*v = 1_L*p by Def2
        .= v by Th9;
    end;
 end;
@@ -763,7 +764,7 @@ definition
   let L be 1-sorted;
   let A be AlgebraStr over L;
  mode Subalgebra of A -> AlgebraStr over L means :Def3:
-  the carrier of it c= the carrier of A & 1_ it = 1_ A & 0.it = 0.A &
+  the carrier of it c= the carrier of A & 1.it = 1.A & 0.it = 0.A &
   the add of it = (the add of A)||the carrier of it &
   the mult of it = (the mult of A)||the carrier of it &
   the lmult of it = (the lmult of A)|[:the carrier of L,the carrier of it:];
@@ -777,7 +778,7 @@ theorem Th11:
  proof
   let L be 1-sorted;
   let A be AlgebraStr over L;
-  thus the carrier of A c= the carrier of A & 1_(A) = 1_(A) & 0.A = 0.A &
+  thus the carrier of A c= the carrier of A & 1.A = 1.A & 0.A = 0.A &
   the add of A = (the add of A)||the carrier of A &
   the mult of A = (the mult of A)||the carrier of A &
   the lmult of A = (the lmult of A)|[:the carrier of L,the carrier of A:]
@@ -796,7 +797,7 @@ A2: B is Subalgebra of C;
 A3: the carrier of A c= the carrier of B by A1,Def3;
         the carrier of B c= the carrier of C by A2,Def3;
    hence the carrier of A c= the carrier of C by A3,XBOOLE_1:1;
-   thus 1_(A) = 1_(B) by A1,Def3 .= 1_(C) by A2,Def3;
+   thus 1.A = 1.B by A1,Def3 .= 1.C by A2,Def3;
    thus 0.A = 0.B by A1,Def3 .= 0.C by A2,Def3;
 A4: [:the carrier of A,the carrier of A:] c=
         [:the carrier of B,the carrier of B:] by A3,ZFMISC_1:119;
@@ -840,12 +841,10 @@ A11: the mult of A = (the mult of B)||the carrier of A by A1,Def3
 A12: the lmult of A = (the lmult of B)|[:the carrier of L,the carrier of A:]
       by A1,Def3
      .= the lmult of B by A8,A9,RELAT_1:97;
-A13: the Zero of A = 0.A
+A13: 0.A = 0.A
      .= 0.B by A1,Def3
-     .= the Zero of B;
-        the unity of A = 1_(A)
-     .= 1_(B) by A1,Def3
-     .= the unity of B;
+     .= 0.B;
+    1.A = 1.B by A1,Def3;
   hence the AlgebraStr of A = the AlgebraStr of B
          by A3,A4,A10,A11,A12,A13,XBOOLE_0:def 10;
  end;
@@ -862,7 +861,7 @@ A2: dom (the add of B) = [:the carrier of B,the carrier of B:] by Th1;
 A3: dom (the mult of B) = [:the carrier of B,the carrier of B:] by Th1;
 A4:dom (the lmult of B) = [:the carrier of L,the carrier of B:] by Th2;
 thus the carrier of A c= the carrier of B by A1;
-thus 1_(A) = 1_(B) by A1;
+thus 1.A = 1.B by A1;
 thus 0.A = 0.B by A1;
 thus the add of A = (the add of B)||the carrier of A by A1,A2,RELAT_1:97;
 thus the mult of A = (the mult of B)||the carrier of A by A1,A3,RELAT_1:97;
@@ -894,7 +893,7 @@ registration
 existence
 proof
   reconsider b = AlgebraStr(# the carrier of B, the add of B, the mult of B,
-        the Zero of B, the unity of B, the lmult of B #)
+        0.B, 1.B, the lmult of B #)
         as Subalgebra of B by Th14;
   take b;
   thus thesis;
@@ -908,7 +907,7 @@ registration
 existence
 proof
 reconsider b = AlgebraStr(# the carrier of B, the add of B, the mult of B,
-        the Zero of B, the unity of B, the lmult of B #)
+        0.B, 1.B, the lmult of B #)
         as Subalgebra of B by Th14;
 take b;
 thus thesis by STRUCT_0:def 1;
@@ -922,7 +921,7 @@ definition
   attr A is opers_closed means :Def4:
     A is lineary-closed &
     (for x,y being Element of B st x in A & y in A holds x*y in A) &
-    1_ B in A &
+    1.B in A &
     0.B in A;
 end;
 
@@ -1022,7 +1021,7 @@ A3:   v in C;
      hence a * v in C;
     end;
   end;
-A4: 1_(B) = 1_(A) & 0.B = 0.A by Def3;
+A4: 1.B = 1.A & 0.B = 0.A by Def3;
      for x,y being Element of B st x in C & y in C holds x*y in C
      proof
       let x,y be Element of B such that
@@ -1095,11 +1094,11 @@ A12:  A is lineary-closed by A1,Def4;
  then reconsider lm = f4 as Function of [:the carrier of L,A:],A by A9,
 FUNCT_2:5;
       0.B in A by A1,Def4;
- then reconsider z = the Zero of B as Element of A;
-      1_(B) in A by A1,Def4;
- then reconsider u = the unity of B as Element of A;
+ then reconsider z = 0.B as Element of A;
+      1.B in A by A1,Def4;
+ then reconsider u = 1.B as Element of A;
 set c = AlgebraStr(# A, ad, mu, z, u, lm #);
-A13: 1_(c) = 1_(B);
+A13: 1.c = 1.B;
       0.c = 0.B;
  then reconsider C=c as strict Subalgebra of B by A13,Def3;
  take C;
@@ -1190,10 +1189,10 @@ A13:    Y = the carrier of C & A c= Y by A1;
 A15:   Y = the carrier of C & A c= Y by A1;
       consider a be set such that A16: a in A by XBOOLE_0:def 1;
      reconsider C as non empty Subalgebra of B by A15,A16,STRUCT_0:def 1;
-          1_(B) = 1_(C) by Def3;
-     hence 1_(B) in Y by A15;
+          1.B = 1.C by Def3;
+     hence 1.B in Y by A15;
     end;
-   hence 1_(B) in meet X by A2,SETFAM_1:def 1;
+   hence 1.B in meet X by A2,SETFAM_1:def 1;
         now let Y be set;
      assume Y in X;
      then consider C be Subalgebra of B such that
@@ -1288,14 +1287,12 @@ A16:  the carrier of P2 c= the carrier of B by Def3;
         .= (the mult of P2).(x,y);
     end;
 then A17: the mult of P1 = the mult of P2 by A13,BINOP_1:2;
-A18: the Zero of P1 = 0.P1
+A18: 0.P1 = 0.P1
         .= 0.B by Def3
         .= 0.P2 by Def3
-        .= the Zero of P2;
-A19: the unity of P1 = 1_(P1)
-        .= 1_(B) by Def3
-        .= 1_(P2) by Def3
-        .= the unity of P2;
+        .= 0.P2;
+A19: 1.P1 = 1.B by Def3
+        .= 1.P2 by Def3;
         now let x be Element of L,
             y be Element of P1;
      reconsider y1=y as Element of P2 by A11,A12,XBOOLE_0:def 10
@@ -1425,9 +1422,9 @@ A4:   u in A & v in A;
           u * v = p*'q by Def2;
      hence u * v in A by A1,POLYNOM3:def 12;
     end;
-        1_(B) = 1_.(L) by Def2
-         .= 1_(Polynom-Ring L) by POLYNOM3:def 12;
-   hence 1_(B) in A by A1;
+        1.B = 1_.(L) by Def2
+         .= 1.Polynom-Ring L by POLYNOM3:def 12;
+   hence 1.B in A by A1;
         0.B = 0_.(L) by Def2
        .= 0.(Polynom-Ring L) by POLYNOM3:def 12;
    hence 0.B in A by A1;
@@ -1488,21 +1485,19 @@ A5: for x being Element of Polynom-Algebra L
     end;
 then A6: the mult of Polynom-Algebra L = the mult of Polynom-Ring L
   by A3,BINOP_1:2;
-A7: the Zero of Polynom-Algebra L = 0.(Polynom-Algebra L)
+A7: 0.Polynom-Algebra L = 0.(Polynom-Algebra L)
        .= 0.(Formal-Series L) by A1,Def3
        .= 0_.(L) by Def2
        .= 0.(Polynom-Ring L) by POLYNOM3:def 12
-       .= the Zero of Polynom-Ring L;
-     the unity of Polynom-Algebra L = 1_(Polynom-Algebra L)
-       .= 1_(Formal-Series L) by A1,Def3
+       .= 0.Polynom-Ring L;
+     1.Polynom-Algebra L = 1.Formal-Series L by A1,Def3
        .= 1_.(L) by Def2
-       .= 1_(Polynom-Ring L) by POLYNOM3:def 12
-       .= the unity of Polynom-Ring L;
+       .= 1.Polynom-Ring L by POLYNOM3:def 12;
  hence thesis by A3,A5,A6,A7,BINOP_1:2;
 end;
 
 theorem
   for L being add-associative right_zeroed right_complementable unital
          distributive (non empty doubleLoopStr) holds
-   1.Formal-Series L = 1_.L by Lm2;
+   1_Formal-Series L = 1_.L by Lm2;
 

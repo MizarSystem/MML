@@ -11,14 +11,16 @@ environ
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0,
       DOMAIN_1, XREAL_0, RELAT_1, FUNCT_1, RELSET_1, FUNCT_2, REAL_1, NAT_1,
       NAT_D, XXREAL_0, SUPINF_1, SUPINF_2, MEASURE5;
- constructors WELLORD2, DOMAIN_1, REAL_1, NAT_1, SUPINF_2, MEASURE5, NAT_D;
+ constructors WELLORD2, DOMAIN_1, REAL_1, NAT_1, SUPINF_2, MEASURE5, NAT_D,
+      CARD_1;
  registrations SUBSET_1, SUPINF_1, XREAL_0, RELSET_1, ARYTM_3, MEMBERED,
       ORDINAL1, NUMBERS, XXREAL_0, FUNCT_2, RELAT_1;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, XBOOLE_0;
  theorems TARSKI, SUPINF_1, SUPINF_2, MEASURE1, FUNCT_1, MEASURE3, MEASURE4,
       MEASURE5, ZFMISC_1, FUNCT_2, NAT_1, CARD_4, WELLORD2, XREAL_0, REAL_2,
-      XBOOLE_0, XBOOLE_1, XREAL_1, XXREAL_0, ORDINAL1;
+      XBOOLE_0, XBOOLE_1, XREAL_1, XXREAL_0, ORDINAL1, NUMBERS, MEMBERED,
+      XXREAL_1;
  schemes REAL_1, RECDEF_1, NAT_1, XBOOLE_0;
 
 begin
@@ -607,11 +609,13 @@ proof
    let x be R_eal;
    assume
 A1:0. < x;
-      for y being R_eal holds y in Seg(x) implies y <= x
+      for y being ext-real number holds y in Seg(x) implies y <= x
    proof
-      let y be R_eal;
-      assume y in Seg(x);
-      then 0. < y & y + y < x by A1,Def2;
+      let y be ext-real number;
+      assume
+Z:     y in Seg(x);
+       reconsider y as R_eal by XXREAL_0:def 1;
+       0. < y & y + y < x by A1,Def2,Z;
       hence thesis by Th22;
    end;
    then x is majorant of Seg(x) by SUPINF_1:def 9;
@@ -658,9 +662,10 @@ A7:    0. < eps0 & eps0 <= eps & eps in REAL by A4,A5,Th22;
       then a - b <= a by XREAL_1:22;
   then A10:len(x) - eps0 <= len(x) by A9;
 A11:  a - b <> a by A5,SUPINF_2:def 1;
-    not for y being R_eal st y in Seg(x) holds y <= len(x) - eps0
+    not for y being ext-real number st y in Seg(x) holds y <= len(x) - eps0
       proof
-         assume for y being R_eal st y in Seg(x) holds y <= len(x) - eps0;
+         assume for y being ext-real number st y in Seg(x)
+          holds y <= len(x) - eps0;
          then len(x) - eps0 is majorant of Seg(x) by SUPINF_1:def 9;
          then sup Seg(x) <= len(x) - eps0 by SUPINF_1:def 16;
          then len(x) <= len(x) - eps0;
@@ -735,9 +740,9 @@ A6:for k being Element of NAT st P[k] holds P[k+1]
    thus A8: for n being Element of NAT holds P[n] from NAT_1:sch 1(A5,A6);
    then for n being Element of NAT holds 0. <= F.n;
    then A9:F is nonnegative by SUPINF_2:58;
-      for s being R_eal holds s in rng Ser(F) implies s <= x0
+      for s being ext-real number holds s in rng Ser(F) implies s <= x0
    proof
-      let s be R_eal;
+      let s be ext-real number;
       assume s in rng Ser(F);
       then consider n being set such that
   A10:n in dom Ser(F) & s = Ser(F).n by FUNCT_1:def 5;
@@ -787,14 +792,14 @@ theorem
       for eps being R_eal holds
    for X being non empty Subset of ExtREAL holds
    0. < eps & inf X is Real implies
-   ex x being R_eal st x in X & x < inf X + eps
+   ex x being ext-real number st x in X & x < inf X + eps
 proof
    let eps be R_eal;
    let X be non empty Subset of ExtREAL;
    assume
 A1:0. < eps & inf X is Real;
    assume
-      not ex x being R_eal st x in X & x < inf X + eps;
+      not ex x being ext-real number st x in X & x < inf X + eps;
    then inf X + eps is minorant of X by SUPINF_1:def 10;
 then A2:inf X + eps <= inf X by SUPINF_1:def 17;
 A3:eps <= +infty by XXREAL_0:4;
@@ -819,14 +824,14 @@ theorem
       for eps being R_eal holds
    for X being non empty Subset of ExtREAL holds
    0. < eps & sup X is Real implies
-   ex x being R_eal st x in X & sup X - eps < x
+   ex x being ext-real number st x in X & sup X - eps < x
 proof
    let eps be R_eal;
    let X be non empty Subset of ExtREAL;
    assume
 A1:0. < eps & sup X is Real;
    assume
-      not ex x being R_eal st x in X & sup X - eps < x;
+      not ex x being ext-real number st x in X & sup X - eps < x;
    then sup X - eps is majorant of X by SUPINF_1:def 9;
 then A2:sup X <= sup X - eps by SUPINF_1:def 16;
 A3:eps <= +infty by XXREAL_0:4;
@@ -896,7 +901,7 @@ A1:REAL c= ].-infty,+infty.[
       assume x in REAL;
       then reconsider x as Real;
       reconsider x as R_eal by XXREAL_0:def 1;
-         -infty < x & x < +infty by SUPINF_1:31;
+         -infty < x & x < +infty by XXREAL_0:9,12;
       hence thesis by MEASURE5:def 2;
    end;
 A2:REAL c= [.-infty,+infty.]
@@ -905,7 +910,7 @@ A2:REAL c= [.-infty,+infty.]
       assume x in REAL;
       then reconsider x as Real;
       reconsider x as R_eal by XXREAL_0:def 1;
-         -infty < x & x < +infty by SUPINF_1:31;
+         -infty < x & x < +infty by XXREAL_0:9,12;
       hence thesis by MEASURE5:def 1;
    end;
 A3:REAL c= [.-infty,+infty.[
@@ -914,7 +919,7 @@ A3:REAL c= [.-infty,+infty.[
       assume x in REAL;
       then reconsider x as Real;
       reconsider x as R_eal by XXREAL_0:def 1;
-         -infty < x & x < +infty by SUPINF_1:31;
+         -infty < x & x < +infty by XXREAL_0:9,12;
       hence thesis by MEASURE5:def 4;
    end;
 A4:REAL c= ].-infty,+infty.]
@@ -923,7 +928,7 @@ A4:REAL c= ].-infty,+infty.]
       assume x in REAL;
       then reconsider x as Real;
       reconsider x as R_eal by XXREAL_0:def 1;
-         -infty < x & x < +infty by SUPINF_1:31;
+         -infty < x & x < +infty by XXREAL_0:9,12;
       hence thesis by MEASURE5:def 3;
    end;
       REAL c= REAL;
@@ -1048,8 +1053,8 @@ proof
 A1:A = ].a,b.[ and
 A2:c in A & d in A and
 A3:c <= e & e <= d;
-      c in REAL & e in REAL & d in REAL;
-   then reconsider c,e,d as R_eal;
+   c in REAL & e in REAL & d in REAL;
+   then reconsider c,e,d as R_eal by NUMBERS:31;
 A4:a < c & c < b & c in REAL by A1,A2,MEASURE5:def 2;
 A5:a < d & d < b & d in REAL by A1,A2,MEASURE5:def 2;
       a <= c & c <= e & e <= d & d <= b by A1,A2,A3,MEASURE5:def 2
@@ -1085,7 +1090,7 @@ A1:A = [.a,b.] and
 A2:c in A & d in A and
 A3:c <= e & e <= d;
       c in REAL & e in REAL & d in REAL;
-   then reconsider c,e,d as R_eal;
+   then reconsider c,e,d as R_eal by NUMBERS:31;
       a <= c & c <= e & e <= d & d <= b
      by A1,A2,A3,MEASURE5:def 1;
    then a <= e & e <= b & e in REAL by XXREAL_0:2;
@@ -1106,7 +1111,7 @@ A1:A = ].a,b.] and
 A2:c in A & d in A and
 A3:c <= e & e <= d;
       c in REAL & e in REAL & d in REAL;
-   then reconsider c,e,d as R_eal;
+   then reconsider c,e,d as R_eal by NUMBERS:31;
    A4:a < c & c <= b & c in REAL by A1,A2,MEASURE5:def 3;
        a <= c & c <= e & e <= d & d <= b
      by A1,A2,A3,MEASURE5:def 3;
@@ -1130,7 +1135,7 @@ A1:A = [.a,b.[ and
 A2:c in A & d in A and
 A3:c <= e & e <= d;
       c in REAL & e in REAL & d in REAL;
-   then reconsider c,e,d as R_eal;
+   then reconsider c,e,d as R_eal by NUMBERS:31;
 A4:a <= d & d < b & d in REAL by A1,A2,MEASURE5:def 4;
       a <= c & c <= e & e <= d & d <= b
      by A1,A2,A3,MEASURE5:def 4;
@@ -1170,23 +1175,23 @@ A1:m = inf A & M = sup A;
       assume
    A4:x in ].m,M.[;
       then x in REAL;
-      then reconsider x as R_eal;
+      then reconsider x as R_eal by NUMBERS:31;
    A5:m < x & x < M & x in REAL by A4,MEASURE5:def 2;
    A6:m is minorant of A by A1,SUPINF_1:def 17;
 A7:   M is majorant of A by A1,SUPINF_1:def 16;
-         ex a being R_eal st a <= x & a in A
+         ex a being ext-real number st a <= x & a in A
       proof
-         assume not ex a being R_eal st a <= x & a in A;
-         then for a being R_eal holds a in A implies x <= a;
+         assume not ex a being ext-real number st a <= x & a in A;
+         then for a being ext-real number holds a in A implies x <= a;
          then x is minorant of A by SUPINF_1:def 10;
          hence thesis by A1,A5,SUPINF_1:def 17;
       end;
       then consider a being R_eal such that
   A8:a <= x & a in A;
-         ex b being R_eal st x <= b & b in A
+         ex b being ext-real number st x <= b & b in A
       proof
-         assume not ex b being R_eal st x <= b & b in A;
-         then for a being R_eal holds a in A implies a <= x;
+         assume not ex b being ext-real number st x <= b & b in A;
+         then for a being ext-real number holds a in A implies a <= x;
          then x is majorant of A by SUPINF_1:def 9;
          hence thesis by A1,A5,SUPINF_1:def 16;
       end;
@@ -1236,7 +1241,7 @@ A2:(for c,d being Real st c in A & d in A holds
    assume
 A4:x in [.m,M.];
    then x in REAL;
-   then reconsider x as R_eal;
+   then reconsider x as R_eal by NUMBERS:31;
 A5:m <= x & x <= M by A4,MEASURE5:def 1;
 then A6: ex a1,x1 being Real st a1 = m & x1 = x & a1 <= x1 by A2,A4;
       ex x2,b1 being Real st x2 = x & b1 = M & x2 <= b1 by A2,A4,A5;
@@ -1272,12 +1277,12 @@ A2:(for c,d being Real st c in A & d in A holds
    assume
 A4:x in [.m,M.[;
    then x in REAL;
-   then reconsider x as R_eal;
+   then reconsider x as R_eal by NUMBERS:31;
 A5:m <= x & x < M & x in REAL by A4,MEASURE5:def 4;
-      ex b being R_eal st x <= b & b in A
+      ex b being ext-real number st x <= b & b in A
    proof
-      assume not ex b being R_eal st x <= b & b in A;
-      then for a being R_eal holds a in A implies a <= x;
+      assume not ex b being ext-real number st x <= b & b in A;
+      then for a being ext-real number holds a in A implies a <= x;
       then x is majorant of A by SUPINF_1:def 9;
       hence thesis by A1,A5,SUPINF_1:def 16;
    end;
@@ -1316,12 +1321,12 @@ A2:(for c,d being Real st c in A & d in A holds
    assume
 A4:x in ].m,M.];
    then x in REAL;
-   then reconsider x as R_eal;
+   then reconsider x as R_eal by NUMBERS:31;
 A5:m < x & x <= M & x in REAL by A4,MEASURE5:def 3;
-      ex a being R_eal st a <= x & a in A
+      ex a being ext-real number st a <= x & a in A
    proof
-      assume not ex a being R_eal st a <= x & a in A;
-      then for a being R_eal holds a in A implies x <= a;
+      assume not ex a being ext-real number st a <= x & a in A;
+      then for a being ext-real number holds a in A implies x <= a;
       then x is minorant of A by SUPINF_1:def 10;
       hence thesis by A1,A5,SUPINF_1:def 17;
    end;
@@ -1379,7 +1384,7 @@ A6:not A is Interval;
          hence thesis by A6;
       end;
       suppose A <> {};
-         then reconsider A as non empty Subset of ExtREAL by XBOOLE_1:1;
+        then reconsider A as non empty Subset of ExtREAL by MEMBERED:2;
          set m = inf A, M = sup A;
          consider x being set such that
      A8:x in A by XBOOLE_0:def 1;
@@ -1512,8 +1517,9 @@ A5:a2 <= b2 &
       suppose
 A6:      a1 = b1 & a2 = b2;
          then a1 <> -infty & a1 <> +infty & a2 <> -infty & a2 <> +infty
-           by A1,A4,A5,MEASURE5:13,14;
-         then A = {a1} & A = {a2} by A1,A4,A5,A6,MEASURE5:13,14;
+           by A1,A4,A5,MEASURE5:13,14,XXREAL_1:20;
+         then A = {a1} & A = {a2} by A1,A4,A5,A6,MEASURE5:13,
+14,XXREAL_1:20;
          hence thesis by ZFMISC_1:6;
 end;
 end;
@@ -1564,8 +1570,9 @@ A5:a2 <= b2 &
       suppose
 A6:      a1 = b1 & a2 = b2;
          then b1 <> -infty & b1 <> +infty & b2 <> -infty & b2 <> +infty
-           by A1,A4,A5,MEASURE5:13,14;
-         then A = {b1} & A = {b2} by A1,A4,A5,A6,MEASURE5:13,14;
+           by A1,A4,A5,MEASURE5:13,14,XXREAL_1:20;
+         then A = {b1} & A = {b2} by A1,A4,A5,A6,MEASURE5:13,
+14,XXREAL_1:20;
          hence thesis by ZFMISC_1:6;
 end;
 end;

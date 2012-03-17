@@ -25,27 +25,27 @@
 <ArticleID name="RVSUM_1"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="RAT_1"/>
-<ArticleID name="COMPLEX1"/>
-<ArticleID name="INT_2"/>
-<ArticleID name="NEWTON"/>
 <ArticleID name="CARD_3"/>
 <ArticleID name="PROB_1"/>
 <ArticleID name="SUPINF_1"/>
 <ArticleID name="MESFUNC1"/>
+<ArticleID name="COMPLEX1"/>
+<ArticleID name="INT_2"/>
+<ArticleID name="NEWTON"/>
 </Signature>
 <FCluster>
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="36"/>
+<Adjective nr="37"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="45"/>
+<Func kind="K" nr="46"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="195">
+<Func kind="K" nr="245">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -53,21 +53,21 @@
 <Adjective nr="15"/>
 <Adjective nr="16"/>
 <Adjective nr="19"/>
-<Adjective nr="36"/>
 <Adjective nr="37"/>
+<Adjective nr="38"/>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes>
 <Typ kind="M" nr="7">
 <Cluster/>
-<Func kind="K" nr="240"/>
+<Func kind="K" nr="205"/>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="11">
+<Func kind="K" nr="12">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -75,26 +75,26 @@
 <Adjective nr="15"/>
 <Adjective nr="16"/>
 <Adjective nr="19"/>
-<Adjective nr="36"/>
 <Adjective nr="37"/>
+<Adjective nr="38"/>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes>
 <Typ kind="M" nr="7">
 <Cluster/>
-<Func kind="K" nr="240"/>
+<Func kind="K" nr="205"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="161">
+<Func kind="K" nr="162">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="15"/>
 <Adjective nr="16"/>
 <Adjective nr="19"/>
-<Adjective nr="36"/>
 <Adjective nr="37"/>
+<Adjective nr="38"/>
 </Cluster>
 </FCluster>
 <CCluster>
@@ -102,10 +102,10 @@
 <Cluster/>
 <Typ kind="M" nr="7">
 <Cluster/>
-<Func kind="K" nr="240"/>
+<Func kind="K" nr="205"/>
 </Typ>
 <Cluster>
-<Adjective nr="34"/>
+<Adjective nr="35"/>
 </Cluster>
 </CCluster>
 <CCluster>
@@ -113,10 +113,10 @@
 <Cluster/>
 <Typ kind="M" nr="7">
 <Cluster/>
-<Func kind="K" nr="45"/>
+<Func kind="K" nr="46"/>
 </Typ>
 <Cluster>
-<Adjective nr="34"/>
+<Adjective nr="35"/>
 </Cluster>
 </CCluster>
 </Registrations>

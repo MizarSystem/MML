@@ -20,6 +20,7 @@
 <ArticleID name="FUNCT_4"/>
 <ArticleID name="FRAENKEL"/>
 <ArticleID name="FUNCT_5"/>
+<ArticleID name="FUNCOP_1"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="FINSET_1"/>
@@ -32,7 +33,6 @@
 <ArticleID name="CAT_2"/>
 <ArticleID name="ENUMSET1"/>
 <ArticleID name="DOMAIN_1"/>
-<ArticleID name="FUNCOP_1"/>
 <ArticleID name="EQREL_1"/>
 <ArticleID name="ORDERS_1"/>
 <ArticleID name="ORDERS_2"/>
@@ -153,9 +153,9 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="451">
+<Func kind="K" nr="453">
 <LocusVar nr="1"/>
-<Func kind="K" nr="251">
+<Func kind="K" nr="264">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
@@ -195,14 +195,14 @@
 <Cluster>
 <Adjective nr="7" value="false"/>
 </Cluster>
-<Func kind="K" nr="18">
+<Func kind="K" nr="19">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="451">
+<Func kind="K" nr="453">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -263,7 +263,7 @@
 <LocusVar nr="1"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="448">
+<Func kind="K" nr="450">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>

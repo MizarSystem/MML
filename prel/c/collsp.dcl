@@ -2,9 +2,15 @@
 <Registrations>
 <Signature>
 <ArticleID name="HIDDEN"/>
+<ArticleID name="TARSKI"/>
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
+<ArticleID name="RELAT_1"/>
+<ArticleID name="FUNCT_1"/>
+<ArticleID name="MCART_1"/>
+<ArticleID name="RELSET_1"/>
+<ArticleID name="FUNCT_2"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="COLLSP"/>
 </Signature>
@@ -14,7 +20,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="5"/>
+<Adjective nr="14"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -23,8 +29,8 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="4" value="false"/>
-<Adjective nr="5"/>
+<Adjective nr="13" value="false"/>
+<Adjective nr="14"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -33,10 +39,10 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="4" value="false"/>
-<Adjective nr="5"/>
-<Adjective nr="6"/>
-<Adjective nr="7"/>
+<Adjective nr="13" value="false"/>
+<Adjective nr="14"/>
+<Adjective nr="15"/>
+<Adjective nr="16"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -45,11 +51,11 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="4" value="false"/>
-<Adjective nr="5"/>
-<Adjective nr="6"/>
-<Adjective nr="7"/>
-<Adjective nr="8"/>
+<Adjective nr="13" value="false"/>
+<Adjective nr="14"/>
+<Adjective nr="15"/>
+<Adjective nr="16"/>
+<Adjective nr="17"/>
 </Cluster>
 </RCluster>
 </Registrations>

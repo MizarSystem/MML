@@ -17,7 +17,7 @@ environ
  registrations RELSET_1, PARTFUN2, RFUNCT_2, XREAL_0, ARYTM_3, MEMBERED,
       ORDINAL1, RCOMP_1, SEQM_3, XXREAL_0;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
- definitions TARSKI, RCOMP_1, XBOOLE_0, SUBSET_1;
+ definitions TARSKI, RCOMP_1, XBOOLE_0, SUBSET_1, PROB_1, LIMFUNC1;
  theorems REAL_1, FUNCT_1, NAT_1, SEQ_1, SEQ_2, SEQ_4, ABSVALUE, PARTFUN1,
       PROB_1, PARTFUN2, RCOMP_1, RFUNCT_2, FCONT_1, SUBSET_1, REAL_2, LIMFUNC1,
       FCONT_2, TARSKI, FUNCT_2, RELAT_1, XREAL_0, XBOOLE_0, XBOOLE_1, FUNCOP_1,
@@ -72,19 +72,18 @@ theorem Th5:
   A1: rng a c= right_closed_halfline(r) & a is convergent;
   r in REAL by XREAL_0:def 1;
   then reconsider b = NAT --> r as Real_Sequence by FUNCOP_1:57;
-  A2: for n holds b.n = r by FUNCOP_1:13;
   A3: b is convergent by SEQ_4:39;
   A4: lim b = b.0 by SEQ_4:41
-           .= r by A2;
+           .= r by FUNCOP_1:13;
       now let n;  a.n in rng a by RFUNCT_2:10;
     then a.n in right_closed_halfline(r) by A1;
-    then a.n in {g: r <= g} by LIMFUNC1:def 2;
+    then a.n in {g1: r <= g1} by LIMFUNC1:154;
     then ex r1 st a.n = r1 & r <= r1;
-    hence b.n <= a.n by A2;
+    hence b.n <= a.n by FUNCOP_1:13;
    end;
   then r <= lim a by A1,A3,A4,SEQ_2:32;
   then (lim a) in {g1: r <= g1};
-  hence thesis by LIMFUNC1:def 2;
+  hence thesis by LIMFUNC1:154;
  end;
 
 theorem Th6:
@@ -93,19 +92,18 @@ theorem Th6:
   A1: rng a c= left_closed_halfline(r) & a is convergent;
   r in REAL by XREAL_0:def 1;
   then reconsider b = NAT --> r as Real_Sequence by FUNCOP_1:57;
-  A2: for n holds b.n = r by FUNCOP_1:13;
   A3: b is convergent by SEQ_4:39;
   A4: lim b = b.0 by SEQ_4:41
-           .= r by A2;
+           .= r by FUNCOP_1:13;
       now let n;  a.n in rng a by RFUNCT_2:10;
     then a.n in left_closed_halfline(r) by A1;
-    then a.n in {g: g <= r} by LIMFUNC1:def 1;
+    then a.n in {g: g <= r} by LIMFUNC1:153;
     then ex r1 st a.n = r1 & r1 <= r;
-    hence a.n <= b.n by A2;
+    hence a.n <= b.n by FUNCOP_1:13;
    end;
   then lim a <= r by A1,A3,A4,SEQ_2:32;
   then lim a in {g1: g1 <= r};
-  hence thesis by LIMFUNC1:def 1;
+  hence thesis by LIMFUNC1:153;
  end;
 
 theorem Th7:
@@ -141,7 +139,6 @@ theorem Th9:
     thus 0 < r & g in ].x0 - r,x0 + r.[ implies
       ex r1 st g = x0 + r1 & abs(r1) < r
     proof assume 0 < r & g in ].x0 - r,x0 + r.[;
-      then g in {g1: x0 - r < g1 & g1 < x0 + r};
 then A1:   ex g1 st g1 = g & x0 - r < g1 & g1 < x0 + r;
       take r1 = g - x0;
       thus x0 + r1 = g;
@@ -178,7 +175,6 @@ theorem
   end;
   set r1 = g - x0;
   assume r1 in ].-r,r.[;
-  then r1 in {g1: -r < g1 & g1 < r};
   then ex g1 st g1 = r1 & -r < g1 & g1 < r;
   then A2: abs(r1) < r by SEQ_2:9;
   x0 + r1 = g;
@@ -190,12 +186,12 @@ theorem Th11:
  proof
   thus left_closed_halfline(p) c= {p} \/ left_open_halfline(p)
    proof let x; assume x in left_closed_halfline(p);
-    then x in {g1: g1 <= p} by LIMFUNC1:def 1;
+    then x in {g1: g1 <= p} by LIMFUNC1:153;
     then consider g1 such that
     A1: g1 = x & g1 <= p;
         now per cases by A1,XXREAL_0:1;
      suppose g1 < p; then x in {g2: g2 < p} by A1;
-      then x in left_open_halfline(p) by PROB_1:def 15;
+      then x in left_open_halfline(p) by LIMFUNC1:151;
       hence thesis by XBOOLE_0:def 2;
      end;
      suppose g1 = p; then x in {p} by A1,TARSKI:def 1;
@@ -207,13 +203,13 @@ theorem Th11:
   let x such that A2: x in {p} \/ left_open_halfline(p);
   now per cases by A2,XBOOLE_0:def 2;
    suppose x in {p}; then x = p by TARSKI:def 1; then x in {g: g <= p};
-    hence thesis by LIMFUNC1:def 1;
+    hence thesis by LIMFUNC1:153;
    end;
    suppose
-    x in left_open_halfline(p); then x in {g: g < p} by PROB_1:def 15;
+    x in left_open_halfline(p); then x in {g: g < p} by LIMFUNC1:151;
     then consider g1 such that
     A3: g1 = x & g1 < p;  x in {g2: g2 <= p} by A3;
-    hence thesis by LIMFUNC1:def 1;
+    hence thesis by LIMFUNC1:153;
    end;
    end;
   hence thesis;
@@ -224,12 +220,12 @@ theorem Th12:
  proof
   thus right_closed_halfline(p) c= {p} \/ right_open_halfline(p)
    proof let x; assume x in right_closed_halfline(p);
-    then x in {g1: p <= g1} by LIMFUNC1:def 2;
+    then x in {g1: p <= g1} by LIMFUNC1:154;
     then consider g1 such that
     A1: g1 = x & p <= g1;
     now per cases by A1,XXREAL_0:1;
      suppose p < g1; then x in {g2: p < g2} by A1;
-      then x in right_open_halfline(p) by LIMFUNC1:def 3;
+      then x in right_open_halfline(p) by LIMFUNC1:152;
       hence thesis by XBOOLE_0:def 2;
      end;
      suppose g1 = p; then x in {p} by A1,TARSKI:def 1;
@@ -241,13 +237,13 @@ theorem Th12:
   let x such that A2: x in {p} \/ right_open_halfline(p);
   now per cases by A2,XBOOLE_0:def 2;
    suppose x in {p}; then x = p by TARSKI:def 1; then x in {g: p <= g};
-    hence thesis by LIMFUNC1:def 2;
+    hence thesis by LIMFUNC1:154;
    end;
    suppose x in right_open_halfline(p);
-    then x in {g: p < g} by LIMFUNC1:def 3;
+    then x in {g: p < g} by LIMFUNC1:152;
     then consider g1 such that
     A3: g1 = x & p < g1;  x in {g2: p <= g2} by A3;
-    hence thesis by LIMFUNC1:def 2;
+    hence thesis by LIMFUNC1:154;
    end;
    end;
   hence thesis;
@@ -262,17 +258,16 @@ theorem Th13:
   A1: for n holds a.n = x0 - p/(n+1);
   x0 in REAL by XREAL_0:def 1;
   then reconsider b = NAT --> x0 as Real_Sequence by FUNCOP_1:57;
-  A2: for n holds b.n = x0 by FUNCOP_1:13;
   deffunc F(Element of NAT) = p/($1+1);
   consider d such that
   A3: for n holds d.n = F(n) from SEQ_1:sch 1;
   A4: d is convergent & lim d = 0 by A3,SEQ_4:46;
   A5: b is convergent by SEQ_4:39;
   A6: lim b = b.0 by SEQ_4:41
-  .= x0 by A2;
+  .= x0 by FUNCOP_1:13;
       now let n;
     thus (b - d).n = b.n - d.n by RFUNCT_2:6
-     .= x0 - d.n by A2
+     .= x0 - d.n by FUNCOP_1:13
      .= x0 - p/(n+1) by A3
      .=a.n by A1;
    end;
@@ -291,17 +286,16 @@ theorem Th14:
   A1: for n holds a.n = x0 + p/(n+1);
   x0 in REAL by XREAL_0:def 1;
   then reconsider b = NAT --> x0 as Real_Sequence by FUNCOP_1:57;
-  A2: for n holds b.n = x0 by FUNCOP_1:13;
   deffunc F(Element of NAT) = p/($1+1);
   consider d such that
   A3: for n holds d.n = F(n) from SEQ_1:sch 1;
   A4: d is convergent & lim d = 0 by A3,SEQ_4:46;
   A5: b is convergent by SEQ_4:39;
   A6: lim b = b.0 by SEQ_4:41
-  .= x0 by A2;
+  .= x0 by FUNCOP_1:13;
       now let n;
     thus (b + d).n = b.n + d.n by SEQ_1:11
-     .= x0 + d.n by A2
+     .= x0 + d.n by FUNCOP_1:13
      .= x0 + p/(n+1) by A3
      .=a.n by A1;
    end;
@@ -340,7 +334,6 @@ A5: p is Real by XREAL_0:def 1;
        by RCOMP_1:def 7;
      A10: Nn c= dom f
       proof let x; assume x in Nn;
-       then x in {g2: x0 - p/(n+1) < g2 & g2 < x0 + p/(n+1)};
        then consider g2 such that
        A11: g2 = x & x0 - p/(n+1) < g2 & g2 < x0 + p/(n+1);
           0 + 1 <= n + 1 by A9,XREAL_1:9;
@@ -349,15 +342,13 @@ A5: p is Real by XREAL_0:def 1;
        then A13: x0 - p < g2 by A11,XXREAL_0:2;
           x0 + p/(n+1) <= x0 + p by A12,XREAL_1:9;
        then g2 < x0 + p by A11,XXREAL_0:2;
-       then x in {r1: x0 - p < r1 & r1 < x0 + p} by A11,A13;
-       then x in N by A4;
+       then x in N by A4,A11,A13;
        hence thesis by A2;
       end;
      then consider g such that
      A14: g in Nn & f.g = r by A3;
      take g;
-     g in {g1: x0 - p/(n+1) < g1 & g1 <x0 + p/(n+1)} by A14;
-     then ex g1 st g1 = g & x0 - p/(n+1) < g1 & g1 <x0 + p/(n+1);
+     ex g1 st g1 = g & x0 - p/(n+1) < g1 & g1 <x0 + p/(n+1) by A14;
      hence x0 - p/(n+1) < g & g <x0 + p/(n+1);
      thus f.g = r by A14;
      thus thesis by A10,A14;
@@ -535,15 +526,11 @@ theorem Th19:
         then A15: (f|X).x0 - r/2 < (f|X).x0 by XREAL_1:21;
         A16: (f|X).x0 < (f|X).x0 + r by A11,XREAL_1:31;
         then (f|X).x0 - r/2 < (f|X).x0 + r by A15,XXREAL_0:2;
-        then (f|X).x0 - r/2 in {s: (f|X).x0 - r < s & s < (f|X).x0 + r} by A13
-;
-        then A17: M1 in ].(f|X).x0 - r,(f|X).x0 + r.[;
+        then A17: M1 in ].(f|X).x0 - r,(f|X).x0 + r.[ by A13;
           A18: (f|X).x0 + r/2 < (f|X).x0 + r/2 + r/2 by A12,XREAL_1:31;
            (f|X).x0 - r < (f|X).x0 + r - r by A16,XREAL_1:11;
         then (f|X).x0 - r < (f|X).x0 + r/2 by A14,XXREAL_0:2;
-        then (f|X).x0 + r/2 in {s: (f|X).x0 - r < s & s < (f|X).x0 + r} by A18
-;
-        then A19: M2 in ].(f|X).x0 - r,(f|X).x0 + r.[;
+        then A19: M2 in ].(f|X).x0 - r,(f|X).x0 + r.[ by A18;
         then A20: [.M1,M2.] c= ].(f|X).x0 - r,(f|X).x0 + r.[ by A17,RCOMP_1:17;
         M1 in N2 by A10,A11,A17;
         then consider r1 such that
@@ -581,7 +568,6 @@ RCOMP_1:def 7;
         take N;
         let x be real number; assume
         A33: x in dom (f|X) & x in N;
-        then x in {s: x0 - R < s & s < x0 + R};
 then A34:        ex s st s = x & x0 - R < s & s < x0 + R;
         then x0 < R + x by XREAL_1:21;
 then A35: x0 - x < R + x - x by XREAL_1:11;
@@ -598,8 +584,7 @@ then A35: x0 - x < R + x - x by XREAL_1:11;
         then A40: (f|X).x <= (f|X).r2 by A3,A38,A39,RFUNCT_2:def 4;
         r1 in X /\ dom (f|X) by A21,XBOOLE_0:def 3;
         then (f|X).r1 <= (f|X).x by A3,A36,A39,RFUNCT_2:def 4;
-        then (f|X).x in {s: M1<=s & s<=M2} by A21,A22,A40;
-        then (f|X).x in [.M1,M2.];
+        then (f|X).x in [.M1,M2.] by A21,A22,A40;
         then (f|X).x in N3 by A11,A20;
         hence (f|X).x in N1 by A10;
        end;
@@ -633,15 +618,11 @@ then A35: x0 - x < R + x - x by XREAL_1:11;
         then A53: (f|X).x0 - r/2 < (f|X).x0 by XREAL_1:21;
         A54: (f|X).x0 < (f|X).x0 + r by A49,XREAL_1:31;
         then (f|X).x0 - r/2 < (f|X).x0 + r by A53,XXREAL_0:2;
-        then (f|X).x0 - r/2 in {s: (f|X).x0 - r < s & s < (f|X).x0 + r} by A51
-;
-        then A55: M1 in ].(f|X).x0 - r,(f|X).x0 + r.[;
+        then A55: M1 in ].(f|X).x0 - r,(f|X).x0 + r.[ by A51;
           A56: (f|X).x0 + r/2 < (f|X).x0 + r/2 + r/2 by A50,XREAL_1:31;
         (f|X).x0 - r < (f|X).x0 + r - r by A54,XREAL_1:11;
         then (f|X).x0 - r < (f|X).x0 + r/2 by A52,XXREAL_0:2;
-        then (f|X).x0 + r/2 in {s: (f|X).x0 - r < s & s < (f|X).x0 + r} by A56
-;
-        then A57: M2 in ].(f|X).x0 - r,(f|X).x0 + r.[;
+        then A57: M2 in ].(f|X).x0 - r,(f|X).x0 + r.[ by A56;
         then A58: [.M1,M2.] c= ].(f|X).x0 - r,(f|X).x0 + r.[ by A55,RCOMP_1:17;
         M1 in N2 by A48,A49,A55;
         then consider r1 such that
@@ -679,7 +660,6 @@ RCOMP_1:def 7;
         take N;
         let x be real number; assume
         A71: x in dom (f|X) & x in N;
-        then x in {s: x0 - R < s & s < x0 + R};
 then A72:        ex s st s = x & x0 - R < s & s < x0 + R;
         then x0 < R + x by XREAL_1:21;
         then A73: x0 - x < R + x - x by XREAL_1:11;
@@ -696,8 +676,7 @@ then A72:        ex s st s = x & x0 - R < s & s < x0 + R;
         then A78: (f|X).x <= (f|X).r2 by A41,A74,A77,RFUNCT_2:def 5;
         r1 in X /\ dom(f|X) by A59,XBOOLE_0:def 3;
         then (f|X).r1 <= (f|X).x by A41,A76,A77,RFUNCT_2:def 5;
-        then (f|X).x in {s: M1 <= s & s <= M2} by A59,A60,A78;
-        then (f|X).x in [.M1,M2.];
+        then (f|X).x in [.M1,M2.] by A59,A60,A78;
         then (f|X).x in N3 by A49,A58;
         hence (f|X).x in N1 by A48;
        end;
@@ -744,15 +723,11 @@ theorem Th20:
         then A15: (f|X).x0 - r/2 < (f|X).x0 by XREAL_1:21;
         A16: (f|X).x0 < (f|X).x0 + r by A11,XREAL_1:31;
         then (f|X).x0 - r/2 < (f|X).x0 + r by A15,XXREAL_0:2;
-        then (f|X).x0 - r/2 in {s: (f|X).x0 - r < s & s < (f|X).x0 + r} by A13
-;
-        then A17: M1 in ].(f|X).x0 - r,(f|X).x0 + r.[;
+        then A17: M1 in ].(f|X).x0 - r,(f|X).x0 + r.[ by A13;
           A18: (f|X).x0 + r/2 < (f|X).x0 + r/2 + r/2 by A12,XREAL_1:31;
            (f|X).x0 - r < (f|X).x0 + r - r by A16,XREAL_1:11;
         then (f|X).x0 - r < (f|X).x0 + r/2 by A14,XXREAL_0:2;
-        then (f|X).x0 + r/2 in {s: (f|X).x0 - r < s & s < (f|X).x0 + r} by A18
-;
-        then A19: M2 in ].(f|X).x0 - r,(f|X).x0 + r.[;
+        then A19: M2 in ].(f|X).x0 - r,(f|X).x0 + r.[ by A18;
         then A20: [.M1,M2.] c= ].(f|X).x0 - r,(f|X).x0 + r.[ by A17,RCOMP_1:17;
         M1 in N2 by A10,A11,A17;
         then consider r1 such that
@@ -790,7 +765,6 @@ RCOMP_1:def 7;
         take N;
         let x be real number; assume
         A33: x in dom (f|X) & x in N;
-        then x in {s: x0 - R < s & s < x0 + R};
 then A34:        ex s st s = x & x0 - R < s & s < x0 + R;
         then x0 < R + x by XREAL_1:21;
  then A35: x0 - x < R + x - x by XREAL_1:11
@@ -807,8 +781,7 @@ then A34:        ex s st s = x & x0 - R < s & s < x0 + R;
         then A40: (f|X).x <= (f|X).r2 by A3,A38,A39,RFUNCT_2:def 4;
         r1 in X /\ dom (f|X) by A21,XBOOLE_0:def 3;
         then (f|X).r1 <= (f|X).x by A3,A36,A39,RFUNCT_2:def 4;
-        then (f|X).x in {s: M1<=s & s<=M2} by A21,A22,A40;
-        then (f|X).x in [.M1,M2.];
+        then (f|X).x in [.M1,M2.] by A21,A22,A40;
         then (f|X).x in N3 by A11,A20;
         hence (f|X).x in N1 by A10;
        end;
@@ -842,15 +815,11 @@ then A34:        ex s st s = x & x0 - R < s & s < x0 + R;
         then A53: (f|X).x0 - r/2 < (f|X).x0 by XREAL_1:21;
         A54: (f|X).x0 < (f|X).x0 + r by A49,XREAL_1:31;
         then (f|X).x0 - r/2 < (f|X).x0 + r by A53,XXREAL_0:2;
-        then (f|X).x0 - r/2 in {s: (f|X).x0 - r < s & s < (f|X).x0 + r} by A51
-;
-        then A55: M1 in ].(f|X).x0 - r,(f|X).x0 + r.[;
+        then A55: M1 in ].(f|X).x0 - r,(f|X).x0 + r.[ by A51;
           A56: (f|X).x0 + r/2 < (f|X).x0 + r/2 + r/2 by A50,XREAL_1:31;
            (f|X).x0 - r < (f|X).x0 + r - r by A54,XREAL_1:11;
         then (f|X).x0 - r < (f|X).x0 + r/2 by A52,XXREAL_0:2;
-        then (f|X).x0 + r/2 in {s: (f|X).x0 - r < s & s < (f|X).x0 + r} by A56
-;
-        then A57: M2 in ].(f|X).x0 - r,(f|X).x0 + r.[;
+        then A57: M2 in ].(f|X).x0 - r,(f|X).x0 + r.[ by A56;
         then A58: [.M1,M2.] c= ].(f|X).x0 - r,(f|X).x0 + r.[ by A55,RCOMP_1:17;
            M1 in N2 by A48,A49,A55;
         then consider r1 such that
@@ -888,7 +857,6 @@ RCOMP_1:def 7;
         take N;
         let x be real number; assume
         A71: x in dom (f|X) & x in N;
-        then x in {s: x0 - R < s & s < x0 + R};
 then A72:        ex s st s = x & x0 - R < s & s < x0 + R;
         then x0 < R + x by XREAL_1:21;
         then A73: x0 - x < R + x - x by XREAL_1:11
@@ -905,8 +873,7 @@ then A72:        ex s st s = x & x0 - R < s & s < x0 + R;
         then A78: (f|X).x <= (f|X).r2 by A41,A74,A77,RFUNCT_2:def 5;
         r1 in X /\ dom(f|X) by A59,XBOOLE_0:def 3;
         then (f|X).r1 <= (f|X).x by A41,A76,A77,RFUNCT_2:def 5;
-        then (f|X).x in {s: M1 <= s & s <= M2} by A59,A60,A78;
-        then (f|X).x in [.M1,M2.];
+        then (f|X).x in [.M1,M2.] by A59,A60,A78;
         then (f|X).x in N3 by A49,A58;
         hence (f|X).x in N1 by A48;
        end;
@@ -959,15 +926,11 @@ then A7:    (f|X).x0 in {p} or (f|X).x0 in L by XBOOLE_0:def 2;
           then A16: (f|X).x0 - r/2 < (f|X).x0 by XREAL_1:21;
           A17: (f|X).x0 < (f|X).x0 + r by A12,XREAL_1:31;
           then (f|X).x0 - r/2 < (f|X).x0 + r by A16,XXREAL_0:2;
-          then (f|X).x0 - r/2 in {s: (f|X).x0 - r < s & s < (f|X).x0 + r} by
-A14;
- then A18: M1 in ].(f|X).x0 - r,(f|X).x0 + r.[;
+ then A18: M1 in ].(f|X).x0 - r,(f|X).x0 + r.[ by A14;
             A19: (f|X).x0 + r/2 < (f|X).x0 + r/2 + r/2 by A13,XREAL_1:31;
              (f|X).x0 - r < (f|X).x0 + r - r by A17,XREAL_1:11;
           then (f|X).x0 - r < (f|X).x0 + r/2 by A15,XXREAL_0:2;
-          then (f|X).x0 + r/2 in {s: (f|X).x0 - r < s & s < (f|X).x0 + r} by
-A19;
- then A20: M2 in ].(f|X).x0 - r,(f|X).x0 + r.[;
+ then A20: M2 in ].(f|X).x0 - r,(f|X).x0 + r.[ by A19;
           then A21: [.M1,M2.] c= ].(f|X).x0 - r,(f|X).x0 + r.[ by A18,
 RCOMP_1:17;
           M1 in N2 by A11,A12,A18;
@@ -1007,7 +970,6 @@ RCOMP_1:def 7;
           take N;
           let x be real number; assume
           A34: x in dom (f|X) & x in N;
-          then x in {s: x0 - R < s & s < x0 + R};
 then A35: ex s st s = x & x0 - R < s & s < x0 + R;
           then x0 < R + x by XREAL_1:21;
           then A36: x0 - x < R + x - x by XREAL_1:11;  R <= x0 - r1 by
@@ -1024,8 +986,7 @@ XXREAL_0:17;
           then A41: (f|X).x <= (f|X).r2 by A9,A39,A40,RFUNCT_2:def 4;
           r1 in X /\ dom (f|X) by A22,XBOOLE_0:def 3;
           then (f|X).r1 <= (f|X).x by A9,A37,A40,RFUNCT_2:def 4;
-          then (f|X).x in {s: M1 <= s & s <= M2} by A22,A23,A41;
-          then (f|X).x in [.M1,M2.];
+          then (f|X).x in [.M1,M2.] by A22,A23,A41;
           then (f|X).x in N3 by A12,A21;
           hence (f|X).x in N1 by A11;
          end;
@@ -1041,16 +1002,14 @@ XXREAL_0:17;
           A48: p < p + R by A44,XREAL_1:31; then p - r < p + R by A47,
 XXREAL_0:2
 ;
-          then p + R in {s: p - r < s & s < p + r} by A46;
-          then A49: p + R in ].p - r, p + r.[;
+          then A49: p + R in ].p - r, p + r.[ by A46;
           A50: p - R < p by A44,XREAL_1:46;  p < p + r by A43,XREAL_1:31;
           then A51: p - R < p + r by A50,XXREAL_0:2;
           p - r < p - R by A45,REAL_1:92;
-          then p - R in {s: p - r < s & s < p + r} by A51;
-          then p - R in ].p - r, p + r.[;
+          then p - R in ].p - r, p + r.[ by A51;
           then A52: [.p - R, p + R.] c= N1 by A43,A49,RCOMP_1:17;
              p - R in {s : s < p} by A50;
-          then p - R in L by PROB_1:def 15;
+          then p - R in L by LIMFUNC1:151;
           then consider r1 such that
           A53: r1 in dom (f|X) & r1 in
  X & p - R = (f|X).r1 by A2,A6,A8,PARTFUN2:78;
@@ -1069,16 +1028,14 @@ XXREAL_0:2
           A57: x in dom(f|X) & x in N;
           A58: dom (f|X) c= X by RELAT_1:87;
           then (f|X).x in l by A2,A6,A57,FUNCT_1:def 12;
-          then (f|X).x in {s: s <= p} by LIMFUNC1:def 1;
+          then (f|X).x in {s: s <= p} by LIMFUNC1:153;
           then ex s st s = (f|X).x & s <= p;
 then A59: (f|X).x <= p + R by A48,XXREAL_0:2;
           A60: x in X /\ dom (f|X) by A57,A58,XBOOLE_0:def 3;
           A61: r1 in X /\ dom (f|X) by A53,XBOOLE_0:def 3;
-          x in {s: x0 - (x0-r1) < s & s < x0 + (x0-r1)} by A57;
-          then ex s st s = x & x0 - (x0-r1) < s & s < x0 + (x0-r1);
+          ex s st s = x & x0 - (x0-r1) < s & s < x0 + (x0-r1) by A57;
           then p - R <= (f|X).x by A9,A53,A60,A61,RFUNCT_2:def 4;
-          then (f|X).x in {s: p - R <= s & s <= p + R} by A59;
-          then (f|X).x in [.p - R, p + R.];
+          then (f|X).x in [.p - R, p + R.] by A59;
           hence (f|X).x in N1 by A52;
          end;
          end;
@@ -1104,15 +1061,11 @@ then A59: (f|X).x <= p + R by A48,XXREAL_0:2;
           then A69: (f|X).x0 - r/2 < (f|X).x0 by XREAL_1:21;
           A70: (f|X).x0 < (f|X).x0 + r by A65,XREAL_1:31;
           then (f|X).x0 - r/2 < (f|X).x0 + r by A69,XXREAL_0:2;
-          then (f|X).x0 - r/2 in {s: (f|X).x0 - r < s & s < (f|X).x0 + r} by
-A67;
-          then A71: M1 in ].(f|X).x0 - r,(f|X).x0 + r.[;
+          then A71: M1 in ].(f|X).x0 - r,(f|X).x0 + r.[ by A67;
             A72: (f|X).x0 + r/2 < (f|X).x0 + r/2 + r/2 by A66,XREAL_1:31;
              (f|X).x0 - r < (f|X).x0 + r - r by A70,XREAL_1:11;
           then (f|X).x0 - r < (f|X).x0 + r/2 by A68,XXREAL_0:2;
-          then (f|X).x0 + r/2 in {s: (f|X).x0 - r < s & s < (f|X).x0 + r} by
-A72;
-          then A73: M2 in ].(f|X).x0 - r,(f|X).x0 + r.[;
+          then A73: M2 in ].(f|X).x0 - r,(f|X).x0 + r.[ by A72;
           then A74: [.M1,M2.] c= ].(f|X).x0 - r,(f|X).x0 + r.[ by A71,
 RCOMP_1:17;
           M1 in N2 by A64,A65,A71;
@@ -1151,7 +1104,6 @@ RCOMP_1:def 7;
           take N;
           let x be real number; assume
           A87: x in dom (f|X) & x in N;
-          then x in {s: x0 - R < s & s < x0 + R};
 then A88:          ex s st s = x & x0 - R < s & s < x0 + R;
           then x0 < R + x by XREAL_1:21;
           then A89: x0 - x < R + x - x by XREAL_1:11;  R <= x0 - r2 by
@@ -1168,8 +1120,7 @@ XXREAL_0:17;
           then A94: (f|X).x <= (f|X).r2 by A62,A90,A93,RFUNCT_2:def 5;
           r1 in X /\ dom(f|X) by A75,XBOOLE_0:def 3;
           then (f|X).r1 <= (f|X).x by A62,A92,A93,RFUNCT_2:def 5;
-          then (f|X).x in {s: M1 <= s & s <= M2} by A75,A76,A94;
-          then (f|X).x in [.M1,M2.];
+          then (f|X).x in [.M1,M2.] by A75,A76,A94;
           then (f|X).x in N3 by A65,A74;
           hence (f|X).x in N1 by A64;
          end;
@@ -1184,16 +1135,14 @@ XXREAL_0:17;
           A100: p - r < p by A96,XREAL_1:46;
           A101: p < p + R by A97,XREAL_1:31; then p - r < p + R by A100,
 XXREAL_0:2;
-          then p + R in {s: p - r < s & s < p + r} by A99;
-          then A102: p + R in ].p - r, p + r.[;
+          then A102: p + R in ].p - r, p + r.[ by A99;
 A103:     p - R < p by A97,XREAL_1:46;  p < p + r by A96,XREAL_1:31;
           then A104: p - R < p + r by A103,XXREAL_0:2;
              p - r < p - R by A98,REAL_1:92;
-          then p - R in {s: p - r < s & s < p + r} by A104;
-          then p - R in ].p - r, p + r.[;
+          then p - R in ].p - r, p + r.[ by A104;
           then A105: [.p - R, p + R.] c= N1 by A96,A102,RCOMP_1:17;
           p - R in {s : s < p} by A103;
-          then p - R in L by PROB_1:def 15;
+          then p - R in L by LIMFUNC1:151;
           then consider r1 such that
           A106: r1 in dom (f|X) & r1 in X & p - R = (f|X).r1 by A2,A6,A8,
 PARTFUN2:78;
@@ -1213,16 +1162,14 @@ RFUNCT_2:def 5;
           A110: x in dom(f|X) & x in N;
           A111: dom (f|X) c= X by RELAT_1:87;
           then (f|X).x in l by A2,A6,A110,FUNCT_1:def 12;
-          then (f|X).x in {s: s <= p} by LIMFUNC1:def 1;
+          then (f|X).x in {s: s <= p} by LIMFUNC1:153;
           then ex s st s = (f|X).x & s <= p;
           then A112: (f|X).x <= p + R by A101,XXREAL_0:2;
           A113: x in X /\ dom (f|X) by A110,A111,XBOOLE_0:def 3;
           A114: r1 in X /\ dom (f|X) by A106,XBOOLE_0:def 3;
-          x in {s: x0 - (r1-x0) < s & s < x0 + (r1-x0)} by A110;
-          then ex s st s = x & x0 - (r1-x0) < s & s < x0 + (r1-x0);
+          ex s st s = x & x0 - (r1-x0) < s & s < x0 + (r1-x0) by A110;
           then p - R <= (f|X).x by A62,A106,A113,A114,RFUNCT_2:def 5;
-          then (f|X).x in {s: p - R <= s & s <= p + R} by A112;
-          then (f|X).x in [.p - R, p + R.];
+          then (f|X).x in [.p - R, p + R.] by A112;
           hence (f|X).x in N1 by A105;
          end;
          end;
@@ -1279,15 +1226,11 @@ then A7:    (f|X).x0 in {p} or (f|X).x0 in L by XBOOLE_0:def 2;
           then A16: (f|X).x0 - r/2 < (f|X).x0 by XREAL_1:21;
           A17: (f|X).x0 < (f|X).x0 + r by A12,XREAL_1:31;
           then (f|X).x0 - r/2 < (f|X).x0 + r by A16,XXREAL_0:2;
-          then (f|X).x0 - r/2 in {s: (f|X).x0 - r < s & s < (f|X).x0 + r} by
-A14;
-          then A18: M1 in ].(f|X).x0 - r,(f|X).x0 + r.[;
+          then A18: M1 in ].(f|X).x0 - r,(f|X).x0 + r.[ by A14;
             A19: (f|X).x0 + r/2 < (f|X).x0 + r/2 + r/2 by A13,XREAL_1:31;
              (f|X).x0 - r < (f|X).x0 + r - r by A17,XREAL_1:11;
           then (f|X).x0 - r < (f|X).x0 + r/2 by A15,XXREAL_0:2;
-          then (f|X).x0 + r/2 in {s: (f|X).x0 - r < s & s < (f|X).x0 + r} by
-A19;
-          then A20: M2 in ].(f|X).x0 - r,(f|X).x0 + r.[;
+          then A20: M2 in ].(f|X).x0 - r,(f|X).x0 + r.[ by A19;
           then A21: [.M1,M2.] c= ].(f|X).x0 - r,(f|X).x0 + r.[ by A18,
 RCOMP_1:17;
              M1 in N2 by A11,A12,A18;
@@ -1328,7 +1271,6 @@ RCOMP_1:def 7;
           take N;
           let x be real number; assume
           A34: x in dom (f|X) & x in N;
-          then x in {s: x0 - R < s & s < x0 + R};
 then A35:          ex s st s = x & x0 - R < s & s < x0 + R;
           then x0 < R + x by XREAL_1:21;
           then A36: x0 - x < R + x - x by XREAL_1:11
@@ -1345,8 +1287,7 @@ then A35:          ex s st s = x & x0 - R < s & s < x0 + R;
           then A41: (f|X).x <= (f|X).r2 by A9,A39,A40,RFUNCT_2:def 4;
              r1 in X /\ dom (f|X) by A22,XBOOLE_0:def 3;
           then (f|X).r1 <= (f|X).x by A9,A37,A40,RFUNCT_2:def 4;
-          then (f|X).x in {s: M1 <= s & s <= M2} by A22,A23,A41;
-          then (f|X).x in [.M1,M2.];
+          then (f|X).x in [.M1,M2.] by A22,A23,A41;
           then (f|X).x in N3 by A12,A21;
           hence (f|X).x in N1 by A11;
          end;
@@ -1362,16 +1303,14 @@ then A35:          ex s st s = x & x0 - R < s & s < x0 + R;
           A48: p < p + R by A44,XREAL_1:31; then p - r < p + R by A47,
 XXREAL_0:2
 ;
-          then p + R in {s: p - r < s & s < p + r} by A46;
-          then A49: p + R in ].p - r, p + r.[;
+          then A49: p + R in ].p - r, p + r.[ by A46;
           A50: p - R < p by A44,XREAL_1:46;  p < p + r by A43,XREAL_1:31;
           then A51: p - R < p + r by A50,XXREAL_0:2;
              p - r < p - R by A45,REAL_1:92;
-          then p - R in {s: p - r < s & s < p + r} by A51;
-          then p - R in ].p - r, p + r.[;
+          then p - R in ].p - r, p + r.[ by A51;
           then A52: [.p - R, p + R.] c= N1 by A43,A49,RCOMP_1:17;
              p + R in {s : p < s} by A48;
-          then p + R in L by LIMFUNC1:def 3;
+          then p + R in L by LIMFUNC1:152;
           then consider r1 such that
           A53: r1 in dom (f|X) & r1 in
  X & p + R = (f|X).r1 by A2,A6,A8,PARTFUN2:78;
@@ -1390,16 +1329,14 @@ XXREAL_0:2
           A57: x in dom(f|X) & x in N;
           A58: dom (f|X) c= X by RELAT_1:87;
           then (f|X).x in l by A2,A6,A57,FUNCT_1:def 12;
-          then (f|X).x in {s: p <= s} by LIMFUNC1:def 2;
+          then (f|X).x in {s: p <= s} by LIMFUNC1:154;
           then ex s st s = (f|X).x & p <= s;
           then A59: p - R <= (f|X).x by A50,XXREAL_0:2;
           A60: x in X /\ dom (f|X) by A57,A58,XBOOLE_0:def 3;
           A61: r1 in X /\ dom (f|X) by A53,XBOOLE_0:def 3;
-          x in {s: x0 - (r1-x0) < s & s < x0 + (r1-x0)} by A57;
-          then ex s st s = x & x0 - (r1-x0) < s & s < x0 + (r1-x0);
+          ex s st s = x & x0 - (r1-x0) < s & s < x0 + (r1-x0) by A57;
           then p + R >= (f|X).x by A9,A53,A60,A61,RFUNCT_2:def 4;
-          then (f|X).x in {s: p - R <= s & s <= p + R} by A59;
-          then (f|X).x in [.p - R, p + R.];
+          then (f|X).x in [.p - R, p + R.] by A59;
           hence (f|X).x in N1 by A52;
          end;
          end;
@@ -1425,15 +1362,11 @@ XXREAL_0:2
           then A69: (f|X).x0 - r/2 < (f|X).x0 by XREAL_1:21;
           A70: (f|X).x0 < (f|X).x0 + r by A65,XREAL_1:31;
           then (f|X).x0 - r/2 < (f|X).x0 + r by A69,XXREAL_0:2;
-          then (f|X).x0 - r/2 in {s: (f|X).x0 - r < s & s < (f|X).x0 + r} by
-A67;
-          then A71: M1 in ].(f|X).x0 - r,(f|X).x0 + r.[;
+          then A71: M1 in ].(f|X).x0 - r,(f|X).x0 + r.[ by A67;
             A72: (f|X).x0 + r/2 < (f|X).x0 + r/2 + r/2 by A66,XREAL_1:31;
              (f|X).x0 - r < (f|X).x0 + r - r by A70,XREAL_1:11;
           then (f|X).x0 - r < (f|X).x0 + r/2 by A68,XXREAL_0:2;
-          then (f|X).x0 + r/2 in {s: (f|X).x0 - r < s & s < (f|X).x0 + r} by
-A72;
-          then A73: M2 in ].(f|X).x0 - r,(f|X).x0 + r.[;
+          then A73: M2 in ].(f|X).x0 - r,(f|X).x0 + r.[ by A72;
           then A74: [.M1,M2.] c= ].(f|X).x0 - r,(f|X).x0 + r.[ by A71,
 RCOMP_1:17;
              M1 in N2 by A64,A65,A71;
@@ -1474,7 +1407,6 @@ RCOMP_1:def 7;
           take N;
           let x be real number; assume
           A87: x in dom (f|X) & x in N;
-          then x in {s: x0 - R < s & s < x0 + R};
 then A88:          ex s st s = x & x0 - R < s & s < x0 + R;
           then x0 < R + x by XREAL_1:21;
           then A89: x0 - x < R + x - x by XREAL_1:11;  R <= x0 - r2 by
@@ -1491,8 +1423,7 @@ XXREAL_0:17;
           then A94: (f|X).x <= (f|X).r2 by A62,A90,A93,RFUNCT_2:def 5;
              r1 in X /\ dom(f|X) by A75,XBOOLE_0:def 3;
           then (f|X).r1 <= (f|X).x by A62,A92,A93,RFUNCT_2:def 5;
-          then (f|X).x in {s: M1 <= s & s <= M2} by A75,A76,A94;
-          then (f|X).x in [.M1,M2.];
+          then (f|X).x in [.M1,M2.] by A75,A76,A94;
           then (f|X).x in N3 by A65,A74;
           hence (f|X).x in N1 by A64;
          end;
@@ -1507,17 +1438,15 @@ XXREAL_0:17;
           A100: p - r < p by A96,XREAL_1:46;
           A101: p < p + R by A97,XREAL_1:31; then p - r < p + R by A100,
 XXREAL_0:2;
-          then p + R in {s: p - r < s & s < p + r} by A99;
-          then A102: p + R in ].p - r, p + r.[;
+          then A102: p + R in ].p - r, p + r.[ by A99;
           A103: p - R < p by A97,XREAL_1:46;  p < p + r by A96,XREAL_1:31
 ;
           then A104: p - R < p + r by A103,XXREAL_0:2;
              p - r < p - R by A98,REAL_1:92;
-          then p - R in {s: p - r < s & s < p + r} by A104;
-          then p - R in ].p - r, p + r.[;
+          then p - R in ].p - r, p + r.[ by A104; :: ???
           then A105: [.p - R, p + R.] c= N1 by A96,A102,RCOMP_1:17;
              p + R in {s : p < s} by A101;
-          then p + R in L by LIMFUNC1:def 3;
+          then p + R in L by LIMFUNC1:152;
           then consider r1 such that
           A106: r1 in dom (f|X) & r1 in X & p + R = (f|X).r1 by A2,A6,A8,
 PARTFUN2:78;
@@ -1537,17 +1466,14 @@ RFUNCT_2:def 5;
           A110: x in dom(f|X) & x in N;
           A111: dom (f|X) c= X by RELAT_1:87;
           then (f|X).x in l by A2,A6,A110,FUNCT_1:def 12;
-          then (f|X).x in {s: p <= s} by LIMFUNC1:def 2;
+          then (f|X).x in {s: p <= s} by LIMFUNC1:154;
           then ex s st s = (f|X).x & p <= s;
           then A112: p - R <= (f|X).x by A103,XXREAL_0:2;
           A113: x in X /\ dom (f|X) by A110,A111,XBOOLE_0:def 3;
           A114: r1 in X /\ dom (f|X) by A106,XBOOLE_0:def 3;
-          x in {s: x0 - (x0-r1) < s & s < x0 + (x0-r1)}
-          by A110;
-          then ex s st s = x & x0 - (x0-r1) < s & s < x0 + (x0-r1);
+          ex s st s = x & x0 - (x0-r1) < s & s < x0 + (x0-r1) by A110;
           then p + R >= (f|X).x by A62,A106,A113,A114,RFUNCT_2:def 5;
-          then (f|X).x in {s: p - R <= s & s <= p + R} by A112;
-          then (f|X).x in [.p - R, p + R.];
+          then (f|X).x in [.p - R, p + R.] by A112;
           hence (f|X).x in N1 by A105;
          end;
          end;
@@ -1598,15 +1524,11 @@ f is_continuous_on X
         then A15: (f|X).x0 - r/2 < (f|X).x0 by XREAL_1:21;
         A16: (f|X).x0 < (f|X).x0 + r by A11,XREAL_1:31;
         then (f|X).x0 - r/2 < (f|X).x0 + r by A15,XXREAL_0:2;
-        then (f|X).x0 - r/2 in {s: (f|X).x0 - r < s & s < (f|X).x0 + r} by A13
-;
-        then A17: M1 in ].(f|X).x0 - r,(f|X).x0 + r.[;
+        then A17: M1 in ].(f|X).x0 - r,(f|X).x0 + r.[ by A13;
           A18: (f|X).x0 + r/2 < (f|X).x0 + r/2 + r/2 by A12,XREAL_1:31;
            (f|X).x0 - r < (f|X).x0 + r - r by A16,XREAL_1:11;
         then (f|X).x0 - r < (f|X).x0 + r/2 by A14,XXREAL_0:2;
-        then (f|X).x0 + r/2 in {s: (f|X).x0 - r < s & s < (f|X).x0 + r} by A18
-;
-        then A19: M2 in ].(f|X).x0 - r,(f|X).x0 + r.[;
+        then A19: M2 in ].(f|X).x0 - r,(f|X).x0 + r.[ by A18;
         then A20: [.M1,M2.] c= ].(f|X).x0 - r,(f|X).x0 + r.[ by A17,RCOMP_1:17;
            M1 in N2 by A10,A11,A17;
         then consider r1 such that
@@ -1644,7 +1566,6 @@ RCOMP_1:def 7;
         take N;
         let x be real number; assume
         A33: x in dom (f|X) & x in N;
-        then x in {s: x0 - R < s & s < x0 + R};
 then A34:        ex s st s = x & x0 - R < s & s < x0 + R;
         then x0 < R + x by XREAL_1:21;
         then A35: x0 - x < R + x - x by XREAL_1:11;
@@ -1661,8 +1582,7 @@ then A34:        ex s st s = x & x0 - R < s & s < x0 + R;
         then A40: (f|X).x <= (f|X).r2 by A3,A38,A39,RFUNCT_2:def 4;
            r1 in X /\ dom (f|X) by A21,XBOOLE_0:def 3;
         then (f|X).r1 <= (f|X).x by A3,A36,A39,RFUNCT_2:def 4;
-        then (f|X).x in {s: M1<=s & s<=M2} by A21,A22,A40;
-        then (f|X).x in [.M1,M2.];
+        then (f|X).x in [.M1,M2.] by A21,A22,A40;
         then (f|X).x in N3 by A11,A20;
         hence (f|X).x in N1 by A10;
        end;
@@ -1696,15 +1616,11 @@ then A34:        ex s st s = x & x0 - R < s & s < x0 + R;
         then A53: (f|X).x0 - r/2 < (f|X).x0 by XREAL_1:21;
         A54: (f|X).x0 < (f|X).x0 + r by A49,XREAL_1:31;
         then (f|X).x0 - r/2 < (f|X).x0 + r by A53,XXREAL_0:2;
-        then (f|X).x0 - r/2 in {s: (f|X).x0 - r < s & s < (f|X).x0 + r} by A51
-;
-        then A55: M1 in ].(f|X).x0 - r,(f|X).x0 + r.[;
+        then A55: M1 in ].(f|X).x0 - r,(f|X).x0 + r.[ by A51;
           A56: (f|X).x0 + r/2 < (f|X).x0 + r/2 + r/2 by A50,XREAL_1:31;
            (f|X).x0 - r < (f|X).x0 + r - r by A54,XREAL_1:11;
         then (f|X).x0 - r < (f|X).x0 + r/2 by A52,XXREAL_0:2;
-        then (f|X).x0 + r/2 in {s: (f|X).x0 - r < s & s < (f|X).x0 + r} by A56
-;
-        then A57: M2 in ].(f|X).x0 - r,(f|X).x0 + r.[;
+        then A57: M2 in ].(f|X).x0 - r,(f|X).x0 + r.[ by A56;
         then A58: [.M1,M2.] c= ].(f|X).x0 - r,(f|X).x0 + r.[ by A55,RCOMP_1:17;
            M1 in N2 by A48,A49,A55;
         then consider r1 such that
@@ -1742,7 +1658,6 @@ RCOMP_1:def 7;
         take N;
         let x be real number; assume
         A71: x in dom (f|X) & x in N;
-        then x in {s: x0 - R < s & s < x0 + R};
 then A72:        ex s st s = x & x0 - R < s & s < x0 + R;
         then x0 < R + x by XREAL_1:21;
         then A73: x0 - x < R + x - x by XREAL_1:11;
@@ -1759,8 +1674,7 @@ then A72:        ex s st s = x & x0 - R < s & s < x0 + R;
         then A78: (f|X).x <= (f|X).r2 by A41,A74,A77,RFUNCT_2:def 5;
            r1 in X /\ dom(f|X) by A59,XBOOLE_0:def 3;
         then (f|X).r1 <= (f|X).x by A41,A76,A77,RFUNCT_2:def 5;
-        then (f|X).x in {s: M1 <= s & s <= M2} by A59,A60,A78;
-        then (f|X).x in [.M1,M2.];
+        then (f|X).x in [.M1,M2.] by A59,A60,A78;
         then (f|X).x in N3 by A49,A58;
         hence (f|X).x in N1 by A48;
        end;
@@ -1798,14 +1712,11 @@ theorem Th24:
         then A10: (f|X).x0 - r/2 < (f|X).x0 by XREAL_1:21;
         A11: (f|X).x0 < (f|X).x0 + r by A6,XREAL_1:31;
         then (f|X).x0 - r/2 < (f|X).x0 + r by A10,XXREAL_0:2;
-        then (f|X).x0 - r/2 in {s: (f|X).x0 - r < s & s < (f|X).x0 + r} by A8;
-        then A12: M1 in ].(f|X).x0 - r,(f|X).x0 + r.[;
+        then A12: M1 in ].(f|X).x0 - r,(f|X).x0 + r.[ by A8;
           A13: (f|X).x0 + r/2 < (f|X).x0 + r/2 + r/2 by A7,XREAL_1:31;
            (f|X).x0 - r < (f|X).x0 + r - r by A11,XREAL_1:11;
         then (f|X).x0 - r < (f|X).x0 + r/2 by A9,XXREAL_0:2;
-        then (f|X).x0 + r/2 in {s: (f|X).x0 - r < s & s < (f|X).x0 + r} by A13
-;
-        then M2 in ].(f|X).x0 - r,(f|X).x0 + r.[;
+        then M2 in ].(f|X).x0 - r,(f|X).x0 + r.[ by A13;
         then A14: [.M1,M2.] c= ].(f|X).x0 - r,(f|X).x0 + r.[ by A12,RCOMP_1:17;
         consider r1 such that
         A15: r1 in dom (f|X) & r1 in X & M1 = (f|X).r1 by A1,A5,PARTFUN2:78;
@@ -1839,7 +1750,6 @@ RCOMP_1:def 7;
         take N;
         let x be real number; assume
         A27: x in dom (f|X) & x in N;
-        then x in {s: x0 - R < s & s < x0 + R};
 then A28:        ex s st s = x & x0 - R < s & s < x0 + R;
         then x0 < R + x by XREAL_1:21;
         then A29: x0 - x < R + x - x by XREAL_1:11;
@@ -1856,8 +1766,7 @@ then A28:        ex s st s = x & x0 - R < s & s < x0 + R;
         then A34: (f|X).x <= (f|X).r2 by A2,A32,A33,RFUNCT_2:def 4;
            r1 in X /\ dom (f|X) by A15,XBOOLE_0:def 3;
         then (f|X).r1 <= (f|X).x by A2,A30,A33,RFUNCT_2:def 4;
-        then (f|X).x in {s: M1<=s & s<=M2} by A15,A16,A34;
-        then (f|X).x in [.M1,M2.];
+        then (f|X).x in [.M1,M2.] by A15,A16,A34;
         hence (f|X).x in N1 by A6,A14;
        end;
       hence thesis by A4,FCONT_1:4;
@@ -1884,15 +1793,11 @@ then A28:        ex s st s = x & x0 - R < s & s < x0 + R;
         then A43: (f|X).x0 - r/2 < (f|X).x0 by XREAL_1:21;
         A44: (f|X).x0 < (f|X).x0 + r by A39,XREAL_1:31;
         then (f|X).x0 - r/2 < (f|X).x0 + r by A43,XXREAL_0:2;
-        then (f|X).x0 - r/2 in {s: (f|X).x0 - r < s & s < (f|X).x0 + r} by A41
-;
-        then A45: M1 in ].(f|X).x0 - r,(f|X).x0 + r.[;
+        then A45: M1 in ].(f|X).x0 - r,(f|X).x0 + r.[ by A41;
           A46: (f|X).x0 + r/2 < (f|X).x0 + r/2 + r/2 by A40,XREAL_1:31;
            (f|X).x0 - r < (f|X).x0 + r - r by A44,XREAL_1:11;
         then (f|X).x0 - r < (f|X).x0 + r/2 by A42,XXREAL_0:2;
-        then (f|X).x0 + r/2 in {s: (f|X).x0 - r < s & s < (f|X).x0 + r} by A46
-;
-        then M2 in ].(f|X).x0 - r,(f|X).x0 + r.[;
+        then M2 in ].(f|X).x0 - r,(f|X).x0 + r.[ by A46;
         then A47: [.M1,M2.] c= ].(f|X).x0 - r,(f|X).x0 + r.[ by A45,RCOMP_1:17;
         consider r1 such that
         A48: r1 in dom (f|X) & r1 in X & M1 = (f|X).r1 by A1,A38,PARTFUN2:78;
@@ -1926,7 +1831,6 @@ RCOMP_1:def 7;
         take N;
         let x be real number; assume
         A60: x in dom (f|X) & x in N;
-        then x in {s: x0 - R < s & s < x0 + R};
 then A61:        ex s st s = x & x0 - R < s & s < x0 + R;
         then x0 < R + x by XREAL_1:21;
         then A62: x0 - x < R + x - x by XREAL_1:11;
@@ -1943,8 +1847,7 @@ then A61:        ex s st s = x & x0 - R < s & s < x0 + R;
         then A67: (f|X).x <= (f|X).r2 by A35,A63,A66,RFUNCT_2:def 5;
            r1 in X /\ dom(f|X) by A48,XBOOLE_0:def 3;
         then (f|X).r1 <= (f|X).x by A35,A65,A66,RFUNCT_2:def 5;
-        then (f|X).x in {s: M1 <= s & s <= M2} by A48,A49,A67;
-        then (f|X).x in [.M1,M2.];
+        then (f|X).x in [.M1,M2.] by A48,A49,A67;
         hence (f|X).x in N1 by A39,A47;
        end;
       hence thesis by A37,FCONT_1:4;
@@ -2341,14 +2244,12 @@ A4:    x0 in dom f /\ ].p,g.[ by A3,FUNCT_1:68;
     then A11: x0 - r/2 < x0 - 0 by REAL_1:92;
        x0 < x0 + r by A6,REAL_2:174;
     then x0 - r/2 < x0 + r by A11,XXREAL_0:2;
-    then x0 - r/2 in {g1: x0 - r < g1 & g1 < x0 + r} by A9;
-    then A12: x0 - r/2 in ].x0 - r, x0 + r.[;
+    then A12: x0 - r/2 in ].x0 - r, x0 + r.[ by A9;
     A13: x0 + r/2 < x0 + r by A8,XREAL_1:10;
     A14: x0 - r < x0 by A6,REAL_2:174;
     A15: x0 < x0 + r/2 by A10,REAL_2:174;
     then x0 - r < x0 + r/2 by A14,XXREAL_0:2;
-    then x0 + r/2 in {g2: x0 - r < g2 & g2 < x0 + r} by A13;
-    then A16: x0 + r/2 in ].x0 - r, x0 + r.[;
+    then A16: x0 + r/2 in ].x0 - r, x0 + r.[ by A13;
     then A17: [.x0 - r/2, x0 + r/2.] c= ].x0 - r, x0 + r.[ by A12,RCOMP_1:17;
     then A18: f is_continuous_on [.x0 - r/2, x0 + r/2.] by A6,A7,FCONT_1:17;
     set fm = f.(x0 - r/2);
@@ -2374,7 +2275,6 @@ RCOMP_1:def 7;
       take N1;
       thus N1 c= rng f1
        proof let x; assume x in N1;
-        then x in {r2: r1 - R < r2 & r2 < r1 + R};
         then consider r2 such that
         A27: r2 = x & f.x0 - R < r2 & r2 < f.x0 + R by A23;
         A28: R <= f.x0 - fm & R <= fp - f.x0 by XXREAL_0:17;
@@ -2382,8 +2282,7 @@ RCOMP_1:def 7;
         then A29: fm < r2 by A27,XXREAL_0:2;
            f.x0 + R <= f.x0 + (fp - f.x0) by A28,XREAL_1:9;
         then r2 < fp by A27,XXREAL_0:2;
-        then r2 in {g2: fm < g2 & g2 < fp} by A29;
-        then A30: r2 in ].fm,fp.[;
+        then A30: r2 in ].fm,fp.[ by A29;
            ].fm,fp.[ c= [.fm,fp.] by RCOMP_1:15;
         then consider s such that
         A31: s in [.x0 - r/2, x0 + r/2.] & x = f.s by A18,A19,A25,A27,A30,
@@ -2410,7 +2309,6 @@ RCOMP_1:def 7;
       take N1;
       thus N1 c= rng f1
        proof let x; assume x in N1;
-        then x in {r2: r1 - R < r2 & r2 < r1 + R};
         then consider r2 such that
         A36: r2 = x & f.x0 - R < r2 & r2 < f.x0 + R by A23;
         A37: R <= fm - f.x0 & R <= f.x0 - fp by XXREAL_0:17;
@@ -2418,8 +2316,7 @@ RCOMP_1:def 7;
         then A38: fp < r2 by A36,XXREAL_0:2;
            f.x0 + R <= f.x0 + (fm - f.x0) by A37,XREAL_1:9;
         then r2 < fm by A36,XXREAL_0:2;
-        then r2 in {g2: fp < g2 & g2 < fm} by A38;
-        then A39: r2 in ].fp,fm.[;
+        then A39: r2 in ].fp,fm.[ by A38;
            ].fp,fm.[ c= [.fp,fm.] by RCOMP_1:15;
         then consider s such that
         A40: s in [.x0 - r/2, x0 + r/2.] & x = f.s by A18,A19,A34,A36,A39,
@@ -2463,14 +2360,12 @@ A2: f is_increasing_on L or f is_decreasing_on L;
     then A11: x0 - r/2 < x0 - 0 by REAL_1:92;
        x0 < x0 + r by A6,REAL_2:174;
     then x0 - r/2 < x0 + r by A11,XXREAL_0:2;
-    then x0 - r/2 in {g1: x0 - r < g1 & g1 < x0 + r} by A9;
-    then A12: x0 - r/2 in ].x0 - r, x0 + r.[;
+    then A12: x0 - r/2 in ].x0 - r, x0 + r.[ by A9;
     A13: x0 + r/2 < x0 + r by A8,XREAL_1:10;
     A14: x0 - r < x0 by A6,REAL_2:174;
     A15: x0 < x0 + r/2 by A10,REAL_2:174;
     then x0 - r < x0 + r/2 by A14,XXREAL_0:2;
-    then x0 + r/2 in {g2: x0 - r < g2 & g2 < x0 + r} by A13;
-    then A16: x0 + r/2 in ].x0 - r, x0 + r.[;
+    then A16: x0 + r/2 in ].x0 - r, x0 + r.[ by A13;
     then A17: [.x0 - r/2, x0 + r/2.] c= ].x0 - r, x0 + r.[ by A12,RCOMP_1:17;
     then A18: f is_continuous_on [.x0 - r/2, x0 + r/2.] by A6,A7,FCONT_1:17;
     set fm = f.(x0 - r/2);
@@ -2496,7 +2391,6 @@ RCOMP_1:def 7;
       take N1;
       thus N1 c= rng f1
        proof let x; assume x in N1;
-        then x in {r2: r1 - R < r2 & r2 < r1 + R};
         then consider r2 such that
         A27: r2 = x & f.x0 - R < r2 & r2 < f.x0 + R by A23;
         A28: R <= f.x0 - fm & R <= fp - f.x0 by XXREAL_0:17;
@@ -2504,8 +2398,7 @@ RCOMP_1:def 7;
         then A29: fm < r2 by A27,XXREAL_0:2;
            f.x0 + R <= f.x0 + (fp - f.x0) by A28,XREAL_1:9;
         then r2 < fp by A27,XXREAL_0:2;
-        then r2 in {g2: fm < g2 & g2 < fp} by A29;
-        then A30: r2 in ].fm,fp.[;
+        then A30: r2 in ].fm,fp.[ by A29;
            ].fm,fp.[ c= [.fm,fp.] by RCOMP_1:15;
         then consider s such that
         A31: s in [.x0 - r/2, x0 + r/2.] & x = f.s by A18,A19,A25,A27,A30,
@@ -2532,7 +2425,6 @@ RCOMP_1:def 7;
       take N1;
       thus N1 c= rng f1
        proof let x; assume x in N1;
-        then x in {r2: r1 - R < r2 & r2 < r1 + R};
         then consider r2 such that
         A36: r2 = x & f.x0 - R < r2 & r2 < f.x0 + R by A23;
         A37: R <= fm - f.x0 & R <= f.x0 - fp by XXREAL_0:17;
@@ -2540,8 +2432,7 @@ RCOMP_1:def 7;
         then A38: fp < r2 by A36,XXREAL_0:2;
            f.x0 + R <= f.x0 + (fm - f.x0) by A37,XREAL_1:9;
         then r2 < fm by A36,XXREAL_0:2;
-        then r2 in {g2: fp < g2 & g2 < fm} by A38;
-        then A39: r2 in ].fp,fm.[;
+        then A39: r2 in ].fp,fm.[ by A38;
            ].fp,fm.[ c= [.fp,fm.] by RCOMP_1:15;
         then consider s such that
         A40: s in [.x0 - r/2, x0 + r/2.] & x = f.s by A18,A19,A34,A36,A39,
@@ -2585,14 +2476,12 @@ A4:    x0 in dom f /\ L by A3,FUNCT_1:68;
     then A11: x0 - r/2 < x0 - 0 by REAL_1:92;
        x0 < x0 + r by A6,REAL_2:174;
     then x0 - r/2 < x0 + r by A11,XXREAL_0:2;
-    then x0 - r/2 in {g1: x0 - r < g1 & g1 < x0 + r} by A9;
-    then A12: x0 - r/2 in ].x0 - r, x0 + r.[;
+    then A12: x0 - r/2 in ].x0 - r, x0 + r.[ by A9;
     A13: x0 + r/2 < x0 + r by A8,XREAL_1:10;
     A14: x0 - r < x0 by A6,REAL_2:174;
     A15: x0 < x0 + r/2 by A10,REAL_2:174;
     then x0 - r < x0 + r/2 by A14,XXREAL_0:2;
-    then x0 + r/2 in {g2: x0 - r < g2 & g2 < x0 + r} by A13;
-    then A16: x0 + r/2 in ].x0 - r, x0 + r.[;
+    then A16: x0 + r/2 in ].x0 - r, x0 + r.[ by A13;
     then A17: [.x0 - r/2, x0 + r/2.] c= ].x0 - r, x0 + r.[ by A12,RCOMP_1:17;
     then A18: f is_continuous_on [.x0 - r/2, x0 + r/2.] by A6,A7,FCONT_1:17;
     set fm = f.(x0 - r/2);
@@ -2618,7 +2507,6 @@ RCOMP_1:def 7;
       take N1;
       thus N1 c= rng f1
        proof let x; assume x in N1;
-        then x in {r2: r1 - R < r2 & r2 < r1 + R};
         then consider r2 such that
         A27: r2 = x & f.x0 - R < r2 & r2 < f.x0 + R by A23;
         A28: R <= f.x0 - fm & R <= fp - f.x0 by XXREAL_0:17;
@@ -2626,8 +2514,7 @@ RCOMP_1:def 7;
         then A29: fm < r2 by A27,XXREAL_0:2;
            f.x0 + R <= f.x0 + (fp - f.x0) by A28,XREAL_1:9;
         then r2 < fp by A27,XXREAL_0:2;
-        then r2 in {g2: fm < g2 & g2 < fp} by A29;
-        then A30: r2 in ].fm,fp.[;
+        then A30: r2 in ].fm,fp.[ by A29;
            ].fm,fp.[ c= [.fm,fp.] by RCOMP_1:15;
         then consider s such that
         A31: s in [.x0 - r/2, x0 + r/2.] & x = f.s by A18,A19,A25,A27,A30,
@@ -2654,7 +2541,6 @@ RCOMP_1:def 7;
       take N1;
       thus N1 c= rng f1
        proof let x; assume x in N1;
-        then x in {r2: r1 - R < r2 & r2 < r1 + R};
         then consider r2 such that
         A36: r2 = x & f.x0 - R < r2 & r2 < f.x0 + R by A23;
         A37: R <= fm - f.x0 & R <= f.x0 - fp by XXREAL_0:17;
@@ -2662,8 +2548,7 @@ RCOMP_1:def 7;
         then A38: fp < r2 by A36,XXREAL_0:2;
            f.x0 + R <= f.x0 + (fm - f.x0) by A37,XREAL_1:9;
         then r2 < fm by A36,XXREAL_0:2;
-        then r2 in {g2: fp < g2 & g2 < fm} by A38;
-        then A39: r2 in ].fp,fm.[;
+        then A39: r2 in ].fp,fm.[ by A38;
            ].fp,fm.[ c= [.fp,fm.] by RCOMP_1:15;
         then consider s such that
         A40: s in [.x0 - r/2, x0 + r/2.] & x = f.s by A18,A19,A34,A36,A39,
@@ -2703,16 +2588,14 @@ rng f is open
     then A9: x0 - r/2 < x0 - 0 by REAL_1:92;
        x0 < x0 + r by A4,REAL_2:174;
     then x0 - r/2 < x0 + r by A9,XXREAL_0:2;
-    then x0 - r/2 in {g1: x0 - r < g1 & g1 < x0 + r} by A7;
-    then A10: x0 - r/2 in ].x0 - r, x0 + r.[;
+    then A10: x0 - r/2 in ].x0 - r, x0 + r.[ by A7;
     A11: x0 + r/2 < x0 + r by A6,XREAL_1:10;
     A12: x0 - r < x0 by A4,REAL_2:174;
     A13: x0 < x0 + r/2 by A8,REAL_2:174;
     then x0 - r < x0 + r/2 by A12,XXREAL_0:2;
-    then x0 + r/2 in {g2: x0 - r < g2 & g2 < x0 + r} by A11;
-    then A14: x0 + r/2 in ].x0 - r, x0 + r.[;
+    then A14: x0 + r/2 in ].x0 - r, x0 + r.[ by A11;
     then A15: [.x0 - r/2, x0 + r/2.] c= ].x0 - r, x0 + r.[ by A10,RCOMP_1:17;
-    then A16: f is_continuous_on [.x0 - r/2, x0 + r/2.] by A4,A5,FCONT_1:17;
+    A16: f is_continuous_on [.x0 - r/2, x0 + r/2.] by A1,FCONT_1:17;
     set fm = f.(x0 - r/2);
     set fp = f.(x0 + r/2);
     A17: x0 - r/2 < x0 + r/2 by A9,A13,XXREAL_0:2;
@@ -2736,7 +2619,6 @@ RCOMP_1:def 7;
       take N1;
       thus N1 c= rng f
        proof let x; assume x in N1;
-        then x in {r2: r1 - R < r2 & r2 < r1 + R};
         then consider r2 such that
         A25: r2 = x & f.x0 - R < r2 & r2 < f.x0 + R by A3;
         A26: R <= f.x0 - fm & R <= fp - f.x0 by XXREAL_0:17;
@@ -2744,8 +2626,7 @@ RCOMP_1:def 7;
         then A27: fm < r2 by A25,XXREAL_0:2;
            f.x0 + R <= f.x0 + (fp - f.x0) by A26,XREAL_1:9;
         then r2 < fp by A25,XXREAL_0:2;
-        then r2 in {g2: fm < g2 & g2 < fp} by A27;
-        then A28: r2 in ].fm,fp.[;
+        then A28: r2 in ].fm,fp.[ by A27;
            ].fm,fp.[ c= [.fm,fp.] by RCOMP_1:15;
         then consider s such that
         A29: s in [.x0 - r/2, x0 + r/2.] & x = f.s by A16,A17,A23,A25,A28,
@@ -2768,7 +2649,6 @@ RCOMP_1:def 7;
       take N1;
       thus N1 c= rng f
        proof let x; assume x in N1;
-        then x in {r2: r1 - R < r2 & r2 < r1 + R};
         then consider r2 such that
         A33: r2 = x & f.x0 - R < r2 & r2 < f.x0 + R by A3;
         A34: R <= fm - f.x0 & R <= f.x0 - fp by XXREAL_0:17;
@@ -2776,8 +2656,7 @@ RCOMP_1:def 7;
         then A35: fp < r2 by A33,XXREAL_0:2;
         f.x0 + R <= f.x0 + (fm - f.x0) by A34,XREAL_1:9;
         then r2 < fm by A33,XXREAL_0:2;
-        then r2 in {g2: fp < g2 & g2 < fm} by A35;
-        then A36: r2 in ].fp,fm.[;
+        then A36: r2 in ].fp,fm.[ by A35;
         ].fp,fm.[ c= [.fp,fm.] by RCOMP_1:15;
         then consider s such that
         A37: s in [.x0 - r/2, x0 + r/2.] & x = f.s by A16,A17,A31,A33,A36,

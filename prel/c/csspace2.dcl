@@ -19,35 +19,36 @@
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="RLVECT_1"/>
+<ArticleID name="NORMSP_1"/>
 <ArticleID name="CLVECT_1"/>
 <ArticleID name="CSSPACE"/>
 <ArticleID name="CLVECT_2"/>
 </Signature>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="151"/>
+<Func kind="K" nr="156"/>
 <Cluster>
 <Adjective nr="32" value="false"/>
 <Adjective nr="35"/>
 <Adjective nr="36"/>
 <Adjective nr="37"/>
 <Adjective nr="38"/>
-<Adjective nr="42"/>
-<Adjective nr="48"/>
+<Adjective nr="46"/>
+<Adjective nr="52"/>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="151"/>
+<Func kind="K" nr="156"/>
 <Cluster>
 <Adjective nr="32" value="false"/>
 <Adjective nr="35"/>
 <Adjective nr="36"/>
 <Adjective nr="37"/>
 <Adjective nr="38"/>
-<Adjective nr="42"/>
-<Adjective nr="48"/>
-<Adjective nr="53"/>
+<Adjective nr="46"/>
+<Adjective nr="52"/>
+<Adjective nr="57"/>
 </Cluster>
 </FCluster>
 </Registrations>

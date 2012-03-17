@@ -20,8 +20,8 @@
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="CLASSES2"/>
-<ArticleID name="INT_1"/>
 <ArticleID name="STRUCT_0"/>
+<ArticleID name="INT_1"/>
 <ArticleID name="GROUP_1"/>
 <ArticleID name="CLASSES1"/>
 <ArticleID name="ORDERS_1"/>
@@ -34,22 +34,22 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="33" value="false"/>
+<Adjective nr="32" value="false"/>
 <Adjective nr="39"/>
-<Adjective nr="46"/>
-<Adjective nr="51"/>
+<Adjective nr="47"/>
+<Adjective nr="52"/>
 </Cluster>
 </RCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="154"/>
+<Func kind="K" nr="156"/>
 <Cluster>
 <Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="155"/>
+<Func kind="K" nr="157"/>
 <Cluster>
 <Adjective nr="1" value="false"/>
 </Cluster>
@@ -65,7 +65,7 @@
 <Cluster/>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="144">
+<Func kind="K" nr="146">
 <LocusVar nr="1"/>
 </Func>
 </Typ>
@@ -78,7 +78,7 @@
 <Cluster/>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="119"/>
+<Func kind="K" nr="120"/>
 </Typ>
 <Cluster>
 <Adjective nr="20"/>

@@ -1,0 +1,2696 @@
+:: Several Classes of {BCI}-algebras and Their Properties
+::  by Yuzhong Ding
+:: 
+:: Received February 23, 2007
+:: Copyright (c) 2007 Association of Mizar Users
+
+environ
+
+ vocabularies BINOP_1, BCIALG_1, BOOLE, FILTER_0, MIDSP_1, RLVECT_1, UNIALG_2,
+      VECTSP_2, WAYBEL15, FILTER_2, PRE_TOPC, FUNCT_1, RELAT_1, COLLSP,
+      SUBSET_1, REALSET1;
+ notations TARSKI, ZFMISC_1, XBOOLE_0, SUBSET_1, NUMBERS, FUNCT_1, RLVECT_1,
+      BINOP_1, STRUCT_0, GROUP_1, VECTSP_1, MIDSP_1, VECTSP_2, REALSET1, NAT_1,
+      RELAT_1;
+ constructors TARSKI, BINOP_1, REAL_1, BINOP_2, RLVECT_1, MEMBERED, XBOOLE_0,
+      GROUP_1, VECTSP_1, MIDSP_1, FUNCT_1, VECTSP_2, REALSET1, STRUCT_0,
+      SUBSET_1, ENUMSET1, ZFMISC_1, RELAT_1;
+ registrations STRUCT_0, RLVECT_1, RELSET_1, MEMBERED, GROUP_1, XBOOLE_0,
+      REALSET1, SUBSET_1, RELAT_1;
+ requirements NUMERALS, SUBSET, ARITHM, BOOLE;
+ definitions RLVECT_1, STRUCT_0, GROUP_1, TARSKI, XBOOLE_0, BINOP_1;
+ theorems TARSKI, VECTSP_2, ZFMISC_1, XBOOLE_0, FUNCT_1, SUBSET_1, STRUCT_0,
+      FUNCT_2, RELAT_1, REALSET1;
+
+begin :: The Basics of General Theory of BCI-algebra
+
+definition
+  struct (1-sorted) BCIStr (# carrier -> set,
+                         InternalDiff -> BinOp of the carrier #);
+end;
+
+registration
+  cluster non empty strict BCIStr;
+  existence
+  proof
+    consider A being non empty set, m being BinOp of A;
+    take BCIStr(#A,m#);
+    thus the carrier of BCIStr(#A,m#) is non empty;
+    thus thesis;
+  end;
+end;
+
+definition let A be BCIStr; let x,y be Element of A;
+  func x \ y -> Element of A equals
+    (the InternalDiff of A).(x,y);
+ coherence
+  proof per cases;
+   suppose A is empty; then
+A:   the carrier of A = {} by STRUCT_0:def 1; then
+B:   [:the carrier of A,the carrier of A:] = {} by ZFMISC_1:113;
+     then [:the carrier of A,the carrier of A:] =
+       dom the InternalDiff of A by FUNCT_2:def 1;
+     then (the InternalDiff of A).(x,y) = {} by B,FUNCT_1:def 4;
+    hence thesis by SUBSET_1:def 2,A;
+   end;
+   suppose A is non empty;
+     then reconsider A as non empty BCIStr;
+     reconsider x,y as Element of A;
+     (the InternalDiff of A).(x,y) is Element of A;
+    hence thesis;
+   end;
+  end;
+end;
+
+definition
+  struct (BCIStr,ZeroStr) BCIStr_0 (# carrier -> set,
+                                 InternalDiff -> BinOp of the carrier,
+                                         Zero -> Element of the carrier #);
+end;
+
+registration
+  cluster non empty strict BCIStr_0;
+  existence
+  proof
+    consider A being non empty set, m being BinOp of A, u being Element of A;
+    take BCIStr_0(#A,m,u#);
+    thus the carrier of BCIStr_0(#A,m,u#) is non empty;
+    thus thesis;
+  end;
+end;
+
+definition let IT be non empty BCIStr_0, x be Element of IT;
+  func x` -> Element of IT equals
+    0.IT\x;
+  coherence;
+end;
+
+definition let IT be non empty BCIStr_0;
+  attr IT is being_B means :DefB:
+    for x,y,z being Element of IT holds ((x\y)\(z\y))\(x\z)=0.IT;
+  attr IT is being_C means :DefC:
+    for x,y,z being Element of IT holds ((x\y)\z)\((x\z)\y)=0.IT;
+  attr IT is being_I means :DefI:
+    for x being Element of IT holds x\x=0.IT;
+  attr IT is being_K means :DefK:
+    for x,y being Element of IT holds (x\y)\x=0.IT;
+  attr IT is being_BCI-4 means :DefBCI4:
+    for x,y being Element of IT holds (x\y=0.IT&y\x=0.IT implies x = y);
+  attr IT is being_BCK-5 means :DefBCK5:
+    for x being Element of IT holds x`=0.IT;
+end;
+
+notation let IT be non empty BCIStr_0;
+  synonym IT is_B for IT is being_B;
+  synonym IT is_C for IT is being_C;
+  synonym IT is_I for IT is being_I;
+  synonym IT is_K for IT is being_K;
+  synonym IT is_BCI-4 for IT is being_BCI-4;
+  synonym IT is_BCK-5 for IT is being_BCK-5;
+end;
+
+definition
+  func BCI-EXAMPLE -> BCIStr_0 equals
+    BCIStr_0 (# {{}}, op2, op0 #);
+  coherence;
+end;
+
+registration
+  cluster BCI-EXAMPLE -> strict non empty;
+  coherence
+  proof
+    thus BCI-EXAMPLE is strict & the carrier of BCI-EXAMPLE is non empty;
+  end;
+end;
+
+Th1: BCI-EXAMPLE is_B & BCI-EXAMPLE is_C & BCI-EXAMPLE is_I &
+     BCI-EXAMPLE is_BCI-4
+proof
+  thus BCI-EXAMPLE is_B
+  proof
+    let x,y,z be Element of BCI-EXAMPLE;
+    ((x\y)\(z\y))\(x\z)={}&0.BCI-EXAMPLE={}by TARSKI:def 1;
+    hence thesis;
+  end;
+  thus BCI-EXAMPLE is_C
+  proof
+  let x,y,z be Element of BCI-EXAMPLE;
+   ((x\y)\z)\((x\z)\y)={} & 0.BCI-EXAMPLE={} by TARSKI:def 1;
+   hence thesis;
+  end;
+  thus BCI-EXAMPLE is_I
+  proof
+    let x be Element of BCI-EXAMPLE;
+    x\x={} & 0.BCI-EXAMPLE={} by TARSKI:def 1;
+    hence thesis;
+  end;
+   let x,y be Element of BCI-EXAMPLE;
+   x = {} & y = {} & 0.BCI-EXAMPLE = {} by TARSKI:def 1;
+   hence thesis;
+end;
+
+registration
+  cluster strict being_B being_C being_I being_BCI-4 (non empty BCIStr_0);
+  existence by Th1;
+end;
+
+definition
+  mode BCI-algebra is being_B being_C being_I being_BCI-4
+      (non empty BCIStr_0);
+end;
+
+definition let X be BCI-algebra;
+  mode SubAlgebra of X -> BCI-algebra means :DSubAlg:
+       the Zero of it = the Zero of X &
+       the carrier of it c= the carrier of X &
+       the InternalDiff of it 
+        = (the InternalDiff of X)||the carrier of it;
+  existence
+  proof
+    take X;
+    dom(the InternalDiff of X) = [:the carrier of X,the carrier of X:]
+                                                  by FUNCT_2:def 1;
+    then the InternalDiff of X
+ =(the InternalDiff of X)|[:the carrier of X,the carrier of X:] by RELAT_1:97;
+    hence thesis by REALSET1:def 3;
+  end;
+end;
+
+::T1.1.11
+theorem The1:
+  for X being non empty BCIStr_0  holds (X is BCI-algebra iff
+      (X is_I & X is_BCI-4 &for x,y,z being Element of X holds
+      ((x\y)\(x\z))\(z\y)=0.X &
+      (x\(x\y))\y = 0.X ))
+proof
+   let X be non empty BCIStr_0;
+   thus X is BCI-algebra implies
+           (X is_I & X is_BCI-4 &for x,y,z being Element of X holds
+      ((x\y)\(x\z))\(z\y)=0.X &
+      (x\(x\y))\y = 0.X )
+  proof 
+  assume A2:X is BCI-algebra;
+  now let x,y,z be Element of X;
+       B0:((x\y)\(z\y))\(x\z)=0.X by A2,DefB;
+    B1:for x,y,z being Element of X holds (x\y)\z = (x\z)\y
+       proof
+         let x,y,z be Element of X;
+         ((x\y)\z)\((x\z)\y)=0.X &((x\z)\y)\((x\y)\z)=0.X by DefC,A2;
+         hence (x\y)\z = (x\z)\y by A2,DefBCI4;
+       end;
+   then (x\(x\y))\y=(x\y)\(x\y);
+   hence ((x\y)\(x\z))\(z\y)=0.X & (x\(x\y))\y = 0.X & x\x = 0.X &
+      (x\y = 0.X & y\x = 0.X implies x = y) by B0,A2,DefI,B1,DefBCI4;
+   end;
+      hence thesis by A2;
+   end;
+    assume A1:(X is_I & X is_BCI-4 &for x,y,z being Element of X holds
+      ((x\y)\(x\z))\(z\y)=0.X &
+      (x\(x\y))\y = 0.X );
+    B1:for x being Element of X st x\0.X=0.X holds x=0.X
+      proof
+          let x be Element of X;
+          assume C1:x\0.X =0.X;
+          then x` = (x \ (x\x)) \ x by A1,DefI
+        .= 0.X by A1;
+         hence thesis by C1,A1,DefBCI4;
+      end;
+    BB:for x being Element of X holds x \ 0.X = x
+       proof
+         let x be Element of X;
+      X1:0.X = (x\(x\x))\x by A1
+                .= (x\0.X)\x by A1,DefI;
+         (x\(x\0.X))\0.X = 0.X by A1;
+         then x\(x\0.X) = 0.X by B1;
+         hence thesis by X1,A1,DefBCI4;
+       end;
+     B2:for x,y,z being Element of X st x\y=0.X & y\z=0.X holds
+        x\z=0.X
+        proof
+          let x,y,z be Element of X;
+          assume Y1: x\y=0.X & y\z=0.X;
+          ((x\z)\(x\y))\(y\z)=0.X by A1;
+          then (x\z)\(x\y)=0.X by Y1,BB;
+          hence thesis by Y1,BB;
+        end;
+     B3:for x,y,z being Element of X st
+      x\y=0.X holds (x\z)\(y\z)=0.X&(z\y)\(z\x)=0.X
+      proof let x,y,z be Element of X;
+      assume AA1: x\y=0.X;
+      AA3:((z\y)\(z\x))\(x\y)=0.X by A1;
+      ((x\z)\(x\y))\(y\z)=0.X by A1;
+      hence thesis by AA1,BB,AA3;
+      end;
+C3:  for x,y,z being Element of X holds ((x\y)\(z\y))\(x\z) = 0.X
+    proof
+      let x,y,z be Element of X;
+      ((x\y)\(x\z))\(z\y) = 0.X by A1;
+  then ((x\y)\(z\y))\((x\y)\((x\y)\(x\z))) = 0.X by B3;
+  then (((x\y)\(z\y))\(x\z))\(((x\y)\((x\y)\(x\z)))\(x\z)) = 0.X by B3;
+  then (((x\y)\(z\y))\(x\z))\ 0.X = 0.X by A1;
+  hence thesis by B1;
+    end;
+    for x,y,z being Element of X holds ((x\y)\z)\((x\z)\y) = 0.X
+    proof
+      let x,y,z be Element of X;
+      (((x\y)\z)\((x\y)\(x\(x\z))))\((x\(x\z))\z)=0.X by A1;
+      then (((x\y)\z)\((x\y)\(x\(x\z))))\0.X=0.X by A1;
+      then Y1:((x\y)\z)\((x\y)\(x\(x\z)))=0.X by B1;
+      ((x\y)\(x\(x\z)))\((x\z)\y) = 0.X by A1;
+      hence thesis by Y1,B2;
+    end;
+    hence thesis by A1,C3,DefC,DefB;
+end;
+
+registration
+  cluster strict being_BCK-5 BCI-algebra;
+  existence
+  proof
+    for x being Element of BCI-EXAMPLE holds x` =0.BCI-EXAMPLE
+      by VECTSP_2:def 18;
+    then BCI-EXAMPLE is_BCK-5 by DefBCK5;
+    hence thesis by Th1;
+  end;
+end;
+
+definition
+  mode BCK-algebra is being_BCK-5 BCI-algebra;
+end;
+
+definition let IT be non empty BCIStr_0;
+           let x,y be Element of IT;
+  pred x <= y means :Def6:
+    x \ y = 0.IT;
+end;
+
+ reserve X for BCI-algebra;
+ reserve x,y,z,u,v,a,b for Element of X;
+ reserve IT for non empty Subset of X;
+
+A00: x\0.X = 0.X implies x = 0.X
+proof
+  assume A1:x\0.X =0.X;
+  then x` = (x \ (x\x)) \ x by DefI
+        .= 0.X by The1;
+  hence thesis by A1,DefBCI4;
+end;
+
+theorem Th00:
+  x \ 0.X = x
+proof
+A1:0.X = (x\(x\x))\x by The1
+      .= (x\0.X)\x by DefI;
+   (x\(x\0.X))\0.X = 0.X by The1;
+   then x\(x\0.X) = 0.X by A00;
+   hence thesis by A1,DefBCI4;
+end;
+
+theorem Th01:
+  x\y=0.X & y\z=0.X implies x\z=0.X
+proof
+  assume A1: x\y=0.X & y\z=0.X;
+  ((x\z)\(x\y))\(y\z)=0.X by The1;
+  then (x\z)\(x\y)=0.X by A1,Th00;
+  hence thesis by A1,Th00;
+end;
+
+theorem Th02:
+  x\y=0.X implies (x\z)\(y\z)=0.X & (z\y)\(z\x)=0.X
+proof
+  assume A1: x\y=0.X;
+A3:((z\y)\(z\x))\(x\y)=0.X by The1;
+  ((x\z)\(x\y))\(y\z)=0.X by The1;
+  hence thesis by A1,Th00,A3;
+end;
+
+theorem
+  x <= y implies x\z <= y\z & z\y <= z\x
+proof
+  assume x <= y;then
+  x\y = 0.X by Def6;
+  then (x\z)\(y\z)=0.X&(z\y)\(z\x)=0.X by Th02;
+  hence thesis by Def6;
+end;
+
+theorem
+  x\y=0.X implies (y\x)` = 0.X
+proof
+  assume x\y = 0.X;
+  then (x\x)\(y\x) = 0.X by Th02;
+  hence thesis by DefI;
+end;
+
+theorem Th03:
+  (x\y)\z = (x\z)\y
+proof
+  (x\(x\z))\z = 0.X by The1;then
+A1: ((x\y)\z)\((x\y)\(x\(x\z)))=0.X by Th02;
+  ((x\y)\(x\(x\z)))\((x\z)\y) = 0.X by The1; then
+A3:((x\y)\z)\((x\z)\y) = 0.X by Th01,A1;
+  (x\(x\y))\y = 0.X by The1;then
+A5: ((x\z)\y)\((x\z)\(x\(x\y)))=0.X by Th02;
+  ((x\z)\(x\(x\y)))\((x\y)\z) = 0.X by The1;
+  then ((x\z)\y)\((x\y)\z) = 0.X by Th01,A5;
+  hence thesis by DefBCI4,A3;
+end;
+
+theorem Th05:
+  x\(x\(x\y)) = x\y
+proof
+A1:(x\(x\(x\y)))\(x\y) = 0.X by The1;
+   (x\y)\(x\(x\(x\y)))\((x\(x\y))\y) = 0.X by The1;
+   then (x\y)\(x\(x\(x\y)))\0.X = 0.X by The1;
+   then (x\y)\(x\(x\(x\y))) = 0.X by Th00;
+   hence thesis by A1,DefBCI4;
+end;
+
+theorem Th06:
+  (x\y)` = x`\y`
+proof 
+   x`\y`= ((((x\y)\(x\y))\x)\y`) by DefI
+     .= ((((x\y)\x)\(x\y))\y`) by Th03
+     .= ((((x\x)\y)\(x\y))\y`) by Th03
+     .= ((y`\(x\y))\y`) by DefI
+     .= (y`\y`)\(x\y) by Th03;
+  hence thesis by DefI;
+end; 
+
+theorem T08:
+  ((x\(x\y))\(y\x))\(x\(x\(y\(y\x))))=0.X
+proof
+  ((x\(x\y))\(y\x))\(x\(x\(y\(y\x))))
+    =((x\(x\y))\(x\(x\(y\(y\x)))))\(y\x) by Th03
+  .=((x\(x\(x\(y\(y\x)))))\(x\y))\(y\x) by Th03
+  .=((x\(y\(y\x)))\(x\y))\(y\x) by Th05
+  .=((x\(y\(y\x)))\(x\y))\(y\(y\(y\x))) by Th05;
+  hence thesis by The1;
+end;
+
+theorem ::T1.1.6
+  for X being non empty BCIStr_0 holds (X is BCI-algebra iff
+     (X is_BCI-4 &
+      for x,y,z being Element of X holds
+      ((x\y)\(x\z))\(z\y)=0.X &
+       x\0.X = x ))
+proof 
+   let X be non empty BCIStr_0;
+   thus X is BCI-algebra implies (X is_BCI-4 &
+      for x,y,z being Element of X holds
+      ((x\y)\(x\z))\(z\y)=0.X &
+       x\0.X = x ) by Th00,The1;
+   thus (X is_BCI-4 &
+      for x,y,z being Element of X holds
+      ((x\y)\(x\z))\(z\y)=0.X &
+       x\0.X = x )implies X is BCI-algebra
+  proof
+  assume A1:X is_BCI-4 &
+      for x,y,z being Element of X holds
+      ((x\y)\(x\z))\(z\y)=0.X &
+       x\0.X = x;
+  A3:X is_I
+  proof 
+    let x be Element of X;
+        x\x=(x\x)\0.X by A1;
+   then x\x=((x\0.X)\x)\0.X by A1;
+   then x\x=((x\0.X)\(x\0.X))\0.X by A1;
+   then x\x=((x\0.X)\(x\0.X))\(0.X)` by A1;
+   hence thesis by A1;
+  end;
+  now let x,y,z be Element of X;
+        ((x\0.X)\(x\y))\(y\0.X)=0.X by A1;
+   then (x\(x\y))\(y\0.X)=0.X by A1;
+   hence ((x\y)\(x\z))\(z\y)=0.X & (x\(x\y))\y = 0.X by A1;
+   end;
+    hence thesis by The1,A1,A3;
+   end;
+end;
+
+theorem 
+  (for X being BCI-algebra,x,y being Element of X holds x\(x\y)=y\(y\x))
+       implies X is BCK-algebra
+proof
+   assume
+A1:for X being BCI-algebra,x,y being Element of X holds x\(x\y)=y\(y\x);
+   for z being Element of X holds z` = 0.X
+   proof
+     let z be Element of X;
+     z`` = z \ (z \ 0.X) by A1;
+     then z`` = z \ z by Th00;
+     then z`` \ z = z` by DefI;
+     hence thesis by The1;
+   end;
+hence thesis by DefBCK5;
+end;
+
+theorem
+  (for X being BCI-algebra,x,y being Element of X holds (x\y)\y=x\y)
+       implies X is BCK-algebra
+proof assume
+A1:for X being BCI-algebra,x,y being Element of X holds (x\y)\y=x\y;
+   for z being Element of X holds z` = 0.X
+   proof
+     let z be Element of X;
+     z`\(z` \ z) =z`\z` by A1;
+     then z`\(z` \ z) =0.X by DefI;
+     hence thesis by The1;
+   end;
+   hence thesis by DefBCK5;
+end;
+
+theorem  
+  (for X being BCI-algebra,x,y being Element of X holds x\(y\x)=x)
+       implies X is BCK-algebra
+proof assume
+A1:for X being BCI-algebra,x,y being Element of X holds x\(y\x)=x;
+   for z being Element of X holds z` = 0.X
+   proof
+     let z be Element of X;
+      (z \ 0.X )` = 0.X by A1;
+     hence thesis by Th00;
+   end;
+   hence thesis by DefBCK5;
+end;
+
+theorem  
+  (for X being BCI-algebra,x,y,z being Element of X holds (x\y)\y=(x\z)\(y\z))
+       implies X is BCK-algebra
+proof
+  assume 
+A1:for X being BCI-algebra,x,y,z being Element of X holds (x\y)\y=(x\z)\(y\z);
+for s being Element of X holds s` = 0.X
+   proof
+    let s be Element of X;
+    s` \ s=s` \ (s \ s) by A1;
+    then s` \ s=s` \ 0.X by DefI;
+    then s`\(s` \ s) =s`\s` by Th00;
+    then s`\(s` \ s) =0.X by DefI;
+    hence thesis by The1;
+   end;
+  hence thesis by DefBCK5;
+end;
+
+theorem  
+  (for X being BCI-algebra,x,y being Element of X holds (x\y)\(y\x)=x\y)
+       implies X is BCK-algebra
+proof assume
+A1:for X being BCI-algebra,x,y being Element of X holds (x\y)\(y\x)=x\y;
+   for s being Element of X holds s` = 0.X
+   proof
+     let s be Element of X;
+     s` \ (s \ 0.X ) = s` by A1;
+     then s`\(s` \ s) =s`\s` by Th00;
+     then s`\(s` \ s) =0.X by DefI;
+     hence thesis by The1;
+   end;
+  hence thesis by DefBCK5;
+end;
+
+theorem 
+  (for X being BCI-algebra,x,y being Element of X holds
+       (x\y)\((x\y)\(y\x))=0.X) implies X is BCK-algebra
+proof assume 
+A1:for X being BCI-algebra,x,y being Element of X holds
+   (x\y)\((x\y)\(y\x))=0.X;
+   for s being Element of X holds s` = 0.X
+   proof
+     let s be Element of X;
+     s`\(s`\(s\0.X))=0.X by A1;
+     then (s`\(s`\s))\s=s` by Th00;
+     hence thesis by The1;
+   end;
+   hence thesis by DefBCK5;
+end;
+
+theorem 
+  for X being BCI-algebra holds X is_K iff X is BCK-algebra
+proof
+  let X be BCI-algebra;
+  thus X is_K implies X is BCK-algebra
+  proof assume A1:X is_K;
+    X is_BCK-5
+    proof
+     now let s be Element of X;
+      s`\0.X = 0.X by A1,DefK;
+      hence s` = 0.X by Th00;
+     end;
+     hence thesis by DefBCK5;
+    end;
+  hence thesis;
+  end;
+  assume D1: X is BCK-algebra;
+  let x,y be Element of X;
+  X is_BCK-5 by D1;
+  y` = 0.X by DefBCK5,D1;
+  then (x\y)\(x\0.X) = 0.X by Th02;
+  hence thesis by Th00;
+end;
+
+definition let X be BCI-algebra; ::P4 1.3 atom BranchV
+  func BCK-part(X) -> non empty Subset of X equals
+     {x where x is Element of X:0.X<=x};
+  coherence
+proof
+   set Y={x where x is Element of X:0.X<=x};
+    (0.X)`=0.X by DefI;
+   then 0.X <= 0.X by Def6;
+   then A1:0.X in Y;
+   now let y be set;
+   assume y in Y;
+   then ex x being Element of X st y=x & 0.X<=x;
+   hence y in the carrier of X;
+   end;
+   hence thesis by TARSKI:def 3,A1;
+ end;
+end;
+
+theorem BCKP1:
+  0.X in BCK-part(X)
+proof
+  (0.X)`=0.X by DefI;
+  then 0.X <= 0.X by Def6;
+  hence thesis;
+end;
+
+registration let X;
+  cluster 0.X -> Element of BCK-part(X);
+  coherence by BCKP1;
+end;
+
+theorem  
+   for x,y being Element of BCK-part(X) holds x\y in BCK-part(X)
+proof
+    let x,y be Element of BCK-part(X);
+    A1:x in {x1 where x1 is Element of X:0.X<=x1} &
+    y in {y1 where y1 is Element of X:0.X<=y1};
+    then consider x1 being Element of X such that
+    A3:x=x1 & 0.X<= x1;
+    consider y1 being Element of X such that
+    A5:y=y1&0.X<=y1 by A1;
+     (x\y)`=x`\y` by Th06;
+    then (x\y)`=(y`)` by A3,Def6;
+    then (x\y)`=(0.X)` by A5,Def6;
+    then (x\y)`=0.X by DefI;
+    then 0.X <= x\y by Def6;
+    hence thesis;
+end;
+
+theorem
+  for x being Element of X,y being Element of BCK-part(X) holds
+       x\y <= x
+proof
+    let x be Element of X,y be Element of BCK-part(X);
+    y in {y1 where y1 is Element of X:0.X<=y1};
+    then consider y1 being Element of X such that
+    A5:y=y1&0.X<=y1;
+    y`=0.X by A5,Def6;
+    then (x\x)\y=0.X by DefI;
+    then (x\y)\x=0.X by Th03;
+    hence x\y <= x by Def6;
+end;
+
+theorem DEF114:
+  X is SubAlgebra of X
+proof  
+ A1:the carrier of X c= the carrier of X & the Zero of X = the Zero of X;
+    dom(the InternalDiff of X) = [:the carrier of X,the carrier of X:]
+                                                  by FUNCT_2:def 1;
+   then the InternalDiff of X
+ =(the InternalDiff of X)|[:the carrier of X,the carrier of X:] by RELAT_1:97
+ .=(the InternalDiff of X)||the carrier of X by REALSET1:def 3;
+    hence thesis by DSubAlg,A1;
+end;
+
+definition let X be BCI-algebra,IT be SubAlgebra of X;
+  attr IT is proper means :DTrivial:
+    IT <> X;
+end;
+
+registration let X;
+  cluster non proper SubAlgebra of X;
+  existence
+  proof
+   take X;
+   X is SubAlgebra of X by DEF114;
+   hence thesis by DTrivial;
+ end;
+end;
+
+definition let X be BCI-algebra,IT be Element of X;
+  attr IT is atom means :Defatom:
+    for z being Element of X holds z\IT=0.X implies z=IT;
+end;
+
+definition let X be BCI-algebra;
+  func AtomSet(X) -> non empty Subset of X equals
+    {x where x is Element of X:x is atom};
+  coherence
+  proof
+   set Y={x where x is Element of X:x is atom};
+   for z being Element of X st z\0.X=0.X holds z=0.X by Th00;
+   then 0.X is atom by Defatom;
+   then A1:0.X in Y;
+   now let y be set;
+   assume y in Y;
+   then consider x being Element of X such that
+   A1:y=x & x is atom;
+   thus y in the carrier of X by A1;
+   end;
+   hence thesis by TARSKI:def 3,A1;
+ end;
+end;
+
+theorem Tm0:
+  0.X in AtomSet(X) 
+proof
+   for z being Element of X st z\0.X=0.X holds z=0.X by Th00;
+   then 0.X is atom by Defatom;
+   hence thesis;
+end;
+
+theorem Tm1:
+  for x being Element of X holds x in AtomSet(X) iff
+      for z being Element of X holds z\(z\x)=x
+proof
+  let x be Element of X;
+  thus x in AtomSet(X) implies for z being Element of X holds z\(z\x)=x
+  proof
+    assume D1:x in AtomSet(X);
+    let z be Element of X;
+     consider x1 being Element of X such that
+    A1:x=x1&x1 is atom by D1;
+    (z\(z\x))\x=0.X by The1;
+    hence (z\(z\x))=x by A1,Defatom;
+ end;
+    assume A1:for z being Element of X holds z\(z\x)=x;
+    now let z be Element of X;
+     assume z\x=0.X;
+    then z\0.X=x by A1;
+    hence z=x by Th00;
+    end;
+    then x is atom by Defatom;
+    hence thesis;
+end;
+
+theorem  
+   for x being Element of X holds x in AtomSet(X) iff
+      for u,z being Element of X holds (z\u)\(z\x)=x\u
+proof
+  let x be Element of X;
+  thus x in AtomSet(X) implies
+    for u,z being Element of X holds (z\u)\(z\x)=x\u
+  proof
+    assume D1:x in AtomSet(X);
+    let u,z be Element of X;
+    consider x1 being Element of X such that
+    A1:x=x1&x1 is atom by D1;
+    (z\(z\x))\x=0.X by The1;
+    then (z\(z\x))=x by A1,Defatom;
+    hence (z\u)\(z\x)=x\u by Th03;
+ end;
+    assume A1:for u,z being Element of X holds (z\u)\(z\x)=x\u;
+    now let z be Element of X;
+     assume z\x=0.X;
+    then (z\0.X)\0.X=x\0.X by A1;
+    then (z\0.X)\0.X=x by Th00;
+    then z\0.X=x by Th00;
+    hence z=x by Th00;
+    end;
+    then x is atom by Defatom;
+    hence thesis;   
+end;
+
+theorem  
+  for x being Element of X holds x in AtomSet(X) iff
+      for y,z being Element of X holds x\(z\y)<=y\(z\x)
+proof
+  let x be Element of X;
+  thus x in AtomSet(X) 
+          implies for y,z being Element of X holds x\(z\y)<=y\(z\x)
+  proof
+    assume D1:x in AtomSet(X);
+    let y,z be Element of X;
+    consider x1 being Element of X such that
+    A1:x=x1&x1 is atom by D1;
+    (z\(z\x))\x=0.X by The1;
+    then (x\(z\y))\(y\(z\x))= ((z\(z\x))\(z\y))\(y\(z\x)) by A1,Defatom;
+    then(x\(z\y))\(y\(z\x))= ((z\(z\y))\(z\x))\(y\(z\x))by Th03;
+    then(x\(z\y))\(y\(z\x))= ((z\(z\y))\(z\x))\(y\(z\x))\0.X by Th00;
+    then(x\(z\y))\(y\(z\x))=((z\(z\y))\(z\x))\(y\(z\x))\((z\(z\y))\y) by The1;
+    then(x\(z\y))\(y\(z\x))=0.X by DefB;
+    hence x\(z\y) <= y\(z\x) by Def6;
+ end;
+    assume A1:for y,z being Element of X holds x\(z\y)<=y\(z\x);
+    now let z be Element of X;
+     assume B1:z\x=0.X;
+     (x\(z\0.X)) <= (z\x)` by A1;
+    then (x\(z\0.X))\(0.X)`=0.X by B1,Def6;
+    then (x\(z\0.X))\0.X = 0.X by Th00;
+    then x\(z\0.X) = 0.X by Th00;
+    then x\z = 0.X by Th00;
+    hence z=x by DefBCI4,B1;
+    end;
+    then x is atom by Defatom;
+    hence thesis;
+end;
+
+theorem  
+  for x being Element of X holds x in AtomSet(X) iff
+      for y,z,u being Element of X holds (x\u)\(z\y)<=(y\u)\(z\x)
+proof
+  let x be Element of X;
+  thus x in AtomSet(X) implies
+             for y,z,u being Element of X holds (x\u)\(z\y)<=(y\u)\(z\x)
+  proof
+    assume D1:x in AtomSet(X);
+    let y,z,u be Element of X;
+     consider x1 being Element of X such that
+    A1:x=x1&x1 is atom by D1;
+    (z\(z\x))\x=0.X by The1;
+    then ((x\u)\(z\y))\((y\u)\(z\x))=(((z\(z\x))\u)\(z\y))\((y\u)\(z\x))
+                                       by A1,Defatom;
+   then ((x\u)\(z\y))\((y\u)\(z\x))=(((z\u)\(z\x))\(z\y))\((y\u)\(z\x))by Th03;
+   then ((x\u)\(z\y))\((y\u)\(z\x))=(((z\u)\(z\y))\(z\x))\((y\u)\(z\x))by Th03
+          .=((((z\u)\(z\y))\(z\x))\((y\u)\(z\x)))\0.X by Th00;
+   then ((x\u)\(z\y))\((y\u)\(z\x))
+          =((((z\u)\(z\y))\(z\x))\((y\u)\(z\x)))\(((z\u)\(z\y))\(y\u)) by The1;
+   then ((x\u)\(z\y))\((y\u)\(z\x))=0.X by DefB;
+   hence (x\u)\(z\y) <= (y\u)\(z\x) by Def6;
+ end;
+    assume A1:for y,z,u being Element of X holds (x\u)\(z\y)<=(y\u)\(z\x);
+    now let z be Element of X;
+     assume B1:z\x=0.X;
+    ((x\0.X)\(z\0.X)) <= ((0.X)`\(z\x)) by A1;
+    then (((x\0.X)\(z\0.X)))\(((0.X)`\0.X))=0.X by B1,Def6;
+    then (((x\0.X)\(z\0.X)))\(0.X)`=0.X by Th00;
+    then (((x\0.X)\(z\0.X)))\0.X=0.X by Th00;
+    then (x\0.X)\(z\0.X)=0.X by Th00;
+    then (x\0.X)\z=0.X by Th00;
+    then x\z = 0.X by Th00;
+    hence z=x by DefBCI4,B1;
+    end;
+    then x is atom by Defatom;
+    hence thesis;
+end;
+
+theorem  Tm5:
+  for x being Element of X holds x in AtomSet(X) iff
+      for z being Element of X holds z`\x`=x\z
+proof
+  let x be Element of X;
+  thus x in AtomSet(X) implies
+             for z being Element of X holds z`\x`=x\z
+  proof
+    assume D1:x in AtomSet(X);
+    let z be Element of X;
+     consider x1 being Element of X such that
+    A1:x=x1&x1 is atom by D1;
+    (z\(z\x))\x=0.X by The1;
+    then (z\(z\x))=x by A1,Defatom;
+    then x\z=(z\z)\(z\x) by Th03;
+    then x\z=(z\x)` by DefI;
+    hence z`\x`=x\z by Th06;
+ end;
+    assume A1: for z being Element of X holds z`\x`=x\z;
+    now let z be Element of X;
+     assume B1:z\x=0.X;
+     then (z\x)`=0.X by DefI;
+     then z`\x`=0.X by Th06;
+     then x\z = 0.X by A1;
+    hence z=x by DefBCI4,B1;
+    end;
+    then x is atom by Defatom;
+    hence thesis;
+end;
+
+theorem Tm6:
+  for x being Element of X holds x in AtomSet(X) iff x``=x
+proof
+  let x be Element of X;
+  thus x in AtomSet(X) implies (x`)`=x
+  proof
+    assume x in AtomSet(X);
+    then (0.X)`\x`= x \ 0.X by Tm5;
+    then (0.X)`\(x`)=x by Th00;
+    hence (x`)`=x by DefI;
+ end;
+    assume A1: x``=x;
+    now let z be Element of X;
+     assume B1:z\x=0.X;
+     then ((z\x)\(x`))\(z\0.X)=x\z by Th00,A1;
+     then 0.X=x\z by DefB;
+    hence z=x by DefBCI4,B1;
+    end;
+    then x is atom by Defatom;
+    hence thesis;
+end;
+
+theorem  Tm7:
+  for x being Element of X holds x in AtomSet(X) iff
+      for z being Element of X holds (z\x)`=x\z
+proof
+   let x be Element of X;
+   (for z being Element of X holds (z\x)`=x\z) iff
+ (for z being Element of X holds z`\x`=x\z)
+   proof
+  thus (for z being Element of X holds (z\x)`=x\z) implies
+  (for z being Element of X holds z`\x`=x\z)
+  proof
+     assume A1:for z being Element of X holds (z\x)`=x\z;
+      let z be Element of X;
+       (z\x)`=x\z by A1;
+      hence z`\x`=x\z by Th06;
+  end;
+thus (for z being Element of X holds z`\x`=x\z) implies
+  (for z being Element of X holds (z\x)`=x\z)
+  proof
+     assume A1:for z being Element of X holds z`\x`=x\z;
+      let z be Element of X;
+       z`\x`=x\z by A1;
+      hence (z\x)`=x\z by Th06;
+   end;
+ end;
+   hence thesis by Tm5;
+end;
+
+theorem Tm8:
+  for x being Element of X holds x in AtomSet(X) iff
+      for z being Element of X holds ((x\z)`)`=x\z
+proof
+   let x be Element of X;
+   thus x in AtomSet(X) implies
+             for z being Element of X holds ((x\z)`)`=x\z
+  proof
+    assume D1:x in AtomSet(X);
+    let z be Element of X;
+     consider x1 being Element of X such that
+    A1:x=x1&x1 is atom by D1;
+    (z\(z\x))\x=0.X by The1;
+    then (z\(z\x))=x by A1,Defatom;
+    then ((x\z)`)`=(((z\z)\(z\x))`)` by Th03;
+    then ((x\z)`)`=(((z\x)`)`)` by DefI;
+    then ((x\z)`)`=(z\x)` by Th05;
+    hence  thesis by Tm7,D1;
+ end;
+    assume for z being Element of X holds (x\z)``=x\z;
+    then ((x\0.X)`)`=x\0.X;
+    then (x`)`=x\0.X by Th00;
+    then (x`)`=x by Th00;
+    hence thesis by Tm6;
+end;
+
+theorem  
+  for x being Element of X holds x in AtomSet(X) iff
+      for z,u being Element of X holds z\(z\(x\u))=x\u
+proof
+     let x be Element of X;
+     thus x in AtomSet(X) implies
+              for z,u being Element of X holds z\(z\(x\u))=x\u
+  proof
+    assume D1:x in AtomSet(X);
+    let z,u be Element of X;
+    x\u =((x\u)`)` by D1,Tm8
+    .= ((z\z)\(x\u))` by DefI
+    .= ((z\(x\u))\z)` by Th03
+    .= (z\(x\u))`\z` by Th06;
+   then E1:(x\u)\( z\(z\(x\u)))=0.X by The1;
+          ( z\(z\(x\u)))\(x\u)=0.X by The1;
+   hence thesis by E1,DefBCI4;
+ end;
+    assume for z,u being Element of X holds z\(z\(x\u))=x\u;
+    then (x\u)``=x\u;
+    hence thesis by Tm8;
+end;
+
+theorem TL133:    ::tuilun1.3.3
+  for a being Element of AtomSet(X),x being Element of X  holds
+       a\x in AtomSet(X)
+proof
+    let a be Element of AtomSet(X),x be Element of X;
+    ((a\x)`)`=a\x by Tm8;
+    hence thesis by Tm6;
+end;
+
+definition let X be BCI-algebra,a,b be Element of AtomSet(X);
+  redefine func a\b -> Element of AtomSet(X);
+  coherence by TL133;
+end;
+
+theorem  TL1:
+  for x being Element of X holds x` in AtomSet(X)
+proof
+  let x be Element of X;
+  0.X in AtomSet(X) by Tm0;
+  hence thesis by TL133;
+end;
+
+theorem  TL134:
+  for x being Element of X holds
+    ex a being Element of AtomSet(X) st a<=x
+proof
+    let x be Element of X;
+    take a=x``;
+    a\x=0.X by The1;
+    hence thesis by Def6,TL1;
+end;
+
+definition let X be BCI-algebra;
+  attr X is generated_by_atom means :DefXX:
+    for x being Element of X holds
+      ex a being Element of AtomSet(X) st a<=x;
+end;
+
+definition let X be BCI-algebra,a be Element of AtomSet(X);
+  func BranchV(a) -> non empty Subset of X equals
+     {x where x is Element of X:a<=x};
+coherence
+proof
+   set Y={x where x is Element of X:a<=x};
+   A1:a in Y
+   proof
+     a\a=0.X by DefI;
+     then a <= a by Def6;
+     hence thesis;
+   end;
+   now let y be set;
+   assume y in Y;
+   then consider x being Element of X such that
+   A1:y=x & a<=x;
+   thus y in the carrier of X by A1;
+   end;
+   hence thesis by TARSKI:def 3,A1;
+ end;
+end;
+
+theorem
+  for X being BCI-algebra holds X is generated_by_atom
+proof
+    let X be BCI-algebra;
+    for x being Element of X holds (ex a being Element of AtomSet(X)
+          st a<=x) by TL134;
+    hence thesis by DefXX;
+end;
+
+theorem
+  for a,b being Element of AtomSet(X),x being Element of BranchV(b)
+       holds a\x =a\b
+proof
+   let a,b be Element of AtomSet(X),x be Element of BranchV(b);
+   a\b in  {x1 where x1 is Element of X:x1 is atom};
+   then consider x1 being Element of X such that
+   A0:a\b=x1 & x1 is atom;
+   x in {yy where yy is Element of X:b<=yy};
+   then consider yy being Element of X such that
+   A1:   x=yy & b<= yy;
+   (a\x)\(a\b)=(a\(a\b))\x by Th03;
+   then (a\x)\(a\b)=b\x by Tm1;
+   then (a\x)\(a\b)=0.X by A1,Def6;
+   hence thesis by Defatom,A0;
+end;
+
+theorem  TL13x:
+  for a being Element of AtomSet(X),x being Element of BCK-part(X)
+       holds a\x =a
+proof
+   let a be Element of AtomSet(X),x be Element of BCK-part(X);
+   a\0.X in {x1 where x1 is Element of X:x1 is atom} by TL133;
+   then consider x1 being Element of X such that
+   A0:a\0.X=x1 & x1 is atom;
+   x in {x2 where x2 is Element of X:0.X<=x2};
+   then consider x2 being Element of X such that
+A1:x=x2 & 0.X<=x2;
+   (a\x)\(a\0.X)=(a\(a\0.X))\x by Th03;
+   then (a\x)\(a\0.X)=(a\a)\x by Th00;
+   then (a\x)\(a\0.X)=x` by DefI;
+   then (a\x)\(a\0.X)=0.X by A1,Def6;
+   then a\x=a\0.X by Defatom,A0;
+   hence thesis by Th00;
+end;
+
+Lm136:for a being Element of AtomSet(X),x being Element of BranchV(a)
+              holds a\x=0.X
+proof
+  let a be Element of AtomSet(X),x be Element of BranchV(a);
+  x in {x1 where x1 is Element of X:a<=x1};
+  then consider x1 being Element of X such that
+  A1:x=x1 & a<=x1;
+  thus a\x =0.X by Def6,A1;
+end;
+
+theorem  TL136:
+  for a,b being Element of AtomSet(X),x being Element of BranchV(a),
+       y being Element of BranchV(b) holds x\y in BranchV(a\b)
+proof
+   let a,b be Element of AtomSet(X),x be Element of BranchV(a),
+       y be Element of BranchV(b);
+   (a\b)\(x\y)=(((a\b)`)`)\(x\y) by Tm6;
+   then (a\b)\(x\y)=(x\y)`\(a\b)` by Th03;
+   then (a\b)\(x\y)=x`\y`\(a\b)` by Th06;
+   then (a\b)\(x\y)=((x`)\((a\b)`))\y` by Th03;
+   then (a\b)\(x\y)=((((a\b)`)`)\x)\(y`) by Th03;
+   then (a\b)\(x\y)=((a\b)\x)\(y`) by Tm6;
+   then (a\b)\(x\y)=((a\x)\b)\(y`) by Th03;
+   then (a\b)\(x\y)=b`\y` by Lm136;
+   then (a\b)\(x\y)=(b\y)` by Th06;
+   then (a\b)\(x\y)=(0.X)` by Lm136;
+   then (a\b)\(x\y)=0.X by DefI;
+   then a\b <= x\y by Def6;
+   hence thesis;
+end;
+
+theorem
+  for a being Element of AtomSet(X),x,y being Element of BranchV(a)
+       holds x\y in BCK-part(X)
+proof
+   let a be Element of AtomSet(X),x,y be Element of BranchV(a);
+   set b=a\a;
+A3:b=0.X by DefI;
+   x\y in BranchV(b) by TL136;
+   hence thesis by A3;
+end;
+
+theorem
+  for a,b being Element of AtomSet(X),x being Element of BranchV(a),
+      y being Element of BranchV(b) st a<>b holds not(x\y in BCK-part(X))
+proof
+   let a,b be Element of AtomSet(X),x be Element of BranchV(a),
+      y be Element of BranchV(b);
+   assume A1:a<>b;
+   assume A2:x\y in BCK-part(X);
+   x\y in BranchV(a\b) by TL136;
+   then consider xy being Element of X such that
+   A3:x\y=xy & a\b <= xy;
+   (a\b)\(x\y) =0.X by A3,Def6;
+   then (a\(x\y))\b =0.X by Th03;
+   then (a\(x\y))\((a\(x\y))\b) =a\(x\y) by Th00;
+   then b = a\(x\y) by Tm1;
+   hence contradiction by A1,TL13x,A2;
+end;
+
+theorem
+  for a,b being Element of AtomSet(X) st a<>b holds
+      BranchV(a) /\ BranchV(b) = {}
+proof
+   let a,b be Element of AtomSet(X);
+   assume A1:a<>b;
+   b in {xx where xx is Element of X:xx is atom};
+   then consider xx being Element of X such that
+   B1:b=xx & xx is atom;
+   assume BranchV(a) /\ BranchV(b) <> {};
+   then consider c being set such that 
+   A3:c in BranchV(a) /\ BranchV(b) by XBOOLE_0:def 1;
+   reconsider z1 = c as Element of BranchV(a) by A3,XBOOLE_0:def 3;
+           reconsider z2 = c as Element of BranchV(b) by A3,XBOOLE_0:def 3;
+           z1 \ z2 in BranchV(a\b) by TL136;
+   then 0.X in {x3 where x3 is Element of X:a\b<=x3}by DefI;
+   then consider x3 being Element of X such that
+   A7:0.X = x3 & a\b <= x3;
+   (a\b)\0.X = 0.X by A7,Def6;
+   then a\b = 0.X by Th00;
+   hence contradiction by A1,Defatom,B1;
+end;
+
+::Ideal
+definition let X be BCI-algebra;
+  mode Ideal of X -> non empty Subset of X means :DIdeal:
+  0.X in it &
+  (for x,y being Element of X st x\y in it & y in it holds x in it);
+  existence
+   proof
+      take X1={0.X};
+      D1:X1 is Subset of X
+     proof
+         now let xx be set;
+          assume xx in X1;
+          then xx=0.X by TARSKI:def 1;
+          hence xx in the carrier of X;
+        end;
+      hence thesis by TARSKI:def 3;
+     end;
+      for x,y being Element of X st x\y in X1 & y in X1 holds x in X1
+      proof let x,y be Element of X;
+      assume x\y in X1 & y in X1;
+      then x\y = 0.X & y = 0.X by TARSKI:def 1;
+      then x=0.X by Th00;
+      hence thesis by TARSKI:def 1;
+      end;
+      hence  thesis by TARSKI:def 1,D1;
+   end;
+end;
+
+definition let X be BCI-algebra, IT be Ideal of X;
+  attr IT is closed means :Close:
+    for x being Element of IT  holds x` in IT;
+end;
+
+LM1610:
+   {0.X} is Ideal of X
+proof
+     set X1={0.X};
+      D1:X1 is Subset of X 
+     proof
+         now let xx be set;
+          assume xx in X1;
+          then EE:xx=0.X by TARSKI:def 1;
+          thus xx in the carrier of X by EE;
+         end;
+       hence thesis by TARSKI:def 3;
+     end;
+     A1:  0.X in {0.X} by TARSKI:def 1;
+     for x,y being Element of X
+                   st x\y in {0.X} & y in {0.X} holds x in {0.X}
+      proof let x,y be Element of X;
+      set X1={0.X};
+      assume x\y in X1 & y in X1;
+      then x\y = 0.X & y = 0.X by TARSKI:def 1;
+      then x=0.X by Th00;
+      hence thesis by TARSKI:def 1;
+      end;
+     hence thesis by DIdeal,D1,A1;
+end;
+
+LM161x:
+  for X1 being Ideal of X st X1={0.X} holds
+    for x being Element of X1 holds x` in { 0.X }
+proof
+    let X1 be Ideal of X;
+    assume A1:X1={0.X};
+    let x be Element of X1;
+    x=0.X by TARSKI:def 1,A1;
+    then x`=0.X by DefI;
+    hence x` in {0.X} by TARSKI:def 1;
+end;
+   
+registration  let X;
+  cluster closed Ideal of X;
+  existence
+  proof
+    set X1={0.X};
+    reconsider X1 as Ideal of X by LM1610;
+   take X1;
+   for x being Element of X1 holds x` in X1 by LM161x;
+   hence thesis by Close;
+  end;
+end;
+
+theorem
+  {0.X} is closed Ideal of X
+proof
+  set X1={0.X};
+  reconsider X1 as Ideal of X by LM1610;
+  for x being Element of X1 holds x` in X1 by LM161x;
+  hence thesis by Close;
+end;
+
+theorem
+  the carrier of X is closed Ideal of X
+proof
+    AA:the carrier of X is non empty Subset of X by ZFMISC_1:def 1;
+    A1: 0.X in the carrier of X &
+              for x being Element of X holds x` in the carrier of X;
+     for x,y being Element of the carrier of X st x\y in the carrier of X
+           & y in the carrier of X  holds x in the carrier of X;
+   hence thesis by DIdeal,A1,AA,Close;
+end;
+
+theorem
+  BCK-part(X) is closed Ideal of X 
+proof
+    set X1=BCK-part(X);
+A1: 0.X in BCK-part(X) by BCKP1;
+    for x,y being Element of X st x\y in  X1  & y in  X1  holds x in  X1
+    proof
+     let x,y be Element of X such that
+    B1:x\y in X1 & y in X1;
+     consider x1 being Element of X such that
+    B5:x\y=x1 & 0.X<= x1 by B1;
+            consider x2 being Element of X such that
+    B7:y=x2 & 0.X<= x2 by B1;
+       (x\y)`=0.X by Def6,B5;
+     then x`\y`=0.X by Th06;
+     then x`\0.X = 0.X by B7,Def6;
+     then x`=0.X by Th00;
+     then 0.X<= x by Def6;
+     hence x in X1;
+    end;
+     then reconsider X1 as Ideal of X by DIdeal,A1;
+     now let x be Element of X1;
+      x in X1;
+     then consider x1 being Element of X such that
+     E5:x=x1 & 0.X<= x1;
+     (x`)=0.X by E5,Def6;
+     then (x`)`=0.X by DefI;
+     then 0.X <=x` by Def6;
+     hence x` in X1;
+     end;
+   hence thesis by Close;
+end;
+ 
+LM161:
+    IT is Ideal of X implies (for x,y being Element of IT  holds
+         {z where z is Element of X : z\x<=y}  c= IT)
+proof
+    assume B1:IT is Ideal of X;
+    then B2:0.X in IT by DIdeal;
+    let x,y be Element of IT;
+    for ss being set st ss in {z where z is Element of X : z\x<=y}
+           holds ss in IT
+    proof
+      let ss be set;
+      assume ss in {z where z is Element of X : z\x<=y};
+      then consider z being Element of X such that
+   B3:ss=z & z\x <= y;
+      reconsider ss as Element of X by B3;
+      (ss\x)\y in IT by B2,B3,Def6;
+      then ss\x in IT by B1,DIdeal;
+      hence thesis by B1,DIdeal;
+    end;
+    hence thesis by TARSKI:def 3;
+end;
+
+theorem
+   IT is Ideal of X implies (for x,y being Element of X  st
+     x in IT & y<=x holds y in IT)
+proof
+    assume A1:IT is Ideal of X;
+    then A2:0.X is Element of IT by DIdeal;
+    let x,y be Element of X;
+    assume A3:x in IT & y<=x;
+    then y\0.X <= x by Th00;
+    then A7:y in  {z where z is Element of X : z\0.X<=x};
+    {z where z is Element of X : z\0.X<=x} c= IT by A1,LM161,A2,A3;
+    hence y in IT by A7;
+end;
+
+begin :: Several Classes of BCI-algebra---associative BCI-algebra
+
+definition let IT be BCI-algebra;
+  attr IT is associative means :Assoc:
+    for x,y,z being Element of IT holds x\y\z = x\(y\z);
+
+  attr IT is quasi-associative means:Def72:
+    for x being Element of IT holds x``=x`;
+
+  attr IT is positive-implicative means :Def8:
+    for x,y being Element of IT holds (x\(x\y))\(y\x)=x\(x\(y\(y\x)));
+
+  attr IT is weakly-positive-implicative means:Def9:
+    for x,y,z being Element of IT holds (x\y)\z=((x\z)\z)\(y\z);
+
+  attr IT is implicative means :Defa:
+    for x,y being Element of IT holds (x\(x\y))\(y\x)=y\(y\x);
+
+  attr IT is weakly-implicative means
+    for x,y being Element of IT holds (x\(y\x))\(y\x)`=x;
+
+  attr IT is p-Semisimple means:Defb:
+    for x,y being Element of IT holds x\(x\y) = y;
+
+  attr IT is alternative means:Defc:
+    for x,y being Element of IT holds
+      x\(x\y) = (x\x)\y & (x\y)\y=x\(y\y);
+end;
+
+registration
+  cluster implicative positive-implicative p-Semisimple
+    associative weakly-implicative weakly-positive-implicative BCI-algebra;
+ existence
+  proof
+    reconsider IT = BCI-EXAMPLE as BCI-algebra by Th1;
+AX:IT is implicative
+   proof
+    let x,y be Element of IT;
+    (x\(x\y))\(y\x)={}&y\(y\x)={} by TARSKI:def 1;
+    hence (x\(x\y))\(y\x)=y\(y\x);
+  end;
+AY:IT is positive-implicative
+   proof
+    let x,y be Element of IT;
+    (x\(x\y))\(y\x)={}&x\(x\(y\(y\x)))={} by TARSKI:def 1;
+    hence (x\(x\y))\(y\x)=x\(x\(y\(y\x)));
+   end;
+AA:IT is p-Semisimple
+   proof
+   let x,y be Element of IT;
+   x\(x\y)={}&{}= y by TARSKI:def 1;
+   hence thesis;
+   end;
+A1: IT is associative
+    proof
+    let x,y,z be Element of IT;
+    (x\y)\z={}&x\(y\z)={} by TARSKI:def 1;
+    hence (x\y)\z=x\(y\z);
+    end;
+A0:IT is weakly-implicative
+   proof
+    let x,y be Element of IT;
+    (x\(y\x))\(y\x)`={}&x={} by TARSKI:def 1;
+    hence (x\(y\x))\(y\x)`=x;
+   end;
+   IT is weakly-positive-implicative
+   proof
+    let x,y,z be Element of IT;
+    (x\y)\z={} & ((x\z)\z)\(y\z)={} by TARSKI:def 1;
+    hence (x\y)\z=((x\z)\z)\(y\z);
+   end;
+   hence thesis by A1,A0,AA,AX,AY;
+  end;
+end;
+
+TT1:
+  (for x,y being Element of X holds y\x=x\y) implies X is associative
+proof
+  assume A1:for x,y being Element of X holds y\x=x\y;
+    let x,y,z be Element of X;
+    x\(y\z) = (y\z)\x by A1
+    .=(y\x)\z by Th03;
+   hence thesis by A1;
+end;
+
+TT2:
+   (for x holds x`=x) implies (for x,y holds x\y=y\x)
+proof
+   assume A1:for x holds x`=x;
+   let x,y;
+A3:(x\y)\(y\x)=(x`\y)\(y\x) by A1
+      .=(x`\y`)\(y\x) by A1
+      .=0.X by The1;
+      (y\x)\(x\y)=(y`\x)\(x\y) by A1
+      .=(y`\x`)\(x\y) by A1
+      .=0.X by The1;
+ hence thesis by A3,DefBCI4;
+end;
+
+theorem TT3:
+  X is associative iff (for x being Element of X holds x`=x)
+proof
+ thus X is associative implies(for x being Element of X holds x`=x)
+ proof
+   assume A1:X is associative;
+   let x be Element of X;
+A3:x`\x=(x\x)` by A1,Assoc
+      .=(0.X)` by DefI .=0.X by DefI;
+   x\x`=(x\0.X)\x by A1,Assoc
+      .=x\x by Th00 .=0.X by DefI;
+   hence thesis by DefBCI4,A3;
+ end;
+  assume for x being Element of X holds x`=x;
+  then for x,y holds x\y=y\x by TT2;
+  hence thesis by TT1;
+end;
+
+theorem TT4:
+  (for x,y being Element of X holds y\x=x\y) iff X is associative
+proof
+  thus
+ (for x,y being Element of X holds y\x=x\y) implies X is associative by TT1;
+   assume X is associative;
+   then for x being Element of X holds x`=x by TT3;
+   hence thesis by TT2;
+end;
+
+theorem Tq1:
+  for X being non empty BCIStr_0 holds (X is associative BCI-algebra
+      iff (for x,y,z being Element of X holds (y\x)\(z\x)=z\y & x\0.X=x))
+proof
+   let X be non empty BCIStr_0;
+   thus X is associative BCI-algebra implies
+        (for x,y,z being Element of X holds (y\x)\(z\x)=z\y & x\0.X=x)
+  proof
+    assume A1:X is associative BCI-algebra;
+    let x,y,z be Element of X;
+    (z\y)\((y\x)\(z\x))=((z\y)\(y\x))\(z\x) by A1,Assoc;
+    then (z\y)\((y\x)\(z\x)) = ((z\y)\(z\x))\(y\x) by Th03,A1;
+    then (z\y)\((y\x)\(z\x)) = ((z\y)\(z\x))\(x\y) by TT4,A1;
+    then B1:(z\y)\((y\x)\(z\x)) = 0.X by The1,A1;
+    ((y\x)\(z\x))\(z\y)=((y\x)\(z\x))\(y\z) by TT4,A1;
+    then ((y\x)\(z\x))\(z\y)=0.X by DefB,A1;
+   hence thesis by Th00,A1,DefBCI4,B1;
+  end;
+  thus (for x,y,z being Element of X holds (y\x)\(z\x)=z\y & x\0.X=x)
+    implies X is associative BCI-algebra
+  proof assume 
+A1:for x,y,z being Element of X holds (y\x)\(z\x)=z\y & x\0.X=x;
+A2:for x,y being Element of X holds y\x=x\y
+    proof
+      let x,y be Element of X;
+      (y\0.X)\(x\0.X)=x\y by A1;
+      then y\(x\0.X)=x\y by A1;
+      hence thesis by A1;
+    end;
+     (X is_I & X is_BCI-4 &for x,y,z being Element of X holds
+      ((x\y)\(x\z))\(z\y)=0.X &
+      (x\(x\y))\y = 0.X )
+    proof
+    C1:for a being Element of X holds a\a=0.X
+    proof
+      let a be Element of X;
+      a`\a`=(0.X)` by A1;
+    then (a\0.X)\a`=(0.X)` by A2;
+    then (a\0.X)\(a\0.X)=(0.X)` by A2;
+    then a\a=(0.X)` by A1;
+    hence a\a=0.X by A1;
+    end;
+    thus X is_I by C1,DefI;
+    thus X is_BCI-4
+    proof 
+    for x,y being Element of X holds (x\y=0.X&y\x=0.X implies x = y)
+    proof 
+    let x,y be Element of X;
+    assume D1:x\y = 0.X & y\x = 0.X;
+    x`\(y\x)=y\0.X by A1;
+    then (x\0.X)\(y\x)=y\0.X by A2;
+    then (x\0.X)\(x\y)=y\0.X by A2;
+    then x\(x\y)=y\0.X by A1;
+    then y=x\(x\y) by A1 .=x by A1,D1;
+    hence thesis;
+    end;
+    hence thesis by DefBCI4;
+    end;
+    thus for x,y,z being Element of X holds
+      ((x\y)\(x\z))\(z\y)=0.X &
+      (x\(x\y))\y = 0.X
+    proof 
+       let x,y,z be Element of X;    
+    thus ((x\y)\(x\z))\(z\y)=0.X
+    proof
+      ((x\y)\(x\z))\(z\y)=((y\x)\(x\z))\(z\y) by A2
+       .=((y\x)\(z\x))\(z\y) by A2
+       .=(z\y)\(z\y) by A1;
+      hence thesis by C1;
+    end;
+   thus (x\(x\y))\y = 0.X
+   proof
+     x`\(y\x)=y\0.X by A1;
+    then (x\0.X)\(y\x)=y\0.X by A2;
+    then (x\0.X)\(x\y)=y\0.X by A2;
+    then x\(x\y)=y\0.X by A1;
+    then (x\(x\y))\y=y\y by A1;
+    hence thesis by C1;
+  end;
+    end;
+    end;
+   then reconsider Y=X as BCI-algebra by The1;
+    Y is associative by TT4,A2;
+    hence thesis;
+   end;
+end;
+
+theorem Tq2:
+  for X being non empty BCIStr_0 holds (X is associative BCI-algebra
+      iff (for x,y,z being Element of X holds (x\y)\(x\z)=z\y & x`=x))
+proof
+   let X be non empty BCIStr_0;
+   thus X is associative BCI-algebra implies
+        (for x,y,z being Element of X holds (x\y)\(x\z)=z\y & x`=x)
+   proof
+     assume A1:X is associative BCI-algebra;
+     let x,y,z be Element of X;
+     (y\x)\(z\x)=z\y & x\0.X=x by A1,Tq1;
+    then (x\y)\(z\x)=z\y & x\0.X=x by TT4,A1;
+    hence thesis by TT4,A1;
+   end;
+   assume B1:for x,y,z being Element of X holds (x\y)\(x\z)=z\y & x`=x;
+   for x,y,z being Element of X holds (y\x)\(z\x)=z\y & x\0.X=x
+   proof
+    let x,y,z be Element of X;
+B3: for x,y being Element of X holds y\x=x\y
+    proof
+      let x,y be Element of X;
+      y`\x`=x\y by B1;
+      then y\x`=x\y by B1;
+      hence thesis by B1;
+    end;
+   (x\y)\(x\z)=z\y & x`=x by B1;
+   then (y\x)\(x\z)=z\y & x\0.X=x by B3;
+   hence thesis by B3;
+   end;
+   hence thesis by Tq1;
+end;
+
+theorem
+  for X being non empty BCIStr_0 holds (X is associative BCI-algebra
+      iff (for x,y,z being Element of X holds (x\y)\(x\z)=y\z & x\0.X=x))
+proof
+   let X be non empty BCIStr_0;
+   thus X is associative BCI-algebra implies
+        (for x,y,z being Element of X holds (x\y)\(x\z)=y\z & x\0.X=x)
+   proof
+     assume A1:X is associative BCI-algebra;
+     let x,y,z be Element of X;
+     (y\x)\(z\x)=z\y & x\0.X=x by Tq1,A1;
+     then (x\y)\(z\x)=z\y & x\0.X=x by TT4,A1;
+     then (x\y)\(x\z)=z\y & x\0.X=x by TT4,A1;
+    hence thesis by TT4,A1;
+   end;
+   assume B1:for x,y,z being Element of X holds (x\y)\(x\z)=y\z & x\0.X=x;
+   for x,y,z being Element of X holds (x\y)\(x\z)=z\y & x`=x
+   proof
+    let x,y,z be Element of X;
+B3: for x,y being Element of X holds y\x=x\y
+    proof
+      let x,y be Element of X;
+      (x\0.X)\(x\0.X)=(0.X)` by B1;
+      then x\(x\0.X)=(0.X)` by B1;
+      then x\x=(0.X)` by B1;
+      then C1:x\x=0.X by B1;
+      (x\y)\(x\x)=y\x by B1;
+      hence thesis by B1,C1;
+    end;
+    (x\y)\(x\z)=y\z & x\0.X=x by B1;
+   hence thesis by B3;
+   end;
+   hence thesis by Tq2;
+end;
+
+begin :: Several Classes of BCI-algebra----p-Semisimple BCI-algebra
+
+theorem
+  X is p-Semisimple iff for x being Element of X holds x is atom
+proof
+     thus X is p-Semisimple implies for x being Element of X holds x is atom
+     proof
+     assume A1:X is p-Semisimple;
+     let x be Element of X;
+     now let z be Element of X;
+      assume z\x=0.X;
+      then z\0.X = x by A1,Defb;
+      hence z=x by Th00;
+     end;
+     hence thesis by Defatom;
+     end;
+     assume C1: for x being Element of X holds x is atom;
+     for x,y being Element of X holds x\(x\y) = y
+     proof
+     let x,y be Element of X;
+      D1:y is atom by C1;
+     (x\(x\y))\y=0.X by The1;
+      hence thesis by D1,Defatom;
+     end;
+      hence thesis by Defb;
+end;
+
+theorem
+  X is p-Semisimple implies BCK-part(X)={0.X}
+proof
+  assume AA:X is p-Semisimple;
+ thus BCK-part(X) c= {0.X}
+  proof
+   let x be set;assume x in BCK-part(X);
+   then consider x1 being Element of X such that
+      B3:x=x1 & 0.X<=x1;
+       reconsider x as Element of X by B3;
+       (x`)`=x by AA,Defb;
+       then (0.X)`=x by B3,Def6;
+       then x=0.X by DefI;
+     hence thesis by TARSKI:def 1;
+   end;
+  thus {0.X} c= BCK-part(X)
+  proof
+    let x be set;
+    assume D1:x in {0.X};
+    then reconsider x as Element of X by TARSKI:def 1;
+         x=0.X by TARSKI:def 1,D1;
+    then x`=0.X by DefI;
+    then 0.X <= x by Def6;
+    hence thesis; 
+  end;
+end;
+
+T01:
+  (for x holds x``=x) iff for x,y holds y\(y\x) = x
+proof
+  thus (for x holds x``=x) implies for x,y holds y\(y\x) = x
+  proof
+    assume A1:for x holds x``=x;
+    let x,y;
+A3: x\(y\(y\x))= (x\(y\(y\x)))`` by A1
+    .=(x`\(y\(y\x))`)` by Th06
+    .=0.X \((x`\(y\(y\x))`)\0.X) by Th00
+    .=0.X \(((0.X \x)\((y\(y\x))`))\((y\(y\x))\x)) by The1
+    .=0.X \0.X by The1
+    .=0.X by DefI;
+     (y\(y\x))\x=0.X by The1;
+   hence thesis by DefBCI4,A3;
+  end;
+  thus thesis;
+end;
+
+T02:
+  (for x,y holds y\(y\x) = x) iff for x,y,z holds (z\y)\(z\x) = x\y
+proof
+  thus (for x,y holds y\(y\x) = x) implies for x,y,z holds (z\y)\(z\x) = x\y
+  proof
+   assume A1:for x,y holds y\(y\x) = x;
+   let x,y,z;
+   (z\y)\(z\x)= (z\(z\x))\y by Th03;
+   hence thesis by A1;
+  end;
+  assume A1:for x,y,z holds (z\y)\(z\x) = x\y;
+  let x,y;
+  (y\0.X)\(y\x) = x\0.X by A1;
+  then y\(y\x) = x\0.X by Th00;
+  hence thesis by Th00;
+end;
+
+theorem TL2221:
+  X is p-Semisimple iff (for x being Element of X holds x`` = x)
+proof
+  (for x being Element of X holds x`` = x)
+      implies X is p-Semisimple
+   proof
+     assume A1:for x being Element of X holds x`` = x;
+     now let x,y be Element of X;
+B1:   y\(x\(x\y))=(y\(x\(x\y)))`` by A1
+       .=(y`\(x\(x\y))`)` by Th06
+       .=0.X \(((0.X \y)\((x\(x\y))`))\0.X) by Th00
+       .=0.X \(((0.X \y)\((x\(x\y))`))\((x\(x\y))\y)) by The1
+       .=0.X \0.X by The1
+       .=0.X by DefI;
+      (x\(x\y))\y=0.X by The1;
+      hence x\(x\y) = y by DefBCI4,B1;
+     end;
+    hence thesis by Defb;
+   end;
+  hence thesis by Defb;
+end;
+
+theorem TL2222:
+  X is p-Semisimple iff (for x,y holds y\(y\x) = x)
+proof
+  X is p-Semisimple iff (for x being Element of X holds x`` = x) by TL2221;
+  hence thesis by T01;
+end;
+
+theorem TL2223:
+  X is p-Semisimple iff (for x,y,z holds (z\y)\(z\x) = x\y)
+proof 
+  X is p-Semisimple iff (for x,y holds y\(y\x) = x)by TL2222;
+  hence thesis by T02;
+end;
+
+theorem  TL2224:
+  X is p-Semisimple iff (for x,y,z holds x\(z\y) = y\(z\x))
+proof 
+     thus X is p-Semisimple implies (for x,y,z holds x\(z\y) = y\(z\x))
+     proof 
+       assume A1:X is p-Semisimple;
+       let x,y,z;
+       x\(z\y) =(z\(z\x))\(z\y)by A1,Defb;
+       then E1:(x\(z\y))\(y\(z\x))=0.X by The1;
+       y\(z\x) =(z\(z\y))\(z\x) by A1,Defb;
+       then (y\(z\x))\(x\(z\y))=0.X by The1;
+       hence thesis by DefBCI4,E1;
+     end;
+    assume A1: for x,y,z holds x\(z\y) = y\(z\x);
+    for x holds x`` = x
+    proof
+      let x;
+      x`` = x\(0.X)` by A1
+       .=x\0.X by DefI;
+      hence thesis by Th00;
+    end;
+    hence thesis by TL2221;
+end;
+
+ThC4:
+  X is p-Semisimple implies (for x,y,z,u holds
+        (x\u)\(z\y)=(y\u)\(z\x)&(x\u)\(z\y)=(x\z)\(u\y))
+proof
+  assume A1:X is p-Semisimple;
+  let x,y,z,u;
+A3:(x\u)\(z\y)=y\(z\(x\u)) by TL2224,A1
+    .=y\(u\(x\z)) by TL2224,A1
+    .=(x\z)\(u\y) by TL2224,A1;
+   (x\u)\(z\y)=(x\(z\y))\u by Th03
+    .=(y\(z\x))\u by TL2224,A1;
+   hence thesis by A3,Th03;
+end;
+
+ThC5:
+  X is p-Semisimple implies (for x,y holds y`\(0.X \x)=x\y)
+proof
+  assume A1:X is p-Semisimple;
+  let x,y;
+  y`\(0.X \x)=(x\y)\(0.X \0.X) by ThC4,A1
+    .=(x\y)\0.X by DefI;
+  hence thesis by Th00;
+end;
+
+ThC7:
+  X is p-Semisimple implies (for x,y,z holds (x\y)\(z\y)=x\z)
+proof
+  assume A1:X is p-Semisimple;
+  let x,y,z;
+  (x\y)\(z\y)=(x\z)\(y\y) by ThC4,A1
+    .=(x\z)\0.X by DefI;
+  hence thesis by Th00;
+end;
+
+ThC8:
+  X is p-Semisimple implies (for x,y,z st x\y=x\z holds y=z)
+proof
+  assume A1:X is p-Semisimple;
+  let x,y,z;
+  assume B1:x\y=x\z;
+  (x\y)\(x\z)=(z\y)\(x\x) by ThC4,A1;
+  then (x\y)\(x\z)=(z\y)\0.X by DefI;
+  then (x\y)\(x\z)=z\y by Th00;
+  then B3: 0.X=z\y by B1,DefI;
+  (x\z)\(x\y)=(y\z)\(x\x) by ThC4,A1;
+  then (x\z)\(x\y)=(y\z)\0.X by DefI;
+  then (x\z)\(x\y)=y\z by Th00;
+  then 0.X=y\z by DefI,B1;
+  hence thesis by B3,DefBCI4;
+end;
+
+ThC9:
+  X is p-Semisimple implies for x,y,z holds x\(y\z)=(z\y)\x`
+proof
+  assume A1:X is p-Semisimple;
+  let x,y,z;
+  x\(y\z)=z\(y\x) by A1,TL2224
+  .=(z\0.X)\(y\x) by Th00;
+  hence thesis by A1,ThC4;
+end;
+
+ThCa:
+  X is p-Semisimple implies for x,y,z st y\x=z\x holds y=z
+proof
+  assume A1:X is p-Semisimple;
+  let x,y,z;
+  assume B1:y\x=z\x;
+B3:y\z=(y\x)\(z\x) by ThC7,A1
+    .=0.X by B1,DefI;
+     z\y=(z\x)\(y\x) by ThC7,A1
+    .=0.X by B1,DefI;
+  hence thesis by B3,DefBCI4;
+end;
+
+theorem
+  X is p-Semisimple iff (for x,y,z,u holds (x\u)\(z\y) = (y\u)\(z\x))
+proof 
+ thus X is p-Semisimple implies
+      (for x,y,z,u holds (x\u)\(z\y) = (y\u)\(z\x))by ThC4;
+ thus (for x,y,z,u holds (x\u)\(z\y) = (y\u)\(z\x)) implies
+        X is p-Semisimple
+ proof 
+   assume A1:for x,y,z,u holds (x\u)\(z\y) = (y\u)\(z\x);
+   for x,y,z holds x\(z\y) = y\(z\x)
+   proof 
+     let x,y,z;
+     (x\0.X)\(z\y) = (y\0.X)\(z\x) by A1;
+     then x\(z\y)= (y\0.X)\(z\x) by Th00;
+     hence thesis by Th00;
+   end;
+   hence thesis by TL2224;   
+ end;
+end;
+
+theorem  TL2226:
+  X is p-Semisimple iff (for x,z holds z`\x` = x\z)
+proof
+  thus X is p-Semisimple implies
+      (for x,z holds z`\x` = x\z) by ThC5;
+   assume A1:for x,z holds z`\x` = x\z;
+   for x holds x`` = x
+   proof
+    let x;
+     (0.X)`\x` = x\0.X by A1;
+     then (x`)` = x\0.X by Th00;
+    hence thesis by Th00;
+   end;
+   hence thesis by TL2221;
+end;
+
+theorem
+  X is p-Semisimple iff (for x,z holds (x\z)`` = x\z)
+proof
+ thus X is p-Semisimple implies (for x,z holds (x\z)`` = x\z)
+ proof
+  assume A1: X is p-Semisimple;
+  let x,z;
+   (x\z)``=(x`\z`)` by Th06
+  .=(z\x)` by A1,TL2226
+  .=z`\x` by Th06;
+  hence thesis by A1,TL2226;
+ end;
+ assume A1: for x,z holds (x\z)`` = x\z;
+ now let x;
+   (x\0.X)``=x\0.X by A1;
+   then (x`)`=x\0.X by Th00;
+   hence x``=x by Th00;
+ end;
+ hence thesis by TL2221;
+end;
+
+theorem
+  X is p-Semisimple iff (for x,u,z holds z\(z\(x\u)) = x\u)
+proof 
+ thus X is p-Semisimple implies (for x,u,z holds z\(z\(x\u)) = x\u)
+ proof 
+  assume A1: X is p-Semisimple;
+  let x,u,z;
+  (z\(z\(x\u)))\(x\u)=0.X by The1
+  .= (x\u)\(x\u) by DefI;
+  hence thesis by ThCa,A1;
+ end;
+ assume A1:for x,u,z holds z\(z\(x\u)) = x\u;
+ now let x;
+     ((x\0.X)`)` = x\0.X by A1;
+  then ((x\0.X)`)` = x by Th00;
+  hence x`` = x by Th00;
+ end;
+ hence thesis by TL2221;
+end;
+
+theorem ThC1:  ::TL2232:
+  X is p-Semisimple iff (for x st x`=0.X holds x=0.X)
+proof 
+ thus X is p-Semisimple implies(for x st x`=0.X holds x=0.X)
+ proof
+  assume A1:X is p-Semisimple;
+  let x;
+  assume x`=0.X;
+  then (x`)`=0.X by DefI;
+  hence thesis by A1,Defb;
+ end;
+assume A1:for x st x`=0.X holds x=0.X;
+   for x holds x`` = x
+   proof
+    let x;
+    (x\x``)`=x`\x``` by Th06
+    .=x`\x` by Th05
+    .=0.X by DefI;
+    then A2: x\((x)`)`=0.X by A1;
+     ((x)`)`\x=0.X by The1;
+    hence thesis by DefBCI4,A2;
+   end;
+   hence thesis by TL2221;
+end;
+
+theorem TL2233:
+  X is p-Semisimple iff (for x,y holds x\y`=y\x`)
+proof
+ thus X is p-Semisimple implies 
+           (for x,y holds x\y`=y\x`) by TL2224;
+ assume A1:for x,y holds x\y`=y\x`;
+ now let x;
+  x\(0.X)`=(x`)` by A1;
+  then x\0.X=(x`)` by Th00;
+  hence x=x`` by Th00;
+ end;
+  hence thesis by TL2221;
+end;
+
+theorem
+  X is p-Semisimple iff (for x,y,z,u holds (x\y)\(z\u)=(x\z)\(y\u))
+proof
+ thus X is p-Semisimple implies 
+          (for x,y,z,u holds (x\y)\(z\u)=(x\z)\(y\u))by ThC4;
+ assume A1:for x,y,z,u holds (x\y)\(z\u)=(x\z)\(y\u);
+ for x,z holds z`\x` = x\z
+ proof
+ let x,z;
+      (z\x)`=(x\x)\(z\x) by DefI;
+ then (z\x)`=(x\z)\(x\x) by A1;
+ then (z\x)`=(x\z)\0.X by DefI;
+ then (z\x)`=x\z by Th00;
+ hence thesis by Th06;
+ end;
+ hence thesis by TL2226;
+end;
+
+theorem
+  X is p-Semisimple iff (for x,y,z holds (x\y)\(z\y)=x\z)
+proof
+ thus X is p-Semisimple implies
+               (for x,y,z holds (x\y)\(z\y)=x\z)by ThC7;
+ assume A1:for x,y,z holds (x\y)\(z\y)=x\z;
+  for x,z holds z`\x` = x\z
+ proof
+ let x,z;
+  (z\x)`=(x\x)\(z\x)by DefI;
+  then (z\x)`=x\z by A1;
+  hence thesis by Th06;
+ end;
+ hence thesis by TL2226;
+end;
+
+theorem
+  X is p-Semisimple iff (for x,y,z holds x\(y\z)=(z\y)\x`)
+proof
+thus X is p-Semisimple implies
+         (for x,y,z holds x\(y\z)=(z\y)\x`)by ThC9;
+  assume A1:for x,y,z holds x\(y\z)=(z\y)\x`;
+  for x,y holds x\y`=y\x`
+  proof
+   let x,y;
+   x\y`=(y\0.X)\x` by A1;
+   hence x\y`=y\x` by Th00;
+  end;
+  hence thesis by TL2233;
+end;
+
+theorem
+  X is p-Semisimple iff (for x,y,z st y\x=z\x holds y=z)
+proof
+ thus X is p-Semisimple implies 
+          (for x,y,z st y\x=z\x holds y=z)by ThCa;
+   assume A1:for x,y,z st y\x=z\x holds y=z;
+  for x,y holds x\(x\y) = y
+  proof let x,y;
+    (x\(x\y))\y = 0.X by The1;
+    then (x\(x\y))\y = y\y by DefI;
+    hence thesis by A1;
+  end;
+  hence thesis by Defb;
+end;
+
+theorem
+  X is p-Semisimple iff (for x,y,z st x\y=x\z holds y=z)
+proof
+ thus X is p-Semisimple implies
+        (for x,y,z st x\y=x\z holds y=z)by ThC8;
+ assume A1:for x,y,z st x\y=x\z holds y=z;
+ for x st x`=0.X holds x=0.X
+ proof 
+   let x;
+   assume x`=0.X;
+   then x`=(0.X)` by DefI;
+   hence thesis by A1;
+ end;
+ hence thesis by ThC1;
+end;
+
+theorem
+  for X being non empty BCIStr_0 holds (X is p-Semisimple BCI-algebra iff
+   (for x,y,z being Element of X holds (x\y)\(x\z)=z\y & x\0.X=x))
+proof
+  let X be non empty BCIStr_0;
+  thus X is p-Semisimple BCI-algebra implies  (for x,y,z being Element of X
+           holds (x\y)\(x\z)=z\y & x\0.X=x) by Th00,TL2223;
+  assume A1:for x,y,z being Element of X holds (x\y)\(x\z)=z\y & x\0.X=x;
+         A3:X is_I
+           proof
+            now let x be Element of X;
+              x\x=(x\0.X)\x by A1 .=(x\0.X)\(x\0.X) by A1 .=(0.X)` by A1;
+            hence x\x=0.X by A1;
+            end;
+            hence thesis by DefI;
+           end;
+         A5: X is_BCI-4
+           proof
+           now let x,y be Element of X;
+              assume D1:x\y = 0.X & y\x = 0.X;
+              x=x\0.X by A1 .=(x\0.X)\(x\y) by A1,D1
+              .= y\0.X by A1;
+              hence x=y by A1;
+           end;
+              hence thesis by DefBCI4;
+           end;
+    now let x,y,z be Element of X;
+    thus ((x\y)\(x\z))\(z\y)=0.X
+           proof
+             ((x\y)\(x\z))\(z\y)=(z\y)\(z\y) by A1  .=((z\y)\0.X)\(z\y) by A1
+             .=((z\y)\0.X)\((z\y)\0.X) by A1 .=(0.X)` by A1;
+             hence thesis by A1;
+           end;
+    thus (x\(x\y))\y = 0.X
+           proof
+             (x\(x\y))\y=((x\0.X)\(x\y))\y by A1  .=(y\0.X)\y by A1
+             .=(y\0.X)\(y\0.X) by A1 .=(0.X)` by A1;
+            hence thesis by A1;
+           end;
+    thus for x,y being Element of X holds x\(x\y) = y
+           proof
+             let x,y be Element of X;
+             x\(x\y)=(x\0.X)\(x\y) by A1;
+            then x\(x\y)= y\0.X by A1;
+            hence thesis by A1;
+          end;
+   end;
+   hence thesis by The1,Defb,A3,A5;
+end;
+
+theorem
+  for X being non empty BCIStr_0 holds (X is p-Semisimple BCI-algebra iff
+   (X is_I &for x,y,z being Element of X holds x\(y\z)=z\(y\x) & x\0.X=x))
+proof
+  let X be non empty BCIStr_0;
+  thus X is p-Semisimple BCI-algebra implies
+   (X is_I & for x,y,z being Element of X holds x\(y\z)=z\(y\x) & x\0.X=x)
+      by TL2224,Th00;
+   assume
+   A1:X is_I & for x,y,z being Element of X holds x\(y\z)=z\(y\x) & x\0.X=x;
+   A3:X is_BCI-4
+   proof
+      now let x,y be Element of X;
+      assume D1:x\y = 0.X & y\x = 0.X;
+      x=x\0.X by A1 .=y\(x\x) by A1,D1
+              .= y\0.X by A1,DefI;
+       hence x=y by A1;
+      end;
+    hence thesis by DefBCI4;
+   end;
+  now let x,y,z be Element of X;
+    thus x\x=0.X by A1,DefI;
+    thus ((x\y)\(x\z))\(z\y)=0.X
+     proof
+       ((x\y)\(x\z))\(z\y)=(z\(x\(x\y)))\(z\y) by A1
+        .=(z\(y\(x\x)))\(z\y) by A1 .=(z\(y\0.X))\(z\y) by A1,DefI
+       .=(z\y)\(z\y) by A1;
+       hence thesis by A1,DefI;
+     end;
+    thus (x\(x\y))\y = 0.X
+    proof
+      (x\(x\y))\y=(y\(x\x))\y by A1  .=(y\0.X)\y by A1,DefI
+         .=y\y by A1;
+      hence thesis by A1,DefI;
+    end;
+    thus for x,y being Element of X holds x\(x\y) = y
+    proof
+      let x,y be Element of X;
+      x\(x\y)=y\(x\x) by A1;
+      then x\(x\y)= y\0.X by A1,DefI;
+      hence thesis by A1;
+    end;
+   end;
+   hence thesis by The1,Defb,A1,A3;
+end;
+
+begin :: Several Classes of BCI-algebra----quasi-associative BCI-algebra
+
+LM2311:(for x being Element of X holds x`<=x) implies
+                 for x,y being Element of X holds (x\y)`=(y\x)`
+proof
+      assume A1:for x being Element of X holds x`<=x;
+      let x,y be Element of X;
+      (x\y)`=(((x\y)`)`)` by Th05
+                  .=((x`\y`)`)` by Th06
+                  .=(x``\y``)` by Th06
+                  .=((((y)`)`)`\x`)` by Th03
+                  .=(y`\x`)` by Th05
+                  .=(y\x)`` by Th06;
+     then (x\y)`<= (y\x)` by A1;
+     then A3:((x\y)`)\((y\x)`)=0.X by Def6;
+     (y\x)`=(y\x)``` by Th05
+                  .=(y`\x`)`` by Th06
+                  .=(y``\x``)` by Th06
+                  .=((((x`)`)`)\y`)` by Th03
+                  .=(x`\y`)` by Th05
+                  .=(x\y)`` by Th06;
+     then (y\x)`<= (x\y)` by A1;
+     then ((y\x)`)\((x\y)`)=0.X by Def6;
+     hence thesis by A3,DefBCI4;
+end;
+
+LM2312:(for x,y being Element of X holds (x\y)`=(y\x)`)implies
+                (for x,y being Element of X holds x`\y=(x\y)`)
+proof
+    assume A1:for x,y being Element of X holds (x\y)`=(y\x)`;
+    let x,y be Element of X;
+    thus (x\y)`=x`\y` by Th06
+                  .=y``\x by Th03
+                  .=(y\0.X)`\x by A1
+                  .=y`\x by Th00
+                  .=x`\y by Th03;
+end;
+
+LM2313:(for x,y being Element of X holds x`\y=(x\y)`) implies
+               (for x,y being Element of X holds (x\y)\(y\x) in BCK-part(X))
+proof
+  assume A1:for x,y being Element of X holds x`\y=(x\y)`;
+  let x,y be Element of X;
+     ((x\y)\(y\x))`=(x\y)`\(y\x) by A1
+    .=(x`\y`)\(y\x) by Th06
+    .=(y``\x)\(y\x) by Th03
+    .=(y`\x)`\(y\x) by A1
+    .=((y\x)``)\(y\x) by A1
+    .=0.X by The1;
+    then 0.X <= (x\y)\(y\x) by Def6;
+    hence thesis;
+end;
+
+LM2314:(for x,y being Element of X holds (x\y)\(y\x) in BCK-part(X))implies
+              X is quasi-associative
+proof
+     assume A1:for x,y being Element of X holds (x\y)\(y\x) in BCK-part(X);
+     for x being Element of X holds (x`)`=x`
+     proof
+       let x be Element of X;
+       x`\x=x`\(x\0.X) by Th00;
+       then x`\x in {x1 where x1 is Element of X:0.X<=x1} by A1;
+       then consider x1 being Element of X such that
+       B1:x`\x=x1 & 0.X<=x1;
+             (x`\x)`=0.X by B1,Def6;
+       then B3:(x`)`\x`=0.X by Th06;
+               x\x`=(x\0.X)\x` by Th00;
+       then x\x` in {x2 where x2 is Element of X:0.X<=x2}by A1;
+       then consider x2 being Element of X such that
+       B1:x\x`=x2 & 0.X<=x2;
+             (x\x`)`=0.X by B1,Def6;
+       then x`\(x`)`=0.X by Th06;
+        hence thesis by B3,DefBCI4;
+     end;
+     hence thesis by Def72; 
+end;
+
+LM2315:(for x being Element of X holds x`<=x) iff
+             (for x,y,z being Element of X holds (x\y)\z<=x\(y\z))
+proof
+thus (for x being Element of X holds x`<=x) implies
+        (for x,y,z being Element of X holds (x\y)\z<=x\(y\z))
+proof
+  assume A1:for x being Element of X holds x`<=x;
+  let x,y,z be Element of X;
+      z`<=z by A1;
+  then A2: z`\z=0.X by Def6;
+A3: ((x\y)\z)\(x\(y\z)) = ((x\y)\(x\(y\z)))\z by Th03
+  .=((x\(x\(y\z)))\y)\z by Th03;
+  (x\(x\(y\z)))\(y\z) =0.X by The1;
+ then ((x\(x\(y\z)))\y)\((y\z)\y) =0.X by Th02;
+ then ((x\y)\z)\(x\(y\z))\(((y\z)\y)\z) =0.X by A3,Th02;
+ then ((x\y)\z)\(x\(y\z))\(((y\y)\z)\z) =0.X by Th03;
+ then ((x\y)\z)\(x\(y\z))\0.X =0.X by DefI,A2;
+ then ((x\y)\z)\(x\(y\z)) =0.X by Th00;
+ hence thesis by Def6;
+end;
+  assume A1: for x,y,z being Element of X holds (x\y)\z<=x\(y\z);
+  let x be Element of X;
+     (0.X)`\x <= (x`)` by A1;
+  then x`<=(x`)`by DefI;
+  then x`\((x`)`)=0.X by Def6;
+  then ((x`)`)`\x=0.X by Th03;
+  then x`\x=0.X by Th05;
+  hence thesis by Def6;
+end;
+
+theorem TL2321:
+  X is quasi-associative iff (for x being Element of X holds x`<=x)
+proof
+thus X is quasi-associative implies (for x being Element of X holds x`<=x)
+ proof
+  assume A1:X is quasi-associative;
+  let x be Element of X;
+   (x`)`\x=0.X by The1;
+  then x`\x=0.X by Def72,A1;
+  hence thesis by Def6;
+end;
+   assume for x being Element of X holds x`<=x;
+   then for x,y being Element of X holds (x\y)`=(y\x)` by LM2311;
+   then for x,y being Element of X holds x`\y=(x\y)` by LM2312;
+   then for x,y being Element of X holds (x\y)\(y\x) in BCK-part(X)by LM2313;
+   hence thesis by LM2314;
+end;
+
+theorem TL2322:
+  X is quasi-associative
+   iff (for x,y being Element of X holds (x\y)`=(y\x)`)
+proof
+ thus X is quasi-associative implies
+           (for x,y being Element of X holds (x\y)`=(y\x)`)
+ proof
+    assume X is quasi-associative;
+    then for x being Element of X holds x`<=x by TL2321;
+    hence thesis by LM2311;
+ end;
+  assume for x,y being Element of X holds (x\y)`=(y\x)`;
+  then for x,y being Element of X holds x`\y=(x\y)` by LM2312;
+  then for x,y being Element of X holds (x\y)\(y\x) in BCK-part(X)by LM2313;
+  hence thesis by LM2314;
+end;
+
+theorem TL2323:
+  X is quasi-associative
+     iff (for x,y being Element of X holds x`\y=(x\y)`)
+proof
+  thus X is quasi-associative
+     implies (for x,y being Element of X holds x`\y=(x\y)`)
+  proof assume X is quasi-associative;
+  then for x,y being Element of X holds (x\y)`=(y\x)` by TL2322;
+  hence thesis by LM2312;
+  end;
+  assume for x,y being Element of X holds x`\y=(x\y)`;then
+  for x,y being Element of X holds (x\y)\(y\x) in BCK-part(X)by LM2313;
+  hence thesis by LM2314;
+end;
+
+theorem
+  X is quasi-associative
+    iff (for x,y being Element of X holds (x\y)\(y\x) in BCK-part(X))
+proof
+   thus X is quasi-associative
+     implies (for x,y being Element of X holds (x\y)\(y\x) in BCK-part(X))
+   proof
+    assume X is quasi-associative;
+    then for x,y being Element of X holds x`\y=(x\y)` by TL2323;
+    hence thesis by LM2313;
+   end;
+ thus thesis by LM2314;
+end;
+
+theorem
+  X is quasi-associative
+    iff (for x,y,z being Element of X holds (x\y)\z<=x\(y\z))
+proof
+    thus X is quasi-associative
+     implies for x,y,z being Element of X holds (x\y)\z<=x\(y\z)
+    proof
+      assume X is quasi-associative;
+      then for x being Element of X holds x`<=x by TL2321;
+      hence thesis by LM2315;
+    end;
+    assume for x,y,z being Element of X holds (x\y)\z<=x\(y\z);
+    then for x being Element of X holds x`<=x by LM2315;
+    hence thesis by TL2321;
+end;
+
+begin :: Several Classes of BCI-algebra----alternative BCI-algebra
+
+theorem ThA2:
+  X is alternative implies x` = x & x\(x\y) = y & (x\y)\y = x
+proof
+   assume A1:X is alternative;
+   thus x` = x
+   proof x\(x\x) = (x\x)\x by Defc,A1;
+    then x\0.X = (x\x)\x by DefI;
+    then x\0.X = x` by DefI;
+    hence thesis by Th00;
+   end;
+   thus x\(x\y) = y
+   proof
+     y\(y\y) = (y\y)\y by Defc,A1;
+     then y\0.X = (y\y)\y by DefI;
+     then y\0.X = y` by DefI;
+     then A3:y = y` by Th00;
+     x\(x\y) = (x\x)\y by Defc,A1;
+     hence thesis by DefI,A3;
+   end;
+    (x\y)\y=x\(y\y) by Defc,A1;
+    then (x\y)\y=x\0.X by DefI;
+    hence thesis by Th00;
+end;
+
+theorem
+  X is alternative & x\a=x\b implies a=b
+proof
+  assume A1:X is alternative & x\a=x\b;
+  then (x\x)\a=x\(x\b) by Defc;
+  then (x\x)\a=(x\x)\b by A1,Defc;
+  then a`=(x\x)\b by DefI;
+  then a`=b` by DefI;
+  then a=b` by ThA2,A1;
+  hence thesis by ThA2,A1;
+end;
+
+theorem
+  X is alternative & a\x=b\x implies a=b
+proof
+  assume A1:X is alternative & a\x=b\x;
+  then a\(x\x)=(b\x)\x by Defc;
+  then a\(x\x)=b\(x\x) by A1,Defc;
+  then a\0.X=b\(x\x) by DefI;
+  then a\0.X=b\0.X by DefI;
+  then a=b\0.X by Th00;
+  hence thesis by Th00;
+end;
+
+theorem
+  X is alternative & x\y=0.X implies x=y
+proof
+  assume A1:X is alternative & x\y=0.X;
+  then x\(x\y)=x by Th00;
+  then (x\x)\y=x by A1,Defc;
+  then y`=x by DefI;
+  hence thesis by A1,ThA2;
+end;
+
+theorem
+  X is alternative & (x\a)\b = 0.X implies a=x\b & b=x\a
+proof
+  assume A1:X is alternative &(x\a)\b = 0.X;
+  then (x\a)\(b\b) = b` by Defc;
+  then (x\a)\0.X = b` by DefI;
+  then x\a = b` by Th00;
+  then x\(x\a) = x\b by A1,ThA2;
+  then (x\x)\a = x\b by Defc,A1;
+  then a` = x\b by DefI;
+  then a=x\b by A1,ThA2;
+  hence thesis by A1,ThA2;
+end;
+
+abc0:
+  X is alternative iff X is associative
+proof
+  thus X is alternative implies X is associative
+  proof
+  assume A1:X is alternative;
+  for x,y,z being Element of X holds (x\y)\z = x\(y\z)
+  proof 
+     let x,y,z be Element of X;
+     ((x\y)\z)\(x\(y\z))=((x\y)\(x\(y\z)))\z by Th03;
+     then ((x\y)\z)\(x\(y\z))=((x\(x\(y\z)))\y)\z by Th03;
+     then ((x\y)\z)\(x\(y\z))=(((x\x)\(y\z))\y)\z by Defc,A1;
+     then ((x\y)\z)\(x\(y\z))=(((y\z)`)\y)\z by DefI;
+     then ((x\y)\z)\(x\(y\z))=((y\z)\y)\z by ThA2,A1;
+     then ((x\y)\z)\(x\(y\z))=((y\y)\z)\z by Th03;
+     then ((x\y)\z)\(x\(y\z))=z`\z by DefI;
+     then C1:((x\y)\z)\(x\(y\z))=0.X by ThA2,A1;
+C3:  (x\(y\z))\((x\y)\z)=(((x\y)\y)\(y\z))\((x\y)\z) by A1,ThA2
+      .=(((x\y)\y)\((x\y)\z))\(y\z) by Th03;
+       (((x\y)\y)\((x\y)\z))\(z\y)=0.X by The1;
+  then ((((x\y)\y)\((x\y)\z))\(y\z))\((z\y)\(y\z))=0.X by Th02;
+  then ((((x\y)\y)\((x\y)\z))\(y\z))\((z\(y\z))\y)=0.X by Th03;
+  then ((((x\y)\y)\((x\y)\z))\(y\z))\((z`\(y\z))\y)=0.X by ThA2,A1;
+  then ((((x\y)\y)\((x\y)\z))\(y\z))\((z`\(y\z))\y`)=0.X by ThA2,A1;
+  then ((((x\y)\y)\((x\y)\z))\(y\z))\0.X=0.X by DefB;
+  then (x\(y\z))\((x\y)\z)=0.X by C3,Th00;
+  hence thesis by C1,DefBCI4;
+  end;
+  hence thesis by Assoc;
+  end;
+  assume X is associative;
+  then for x,y being Element of X holds x\(x\y) = (x\x)\y & (x\y)\y=x\(y\y)
+    by Assoc;
+  hence thesis by Defc;
+end;
+
+abc1: 
+  X is alternative implies X is implicative
+proof
+  assume X is alternative;
+  then for x,y being Element of X holds (x\(x\y))\(y\x)=y\(y\x)by ThA2;
+  hence thesis by Defa;
+end;
+
+registration 
+  cluster alternative -> associative BCI-algebra;
+  coherence by abc0;
+  cluster associative -> alternative BCI-algebra;
+  coherence by abc0;
+  cluster alternative -> implicative BCI-algebra;
+  coherence by abc1;
+end;
+
+theorem
+  X is alternative implies (x\(x\y))\(y\x) = x
+proof
+  assume A1:X is alternative;
+  then x\(x\y)=y by ThA2;
+  hence thesis by ThA2,A1;
+end;
+
+theorem
+  X is alternative implies y\(y\(x\(x\y))) = y
+proof
+  assume X is alternative;
+  then y\(y\(x\(x\y)))=y\(y\y) by ThA2
+       .=y\0.X by DefI
+       .= y by Th00;
+  hence thesis;
+end;
+
+begin 
+:: Several Classes of BCI-algebra-
+::-implicative & positive-implicative & weakly-positive-implicative BCI-algebra
+abc:
+  X is associative implies X is weakly-positive-implicative
+proof
+  assume A1:X is associative;
+  for x,y,z being Element of X holds (x\y)\z=((x\z)\z)\(y\z)
+  proof
+     let x,y,z be Element of X;
+     (x\y)\z=x\(y\z) by Assoc,A1;
+     then (x\y)\z=(x\0.X)\(y\z) by Th00;
+     then (x\y)\z=(x\(z\z))\(y\z) by DefI;
+   hence thesis by Assoc,A1;
+  end;
+  hence thesis by Def9;
+end;
+
+bcd: X is p-Semisimple BCI-algebra implies
+    X is weakly-positive-implicative BCI-algebra
+proof
+ assume A1: X is p-Semisimple BCI-algebra;
+ for x,y,z being Element of X holds (x\y)\z=((x\z)\z)\(y\z)
+ proof
+  let x,y,z be Element of X;
+  ((x\z)\z)\(y\z)=(x\z)\y by A1,ThC7
+  .=(x\z)\(y\0.X) by Th00
+  .=(x\y)\(z\0.X) by A1,ThC4;
+  hence thesis by Th00;
+ end;
+ hence thesis by Def9;
+end;
+
+registration 
+  cluster associative -> weakly-positive-implicative BCI-algebra;
+  coherence by abc;
+  cluster p-Semisimple -> weakly-positive-implicative BCI-algebra;
+  coherence by bcd;
+end;
+
+theorem
+  for X being non empty BCIStr_0 holds (X is implicative BCI-algebra
+       iff (for x,y,z being Element of X holds
+           ((x\y)\(x\z))\(z\y)=0.X
+           & x\0.X=x &(x\(x\y))\(y\x)=y\(y\x)))
+proof 
+ let X be non empty BCIStr_0;
+ thus X is implicative BCI-algebra implies (for x,y,z being Element of X holds 
+           ((x\y)\(x\z))\(z\y)=0.X & x\0.X=x & (x\(x\y))\(y\x)=y\(y\x))
+           by The1,Th00,Defa;
+ thus (for x,y,z being Element of X holds
+              ((x\y)\(x\z))\(z\y)=0.X & x\0.X=x & (x\(x\y))\(y\x)=y\(y\x))
+           implies X is implicative BCI-algebra
+proof
+ assume A1: for x,y,z being Element of X holds
+              ((x\y)\(x\z))\(z\y)=0.X & x\0.X=x &(x\(x\y))\(y\x)=y\(y\x);
+ A3:X is_I
+ proof
+    now let x be Element of X;
+      x\x=(x\0.X)\x by A1 .=(x\0.X)\(x\0.X) by A1
+            .=((x\0.X)\(x\0.X))\0.X by A1
+            .=((x\0.X)\(x\0.X))\(0.X)` by A1;
+      hence x\x=0.X by A1;
+    end;
+    hence thesis by DefI;
+ end;
+ A5:X is_BCI-4
+ proof 
+   now let x,y be Element of X;
+    assume D1:x\y = 0.X & y\x = 0.X;
+    x=x\0.X by A1 .=(y\(y\x))\(x\y) by A1,D1
+       .=y\0.X by A1,D1;
+    hence x=y by A1;
+   end;
+   hence thesis by DefBCI4;
+ end;
+ now let x,y,z be Element of X;
+    thus ((x\y)\(x\z))\(z\y)=0.X by A1;
+    thus (x\(x\y))\y = 0.X
+    proof
+      (x\(x\y))\y=((x\0.X)\(x\y))\y by A1
+         .=((x\0.X)\(x\y))\(y\0.X)  by A1;
+      hence thesis by A1;
+    end;
+   end;
+   hence thesis by The1,Defa,A1,A3,A5;
+end;
+end;
+
+theorem TL275:
+  X is weakly-positive-implicative iff 
+    for x,y being Element of X holds x\y=((x\y)\y)\y`
+proof
+ thus X is weakly-positive-implicative implies 
+       for x,y being Element of X holds x\y=((x\y)\y)\y`
+ proof
+   assume A1:X is weakly-positive-implicative;
+   let x,y be Element of X;
+   (x\0.X)\y=((x\y)\y)\y` by A1,Def9;
+   hence thesis by Th00;
+ end;
+ assume B1:for x,y being Element of X holds x\y=((x\y)\y)\y`;
+  for x,y,z being Element of X holds (x\y)\z=((x\z)\z)\(y\z)
+  proof
+    let x,y,z be Element of X;
+    ((x\z)\(y\z))\(x\y)=0.X by DefB;
+    then (((x\z)\(y\z))\z)\((x\y)\z)=0.X by Th02;
+    then C1:(((x\z)\z)\(y\z))\((x\y)\z)=0.X by Th03;
+    C3:((x\y)\z)\(((x\z)\z)\(y\z))
+      =((x\z)\y)\(((x\z)\z)\(y\z)) by Th03
+     .=((((x\z)\z)\z`)\y)\(((x\z)\z)\(y\z)) by B1
+     .=((((x\z)\z)\z`)\(((x\z)\z)\(y\z)))\y by Th03
+     .=(((x\z)\z)\(((x\z)\z)\(y\z))\z`)\y by Th03;
+     (((x\z)\z)\(((x\z)\z)\(y\z)))\(y\z)=0.X by The1;
+   then((((x\z)\z)\(((x\z)\z)\(y\z)))\z`)\((y\z)\z`)=0.X by Th02;
+   then(((((x\z)\z)\(((x\z)\z)\(y\z)))\z`)\y)\(((y\z)\z`)\y) =0.X by Th02;
+  then(((((x\z)\z)\(((x\z)\z)\(y\z)))\z`)\y)\(((y\z)\z`)\(y\0.X))=0.X by Th00;
+   then(((((x\z)\z)\(((x\z)\z)\(y\z)))\z`)\y)\0.X=0.X by DefB;
+   then((x\y)\z)\(((x\z)\z)\(y\z))=0.X by C3,Th00;
+   hence thesis by DefBCI4,C1;
+  end;
+  hence thesis by Def9;
+end;
+
+ThB0:
+   X is weakly-positive-implicative implies
+                     (x\(x\y))\(y\x)=((y\(y\x))\(y\x))\(x\y)
+proof
+   assume A1:X is weakly-positive-implicative;
+  ((y\(y\x))\(y\x))\(x\(y\x))=0.X by The1;
+  then (((y\(y\x))\(y\x))\(x\y))\((x\(y\x))\(x\y))=0.X by Th02;
+  then A3:(((y\(y\x))\(y\x))\(x\y))\((x\(x\y))\(y\x))=0.X by Th03;
+  ((x\(x\y))\(y\(x\y)))\(x\y)=0.X by DefB;
+  then ((x\(x\y))\(x\y))\(y\(x\y))=0.X by Th03;
+  then (((x\(x\y))\(x\y))\((x\y)`))\((y\(x\y))\((x\y)`))=0.X by Th02;
+  then ((((x\(x\y))\(x\y))\((x\y)`))\(y\x))\(((y\(x\y))
+                                        \((x\y)`))\(y\x))=0.X by Th02;
+  then ((x\(x\y))\(y\x))\(((y\(x\y))\((x\y)`))\(y\x))=0.X by TL275,A1;
+  then ((x\(x\y))\(y\x))\((((y\(x\y))\(y\x))\(y\x))\((x\y)`\(y\x)))
+                                                  =0.X by Def9,A1;
+  then ((x\(x\y))\(y\x))\((((y\(x\y))\(y\x))\(y\x))\(((x\x)\(x\y))\(y\x)))
+                                                  =0.X by DefI;
+  then ((x\(x\y))\(y\x))\((((y\(x\y))\(y\x))\(y\x))\0.X) =0.X by The1;
+  then ((x\(x\y))\(y\x))\(((y\(x\y))\(y\x))\(y\x)) =0.X by Th00;
+  then ((x\(x\y))\(y\x))\(((y\(y\x))\(x\y))\(y\x)) =0.X by Th03;
+  then ((x\(x\y))\(y\x))\(((y\(y\x))\(y\x))\(x\y))=0.X by Th03;
+  hence thesis by DefBCI4,A3;
+end;
+
+ThB1:
+  X is positive-implicative iff X is weakly-positive-implicative
+proof
+   thus X is positive-implicative implies X is weakly-positive-implicative
+  proof
+  assume A1:X is positive-implicative;
+  for x,y being Element of X holds x\y=((x\y)\y)\y`
+  proof
+   let x,y be Element of X;
+  ((x\y)\((x\y)\x))\(x\(x\y))=(x\y)\((x\y)\(x\(x\(x\y)))) by A1,Def8;
+  then ((x\y)\((x\y)\x))\(x\(x\y))=(x\y)\((x\y)\(x\y)) by Th05;
+  then ((x\y)\((x\y)\x))\(x\(x\y))=(x\y)\0.X by DefI;
+  then ((x\y)\((x\y)\x))\(x\(x\y))=x\y by Th00;
+  then ((x\y)\((x\x)\y))\(x\(x\y))=x\y by Th03;
+  then ((x\y)\(x\(x\y)))\((x\x)\y)=x\y by Th03;
+  then ((x\(x\(x\y)))\y)\((x\x)\y)=x\y by Th03;
+  then ((x\y)\y)\((x\x)\y)=x\y by Th05;
+  hence thesis by DefI;
+  end;
+  hence thesis by TL275;
+  end;
+   assume C1: X is weakly-positive-implicative;
+   for x,y being Element of X holds (x\(x\y))\(y\x)=x\(x\(y\(y\x)))
+   proof
+    let x,y be Element of X;
+    (y\(y\x))\x = 0.X by The1;
+    then (x\x)\(x\(y\(y\x)))=0.X by Th02;
+    then (x\(y\(y\x)))`=0.X by DefI;
+    then x\(x\(y\(y\x)))=((x\(x\(y\(y\x))))\(x\(y\(y\x))))\0.X by TL275,C1;
+    then x\(x\(y\(y\x)))=(x\(x\(y\(y\x))))\(x\(y\(y\x))) by Th00;
+    then (x\(x\(y\(y\x))))\( (y\(y\x))\(x\(y\(y\x))) )=0.X by The1;
+    then ((x\(x\(y\(y\x)))))\(((y\(y\x))\(y\x))\(x\y))
+         \(((y\(y\x))\(x\(y\(y\x))))\(((y\(y\x))\(y\x))\(x\y)))=0.X by Th02;
+    then D5:((x\(x\(y\(y\x)))))\(((y\(y\x))\(y\x))\(x\y))
+         \(((y\(y\x))\(((y\(y\x))\(y\x))\(x\y)))\(x\(y\(y\x))))=0.X by Th03;
+    D4: (x\(x\(y\(y\x)))) \ ((x\(x\y))\(y\x))
+     =(x\(x\(y\(y\x)))) \ (((y\(y\x))\(y\x))\(x\y)) by ThB0,C1;
+       ((y\(y\x))\(((y\(y\x))\(y\x))\(x\y)))\((x\y)\(y\x)`)
+    =((((y\(y\x))\(y\x))\((y\x)`))\(((y\(y\x))\(y\x))\(x\y)))
+        \((x\y)\((y\x)`)) by TL275,C1
+   .=0.X by The1;
+    then (((y\(y\x))\(((y\(y\x))\(y\x))\(x\y)))\(x\(y\(y\x))))
+          \(((x\y)\((y\x)`))\(x\(y\(y\x))))=0.X by Th02;
+    then ((x\(x\(y\(y\x)))))\(((y\(y\x))\(y\x))\(x\y))
+         \(((x\y)\((y\x)`))\(x\(y\(y\x))))=0.X by D5,Th01;
+    then D7:((x\(x\(y\(y\x)))))\(((y\(y\x))\(y\x))\(x\y))
+         \(((x\y)\(x\(y\(y\x))))\((y\x)`))=0.X by Th03;
+       ((x\y)\(x\(y\(y\x))))\((y\(y\x))\y)=0.X by The1;
+  then ((x\y)\(x\(y\(y\x))))\((y\y)\(y\x))=0.X by Th03;
+  then ((x\(x\(y\(y\x)))))\(((y\(y\x))\(y\x))\(x\y))\0.X=0.X by DefI,D7;
+  then D9:(x\(x\(y\(y\x))))\((x\(x\y))\(y\x))=0.X by D4,Th00;
+  ((x\(x\y))\(y\x))\(x\(x\(y\(y\x))))=0.X by T08;
+  hence thesis by DefBCI4,D9;
+  end;
+   hence thesis by Def8;
+end;
+
+ThB2:
+  X is alternative implies X is weakly-positive-implicative
+proof
+  assume A1:X is alternative;
+  for x,y being Element of X holds ((x\y)\y)\y`=x\y
+  proof
+   let x,y be Element of X;
+   (x\y)\y = x & y` = y by A1,ThA2;
+   hence thesis;
+  end;
+ hence thesis by TL275;
+end;
+
+registration 
+  cluster positive-implicative -> weakly-positive-implicative BCI-algebra;
+  coherence by ThB1;
+  cluster alternative -> weakly-positive-implicative BCI-algebra;
+  coherence by ThB2;
+end;
+
+theorem
+  X is weakly-positive-implicative BCI-algebra implies
+     for x,y being Element of X holds (x\(x\y))\(y\x)=((y\(y\x))\(y\x))\(x\y)
+     by ThB0;
+
+theorem
+  for X being non empty BCIStr_0 holds (X is positive-implicative BCI-algebra
+      iff (for x,y,z being Element of X holds
+           ((x\y)\(x\z))\(z\y)=0.X
+           & x\0.X=x
+           & x\y=((x\y)\y)\y`
+           & (x\(x\y))\(y\x)=((y\(y\x))\(y\x))\(x\y)))
+proof
+   let X be non empty BCIStr_0;
+   thus X is positive-implicative BCI-algebra implies
+     (for x,y,z being Element of X holds ((x\y)\(x\z))\(z\y)=0.X
+                & x\0.X=x
+                & x\y=((x\y)\y)\y`
+                & (x\(x\y))\(y\x)=((y\(y\x))\(y\x))\(x\y))
+                by TL275,The1,ThB0,Th00;
+   assume
+A1:(for x,y,z being Element of X holds ((x\y)\(x\z))\(z\y)=0.X
+                & x\0.X=x
+                & x\y=((x\y)\y)\y`
+                & (x\(x\y))\(y\x)=((y\(y\x))\(y\x))\(x\y));
+A3:X is_I
+   proof 
+     now let x be Element of X;
+       ((x\0.X)\(x\0.X))\(0.X)`=0.X by A1;
+       then ((x\0.X)\(x\0.X))\0.X=0.X by A1;
+       then ((x\0.X)\x)\0.X=0.X by A1;
+       then (x\x)\0.X=0.X by A1;
+       hence x\x=0.X by A1;
+     end;
+    hence thesis by DefI;
+   end;
+A5: X is_BCI-4
+   proof 
+      now let x,y be Element of X;
+       assume x\y = 0.X & y\x = 0.X;
+       then (x\0.X)\0.X=((y\0.X)\0.X)\0.X by A1;
+       then (x\0.X)=((y\0.X)\0.X)\0.X by A1;
+       then x=((y\0.X)\0.X)\0.X by A1;
+       then x=(y\0.X)\0.X by A1;
+       then x=y\0.X by A1;
+       hence x=y by A1;
+       end;
+    hence thesis by DefBCI4;
+   end;
+   now let x,y,z be Element of X;
+     thus ((x\y)\(x\z))\(z\y)=0.X by A1;
+     ((x\0.X)\(x\y))\(y\0.X)=0.X by A1;
+     then (x\(x\y))\(y\0.X)=0.X by A1;
+     hence (x\(x\y))\y = 0.X by A1;
+   end;
+ then X is weakly-positive-implicative BCI-algebra by A1,TL275,The1,A3,A5;
+hence thesis by ThB1;
+end;

@@ -21,7 +21,7 @@ environ
       REALSET1, ORDINAL1;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, BINOP_1, SETWISEO, FINSEQOP, GROUP_1, STRUCT_0, VECTSP_2,
-      XBOOLE_0, REALSET1;
+      XBOOLE_0, REALSET1, VECTSP_1;
  theorems TARSKI, NAT_1, INT_1, FINSEQ_1, BINOP_1, GROUP_1, FINSEQOP, SETWISEO,
       VECTSP_1, MCART_1, ZFMISC_1, FUNCT_1, FUNCT_2, FUNCT_4, FUNCOP_1,
       PARTFUN1, GR_CY_1, GRFUNC_1, RELAT_1, STRUCT_0, RELSET_1, VECTSP_2,
@@ -680,45 +680,45 @@ end;
 
 begin :: Monoids
 
- deffunc un(multLoopStr) = the unity of $1;
+ deffunc un(multLoopStr) = 1.$1;
 
 reserve M for non empty multLoopStr;
 
 definition let IT be non empty multLoopStr;
  redefine attr IT is well-unital means:Def21:
-  the unity of IT is_a_unity_wrt the mult of IT;
+  1.IT is_a_unity_wrt the mult of IT;
  compatibility
   proof
-   thus IT is well-unital implies the unity of IT is_a_unity_wrt the mult of
+   thus IT is well-unital implies 1.IT is_a_unity_wrt the mult of
 IT
     proof assume
 A1:     IT is well-unital;
-     thus the unity of IT is_a_left_unity_wrt the mult of IT
+     thus 1.IT is_a_left_unity_wrt the mult of IT
       proof let a be Element of IT;
-       thus (the mult of IT).(the unity of IT,a)
-                  = (1_ IT)*a by VECTSP_1:def 9
+       thus (the mult of IT).(1.IT,a)
+                  = (1.IT)*a by VECTSP_1:def 9
                  .= a by A1,VECTSP_2:def 2;
       end;
      let a be Element of IT;
-     thus (the mult of IT).(a,the unity of IT)
-                  = a*(1_ IT) by VECTSP_1:def 9
+     thus (the mult of IT).(a,1.IT)
+                  = a*(1.IT) by VECTSP_1:def 9
                  .= a by A1,VECTSP_2:def 2;
     end;
    assume
-A2:  the unity of IT is_a_unity_wrt the mult of IT;
+A2:  1.IT is_a_unity_wrt the mult of IT;
    let x be Element of IT;
-A3:  the unity of IT is_a_right_unity_wrt the mult of IT by A2,BINOP_1:def 7;
-   thus x*(1_ IT) = (the mult of IT).(x,the unity of IT) by VECTSP_1:def 9
+A3:  1.IT is_a_right_unity_wrt the mult of IT by A2,BINOP_1:def 7;
+   thus x*(1.IT) = (the mult of IT).(x,1.IT) by VECTSP_1:def 9
            .= x by A3,BINOP_1:def 6;
-A4:  the unity of IT is_a_left_unity_wrt the mult of IT by A2,BINOP_1:def 7;
-   thus (1_ IT)*x = (the mult of IT).(the unity of IT,x) by VECTSP_1:def 9
+A4:  1.IT is_a_left_unity_wrt the mult of IT by A2,BINOP_1:def 7;
+   thus (1.IT)*x = (the mult of IT).(1.IT,x) by VECTSP_1:def 9
            .= x by A4,BINOP_1:def 5;
   end;
 end;
 
 theorem Th18:
  M is well-unital iff for a being Element of M holds
-   (the unity of M)*a = a & a*(the unity of M) = a
+   (1.M)*a = a & a*(1.M) = a
   proof
 A1:    M is well-unital iff un(M) is_a_unity_wrt op(M) by Def21;
    thus M is well-unital implies
@@ -746,7 +746,7 @@ end;
 
 theorem Th19:
  for M being non empty multLoopStr st M is well-unital holds
-  the unity of M = the_unity_wrt the mult of M
+  1.M = the_unity_wrt the mult of M
   proof let M be non empty multLoopStr;
    assume un(M) is_a_unity_wrt the mult of M;
    hence thesis by BINOP_1:def 8;
@@ -768,11 +768,12 @@ registration
     take G = multLoopStr(#{p},o,e#);
     reconsider e as Element of G;
     reconsider o as BinOp of G;
+X:  un(G) = e;
         now let b be Element of G;
           o.(e,b) = p & o.(b,e) = p & b = p by TARSKI:def 1;
       hence o.(e,b) = b & o.(b,e) = b;
      end;
-    hence un(G) is_a_unity_wrt op(G) by BINOP_1:11;
+    hence un(G) is_a_unity_wrt op(G) by BINOP_1:11,X;
     hence op(G) is commutative & op(G) is associative & op(G) is cancelable &
       op(G) is idempotent & op(G) is invertible uniquely-decomposable &
       ex e being Element of G st e is_a_unity_wrt op(G) by Th3;
@@ -989,7 +990,7 @@ end;
 definition let G be HGrStr;
  mode MonoidalSubStr of G -> multLoopStr means:Def24:
    the mult of it <= the mult of G &
-   for M being multLoopStr st G = M holds the unity of it = the unity of M;
+   for M being multLoopStr st G = M holds 1.it = 1.M;
  existence
   proof consider M being MonoidalExtension of G;
 A1:    the HGrStr of M = the HGrStr of G by Def22;
@@ -1010,11 +1011,12 @@ registration let G be HGrStr;
  cluster strict MonoidalSubStr of G;
   existence
    proof consider N being MonoidalSubStr of G;
-        op(the multLoopStr of N) <= op(G) &
-     for M being multLoopStr st G = M
+X:      op(the multLoopStr of N) <= op(G) by Def24;
+     un(the multLoopStr of N) = un(N);
+     then for M being multLoopStr st G = M
       holds un(the multLoopStr of N) = un(M) by Def24;
-    then reconsider N' = the multLoopStr of N as MonoidalSubStr of G by Def24;
-    take N'; thus thesis;
+     then the multLoopStr of N is MonoidalSubStr of G by Def24,X;
+    hence thesis by X;
    end;
 end;
 
@@ -1026,7 +1028,7 @@ registration let G be non empty HGrStr;
     suppose G is multLoopStr;
       then reconsider L = G as multLoopStr;
          for N being multLoopStr st G = N
-        holds the unity of the multLoopStr of L = the unity of N;
+        holds 1.the multLoopStr of L = 1.N;
       then reconsider M = the multLoopStr of L as MonoidalSubStr of G
                        by Def24;
      take M;
@@ -1038,7 +1040,7 @@ registration let G be non empty HGrStr;
 A1:   G is not multLoopStr;
     consider M being strict MonoidalExtension of G;
 A2: the HGrStr of M = the HGrStr of G by Def22;
-       for N being multLoopStr st G = N holds the unity of M = the unity of N
+       for N being multLoopStr st G = N holds 1.M = 1.N
        by A1;
     then reconsider M as MonoidalSubStr of G by A2,Def24;
    take M;
@@ -1050,7 +1052,7 @@ end;
 definition let M be multLoopStr;
  redefine mode MonoidalSubStr of M means:Def25:
    the mult of it <= the mult of M &
-   the unity of it = the unity of M;
+   1.it = 1.M;
   compatibility
    proof let N be multLoopStr;
     thus N is MonoidalSubStr of M implies op(N) <= op(M) & un(N) = un(M)
@@ -1072,11 +1074,12 @@ registration let G be well-unital (non empty multLoopStr);
     reconsider e = a as Element of {a} by TARSKI:def 1;
     consider f being BinOp of {a};
     set H = multLoopStr(#{a},f,e#);
-        f = {[a,a]} --> a & a = a*a & a*a = op(G).(a,a) &
-     op(G).(a,a) = op(G).[a,a] & dom op(G) = [:carr(G),carr(G):]
+X:   1.H = 1.G;
+     f = {[a,a]} --> a & a = a*a & a*a = op(G).(a,a) &
+     dom op(G) = [:carr(G),carr(G):]
       by Th3,Th18,FUNCT_2:def 1;
-     then op(H) <= op(G) by FUNCT_4:8;
-    then reconsider H as non empty MonoidalSubStr of G by Def25;
+    then op(H) <= op(G) by FUNCT_4:8;
+    then reconsider H as non empty MonoidalSubStr of G by Def25,X;
     take H;
         now let b be Element of H;  b = a by TARSKI:def 1;
       hence op(H).(un(H),b) = b & op(H).(b,un(H)) = b by TARSKI:def 1;
@@ -1512,13 +1515,13 @@ scheme MonoidalSubStrEx1 {G() -> non empty multLoopStr,
   the carrier of H = D()
  provided
 A1: for x,y being Element of D() holds x*y in D() and
-A2: the unity of G() in D()
+A2: 1.G() in D()
 proof reconsider G = G() as non empty HGrStr;
    reconsider D = D() as non empty Subset of G;
 A3: for x,y being Element of D holds x*y in D by A1;
    consider H being strict non empty SubStr of G such that
 A4:  the carrier of H = D from SubStrEx1(A3);
-   reconsider e = the unity of G() as Element of H by A2,A4;
+   reconsider e = 1.G() as Element of H by A2,A4;
    set N = multLoopStr(#the carrier of H, the mult of H, e#);
        N is MonoidalSubStr of G()
      proof
@@ -1536,7 +1539,7 @@ scheme MonoidalSubStrEx2 {G() -> non empty multLoopStr, P[set]}:
  provided
 A1:  for x,y being Element of G()
      holds P[x] & P[y] implies P[x*y] and
-A2:  P[the unity of G()]
+A2:  P[1.G()]
 proof
    reconsider G = G() as non empty HGrStr;
 A3: for x,y being Element of G
@@ -1545,10 +1548,11 @@ A4: ex x being Element of G st P[x] by A2;
    consider H being strict non empty SubStr of G such that
 A5:  for x being Element of G holds x in the carrier of H
       iff P[x] from SubStrEx2(A3,A4);
-   reconsider e = the unity of G() as Element of H by A2,A5;
+   reconsider e = 1.G() as Element of H by A2,A5;
+   set M = multLoopStr(#carr(H), op(H), e#);
+X: 1.G() = 1.M;
        the mult of H <= the mult of G() by Def23;
-   then reconsider M = multLoopStr(#carr(H), op(H), e#) as
-     strict non empty MonoidalSubStr of G() by Def25;
+   then reconsider M as strict non empty MonoidalSubStr of G() by Def25,X;
    take M; thus thesis by A5;
   end;
 
@@ -2088,7 +2092,7 @@ A1:  carr(N) = D* & for p,q being Element of D*+^
 
 theorem
     the carrier of D*+^+<0> = D* & the mult of D*+^+<0> = D-concatenation &
- the unity of D*+^+<0> = {}
+ 1.(D*+^+<0>) = {}
   proof set M = D*+^+<0>;
       the HGrStr of M = D*+^ & the_unity_wrt op(M) = un(M) &
     the_unity_wrt the mult of D*+^ = {} by Def22,Th19,Th69;
@@ -2390,7 +2394,7 @@ theorem Th84:
 theorem
     the carrier of MFuncs X = Funcs(X,X) &
  the mult of MFuncs X = (X-composition)||Funcs(X,X) &
- the unity of MFuncs X = id X
+ 1.MFuncs X = id X
   proof
        the_unity_wrt op(GFuncs X) = id X & the HGrStr of MFuncs X = GFuncs X
      by Def22,Th84;
@@ -2491,7 +2495,7 @@ theorem Th86:
   end;
 
 theorem Th87:
- the_unity_wrt the mult of GPerms X = id X & 1.GPerms X = id X
+ the_unity_wrt the mult of GPerms X = id X & 1_GPerms X = id X
   proof reconsider i = id X as Element of GPerms X by Th86;
    now let a be Element of GPerms X;
      reconsider f = a as Permutation of X by Th86;
@@ -2511,7 +2515,7 @@ theorem
    reconsider g = f as Permutation of X by Th86;
    reconsider b = g" as Element of GPerms X by Th86;
    reconsider b as Element of GPerms X;
-      g(*)(g") = id X & g"(*)g = id X & id X = 1.GPerms X & f[*]b = g(*)(g") &
+      g(*)(g") = id X & g"(*)g = id X & id X = 1_GPerms X & f[*]b = g(*)(g") &
     b[*]f = g"(*)g by Th79,Th87,FUNCT_2:88;
    hence thesis by GROUP_1:def 6;
   end;

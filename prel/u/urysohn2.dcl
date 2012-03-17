@@ -19,19 +19,20 @@
 <ArticleID name="CARD_1"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="XXREAL_0"/>
-<ArticleID name="FINSEQ_1"/>
-<ArticleID name="FINSEQ_2"/>
-<ArticleID name="INT_1"/>
 <ArticleID name="SUPINF_1"/>
+<ArticleID name="XXREAL_1"/>
 <ArticleID name="MEASURE5"/>
+<ArticleID name="FINSEQ_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PRE_TOPC"/>
+<ArticleID name="FINSEQ_2"/>
 <ArticleID name="SEQ_1"/>
 <ArticleID name="BINOP_1"/>
 <ArticleID name="METRIC_1"/>
 <ArticleID name="RVSUM_1"/>
 <ArticleID name="EUCLID"/>
 <ArticleID name="RCOMP_1"/>
+<ArticleID name="INT_1"/>
 <ArticleID name="GROUP_1"/>
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="VECTSP_1"/>
@@ -44,25 +45,26 @@
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="44"/>
+<Adjective nr="42"/>
 </Cluster>
 <Func kind="K" nr="10">
-<Func kind="K" nr="129"/>
+<Func kind="K" nr="102"/>
 </Func>
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="61"/>
+<Func kind="K" nr="62"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="292">
+<Func kind="K" nr="298">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
 <Adjective nr="16"/>
 <Adjective nr="17"/>
-<Adjective nr="44"/>
+<Adjective nr="18"/>
+<Adjective nr="42"/>
 </Cluster>
 </FCluster>
 </Registrations>

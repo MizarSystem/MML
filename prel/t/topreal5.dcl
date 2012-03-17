@@ -34,13 +34,13 @@
 <CCluster>
 <ArgTypes/>
 <Cluster>
-<Adjective nr="59"/>
+<Adjective nr="60"/>
 </Cluster>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="18">
+<Func kind="K" nr="19">
 <Func kind="U" nr="1">
-<Func kind="K" nr="194">
+<Func kind="K" nr="196">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -49,13 +49,13 @@
 <Cluster>
 <Adjective nr="7" value="false"/>
 <Adjective nr="33">
-<Func kind="K" nr="194">
+<Func kind="K" nr="196">
 <Num nr="2"/>
 </Func>
 </Adjective>
-<Adjective nr="59"/>
-<Adjective nr="60" value="false"/>
+<Adjective nr="60"/>
 <Adjective nr="61" value="false"/>
+<Adjective nr="62" value="false"/>
 </Cluster>
 </CCluster>
 </Registrations>

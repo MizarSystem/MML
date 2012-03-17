@@ -22,16 +22,18 @@
 <ArticleID name="QC_LANG1"/>
 <ArticleID name="QC_LANG2"/>
 <ArticleID name="CQC_LANG"/>
+<ArticleID name="XREAL_0"/>
+<ArticleID name="SEQ_4"/>
 <ArticleID name="CQC_SIM1"/>
 </Signature>
 <FCluster>
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="156"/>
+<Func kind="K" nr="157"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="177">
+<Func kind="K" nr="183">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -41,6 +43,8 @@
 <Adjective nr="25"/>
 <Adjective nr="26"/>
 <Adjective nr="27"/>
+<Adjective nr="28"/>
+<Adjective nr="48"/>
 </Cluster>
 </FCluster>
 </Registrations>

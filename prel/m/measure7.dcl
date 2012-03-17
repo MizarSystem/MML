@@ -13,27 +13,22 @@
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
-<ArticleID name="XCMPLX_0"/>
+<ArticleID name="MEMBERED"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="CARD_3"/>
 <ArticleID name="PROB_1"/>
+<ArticleID name="XXREAL_0"/>
+<ArticleID name="SUPINF_1"/>
 <ArticleID name="FINSUB_1"/>
-<ArticleID name="FINSEQ_1"/>
-<ArticleID name="FINSEQ_2"/>
-<ArticleID name="INT_1"/>
-<ArticleID name="COMPLEX1"/>
-<ArticleID name="INT_2"/>
-<ArticleID name="NEWTON"/>
 <ArticleID name="CARD_4"/>
 <ArticleID name="SUPINF_2"/>
 <ArticleID name="MEASURE1"/>
 <ArticleID name="SETFAM_1"/>
 <ArticleID name="MEASURE2"/>
 <ArticleID name="MEASURE4"/>
-<ArticleID name="XXREAL_0"/>
-<ArticleID name="SUPINF_1"/>
+<ArticleID name="XXREAL_1"/>
 <ArticleID name="MEASURE5"/>
 <ArticleID name="MEASURE7"/>
 </Signature>
@@ -41,16 +36,17 @@
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="18">
-<Func kind="K" nr="231"/>
+<Func kind="K" nr="19">
+<Func kind="K" nr="116"/>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="252">
+<Func kind="K" nr="187">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="7" value="false"/>
+<Adjective nr="19"/>
 </Cluster>
 </FCluster>
 </Registrations>

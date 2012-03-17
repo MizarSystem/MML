@@ -17,13 +17,13 @@
 <ArgTypes>
 <Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="41"/>
-<Func kind="K" nr="45"/>
+<Func kind="K" nr="42"/>
+<Func kind="K" nr="46"/>
 </Typ>
 <Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="41"/>
-<Func kind="K" nr="45"/>
+<Func kind="K" nr="42"/>
+<Func kind="K" nr="46"/>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -39,18 +39,18 @@
 <Fraenkel>
 <Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="41"/>
-<Func kind="K" nr="45"/>
+<Func kind="K" nr="42"/>
+<Func kind="K" nr="46"/>
 </Typ>
 <Func kind="F" nr="4">
 <Var nr="1"/>
 </Func>
 <And>
-<Pred kind="R" nr="11">
+<Pred kind="R" nr="16">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 </Pred>
-<Pred kind="R" nr="11">
+<Pred kind="R" nr="16">
 <Var nr="1"/>
 <Func kind="F" nr="2"/>
 </Pred>
@@ -66,7 +66,7 @@
 </Func>
 </Typ>
 </Is>
-<Pred kind="R" nr="11">
+<Pred kind="R" nr="16">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 </Pred>
@@ -75,8 +75,8 @@
 <ArgTypes>
 <Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="41"/>
-<Func kind="K" nr="45"/>
+<Func kind="K" nr="42"/>
+<Func kind="K" nr="46"/>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -92,13 +92,13 @@
 <Fraenkel>
 <Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="41"/>
-<Func kind="K" nr="45"/>
+<Func kind="K" nr="42"/>
+<Func kind="K" nr="46"/>
 </Typ>
 <Func kind="F" nr="3">
 <Var nr="1"/>
 </Func>
-<Pred kind="R" nr="11">
+<Pred kind="R" nr="16">
 <Var nr="1"/>
 <Func kind="F" nr="1"/>
 </Pred>
@@ -118,8 +118,8 @@
 <ArgTypes>
 <Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="41"/>
-<Func kind="K" nr="45"/>
+<Func kind="K" nr="42"/>
+<Func kind="K" nr="46"/>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -135,14 +135,14 @@
 <Fraenkel>
 <Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="41"/>
-<Func kind="K" nr="45"/>
+<Func kind="K" nr="42"/>
+<Func kind="K" nr="46"/>
 </Typ>
 <Func kind="F" nr="3">
 <Var nr="1"/>
 </Func>
 <Not>
-<Pred kind="R" nr="11">
+<Pred kind="R" nr="16">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 </Pred>
@@ -159,7 +159,7 @@
 </Typ>
 </Is>
 <Not>
-<Pred kind="R" nr="11">
+<Pred kind="R" nr="16">
 <Func kind="F" nr="1"/>
 <Num nr="0"/>
 </Pred>

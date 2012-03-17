@@ -1,0 +1,2004 @@
+:: Formal Languages -- Concatenation and Closure
+::  by Micha{\l} Trybulec
+:: 
+:: Received March 9, 2007
+:: Copyright (c) 2007 Association of Mizar Users
+
+environ
+
+ vocabularies FUNCT_1, BOOLE, FINSEQ_1, RELAT_1, TARSKI, ALGSEQ_1, AFINSQ_1,
+      MEASURE6, GROUP_1, SETFAM_1, FLANG_1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0, NAT_1,
+      DOMAIN_1, FUNCT_1, RELSET_1, FUNCT_2, ORDINAL1, SETFAM_1, XXREAL_0,
+      AFINSQ_1, CATALAN2;
+ constructors XXREAL_0, NAT_1, XREAL_0, CATALAN2;
+ registrations SUBSET_1, RELSET_1, NAT_1, ORDINAL1, AFINSQ_1, XREAL_0;
+ requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
+ definitions TARSKI;
+ theorems AFINSQ_1, ISOCAT_2, NAT_1, ORDINAL1, REAL_1, SUBSET_1, TARSKI,
+      XBOOLE_0, XBOOLE_1, XREAL_1, ZFMISC_1;
+ schemes CARD_FIL, DOMAIN_1, NAT_1, RECDEF_1, SUBSET_1;
+
+begin
+
+ reserve E, x, y, z, X, Y, Z for set;
+ reserve A, B, C, D for Subset of E^omega;
+ reserve a, a1, a2, b, c, c1, c2, d, ab, bc for Element of E^omega;
+ reserve e for Element of E;
+ reserve i, j, k, l, n, n1, n2, m for Nat;
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:: Preliminaries - Redefinitions
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+definition 
+  let E, a, b;
+  redefine func a ^ b -> Element of E^omega;
+  coherence
+  proof
+    a ^ b is XFinSequence of E;
+    hence thesis by AFINSQ_1:def 8;
+  end;
+end;
+
+definition
+  let E;
+  redefine func <%>E -> Element of E^omega;
+  coherence by AFINSQ_1:def 8;
+end;
+
+definition
+  let E be non empty set;
+  let e be Element of E;
+  redefine func <%e%> -> Element of E^omega;
+  coherence
+  proof
+    {e} c= E;
+    then rng <%e%> c= E by AFINSQ_1:36;
+    hence thesis by AFINSQ_1:def 8;
+  end;
+end;
+
+definition 
+  let E, a;
+  redefine func {a} -> Subset of E^omega;
+  coherence by SUBSET_1:55;
+end;
+
+definition 
+  let E;
+  let f be Function of NAT, bool E;
+  let n;
+  redefine func f.n -> Subset of E;
+  coherence
+  proof
+A:  n is Element of NAT by ORDINAL1:def 13;
+    f.n in rng f by A, ISOCAT_2:4;
+    hence thesis;
+  end;
+end;
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:: Preliminaries - Numbers:
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+theorem LmNum5:
+n1 > n or n2 > n implies n1 + n2 > n
+proof
+  assume
+A:  n1 > n or n2 > n;
+A1:
+  n1 > n & n2 >= 0 implies n1 + n2 > n + 0 by XREAL_1:10;
+A2:
+  n1 >= 0 & n2 > n implies n1 + n2 > n + 0 by XREAL_1:10;
+  thus thesis by A, A1, A2;
+end;
+
+theorem LmNum30:
+n1 + n <= n2 + 1 & n > 0 implies n1 <= n2
+proof
+  assume
+A:  n1 + n <= n2 + 1 & n > 0;
+  then 1 + 0 <= n by NAT_1:13;
+  hence thesis by A, XREAL_1:10;
+end;
+
+theorem LmNum40:
+n1 + n2 = 1 iff (n1 = 1 & n2 = 0) or (n1 = 0 & n2 = 1)
+proof
+  thus n1 + n2 = 1 implies (n1 = 1 & n2 = 0) or (n1 = 0 & n2 = 1)
+  proof
+    assume
+A:    n1 + n2 = 1;
+    now
+      assume
+C1:     n1 <= 1 & n2 <= 1;
+C2:   n1 = 1 & n2 = 1 implies contradiction by A;
+      n1 = 0 & n2 = 0 implies contradiction by A;
+      hence (n1 = 1 & n2 = 0) or (n1 = 0 & n2 = 1) by C1, NAT_1:26, C2;
+    end;
+    hence thesis by A, LmNum5;
+  end;
+  thus thesis;
+end;
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:: Preliminaries - Sequences:
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+theorem LmSeq10:
+a ^ b = <%x%> iff (a = <%>E & b = <%x%>) or (b = <%>E & a = <%x%>)
+proof
+  thus a ^ b = <%x%> implies (a = <%>E & b = <%x%>) or (b = <%>E & a = <%x%>)
+  proof
+    assume
+A:    a ^ b = <%x%>;
+    then len (a ^ b) = 1 by AFINSQ_1:38;
+    then len a + len b = 1 by AFINSQ_1:20;
+    then (len a = 1 & len b = 0) or (len a = 0 & len b = 1) by LmNum40;
+    then (len a = 1 & b = <%>E) or (a = <%>E & len b = 1) by AFINSQ_1:18;
+    hence thesis by A, AFINSQ_1:32;
+  end;
+  assume (a = <%>E & b = <%x%>) or (b = <%>E & a = <%x%>);
+  hence thesis by AFINSQ_1:32;
+end;
+
+theorem LmSeq20:
+for p, q being XFinSequence holds
+  a = p ^ q implies
+    p is Element of E^omega &
+    q is Element of E^omega
+proof
+  let p, q be XFinSequence;
+  assume a = p ^ q;
+  then p is XFinSequence of E &
+       q is XFinSequence of E by AFINSQ_1:34;
+  hence thesis by AFINSQ_1:def 8;
+end;
+
+theorem LmSeq30:
+<%x%> is Element of E^omega implies x in E
+proof
+  assume <%x%> is Element of E^omega;
+  then rng <%x%> c= E by ORDINAL1:def 8;
+  then {x} c= E by AFINSQ_1:36;
+  hence thesis by ZFMISC_1:37;
+end;
+
+theorem LmSeq40:
+len b = n + 1 implies ex c, e st len c = n & b = c ^ <%e%>
+proof
+  assume
+C0: len b = n + 1;
+  then
+C1: b <> {} by AFINSQ_1:18;
+  consider c' being XFinSequence, x such that
+C2: b = c' ^ <%x%> by C1, AFINSQ_1:44;
+  reconsider c = c' as Element of E^omega by C2, LmSeq20;
+C3:
+  n + 1 = len c + len <%x%> by C0, C2, AFINSQ_1:20
+       .= len c + 1 by AFINSQ_1:37;
+  <%x%> is Element of E^omega by C2, LmSeq20;
+  then reconsider e = x as Element of E by LmSeq30;
+  take c, e;
+  thus thesis by C3, C2;
+end;
+
+theorem LmSeq41:
+for p being XFinSequence st p <> {} 
+  ex q being XFinSequence, x st p = <%x%> ^ q
+proof
+  defpred P[Nat] means
+    for p being XFinSequence st len p = $1 & p <> {} 
+      ex q being XFinSequence, x st p = <%x%> ^ q; 
+A:
+  P[0] by AFINSQ_1:18;
+B:  
+  now
+    let n;
+    assume 
+B1:   P[n];
+    thus P[n + 1]
+    proof
+      let p be XFinSequence such that
+B2:     len p = n + 1 & p <> {};
+      consider q being XFinSequence, x such that
+B3:     p = q ^ <%x%> by B2, AFINSQ_1:44;
+B4:   n + 1 = len q + len <%x%> by B2, B3, AFINSQ_1:20
+           .= len q + 1 by AFINSQ_1:37;
+      per cases;
+      suppose 
+B4a:    q = {};
+        then p = <%x%> by B3, AFINSQ_1:32
+              .= <%x%> ^ q by B4a, AFINSQ_1:32;
+        hence ex s being XFinSequence, z st p = <%z%> ^ s;
+      end;
+      suppose q <> {};
+        then consider r being XFinSequence, y such that
+B5:       q = <%y%> ^ r by B1, B4;  
+        p = <%y%> ^ (r ^ <%x%>) by B3, B5, AFINSQ_1:30;
+        hence ex s being XFinSequence, z st p = <%z%> ^ s;
+      end;     
+    end;    
+  end;  
+C:  
+  for n holds P[n] from NAT_1:sch 2(A, B);
+  let p be XFinSequence;
+  assume 
+D:  p <> {};
+  len p = len p;
+  hence thesis by C, D;
+end;  
+
+theorem 
+len b = n + 1 implies ex c, e st len c = n & b = <%e%> ^ c
+proof
+  assume
+C0: len b = n + 1;
+  then
+C1: b <> {} by AFINSQ_1:18;
+  consider c' being XFinSequence, x such that
+C2: b = <%x%> ^ c' by C1, LmSeq41;
+  reconsider c = c' as Element of E^omega by C2, LmSeq20;
+C3:
+  n + 1 = len c + len <%x%> by C0, C2, AFINSQ_1:20
+       .= len c + 1 by AFINSQ_1:37;
+  <%x%> is Element of E^omega by C2, LmSeq20;
+  then reconsider e = x as Element of E by LmSeq30;
+  take c, e;
+  thus thesis by C3, C2;
+end;
+
+theorem LmSeq43:
+for p being XFinSequence st len p = i + j
+  ex q1, q2 being XFinSequence st len q1 = i & len q2 = j & p = q1 ^ q2
+proof
+  defpred P[Nat] means
+    for p being XFinSequence, i, j st len p = $1 & len p = i + j
+      ex q1, q2 being XFinSequence st len q1 = i & len q2 = j & p = q1 ^ q2;
+A:
+  P[0]
+  proof
+    let p be XFinSequence;
+    let i, j;
+    assume 
+A1:   len p = 0 & len p = i + j;
+    then 
+A2:   i = 0 & j = 0 by NAT_1:7;
+A3: p = {} by A1, AFINSQ_1:18;
+A4: len {} = i & len {} = j by A2, AFINSQ_1:18;
+    p = {} ^ {} by A3, AFINSQ_1:32; 
+    hence thesis by A4;
+  end;
+B:
+  now
+    let n;
+    assume 
+B1:   P[n];
+    thus P[n + 1]
+    proof
+      let p be XFinSequence;
+      let i, j;
+      assume 
+B2:     len p = n + 1 & len p = i + j;
+      per cases;
+      suppose 
+B3:     j = 0;
+        take q1 = p;
+        take q2 = {};
+        thus len q1 = i & len q2 = j & p = q1 ^ q2 
+          by B2, B3, AFINSQ_1:18, AFINSQ_1:32;
+      end;
+      suppose j > 0;
+        then consider k such that
+B4a:      j = k + 1 by NAT_1:6;
+B4b:    n = i + k by B2, B4a;  
+        p <> {} by B2, AFINSQ_1:18;
+        then consider q being XFinSequence, x such that
+B3a:      p = q ^ <%x%> by AFINSQ_1:44;
+        n + 1 = len q + len <%x%> by B2, B3a, AFINSQ_1:20
+             .= len q + 1 by AFINSQ_1:37;    
+        then consider q1, q2 being XFinSequence such that
+B3b:      len q1 = i & len q2 = k & q = q1 ^ q2 by B1, B4b;
+B3c:    p = q1 ^ (q2 ^ <%x%>) by B3a, B3b, AFINSQ_1:30;
+        len (q2 ^ <%x%>) = len q2 + len <%x%> by AFINSQ_1:20
+                        .= j by B3b, B4a, AFINSQ_1:37; 
+        hence ex q1, q2 being XFinSequence st 
+          len q1 = i & len q2 = j & p = q1 ^ q2 by B3b, B3c;
+      end;
+    end;
+  end;
+  for n holds P[n] from NAT_1:sch 2(A, B);
+  hence thesis;          
+end;   
+
+theorem 
+len b = n + m implies ex c1, c2 st len c1 = n & len c2 = m & b = c1 ^ c2
+proof
+  assume
+C0: len b = n + m;
+  consider c1', c2' being XFinSequence such that
+C2: len c1' = n & len c2' = m & b = c1' ^ c2' by C0, LmSeq43;
+  reconsider c1 = c1' as Element of E^omega by C2, LmSeq20;
+  reconsider c2 = c2' as Element of E^omega by C2, LmSeq20;
+  take c1, c2;
+  thus thesis by C2;
+end;
+
+theorem LmSeq50:
+a ^ a = a implies a = {}
+proof
+  assume
+A:  a ^ a = a;
+  len a + len a = len a by A, AFINSQ_1:20;
+  hence thesis by AFINSQ_1:18;
+end;
+
+begin
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:: Concatenation of Languages
+:: Definition of ^^
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+definition
+  let E, A, B;
+  func A ^^ B -> Subset of E^omega means :DefConcat:
+    x in it iff ex a, b st a in A & b in B & x = a ^ b;
+  existence
+  proof
+    defpred P[set] means ex a, b st a in A & b in B & $1 = a ^ b;
+    consider C such that
+A:    x in C iff x in E^omega & P[x] from SUBSET_1:sch 1;
+    take C;
+    thus thesis by A;
+  end;
+  uniqueness
+  proof
+    let C1, C2 be Subset of E^omega such that
+A1:   x in C1 iff ex a, b st a in A & b in B & x = a ^ b and
+A2:   x in C2 iff ex a, b st a in A & b in B & x = a ^ b;
+    now
+      let x;
+      thus x in C1 implies x in C2
+      proof
+        assume x in C1;
+        then ex a, b st a in A & b in B & x = a ^ b by A1;
+        hence x in C2 by A2;
+      end;
+      assume x in C2;
+      then ex a, b st a in A & b in B & x = a ^ b by A2;
+      hence x in C1 by A1;
+    end;
+    hence thesis by TARSKI:2;
+  end;
+end;
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:: Concatenation of Languages
+:: Properties of ^^
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+theorem ThConcat70:
+A ^^ B = {} iff A = {} or B = {}
+proof
+  thus A ^^ B = {} implies A = {} or B = {}
+  proof
+    assume that
+A1:   A ^^ B = {} and
+A2:   A <> {} & B <> {};
+    consider a such that
+A3:   a in A by A2, SUBSET_1:10;
+    consider b such that
+A4:   b in B by A2, SUBSET_1:10;
+    a ^ b in A ^^ B by A3, A4, DefConcat;
+    hence contradiction by A1;
+  end;
+  assume
+B:  A = {} or B = {};
+  not ex x st x in A ^^ B
+  proof
+    given x such that
+B1:   x in A ^^ B;
+    ex a, b st a in A & b in B & x = a ^ b by B1, DefConcat;
+    hence contradiction by B;
+  end;
+  hence thesis by XBOOLE_0:def 1;
+end;
+
+theorem ThConcat80:
+A ^^ {<%>E} = A & {<%>E} ^^ A = A
+proof
+A1:
+  x in {<%>E} ^^ A implies x in A
+  proof
+    assume x in {<%>E} ^^ A;
+    then consider d, a such that
+B1:   d in {<%>E} & a in A & x = d ^ a by DefConcat;
+    x = <%>E ^ a by B1, TARSKI:def 1;
+    hence thesis by B1, AFINSQ_1:32;
+  end;
+A2:
+  x in A ^^ {<%>E} implies x in A
+  proof
+    assume x in A ^^ {<%>E};
+    then consider a, d such that
+B2:   a in A & d in {<%>E} & x = a ^ d by DefConcat;
+    x = a ^ <%>E by B2, TARSKI:def 1;
+    hence thesis by B2, AFINSQ_1:32;
+  end;
+A3:
+  x in A implies x in {<%>E} ^^ A
+  proof
+    assume
+B3:   x in A;
+    ex d, a st d in {<%>E} & a in A & x = d ^ a
+    proof
+      consider d such that
+C3:     d = <%>E;
+      reconsider a = x as Element of E^omega by B3;
+      take d, a;
+      thus thesis by B3, C3, AFINSQ_1:32, TARSKI:def 1;
+    end;
+    hence thesis by DefConcat;
+  end;
+A4:
+  x in A implies x in A ^^ {<%>E}
+  proof
+    assume
+B4:   x in A;
+    ex a, d st a in A & d in {<%>E} & x = a ^ d
+    proof
+      set d = <%>E;
+      reconsider a = x as Element of E^omega by B4;
+      take a, d;
+      thus thesis by B4, AFINSQ_1:32, TARSKI:def 1;
+    end;
+    hence thesis by DefConcat;
+  end;
+  thus thesis by A1, A2, A3, A4, TARSKI:2;
+end;
+
+theorem ThConcat90:
+A ^^ B = {<%>E} iff A = {<%>E} & B = {<%>E}
+proof
+  thus A ^^ B = {<%>E} implies A = {<%>E} & B = {<%>E}
+  proof
+    assume that
+A1:   A ^^ B = {<%>E} and
+A2:   (A <> {<%>E} or B <> {<%>E});
+    <%>E in A ^^ B by A1, TARSKI:def 1;
+    then consider a, b such that
+A3:   a in A & b in B & <%>E = a ^ b by DefConcat;
+B:  now
+      let x;
+      assume
+B1:     (x in A or x in B) & x <> <%>E;
+B2:   now
+        assume
+B2a:      x in A;
+        then reconsider xa = x as Element of E^omega;
+B2b:    xa ^ b in A ^^ B by A3, B2a, DefConcat;
+        xa ^ b <> <%>E by B1, AFINSQ_1:33;
+        hence contradiction by B2b, A1, TARSKI:def 1;
+      end;
+B3:   now
+        assume
+B3a:      x in B;
+        then reconsider xb = x as Element of E^omega;
+B3b:    a ^ xb in A ^^ B by A3, B3a, DefConcat;
+        a ^ xb <> <%>E by B1, AFINSQ_1:33;
+        hence contradiction by B3b, A1, TARSKI:def 1;
+      end;
+      thus contradiction by B1, B2, B3;
+    end;
+    (x in A iff x = <%>E) & (x in B iff x = <%>E) by A3, B;
+    hence contradiction by A2, TARSKI:def 1;
+  end;
+  assume A = {<%>E} & B = {<%>E};
+  hence thesis by ThConcat80;
+end;
+
+theorem ThConcat100:
+<%>E in A ^^ B iff <%>E in A & <%>E in B
+proof
+  thus <%>E in A ^^ B implies <%>E in A & <%>E in B
+  proof
+    assume <%>E in A ^^ B;
+    then consider a, b such that
+A:    a in A & b in B & a ^ b = <%>E by DefConcat;
+    thus thesis by A, AFINSQ_1:33;
+  end;
+  assume <%>E in A & <%>E in B;
+  then <%>E ^ <%>E in A ^^ B by DefConcat;
+  hence thesis by AFINSQ_1:32;
+end;
+
+theorem ThConcat110:
+<%>E in B implies A c= A ^^ B & A c= B ^^ A
+proof
+  assume
+A:  <%>E in B;
+  thus A c= A ^^ B
+  proof
+    let x;
+    assume
+B1:   x in A;
+    then reconsider xa = x as Element of E^omega;
+    xa ^ <%>E in A ^^ B by A, B1, DefConcat;
+    hence x in A ^^ B by AFINSQ_1:32;
+  end;
+  thus A c= B ^^ A
+  proof
+    let x;
+    assume
+C1:   x in A;
+    then reconsider xa = x as Element of E^omega;
+    <%>E ^ xa in B ^^ A by A, C1, DefConcat;
+    hence x in B ^^ A by AFINSQ_1:32;
+  end;
+end;
+
+theorem ThConcat10:
+A c= C & B c= D implies A ^^ B c= C ^^ D
+proof
+  assume
+A:  A c= C & B c= D;
+  thus thesis
+  proof
+    let x;
+    assume x in A ^^ B;
+    then consider a, b such that
+B:    a in A & b in B & x = a ^ b by DefConcat;
+    thus x in C ^^ D by A, B, DefConcat;
+  end;
+end;
+
+theorem ThConcat20:
+(A ^^ B) ^^ C = A ^^ (B ^^ C)
+proof
+  now
+    let x;
+    thus x in (A ^^ B) ^^ C implies x in A ^^ (B ^^ C)
+    proof
+      assume x in (A ^^ B) ^^ C;
+      then consider ab, c such that
+A1:     ab in (A ^^ B) & c in C & x = ab ^ c by DefConcat;
+      consider a, b such that
+A2:     a in A & b in B & ab = a ^ b by A1, DefConcat;
+A3:   x = a ^ (b ^ c) by A1, A2, AFINSQ_1:30;
+      b ^ c in B ^^ C by A1, A2, DefConcat;
+      hence thesis by A2, A3, DefConcat;
+    end;
+    assume x in A ^^ (B ^^ C);
+    then consider a, bc such that
+A1:   a in A & bc in (B ^^ C) & x = a ^ bc by DefConcat;
+    consider b, c such that
+A2:   b in B & c in C & bc = b ^ c by A1, DefConcat;
+A3: x = (a ^ b) ^ c by A1, A2, AFINSQ_1:30;
+    a ^ b in A ^^ B by A1, A2, DefConcat;
+    hence x in (A ^^ B) ^^ C by A2, A3, DefConcat;
+  end;
+  hence thesis by TARSKI:2;
+end;
+
+theorem ThConcat30:
+A ^^ (B /\ C) c= (A ^^ B) /\ (A ^^ C) &
+(B /\ C) ^^ A c= (B ^^ A) /\ (C ^^ A)
+proof
+  thus A ^^ (B /\ C) c= (A ^^ B) /\ (A ^^ C)
+  proof
+    let x;
+    assume x in A ^^ (B /\ C);
+    then consider a, bc such that
+A1:   a in A & bc in B /\ C & x = a ^ bc by DefConcat;
+    bc in B & bc in C by A1, XBOOLE_0:def 3;
+    then x in A ^^ B & x in A ^^ C by A1, DefConcat;
+    hence x in (A ^^ B) /\ (A ^^ C) by XBOOLE_0:def 3;
+  end;
+  thus (B /\ C) ^^ A c= (B ^^ A) /\ (C ^^ A)
+  proof
+    let x;
+    assume x in (B /\ C) ^^ A;
+    then consider bc, a such that
+B1:   bc in B /\ C & a in A & x = bc ^ a by DefConcat;
+    bc in B & bc in C by B1, XBOOLE_0:def 3;
+    then x in B ^^ A & x in C ^^ A by B1, DefConcat;
+    hence x in (B ^^ A) /\ (C ^^ A) by XBOOLE_0:def 3;
+  end;
+end;
+
+theorem ThConcat40:
+A ^^ B \/ A ^^ C = A ^^ (B \/ C) &
+B ^^ A \/ C ^^ A = (B \/ C) ^^ A
+proof
+A:
+  A ^^ (B \/ C) c= (A ^^ B) \/ (A ^^ C)
+  proof
+    let x;
+    assume x in A ^^ (B \/ C);
+    then consider a, bc such that
+A1:   a in A & bc in B \/ C & x = a ^ bc by DefConcat;
+    bc in B or bc in C by A1, XBOOLE_0:def 2;
+    then x in A ^^ B or x in A ^^ C by A1, DefConcat;
+    hence x in (A ^^ B) \/ (A ^^ C) by XBOOLE_0:def 2;
+  end;
+B:  
+  (B \/ C) ^^ A c= (B ^^ A) \/ (C ^^ A)
+  proof
+    let x;
+    assume x in (B \/ C) ^^ A;
+    then consider bc, a such that
+B1:   bc in B \/ C & a in A & x = bc ^ a by DefConcat;
+    bc in B or bc in C by B1, XBOOLE_0:def 2;
+    then x in B ^^ A or x in C ^^ A by B1, DefConcat;
+    hence x in (B ^^ A) \/ (C ^^ A) by XBOOLE_0:def 2;
+  end;
+C:
+  now
+    B c= B \/ C & C c= B \/ C by XBOOLE_1:7;
+    then A ^^ B c= A ^^ (B \/ C) & A ^^ C c= A ^^ (B \/ C) by ThConcat10;
+    hence (A ^^ B) \/ (A ^^ C) c= A ^^ (B \/ C) by XBOOLE_1:8;
+  end;
+D:
+  now
+    B c= B \/ C & C c= B \/ C by XBOOLE_1:7;
+    then B ^^ A c= (B \/ C) ^^ A & C ^^ A c= (B \/ C) ^^ A by ThConcat10;
+    hence (B ^^ A) \/ (C ^^ A) c= (B \/ C) ^^ A by XBOOLE_1:8;
+  end;
+  thus thesis by A, B, C, D, XBOOLE_0:def 10;
+end;
+
+theorem ThConcat50:
+(A ^^ B) \ (A ^^ C) c= A ^^ (B \ C) &
+(B ^^ A) \ (C ^^ A) c= (B \ C) ^^ A
+proof
+  thus (A ^^ B) \ (A ^^ C) c= A ^^ (B \ C)
+  proof
+    let x;
+    assume x in (A ^^ B) \ (A ^^ C);
+    then
+A1:   x in A ^^ B & not x in A ^^ C by XBOOLE_0:def 4;
+    then consider a, b such that
+A2:   a in A & b in B & x = a ^ b by DefConcat;
+A4: now
+      assume not b in C;
+      then b in B \ C by A2, XBOOLE_0:def 4;
+      hence x in A ^^ (B \ C) by A2, DefConcat;
+    end;
+    thus x in A ^^ (B \ C) by A1, A2, DefConcat, A4;
+  end;
+  thus (B ^^ A) \ (C ^^ A) c= (B \ C) ^^ A
+  proof
+    let x;
+    assume x in (B ^^ A) \ (C ^^ A);
+    then
+B1:   x in B ^^ A & not x in C ^^ A by XBOOLE_0:def 4;
+    then consider b, a such that
+B2:   b in B & a in A & x = b ^ a by DefConcat;
+B4: now
+      assume not b in C;
+      then b in B \ C by B2, XBOOLE_0:def 4;
+      hence x in (B \ C) ^^ A by B2, DefConcat;
+    end;
+    thus x in (B \ C) ^^ A by B1, B2, DefConcat, B4;
+  end;
+end;
+
+theorem
+(A ^^ B) \+\ (A ^^ C) c= A ^^ (B \+\ C) &
+(B ^^ A) \+\ (C ^^ A) c= (B \+\ C) ^^ A
+proof
+A:
+  now
+A1: A ^^ (B /\ C) c= (A ^^ B) /\ (A ^^ C) by ThConcat30;
+A2: (A ^^ (B \/ C)) \ (A ^^ (B /\ C)) c=
+      A ^^ ((B \/ C) \ (B /\ C)) by ThConcat50;
+    (A ^^ B) \+\ (A ^^ C)
+      = ((A ^^ B) \/ (A ^^ C)) \ ((A ^^ B) /\ (A ^^ C)) by XBOOLE_1:101
+     .= (A ^^ (B \/ C)) \ ((A ^^ B) /\ (A ^^ C)) by ThConcat40;
+    then (A ^^ B) \+\ (A ^^ C) c=
+           (A ^^ (B \/ C)) \ (A ^^ (B /\ C)) by A1, XBOOLE_1:34;
+    then (A ^^ B) \+\ (A ^^ C) c= A ^^ ((B \/ C) \ (B /\ C)) by A2, XBOOLE_1:1;
+    hence (A ^^ B) \+\ (A ^^ C) c= A ^^ (B \+\ C) by XBOOLE_1:101;
+  end;
+B:
+  now
+B1: (B /\ C) ^^ A c= (B ^^ A) /\ (C ^^ A) by ThConcat30;
+B2: ((B \/ C) ^^ A) \ ((B /\ C) ^^ A) c=
+      ((B \/ C) \ (B /\ C)) ^^ A by ThConcat50;
+    (B ^^ A) \+\ (C ^^ A)
+      = ((B ^^ A) \/ (C ^^ A)) \ ((B ^^ A) /\ (C ^^ A)) by XBOOLE_1:101
+     .= ((B \/ C) ^^ A) \ ((B ^^ A) /\ (C ^^ A)) by ThConcat40;
+    then (B ^^ A) \+\ (C ^^ A) c=
+           ((B \/ C) ^^ A) \ ((B /\ C) ^^ A) by B1, XBOOLE_1:34;
+    then (B ^^ A) \+\ (C ^^ A) c= ((B \/ C) \ (B /\ C)) ^^ A by B2, XBOOLE_1:1;
+    hence (B ^^ A) \+\ (C ^^ A) c= (B \+\ C) ^^ A by XBOOLE_1:101;
+  end;
+  thus thesis by A, B;
+end;
+
+begin
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:: Concatenation of a Language with Itself
+:: Definition of |^
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+definition 
+  let E, A, n;
+  func A |^ n -> Subset of E^omega means :DefPower:
+    ex concat being Function of NAT, bool (E^omega) st
+      it = concat.n &
+      concat.0 = {<%>E} &
+      for i holds concat.(i + 1) = concat.i ^^ A;
+  existence
+  proof
+    defpred P[set, set, set] means
+      ex B, C st C = $3 & B = $2 & C = B ^^ A;
+A:  for i being Element of NAT
+      for x being Element of bool (E^omega)
+        ex y being Element of bool (E^omega) st P[i, x, y]
+    proof
+      let i be Element of NAT;
+      let x be Element of bool (E^omega);
+      take x ^^ A;
+      thus thesis;
+    end;
+    consider f being Function of NAT, bool (E^omega) such that
+B:    f.0 = {<%>E} & for i being Element of NAT holds P[i, f.i, f.(i + 1)]
+                                                        from RECDEF_1:sch 2(A);
+    consider C being Subset of E^omega such that
+C:    C = f.n;
+    take C;
+C2: now
+      let i;
+      reconsider j = i as Element of NAT by ORDINAL1:def 13;
+      consider B, C such that
+C2A:    C = f.(j + 1) & B = f.j & C = B ^^ A by B;
+      thus f.(i + 1) = f.i ^^ A by C2A;
+    end;
+    thus thesis by B, C, C2;
+  end;
+  uniqueness
+  proof
+    let C1, C2 be Subset of E^omega;
+    given f1 being Function of NAT, bool (E^omega) such that
+A1:   C1 = f1.n &
+      f1.0 = {<%>E} &
+      for i holds f1.(i + 1) = f1.i ^^ A;
+    given f2 being Function of NAT, bool (E^omega) such that
+A2:   C2 = f2.n &
+      f2.0 = {<%>E} &
+      for i holds f2.(i + 1) = f2.i ^^ A;
+    defpred P[Nat] means f1.$1 = f2.$1;
+B1: P[0] by A1, A2;
+B2: now
+      let k;
+      assume
+B2A:    P[k];
+      f2.(k + 1) = f2.k ^^ A by A2;
+      hence P[k + 1] by B2A, A1;
+    end;
+    for k holds P[k] from NAT_1:sch 2(B1, B2);
+    hence thesis by A1, A2;
+  end;
+end;
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:: Concatenation of a Language with Itself
+:: Properties of |^
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+theorem ThPower10:
+A |^ (n + 1) = (A |^ n) ^^ A
+proof
+  consider concat being Function of NAT, bool (E^omega) such that
+A:  A |^ n = concat.n &
+    concat.0 = {<%>E} &
+    for i holds concat.(i + 1) = concat.i ^^ A by DefPower;
+  concat.(n + 1) = (A |^ n) ^^ A by A;
+  hence thesis by DefPower, A;
+end;
+
+theorem ThPower20:
+A |^ 0 = {<%>E}
+proof
+  consider concat being Function of NAT, bool (E^omega) such that
+A:  A |^ 0 = concat.0 &
+    concat.0 = {<%>E} &
+    for i holds concat.(i + 1) = concat.i ^^ A by DefPower;
+  thus thesis by A;
+end;
+
+theorem ThPower30:
+A |^ 1 = A
+proof
+  consider concat being Function of NAT, bool (E^omega) such that
+A:  A |^ 1 = concat.1 &
+    concat.0 = {<%>E} &
+    for i holds concat.(i + 1) = concat.i ^^ A by DefPower;
+  thus A |^ 1 = concat.(0 + 1) by A
+             .= {<%>E} ^^ A by A
+             .= A by ThConcat80;
+end;
+
+theorem ThPower40:
+A |^ 2 = A ^^ A
+proof
+  thus A |^ 2 = A |^ (1 + 1)
+             .= (A |^ 1) ^^ A by ThPower10
+             .= A ^^ A  by ThPower30;
+end;
+
+theorem ThPower50:
+A |^ n = {} iff n > 0 & A = {} 
+proof
+  thus A |^ n = {} implies n > 0 & A = {}
+  proof
+    assume that
+A1:   A |^ n = {} and
+A2:   n <= 0 or A <> {};
+B:  now 
+      assume 
+B1:     A <> {};
+      defpred P[Nat] means A |^ $1 <> {};
+C:    P[0]
+      proof
+        A |^ 0 = {<%>E} by ThPower20;
+        hence thesis;
+      end;  
+D:    now
+        let n;
+        assume 
+D1:       P[n];
+        consider a1 such that 
+E1:       a1 in A |^ n by D1, SUBSET_1:10;
+        consider a2 such that 
+E2:       a2 in A by B1, SUBSET_1:10;
+        a1 ^ a2 in A |^ n ^^ A by E1, E2, DefConcat;
+        hence P[n + 1] by ThPower10;
+      end;          
+      for n holds P[n] from NAT_1:sch 2(C, D);
+      hence contradiction by A1;
+    end;  
+    now 
+      assume n <= 0;
+      then n = 0;
+      then A |^ n = {<%>E} by ThPower20;
+      hence contradiction by A1;
+    end;
+    hence thesis by A2, B;  
+  end;
+  assume 
+A1: n > 0 & A = {}; 
+  then
+A2: n >= 0 + 1 by NAT_1:13;    
+  defpred P[Nat] means A |^ $1 = {};
+B:
+  P[1] by A1, ThPower30;
+C:
+  now
+    let m be Element of NAT;
+    assume 1 <= m & P[m];
+    {}(E^omega) |^ (m + 1) = {}(E^omega) |^ m ^^ {}(E^omega) by ThPower10
+                          .= {} by ThConcat70;
+    hence P[m + 1] by A1;
+  end;
+D:
+  for m being Element of NAT st m >= 1 holds P[m] from NAT_1:sch 8(B, C);
+  for n st n >= 1 holds P[n]
+  proof
+    let n;
+    reconsider m = n as Element of NAT by ORDINAL1:def 13;
+    m >= 1 implies P[m] by D;
+    hence thesis;
+  end;
+  hence thesis by A2;
+end;
+
+theorem ThPower60:
+{<%>E} |^ n = {<%>E}
+proof
+  defpred P[Nat] means {<%>E} |^ $1 = {<%>E};
+A:
+  P[0] by ThPower20;
+B:
+  now
+    let n;
+    assume
+B1:   P[n];
+    {<%>E} |^ (n + 1) = ({<%>E} |^ n) ^^ {<%>E} by ThPower10
+                     .= {<%>E} by B1, ThConcat80;
+    hence P[n + 1];
+  end;
+  for n holds P[n] from NAT_1:sch 2(A, B);
+  hence thesis;
+end;
+
+theorem
+A |^ n = {<%>E} iff n = 0 or A = {<%>E}
+proof
+  thus A |^ n = {<%>E} implies n = 0 or A = {<%>E}
+  proof
+    assume
+A:    A |^ n = {<%>E};
+    now
+      assume n > 0;
+      then consider m such that
+B:      m + 1 = n by NAT_1:6;
+      A |^ n = (A |^ m) ^^ A by B, ThPower10;
+      hence A = {<%>E} by A, ThConcat90;
+    end;
+    hence thesis;
+  end;
+  assume n = 0 or A = {<%>E};
+  hence thesis by ThPower20, ThPower60;
+end;
+
+theorem ThPower70:
+<%>E in A implies <%>E in A |^ n
+proof
+  assume
+A:  <%>E in A;
+  defpred P[Nat] means <%>E in A |^ $1;
+B:
+  P[0]
+  proof
+    A |^ 0 = {<%>E} by ThPower20;
+    hence thesis by TARSKI:def 1;
+  end;
+C:
+  now
+    let n;
+    assume P[n];
+    then <%>E in (A |^ n) ^^ A by A, ThConcat100;
+    hence P[n + 1] by ThPower10;
+  end;
+  for n holds P[n] from NAT_1:sch 2(B, C);
+  hence thesis;
+end;
+
+theorem 
+<%>E in A |^ n & n > 0 implies <%>E in A
+proof 
+  assume 
+A:  <%>E in A |^ n & n > 0;
+  then consider m such that
+B:  m + 1 = n by NAT_1:6;
+  A |^ n = (A |^ m) ^^ A by B, ThPower10;
+  then consider a1, a2 such that
+C:  a1 in A |^ m & a2 in A & a1 ^ a2 = <%>E by A, DefConcat;
+  thus thesis by C, AFINSQ_1:33;         
+end;
+ 
+theorem ThPower80:
+(A |^ n) ^^ A = A ^^ (A |^ n)
+proof
+  defpred P[Nat] means (A |^ $1) ^^ A = A ^^ (A |^ $1);
+A:
+  P[0]
+  proof
+    thus (A |^ 0) ^^ A = {<%>E} ^^ A by ThPower20
+                      .= A by ThConcat80
+                      .= A ^^ {<%>E} by ThConcat80
+                      .= A ^^ (A |^ 0) by ThPower20;
+  end;
+B:
+  now
+    let n;
+    assume
+B1:   P[n];
+    (A |^ (n + 1)) ^^ A = ((A |^ n) ^^ A) ^^ A by ThPower10
+                       .= A ^^ ((A |^ n) ^^ A) by B1, ThConcat20
+                       .= A ^^ (A |^ (n + 1)) by ThPower10;
+    hence P[n + 1];
+  end;
+  for n holds P[n] from NAT_1:sch 2(A, B);
+  hence thesis;
+end;
+
+theorem ThPower90:
+A |^ (m + n) = (A |^ m) ^^ (A |^ n)
+proof
+  defpred P[Nat] means
+    for m, n st m + n <= $1 holds A |^ (m + n) = (A |^ m) ^^ (A |^ n);
+A:
+  P[0]
+  proof
+    let m, n;
+    assume m + n <= 0;
+    then
+A0:   m + n = 0;
+    then
+A1:   m = 0 & n = 0 by NAT_1:7;
+    thus A |^ (m + n) = (A |^ 0) ^^ {<%>E} by A0, ThConcat80
+                     .= (A |^ m) ^^ (A |^ n) by ThPower20, A1;
+  end;
+B:
+  now
+    let l;
+    assume
+B1:   P[l];
+    now
+      let m, n be Nat;
+      assume
+C1:     m + n <= l + 1;
+C2:   now
+        assume
+C2'1:     m + n = l + 1;
+C2'2:   now
+          assume
+C2'2A:      m = 0;
+          thus A |^ (m + n) = {<%>E} ^^ (A |^ (l + 1)) by C2'1, ThConcat80
+                           .= (A |^ m) ^^ (A |^ n) by ThPower20, C2'2A, C2'1;
+        end;
+C2'3:   now
+          assume
+C2'3A:      n = 0;
+          thus A |^ (m + n) = (A |^ (l + 1)) ^^ {<%>E} by C2'1, ThConcat80
+                           .= (A |^ m) ^^ (A |^ n) by ThPower20, C2'3A, C2'1;
+        end;
+C2'4:   now
+          assume
+C2'4A1:     m > 0 & n > 0;
+          then consider k such that
+C2'4A2:     k + 1 = m by NAT_1:6;
+C2'4C:    k + 1 <= l by C2'4A1, C2'4A2, C2'1, LmNum30;
+          A |^ (m + n) = A |^ (k + n + 1) by C2'4A2
+                      .= (A |^ (k + n)) ^^ A by ThPower10
+                      .= A ^^ (A |^ (k + n)) by ThPower80
+                      .= A ^^ ((A |^ k) ^^ (A |^ n)) by C2'4A2, C2'1, B1
+                      .= (A ^^ (A |^ k)) ^^ (A |^ n) by ThConcat20
+                      .= ((A |^ k) ^^ A) ^^ (A |^ n) by ThPower80
+                      .= ((A |^ k) ^^ (A |^ 1)) ^^ (A |^ n) by ThPower30
+                      .= (A |^ m) ^^ (A |^ n) by C2'4C, B1, C2'4A2;
+          hence A |^ (m + n) = (A |^ m) ^^ (A |^ n);
+        end;
+        thus A |^ (m + n) = (A |^ m) ^^ (A |^ n) by C2'2, C2'3, C2'4;
+      end;
+C3:   now
+        assume m + n < l + 1;
+        then m + n <= l by NAT_1:13;
+        hence A |^ (m + n) = (A |^ m) ^^ (A |^ n) by B1;
+      end;
+      thus A |^ (m + n) = (A |^ m) ^^ (A |^ n) by C1, REAL_1:def 5, C2, C3;
+    end;
+    hence P[l + 1];
+  end;
+  for l holds P[l] from NAT_1:sch 2(A, B);
+  hence thesis;
+end;
+
+theorem 
+(A |^ m) |^ n = A |^ (m * n)
+proof
+  defpred P[Nat] means
+    for m, n st m + n <= $1 holds (A |^ m) |^ n = A |^ (m * n);
+A:
+  P[0]
+  proof
+    let m, n;
+    assume m + n <= 0;
+    then m + n = 0;
+    then
+A1:   m = 0 & n = 0 by NAT_1:7;
+    hence (A |^ m) |^ n = {<%>E} by ThPower20
+                       .= A |^ (m * n) by ThPower20, A1;
+  end;
+B:
+  now
+    let l;
+    assume
+B1:   P[l];
+    now
+      let m, n;
+      assume
+C1:     m + n <= l + 1;
+C2:   now
+        assume
+C2'1:     m + n = l + 1;
+C2'2:   now
+          assume
+C2'2A:      m = 0;
+          thus (A |^ m) |^ n = {<%>E} |^ n by C2'2A, ThPower20
+                            .= {<%>E} by ThPower60
+                            .= A |^ (m * n) by ThPower20, C2'2A;
+        end;
+C2'3:   now
+          assume
+C2'3A:      n = 0;
+          hence (A |^ m) |^ n = {<%>E} by ThPower20
+                             .= A |^ (m * n) by ThPower20, C2'3A;
+        end;
+C2'4:   now
+          assume m > 0 & n > 0;
+          then consider k such that
+C2'4A2:     k + 1 = n by NAT_1:6;
+C2'4B:    m + k <= l by C2'4A2, C2'1;
+          (A |^ m) |^ n = ((A |^ m) |^ k) ^^ (A |^ m) by C2'4A2, ThPower10
+                       .= (A |^ (m * k)) ^^ (A |^ m) by C2'4B, B1
+                       .= A |^ (m * k + m) by ThPower90
+                       .= A |^ (m * n) by C2'4A2;
+          hence (A |^ m) |^ n = A |^ (m * n);
+        end;
+        thus (A |^ m) |^ n = A |^ (m * n) by C2'2, C2'3, C2'4;
+      end;
+C3:   now
+        assume m + n < l + 1;
+        then m + n <= l by NAT_1:13;
+        hence (A |^ m) |^ n = A |^ (m * n) by B1;
+      end;
+      thus (A |^ m) |^ n = A |^ (m * n) by C1, REAL_1:def 5, C2, C3;
+    end;
+    hence P[l + 1];
+  end;
+D:
+  for l holds P[l] from NAT_1:sch 2(A, B);
+  now
+    let m, n;
+    reconsider l = m + n as Nat;
+    m + n <= l;
+    hence (A |^ m) |^ n = A |^ (m * n) by D;
+  end;
+  hence thesis;
+end;
+
+theorem ThPower120:
+<%>E in A & n > 0 implies A c= A |^ n
+proof
+  assume that
+A1: <%>E in A and
+A2: n > 0;
+  consider m such that
+B:  m + 1 = n by A2, NAT_1:6;
+  <%>E in A |^ m by A1, ThPower70;
+  then A c= A |^ m ^^ A by ThConcat110;
+  hence thesis by B, ThPower10;
+end;
+
+theorem
+<%>E in A & m > n implies A |^ n c= A |^ m
+proof
+  assume that
+A1: <%>E in A and
+A2: m > n;
+  consider k such that
+B:  n + k = m by A2, NAT_1:10;
+  <%>E in A |^ k by A1, ThPower70;
+  then A |^ n c= A |^ k ^^ A |^ n by ThConcat110;
+  hence thesis by B, ThPower90;
+end;
+
+theorem ThPower130:
+A c= B implies A |^ n c= B |^ n
+proof
+  assume
+A:  A c= B;
+ defpred P[Nat] means A |^ $1 c= B |^ $1;
+B:
+  P[0]
+  proof
+    A |^ 0 = {<%>E} & B |^ 0 = {<%>E} by ThPower20;
+    hence thesis;
+  end;
+C:
+  now
+    let n;
+    assume
+C1:   P[n];
+    (A |^ n) ^^ A = A |^ (n + 1) & (B |^ n) ^^ B = B |^ (n + 1) by ThPower10;
+    hence P[n + 1] by C1, A, ThConcat10;
+  end;
+  for n holds P[n] from NAT_1:sch 2(B, C);
+  hence thesis;
+end;
+
+theorem 
+(A |^ n) \/ (B |^ n) c= (A \/ B) |^ n
+proof
+  A c= A \/ B & B c= A \/ B by XBOOLE_1:7;
+  then A |^ n c= (A \/ B) |^ n & B |^ n c= (A \/ B) |^ n by ThPower130;
+  hence thesis by XBOOLE_1:8;
+end;
+
+theorem 
+(A /\ B) |^ n c= (A |^ n) /\ (B |^ n)
+proof
+  A /\ B c= A & A /\ B c= B by XBOOLE_1:17;
+  then (A /\ B) |^ n c= A |^ n & (A /\ B) |^ n c= B |^ n by ThPower130;
+  hence thesis by XBOOLE_1:19;
+end;
+
+theorem ThPower160:
+a in C |^ m & b in C |^ n implies a ^ b in C |^ (m + n)
+proof
+  assume a in C |^ m & b in C |^ n;
+  then a ^ b in (C |^ m) ^^ (C |^ n) by DefConcat;
+  hence thesis by ThPower90;
+end;
+
+begin
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:: Kleene Closure
+:: Definition of *
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+definition 
+  let E, A;
+  func A* -> Subset of E^omega equals
+    union { B : ex n st B = A |^ n };
+  coherence  
+  proof
+    defpred P[set] means ex n st $1 = A |^ n;
+    reconsider M = { B : P[B] } as Subset-Family of E^omega
+                           from DOMAIN_1:sch 7;
+    union M is Subset of E^omega;
+    hence thesis;
+  end;
+end;
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:: Kleene Closure
+:: Properties of *
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+theorem ThClosure10:
+x in A* iff ex n st x in A |^ n
+proof
+  thus x in A* implies ex n st x in A |^ n
+  proof
+    assume 
+A:    x in A*;
+    consider X such that
+A1:   x in X and
+A2:   X in { B : ex k st B = A |^ k } by A, TARSKI:def 4;
+    defpred P[set] means ex k st $1 = A |^ k;
+A3: X in { B : P[B] } by A2;
+    P[X] from CARD_FIL:sch 1(A3);
+    hence thesis by A1;
+  end;
+  given n such that
+B:  x in A |^ n;
+  defpred P[set] means ex k st $1 = A |^ k;
+  consider B such that
+D:  x in B & P[B] by B;
+  reconsider A = { C : P[C] } as Subset-Family of E^omega from DOMAIN_1:sch 7;
+  B in A by D;
+  hence thesis by D, TARSKI:def 4;
+end;
+
+theorem ThClosure40:
+A |^ n c= A*
+proof
+  (A |^ n) in { B : ex k st B = A |^ k };
+  hence thesis by ZFMISC_1:92;
+end;
+
+theorem ThClosure50:
+A c= A*
+proof
+  A = A |^ 1 by ThPower30;
+  hence thesis by ThClosure40;
+end;
+
+theorem 
+A ^^ A c= A*
+proof
+  A ^^ A = A |^ 2 by ThPower40;
+  hence thesis by ThClosure40;
+end;
+
+theorem ThClosure60:
+a in C* & b in C* implies a ^ b in C*
+proof
+  assume
+A:  a in C* & b in C*;
+  consider k such that
+Ak: a in C |^ k by A, ThClosure10;
+  consider l such that
+Al: b in C |^ l by A, ThClosure10;
+  a ^ b in C |^ (k + l) by Ak, Al, ThPower160;
+  hence thesis by ThClosure10;
+end;
+
+theorem ThClosure70:
+A c= C* & B c= C* implies A ^^ B c= C*
+proof
+  assume
+A:  A c= C* & B c= C*;
+  thus thesis
+  proof
+    let x;
+    assume x in A ^^ B;
+    then consider a, b such that
+B:    a in A & b in B & x = a ^ b by DefConcat;
+    thus x in C* by A, B, ThClosure60;
+  end;
+end;
+
+theorem
+A* = {<%>E} iff A = {} or A = {<%>E}
+proof
+  thus A* = {<%>E} implies A = {} or A = {<%>E}
+  proof
+    assume that
+A1:   A* = {<%>E} and
+A2:   A <> {} & A <> {<%>E};
+    consider x such that
+A3:   x in A & x <> <%>E by A2, ZFMISC_1:41;
+    reconsider a = x as Element of E^omega by A3;
+    A c= A* by ThClosure50;
+    hence contradiction by A1, TARSKI:def 1,A3;
+  end;
+B:
+  now
+    assume
+B0:   A = {};
+B1: now
+      let x;
+      assume x in A*;
+      then consider n such that
+B2:     x in A |^ n by ThClosure10;
+B3:   n = 0 implies x in {<%>E} by B2, ThPower20;
+      n > 0 implies contradiction by B0, B2, ThPower50;
+      hence x in {<%>E} by B3;
+    end;
+    now
+      let x;
+      assume x in {<%>E};
+      then x in A |^ 0 by ThPower20;
+      hence x in A* by ThClosure10;
+    end;  
+    hence A* = {<%>E} by B1, TARSKI:2;
+  end;
+  now
+    assume 
+C1:   A = {<%>E};
+C2: A* c= {<%>E}
+    proof
+      let x;
+      assume x in A*;
+      then consider n such that
+C3:     x in A |^ n by ThClosure10;
+      thus x in {<%>E} by C1, C3, ThPower60;
+    end;
+    {<%>E} c= A*
+    proof
+      let x;
+      assume x in {<%>E};
+      then x in A |^ 0 by ThPower20;
+      hence x in A* by ThClosure10;
+    end;
+    hence A* = {<%>E} by C2, XBOOLE_0:def 10;
+  end;
+  hence thesis by B;
+end;
+
+theorem ThClosure30:
+<%>E in A*
+proof
+  {<%>E} = A |^ 0 by ThPower20;
+  then <%>E in A |^ 0 by TARSKI:def 1;
+  hence thesis by ThClosure10;
+end;
+
+theorem
+A* = {x} implies x = <%>E
+proof
+  assume
+A:  A* = {x} & x <> <%>E;
+  then 
+B:  x in A* by ZFMISC_1:37;
+  reconsider a = x as Element of E^omega by A, ZFMISC_1:37;
+C:  
+  a ^ a in A* by B, ThClosure60;
+  a ^ a <> x by A, LmSeq50;
+  hence thesis by A, C, TARSKI:def 1;
+end;
+
+theorem ThClosure15:
+x in A |^ (m + 1) implies x in (A*) ^^ A & x in A ^^ (A*)
+proof
+  assume x in A |^ (m + 1);
+  then
+A:  x in (A |^ m) ^^ A by ThPower10;
+  then consider a, b such that
+B:  a in A |^ m & b in A & x = a ^ b by DefConcat;
+  a in A* & b in A by B, ThClosure10;
+  hence x in (A*) ^^ A by DefConcat, B;
+  x in A ^^ (A |^ m) by A, ThPower80;
+  then consider a, b such that
+C:  a in A & b in A |^ m & x = a ^ b by DefConcat;
+  a in A & b in A* by C, ThClosure10;
+  hence x in A ^^ (A*) by DefConcat, C;
+end;
+
+theorem 
+A |^ (m + 1) c= (A*) ^^ A & A |^ (m + 1) c= A ^^ (A*)
+proof
+  thus A |^ (m + 1) c= (A*) ^^ A 
+  proof
+    let x;
+    assume x in A |^ (m + 1);
+    hence x in (A*) ^^ A by ThClosure15;
+  end;
+  let x;
+  assume x in A |^ (m + 1);
+  hence x in A ^^ (A*) by ThClosure15;
+end;
+
+theorem ThClosure20:
+x in (A*) ^^ A or x in A ^^ (A*) implies x in A*
+proof
+B:
+  now
+    let x;
+    assume x in (A*) ^^ A;
+    then consider a, b such that
+B1:   a in A* & b in A & x = a ^ b by DefConcat;
+    consider n such that
+B2:   a in A |^ n by B1, ThClosure10;
+    b in A |^ 1 by B1, ThPower30;
+    then a ^ b in A |^ (n + 1) by B2, ThPower160;
+    hence x in A* by ThClosure10, B1;
+  end;
+C:
+  now
+    let x;
+    assume x in A ^^ (A*);
+    then consider a, b such that
+C1:   a in A & b in A* & x = a ^ b by DefConcat;
+    consider n such that
+C2:   b in A |^ n by C1, ThClosure10;
+    a in A |^ 1 by C1, ThPower30;
+    then a ^ b in A |^ (n + 1) by C2, ThPower160;
+    hence x in A* by ThClosure10, C1;
+  end;
+  thus thesis by B, C;
+end;
+
+theorem 
+(A*) ^^ A c= A* & A ^^ (A*) c= A*
+proof
+  thus (A*) ^^ A c= A*
+  proof
+    let x;
+    assume x in (A*) ^^ A;
+    hence x in A* by ThClosure20;
+  end;
+  thus A ^^ (A*) c= A*
+  proof
+    let x;
+    assume x in A^^ (A*);
+    hence x in A* by ThClosure20;
+  end;
+end; 
+
+theorem ThClosure38:
+<%>E in A implies A* = (A*) ^^ A & A* = A ^^ (A*)
+proof
+  assume
+A1: <%>E in A;
+A2:
+  <%>E in A* by ThClosure30;
+B:
+  for x holds
+    (x in (A*) ^^ A implies x in A*) &
+    (x in A ^^ (A*) implies x in A*) by ThClosure20;
+  now
+    let x;
+    assume x in A*;
+    then consider n such that
+D1:   x in A |^ n by ThClosure10;
+D2: now
+      assume n = 0;
+      then x in {<%>E} by D1, ThPower20;
+      then x = <%>E by TARSKI:def 1;
+      hence x in (A*) ^^ A & x in A ^^ (A*) by A1, A2, ThConcat100;
+    end;
+E:
+    now
+      assume n > 0;
+      then consider m such that
+E1:      m + 1 = n by NAT_1:6;
+      thus x in (A*) ^^ A by D1, E1, ThClosure15;
+    end;
+F:
+    now
+      assume n > 0;
+      then consider m such that
+F1:     m + 1 = n by NAT_1:6;
+      thus x in A ^^ (A*) by D1, F1, ThClosure15;
+    end;
+    thus x in (A*) ^^ A & x in A ^^ (A*) by D2, E, F;
+  end;
+  then (x in A* implies x in (A*) ^^ A) &
+       (x in A* implies x in A ^^ (A*));
+  hence thesis by B, TARSKI:2;
+end;
+
+theorem 
+<%>E in A implies A* = (A*) ^^ (A |^ n) & A* = (A |^ n) ^^ (A*)
+proof
+  assume
+A0: <%>E in A;  
+  defpred P[Nat] means A* = (A*) ^^ (A |^ $1) & A* = (A |^ $1) ^^ (A*);
+A:  
+  P[0]
+  proof
+    thus (A*) ^^ (A |^ 0) = (A*) ^^ {<%>E} by ThPower20
+                         .= A* by ThConcat80;
+    thus (A |^ 0) ^^ (A*) = {<%>E} ^^ (A*) by ThPower20
+                         .= A* by ThConcat80;
+  end;
+B:  
+  now
+    let n;
+    assume 
+B1:   P[n];
+B2: (A*) ^^ (A |^ (n + 1)) = (A*) ^^ ((A |^ n) ^^ A) by ThPower10
+                          .= (A*) ^^ A by ThConcat20, B1
+                          .= A* by A0, ThClosure38;
+B3: (A |^ (n + 1)) ^^ (A*) = ((A |^ n) ^^ A) ^^ (A*) by ThPower10
+                          .= (A ^^ (A |^ n)) ^^ (A*) by ThPower80
+                          .= A ^^ (A*) by ThConcat20, B1
+                          .= A* by A0, ThClosure38;
+    thus P[n + 1] by B2, B3;
+  end;
+  for n holds P[n] from NAT_1:sch 2(A, B);    
+  hence thesis;
+end;
+
+theorem ThClosure39:
+A* = {<%>E} \/ A ^^ (A*) & A* = {<%>E} \/ (A*) ^^ A
+proof
+A:
+  now
+    let x;
+    assume x in A*;
+    then consider n such that
+A1:   x in A |^ n by ThClosure10;
+A2: n = 0 implies x in {<%>E} by A1, ThPower20;
+    now
+      assume n > 0;
+      then consider m such that
+A3:     m + 1 = n by NAT_1:6;
+      thus x in (A*) ^^ A by A1, A3, ThClosure15;
+    end;
+    hence x in {<%>E} \/ (A*) ^^ A by A2, XBOOLE_0:def 2;
+  end;
+B:
+  now
+    let x;
+    assume x in A*;
+    then consider n such that
+B1:   x in A |^ n by ThClosure10;
+B2: n = 0 implies x in {<%>E} by B1, ThPower20;
+    now
+      assume n > 0;
+      then consider m such that
+B3:     m + 1 = n by NAT_1:6;
+      thus x in A ^^ (A*) by B1, B3, ThClosure15;
+    end;
+    hence x in {<%>E} \/ A ^^ (A*) by B2, XBOOLE_0:def 2;
+  end;
+C:
+  now
+    let x;
+    assume x in {<%>E} \/ A ^^ (A*);
+    then x in {<%>E} or x in A ^^ (A*) by XBOOLE_0:def 2;
+    then x = <%>E or x in A* by TARSKI:def 1, ThClosure20;
+    hence x in A* by ThClosure30;
+  end;
+D:
+  now
+    let x;
+    assume x in {<%>E} \/ (A*) ^^ A;
+    then x in {<%>E} or x in (A*) ^^ A by XBOOLE_0:def 2;
+    then x = <%>E or x in A* by TARSKI:def 1, ThClosure20;
+    hence x in A* by ThClosure30;
+  end;
+  thus thesis by A, B, C, D, TARSKI:2;
+end;
+
+theorem ThClosure105:
+A ^^ (A*) = (A*) ^^ A
+proof
+A:
+  A* = {<%>E} \/ A ^^ (A*) & A* = {<%>E} \/ (A*) ^^ A by ThClosure39;
+  now per cases;
+    suppose <%>E in A;
+      then A* = A ^^ (A*) & A* = (A*) ^^ A by ThClosure38;
+      hence A ^^ (A*) = (A*) ^^ A;
+    end;  
+    suppose not <%>E in A;
+      then not <%>E in A ^^ (A*) & not <%>E in (A*) ^^ A by ThConcat100;
+      then {<%>E} misses A ^^ (A*) & {<%>E} misses (A*) ^^ A by ZFMISC_1:56;
+      hence A ^^ (A*) = (A*) ^^ A by A, XBOOLE_1:71;
+    end;  
+  end;
+  hence thesis;
+end;
+
+theorem 
+(A |^ n) ^^ (A*) = (A*) ^^ (A |^ n)
+proof
+  defpred P[Nat] means (A |^ $1) ^^ (A*) = (A*) ^^ (A |^ $1);
+A:
+  P[0]
+  proof
+    thus (A |^ 0) ^^ (A*) = {<%>E} ^^ (A*) by ThPower20
+                         .= A* by ThConcat80
+                         .= (A*) ^^ {<%>E} by ThConcat80
+                         .= (A*) ^^ (A |^ 0) by ThPower20;
+  end;
+B:
+  now
+    let n;
+    assume
+B1:   P[n];
+    (A |^ (n + 1)) ^^ (A*) = (A |^ n ^^ A) ^^ (A*) by ThPower10
+                          .= A |^ n ^^ (A ^^ (A*)) by ThConcat20
+                          .= A |^ n ^^ ((A*) ^^ A) by ThClosure105
+                          .= ((A*) ^^ A |^ n) ^^ A by B1, ThConcat20
+                          .= (A*) ^^ (A |^ n ^^ A) by ThConcat20
+                          .= (A*) ^^ A |^ (n + 1) by ThPower10;
+    hence P[n + 1];
+  end;
+  for n holds P[n] from NAT_1:sch 2(A, B);
+  hence thesis;
+end;
+
+theorem ThClosure80:
+A c= B* implies A |^ n c= B*
+proof
+  assume
+A:  A c= B*;
+  defpred P[Nat] means A |^ $1 c= B*;
+B:
+  P[0]
+  proof
+    <%>E in B* by ThClosure30;
+    then {<%>E} c= B* by ZFMISC_1:37;
+    hence thesis by ThPower20;
+  end;
+C:
+  now
+    let n;
+    assume P[n];
+    then (A |^ n) ^^ A c= B*  by A, ThClosure70;
+    hence P[n + 1] by ThPower10;
+  end;
+  for n holds P[n] from NAT_1:sch 2(B, C);
+  hence thesis;
+end;
+
+theorem ThClosure90:
+A c= B* implies A* c= B*
+proof
+  assume
+A:  A c= B*;
+  thus thesis
+  proof
+    let x;
+    assume
+B1:   x in A*;
+    consider n such that
+B2:   x in A |^ n by B1, ThClosure10;
+    A |^ n c= B* by A, ThClosure80;
+    hence x in B* by B2;
+  end;
+end;
+
+theorem ThClosure100:
+A c= B implies A* c= B*
+proof
+  assume
+A:  A c= B;
+  B c= B* by ThClosure50;
+  then A c= B* by A, XBOOLE_1:1;
+  hence thesis by ThClosure90;
+end;
+
+theorem ThClosure120:
+(A*)* = A*
+proof
+B:
+  (A*)* c= A* by ThClosure90;
+  A* c= (A*)* by ThClosure50;
+  hence thesis by B, XBOOLE_0:def 10;
+end;
+
+theorem
+(A*) ^^ (A*) = A*
+proof
+A:
+  (A*) ^^ (A*) c= A* by ThClosure70;
+  <%>E in A* by ThClosure30;
+  then A* c= (A*) ^^ (A*) by ThConcat110;
+  hence thesis by A, XBOOLE_0:def 10;
+end;
+
+theorem
+(A |^ n)* c= A*
+proof
+  A |^ n c= A* by ThClosure40;
+  hence thesis by ThClosure90;
+end;
+
+theorem ThClosure135:
+(A*) |^ n c= A*
+proof
+  (A*) |^ n c= (A*)* by ThClosure40;
+  hence thesis by ThClosure120;
+end;
+
+theorem
+n > 0 implies (A*) |^ n = A*
+proof
+  <%>E in A* by ThClosure30;
+  then
+A:  n > 0 implies A* c= (A*) |^ n by ThPower120;
+  (A*) |^ n c= A* by ThClosure135;
+  hence thesis by A, XBOOLE_0:def 10;
+end;
+
+theorem ThClosure145:
+A c= B* implies B* = (B \/ A)*
+proof
+  assume
+A:  A c= B*;
+  defpred P[Nat] means (B \/ A) |^ $1 c= B*;
+B:
+  P[0]
+  proof
+B1: (B \/ A) |^ 0 = {<%>E} by ThPower20;
+    <%>E in B* by ThClosure30;
+    hence thesis by B1, ZFMISC_1:37;
+  end;
+C:
+  now
+    let n;
+    assume
+C0:   P[n];
+C1: (B \/ A) |^ (n + 1) = (B \/ A) |^ n ^^ (B \/ A) by ThPower10;
+    B c= B* by ThClosure50;
+    then B \/ A c= B* by XBOOLE_1:8, A;
+    hence P[n + 1] by C0, C1, ThClosure70;
+  end;
+D:
+  for n holds P[n] from NAT_1:sch 2(B, C);
+E:  
+  (B \/ A)* c= B*
+  proof
+    let x;
+    assume x in (B \/ A)*;
+    then consider n such that
+E1:   x in (B \/ A) |^ n by ThClosure10;
+    (B \/ A) |^ n c= B* by D;
+    hence x in B* by E1;
+  end;
+  B c= B \/ A by XBOOLE_1:7;
+  then B* c= (B \/ A)* by ThClosure100;
+  hence thesis by E, XBOOLE_0:def 10;
+end;
+
+theorem ThClosure150:
+a in A* implies A* = (A \/ {a})*
+proof
+  assume a in A*;
+  then {a} c= A* by ZFMISC_1:37;
+  hence thesis by ThClosure145;
+end;
+
+theorem
+A* = (A \ {<%>E})*
+proof
+B:
+  <%>E in A* by ThClosure30;
+  <%>E in (A \ {<%>E})* by ThClosure30;
+  hence (A \ {<%>E})* = ((A \ {<%>E}) \/ {<%>E})* by ThClosure150
+                     .= (A \/ {<%>E})* by XBOOLE_1:39
+                     .= A* by B, ThClosure150;
+end;
+
+theorem
+(A*) \/ (B*) c= (A \/ B)*
+proof
+  A c= A \/ B & B c= A \/ B by XBOOLE_1:7;
+  then A* c= (A \/ B)* & B* c= (A \/ B)* by ThClosure100;
+  hence thesis by XBOOLE_1:8;
+end;
+
+theorem
+(A /\ B)* c= (A*) /\ (B*)
+proof
+  A /\ B c= A & A /\ B c= B by XBOOLE_1:17;
+  then (A /\ B)* c= A* & (A /\ B)* c= B* by ThClosure100;
+  hence thesis by XBOOLE_1:19;
+end;
+
+theorem ThClosure180:
+<%x%> in A* iff <%x%> in A
+proof
+  thus <%x%> in A* implies <%x%> in A
+  proof
+    assume
+A:    <%x%> in A* & not <%x%> in A;
+    defpred P[Nat] means <%x%> in A |^ $1;
+    consider n such that
+B1:   P[n] by A, ThClosure10;
+    reconsider m = n as Element of NAT by ORDINAL1:def 13;
+B2: ex i being Element of NAT st P[i]
+    proof
+      take m;
+      thus thesis by B1;
+    end;
+    ex n1 being Element of NAT st
+      P[n1] &
+      for n2 being Element of NAT st P[n2] holds n1 <= n2 from NAT_1:sch 5(B2);
+    then consider n1 being Element of NAT such that
+C1:   P[n1] and
+C2:   for n2 being Element of NAT st P[n2] holds n1 <= n2;
+    reconsider n1 as Nat;
+D:  now
+      assume n1 > 1;
+      then consider n2 such that
+D1:     n2 + 1 = n1 by NAT_1:6;
+      <%x%> in (A |^ n2) ^^ A by C1, D1, ThPower10;
+      then consider a, b such that
+E:      a in (A |^ n2) & b in A & <%x%> = a ^ b by DefConcat;
+      now
+        assume
+G:        (a = <%x%> & b = <%>E);
+        reconsider n2 as Element of NAT by ORDINAL1:def 13;
+        ex i being Element of NAT st P[i] & n1 > i
+        proof
+          take n2;
+          thus thesis by D1, E, G, NAT_1:13;
+        end;
+        hence contradiction by C2;
+      end;
+      hence <%x%> in A by E, LmSeq10;
+    end;
+H:  n1 = 1 implies <%x%> in A by C1, ThPower30;
+    now
+      assume n1 = 0;
+      then <%x%> in {<%>E} by C1, ThPower20;
+      then <%x%> = <%>E by TARSKI:def 1;
+      then { [0, x] } = {} by AFINSQ_1:35;
+      hence contradiction;
+    end;
+    hence contradiction by A, D, H, NAT_1:26;
+  end;
+  assume <%x%> in A;
+  then <%x%> in A |^ 1 by ThPower30;
+  hence thesis by ThClosure10;
+end;
+
+begin
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:: Lexemes as a Subset of E^omega
+:: Definition of Lex
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+definition
+  let E;
+  func Lex(E) -> Subset of E^omega means :DefAlphabet:
+    x in it iff ex e st e in E & x = <%e%>;
+  existence
+  proof
+    defpred P[set] means ex e st e in E & $1 = <%e%>;
+    consider C such that
+A:    x in C iff x in E^omega & P[x] from SUBSET_1:sch 1;
+    take C;
+    x in C iff ex e st e in E & x = <%e%>
+    proof
+      thus x in C implies ex e st e in E & x = <%e%> by A;
+      given e such that
+B:      e in E & x = <%e%>;
+      {e} c= E by B, ZFMISC_1:37;
+      then rng <%e%> c= E by AFINSQ_1:36;
+      then <%e%> is XFinSequence of E by ORDINAL1:def 8;
+      then <%e%> is Element of E^omega by AFINSQ_1:def 8;
+      hence thesis by A, B;
+    end;
+    hence thesis;
+  end;
+  uniqueness
+  proof
+    let C1, C2 be Subset of E^omega such that
+A1:   x in C1 iff ex e st e in E & x = <%e%> and
+A2:   x in C2 iff ex e st e in E & x = <%e%>;
+    now
+      let x;
+      thus x in C1 implies x in C2
+      proof
+        assume x in C1;
+        then ex e st e in E & x = <%e%> by A1;
+        hence x in C2 by A2;
+      end;
+      assume x in C2;
+      then ex e st e in E & x = <%e%> by A2;
+      hence x in C1 by A1;
+    end;
+    hence thesis by TARSKI:2;
+  end;
+end;
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:: Lexemes as a Subset of E^omega
+:: Properties of Lex
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+theorem ThAlphabet10:
+a in Lex(E) |^ len a
+proof
+  defpred P[Nat] means
+    for a holds len a = $1 implies a in Lex(E) |^ $1;
+A:
+  P[0]
+  proof
+    let a;
+    assume len a = 0;
+    then a = <%>E by AFINSQ_1:18;
+    then a in {<%>E} by TARSKI:def 1;
+    hence thesis by ThPower20;
+  end;
+B:
+  now
+    let n;
+    assume
+B1:   P[n];
+    now
+      let b;
+      assume len b = n + 1;
+      then consider c, e such that
+C1:     len c = n & b = c ^ <%e%> by LmSeq40;
+C3:   c in Lex(E) |^ n by C1, B1;
+      <%e%> is Element of E^omega by C1, LmSeq20;
+      then e in E by LmSeq30;
+      then <%e%> in Lex(E) by DefAlphabet;
+      then <%e%> in Lex(E) |^ 1 by ThPower30;
+      hence b in Lex(E) |^ (n + 1) by C1, C3, ThPower160;
+    end;
+    hence P[n + 1];
+  end;
+  for n holds P[n] from NAT_1:sch 2(A, B);
+  hence thesis;
+end;
+
+theorem
+Lex(E)* = E^omega
+proof
+A:
+  now
+    let x;
+    assume x in E^omega;
+    then reconsider a = x as Element of E^omega;
+    a in Lex(E) |^ len a by ThAlphabet10;
+    hence x in Lex(E)* by ThClosure10;
+  end;
+B:
+  for x st x in Lex(E)* holds x in E^omega;
+  thus thesis by A, B, TARSKI:2;
+end;
+
+theorem
+A* = E^omega implies Lex(E) c= A
+proof
+  assume
+A:  A* = E^omega;
+  thus thesis
+  proof
+    let x;
+    assume
+B1:   x in Lex(E);
+    then consider e such that
+B2:   e in E & x = <%e%> by DefAlphabet;
+    thus x in A by B1, B2, A, ThClosure180;
+  end;
+end;

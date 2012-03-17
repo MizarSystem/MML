@@ -8,17 +8,17 @@ environ
 
  vocabularies PRE_TOPC, TARSKI, FUNCT_1, RELAT_1, BOOLE, FUNCT_4, SETFAM_1,
       SUBSET_1, CONNSP_2, ORDINAL2, FUNCOP_1, FUNCT_3, TSEP_1, CONNSP_1,
-      TMAP_1, NAT_1;
+      TMAP_1, NAT_1, COMPLEX1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, RELSET_1,
       PARTFUN1, FUNCT_2, FUNCT_4, DOMAIN_1, STRUCT_0, PRE_TOPC, CONNSP_1,
-      CONNSP_2, BORSUK_1, GRCAT_1, TSEP_1;
- constructors CONNSP_1, BORSUK_1, GRCAT_1, TSEP_1, NAT_D;
+      CONNSP_2, BORSUK_1, TSEP_1;
+ constructors CONNSP_1, BORSUK_1, TSEP_1, NAT_D, FUNCT_4, SETFAM_1;
  registrations PRE_TOPC, BORSUK_1, TSEP_1, STRUCT_0, COMPLSP1, RELSET_1,
       SUBSET_1, XBOOLE_0, FUNCT_2, PARTFUN1;
  requirements BOOLE, SUBSET;
- definitions PRE_TOPC, BORSUK_1, XBOOLE_0, STRUCT_0;
+ definitions PRE_TOPC, BORSUK_1, XBOOLE_0, STRUCT_0, RELAT_1;
  theorems TARSKI, SUBSET_1, FUNCT_1, FUNCT_2, FUNCT_4, ZFMISC_1, PRE_TOPC,
-      CONNSP_2, TOPS_1, TOPS_2, BORSUK_1, TSEP_1, RELAT_1, GRCAT_1, RELSET_1,
+      CONNSP_2, TOPS_1, TOPS_2, BORSUK_1, TSEP_1, RELAT_1, RELSET_1,
       XBOOLE_0, XBOOLE_1, CONNSP_1, PARTFUN1;
 
 begin :: 1. Set-Theoretic Preliminaries.
@@ -1434,7 +1434,7 @@ theorem
        dom f = [#]X by FUNCT_2:def 1;
   then A4: x in the carrier of X & dom f = the carrier of X;
        {x} is Subset of f"{y} by A3,SUBSET_1:63;
-  then f.:{x} c= {y} by Lm1;
+  then Im(f,x) c= {y} by Lm1;
   then {f.x} c= {y} & f.x in {f.x} by A4,FUNCT_1:117,TARSKI:def 1;
   then f is_continuous_at x & f.x = y by A1,Th49,TARSKI:def 1;
   hence thesis by A2,Th52;
@@ -2082,11 +2082,7 @@ theorem Th90:
 
 theorem Th91:
  for X being non empty 1-sorted, x being Element of X
-   holds (id X).x = x
- proof let X be non empty 1-sorted, x be Element of X;
-  thus (id X).x = (id the carrier of X).x by GRCAT_1:def 11
-               .= x by FUNCT_1:35;
- end;
+   holds (id X).x = x by FUNCT_1:35;
 
 theorem
   for X being non empty 1-sorted, f being Function of X,X
@@ -2100,34 +2096,20 @@ theorem
     hence thesis by A1;
    end;
   then f = id the carrier of X by FUNCT_2:113;
-  hence thesis by GRCAT_1:def 11;
+  hence thesis;
  end;
 
 theorem Th93:
  for X,Y being 1-sorted,
      f being Function of the carrier of X,the carrier of Y
-  holds f*(id X) = f & (id Y)*f = f
- proof let X,Y be 1-sorted;
-   let f be Function of the carrier of X,the carrier of Y;
-   f*(id the carrier of X) = f & (id the carrier of Y)*f = f by FUNCT_2:23;
-  hence thesis by GRCAT_1:def 11;
- end;
+  holds f*(id X) = f & (id Y)*f = f by FUNCT_2:23;
 
 theorem Th94:
- id X is continuous Function of X,X
+ id X is continuous
  proof
-   id X is continuous
-   proof
-        for V being Subset of X st V is open holds (id X)"V is open
-     proof let V be Subset of X;
-      assume A1: V is open;
-           (id X)"V = (id the carrier of X)"V by GRCAT_1:def 11
-               .= V by FUNCT_2:171;
-      hence (id X)"V is open by A1;
-     end;
-    hence thesis by TOPS_2:55;
-   end;
-  hence thesis;
+   for V being Subset of X st V is open holds (id X)"V is open
+   by FUNCT_2:171;
+  hence thesis by TOPS_2:55;
  end;
 
 ::(Definition of the inclusion mapping.)
@@ -2666,10 +2648,6 @@ definition let X be non empty TopSpace, A be Subset of X;
  coherence;
 end;
 
- Lm7:
- for A being Subset of X st A is open holds modid(X,A) = id X
-         by GRCAT_1:def 11;
-
 canceled;
 
 theorem Th108:
@@ -2788,10 +2766,10 @@ theorem Th113:
  proof let A be Subset of X;
   thus A is open implies modid(X,A) is
      continuous Function of X,X modified_with_respect_to A
-   proof assume A1: A is open;
+   proof assume A is open;
     then A2: the TopStruct of X = X modified_with_respect_to A by Th106;
     reconsider f = modid(X,A) as Function of X,X;
-         f = id X by A1,Lm7;
+         f = id X;
     then f is continuous Function of X,X by Th94;
     hence thesis by A2,Th56;
    end;
@@ -2922,11 +2900,10 @@ definition let X be non empty TopSpace, X0 be SubSpace of X;
 end;
 
 theorem
-  X0 is open SubSpace of X implies modid(X,X0) = id X
- proof assume A1: X0 is open SubSpace of X;
+  modid(X,X0) = id X
+ proof
   reconsider A = the carrier of X0 as Subset of X by TSEP_1:1;
-  A is open by A1,TSEP_1:16;
-  then modid(X,A) = id X & modid(X,A) = modid(X,X0) by Def11,Lm7;
+  modid(X,A) = id X & modid(X,A) = modid(X,X0) by Def11;
   hence thesis;
  end;
 

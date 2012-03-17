@@ -7,41 +7,34 @@
 environ
 
  vocabularies BOOLE, REALSET1, FUNCT_1, RELAT_1, BINOP_1, RLVECT_1, QC_LANG1,
-      VECTSP_1, REALSET2, NAT_1;
+      VECTSP_1, REALSET2, NAT_1, FUNCOP_1, FUNCT_4, CAT_1, FUNCT_7, GROUP_1;
  notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1,
-      REALSET1, FUNCT_2, BINOP_1, STRUCT_0, RLVECT_1, GROUP_1, VECTSP_1;
- constructors ENUMSET1, BINOP_1, REALSET1, VECTSP_1, NAT_D;
- registrations REALSET1, RELSET_1, SUBSET_1, XBOOLE_0, RLVECT_1, GROUP_1;
+      REALSET1, FUNCOP_1, FUNCT_2, BINOP_1, FUNCT_4, FUNCT_7, STRUCT_0,
+      RLVECT_1, GROUP_1, VECTSP_1;
+ constructors ENUMSET1, BINOP_1, REALSET1, VECTSP_1, NAT_D, FUNCOP_1, FUNCT_4,
+      FUNCT_7;
+ registrations REALSET1, RELSET_1, SUBSET_1, XBOOLE_0, RLVECT_1, GROUP_1,
+      VECTSP_1, STRUCT_0, FUNCOP_1;
  requirements SUBSET, BOOLE;
 
 
 begin
+
+reserve x,y for set;
 
 definition
   let IT be LoopStr;
   attr IT is zeroed means
 :: REALSET2:def 1
                  for a being Element of IT holds
-                      (the add of IT).(a,the Zero of IT) = a &
-                      (the add of IT).(the Zero of IT,a) = a;
+                      (the add of IT).(a,0.IT) = a &
+                      (the add of IT).(0.IT,a) = a;
   attr IT is complementable means
 :: REALSET2:def 2
                  for a being Element of IT
                   ex b being Element of IT st
-                      (the add of IT).(a,b) = the Zero of IT &
-                      (the add of IT).(b,a) = the Zero of IT;
-end;
-
-definition let L be non empty LoopStr;
- redefine attr L is add-associative means
-:: REALSET2:def 3
-        for a,b,c being Element of L holds
-                      (the add of L).((the add of L).(a,b),c) =
-                       (the add of L).(a,(the add of L).(b,c));
-  redefine attr L is Abelian means
-:: REALSET2:def 4
-     for a,b being Element of L holds
-        (the add of L).(a,b) = (the add of L).(b,a);
+                      (the add of IT).(a,b) = 0.IT &
+                      (the add of IT).(b,a) = 0.IT;
 end;
 
 registration
@@ -50,15 +43,16 @@ registration
 end;
 
 definition
-   mode Group is Abelian add-associative zeroed complementable
+   mode AbGroup is Abelian add-associative zeroed complementable
     (non empty LoopStr);
 end;
 
 definition
+  canceled 2;
   let IT be 1-sorted;
   attr IT is trivial means
 :: REALSET2:def 5
-     the carrier of IT is trivial;
+   the carrier of IT is trivial;
 end;
 
 registration
@@ -70,20 +64,7 @@ registration
 end;
 
 definition
-   let A be non trivial set;
-   let od,om be BinOp of A;
-   let nd be Element of A;
-   let nm be Element of A\{nd};
-   func field(A,od,om,nd,nm) -> non trivial strict doubleLoopStr means
-:: REALSET2:def 6
-   A = the carrier of it &
-        od = the add of it &
-        om = the mult of it &
-        nd = the Zero of it &
-        nm = the unity of it;
-end;
-
-definition
+ canceled;
  let IT be 1-sorted;
  redefine attr IT is trivial means
 :: REALSET2:def 7
@@ -91,83 +72,109 @@ definition
 end;
 
 definition
-  let IT be doubleLoopStr;
-  attr IT is Field-like means
+ func add_2 -> BinOp of 2 equals
 :: REALSET2:def 8
+  (0,0) .--> 0 +* (0,1) .--> 1 +* (1,0) .--> 1 +* (1,1) .--> 0;
+ func mult_2 -> BinOp of 2 equals
+:: REALSET2:def 9
+  (0,0) .--> 0 +* (0,1) .--> 0 +* (1,0) .--> 0 +* (1,1) .--> 1;
+end;
+
+definition
+ func dL-Z_2 -> doubleLoopStr equals
+:: REALSET2:def 10
+  doubleLoopStr(#2,add_2,mult_2,In(1,2),In(0,2)#);
+end;
+
+registration
+ cluster dL-Z_2 -> strict non empty;
+end;
+
+definition
+  let IT be non empty doubleLoopStr;
+  attr IT is Field-like means
+:: REALSET2:def 11
+ the LoopStr of IT is AbGroup &
+ ::IT is not degenerated &
    ex A being non trivial set,
             od being BinOp of A, nd being Element of A,
             om being DnT of nd,A, nm being Element of A\{nd} st
-           (IT = field(A,od,om,nd,nm) & LoopStr(#A,od,nd#) is Group &
+           (IT = doubleLoopStr(#A,od,om,nm,nd#) &
            (for B being non empty set, P being BinOp of B,
                 e being Element of B holds
            B = A\{nd} & e = nm & P = om!(A,nd) implies
-           LoopStr(#B,P,e#) is Group)) &
+           LoopStr(#B,P,e#) is AbGroup)) &
            for x,y,z being Element of A holds
             om.(x,od.(y,z)) = od.(om.(x,y),om.(x,z)) &
             om.(od.(x,y),z) = od.(om.(x,z),om.(y,z));
 end;
 
 registration
- cluster strict Field-like doubleLoopStr;
+ let A be non trivial set,
+     od be BinOp of A,
+     nd be Element of A,
+     om be BinOp of A,
+     nm be Element of A;
+ cluster doubleLoopStr(#A,od,om,nm,nd#) -> non empty;
+end;
+
+registration
+ cluster strict Field-like (non empty doubleLoopStr);
 end;
 
 definition
-  mode Field is Field-like doubleLoopStr;
+  mode Field is Field-like (non empty doubleLoopStr);
 end;
 
 definition
    let F be Field;
-   func suppf(F) -> non trivial set means
-:: REALSET2:def 9
-    ex od being BinOp of it,
-             nd being Element of it,
-             om being DnT of nd,it,
-             nm being Element of it\{nd} st
-           F = field(it,od,om,nd,nm);
+   func suppf(F) -> non trivial set equals
+:: REALSET2:def 12
+    the carrier of F;
 end;
 
 definition
    let F be Field;
-   func odf(F) -> BinOp of suppf(F) means
-:: REALSET2:def 10
-     ex nd being Element of suppf(F),
+   func odf(F) -> BinOp of suppf F means
+:: REALSET2:def 13
+ ex nd being Element of suppf(F),
               om being DnT of nd, suppf(F),
               nm being Element of suppf(F)\{nd} st
-           F = field(suppf(F),it,om,nd,nm);
+           F = doubleLoopStr(#suppf F,it,om,nm,nd#);
 end;
 
 definition
    let F be Field;
    func ndf(F) -> Element of suppf(F) means
-:: REALSET2:def 11
+:: REALSET2:def 14
     ex om being DnT of it,suppf(F),
              nm being Element of suppf(F)\{it} st
-           F = field(suppf(F),odf(F),om,it,nm);
+           F = doubleLoopStr(#suppf F,odf F,om,nm,it#);
 end;
 
 definition
    let F be Field;
    func omf(F) -> DnT of ndf(F),suppf(F) means
-:: REALSET2:def 12
+:: REALSET2:def 15
    ex nm being Element of suppf(F)\{ndf(F)} st
-           F = field(suppf(F),odf(F),it,ndf(F),nm);
+           F = doubleLoopStr(#suppf F,odf F,it,nm,ndf F#);
 end;
 
 definition
    let F be Field;
    func nmf(F) -> Element of suppf(F)\{ndf(F)} means
-:: REALSET2:def 13
-       F = field(suppf(F),odf(F),omf(F),ndf(F),it);
+:: REALSET2:def 16
+       F = doubleLoopStr(#suppf F,odf F,omf F,it,ndf F#);
 end;
 
 theorem :: REALSET2:1
-   for F being Field holds LoopStr(#suppf(F),odf(F),ndf(F)#) is Group;
+   for F being Field holds LoopStr(#suppf(F),odf(F),ndf(F)#) is AbGroup;
 
 theorem :: REALSET2:2
    for F being Field, B being non empty set,
        P being BinOp of B, e being Element of B st
    B = suppf(F)\{ndf(F)} & e = nmf(F) & P = omf(F)!(suppf(F),ndf(F)) holds
-    LoopStr(#B,P,e#) is Group;
+    LoopStr(#B,P,e#) is AbGroup;
 
 theorem :: REALSET2:3
    for F being Field, x,y,z being Element of suppf(F) holds
@@ -218,7 +225,7 @@ theorem :: REALSET2:11
 definition
    let F be Field;
    func compf(F) -> Function of suppf(F),suppf(F) means
-:: REALSET2:def 14
+:: REALSET2:def 17
  for x being Element of suppf(F) holds odf(F).(x,it.x) = ndf(F);
 end;
 
@@ -293,7 +300,7 @@ theorem :: REALSET2:25
 definition
   let F be Field;
   func revf(F) -> Function of suppf(F)\{ndf(F)},suppf(F)\{ndf(F)} means
-:: REALSET2:def 15
+:: REALSET2:def 18
  for x being Element of suppf(F)\{ndf(F)} holds
         omf(F).(x,it.x) = nmf(F);
 end;

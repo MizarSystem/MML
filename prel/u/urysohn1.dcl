@@ -25,34 +25,37 @@
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="65"/>
+<Func kind="K" nr="66"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="110">
+<Func kind="K" nr="112">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="1" value="false"/>
 <Adjective nr="15"/>
 <Adjective nr="16"/>
+<Adjective nr="17"/>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="111"/>
+<Func kind="K" nr="113"/>
 <Cluster>
 <Adjective nr="1" value="false"/>
 <Adjective nr="15"/>
 <Adjective nr="16"/>
+<Adjective nr="17"/>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="112"/>
+<Func kind="K" nr="114"/>
 <Cluster>
 <Adjective nr="1" value="false"/>
 <Adjective nr="15"/>
 <Adjective nr="16"/>
+<Adjective nr="17"/>
 </Cluster>
 </FCluster>
 </Registrations>

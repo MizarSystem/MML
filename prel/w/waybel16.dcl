@@ -19,8 +19,8 @@
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="ORDERS_1"/>
 <ArticleID name="ORDERS_2"/>
-<ArticleID name="FUNCT_4"/>
 <ArticleID name="FUNCOP_1"/>
+<ArticleID name="FUNCT_4"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="PBOOLE"/>
 <ArticleID name="RELAT_2"/>
@@ -47,7 +47,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="163">
+<Func kind="K" nr="166">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -66,8 +66,8 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="171">
-<Func kind="K" nr="163">
+<Func kind="K" nr="174">
+<Func kind="K" nr="166">
 <LocusVar nr="1"/>
 </Func>
 </Func>

@@ -46,12 +46,12 @@
 <Typ kind="G" nr="11">
 <Cluster>
 <Adjective nr="29" value="false"/>
-<Adjective nr="75" value="false"/>
+<Adjective nr="76" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="13">
 <Cluster>
-<Adjective nr="78">
+<Adjective nr="79">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

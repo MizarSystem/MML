@@ -20,31 +20,25 @@
 <ArticleID name="RAT_1"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="SEQ_1"/>
-<ArticleID name="FINSET_1"/>
-<ArticleID name="CARD_1"/>
-<ArticleID name="FINSEQ_1"/>
-<ArticleID name="FINSEQ_2"/>
 <ArticleID name="COMPLEX1"/>
-<ArticleID name="INT_2"/>
-<ArticleID name="NEWTON"/>
 <ArticleID name="PREPOWER"/>
 </Signature>
 <RCluster>
 <ArgTypes/>
 <Typ kind="M" nr="4">
 <Cluster/>
-<Func kind="K" nr="82"/>
-<Func kind="K" nr="78"/>
+<Func kind="K" nr="83"/>
+<Func kind="K" nr="79"/>
 </Typ>
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="8">
-<Func kind="K" nr="82"/>
-<Func kind="K" nr="78"/>
+<Func kind="K" nr="83"/>
+<Func kind="K" nr="79"/>
 </Adjective>
-<Adjective nr="30"/>
-<Adjective nr="38"/>
+<Adjective nr="31"/>
+<Adjective nr="32"/>
 </Cluster>
 </RCluster>
 <FCluster>
@@ -55,7 +49,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="166">
+<Func kind="K" nr="141">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -84,7 +78,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="192">
+<Func kind="K" nr="147">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -107,7 +101,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="194">
+<Func kind="K" nr="149">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>

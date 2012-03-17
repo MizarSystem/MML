@@ -157,7 +157,7 @@
 </Typ>
 <Not>
 <And>
-<Pred kind="R" nr="21">
+<Pred kind="R" nr="26">
 <Var nr="1"/>
 <Func kind="F" nr="1"/>
 </Pred>

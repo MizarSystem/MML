@@ -10,6 +10,7 @@
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
+<ArticleID name="MEMBERED"/>
 <ArticleID name="XXREAL_0"/>
 <ArticleID name="SUPINF_1"/>
 </Signature>
@@ -19,14 +20,14 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="K" nr="10">
-<Func kind="K" nr="53"/>
+<Func kind="K" nr="54"/>
 </Func>
 </Typ>
 <For>
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="K" nr="10">
-<Func kind="K" nr="53"/>
+<Func kind="K" nr="54"/>
 </Func>
 </Typ>
 <Not>
@@ -34,7 +35,7 @@
 <For>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="46"/>
+<Func kind="K" nr="47"/>
 </Typ>
 <And>
 <Not>
@@ -68,7 +69,7 @@
 <For>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="46"/>
+<Func kind="K" nr="47"/>
 </Typ>
 <And>
 <Not>

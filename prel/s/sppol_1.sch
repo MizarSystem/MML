@@ -35,8 +35,8 @@
 <Fraenkel>
 <Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="41"/>
-<Func kind="K" nr="45"/>
+<Func kind="K" nr="42"/>
+<Func kind="K" nr="46"/>
 </Typ>
 <Func kind="F" nr="3">
 <Func kind="F" nr="2"/>
@@ -45,7 +45,7 @@
 <And>
 <Pred kind="R" nr="2">
 <Var nr="1"/>
-<Func kind="K" nr="69">
+<Func kind="K" nr="70">
 <Func kind="F" nr="2"/>
 </Func>
 </Pred>
@@ -75,21 +75,21 @@
 <Fraenkel>
 <Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="41"/>
-<Func kind="K" nr="45"/>
+<Func kind="K" nr="42"/>
+<Func kind="K" nr="46"/>
 </Typ>
 <Func kind="F" nr="3">
 <Func kind="F" nr="2"/>
 <Var nr="1"/>
 </Func>
 <And>
-<Pred kind="R" nr="11">
+<Pred kind="R" nr="16">
 <Num nr="1"/>
 <Var nr="1"/>
 </Pred>
-<Pred kind="R" nr="11">
+<Pred kind="R" nr="16">
 <Var nr="1"/>
-<Func kind="K" nr="68">
+<Func kind="K" nr="69">
 <Func kind="F" nr="2"/>
 </Func>
 </Pred>

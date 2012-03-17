@@ -15,10 +15,10 @@
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="INT_1"/>
+<ArticleID name="SEQM_3"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="SEQM_3"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FRAENKEL"/>
 <ArticleID name="STRUCT_0"/>
@@ -45,8 +45,8 @@
 <Adjective nr="43"/>
 <Adjective nr="46"/>
 <Adjective nr="55"/>
-<Adjective nr="73"/>
-<Adjective nr="82"/>
+<Adjective nr="74"/>
+<Adjective nr="83"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
@@ -56,7 +56,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="217">
+<Func kind="K" nr="218">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -64,7 +64,7 @@
 <Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="16">
-<Func kind="K" nr="45"/>
+<Func kind="K" nr="46"/>
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
@@ -72,10 +72,10 @@
 <Adjective nr="48">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="83">
+<Adjective nr="84">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="84">
+<Adjective nr="85">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

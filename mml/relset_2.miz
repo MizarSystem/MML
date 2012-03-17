@@ -7,13 +7,13 @@
 environ
 
  vocabularies RELSET_2, TARSKI, RELAT_1, CANTOR_1, SETFAM_1, BOOLE, FUNCT_1,
-      PUA2MSS1, EQREL_1, FUNCT_5, SUBSET_1, NAT_1;
+      PUA2MSS1, EQREL_1, FUNCT_5, SUBSET_1, NAT_1, COMPLEX1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, RELAT_1, FUNCT_1,
       RELSET_1, FUNCT_2, EQREL_1, FUNCT_5;
  constructors SETFAM_1, FUNCT_2, EQREL_1, FUNCT_5, NAT_D;
  registrations SUBSET_1, RELSET_1, PARTFUN1, SYSREL, RELAT_1;
  requirements SUBSET, BOOLE;
- definitions XBOOLE_0, TARSKI, EQREL_1, SUBSET_1;
+ definitions XBOOLE_0, TARSKI, EQREL_1, SUBSET_1, RELAT_1;
  theorems RELAT_1, TARSKI, SETFAM_1, ZFMISC_1, XBOOLE_1, SUBSET_1, RELSET_1,
       XBOOLE_0, FUNCT_1, FUNCT_2, MSSUBFAM, EQREL_1, FUNCT_5, SYSREL, ORDERS_1;
  schemes FUNCT_1, DOMAIN_1;
@@ -199,16 +199,14 @@ end;
 theorem :: (27.2)
   (P /\ Q)*R c= (P*R) /\ (Q*R)
 proof
-  let a be set;
-  assume A1: a in (P /\ Q)*R;
-  then consider x,y being set such that
-A2: a = [x,y] by RELAT_1:def 1;
+  let x,y be set;
+  assume A1: [x,y] in (P /\ Q)*R;
   consider z being set such that
-A3: [x,z] in P/\Q & [z,y] in R by RELAT_1:def 8,A2,A1;
+A3: [x,z] in P/\Q & [z,y] in R by RELAT_1:def 8,A1;
 A4: [x,z] in P & [x,z] in Q by A3,XBOOLE_0:def 3;
   then A5: [x,y] in P*R by A3,RELAT_1:def 8;
   [x,y] in Q*R by A3,A4,RELAT_1:def 8;
-  hence thesis by A2,A5,XBOOLE_0:def 3;
+  hence thesis by A5,XBOOLE_0:def 3;
 end;
 
 begin :: The first order cutting of binary relation of two sets A,B
@@ -219,11 +217,11 @@ definition
 end;
 
 theorem Th9:
-  y in R.:{x} iff [x,y] in R
+  y in Im(R,x) iff [x,y] in R
 proof
-  thus y in R.:{x} implies [x,y] in R
+  thus y in Im(R,x) implies [x,y] in R
   proof
-    assume y in R.:{x};
+    assume y in Im(R,x);
     then consider a being set such that
 A1: [a,y] in R & a in {x} by RELAT_1:def 13;
     thus thesis by A1,TARSKI:def 1;
@@ -234,26 +232,26 @@ A1: [a,y] in R & a in {x} by RELAT_1:def 13;
 end;
 
 theorem Th10:
-  (R1 \/ R2).:{x} = R1.:{x} \/ R2.:{x}
+  Im(R1 \/ R2,x) = Im(R1,x) \/ Im(R2,x)
 proof
-  thus (R1 \/ R2).:{x} c= R1.:{x} \/ R2.:{x}
+  thus Im(R1 \/ R2,x) c= Im(R1,x) \/ Im(R2,x)
   proof
     let y be set;
-    assume y in (R1 \/ R2).:{x};
+    assume y in Im(R1 \/ R2,x);
     then [x,y] in R1 \/ R2 by Th9;
     then [x,y] in R1 or [x,y] in R2 by XBOOLE_0:def 2;
-    then y in R1.:{x} or y in R2.:{x} by Th9;
+    then y in Im(R1,x) or y in Im(R2,x) by Th9;
     hence thesis by XBOOLE_0:def 2;
   end;
   let y be set;
-  assume A1: y in R1.:{x} \/ R2.:{x};
+  assume A1: y in Im(R1,x) \/ Im(R2,x);
   per cases by A1,XBOOLE_0:def 2;
-  suppose y in R1.:{x};
+  suppose y in Im(R1,x);
     then [x,y] in R1 by Th9;
     then [x,y] in R1\/R2 by XBOOLE_0:def 2;
     hence thesis by Th9;
   end;
-  suppose y in R2.:{x};
+  suppose y in Im(R2,x);
     then [x,y] in R2 by Th9;
     then [x,y] in R1\/R2 by XBOOLE_0:def 2;
     hence thesis by Th9;
@@ -261,40 +259,40 @@ proof
 end;
 
 theorem Th11:
-  (R1 /\ R2).:{x} = R1.:{x} /\ R2.:{x}
+  Im(R1 /\ R2,x) = Im(R1,x) /\ Im(R2,x)
 proof
- thus (R1 /\ R2).:{x} c= R1.:{x} /\ R2.:{x}
+ thus Im(R1 /\ R2,x) c= Im(R1,x) /\ Im(R2,x)
  proof
   let y be set;
-  assume y in (R1 /\ R2).:{x};
+  assume y in Im(R1 /\ R2,x);
   then [x,y] in R1/\R2 by Th9;
   then [x,y] in R1 & [x,y] in R2 by XBOOLE_0:def 3;
-  then y in R1.:{x} & y in R2.:{x} by Th9;
+  then y in Im(R1,x) & y in Im(R2,x) by Th9;
   hence thesis by XBOOLE_0:def 3;
  end;
  let y be set;
- assume y in R1.:{x} /\ R2.:{x};
- then y in R1.:{x} & y in R2.:{x} by XBOOLE_0:def 3;
+ assume y in Im(R1,x) /\ Im(R2,x);
+ then y in Im(R1,x) & y in Im(R2,x) by XBOOLE_0:def 3;
  then [x,y] in R1 & [x,y] in R2 by Th9;
  then [x,y] in R1 /\ R2 by XBOOLE_0:def 3;
  hence thesis by Th9;
 end;
 
 theorem
-  (R1 \ R2).:{x} = R1.:{x} \ R2.:{x}
+  Im(R1 \ R2,x) = Im(R1,x) \ Im(R2,x)
 proof
-  thus (R1\R2) .:{x} c= R1.:{x} \ R2.:{x}
+  thus Im(R1\R2,x) c= Im(R1,x) \ Im(R2,x)
   proof
     let y;
-    assume y in (R1\R2) .:{x};
+    assume y in Im(R1\R2,x);
     then [x,y] in R1\R2 by Th9;
     then [x,y] in R1 & not [x,y] in R2 by XBOOLE_0:def 4;
-    then y in R1.:{x} & not y in R2.:{x} by Th9;
+    then y in Im(R1,x) & not y in Im(R2,x) by Th9;
     hence thesis by XBOOLE_0:def 4;
   end;
   let y;
-  assume y in R1.:{x} \ R2.:{x};
-  then y in R1.:{x} & not y in R2.:{x} by XBOOLE_0:def 4;
+  assume y in Im(R1,x) \ Im(R2,x);
+  then y in Im(R1,x) & not y in Im(R2,x) by XBOOLE_0:def 4;
   then [x,y] in R1 & not [x,y] in R2 by Th9;
   then [x,y] in R1\R2 by XBOOLE_0:def 4;
   hence thesis by Th9;
@@ -622,7 +620,7 @@ A3:  x in A by A2;
 end;
 
 theorem Th24:
-  y in R.:^X implies for x being set st x in X holds y in R.:{x}
+  y in R.:^X implies for x being set st x in X holds y in Im(R,x)
 proof
  assume y in R.:^X;
  then A1: y in Intersect(.:R.:{_{X}_});
@@ -660,12 +658,12 @@ end;
 theorem Th25:
   for B being non empty set, A being set, X being Subset of A,
       y being Element of B, R being Subset of [:A,B:] holds
-    y in R.:^X iff for x being set st x in X holds y in R.:{x}
+    y in R.:^X iff for x being set st x in X holds y in Im(R,x)
 proof
  let B be non empty set, A be set, X be Subset of A, y be Element of B,
      R be Subset of [:A,B:];
- thus y in R.:^X implies for x being set st x in X holds y in R.:{x} by Th24;
- assume A1: for x being set st x in X holds y in R.:{x};
+ thus y in R.:^X implies for x being set st x in X holds y in Im(R,x) by Th24;
+ assume A1: for x being set st x in X holds y in Im(R,x);
  per cases;
  suppose .:R.:{_{X}_} = {};
   then Intersect(.:R.:{_{X}_}) = B by SETFAM_1:def 10;
@@ -683,7 +681,7 @@ A4: [z,Y] in .:R & z in {_{X}_} by RELAT_1:def 13;
    consider x being set such that
 A5: z = {x} & x in X by A4,Th1;
 A6: z in dom .:R & Y = .:R.z by A4,FUNCT_1:8;
-   Y = R.:{x} by A5,A6,Def3;
+   Y = Im(R,x) by A5,A6,Def3;
    hence thesis by A1,A5;
   end;
   then y in meet (.:R.:{_{X}_}) by A2,SETFAM_1:def 1;
@@ -814,7 +812,7 @@ A7: G <> {}
         then consider Z3 being Subset of A such that
 A9:    Z2 = R.:^Z3 & Z3 in F by A1;
         reconsider a as Element of B by A8;
-        for x being set st x in Z3 holds a in R.:{x}
+        for x being set st x in Z3 holds a in Im(R,x)
         proof
           let x be set such that A10: x in Z3;
           x in union F by A10,A9,TARSKI:def 4;
@@ -829,7 +827,7 @@ A9:    Z2 = R.:^Z3 & Z3 in F by A1;
     assume A11: a in Intersect G;
     then A12: a in meet G by A7,SETFAM_1:def 10;
     reconsider a as Element of B by A11;
-    for X being set st X in union F holds a in R.:{X}
+    for X being set st X in union F holds a in Im(R,X)
     proof
       let X be set;
       assume X in union F;
@@ -979,19 +977,19 @@ proof
     assume A1: y in (R1 /\ R2).:^X; then
     reconsider B as non empty set;
     reconsider y as Element of B by A1;
-    for x being set st x in X holds y in R1.:{x}
+    for x being set st x in X holds y in Im(R1,x)
     proof
       let x be set; assume x in X;
-      then y in (R1 /\ R2).:{x} by Th24,A1;
-      then y in R1.:{x} /\ R2.:{x} by Th11;
+      then y in Im(R1 /\ R2,x) by Th24,A1;
+      then y in Im(R1,x) /\ Im(R2,x) by Th11;
       hence thesis by XBOOLE_0:def 3;
     end; then
 A2: y in R1.:^X by Th25;
-    for x being set st x in X holds y in R2.:{x}
+    for x being set st x in X holds y in Im(R2,x)
     proof
       let x be set; assume x in X;
-      then y in (R1 /\ R2).:{x} by Th24,A1;
-      then y in R1.:{x} /\ R2.:{x} by Th11;
+      then y in Im(R1 /\ R2,x) by Th24,A1;
+      then y in Im(R1,x) /\ Im(R2,x) by Th11;
       hence thesis by XBOOLE_0:def 3;
     end;
     then y in R2.:^X by Th25;
@@ -1002,12 +1000,12 @@ A2: y in R1.:^X by Th25;
 A4: y in (R1.:^X) & y in (R2.:^X) by XBOOLE_0:def 3;
   reconsider B as non empty set by A3;
   reconsider y as Element of B by A3;
-  for x being set st x in X holds y in (R1/\R2).:{x}
+  for x being set st x in X holds y in Im(R1/\R2,x)
   proof
     let x be set;
     assume x in X;
-    then y in R1.:{x} & y in R2.:{x} by A4,Th25;
-    then y in R1.:{x} /\ R2.:{x} by XBOOLE_0:def 3;
+    then y in Im(R1,x) & y in Im(R2,x) by A4,Th25;
+    then y in Im(R1,x) /\ Im(R2,x) by XBOOLE_0:def 3;
     hence thesis by Th11;
   end;
   hence thesis by Th25;
@@ -1078,7 +1076,7 @@ proof
     assume A3: a in R.:^X;
     consider x being set such that
 A4: x in X by XBOOLE_0:def 1,A2;
-    a in R.:{x} by A4,A3,Th24;
+    a in Im(R,x) by A4,A3,Th24;
     hence thesis by Th9,A1;
   end;
   hence thesis by XBOOLE_1:3;
@@ -1095,7 +1093,7 @@ theorem Th38: :: (7.2.2)
       assume A2: a in B;
       then reconsider B as non empty set;
       reconsider a as Element of B by A2;
-      for x being set st x in X holds a in R.:{x}
+      for x being set st x in X holds a in Im(R,x)
       proof
         let x be set; assume x in X; then
         [x,a] in R by A1,ZFMISC_1:106;
@@ -1188,10 +1186,10 @@ A15:    x = R.:^X & R in FR by A14,A1;
             let Y be set such that A20: Y in G;
             consider R being Subset of [:A,B:] such that
 A21:        Y = R.:^X & R in FR by A20,A1;
-            for x being set st x in X holds a in R.:{x}
+            for x being set st x in X holds a in Im(R,x)
             proof
               let x be set such that A22: x in X;
-              a in (Intersect FR).:{x} by A22,Th24,A16;
+              a in Im(Intersect FR,x) by A22,Th24,A16;
               then [x,a] in Intersect FR by Th9;
               then [x,a] in meet FR by SETFAM_1:def 10,A10;
               then [x,a] in R by A21, SETFAM_1:def 1;
@@ -1210,7 +1208,7 @@ A21:        Y = R.:^X & R in FR by A20,A1;
 A24:    R in FR by A10,SUBSET_1:10;
 A25:    R.:^X in G by A24,A1;
 A26:  a in meet G by A25,A23,SETFAM_1:def 10;
-      for x being set st x in X holds a in (Intersect FR).:{x}
+      for x being set st x in X holds a in Im(Intersect FR,x)
       proof
         let x be set such that A27: x in X;
         for Y being set holds Y in FR implies [x,a] in Y
@@ -1221,7 +1219,7 @@ A26:  a in meet G by A25,A23,SETFAM_1:def 10;
           set S = P.:^X;
           S in G by A1,A28;
           then a in P.:^X by A26,SETFAM_1:def 1;
-          then a in P.:{x} by Th24,A27;
+          then a in Im(P,x) by Th24,A27;
           hence thesis by Th9;
         end;
         then [x,a] in meet FR by SETFAM_1:def 1,A10;
@@ -1242,11 +1240,11 @@ theorem :: (8)
    assume A2: y in R1.:^X; then
    reconsider B as non empty set;
    reconsider y as Element of B by A2;
-   for x being set st x in X holds y in R2.:{x}
+   for x being set st x in X holds y in Im(R2,x)
    proof
     let x be set;
     assume A3: x in X;
-    y in R1.:{x} by A2,Th25,A3; then
+    y in Im(R1,x) by A2,Th25,A3; then
     [x,y] in R1 by Th9;
     hence thesis by Th9,A1;
    end;
@@ -1262,11 +1260,11 @@ proof
   suppose A2: y in R1.:^X;
    then reconsider B as non empty set;
    reconsider y as Element of B by A2;
-   for x being set st x in X holds y in (R1 \/ R2).:{x}
+   for x being set st x in X holds y in Im(R1 \/ R2,x)
    proof
     let x be set; assume x in X;
-    then y in R1.:{x} by A2,Th25;
-    then y in R1.:{x} \/ R2.:{x} by XBOOLE_0:def 2;
+    then y in Im(R1,x) by A2,Th25;
+    then y in Im(R1,x) \/ Im(R2,x) by XBOOLE_0:def 2;
     hence thesis by Th10;
    end;
    hence thesis by Th25;
@@ -1274,11 +1272,11 @@ proof
   suppose A3: y in R2.:^X;
    then reconsider B as non empty set;
    reconsider y as Element of B by A3;
-   for x being set st x in X holds y in (R1 \/ R2).:{x}
+   for x being set st x in X holds y in Im(R1 \/ R2,x)
    proof
     let x be set; assume x in X;
-    then y in R2.:{x} by A3,Th25;
-    then y in R1.:{x} \/ R2.:{x} by XBOOLE_0:def 2;
+    then y in Im(R2,x) by A3,Th25;
+    then y in Im(R1,x) \/ Im(R2,x) by XBOOLE_0:def 2;
     hence thesis by Th10;
    end;
    hence thesis by Th25;
@@ -1286,11 +1284,11 @@ proof
 end;
 
 theorem Th42:
-  y in R`.:{x} iff not [x,y] in R & x in A & y in B
+  y in Im(R`,x) iff not [x,y] in R & x in A & y in B
 proof
-  thus y in R`.:{x} implies not [x,y] in R & x in A & y in B
+  thus y in Im(R`,x) implies not [x,y] in R & x in A & y in B
   proof
-    assume y in R`.:{x};
+    assume y in Im(R`,x);
     then consider a being set such that
     A1: [a,y] in R` & a in {x} by RELAT_1:def 13;
     a = x by A1,TARSKI:def 1;
@@ -1317,14 +1315,14 @@ proof
   let y be set;
   assume A2: y in R.:^X;
   consider x being set such that A3: x in X by XBOOLE_0:def 1,A1;
-  y in R.:{x} by A3,A2,Th24;
+  y in Im(R,x) by A3,A2,Th24;
   then [x,y] in R by Th9;
   hence thesis by RELAT_1:def 13,A3;
 end;
 
 theorem Th44:
   for X, Y being set holds
-  X meets R~.:Y iff ex x,y being set st x in X & y in Y & x in R~.:{y}
+  X meets R~.:Y iff ex x,y being set st x in X & y in Y & x in Im(R~,y)
   proof
     let X, Y be set;
     hereby assume X meets R~.:Y; then
@@ -1336,10 +1334,10 @@ A3:   [b,a] in R~ & b in {b} by A2,TARSKI:def 1;
       take a,b;
       thus a in X by A1;
       thus b in Y by A2;
-      thus a in R~.:{b} by A3,RELAT_1:def 13;
+      thus a in Im(R~,b) by A3,RELAT_1:def 13;
     end;
     given x,y being set such that
-A4: x in X & y in Y & x in R~.:{y};
+A4: x in X & y in Y & x in Im(R~,y);
     consider a being set such that
 A5: [a,x] in R~ & a in {y} by RELAT_1:def 13,A4;
     [y,x] in R~ & y in Y by TARSKI:def 1,A4,A5;
@@ -1349,14 +1347,14 @@ A5: [a,x] in R~ & a in {y} by RELAT_1:def 13,A4;
 
 theorem Th45:
   for X, Y being set holds
-    (ex x,y being set st x in X & y in Y & x in R~.:{y}) iff Y meets R.:X
+    (ex x,y being set st x in X & y in Y & x in Im(R~,y)) iff Y meets R.:X
 proof
   let X, Y be set;
-  thus (ex x,y being set st x in X & y in Y & x in R~.:{y}) implies
+  thus (ex x,y being set st x in X & y in Y & x in Im(R~,y)) implies
     Y meets R.:X
   proof
    given x,y being set such that
-A1: x in X & y in Y & x in R~.:{y};
+A1: x in X & y in Y & x in Im(R~,y);
     consider a being set such that
 A2: [a,x] in R~ & a in {y} by RELAT_1:def 13,A1;
     a = y by TARSKI:def 1,A2;
@@ -1373,13 +1371,13 @@ A5: [a,b] in R~ & a in {a} by A4,RELAT_1:def 7,TARSKI:def 1;
   take b,a;
   thus b in X by A4;
   thus a in Y by A3;
-  thus b in R~.:{a} by A5,RELAT_1:def 13;
+  thus b in Im(R~,a) by A5,RELAT_1:def 13;
  end;
 
 theorem Th46: :: (19)
   X misses R~.:Y iff Y misses R.:X
 proof
-  X meets R~.:Y iff ex x,y being set st x in X & y in Y & x in R~.:{y}
+  X meets R~.:Y iff ex x,y being set st x in X & y in Y & x in Im(R~,y)
     by Th44;
   hence thesis by Th45;
 end;
@@ -1441,7 +1439,7 @@ proof
     then a in B\ R.:^X;
     then A1: a in B & not a in R.:^X by XBOOLE_0:def 4;
     then consider x being set such that
-A2: x in X & not a in R.:{x} by Th25;
+A2: x in X & not a in Im(R,x) by Th25;
 A3: not [x,a] in R by A2,Th9;
     [x,a] in [:A,B:] by ZFMISC_1:106,A1,A2;
     then [x,a] in [:A,B:] \ R by A3,XBOOLE_0:def 4;
@@ -1462,7 +1460,7 @@ A4: [x,a] in R` & x in X by RELAT_1:def 13;
     assume A7: a in R.:^X;
     let x be set;
     assume x in X;
-    then a in R.:{x} by A7,Th24;
+    then a in Im(R,x) by A7,Th24;
     hence thesis by Th9;
   end;
   hence contradiction by A5,A4,A6,ZFMISC_1:106;
@@ -1496,7 +1494,7 @@ proof
     reconsider a as Element of B by A1;
     assume not thesis;
     then consider x being set such that
-A3: x in X & not a in R`.:{x} by Th25;
+A3: x in X & not a in Im(R`,x) by Th25;
     [x,a] in R by A3,Th42;
     then a in R.:X by A3,RELAT_1:def 13;
     hence contradiction by A2,XBOOLE_0:def 4;
@@ -1509,7 +1507,7 @@ A5: a in (R`).:^X implies for x being set st x in X holds not [x,a] in R
     let x be set;
     assume A6: x in X;
     assume A7: not thesis;
-    a in R`.:{x} by A4,Th24,A6;
+    a in Im(R`,x) by A4,Th24,A6;
     then consider b being set such that
 A8: [b,a] in R` & b in {x} by RELAT_1:def 13;
 A9: [x,a] in R` & [x,a] in R by A8,TARSKI:def 1,A7;
@@ -1612,7 +1610,7 @@ proof
     then consider x being set such that
 A3: [x,y] in R by A1,FUNCT_5:def 2;
 A4: [y,x] in R~ by A3,RELAT_1:def 7;
-A5: y in R.:{x} by Th9,A3;
+A5: y in Im(R,x) by Th9,A3;
     R.:{x} c= ((R~)*R).:Y
     proof
       let a be set;

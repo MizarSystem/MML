@@ -15,7 +15,7 @@ environ
       FUNCOP_1, RLVECT_1, GROUP_1, VECTSP_1, FINSEQOP, FINSEQ_1, FRAENKEL,
       FUNCT_6, SETWISEO, FINSEQ_2;
  constructors PARTFUN1, FUNCT_3, BINOP_1, SETWISEO, FRAENKEL, FUNCT_5, CARD_3,
-      FINSEQOP, FUNCT_6, VECTSP_1, NAT_D;
+      FINSEQOP, FUNCT_6, VECTSP_1, NAT_D, REAL_1, NAT_1, XXREAL_0;
  registrations FUNCT_1, VECTSP_1, FRAENKEL, STRUCT_0, FINSEQ_2, GROUP_1,
       RELSET_1, FUNCOP_1, FINSEQ_1, ARYTM_3, FUNCT_2, ORDINAL1, CARD_3;
  requirements BOOLE, SUBSET;
@@ -34,17 +34,17 @@ reserve G for Abelian add-associative right_complementable right_zeroed
  deffunc car(1-sorted) = the carrier of $1;
  deffunc ad(LoopStr) = the add of $1;
  deffunc cc(non empty LoopStr) = comp $1;
- deffunc zr(LoopStr) = the Zero of $1;
+ deffunc zr(LoopStr) = 0.$1;
 
 canceled 2;
 
 theorem Th3:
- the Zero of G is_a_unity_wrt the add of G
+ 0.G is_a_unity_wrt the add of G
   proof
         now let x be Element of G;
-      thus (the add of G).(the Zero of G,x)=0.G + x
+      thus (the add of G).(0.G,x)=0.G + x
                     .= x by RLVECT_1:10;
-      thus (the add of G).(x,the Zero of G)= x + 0.G
+      thus (the add of G).(x,0.G)= x + 0.G
                     .= x by RLVECT_1:10;
      end;
     hence thesis by BINOP_1:11;
@@ -54,7 +54,7 @@ theorem Th4:
  for G being AbGroup holds comp G is_an_inverseOp_wrt the add of G
   proof
   let G be AbGroup;
-A1:    the Zero of G is_a_unity_wrt the add of G by Th3;
+A1:    0.G is_a_unity_wrt the add of G by Th3;
       now let x be Element of G;
    thus (the add of G).(x,(comp G).x)= x+(-x) by VECTSP_1:def 25
                  .= 0.G by RLVECT_1:16
@@ -70,7 +70,7 @@ A1:    the Zero of G is_a_unity_wrt the add of G by Th3;
 Lm1:
  comp G is_an_inverseOp_wrt the add of G
   proof
-A1:    the Zero of G is_a_unity_wrt the add of G by Th3;
+A1:    0.G is_a_unity_wrt the add of G by Th3;
       now let x be Element of G;
    thus (the add of G).(x,(comp G).x)= x+(-x) by VECTSP_1:def 25
                  .= 0.G by RLVECT_1:16
@@ -87,13 +87,13 @@ reserve GS for non empty LoopStr;
 
 theorem
      the add of GS is commutative associative &
-  the Zero of GS is_a_unity_wrt the add of GS &
+  0.GS is_a_unity_wrt the add of GS &
   comp GS is_an_inverseOp_wrt the add of GS implies
    GS is AbGroup
   proof assume that
 A1:  the add of GS is commutative and
 A2:  the add of GS is associative and
-A3:  the Zero of GS is_a_unity_wrt the add of GS and
+A3:  0.GS is_a_unity_wrt the add of GS and
 A4:  comp GS is_an_inverseOp_wrt the add of GS;
       now
    let x,y,z be Element of GS;
@@ -124,10 +124,10 @@ A2:  the add of GS is associative;
   end;
 
 Lm3:
-  the Zero of GS is_a_unity_wrt the add of GS implies
+  0.GS is_a_unity_wrt the add of GS implies
     GS is right_zeroed
   proof assume that
-A1:  the Zero of GS is_a_unity_wrt the add of GS;
+A1:  0.GS is_a_unity_wrt the add of GS;
    let x be Element of GS;
    thus x+(0.GS) = x by A1,BINOP_1:11;
   end;
@@ -149,24 +149,24 @@ reserve F for Field;
 canceled 4;
 
 theorem
-     the Zero of F is_a_unity_wrt the add of F
+     0.F is_a_unity_wrt the add of F
   proof
       now let x be Element of F;
-   thus (the add of F).(the Zero of F,x) = x+(0.F) by RLVECT_1:5
+   thus (the add of F).(0.F,x) = x+(0.F) by RLVECT_1:5
                     .= x by RLVECT_1:10;
-   thus (the add of F).(x,the Zero of F) = x+(0.F)
+   thus (the add of F).(x,0.F) = x+(0.F)
                     .= x by RLVECT_1:10;
    end;
    hence thesis by BINOP_1:11;
   end;
 
 theorem Th11:
- 1.F is_a_unity_wrt the mult of F
+ 1_F is_a_unity_wrt the mult of F
  proof
      now let x be Element of F;
-  thus (the mult of F).(1.F,x) = (1.F)*x by GROUP_1:def 1
+  thus (the mult of F).(1_F,x) = (1_F)*x by GROUP_1:def 1
                     .= x by VECTSP_1:def 19;
-  thus (the mult of F).(x,1.F) = x*(1.F) by GROUP_1:def 1
+  thus (the mult of F).(x,1_F) = x*(1_F) by GROUP_1:def 1
                     .= x by VECTSP_1:def 19;
   end;
   hence thesis by BINOP_1:11;
@@ -395,17 +395,18 @@ definition let F be non empty LoopStr, n;
   func n -Group_over F -> strict AbGroup equals :Def3:
      LoopStr(# n-tuples_on the carrier of F,
         product(the add of F,n),
-        (n .--> the Zero of F) qua Element of n-tuples_on the carrier of F#);
+        (n .--> 0.F) qua Element of n-tuples_on the carrier of F#);
   coherence
    proof
      set G = LoopStr(# n-tuples_on the carrier of F,product(the add of F,n),
-       (n .--> the Zero of F) qua Element of n-tuples_on the carrier of F#);
+       (n .--> 0.F) qua Element of n-tuples_on the carrier of F#);
      reconsider G as non empty LoopStr;
         the add of F is commutative associative by A1,FVSUM_1:2,3;
-     then A2: product(the add of F,n) is commutative associative by Th14,Th15;
-A3:   the Zero of F is_a_unity_wrt the add of F by A1,Th3;
-     then A4: (n .--> the Zero of F) qua Element of n-tuples_on the carrier of
-F
+     then
+A2: product(the add of F,n) is commutative associative by Th14,Th15;
+X:   0.G = (n .--> 0.F);
+A3:   0.F is_a_unity_wrt the add of F by A1,Th3;
+     then A4: (n .--> 0.F) qua Element of n-tuples_on the carrier of F
        is_a_unity_wrt product(the add of F,n) by Th16;
         G is right_complementable
      proof
@@ -415,16 +416,13 @@ A5:    B is associative & C is_an_inverseOp_wrt B by A1,Lm1,FVSUM_1:3;
           B has_a_unity by A3,SETWISEO:def 2;
 then A6:    product(C,n) is_an_inverseOp_wrt product(B,n) by A5,Th17;
        reconsider y = (product (comp F,n)).x as Element of G by FUNCT_2:7;
-          the Zero of F is_a_unity_wrt the add of F by A1,Th3;
-then A7:    the Zero of G is_a_unity_wrt the add of G by Th16;
-          product(B,n).(x,product(C,n).x) = the_unity_wrt product(B,n)
-         by A6,FINSEQOP:def 1;
-       then x + y = the_unity_wrt product(B,n);
-       then x + y = the Zero of G by A7,BINOP_1:def 8;
-       then x + y = 0.G;
+          0.F is_a_unity_wrt the add of F by A1,Th3;
+then A7:    0.G is_a_unity_wrt the add of G by Th16;
+       x + y = the_unity_wrt product(B,n) by A6,FINSEQOP:def 1;
+       then x + y = 0.G by A7,BINOP_1:def 8;
        hence thesis;
      end;
-     hence thesis by A2,A4,Lm2,Lm3;
+   hence thesis by A2,A4,Lm2,Lm3,X;
   end;
 end;
 
@@ -505,7 +503,7 @@ definition let F,n;
        proof
             n-Group_over F = LoopStr(# n-tuples_on the carrier of F,
           product(the add of F,n),
-          (n .--> the Zero of F) qua Element of n-tuples_on the carrier of F#)
+          (n .--> 0.F) qua Element of n-tuples_on the carrier of F#)
           by Def3;
         hence thesis;
        end;
@@ -755,15 +753,15 @@ registration let F,n;
   cluster n -VectSp_over F -> VectSp-like;
    coherence
    proof
-A1:       1.F is_a_unity_wrt the mult of F by Th11;
+A1:       1_F is_a_unity_wrt the mult of F by Th11;
 then A2:  the mult of F has_a_unity by SETWISEO:def 2;
-A3:       the_unity_wrt the mult of F = 1.F by A1,BINOP_1:def 8;
+A3:       the_unity_wrt the mult of F = 1_F by A1,BINOP_1:def 8;
 A4:       the mult of F is associative by Lm4;
 A5:       the mult of F is_distributive_wrt the add of F by Lm5;
 A6:       the LoopStr of n -VectSp_over F=n-Group_over F by Def5;
 A7:       n-Group_over F=LoopStr(# n-tuples_on the carrier of F,
         product(the add of F,n),
-        (n .--> the Zero of F) qua Element of n-tuples_on the carrier of F#)
+        (n .--> 0.F) qua Element of n-tuples_on the carrier of F#)
         by Def3;
      n-VectSp_over F is VectSp-like proof
    let x,y be Element of F;
@@ -809,8 +807,8 @@ thus (x+y)*v = (n-Mult_over F).(x+y,v') by Def5
           .= (n-Mult_over F).(x,(n-Mult_over F).(y,v')) by Def4
           .= (n-Mult_over F).(x,(the lmult of n-VectSp_over F).(y,v)) by Def5
           .= x*(y*v) by Def5;
-  thus (1.F)*v = (n-Mult_over F).(1.F,v') by Def5
-          .= (the mult of F)[;](1.F,v') by Def4
+  thus (1_F)*v = (n-Mult_over F).(1_F,v') by Def5
+          .= (the mult of F)[;](1_F,v') by Def4
           .= v by A8,A2,A3,FINSEQOP:58;
    thus thesis;
    end;
@@ -1403,10 +1401,10 @@ A8:      dom f' = Seg len f' & dom h' = Seg len h' by FINSEQ_1:def 3;
       hence f = h by A6,A7,A8,FINSEQ_1:17;
    end;
  func zeros g -> Element of product carr g means :Def15:
-  for i holds it.i = the Zero of g.i;
+  for i holds it.i = 0.(g.i);
   existence
    proof
-      deffunc F(Element of dom carr g) = the Zero of g.$1;
+      deffunc F(Element of dom carr g) = 0.(g.$1);
       consider p being non empty FinSequence such that
 A9:   len p = len carr g & for i holds p.i = F(i) from NEFinSeqLambda;
 A10:dom g = Seg len g & dom (carr g) = Seg len (carr g) & len g = len carr g &
@@ -1414,7 +1412,7 @@ A10:dom g = Seg len g & dom (carr g) = Seg len (carr g) & len g = len carr g &
         now let i be set; assume i in dom (carr g);
       then reconsider x = i as Element of dom carr g;
       reconsider x' = x as Element of dom g by A10;
-      p.x = the Zero of g.x & (carr g).x' = the carrier of g.x' by A9,Def12;
+      p.x = 0.(g.x) & (carr g).x' = the carrier of g.x' by A9,Def12;
       hence p.i in (carr g).i;
      end;
     then reconsider t = p as Element of product (carr g) by A9,A10,CARD_3:18;
@@ -1424,13 +1422,13 @@ A10:dom g = Seg len g & dom (carr g) = Seg len (carr g) & len g = len carr g &
   uniqueness
    proof
     let f,h be Element of product carr g;
-    assume that A11: (for i holds f.i = the Zero of g.i) and
-A12:                 (for i holds h.i = the Zero of g.i);
+    assume that A11: for i holds f.i = 0.(g.i) and
+A12:                 for i holds h.i = 0.(g.i);
      reconsider f' = f , h' = h as Function;
 A13:       dom f' = dom carr g & dom h' = dom carr g by CARD_3:18;
          now let x; assume x in dom carr g;
        then reconsider i = x as Element of dom carr g;
-       thus f'.x = the Zero of g.i by A11 .= h'.x by A12;
+       thus f'.x = 0.(g.i) by A11 .= h'.x by A12;
       end;
       hence thesis by A13,FUNCT_1:9;
    end;
@@ -1444,6 +1442,7 @@ definition
    proof
      reconsider GS = LoopStr(# product carr G, [:addop G:], zeros G #)
        as non empty LoopStr;
+X:   0.GS = zeros G;
 A1:  now let i be Element of dom carr G;
           dom G = Seg len G by FINSEQ_1:def 3
             .= Seg len carr G by Def12
@@ -1479,12 +1478,10 @@ then A4:  zeros G is_a_unity_wrt [:addop G:] by Th27;
            (addop G).i has_a_unity by Th4,SETWISEO:def 2;
        end;
        then Frege complop G is_an_inverseOp_wrt [:addop G:] by Th28;
-       then [:addop G:].(x,y) = the_unity_wrt [:addop G:] by FINSEQOP:def 1;
-       then x + y = the_unity_wrt [:addop G:];
-       then x + y = the Zero of GS by A4,BINOP_1:def 8;
-       hence thesis;
+       then x + y = the_unity_wrt [:addop G:] by FINSEQOP:def 1;
+       hence thesis by A4,BINOP_1:def 8;
      end;
-     hence thesis by A2,A3,A4,Lm2,Lm3;
+     hence thesis by A2,A3,A4,Lm2,Lm3,X;
    end;
 end;
 

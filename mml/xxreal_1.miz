@@ -1,0 +1,3658 @@
+:: Basic Properties of Extended Real Numbers
+::  by Andrzej Trybulec, Yatsuka Nakamura, Artur Korni{\l}owicz and
+::    Adam Grabowski
+::
+:: Received January 22, 2007
+:: Copyright (c) 2007 Association of Mizar Users
+
+environ
+
+ vocabularies SUPINF_1, ARYTM, BOOLE, RCOMP_1, MEMBERED, SQUARE_1;
+ notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, MEMBERED, XXREAL_0,
+      XREAL_0;
+ constructors SUBSET_1, ORDINAL1, NUMBERS, XXREAL_0, MEMBERED, XREAL_0,
+      XCMPLX_0;
+ registrations XXREAL_0, NUMBERS, MEMBERED, SUBSET_1, XREAL_0;
+ requirements SUBSET, BOOLE, NUMERALS;
+ definitions TARSKI, XBOOLE_0, MEMBERED;
+ theorems XBOOLE_0, XXREAL_0, XBOOLE_1, TARSKI, AXIOMS, SUBSET_1, XREAL_0,
+      XREAL_1, MEMBERED, ZFMISC_1;
+
+begin
+
+ reserve x,y,A,B for set,
+         p,q,r,s,t,u for ext-real number,
+         a,b for Element of ExtREAL,
+         X,Y for ext-real-membered set;
+
+scheme Conti { P,Q[set] }:
+ ex s st (for r st P[r] holds r <= s) & for r st Q[r] holds s <= r
+provided
+P: for r,s st P[r] & Q[s] holds r <= s
+proof
+  set A = { a : P[a]},  B = { a : Q[a]};
+  reconsider X = A /\ REAL,  Y = B /\ REAL as Subset of REAL by XBOOLE_1:17;
+ per cases;
+ suppose
+SS: X = {};
+  per cases;
+  suppose
+S: +infty in A;
+   take +infty;
+   thus for r st P[r] holds r <= +infty by XXREAL_0:3;
+    ex a st a = +infty & P[a] by S;
+   hence thesis by P;
+  end;
+  suppose
+S:  not +infty in A;
+   take -infty;
+   thus for r st P[r] holds r <= -infty
+    proof let r such that
+Z:    P[r];
+      r in ExtREAL by XXREAL_0:def 1;
+      then
+R:     r in A by Z;
+     per cases by R,S, XXREAL_0:14;
+     suppose r = -infty;
+     hence thesis;
+     end;
+     suppose r in REAL;
+     hence thesis by SS,R,XBOOLE_0:def 3;
+     end;
+    end;
+   thus thesis by XXREAL_0:5;
+  end;
+ end;
+ suppose
+SS: Y = {};
+  per cases;
+  suppose
+S: -infty in B;
+   take -infty;
+   thus for r st P[r] holds r <= -infty
+    proof ex a st a = -infty & Q[a] by S;
+     hence thesis by P;
+    end;
+   thus thesis by XXREAL_0:5;
+  end;
+  suppose
+S:  not -infty in B;
+   take +infty;
+   thus for r st P[r] holds r <= +infty by XXREAL_0:3;
+   let r such that
+Z:  Q[r];
+    r in ExtREAL by XXREAL_0:def 1;
+    then
+R:  r in B by Z;
+   per cases by R,S,XXREAL_0:14;
+    suppose r = +infty;
+     hence thesis;
+    end;
+    suppose r in REAL;
+     hence thesis by SS,R,XBOOLE_0:def 3;
+    end;
+  end;
+ end;
+ suppose that
+S1: X <> {} and
+S2: Y <> {};
+   for x,y being real number st x in X & y in Y holds x <= y
+    proof let x,y be real number;
+     assume x in X;
+      then x in A by XBOOLE_0:def 3;
+      then consider a such that
+W1:    a = x and
+W2:    P[a];
+     assume y in Y;
+      then y in B by XBOOLE_0:def 3;
+      then ex a st a = y & Q[a];
+     hence x <= y by W1,W2,P;
+    end;
+   then consider s being real number such that
+W:   for x,y being real number st x in X & y in Y holds x <= s & s <= y
+                  by AXIOMS:26;
+   reconsider s as ext-real number;
+  take s;
+  thus for r st P[r] holds r <= s
+   proof let r;
+     consider x being Element of REAL such that
+V:    x in Y by S2,SUBSET_1:10;
+     x in B by V,XBOOLE_0:def 3;
+     then
+B:    ex a st x = a & Q[a];
+    assume
+ZZ:  P[r];
+     then
+C:   r <= x by B,P;
+    per cases by C,XXREAL_0:13;
+    suppose
+S:   r in REAL;
+     then reconsider r as real number by XREAL_0:def 1;
+     r is Element of ExtREAL by XXREAL_0:def 1;
+     then r in A by ZZ;
+     then r in X by S,XBOOLE_0:def 3;
+    hence thesis by V,W;
+    end;
+    suppose r = -infty;
+    hence r <= s by XXREAL_0:5;
+    end;
+   end;
+  let r;
+   consider x being Element of REAL such that
+V:  x in X by S1,SUBSET_1:10;
+   x in A by V,XBOOLE_0:def 3;
+   then
+B:  ex a st x = a & P[a];
+  assume
+ZZ: Q[r];
+   then
+C: x <= r by B,P;
+  per cases by C,XXREAL_0:10;
+  suppose
+S: r in REAL;
+   then reconsider r as real number by XREAL_0:def 1;
+   r is Element of ExtREAL by XXREAL_0:def 1;
+   then r in B by ZZ;
+   then r in Y by S,XBOOLE_0:def 3;
+  hence thesis by V,W;
+  end;
+  suppose r = +infty;
+  hence s <= r by XXREAL_0:3;
+  end;
+ end;
+end;
+
+begin :: Intervals
+
+definition let r,s;
+ func [.r,s.] equals
+ { a : r <= a & a <= s };
+ correctness;
+ func [.r,s.[ equals
+ { a : r <= a & a < s };
+ correctness;
+ func ].r,s.] equals
+ { a : r < a & a <= s };
+ correctness;
+ func ].r,s.[ equals
+ { a : r < a & a < s };
+ correctness;
+end;
+
+theorem Th3: :: RCOMP_1:48
+ t in [.r,s.] iff r <= t & t <= s
+ proof
+  hereby assume t in [.r,s.];
+    then ex a st a = t & r <= a & a <= s;
+   hence r <= t & t <= s;
+  end;
+   t is Element of ExtREAL by XXREAL_0:def 1;
+  hence thesis;
+ end;
+
+theorem Th4: :: RCOMP_2:4
+ t in ].r,s.] iff r < t & t <= s
+ proof
+  hereby assume t in ].r,s.];
+    then ex a st a = t & r < a & a <= s;
+   hence r < t & t <= s;
+  end;
+   t is Element of ExtREAL by XXREAL_0:def 1;
+  hence thesis;
+ end;
+
+theorem Th5: :: RCOMP_2:3
+ t in [.r,s.[ iff r <= t & t < s
+ proof
+  hereby assume t in [.r,s.[;
+    then ex a st a = t & r <= a & a < s;
+   hence r <= t & t < s;
+  end;
+   t is Element of ExtREAL by XXREAL_0:def 1;
+  hence thesis;
+ end;
+
+theorem Th6:  :: RCOMP_1:47
+ t in ].r,s.[ iff r < t & t < s
+ proof
+  hereby assume t in ].r,s.[;
+    then ex a st a = t & r < a & a < s;
+   hence r < t & t < s;
+  end;
+   t is Element of ExtREAL by XXREAL_0:def 1;
+  hence thesis;
+ end;
+
+registration let r,s; :: MEASURE5:11
+ cluster [.r,s.] -> ext-real-membered;
+ coherence
+  proof let x;
+   assume x in [.r,s.];
+    then ex a st x = a & r <= a & a <= s;
+   hence thesis;
+  end;
+ cluster [.r,s.[ -> ext-real-membered;
+ coherence
+  proof let x;
+   assume x in [.r,s.[;
+    then ex a st x = a & r <= a & a < s;
+   hence thesis;
+  end;
+ cluster ].r,s.] -> ext-real-membered;
+ coherence
+  proof let x;
+   assume x in ].r,s.];
+    then ex a st x = a & r < a & a <= s;
+   hence thesis;
+  end;
+ cluster ].r,s.[ -> ext-real-membered;
+ coherence
+  proof let x;
+   assume x in ].r,s.[;
+    then ex a st x = a & r < a & a < s;
+   hence thesis;
+  end;
+end;
+
+theorem Th7: :: BORSUK_4:10
+ x in [.p,q.] implies x in ].p,q.[ or x = p or x = q
+  proof
+   assume
+Z:   x in [. p, q .];
+     then reconsider s = x as ext-real number by MEMBERED:def 2;
+     p <= s & s <= q by Z,Th3;
+     then (p = s or p < s) & (s = q or s < q) by XXREAL_0:1;
+    hence x in ].p,q.[ or x = p or x = q by Th6;
+  end;
+
+theorem Tw8:
+ x in [.p,q.] implies x in ].p,q.] or x = p
+  proof
+   assume
+Z:   x in [.p,q.];
+     then reconsider s = x as ext-real number by MEMBERED:def 2;
+B:   p <= s & s <= q by Z,Th3;
+     then p = s or p < s by XXREAL_0:1;
+    hence x in ].p,q.] or x = p by Th4,B;
+  end;
+
+theorem Tw9:
+ x in [.p,q.] implies x in [.p,q.[ or x = q
+  proof
+   assume
+Z:   x in [.p,q.];
+     then reconsider s = x as ext-real number by MEMBERED:def 2;
+B:   p <= s & s <= q by Z,Th3;
+     then q = s or s < q by XXREAL_0:1;
+    hence x in [.p,q.[ or x = q by Th5,B;
+  end;
+
+theorem Tw10:
+ x in [.p,q.[ implies x in ].p,q.[ or x = p
+  proof
+   assume
+Z:   x in [.p,q.[;
+     then reconsider s = x as ext-real number by MEMBERED:def 2;
+B:   p <= s & s < q by Z,Th5;
+     then p = s or p < s by XXREAL_0:1;
+    hence x in ].p,q.[ or x = p by Th6,B;
+  end;
+
+theorem Tw11:
+ x in ].p,q.] implies x in ].p,q.[ or x = q
+  proof
+   assume
+Z:   x in ].p,q.];
+     then reconsider s = x as ext-real number by MEMBERED:def 2;
+B:   p < s & s <= q by Z,Th4;
+     then q = s or s < q by XXREAL_0:1;
+    hence x in ].p,q.[ or x = q by Th6,B;
+  end;
+
+theorem
+ x in [.p,q.[ implies x in ].p,q.] & x <> q or x = p
+  proof
+   assume
+Z:   x in [.p,q.[;
+     then reconsider s = x as ext-real number by MEMBERED:def 2;
+B:   p <= s & s < q by Z,Th5;
+     then p = s or p < s by XXREAL_0:1;
+    hence x in ].p,q.] & x <> q or x = p by Th4,B;
+  end;
+
+theorem
+ x in ].p,q.] implies x in [.p,q.[ & x <> p or x = q
+  proof
+   assume
+Z:   x in ].p,q.];
+     then reconsider s = x as ext-real number by MEMBERED:def 2;
+B:   p < s & s <= q by Z,Th4;
+     then q = s or s < q by XXREAL_0:1;
+    hence x in [.p,q.[ & x <> p or x = q by Th5,B;
+  end;
+
+theorem Tw14:
+ x in ].p,q.] implies x in [.p,q.] & x <> p
+  proof
+   assume
+Z:   x in ].p,q.];
+     then reconsider s = x as ext-real number by MEMBERED:def 2;
+     p < s & s <= q by Z,Th4;
+   hence x in [.p,q.] & x <> p by Th3;
+  end;
+
+theorem Tw15:
+ x in [.p,q.[ implies x in [.p,q.] & x <> q
+  proof
+   assume
+Z:   x in [.p,q.[;
+     then reconsider s = x as ext-real number by MEMBERED:def 2;
+     p <= s & s < q by Z,Th5;
+   hence x in [.p,q.] & x <> q by Th3;
+  end;
+
+theorem Tw16:
+ x in ].p,q.[ implies x in [.p,q.[ & x <> p
+  proof
+   assume
+Z:   x in ].p,q.[;
+     then reconsider s = x as ext-real number by MEMBERED:def 2;
+     p < s & s < q by Z,Th6;
+   hence x in [.p,q.[ & x <> p by Th5;
+  end;
+
+theorem Tw17:
+ x in ].p,q.[ implies x in ].p,q.] & x <> q
+  proof
+   assume
+Z:   x in ].p,q.[;
+     then reconsider s = x as ext-real number by MEMBERED:def 2;
+     p < s & s < q by Z,Th6;
+   hence x in ].p,q.] & x <> q by Th4;
+  end;
+
+theorem Tw18:
+ x in ].p,q.[ implies x in [.p,q.] & x <> p & x <> q
+ proof
+  assume x in ].p,q.[;
+   then x in ].p,q.] & x <> q by Tw17;
+  hence x in [.p,q.] & x <> p & x <> q by Tw14;
+ end;
+
+theorem Th8: :: RCOMP_1:14 :: MEASURE5:14
+ [.r,r.] = {r}
+ proof let s;
+  thus s in [.r,r.] implies s in {r}
+   proof
+    assume s in [.r,r.];
+     then ex a st s = a & r <= a & a <= r;
+     then s = r by XXREAL_0:1;
+    hence thesis by TARSKI:def 1;
+   end;
+  assume s in {r};
+   then
+A:  s = r by TARSKI:def 1;
+   reconsider s as Element of ExtREAL by XXREAL_0:def 1;
+   s <= s;
+  hence thesis by A;
+ end;
+
+theorem Th9: :: MEASURE5:13  :: RCOMP_2:7
+ [.r,r.[ = {}
+  proof let p;
+    not ex p st p in [.r,r.[
+     proof given p such that
+G:    p in [.r,r.[;
+      ex a st p = a & r <= a & a < r by G;
+     hence thesis;
+     end;
+   hence thesis;
+  end;
+
+theorem Th10: :: MEASURE5:13 :: RCOMP_2:7
+ ].r,r.] = {}
+  proof let p;
+   thus p in ].r,r.] implies p in {}
+    proof
+     assume p in ].r,r.];
+      then ex a st p = a & r < a & a <= r;
+     hence thesis;
+    end;
+   thus thesis;
+  end;
+
+theorem Th11: :: MEASURE5:13
+ ].r,r.[ = {}
+  proof let p;
+   thus p in ].r,r.[ implies p in {}
+    proof
+     assume p in ].r,r.[;
+      then ex a st p = a & r < a & a < r;
+     hence thesis;
+    end;
+   thus thesis;
+  end;
+
+registration let r;
+ cluster [.r,r.] -> non empty;
+ coherence
+  proof
+    [.r,r.] = {r} by Th8;
+   hence thesis;
+  end;
+ cluster [.r,r.[ -> empty;
+ coherence by Th9;
+ cluster ].r,r.] -> empty;
+ coherence by Th10;
+ cluster ].r,r.[ -> empty;
+ coherence by Th11;
+end;
+
+theorem Th12: :: RCOMP_2:17
+ ].p,q.[ c= ].p,q.]
+proof
+ let s;
+ assume s in ].p,q.[;
+  then p < s & s < q by Th6;
+ hence s in ].p,q.] by Th4;
+end;
+
+theorem Th13: :: RCOMP_2:17
+ ].p,q.[ c= [.p,q.[
+proof
+ let s;
+ assume s in ].p,q.[;
+  then p < s & s < q by Th6;
+ hence s in [.p,q.[ by Th5;
+end;
+
+theorem Th14: :: RCOMP_2:17
+ ].p,q.] c= [.p,q.]
+proof
+ let s;
+ assume s in ].p,q.];
+  then p < s & s <= q by Th4;
+ hence s in [.p,q.] by Th3;
+end;
+
+theorem Th15: :: RCOMP_2:17
+ [.p,q.[ c= [.p,q.]
+proof
+ let s;
+ assume s in [.p,q.[;
+  then p <= s & s < q by Th5;
+ hence s in [.p,q.] by Th3;
+end;
+
+theorem Th16: :: RCOMP_1:15 :: RCOMP_2:17
+ ].p,q.[ c= [.p,q.]
+proof
+  ].p,q.[ c= [.p,q.[ & [.p,q.[ c= [.p,q.] by Th13,Th15;
+ hence thesis by XBOOLE_1:1;
+end;
+
+theorem :: MEASURE5:12,15 :: RCOMP_2:10
+ p <= q implies ].q,p.] = {}
+proof assume
+Z: p <= q;
+ assume ].q,p.] <> {};
+  then consider r such that
+W: r in ].q,p.] by MEMBERED:8;
+  q < r & r <= p by W,Th4;
+ hence contradiction by Z,XXREAL_0:2;
+end;
+
+theorem Th18: :: MEASURE5:12,15 :: RCOMP_2:9
+ p <= q implies [.q,p.[ = {}
+proof assume
+Z: p <= q;
+ assume [.q,p.[ <> {};
+  then consider r such that
+W: r in [.q,p.[ by MEMBERED:8;
+  q <= r & r < p by W,Th5;
+ hence contradiction by Z,XXREAL_0:2;
+end;
+
+theorem Th19: :: RCOMP_1:12 :: MEASURE5:12,15
+ p <= q implies ].q,p.[ = {}
+proof assume p <= q;
+  then
+Z: [.q,p.[ = {} by Th18;
+   ].q,p.[ c= [.q,p.[ by Th13;
+ hence ].q,p.[ = {} by Z,XBOOLE_1:3;
+end;
+
+theorem Th20: :: RCOMP_1:13 :: MEASURE5:12
+ p < q implies [.q,p.] = {}
+proof assume
+Z: p < q;
+ assume [.q,p.] <> {};
+  then consider r such that
+W: r in [.q,p.] by MEMBERED:8;
+  q <= r & r <= p by W,Th3;
+ hence contradiction by Z,XXREAL_0:2;
+end;
+
+theorem
+ r <= s implies [.r,s.] is non empty by Th3;
+
+theorem
+ p < q implies [.p,q.[ is non empty by Th5;
+
+theorem
+ p < q implies ].p,q.] is non empty by Th4;
+
+theorem
+ p < q implies ].p,q.[ is non empty
+ proof assume p < q;
+   then ex s st p < s & s < q by XREAL_1:229;
+  hence thesis by Th6;
+ end;
+
+theorem Th29: :: RCOMP_1:49 :: TREAL_1:1
+ p <= r & s <= q implies [.r,s.] c= [.p,q.]
+ proof assume
+Z: p <= r & s <= q;
+  let t;
+  assume t in [.r,s.];
+   then r <= t & t <= s by Th3;
+   then p <= t & t <= q by Z,XXREAL_0:2;
+  hence t in [.p,q.] by Th3;
+ end;
+
+theorem :: TOPREALA:11
+ p <= r & s <= q implies [.r,s.[ c= [.p,q.]
+ proof
+F: [.r,s.[ c= [.r,s.] by Th15;
+  assume p <= r & s <= q;
+   then [.r,s.] c= [.p,q.] by Th29;
+  hence thesis by F,XBOOLE_1:1;
+ end;
+
+theorem :: TOPREALA:15
+ p <= r & s <= q implies ].r,s.] c= [.p,q.]
+ proof
+F: ].r,s.] c= [.r,s.] by Th14;
+  assume p <= r & s <= q;
+   then [.r,s.] c= [.p,q.] by Th29;
+  hence thesis by F,XBOOLE_1:1;
+ end;
+
+theorem :: TOPREALA:19
+ p <= r & s <= q implies ].r,s.[ c= [.p,q.]
+ proof
+F: ].r,s.[ c= [.r,s.] by Th16;
+  assume p <= r & s <= q;
+   then [.r,s.] c= [.p,q.] by Th29;
+  hence thesis by F,XBOOLE_1:1;
+ end;
+
+theorem :: TOPREALA:12
+ p <= r & s <= q implies [.r,s.[ c= [.p,q.[
+ proof assume
+Z: p <= r & s <= q;
+  let t;
+  assume t in [.r,s.[;
+   then r <= t & t < s by Th5;
+   then p <= t & t < q by Z,XXREAL_0:2;
+  hence t in [.p,q.[ by Th5;
+ end;
+
+theorem Th34: :: TOPREALA:9
+ p < r & s <= q implies [.r,s.] c= ].p,q.]
+ proof assume
+Z: p < r & s <= q;
+  let t;
+  assume t in [.r,s.];
+   then r <= t & t <= s by Th3;
+   then p <t & t <= q by Z,XXREAL_0:2;
+  hence t in ].p,q.] by Th4;
+ end;
+
+theorem :: TOPREALA:13
+ p < r & s <= q implies [.r,s.[ c= ].p,q.]
+ proof
+F: [.r,s.[ c= [.r,s.] by Th15;
+  assume p < r & s <= q;
+   then [.r,s.] c= ].p,q.] by Th34;
+  hence thesis by F,XBOOLE_1:1;
+ end;
+
+theorem :: TOPREALA:21
+  p <= r & s <= q implies ].r,s.[ c= ].p,q.]
+ proof assume
+Z: p <= r & s <= q;
+  let t;
+  assume t in ].r,s.[;
+   then r < t & t < s by Th6;
+   then p < t & t < q by Z,XXREAL_0:2;
+  hence t in ].p,q.] by Th4;
+ end;
+
+theorem :: TOPREALA:17
+ p <= r & s <= q implies ].r,s.] c= ].p,q.]
+ proof assume
+Z: p <= r & s <= q;
+  let t;
+  assume t in ].r,s.];
+   then r < t & t <= s by Th4;
+   then p < t & t <= q by Z,XXREAL_0:2;
+  hence t in ].p,q.] by Th4;
+ end;
+
+theorem Th38: :: TOPREALA:8
+  p <= r & s < q implies [.r,s.] c= [.p,q.[
+ proof assume
+Z: p <= r & s < q;
+  let t;
+  assume t in [.r,s.];
+   then r <= t & t <= s by Th3;
+   then p <= t & t < q by Z,XXREAL_0:2;
+  hence t in [.p,q.[ by Th5;
+ end;
+
+theorem :: TOPREALA:16
+  p <= r & s < q implies ].r,s.] c= [.p,q.[
+ proof
+F: ].r,s.] c= [.r,s.] by Th14;
+  assume p <= r & s < q;
+   then [.r,s.] c= [.p,q.[ by Th38;
+  hence thesis by F,XBOOLE_1:1;
+ end;
+
+theorem :: TOPREALA:20
+  p <= r & s <= q implies ].r,s.[ c= [.p,q.[
+ proof assume
+Z: p <= r & s <= q;
+  let t;
+  assume t in ].r,s.[;
+   then r < t & t < s by Th6;
+   then p <= t & t < q by Z,XXREAL_0:2;
+  hence t in [.p,q.[ by Th5;
+ end;
+
+theorem :: RCOMP_1:52 :: JGRAPH_3:9
+ p <= r & s <= q implies ].r,s.[ c= ].p,q.[
+ proof assume
+Z: p <= r & s <= q;
+  let t;
+  assume t in ].r,s.[;
+   then r < t & t < s by Th6;
+   then p < t & t < q by Z,XXREAL_0:2;
+  hence t in ].p,q.[ by Th6;
+ end;
+
+theorem :: TOPREALA:10
+  p < r & s < q implies [.r,s.] c= ].p,q.[
+ proof assume
+Z: p < r & s < q;
+  let t;
+  assume t in [.r,s.];
+   then r <= t & t <= s by Th3;
+   then p < t & t < q by Z,XXREAL_0:2;
+  hence t in ].p,q.[ by Th6;
+ end;
+
+theorem :: TOPREALA:14
+  p < r & s <= q implies [.r,s.[ c= ].p,q.[
+ proof assume
+Z: p < r & s <= q;
+  let t;
+  assume t in [.r,s.[;
+   then r <= t & t < s by Th5;
+   then p < t & t < q by Z,XXREAL_0:2;
+  hence t in ].p,q.[ by Th6;
+ end;
+
+theorem :: TOPREALA:18
+  p <= r & s < q implies ].r,s.] c= ].p,q.[
+ proof assume
+Z: p <= r & s < q;
+  let t;
+  assume t in ].r,s.];
+   then r < t & t <= s by Th4;
+   then p < t & t < q by Z,XXREAL_0:2;
+  hence t in ].p,q.[ by Th6;
+ end;
+
+theorem Tw81: :: BORSUK_4:14
+ r <= s & [.r,s.] c= [.p,q.] implies p <= r & s <= q
+ proof assume r <= s;
+   then r in [.r,s.] & s in [.r,s.] by Th3;
+  hence thesis by Th3;
+ end;
+
+theorem Th46: :: BORSUK_4:15
+ r < s & ].r,s.[ c= [.p,q.] implies p <= r & s <= q
+ proof assume that
+Z1: r < s and
+Z2: ].r,s.[ c= [.p,q.];
+   now let t;
+    assume r < t & t < s;
+     then t in ].r,s.[ by Th6;
+    hence p <= t by Th3,Z2;
+   end;
+  hence p <= r by Z1,XREAL_1:230;
+   now let t;
+    assume r < t & t < s;
+     then t in ].r,s.[ by Th6;
+    hence t <= q by Th3,Z2;
+   end;
+  hence s <= q by Z1,XREAL_1:231;
+ end;
+
+theorem Th67: :: RCOMP_3:12
+ r < s & [.r,s.[ c= [.p,q.] implies p <= r & s <= q
+ proof assume that
+Z1: r < s and
+Z2: [.r,s.[ c= [.p,q.];
+   ].r,s.[ c= [.r,s.[ by Th13;
+   then ].r,s.[ c= [.p,q.] by Z2,XBOOLE_1:1;
+  hence thesis by Z1,Th46;
+ end;
+
+theorem Th86: :: RCOMP_3:14
+ r < s & ].r,s.] c= [.p,q.] implies p <= r & s <= q
+ proof assume that
+Z1: r < s and
+Z2: ].r,s.] c= [.p,q.];
+   ].r,s.[ c= ].r,s.] by Th12;
+   then ].r,s.[ c= [.p,q.] by Z2,XBOOLE_1:1;
+  hence thesis by Z1,Th46;
+ end;
+
+theorem Th69:
+ r <= s & [.r,s.] c= [.p,q.[ implies p <= r & s < q
+ proof assume that
+Z1: r <= s and
+Z2: [.r,s.] c= [.p,q.[;
+   [.p,q.[ c= [.p,q.] by Th15;
+   then [.r,s.] c= [.p,q.] by Z2,XBOOLE_1:1;
+  hence p <= r by Z1,Tw81;
+   s in [.r,s.] by Z1,Th3;
+  hence s < q by Z2,Th5;
+ end;
+
+theorem Th87: :: RCOMP_3:13
+ r < s & [.r,s.[ c= [.p,q.[ implies p <= r & s <= q
+ proof assume that
+Z1: r < s and
+Z2: [.r,s.[ c= [.p,q.[;
+   ].r,s.[ c= [.r,s.[ by Th13;
+   then
+A:  ].r,s.[ c= [.p,q.[ by Z2,XBOOLE_1:1;
+   [.p,q.[ c= [.p,q.] by Th15;
+   then ].r,s.[ c= [.p,q.] by A,XBOOLE_1:1;
+  hence p <= r & s <= q by Z1,Th46;
+ end;
+
+theorem Th71:
+ r < s & ].r,s.[ c= [.p,q.[ implies p <= r & s <= q
+ proof assume that
+Z1: r < s and
+Z2: ].r,s.[ c= [.p,q.[;
+   [.p,q.[ c= [.p,q.] by Th15;
+   then ].r,s.[ c= [.p,q.] by Z2,XBOOLE_1:1;
+  hence p <= r & s <= q by Z1,Th46;
+ end;
+
+theorem Th72:
+ r < s & ].r,s.] c= [.p,q.[ implies p <= r & s < q
+ proof assume that
+Z1: r < s and
+Z2: ].r,s.] c= [.p,q.[;
+   [.p,q.[ c= [.p,q.] by Th15;
+   then ].r,s.] c= [.p,q.] by Z2,XBOOLE_1:1;
+  hence p <= r by Z1,Th86;
+   s in ].r,s.] by Z1,Th4;
+  hence s < q by Z2,Th5;
+ end;
+
+theorem Th73:
+ r <= s & [.r,s.] c= ].p,q.] implies p < r & s <= q
+ proof assume that
+Z1: r <= s and
+Z2: [.r,s.] c= ].p,q.];
+   ].p,q.] c= [.p,q.] by Th14;
+   then
+A:  [.r,s.] c= [.p,q.] by Z2,XBOOLE_1:1;
+   r in [.r,s.] by Z1,Th3;
+  hence p < r by Z2,Th4;
+  thus s <= q by A,Z1,Tw81;
+ end;
+
+theorem Th74:
+ r < s & ].r,s.[ c= ].p,q.] implies p <= r & s <= q
+ proof assume that
+Z1: r < s and
+Z2: ].r,s.[ c= ].p,q.];
+   ].p,q.] c= [.p,q.] by Th14;
+   then ].r,s.[ c= [.p,q.] by Z2,XBOOLE_1:1;
+  hence p <= r & s <= q by Z1,Th46;
+ end;
+
+theorem Th75:
+ r < s & [.r,s.[ c= ].p,q.] implies p < r & s <= q
+ proof assume that
+Z1: r < s and
+Z2: [.r,s.[ c= ].p,q.];
+   ].p,q.] c= [.p,q.] by Th14;
+   then
+A:  [.r,s.[ c= [.p,q.] by Z2,XBOOLE_1:1;
+   r in [.r,s.[ by Z1,Th5;
+  hence p < r by Th4,Z2;
+  thus s <= q by A,Z1,Th67;
+ end;
+
+theorem Th90: :: RCOMP_3:15
+ r < s & ].r,s.] c= ].p,q.] implies p <= r & s <= q
+ proof assume that
+Z1: r < s and
+Z2: ].r,s.] c= ].p,q.];
+   ].r,s.[ c= ].r,s.] by Th12;
+   then
+A:  ].r,s.[ c= ].p,q.] by Z2,XBOOLE_1:1;
+   ].p,q.] c= [.p,q.] by Th14;
+   then ].r,s.[ c= [.p,q.] by A,XBOOLE_1:1;
+  hence p <= r & s <= q by Z1,Th46;
+ end;
+
+theorem Th77:
+ r <= s & [.r,s.] c= ].p,q.[ implies p < r & s < q
+ proof assume that
+Z1: r <= s and
+Z2: [.r,s.] c= ].p,q.[;
+   r in [.r,s.] by Z1,Th3;
+  hence p < r by Z2,Th6;
+   s in [.r,s.] by Z1,Th3;
+  hence s < q by Z2,Th6;
+ end;
+
+theorem Th94:
+ r < s & ].r,s.[ c= ].p,q.[ implies p <= r & s <= q
+ proof assume that
+Z1: r < s and
+Z2: ].r,s.[ c= ].p,q.[;
+   ].p,q.[ c= [.p,q.] by Th16;
+   then ].r,s.[ c= [.p,q.] by Z2,XBOOLE_1:1;
+  hence thesis by Z1,Th46;
+ end;
+
+theorem Th79:
+ r < s & [.r,s.[ c= ].p,q.[ implies p < r & s <= q
+ proof assume that
+Z1: r < s and
+Z2: [.r,s.[ c= ].p,q.[;
+   ].p,q.[ c= [.p,q.] by Th16;
+   then
+A:  [.r,s.[ c= [.p,q.] by Z2,XBOOLE_1:1;
+   r in [.r,s.[ by Z1,Th5;
+  hence p < r by Z2,Th6;
+  thus s <= q by A,Z1,Th67;
+ end;
+
+theorem Th80:
+ r < s & ].r,s.] c= ].p,q.[ implies p <= r & s < q
+ proof assume that
+Z1: r < s and
+Z2: ].r,s.] c= ].p,q.[;
+   ].p,q.[ c= [.p,q.] by Th16;
+   then ].r,s.] c= [.p,q.] by Z2,XBOOLE_1:1;
+  hence p <= r by Z1,Th86;
+   s in ].r,s.] by Z1,Th4;
+  hence s < q by Z2,Th6;
+ end;
+
+theorem :: RCOMP_3:8 :: INTEGRA1:6 ??
+  p <= q & [.p,q.] = [.r,s.] implies p = r & q = s
+ proof assume that
+Z1: p <= q and
+Z2: [.p,q.] = [.r,s.];
+A:  r <= p & q <= s by Z1,Z2,Tw81;
+   then r <= q by Z1,XXREAL_0:2;
+   then r <= s by A,XXREAL_0:2;
+   then p <= r & s <= q by Z2,Tw81;
+  hence p = r & q = s by XXREAL_0:1,A;
+ end;
+
+theorem :: RCOMP_3:9
+  p < q & ].p,q.[ = ].r,s.[ implies p = r & q = s
+ proof assume that
+Z1: p < q and
+Z2: ].p,q.[ = ].r,s.[;
+A:  r <= p & q <= s by Z1,Z2,Th94;
+   then r < q by Z1,XXREAL_0:2;
+   then r < s by A,XXREAL_0:2;
+   then p <= r & s <= q by Z2,Th94;
+  hence p = r & q = s by XXREAL_0:1,A;
+ end;
+
+theorem :: RCOMP_3:10
+  p < q & ].p,q.] = ].r,s.] implies p = r & q = s
+ proof assume that
+Z1: p < q and
+Z2: ].p,q.] = ].r,s.];
+A:  r <= p & q <= s by Z1,Z2,Th90;
+   then r < q by Z1,XXREAL_0:2;
+   then r < s by A,XXREAL_0:2;
+   then p <= r & s <= q by Z2,Th90;
+  hence p = r & q = s by XXREAL_0:1,A;
+ end;
+
+theorem :: RCOMP_3:11
+  p < q & [.p,q.[ = [.r,s.[ implies p = r & q = s
+ proof assume that
+Z1: p < q and
+Z2: [.p,q.[ = [.r,s.[;
+A:  r <= p & q <= s by Z1,Z2,Th87;
+   then r < q by Z1,XXREAL_0:2;
+   then r < s by A,XXREAL_0:2;
+   then p <= r & s <= q by Z2,Th87;
+  hence p = r & q = s by XXREAL_0:1,A;
+ end;
+
+theorem :: BORSUK_4:25 :: MEASURE5:52
+  r <= s implies [.r,s.] <> ].p,q.]
+ proof assume that
+Z1: r <= s and
+Z2: [.r,s.] = ].p,q.];
+   now assume r in ].p,q.];
+     then
+B:    p < r by Th4;
+     s <= q by Z1,Z2,Th73;
+     then r <= q by Z1,XXREAL_0:2;
+     then p < q by B,XXREAL_0:2;
+    hence contradiction by B,Z2,Th86;
+   end;
+  hence contradiction by Z1,Th3,Z2;
+ end;
+
+theorem  :: MEASURE5:52
+  r <= s implies [.r,s.] <> [.p,q.[
+ proof assume that
+Z1: r <= s and
+Z2: [.r,s.] = [.p,q.[;
+   now assume s in [.p,q.[;
+     then
+B:    s < q by Th5;
+     p <= r by Z1,Z2,Th69;
+     then p <= s by Z1,XXREAL_0:2;
+     then p < q by B,XXREAL_0:2;
+    hence contradiction by B,Z2,Th67;
+   end;
+  hence contradiction by Z1,Th3,Z2;
+ end;
+
+theorem  :: MEASURE5:52
+  r <= s implies [.r,s.] <> ].p,q.[
+ proof assume that
+Z1: r <= s and
+Z2: [.r,s.] = ].p,q.[;
+   now assume s in ].p,q.[;
+     then
+B:    s < q by Th6;
+     p <= r by Z1,Z2,Th77;
+     then p <= s by Z1,XXREAL_0:2;
+     then p < q by B,XXREAL_0:2;
+    hence contradiction by B,Z2,Th46;
+   end;
+  hence contradiction by Z1,Th3,Z2;
+ end;
+
+theorem  :: MEASURE5:52
+  r < s implies [.r,s.[ <> [.p,q.]
+ proof assume that
+Z1: r < s and
+Z2: [.r,s.[ = [.p,q.];
+A:  not s in [.r,s.[ by Th5;
+   p <= r by Z1,Z2,Th67;
+   then
+B: p <= s by Z1,XXREAL_0:2;
+   s <= q by Z2,Z1,Th67;
+  hence contradiction by A,Z2,B,Th3;
+ end;
+
+theorem :: MEASURE5:52
+  r < s implies [.r,s.[ <> ].p,q.]
+ proof assume that
+Z1: r < s and
+Z2: [.r,s.[ = ].p,q.];
+A:  not s in [.r,s.[ by Th5;
+   p <= r by Z1,Z2,Th75;
+   then
+B: p < s by Z1,XXREAL_0:2;
+   s <= q by Z2,Z1,Th75;
+  hence contradiction by A,Z2,B,Th4;
+ end;
+
+theorem  :: MEASURE5:52
+  r < s implies [.r,s.[ <> ].p,q.[
+ proof assume that
+Z1: r < s and
+Z2: [.r,s.[ = ].p,q.[;
+   now assume r in ].p,q.[;
+     then
+B:   p < r by Th6;
+     s <= q by Z1,Z2,Th79;
+     then r < q by Z1,XXREAL_0:2;
+     then p < q by B,XXREAL_0:2;
+    hence contradiction by B,Z2,Th71;
+   end;
+  hence contradiction by Z1,Th5,Z2;
+ end;
+
+theorem  :: MEASURE5:52
+ r < s implies ].r,s.] <> [.p,q.]
+ proof assume that
+Z1: r < s and
+Z2: ].r,s.] = [.p,q.];
+A:  not r in ].r,s.] by Th4;
+B: p <= r by Z1,Z2,Th86;
+   s <= q by Z2,Z1,Th86;
+   then r <= q by Z1,XXREAL_0:2;
+  hence contradiction by A,Z2,B,Th3;
+ end;
+
+theorem  :: MEASURE5:52
+  r < s implies ].r,s.] <> [.p,q.[
+ proof assume that
+Z1: r < s and
+Z2: ].r,s.] = [.p,q.[;
+A:  not r in ].r,s.] by Th4;
+B: p <= r by Z1,Z2,Th72;
+   s <= q by Z2,Z1,Th72;
+   then r < q by Z1,XXREAL_0:2;
+  hence contradiction by A,Z2,B,Th5;
+ end;
+
+theorem :: MEASURE5:52
+  r < s implies ].r,s.] <> ].p,q.[
+ proof assume that
+Z1: r < s and
+Z2: ].r,s.] = ].p,q.[;
+   now assume s in ].p,q.[;
+     then
+B:    s < q by Th6;
+     p <= r by Z1,Z2,Th80;
+     then p <= s by Z1,XXREAL_0:2;
+     then p < q by B,XXREAL_0:2;
+    hence contradiction by B,Z2,Th74;
+   end;
+  hence contradiction by Z1,Th4,Z2;
+ end;
+
+theorem  :: MEASURE5:52
+  r < s implies ].r,s.[ <> [.p,q.]
+ proof assume that
+Z1: r < s and
+Z2: ].r,s.[ = [.p,q.];
+A:  not r in ].r,s.[ by Th6;
+B: p <= r by Z1,Z2,Th46;
+   s <= q by Z2,Z1,Th46;
+   then r <= q by Z1,XXREAL_0:2;
+  hence contradiction by A,Z2,B,Th3;
+ end;
+
+theorem :: MEASURE5:52
+  r < s implies ].r,s.[ <> ].p,q.]
+ proof assume that
+Z1: r < s and
+Z2: ].r,s.[ = ].p,q.];
+A:  not s in ].r,s.[ by Th6;
+   p <= r by Z1,Z2,Th74;
+   then
+B: p < s by Z1,XXREAL_0:2;
+   s <= q by Z2,Z1,Th74;
+  hence contradiction by A,Z2,B,Th4;
+ end;
+
+theorem  :: MEASURE5:52
+  r < s implies ].r,s.[ <> [.p,q.[
+ proof assume that
+Z1: r < s and
+Z2: ].r,s.[ = [.p,q.[;
+A:  not r in ].r,s.[ by Th6;
+B: p <= r by Z1,Z2,Th71;
+   s <= q by Z2,Z1,Th71;
+   then r < q by Z1,XXREAL_0:2;
+  hence contradiction by A,Z2,B,Th5;
+ end;
+
+theorem
+  r <= s & [.r,s.] c< [.p,q.] implies p < r or s < q
+ proof assume
+Z1: r <= s;
+  assume
+Z2: [.r,s.] c< [.p,q.];
+   then [.r,s.] c= [.p,q.] by XBOOLE_0:def 8;
+   then
+A:  p <= r & s <= q by Z1,Tw81;
+   p <> r or s <> q by Z2;
+  hence p < r or s < q by A,XXREAL_0:1;
+ end;
+
+theorem :: BORSUK_4:16
+  r < s & ].r,s.[ c= [.p,q.] implies [.r,s.] c= [.p,q.]
+ proof assume that
+Z1: r < s and
+Z2: ].r,s.[ c= [.p,q.];
+  let t;
+  assume
+pc: t in [.r,s.];
+  per cases by pc,Th7;
+  suppose t in ].r,s.[;
+   hence t in [.p,q.] by Z2;
+  end;
+  suppose
+S: t = r;
+   then
+A:  p <= t by Z1,Z2,Th46;
+    s <= q by Z1,Z2,Th46;
+    then t <= q by S,Z1,XXREAL_0:2;
+   hence t in [.p,q.] by Th3,A;
+  end;
+  suppose
+S: t = s;
+A:  s <= q by Z1,Z2,Th46;
+    p <= r by Z1,Z2,Th46;
+    then p <= t by S,Z1,XXREAL_0:2;
+   hence t in [.p,q.] by S,Th3,A;
+  end;
+ end;
+
+theorem :: BORSUK_4:39
+  r < s implies [.s,p.[ c= ].r,p.[
+ proof assume
+Z: r < s;
+  let t;
+  assume t in [.s,p.[;
+   then s <= t & t < p by Th5;
+   then r < t & t < p by Z,XXREAL_0:2;
+  hence t in ].r,p.[ by Th6;
+ end;
+
+theorem Tw100: :: MEASURE5:15
+  s <= r implies [.r,s.] c= {r} & [.r,s.] c= {s}
+ proof assume
+Z: s <= r;
+  thus [.r,s.] c= {r}
+   proof let t;
+    assume t in [.r,s.];
+     then r <= t & t <= s by Th3;
+     then r <= t & t <= r by Z,XXREAL_0:2;
+     then r = t by XXREAL_0:1;
+    hence t in {r} by TARSKI:def 1;
+   end;
+  let t;
+  assume t in [.r,s.];
+   then r <= t & t <= s by Th3;
+   then s <= t & t <= s by Z,XXREAL_0:2;
+   then s = t by XXREAL_0:1;
+  hence t in {s} by TARSKI:def 1;
+ end;
+
+theorem :: RCOMP_1:46
+ ].r,s.[ misses {r,s}
+ proof let t;
+  assume t in ].r,s.[;
+   then r < t & t < s by Th6;
+  hence not t in {r,s} by TARSKI:def 2;
+ end;
+
+theorem :: BORSUK_4:26
+ [.r,s.[ misses {s}
+ proof let t;
+  assume t in [.r,s.[;
+   then t < s by Th5;
+  hence not t in {s} by TARSKI:def 1;
+ end;
+
+theorem :: BORSUK_4:26
+ ].r,s.] misses {r}
+ proof let t;
+  assume t in ].r,s.];
+   then r < t by Th4;
+  hence not t in {r} by TARSKI:def 1;
+ end;
+
+theorem :: BORSUK_4:12
+ s <= p implies [.r,s.] misses ].p,q.[
+proof assume
+Z: s <= p;
+ let t;
+ assume t in [.r,s.];
+  then t <= s by Th3;
+  then t <= p by Z,XXREAL_0:2;
+ hence not t in ].p,q.[ by Th6;
+end;
+
+theorem :: BORSUK_5:19 :: BORSUK_4:30 :: ISOMICHI:38
+ s <= p implies [.r,s.] misses ].p,q.]
+proof assume
+Z: s <= p;
+ let t;
+ assume t in [.r,s.];
+  then t <= s by Th3;
+  then t <= p by Z,XXREAL_0:2;
+ hence not t in ].p,q.] by Th4;
+end;
+
+theorem :: BORSUK_5:26
+ s <= p implies ].r,s.] misses ].p,q.[
+proof assume
+Z: s <= p;
+ let t;
+ assume t in ].r,s.];
+  then t <= s by Th4;
+  then t <= p by Z,XXREAL_0:2;
+ hence not t in ].p,q.[ by Th6;
+end;
+
+theorem :: RCOMP_2:23
+  s <= p implies ].r,s.] misses ].p,q.]
+proof assume
+Z: s <= p;
+ let t;
+ assume t in ].r,s.];
+  then t <= s by Th4;
+  then t <= p by Z,XXREAL_0:2;
+ hence not t in ].p,q.] by Th4;
+end;
+
+theorem :: BORSUK_4:13 :: BORSUK_4:11
+  s <= p implies ].r,s.[ misses [.p,q.]
+proof assume
+Z: s <= p;
+ let t;
+ assume t in ].r,s.[;
+  then t < s by Th6;
+  then t < p by Z,XXREAL_0:2;
+ hence not t in [.p,q.] by Th3;
+end;
+
+theorem :: ISOMICHI:34 :: BORSUK_5:27
+  s <= p implies ].r,s.[ misses [.p,q.[
+proof assume
+Z: s <= p;
+ let t;
+ assume t in ].r,s.[;
+  then t < s by Th6;
+  then t < p by Z,XXREAL_0:2;
+ hence not t in [.p,q.[ by Th5;
+end;
+
+theorem :: BORSUK_5:20 :: BORSUK_4:30
+ s <= p implies [.r,s.[ misses [.p,q.]
+proof assume
+Z: s <= p;
+ let t;
+ assume t in [.r,s.[;
+  then t < s by Th5;
+  then t < p by Z,XXREAL_0:2;
+ hence not t in [.p,q.] by Th3;
+end;
+
+theorem :: RCOMP_2:22
+ s <= p implies [.r,s.[ misses [.p,q.[
+proof assume
+Z: s <= p;
+ let t;
+ assume t in [.r,s.[;
+  then t < s by Th5;
+  then t < p by Z,XXREAL_0:2;
+ hence not t in [.p,q.[ by Th5;
+end;
+
+theorem :: MEASURE5:24
+ r < p & r < s implies not ].r,s.[ c= [.p,q.]
+proof assume that
+Z1: r < p and
+Z2: r < s;
+ per cases;
+ suppose
+S: s <= p;
+  consider t such that
+W1: r < t and
+W2: t < s by Z2,XREAL_1:229;
+ take t;
+ thus t in ].r,s.[ by W2,W1,Th6;
+   t < p by S,W2,XXREAL_0:2;
+  hence not t in [.p,q.] by Th3;
+ end;
+ suppose
+S: p <= s;
+  consider t such that
+W1: r < t and
+W2: t < p by Z1,XREAL_1:229;
+ take t;
+  t < s by S,W2, XXREAL_0:2;
+ hence t in ].r,s.[ by W1,Th6;
+ thus not t in [.p,q.] by W2,Th3;
+ end;
+end;
+
+theorem :: MEASURE5:38
+ r < p & r < s implies not [.r,s.[ c= [.p,q.]
+proof assume that
+Z1: r < p and
+Z2: r < s;
+ per cases;
+ suppose
+S: s <= p;
+  consider t such that
+W1: r < t and
+W2: t < s by Z2,XREAL_1:229;
+ take t;
+ thus t in [.r,s.[ by W2,W1,Th5;
+   t < p by S,W2,XXREAL_0:2;
+  hence not t in [.p,q.] by Th3;
+ end;
+ suppose
+S: p <= s;
+  consider t such that
+W1: r < t and
+W2: t < p by Z1,XREAL_1:229;
+ take t;
+  t < s by S,W2, XXREAL_0:2;
+ hence t in [.r,s.[ by W1,Th5;
+ thus not t in [.p,q.] by W2,Th3;
+ end;
+end;
+
+theorem :: MEASURE5:42
+ r < p & r < s implies not ].r,s.] c= [.p,q.]
+proof assume that
+Z1: r < p and
+Z2: r < s;
+ per cases;
+ suppose
+S: s <= p;
+  consider t such that
+W1: r < t and
+W2: t < s by Z2,XREAL_1:229;
+ take t;
+ thus t in ].r,s.] by W2,W1,Th4;
+   t < p by S,W2,XXREAL_0:2;
+  hence not t in [.p,q.] by Th3;
+ end;
+ suppose
+S: p <= s;
+  consider t such that
+W1: r < t and
+W2: t < p by Z1,XREAL_1:229;
+ take t;
+  t < s by S,W2, XXREAL_0:2;
+ hence t in ].r,s.] by W1,Th4;
+ thus not t in [.p,q.] by W2,Th3;
+ end;
+end;
+
+theorem :: MEASURE5:34
+ r < p & r <= s implies not [.r,s.] c= [.p,q.]
+proof assume that
+Z1: r < p and
+Z2: r <= s;
+  take t=r;
+  thus t in [.r,s.] by Z2,Th3;
+  thus not t in [.p,q.] by Z1,Th3;
+end;
+
+theorem :: MEASURE5:26
+ r < p & r < s implies not ].r,s.[ c= [.p,q.[
+proof assume that
+Z1: r < p and
+Z2: r < s;
+ per cases;
+ suppose
+S: s <= p;
+  consider t such that
+W1: r < t and
+W2: t < s by Z2,XREAL_1:229;
+ take t;
+ thus t in ].r,s.[ by W2,W1,Th6;
+   t < p by S,W2,XXREAL_0:2;
+  hence not t in [.p,q.[ by Th5;
+ end;
+ suppose
+S: p <= s;
+  consider t such that
+W1: r < t and
+W2: t < p by Z1,XREAL_1:229;
+ take t;
+  t < s by S,W2, XXREAL_0:2;
+ hence t in ].r,s.[ by W1,Th6;
+ thus not t in [.p,q.[ by W2,Th5;
+ end;
+end;
+
+theorem :: MEASURE5:48
+ r < p & r < s implies not ].r,s.] c= [.p,q.[
+proof assume that
+Z1: r < p and
+Z2: r < s;
+ per cases;
+ suppose
+S: s <= p;
+  consider t such that
+W1: r < t and
+W2: t < s by Z2,XREAL_1:229;
+ take t;
+ thus t in ].r,s.] by W2,W1,Th4;
+   t < p by S,W2,XXREAL_0:2;
+  hence not t in [.p,q.[ by Th5;
+ end;
+ suppose
+S: p <= s;
+  consider t such that
+W1: r < t and
+W2: t < p by Z1,XREAL_1:229;
+ take t;
+  t < s by S,W2, XXREAL_0:2;
+ hence t in ].r,s.] by W1,Th4;
+ thus not t in [.p,q.[ by W2,Th5;
+ end;
+end;
+
+theorem
+ r < p & r < s implies not [.r,s.[ c= [.p,q.[
+proof assume that
+Z1: r < p and
+Z2: r < s;
+ per cases;
+ suppose
+S: s <= p;
+  consider t such that
+W1: r < t and
+W2: t < s by Z2,XREAL_1:229;
+ take t;
+ thus t in [.r,s.[ by W2,W1,Th5;
+   t < p by S,W2,XXREAL_0:2;
+  hence not t in [.p,q.[ by Th5;
+ end;
+ suppose
+S: p <= s;
+  consider t such that
+W1: r < t and
+W2: t < p by Z1,XREAL_1:229;
+ take t;
+  t < s by S,W2, XXREAL_0:2;
+ hence t in [.r,s.[ by W1,Th5;
+ thus not t in [.p,q.[ by W2,Th5;
+ end;
+end;
+
+theorem :: MEASURE5:44
+ r < p & r <= s implies not [.r,s.] c= [.p,q.[
+proof assume that
+Z1: r < p and
+Z2: r <= s;
+  take t=r;
+  thus t in [.r,s.] by Z2,Th3;
+  thus not t in [.p,q.[ by Th5,Z1;
+end;
+
+theorem :: MEASURE5:30
+ r < p & r < s implies not ].r,s.[ c= ].p,q.]
+proof assume that
+Z1: r < p and
+Z2: r < s;
+ per cases;
+ suppose
+S: s <= p;
+  consider t such that
+W1: r < t and
+W2: t < s by Z2,XREAL_1:229;
+ take t;
+ thus t in ].r,s.[ by W2,W1,Th6;
+   t < p by S,W2,XXREAL_0:2;
+  hence not t in ].p,q.] by Th4;
+ end;
+ suppose
+S: p <= s;
+  consider t such that
+W1: r < t and
+W2: t < p by Z1,XREAL_1:229;
+ take t;
+  t < s by S,W2, XXREAL_0:2;
+ hence t in ].r,s.[ by W1,Th6;
+ thus not t in ].p,q.] by W2,Th4;
+ end;
+end;
+
+theorem :: MEASURE5:46
+ r <= p & r < s implies not [.r,s.[ c= ].p,q.]
+proof assume that
+Z1: r <= p and
+Z2: r < s;
+ take t=r;
+ thus t in [.r,s.[ by Z2,Th5;
+ thus not t in ].p,q.] by Z1,Th4;
+end;
+
+theorem :: MEASURE5:50
+ r < p & r < s implies not ].r,s.] c= ].p,q.]
+proof assume that
+Z1: r < p and
+Z2: r < s;
+ per cases;
+ suppose
+S: s <= p;
+  consider t such that
+W1: r < t and
+W2: t < s by Z2,XREAL_1:229;
+ take t;
+ thus t in ].r,s.] by W2,W1,Th4;
+   t < p by S,W2,XXREAL_0:2;
+  hence not t in ].p,q.] by Th4;
+ end;
+ suppose
+S: p <= s;
+  consider t such that
+W1: r < t and
+W2: t < p by Z1,XREAL_1:229;
+ take t;
+  t <= s by S,W2,XXREAL_0:2;
+ hence t in ].r,s.] by W1,Th4;
+ thus not t in ].p,q.] by W2,Th4;
+ end;
+end;
+
+theorem :: MEASURE5:40
+ r <= p & r <= s implies not [.r,s.] c= ].p,q.]
+proof assume that
+Z1: r <= p and
+Z2: r <= s;
+ take r;
+ thus r in [.r,s.] by Z2,Th3;
+ thus not r in ].p,q.] by Th4,Z1;
+end;
+
+theorem :: MEASURE5:22 :: MEASURE5:36
+ r <= p & r <= s implies not [.r,s.] c= ].p,q.[
+proof assume that
+Z1: r <= p and
+Z2: r <= s;
+ take r;
+ thus r in [.r,s.] by Z2,Th3;
+ thus not r in ].p,q.[ by Th6,Z1;
+end;
+
+theorem :: MEASURE5:28
+ r <= p & r < s implies not [.r,s.[ c= ].p,q.[
+proof assume that
+Z1: r <= p and
+Z2: r < s;
+ take r;
+ thus r in [.r,s.[ by Z2,Th5;
+ thus not r in ].p,q.[ by Th6,Z1;
+end;
+
+theorem :: MEASURE5:32
+ r < p & r < s implies not ].r,s.] c= ].p,q.[
+proof assume that
+Z1: r < p and
+Z2: r < s;
+ per cases;
+ suppose
+S: s <= p;
+  consider t such that
+W1: r < t and
+W2: t < s by Z2,XREAL_1:229;
+ take t;
+ thus t in ].r,s.] by W2,W1,Th4;
+   t < p by S,W2,XXREAL_0:2;
+  hence not t in ].p,q.[ by Th6;
+ end;
+ suppose
+S: p <= s;
+  consider t such that
+W1: r < t and
+W2: t < p by Z1,XREAL_1:229;
+ take t;
+  t <= s by S,W2,XXREAL_0:2;
+ hence t in ].r,s.] by W1,Th4;
+ thus not t in ].p,q.[ by W2,Th6;
+ end;
+end;
+
+theorem :: MEASURE5:20
+ r < p & r < s implies not ].r,s.[ c= ].p,q.[
+proof assume that
+Z1: r < p and
+Z2: r < s;
+ per cases;
+ suppose
+S: s <= p;
+  consider t such that
+W1: r < t and
+W2: t < s by Z2,XREAL_1:229;
+ take t;
+ thus t in ].r,s.[ by W2,W1,Th6;
+   t < p by S,W2,XXREAL_0:2;
+  hence not t in ].p,q.[ by Th6;
+ end;
+ suppose
+S: p <= s;
+  consider t such that
+W1: r < t and
+W2: t < p by Z1,XREAL_1:229;
+ take t;
+  t < s by S,W2,XXREAL_0:2;
+ hence t in ].r,s.[ by W1,Th6;
+ thus not t in ].p,q.[ by W2,Th6;
+ end;
+end;
+
+theorem :: MEASURE5:21
+ q < s & r < s implies not ].r,s.[ c= [.p,q.]
+proof assume that
+Z1: q < s and
+Z2: r < s;
+ per cases;
+ suppose
+S: r <= q;
+   consider t such that
+W1: q < t and
+W2: t < s by Z1,XREAL_1:229;
+  take t;
+   r < t by S,W1,XXREAL_0:2;
+  hence t in ].r,s.[ by W2,Th6;
+  thus not t in [.p,q.] by W1,Th3;
+ end;
+ suppose
+S: q <= r;
+  consider t such that
+W1: r < t and
+W2: t < s by Z2,XREAL_1:229;
+ take t;
+ thus t in ].r,s.[ by W1,W2,Th6;
+  q < t by S,W1,XXREAL_0:2;
+ hence not t in [.p,q.] by Th3;
+ end;
+end;
+
+theorem
+ q < s & r < s implies not [.r,s.[ c= [.p,q.]
+proof assume that
+Z1: q < s and
+Z2: r < s;
+ per cases;
+ suppose
+S: r <= q;
+   consider t such that
+W1: q < t and
+W2: t < s by Z1,XREAL_1:229;
+  take t;
+   r < t by S,W1,XXREAL_0:2;
+  hence t in [.r,s.[ by W2,Th5;
+  thus not t in [.p,q.] by W1,Th3;
+ end;
+ suppose
+S: q <= r;
+  consider t such that
+W1: r < t and
+W2: t < s by Z2,XREAL_1:229;
+ take t;
+ thus t in [.r,s.[ by W1,W2,Th5;
+  q < t by S,W1,XXREAL_0:2;
+ hence not t in [.p,q.] by Th3;
+ end;
+end;
+
+theorem
+ q < s & r < s implies not ].r,s.] c= [.p,q.]
+proof assume that
+Z1: q < s and
+Z2: r < s;
+ per cases;
+ suppose
+S: r <= q;
+   consider t such that
+W1: q < t and
+W2: t < s by Z1,XREAL_1:229;
+  take t;
+   r < t by S,W1,XXREAL_0:2;
+  hence t in ].r,s.] by W2,Th4;
+  thus not t in [.p,q.] by W1,Th3;
+ end;
+ suppose
+S: q <= r;
+  consider t such that
+W1: r < t and
+W2: t < s by Z2,XREAL_1:229;
+ take t;
+ thus t in ].r,s.] by W1,W2,Th4;
+  q < t by S,W1,XXREAL_0:2;
+ hence not t in [.p,q.] by Th3;
+ end;
+end;
+
+theorem
+ q < s & r <= s implies not [.r,s.] c= [.p,q.]
+proof assume that
+Z1: q < s and
+Z2: r <= s;
+ per cases;
+ suppose
+S: r <= q;
+   consider t such that
+W1: q < t and
+W2: t < s by Z1,XREAL_1:229;
+  take t;
+   r < t by S,W1,XXREAL_0:2;
+  hence t in [.r,s.] by W2,Th3;
+  thus not t in [.p,q.] by W1,Th3;
+ end;
+ suppose
+S: q < r;
+ take t=r;
+ thus t in [.r,s.] by Z2,Th3;
+ thus not t in [.p,q.] by S,Th3;
+ end;
+end;
+
+theorem
+ q < s & r < s implies not ].r,s.[ c= [.p,q.[
+proof assume that
+Z1: q < s and
+Z2: r < s;
+ per cases;
+ suppose
+S: r <= q;
+   consider t such that
+W1: q < t and
+W2: t < s by Z1,XREAL_1:229;
+  take t;
+   r < t by S,W1,XXREAL_0:2;
+  hence t in ].r,s.[ by W2,Th6;
+  thus not t in [.p,q.[ by W1,Th5;
+ end;
+ suppose
+S: q < r;
+   consider t such that
+W1: r < t and
+W2: t < s by Z2,XREAL_1:229;
+ take t;
+ thus t in ].r,s.[ by W1,W2,Th6;
+  q < t by S,W1,XXREAL_0:2;
+ hence not t in [.p,q.[ by Th5;
+ end;
+end;
+
+theorem
+ q <= s & r < s implies not ].r,s.] c= [.p,q.[
+proof assume that
+Z1: q <= s and
+Z2: r < s;
+  take t=s;
+  thus t in ].r,s.] by Z2,Th4;
+  thus not t in [.p,q.[ by Z1,Th5;
+end;
+
+theorem
+ q < s & r < s implies not [.r,s.[ c= [.p,q.[
+proof assume that
+Z1: q < s and
+Z2: r < s;
+ per cases;
+ suppose
+S: r <= q;
+   consider t such that
+W1: q < t and
+W2: t < s by Z1,XREAL_1:229;
+  take t;
+   r < t by S,W1,XXREAL_0:2;
+  hence t in [.r,s.[ by W2,Th5;
+  thus not t in [.p,q.[ by W1,Th5;
+ end;
+ suppose
+S: q < r;
+   consider t such that
+W1: r < t and
+W2: t < s by Z2,XREAL_1:229;
+ take t;
+ thus t in [.r,s.[ by W1,W2,Th5;
+  q < t by S,W1,XXREAL_0:2;
+ hence not t in [.p,q.[ by Th5;
+ end;
+end;
+
+theorem
+ q < s & r < s implies not ].r,s.[ c= ].p,q.]
+proof assume that
+Z1: q < s and
+Z2: r < s;
+ per cases;
+ suppose
+S: r <= q;
+   consider t such that
+W1: q < t and
+W2: t < s by Z1,XREAL_1:229;
+  take t;
+   r < t by S,W1,XXREAL_0:2;
+  hence t in ].r,s.[ by W2,Th6;
+  thus not t in ].p,q.] by W1,Th4;
+ end;
+ suppose
+S: q < r;
+   consider t such that
+W1: r < t and
+W2: t < s by Z2,XREAL_1:229;
+ take t;
+ thus t in ].r,s.[ by W1,W2,Th6;
+  q < t by S,W1,XXREAL_0:2;
+ hence not t in ].p,q.] by Th4;
+ end;
+end;
+
+theorem
+ q < s & r <= s implies not [.r,s.] c= ].p,q.]
+proof assume that
+Z1: q < s and
+Z2: r <= s;
+ take t=s;
+ thus t in [.r,s.] by Z2,Th3;
+  thus not t in ].p,q.] by Z1,Th4;
+end;
+
+theorem
+ q < s & r < s implies not [.r,s.[ c= ].p,q.]
+proof assume that
+Z1: q < s and
+Z2: r < s;
+ per cases;
+ suppose
+S: r <= q;
+   consider t such that
+W1: q < t and
+W2: t < s by Z1,XREAL_1:229;
+  take t;
+   r < t by S,W1,XXREAL_0:2;
+  hence t in [.r,s.[ by W2,Th5;
+  thus not t in ].p,q.] by W1,Th4;
+ end;
+ suppose
+S: q < r;
+   consider t such that
+W1: r < t and
+W2: t < s by Z2,XREAL_1:229;
+ take t;
+ thus t in [.r,s.[ by W1,W2,Th5;
+  q < t by S,W1,XXREAL_0:2;
+ hence not t in ].p,q.] by Th4;
+ end;
+end;
+
+theorem
+ q < s & r < s implies not ].r,s.] c= ].p,q.]
+proof assume that
+Z1: q < s and
+Z2: r < s;
+ per cases;
+ suppose
+S: r <= q;
+   consider t such that
+W1: q < t and
+W2: t < s by Z1,XREAL_1:229;
+  take t;
+   r < t by S,W1,XXREAL_0:2;
+  hence t in ].r,s.] by W2,Th4;
+  thus not t in ].p,q.] by W1,Th4;
+ end;
+ suppose
+S: q < r;
+   consider t such that
+W1: r < t and
+W2: t < s by Z2,XREAL_1:229;
+ take t;
+ thus t in ].r,s.] by W1,W2,Th4;
+  q < t by S,W1,XXREAL_0:2;
+ hence not t in ].p,q.] by Th4;
+ end;
+end;
+
+theorem
+ q <= s & r <= s implies not [.r,s.] c= ].p,q.[
+ proof assume that
+Z1: q <= s and
+Z2: r <= s;
+  take t=s;
+  thus t in [.r,s.] by Z2,Th3;
+  thus not t in ].p,q.[ by Z1,Th6;
+ end;
+
+theorem
+ q < s & r < s implies not [.r,s.[ c= ].p,q.[
+proof assume that
+Z1: q < s and
+Z2: r < s;
+ per cases;
+ suppose
+S: r <= q;
+   consider t such that
+W1: q < t and
+W2: t < s by Z1,XREAL_1:229;
+  take t;
+   r < t by S,W1,XXREAL_0:2;
+  hence t in [.r,s.[ by W2,Th5;
+  thus not t in ].p,q.[ by W1,Th6;
+ end;
+ suppose
+S: q < r;
+   consider t such that
+W1: r < t and
+W2: t < s by Z2,XREAL_1:229;
+ take t;
+ thus t in [.r,s.[ by W1,W2,Th5;
+  q < t by S,W1,XXREAL_0:2;
+ hence not t in ].p,q.[ by Th6;
+ end;
+end;
+
+theorem
+ q <= s & r < s implies not ].r,s.] c= ].p,q.[
+proof assume that
+Z1: q <= s and
+Z2: r < s;
+  take t=s;
+  thus t in ].r,s.] by Z2,Th4;
+  thus not t in ].p,q.[ by Z1,Th6;
+end;
+
+theorem
+ q < s & r < s implies not ].r,s.[ c= ].p,q.[
+proof assume that
+Z1: q < s and
+Z2: r < s;
+ per cases;
+ suppose
+S: r <= q;
+   consider t such that
+W1: q < t and
+W2: t < s by Z1,XREAL_1:229;
+  take t;
+   r < t by S,W1,XXREAL_0:2;
+  hence t in ].r,s.[ by W2,Th6;
+  thus not t in ].p,q.[ by W1,Th6;
+ end;
+ suppose
+S: q < r;
+   consider t such that
+W1: r < t and
+W2: t < s by Z2,XREAL_1:229;
+ take t;
+ thus t in ].r,s.[ by W1,W2,Th6;
+  q < t by S,W1,XXREAL_0:2;
+ hence not t in ].p,q.[ by Th6;
+ end;
+end;
+
+begin :: Boolean operations
+
+theorem Th143: :: RCOMP_1:11
+ r <= s implies [.r,s.] = ].r,s.[ \/ {r,s}
+proof assume
+Z: r <= s;
+  let t;
+ thus t in [.r,s.] implies t in ].r,s.[ \/ {r,s}
+  proof
+   assume t in [.r,s.];
+    then t in ].r,s.[ or t = r or t = s by Th7;
+    then t in ].r,s.[ or t in {r,s} by TARSKI:def 2;
+   hence t in ].r,s.[ \/ {r,s} by XBOOLE_0:def 2;
+  end;
+ assume t in ].r,s.[ \/ {r,s};
+  then t in ].r,s.[ or t in {r,s} by XBOOLE_0:def 2;
+  then t in ].r,s.[ or t = r or t = s by TARSKI:def 2;
+ hence t in [.r,s.] by Tw18,Z,Th3;
+end;
+
+theorem Th144: :: BORSUK_4:34
+ r <= s implies [.r,s.] = [.r,s.[ \/ {s}
+proof assume
+Z: r <= s;
+  let t;
+ thus t in [.r,s.] implies t in [.r,s.[ \/ {s}
+  proof
+   assume t in [.r,s.];
+    then t in [.r,s.[ or t = s by Tw9;
+    then t in [.r,s.[ or t in {s} by TARSKI:def 1;
+   hence t in [.r,s.[ \/ {s} by XBOOLE_0:def 2;
+  end;
+ assume t in [.r,s.[ \/ {s};
+  then t in [.r,s.[ or t in {s} by XBOOLE_0:def 2;
+  then t in [.r,s.[ or t = s by TARSKI:def 1;
+ hence t in [.r,s.] by Tw15,Z,Th3;
+end;
+
+theorem Th145: :: BORSUK_4:35
+ r <= s implies [.r,s.] = {r} \/ ].r,s.]
+proof assume
+Z: r <= s;
+  let t;
+ thus t in [.r,s.] implies t in {r} \/ ].r,s.]
+  proof
+   assume t in [.r,s.];
+    then t in ].r,s.] or t = r by Tw8;
+    then t in ].r,s.] or t in {r} by TARSKI:def 1;
+   hence t in {r} \/].r,s.] by XBOOLE_0:def 2;
+  end;
+ assume t in {r} \/].r,s.];
+  then t in ].r,s.] or t in {r} by XBOOLE_0:def 2;
+  then t in ].r,s.] or t = r by TARSKI:def 1;
+ hence t in [.r,s.] by Tw14,Z,Th3;
+end;
+
+theorem Th146: :: RCOMP_2:5
+ r < s implies [.r,s.[ = {r} \/ ].r,s.[
+proof assume
+Z: r < s;
+  let t;
+ thus t in [.r,s.[ implies t in {r} \/ ].r,s.[
+  proof
+   assume t in [.r,s.[;
+    then t in ].r,s.[ or t = r by Tw10;
+    then t in ].r,s.[ or t in {r} by TARSKI:def 1;
+   hence t in {r} \/].r,s.[ by XBOOLE_0:def 2;
+  end;
+ assume t in {r} \/].r,s.[;
+  then t in ].r,s.[ or t in {r} by XBOOLE_0:def 2;
+  then t in ].r,s.[ or t = r by TARSKI:def 1;
+ hence t in [.r,s.[ by Tw16,Z,Th5;
+end;
+
+theorem Th147: :: RCOMP_2:6
+ r < s implies ].r,s.] = ].r,s.[ \/ {s}
+proof assume
+Z: r < s;
+  let t;
+ thus t in ].r,s.] implies t in ].r,s.[ \/ {s}
+  proof
+   assume t in ].r,s.];
+    then t in ].r,s.[ or t = s by Tw11;
+    then t in ].r,s.[ or t in {s} by TARSKI:def 1;
+   hence t in ].r,s.[ \/ {s} by XBOOLE_0:def 2;
+  end;
+ assume t in ].r,s.[ \/ {s};
+  then t in ].r,s.[ or t in {s} by XBOOLE_0:def 2;
+  then t in ].r,s.[ or t = s by TARSKI:def 1;
+ hence t in ].r,s.] by Tw17,Z,Th4;
+end;
+
+theorem
+ r <= s implies [.r,s.] \ {r,s} = ].r,s.[
+ proof assume r <= s;
+   then
+A:  [.r,s.] = ].r,s.[ \/ {r,s} by Th143;
+   not r in ].r,s.[ & not s in ].r,s.[ by Th6;
+  hence [.r,s.] \ {r,s} = ].r,s.[ by A,ZFMISC_1:145;
+ end;
+
+theorem :: BORSUK_4:27
+  r <= s implies [.r,s.] \ {r} = ].r,s.]
+ proof assume r <= s; then
+A:  [.r,s.] = {r} \/ ].r,s.] by Th145;
+   not r in ].r,s.] by Th4;
+  hence [.r,s.] \ {r} = ].r,s.] by A,ZFMISC_1:141;
+ end;
+
+theorem :: BORSUK_4:28
+  r <= s implies [.r,s.] \ {s} = [.r,s.[
+ proof assume r <= s;
+   then
+A:  [.r,s.] = [.r,s.[ \/ {s} by Th144;
+   not s in [.r,s.[ by Th5;
+  hence [.r,s.] \ {s} = [.r,s.[ by A,ZFMISC_1:141;
+ end;
+
+theorem
+ r < s implies [.r,s.[ \ {r} = ].r,s.[
+ proof assume r < s; then
+A:  [.r,s.[= {r} \/ ].r,s.[ by Th146;
+   not r in ].r,s.[ by Th6;
+  hence [.r,s.[ \ {r} = ].r,s.[ by A,ZFMISC_1:141;
+ end;
+
+theorem
+ r < s implies ].r,s.] \ {s} = ].r,s.[
+ proof assume r < s; then
+A:  ].r,s.] = ].r,s.[ \/ {s} by Th147;
+   not s in ].r,s.[ by Th6;
+  hence ].r,s.] \ {s} = ].r,s.[ by A,ZFMISC_1:141;
+ end;
+
+theorem :: BORSUK_4:29
+ r < s & s < t implies ].r,s.] /\ [.s,t.[ = {s}
+ proof assume that
+Z1: r < s and
+Z2: s < t;
+   now let x;
+    hereby assume
+Z:   x in ].r,s.] /\ [.s,t.[;
+     then reconsider p = x as ext-real number by MEMBERED:def 2;
+      p in ].r,s.] & p in [.s,t.[ by Z,XBOOLE_0:def 3;
+      then s <= p & p <= s by Th4,Th5;
+     hence x = s by XXREAL_0:1;
+    end;
+    assume
+Z:   x = s;
+     s in ].r,s.] & s in [.s,t.[ by Z1,Z2,Th4,Th5;
+    hence x in ].r,s.] /\ [.s,t.[ by Z,XBOOLE_0:def 3;
+   end;
+  hence ].r,s.] /\ [.s,t.[ = {s} by TARSKI:def 1;
+ end;
+
+theorem :: RCOMP_2:15
+[.r,s.[ /\ [.p,q.[ = [.max(r,p),min(s,q).[
+proof let t;
+ thus t in [.r,s.[ /\ [.p,q.[ implies t in [.max(r,p),min(s,q).[
+  proof assume t in [.r,s.[ /\ [.p,q.[;
+    then t in [.r,s.[ & t in [.p,q.[ by XBOOLE_0:def 3;
+    then r <= t & t < s & p <= t & t < q by Th5;
+    then max(r,p) <= t & t < min(s,q) by XXREAL_0:21,28;
+   hence t in [.max(r,p),min(s,q).[ by Th5;
+  end;
+ assume t in [.max(r,p),min(s,q).[;
+  then max(r,p) <= t & t < min(s,q) by Th5;
+  then r <= t & p <= t & t < s & t < q by XXREAL_0:23,30;
+  then t in [.r,s.[ & t in [.p,q.[ by Th5;
+ hence t in [.r,s.[ /\ [.p,q.[ by XBOOLE_0:def 3;
+end;
+
+theorem
+[.r,s.] /\ [.p,q.] = [.max(r,p),min(s,q).]
+proof let t;
+ thus t in [.r,s.] /\ [.p,q.] implies t in [.max(r,p),min(s,q).]
+  proof assume t in [.r,s.] /\ [.p,q.];
+    then t in [.r,s.] & t in [.p,q.] by XBOOLE_0:def 3;
+    then r <= t & t <= s & p <= t & t <= q by Th3;
+    then max(r,p) <= t & t <= min(s,q) by XXREAL_0:20,28;
+   hence t in [.max(r,p),min(s,q).] by Th3;
+  end;
+ assume t in [.max(r,p),min(s,q).];
+  then max(r,p) <= t & t <= min(s,q) by Th3;
+  then r <= t & p <= t & t <= s & t <= q by XXREAL_0:22,30;
+  then t in [.r,s.] & t in [.p,q.] by Th3;
+ hence t in [.r,s.] /\ [.p,q.] by XBOOLE_0:def 3;
+end;
+
+theorem :: RCOMP_2:16
+  ].r,s.] /\ ].p,q.] = ].max(r,p),min(s,q).]
+proof let t;
+ thus t in ].r,s.] /\ ].p,q.] implies t in ].max(r,p),min(s,q).]
+  proof assume t in ].r,s.] /\ ].p,q.];
+    then t in ].r,s.] & t in ].p,q.] by XBOOLE_0:def 3;
+    then r < t & t <= s & p < t & t <= q by Th4;
+    then max(r,p) < t & t <= min(s,q) by XXREAL_0:20,29;
+   hence t in ].max(r,p),min(s,q).] by Th4;
+  end;
+ assume t in ].max(r,p),min(s,q).];
+  then max(r,p) < t & t <= min(s,q) by Th4;
+  then r < t & p < t & t <= s & t <= q by XXREAL_0:22,31;
+  then t in ].r,s.] & t in ].p,q.] by Th4;
+ hence t in ].r,s.] /\ ].p,q.] by XBOOLE_0:def 3;
+end;
+
+theorem
+  ].r,s.[ /\ ].p,q.[ = ].max(r,p),min(s,q).[
+proof let t;
+ thus t in ].r,s.[ /\ ].p,q.[ implies t in ].max(r,p),min(s,q).[
+  proof assume t in ].r,s.[ /\ ].p,q.[;
+    then t in ].r,s.[ & t in ].p,q.[ by XBOOLE_0:def 3;
+    then r < t & t < s & p < t & t < q by Th6;
+    then max(r,p) < t & t < min(s,q) by XXREAL_0:21,29;
+   hence t in ].max(r,p),min(s,q).[ by Th6;
+  end;
+ assume t in ].max(r,p),min(s,q).[;
+  then max(r,p) < t & t < min(s,q) by Th6;
+  then r < t & p < t & t < s & t < q by XXREAL_0:23,31;
+  then t in ].r,s.[ & t in ].p,q.[ by Th6;
+ hence t in ].r,s.[ /\ ].p,q.[ by XBOOLE_0:def 3;
+end;
+
+theorem :: RCOMP_1:51 :: TREAL_1:3
+  r <= p & s <= q implies [.r,s.] /\ [.p,q.] = [.p,s.]
+ proof assume that
+Z1: r <= p and
+Z2: s <= q;
+  let t;
+  thus t in [.r,s.] /\ [.p,q.] implies t in [.p,s.]
+   proof assume t in [.r,s.] /\ [.p,q.];
+     then t in [.r,s.] & t in [.p,q.] by XBOOLE_0:def 3;
+     then t <= s & p <= t by Th3;
+    hence t in [.p,s.] by Th3;
+   end;
+  assume t in [.p,s.];
+   then
+A:  p <= t & t <= s by Th3;
+   then r <= t & t <= q by Z1,Z2,XXREAL_0:2;
+   then t in [.r,s.] & t in [.p,q.] by A,Th3;
+  hence t in [.r,s.] /\ [.p,q.] by XBOOLE_0:def 3;
+ end;
+
+theorem
+  r <= p & s <= q implies [.r,s.[ /\ [.p,q.] = [.p,s.[
+ proof assume that
+Z1: r <= p and
+Z2: s <= q;
+  let t;
+  thus t in [.r,s.[ /\ [.p,q.] implies t in [.p,s.[
+   proof assume t in [.r,s.[ /\ [.p,q.];
+     then t in [.r,s.[ & t in [.p,q.] by XBOOLE_0:def 3;
+     then t < s & p <= t by Th3,Th5;
+    hence t in [.p,s.[ by Th5;
+   end;
+  assume t in [.p,s.[;
+   then
+A:  p <= t & t < s by Th5;
+   then r <= t & t <= q by Z1,Z2,XXREAL_0:2;
+   then t in [.r,s.[ & t in [.p,q.] by A,Th3,Th5;
+  hence t in [.r,s.[ /\ [.p,q.] by XBOOLE_0:def 3;
+ end;
+
+theorem
+  r >= p & s > q implies [.r,s.[ /\ [.p,q.] = [.r,q.]
+ proof assume that
+Z1: r >= p and
+Z2: s > q;
+  let t;
+  thus t in [.r,s.[ /\ [.p,q.] implies t in [.r,q.]
+   proof assume t in [.r,s.[ /\ [.p,q.];
+     then t in [.r,s.[ & t in [.p,q.] by XBOOLE_0:def 3;
+     then r <= t & t <= q by Th3,Th5;
+    hence t in [.r,q.] by Th3;
+   end;
+  assume t in [.r,q.];
+   then
+A:  r <= t & t <= q by Th3;
+   then t < s & p <= t by Z1,Z2,XXREAL_0:2;
+   then t in [.r,s.[ & t in [.p,q.] by A,Th3,Th5;
+  hence t in [.r,s.[ /\ [.p,q.] by XBOOLE_0:def 3;
+ end;
+
+theorem
+  r < p & s <= q implies ].r,s.] /\ [.p,q.] = [.p,s.]
+ proof assume that
+Z1: r < p and
+Z2: s <= q;
+  let t;
+  thus t in ].r,s.] /\ [.p,q.] implies t in [.p,s.]
+   proof assume t in ].r,s.] /\ [.p,q.];
+     then t in ].r,s.] & t in [.p,q.] by XBOOLE_0:def 3;
+     then t <= s & p <= t by Th3,Th4;
+    hence t in [.p,s.] by Th3;
+   end;
+  assume t in [.p,s.];
+   then
+A:  p <= t & t <= s by Th3;
+   then r < t & t <= q by Z1,Z2,XXREAL_0:2;
+   then t in ].r,s.] & t in [.p,q.] by A,Th3,Th4;
+  hence t in ].r,s.] /\ [.p,q.] by XBOOLE_0:def 3;
+ end;
+
+theorem
+  r >= p & s >= q implies ].r,s.] /\ [.p,q.] = ].r,q.]
+ proof assume that
+Z1: r >= p and
+Z2: s >= q;
+  let t;
+  thus t in ].r,s.] /\ [.p,q.] implies t in ].r,q.]
+   proof assume t in ].r,s.] /\ [.p,q.];
+     then t in ].r,s.] & t in [.p,q.] by XBOOLE_0:def 3;
+     then r < t & t <= q by Th3,Th4;
+    hence t in ].r,q.] by Th4;
+   end;
+  assume t in ].r,q.];
+   then
+A:  r < t & t <= q by Th4;
+   then t <= s & p <= t by Z1,Z2,XXREAL_0:2;
+   then t in ].r,s.] & t in [.p,q.] by A,Th3,Th4;
+  hence t in ].r,s.] /\ [.p,q.] by XBOOLE_0:def 3;
+ end;
+
+theorem :: TOPGEN_5:8
+  r < p & s <= q implies ].r,s.[ /\ [.p,q.] = [.p,s.[
+ proof assume that
+Z1: r < p and
+Z2: s <= q;
+  let t;
+  thus t in ].r,s.[ /\ [.p,q.] implies t in [.p,s.[
+   proof assume t in ].r,s.[ /\ [.p,q.];
+     then t in ].r,s.[ & t in [.p,q.] by XBOOLE_0:def 3;
+     then t < s & p <= t by Th3,Th6;
+    hence t in [.p,s.[ by Th5;
+   end;
+  assume t in [.p,s.[;
+   then
+A:  p <= t & t < s by Th5;
+   then r < t & t <= q by Z1,Z2,XXREAL_0:2;
+   then t in ].r,s.[ & t in [.p,q.] by A,Th3,Th6;
+  hence t in ].r,s.[ /\ [.p,q.] by XBOOLE_0:def 3;
+ end;
+
+theorem :: TOPGEN_5:9
+  r >= p & s > q implies ].r,s.[ /\ [.p,q.] = ].r,q.]
+ proof assume that
+Z1: r >= p and
+Z2: s > q;
+  let t;
+  thus t in ].r,s.[ /\ [.p,q.] implies t in ].r,q.]
+   proof assume t in ].r,s.[ /\ [.p,q.];
+     then t in ].r,s.[ & t in [.p,q.] by XBOOLE_0:def 3;
+     then r < t & t <= q by Th3,Th6;
+    hence t in ].r,q.] by Th4;
+   end;
+  assume t in ].r,q.];
+   then
+A:  r < t & t <= q by Th4;
+   then t < s & p <= t by Z1,Z2,XXREAL_0:2;
+   then t in ].r,s.[ & t in [.p,q.] by A,Th3,Th6;
+  hence t in ].r,s.[ /\ [.p,q.] by XBOOLE_0:def 3;
+ end;
+
+theorem
+  r <= p & s <= q implies [.r,s.[ /\ [.p,q.[ = [.p,s.[
+proof assume that
+Z1: r <= p and
+Z2: s <= q;
+  let t;
+  thus t in [.r,s.[ /\ [.p,q.[ implies t in [.p,s.[
+   proof assume t in [.r,s.[ /\ [.p,q.[;
+     then t in [.r,s.[ & t in [.p,q.[ by XBOOLE_0:def 3;
+     then t < s & p <= t by Th5;
+    hence t in [.p,s.[ by Th5;
+   end;
+  assume t in [.p,s.[;
+   then
+A:  p <= t & t < s by Th5;
+   then r <= t & t < q by Z1,Z2,XXREAL_0:2;
+   then t in [.r,s.[ & t in [.p,q.[ by A,Th5;
+  hence t in [.r,s.[ /\ [.p,q.[ by XBOOLE_0:def 3;
+ end;
+
+theorem
+  r >= p & s >= q implies [.r,s.[ /\ [.p,q.[ = [.r,q.[
+ proof assume that
+Z1: r >= p and
+Z2: s >= q;
+  let t;
+  thus t in [.r,s.[ /\ [.p,q.[ implies t in [.r,q.[
+   proof assume t in [.r,s.[ /\ [.p,q.[;
+     then t in [.r,s.[ & t in [.p,q.[ by XBOOLE_0:def 3;
+     then r <= t & t < q by Th5;
+    hence t in [.r,q.[ by Th5;
+   end;
+  assume t in [.r,q.[;
+   then
+A:  r <= t & t < q by Th5;
+   then t < s & p <= t by Z1,Z2,XXREAL_0:2;
+   then t in [.r,s.[ & t in [.p,q.[ by A,Th5;
+  hence t in [.r,s.[ /\ [.p,q.[ by XBOOLE_0:def 3;
+ end;
+
+theorem
+  r < p & s < q implies ].r,s.] /\ [.p,q.[ = [.p,s.]
+proof assume that
+Z1: r < p and
+Z2: s < q;
+  let t;
+  thus t in ].r,s.] /\ [.p,q.[ implies t in [.p,s.]
+   proof assume t in ].r,s.] /\ [.p,q.[;
+     then t in ].r,s.] & t in [.p,q.[ by XBOOLE_0:def 3;
+     then t <= s & p <= t by Th4,Th5;
+    hence t in [.p,s.] by Th3;
+   end;
+  assume t in [.p,s.];
+   then
+A:  p <= t & t <= s by Th3;
+   then r < t & t < q by Z1,Z2,XXREAL_0:2;
+   then t in ].r,s.] & t in [.p,q.[ by A,Th5,Th4;
+  hence t in ].r,s.] /\ [.p,q.[ by XBOOLE_0:def 3;
+ end;
+
+theorem :: TOPGEN_5:11
+  r >= p & s >= q implies ].r,s.] /\ [.p,q.[ = ].r,q.[
+ proof assume that
+Z1: r >= p and
+Z2: s >= q;
+  let t;
+  thus t in ].r,s.] /\ [.p,q.[ implies t in ].r,q.[
+   proof assume t in ].r,s.] /\ [.p,q.[;
+     then t in ].r,s.] & t in [.p,q.[ by XBOOLE_0:def 3;
+     then r < t & t < q by Th4,Th5;
+    hence t in ].r,q.[ by Th6;
+   end;
+  assume t in ].r,q.[;
+   then
+A:  r < t & t < q by Th6;
+   then t <= s & p <= t by Z1,Z2,XXREAL_0:2;
+   then t in ].r,s.] & t in [.p,q.[ by A,Th4,Th5;
+  hence t in ].r,s.] /\ [.p,q.[ by XBOOLE_0:def 3;
+ end;
+
+theorem
+  r < p & s <= q implies ].r,s.[ /\ [.p,q.[ = [.p,s.[
+proof assume that
+Z1: r < p and
+Z2: s <= q;
+  let t;
+  thus t in ].r,s.[ /\ [.p,q.[ implies t in [.p,s.[
+   proof assume t in ].r,s.[ /\ [.p,q.[;
+     then t in ].r,s.[ & t in [.p,q.[ by XBOOLE_0:def 3;
+     then t < s & p <= t by Th5,Th6;
+    hence t in [.p,s.[ by Th5;
+   end;
+  assume t in [.p,s.[;
+   then
+A:  p <= t & t < s by Th5;
+   then r < t & t < q by Z1,Z2,XXREAL_0:2;
+   then t in ].r,s.[ & t in [.p,q.[ by A,Th5,Th6;
+  hence t in ].r,s.[ /\ [.p,q.[ by XBOOLE_0:def 3;
+ end;
+
+theorem
+  r >= p & s >= q implies ].r,s.[ /\ [.p,q.[ = ].r,q.[
+ proof assume that
+Z1: r >= p and
+Z2: s >= q;
+  let t;
+  thus t in ].r,s.[ /\ [.p,q.[ implies t in ].r,q.[
+   proof assume t in ].r,s.[ /\ [.p,q.[;
+     then t in ].r,s.[ & t in [.p,q.[ by XBOOLE_0:def 3;
+     then r < t & t < q by Th5,Th6;
+    hence t in ].r,q.[ by Th6;
+   end;
+  assume t in ].r,q.[;
+   then
+A:  r < t & t < q by Th6;
+   then t < s & p <= t by Z1,Z2,XXREAL_0:2;
+   then t in ].r,s.[ & t in [.p,q.[ by A,Th5,Th6;
+  hence t in ].r,s.[ /\ [.p,q.[ by XBOOLE_0:def 3;
+ end;
+
+theorem
+  r <= p & s <= q implies ].r,s.] /\ ].p,q.] = ].p,s.]
+proof assume that
+Z1: r <= p and
+Z2: s <= q;
+  let t;
+  thus t in ].r,s.] /\ ].p,q.] implies t in ].p,s.]
+   proof assume t in ].r,s.] /\ ].p,q.];
+     then t in ].r,s.] & t in ].p,q.] by XBOOLE_0:def 3;
+     then t <= s & p < t by Th4;
+    hence t in ].p,s.] by Th4;
+   end;
+  assume t in ].p,s.];
+   then
+A:  p < t & t <= s by Th4;
+   then r < t & t <= q by Z1,Z2,XXREAL_0:2;
+   then t in ].r,s.] & t in ].p,q.] by A,Th4;
+  hence t in ].r,s.] /\ ].p,q.] by XBOOLE_0:def 3;
+ end;
+
+theorem
+  r >= p & s >= q implies ].r,s.] /\ ].p,q.] = ].r,q.]
+ proof assume that
+Z1: r >= p and
+Z2: s >= q;
+  let t;
+  thus t in ].r,s.] /\ ].p,q.] implies t in ].r,q.]
+   proof assume t in ].r,s.] /\ ].p,q.];
+     then t in ].r,s.] & t in ].p,q.] by XBOOLE_0:def 3;
+     then r < t & t <= q by Th4;
+    hence t in ].r,q.] by Th4;
+   end;
+  assume t in ].r,q.];
+   then
+A:  r < t & t <= q by Th4;
+   then t <= s & p < t by Z1,Z2,XXREAL_0:2;
+   then t in ].r,s.] & t in ].p,q.] by A,Th4;
+  hence t in ].r,s.] /\ ].p,q.] by XBOOLE_0:def 3;
+ end;
+
+theorem
+  r <= p & s <= q implies ].r,s.[ /\ ].p,q.] = ].p,s.[
+proof assume that
+Z1: r <= p and
+Z2: s <= q;
+  let t;
+  thus t in ].r,s.[ /\ ].p,q.] implies t in ].p,s.[
+   proof assume t in ].r,s.[ /\ ].p,q.];
+     then t in ].r,s.[ & t in ].p,q.] by XBOOLE_0:def 3;
+     then t < s & p < t by Th4,Th6;
+    hence t in ].p,s.[ by Th6;
+   end;
+  assume t in ].p,s.[;
+   then
+A:  p < t & t < s by Th6;
+   then r < t & t <= q by Z1,Z2,XXREAL_0:2;
+   then t in ].r,s.[ & t in ].p,q.] by A,Th4,Th6;
+  hence t in ].r,s.[ /\ ].p,q.] by XBOOLE_0:def 3;
+ end;
+
+theorem
+  r >= p & s > q implies ].r,s.[ /\ ].p,q.] = ].r,q.]
+ proof assume that
+Z1: r >= p and
+Z2: s > q;
+  let t;
+  thus t in ].r,s.[ /\ ].p,q.] implies t in ].r,q.]
+   proof assume t in ].r,s.[ /\ ].p,q.];
+     then t in ].r,s.[ & t in ].p,q.] by XBOOLE_0:def 3;
+     then r < t & t <= q by Th4,Th6;
+    hence t in ].r,q.] by Th4;
+   end;
+  assume t in ].r,q.];
+   then
+A:  r < t & t <= q by Th4;
+   then t < s & p < t by Z1,Z2,XXREAL_0:2;
+   then t in ].r,s.[ & t in ].p,q.] by A,Th4,Th6;
+  hence t in ].r,s.[ /\ ].p,q.] by XBOOLE_0:def 3;
+ end;
+
+theorem
+  r <= p & s <= q implies ].r,s.[ /\ ].p,q.[ = ].p,s.[
+proof assume that
+Z1: r <= p and
+Z2: s <= q;
+  let t;
+  thus t in ].r,s.[ /\ ].p,q.[ implies t in ].p,s.[
+   proof assume t in ].r,s.[ /\ ].p,q.[;
+     then t in ].r,s.[ & t in ].p,q.[ by XBOOLE_0:def 3;
+     then t < s & p < t by Th6;
+    hence t in ].p,s.[ by Th6;
+   end;
+  assume t in ].p,s.[;
+   then
+A:  p < t & t < s by Th6;
+   then r < t & t < q by Z1,Z2,XXREAL_0:2;
+   then t in ].r,s.[ & t in ].p,q.[ by A,Th6;
+  hence t in ].r,s.[ /\ ].p,q.[ by XBOOLE_0:def 3;
+ end;
+
+theorem
+  [.r,s.[ \/ [.p,q.[ c= [.min(r,p),max(s,q).[
+ proof let t;
+  assume t in [.r,s.[ \/ [.p,q.[;
+   then t in [.r,s.[ or t in [.p,q.[ by XBOOLE_0:def 2;
+   then r <= t & t < s or p <= t & t < q by Th5;
+   then min(r,p) <= t & t < max(s,q) by XXREAL_0:23,30;
+  hence t in [.min(r,p),max(s,q).[ by Th5;
+ end;
+
+theorem :: RCOMP_2:24
+  [.r,s.[ meets [.p,q.[ implies
+    [.r,s.[ \/ [.p,q.[ = [.min(r,p),max(s,q).[
+proof assume [.r,s.[ meets [.p,q.[;
+ then consider u such that
+W1: u in [.r,s.[ and
+W2: u in [.p,q.[ by MEMBERED:def 20;
+ let t;
+ thus t in [.r,s.[ \/ [.p,q.[ implies t in [.min(r,p),max(s,q).[
+  proof assume t in [.r,s.[ \/ [.p,q.[;
+    then t in [.r,s.[ or t in [.p,q.[ by XBOOLE_0:def 2;
+    then r <= t & t < s or p <= t & t < q by Th5;
+    then min(r,p) <= t & t < max(s,q) by XXREAL_0:23,30;
+   hence t in [.min(r,p),max(s,q).[ by Th5;
+  end;
+A: r <= u & u < s by W1,Th5;
+B: p <= u & u < q by W2,Th5;
+ assume t in [.min(r,p),max(s,q).[;
+  then
+pc: min(r,p) <= t & t < max(s,q) by Th5;
+  per cases by pc,XXREAL_0:28,21;
+  suppose r <= t & t < s or p <= t & t < q;
+    then t in [.r,s.[ or t in [.p,q.[ by Th5;
+   hence t in [.r,s.[ \/ [.p,q.[ by XBOOLE_0:def 2;
+  end;
+  suppose that
+S1: p <= t and
+S2: t < s;
+    u <= t or t <= u;
+    then r <= t or t < q by A,B,XXREAL_0:2;
+    then t in [.r,s.[ or t in [.p,q.[ by Th5,S1,S2;
+   hence t in [.r,s.[ \/ [.p,q.[ by XBOOLE_0:def 2;
+  end;
+  suppose that
+S1:  r <= t and
+S2: t < q;
+    u <= t or t <= u;
+    then t < s or p <= t by A,B,XXREAL_0:2;
+    then t in [.r,s.[ or t in [.p,q.[ by Th5,S1,S2;
+   hence t in [.r,s.[ \/ [.p,q.[ by XBOOLE_0:def 2;
+  end;
+end;
+
+theorem
+ ].r,s.] \/ ].p,q.] c= ].min(r,p),max(s,q).]
+ proof let t;
+  assume t in ].r,s.] \/ ].p,q.];
+   then t in ].r,s.] or t in ].p,q.] by XBOOLE_0:def 2;
+   then r < t & t <= s or p < t & t <= q by Th4;
+   then min(r,p) < t & t <= max(s,q) by XXREAL_0:22,31;
+  hence t in ].min(r,p),max(s,q).] by Th4;
+ end;
+
+theorem :: RCOMP_2:25
+].r,s.] meets ].p,q.] implies
+    ].r,s.] \/ ].p,q.] = ].min(r,p),max(s,q).]
+proof assume ].r,s.] meets ].p,q.];
+ then consider u such that
+W1: u in ].r,s.] and
+W2: u in ].p,q.] by MEMBERED:def 20;
+ let t;
+ thus t in ].r,s.] \/ ].p,q.] implies t in ].min(r,p),max(s,q).]
+  proof assume t in ].r,s.] \/ ].p,q.];
+    then t in ].r,s.] or t in ].p,q.] by XBOOLE_0:def 2;
+    then r < t & t <= s or p < t & t <= q by Th4;
+    then min(r,p) < t & t <= max(s,q) by XXREAL_0:22,31;
+   hence t in ].min(r,p),max(s,q).] by Th4;
+  end;
+A: r < u & u <= s by W1,Th4;
+B: p < u & u <= q by W2,Th4;
+ assume t in ].min(r,p),max(s,q).];
+  then
+pc: min(r,p) < t & t <= max(s,q) by Th4;
+  per cases by pc,XXREAL_0:29,20;
+  suppose r < t & t <= s or p < t & t <= q;
+    then t in ].r,s.] or t in ].p,q.] by Th4;
+   hence t in ].r,s.] \/ ].p,q.] by XBOOLE_0:def 2;
+  end;
+  suppose that
+S1: p < t and
+S2: t <= s;
+    u <= t or t <= u;
+    then r < t or t <= q by A,B,XXREAL_0:2;
+    then t in ].r,s.] or t in ].p,q.] by Th4,S1,S2;
+   hence t in ].r,s.] \/ ].p,q.] by XBOOLE_0:def 2;
+  end;
+  suppose that
+S1:  r < t and
+S2: t <= q;
+    u <= t or t <= u;
+    then t <= s or p < t by A,B,XXREAL_0:2;
+    then t in ].r,s.] or t in ].p,q.] by Th4,S1,S2;
+   hence t in ].r,s.] \/ ].p,q.] by XBOOLE_0:def 2;
+  end;
+end;
+
+theorem :: HEINE:2 :: RCOMP_2:21
+  r <= s & s <= t implies [.r,s.] \/ [.s,t.] = [.r,t.]
+ proof assume that
+Z1: r <= s and
+Z2: s <= t;
+  let p;
+  thus p in [.r,s.] \/ [.s,t.] implies p in [.r,t.]
+   proof assume p in [.r,s.] \/ [.s,t.];
+     then p in [.r,s.] or p in [.s,t.] by XBOOLE_0:def 2;
+     then r <= p & p <= s or s <= p & p <= t by Th3;
+     then r <= p & p <= t by Z1,Z2,XXREAL_0:2;
+    hence p in [.r,t.] by Th3;
+   end;
+  assume p in [.r,t.];
+   then r <= p & p <= s or s <= p & p <= t by Th3;
+   then p in [.r,s.] or p in [.s,t.] by Th3;
+  hence p in [.r,s.] \/ [.s,t.] by XBOOLE_0:def 2;
+ end;
+
+theorem Th165:
+ r <= s & s <= t implies [.r,s.[ \/ [.s,t.] = [.r,t.]
+ proof assume that
+Z1: r <= s and
+Z2: s <= t;
+  let p;
+  thus p in [.r,s.[ \/ [.s,t.] implies p in [.r,t.]
+   proof assume p in [.r,s.[ \/ [.s,t.];
+     then p in [.r,s.[ or p in [.s,t.] by XBOOLE_0:def 2;
+     then r <= p & p < s or s <= p & p <= t by Th3,Th5;
+     then r <= p & p <= t by Z1,Z2,XXREAL_0:2;
+    hence p in [.r,t.] by Th3;
+   end;
+  assume p in [.r,t.];
+   then r <= p & p < s or s <= p & p <= t by Th3;
+   then p in [.r,s.[ or p in [.s,t.] by Th3,Th5;
+  hence p in [.r,s.[ \/ [.s,t.] by XBOOLE_0:def 2;
+ end;
+
+theorem Th166: :: RCOMP_2:20
+ r <= s & s <= t implies [.r,s.] \/ ].s,t.] = [.r,t.]
+ proof assume that
+Z1: r <= s and
+Z2: s <= t;
+  let p;
+  thus p in [.r,s.] \/ ].s,t.] implies p in [.r,t.]
+   proof assume p in [.r,s.] \/ ].s,t.];
+     then p in [.r,s.] or p in ].s,t.] by XBOOLE_0:def 2;
+     then r <= p & p <= s or s < p & p <= t by Th3,Th4;
+     then r <= p & p <= t by Z1,Z2,XXREAL_0:2;
+    hence p in [.r,t.] by Th3;
+   end;
+  assume p in [.r,t.];
+   then r <= p & p <= s or s < p & p <= t by Th3;
+   then p in [.r,s.] or p in ].s,t.] by Th3,Th4;
+  hence p in [.r,s.] \/ ].s,t.] by XBOOLE_0:def 2;
+ end;
+
+theorem :: RCOMP_2:11
+ r <= s & s <= t implies [.r,s.[ \/ [.s,t.[ = [.r,t.[
+ proof assume that
+Z1: r <= s and
+Z2: s <= t;
+  let p;
+  thus p in [.r,s.[ \/ [.s,t.[ implies p in [.r,t.[
+   proof assume p in [.r,s.[ \/ [.s,t.[;
+     then p in [.r,s.[ or p in [.s,t.[ by XBOOLE_0:def 2;
+     then r <= p & p < s or s <= p & p < t by Th5;
+     then r <= p & p < t by Z1,Z2,XXREAL_0:2;
+    hence p in [.r,t.[ by Th5;
+   end;
+  assume p in [.r,t.[;
+   then r <= p & p < s or s <= p & p < t by Th5;
+   then p in [.r,s.[ or p in [.s,t.[ by Th5;
+  hence p in [.r,s.[ \/ [.s,t.[ by XBOOLE_0:def 2;
+ end;
+
+theorem Tw168: :: RCOMP_2:11
+ r <= s & s < t implies [.r,s.] \/ ].s,t.[ = [.r,t.[
+ proof assume that
+Z1: r <= s and
+Z2: s < t;
+  let p;
+  thus p in [.r,s.] \/ ].s,t.[ implies p in [.r,t.[
+   proof assume p in [.r,s.] \/ ].s,t.[;
+     then p in [.r,s.] or p in ].s,t.[ by XBOOLE_0:def 2;
+     then r <= p & p <= s or s < p & p < t by Th3,Th6;
+     then r <= p & p < t by Z1,Z2,XXREAL_0:2;
+    hence p in [.r,t.[ by Th5;
+   end;
+  assume p in [.r,t.[;
+   then r <= p & p <= s or s < p & p < t by Th5;
+   then p in [.r,s.] or p in ].s,t.[ by Th3,Th6;
+  hence p in [.r,s.] \/ ].s,t.[ by XBOOLE_0:def 2;
+ end;
+
+theorem :: RCOMP_2:12
+ r <= s & s <= t implies ].r,s.] \/ ].s,t.] = ].r,t.]
+ proof assume that
+Z1: r <= s and
+Z2: s <= t;
+  let p;
+  thus p in ].r,s.] \/ ].s,t.] implies p in ].r,t.]
+   proof assume p in ].r,s.] \/ ].s,t.];
+     then p in ].r,s.] or p in ].s,t.] by XBOOLE_0:def 2;
+     then r < p & p <= s or s < p & p <= t by Th4;
+     then r < p & p <= t by Z1,Z2,XXREAL_0:2;
+    hence p in ].r,t.] by Th4;
+   end;
+  assume p in ].r,t.];
+   then r < p & p <= s or s < p & p <= t by Th4;
+   then p in ].r,s.] or p in ].s,t.] by Th4;
+  hence p in ].r,s.] \/ ].s,t.] by XBOOLE_0:def 2;
+ end;
+
+theorem Th169: :: BORSUK_4:38
+ r <= s & s < t implies ].r,s.] \/ ].s,t.[ = ].r,t.[
+ proof assume that
+Z1: r <= s and
+Z2: s < t;
+  let p;
+  thus p in ].r,s.] \/ ].s,t.[ implies p in ].r,t.[
+   proof
+    assume p in ].r,s.] \/ ].s,t.[;
+     then p in ].r,s.] or p in ].s,t.[ by XBOOLE_0:def 2;
+     then r < p & p <= s or s < p & p < t by Th4,Th6;
+     then r < p & p < t by Z1,Z2,XXREAL_0:2;
+    hence p in ].r,t.[ by Th6;
+   end;
+  assume p in ].r,t.[;
+   then r < p & p <= s or s < p & p < t by Th6;
+   then p in ].r,s.] or p in ].s,t.[ by Th4,Th6;
+  hence p in ].r,s.] \/ ].s,t.[ by XBOOLE_0:def 2;
+ end;
+
+theorem :: BORSUK_4:40
+ r < s & s < t implies ].r,s.] \/ [.s,t.[ = ].r,t.[
+ proof assume that
+Z1: r < s and
+Z2: s < t;
+  let p;
+  thus p in ].r,s.] \/ [.s,t.[ implies p in ].r,t.[
+   proof
+    assume p in ].r,s.] \/ [.s,t.[;
+     then p in ].r,s.] or p in [.s,t.[ by XBOOLE_0:def 2;
+     then r < p & p <= s or s <= p & p < t by Th4,Th5;
+     then r < p & p < t by Z1,Z2,XXREAL_0:2;
+    hence p in ].r,t.[ by Th6;
+   end;
+  assume p in ].r,t.[;
+   then r < p & p <= s or s < p & p < t by Th6;
+   then p in ].r,s.] or p in [.s,t.[ by Th4,Th5;
+  hence p in ].r,s.] \/ [.s,t.[ by XBOOLE_0:def 2;
+ end;
+
+theorem Th171:
+ r < s & s < t implies ].r,s.[ \/ [.s,t.[ = ].r,t.[
+ proof assume that
+Z1: r < s and
+Z2: s < t;
+  let p;
+  thus p in ].r,s.[ \/ [.s,t.[ implies p in ].r,t.[
+   proof
+    assume p in ].r,s.[ \/ [.s,t.[;
+     then p in ].r,s.[ or p in [.s,t.[ by XBOOLE_0:def 2;
+     then r < p & p < s or s <= p & p < t by Th5,Th6;
+     then r < p & p < t by Z1,Z2,XXREAL_0:2;
+    hence p in ].r,t.[ by Th6;
+   end;
+  assume p in ].r,t.[;
+   then r < p & p < s or s <= p & p < t by Th6;
+   then p in ].r,s.[ or p in [.s,t.[ by Th5,Th6;
+  hence p in ].r,s.[ \/ [.s,t.[ by XBOOLE_0:def 2;
+ end;
+
+theorem Tw173: :: RCOMP_1:50 :: TREAL_1:2
+ p <= s & r <= q & s <= r implies [.p,r.] \/ [.s,q.] = [.p,q.]
+ proof assume that
+Z1: p <= s and
+Z2: r <= q and
+Z3: s <= r;
+  let t;
+  thus t in [.p,r.] \/ [.s,q.] implies t in [.p,q.]
+   proof assume t in [.p,r.] \/ [.s,q.];
+     then t in [.p,r.] or t in [.s,q.] by XBOOLE_0:def 2;
+     then p <= t & t <= r or s <= t & t <= q by Th3;
+     then p <= t & t <= q by Z1,Z2,XXREAL_0:2;
+    hence t in [.p,q.] by Th3;
+   end;
+  assume t in [.p,q.];
+   then p <= t & t <= r or s <= t & t <= q by Z3,XXREAL_0:2,Th3;
+   then t in [.p,r.] or t in [.s,q.] by Th3;
+  hence t in [.p,r.] \/ [.s,q.] by XBOOLE_0:def 2;
+ end;
+
+theorem Th172: :: TOPGEN_5:10
+ p <= s & r <= q & s < r implies [.p,r.[ \/ ].s,q.] = [.p,q.]
+ proof assume that
+Z1: p <= s and
+Z2: r <= q and
+Z3: s < r;
+  let t;
+  thus t in [.p,r.[ \/ ].s,q.] implies t in [.p,q.]
+   proof assume t in [.p,r.[ \/ ].s,q.];
+     then t in [.p,r.[ or t in ].s,q.] by XBOOLE_0:def 2;
+     then p <= t & t <= r or s <= t & t <= q by Th4,Th5;
+     then p <= t & t <= q by Z1,Z2,XXREAL_0:2;
+    hence t in [.p,q.] by Th3;
+   end;
+  assume t in [.p,q.];
+   then p <= t & t < r or s < t & t <= q by Z3,XXREAL_0:2,Th3;
+   then t in [.p,r.[ or t in ].s,q.] by Th4,Th5;
+  hence t in [.p,r.[ \/ ].s,q.] by XBOOLE_0:def 2;
+ end;
+
+theorem :: BORSUK_5:28
+ p <= s & s <= r & r < q implies [.p,r.] \/ [.s,q.[ = [.p,q.[
+ proof assume that
+Z1: p <= s and
+Z3: s <= r and
+Z4: r < q;
+  let t;
+  thus t in [.p,r.] \/ [.s,q.[ implies t in [.p,q.[
+   proof assume t in [.p,r.] \/ [.s,q.[;
+     then t in [.p,r.] or t in [.s,q.[ by XBOOLE_0:def 2;
+     then p <= t & t <= r or s <= t & t < q by Th3,Th5;
+     then p <= t & t < q by Z1,XXREAL_0:2,Z4;
+    hence t in [.p,q.[ by Th5;
+   end;
+  assume t in [.p,q.[;
+   then p <= t & t <= r or s <= t & t < q by Z3,XXREAL_0:2,Th5;
+   then t in [.p,r.] or t in [.s,q.[ by Th3,Th5;
+  hence t in [.p,r.] \/ [.s,q.[ by XBOOLE_0:def 2;
+ end;
+
+theorem :: BORSUK_5:29
+ p < s & r <= q & s <= r implies ].p,r.] \/ [.s,q.] = ].p,q.]
+ proof assume that
+Z1: p < s and
+Z4: r <= q and
+Z3: s <= r;
+  let t;
+  thus t in ].p,r.] \/ [.s,q.] implies t in ].p,q.]
+   proof assume t in ].p,r.] \/ [.s,q.];
+     then t in ].p,r.] or t in [.s,q.] by XBOOLE_0:def 2;
+     then p < t & t <= r or s <= t & t <= q by Th3,Th4;
+     then p < t & t <= q by Z1,XXREAL_0:2,Z4;
+    hence t in ].p,q.] by Th4;
+   end;
+  assume t in ].p,q.];
+   then p < t & t <= r or s <= t & t <= q by Z3,XXREAL_0:2,Th4;
+   then t in ].p,r.] or t in [.s,q.] by Th3,Th4;
+  hence t in ].p,r.] \/ [.s,q.] by XBOOLE_0:def 2;
+ end;
+
+theorem Th176:
+ p < s & r < q & s <= r implies ].p,r.] \/ [.s,q.[ = ].p,q.[
+ proof assume that
+Z1: p < s and
+Z4: r < q and
+Z3: s <= r;
+  let t;
+  thus t in ].p,r.] \/ [.s,q.[ implies t in ].p,q.[
+   proof assume t in ].p,r.] \/ [.s,q.[;
+     then t in ].p,r.] or t in [.s,q.[ by XBOOLE_0:def 2;
+     then p < t & t <= r or s <= t & t < q by Th5,Th4;
+     then p < t & t < q by Z1,XXREAL_0:2,Z4;
+    hence t in ].p,q.[ by Th6;
+   end;
+  assume t in ].p,q.[;
+   then p < t & t <= r or s <= t & t < q by Z3,XXREAL_0:2,Th6;
+   then t in ].p,r.] or t in [.s,q.[ by Th5,Th4;
+  hence t in ].p,r.] \/ [.s,q.[ by XBOOLE_0:def 2;
+ end;
+
+theorem :: RCOMP_2:13
+ p<=r & p<=s & r<=q & s<=q implies [.p,r.[ \/ [.r,s.] \/ ].s,q.] = [.p,q.]
+ proof assume that
+Z2: p <= r and
+Z1: p <= s and
+Z4: r <= q and
+Z3: s <= q;
+  per cases;
+  suppose r <= s;
+  hence [.p,r.[ \/ [.r,s.] \/ ].s,q.] = [.p,s.] \/ ].s,q.] by Th165,Z2
+        .= [.p,q.] by Z1,Z3,Th166;
+  end;
+  suppose
+S: s < r;
+  hence [.p,r.[ \/ [.r,s.] \/ ].s,q.] = [.p,r.[ \/ {} \/ ].s,q.] by Th20
+        .= [.p,q.] by S,Th172,Z1,Z4;
+  end;
+ end;
+
+theorem :: RCOMP_2:14
+ p<r & p<s & r<q & s<q implies ].p,r.] \/ ].r,s.[ \/ [.s,q.[ = ].p,q.[
+ proof assume that
+Z2: p < r and
+Z1: p < s and
+Z4: r < q and
+Z3: s < q;
+  per cases;
+  suppose r < s;
+  hence ].p,r.] \/ ].r,s.[ \/ [.s,q.[ = ].p,s.[ \/ [.s,q.[ by Th169,Z2
+        .= ].p,q.[ by Z1,Z3,Th171;
+  end;
+  suppose
+S: s <= r;
+  hence ].p,r.] \/ ].r,s.[ \/ [.s,q.[ = ].p,r.] \/ {} \/ [.s,q.[ by Th19
+        .= ].p,q.[ by S,Th176,Z1,Z4;
+  end;
+ end;
+
+theorem :: BORSUK_4:36
+ p <= r & r <= s & s <= q implies [.p,r.] \/ ].r,s.[ \/ [.s,q.] = [.p,q.]
+ proof assume that
+Z2: p <= r and
+Z1: r <= s and
+Z3: s <= q;
+A: p <= s by Z1,Z2,XXREAL_0:2;
+B: r <= q by Z1,Z3,XXREAL_0:2;
+  per cases;
+  suppose r < s;
+  hence [.p,r.] \/ ].r,s.[ \/ [.s,q.] = [.p,s.[ \/ [.s,q.] by Tw168,Z2
+        .= [.p,q.] by Z3,Th165,A;
+  end;
+  suppose
+S: s <= r;
+  hence [.p,r.] \/ ].r,s.[ \/ [.s,q.] = [.p,r.] \/ {} \/ [.s,q.] by Th19
+        .= [.p,q.] by S,Tw173,A,B;
+  end;
+ end;
+
+theorem Tw181:
+ r <= s implies [.r,t.] \ [.r,s.] = ].s,t.]
+ proof assume that
+Z1: r <= s;
+  let p;
+  thus p in [.r,t.] \ [.r,s.] implies p in ].s,t.]
+   proof assume p in [.r,t.] \ [.r,s.];
+     then p in [.r,t.] & not p in [.r,s.] by XBOOLE_0:def 4;
+     then r <= p & p <= t & (p < r or s < p) by Th3;
+    hence p in ].s,t.] by Th4;
+   end;
+  assume p in ].s,t.];
+   then s < p & p <= t by Th4;
+   then r <= p & p <= t & (p < r or s < p) by Z1,XXREAL_0:2;
+   then p in [.r,t.] & not p in [.r,s.] by Th3;
+  hence p in [.r,t.] \ [.r,s.] by XBOOLE_0:def 4;
+ end;
+
+theorem
+ r <= s implies [.r,t.[ \ [.r,s.] = ].s,t.[
+ proof assume that
+Z1: r <= s;
+  let p;
+  thus p in [.r,t.[ \ [.r,s.] implies p in ].s,t.[
+   proof assume p in [.r,t.[ \ [.r,s.];
+     then p in [.r,t.[ & not p in [.r,s.] by XBOOLE_0:def 4;
+     then r <= p & p < t & (p < r or s < p) by Th3,Th5;
+    hence p in ].s,t.[ by Th6;
+   end;
+  assume p in ].s,t.[;
+   then s < p & p < t by Th6;
+   then r <= p & p < t & (p < r or s < p) by Z1,XXREAL_0:2;
+   then p in [.r,t.[ & not p in [.r,s.] by Th3,Th5;
+  hence p in [.r,t.[ \ [.r,s.] by XBOOLE_0:def 4;
+ end;
+
+theorem
+ r < s implies [.r,t.] \ [.r,s.[ = [.s,t.]
+ proof assume that
+Z1: r < s;
+  let p;
+  thus p in [.r,t.] \ [.r,s.[ implies p in [.s,t.]
+   proof assume p in [.r,t.] \ [.r,s.[;
+     then p in [.r,t.] & not p in [.r,s.[ by XBOOLE_0:def 4;
+     then r <= p & p <= t & (p < r or s <= p) by Th3,Th5;
+    hence p in [.s,t.] by Th3;
+   end;
+  assume p in [.s,t.];
+   then s <= p & p <= t by Th3;
+   then r <= p & p <= t & (p < r or s <= p) by Z1,XXREAL_0:2;
+   then p in [.r,t.] & not p in [.r,s.[ by Th3,Th5;
+  hence p in [.r,t.] \ [.r,s.[ by XBOOLE_0:def 4;
+ end;
+
+theorem
+ r < s implies [.r,t.[ \ [.r,s.[ = [.s,t.[
+ proof assume that
+Z1: r < s;
+  let p;
+  thus p in [.r,t.[ \ [.r,s.[ implies p in [.s,t.[
+   proof assume p in [.r,t.[ \ [.r,s.[;
+     then p in [.r,t.[ & not p in [.r,s.[ by XBOOLE_0:def 4;
+     then r <= p & p < t & (p < r or s <= p) by Th5;
+    hence p in [.s,t.[ by Th5;
+   end;
+  assume p in [.s,t.[;
+   then s <= p & p < t by Th5;
+   then r <= p & p < t & (p < r or s <= p) by Z1,XXREAL_0:2;
+   then p in [.r,t.[ & not p in [.r,s.[ by Th5;
+  hence p in [.r,t.[ \ [.r,s.[ by XBOOLE_0:def 4;
+ end;
+
+theorem
+ r <= s implies [.r,t.] \ [.r,s.] = ].s,t.]
+ proof assume that
+Z1: r <= s;
+  let p;
+  thus p in [.r,t.] \ [.r,s.] implies p in ].s,t.]
+   proof assume p in [.r,t.] \ [.r,s.];
+     then p in [.r,t.] & not p in [.r,s.] by XBOOLE_0:def 4;
+     then r <= p & p <= t & (p < r or s < p) by Th3;
+    hence p in ].s,t.] by Th4;
+   end;
+  assume p in ].s,t.];
+   then s < p & p <= t by Th4;
+   then r <= p & p <= t & (p < r or s < p) by Z1,XXREAL_0:2;
+   then p in [.r,t.] & not p in [.r,s.] by Th3;
+  hence p in [.r,t.] \ [.r,s.] by XBOOLE_0:def 4;
+ end;
+
+theorem:: BORSUK_4:41
+ r < s implies ].r,t.[ \ ].r,s.] = ].s,t.[
+ proof assume that
+Z1: r < s;
+  let p;
+  thus p in ].r,t.[ \ ].r,s.] implies p in ].s,t.[
+   proof assume p in ].r,t.[ \ ].r,s.];
+     then p in ].r,t.[ & not p in ].r,s.] by XBOOLE_0:def 4;
+     then r < p & p < t & (p <= r or s < p) by Th6,Th4;
+    hence p in ].s,t.[ by Th6;
+   end;
+  assume p in ].s,t.[;
+   then s < p & p < t by Th6;
+   then r < p & p < t & (p <= r or s < p) by Z1,XXREAL_0:2;
+   then p in ].r,t.[ & not p in ].r,s.] by Th6,Th4;
+  hence p in ].r,t.[ \ ].r,s.] by XBOOLE_0:def 4;
+ end;
+
+theorem
+ r < s implies ].r,t.] \ ].r,s.[ = [.s,t.]
+ proof assume that
+Z1: r < s;
+  let p;
+  thus p in ].r,t.] \ ].r,s.[ implies p in [.s,t.]
+   proof assume p in ].r,t.] \ ].r,s.[;
+     then p in ].r,t.] & not p in ].r,s.[ by XBOOLE_0:def 4;
+     then r < p & p <= t & (p <= r or s <= p) by Th4,Th6;
+    hence p in [.s,t.] by Th3;
+   end;
+  assume p in [.s,t.];
+   then s <= p & p <= t by Th3;
+   then r < p & p <= t & (p <= r or s <= p) by Z1,XXREAL_0:2;
+   then p in ].r,t.] & not p in ].r,s.[ by Th6,Th4;
+  hence p in ].r,t.] \ ].r,s.[ by XBOOLE_0:def 4;
+ end;
+
+theorem
+ r < s implies ].r,t.[ \ ].r,s.[ = [.s,t.[
+ proof assume that
+Z1: r < s;
+  let p;
+  thus p in ].r,t.[ \ ].r,s.[ implies p in [.s,t.[
+   proof assume p in ].r,t.[ \ ].r,s.[;
+     then p in ].r,t.[ & not p in ].r,s.[ by XBOOLE_0:def 4;
+     then r < p & p < t & (p <= r or s <= p) by Th6;
+    hence p in [.s,t.[ by Th5;
+   end;
+  assume p in [.s,t.[;
+   then s <= p & p < t by Th5;
+   then r < p & p < t & (p <= r or s <= p) by Z1,XXREAL_0:2;
+   then p in ].r,t.[ & not p in ].r,s.[ by Th6;
+  hence p in ].r,t.[ \ ].r,s.[ by XBOOLE_0:def 4;
+ end;
+
+theorem 
+ s <= t implies [.r,t.] \ [.s,t.] = [.r,s.[
+ proof assume that
+Z1: s <= t;
+  let p;
+  thus p in [.r,t.] \ [.s,t.] implies p in [.r,s.[
+   proof assume p in [.r,t.] \ [.s,t.];
+     then p in [.r,t.] & not p in [.s,t.] by XBOOLE_0:def 4;
+     then r <= p & p <= t & (p < s or t < p) by Th3;
+    hence p in [.r,s.[ by Th5;
+   end;
+  assume p in [.r,s.[;
+   then r <= p & p < s by Th5;
+   then r <= p & p <= t & (p < s or t < p) by Z1,XXREAL_0:2;
+   then p in [.r,t.] & not p in [.s,t.] by Th3;
+  hence p in [.r,t.] \ [.s,t.] by XBOOLE_0:def 4;
+ end;
+
+theorem Tw190: :: BORSUK_4:42
+ s <= t implies ].r,t.] \ [.s,t.] = ].r,s.[
+ proof assume that
+Z1: s <= t;
+  let p;
+  thus p in ].r,t.] \ [.s,t.] implies p in ].r,s.[
+   proof assume p in ].r,t.] \ [.s,t.];
+     then p in ].r,t.] & not p in [.s,t.] by XBOOLE_0:def 4;
+     then r < p & p <= t & (p < s or t < p) by Th3,Th4;
+    hence p in ].r,s.[ by Th6;
+   end;
+  assume p in ].r,s.[;
+   then r < p & p < s by Th6;
+   then r < p & p <= t & (p < s or t < p) by Z1,XXREAL_0:2;
+   then p in ].r,t.] & not p in [.s,t.] by Th3,Th4;
+  hence p in ].r,t.] \ [.s,t.] by XBOOLE_0:def 4;
+ end;
+
+theorem
+ s < t implies [.r,t.] \ ].s,t.] = [.r,s.]
+ proof assume that
+Z1: s < t;
+  let p;
+  thus p in [.r,t.] \ ].s,t.] implies p in [.r,s.]
+   proof assume p in [.r,t.] \ ].s,t.];
+     then p in [.r,t.] & not p in ].s,t.] by XBOOLE_0:def 4;
+     then r <= p & p <= t & (p <= s or t < p) by Th3,Th4;
+    hence p in [.r,s.] by Th3;
+   end;
+  assume p in [.r,s.];
+   then r <= p & p <= s by Th3;
+   then r <= p & p <= t & (p <= s or t < p) by Z1,XXREAL_0:2;
+   then p in [.r,t.] & not p in ].s,t.] by Th3,Th4;
+  hence p in [.r,t.] \ ].s,t.] by XBOOLE_0:def 4;
+ end;
+
+theorem
+ s < t implies ].r,t.] \ ].s,t.] = ].r,s.]
+ proof assume that
+Z1: s < t;
+  let p;
+  thus p in ].r,t.] \ ].s,t.] implies p in ].r,s.]
+   proof assume p in ].r,t.] \ ].s,t.];
+     then p in ].r,t.] & not p in ].s,t.] by XBOOLE_0:def 4;
+     then r < p & p <= t & (p <= s or t < p) by Th4;
+    hence p in ].r,s.] by Th4;
+   end;
+  assume p in ].r,s.];
+   then r < p & p <= s by Th4;
+   then r < p & p <= t & (p <= s or t < p) by Z1,XXREAL_0:2;
+   then p in ].r,t.] & not p in ].s,t.] by Th4;
+  hence p in ].r,t.] \ ].s,t.] by XBOOLE_0:def 4;
+ end;
+
+theorem
+ s < t implies [.r,t.[ \ [.s,t.[ = [.r,s.[
+ proof assume that
+Z1: s < t;
+  let p;
+  thus p in [.r,t.[ \ [.s,t.[ implies p in [.r,s.[
+   proof assume p in [.r,t.[ \ [.s,t.[;
+     then p in [.r,t.[ & not p in [.s,t.[ by XBOOLE_0:def 4;
+     then r <= p & p < t & (p < s or t <= p) by Th5;
+    hence p in [.r,s.[ by Th5;
+   end;
+  assume p in [.r,s.[;
+   then r <= p & p < s by Th5;
+   then r <= p & p < t & (p < s or t <= p) by Z1,XXREAL_0:2;
+   then p in [.r,t.[ & not p in [.s,t.[ by Th5;
+  hence p in [.r,t.[ \ [.s,t.[ by XBOOLE_0:def 4;
+ end;
+
+theorem
+ s < t implies ].r,t.[ \ [.s,t.[ = ].r,s.[
+ proof assume that
+Z1: s < t;
+  let p;
+  thus p in ].r,t.[ \ [.s,t.[ implies p in ].r,s.[
+   proof assume p in ].r,t.[ \ [.s,t.[;
+     then p in ].r,t.[ & not p in [.s,t.[ by XBOOLE_0:def 4;
+     then r < p & p < t & (p < s or t <= p) by Th6,Th5;
+    hence p in ].r,s.[ by Th6;
+   end;
+  assume p in ].r,s.[;
+   then r < p & p < s by Th6;
+   then r < p & p < t & (p < s or t <= p) by Z1,XXREAL_0:2;
+   then p in ].r,t.[ & not p in [.s,t.[ by Th6,Th5;
+  hence p in ].r,t.[ \ [.s,t.[ by XBOOLE_0:def 4;
+ end;
+
+theorem
+ s < t implies [.r,t.[ \ ].s,t.[ = [.r,s.]
+ proof assume that
+Z1: s < t;
+  let p;
+  thus p in [.r,t.[ \ ].s,t.[ implies p in [.r,s.]
+   proof assume p in [.r,t.[ \ ].s,t.[;
+     then p in [.r,t.[ & not p in ].s,t.[ by XBOOLE_0:def 4;
+     then r <= p & p < t & (p <= s or t <= p) by Th6,Th5;
+    hence p in [.r,s.] by Th3;
+   end;
+  assume p in [.r,s.];
+   then r <= p & p <= s by Th3;
+   then r <= p & p < t & (p <= s or t <= p) by Z1,XXREAL_0:2;
+   then p in [.r,t.[ & not p in ].s,t.[ by Th6,Th5;
+  hence p in [.r,t.[ \ ].s,t.[ by XBOOLE_0:def 4;
+ end;
+
+theorem
+ s < t implies ].r,t.[ \ ].s,t.[ = ].r,s.]
+ proof assume that
+Z1: s < t;
+  let p;
+  thus p in ].r,t.[ \ ].s,t.[ implies p in ].r,s.]
+   proof assume p in ].r,t.[ \ ].s,t.[;
+     then p in ].r,t.[ & not p in ].s,t.[ by XBOOLE_0:def 4;
+     then r < p & p < t & (p <= s or t <= p) by Th6;
+    hence p in ].r,s.] by Th4;
+   end;
+  assume p in ].r,s.];
+   then r < p & p <= s by Th4;
+   then r < p & p < t & (p <= s or t <= p) by Z1,XXREAL_0:2;
+   then p in ].r,t.[ & not p in ].s,t.[ by Th6;
+  hence p in ].r,t.[ \ ].s,t.[ by XBOOLE_0:def 4;
+ end;
+
+theorem :: RCOMP_2:26
+ [.p,q.[ meets [.r,s.[ implies [.p,q.[ \ [.r,s.[ = [.p,r.[ \/ [.s,q.[
+proof assume
+[.p,q.[ meets [.r,s.[;
+ then consider u such that
+W1: u in [.r,s.[ and
+W2: u in [.p,q.[ by MEMBERED:def 20;
+A: r <= u & u <= s by W1,Th5;
+B: p <= u & u <= q by W2,Th5;
+  then
+C: r <= q by A,XXREAL_0:2;
+D: p <= s by A,B,XXREAL_0:2;
+ let t;
+ thus t in [.p,q.[ \ [.r,s.[ implies t in [.p,r.[ \/ [.s,q.[
+  proof assume t in [.p,q.[ \ [.r,s.[;
+    then t in [.p,q.[ & not(t in [.r,s.[) by XBOOLE_0:def 4;
+    then p <= t & t < q & (t < r or s <= t) by Th5;
+    then t in [.p,r.[ or t in [.s,q.[ by Th5;
+   hence t in [.p,r.[ \/ [.s,q.[ by XBOOLE_0:def 2;
+  end;
+ assume t in [.p,r.[ \/ [.s,q.[;
+  then t in [.p,r.[ or t in [.s,q.[ by XBOOLE_0:def 2;
+  then p <= t & t < r or s <= t & t < q by Th5;
+  then p <= t & t < q & (t < r or s <= t) by C,XXREAL_0:2,D;
+  then t in [.p,q.[ & not(t in [.r,s.[) by Th5;
+ hence t in [.p,q.[ \ [.r,s.[ by XBOOLE_0:def 4;
+end;
+
+theorem :: RCOMP_2:27
+ ].p,q.] meets ].r,s.] implies ].p,q.] \ ].r,s.] = ].p,r.] \/ ].s,q.]
+proof assume
+ ].p,q.] meets ].r,s.];
+ then consider u such that
+W1: u in ].r,s.] and
+W2: u in ].p,q.] by MEMBERED:def 20;
+A: r < u & u <= s by W1,Th4;
+B: p < u & u <= q by W2,Th4;
+  then
+C: r <= q by A,XXREAL_0:2;
+D: p <= s by A,B,XXREAL_0:2;
+ let t;
+ thus t in ].p,q.] \ ].r,s.] implies t in ].p,r.] \/ ].s,q.]
+  proof assume t in ].p,q.] \ ].r,s.];
+    then t in ].p,q.] & not(t in ].r,s.]) by XBOOLE_0:def 4;
+    then p < t & t <= q & (t <= r or s < t) by Th4;
+    then t in ].p,r.] or t in ].s,q.] by Th4;
+   hence t in ].p,r.] \/ ].s,q.] by XBOOLE_0:def 2;
+  end;
+ assume t in ].p,r.] \/ ].s,q.];
+  then t in ].p,r.] or t in ].s,q.] by XBOOLE_0:def 2;
+  then p < t & t <= r or s < t & t <= q by Th4;
+  then p < t & t <= q & (t <= r or s < t) by C,XXREAL_0:2,D;
+  then t in ].p,q.] & not(t in ].r,s.]) by Th4;
+ hence t in ].p,q.] \ ].r,s.] by XBOOLE_0:def 4;
+end;
+
+theorem :: BORSUK_4:37
+ p <= r & s <= q implies [.p,q.] \ ([.p,r.] \/ [.s,q.]) = ].r,s.[
+  proof assume that
+Z1: p <= r and
+Z3: s <= q;
+   thus [.p,q.] \ ([.p,r.] \/ [.s,q.])
+          = [.p,q.] \ [.p,r.] \ [.s,q.] by XBOOLE_1:41
+         .= ].r,q.] \ [.s,q.] by Z1,Tw181
+         .= ].r,s.[ by Z3,Tw190;
+  end;
+
+theorem :: BORSUK_4:31
+ r <= s & s <= t implies [.r,t.] \ {s} = [.r,s.[ \/ ].s,t.]
+ proof assume that
+Z1: r <= s and
+Z2: s <= t;
+  let p;
+  thus p in [.r,t.] \ {s} implies p in [.r,s.[ \/ ].s,t.]
+   proof assume
+Z3:  p in [.r,t.] \ {s};
+     then not p in {s} by XBOOLE_0:def 4;
+     then p <> s by TARSKI:def 1;
+     then r <= p & p < s or s < p & p <= t by XXREAL_0:1,Th3,Z3;
+     then p in [.r,s.[ or p in ].s,t.] by Th4,Th5;
+    hence p in [.r,s.[ \/ ].s,t.] by XBOOLE_0:def 2;
+   end;
+  assume p in [.r,s.[ \/ ].s,t.];
+   then p in [.r,s.[ or p in ].s,t.] by XBOOLE_0:def 2;
+   then r <= p & p < s or s < p & p <= t by Th4,Th5;
+   then r <= p & p <= t & p <> s by Z1,Z2,XXREAL_0:2;
+   then p in [.r,t.] & not p in {s} by Th3,TARSKI:def 1;
+  hence p in [.r,t.] \ {s} by XBOOLE_0:def 4;
+ end;
+
+theorem
+ r <= s & s < t implies [.r,t.[ \ {s} = [.r,s.[ \/ ].s,t.[
+ proof assume that
+Z1: r <= s and
+Z2: s < t;
+  let p;
+  thus p in [.r,t.[ \ {s} implies p in [.r,s.[ \/ ].s,t.[
+   proof assume
+Z3:  p in [.r,t.[ \ {s};
+     then not p in {s} by XBOOLE_0:def 4;
+     then p <> s by TARSKI:def 1;
+     then r <= p & p < s or s < p & p < t by XXREAL_0:1,Th5,Z3;
+     then p in [.r,s.[ or p in ].s,t.[ by Th6,Th5;
+    hence p in [.r,s.[ \/ ].s,t.[ by XBOOLE_0:def 2;
+   end;
+  assume p in [.r,s.[ \/ ].s,t.[;
+   then p in [.r,s.[ or p in ].s,t.[ by XBOOLE_0:def 2;
+   then r <= p & p < s or s < p & p < t by Th6,Th5;
+   then r <= p & p < t & p <> s by Z1,Z2,XXREAL_0:2;
+   then p in [.r,t.[ & not p in {s} by Th5,TARSKI:def 1;
+  hence p in [.r,t.[ \ {s} by XBOOLE_0:def 4;
+ end;
+
+theorem :: BORSUK_4:31
+ r < s & s <= t implies ].r,t.] \ {s} = ].r,s.[ \/ ].s,t.]
+ proof assume that
+Z1: r < s and
+Z2: s <= t;
+  let p;
+  thus p in ].r,t.] \ {s} implies p in ].r,s.[ \/ ].s,t.]
+   proof assume
+Z3:  p in ].r,t.] \ {s};
+     then not p in {s} by XBOOLE_0:def 4;
+     then p <> s by TARSKI:def 1;
+     then r < p & p < s or s < p & p <= t by XXREAL_0:1,Th4,Z3;
+     then p in ].r,s.[ or p in ].s,t.] by Th4,Th6;
+    hence p in ].r,s.[ \/ ].s,t.] by XBOOLE_0:def 2;
+   end;
+  assume p in ].r,s.[ \/ ].s,t.];
+   then p in ].r,s.[ or p in ].s,t.] by XBOOLE_0:def 2;
+   then r < p & p < s or s < p & p <= t by Th4,Th6;
+   then r < p & p <= t & p <> s by Z1,Z2,XXREAL_0:2;
+   then p in ].r,t.] & not p in {s} by Th4,TARSKI:def 1;
+  hence p in ].r,t.] \ {s} by XBOOLE_0:def 4;
+ end;
+
+theorem
+ r < s & s < t implies ].r,t.[ \ {s} = ].r,s.[ \/ ].s,t.[
+ proof assume that
+Z1: r < s and
+Z2: s < t;
+  let p;
+  thus p in ].r,t.[ \ {s} implies p in ].r,s.[ \/ ].s,t.[
+   proof assume
+Z3:  p in ].r,t.[ \ {s};
+     then not p in {s} by XBOOLE_0:def 4;
+     then p <> s by TARSKI:def 1;
+     then r < p & p < s or s < p & p < t by XXREAL_0:1,Th6,Z3;
+     then p in ].r,s.[ or p in ].s,t.[ by Th6;
+    hence p in ].r,s.[ \/ ].s,t.[ by XBOOLE_0:def 2;
+   end;
+  assume p in ].r,s.[ \/ ].s,t.[;
+   then p in ].r,s.[ or p in ].s,t.[ by XBOOLE_0:def 2;
+   then r < p & p < s or s < p & p < t by Th6;
+   then r < p & p < t & p <> s by Z1,Z2,XXREAL_0:2;
+   then p in ].r,t.[ & not p in {s} by Th6,TARSKI:def 1;
+  hence p in ].r,t.[ \ {s} by XBOOLE_0:def 4;
+ end;
+
+theorem :: BORSUK_5:87
+ not s in ].r,s .[ \/ ].s,t.[
+ proof assume s in ].r,s .[ \/ ].s,t.[;
+   then s in ].r,s .[ or s in ].s,t.[ by XBOOLE_0:def 2;
+  hence contradiction by Th6;
+ end;
+
+theorem
+ not s in [.r,s .[ \/ ].s,t.[
+ proof assume s in [.r,s .[ \/ ].s,t.[;
+   then s in [.r,s .[ or s in ].s,t.[ by XBOOLE_0:def 2;
+  hence contradiction by Th6,Th5;
+ end;
+
+theorem
+ not s in ].r,s .[ \/ ].s,t.]
+ proof assume s in ].r,s .[ \/ ].s,t.];
+   then s in ].r,s .[ or s in ].s,t.] by XBOOLE_0:def 2;
+  hence contradiction by Th6,Th4;
+ end;
+
+theorem
+ not s in [.r,s .[ \/ ].s,t.]
+ proof assume s in [.r,s .[ \/ ].s,t.];
+   then s in [.r,s .[ or s in ].s,t.] by XBOOLE_0:def 2;
+  hence contradiction by Th4,Th5;
+ end;
+
+begin :: -infty & + infty
+
+theorem
+ [.-infty,+infty.] = ExtREAL
+ proof let r;
+  thus r in [.-infty,+infty.] implies r in ExtREAL by XXREAL_0:def 1;
+  assume r in ExtREAL;
+   -infty <= r & r <= +infty by XXREAL_0:3,5;
+  hence thesis by Th3;
+ end;
+
+theorem :: MEASURE6:36
+ ].p,-infty.[ = {}
+ proof
+   not ex x st x in ].p,-infty.[
+    proof given x such that
+G:    x in ].p,-infty.[;
+      reconsider s = x as ext-real number by G,MEMBERED:def 2;
+      p < s & s < -infty by G,Th6;
+     hence contradiction by XXREAL_0:5;
+    end;
+  hence thesis by XBOOLE_0:def 1;
+ end;
+
+theorem :: MEASURE6:36
+ [.p,-infty.[ = {}
+ proof
+   not ex x st x in [.p,-infty.[
+    proof given x such that
+G:    x in [.p,-infty.[;
+      reconsider s = x as ext-real number by G,MEMBERED:def 2;
+      p <= s & s < -infty by G,Th5;
+     hence contradiction by XXREAL_0:5;
+    end;
+  hence thesis by XBOOLE_0:def 1;
+ end;
+
+theorem :: MEASURE6:36
+ ].p,-infty.] = {}
+ proof
+   not ex x st x in ].p,-infty.]
+    proof given x such that
+G:    x in ].p,-infty.];
+      reconsider s = x as ext-real number by G,MEMBERED:def 2;
+      p < s & s <= -infty by G,Th4;
+      then p < -infty by XXREAL_0:2;
+     hence contradiction by XXREAL_0:5;
+    end;
+  hence thesis by XBOOLE_0:def 1;
+ end;
+
+theorem :: MEASURE6:36
+ p <> -infty implies [.p,-infty.] = {}
+ proof assume
+Z: p <> -infty;
+   not ex x st x in [.p,-infty.]
+    proof given x such that
+G:    x in [.p,-infty.];
+      reconsider s = x as ext-real number by G,MEMBERED:def 2;
+      p <= s & s <= -infty by G,Th3;
+      then p <= -infty by XXREAL_0:2;
+     hence contradiction by XXREAL_0:6,Z;
+    end;
+  hence thesis by XBOOLE_0:def 1;
+ end;
+
+theorem :: MEASURE6:37
+ ].+infty,p.[ = {}
+ proof
+   not ex x st x in ].+infty,p.[
+    proof given x such that
+G:    x in ].+infty,p.[;
+      reconsider s = x as ext-real number by G,MEMBERED:def 2;
+      +infty < s & s < p by G,Th6;
+     hence contradiction by XXREAL_0:3;
+    end;
+  hence thesis by XBOOLE_0:def 1;
+ end;
+
+theorem :: MEASURE6:37
+ [.+infty,p.[ = {}
+ proof
+   not ex x st x in [.+infty,p.[
+    proof given x such that
+G:    x in [.+infty,p.[;
+      reconsider s = x as ext-real number by G,MEMBERED:def 2;
+      +infty <= s & s < p by G,Th5;
+      then p > +infty by XXREAL_0:2;
+     hence contradiction by XXREAL_0:3;
+    end;
+  hence thesis by XBOOLE_0:def 1;
+ end;
+
+theorem :: MEASURE6:37
+ ].+infty,p.] = {}
+ proof
+   not ex x st x in ].+infty,p.]
+    proof given x such that
+G:    x in ].+infty,p.];
+      reconsider s = x as ext-real number by G,MEMBERED:def 2;
+      +infty < s & s <= p by G,Th4;
+     hence contradiction by XXREAL_0:3;
+    end;
+  hence thesis by XBOOLE_0:def 1;
+ end;
+
+theorem :: MEASURE6:37
+ p <> +infty implies [.+infty,p.] = {}
+ proof assume
+Z: p <> +infty;
+   not ex x st x in [.+infty,p.]
+    proof given x such that
+G:    x in [.+infty,p.];
+      reconsider s = x as ext-real number by G,MEMBERED:def 2;
+      +infty <= s & s <= p by G,Th3;
+      then p >= +infty by XXREAL_0:2;
+     hence contradiction by XXREAL_0:4,Z;
+    end;
+  hence thesis by XBOOLE_0:def 1;
+ end;
+
+theorem
+ p > q implies p in ].q, +infty.]
+  proof
+    p <= +infty by XXREAL_0:3;
+   hence thesis by Th4;
+  end;
+
+theorem
+ q <= p implies p in [.q, +infty.]
+  proof
+    p <= +infty by XXREAL_0:3;
+   hence thesis by Th3;
+  end;
+
+theorem
+ p <= q implies p in [.-infty,q.]
+  proof
+    p >= -infty by XXREAL_0:5;
+   hence thesis by Th3;
+  end;
+
+theorem
+ p < q implies p in [.-infty, q.[
+  proof
+    p >= -infty by XXREAL_0:5;
+   hence thesis by Th5;
+  end;
+
+begin :: Additional
+
+theorem :: RCOMP_1:18
+ p <= q implies [.p,q.] = [.p,q.] \/ [.q,p.]
+  proof assume
+Z:  p <= q;
+    then
+A:   [.q,p.] c= {p} by Tw100;
+    p in [.p,q.] by Z,Th3;
+    then {p} c= [.p,q.] by ZFMISC_1:37;
+    then [.q,p.] c= [.p,q.] by A,XBOOLE_1:1;
+   hence [.p,q.] = [.p,q.] \/ [.q,p.] by XBOOLE_1:12;
+  end;
+
+theorem :: BORSUK_5:86
+ r <= s & s <= t implies not r in ].s,t.[ \/ ].t,p.[
+ proof assume that
+Z1: r <= s and
+Z2: s <= t;
+  assume r in ].s,t.[ \/ ].t,p.[;
+   then r in ].s,t.[ or r in ].t,p.[ by XBOOLE_0:def 2;
+   then s < r & r < t or t < r & r < p by Th6;
+  hence contradiction by Z1,Z2,XXREAL_0:2;
+ end;

@@ -72,7 +72,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="145">
+<Func kind="K" nr="147">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -94,13 +94,13 @@
 </Typ>
 </ArgTypes>
 <Func kind="G" nr="5">
-<Func kind="K" nr="145">
-<LocusVar nr="1"/>
-</Func>
 <Func kind="K" nr="147">
 <LocusVar nr="1"/>
 </Func>
-<Func kind="K" nr="148">
+<Func kind="K" nr="149">
+<LocusVar nr="1"/>
+</Func>
+<Func kind="K" nr="150">
 <LocusVar nr="1"/>
 </Func>
 </Func>
@@ -131,13 +131,13 @@
 </Typ>
 </ArgTypes>
 <Func kind="G" nr="5">
-<Func kind="K" nr="145">
-<LocusVar nr="1"/>
-</Func>
 <Func kind="K" nr="147">
 <LocusVar nr="1"/>
 </Func>
-<Func kind="K" nr="148">
+<Func kind="K" nr="149">
+<LocusVar nr="1"/>
+</Func>
+<Func kind="K" nr="150">
 <LocusVar nr="1"/>
 </Func>
 </Func>

@@ -8,7 +8,7 @@ environ
 
  vocabularies RELAT_1, SETFAM_1, ARYTM_1, BOOLE, RELAT_2, LATTICES, FINSEQ_1,
       FUNCT_1, TARSKI, EQREL_1, PARTFUN1, TOLER_1, AMI_1, T_1TOPSP, PUA2MSS1,
-      PROB_1, NAT_1;
+      PROB_1, NAT_1, COMPLEX1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, XCMPLX_0, XXREAL_0, RELAT_1,
       RELAT_2, RELSET_1, SETFAM_1, FINSEQ_1, FUNCT_1, NUMBERS, NAT_1, NAT_D,
       PARTFUN1;
@@ -17,7 +17,7 @@ environ
  registrations RELSET_1, FINSEQ_1, SUBSET_1, XREAL_0, ARYTM_3, PARTFUN1,
       XXREAL_0, NAT_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions TARSKI, RELAT_2, XBOOLE_0, PARTFUN1, SETFAM_1;
+ definitions TARSKI, RELAT_1, RELAT_2, XBOOLE_0, PARTFUN1, SETFAM_1;
  theorems RELAT_1, RELAT_2, RELSET_1, SETFAM_1, ZFMISC_1, TARSKI, FINSEQ_1,
       NAT_1, REAL_1, XBOOLE_0, XBOOLE_1, ORDERS_1, PARTFUN1, XREAL_1, XXREAL_0;
  schemes SUBSET_1, RELSET_1, FINSEQ_1, NAT_1;
@@ -52,7 +52,7 @@ registration let X;
     end;
    let x;
    assume x in field nabla X;
-    then x in dom nabla X \/ rng nabla X by RELAT_1:def 6;
+    then x in dom nabla X \/ rng nabla X;
    hence [x,x] in nabla X by ZFMISC_1:106;
  end;
 end;
@@ -71,8 +71,6 @@ coherence
   hence thesis;
  end;
 end;
-
-Lm1: i < j implies j - i is Element of NAT by NAT_1:21;
 
 theorem
   nabla X \/ R1 = nabla X by XBOOLE_1:12;
@@ -199,7 +197,6 @@ A1: field (EqR1 /\ EqR2) = X
    then id X c= EqR1 /\ EqR2 by XBOOLE_1:19;
    then dom(EqR1 /\ EqR2) = X & rng(EqR1 /\ EqR2) = X by RELSET_1:31,
 32;
-   then field (EqR1 /\ EqR2) = X \/ X by RELAT_1:def 6;
    hence thesis;
   end;
 A3: EqR1 /\ EqR2 is reflexive by RELAT_2:31;
@@ -413,16 +410,15 @@ end;
 
 :: Classes of abstraction
 
-definition let R be Relation,
+notation let R be Relation,
                x be set;
-  func Class(R,x) equals
-    R.:{x};
-  coherence;
+ synonym Class(R,x) for Im(R,x);
 end;
 
 definition let X, Y be set,
                R be Relation of X, Y,
                x be set;
+ canceled;
   redefine func Class(R,x) -> Subset of Y;
   coherence
   proof
@@ -455,7 +451,6 @@ theorem Th27:
   thus y in Class(R,x) implies [y,x] in R
   proof
     assume y in Class(R,x);
-    then y in R.:{x};
      then ex z being set st [z,y] in R & z in {x} by RELAT_1:def 13;
     then [x,y] in R by TARSKI:def 1;
     hence [y,x] in R by Th12;
@@ -463,8 +458,7 @@ theorem Th27:
   assume [y,x] in R;
   then A1: [x,y] in R by Th12;
    x in {x} by TARSKI:def 1;
-  then y in R.:{x} by A1,RELAT_1:def 13;
-  hence thesis;
+  hence thesis by A1,RELAT_1:def 13;
  end;
 
 theorem Th28:
@@ -585,8 +579,7 @@ theorem Th34:
 for x st x in X holds Class(nabla X,x) = X
 proof let x such that A1: x in X;
     now let y; assume y in X;
-  then [y,x] in [:X,X:] by A1,ZFMISC_1:106;
-  then [y,x] in nabla X;
+  then [y,x] in nabla X by A1,ZFMISC_1:106;
   hence y in Class(nabla X,x) by Th27;
  end;
  then for y holds y in X iff y in Class(nabla X,x);
@@ -604,8 +597,7 @@ proof
   hence [y,z] in EqR by Th13;
  end;
  then [:X,X:] c= EqR by ZFMISC_1:109;
- then [:X,X:] = EqR by XBOOLE_0:def 10;
- hence thesis;
+ hence thesis by XBOOLE_0:def 10;
 end;
 
 theorem
@@ -666,7 +658,7 @@ FINSEQ_1:57;
      then (j + 1) in Seg(len f) by A19,FINSEQ_1:3;
     then A20: g.(j + 1) = f.((len f) + 1 - (1 + j)) by A12
                  .= f.((len f) - j);
-    reconsider k = (len f) - j as Element of NAT by A13,A17,Lm1;
+    reconsider k = (len f) - j as Element of NAT by A13,A17,NAT_1:21;
        j - (len f) < (len f) - (len f) by A13,A17,XREAL_1:11;
     then - ((len f) - j) < - 0;
     then 0 < k by XREAL_1:26;
@@ -735,7 +727,7 @@ A23:    Y is_transitive_in X
       then A40: h.(i + 1) = g.(1 + i - len f) by FINSEQ_1:36
                    .= g.((i - len f) + 1);
         1 <= len f & len f < i by A25,A39,NAT_1:13;
-     then reconsider k = i - len f as Element of NAT by Lm1;
+     then reconsider k = i - len f as Element of NAT by NAT_1:21;
    (1 + len f - len f <= i - len f & i < len f + len g) by A39,FINSEQ_1:35
 ,XREAL_1:11;
      then (1 <= i - len f & i - len f < len g) by XREAL_1:21;
@@ -790,10 +782,9 @@ given f being FinSequence such that A48: 1 <= len f &
       proof
       assume A52: 1 <= i + 1 & i + 1 <= len f;
       then A53: i < len f by NAT_1:13;
-         1 <= i or 1 = i + 1 by A52,NAT_1:8;
-then A54:      1 <= i or 1 - 1 = i;
+B54:     1 <= i or 1 = i + 1 by A52,NAT_1:8;
       A55: EqR1 \/ EqR2 c= EqR1 "\/" EqR2 by Def3;
-          now per cases by A54;
+          now per cases by B54;
         suppose A56: 1 <= i;
          then [f.i,f.(i+1)] in EqR1 \/ EqR2 by A48,A53;
 hence [f.1,f.(i+1)] in EqR1 "\/" EqR2 by A51,A52,A55,A56,Th13,NAT_1:13;
@@ -868,8 +859,7 @@ theorem
 proof
  assume A1: EqR1 \/ EqR2 = nabla X;
  A2: now assume X = {};
-     then [:X,X:] = {} by ZFMISC_1:113;
-      then nabla X = {};
+      then nabla X = {} by ZFMISC_1:113;
      hence EqR1 = nabla X or EqR2 = nabla X by A1,XBOOLE_1:15;
     end;
     (not X = {}) implies EqR1 = nabla X or EqR2 = nabla X
@@ -969,7 +959,6 @@ A2:  now let y;
  end;
  assume X = {};
     {} c= bool X by XBOOLE_1:2;
- then {} is Subset-Family of X;
  hence thesis;
 end;
 consistency;
@@ -1263,8 +1252,7 @@ theorem Th7:
  for X being non empty set holds {X} is a_partition of X
   proof
    let X be non empty set;
-   {X} c= bool X by ZFMISC_1:80;
-   then reconsider A1 = {X} as Subset-Family of X;
+   reconsider A1 = {X} as Subset-Family of X by ZFMISC_1:80;
 A1: union A1 = X by ZFMISC_1:31;
     for A being Subset of X st A in A1 holds A <> {} & for B being
              Subset of X st B in A1 holds A = B or A misses B

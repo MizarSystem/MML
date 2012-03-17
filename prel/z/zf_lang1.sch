@@ -23,7 +23,7 @@
 <Cluster>
 <Adjective nr="21"/>
 </Cluster>
-<Func kind="K" nr="45"/>
+<Func kind="K" nr="46"/>
 </Typ>
 <Pred kind="P" nr="1">
 <Var nr="1"/>
@@ -32,79 +32,79 @@
 <For>
 <Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="45"/>
-<Func kind="K" nr="80"/>
+<Func kind="K" nr="46"/>
+<Func kind="K" nr="81"/>
 </Typ>
 <For>
 <Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="45"/>
-<Func kind="K" nr="80"/>
+<Func kind="K" nr="46"/>
+<Func kind="K" nr="81"/>
 </Typ>
 <And>
-<Pred kind="P" nr="1">
-<Func kind="K" nr="83">
-<Var nr="1"/>
-<Var nr="2"/>
-</Func>
-</Pred>
 <Pred kind="P" nr="1">
 <Func kind="K" nr="84">
 <Var nr="1"/>
 <Var nr="2"/>
 </Func>
 </Pred>
-</And>
-</For>
-</For>
-<For>
-<Typ kind="M" nr="8">
-<Cluster>
-<Adjective nr="21"/>
-</Cluster>
-<Func kind="K" nr="45"/>
-</Typ>
-<Not>
-<And>
-<Pred kind="P" nr="1">
-<Var nr="1"/>
-</Pred>
-<Not>
 <Pred kind="P" nr="1">
 <Func kind="K" nr="85">
 <Var nr="1"/>
+<Var nr="2"/>
 </Func>
 </Pred>
-</Not>
 </And>
-</Not>
+</For>
 </For>
 <For>
 <Typ kind="M" nr="8">
 <Cluster>
 <Adjective nr="21"/>
 </Cluster>
-<Func kind="K" nr="45"/>
-</Typ>
-<For>
-<Typ kind="M" nr="8">
-<Cluster>
-<Adjective nr="21"/>
-</Cluster>
-<Func kind="K" nr="45"/>
+<Func kind="K" nr="46"/>
 </Typ>
 <Not>
 <And>
 <Pred kind="P" nr="1">
 <Var nr="1"/>
-</Pred>
-<Pred kind="P" nr="1">
-<Var nr="2"/>
 </Pred>
 <Not>
 <Pred kind="P" nr="1">
 <Func kind="K" nr="86">
 <Var nr="1"/>
+</Func>
+</Pred>
+</Not>
+</And>
+</Not>
+</For>
+<For>
+<Typ kind="M" nr="8">
+<Cluster>
+<Adjective nr="21"/>
+</Cluster>
+<Func kind="K" nr="46"/>
+</Typ>
+<For>
+<Typ kind="M" nr="8">
+<Cluster>
+<Adjective nr="21"/>
+</Cluster>
+<Func kind="K" nr="46"/>
+</Typ>
+<Not>
+<And>
+<Pred kind="P" nr="1">
+<Var nr="1"/>
+</Pred>
+<Pred kind="P" nr="1">
+<Var nr="2"/>
+</Pred>
+<Not>
+<Pred kind="P" nr="1">
+<Func kind="K" nr="87">
+<Var nr="1"/>
 <Var nr="2"/>
 </Func>
 </Pred>
@@ -118,13 +118,13 @@
 <Cluster>
 <Adjective nr="21"/>
 </Cluster>
-<Func kind="K" nr="45"/>
+<Func kind="K" nr="46"/>
 </Typ>
 <For>
 <Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="45"/>
-<Func kind="K" nr="80"/>
+<Func kind="K" nr="46"/>
+<Func kind="K" nr="81"/>
 </Typ>
 <Not>
 <And>
@@ -133,7 +133,7 @@
 </Pred>
 <Not>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="87">
+<Func kind="K" nr="88">
 <Var nr="2"/>
 <Var nr="1"/>
 </Func>
