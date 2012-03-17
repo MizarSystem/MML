@@ -6,14 +6,14 @@
 
 environ
 
- vocabulary ARYTM, ARYTM_1, ORDINAL2, NAT_1, ARYTM_3, RELAT_1, INT_1, BOOLE, 
+ vocabulary ARYTM, ARYTM_1, ORDINAL2, NAT_1, ARYTM_3, RELAT_1, INT_1, BOOLE,
       COMPLEX1, ARYTM_2;
  notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, ORDINAL2, ARYTM_2,
-      ARYTM_1, NUMBERS, ARYTM_0, XCMPLX_0, XREAL_0, REAL_1, NAT_1;
+      ARYTM_1, NUMBERS, ARYTM_0, XCMPLX_0, XREAL_0, REAL_1;
  constructors REAL_1, NAT_1, XCMPLX_0, XREAL_0, XBOOLE_0, ARYTM_0, ARYTM_3,
       ARYTM_2, FUNCT_4, ARYTM_1;
  clusters XREAL_0, ARYTM_3, REAL_1, ORDINAL2, NUMBERS, ZFMISC_1, XBOOLE_0,
-      XCMPLX_0, SQUARE_1;
+      XCMPLX_0, SQUARE_1, NAT_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, XBOOLE_0;
  theorems REAL_1, NAT_1, SQUARE_1, AXIOMS, TARSKI, XREAL_0, ORDINAL2, XCMPLX_0,
@@ -23,7 +23,7 @@ environ
 begin
 
  reserve X,x,y,z for set,
-         k,l,n,n1,n2 for Nat,
+         k,l,n,n1,n2 for Element of NAT,
          r for real number;
 
 Lm1:
@@ -35,7 +35,7 @@ A1:   z in [:{0},NAT:] \ {[0,0]};
     x in {0} and
 A3:   y in NAT and
 A4:   z = [x,y] by ZFMISC_1:103;
-     reconsider y as Nat by A3;
+     reconsider y as Element of NAT by A3;
     take y;
 A5:   z in NAT \/ [:{0},NAT:] by A2,XBOOLE_0:def 2;
         not z in {[0,0]} by A1,XBOOLE_0:def 4;
@@ -67,7 +67,7 @@ Lm2:
 A1:  x = -k and
 A2:  k <> x;
      reconsider r = x as Element of REAL by A1;
-        r + k = 0 by A1,XCMPLX_0:def 6;
+        r + k = 0 by A1;
      then consider x1,x2,y1,y2 being Element of REAL such that
 A3:   r = [*x1,x2*] and
 A4:   k = [*y1,y2*] and
@@ -101,7 +101,7 @@ A17:   0 = y' - x' by A6,A7,A9,A10,ARYTM_0:def 2,ARYTM_2:2;
     hence x in [:{0},NAT:] \ {[0,0]} by A19,XBOOLE_0:def 4;
    end;
 
- definition
+definition
   redefine func INT means
    :Def1: x in it iff ex k st x = k or x = - k;
   compatibility
@@ -150,14 +150,14 @@ A11:       x = k or x = - k by A10;
       per cases by A11;
       suppose A12: x = k;
        then A13:      x in NAT \/ [:{0},NAT:] by XBOOLE_0:def 2;
-          not x in {[0,0]} by A12,NUMBERS:def 1,XBOOLE_0:def 4;
+      not x in {[0,0]} by A12,NUMBERS:def 1,XBOOLE_0:def 4;
       hence x in INT by A13,NUMBERS:def 4,XBOOLE_0:def 4;
       end;
       suppose x = -k & k <> x;
        then A14:      x in [:{0},NAT:] \ {[0,0]} by Lm2;
        then x in [:{0},NAT:] by XBOOLE_0:def 4;
        then A15:      x in NAT \/ [:{0},NAT:] by XBOOLE_0:def 2;
-          not x in {[0,0]} by A14,XBOOLE_0:def 4;
+       not x in {[0,0]} by A14,XBOOLE_0:def 4;
       hence x in INT by A15,NUMBERS:def 4,XBOOLE_0:def 4;
      end;
      end;
@@ -175,14 +175,14 @@ A18:    not x in {[0,0]} by A16,NUMBERS:def 4,XBOOLE_0:def 4;
       hence x in I by A10;
    end;
    end;
- end;
+end;
 
- definition let i be number;
+definition let i be number;
   attr i is integer means
    :Def2: i in INT;
- end;
+end;
 
- registration
+registration
   cluster integer Real;
   existence
    proof
@@ -197,81 +197,70 @@ A18:    not x in {[0,0]} by A16,NUMBERS:def 4,XBOOLE_0:def 4;
    end;
   cluster -> integer Element of INT;
   coherence by Def2;
- end;
+end;
 
 definition
   mode Integer is integer number;
 end;
 
-canceled 7;
+canceled 6;
 
- theorem Th8:
-  r is Integer iff ex k st r = k or r = - k
+theorem Th7:
+  for k being natural number st r = k or r = -k holds r is Integer
+proof let k be natural number;
+A: k in NAT by ORDINAL2:def 21;
+ assume r = k or r = -k;
+  then r in INT by Def1,A;
+ hence thesis by Def2;
+end;
+
+theorem Th8:
+  r is Integer implies ex k st r = k or r = - k
    proof
-    thus r is Integer implies ex k st r = k or r = - k
-     proof
-      assume r is Integer;
-      then r is Element of INT by Def2;
-      hence thesis by Def1;
-     end;
-    assume ex k st r = k or r = - k;
-     then r in INT by Def1;
-    hence thesis by Def2;
+    assume r is Integer;
+     then r is Element of INT by Def2;
+    hence thesis by Def1;
    end;
 
 :: Relations between sets INT, NAT and REAL ( and their elements )
 
 registration
- cluster -> integer Nat;
- coherence by Th8;
- cluster natural -> integer number;
- coherence
+  cluster -> integer Element of NAT;
+  coherence by Th7;
+  cluster natural -> integer number;
+  coherence
   proof let n be number;
-   assume n is natural;
-   then n is Nat by ORDINAL2:def 21;
-   hence thesis by Th8;
+    assume n is natural;
+    then n is Element of NAT by ORDINAL2:def 21;
+    hence thesis by Th7;
   end;
 end;
 
- Lm3:
-  x is Nat implies x is Integer;
+canceled 7;
 
-canceled 2;
-
- theorem Th11:
-  x in INT implies x in REAL
-   proof
-    assume x in INT;
-    then ex k st x = k or x = - k by Def1;
-    hence x in REAL;
-   end;
+Th11: x in INT implies x in REAL by NUMBERS:15;
 
 registration
- cluster integer -> real number;
+  cluster integer -> real number;
 coherence
   proof
     let n be number;
     assume n is integer;
     then n is Element of INT by Def2;
     then reconsider n as Element of REAL by Th11;
-         n is real;
+    n is real;
     hence thesis;
   end;
 end;
-
- theorem Th12:
-  x is Integer iff x in INT by Def2;
-
- canceled 3;
 
  reserve i,i0,i1,i2,i3,i4,i5,i7,i8,i9 for Integer;
 
 :: Now we are ready to redefine some functions
 :: Redefinition of functions "+", "*" and "-"
 
- registration
+registration
   let i1,i2 be Integer;
-   cluster i1 + i2 -> integer;
+  cluster i1 + i2 -> integer;
     coherence
      proof
       consider k such that A1: (i1 = k or i1 = - k) by Th8;
@@ -286,14 +275,16 @@ A4:    now
        A6: now
         assume k - l <= 0;
         then k <= 0 + l by REAL_1:86;
-        then consider z being Nat such that A7: l = k + z by NAT_1:28;
-             - z = - l + k by A7;
-        hence k - l is Integer by Th8;
+        then consider z being Element of NAT such that
+        A7: l = k + z by NAT_1:28;
+        - z = - l + k by A7;
+        hence k - l is Integer by Th7;
        end;
-           now
+       now
         assume 0 <= k - l;
         then 0 + l <= k by REAL_1:84;
-        then consider z being Nat such that A8: k = l + z by NAT_1:28;
+        then consider z being Element of NAT such that
+        A8: k = l + z by NAT_1:28;
         thus k - l is Integer by A8;
        end;
        hence i1 + i2 is Integer by A5,A6;
@@ -303,27 +294,28 @@ A9:    now
        A11: now
         assume l - k <= 0;
         then l <= 0 + k by REAL_1:86;
-        then consider z being Nat such that A12: k = l + z by NAT_1:28;
-             - z = - k + l by A12;
-        hence l - k is Integer by Th8;
+        then consider z being Element of NAT such that
+        A12: k = l + z by NAT_1:28;
+        - z = - k + l by A12;
+        hence l - k is Integer by Th7;
        end;
-            now
+        now
         assume 0 <= l - k;
         then 0 + k <= l by REAL_1:84;
-        then consider z being Nat such that A13: l = k + z by NAT_1:28;
+        then consider z being Element of NAT such that
+        A13: l = k + z by NAT_1:28;
         thus l - k is Integer by A13;
        end;
        hence i1 + i2 is Integer by A10,A11;
       end;
-           now
+      now
        assume i1 = - k & i2 = - l;
        then i1 + i2 = - (k + l);
-       hence i1 + i2 is Integer by Th8;
+       hence i1 + i2 is Integer by Th7;
       end;
       hence thesis by A1,A2,A3,A4,A9;
      end;
-
-   cluster i1 * i2 -> integer;
+  cluster i1 * i2 -> integer;
     coherence
      proof
       consider k such that A14: (i1 = k or i1 = - k) by Th8;
@@ -338,101 +330,99 @@ A17:    now
        then i1 * i2 = k * l;
        hence i1 * i2 is Integer;
       end;
-           now
+      now
        assume (i1 = - k & i2 = l) or (i1 = k & i2 = - l);
        then i1 * i2 = - (k * l);
-       hence i1 * i2 is Integer by Th8;
+       hence i1 * i2 is Integer by Th7;
       end;
       hence i1 * i2 is integer by A14,A15,A16,A17;
      end;
- end;
+end;
 
- registration
+registration
   let i0 be Integer;
-   cluster - i0 -> integer;
-    coherence
-     proof
-      consider k such that A1: i0 = k or i0 = - k by Th8;
-      thus thesis by A1,Th8;
-     end;
- end;
+  cluster - i0 -> integer;
+  coherence
+  proof
+    consider k such that A1: i0 = k or i0 = - k by Th8;
+    thus thesis by A1,Th7;
+  end;
+end;
 
- registration
+registration
   let i1,i2 be Integer;
-   cluster i1 - i2 -> integer;
-    coherence
-     proof
-           i1 - i2 = i1 + (- i2);
-      hence i1 - i2 is integer;
-     end;
- end;
+  cluster i1 - i2 -> integer;
+  coherence
+  proof
+    i1 - i2 = i1 + (- i2);
+    hence i1 - i2 is integer;
+  end;
+end;
 
 :: More redefinitions
 
- registration
-  let n be Nat;
-   cluster - n -> integer;
-    coherence;
+registration
+  let n be Element of NAT;
+  cluster - n -> integer;
+  coherence;
   let i1 be Integer;
-   cluster i1 + n -> integer;
-    coherence;
-   cluster i1 * n -> integer;
-    coherence;
-   cluster i1 - n -> integer;
-    coherence;
- end;
+  cluster i1 + n -> integer;
+  coherence;
+  cluster i1 * n -> integer;
+  coherence;
+  cluster i1 - n -> integer;
+  coherence;
+end;
 
- registration
-  let n1,n2;
-   cluster n1 - n2 -> integer;
-    coherence
-     proof
-      reconsider l = n1 as Integer by Lm3;
-           l - n2 is Integer;
-      hence thesis;
-     end;
- end;
+registration let n1,n2;
+  cluster n1 - n2 -> integer;
+  coherence
+  proof
+    reconsider l = n1 as Integer;
+    thus thesis;
+  end;
+end;
 
 :: Some basic theorems about integers
 
- theorem Th16:
-  0 <= i0 implies i0 is Nat
+theorem Th16:
+  0 <= i0 implies i0 in NAT
    proof
     assume A1: 0 <= i0;
     consider k such that A2: i0 = k or i0 = - k by Th8;
-         now
+    now
      assume A3: i0 = - k;
      then A4: k <= -0 by A1,REAL_1:50;
-          -0 <= k by NAT_1:18;
-     hence i0 is Nat by A3,A4,AXIOMS:21;
+     -0 <= k by NAT_1:18;
+     hence i0 is Element of NAT by A3,A4,AXIOMS:21;
     end;
     hence thesis by A2;
    end;
 
- theorem
-       r is Integer implies r + 1 is Integer & r - 1 is Integer
+theorem
+  r is Integer implies r + 1 is Integer & r - 1 is Integer
    proof
     assume r is Integer;
     then reconsider i1 = r as Integer;
-         i1 + 1 is Integer & i1 - 1 is Integer;
+    i1 + 1 is Integer & i1 - 1 is Integer;
     hence thesis;
    end;
 
- theorem Th18:
-  i2 <= i1 implies i1 - i2 is Nat
+theorem Th18:
+  i2 <= i1 implies i1 - i2 in NAT
    proof
     assume i2 <= i1;
     then i2 - i2 <= i1 - i2 by REAL_1:49;
     hence thesis by Th16;
    end;
 
- theorem Th19:
+theorem Th19:
   i1 + k = i2 implies i1 <= i2
    proof
-         now
+    now
      assume A1: i1 + k = i2;
-     reconsider i0 = k as Integer by Lm3;
-          0 <= k by NAT_1:18;
+     reconsider i0 = k as Integer;
+     0 <= k by NAT_1:18;
      then 0 + (i1 + k) <= k + i2 by A1,AXIOMS:24;
      then i1 + i0 - i0 <= i2 + i0 - i0 by REAL_1:49;
      hence thesis;
@@ -441,23 +431,23 @@ A17:    now
    end;
 
 Lm4:
- for j being Nat holds j < 1 implies j = 0
- proof let j be Nat; assume j < 1;
+ for j being Element of NAT holds j < 1 implies j = 0
+ proof let j be Element of NAT; assume j < 1;
     then j < 0 + 1;
     then A1: j <= 0 by NAT_1:38;
    assume j <> 0;
   hence thesis by A1,NAT_1:18;
  end;
 
- Lm5: 0 < i1 implies 1 <= i1
+Lm5: 0 < i1 implies 1 <= i1
   proof
    assume A1: 0 < i1;
-   then reconsider i2 = i1 as Nat by Th16;
-        0 <> i2 by A1;
+   then reconsider i2 = i1 as Element of NAT by Th16;
+   0 <> i2 by A1;
    hence thesis by Lm4;
   end;
 
- theorem Th20:
+theorem Th20:
   i0 < i1 implies i0 + 1 <= i1
    proof
     assume i0 < i1;
@@ -467,7 +457,7 @@ Lm4:
     hence thesis;
    end;
 
- theorem Th21:
+theorem Th21:
   i1 < 0 implies i1 <= - 1
    proof
     assume i1 < 0;
@@ -477,7 +467,7 @@ Lm4:
     hence i1 <= - 1;
    end;
 
- theorem Th22:
+theorem Th22:
   i1 * i2 = 1 iff (i1 = 1 & i2 = 1) or (i1 = - 1 & i2 = - 1)
    proof
     thus i1 * i2 = 1 implies (i1 = 1 & i2 = 1) or (i1 = - 1 & i2 = - 1)
@@ -486,14 +476,14 @@ Lm4:
 then A2:    not(i1 = 0 or i2 = 0);
       A3: now
        assume 0 < i1 & 0 < i2;
-       then i1 is Nat & i2 is Nat by Th16;
+       then i1 is Element of NAT & i2 is Element of NAT by Th16;
        hence i1 = 1 & i2 = 1 by A1,NAT_1:40;
       end;
-           now
+      now
        assume i1 < 0 & i2 < 0;
        then 0 <= - i1 & 0 <= - i2 by REAL_1:66;
-       then A4: (- i1) is Nat & (- i2) is Nat by Th16;
-            (- i1) * (- i2) = i1 * i2;
+       then A4: (- i1) is Element of NAT & (- i2) is Element of NAT by Th16;
+       (- i1) * (- i2) = i1 * i2;
        then - (- i1) = - 1 & - (- i2) = - 1 by A1,A4,NAT_1:40;
        hence i1 = - 1 & i2 = - 1;
       end;
@@ -502,16 +492,16 @@ then A2:    not(i1 = 0 or i2 = 0);
     thus thesis;
    end;
 
- theorem
-       i1 * i2 = - 1 iff (i1 = - 1 & i2 = 1) or (i1 = 1 & i2 = - 1)
+theorem
+  i1 * i2 = - 1 iff (i1 = - 1 & i2 = 1) or (i1 = 1 & i2 = - 1)
    proof
     thus i1 * i2 = - 1 implies (i1 = - 1 & i2 = 1) or (i1 = 1 & i2 = - 1)
      proof
       assume A1: i1 * i2 = - 1;
-           (- i1) * i2 = - (i1 * i2)
+      (- i1) * i2 = - (i1 * i2)
              .= 1 by A1;
       then A2: (- (- i1) = - 1 & i2 = 1) or (- i1 = - 1 & i2 = - 1) by Th22;
-           now
+      now
        assume - i1 = - 1;
        hence 1 = - (- i1)
               .= i1;
@@ -525,25 +515,25 @@ then A2:    not(i1 = 0 or i2 = 0);
 Lm6: i0 <= i1 implies ex k st i0 + k = i1
  proof
   assume i0 <= i1;
-  then reconsider k = i1 - i0 as Nat by Th18;
-       i0 + k = i1;
+  then reconsider k = i1 - i0 as Element of NAT by Th18;
+  i0 + k = i1;
   hence thesis;
  end;
 
 Lm7: i0 <= i1 implies ex k st i1 - k = i0
  proof
   assume i0 <= i1;
-  then reconsider k = i1 - i0 as Nat by Th18;
-       i1 - k = i0;
+  then reconsider k = i1 - i0 as Element of NAT by Th18;
+  i1 - k = i0;
   hence thesis;
  end;
 
 canceled 2;
 
- theorem Th26:
+theorem Th26:
   r - 1 < r
    proof
-         r + (- 1) < r + 0 by REAL_1:53;
+    r + (- 1) < r + 0 by REAL_1:53;
     hence thesis;
    end;
 
@@ -555,9 +545,9 @@ proof
     consider X such that
 A1:   for y holds y in X iff
       y in INT & P1[y] from XBOOLE_0:sch 1;
-         X is Subset of INT
+     X is Subset of INT
      proof
-           y in X implies y in INT by A1;
+      y in X implies y in INT by A1;
       hence thesis by TARSKI:def 3;
      end;
     then reconsider X as Subset of INT;
@@ -569,10 +559,10 @@ A2:  i0 in X implies P[i0]
       then ex i1 st i0 = i1 & P[i1] by A1;
       hence thesis;
      end;
-         P[i0] implies i0 in X
+     P[i0] implies i0 in X
      proof
       assume A3: P[i0];
-           i0 in INT by Th12;
+      i0 in INT by Def2;
       hence thesis by A1,A3;
      end;
     hence thesis by A2;
@@ -585,7 +575,7 @@ A2: for i2 st F() <= i2 holds P[i2] implies P[i2 + 1]
 proof
   let i0;
   assume A3: F() <= i0;
-  defpred Q[Nat] means
+  defpred Q[natural number] means
    for i2 st $1 = i2 - F() holds P[i2];
 A4: Q[0]
     proof
@@ -598,14 +588,14 @@ A4: Q[0]
 A5: for k st Q[k] holds Q[k + 1]
     proof
      let k;
-     reconsider i8 = k as Integer by Lm3;
+     reconsider i8 = k as Integer;
      assume A6: Q[k];
      let i2;
      assume A7: k + 1 = i2 - F();
      then k = i2 + (- F()) - 1 by XCMPLX_1:26
            .= i2 - 1 - F();
      then A8: P[i2 - 1] by A6;
-           F() <= i2 - 1
+     F() <= i2 - 1
       proof
         i2 - 1 = (k + 1 + (- 1)) + F() by A7
                       .= i8 + F();
@@ -615,8 +605,8 @@ A5: for k st Q[k] holds Q[k + 1]
      hence thesis;
     end;
 A9: for k holds Q[k] from NAT_1:sch 1(A4,A5);
-  reconsider l = i0 - F() as Nat by A3,Th18;
-       l = i0 - F();
+  reconsider l = i0 - F() as Element of NAT by A3,Th18;
+  l = i0 - F();
   hence P[i0] by A9;
  end;
 
@@ -647,7 +637,7 @@ A5: for i2 st - F() <= i2 holds Q[i2] implies Q[i2 + 1]
      then A9: P[i3 + 1] by A7;
            i3 + 1 <= F()
       proof
-            i2 = - i3 - 1 by A8,XCMPLX_1:26;
+       i2 = - i3 - 1 by A8,XCMPLX_1:26;
        then - (- i3 - 1) <= - (- F()) by A6,REAL_1:50;
        hence thesis;
       end;
@@ -670,13 +660,13 @@ proof
 A4: now
     assume A5: F() <= i0;
     A6: for i2 st F() <= i2 holds P1[i2] implies P1[i2 + 1] by A2;
-         for i2 st F() <= i2 holds P1[i2] from Int_Ind_Up(A3,A6);
+    for i2 st F() <= i2 holds P1[i2] from Int_Ind_Up(A3,A6);
     hence P[i0] by A5;
    end;
-      now
+   now
     assume A7: i0 <= F();
-    A8: for i2 st i2 <= F() holds P1[i2] implies P1[i2 - 1] by A2;
-         for i2 st i2 <= F() holds P1[i2] from Int_Ind_Down(A3,A8);
+A8: for i2 st i2 <= F() holds P1[i2] implies P1[i2 - 1] by A2;
+    for i2 st i2 <= F() holds P1[i2] from Int_Ind_Down(A3,A8);
     hence P[i0] by A7;
    end;
   hence thesis by A4;
@@ -690,7 +680,7 @@ proof
   consider i1 such that A3: P[i1] by A2;
        F() <= i1 by A1,A3;
   then A4: ex k st F() + k = i1 by Lm6;
-  defpred Q[Nat] means P[F() + $1];
+  defpred Q[natural number] means P[F() + $1];
    A5: ex k st Q[k] by A3,A4;
    consider l such that A6: Q[l] & for n st Q[n] holds l <= n from NAT_1:sch 5
 (A5);
@@ -713,9 +703,9 @@ A1: for i1 st P[i1] holds i1 <= F() and
 A2: ex i1 st P[i1]
 proof
   consider i1 such that A3: P[i1] by A2;
-       i1 <= F() by A1,A3;
+  i1 <= F() by A1,A3;
   then A4: ex k st i1 = F() - k by Lm7;
-  defpred Q[Nat] means P[F() - $1];
+  defpred Q[natural number] means P[F() - $1];
    A5: ex k st Q[k] by A3,A4;
    consider l such that A6: Q[l] & for n st Q[n] holds l <= n from NAT_1:sch 5
 (A5);
@@ -748,7 +738,7 @@ proof
 canceled 4;
 
 :: theorem
-::       sgn r = 1 or sgn r = - 1 or sgn r = 0
+::   sgn r = 1 or sgn r = - 1 or sgn r = 0
 ::   proof
 ::    r < 0 or 0 < r or r = 0;
 ::    hence thesis by ABSVALUE:def 2;
@@ -756,46 +746,46 @@ canceled 4;
 
 :: Congruences
 
- definition let i1,i2,i3 be Integer;
+definition let i1,i2,i3 be Integer;
   pred i1,i2 are_congruent_mod i3 means
    :Def3: ex i4 st i3 * i4 = i1 - i2;
- end;
+end;
 
 canceled;
 
- theorem
-       i1,i1 are_congruent_mod i2
+theorem
+  i1,i1 are_congruent_mod i2
    proof
-     i2 * 0 = i1 - i1;
+    i2 * 0 = i1 - i1;
     hence thesis by Def3;
    end;
 
- theorem
-       i1,0 are_congruent_mod i1 & 0,i1 are_congruent_mod i1
+theorem
+  i1,0 are_congruent_mod i1 & 0,i1 are_congruent_mod i1
    proof
      i1 * 1 = i1 - 0 & i1 * (- 1) = 0 - i1;
     hence thesis by Def3;
    end;
 
- theorem
-       i1,i2 are_congruent_mod 1
+theorem
+  i1,i2 are_congruent_mod 1
    proof
-       i1 - i2 = 1 * (i1 - i2);
+    i1 - i2 = 1 * (i1 - i2);
     hence thesis by Def3;
    end;
 
- theorem
-       i1,i2 are_congruent_mod i3 implies i2,i1 are_congruent_mod i3
+theorem
+  i1,i2 are_congruent_mod i3 implies i2,i1 are_congruent_mod i3
    proof
     assume i1,i2 are_congruent_mod i3;
     then consider i0 such that A1: (i1 - i2) = i3 * i0 by Def3;
-         i2 - i1 = - (i3 * i0) by A1,XCMPLX_1:143
-                .= i3 * (- i0);
+    i2 - i1 = - (i3 * i0) by A1,XCMPLX_1:143
+           .= i3 * (- i0);
     hence thesis by Def3;
    end;
 
- theorem
-       i1,i2 are_congruent_mod i5 & i2,i3 are_congruent_mod i5
+theorem
+  i1,i2 are_congruent_mod i5 & i2,i3 are_congruent_mod i5
              implies i1,i3 are_congruent_mod i5
    proof
     assume A1: i1,i2 are_congruent_mod i5 & i2,i3 are_congruent_mod i5;
@@ -806,8 +796,8 @@ canceled;
     hence thesis by Def3;
    end;
 
- theorem
-       i1,i2 are_congruent_mod i5 & i3,i4 are_congruent_mod i5
+theorem
+  i1,i2 are_congruent_mod i5 & i3,i4 are_congruent_mod i5
       implies (i1 + i3),(i2 + i4) are_congruent_mod i5
    proof
     assume A1: i1,i2 are_congruent_mod i5 & i3,i4 are_congruent_mod i5;
@@ -818,24 +808,24 @@ canceled;
     hence thesis by Def3;
    end;
 
- theorem
-       i1,i2 are_congruent_mod i5 & i3,i4 are_congruent_mod i5
+theorem
+  i1,i2 are_congruent_mod i5 & i3,i4 are_congruent_mod i5
             implies (i1 - i3),(i2 - i4) are_congruent_mod i5
    proof
     assume A1: i1,i2 are_congruent_mod i5 & i3,i4 are_congruent_mod i5;
     then consider i8 such that A2: i5 * i8 = i1 - i2 by Def3;
     consider i9 such that A3: i5 * i9 = i3 - i4 by A1,Def3;
-         ex i7 st i5 * i7 = (i1 - i3) - (i2 - i4)
+    ex i7 st i5 * i7 = (i1 - i3) - (i2 - i4)
      proof
-           (i1 - i3) - (i2 - i4) = (i5 * i8) - (i5 * i9) by A2,A3
-                           .= i5 * (i8 - i9);
+      (i1 - i3) - (i2 - i4) = (i5 * i8) - (i5 * i9) by A2,A3
+                       .= i5 * (i8 - i9);
       hence thesis;
      end;
     hence thesis by Def3;
    end;
 
- theorem
-       i1,i2 are_congruent_mod i5 & i3,i4 are_congruent_mod i5
+theorem
+  i1,i2 are_congruent_mod i5 & i3,i4 are_congruent_mod i5
           implies (i1 * i3),(i2 * i4) are_congruent_mod i5
    proof
     assume A1: i1,i2 are_congruent_mod i5 & i3,i4 are_congruent_mod i5;
@@ -851,8 +841,8 @@ canceled;
     hence thesis by Def3;
    end;
 
- theorem
-       (i1 + i2),i3 are_congruent_mod i5 iff i1, (i3 - i2) are_congruent_mod i5
+theorem
+  (i1 + i2),i3 are_congruent_mod i5 iff i1, (i3 - i2) are_congruent_mod i5
    proof
     thus (i1 + i2),i3 are_congruent_mod i5
               implies i1,(i3 - i2) are_congruent_mod i5
@@ -868,8 +858,8 @@ canceled;
     hence thesis by A2,Def3;
    end;
 
- theorem
-       i4 * i5 = i3
+theorem
+  i4 * i5 = i3
    implies (i1,i2 are_congruent_mod i3 implies i1,i2 are_congruent_mod i4)
    proof
     assume A1: i4 * i5 = i3;
@@ -879,8 +869,8 @@ canceled;
     hence thesis by Def3;
    end;
 
- theorem
-       i1,i2 are_congruent_mod i5 iff (i1 + i5),i2 are_congruent_mod i5
+theorem
+  i1,i2 are_congruent_mod i5 iff (i1 + i5),i2 are_congruent_mod i5
    proof
     thus i1,i2 are_congruent_mod i5 implies (i1 + i5),i2 are_congruent_mod i5
      proof
@@ -898,8 +888,8 @@ canceled;
     hence thesis by Def3;
    end;
 
- theorem
-       i1,i2 are_congruent_mod i5 iff (i1 - i5),i2 are_congruent_mod i5
+theorem
+  i1,i2 are_congruent_mod i5 iff (i1 - i5),i2 are_congruent_mod i5
    proof
     thus i1,i2 are_congruent_mod i5 implies (i1 - i5),i2 are_congruent_mod i5
      proof
@@ -917,7 +907,7 @@ canceled;
     hence thesis by Def3;
    end;
 
- theorem Th44:
+theorem Th44:
   (i1 <= r & r - 1 < i1) & (i2 <= r & r - 1 < i2) implies i1 = i2
    proof
     assume A1: (i1 <= r & r - 1 < i1) & (i2 <= r & r - 1 < i2);
@@ -939,7 +929,7 @@ A4:  now
     hence thesis by A3,A4;
    end;
 
- theorem Th45:
+theorem Th45:
   (r <= i1 & i1 < r + 1) & (r <= i2 & i2 < r + 1) implies i1 = i2
    proof
     assume A1: (r <= i1 & i1 < r + 1) & (r <= i2 & i2 < r + 1);
@@ -963,7 +953,7 @@ A4:  now
 reserve r1,p,p1,g,g1,g2 for real number,
         X,Y for Subset of REAL;
 
- Lm8:for r ex n st r<n
+Lm8:for r ex n st r<n
   proof
    let r;
    defpred P[Real] means for r st r in NAT holds not $1<r;
@@ -985,8 +975,8 @@ then A6: g1 in Y by A1,A5;
       then consider r1 such that
   A7: r1 in NAT and
   A8: g2-1<r1 by A1,A3;
-          A9: g2-1+1<r1+1 by A8,REAL_1:53;
-           r1+1 in NAT by A7,AXIOMS:28;
+  A9: g2-1+1<r1+1 by A8,REAL_1:53;
+      r1+1 in NAT by A7,AXIOMS:28;
       hence contradiction by A2,A6,A9;
      end;
     hence contradiction by A2,A4;
@@ -994,18 +984,19 @@ then A6: g1 in Y by A1,A5;
    then consider p such that
 A10: p in NAT and
 A11: r<p;
-   reconsider p as Nat by A10;
+   reconsider p as Element of NAT by A10;
    take p;
    thus r<p by A11;
   end;
 
- definition
+definition
   let r be real number;
-  func [\ r /] -> Integer means :Def4: it <= r & r - 1 < it;
+  func [\ r /] -> Integer means :Def4:
+  it <= r & r - 1 < it;
    existence
     proof
     consider n such that A1: - r < n by Lm8;
-A2:   - n < - - r by A1,REAL_1:50;
+A2: - n < -- r by A1,REAL_1:50;
     defpred P[Integer] means r < $1;
 A3:   for i1 st P[i1] holds -n <= i1
        proof
@@ -1015,26 +1006,26 @@ A3:   for i1 st P[i1] holds -n <= i1
         hence -n <= i1 by AXIOMS:24;
        end;
     consider n such that A4: r < n by Lm8;
-    reconsider i0 = n as Integer by Lm3;
+    reconsider i0 = n as Integer;
        r < i0 by A4;
     then A5: ex i0 st P[i0];
       consider i1 such that
 A6:    P[i1] & for i2 st P[i2] holds i1 <= i2 from Int_Min(A3,A5);
 A7:   r < i1 - 1 implies i1 <= i1-1 by A6;
-           r - 1 < i1 - 1 by A6,REAL_1:54;
+     r - 1 < i1 - 1 by A6,REAL_1:54;
      hence thesis by A7,Th26;
     end;
    uniqueness by Th44;
- end;
+end;
 
 canceled;
 
- theorem Th47:
+theorem Th47:
   [\ r /] = r iff r is integer
    proof
-         r is Integer implies [\ r /] = r
+     r is Integer implies [\ r /] = r
      proof
-           r + 0 < r + 1 by REAL_1:53;
+      r + 0 < r + 1 by REAL_1:53;
       then A1: r - 1 < r + 1 - 1 by REAL_1:54;
       assume r is Integer;
       hence thesis by A1,Def4;
@@ -1042,12 +1033,12 @@ canceled;
     hence thesis;
    end;
 
- theorem Th48:
+theorem Th48:
   [\ r /] < r iff r is not integer
    proof
-         now
+   now
      assume A1: not r is Integer;
-           [\ r /] <= r by Def4;
+     [\ r /] <= r by Def4;
      hence [\ r /] < r by A1,REAL_1:def 5;
     end;
     hence thesis by Th47;
@@ -1055,146 +1046,147 @@ canceled;
 
 canceled;
 
- theorem
-       [\ r /] - 1 < r & [\ r /] < r + 1
+theorem
+  [\ r /] - 1 < r & [\ r /] < r + 1
    proof
-         [\ r /] <= r by Def4;
+    [\ r /] <= r by Def4;
     then A1: [\ r /] + 0 < r + 1 by REAL_1:67;
     then [\ r /] + (- 1) < r + 1 + (- 1) by REAL_1:53;
     hence thesis by A1;
    end;
 
- theorem Th51:
+theorem Th51:
   [\ r /] + i0 = [\ r + i0 /]
    proof
     A1: r - 1 < [\ r /] & [\ r /] <= r by Def4;
     then r - 1 + i0 < [\ r /] + i0 by REAL_1:53;
     then A2: r + i0 - 1 < [\ r /] + i0;
-         [\ r /] + i0 <= r + i0 by A1,AXIOMS:24;
+    [\ r /] + i0 <= r + i0 by A1,AXIOMS:24;
     hence thesis by A2,Def4;
    end;
 
- theorem Th52:
+theorem Th52:
   r < [\ r /] + 1
    proof
-       r - 1 < [\ r /] by Def4;
+    r - 1 < [\ r /] by Def4;
     then r - 1 + 1 < [\ r /] + 1 by REAL_1:53;
     hence r < [\ r /] + 1;
    end;
 
- definition
+definition
   let r be real number;
-  func [/ r \] -> Integer means :Def5: r <= it & it < r + 1;
+  func [/ r \] -> Integer means :Def5:
+  r <= it & it < r + 1;
    existence
     proof
 A1:  now
       assume
 A2:    r is Integer;
-            r + 0 < r + 1 by REAL_1:53;
+      r + 0 < r + 1 by REAL_1:53;
       hence r <= [\ r /] & [\ r /] < r + 1 by A2,Th47;
      end;
-          now assume not r is Integer;
+     now assume not r is Integer;
       then [\ r /] < r by Th48;
       hence r <= [\ r /] + 1 & [\ r /] + 1 < r + 1 by Th52,REAL_1:53;
      end;
      hence thesis by A1;
     end;
    uniqueness by Th45;
- end;
+end;
 
 canceled;
 
- theorem Th54:
+theorem Th54:
   [/ r \] = r iff r is integer
    proof
-         r is Integer implies [/ r \] = r
+    r is Integer implies [/ r \] = r
      proof
-           r + 0 < r + 1 by REAL_1:53;
+      r + 0 < r + 1 by REAL_1:53;
       hence thesis by Def5;
      end;
     hence thesis;
    end;
 
- theorem Th55:
+theorem Th55:
   r < [/ r \] iff r is not integer
-   proof
-         now
+  proof
+   now
      assume A1: not r is Integer;
-           r <= [/ r \] by Def5;
+     r <= [/ r \] by Def5;
      hence r < [/ r \] by A1,REAL_1:def 5;
     end;
     hence thesis by Th54;
-   end;
+  end;
 
 canceled;
 
- theorem
-       r - 1 < [/ r \] & r < [/ r \] + 1
+theorem
+  r - 1 < [/ r \] & r < [/ r \] + 1
    proof
-         r <= [/ r \] by Def5;
+    r <= [/ r \] by Def5;
     then A1: r + 0 < [/ r \] + 1 by REAL_1:67;
     then r + (- 1) < [/ r \] + 1 + (- 1) by REAL_1:53;
     hence thesis by A1;
    end;
 
- theorem
-       [/ r \] + i0 = [/ r + i0 \]
+theorem
+  [/ r \] + i0 = [/ r + i0 \]
    proof
     A1: r <= [/ r \] & [/ r \] < r + 1 by Def5;
     then [/ r \] + i0 < r + 1 + i0 by REAL_1:53;
     then A2: [/ r \] + i0 < r + i0 + 1;
-         r + i0 <= [/ r \] + i0 by A1,AXIOMS:24;
+    r + i0 <= [/ r \] + i0 by A1,AXIOMS:24;
     hence thesis by A2,Def5;
    end;
 
- theorem Th59:
+theorem Th59:
   [\ r /] = [/ r \] iff r is integer
-   proof
+  proof
 A1:  now
      assume r is Integer;
      hence [\ r /] = r & r = [/ r \] by Th47,Th54;
      hence [\ r /] = [/ r \];
     end;
-         now
+    now
      assume not r is Integer;
      then [\ r /] < r & r < [/ r \] by Th48,Th55;
      hence [\ r /] <> [/ r \];
     end;
     hence thesis by A1;
-   end;
+  end;
 
- theorem Th60:
+theorem Th60:
   [\ r /] < [/ r \] iff r is not integer
-   proof
-         now
+  proof
+    now
      assume not r is Integer;
      then [\ r /] < r & r < [/ r \] by Th48,Th55;
      hence [\ r /] < [/ r \] by AXIOMS:22;
     end;
     hence thesis by Th59;
-   end;
+  end;
 
- theorem
-       [\ r /] <= [/ r \]
+theorem
+  [\ r /] <= [/ r \]
    proof
-         [\ r /] <= r & r <= [/ r \] by Def4,Def5;
+    [\ r /] <= r & r <= [/ r \] by Def4,Def5;
     hence thesis by AXIOMS:22;
    end;
 
- theorem
-       [\ ([/ r \]) /] = [/ r \] by Th47;
+theorem
+  [\ ([/ r \]) /] = [/ r \] by Th47;
 
- theorem
-       [\ ([\ r /]) /] = [\ r /] by Th47;
+theorem
+  [\ ([\ r /]) /] = [\ r /] by Th47;
 
- theorem
-       [/ ([/ r \]) \] = [/ r \] by Th54;
+theorem
+  [/ ([/ r \]) \] = [/ r \] by Th54;
 
- theorem
-       [/ ([\ r /]) \] = [\ r /] by Th54;
+theorem
+  [/ ([\ r /]) \] = [\ r /] by Th54;
 
- theorem
-       [\ r /] = [/ r \] iff not [\ r /] + 1 = [/ r \]
+theorem
+  [\ r /] = [/ r \] iff not [\ r /] + 1 = [/ r \]
    proof
     set Diff = [/ r \] + (- [\ r /]);
     reconsider i0 = 1 as Integer;
@@ -1203,13 +1195,13 @@ A1:  now
      then [\ r /] = [/ r \] by Th59;
      hence [\ r /] = [/ r \] & [\ r /] + 1 <> [/ r \] by XCMPLX_1:3;
     end;
-       now
+    now
      assume A2: not r is Integer;
      then [\ r /] < [/ r \] by Th60;
      then [\ r /] + (- [\ r /]) < Diff by REAL_1:53;
      then A3: 1 <= Diff by Lm5;
 A4:   [/ r \] < r + 1 by Def5;
-          r - 1 < [\ r /] by Def4;
+     r - 1 < [\ r /] by Def4;
      then - [\ r /] < - (r - 1) by REAL_1:50;
      then Diff < r + 1 + (- (r - 1)) by A4,REAL_1:67;
      then Diff + 1 + (- 1) <= 1 + 1 + (- 1) by Th20;
@@ -1219,72 +1211,71 @@ A4:   [/ r \] < r + 1 by Def5;
     hence thesis by A1;
    end;
 
- definition
+definition
   let r be real number;
   func frac r equals
    :Def6:  r - [\ r /];
-   coherence;
- end;
+  coherence;
+end;
 
- registration
+registration
   let r be real number;
   cluster frac r -> real;
   coherence
   proof
-         frac r = r - [\ r /] by Def6;
+    frac r = r - [\ r /] by Def6;
     hence thesis;
   end;
- end;
+end;
 
- definition
+definition
   let r be real number;
   redefine func frac r -> Real;
   coherence by XREAL_0:def 1;
- end;
+end;
 
 canceled;
 
- theorem
-       r = [\ r /] + frac r
+theorem
+  r = [\ r /] + frac r
    proof
     thus [\ r /] + frac r = [\ r /] + (r - [\ r /]) by Def6
                    .= r;
    end;
 
- theorem Th69:
+theorem Th69:
   frac r < 1 & 0 <= frac r
    proof
-    A1: frac r = r - [\ r /] by Def6;
-    A2: r - 1 < [\ r /] & [\ r /] <= r by Def4;
+A1: frac r = r - [\ r /] by Def6;
+A2: r - 1 < [\ r /] & [\ r /] <= r by Def4;
     then frac r + (r - 1) < r - [\ r /] + [\ r /] by A1,REAL_1:53;
     then frac r + (- 1) + r - r < r - r by REAL_1:54;
     then A3: frac r - 1 + 1 < 0 + 1 by REAL_1:53;
-         [\ r /] + (r - [\ r /]) <= r + frac r by A1,A2,AXIOMS:24;
+    [\ r /] + (r - [\ r /]) <= r + frac r by A1,A2,AXIOMS:24;
     then r - r <= r + frac r - r by REAL_1:49;
     hence thesis by A3;
    end;
 
- theorem
-       [\ frac r /] = 0
+theorem
+  [\ frac r /] = 0
    proof
-         [\ frac r /]
-      = [\ (r - [\ r /]) /] by Def6
+     [\ frac r /] = [\ (r - [\ r /]) /] by Def6
      .= [\ (r + (- [\ r /])) /]
      .= [\ r /] + (- [\ r /]) by Th51
      .= 0;
     hence thesis;
    end;
 
-  theorem Th71:
-   frac r = 0 iff r is integer
+theorem Th71:
+  frac r = 0 iff r is integer
     proof
 A1:   now
       assume r is Integer;
       then A2: r = [\ r /] by Th47;
-           frac r = r - [\ r /] by Def6;
+      frac r = r - [\ r /] by Def6;
       hence frac r = 0 by A2;
      end;
-        now
+     now
       assume not r is Integer;
       then [\ r /] < r by Th48;
       then [\ r /] - r < r - r by REAL_1:54;
@@ -1295,10 +1286,10 @@ A1:   now
      hence thesis by A1;
     end;
 
-  theorem
-        0 < frac r iff r is not integer
+theorem
+  0 < frac r iff r is not integer
     proof
-        now
+    now
       assume not r is Integer;
       then 0 <> frac r by Th71;
       hence 0 < frac r by Th69;
@@ -1308,27 +1299,27 @@ A1:   now
 
 :: Functions div and mod
 
- definition
+definition
   let i1,i2 be Integer;
-   func i1 div i2 -> Integer equals
+  func i1 div i2 -> Integer equals
     :Def7:  [\ i1 / i2 /];
-   correctness;
- end;
+  correctness;
+end;
 
- definition
+definition
   let i1,i2 be Integer;
-   func i1 mod i2 -> Integer equals
+  func i1 mod i2 -> Integer equals
     :Def8:  i1 - (i1 div i2) * i2 if i2 <> 0
             otherwise 0;
-   correctness;
- end;
+  correctness;
+end;
 
 :: The divisibility relation
 
- definition
+definition
   let i1,i2 be Integer;
   pred i1 divides i2 means
-         ex i3 st i2 = i1 * i3;
+    ex i3 st i2 = i1 * i3;
   reflexivity
   proof
    let a be Integer;
@@ -1336,12 +1327,12 @@ A1:   now
    take x;
    thus thesis;
   end;
- end;
+end;
 
 canceled;
 
 theorem Th74:
- for r being real number st r <> 0 holds [\ r / r /] = 1
+  for r being real number st r <> 0 holds [\ r / r /] = 1
   proof
     let r be real number;
     assume r <> 0;
@@ -1350,18 +1341,18 @@ theorem Th74:
   end;
 
 theorem
-      for i being Integer holds i div 0 = 0
+  for i being Integer holds i div 0 = 0
   proof
     let i be Integer;
 A1: 0 - 1 < 0;
-         i / 0 = i * 0" by XCMPLX_0:def 9
+    i / 0 = i * 0" by XCMPLX_0:def 9
          .= i * 0;
     then [\ i / 0 /] = 0 by A1,Def4;
     hence thesis by Def7;
   end;
 
 theorem Th76:
- for i being Integer st i <> 0 holds i div i = 1
+  for i being Integer st i <> 0 holds i div i = 1
   proof
     let i be Integer;
     assume i <> 0;
@@ -1370,7 +1361,7 @@ theorem Th76:
   end;
 
 theorem
-      for i being Integer holds i mod i = 0
+  for i being Integer holds i mod i = 0
   proof
     let i be Integer;
     per cases;
@@ -1388,14 +1379,14 @@ begin :: Addenda
 :: from FSM_1
 
 theorem
- k < i implies ex j being Nat st j = i-k & 1 <= j
+  k < i implies ex j being Element of NAT st j = i-k & 1 <= j
 proof
- assume k < i; then A1: k - k < i - k by REAL_1:54;
-then A2: 0 < i - k;
-  reconsider j = i - k as Nat by A1,Th16;
+  assume k < i; then A1: k - k < i - k by REAL_1:54;
+  then A2: 0 < i - k;
+  reconsider j = i - k as Element of NAT by A1,Th16;
   take j; thus j = i - k;
   reconsider j' = j, 0' = 0 as Integer;
-      0' + 1 <= j' by A2,Th20;
- hence 1 <= j;
+  0' + 1 <= j' by A2,Th20;
+  hence 1 <= j;
 end;
 

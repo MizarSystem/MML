@@ -13,7 +13,7 @@ environ
       NAT_1, NEWTON, FUNCT_1, SEQ_1, SEQ_2, SEQM_3, INT_1, SQUARE_1, SEQ_4,
       RAT_1, COMPLEX1;
  constructors REAL_1, NAT_1, SEQ_2, SEQM_3, SQUARE_1, SEQ_4, RAT_1, PARTFUN1,
-      NEWTON, INT_2, MEMBERED, XBOOLE_0, COMPLEX1;
+      NEWTON, INT_2, MEMBERED, XBOOLE_0, COMPLEX1, INT_1;
  clusters INT_1, RAT_1, XREAL_0, SEQ_1, RELSET_1, NEWTON, NAT_1, MEMBERED,
       ZFMISC_1, XBOOLE_0, ORDINAL2, COMPLEX1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
@@ -42,8 +42,9 @@ registration let i be Integer;
   coherence
   proof
 A1: 0 <= abs i by ABSVALUE:5;
-    abs i is Integer by Lm0;
-    hence thesis by INT_1:16,A1;
+    abs i is Integer by Lm0;then
+    abs i in NAT by A1,INT_1:16;
+    hence thesis by ORDINAL2:def 21;
   end;
 end;
 
@@ -313,8 +314,8 @@ proof
  then a<=a |^ 0 * a by Def1;
  then A3: P[0] by NEWTON:11;
  A4: for m1 st P[m1] holds P[m1+1]
- proof let m1 such that A5: a <= a |^ (m1+1);  a>0 by A1,AXIOMS:22;
-  then a*1 <= a |^ (m1+1) * a by A1,A5,SEQ_4:7; hence thesis by NEWTON:11;
+ proof let m1 such that A5: a <= a |^ (m1+1);
+  a*1 <= a |^ (m1+1) * a by A1,A5,SEQ_4:7; hence thesis by NEWTON:11;
  end;
   for m1 holds P[m1] from NAT_1:sch 1(A3,A4);
  hence thesis by A2;
@@ -325,13 +326,13 @@ theorem
   1 < a & 2 <= n implies a < a |^ n
 proof  let n be natural number;
 assume A1: 1 < a & 2 <= n;
- then A2: a>0 by AXIOMS:22;
+ then A2: a>0;
  A3: ex m st n = 2+m by A1,NAT_1:28;
  A4: a |^ (2+0) = a GeoSeq.(1+1) by Def1
  .= a GeoSeq.(0+1) * a by Th4 .= a GeoSeq.0 * a * a by Th4
  .= 1*a*a by Th4 .= a*a;
  defpred P[Nat] means a < a |^ (2+$1);
- A5: a*a > a*1 by A1,A2,REAL_1:70;
+ A5: a*a > a*1 by A1,REAL_1:70;
  then A6: P[0] by A4;
  A7: for m1 st P[m1] holds P[m1+1]
  proof let m1; assume a < a |^ (2+m1);
@@ -431,7 +432,7 @@ assume
    proof let n be natural number such that
   A6: (1 + a) |^ n <= 1 + 3 |^ n * a;
       1 < 1 + a by A1,REAL_1:69;
-  then A7: 0 <= 1 + a by AXIOMS:22;
+  then A7: 0 <= 1 + a;
   A8: 1 <= 3 |^ n
      proof now per cases;
      suppose A9: 0 = n;  n is Nat by ORDINAL2:def 21;
@@ -446,7 +447,7 @@ assume
        end;
        end; hence thesis;
      end;
-  then A10: 0 < 3 |^ n by AXIOMS:22;
+  then A10: 0 < 3 |^ n;
       1 * a <= 3 |^ n * a by A1,A8,AXIOMS:25;
 then A11: 1 + a <= 1 + 3 |^ n * a by REAL_1:55;
   A12: (1 + 3 |^ n * a) * (1+a) = 1 + a + (3 |^ n * a + 3 |^ n * (a * a));
@@ -595,7 +596,7 @@ A9:    1 <= a implies ex c be real number st
  A17: not a < d |^ n
    proof assume A18: a < d |^ n;
    set b = d * (1 - a / d |^ n) / (n + 1);
-  A19: 0 < d |^ n by A2,A18,AXIOMS:22;
+  A19: 0 < d |^ n by A2,A18;
   A20: 0 < n + 1 by NAT_1:19;
   then A21: (n + 1)" > 0 by REAL_1:72;
   then A22: 1/(n+1) > 0 by XCMPLX_1:217;
@@ -941,12 +942,12 @@ end;
 
 theorem Th38:
 a>=1 & n>=1 implies n -Root a >= 1 & a >= n -Root a
-proof assume A1: a>=1 & n>=1; then A2: a>0 by AXIOMS:22;
+proof assume A1: a>=1 & n>=1; 
     n -Root a >= n -Root 1 by A1,Th36;
- hence n -Root a >= 1 by A1,Th29; A3: a>=0 by A1,AXIOMS:22;
+ hence n -Root a >= 1 by A1,Th29; 
     a <= a |^ n by A1,Th20;
- then n -Root a <= n -Root (a |^ n) by A1,A3,Th36;
- hence thesis by A1,A2,Lm3;
+ then n -Root a <= n -Root (a |^ n) by A1,Th36;
+ hence thesis by A1,Lm3;
 end;
 
 theorem Th39:
@@ -973,7 +974,7 @@ end;
 
 theorem Th40:
 a>0 & n>=1 implies n -Root a - 1 <= (a-1)/n
-proof assume A1: a>0 & n>=1; then A2: n>0 by AXIOMS:22;
+proof assume A1: a>0 & n>=1; then A2: n>0;
  A3: n<>0 by A1;
     n -Root a > 0 by A1,Def3;
  then n -Root a - 1 > 0 - 1 by REAL_1:54
@@ -999,7 +1000,7 @@ holds s is convergent & lim s = 1
 proof let s be Real_Sequence;
  let a such that A1: a>=1;
  assume A2: for n st n>=1 holds s.n = n -Root a;
- A3: a>0 by A1,AXIOMS:22;
+ A3: a>0 by A1;
  deffunc O(Nat) = (a-1)/($1+1);
  consider s1 being Real_Sequence such that A4:
  for n holds s1.n = O(n) from SEQ_1:sch 1;
@@ -1079,10 +1080,10 @@ proof let s be Real_Sequence;
        .= abs(1 - m -Root a)*abs((m -Root a)") by ABSVALUE:10;
 A15:   a<=m -Root a & m -Root a<1 by A1,A3,A11,Th39;
      0<m -Root a & m -Root a<1 by A1,A3,A11,Th39;
-   then A16: 0<(m -Root a)" & m -Root a<1 by REAL_1:72;
+   then 0<(m -Root a)" & m -Root a<1 by REAL_1:72;
    then (m -Root a)*(m -Root a)"<1*(m -Root a)" by REAL_1:70;
     then 1<(m -Root a)" by A13,XCMPLX_0:def 7;
-   then A17: 1<abs((m -Root a)") by A16,ABSVALUE:def 1;
+   then A17: 1<abs((m -Root a)") by ABSVALUE:def 1;
       0<>1 - m -Root a by A15,SQUARE_1:11;
    then abs(1 - m -Root a) > 0 by ABSVALUE:6;
    then 1*abs(1 - m -Root a) < abs(1 - m -Root a)*abs((m -Root
@@ -1492,7 +1493,7 @@ end;
 
 theorem
 Th61: a>0 & n>=1 & p = n" implies a #Q p = n -Root a
-proof assume A1: a>0 & n>=1 & p = n"; then A2: n>0 by AXIOMS:22;
+proof assume A1: a>0 & n>=1 & p = n"; then A2: n>0;
  A3: p=1/n by A1,XCMPLX_1:217;
  reconsider q=n as Rational;
  numerator(p)=denominator(q) & denominator(p)=numerator(q) by A2,A3,RAT_1:88;
@@ -1545,7 +1546,7 @@ proof assume A1: a>0;
  reconsider k=n as Integer;
  A14: denominator(p+q) > 0 by RAT_1:27;
  A15: denominator(p+q) <> 0 by RAT_1:27;
-     denominator(p+q)*n > 0 by A9,A13,AXIOMS:22;
+     denominator(p+q)*n > 0 by A9,A13;
  then denominator(p+q)*n/denominator(p+q) > 0 by A14,SEQ_2:6;
  then n>0 by A15,XCMPLX_1:90;
  then A16: n>=0+1 by NAT_1:38; A17: denominator(p+q) >= 1 by RAT_1:29;
@@ -1703,10 +1704,10 @@ end;
 
 theorem
 Th72: a>=1 & p<=0 implies a #Q p <= 1
-proof assume A1: a>=1 & p<=0; then A2: a>0 by AXIOMS:22;
- then A3: a #Q p > 0 by Th63;  -p>=-0 by A1,REAL_1:50;
+proof assume A1: a>=1 & p<=0; then A2: a>0;
+ -p>=-0 by A1,REAL_1:50;
  then a #Q (-p) >= 1 by A1,Th71; then 1 / a #Q p >= 1 by A2,Th65; hence
-    a #Q p <= 1 by A3,REAL_2:118;
+    a #Q p <= 1 by REAL_2:118;
 end;
 
 theorem
@@ -1727,7 +1728,7 @@ end;
 
 theorem
 Th74: a>=1 & p>=q implies a #Q p >= a #Q q
-proof assume A1: a>=1 & p>=q; then A2: a>0 by AXIOMS:22;
+proof assume A1: a>=1 & p>=q; then A2: a>0;
     now per cases by A1,REAL_1:def 5;
  suppose p=q; hence a #Q p >= a#Q q;
  end;
@@ -1743,7 +1744,7 @@ end;
 
 theorem
 Th75: a>1 & p>q implies a #Q p > a #Q q
-proof assume A1: a>1 & p>q; then A2: a>0 by AXIOMS:22;
+proof assume A1: a>1 & p>q; then A2: a>0;
  A3: p-q>0 by A1,SQUARE_1:11;
  A4: a #Q q > 0 by A2,Th63;
  A5: a #Q q <> 0 by A2,Th63;
@@ -1757,13 +1758,12 @@ theorem
 Th76: a>0 & a<1 & p>0 implies a #Q p < 1
 proof assume A1: a>0 & a<1 & p>0;
  reconsider q=0 as Rational;
- A2: a #Q p > 0 by A1,Th63;
  A3: 1/a>1 by A1,Lm5,REAL_2:151;
- then A4: 1/a>0 by AXIOMS:22;
+ then A4: 1/a>0;
     (1/a) #Q p > (1/a) #Q q by A1,A3,Th75;
  then (1/a) #Q p > 1 by A4,Th58;
  then 1/a #Q p > 1 by A1,Th68;
- hence thesis by A2,REAL_2:117;
+ hence thesis by REAL_2:117;
 end;
 
 theorem
@@ -1944,7 +1944,7 @@ a #Q s is convergent
 proof let s be Rational_Sequence; let a;
  assume that A1: s is convergent and
              A2: a>=1;
- A3: a>0 by A2,AXIOMS:22;
+ A3: a>0 by A2;
     s is bounded by A1,SEQ_2:27;
  then consider d be real number such that
  A4: 0<d & for n holds abs(s.n)<d by SEQ_2:15;
@@ -2127,7 +2127,7 @@ lim s1 = lim s2 & a>=1 holds lim a #Q s1 = lim a #Q s2
 proof let s1,s2 be Rational_Sequence; let a;
  assume that A1: s1 is convergent & s2 is convergent & lim s1 = lim s2 and
              A2: a>=1;
- A3: a>0 by A2,AXIOMS:22;
+ A3: a>0 by A2;
  A4: s1-s2 is convergent by A1,SEQ_2:25;
 A5: lim(s1-s2) = lim s1 - lim s2 by A1,SEQ_2:26 .= 0 by A1;
     s2 is bounded by A1,SEQ_2:27;
@@ -2279,7 +2279,7 @@ proof let s1,s2 be Rational_Sequence; let a;
  end;
  suppose A9: a<1; then a/a<1/a by A2,REAL_1:73;
 then A10:  1<1/a by A2,XCMPLX_1:60;
-  then A11: 1/a>0 by AXIOMS:22;
+  then A11: 1/a>0;
   A12: lim (1/a) #Q s1 = lim (1/a) #Q s2 by A1,A10,Lm7;
   A13: (1/a) #Q s1 is convergent by A1,A11,Th82;
   A14: (1/a) #Q s2 is convergent by A1,A11,Th82;
@@ -2579,7 +2579,7 @@ Th95: a > 0 implies a #R b > 0
 theorem Th96:
 a>=1 & c>=b implies a #R c >= a #R b
 proof assume A1: a>=1 & c>=b;
- then A2: a>0 by AXIOMS:22;
+ then A2: a>0;
  consider s1 being Rational_Sequence such that
  A3: s1 is convergent & c = lim s1 & for n holds s1.n>=c by Th80;
  consider s2 being Rational_Sequence such that
@@ -2600,7 +2600,7 @@ end;
 theorem Th97:
 a>1 & c>b implies a #R c > a #R b
 proof assume A1: a>1 & c>b;
- then A2: a>0 by AXIOMS:22;
+ then A2: a>0;
  consider p such that A3: b<p & p<c by A1,RAT_1:22;
  consider q such that A4: b<q & q<p by A3,RAT_1:22;
  A5: a #Q q < a #Q p by A1,A4,Th75;
@@ -2644,7 +2644,7 @@ end;
 theorem
 Th99: a >= 1 & b >= 0 implies a #R b >= 1
 proof assume A1: a >= 1 & b >= 0;
- then A2: a>0 by AXIOMS:22;
+ then A2: a>0;
  consider s being Rational_Sequence such that
  A3: s is convergent & b = lim s & for n holds s.n>=b by Th80;
  A4: a #Q s is convergent by A2,A3,Th82;
@@ -2658,14 +2658,14 @@ end;
 
 theorem
 Th100: a > 1 & b > 0 implies a #R b > 1
-proof assume A1: a>1 & b>0; then A2: a>0 by AXIOMS:22;
+proof assume A1: a>1 & b>0; then A2: a>0;
     a #R b > a #R 0 by A1,Th97;
  hence thesis by A2,Th85;
 end;
 
 theorem
 Th101: a >= 1 & b <= 0 implies a #R b <= 1
-proof assume A1: a>=1 & b<=0; then A2: a>0 by AXIOMS:22;
+proof assume A1: a>=1 & b<=0; then A2: a>0;
     -b>=-0 by A1,REAL_1:50;
  then a #R (-b) >= 1 by A1,Th99;
  then 1 / a #R b >= 1 by A2,Th90;
@@ -2675,7 +2675,7 @@ end;
 
 theorem
     a > 1 & b < 0 implies a #R b < 1
-proof assume A1: a>1 & b<0; then A2: a>0 by AXIOMS:22;
+proof assume A1: a>1 & b<0; then A2: a>0;
     -b>0 by A1,REAL_1:66;
  then a #R (-b) > 1 by A1,Th100;
  then 1 / a #R b > 1 by A2,Th90;
@@ -2761,7 +2761,7 @@ XCMPLX_1:75
    then s1.m*(lim s1)">=(lim s1)*(lim s1)" by A28,AXIOMS:25;
    then s1.m*(lim s1)">=1 by A2,XCMPLX_0:def 7;
    then A34: (s1/"s).m >= 1 by A33,XCMPLX_0:def 9;
-   then A35: (s1/"s).m > 0 by AXIOMS:22;
+   then A35: (s1/"s).m > 0;
       ((s1/"s).m) #Q p <= ((s1/"s).m) #Q q by A14,A34,Th74;
    then ((s1/"s).m) #Q p <= ((s1/"s).m) |^ m0 by A35,Th60;
    then A36: ((s1/"s).m) #Q p - 1 <= ((s1/"s).m) |^ m0 - 1 by REAL_1:49;
@@ -2809,7 +2809,7 @@ XCMPLX_1:75
    then s1.m*(s1.m)"<=(lim s1)*(s1.m)" by A39,AXIOMS:25;
    then (lim s1)*(s1.m)">=1 by A43,XCMPLX_0:def 7;
    then A46: (s/"s1).m >= 1 by A45,XCMPLX_0:def 9;
-   then A47: (s/"s1).m > 0 by AXIOMS:22;
+   then A47: (s/"s1).m > 0;
       ((s/"s1).m) #Q p <= ((s/"s1).m) #Q q by A14,A46,Th74;
    then ((s/"s1).m) #Q p <= ((s/"s1).m) |^ m0 by A47,Th60;
    then A48: ((s/"s1).m) #Q p - 1 <= ((s/"s1).m) |^ m0 - 1 by REAL_1:49;
@@ -2932,7 +2932,7 @@ a>=1 & s1 is convergent & s2 is convergent &
 proof assume that A1: a>=1 and
                   A2: s1 is convergent & s2 is convergent and
                   A3: for n holds s2.n = a #R (s1.n);
- A4: a>0 by A1,AXIOMS:22;
+ A4: a>0 by A1;
  set d = abs(lim s1)+1;
  A5: abs(lim s1)<abs(lim s1) + 1 by REAL_1:69;
     now let c be real number; assume A6: c>0;

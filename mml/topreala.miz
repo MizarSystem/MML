@@ -1,0 +1,1615 @@
+:: Some Properties of Rectangles on the Plane
+::  by Artur Korni{\l}owicz and Yasunari Shidama
+:: 
+:: Received October 18, 2004
+:: Copyright (c) 2004 Association of Mizar Users
+
+environ
+
+ vocabulary PRE_TOPC, EUCLID, RELAT_1, ARYTM, ZF_LANG, SUBSET_1, CARD_3,
+      TOPS_1, INT_1, FUNCT_1, ORDINAL2, ARYTM_1, MCART_1, T_0TOPSP, TOPS_2,
+      ARYTM_3, RCOMP_1, ASYMPT_0, FUNCOP_1, TOPMETR, SGRAPH1, BOOLE, TOPREALA,
+      FCONT_1, FINSEQ_1, PARTFUN1, TMAP_1, CONNSP_2, JGRAPH_6, NATTRA_1,
+      TDLAT_3, PARTFUN2, FINSEQ_4, MONOID_0;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, RELAT_1, FUNCT_1,
+      RELSET_1, PARTFUN1, FUNCT_2, SEQ_1, ORDINAL2, NUMBERS, XCMPLX_0, XREAL_0,
+      REAL_1, NAT_1, FUNCOP_1, FINSEQ_4, PARTFUN2, INT_1, CARD_3, FINSEQ_1,
+      FUNCT_4, MONOID_0, RCOMP_1, RCOMP_2, FCONT_1, STRUCT_0, PRE_TOPC, TOPS_1,
+      BORSUK_1, TSEP_1, TOPS_2, TDLAT_3, CONNSP_2, T_0TOPSP, TMAP_1, TOPMETR,
+      EUCLID, JGRAPH_6, TOPALG_2;
+ constructors GRCAT_1, PARTFUN2, REAL_1, TOPS_2, TOPS_1, BORSUK_3, TOPALG_2,
+      COMPTS_1, FCONT_1, REALSET2, CARD_3, TMAP_1, RCOMP_2, FINSEQ_4, JGRAPH_6,
+      INTEGRA2, PSCOMP_1, TDLAT_3, MONOID_0, YELLOW_8;
+ clusters STRUCT_0, RELSET_1, ARYTM_3, XREAL_0, REAL_1, BORSUK_1, PRE_TOPC,
+      INT_1, TOPALG_2, TOPS_1, YELLOW13, TOPREAL6, BORSUK_6, FINSEQ_1, FUNCT_4,
+      TOPGRP_1, TSEP_1, PSCOMP_1, YELLOW12, MONOID_0;
+ requirements NUMERALS, BOOLE, SUBSET, ARITHM, REAL;
+ definitions TARSKI, XBOOLE_0, FUNCT_2, PRE_TOPC, T_0TOPSP, TMAP_1, STRUCT_0,
+      RCOMP_1, FCONT_1, PARTFUN2, MONOID_0;
+ theorems PRE_TOPC, XREAL_0, FUNCT_2, BORSUK_1, INT_1, EUCLID, TOPS_2,
+      BORSUK_3, FUNCT_1, XCMPLX_1, TOPMETR, RELAT_1, FUNCOP_1, RCOMP_2,
+      TOPREAL3, TOPREAL6, JORDAN16, BORSUK_6, TARSKI, ZFMISC_1, FUNCT_4,
+      TSEP_1, HILBERT3, FINSEQ_1, TMAP_1, XBOOLE_1, JORDAN6, REAL_1, TOPS_3,
+      FCONT_1, JORDAN1, CONNSP_2, FRECHET, XBOOLE_0, FINSEQ_3, ORDINAL2, NAT_1,
+      RCOMP_1, TOPREAL5, AXIOMS, TEX_2, DOMAIN_1, TOPS_1, TOPGRP_1, T_0TOPSP,
+      TREAL_1, CARD_3, SUBSET_1, MSAFREE3, JGRAPH_6, STRUCT_0, EXTENS_1,
+      TDLAT_3, ENUMSET1, FINSEQ_4, TOPALG_3;
+
+begin :: Real numbers
+
+set R = the carrier of R^1;
+Lm15: the carrier of [:R^1,R^1:] = [:R,R:] by BORSUK_1:def 5;
+reconsider p1 = 1 as positive (real number);
+
+reserve
+  n for Nat,
+  i for Integer,
+  a, b, r, s for real number;
+
+theorem
+  frac(r+i) = frac r
+proof 
+  thus frac(r+i) = r+i-[\r+i/] by INT_1:def 6
+    .= r+i-([\r/]+i) by INT_1:51
+    .= r-[\r/]+i-i
+    .= frac r by INT_1:def 6;
+end;
+
+theorem Tfrac1:
+  r <= a & a < [\r/]+1 implies [\a/] = [\r/]
+proof 
+  assume
+a1: r <= a;
+  [\r/] <= r by INT_1:def 4;
+  then
+a2: [\r/] <= a by a1,AXIOMS:22;
+  assume a < [\r/]+1;
+  then a-1 < [\r/]+1-1 by REAL_1:54;
+  hence [\a/] = [\r/] by a2,INT_1:def 4;
+end;
+
+theorem Tfrac2:
+  r <= a & a < [\r/]+1 implies frac r <= frac a
+proof 
+  assume
+Z0: r <= a;
+  assume a < [\r/]+1;
+  then
+a0: [\a/] = [\r/] by Z0,Tfrac1;
+  frac a = a-[\a/] & frac r = r-[\r/] by INT_1:def 6;
+  hence frac r <= frac a by Z0,a0,REAL_1:49;
+end;
+
+theorem
+  r < a & a < [\r/]+1 implies frac r < frac a
+proof 
+  assume
+Z0: r < a;
+  assume a < [\r/]+1;
+  then
+a0: [\a/] = [\r/] by Z0,Tfrac1;
+  frac a = a-[\a/] & frac r = r-[\r/] by INT_1:def 6;
+  hence frac r < frac a by Z0,a0,REAL_1:54;
+end;
+
+theorem Tfrac3:
+  a >= [\r/]+1 & a <= r+1 implies [\a/] = [\r/]+1
+proof 
+  assume
+a1: a >= [\r/]+1;
+  assume a <= r+1;
+  then
+a2: a-1 <= r+1-1 by REAL_1:49;
+  r < [\r/]+1 by INT_1:52;
+  then a-1 < [\r/]+1 by a2,AXIOMS:22;
+  hence [\a/] = [\r/]+1 by a1,INT_1:def 4;
+end;
+
+theorem Tfrac4:
+  a >= [\r/]+1 & a < r+1 implies frac a < frac r
+proof 
+  assume
+Z0: a >= [\r/]+1;
+  assume
+Z1: a < r+1;
+  then
+a0: [\a/] = [\r/]+1 by Z0,Tfrac3;
+a1: frac a = a-[\a/] & frac r = r-[\r/] by INT_1:def 6;
+  a-1 < r by Z1,REAL_1:84;
+  then a-1-[\r/] < r-[\r/] by REAL_1:92;
+  hence frac a < frac r by a0,a1;
+end;
+
+theorem
+  r <= a & a < r+1 & r <= b & b < r+1 & frac a = frac b implies a = b
+proof 
+  assume that
+a1: r <= a and
+a2: a < r+1 and
+a3: r <= b and
+a4: b < r+1 and
+a5: frac a = frac b;
+a6: frac a = a-[\a/] by INT_1:def 6;
+a7: frac b = b-[\b/] by INT_1:def 6;
+  [\r/] <= r by INT_1:def 4;
+  then
+a9: [\r/] <= a & [\r/] <= b by a1,a3,AXIOMS:22;
+  per cases;
+  suppose a < [\r/]+1 & b >= [\r/]+1;
+  then frac a >= frac r & frac b < frac r by a1,a4,Tfrac2,Tfrac4;
+  hence thesis by a5;
+  end;
+  suppose a >= [\r/]+1 & b < [\r/]+1;
+  then frac a < frac r & frac b >= frac r by a2,a3,Tfrac2,Tfrac4;
+  hence thesis by a5;
+  end;
+  suppose a < [\r/]+1 & b < [\r/]+1;
+  then a-1 < [\r/]+1-1 & b-1 < [\r/]+1-1 by REAL_1:54;
+  then
+a8: [\a/] = [\r/] & [\b/] = [\r/] by a9,INT_1:def 4;
+  thus a = a-[\a/]+[\a/]
+        .= b by a5,a6,a7,a8;
+  end;
+  suppose a >= [\r/]+1 & b >= [\r/]+1;
+  then
+a8: [\a/] = [\r/]+1 & [\b/] = [\r/]+1 by a2,a4,Tfrac3;
+  thus a = a-[\a/]+[\a/]
+        .= b by a5,a6,a7,a8;
+  end;
+end;
+
+begin :: Subsets of REAL
+
+registration
+  let r be real number,
+      s be positive (real number);
+  cluster ].r,r+s.[ -> non empty;
+coherence
+proof 
+  r+0 < r+s by REAL_1:53;
+  then r < (r+(r+s))/2 & (r+(r+s))/2 < r+s by TOPREAL3:3;
+  hence thesis by JORDAN6:45;
+end;
+  cluster [.r,r+s.[ -> non empty;
+coherence
+proof 
+  r+0 < r+s by REAL_1:53;
+  hence thesis by RCOMP_2:3;
+end;
+  cluster ].r,r+s.] -> non empty;
+coherence
+proof 
+  r+0 < r+s by REAL_1:53;
+  hence thesis by RCOMP_2:4;
+end;
+  cluster [.r,r+s.] -> non empty;
+coherence
+proof 
+  r+0 < r+s by REAL_1:53;
+  hence thesis by TOPREAL5:1;
+end;
+  cluster ].r-s,r.[ -> non empty;
+coherence
+proof 
+  r-s < r-0 by REAL_1:92;
+  then r-s < (r-s+r)/2 & (r-s+r)/2 < r by TOPREAL3:3;
+  hence thesis by JORDAN6:45;
+end;
+  cluster [.r-s,r.[ -> non empty;
+coherence
+proof 
+  r-s < r-0 by REAL_1:92;
+  hence thesis by RCOMP_2:3;
+end;
+  cluster ].r-s,r.] -> non empty;
+coherence
+proof 
+  r-s < r-0 by REAL_1:92;
+  hence thesis by RCOMP_2:4;
+end;
+  cluster [.r-s,r.] -> non empty;
+coherence
+proof 
+  r-s < r-0 by REAL_1:92;
+  hence thesis by TOPREAL5:1;
+end;
+end;
+
+registration
+  let r be non positive (real number),
+      s be positive (real number);
+  cluster ].r,s.[ -> non empty;
+coherence
+proof
+  r < (r+s)/2 & (r+s)/2 < s by TOPREAL3:3;
+  hence thesis by JORDAN6:45;
+end;
+  cluster [.r,s.[ -> non empty;
+coherence by RCOMP_2:3;
+  cluster ].r,s.] -> non empty;
+coherence by RCOMP_2:4;
+  cluster [.r,s.] -> non empty;
+coherence by TOPREAL5:1;
+end;
+
+registration
+  let r be negative (real number),
+      s be non negative (real number);
+  cluster ].r,s.[ -> non empty;
+coherence
+proof
+  r < (r+s)/2 & (r+s)/2 < s by TOPREAL3:3;
+  hence thesis by JORDAN6:45;
+end;
+  cluster [.r,s.[ -> non empty;
+coherence by RCOMP_2:3;
+  cluster ].r,s.] -> non empty;
+coherence by RCOMP_2:4;
+  cluster [.r,s.] -> non empty;
+coherence by TOPREAL5:1;
+end;
+
+:: r <= a & b <= s implies [.a,b.] c= [.r,s.];  TREAL_1:1
+:: r <= a & b <= s implies ].a,b.[ c= ].r,s.[;  JGRAPH_3:9
+
+theorem
+  r <= a & b < s implies [.a,b.] c= [.r,s.[
+proof 
+  assume that
+A1: r <= a and
+A2: b < s;
+  let x be set such that
+a1: x in [.a,b.];
+  reconsider x as Real by a1;
+  a <= x & x <= b by a1,TOPREAL5:1;
+  then r <= x & x < s by A1,A2,AXIOMS:22;
+  hence thesis by RCOMP_2:3;
+end;
+
+theorem
+  r < a & b <= s implies [.a,b.] c= ].r,s.]
+proof 
+  assume that
+A1: r < a and
+A2: b <= s;
+  let x be set such that
+a1: x in [.a,b.];
+  reconsider x as Real by a1;
+  a <= x & x <= b by a1,TOPREAL5:1;
+  then r < x & x <= s by A1,A2,AXIOMS:22;
+  hence thesis by RCOMP_2:4;
+end;
+
+theorem
+  r < a & b < s implies [.a,b.] c= ].r,s.[
+proof 
+  assume that
+A1: r < a and
+A2: b < s;
+  let x be set such that
+a1: x in [.a,b.];
+  reconsider x as Real by a1;
+  a <= x & x <= b by a1,TOPREAL5:1;
+  then r < x & x < s by A1,A2,AXIOMS:22;
+  hence thesis by JORDAN6:45;
+end;
+
+theorem SIN5:
+  r <= a & b <= s implies [.a,b.[ c= [.r,s.]
+proof 
+  assume that
+A1: r <= a and
+A2: b <= s;
+  let x be set such that
+a1: x in [.a,b.[;
+  reconsider x as Real by a1;
+  a <= x & x < b by a1,RCOMP_2:3;
+  then r <= x & x <= s by A1,A2,AXIOMS:22;
+  hence thesis by TOPREAL5:1;
+end;
+
+theorem
+  r <= a & b <= s implies [.a,b.[ c= [.r,s.[
+proof 
+  assume that
+A1: r <= a and
+A2: b <= s;
+  let x be set such that
+a1: x in [.a,b.[;
+  reconsider x as Real by a1;
+  a <= x & x < b by a1,RCOMP_2:3;
+  then r <= x & x < s by A1,A2,AXIOMS:22;
+  hence thesis by RCOMP_2:3;
+end;
+
+theorem
+  r < a & b <= s implies [.a,b.[ c= ].r,s.]
+proof 
+  assume that
+A1: r < a and
+A2: b <= s;
+  let x be set such that
+a1: x in [.a,b.[;
+  reconsider x as Real by a1;
+  a <= x & x < b by a1,RCOMP_2:3;
+  then r < x & x <= s by A1,A2,AXIOMS:22;
+  hence thesis by RCOMP_2:4;
+end;
+
+theorem SIN8:
+  r < a & b <= s implies [.a,b.[ c= ].r,s.[
+proof 
+  assume that
+A1: r < a and
+A2: b <= s;
+  let x be set such that
+a1: x in [.a,b.[;
+  reconsider x as Real by a1;
+  a <= x & x < b by a1,RCOMP_2:3;
+  then r < x & x < s by A1,A2,AXIOMS:22;
+  hence thesis by JORDAN6:45;
+end;
+
+theorem SIN9:
+  r <= a & b <= s implies ].a,b.] c= [.r,s.]
+proof 
+  assume that
+A1: r <= a and
+A2: b <= s;
+  let x be set such that
+a1: x in ].a,b.];
+  reconsider x as Real by a1;
+  a < x & x <= b by a1,RCOMP_2:4;
+  then r <= x & x <= s by A1,A2,AXIOMS:22;
+  hence thesis by TOPREAL5:1;
+end;
+
+theorem
+  r <= a & b < s implies ].a,b.] c= [.r,s.[
+proof 
+  assume that
+A1: r <= a and
+A2: b < s;
+  let x be set such that
+a1: x in ].a,b.];
+  reconsider x as Real by a1;
+  a < x & x <= b by a1,RCOMP_2:4;
+  then r <= x & x < s by A1,A2,AXIOMS:22;
+  hence thesis by RCOMP_2:3;
+end;
+
+theorem
+  r <= a & b <= s implies ].a,b.] c= ].r,s.]
+proof 
+  assume that
+A1: r <= a and
+A2: b <= s;
+  let x be set such that
+a1: x in ].a,b.];
+  reconsider x as Real by a1;
+  a < x & x <= b by a1,RCOMP_2:4;
+  then r < x & x <= s by A1,A2,AXIOMS:22;
+  hence thesis by RCOMP_2:4;
+end;
+
+theorem SIN12:
+  r <= a & b < s implies ].a,b.] c= ].r,s.[
+proof 
+  assume that
+A1: r <= a and
+A2: b < s;
+  let x be set such that
+a1: x in ].a,b.];
+  reconsider x as Real by a1;
+  a < x & x <= b by a1,RCOMP_2:4;
+  then r < x & x < s by A1,A2,AXIOMS:22;
+  hence thesis by JORDAN6:45;
+end;
+
+theorem SIN13:
+  r <= a & b <= s implies ].a,b.[ c= [.r,s.]
+proof 
+  assume that
+a4: r <= a and
+b1: b <= s;
+  let c be set;
+  assume
+a3: c in ].a,b.[;
+  then reconsider c as Real;
+  a < c & c < b by a3,JORDAN6:45;
+  then r <= c & c <= s by a4,b1,AXIOMS:22;
+  hence thesis by TOPREAL5:1;
+end;
+
+theorem
+  r <= a & b <= s implies ].a,b.[ c= [.r,s.[
+proof 
+  assume that
+a4: r <= a and
+b1: b <= s;
+  let c be set;
+  assume
+a3: c in ].a,b.[;
+  then reconsider c as Real;
+  a < c & c < b by a3,JORDAN6:45;
+  then r <= c & c < s by a4,b1,AXIOMS:22;
+  hence thesis by RCOMP_2:3;
+end;
+
+theorem
+  r <= a & b <= s implies ].a,b.[ c= ].r,s.]
+proof 
+  assume that
+a4: r <= a and
+b1: b <= s;
+  let c be set;
+  assume
+a3: c in ].a,b.[;
+  then reconsider c as Real;
+  a < c & c < b by a3,JORDAN6:45;
+  then r < c & c <= s by a4,b1,AXIOMS:22;
+  hence thesis by RCOMP_2:4;
+end;
+
+begin :: Functions
+
+theorem
+  for f being Function, x, X being set st
+    x in dom f & f.x in f.:X & f is one-to-one
+  holds x in X
+proof 
+  let f be Function,
+      x, X be set;
+  assume
+a0: x in dom f;
+  assume f.x in f.:X;
+  then
+a1: ex a being set st a in dom f & a in X & f.x = f.a by FUNCT_1:def 12;
+  assume f is one-to-one;
+  hence x in X by a0,a1,FUNCT_1:def 8;
+end;
+
+theorem
+  for f being FinSequence, i being natural number st i+1 in dom f holds
+  i in dom f or i = 0
+proof 
+  let f be FinSequence;
+  let i be natural number;
+  assume
+A1: i+1 in dom f;
+  1 <= i+1 by A1,FINSEQ_3:27;
+  then
+A2: 1 < i+1 or 1+0 = i+1 by REAL_1:def 5;
+  per cases by A2,NAT_1:38,XCMPLX_1:2;
+  suppose i = 0;
+  hence thesis;
+  end;
+  suppose
+A3: 1 <= i;
+A4: i is Nat by ORDINAL2:def 21;
+  i+1 <= len f by A1,FINSEQ_3:27;
+  then i <= len f by NAT_1:38;
+  hence thesis by A3,A4,FINSEQ_3:27;
+  end;
+end;
+
+theorem Tfpr:
+  for x, y, X, Y being set, f being Function
+    st x <> y & f in product ((x,y) --> (X,Y)) holds
+  f.x in X & f.y in Y
+proof 
+  let x, y, X, Y be set,
+      f be Function such that
+a1: x <> y and
+a2: f in product ((x,y) --> (X,Y));
+  set g = (x,y) --> (X,Y);
+  dom g = {x,y} by FUNCT_4:65;
+  then x in dom g & y in dom g by TARSKI:def 2;
+  then f.x in g.x & f.y in g.y by a2,CARD_3:18;
+  hence f.x in X & f.y in Y by a1,FUNCT_4:66;
+end;
+
+theorem T143:
+  for a, b being set holds <*a,b*> = (1,2) --> (a,b)
+proof 
+  let a, b be set;
+  set f = (1,2) --> (a,b);
+  set g = <*a,b*>;
+a1: dom g = {1,2} by FINSEQ_1:4,FINSEQ_3:29;
+a2: dom f = {1,2} by FUNCT_4:65;
+  now
+    let x be set;
+    assume
+a3:   x in dom f;
+    per cases by a2,a3,TARSKI:def 2;
+    suppose
+a4:   x = 1;
+    hence f.x = a by FUNCT_4:66
+       .= g.x by a4,FINSEQ_1:61;
+    end;
+    suppose
+a5:   x = 2;
+    hence f.x = b by FUNCT_4:66
+       .= g.x by a5,FINSEQ_1:61;
+    end;
+  end;
+  hence thesis by a1,a2,FUNCT_1:9;
+end;
+
+begin :: General topology
+
+registration
+  cluster constituted-FinSeqs non empty strict TopSpace;
+existence
+proof 
+  take TOP-REAL 1;
+  thus thesis;
+end;
+end;
+
+registration
+  let T be constituted-FinSeqs TopSpace;
+  cluster -> constituted-FinSeqs SubSpace of T;
+coherence
+proof 
+  let X be SubSpace of T;
+  let p be Element of X;
+a1: the carrier of X is Subset of the carrier of T by TSEP_1:1;
+  per cases;
+  suppose the carrier of X is non empty;
+  then p in the carrier of X;
+  then reconsider p as Point of T by a1;
+  p is FinSequence;
+  hence thesis;
+  end;
+  suppose the carrier of X is empty;
+  hence thesis by SUBSET_1:def 2;
+  end;
+end;
+end;
+
+theorem Tnei2:
+  for T being non empty TopSpace, Z being non empty SubSpace of T,
+      t being Point of T, z being Point of Z,
+      N being open a_neighborhood of t,
+      M being Subset of Z st t = z & M = N /\ [#]Z
+   holds M is open a_neighborhood of z
+proof 
+  let T be non empty TopSpace,
+      Z be non empty SubSpace of T,
+      t be Point of T,
+      z be Point of Z,
+      N be open a_neighborhood of t,
+      M be Subset of Z such that
+a0: t = z and
+a1: M = N /\ [#]Z;
+a6: [#]Z = the carrier of Z by PRE_TOPC:12;
+a4: t in Int N by CONNSP_2:def 1;
+a5: Int N c= N by TOPS_1:44;
+  M is open by a1,TOPS_2:32;
+  then Int M = M by TOPS_1:55;
+  then z in Int M by a0,a1,a6,a4,a5,XBOOLE_0:def 3;
+  hence thesis by a1,TOPS_2:32,CONNSP_2:def 1;
+end;
+
+registration
+  cluster empty -> discrete anti-discrete TopSpace;
+coherence
+proof 
+  let T be TopSpace;
+  assume T is empty;
+  then the carrier of T = {} by STRUCT_0:def 1;
+  then bool the carrier of T = {{}, the carrier of T}
+    by ZFMISC_1:1,ENUMSET1:69;
+  hence thesis by TDLAT_3:16;
+end;
+end;
+
+registration
+  let X be discrete TopSpace, Y be TopSpace;
+  cluster -> continuous map of X,Y;
+coherence by TEX_2:68;
+end;
+
+theorem Tqw:
+  for X being TopSpace, Y being TopStruct, f being map of X,Y st f is empty
+  holds f is continuous
+proof 
+  let X be TopSpace, Y be TopStruct,
+      f be map of X,Y such that
+a1: f is empty;
+  let P being Subset of Y;
+  assume P is closed;
+  f"P = {}X by a1,RELAT_1:172;
+  hence f"P is closed;
+end;
+
+registration
+  let X be TopSpace, Y be TopStruct;
+  cluster empty -> continuous map of X,Y;
+coherence by Tqw;
+end;
+
+theorem
+  for X being TopStruct, Y being non empty TopStruct,
+      Z being non empty SubSpace of Y,
+      f being map of X,Z 
+  holds f is map of X,Y
+proof 
+  let X be TopStruct, Y be non empty TopStruct, Z be non empty SubSpace of Y;
+  let f be map of X,Z;
+  the carrier of Z is Subset of the carrier of Y by TSEP_1:1;
+  then
+a1: rng f c= the carrier of Y by XBOOLE_1:1;
+  dom f = the carrier of X by FUNCT_2:def 1;
+  hence f is map of X,Y by a1,FUNCT_2:4;
+end;
+
+theorem
+  for S, T being non empty TopSpace,
+      X being Subset of S, Y being Subset of T,
+      f being continuous map of S,T,
+      g being map of S|X,T|Y st g = f|X
+  holds g is continuous
+proof 
+  let S, T be non empty TopSpace,
+      X be Subset of S,
+      Y be Subset of T,
+      f be continuous map of S,T,
+      g be map of S|X,T|Y such that
+a1: g = f|X;
+  set h = f|X;
+  dom f = the carrier of S by FUNCT_2:def 1;
+  then
+a2: dom h = X by RELAT_1:91;
+a3: the carrier of S|X = X by JORDAN1:1;
+  rng h c= the carrier of T;
+  then reconsider h as map of S|X,T by a2,a3,FUNCT_2:4;
+  h is continuous by TOPMETR:10;
+  hence g is continuous by a1,TOPMETR:9;
+end;
+
+theorem
+  for S, T being non empty TopSpace, Z being non empty SubSpace of T,
+      f being map of S,T,
+      g being map of S,Z st f = g & f is open holds
+   g is open
+proof 
+  let S, T be non empty TopSpace,
+      Z be non empty SubSpace of T,
+      f be map of S,T,
+      g be map of S,Z such that
+a1: f = g and
+a2: f is open;
+  for p being Point of S, P being open a_neighborhood of p
+    ex R being a_neighborhood of g.p st R c= g.:P
+  proof
+    let p be Point of S,
+        P be open a_neighborhood of p;
+    consider R being open a_neighborhood of f.p such that
+a3:   R c= f.:P by a2,TOPGRP_1:22;
+    [#]Z = the carrier of Z by PRE_TOPC:12;
+    then reconsider R2 = R /\ [#]Z as Subset of Z by XBOOLE_1:17;
+    reconsider R2 as a_neighborhood of g.p by a1,Tnei2;
+    take R2;
+    R2 c= R by XBOOLE_1:17;
+    hence R2 c= g.:P by a1,a3,XBOOLE_1:1;
+  end;
+  hence g is open by TOPGRP_1:23;
+end;
+
+theorem
+  for S, T being non empty TopSpace,
+      S1 being Subset of S, T1 being Subset of T,
+      f being map of S,T, g being map of S|S1,T|T1
+  st g = f|S1 & g is onto & f is open one-to-one
+  holds g is open
+proof 
+  let S, T be non empty TopSpace,
+      S1 be Subset of S,
+      T1 be Subset of T,
+      f be map of S,T,
+      g be map of S|S1,T|T1 such that
+a1: g = f|S1 and
+d1: rng g = the carrier of T|T1 and
+a2: f is open and
+d2: f is one-to-one;
+  let A be Subset of S|S1;
+  assume A is open;
+  then consider C being Subset of S such that
+a3: C is open and
+a4: C /\ [#](S|S1) = A by TOPS_2:32;
+a5: f.:C is open by a2,a3,T_0TOPSP:def 2;
+a6: [#](T|T1)= T1 by PRE_TOPC:def 10;
+b2: [#](T|T1)= the carrier of T|T1 by PRE_TOPC:12;
+e1: [#](S|S1)= the carrier of S|S1 by PRE_TOPC:12;
+a7: [#](S|S1)= S1 by PRE_TOPC:def 10;
+b1: g.:(C /\ S1) c= g.:C /\ g.:S1 by RELAT_1:154;
+  g.:A = (f.:C) /\ T1
+  proof
+    g.:C c= f.:C by a1,RELAT_1:161;
+    then g.:C /\ g.:S1 c= (f.:C) /\ T1 by a6,b2,XBOOLE_1:27;
+    hence g.:A c= (f.:C) /\ T1 by a4,a7,b1,XBOOLE_1:1;
+    let y be set;
+    assume
+c1:   y in (f.:C) /\ T1;
+    then y in f.:C by XBOOLE_0:def 3;
+    then consider x being Element of S such that
+c2:   x in C and
+c3:   y = f.x by FUNCT_2:116;
+    y in T1 by c1,XBOOLE_0:def 3;
+    then consider a being set such that
+c4:   a in dom g and
+c5:   g.a = y by d1,a6,FUNCT_1:def 5;
+r1: dom g c= dom f by a1,RELAT_1:89;
+r2: dom f = the carrier of S by FUNCT_2:def 1;
+    f.a = g.a by a1,c4,FUNCT_1:70;
+    then a = x by c3,c4,c5,r1,r2,d2,FUNCT_1:def 8;
+    then a in A by e1,c2,c4,a4,XBOOLE_0:def 3;
+    hence y in g.:A by c4,c5,FUNCT_1:def 12;
+  end;
+  hence g.:A is open by a5,a6,TOPS_2:32;
+end;
+
+theorem
+  for X, Y, Z being non empty TopSpace,
+      f being map of X,Y, g being map of Y,Z st f is open & g is open
+   holds g*f is open
+proof 
+  let X, Y, Z be non empty TopSpace,
+      f be map of X,Y,
+      g be map of Y,Z such that
+a1: f is open and
+a2: g is open;
+  let A be Subset of X;
+  assume A is open;
+  then
+a3: f.:A is open by a1,T_0TOPSP:def 2;
+  (g*f).:A = g.:(f.:A) by RELAT_1:159;
+  hence (g*f).:A is open by a2,a3,T_0TOPSP:def 2;
+end;
+
+theorem
+  for X, Y being TopSpace, Z being open SubSpace of Y,
+      f being map of X, Y,
+      g being map of X, Z st f = g & g is open
+  holds f is open
+proof 
+  let X, Y be TopSpace,
+      Z be open SubSpace of Y,
+      f be map of X, Y,
+      g be map of X, Z such that
+a1: f = g and
+a2: g is open;
+  let A be Subset of X;
+  assume A is open;
+  then g.:A is open by a2,T_0TOPSP:def 2;
+  hence f.:A is open by a1,TSEP_1:17;
+end;
+
+theorem Topen10:
+  for S, T being non empty TopSpace,
+      f being map of S,T st f is one-to-one onto
+  holds f is continuous iff f" is open
+proof 
+  let S, T be non empty TopSpace,
+      f be map of S,T such that
+a1: f is one-to-one;
+  assume f is onto;
+  then rng f = the carrier of T by FUNCT_2:def 3
+    .= [#]T by PRE_TOPC:12;
+  then
+a5: f qua Function" = f" by a1,TOPS_2:def 4;
+  thus f is continuous implies f" is open
+  proof
+    assume
+a3:   f is continuous;
+    let A be Subset of T;
+    assume A is open;
+    then f"A is open by a3,TOPS_2:55;
+    hence f".:A is open by a1,a5,FUNCT_1:155;
+  end;
+  assume
+a6: f" is open;
+  now
+    let A be Subset of T;
+    assume A is open;
+    then f".:A is open by a6,T_0TOPSP:def 2;
+    hence f"A is open by a1,a5,FUNCT_1:155;
+  end;
+  hence thesis by TOPS_2:55;
+end;
+
+theorem
+  for S, T being non empty TopSpace,
+      f being map of S,T st f is one-to-one onto
+  holds f is open iff f" is continuous
+proof 
+  let S, T be non empty TopSpace,
+      f be map of S,T such that
+a1: f is one-to-one;
+  assume f is onto;
+  then
+a5: rng f = the carrier of T by FUNCT_2:def 3
+    .= [#]T by PRE_TOPC:12;
+a7: the carrier of S = [#]S by PRE_TOPC:12;
+  rng (f") = [#]S by a1,a5,TOPS_2:62;
+  then
+a4: f" is onto by a7,FUNCT_2:def 3;
+a6: f" is one-to-one by a1,a5,TOPS_2:63;
+  f"" = f by a1,a5,TOPS_2:64;
+  hence thesis by a4,a6,Topen10;
+end;
+
+theorem
+  for S being TopSpace, T being non empty TopSpace holds
+  S,T are_homeomorphic iff
+  the TopStruct of S, the TopStruct of T are_homeomorphic
+proof 
+  let S be TopSpace, T be non empty TopSpace;
+  set SS = the TopStruct of S;
+  set TT = the TopStruct of T;
+b1: [#]S = the carrier of S by PRE_TOPC:12
+        .= [#]SS by PRE_TOPC:12;
+b2: [#]T = the carrier of T by PRE_TOPC:12
+        .= [#]TT by PRE_TOPC:12;
+  thus S,T are_homeomorphic implies
+    the TopStruct of S, the TopStruct of T are_homeomorphic
+  proof
+    given f being map of S,T such that
+a1:   f is_homeomorphism;
+    reconsider g = f as map of SS,TT;
+    take g;
+a2: dom f = [#]S & rng f = [#]T & f is one-to-one by a1,TOPS_2:74;
+    now
+      let P be Subset of SS;
+      reconsider R = P as Subset of S;
+      thus g.:(Cl P) = f.:(Cl R) by TOPS_3:80
+        .= Cl(f.:R) by a1,TOPS_2:74
+        .= Cl(g.:P) by TOPS_3:80;
+    end;
+    hence g is_homeomorphism by a2,b1,b2,TOPS_2:74;
+  end;
+  given f being map of SS,TT such that
+a1:  f is_homeomorphism;
+  reconsider g = f as map of S,T;
+  take g;
+a2: dom f = [#]SS & rng f = [#]TT & f is one-to-one by a1,TOPS_2:74;
+  now
+    let P be Subset of S;
+    reconsider R = P as Subset of SS;
+    thus g.:(Cl P) = f.:(Cl R) by TOPS_3:80
+      .= Cl(f.:R) by a1,TOPS_2:74
+      .= Cl(g.:P) by TOPS_3:80;
+  end;
+  hence g is_homeomorphism by a2,b1,b2,TOPS_2:74;
+end;
+
+theorem
+  for S, T being non empty TopSpace,
+      f being map of S,T st f is one-to-one onto continuous open
+  holds f is_homeomorphism
+proof 
+  let S, T be non empty TopSpace,
+      f be map of S,T such that
+a1: f is one-to-one and
+a2: f is onto and
+a3: f is continuous and
+a4: f is open;
+a7: dom f = the carrier of S by FUNCT_2:def 1;
+  then
+a5: dom f = [#]S by PRE_TOPC:12;
+  rng f = the carrier of T by a2,FUNCT_2:def 3;
+  then
+a6: rng f = [#]T by PRE_TOPC:12;
+  for P being Subset of S holds P is open iff f.:P is open
+  proof
+    let P be Subset of S;
+    thus P is open implies f.:P is open by a4,T_0TOPSP:def 2;
+    assume f.:P is open;
+    then f"(f.:P) is open by a3,TOPS_2:55;
+    hence P is open by a1,a7,MSAFREE3:1;
+  end;
+  hence thesis by a1,a5,a6,TOPGRP_1:25;
+end;
+
+begin :: R^1
+
+theorem
+  for f being PartFunc of REAL,REAL st f = REAL --> r holds
+  f is_continuous_on REAL
+proof 
+  let f be PartFunc of REAL,REAL such that
+a1: f = REAL --> r;
+a2: dom f = REAL by a1,FUNCOP_1:19;
+  f is_constant_on REAL
+  proof
+    reconsider r as Real by XREAL_0:def 1;
+    take r;
+    let c be Element of REAL;
+    assume c in REAL /\ dom f;
+    then c in dom f by XBOOLE_0:def 3;
+    hence f/.c = f.c by FINSEQ_4:def 4
+       .= r by a1,FUNCOP_1:13;
+  end;
+  hence f is_continuous_on REAL by a2,FCONT_1:44;
+end;
+
+theorem
+  for f, f1, f2 being PartFunc of REAL,REAL st
+   dom f = dom f1 \/ dom f2 & dom f1 is open & dom f2 is open &
+   f1 is_continuous_on dom f1 & f2 is_continuous_on dom f2 &
+   (for z being set st z in dom f1 holds f.z = f1.z) &
+   (for z being set st z in dom f2 holds f.z = f2.z) holds
+  f is_continuous_on dom f
+proof 
+  let f, f1, f2 be PartFunc of REAL,REAL;
+  set X1 = dom f1, X2 = dom f2;
+  assume that
+a0: dom f = X1 \/ X2 and
+A0: X1 is open and
+A1: X2 is open and
+a1: f1 is_continuous_on X1 and
+a2: f2 is_continuous_on X2 and
+a4: for z being set st z in X1 holds f.z = f1.z and
+a5: for z being set st z in X2 holds f.z = f2.z;
+b4: f|(X1 \/ X2) = (f|X1) \/ (f|X2) by RELAT_1:107;
+b5: dom ((f|X1) \/ (f|X2)) = dom (f|X1) \/ dom (f|X2) by RELAT_1:13;
+c1: X1 c= dom f by a0,XBOOLE_1:7;
+c2: dom (f|X1) = dom f /\ X1 by RELAT_1:90;
+c3: dom f /\ X1 = X1 by c1,XBOOLE_1:28;
+C1: X2 c= dom f by a0,XBOOLE_1:7;
+C2: dom (f|X2) = dom f /\ X2 by RELAT_1:90;
+C3: dom f /\ X2 = X2 by C1,XBOOLE_1:28;
+  thus dom f c= dom f;
+  let x be real number such that
+a6:  x in dom f;
+e1: (f|(X1 \/ X2)).x = f.x by a0,a6,FUNCT_1:72;
+  per cases by a0,a6,XBOOLE_0:def 2;
+  suppose
+s1:  x in X1;
+a8: (f|(X1 \/ X2)).x = f1.x by s1,a4,e1
+      .= (f1|X1).x by s1,FUNCT_1:72;
+a7: x in dom (f|(X1 \/ X2)) by s1,c2,c3,b4,b5,XBOOLE_0:def 2;
+  for N1 being Neighbourhood of (f|(X1 \/ X2)).x
+    ex N being Neighbourhood of x st
+    for x1 being real number st x1 in dom (f|(X1 \/ X2)) & x1 in N holds
+    (f|(X1 \/ X2)).x1 in N1
+  proof
+    let N1 be Neighbourhood of (f|(X1 \/ X2)).x;
+    f1|X1 is_continuous_in x by a1,s1,FCONT_1:def 2;
+    then consider N being Neighbourhood of x such that
+b1:   for x1 being real number st x1 in dom (f1|X1) & x1 in N holds
+      (f1|X1).x1 in N1 by a8,FCONT_1:4;
+    consider N2 being Neighbourhood of x such that
+d1:   N2 c= X1 by s1,A0,RCOMP_1:39;
+    consider N3 being Neighbourhood of x such that
+d2:   N3 c= N and
+d3:   N3 c= N2 by RCOMP_1:38;
+    take N3;
+    let x1 be real number such that
+b2:   x1 in dom (f|(X1 \/ X2)) and
+b3:   x1 in N3;
+    per cases;
+    suppose
+b7:   x1 in dom (f|X1);
+    then
+b8: x1 in X1 by c2,XBOOLE_0:def 3;
+b9: dom (f|X1) = X1 /\ X1 by c2,c1,XBOOLE_1:28
+      .= dom (f1|X1) by RELAT_1:90;
+    (f|(X1 \/ X2)).x1 = f.x1 by b2,FUNCT_1:70
+      .= f1.x1 by a4,b8
+      .= (f1|X1).x1 by b8,FUNCT_1:72;
+    hence (f|(X1 \/ X2)).x1 in N1 by b9,b1,b3,b7,d2;
+    end;
+    suppose
+s1:   not x1 in dom (f|X1);
+    x1 in N2 by d3,b3;
+    hence (f|(X1 \/ X2)).x1 in N1 by c2,c3,s1,d1;
+    end;
+  end;
+  hence f|dom f is_continuous_in x by a0,a7,FCONT_1:4;
+  end;
+  suppose
+s1:  x in X2;
+a8: (f|(X1 \/ X2)).x = f2.x by s1,a5,e1
+      .= (f2|X2).x by s1,FUNCT_1:72;
+a7: x in dom (f|(X1 \/ X2)) by s1,C2,C3,b4,b5,XBOOLE_0:def 2;
+  for N1 being Neighbourhood of (f|(X1 \/ X2)).x
+    ex N being Neighbourhood of x st
+    for x1 being real number st x1 in dom (f|(X1 \/ X2)) & x1 in N holds
+    (f|(X1 \/ X2)).x1 in N1
+  proof
+    let N1 be Neighbourhood of (f|(X1 \/ X2)).x;
+    f2|X2 is_continuous_in x by a2,s1,FCONT_1:def 2;
+    then consider N being Neighbourhood of x such that
+b1:   for x1 being real number st x1 in dom (f2|X2) & x1 in N holds
+      (f2|X2).x1 in N1 by a8,FCONT_1:4;
+    consider N2 being Neighbourhood of x such that
+d1:   N2 c= X2 by s1,A1,RCOMP_1:39;
+    consider N3 being Neighbourhood of x such that
+d2:   N3 c= N and
+d3:   N3 c= N2 by RCOMP_1:38;
+    take N3;
+    let x1 be real number such that
+b2:   x1 in dom (f|(X1 \/ X2)) and
+b3:   x1 in N3;
+    per cases;
+    suppose
+b7:   x1 in dom (f|X2);
+    then
+b8: x1 in X2 by C2,XBOOLE_0:def 3;
+b9: dom (f|X2) = X2 /\ X2 by C2,C1,XBOOLE_1:28
+      .= dom (f2|X2) by RELAT_1:90;
+    (f|(X1 \/ X2)).x1 = f.x1 by b2,FUNCT_1:70
+      .= f2.x1 by a5,b8
+      .= (f2|X2).x1 by b8,FUNCT_1:72;
+    hence (f|(X1 \/ X2)).x1 in N1 by b9,b1,b3,b7,d2;
+    end;
+    suppose
+s1:   not x1 in dom (f|X2);
+    x1 in N2 by d3,b3;
+    hence (f|(X1 \/ X2)).x1 in N1 by C2,C3,s1,d1;
+    end;
+  end;
+  hence f|dom f is_continuous_in x by a0,a7,FCONT_1:4;
+  end;
+end;
+
+theorem Tnn1:
+  for x being Point of R^1,
+      N being Subset of REAL, M being Subset of R^1 st M = N holds
+   N is Neighbourhood of x implies M is a_neighborhood of x
+proof 
+  let x be Point of R^1,
+      N be Subset of REAL,
+      M be Subset of R^1 such that
+a1:  M = N;
+  given r such that
+a2: 0 < r and
+a3: N = ].x-r,x+r.[;
+a4: M is open by a1,a3,JORDAN6:46;
+  x in M by a1,a2,a3,TOPREAL6:20;
+  hence M is a_neighborhood of x by a4,CONNSP_2:5;
+end;
+
+theorem Tnn2:
+  for x being Point of R^1, M being a_neighborhood of x
+   ex N being Neighbourhood of x st N c= M
+proof 
+  let x be Point of R^1,
+      M be a_neighborhood of x;
+  consider V being Subset of R^1 such that
+a5:  V is open and
+a6:  V c= M and
+a7:  x in V by CONNSP_2:8;
+  x is Real by XREAL_0:def 1;
+  then consider r being Real such that
+a8:  r > 0 and
+a9:  ].x-r,x+r.[ c= V by a5,a7,FRECHET:8;
+  reconsider N = ].x-r,x+r.[ as Neighbourhood of x by a8,RCOMP_1:def 7;
+  take N;
+  thus thesis by a6,a9,XBOOLE_1:1;
+end;
+
+theorem Tcc1:
+  for f being map of R^1,R^1, g being PartFunc of REAL,REAL,
+      x being Point of R^1 st f = g & g is_continuous_in x holds
+   f is_continuous_at x
+proof 
+  let f be map of R^1,R^1,
+      g be PartFunc of REAL,REAL,
+      x be Point of R^1 such that
+a1: f = g and
+a2: g is_continuous_in x;
+  let G be a_neighborhood of f.x;
+  consider Z being Neighbourhood of g.x such that
+a4: Z c= G by a1,Tnn2;
+  consider N being Neighbourhood of x such that
+a3:  g.:N c= Z by a2,FCONT_1:5;
+  reconsider H = N as a_neighborhood of x by Tnn1,TOPMETR:24;
+  take H;
+  thus f.:H c= G by a1,a3,a4,XBOOLE_1:1;
+end;
+
+theorem
+  for f being map of R^1,R^1, g being Function of REAL,REAL st
+      f = g & g is_continuous_on REAL holds
+   f is continuous
+proof 
+  let f be map of R^1,R^1,
+      g be Function of REAL,REAL such that
+a1: f = g and
+a2: g is_continuous_on REAL;
+  for x being Point of R^1 holds f is_continuous_at x
+  proof
+    let x be Point of R^1;
+a3: dom g = REAL by FUNCT_2:def 1;
+    x is Real by XREAL_0:def 1;
+    then g|REAL is_continuous_in x by a2,FCONT_1:def 2;
+    then g is_continuous_in x by a3,RELAT_1:98;
+    hence f is_continuous_at x by a1,Tcc1;
+  end;
+  hence f is continuous by TMAP_1:49;
+end;
+
+theorem
+  a <= r & s <= b implies
+  [.r,s.] is closed Subset of Closed-Interval-TSpace(a,b)
+proof 
+  set T = Closed-Interval-TSpace(a,b);
+  set A = [.r,s.];
+  assume that
+a2: a <= r and
+b1: s <= b;
+  per cases;
+  suppose r > s;
+  then A = {}T by RCOMP_1:13;
+  hence thesis;
+  end;
+  suppose r <= s;
+  then a <= s by a2,AXIOMS:22;
+  then a <= b by b1,AXIOMS:22;
+  then the carrier of T = [.a,b.] by TOPMETR:25;
+  then reconsider A as Subset of T by b1,a2,TREAL_1:1;
+  reconsider C = A as Subset of R^1 by TOPMETR:24;
+a4: C is closed by TREAL_1:4;
+  [#]T = the carrier of T by PRE_TOPC:12;
+  then C /\ [#]T = A by XBOOLE_1:28;
+  hence thesis by a4,PRE_TOPC:43;
+  end;
+end;
+
+theorem
+  a <= r & s <= b implies
+  ].r,s.[ is open Subset of Closed-Interval-TSpace(a,b)
+proof 
+  set T = Closed-Interval-TSpace(a,b);
+  set A = ].r,s.[;
+  assume that
+a2: a <= r and
+b1: s <= b;
+  per cases;
+  suppose r >= s;
+  then A = {}T by RCOMP_1:12;
+  hence thesis;
+  end;
+  suppose r < s;
+  then a < s by a2,AXIOMS:22;
+  then a <= b by b1,AXIOMS:22;
+  then the carrier of T = [.a,b.] by TOPMETR:25;
+  then reconsider A as Subset of T by b1,a2,SIN13;
+  reconsider C = A as Subset of R^1 by TOPMETR:24;
+a4: C is open by JORDAN6:46;
+  [#]T = the carrier of T by PRE_TOPC:12;
+  then C /\ [#]T = A by XBOOLE_1:28;
+  hence thesis by a4,TOPS_2:32;
+  end;
+end;
+
+theorem
+  a <= b & a <= r implies
+  ].r,b.] is open Subset of Closed-Interval-TSpace(a,b)
+proof 
+  set T = Closed-Interval-TSpace(a,b);
+  assume that
+a1: a <= b and
+a2: a <= r;
+a3: the carrier of T = [.a,b.] by a1,TOPMETR:25;
+  then reconsider A = ].r,b.] as Subset of T by a2,SIN9;
+  reconsider C = ].r,b+1.[ as Subset of R^1 by TOPMETR:24;
+a4: C is open by JORDAN6:46;
+a5: [#]T = the carrier of T by PRE_TOPC:12;
+  C /\ [#]T = A
+  proof
+    thus C /\ [#]T c= A
+    proof
+      let x be set;
+      assume
+a7:     x in C /\ [#]T;
+      then
+a6:   x in C by XBOOLE_0:def 3;
+      then reconsider x as Real;
+      x in [#]T by a7,XBOOLE_0:def 3;
+      then
+a8:   x <= b by a3,TOPREAL5:1;
+      r < x by a6,JORDAN6:45;
+      hence thesis by a8,RCOMP_2:4;
+    end;
+    b+0 < b+1 by REAL_1:53;
+    then A c= C by SIN12;
+    hence thesis by a5,XBOOLE_1:19;
+  end;
+  hence thesis by a4,TOPS_2:32;
+end;
+
+theorem
+  a <= b & r <= b implies
+  [.a,r.[ is open Subset of Closed-Interval-TSpace(a,b)
+proof 
+  set T = Closed-Interval-TSpace(a,b);
+  assume that
+a1: a <= b and
+a2: r <= b;
+a3: the carrier of T = [.a,b.] by a1,TOPMETR:25;
+  then reconsider A = [.a,r.[ as Subset of T by a2,SIN5;
+  reconsider C = ].a-1,r.[ as Subset of R^1 by TOPMETR:24;
+a4: C is open by JORDAN6:46;
+a5: [#]T = the carrier of T by PRE_TOPC:12;
+  C /\ [#]T = A
+  proof
+    thus C /\ [#]T c= A
+    proof
+      let x be set;
+      assume
+a7:     x in C /\ [#]T;
+      then
+a6:   x in C by XBOOLE_0:def 3;
+      then reconsider x as Real;
+      x in [#]T by a7,XBOOLE_0:def 3;
+      then
+a8:   a <= x by a3,TOPREAL5:1;
+      x < r by a6,JORDAN6:45;
+      hence thesis by a8,RCOMP_2:3;
+    end;
+    a-1 < a-0 by REAL_1:92;
+    then A c= C by SIN8;
+    hence thesis by a5,XBOOLE_1:19;
+  end;
+  hence thesis by a4,TOPS_2:32;
+end;
+
+theorem Trec7:
+  a <= b & r <= s implies
+  the carrier of [:Closed-Interval-TSpace(a,b),Closed-Interval-TSpace(r,s):]
+    = [: [.a,b.], [.r,s.] :]
+proof 
+  set C1 = Closed-Interval-TSpace(a,b);
+  set C2 = Closed-Interval-TSpace(r,s);
+  assume a <= b & r <= s;
+  then the carrier of C1 = [.a,b.] & the carrier of C2 = [.r,s.] by TOPMETR:25;
+  hence the carrier of [:C1,C2:] = [:[.a,b.], [.r,s.]:] by BORSUK_1:def 5;
+end;
+
+begin :: TOP-REAL 2
+
+theorem Tpoin:
+  |[a,b]| = (1,2) --> (a,b)
+proof 
+  thus |[a,b]| = <*a,b*> by EUCLID:def 16
+    .= (1,2) --> (a,b) by T143;
+end;
+
+theorem
+  |[a,b]|.1 = a & |[a,b]|.2 = b
+proof 
+  thus |[a,b]|.1 = ((1,2) --> (a,b)).1 by Tpoin
+    .= a by FUNCT_4:66;
+  thus |[a,b]|.2 = ((1,2) --> (a,b)).2 by Tpoin
+    .= b by FUNCT_4:66;
+end;
+
+theorem Trec11:
+  closed_inside_of_rectangle(a,b,r,s) = product ((1,2)-->([.a,b.],[.r,s.]))
+proof 
+  set A = [.a,b.], B = [.r,s.];
+  set f = (1,2)-->(A,B);
+  set R = closed_inside_of_rectangle(a,b,r,s);
+a1: R = {p where p is Point of TOP-REAL 2:
+        a <= p`1 & p`1 <= b & r <= p`2 & p`2 <= s} by JGRAPH_6:def 2;
+  thus R c= product f
+  proof
+    let x be set;
+    assume x in R;
+    then consider p being Point of TOP-REAL 2 such that
+a3:   x = p and
+a2:   a <= p`1 & p`1 <= b & r <= p`2 & p`2 <= s by a1;
+a5: p`1 in A & p`2 in B by a2,TOPREAL5:1;
+    |[p`1,p`2]| = (1,2) --> (p`1,p`2) by Tpoin;
+    then p = (1,2) --> (p`1,p`2) by EUCLID:57;
+    hence x in product f by a3,a5,HILBERT3:11;
+  end;
+  let x be set;
+  assume
+b1: x in product f;
+  then consider g being Function such that
+b2: x = g and
+b7: dom g = dom f and
+    for y being set st y in dom f holds g.y in f.y by CARD_3:def 5;
+b3: g.1 in A & g.2 in B by b1,b2,Tfpr;
+b4: dom f = {1,2} by FUNCT_4:65;
+  reconsider g1 = g.1, g2 = g.2 as Real by b3;
+b6: |[g1,g2]| = (1,2) --> (g1,g2) by Tpoin;
+  reconsider g as FinSequence by b4,b7,FINSEQ_1:def 2,4;
+  len g = 2 by b4,b7,FINSEQ_1:4,def 3;
+  then g = <*g.1,g.2*> by FINSEQ_1:61;
+  then reconsider g as Point of TOP-REAL 2 by b6,T143;
+  g.1 = g`1 & g.2 = g`2 by EUCLID:def 14,def 15;
+  then a <= g`1 & g`1 <= b & r <= g`2 & g`2 <= s by b3,TOPREAL5:1;
+  hence x in R by a1,b2;
+end;
+
+theorem Tclrec:
+  a <= b & r <= s implies
+  |[a,r]| in closed_inside_of_rectangle(a,b,r,s)
+proof 
+  set o = |[a,r]|;
+  assume
+a2: a <= b & r <= s;
+a1: closed_inside_of_rectangle(a,b,r,s) =
+      {p where p is Point of TOP-REAL 2:
+        a <= p`1 & p`1 <= b & r <= p`2 & p`2 <= s} by JGRAPH_6:def 2;
+  o`1 = a & o`2 = r by EUCLID:56;
+  hence thesis by a1,a2;
+end;
+
+definition
+  let a, b, c, d be real number;
+  func Trectangle(a,b,c,d) -> SubSpace of TOP-REAL 2 equals :drec:
+  (TOP-REAL 2) | closed_inside_of_rectangle(a,b,c,d);
+coherence;
+end;
+
+theorem Trec9:
+  the carrier of Trectangle(a,b,r,s) = closed_inside_of_rectangle(a,b,r,s)
+proof 
+  thus the carrier of Trectangle(a,b,r,s) =
+  the carrier of (TOP-REAL 2) | closed_inside_of_rectangle(a,b,r,s) by drec
+  .= closed_inside_of_rectangle(a,b,r,s) by JORDAN1:1;
+end;
+
+theorem Tclrec2:
+  a <= b & r <= s implies Trectangle(a,b,r,s) is non empty
+proof 
+  assume a <= b & r <= s;
+  then |[a,r]| in closed_inside_of_rectangle(a,b,r,s) by Tclrec;
+  hence the carrier of Trectangle(a,b,r,s) is non empty by Trec9;
+end;
+  
+registration
+  let a, c be non positive (real number);
+  let b, d be non negative (real number);
+  cluster Trectangle(a,b,c,d) -> non empty;
+coherence by Tclrec2;
+end;
+
+definition
+  func R2Homeomorphism -> map of [:R^1,R^1:], TOP-REAL 2 means :dR2H:
+  for x, y being real number holds it. [x,y] = <*x,y*>;
+existence
+proof 
+  consider f being map of [:R^1,R^1:], TOP-REAL 2 such that
+a1: for x, y being Real holds f. [x,y] = <*x,y*> by BORSUK_6:24;
+  take f;
+  let x, y be real number;
+  x is Real & y is Real by XREAL_0:def 1;
+  hence thesis by a1;
+end;
+uniqueness
+proof 
+  let f, g be map of [:R^1,R^1:], TOP-REAL 2 such that
+a1: for x, y being real number holds f. [x,y] = <*x,y*> and
+a2: for x, y being real number holds g. [x,y] = <*x,y*>;
+  now
+    let a be Point of [:R^1,R^1:];
+    consider x, y being Element of R such that
+a3:   a = [x,y] by Lm15,DOMAIN_1:9;
+    thus f.a = <*x,y*> by a1,a3
+      .= g.a by a2,a3;
+  end;
+  hence thesis by FUNCT_2:113;
+end;
+end;
+
+theorem Trec10:
+  for A, B being Subset of REAL holds
+  R2Homeomorphism.:[:A,B:] = product ((1,2) --> (A,B))
+proof 
+  for x, y being Real holds R2Homeomorphism. [x,y] = <*x,y*> by dR2H;
+  hence thesis by TOPREAL6:84;
+end;
+
+theorem Trec4:
+  R2Homeomorphism is_homeomorphism
+proof 
+  for x, y being Real holds R2Homeomorphism. [x,y] = <*x,y*> by dR2H;
+  hence thesis by TOPREAL6:85;
+end;
+
+theorem Trec6:
+  a <= b & r <= s implies
+  R2Homeomorphism | the carrier of
+      [:Closed-Interval-TSpace(a,b),Closed-Interval-TSpace(r,s):]
+  is map of [:Closed-Interval-TSpace(a,b),Closed-Interval-TSpace(r,s):],
+    Trectangle(a,b,r,s)
+proof 
+  set C1 = Closed-Interval-TSpace(a,b);
+  set C2 = Closed-Interval-TSpace(r,s);
+  set TR = Trectangle(a,b,r,s);
+  set h = R2Homeomorphism | the carrier of [:C1,C2:];
+  assume a <= b & r <= s;
+  then
+a1: the carrier of [:C1,C2:] = [: [.a,b.], [.r,s.] :] by Trec7;
+  dom R2Homeomorphism = [:R,R:] by Lm15,FUNCT_2:def 1;
+  then the carrier of [:C1,C2:] c= dom R2Homeomorphism
+    by a1,TOPMETR:24,ZFMISC_1:119;
+  then
+a2: dom h = the carrier of [:C1,C2:] by RELAT_1:91;
+  rng h c= the carrier of TR
+  proof
+    let y be set;
+    assume y in rng h;
+    then consider x being set such that
+a3:   x in dom h and
+a4:   h.x = y by FUNCT_1:def 5;
+a6: the carrier of TR = closed_inside_of_rectangle(a,b,r,s) by Trec9;
+a5: closed_inside_of_rectangle(a,b,r,s) =
+      {p where p is Point of TOP-REAL 2:
+        a <= p`1 & p`1 <= b & r <= p`2 & p`2 <= s} by JGRAPH_6:def 2;
+    reconsider x as Point of [:R^1,R^1:] by a3;
+a7: h.x = R2Homeomorphism.x by a3,FUNCT_1:70;
+    then
+    reconsider p = h.x as Point of TOP-REAL 2;
+    dom h c= [:R,R:] by a1,a2,TOPMETR:24,ZFMISC_1:119;
+    then consider x1, x2 being Element of R such that
+a8:   x = [x1,x2] by a3,DOMAIN_1:9;
+    h.x = <*x1,x2*> by a7,a8,dR2H;
+    then p`1 = <*x1,x2*>.1 & p`2 = <*x1,x2*>.2 by EUCLID:def 14,def 15;
+    then
+a10: x1 = p`1 & x2 = p`2 by FINSEQ_1:61;
+    x1 in [.a,b.] & x2 in [.r,s.] by a1,a2,a3,a8,ZFMISC_1:106;
+    then a <= p`1 & p`1 <= b & r <= p`2 & p`2 <= s by a10,TOPREAL5:1;
+    hence thesis by a4,a6,a5;
+  end;
+  hence thesis by a2,FUNCT_2:4;
+end;
+  
+theorem Trec3:
+  a <= b & r <= s implies
+  for h being map of 
+    [:Closed-Interval-TSpace(a,b),Closed-Interval-TSpace(r,s):],
+    Trectangle(a,b,r,s) st
+  h = R2Homeomorphism | the carrier of
+      [:Closed-Interval-TSpace(a,b),Closed-Interval-TSpace(r,s):]
+  holds h is_homeomorphism
+proof 
+  assume
+a0: a <= b & r <= s;
+  set C1 = Closed-Interval-TSpace(a,b);
+  set C2 = Closed-Interval-TSpace(r,s);
+  set TR = Trectangle(a,b,r,s);
+  let h be map of [:C1,C2:], TR such that
+a1: h = R2Homeomorphism | the carrier of [:C1,C2:];
+  reconsider S0 = [:C1,C2:] as non empty SubSpace of [:R^1,R^1:]
+    by BORSUK_3:25;
+a4: closed_inside_of_rectangle(a,b,r,s) =
+      {p where p is Point of TOP-REAL 2:
+        a <= p`1 & p`1 <= b & r <= p`2 & p`2 <= s} by JGRAPH_6:def 2;
+a11: the carrier of TR = closed_inside_of_rectangle(a,b,r,s) by Trec9;
+  set p = |[a,r]|;
+  p`1 = a & p`2 = r by EUCLID:56;
+  then p in closed_inside_of_rectangle(a,b,r,s) by a0,a4;
+  then reconsider T0 = TR as non empty SubSpace of TOP-REAL 2
+    by a11,STRUCT_0:def 1;
+  reconsider g = h as map of S0,T0;
+a3: g = R2Homeomorphism|S0 by a1,TMAP_1:def 3;
+  g is onto
+  proof
+    thus rng g c= the carrier of T0;
+    let y be set;
+    assume
+a2:  y in the carrier of T0;
+    consider p being Point of TOP-REAL 2 such that
+a5:   y = p and
+a6:   a <= p`1 & p`1 <= b & r <= p`2 & p`2 <= s by a11,a2,a4;
+a7: the carrier of [:C1,C2:] = [:[.a,b.],[.r,s.]:] by a0,Trec7;
+a9: dom g = the carrier of S0 by FUNCT_2:def 1;
+    p`1 in [.a,b.] & p`2 in [.r,s.] by a6,TOPREAL5:1;
+    then
+a8: [p`1,p`2] in dom g by a7,a9,ZFMISC_1:def 2;
+    then g. [p`1,p`2] = R2Homeomorphism. [p`1,p`2] by a1,FUNCT_1:72
+      .= <*p`1,p`2*> by dR2H
+      .= |[p`1,p`2]| by EUCLID:def 16
+      .= y by a5,EUCLID:57;
+    hence thesis by a8,FUNCT_1:def 5;
+  end;
+  hence thesis by a3,Trec4,JORDAN16:13;
+end;
+
+theorem
+  a <= b & r <= s implies
+  [:Closed-Interval-TSpace(a,b),Closed-Interval-TSpace(r,s):],
+  Trectangle(a,b,r,s) are_homeomorphic
+proof 
+  assume
+a0: a <= b & r <= s;
+  set C1 = Closed-Interval-TSpace(a,b);
+  set C2 = Closed-Interval-TSpace(r,s);
+  reconsider h = R2Homeomorphism | the carrier of [:C1,C2:]
+    as map of [:C1,C2:], Trectangle(a,b,r,s) by a0,Trec6;
+  take h;
+  thus thesis by a0,Trec3;
+end;
+
+theorem Topen9:
+  a <= b & r <= s implies
+  for A being Subset of Closed-Interval-TSpace(a,b),
+      B being Subset of Closed-Interval-TSpace(r,s) holds
+  product ((1,2)-->(A,B)) is Subset of Trectangle(a,b,r,s)
+proof 
+  set T = Closed-Interval-TSpace(a,b);
+  set S = Closed-Interval-TSpace(r,s);
+  assume
+a1: a <= b & r <= s;
+  let A be Subset of T;
+  let B be Subset of S;
+b3: the carrier of T = [.a,b.] & the carrier of S = [.r,s.] by a1,TOPMETR:25;
+  closed_inside_of_rectangle(a,b,r,s) =
+    product ((1,2)-->([.a,b.],[.r,s.])) by Trec11;
+  then product ((1,2)-->(A,B)) c= closed_inside_of_rectangle(a,b,r,s)
+    by b3,TOPREAL6:29;
+  hence thesis by Trec9;
+end;
+
+theorem
+  a <= b & r <= s implies
+  for A being open Subset of Closed-Interval-TSpace(a,b),
+      B being open Subset of Closed-Interval-TSpace(r,s) holds
+  product ((1,2)-->(A,B)) is open Subset of Trectangle(a,b,r,s)
+proof 
+  set T = Closed-Interval-TSpace(a,b);
+  set S = Closed-Interval-TSpace(r,s);
+  assume that
+a1: a <= b and
+a2: r <= s;
+  let A be open Subset of T,
+      B be open Subset of S;
+  reconsider P = product ((1,2)-->(A,B)) as Subset of Trectangle(a,b,r,s)
+    by a1,a2,Topen9;
+  the carrier of T is Subset of R^1 &
+    the carrier of S is Subset of R^1 by TSEP_1:1;
+  then
+a7: A is Subset of REAL & B is Subset of REAL by TOPMETR:24,XBOOLE_1:1;
+  reconsider h = R2Homeomorphism | the carrier of
+      [:Closed-Interval-TSpace(a,b),Closed-Interval-TSpace(r,s):]
+  as map of [:Closed-Interval-TSpace(a,b),Closed-Interval-TSpace(r,s):],
+    Trectangle(a,b,r,s) by a1,a2,Trec6;
+a4: h is_homeomorphism by a1,a2,Trec3;
+a6: Trectangle(a,b,r,s) is non empty by a1,a2,Tclrec2;
+a3: h.:[:A,B:] = R2Homeomorphism.:[:A,B:] by EXTENS_1:1
+       .= P by a7,Trec10;
+  [:A,B:] is open by BORSUK_1:46;
+  hence thesis by a4,a3,a6,TOPGRP_1:25;
+end;
+
+theorem
+  a <= b & r <= s implies
+  for A being closed Subset of Closed-Interval-TSpace(a,b),
+      B being closed Subset of Closed-Interval-TSpace(r,s) holds
+  product ((1,2)-->(A,B)) is closed Subset of Trectangle(a,b,r,s)
+proof 
+  set T = Closed-Interval-TSpace(a,b);
+  set S = Closed-Interval-TSpace(r,s);
+  assume that
+a1: a <= b and
+a2: r <= s;
+  let A be closed Subset of T,
+      B be closed  Subset of S;
+  reconsider P = product ((1,2)-->(A,B)) as Subset of Trectangle(a,b,r,s)
+    by a1,a2,Topen9;
+  the carrier of T is Subset of R^1 &
+    the carrier of S is Subset of R^1 by TSEP_1:1;
+  then
+a7: A is Subset of REAL & B is Subset of REAL by TOPMETR:24,XBOOLE_1:1;
+  reconsider h = R2Homeomorphism | the carrier of
+      [:Closed-Interval-TSpace(a,b),Closed-Interval-TSpace(r,s):]
+  as map of [:Closed-Interval-TSpace(a,b),Closed-Interval-TSpace(r,s):],
+    Trectangle(a,b,r,s) by a1,a2,Trec6;
+a4: h is_homeomorphism by a1,a2,Trec3;
+a6: Trectangle(a,b,r,s) is non empty by a1,a2,Tclrec2;
+a3: h.:[:A,B:] = R2Homeomorphism.:[:A,B:] by EXTENS_1:1
+       .= P by a7,Trec10;
+  [:A,B:] is closed by TOPALG_3:16;
+  hence thesis by a4,a3,a6,TOPS_2:72;
+end;
+

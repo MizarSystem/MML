@@ -20,7 +20,7 @@ environ
  definitions PRE_TOPC, XBOOLE_0, REALSET2;
  theorems TARSKI, SUBSET_1, ZFMISC_1, FUNCT_2, PRE_TOPC, TOPS_1, TOPS_2,
       PCOMPS_1, BORSUK_1, TSEP_1, TDLAT_3, REALSET1, TOPS_3, TEX_1, RELAT_1,
-      STRUCT_0, RELSET_1, SETFAM_1, XBOOLE_0, XBOOLE_1, REALSET2;
+      STRUCT_0, RELSET_1, SETFAM_1, XBOOLE_0, XBOOLE_1, REALSET2, TMAP_1;
  schemes WELLORD2, FUNCT_2;
 
 begin
@@ -250,10 +250,10 @@ registration let Y be trivial non empty 1-sorted;
  cluster non proper -> trivial (non empty Subset of Y);
  coherence
   proof let A be non empty Subset of Y;
-   assume A3: A is non proper;
-           ex s being Element of Y st
+   assume A is non proper;
+   ex s being Element of Y st
         the carrier of Y = {s} by TEX_1:def 1;
-   hence thesis by A3,Th5;
+   hence thesis by Th5;
   end;
 end;
 
@@ -306,25 +306,8 @@ begin
 :: 2. Proper Subspaces of Topological Spaces.
 
 theorem
-       for X being non empty TopStruct, X0 being SubSpace of X holds
-               the TopStruct of X0 is strict SubSpace of X
- proof let X be non empty TopStruct, X0 be SubSpace of X;
-   set S = the TopStruct of X0;
-       S is SubSpace of X
-   proof
-     A1: [#](S) = the carrier of S & [#]
-(X0) = the carrier of X0 by PRE_TOPC:12;
-    hence [#](S) c= [#](X) by PRE_TOPC:def 9;
-     let P be Subset of S;
-    thus P in
- the topology of S implies ex Q being Subset of X st
-                 Q in the topology of X & P = Q /\ [#](S) by A1,PRE_TOPC:def 9;
-     given Q being Subset of X such that
-         A2: Q in the topology of X & P = Q /\ [#](S);
-    thus P in the topology of S by A1,A2,PRE_TOPC:def 9;
-   end;
-  hence thesis;
- end;
+  for X being TopStruct, X0 being SubSpace of X holds
+               the TopStruct of X0 is strict SubSpace of X by TMAP_1:11;
 
 canceled;
 
@@ -407,7 +390,7 @@ registration let Y be trivial non empty TopStruct;
  coherence
   proof let Y0 be non empty SubSpace of Y;
    assume Y0 is non proper;
-    then consider A being Subset of Y such that
+    consider A being Subset of Y such that
            A1: A = the carrier of Y0 and A is non proper by Def3;
    reconsider A = the carrier of Y0 as non empty Subset of Y
    by A1;
@@ -2680,20 +2663,19 @@ end;
 begin
 :: 5. Continuous Mappings and Almost Discrete Spaces.
 
-reserve X,Y for non empty TopSpace;
+ reserve X,Y for non empty TopSpace;
 
 theorem Th68:
- for X being discrete non empty TopSpace, f being map of X,Y holds
+ for X being discrete TopSpace, Y being TopSpace, f being map of X,Y holds
    f is continuous
- proof let X be discrete non empty TopSpace, f be map of X,Y;
-        for B be Subset of Y st B is closed holds
+ proof let X be discrete TopSpace, Y be TopSpace, f be map of X,Y;
+  for B be Subset of Y st B is closed holds
     f" B is closed by TDLAT_3:18;
   hence f is continuous by PRE_TOPC:def 12;
  end;
 
 theorem
-      (for Y being non empty TopSpace, f being map of X,Y holds f is continuous
-)
+  (for Y being non empty TopSpace, f being map of X,Y holds f is continuous)
     implies X is discrete
  proof
   assume A1: for Y being non empty TopSpace, f being map of X,Y holds
@@ -2714,7 +2696,7 @@ A2:     Y = TopStruct(#the carrier of X, bool the carrier of X#)
  end;
 
 theorem
-      for Y being anti-discrete non empty TopSpace, f being map of X,Y holds
+  for Y being anti-discrete non empty TopSpace, f being map of X,Y holds
    f is continuous
  proof let Y be anti-discrete non empty TopSpace, f be map of X,Y;
         now let B be Subset of Y;

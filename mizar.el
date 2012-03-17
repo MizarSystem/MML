@@ -1,6 +1,6 @@
 ;;; mizar.el --- mizar.el -- Mizar Mode for Emacs
 ;;
-;; $Revision: 1.95 $
+;; $Revision: 1.96 $
 ;;
 ;;; License:     GPL (GNU GENERAL PUBLIC LICENSE)
 ;;
@@ -1756,6 +1756,8 @@ If TABLE is not given, get it with `mizar-get-errors'."
 		  ))
 	    (let* ((snrstr (number-to-string snr))
 		   (snrl (length snrstr)))
+	      (put-text-property 0 snrl 'help-echo 
+				 (mizar-get-err-string snrstr) snrstr)
 	      (if (and mizar-use-momm (eq snr 4))  ; add momm stuff
 		  (progn
 		    (add-text-properties 0 1 props snrstr)
@@ -1777,6 +1779,33 @@ If TABLE is not given, get it with `mizar-get-errors'."
 
 (defvar mizar-err-msgs (concat mizfiles "mizar.msg")
   "File with explanations of Mizar error messages.")
+
+(defvar mizar-err-table nil
+  "Global hash table containing error explanations.
+   The explanations is the 'expl property of the symbols.")
+
+(defun mizar-parse-err-msgs ()
+  "Parse `mizar-err-msgs' into `mizar-err-table'."
+(let* ((lines (with-temp-buffer
+		(insert-file-contents mizar-err-msgs)
+		(split-string (buffer-string) "[\n]")))
+       (table (make-vector (length lines) 0)))
+  (while lines
+    (if (string-match "^# +\\([0-9]+\\)\\b" (car lines))
+      (let ((symb (intern (match-string 1 (car lines)) table)))
+	(put symb 'expl (cadr lines))
+	(setq lines (cddr lines)))
+      (setq lines (cdr lines))))
+  (setq mizar-err-table table)))
+
+
+(defun mizar-get-err-string (err)
+  "Return the error message for error ERR (it is a string).
+   Initializes `mizar-err-table' if not yet initialized."
+  (or mizar-err-table (mizar-parse-err-msgs))
+  (or (get  (intern-soft err mizar-err-table) 'expl)
+      "  ?"))
+
 (defun mizar-getmsgs (errors &optional cformat)
 "Return string of error messages for ERRORS.
 If CFORMAT, return list of numbered messages for `mizar-compile'."

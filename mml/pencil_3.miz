@@ -1,0 +1,3439 @@
+:: On the Characterization of Collineations of the Segre Product of Strongly 
+:: Connected Partial Linear Spaces
+::  by Adam Naumowicz
+:: 
+:: Received October 18, 2004
+:: Copyright (c) 2004 Association of Mizar Users
+
+environ
+
+ vocabulary PENCIL_3, FINSEQ_1, RELAT_1, ARYTM_1, BOOLE, FUNCT_1, PRALG_1,
+      PBOOLE, MSUALG_2, RLVECT_2, FUNCT_4, PENCIL_1, CARD_3, INTEGRA1,
+      SUBSET_1, PRE_TOPC, REALSET1, CARD_1, SGRAPH1, CAT_1, AMI_1, RELAT_2,
+      PENCIL_2, FINSET_1, FUNCT_2, PARSP_1, WAYBEL_3, VECTSP_1, FDIFF_1,
+      GRAPH_2;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, XCMPLX_0, XREAL_0, NAT_1, RELAT_1,
+      SUBSET_1, REALSET1, STRUCT_0, FUNCT_1, FUNCT_2, FUNCOP_1, RELSET_1,
+      REALSET2, CARD_1, FINSET_1, FINSEQ_1, CARD_3, PRE_TOPC, PBOOLE, PZFMISC1,
+      T_0TOPSP, PRALG_1, POLYNOM1, WAYBEL_3, PENCIL_1, PENCIL_2, TOPS_2,
+      GRAPH_2;
+ constructors POLYNOM1, PZFMISC1, TOPS_2, T_0TOPSP, PENCIL_2, MEMBERED,
+      GRAPH_2;
+ clusters STRUCT_0, RELSET_1, SUBSET_1, PENCIL_1, XREAL_0, ARYTM_3, TREES_9,
+      FUNCT_2, XBOOLE_0, REALSET1, FINSET_1, TEX_1, PBOOLE;
+ requirements REAL, BOOLE, SUBSET, NUMERALS, ARITHM;
+ definitions TARSKI, XBOOLE_0, PBOOLE, FUNCT_1, FUNCT_2, PENCIL_2, T_0TOPSP;
+ theorems XBOOLE_0, ZFMISC_1, FUNCT_1, FINSEQ_1, FINSEQ_3, AXIOMS, NAT_1,
+      CARD_3, PBOOLE, REALSET2, PRE_TOPC, FUNCT_7, PRALG_1, PZFMISC1, TARSKI,
+      FUNCT_2, REALSET1, TOPS_2, PENCIL_1, PENCIL_2, CARD_1, XBOOLE_1,
+      PUA2MSS1, REAL_1, FINSET_1, CARD_2, GRAPH_2, FUNCOP_1, RELAT_1, RELSET_1;
+ schemes TRANSGEO, NAT_1, FINSEQ_2, PENCIL_2, FINSEQ_1, PBOOLE, FUNCT_1;
+
+begin :: Preliminaries
+    
+theorem powel:
+  for S being non empty non void TopStruct
+  for f being Collineation of S
+  for p,q being Point of S st p,q are_collinear holds f.p,f.q are_collinear
+  proof
+    let S be non empty non void TopStruct;
+    let f be Collineation of S;
+    f: dom f = the carrier of S by FUNCT_2:def 1;
+    let p,q be Point of S;
+    assume pq: p,q are_collinear;
+    per cases;
+    suppose p=q;
+      hence f.p,f.q are_collinear by PENCIL_1:def 1;
+    end;
+    suppose p<>q; then
+      consider B being Block of S such that
+      B: {p,q} c= B by pq,PENCIL_1:def 1;
+      p in B & q in B by B,ZFMISC_1:38; then
+      f.p in f.:B & f.q in f.:B by f,FUNCT_1:def 12; then
+      {f.p,f.q} c= f.:B by ZFMISC_1:38;
+      hence f.p,f.q are_collinear by PENCIL_1:def 1;
+    end;
+  end;
+  
+theorem not_cluster:
+  for I being non empty set
+  for i be Element of I
+  for A being non-Trivial-yielding (1-sorted-yielding ManySortedSet of I)
+  holds A.i is non trivial
+  proof
+    let I be non empty set;
+    let i be Element of I;
+    let A be non-Trivial-yielding (1-sorted-yielding ManySortedSet of I);
+    dom A = I by PBOOLE:def 3; then
+    A.i in rng A by FUNCT_1:12;
+    hence A.i is non trivial by PENCIL_1:def 17;
+  end;
+  
+theorem errata:
+  for S being non void identifying_close_blocks TopStruct
+  st S is strongly_connected holds S is without_isolated_points
+  proof
+    let S be non void identifying_close_blocks TopStruct;
+    assume s: S is strongly_connected;
+    now
+      let x being Point of S;
+      consider X being set such that
+      x: X in the topology of S by XBOOLE_0:def 1;
+      reconsider X as Block of S by x;
+      reconsider X1=X as Subset of S by x;
+      X1 is closed_under_lines strong by PENCIL_1:20,21; then
+    consider f being FinSequence of bool the carrier of S such that
+    f: X = f.1 & x in f.(len f) &
+    (for W being Subset of S st W in rng f holds
+    W is closed_under_lines strong) &
+    for i being Nat st 1 <= i & i < len f holds
+    2 c= Card((f.i) /\ (f.(i+1))) by s,PENCIL_1:def 11;
+    x in f.(len f) by f; then
+    f.(len f) <> {}; then
+    do: len f in dom f by FUNCT_1:def 4; then
+    re: f.(len f) in rng f by FUNCT_1:12; then
+    reconsider W=f.(len f) as Subset of S;
+    fo: W is closed_under_lines strong &
+    for i being Nat st 1 <= i & i < len f holds
+    2 c= Card((f.i) /\ (f.(i+1))) by f,re;
+    reconsider l=len f - 1 as Nat by do,FINSEQ_3:28;
+    per cases;
+    suppose x in X;
+      hence ex l being Block of S st x in l;
+    end;  
+    suppose not x in X; then
+      ro: 1 <> len f by f;
+      1 <= len f by do,FINSEQ_3:27; then
+      1 < len f -1 + 1 by ro,AXIOMS:21; then
+      1 <= l & l < len f by NAT_1:38; then
+      2 c= Card((f.l) /\ (f.(l+1))) by fo; then
+      consider a being set such that
+      a0: a in f.l /\ f.(len f) & a<>x by PENCIL_1:3;
+      aa: a in W & a<>x by a0,XBOOLE_0:def 3;
+      reconsider a as Point of S by aa;
+      x,a are_collinear by aa,f,fo,PENCIL_1:def 3;
+      then consider l being Block of S such that
+      l: {x,a} c= l by aa,PENCIL_1:def 1;
+      x in l & a in l by l,ZFMISC_1:38; 
+      hence ex l being Block of S st x in l;
+    end;
+    end;
+    hence S is without_isolated_points by PENCIL_1:def 9;
+  end;
+  
+theorem p_1_28:
+  for S being non empty non void identifying_close_blocks TopStruct holds
+  S is strongly_connected implies S is connected
+  proof
+    let S being non empty non void identifying_close_blocks TopStruct;
+    assume S is strongly_connected; then  
+    S is strongly_connected & S is without_isolated_points by errata;
+    hence S is connected by PENCIL_1:28;
+  end;
+
+theorem 
+  for S being non void non degenerated TopStruct
+  for L being Block of S
+  ex x being Point of S st not x in L
+  proof
+    let S be non void non degenerated TopStruct;
+    let L be Block of S;
+    L in the topology of S; then
+    L c= the carrier of S; then
+    l: L c= [#]S by PRE_TOPC:def 3;
+    now assume [#]S c= L; then
+      [#]S=L by l,XBOOLE_0:def 10; then
+      the carrier of S is Block of S by PRE_TOPC:def 3;
+      hence contradiction by PENCIL_1:def 5;
+    end; then
+    consider x being set such that
+    x: x in [#]S & not x in L by TARSKI:def 3;
+    reconsider x as Point of S by x;
+    take x;
+    thus thesis by x;
+  end;
+
+theorem e2:
+  for I being non empty set
+  for A being non-Empty (TopStruct-yielding ManySortedSet of I)
+  for p being Point of Segre_Product A holds
+  p is Element of Carrier A
+  proof
+    let I be non empty set;
+    let A be non-Empty (TopStruct-yielding ManySortedSet of I);
+    let p be Point of Segre_Product A;
+    Segre_Product A = TopStruct(#product Carrier A, Segre_Blocks A#)
+    by PENCIL_1:def 23;
+    then the carrier of Segre_Product A = product Carrier A;
+    then p in product Carrier A; then
+    consider f being Function such that
+    f: f=p & dom f = dom Carrier A & for x being set st x in dom Carrier A
+    holds f.x in (Carrier A).x by CARD_3:def 5;
+    d: dom f = I by PBOOLE:def 3,f; then
+    reconsider f as ManySortedSet of I by PBOOLE:def 3; 
+    for i being set st i in I holds f.i is Element of (Carrier A).i by f,d; 
+    hence p is Element of Carrier A by f,PBOOLE:def 17;
+  end;
+
+theorem e3:
+  for I being non empty set
+  for A be 1-sorted-yielding ManySortedSet of I
+  for x being Element of I holds (Carrier A).x = [#](A.x)
+  proof
+    let I be non empty set;
+    let A be 1-sorted-yielding ManySortedSet of I;
+    let x be Element of I;
+    consider R being 1-sorted such that
+    r: R=A.x & (Carrier A).x = the carrier of R by PRALG_1:def 13;
+    thus (Carrier A).x = [#](A.x) by r,PRE_TOPC:def 3;
+  end;    
+  
+theorem e4:
+  for I being non empty set
+  for i being Element of I 
+  for A be non-Trivial-yielding (TopStruct-yielding ManySortedSet of I)
+  ex L being Segre-like non trivial-yielding ManySortedSubset of Carrier A st
+  indx(L)=i & product L is Segre-Coset of A
+  proof
+    let I being non empty set;
+    let x being Element of I ;
+    let A be non-Trivial-yielding (TopStruct-yielding ManySortedSet of I);
+    dom A = I by PBOOLE:def 3; then
+    A.x in rng A by FUNCT_1:12; then
+    A.x is non trivial by PENCIL_1:def 18; then
+    the carrier of A.x is non trivial by REALSET2:def 5; then
+    reconsider C=[#](A.x) as non trivial set by PRE_TOPC:def 3;
+    consider p0 being Point of Segre_Product A;
+    reconsider p0 as Element of Carrier A by e2;
+    reconsider p={p0} as ManySortedSubset of Carrier A by PENCIL_1:11;
+    reconsider b=p+*(x,C) as Segre-like non trivial-yielding ManySortedSubset
+    of Carrier A by PENCIL_1:10,9,PENCIL_2:7;
+    take b;
+    dom p=I by PBOOLE:def 3; then
+    c: b.x = C by FUNCT_7:33; then
+    b.x is non trivial; 
+    hence indx(b)=x by PENCIL_1:def 21; then
+    bi: b.indx(b)=[#](A.indx(b)) by c;
+    product b c= the carrier of Segre_Product A
+    proof
+      let a be set;
+      assume a in product b; then consider f being Function such that
+      f: a=f & dom f=dom b &
+      for x being set st x in dom b holds f.x in b.x by CARD_3:def 5;
+      di: dom Carrier A = I by PBOOLE:def 3; then
+      df: dom f = dom Carrier A by f,PBOOLE:def 3;
+      now
+        let i be set; assume i: i in dom Carrier A; then
+        fi: f.i in b.i by f,df;
+        reconsider i1=i as Element of I by i,di;
+        per cases;
+        suppose i1=x;
+          hence f.i in (Carrier A).i by e3,fi,c;
+        end;
+        suppose i1<>x; then
+          f.i1 in p.i1 by FUNCT_7:34,fi; then
+          f.i1 in {p0.i1} by PZFMISC1:def 1; then
+          f.i1 = p0.i1 by TARSKI:def 1; then
+          f1: f.i1 is Element of (Carrier A).i1 by PBOOLE:def 17;
+          I = dom A by PBOOLE:def 3; then
+          A.i1 in rng A by FUNCT_1:12; then
+          A.i1 is non trivial by PENCIL_1:def 18; then
+          the carrier of A.i1 is non trivial by REALSET2:def 5; then
+          reconsider AA=the carrier of A.i1 as non trivial set;
+          AA is non empty; then
+          [#](A.i1) is non empty by PRE_TOPC:def 3; then
+          (Carrier A).i1 is non empty by e3;
+          hence f.i in (Carrier A).i by f1;
+        end;  
+      end; then
+      ap: a in product Carrier A by f,CARD_3:def 5,df;
+      Segre_Product A = TopStruct(#product Carrier A, Segre_Blocks A#)
+      by PENCIL_1:def 23;
+      hence a in the carrier of Segre_Product A by ap;
+    end;
+    hence product b is Segre-Coset of A by PENCIL_2:def 2,bi;
+  end;
+  
+theorem e4':
+  for I being non empty set
+  for i being Element of I 
+  for A be non-Trivial-yielding (TopStruct-yielding ManySortedSet of I)
+  for p being Point of Segre_Product A
+  ex L being Segre-like non trivial-yielding ManySortedSubset of Carrier A st
+  indx(L)=i & product L is Segre-Coset of A & p in product L
+  proof
+    let I being non empty set;
+    let x being Element of I ;
+    let A be non-Trivial-yielding (TopStruct-yielding ManySortedSet of I);
+    dom A = I by PBOOLE:def 3; then
+    A.x in rng A by FUNCT_1:12; then
+    A.x is non trivial by PENCIL_1:def 18; then
+    the carrier of A.x is non trivial by REALSET2:def 5; then
+    reconsider C=[#](A.x) as non trivial set by PRE_TOPC:def 3;
+    let p0 be Point of Segre_Product A;
+    reconsider p0'=p0 as Element of Carrier A by e2;
+    reconsider p={p0'} as ManySortedSubset of Carrier A by PENCIL_1:11;
+    reconsider b=p+*(x,C) as Segre-like non trivial-yielding ManySortedSubset
+    of Carrier A by PENCIL_1:10,9,PENCIL_2:7;
+    take b;
+    dom p=I by PBOOLE:def 3; then
+    c: b.x = C by FUNCT_7:33; then
+    b.x is non trivial; 
+    hence indx(b)=x by PENCIL_1:def 21; then
+    bi: b.indx(b)=[#](A.indx(b)) by c;
+    product b c= the carrier of Segre_Product A
+    proof
+      let a be set;
+      assume a in product b; then consider f being Function such that
+      f: a=f & dom f=dom b &
+      for x being set st x in dom b holds f.x in b.x by CARD_3:def 5;
+      di: dom Carrier A = I by PBOOLE:def 3; then
+      df: dom f = dom Carrier A by f,PBOOLE:def 3;
+      now
+        let i be set; assume i: i in dom Carrier A; then
+        fi: f.i in b.i by f,df;
+        reconsider i1=i as Element of I by i,di;
+        per cases;
+        suppose i1=x;
+          hence f.i in (Carrier A).i by e3,fi,c;
+        end;
+        suppose i1<>x; then
+          f.i1 in p.i1 by FUNCT_7:34,fi; then
+          f.i1 in {p0'.i1} by PZFMISC1:def 1; then
+          f.i1 = p0'.i1 by TARSKI:def 1; then
+          f1: f.i1 is Element of (Carrier A).i1 by PBOOLE:def 17;
+          I = dom A by PBOOLE:def 3; then
+          A.i1 in rng A by FUNCT_1:12; then
+          A.i1 is non trivial by PENCIL_1:def 18; then
+          the carrier of A.i1 is non trivial by REALSET2:def 5; then
+          reconsider AA=the carrier of A.i1 as non trivial set;
+          AA is non empty; then
+          [#](A.i1) is non empty by PRE_TOPC:def 3; then
+          (Carrier A).i1 is non empty by e3;
+          hence f.i in (Carrier A).i by f1;
+        end;  
+      end; then
+      ap: a in product Carrier A by f,CARD_3:def 5,df;
+      Segre_Product A = TopStruct(#product Carrier A, Segre_Blocks A#)
+      by PENCIL_1:def 23;
+      hence a in the carrier of Segre_Product A by ap;
+    end;
+    hence product b is Segre-Coset of A by PENCIL_2:def 2,bi;
+    dp: dom p0' = I & dom (p+*(x,C)) = I & dom p = I by PBOOLE:def 3;
+    now
+      let z be set;
+      assume zi: z in I; then
+      reconsider z1=z as Element of I;
+      dom A = I by PBOOLE:def 3; then
+      A.z in rng A by zi,FUNCT_1:def 5; then
+      A.z is non trivial 1-sorted by PENCIL_1:def 18; then
+      reconsider tc = the carrier of A.z1 as non trivial set by REALSET2:def 5;
+      tc: tc is non empty;
+      per cases;
+      suppose zx: z=x; then
+        pc: p+*(x,C).z = C by dp,FUNCT_7:33;
+        p0'.z1 is Element of (Carrier A).z1 by PBOOLE:def 17; then
+        p0'.z1 is Element of [#](A.z1) by e3; then
+        p0'.z1 is Element of the carrier of A.z1 by PRE_TOPC:def 3; then
+        p0'.z1 in the carrier of A.z1 by tc; then
+        p0'.z1 in [#](A.z1) by PRE_TOPC:def 3;      
+        hence p0'.z in p+*(x,C).z by pc,zx;
+      end;
+      suppose z<>x; then
+        p+*(x,C).z = p.z by FUNCT_7:34; then
+        p+*(x,C).z = {p0'.z} by zi,PZFMISC1:def 1;
+        hence p0'.z in p+*(x,C).z by TARSKI:def 1;
+      end;
+    end;
+    hence p0 in product b by dp,CARD_3:18;
+  end;
+  
+theorem e4_4:
+  for I being non empty set
+  for A being non-Trivial-yielding (TopStruct-yielding ManySortedSet of I)
+  for b being Segre-like non trivial-yielding ManySortedSubset of Carrier A st
+  product b is Segre-Coset of A holds b.indx(b) = [#](A.indx(b))
+  proof
+    let I be non empty set;
+    let A be non-Trivial-yielding (TopStruct-yielding ManySortedSet of I);
+    let b be Segre-like non trivial-yielding ManySortedSubset of Carrier A
+    such that
+    b: product b is Segre-Coset of A;
+    consider L being Segre-like non trivial-yielding ManySortedSubset of
+    Carrier A such that
+    L: product b = product L & L.indx(L) = [#](A.indx(L)) by b,PENCIL_2:def 2;
+    b=L by L,PUA2MSS1:2;
+    hence b.indx(b) = [#](A.indx(b)) by L;
+  end;
+
+theorem e4_5:
+  for I being non empty set
+  for A be non-Trivial-yielding (TopStruct-yielding ManySortedSet of I)
+  for L1,L2 being Segre-like non trivial-yielding ManySortedSubset of Carrier A
+  st product L1 is Segre-Coset of A & product L2 is Segre-Coset of A &
+  indx(L1) = indx(L2) & product L1 meets product L2 holds L1=L2
+  proof
+    let I be non empty set;
+    let A be non-Trivial-yielding (TopStruct-yielding ManySortedSet of I);
+    let L1,L2 being Segre-like non trivial-yielding ManySortedSubset of
+    Carrier A;
+    assume ll: product L1 is Segre-Coset of A & product L2 is Segre-Coset of A
+    & indx(L1) = indx(L2) & product L1 meets product L2;
+    reconsider B1=product L1, B2=product L2 as Segre-Coset of A by ll;
+    consider b1 being Segre-like non trivial-yielding ManySortedSubset of
+    Carrier A such that
+    b1: B1=product b1 & b1.indx(b1)=[#](A.indx(b1)) by PENCIL_2:def 2; 
+    consider b2 being Segre-like non trivial-yielding ManySortedSubset of
+    Carrier A such that
+    b2: B2=product b2 & b2.indx(b2)=[#](A.indx(b2)) by PENCIL_2:def 2; 
+    bl: b1=L1 & b2=L2 by b1,b2,PUA2MSS1:2;
+    B1 /\ B2 <> {} by ll,XBOOLE_0:def 7; then
+    consider x being set such that x0: x in B1 /\ B2 by XBOOLE_0:def 1;
+    x: x in B1 & x in B2 by x0,XBOOLE_0:def 3; then
+    reconsider x as Element of Carrier A by e2;
+    d: dom L1 = I by PBOOLE:def 3 .= dom L2 by PBOOLE:def 3;
+    now
+      let a be set;
+      assume ad: a in dom L1; then
+      reconsider i=a as Element of I by PBOOLE:def 3;
+      per cases;
+      suppose i: i=indx(L1); then
+        L1.i = [#](A.i) by bl,b1;
+        hence L1.a = L2.a by bl,b2,i,ll;
+      end;
+      suppose i: i<>indx(L1);
+        L1.i is trivial non empty by i,PENCIL_1:def 21; then
+        consider o1 being set such that
+        o1: L1.i = {o1} by REALSET1:def 4;
+        L2.i is trivial non empty by i,ll,PENCIL_1:def 21; then
+        consider o2 being set such that
+        o2: L2.i = {o2} by REALSET1:def 4;
+        l1: x.i in L1.i by x,CARD_3:18,ad;
+        l2: x.i in L2.i by x,CARD_3:18,ad,d;
+        o1 = x.i by l1,o1,TARSKI:def 1 .= o2 by l2,o2,TARSKI:def 1;
+        hence L1.a = L2.a by o1,o2;
+      end;
+    end;
+    hence L1=L2 by d,FUNCT_1:9;
+  end;
+  
+theorem blema:
+  for I being non empty set
+  for A be PLS-yielding ManySortedSet of I
+  for L being Segre-like non trivial-yielding ManySortedSubset of Carrier A
+  for B being Block of A.indx(L) holds
+  product(L+*(indx(L),B)) is Block of Segre_Product A
+  proof
+    let I being non empty set;
+    let A be PLS-yielding ManySortedSet of I;
+    let L being Segre-like non trivial-yielding ManySortedSubset of Carrier A;
+    let B being Block of A.indx(L);
+    B in the topology of A.indx(L); then
+    reconsider B1=B as Subset of A.indx(L);
+    tr: now let i be Element of I;
+    assume a: i <> indx(L); then
+    L+*(indx(L),B1).i = L.i by FUNCT_7:34;
+    hence L+*(indx(L),B1).i is non empty trivial by a,PENCIL_1:12;
+    end; 
+    2 c= Card B by PENCIL_1:def 6; then
+    B1 is non trivial by PENCIL_1:4; then
+    reconsider S=L+*(indx(L),B1) as Segre-like non trivial-yielding
+    ManySortedSubset of Carrier A by tr,PENCIL_1:def 20,PENCIL_2:7,PENCIL_1:9;
+    ii: now assume indx(S)<>indx(L); then
+      S.indx(S) is non empty trivial by tr;
+      hence contradiction by PENCIL_1:def 21;
+    end;
+    dom L = I by PBOOLE:def 3;
+    then S.indx(S) = B1 by ii,FUNCT_7:33; then
+    S.indx(S) is Block of A.indx(S) by ii;
+    hence product(L+*(indx(L),B)) is Block of Segre_Product A by PENCIL_1:24;
+  end;
+  
+theorem e5_5:
+  for I being non empty set
+  for A be PLS-yielding ManySortedSet of I
+  for i being Element of I
+  for p being Point of A.i
+  for L being Segre-like non trivial-yielding ManySortedSubset of Carrier A
+  st i<>indx(L) holds
+  L+*(i,{p}) is Segre-like non trivial-yielding ManySortedSubset of Carrier A
+  proof
+    let I be non empty set;
+    let A be PLS-yielding ManySortedSet of I;
+    let i be Element of I;
+    let p be Point of A.i;
+    let L be Segre-like non trivial-yielding ManySortedSubset of Carrier A;
+    assume i: i<>indx(L);
+    L+*(i,{p}) c= Carrier A
+    proof
+      let a be set;
+      assume a: a in I; then
+      reconsider a1=a as Element of I;
+      a1: a1 in dom L by a,PBOOLE:def 3;
+      per cases;
+      suppose ai: a=i; then
+        L+*(i,{p}).a1 = {p} by a1,FUNCT_7:33; then
+        L+*(i,{p}).a1 c= the carrier of A.a1 by ai; then
+        L+*(i,{p}).a1 c= [#](A.a1) by PRE_TOPC:def 3;
+        hence L+*(i,{p}).a c= (Carrier A).a by e3;
+      end;
+      suppose a<>i; then
+        r: L+*(i,{p}).a1 = L.a1 by FUNCT_7:34;
+        L c= Carrier A by PBOOLE:def 23;
+        hence L+*(i,{p}).a c= (Carrier A).a by PBOOLE:def 5,r;
+      end;
+    end; then
+    l1: L+*(i,{p}) is ManySortedSubset of Carrier A by PBOOLE:def 23;
+    now
+      let j be Element of I;
+      dl: dom L=I by PBOOLE:def 3;
+      assume j: j<>indx(L);
+      per cases;
+      suppose j=i; then
+        L+*(i,{p}).j = {p} by dl,FUNCT_7:33;
+        hence L+*(i,{p}).j is non empty trivial;
+      end;
+      suppose j<>i; then
+        L+*(i,{p}).j = L.j by FUNCT_7:34;
+        hence L+*(i,{p}).j is non empty trivial by j,PENCIL_1:12;
+      end;
+    end; then
+    l2: L+*(i,{p}) is Segre-like by PENCIL_1:def 20;
+    dom (L+*(i,{p})) = I by PBOOLE:def 3; then
+    rn: L+*(i,{p}).indx(L) in rng (L+*(i,{p})) by FUNCT_1:12;
+    L+*(i,{p}).indx(L) = L.indx(L) by i,FUNCT_7:34; then
+    L+*(i,{p}).indx(L) is non trivial by PENCIL_1:def 21; then
+    L+*(i,{p}) is non trivial-yielding by PENCIL_1:def 16,rn;
+    hence L+*(i,{p}) is Segre-like non trivial-yielding ManySortedSubset
+    of Carrier A by l1,l2;
+end;
+  
+theorem e5_6:
+  for I being non empty set
+  for A being PLS-yielding ManySortedSet of I
+  for i being Element of I
+  for S being Subset of A.i
+  for L being Segre-like non trivial-yielding ManySortedSubset of Carrier A
+  holds product (L+*(i,S)) is Subset of Segre_Product A
+  proof
+    let I be non empty set;
+    let A be PLS-yielding ManySortedSet of I;
+    let i be Element of I;
+    let S be Subset of A.i;
+    let L be Segre-like non trivial-yielding ManySortedSubset of Carrier A;
+    S: Segre_Product A = TopStruct(#product Carrier A, Segre_Blocks A#)
+    by PENCIL_1:def 23;
+    d: dom (L+*(i,S)) = I by PBOOLE:def 3 .= dom Carrier A by PBOOLE:def 3;
+    now
+      let a be set;
+      assume a in dom (L+*(i,S)); then
+      ai: a in I by PBOOLE:def 3; then
+      al: a in dom L by PBOOLE:def 3;
+      per cases;
+      suppose ai: a=i; then        
+        (L+*(i,S)).a = S by al,FUNCT_7:33; then
+        (L+*(i,S)).a c= the carrier of A.i; then
+        (L+*(i,S)).a c= [#](A.i) by PRE_TOPC:def 3;
+        hence (L+*(i,S)).a c= (Carrier A).a by e3,ai;
+      end;
+      suppose a<>i; then
+        la: (L+*(i,S)).a = L.a by FUNCT_7:34;
+        L c= Carrier A by PBOOLE:def 23;
+        hence (L+*(i,S)).a c= (Carrier A).a by la,PBOOLE:def 5,ai;
+      end;
+    end; then
+    product (L+*(i,S)) c= product Carrier A by d,CARD_3:38;
+    hence product (L+*(i,S)) is Subset of Segre_Product A by S;
+  end;
+
+theorem e6:
+  for I being non empty set
+  for P being ManySortedSet of I
+  for i being Element of I holds
+  {P}.i is non empty trivial
+  proof
+    let I being non empty set;
+    let P be ManySortedSet of I;
+    let i be Element of I;
+    {P}.i = {P.i} by PZFMISC1:def 1;
+    hence {P}.i is non empty trivial;
+  end;
+  
+theorem e7:
+  for I being non empty set
+  for i being Element of I
+  for A be PLS-yielding ManySortedSet of I
+  for B being Block of A.i
+  for P being Element of Carrier A holds
+  product({P}+*(i,B)) is Block of Segre_Product A
+  proof
+    let I being non empty set;
+    let i be Element of I;
+    let A be PLS-yielding ManySortedSet of I;
+    let B being Block of A.i;
+    let P being Element of Carrier A;
+    B in the topology of A.i; then
+    reconsider B1=B as Subset of A.i;
+    tr: now let j be Element of I;
+    assume j <> i; then
+    {P}+*(i,B1).j = {P}.j by FUNCT_7:34;
+    hence {P}+*(i,B1).j is non empty trivial by e6;
+    end;
+    reconsider PP={P} as ManySortedSubset of Carrier A by PENCIL_1:11;
+    2 c= Card B by PENCIL_1:def 6; then
+    B1 is non trivial by PENCIL_1:4; then
+    reconsider S=PP+*(i,B1) as Segre-like non trivial-yielding ManySortedSubset
+    of Carrier A by tr,PENCIL_1:def 20,PENCIL_2:7,PENCIL_1:9;
+    ii: now assume indx(S)<>i; then
+      S.indx(S) is non empty trivial by tr;
+      hence contradiction by PENCIL_1:def 21;
+    end;
+    dom {P} = I by PBOOLE:def 3;
+    then S.indx(S) = B1 by ii,FUNCT_7:33; then
+    S.i is Block of A.i by ii;
+    hence product({P}+*(i,B)) is Block of Segre_Product A by PENCIL_1:24,ii;
+  end;
+  
+theorem col:
+  for I being non empty set
+  for A being PLS-yielding ManySortedSet of I
+  for p,q being Point of Segre_Product A st p<>q holds
+  p,q are_collinear iff 
+  for p1,q1 being ManySortedSet of I st p1=p & q1=q
+  ex i being Element of I st
+  (for a,b being Point of A.i st a=p1.i & b=q1.i
+  holds a<>b & a,b are_collinear) &
+  for j being Element of I st j<>i holds p1.j = q1.j
+  proof
+    let I being non empty set;
+    let A being PLS-yielding ManySortedSet of I;
+    let p,q being Point of Segre_Product A;
+    assume prq: p<>q;
+    thus p,q are_collinear implies 
+    for p1,q1 being ManySortedSet of I st p1=p & q1=q
+    ex i being Element of I st
+    (for a,b being Point of A.i st a=p1.i & b=q1.i holds
+    a<>b & a,b are_collinear) &
+    for j being Element of I st j<>i holds p1.j = q1.j
+    proof
+      assume p,q are_collinear; then
+      consider l being Block of Segre_Product A such that
+      l: {p,q} c= l by PENCIL_1:def 1,prq;
+      consider L being Segre-like non trivial-yielding ManySortedSubset of
+      Carrier A such that
+      L: l = product L & L.indx(L) is Block of A.indx(L) by PENCIL_1:24;
+      let p1,q1 be ManySortedSet of I;
+      assume pp: p1=p & q1=q; then
+      pq1: p1 in l & q1 in l by ZFMISC_1:38,l;
+      take i=indx(L);
+      thus for a,b being Point of A.i st a=p1.i & b=q1.i holds
+      a<>b & a,b are_collinear
+      proof
+        let a,b being Point of A.i;
+        assume ab: a=p1.i & b=q1.i;
+        consider p0 being Function such that
+        p0: p0=p1 & dom p0=dom L & for o being set st o in dom L holds
+        p0.o in L.o by pq1,CARD_3:def 5,L;
+        consider q0 being Function such that
+        q0: q0=q1 & dom q0=dom L & for o being set st o in dom L holds
+        q0.o in L.o by pq1,CARD_3:def 5,L;
+        reconsider LI=L.indx(L) as Block of A.indx(L) by L;
+        now
+          assume aeb: a=b;
+          dpq: dom p1 = I by PBOOLE:def 3 .= dom q1 by PBOOLE:def 3;
+          now
+            let o be set;
+            assume od: o in dom p1; then
+            reconsider o1=o as Element of I by PBOOLE:def 3;
+            per cases;
+            suppose o1=i;
+              hence p1.o = q1.o by aeb,ab;
+            end;
+            suppose o1<>i; then
+              L.o1 is non empty trivial by PENCIL_1:12; then
+              consider s being set such that
+              los: L.o1 = {s} by REALSET1:def 4;
+              p1.o in {s} & q1.o in {s} by los,p0,q0,od; then
+              p1.o = s & q1.o = s by TARSKI:def 1;
+              hence p1.o = q1.o;
+            end;
+          end;
+          hence contradiction by pp,dpq,FUNCT_1:9,prq;
+        end;
+        hence a<>b;
+        dom L = I by PBOOLE:def 3; then
+        p1.i in LI & q1.i in LI by p0,q0; then
+        {a,b} c= LI by ab,ZFMISC_1:38;      
+        hence a,b are_collinear by PENCIL_1:def 1;
+      end;
+      let j being Element of I;
+      assume j<>i;
+      hence p1.j = q1.j by PENCIL_1:23,pq1,L;
+    end;
+    assume ass: for p1,q1 being ManySortedSet of I st p1=p & q1=q
+    ex i being Element of I st
+    (for a,b being Point of A.i st a=p1.i & b=q1.i holds
+    a<>b & a,b are_collinear) &
+    for j being Element of I st j<>i holds p1.j = q1.j;
+    reconsider p1=p,q1=q as Element of Carrier A by e2;
+    consider i being Element of I such that
+    i: (for a,b being Point of A.i st a=p1.i & b=q1.i holds
+    a<>b & a,b are_collinear) &
+    for j being Element of I st j<>i holds p1.j = q1.j by ass;
+    p1.i is Element of (Carrier A).i by PBOOLE:def 17; then
+    p1.i is Element of [#](A.i) by e3;
+    then reconsider a=p1.i as Point of A.i by PRE_TOPC:def 3;
+    q1.i is Element of (Carrier A).i by PBOOLE:def 17; then
+    q1.i is Element of [#](A.i) by e3;
+    then reconsider b=q1.i as Point of A.i by PRE_TOPC:def 3;
+    a,b are_collinear by i; then
+    pr: a=b or ex l being Block of A.i st {a,b} c= l by PENCIL_1:def 1;
+    per cases by pr;
+    suppose a=b;
+      hence p,q are_collinear by i;
+    end;
+    suppose ex l being Block of A.i st {a,b} c= l;  then
+      consider l being Block of A.i such that
+      l: {a,b} c= l;
+      reconsider L=product ({p1}+*(i,l)) as Block of Segre_Product A by e7;    
+      dpl: dom ({p1}+*(i,l)) = I by PBOOLE:def 3;
+      dp0: dom {p1} = dom ({p1}+*(i,l)) by dpl,PBOOLE:def 3;
+      dp1: dom p1 = dom ({p1}+*(i,l)) by dpl,PBOOLE:def 3;
+      for o being set st o in dom ({p1}+*(i,l)) holds p1.o in ({p1}+*(i,l)).o
+      proof
+        let o be set;
+        assume od: o in dom ({p1}+*(i,l));
+        per cases;
+        suppose oi: o = i; then
+          ({p1}+*(i,l)).o = l by od,dp0,FUNCT_7:33;
+          hence p1.o in ({p1}+*(i,l)).o by oi,l,ZFMISC_1:38;
+        end;
+        suppose o <> i; then
+          ({p1}+*(i,l)).o = {p1}.o by FUNCT_7:34; then
+          ({p1}+*(i,l)).o = {p1.o} by PZFMISC1:def 1,od,dpl;
+          hence p1.o in ({p1}+*(i,l)).o by TARSKI:def 1;
+        end;
+      end; then
+      pl: p in L by dp1,CARD_3:def 5;
+      dq1: dom q1 = dom ({p1}+*(i,l)) by dpl,PBOOLE:def 3;
+      for o being set st o in dom ({p1}+*(i,l)) holds q1.o in ({p1}+*(i,l)).o
+      proof
+        let o be set;
+        assume od: o in dom ({p1}+*(i,l)); then
+        reconsider o1=o as Element of I by PBOOLE:def 3;
+        per cases;
+        suppose oi: o1 = i; then
+          ({p1}+*(i,l)).o = l by od,dp0,FUNCT_7:33;
+          hence q1.o in ({p1}+*(i,l)).o by oi,l,ZFMISC_1:38;
+        end;
+        suppose oj: o1 <> i; then
+          ({p1}+*(i,l)).o = {p1}.o by FUNCT_7:34; then
+          ({p1}+*(i,l)).o = {p1.o} by PZFMISC1:def 1,od,dpl; then
+          ({p1}+*(i,l)).o = {q1.o1} by oj,i;
+          hence q1.o in ({p1}+*(i,l)).o by TARSKI:def 1;
+        end;
+      end; then
+      q in L by dq1,CARD_3:def 5; then
+      {p,q} c= L by pl,ZFMISC_1:38;
+      hence p,q are_collinear by PENCIL_1:def 1;
+    end;
+  end;
+  
+theorem inqua:
+  for I being non empty set
+  for A being PLS-yielding ManySortedSet of I
+  for b being Segre-like non trivial-yielding ManySortedSubset of Carrier A
+  for x being Point of A.indx(b)
+  ex p being ManySortedSet of I st
+  p in product b & {p+*(indx(b),x) qua set} = product(b+*(indx(b),{x}))
+  proof
+    let I be non empty set;
+    let A be PLS-yielding ManySortedSet of I;
+    let b1 be Segre-like non trivial-yielding ManySortedSubset of Carrier A;
+    set i=indx(b1);
+    let x be Point of A.i;
+    consider bb being set such that
+    bb: bb in product b1 by XBOOLE_0:def 1;
+    consider bf being Function such that
+    bf: bf=bb & dom bf=dom b1 & for o being set st o in dom b1 holds
+    bf.o in b1.o by bb,CARD_3:def 5;
+    db1: dom b1=I & dom Carrier A = I by PBOOLE:def 3; then
+    reconsider bb as ManySortedSet of I by bf,PBOOLE:def 3;
+    take p=bb;
+    thus p in product b1 by bb;
+    set bbx=bb+*(i,x);
+    thus {p+*(i,x) qua set}=product(b1+*(i,{x}))
+    proof
+      thus {p+*(i,x) qua set} c= product(b1+*(i,{x}))
+      proof
+        let o be set;
+        assume o in {p+*(i,x) qua set}; then
+        ob: o = bbx by TARSKI:def 1;
+        do: dom bbx = I by PBOOLE:def 3 .= dom (b1+*(i,{x})) by PBOOLE:def 3;
+        now
+          let z be set;
+          assume z in dom (b1+*(i,{x})); then
+          z0: z in I by PBOOLE:def 3; then
+          z1: z in dom bb by PBOOLE:def 3;
+          per cases;
+          suppose zi: z=i; then
+            bbx.z = x by FUNCT_7:33,z1; then
+            bbx.z in {x} by TARSKI:def 1; 
+            hence bbx.z in (b1+*(i,{x})).z by FUNCT_7:33,zi,db1;
+          end;
+          suppose zi: z<>i; then
+            bbx.z = bb.z by FUNCT_7:34; then
+            bbx.z in b1.z by bb,CARD_3:18,z0,db1;
+            hence bbx.z in (b1+*(i,{x})).z by zi,FUNCT_7:34;
+          end;
+        end;
+        hence o in product(b1+*(i,{x})) by ob,CARD_3:18,do;
+      end;
+      let o be set;
+      assume o in product(b1+*(i,{x})); then
+      consider u being Function such that
+      u: u=o & dom u=dom (b1+*(i,{x})) &
+      for z being set st z in dom (b1+*(i,{x})) holds u.z in (b1+*(i,{x})).z
+      by CARD_3:def 5;
+      dd: dom u = I by u,PBOOLE:def 3 .= dom bbx by PBOOLE:def 3;
+      now
+        let z be set;
+        assume z: z in dom u; then
+        z1: z in I by u,PBOOLE:def 3; then
+        reconsider zz=z as Element of I;
+        uzi: u.z in (b1+*(i,{x})).z by u,z;
+        per cases;
+        suppose zi: zz=i; then
+          u.z in {x} by db1,uzi,FUNCT_7:33; then
+          u.z = x by TARSKI:def 1;
+          hence u.z = bbx.z by bf,db1,zi,FUNCT_7:33;
+        end;
+        suppose zi: zz<>i; then
+          b1.zz is non empty trivial by PENCIL_1:def 21; then
+          consider o being set such that
+          o: b1.z = {o} by REALSET1:def 4;
+          u.z in b1.z by zi,uzi,FUNCT_7:34; then
+          uzo: u.z = o by o,TARSKI:def 1;
+          bbx.z = bb.z by zi,FUNCT_7:34; then
+          bbx.z in {o} by z1,o,bf,db1;
+          hence u.z = bbx.z by uzo,TARSKI:def 1;
+        end;
+      end; then
+      u=bbx by dd,FUNCT_1:9;
+      hence o in {p+*(i,x) qua set} by u,TARSKI:def 1;
+    end;
+  end;
+    
+definition
+  let I be finite non empty set;
+  let b1,b2 be ManySortedSet of I;
+  func diff(b1,b2) -> Nat equals :diffdef:
+  Card {i where i is Element of I: b1.i <> b2.i};
+  correctness
+  proof
+    {i where i is Element of I: b1.i <> b2.i} c= I
+    proof
+      let a be set;
+      assume a in {i where i is Element of I: b1.i <> b2.i}; then
+      consider i being Element of I such that
+      a: a=i & b1.i<>b2.i;
+      thus a in I by a;
+    end; then
+    reconsider F={i where i is Element of I: b1.i <> b2.i} as finite set
+    by FINSET_1:13;
+    card F = Card F;
+    hence thesis;
+  end;
+end;
+
+theorem diffmin:
+  for I being finite non empty set
+  for b1,b2 being ManySortedSet of I
+  for i being Element of I st b1.i<>b2.i holds
+  diff(b1,b2) = diff(b1,b2+*(i,b1.i)) + 1
+  proof
+    let I be finite non empty set;
+    let b1,b2 be ManySortedSet of I;
+    let j be Element of I;
+    assume bj: b1.j<>b2.j;
+    {i where i is Element of I: b1.i <> b2.i} c= I
+    proof
+      let a be set;
+      assume a in {i where i is Element of I: b1.i <> b2.i}; then
+      consider i being Element of I such that
+      a: a=i & b1.i<>b2.i;
+      thus a in I by a;
+    end; then
+    reconsider F={i where i is Element of I: b1.i <> b2.i} as finite set
+    by FINSET_1:13;
+    set b3=b2+*(j,b1.j);
+    {i where i is Element of I: b1.i <> b3.i} c= I
+    proof
+      let a be set;
+      assume a in {i where i is Element of I: b1.i <> b3.i}; then
+      consider i being Element of I such that
+      a: a=i & b1.i<>b3.i;
+      thus a in I by a;
+    end; then
+    reconsider G={i where i is Element of I: b1.i <> b3.i} as finite set
+    by FINSET_1:13;
+    un: F = G \/ {j}
+    proof
+      thus F c= G \/ {j}
+      proof
+        let o be set;
+        assume o in F; then
+        consider i being Element of I such that
+        i: o=i & b1.i <> b2.i;
+        per cases;
+        suppose i=j; then
+          o in {j} by i,TARSKI:def 1;
+          hence o in G \/ {j} by XBOOLE_0:def 2;
+        end;
+        suppose i<>j; then
+          b3.i=b2.i by FUNCT_7:34; then
+          i in G by i;
+          hence o in G \/ {j} by i,XBOOLE_0:def 2;
+        end;
+      end;
+      let o be set;
+      assume o: o in G \/ {j};
+      per cases by o,XBOOLE_0:def 2;
+      suppose o in G; then
+        consider i being Element of I such that
+        i: o=i & b1.i <> b3.i;
+        now
+          assume ass: b1.i = b2.i; then
+          i=j by i,FUNCT_7:34;
+          hence contradiction by ass,bj;
+        end;
+        hence o in F by i;
+      end;
+      suppose o in {j}; then
+        o=j by TARSKI:def 1;
+        hence o in F by bj;
+      end;      
+    end; 
+    now
+      assume j in G; then
+      consider jj being Element of I such that
+      jj: jj=j & b1.jj <> b3.jj;
+      dom b2=I by PBOOLE:def 3; then
+      b1.j=b3.j by FUNCT_7:33;
+      hence contradiction by jj;
+    end; then
+    card F = card G + 1 by un,CARD_2:54;
+    hence diff(b1,b2) = card G + 1 by diffdef
+    .= diff(b1,b2+*(j,b1.j)) + 1 by diffdef;
+end;
+  
+begin :: The adherence of Segre cosets
+  
+definition
+  let I be non empty set;
+  let A be PLS-yielding ManySortedSet of I;
+  let B1,B2 be Segre-Coset of A;
+  pred B1 '||' B2 means :defpar:
+  for x being Point of Segre_Product A st x in B1
+  ex y being Point of Segre_Product A st y in B2 & x,y are_collinear; 
+end;
+
+theorem colrow:
+  for I being non empty set
+  for A being PLS-yielding ManySortedSet of I
+  for B1,B2 being Segre-Coset of A st B1 '||' B2
+  for f being Collineation of Segre_Product A
+  for C1,C2 being Segre-Coset of A st C1=f.:B1 & C2=f.:B2 holds C1 '||' C2
+  proof
+    let I be non empty set;
+    let A be PLS-yielding ManySortedSet of I;
+    let B1,B2 be Segre-Coset of A such that B: B1 '||' B2;
+    let f be Collineation of Segre_Product A;
+    let C1,C2 be Segre-Coset of A such that
+    C: C1=f.:B1 & C2=f.:B2;
+    let x be Point of Segre_Product A;
+    assume x in C1; then
+    consider a being set such that
+    a: a in dom f & a in B1 & x=f.a by C,FUNCT_1:def 12;
+    reconsider a as Point of Segre_Product A by a;
+    consider b being Point of Segre_Product A such that
+    b: b in B2 & a,b are_collinear by B,defpar,a;
+    d: dom f = the carrier of Segre_Product A by FUNCT_2:def 1;
+    take y=f.b;
+    thus y in C2 by C,b,FUNCT_1:def 12,d;
+    per cases;
+    suppose a=b;
+      hence x,y are_collinear by a,PENCIL_1:def 1;
+    end;
+    suppose a<>b; then
+      consider l being Block of Segre_Product A such that
+      l: {a,b} c= l by b,PENCIL_1:def 1;
+      reconsider k=f.:l as Block of Segre_Product A;
+      a in l & b in l by l,ZFMISC_1:38; then
+      x in k & y in k by a,d,FUNCT_1:def 12; then
+      {x,y} c= k by ZFMISC_1:38;
+      hence x,y are_collinear by PENCIL_1:def 1;
+    end;
+end;
+  
+theorem rowni:
+  for I being non empty set
+  for A being PLS-yielding ManySortedSet of I
+  for B1,B2 being Segre-Coset of A st B1 misses B2 holds
+  B1 '||' B2 iff 
+  for b1,b2 being Segre-like non trivial-yielding ManySortedSubset of Carrier A
+  st B1 = product b1 & B2 = product b2 holds indx(b1)=indx(b2) &
+  ex r being Element of I st r<>indx(b1) & 
+  (for i being Element of I st i<>r holds b1.i=b2.i) &
+  for c1,c2 being Point of A.r st b1.r = {c1} & b2.r = {c2} holds
+  c1,c2 are_collinear
+  proof
+    let I being non empty set;
+    let A being PLS-yielding ManySortedSet of I;
+    let B1,B2 being Segre-Coset of A;
+    assume bmb: B1 misses B2;
+    thus B1 '||' B2 implies
+    for b1,b2 being Segre-like non trivial-yielding ManySortedSubset of
+    Carrier A st
+    B1 = product b1 & B2 = product b2 holds indx(b1)=indx(b2) &
+    ex r being Element of I st r<>indx(b1) & 
+    (for i being Element of I st i<>r holds b1.i=b2.i) &
+    for c1,c2 being Point of A.r st b1.r={c1} & b2.r={c2} holds
+    c1,c2 are_collinear
+    proof
+      assume B1 '||' B2; then
+      brb: for x being Point of Segre_Product A st x in B1
+      ex y being Point of Segre_Product A st y in B2 & x,y are_collinear
+      by defpar;
+      let b1,b2 being Segre-like non trivial-yielding ManySortedSubset of
+      Carrier A;
+      assume bb: B1 = product b1 & B2 = product b2;
+      consider L1 being Segre-like non trivial-yielding ManySortedSubset of
+      Carrier A such that
+      L1: B1 = product L1 & L1.indx(L1) = [#](A.indx(L1)) by PENCIL_2:def 2;
+      consider L2 being Segre-like non trivial-yielding ManySortedSubset of
+      Carrier A such that
+      L2: B2 = product L2 & L2.indx(L2) = [#](A.indx(L2)) by PENCIL_2:def 2;
+      bl1:b1 = L1 by bb,L1,PUA2MSS1:2;    
+      bl2:b2 = L2 by bb,L2,PUA2MSS1:2;    
+      thus iri: indx(b1)=indx(b2)
+      proof
+        assume indx(b1)<>indx(b2);
+        then b2.indx(b1) is non empty trivial by PENCIL_1:12; then
+        consider c2 being set such that
+        c2: b2.indx(b1)={c2} by REALSET1:def 4;
+        consider p0 being set such that
+        p0: p0 in B1 by XBOOLE_0:def 1,bb;
+        reconsider p0 as Point of Segre_Product A by p0;
+        reconsider p=p0 as Element of Carrier A by e2;      
+        consider bl being Block of A.indx(b1);
+        dwa:  2 c= Card bl by PENCIL_1:def 6;
+        bl in the topology of A.indx(b1); then
+        bl c= the carrier of (A.indx(b1)); then
+        Card bl c= Card (the carrier of (A.indx(b1))) by CARD_1:27; then
+        2 c= Card (the carrier of (A.indx(b1))) by dwa,XBOOLE_1:1;
+        then consider a being set such that
+        a: a in the carrier of (A.indx(b1)) & a <> c2 by PENCIL_1:3;
+        reconsider a as Point of A.indx(b1) by a;      
+        reconsider x=p+*(indx(b1),a) as Point of Segre_Product A
+        by PENCIL_1:25;
+        reconsider x1=x as Element of Carrier A by e2;
+        do: dom x1 = I by PBOOLE:def 3 .= dom b1 by PBOOLE:def 3;
+        now
+          let i be set;
+          assume i0: i in dom x1; then i in I by PBOOLE:def 3; then
+          i: i in dom p by PBOOLE:def 3;
+          per cases;
+          suppose i1: i=indx(b1); then
+            x1.i = a by FUNCT_7:33,i; then
+            x1.i in [#](A.indx(b1)) by a,PRE_TOPC:def 3;
+            hence x1.i in b1.i by i1,bl1,L1;
+          end;
+          suppose i2: i<>indx(b1); 
+            consider f being Function such that
+            f: f=p & dom f = dom b1 & for a being set st a in dom b1 holds
+            f.a in b1.a by p0,bb,CARD_3:def 5; 
+            x1.i = p.i by i2,FUNCT_7:34;
+            hence x1.i in b1.i by f,do,i0;
+          end;          
+        end; then
+        x: x in B1 by do,CARD_3:def 5,bb; then
+        consider y being Point of Segre_Product A such that
+        y: y in B2 & x,y are_collinear by brb;
+        reconsider y1=y as Element of Carrier A by e2;
+        per cases;
+        suppose
+          y=x; then
+          y in B1 by x; then
+          y in B1 /\ B2 by y,XBOOLE_0:def 3;      
+          hence contradiction by bmb,XBOOLE_0:def 7;
+        end;
+        suppose
+          y<>x; then
+          consider i0 being Element of I such that
+          iz: (for a,b being Point of A.i0 st a=x1.i0 & b=y1.i0 holds
+          a<>b & a,b are_collinear) &
+          for j being Element of I st j<>i0 holds x1.j = y1.j by col,y;        
+          doy: dom y1 = I by PBOOLE:def 3 .= dom b1 by PBOOLE:def 3;
+          now
+            let i be set;
+            assume i0: i in dom y1; then i in I by PBOOLE:def 3; then
+            i: i in dom p by PBOOLE:def 3;
+            then reconsider i5=i as Element of I by PBOOLE:def 3;
+            per cases;
+            suppose i1: i=indx(b1);
+              reconsider i1=i as Element of I by i,PBOOLE:def 3;
+              y1.i1 is Element of (Carrier A).i1 by PBOOLE:def 17; then
+              y1.i1 is Element of [#](A.i1) by e3; then
+              y1.i1 is Element of the carrier of (A.i1) by PRE_TOPC:def 3; then
+              y1.i1 in the carrier of (A.i1); then
+              y1.i1 in [#](A.i1) by PRE_TOPC:def 3;
+              hence y1.i in b1.i by i1,bl1,L1;
+            end;
+            suppose i2: i<>indx(b1); 
+              consider f being Function such that
+              f: f=p & dom f = dom b1 & for a being set st a in dom b1 holds
+              f.a in b1.a by p0,bb,CARD_3:def 5;
+              dom p = I by PBOOLE:def 3; then 
+              ra: x1.indx(b1) = a by FUNCT_7:33;
+              consider g being Function such that
+              g: g=y1 & dom g = dom b2 & for a being set st a in dom b2 holds
+              g.a in b2.a by y,bb,CARD_3:def 5;
+              dom b2 = I by PBOOLE:def 3; then
+              y1.indx(b1) in b2.indx(b1) by g; then
+              y1.indx(b1) in {c2} by c2; then
+              y1.indx(b1) = c2 by TARSKI:def 1; then
+              y1.indx(b1)<>x1.indx(b1) by a,ra; then
+              i0 = indx(b1) by iz; then
+              yx: y1.i5 = x1.i5 by i2,iz;
+              x1.i = p.i by i2,FUNCT_7:34;
+              hence y1.i in b1.i by yx,f,doy,i0;
+            end;          
+          end; then
+          y in B1 by doy,CARD_3:def 5,bb; then
+          y in B1 /\ B2 by y,XBOOLE_0:def 3;      
+          hence contradiction by bmb,XBOOLE_0:def 7;
+        end;
+      end;
+      
+      thus ex r being Element of I st r<>indx(b1) & 
+      (for i being Element of I st i<>r holds b1.i=b2.i) &
+      for c1,c2 being Point of A.r st b1.r={c1} & b2.r={c2} holds
+      c1,c2 are_collinear
+      proof
+        consider x being set such that
+        x: x in B1 by XBOOLE_0:def 1,bb;
+        reconsider x as Point of Segre_Product A by x;
+        reconsider x1=x as Element of Carrier A by e2;      
+        consider y being Point of Segre_Product A such that
+        y: y in B2 & x,y are_collinear by brb,x;
+        reconsider y1=y as Element of Carrier A by e2;
+        now
+          assume x=y; then
+          B1 /\ B2 <> {} by x,y,XBOOLE_0:def 3;
+          hence contradiction by bmb,XBOOLE_0:def 7;
+        end; then
+        consider r being Element of I such that
+        r: (for a,b being Point of A.r st a=x1.r & b=y1.r holds
+        a<>b & a,b are_collinear) &
+        for j being Element of I st j<>r holds x1.j = y1.j by col,y;
+        take r;
+        now
+          assume er: r=indx(b1);
+          dy: dom y1 = I by PBOOLE:def 3 .= dom b1 by PBOOLE:def 3;
+          now
+            let o be set;
+            assume do: o in dom b1; then
+            reconsider o1=o as Element of I by PBOOLE:def 3;
+            per cases;
+            suppose so: o1=r; then
+              bh: b1.o1 = [#](A.r) by er,bl1,L1;
+              y1.o1 is Element of (Carrier A).o1 by PBOOLE:def 17; then
+              y1.o1 is Element of [#](A.o1) by e3;
+              hence y1.o in b1.o by so,bh;
+            end;
+            suppose so: o1<>r; then
+              b1.o1 is trivial non empty by PENCIL_1:12,er; then
+              consider c being set such that
+              c: b1.o1 = {c} by REALSET1:def 4;
+              x1.o1 in b1.o1 by L1,bl1,x,do,CARD_3:18; then
+              c = x1.o1 by c,TARSKI:def 1 .= y1.o1 by r,so;
+              hence y1.o in b1.o by c,TARSKI:def 1;
+            end;
+          end; then
+          y1 in B1 by dy,L1,bl1,CARD_3:18; then
+          B1 /\ B2 <> {} by XBOOLE_0:def 3,y;
+          hence contradiction by XBOOLE_0:def 7,bmb;
+        end;
+        hence r<>indx(b1);
+        thus for i being Element of I st i<>r holds b1.i=b2.i
+        proof
+          let i be Element of I;
+          assume ir: i<>r;
+          per cases;
+          suppose i=indx(b1);then
+            b1.i = [#](A.i) & b2.i = [#](A.i) by iri,L1,L2,bl1,bl2;
+            hence b1.i=b2.i;
+          end;
+          suppose ii: i<>indx(b1);
+            b1.i is trivial non empty by ii,PENCIL_1:12; then
+            consider c being set such that
+            c: b1.i = {c} by REALSET1:def 4;
+            b2.i is trivial non empty by iri,ii,PENCIL_1:12; then
+            consider d being set such that
+            d: b2.i = {d} by REALSET1:def 4;
+            dom b1 = I by PBOOLE:def 3; then
+            x1.i in b1.i by L1,bl1,x,CARD_3:18; then
+            ce: c = x1.i by c,TARSKI:def 1 .= y1.i by r,ir;
+            dom b2 = I by PBOOLE:def 3; then
+            y1.i in b2.i by L2,bl2,y,CARD_3:18; 
+            hence b1.i=b2.i by c,d,TARSKI:def 1,ce;
+          end;
+        end;
+        let c1,c2 being Point of A.r;
+        assume cc: b1.r={c1} & b2.r={c2};
+        dom L1 = I by PBOOLE:def 3; then
+        x1.r in b1.r by bl1,L1,x,CARD_3:18; then
+        c1: c1 = x1.r by cc,TARSKI:def 1;
+        dom L2 = I by PBOOLE:def 3; then
+        y1.r in b2.r by bl2,L2,y,CARD_3:18; then
+        c2 = y1.r by cc,TARSKI:def 1;    
+        hence c1,c2 are_collinear by c1,r;
+      end;
+    end;
+    assume ass:
+    for b1,b2 being Segre-like non trivial-yielding ManySortedSubset of
+    Carrier A st
+    B1 = product b1 & B2 = product b2 holds indx(b1)=indx(b2) &
+    ex r being Element of I st r<>indx(b1) & 
+    (for i being Element of I st i<>r holds b1.i=b2.i) &
+    for c1,c2 being Point of A.r st b1.r={c1} & b2.r={c2} holds
+    c1,c2 are_collinear;
+    consider L1 being Segre-like non trivial-yielding ManySortedSubset of
+    Carrier A such that
+    be1: B1 = product L1 & L1.indx(L1) = [#](A.indx(L1)) by PENCIL_2:def 2;
+    consider L2 being Segre-like non trivial-yielding ManySortedSubset of
+    Carrier A such that
+    be2: B2 = product L2 & L2.indx(L2) = [#](A.indx(L2)) by PENCIL_2:def 2;
+    ix: indx(L1)=indx(L2) by be1,be2,ass;
+    consider r being Element of I such that
+    r: r<>indx(L1) & 
+    (for i being Element of I st i<>r holds L1.i=L2.i) &
+    for c1,c2 being Point of A.r st L1.r={c1} & L2.r={c2} holds
+    c1,c2 are_collinear by be1,be2,ass;
+    L1.r is non empty trivial by r,PENCIL_1:12; then
+    consider c1 being set such that
+    c1: L1.r = {c1} by REALSET1:def 4;
+    L1 c= Carrier A by PBOOLE:def 23; then
+    L1.r c= (Carrier A).r by PBOOLE:def 5; then
+    {c1} c= [#](A.r) by c1,e3; then
+    {c1} c= the carrier of A.r by PRE_TOPC:def 3; then 
+    reconsider c1 as Point of A.r by ZFMISC_1:37;
+    L2.r is non empty trivial by ix,r,PENCIL_1:12; then
+    consider c2 being set such that
+    c2: L2.r = {c2} by REALSET1:def 4;
+    L2 c= Carrier A by PBOOLE:def 23; then
+    L2.r c= (Carrier A).r by PBOOLE:def 5; then
+    {c2} c= [#](A.r) by c2,e3; then
+    {c2} c= the carrier of A.r by PRE_TOPC:def 3; then 
+    reconsider c2 as Point of A.r by ZFMISC_1:37;
+    crc: now assume cc: c1=c2;
+    dd: dom L1 = I by PBOOLE:def 3 .= dom L2 by PBOOLE:def 3;
+    now let s be set; assume s in dom L1; then
+      reconsider s1=s as Element of I by PBOOLE:def 3;
+      per cases;
+      suppose s1=r;
+        hence L1.s=L2.s by c1,c2,cc;
+      end;
+      suppose s1<>r;
+        hence L1.s=L2.s by r;
+      end;
+    end;
+    then L1=L2 by FUNCT_1:9,dd; then
+    B1 = B2 by be1,be2; then
+    B1 /\ B1 = {} by XBOOLE_0:def 7,bmb;
+    hence contradiction by be1;
+  end;
+  c1,c2 are_collinear by r,c1,c2; then
+  consider bb being Block of A.r such that
+  col: {c1,c2} c= bb by crc,PENCIL_1:def 1;
+  let x being Point of Segre_Product A;
+  assume x: x in B1;
+  reconsider x1=x as Element of Carrier A by e2;
+  consider x2 being Function such that
+  x2: x2=x & dom x2=dom L1 & for o being set st o in dom L1 holds
+  x2.o in L1.o by x,be1,CARD_3:def 5;
+  reconsider y=x1+*(r,c2) as Point of Segre_Product A by PENCIL_1:25;
+  take y;
+  reconsider y1=y as ManySortedSet of I;
+  d: dom y1 = I by PBOOLE:def 3 .= dom L2 by PBOOLE:def 3;
+  now let a be set;
+    assume a in dom L2; then reconsider a1=a as Element of I by PBOOLE:def 3;
+    per cases;
+    suppose ar: a1=r;
+      dom x1 = I by PBOOLE:def 3; then
+      y1.a = c2 by FUNCT_7:33,ar;
+      hence y1.a in L2.a by ar,c2,TARSKI:def 1;
+    end;  
+    suppose ar: a1<>r;
+      d: dom x1 = I by PBOOLE:def 3;
+      yx: y1.a1 = x1.a1 by FUNCT_7:34,ar;
+      y1.a1 in L1.a1 by yx,d,x2;
+      hence y1.a in L2.a by ar,r;
+    end;  
+  end;
+  hence y in B2 by d,be2,CARD_3:def 5;
+  reconsider B=product({x1}+*(r,bb)) as Block of Segre_Product A by e7;
+  dx: dom x1 = I by PBOOLE:def 3 .= dom ({x1}+*(r,bb)) by PBOOLE:def 3;
+  now let s be set;
+    assume s: s in dom x1; then s0: s in I by PBOOLE:def 3; then
+    sd: s in dom {x1} by PBOOLE:def 3;
+    per cases;
+    suppose sr: s=r;
+      x1.s in L1.s by s,x2; then
+      x1.s in {c1} by c1,sr; then
+      xc: x1.s = c1 by TARSKI:def 1;
+      bb = ({x1}+*(r,bb)).s by sr,sd,FUNCT_7:33;
+      hence x1.s in ({x1}+*(r,bb)).s by xc,col,ZFMISC_1:38;
+    end;
+    suppose s<>r; then
+      {x1}.s = ({x1}+*(r,bb)).s by FUNCT_7:34; then
+      {x1.s} = ({x1}+*(r,bb)).s by s0,PZFMISC1:def 1; 
+      hence x1.s in ({x1}+*(r,bb)).s by TARSKI:def 1;
+    end;
+  end; then
+  xb: x in B by CARD_3:def 5,dx;
+  dy: dom y1 = I by PBOOLE:def 3 .= dom({x1}+*(r,bb)) by PBOOLE:def 3;
+  now let s be set;
+    assume s in dom y1; then
+    s0: s in I by PBOOLE:def 3; then
+    sd: s in dom {x1} & s in dom x1 by PBOOLE:def 3;
+    per cases;
+    suppose sr: s=r; then
+      xc: y1.s = c2 by FUNCT_7:33,sd;
+      bb = ({x1}+*(r,bb)).s by sr,sd,FUNCT_7:33;
+      hence y1.s in ({x1}+*(r,bb)).s by xc,col,ZFMISC_1:38;
+    end;
+    suppose sra: s<>r; then
+      yrx: y1.s = x1.s by FUNCT_7:34;
+      {x1}.s = ({x1}+*(r,bb)).s by sra,FUNCT_7:34; then
+      {x1.s} = ({x1}+*(r,bb)).s by s0,PZFMISC1:def 1; 
+      hence y1.s in ({x1}+*(r,bb)).s by TARSKI:def 1,yrx;
+    end;
+  end; then
+  yb: y in B by dy,CARD_3:def 5;
+  {x,y} c= B by xb,yb,ZFMISC_1:38;
+  hence x,y are_collinear by PENCIL_1:def 1; 
+end;
+
+theorem conseq0:
+  for I being finite non empty set
+  for A being PLS-yielding ManySortedSet of I st
+  for i being Element of I holds A.i is connected
+  for i being Element of I
+  for p being Point of A.i
+  for b1,b2 being Segre-like non trivial-yielding ManySortedSubset of Carrier A
+  st product b1 is Segre-Coset of A & product b2 is Segre-Coset of A &
+  b1=b2+*(i,{p}) & not p in b2.i
+  ex D being FinSequence of bool the carrier of Segre_Product A st
+  D.1=product b1 & D.(len D)=product b2  &
+  (for i being Nat st i in dom D holds D.i is Segre-Coset of A) &
+  for i being Nat st 1<=i & i<len D
+  for Di,Di1 being Segre-Coset of A st Di=D.i & Di1=D.(i+1)
+  holds Di misses Di1 & Di '||' Di1
+  proof
+    let I be finite non empty set;
+    let A be PLS-yielding ManySortedSet of I such that
+    con: for i being Element of I holds A.i is connected;
+    let i be Element of I;
+    let p be Point of A.i;
+    let b1,b2 be Segre-like non trivial-yielding ManySortedSubset of Carrier A
+    such that
+    bb: product b1 is Segre-Coset of A & product b2 is Segre-Coset of A &
+    b1=b2+*(i,{p}) & not p in b2.i;
+    db2: dom b2=I by PBOOLE:def 3;
+    ib2:
+    now
+      assume i=indx(b2); then
+      b2.i = [#](A.i) by e4_4,bb; then
+      b2.i = the carrier of (A.i) by PRE_TOPC:def 3;
+      hence contradiction by bb;
+    end; then
+    b2.i is non empty trivial by PENCIL_1:12; then consider q being set
+    such that
+    q: b2.i = {q} by REALSET1:def 4;
+    b2 c= Carrier A by PBOOLE:def 23; then
+    b2.i c= (Carrier A).i by PBOOLE:def 5; then
+    {q} c= [#](A.i) by q,e3; then
+    q in [#](A.i) by ZFMISC_1:37; then
+    reconsider q as Point of A.i;
+    A.i is connected by con; then
+    consider f being FinSequence of the carrier of A.i such that
+    f: p=f.1 & q=f.(len f) and
+    f1: for j being Nat st 1 <= j & j < len f
+    for a,b being Point of A.i st a = f.j & b = f.(j+1)
+    holds a,b are_collinear by PENCIL_1:def 10;
+    
+    defpred P[set,set] means
+    for a,b being Point of A.i st $1=a & $2=b holds a,b are_collinear;
+    
+    ff: for j being Nat, x,y being set st
+    1 <= j & j < len f & x=f.j & y=f.(j+1) holds P[x,y] by f1;
+    consider F being one-to-one FinSequence of the carrier of A.i such that
+    F: p=F.1 & q=F.len F & rng F c= rng f &
+    for j being Nat st 1 <= j & j < len F holds P[F.j,F.(j+1)]
+    from PENCIL_2:sch 1(f,ff);
+    
+    deffunc H(set) = product (b2+*(i,{F.$1}));
+    
+    consider G being FinSequence such that
+    G: len G = len F & for j being Nat st j in Seg (len F) holds G.j=H(j)
+    from FINSEQ_1:sch 2;
+    rng G c= bool the carrier of Segre_Product A
+    proof
+      let a be set;
+      assume a in rng G; then
+      consider o being set such that
+      o: o in dom G & G.o=a by FUNCT_1:def 5;
+      reconsider o as Nat by o;
+      o in Seg (len F) by G,o,FINSEQ_1:def 3; then
+      go: G.o = product (b2+*(i,{F.o})) by G;
+      dom G = dom F by G,FINSEQ_3:31; then
+      fr: F.o in rng F by o,FUNCT_1:12;
+      F.o in the carrier of A.i by fr; then
+      {F.o} is Subset of A.i by ZFMISC_1:37; then
+      product (b2+*(i,{F.o})) is Subset of Segre_Product A by e5_6;
+      hence a in bool the carrier of Segre_Product A by o,go;
+    end; then
+    reconsider D=G as FinSequence of bool the carrier of Segre_Product A
+    by FINSEQ_1:def 4;
+    
+    take D;
+    Fne:
+    now
+      assume F={}; then
+      dom F = {} by FINSEQ_1:26; then
+      F.1 = {} & F.(len F) = {} by FUNCT_1:def 4; then
+      p = q by F; 
+      hence contradiction by bb,q,TARSKI:def 1;
+    end; then
+    rng F <> {} by FINSEQ_1:27; then
+    jf: 1 in dom F by FINSEQ_3:34;
+    dom F = Seg (len F) by FINSEQ_1:def 3; then 
+    1 in Seg (len F) by jf; then
+    dp1: D.1 = product (b2+*(i,{F.1})) by G;
+    b1 = b2+*(i,{F.1}) by F,bb;
+    hence D.1=product b1 by dp1;
+    len F <> 0 by Fne,FINSEQ_1:25; then
+    len D in Seg (len F) by G,FINSEQ_1:5; then
+    dp2: D.(len D) = product (b2+*(i,{F.(len F)})) by G;
+    {F.(len F)}=b2.i by q,F; then
+    b2=b2+*(i,{F.(len F)}) by FUNCT_7:37;
+    hence D.(len D)=product b2 by dp2;
+    thus for j being Nat st j in dom D holds D.j is Segre-Coset of A
+    proof
+      let j be Nat;
+      assume jd: j in dom D; then
+      j in Seg (len F) by G,FINSEQ_1:def 3; then
+      j in dom F by FINSEQ_1:def 3; then
+      fr: F.j in rng F by FUNCT_1:12;
+      reconsider Fj=F.j as Point of A.i by fr;
+      reconsider BB=b2+*(i,{Fj}) as Segre-like non trivial-yielding
+      ManySortedSubset of Carrier A by ib2,e5_5;
+      j in Seg (len F) by jd,FINSEQ_1:def 3,G; then
+      dj: D.j = product BB by G;      
+      de: D.j is Subset of Segre_Product A by e5_6,dj;
+      BB.indx(b2) = b2.indx(b2) by FUNCT_7:34,ib2; then
+      BB.indx(b2) is non trivial by PENCIL_1:def 21; then
+      ibbi: indx(BB)=indx(b2) by PENCIL_1:def 21; then
+      BB.indx(BB)=b2.indx(b2) by FUNCT_7:34,ib2
+      .=[#](A.indx(BB)) by ibbi,bb,e4_4;
+      hence D.j is Segre-Coset of A by de,dj,PENCIL_2:def 2;
+    end;
+    thus for i being Nat st 1<=i & i<len D for Di,Di1 being Segre-Coset of A st
+    Di=D.i & Di1=D.(i+1)
+    holds Di misses Di1 & Di '||' Di1
+    proof
+      let j be Nat;
+      assume jot: 1<=j & j<len D;
+      let Di,Di1 be Segre-Coset of A such that
+      DD: Di=D.j & Di1=D.(j+1);
+      j in dom D by jot,FINSEQ_3:27; then
+      j in Seg (len F) by G,FINSEQ_1:def 3; then
+      j in dom F by FINSEQ_1:def 3; then
+      fr: F.j in rng F by FUNCT_1:12;
+      reconsider Fj=F.j as Point of A.i by fr;
+      reconsider BB1=b2+*(i,{Fj}) as Segre-like non trivial-yielding
+      ManySortedSubset of Carrier A by ib2,e5_5;
+      1<=j+1 & j+1 <= len D by jot,NAT_1:38; then
+      j+1 in dom D by FINSEQ_3:27; then
+      j+1 in Seg (len F) by G,FINSEQ_1:def 3; then
+      j+1 in dom F by FINSEQ_1:def 3; then
+      fr: F.(j+1) in rng F by FUNCT_1:12;
+      reconsider Fj2=F.(j+1) as Point of A.i by fr;
+      reconsider BB2=b2+*(i,{Fj2}) as Segre-like non trivial-yielding
+      ManySortedSubset of Carrier A by ib2,e5_5;
+      j in dom D by jot,FINSEQ_3:27; then
+      je: j in Seg len F by G,FINSEQ_1:def 3; then
+      dj: D.j = product BB1 by G;
+      1<=j+1 & j+1<=len D by jot,NAT_1:38; then
+      j+1 in dom D by FINSEQ_3:27; then
+      jeje: j+1 in Seg len F by G,FINSEQ_1:def 3; then
+      dj1: D.(j+1) = product BB2 by G;
+      thus miss: Di misses Di1
+      proof
+        assume Di /\ Di1 <> {}; then consider x being set such that
+        x0: x in Di /\ Di1 by XBOOLE_0:def 1;
+        x: x in Di & x in Di1 by x0,XBOOLE_0:def 3;
+        consider x1 being Function such that
+        x1: x1=x & dom x1=dom (b2+*(i,{F.j})) & for o being set st
+        o in dom (b2+*(i,{F.j}))
+        holds x1.o in (b2+*(i,{F.j})).o by CARD_3:def 5,x,dj,DD;
+        consider x2 being Function such that
+        x2: x2=x & dom x2=dom (b2+*(i,{F.(j+1)})) & for o being set st
+        o in dom (b2+*(i,{F.(j+1)}))
+        holds x2.o in (b2+*(i,{F.(j+1)})).o by CARD_3:def 5,x,dj1,DD;
+        dom (b2+*(i,{F.j})) = I by PBOOLE:def 3; then
+        x1.i in (b2+*(i,{F.j})).i by x1; then
+        x1.i in {F.j} by db2,FUNCT_7:33; then
+        xf: x1.i = F.j by TARSKI:def 1;
+        dom (b2+*(i,{F.(j+1)})) = I by PBOOLE:def 3; then
+        x2.i in (b2+*(i,{F.(j+1)})).i by x2; then
+        x2.i in {F.(j+1)} by db2,FUNCT_7:33; then
+        xx: x2.i = F.(j+1) by TARSKI:def 1;
+        j in dom F & j+1 in dom F & j<>j+1 by je,jeje,FINSEQ_1:def 3,NAT_1:38;
+        hence contradiction by xx,xf,FUNCT_1:def 8,x1,x2;
+      end;
+      now
+        let c1,c2 be Segre-like non trivial-yielding ManySortedSubset of
+        Carrier A such that
+        DDc: Di = product c1 & Di1 = product c2;
+        cc1: c1 = b2+*(i,{F.j}) by dj,DD,DDc,PUA2MSS1:2; then
+        c1.indx(b2)=b2.indx(b2) by FUNCT_7:34,ib2; then
+        c1.indx(b2) is non trivial by PENCIL_1:def 21; then
+        ic: indx(c1) = indx(b2) by PENCIL_1:def 21;
+        cc2: c2 = b2+*(i,{F.(j+1)}) by dj1,DD,DDc,PUA2MSS1:2; then
+        c2.indx(b2)=b2.indx(b2) by FUNCT_7:34,ib2; then
+        c2.indx(b2) is non trivial by PENCIL_1:def 21;
+        hence indx(c1)=indx(c2) by PENCIL_1:def 21,ic;
+        take r=i;
+        thus r<>indx(c1) by ic,ib2;
+        thus for j being Element of I st j<>r holds c1.j=c2.j
+        proof
+          let j be Element of I;
+          assume jr: j<>r;
+          thus c1.j = b2.j by cc1,jr,FUNCT_7:34
+          .= c2.j by cc2,jr,FUNCT_7:34;
+        end;
+        thus for p1,p2 being Point of A.r st c1.r={p1} & c2.r={p2} holds
+        p1,p2 are_collinear
+        proof
+          let p1,p2 be Point of A.r such that
+          cr: c1.r={p1} & c2.r={p2};
+          c1.r = {F.j} by db2,cc1,FUNCT_7:33; then
+          fp: F.j=p1 by cr,ZFMISC_1:6;
+          c2.r = {F.(j+1)} by db2,cc2,FUNCT_7:33; then
+          F.(j+1)=p2 by cr,ZFMISC_1:6;
+          hence p1,p2 are_collinear by fp,jot,G,F;
+        end;
+      end;
+      hence Di '||' Di1 by miss,rowni;
+    end;
+  end;
+
+theorem conseq:
+  for I being finite non empty set
+  for A being PLS-yielding ManySortedSet of I st
+  for i being Element of I holds A.i is connected
+  for B1,B2 being Segre-Coset of A st B1 misses B2
+  for b1,b2 being Segre-like non trivial-yielding ManySortedSubset of Carrier A
+  st B1 = product b1 & B2 = product b2 holds indx(b1)=indx(b2) iff
+  ex D being FinSequence of bool the carrier of Segre_Product A st
+  D.1=B1 & D.(len D)=B2 &
+  (for i being Nat st i in dom D holds D.i is Segre-Coset of A) &
+  for i being Nat st 1<=i & i<len D for Di,Di1 being Segre-Coset of A st
+  Di=D.i & Di1=D.(i+1) holds Di misses Di1 & Di '||' Di1
+  proof
+    let I be finite non empty set;
+    let A be PLS-yielding ManySortedSet of I;
+    assume fic: for i being Element of I holds A.i is connected;
+    let B1,B2 be Segre-Coset of A such that
+    bmb: B1 misses B2;
+    let b1,b2 be Segre-like non trivial-yielding ManySortedSubset of Carrier A
+    such that
+    pb: B1 = product b1 & B2 = product b2;
+    
+    thus indx(b1)=indx(b2) implies ex D being FinSequence of bool the carrier
+    of Segre_Product A st
+    D.1=B1 & D.(len D)=B2 &
+    (for i being Nat st i in dom D holds D.i is Segre-Coset of A) &
+    for i being Nat st 1<=i & i<len D for Di,Di1 being Segre-Coset of A st
+    Di=D.i & Di1=D.(i+1) holds Di misses Di1 & Di '||' Di1
+    proof
+      assume ibbi: indx(b1)=indx(b2);
+      defpred P[Nat] means
+      for c1,c2 being Segre-like non trivial-yielding ManySortedSubset of
+      Carrier A st indx(c1) = indx(c2) &
+      product c1 is Segre-Coset of A & product c2 is Segre-Coset of A &
+      product c1 misses product c2 & diff(c1,c2)=$1 
+      ex D being FinSequence of bool the carrier of Segre_Product A st
+      D.1=product c1 & D.(len D)=product c2 &
+      (for i being Nat st i in dom D holds D.i is Segre-Coset of A) &
+      for i being Nat st 1<=i & i<len D for Di,Di1 being Segre-Coset of A st
+      Di=D.i & Di1=D.(i+1) holds Di misses Di1 & Di '||' Di1;
+      z: P[0]
+      proof
+        let c1,c2 be Segre-like non trivial-yielding ManySortedSubset of
+        Carrier A;
+        assume cc: indx(c1)=indx(c2) & product c1 is Segre-Coset of A &
+        product c2 is Segre-Coset of A &
+        product c1 misses product c2 & diff(c1,c2)=0; then
+        Card {i where i is Element of I: c1.i <> c2.i} = 0 by diffdef; then
+        p: {i where i is Element of I: c1.i <> c2.i} = {} by CARD_2:59;
+        d: dom c1 = I by PBOOLE:def 3 .= dom c2 by PBOOLE:def 3;
+        now
+          let a be set;
+          assume a in dom c1; then
+          reconsider j=a as Element of I by PBOOLE:def 3;
+          assume c1.a<>c2.a; then
+          j in {i where i is Element of I: c1.i <> c2.i}; 
+          hence contradiction by p;
+        end;
+        then c1=c2 by d,FUNCT_1:9;
+        hence ex D being FinSequence of bool the carrier of Segre_Product A st
+        D.1=product c1 & D.(len D)=product c2 &
+        (for i being Nat st i in dom D holds D.i is Segre-Coset of A) &
+        for i being Nat st 1<=i & i<len D for Di,Di1 being Segre-Coset of A st
+        Di=D.i & Di1=D.(i+1)
+        holds Di misses Di1 & Di '||' Di1 by cc;
+      end;
+      ind:
+      now
+        let k be Nat;
+        assume pk: P[k];
+        thus P[k+1]
+        proof
+          let c1,c2 being Segre-like non trivial-yielding ManySortedSubset of
+          Carrier A such that
+          cc: indx(c1) = indx(c2) & product c1 is Segre-Coset of A &
+          product c2 is Segre-Coset of A &
+          product c1 misses product c2 & diff(c1,c2)=k+1;
+          Card {i where i is Element of I: c1.i<>c2.i} = k+1 by cc,diffdef;then
+          Card {i where i is Element of I: c1.i<>c2.i} <> 0 by NAT_1:21; then
+          {i where i is Element of I: c1.i<>c2.i} <> {} by CARD_2:19; then
+          consider j0 being set such that
+          j0: j0 in {i where i is Element of I: c1.i<>c2.i} by XBOOLE_0:def 1;
+          consider j being Element of I such that
+          j: j0=j & c1.j<>c2.j by j0;
+          ci: c1.indx(c1)=[#](A.indx(c1)) & c2.indx(c1)=[#](A.indx(c1))
+          by e4_4,cc; then
+          ji: j <> indx(c1) by j;
+          c1.j is non empty trivial by ji,PENCIL_1:12; then
+          consider p being set such that
+          p: c1.j={p} by REALSET1:def 4;
+          c1 c= Carrier A by PBOOLE:def 23; then
+          {p} c= (Carrier A).j by p,PBOOLE:def 5; then
+          p in (Carrier A).j by ZFMISC_1:37; then
+          p in [#](A.j) by e3; then
+          reconsider p as Point of A.j;        
+          c2.j is non empty trivial by ji,PENCIL_1:12,cc; then
+          consider r being set such that
+          r: c2.j={r} by REALSET1:def 4;
+          c2 c= Carrier A by PBOOLE:def 23; then
+          {r} c= (Carrier A).j by r,PBOOLE:def 5; then
+          r in (Carrier A).j by ZFMISC_1:37; then
+          r in [#](A.j) by e3; then
+          reconsider r as Point of A.j;        
+          reconsider c3=c2+*(j,{p}) as Segre-like non trivial-yielding
+          ManySortedSubset of Carrier A by e5_5,ji,cc;
+          pr3: product c3 is Subset of Segre_Product A by e5_6;
+          ait: A.indx(c1) is non trivial by not_cluster;
+          ca: c3.indx(c1)=[#](A.indx(c1)) by ci,ji,FUNCT_7:34; then
+          c3.indx(c1)=the carrier of (A.indx(c1)) by PRE_TOPC:def 3; then
+          c3.indx(c1) is non trivial by ait,REALSET2:def 5; then
+          p4: indx(c3) = indx(c1) by PENCIL_1:def 21; then
+          c3.indx(c3)=[#](A.indx(c3)) by ca; then
+          p3: product c3 is Segre-Coset of A by PENCIL_2:def 2,pr3;
+          per cases;
+          suppose pm: product c1 misses product c3;
+            diff(c1,c2) = diff(c1,c3) + 1 by diffmin,j,p; then
+            k+(1-1) = diff(c1,c3) + 1-1 by cc; then
+            diff(c1,c3)= k; then
+            consider E being FinSequence of bool the carrier of Segre_Product A
+            such that
+            E: E.1=product c1 & E.(len E)=product c3 &
+            (for i being Nat st i in dom E holds E.i is Segre-Coset of A) &
+            for i being Nat st 1<=i & i<len E for Ei,Ei1 being Segre-Coset of A
+            st Ei=E.i & Ei1=E.(i+1)
+            holds Ei misses Ei1 & Ei '||' Ei1 by pk,p4,cc,p3,pm;
+          
+            np: not p in c2.j by p,r,j,TARSKI:def 1;
+            then consider F being FinSequence of bool the carrier of
+            Segre_Product A such that
+            F: F.1=product c3 & F.(len F)=product c2 &
+            (for i being Nat st i in dom F holds F.i is Segre-Coset of A) &
+            for i being Nat st 1<=i & i<len F for Di,Di1 being Segre-Coset of A
+            st Di=F.i & Di1=F.(i+1)
+            holds Di misses Di1 & Di '||' Di1 by conseq0,fic,p3,cc;          
+            reconsider D = E ^' F as FinSequence of bool the carrier of
+            Segre_Product A;
+            take D;          
+            1 in dom E by E,FUNCT_1:def 4; then
+            1 <= len E by FINSEQ_3:27; 
+            hence D.1=product c1 by GRAPH_2:14,E;
+            1 in dom F by F,FUNCT_1:def 4; then
+            jf: 1 <= len F by FINSEQ_3:27; 
+            now
+              assume len F=1; then
+              product c3 = product c2 by F; then
+              cr: c3 = c2 by PUA2MSS1:2;
+              dom c2 = I by PBOOLE:def 3; then
+              c3.j = {p} by FUNCT_7:33;
+              hence contradiction by cr,np,TARSKI:def 1;
+            end; then
+            lf: len F > 1 by jf,AXIOMS:21;
+            hence D.(len D)=product c2 by GRAPH_2:16,F;
+            
+            thus for i being Nat st i in dom D holds D.i is Segre-Coset of A
+            proof
+              let i be Nat;
+              assume i in dom D; then
+              rd: D.i in rng D by FUNCT_1:12;
+              rng D c= rng E \/ rng F by GRAPH_2:17; then
+              D.i in rng E \/ rng F by rd; then
+              pc: D.i in rng E or D.i in rng F by XBOOLE_0:def 2;
+              per cases by pc;
+              suppose D.i in rng E; then
+                consider i0 being set such that
+                i0: i0 in dom E & D.i = E.i0 by FUNCT_1:def 5;
+                thus D.i is Segre-Coset of A by i0,E;
+              end;
+              suppose D.i in rng F; then
+                consider i0 being set such that
+                i0: i0 in dom F & D.i = F.i0 by FUNCT_1:def 5;
+                thus D.i is Segre-Coset of A by i0,F;
+              end;
+            end;
+            thus for i being Nat st 1<=i & i<len D for Di,Di1 being Segre-Coset
+            of A st Di=D.i & Di1=D.(i+1) holds Di misses Di1 & Di '||' Di1
+            proof
+              let i be Nat;
+              assume i: 1<=i & i<len D;
+              let Di,Di1 be Segre-Coset of A such that
+              dd: Di=D.i & Di1=D.(i+1);
+              
+              per cases;
+              suppose ii: i<len E; then
+                d1: Di=E.i by GRAPH_2:14,i,dd;
+                i+1 <= len E by ii,NAT_1:38; then
+                1<=i+1 & i+1 <= len E by NAT_1:29; then
+                Di1=E.(i+1) by GRAPH_2:14,dd;
+                hence Di misses Di1 & Di '||' Di1 by d1,E,i,ii;
+              end;
+              suppose i>=len E; then
+                consider k being Nat such that
+                k: i=len E+k by NAT_1:28;
+                len F > 0 by lf; then
+                F <> {} by FINSEQ_1:25; then
+                lenno: len D + 1 = len E + len F by GRAPH_2:13;
+                per cases by NAT_1:18;
+                suppose k>0; then
+                  jk: 0+1<=k by NAT_1:38;
+                  len E + k < len D by i,k; then
+                  len E + k + 1 < len D + 1 by REAL_1:53; then
+                  len E + (k + 1) < len E + len F by lenno; then
+                  kk: k+1 < len F by AXIOMS:24; 
+                  k < k+1 by NAT_1:38; then
+                  k < len F by kk,AXIOMS:22; then
+                  di: Di=F.(k+1) by dd,k,jk,GRAPH_2:15;
+                  ddd: Di1=D.(len E + (k + 1)) by k,dd;
+                  1 <= k+1 by NAT_1:29; then
+                  dii: Di1=F.((k+1)+1) by kk,ddd,GRAPH_2:15;
+                  1 <= k+1 & k+1 < len F by kk,NAT_1:29;
+                  hence Di misses Di1 & Di '||' Di1 by di,dii,F;
+                end;
+                suppose k=0; then
+                  il: i = len E by k; then
+                  dij: Di = F.1 by F,E,dd,GRAPH_2:14,i;
+                  Di1 = F.(1+1) by lf,il,GRAPH_2:15,dd;
+                  hence Di misses Di1 & Di '||' Di1 by dij,F,lf;
+                end;
+              end;
+            end;
+          end;
+          suppose product c1 meets product c3; then
+            ccc: c1=c3 by e4_5,p3,p4,cc;
+            not p in c2.j by p,r,j,TARSKI:def 1;
+            hence ex D being FinSequence of bool the carrier of Segre_Product A
+            st D.1=product c1 & D.(len D)=product c2 &
+            (for i being Nat st i in dom D holds D.i is Segre-Coset of A) &
+            for i being Nat st 1<=i & i<len D for Di,Di1 being Segre-Coset of A
+            st Di=D.i & Di1=D.(i+1)
+            holds Di misses Di1 & Di '||' Di1 by ccc,conseq0,fic,cc;
+          end;
+        end;
+      end;
+      for n being Nat holds P[n] from NAT_1:sch 1(z,ind); then
+      P[diff(b1,b2)]; then
+      consider D being FinSequence of bool the carrier of Segre_Product A
+      such that
+      D: D.1=product b1 & D.(len D)=product b2 &
+      (for i being Nat st i in dom D holds D.i is Segre-Coset of A) &
+      for i being Nat st 1<=i & i<len D for Di,Di1 being Segre-Coset of A st
+      Di=D.i & Di1=D.(i+1) holds Di misses Di1 & Di '||' Di1 by ibbi,pb,bmb;
+      take D;
+      thus D.1=B1 & D.(len D)=B2 by D,pb;
+      thus (for i being Nat st i in dom D holds D.i is Segre-Coset of A) &
+      for i being Nat st 1<=i & i<len D for Di,Di1 being Segre-Coset of A st
+      Di=D.i & Di1=D.(i+1) holds Di misses Di1 & Di '||' Di1 by D;
+    end;
+    
+    given D being FinSequence of bool the carrier of Segre_Product A such that
+    d: D.1=B1 & D.(len D)=B2 &
+    (for i being Nat st i in dom D holds D.i is Segre-Coset of A) &
+    for i being Nat st 1<=i & i<len D
+    for Di,Di1 being Segre-Coset of A st Di=D.i & Di1=D.(i+1)
+    holds Di misses Di1 & Di '||' Di1;
+    defpred P[Nat] means for bb being Segre-like non trivial-yielding
+    ManySortedSubset of Carrier A st
+    product bb = D.$1 holds indx(b1) = indx(bb);
+    z: P[0]
+    proof
+      let bb be Segre-like non trivial-yielding ManySortedSubset of Carrier A
+      such that
+      bb: product bb = D.0;
+      not 0 in dom D by FINSEQ_3:26;
+      hence indx(b1) = indx(bb) by FUNCT_1:def 4,bb;
+    end;
+    n:
+    now
+      let k be Nat;
+      assume pk: P[k];
+      thus P[k+1]
+      proof
+        let bb be Segre-like non trivial-yielding ManySortedSubset of Carrier A
+        such that
+        bb: product bb = D.(k+1);
+        kjd: k+1 in dom D by FUNCT_1:def 4,bb; then
+        jk0: 1<=k+1 & k+1 <= len D by FINSEQ_3:27;
+        per cases by NAT_1:18;
+        suppose k=0; then
+          product bb = product b1 by bb,pb,d;
+          hence indx(b1) = indx(bb) by PUA2MSS1:2;
+        end;
+        suppose 0<k; then
+          0+1<k+1 by REAL_1:53; then
+          jk: 1<=k by NAT_1:38;
+          k <= len D by jk0,NAT_1:38; then
+          k in dom D by jk,FINSEQ_3:27; then
+          reconsider B0=D.k as Segre-Coset of A by d;
+          reconsider B3=D.(k+1) as Segre-Coset of A by d,kjd;
+          consider b0 being Segre-like non trivial-yielding ManySortedSubset of
+          Carrier A such that
+          b0: B0 = product b0 & b0.indx(b0)=[#](A.indx(b0)) by PENCIL_2:def 2;
+          ii: indx(b1) = indx(b0) by pk,b0;
+          k < len D by NAT_1:38,jk0; then
+          B0 misses B3 & B0 '||' B3 by d,jk; then
+          indx(b0) = indx(bb) by b0,bb,rowni;
+          hence indx(b1) = indx(bb) by ii;
+        end;
+      end;
+    end;
+    f: for n being Nat holds P[n] from NAT_1:sch 1(z,n);  
+    thus indx(b1) = indx(b2) by d,pb,f;
+  end;
+  
+theorem zach:
+  for I being finite non empty set
+  for A being PLS-yielding ManySortedSet of I st
+  for i being Element of I holds A.i is strongly_connected
+  for f being Collineation of Segre_Product A
+  for B1,B2 being Segre-Coset of A 
+  for b1,b2,b3,b4 being Segre-like non trivial-yielding ManySortedSubset of
+  Carrier A st B1 = product b1 & B2 = product b2 &
+  f.:B1 = product b3 & f.:B2 = product b4 holds
+  indx(b1)=indx(b2) implies indx(b3)=indx(b4)
+  proof
+    let I be finite non empty set;
+    let A be PLS-yielding ManySortedSet of I such that
+    con: for i being Element of I holds A.i is strongly_connected;
+    con1:
+    now
+      let i be Element of I;
+      A.i is strongly_connected by con;
+      hence A.i is connected by p_1_28;
+    end;
+    let f be Collineation of Segre_Product A;
+    let B1,B2 be Segre-Coset of A; 
+    let b1,b2,b3,b4 be Segre-like non trivial-yielding ManySortedSubset of
+    Carrier A such that
+    bb: B1 = product b1 & B2 = product b2 & f.:B1 = product b3 &
+    f.:B2 = product b4;
+    assume ii: indx(b1)=indx(b2);
+    per cases;
+    suppose bmb: B1 misses B2; then
+      consider D being FinSequence of bool the carrier of Segre_Product A
+      such that
+      d: D.1=B1 & D.(len D)=B2 &
+      (for i being Nat st i in dom D holds D.i is Segre-Coset of A) &
+      for i being Nat st 1<=i & i<len D for Di,Di1 being Segre-Coset of A st
+      Di=D.i & Di1=D.(i+1)
+      holds Di misses Di1 & Di '||' Di1 by bb,ii,con1,conseq;
+      deffunc F(Nat)=f.:(D.$1);
+      consider E being FinSequence of bool the carrier of Segre_Product A
+      such that
+      E: len E = len D & for j being Nat st j in Seg len D holds E.j = F(j)
+      from FINSEQ_2:sch 1;
+      1 in dom D by bb,d,FUNCT_1:def 4; then
+      1 in Seg len D by FINSEQ_1:def 3; then
+      E1: E.1 = f.:B1 by d,E;
+      len E in dom D by E,bb,d,FUNCT_1:def 4; then
+      len E in Seg len D by FINSEQ_1:def 3; then    
+      E2: E.(len E) = f.:B2 by d,E;
+      E3: for i being Nat st i in dom E holds E.i is Segre-Coset of A
+      proof
+        let i be Nat;
+        assume i in dom E; then
+        ie: i in Seg len D by E,FINSEQ_1:def 3; then
+        i in dom D by FINSEQ_1:def 3; then
+        reconsider di=D.i as Segre-Coset of A by d;
+        E.i = f.:di by E,ie;
+        hence E.i is Segre-Coset of A by con,PENCIL_2:24;
+      end;
+      E4: for i being Nat st 1<=i & i<len E for Ei,Ei1 being Segre-Coset of A
+      st Ei=E.i & Ei1=E.(i+1) holds Ei misses Ei1 & Ei '||' Ei1
+      proof
+        let i be Nat;
+        assume i: 1<=i & i<len E;
+        let Ei,Ei1 be Segre-Coset of A;
+        assume ee: Ei=E.i & Ei1=E.(i+1);
+        i in Seg len D by E,i,FINSEQ_1:3; then
+        i1: Ei=f.:(D.i) by ee,E;
+        1<=i+1 & i+1 <= len E by i,NAT_1:38; then
+        i+1 in Seg len D by E,FINSEQ_1:3; then
+        i2: Ei1=f.:(D.(i+1)) by ee,E;
+        i in dom D by E,FINSEQ_3:27,i; then
+        reconsider Di=D.i as Segre-Coset of A by d;
+        1<=i+1 & i+1 <= len E by i,NAT_1:38; then
+        i+1 in dom D by E,FINSEQ_3:27; then
+        reconsider Di1=D.(i+1) as Segre-Coset of A by d;
+        dmd: Di misses Di1 & Di '||' Di1 by d,i,E;
+        f is bijective Function of the carrier of
+        Segre_Product A, the carrier of Segre_Product A by PENCIL_2:def 4;
+        hence Ei misses Ei1 by i1,i2,dmd,FUNCT_1:125;
+        thus Ei '||' Ei1 by dmd,colrow,i1,i2;
+      end;
+      reconsider fB1=f.:B1,fB2=f.:B2 as Segre-Coset of A by PENCIL_2:24,con;
+      f is bijective Function of the carrier of Segre_Product A,
+      the carrier of Segre_Product A by PENCIL_2:def 4; then
+      fB1 misses fB2 by bmb,FUNCT_1:125;
+      hence indx(b3)=indx(b4) by conseq,E1,E2,E3,E4,con1,bb;
+    end;
+    suppose B1 meets B2; then
+      B1=B2 by e4_5,bb,ii;
+      hence indx(b3)=indx(b4) by bb,PUA2MSS1:2;
+    end;
+  end;
+  
+theorem perm:
+  for I being finite non empty set
+  for A being PLS-yielding ManySortedSet of I st
+  for i being Element of I holds A.i is strongly_connected
+  for f being Collineation of Segre_Product A
+  ex s being Permutation of I st
+  for i,j being Element of I
+  holds s.i=j iff
+  for B1 being Segre-Coset of A
+  for b1,b2 being Segre-like non trivial-yielding ManySortedSubset of Carrier A
+  st B1 = product b1 & f.:B1 = product b2 holds indx(b1)=i implies indx(b2)=j
+  proof
+    let I be finite non empty set;
+    let A be PLS-yielding ManySortedSet of I;
+    assume con: for i be Element of I holds A.i is strongly_connected;
+    let f be Collineation of Segre_Product A;
+    
+    deffunc A() = I;
+    defpred P[set,set] means  
+    for B1 being Segre-Coset of A
+    for b1,b2 being Segre-like non trivial-yielding ManySortedSubset of
+    Carrier A st B1 = product b1 & f.:B1 = product b2 holds
+    indx(b1)=$1 implies indx(b2)=$2;
+    
+    a:  for x being Element of A()
+    ex y being Element of A() st P[x,y]
+    proof
+      let x be Element of I;
+      dom A = I by PBOOLE:def 3; then
+      A.x in rng A by FUNCT_1:12; then
+      A.x is non trivial by PENCIL_1:def 18; then
+      the carrier of A.x is non trivial by REALSET2:def 5; then
+      reconsider C=[#](A.x) as non trivial set by PRE_TOPC:def 3;
+      consider p0 being Point of Segre_Product A;
+      reconsider p0 as Element of Carrier A by e2;
+      reconsider p={p0} as ManySortedSubset of Carrier A by PENCIL_1:11;
+      reconsider b=p+*(x,C) as Segre-like non trivial-yielding ManySortedSubset
+      of Carrier A by PENCIL_1:10,9,PENCIL_2:7;
+      dom p=I by PBOOLE:def 3; then
+      c: b.x = C by FUNCT_7:33; then
+      b.x is non trivial; then
+      b: indx(b)=x by PENCIL_1:def 21; then
+      bi: b.indx(b)=[#](A.indx(b)) by c;
+      product b c= the carrier of Segre_Product A
+      proof
+        let a be set;
+        assume a in product b; then consider f being Function such that
+        f: a=f & dom f=dom b & for x being set st x in dom b holds
+        f.x in b.x by CARD_3:def 5;
+        di: dom Carrier A = I by PBOOLE:def 3; then
+        df: dom f = dom Carrier A by f,PBOOLE:def 3;
+        now
+          let i be set; assume i: i in dom Carrier A; then
+          fi: f.i in b.i by f,df;
+          reconsider i1=i as Element of I by i,di;
+          per cases;
+          suppose i1=x; 
+            hence f.i in (Carrier A).i by e3,fi,c;
+          end;
+          suppose i1<>x; then
+            f.i1 in p.i1 by FUNCT_7:34,fi; then
+            f.i1 in {p0.i1} by PZFMISC1:def 1; then
+            f.i1 = p0.i1 by TARSKI:def 1; then
+            f1: f.i1 is Element of (Carrier A).i1 by PBOOLE:def 17;
+            [#](A.i1) is non empty by PRE_TOPC:def 3; then
+            (Carrier A).i1 is non empty by e3;
+            hence f.i in (Carrier A).i by f1;
+          end;  
+        end; then
+        ap: a in product Carrier A by f,CARD_3:def 5,df;
+        Segre_Product A = TopStruct(#product Carrier A, Segre_Blocks A#)
+        by PENCIL_1:def 23;
+        hence a in the carrier of Segre_Product A by ap;
+      end;
+      then reconsider B=product b as Segre-Coset of A by PENCIL_2:def 2,bi;
+      reconsider fB=f.:B as Segre-Coset of A by con,PENCIL_2:24;
+      consider b0 being Segre-like non trivial-yielding ManySortedSubset of
+      Carrier A such that
+      b0: fB = product b0 & b0.indx(b0)=[#](A.indx(b0)) by PENCIL_2:def 2;
+      take y=indx(b0);
+      let B1 being Segre-Coset of A;
+      let b1,b2 being Segre-like non trivial-yielding ManySortedSubset of
+      Carrier A;
+      assume B1 = product b1 & f.:B1 = product b2 & indx(b1)=x;
+      hence indx(b2)=y by b,b0,zach,con;
+    end;
+    b:  for y being Element of A()
+    ex x being Element of A() st P[x,y]
+    proof
+      let x be Element of I;
+      dom A = I by PBOOLE:def 3; then
+      A.x in rng A by FUNCT_1:12; then
+      A.x is non trivial by PENCIL_1:def 18; then
+      the carrier of A.x is non trivial by REALSET2:def 5; then
+      reconsider C=[#](A.x) as non trivial set by PRE_TOPC:def 3;
+      consider p0 being Point of Segre_Product A;
+      reconsider p0 as Element of Carrier A by e2;
+      reconsider p={p0} as ManySortedSubset of Carrier A by PENCIL_1:11;
+      reconsider b=p+*(x,C) as Segre-like non trivial-yielding ManySortedSubset
+      of Carrier A by PENCIL_1:10,9,PENCIL_2:7;
+      dom p=I by PBOOLE:def 3; then
+      c: b.x = C by FUNCT_7:33; then
+      b.x is non trivial; then
+      b: indx(b)=x by PENCIL_1:def 21; then
+      bi: b.indx(b)=[#](A.indx(b)) by c;
+      product b c= the carrier of Segre_Product A
+      proof
+        let a be set;
+        assume a in product b; then consider f being Function such that
+        f: a=f & dom f=dom b & for x being set st x in dom b holds
+        f.x in b.x by CARD_3:def 5;
+        di: dom Carrier A = I by PBOOLE:def 3; then
+        df: dom f = dom Carrier A by f,PBOOLE:def 3;
+        now
+          let i be set; assume i: i in dom Carrier A; then
+          fi: f.i in b.i by f,df;
+          reconsider i1=i as Element of I by i,di;
+          per cases;
+          suppose i1=x;
+            hence f.i in (Carrier A).i by e3,fi,c;
+          end;
+          suppose i1<>x; then
+            f.i1 in p.i1 by FUNCT_7:34,fi; then
+            f.i1 in {p0.i1} by PZFMISC1:def 1; then
+            f.i1 = p0.i1 by TARSKI:def 1; then
+            f1: f.i1 is Element of (Carrier A).i1 by PBOOLE:def 17;
+            [#](A.i1) is non empty by PRE_TOPC:def 3; then
+            (Carrier A).i1 is non empty by e3;
+            hence f.i in (Carrier A).i by f1;
+          end;  
+        end; then
+        ap: a in product Carrier A by f,CARD_3:def 5,df;
+        Segre_Product A = TopStruct(#product Carrier A, Segre_Blocks A#)
+        by PENCIL_1:def 23;
+        hence a in the carrier of Segre_Product A by ap;
+      end;
+      then reconsider B=product b as Segre-Coset of A by PENCIL_2:def 2,bi;
+      reconsider fB=f"B as Segre-Coset of A by con,PENCIL_2:25;
+      consider b0 being Segre-like non trivial-yielding ManySortedSubset of
+      Carrier A such that
+      b0: fB = product b0 & b0.indx(b0)=[#](A.indx(b0)) by PENCIL_2:def 2;
+      take y=indx(b0);
+      let B1 being Segre-Coset of A;
+      let b1,b2 being Segre-like non trivial-yielding ManySortedSubset of
+      Carrier A;
+      assume ab: B1 = product b1 & f.:B1 = product b2 & indx(b1)=y;
+      f is bijective by PENCIL_2:def 4; then
+      f is onto by FUNCT_2:def 4; then
+      rng f = the carrier of Segre_Product A by FUNCT_2:def 3; then
+      f.:fB = product b by FUNCT_1:147;
+      hence indx(b2)=x by ab,b,b0,zach,con;
+    end;
+    c:  for x,y,x' being Element of A()
+    st P[x,y] & P[x',y] holds x=x'
+    proof
+      let x,y,x' be Element of A();
+      assume a1:
+      (for B1 being Segre-Coset of A
+      for b1,b2 being Segre-like non trivial-yielding ManySortedSubset of
+      Carrier A st B1 = product b1 & f.:B1 = product b2 holds
+      indx(b1)=x implies indx(b2)=y) &
+      (for B1 being Segre-Coset of A
+      for b1,b2 being Segre-like non trivial-yielding ManySortedSubset of
+      Carrier A st B1 = product b1 & f.:B1 = product b2 holds
+      indx(b1)=x' implies indx(b2)=y);
+      consider b1 being Segre-like non trivial-yielding ManySortedSubset of
+      Carrier A such that
+      be1: indx(b1) = x & product b1 is Segre-Coset of A by e4;
+      reconsider B1 = product b1 as Segre-Coset of A by be1;
+      reconsider fB1=f.:B1 as Segre-Coset of A by con,PENCIL_2:24;
+      consider L1 being Segre-like non trivial-yielding ManySortedSubset of
+      Carrier A such that
+      fbe1: fB1 = product L1 & L1.indx(L1) = [#](A.indx(L1)) by PENCIL_2:def 2;
+      i1: indx(L1)=y by a1,be1,fbe1; 
+      consider b2 being Segre-like non trivial-yielding ManySortedSubset of
+      Carrier A such that
+      be2: indx(b2) = x' & product b2 is Segre-Coset of A by e4;
+      reconsider B2 = product b2 as Segre-Coset of A by be2;
+      reconsider fB2=f.:B2 as Segre-Coset of A by con,PENCIL_2:24;
+      consider L2 being Segre-like non trivial-yielding ManySortedSubset of
+      Carrier A such that
+      fbe2: fB2 = product L2 & L2.indx(L2) = [#](A.indx(L2)) by PENCIL_2:def 2;
+      i2: indx(L2)=y by a1,be2,fbe2;
+      reconsider ff=f" as Collineation of Segre_Product A by PENCIL_2:13;
+      k: [#]Segre_Product A = the carrier of Segre_Product A by PRE_TOPC:def 3;
+      f is bijective by PENCIL_2:def 4; then
+      o: f is onto one-to-one by FUNCT_2:def 4; then
+      rng f = [#]Segre_Product A & f is one-to-one by k,FUNCT_2:def 3; then
+      ff: ff = (f qua Function)" by TOPS_2:def 4; 
+      f1: ff.:fB1 = f"fB1 by FUNCT_1:155,o,ff; then
+      z1: ff.:fB1 c= B1 by o,FUNCT_1:152;
+      dom f = the carrier of Segre_Product A by FUNCT_2:def 1; then
+      B1 c= ff.:fB1 by f1,FUNCT_1:146; then
+      BB1: B1=ff.:fB1 by z1,XBOOLE_0:def 10;
+      f2: ff.:fB2 = f"fB2 by FUNCT_1:155,o,ff; then
+      z2: ff.:fB2 c= B2 by o,FUNCT_1:152;
+      dom f = the carrier of Segre_Product A by FUNCT_2:def 1; then
+      B2 c= ff.:fB2 by f2,FUNCT_1:146; then
+      BB2: B2=ff.:fB2 by z2,XBOOLE_0:def 10;
+      thus x=x' by zach,con,i1,i2,BB1,BB2,fbe1,fbe2,be1,be2;
+    end;
+    d:  for x,y,y' being Element of A()
+    st P[x,y] & P[x,y'] holds y=y'
+    proof
+      let x,y,y' be Element of A();
+      assume a1:
+      (for B1 being Segre-Coset of A
+      for b1,b2 being Segre-like non trivial-yielding ManySortedSubset of
+      Carrier A st B1 = product b1 & f.:B1 = product b2 holds
+      indx(b1)=x implies indx(b2)=y) &
+      (for B1 being Segre-Coset of A
+      for b1,b2 being Segre-like non trivial-yielding ManySortedSubset of
+      Carrier A st B1 = product b1 & f.:B1 = product b2 holds
+      indx(b1)=x implies indx(b2)=y');
+      consider b1 being Segre-like non trivial-yielding ManySortedSubset of
+      Carrier A such that
+      be1: indx(b1) = x & product b1 is Segre-Coset of A by e4;
+      reconsider B1 = product b1 as Segre-Coset of A by be1;
+      reconsider fB1=f.:B1 as Segre-Coset of A by con,PENCIL_2:24;
+      consider L1 being Segre-like non trivial-yielding ManySortedSubset of
+      Carrier A such that
+      fbe1: fB1 = product L1 & L1.indx(L1) = [#](A.indx(L1)) by PENCIL_2:def 2;
+      indx(L1)=y by a1,be1,fbe1;
+      hence y=y' by a1,be1,fbe1;
+    end;  
+    
+    thus ex f being Permutation of A() st
+    for x,y being Element of A() holds f.x=y iff P[x,y]
+    from TRANSGEO:sch 1(a,b,c,d);  
+  end;
+  
+definition
+  let I be finite non empty set;
+  let A be PLS-yielding ManySortedSet of I such that
+  con: for i being Element of I holds A.i is strongly_connected;
+  let f be Collineation of Segre_Product A;
+  func permutation_of_indices(f) -> Permutation of I means :permdef:
+  for i,j being Element of I
+  holds it.i=j iff
+  for B1 being Segre-Coset of A
+  for b1,b2 being Segre-like non trivial-yielding ManySortedSubset of Carrier A
+  st B1 = product b1 & f.:B1 = product b2 holds indx(b1)=i implies indx(b2)=j;
+  existence by con,perm;
+  uniqueness
+  proof
+    let s,t be Permutation of I such that
+    s: for i,j being Element of I
+    holds s.i=j iff
+    for B1 being Segre-Coset of A
+    for b1,b2 being Segre-like non trivial-yielding ManySortedSubset of
+    Carrier A st
+    B1 = product b1 & f.:B1 = product b2 holds indx(b1)=i implies indx(b2)=j
+    and
+    t: for i,j being Element of I
+    holds t.i=j iff
+    for B1 being Segre-Coset of A
+    for b1,b2 being Segre-like non trivial-yielding ManySortedSubset of
+    Carrier A st
+    B1 = product b1 & f.:B1 = product b2 holds indx(b1)=i implies indx(b2)=j;
+    dd: dom s = I & dom t = I by FUNCT_2:def 1;
+    now
+      let a be set;
+      assume a in I; then
+      reconsider i=a as Element of I;      
+      reconsider j1=s.i as Element of I;
+      reconsider j2=t.i as Element of I;
+      consider b1 being Segre-like non trivial-yielding ManySortedSubset of
+      Carrier A such that
+      b1: indx(b1)=i & product b1 is Segre-Coset of A by e4;
+      reconsider B1=product b1 as Segre-Coset of A by b1;
+      reconsider fB=f.:B1 as Segre-Coset of A by con,PENCIL_2:24;
+      consider b2 being Segre-like non trivial-yielding ManySortedSubset of
+      Carrier A such that
+      b2: fB = product b2 & b2.indx(b2) = [#](A.indx(b2)) by PENCIL_2:def 2;
+      j1 = indx(b2) by s,b1,b2 .= j2 by t,b1,b2;
+      hence s.a=t.a;
+    end; 
+    hence s=t by dd,FUNCT_1:9;
+  end;
+end;
+
+begin :: Canonical embeddings and automorphisms of Segre product
+  
+definition
+  let I be finite non empty set;
+  let A be PLS-yielding ManySortedSet of I such that
+  con: for i being Element of I holds A.i is strongly_connected;
+  let f be Collineation of Segre_Product A;
+  let b1 be Segre-like non trivial-yielding ManySortedSubset of Carrier A
+  such that b1: product b1 is Segre-Coset of A;
+  func canonical_embedding(f,b1) ->
+  map of A.indx(b1),A.(permutation_of_indices(f).indx(b1))
+  means :nmap:
+  it is isomorphic & 
+  for a being ManySortedSet of I st
+  a is Point of Segre_Product A & a in product b1
+  for b being ManySortedSet of I st b=f.a
+  holds b.(permutation_of_indices(f).indx(b1))=it.(a.indx(b1));
+  existence
+  proof
+    set s=permutation_of_indices(f);
+    set i=indx(b1);
+    s: for i,j being Element of I
+    holds s.i=j iff
+    for B1 being Segre-Coset of A
+    for b1,b2 being Segre-like non trivial-yielding ManySortedSubset of
+    Carrier A st
+    B1 = product b1 & f.:B1 = product b2 holds
+    indx(b1)=i implies indx(b2)=j by con,permdef;
+    df: dom f = the carrier of Segre_Product A by FUNCT_2:def 1;
+    f is bijective by PENCIL_2:def 4; then
+    f is onto by FUNCT_2:def 4; then
+    rf: rng f = the carrier of Segre_Product A by FUNCT_2:def 3; then
+    rf1: rng f = [#]Segre_Product A by PRE_TOPC:def 3;
+    f is bijective by PENCIL_2:def 4; then
+    fo: f is one-to-one by FUNCT_2:def 4;
+    ff: f" = (f qua Function)" by TOPS_2:def 4,fo,rf1;
+    
+    reconsider B1=product b1 as Segre-Coset of A by b1;
+    reconsider B2=f.:B1 as Segre-Coset of A by PENCIL_2:24,con;
+    consider b2 being Segre-like non trivial-yielding ManySortedSubset of
+    Carrier A such that
+    b2: product b2=B2 & b2.indx(b2) = [#](A.indx(b2)) by PENCIL_2:def 2;
+    ibs: indx(b2)=s.i by s,b2;
+    set j=indx(b2);
+    bh: B1 c= f"B2 by FUNCT_1:146,df;
+    f"B2 c= B1 by fo,FUNCT_1:152; then
+    fB: f"B2 = B1 by bh,XBOOLE_0:def 10;
+    
+    defpred P[set,set] means for J being ManySortedSet of I st
+    J in f.:(product(b1+*(i,{$1}))) holds $2 = J.(s.i);
+    deffunc A() = the carrier of A.i;
+    SP: Segre_Product A = TopStruct(#product Carrier A, Segre_Blocks A#)
+    by PENCIL_1:def 23;
+    s1: for x,y1,y2 being set st x in A() & P[x,y1] & P[x,y2] holds y1 = y2
+    proof
+      let x,y1,y2 be set;
+      assume x: x in A() & P[x,y1] & P[x,y2];
+      consider bb being set such that
+      bb: bb in B1 by XBOOLE_0:def 1;
+      consider bf being Function such that
+      bf: bf=bb & dom bf=dom b1 & for o being set st o in dom b1 holds
+      bf.o in b1.o by bb,CARD_3:def 5;
+      db1: dom b1=I & dom Carrier A = I by PBOOLE:def 3; then
+      reconsider bb as ManySortedSet of I by bf,PBOOLE:def 3;
+      set bbx=bb+*(i,x);
+      dd: dom bbx= I by PBOOLE:def 3 .= dom Carrier A by PBOOLE:def 3;
+      now
+        let o be set;
+        assume o: o in dom Carrier A; then
+        reconsider u=o as Element of I by PBOOLE:def 3;
+        per cases;
+        suppose ui: u=i; then
+          bbx.u=x by bf,db1,FUNCT_7:33; then
+          bbx.u in [#](A.i) by x,PRE_TOPC:def 3;
+          hence bbx.o in (Carrier A).o by ui,e3;
+        end;
+        suppose u<>i; then
+          bbx.u = bb.u by FUNCT_7:34; then
+          fb: bbx.u in b1.u by bb,CARD_3:18,db1;
+          b1 c= Carrier A by PBOOLE:def 23; then
+          b1.o c= (Carrier A).o by o,db1,PBOOLE:def 5;
+          hence bbx.o in (Carrier A).o by fb;
+        end;
+      end; then
+      bbx in product Carrier A by CARD_3:18,dd; then
+      reconsider bbx1=bbx as Point of Segre_Product A by SP;
+      bbx: bbx1 in dom f by df;
+      {bbx qua set} = product(b1+*(i,{x}))
+      proof
+        thus {bbx qua set} c= product(b1+*(i,{x}))
+        proof
+          let o be set;
+          assume o in {bbx qua set}; then
+          ob: o = bbx by TARSKI:def 1;
+          do: dom bbx = I by PBOOLE:def 3 .= dom (b1+*(i,{x})) by PBOOLE:def 3;
+          now
+            let z be set;
+            assume z in dom (b1+*(i,{x})); then
+            z0: z in I by PBOOLE:def 3; then
+            z1: z in dom bb by PBOOLE:def 3;
+            per cases;
+            suppose zi: z=i; then
+              bbx.z = x by FUNCT_7:33,z1; then
+              bbx.z in {x} by TARSKI:def 1; 
+              hence bbx.z in (b1+*(i,{x})).z by FUNCT_7:33,zi,db1;
+            end;
+            suppose zi: z<>i; then
+              bbx.z = bb.z by FUNCT_7:34; then
+              bbx.z in b1.z by bb,CARD_3:18,z0,db1;
+              hence bbx.z in (b1+*(i,{x})).z by zi,FUNCT_7:34;
+            end;
+          end;
+          hence o in product(b1+*(i,{x})) by ob,CARD_3:18,do;
+        end;
+        let o be set;
+        assume o in product(b1+*(i,{x})); then
+        consider u being Function such that
+        u: u=o & dom u=dom (b1+*(i,{x})) &
+        for z being set st z in dom (b1+*(i,{x})) holds
+        u.z in (b1+*(i,{x})).z by CARD_3:def 5;
+        dd: dom u = I by u,PBOOLE:def 3 .= dom bbx by PBOOLE:def 3;
+        now
+          let z be set;
+          assume z: z in dom u; then
+          z1: z in I by u,PBOOLE:def 3; then
+          reconsider zz=z as Element of I;
+          uzi: u.z in (b1+*(i,{x})).z by u,z;
+          per cases;
+          suppose zi: zz=i; then
+            u.z in {x} by db1,uzi,FUNCT_7:33; then
+            u.z = x by TARSKI:def 1;
+            hence u.z = bbx.z by bf,db1,zi,FUNCT_7:33;
+          end;
+          suppose zi: zz<>i; then
+            b1.zz is non empty trivial by PENCIL_1:def 21; then
+            consider o being set such that
+            o: b1.z = {o} by REALSET1:def 4;
+            u.z in b1.z by zi,uzi,FUNCT_7:34; then
+            uzo: u.z = o by o,TARSKI:def 1;
+            bbx.z = bb.z by zi,FUNCT_7:34; then
+            bbx.z in {o} by z1,o,bf,db1;
+            hence u.z = bbx.z by uzo,TARSKI:def 1;
+          end;
+        end; then
+        u=bbx by dd,FUNCT_1:9;
+        hence o in {bbx qua set} by u,TARSKI:def 1;
+      end; then
+      fs: f.:product(b1+*(i,{x})) = {f.bbx} by FUNCT_1:117,bbx;
+      reconsider fbbx=f.bbx1 as ManySortedSet of I by PENCIL_1:14;
+      fbbx: fbbx in f.:product(b1+*(i,{x})) by fs,TARSKI:def 1;
+      thus y1 = fbbx.(s.i) by x,fbbx
+      .= y2 by x,fbbx;
+    end;
+    s2: for x being set st x in A() ex y being set st P[x,y]
+    proof
+      let x be set;
+      assume x: x in A();
+      consider bb being set such that
+      bb: bb in B1 by XBOOLE_0:def 1;
+      consider bf being Function such that
+      bf: bf=bb & dom bf=dom b1 & for o being set st o in dom b1 holds
+      bf.o in b1.o by bb,CARD_3:def 5;
+      db1: dom b1=I & dom Carrier A = I by PBOOLE:def 3; then
+      reconsider bb as ManySortedSet of I by bf,PBOOLE:def 3;
+      set bbx=bb+*(i,x);
+      dd: dom bbx= I by PBOOLE:def 3 .= dom Carrier A by PBOOLE:def 3;
+      now
+        let o be set;
+        assume o: o in dom Carrier A; then
+        reconsider u=o as Element of I by PBOOLE:def 3;
+        per cases;
+        suppose ui: u=i; then
+          bbx.u=x by bf,db1,FUNCT_7:33; then
+          bbx.u in [#](A.i) by x,PRE_TOPC:def 3;
+          hence bbx.o in (Carrier A).o by ui,e3;
+        end;
+        suppose u<>i; then
+          bbx.u = bb.u by FUNCT_7:34; then
+          fb: bbx.u in b1.u by bb,CARD_3:18,db1;
+          b1 c= Carrier A by PBOOLE:def 23; then
+          b1.o c= (Carrier A).o by o,db1,PBOOLE:def 5;
+          hence bbx.o in (Carrier A).o by fb;
+        end;
+      end; then
+      bbx in product Carrier A by CARD_3:18,dd; then
+      reconsider bbx1=bbx as Point of Segre_Product A by SP;
+      dom f = the carrier of Segre_Product A by FUNCT_2:def 1; then
+      bbx: bbx1 in dom f;
+      {bbx qua set} = product(b1+*(i,{x}))
+      proof
+        thus {bbx qua set} c= product(b1+*(i,{x}))
+        proof
+          let o be set;
+          assume o in {bbx qua set}; then
+          ob: o = bbx by TARSKI:def 1;
+          do: dom bbx = I by PBOOLE:def 3 .= dom (b1+*(i,{x})) by PBOOLE:def 3;
+          now
+            let z be set;
+            assume z in dom (b1+*(i,{x})); then
+            z0: z in I by PBOOLE:def 3; then
+            z1: z in dom bb by PBOOLE:def 3;
+            per cases;
+            suppose zi: z=i; then
+              bbx.z = x by FUNCT_7:33,z1; then
+              bbx.z in {x} by TARSKI:def 1; 
+              hence bbx.z in (b1+*(i,{x})).z by FUNCT_7:33,zi,db1;
+            end;
+            suppose zi: z<>i; then
+              bbx.z = bb.z by FUNCT_7:34; then
+              bbx.z in b1.z by bb,CARD_3:18,z0,db1;
+              hence bbx.z in (b1+*(i,{x})).z by zi,FUNCT_7:34;
+            end;
+          end;
+          hence o in product(b1+*(i,{x})) by ob,CARD_3:18,do;
+        end;
+        let o be set;
+        assume o in product(b1+*(i,{x})); then
+        consider u being Function such that
+        u: u=o & dom u=dom (b1+*(i,{x})) &
+        for z being set st z in dom (b1+*(i,{x})) holds
+        u.z in (b1+*(i,{x})).z by CARD_3:def 5;
+        dd: dom u = I by u,PBOOLE:def 3 .= dom bbx by PBOOLE:def 3;
+        now
+          let z be set;
+          assume z: z in dom u; then
+          z1: z in I by u,PBOOLE:def 3; then
+          reconsider zz=z as Element of I;
+          uzi: u.z in (b1+*(i,{x})).z by u,z;
+          per cases;
+          suppose zi: zz=i; then
+            u.z in {x} by db1,uzi,FUNCT_7:33; then
+            u.z = x by TARSKI:def 1;
+            hence u.z = bbx.z by bf,db1,zi,FUNCT_7:33;
+          end;
+          suppose zi: zz<>i; then
+            b1.zz is non empty trivial by PENCIL_1:def 21; then
+            consider o being set such that
+            o: b1.z = {o} by REALSET1:def 4;
+            u.z in b1.z by zi,uzi,FUNCT_7:34; then
+            uzo: u.z = o by o,TARSKI:def 1;
+            bbx.z = bb.z by zi,FUNCT_7:34; then
+            bbx.z in {o} by z1,o,bf,db1;
+            hence u.z = bbx.z by uzo,TARSKI:def 1;
+          end;
+        end; then
+        u=bbx by dd,FUNCT_1:9;
+        hence o in {bbx qua set} by u,TARSKI:def 1;
+      end; then
+      fs: f.:product(b1+*(i,{x})) = {f.bbx} by FUNCT_1:117,bbx;
+      reconsider fbbx=f.bbx1 as ManySortedSet of I by PENCIL_1:14;
+      take y=fbbx.(s.i);
+      let J be ManySortedSet of I such that
+      J: J in f.:product(b1+*(i,{x}));
+      thus y=J.(s.i) by J,fs,TARSKI:def 1;
+    end;
+    consider M being Function such that
+    M: dom M = A() & for x being set st x in A() holds P[x,M.x]
+    from FUNCT_1:sch 2(s1,s2);
+    set t=s;
+    rng M c= the carrier of A.(t.i)
+    proof
+      let x be set;
+      assume x in rng M; then
+      consider o being set such that
+      o: o in dom M & x=M.o by FUNCT_1:def 5;
+      reconsider o as Point of A.i by o,M;
+      consider p being ManySortedSet of I such that
+      p: p in product b1 & {p+*(i,o) qua set} = product(b1+*(i,{o})) by inqua;
+      p is Point of Segre_Product A by p,b1; then
+      reconsider pio=p+*(i,o) as Point of Segre_Product A by PENCIL_1:25;
+      pio in dom f by df; then
+      ff: f.:(product(b1+*(i,{o}))) = {f.pio} by p,FUNCT_1:117;
+      reconsider J=f.pio as ManySortedSet of I by PENCIL_1:14;
+      J: J in f.:(product(b1+*(i,{o}))) by TARSKI:def 1,ff;
+      P[o,M.o] by M; then      
+      MO: M.o = J.(s.i) by J;
+      s.i in I; then
+      si: s.i in dom Carrier A by PBOOLE:def 3;
+      J in product Carrier A by SP; then
+      J.(s.i) in (Carrier A).(s.i) by CARD_3:18,si; then
+      J.(s.i) in [#](A.(s.i)) by e3;
+      hence x in the carrier of A.(t.i) by MO,o;
+    end; then
+    M is Relation of the carrier of A.i,the carrier of A.(t.i)
+    by M,RELSET_1:11;
+    then reconsider M as map of A.i,A.(t.i) by M,FUNCT_2:def 1;
+    take M;
+    set m=M;
+    thus m is isomorphic
+    proof
+      mo: m is one-to-one
+      proof
+        let x1,x2 be set;
+        assume xx: x1 in dom m & x2 in dom m & m.x1 = m.x2; then
+        reconsider o1=x1,o2=x2 as Point of A.i;
+        consider p1 being ManySortedSet of I such that
+        p1: p1 in product b1 & {p1+*(i,o1) qua set} = product(b1+*(i,{o1}))
+        by inqua;
+        p1 is Point of Segre_Product A by p1,b1; then
+        reconsider p1io=p1+*(i,o1) as Point of Segre_Product A by PENCIL_1:25;
+        p1io in dom f by df; then
+        ff1: f.:(product(b1+*(i,{o1}))) = {f.p1io} by p1,FUNCT_1:117;
+        reconsider J1=f.p1io as ManySortedSet of I by PENCIL_1:14;
+        J1: J1 in f.:(product(b1+*(i,{o1}))) by TARSKI:def 1,ff1;
+        P[o1,M.o1] by M; then      
+        MO1: M.o1 = J1.(s.i) by J1;
+        consider p2 being ManySortedSet of I such that
+        p2: p2 in product b1 & {p2+*(i,o2) qua set} = product(b1+*(i,{o2}))
+        by inqua;
+        p2 is Point of Segre_Product A by p2,b1; then
+        reconsider p2io=p2+*(i,o2) as Point of Segre_Product A by PENCIL_1:25;
+        p2io in dom f by df; then
+        ff2: f.:(product(b1+*(i,{o2}))) = {f.p2io} by p2,FUNCT_1:117;
+        reconsider J2=f.p2io as ManySortedSet of I by PENCIL_1:14;
+        J2: J2 in f.:(product(b1+*(i,{o2}))) by TARSKI:def 1,ff2;
+        P[o2,M.o2] by M; then      
+        MO2: M.o2 = J2.(s.i) by J2;
+        dp1: dom p1=I & dom (p1+*(i,o1))=I & dom b1=I by PBOOLE:def 3;
+        now
+          let o be set;
+          assume oi: o in I;
+          per cases;
+          suppose ob: o=indx(b1); then
+            p1+*(i,o1).o = o1 by dp1,FUNCT_7:33; then
+            p1+*(i,o1).o in the carrier of A.i; then
+            p1+*(i,o1).o in [#](A.i) by PRE_TOPC:def 3;
+            hence p1+*(i,o1).o in b1.o by b1,ob,e4_4;
+          end;
+          suppose o<>indx(b1); then
+            p1+*(i,o1).o = p1.o by FUNCT_7:34;
+            hence p1+*(i,o1).o in b1.o by dp1,p1,CARD_3:18,oi;
+          end;
+        end; then
+        p1io in product b1 by CARD_3:18,dp1; then
+        jb1: J1 in B2 by FUNCT_1:def 12,df;
+        dp2: dom p2=I & dom (p2+*(i,o2))=I & dom b1=I by PBOOLE:def 3;
+        now
+          let o be set;
+          assume oi: o in I;
+          per cases;
+          suppose ob: o=indx(b1); then
+            p2+*(i,o2).o = o2 by dp2,FUNCT_7:33; then
+            p2+*(i,o2).o in the carrier of A.i; then
+            p2+*(i,o2).o in [#](A.i) by PRE_TOPC:def 3;
+            hence p2+*(i,o2).o in b1.o by b1,ob,e4_4;
+          end;
+          suppose o<>indx(b1); then
+            p2+*(i,o2).o = p2.o by FUNCT_7:34;
+            hence p2+*(i,o2).o in b1.o by dp2,p2,CARD_3:18,oi;
+          end;
+        end; then
+        p2io in product b1 by dp2,CARD_3:18; then
+        jb2: J2 in B2 by FUNCT_1:def 12,df;
+        dj: dom J1 = I & dom J2 = I by PBOOLE:def 3;
+        now
+          let o be set;
+          assume o in I; then
+          reconsider l=o as Element of I;
+          per cases;
+          suppose l=indx(b2);
+            hence J1.o=J2.o by MO1,MO2,ibs,xx;
+          end;
+          suppose l<>indx(b2);
+            hence J1.o=J2.o by b2,jb1,jb2,PENCIL_1:23;
+          end;
+        end; then
+        J1=J2 by dj,FUNCT_1:9; then
+        pepe: p1io=p2io by FUNCT_1:def 8,df,fo;
+        dom p1 = I & dom p2 = I by PBOOLE:def 3; then
+        p1+*(i,o1).i = o1 & p2+*(i,o2).i = o2 by FUNCT_7:33;
+        hence x1=x2 by pepe;
+      end;
+      mon: m is onto
+      proof
+        thus rng m = the carrier of A.(t.i)
+        proof
+          thus rng m c= the carrier of A.(t.i);
+          thus the carrier of A.(t.i) c= rng m
+          proof
+            let x be set;
+            assume x in the carrier of A.(t.i); then
+            reconsider x1=x as Point of A.(t.i);
+            consider p0 being ManySortedSet of I such that
+            p0: p0 in product b2 & {p0+*(indx(b2),x1) qua set} =
+            product(b2+*(indx(b2),{x1})) by ibs,inqua;
+            p0 is Point of Segre_Product A by p0,b2; then
+            reconsider p=p0+*(indx(b2),x1) as Point of Segre_Product A
+            by PENCIL_1:25,ibs;
+            reconsider p1=p as ManySortedSet of I;
+            pf: p=f.(f".p) by rf,fo,ff,FUNCT_1:57; 
+            reconsider q=f".p as ManySortedSet of I by PENCIL_1:14;
+            dca: dom m = the carrier of A.i by FUNCT_2:def 1;
+            ic: I = dom Carrier A by PBOOLE:def 3;
+            f".p in product Carrier A by SP; then
+            q.i in (Carrier A).i by CARD_3:18,ic; then
+            q.i in [#](A.i) by e3; then
+            qic: q.i in the carrier of A.i; then
+            qm: q.i in dom m by dca;
+            d0: dom p0 = I by PBOOLE:def 3;
+            fix1: q in dom f by df;
+            dq: dom q = I & dom (b1+*(i,{q.i})) = I & dom b1=I by PBOOLE:def 3;
+            now
+              let o be set;
+              assume oi: o in I; then
+              reconsider l=o as Element of I;
+              per cases;
+              suppose l=i; then
+                b1+*(i,{q.i}).l = {q.o} by FUNCT_7:33,dq;
+                hence q.o in b1+*(i,{q.i}).o by TARSKI:def 1;
+              end;
+              suppose l<>i; then
+                bb: b1+*(i,{q.i}).l = b1.l by FUNCT_7:34;
+                dp: dom p1 = I & dom b2 = I & dom p0 = I by PBOOLE:def 3;
+                now
+                  let o be set;
+                  assume oi: o in I;
+                  per cases;
+                  suppose on: o=indx(b2); then
+                    p1.o = x1 by FUNCT_7:33,dp; then
+                    p1.o in the carrier of A.(t.i); then
+                    p1.o in [#](A.(t.i)) by PRE_TOPC:def 3;
+                    hence p1.o in b2.o by on,ibs,b2;
+                  end;
+                  suppose o<>indx(b2); then
+                    p1.o = p0.o by FUNCT_7:34;
+                    hence p1.o in b2.o by p0,CARD_3:18,oi,dp;
+                  end;
+                end; then
+                p in product b2 by dp,CARD_3:18; then
+                p in f.:B1 by b2; then
+                consider q0 being set such that
+                q0: q0 in dom f & q0 in B1 & p=f.q0 by FUNCT_1:def 12;
+                q=q0 by pf,q0,fo,FUNCT_1:def 8,fix1; then
+                q.o in b1.o by dq,oi,CARD_3:18,q0;
+                hence q.o in b1+*(i,{q.i}).o by bb;
+              end;
+            end; then
+            fix2: q in product(b1+*(i,{q.i})) by dq,CARD_3:18;
+            
+            p0+*(indx(b2),x1) in f.:(product(b1+*(i,{q.i})))
+            by fix1,fix2,FUNCT_1:def 12,pf; then
+            m.(q.i) = p0+*(indx(b2),x1).(s.i) by M,qic; then            
+            m.(q.i)=x by ibs,FUNCT_7:33,d0;
+            hence x in rng m by qm,FUNCT_1:12;
+          end;
+        end;
+      end;
+      hence mb: m is bijective by mo,FUNCT_2:def 4;
+      
+      rng m = the carrier of A.j by mon,FUNCT_2:def 3,ibs; then
+      rng m = [#](A.j) by PRE_TOPC:def 3; then
+      mm: m" = (m qua Function)" by TOPS_2:def 4,mo,ibs;
+      
+      thus m is open
+      proof
+        let S0 be Subset of A.i;
+        assume S0 is open; then
+        S0 in the topology of A.i by PRE_TOPC:def 5; then
+        reconsider S=S0 as Block of A.i;
+        reconsider L=product(b1+*(i,S)) as Block of Segre_Product A by blema;
+        reconsider K=f.:L as Block of Segre_Product A;
+        consider k being Segre-like non trivial-yielding ManySortedSubset of
+        Carrier A such that
+        k: K = product k & k.indx(k) is Block of A.indx(k) by PENCIL_1:24;
+        dk: dom k = I by PBOOLE:def 3;
+        db: dom (b1+*(i,S)) = I & dom b1 = I by PBOOLE:def 3;
+        now
+          let x be set;
+          assume x in I;
+          per cases;
+          suppose xxi: x=i; then
+            b1+*(i,S).x = S by db,FUNCT_7:33; then
+            b1+*(i,S).x c= the carrier of A.i; then
+            b1+*(i,S).x c= [#](A.i) by PRE_TOPC:def 3;
+            hence b1+*(i,S).x c= b1.x by xxi,b1,e4_4;
+          end;
+          suppose x<>i;
+            hence b1+*(i,S).x c= b1.x by FUNCT_7:34;
+          end;
+        end; then
+        lz: L c= product b1 by CARD_3:38,db; then
+        K c= product b2 by b2,RELAT_1:156; then
+        product b2 /\ product k = K by k,XBOOLE_1:28; then        
+        2 c= Card(product b2 /\ product k) by PENCIL_1:def 6; then        
+        ik: indx(k)=t.i & for i being set st i <> indx(b2) holds k.i = b2.i
+        by PENCIL_1:26,ibs;
+        m.:S=k.indx(k)
+        proof
+          thus m.:S c= k.indx(k)
+          proof
+            let o be set;
+            assume o in m.:S; then
+            consider u being set such that
+            u: u in dom m & u in S & o=m.u by FUNCT_1:def 12;
+            reconsider u as Point of A.i by u;
+            consider p0 being ManySortedSet of I such that
+            p0: p0 in product b1 & {p0+*(indx(b1),u) qua set} =
+            product(b1+*(indx(b1),{u})) by inqua;
+            reconsider p=p0+*(indx(b1),u) as Point of Segre_Product A
+            by b1,p0,PENCIL_1:25;
+            reconsider q=f.p as ManySortedSet of I by PENCIL_1:14;
+            dp: dom (p0+*(i,u)) = I & dom (b1+*(i,S)) = I &
+            dom p0 = I & dom b1 = I by PBOOLE:def 3;
+            now
+              let a be set;
+              assume ai: a in I;
+              per cases;
+              suppose ari: a=i; then
+                p0+*(i,u).a = u by dp,FUNCT_7:33; then
+                p0+*(i,u).a in S by u;
+                hence p0+*(i,u).a in b1+*(i,S).a by ari,dp,FUNCT_7:33;
+              end;
+              suppose ari:a<>i; then
+                p0+*(i,u).a = p0.a by FUNCT_7:34; then
+                p0+*(i,u).a in b1.a by ai,dp,p0,CARD_3:18;
+                hence p0+*(i,u).a in b1+*(i,S).a by ari,FUNCT_7:34;
+              end;
+            end; then
+            p in L by dp,CARD_3:18; then
+            qk: q in product k by k,FUNCT_1:def 12,df;
+            fpr: f.:product(b1+*(indx(b1),{u})) = {f.p} by p0,FUNCT_1:117,df;
+            P: P[u,m.u] by M;
+            q in f.:product(b1+*(indx(b1),{u})) by fpr,TARSKI:def 1; then
+            m.u = q.(s.i) by P;           
+            hence o in k.indx(k) by u,ik,qk,CARD_3:18,dk;
+          end;
+          let o be set;
+          assume ok: o in k.indx(k);
+          k.indx(k) is Block of A.(s.i) by ik,k; then
+          k.indx(k) in the topology of A.(s.i); then
+          reconsider u=o as Point of A.(s.i) by ok;
+          consider p0 being ManySortedSet of I such that
+          p0: p0 in product k & {p0+*(s.i,u) qua set} =
+          product(k+*(s.i,{u})) by inqua,ik;
+          K in the topology of Segre_Product A; then
+          K c= the carrier of Segre_Product A; then
+          p0 is Point of Segre_Product A by p0,k; then
+          reconsider p=p0+*(s.i,u) as Point of Segre_Product A by PENCIL_1:25;
+          reconsider q=f".p as ManySortedSet of I by PENCIL_1:14;
+          dq: dom q = I & dom Carrier A = I & dom(b1+*(i,S)) = I & dom b1 = I
+          by PBOOLE:def 3;
+          q in product Carrier A by SP; then
+          q.i in (Carrier A).i by dq,CARD_3:18; then
+          q.i in [#](A.i) by e3; then
+          q.i in the carrier of A.i; then
+          q1: q.i in dom m by M;
+          dp0: dom (p0+*(s.i,u)) = I & dom k = I & dom p0 = I by PBOOLE:def 3;
+          now
+            let z be set;
+            assume zi: z in I;
+            per cases;
+            suppose zs: z=s.i; then
+              p0+*(s.i,u).z = u by dp0,FUNCT_7:33;
+              hence p0+*(s.i,u).z in k.z by zs,ok,ik;
+            end;
+            suppose z<>s.i; then
+              p0+*(s.i,u).z = p0.z by FUNCT_7:34;
+              hence p0+*(s.i,u).z in k.z by zi,dp0,CARD_3:18,p0;
+            end;
+          end; then
+          p in f.:L by dp0,CARD_3:18,k; then
+          consider qq being set such that
+          qq: qq in dom f & qq in L & p=f.qq by FUNCT_1:def 12;
+          pq: p=f.q by rf,fo,ff,FUNCT_1:57;          
+          q in dom f by df; then
+          cool: q in L by pq,qq,fo,FUNCT_1:def 8; then
+          q.i in b1+*(i,S).i by CARD_3:18,dq; then          
+          q2: q.i in S by db,FUNCT_7:33; then
+          reconsider qi=q.i as Point of A.i;
+          consider q0 being ManySortedSet of I such that
+          q0: q0 in product b1 & {q0+*(i,qi) qua set} = product(b1+*(i,{qi}))
+          by inqua;
+          dq: dom q = I & dom (q0+*(i,qi)) = I & dom q0 = I by PBOOLE:def 3;
+          now
+            let a be set;
+            assume a in I;
+            per cases;
+            suppose a=i;
+              hence q0+*(i,qi).a = q.a by FUNCT_7:33,dq;
+            end;
+            suppose ai: a<>i; then
+              q0+*(i,qi).a = q0.a by FUNCT_7:34;
+              hence q0+*(i,qi).a = q.a by ai,q0,cool,lz,PENCIL_1:23;
+            end;
+          end; then
+          q0+*(i,qi) = q by dq,FUNCT_1:9; then
+          fp: f.:product(b1+*(i,{qi}))={f.q} by q0,FUNCT_1:117,df;
+          P: P[qi,m.qi] by M;
+          p in f.:product(b1+*(i,{qi})) by TARSKI:def 1,pq,fp; then
+          m.(q.i) = p0+*(s.i,u).(s.i) by P; then
+          m.(q.i) = o by FUNCT_7:33,dp0; 
+          hence o in m.:S by q1,q2,FUNCT_1:def 12;
+        end; then
+        m.:S is Block of A.(t.i) by k,ik;
+        hence m.:S0 is open by PRE_TOPC:def 5;
+      end;
+      thus m" is bijective by mb,PENCIL_2:12;
+      thus m" is open
+      proof
+        let S0 be Subset of A.(t.i);
+        assume S0 is open; then
+        S0 in the topology of A.(t.i) by PRE_TOPC:def 5; then
+        reconsider S=S0 as Block of A.(t.i);
+        reconsider L=product(b2+*(j,S)) as Block of Segre_Product A
+        by blema,ibs;
+        reconsider K=f"L as Block of Segre_Product A;
+        consider k being Segre-like non trivial-yielding ManySortedSubset of
+        Carrier A such that
+        k: K = product k & k.indx(k) is Block of A.indx(k) by PENCIL_1:24;
+        db: dom (b2+*(j,S)) = I & dom b2 = I by PBOOLE:def 3;
+        now
+          let x be set;
+          assume x in I;
+          per cases;
+          suppose xxi: x=j; then
+            b2+*(j,S).x = S by db,FUNCT_7:33; then
+            b2+*(j,S).x c= the carrier of A.(t.i); then
+            b2+*(j,S).x c= [#](A.(s.i)) by PRE_TOPC:def 3;
+            hence b2+*(j,S).x c= b2.x by xxi,ibs,b2;
+          end;
+          suppose x<>j;
+            hence b2+*(j,S).x c= b2.x by FUNCT_7:34;
+          end;
+        end; then
+        L c= product b2 by CARD_3:38,db; then
+        K c= product b1 by b2,fB,RELAT_1:178; then
+        product b1 /\ product k = K by k,XBOOLE_1:28; then        
+        2 c= Card(product b1 /\ product k) by PENCIL_1:def 6; then        
+        ik: indx(k)=i & for i being set st i <> indx(b1) holds k.i = b1.i
+        by PENCIL_1:26;
+        m"S=k.indx(k)
+        proof
+          thus m"S c= k.indx(k)
+          proof
+            let o be set;
+            assume o in m"S; then
+            o: o in dom m & m.o in S by FUNCT_1:def 13; then
+            reconsider u=o as Point of A.i;
+            consider p being ManySortedSet of I such that
+            p: p in product b1 & {p+*(i,u) qua set} = product(b1+*(i,{u}))
+            by inqua;
+            reconsider q=p+*(i,u) as Point of Segre_Product A
+            by p,b1,PENCIL_1:25;
+            reconsider fq=f.q as ManySortedSet of I by PENCIL_1:14;
+            dp: dom p = I & dom k = I by PBOOLE:def 3;
+            f.:product(b1+*(i,{u})) = {f.q} by df,p,FUNCT_1:117; then
+            fak: fq in f.:product(b1+*(i,{u})) by TARSKI:def 1; then
+            m.u = fq.(s.i) by M; then
+            fuks: fq.(s.i) in S by o;
+            product(b1+*(i,{u})) c= product b1
+            proof
+              let a be set;
+              assume a in product(b1+*(i,{u})); then
+              consider g being Function such that
+              g: a=g & dom g=dom (b1+*(i,{u})) &
+              for o being set st o in dom (b1+*(i,{u})) holds
+              g.o in b1+*(i,{u}).o by CARD_3:def 5;
+              dg: dom g = I & dom b1 = I & dom (b1+*(i,{u})) = I
+              by g,PBOOLE:def 3;
+              now
+                let o be set;
+                assume o in I; then
+                go: g.o in b1+*(i,{u}).o by g,dg;
+                per cases;
+                suppose ori: o=i; then
+                  g.o in {u} by go,dg,FUNCT_7:33; then
+                  g.o = u by TARSKI:def 1; then
+                  g.o in the carrier of A.i; then
+                  g.o in [#](A.i) by PRE_TOPC:def 3;
+                  hence g.o in b1.o by b1,ori,e4_4;
+                end;
+                suppose o<>i; then
+                  b1+*(i,{u}).o = b1.o by FUNCT_7:34;
+                  hence g.o in b1.o by go;
+                end;
+              end;
+              hence a in product b1 by g,dg,CARD_3:18;
+            end; then
+            f.:product(b1+*(i,{u})) c= product b2 by RELAT_1:156,b2; then
+            fk: fq in product b2 by fak;
+            dq: dom fq = I & dom (b2+*(j,S)) = I & dom b2 = I by PBOOLE:def 3;
+            now
+              let o be set;
+              assume oi: o in I;
+              per cases;
+              suppose oj: o=j; then
+                b2+*(j,S).o = S by dq,FUNCT_7:33;
+                hence fq.o in b2+*(j,S).o by fuks,oj,ibs;
+              end;
+              suppose o<>j; then
+                b2+*(j,S).o = b2.o by FUNCT_7:34;
+                hence fq.o in b2+*(j,S).o by dq,oi,fk,CARD_3:18;
+              end;
+            end; then
+            fq in L by CARD_3:18,dq; then
+            q in K by FUNCT_1:def 13,df; then
+            p+*(i,u).i in k.i by k,CARD_3:18,dp;
+            hence o in k.indx(k) by ik,FUNCT_7:33,dp;
+          end;
+          let o be set;
+          assume ok: o in k.indx(k);
+          k.indx(k) is Block of A.i by ik,k; then
+          k.indx(k) in the topology of A.i; then
+          reconsider u=o as Point of A.i by ok;
+          consider p0 being ManySortedSet of I such that
+          p0: p0 in product b1 & {p0+*(i,u) qua set} = product(b1+*(i,{u}))
+          by inqua;
+          p0 is Point of Segre_Product A by p0,b1; then
+          reconsider p=p0+*(i,u) as Point of Segre_Product A by PENCIL_1:25;
+          reconsider fp=f.p as ManySortedSet of I by PENCIL_1:14;
+          f.:product(b1+*(i,{u})) = {f.p} by df,p0,FUNCT_1:117; then
+          fp in f.:product(b1+*(i,{u})) by TARSKI:def 1; then
+          mu: m.u = fp.(s.i) by M;
+          dof: dom fp = I & dom (b2+*(j,S)) = I & dom b2 = I by PBOOLE:def 3;
+          dp0: dom (p0+*(i,u)) = I & dom k = I & dom b1 = I & dom p0 = I
+          by PBOOLE:def 3;
+          now
+            let a be set;
+            assume ai: a in I;
+            per cases;
+            suppose ari: a=i; then
+              p0+*(i,u).a = u by dp0,FUNCT_7:33;
+              hence p0+*(i,u).a in k.a by ari,ik,ok;
+            end;
+            suppose ari: a<>i; then
+              p0+*(i,u).a = p0.a by FUNCT_7:34; then
+              p0+*(i,u).a in b1.a by ai,p0,dp0,CARD_3:18;
+              hence p0+*(i,u).a in k.a by ari,ik;
+            end;
+          end; then
+          p in K by k,dp0,CARD_3:18; then
+          fp in L by FUNCT_1:def 13; then
+          fp.j in b2+*(j,S).j by dof,CARD_3:18; then
+          fp.(s.i) in S by FUNCT_7:33,dof,ibs; then
+          m.u in S by mu;
+          hence o in m"S by M,FUNCT_1:def 13;
+        end; then
+        m".:S is Block of A.i by k,ik,mo,mm,FUNCT_1:155;
+        hence m".:S0 is open by PRE_TOPC:def 5;
+      end;
+    end;
+    let a be ManySortedSet of I such that
+    a: a is Point of Segre_Product A & a in product b1;
+    let b be ManySortedSet of I such that
+    b: b=f.a;
+    do: dom a = I & dom Carrier A = I by PBOOLE:def 3;
+    a in product Carrier A by SP,a; then
+    a.i in (Carrier A).i by CARD_3:18,do; then
+    a.i in [#](A.i) by e3; then
+    reconsider ai=a.i as Point of A.i;
+    d1: dom a = I & dom (b1+*(i,{ai})) = I & dom b1 = I by PBOOLE:def 3;
+    now
+      let o be set;
+      assume oi: o in I;
+      per cases;
+      suppose ori: o=i; then
+        b1+*(i,{ai}).o = {ai} by d1,FUNCT_7:33;
+        hence a.o in b1+*(i,{ai}).o by TARSKI:def 1,ori;
+      end;
+      suppose o<>i; then
+        b1+*(i,{ai}).o = b1.o by FUNCT_7:34;
+        hence a.o in b1+*(i,{ai}).o by oi,d1,a,CARD_3:18;
+      end;
+    end; then
+    a in product(b1+*(i,{ai})) by d1,CARD_3:18; then
+    b in f.:product(b1+*(i,{ai})) by b,a,df,FUNCT_1:def 12;
+    hence b.(t.i) = m.(a.i) by M;
+  end;
+  uniqueness
+  proof
+    set s=permutation_of_indices(f);
+    set i=indx(b1);
+    let f1,f2 be map of A.i,A.(permutation_of_indices(f).i) such that
+    f1:
+    f1 is isomorphic &
+    for a being ManySortedSet of I st
+    a is Point of Segre_Product A & a in product b1
+    for b being ManySortedSet of I st b=f.a holds b.(s.i)=f1.(a.i) and
+    f2:
+    f2 is isomorphic &
+    for a being ManySortedSet of I st
+    a is Point of Segre_Product A & a in product b1
+    for b being ManySortedSet of I st b=f.a
+    holds b.(s.i)=f2.(a.i);
+    dd: dom f1 = the carrier of A.i by FUNCT_2:def 1
+    .= dom f2 by FUNCT_2:def 1;
+    now
+      let x be set;
+      assume x in dom f1; then
+      reconsider x0=x as Point of A.i;
+      consider p being set such that
+      p: p in product b1 by XBOOLE_0:def 1;
+      product b1 is Segre-Coset of A by b1; then
+      reconsider p as Point of Segre_Product A by p;
+      reconsider P=p as ManySortedSet of I by PENCIL_1:14;
+      set a=P+*(i,x0);
+      da: dom a = I & dom P = I & dom b1 = I by PBOOLE:def 3;
+      now
+        let e be set;
+        assume ei: e in I;
+        per cases;
+        suppose eri: e=i; then
+          a.e = x0 by da,FUNCT_7:33; then
+          a.e in the carrier of A.i; then
+          a.e in [#](A.i) by PRE_TOPC:def 3;
+          hence a.e in b1.e by e4_4,b1,eri;
+        end;
+        suppose e<>i; then
+          a.e = P.e by FUNCT_7:34;
+          hence a.e in b1.e by ei,p,CARD_3:18,da;
+        end;
+      end; then
+      ap: a in product b1 by da,CARD_3:18;
+      reconsider a1=a as Point of Segre_Product A by PENCIL_1:25;
+      reconsider b=f.a1 as ManySortedSet of I by PENCIL_1:14;
+      f1x: f1.(a.i)=b.(s.i) by f1,ap;
+      f2x: f2.(a.i)=b.(s.i) by f2,ap;
+      dom P = I by PBOOLE:def 3; then
+      a.i=x by FUNCT_7:33;
+      hence f1.x = f2.x by f1x,f2x;
+    end;
+    hence f1=f2 by dd,FUNCT_1:9;
+    end;
+end;
+
+theorem netnet0:
+  for I being finite non empty set
+  for A being PLS-yielding ManySortedSet of I st
+  for i being Element of I holds A.i is strongly_connected
+  for f being Collineation of Segre_Product A
+  for B1,B2 being Segre-Coset of A st B1 misses B2 & B1 '||' B2
+  for b1,b2 being Segre-like non trivial-yielding ManySortedSubset of Carrier A
+  st product b1 = B1 & product b2 = B2 holds
+  canonical_embedding(f,b1) = canonical_embedding(f,b2)
+  proof
+    let I be finite non empty set;
+    let A be PLS-yielding ManySortedSet of I such that
+    con: for i being Element of I holds A.i is strongly_connected;
+    let f be Collineation of Segre_Product A;
+    f: dom f = the carrier of Segre_Product A by FUNCT_2:def 1;
+    let B1,B2 be Segre-Coset of A such that
+    B: B1 misses B2 & B1 '||' B2;
+    let b1,b2 be Segre-like non trivial-yielding ManySortedSubset of Carrier A
+    such that
+    b: product b1 = B1 & product b2 = B2;
+    db: dom b1 = I by PBOOLE:def 3;
+    ii: indx(b1)=indx(b2) by rowni,b,B;
+    set i = indx(b1);
+    consider r being Element of I such that
+    r: r<>indx(b1) & 
+    (for i being Element of I st i<>r holds b1.i=b2.i) &
+    for c1,c2 being Point of A.r st b1.r={c1} & b2.r={c2} holds
+    c1,c2 are_collinear by rowni,b,B;
+    reconsider B3=f.:B1,B4=f.:B2 as Segre-Coset of A by PENCIL_2:24,con;
+    f is bijective by PENCIL_2:def 4; then
+    fo: f is one-to-one by FUNCT_2:def 4; then
+    BB: B3 misses B4 & B3 '||' B4 by B,colrow,FUNCT_1:125;
+    consider b3 being Segre-like non trivial-yielding ManySortedSubset of
+    Carrier A such that
+    b3: product b3 = B3 & b3.indx(b3) = [#](A.indx(b3)) by PENCIL_2:def 2;
+    consider b4 being Segre-like non trivial-yielding ManySortedSubset of
+    Carrier A such that
+    b4: product b4 = B4 & b4.indx(b4) = [#](A.indx(b4)) by PENCIL_2:def 2;
+    iii: indx(b3)=indx(b4) by rowni,b3,b4,BB;
+    set j = indx(b3);
+    d: dom canonical_embedding(f,b1) = the carrier of A.i &
+       dom canonical_embedding(f,b2) = the carrier of A.i by ii,FUNCT_2:def 1;
+    now
+      let o be set;
+      assume o in the carrier of A.i; then
+      reconsider u=o as Point of A.i;
+      consider p0 being set such that
+      p0: p0 in product b1 by XBOOLE_0:def 1;
+      reconsider p1=p0 as Point of Segre_Product A by p0,b;
+      reconsider p=p1 as ManySortedSet of I by PENCIL_1:14;
+      set q=p+*(i,u);
+      reconsider q1=q as Point of Segre_Product A by PENCIL_1:25;
+      b1.r is trivial by PENCIL_1:def 21,r; then
+      consider c1 being set such that
+      c1: b1.r = {c1} by REALSET1:def 4;
+      b1 c= Carrier A by PBOOLE:def 23; then
+      b1.r c= (Carrier A).r by PBOOLE:def 5; then
+      {c1} c= [#](A.r) by c1,e3; then
+      c1 in [#](A.r) by ZFMISC_1:37; then
+      reconsider c1 as Point of A.r;
+      b2.r is trivial by PENCIL_1:def 21,r,ii; then
+      consider c2 being set such that
+      c2: b2.r = {c2} by REALSET1:def 4;
+      b2 c= Carrier A by PBOOLE:def 23; then
+      b2.r c= (Carrier A).r by PBOOLE:def 5; then
+      {c2} c= [#](A.r) by c2,e3; then
+      c2 in [#](A.r) by ZFMISC_1:37; then
+      reconsider c2 as Point of A.r;
+      set t=q+*(r,c2);
+      q is Point of Segre_Product A by PENCIL_1:25; then
+      t is Point of Segre_Product A by PENCIL_1:25; then
+      reconsider t1=t as Point of Segre_Product A;
+      cc: c1,c2 are_collinear by r,c1,c2;
+      per cases;
+      suppose crc: c1<>c2;
+        q.r = p.r by FUNCT_7:34,r; then
+        q.r in b1.r by db,p0,CARD_3:18; then
+        okr: q.r = c1 by c1,TARSKI:def 1;
+        dom q = I by PBOOLE:def 3; then
+        tc: t.r=c2 by FUNCT_7:33; then
+        qr: q1<>t1 by crc,okr; then
+        kur: f.q1 <> f.t1 by f,fo,FUNCT_1:def 8;
+        now
+          let q3,t3 be ManySortedSet of I such that
+          qt: q3=q1 & t3=t1;
+          take r;
+          thus for a,b being Point of A.r st a=q3.r & b=t3.r holds
+          a<>b & a,b are_collinear
+          by qt,cc,crc,okr,tc;
+          let j be Element of I;
+          assume j<>r;
+          hence q3.j = t3.j by qt,FUNCT_7:34;
+        end; then
+        q1,t1 are_collinear by qr,col; then
+        fak: f.q1,f.t1 are_collinear by powel;
+        reconsider fq=f.q1,ft=f.t1 as ManySortedSet of I by PENCIL_1:14;
+        j: j=permutation_of_indices(f).i by con,permdef,b3,b;
+        dq: dom q = I & dom p = I & dom t = I & dom b1 = I & dom b2 = I
+        by PBOOLE:def 3;
+        now
+          let a be set;
+          assume aii: a in I;
+          per cases;
+          suppose a=i; then
+            q.a = u & b1.a = [#](A.i) by dq,FUNCT_7:33,e4_4,b; then
+            q.a = u & b1.a = the carrier of (A.i) by PRE_TOPC:def 3;
+            hence q.a in b1.a;
+          end;
+          suppose a<>i; then
+            q.a = p.a by FUNCT_7:34;
+            hence q.a in b1.a by aii,p0,CARD_3:18,dq;
+          end;
+        end; then
+        qb: q in product b1 by dq,CARD_3:18; then
+        n1: canonical_embedding(f,b1).(q.i)=fq.(permutation_of_indices(f).i)
+        by nmap,con,b;
+        now
+          let a be set;
+          assume aii: a in I;
+          per cases;
+          suppose ai: a=r; then
+            t.a = c2 by dq,FUNCT_7:33;
+            hence t.a in b2.a by ai,c2,TARSKI:def 1;
+          end;
+          suppose ar: a<>r; then
+            t.a = q.a by FUNCT_7:34; then
+            t.a in b1.a by aii,dq,qb,CARD_3:18;
+            hence t.a in b2.a by ar,r,aii;
+          end;
+        end; then        
+        t2: t in product b2 by dq,CARD_3:18; then
+        n2: canonical_embedding(f,b2).(t.i)=ft.(permutation_of_indices(f).i)
+        by ii,nmap,con,b;        
+        ff:
+        now
+          assume faf: fq.j<>ft.j;
+          consider l being Element of I such that
+          l: (for a,b being Point of A.l st a=fq.l & b=ft.l holds
+          a<>b & a,b are_collinear) &
+          for j being Element of I st j<>l holds fq.j = ft.j by col,fak,kur;
+          jl: j=l by faf,l;
+          q1 in B1 & q1 in dom f by qb,b,f; then
+          fuck: fq in B3 by FUNCT_1:def 12;
+          dfu: dom fq = I & dom ft = I & dom b3 = I & dom b4=I by PBOOLE:def 3;
+          now
+            let o be set;
+            assume o in I; then
+            reconsider o1=o as Element of I; 
+            per cases;
+            suppose ojojoj: o1=j; then
+              fq.o1 in b3.j by fuck,b3,CARD_3:18,dfu; then
+              fq.o in [#](A.j) by b3;
+              hence fq.o in b4.o by ojojoj,b4,iii;
+            end;
+            suppose o1<>j; then
+              fff: fq.o1 = ft.o1 by jl,l;
+              t in B2 & t1 in dom f by f,t2,b; then
+              ft in product b4 by b4,FUNCT_1:def 12;
+              hence fq.o in b4.o by dfu,fff,CARD_3:18;
+            end;
+          end; then
+          fq in product b4 by dfu,CARD_3:18; then
+          fq in product b3 /\ product b4 by fuck,XBOOLE_0:def 3,b3; then
+          product b3 meets product b4 by XBOOLE_0:def 7;
+          hence contradiction by b3,b4,BB;
+        end;
+        dom p = I by PBOOLE:def 3; then
+        qo: q.i=o by FUNCT_7:33; then
+        too: t.i=o by r,FUNCT_7:34;
+        thus canonical_embedding(f,b1).o = canonical_embedding(f,b2).o
+        by j,n2,too,ff,n1,qo;
+      end;
+      suppose cc: c1=c2; 
+        dd: dom b1 = I & dom b2 = I by PBOOLE:def 3;
+        now
+          let o be set;
+          assume o in I; then
+          reconsider o1=o as Element of I;
+          per cases;
+          suppose r=o1;
+            hence b1.o=b2.o by cc,c1,c2;
+          end;
+          suppose r<>o1;
+            hence b1.o=b2.o by r;
+          end;
+        end; then
+        b1=b2 by dd,FUNCT_1:9;
+        hence canonical_embedding(f,b1).o = canonical_embedding(f,b2).o;
+      end;
+    end;
+    hence canonical_embedding(f,b1) = canonical_embedding(f,b2) by d,FUNCT_1:9;
+  end;
+  
+theorem netnet:
+  for I being finite non empty set
+  for A being PLS-yielding ManySortedSet of I st
+  for i being Element of I holds A.i is strongly_connected
+  for f being Collineation of Segre_Product A
+  for b1,b2 being Segre-like non trivial-yielding ManySortedSubset of Carrier A
+  st product b1 is Segre-Coset of A & product b2 is Segre-Coset of A &
+  indx(b1)=indx(b2) holds canonical_embedding(f,b1) = canonical_embedding(f,b2)
+  proof
+    let I be finite non empty set;
+    let A be PLS-yielding ManySortedSet of I such that
+    con: for i being Element of I holds A.i is strongly_connected;
+    con1:
+    now
+      let o be Element of I;
+      A.o is strongly_connected by con;
+      hence A.o is connected by p_1_28;
+    end;
+    let f be Collineation of Segre_Product A;
+    let b1,b2 be Segre-like non trivial-yielding ManySortedSubset of Carrier A
+    such that
+    bb: product b1 is Segre-Coset of A & product b2 is Segre-Coset of A &
+    indx(b1)=indx(b2);    
+    reconsider B1=product b1, B2=product b2 as Segre-Coset of A by bb;
+    per cases;
+    suppose B1 misses B2; then
+      consider D being FinSequence of bool the carrier of Segre_Product A
+      such that
+      D: D.1=B1 & D.(len D)=B2 & (for i being Nat st i in dom D holds
+      D.i is Segre-Coset of A) &
+      for i being Nat st 1<=i & i<len D for Di,Di1 being Segre-Coset of A st
+      Di=D.i & Di1=D.(i+1)
+      holds Di misses Di1 & Di '||' Di1 by con1,bb,conseq;
+      
+      defpred P[Nat] means
+      $1 in dom D implies
+      for D1 being Segre-Coset of A st D1=D.$1
+      for d1 being Segre-like non trivial-yielding ManySortedSubset of
+      Carrier A st D1=product d1 holds
+      canonical_embedding(f,b1)=canonical_embedding(f,d1);
+      
+      _0: P[0] by FINSEQ_3:26;
+      _k:
+      now
+        let k be Nat;
+        assume pk: P[k];
+        thus P[k+1]
+        proof
+          assume k+1 in dom D; then
+          k+1 <= len D by FINSEQ_3:27; then
+          kd: k < len D by NAT_1:38;
+          let D2 be Segre-Coset of A such that
+          D2: D2=D.(k+1);
+          let d2 be Segre-like non trivial-yielding ManySortedSubset of
+          Carrier A such that
+          d2: D2=product d2;
+          per cases by NAT_1:39;
+          suppose k=0; then
+            D2=B1 by D2,D;
+            hence canonical_embedding(f,b1)=canonical_embedding(f,d2)
+            by d2,PUA2MSS1:2;
+          end;
+          suppose jk: 1<=k; then
+            kd1: k in dom D by kd,FINSEQ_3:27; then
+            reconsider D1=D.k as Segre-Coset of A by D;
+            consider d1 being Segre-like non trivial-yielding
+            ManySortedSubset of Carrier A such that
+            d1: product d1 = D1 & d1.indx(d1)=[#](A.indx(d1))
+            by PENCIL_2:def 2;
+            D1 misses D2 & D1 '||' D2 by D,jk,kd,D2; then
+            n: canonical_embedding(f,d1)=canonical_embedding(f,d2)
+            by netnet0,con,d1,d2;
+            thus canonical_embedding(f,b1) = canonical_embedding(f,d2)
+            by n,pk,kd1,d1;
+          end;
+        end;
+      end;
+      for n being Nat holds P[n] from NAT_1:sch 1(_0,_k); then
+      P: P[len D];
+      1 in dom D by D,FUNCT_1:def 4; then
+      1 <= len D by FINSEQ_3:27; then
+      len D in dom D by FINSEQ_3:27;      
+      hence canonical_embedding(f,b1) = canonical_embedding(f,b2) by D,P;
+    end;
+    suppose B1 meets B2;
+      then B1=B2 by e4_5,bb;
+      hence canonical_embedding(f,b1) = canonical_embedding(f,b2)
+      by PUA2MSS1:2;
+    end;
+  end;
+
+definition
+  let I be finite non empty set;
+  let A be PLS-yielding ManySortedSet of I such that
+  con: for i being Element of I holds A.i is strongly_connected;
+  let f be Collineation of Segre_Product A;
+  let i be Element of I;
+  func canonical_embedding(f,i) ->
+  map of A.i,A.(permutation_of_indices(f).i) means :nmapi:
+  for b being Segre-like non trivial-yielding ManySortedSubset of Carrier A st
+  product b is Segre-Coset of A & indx(b)=i holds it=canonical_embedding(f,b);
+  existence
+  proof
+    consider L being Segre-like non trivial-yielding ManySortedSubset of
+    Carrier A such that
+    L: indx(L)=i & product L is Segre-Coset of A by e4;
+    reconsider n=canonical_embedding(f,L) as map of
+    A.i,A.(permutation_of_indices(f).i) by L;
+    take n;
+    let b be Segre-like non trivial-yielding ManySortedSubset of Carrier A
+    such that
+    b: product b is Segre-Coset of A & indx(b)=i;
+    thus n=canonical_embedding(f,b) by b,L,netnet,con;
+  end;
+  uniqueness
+  proof
+    let n1,n2 be map of A.i,A.(permutation_of_indices(f).i) such that
+    n1: for b being Segre-like non trivial-yielding ManySortedSubset of
+    Carrier A st
+    product b is Segre-Coset of A & indx(b)=i holds n1=canonical_embedding(f,b)
+    and
+    n2: for b being Segre-like non trivial-yielding ManySortedSubset of
+    Carrier A st
+    product b is Segre-Coset of A & indx(b)=i
+    holds n2=canonical_embedding(f,b);
+    consider L being Segre-like non trivial-yielding ManySortedSubset of
+    Carrier A such that
+    L: indx(L)=i & product L is Segre-Coset of A by e4;
+    thus n1=canonical_embedding(f,L) by L,n1 .= n2 by L,n2;
+  end;
+end;
+   
+theorem
+  for I being finite non empty set
+  for A being PLS-yielding ManySortedSet of I st
+  for i being Element of I holds A.i is strongly_connected
+  for f being Collineation of Segre_Product A
+  ex s being Permutation of I, B being Function-yielding ManySortedSet of I st
+  for i being Element of I holds (B.i is map of A.i,A.(s.i) &
+  for m being map of A.i,A.(s.i) st m=B.i holds m is isomorphic) &
+  for p being Point of Segre_Product A
+  for a being ManySortedSet of I st a=p
+  for b being ManySortedSet of I st b=f.p
+  for m being map of A.i,A.(s.i) st m=B.i holds b.(s.i)=m.(a.i)
+  proof
+    let I be finite non empty set;
+    let A be PLS-yielding ManySortedSet of I such that
+    con: for i being Element of I holds A.i is strongly_connected;
+    let f be Collineation of Segre_Product A;
+    set s=permutation_of_indices(f);
+    take s;
+    
+    defpred P[set,set] means
+    for i being Element of I st i=$1 holds $2=canonical_embedding(f,i);
+    
+    sc: for i being set st i in I ex j being set st P[i,j]
+    proof
+      let i be set;
+      assume i in I; then reconsider i1=i as Element of I;
+      P[i1,canonical_embedding(f,i1)];
+      hence ex j being set st P[i,j];
+    end;
+    
+    consider B being ManySortedSet of I such that
+    B: for i being set st i in I holds P[i,B.i] from PBOOLE:sch 3(sc);
+    
+    now
+      let x be set;
+      assume x in dom B; then
+      reconsider y=x as Element of I by PBOOLE:def 3;
+      P[y,B.y] by B; then
+      B.y = canonical_embedding(f,y);
+      hence B.x is Function;
+    end; then
+    reconsider B as Function-yielding ManySortedSet of I by FUNCOP_1:def 6;
+    take B;
+    let i be Element of I;
+    bi: B.i = canonical_embedding(f,i) by B;
+    thus B.i is map of A.i,A.(s.i) &
+    for m being map of A.i,A.(s.i) st m=B.i holds m is isomorphic
+    proof
+      thus B.i is map of A.i,A.(s.i) by bi;
+      let m be map of A.i,A.(s.i);
+      assume m: m=B.i; 
+      consider L being Segre-like non trivial-yielding ManySortedSubset of
+      Carrier A such that
+      L: indx(L)=i & product L is Segre-Coset of A by e4;
+      B.i=canonical_embedding(f,L) by con,bi,L,nmapi;
+      hence m is isomorphic by con,m,nmap,L;
+    end;
+    let p be Point of Segre_Product A;
+    let a be ManySortedSet of I such that
+    a: a=p;
+    let b be ManySortedSet of I such that
+    b: b=f.p;
+    let m be map of A.i,A.(s.i) such that
+    m: m=B.i;
+    consider b1 being Segre-like non trivial-yielding ManySortedSubset of
+    Carrier A such that
+    b1: indx(b1)=i & product b1 is Segre-Coset of A & a in product b1 by a,e4';
+    m=canonical_embedding(f,b1) by m,bi,b1,con,nmapi;
+    hence b.(s.i)=m.(a.i) by con,nmap,a,b,b1;
+  end;

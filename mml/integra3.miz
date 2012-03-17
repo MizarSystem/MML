@@ -19,7 +19,7 @@ environ
       FDIFF_1, SQUARE_1, FINSEQ_4, RFINSEQ, TOPREAL1, BINARITH, JORDAN3,
       INTEGRA2, ABSVALUE, PSCOMP_1, FINSOP_1, COMPLEX1, BINOP_2, NAT_1;
  clusters XREAL_0, RELSET_1, FINSEQ_1, NAT_2, GOBOARD1, INTEGRA1, INTEGRA2,
-      NAT_1, MEMBERED, NUMBERS, COMPLEX1, ORDINAL2;
+      NAT_1, MEMBERED, NUMBERS, COMPLEX1, ORDINAL2, XCMPLX_0;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI;
  theorems AXIOMS, REAL_1, SEQ_4, SUBSET_1, REAL_2, PARTFUN1, INTEGRA1,
@@ -27,7 +27,7 @@ environ
       PRE_CIRC, NAT_1, GOBOARD2, RFINSEQ, TARSKI, GOBOARD1, SQUARE_1, CARD_1,
       FINSEQ_5, FINSEQ_3, FINSEQ_4, JORDAN7, JORDAN3, SFMASTR3, BINARITH,
       INTEGRA2, RELAT_1, XREAL_0, SCMFSA_7, FUNCT_2, XBOOLE_0, XBOOLE_1,
-      RCOMP_1, XCMPLX_1;
+      RCOMP_1, XCMPLX_1, INT_1;
  schemes FINSEQ_2, NAT_1, BINARITH;
 
 begin :: Lemmas of Division
@@ -37,10 +37,11 @@ reserve a,b,d,e,x,y for Real,
         x1 for set,
         p,q for FinSequence of REAL;
 
-Lm1: now let k;  k <= k+1 by NAT_1:29; hence k-1 <= k by REAL_1:86; end;
+Lm1: a-1 <= a by INT_1:26;
+
 Lm2:j-'j+1 = 1
     proof
-        j-'j=j-j by SCMFSA_7:3 .= 0;
+     j-'j=j-j by SCMFSA_7:3 .= 0;
      hence thesis;
     end;
 
@@ -347,7 +348,7 @@ then   inf divset(D,m+1)=D.((m+1)-1)
       hence thesis by A21,AXIOMS:22;
     end;
     end;
-       abs (D.n-D.m) <= delta D1
+    abs (D.n-D.m) <= delta D1
     proof
      per cases by A5,A6,A7,AXIOMS:21;
       suppose n<m;
@@ -521,8 +522,7 @@ then A1:j in Seg len D1 by FINSEQ_1:def 3;
   then upper_volume(chi(A,A),D1).j <= max rng upper_volume(chi(A,A),D1)
   by PRE_CIRC:def 1;
   then vol(divset(D1,j)) <= max rng upper_volume(chi(A,A),D1) by A1,INTEGRA1:
-22
-;
+22;
   hence thesis by INTEGRA1:def 19;
 end;
 
@@ -1531,9 +1531,8 @@ A106:  vol(divset(D1,j))
      proof
 A107:  inf divset(D1,j)=D2.indx(D2,D1,j1)&sup divset(D1,j)=D2.indx(D2,D1,j)
       proof
-          inf divset(D1,j)=D1.j1 & sup divset(D1,j)=D1.j by A5,A6,INTEGRA1:def
-5
-;
+       inf divset(D1,j)=D1.j1 & sup divset(D1,j)=D1.j by A5,A6,INTEGRA1:def
+5;
        hence thesis by A2,A5,A16,INTEGRA1:def 21;
       end;
 A108:  indx(D2,D1,j)=indx(D2,D1,j1)+2
@@ -1599,7 +1598,7 @@ A123:  Sum mid(UVg(D2),(indx(D2,D1,j1)+1),indx(D2,D1,j))
         *vol(divset(D2,indx(D2,D1,j1)+1)) by A93,INTEGRA1:def 7;
          divset(D2,ID2)c=A by A120,A122,INTEGRA1:10;
       then A124: sup rng(g|divset(D2,ID2)) >= inf rng g by A3,Lm6;
-         ID1 in dom D2 by A93,FINSEQ_1:def 3;
+      ID1 in dom D2 by A93,FINSEQ_1:def 3;
       then divset(D2,ID1)c=A by INTEGRA1:10;
       then sup rng(g|divset(D2,ID1)) >= inf rng g by A3,Lm6;
 then A125:  (sup rng(g|divset(D2,ID1)))*vol(divset(D2,ID1))
@@ -1619,12 +1618,24 @@ then A126:  (sup rng(g|divset(D1,j)))*vol(divset(D2,ID2))
       then Sum mid(UVg(D2),ID1,indx(D2,D1,j))-(inf rng g)*vol(divset(D2,ID2))
       >=(sup rng(g|divset(D2,ID1)))*vol(divset(D2,ID1)) by REAL_1:84;
       then Sum mid(UVg(D2),ID1,indx(D2,D1,j))-(inf rng g)*vol(divset(D2,ID2))
-      >=(inf rng g)*vol(divset(D2,ID1)) by A125,AXIOMS:22;
-then A127:  Sum mid(UVg(D2),ID1,indx(D2,D1,j))>=(inf rng g)*vol(divset(D2,ID2))
-+
-      (inf rng g)*vol(divset(D2,ID1)) by REAL_1:84;
+      >=(inf rng g)*vol(divset(D2,ID1)) by A125,AXIOMS:22;then
+A127: Sum mid(UVg(D2),ID1,indx(D2,D1,j)) >= (inf rng g)*vol(divset(D2,ID2))
+      + (inf rng g)*vol(divset(D2,ID1)) by REAL_1:84;
+      reconsider A = sup(rng(g|divset(D1,j))) as real number;
+      Sum mid(UVg(D1),j,j) =
+      (sup(rng(g|divset(D1,j)))) * (vol(divset(D2,indx(D2,D1,j1)+1)) +
+         vol(divset(D2,indx(D2,D1,j1)+2))) by A116,A92
+       .= (sup(rng(g|divset(D1,j)))) *
+       (vol(divset(D2,indx(D2,D1,j1)+1)) +
+         vol(divset(D2,indx(D2,D1,j1)+2)))
+       .= A * (vol(divset(D2,indx(D2,D1,j1)+1)) +
+         vol(divset(D2,indx(D2,D1,j1)+2)))
+       .= A * vol(divset(D2,indx(D2,D1,j1)+1)) +
+          A * vol(divset(D2,indx(D2,D1,j1)+2))
+       .= (sup(rng(g|divset(D1,j)))) * vol(divset(D2,ID1)) +
+          (sup(rng(g|divset(D1,j)))) * vol(divset(D2,indx(D2,D1,j1)+2)); then
        Sum mid(UVg(D1),j,j)-(sup rng(g|divset(D1,j)))*vol(divset(D2,ID1))
-       =(sup rng(g|divset(D1,j)))*vol(divset(D2,ID2)) by A92,A116;
+       = (sup rng(g|divset(D1,j)))*vol(divset(D2,ID2));
       then Sum mid(UVg(D1),j,j)<=(sup rng(g|divset(D1,j)))*vol(divset(D2,ID1))
        +(sup rng g)*vol(divset(D2,ID2)) by A126,REAL_1:86;
       then Sum mid(UVg(D1),j,j)-(sup rng g)*vol(divset(D2,ID2))
@@ -2851,13 +2862,12 @@ A11:   i in dom upper_volume(chi(A,A),T.m) &
 A12:   i in Seg len upper_volume(chi(A,A),T.m) by A11,FINSEQ_1:def 3;
        consider D being Element of divs A such that
 A13:   D = T.m;
-          i in Seg len D by A12,A13,INTEGRA1:def 7;
+       i in Seg len D by A12,A13,INTEGRA1:def 7;
        then delta(T.m)=vol(divset(T.m,i)) by A11,A13,INTEGRA1:22;
        hence thesis by A8,A9,A10,AXIOMS:24,INTEGRA1:11;
      end;
      hence thesis;
    end;
-
 A14:for D,D1 be Element of divs A holds ex D2 be Element of divs A st
    D<=D2 & D1<=D2 & rng D2=rng D1 \/
  rng D & 0<=lower_sum(f,D2)-lower_sum(f,D) &
@@ -2911,11 +2921,11 @@ A28:   inf divset(D1,j)<=D.i & D.i<=sup divset(D1,j) by A26,INTEGRA2:1;
        then j = 1 by A27,AXIOMS:21;
 then A29:   inf divset(D1,j)=inf A & sup divset(D1,j)=D1.j by A26,INTEGRA1:def
 5;
-          delta(D1) >= min rng upper_volume(chi(A,A),D)
+       delta(D1) >= min rng upper_volume(chi(A,A),D)
        proof
         per cases;
          suppose A30:i=1;
-            len D <> 0 by FINSEQ_1:25;
+         len D <> 0 by FINSEQ_1:25;
          then len D in Seg len D by FINSEQ_1:5;
          then 1 <= len D by FINSEQ_1:3;
 then A31:     1 in Seg len D by FINSEQ_1:3;
@@ -3305,8 +3315,8 @@ A140:        n in dom D1 & D1.n=D2.ID2 by PARTFUN1:26;
 A141:     inf divset(D1,j)=D2.indx(D2,D1,j1)
           & sup divset(D1,j)=D2.indx(D2,D1,j)
           proof
-              inf divset(D1,j)=D1.j1 & sup divset(D1,j)=D1.j
-           by A45,A46,INTEGRA1:def 5;
+           inf divset(D1,j)=D1.j1 & sup divset(D1,j)=D1.j
+             by A45,A46,INTEGRA1:def 5;
            hence thesis by A21,A45,A51,INTEGRA1:def 21;
           end;
 A142:     D2.ID1 in rng D /\ divset(D1,j)
@@ -3372,7 +3382,6 @@ A151:      indx(D2,D1,j1)+1=indx(D2,D1,j)
            then indx(D2,D1,j)=0+(indx(D2,D1,j1)+1);
            hence thesis;
           end;
-
 A152:      divset(D2,indx(D2,D1,j))=divset(D1,j)
           proof
               inf divset(D1,j)=D2.indx(D2,D1,j1)
@@ -3392,7 +3401,6 @@ A155:      indx(D2,D1,j) in dom D2 by A21,A45,INTEGRA1:def 21;
            by A154,A155,INTEGRA1:def 5;
            hence thesis by A153,INTEGRA1:5;
           end;
-
              mid(lower_volume(f,D2),(indx(D2,D1,j1)+1),indx(D2,D1,j)).1
            =lower_volume(f,D2).(indx(D2,D1,j1)+1) by A125,A126,JORDAN3:27;
           then mid(lower_volume(f,D2),(indx(D2,D1,j1)+1),indx(D2,D1,j))
@@ -3457,8 +3465,7 @@ A165:       inf divset(D2,(indx(D2,D1,j1)+2))=D2.(indx(D2,D1,j1)+1)
            proof
 A166:        indx(D2,D1,j1)+2 in dom D2 by A21,A45,A164,INTEGRA1:def 21;
                indx(D2,D1,j1)+1 in Seg len lower_volume(f,D2) by A126,FINSEQ_1:
-3
-;
+3;
             then indx(D2,D1,j1)+1 in Seg len D2 by INTEGRA1:def 8;
 then A167:        indx(D2,D1,j1)+1 in dom D2 by FINSEQ_1:def 3;
 A168:        indx(D2,D1,j1)+1 <> 1 by A49,NAT_1:38;
@@ -3482,7 +3489,6 @@ A171:        indx(D2,D1,j1)+1-1=indx(D2,D1,j1)+0;
            by A165;
            hence thesis by INTEGRA1:def 6;
           end;
-
 then A172:       lower_volume(f,D1).j=(inf(rng(f|divset(D1,j))))*
           (vol(divset(D2,indx(D2,D1,j1)+1))+vol(divset(D2,indx(D2,D1,j1)+2)))
           by A149,INTEGRA1:def 8;
@@ -3502,7 +3508,6 @@ A177:      indx(D2,D1,j)=indx(D2,D1,j1)+2
             hence thesis;
            end;
 then A178:       indx(D2,D1,j1)+2 in Seg len D2 by A176,FINSEQ_1:def 3;
-
            set ID1=indx(D2,D1,j1)+1;
            set ID2=indx(D2,D1,j1)+2;
 
@@ -3542,9 +3547,12 @@ ID2))
 then A183:    Sum mid(LVf(D2),ID1,indx(D2,D1,j))<=(sup rng f)*vol(divset(D2,ID2
 ))+
            (sup rng f)*vol(divset(D2,ID1)) by REAL_1:86;
-            Sum mid(LVf(D1),j,j)-(inf rng(f|divset(D1,j)))*vol(divset(D2,
-ID1))
-           >=(inf rng f)*vol(divset(D2,ID2)) by A147,A172,A182;
+           reconsider A = inf(rng(f|divset(D1,j))) as real number;
+           set B = vol(divset(D2,ID1));
+           set C = vol(divset(D2,ID2));
+          lower_volume(f,D1).j=A*B+A*C by A172; then
+          lower_volume(f,D1).j-A*B=A*C; then
+           Sum mid(LVf(D1),j,j)-A*B >=(inf rng f)*C by A147,A182;
            then Sum mid(LVf(D1),j,j)>=(inf rng(f|divset(D1,j)))*vol(divset(D2,
 ID1))
            +(inf rng f)*vol(divset(D2,ID2)) by REAL_1:84;
@@ -3570,7 +3578,6 @@ A184:      vol(divset(D1,j)) <= delta(D1) by A45,Lm7;
          end;
          hence thesis;
         end;
-
 A185:    PLf(D2,indx(D2,D1,j1))
         +Sum mid(lower_volume(f,D2),(indx(D2,D1,j1)+1),indx(D2,D1,j))
         =PLf(D2,indx(D2,D1,j))
@@ -4689,7 +4696,6 @@ A488: y in rng lower_sum_set(f) & lower_integral(f)-e/2<y
 A489: D in dom lower_sum_set(f) & y=(lower_sum_set(f)).D & D.1>inf A
      by A3,A488,Lm9;
        A490: y=lower_sum(f,D) by A489,INTEGRA1:def 12;
-
      set p=len D;
      set H=sup rng f;
      set h=inf rng f;
@@ -4735,7 +4741,6 @@ then A499: 2*p*(H-h+1) > 0 by A498,REAL_2:122;
      then consider n such that
 A500: for m st n<=m holds 0 < (delta(T)).m
      & (delta(T)).m < min(v1.k,e/(2*p*(H-h+1))) by A5;
-
 A501: for m st n<=m holds abs((lower_sum(f,T)).m-lower_integral(f))<e
      proof
        let m; assume A502:n<=m;
@@ -4755,7 +4760,7 @@ A507:   delta(D1)<min (v1.k,e/(2*p*(H-h+1))) by A503,INTEGRA2:def 3;
 then A508:   delta(D1)<v1.k by A507,AXIOMS:22;
 A509:  v1.1 > 0
        proof
-A510:     for n1 be Element of NAT st n1 in dom D holds
+A510:   for n1 be Element of NAT st n1 in dom D holds
         vol(divset(D,n1))>0
         proof
          let n1 be Element of NAT;
@@ -4856,7 +4861,6 @@ A540:  (delta(T)).m < min(v1.k,e/(2*p*(H-h+1))) by A500,A502;
        then (delta(T)).m*(2*p*(H-h+1))<e by A499,REAL_2:177;
        then ((delta(T)).m*(p*(H-h+1)))*2<e;
 then A541:  p*(H-h+1)*(delta(T)).m < e/2 by REAL_2:178;
-
        set s=lower_integral(f);
        set sD=lower_sum(f,D);
        set sD1=lower_sum(f,T.m);
@@ -4880,8 +4884,7 @@ then A544:   T.m in dom lower_sum_set(f) by INTEGRA1:def 12;
        then lower_integral(f)>=(lower_sum(f,T)).m by INTEGRA1:def 16;
        then lower_integral(f)-(lower_sum(f,T)).m >= 0 by SQUARE_1:12;
        then abs(lower_integral(f)-(lower_sum(f,T)).m) < e by A543,ABSVALUE:def
-1
-;
+1;
        then abs(-(lower_integral(f)-(lower_sum(f,T)).m)) < e by ABSVALUE:17;
        hence thesis;
      end;
@@ -5015,7 +5018,7 @@ then A37:     inf divset(D,i)=D.(i-1) & sup divset(D,i)=D.i by A24,INTEGRA1:def
          then A38:      sup divset(D1,j)-inf divset(D1,j) >= sup divset(D,i)-
 inf A
          by A27,A28,REAL_1:49;
-            D.(i-1) in A by A24,A36,INTEGRA1:9;
+         D.(i-1) in A by A24,A36,INTEGRA1:9;
          then inf A <= D.(i-1) by INTEGRA2:1;
          then sup divset(D,i)-inf A >= sup divset(D,i)-inf divset(D,i)
          by A37,REAL_2:106;
@@ -5059,7 +5062,7 @@ A45:   j in dom D1 & D.1 in divset(D1,j) by Th2;
 A46:    j <> 1 by A23,A44,A45;
         then reconsider j1=j-1 as Element of NAT by A45,INTEGRA1:9;
 A47:    j-1 in NAT & j-1 in dom D1 by A45,A46,INTEGRA1:9;
-           inf divset(D1,j) <= D.1 & D.1 <= sup divset(D1,j) by A45,INTEGRA2:1;
+        inf divset(D1,j) <= D.1 & D.1 <= sup divset(D1,j) by A45,INTEGRA2:1;
         then A48:    D1.j1 <= D.1 & D.1 <= D1.j by A45,A46,INTEGRA1:def 5;
 A49:    indx(D2,D1,j1) in dom D2 & 1 <= indx(D2,D1,j1) &
           indx(D2,D1,j1) <= len D2
@@ -5080,7 +5083,7 @@ A51:    j1 in dom D1 & 1 <= j1 & j1 <= len D1
 then A52:    D1|j1 is increasing by A51,JORDAN3:25;
 A53:    rng (D2|indx(D2,D1,j1)) = rng (D1|j1)
         proof
-            for x1 st x1 in rng(D2|indx(D2,D1,j1)) holds x1 in rng(D1|j1)
+         for x1 st x1 in rng(D2|indx(D2,D1,j1)) holds x1 in rng(D1|j1)
          proof
           let x1; assume x1 in rng(D2|indx(D2,D1,j1));
           then consider k such that
@@ -5099,7 +5102,7 @@ A60:      D2.k in rng D implies D2.k = D1.j1
            assume D2.k in rng D;
            then consider n such that
 A61:       n in dom D & D2.k=D.n by PARTFUN1:26;
-              1 <= n by A61,FINSEQ_3:27;
+           1 <= n by A61,FINSEQ_3:27;
            then D.1 <= D2.k by A44,A61,GOBOARD2:18;
            then D1.j1 <= D2.k by A48,AXIOMS:22;
            hence thesis by A58,AXIOMS:21;
@@ -5293,7 +5296,7 @@ then A120:   indx(D2,D1,j1) in Seg len upper_volume(f,D2) by INTEGRA1:def 7;
 then A121:   j1 in Seg len upper_volume(f,D1) by INTEGRA1:def 7;
 A122:   indx(D2,D1,j1)+1 <= indx(D2,D1,j)
         proof
-            j < j+1 by NAT_1:38;
+         j < j+1 by NAT_1:38;
          then j1 < j by REAL_1:84;
          then indx(D2,D1,j1) < indx(D2,D1,j) by A20,A45,A51,Th7;
          hence thesis by NAT_1:38;
@@ -5324,20 +5327,20 @@ A129:     indx(D2,D1,j1) < ID1 & ID1 < ID2 & ID2 < indx(D2,D1,j)
           proof
            thus indx(D2,D1,j1) < ID1 by NAT_1:38;
            thus ID1 < ID2 by NAT_1:38;
-              indx(D2,D1,j1)+(1+1)<indx(D2,D1,j) by A128,REAL_1:86;
+          indx(D2,D1,j1)+(1+1)<indx(D2,D1,j) by A128,REAL_1:86;
            hence thesis;
           end;
 A130:     indx(D2,D1,j) in dom D2 by A20,A45,INTEGRA1:def 21;
 then A131:     indx(D2,D1,j) <= len D2 by FINSEQ_3:27;
 A132:     ID1 in dom D2
           proof
-A133:         1 <= ID1 & ID1 <= indx(D2,D1,j) by A49,A129,AXIOMS:22;
+A133:      1 <= ID1 & ID1 <= indx(D2,D1,j) by A49,A129,AXIOMS:22;
            then ID1 <= len D2 by A131,AXIOMS:22;
            hence thesis by A133,FINSEQ_3:27;
           end;
 A134:     ID2 in dom D2
           proof
-A135:         indx(D2,D1,j1) <= ID2 & ID2 <= len D2 by A129,A131,AXIOMS:22;
+A135:      indx(D2,D1,j1) <= ID2 & ID2 <= len D2 by A129,A131,AXIOMS:22;
            then 1 <= ID2 by A49,AXIOMS:22;
            hence thesis by A135,FINSEQ_3:27;
           end;
@@ -5346,18 +5349,17 @@ j)
           by A49,A129,A130,A132,GOBOARD1:def 1;
 A137:     D2.ID1 in rng D & D2.ID2 in rng D
           proof
-           A138: D2.ID1 in rng D2 & D2.ID2 in rng D2 by A132,A134,FUNCT_1:def 5
-;
+A138:      D2.ID1 in rng D2 & D2.ID2 in rng D2 by A132,A134,FUNCT_1:def 5;
 A139:      D1.j1 = D2.indx(D2,D1,j1) & D1.j = D2.indx(D2,D1,j)
            by A20,A45,A51,INTEGRA1:def 21;
-              not(D2.ID1 in rng D1) & not D2.ID2 in rng D1
+           not(D2.ID1 in rng D1) & not D2.ID2 in rng D1
            proof
             assume A140:D2.ID1 in rng D1 or D2.ID2 in rng D1;
             per cases by A140;
              suppose D2.ID1 in rng D1;
              then consider n such that
 A141:        n in dom D1 & D1.n=D2.ID1 by PARTFUN1:26;
-                D2.indx(D2,D1,j1)<D2.ID1 & D2.ID1<D2.indx(D2,D1,j)
+             D2.indx(D2,D1,j1)<D2.ID1 & D2.ID1<D2.indx(D2,D1,j)
              by A136,AXIOMS:22;
              then j1<n & n<j by A45,A51,A139,A141,GOBOARD2:18;
              then j<n+1 & n<j by REAL_1:84;
@@ -5366,7 +5368,7 @@ A141:        n in dom D1 & D1.n=D2.ID1 by PARTFUN1:26;
              suppose D2.ID2 in rng D1;
              then consider n such that
 A142:        n in dom D1 & D1.n=D2.ID2 by PARTFUN1:26;
-                D2.indx(D2,D1,j1)<D2.ID2 & D2.ID2<D2.indx(D2,D1,j)
+             D2.indx(D2,D1,j1)<D2.ID2 & D2.ID2<D2.indx(D2,D1,j)
              by A136,AXIOMS:22;
              then j1<n & n<j by A45,A51,A139,A142,GOBOARD2:18;
              then j<n+1 & n<j by REAL_1:84;
@@ -5378,20 +5380,20 @@ A142:        n in dom D1 & D1.n=D2.ID2 by PARTFUN1:26;
 A143:     inf divset(D1,j)=D2.indx(D2,D1,j1)
           & sup divset(D1,j)=D2.indx(D2,D1,j)
           proof
-              inf divset(D1,j)=D1.j1 & sup divset(D1,j)=D1.j
+           inf divset(D1,j)=D1.j1 & sup divset(D1,j)=D1.j
            by A45,A46,INTEGRA1:def 5;
            hence thesis by A20,A45,A51,INTEGRA1:def 21;
           end;
 A144:     D2.ID1 in rng D /\ divset(D1,j)
           proof
-              D2.indx(D2,D1,j1)<=D2.ID1&D2.ID1<=D2.indx(D2,D1,j)
+           D2.indx(D2,D1,j1)<=D2.ID1&D2.ID1<=D2.indx(D2,D1,j)
            by A136,AXIOMS:22;
            then D2.ID1 in divset(D1,j) by A143,INTEGRA2:1;
            hence thesis by A137,XBOOLE_0:def 3;
           end;
        D2.ID2 in rng D /\ divset(D1,j)
           proof
-              D2.indx(D2,D1,j1)<=D2.ID2&D2.ID2<=D2.indx(D2,D1,j)
+           D2.indx(D2,D1,j1)<=D2.ID2&D2.ID2<=D2.indx(D2,D1,j)
            by A136,AXIOMS:22;
            then D2.ID2 in divset(D1,j) by A143,INTEGRA2:1;
            hence thesis by A137,XBOOLE_0:def 3;
@@ -5523,9 +5525,7 @@ A167:       inf divset(D2,(indx(D2,D1,j1)+2))=D2.(indx(D2,D1,j1)+1)
            & sup divset(D2,(indx(D2,D1,j1)+1))=D2.(indx(D2,D1,j1)+1)
            proof
 A168:        indx(D2,D1,j1)+2 in dom D2 by A20,A45,A166,INTEGRA1:def 21;
-               indx(D2,D1,j1)+1 in Seg len upper_volume(f,D2) by A126,FINSEQ_1:
-3
-;
+           indx(D2,D1,j1)+1 in Seg len upper_volume(f,D2) by A126,FINSEQ_1:3;
             then indx(D2,D1,j1)+1 in Seg len D2 by INTEGRA1:def 7;
 then A169:        indx(D2,D1,j1)+1 in dom D2 by FINSEQ_1:def 3;
 A170:        indx(D2,D1,j1)+1 <> 1 by A49,NAT_1:38;
@@ -5562,16 +5562,14 @@ A178:      indx(D2,D1,j) in dom D2 by A20,A45,INTEGRA1:def 21;
 then A179:       indx(D2,D1,j) in Seg len D2 by FINSEQ_1:def 3;
 A180:      indx(D2,D1,j)=indx(D2,D1,j1)+2
            proof
-               indx(D2,D1,j)-'(indx(D2,D1,j1)+1)+1=2
-            by A122,A125,A126,A160,JORDAN3:27;
+            indx(D2,D1,j)-'(indx(D2,D1,j1)+1)+1=2
+              by A122,A125,A126,A160,JORDAN3:27;
             then 2=indx(D2,D1,j)-(indx(D2,D1,j1)+1)+1 by A122,SCMFSA_7:3
             .=indx(D2,D1,j)-indx(D2,D1,j1);
             hence thesis;
            end;
-
            set ID1=indx(D2,D1,j1)+1;
            set ID2=indx(D2,D1,j1)+2;
-
 A181:       Sum mid(UVf(D2),ID1,indx(D2,D1,j))
             =(sup rng(f|divset(D2,ID2)))*vol(divset(D2,ID2))
             +UVf(D2).ID1 by A163,A179,A180,INTEGRA1:def 7
@@ -5580,7 +5578,7 @@ A181:       Sum mid(UVf(D2),ID1,indx(D2,D1,j))
             *vol(divset(D2,ID1)) by A150,INTEGRA1:def 7;
               divset(D2,ID2) c= A by A178,A180,INTEGRA1:10;
            then A182: sup rng(f|divset(D2,ID2)) >= inf rng f by A1,Lm6;
-              ID1 in dom D2 by A150,FINSEQ_1:def 3;
+           ID1 in dom D2 by A150,FINSEQ_1:def 3;
            then divset(D2,ID1)c=A by INTEGRA1:10;
            then sup rng(f|divset(D2,ID1)) >= inf rng f by A1,Lm6;
 then A183:       (sup rng(f|divset(D2,ID1)))*vol(divset(D2,ID1))
@@ -5605,9 +5603,12 @@ ID2))
 then A185:      Sum mid(UVf(D2),ID1,indx(D2,D1,j))>=(inf rng f)*vol(divset(D2,
 ID2))+
            (inf rng f)*VR by REAL_1:84;
-            Sum mid(UVf(D1),j,j)-(sup rng(f|divset(D1,j)))*vol(divset(D2,
-ID1))
-           =(sup rng(f|divset(D1,j)))*vol(divset(D2,ID2)) by A149,A174;
+           reconsider A = sup rng(f|divset(D1,j)) as real number;
+           set B = vol(divset(D2,ID1));
+           set C = vol(divset(D2,ID2));
+           upper_volume(f,D1).j=A*(B+C) by A174 .= A*B + A*C; then
+           upper_volume(f,D1).j-A*B = A*C; then
+           Sum mid(UVf(D1),j,j)-A*B = A*C by A149;
            then Sum mid(UVf(D1),j,j)<=(sup rng(f|divset(D1,j)))*vol(divset(D2,
 ID1))
            +(sup rng f)*vol(divset(D2,ID2)) by A184,REAL_1:86;
@@ -5694,7 +5695,7 @@ A198: for i being non empty Nat st P[i] holds P[i+1]
        let i be non empty Nat;
        assume A199:P[i];
 A200:  i>=1 by NAT_1:39;
-          P[i+1]
+       P[i+1]
        proof
         assume A201:i+1 in dom D;
         then D.(i+1) in A by INTEGRA1:8;
@@ -6978,8 +6979,7 @@ A568:     n1-1 in dom D by A563,A566,INTEGRA1:9;
           hence thesis by A567,SQUARE_1:11;
         end;
         end;
-           k in Seg len v1 by A549,FINSEQ_1:def 3;
-        then 1 <= k & k <= len v1 by FINSEQ_1:3;
+        1 <= k & k <= len v1 by A549,FINSEQ_3:27;
         then 1 <= len v1 by AXIOMS:22;
         then 1 in dom v1 by FINSEQ_3:27;
 then A569:   v1.1 in rng v1 by FUNCT_1:def 5;
@@ -7018,24 +7018,24 @@ then A580:   m in Seg len D by INTEGRA1:def 7;
         then min rng upper_volume(chi(A,A),D)=vol(divset(D,m))
         by A579,INTEGRA1:22;
 then A581:   v.m=min rng upper_volume(chi(A,A),D) by A544,A580;
-           m in dom v by A544,A580,FINSEQ_1:def 3;
+        m in dom v by A544,A580,FINSEQ_1:def 3;
 then A582:   min rng upper_volume(chi(A,A),D) in rng v by A581,FUNCT_1:def 5;
 A583:   rng v = rng v1 by A545,RFINSEQ:1;
         then consider m1 being Element of NAT such that
 A584:   m1 in dom v1 & min rng upper_volume(chi(A,A),D)=v1.m1
         by A582,PARTFUN1:26;
-           m1 >= 1 by A584,FINSEQ_3:27;
+        m1 >= 1 by A584,FINSEQ_3:27;
 then A585:   v1.1 <= min rng upper_volume(chi(A,A),D) by A549,A573,A584,
 INTEGRA2:2;
-           v1.k in rng upper_volume(chi(A,A),D)
+        v1.k in rng upper_volume(chi(A,A),D)
         proof
-            v1.k in rng v by A549,A583,FUNCT_1:def 5;
+         v1.k in rng v by A549,A583,FUNCT_1:def 5;
          then consider k2 being Element of NAT such that
 A586:     k2 in dom v & v1.k = v.k2 by PARTFUN1:26;
 A587:     k2 in Seg len D by A544,A586,FINSEQ_1:def 3;
          then v1.k = vol(divset(D,k2)) by A544,A586;
 then A588:     v1.k = upper_volume(chi(A,A),D).k2 by A587,INTEGRA1:22;
-            k2 in Seg len upper_volume(chi(A,A),D) by A587,INTEGRA1:def 7;
+         k2 in Seg len upper_volume(chi(A,A),D) by A587,INTEGRA1:def 7;
          then k2 in dom upper_volume(chi(A,A),D) by FINSEQ_1:def 3;
          hence thesis by A588,FUNCT_1:def 5;
         end;
@@ -7054,18 +7054,18 @@ then p*(H-h)*(delta(T)).m <= p*(H-h+1)*(delta(T)).m by A556,AXIOMS:25;
 then A591:  upper_sum(f,T.m)-upper_sum(f,D2) <= p*(H-h+1)*(delta(T)).m
        by A559,A590,AXIOMS:22;
 A592:  (delta(T)).m < min(v1.k,e/(2*p*(H-h+1))) by A553,A555;
-          min(v1.k,e/(2*p*(H-h+1))) <= e/(2*p*(H-h+1)) by SQUARE_1:35;
+       min(v1.k,e/(2*p*(H-h+1))) <= e/(2*p*(H-h+1)) by SQUARE_1:35;
        then (delta(T)).m < e/(2*p*(H-h+1)) by A592,AXIOMS:22;
        then (delta(T)).m*(2*p*(H-h+1))<e by A552,REAL_2:177;
        then ((delta(T)).m*(p*(H-h+1)))*2<e;
 then A593:  p*(H-h+1)*(delta(T)).m < e/2 by REAL_2:178;
        set s=upper_integral(f), sD=upper_sum(f,D);
        set sD1=upper_sum(f,T.m), sD2=upper_sum(f,D2);
-          sD+sD1-sD1-s < e/2 by A498,A543,REAL_1:84;
+       sD+sD1-sD1-s < e/2 by A498,A543,REAL_1:84;
        then sD1-s+sD-sD1 < e/2;
        then sD1-s+sD < sD1+e/2 by REAL_1:84;
        then A594: sD1-s < sD1+e/2-sD by REAL_1:86;
-          sD1-sD <= sD1-sD2 by A558,REAL_2:106;
+       sD1-sD <= sD1-sD2 by A558,REAL_2:106;
        then sD1-sD <= p*(H-h+1)*(delta(T)).m by A591,AXIOMS:22;
        then sD1-sD < e/2 by A593,AXIOMS:22;
        then sD1-sD+e/2 < e/2+e/2 by REAL_1:53;

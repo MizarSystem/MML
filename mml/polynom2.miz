@@ -539,7 +539,7 @@ defpred P[Nat] means
 consider l being Nat such that A3: dom p = Seg l by FINSEQ_1:def 2;
     i in {z where z is Nat : 1 <= z & z <= l} by A1,A3,FINSEQ_1:def 1;
 then consider i' being Nat such that A4: i' = i & 1 <= i' & i' <= l;
-A5: P[0] by A2,A4,AXIOMS:22;
+A5: P[0] by A2,A4;
 A6: for j being Nat st 0 <= j & j < len p holds P[j] implies P[j+1]
     proof
     let j be Nat;
@@ -592,8 +592,7 @@ A6: for j being Nat st 0 <= j & j < len p holds P[j] implies P[j+1]
     end;
 A19: for j being Nat st 0 <= j & j <= len p holds P[j] from FinInd(A5,A6);
 A20: len p = l by A3,FINSEQ_1:def 3;
-    0 <= l by NAT_1:18;
-hence Sum p = p/.i by A2,A4,A19,A20;
+thus Sum p = p/.i by A2,A4,A19,A20;
 end;
 
 theorem
@@ -726,7 +725,7 @@ consider l being Nat such that A5: dom p = Seg l by FINSEQ_1:def 2;
 then consider i' being Nat such that A6: i' = i & 1 <= i' & i' <= l;
 consider l' being Nat such that A7: dom q = Seg l' by FINSEQ_1:def 2;
 A8: l = len p by A5,FINSEQ_1:def 3 .= l' by A1,A7,FINSEQ_1:def 3;
-A9: P[0] by A3,A4,A6,AXIOMS:22;
+A9: P[0] by A3,A4,A6;
 A10: for j being Nat st 0 <= j & j < len p holds P[j] implies P[j+1]
     proof
     let j be Nat;
@@ -783,8 +782,7 @@ A10: for j being Nat st 0 <= j & j < len p holds P[j] implies P[j+1]
     end;
 A26: for j being Nat st 0 <= j & j <= len p holds P[j] from FinInd(A9,A10);
 A27: len p = l by A5,FINSEQ_1:def 3;
-    0 <= l by NAT_1:18;
-hence Sum q = a + Sum p by A1,A3,A4,A6,A26,A27;
+thus Sum q = a + Sum p by A1,A3,A4,A6,A26,A27;
 end;
 
 theorem Th8:
@@ -853,7 +851,6 @@ suppose len p <> 0;
       proof
       let j be Nat;
       assume A15: 1 <= j & j < len p;
-      then A16: j <> 0;
       assume A17: P[j];
       per cases;
       suppose A18: j < i;
@@ -862,12 +859,12 @@ suppose len p <> 0;
           then A20: p.(j+1) = p/.(j+1) by A2,FINSEQ_4:def 4;
               q.(j+1) = q/.(j+1) by A2,A7,A9,A10,A19,FINSEQ_4:def 4;
           then fq.(j+1) = (the mult of L).(fq.j,a * p/.(j+1)) by A1,A2,A6,A15,
-A16,A19
+A19
                        .= fp.j * (a * p/.(j+1)) by A17,A18,VECTSP_1:def 10
                        .= (fp.j * p/.(j+1)) * a by VECTSP_1:def 16
                        .= (the mult of L).(fp.j,p/.(j+1)) * a
                           by VECTSP_1:def 10
-                       .= fp.(j+1) * a by A5,A15,A16,A20;
+                       .= fp.(j+1) * a by A5,A15,A20;
           hence P[j+1] by A19;
         end;
         case A21: j + 1 <> i;
@@ -879,12 +876,12 @@ A16,A19
           then A24: p.(j+1) = p/.(j+1) by A7,FINSEQ_4:def 4;
           A25: q.(j+1) = q/.(j+1) by A9,A10,A23,FINSEQ_4:def 4;
           A26: fq.(j+1) = (the mult of L).(fq.j,q.(j+1))
-                         by A1,A6,A15,A16
+                         by A1,A6,A15
                       .= fq.j * q/.(j+1) by A25,VECTSP_1:def 10
                       .= fq.j * p/.(j+1) by A2,A7,A21,A23
                       .= (the mult of L).(fq.j,p.(j+1))
                                by A24,VECTSP_1:def 10
-                      .= fp.(j+1) by A5,A15,A16,A17,A18;
+                      .= fp.(j+1) by A5,A15,A17,A18;
               j + 1 < i
             proof
             assume i <= j + 1;
@@ -906,12 +903,12 @@ A16,A19
         then A31: p.(j+1) = p/.(j+1) by FINSEQ_4:def 4;
         A32: q.(j+1) = q/.(j+1) by A7,A9,A10,A30,FINSEQ_4:def 4;
             fq.(j+1) = (the mult of L).(fq.j,q.(j+1))
-                   by A1,A6,A15,A16
+                   by A1,A6,A15
                 .= fq.j * q/.(j+1) by A32,VECTSP_1:def 10
                 .= (a * fp.j) * p/.(j+1) by A2,A17,A27,A28,A30
                 .= a * (fp.j * p/.(j+1)) by VECTSP_1:def 16
                 .= a * ((the mult of L).(fp.j,p/.(j+1))) by VECTSP_1:def 10
-                .= a * fp.(j+1) by A5,A15,A16,A31;
+                .= a * fp.(j+1) by A5,A15,A31;
         hence P[j+1] by A27,NAT_1:38;
       end;
       end;
@@ -2987,7 +2984,7 @@ then A12: len yq = len ytmp by A8,A9,FINSEQ_5:72;
       case A43: i > k;
         then A44: i - 1 > k' by REAL_1:54;
             k' >= 0 by NAT_1:18;
-        then i - 1 >= 0 by A44,AXIOMS:22;
+        then i - 1 >= 0 by A44;
         then reconsider i1 = i - 1 as Nat by INT_1:16;
         A45: (i - 1) + 1 = i + 0;
            A46: i - 1 <= (len yp + 1) - 1 by A8,A9,A11,A13,REAL_1:49;

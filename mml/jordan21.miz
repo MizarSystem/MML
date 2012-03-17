@@ -1,0 +1,2837 @@
+:: On Some Points of a Simple Closed Curve
+::  by Artur Korni{\l}owicz
+:: 
+:: Received October 6, 2004
+:: Copyright (c) 2004 Association of Mizar Users
+
+environ
+
+ vocabulary BOOLE, RELAT_1, RELAT_2, PRE_TOPC, COMPTS_1, EUCLID, TOPREAL2,
+      JORDAN2C, TREES_1, JORDAN8, TOPREAL1, ORDINAL2, ARYTM, JORDAN6, JORDAN9,
+      FINSEQ_1, FUNCT_1, PSCOMP_1, MCART_1, ARYTM_3, SUBSET_1, METRIC_1,
+      PCOMPS_1, GOBOARD2, ARYTM_1, MATRIX_1, GOBOARD1, GROUP_1, GOBOARD9,
+      SPPOL_1, JORDAN3, JORDAN1K, JORDAN1A, JORDAN1, FUNCT_5, SEQ_2, LATTICES,
+      JORDAN21;
+ notation TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, XCMPLX_0, XREAL_0, REAL_1,
+      NAT_1, RELAT_1, FUNCT_2, SEQ_1, SEQ_4, NEWTON, FINSEQ_1, MATRIX_1,
+      STRUCT_0, PRE_TOPC, COMPTS_1, BINARITH, CONNSP_1, TBSP_1, PCOMPS_1,
+      RCOMP_1, PSCOMP_1, EUCLID, TOPREAL1, TOPREAL2, GOBOARD1, GOBOARD2,
+      SPPOL_1, JORDAN1, JORDAN2C, JORDAN6, GOBOARD9, JORDAN5C, JORDAN8,
+      JORDAN9, GOBRD14, JORDAN1A, JORDAN1K;
+ constructors CARD_4, CONNSP_1, JORDAN2C, GOBOARD9, BINARITH, JORDAN1H, REAL_1,
+      REALSET1, INT_1, JORDAN8, NAT_1, JORDAN6, JORDAN9, PSCOMP_1, JORDAN5C,
+      JORDAN1K, GOBRD14, FINSEQ_4, GOBOARD2, JORDAN1A, RCOMP_1, TBSP_1,
+      JORDAN1;
+ clusters TOPREAL6, JORDAN8, INT_1, RELSET_1, XREAL_0, SPRECT_3, XBOOLE_0,
+      EUCLID, SPRECT_4, BORSUK_2, BORSUK_4, MEMBERED, STRUCT_0, JORDAN1A;
+ requirements SUBSET, BOOLE, REAL, NUMERALS, ARITHM;
+ definitions TARSKI, XBOOLE_0, JORDAN1;
+ theorems XBOOLE_1, JORDAN1A, JORDAN6, XBOOLE_0, JORDAN1K, EUCLID, TOPREAL1,
+      BORSUK_4, TARSKI, TOPREAL5, JORDAN16, REAL_2, HEINE, SPRECT_3, TOPMETR,
+      JORDAN7, GOBRD14, AXIOMS, JORDAN1I, GOBOARD5, GOBOARD7, JGRAPH_1,
+      JORDAN1H, JORDAN9, REAL_1, SQUARE_1, NAT_1, JORDAN8, TBSP_1, SUBSET_1,
+      JORDAN2C, JORDAN10, PSCOMP_1, SPRECT_1, JORDAN5B, AMI_5, SPPOL_1,
+      TOPREAL3, SEQ_4, FUNCT_2, JORDAN1G, JORDAN1B, JORDAN18, RELAT_1, TOPS_1,
+      RCOMP_1, JORDAN1C, JORDAN1F, JORDAN1, JORDAN1E, JORDAN1J, JORDAN5D,
+      JORDAN19, XREAL_0;
+
+begin :: On the Subsets of TOP-REAL 2
+
+reserve C for Simple_closed_curve,
+        P for Subset of TOP-REAL 2,
+        R for non empty Subset of TOP-REAL 2,
+        p, q for Point of TOP-REAL 2,
+        i, j, k, m, n for Nat;
+
+Lm2: dom proj2 = the carrier of TOP-REAL 2 by FUNCT_2:def 1;
+
+Lm3:
+  for r being real number, X being Subset of TOP-REAL 2 st r in proj2.:X
+    ex x being Point of TOP-REAL 2 st x in X & proj2.x = r
+    proof
+      let r be real number,
+          X be Subset of TOP-REAL 2;
+      assume r in proj2.:X;
+      then ex x being set st x in the carrier of TOP-REAL 2 &
+       x in X & proj2.x = r by FUNCT_2:115;
+      hence thesis;
+    end;
+
+Lm5:
+  now
+    let a,A,B,C be set;
+    assume a in A \/ B \/ C;
+    then a in A \/ B or a in C by XBOOLE_0:def 2;
+    hence a in A or a in B or a in C by XBOOLE_0:def 2;
+  end;
+
+Th1:
+  for A,B,C,D being set st A misses D & B misses D & C misses D holds
+  A \/ B \/ C misses D
+  proof
+    let A,B,C,D be set;
+    assume A misses D & B misses D;
+    then
+A1: A \/ B misses D by XBOOLE_1:70;
+    assume C misses D;
+    hence A \/ B \/ C misses D by A1,XBOOLE_1:70;
+  end;
+
+theorem Th2:
+  for p being Point of TOP-REAL n holds {p} is Bounded
+  proof
+    let p be Point of TOP-REAL n;
+    TOP-REAL n = TopSpaceMetr Euclid n by EUCLID:def 8;
+    then reconsider a = p as Point of Euclid n by TOPMETR:16;
+    {a} is bounded by TBSP_1:22;
+    hence thesis by JORDAN2C:def 2;
+  end;
+
+theorem Th3: :: P is an open east halfline
+  for s1,t being real number, P being Subset of TOP-REAL 2
+    st P = { |[ s,t ]| where s is Real : s1 < s } holds P is convex
+  proof
+    let s1,t be real number,
+        P be Subset of TOP-REAL 2;
+    assume
+A1:   P = { |[ s,t ]| where s is Real: s1<s };
+    let w1,w2 be Point of TOP-REAL 2 such that
+A2:   w1 in P & w2 in P;
+    let x be set such that
+A3:   x in LSeg(w1,w2);
+    consider s3 being Real such that
+A4:  |[ s3,t ]|=w1 & s1<s3 by A1,A2;
+A5: w1`1=s3 & w1`2=t by A4,EUCLID:56;
+    consider s4 being Real such that
+A6:  |[ s4,t ]|=w2 & s1<s4 by A1,A2;
+A7: w2`1=s4 & w2`2=t by A6,EUCLID:56;
+    x in {(1-lambda)*w1 + lambda*w2 where lambda is Real :
+      0 <= lambda & lambda <= 1} by A3,TOPREAL1:def 4;
+    then consider l being Real such that
+A8:   x = (1-l)*w1 + l*w2 & 0 <= l & l <= 1;
+    set w = (1-l)*w1 + l*w2;
+A9: w = |[((1-l)*w1)`1+(l*w2)`1,((1-l)*w1)`2+ (l*w2)`2]| by EUCLID:59;
+A10: s1 is Real by XREAL_0:def 1;
+    (1-l)*w1=|[ (1-l)*w1`1 ,(1-l)*w1`2 ]| & l*w2=|[ l*w2`1 ,l*w2`2 ]|
+         by EUCLID:61;
+    then ((1-l)*w1)`1= (1-l)*w1`1 & ((1-l)*w1)`2= (1-l)*w1`2
+      &  (l*w2)`1=l*w2`1 & (l*w2)`2=l*w2`2 by EUCLID:56;
+    then
+A11: w`1=(1-l)* w1`1+ l* w2`1 & w`2=(1-l)* w1`2+ l* w2`2 by A9,EUCLID:56;
+    then
+A12: s1 < w`1 & w = |[w`1, w`2]| by A10,A4,A5,A6,A7,A8,JORDAN1:10,EUCLID:57;
+    w`2 = (1-l)*t + l*t by A11,A4,A7,EUCLID:56
+       .= t - 0;
+    hence thesis by A1,A8,A12;
+  end;
+
+theorem Th4: :: P is an open west halfline
+  for s2,t being real number, P being Subset of TOP-REAL 2
+    st P = {|[ s,t ]| where s is Real : s < s2 } holds P is convex
+  proof
+    let s2,t be real number,
+        P be Subset of TOP-REAL 2;
+    assume
+A1:   P = { |[ s,t ]| where s is Real: s<s2 };
+    let w1,w2 be Point of TOP-REAL 2 such that
+A2:   w1 in P & w2 in P;
+    let x be set such that
+A3:   x in LSeg(w1,w2);
+    consider s3 being Real such that
+A4:   |[ s3,t ]|=w1 & s3<s2 by A1,A2;
+A5: w1`1=s3 & w1`2=t by A4,EUCLID:56;
+    consider s4 being Real such that
+A6:   |[ s4,t ]|=w2 & s4<s2 by A1,A2;
+A7: w2`1=s4 & w2`2=t by A6,EUCLID:56;
+    x in {(1-lambda)*w1 + lambda*w2 where lambda is Real :
+      0 <= lambda & lambda <= 1} by A3,TOPREAL1:def 4;
+    then consider l being Real such that
+A8:   x = (1-l)*w1 + l*w2& 0 <= l & l <= 1;
+    set w = (1-l)*w1 + l*w2;
+A9: w = |[((1-l)*w1)`1+(l*w2)`1,((1-l)*w1)`2+ (l*w2)`2]| by EUCLID:59;
+A10: s2 is Real by XREAL_0:def 1;
+    (1-l)*w1=|[ (1-l)*w1`1 ,(1-l)*w1`2 ]| & l*w2=|[ l*w2`1 ,l*w2`2 ]|
+         by EUCLID:61;
+    then ((1-l)*w1)`1= (1-l)*w1`1 & ((1-l)*w1)`2= (1-l)*w1`2
+       & (l*w2)`1=l*w2`1 & (l*w2)`2=l*w2`2 by EUCLID:56;
+    then
+A11: w`1=(1-l)* w1`1+ l* w2`1 & w`2=(1-l)* w1`2+ l* w2`2 by A9,EUCLID:56;
+    then
+A12: s2 > w`1 & w = |[w`1, w`2]| by A10,A4,A5,A6,A7,A8,JORDAN1:11,EUCLID:57;
+    w`2 = (1-l)*t + l*t by A11,A7,A4,EUCLID:56
+       .= t - 0;
+    hence thesis by A1,A8,A12;
+  end;
+
+theorem Th5: :: P is an open north halfline
+  for s,t1 being real number, P being Subset of TOP-REAL 2
+    st P = {|[ s,t ]| where t is Real : t1 < t } holds P is convex
+  proof
+    let s,t1 be real number,
+        P be Subset of TOP-REAL 2;
+    assume
+A1:   P = { |[ s,t ]| where t is Real : t1<t };
+    let w1,w2 be Point of TOP-REAL 2 such that
+A2:   w1 in P & w2 in P;
+    let x be set such that
+A3:   x in LSeg(w1,w2);
+    consider t3 being Real such that
+A4:   |[ s,t3 ]|=w1 & t1<t3 by A1,A2;
+A5: w1`1=s & w1`2=t3 by A4,EUCLID:56;
+    consider t4  being Real such that
+A6:   |[ s,t4 ]|=w2 & t1<t4 by A1,A2;
+A7: w2`1=s & w2`2=t4 by A6,EUCLID:56;
+    x in {(1-lambda)*w1 + lambda*w2 where lambda is Real :
+    0 <= lambda & lambda <= 1} by A3,TOPREAL1:def 4;
+    then consider l being Real such that
+A8:   x = (1-l)*w1 + l*w2 & 0 <= l & l <= 1;
+    set w = (1-l)*w1 + l*w2;
+A9: w = |[((1-l)*w1)`1+(l*w2)`1,((1-l)*w1)`2+ (l*w2)`2]| by EUCLID:59;
+A10: t1 is Real by XREAL_0:def 1;
+    (1-l)*w1=|[ (1-l)*w1`1 ,(1-l)*w1`2 ]| & l*w2=|[ l*w2`1 ,l*w2`2 ]|
+      by EUCLID:61;
+    then
+A11: ((1-l)*w1)`1= (1-l)*w1`1 & ((1-l)*w1)`2= (1-l)*w1`2
+      &  (l*w2)`1=l*w2`1 & (l*w2)`2=l*w2`2 by EUCLID:56;
+    then w`1=(1-l)* w1`1+ l* w2`1 & w`2=(1-l)* w1`2+ l* w2`2 by A9,EUCLID:56;
+    then
+A12: t1 < w`2 & w = |[w`1, w`2]| by A10,A4,A5,A6,A7,A8,JORDAN1:10,EUCLID:57;
+    w`1 = s - 0 by A11,A5,A7,A9,EUCLID:56;
+    hence x in P by A12,A1,A8;
+  end;
+
+theorem Th6: :: P is an open south halfline
+  for s,t2 being real number, P being Subset of TOP-REAL 2
+    st P = { |[ s,t ]| where t is Real : t < t2 } holds P is convex
+  proof
+    let s,t2 be real number,
+        P be Subset of TOP-REAL 2;
+    assume
+A1:   P = { |[ s,t ]| where t is Real : t<t2 };
+    let w1,w2 be Point of TOP-REAL 2 such that
+A2:   w1 in P & w2 in P;
+    let x be set such that
+A3:   x in LSeg(w1,w2);
+    consider t3 being Real such that
+A4:   |[ s,t3 ]|=w1 & t3<t2 by A1,A2;
+A5: w1`1=s & w1`2=t3 by A4,EUCLID:56;
+    consider t4 being Real such that
+A6:   |[ s,t4 ]|=w2 & t4<t2 by A1,A2;
+A7: w2`1=s & w2`2=t4 by A6,EUCLID:56;
+    x in {(1-lambda)*w1 + lambda*w2 where lambda is Real:
+      0 <= lambda & lambda <= 1} by A3,TOPREAL1:def 4;
+    then consider l being Real such that
+A8: x = (1-l)*w1 + l*w2& 0 <= l & l <= 1;
+    set w = (1-l)*w1 + l*w2;
+A9: w = |[((1-l)*w1)`1+(l*w2)`1,((1-l)*w1)`2+ (l*w2)`2]| by EUCLID:59;
+A10: t2 is Real by XREAL_0:def 1;
+    (1-l)*w1=|[ (1-l)*w1`1 ,(1-l)*w1`2 ]| & l*w2=|[ l*w2`1 ,l*w2`2 ]|
+       by EUCLID:61;
+    then ((1-l)*w1)`1= (1-l)*w1`1 & ((1-l)*w1)`2= (1-l)*w1`2
+     &  (l*w2)`1=l*w2`1 & (l*w2)`2=l*w2`2 by EUCLID:56;
+    then
+A11: w`1=(1-l)* w1`1+ l* w2`1 & w`2=(1-l)* w1`2+ l* w2`2 by A9,EUCLID:56;
+    then
+A12: t2 > w`2 & w = |[w`1, w`2]| by A10,A4,A5,A6,A7,A8,JORDAN1:11,EUCLID:57;
+    w`1 = (1-l)*s + l*s by A11,A7,A4,EUCLID:56
+       .= s - 0;
+    hence thesis by A1,A8,A12;
+end;
+
+theorem Th7:
+  north_halfline p \ {p} is convex
+  proof
+    set P = north_halfline p \ {p};
+    P = {|[ p`1,r ]| where r is Real : r > p`2 }
+    proof
+       hereby
+         let x be set;
+         assume
+A1:        x in P;
+         then
+A2:      x in north_halfline p by XBOOLE_0:def 4;
+A3:      not x in {p} by A1,XBOOLE_0:def 4;
+         reconsider y = x as Point of TOP-REAL 2 by A1;
+A4:      y`1 = p`1 & y`2 >= p`2 by A2,JORDAN1A:def 2;
+         now
+           assume y`2 = p`2;
+           then x = p by A4,TOPREAL3:11;
+           hence contradiction by A3,TARSKI:def 1;
+         end;
+         then
+A5:      y`2 > p`2 by A4,REAL_1:def 5;
+         x = |[ p`1,y`2 ]| by A4,EUCLID:57;
+         hence x in {|[ p`1,r ]| where r is Real : r > p`2} by A5;
+       end;
+       let x be set;
+       assume x in {|[ p`1,r ]| where r is Real : r > p`2 };
+       then consider r being Real such that
+A6:      x = |[ p`1,r ]| and
+A7:      r > p`2;
+       reconsider y = x as Point of TOP-REAL 2 by A6;
+A8:    y`1 = p`1 & y`2 = r by A6,EUCLID:56;
+       then
+A9:    x in north_halfline p by A7,JORDAN1A:def 2;
+       not x in {p} by A7,A8,TARSKI:def 1;
+       hence x in P by A9,XBOOLE_0:def 4;
+    end;
+    hence thesis by Th5;
+  end;
+
+theorem Th8:
+  south_halfline p \ {p} is convex
+  proof
+    set P = south_halfline p \ {p};
+    P = {|[ p`1,r ]| where r is Real : r < p`2 }
+    proof
+       hereby
+         let x be set;
+         assume
+A1:        x in P;
+         then
+A2:      x in south_halfline p by XBOOLE_0:def 4;
+A3:      not x in {p} by A1,XBOOLE_0:def 4;
+         reconsider y = x as Point of TOP-REAL 2 by A1;
+A4:      y`1 = p`1 & y`2 <= p`2 by A2,JORDAN1A:def 4;
+         now
+           assume y`2 = p`2;
+           then x = p by A4,TOPREAL3:11;
+           hence contradiction by A3,TARSKI:def 1;
+         end;
+         then
+A5:      y`2 < p`2 by A4,REAL_1:def 5;
+         x = |[ p`1,y`2 ]| by A4,EUCLID:57;
+         hence x in {|[ p`1,r ]| where r is Real : r < p`2} by A5;
+       end;
+       let x be set;
+       assume x in {|[ p`1,r ]| where r is Real : r < p`2 };
+       then consider r being Real such that
+A6:      x = |[ p`1,r ]| and
+A7:      r < p`2;
+       reconsider y = x as Point of TOP-REAL 2 by A6;
+A8:    y`1 = p`1 & y`2 = r by A6,EUCLID:56;
+       then
+A9:    x in south_halfline p by A7,JORDAN1A:def 4;
+       not x in {p} by A7,A8,TARSKI:def 1;
+       hence x in P by A9,XBOOLE_0:def 4;
+    end;
+    hence thesis by Th6;
+  end;
+
+theorem
+  west_halfline p \ {p} is convex
+  proof
+    set P = west_halfline p \ {p};
+    P = {|[ r,p`2 ]| where r is Real : r < p`1 }
+    proof
+       hereby
+         let x be set;
+         assume
+A1:        x in P;
+         then
+A2:      x in west_halfline p by XBOOLE_0:def 4;
+A3:      not x in {p} by A1,XBOOLE_0:def 4;
+         reconsider y = x as Point of TOP-REAL 2 by A1;
+A4:      y`1 <= p`1 & y`2 = p`2 by A2,JORDAN1A:def 5;
+         now
+           assume y`1 = p`1;
+           then x = p by A4,TOPREAL3:11;
+           hence contradiction by A3,TARSKI:def 1;
+         end;
+         then
+A5:      y`1 < p`1 by A4,REAL_1:def 5;
+         x = |[ y`1,p`2 ]| by A4,EUCLID:57;
+         hence x in {|[ r,p`2 ]| where r is Real : r < p`1} by A5;
+       end;
+       let x be set;
+       assume x in {|[ r,p`2 ]| where r is Real : r < p`1 };
+       then consider r being Real such that
+A6:      x = |[ r,p`2 ]| and
+A7:      r < p`1;
+       reconsider y = x as Point of TOP-REAL 2 by A6;
+A8:    y`1 = r & y`2 = p`2 by A6,EUCLID:56;
+       then
+A9:    x in west_halfline p by A7,JORDAN1A:def 5;
+       not x in {p} by A7,A8,TARSKI:def 1;
+       hence x in P by A9,XBOOLE_0:def 4;
+    end;
+    hence thesis by Th4;
+  end;
+
+theorem
+  east_halfline p \ {p} is convex
+  proof
+    set P = east_halfline p \ {p};
+    P = {|[ r,p`2 ]| where r is Real : r > p`1 }
+    proof
+       hereby
+         let x be set;
+         assume
+A1:        x in P;
+         then
+A2:      x in east_halfline p by XBOOLE_0:def 4;
+A3:      not x in {p} by A1,XBOOLE_0:def 4;
+         reconsider y = x as Point of TOP-REAL 2 by A1;
+A4:      y`1 >= p`1 & y`2 = p`2 by A2,JORDAN1A:def 3;
+         now
+           assume y`1 = p`1;
+           then x = p by A4,TOPREAL3:11;
+           hence contradiction by A3,TARSKI:def 1;
+         end;
+         then
+A5:      y`1 > p`1 by A4,REAL_1:def 5;
+         x = |[ y`1,p`2 ]| by A4,EUCLID:57;
+         hence x in {|[ r,p`2 ]| where r is Real : r > p`1} by A5;
+       end;
+       let x be set;
+       assume x in {|[ r,p`2 ]| where r is Real : r > p`1 };
+       then consider r being Real such that
+A6:      x = |[ r,p`2 ]| and
+A7:      r > p`1;
+       reconsider y = x as Point of TOP-REAL 2 by A6;
+A8:    y`1 = r & y`2 = p`2 by A6,EUCLID:56;
+       then
+A9:    x in east_halfline p by A7,JORDAN1A:def 3;
+       not x in {p} by A7,A8,TARSKI:def 1;
+       hence x in P by A9,XBOOLE_0:def 4;
+    end;
+    hence thesis by Th3;
+  end;
+
+theorem Th11:
+  for A being Subset of the carrier of TOP-REAL 2 holds UBD A misses A
+  proof
+    let A be Subset of the carrier of TOP-REAL 2;
+A1: UBD A c= A` by JORDAN2C:30;
+    A` misses A by SUBSET_1:26;
+    hence thesis by A1,XBOOLE_1:63;
+  end;
+
+theorem Th12:
+  for P being Subset of the carrier of TOP-REAL 2,
+      p1,p2,q1,q2 being Point of TOP-REAL 2 st
+    P is_an_arc_of p1,p2 & p1 <> q1 & p2 <> q2 holds
+   not p1 in Segment(P,p1,p2,q1,q2) & not p2 in Segment(P,p1,p2,q1,q2)
+  proof
+    let P be Subset of the carrier of TOP-REAL 2,
+        p1,p2,q1,q2 be Point of TOP-REAL 2 such that
+A1:   P is_an_arc_of p1,p2 and
+A2:   p1 <> q1 and
+A3:   p2 <> q2;
+A4: Segment(P,p1,p2,q1,q2) = R_Segment(P,p1,p2,q1) /\ L_Segment(P,p1,p2,q2)
+      by JORDAN6:def 5;
+    not p2 in L_Segment(P,p1,p2,q2) & not p1 in R_Segment(P,p1,p2,q1)
+      by A1,A2,A3,JORDAN18:16,17;
+    hence thesis by A4,XBOOLE_0:def 3;
+  end;
+
+theorem Th13:
+  proj2.:(C /\ Vertical_Line((W-bound C + E-bound C) / 2)) is not empty
+  proof
+    set w = (W-bound C + E-bound C) / 2;
+A1: Upper_Arc C c= C by JORDAN1A:16;
+A2: Upper_Arc C is_an_arc_of W-min C,E-max C by JORDAN6:def 8;
+A3: (W-min C)`1 = W-bound C & (E-max C)`1 = E-bound C by PSCOMP_1:84,104;
+    W-bound C < E-bound C by SPRECT_1:33;
+    then (W-min C)`1 <= w & w <= (E-max C)`1 by A3,TOPREAL3:3;
+    then Upper_Arc C meets Vertical_Line w by A2,JORDAN6:64;
+    then C meets Vertical_Line w by A1,XBOOLE_1:63;
+    then C /\ Vertical_Line w is non empty by XBOOLE_0:def 7;
+    hence thesis by Lm2,RELAT_1:152;
+  end;
+
+theorem Th14:
+  for C being compact Subset of TOP-REAL 2 holds
+   proj2.:(C /\ Vertical_Line((W-bound C + E-bound C) / 2))
+    is closed bounded_below bounded_above
+  proof
+    let C be compact Subset of TOP-REAL 2;
+A1: C is Bounded by JORDAN2C:73;
+    set w = (W-bound C + E-bound C) / 2;
+    set X = C /\ Vertical_Line w;
+    X c= C by XBOOLE_1:17;
+    then
+A2: X is Bounded by A1,JORDAN2C:16;
+    Vertical_Line w is closed by JORDAN6:33;
+    then X is closed by TOPS_1:35;
+    hence proj2.:X is closed by A2,JORDAN1A:26;
+    proj2.:X is bounded by A2,JORDAN1A:27;
+    hence thesis by SEQ_4:def 3;
+  end;
+
+begin :: Gauges
+
+Lm6:
+  1 <= len Gauge(R,n)
+  proof
+    4 <= len Gauge(R,n) by JORDAN8:13;
+    hence 1 <= len Gauge(R,n) by AXIOMS:22;
+  end;
+
+theorem Th15:
+  [1,1] in Indices Gauge(R,n)
+  proof
+A1: len Gauge(R,n) = width Gauge(R,n) by JORDAN8:def 1;
+    1 <= len Gauge(R,n) by Lm6;
+    hence [1,1] in Indices Gauge(R,n) by A1,GOBOARD7:10;
+  end;
+
+theorem Th16:
+  [1,2] in Indices Gauge(R,n)
+  proof
+A1: len Gauge(R,n) = width Gauge(R,n) by JORDAN8:def 1;
+    4 <= len Gauge(R,n) by JORDAN8:13;
+    then 1 <= len Gauge(R,n) & 2 <= len Gauge(R,n) by AXIOMS:22;
+    hence [1,2] in Indices Gauge(R,n) by A1,GOBOARD7:10;
+  end;
+
+theorem Th17:
+  [2,1] in Indices Gauge(R,n)
+  proof
+A1: len Gauge(R,n) = width Gauge(R,n) by JORDAN8:def 1;
+    4 <= len Gauge(R,n) by JORDAN8:13;
+    then 1 <= len Gauge(R,n) & 2 <= len Gauge(R,n) by AXIOMS:22;
+    hence [2,1] in Indices Gauge(R,n) by A1,GOBOARD7:10;
+  end;
+
+theorem Th18:
+  for C being non vertical non horizontal compact Subset of TOP-REAL 2 holds
+  m > k & [i,j] in Indices Gauge(C,k) & [i,j+1] in Indices Gauge(C,k)
+  implies
+    dist(Gauge(C,m)*(i,j),Gauge(C,m)*(i,j+1)) <
+    dist(Gauge(C,k)*(i,j),Gauge(C,k)*(i,j+1))
+  proof
+    let C be non vertical non horizontal compact Subset of TOP-REAL 2;
+    assume that
+A1:   m > k and
+A2:   [i,j] in Indices Gauge(C,k) and
+A3:   [i,j+1] in Indices Gauge(C,k);
+A4: 2|^m > 2|^k by A1,JORDAN1A:7;
+A5: dist(Gauge(C,k)*(i,j),Gauge(C,k)*(i,j+1))
+        = (N-bound C - S-bound C)/2|^k by A2,A3,GOBRD14:19;
+A6: len Gauge(C,k) = width Gauge(C,k) by JORDAN8:def 1;
+A7: len Gauge(C,m) = width Gauge(C,m) by JORDAN8:def 1;
+A8: 1 <= i & 1 <= j by A2,GOBOARD5:1;
+A9: len Gauge(C,k) < len Gauge(C,m) by A1,JORDAN1A:50;
+    i <= len Gauge(C,k) by A2,GOBOARD5:1;
+    then
+A10: i <= len Gauge(C,m) by A9,AXIOMS:22;
+    j <= width Gauge(C,k) by A2,GOBOARD5:1;
+    then
+    j <= width Gauge(C,m) by A9,A7,A6,AXIOMS:22;
+    then
+A11: [i,j] in Indices Gauge(C,m) by A8,A10,GOBOARD7:10;
+A12: 1 <= j+1 by NAT_1:29;
+    j+1 <= width Gauge(C,k) by A3,GOBOARD5:1;
+    then
+    j+1 <= width Gauge(C,m) by A9,A7,A6,AXIOMS:22;
+    then
+A13: [i,j+1] in Indices Gauge(C,m) by A8,A10,A12,GOBOARD7:10;
+A14: dist(Gauge(C,m)*(i,j),Gauge(C,m)*(i,j+1))
+        = (N-bound C - S-bound C)/2|^m by A11,A13,GOBRD14:19;
+A15: 2|^k > 0 by HEINE:5;
+    N-bound C > S-bound C by SPRECT_1:34;
+    then N-bound C - S-bound C > 0 by SQUARE_1:11;
+    hence thesis by A4,A5,A14,A15,REAL_2:200;
+  end;
+
+theorem Th19:
+  for C being non vertical non horizontal compact Subset of TOP-REAL 2 holds
+  m > k implies
+    dist(Gauge(C,m)*(1,1),Gauge(C,m)*(1,2)) <
+    dist(Gauge(C,k)*(1,1),Gauge(C,k)*(1,2))
+  proof
+    let C be non vertical non horizontal compact Subset of TOP-REAL 2;
+    assume
+A1:   m > k;
+    [1,1] in Indices Gauge(C,k) & [1,1+1] in Indices Gauge(C,k) by Th15,Th16;
+    hence thesis by A1,Th18;
+  end;
+
+theorem Th20:
+  for C being non vertical non horizontal compact Subset of TOP-REAL 2 holds
+  m > k & [i,j] in Indices Gauge(C,k) & [i+1,j] in Indices Gauge(C,k)
+  implies
+    dist(Gauge(C,m)*(i,j),Gauge(C,m)*(i+1,j)) <
+    dist(Gauge(C,k)*(i,j),Gauge(C,k)*(i+1,j))
+  proof
+    let C be non vertical non horizontal compact Subset of TOP-REAL 2;
+    assume that
+A1:   m > k and
+A2:   [i,j] in Indices Gauge(C,k) and
+A3:   [i+1,j] in Indices Gauge(C,k);
+A4: 2|^m > 2|^k by A1,JORDAN1A:7;
+A5: dist(Gauge(C,k)*(i,j),Gauge(C,k)*(i+1,j))
+        = (E-bound C - W-bound C)/2|^k by A2,A3,GOBRD14:20;
+A6: len Gauge(C,k) = width Gauge(C,k) by JORDAN8:def 1;
+A7: len Gauge(C,m) = width Gauge(C,m) by JORDAN8:def 1;
+A8: 1 <= i & 1 <= j by A2,GOBOARD5:1;
+A9: len Gauge(C,k) < len Gauge(C,m) by A1,JORDAN1A:50;
+    i <= len Gauge(C,k) by A2,GOBOARD5:1;
+    then
+A10: i <= len Gauge(C,m) by A9,AXIOMS:22;
+    j <= width Gauge(C,k) by A2,GOBOARD5:1;
+    then
+A11: j <= width Gauge(C,m) by A9,A7,A6,AXIOMS:22;
+    then
+A12: [i,j] in Indices Gauge(C,m) by A8,A10,GOBOARD7:10;
+A13: 1 <= i+1 by NAT_1:29;
+    i+1 <= len Gauge(C,k) by A3,GOBOARD5:1;
+    then
+    i+1 <= len Gauge(C,m) by A9,AXIOMS:22;
+    then
+A14: [i+1,j] in Indices Gauge(C,m) by A8,A11,A13,GOBOARD7:10;
+A15: dist(Gauge(C,m)*(i,j),Gauge(C,m)*(i+1,j))
+        = (E-bound C - W-bound C)/2|^m by A12,A14,GOBRD14:20;
+A16: 2|^k > 0 by HEINE:5;
+    E-bound C > W-bound C by SPRECT_1:33;
+    then E-bound C - W-bound C > 0 by SQUARE_1:11;
+    hence thesis by A4,A5,A15,A16,REAL_2:200;
+  end;
+
+theorem Th21:
+  for C being non vertical non horizontal compact Subset of TOP-REAL 2 holds
+  m > k implies
+    dist(Gauge(C,m)*(1,1),Gauge(C,m)*(2,1)) <
+    dist(Gauge(C,k)*(1,1),Gauge(C,k)*(2,1))
+  proof
+    let C be non vertical non horizontal compact Subset of TOP-REAL 2;
+    assume
+A1:   m > k;
+    [1,1] in Indices Gauge(C,k) & [1+1,1] in Indices Gauge(C,k) by Th15,Th17;
+    hence thesis by A1,Th20;
+  end;
+
+theorem
+  for r, t being real number holds r > 0 & t > 0 implies
+  ex n being Nat st i < n &
+    dist(Gauge(C,n)*(1,1),Gauge(C,n)*(1,2)) < r &
+    dist(Gauge(C,n)*(1,1),Gauge(C,n)*(2,1)) < t
+  proof
+    let r, t be real number;
+    assume r > 0 & t > 0;
+    then consider  n being Nat such that
+      1 < n and
+a3:   dist(Gauge(C,n)*(1,1),Gauge(C,n)*(1,2)) < r &
+      dist(Gauge(C,n)*(1,1),Gauge(C,n)*(2,1)) < t by GOBRD14:21;
+    per cases;
+    suppose
+a4:   i < n;
+    take n;
+    thus thesis by a3,a4;
+    end;
+    suppose
+a5:   i >= n;
+    take i+1;
+    thus
+a7:   i < i+1 by NAT_1:38;
+    then
+a6: dist(Gauge(C,i+1)*(1,1),Gauge(C,i+1)*(2,1)) <
+      dist(Gauge(C,i)*(1,1),Gauge(C,i)*(2,1)) by Th21;
+b1: i > n or i = n by a5,REAL_1:def 5;
+    then dist(Gauge(C,i)*(1,1),Gauge(C,i)*(2,1)) <=
+      dist(Gauge(C,n)*(1,1),Gauge(C,n)*(2,1)) by Th21;
+    then
+a9: dist(Gauge(C,i+1)*(1,1),Gauge(C,i+1)*(2,1)) <
+      dist(Gauge(C,n)*(1,1),Gauge(C,n)*(2,1)) by a6,AXIOMS:22;      
+a8: dist(Gauge(C,i+1)*(1,1),Gauge(C,i+1)*(1,2)) <
+      dist(Gauge(C,i)*(1,1),Gauge(C,i)*(1,2)) by a7,Th19;
+    dist(Gauge(C,i)*(1,1),Gauge(C,i)*(1,2)) <=
+      dist(Gauge(C,n)*(1,1),Gauge(C,n)*(1,2)) by b1,Th19;
+    then dist(Gauge(C,i+1)*(1,1),Gauge(C,i+1)*(1,2)) <
+      dist(Gauge(C,n)*(1,1),Gauge(C,n)*(1,2)) by a8,AXIOMS:22;      
+    hence dist(Gauge(C,i+1)*(1,1),Gauge(C,i+1)*(1,2)) < r &
+      dist(Gauge(C,i+1)*(1,1),Gauge(C,i+1)*(2,1)) < t by a3,a9,AXIOMS:22;
+  end;
+end;
+  
+begin :: Middle Points
+
+theorem Th22:
+  Upper_Middle_Point C in C
+  proof
+A1: Upper_Middle_Point C in Upper_Arc C by JORDAN1K:63;
+    Upper_Arc C c= C by JORDAN1A:16;
+    hence thesis by A1;
+  end;
+
+theorem Th23:
+  Lower_Middle_Point C in C
+  proof
+A1: Lower_Middle_Point C in Lower_Arc C by JORDAN1K:62;
+    Lower_Arc C c= C by JORDAN1A:16;
+    hence thesis by A1;
+  end;
+
+theorem Th24:
+  (Lower_Middle_Point C)`2 <> (Upper_Middle_Point C)`2
+  proof
+    set l = Lower_Middle_Point C,
+        u = Upper_Middle_Point C,
+        w = (W-bound C+E-bound C)/2;
+    assume
+A1:   l`2 = u`2;
+A2: l`1 = w & u`1 = w by JORDAN1K:60,61;
+    then l = u by A1,TOPREAL3:11;
+    then l in Lower_Arc C & l in Upper_Arc C by JORDAN1K:62,63;
+    then l in Lower_Arc C /\ Upper_Arc C by XBOOLE_0:def 3;
+    then l in {W-min(C),E-max(C)} by JORDAN6:def 9;
+    then l = W-min(C) or l = E-max(C) by TARSKI:def 2;
+    then
+A3: W-bound C = w or E-bound C = w by A2,PSCOMP_1:84,104;
+    W-bound C < E-bound C by SPRECT_1:33;
+    hence thesis by A3,TOPREAL3:3;
+  end;
+
+theorem
+  Lower_Middle_Point C <> Upper_Middle_Point C
+  proof
+    (Lower_Middle_Point C)`2 <> (Upper_Middle_Point C)`2 by Th24;
+    hence thesis;
+  end;
+
+begin :: Upper_Arc and Lower_Arc
+
+theorem Th26:
+  W-bound C = W-bound Upper_Arc C
+  proof
+    Upper_Arc C c= C by JORDAN1A:16;
+    then
+A1: W-bound C <= W-bound Upper_Arc C by JORDAN1E:4;
+    W-bound Upper_Arc C <= W-bound C
+    proof
+      assume
+A2:     W-bound Upper_Arc C > W-bound C;
+A3:   (W-min C)`1 = W-bound C by PSCOMP_1:84;
+A4:   west_halfline W-min C misses Upper_Arc C
+      proof
+        assume west_halfline W-min C meets Upper_Arc C;
+        then consider p being set such that
+A5:       p in west_halfline W-min C and
+A6:       p in Upper_Arc C by XBOOLE_0:3;
+        reconsider p as Point of TOP-REAL 2 by A5;
+        p`1 >= W-bound Upper_Arc C by A6,PSCOMP_1:71;
+        then W-bound C < p`1 by A2,AXIOMS:22;
+        hence contradiction by A3,A5,JORDAN1A:def 5;
+      end;
+A7:   W-min C in west_halfline W-min C by JORDAN1C:7;
+      W-min C in Upper_Arc C by JORDAN7:1;
+      hence contradiction by A7,A4,XBOOLE_0:3;
+    end;
+    hence thesis by A1,AXIOMS:21;
+  end;
+
+theorem Th27:
+  E-bound C = E-bound Upper_Arc C
+  proof
+    Upper_Arc C c= C by JORDAN1A:16;
+    then
+A1: E-bound C >= E-bound Upper_Arc C by JORDAN1E:2;
+    E-bound Upper_Arc C >= E-bound C
+    proof
+      assume
+A2:     E-bound Upper_Arc C < E-bound C;
+A3:   (E-max C)`1 = E-bound C by PSCOMP_1:104;
+A4:   east_halfline E-max C misses Upper_Arc C
+      proof
+        assume east_halfline E-max C meets Upper_Arc C;
+        then consider p being set such that
+A5:       p in east_halfline E-max C and
+A6:       p in Upper_Arc C by XBOOLE_0:3;
+        reconsider p as Point of TOP-REAL 2 by A5;
+        p`1 <= E-bound Upper_Arc C by A6,PSCOMP_1:71;
+        then E-bound C > p`1 by A2,AXIOMS:22;
+        hence contradiction by A3,A5,JORDAN1A:def 3;
+      end;
+A7:   E-max C in east_halfline E-max C by JORDAN1C:7;
+      E-max C in Upper_Arc C by JORDAN7:1;
+      hence contradiction by A7,A4,XBOOLE_0:3;
+    end;
+    hence thesis by A1,AXIOMS:21;
+  end;
+
+theorem Th28:
+  W-bound C = W-bound Lower_Arc C
+  proof
+    Lower_Arc C c= C by JORDAN1A:16;
+    then
+A1: W-bound C <= W-bound Lower_Arc C by JORDAN1E:4;
+    W-bound Lower_Arc C <= W-bound C
+    proof
+      assume
+A2:     W-bound Lower_Arc C > W-bound C;
+A3:   (W-min C)`1 = W-bound C by PSCOMP_1:84;
+A4:   west_halfline W-min C misses Lower_Arc C
+      proof
+        assume west_halfline W-min C meets Lower_Arc C;
+        then consider p being set such that
+A5:       p in west_halfline W-min C and
+A6:       p in Lower_Arc C by XBOOLE_0:3;
+        reconsider p as Point of TOP-REAL 2 by A5;
+        p`1 >= W-bound Lower_Arc C by A6,PSCOMP_1:71;
+        then W-bound C < p`1 by A2,AXIOMS:22;
+        hence contradiction by A3,A5,JORDAN1A:def 5;
+      end;
+A7:   W-min C in west_halfline W-min C by JORDAN1C:7;
+      W-min C in Lower_Arc C by JORDAN7:1;
+      hence contradiction by A7,A4,XBOOLE_0:3;
+    end;
+    hence thesis by A1,AXIOMS:21;
+  end;
+
+theorem Th29:
+  E-bound C = E-bound Lower_Arc C
+  proof
+    Lower_Arc C c= C by JORDAN1A:16;
+    then
+A1: E-bound C >= E-bound Lower_Arc C by JORDAN1E:2;
+    E-bound Lower_Arc C >= E-bound C
+    proof
+      assume
+A2:     E-bound Lower_Arc C < E-bound C;
+A3:   (E-max C)`1 = E-bound C by PSCOMP_1:104;
+A4:   east_halfline E-max C misses Lower_Arc C
+      proof
+        assume east_halfline E-max C meets Lower_Arc C;
+        then consider p being set such that
+A5:       p in east_halfline E-max C and
+A6:       p in Lower_Arc C by XBOOLE_0:3;
+        reconsider p as Point of TOP-REAL 2 by A5;
+        p`1 <= E-bound Lower_Arc C by A6,PSCOMP_1:71;
+        then E-bound C > p`1 by A2,AXIOMS:22;
+        hence contradiction by A3,A5,JORDAN1A:def 3;
+      end;
+A7:   E-max C in east_halfline E-max C by JORDAN1C:7;
+      E-max C in Lower_Arc C by JORDAN7:1;
+      hence contradiction by A7,A4,XBOOLE_0:3;
+    end;
+    hence thesis by A1,AXIOMS:21;
+  end;
+
+theorem Th30:
+  Upper_Arc C /\ Vertical_Line((W-bound C + E-bound C) / 2)
+    is not empty &
+  proj2.:(Upper_Arc C /\ Vertical_Line((W-bound C + E-bound C) / 2))
+   is not empty
+  proof
+    set w = (W-bound C + E-bound C) / 2;
+A1: Upper_Arc C is_an_arc_of W-min C,E-max C by JORDAN6:def 8;
+A2: (W-min C)`1 = W-bound C & (E-max C)`1 = E-bound C by PSCOMP_1:84,104;
+    W-bound C < E-bound C by SPRECT_1:33;
+    then (W-min C)`1 <= w & w <= (E-max C)`1 by A2,TOPREAL3:3;
+    then Upper_Arc C meets Vertical_Line w by A1,JORDAN6:64;
+    then Upper_Arc C /\ Vertical_Line w is non empty by XBOOLE_0:def 7;
+    hence thesis by Lm2,RELAT_1:152;
+  end;
+
+theorem Th31:
+  Lower_Arc C /\ Vertical_Line((W-bound C + E-bound C) / 2)
+   is not empty  &
+  proj2.:(Lower_Arc C /\ Vertical_Line((W-bound C + E-bound C) / 2))
+   is not empty
+  proof
+    set w = (W-bound C + E-bound C) / 2;
+    Lower_Arc C is_an_arc_of E-max C,W-min C by JORDAN6:def 9;
+    then
+A1: Lower_Arc C is_an_arc_of W-min C,E-max C by JORDAN5B:14;
+A2: (W-min C)`1 = W-bound C & (E-max C)`1 = E-bound C by PSCOMP_1:84,104;
+    W-bound C < E-bound C by SPRECT_1:33;
+    then (W-min C)`1 <= w & w <= (E-max C)`1 by A2,TOPREAL3:3;
+    then Lower_Arc C meets Vertical_Line w by A1,JORDAN6:64;
+    then Lower_Arc C /\ Vertical_Line w is non empty by XBOOLE_0:def 7;
+    hence thesis by Lm2,RELAT_1:152;
+  end;
+
+theorem
+ for P being compact connected Subset of TOP-REAL 2 st P c= C
+  & W-min C in P & E-max C in P
+ holds Upper_Arc C c= P or Lower_Arc C c= P
+  proof
+    let P be compact connected Subset of TOP-REAL 2 such that
+A1:   P c= C and
+A2:   W-min C in P and
+A3:   E-max C in P;
+A4: now given p being Point of TOP-REAL 2 such that
+A5:    P = {p};
+      W-min C = p & E-max C = p by A5,A2,A3,TARSKI:def 1;
+     hence contradiction by TOPREAL5:25;
+    end;
+ per cases by A4,A1,A2,BORSUK_4:81;
+ suppose ex p1, p2 being Point of TOP-REAL 2 st P is_an_arc_of p1,p2;
+ hence Upper_Arc C c= P or Lower_Arc C c= P by A1,A2,A3,JORDAN16:37;
+ end;
+ suppose P = C;
+ hence Upper_Arc C c= P or Lower_Arc C c= P by JORDAN1A:16;
+ end;
+end;
+
+begin :: UMP and LMP
+
+definition let P be Subset of the carrier of TOP-REAL 2;
+  func UMP P -> Point of TOP-REAL 2 equals
+:Def1:
+  |[ (E-bound P + W-bound P) / 2 ,
+      sup (proj2.:(P /\ Vertical_Line ((E-bound P + W-bound P) / 2))) ]|;
+correctness;
+  func LMP P -> Point of TOP-REAL 2 equals
+:Def2:
+  |[ (E-bound P + W-bound P) / 2 ,
+      inf (proj2.:(P /\ Vertical_Line ((E-bound P + W-bound P) / 2))) ]|;
+correctness;
+end;
+
+theorem Th33:
+  (UMP P)`1 = (W-bound P + E-bound P) / 2
+  proof
+    thus (UMP P)`1
+       = |[(W-bound P + E-bound P)/2,
+            sup (proj2.:(P /\ Vertical_Line ((E-bound P + W-bound P) / 2)))]|`1
+             by Def1
+      .= (W-bound P + E-bound P)/2 by EUCLID:56;
+  end;
+
+theorem Th34:
+  (UMP P)`2 =
+    sup (proj2.:(P /\ Vertical_Line ((E-bound P + W-bound P) / 2)))
+  proof
+    thus (UMP P)`2
+       = |[(W-bound P + E-bound P)/2,
+         sup (proj2.:(P /\ Vertical_Line ((E-bound P + W-bound P) / 2)))]|`2
+             by Def1
+      .= sup (proj2.:(P /\ Vertical_Line ((E-bound P + W-bound P) / 2)))
+             by EUCLID:56;
+  end;
+
+theorem Th35:
+  (LMP P)`1 = (W-bound P + E-bound P) / 2
+  proof
+    thus (LMP P)`1
+       = |[(W-bound P + E-bound P)/2,
+          inf (proj2.:(P /\ Vertical_Line ((E-bound P + W-bound P) / 2)))]|`1
+             by Def2
+      .= (W-bound P + E-bound P)/2 by EUCLID:56;
+  end;
+
+theorem Th36:
+  (LMP P)`2 =
+    inf (proj2.:(P /\ Vertical_Line ((E-bound P + W-bound P) / 2)))
+  proof
+    thus (LMP P)`2
+       = |[(W-bound P + E-bound P)/2,
+          inf (proj2.:(P /\ Vertical_Line ((E-bound P + W-bound P) / 2)))]|`2
+             by Def2
+      .= inf (proj2.:(P /\ Vertical_Line ((E-bound P + W-bound P) / 2)))
+             by EUCLID:56;
+  end;
+
+theorem Th37:
+  for C being non vertical compact Subset of TOP-REAL 2 holds UMP C <> W-min C
+  proof
+    let C being non vertical compact Subset of TOP-REAL 2;
+    assume
+A1:   UMP C = W-min C;
+A2: (W-min C)`1 = W-bound C by PSCOMP_1:84;
+A3: (UMP C)`1 = (W-bound C + E-bound C)/2 by Th33;
+    W-bound C < E-bound C by SPRECT_1:33;
+    hence thesis by A1,A2,A3,TOPREAL3:3;
+  end;
+
+theorem Th38:
+  for C being non vertical compact Subset of TOP-REAL 2 holds UMP C <> E-max C
+  proof
+    let C being non vertical compact Subset of TOP-REAL 2;
+    assume
+A1:   UMP C = E-max C;
+A2: (E-max C)`1 = E-bound C by PSCOMP_1:104;
+A3: (UMP C)`1 = (W-bound C + E-bound C)/2 by Th33;
+    W-bound C < E-bound C by SPRECT_1:33;
+    hence thesis by A1,A2,A3,TOPREAL3:3;
+  end;
+
+theorem Th39:
+  for C being non vertical compact Subset of TOP-REAL 2 holds LMP C <> W-min C
+  proof
+    let C being non vertical compact Subset of TOP-REAL 2;
+    assume
+A1:   LMP C = W-min C;
+A2: (W-min C)`1 = W-bound C by PSCOMP_1:84;
+A3: (LMP C)`1 = (W-bound C + E-bound C)/2 by Th35;
+    W-bound C < E-bound C by SPRECT_1:33;
+    hence thesis by A1,A2,A3,TOPREAL3:3;
+  end;
+
+theorem Th40:
+  for C being non vertical compact Subset of TOP-REAL 2 holds LMP C <> E-max C
+  proof
+    let C being non vertical compact Subset of TOP-REAL 2;
+    assume
+A1:   LMP C = E-max C;
+A2: (E-max C)`1 = E-bound C by PSCOMP_1:104;
+A3: (LMP C)`1 = (W-bound C + E-bound C)/2 by Th35;
+    W-bound C < E-bound C by SPRECT_1:33;
+    hence thesis by A1,A2,A3,TOPREAL3:3;
+  end;
+
+theorem Th41:
+  for C being compact Subset of TOP-REAL 2 st
+    p in C /\ Vertical_Line ((W-bound C + E-bound C) / 2) holds
+   p`2 <= (UMP C)`2
+   proof
+     let C be compact Subset of TOP-REAL 2 such that
+A1:    p in C /\ Vertical_Line ((W-bound C + E-bound C) / 2);
+A2:  (UMP C)`2 =
+       sup (proj2.:(C /\ Vertical_Line ((E-bound C + W-bound C) / 2))) by Th34;
+A3:  proj2.:(C /\ Vertical_Line ((E-bound C + W-bound C) / 2)) is non empty
+      bounded_above by A1,Lm2,Th14,RELAT_1:152;
+     p`2 = proj2.p by PSCOMP_1:def 29;
+     then p`2 in proj2.:(C /\ Vertical_Line ((E-bound C + W-bound C) / 2))
+       by A1,FUNCT_2:43;
+     hence thesis by A2,A3,SEQ_4:def 4;
+   end;
+
+theorem Th42:
+  for C being compact Subset of TOP-REAL 2 st
+    p in C /\ Vertical_Line ((W-bound C + E-bound C) / 2) holds
+   (LMP C)`2 <= p`2
+   proof
+     let C be compact Subset of TOP-REAL 2 such that
+A1:    p in C /\ Vertical_Line ((W-bound C + E-bound C) / 2);
+A2:  (LMP C)`2 =
+       inf (proj2.:(C /\ Vertical_Line ((E-bound C + W-bound C) / 2))) by Th36;
+A3:  proj2.:(C /\ Vertical_Line ((E-bound C + W-bound C) / 2)) is non empty
+      bounded_below by A1,Lm2,Th14,RELAT_1:152;
+     p`2 = proj2.p by PSCOMP_1:def 29;
+     then p`2 in proj2.:(C /\ Vertical_Line ((E-bound C + W-bound C) / 2))
+       by A1,FUNCT_2:43;
+     hence thesis by A2,A3,SEQ_4:def 5;
+   end;
+
+theorem Th43:
+  UMP C in C
+  proof
+    set w = (W-bound C + E-bound C) / 2;
+    set X = C /\ Vertical_Line w;
+A1: proj2.:X is non empty by Th13;
+A2: proj2.:X is closed by Th14;
+    proj2.:X is bounded_above by Th14;
+    then sup (proj2.:X) in proj2.:X by A1,A2,RCOMP_1:30;
+    then consider x being Point of TOP-REAL 2 such that
+A3:   x in X and
+A4:   sup (proj2.:X) = proj2.x by Lm3;
+    x in Vertical_Line w by A3,XBOOLE_0:def 3;
+    then
+A5: x`1 = w by JORDAN6:34
+       .= (UMP C)`1 by Th33;
+    x`2 = sup (proj2.:X) by A4,PSCOMP_1:def 29
+       .= (UMP C)`2 by Th34;
+    then x = UMP C by A5,TOPREAL3:11;
+    hence thesis by A3,XBOOLE_0:def 3;
+  end;
+
+theorem Th44:
+  LMP C in C
+  proof
+    set w = (W-bound C + E-bound C) / 2;
+    set X = C /\ Vertical_Line w;
+A1: proj2.:X is non empty by Th13;
+A2: proj2.:X is closed by Th14;
+    proj2.:X is bounded_below by Th14;
+    then inf (proj2.:X) in proj2.:X by A1,A2,RCOMP_1:31;
+    then consider x being Point of TOP-REAL 2 such that
+A3:   x in X and
+A4:   inf (proj2.:X) = proj2.x by Lm3;
+    x in Vertical_Line w by A3,XBOOLE_0:def 3;
+    then
+A5: x`1 = w by JORDAN6:34
+       .= (LMP C)`1 by Th35;
+    x`2 = inf (proj2.:X) by A4,PSCOMP_1:def 29
+       .= (LMP C)`2 by Th36;
+    then x = LMP C by A5,TOPREAL3:11;
+    hence thesis by A3,XBOOLE_0:def 3;
+  end;
+
+theorem Th45:
+  LSeg(UMP P, |[ (W-bound P + E-bound P) / 2, N-bound P]|) is vertical
+  proof
+    set w = (W-bound P + E-bound P) / 2;
+A1: |[w,N-bound P]|`1 = w by EUCLID:56;
+    (UMP P)`1 = w by Th33;
+    hence thesis by A1,SPPOL_1:37;
+  end;
+
+theorem Th46:
+  LSeg(LMP P, |[ (W-bound P + E-bound P) / 2, S-bound P]|) is vertical
+  proof
+    set w = (W-bound P + E-bound P) / 2;
+A1: |[w,S-bound P]|`1 = w by EUCLID:56;
+    (LMP P)`1 = w by Th35;
+    hence thesis by A1,SPPOL_1:37;
+  end;
+
+theorem Th47:
+  LSeg(UMP C, |[ (W-bound C + E-bound C) / 2, N-bound C]|) /\ C = { UMP C }
+  proof
+    set w = (W-bound C + E-bound C) / 2;
+    set L = LSeg(UMP C, |[w,N-bound C]|);
+    set X = C /\ Vertical_Line(w);
+A1: UMP C in L by TOPREAL1:6;
+    hereby
+      let x be set;
+      assume
+A2:     x in L /\ C;
+      then
+A3:   x in L & x in C by XBOOLE_0:def 3;
+      reconsider y = x as Point of TOP-REAL 2 by A2;
+A4:   |[w,N-bound C]|`2 = N-bound C by EUCLID:56;
+A5:   (UMP C)`1 = w by Th33;
+A6:   (UMP C)`2 = sup (proj2.:X) by Th34;
+A7:   proj2.:X is bounded_above by Th14;
+      L is vertical by Th45;
+      then
+A8:   y`1 = w by A1,A3,A5,SPPOL_1:def 3;
+A9:   y`2 = proj2.y by PSCOMP_1:def 29;
+      y in Vertical_Line (w) by A8,JORDAN6:34;
+      then y in X by A3,XBOOLE_0:def 3;
+      then y`2 in proj2.:X by A9,FUNCT_2:43;
+      then
+A10:   y`2 <= sup (proj2.:X) by A7,SEQ_4:def 4;
+      UMP C in C by Th43;
+      then (UMP C)`2 <= N-bound C by PSCOMP_1:71;
+      then (UMP C)`2 <= y`2 by A3,A4,TOPREAL1:10;
+      then y`2 = sup (proj2.:X) by A10,A6,AXIOMS:21;
+      then y = UMP C by A8,A6,A5,TOPREAL3:11;
+      hence x in {UMP C} by TARSKI:def 1;
+    end;
+    let x be set;
+    assume x in {UMP C};
+    then
+A11: x = UMP C by TARSKI:def 1;
+    UMP C in C by Th43;
+    hence thesis by A1,A11,XBOOLE_0:def 3;
+  end;
+
+theorem Th48:
+  LSeg(LMP C, |[ (W-bound C + E-bound C) / 2, S-bound C]|) /\ C = { LMP C }
+  proof
+    set w = (W-bound C + E-bound C) / 2;
+    set L = LSeg(LMP C, |[w,S-bound C]|);
+    set X = C /\ Vertical_Line (w);
+A1: LMP C in L by TOPREAL1:6;
+    hereby
+      let x be set;
+      assume
+A2:     x in L /\ C;
+      then
+A3:   x in L & x in C by XBOOLE_0:def 3;
+      reconsider y = x as Point of TOP-REAL 2 by A2;
+A4:   |[w,S-bound C]|`2 = S-bound C by EUCLID:56;
+A5:   (LMP C)`1 = w by Th35;
+A6:   (LMP C)`2 = inf (proj2.:X) by Th36;
+A7:   proj2.:X is bounded_below by Th14;
+      L is vertical by Th46;
+      then
+A8:   y`1 = w by A1,A3,A5,SPPOL_1:def 3;
+A9:   y`2 = proj2.y by PSCOMP_1:def 29;
+      y in Vertical_Line (w) by A8,JORDAN6:34;
+      then y in X by A3,XBOOLE_0:def 3;
+      then y`2 in proj2.:X by A9,FUNCT_2:43;
+      then
+A10:   y`2 >= inf (proj2.:X) by A7,SEQ_4:def 5;
+      LMP C in C by Th44;
+      then (LMP C)`2 >= S-bound C by PSCOMP_1:71;
+      then (LMP C)`2 >= y`2 by A3,A4,TOPREAL1:10;
+      then y`2 = inf (proj2.:X) by A10,A6,AXIOMS:21;
+      then y = LMP C by A8,A6,A5,TOPREAL3:11;
+      hence x in {LMP C} by TARSKI:def 1;
+    end;
+    let x be set;
+    assume x in {LMP C};
+    then
+A11: x = LMP C by TARSKI:def 1;
+    LMP C in C by Th44;
+    hence thesis by A1,A11,XBOOLE_0:def 3;
+  end;
+
+theorem Th49:
+  (LMP C)`2 < (UMP C)`2
+  proof
+    set w = (E-bound C + W-bound C) / 2;
+    set X = C /\ Vertical_Line (w);
+A1: (UMP C)`2 = sup (proj2.:X) & (LMP C)`2 = inf (proj2.:X) by Th34,Th36;
+    C is Bounded by JORDAN2C:73;
+    then X is Bounded by JORDAN1I:1;
+    then
+A2: proj2.:X is bounded by JORDAN1A:27;
+    set u = Upper_Middle_Point C,
+        l = Lower_Middle_Point C;
+A3: u`2 <> l`2 by Th24;
+    u`1 = w by JORDAN1K:61;
+    then u in C & u in Vertical_Line (w) by Th22,JORDAN6:34;
+    then
+A4: u in X by XBOOLE_0:def 3;
+    u`2 = proj2.u by PSCOMP_1:def 29;
+    then
+A5: u`2 in proj2.:X by A4,FUNCT_2:43;
+    l`1 = w by JORDAN1K:60;
+    then l in C & l in Vertical_Line (w) by Th23,JORDAN6:34;
+    then
+A6: l in X by XBOOLE_0:def 3;
+    l`2 = proj2.l by PSCOMP_1:def 29;
+    then l`2 in proj2.:X by A6,FUNCT_2:43;
+    hence thesis by A1,A2,A5,A3,SEQ_4:25;
+  end;
+
+theorem Th50:
+  UMP C <> LMP C
+  proof
+    assume
+A1:   UMP C = LMP C;
+    (LMP C)`2 < (UMP C)`2 by Th49;
+    hence contradiction by A1;
+  end;
+
+theorem Th51:
+  S-bound C < (UMP C)`2
+  proof
+    set u = UMP C,
+        l = LMP C;
+    u in C by Th43;
+    then
+A1: S-bound C <= u`2 by PSCOMP_1:71;
+    now
+      assume
+A2:     S-bound C = u`2;
+A3:   l`2 < u`2 by Th49;
+      l in C by Th44;
+      hence contradiction by A2,A3,PSCOMP_1:71;
+    end;
+    hence S-bound C < u`2 by A1,REAL_1:def 5;
+  end;
+
+theorem Th52:
+  (UMP C)`2 <= N-bound C
+  proof
+    UMP C in C by Th43;
+    hence (UMP C)`2 <= N-bound C by PSCOMP_1:71;
+  end;
+
+theorem Th53:
+  S-bound C <= (LMP C)`2
+  proof
+    LMP C in C by Th44;
+    hence S-bound C <= (LMP C)`2 by PSCOMP_1:71;
+  end;
+
+theorem Th54:
+  (LMP C)`2 < N-bound C
+  proof
+    set u = UMP C,
+        l = LMP C;
+A1: l in C by Th44;
+A2: l`2 <= N-bound C by A1,PSCOMP_1:71;
+    now
+      assume
+A3:     N-bound C = l`2;
+A4:   l`2 < u`2 by Th49;
+      u in C by Th43;
+      hence contradiction by A3,A4,PSCOMP_1:71;
+    end;
+    hence l`2 < N-bound C by A2,REAL_1:def 5;
+  end;
+
+theorem Th55:
+  LSeg(UMP C, |[ (W-bound C + E-bound C) / 2, N-bound C]|)
+  misses
+  LSeg(LMP C, |[ (W-bound C + E-bound C) / 2, S-bound C]|)
+  proof
+    set w = (W-bound C + E-bound C) / 2;
+    assume LSeg(UMP C, |[w, N-bound C]|) meets
+           LSeg(LMP C, |[w, S-bound C]|);
+    then consider x being set such that
+A1:   x in LSeg(UMP C, |[w, N-bound C]|) and
+A2:   x in LSeg(LMP C, |[w, S-bound C]|) by XBOOLE_0:3;
+    reconsider x as Point of TOP-REAL 2 by A1;
+    |[w, S-bound C]|`2 = S-bound C by EUCLID:56;
+    then |[w, S-bound C]|`2 <= (LMP C)`2 by Th53;
+    then
+A3: x`2 <= (LMP C)`2 by A2,TOPREAL1:10;
+    |[w, N-bound C]|`2 = N-bound C by EUCLID:56;
+    then (UMP C)`2 <= |[w, N-bound C]|`2 by Th52;
+    then x`2 >= (UMP C)`2 by A1,TOPREAL1:10;
+    then (UMP C)`2 <= (LMP C)`2 by A3,AXIOMS:22;
+    hence contradiction by Th49;
+  end;
+
+theorem Th56:
+  for A, B being Subset of TOP-REAL 2 st A c= B &
+    W-bound A + E-bound A = W-bound B + E-bound B &
+    A /\ Vertical_Line ((W-bound A + E-bound A) / 2) is non empty
+    &
+    proj2.:(B /\ Vertical_Line ((W-bound A + E-bound A) / 2)) is bounded_above
+   holds (UMP A)`2 <= (UMP B)`2
+  proof
+    let A, B be Subset of TOP-REAL 2;
+    assume that
+A1:   A c= B and
+A2:   W-bound A + E-bound A = W-bound B + E-bound B and
+A3:   A /\ Vertical_Line ((W-bound A + E-bound A) / 2) is non empty and
+A4:   proj2.:(B /\ Vertical_Line ((W-bound A + E-bound A) / 2))
+        is bounded_above;
+    set w = (W-bound A + E-bound A) / 2;
+A5: proj2.:(A /\ Vertical_Line w) is non empty by A3,Lm2,RELAT_1:152;
+    A /\ Vertical_Line w c= B /\ Vertical_Line w by A1,XBOOLE_1:26;
+    then proj2.:(A /\ Vertical_Line w) c= proj2.:(B /\ Vertical_Line w)
+      by RELAT_1:156;
+    then sup(proj2.:(A /\ Vertical_Line w)) <=
+     sup(proj2.:(B /\ Vertical_Line w)) by A4,A5,SEQ_4:65;
+    then (UMP A)`2 <= sup(proj2.:(B /\ Vertical_Line w))
+      by Th34;
+    hence thesis by A2,Th34;
+  end;
+
+theorem Th57:
+  for A, B being Subset of TOP-REAL 2 st A c= B &
+    W-bound A + E-bound A = W-bound B + E-bound B &
+    A /\ Vertical_Line ((W-bound A + E-bound A) / 2) is non empty
+    &
+    proj2.:(B /\ Vertical_Line ((W-bound A + E-bound A) / 2)) is bounded_below
+   holds (LMP B)`2 <= (LMP A)`2
+  proof
+    let A, B be Subset of TOP-REAL 2;
+    assume that
+A1:   A c= B and
+A2:   W-bound A + E-bound A = W-bound B + E-bound B and
+A3:   A /\ Vertical_Line ((W-bound A + E-bound A) / 2) is non empty and
+A4:   proj2.:(B /\ Vertical_Line ((W-bound A + E-bound A) / 2))
+        is bounded_below;
+    set w = (W-bound A + E-bound A) / 2;
+A5: proj2.:(A /\ Vertical_Line w) is non empty by A3,Lm2,RELAT_1:152;
+    A /\ Vertical_Line w c= B /\ Vertical_Line w by A1,XBOOLE_1:26;
+    then proj2.:(A /\ Vertical_Line w) c= proj2.:(B /\ Vertical_Line w)
+      by RELAT_1:156;
+    then inf(proj2.:(A /\ Vertical_Line w)) >=
+     inf(proj2.:(B /\ Vertical_Line w)) by A4,A5,SEQ_4:64;
+    then (LMP A)`2 >= inf(proj2.:(B /\ Vertical_Line w))
+      by Th36;
+    hence thesis by A2,Th36;
+  end;
+
+theorem Th58:
+  for A, B being Subset of TOP-REAL 2 st A c= B & UMP B in A &
+    A /\ Vertical_Line ((W-bound A + E-bound A) / 2) is non empty &
+    proj2.:(B /\ Vertical_Line ((W-bound B + E-bound B) / 2))
+      is bounded_above &
+    W-bound A + E-bound A = W-bound B + E-bound B
+   holds UMP A = UMP B
+  proof
+    let A, B be Subset of TOP-REAL 2 such that
+A1:   A c= B and
+A2:   UMP B in A and
+A3:   A /\ Vertical_Line ((W-bound A + E-bound A) / 2) is non empty and
+A4:   proj2.:(B /\ Vertical_Line ((W-bound B + E-bound B) / 2))
+       is bounded_above and
+A5:   W-bound A + E-bound A = W-bound B + E-bound B;
+    set w = (W-bound A + E-bound A)/2;
+A6: (UMP A)`2 = sup (proj2.:(A /\ Vertical_Line w)) by Th34;
+A7: (UMP B)`2 = sup (proj2.:(B /\ Vertical_Line w)) by A5,Th34;
+A8: proj2.:(A /\ Vertical_Line w) is non empty by A3,Lm2,RELAT_1:152;
+    A /\ Vertical_Line w c= B /\ Vertical_Line w by A1,XBOOLE_1:26;
+    then
+A9: proj2.:(A /\ Vertical_Line w) c=
+      proj2.:(B /\ Vertical_Line w) by RELAT_1:156;
+    then
+A10: proj2.:(A /\ Vertical_Line w) is bounded_above by A5,A4,RCOMP_1:4;
+A11: (UMP A)`1 = w by Th33;
+A12: (UMP B)`1 = w by A5,Th33;
+A13: for r being real number st r in proj2.:(A /\ Vertical_Line w) holds
+     (UMP B)`2 >= r by A9,A7,A5,A4,SEQ_4:def 4;
+    for s being real number st 0 < s
+     ex r being real number st
+      r in proj2.:(A /\ Vertical_Line w) & (UMP B)`2 - s < r
+    proof
+      let s be real number;
+      assume
+A14:     0 < s;
+      take (UMP B)`2;
+A15:   proj2.UMP B = (UMP B)`2 by PSCOMP_1:def 29;
+      UMP B in Vertical_Line w by A12,JORDAN6:34;
+      then UMP B in A /\ Vertical_Line w by A2,XBOOLE_0:def 3;
+      hence (UMP B)`2 in proj2.:(A /\ Vertical_Line w) by A15,FUNCT_2:43;
+      (UMP B)`2 - s < (UMP B)`2 - 0 by A14,REAL_1:92;
+      hence (UMP B)`2 - s < (UMP B)`2;
+    end;
+    then (UMP A)`2 = (UMP B)`2 by A6,A13,A8,A10,SEQ_4:def 4;
+    hence UMP A = UMP B by A11,A12,TOPREAL3:11;
+  end;
+
+theorem Th59:
+  for A, B being Subset of TOP-REAL 2 st A c= B & LMP B in A &
+    A /\ Vertical_Line ((W-bound A + E-bound A) / 2) is non empty &
+    proj2.:(B /\ Vertical_Line ((W-bound B + E-bound B) / 2))
+      is bounded_below &
+    W-bound A + E-bound A = W-bound B + E-bound B
+   holds LMP A = LMP B
+  proof
+    let A, B be Subset of TOP-REAL 2 such that
+A1:   A c= B and
+A2:   LMP B in A and
+A3:   A /\ Vertical_Line ((W-bound A + E-bound A) / 2) is non empty and
+A4:   proj2.:(B /\ Vertical_Line ((W-bound B + E-bound B) / 2))
+       is bounded_below and
+A5:   W-bound A + E-bound A = W-bound B + E-bound B;
+    set w = (W-bound A + E-bound A)/2;
+A6: (LMP A)`2 = inf (proj2.:(A /\ Vertical_Line w)) by Th36;
+A7: (LMP B)`2 = inf (proj2.:(B /\ Vertical_Line w)) by A5,Th36;
+A8: proj2.:(A /\ Vertical_Line w) is non empty by A3,Lm2,RELAT_1:152;
+    A /\ Vertical_Line w c= B /\ Vertical_Line w by A1,XBOOLE_1:26;
+    then
+A9: proj2.:(A /\ Vertical_Line w) c=
+      proj2.:(B /\ Vertical_Line w) by RELAT_1:156;
+    then
+A10: proj2.:(A /\ Vertical_Line w) is bounded_below by A5,A4,RCOMP_1:3;
+A11: (LMP A)`1 = w by Th35;
+A12: (LMP B)`1 = w by A5,Th35;
+A13: for r being real number st r in proj2.:(A /\ Vertical_Line w) holds
+     (LMP B)`2 <= r by A9,A7,A5,A4,SEQ_4:def 5;
+    for s being real number st 0 < s
+     ex r being real number st
+      r in proj2.:(A /\ Vertical_Line w) & r < (LMP B)`2 + s
+    proof
+      let s be real number;
+      assume
+A14:     0 < s;
+      take (LMP B)`2;
+A15:   proj2.LMP B = (LMP B)`2 by PSCOMP_1:def 29;
+      LMP B in Vertical_Line w by A12,JORDAN6:34;
+      then LMP B in A /\ Vertical_Line w by A2,XBOOLE_0:def 3;
+      hence (LMP B)`2 in proj2.:(A /\ Vertical_Line w) by A15,FUNCT_2:43;
+      (LMP B)`2 + 0 < (LMP B)`2 + s by A14,REAL_1:53;
+      hence (LMP B)`2 < (LMP B)`2 + s;
+    end;
+    then (LMP A)`2 = (LMP B)`2 by A6,A13,A8,A10,SEQ_4:def 5;
+    hence LMP A = LMP B by A11,A12,TOPREAL3:11;
+  end;
+
+theorem
+  (UMP Upper_Arc C)`2 <= N-bound C
+  proof
+    set w = (E-bound C + W-bound C) / 2;
+A1: W-bound C = W-bound Upper_Arc C & E-bound C = E-bound Upper_Arc C
+      by Th26,Th27;
+A2: proj2.:(Upper_Arc C /\ Vertical_Line w) is non empty by Th30;
+A3: proj2.:(C /\ Vertical_Line w) is bounded_above by Th14;
+    Upper_Arc C c= C by JORDAN1A:16;
+    then Upper_Arc C /\ Vertical_Line w c= C /\ Vertical_Line w by XBOOLE_1:26;
+    then proj2.:(Upper_Arc C /\ Vertical_Line w) c=
+      proj2.:(C /\ Vertical_Line w) by RELAT_1:156;
+    then
+A4: sup(proj2.:(Upper_Arc C /\ Vertical_Line w)) <=
+      sup(proj2.:(C /\ Vertical_Line w)) by A2,A3,SEQ_4:65;
+A5: (UMP Upper_Arc C)`2 = sup(proj2.:(Upper_Arc C /\ Vertical_Line w))
+      by A1,Th34;
+A6: (UMP C)`2 = sup(proj2.:(C /\ Vertical_Line w)) by Th34;
+    (UMP C)`2 <= N-bound C by Th52;
+    hence thesis by A4,A5,A6,AXIOMS:22;
+  end;
+
+theorem
+  S-bound C <= (LMP Lower_Arc C)`2
+  proof
+    set w = (E-bound C + W-bound C) / 2;
+A1: W-bound C = W-bound Lower_Arc C & E-bound C = E-bound Lower_Arc C
+      by Th28,Th29;
+A2: proj2.:(Lower_Arc C /\ Vertical_Line w) is non empty by Th31;
+A3: proj2.:(C /\ Vertical_Line w) is bounded_below by Th14;
+    Lower_Arc C c= C by JORDAN1A:16;
+    then Lower_Arc C /\ Vertical_Line w c= C /\ Vertical_Line w by XBOOLE_1:26;
+    then proj2.:(Lower_Arc C /\ Vertical_Line w) c=
+      proj2.:(C /\ Vertical_Line w) by RELAT_1:156;
+    then
+A4: inf(proj2.:(Lower_Arc C /\ Vertical_Line w)) >=
+      inf(proj2.:(C /\ Vertical_Line w)) by A2,A3,SEQ_4:64;
+A5: (LMP Lower_Arc C)`2 = inf(proj2.:(Lower_Arc C /\ Vertical_Line w))
+      by A1,Th36;
+A6: (LMP C)`2 = inf(proj2.:(C /\ Vertical_Line w)) by Th36;
+    S-bound C <= (LMP C)`2 by Th53;
+    hence thesis by A4,A5,A6,AXIOMS:22;
+  end;
+
+theorem
+  not (LMP C in Lower_Arc C & UMP C in Lower_Arc C)
+  proof
+    assume
+A1:   LMP C in Lower_Arc C & UMP C in Lower_Arc C;
+A2: UMP C in C & LMP C in C by Th43,Th44;
+    set n = |[ (W-bound C + E-bound C) / 2, N-bound C ]|;
+    set s = |[ (W-bound C + E-bound C) / 2, S-bound C ]|;
+    set S1 = LSeg(n, UMP C);
+    set S2 = LSeg(LMP C, s);
+A3: UMP C <> W-min C by Th37;
+A4: UMP C <> E-max C by Th38;
+A5: LMP C <> W-min C by Th39;
+A6: LMP C <> E-max C by Th40;
+A7: LMP C <> UMP C by Th50;
+A8: Upper_Arc(C) /\ Lower_Arc(C) = {W-min(C),E-max(C)} by JORDAN6:def 9;
+A9: Upper_Arc C c= C by JORDAN1A:16;
+A10: Lower_Arc C c= C by JORDAN1A:16;
+A11: Upper_Arc C is_an_arc_of W-min C,E-max C by JORDAN6:def 8;
+A12: Lower_Arc C is_an_arc_of E-max C,W-min C by JORDAN6:def 9;
+A13: now
+      assume UMP C in Upper_Arc C;
+      then UMP C in Upper_Arc C /\ Lower_Arc C by A1,XBOOLE_0:def 3;
+      hence contradiction by A8,A3,A4,TARSKI:def 2;
+    end;
+A14: now
+      assume LMP C in Upper_Arc C;
+      then LMP C in Upper_Arc C /\ Lower_Arc C by A1,XBOOLE_0:def 3;
+      hence contradiction by A8,A5,A6,TARSKI:def 2;
+    end;
+A15: (UMP C)`1 = (W-bound C + E-bound C)/2 by Th33;
+A16: (LMP C)`1 = (W-bound C + E-bound C)/2 by Th35;
+A17: n`1 = (W-bound C + E-bound C)/2 by EUCLID:56;
+A18: s`1 = (W-bound C + E-bound C)/2 by EUCLID:56;
+A19: s`2 = S-bound C & n`2 = N-bound C by EUCLID:56;
+A20: (W-min C)`1 = W-bound C by PSCOMP_1:84;
+A21: (E-max C)`1 = E-bound C by PSCOMP_1:104;
+A22: S1 is vertical by A15,A17,SPPOL_1:37;
+A23: S2 is vertical by A16,A18,SPPOL_1:37;
+A24: UMP C in S1 by TOPREAL1:6;
+A25: LMP C in S2 by TOPREAL1:6;
+A26: W-bound C < E-bound C by SPRECT_1:33;
+A27: S1 misses S2 by Th55;
+A28: for p being Point of TOP-REAL 2 st p in Upper_Arc C holds
+       s`2<=p`2 & p`2<=n`2 by A19,A9,PSCOMP_1:71;
+A29: for p being Point of TOP-REAL 2 st p in Upper_Arc C holds
+       (W-min C)`1<=p`1 & p`1<=(E-max C)`1 by A21,A20,A9,PSCOMP_1:71;
+A30: Upper_Arc C misses S1
+    proof
+      assume Upper_Arc C meets S1;
+      then consider x being set such that
+A31:     x in Upper_Arc C and
+A32:     x in S1 by XBOOLE_0:3;
+A33:   S1 /\ C = {UMP C} by Th47;
+      x in S1 /\ C by A32,A31,A9,XBOOLE_0:def 3;
+      then
+A34:   x = UMP C by A33,TARSKI:def 1;
+      then x in Lower_Arc C /\ Upper_Arc C by A1,A31,XBOOLE_0:def 3;
+      hence contradiction by A3,A4,A34,A8,TARSKI:def 2;
+    end;
+A35: Upper_Arc C misses S2
+    proof
+      assume Upper_Arc C meets S2;
+      then consider x being set such that
+A36:     x in Upper_Arc C and
+A37:     x in S2 by XBOOLE_0:3;
+A38:   S2 /\ C = {LMP C} by Th48;
+      x in S2 /\ C by A37,A36,A9,XBOOLE_0:def 3;
+      then
+A39:   x = LMP C by A38,TARSKI:def 1;
+      then x in Lower_Arc C /\ Upper_Arc C by A1,A36,XBOOLE_0:def 3;
+      hence contradiction by A5,A6,A39,A8,TARSKI:def 2;
+    end;
+
+    per cases by A2,JORDAN16:11;
+    suppose LE LMP C, UMP C, C;
+    then
+A40: LE LMP C, UMP C, Lower_Arc C, E-max C, W-min C by A14,JORDAN6:def 10;
+    set S = Segment(Lower_Arc C, E-max C, W-min C, LMP C, UMP C);
+A41: UMP C in S by A40,A12,JORDAN16:9;
+A42: LMP C in S by A40,A12,JORDAN16:9;
+A43: S c= Lower_Arc C by JORDAN16:5;
+    then
+A44: S c= C by A10,XBOOLE_1:1;
+A45: S1 /\ S = {UMP C}
+    proof
+      S1 /\ C = {UMP C} by Th47;
+      hence S1 /\ S c= {UMP C} by A44,XBOOLE_1:26;
+      let x be set;
+      assume x in {UMP C};
+      then
+A46:   x = UMP C by TARSKI:def 1;
+      UMP C in S1 by TOPREAL1:6;
+      hence x in S1 /\ S by A41,A46,XBOOLE_0:def 3;
+    end;
+A47: S2 /\ S = {LMP C}
+    proof
+      S2 /\ C = {LMP C} by Th48;
+      hence S2 /\ S c= {LMP C} by A44,XBOOLE_1:26;
+      let x be set;
+      assume x in {LMP C};
+      then
+      x = LMP C by TARSKI:def 1;
+      hence x in S2 /\ S by A42,A25,XBOOLE_0:def 3;
+    end;
+A48: (S1 \/ S) /\ S2 = S1 /\ S2 \/ S /\ S2 by XBOOLE_1:23
+        .= {} \/ S /\ S2 by A27,XBOOLE_0:def 7;
+    S is_an_arc_of LMP C, UMP C by A12,A40,A7,JORDAN16:36;
+    then S is_an_arc_of UMP C, LMP C by JORDAN5B:14;
+    then S1 \/ S is_an_arc_of n,LMP C by A45,TOPREAL1:17;
+    then S1 \/ S \/ S2 is_an_arc_of n,s by A47,A48,TOPREAL1:16;
+    then
+A49: S1 \/ S \/ S2 is_an_arc_of s,n by JORDAN5B:14;
+A50: S c= Lower_Arc C \ {W-min C,E-max C}
+    proof
+      let s be set;
+      assume
+A51:     s in S;
+      now
+        assume s in {W-min C,E-max C};
+        then s = W-min C or s = E-max C by TARSKI:def 2;
+        hence contradiction by A3,A6,A51,A12,Th12;
+      end;
+      hence s in Lower_Arc C \ {W-min C,E-max C} by A43,A51,XBOOLE_0:def 4;
+    end;
+    Upper_Arc C misses S
+    proof
+      assume Upper_Arc C meets S;
+      then consider x being set such that
+A52:     x in Upper_Arc C and
+A53:     x in S by XBOOLE_0:3;
+      x in Lower_Arc C by A50,A53,XBOOLE_0:def 4;
+      then x in Lower_Arc C /\ Upper_Arc C by A52,XBOOLE_0:def 3;
+      hence contradiction by A8,A50,A53,XBOOLE_0:def 4;
+    end;
+    then
+A54: Upper_Arc C misses S1 \/ S \/ S2 by A30,A35,Th1;
+A55: now
+      let p be Point of TOP-REAL 2;
+      assume
+A56:     p in S1 \/ S \/ S2;
+      per cases by A56,Lm5;
+      suppose
+A57:    p in S1;
+A58:   (UMP C)`2<=n`2 by A19,Th52;
+      then s`2<=(UMP C)`2 & (UMP C)`2<=p`2 by A19,Th51,A57,TOPREAL1:10;
+      hence s`2<=p`2 & p`2<=n`2 by A57,A58,TOPREAL1:10,AXIOMS:22;
+      end;
+      suppose p in S;
+      hence s`2<=p`2 & p`2<=n`2 by A19,A44,PSCOMP_1:71;
+      end;
+      suppose
+A59:     p in S2;
+A60:   s`2<=(LMP C)`2 by A19,Th53;
+      hence s`2<=p`2 by A59,TOPREAL1:10;
+A61:   p`2<=(LMP C)`2 by A59,A60,TOPREAL1:10;
+      (LMP C)`2<=n`2 by A19,Th54;
+      hence p`2<=n`2 by A61,AXIOMS:22;
+      end;
+    end;
+    now
+      let p be Point of TOP-REAL 2;
+      assume
+A62:     p in S1 \/ S \/ S2;
+      per cases by A62,Lm5;
+      suppose p in S1;
+      then p`1 = (UMP C)`1 by A22,A24,SPPOL_1:def 3;
+      hence (W-min C)`1<=p`1 & p`1<=(E-max C)`1 by A20,A21,A15,A26,TOPREAL3:3;
+      end;
+      suppose p in S;
+      hence (W-min C)`1<=p`1 & p`1<=(E-max C)`1 by A21,A20,A44,PSCOMP_1:71;
+      end;
+      suppose p in S2;
+      then p`1 = (LMP C)`1 by A23,A25,SPPOL_1:def 3;
+      hence (W-min C)`1<=p`1 & p`1<=(E-max C)`1 by A20,A21,A16,A26,TOPREAL3:3;
+      end;
+    end;
+    hence thesis by A54,A49,A11,A55,A28,A29,JGRAPH_1:62;
+    end;
+
+    suppose LE UMP C, LMP C, C;
+    then
+A63: LE UMP C, LMP C, Lower_Arc C, E-max C, W-min C by A13,JORDAN6:def 10;
+    set S = Segment(Lower_Arc C, E-max C, W-min C, UMP C, LMP C);
+A64: UMP C in S by A63,A12,JORDAN16:9;
+A65: LMP C in S by A63,A12,JORDAN16:9;
+A66: S c= Lower_Arc C by JORDAN16:5;
+    then
+A67: S c= C by A10,XBOOLE_1:1;
+A68: S1 /\ S = {UMP C}
+    proof
+      S1 /\ C = {UMP C} by Th47;
+      hence S1 /\ S c= {UMP C} by A67,XBOOLE_1:26;
+      let x be set;
+      assume x in {UMP C};
+      then
+A69:   x = UMP C by TARSKI:def 1;
+      UMP C in S1 by TOPREAL1:6;
+      hence x in S1 /\ S by A64,A69,XBOOLE_0:def 3;
+    end;
+A70: S2 /\ S = {LMP C}
+    proof
+      S2 /\ C = {LMP C} by Th48;
+      hence S2 /\ S c= {LMP C} by A67,XBOOLE_1:26;
+      let x be set;
+      assume x in {LMP C};
+      then
+      x = LMP C by TARSKI:def 1;
+      hence x in S2 /\ S by A65,A25,XBOOLE_0:def 3;
+    end;
+A71: (S1 \/ S) /\ S2 = S1 /\ S2 \/ S /\ S2 by XBOOLE_1:23
+        .= {} \/ S /\ S2 by A27,XBOOLE_0:def 7;
+    S is_an_arc_of UMP C, LMP C by A12,A63,A7,JORDAN16:36;
+    then S1 \/ S is_an_arc_of n,LMP C by A68,TOPREAL1:17;
+    then S1 \/ S \/ S2 is_an_arc_of n,s by A70,A71,TOPREAL1:16;
+    then
+A72: S1 \/ S \/ S2 is_an_arc_of s,n by JORDAN5B:14;
+A73: S c= Lower_Arc C \ {W-min C,E-max C}
+    proof
+      let s be set;
+      assume
+A74:     s in S;
+      now
+        assume s in {W-min C,E-max C};
+        then s = W-min C or s = E-max C by TARSKI:def 2;
+        hence contradiction by A4,A5,A74,A12,Th12;
+      end;
+      hence s in Lower_Arc C \ {W-min C,E-max C} by A74,A66,XBOOLE_0:def 4;
+    end;
+    Upper_Arc C misses S
+    proof
+      assume Upper_Arc C meets S;
+      then consider x being set such that
+A75:     x in Upper_Arc C and
+A76:     x in S by XBOOLE_0:3;
+      x in Lower_Arc C by A73,A76,XBOOLE_0:def 4;
+      then x in Lower_Arc C /\ Upper_Arc C by A75,XBOOLE_0:def 3;
+      hence contradiction by A8,A73,A76,XBOOLE_0:def 4;
+    end;
+    then
+A77: Upper_Arc C misses S1 \/ S \/ S2 by A30,A35,Th1;
+A78: now
+      let p be Point of TOP-REAL 2;
+      assume
+A79:     p in S1 \/ S \/ S2;
+      per cases by A79,Lm5;
+      suppose
+A80:    p in S1;
+A81:   (UMP C)`2<=n`2 by A19,Th52;
+      then s`2<=(UMP C)`2 & (UMP C)`2<=p`2 by A19,Th51,A80,TOPREAL1:10;
+      hence s`2<=p`2 & p`2<=n`2 by A80,A81,TOPREAL1:10,AXIOMS:22;
+      end;
+      suppose p in S;
+      hence s`2<=p`2 & p`2<=n`2 by A19,A67,PSCOMP_1:71;
+      end;
+      suppose
+A82:     p in S2;
+A83:   s`2<=(LMP C)`2 by A19,Th53;
+      hence s`2<=p`2 by A82,TOPREAL1:10;
+A84:   p`2<=(LMP C)`2 by A82,A83,TOPREAL1:10;
+      (LMP C)`2<=n`2 by A19,Th54;
+      hence p`2<=n`2 by A84,AXIOMS:22;
+      end;
+    end;
+    now
+      let p be Point of TOP-REAL 2;
+      assume
+A85:     p in S1 \/ S \/ S2;
+      per cases by A85,Lm5;
+      suppose p in S1;
+      then p`1 = (UMP C)`1 by A22,A24,SPPOL_1:def 3;
+      hence (W-min C)`1<=p`1 & p`1<=(E-max C)`1 by A20,A21,A15,A26,TOPREAL3:3;
+      end;
+      suppose p in S;
+      hence (W-min C)`1<=p`1 & p`1<=(E-max C)`1 by A21,A20,A67,PSCOMP_1:71;
+      end;
+      suppose p in S2;
+      then p`1 = (LMP C)`1 by A23,A25,SPPOL_1:def 3;
+      hence (W-min C)`1<=p`1 & p`1<=(E-max C)`1 by A20,A21,A16,A26,TOPREAL3:3;
+      end;
+    end;
+    hence thesis by A77,A72,A11,A78,A28,A29,JGRAPH_1:62;
+    end;
+  end;
+
+theorem
+  not (LMP C in Upper_Arc C & UMP C in Upper_Arc C)
+  proof
+    assume
+A1:   LMP C in Upper_Arc C & UMP C in Upper_Arc C;
+A2: UMP C in C & LMP C in C by Th43,Th44;
+    set n = |[ (W-bound C + E-bound C) / 2, N-bound C ]|;
+    set s = |[ (W-bound C + E-bound C) / 2, S-bound C ]|;
+    set S1 = LSeg(n, UMP C);
+    set S2 = LSeg(LMP C, s);
+A3: UMP C <> W-min C by Th37;
+A4: UMP C <> E-max C by Th38;
+A5: LMP C <> W-min C by Th39;
+A6: LMP C <> E-max C by Th40;
+A7: LMP C <> UMP C by Th50;
+A8: Upper_Arc(C) /\ Lower_Arc(C) = {W-min(C),E-max(C)} by JORDAN6:def 9;
+A9: Lower_Arc C c= C by JORDAN1A:16;
+A10: Upper_Arc C c= C by JORDAN1A:16;
+    Lower_Arc C is_an_arc_of E-max C,W-min C by JORDAN6:def 9;
+    then
+A11: Lower_Arc C is_an_arc_of W-min C,E-max C by JORDAN5B:14;
+A12: Upper_Arc C is_an_arc_of W-min C,E-max C by JORDAN6:def 8;
+A13: now
+      assume UMP C in Lower_Arc C;
+      then UMP C in Upper_Arc C /\ Lower_Arc C by A1,XBOOLE_0:def 3;
+      hence contradiction by A8,A3,A4,TARSKI:def 2;
+    end;
+A14: now
+      assume LMP C in Lower_Arc C;
+      then LMP C in Upper_Arc C /\ Lower_Arc C by A1,XBOOLE_0:def 3;
+      hence contradiction by A8,A5,A6,TARSKI:def 2;
+    end;
+A15: (UMP C)`1 = (W-bound C + E-bound C)/2 by Th33;
+A16: (LMP C)`1 = (W-bound C + E-bound C)/2 by Th35;
+A17: n`1 = (W-bound C + E-bound C)/2 by EUCLID:56;
+A18: s`1 = (W-bound C + E-bound C)/2 by EUCLID:56;
+A19: s`2 = S-bound C & n`2 = N-bound C by EUCLID:56;
+A20: (W-min C)`1 = W-bound C by PSCOMP_1:84;
+A21: (E-max C)`1 = E-bound C by PSCOMP_1:104;
+A22: S1 is vertical by A15,A17,SPPOL_1:37;
+A23: S2 is vertical by A16,A18,SPPOL_1:37;
+A24: UMP C in S1 by TOPREAL1:6;
+A25: LMP C in S2 by TOPREAL1:6;
+A26: W-bound C < E-bound C by SPRECT_1:33;
+A27: S1 misses S2 by Th55;
+A28: for p being Point of TOP-REAL 2 st p in Lower_Arc C holds
+       s`2<=p`2 & p`2<=n`2 by A19,A9,PSCOMP_1:71;
+A29: for p being Point of TOP-REAL 2 st p in Lower_Arc C holds
+       (W-min C)`1<=p`1 & p`1<=(E-max C)`1 by A21,A20,A9,PSCOMP_1:71;
+A30: Lower_Arc C misses S1
+    proof
+      assume Lower_Arc C meets S1;
+      then consider x being set such that
+A31:     x in Lower_Arc C and
+A32:     x in S1 by XBOOLE_0:3;
+A33:   S1 /\ C = {UMP C} by Th47;
+      x in S1 /\ C by A32,A31,A9,XBOOLE_0:def 3;
+      then
+A34:   x = UMP C by A33,TARSKI:def 1;
+      then x in Lower_Arc C /\ Upper_Arc C by A1,A31,XBOOLE_0:def 3;
+      hence contradiction by A3,A4,A34,A8,TARSKI:def 2;
+    end;
+A35: Lower_Arc C misses S2
+    proof
+      assume Lower_Arc C meets S2;
+      then consider x being set such that
+A36:     x in Lower_Arc C and
+A37:     x in S2 by XBOOLE_0:3;
+A38:   S2 /\ C = {LMP C} by Th48;
+      x in S2 /\ C by A36,A37,A9,XBOOLE_0:def 3;
+      then
+A39:   x = LMP C by A38,TARSKI:def 1;
+      then x in Lower_Arc C /\ Upper_Arc C by A1,A36,XBOOLE_0:def 3;
+      hence contradiction by A5,A6,A39,A8,TARSKI:def 2;
+    end;
+
+    per cases by A2,JORDAN16:11;
+    suppose LE LMP C, UMP C, C;
+    then
+A40: LE LMP C, UMP C, Upper_Arc C, W-min C, E-max C by A13,JORDAN6:def 10;
+    set S = Segment(Upper_Arc C, W-min C, E-max C, LMP C, UMP C);
+A41: UMP C in S by A40,A12,JORDAN16:9;
+A42: LMP C in S by A40,A12,JORDAN16:9;
+A43: S c= Upper_Arc C by JORDAN16:5;
+    then
+A44: S c= C by A10,XBOOLE_1:1;
+A45: S1 /\ S = {UMP C}
+    proof
+      S1 /\ C = {UMP C} by Th47;
+      hence S1 /\ S c= {UMP C} by A44,XBOOLE_1:26;
+      let x be set;
+      assume x in {UMP C};
+      then
+A46:   x = UMP C by TARSKI:def 1;
+      UMP C in S1 by TOPREAL1:6;
+      hence x in S1 /\ S by A41,A46,XBOOLE_0:def 3;
+    end;
+A47: S2 /\ S = {LMP C}
+    proof
+      S2 /\ C = {LMP C} by Th48;
+      hence S2 /\ S c= {LMP C} by A44,XBOOLE_1:26;
+      let x be set;
+      assume x in {LMP C};
+      then
+      x = LMP C by TARSKI:def 1;
+      hence x in S2 /\ S by A42,A25,XBOOLE_0:def 3;
+    end;
+A48: (S1 \/ S) /\ S2 = S1 /\ S2 \/ S /\ S2 by XBOOLE_1:23
+        .= {} \/ S /\ S2 by A27,XBOOLE_0:def 7;
+    S is_an_arc_of LMP C, UMP C by A12,A40,A7,JORDAN16:36;
+    then S is_an_arc_of UMP C, LMP C by JORDAN5B:14;
+    then S1 \/ S is_an_arc_of n,LMP C by A45,TOPREAL1:17;
+    then S1 \/ S \/ S2 is_an_arc_of n,s by A47,A48,TOPREAL1:16;
+    then
+A49: S1 \/ S \/ S2 is_an_arc_of s,n by JORDAN5B:14;
+A50: S c= Upper_Arc C \ {W-min C,E-max C}
+    proof
+      let s be set;
+      assume
+A51:     s in S;
+      now
+        assume s in {W-min C,E-max C};
+        then s = W-min C or s = E-max C by TARSKI:def 2;
+        hence contradiction by A4,A5,A51,A12,Th12;
+      end;
+      hence s in Upper_Arc C \ {W-min C,E-max C} by A51,A43,XBOOLE_0:def 4;
+    end;
+    Lower_Arc C misses S
+    proof
+      assume Lower_Arc C meets S;
+      then consider x being set such that
+A52:     x in Lower_Arc C and
+A53:     x in S by XBOOLE_0:3;
+      x in Upper_Arc C by A50,A53,XBOOLE_0:def 4;
+      then x in Lower_Arc C /\ Upper_Arc C by A52,XBOOLE_0:def 3;
+      hence contradiction by A8,A50,A53,XBOOLE_0:def 4;
+    end;
+    then
+A54: Lower_Arc C misses S1 \/ S \/ S2 by A30,A35,Th1;
+A55: now
+      let p be Point of TOP-REAL 2;
+      assume
+A56:     p in S1 \/ S \/ S2;
+      per cases by A56,Lm5;
+      suppose
+A57:    p in S1;
+A58:   (UMP C)`2<=n`2 by A19,Th52;
+      then s`2<=(UMP C)`2 & (UMP C)`2<=p`2 by A19,Th51,A57,TOPREAL1:10;
+      hence s`2<=p`2 & p`2<=n`2 by A57,A58,TOPREAL1:10,AXIOMS:22;
+      end;
+      suppose p in S;
+      hence s`2<=p`2 & p`2<=n`2 by A19,A44,PSCOMP_1:71;
+      end;
+      suppose
+A59:     p in S2;
+A60:   s`2<=(LMP C)`2 by A19,Th53;
+      hence s`2<=p`2 by A59,TOPREAL1:10;
+A61:   p`2<=(LMP C)`2 by A59,A60,TOPREAL1:10;
+      (LMP C)`2<=n`2 by A19,Th54;
+      hence p`2<=n`2 by A61,AXIOMS:22;
+      end;
+    end;
+    now
+      let p be Point of TOP-REAL 2;
+      assume
+A62:     p in S1 \/ S \/ S2;
+      per cases by A62,Lm5;
+      suppose p in S1;
+      then p`1 = (UMP C)`1 by A22,A24,SPPOL_1:def 3;
+      hence (W-min C)`1<=p`1 & p`1<=(E-max C)`1 by A20,A21,A15,A26,TOPREAL3:3;
+      end;
+      suppose p in S;
+      hence (W-min C)`1<=p`1 & p`1<=(E-max C)`1 by A21,A20,A44,PSCOMP_1:71;
+      end;
+      suppose p in S2;
+      then p`1 = (LMP C)`1 by A23,A25,SPPOL_1:def 3;
+      hence (W-min C)`1<=p`1 & p`1<=(E-max C)`1 by A20,A21,A16,A26,TOPREAL3:3;
+      end;
+    end;
+    hence thesis by A54,A49,A11,A55,A28,A29,JGRAPH_1:62;
+    end;
+
+    suppose LE UMP C, LMP C, C;
+    then
+A63: LE UMP C, LMP C, Upper_Arc C, W-min C, E-max C by A14,JORDAN6:def 10;
+    set S = Segment(Upper_Arc C, W-min C, E-max C, UMP C, LMP C);
+A64: UMP C in S by A63,A12,JORDAN16:9;
+A65: LMP C in S by A63,A12,JORDAN16:9;
+A66: S c= Upper_Arc C by JORDAN16:5;
+    then
+A67: S c= C by A10,XBOOLE_1:1;
+A68: S1 /\ S = {UMP C}
+    proof
+      S1 /\ C = {UMP C} by Th47;
+      hence S1 /\ S c= {UMP C} by A67,XBOOLE_1:26;
+      let x be set;
+      assume x in {UMP C};
+      then
+A69:   x = UMP C by TARSKI:def 1;
+      UMP C in S1 by TOPREAL1:6;
+      hence x in S1 /\ S by A64,A69,XBOOLE_0:def 3;
+    end;
+A70: S2 /\ S = {LMP C}
+    proof
+      S2 /\ C = {LMP C} by Th48;
+      hence S2 /\ S c= {LMP C} by A67,XBOOLE_1:26;
+      let x be set;
+      assume x in {LMP C};
+      then
+      x = LMP C by TARSKI:def 1;
+      hence x in S2 /\ S by A65,A25,XBOOLE_0:def 3;
+    end;
+A71: (S1 \/ S) /\ S2 = S1 /\ S2 \/ S /\ S2 by XBOOLE_1:23
+        .= {} \/ S /\ S2 by A27,XBOOLE_0:def 7;
+    S is_an_arc_of UMP C, LMP C by A12,A63,A7,JORDAN16:36;
+    then S1 \/ S is_an_arc_of n,LMP C by A68,TOPREAL1:17;
+    then S1 \/ S \/ S2 is_an_arc_of n,s by A70,A71,TOPREAL1:16;
+    then
+A72: S1 \/ S \/ S2 is_an_arc_of s,n by JORDAN5B:14;
+A73: S c= Upper_Arc C \ {W-min C,E-max C}
+    proof
+      let s be set;
+      assume
+A74:     s in S;
+      now
+        assume s in {W-min C,E-max C};
+        then s = W-min C or s = E-max C by TARSKI:def 2;
+        hence contradiction by A3,A6,A74,A12,Th12;
+      end;
+      hence s in Upper_Arc C \ {W-min C,E-max C} by A66,A74,XBOOLE_0:def 4;
+    end;
+    Lower_Arc C misses S
+    proof
+      assume Lower_Arc C meets S;
+      then consider x being set such that
+A75:     x in Lower_Arc C and
+A76:     x in S by XBOOLE_0:3;
+      x in Upper_Arc C by A73,A76,XBOOLE_0:def 4;
+      then x in Lower_Arc C /\ Upper_Arc C by A75,XBOOLE_0:def 3;
+      hence contradiction by A8,A73,A76,XBOOLE_0:def 4;
+    end;
+    then
+A77: Lower_Arc C misses S1 \/ S \/ S2 by A30,A35,Th1;
+A78: now
+      let p be Point of TOP-REAL 2;
+      assume
+A79:     p in S1 \/ S \/ S2;
+      per cases by A79,Lm5;
+      suppose
+A80:    p in S1;
+A81:   (UMP C)`2<=n`2 by A19,Th52;
+      then s`2<=(UMP C)`2 & (UMP C)`2<=p`2 by A19,Th51,A80,TOPREAL1:10;
+      hence s`2<=p`2 & p`2<=n`2 by A80,A81,TOPREAL1:10,AXIOMS:22;
+      end;
+      suppose p in S;
+      hence s`2<=p`2 & p`2<=n`2 by A19,A67,PSCOMP_1:71;
+      end;
+      suppose
+A82:     p in S2;
+A83:   s`2<=(LMP C)`2 by A19,Th53;
+      hence s`2<=p`2 by A82,TOPREAL1:10;
+A84:   p`2<=(LMP C)`2 by A82,A83,TOPREAL1:10;
+      (LMP C)`2<=n`2 by A19,Th54;
+      hence p`2<=n`2 by A84,AXIOMS:22;
+      end;
+    end;
+    now
+      let p be Point of TOP-REAL 2;
+      assume
+A85:     p in S1 \/ S \/ S2;
+      per cases by A85,Lm5;
+      suppose p in S1;
+      then p`1 = (UMP C)`1 by A22,A24,SPPOL_1:def 3;
+      hence (W-min C)`1<=p`1 & p`1<=(E-max C)`1 by A20,A21,A15,A26,TOPREAL3:3;
+      end;
+      suppose p in S;
+      hence (W-min C)`1<=p`1 & p`1<=(E-max C)`1 by A21,A20,A67,PSCOMP_1:71;
+      end;
+      suppose p in S2;
+      then p`1 = (LMP C)`1 by A23,A25,SPPOL_1:def 3;
+      hence (W-min C)`1<=p`1 & p`1<=(E-max C)`1 by A20,A21,A16,A26,TOPREAL3:3;
+      end;
+    end;
+    hence thesis by A77,A72,A11,A78,A28,A29,JGRAPH_1:62;
+  end;
+  end;
+
+theorem Th64:
+  0 < n implies
+  sup (proj2.:(L~Cage(C,n) /\
+       LSeg(Gauge(C,n)*(Center Gauge(C,n),1),
+            Gauge(C,n)*(Center Gauge(C,n),len Gauge(C,n)))))
+  =
+  sup (proj2.:(L~Cage(C,n) /\
+       Vertical_Line ((E-bound L~Cage(C,n) + W-bound L~Cage(C,n)) / 2)))
+  proof
+    assume
+A1:   0 < n;
+    set f = Cage(C,n),
+        G = Gauge(C,n),
+        c = Center G;
+    set Y = proj2.:(L~f /\ Vertical_Line ((E-bound L~f + W-bound L~f) / 2));
+    set X = proj2.:(L~f /\ LSeg(G*(c,1),G*(c,len G)));
+A2: len G = width G by JORDAN8:def 1;
+A3: 1 <= len G by Lm6;
+A4: 1 <= c & c <= len G by JORDAN1B:12,14;
+    then
+A5: G*(c,1)`1 = G*(c,len G)`1 by A2,A3,GOBOARD5:3;
+A6: G*(c,1)`1 = (W-bound C + E-bound C) / 2 by A1,A2,A3,JORDAN1G:43
+             .= (W-bound L~f + E-bound L~f) / 2 by JORDAN1G:41;
+    then G*(c,1) in Vertical_Line ((E-bound L~f + W-bound L~f) / 2) &
+      G*(c,len G) in Vertical_Line ((E-bound L~f + W-bound L~f) / 2)
+        by A5,JORDAN6:34;
+    then
+    LSeg(G*(c,1),G*(c,len G)) c=
+      Vertical_Line ((E-bound L~f + W-bound L~f) / 2) by JORDAN1A:23;
+    then L~f /\ L~f /\ LSeg(G*(c,1),G*(c,len G)) c=
+      L~f /\ Vertical_Line ((E-bound L~f + W-bound L~f) / 2) by XBOOLE_1:26;
+    then
+A7: X c= Y by RELAT_1:156;
+A8: Y is bounded_above by Th14;
+    then
+A9: X is bounded_above by A7,RCOMP_1:4;
+A10: LSeg(G*(c,1),G*(c,len G)) meets Upper_Arc L~f by JORDAN1B:34;
+    Upper_Arc L~f c= L~f by JORDAN1A:16;
+    then
+    LSeg(G*(c,1),G*(c,len G)) meets L~f by A10,XBOOLE_1:63;
+    then
+    L~f /\ LSeg(G*(c,1),G*(c,len G)) is non empty by XBOOLE_0:def 7;
+    then
+A11: X is non empty by Lm2,RELAT_1:152;
+    then
+A12: Y is non empty by A7,XBOOLE_1:3;
+A13: for r being real number st r in X holds r<=sup Y by A7,A8,SEQ_4:def 4;
+    for s being real number st 0<s ex r being real number st r in X & sup Y-s<r
+    proof
+      let s be real number;
+      assume 0<s;
+      then consider r being real number such that
+A14:     r in Y and
+A15:     sup Y-s<r by A12,A8,SEQ_4:def 4;
+      take r;
+      consider x being Point of TOP-REAL 2 such that
+A16:     x in L~f /\ Vertical_Line ((E-bound L~f + W-bound L~f) / 2) and
+A17:     proj2.x = r by A14,Lm3;
+A18:   x in L~f by A16,XBOOLE_0:def 3;
+      x in Vertical_Line ((E-bound L~f + W-bound L~f)/2) by A16,XBOOLE_0:def 3;
+      then
+A19:   G*(c,1)`1 = x`1 by A6,JORDAN6:34;
+      GoB f = G by JORDAN1H:52;
+      then G*(c,1)`2 <= x`2 & x`2 <= G*(c,len G)`2
+        by A4,A2,A18,JORDAN5D:35,36;
+      then x in LSeg(G*(c,1),G*(c,len G)) by A19,A5,GOBOARD7:8;
+      then x in L~f /\ LSeg(G*(c,1),G*(c,len G)) by A18,XBOOLE_0:def 3;
+      hence r in X by A17,FUNCT_2:43;
+      thus thesis by A15;
+    end;
+    hence thesis by A11,A9,A13,SEQ_4:def 4;
+  end;
+
+theorem Th65:
+  0 < n implies
+  inf (proj2.:(L~Cage(C,n) /\
+       LSeg(Gauge(C,n)*(Center Gauge(C,n),1),
+            Gauge(C,n)*(Center Gauge(C,n),len Gauge(C,n)))))
+  =
+  inf (proj2.:(L~Cage(C,n) /\
+       Vertical_Line ((E-bound L~Cage(C,n) + W-bound L~Cage(C,n)) / 2)))
+  proof
+    assume
+A1:   0 < n;
+    set f = Cage(C,n),
+        G = Gauge(C,n),
+        c = Center G;
+    set Y = proj2.:(L~f /\ Vertical_Line ((E-bound L~f + W-bound L~f) / 2));
+    set X = proj2.:(L~f /\ LSeg(G*(c,1),G*(c,len G)));
+A2: len G = width G by JORDAN8:def 1;
+A3: 1 <= len G by Lm6;
+A4: 1 <= c & c <= len G by JORDAN1B:12,14;
+    then
+A5: G*(c,1)`1 = G*(c,len G)`1 by A2,A3,GOBOARD5:3;
+A6: G*(c,1)`1 = (W-bound C + E-bound C) / 2 by A1,A2,A3,JORDAN1G:43
+             .= (W-bound L~f + E-bound L~f) / 2 by JORDAN1G:41;
+    then G*(c,1) in Vertical_Line ((E-bound L~f + W-bound L~f) / 2) &
+      G*(c,len G) in Vertical_Line ((E-bound L~f + W-bound L~f) / 2)
+        by A5,JORDAN6:34;
+    then
+    LSeg(G*(c,1),G*(c,len G)) c=
+      Vertical_Line ((E-bound L~f + W-bound L~f) / 2) by JORDAN1A:23;
+    then L~f /\ L~f /\ LSeg(G*(c,1),G*(c,len G)) c=
+      L~f /\ Vertical_Line ((E-bound L~f + W-bound L~f) / 2) by XBOOLE_1:26;
+    then
+A7: X c= Y by RELAT_1:156;
+A8: Y is bounded_below by Th14;
+    then
+A9: X is bounded_below by A7,RCOMP_1:3;
+A10: LSeg(G*(c,1),G*(c,len G)) meets Upper_Arc L~f by JORDAN1B:34;
+    Upper_Arc L~f c= L~f by JORDAN1A:16;
+    then
+    LSeg(G*(c,1),G*(c,len G)) meets L~f by A10,XBOOLE_1:63;
+    then
+    L~f /\ LSeg(G*(c,1),G*(c,len G)) is non empty by XBOOLE_0:def 7;
+    then
+A11: X is non empty by Lm2,RELAT_1:152;
+    then
+A12: Y is non empty by A7,XBOOLE_1:3;
+A13: for r being real number st r in X holds inf Y<=r by A7,A8,SEQ_4:def 5;
+    for s being real number st 0<s ex r being real number st r in X & r<inf Y+s
+    proof
+      let s be real number;
+      assume 0<s;
+      then consider r being real number such that
+A14:     r in Y and
+A15:     r<inf Y+s by A12,A8,SEQ_4:def 5;
+      take r;
+      consider x being Point of TOP-REAL 2 such that
+A16:     x in L~f /\ Vertical_Line ((E-bound L~f + W-bound L~f) / 2) and
+A17:     proj2.x = r by A14,Lm3;
+A18:   x in L~f by A16,XBOOLE_0:def 3;
+      x in Vertical_Line ((E-bound L~f + W-bound L~f)/2) by A16,XBOOLE_0:def 3;
+      then
+A19:   G*(c,1)`1 = x`1 by A6,JORDAN6:34;
+      GoB f = G by JORDAN1H:52;
+      then G*(c,1)`2 <= x`2 & x`2 <= G*(c,len G)`2
+        by A4,A2,A18,JORDAN5D:35,36;
+      then x in LSeg(G*(c,1),G*(c,len G)) by A19,A5,GOBOARD7:8;
+      then x in L~f /\ LSeg(G*(c,1),G*(c,len G)) by A18,XBOOLE_0:def 3;
+      hence r in X by A17,FUNCT_2:43;
+      thus thesis by A15;
+    end;
+    hence thesis by A11,A9,A13,SEQ_4:def 5;
+  end;
+
+theorem Th66:
+  0 < n implies
+  UMP L~Cage(C,n) =
+    |[ (E-bound L~Cage(C,n) + W-bound L~Cage(C,n)) / 2,
+      sup (proj2.:(L~Cage(C,n) /\
+           LSeg(Gauge(C,n)*(Center Gauge(C,n),1),
+                Gauge(C,n)*(Center Gauge(C,n),len Gauge(C,n))))) ]|
+  proof
+    assume
+A1:   0 < n;
+A2: (UMP L~Cage(C,n))`1 = (E-bound L~Cage(C,n) + W-bound L~Cage(C,n)) / 2
+      by Th33;
+A3: sup (proj2.:(L~Cage(C,n) /\
+         LSeg(Gauge(C,n)*(Center Gauge(C,n),1),
+              Gauge(C,n)*(Center Gauge(C,n),len Gauge(C,n))))) =
+    sup (proj2.:(L~Cage(C,n) /\
+         Vertical_Line ((E-bound L~Cage(C,n) + W-bound L~Cage(C,n)) / 2)))
+      by A1,Th64;
+A4: (UMP L~Cage(C,n))`2 =
+     sup (proj2.:(L~Cage(C,n) /\
+          Vertical_Line ((E-bound L~Cage(C,n) + W-bound L~Cage(C,n)) / 2)))
+     by Th34;
+    |[ (E-bound L~Cage(C,n) + W-bound L~Cage(C,n)) / 2,
+      sup (proj2.:(L~Cage(C,n) /\
+           LSeg(Gauge(C,n)*(Center Gauge(C,n),1),
+                Gauge(C,n)*(Center Gauge(C,n),len Gauge(C,n))))) ]|`1
+      = (E-bound L~Cage(C,n) + W-bound L~Cage(C,n)) / 2 &
+    |[ (E-bound L~Cage(C,n) + W-bound L~Cage(C,n)) / 2,
+      sup (proj2.:(L~Cage(C,n) /\
+           LSeg(Gauge(C,n)*(Center Gauge(C,n),1),
+                Gauge(C,n)*(Center Gauge(C,n),len Gauge(C,n))))) ]|`2
+      = sup (proj2.:(L~Cage(C,n) /\
+             LSeg(Gauge(C,n)*(Center Gauge(C,n),1),
+                  Gauge(C,n)*(Center Gauge(C,n),len Gauge(C,n)))))
+      by EUCLID:56;
+    hence thesis by A2,A3,A4,TOPREAL3:11;
+  end;
+
+theorem Th67:
+  0 < n implies
+  LMP L~Cage(C,n) =
+    |[ (E-bound L~Cage(C,n) + W-bound L~Cage(C,n)) / 2,
+      inf (proj2.:(L~Cage(C,n) /\
+           LSeg(Gauge(C,n)*(Center Gauge(C,n),1),
+                Gauge(C,n)*(Center Gauge(C,n),len Gauge(C,n))))) ]|
+  proof
+    assume
+A1:   0 < n;
+A2: (LMP L~Cage(C,n))`1 = (E-bound L~Cage(C,n) + W-bound L~Cage(C,n)) / 2
+      by Th35;
+A3: inf (proj2.:(L~Cage(C,n) /\
+         LSeg(Gauge(C,n)*(Center Gauge(C,n),1),
+              Gauge(C,n)*(Center Gauge(C,n),len Gauge(C,n))))) =
+    inf (proj2.:(L~Cage(C,n) /\
+         Vertical_Line ((E-bound L~Cage(C,n) + W-bound L~Cage(C,n)) / 2)))
+      by A1,Th65;
+A4: (LMP L~Cage(C,n))`2 =
+     inf (proj2.:(L~Cage(C,n) /\
+          Vertical_Line ((E-bound L~Cage(C,n) + W-bound L~Cage(C,n)) / 2)))
+     by Th36;
+    |[ (E-bound L~Cage(C,n) + W-bound L~Cage(C,n)) / 2,
+      inf (proj2.:(L~Cage(C,n) /\
+           LSeg(Gauge(C,n)*(Center Gauge(C,n),1),
+                Gauge(C,n)*(Center Gauge(C,n),len Gauge(C,n))))) ]|`1
+      = (E-bound L~Cage(C,n) + W-bound L~Cage(C,n)) / 2 &
+    |[ (E-bound L~Cage(C,n) + W-bound L~Cage(C,n)) / 2,
+      inf (proj2.:(L~Cage(C,n) /\
+           LSeg(Gauge(C,n)*(Center Gauge(C,n),1),
+                Gauge(C,n)*(Center Gauge(C,n),len Gauge(C,n))))) ]|`2
+      = inf (proj2.:(L~Cage(C,n) /\
+             LSeg(Gauge(C,n)*(Center Gauge(C,n),1),
+                  Gauge(C,n)*(Center Gauge(C,n),len Gauge(C,n)))))
+      by EUCLID:56;
+    hence thesis by A2,A3,A4,TOPREAL3:11;
+  end;
+
+theorem Th68:
+  (UMP C)`2 < (UMP L~Cage(C,n))`2
+  proof
+    set p = UMP L~Cage(C,n),
+        u = UMP C,
+        w = (W-bound C + E-bound C) / 2;
+    assume
+A1:   not thesis;
+A2: u`1 = w by Th33;
+A3: w = (W-bound L~Cage(C,n) + E-bound L~Cage(C,n)) / 2 by JORDAN1G:41;
+    then
+A4: p`1 = w by Th33;
+A5: p = |[p`1,p`2]| & u = |[u`1,u`2]| by EUCLID:57;
+A6: C misses L~Cage(C,n) by JORDAN10:5;
+A7: u in C by Th43;
+A8: p in L~Cage(C,n) by Th43;
+    per cases by A1,REAL_1:def 5;
+    suppose u`2 = p`2;
+    hence thesis by A2,A4,A5,A6,A7,A8,XBOOLE_0:3;
+    end;
+    suppose
+A9:   u`2 > p`2;
+A10: p`2 = sup (proj2.:(L~Cage(C,n) /\ Vertical_Line w)) by A3,Th34;
+A11: proj2.:(L~Cage(C,n) /\ Vertical_Line w) is non empty bounded_above
+      by A3,Th13,Th14;
+    north_halfline p \ {p} is convex by Th7;
+    then
+A12: north_halfline p \ {p} is connected by JORDAN1:9;
+    north_halfline p \ {p} misses L~Cage(C,n)
+    proof
+      assume north_halfline p \ {p} meets L~Cage(C,n);
+      then consider x being set such that
+A13:     x in north_halfline p \ {p} and
+A14:     x in L~Cage(C,n) by XBOOLE_0:3;
+      reconsider x as Point of TOP-REAL 2 by A14;
+A15:   x in north_halfline p by A13,XBOOLE_0:def 4;
+      then
+A16:   x`2 >= p`2 by JORDAN1A:def 2;
+A17:   x`1 = w by A4,A15,JORDAN1A:def 2;
+      not x in {p} by A13,XBOOLE_0:def 4;
+      then x <> p by TARSKI:def 1;
+      then
+A18:   x`2 <> p`2 by A4,A17,TOPREAL3:11;
+      x in Vertical_Line w by A17,JORDAN6:34;
+      then
+A19:   x in L~Cage(C,n) /\ Vertical_Line w by A14,XBOOLE_0:def 3;
+      proj2.x = x`2 by PSCOMP_1:def 29;
+      then x`2 in proj2.:(L~Cage(C,n) /\ Vertical_Line w) by A19,FUNCT_2:43;
+      then x`2 <= p`2 by A10,A11,SEQ_4:def 4;
+      hence contradiction by A18,A16,REAL_1:def 5;
+    end;
+    then
+A20: north_halfline p \ {p} c= UBD L~Cage(C,n) or
+      north_halfline p \ {p} c= BDD L~Cage(C,n) by A12,JORDAN1K:19;
+A21: north_halfline p is not Bounded by JORDAN1C:10;
+    L~Cage(C,n) is Bounded by JORDAN2C:73;
+    then
+A22: BDD L~Cage(C,n) is Bounded by JORDAN2C:114;
+    {p} is Bounded by Th2;
+    then
+A23: north_halfline p \ {p} is not Bounded by A21,JORDAN1I:2;
+A24: UBD L~Cage(C,n) c= UBD C by JORDAN10:13;
+A25: u in north_halfline p by A9,A2,A4,JORDAN1A:def 2;
+    not u in {p} by A9,TARSKI:def 1;
+    then u in north_halfline p \ {p} by A25,XBOOLE_0:def 4;
+    then
+A26: u in UBD L~Cage(C,n) by A23,A20,A22,JORDAN2C:16;
+    UBD C misses C by Th11;
+    hence thesis by A7,A26,A24,XBOOLE_0:3;
+  end;
+  end;
+
+theorem Th69:
+  (LMP C)`2 > (LMP L~Cage(C,n))`2
+  proof
+    set p = LMP L~Cage(C,n),
+        u = LMP C,
+        w = (W-bound C + E-bound C) / 2;
+    assume
+A1:   not thesis;
+A2: u`1 = w by Th35;
+A3: w = (W-bound L~Cage(C,n) + E-bound L~Cage(C,n)) / 2 by JORDAN1G:41;
+    then
+A4: p`1 = w by Th35;
+A5: p = |[p`1,p`2]| & u = |[u`1,u`2]| by EUCLID:57;
+A6: C misses L~Cage(C,n) by JORDAN10:5;
+A7: u in C by Th44;
+A8: p in L~Cage(C,n) by Th44;
+    per cases by A1,REAL_1:def 5;
+    suppose u`2 = p`2;
+    hence thesis by A2,A4,A5,A6,A7,A8,XBOOLE_0:3;
+    end;
+    suppose
+A9:   u`2 < p`2;
+A10: p`2 = inf (proj2.:(L~Cage(C,n) /\ Vertical_Line w)) by A3,Th36;
+A11: proj2.:(L~Cage(C,n) /\ Vertical_Line w) is non empty bounded_below
+      by A3,Th13,Th14;
+    south_halfline p \ {p} is convex by Th8;
+    then
+A12: south_halfline p \ {p} is connected by JORDAN1:9;
+    south_halfline p \ {p} misses L~Cage(C,n)
+    proof
+      assume south_halfline p \ {p} meets L~Cage(C,n);
+      then consider x being set such that
+A13:     x in south_halfline p \ {p} and
+A14:     x in L~Cage(C,n) by XBOOLE_0:3;
+      reconsider x as Point of TOP-REAL 2 by A14;
+A15:   x in south_halfline p by A13,XBOOLE_0:def 4;
+      then
+A16:   x`2 <= p`2 by JORDAN1A:def 4;
+A17:   x`1 = w by A4,A15,JORDAN1A:def 4;
+      not x in {p} by A13,XBOOLE_0:def 4;
+      then x <> p by TARSKI:def 1;
+      then
+A18:   x`2 <> p`2 by A4,A17,TOPREAL3:11;
+      x in Vertical_Line w by A17,JORDAN6:34;
+      then
+A19:   x in L~Cage(C,n) /\ Vertical_Line w by A14,XBOOLE_0:def 3;
+      proj2.x = x`2 by PSCOMP_1:def 29;
+      then x`2 in proj2.:(L~Cage(C,n) /\ Vertical_Line w) by A19,FUNCT_2:43;
+      then x`2 >= p`2 by A10,A11,SEQ_4:def 5;
+      hence contradiction by A18,A16,REAL_1:def 5;
+    end;
+    then
+A20: south_halfline p \ {p} c= UBD L~Cage(C,n) or
+      south_halfline p \ {p} c= BDD L~Cage(C,n) by A12,JORDAN1K:19;
+A21: south_halfline p is not Bounded by JORDAN1C:11;
+    L~Cage(C,n) is Bounded by JORDAN2C:73;
+    then
+A22: BDD L~Cage(C,n) is Bounded by JORDAN2C:114;
+    {p} is Bounded by Th2;
+    then
+A23: south_halfline p \ {p} is not Bounded by A21,JORDAN1I:2;
+A24: UBD L~Cage(C,n) c= UBD C by JORDAN10:13;
+A25: u in south_halfline p by A9,A2,A4,JORDAN1A:def 4;
+    not u in {p} by A9,TARSKI:def 1;
+    then u in south_halfline p \ {p} by A25,XBOOLE_0:def 4;
+    then
+A26: u in UBD L~Cage(C,n) by A23,A20,A22,JORDAN2C:16;
+    UBD C misses C by Th11;
+    hence thesis by A7,A26,A24,XBOOLE_0:3;
+  end;
+  end;
+
+theorem
+  UMP Upper_Arc L~Cage(C,n) in Upper_Arc L~Cage(C,n)
+  proof
+    set w = (W-bound C + E-bound C) / 2;
+    set X = Upper_Arc L~Cage(C,n) /\ Vertical_Line w;
+A1: W-bound Upper_Arc L~Cage(C,n) = W-bound L~Cage(C,n) &
+      E-bound Upper_Arc L~Cage(C,n) = E-bound L~Cage(C,n)
+        by Th26,Th27;
+A2: W-bound L~Cage(C,n) + E-bound L~Cage(C,n) = W-bound C + E-bound C
+      by JORDAN1G:41;
+    then
+A3: proj2.:X is non empty by Th30;
+A4: proj2.:X is closed by A1,A2,Th14;
+    proj2.:X is bounded_above by A1,A2,Th14;
+    then sup (proj2.:X) in proj2.:X by A3,A4,RCOMP_1:30;
+    then consider x being Point of TOP-REAL 2 such that
+A5:   x in X and
+A6:   sup (proj2.:X) = proj2.x by Lm3;
+    x in Vertical_Line w by A5,XBOOLE_0:def 3;
+    then
+A7: x`1 = w by JORDAN6:34
+       .= (UMP Upper_Arc L~Cage(C,n))`1 by A1,A2,Th33;
+    x`2 = sup (proj2.:X) by A6,PSCOMP_1:def 29
+       .= (UMP Upper_Arc L~Cage(C,n))`2 by A1,A2,Th34;
+    then x = UMP Upper_Arc L~Cage(C,n) by A7,TOPREAL3:11;
+    hence thesis by A5,XBOOLE_0:def 3;
+  end;
+
+theorem
+  LMP Lower_Arc L~Cage(C,n) in Lower_Arc L~Cage(C,n)
+  proof
+    set w = (W-bound C + E-bound C) / 2;
+    set X = Lower_Arc L~Cage(C,n) /\ Vertical_Line w;
+A1: W-bound Lower_Arc L~Cage(C,n) = W-bound L~Cage(C,n) &
+      E-bound Lower_Arc L~Cage(C,n) = E-bound L~Cage(C,n)
+        by Th28,Th29;
+A2: W-bound L~Cage(C,n) + E-bound L~Cage(C,n) = W-bound C + E-bound C
+      by JORDAN1G:41;
+    then
+A3: proj2.:X is non empty by Th31;
+A4: proj2.:X is closed by A1,A2,Th14;
+    proj2.:X is bounded_below by A1,A2,Th14;
+    then inf (proj2.:X) in proj2.:X by A3,A4,RCOMP_1:31;
+    then consider x being Point of TOP-REAL 2 such that
+A5:   x in X and
+A6:   inf (proj2.:X) = proj2.x by Lm3;
+    x in Vertical_Line w by A5,XBOOLE_0:def 3;
+    then
+A7: x`1 = w by JORDAN6:34
+       .= (LMP Lower_Arc L~Cage(C,n))`1 by A1,A2,Th35;
+    x`2 = inf (proj2.:X) by A6,PSCOMP_1:def 29
+       .= (LMP Lower_Arc L~Cage(C,n))`2 by A1,A2,Th36;
+    then x = LMP Lower_Arc L~Cage(C,n) by A7,TOPREAL3:11;
+    hence thesis by A5,XBOOLE_0:def 3;
+  end;
+
+theorem Th72:
+  0 < n implies ex i being Nat st 1 <= i & i <= len Gauge(C,n) &
+    UMP L~Cage(C,n) = Gauge(C,n)*(Center Gauge(C,n),i)
+  proof
+    assume
+A1:   0 < n;
+    set f = Cage(C,n),
+        G = Gauge(C,n),
+        w = Center G;
+A2: UMP L~f =
+    |[ (E-bound L~f + W-bound L~f) / 2,
+       sup (proj2.:(L~f /\ LSeg(G*(w,1),G*(w,len G)))) ]| by A1,Th66;
+A3: f is_sequence_on G by JORDAN9:def 1;
+A4: LSeg(G*(w,1),G*(w,len G)) meets Upper_Arc L~f by JORDAN1B:34;
+    Upper_Arc L~f c= L~f by JORDAN1A:16;
+    then
+A5: LSeg(G*(w,1),G*(w,len G)) meets L~f by A4,XBOOLE_1:63;
+A6: len G = width G by JORDAN8:def 1;
+A7: 1 <= len G by Lm6;
+    1 <= w & w <= len G by JORDAN1B:12,14;
+    then
+    [w,1] in Indices G & [w,len G] in Indices G by A7,A6,GOBOARD7:10;
+    then consider i such that
+A8:   1 <= i & i <= len G and
+A9:   G*(w,i)`2 = sup(proj2.:(LSeg(G*(w,1),G*(w,len G)) /\ L~f))
+        by A3,A5,A7,JORDAN1F:2;
+    take i;
+    thus 1 <= i & i <= len G by A8;
+A10: (UMP L~f)`2 = sup (proj2.:(L~f /\ LSeg(G*(w,1),G*(w,len G))))
+      by A2,EUCLID:56;
+A11: (UMP L~f)`1 = (E-bound L~f + W-bound L~f) / 2 by Th33;
+    G*(w,i)`1 = (W-bound C + E-bound C) / 2 by A1,A8,A6,JORDAN1G:43;
+    then (UMP L~f)`1 = G*(w,i)`1 by A11,JORDAN1G:41;
+    hence thesis by A9,A10,TOPREAL3:11;
+  end;
+
+theorem Th73:
+  0 < n implies ex i being Nat st 1 <= i & i <= len Gauge(C,n) &
+    LMP L~Cage(C,n) = Gauge(C,n)*(Center Gauge(C,n),i)
+  proof
+    assume
+A1:   0 < n;
+    set f = Cage(C,n),
+        G = Gauge(C,n),
+        w = Center G;
+A2: LMP L~f =
+    |[ (E-bound L~f + W-bound L~f) / 2,
+       inf (proj2.:(L~f /\ LSeg(G*(w,1),G*(w,len G)))) ]| by A1,Th67;
+A3: f is_sequence_on G by JORDAN9:def 1;
+A4: LSeg(G*(w,1),G*(w,len G)) meets Upper_Arc L~f by JORDAN1B:34;
+    Upper_Arc L~f c= L~f by JORDAN1A:16;
+    then
+A5: LSeg(G*(w,1),G*(w,len G)) meets L~f by A4,XBOOLE_1:63;
+A6: len G = width G by JORDAN8:def 1;
+A7: 1 <= len G by Lm6;
+    1 <= w & w <= len G by JORDAN1B:12,14;
+    then
+    [w,1] in Indices G & [w,len G] in Indices G by A7,A6,GOBOARD7:10;
+    then consider i such that
+A8:   1 <= i & i <= len G and
+A9:   G*(w,i)`2 = inf(proj2.:(LSeg(G*(w,1),G*(w,len G)) /\ L~f))
+        by A3,A5,A7,JORDAN1F:1;
+    take i;
+    thus 1 <= i & i <= len G by A8;
+A10: (LMP L~f)`2 = inf (proj2.:(L~f /\ LSeg(G*(w,1),G*(w,len G))))
+      by A2,EUCLID:56;
+A11: (LMP L~f)`1 = (E-bound L~f + W-bound L~f) / 2 by Th35;
+    G*(w,i)`1 = (W-bound C + E-bound C) / 2 by A1,A8,A6,JORDAN1G:43;
+    then (LMP L~f)`1 = G*(w,i)`1 by A11,JORDAN1G:41;
+    hence thesis by A9,A10,TOPREAL3:11;
+  end;
+
+theorem Th74:
+  0 < n implies UMP L~Cage(C,n) = UMP Upper_Arc L~Cage(C,n)
+  proof
+    set f = Cage(C,n);
+    set w = (E-bound C + W-bound C) / 2;
+    assume
+A1:   0 < n;
+    then
+A2: 0+1 <= n by NAT_1:38;
+    then
+A3: n-'1+1 = n by AMI_5:4;
+A4: Upper_Arc L~f c= L~f by JORDAN1A:16;
+A5: W-bound C + E-bound C = W-bound L~f + E-bound L~f by JORDAN1G:41;
+    then
+A6: proj2.:(L~f /\ Vertical_Line w) is bounded_above by Th14;
+A7: W-bound L~f = W-bound Upper_Arc L~f &
+      E-bound L~f = E-bound Upper_Arc L~f by Th26,Th27;
+    then
+A8: Upper_Arc L~f /\ Vertical_Line
+     ((W-bound Upper_Arc L~f + E-bound Upper_Arc L~f) / 2) is non empty
+       by Th30;
+    now
+      assume
+A9:     not UMP L~f in Upper_Arc L~f;
+A10:   UMP L~f in L~f by Th43;
+      Upper_Arc L~f \/ Lower_Arc L~f = L~f by JORDAN6:def 9;
+      then
+A11:   UMP L~f in Lower_Arc L~f by A9,A10,XBOOLE_0:def 2;
+      consider j being Nat such that
+A12:     1 <= j & j <= len Gauge(C,n) and
+A13:     UMP L~f = Gauge(C,n)*(Center Gauge(C,n),j) by A1,Th72;
+      set a = Gauge(C,1)*(Center Gauge(C,1),len Gauge(C,1)),
+          b = Gauge(C,n)*(Center Gauge(C,n),j),
+          L = LSeg(a,b);
+      len Gauge(C,1) = width Gauge(C,1) &
+      len Gauge(C,n) = width Gauge(C,n) by JORDAN8:def 1;
+      then L meets Upper_Arc L~f by A3,A11,A12,A13,JORDAN19:5;
+      then consider x being set such that
+A14:     x in L and
+A15:     x in Upper_Arc L~f by XBOOLE_0:3;
+      reconsider x as Point of TOP-REAL 2 by A14;
+A16:   1 <= len Gauge(C,1) by Lm6;
+      then
+A17:   a`1 = w by JORDAN1A:59;
+A18:   b`1 = w by A1,A12,A17,A16,JORDAN1A:57;
+      then
+A19:   L is vertical by A17,SPPOL_1:37;
+A20:   1 <= Center Gauge(C,n) & Center Gauge(C,n) <= len Gauge(C,n)
+        by JORDAN1B:12,14;
+      1 <= Center Gauge(C,1) & Center Gauge(C,1) <= len Gauge(C,1)
+        by JORDAN1B:12,14; then
+A21:   Gauge(C,1)*(Center Gauge(C,1),len Gauge(C,1))`2 >=
+       Gauge(C,n)*(Center Gauge(C,n),len Gauge(C,n))`2
+        by A2,A20,JORDAN1A:61;
+      len Gauge(C,n) = width Gauge(C,n) by JORDAN8:def 1;
+      then Gauge(C,n)*(Center Gauge(C,n),len Gauge(C,n))`2 >=
+       Gauge(C,n)*(Center Gauge(C,n),j)`2 by A12,A20,SPRECT_3:24;
+      then a`2 >= b`2 by A21,AXIOMS:22;
+      then
+A22:   x`2 >= b`2 by A14,TOPREAL1:10;
+      a in L by TOPREAL1:6;
+      then
+A23:   x`1 = w by A14,A19,A17,SPPOL_1:def 3;
+      then x in Vertical_Line w by JORDAN6:34;
+      then
+A24:   x in Upper_Arc L~f /\ Vertical_Line w by A15,XBOOLE_0:def 3;
+      then
+A25:   (UMP Upper_Arc L~f)`2 >= x`2 by A5,A7,Th41;
+      (UMP L~f)`2 >= (UMP Upper_Arc L~f)`2 by A4,A24,A7,A5,A6,Th56;
+      then b`2 >= x`2 by A13,A25,AXIOMS:22;
+      then b`2 = x`2 by A22,AXIOMS:21;
+      hence contradiction by A9,A13,A15,A18,A23,TOPREAL3:11;
+    end;
+    hence thesis by A4,A8,A6,A5,A7,Th58;
+  end;
+
+theorem Th75:
+  0 < n implies LMP L~Cage(C,n) = LMP Lower_Arc L~Cage(C,n)
+  proof
+    set f = Cage(C,n);
+    set w = (E-bound C + W-bound C) / 2;
+    assume
+A1:   0 < n;
+    then
+A2: 0+1 <= n by NAT_1:38;
+    then
+A3: n-'1+1 = n by AMI_5:4;
+A4: Lower_Arc L~f c= L~f by JORDAN1A:16;
+A5: W-bound C + E-bound C = W-bound L~f + E-bound L~f by JORDAN1G:41;
+    then
+A6: proj2.:(L~f /\ Vertical_Line w) is bounded_below by Th14;
+A7: W-bound L~f = W-bound Lower_Arc L~f &
+      E-bound L~f = E-bound Lower_Arc L~f by Th28,Th29;
+    then
+A8: Lower_Arc L~f /\ Vertical_Line
+     ((W-bound Lower_Arc L~f + E-bound Lower_Arc L~f) / 2) is non empty
+       by Th31;
+    now
+      assume
+A9:     not LMP L~f in Lower_Arc L~f;
+A10:   LMP L~f in L~f by Th44;
+      Upper_Arc L~f \/ Lower_Arc L~f = L~f by JORDAN6:def 9;
+      then
+A11:   LMP L~f in Upper_Arc L~f by A9,A10,XBOOLE_0:def 2;
+      consider j being Nat such that
+A12:     1 <= j & j <= len Gauge(C,n) and
+A13:     LMP L~f = Gauge(C,n)*(Center Gauge(C,n),j) by A1,Th73;
+      set a = Gauge(C,1)*(Center Gauge(C,1),1),
+          b = Gauge(C,n)*(Center Gauge(C,n),j),
+          L = LSeg(a,b);
+A14:   len Gauge(C,n) = width Gauge(C,n) by JORDAN8:def 1;
+      then L meets Lower_Arc L~f by A3,A11,A12,A13,JORDAN1J:62;
+      then consider x being set such that
+A15:     x in L and
+A16:     x in Lower_Arc L~f by XBOOLE_0:3;
+      reconsider x as Point of TOP-REAL 2 by A15;
+A17:   1 <= len Gauge(C,1) by Lm6;
+      then
+A18:   a`1 = w by JORDAN1A:59;
+A19:   b`1 = w by A1,A12,A18,A17,JORDAN1A:57;
+      then
+A20:   L is vertical by A18,SPPOL_1:37;
+A21:   1 <= Center Gauge(C,n) & Center Gauge(C,n) <= len Gauge(C,n)
+        by JORDAN1B:12,14;
+      1 <= Center Gauge(C,1) & Center Gauge(C,1) <= len Gauge(C,1)
+        by JORDAN1B:12,14; then
+A22:   Gauge(C,1)*(Center Gauge(C,1),1)`2 <= Gauge(C,n)*(Center Gauge(C,n),1)`2
+        by A2,A21,JORDAN1A:64;
+      Gauge(C,n)*(Center Gauge(C,n),1)`2 <= Gauge(C,n)*(Center Gauge(C,n),j)`2
+        by A12,A21,A14,SPRECT_3:24;
+      then a`2 <= b`2 by A22,AXIOMS:22;
+      then
+A23:   x`2 <= b`2 by A15,TOPREAL1:10;
+      a in L by TOPREAL1:6;
+      then
+A24:   x`1 = w by A15,A20,A18,SPPOL_1:def 3;
+      then x in Vertical_Line w by JORDAN6:34;
+      then
+A25:   x in Lower_Arc L~f /\ Vertical_Line w by A16,XBOOLE_0:def 3;
+      then
+A26:   (LMP Lower_Arc L~f)`2 <= x`2 by A5,A7,Th42;
+      (LMP L~f)`2 <= (LMP Lower_Arc L~f)`2 by A4,A25,A7,A5,A6,Th57;
+      then b`2 <= x`2 by A13,A26,AXIOMS:22;
+      then b`2 = x`2 by A23,AXIOMS:21;
+      hence contradiction by A9,A13,A16,A19,A24,TOPREAL3:11;
+    end;
+    hence thesis by A4,A8,A6,A5,A7,Th59;
+  end;
+
+theorem
+  0 < n implies (UMP C)`2 < (UMP Upper_Arc L~Cage(C,n))`2
+  proof
+    assume 0 < n;
+    then UMP Upper_Arc L~Cage(C,n) = UMP L~Cage(C,n) by Th74;
+    hence thesis by Th68;
+  end;
+
+theorem
+  0 < n implies (LMP Lower_Arc L~Cage(C,n))`2 < (LMP C)`2
+  proof
+    assume 0 < n;
+    then LMP Lower_Arc L~Cage(C,n) = LMP L~Cage(C,n) by Th75;
+    hence thesis by Th69;
+  end;
+
+theorem Th78:
+  i <= j implies (UMP L~Cage(C,j))`2 <= (UMP L~Cage(C,i))`2
+  proof
+    assume
+A1:   i <= j;
+    set w = (E-bound C + W-bound C) / 2,
+        ui = UMP L~Cage(C,i),
+        uj = UMP L~Cage(C,j);
+A2: W-bound L~Cage(C,j) + E-bound L~Cage(C,j) =
+     W-bound C + E-bound C by JORDAN1G:41;
+    then
+A3: uj`2 = sup (proj2.:(L~Cage(C,j) /\ Vertical_Line w)) by Th34;
+A4: W-bound L~Cage(C,i) + E-bound L~Cage(C,i) =
+     W-bound C + E-bound C by JORDAN1G:41;
+    then
+A5: ui`2 = sup (proj2.:(L~Cage(C,i) /\ Vertical_Line w)) by Th34;
+A6: proj2.:(L~Cage(C,j) /\ Vertical_Line w) is non empty bounded_above
+      by A2,Th13,Th14;
+A7: proj2.:(L~Cage(C,i) /\ Vertical_Line w) is non empty bounded_above
+      by A4,Th13,Th14;
+    assume (UMP L~Cage(C,j))`2 > (UMP L~Cage(C,i))`2;
+    then uj`2 - ui`2 > 0 by SQUARE_1:11;
+    then consider r being real number such that
+A8:   r in proj2.:(L~Cage(C,j) /\ Vertical_Line w) and
+A9:   sup (proj2.:(L~Cage(C,j) /\ Vertical_Line w)) - (uj`2 - ui`2) < r
+        by A6,SEQ_4:def 4;
+    consider x being Point of TOP-REAL 2 such that
+A11:   x in L~Cage(C,j) /\ Vertical_Line w and
+A12:   proj2.x = r by A8,Lm3;
+A13: LeftComp(Cage(C,i)) c= LeftComp(Cage(C,j)) by A1,JORDAN1H:55;
+A14: x`2 = r by A12,PSCOMP_1:def 29;
+    north_halfline x misses L~Cage(C,i)
+    proof
+      assume north_halfline x meets L~Cage(C,i);
+      then consider y being set such that
+A15:     y in north_halfline x and
+A16:     y in L~Cage(C,i) by XBOOLE_0:3;
+      reconsider y as Point of TOP-REAL 2 by A16;
+A17:   y`2 >= x`2 by A15,JORDAN1A:def 2;
+A18:   x in Vertical_Line w by A11,XBOOLE_0:def 3;
+      y`1 = x`1 by A15,JORDAN1A:def 2
+         .= w by A18,JORDAN6:34;
+      then y in Vertical_Line w by JORDAN6:34;
+      then
+A19:   y in L~Cage(C,i) /\ Vertical_Line w by A16,XBOOLE_0:def 3;
+      proj2.y = y`2 by PSCOMP_1:def 29;
+      then y`2 in proj2.:(L~Cage(C,i) /\ Vertical_Line w) by A19,FUNCT_2:43;
+      then y`2 <= ui`2 by A5,A7,SEQ_4:def 4;
+      hence contradiction by A17,A3,A9,A14,AXIOMS:22;
+    end;
+    then
+A20: north_halfline x c= UBD L~Cage(C,i) by JORDAN1C:17;
+    x in north_halfline x by JORDAN1C:7;
+    then x in UBD L~Cage(C,i) by A20;
+    then
+A21: x in LeftComp Cage(C,i) by GOBRD14:46;
+    x in L~Cage(C,j) by A11,XBOOLE_0:def 3;
+    then LeftComp Cage(C,j) meets L~Cage(C,j) by A13,A21,XBOOLE_0:3;
+    hence thesis by SPRECT_3:43;
+  end;
+
+theorem Th79:
+  i <= j implies (LMP L~Cage(C,i))`2 <= (LMP L~Cage(C,j))`2
+  proof
+    assume
+A1:   i <= j;
+    set w = (E-bound C + W-bound C) / 2,
+        ui = LMP L~Cage(C,i),
+        uj = LMP L~Cage(C,j);
+A2: W-bound L~Cage(C,j) + E-bound L~Cage(C,j) =
+     W-bound C + E-bound C by JORDAN1G:41;
+    then
+A3: uj`2 = inf (proj2.:(L~Cage(C,j) /\ Vertical_Line w)) by Th36;
+A4: W-bound L~Cage(C,i) + E-bound L~Cage(C,i) =
+     W-bound C + E-bound C by JORDAN1G:41;
+    then
+A5: ui`2 = inf (proj2.:(L~Cage(C,i) /\ Vertical_Line w)) by Th36;
+A6: proj2.:(L~Cage(C,j) /\ Vertical_Line w) is non empty bounded_below
+      by A2,Th13,Th14;
+A7: proj2.:(L~Cage(C,i) /\ Vertical_Line w) is non empty bounded_below
+      by A4,Th13,Th14;
+    assume (LMP L~Cage(C,i))`2 > (LMP L~Cage(C,j))`2;
+    then ui`2 - uj`2 > 0 by SQUARE_1:11;
+    then consider r being real number such that
+A8:   r in proj2.:(L~Cage(C,j) /\ Vertical_Line w) and
+A9:   r < inf (proj2.:(L~Cage(C,j) /\ Vertical_Line w)) + (ui`2 - uj`2)
+        by A6,SEQ_4:def 5;
+    consider x being Point of TOP-REAL 2 such that
+A11:   x in L~Cage(C,j) /\ Vertical_Line w and
+A12:   proj2.x = r by A8,Lm3;
+A13: LeftComp(Cage(C,i)) c= LeftComp(Cage(C,j)) by A1,JORDAN1H:55;
+A14: x`2 = r by A12,PSCOMP_1:def 29;
+    south_halfline x misses L~Cage(C,i)
+    proof
+      assume south_halfline x meets L~Cage(C,i);
+      then consider y being set such that
+A15:     y in south_halfline x and
+A16:     y in L~Cage(C,i) by XBOOLE_0:3;
+      reconsider y as Point of TOP-REAL 2 by A16;
+A17:   y`2 <= x`2 by A15,JORDAN1A:def 4;
+A18:   x in Vertical_Line w by A11,XBOOLE_0:def 3;
+      y`1 = x`1 by A15,JORDAN1A:def 4
+         .= w by A18,JORDAN6:34;
+      then y in Vertical_Line w by JORDAN6:34;
+      then
+A19:   y in L~Cage(C,i) /\ Vertical_Line w by A16,XBOOLE_0:def 3;
+      proj2.y = y`2 by PSCOMP_1:def 29;
+      then y`2 in proj2.:(L~Cage(C,i) /\ Vertical_Line w) by A19,FUNCT_2:43;
+      then y`2 >= ui`2 by A5,A7,SEQ_4:def 5;
+      hence contradiction by A17,A3,A9,A14,AXIOMS:22;
+    end;
+    then
+A20: south_halfline x c= UBD L~Cage(C,i) by JORDAN1C:16;
+    x in south_halfline x by JORDAN1C:7;
+    then x in UBD L~Cage(C,i) by A20;
+    then
+A21: x in LeftComp Cage(C,i) by GOBRD14:46;
+    x in L~Cage(C,j) by A11,XBOOLE_0:def 3;
+    then LeftComp Cage(C,j) meets L~Cage(C,j) by A13,A21,XBOOLE_0:3;
+    hence thesis by SPRECT_3:43;
+  end;
+
+theorem
+  0 < i & i <= j implies
+  (UMP Upper_Arc L~Cage(C,j))`2 <= (UMP Upper_Arc L~Cage(C,i))`2
+  proof
+    assume that
+A1:   0 < i and
+A2:   i <= j;
+    0 < j by A1,A2;
+    then (UMP Upper_Arc L~Cage(C,i))`2 = (UMP L~Cage(C,i))`2 &
+    (UMP Upper_Arc L~Cage(C,j))`2 = (UMP L~Cage(C,j))`2 by A1,Th74;
+    hence thesis by A2,Th78;
+  end;
+
+theorem
+  0 < i & i <= j implies
+  (LMP Lower_Arc L~Cage(C,i))`2 <= (LMP Lower_Arc L~Cage(C,j))`2
+  proof
+    assume that
+A1:   0 < i and
+A2:   i <= j;
+    0 < j by A1,A2;
+    then (LMP Lower_Arc L~Cage(C,i))`2 = (LMP L~Cage(C,i))`2 &
+    (LMP Lower_Arc L~Cage(C,j))`2 = (LMP L~Cage(C,j))`2 by A1,Th75;
+    hence thesis by A2,Th79;
+  end;
+
