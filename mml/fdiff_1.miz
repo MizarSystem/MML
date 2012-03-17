@@ -14,7 +14,7 @@ environ
       PARTFUN2, RFUNCT_2, RCOMP_1, FCONT_1;
  constructors REAL_1, NAT_1, ABSVALUE, SEQ_2, SEQM_3, PARTFUN1, PARTFUN2,
       RFUNCT_2, RCOMP_1, FCONT_1, MEMBERED, COMPLEX1, XBOOLE_0;
- registrations RCOMP_1, RELSET_1, XREAL_0, SEQ_1, NAT_1, MEMBERED;
+ registrations RCOMP_1, RELSET_1, XREAL_0, SEQ_1, NAT_1, MEMBERED, FUNCT_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, FCONT_1, XBOOLE_0;
  theorems AXIOMS, TARSKI, NAT_1, REAL_1, FUNCT_1, ABSVALUE, ZFMISC_1, SEQ_1,
@@ -998,17 +998,13 @@ f is_differentiable_on Z & for x st x in Z holds (f`|Z).x = 1
 proof let f,Z;
  assume that A1: Z c= dom f and A2: f|Z = id Z;
  defpred P[set] means $1 in REAL;
- deffunc F(Real) = $1;
  deffunc G(Real) = 0;
- consider L being PartFunc of REAL,REAL such that A3:
- (for r holds r in dom L iff P[r]) &
- for r st r in dom L holds L.r=F(r) from SEQ_1:sch 3;
-     dom L = REAL by A3,Th1;
- then A4: L is total by PARTFUN1:def 4;
-    now let p;  p in dom L by A3;
-  hence L.p = 1*p by A3;
+ reconsider L = id REAL as PartFunc of REAL,REAL;
+A3: dom L = REAL by RELAT_1:71;
+    now let p;
+  thus L.p = 1*p by FUNCT_1:35;
  end;
- then reconsider L as LINEAR by A4,Def4;
+ then reconsider L as LINEAR by Def4;
  consider R being PartFunc of REAL,REAL such that A5:
  (for r holds r in dom R iff P[r]) &
  for r st r in dom R holds R.r= G(r) from SEQ_1:sch 3;
@@ -1035,10 +1031,10 @@ proof let f,Z;
 ;
   A16: N c= dom f by A1,A15,XBOOLE_1:1;
      for x st x in N holds f.x - f.x0 = L.(x-x0) + R.(x-x0)
-  proof let x; A17: x-x0 in dom L by A3;
+  proof let x;
    assume x in N; hence f.x - f.x0 = x - f.x0 by A11,A15
     .= x - x0 by A11,A14
-    .= L.(x-x0)+0 by A3,A17
+    .= L.(x-x0)+0 by FUNCT_1:35
     .= L.(x-x0) + R.(x-x0) by A5,A6;
   end;
   hence f is_differentiable_in x0 by A16,Def5;
@@ -1056,15 +1052,15 @@ proof let f,Z;
     by RCOMP_1:38;
   A24: N2 c= dom f by A21,A23,XBOOLE_1:1;
   A25: for x st x in N2 holds f.x - f.x0 = L.(x-x0) + R.(x-x0)
-  proof let x; A26: x-x0 in dom L by A3;
+  proof let x;
    assume x in N2; then x in N1 by A23; hence f.x - f.x0 = x - f.x0 by A11,A22
     .= x - x0 by A11,A19
-    .= L.(x-x0)+0 by A3,A26
+    .= L.(x-x0)+0 by FUNCT_1:35
     .= L.(x-x0) + R.(x-x0) by A5,A6;
-  end; A27: 1 in dom L by A3;
+  end;
  thus (f`|Z).x0 = diff(f,x0) by A18,A19,Def8
   .= L.1 by A20,A24,A25,Def6
-  .= 1 by A3,A27;
+  .= 1 by FUNCT_1:35;
 end;
 
 theorem

@@ -1,6 +1,6 @@
 ;;; mizar.el --- mizar.el -- Mizar Mode for Emacs
 ;;
-;; $Revision: 1.105 $
+;; $Revision: 1.106 $
 ;;
 ;;; License:     GPL (GNU GENERAL PUBLIC LICENSE)
 ;;
@@ -5362,17 +5362,23 @@ move backward across N balanced expressions."
   (if (< arg 0)
       (backward-sexp 1)
     (if (looking-at hs-block-start-regexp)
-	(progn
+	(let (beg1 end1 result1 prec)
 	  (forward-sexp 1)
 	  (setq count 1)
-	  (while (> count 0)
+	  (while (and (> count 0) (not (eobp)))
 	    (re-search-forward both-regexps (point-max) t nil)
 	    (setq beg1  (match-beginning 0))
 	    (setq end1 (match-end 0))
 	    (setq result1 (buffer-substring-no-properties beg1 end1))
-	    (if (string-match hs-block-start-regexp result1)
-		(setq count (+  count 1))
-	      (setq count (- count 1))))
+	    ;; check for preceding comment 
+	    (forward-line 0)
+	    (setq prec  (buffer-substring-no-properties (point) beg1))
+	    (if (string-match "::" prec)
+		(forward-line 1)
+	      (goto-char end1)
+	      (if (string-match hs-block-start-regexp result1)
+		  (setq count (+  count 1))
+		(setq count (- count 1)))))
 	  (goto-char (match-end 0)))
 	  ))))
 
@@ -5382,7 +5388,7 @@ move backward across N balanced expressions."
   (point)))
 
 
-(let ((mizar-mode-hs-info '(mizar-mode ".*\\b\\(proof\\|now\\|hereby\\|case\\|suppose\\)[ \n\r]" "end;" "::+" mizar-hs-forward-sexp mizar-hs-adjust-block-beginning)))
+(let ((mizar-mode-hs-info '(mizar-mode "\\b\\(proof\\|now\\|hereby\\|case\\|suppose\\)[ \n\r]" "end;" "::+" mizar-hs-forward-sexp mizar-hs-adjust-block-beginning)))
     (if (not (member mizar-mode-hs-info hs-special-modes-alist))
             (setq hs-special-modes-alist
 	                  (cons mizar-mode-hs-info hs-special-modes-alist))))

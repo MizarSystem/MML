@@ -10,10 +10,11 @@ environ
       RELAT_1, BOOLE, PBOOLE, TREES_9, CIRCCOMB, MSAFREE2, TREES_1, FINSEQ_1,
       QC_LANG1, TREES_3, FINSET_1, TREES_2, PARTFUN1, FUNCT_4, MCART_1,
       PRALG_1, TDGROUP, CARD_3, PRE_CIRC, FACIRC_1, FUNCT_6, PUA2MSS1,
-      ISOCAT_1, CQC_SIM1, CIRCUIT1, CIRCUIT2, CIRCTRM1;
+      ISOCAT_1, CQC_SIM1, CIRCUIT1, CIRCUIT2, CIRCTRM1, FUNCT_3;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XREAL_0, NAT_1,
       RELAT_1, FUNCT_1, FUNCT_2, FINSEQ_1, FINSET_1, PARTFUN1, MCART_1,
-      FUNCT_4, CARD_3, FUNCOP_1, STRUCT_0, PBOOLE, MSUALG_1, PRE_CIRC,
+      FUNCT_4, CARD_3, FUNCOP_1, FUNCT_3,
+      STRUCT_0, PBOOLE, MSUALG_1, PRE_CIRC,
       MSAFREE2, CIRCUIT1, CIRCUIT2, CIRCCOMB, FACIRC_1, TREES_1, TREES_2,
       TREES_3, TREES_4, TREES_9, MSATERM, PUA2MSS1;
  constructors TREES_9, MSATERM, FINSEQ_4, MSUALG_3, CIRCUIT1, CIRCUIT2,
@@ -72,16 +73,6 @@ then A3:    t.{} = [o,the carrier of S] by TREES_4:def 4;
    hence thesis;
   end;
 
-definition let D be non empty set;
- let X be Subset of D;
- redefine func id X -> Function of X, D;
-  correctness
-   proof
-        dom id X = X & rng id X = X & X c= D by RELAT_1:71;
-    hence thesis by FUNCT_2:4;
-   end;
-end;
-
 definition
  let S be non empty non void ManySortedSign;
  let V be non-empty ManySortedSet of the carrier of S;
@@ -91,7 +82,7 @@ Def1:
   ManySortedSign(#
         Subtrees X, [:the OperSymbols of S,{the carrier of S}:]-Subtrees X,
         [:the OperSymbols of S,{the carrier of S}:]-ImmediateSubtrees X,
-        id ([:the OperSymbols of S,{the carrier of S}:]-Subtrees X)
+        incl([:the OperSymbols of S,{the carrier of S}:]-Subtrees X)
        #);
   correctness;
 end;
@@ -106,7 +97,7 @@ registration
        X-CircuitStr = ManySortedSign(#
         Subtrees X, [:the OperSymbols of S,{the carrier of S}:]-Subtrees X,
         [:the OperSymbols of S,{the carrier of S}:]-ImmediateSubtrees X,
-        id ([:the OperSymbols of S,{the carrier of S}:]-Subtrees X)
+        incl([:the OperSymbols of S,{the carrier of S}:]-Subtrees X)
        #) by Def1;
    hence the ResultSort of X-CircuitStr = id the OperSymbols of X-CircuitStr;
   end;
@@ -126,7 +117,7 @@ theorem Th2:
 A1:  C-Subtrees X is empty iff for t holds t is root & not t.{} in C
      by TREES_9:26;
        X-CircuitStr = ManySortedSign(# Subtrees X, C-Subtrees X,
-        C-ImmediateSubtrees X, id(C-Subtrees X)#) by Def1;
+        C-ImmediateSubtrees X, incl(C-Subtrees X)#) by Def1;
    hence thesis by A1,MSUALG_1:def 5;
   end;
 
@@ -163,7 +154,7 @@ theorem Th4:
       s is CompoundTerm of S,V)
   proof set C = [:the OperSymbols of S, {the carrier of S}:];
 A1:  X-CircuitStr = ManySortedSign(# Subtrees X, C-Subtrees X,
-      C-ImmediateSubtrees X, id(C-Subtrees X)#) by Def1;
+      C-ImmediateSubtrees X, incl(C-Subtrees X)#) by Def1;
    hereby let v be Vertex of X-CircuitStr;
     consider t being Element of X, p being Node of t such that
 A2:   v = t|p by A1,TREES_9:20;
@@ -191,7 +182,7 @@ theorem Th5:
      by Th4;
    set C = [:the OperSymbols of S, {the carrier of S}:];
 A1:  X-CircuitStr = ManySortedSign(# Subtrees X, C-Subtrees X,
-      C-ImmediateSubtrees X, id(C-Subtrees X)#) by Def1;
+      C-ImmediateSubtrees X, incl(C-Subtrees X)#) by Def1;
    then consider tt being Element of X, p being Node of tt such that
 A2:  t = tt|p by TREES_9:20;
    assume t is CompoundTerm of S,V;
@@ -209,7 +200,7 @@ theorem Th6:
    let X be SetWithCompoundTerm of S,V;
    let g be Gate of X-CircuitStr;
        X-CircuitStr = ManySortedSign(# Subtrees X, C-Subtrees X,
-      C-ImmediateSubtrees X, id(C-Subtrees X)#) by Def1;
+      C-ImmediateSubtrees X, incl(C-Subtrees X)#) by Def1;
    hence (the ResultSort of X-CircuitStr).g = g by FUNCT_1:35;
    hence the_result_sort_of g = g by MSUALG_1:def 7;
   end;
@@ -221,7 +212,7 @@ registration
  coherence
   proof set C = [:the OperSymbols of S,{the carrier of S}:];
        X-CircuitStr = ManySortedSign(# Subtrees X, C-Subtrees X,
-        C-ImmediateSubtrees X, id(C-Subtrees X)#) by Def1;
+        C-ImmediateSubtrees X, incl(C-Subtrees X)#) by Def1;
     then the_arity_of g is FinSequence of Subtrees X;
    hence thesis;
   end;
@@ -271,14 +262,14 @@ theorem Th7:
    proof let t1,t2 be non empty Subset of S-Terms V;
     set C = [:the OperSymbols of S, {the carrier of S}:];
 A1:   t1-CircuitStr = ManySortedSign(#Subtrees t1, C-Subtrees t1,
-                   C-ImmediateSubtrees t1, id (C-Subtrees t1)#) &
+                   C-ImmediateSubtrees t1, incl(C-Subtrees t1)#) &
      t2-CircuitStr = ManySortedSign(#Subtrees t2, C-Subtrees t2,
-                   C-ImmediateSubtrees t2, id (C-Subtrees t2)#)
+                   C-ImmediateSubtrees t2, incl(C-Subtrees t2)#)
                     by Def1;
 A2:   dom (C-ImmediateSubtrees t1) = C-Subtrees t1 &
      dom id (C-Subtrees t1) = C-Subtrees t1 &
      dom (C-ImmediateSubtrees t2) = C-Subtrees t2 &
-     dom id (C-Subtrees t2) = C-Subtrees t2 by FUNCT_2:def 1;
+     dom id (C-Subtrees t2) = C-Subtrees t2 by RELAT_1:71, FUNCT_2:def 1;
     hereby let x be set; assume
          x in (dom the Arity of t1-CircuitStr) /\ dom the Arity of t2
 -CircuitStr
@@ -433,13 +424,13 @@ theorem Th11:
    set X = X1 \/ X2;
    set C = [:the OperSymbols of S,{the carrier of S}:];
 A1:  X-CircuitStr = ManySortedSign(#
-        Subtrees X, C-Subtrees X, C-ImmediateSubtrees X, id (C-Subtrees X)#)
+        Subtrees X, C-Subtrees X, C-ImmediateSubtrees X, incl(C-Subtrees X)#)
       by Def1;
 A2:  X1-CircuitStr = ManySortedSign(#
-     Subtrees X1, C-Subtrees X1, C-ImmediateSubtrees X1, id (C-Subtrees X1)#)
+     Subtrees X1, C-Subtrees X1, C-ImmediateSubtrees X1, incl(C-Subtrees X1)#)
       by Def1;
 A3:  X2-CircuitStr = ManySortedSign(#
-     Subtrees X2, C-Subtrees X2, C-ImmediateSubtrees X2, id (C-Subtrees X2)#)
+     Subtrees X2, C-Subtrees X2, C-ImmediateSubtrees X2, incl(C-Subtrees X2)#)
       by Def1;
 A4:  Subtrees X = (Subtrees X1) \/ Subtrees X2 by Th8;
 A5:  C-Subtrees X = (C-Subtrees X1) \/ (C-Subtrees X2) by Th9;
@@ -471,7 +462,7 @@ theorem Th12:
 then A1:  InputVertices G = (the carrier of G) \ the OperSymbols of G
       by MSAFREE2:def 2;
 A2:  X-CircuitStr = ManySortedSign(# Subtrees X, C-Subtrees X,
-        C-ImmediateSubtrees X, id(C-Subtrees X)#) by Def1;
+        C-ImmediateSubtrees X, incl(C-Subtrees X)#) by Def1;
    let x be set;
    hereby assume A3:x in InputVertices (X-CircuitStr);
 then A4:   x in the carrier of G & not x in the OperSymbols of G by A1,
@@ -509,7 +500,7 @@ theorem Th13:
    let X be SetWithCompoundTerm of S,V;
    let g be Gate of X-CircuitStr;
 A1:  X-CircuitStr = ManySortedSign(# Subtrees X, C-Subtrees X,
-      C-ImmediateSubtrees X, id(C-Subtrees X)#) by Def1;
+      C-ImmediateSubtrees X, incl(C-Subtrees X)#) by Def1;
    then reconsider p = (C-ImmediateSubtrees X).g as Element of (Subtrees X)*
      by FUNCT_2:7;
    reconsider p as FinSequence of Subtrees X by FINSEQ_1:def 11;
@@ -693,7 +684,7 @@ theorem Th14:
    reconsider f = g as CompoundTerm of S,V by Th4;
    set C = [:the OperSymbols of S, {the carrier of S}:];
        t-CircuitStr = ManySortedSign(# Subtrees t, C-Subtrees t,
-      C-ImmediateSubtrees t, id(C-Subtrees t)#) by Def1;
+      C-ImmediateSubtrees t, incl(C-Subtrees t)#) by Def1;
    then reconsider ag = the_arity_of g as FinSequence of Subtrees t;
 A1:  g = (f.{})-tree ag by Th13;
    let o be OperSymbol of S; assume
@@ -1034,7 +1025,7 @@ definition
  let s be State of X-Circuit A;
  set C = [:the OperSymbols of S, {the carrier of S}:];
 A1:   X-CircuitStr = ManySortedSign(# Subtrees X, C-Subtrees X,
-       C-ImmediateSubtrees X, id(C-Subtrees X)#) by Def1;
+       C-ImmediateSubtrees X, incl(C-Subtrees X)#) by Def1;
 A2:   X-CircuitA = MSAlgebra(#X-CircuitSortsA,X-CircuitCharactA#) by Def6;
    defpred P[set,set,set] means
     root-tree [$2,$1] in Subtrees X implies $3 = s.root-tree [$2,$1];
@@ -1111,7 +1102,7 @@ theorem Th22:
 A1:  X-CircuitStr = ManySortedSign(#Subtrees X,
         [:the OperSymbols of S,{the carrier of S}:]-Subtrees X,
         [:the OperSymbols of S,{the carrier of S}:]-ImmediateSubtrees X,
-        id ([:the OperSymbols of S,{the carrier of S}:]-Subtrees X)#)
+        incl([:the OperSymbols of S,{the carrier of S}:]-Subtrees X)#)
       by Def1;
      defpred P[finite DecoratedTree] means $1 in Subtrees X implies
       Following(q, 1+height dom $1) is_stable_at $1 &
@@ -1268,7 +1259,7 @@ A1: not ex t being Term of S,V, o being OperSymbol of S st
 A2:  X-CircuitStr = ManySortedSign(#Subtrees X,
         [:the OperSymbols of S,{the carrier of S}:]-Subtrees X,
         [:the OperSymbols of S,{the carrier of S}:]-ImmediateSubtrees X,
-        id ([:the OperSymbols of S,{the carrier of S}:]-Subtrees X)#)
+        incl([:the OperSymbols of S,{the carrier of S}:]-Subtrees X)#)
       by Def1;
     defpred P[finite DecoratedTree] means $1 in Subtrees X implies
      Following(q, height dom $1) is_stable_at $1 &
@@ -2281,7 +2272,7 @@ A5: t in Subtrees X;
       X-CircuitStr = ManySortedSign(#
         Subtrees X, [:the OperSymbols of S,{the carrier of S}:]-Subtrees X,
         [:the OperSymbols of S,{the carrier of S}:]-ImmediateSubtrees X,
-        id ([:the OperSymbols of S,{the carrier of S}:]-Subtrees X)
+        incl([:the OperSymbols of S,{the carrier of S}:]-Subtrees X)
        #) by Def1;
    then reconsider t' = t as Vertex of X-CircuitStr by A5;
 A6: Following(s', 1+height dom t) is_stable_at t' &
@@ -2322,7 +2313,7 @@ A5: f, g form_morphism_between X-CircuitStr, G by A2,Def12;
        X-CircuitStr = ManySortedSign(#
         Subtrees X, [:the OperSymbols of S,{the carrier of S}:]-Subtrees X,
         [:the OperSymbols of S,{the carrier of S}:]-ImmediateSubtrees X,
-        id ([:the OperSymbols of S,{the carrier of S}:]-Subtrees X)
+        incl([:the OperSymbols of S,{the carrier of S}:]-Subtrees X)
        #) by Def1;
    then reconsider t' = t as Vertex of X-CircuitStr by A4;
    reconsider v = f.t' as Vertex of G by A5,Th31;

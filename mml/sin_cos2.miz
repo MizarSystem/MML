@@ -14,64 +14,49 @@ environ
       PARTFUN1, SEQ_2, SEQM_3, RCOMP_1, RFUNCT_1, RFUNCT_2, SIN_COS, SEQ_1,
       BINOP_2;
  constructors NAT_1, COMSEQ_3, REAL_1, SEQ_2, RCOMP_1, FINSEQ_4, FCONT_1,
-      RFUNCT_1, FDIFF_1, GOBOARD1, SQUARE_1, PREPOWER, PARTFUN1, RFUNCT_2,
-      SIN_COS, MEMBERED, BINOP_2;
+      RFUNCT_1, FDIFF_1, SQUARE_1, PREPOWER, PARTFUN1, RFUNCT_2, SIN_COS,
+      MEMBERED, BINOP_2;
  registrations XREAL_0, RELSET_1, FDIFF_1, RCOMP_1, SEQ_1, MEMBERED, SQUARE_1,
       SIN_COS;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  theorems AXIOMS, REAL_1, REAL_2, SEQ_1, SEQM_3, SEQ_4, SQUARE_1, FINSEQ_4,
       RCOMP_1, FUNCT_1, FDIFF_1, FDIFF_2, FCONT_3, TARSKI, FUNCT_2, RFUNCT_1,
       SUBSET_1, RFUNCT_2, RELSET_1, PARTFUN1, ROLLE, SIN_COS, NEWTON, XREAL_0,
-      TOPREAL5, JORDAN6, RELAT_1, XBOOLE_0, XCMPLX_0, XCMPLX_1, BINOP_2;
+      RELAT_1, XBOOLE_0, XCMPLX_0, XCMPLX_1, BINOP_2;
  schemes NAT_1, PARTFUN2;
 
 begin :: Monotone increasing and monotone decreasing of sine and cosine.
 
-reserve p,q,r,th for real number;
-reserve n for Nat;
-
-Lm1:
-( for a, b be real number holds
-  (for th holds th in [.a,b.] iff a<=th & th<=b) &
-  (for th holds th in ].a,b.[ iff a<th & th<b) ) &
- (for x, y be real number st x <y holds
-  (for a be real number st a>0 holds
-  (a * x < a * y & x/a < y/a)))
- &
- (for x, y be real number st x < y & 0< x holds 1 < y/x)
-by JORDAN6:45,REAL_1:70,73,REAL_2:142,TOPREAL5:1;
+ reserve p,q,r,th for real number;
+ reserve n for Nat;
 
 Lm2:
 0 < PI/2 & PI/2 < PI & PI < 3/2*PI & 3/2*PI < 2*PI
 proof
- A1: 0 < PI/2
+ thus A1: 0 < PI/2
  proof
-    PI in ].0, 4.[ by SIN_COS:def 30;
- then 0< PI & PI < 4 by Lm1;
+ PI in ].0, 4.[ by SIN_COS:def 30;
+ then 0< PI & PI < 4 by RCOMP_1:47;
  then 0/2 <PI/2 by REAL_1:73;
  hence 0< PI/2;
  end;
- A2: PI/2 < PI
+ thus A2: PI/2 < PI
  proof
     0 + PI/2 < PI/2 + PI/2 by A1,REAL_1:53;
  hence PI/2 < PI;
  end;
- A3: PI < 3/2*PI
+ thus A3: PI < 3/2*PI
  proof
   PI/2 + PI/2 < PI + PI/2 by A2,REAL_1:53;
  hence thesis;
  end;
-    3/2*PI < 2*PI
- proof
- A4: PI + PI/2 = 3/2*PI;
-    PI/2 + 3/2*PI = 2*PI;
- hence 3/2*PI < 2*PI by A3,A4,REAL_1:53;
- end;
- hence thesis by A1,A2,A3;
+A4: PI + PI/2 = 3/2*PI;
+  PI/2 + 3/2*PI = 2*PI;
+  hence 3/2*PI < 2*PI by A3,A4,REAL_1:53;
 end;
 
- theorem Th1:
- p>=0 & r>=0 implies p+r>=2*sqrt(p*r)
+theorem Th1:
+  p>=0 & r>=0 implies p+r>=2*sqrt(p*r)
  proof
  assume A1:p>=0 & r>=0;
  A2:(sqrt p - sqrt r)^2>=0 by SQUARE_1:72;
@@ -86,7 +71,7 @@ end;
  end;
 
 theorem
-   sin is_increasing_on ].0,PI/2.[
+  sin is_increasing_on ].0,PI/2.[
 proof
 A1: sin is_differentiable_on ].0,PI/2.[ by FDIFF_1:34,SIN_COS:73;
    for th be Real st th in ].0,PI/2.[ holds 0 < diff(sin,th)
@@ -103,30 +88,26 @@ Lm3:
 for th st th in ].0,PI/2.[ holds 0 < sin.th
 proof
 let th; assume th in ].0,PI/2.[;
-then 0 < th & th < PI/2 by Lm1;
+then 0 < th & th < PI/2 by RCOMP_1:47;
 then 0-th<0 & -th>-PI/2 by REAL_1:50,REAL_2:105;
-then -th+PI/2 < 0+PI/2
-   & -th+PI/2 > -PI/2+ PI/2 by REAL_1:53;
-then PI/2-th in ].0,PI/2.[ by Lm1;
+then -th+PI/2 < 0+PI/2 & -th+PI/2 > -PI/2+ PI/2 by REAL_1:53;
+then PI/2-th in ].0,PI/2.[ by RCOMP_1:47;
 then cos.(PI/2-th) > 0 by SIN_COS:85;
 hence sin.th > 0 by SIN_COS:83;
 end;
 
 theorem
-   sin is_decreasing_on ].PI/2,PI.[
+  sin is_decreasing_on ].PI/2,PI.[
 proof
 A1: sin is_differentiable_on ].PI/2,PI.[ by FDIFF_1:34,SIN_COS:73;
    for th1 be Real st th1 in ].PI/2,PI.[ holds 0 > diff(sin,th1)
  proof
- let th1 be Real; assume
-     th1 in ].PI/2,PI.[;
- then PI/2 < th1 & th1 < PI by Lm1;
+ let th1 be Real; assume th1 in ].PI/2,PI.[;
+ then PI/2 < th1 & th1 < PI by RCOMP_1:47;
  then PI/2 - PI/2 < th1 - PI/2
  & th1 - PI/2 < PI - PI/2 by REAL_1:54;
-
- then A2: th1-PI/2 in ].0,PI/2.[ by Lm1;
- A3:
- diff(sin,(th1))=cos.(PI/2+(th1-PI/2)) by SIN_COS:73
+ then A2: th1-PI/2 in ].0,PI/2.[ by RCOMP_1:47;
+A3: diff(sin,(th1))=cos.(PI/2+(th1-PI/2)) by SIN_COS:73
                .=-sin.(th1-PI/2) by SIN_COS:83;
     sin.(th1-PI/2) > 0 by A2,Lm3;
  then 0-sin.(th1-PI/2) < 0 by REAL_2:105;
@@ -136,7 +117,7 @@ hence thesis by A1,Lm2,ROLLE:10;
 end;
 
 theorem
-   cos is_decreasing_on ].0,PI/2.[
+  cos is_decreasing_on ].0,PI/2.[
 proof
  A1: cos is_differentiable_on ].0,PI/2.[ by FDIFF_1:34,SIN_COS:72;
     for th be Real st th in ].0,PI/2.[ holds diff(cos,th) < 0
@@ -144,7 +125,7 @@ proof
   let th be Real such that
   A2: th in ].0,PI/2.[;
   A3: diff(cos,th) = -sin.(th) by SIN_COS:72;
-     0 < sin.(th) by A2,Lm3;
+   0 < sin.(th) by A2,Lm3;
   then 0-sin.(th) < 0 by REAL_2:105;
   hence diff(cos,th) < 0 by A3;
   end;
@@ -152,16 +133,16 @@ hence thesis by A1,Lm2,ROLLE:10;
 end;
 
 theorem
-   cos is_decreasing_on ].PI/2,PI.[
+  cos is_decreasing_on ].PI/2,PI.[
 proof
- A1: cos is_differentiable_on ].PI/2,PI.[ by FDIFF_1:34,SIN_COS:72;
+A1: cos is_differentiable_on ].PI/2,PI.[ by FDIFF_1:34,SIN_COS:72;
     for th be Real st th in ].PI/2,PI.[ holds diff(cos,th) < 0
   proof
   let th be Real; assume th in ].PI/2,PI.[;
-   then PI/2 < th & th < PI by Lm1;
+   then PI/2 < th & th < PI by RCOMP_1:47;
    then PI/2 - PI/2 < th - PI/2
    & th - PI/2 < PI - PI/2 by REAL_1:54;
-   then A2: th-PI/2 in ].0,PI/2.[ by Lm1;
+   then A2: th-PI/2 in ].0,PI/2.[ by RCOMP_1:47;
    A3:diff(cos,(th))=-sin.(PI/2+(th-PI/2)) by SIN_COS:72
                  .=-cos.(th-PI/2) by SIN_COS:83;
       cos.(th-PI/2) > 0 by A2,SIN_COS:85;
@@ -172,7 +153,7 @@ hence thesis by A1,Lm2,ROLLE:10;
 end;
 
 theorem
-   sin is_decreasing_on ].PI,3/2*PI.[
+  sin is_decreasing_on ].PI,3/2*PI.[
 proof
 A1: sin is_differentiable_on ].PI,3/2*PI.[ by FDIFF_1:34,SIN_COS:73;
    for th be Real st th in ].PI,3/2*PI.[ holds diff(sin,(th))<0
@@ -181,10 +162,9 @@ A1: sin is_differentiable_on ].PI,3/2*PI.[ by FDIFF_1:34,SIN_COS:73;
  A2:th in ].PI,3/2*PI.[;
  A3:diff(sin,(th))= cos.(PI+(th-PI)) by SIN_COS:73
              .= -cos.(th-PI) by SIN_COS:83;
-    PI < th & th < 3/2*PI by A2,Lm1;
- then PI-PI < th-PI
-   & th-PI < 3/2*PI-PI by REAL_1:54;
- then th-PI in ].0,PI/2.[ by Lm1;
+    PI < th & th < 3/2*PI by A2,RCOMP_1:47;
+ then PI-PI < th-PI & th-PI < 3/2*PI-PI by REAL_1:54;
+ then th-PI in ].0,PI/2.[ by RCOMP_1:47;
  then cos.(th-PI) > 0 by SIN_COS:85;
  then 0-cos.(th-PI) < 0 by REAL_2:105;
  hence diff(sin,(th)) < 0 by A3;
@@ -193,7 +173,7 @@ hence thesis by A1,Lm2,ROLLE:10;
 end;
 
 theorem
-   sin is_increasing_on ].3/2*PI,2*PI.[
+  sin is_increasing_on ].3/2*PI,2*PI.[
 proof
 A1: sin is_differentiable_on ].3/2*PI,2*PI.[ by FDIFF_1:34,SIN_COS:73;
    for th be Real st th in ].3/2*PI,2*PI.[ holds diff(sin,(th))>0
@@ -204,17 +184,17 @@ A1: sin is_differentiable_on ].3/2*PI,2*PI.[ by FDIFF_1:34,SIN_COS:73;
              .= -cos.(PI/2+(th-3/2*PI)) by SIN_COS:83
              .= -(-sin.(th-3/2*PI)) by SIN_COS:83
              .= sin.(th-3/2*PI);
-    3/2*PI < th & th < 2*PI by A2,Lm1;
+    3/2*PI < th & th < 2*PI by A2,RCOMP_1:47;
  then 3/2*PI-3/2*PI < th-3/2*PI
    & th-3/2*PI < 2*PI-3/2*PI by REAL_1:54;
- then th-3/2*PI in ].0,PI/2.[ by Lm1;
+ then th-3/2*PI in ].0,PI/2.[ by RCOMP_1:47;
  hence diff(sin,(th)) > 0 by A3,Lm3;
  end;
 hence thesis by A1,Lm2,ROLLE:9;
 end;
 
 theorem
-   cos is_increasing_on ].PI,3/2*PI.[
+  cos is_increasing_on ].PI,3/2*PI.[
 proof
 A1: cos is_differentiable_on ].PI,3/2*PI.[ by FDIFF_1:34,SIN_COS:72;
    for th be Real st th in ].PI,3/2*PI.[ holds diff(cos,(th))>0
@@ -224,9 +204,9 @@ A1: cos is_differentiable_on ].PI,3/2*PI.[ by FDIFF_1:34,SIN_COS:72;
  A3:diff(cos,(th)) = -sin.(PI+(th-PI)) by SIN_COS:72
              .= -(-sin.(th-PI)) by SIN_COS:83
              .= sin.(th-PI);
-    PI < th & th < 3/2*PI by A2,Lm1;
+    PI < th & th < 3/2*PI by A2,RCOMP_1:47;
  then PI-PI < th-PI & th-PI < 3/2*PI-PI by REAL_1:54;
- then th-PI in ].0,PI/2.[ by Lm1;
+ then th-PI in ].0,PI/2.[ by RCOMP_1:47;
  hence diff(cos,(th)) > 0 by A3,Lm3;
 end;
 hence thesis by A1,Lm2,ROLLE:9;
@@ -243,10 +223,10 @@ A1: cos is_differentiable_on ].3/2*PI,2*PI.[ by FDIFF_1:34,SIN_COS:72;
  A3: diff(cos,(th)) = -sin.(PI + (PI/2+(th-3/2*PI))) by SIN_COS:72
                .= -(-sin.(PI/2+(th-3/2*PI))) by SIN_COS:83
                .= cos.(th-3/2*PI) by SIN_COS:83;
-    3/2*PI < th & th < 2*PI by A2,Lm1;
+    3/2*PI < th & th < 2*PI by A2,RCOMP_1:47;
  then 3/2*PI-3/2*PI < th-3/2*PI
    & th-3/2*PI < 2*PI-3/2*PI by REAL_1:54;
- then th-3/2*PI in ].0,PI/2.[ by Lm1;
+ then th-3/2*PI in ].0,PI/2.[ by RCOMP_1:47;
  hence diff(cos,(th)) > 0 by A3,SIN_COS:85;
  end;
 hence thesis by A1,Lm2,ROLLE:9;
@@ -301,9 +281,9 @@ end;
 begin ::Hyperbolic sine, hyperbolic cosine and hyperbolic tangent.
 
 definition
-func sinh -> PartFunc of REAL, REAL means :Def1:
- dom it= REAL & for d being real number holds it.d=(exp.(d) - exp.(-d))/2;
- existence
+  func sinh -> PartFunc of REAL, REAL means :Def1:
+  dom it= REAL & for d being real number holds it.d=(exp.(d) - exp.(-d))/2;
+  existence
   proof
     defpred X[set] means $1 in REAL;
     deffunc U(Real) = (exp.($1) - exp.(-$1))/2;
@@ -314,9 +294,9 @@ PARTFUN2:sch 2;
    take f;
    thus dom(f)=REAL
     proof
-       A3:  dom(f) c=REAL by RELSET_1:12;
-           for x be set st x in REAL holds x in dom f by A1;
-        then REAL c=dom(f) by TARSKI:def 3;
+A3:  dom(f) c=REAL by RELSET_1:12;
+     for x be set st x in REAL holds x in dom f by A1;
+     then REAL c=dom(f) by TARSKI:def 3;
      hence dom(f)=REAL by A3,XBOOLE_0:def 10;
     end;
      let d be real number;
@@ -345,33 +325,31 @@ A4:   d is Real by XREAL_0:def 1;
   end;
  end;
 
-definition
-let d be number;
- func sinh(d) equals :Def2:
- sinh.d;
-correctness;
+definition let d be number;
+  func sinh(d) equals :Def2:
+  sinh.d;
+  coherence;
 end;
 
 registration
   let d be number;
- cluster sinh(d) -> real;
-coherence
+  cluster sinh(d) -> real;
+  coherence
   proof
-       sinh(d) = sinh.d by Def2;
+    sinh(d) = sinh.d by Def2;
     hence thesis;
   end;
 end;
 
-definition
-let d be number;
- redefine func sinh(d) -> Real;
-coherence by XREAL_0:def 1;
+definition let d be number;
+  redefine func sinh(d) -> Real;
+  coherence by XREAL_0:def 1;
 end;
 
 definition
-func cosh -> PartFunc of REAL, REAL means :Def3:
- dom it= REAL & for d being real number holds it.d=(exp.(d) + exp.(-d))/2;
- existence
+  func cosh -> PartFunc of REAL, REAL means :Def3:
+  dom it = REAL & for d being real number holds it.d=(exp.(d) + exp.(-d))/2;
+  existence
   proof
     defpred X[set] means $1 in REAL;
     deffunc U(Real) = (exp.($1) + exp.(-$1))/2;
@@ -380,13 +358,12 @@ func cosh -> PartFunc of REAL, REAL means :Def3:
    A2:   for d be Element of REAL st d in dom f holds f/.d = U(d)
     from PARTFUN2:sch 2;
    take f;
-
    thus dom(f)=REAL
     proof
-       A3:  dom(f) c=REAL by RELSET_1:12;
-           for x be set st x in REAL holds x in dom f by A1;
-        then REAL c=dom(f) by TARSKI:def 3;
-       hence dom(f)=REAL by A3,XBOOLE_0:def 10;
+A3:  dom(f) c=REAL by RELSET_1:12;
+     for x be set st x in REAL holds x in dom f by A1;
+     then REAL c=dom(f) by TARSKI:def 3;
+     hence dom(f)=REAL by A3,XBOOLE_0:def 10;
     end;
     let d be real number;
 A4:  d is Real by XREAL_0:def 1;
@@ -403,10 +380,10 @@ A4:  d is Real by XREAL_0:def 1;
    assume
    A7: dom f2= REAL & for d being real number holds
    f2.d=(exp.(d) + exp.(-d))/2;
-      for d being Element of REAL st d in REAL holds f1.d = f2.d
+    for d being Element of REAL st d in REAL holds f1.d = f2.d
     proof
-     let d  be Element of REAL such that
-        d in REAL;
+     let d be Element of REAL such that
+     d in REAL;
      thus f1.d=(exp.(d) + exp.(-d))/2 by A6
              .=f2.d by A7;
     end;
@@ -417,25 +394,25 @@ A4:  d is Real by XREAL_0:def 1;
 definition let d be number;
   func cosh(d) equals :Def4:
   cosh.d;
- correctness;
+  coherence;
 end;
 
 registration let d be number;
- cluster cosh(d) -> real;
-coherence
+  cluster cosh(d) -> real;
+  coherence
   proof
-       cosh(d) = cosh.d by Def4;
+    cosh(d) = cosh.d by Def4;
     hence thesis;
   end;
 end;
 
 definition let d be number;
- redefine func cosh(d) -> Real;
-coherence by XREAL_0:def 1;
+  redefine func cosh(d) -> Real;
+  coherence by XREAL_0:def 1;
 end;
 
- definition
- func tanh -> PartFunc of REAL, REAL means :Def5:
+definition
+  func tanh -> PartFunc of REAL, REAL means :Def5:
   dom it= REAL &
   for d being real number holds it.d=(exp.(d) - exp.(-d))/(exp.(d) + exp.(-d));
   existence
@@ -449,9 +426,9 @@ end;
     take f;
     thus dom(f)=REAL
      proof
-       A3:  dom(f) c=REAL by RELSET_1:12;
-            for x be set st x in REAL holds x in dom f by A1;
-         then REAL c=dom(f) by TARSKI:def 3;
+A3:  dom(f) c=REAL by RELSET_1:12;
+      for x be set st x in REAL holds x in dom f by A1;
+      then REAL c=dom(f) by TARSKI:def 3;
       hence dom(f)=REAL by A3,XBOOLE_0:def 10;
      end;
      let d be real number;
@@ -472,8 +449,8 @@ A4:  d is Real by XREAL_0:def 1;
         f2.d=(exp.(d) - exp.(-d))/(exp.(d) + exp.(-d));
        for d being Element of REAL st d in REAL holds f1.d = f2.d
      proof
-      let d  be Element of REAL such that
-         d in REAL;
+      let d be Element of REAL such that
+      d in REAL;
       thus f1.d=(exp.(d) - exp.(-d))/(exp.(d) + exp.(-d)) by A6
               .=f2.d by A7;
      end;
@@ -481,28 +458,28 @@ A4:  d is Real by XREAL_0:def 1;
    end;
  end;
 
- definition let d be number;
-   func tanh(d) equals :Def6:
-   tanh.d;
-  correctness;
- end;
+definition let d be number;
+  func tanh(d) equals :Def6:
+  tanh.d;
+  coherence;
+end;
 
- registration let d be number;
+registration let d be number;
   cluster tanh(d) -> real;
-  correctness
+  coherence
   proof
-       tanh(d) = tanh.d by Def6;
+    tanh(d) = tanh.d by Def6;
     hence thesis;
   end;
- end;
+end;
 
- definition let d be number;
-   redefine func tanh(d) -> Real;
-  correctness by XREAL_0:def 1;
- end;
+definition let d be number;
+  redefine func tanh(d) -> Real;
+  coherence by XREAL_0:def 1;
+end;
 
- theorem Th12:
- exp.(p+q) = exp.(p) * exp.(q)
+theorem Th12:
+  exp.(p+q) = exp.(p) * exp.(q)
  proof
     exp.(p+q) = exp(p+q) by SIN_COS:def 27
           .= exp(p) * exp(q) by SIN_COS:55
@@ -511,12 +488,12 @@ A4:  d is Real by XREAL_0:def 1;
  hence thesis;
  end;
 
- theorem Th13:
- exp.0 = 1 by SIN_COS:56,def 27;
+theorem Th13:
+  exp.0 = 1 by SIN_COS:56,def 27;
 
- theorem Th14:
- (cosh.p)^2-(sinh.p)^2=1 &
- (cosh.p)*(cosh.p)-(sinh.p)*(sinh.p)=1
+theorem Th14:
+  (cosh.p)^2-(sinh.p)^2=1 &
+  (cosh.p)*(cosh.p)-(sinh.p)*(sinh.p)=1
  proof
   A1: (cosh.p)*(cosh.p)
     = ((exp.(p) + exp.(-p))/2)*(cosh.p) by Def3
@@ -596,7 +573,7 @@ hence thesis;
 end;
 
 theorem Th15:
-cosh.p <> 0 & cosh.p > 0 & cosh.0 = 1
+  cosh.p <> 0 & cosh.p > 0 & cosh.0 = 1
 proof
  A1: cosh.0 = 1
   proof
@@ -617,7 +594,7 @@ proof
 end;
 
 theorem Th16:
-sinh.0 = 0
+  sinh.0 = 0
 proof
    sinh.0 = (exp.0-exp.(-0))/2 by Def1
       .= (1-exp.0)/2 by SIN_COS:56,def 27
@@ -627,7 +604,7 @@ hence thesis;
 end;
 
 theorem Th17:
-tanh.p = (sinh.p)/(cosh.p)
+  tanh.p = (sinh.p)/(cosh.p)
 proof
      (sinh.p)/(cosh.p)
  =((exp.(p) - exp.(-p))/2)/(cosh.p) by Def1
@@ -688,8 +665,7 @@ theorem Th18:
 proof
 A1: (sinh.p)^2 = 1/2*(cosh.(2*p) - 1)
  proof
-      (sinh.p)^2
-  =(sinh.p)*(sinh.p) by SQUARE_1:def 3
+  (sinh.p)^2 = (sinh.p)*(sinh.p) by SQUARE_1:def 3
  .=( (exp.(p) - exp.(-p))/2 )*(sinh.p) by Def1
  .=( (exp.(p) - exp.(-p))/2 )*( (exp.(p) - exp.(-p))/2 ) by Def1
  .=( (exp.(p))*(exp.(p))-(exp.(p))*(exp.(-p))
@@ -711,14 +687,13 @@ A1: (sinh.p)^2 = 1/2*(cosh.(2*p) - 1)
  .=( exp.(2*p) +exp.(-(2*p))+ 2*(-1) )/4
  .=( exp.(2*p) +exp.(-(2*p)) )/(2*2) + ((-1)*2)/(2*2) by XCMPLX_1:63
  .=1/2*( ( exp.(2*p) +exp.(-(2*p)) )/2 ) + ((-1)*2)/(2*2) by XCMPLX_1:104
-
  .=1/2*(cosh.(2*p))+ 1/2*((2*(-1))/2) by Def3
  .=1/2*( cosh.(2*p) - 1 );
  hence thesis;
  end;
-   (cosh.p)^2 = 1/2*(cosh.(2*p) + 1)
+  (cosh.p)^2 = 1/2*(cosh.(2*p) + 1)
  proof
-       (cosh.p)^2
+     (cosh.p)^2
    =(cosh.p)*(cosh.p) by SQUARE_1:def 3
   .=( (exp.(p) + exp.(-p))/2 )*(cosh.p) by Def3
   .=( (exp.(p) + exp.(-p))/2 )*( (exp.(p) + exp.(-p))/2 ) by Def3
@@ -803,7 +778,7 @@ proof
           .= -sinh.p by Def1;
  hence thesis;
  end;
-    tanh.(-p) = -tanh.p
+  tanh.(-p) = -tanh.p
  proof
     tanh.(-p) = (-sinh.p)/(cosh.(-p)) by A2,Th17
           .= -(sinh.p)/(cosh.p) by A1,XCMPLX_1:188
@@ -860,7 +835,7 @@ tanh.(p-r) = (tanh.p - tanh.r)/(1- (tanh.p)*(tanh.r))
 by Lm7,Lm11;
 
 theorem
-    sinh.(2*p) = 2*(sinh.p)*(cosh.p) &
+  sinh.(2*p) = 2*(sinh.p)*(cosh.p) &
  cosh.(2*p) = 2*(cosh.p)^2 - 1 &
  tanh.(2*p) = (2*tanh.p)/(1+(tanh.p)^2)
  proof
@@ -1035,7 +1010,6 @@ SQUARE_1:def 3
  .=sinh.(2*(p/2)) + 2*(sinh.(r/2))*(cosh.(r/2)) by Lm8
  .=sinh.p + sinh.(2*(r/2)) by Lm8
  .=sinh.p + sinh.r;
-
       2*(sinh.(p/2-r/2))*(cosh.(p/2+r/2))
   =2*( (sinh.(p/2))*(cosh.(r/2))-(cosh.(p/2))*(sinh.(r/2)) )
     *(cosh.(p/2+r/2)) by Lm10
@@ -1088,7 +1062,6 @@ SQUARE_1:def 3
  .=2*( 1/2*(cosh.p - 1)+1/2*(cosh.(2*(r/2)) + 1) ) by Th18
  .=2*( 1/2*(cosh.p - 1)+1/2*(cosh.r + 1) )
  .=cosh.r+cosh.p;
-
       2*(sinh.(p/2-r/2))*(sinh.(p/2+r/2))
   =2*((sinh.(p/2-r/2))*(sinh.(p/2+r/2)))
  .=2*( (cosh.(p/2))^2 - (cosh.(r/2))^2 ) by Th24
@@ -1104,8 +1077,7 @@ SQUARE_1:def 3
  tanh.p - tanh.r = (sinh.(p-r))/((cosh.p)*(cosh.r))
  proof
  A1:cosh.p<>0 & cosh.r<>0 by Th15;
- A2:
-   (sinh.(p+r))/((cosh.p)*(cosh.r))
+ A2: (sinh.(p+r))/((cosh.p)*(cosh.r))
   =( (sinh.p)*(cosh.r)+(cosh.p)*(sinh.r) )/((cosh.p)*(cosh.r)) by Lm5
  .= ((sinh.p)*(cosh.r))/((cosh.p)*(cosh.r))
    +((cosh.p)*(sinh.r))/((cosh.p)*(cosh.r)) by XCMPLX_1:63
@@ -1113,7 +1085,6 @@ SQUARE_1:def 3
  .=(sinh.p)/(cosh.p)+(sinh.r)/(cosh.r) by A1,XCMPLX_1:92
  .=tanh.p+(sinh.r)/(cosh.r) by Th17
  .=tanh.p+tanh.r by Th17;
-
       (sinh.(p-r))/((cosh.p)*(cosh.r))
   =( (sinh.p)*(cosh.r)-(cosh.p)*(sinh.r) )/((cosh.p)*(cosh.r)) by Lm10
  .= ((sinh.p)*(cosh.r))/((cosh.p)*(cosh.r))
@@ -1135,7 +1106,6 @@ proof
  proof
  let n such that
  A3: for p holds (cosh.p + sinh.p) |^ n = cosh.(n*p) + sinh.(n*p);
-
    for p holds (cosh.p + sinh.p) |^ (n+1) = cosh.((n+1)*p) + sinh.((n+1)*p)
   proof
   let p;
@@ -1218,21 +1188,21 @@ registration
   cluster sinh -> total;
   coherence
   proof
-       dom sinh=REAL by Def1;
+    dom sinh=REAL by Def1;
     hence thesis by PARTFUN1:def 4;
   end;
 
   cluster cosh -> total;
   coherence
   proof
-       dom cosh=REAL by Def3;
+    dom cosh=REAL by Def3;
     hence thesis by PARTFUN1:def 4;
   end;
 
   cluster tanh -> total;
   coherence
   proof
-       dom tanh=REAL by Def5;
+    dom tanh=REAL by Def5;
     hence thesis by PARTFUN1:def 4;
   end;
 end;
@@ -1273,9 +1243,7 @@ PARTFUN2:sch 2;
         then REAL c=dom f1 by TARSKI:def 3;
        hence dom f1=REAL by A5,XBOOLE_0:def 10;
       end;
-
     then A6:f1 is total by PARTFUN1:def 4;
-
     A7: for p be Element of REAL holds
           f1.p = - p
          proof
@@ -1292,7 +1260,6 @@ PARTFUN2:sch 2;
       end;
     hence f1 is LINEAR by A6,FDIFF_1:def 4;
     end;
-
     defpred X[set] means $1 in REAL;
     deffunc U(Real) = 0;
     consider f2 being PartFunc of REAL,REAL such that
@@ -1309,16 +1276,13 @@ PARTFUN2:sch 2;
           hence dom f2=REAL by A13,XBOOLE_0:def 10;
          end;
        then A14:f2 is total by PARTFUN1:def 4;
-
-  A15: for d be Element of REAL holds
-        f2.d = 0
+  A15: for d be Element of REAL holds f2.d = 0
        proof
        let d be Element of REAL;
        A16: d in dom f2 by A9;
        then f2/.d = 0 by A10;
        hence f2.d = 0 by A16,FINSEQ_4:def 4;
     end;
-
      f2 is REST-like PartFunc of REAL,REAL
    proof
       for hy1 be convergent_to_0 Real_Sequence holds
@@ -1353,7 +1317,6 @@ PARTFUN2:sch 2;
    end;
    hence thesis;
    end;
-
   A20: ex N being Neighbourhood of p st N c= dom compreal &
    for r be Real st r in N holds compreal.r - compreal.p = f1.(r-p) + f2.(r-p)
      proof
@@ -1400,7 +1363,7 @@ A26:       d is Real by XREAL_0:def 1;
    hence thesis by A1,A4,A11,A20,FDIFF_1:def 5;
 end;
 
- Lm15:
+Lm15:
  for f being PartFunc of REAL,REAL st f = compreal holds
  exp*f is_differentiable_in p &
  diff(exp*f,p) = (-1)*exp.(f.p)
@@ -1450,7 +1413,6 @@ A2:  f = compreal;
   .=exp.p- (-1)*exp.((-1)*p) by A2,Lm12
   .=exp.p- (-1)*exp.(-p)
   .=exp.p+exp.(-p);
-
      diff(exp+(exp*f),p)
    =diff(exp,p)+diff((exp*f),p) by A1,A3,FDIFF_1:21
   .=exp.p+diff((exp*f),p) by SIN_COS:70
@@ -1468,13 +1430,12 @@ A2:  f = compreal;
  proof
 A1: p is Real by XREAL_0:def 1;
   let f be PartFunc of REAL,REAL;
-  assume
-    f = compreal;
-then (exp-exp*f) is_differentiable_in p by Lm17;
- hence thesis by A1,FDIFF_1:23;
+  assume f = compreal;
+  then (exp-exp*f) is_differentiable_in p by Lm17;
+  hence thesis by A1,FDIFF_1:23;
  end;
 
- Lm19:
+Lm19:
  for ff being PartFunc of REAL,REAL st ff = compreal holds
   sinh.p=((1/2)(#)(exp-exp*ff)).p
  proof
@@ -1490,8 +1451,7 @@ A2:  ff = compreal;
      hence thesis by A3,SIN_COS:51;
   end;
  then A5:dom((1/2)(#)(exp-exp*ff))=REAL by SEQ_1:def 6;
-      sinh.p
-  =(exp.(p) - exp.(-p))/2 by Def1
+   sinh.p = (exp.(p) - exp.(-p))/2 by Def1
  .=(1/2)*(exp.(p) - exp.(-p))
  .=(1/2)*(exp.(p) - exp.((-1)*p))
  .=(1/2)*(exp.(p) - (exp*ff).p) by A2,Lm16
@@ -1511,7 +1471,7 @@ A1:   ff = compreal;
     exp.(p) - (exp*ff).p = (exp - exp*ff).p by SEQ_1:def 4;
      dom (exp - exp*ff) = REAL
     proof
-       dom (exp*ff) = REAL by A1,Lm13,RELAT_1:46,SIN_COS:51;
+    dom (exp*ff) = REAL by A1,Lm13,RELAT_1:46,SIN_COS:51;
     hence thesis by A2,SIN_COS:51;
     end;
    then A3:REAL=dom(sinh) & REAL=dom((1/2)(#)(exp-exp*ff)) by Def1,SEQ_1:def 6;
@@ -1595,7 +1555,7 @@ A3: dom (exp + exp*ff) = dom exp /\ dom (exp*ff) &
       cosh=(1/2)(#)(exp+exp*ff) by A3,PARTFUN1:34;
     end;
 
-  theorem Th32:
+theorem Th32:
   cosh is_differentiable_in p & diff(cosh,p)=sinh.p
   proof
    reconsider ff = compreal as PartFunc of REAL,REAL;
@@ -1655,13 +1615,12 @@ A1: p is Real by XREAL_0:def 1;
      tanh=sinh/cosh by A1,A2,Th30,PARTFUN1:34;
  end;
 
- theorem
-   tanh is_differentiable_in p & diff(tanh,p)=1/(cosh.p)^2
- by Lm24,Lm25;
+theorem
+  tanh is_differentiable_in p & diff(tanh,p)=1/(cosh.p)^2 by Lm24,Lm25;
 
- theorem Th34:
-   sinh is_differentiable_on REAL &
-   diff(sinh,p)=cosh.p
+theorem Th34:
+  sinh is_differentiable_on REAL &
+  diff(sinh,p)=cosh.p
   proof
      REAL is open Subset of REAL &
   REAL c= dom(sinh) &
@@ -1670,7 +1629,7 @@ A1: p is Real by XREAL_0:def 1;
   hence thesis by Th31,FDIFF_1:16;
   end;
 
- theorem Th35:
+theorem Th35:
   cosh is_differentiable_on REAL &
   diff(cosh,p)=sinh.p
   proof
@@ -1681,7 +1640,7 @@ A1: p is Real by XREAL_0:def 1;
   hence thesis by Th32,FDIFF_1:16;
   end;
 
- theorem Th36:
+theorem Th36:
   tanh is_differentiable_on REAL &
   diff(tanh,p)=1/(cosh.p)^2
   proof
@@ -1702,53 +1661,52 @@ A1: p is Real by XREAL_0:def 1;
  hence thesis by A1,A2,Th1;
  end;
 
- theorem
-    cosh.p >= 1
+theorem
+  cosh.p >= 1
  proof
-     (exp.p + exp.-p)>=2 by Lm26;
+ (exp.p + exp.-p)>=2 by Lm26;
  then (exp.p + exp.-p)/2 >= 2/2 by REAL_1:73;
  hence thesis by Def3;
  end;
 
- theorem
-    sinh is_continuous_in p
+theorem
+  sinh is_continuous_in p
  proof
      sinh is_differentiable_in p by Th31;
  hence thesis by FDIFF_1:32;
  end;
 
- theorem
-    cosh is_continuous_in p
+theorem
+  cosh is_continuous_in p
  proof
     cosh is_differentiable_in p by Th32;
  hence thesis by FDIFF_1:32;
  end;
 
- theorem
-    tanh is_continuous_in p
+theorem
+  tanh is_continuous_in p
  proof
     tanh is_differentiable_in p by Lm24,Lm25;
  hence thesis by FDIFF_1:32;
  end;
 
- theorem
-    sinh is_continuous_on REAL by Th34,FDIFF_1:33;
+theorem
+  sinh is_continuous_on REAL by Th34,FDIFF_1:33;
 
- theorem
-    cosh is_continuous_on REAL by Th35,FDIFF_1:33;
+theorem
+  cosh is_continuous_on REAL by Th35,FDIFF_1:33;
 
- theorem
-    tanh is_continuous_on REAL by Th36,FDIFF_1:33;
+theorem
+  tanh is_continuous_on REAL by Th36,FDIFF_1:33;
 
- theorem
-    tanh.p<1 & tanh.p>-1
+theorem
+  tanh.p<1 & tanh.p>-1
  proof
   thus tanh.p<1
   proof
   assume tanh.p>=1;
   then A1: (exp.p - exp.(-p))/(exp.p + exp.(-p))>=1 by Def5;
      (exp.p + exp.-p) >= 2 by Lm26;
-  then (exp.p + exp.(-p))>=0;
   then A2:(exp.p - exp.(-p))/(exp.p + exp.(-p))*(exp.p + exp.(-p))
                     >=1*(exp.p + exp.(-p)) by A1,AXIOMS:25;
      exp.p > 0 & exp.(-p) > 0 by SIN_COS:59;
@@ -1765,7 +1723,6 @@ A1: p is Real by XREAL_0:def 1;
   assume tanh.p<=-1;
   then A4: (exp.p - exp.(-p))/(exp.p + exp.(-p))<=-1 by Def5;
      (exp.p + exp.-p) >= 2 by Lm26;
-  then (exp.p + exp.(-p))>=0;
   then A5:(exp.p - exp.(-p))/(exp.p + exp.(-p))*(exp.p + exp.(-p))
                     <=(-1)*(exp.p + exp.(-p)) by A4,AXIOMS:25;
      exp.p > 0 & exp.(-p) > 0 by SIN_COS:59;

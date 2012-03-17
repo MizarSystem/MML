@@ -7,16 +7,10 @@
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="SETFAM_1"/>
-<ArticleID name="STRUCT_0"/>
-<ArticleID name="RELAT_1"/>
-<ArticleID name="FUNCT_1"/>
-<ArticleID name="RELSET_1"/>
-<ArticleID name="FUNCT_2"/>
-<ArticleID name="PRE_TOPC"/>
 </Signature>
 <Scheme>
 <ArgTypes>
-<Typ kind="G" nr="3">
+<Typ kind="M" nr="1">
 <Cluster/>
 </Typ>
 </ArgTypes>
@@ -24,18 +18,14 @@
 <For>
 <Typ kind="M" nr="5">
 <Cluster/>
-<Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
-</Func>
 </Typ>
 <Not>
 <For>
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="K" nr="10">
-<Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
-</Func>
 </Func>
 </Typ>
 <And>
@@ -73,7 +63,7 @@
 </Scheme>
 <Scheme>
 <ArgTypes>
-<Typ kind="G" nr="3">
+<Typ kind="M" nr="1">
 <Cluster/>
 </Typ>
 </ArgTypes>
@@ -82,9 +72,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="K" nr="10">
-<Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
-</Func>
 </Func>
 </Typ>
 <Not>
@@ -96,9 +84,7 @@
 <And>
 <Pred kind="R" nr="2">
 <Var nr="2"/>
-<Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
-</Func>
 </Pred>
 <Not>
 <And>

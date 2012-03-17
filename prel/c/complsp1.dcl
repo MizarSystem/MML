@@ -11,6 +11,7 @@
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="NUMBERS"/>
+<ArticleID name="XCMPLX_0"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="SETFAM_1"/>
@@ -29,7 +30,7 @@
 <Func kind="K" nr="56"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="135">
+<Func kind="K" nr="142">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -53,8 +54,8 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="23" value="false"/>
-<Adjective nr="24"/>
+<Adjective nr="24" value="false"/>
+<Adjective nr="25"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -64,13 +65,13 @@
 <Func kind="K" nr="56"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="150">
+<Func kind="K" nr="157">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="23" value="false"/>
-<Adjective nr="24"/>
+<Adjective nr="24" value="false"/>
 <Adjective nr="25"/>
+<Adjective nr="26"/>
 </Cluster>
 </FCluster>
 </Registrations>

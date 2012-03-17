@@ -1,0 +1,1800 @@
+:: Properties of First and Second Order Cutting of Binary Relations
+::  by Krzysztof Retel
+:: 
+:: Received April 25, 2005
+:: Copyright (c) 2005 Association of Mizar Users
+
+environ
+
+ vocabularies RELSET_2, TARSKI, RELAT_1, CANTOR_1, SETFAM_1, BOOLE, FUNCT_1,
+      PUA2MSS1, EQREL_1, FUNCT_5, SUBSET_1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, RELAT_1, RELSET_1,
+      PARTFUN1, FUNCT_1, FUNCT_2, PUA2MSS1, EQREL_1, FUNCT_5;
+ constructors PUA2MSS1, FUNCT_5;
+ registrations SUBSET_1, RELSET_1, PARTFUN1, SYSREL, RELAT_1, SETFAM_1;
+ requirements SUBSET, BOOLE;
+ definitions XBOOLE_0, TARSKI, SETFAM_1;
+ theorems RELAT_1, TARSKI, SETFAM_1, ZFMISC_1, XBOOLE_1, SUBSET_1, RELSET_1,
+      XBOOLE_0, FUNCT_1, FUNCT_2, MSSUBFAM, PUA2MSS1, EQREL_1, FUNCT_5, SYSREL,
+      ORDERS_1;
+ schemes FUNCT_1;
+
+begin :: Preliminaries
+
+:: Formalisation of first paragraph from the article:
+:: "Relations binaries, fermetures, correspondances de Galois" (1948),
+:: Prof. Jacques Riguet,
+:: Bulettin de la S.M.F., tome 76 (1948), p.114-155.
+
+ reserve x,y,X,Y,A,B,C,M for set;
+ reserve P,Q,R,R1,R2 for Relation;
+
+notation
+  let X be set;
+  synonym {_{X}_} for SmallestPartition X;
+end;
+
+theorem THD4_0:
+  y in {_{X}_} iff ex x st y = {x} & x in X
+proof
+  thus y in {_{X}_} implies ex x st y = {x} & x in X
+  proof
+    assume A1: y in {_{X}_};
+    per cases;
+      suppose A2: X is empty;
+A3:     SmallestPartition X = Class id X by PUA2MSS1:def 2;
+        consider x being set such that
+A4:     x in X & y = Class(id X,x) by EQREL_1:def 5,A3,A1;
+        thus thesis by A4,A2;
+      end;
+      suppose X is non empty;
+        then reconsider X' = X as non empty set;
+    y in {{x} where x is Element of X': not contradiction} by PUA2MSS1:13,A1;
+        then consider x being Element of X' such that
+A3:     y = {x};
+        thus thesis by A3;
+      end;
+    end;
+    given x such that
+A1: y = {x} & x in X;
+    reconsider X' = X as non empty set by A1;
+    y in {{z} where z is Element of X': not contradiction} by A1;
+    hence thesis by PUA2MSS1:13;
+  end;
+
+theorem Jerry:
+  X = {} iff {_{X}_} = {}
+proof
+  thus X = {} implies {_{X}_} = {}
+  proof
+    assume A0: X = {};
+    assume not thesis;
+    then consider y being set such that
+A1: y in {_{X}_} by XBOOLE_0:def 1;
+    consider x being set such that
+A2: y = {x} & x in X by A1,THD4_0;
+    thus contradiction by A0,A2;
+  end;
+  assume A0: {_{X}_} = {};
+  assume not thesis;
+  then consider x being set such that
+A1: x in X by XBOOLE_0:def 1;
+  {x} in {_{X}_} by THD4_0,A1;
+  hence contradiction by A0;
+end;
+
+theorem THD4_1:
+  {_{X\/Y}_} = {_{X}_} \/ {_{Y}_}
+proof
+  thus {_{X\/Y}_} c= {_{X}_} \/ {_{Y}_}
+  proof
+   let y be set;
+   assume y in {_{X\/Y}_};
+   then consider x being set such that
+A2: y = {x} & x in X\/Y by THD4_0;
+   x in X or x in Y by A2,XBOOLE_0:def 2;
+   then y in {_{X}_} or y in {_{Y}_} by A2,THD4_0;
+   hence thesis by XBOOLE_0:def 2;
+  end;
+  let y be set;
+  assume A1: y in {_{X}_} \/ {_{Y}_};
+  per cases by A1,XBOOLE_0:def 2;
+  suppose y in {_{X}_};
+   then consider x being set such that
+A2: y = {x} & x in X by THD4_0;
+   x in X\/Y by A2,XBOOLE_0:def 2;
+   hence thesis by THD4_0,A2;
+  end;
+  suppose y in {_{Y}_};
+   then consider x being set such that
+A2: y = {x} & x in Y by THD4_0;
+   x in X\/Y by A2,XBOOLE_0:def 2;
+   hence thesis by THD4_0,A2;
+  end;
+end;
+
+theorem THD4_2:
+  {_{X/\Y}_} = {_{X}_} /\ {_{Y}_}
+proof
+  thus {_{X/\Y}_} c= {_{X}_} /\ {_{Y}_}
+  proof
+    let y be set;
+    assume y in {_{X/\Y}_};
+    then consider x being set such that
+A1: y = {x} & x in X/\Y by THD4_0;
+    x in X & x in Y by A1,XBOOLE_0:def 3;
+    then y in {_{X}_} & y in {_{Y}_} by A1,THD4_0;
+    hence thesis by XBOOLE_0:def 3;
+  end;
+  let y be set;
+  assume y in {_{X}_} /\ {_{Y}_};
+  then A0: y in {_{X}_} & y in {_{Y}_} by XBOOLE_0:def 3;
+  then consider x being set such that
+A1: y = {x} & x in X by THD4_0;
+  consider x1 being set such that
+A2: y = {x1} & x1 in Y by A0,THD4_0;
+  x = x1 by ZFMISC_1:6,A1,A2;
+  then x in X /\ Y by XBOOLE_0:def 3,A1,A2;
+  hence thesis by A1,THD4_0;
+end;
+
+theorem
+  {_{X\Y}_} = {_{X}_} \ {_{Y}_}
+proof
+ thus {_{X\Y}_} c= {_{X}_} \ {_{Y}_}
+ proof
+  let y be set;
+  assume y in {_{X\Y}_};
+  then consider x being set such that
+A1: y = {x} & x in X\Y by THD4_0;
+A2: x in X & not x in Y by A1,XBOOLE_0:def 4;
+    then A3: y in {_{X}_} by A1,THD4_0;
+  not y in {_{Y}_}
+  proof
+   assume not thesis;
+   then consider x1 being set such that
+S1: y = {x1} & x1 in Y by THD4_0;
+   thus contradiction by A2,S1,A1,ZFMISC_1:6; 
+  end;
+  hence thesis by A3,XBOOLE_0:def 4;
+ end;
+ let y be set;
+ assume y in {_{X}_} \ {_{Y}_};
+ then A1: y in {_{X}_} & not y in {_{Y}_} by XBOOLE_0:def 4;
+ then consider x being set such that
+A2: y = {x} & x in X by THD4_0;
+ not x in Y by A1,A2,THD4_0;
+ then x in X\Y by A2,XBOOLE_0:def 4;
+ hence thesis by A2,THD4_0; 
+end;
+
+theorem THD4_4:
+  X c= Y iff {_{X}_} c= {_{Y}_}
+proof
+  thus X c= Y implies {_{X}_} c= {_{Y}_}
+  proof
+    assume A1: X c= Y;
+    let y be set;
+    assume y in {_{X}_};
+    then consider x being set such that
+A3: y = {x} & x in X by THD4_0;
+    thus thesis by A1,A3,THD4_0;
+  end;
+  assume A1: {_{X}_} c= {_{Y}_};
+  let y be set;
+  assume A2: y in X;
+  {y} in {_{X}_} by A2,THD4_0;
+  then consider x1 being set such that
+A4: {y} = {x1} & x1 in Y by THD4_0,A1;
+  thus thesis by A4,ZFMISC_1:6;
+end;
+
+definition
+  let M be set, X,Y be Subset-Family of M;
+  redefine func X /\ Y -> Subset-Family of M;
+  coherence
+  proof
+    thus X/\Y is Subset-Family of M by SETFAM_1:def 7;
+  end;
+end;
+
+theorem 
+  for B1, B2 being Subset-Family of M holds
+    Intersect(B1) /\ Intersect(B2) c= Intersect(B1 /\ B2)
+proof
+  let B1, B2 be Subset-Family of M;
+  B1 /\ B2 c= B1 \/ B2 by XBOOLE_1:29; then
+  Intersect(B1 \/ B2) c= Intersect(B1 /\ B2) by SETFAM_1:59;
+  hence thesis by MSSUBFAM:8;
+end;
+
+theorem :: (27.2)
+  (P /\ Q)*R c= (P*R) /\ (Q*R)
+proof
+  let a be set;
+  assume A0: a in (P /\ Q)*R;
+  then consider x,y being set such that
+A1: a = [x,y] by RELAT_1:def 1;
+  consider z being set such that
+A2: [x,z] in P/\Q & [z,y] in R by RELAT_1:def 8,A1,A0;
+A3: [x,z] in P & [x,z] in Q by A2,XBOOLE_0:def 3;
+  then A4: [x,y] in P*R by A2,RELAT_1:def 8;
+  [x,y] in Q*R by A2,A3,RELAT_1:def 8;
+  hence thesis by A1,A4,XBOOLE_0:def 3;
+end;
+
+begin :: The first order cutting of binary relation of two sets A,B
+      :: under a subset of the set A
+
+definition
+  let X,Y be set; let R be Relation of X,Y;
+  let x be Element of X;
+  func R.:x -> Subset of Y equals    :: R(x) - original counterpart
+:Def1:  R.:{x};
+  correctness;
+end;
+
+theorem THD5_1:
+  y in R.:{x} iff [x,y] in R
+proof
+  thus y in R.:{x} implies [x,y] in R
+  proof
+    assume y in R.:{x};
+    then consider a being set such that
+A2: [a,y] in R & a in {x} by RELAT_1:def 13;
+    thus thesis by A2,TARSKI:def 1;
+  end;
+  assume A1: [x,y] in R;
+  x in {x} by TARSKI:def 1;
+  hence thesis by RELAT_1:def 13,A1;
+end;
+
+theorem TH12_2:
+  (R1 \/ R2).:{x} = R1.:{x} \/ R2.:{x}
+proof
+  thus (R1 \/ R2).:{x} c= R1.:{x} \/ R2.:{x}
+  proof
+    let y be set;
+    assume y in (R1 \/ R2).:{x};
+    then [x,y] in R1 \/ R2 by THD5_1;
+    then [x,y] in R1 or [x,y] in R2 by XBOOLE_0:def 2;
+    then y in R1.:{x} or y in R2.:{x} by THD5_1;
+    hence thesis by XBOOLE_0:def 2;
+  end;
+  let y be set;
+  assume A1: y in R1.:{x} \/ R2.:{x};
+  per cases by A1,XBOOLE_0:def 2;
+  suppose y in R1.:{x};
+    then [x,y] in R1 by THD5_1;
+    then [x,y] in R1\/R2 by XBOOLE_0:def 2;
+    hence thesis by THD5_1;
+  end;
+  suppose y in R2.:{x};
+    then [x,y] in R2 by THD5_1;
+    then [x,y] in R1\/R2 by XBOOLE_0:def 2;
+    hence thesis by THD5_1;
+  end;
+end;
+
+theorem TH12_0:
+  (R1 /\ R2).:{x} = R1.:{x} /\ R2.:{x}
+proof
+ thus (R1 /\ R2).:{x} c= R1.:{x} /\ R2.:{x}
+ proof
+  let y be set;
+  assume y in (R1 /\ R2).:{x};
+  then [x,y] in R1/\R2 by THD5_1;
+  then [x,y] in R1 & [x,y] in R2 by XBOOLE_0:def 3;
+  then y in R1.:{x} & y in R2.:{x} by THD5_1;
+  hence thesis by XBOOLE_0:def 3;
+ end;
+ let y be set;
+ assume y in R1.:{x} /\ R2.:{x};
+ then y in R1.:{x} & y in R2.:{x} by XBOOLE_0:def 3;
+ then [x,y] in R1 & [x,y] in R2 by THD5_1;
+ then [x,y] in R1 /\ R2 by XBOOLE_0:def 3;
+ hence thesis by THD5_1;
+end;
+
+theorem
+  (R1 \ R2).:{x} = R1.:{x} \ R2.:{x}
+proof
+  thus (R1\R2) .:{x} c= R1.:{x} \ R2.:{x}
+  proof
+    let y;
+    assume y in (R1\R2) .:{x};
+    then [x,y] in R1\R2 by THD5_1;
+    then [x,y] in R1 & not [x,y] in R2 by XBOOLE_0:def 4;
+    then y in R1.:{x} & not y in R2.:{x} by THD5_1;
+    hence thesis by XBOOLE_0:def 4;
+  end;
+  let y;
+  assume y in R1.:{x} \ R2.:{x};
+  then y in R1.:{x} & not y in R2.:{x} by XBOOLE_0:def 4;
+  then [x,y] in R1 & not [x,y] in R2 by THD5_1;
+  then [x,y] in R1\R2 by XBOOLE_0:def 4;
+  hence thesis by THD5_1;
+end;
+
+theorem
+  (R1 /\ R2).:{_{X}_} c= R1.:{_{X}_} /\ R2.:{_{X}_}
+proof
+ let y;
+ assume y in (R1 /\ R2).:{_{X}_};
+ then consider x being set such that
+A2: [x,y] in R1 /\ R2 & x in {_{X}_} by RELAT_1:def 13;
+ [x,y] in R1 & [x,y] in R2 by A2,XBOOLE_0:def 3;
+ then y in R1.:{_{X}_} & y in R2.:{_{X}_} by A2,RELAT_1:def 13;
+ hence thesis by XBOOLE_0:def 3;
+end;
+
+definition
+  let X,Y be set; let R be Relation of X,Y;
+  let x be Element of X;
+  func R"x -> Subset of X equals
+  R"{x};
+  correctness;
+end;
+
+theorem
+  for A being set, F being Subset-Family of A, R be Relation holds
+    R.: union F = union {R.:X where X is Subset of A: X in F} :: (3.1.1)
+proof
+   let A be set, F be Subset-Family of A, R be Relation;
+   thus R.: union F c= union {R.:f where f is Subset of A: f in F}
+   proof
+    let y be set;
+    assume y in R.:(union F);
+    then consider x being set such that
+A2: [x,y] in R & x in union F by RELAT_1:def 13;
+    consider Y being set such that
+A3: x in Y & Y in F by A2,TARSKI:def 4;
+    set Z = R.:Y;
+   y in Z & Z in {R.:f where f is Subset of A: f in F} by A3,A2,RELAT_1:def 13;
+    hence thesis by TARSKI:def 4;
+   end;
+   let y be set;
+   assume y in union {R.:f where f is Subset of A: f in F};
+   then consider Y being set such that
+A2: y in Y & Y in {R.:f where f is Subset of A: f in F} by TARSKI:def 4;
+   consider f being Subset of A such that
+A3: Y = R.:f & f in F by A2;
+   consider x being set such that
+A4: [x,y] in R & x in f by A2,A3,RELAT_1:def 13;
+   x in union F by TARSKI:def 4,A3,A4; 
+   hence thesis by A4,RELAT_1:def 13;
+end;
+
+:: (3.1.2) - RELAT_1:149
+
+theorem TH2:
+  for A being non empty set, X being Subset of A holds
+    X = union {{x} where x is Element of A: x in X}
+proof
+ let A be non empty set, X be Subset of A;
+ thus X c= union {{x} where x is Element of A: x in X}
+ proof
+  let a be set;
+  assume A1: a in X;
+  set Y = {a};
+A2: a in Y by TARSKI:def 1;
+  Y in {{x} where x is Element of A: x in X} by A1;
+  hence thesis by A2,TARSKI:def 4;
+ end;
+ let a be set;
+ assume a in union {{x} where x is Element of A: x in X};
+ then consider Y being set such that
+A2: a in Y & Y in {{x} where x is Element of A: x in X} by TARSKI:def 4;
+ consider x being Element of A such that
+A3: Y = {x} & x in X by A2;
+  thus thesis by A3,A2,TARSKI:def 1;
+end;
+
+theorem
+  for A being non empty set, X being Subset of A holds
+    {{x} where x is Element of A: x in X} is Subset-Family of A
+ proof
+   let A be non empty set, X be Subset of A;
+   {{x} where x is Element of A: x in X} c= bool A
+   proof
+     let a be set;
+     assume a in {{x} where x is Element of A: x in X};
+     then consider x being Element of A such that
+A2:  a = {x} & x in X;
+     a c= A by A2,ZFMISC_1:37;
+     hence thesis;
+   end;
+   hence thesis by SETFAM_1:def 7;
+ end;
+
+theorem :: R(X) - original counterpart. The First Order Cutting.
+  for A being non empty set, B being set,
+      X being Subset of A, R being Relation of A,B
+  holds R.:X = union {R.:x where x is Element of A: x in X}
+proof
+ let A be non empty set, B be set, X be Subset of A, R be Relation of A,B;
+ thus R.:X c= union {R.:x where x is Element of A: x in X}
+ proof
+   let y be set;
+   assume y in R.:X;
+   then consider x1 being set such that
+A2: [x1,y] in R & x1 in X by RELAT_1:def 13;
+   x1 in union {{x} where x is Element of A: x in X} by TH2,A2;
+   then consider S being set such that
+A3: x1 in S & S in {{x} where x is Element of A: x in X} by TARSKI:def 4;
+   consider x being Element of A such that
+A4: S = {x} & x in X by A3;
+A5: y in R.:{x} by A2,A3,A4,RELAT_1:def 13;
+   set Y = R.:{x};
+   Y = R.:x by Def1;
+   then Y in {R.:xs where xs is Element of A: xs in X} by A4;
+   hence thesis by A5,TARSKI:def 4;
+ end;
+ let a be set;
+ assume a in union {R.:x where x is Element of A: x in X};
+ then consider Y being set such that
+A2: a in Y & Y in {R.:x where x is Element of A: x in X} by TARSKI:def 4;
+ consider x being Element of A such that
+A3: Y = R.:x & x in X by A2;
+ Y c= R.:X
+ proof
+  let b be set; assume b in Y;
+  then b in R.:{x} by Def1,A3;
+  then consider x1 being set such that
+B2: [x1,b] in R & x1 in {x} by RELAT_1:def 13;
+  x1 = x by B2,TARSKI:def 1;
+  hence thesis by B2,A3,RELAT_1:def 13;
+ end;
+ hence thesis by A2;
+end;
+
+theorem
+  for A being non empty set, B being set, X being Subset of A,
+      R being Relation of A,B holds
+    {R.:x where x is Element of A: x in X} is Subset-Family of B
+proof
+  let A be non empty set, B be set, X be Subset of A,
+      R be Relation of A,B;
+  set Y = {R.:x where x is Element of A: x in X};
+  let a be set; assume a in Y;
+  then consider x being Element of A such that
+A2: a = R.:x & x in X;
+  thus thesis by A2;
+end;
+
+definition
+  let A,B be set;
+  let R be Subset of [:A,bool B:];
+  let X be set;
+  redefine func R.:X -> Subset-Family of B;
+  coherence
+  proof
+   reconsider R as Relation of A,bool B by RELSET_1:def 1; 
+   R.:X c= bool B;
+   hence thesis by SETFAM_1:def 7;
+  end;
+end;
+
+definition let A be set, R be Relation;
+  func .:(R,A) -> Function means
+:Def3:  dom it = bool A & for X being set st X c= A holds it.X = R.:X;
+  existence
+  proof
+    defpred P[set,set] means for X st $1=X holds $2 = R.:X;
+A1: for x,y1,y2 being set st x in bool A & P[x,y1] & P[x,y2] holds y1=y2
+    proof let x,y1,y2 be set such that x in bool A and
+A2:   for X st x=X holds y1 = R.:X and
+A3:   for X st x=X holds y2 = R.:X;
+      thus y1 = R.:x by A2 .= y2 by A3;
+    end;
+A4: for x being set st x in bool A ex y being set st P[x,y]
+    proof let x be set such that x in bool A;
+      take R.:x;
+      thus thesis;
+    end;
+    consider g being Function such that
+A5:   dom g = bool A and
+A6:   for x be set st x in bool A holds P[x,g.x] from FUNCT_1:sch 2(A1,A4);
+    take g;
+    thus thesis by A5,A6;
+  end;
+  uniqueness
+   proof let R1,R2 be Function such that
+A7:  dom R1 = bool A and
+A8:  for X st X c= A holds R1.X = R.:X and
+A9:  dom R2 = bool A and
+A10: for X st X c= A holds R2.X = R.:X;
+     for x being set st x in bool A holds R1.x = R2.x
+     proof let x be set;
+       assume x in bool A;
+       then R1.x = R.:x & R2.x = R.:x by A8,A10;
+       hence thesis;
+     end;
+     hence thesis by A7,A9,FUNCT_1:9;
+   end;
+end;
+
+notation
+  let B,A be set;
+  let R be Subset of [:A,B:];
+  synonym .:R for .:(R,A);
+end;
+
+theorem TH7:
+  for A,B being set, R being Subset of [:A,B:] st
+    X in dom(.:R) holds (.:R).X = R.:X
+  proof
+   let A,B be set;
+   let R be Subset of [:A,B:] such that
+A1: X in dom (.:R);
+   X in bool A by A1,Def3;
+   hence thesis by Def3;
+ end;
+
+theorem TH8:
+  for A,B being set, R being Subset of [:A,B:] holds
+    rng(.:R) c= bool rng R
+ proof
+  let A,B be set, R be Subset of [:A,B:];
+  let y be set;
+  assume y in rng(.:R);
+  then consider x be set such that
+A1: x in dom(.:R) and
+A2: y = (.:R).x by FUNCT_1:def 5;
+  y = R.:x by A1,A2,TH7;
+  then y c= rng R by RELAT_1:144;
+  hence thesis;
+end;
+
+theorem TH9:
+  for A,B being set, R being Subset of [:A,B:]
+  holds .:R is Function of bool A, bool rng R
+proof
+  let A,B be set, R be Subset of [:A,B:];
+  dom .:R = bool A & rng.:R c= bool rng R by Def3,TH8;
+  hence thesis by FUNCT_2:def 1,RELSET_1:11;
+end;
+
+definition
+  let B,A be set; let R be Subset of [:A,B:];
+  redefine func .:R -> Function of bool A, bool B;
+  correctness
+  proof
+A0: dom .:R = bool A by Def3;   
+A1: .:R is Function of bool A,bool rng R by TH9;
+    R is Relation of A,B by RELSET_1:def 1; then 
+A2: rng R c= B by RELSET_1:12;
+A3: rng .:R c= bool rng R by A1,RELSET_1:12; 
+    bool rng R c= bool B by ZFMISC_1:79,A2;
+   then rng .:R c= bool B by A3,XBOOLE_1:1;
+   hence thesis by A0,FUNCT_2:def 1,RELSET_1:11;
+  end;
+end;
+
+theorem :: FUNCT_3:15
+  for A,B being set, R being Subset of [:A,B:] holds
+    union((.:R).:A) c= R.:(union A)
+proof
+ let A,B be set, R be Subset of [:A,B:];
+ let y be set;
+ assume y in union((.:R).:A);
+ then consider Z being set such that
+A2:  y in Z and
+A3:  Z in (.:R).:A by TARSKI:def 4;
+   consider X being set such that
+A4:  X in dom(.:R) and
+A5:  X in A and
+A6:  Z = (.:R).X by A3,FUNCT_1:def 12;
+   y in R.:X by A2,A4,A6,TH7;
+   then consider x being set such that
+A7: [x,y] in R & x in X by RELAT_1:def 13;
+ x in union A by A5,A7,TARSKI:def 4; 
+ hence thesis by A7,RELAT_1:def 13;
+end;
+
+begin :: The second order cutting of binary relation of two sets A,B
+      :: under a subset of the set A
+
+ reserve X,X1,X2 for Subset of A;
+ reserve Y for Subset of B;
+ reserve R,R1,R2 for Subset of [:A,B:];
+ reserve F for Subset-Family of A;
+ reserve FR for Subset-Family of [:A,B:];
+
+definition
+  let A,B be set, X be Subset of A, R be Subset of [:A,B:];
+  func R.:^X equals
+:Def5:  Intersect(.:R.:{_{X}_});
+:: R[X] - original counterpart. The Second Order Cutting.
+  correctness;
+end;
+
+definition
+  let A,B be set;
+  let X be Subset of A;
+  let R be Subset of [:A,B:];
+  redefine func R.:^X -> Subset of B;
+  coherence
+  proof
+   R.:^X = Intersect(.:R.:{_{X}_}) by Def5;
+   hence thesis;
+  end;
+end;
+
+theorem THD5_0:
+  .:R.:{_{X}_} = {} iff X = {}
+proof
+ thus .:R.:{_{X}_} = {} implies X = {}
+ proof
+   assume .:R.:{_{X}_} = {}; then
+   dom .:R misses {_{X}_} by RELAT_1:151;
+   then A2: bool A misses {_{X}_} by Def3;
+   {_{X}_} c= bool A
+   proof
+     let y be set;
+     assume y in {_{X}_};
+     then consider x being set such that
+B1:  y = {x} & x in X by THD4_0;
+B2:  x in A by B1;
+     y c= A
+     proof
+       let x1 be set;
+       assume x1 in y;
+       hence thesis by B1,TARSKI:def 1,B2;
+     end;
+     hence thesis;
+   end;
+   then A3: bool A /\ {_{X}_} = {_{X}_} by XBOOLE_1:28;
+   assume X <> {}; then
+   {_{X}_} <> {} by Jerry;
+   hence thesis by A2,A3,XBOOLE_0:def 7;
+ end;
+ assume X = {}; then
+ {_{X}_} = {} by Jerry;
+ hence thesis by RELAT_1:149;
+end;
+
+theorem THD5_2:
+  y in R.:^X implies for x being set st x in X holds y in R.:{x}
+proof
+ assume y in R.:^X;
+ then A2: y in Intersect(.:R.:{_{X}_}) by Def5;
+ per cases;
+ suppose .:R.:{_{X}_} = {};
+  hence thesis by THD5_0;
+ end;
+ suppose .:R.:{_{X}_} <> {};
+  then A4: y in meet (.:R.:{_{X}_}) by A2,SETFAM_1:def 10;
+  for x being set st x in X holds y in R.:{x}
+  proof
+   let x be set;
+   assume S1: x in X;
+   then S2: {x} in {_{X}_} by THD4_0;
+S3: {x} c= A
+    proof
+     let a be set;
+     assume a in {x};
+     then a = x by TARSKI:def 1;
+     hence thesis by S1;
+    end;
+    then S4: .:R.{x} = R.:{x} by Def3;
+    R.:{x} in .:R.:{_{X}_}
+    proof
+     dom .:R = bool A by Def3;
+     then [{x},R.:{x}] in .:R by S3,S4,FUNCT_1:8;
+     hence thesis by S2,RELAT_1:def 13;
+    end;
+    hence thesis by A4,SETFAM_1:def 1; 
+   end;
+   hence thesis;
+  end;
+end;
+
+theorem THD5_3:
+  for B being non empty set, A being set, X being Subset of A,
+      y being Element of B, R being Subset of [:A,B:] holds
+    y in R.:^X iff for x being set st x in X holds y in R.:{x}
+proof
+ let B be non empty set, A be set, X be Subset of A, y be Element of B,
+     R be Subset of [:A,B:];
+ thus y in R.:^X implies for x being set st x in X holds y in R.:{x} by THD5_2;
+ assume A1: for x being set st x in X holds y in R.:{x};
+ per cases;
+ suppose .:R.:{_{X}_} = {};
+  then Intersect(.:R.:{_{X}_}) = B by SETFAM_1:def 10;
+  then R.:^X = B by Def5;
+  hence thesis;
+ end;
+ suppose A2: .:R.:{_{X}_} <> {};
+  then A3: Intersect(.:R.:{_{X}_}) = meet (.:R.:{_{X}_}) by SETFAM_1:def 10;
+  for Y being set holds Y in .:R.:{_{X}_} implies y in Y
+  proof
+   let Y be set;
+   assume Y in .:R.:{_{X}_};
+   then consider z being set such that
+B1: [z,Y] in .:R & z in {_{X}_} by RELAT_1:def 13;
+   consider x being set such that
+B2: z = {x} & x in X by B1,THD4_0;
+B3: z in dom .:R & Y = .:R.z by B1,FUNCT_1:8;
+   Y = R.:{x} by B2,B3,Def3;
+   hence thesis by A1,B2;
+  end;
+  then y in meet (.:R.:{_{X}_}) by A2,SETFAM_1:def 1;
+  hence thesis by A3,Def5;
+ end;
+end;
+
+theorem
+  (.:R).:{_{X1}_} = {} implies R.:^(X1\/X2) = R.:^X2
+proof
+A0: {_{X1\/X2}_} = {_{X1}_} \/ {_{X2}_} by THD4_1;
+  assume A1: (.:R).:{_{X1}_} = {};
+  R .:^ (X1\/X2) = Intersect((.:R).:{_{X1\/X2}_}) by Def5
+   .= Intersect((.:R).:{_{X1}_} \/ ((.:R).:{_{X2}_})) by RELAT_1:153,A0
+   .= R.:^X2 by Def5,A1;
+  hence thesis;
+end;
+
+:: ksiazka S o R = SR a w MML jest to R*S
+:: (1) S .:(R.:X) = (S o R).:X
+:: w notacji uzytej w MML:  S.:(R.:X) = (R*S).:X
+
+theorem :: (2)
+  R.:^(X1\/X2) = (R.:^X1) /\ (R.:^X2)
+proof
+A1:Intersect(.:R.:{_{X1}_}) = R.:^X1 by Def5;
+A2:Intersect(.:R.:{_{X2}_}) = R.:^X2 by Def5;
+   R.:^(X1\/X2) = Intersect(.:R.:{_{X1\/X2}_}) by Def5
+             .= Intersect(.:R.:({_{X1}_} \/ {_{X2}_})) by THD4_1
+             .= Intersect(.:R.:{_{X1}_} \/ (.:R.:{_{X2}_})) by RELAT_1:153
+             .= R.:^X1 /\ (R.:^X2) by A1,A2,MSSUBFAM:8;
+   hence thesis;
+ end;
+
+theorem
+  for A being non empty set, B being set, F being Subset-Family of A,
+      R being Relation of A,B
+  holds {R.:^X where X is Subset of A: X in F} is Subset-Family of B
+proof
+  let A be non empty set, B be set, F be Subset-Family of A,
+      R be Relation of A,B;
+  let x be set;
+  assume x in {R.:^X where X is Subset of A: X in F};
+  then consider X being Subset of A such that
+A1: x = R.:^X & X in F;
+  thus thesis by A1;
+end;
+
+theorem TH40: :: (3.2.2)
+  X = {} implies R.:^X = B
+proof
+  assume X = {};
+  then .:R.:{_{X}_} = {} by THD5_0;
+  then Intersect(.:R.:{_{X}_}) = B by SETFAM_1:def 10;
+  hence thesis by Def5;
+end;
+
+theorem
+  union F = {} iff for X being set st X in F holds X = {}
+proof
+  thus union F = {} implies for X being set st X in F holds X = {}
+  proof
+    assume S1: union F = {};
+    given X being set such that
+S2: X in F & X <> {};
+    consider a being set such that
+S4: a in X by S2,XBOOLE_0:def 1;
+    thus contradiction by S1,S2,S4,TARSKI:def 4;
+  end;
+  assume L0: for X being set st X in F holds X = {};
+  assume not thesis;
+  then consider x being set such that
+L1: x in union F by XBOOLE_0:def 1;
+  consider Y being set such that
+L2: x in Y & Y in F by L1,TARSKI:def 4;
+  thus contradiction by L0,L2;
+end;
+
+theorem :: (3.2.1)
+  for A being set,B being non empty set, R being Relation of A,B,
+      F being Subset-Family of A, G being Subset-Family of B st
+  G = {R.:^Y where Y is Subset of A: Y in F} holds R.:^(union F) = Intersect G
+proof
+  let A be set,B be non empty set, R be Relation of A,B,
+      F be Subset-Family of A,
+      G be Subset-Family of B;
+  assume T0: G = {R.:^Y where Y is Subset of A: Y in F};
+  per cases;
+  suppose S1: union F = {};
+    then S2: R.:^(union F) = B by TH40;
+    per cases;
+    suppose L0: G <> {};
+      G c= {B}
+      proof
+        let x be set;
+        assume x in G;
+        then consider Y being Subset of A such that
+L2:     x = R.:^Y & Y in F by T0;
+        Y = {} by L2,S1,ORDERS_1:91;
+        then .:R.:{_{Y}_} = {} by THD5_0;
+        then Intersect(.:R.:{_{Y}_}) = B by SETFAM_1:def 10;
+        then R.:^Y = B by Def5;
+        hence thesis by L2,TARSKI:def 1;
+      end;
+      then meet {B} c= meet G by SETFAM_1:7,L0;
+      then B c= meet G by SETFAM_1:11;
+      then meet G = B by XBOOLE_0:def 10;
+      hence thesis by SETFAM_1:def 10,L0,S2;
+    end;
+    suppose G = {};
+      hence thesis by SETFAM_1:def 10,S2;
+    end;
+  end;
+  suppose union F <> {};
+    then consider Z1 being set such that
+S2: Z1 <> {} & Z1 in F by ORDERS_1:91;
+    reconsider Z1 as Subset of A by S2;
+S3: G <> {}
+    proof
+      assume not thesis; then
+      not R.:^Z1 in G;
+      hence contradiction by S2,T0;
+    end;
+    thus R.:^(union F) c= Intersect G
+    proof
+      let a be set;
+      assume LA1: a in R.:^(union F);
+      for Y being set holds Y in G implies a in Y
+      proof
+        let Z2 be set;
+        assume Z2 in G;
+        then consider Z3 being Subset of A such that
+LB2:    Z2 = R.:^Z3 & Z3 in F by T0;
+        reconsider a as Element of B by LA1;
+        for x being set st x in Z3 holds a in R.:{x}
+        proof
+          let x be set such that LC1: x in Z3;
+          x in union F by LC1,LB2,TARSKI:def 4;
+          hence thesis by THD5_2,LA1;
+        end;
+        hence thesis by THD5_3,LB2;
+      end;
+      then a in meet G by S3,SETFAM_1:def 1;
+      hence thesis by S3,SETFAM_1:def 10;
+    end;
+    let a be set;
+    assume LA1: a in Intersect G;
+    then LA2: a in meet G by S3,SETFAM_1:def 10;
+    reconsider a as Element of B by LA1;
+    for X being set st X in union F holds a in R.:{X}
+    proof
+      let X be set;
+      assume X in union F;
+      then consider Z being set such that
+      LB2: X in Z & Z in F by TARSKI:def 4;
+      reconsider Z as Subset of A by LB2;
+      set C = R.:^Z;
+      C in G by LB2,T0;
+      then a in C by SETFAM_1:def 1,LA2;
+      hence thesis by THD5_2,LB2;
+    end;
+    hence thesis by THD5_3;
+  end;
+end;
+
+theorem TH11: :: (4)
+  X1 c= X2 implies R.:^X2 c= R.:^X1
+proof
+  assume X1 c= X2;
+  then A1: {_{X1}_} c= {_{X2}_} by THD4_4;
+  let y be set;
+  assume a3: y in R.:^X2;
+  then A3: y in Intersect((.:R).:{_{X2}_}) by Def5;
+  per cases;
+  suppose S1: (.:R).:{_{X2}_} = {};
+  per cases;
+  suppose (.:R).:{_{X1}_} = {};
+   then Intersect((.:R).:{_{X1}_}) = B by SETFAM_1:def 10;
+   then y in Intersect((.:R).:{_{X1}_}) by a3;
+   hence thesis by Def5;
+  end;
+  suppose S3: (.:R).:{_{X1}_} <> {};
+   for Y being set holds Y in (.:R).:{_{X1}_} implies y in Y
+   proof
+    let Y be set;
+    assume Y in (.:R).:{_{X1}_};
+    then consider x being set such that
+T2: [x,Y] in .:R & x in {_{X1}_} by RELAT_1:def 13;
+    thus thesis by S1,A1,T2,RELAT_1:def 13;
+   end;
+   then y in meet ((.:R).:{_{X1}_}) by SETFAM_1:def 1,S3;
+   then y in Intersect((.:R).:{_{X1}_}) by S3,SETFAM_1:def 10;
+   hence thesis by Def5;
+  end;
+ end;
+ suppose (.:R).:{_{X2}_} <> {};
+  then S2: y in meet ((.:R).:{_{X2}_}) by A3,SETFAM_1:def 10;
+  per cases;
+  suppose (.:R).:{_{X1}_} = {};
+   then Intersect((.:R).:{_{X1}_}) = B by SETFAM_1:def 10;
+   then y in Intersect((.:R).:{_{X1}_}) by a3;
+   hence thesis by Def5;
+  end;
+  suppose S3: (.:R).:{_{X1}_} <> {};
+   (.:R).:{_{X1}_} c= (.:R).:{_{X2}_} by A1,RELAT_1:156;
+   then meet ((.:R).:{_{X2}_}) c= meet ((.:R).:{_{X1}_}) by SETFAM_1:7,S3;
+   then y in meet ((.:R).:{_{X1}_}) by S2;
+   then y in Intersect((.:R).:{_{X1}_}) by S3, SETFAM_1:def 10;
+   hence thesis by Def5;
+  end;
+ end;
+end;
+
+theorem :: (5)
+  R.:^X1 \/ R.:^X2 c= R.:^(X1/\X2)
+proof
+  let y be set;
+  assume A1: y in R.:^X1 \/ R.:^X2;
+S13:{_{X1/\X2}_} = {_{X1}_} /\ {_{X2}_} by THD4_2; then
+SS: .:R.:({_{X1/\X2}_}) c= .:R.:{_{X1}_} /\ .:R.:{_{X2}_} by RELAT_1:154;
+  per cases by XBOOLE_0:def 2,A1;
+  suppose a3: y in R.:^X1;
+  then A3: y in Intersect((.:R).:{_{X1}_}) by Def5;
+  y in Intersect((.:R).:({_{X1/\X2}_}))
+  proof
+   per cases;
+   suppose S1: (.:R).:({_{X1/\X2}_}) <> {};
+    {_{X1/\X2}_} = {_{X1}_} /\ {_{X2}_} by THD4_2;
+    then s3:(.:R).:({_{X1/\X2}_}) c= (.:R).:{_{X1}_} /\ ((.:R).:{_{X2}_})
+      by RELAT_1:154;
+    then S3: (.:R).:{_{X1}_} /\ ((.:R).:{_{X2}_}) <> {} by XBOOLE_1:3,S1;
+    (.:R).:{_{X1}_} <> {} & (.:R).:{_{X2}_} <> {} by s3,XBOOLE_1:3,S1;
+    then S11: y in meet ((.:R).:{_{X1}_}) by SETFAM_1:def 10,A3;
+    for Y being set holds
+      Y in (.:R).:{_{X1}_} /\ (.:R).:{_{X2}_} implies y in Y
+    proof
+     let Y be set;
+     assume Y in (.:R).:{_{X1}_} /\ (.:R).:{_{X2}_};
+     then Y in (.:R).:{_{X1}_} by XBOOLE_0:def 3;
+     hence thesis by S11,SETFAM_1:def 1;
+    end;
+    then y in meet ((.:R).:{_{X1}_} /\ (.:R).:{_{X2}_}) by SETFAM_1:def 1,S3;
+    then S12: y in Intersect ((.:R).:{_{X1}_} /\ (.:R).:{_{X2}_})
+      by SETFAM_1:def 10,S3;
+    Intersect(.:R.:{_{X1}_} /\ (.:R.:{_{X2}_})) c=
+      Intersect(.:R.:({_{X1}_} /\ {_{X2}_})) by SS,SETFAM_1:59,S13;
+    hence thesis by S12,S13;
+   end;
+   suppose (.:R).:({_{X1/\X2}_}) = {};
+    then Intersect((.:R).:({_{X1/\X2}_})) = B by SETFAM_1:def 10;
+    hence thesis by a3;
+   end;
+  end;
+  hence thesis by Def5;
+ end;
+ suppose a3: y in R.:^X2;
+  then A3: y in Intersect((.:R).:{_{X2}_}) by Def5;
+  y in Intersect((.:R).:({_{X1/\X2}_}))
+  proof
+   per cases;
+   suppose S1: (.:R).:({_{X1/\X2}_}) <> {}; then
+S3: (.:R).:{_{X1}_} /\ ((.:R).:{_{X2}_}) <> {} by SS,XBOOLE_1:3;
+    (.:R).:{_{X1}_} <> {} & (.:R).:{_{X2}_} <> {} by SS,XBOOLE_1:3,S1;
+    then S11: y in meet ((.:R).:{_{X2}_}) by A3,SETFAM_1:def 10;
+    for Y being set holds
+      Y in (.:R).:{_{X1}_} /\ (.:R).:{_{X2}_} implies y in Y
+    proof
+     let Y be set;
+     assume Y in (.:R).:{_{X1}_} /\ (.:R).:{_{X2}_};
+     then Y in (.:R).:{_{X2}_} by XBOOLE_0:def 3;
+     hence thesis by S11, SETFAM_1:def 1;
+    end;
+    then y in meet ((.:R).:{_{X1}_} /\ (.:R).:{_{X2}_}) by SETFAM_1:def 1,S3;
+    then S12: y in Intersect ((.:R).:{_{X1}_} /\ (.:R).:{_{X2}_})
+      by SETFAM_1:def 10,S3;
+S13: {_{X1/\X2}_} = {_{X1}_} /\ {_{X2}_} by THD4_2; then
+    .:R.:({_{X1/\X2}_}) c= .:R.:{_{X1}_} /\ .:R.:{_{X2}_} by RELAT_1:154; then
+    Intersect(.:R.:{_{X1}_} /\ (.:R.:{_{X2}_})) c=
+      Intersect(.:R.:({_{X1}_} /\ {_{X2}_})) by SETFAM_1:59,S13;
+    hence thesis by S12,S13;
+   end;
+   suppose (.:R).:({_{X1/\X2}_}) = {};
+    then Intersect((.:R).:({_{X1/\X2}_})) = B by SETFAM_1:def 10;
+    hence thesis by a3;
+   end;
+  end;
+  hence thesis by Def5;
+ end;
+end;
+
+theorem :: (6)
+  (R1 /\ R2).:^X = (R1.:^X) /\ (R2.:^X)
+proof
+  thus (R1 /\ R2).:^X c= (R1.:^X) /\ (R2.:^X)
+  proof
+    let y be set;
+    assume A1: y in (R1 /\ R2).:^X; then
+    reconsider B as non empty set;
+    reconsider y as Element of B by A1;
+    for x being set st x in X holds y in R1.:{x}
+    proof
+      let x be set; assume x in X;
+      then y in (R1 /\ R2).:{x} by THD5_2,A1;
+      then y in R1.:{x} /\ R2.:{x} by TH12_0;
+      hence thesis by XBOOLE_0:def 3;
+    end; then
+A8: y in R1.:^X by THD5_3;
+    for x being set st x in X holds y in R2.:{x}
+    proof
+      let x be set; assume x in X;
+      then y in (R1 /\ R2).:{x} by THD5_2,A1;
+      then y in R1.:{x} /\ R2.:{x} by TH12_0;
+      hence thesis by XBOOLE_0:def 3;
+    end;
+    then y in R2.:^X by THD5_3;
+    hence thesis by A8,XBOOLE_0:def 3;
+  end;
+  let y be set;
+  assume a2: y in (R1.:^X) /\ (R2.:^X); then
+A2: y in (R1.:^X) & y in (R2.:^X) by XBOOLE_0:def 3;
+  reconsider B as non empty set by a2;
+  reconsider y as Element of B by a2;
+  for x being set st x in X holds y in (R1/\R2).:{x}
+  proof
+    let x be set;
+    assume x in X;
+    then y in R1.:{x} & y in R2.:{x} by A2,THD5_3;
+    then y in R1.:{x} /\ R2.:{x} by XBOOLE_0:def 3;
+    hence thesis by TH12_0;
+  end;
+  hence thesis by THD5_3;
+end;
+
+theorem :: (7.1.1)
+  (union FR).:X = union {R.:X where R is Subset of [:A,B:]: R in FR}
+proof
+  thus (union FR).:X c= union {R.:X where R is Subset of [:A,B:]: R in FR}
+  proof
+    let a be set;
+    assume a in (union FR).:X;
+    then consider x being set such that
+LA2: [x,a] in union FR & x in X by RELAT_1:def 13;
+    consider S being set such that
+LA3: [x,a] in S & S in FR by LA2,TARSKI:def 4;
+    reconsider S as Subset of [:A,B:] by LA3;
+    ex P being set st
+      a in P & P in {T.:X where T is Subset of [:A,B:]: T in FR}
+    proof
+      set P = S.:X;
+LB1:  a in P by LA3,LA2,RELAT_1:def 13;
+      P in {T.:X where T is Subset of [:A,B:]: T in FR} by LA3;
+      hence thesis by LB1;
+    end;
+    hence thesis by TARSKI:def 4;
+  end;
+  let a be set;
+  assume a in union {R.:X where R is Subset of [:A,B:]: R in FR};
+  then consider P being set such that LA2: a in P &
+  P in {R.:X where R is Subset of [:A,B:]: R in FR} by TARSKI:def 4;
+  consider R being Subset of [:A,B:] such that
+LA3: P = R.:X & R in FR by LA2;
+  consider x being set such that
+LA4: [x,a] in R & x in X by LA2,LA3,RELAT_1:def 13;
+  ex x being set st x in X & [x,a] in union FR
+  proof
+    take x;
+    thus thesis by LA4,LA3,TARSKI:def 4;
+  end;
+  hence thesis by RELAT_1:def 13;
+end;
+
+:: (7.1.2) - RELAT_1:150
+
+theorem
+  for FR being Subset-Family of [:A,B:], A,B being set,
+      X being Subset of A holds
+  {R.:^X where R is Subset of [:A,B:]: R in FR} is Subset-Family of B
+  proof
+    let FR be Subset-Family of [:A,B:], A,B be set,
+        X be Subset of A;
+    set G = {R.:^X where R is Subset of [:A,B:]: R in FR};
+    G is Subset-Family of B
+    proof
+      let a be set;
+      assume a in G;
+      then consider R being Subset of [:A,B:] such that
+LB2:  a = R.:^X & R in FR;
+      thus thesis by LB2;
+    end;
+    hence thesis;
+end;
+
+:: (11.2) theorem TH40.
+
+theorem TH16: :: (11.1)
+  R = {} & X <> {} implies R.:^X = {}
+proof
+  assume that A1: R = {} and LA1: X <> {};
+  R.:^X c= {}
+  proof
+    let a be set;
+    assume LB2: a in R.:^X;
+    consider x being set such that
+LB3: x in X by XBOOLE_0:def 1,LA1;
+    a in R.:{x} by LB3,LB2,THD5_2;
+    hence thesis by THD5_1,A1;
+  end;
+  hence thesis by XBOOLE_1:3;
+end;
+
+theorem TH47: :: (7.2.2)
+  R = [:A,B:] implies R.:^X = B
+  proof
+    assume LA1: R = [:A,B:];
+    thus R.:^X c= B;
+    thus B c= R.:^X
+    proof
+      let a be set;
+      assume LB1: a in B;
+      then reconsider B as non empty set;
+      reconsider a as Element of B by LB1;
+      for x being set st x in X holds a in R.:{x}
+      proof
+        let x be set; assume x in X; then
+        [x,a] in R by LA1,ZFMISC_1:106;
+        hence thesis by THD5_1;
+      end;
+      hence thesis by THD5_3;
+    end;
+  end;
+
+theorem :: (7.2.1)
+  for G being Subset-Family of B st
+  G = {R.:^X where R is Subset of [:A,B:]: R in FR} holds
+  (Intersect FR).:^X = Intersect G
+proof
+  let G be Subset-Family of B;
+  assume LA1: G = {R.:^X where R is Subset of [:A,B:]: R in FR};
+XX: for x being set st G = {x} holds Intersect G = x
+  proof
+    let x be set;
+    assume G = {x}; then
+    Intersect G = meet {x} by SETFAM_1:def 10;
+    hence thesis by SETFAM_1:11;
+  end;
+  per cases;
+  suppose S1: X = {}; then
+S2: (Intersect FR).:^X = B by TH40;
+    G c= {B}
+    proof
+      let a be set;
+      assume a in G;
+      then consider R being Subset of [:A,B:] such that
+LD1:  a = R.:^X & R in FR by LA1;
+      a = B by LD1,S1,TH40;
+      hence thesis by TARSKI:def 1;
+    end;
+    then G = {} or G = {B} by ZFMISC_1:39;
+    hence thesis by XX,SETFAM_1:def 10,S2;
+  end;
+  suppose LB1: X <> {};
+    per cases;
+    suppose LB2: FR = {};
+      then Intersect FR = [:A,B:] by SETFAM_1:def 10;
+      then LC2: (Intersect FR).:^X = B by TH47;
+      G c= {B}
+      proof
+        let a be set;
+        assume a in G;
+        then consider R being Subset of [:A,B:] such that
+LD2:    a = R.:^X & R in FR by LA1;
+        thus thesis by LD2,LB2;
+      end;
+      then G = {} or G = {B} by ZFMISC_1:39;
+      hence thesis by XX,LC2,SETFAM_1:def 10;
+    end;
+    suppose LB2: FR <> {};
+    per cases;
+    suppose LC1: B = {};
+      then [:A,B:] = {} by ZFMISC_1:113;
+      then LC2: FR = {} or FR = {{}} by ZFMISC_1:39,1;
+      then Intersect FR = meet {{}} by LB2,SETFAM_1:def 10;
+      then Intersect FR = {} by SETFAM_1:11;
+      then LC3: (Intersect FR).:^X = {} by TH16,LB1;
+      G c= {{}}
+      proof
+        let x be set;
+        assume LE1: x in G;
+        consider R being Subset of [:A,B:] such that
+LE2:    x = R.:^X & R in FR by LE1,LA1;
+        R = {} by LE2,LC2,TARSKI:def 1;
+        then x = {} by TH16,LB1,LE2;
+        hence thesis by TARSKI:def 1;
+      end;
+      then G = {} or G = {{}} by ZFMISC_1:39;
+      hence thesis by XX,LC1,LC3,SETFAM_1:def 10;
+    end;
+    suppose B <> {};
+      then reconsider B as non empty set;
+      thus (Intersect FR).:^X c= Intersect G
+      proof
+        let a be set;
+        assume LC1: a in (Intersect FR).:^X;
+        then LC2: a in B;
+        reconsider a as Element of B by LC1;
+        G <> {} implies a in Intersect G
+        proof
+          assume LD1: G <> {};
+          then LD2: Intersect G = meet G by SETFAM_1:def 10;
+          for Y being set holds Y in G implies a in Y
+          proof
+            let Y be set such that LE1: Y in G;
+            consider R being Subset of [:A,B:] such that
+LE2:        Y = R.:^X & R in FR by LE1,LA1;
+            for x being set st x in X holds a in R.:{x}
+            proof
+              let x be set such that LF1: x in X;
+              a in (Intersect FR).:{x} by LF1,THD5_2,LC1;
+              then [x,a] in Intersect FR by THD5_1;
+              then [x,a] in meet FR by SETFAM_1:def 10,LB2;
+              then [x,a] in R by LE2, SETFAM_1:def 1;
+              hence thesis by THD5_1;
+            end;
+            hence thesis by LE2,THD5_3;
+          end;
+          hence thesis by SETFAM_1:def 1,LD1,LD2;
+        end;
+        hence thesis by LC2,SETFAM_1:def 10;
+      end;
+      let a be set;
+      assume LC1: a in Intersect G;
+      then reconsider a as Element of B;
+      consider R being Subset of [:A,B:] such that
+W:    R in FR by LB2,SUBSET_1:10;
+X:    R.:^X in G by W,LA1;
+LD2:  a in meet G by X,LC1,SETFAM_1:def 10;
+      for x being set st x in X holds a in (Intersect FR).:{x}
+      proof
+        let x be set such that LE1: x in X;
+        for Y being set holds Y in FR implies [x,a] in Y
+        proof
+          let P be set;
+          assume LF1: P in FR;
+          then reconsider P as Subset of [:A,B:];
+          set S = P.:^X;
+          S in G by LA1,LF1;
+          then a in P.:^X by LD2,SETFAM_1:def 1;
+          then a in P.:{x} by THD5_2,LE1;
+          hence thesis by THD5_1;
+        end;
+        then [x,a] in meet FR by SETFAM_1:def 1,LB2;
+        then [x,a] in Intersect FR by SETFAM_1:def 10,LB2;
+        hence thesis by THD5_1;
+      end;
+      hence thesis by THD5_3;
+    end;
+  end;
+end;
+end;
+
+theorem :: (8)
+  R1 c= R2 implies R1.:^X c= R2.:^X
+  proof
+   assume A1: R1 c= R2;
+   let y be set;
+   assume A2: y in R1.:^X; then
+   reconsider B as non empty set;
+   reconsider y as Element of B by A2;
+   for x being set st x in X holds y in R2.:{x}
+   proof
+    let x be set;
+    assume S1: x in X;
+    y in R1.:{x} by A2,THD5_3,S1; then
+    [x,y] in R1 by THD5_1;
+    hence thesis by THD5_1,A1;
+   end;
+   hence thesis by THD5_3;
+ end;
+
+theorem :: (9)
+  (R1.:^X) \/ (R2.:^X) c= (R1 \/ R2).:^X
+proof
+ let y be set;
+ assume A1: y in (R1.:^X) \/ (R2.:^X);
+  per cases by A1,XBOOLE_0:def 2;
+  suppose S1: y in R1.:^X;
+   then reconsider B as non empty set;
+   reconsider y as Element of B by S1;
+   for x being set st x in X holds y in (R1 \/ R2).:{x}
+   proof
+    let x be set; assume x in X;
+    then y in R1.:{x} by S1,THD5_3;
+    then y in R1.:{x} \/ R2.:{x} by XBOOLE_0:def 2;
+    hence thesis by TH12_2;
+   end;
+   hence thesis by THD5_3;
+  end;
+  suppose S1: y in R2.:^X;
+   then reconsider B as non empty set;
+   reconsider y as Element of B by S1;
+   for x being set st x in X holds y in (R1 \/ R2).:{x}
+   proof
+    let x be set; assume x in X;
+    then y in R2.:{x} by S1,THD5_3;
+    then y in R1.:{x} \/ R2.:{x} by XBOOLE_0:def 2;
+    hence thesis by TH12_2;
+   end;
+   hence thesis by THD5_3;
+ end;
+end;
+
+theorem TH15_0:
+  y in R`.:{x} iff not [x,y] in R & x in A & y in B
+proof
+  thus y in R`.:{x} implies not [x,y] in R & x in A & y in B
+  proof
+    assume y in R`.:{x};
+    then consider a being set such that
+    A1: [a,y] in R` & a in {x} by RELAT_1:def 13;
+    a = x by A1,TARSKI:def 1;
+    then [x,y] in [:A,B:] \ R by A1,SUBSET_1:def 5;
+    then [x,y] in [:A,B:] & not [x,y] in R by XBOOLE_0:def 4;
+    hence thesis by ZFMISC_1:106;
+  end;
+  assume A0: not [x,y] in R & x in A & y in B;
+  ex a being set st [a,y] in R` & a in {x}
+  proof
+C0: x in {x} by TARSKI:def 1;
+    [x,y] in [:A,B:] by A0,ZFMISC_1:106;
+    then [x,y] in [:A,B:] \ R by XBOOLE_0:def 4,A0;
+    then [x,y] in R` by SUBSET_1:def 5;
+    hence thesis by C0;
+  end;
+  hence thesis by RELAT_1:def 13;
+end;
+
+theorem :: (17)
+  X <> {} implies R.:^X c= R.:X
+proof
+  assume A1: X <> {};
+  let y be set;
+  assume A2: y in R.:^X;
+  consider x being set such that A3: x in X by XBOOLE_0:def 1,A1;
+  y in R.:{x} by A3,A2,THD5_2;
+  then [x,y] in R by THD5_1;
+  hence thesis by RELAT_1:def 13,A3;
+end;
+
+theorem TH27_0:
+  for X, Y being set holds
+  X meets R~.:Y iff ex x,y being set st x in X & y in Y & x in R~.:{y}
+  proof
+    let X, Y be set;
+    hereby assume X meets R~.:Y; then
+      consider a being set such that
+E2:   a in X & a in R~.:Y by XBOOLE_0:3;
+      consider b being set such that
+E3:   [b,a] in R~ & b in Y by E2,RELAT_1:def 13;
+E5:   [b,a] in R~ & b in {b} by E3,TARSKI:def 1;
+      take a,b;
+      thus a in X by E2;
+      thus b in Y by E3;
+      thus a in R~.:{b} by E5,RELAT_1:def 13;
+    end;
+    given x,y being set such that
+L1: x in X & y in Y & x in R~.:{y};
+    consider a being set such that
+L2: [a,x] in R~ & a in {y} by RELAT_1:def 13,L1;
+    [y,x] in R~ & y in Y by TARSKI:def 1,L1,L2;
+    then x in R~.:Y by RELAT_1:def 13;
+    hence thesis by L1,XBOOLE_0:3;
+  end;
+
+theorem TH27_1:
+  for X, Y being set holds
+    (ex x,y being set st x in X & y in Y & x in R~.:{y}) iff Y meets R.:X
+proof
+  let X, Y be set;
+  thus (ex x,y being set st x in X & y in Y & x in R~.:{y}) implies
+    Y meets R.:X
+  proof
+   given x,y being set such that
+E1: x in X & y in Y & x in R~.:{y};
+    consider a being set such that
+E2: [a,x] in R~ & a in {y} by RELAT_1:def 13,E1;
+    a = y by TARSKI:def 1,E2;
+    then [x,y] in R & x in X by E1,E2,RELAT_1:def 7;
+    then y in R.:X by RELAT_1:def 13;
+    hence thesis by E1,XBOOLE_0:3;
+  end;
+  assume Y meets R.:X; then
+  consider a being set such that
+E2:a in Y & a in R.:X by XBOOLE_0:3;
+  consider b being set such that
+E3: [b,a] in R & b in X by E2,RELAT_1:def 13;
+E5: [a,b] in R~ & a in {a} by E3,RELAT_1:def 7,TARSKI:def 1;
+  take b,a;
+  thus b in X by E3;
+  thus a in Y by E2;
+  thus b in R~.:{a} by E5,RELAT_1:def 13;
+ end;
+
+theorem TH27: :: (19)
+  X misses R~.:Y iff Y misses R.:X
+proof
+  X meets R~.:Y iff ex x,y being set st x in X & y in Y & x in R~.:{y}
+    by TH27_0;
+  hence thesis by TH27_1;
+end;
+
+theorem TH19: :: (14.1)
+  for X being set holds
+    R.:X = R.:(X /\ proj1 R)
+proof
+ let X be set;
+ thus R.:X c= R.:(X /\ proj1 R)
+ proof
+  let y be set;
+  assume y in R.:X;
+  then consider x being set such that
+A2: [x,y] in R & x in X by RELAT_1:def 13;
+  x in proj1 R by A2,FUNCT_5:def 1;
+  then x in X /\ proj1 R by A2,XBOOLE_0:def 3;
+  hence thesis by A2,RELAT_1:def 13;
+ end;
+ let y be set;
+ assume y in R.:(X /\ proj1 R);
+ then consider x being set such that
+A2: [x,y] in R & x in X /\ proj1 R by RELAT_1:def 13;
+ x in X by A2,XBOOLE_0:def 3;
+ hence thesis by RELAT_1:def 13,A2;
+end;
+
+theorem TH20: :: (14.2)
+  for Y being set holds
+    (R~).:Y = (R~).:(Y /\ proj2 R)
+proof
+ let Y be set;
+ thus (R~).:Y c= (R~).:(Y /\ proj2 R)
+ proof
+  let y be set;
+  assume y in (R~).:Y;
+  then consider x being set such that
+A2: [x,y] in R~ & x in Y by RELAT_1:def 13;
+  [y,x] in R by A2,RELAT_1:def 7;
+  then x in proj2 R by FUNCT_5:def 2;
+  then x in Y /\ proj2 R by A2,XBOOLE_0:def 3;
+  hence thesis by A2,RELAT_1:def 13;
+ end;
+ let y be set;
+ assume y in (R~).:(Y /\ proj2 R);
+ then consider x being set such that
+A2: [x,y] in R~ & x in (Y /\ proj2 R) by RELAT_1:def 13;
+ x in Y by A2,XBOOLE_0:def 3;   
+ hence thesis by A2,RELAT_1:def 13;
+end;
+
+theorem TH15_2: :: (10.2)
+  (R.:^X)` = R`.:X
+proof
+  thus (R.:^X)` c= R`.:X
+  proof
+    let a be set;
+    assume a in (R.:^X)`;
+    then a in B\ R.:^X by SUBSET_1:def 5;
+    then B0: a in B & not a in R.:^X by XBOOLE_0:def 4;
+    then consider x being set such that
+B1: x in X & not a in R.:{x} by THD5_3;
+B2: not [x,a] in R by B1,THD5_1;
+    [x,a] in [:A,B:] by ZFMISC_1:106,B0,B1;
+    then [x,a] in [:A,B:] \ R by B2,XBOOLE_0:def 4;
+    then [x,a] in R` by SUBSET_1:def 5;
+    hence thesis by RELAT_1:def 13,B1;
+  end;
+  let a be set;
+  assume a in R`.:X;
+  then consider x being set such that
+A2: [x,a] in R` & x in X by RELAT_1:def 13;
+  [x,a] in [:A,B:] \ R by A2,SUBSET_1:def 5;
+  then A3: [x,a] in [:A,B:] & not [x,a] in R by XBOOLE_0:def 4;
+  assume not thesis;
+  then not a in B \ R.:^X by SUBSET_1:def 5;
+  then A5: not a in B or a in R.:^X by XBOOLE_0:def 4;
+  a in R.:^X implies for x being set st x in X holds [x,a] in R
+  proof
+    assume C1: a in R.:^X;
+    let x be set;
+    assume x in X;
+    then a in R.:{x} by C1,THD5_2;
+    hence thesis by THD5_1;
+  end;
+  hence contradiction by A3,A2,A5,ZFMISC_1:106;
+end;
+
+ reserve R for Relation of A,B;
+ reserve S for Relation of B,C;
+
+definition
+  let A,B,C be set;
+  let R be Subset of [:A,B:], S be Subset of [:B,C:];
+  redefine func R*S -> Relation of A,C;
+  coherence
+  proof
+    reconsider R as Relation of A,B by RELSET_1:def 1;
+    reconsider S as Relation of B,C by RELSET_1:def 1;
+    R*S is Relation of A,C;
+    hence thesis;
+  end;
+end;
+
+theorem TH15_1: :: (10.1)
+  (R.:X)` = (R`).:^X
+proof
+  thus (R.:X)` c= (R`).:^X
+  proof
+    let a be set;
+    assume s2:a in (R.:X)`;
+    then S2: a in B \ R.:X by SUBSET_1:def 5;
+    reconsider B as non empty set by s2;
+    reconsider a as Element of B by s2;
+    assume not thesis;
+    then consider x being set such that
+S5: x in X & not a in R`.:{x} by THD5_3;
+    [x,a] in R by S5,TH15_0;
+    then a in R.:X by S5,RELAT_1:def 13;
+    hence contradiction by S2,XBOOLE_0:def 4;
+  end;
+  let a be set;
+  assume S0: a in (R`).:^X;
+S2: a in (R`).:^X implies for x being set st x in X holds not [x,a] in R
+  proof
+    assume a in (R`).:^X;
+    let x be set;
+    assume C1: x in X;
+    assume C2: not thesis;
+    a in R`.:{x} by S0,THD5_2,C1;
+    then consider b being set such that
+C3: [b,a] in R` & b in {x} by RELAT_1:def 13;
+C5: [x,a] in R` & [x,a] in R by C3,TARSKI:def 1,C2;
+    R` misses R by SUBSET_1:26;
+    hence contradiction by C5,XBOOLE_0:3;
+  end;
+  assume not thesis;
+  then S3: not (a in B\R.:X) by SUBSET_1:def 5;
+  per cases by S3,XBOOLE_0:def 4;
+  suppose not a in B;
+    hence contradiction by S0;
+  end;
+  suppose a in R.:X;
+    then consider y being set such that
+L2: [y,a] in R & y in X by RELAT_1:def 13;
+    thus contradiction by S2,L2,S0;
+  end;
+end;
+
+:: (12) - FUNCT_5:20, RELAT_1:37
+
+theorem TH17:  
+  proj1 R = (R~).:B & proj2 R = R.:A
+proof
+  thus proj1 R = dom R by FUNCT_5:21
+    .= rng (R~) by RELAT_1:37
+    .= (R~).:B by RELSET_1:38;
+  thus proj2 R = rng R by FUNCT_5:21
+    .= R.:A by RELSET_1:38;
+end;
+
+theorem :: (13.1)
+  proj1 (R*S) = (R~).:(proj1 S) & proj1 (R*S) c= proj1 R
+proof
+  thus A1: proj1 (R*S) = (R*S)~.:C by TH17
+          .= (S~*R~).:C by RELAT_1:54
+          .= R~.:(S~.:C) by RELAT_1:159
+          .= R~.:(proj1 S) by TH17;
+  proj1 S = dom S by FUNCT_5:21;
+  then proj1 (R*S) c= R~.:B by A1,RELAT_1:156;
+  hence thesis by TH17;
+end;
+
+theorem :: (13.2)
+  proj2 (R*S) = S.:(proj2 R) & proj2 (R*S) c= proj2 S
+proof
+  thus A1: proj2 (R*S) = (R*S).:A by TH17
+          .= S.:(R.:A) by RELAT_1:159
+          .= S.:(proj2 R) by TH17;
+  proj2 R = rng R by FUNCT_5:21;
+  then S.:(proj2 R) c= S.:B by RELAT_1:156;
+  hence thesis by A1,TH17;
+end;
+
+theorem :: (15.1)
+  X c= proj1 R iff X c= (R*(R~)).:X
+proof
+  thus X c= proj1 R implies X c= (R*(R~)).:X
+  proof
+    assume A1: X c= proj1 R;
+    let x be set;
+    assume A2: x in X;
+    then reconsider x as Element of A;
+    consider y being set such that
+A4: [x,y] in R by A1,A2,FUNCT_5:def 1;
+A8: x in (R~).:{y}
+    proof
+      [y,x] in R~ & y in {y} by TARSKI:def 1,RELAT_1:def 7,A4;
+      hence thesis by RELAT_1:def 13;
+    end;
+    (R~).:{y} c= (R*(R~)).:X
+    proof
+      let a be set;
+      assume a in (R~).:{y};
+      then consider b being set such that
+S2:   [b,a] in R~ & b in {y} by RELAT_1:def 13;
+      [y,a] in R~ by S2,TARSKI:def 1;
+      then [x,a] in R*R~ by A4,RELAT_1:def 8;
+      hence thesis by A2,RELAT_1:def 13;
+    end;
+    hence thesis by A8;
+  end;
+  assume A1: X c= (R*(R~)).:X;
+  let x be set; assume x in X;
+  then A2: x in (R*(R~)).:X by A1;
+A3: (R*R~).:X = (R~).:(R.:X) by RELAT_1:159;
+  (R~).:(R.:X) c= (R~).:B by RELAT_1:156;
+  then (R*R~).:X c= proj1 R by A3,TH17;
+  hence thesis by A2;
+end;
+
+theorem :: (15.2)
+  Y c= proj2 R iff Y c= ((R~)*R).:Y
+proof
+  thus Y c= proj2 R implies Y c= ((R~)*R).:Y
+  proof
+    assume A1: Y c= proj2 R;
+    let y be set;
+    assume A2: y in Y;
+    then consider x being set such that
+A3: [x,y] in R by A1,FUNCT_5:def 2;
+A4: [y,x] in R~ by A3,RELAT_1:def 7;
+A7: y in R.:{x} by THD5_1,A3;
+    R.:{x} c= ((R~)*R).:Y
+    proof
+      let a be set;
+      assume a in R.:{x};
+      then consider b being set such that
+S2:   [b,a] in R & b in {x} by RELAT_1:def 13;
+      [x,a] in R by S2,TARSKI:def 1;
+      then [y,a] in ((R~)*R) by RELAT_1:def 8,A4;
+      hence thesis by A2,RELAT_1:def 13;
+    end;
+    hence thesis by A7;
+  end;
+  assume A1: Y c= ((R~)*R).:Y;
+  let x be set; assume x in Y;
+  then A3: x in ((R~)*R).:Y by A1;
+A4: ((R~)*R).:Y = R.:((R~).:Y) by RELAT_1:159;
+  R.:((R~).:Y) c= R.:A by RELAT_1:156;
+  then ((R~)*R).:Y c= proj2 R by A4,TH17;
+  hence thesis by A3;
+end;
+
+theorem
+  proj1 R = (R~).:B & (R~).:(R.:A) = (R~).:(proj2 R) by TH17;
+
+theorem :: (16.1)
+  (R~).:B = (R*(R~)).:A
+proof
+E1: (R*(R~)).:A = R~.:(R.:A) by RELAT_1:159
+    .= R~.:(proj2 R) by TH17;
+   thus (R~).:B c= (R*(R~)).:A
+   proof
+    let x be set;
+    assume A1: x in (R~).:B;
+A2: (R~).:B = (R~).:(B /\ proj2 R) by TH20;
+    (R~).:(B /\ proj2 R) c= R~.:B /\ R~.:(proj2 R) by RELAT_1:154;
+    hence thesis by A2,A1,E1,XBOOLE_0:def 3;
+   end;
+   let x be set;
+   assume L1: x in (R*(R~)).:A;
+   proj2 R c= rng R by FUNCT_5:21;
+   then proj2 R c= B by XBOOLE_1:1;
+   then R~.:(proj2 R) c= R~.:B by RELAT_1:156;
+   hence thesis by L1,E1;
+ end;
+
+theorem :: (16.2)
+  R.:A = (R~*R).:B
+proof
+E1: (R~*R).:B = R.:(R~.:B) by RELAT_1:159 .= R.:(proj1 R) by TH17;
+   thus R.:A c= (R~*R).:B
+   proof
+    let x be set;
+    assume A1: x in R.:A;
+A2: R.:A = R.:(A /\ proj1 R) by TH19;
+    R.:(A /\ proj1 R) c= R.:A /\ R.:(proj1 R) by RELAT_1:154;
+    hence thesis by A2,A1,E1,XBOOLE_0:def 3;
+   end;
+    let x be set;
+    assume L1: x in (R~*R).:B;
+    proj1 R c= dom R by FUNCT_5:21;
+    then proj1 R c= A by XBOOLE_1:1;
+    then R.:(proj1 R) c= R.:A by RELAT_1:156;
+    hence thesis by L1,E1;
+  end;
+
+theorem :: (18)
+  S.:^(R.:X) = (R*S`)`.:^X
+proof
+  (S.:^(R.:X))` = S`.:(R.:X) by TH15_2
+               .= ((R*(S`)).:X) by RELAT_1:159;
+  then S.:^(R.:X) = ((R*(S`)).:X)`
+                 .= (R*S`)`.:^X by TH15_1;
+  hence thesis;
+end;
+
+theorem TH27_1: :: (24.3)
+  (R`)~ = (R~)`
+proof
+  R` = [:A,B:] \ R by SUBSET_1:def 5; then
+  (R`)~ = ([:A,B:])~ \ R~ by RELAT_1:41
+       .= [:B,A:] \ R~ by SYSREL:18
+       .= (R~)` by SUBSET_1:def 5;
+  hence thesis;
+end;
+
+theorem TH28: :: (20)
+  X c= (R~).:^Y iff Y c= R.:^X
+proof
+  X c= (R~).:^Y iff X misses ((R~).:^Y)` by SUBSET_1:44;
+  then X c= (R~).:^Y iff X misses (R~)`.:Y by TH15_2;
+  then A1: X c= (R~).:^Y iff X /\ (R~)`.:Y = {} by XBOOLE_0:def 7;
+  reconsider S = R` as Relation of A,B by RELSET_1:def 1;
+  X misses S~.:Y iff Y misses S.:X by TH27; then
+  X /\ S~.:Y = {} iff Y /\ S.:X = {} by XBOOLE_0:def 7;
+  then X c= (R~).:^Y iff (R.:^X)` /\ Y = {} by A1,TH27_1,TH15_2;
+  then X c= (R~).:^Y iff (R.:^X)` misses Y by XBOOLE_0:def 7;
+  hence thesis by SUBSET_1:44;
+end;
+
+theorem :: (21)
+  R.:(X`) c= Y` iff R~.:Y c= X
+proof
+  X` misses R~.:Y iff Y misses R.:(X`) by TH27;
+  hence thesis by SUBSET_1:44,SUBSET_1:43;
+end;
+
+theorem :: (22)
+  X c= (R~).:^(R.:^X) & Y c= R.:^((R~).:^Y) by TH28;
+
+theorem :: (23)
+  R.:^X = R.:^( R~.:^(R.:^X) ) & R~.:^Y = (R~).:^(R.:^((R~).:^Y))
+proof
+  thus R.:^X = R.:^( R~.:^(R.:^X) )
+  proof
+    thus R.:^X c= R.:^( R~.:^(R.:^X) ) by TH28;
+    X c= (R~).:^(R.:^X) by TH28;    
+    hence R.:^( R~.:^(R.:^X) ) c= R.:^X by TH11;
+  end;
+  thus R~.:^Y c= (R~).:^(R.:^((R~).:^Y)) by TH28;
+  Y c= R.:^((R~).:^Y) by TH28;
+  hence (R~).:^(R.:^((R~).:^Y)) c= R~.:^Y by TH11;
+end;
+
+theorem :: (29.3)
+  (id A)*R = R*(id B)
+proof
+  (id A)*R = R by FUNCT_2:23
+          .= R*(id B) by FUNCT_2:23;
+  hence thesis;        
+end;
+
+:: (24.1) - RELAT_1:40
+:: (24.2) - RELAT_1:39
+:: (24.4) - RELAT_1:54
+:: (24.5) - R1 c= R2 implies R1~ c= R2~   :: SYSREL:27
+:: (24.6) - R~~ = R ; atomatically
+:: (25.1) - RELAT_1:51
+:: (25.2) - (S1 \/ S2)*R = S1*R \/ S2*R   :: SYSREL:20
+:: (26) - RELAT_1:50
+:: (27.1) - RELAT_1:52
+:: (28.1) and (28.2) - RELAT_1:62
+:: (29.1) and (29.2) - FUNCT_2:23

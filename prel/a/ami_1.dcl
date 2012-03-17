@@ -377,25 +377,6 @@
 </Typ>
 <Typ kind="G" nr="3">
 <Cluster>
-<Adjective nr="41" value="false"/>
-</Cluster>
-<LocusVar nr="1"/>
-</Typ>
-</ArgTypes>
-<Func kind="U" nr="1">
-<LocusVar nr="2"/>
-</Func>
-<Cluster>
-<Adjective nr="1" value="false"/>
-</Cluster>
-</FCluster>
-<FCluster>
-<ArgTypes>
-<Typ kind="M" nr="1">
-<Cluster/>
-</Typ>
-<Typ kind="G" nr="3">
-<Cluster>
 <Adjective nr="43" value="false">
 <LocusVar nr="1"/>
 </Adjective>

@@ -61,4 +61,29 @@
 </For>
 </Not>
 </Scheme>
+<Scheme>
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+</ArgTypes>
+<Is>
+<Fraenkel>
+<Typ kind="M" nr="2">
+<Cluster/>
+<Func kind="K" nr="10">
+<Func kind="F" nr="1"/>
+</Func>
+</Typ>
+<Var nr="1"/>
+<Pred kind="P" nr="1">
+<Var nr="1"/>
+</Pred>
+</Fraenkel>
+<Typ kind="M" nr="5">
+<Cluster/>
+<Func kind="F" nr="1"/>
+</Typ>
+</Is>
+</Scheme>
 </Schemes>

@@ -843,10 +843,14 @@ definition let A,X;
    end;
 end;
 
-definition
-  let Y; let A be Subset of Y;
-func incl(A) -> Function of A,Y equals
-:Def4: id A;
+notation let Y; let A be Subset of Y;
+ synonym incl A for id A;
+end;
+
+definition let Y; let A be Subset of Y;
+ canceled;
+ redefine
+  func incl A -> Function of A,Y;
  coherence
   proof A c= Y & rng id A = A by RELAT_1:71;
    then (Y = {} implies A = {}) & dom id A = A & rng id A c= Y
@@ -858,31 +862,19 @@ end;
 canceled 3;
 
 theorem
-      for A being Subset of Y holds incl A = (id Y)|A
- proof let A be Subset of Y;
-     A c= Y & incl A = id A by Def4;
-  hence incl A = (id Y)|A by Th1;
- end;
-
-theorem Th54:
-   for A being Subset of Y holds dom incl A = A & rng incl A = A
- proof let A be Subset of Y;
-     incl A = id A by Def4;
-  hence thesis by RELAT_1:71;
- end;
+      for A being Subset of Y holds incl A = (id Y)|A by Th1;
 
 theorem
-      for A being Subset of Y st x in A holds (incl A).x = x
- proof let A be Subset of Y;
-     incl A = id A by Def4;
-  hence thesis by FUNCT_1:35;
- end;
+   for A being Subset of Y holds dom incl A = A & rng incl A = A by RELAT_1:71;
+
+theorem
+      for A being Subset of Y st x in A holds (incl A).x = x by FUNCT_1:35;
 
 theorem
       for A being Subset of Y st x in A holds incl(A).x in Y
  proof let A be Subset of Y such that
 A1:  x in A;
-     dom incl A = A & rng incl A = A by Th54;
+     dom incl A = A & rng incl A = A by RELAT_1:71;
   then incl(A).x in A & A c= Y by A1,FUNCT_1:def 5;
   hence thesis;
  end;
@@ -1805,18 +1797,14 @@ theorem
  proof let f1 be Function of X,Y1; let f2 be Function of X,Y2;
   per cases;
   suppose Y1 = {} or Y2 = {};
-    then f1 = {} or f2 = {} by RELSET_1:27;
     then
-A1:   dom f1 = {} or dom f2 = {} by RELAT_1:60;
-     dom[:f1,f2:] = [:dom f1, dom f2:] by Def9
+A1:   dom f1 = {} or dom f2 = {} by RELAT_1:60,RELSET_1:27;
+A2:  dom[:f1,f2:] = [:dom f1, dom f2:] by Def9
                 .= {} by A1,ZFMISC_1:113;
-     then
-A2:    [:f1,f2:] = {} by RELAT_1:64;
      dom<:f1,f2:> = dom f1 /\ dom f2 by Def8
                 .= {} by A1;
-   hence <:f1,f2:> = {} by RELAT_1:64
-                  .= {}*delta X
-                  .= [:f1,f2:]*delta X by A2;
+   hence <:f1,f2:> = {}*delta X by RELAT_1:64
+                  .= [:f1,f2:]*delta X by A2,RELAT_1:64;
   end;
   suppose Y1 <> {} & Y2 <> {};
   then dom f1 = X & dom f2 = X by FUNCT_2:def 1;
