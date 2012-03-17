@@ -1,5 +1,5 @@
 :: Banach Space of Absolute Summable Real Sequences
-::  by Yasumasa Suzuki , Noboru Endou and Yasunari Shidama
+::  by Yasumasa Suzuki, Noboru Endou and Yasunari Shidama
 ::
 :: Received August 8, 2003
 :: Copyright (c) 2003 Association of Mizar Users
@@ -31,12 +31,19 @@ definition
    (x in the_set_of_RealSequences & seq_id(x) is absolutely_summable);
 end;
 
+theorem :: RSSPACE3:1
+for c be Real, seq be Real_Sequence st seq is convergent
+for rseq be Real_Sequence st
+ ( for i be Nat holds rseq .i = abs(seq.i-c) ) holds
+ ( rseq is convergent & lim rseq = abs(lim seq-c) );
+
 definition
   cluster the_set_of_l1RealSequences -> non empty;
 end;
 
-theorem :: RSSPACE3:1
-the_set_of_l1RealSequences is lineary-closed;
+definition
+  cluster the_set_of_l1RealSequences -> lineary-closed;
+end;
 
 theorem :: RSSPACE3:2
 RLSStruct (# the_set_of_l1RealSequences,
@@ -65,7 +72,7 @@ definition
   func l_norm -> Function of the_set_of_l1RealSequences, REAL means
 :: RSSPACE3:def 2
   for x be set st x in the_set_of_l1RealSequences holds
-    it.x = Sum(abs(seq_id(x)));
+    it.x = Sum abs seq_id x;
 end;
 
 definition let X be non empty set,
@@ -83,11 +90,11 @@ for l be NORMSTR st RLSStruct (# the carrier of l, the Zero of l,
 theorem :: RSSPACE3:5
 for rseq be Real_Sequence
    st (for n be Nat holds rseq.n=0) holds
-   rseq is absolutely_summable & Sum(abs(rseq))=0;
+   rseq is absolutely_summable & Sum abs rseq = 0;
 
 theorem :: RSSPACE3:6
 for rseq be Real_Sequence st
- ( rseq is absolutely_summable & Sum(abs(rseq))=0 ) holds
+ ( rseq is absolutely_summable & Sum abs rseq=0 ) holds
   for n be Nat holds rseq.n =0;
 
 theorem :: RSSPACE3:7
@@ -112,27 +119,24 @@ begin :: l1_Space is Banach
 theorem :: RSSPACE3:8
   the carrier of l1_Space = the_set_of_l1RealSequences &
 ( for x be set holds
-   x is Element of l1_Space
-  iff x is Real_Sequence & seq_id(x) is absolutely_summable ) &
-( for x be set holds
    x is VECTOR of l1_Space
-   iff x is Real_Sequence & seq_id(x) is absolutely_summable ) &
+   iff x is Real_Sequence & seq_id x is absolutely_summable ) &
 0.l1_Space = Zeroseq &
-( for u be VECTOR of l1_Space holds u =seq_id(u) ) &
+( for u be VECTOR of l1_Space holds u =seq_id u ) &
 ( for u,v be VECTOR of l1_Space holds u+v =seq_id(u)+seq_id(v) ) &
 ( for r be Real for u be VECTOR of l1_Space holds r*u =r(#)seq_id(u) ) &
 ( for u be VECTOR of l1_Space holds
-   -u = -seq_id(u) & seq_id(-u) = -seq_id(u) ) &
-( for u,v be VECTOR of l1_Space holds u-v =seq_id(u)-seq_id(v) ) &
-( for v be VECTOR of l1_Space holds seq_id(v) is absolutely_summable ) &
-( for v be VECTOR of l1_Space holds ||.v.|| = Sum(abs(seq_id(v))) );
+   -u = -seq_id u & seq_id(-u) = -seq_id(u) ) &
+( for u,v be VECTOR of l1_Space holds u-v =seq_id(u)-seq_id v ) &
+( for v be VECTOR of l1_Space holds seq_id v is absolutely_summable ) &
+( for v be VECTOR of l1_Space holds ||.v.|| = Sum abs seq_id v );
 
 theorem :: RSSPACE3:9
 for x, y being Point of l1_Space, a be Real holds
   ( ||.x.|| = 0 iff x = 0.l1_Space ) &
   0 <= ||.x.|| &
-  ||.x+y.|| <= ||.x.|| +  ||.y.|| &
-  ||.(a*x).|| = abs(a) * ||.x.||;
+  ||.x+y.|| <= ||.x.|| + ||.y.|| &
+  ||. a*x .|| = abs(a) * ||.x.||;
 
 definition
   cluster l1_Space -> RealNormSpace-like RealLinearSpace-like
@@ -156,8 +160,8 @@ definition
   synonym seqt is Cauchy_sequence_by_Norm;
 end;
 
-reserve NRM for non empty RealNormSpace;
-reserve seq for sequence of NRM;
+ reserve NRM for non empty RealNormSpace;
+ reserve seq for sequence of NRM;
 
 theorem :: RSSPACE3:10
 seq is Cauchy_sequence_by_Norm iff for r be Real st r > 0

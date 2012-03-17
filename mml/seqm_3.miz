@@ -726,12 +726,12 @@ theorem
   end;
 
 definition let Nseq,n;
-  redefine func Nseq.n ->Nat;
+  redefine func Nseq.n -> Nat;
 coherence by Th29;
 end;
 
 definition let Nseq,seq;
-  redefine func seq*Nseq ->Real_Sequence;
+  redefine func seq*Nseq -> Real_Sequence;
  coherence
   proof
      A1:dom Nseq=NAT by FUNCT_2:def 1;
@@ -1015,7 +1015,7 @@ theorem
 
 ::
 ::  SUBSEQUENCES OF MONOTONE SEQUENCE
-::    SUBSEQUENCE  OF BOUND SEQUENCE
+::    SUBSEQUENCE OF BOUNDED SEQUENCE
 ::
 theorem
    seq is increasing & seq1 is_subsequence_of seq implies
@@ -1431,7 +1431,7 @@ theorem
   end;
 
 ::
-:: OPERATIONS ON BOUND SEQUENCES
+:: OPERATIONS ON BOUNDED SEQUENCES
 ::
 theorem
  Th68:(seq is bounded_above & 0<r implies r(#)seq is bounded_above) &
@@ -1455,8 +1455,7 @@ theorem
   thus 0=r implies r(#)seq is bounded
    proof
     assume A5:0=r;
-       now
-      let n;
+       now let n;
          (r(#)seq).n = 0*seq.n by A5,SEQ_1:13;
       hence (r(#)seq).n < 1;
      end;
@@ -1509,38 +1508,55 @@ theorem
   hence (r(#)seq).n<p by SEQ_1:13;
  end;
 
-theorem
- Th70:seq is bounded implies (for r holds r(#)seq is bounded) &
-                              -seq is bounded &
-                              abs seq is bounded
+theorem Th70:
+  (seq is bounded implies for r holds r(#)seq is bounded) &
+  (seq is bounded implies -seq is bounded) &
+  (seq is bounded iff abs seq is bounded)
   proof
-   assume A1:seq is bounded;
-   then A2:seq is bounded_above & seq is bounded_below by SEQ_2:def 5;
-   hereby let r;
-        per cases;
-      suppose A3:0<r;
-       then A4:r(#)seq is bounded_above by A2,Th68;
-         r(#)seq is bounded_below by A2,A3,Th69;
-       hence r(#)seq is bounded by A4,SEQ_2:def 5;
-      suppose 0=r;
-       hence r(#)seq is bounded by Th68;
-      suppose A5:r<0;
-       then A6:r(#)seq is bounded_above by A2,Th69;
-         r(#)seq is bounded_below by A2,A5,Th68;
-       hence r(#)seq is bounded by A6,SEQ_2:def 5;
+  thus A0:seq is bounded implies for r holds r(#)seq is bounded
+  proof
+    assume A1:seq is bounded; then
+  A2:seq is bounded_above & seq is bounded_below by SEQ_2:def 5;
+     let r;
+     per cases;
+     suppose A3:0<r;
+     then A4:r(#)seq is bounded_above by A2,Th68;
+     r(#)seq is bounded_below by A2,A3,Th69;
+     hence r(#)seq is bounded by A4,SEQ_2:def 5;
+     suppose 0=r;
+     hence r(#)seq is bounded by Th68;
+     suppose A5:r<0;
+     then A6:r(#)seq is bounded_above by A2,Th69;
+     r(#)seq is bounded_below by A2,A5,Th68;
+     hence r(#)seq is bounded by A6,SEQ_2:def 5;
     end;
-   then (-1)(#)seq is bounded;
-   hence -seq is bounded by SEQ_1:25;
+   hereby assume A1:seq is bounded;
+     then (-1)(#)seq is bounded by A0;
+     hence -seq is bounded by SEQ_1:25;
+   end;
+    thus seq is bounded implies abs seq is bounded
+    proof
+      assume A1: seq is bounded;
    consider r such that A7:0<r and
                         A8:for n holds abs (seq.n) <r by A1,SEQ_2:15;
-      now
+    now
      thus 0<r by A7;
      let n;
-       abs (abs (seq.n))<r by A8;
+     abs (abs (seq.n))<r by A8;
      hence abs ((abs seq).n)<r by SEQ_1:16;
+    end; hence thesis by SEQ_2:15;
     end;
-   hence thesis by SEQ_2:15;
-  end;
+    assume
+R1: abs seq is bounded;
+    consider r be real number such that
+R2: 0<r & for n be Nat holds abs(abs seq.n)<r by SEQ_2:15,R1;
+    now let n be Nat;
+      abs(abs seq .n)=abs(abs(seq.n)) by SEQ_1:16
+                     .=abs(seq.n);
+      hence abs(seq.n) < r by R2;
+    end;
+    hence seq is bounded by R2,SEQ_2:15;
+end;
 
 theorem
  Th71:(seq is bounded_above & seq1 is bounded_above implies
@@ -1610,13 +1626,13 @@ theorem
      hence abs ((seq(#)seq1).n)<r by SEQ_1:12;
     end;
    hence seq (#)seq1 is bounded by SEQ_2:15;
-     -seq1 is bounded by A2,Th70;
+   -seq1 is bounded by A2,Th70;
    then seq+-seq1 is bounded by A1,Th71;
    hence thesis by SEQ_1:15;
   end;
 
 ::
-:: OPERATIONS ON BOUND & CONSTANT SEQUENCES
+:: OPERATIONS ON BOUNDED & CONSTANT SEQUENCES
 ::
 theorem
  Th73:seq is constant implies seq is bounded
@@ -1637,7 +1653,7 @@ theorem
 
 theorem
    seq is constant implies (for r holds r(#)seq is bounded) &
-                               (-seq is bounded) &
+                               -seq is bounded &
                                abs seq is bounded
   proof
    assume A1:seq is constant;
@@ -1720,7 +1736,7 @@ theorem
   end;
 
 ::
-:: OPERATIONS ON BOUND & MONOTONE SEQUENCES
+:: OPERATIONS ON BOUNDED & MONOTONE SEQUENCES
 ::
 theorem
    seq is bounded_above & seq1 is non-increasing implies
